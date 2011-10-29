@@ -6,8 +6,10 @@ version := "0.1.0-SNAPSHOT"
 
 seq(ghpages.settings:_*)
 
-ghpages.gitRemoteRepo := "git@github.com:sbt/sbt.github.com.git"
+git.remoteRepo := "git@github.com:sbt/sbt.github.com.git"
 
-ghpages.genSite <<= (baseDirectory, ghpages.siteDirectory) map { (bd, sd) =>
-  IO.copyDirectory(bd / "static", sd)
-}
+(com.jsuereth.git.GitKeys.gitBranch) := Some("master")
+
+seq(site.settings:_*)
+
+(com.jsuereth.sbtsite.SiteKeys.siteSourceDirectory) <<= baseDirectory(_ / "static")
