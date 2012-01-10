@@ -2,10 +2,22 @@
 
 {% include topbar.txt %}
 
-<div class="row">
+<div class="cf" id="container">
   <div class="span2 columns"><p>&nbsp;</p></div>
   <div class="span10 columns content">
-    {{ content }}   
+    <div id="head" class="cf">
+      <div id="name" class="left">
+        <h1>SBT</h1>
+        <h2>{{page.title}}</h2>
+        <p id="what">{{page.tagline}}</p>
+      </div>
+      <div class="left page-description" id="vc">
+          {{page.description | markdownify }}
+      </div>
+    </div>
+    <div id="features" class="cf">
+      {{ content }}   
+    </div>
   </div>
   <div class="span6 columns"><p>&nbsp;</p></div>
 </div>
