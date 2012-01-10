@@ -20,7 +20,7 @@ com.jsuereth.sbtsite.SiteKeys.siteMappings <<= (com.jsuereth.sbtsite.SiteKeys.si
   // Run Jekyll
   sbt.Process(Seq("jekyll", jekyllOutput.getAbsolutePath), Some(jekyllSrc)).!;
   // Figure out what was generated.
-  mappings ++ (jekyllOutput ** ("*.html" | "*.png" | "*.js" | "*.css") x relativeTo(jekyllOutput))
+  mappings ++ (jekyllOutput ** ("*.html" | "*.png" | "*.js" | "*.css" | "CNAME") x relativeTo(jekyllOutput))
 }
 
 
