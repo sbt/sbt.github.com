@@ -16,11 +16,14 @@ If you would like to publish your project to this Ivy repository, first contact 
     
     publishMavenStyle := false
 
+-------
 
 #### SBT Organization ####
 
 The [SBT Organization](http://github.com/sbt) is available for use by any SBT plugin.  Developers who contribute their plugins into the community organization will still retain control over their repository and its access.   The Goal of the SBT organization is to organize SBT software into one central location.
 
+
+-------
 
 #### SBT Community Plugin Build ####
 
