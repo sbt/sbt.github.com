@@ -4,5 +4,5 @@ object PluginDef extends Build {
   lazy val root = Project("plugins", file(".")) dependsOn(ghpages)
   // move back to josh's repo after pull requests for git branch key
   // support goes through
-  lazy val ghpages = uri("git://github.com/softprops/xsbt-ghpages-plugin.git#pikka-branch")
+  lazy val ghpages = uri("git://github.com/jsuereth/xsbt-ghpages-plugin.git")
 }
