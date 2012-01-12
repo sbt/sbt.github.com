@@ -22,6 +22,15 @@ If you would like to publish your project to this Ivy repository, first contact 
     
     publishMavenStyle := false
 
+You'll also need to add your credentials somewhere.  I use a `~/.sbt/sbtpluginpublish.sbt` file:
+
+    credentials += Credentials("Artifactory Realm", "scalasbt.artifactoryonline.com", "jsuereth", "@my encrypted password@")
+
+Where `@my encrypted password@` is actually obtained using the following [instructions](http://wiki.jfrog.org/confluence/display/RTF/Centrally+Secure+Passwords).
+
+*Note: You also need to swap `jsuereth` for your own username :)*
+
+
 -------
 
 #### SBT Organization ####
