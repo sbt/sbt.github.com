@@ -5,10 +5,22 @@ tagline: up and running in moments.
 description: 'The [SBT Launcher](http://github.com/sbt/sbt-launcher) project contains a set of native packages for use in your operating system. <br/>&nbsp;<br/>
 [msi](#windows) | [yum](#rpm) | [apt-get](#deb) | [homebrew](#mac) | [by hand](#manual)
 '
+toplinks:
+       - name: 'Windows MSI downloads'
+         url: '#windows'
+       - name: 'Yum Repository'
+         url: '#rpm'
+       - name: 'Apt Repository'
+         url: '#deb'
+       - name: 'Homebrew'
+         url: '#mac'
+       - name: 'Macports'
+         url: '#mac'
+       - name: 'Manual Installation'
+         url: '#manual'
 ---
 
 #### Windows Releases ####
-
 <a id="windows" label="windows"></a>
 
 [Click here](http://typesafe.artifactoryonline.com/typesafe/windows-releases/org/scalasbt/sbt/0.11.2/sbt.msi) for the latest windows MSI.

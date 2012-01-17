@@ -4,7 +4,7 @@
 
 <div class="cf" id="container">
   <div class="span2 columns container-spacer"><p>&nbsp;</p></div>
-  <div class="span10 columns content">
+  <div id="intro" class="span10 columns content">
     <div id="head" class="cf">
       <div id="name" class="left">
         <h1>sbt</h1>
@@ -15,6 +15,25 @@
           {{page.description | markdownify }}
       </div>
     </div>
+    <div id="features" class="cf">
+      <div id="feature-list">
+        <ul class="left">           
+          {% for link in page.toplinks %}
+            {% capture x %}{% cycle 'odd', 'even' %}{% endcapture %}
+            {% if x == 'odd' %}<li><a href="{{link.url}}">{{link.name}}</a></li>{% endif %}
+          {% endfor %}
+        </ul>
+        <ul class="left">
+          {% for link in page.toplinks %}
+            {% capture x %}{% cycle 'odd2', 'even2' %}{% endcapture %}
+            {% if x == 'even2' %}<li><a href="{{link.url}}">{{link.name}}</a></li>{% endif %}
+          {% endfor %}
+         </ul>
+       </div>
+     </div>
+   </div>
+
+
     <div id="pagecontent" class="cf">
       {{ content }}   
     </div>

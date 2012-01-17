@@ -1,2 +1,24 @@
+
+<script type="text/javascript" src="jquery.scrollto.min.js"></script>
+<script type="text/javascript">
+   (function($){ $(function(){
+     $("#top").click(function(){ $("#intro").ScrollTo(); })
+
+     var applyH = function() {
+       $("#intro, .feature").height($(window).height());
+     };
+     $(window).bind('resize', function() { applyH(); });
+     applyH();
+     
+     $('#features a, .st').click(function(e){
+         e.preventDefault();
+         var h = $(this).attr('href');
+         $(h).ScrollTo({
+             callback:function(){ window.location.hash = h;}
+         });
+     });
+   });})(jQuery);
+</script>
+
 </body>
 </html>
