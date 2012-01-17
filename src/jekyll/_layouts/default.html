@@ -20,23 +20,29 @@
         <ul class="left">           
           {% for link in page.toplinks %}
             {% capture x %}{% cycle 'odd', 'even' %}{% endcapture %}
-            {% if x == 'odd' %}<li><a href="{{link.url}}">{{link.name}}</a></li>{% endif %}
+            {% if x == 'odd' %}<li><a href="#{{link.id}}">{{link.name}}</a></li>{% endif %}
           {% endfor %}
         </ul>
         <ul class="left">
           {% for link in page.toplinks %}
             {% capture x %}{% cycle 'odd2', 'even2' %}{% endcapture %}
-            {% if x == 'even2' %}<li><a href="{{link.url}}">{{link.name}}</a></li>{% endif %}
+            {% if x == 'even2' %}<li><a href="#{{link.id}}">{{link.name}}</a></li>{% endif %}
           {% endfor %}
          </ul>
        </div>
      </div>
-   </div>
-
-
     <div id="pagecontent" class="cf">
       {{ content }}   
     </div>
+   </div>
+
+   <div id="extra">
+     <ul id="examples">
+       {% for link in page.toplinks %}{% if link.content %}
+       <li id="{{link.id}}" class="feature">{{ link.content | markdownify }}</li>
+       {% endif %}{% endfor %}
+     </ul>
+   </div>
   </div>
   <div class="span6 columns"><p>&nbsp;</p></div>
 </div>
