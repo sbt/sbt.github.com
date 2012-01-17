@@ -20,29 +20,35 @@ toplinks:
          url: '#manual'
 ---
 
-#### Windows Releases ####
+---------
 <a id="windows" label="windows"></a>
+
+#### Windows Releases ####
 
 [Click here](http://typesafe.artifactoryonline.com/typesafe/windows-releases/org/scalasbt/sbt/0.11.2/sbt.msi) for the latest windows MSI.
 
 *Note: This MSI is still in BETA.  While it has been tested it may fail in obscure situations, please make sure to report any issues you may find [here](https://github.com/sbt/sbt-launcher-package/issues).*
 
+---------
+<a id="rpm" label="rpm"></a>
 
 #### Yum Repositories ####
 
-<a id="rpm" label="rpm"></a>
-
 Coming Soon...
 
-#### APT Repositories ####
+---------
 
 <a id="deb" label="deb"></a>
 
+#### APT Repositories ####
+
 Coming Soon...
 
-#### Hombrew/Macports ####
+---------
 
 <a id="mac" label="mac"></a>
+
+#### Hombrew/Macports ####
 
 Use either MacPorts:
 
@@ -52,9 +58,11 @@ Or HomeBrew:
 
     $ brew install sbt
 
-#### By Hand installation ####
+---------
 
 <a id="manual" label="manual"></a>
+
+#### By Hand installation ####
 
 First, download the [launcher jar](http://typesafe.artifactoryonline.com/typesafe/ivy-releases/org.scala-tools.sbt/sbt-launch/0.11.2/sbt-launch.jar) and place it somewhere useful.
 
