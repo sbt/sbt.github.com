@@ -13,6 +13,8 @@ description: 'The [SBT Launcher](http://github.com/sbt/sbt-launcher) project con
 
 [Click here](http://typesafe.artifactoryonline.com/typesafe/windows-releases/org/scalasbt/sbt/0.11.2/sbt.msi) for the latest windows MSI.
 
+*Note: This MSI is still in BETA.  While it has been tested it may fail in obscure situations, please make sure to report any issues you may find [here](https://github.com/sbt/sbt-launcher-package/issues).*
+
 
 #### Yum Repositories ####
 
