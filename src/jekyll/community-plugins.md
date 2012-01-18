@@ -4,8 +4,10 @@ title: Community Plugins
 tagline: ensuring everything is possible.
 description: 'The [SBT Organization](http://github.com/sbt) contains a [SBT Community Plugins](http://github.com/sbt/sbt-community-plugins) project.   This project aims to unify all the SBT plugins in the community and ensure their compatibility and timely releases with new versions of SBT.'
 toplinks: #Links at the top.
+
        - name: 'Community Ivy repository'
          id: 'communityrepo'
+         class: 'contained'
          content: |
            #### Community Ivy Repository ####           
            [Typesafe, Inc.](http://www.typesafe.com) has provided a freely available [Ivy Repository](http://scalasbt.artifactoryonline.com/scalasbt) for SBT projects to make use of.
@@ -27,15 +29,18 @@ toplinks: #Links at the top.
 
        - name: 'SBT Organization'
          id: 'sbtorg'
+         class: 'contained'
          content: |
            #### SBT Organization ####
            
            The [SBT Organization](http://github.com/sbt) is available for use by any SBT plugin.  
            Developers who contribute their plugins into the community organization will still retain 
-           control over their repository and its access.   The Goal of the SBT organization is to 
+           control over their repository and its access.   The Goal of the SBT organization is to
            organize SBT software into one central location.
+           
        - name: 'Community Plugin Build'
          id: 'pluginbuild'
+         class: 'contained'
          content: |
            #### SBT Community Plugin Build ####
            
