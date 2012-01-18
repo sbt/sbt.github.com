@@ -7,7 +7,6 @@ toplinks: #Links at the top.
 
        - name: 'Community Ivy repository'
          id: 'communityrepo'
-         class: 'contained'
          content: |
            #### Community Ivy Repository ####           
            [Typesafe, Inc.](http://www.typesafe.com) has provided a freely available [Ivy Repository](http://scalasbt.artifactoryonline.com/scalasbt) for SBT projects to make use of.
@@ -29,7 +28,6 @@ toplinks: #Links at the top.
 
        - name: 'SBT Organization'
          id: 'sbtorg'
-         class: 'contained'
          content: |
            #### SBT Organization ####
            
@@ -40,7 +38,6 @@ toplinks: #Links at the top.
            
        - name: 'Community Plugin Build'
          id: 'pluginbuild'
-         class: 'contained'
          content: |
            #### SBT Community Plugin Build ####
            
