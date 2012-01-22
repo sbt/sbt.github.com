@@ -2,9 +2,11 @@
 layout: default
 title: download
 tagline: up and running in moments.
-description: 'The [SBT Launcher](http://github.com/sbt/sbt-launcher) project contains a set of native packages for use in your operating system. <br/>&nbsp;<br/>
-[msi](#windows) | [yum](#rpm) | [apt-get](#deb) | [homebrew](#mac) | [by hand](#manual)
-'
+description: |
+  The [SBT Launcher](http://github.com/sbt/sbt-launcher) project contains a set of native packages for use in your operating system.
+
+  [msi](#windows) | [yum](#rpm) | [apt-get](#deb) | [homebrew](#mac) | [by hand](#manual)
+
 toplinks:
        - name: 'Windows MSI downloads'
          id: 'windows'
@@ -26,16 +28,12 @@ toplinks:
            #### APT Repositories ####
            
            Coming Soon...
-       - name: 'Homebrew / Macports'
+       - name: 'Homebrew'
          id: 'mac'
          content: |
-           #### Hombrew/Macports ####
+           #### Hombrew ####
            
-           Use either MacPorts:
-           
-               $ sudo port install sbt
-           
-           Or HomeBrew:
+           Use HomeBrew:
            
                $ brew install sbt
        - name: 'Manual Installation'

@@ -24,7 +24,7 @@ toplinks: #Links at the top.
            
            Where `@my encrypted password@` is actually obtained using the following [instructions](http://wiki.jfrog.org/confluence/display/RTF/Centrally+Secure+Passwords).
            
-           *Note: You also need to swap `jsuereth` for your own username :)*
+           *Note: Your code must abide by the [repository polices](repository-rules.html).*
 
        - name: 'SBT Organization'
          id: 'sbtorg'
@@ -35,6 +35,8 @@ toplinks: #Links at the top.
            Developers who contribute their plugins into the community organization will still retain 
            control over their repository and its access.   The Goal of the SBT organization is to
            organize SBT software into one central location.
+
+           A side benefit to using the SBT organization for projects is that you can us gh-pages to host websites in the http://scala-sbt.org domain.
            
        - name: 'Community Plugin Build'
          id: 'pluginbuild'
