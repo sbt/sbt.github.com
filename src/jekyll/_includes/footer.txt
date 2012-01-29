@@ -11,11 +11,14 @@
      applyH();
      
      $('#features a, .st').click(function(e){
-         e.preventDefault();
          var h = $(this).attr('href');
-         $(h).ScrollTo({
-             callback:function(){ window.location.hash = h;}
-         });
+         if(h && h[0] && h[0] == '#') {
+           e.preventDefault();
+         
+           $(h).ScrollTo({
+               callback:function(){ window.location.hash = h;}
+           });
+         }
      });
    });})(jQuery);
 </script>

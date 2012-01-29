@@ -2,9 +2,11 @@
 layout: default
 title: Community Plugins
 tagline: ensuring everything is possible.
-description: 'The [SBT Organization](http://github.com/sbt) contains a [SBT Community Plugins](http://github.com/sbt/sbt-community-plugins) project.   This project aims to unify all the SBT plugins in the community and ensure their compatibility and timely releases with new versions of SBT.'
-toplinks: #Links at the top.
+description: 'The [SBT Organization](http://github.com/sbt) contains a [SBT Community Plugins](http://github.com/sbt/sbt-community-plugins) project.   This project aims to unify all the SBT plugins in the community and ensure their compatibility and timely releases with new versions of SBT.  There is also a [list of plugins](https://github.com/harrah/xsbt/wiki/sbt-0.10-plugins-list) that is up-to-date.'
+toplinks:
 
+       - name: 'Available Plugins'
+         link: 'plugins.html'
        - name: 'Community Ivy repository'
          id: 'communityrepo'
          content: |

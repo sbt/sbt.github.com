@@ -11,7 +11,11 @@ toplinks: #Links at the top.
            #### Building SBT Plugins ####           
            Presentation showing how to build SBT plugins. The source code and presentation pdf 
            can be found [here](https://github.com/mads379/sbt-plugin-examples "here").
-           
+       - name: 'SBT Cookbook'
+         id: 'sbtcookbook'
+         content: |
+           #### SBT Cookbook ####           
+           A [talk](http://youtu.be/V2rl62CZPVc) on the basics of SBT as well as some cookbook examples.
 
 ---
 
