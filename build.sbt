@@ -14,6 +14,10 @@ seq(com.jsuereth.sbtsite.SitePlugin.site.settings:_*)
 
 (com.jsuereth.sbtsite.SiteKeys.siteSourceDirectory) <<= baseDirectory(_ / "static")
 
+com.jsuereth.sbtsite.SiteKeys.siteMappings <+= (baseDirectory, streams) map { (dir, s) => 
+  (dir / "src" / "site" / "README.md") -> "README.md"
+}
+
 com.jsuereth.sbtsite.SiteKeys.siteMappings <<= (com.jsuereth.sbtsite.SiteKeys.siteMappings, baseDirectory, target, streams) map { (mappings, dir, out, s) => 
   val jekyllSrc = dir / "src" / "jekyll"
   val jekyllOutput = out / "jekyll"
