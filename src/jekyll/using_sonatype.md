@@ -136,7 +136,9 @@ This file (kept *outside the VCS*) contains the Sonatype credentials settings:
 
 This file specifies the plugins for your project. If you intend to sign the artefacts, you'll need to include @jsuereth's `xsbt-gpg-plugin`:
 
-    resolvers += "sbt-plugin-releases" at "http://scalasbt.artifactoryonline.com/scalasbt/sbt-plugin-releases/"
+    resolvers += Resolver.url("sbt-plugin-releases", /* no new line */
+      new URL("http://scalasbt.artifactoryonline.com/scalasbt/sbt-plugin-releases")) /* no new line */
+      (Resolver.ivyStylePatterns)
     
     addSbtPlugin("com.jsuereth" % "xsbt-gpg-plugin" % "0.5")
 
