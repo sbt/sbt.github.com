@@ -38,7 +38,7 @@ toplinks:
            control over their repository and its access.   The Goal of the SBT organization is to
            organize SBT software into one central location.
 
-           A side benefit to using the SBT organization for projects is that you can us gh-pages to host websites in the http://scala-sbt.org domain.
+           A side benefit to using the SBT organization for projects is that you can use gh-pages to host websites in the http://scala-sbt.org domain.
            
        - name: 'Community Plugin Build'
          id: 'pluginbuild'
