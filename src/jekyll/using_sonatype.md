@@ -86,7 +86,7 @@ The credentails for your Sonatype OSSRH account need to be added somewhere.  Com
                                "<your username>",
                                "<your password>")
 
-*Note: The first two strings **must** be `"Sonatype Nexus Repository Manager"` and `"oss.sonatype.org"` for Ivy to use the credentials.*
+*Note: The first two strings must be `"Sonatype Nexus Repository Manager"` and `"oss.sonatype.org"` for Ivy to use the credentials.*
 
 ## Finally - Publish ##
 
