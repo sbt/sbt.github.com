@@ -8,13 +8,17 @@ The project contains the sources used to generate  [http://www.scala-sbt.org/](h
 
 ## Requirements
 
-You need to have `jekyll` installed. Luckily that's quite easy: `gem install jekyll`. If that doesn't work check out the [installation instructions](https://github.com/mojombo/jekyll/wiki/Install "installation instructions").
+You need to have `jekyll` installed. Luckily, that's quite easy: `gem install jekyll`. If that doesn't work, check out the [installation instructions](https://github.com/mojombo/jekyll/wiki/Install "installation instructions").
 
 ## Usage
  
 You can find the sources in the src/jekyll folder.
 
-To generate the site simple start an SBT shell and type:
+To generate the site, simply start an SBT shell and type:
 
     > make-site
     > ghpages-push-site
+
+To preview the site, start jekyll and browse to [localhost:4000](http://localhost:4000):
+
+    $ jekyll src/jekyll/ target/jekyll/ --server

@@ -79,7 +79,7 @@ This might be advantageous if those keys are used also by other plugins (e.g. `l
 
 ## Fourth - Adding credentials ##
 
-The credentails for your Sonatype OSSRH account need to be added somewhere.  Common convention is a `~/.sbt/sonatype.sbt` file with the following:
+The credentials for your Sonatype OSSRH account need to be added somewhere.  Common convention is a `~/.sbt/sonatype.sbt` file with the following:
 
     credentials += Credentials("Sonatype Nexus Repository Manager", 
                                "oss.sonatype.org", 
