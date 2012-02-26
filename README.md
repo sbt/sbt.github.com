@@ -18,3 +18,7 @@ To generate the site, simply start an SBT shell and type:
 
     > make-site
     > ghpages-push-site
+
+To preview the site, start jekyll and browse to [localhost:4000](http://localhost:4000):
+
+    $ jekyll src/jekyll/ target/jekyll/ --server
