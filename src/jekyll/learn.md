@@ -8,6 +8,8 @@ description: |
 toplinks:
        - name: 'Getting Started Guide'
          link: 'https://github.com/harrah/xsbt/wiki/Getting-Started-Welcome'
+       - name: 'How to ...'
+         link: 'howto.html'
        - name: 'Talks'
          link: 'talks.html'
        - name: 'Wiki'
