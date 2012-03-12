@@ -8,7 +8,7 @@ The project contains the sources used to generate  [http://www.scala-sbt.org/](h
 
 ## Requirements
 
-You need to have `jekyll` installed. Luckily, that's quite easy: `gem install jekyll`. If that doesn't work, check out the [installation instructions](https://github.com/mojombo/jekyll/wiki/Install "installation instructions").
+You need to have `jekyll` installed. Luckily, that's quite easy: `gem install jekyll rdiscount --no-ri --no-rdoc`. If that doesn't work, check out the [installation instructions](https://github.com/mojombo/jekyll/wiki/Install "installation instructions").
 
 ## Usage
  
