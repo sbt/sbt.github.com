@@ -16,4 +16,6 @@ toplinks:
          link: 'https://github.com/harrah/xsbt/wiki'
        - name: 'Plugins'
          link: 'plugins.html'
+       - name: 'FAQ'
+         link: 'https://github.com/harrah/xsbt/wiki/FAQ'
 ---
