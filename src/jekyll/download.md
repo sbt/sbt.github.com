@@ -15,7 +15,7 @@ toplinks:
            
            [Click here](http://typesafe.artifactoryonline.com/typesafe/windows-releases/org/scalasbt/sbt/0.11.2/sbt.msi) for the latest windows MSI.
            
-           *Note: please make sure to report any issues you may find [here](https://github.com/sbt/sbt-launcher-package/issues).*"
+           *Note: please make sure to report any issues you may find [here](https://github.com/sbt/sbt-launcher-package/issues).*
        - name: 'Yum Repository'
          id: 'rpm'
          content: |
@@ -23,7 +23,11 @@ toplinks:
 
             The sbt package is available from the [Typesafe Yum Repository](http://rpm.typesafe.com).
             Please install [this rpm](http://rpm.typesafe.com/typesafe-repo-2.0.0-1.noarch.rpm) to add the typesafe yum repository to your list of approved sources. 
-            Then run `yum install sbt` to grab the latest release of sbt.
+            Then run:
+            
+                yum install sbt
+             
+             to grab the latest release of sbt.
             
             *Note: please make sure to report any issues you may find [here](https://github.com/sbt/sbt-launcher-package/issues).*"
        - name: 'Apt Repository'
@@ -33,7 +37,11 @@ toplinks:
            
            The sbt package is available from the [Typesafe Debian Repository](http://apt.typesafe.com).
            Please install [this deb](http://apt.typesafe.com/repo-deb-build-0002.deb) to enable the typesafe repository.
-           Then run `apt-get install sbt` to grab the latest release of sbt.
+           Then run:
+           
+               apt-get install sbt
+           
+           to grab the latest release of sbt.
             
             *Note: please make sure to report any issues you may find [here](https://github.com/sbt/sbt-launcher-package/issues).*"
        - name: 'Homebrew'
