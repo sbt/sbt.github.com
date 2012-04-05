@@ -30,6 +30,7 @@ com.jsuereth.sbtsite.SiteKeys.siteMappings <<= (com.jsuereth.sbtsite.SiteKeys.si
   }
   checkVersion("jekyll", "0.11.2")
   checkVersion("liquid", "2.3.0")
+  try { Seq("pygmentize", "-V").!! } catch { case e:java.io.IOException => error("Pygments required but not installed") }
   val jekyllSrc = dir / "src" / "jekyll"
   val jekyllOutput = out / "jekyll"
   // Run Jekyll
