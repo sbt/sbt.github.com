@@ -10,6 +10,7 @@ The project contains the sources used to generate  [http://www.scala-sbt.org/](h
 
 You need to have `jekyll` and `Pygments` installed. Luckily, that's quite easy:
 `gem install jekyll rdiscount --no-ri --no-rdoc && sudo easy_install Pygments`
+
 If that doesn't work, check out the [installation instructions](https://github.com/mojombo/jekyll/wiki/Install "installation instructions").
 
 ## Usage
