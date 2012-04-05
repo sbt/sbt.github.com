@@ -18,7 +18,18 @@ com.jsuereth.sbtsite.SiteKeys.siteMappings <+= (baseDirectory, streams) map { (d
   (dir / "src" / "site" / "README.md") -> "README.md"
 }
 
-com.jsuereth.sbtsite.SiteKeys.siteMappings <<= (com.jsuereth.sbtsite.SiteKeys.siteMappings, baseDirectory, target, streams) map { (mappings, dir, out, s) => 
+com.jsuereth.sbtsite.SiteKeys.siteMappings <<= (com.jsuereth.sbtsite.SiteKeys.siteMappings, baseDirectory, target, streams) map { (mappings, dir, out, s) =>
+  def checkVersion(gem: String, version: String) = {
+    val installed = Seq("gem", "list", "--local", gem).!!
+    """\((.+)\)""".r.findFirstMatchIn(installed) match {
+      case None => error(gem + " not installed.")
+      case Some(m) =>
+        val v = m.group(1)
+        if(v == version) () else error("%s %s required, but %s was found.".format(gem, version, v))
+    }
+  }
+  checkVersion("jekyll", "0.11.2")
+  checkVersion("liquid", "2.3.0")
   val jekyllSrc = dir / "src" / "jekyll"
   val jekyllOutput = out / "jekyll"
   // Run Jekyll
