@@ -3,7 +3,7 @@ layout: default
 title: download
 tagline: up and running in moments.
 description: |
-  The [SBT Launcher](http://github.com/sbt/sbt-launcher) project contains a set of native packages for use in your operating system.
+  The [SBT Launcher](http://github.com/sbt/sbt-launcher-package) project contains a set of native packages for use in your operating system.
 
   [msi](#windows) | [yum](#rpm) | [apt-get](#deb) | [homebrew](#mac) | [by hand](#manual)
 
