@@ -116,7 +116,7 @@ homepage := Some(url("http://jsuereth.com/scala-arm"))
 
 <h2>Fourth - Adding credentials</h2>
 
-<p>The credentials for your Sonatype OSSRH account need to be added somewhere.  Common convention is a <code>~/.sbt/sonatype.sbt</code> file with the following:</p>
+<p>The credentials for your Sonatype OSSRH account need to be added somewhere.  Common convention is a <code>~/.sbt/sonatype.sbt</code> file or <code>~/.sbt/[sbt version]/sonatype.sbt</code> with the following:</p>
 
 <pre><code>credentials += Credentials("Sonatype Nexus Repository Manager", 
                            "oss.sonatype.org", 
@@ -174,7 +174,7 @@ Please enter your PGP passphrase&gt; ***********
 you'll then need to:</p>
 
 <h4>~/.sbt/sonatype.sbt</h4>
-
+Note you may need to put sonatype.sbt in <code>~/.sbt/[sbt version]/sonatype.sbt</code>
 <p>This file (kept <em>outside the VCS</em>) contains the Sonatype credentials settings:</p>
 
 <pre><code>credentials += Credentials("Sonatype Nexus Repository Manager",
