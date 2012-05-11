@@ -25,7 +25,7 @@ com.jsuereth.sbtsite.SiteKeys.siteMappings <<= (com.jsuereth.sbtsite.SiteKeys.si
       case None => error(gem + " not installed.")
       case Some(m) =>
         val v = m.group(1)
-        if(v == version) () else error("%s %s required, but %s was found.".format(gem, version, v))
+        if(v contains version) () else error("%s %s required, but %s was found.".format(gem, version, v))
     }
   }
   checkVersion("jekyll", "0.11.2")
