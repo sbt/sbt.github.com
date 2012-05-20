@@ -113,9 +113,10 @@ shellPrompt := { state => System.getProperty("user.name") + "> " }
 
 <h4 id="history">Using history</h4>
 
-Interactive mode remembers history, even if you exit sbt and restart it.
-The simplest way to access history is with the up arrow key. The following
-commands are also supported:
+Interactive mode remembers history even if you exit sbt and restart it.
+The simplest way to access history is to press the up arrow key to cycle
+through previously entered commands.  Use `Ctrl+r` to incrementally
+search history backwards.  The following commands are supported:
 
 * `!` Show history command help.
 * `!!` Execute the previous command again.

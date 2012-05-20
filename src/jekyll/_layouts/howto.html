@@ -1,20 +1,16 @@
-{% include header.txt %}
-
-{% include topbar.txt %}
+{% include howto_header.txt %}
 
 <div class="cf" id="container">
   <div class="span2 columns container-spacer"><p>&nbsp;</p></div>
   <div id="intro" class="span10 columns content">
     <div id="head" class="cf">
-      <div id="name" class="left">
-        <h1>sbt</h1>
-        <h2>{{page.title}}</h2>
-      </div>
+      <h2>{{page.title}}</h2>
     </div>
-    <div id="features" class="cf"><div id="feature-list">
-      <ul class="left">
+    <div class="cf"><div id="feature-list">
+      <h3> How to ...</h3>
+      <ul class="left" id="section-toc">
           {% for section in page.sections %}
-             <li id="feature"><h4><a href="#{{section.id}}">How to {{section.name}}</a></h4></li>
+             <li id="feature"><h5>... <a href="#{{section.id}}">{{section.name}}</a></h5></li>
           {% endfor %}
        </ul>
      </div></div>

@@ -16,8 +16,6 @@ sections:
    setting: 'pollInterval := 1000 // in ms'
 ---
 
-[Full Configuration](https://github.com/harrah/xsbt/wiki/Full-Configuration)
-
 <h4 id="basic">Run a command when sources change</h4>
 
 You can make a command run when certain files change by prefixing the command with `~`.  Monitoring is terminated when `enter` is pressed.  This triggered execution is configured by the `watch` setting, but typically the basic settings `watch-sources` and `poll-interval` are modified as described in later sections.
@@ -59,7 +57,7 @@ watchSources <+= baseDirectory { _ / "demo" / "examples.txt" }
 
 <h4 id="interval">Configure the polling time</h4>
 
-* `pollInterval` selects the interval between polling for changes in milliseconds.  The default value is `500 ms`.  To change it to `1 s`,
+`pollInterval` selects the interval between polling for changes in milliseconds.  The default value is `500 ms`.  To change it to `1 s`,
 
 {% highlight scala %}
 pollInterval := 1000 // in ms
