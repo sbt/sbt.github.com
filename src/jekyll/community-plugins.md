@@ -13,7 +13,7 @@ toplinks:
            #### Community Ivy Repository ####           
            [Typesafe, Inc.](http://www.typesafe.com) has provided a freely available [Ivy Repository](http://scalasbt.artifactoryonline.com/scalasbt) for SBT projects to make use of.
 
-           If you would like to publish your project to this Ivy repository, first contact Joshua.Suereth@typesafe.com and request privileges
+           If you would like to publish your project to this Ivy repository, first contact [sbt-repo-admins](http://groups.google.com/group/sbt-repo-admins?hl=en) and request privileges
            (we have to verify code ownership, rights to publish, etc.).  After which, you can deploy your plugins using the following configuration:
            
                publishTo := Some(Resolver.url("sbt-plugin-releases", new URL("http://scalasbt.artifactoryonline.com/scalasbt/sbt-plugin-releases/"))(Resolver.ivyStylePatterns))
@@ -41,7 +41,6 @@ toplinks:
                }
 
            *Note: ivy repositories currently don't support Maven-style snapshots.*
-
        - name: 'SBT Organization'
          id: 'sbtorg'
          content: |
