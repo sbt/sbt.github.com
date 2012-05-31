@@ -61,7 +61,7 @@ toplinks:
            add the bin/ to your path.
 
            #### By Hand installation ####
-           First, download the [launcher jar](http://typesafe.artifactoryonline.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.11.3/sbt-launch.jar) 
+           First, download the [launcher jar](http://typesafe.artifactoryonline.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.11.3-2/sbt-launch.jar) 
            and place it somewhere useful.
            THEN, create a script in that same directory.
            ##### Windows #####
