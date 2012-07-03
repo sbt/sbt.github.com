@@ -29,7 +29,7 @@ toplinks:
              
              to grab the latest release of sbt.
             
-            *Note: please make sure to report any issues you may find [here](https://github.com/sbt/sbt-launcher-package/issues).*"
+            *Note: please make sure to report any issues you may find [here](https://github.com/sbt/sbt-launcher-package/issues).*
        - name: 'Apt Repository'
          id: 'deb'
          content: |
@@ -39,11 +39,12 @@ toplinks:
            Please install [this deb](http://apt.typesafe.com/repo-deb-build-0002.deb) to enable the typesafe repository.
            Then run:
            
-               apt-get install sbt
+               sudo apt-get update
+               sudo apt-get install sbt
            
            to grab the latest release of sbt.
             
-            *Note: please make sure to report any issues you may find [here](https://github.com/sbt/sbt-launcher-package/issues).*"
+            *Note: please make sure to report any issues you may find [here](https://github.com/sbt/sbt-launcher-package/issues).*
        - name: 'Homebrew'
          id: 'mac'
          content: |
