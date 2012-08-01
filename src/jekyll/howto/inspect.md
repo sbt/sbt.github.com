@@ -222,11 +222,11 @@ For details, see `help session`.
 
 {% highlight console %}
 > about
-[info] This is sbt 0.11.3
+[info] This is sbt 0.12.0
 [info] The current project is {file:~/code/sbt.github.com/}default
-[info] The current project is built against Scala 2.9.1
+[info] The current project is built against Scala 2.9.2
 [info] Available Plugins: com.jsuereth.ghpages.GhPages, com.jsuereth.git.GitPlugin, com.jsuereth.sbtsite.SitePlugin
-[info] sbt, sbt plugins, and build definitions are using Scala 2.9.1
+[info] sbt, sbt plugins, and build definitions are using Scala 2.9.2
 {% endhighlight %}
 
 <h4 id="value">Show the value of a setting</h4>
@@ -250,7 +250,7 @@ The `show` command also works for tasks, described next.
 [info] Update report:
 [info] 	Resolve time: 122 ms, Download time: 5 ms, Download size: 0 bytes
 [info] 	compile:
-[info] 		org.scala-lang:scala-library:2.9.1: ...
+[info] 		org.scala-lang:scala-library:2.9.2: ...
 {% endhighlight %}
 
 The `show` command will execute the task provided as an argument and then print the result.
@@ -262,7 +262,7 @@ which does not execute a task and thus can only display its type and not its gen
 {% highlight console %}
 > show compile:dependency-classpath
 ...
-[info] ArrayBuffer(Attributed(~/.sbt/0.11.3/boot/scala-2.9.1/lib/scala-library.jar))
+[info] ArrayBuffer(Attributed(~/.sbt/0.12.0/boot/scala-2.9.2/lib/scala-library.jar))
 {% endhighlight %}
 
 For the test classpath,
@@ -270,7 +270,7 @@ For the test classpath,
 {% highlight console %}
 > show test:dependency-classpath
 ...
-[info] ArrayBuffer(Attributed(~/code/sbt.github.com/target/scala-2.9.1/classes), Attributed(~/.sbt/0.11.3/boot/scala-2.9.1/lib/scala-library.jar), Attributed(~/.ivy2/cache/junit/junit/jars/junit-4.8.2.jar))
+[info] ArrayBuffer(Attributed(~/code/sbt.github.com/target/scala-2.9.2/classes), Attributed(~/.sbt/0.12.0/boot/scala-2.9.2/lib/scala-library.jar), Attributed(~/.ivy2/cache/junit/junit/jars/junit-4.8.2.jar))
 {% endhighlight %}
 
 <h4 id="applications">Show the main classes detected in a project</h4>

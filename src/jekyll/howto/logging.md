@@ -73,8 +73,8 @@ The details of this execution can be recalled by running `last`:
 [debug] Starting sandboxed run...
 [debug] Waiting for threads to exit or System.exit to be called.
 [debug]   Classpath:
-[debug] 	/tmp/e/target/scala-2.9.1/classes
-[debug] 	/tmp/e/.sbt/0.12.0/boot/scala-2.9.1/lib/scala-library.jar
+[debug] 	/tmp/e/target/scala-2.9.2/classes
+[debug] 	/tmp/e/.sbt/0.12.0/boot/scala-2.9.2/lib/scala-library.jar
 [debug] Waiting for thread run-main to exit
 [debug] 	Thread run-main exited.
 [debug] Interrupting remaining threads (should be all daemons).

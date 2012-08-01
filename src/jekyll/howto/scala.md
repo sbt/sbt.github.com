@@ -42,10 +42,10 @@ By default, sbt's interactive mode is started when no commands are provided on t
 
 The `scalaVersion` configures the version of Scala used for compilation.  By default, sbt also adds a dependency on the Scala library with this version.  See the next section for how to disable this automatic dependency.  If the Scala version is not specified, the version sbt was built against is used.  It is recommended to explicitly specify the version of Scala.
 
-For example, to set the Scala version to "2.9.1",
+For example, to set the Scala version to "2.9.2",
 
 {% highlight scala %}
-scalaVersion := "2.9.1"
+scalaVersion := "2.9.2"
 {% endhighlight %}
 
 <h4 id="noauto">Disable the automatic dependency on the Scala library</h4>

@@ -13,7 +13,7 @@ toplinks:
          content: |
            #### Windows Releases ####
            
-           [Click here](http://scalasbt.artifactoryonline.com/scalasbt/sbt-native-packages/org/scala-sbt/sbt-launcher/0.11.3/sbt.msi) for the latest windows MSI.
+           [Click here](http://scalasbt.artifactoryonline.com/scalasbt/sbt-native-packages/org/scala-sbt/sbt/0.12.0/sbt.msi) for the latest windows MSI.
            
            *Note: please make sure to report any issues you may find [here](https://github.com/sbt/sbt-launcher-package/issues).*
        - name: 'Yum Repository'
@@ -56,12 +56,12 @@ toplinks:
          id: 'manual'
          content: |
            #### Pre-Built Zip files ###
-           Download one of the pre-built [zip](http://scalasbt.artifactoryonline.com/scalasbt/sbt-native-packages/org/scala-sbt/sbt-launcher/0.11.3/sbt.zip)
-           or [tgz](http://scalasbt.artifactoryonline.com/scalasbt/sbt-native-packages/org/scala-sbt/sbt-launcher/0.11.3/sbt.tgz) and
+           Download one of the pre-built [zip](http://scalasbt.artifactoryonline.com/scalasbt/sbt-native-packages/org/scala-sbt/sbt/0.12.0/sbt.zip)
+           or [tgz](http://scalasbt.artifactoryonline.com/scalasbt/sbt-native-packages/org/scala-sbt/sbt/0.12.0/sbt.tgz) and
            add the bin/ to your path.
 
            #### By Hand installation ####
-           First, download the [launcher jar](http://typesafe.artifactoryonline.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.11.3-2/sbt-launch.jar) 
+           First, download the [launcher jar](http://typesafe.artifactoryonline.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.12.0/sbt-launch.jar) 
            and place it somewhere useful.
            THEN, create a script in that same directory.
            ##### Windows #####
