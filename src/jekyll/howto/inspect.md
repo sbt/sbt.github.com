@@ -52,7 +52,7 @@ sections:
    command: show defined-test-names
 ---
 
-[Inspecting Settings]: https://github.com/harrah/xsbt/wiki/Inspecting-Settings
+[Inspecting Settings]: https://sbtwiki.backchat.io/Inspecting-Settings
 
 <h4 id="taskhelp">Show or search help for a command, task, or setting</h4>
 

@@ -15,8 +15,8 @@ sections:
    setting: 'mappings in (Compile, packageBin) <+= baseDirectory { dir => ( dir / "example.txt") -> "out/example.txt" }'
 ---
 
-[mapping files]: https://github.com/harrah/xsbt/wiki/Mapping-Files
-[Artifacts]: https://github.com/harrah/xsbt/wiki/Artifacts
+[mapping files]: https://sbtwiki.backchat.io/Mapping-Files
+[Artifacts]: https://sbtwiki.backchat.io/Artifacts
 
 <h4 id="export">Use the packaged jar on classpaths instead of class directory</h4>
 
