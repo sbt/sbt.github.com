@@ -32,8 +32,8 @@ sections:
    name: use the Scala REPL from project code
 ---
 
-[console-project]: https://github.com/harrah/xsbt/wiki/Console-Project
-[cross building]: https://github.com/harrah/xsbt/wiki/Cross-Build
+[console-project]: https://sbtwiki.backchat.io/Console-Project
+[cross building]: https://sbtwiki.backchat.io/Cross-Build
 [original proposal]: https://gist.github.com/404272
 
 By default, sbt's interactive mode is started when no commands are provided on the command line or when the `shell` command is invoked.

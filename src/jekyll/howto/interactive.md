@@ -35,7 +35,7 @@ sections:
    batch: clean compile shell
 ---
 
-[State]: https://github.com/harrah/xsbt/wiki/Build-State
+[State]: https://sbtwiki.backchat.io/Build-State
 
 By default, sbt's interactive mode is started when no commands are provided on the command line or when the `shell` command is invoked.
 
