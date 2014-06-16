@@ -129,13 +129,16 @@ If you’d like to submit your plugin, please follow these instructions:
 </p><h3 id="Available+Plugins">Available Plugins<a href="#Available+Plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Please feel free to
 <a href="https://github.com/sbt/website/pulls">submit a pull request</a> that adds
 your plugin to the list.
-</p><h4 id="Plugins+for+IDEs">Plugins for IDEs<a href="#Plugins+for+IDEs" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>IntelliJ IDEA
-</li><li>sbt Plugin to generate IDEA project configuration:
+</p><h4 id="Plugins+for+IDEs">Plugins for IDEs<a href="#Plugins+for+IDEs" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li><p>IntelliJ IDEA
+</p><ul><li>sbt Plugin to generate IDEA project configuration:
 <a href="https://github.com/mpeltonen/sbt-idea">https://github.com/mpeltonen/sbt-idea</a>
 </li><li>IDEA Plugin to embed an sbt Console into the IDE:
 <a href="https://github.com/orfjackal/idea-sbt-plugin">https://github.com/orfjackal/idea-sbt-plugin</a>
-</li><li>Netbeans: <a href="https://github.com/remeniuk/sbt-netbeans-plugin">https://github.com/remeniuk/sbt-netbeans-plugin</a>
-</li><li>Eclipse: <a href="https://github.com/typesafehub/sbteclipse">https://github.com/typesafehub/sbteclipse</a>
+</li></ul></li><li><p>Netbeans
+</p><ul><li>sbt-netbeans-plugin (older): <a href="https://github.com/remeniuk/sbt-netbeans-plugin">https://github.com/remeniuk/sbt-netbeans-plugin</a>
+</li><li>sbt plugin to generate NetBeans configuration: <a href="https://github.com/dcaoyuan/nbsbt">https://github.com/dcaoyuan/nbsbt</a>
+</li><li>sbt plugin to add scala support to NetBeans: <a href="https://github.com/dcaoyuan/nbscala">https://github.com/dcaoyuan/nbscala</a>
+</li></ul></li><li>Eclipse: <a href="https://github.com/typesafehub/sbteclipse">https://github.com/typesafehub/sbteclipse</a>
 </li><li>Sublime Text: <a href="https://github.com/orrsella/sbt-sublime">https://github.com/orrsella/sbt-sublime</a>
 </li><li>Ensime: <a href="https://github.com/aemoncannon/ensime-sbt-cmd">https://github.com/aemoncannon/ensime-sbt-cmd</a>
 </li><li>sbt-mode for Emacs: <a href="https://github.com/hvesalai/sbt-mode">https://github.com/hvesalai/sbt-mode</a>
@@ -494,14 +497,20 @@ time.
 </p><blockquote><ul><li>Note: The plugin is a jvm-only solution to generate PGP keys and sign
 artifacts. It can work with the GPG command line tool, but the command
 line is not needed.*
-</li></ul></blockquote><p>If your PGP key has not yet been distributed to the keyserver pool,
+</li></ul></blockquote><p>If the command to generate your key fails execute the following commands and remove the displayed files:
+</p><pre><code class="">&gt; show */*:pgpSecretRing
+[info] /home/username/.sbt/.gnupg/secring.gpg
+&gt; show */*:pgpPublicRing
+[info] /home/username/.sbt/.gnupg/pubring.gpg
+</code></pre><p>If your PGP key has not yet been distributed to the keyserver pool,
 i.e., you’ve just generated it, you’ll need to publish it. You can do so
 using the <a href="http://scala-sbt.org/sbt-pgp">sbt-pgp</a> plugin:
 </p><pre><code class="">pgp-cmd send-key keyname hkp://pool.sks-keyservers.net/
-</code></pre><p>(where keyname is the name, email address used when creating the key or
+</code></pre><p>(where keyname is the name or email address used when creating the key or
 hexadecimal identifier for the key.)
 </p><p>If you see no output from sbt-pgp then the key name specified was not
 found.
+</p><p>If it fails to run the <code>SendKey</code> command you can try another server (for example: hkp://keyserver.ubuntu.com). A list of servers can be found at <a href="https://sks-keyservers.net/status/">the status page</a> of sks-keyservers.net.
 </p><h3 id="Second+-+Maven+Publishing+Settings">Second - Maven Publishing Settings<a href="#Second+-+Maven+Publishing+Settings" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To publish to a maven repository, you’ll need to configure a few
 settings so that the correct metadata is generated.
 </p><pre><code class="prettyprint lang-scala">publishMavenStyle := true
@@ -3474,7 +3483,7 @@ val cp: Classpath = raw.classpath
 
 val rawFile: File = ..
 val af: Attributed[File] = Attributed.blank(rawFile)
-</code></pre><h4 id="Unmanaged+v.+managed">Unmanaged v. managed<a href="#Unmanaged+v.+managed" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Classpaths, sources, and resources are separated into two main
+</code></pre><h4 id="Unmanaged+vs+managed">Unmanaged vs managed<a href="#Unmanaged+vs+managed" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Classpaths, sources, and resources are separated into two main
 categories: unmanaged and managed. Unmanaged files are manually created
 files that are outside of the control of the build. They are the inputs
 to the build. Managed files are under the control of the build. These
@@ -3503,7 +3512,7 @@ to <code>src/main/scala</code>. You can exclude source files by name
 </p><pre><code class="prettyprint lang-scala">excludeFilter in unmanagedSources := &quot;butler.scala&quot; 
 </code></pre><p>Read more on
 <a href="http://groups.google.com/group/simple-build-tool/browse_thread/thread/cd5332a164405568?hl=en">How to exclude .scala source file in project folder - Google Groups</a>
-</p><h4 id="External+v.+internal">External v. internal<a href="#External+v.+internal" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Classpaths are also divided into internal and external dependencies. The
+</p><h4 id="External+vs+internal">External vs internal<a href="#External+vs+internal" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Classpaths are also divided into internal and external dependencies. The
 internal dependencies are inter-project dependencies. These effectively
 put the outputs of one project on the classpath of another project.
 </p><p>External classpaths are the union of the unmanaged and managed

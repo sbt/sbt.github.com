@@ -150,11 +150,14 @@ your plugin to the list.
 #### Plugins for IDEs
 
 -   IntelliJ IDEA
--   sbt Plugin to generate IDEA project configuration:
+    -   sbt Plugin to generate IDEA project configuration:
     <https://github.com/mpeltonen/sbt-idea>
--   IDEA Plugin to embed an sbt Console into the IDE:
+    -   IDEA Plugin to embed an sbt Console into the IDE:
     <https://github.com/orfjackal/idea-sbt-plugin>
--   Netbeans: <https://github.com/remeniuk/sbt-netbeans-plugin>
+-   Netbeans
+    -   sbt-netbeans-plugin (older): <https://github.com/remeniuk/sbt-netbeans-plugin>
+    -   sbt plugin to generate NetBeans configuration: <https://github.com/dcaoyuan/nbsbt>
+    -   sbt plugin to add scala support to NetBeans: <https://github.com/dcaoyuan/nbscala>
 -   Eclipse: <https://github.com/typesafehub/sbteclipse>
 -   Sublime Text: <https://github.com/orrsella/sbt-sublime>
 -   Ensime: <https://github.com/aemoncannon/ensime-sbt-cmd>
@@ -687,6 +690,15 @@ time.
 artifacts. It can work with the GPG command line tool, but the command
 line is not needed.*
 
+If the command to generate your key fails execute the following commands and remove the displayed files:
+
+```
+> show */*:pgpSecretRing
+[info] /home/username/.sbt/.gnupg/secring.gpg
+> show */*:pgpPublicRing
+[info] /home/username/.sbt/.gnupg/pubring.gpg
+```
+
 If your PGP key has not yet been distributed to the keyserver pool,
 i.e., you've just generated it, you'll need to publish it. You can do so
 using the [sbt-pgp][sbt-pgp] plugin:
@@ -695,11 +707,13 @@ using the [sbt-pgp][sbt-pgp] plugin:
 pgp-cmd send-key keyname hkp://pool.sks-keyservers.net/
 ```
 
-(where keyname is the name, email address used when creating the key or
+(where keyname is the name or email address used when creating the key or
 hexadecimal identifier for the key.)
 
 If you see no output from sbt-pgp then the key name specified was not
 found.
+
+If it fails to run the `SendKey` command you can try another server (for example: hkp://keyserver.ubuntu.com). A list of servers can be found at [the status page](https://sks-keyservers.net/status/) of sks-keyservers.net.
 
 ### Second - Maven Publishing Settings
 
@@ -4719,7 +4733,7 @@ val rawFile: File = ..
 val af: Attributed[File] = Attributed.blank(rawFile)
 ```
 
-#### Unmanaged v. managed
+#### Unmanaged vs managed
 
 Classpaths, sources, and resources are separated into two main
 categories: unmanaged and managed. Unmanaged files are manually created
@@ -4769,7 +4783,7 @@ excludeFilter in unmanagedSources := "butler.scala"
 Read more on
 [How to exclude .scala source file in project folder - Google Groups](http://groups.google.com/group/simple-build-tool/browse_thread/thread/cd5332a164405568?hl=en)
 
-#### External v. internal
+#### External vs internal
 
 Classpaths are also divided into internal and external dependencies. The
 internal dependencies are inter-project dependencies. These effectively

@@ -52,14 +52,20 @@ time.
 </p><blockquote><ul><li>Note: The plugin is a jvm-only solution to generate PGP keys and sign
 artifacts. It can work with the GPG command line tool, but the command
 line is not needed.*
-</li></ul></blockquote><p>If your PGP key has not yet been distributed to the keyserver pool,
+</li></ul></blockquote><p>If the command to generate your key fails execute the following commands and remove the displayed files:
+</p><pre><code class="">&gt; show */*:pgpSecretRing
+[info] /home/username/.sbt/.gnupg/secring.gpg
+&gt; show */*:pgpPublicRing
+[info] /home/username/.sbt/.gnupg/pubring.gpg
+</code></pre><p>If your PGP key has not yet been distributed to the keyserver pool,
 i.e., you’ve just generated it, you’ll need to publish it. You can do so
 using the <a href="http://scala-sbt.org/sbt-pgp">sbt-pgp</a> plugin:
 </p><pre><code class="">pgp-cmd send-key keyname hkp://pool.sks-keyservers.net/
-</code></pre><p>(where keyname is the name, email address used when creating the key or
+</code></pre><p>(where keyname is the name or email address used when creating the key or
 hexadecimal identifier for the key.)
 </p><p>If you see no output from sbt-pgp then the key name specified was not
 found.
+</p><p>If it fails to run the <code>SendKey</code> command you can try another server (for example: hkp://keyserver.ubuntu.com). A list of servers can be found at <a href="https://sks-keyservers.net/status/">the status page</a> of sks-keyservers.net.
 </p><h3 id="Second+-+Maven+Publishing+Settings">Second - Maven Publishing Settings<a href="#Second+-+Maven+Publishing+Settings" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To publish to a maven repository, you’ll need to configure a few
 settings so that the correct metadata is generated.
 </p><pre><code class="prettyprint lang-scala">publishMavenStyle := true
