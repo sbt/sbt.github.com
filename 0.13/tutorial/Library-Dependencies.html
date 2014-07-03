@@ -43,7 +43,7 @@
           </a>
         <div class="container contentswrapper">
           <div class="span-16 prepend-1 append-1 contents">
-            <h2 id="Library+dependencies">Library dependencies<a href="#Library+dependencies" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>This page assumes you’ve read the earlier Getting Started pages, in
+            <h2 id="Library+dependencies">Library dependencies<a href="#Library+dependencies" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>This page assumes you’ve already read the earlier Getting Started pages, in
 particular <a href="Basic-Def.html">.sbt build definition</a>, <a href="Scopes.html">scopes</a>, and
 <a href="More-About-Settings.html">more kinds of setting</a>.
 </p><p>Library dependencies can be added in two ways:
@@ -55,8 +55,8 @@ can be simpler when starting out.
 </p><p>Unmanaged dependencies work like this: add jars to <code>lib</code> and they will be
 placed on the project classpath. Not much else to it!
 </p><p>You can place test jars such as
-<a href="https://github.com/rickynils/scalacheck">ScalaCheck</a>,
-<a href="http://code.google.com/p/specs/">specs</a>, and
+<a href="http://scalacheck.org/">ScalaCheck</a>,
+<a href="http://specs2.org">Specs2</a>, and
 <a href="http://www.scalatest.org/">ScalaTest</a> in <code>lib</code> as well.
 </p><p>Dependencies in <code>lib</code> go on all the classpaths (for <code>compile</code>, <code>test</code>, <code>run</code>,
 and <code>console</code>). If you wanted to change the classpath for just one of
@@ -68,14 +68,16 @@ different directory rather than <code>lib</code>.
 </p><p>To use <code>custom_lib</code> instead of <code>lib</code>:
 </p><pre><code class="prettyprint lang-scala">unmanagedBase := baseDirectory.value / &quot;custom_lib&quot;
 </code></pre><p><code>baseDirectory</code> is the project’s root directory, so here you’re changing
-<code>unmanagedBase</code> depending on <code>baseDirectory</code> using the special value method
+<code>unmanagedBase</code> depending on <code>baseDirectory</code> using the special <code>value</code> method
 as explained in <a href="More-About-Settings.html">more kinds of setting</a>.
 </p><p>There’s also an <code>unmanagedJars</code> task which lists the jars from the
 <code>unmanagedBase</code> directory. If you wanted to use multiple directories or do
 something else complex, you might need to replace the whole
-<code>unmanagedJars</code> task with one that does something else.
-</p><h3 id="Managed+Dependencies">Managed Dependencies<a href="#Managed+Dependencies" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt uses <a href="http://ant.apache.org/ivy/">Apache Ivy</a> to implement managed
-dependencies, so if you’re familiar with Maven or Ivy, you won’t have
+<code>unmanagedJars</code> task with one that does something else, e.g. empty the list for
+<code>Compile</code> configuration regardless of the files in <code>lib</code> directory:
+</p><pre><code class="prettyprint lang-scala">unmanagedJars in Compile := Seq.empty[sbt.Attributed[java.io.File]]
+</code></pre><h3 id="Managed+Dependencies">Managed Dependencies<a href="#Managed+Dependencies" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt uses <a href="http://ant.apache.org/ivy/">Apache Ivy</a> to implement managed
+dependencies, so if you’re familiar with Ivy or Maven, you won’t have
 much trouble.
 </p><h4 id="The++key">The <code>libraryDependencies</code> key<a href="#The++key" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Most of the time, you can simply list your dependencies in the setting
 <code>libraryDependencies</code>. It’s also possible to write a Maven POM file or Ivy
@@ -85,20 +87,22 @@ that <a href="../docs/Library-Management.html#external-maven-ivy">here</a>.
 </p><p>Declaring a dependency looks like this, where <code>groupId</code>, <code>artifactId</code>, and
 <code>revision</code> are strings:
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += groupID % artifactID % revision
-</code></pre><p>or like this, where <code>configuration</code> is also a string:
+</code></pre><p>or like this, where <code>configuration</code> can be a string or
+<a href="../sxr/sbt/Configurations.scala.html#sbt.Configuration">Configuration</a> val:
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += groupID % artifactID % revision % configuration
 </code></pre><p><code>libraryDependencies</code> is declared in
 <a href="../sxr/sbt/Keys.scala.html#sbt.Keys.libraryDependencies">Keys</a> like
 this:
 </p><pre><code class="prettyprint lang-scala">val libraryDependencies = settingKey[Seq[ModuleID]](&quot;Declares managed dependencies.&quot;)
-</code></pre><p>The <code>%</code> methods create<code>ModuleID</code> objects from strings, then you add those
+</code></pre><p>The <code>%</code> methods create <code>ModuleID</code> objects from strings, then you add those
 <code>ModuleID</code> to <code>libraryDependencies</code>.
 </p><p>Of course, sbt (via Ivy) has to know where to download the module. If
 your module is in one of the default repositories sbt comes with, this
-will just work. For example, Apache Derby is in a default repository:
+will just work. For example, Apache Derby is in the standard Maven2
+repository:
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot;
 </code></pre><p>If you type that in <code>build.sbt</code> and then <code>update</code>, sbt should download Derby
-to <code>~/.ivy2/cache/org.apache.derby/</code>. (By the way, <code>updat</code>e is a dependency
+to <code>~/.ivy2/cache/org.apache.derby/</code>. (By the way, <code>update</code> is a dependency
 of <code>compile</code> so there’s no need to manually type <code>update</code> most of the time.)
 </p><p>Of course, you can also use <code>++=</code> to add a list of dependencies all at
 once:
@@ -112,17 +116,18 @@ as well.
 <code>groupID % artifactID % revision</code> (the difference is the double <code>%%</code> after
 the <code>groupID</code>), sbt will add your project’s Scala version to the artifact
 name. This is just a shortcut. You could write this without the <code>%%</code>:
-</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-tools&quot; % &quot;scala-stm_2.9.1&quot; % &quot;0.3&quot;
-</code></pre><p>Assuming the <code>scalaVersion</code> for your build is <code>2.9.1</code>, the following is
-identical:
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-tools&quot; % &quot;scala-stm_2.11.1&quot; % &quot;0.3&quot;
+</code></pre><p>Assuming the <code>scalaVersion</code> for your build is <code>2.11.1</code>, the following is
+identical (note the double <code>%%</code> after <code>&quot;org.scala-tools&quot;</code>):
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-tools&quot; %% &quot;scala-stm&quot; % &quot;0.3&quot;
 </code></pre><p>The idea is that many dependencies are compiled for multiple Scala
-versions, and you’d like to get the one that matches your project.
+versions, and you’d like to get the one that matches your project
+to ensure binary compatibility.
 </p><p>The complexity in practice is that often a dependency will work with a
 slightly different Scala version; but <code>%%</code> is not smart about that. So if
-the dependency is available for <code>2.9.0</code> but you’re using
-<code>scalaVersion := &quot;2.9.1&quot;</code>, you won’t be able to use <code>%%</code> even though the
-<code>2.9.0</code> dependency likely works. If <code>%%</code> stops working just go see which
+the dependency is available for <code>2.10.1</code> but you’re using
+<code>scalaVersion := &quot;2.10.4&quot;</code>, you won’t be able to use <code>%%</code> even though the
+<code>2.10.1</code> dependency likely works. If <code>%%</code> stops working, just go see which
 versions the dependency is really built for, and hardcode the one you
 think will work (assuming there is one).
 </p><p>See <a href="../docs/Cross-Build.html">Cross Building</a> for some more detail on this.
@@ -139,7 +144,8 @@ repository by default. If your dependency isn’t on one of the default
 repositories, you’ll have to add a <em>resolver</em> to help Ivy find it.
 </p><p>To add an additional repository, use
 </p><pre><code class="prettyprint lang-scala">resolvers += name at location
-</code></pre><p>For example:
+</code></pre><p>with the special <code>at</code> between two strings.
+</p><p>For example:
 </p><pre><code class="prettyprint lang-scala">resolvers += &quot;Sonatype OSS Snapshots&quot; at &quot;https://oss.sonatype.org/content/repositories/snapshots&quot;
 </code></pre><p>The <code>resolvers</code> key is defined in
 <a href="../sxr/sbt/Keys.scala.html#sbt.Keys.resolvers">Keys</a> like this:
@@ -148,6 +154,8 @@ repositories, you’ll have to add a <em>resolver</em> to help Ivy find it.
 </p><p>sbt can search your local Maven repository if you add it as a
 repository:
 </p><pre><code class="prettyprint lang-scala">resolvers += &quot;Local Maven Repository&quot; at &quot;file://&quot;+Path.userHome.absolutePath+&quot;/.m2/repository&quot;
+</code></pre><p>or, for convenience:
+</p><pre><code class="prettyprint lang-scala">resolvers += Resolver.mavenLocal
 </code></pre><p>See <a href="../docs/Resolvers.html">Resolvers</a> for details on defining other types of
 repositories.
 </p><h4 id="Overriding+default+resolvers">Overriding default resolvers<a href="#Overriding+default+resolvers" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>resolvers</code> does not contain the default resolvers; only additional ones
@@ -161,16 +169,17 @@ is compiled by the <code>Test</code> configuration) but not your main code.
 </p><p>If you want a dependency to show up in the classpath only for the <code>Test</code>
 configuration and not the <code>Compile</code> configuration, add <code>% &quot;test&quot;</code> like this:
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot; % &quot;test&quot;
+</code></pre><p>You may also use the type-safe version of <code>Test</code> configuration as follows:
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot; % Test
 </code></pre><p>Now, if you type <code>show compile:dependencyClasspath</code> at the sbt interactive
-prompt, you should not see derby. But if you type
+prompt, you should not see the derby jar. But if you type
 <code>show test:dependencyClasspath</code>, you should see the derby jar in the list.
 </p><p>Typically, test-related dependencies such as
-<a href="https://github.com/rickynils/scalacheck">ScalaCheck</a>,
-<a href="http://code.google.com/p/specs/">specs</a>, and
+<a href="http://scalacheck.org/">ScalaCheck</a>,
+<a href="http://specs2.org">Specs2</a>, and
 <a href="http://www.scalatest.org/">ScalaTest</a> would be defined with <code>% &quot;test&quot;</code>.
-</p><p>There are some more details and tips-and-tricks related to library
-dependencies on <a href="../docs/Library-Management.html">this page</a>, if
-you didn’t find an answer on this introductory page.
+</p><p>There are more details and tips-and-tricks related to library
+dependencies on <a href="../docs/Library-Management.html">this page</a>.
 </p><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>

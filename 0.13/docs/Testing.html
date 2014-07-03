@@ -56,7 +56,7 @@ methods of <code>java.lang.Class</code> or <code>java.lang.ClassLoader</code>.
 common test interface and only need to be added to the classpath to work
 with sbt. For example, ScalaCheck may be used by declaring it as a
 <a href="../tutorial/Library-Dependencies.html">managed dependency</a>:
-</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scalacheck&quot; %% &quot;scalacheck&quot; % &quot;1.10.1&quot; % &quot;test&quot;
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scalacheck&quot; %% &quot;scalacheck&quot; % &quot;1.11.4&quot; % &quot;test&quot;
 </code></pre><p>The fourth component <code>&quot;test&quot;</code> is the
 <a href="Library-Management.html#ivy-configurations">configuration</a> and means that ScalaCheck will
 only be on the test classpath and it isn’t needed by the main sources.
@@ -104,12 +104,12 @@ This can be disabled by disabling the <code>JUnitXmlReportPlugin</code>
 </p><pre><code class="prettyprint lang-scala">val myProject = project in file(&quot;.&quot;) disablePlugins (plugins.JUnitXmlReportPlugin)  
 </code></pre><h3 id="Options">Options<a href="#Options" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="Test+Framework+Arguments">Test Framework Arguments<a href="#Test+Framework+Arguments" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Arguments to the test framework may be provided on the command line to
 the <code>testOnly</code> tasks following a <code>--</code> separator. For example:
-</p><pre><code class="">&gt; testOnly org.example.MyTest -- -d -S
+</p><pre><code class="">&gt; testOnly org.example.MyTest -- -verbosity 1
 </code></pre><p>To specify test framework arguments as part of the build, add options
 constructed by <code>Tests.Argument</code>:
-</p><pre><code class="prettyprint lang-scala">testOptions in Test += Tests.Argument(&quot;-d&quot;, &quot;-g&quot;)
+</p><pre><code class="prettyprint lang-scala">testOptions in Test += Tests.Argument(&quot;-verbosity&quot;, &quot;1&quot;)
 </code></pre><p>To specify them for a specific test framework only:
-</p><pre><code class="prettyprint lang-scala">testOptions in Test += Tests.Argument(TestFrameworks.ScalaCheck, &quot;-d&quot;, &quot;-g&quot;)
+</p><pre><code class="prettyprint lang-scala">testOptions in Test += Tests.Argument(TestFrameworks.ScalaCheck, &quot;-verbosity&quot;, &quot;1&quot;)
 </code></pre><h4 id="Setup+and+Cleanup">Setup and Cleanup<a href="#Setup+and+Cleanup" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Specify setup and cleanup actions using <code>Tests.Setup</code> and
 <code>Tests.Cleanup</code>. These accept either a function of type <code>() =&gt; Unit</code> or
 a function of type <code>ClassLoader =&gt; Unit</code>. The variant that accepts a

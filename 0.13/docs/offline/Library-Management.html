@@ -366,7 +366,7 @@ or <code>&quot;compile&quot;</code>. The <code>-&gt;</code> is only needed when 
 configuration than those. The ScalaTest dependency above can then be
 shortened to:
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;2.1.3&quot; % &quot;test&quot;
-</code></pre><h4 id="Maven%2FIvy">Maven/Ivy<a href="#Maven%2FIvy" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>For this method, create the configuration files as you would for Maven
+</code></pre><h4 id="External+Maven+or+Ivy">External Maven or Ivy<a href="#External+Maven+or+Ivy" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>For this method, create the configuration files as you would for Maven
 (<code>pom.xml</code>) or Ivy (<code>ivy.xml</code> and optionally <code>ivysettings.xml</code>).
 External configuration is selected by using one of the following
 expressions.
@@ -379,8 +379,8 @@ expressions.
 </code></pre><p>or
 </p><pre><code class="prettyprint lang-scala">externalIvyFile(Def.setting(baseDirectory.value / &quot;custom-name.xml&quot;))
 </code></pre><p>Because Ivy files specify their own configurations, sbt needs to know
-which configurations to use for the compile, runtime, and test
-classpaths. For example, to specify that the Compile classpath should
+which configurations to use for the <code>compile</code>, <code>runtime</code>, and <code>test</code>
+classpaths. For example, to specify that the <code>Compile</code> classpath should
 use the ‘default’ configuration:
 </p><pre><code class="prettyprint lang-scala">classpathConfiguration in Compile := config(&quot;default&quot;)
 </code></pre><h5 id="Maven+pom+%28dependencies+only%29">Maven pom (dependencies only)<a href="#Maven+pom+%28dependencies+only%29" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><pre><code class="prettyprint lang-scala">externalPom()
@@ -401,7 +401,7 @@ with this support:
 </p><ul><li>Specifying <code>relativePath</code> in the <code>parent</code> section of a POM will
 produce an error.
 </li><li>Ivy ignores repositories specified in the POM. A workaround is to
-specify repositories inline or in an Ivy ivysettings.xml file.
+specify repositories inline or in an Ivy <code>ivysettings.xml</code> file.
 </li></ul><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>

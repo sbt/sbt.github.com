@@ -130,13 +130,13 @@ and its access. The goal of the sbt organization is to organize sbt
 software into one central location.
 
 A side benefit to using the sbt organization for projects is that you
-can use gh-pages to host websites in the http://scala-sbt.org domain.
+can use gh-pages to host websites under the http://scala-sbt.org domain.
 
 ### Community Ivy Repository
 
 [Typesafe](http://www.typesafe.com) has provided a freely available
 [Ivy Repository](http://repo.scala-sbt.org/scalasbt) for sbt projects
-to use. This ivy repository is mirrored from the freely available
+to use. This Ivy repository is mirrored from the freely available
 [Bintray service](http://bintray.com).
 If you'd like to submit your plugin, please follow these instructions:
 [Bintray For Plugins][Bintray-For-Plugins].
@@ -150,11 +150,9 @@ your plugin to the list.
 #### Plugins for IDEs
 
 -   IntelliJ IDEA
-    -   sbt Plugin to generate IDEA project configuration:
-    <https://github.com/mpeltonen/sbt-idea>
-    -   IDEA Plugin to embed an sbt Console into the IDE:
-    <https://github.com/orfjackal/idea-sbt-plugin>
--   Netbeans
+    -   sbt Plugin to generate IDEA project configuration: <https://github.com/mpeltonen/sbt-idea>
+    -   IDEA Plugin to embed an sbt Console into the IDE: <https://github.com/orfjackal/idea-sbt-plugin>
+-   Netbeans (no support to create a new sbt project yet)
     -   sbt-netbeans-plugin (older): <https://github.com/remeniuk/sbt-netbeans-plugin>
     -   sbt plugin to generate NetBeans configuration: <https://github.com/dcaoyuan/nbsbt>
     -   sbt plugin to add scala support to NetBeans: <https://github.com/dcaoyuan/nbscala>
@@ -350,6 +348,8 @@ your plugin to the list.
 
 #### Utility plugins
 
+-   sbt-process-runner (Run your own applications from SBT console)
+    <https://github.com/whysoserious/sbt-process-runner>
 -   jot (Write down your ideas lest you forget them)
     <https://github.com/softprops/jot>
 -   np (Dead simple new project directory generation):
@@ -6527,7 +6527,7 @@ with sbt. For example, ScalaCheck may be used by declaring it as a
 [managed dependency][Library-Dependencies]:
 
 ```scala
-libraryDependencies += "org.scalacheck" %% "scalacheck" % "1.10.1" % "test"
+libraryDependencies += "org.scalacheck" %% "scalacheck" % "1.11.4" % "test"
 ```
 
 The fourth component `"test"` is the
@@ -6622,20 +6622,20 @@ Arguments to the test framework may be provided on the command line to
 the `testOnly` tasks following a `--` separator. For example:
 
 ```
-> testOnly org.example.MyTest -- -d -S
+> testOnly org.example.MyTest -- -verbosity 1
 ```
 
 To specify test framework arguments as part of the build, add options
 constructed by `Tests.Argument`:
 
 ```scala
-testOptions in Test += Tests.Argument("-d", "-g")
+testOptions in Test += Tests.Argument("-verbosity", "1")
 ```
 
 To specify them for a specific test framework only:
 
 ```scala
-testOptions in Test += Tests.Argument(TestFrameworks.ScalaCheck, "-d", "-g")
+testOptions in Test += Tests.Argument(TestFrameworks.ScalaCheck, "-verbosity", "1")
 ```
 
 #### Setup and Cleanup
@@ -7886,7 +7886,7 @@ shortened to:
 libraryDependencies += "org.scalatest" %% "scalatest" % "2.1.3" % "test"
 ```
 
-#### Maven/Ivy
+#### External Maven or Ivy
 
 For this method, create the configuration files as you would for Maven
 (`pom.xml`) or Ivy (`ivy.xml` and optionally `ivysettings.xml`).
@@ -7924,8 +7924,8 @@ externalIvyFile(Def.setting(baseDirectory.value / "custom-name.xml"))
 ```
 
 Because Ivy files specify their own configurations, sbt needs to know
-which configurations to use for the compile, runtime, and test
-classpaths. For example, to specify that the Compile classpath should
+which configurations to use for the `compile`, `runtime`, and `test`
+classpaths. For example, to specify that the `Compile` classpath should
 use the 'default' configuration:
 
 ```scala
@@ -7968,7 +7968,7 @@ with this support:
 -   Specifying `relativePath` in the `parent` section of a POM will
     produce an error.
 -   Ivy ignores repositories specified in the POM. A workaround is to
-    specify repositories inline or in an Ivy ivysettings.xml file.
+    specify repositories inline or in an Ivy `ivysettings.xml` file.
 
 
 
@@ -10656,22 +10656,21 @@ Plugins
 ### Introduction
 
 A plugin is essentially a way to use external code in a build
-definition. A plugin can be a library used to implement a task. For
-example, you might use
+definition. A plugin can be a library used to implement a task (you might use
 [Knockoff](https://github.com/tristanjuricek/knockoff/) to write a
-markdown processing task. A plugin can define a sequence of sbt Settings
+markdown processing task). A plugin can define a sequence of sbt settings
 that are automatically added to all projects or that are explicitly
 declared for selected projects. For example, a plugin might add a
-`proguard` task and associated (overridable) settings. Also, `Commands`
-can be added with the `commands` setting
+`proguard` task and associated (overridable) settings. Finally, a plugin
+can define new commands (via the `commands` setting).
 
-The `Plugins-Best-Practices` page describes the currently evolving
-guidelines to writing sbt plugins. See also the general
+The [Plugins Best Practices][Plugins-Best-Practices] page describes
+the currently evolving guidelines to writing sbt plugins. See also the general
 [best practices][Best-Practices].
 
 ### Using a binary sbt plugin
 
-A common situation is using a binary plugin published to a repository.
+A common situation is when using a binary plugin published to a repository.
 Create `project/plugins.sbt` with the desired sbt plugins, any general
 dependencies, and any necessary repositories:
 
@@ -10691,9 +10690,9 @@ plugins.
 
 ### By Description
 
-A plugin definition is a project in `<main-project>/project/`. This
+A plugin definition is a project under `project/` folder. This
 project's classpath is the classpath used for build definitions in
-`<main-project>/project/` and any `.sbt` files in the project's base
+`project/` and any `.sbt` files in the project's base
 directory. It is also used for the `eval` and `set` commands.
 
 Specifically,
@@ -10706,23 +10705,26 @@ Specifically,
 3.  Sources in the `project/` project are the build definition files and
     are compiled using the classpath built from the managed and
     unmanaged dependencies.
-4.  Project dependencies can be declared in `project/plugins.sbt` or
-    project/project/Build.scala and will be available to the build
+4.  Project dependencies can be declared in `project/plugins.sbt`
+    (similarly to `build.sbt` file in a normal project) or
+    `project/project/Build.scala` (similarly to `project/Build.scala` in 
+    a normal project) and will be available to the build
     definition sources. Think of project/project/ as the build
-    definition for the build definition.
+    definition for the build definition (worth to repeat it here again:
+    "sbt is recursive", remember?).
 
 The build definition classpath is searched for `sbt/sbt.plugins`
-descriptor files containing the names of Plugin implementations. A
-Plugin is a module that defines settings to automatically inject to
-projects. Additionally, all Plugin modules are wildcard imported for the
-`eval` and `set` commands and `.sbt` files. A Plugin implementation is
+descriptor files containing the names of `sbt.Plugin` implementations. A
+plugin is a module that defines settings to automatically inject to
+projects. Additionally, all plugin modules are wildcard imported for the
+`eval` and `set` commands and `.sbt` files. A plugin implementation is
 not required to produce a plugin, however. It is a convenience for
 plugin consumers and because of the automatic nature, it is not always
 appropriate.
 
 The `reload plugins` command changes the current build to
-`<current-build>/project/`. This allows manipulating the build
-definition project like a normal project. `reload return` changes back
+the (root) project's `project/` build definition. This allows manipulating
+the build definition project like a normal project. `reload return` changes back
 to the original build. Any session settings for the plugin definition
 project that have not been saved are dropped.
 
@@ -10761,7 +10763,7 @@ libraryDependencies += "org.clapper" %% "grizzled-scala" % "1.0.4"
 
 If sbt is running, do `reload`.
 
-##### 1c) Automatically managed: command line approach
+##### 1c) Automatically managed: command-line approach
 
 We can change to the plugins project in `project/` using
 `reload plugins`.
@@ -10769,7 +10771,7 @@ We can change to the plugins project in `project/` using
 ```
 $ sbt
 > reload plugins
-[info] Set current project to default (in build file:/Users/harrah/demo2/project/)
+[info] Set current project to default (in build file:/Users/sbt/demo2/project/)
 >
 ```
 
@@ -10786,11 +10788,11 @@ to verify that the dependencies are correct.
 ...
 ```
 
-To switch back to the main project:
+To switch back to the main project use `reload return`:
 
 ```
 > reload return
-[info] Set current project to root (in build file:/Users/harrah/demo2/)
+[info] Set current project to root (in build file:/Users/sbt/demo2/)
 ```
 
 ##### 1d) Project dependency
@@ -10802,7 +10804,8 @@ built from source and used on the classpath.
 Edit `project/plugins.sbt`
 
 ```scala
-lazy val root = (project in file(".")).dependsOn(assemblyPlugin)
+lazy val root = project.in(file(".")).dependsOn(assemblyPlugin)
+
 lazy val assemblyPlugin = uri("git://github.com/sbt/sbt-assembly")
 ```
 
@@ -10814,7 +10817,7 @@ saves the intermediate steps of `publishLocal` and `update`. It can also
 be used to work with the development version of a plugin from its
 repository.
 
-It is recommended to explicitly specify the commit or tag by appending
+It is however recommended to explicitly specify the commit or tag by appending
 it to the repository as a fragment:
 
 ```scala
@@ -10843,10 +10846,10 @@ import grizzled.sys._
 import OperatingSystem._
 
 libraryDependencies ++=
-    if(os ==Windows)
-        ("org.example" % "windows-only" % "1.0") :: Nil
+    if(os == Windows)
+        Seq("org.example" % "windows-only" % "1.0")
     else
-        Nil
+        Seq.empty
 ```
 
 ### Creating a plugin
@@ -10864,6 +10867,11 @@ integrate.
 #### Description
 
 To make a plugin, create a project and configure `sbtPlugin` to `true`.
+
+```scala
+sbtPlugin := true
+```
+
 Then, write the plugin code and publish your project to a repository.
 The plugin can be used as described in the previous section.
 
@@ -10875,19 +10883,62 @@ The plugin can be used as described in the previous section.
 
 When an AutoPlugin provides a stable field such as `val` or `object`
 named `autoImport`, the contents of the field are wildcard imported in
-in `set`, `eval`, and `.sbt` files. Typically, this is used to provide
-new keys (SettingKey, TaskKey, or InputKey) or core methods without
-requiring an import or qualification.
+in `set`, `eval`, and `.sbt` files.
+
+```scala
+object autoImport
+{
+  lazy val hello = taskKey[String]("Returning a hello string")
+  lazy val settings: Seq[Def.Setting[_]] = Seq(
+    hello := {
+      "Hello from hello task"
+    }
+  )
+}
+```
+
+Typically, this is used to provide new keys - `SettingKey`s, `TaskKey`s,
+or `InputKey`s - or core methods without requiring an import or qualification.
+
+The `requires` method defines the dependencies to other plugins. When not specified,
+it defaults to an empty list which means no dependency on other plugins.
+
+```scala
+override def requires: Plugins = empty
+```
+
+The `trigger` method defines the conditions by which this plugin's settings
+are automatically activated. It defaults to `noTrigger` which means that the plugin
+is activated only when it is manually activated.
+
+```scala
+override def trigger: PluginTrigger = allRequirements
+```
 
 The AutoPlugin's `projectSettings` is automatically appended to each
-project's settings, when its dependencies also exist on that project.
-The `requires` method defines the dependencies to other plugins. The
-`trigger` method defines the conditions by which this plugin's settings
-are automatically activated. The `buildSettings` is appended to each
-build's settings (that is, `in ThisBuild`). The `globalSettings` is
-appended once to the global settings (`in Global`). These allow a plugin
-to automatically provide new functionality or new defaults. One main use
-of this feature is to globally add commands, such as for IDE plugins.
+project's settings, when its dependencies also exist on that project, i.e.
+in the scope of each project that activates this AutoPlugin.
+
+```scala
+override val projectSettings = inConfig(Compile)(settings)
+```
+
+The `buildSettings` is appended to each build's settings (that is, to the build scope as `in ThisBuild`).
+The settings returned here are guaranteed to be added to a given build scope only once
+regardless of how many projects for that build activate this AutoPlugin.
+
+```scala
+override def buildSettings: Seq[Setting[_]] = Nil
+```
+
+The `globalSettings` is appended once to the global settings (`in Global`).
+These allow a plugin to automatically provide new functionality or new defaults. 
+One main use of this feature is to globally add commands, such as for IDE plugins.
+
+```scala
+override def globalSettings: Seq[Setting[_]] = Nil
+```
+
 Use `globalSettings` to define the default value of a setting.
 
 #### Example Plugin
@@ -10913,32 +10964,32 @@ import sbt._
 
 object Plugin extends AutoPlugin
 {
-    // by defining autoImport, these are automatically imported into user's `*.sbt`
-    object autoImport
-    {
-        // configuration points, like the built in `version`, `libraryDependencies`, or `compile`
-        val obfuscate = taskKey[Seq[File]]("Obfuscates files.")
-        val obfuscateLiterals = settingKey[Boolean]("Obfuscate literals.")
+  // by defining autoImport, the settings are automatically imported into user's `*.sbt`
+  object autoImport
+  {
+    // configuration points, like the built-in `version`, `libraryDependencies`, or `compile`
+    val obfuscate = taskKey[Seq[File]]("Obfuscates files.")
+    val obfuscateLiterals = settingKey[Boolean]("Obfuscate literals.")
 
-        // default values for the tasks and settings
-        lazy val baseObfuscateSettings: Seq[sbt.Def.Setting[_]] = Seq(
-            obfuscate := {
-                Obfuscate(sources.value, (obfuscateLiterals in obfuscate).value)
-            },
-            obfuscateLiterals in obfuscate := false                
-        )
-    }
+    // default values for the tasks and settings
+    lazy val baseObfuscateSettings: Seq[Def.Setting[_]] = Seq(
+      obfuscate := {
+        Obfuscate(sources.value, (obfuscateLiterals in obfuscate).value)
+      },
+      obfuscateLiterals in obfuscate := false                
+    )
+  }
 
-    import autoImport._
-    override def requires = sbt.plugins.JvmModule
+  import autoImport._
+  override def requires = sbt.plugins.JvmModule
 
-    // This plugin is automatically enabled for projects which are JvmModules.
-    override def trigger = allRequirements
+  // This plugin is automatically enabled for projects which are JvmModules.
+  override def trigger = allRequirements
 
-    // a group of settings that are automatically added to projects.
-    override val projectSettings =
-        inConfig(Compile)(baseObfucscateSettings) ++
-        inConfig(Test)(baseObfuscateSettings)
+  // a group of settings that are automatically added to projects.
+  override val projectSettings =
+    inConfig(Compile)(baseObfuscateSettings) ++
+    inConfig(Test)(baseObfuscateSettings)
 }
 
 object Obfuscate
@@ -10980,6 +11031,7 @@ package sbtsample
 
 import sbt._
 import Keys._
+
 object Plugin extends AutoPlugin {
   override lazy val projectSettings = Seq(commands += myCommand)
 
@@ -10998,11 +11050,11 @@ in one plugin (for example, use `commands ++= Seq(a,b)`). See
 for defining more useful commands, including ones that accept arguments
 and affect the execution state.
 
-For a user to consume this plugin, it requires an explicit include via
+For a user to consume this plugin, it requires an explicit include (trigger) via
 the `Project` instance. Here's what their local sbt will look like. `build.sbt`:
 
 ```scala
-val root = Project("example-plugin-usage", file(".")).setPlugins(MyPlugin)
+lazy val root = Project("example-plugin-usage", file(".")).setPlugins(MyPlugin)
 ```
 
 The `setPlugins` method allows projects to explicitly define the
@@ -11015,7 +11067,7 @@ method. For example, if we wish to remove the JvmModule settings
 
 
 ```scala
-val root = Project("example-plugin-usage", file(".")).setPlugins(MyPlugin).disablePlugins(plugins.JvmModule)
+lazy val root = Project("example-plugin-usage", file(".")).setPlugins(MyPlugin).disablePlugins(plugins.JvmModule)
 ```
 
 #### Global plugins example
@@ -11036,7 +11088,7 @@ In addition:
    and will be available to every build definition for the current user.
 - Dependencies on plugins built from source may be declared in
    `~/.sbt/0.13/plugins/project/Build.scala` as described at
-   [.scala build definition][Full-Deff].
+   [.scala build definition][Full-Def].
 - A Plugin may be directly defined in Scala
    source files in `~/.sbt/0.13/plugins/`, such as
    `~/.sbt/0.13/plugins/MyPlugin.scala`.
@@ -11045,11 +11097,11 @@ In addition:
    turnaround when developing a plugin initially:
    
    1.  Edit the global plugin code
-   2.  reload the project you want to use the modified plugin in
+   2.  `reload` the project you want to use the modified plugin in
    3.  sbt will rebuild the plugin and use it for the project.
        Additionally, the plugin will be available in other projects on
        the machine without recompiling again. This approach skips the
-       overhead of publishLocal and cleaning the plugins directory of the
+       overhead of `publishLocal` and `clean`ing the plugins directory of the
        project using the plugin.
 
 These are all consequences of `~/.sbt/0.13/plugins/` being a standard
@@ -11058,9 +11110,9 @@ definition.
 
 ### Best Practices
 
-If you're a plugin writer, please consult the [plugins best practices][Plugins-Best-Practices]
+If you're a plugin writer, please consult the [Plugins Best Practices][Plugins-Best-Practices]
 page; it contains a set of guidelines to help you ensure that your
-plugin is consistent with and plays well with other plugins.
+plugin is consistent and plays well with other plugins.
 
 
 Plugins Best Practices
@@ -15836,12 +15888,8 @@ you want to insulate your builds from the ivy cache being cleared, set
 `lib_managed` in 0.7.x).
 
 This does mean that existing solutions for sharing libraries with your
-favoured IDE may not work. There are 0.13.5 plugins for IDEs being
-developed:
-
-- [IntelliJ IDEA](https://github.com/mpeltonen/sbt-idea)
-- [Netbeans](https://github.com/remeniuk/sbt-netbeans-plugin)
-- [Eclipse](https://github.com/typesafehub/sbteclipse)
+favoured IDE may not work. Refer to [Community Plugins page][Community-Plugins]
+for a list of currently available plugins for your IDE.
 
 #### What are the commands I can use in 0.13.5 vs. 0.7?
 
