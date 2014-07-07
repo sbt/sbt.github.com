@@ -7113,20 +7113,27 @@ limit the number of classes generated, so use flatMap like:
 </code></pre><blockquote><p>This example defines a parser a whitespace-delimited list of integers,
 ending with a negative number, and returning that final, negative
 number.
-</p></blockquote><h2 id="Plugins">Plugins<a href="#Plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Introduction">Introduction<a href="#Introduction" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A plugin is essentially a way to use external code in a build
-definition. A plugin can be a library used to implement a task (you might use
+</p></blockquote><h2 id="Plugins">Plugins<a href="#Plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>There’s a <a href="../tutorial/Using-Plugins.html">getting started page</a> focused on using existing plugins,
+which you may want to read first.
+</p><p>A plugin is a way to use external code in a build definition.
+A plugin can be a library used to implement a task (you might use
 <a href="https://github.com/tristanjuricek/knockoff/">Knockoff</a> to write a
 markdown processing task). A plugin can define a sequence of sbt settings
 that are automatically added to all projects or that are explicitly
 declared for selected projects. For example, a plugin might add a
 <code>proguard</code> task and associated (overridable) settings. Finally, a plugin
 can define new commands (via the <code>commands</code> setting).
-</p><p>The <a href="Plugins-Best-Practices.html">Plugins Best Practices</a> page describes
+</p><p>sbt 0.13.5 intoduces auto plugin with improved dependency management
+among the plugins and explicitly scoped auto importing.
+Going forward, our recommendation is to migrate to the auto plugins.
+The <a href="Plugins-Best-Practices.html">Plugins Best Practices</a> page describes
 the currently evolving guidelines to writing sbt plugins. See also the general
 <a href="Best-Practices.html">best practices</a>.
-</p><h3 id="Using+a+binary+sbt+plugin">Using a binary sbt plugin<a href="#Using+a+binary+sbt+plugin" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A common situation is when using a binary plugin published to a repository.
-Create <code>project/plugins.sbt</code> with the desired sbt plugins, any general
-dependencies, and any necessary repositories:
+</p><h3 id="Using+an+auto+plugin">Using an auto plugin<a href="#Using+an+auto+plugin" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A common situation is when using a binary plugin published to a repository.
+If you’re adding sbt-assembly, create <code>project/assembly.sbt</code> with the following:
+</p><pre><code class="prettyprint lang-scala">addSbtPlugin(&quot;com.eed3si9n&quot; % &quot;sbt-assembly&quot; % &quot;0.11.2&quot;)
+</code></pre><p>Alternatively, you can create <code>project/plugins.sbt</code> with
+all of the desired sbt plugins, any general dependencies, and any necessary repositories:
 </p><pre><code class="prettyprint lang-scala">addSbtPlugin(&quot;org.example&quot; % &quot;plugin&quot; % &quot;1.0&quot;)
 
 addSbtPlugin(&quot;org.example&quot; % &quot;another-plugin&quot; % &quot;2.0&quot;)
@@ -7135,8 +7142,15 @@ addSbtPlugin(&quot;org.example&quot; % &quot;another-plugin&quot; % &quot;2.0&qu
 libraryDependencies += &quot;org.example&quot; % &quot;utilities&quot; % &quot;1.3&quot;
 
 resolvers += &quot;Example Plugin Repository&quot; at &quot;http://example.org/repo/&quot;
-</code></pre><p>See the rest of the page for more information on creating and using
-plugins.
+</code></pre><p>Many of the auto plugins automatically adds settings into projects,
+however, some may require explicit enablement. Here’s an example:
+</p><pre><code class="prettyprint lang-scala">lazy val util = (project in file(&quot;util&quot;)).
+  enablePlugins(FooPlugin, BarPlugin).
+  disablePlugins(plugins.IvyPlugin).
+  settings(
+    name := &quot;hello-util&quot;
+  )
+</code></pre><p>See <a href="../tutorial/Using-Plugins.html">using plugins</a> in the Getting Started guide for more details on using plugins.
 </p><h3 id="By+Description">By Description<a href="#By+Description" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A plugin definition is a project under <code>project/</code> folder. This
 project’s classpath is the classpath used for build definitions in
 <code>project/</code> and any <code>.sbt</code> files in the project’s base
@@ -7158,128 +7172,67 @@ definition sources. Think of project/project/ as the build
 definition for the build definition (worth to repeat it here again:
 “sbt is recursive”, remember?).
 </li></ol><p>The build definition classpath is searched for <code>sbt/sbt.plugins</code>
-descriptor files containing the names of <code>sbt.Plugin</code> implementations. A
-plugin is a module that defines settings to automatically inject to
-projects. Additionally, all plugin modules are wildcard imported for the
-<code>eval</code> and <code>set</code> commands and <code>.sbt</code> files. A plugin implementation is
-not required to produce a plugin, however. It is a convenience for
-plugin consumers and because of the automatic nature, it is not always
-appropriate.
+descriptor files containing the names of
+<code>sbt.AutoPlugin</code> or <code>sbt.Plugin</code> implementations.
 </p><p>The <code>reload plugins</code> command changes the current build to
 the (root) project’s <code>project/</code> build definition. This allows manipulating
 the build definition project like a normal project. <code>reload return</code> changes back
 to the original build. Any session settings for the plugin definition
 project that have not been saved are dropped.
-</p><p><em>Note</em>: At runtime, all plugins for all builds are loaded in a separate,
-parent class loader of the class loaders for builds. This means that
-plugins will not see classes or resources from build definitions.
+</p><p>An auto plugin is a module that defines settings to automatically inject to
+projects. In addition an auto plugin provides the following feature:
+</p><ul><li>Automatically import selective names to <code>.sbt</code> files and the <code>eval</code> and <code>set</code> commands.
+</li><li>Specify plugin dependencies to other auto plugins.
+</li><li>Automatically activate itself when all dependencies are present.
+</li><li>Specify <code>projectSettings</code>, <code>buildSettings</code>, and <code>globalSettings</code> as appropriate.
+</li></ul><h3 id="Plugin+dependencies">Plugin dependencies<a href="#Plugin+dependencies" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>When a traditional plugin wanted to reuse some functionality from an existing plugin, it would pull in the plugin as a library dependency, and then it would either:
+</p><ol><li>add the setting sequence from the dependency as part of its own setting sequence, or
+</li><li>tell the build users to include them in the right order.
+</li></ol><p>This becomes complicated as the number of plugins increase within an application, and becomes more error prone. The main goal of auto plugin is to alleviate this setting dependency problem. An auto plugin can depend on other auto plugins and lensure these dependency settings are loaded first.
+</p><p>Suppose we have the <code>SbtLessPlugin</code> and the <code>SbtCoffeeScriptPlugin</code>, which in turn depends on the <code>SbtJsTaskPlugin</code>, <code>SbtWebPlugin</code>, and <code>JvmPlugin</code>. Instead of manually activating all of these plugins, a project can just activate the <code>SbtLessPlugin</code> and <code>SbtCoffeeScriptPlugin</code> like this:
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
+  enablePlugins(SbtLessPlugin, SbtCoffeeScriptPlugin)
+</code></pre><p>This will pull in the right setting sequence from the plugins in the right order.  The key notion here is you declare the plugins you want, and sbt can fill in the gap.
+</p><p>A plugin implementation is not required to produce an auto plugin, however.
+It is a convenience for plugin consumers and because of the automatic nature, it is not always appropriate.
 </p><h4 id="Global+plugins">Global plugins<a href="#Global+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The <code>~/.sbt/0.13/plugins/</code> directory is treated as a global plugin
 definition project. It is a normal sbt project whose classpath is
 available to all sbt project definitions for that user as described
 above for per-project plugins.
-</p><h3 id="By+Example">By Example<a href="#By+Example" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="Using+a+library+in+a+build+definition">Using a library in a build definition<a href="#Using+a+library+in+a+build+definition" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>As an example, we’ll add the Grizzled Scala library as a plugin.
-Although this does not provide sbt-specific functionality, it
-demonstrates how to declare plugins.
-</p><h5 id="1a%29+Manually+managed">1a) Manually managed<a href="#1a%29+Manually+managed" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><ol><li>Download the jar manually from
-<a href="https://oss.sonatype.org/content/repositories/releases/org/clapper/grizzled-scala_2.8.1/1.0.4/grizzled-scala_2.8.1-1.0.4.jar">https://oss.sonatype.org/content/repositories/releases/org/clapper/grizzled-scala<em>2.8.1/1.0.4/grizzled-scala</em>2.8.1-1.0.4.jar</a>
-</li><li>Put it in <code>project/lib/</code>
-</li></ol><h5 id="1b%29+Automatically+managed%3A+direct+editing+approach">1b) Automatically managed: direct editing approach<a href="#1b%29+Automatically+managed%3A+direct+editing+approach" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p>Edit <code>project/plugins.sbt</code> to contain:
-</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.clapper&quot; %% &quot;grizzled-scala&quot; % &quot;1.0.4&quot;
-</code></pre><p>If sbt is running, do <code>reload</code>.
-</p><h5 id="1c%29+Automatically+managed%3A+command-line+approach">1c) Automatically managed: command-line approach<a href="#1c%29+Automatically+managed%3A+command-line+approach" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p>We can change to the plugins project in <code>project/</code> using
-<code>reload plugins</code>.
-</p><pre><code class="">$ sbt
-&gt; reload plugins
-[info] Set current project to default (in build file:/Users/sbt/demo2/project/)
-&gt;
-</code></pre><p>Then, we can add dependencies like usual and save them to
-<code>project/plugins.sbt</code>. It is useful, but not required, to run <code>update</code>
-to verify that the dependencies are correct.
-</p><pre><code class="">&gt; set libraryDependencies += &quot;org.clapper&quot; %% &quot;grizzled-scala&quot; % &quot;1.0.4&quot;
-...
-&gt; update
-...
-&gt; session save
-...
-</code></pre><p>To switch back to the main project use <code>reload return</code>:
-</p><pre><code class="">&gt; reload return
-[info] Set current project to root (in build file:/Users/sbt/demo2/)
-</code></pre><h5 id="1d%29+Project+dependency">1d) Project dependency<a href="#1d%29+Project+dependency" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p>This variant shows how to use sbt’s external project support to declare
-a source dependency on a plugin. This means that the plugin will be
-built from source and used on the classpath.
-</p><p>Edit <code>project/plugins.sbt</code>
-</p><pre><code class="prettyprint lang-scala">lazy val root = project.in(file(&quot;.&quot;)).dependsOn(assemblyPlugin)
-
-lazy val assemblyPlugin = uri(&quot;git://github.com/sbt/sbt-assembly&quot;)
-</code></pre><p>If sbt is running, run <code>reload</code>.
-</p><p>Note that this approach can be useful used when developing a plugin. A
-project that uses the plugin will rebuild the plugin on <code>reload</code>. This
-saves the intermediate steps of <code>publishLocal</code> and <code>update</code>. It can also
-be used to work with the development version of a plugin from its
-repository.
-</p><p>It is however recommended to explicitly specify the commit or tag by appending
-it to the repository as a fragment:
-</p><pre><code class="prettyprint lang-scala">lazy val assemblyPlugin = uri(&quot;git://github.com/sbt/sbt-assembly#0.9.1&quot;)
-</code></pre><p>One caveat to using this method is that the local sbt will try to run
-the remote plugin’s build. It is quite possible that the plugin’s own
-build uses a different sbt version, as many plugins cross-publish for
-several sbt versions. As such, it is recommended to stick with binary
-artifacts when possible.
-</p><h5 id="2%29+Use+the+library">2) Use the library<a href="#2%29+Use+the+library" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p>Grizzled Scala is ready to be used in build definitions. This includes
-the <code>eval</code> and <code>set</code> commands and <code>.sbt</code> and <code>project/*.scala</code> files.
-</p><pre><code class="">&gt; eval grizzled.sys.os
-</code></pre><p>In a <code>build.sbt</code> file:
-</p><pre><code class="prettyprint lang-scala">import grizzled.sys._
-import OperatingSystem._
-
-libraryDependencies ++=
-    if(os == Windows)
-        Seq(&quot;org.example&quot; % &quot;windows-only&quot; % &quot;1.0&quot;)
-    else
-        Seq.empty
-</code></pre><h3 id="Creating+a+plugin">Creating a plugin<a href="#Creating+a+plugin" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="Introduction">Introduction<a href="#Introduction" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>A minimal plugin is a Scala library that is built against the version of
+</p><h3 id="Creating+an+auto+plugin">Creating an auto plugin<a href="#Creating+an+auto+plugin" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A minimal sbt plugin is a Scala library that is built against the version of
 Scala that sbt runs (currently, 2.10.3) or a Java library.
-Nothing special needs to be done for this type of library, as shown in
-the previous section. A more typical plugin will provide sbt tasks,
-commands, or settings. This kind of plugin may provide these settings
+Nothing special needs to be done for this type of library.
+A more typical plugin will provide sbt tasks, commands, or settings.
+This kind of plugin may provide these settings
 automatically or make them available for the user to explicitly
 integrate.
-</p><h4 id="Description">Description<a href="#Description" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>To make a plugin, create a project and configure <code>sbtPlugin</code> to <code>true</code>.
+</p><p>To make an auto plugin, create a project and configure <code>sbtPlugin</code> to <code>true</code>.
 </p><pre><code class="prettyprint lang-scala">sbtPlugin := true
 </code></pre><p>Then, write the plugin code and publish your project to a repository.
 The plugin can be used as described in the previous section.
-</p><ul><li>Automatically importing selective names to <code>.sbt</code> files.
-</li><li>Specifying plugin dependencies.
-</li><li>Automatically activating itself when all dependencies are present.
-</li><li>Specifying <code>projectSettings</code>, <code>buildSettings</code>, and <code>globalSettings</code>
-as appropriate.
-</li></ul><p>When an AutoPlugin provides a stable field such as <code>val</code> or <code>object</code>
-named <code>autoImport</code>, the contents of the field are wildcard imported in
-in <code>set</code>, <code>eval</code>, and <code>.sbt</code> files.
-</p><pre><code class="prettyprint lang-scala">object autoImport
-{
-  lazy val hello = taskKey[String](&quot;Returning a hello string&quot;)
-  lazy val settings: Seq[Def.Setting[_]] = Seq(
-    hello := {
-      &quot;Hello from hello task&quot;
+</p><p>First, in an appropriate namespace, define your auto plugin object
+by extending <code>sbt.AutoPlugin</code>.
+</p><h4 id="projectSettings+and+buildSettings">projectSettings and buildSettings<a href="#projectSettings+and+buildSettings" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>With auto plugins, all provided settings (e.g. <code>assemblySettings</code>) are provided by the plugin directly via the <code>projectSettings</code> method. Here’s an example plugin that adds a command named hello to sbt projects:
+</p><pre><code class="prettyprint lang-scala">package sbthello
+
+import sbt._
+import Keys._
+
+object HelloPlugin extends AutoPlugin {
+  override lazy val projectSettings = Seq(commands += helloCommand)
+  lazy val helloCommand =
+    Command.command(&quot;hello&quot;) { (state: State) =&gt;
+      println(&quot;Hi!&quot;)
+      state
     }
-  )
 }
-</code></pre><p>Typically, this is used to provide new keys - <code>SettingKey</code>s, <code>TaskKey</code>s,
-or <code>InputKey</code>s - or core methods without requiring an import or qualification.
-</p><p>The <code>requires</code> method defines the dependencies to other plugins. When not specified,
-it defaults to an empty list which means no dependency on other plugins.
-</p><pre><code class="prettyprint lang-scala">override def requires: Plugins = empty
-</code></pre><p>The <code>trigger</code> method defines the conditions by which this plugin’s settings
-are automatically activated. It defaults to <code>noTrigger</code> which means that the plugin
-is activated only when it is manually activated.
-</p><pre><code class="prettyprint lang-scala">override def trigger: PluginTrigger = allRequirements
-</code></pre><p>The AutoPlugin’s <code>projectSettings</code> is automatically appended to each
-project’s settings, when its dependencies also exist on that project, i.e.
-in the scope of each project that activates this AutoPlugin.
-</p><pre><code class="prettyprint lang-scala">override val projectSettings = inConfig(Compile)(settings)
-</code></pre><p>The <code>buildSettings</code> is appended to each build’s settings (that is, to the build scope as <code>in ThisBuild</code>).
-The settings returned here are guaranteed to be added to a given build scope only once
+</code></pre><p>This example demonstrates how to take a Command (here, <code>helloCommand</code>) and
+distribute it in a plugin. Note that multiple commands can be included
+in one plugin (for example, use <code>commands ++= Seq(a,b)</code>). See
+<a href="Commands.html">Commands</a>
+for defining more useful commands, including ones that accept arguments
+and affect the execution state.
+</p><p>If the plugin needs to append settings at the build-level (that is, in <code>ThisBuild</code>) there’s a <code>buildSettings</code> method. The settings returned here are guaranteed to be added to a given build scope only once
 regardless of how many projects for that build activate this AutoPlugin.
 </p><pre><code class="prettyprint lang-scala">override def buildSettings: Seq[Setting[_]] = Nil
 </code></pre><p>The <code>globalSettings</code> is appended once to the global settings (<code>in Global</code>).
@@ -7287,6 +7240,79 @@ These allow a plugin to automatically provide new functionality or new defaults.
 One main use of this feature is to globally add commands, such as for IDE plugins.
 </p><pre><code class="prettyprint lang-scala">override def globalSettings: Seq[Setting[_]] = Nil
 </code></pre><p>Use <code>globalSettings</code> to define the default value of a setting.
+</p><h4 id="Implementing+plugin+dependencies">Implementing plugin dependencies<a href="#Implementing+plugin+dependencies" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Next step is to define the plugin dependencies.
+</p><pre><code class="prettyprint lang-scala">package sbtless
+
+import sbt._
+import Keys._
+object SbtLessPlugin extends AutoPlugin {
+  override def requires = SbtJsTaskPlugin
+  override lazy val projectSettings = ...
+}
+</code></pre><p>The <code>requires</code> method returns a value of type <code>Plugins</code>, which is a DSL for constructing the dependency list. The requires method typically contains one of the following values:
+</p><ul><li><code>empty</code> (No plugins, this is the default)
+</li><li>other auto plugins
+</li><li><code>&amp;&amp;</code> operator (for defining multiple dependencies)
+</li></ul><h4 id="Root+plugins+and+triggered+plugins">Root plugins and triggered plugins<a href="#Root+plugins+and+triggered+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Some plugins should always be explicitly enabled on projects. we call
+these root plugins, i.e. plugins that are “root” nodes in the plugin
+depdendency graph. An auto plugin is by default a root plugin.
+</p><p>Auto plugins also provide a way for plugins to automatically attach themselves to
+projects if their dependencies are met. We call these triggered plugins,
+and they are created by overriding the <code>trigger</code> method.
+</p><p>For example, we might want to create a triggered plugin that can append commands automatically to the build. To do this, set the <code>requires</code> method to return <code>empty</code> (this is the default), and override the <code>trigger</code> method with <code>allRequirements</code>.
+</p><pre><code class="prettyprint lang-scala">package sbthello
+
+import sbt._
+import Keys._
+
+object HelloPlugin2 extends AutoPlugin {
+  override def trigger = allRequirements
+  override lazy val buildSettings = Seq(commands += helloCommand)
+  lazy val helloCommand =
+    Command.command(&quot;hello&quot;) { (state: State) =&gt;
+      println(&quot;Hi!&quot;)
+      state
+    }
+}
+</code></pre><p>The build user still needs to include this plugin in <code>project/plugins.sbt</code>, but it is no longer needed to be included in <code>build.sbt</code>. This becomes more interesting when you do specify a plugin with requirements. Let’s modify the <code>SbtLessPlugin</code> so that it depends on another plugin:
+</p><pre><code class="prettyprint lang-scala">package sbtless
+import sbt._
+import Keys._
+object SbtLessPlugin extends AutoPlugin {
+  override def trigger = allRequirements
+  override def requires = SbtJsTaskPlugin
+  override lazy val projectSettings = ...
+}
+</code></pre><p>As it turns out, <code>PlayScala</code> plugin (in case you didn’t know, the Play framework is an sbt plugin) lists <code>SbtJsTaskPlugin</code> as one of it required plugins. So, if we define a <code>build.sbt</code> with:
+</p><pre><code class="prettyprint lang-scala">plazy val root = (project in file(&quot;.&quot;)).
+  enablePlugins(PlayScala)
+</code></pre><p>then the setting sequence from <code>SbtLessPlugin</code> will be automatically appended somewhere after the settings from <code>PlayScala</code>.
+</p><p>This allows plugins to silently, and correctly, extend existing plugins with more features.  It also can help remove the burden of ordering from the user, allowing the plugin authors greater freedom and power when providing feature for their users.
+</p><h4 id="Controlling+the+import+with+autoImport">Controlling the import with autoImport<a href="#Controlling+the+import+with+autoImport" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>When an auto plugin provides a stable field such as <code>val</code> or <code>object</code>
+named <code>autoImport</code>, the contents of the field are wildcard imported in
+in <code>set</code>, <code>eval</code>, and <code>.sbt</code> files.
+</p><pre><code class="prettyprint lang-scala">package sbthello
+
+import sbt._
+import Keys._
+
+object HelloPlugin3 extends AutoPlugin {
+  object autoImport {
+    val greeting = settingKey[String](&quot;greeting&quot;)
+  }
+  import autoImport._
+  override def trigger = allRequirements
+  override lazy val buildSettings = Seq(
+    greeting := &quot;Hi!&quot;,
+    commands += helloCommand)
+  lazy val helloCommand =
+    Command.command(&quot;hello&quot;) { (state: State) =&gt;
+      println(greeting.value)
+      state
+    }
+}
+</code></pre><p>Typically, <code>autoImport</code> is used to provide new keys - <code>SettingKey</code>s, <code>TaskKey</code>s,
+or <code>InputKey</code>s - or core methods without requiring an import or qualification.
 </p><h4 id="Example+Plugin">Example Plugin<a href="#Example+Plugin" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>An example of a typical plugin:
 </p><p><code>build.sbt</code>:
 </p><pre><code class="prettyprint lang-scala">sbtPlugin := true
@@ -7294,16 +7320,14 @@ One main use of this feature is to globally add commands, such as for IDE plugin
 name := &quot;sbt-obfuscate&quot;
 
 organization := &quot;org.example&quot;
-</code></pre><p><code>Plugin.scala</code>:
+</code></pre><p><code>ObfuscatePlugin.scala</code>:
 </p><pre><code class="prettyprint lang-scala">package sbtobfuscate
 
 import sbt._
 
-object Plugin extends AutoPlugin
-{
+object ObfuscatePlugin extends AutoPlugin {
   // by defining autoImport, the settings are automatically imported into user's `*.sbt`
-  object autoImport
-  {
+  object autoImport {
     // configuration points, like the built-in `version`, `libraryDependencies`, or `compile`
     val obfuscate = taskKey[Seq[File]](&quot;Obfuscates files.&quot;)
     val obfuscateLiterals = settingKey[Boolean](&quot;Obfuscate literals.&quot;)
@@ -7318,9 +7342,9 @@ object Plugin extends AutoPlugin
   }
 
   import autoImport._
-  override def requires = sbt.plugins.JvmModule
+  override def requires = sbt.plugins.JvmPlugin
 
-  // This plugin is automatically enabled for projects which are JvmModules.
+  // This plugin is automatically enabled for projects which are JvmPlugin.
   override def trigger = allRequirements
 
   // a group of settings that are automatically added to projects.
@@ -7329,52 +7353,11 @@ object Plugin extends AutoPlugin
     inConfig(Test)(baseObfuscateSettings)
 }
 
-object Obfuscate
-{
+object Obfuscate {
     def apply(sources: Seq[File]): Seq[File] := sources
 }
 </code></pre><h4 id="Usage+example">Usage example<a href="#Usage+example" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>A build definition that uses the plugin might look like. <code>obfuscate.sbt</code>:
 </p><pre><code class="prettyprint lang-scala">obfuscateLiterals in obfuscate := true
-</code></pre><h4 id="Root+Plugins">Root Plugins<a href="#Root+Plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Some plugins should always be explicitly enabled on projects. Sbt calls
-these root plugins, i.e. plugins that are “root” nodes in the plugin
-depdendency graph. <code>AutoPlugin</code> by default defines a root plugin.
-</p><h4 id="Example+command+root+plugin">Example command root plugin<a href="#Example+command+root+plugin" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>A basic plugin that adds commands looks like. <code>build.sbt</code>:
-</p><pre><code class="prettyprint lang-scala">sbtPlugin := true
-
-name := &quot;sbt-sample&quot;
-
-organization := &quot;org.example&quot;
-</code></pre><p><code>Plugin.scala</code>:
-</p><pre><code class="prettyprint lang-scala">package sbtsample
-
-import sbt._
-import Keys._
-
-object Plugin extends AutoPlugin {
-  override lazy val projectSettings = Seq(commands += myCommand)
-
-  lazy val myCommand = 
-    Command.command(&quot;hello&quot;) { (state: State) =&gt;
-      println(&quot;Hi!&quot;)
-      state
-    }
-}
-</code></pre><p>This example demonstrates how to take a Command (here, <code>myCommand</code>) and
-distribute it in a plugin. Note that multiple commands can be included
-in one plugin (for example, use <code>commands ++= Seq(a,b)</code>). See
-<a href="Commands.html">Commands</a>
-for defining more useful commands, including ones that accept arguments
-and affect the execution state.
-</p><p>For a user to consume this plugin, it requires an explicit include (trigger) via
-the <code>Project</code> instance. Here’s what their local sbt will look like. <code>build.sbt</code>:
-</p><pre><code class="prettyprint lang-scala">lazy val root = Project(&quot;example-plugin-usage&quot;, file(&quot;.&quot;)).setPlugins(MyPlugin)
-</code></pre><p>The <code>setPlugins</code> method allows projects to explicitly define the
-<code>RootPlugin</code>s they wish to consume. <code>AutoPlugin</code>s are automatically
-added to the project as appropriate.
-</p><p>Projects can also exclude any type of plugin using the <code>disablePlugins</code>
-method. For example, if we wish to remove the JvmModule settings
-(<code>compile</code>,<code>test</code>,<code>run</code>), we modify our <code>build.sbt</code> as follows:
-</p><pre><code class="prettyprint lang-scala">lazy val root = Project(&quot;example-plugin-usage&quot;, file(&quot;.&quot;)).setPlugins(MyPlugin).disablePlugins(plugins.JvmModule)
 </code></pre><h4 id="Global+plugins+example">Global plugins example<a href="#Global+plugins+example" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The simplest global plugin definition is declaring a library or plugin
 in <code>~/.sbt/0.13/plugins/build.sbt</code>:
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.example&quot; %% &quot;example-plugin&quot; % &quot;0.1&quot;
@@ -7402,10 +7385,71 @@ turnaround when developing a plugin initially:
 </p></li></ol><p>These are all consequences of <code>~/.sbt/0.13/plugins/</code> being a standard
 project whose classpath is added to every sbt project’s build
 definition.
-</p><h3 id="Best+Practices">Best Practices<a href="#Best+Practices" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>If you’re a plugin writer, please consult the <a href="Plugins-Best-Practices.html">Plugins Best Practices</a>
+</p><h3 id="Using+a+library+in+a+build+definition+example">Using a library in a build definition example<a href="#Using+a+library+in+a+build+definition+example" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>As an example, we’ll add the Grizzled Scala library as a plugin.
+Although this does not provide sbt-specific functionality, it
+demonstrates how to declare plugins.
+</p><h4 id="1a%29+Manually+managed">1a) Manually managed<a href="#1a%29+Manually+managed" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ol><li>Download the jar manually from
+<a href="https://oss.sonatype.org/content/repositories/releases/org/clapper/grizzled-scala_2.8.1/1.0.4/grizzled-scala_2.8.1-1.0.4.jar">https://oss.sonatype.org/content/repositories/releases/org/clapper/grizzled-scala<em>2.8.1/1.0.4/grizzled-scala</em>2.8.1-1.0.4.jar</a>
+</li><li>Put it in <code>project/lib/</code>
+</li></ol><h4 id="1b%29+Automatically+managed%3A+direct+editing+approach">1b) Automatically managed: direct editing approach<a href="#1b%29+Automatically+managed%3A+direct+editing+approach" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Edit <code>project/plugins.sbt</code> to contain:
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.clapper&quot; %% &quot;grizzled-scala&quot; % &quot;1.0.4&quot;
+</code></pre><p>If sbt is running, do <code>reload</code>.
+</p><h4 id="1c%29+Automatically+managed%3A+command-line+approach">1c) Automatically managed: command-line approach<a href="#1c%29+Automatically+managed%3A+command-line+approach" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>We can change to the plugins project in <code>project/</code> using
+<code>reload plugins</code>.
+</p><pre><code class="">$ sbt
+&gt; reload plugins
+[info] Set current project to default (in build file:/Users/sbt/demo2/project/)
+&gt;
+</code></pre><p>Then, we can add dependencies like usual and save them to
+<code>project/plugins.sbt</code>. It is useful, but not required, to run <code>update</code>
+to verify that the dependencies are correct.
+</p><pre><code class="">&gt; set libraryDependencies += &quot;org.clapper&quot; %% &quot;grizzled-scala&quot; % &quot;1.0.4&quot;
+...
+&gt; update
+...
+&gt; session save
+...
+</code></pre><p>To switch back to the main project use <code>reload return</code>:
+</p><pre><code class="">&gt; reload return
+[info] Set current project to root (in build file:/Users/sbt/demo2/)
+</code></pre><h4 id="1d%29+Project+dependency">1d) Project dependency<a href="#1d%29+Project+dependency" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>This variant shows how to use sbt’s external project support to declare
+a source dependency on a plugin. This means that the plugin will be
+built from source and used on the classpath.
+</p><p>Edit <code>project/plugins.sbt</code>
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).dependsOn(assemblyPlugin)
+
+lazy val assemblyPlugin = uri(&quot;git://github.com/sbt/sbt-assembly&quot;)
+</code></pre><p>If sbt is running, run <code>reload</code>.
+</p><p>Note that this approach can be useful used when developing a plugin. A
+project that uses the plugin will rebuild the plugin on <code>reload</code>. This
+saves the intermediate steps of <code>publishLocal</code> and <code>update</code>. It can also
+be used to work with the development version of a plugin from its
+repository.
+</p><p>It is however recommended to explicitly specify the commit or tag by appending
+it to the repository as a fragment:
+</p><pre><code class="prettyprint lang-scala">lazy val assemblyPlugin = uri(&quot;git://github.com/sbt/sbt-assembly#0.9.1&quot;)
+</code></pre><p>One caveat to using this method is that the local sbt will try to run
+the remote plugin’s build. It is quite possible that the plugin’s own
+build uses a different sbt version, as many plugins cross-publish for
+several sbt versions. As such, it is recommended to stick with binary
+artifacts when possible.
+</p><h4 id="2%29+Use+the+library">2) Use the library<a href="#2%29+Use+the+library" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Grizzled Scala is ready to be used in build definitions. This includes
+the <code>eval</code> and <code>set</code> commands and <code>.sbt</code> and <code>project/*.scala</code> files.
+</p><pre><code class="">&gt; eval grizzled.sys.os
+</code></pre><p>In a <code>build.sbt</code> file:
+</p><pre><code class="prettyprint lang-scala">import grizzled.sys._
+import OperatingSystem._
+
+libraryDependencies ++=
+    if(os == Windows)
+        Seq(&quot;org.example&quot; % &quot;windows-only&quot; % &quot;1.0&quot;)
+    else
+        Seq.empty
+</code></pre><h3 id="Best+Practices">Best Practices<a href="#Best+Practices" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>If you’re a plugin writer, please consult the <a href="Plugins-Best-Practices.html">Plugins Best Practices</a>
 page; it contains a set of guidelines to help you ensure that your
 plugin is consistent and plays well with other plugins.
 </p><h2 id="Plugins+Best+Practices">Plugins Best Practices<a href="#Plugins+Best+Practices" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p><em>This page is intended primarily for sbt plugin authors.</em>
+This page assumes you’ve read <a href="../tutorial/Using-Plugins.html">using plugins</a> and <a href="Plugins.html">Plugins</a>.
 </p><p>A plugin developer should strive for consistency and ease of use.
 Specifically:
 </p><ul><li>Plugins should play well with other plugins. Avoiding namespace
@@ -7413,12 +7457,26 @@ clashes (in both sbt and Scala) is paramount.
 </li><li>Plugins should follow consistent conventions. The experiences of an
 sbt <em>user</em> should be consistent, no matter what plugins are pulled
 in.
-</li></ul><p>Here are some current plugin best practices. <strong>NOTE:</strong> Best practices
-are evolving, so check back frequently.
-</p><h3 id="Don%E2%80%99t+use+default+package">Don’t use default package<a href="#Don%E2%80%99t+use+default+package" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Users who have their build files in some package will not be able to use
+</li></ul><p>Here are some current plugin best practices.
+</p><blockquote><p><strong>Note:</strong> Best practices are evolving, so check back frequently.
+</p></blockquote><h3 id="Don%E2%80%99t+use+default+package">Don’t use default package<a href="#Don%E2%80%99t+use+default+package" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Users who have their build files in some package will not be able to use
 your plugin if it’s defined in default (no-name) package.
-</p><h3 id="Avoid+older++mechanism">Avoid older <code>sbt.Plugin</code> mechanism<a href="#Avoid+older++mechanism" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt has deprecated the old <code>sbt.Plugin</code> mechanism in favor of
-<code>sbt.AutoPlugin</code>. The new mechanism features a set of user-level
+</p><h3 id="Use+settings+and+tasks.+Avoid+commands.">Use settings and tasks. Avoid commands.<a href="#Use+settings+and+tasks.+Avoid+commands." class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Your plugin should fit in naturally with the rest of the sbt ecosystem.
+The first thing you can do is to avoid defining <a href="Commands.html">commands</a>,
+and use settings and <a href="Tasks.html">tasks</a> and task-scoping instead (see below for more on task-scoping).
+Most of the interesting things in sbt like
+<code>compile</code>, <code>test</code> and <code>publish</code> are provided using tasks.
+Tasks can take advantage of duplication reduction and parallel execution by the task engine.
+With features like <a href="Tasks.html#ScopeFilter">ScopeFilter</a>, many of the features that previously required
+commands are now possible using tasks. 
+</p><p>Settings can be composed from other settings and tasks.
+Tasks can be composed from other tasks and input tasks.
+Commands, on the other hand, cannot be composed from any of the above.
+In general, use the minimal thing that you need.
+One legitimate use of commands may be using plugin to access the build definition itself not the code.
+sbt-inspectr was implemented using <a href="https://github.com/eed3si9n/sbt-inspectr/blob/aa88bfac609e4668d0ad8ac220e4ef5fb1c3b9f5/src/main/scala/sbtinspectr/InspectrCommand.scala">a command</a> before it became <code>insect tree</code>.
+</p><h3 id="Use">Use <code>sbt.AutoPlugin</code><a href="#Use" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt is in the process of migrating to <code>sbt.AutoPlugin</code> from <code>sbt.Plugin</code>.
+The new mechanism features a set of user-level
 controls and dependency declarations that cleans up a lot of
 long-standing issues with plugins.
 </p><h3 id="Reuse+existing+keys">Reuse existing keys<a href="#Reuse+existing+keys" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt has a number of <a href="../api/sbt/Keys%24.html">predefined keys</a>.
@@ -7426,128 +7484,159 @@ Where possible, reuse them in your plugin. For instance, don’t define:
 </p><pre><code class="prettyprint lang-scala">val sourceFiles = settingKey[Seq[File]](&quot;Some source files&quot;)
 </code></pre><p>Instead, simply reuse sbt’s existing <code>sources</code> key.
 </p><h3 id="Avoid+namespace+clashes">Avoid namespace clashes<a href="#Avoid+namespace+clashes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Sometimes, you need a new key, because there is no existing sbt key. In
-this case, use a plugin-specific prefix, both in the (string) key name
-used in the sbt namespace and in the Scala <code>val</code>. There are two
-acceptable ways to accomplish this goal.
-</p><h4 id="Just+use+a++prefix">Just use a <code>val</code> prefix<a href="#Just+use+a++prefix" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">package sbtobfuscate
-object Plugin extends sbt.Plugin {
-  val obfuscateStylesheet = settingKey[File](&quot;Obfuscate stylesheet&quot;)
+this case, use a plugin-specific prefix.
+</p><pre><code class="prettyprint lang-scala">package sbtobfuscate
+
+import sbt._, Keys._
+
+object ObfuscatePlugin extends sbt.AutoPlugin {
+  object autoImport {
+    lazy val obfuscateStylesheet = settingKey[File](&quot;obfuscate stylesheet&quot;)
+  } 
 }
-</code></pre><p>In this approach, every <code>val</code> starts with <code>obfuscate</code>. A user of the
+</code></pre><p>In this approach, every <code>lazy val</code> starts with <code>obfuscate</code>. A user of the
 plugin would refer to the settings like this:
-</p><pre><code class="prettyprint lang-scala">obfuscateStylesheet := ...
-</code></pre><h4 id="Use+a+nested+object">Use a nested object<a href="#Use+a+nested+object" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">package sbtobfuscate
-object Plugin extends sbt.Plugin {
-  object ObfuscateKeys {
-    val stylesheet = SettingKey[File](&quot;obfuscateStylesheet&quot;)
-  }
-}
-</code></pre><p>In this approach, all non-common settings are in a nested object. A user
-of the plugin would refer to the settings like this:
-</p><pre><code class="prettyprint lang-scala">import ObfuscateKeys._ // place this at the top of build.sbt
-
-stylesheet := ...
-</code></pre><h3 id="Configuration+Advice">Configuration Advice<a href="#Configuration+Advice" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Due to usability concerns from the shell, you could opt out of
-task-scoping described in this section, if your plugin makes heavy use
-of the shell. Using configuration-scoping the user could discover your
-tasks using tab completion:
-</p><pre><code class="">coffee:[tab]
-</code></pre><p>This method no longer works with per-task keys, but there’s a pending
-case, so hopefully it will be addressed in the future.
-</p><h4 id="When+to+define+your+own+configuration">When to define your own configuration<a href="#When+to+define+your+own+configuration" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>If your plugin introduces a new concept (even if that concept reuses an
-existing key), you want your own configuration. For instance, suppose
-you’ve built a plugin that produces PDF files from some kind of markup,
-and your plugin defines a target directory to receive the resulting
-PDFs. That target directory is scoped in its own configuration, so it is
-distinct from other target directories. Thus, these two definitions use
-the same <em>key</em>, but they represent distinct <em>values</em>. So, in a user’s
-<code>build.sbt</code>, we might see:
-</p><pre><code class="prettyprint lang-scala">target in PDFPlugin := baseDirectory.value / &quot;mytarget&quot; / &quot;pdf&quot;
-
-target in Compile := baseDirectory.value / &quot;mytarget&quot;
-</code></pre><p>In the PDF plugin, this is achieved with an <code>inConfig</code> definition:
-</p><pre><code class="prettyprint lang-scala">val settings: Seq[sbt.Project.Setting[_]] = inConfig(LWM)(Seq(
-  target := baseDirectory.value / &quot;target&quot; / &quot;docs&quot; # the default value
-))
-</code></pre><h4 id="When++to+define+your+own+configuration.">When <em>not</em> to define your own configuration.<a href="#When++to+define+your+own+configuration." class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>If you’re merely adding to existing definitions, don’t define your own
+</p><pre><code class="prettyprint lang-scala">obfuscateStylesheet := file(&quot;something.txt&quot;)
+</code></pre><h3 id="Provide+core+feature+in+a+plain+old+Scala+object">Provide core feature in a plain old Scala object<a href="#Provide+core+feature+in+a+plain+old+Scala+object" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The core feature of sbt’s <code>package</code> task, for example, is implemented in <a href="../api/#sbt.Package%24">sbt.Package</a>,
+which can be called via its <code>apply</code> method.
+This allows greater reuse of the feature from other plugins such as sbt-assembly,
+which in return implements <code>sbtassembly.Assembly</code> object to implement its core feature.
+</p><p>Follow their lead, and provide core feature in a plain old Scala object.
+</p><h3 id="Configuration+advices">Configuration advices<a href="#Configuration+advices" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>If your plugin introduces either a new set of source code or
+its own library dependencies, only then you want your own configuration.
+</p><h4 id="You+probably+won%E2%80%99t+need+your+own+configuration">You probably won’t need your own configuration<a href="#You+probably+won%E2%80%99t+need+your+own+configuration" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Configurations should <em>not</em> be used to namespace keys for a plugin. 
+If you’re merely adding tasks and settings, don’t define your own
 configuration. Instead, reuse an existing one <em>or</em> scope by the main
 task (see below).
-</p><pre><code class="prettyprint lang-scala">val akka = config(&quot;akka&quot;)  // This isn't needed.
-val akkaStartCluster = TaskKey[Unit](&quot;akkaStartCluster&quot;)
+</p><pre><code class="prettyprint lang-scala">package sbtwhatever
 
-target in akkaStartCluster := ... // This is ok.
+import sbt._, Keys._
 
-akkaStartCluster in akka := ...   // BAD.  No need for a Config for plugin-specific task.
-</code></pre><h4 id="Configuration+Cat+says+%E2%80%9CConfiguration+is+for+configuration%E2%80%9C">Configuration Cat says “Configuration is for configuration“<a href="#Configuration+Cat+says+%E2%80%9CConfiguration+is+for+configuration%E2%80%9C" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>When defining a new type of configuration, e.g.
-</p><pre><code class="prettyprint lang-scala">val Config = config(&quot;profile&quot;)
-</code></pre><p>should be used to create a “cross-task” configuration. The task
-definitions don’t change in this case, but the default configuration
-does. For example, the <code>profile</code> configuration can extend the test
-configuration with additional settings and changes to allow profiling in
-sbt. Plugins should not create arbitrary Configurations, but utilize
-them for specific purposes and builds.
-</p><p>Configurations actually tie into dependency resolution (with Ivy) and
+object WhateverPlugin extends sbt.AutoPlugin {
+  override def requires = plugins.JvmPlugin
+  override def trigger = allRequirements
+
+  object autoImport {
+    // BAD sample
+    lazy val Whatever = config(&quot;whatever&quot;) extend(Compile)
+    lazy val dude = settingKey[String](&quot;A plugin specific key&quot;)
+  }
+  import autoImport._
+  override lazy val projectSettings = Seq(
+    dude in Whatever := &quot;your opinion man&quot; // DON'T DO THIS
+  )
+}
+</code></pre><h4 id="When+to+define+your+own+configuration">When to define your own configuration<a href="#When+to+define+your+own+configuration" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>If your plugin introduces either a new set of source code or
+its own library dependencies, only then you want your own configuration.
+For instance, suppose you’ve built a plugin that performs fuzz testing
+that requires its own fuzzing library and fuzzing source code.
+<code>scalaSource</code> key can be reused similar to <code>Compile</code> and <code>Test</code> configuration,
+but <code>scalaSource</code> scoped to <code>Fuzz</code> configuration (denoted as <code>scalaSource in Fuzz</code>)
+can point to <code>src/fuzz/scala</code> so it is distinct from other Scala source directories.
+Thus, these three definitions use
+the same <em>key</em>, but they represent distinct <em>values</em>. So, in a user’s
+<code>build.sbt</code>, we might see:
+</p><pre><code class="prettyprint lang-scala">scalaSource in Fuzz := baseDirectory.value / &quot;source&quot; / &quot;fuzz&quot; / &quot;scala&quot;
+
+scalaSource in Compile := baseDirectory.value / &quot;source&quot; / &quot;main&quot; / &quot;scala&quot;
+</code></pre><p>In the fuzzing plugin, this is achieved with an <code>inConfig</code> definition:
+</p><pre><code class="prettyprint lang-scala">package sbtfuzz
+
+import sbt._, Keys._
+
+object FuzzPlugin extends sbt.AutoPlugin {
+  override def requires = plugins.JvmPlugin
+  override def trigger = allRequirements
+
+  object autoImport {
+    lazy val Fuzz = config(&quot;fuzz&quot;) extend(Compile)
+  }
+  import autoImport._
+  
+  lazy val baseFuzzSettings: Seq[Def.Setting[_]] = Seq(
+    test := {
+      println(&quot;fuzz test&quot;)
+    }
+  )
+  override lazy val projectSettings = inConfig(Fuzz)(baseFuzzSettings)
+}
+</code></pre><p>When defining a new type of configuration, e.g.
+</p><pre><code class="prettyprint lang-scala">lazy val Fuzz = config(&quot;fuzz&quot;) extend(Compile)
+</code></pre><p>should be used to create a configuration.
+Configurations actually tie into dependency resolution (with Ivy) and
 can alter generated pom files.
-</p><p>Configurations should <em>not</em> be used to namespace keys for a plugin. e.g.
-</p><pre><code class="prettyprint lang-scala">val Config = config(&quot;my-plugin&quot;)
-val pluginKey = settingKey[String](&quot;A plugin specific key&quot;)
-val settings = pluginKey in Config  // DON'T DO THIS!
-</code></pre><h4 id="Playing+nice+with+configurations">Playing nice with configurations<a href="#Playing+nice+with+configurations" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Whether you ship with a configuration or not, a plugin should strive to
+</p><h4 id="Playing+nice+with+configurations">Playing nice with configurations<a href="#Playing+nice+with+configurations" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Whether you ship with a configuration or not, a plugin should strive to
 support multiple configurations, including those created by the build
 user. Some tasks that are tied to a particular configuration can be
 re-used in other configurations. While you may not see the need
 immediately in your plugin, some project may and will ask you for the
 flexibility.
-</p><h5 id="Provide+raw+settings+and+configured+settings">Provide raw settings and configured settings<a href="#Provide+raw+settings+and+configured+settings" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p>Split your settings by the configuration axis like so:
-</p><pre><code class="prettyprint lang-scala">val obfuscate = TaskKey[Seq[File]](&quot;obfuscate&quot;)
-val obfuscateSettings = inConfig(Compile)(baseObfuscateSettings)
-val baseObfuscateSettings: Seq[Setting[_]] = Seq(
-  obfuscate := ... (sources in obfuscate).value ...,
-  sources in obfuscate := sources.value
-)
+</p><h4 id="Provide+raw+settings+and+configured+settings">Provide raw settings and configured settings<a href="#Provide+raw+settings+and+configured+settings" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Split your settings by the configuration axis like so:
+</p><pre><code class="prettyprint lang-scala">package sbtobfuscate
+
+import sbt._, Keys._
+
+object ObfuscatePlugin extends sbt.AutoPlugin {
+  override def requires = plugins.JvmPlugin
+  override def trigger = allRequirements
+
+  object autoImport {
+    lazy val obfuscate = taskKey[Seq[File]](&quot;obfuscate the source&quot;)
+    lazy val obfuscateStylesheet = settingKey[File](&quot;obfuscate stylesheet&quot;)
+  }
+  import autoImport._
+  lazy val baseObfuscateSettings: Seq[Def.Setting[_]] = Seq(
+    obfuscate := Obfuscate((sources in obfuscate).value),
+    sources in obfuscate := sources.value
+  )
+  override lazy val projectSettings = inConfig(Compile)(baseObfuscateSettings)
+}
+
+// core feature implemented here
+object Obfuscate {
+  def apply(sources: Seq[File]): Seq[File] = {
+    sources
+  }
+}
 </code></pre><p>The <code>baseObfuscateSettings</code> value provides base configuration for the
 plugin’s tasks. This can be re-used in other configurations if projects
 require it. The <code>obfuscateSettings</code> value provides the default <code>Compile</code>
 scoped settings for projects to use directly. This gives the greatest
 flexibility in using features provided by a plugin. Here’s how the raw
 settings may be reused:
-</p><pre><code class="prettyprint lang-scala">Project.inConfig(Test)(sbtObfuscate.Plugin.baseObfuscateSettings)
-</code></pre><p>Alternatively, one could provide a utility method to load settings in a
-given configuration:
-</p><pre><code class="prettyprint lang-scala">def obfuscateSettingsIn(c: Configuration): Seq[Project.Setting[_]] =
-  inConfig(c)(baseObfuscateSettings)
-</code></pre><p>This could be used as follows:
-</p><pre><code class="prettyprint lang-scala">seq(obfuscateSettingsIn(Test): _*) 
-</code></pre><h5 id="Using+a+%E2%80%98main%E2%80%99+task+scope+for+settings">Using a ‘main’ task scope for settings<a href="#Using+a+%E2%80%98main%E2%80%99+task+scope+for+settings" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p>Sometimes you want to define some settings for a particular ‘main’ task
+</p><pre><code class="prettyprint lang-scala">import sbtobfuscate.ObfuscatePlugin
+
+lazy val app = (project in file(&quot;app&quot;)).
+  settings(inConfig(Test)(ObfuscatePlugin.baseObfuscateSettings): _*)
+</code></pre><h4 id="Using+a+%E2%80%9Cmain%E2%80%9D+task+scope+for+settings">Using a “main” task scope for settings<a href="#Using+a+%E2%80%9Cmain%E2%80%9D+task+scope+for+settings" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Sometimes you want to define some settings for a particular “main” task
 in your plugin. In this instance, you can scope your settings using the
-task itself.
-</p><pre><code class="prettyprint lang-scala">val obfuscate = TaskKey[Seq[File]](&quot;obfuscate&quot;)
-val obfuscateSettings = inConfig(Compile)(baseObfuscateSettings)
-val baseObfuscateSettings: Seq[Setting[_]] = Seq(
-  obfuscate := ... (sources in obfuscate).value ...,
-  sources in obfuscate := sources.value
-)
+task itself. See the <code>baseObfuscateSettings</code>:
+</p><pre><code class="prettyprint lang-scala">  lazy val baseObfuscateSettings: Seq[Def.Setting[_]] = Seq(
+    obfuscate := Obfuscate((sources in obfuscate).value),
+    sources in obfuscate := sources.value
+  )
 </code></pre><p>In the above example, <code>sources in obfuscate</code> is scoped under the main
 task, <code>obfuscate</code>.
-</p><h3 id="Mucking+with+Global+build+state">Mucking with Global build state<a href="#Mucking+with+Global+build+state" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>There may be times when you need to muck with global build state. The
+</p><h3 id="Mucking+with">Mucking with <code>globalSettings</code><a href="#Mucking+with" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>There may be times when you need to muck with <code>globalSettings</code>. The
 general rule is <em>be careful what you touch</em>.
-</p><p>First, make sure your user does not include global build configuration
-in <em>every</em> project but rather in the build itself. e.g.
-</p><pre><code class="prettyprint lang-scala">object MyBuild extends Build {
-  override lazy val settings = super.settings ++ MyPlugin.globalSettings
-  val main = project(file(&quot;.&quot;), &quot;root&quot;) settings(MyPlugin.globalSettings:_*) // BAD!
-}
-</code></pre><p>Global settings should <em>not</em> be placed into a <code>build.sbt</code> file.
 </p><p>When overriding global settings, care should be taken to ensure previous
 settings from other plugins are not ignored. e.g. when creating a new
 <code>onLoad</code> handler, ensure that the previous <code>onLoad</code> handler is not
 removed.
-</p><pre><code class="prettyprint lang-scala">object MyPlugin extends Plugin {
-   val globalSettings: Seq[Setting[_]] = Seq(
-     onLoad in Global := (onLoad in Global).value andThen { state =&gt;
-         ... return new state ...
-     }
-   )
+</p><pre><code class="prettyprint lang-scala">package sbtsomething
+
+import sbt._, Keys._
+
+object MyPlugin extends AutoPlugin {
+  override def requires = plugins.JvmPlugin
+  override def trigger = allRequirements
+
+  override val globalSettings: Seq[Def.Setting[_]] = Seq(
+    onLoad in Global := (onLoad in Global).value andThen { state =&gt;
+      ... return new state ...
+    }
+  )
+}
 </code></pre><h2 id="Sbt+Launcher">Sbt Launcher<a href="#Sbt+Launcher" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>The sbt launcher provides a generic container that can load and run
 programs resolved using the Ivy dependency manager. Sbt uses this as its
 own deployment mechanism.

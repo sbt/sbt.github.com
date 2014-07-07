@@ -1151,13 +1151,15 @@ sbt-site plugin to the build definition, create <code>hello/project/site.sbt</co
 and declare the plugin dependency by passing the plugin’s Ivy module ID
 to <code>addSbtPlugin</code>:
 </p><pre><code class="prettyprint lang-scala">addSbtPlugin(&quot;com.typesafe.sbt&quot; % &quot;sbt-site&quot; % &quot;0.7.0&quot;)
+</code></pre><p>If you’re adding sbt-assembly, create <code>hello/project/assembly.sbt</code> with the following:
+</p><pre><code class="prettyprint lang-scala">addSbtPlugin(&quot;com.eed3si9n&quot; % &quot;sbt-assembly&quot; % &quot;0.11.2&quot;)
 </code></pre><p>Not every plugin is located on one of the default repositories and a
 plugin’s documentation may instruct you to also add the repository where
 it can be found:
 </p><pre><code class="prettyprint lang-scala">resolvers += Resolver.sonatypeRepo(&quot;public&quot;)
 </code></pre><p>Plugins usually provide settings that get added to a project to enable
 the plugin’s functionality. This is described in the next section.
-</p><h3 id="Adding+settings+for+a+plugin">Adding settings for a plugin<a href="#Adding+settings+for+a+plugin" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A plugin can declare that its settings be automatically added to the build definition,
+</p><h3 id="Enabling+and+disabling+auto+plugins">Enabling and disabling auto plugins<a href="#Enabling+and+disabling+auto+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A plugin can declare that its settings be automatically added to the build definition,
 in which case you don’t have to do anything to add them.
 </p><p>As of sbt 0.13.5, there is a new
 <a href="../docs/Plugins.html">auto plugins</a> feature that enables
@@ -1166,7 +1168,22 @@ dependencies are on a project. Many auto plugins should have their default
 settings automatically, however some may require explicit enablement.
 </p><p>If you’re using an auto plugin that requires explicit enablement, then you you
 have to add the following to your <code>build.sbt</code>:
-</p><pre><code class="prettyprint lang-scala">lazy val util = (project in file(&quot;util&quot;)).enablePlugins(ThePluginIWant)
+</p><pre><code class="prettyprint lang-scala">lazy val util = (project in file(&quot;util&quot;)).
+  enablePlugins(FooPlugin, BarPlugin).
+  settings(
+    name := &quot;hello-util&quot;
+  )
+</code></pre><p>The <code>enablePlugins</code> method allows projects to explicitly define the
+auto plugins they wish to consume.
+</p><p>Projects can also exclude plugins using the <code>disablePlugins</code>
+method. For example, if we wish to remove the <code>IvyPlugin</code> settings
+from <code>util</code>, we modify our <code>build.sbt</code> as follows:
+</p><pre><code class="prettyprint lang-scala">lazy val util = (project in file(&quot;util&quot;)).
+  enablePlugins(FooPlugin, BarPlugin).
+  disablePlugins(plugins.IvyPlugin).
+  settings(
+    name := &quot;hello-util&quot;
+  )
 </code></pre><p>Auto plugins should document whether they need to explicitly enabled. If you’re
 curious which auto plugins are enabled for a given project, just run the
 <code>plugins</code> command on the sbt console.
@@ -1199,7 +1216,8 @@ project:
 lazy val util = (project in file(&quot;util&quot;))
 
 // enable the site plugin for the `core` project
-lazy val core = (project in file(&quot;core&quot;)).settings(site.settings : _*)
+lazy val core = (project in file(&quot;core&quot;)).
+  settings(site.settings : _*)
 </code></pre><h3 id="Global+plugins">Global plugins<a href="#Global+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Plugins can be installed for all your projects at once by declaring them
 in <code>~/.sbt/0.13/plugins/</code>. <code>~/.sbt/0.13/plugins/</code> is an sbt project whose
 classpath is exported to all sbt build definition projects. Roughly

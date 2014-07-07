@@ -979,19 +979,35 @@ sbt-site を追加するとした場合、<code>hello/project/site.sbt</code> �
 プラグインの Ivy モジュール ID と共に <code>addSbtPlugin</code>
 を呼び出す:
 </p><pre><code class="prettyprint lang-scala">addSbtPlugin(&quot;com.typesafe.sbt&quot; % &quot;sbt-site&quot; % &quot;0.7.0&quot;)
+</code></pre><p>sbt-assembly を追加したければ、<code>hello/project/assembly.sbt</code> を作って以下を書く:
+</p><pre><code class="prettyprint lang-scala">addSbtPlugin(&quot;com.eed3si9n&quot; % &quot;sbt-assembly&quot; % &quot;0.11.2&quot;)
 </code></pre><p>全てのプラグインがデフォルトのリポジトリにある訳では無いので、
 プラグインの説明書にレポジトリの追加する手順が書かれているかもしれない:
 </p><pre><code class="prettyprint lang-scala">resolvers += Resolver.sonatypeRepo(&quot;public&quot;)
 </code></pre><p>通常、プラグインは、プロジェクトに追加されるセッティングを提供することで機能を追加する。
 これを次に説明しよう。
-</p><h3 id="%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%81%AE%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AE%E8%BF%BD%E5%8A%A0">プラグインのセッティングの追加<a href="#%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%81%AE%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AE%E8%BF%BD%E5%8A%A0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>プラグインはビルド定義に自動的に追加されるセッティングを宣言することができ、
+</p><h3 id="auto+plugin+%E3%81%AE%E6%9C%89%E5%8A%B9%E5%8C%96%E3%81%A8%E7%84%A1%E5%8A%B9%E5%8C%96">auto plugin の有効化と無効化<a href="#auto+plugin+%E3%81%AE%E6%9C%89%E5%8A%B9%E5%8C%96%E3%81%A8%E7%84%A1%E5%8A%B9%E5%8C%96" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>プラグインはビルド定義に自動的に追加されるセッティングを宣言することができ、
 その場合は何もしなくてもいい。
 </p><p>sbt 0.13.5 より新しい <a href="../../docs/Plugins.html">auto plugin</a> というプラグインを自動的に追加して、
 セッティングの依存性がプロジェクトにあることを安全に保証する機構ができた。
 auto plugin の多くはデフォルトセッティングを自動的に追加するけども、
 中には明示的な有効化を必要とするものもある。
 </p><p>明示的な有効化が必要な auto plugin を使っている場合は、以下を <code>build.sbt</code> に追加する:
-</p><pre><code class="prettyprint lang-scala">lazy val util = (project in file(&quot;util&quot;)).enablePlugins(ThePluginIWant)
+</p><pre><code class="prettyprint lang-scala">lazy val util = (project in file(&quot;util&quot;)).
+  enablePlugins(FooPlugin, BarPlugin).
+  settings(
+    name := &quot;hello-util&quot;
+  )
+</code></pre><p>プロジェクトは <code>enablePlugins</code> メソッドを用いて使用したい auto plugin
+を明示的に定義することができる。
+</p><p>プロジェクトは、<code>disablePlugins</code> メソッドを用いてプラグインを除外することもできる。
+例えば、<code>util</code> から <code>IvyPlugin</code> のセッティングを除外したいとすると、<code>build.sbt</code> を以下のように変更する:
+</p><pre><code class="prettyprint lang-scala">lazy val util = (project in file(&quot;util&quot;)).
+  enablePlugins(FooPlugin, BarPlugin).
+  disablePlugins(plugins.IvyPlugin).
+  settings(
+    name := &quot;hello-util&quot;
+  )
 </code></pre><p>明示的な有効化が必要かはそれぞれの auto plugin がドキュメントに書くべきだ。
 現行プロジェクトにおいてどの auto plugin が有効化されているかが気になるなら、
 sbt コンソールから <code>plugins</code> コマンドを実行してみてほしい。
@@ -1020,7 +1036,8 @@ sbt のデフォルトセッティングは 3つのプラグインによって�
 lazy val util = (project in file(&quot;util&quot;))
 
 // enable the site plugin for the `core` project
-lazy val core = (project in file(&quot;core&quot;)).settings(site.settings : _*)
+lazy val core = (project in file(&quot;core&quot;)).
+  settings(site.settings : _*)
 </code></pre><h3 id="%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%90%E3%83%AB%E3%83%BB%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3">グローバル・プラグイン<a href="#%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%90%E3%83%AB%E3%83%BB%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>プラグインを <code>~/.sbt/0.13/plugins/</code> 以下で宣言することで全てのプロジェクトに対して一括してプラグインをインストールすることができる。
 <code>~/.sbt/0.13/plugins/</code> は、sbt プロジェクトで、そのクラスパスは全ての sbt ビルド定義にエクスポートされる。
 大まかに言うと、<code>~/.sbt/0.13/plugins/</code> 内の <code>.sbt</code> ファイルは、それが全てのプロジェクトの
