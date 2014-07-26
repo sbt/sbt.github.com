@@ -359,6 +359,8 @@ your plugin to the list.
     <http://software.clapper.org/sbt-editsource/>
 -   sbt-cross-building (Simplifies building your plugins for multiple
     versions of sbt): <https://github.com/jrudolph/sbt-cross-building>
+-   sbt-doge (aggregates tasks across subprojects and their `crossScalaVersions`):
+    <https://github.com/sbt/sbt-doge>
 -   sbt-revolver (Triggered restart, hot reloading):
     <https://github.com/spray/sbt-revolver>
 -   sbt-scalaedit (Open and upgrade ScalaEdit (text editor)):
@@ -11177,6 +11179,7 @@ plugin is consistent and plays well with other plugins.
   [Plugins]: Plugins.html
   [ScopeFilter]: Tasks.html#ScopeFilter
   [inspectr]: https://github.com/eed3si9n/sbt-inspectr/blob/aa88bfac609e4668d0ad8ac220e4ef5fb1c3b9f5/src/main/scala/sbtinspectr/InspectrCommand.scala
+  [Community-Plugins]: Community-Plugins.html
 
 Plugins Best Practices
 ----------------------
@@ -11196,6 +11199,14 @@ Specifically:
 Here are some current plugin best practices.
 
 > **Note:** Best practices are evolving, so check back frequently.
+
+### Get your plugins known
+
+Make sure people can find your plugin. Here are some of the recommended steps:
+
+1. Mention [@scala_sbt](https://twitter.com/scala_sbt) in your announcement, and we will RT it.
+2. Accounce it on [implicit.ly](http://notes.implicit.ly/) using [n8han/herald](https://github.com/n8han/herald).
+3. Send a pull req to [sbt/website](https://github.com/sbt/website) and add your plugin on [the plugins list][Community-Plugins].
 
 ### Don't use default package
 

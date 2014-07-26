@@ -305,6 +305,8 @@ tree): <a href="https://github.com/jrudolph/sbt-dependency-graph">https://github
 <a href="http://software.clapper.org/sbt-editsource/">http://software.clapper.org/sbt-editsource/</a>
 </li><li>sbt-cross-building (Simplifies building your plugins for multiple
 versions of sbt): <a href="https://github.com/jrudolph/sbt-cross-building">https://github.com/jrudolph/sbt-cross-building</a>
+</li><li>sbt-doge (aggregates tasks across subprojects and their <code>crossScalaVersions</code>):
+<a href="https://github.com/sbt/sbt-doge">https://github.com/sbt/sbt-doge</a>
 </li><li>sbt-revolver (Triggered restart, hot reloading):
 <a href="https://github.com/spray/sbt-revolver">https://github.com/spray/sbt-revolver</a>
 </li><li>sbt-scalaedit (Open and upgrade ScalaEdit (text editor)):
@@ -7463,7 +7465,11 @@ sbt <em>user</em> should be consistent, no matter what plugins are pulled
 in.
 </li></ul><p>Here are some current plugin best practices.
 </p><blockquote><p><strong>Note:</strong> Best practices are evolving, so check back frequently.
-</p></blockquote><h3 id="Don%E2%80%99t+use+default+package">Don’t use default package<a href="#Don%E2%80%99t+use+default+package" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Users who have their build files in some package will not be able to use
+</p></blockquote><h3 id="Get+your+plugins+known">Get your plugins known<a href="#Get+your+plugins+known" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Make sure people can find your plugin. Here are some of the recommended steps:
+</p><ol><li>Mention <a href="https://twitter.com/scala_sbt">@scala_sbt</a> in your announcement, and we will RT it.
+</li><li>Accounce it on <a href="http://notes.implicit.ly/">implicit.ly</a> using <a href="https://github.com/n8han/herald">n8han/herald</a>.
+</li><li>Send a pull req to <a href="https://github.com/sbt/website">sbt/website</a> and add your plugin on <a href="Community-Plugins.html">the plugins list</a>.
+</li></ol><h3 id="Don%E2%80%99t+use+default+package">Don’t use default package<a href="#Don%E2%80%99t+use+default+package" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Users who have their build files in some package will not be able to use
 your plugin if it’s defined in default (no-name) package.
 </p><h3 id="Use+settings+and+tasks.+Avoid+commands.">Use settings and tasks. Avoid commands.<a href="#Use+settings+and+tasks.+Avoid+commands." class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Your plugin should fit in naturally with the rest of the sbt ecosystem.
 The first thing you can do is to avoid defining <a href="Commands.html">commands</a>,
