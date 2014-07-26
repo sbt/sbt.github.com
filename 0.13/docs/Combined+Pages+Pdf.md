@@ -174,6 +174,8 @@ your plugin to the list.
     <https://github.com/timperrett/sbt-cloudbees-plugin>
 -   sbt-jelastic-deploy:
     <https://github.com/casualjim/sbt-jelastic-deploy>
+-   sbt-elasticbeanstalk (Deploy WAR files to AWS Elastic Beanstalk):
+    <https://github.com/sqs/sbt-elasticbeanstalk>
 
 ### Test plugins
 
@@ -225,7 +227,9 @@ your plugin to the list.
 -   sbt-requirejs: <https://github.com/scalatra/sbt-requirejs>
 -   sbt-vaadin-plugin:
     <https://github.com/henrikerola/sbt-vaadin-plugin>
--  sbt-purescript: <https://github.com/eamelink/sbt-purescript>
+-   sbt-purescript: <https://github.com/eamelink/sbt-purescript>
+-   sbt-jasmine-plugin (Run javascript tests with jasmine within sbt):
+    <https://github.com/joescii/sbt-jasmine-plugin>
 
 #### Game development plugins
 
