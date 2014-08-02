@@ -297,6 +297,8 @@ tree): <a href="https://github.com/jrudolph/sbt-dependency-graph">https://github
 <a href="https://github.com/rtimush/sbt-updates">https://github.com/rtimush/sbt-updates</a>
 </li><li>sbt-lock (Locks library versions for reproducible build):
 <a href="https://github.com/tkawachi/sbt-lock">https://github.com/tkawachi/sbt-lock</a>
+</li><li>sbt-versions (Checks for updated versions of your dependencies):
+<a href="https://github.com/sksamuel/sbt-versions">https://github.com/sksamuel/sbt-versions</a>
 </li></ul><h4 id="Utility+plugins">Utility plugins<a href="#Utility+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>sbt-process-runner (Run your own applications from SBT console)
 <a href="https://github.com/whysoserious/sbt-process-runner">https://github.com/whysoserious/sbt-process-runner</a>
 </li><li>jot (Write down your ideas lest you forget them)
@@ -307,6 +309,8 @@ tree): <a href="https://github.com/jrudolph/sbt-dependency-graph">https://github
 <a href="https://github.com/reikje/npt">https://github.com/reikje/npt</a>
 </li><li>sbt-editsource (A poor man’s <em>sed</em>(1), for sbt):
 <a href="http://software.clapper.org/sbt-editsource/">http://software.clapper.org/sbt-editsource/</a>
+</li><li>sbt-conflict-classes (Show conclict classes from classpath):
+<a href="https://github.com/todesking/sbt-conflict-classes">https://github.com/todesking/sbt-conflict-classes</a>
 </li><li>sbt-cross-building (Simplifies building your plugins for multiple
 versions of sbt): <a href="https://github.com/jrudolph/sbt-cross-building">https://github.com/jrudolph/sbt-cross-building</a>
 </li><li>sbt-doge (aggregates tasks across subprojects and their <code>crossScalaVersions</code>):
@@ -4629,9 +4633,9 @@ testOptions in Test += Tests.Cleanup( () =&gt; println(&quot;Cleanup&quot;) )
 testOptions in Test += Tests.Setup( loader =&gt; ... )
 
 testOptions in Test += Tests.Cleanup( loader =&gt; ... )
-</code></pre><h4 id="Disable+Parallel+Execution+of+Tests">Disable Parallel Execution of Tests<a href="#Disable+Parallel+Execution+of+Tests" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>By default, sbt runs all tasks in parallel. Because each test is mapped
-to a task, tests are also run in parallel by default. To make tests
-within a given project execute serially: :
+</code></pre><h4 id="Disable+Parallel+Execution+of+Tests">Disable Parallel Execution of Tests<a href="#Disable+Parallel+Execution+of+Tests" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>By default, sbt runs all tasks in parallel and within the same JVM as sbt itself. 
+Because each test is mapped to a task, tests are also run in parallel by default. 
+To make tests within a given project execute serially: :
 </p><pre><code class="prettyprint lang-scala">parallelExecution in Test := false
 </code></pre><p><code>Test</code> can be replaced with <code>IntegrationTest</code> to only execute
 integration tests serially. Note that tests from different projects may
@@ -4642,7 +4646,8 @@ still execute concurrently.
 </code></pre><h4 id="Forking+tests">Forking tests<a href="#Forking+tests" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The setting:
 </p><pre><code class="prettyprint lang-scala">fork in Test := true
 </code></pre><p>specifies that all tests will be executed in a single external JVM. See
-<a href="Forking.html">Forking</a> for configuring standard options for forking. More control
+<a href="Forking.html">Forking</a> for configuring standard options for forking. By default,
+tests executed in a forked JVM are executed <em>sequentially</em>.   More control
 over how tests are assigned to JVMs and what options to pass to those is
 available with <code>testGrouping</code> key. For example in build.sbt:
 </p><pre><code class="prettyprint lang-scala">import Tests._
@@ -4660,7 +4665,10 @@ forked JVMs allowed to run at the same time by setting the limit on
 <code>Tags.ForkedTestGroup</code> tag, which is 1 by default. <code>Setup</code> and <code>Cleanup</code>
 actions cannot be provided with the actual test class loader when a
 group is forked.
-</p><a name="additional-test-configurations"></a><h3 id="Additional+test+configurations">Additional test configurations<a href="#Additional+test+configurations" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>You can add an additional test configuration to have a separate set of
+</p><p>In addition, forked tests can optionally be run in parallel.  This feature
+is still considered experimental, and may be enabled with the following setting :
+</p><pre><code class="prettyprint lang-scala">testForkedParallel in Test := true
+</code></pre><a name="additional-test-configurations"></a><h3 id="Additional+test+configurations">Additional test configurations<a href="#Additional+test+configurations" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>You can add an additional test configuration to have a separate set of
 test sources and associated compilation, packaging, and testing tasks
 and settings. The steps are:
 </p><ul><li>Define the configuration

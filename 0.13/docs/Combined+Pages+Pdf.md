@@ -353,6 +353,8 @@ your plugin to the list.
     <https://github.com/rtimush/sbt-updates>
 -   sbt-lock (Locks library versions for reproducible build):
     <https://github.com/tkawachi/sbt-lock>
+-   sbt-versions (Checks for updated versions of your dependencies):
+    <https://github.com/sksamuel/sbt-versions>
 
 #### Utility plugins
 
@@ -366,6 +368,8 @@ your plugin to the list.
     <https://github.com/reikje/npt>
 -   sbt-editsource (A poor man's *sed*(1), for sbt):
     <http://software.clapper.org/sbt-editsource/>
+-   sbt-conflict-classes (Show conclict classes from classpath):
+    <https://github.com/todesking/sbt-conflict-classes>
 -   sbt-cross-building (Simplifies building your plugins for multiple
     versions of sbt): <https://github.com/jrudolph/sbt-cross-building>
 -   sbt-doge (aggregates tasks across subprojects and their `crossScalaVersions`):
@@ -6675,9 +6679,9 @@ testOptions in Test += Tests.Cleanup( loader => ... )
 
 #### Disable Parallel Execution of Tests
 
-By default, sbt runs all tasks in parallel. Because each test is mapped
-to a task, tests are also run in parallel by default. To make tests
-within a given project execute serially: :
+By default, sbt runs all tasks in parallel and within the same JVM as sbt itself. 
+Because each test is mapped to a task, tests are also run in parallel by default. 
+To make tests within a given project execute serially: :
 
 ```scala
 parallelExecution in Test := false
@@ -6705,7 +6709,8 @@ fork in Test := true
 ```
 
 specifies that all tests will be executed in a single external JVM. See
-[Forking][Forking] for configuring standard options for forking. More control
+[Forking][Forking] for configuring standard options for forking. By default,
+tests executed in a forked JVM are executed *sequentially*.   More control
 over how tests are assigned to JVMs and what options to pass to those is
 available with `testGrouping` key. For example in build.sbt:
 
@@ -6727,6 +6732,13 @@ forked JVMs allowed to run at the same time by setting the limit on
 `Tags.ForkedTestGroup` tag, which is 1 by default. `Setup` and `Cleanup`
 actions cannot be provided with the actual test class loader when a
 group is forked.
+
+In addition, forked tests can optionally be run in parallel.  This feature
+is still considered experimental, and may be enabled with the following setting :
+
+```scala
+testForkedParallel in Test := true
+```
 
 <a name="additional-test-configurations"></a>
 
