@@ -41,7 +41,36 @@
           </a>
         <div class="container contentswrapper">
           <div class="span-16 prepend-1 append-1 contents">
-            <h2 id="%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84">目录结构<a href="#%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>翻译中</p><div class="bottom nav span-16">
+            <h2 id="%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84">目录结构<a href="#%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>这一小节假设你已经<a href="Setup.html">安装 sbt</a> 并且已经阅读过 <a href="Hello.html">Hello, World</a> 了。
+</p><h3 id="%E5%9F%BA%E7%A1%80%E7%9B%AE%E5%BD%95">基础目录<a href="#%E5%9F%BA%E7%A1%80%E7%9B%AE%E5%BD%95" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在 sbt 的术语里，“基础目录”是包含项目的目录。所以，如果你创建了一个和 <a href="Hello.html">Hello, World</a> 一样的项目 <code>hello</code> ，包含 <code>hello/build.sbt</code> 和 <code>hello/hw.scala</code>， <code>hello</code> 就是基础目录。
+</p><h3 id="%E6%BA%90%E4%BB%A3%E7%A0%81">源代码<a href="#%E6%BA%90%E4%BB%A3%E7%A0%81" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>源代码可以像 <code>hello/hw.scala</code> 一样的放在项目的基础目录。然而，大多数人不会在真实的项目中这样做，因为太杂乱了。
+</p><p>sbt 和 <a href="http://maven.apache.org/">Maven</a> 的默认的源文件的目录结构是一样的（所有的路径都是相对于基础目录的）：
+</p><pre><code class="">src/
+  main/
+    resources/
+       &lt;files to include in main jar here&gt;
+    scala/
+       &lt;main Scala sources&gt;
+    java/
+       &lt;main Java sources&gt;
+  test/
+    resources
+       &lt;files to include in test jar here&gt;
+    scala/
+       &lt;test Scala sources&gt;
+    java/
+       &lt;test Java sources&gt;
+</code></pre><p><code>src/</code> 中其他的目录将被忽略。而且，所有的隐藏目录也会被忽略。
+</p><h3 id="sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E6%96%87%E4%BB%B6">sbt 构建定义文件<a href="#sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E6%96%87%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>你已经在项目的基础目录中看到了 <code>build.sbt</code>。其他的 sbt 文件在 <code>project</code> 子目录中。
+</p><p><code>project</code> 目录可以包含 <code>.scala</code> 文件，这些文件最后会和 <code>.sbt</code> 文件合并共同构成完整的构建定义。想知道更多请参见 <a href="Full-Def.html">.scala 构建定义</a>。
+</p><pre><code class="">build.sbt
+project/
+  Build.scala
+</code></pre><p>你可能在 <code>project/</code> 中也看到了 <code>.sbt</code> 文件，但是它不等同于项目基础目录中的 <code>.sbt</code> 文件。这将在<a href="Full-Def.html">稍后</a>解释，因为首先你需要一些背景知识。
+</p><h3 id="%E6%9E%84%E5%BB%BA%E4%BA%A7%E5%93%81">构建产品<a href="#%E6%9E%84%E5%BB%BA%E4%BA%A7%E5%93%81" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>生成的文件（编译的 classes，打包的 jars，托管文件，caches 和文档）默认写在 <code>target</code> 目录中。
+</p><h3 id="%E9%85%8D%E7%BD%AE%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86">配置版本管理<a href="#%E9%85%8D%E7%BD%AE%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>你的 <code>.gitignore</code> 文件（或者其他版本控制系统等同的文件）应该包含：
+</p><pre><code class="">target/
+</code></pre><p>注意：这里后面需要跟一个 <code>/</code> （只匹配目录）且前面不能有 <code>/</code> （除了匹配普通的 <code>target/</code> 还匹配 <code>project/target/</code> ）。</p><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>
                         <a href="Running.html"> 运行 </a>                        
@@ -53,7 +82,7 @@
       <a name="toc"></a>
       <h4 class="toctitle">Contents</h4>
       <div class="tocbody">
-      <div><a href="index.html">sbt 入门</a></div><ol class="toc"> <li><div><a href="Setup.html">安装 sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">在 Mac 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">在 Windows 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">在Linux上安装sbt</a></div></li><li><div><a href="Manual-Installation.html">手动安装 sbt</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div class="current">目录结构</div></li><li><div><a href="Running.html">运行</a></div></li><li><div><a href="Basic-Def.html">.sbt 构建定义</a></div></li><li><div><a href="Scopes.html">Scopes</a></div></li><li><div><a href="More-About-Settings.html">更多项设置</a></div></li><li><div><a href="Library-Dependencies.html">库依赖</a></div></li><li><div><a href="Multi-Project.html">多项目构建</a></div></li><li><div><a href="Using-Plugins.html">使用插件</a></div></li><li><div><a href="Custom-Settings.html">自定义设置和设置</a></div></li><li><div><a href="Full-Def.html">.scala 构建定义</a></div></li><li><div><a href="Summary.html">总结</a></div></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+      <div><a href="index.html">sbt 入门</a></div><ol class="toc"> <li><div><a href="Setup.html">安装 sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">在 Mac 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">在 Windows 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">在Linux上安装sbt</a></div></li><li><div><a href="Manual-Installation.html">手动安装 sbt</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div class="current">目录结构</div></li><li><div><a href="Running.html">运行</a></div></li><li><div><a href="Basic-Def.html">.sbt 构建定义</a></div></li><li><div><a href="Scopes.html">Scopes</a></div></li><li><div><a href="More-About-Settings.html">更多关于设置</a></div></li><li><div><a href="Library-Dependencies.html">库依赖</a></div></li><li><div><a href="Multi-Project.html">多项目构建</a></div></li><li><div><a href="Using-Plugins.html">使用插件</a></div></li><li><div><a href="Custom-Settings.html">自定义设置和任务</a></div></li><li><div><a href="Full-Def.html">.scala 构建定义</a></div></li><li><div><a href="Summary.html">总结</a></div></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
           </div>
         </div>
         <div class="header">

@@ -24,7 +24,9 @@
         <script type="text/javascript">
           Pamflet.page.language = 'zh-cn';
         </script>
-        
+        <script type="text/javascript" src="../js/prettify/prettify.js"></script><script type="text/javascript" src="../js/prettify/lang-scala.js"></script><link type="text/css" rel="stylesheet" href="../css/prettify.css"/><script type="text/javascript"><!--
+        window.onload=function() { prettyPrint(); };
+      --></script>
         <link rel="stylesheet" href="../css/custom.css" type="text/css" media="screen, projection"/>
         
         <script type="text/javascript">
@@ -43,12 +45,19 @@
       <a name="toc"></a>
       <h4 class="toctitle">Contents</h4>
       <div class="tocbody">
-      <div><a href="#sbt+%E5%85%A5%E9%97%A8">sbt 入门</a></div><ol class="toc"> <li><div><a href="#%E5%AE%89%E8%A3%85+sbt">安装 sbt</a></div><ol class="toc"> <li><div><a href="#%E5%9C%A8+Mac+%E4%B8%8A%E5%AE%89%E8%A3%85+sbt">在 Mac 上安装 sbt</a></div></li><li><div><a href="#%E5%9C%A8+Windows+%E4%B8%8A%E5%AE%89%E8%A3%85+sbt">在 Windows 上安装 sbt</a></div></li><li><div><a href="#%E5%9C%A8Linux%E4%B8%8A%E5%AE%89%E8%A3%85sbt">在Linux上安装sbt</a></div></li><li><div><a href="#%E6%89%8B%E5%8A%A8%E5%AE%89%E8%A3%85+sbt">手动安装 sbt</a></div></li> </ol></li><li><div><a href="#Hello%2C+World">Hello, World</a></div></li><li><div><a href="#%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84">目录结构</a></div></li><li><div><a href="#%E8%BF%90%E8%A1%8C">运行</a></div></li><li><div><a href="#.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">.sbt 构建定义</a></div></li><li><div><a href="#Scopes">Scopes</a></div></li><li><div><a href="#%E6%9B%B4%E5%A4%9A%E9%A1%B9%E8%AE%BE%E7%BD%AE">更多项设置</a></div></li><li><div><a href="#%E5%BA%93%E4%BE%9D%E8%B5%96">库依赖</a></div></li><li><div><a href="#%E5%A4%9A%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA">多项目构建</a></div></li><li><div><a href="#%E4%BD%BF%E7%94%A8%E6%8F%92%E4%BB%B6">使用插件</a></div></li><li><div><a href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E8%AE%BE%E7%BD%AE%E5%92%8C%E8%AE%BE%E7%BD%AE">自定义设置和设置</a></div></li><li><div><a href="#.scala+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">.scala 构建定义</a></div></li><li><div><a href="#%E6%80%BB%E7%BB%93">总结</a></div></li> </ol></div></div><h1 id="sbt+%E5%85%A5%E9%97%A8">sbt 入门<a href="#sbt+%E5%85%A5%E9%97%A8" class="header-link"><span class="header-link-content">&nbsp;</span></a></h1><p>翻译中</p><h2 id="%E5%AE%89%E8%A3%85+sbt">安装 sbt<a href="#%E5%AE%89%E8%A3%85+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>创建一个 sbt 工程，你需要经过以下几步：
-</p><ul><li>安装sbt并且创建脚本来运行它。
+      <div><a href="#sbt+%E5%85%A5%E9%97%A8">sbt 入门</a></div><ol class="toc"> <li><div><a href="#%E5%AE%89%E8%A3%85+sbt">安装 sbt</a></div><ol class="toc"> <li><div><a href="#%E5%9C%A8+Mac+%E4%B8%8A%E5%AE%89%E8%A3%85+sbt">在 Mac 上安装 sbt</a></div></li><li><div><a href="#%E5%9C%A8+Windows+%E4%B8%8A%E5%AE%89%E8%A3%85+sbt">在 Windows 上安装 sbt</a></div></li><li><div><a href="#%E5%9C%A8Linux%E4%B8%8A%E5%AE%89%E8%A3%85sbt">在Linux上安装sbt</a></div></li><li><div><a href="#%E6%89%8B%E5%8A%A8%E5%AE%89%E8%A3%85+sbt">手动安装 sbt</a></div></li> </ol></li><li><div><a href="#Hello%2C+World">Hello, World</a></div></li><li><div><a href="#%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84">目录结构</a></div></li><li><div><a href="#%E8%BF%90%E8%A1%8C">运行</a></div></li><li><div><a href="#.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">.sbt 构建定义</a></div></li><li><div><a href="#Scopes">Scopes</a></div></li><li><div><a href="#%E6%9B%B4%E5%A4%9A%E5%85%B3%E4%BA%8E%E8%AE%BE%E7%BD%AE">更多关于设置</a></div></li><li><div><a href="#%E5%BA%93%E4%BE%9D%E8%B5%96">库依赖</a></div></li><li><div><a href="#%E5%A4%9A%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA">多项目构建</a></div></li><li><div><a href="#%E4%BD%BF%E7%94%A8%E6%8F%92%E4%BB%B6">使用插件</a></div></li><li><div><a href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E8%AE%BE%E7%BD%AE%E5%92%8C%E4%BB%BB%E5%8A%A1">自定义设置和任务</a></div></li><li><div><a href="#.scala+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">.scala 构建定义</a></div></li><li><div><a href="#%E6%80%BB%E7%BB%93">总结</a></div></li> </ol></div></div><h1 id="sbt+%E5%85%A5%E9%97%A8">sbt 入门<a href="#sbt+%E5%85%A5%E9%97%A8" class="header-link"><span class="header-link-content">&nbsp;</span></a></h1><p>sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。其实没有太多的概念，但是 sbt 并不完全像其他的构建体系，而且如果你没有看过文档的话，你 <em>将会</em> 偶然遇到一些细节问题。
+</p><p>这篇入门指南覆盖了一些你在创建和维护一个 sbt 构建定义时需要知道的概念。
+</p><p><em>强烈建议</em>看完该入门指南！
+</p><p>如果你非常急切，你可以直接进入以下几小节了解最重要的概念背景 <a href="Basic-Def.html">.sbt 构建定义</a>，<a href="Scopes.html">scopes</a>，<a href="More-About-Settings.html">更多关于设置</a>。
+但是我们不保证跳过该指南中的其他小节是一个好的想法。
+</p><p>最好是按顺序阅读，因为该指南中后面的小节建立在前面介绍的概念的基础上。
+</p><p>感谢尝试 sbt 并且 <em>体验其中的乐趣</em> ！
+</p><h2 id="%E5%AE%89%E8%A3%85+sbt">安装 sbt<a href="#%E5%AE%89%E8%A3%85+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>创建一个 sbt 工程，你需要经过以下几步：
+</p><ul><li>安装 sbt 并且创建脚本来运行它。
 </li><li><p>建立一个简单的 <a href="Hello.html">hello world</a> 工程
 </p><ul><li>创建一个工程目录并且将源文件放在其中。
 </li><li>创建你的构建定义。
-</li></ul></li><li>继续去<a href="Running.html">运行 sbt</a> 学习怎么运行sbt。
+</li></ul></li><li>继续去<a href="Running.html">运行 sbt</a> 学习怎么运行 sbt。
 </li><li>然后去 <a href="Basic-Def.html">.sbt 构建定义</a>学习更多关于构建的定义。
 </li></ul><p>最后，安装步骤就简化为一个 Jar 文件和一个 Shell 脚本，但是取决于你的平台，我们提供了好几种方式来使得步骤不是那儿单调。 <a href="Installing-sbt-on-Mac.html">Mac</a>，<a href="Installing-sbt-on-Windows.html">Windows</a>，<a href="Installing-sbt-on-Linux.html">Linux</a>，<a href="Manual-Installation.html">手动安装</a>提供了相应的安装步骤。
 </p><h3 id="%E6%8F%90%E7%A4%BA%E5%92%8C%E6%8A%80%E5%B7%A7">提示和技巧<a href="#%E6%8F%90%E7%A4%BA%E5%92%8C%E6%8A%80%E5%B7%A7" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>如果你在运行 sbt 时遇到任何问题，查看<a href="../docs/Setup-Notes.html">安装建议</a>中的终端编码，HTTP 代理，JVM 参数。
@@ -101,7 +110,162 @@ stty icanon echo &gt; /dev/null 2&gt;&amp;1
 </code></pre><p>为了让退格(backspace)能够在 scala 的控制台中正常工作，你需要确保你的退格键发送的是删除符(erase character)，和在 stty 中配置的一样。对于默认的 cygwin 终端(mintty)，
 在设置选项 -&gt; 键中，“退格发送 ^H” 需要被选中如果你的删除符是 cygwin 默认的 ^H。
 </p><blockquote><p><strong>注意:</strong> 当前其他的配置还不支持。请<a href="https://github.com/sbt/sbt/blob/0.13/CONTRIBUTING.md">提交 pull request</a> 实现或者描述已经支持的配置。
-</p></blockquote><h2 id="Hello%2C+World">Hello, World<a href="#Hello%2C+World" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>翻译中</p><h2 id="%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84">目录结构<a href="#%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>翻译中</p><h2 id="%E8%BF%90%E8%A1%8C">运行<a href="#%E8%BF%90%E8%A1%8C" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>翻译中</p><h2 id=".sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">.sbt 构建定义<a href="#.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>翻译中</p><h2 id="Scopes">Scopes<a href="#Scopes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>翻译中</p><h2 id="%E6%9B%B4%E5%A4%9A%E9%A1%B9%E8%AE%BE%E7%BD%AE">更多项设置<a href="#%E6%9B%B4%E5%A4%9A%E9%A1%B9%E8%AE%BE%E7%BD%AE" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>翻译中</p><h2 id="%E5%BA%93%E4%BE%9D%E8%B5%96">库依赖<a href="#%E5%BA%93%E4%BE%9D%E8%B5%96" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>翻译中</p><h2 id="%E5%A4%9A%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA">多项目构建<a href="#%E5%A4%9A%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>翻译中</p><h2 id="%E4%BD%BF%E7%94%A8%E6%8F%92%E4%BB%B6">使用插件<a href="#%E4%BD%BF%E7%94%A8%E6%8F%92%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>翻译中</p><h2 id="%E8%87%AA%E5%AE%9A%E4%B9%89%E8%AE%BE%E7%BD%AE%E5%92%8C%E8%AE%BE%E7%BD%AE">自定义设置和设置<a href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E8%AE%BE%E7%BD%AE%E5%92%8C%E8%AE%BE%E7%BD%AE" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>翻译中</p><h2 id=".scala+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">.scala 构建定义<a href="#.scala+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>翻译中</p><h2 id="%E6%80%BB%E7%BB%93">总结<a href="#%E6%80%BB%E7%BB%93" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>翻译中</p>
+</p></blockquote><h2 id="Hello%2C+World">Hello, World<a href="#Hello%2C+World" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>这一小节假设你已经 <a href="Setup.html">安装 sbt</a> 了。
+</p><h3 id="%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%9C%89%E6%BA%90%E7%A0%81%E7%9A%84%E9%A1%B9%E7%9B%AE%E7%9B%AE%E5%BD%95">创建一个有源码的项目目录<a href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%9C%89%E6%BA%90%E7%A0%81%E7%9A%84%E9%A1%B9%E7%9B%AE%E7%9B%AE%E5%BD%95" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>一个合法的 sbt 项目可以是一个包含单个源码文件的目录。
+尝试创建一个 <code>hello</code> 目录，包含内容如下的源码文件 <code>hw.scala</code>：
+</p><pre><code class="prettyprint lang-scala">object Hi {
+  def main(args: Array[String]) = println(&quot;Hi!&quot;)
+}
+</code></pre><p>现在在 <code>hello</code> 目录下启动 sbt，然后执行 <code>run</code> 命令进入到 sbt 的交互式命令行。在 Linux 或者 OS X 上的命令可能是这样：
+</p><pre><code class="">$ mkdir hello
+$ cd hello
+$ echo 'object Hi { def main(args: Array[String]) = println(&quot;Hi!&quot;) }' &gt; hw.scala
+$ sbt
+...
+&gt; run
+...
+Hi!
+</code></pre><p>在这个例子中，sbt 完全按照约定工作。sbt 将会自动找到以下内容：
+</p><ul><li>项目根目录下的源文件
+</li><li><code>src/main/scala</code> 或 <code>src/main/java</code> 中的源文件
+</li><li><code>src/test/scala</code> 或 <code>src/test/java</code> 中的测试文件
+</li><li><code>src/main/resources</code> 或 <code>src/test/resources</code> 中的数据文件
+</li><li><code>lib</code> 中的 jar 文件
+</li></ul><p>默认情况下，sbt 会用和启动自身相同版本的 Scala 来构建项目。
+</p><p>你可以通过执行 <code>sbt run</code> 来运行项目或者通过 <code>sbt console</code> 进入 <a href="http://www.scala-lang.org/node/2097">Scala REPL</a>。<code>sbt console</code> 已经帮你
+设置好项目的 classpath，所以你可以根据项目的代码尝试实际的 Scala 示例。
+</p><h3 id="%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">构建定义<a href="#%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>大多数项目需要一些手动设置。基本的构建设置都放在项目根目录的 <code>build.sbt</code> 文件里。
+</p><p>例如，如果你的项目放在 <code>hello</code> 下，在 <code>hello/build.sbt</code> 中可以这样写：
+</p><pre><code class="prettyprint lang-scala">name := &quot;hello&quot;
+
+version := &quot;1.0&quot;
+
+scalaVersion := &quot;2.10.3&quot;
+</code></pre><p>注意相邻的两行之间都有一个空行。这不仅仅是为了好看，它们是为了能将每一项分隔必须的。在 <a href="Basic-Def.html">.sbt 构建定义</a>这节中你将会学到更多关于
+如何编写 <code>build.sbt</code> 脚本的东西。
+</p><p>如果你准备将你的项目打包成一个 jar 包，在 <code>build.sbt</code> 中至少要写上 name 和 version。
+</p><h3 id="%E8%AE%BE%E7%BD%AE+sbt+%E7%89%88%E6%9C%AC">设置 sbt 版本<a href="#%E8%AE%BE%E7%BD%AE+sbt+%E7%89%88%E6%9C%AC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>你可以通过创建 <code>hello/project/build.properties</code> 文件强制指定一个版本的 sbt。在这个文件里，编写如下内容来强制使用 0.13.5：
+</p><pre><code class="">sbt.version=0.13.5
+</code></pre><p>sbt 在不同的 release 版本中是 99% 兼容的。但是在 <code>project/build.properties</code> 文件中设置 sbt 的版本仍然能避免一些潜在的混淆。
+</p><h2 id="%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84">目录结构<a href="#%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>这一小节假设你已经<a href="Setup.html">安装 sbt</a> 并且已经阅读过 <a href="Hello.html">Hello, World</a> 了。
+</p><h3 id="%E5%9F%BA%E7%A1%80%E7%9B%AE%E5%BD%95">基础目录<a href="#%E5%9F%BA%E7%A1%80%E7%9B%AE%E5%BD%95" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在 sbt 的术语里，“基础目录”是包含项目的目录。所以，如果你创建了一个和 <a href="Hello.html">Hello, World</a> 一样的项目 <code>hello</code> ，包含 <code>hello/build.sbt</code> 和 <code>hello/hw.scala</code>， <code>hello</code> 就是基础目录。
+</p><h3 id="%E6%BA%90%E4%BB%A3%E7%A0%81">源代码<a href="#%E6%BA%90%E4%BB%A3%E7%A0%81" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>源代码可以像 <code>hello/hw.scala</code> 一样的放在项目的基础目录。然而，大多数人不会在真实的项目中这样做，因为太杂乱了。
+</p><p>sbt 和 <a href="http://maven.apache.org/">Maven</a> 的默认的源文件的目录结构是一样的（所有的路径都是相对于基础目录的）：
+</p><pre><code class="">src/
+  main/
+    resources/
+       &lt;files to include in main jar here&gt;
+    scala/
+       &lt;main Scala sources&gt;
+    java/
+       &lt;main Java sources&gt;
+  test/
+    resources
+       &lt;files to include in test jar here&gt;
+    scala/
+       &lt;test Scala sources&gt;
+    java/
+       &lt;test Java sources&gt;
+</code></pre><p><code>src/</code> 中其他的目录将被忽略。而且，所有的隐藏目录也会被忽略。
+</p><h3 id="sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E6%96%87%E4%BB%B6">sbt 构建定义文件<a href="#sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E6%96%87%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>你已经在项目的基础目录中看到了 <code>build.sbt</code>。其他的 sbt 文件在 <code>project</code> 子目录中。
+</p><p><code>project</code> 目录可以包含 <code>.scala</code> 文件，这些文件最后会和 <code>.sbt</code> 文件合并共同构成完整的构建定义。想知道更多请参见 <a href="Full-Def.html">.scala 构建定义</a>。
+</p><pre><code class="">build.sbt
+project/
+  Build.scala
+</code></pre><p>你可能在 <code>project/</code> 中也看到了 <code>.sbt</code> 文件，但是它不等同于项目基础目录中的 <code>.sbt</code> 文件。这将在<a href="Full-Def.html">稍后</a>解释，因为首先你需要一些背景知识。
+</p><h3 id="%E6%9E%84%E5%BB%BA%E4%BA%A7%E5%93%81">构建产品<a href="#%E6%9E%84%E5%BB%BA%E4%BA%A7%E5%93%81" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>生成的文件（编译的 classes，打包的 jars，托管文件，caches 和文档）默认写在 <code>target</code> 目录中。
+</p><h3 id="%E9%85%8D%E7%BD%AE%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86">配置版本管理<a href="#%E9%85%8D%E7%BD%AE%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>你的 <code>.gitignore</code> 文件（或者其他版本控制系统等同的文件）应该包含：
+</p><pre><code class="">target/
+</code></pre><p>注意：这里后面需要跟一个 <code>/</code> （只匹配目录）且前面不能有 <code>/</code> （除了匹配普通的 <code>target/</code> 还匹配 <code>project/target/</code> ）。</p><h2 id="%E8%BF%90%E8%A1%8C">运行<a href="#%E8%BF%90%E8%A1%8C" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>这一小节将讲述在你建立好项目之后如何去使用 sbt。假设你已经<a href="Setup.html">安装 sbt</a> 并且已经创建过 <a href="Hello.html">Hello, World</a> 项目或其他项目。
+</p><h3 id="%E4%BA%A4%E4%BA%92%E6%A8%A1%E5%BC%8F">交互模式<a href="#%E4%BA%A4%E4%BA%92%E6%A8%A1%E5%BC%8F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在你的项目目录下运行 sbt 不跟任何参数：
+</p><pre><code class="">$ sbt
+</code></pre><p>执行 sbt 不跟任何命令行参数将会进入交互模式。交互模式有一个命令行（含有 tab 自动补全功能和历史记录）。
+</p><p>例如，在 sbt 命令行里输入 <code>compile</code>：
+</p><pre><code class="">&gt; compile
+</code></pre><p>再次 <code>compile</code>，只需要按方向键上然后回车。
+</p><p>输入 <code>run</code> 来启动程序。
+</p><p>输入 <code>exit</code> 或者 Ctrl+D （Unix）或者 Ctrl+Z （Windows）可以退出交互模式。
+</p><h3 id="%E6%89%B9%E5%A4%84%E7%90%86%E6%A8%A1%E5%BC%8F">批处理模式<a href="#%E6%89%B9%E5%A4%84%E7%90%86%E6%A8%A1%E5%BC%8F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>你也可以用批处理模式来运行 sbt，可以以空格为分隔符指定参数。对于接受参数的 sbt 命令，将命令和参数用引号引起来一起传给 sbt。例如：
+</p><pre><code class="">$ sbt clean compile &quot;testOnly TestA TestB&quot;
+</code></pre><p>在这个例子中，<code>testOnly</code> 有两个参数 <code>TestA</code> 和 <code>TestB</code>。这个命令会按顺序执行（<code>clean</code>， <code>compile</code>， 然后 <code>testOnly</code>）。
+</p><h3 id="%E6%8C%81%E7%BB%AD%E6%9E%84%E5%BB%BA%E5%92%8C%E6%B5%8B%E8%AF%95">持续构建和测试<a href="#%E6%8C%81%E7%BB%AD%E6%9E%84%E5%BB%BA%E5%92%8C%E6%B5%8B%E8%AF%95" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>为了加快编辑-编译-测试循环，你可以让 sbt 在你保存源文件时自动重新编译或者跑测试。
+</p><p>在命令前面加上前缀 <code>~</code> 后，每当有一个或多个源文件发生变化时就会自动运行该命令。例如，在交互模式下尝试：
+</p><pre><code class="">&gt; ~ compile
+</code></pre><p>按回车键停止监视变化。
+</p><p>你可以在交互模式或者批处理模式下使用 <code>~</code> 前缀。
+</p><p>参见<a href="../docs/Triggered-Execution.html">触发执行</a>获取详细信息。
+</p><h3 id="%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4">常用命令<a href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>下面是一些非常常用的的 sbt 命令。更加详细的列表请参见<a href="../docs/Command-Line-Reference.html">命令行参考</a>。
+</p><table>
+  <tr>
+    <td><tt>clean</tt></td>
+    <td>删除所有生成的文件 （在 <tt>target</tt> 目录下）。</td>
+  </tr>
+  <tr>
+    <td><tt>compile</tt></td>
+    <td>编译源文件（在 <tt>src/main/scala</tt> 和
+   <tt>src/main/java</tt> 目录下）。</td>
+  </tr>
+  <tr>
+    <td><tt>test</tt></td>
+    <td>编译和运行所有测试。</td>
+  </tr>
+  <tr>
+    <td><tt>console</tt></td>
+    <td>进入到一个包含所有编译的文件和所有依赖的 classpath 的 Scala 解析器。输入 <tt>:quit</tt>，
+   Ctrl+D （Unix），或者 Ctrl+Z （Windows） 返回到 sbt。</td>
+  </tr>
+  <tr>
+    <td><nobr><tt>run &lt;参数&gt;*</tt></nobr></td>
+    <td>在和 sbt 所处的同一个虚拟机上执行项目的 main class。</td>
+  </tr>
+  <tr>
+    <td><tt>package</tt></td>
+    <td>将 <tt>src/main/resources</tt> 下的文件和 <tt>src/main/scala</tt> 以及 <tt>src/main/java</tt> 中编译出来的 class 文件打包成一个 jar 文件。</td>
+  </tr>
+  <tr>
+    <td><tt>help &lt;命令&gt;</tt></td>
+    <td>显示指定的命令的详细帮助信息。如果没有指定命令，会显示所有命令的简介。</td>
+  </tr>
+  <tr>
+    <td><tt>reload</tt></td>
+    <td>重新加载构建定义（<tt>build.sbt</tt>， <tt>project/*.scala</tt>， <tt>project/*.sbt</tt> 这些文件中定义的内容)。在修改了构建定义文件之后需要重新加载。</td>
+  </tr>
+</table><h3 id="Tab+%E8%87%AA%E5%8A%A8%E8%A1%A5%E5%85%A8">Tab 自动补全<a href="#Tab+%E8%87%AA%E5%8A%A8%E8%A1%A5%E5%85%A8" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>交互模式下包括空的命令行都有 tab 自动补全。sbt 的一个特别的约定是，当按 tab 键一次的时候可能只会显示所有命令中最有可能的自动补全的子集，当按多次时才会显示详细的选项。
+</p><h3 id="%E5%91%BD%E4%BB%A4%E5%8E%86%E5%8F%B2%E8%AE%B0%E5%BD%95">命令历史记录<a href="#%E5%91%BD%E4%BB%A4%E5%8E%86%E5%8F%B2%E8%AE%B0%E5%BD%95" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>交互模式有历史记录，即使你退出 sbt 然后重新进入。最简单的访问历史记录的方法时用上方向键。还支持以下一些命令：
+</p><table>
+  <tr>
+    <td><tt>!</tt></td>
+    <td>显示历史记录命令帮助。</td>
+  </tr>
+  <tr>
+    <td><tt>!!</tt></td>
+    <td>重新执行前一条命令。</td>
+  </tr>
+  <tr>
+    <td><tt>!:</tt></td>
+    <td>显示所有之前的命令。</td>
+  </tr>  
+  <tr>
+    <td><tt>!:n</tt></td>
+    <td>显示之前的最后 <tt>n</tt> 条命令。</td>
+  </tr>
+  <tr>
+    <td><tt>!n</tt></td>
+    <td>执行下标为 <tt>n</tt> 的命令，顺序和 <tt>!:</tt> 命令展示的一直。</td>
+  </tr>
+  <tr>
+    <td><tt>!-n</tt></td>
+    <td>执行从该命令往前数第 n 条命令。</td>
+  </tr>
+  <tr>
+    <td><tt>!string</tt></td>
+    <td>执行最近执行过的以 string 打头的命令。</td>
+  </tr>
+  <tr>
+    <td><tt>!?string</tt></td>
+    <td>执行最近执行过的包含 string 的命令。</td>
+  </tr>
+</table><h2 id=".sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">.sbt 构建定义<a href="#.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>翻译中</p><h2 id="Scopes">Scopes<a href="#Scopes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>翻译中</p><h2 id="%E6%9B%B4%E5%A4%9A%E5%85%B3%E4%BA%8E%E8%AE%BE%E7%BD%AE">更多关于设置<a href="#%E6%9B%B4%E5%A4%9A%E5%85%B3%E4%BA%8E%E8%AE%BE%E7%BD%AE" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>翻译中</p><h2 id="%E5%BA%93%E4%BE%9D%E8%B5%96">库依赖<a href="#%E5%BA%93%E4%BE%9D%E8%B5%96" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>翻译中</p><h2 id="%E5%A4%9A%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA">多项目构建<a href="#%E5%A4%9A%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>翻译中</p><h2 id="%E4%BD%BF%E7%94%A8%E6%8F%92%E4%BB%B6">使用插件<a href="#%E4%BD%BF%E7%94%A8%E6%8F%92%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>翻译中</p><h2 id="%E8%87%AA%E5%AE%9A%E4%B9%89%E8%AE%BE%E7%BD%AE%E5%92%8C%E4%BB%BB%E5%8A%A1">自定义设置和任务<a href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E8%AE%BE%E7%BD%AE%E5%92%8C%E4%BB%BB%E5%8A%A1" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>翻译中</p><h2 id=".scala+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">.scala 构建定义<a href="#.scala+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>翻译中</p><h2 id="%E6%80%BB%E7%BB%93">总结<a href="#%E6%80%BB%E7%BB%93" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>翻译中</p>
           </div>
         </div>
         <div class="header">
