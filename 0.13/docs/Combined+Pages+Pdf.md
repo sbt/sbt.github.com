@@ -71,7 +71,7 @@ corrections and add documentation.
 
 Documentation for 0.7.x has been
 [archived here](http://www.scala-sbt.org/0.7.7/docs/home.html). This
-documentation applies to sbt 0.13.5.
+documentation applies to sbt 0.13.6.
 
 See also the [API Documentation](../api/index.html),
 [SXR Documentation](../sxr/index.html), and the
@@ -187,6 +187,7 @@ your plugin to the list.
     <https://github.com/skipoleschris/xsbt-cucumber-plugin>
 -   sbt-multi-jvm: <https://github.com/typesafehub/sbt-multi-jvm>
 -   sbt-testng-interface: <https://github.com/sbt/sbt-testng-interface>
+-   sbt-doctest: <https://github.com/tkawachi/sbt-doctest>
 
 #### Static Code Analysis plugins
 
@@ -409,8 +410,7 @@ your plugin to the list.
 -   sbt-scct: <https://github.com/sqality/sbt-scct>
 -   sbt-scoverage: <https://github.com/scoverage/sbt-scoverage>
 -   jacoco4sbt: <https://github.com/sbt/jacoco4sbt>
--   xsbt-coveralls-plugin:
-    <https://github.com/theon/xsbt-coveralls-plugin>
+-   sbt-coveralls: <https://github.com/scoverage/sbt-coveralls>
 
 #### Android plugin
 
@@ -2995,12 +2995,12 @@ Migrating from 0.7 to 0.10+
 ---------------------------
 
 The assumption here is that you are familiar with sbt 0.7 but new to sbt
-0.13.5.
+0.13.6.
 
-sbt 0.13.5's many new capabilities can be a bit overwhelming, but
-this page should help you migrate to 0.13.5 with a minimum of fuss.
+sbt 0.13.6's many new capabilities can be a bit overwhelming, but
+this page should help you migrate to 0.13.6 with a minimum of fuss.
 
-### Why move to 0.13.5?
+### Why move to 0.13.6?
 
 1.  Faster builds (because it is smarter at re-compiling only what it
     must)
@@ -3013,17 +3013,17 @@ this page should help you migrate to 0.13.5 with a minimum of fuss.
 5.  Terser output. (Yet you can ask for more details if something goes
     wrong.)
 
-#### Step 1: Read the Getting Started Guide for sbt 0.13.5
+#### Step 1: Read the Getting Started Guide for sbt 0.13.6
 
 Reading the [Getting Started Guide][Getting-Started] will
 probably save you a lot of confusion.
 
-#### Step 2: Install sbt 0.13.5
+#### Step 2: Install sbt 0.13.6
 
-Download sbt 0.13.5 as described on
+Download sbt 0.13.6 as described on
 [the setup page][Setup].
 
-You can run 0.13.5 the same way that you run 0.7.x, either simply:
+You can run 0.13.6 the same way that you run 0.7.x, either simply:
 
 ```
 $ java -jar sbt-launch.jar
@@ -3037,7 +3037,7 @@ For more details see
 
 #### Step 3: A technique for switching an existing project
 
-Here is a technique for switching an existing project to 0.13.5 while
+Here is a technique for switching an existing project to 0.13.6 while
 retaining the ability to switch back again at will. Some builds, such as
 those with subprojects, are not suited for this technique, but if you
 learn how to transition a simple project it will help you do a more
@@ -3046,10 +3046,10 @@ complex one next.
 ### Preserve `project/` for 0.7.x project
 
 Rename your `project/` directory to something like `project-old`. This
-will hide it from sbt 0.13.5 but keep it in case you want to switch
+will hide it from sbt 0.13.6 but keep it in case you want to switch
 back to 0.7.x.
 
-### Create `build.sbt` for 0.13.5
+### Create `build.sbt` for 0.13.6
 
 Create a `build.sbt` file in the root directory of your project. See
 [.sbt build definition][Basic-Def] in the Getting
@@ -3092,7 +3092,7 @@ scalaVersion := "2.9.2"
 Currently, a `project/build.properties` is still needed to explicitly
 select the sbt version. For example:
 
-### Run sbt 0.13.5
+### Run sbt 0.13.6
 
 Now launch sbt. If you're lucky it works and you're done. For help
 debugging, see below.
@@ -3101,7 +3101,7 @@ debugging, see below.
 
 If you get stuck and want to switch back, you can leave your `build.sbt`
 file alone. sbt 0.7.x will not understand or notice it. Just rename your
-0.13.5 `project` directory to something like `project10` and rename
+0.13.6 `project` directory to something like `project10` and rename
 the backup of your old project from `project-old` to `project` again.
 
 #### FAQs
@@ -3485,7 +3485,7 @@ influence SBT execution. Also see [sbt launcher][Sbt-Launcher].
   <tr>
     <td><tt>sbt.version</tt></td>
     <td>Version</td>
-    <td><tt>0.13.5</tt></td>
+    <td><tt>0.13.6</tt></td>
     <td>sbt version to use, usually taken from <tt>project/build.properties</tt>.</td>
   </tr>
 
@@ -5107,7 +5107,7 @@ sbt needs Scala jars to run itself since it is written in Scala. sbt
 uses that same version of Scala to compile the build definitions that
 you write for your project because they use sbt APIs. This version of
 Scala is fixed for a specific sbt release and cannot be changed. For sbt
-0.13.5, this version is Scala 2.10.3. Because this Scala
+0.13.6, this version is Scala 2.10.4. Because this Scala
 version is needed before sbt runs, the repositories used to retrieve
 this version are configured in the sbt
 [launcher][Sbt-Launcher].
@@ -9547,8 +9547,8 @@ Def.setting {
 This Parser definition will produce a value of type `(String,String)`.
 The input syntax defined isn't very flexible; it is just a
 demonstration. It will produce one of the following values for a
-successful parse (assuming the current Scala version is 2.10.3,
-the current sbt version is 0.13.5, and there are 3 commands left to
+successful parse (assuming the current Scala version is 2.10.4,
+the current sbt version is 0.13.6, and there are 3 commands left to
 run):
 
 Again, we were able to access the current Scala and sbt version for the
@@ -10811,7 +10811,7 @@ above for per-project plugins.
 ### Creating an auto plugin
 
 A minimal sbt plugin is a Scala library that is built against the version of
-Scala that sbt runs (currently, 2.10.3) or a Java library.
+Scala that sbt runs (currently, 2.10.4) or a Java library.
 Nothing special needs to be done for this type of library.
 A more typical plugin will provide sbt tasks, commands, or settings.
 This kind of plugin may provide these settings
@@ -11929,10 +11929,6 @@ resolving applications. It consists of the following properties:
 -   `ivy-home` - The home directory for Ivy. This determines where the
     ivy-local repository is located, and also where the ivy cache is
     stored. Defaults to `~/.ivy2`
--   `ivy.cache-directory` - provides an alternative location for the Ivy
-    cache used by the launcher. This does not automatically set the Ivy
-    cache for the application, but the application is provided this
-    location through the AppConfiguration instance.
 -   `checksums` - The comma-separated list of checksums that Ivy should
     use to verify artifacts have correctly resolved, e.g. md5 or sha1.
 -   `override-build-repos` - If this is set, then the
@@ -13003,7 +12999,7 @@ application. `hello.build.properties`:
 Nightly Builds
 --------------
 
-The latest development versions of 0.13.5 are available as nightly
+The latest development versions of 0.13.6 are available as nightly
 builds on [Typesafe Snapshots](http://repo.typesafe.com/typesafe/ivy-snapshots/).
 
 To use a nightly build, the instructions are the same for
@@ -13013,7 +13009,7 @@ To use a nightly build, the instructions are the same for
 nightly-launcher|. They should be listed in chronological order, so
     the most recent one will be last.
 2.  The version number is the name of the subdirectory and is of the
-    form `0.13.5.x-yyyyMMdd-HHmmss`. Use this in a build.properties
+    form `0.13.6.x-yyyyMMdd-HHmmss`. Use this in a build.properties
     file.
 3.  Call your script something like `sbt-nightly` to retain access to a
     stable sbt launcher. The documentation will refer to the script as
@@ -15468,7 +15464,7 @@ something is a bug.
 
 #### My last command didn't work but I can't see an explanation. Why?
 
-sbt 0.13.5 by default suppresses most stack traces and debugging
+sbt 0.13.6 by default suppresses most stack traces and debugging
 information. It has the nice side effect of giving you less noise on
 screen, but as a newcomer it can leave you lost for explanation. To see
 the previous output of a command at a higher verbosity, type
@@ -15976,7 +15972,7 @@ first and then the following questions.
 
 #### Where has 0.7's `lib_managed` gone?
 
-By default, sbt 0.13.5 loads managed libraries from your ivy cache
+By default, sbt 0.13.6 loads managed libraries from your ivy cache
 without copying them to a `lib_managed` directory. This fixes some bugs
 with the previous solution and keeps your project directory small. If
 you want to insulate your builds from the ivy cache being cleared, set
@@ -15988,7 +15984,7 @@ This does mean that existing solutions for sharing libraries with your
 favoured IDE may not work. Refer to [Community Plugins page][Community-Plugins]
 for a list of currently available plugins for your IDE.
 
-#### What are the commands I can use in 0.13.5 vs. 0.7?
+#### What are the commands I can use in 0.13.6 vs. 0.7?
 
 For a list of commands, run `help`. For details on a specific command,
 run `help <command>`. To view a list of tasks defined on the current
@@ -16025,7 +16021,7 @@ classpaths.
 ### My tests all run really fast but some are broken that weren't in 0.7!
 
 Be aware that compilation and tests run in parallel by default in sbt
-0.13.5. If your test code isn't thread-safe then you may want to
+0.13.6. If your test code isn't thread-safe then you may want to
 change this behaviour by adding one of the following to your
 `build.sbt`:
 
@@ -16047,9 +16043,9 @@ project.
 For an early version of an xsbt Web Start plugin, visit the
 [xsbt-webstart](https://github.com/ritschwumm/xsbt-webstart) project.
 
-#### How are inter-project dependencies different in 0.13.5 vs. 0.7?
+#### How are inter-project dependencies different in 0.13.6 vs. 0.7?
 
-In 0.13.5, there are three types of project dependencies (classpath,
+In 0.13.6, there are three types of project dependencies (classpath,
 execution, and configuration) and they are independently defined. These
 were combined in a single dependency type in 0.7.x. A declaration like:
 
@@ -16068,7 +16064,7 @@ meant that the `B` project had a classpath and execution dependency on
 3.  Configuration: For some settings, if they were not overridden in A,
     they would default to the value provided in B.
 
-In 0.13.5, declare the specific type of dependency you want. Read
+In 0.13.6, declare the specific type of dependency you want. Read
 about [multi-project builds][Multi-Project] in the
 Getting Started Guide for details.
 
@@ -16077,7 +16073,7 @@ Getting Started Guide for details.
 <table>
   <tr>
     <th>0.7</th>
-    <th>0.13.5</th>
+    <th>0.13.6</th>
   </tr>
 
   <tr>
@@ -16105,7 +16101,7 @@ Getting Started Guide for details.
   </tr>
 </table>
 
-#### Where can I find plugins for 0.13.5?
+#### Where can I find plugins for 0.13.6?
 
 See [Community Plugins][Community-Plugins] for a list of currently available
 plugins.
