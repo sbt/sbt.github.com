@@ -39,7 +39,7 @@ sbt を試してくれて、ありがとう。_楽しもう！_
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: http://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.msi
+  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.msi
   [Setup-Notes]: ../../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -67,8 +67,8 @@ sbt プロジェクトを作るには、以下の手順をたどる:
 `sbt` の実行に上手くいかない場合は、[[Setup Notes]] のターミナルの文字エンコーディング、HTTP プロキシ、JVM のオプションにかんする説明を参照する。
 
 
-  [ZIP]: http://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.zip
-  [TGZ]: http://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.tgz
+  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.zip
+  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.tgz
   [Manual-Installation]: Manual-Installation.html
  
 Mac への sbt のインストール
@@ -100,9 +100,9 @@ $ brew install sbt
 手動インストールの手順を参照。
 
 
-  [MSI]: http://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.msi
-  [ZIP]: http://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.zip
-  [TGZ]: http://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.tgz
+  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.msi
+  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.zip
+  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.tgz
 
 Windows への sbt のインストール
 ----------------------------
@@ -120,10 +120,10 @@ Windows への sbt のインストール
 手動インストールの手順を参照。
 
 
-  [ZIP]: http://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.zip
-  [TGZ]: http://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.tgz
-  [RPM]: http://dl.bintray.com/sbt/rpm/sbt-0.13.6.rpm
-  [DEB]: http://dl.bintray.com/sbt/debian/sbt-0.13.6.deb
+  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.zip
+  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-0.13.6.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-0.13.6.deb
   [Manual-Installation]: Manual-Installation.html
  
 Linux への sbt のインストール
@@ -164,7 +164,7 @@ sbt をマージする [ebuild](https://github.com/whiter4bbit/overlays/tree/mas
 手動インストールの手順を参照。
 
 
-  [sbt-launch.jar]: http://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.6/sbt-launch.jar
+  [sbt-launch.jar]: https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.6/sbt-launch.jar
 
 手動インストール
 --------------
@@ -341,7 +341,7 @@ sbt はリリース間で 99% ソースの互換性を持たせてある。
   [Hello]: Hello.html
   [Setup]: Setup.html
   [Full-Def]: Full-Def.html
-  [Maven]: http://maven.apache.org/
+  [Maven]: https://maven.apache.org/
 
 ディレクトリ構造
 --------------
@@ -793,7 +793,7 @@ libraryDependencies += "org.apache.derby" % "derby" % "10.4.1.3"
 後で、[一ページ分][Library-Dependencies]をさいてちゃんと説明する。
 
 
-  [MavenScopes]: http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Scope
+  [MavenScopes]: https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Scope
   [Basic-Def]: Basic-Def.html
   [More-About-Settings]: More-About-Settings.html
   [Library-Dependencies]: Library-Dependencies.html
@@ -1397,10 +1397,10 @@ cleanFiles <+= (name) { n => file("coverage-report-" + n + ".txt") }
 
 
   [Keys]: ../sxr/sbt/Keys.scala.html
-  [Apache Ivy]: http://ant.apache.org/ivy/
-  [Ivy revisions]: http://ant.apache.org/ivy/history/2.3.0-rc1/ivyfile/dependency.html#revision
-  [Extra attributes]: http://ant.apache.org/ivy/history/2.3.0-rc1/concept.html#extra
-  [through Ivy]: http://ant.apache.org/ivy/history/latest-milestone/concept.html#checksum
+  [Apache Ivy]: https://ant.apache.org/ivy/
+  [Ivy revisions]: https://ant.apache.org/ivy/history/2.3.0-rc1/ivyfile/dependency.html#revision
+  [Extra attributes]: https://ant.apache.org/ivy/history/2.3.0-rc1/concept.html#extra
+  [through Ivy]: https://ant.apache.org/ivy/history/latest-milestone/concept.html#checksum
   [ScalaCheck]: http://scalacheck.org
   [specs]: http://code.google.com/p/specs/
   [ScalaTest]: http://scalatest.org

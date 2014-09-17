@@ -28,7 +28,7 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: http://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.msi
+  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.msi
   [Setup-Notes]: ../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -55,8 +55,8 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
 如果你在运行 sbt 时遇到任何问题，查看[安装建议][Setup-Notes]中的终端编码，HTTP 代理，JVM 参数。
 
 
-  [ZIP]: http://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.zip
-  [TGZ]: http://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.tgz
+  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.zip
+  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.tgz
   [Manual-Installation]: Manual-Installation.html
  
 在 Mac 上安装 sbt
@@ -87,9 +87,9 @@ $ brew install sbt
 参见手动安装指南。
 
 
-  [MSI]: http://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.msi
-  [ZIP]: http://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.zip
-  [TGZ]: http://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.tgz
+  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.msi
+  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.zip
+  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.tgz
 
 在 Windows 上安装 sbt
 -------------------------
@@ -107,10 +107,10 @@ $ brew install sbt
 参见手动安装指南。
 
 
-  [ZIP]: http://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.zip
-  [TGZ]: http://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.tgz
-  [RPM]: http://dl.bintray.com/sbt/rpm/sbt-0.13.6.rpm
-  [DEB]: http://dl.bintray.com/sbt/debian/sbt-0.13.6.deb
+  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.zip
+  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-0.13.6.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-0.13.6.deb
   [Manual-Installation]: Manual-Installation.html
  
 在Linux上安装sbt
@@ -146,7 +146,7 @@ $ brew install sbt
 参见手动安装指南。
 
 
-  [sbt-launch.jar]: http://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.6/sbt-launch.jar
+  [sbt-launch.jar]: https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.6/sbt-launch.jar
 
 手动安装 sbt
 -----------------------
@@ -316,7 +316,7 @@ sbt 在不同的 release 版本中是 99% 兼容的。但是在 `project/build.p
 
 源代码可以像 `hello/hw.scala` 一样的放在项目的基础目录。然而，大多数人不会在真实的项目中这样做，因为太杂乱了。
 
-sbt 和 [Maven](http://maven.apache.org/) 的默认的源文件的目录结构是一样的（所有的路径都是相对于基础目录的）：
+sbt 和 [Maven](https://maven.apache.org/) 的默认的源文件的目录结构是一样的（所有的路径都是相对于基础目录的）：
 
 ```
 src/

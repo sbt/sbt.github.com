@@ -29,7 +29,7 @@ yourself a *lot* of time if you have the right understanding of the big
 picture up-front.
 All documentation may be found via the table of contents included at the end of every page.
 
-Use [Stack Overflow](http://stackoverflow.com/tags/sbt) for
+Use [Stack Overflow](https://stackoverflow.com/tags/sbt) for
 questions. Use the [sbt-dev mailing list](https://groups.google.com/d/forum/sbt-dev) for discussing sbt
 development. Use [@scala_sbt](https://twitter.com/scala_sbt) for questions and discussions.
 
@@ -118,7 +118,7 @@ Community Plugins
 
 ### sbt Organization
 
-The [sbt organization](http://github.com/sbt) is available for use by
+The [sbt organization](https://github.com/sbt) is available for use by
 any sbt plugin. Developers who contribute their plugins into the
 community organization will still retain control over their repository
 and its access. The goal of the sbt organization is to organize sbt
@@ -129,10 +129,10 @@ can use gh-pages to host websites under the http://scala-sbt.org domain.
 
 ### Community Ivy Repository
 
-[Typesafe](http://www.typesafe.com) has provided a freely available
-[Ivy Repository](http://repo.scala-sbt.org/scalasbt) for sbt projects
+[Typesafe](https://www.typesafe.com) has provided a freely available
+[Ivy Repository](https://repo.scala-sbt.org/scalasbt) for sbt projects
 to use. This Ivy repository is mirrored from the freely available
-[Bintray service](http://bintray.com).
+[Bintray service](https://bintray.com).
 If you'd like to submit your plugin, please follow these instructions:
 [Bintray For Plugins][Bintray-For-Plugins].
 
@@ -309,7 +309,7 @@ your plugin to the list.
 -   sbt-scalashim (Generate Scala shim like `sys.error`):
     <https://github.com/sbt/sbt-scalashim>
 -   sbtend (Generate Java source code from
-    [xtend](http://www.eclipse.org/xtend/) ):
+    [xtend](https://www.eclipse.org/xtend/) ):
     <https://github.com/xuwei-k/sbtend>
 -   sbt-boilerplate (generating scala.Tuple/Function related boilerplate
     code): <https://github.com/sbt/sbt-boilerplate>
@@ -450,7 +450,7 @@ Bintray For Plugins
 **This is currently in Beta mode.**
 
 sbt hosts their community plugin repository on
-[Bintray](http://bintray.com/sbt).
+[Bintray](https://bintray.com/sbt).
 Bintray is a repository hosting site, similar to github, which allows users to contribute their own
 plugins, while sbt can aggregate them together in a common repository.
 
@@ -464,7 +464,7 @@ To do this, we need to perform the following steps:
 
 ### Create an account on Bintray
 
-First, go to <http://bintray.com>. Click on the sign in link on the top
+First, go to <https://bintray.com>. Click on the sign in link on the top
 left, and then the sign up button.
 
 *Note: If you had an account on repo.scala-sbt.org previous, please use
@@ -503,7 +503,7 @@ First, create a `project/bintray.sbt` file
 ```scala
 resolvers += Resolver.url(
   "bintray-sbt-plugin-releases",
-   url("http://dl.bintray.com/content/sbt/sbt-plugin-releases"))(
+   url("https://dl.bintray.com/content/sbt/sbt-plugin-releases"))(
        Resolver.ivyStylePatterns)
 
 addSbtPlugin("me.lessis" % "bintray-sbt" % "0.1.1")
@@ -530,7 +530,7 @@ repository in bintray := "sbt-plugins"
 
 // This is an example.  bintray-sbt requires licenses to be specified 
 // (using a canonical name).
-licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0.html"))
+licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html"))
 
 bintrayOrganization in bintray := None
 ```
@@ -550,7 +550,7 @@ sbt> publish
 ```
 
 The plugin will ask you for your credentials. If you don't know where
-they are, you can find them on [Bintray](http://bintray.com).
+they are, you can find them on [Bintray](https://bintray.com).
 
 1.  Login to the website with your credentials.
 2.  Click on your username
@@ -824,7 +824,7 @@ duplicate entries in the final POM file, leading to a rejection in
 Sonatype's staging process.
 
 *The full format of a pom.xml file is
-[outlined here](http://maven.apache.org/pom.html).*
+[outlined here](https://maven.apache.org/pom.html).*
 
 ### Fourth - Adding credentials
 
@@ -2108,7 +2108,7 @@ Some of the more visible changes:
 -   Tab completion parser combinators for commands and input tasks:
     [Commands][Commands]
 -   No project creation prompts anymore
--   Moved to GitHub: <http://github.com/harrah/xsbt>
+-   Moved to GitHub: <https://github.com/harrah/xsbt>
 
 ### 0.7.5 to 0.7.7
 
@@ -2122,12 +2122,12 @@ Some of the more visible changes:
 -   Updated to work with Jetty 7.2 WebAppClassLoader binary
     incompatibility (issue 129).
 -   Provide application and boot classpaths to tests and 'run'ning code
-    according to <http://gist.github.com/404272>
+    according to <https://gist.github.com/404272>
 -   Fix `provided` configuration. It is no longer included on the
     classpath of dependent projects.
 -   Scala 2.8.1 is the default version used when starting a new project.
 -   Updated to
-    [Ivy 2.2.0](http://ant.apache.org/ivy/history/2.2.0/release-notes.html).
+    [Ivy 2.2.0](https://ant.apache.org/ivy/history/2.2.0/release-notes.html).
 -   Trond's patches that allow configuring
     [jetty-env.xml](http://github.com/sbt/sbt/commit/5e41a47f50e6) and
     [webdefault.xml](http://github.com/sbt/sbt/commit/030e2ee91bac0)
@@ -2253,7 +2253,7 @@ Some of the more visible changes:
     tests.
 -   Works with Scala 2.8 trunk
 -   Fixed logging level behavior on subprojects.
--   All sbt code is now at <http://github.com/harrah/xsbt> in one
+-   All sbt code is now at <https://github.com/harrah/xsbt> in one
     project.
 
 ### 0.7.0 to 0.7.1
@@ -4795,7 +4795,7 @@ excludeFilter in unmanagedSources := "butler.scala"
 ```
 
 Read more on
-[How to exclude .scala source file in project folder - Google Groups](http://groups.google.com/group/simple-build-tool/browse_thread/thread/cd5332a164405568?hl=en)
+[How to exclude .scala source file in project folder - Google Groups](https://groups.google.com/group/simple-build-tool/browse_thread/thread/cd5332a164405568?hl=en)
 
 #### External vs internal
 
@@ -4841,7 +4841,7 @@ Use the [inspect command][Inspecting-Settings] for
 more details.
 
 See also a related
-[StackOverflow answer](http://stackoverflow.com/a/7862872/850196).
+[StackOverflow answer](https://stackoverflow.com/a/7862872/850196).
 
 #### Example
 
@@ -6449,7 +6449,7 @@ complex reasons. This can happen in many scenarios, and running under
 SBT is just one of them. This is discussed for instance in issues
 #163 and #136. The reason is
 explained
-[here](http://jira.codehaus.org/browse/GROOVY-1627?focusedCommentId=85900#comment-85900).
+[here](https://jira.codehaus.org/browse/GROOVY-1627?focusedCommentId=85900#comment-85900).
 
 ### sbt's Solutions
 
@@ -6978,7 +6978,7 @@ packaging the project as an sbt [Plugin][Plugins].
 
 The main Scala testing libraries have built-in support for sbt. To add
 support for a different framework, implement the
-[uniform test interface](http://github.com/sbt/test-interface).
+[uniform test interface](https://github.com/sbt/test-interface).
 
 #### Custom Test Reporters
 
@@ -7145,7 +7145,7 @@ Artifact("myproject", "jdk15")
 ```
 
 See the
-[Ivy documentation](http://ant.apache.org/ivy/history/2.3.0/ivyfile/dependency-artifact.html)
+[Ivy documentation](https://ant.apache.org/ivy/history/2.3.0/ivyfile/dependency-artifact.html)
 for more details on artifacts. See the
 [Artifact API](../api/sbt/Artifact$.html) for combining the
 parameters above and specifying [Configurations] and extra attributes.
@@ -7410,7 +7410,7 @@ dependencies:
 -   Maven POM files (dependency definitions only: no repositories)
 -   Ivy configuration and settings files
 
-sbt uses [Apache Ivy](http://ant.apache.org/ivy/) to implement
+sbt uses [Apache Ivy](https://ant.apache.org/ivy/) to implement
 dependency management in all three cases. The default is to use inline
 declarations, but external configuration can be explicitly selected. The
 following sections describe how to use each method of automatic
@@ -7461,7 +7461,7 @@ the version of Scala you are using. See [Cross Build][Cross-Build] for details.
 Ivy can select the latest revision of a module according to constraints
 you specify. Instead of a fixed revision like `"1.6.1"`, you specify
 `"latest.integration"`, `"2.9.+"`, or `"[1.0,)"`. See the
-[Ivy revisions](http://ant.apache.org/ivy/history/2.3.0/ivyfile/dependency.html#revision)
+[Ivy revisions](https://ant.apache.org/ivy/history/2.3.0/ivyfile/dependency.html#revision)
 documentation for details.
 
 ##### Resolvers
@@ -7534,8 +7534,8 @@ with the same format as the `Launcher` configuration file. For example:
 ```
 [repositories]
 local
-my-maven-repo: http://example.org/repo
-my-ivy-repo: http://example.org/ivy-repo/, [organization]/[module]/[revision]/[type]s/[artifact](-[classifier]).[ext]
+my-maven-repo: https://example.org/repo
+my-ivy-repo: https://example.org/ivy-repo/, [organization]/[module]/[revision]/[type]s/[artifact](-[classifier]).[ext]
 ```
 
 A different location for the repositories file may be specified by the
@@ -7549,7 +7549,7 @@ If your project requires a dependency that is not present in a
 repository, a direct URL to its jar can be specified as follows:
 
 ```scala
-libraryDependencies += "slinky" % "slinky" % "2.1" from "http://slinky2.googlecode.com/svn/artifacts/2.1/slinky.jar"
+libraryDependencies += "slinky" % "slinky" % "2.1" from "https://slinky2.googlecode.com/svn/artifacts/2.1/slinky.jar"
 ```
 
 The URL is only used as a fallback if the dependency cannot be found
@@ -7643,7 +7643,7 @@ for that.
 
 ##### Extra Attributes
 
-[Extra attributes](http://ant.apache.org/ivy/history/2.3.0/concept.html#extra)
+[Extra attributes](https://ant.apache.org/ivy/history/2.3.0/concept.html#extra)
 can be specified by passing key/value pairs to the `extra` method.
 
 To select dependencies by extra attributes:
@@ -7695,7 +7695,7 @@ java -Dsbt.ivy.home=/tmp/.ivy2/ ...
 ##### Checksums
 
 sbt
-([through Ivy](http://ant.apache.org/ivy/history/latest-milestone/concept.html#checksum))
+([through Ivy](https://ant.apache.org/ivy/history/latest-milestone/concept.html#checksum))
 verifies the checksums of downloaded files by default. It also publishes
 checksums of artifacts by default. The checksums to use are specified by
 the *checksums* setting.
@@ -7729,7 +7729,7 @@ brings in different versions of the same library. By default, the latest
 revision is selected. This can be changed by setting `conflictManager`,
 which has type [ConflictManager](../api/sbt/ConflictManager.html).
 See the
-[Ivy documentation](http://ant.apache.org/ivy/history/latest-milestone/settings/conflict-managers.html)
+[Ivy documentation](https://ant.apache.org/ivy/history/latest-milestone/settings/conflict-managers.html)
 for details on the different conflict managers. For example, to specify
 that no conflicts are allowed,
 
@@ -7855,13 +7855,13 @@ See [Publishing][Publishing] for how to publish your project.
 Ivy configurations are a useful feature for your build when you need
 custom groups of dependencies, such as for a plugin. Ivy configurations
 are essentially named sets of dependencies. You can read the
-[Ivy documentation](http://ant.apache.org/ivy/history/2.3.0/tutorial/conf.html)
+[Ivy documentation](https://ant.apache.org/ivy/history/2.3.0/tutorial/conf.html)
 for details.
 
 The built-in use of configurations in sbt is similar to scopes in Maven.
 sbt adds dependencies to different classpaths by the configuration that
 they are defined in. See the description of
-[Maven Scopes](http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Scope)
+[Maven Scopes](https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Scope)
 for details.
 
 You put a dependency in a configuration by selecting one or more of its
@@ -7877,7 +7877,7 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "2.1.3" % "test->compile
 
 This says that your project's `"test"` configuration uses `ScalaTest`'s
 `"compile"` configuration. See the
-[Ivy documentation](http://ant.apache.org/ivy/history/2.3.0/tutorial/conf.html)
+[Ivy documentation](https://ant.apache.org/ivy/history/2.3.0/tutorial/conf.html)
 for more advanced mappings. Most projects published to Maven
 repositories will use the `"compile"` configuration.
 
@@ -7889,7 +7889,7 @@ it in your jar by modifying `resources`. For example:
 ```scala
 ivyConfigurations += config("js") hide
 
-libraryDependencies += "jquery" % "jquery" % "1.3.2" % "js->default" from "http://jqueryjs.googlecode.com/files/jquery-1.3.2.min.js"
+libraryDependencies += "jquery" % "jquery" % "1.3.2" % "js->default" from "https://jqueryjs.googlecode.com/files/jquery-1.3.2.min.js"
 
 resources ++= update.value.select(configurationFilter("js"))
 ```
@@ -8221,7 +8221,7 @@ pomExtra :=
   <licenses>
     <license>
       <name>Apache 2</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
       <distribution>repo</distribution>
     </license>
 </licenses>
@@ -8273,7 +8273,7 @@ change the version number each time you publish. Ivy maintains a cache,
 and it stores even local projects in that cache. If Ivy already has a
 version cached, it will not check the local repository for updates,
 unless the version number matches a
-[changing pattern](http://ant.apache.org/ivy/history/2.3.0/concept.html#change),
+[changing pattern](https://ant.apache.org/ivy/history/2.3.0/concept.html#change),
 and `SNAPSHOT` is one such pattern.
 
 
@@ -8297,7 +8297,7 @@ page describes how to define other types of repositories.
 A few predefined repositories are available and are listed below
 
 -   `DefaultMavenRepository` This is the main Maven repository at
-    <http://repo1.maven.org/maven2/> and is included by default
+    <https://repo1.maven.org/maven2/> and is included by default
 -   `JavaNet1Repository` This is the Maven 1 repository at
     <http://download.java.net/maven/1/>
 
@@ -8319,7 +8319,7 @@ Resolver.sonatypeRepo("releases")  // Or "snapshots"
 
 sbt provides an interface to the repository types available in Ivy:
 file, URL, SSH, and SFTP. A key feature of repositories in Ivy is using
-[patterns](http://ant.apache.org/ivy/history/latest-milestone/concept.html#patterns)
+[patterns](https://ant.apache.org/ivy/history/latest-milestone/concept.html#patterns)
 to configure repositories.
 
 Construct a repository definition using the factory in `sbt.Resolver`
@@ -8342,7 +8342,7 @@ configured identically except for the name of the factory. Use
   <tr>
     <td>Filesystem</td>
     <td><tt>Resolver.file</tt></td>
-    <td><a href="http://ant.apache.org/ivy/history/latest-milestone/resolver/filesystem.html">Ivy filesystem</a></td>
+    <td><a href="https://ant.apache.org/ivy/history/latest-milestone/resolver/filesystem.html">Ivy filesystem</a></td>
     <td><a href="../api/sbt/Resolver$$file$.html">filesystem factory</a></td>
     <td><a href="../api/sbt/FileRepository.html">FileRepository API</a></td>
   </tr>
@@ -8350,7 +8350,7 @@ configured identically except for the name of the factory. Use
   <tr>
     <td>SFTP</td>
     <td><tt>Resolver.sftp</tt></td>
-    <td><a href="http://ant.apache.org/ivy/history/latest-milestone/resolver/sftp.html">Ivy sftp</a></td>
+    <td><a href="https://ant.apache.org/ivy/history/latest-milestone/resolver/sftp.html">Ivy sftp</a></td>
     <td><a href="../api/sbt/Resolver$$Define$.html">sftp factory</a></td>
     <td><a href="../api/sbt/SftpRepository.html">SftpRepository API</a></td>
   </tr>
@@ -8358,7 +8358,7 @@ configured identically except for the name of the factory. Use
   <tr>
     <td>SSH</td>
     <td><tt>Resolver.ssh</tt></td>
-    <td><a href="http://ant.apache.org/ivy/history/latest-milestone/resolver/ssh.html">Ivy ssh</a></td>
+    <td><a href="https://ant.apache.org/ivy/history/latest-milestone/resolver/ssh.html">Ivy ssh</a></td>
     <td><a href="../api/sbt/Resolver$$Define$.html">ssh factory</a></td>
     <td><a href="../api/sbt/SshRepository.html">SshRepository API</a></td>
   </tr>
@@ -8366,7 +8366,7 @@ configured identically except for the name of the factory. Use
   <tr>
     <td>URL</td>
     <td><tt>Resolver.url</tt></td>
-    <td><a href="http://ant.apache.org/ivy/history/latest-milestone/resolver/url.html">Ivy url</a></td>
+    <td><a href="https://ant.apache.org/ivy/history/latest-milestone/resolver/url.html">Ivy url</a></td>
     <td><a href="../api/sbt/Resolver$$url$.html">url factory</a></td>
     <td><a href="../api/sbt/URLRepository.html">URLRepository API</a></td>
   </tr>
@@ -8389,10 +8389,10 @@ resolvers += Resolver.file("my-test-repo", file("test")) transactional()
 
 ##### URL
 
-Define a URL repository at `"http://example.org/repo-releases/"`.
+Define a URL repository at `"https://example.org/repo-releases/"`.
 
 ```scala
-resolvers += Resolver.url("my-test-repo", url("http://example.org/repo-releases/"))
+resolvers += Resolver.url("my-test-repo", url("https://example.org/repo-releases/"))
 ```
 
 To specify an Ivy repository, use:
@@ -8487,7 +8487,7 @@ using `ivys` and `artifacts`:
 
 ```scala
 resolvers += Resolver.url("my-test-repo") artifacts
-        "http://example.org/[organisation]/[module]/[revision]/[artifact].[ext]"
+        "https://example.org/[organisation]/[module]/[revision]/[artifact].[ext]"
 ```
 
 
@@ -10715,7 +10715,7 @@ addSbtPlugin("org.example" % "another-plugin" % "2.0")
 // plain library (not an sbt plugin) for use in the build definition
 libraryDependencies += "org.example" % "utilities" % "1.3"
 
-resolvers += "Example Plugin Repository" at "http://example.org/repo/"
+resolvers += "Example Plugin Repository" at "https://example.org/repo/"
 ```
 
 Many of the auto plugins automatically adds settings into projects,
@@ -12995,7 +12995,7 @@ Nightly Builds
 --------------
 
 The latest development versions of 0.13.6 are available as nightly
-builds on [Typesafe Snapshots](http://repo.typesafe.com/typesafe/ivy-snapshots/).
+builds on [Typesafe Snapshots](https://repo.typesafe.com/typesafe/ivy-snapshots/).
 
 To use a nightly build, the instructions are the same for
 [normal manual setup][Manual-Installation] except:
@@ -14343,7 +14343,7 @@ startYear := Some(2008)
 
 description := "A build tool for Scala."
 
-licenses += "GPLv2" -> url("http://www.gnu.org/licenses/gpl-2.0.html")
+licenses += "GPLv2" -> url("https://www.gnu.org/licenses/gpl-2.0.html")
 ```
 
 
@@ -14788,7 +14788,7 @@ example,
 ```scala
 apiMappings += (
   (unmanagedBase.value / "a-library.jar") -> 
-    url("http://example.org/api/")
+    url("https://example.org/api/")
 )
 ```
 
@@ -14802,7 +14802,7 @@ against the API documentation using `autoAPIMappings`. (This only works
 for Scala 2.10.2 and later.) For example,
 
 ```scala
-apiURL := Some(url("http://example.org/api/"))
+apiURL := Some(url("https://example.org/api/"))
 ```
 
 This information will get included in a property of the published
@@ -15243,7 +15243,7 @@ object CDAP2Build extends Build {
 
 ### External Builds
 
--   [Mojolly Backchat Build](http://gist.github.com/1021873)
+-   [Mojolly Backchat Build](https://gist.github.com/1021873)
 -   [Scalaz Build](https://github.com/scalaz/scalaz/blob/master/project/ScalazBuild.scala)
 -   Source Code Generation
 -   Generates Scaladoc and Scala X-Ray HTML Sources, with a unified view
@@ -15426,7 +15426,7 @@ Frequently Asked Questions
 
 #### How do I get help?
 
-Please use [Stack Overflow](http://stackoverflow.com/tags/sbt) for questions. Use the
+Please use [Stack Overflow](https://stackoverflow.com/tags/sbt) for questions. Use the
 [sbt-dev mailing list](https://groups.google.com/d/forum/sbt-dev) for comments and discussions about sbt
 development.
 
@@ -15446,12 +15446,12 @@ something is a bug.
 
 #### How can I help?
 
--   Answer questions on [Stack Overflow](http://stackoverflow.com/tags/sbt).
+-   Answer questions on [Stack Overflow](https://stackoverflow.com/tags/sbt).
 -   Fix mistakes that you notice on the wiki.
 -   Make [bug reports](https://github.com/sbt/sbt/issues) that are
     clear and reproducible.
 -   Discuss development on the [sbt-dev mailing list](https://groups.google.com/d/forum/sbt-dev).
--   Fix issues that affect you. [Fork, fix, and submit a pull request](http://help.github.com/fork-a-repo/).
+-   Fix issues that affect you. [Fork, fix, and submit a pull request](https://help.github.com/fork-a-repo/).
 -   Implement features that are important to you.
     See [Contributing to sbt][Contributing-to-sbt] for more details.
 
@@ -15632,7 +15632,7 @@ See the [Additional test configurations][additional-test-configurations] section
 #### How can I create a custom run task, in addition to `run`?
 
 This answer is extracted from a
-[mailing list discussion](http://groups.google.com/group/simple-build-tool/browse_thread/thread/4c28ee5b7e18b46a/).
+[mailing list discussion](https://groups.google.com/group/simple-build-tool/browse_thread/thread/4c28ee5b7e18b46a/).
 
 Read the Getting Started Guide up to
 [custom settings][Custom-Settings] for background.
@@ -15875,7 +15875,7 @@ as a jar or pom.xml. An example of such an error is:
 
 ```
 [warn]  problem while downloading module descriptor:
-http://repo1.maven.org/maven2/commons-fileupload/commons-fileupload/1.2.2/commons-fileupload-1.2.2.pom:
+https://repo1.maven.org/maven2/commons-fileupload/commons-fileupload/1.2.2/commons-fileupload-1.2.2.pom:
 invalid sha1: expected=ad3fda4adc95eb0d061341228cc94845ddb9a6fe computed=0ce5d4a03b07c8b00ab60252e5cacdc708a4e6d8 (1070ms)
 ```
 
@@ -16072,13 +16072,13 @@ Getting Started Guide for details.
   </tr>
 
   <tr>
-    <td><a href="http://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/FileUtilities$object.html">FileUtilities</a></td>
+    <td><a href="https://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/FileUtilities$object.html">FileUtilities</a></td>
     <td><a href="../api/sbt/IO$.html)">IO</a></td>
   </tr>
 
   <tr>
-    <td><a href="http://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/Path.html">Path class</a> and
-    <a href="http://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/Path$.html">object</a></td>
+    <td><a href="https://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/Path.html">Path class</a> and
+    <a href="https://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/Path$.html">object</a></td>
     <td>
       <a href="../api/sbt/Path$.html">Path object</a>, <tt>File</tt>,
       <a href="../api/sbt/RichFile.html">RichFile</a>
@@ -16087,7 +16087,7 @@ Getting Started Guide for details.
   </tr>
 
   <tr>
-    <td><a href="http://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/PathFinder.html">PathFinder class</a></td>
+    <td><a href="https://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/PathFinder.html">PathFinder class</a></td>
     <td>
       <tt>Seq[File]</tt>, 
       <a href="../api/sbt/PathFinder.html)">PathFinder class</a>,

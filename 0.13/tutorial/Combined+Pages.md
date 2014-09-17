@@ -30,7 +30,7 @@ Thanks for trying out sbt and *have fun*!
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: http://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.msi
+  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.msi
   [Setup-Notes]: ../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -60,8 +60,8 @@ If you have any trouble running sbt, see [Setup Notes][Setup-Notes] on
 terminal encodings, HTTP proxies, and JVM options.
 
 
-  [ZIP]: http://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.zip
-  [TGZ]: http://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.tgz
+  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.zip
+  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.tgz
   [Manual-Installation]: Manual-Installation.html
  
 Installing sbt on Mac
@@ -94,9 +94,9 @@ Download [ZIP][ZIP] or [TGZ][TGZ] package, and expand it.
 See instruction to install manually.
 
 
-  [MSI]: http://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.msi
-  [ZIP]: http://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.zip
-  [TGZ]: http://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.tgz
+  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.msi
+  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.zip
+  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.tgz
 
 Installing sbt on Windows
 -------------------------
@@ -114,10 +114,10 @@ Download [ZIP][ZIP] or [TGZ][TGZ] package and expand it.
 See instruction to install manually.
 
 
-  [ZIP]: http://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.zip
-  [TGZ]: http://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.tgz
-  [RPM]: http://dl.bintray.com/sbt/rpm/sbt-0.13.6.rpm
-  [DEB]: http://dl.bintray.com/sbt/debian/sbt-0.13.6.deb
+  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.zip
+  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-0.13.6.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-0.13.6.deb
   [Manual-Installation]: Manual-Installation.html
  
 Installing sbt on Linux
@@ -157,7 +157,7 @@ To merge sbt from this ebuilds you can do:
 See instruction to install manually.
 
 
-  [sbt-launch.jar]: http://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.6/sbt-launch.jar
+  [sbt-launch.jar]: https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.6/sbt-launch.jar
 
 Installing sbt manually
 -----------------------
@@ -364,7 +364,7 @@ Source code can be placed in the project's base directory as with
 too much clutter.
 
 sbt uses the same directory structure as
-[Maven](http://maven.apache.org/) for source files by default (all paths
+[Maven](https://maven.apache.org/) for source files by default (all paths
 are relative to the base directory):
 
 ```
@@ -950,7 +950,7 @@ A *configuration* defines a flavor of build, potentially with its own
 classpath, sources, generated packages, etc. The configuration concept
 comes from Ivy, which sbt uses for
 managed dependencies [Library Dependencies][Library-Dependencies], and from
-[MavenScopes](http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Scope).
+[MavenScopes](https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Scope).
 
 Some configurations you'll see in sbt:
 
@@ -1507,7 +1507,7 @@ unmanagedJars in Compile := Seq.empty[sbt.Attributed[java.io.File]]
 
 ### Managed Dependencies
 
-sbt uses [Apache Ivy](http://ant.apache.org/ivy/) to implement managed
+sbt uses [Apache Ivy](https://ant.apache.org/ivy/) to implement managed
 dependencies, so if you're familiar with Ivy or Maven, you won't have
 much trouble.
 
@@ -1609,7 +1609,7 @@ single fixed version. Ivy can select the latest revision of a module
 according to constraints you specify. Instead of a fixed revision like
 `"1.6.1"`, you specify `"latest.integration"`, `"2.9.+"`, or `"[1.0,)"`. See the
 [Ivy
-revisions](http://ant.apache.org/ivy/history/2.3.0/ivyfile/dependency.html#revision)
+revisions](https://ant.apache.org/ivy/history/2.3.0/ivyfile/dependency.html#revision)
 documentation for details.
 
 <!-- TODO: Add aliases -->

@@ -50,7 +50,7 @@
 page describes how to define other types of repositories.
 </p><h3 id="Predefined">Predefined<a href="#Predefined" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A few predefined repositories are available and are listed below
 </p><ul><li><code>DefaultMavenRepository</code> This is the main Maven repository at
-<a href="http://repo1.maven.org/maven2/">http://repo1.maven.org/maven2/</a> and is included by default
+<a href="https://repo1.maven.org/maven2/">https://repo1.maven.org/maven2/</a> and is included by default
 </li><li><code>JavaNet1Repository</code> This is the Maven 1 repository at
 <a href="http://download.java.net/maven/1/">http://download.java.net/maven/1/</a>
 </li></ul><p>For example, to use the <code>java.net</code> repository, use the following setting
@@ -61,7 +61,7 @@ in one place:
 </p><pre><code class="prettyprint lang-scala">Resolver.sonatypeRepo(&quot;releases&quot;)  // Or &quot;snapshots&quot;
 </code></pre><h3 id="Custom">Custom<a href="#Custom" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt provides an interface to the repository types available in Ivy:
 file, URL, SSH, and SFTP. A key feature of repositories in Ivy is using
-<a href="http://ant.apache.org/ivy/history/latest-milestone/concept.html#patterns">patterns</a>
+<a href="https://ant.apache.org/ivy/history/latest-milestone/concept.html#patterns">patterns</a>
 to configure repositories.
 </p><p>Construct a repository definition using the factory in <code>sbt.Resolver</code>
 for the desired type. This factory creates a <code>Repository</code> object that
@@ -82,7 +82,7 @@ configured identically except for the name of the factory. Use
   <tr>
     <td>Filesystem</td>
     <td><tt>Resolver.file</tt></td>
-    <td><a href="http://ant.apache.org/ivy/history/latest-milestone/resolver/filesystem.html">Ivy filesystem</a></td>
+    <td><a href="https://ant.apache.org/ivy/history/latest-milestone/resolver/filesystem.html">Ivy filesystem</a></td>
     <td><a href="../api/sbt/Resolver$$file$.html">filesystem factory</a></td>
     <td><a href="../api/sbt/FileRepository.html">FileRepository API</a></td>
   </tr>
@@ -90,7 +90,7 @@ configured identically except for the name of the factory. Use
   <tr>
     <td>SFTP</td>
     <td><tt>Resolver.sftp</tt></td>
-    <td><a href="http://ant.apache.org/ivy/history/latest-milestone/resolver/sftp.html">Ivy sftp</a></td>
+    <td><a href="https://ant.apache.org/ivy/history/latest-milestone/resolver/sftp.html">Ivy sftp</a></td>
     <td><a href="../api/sbt/Resolver$$Define$.html">sftp factory</a></td>
     <td><a href="../api/sbt/SftpRepository.html">SftpRepository API</a></td>
   </tr>
@@ -98,7 +98,7 @@ configured identically except for the name of the factory. Use
   <tr>
     <td>SSH</td>
     <td><tt>Resolver.ssh</tt></td>
-    <td><a href="http://ant.apache.org/ivy/history/latest-milestone/resolver/ssh.html">Ivy ssh</a></td>
+    <td><a href="https://ant.apache.org/ivy/history/latest-milestone/resolver/ssh.html">Ivy ssh</a></td>
     <td><a href="../api/sbt/Resolver$$Define$.html">ssh factory</a></td>
     <td><a href="../api/sbt/SshRepository.html">SshRepository API</a></td>
   </tr>
@@ -106,7 +106,7 @@ configured identically except for the name of the factory. Use
   <tr>
     <td>URL</td>
     <td><tt>Resolver.url</tt></td>
-    <td><a href="http://ant.apache.org/ivy/history/latest-milestone/resolver/url.html">Ivy url</a></td>
+    <td><a href="https://ant.apache.org/ivy/history/latest-milestone/resolver/url.html">Ivy url</a></td>
     <td><a href="../api/sbt/Resolver$$url$.html">url factory</a></td>
     <td><a href="../api/sbt/URLRepository.html">URLRepository API</a></td>
   </tr>
@@ -116,8 +116,8 @@ layout.
 working directory and declare that publishing to this repository must be
 atomic.
 </p><pre><code class="prettyprint lang-scala">resolvers += Resolver.file(&quot;my-test-repo&quot;, file(&quot;test&quot;)) transactional()
-</code></pre><h5 id="URL">URL<a href="#URL" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p>Define a URL repository at <code>&quot;http://example.org/repo-releases/&quot;</code>.
-</p><pre><code class="prettyprint lang-scala">resolvers += Resolver.url(&quot;my-test-repo&quot;, url(&quot;http://example.org/repo-releases/&quot;))
+</code></pre><h5 id="URL">URL<a href="#URL" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p>Define a URL repository at <code>&quot;https://example.org/repo-releases/&quot;</code>.
+</p><pre><code class="prettyprint lang-scala">resolvers += Resolver.url(&quot;my-test-repo&quot;, url(&quot;https://example.org/repo-releases/&quot;))
 </code></pre><p>To specify an Ivy repository, use:
 </p><pre><code class="prettyprint lang-scala">resolvers += Resolver.url(&quot;my-test-repo&quot;, url)(Resolver.ivyStylePatterns)
 </code></pre><p>or customize the layout pattern described in the Custom Layout section
@@ -160,7 +160,7 @@ be Maven compatible (as defined by Ivy). See the
 by omitting the base URL, passing an empty <code>Patterns</code> instance, and
 using <code>ivys</code> and <code>artifacts</code>:
 </p><pre><code class="prettyprint lang-scala">resolvers += Resolver.url(&quot;my-test-repo&quot;) artifacts
-        &quot;http://example.org/[organisation]/[module]/[revision]/[artifact].[ext]&quot;
+        &quot;https://example.org/[organisation]/[module]/[revision]/[artifact].[ext]&quot;
 </code></pre><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>
@@ -175,7 +175,7 @@ using <code>ivys</code> and <code>artifacts</code>:
           </div>
         </div>
         <div class="header">
-          <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
+          <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
 <div class="container navbar-static-top nav">
     <div class="logo">
       <a href="../../index.html"><img src="files/sbt-logo-white-72x50.png" alt="sbt"></a>

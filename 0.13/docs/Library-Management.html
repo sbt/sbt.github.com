@@ -86,7 +86,7 @@ dependencies:
 </p><ul><li>Declarations in your project definition
 </li><li>Maven POM files (dependency definitions only: no repositories)
 </li><li>Ivy configuration and settings files
-</li></ul><p>sbt uses <a href="http://ant.apache.org/ivy/">Apache Ivy</a> to implement
+</li></ul><p>sbt uses <a href="https://ant.apache.org/ivy/">Apache Ivy</a> to implement
 dependency management in all three cases. The default is to use inline
 declarations, but external configuration can be explicitly selected. The
 following sections describe how to use each method of automatic
@@ -114,7 +114,7 @@ the version of Scala you are using. See <a href="Cross-Build.html">Cross Build</
 </p><p>Ivy can select the latest revision of a module according to constraints
 you specify. Instead of a fixed revision like <code>&quot;1.6.1&quot;</code>, you specify
 <code>&quot;latest.integration&quot;</code>, <code>&quot;2.9.+&quot;</code>, or <code>&quot;[1.0,)&quot;</code>. See the
-<a href="http://ant.apache.org/ivy/history/2.3.0/ivyfile/dependency.html#revision">Ivy revisions</a>
+<a href="https://ant.apache.org/ivy/history/2.3.0/ivyfile/dependency.html#revision">Ivy revisions</a>
 documentation for details.
 </p><h5 id="Resolvers">Resolvers<a href="#Resolvers" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p>sbt uses the standard Maven2 repository by default.
 </p><p>Declare additional repositories with the form:
@@ -153,15 +153,15 @@ definitions.
 with the same format as the <code>Launcher</code> configuration file. For example:
 </p><pre><code class="">[repositories]
 local
-my-maven-repo: http://example.org/repo
-my-ivy-repo: http://example.org/ivy-repo/, [organization]/[module]/[revision]/[type]s/[artifact](-[classifier]).[ext]
+my-maven-repo: https://example.org/repo
+my-ivy-repo: https://example.org/ivy-repo/, [organization]/[module]/[revision]/[type]s/[artifact](-[classifier]).[ext]
 </code></pre><p>A different location for the repositories file may be specified by the
 <code>sbt.repository.config</code> system property in the sbt startup script. The
 final step is to set <code>sbt.override.build.repos</code> to true to use these
 repositories for dependency resolution and retrieval.
 </p><h5 id="Explicit+URL">Explicit URL<a href="#Explicit+URL" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p>If your project requires a dependency that is not present in a
 repository, a direct URL to its jar can be specified as follows:
-</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;slinky&quot; % &quot;slinky&quot; % &quot;2.1&quot; from &quot;http://slinky2.googlecode.com/svn/artifacts/2.1/slinky.jar&quot;
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;slinky&quot; % &quot;slinky&quot; % &quot;2.1&quot; from &quot;https://slinky2.googlecode.com/svn/artifacts/2.1/slinky.jar&quot;
 </code></pre><p>The URL is only used as a fallback if the dependency cannot be found
 through the configured repositories. Also, the explicit URL is not
 included in published metadata (that is, the pom or ivy.xml).
@@ -211,7 +211,7 @@ add <code>withJavadoc()</code>. For example:
   &quot;org.apache.felix&quot; % &quot;org.apache.felix.framework&quot; % &quot;1.8.0&quot; withSources() withJavadoc()
 </code></pre><p>Note that this is not transitive. Use the <code>update-*classifiers</code> tasks
 for that.
-</p><h5 id="Extra+Attributes">Extra Attributes<a href="#Extra+Attributes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p><a href="http://ant.apache.org/ivy/history/2.3.0/concept.html#extra">Extra attributes</a>
+</p><h5 id="Extra+Attributes">Extra Attributes<a href="#Extra+Attributes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p><a href="https://ant.apache.org/ivy/history/2.3.0/concept.html#extra">Extra attributes</a>
 can be specified by passing key/value pairs to the <code>extra</code> method.
 </p><p>To select dependencies by extra attributes:
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org&quot; % &quot;name&quot; % &quot;rev&quot; extra(&quot;color&quot; -&gt; &quot;blue&quot;)
@@ -238,7 +238,7 @@ both the sbt launcher and by projects, by setting the system property
 </p><p>For example:
 </p><pre><code class="">java -Dsbt.ivy.home=/tmp/.ivy2/ ...
 </code></pre><h5 id="Checksums">Checksums<a href="#Checksums" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p>sbt
-(<a href="http://ant.apache.org/ivy/history/latest-milestone/concept.html#checksum">through Ivy</a>)
+(<a href="https://ant.apache.org/ivy/history/latest-milestone/concept.html#checksum">through Ivy</a>)
 verifies the checksums of downloaded files by default. It also publishes
 checksums of artifacts by default. The checksums to use are specified by
 the <em>checksums</em> setting.
@@ -255,7 +255,7 @@ brings in different versions of the same library. By default, the latest
 revision is selected. This can be changed by setting <code>conflictManager</code>,
 which has type <a href="../api/sbt/ConflictManager.html">ConflictManager</a>.
 See the
-<a href="http://ant.apache.org/ivy/history/latest-milestone/settings/conflict-managers.html">Ivy documentation</a>
+<a href="https://ant.apache.org/ivy/history/latest-milestone/settings/conflict-managers.html">Ivy documentation</a>
 for details on the different conflict managers. For example, to specify
 that no conflicts are allowed,
 </p><pre><code class="prettyprint lang-scala">conflictManager := ConflictManager.strict
@@ -329,12 +329,12 @@ published pom.xml.
 </p><a name="ivy-configurations"></a><h5 id="Configurations">Configurations<a href="#Configurations" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p>Ivy configurations are a useful feature for your build when you need
 custom groups of dependencies, such as for a plugin. Ivy configurations
 are essentially named sets of dependencies. You can read the
-<a href="http://ant.apache.org/ivy/history/2.3.0/tutorial/conf.html">Ivy documentation</a>
+<a href="https://ant.apache.org/ivy/history/2.3.0/tutorial/conf.html">Ivy documentation</a>
 for details.
 </p><p>The built-in use of configurations in sbt is similar to scopes in Maven.
 sbt adds dependencies to different classpaths by the configuration that
 they are defined in. See the description of
-<a href="http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Scope">Maven Scopes</a>
+<a href="https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Scope">Maven Scopes</a>
 for details.
 </p><p>You put a dependency in a configuration by selecting one or more of its
 configurations to map to one or more of your project’s configurations.
@@ -345,7 +345,7 @@ your dependency definition:
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;2.1.3&quot; % &quot;test-&gt;compile&quot;
 </code></pre><p>This says that your project’s <code>&quot;test&quot;</code> configuration uses <code>ScalaTest</code>’s
 <code>&quot;compile&quot;</code> configuration. See the
-<a href="http://ant.apache.org/ivy/history/2.3.0/tutorial/conf.html">Ivy documentation</a>
+<a href="https://ant.apache.org/ivy/history/2.3.0/tutorial/conf.html">Ivy documentation</a>
 for more advanced mappings. Most projects published to Maven
 repositories will use the <code>&quot;compile&quot;</code> configuration.
 </p><p>A useful application of configurations is to group dependencies that are
@@ -354,7 +354,7 @@ not used on normal classpaths. For example, your project might use a
 it in your jar by modifying <code>resources</code>. For example:
 </p><pre><code class="prettyprint lang-scala">ivyConfigurations += config(&quot;js&quot;) hide
 
-libraryDependencies += &quot;jquery&quot; % &quot;jquery&quot; % &quot;1.3.2&quot; % &quot;js-&gt;default&quot; from &quot;http://jqueryjs.googlecode.com/files/jquery-1.3.2.min.js&quot;
+libraryDependencies += &quot;jquery&quot; % &quot;jquery&quot; % &quot;1.3.2&quot; % &quot;js-&gt;default&quot; from &quot;https://jqueryjs.googlecode.com/files/jquery-1.3.2.min.js&quot;
 
 resources ++= update.value.select(configurationFilter(&quot;js&quot;))
 </code></pre><p>The <code>config</code> method defines a new configuration with name <code>&quot;js&quot;</code> and
@@ -416,7 +416,7 @@ specify repositories inline or in an Ivy <code>ivysettings.xml</code> file.
           </div>
         </div>
         <div class="header">
-          <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
+          <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
 <div class="container navbar-static-top nav">
     <div class="logo">
       <a href="../../index.html"><img src="files/sbt-logo-white-72x50.png" alt="sbt"></a>
