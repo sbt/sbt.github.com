@@ -126,11 +126,11 @@ object HelloBuild extends Build {
 </p><pre><code class="prettyprint lang-scala">sampleKeyC in ThisBuild := &quot;C: in build.sbt scoped to ThisBuild&quot;
 
 sampleKeyD := &quot;D: in build.sbt&quot;
-</code></pre><p>sbt のインタラクティブプロンプトを起動する。<code>inspect sample-a</code> と打ち込むと、以下のように表示されるはず（一部抜粋）:
+</code></pre><p>sbt のインタラクティブプロンプトを起動する。<code>inspect sampleKeyA</code> と打ち込むと、以下のように表示されるはず（一部抜粋）:
 </p><pre><code class="">[info] Setting: java.lang.String = A: in Build.settings in Build.scala
 [info] Provided by:
 [info]  {file:/home/hp/checkout/hello/}/*:sampleKeyA
-</code></pre><p>次に、<code>inspect sample-c</code> と打ち込むと、以下のように表示される:
+</code></pre><p>次に、<code>inspect sampleKeyC</code> と打ち込むと、以下のように表示される:
 </p><pre><code class="">[info] Setting: java.lang.String = C: in build.sbt scoped to ThisBuild
 [info] Provided by:
 [info]  {file:/home/hp/checkout/hello/}/*:sampleKeyC
@@ -138,15 +138,15 @@ sampleKeyD := &quot;D: in build.sbt&quot;
 つまり、<code>.sbt</code> ファイルの <code>sampleKeyC in ThisBuild</code> は、
 <code>.scala</code> ファイルの <code>Build.settings</code> リストにセッティングを追加するのと等価とういうことだ。
 sbt は、ビルド全体にスコープ付けされたセッティングを両者から取り込んでビルド定義を作成する。
-</p><p>次は、<code>inspect sample-b</code>:
+</p><p>次は、<code>inspect sampleKeyB</code>:
 </p><pre><code class="">[info] Setting: java.lang.String = B: in the root project settings in Build.scala
 [info] Provided by:
 [info]  {file:/home/hp/checkout/hello/}hello/*:sampleKeyB
-</code></pre><p><code>sample-b</code> は、
+</code></pre><p><code>sampleKeyB</code> は、
 ビルド全体（<code>{file:/home/hp/checkout/hello/}</code>）ではなく、
 特定のプロジェクト（<code>{file:/home/hp/checkout/hello/}hello</code>）
 にスコープ付けされいることに注意してほしい。
-</p><p>もうお分かりだと思うが、<code>inspect sample-d</code> は <code>sample-b</code> に対応する:
+</p><p>もうお分かりだと思うが、<code>inspect sampleKeyD</code> は <code>sampleKeyB</code> に対応する:
 </p><pre><code class="">[info] Setting: java.lang.String = D: in build.sbt
 [info] Provided by:
 [info]  {file:/home/hp/checkout/hello/}hello/*:sampleKeyD
@@ -154,9 +154,9 @@ sbt は、ビルド全体にスコープ付けされたセッティングを両�
 <code>Build.settings</code> と <code>Project.settings</code> に<em>追加する</em>ため、
 これは <code>.sbt</code> 内のセッティングの優先順位が高いことを意味する。
 <code>Build.scala</code> を変更して、<code>build.sbt</code> でも設定されている
-<code>sample-c</code> か <code>sample-d</code> キーを設定してみよう。
+<code>sampleKeyC</code> か <code>sampleKeyD</code> キーを設定してみよう。
 <code>build.sbt</code> 内のセッティングが、<code>Build.scala</code> 内のそれに「勝つ」はずだ。
-</p><p>もう一つ気づいたかもしれないが、<code>sampleC</code> と <code>sampleD</code> は <code>build.sbt</code> でそのまま使うことができる。
+</p><p>もう一つ気づいたかもしれないが、<code>sampleKeyC</code> と <code>sampleKeyD</code> は <code>build.sbt</code> でそのまま使うことができる。
 これは、sbt が <code>Build</code> オブジェクトのコンテンツを自動的に <code>.sbt</code> ファイルにインポートすることにより実現されている。
 具体的には、<code>build.sbt</code> ファイル内で <code>import HelloBuild._</code> が暗黙に呼ばれている。
 </p><p>まとめてみると:
@@ -173,16 +173,6 @@ sbt は、ビルド全体にスコープ付けされたセッティングを両�
 <code>val</code>、<code>object</code> やメソッド定義など、Scala コードを自由に書ける。
 </p><p><em>推奨される方法の一つとしては、<code>.scala</code> ファイルは <code>val</code> や <code>object</code> やメソッド定義を
 くくり出すのに使用して、セッティングの定義は <code>.sbt</code> で行うことだ。</em>
-</p><p><code>.sbt</code> 形式は、単一の式のみが許されているので、式の間でコードを共有する方法を持たない。
-コードを共有したければ、共通の変数やメソッドの定義ができるように <code>.scala</code> ファイルが必要になる。
-(sbt 0.13.0 からbuild.sbtでも、val、lazy val、メソッド定義は可能になりました。classやobjectが必要な場合は引き続きbuild.scalaが必要です)
-</p><p><code>.sbt</code> ファイルと <code>.scala</code> ファイルの両方がコンパイルされ、一つのビルド定義が作られる。
-</p><p><code>.scala</code> ファイルは、単一のビルド内で複数のプロジェクトを定義する場合にも必須だ。
-これに関しては、<a href="../multi-project">マルチプロジェクト</a>で後ほど説明する。
-</p><p>（<a href="../multi-project">マルチプロジェクト</a>で <code>.sbt</code> ファイルを使うことの欠点は、
-<code>.sbt</code> ファイルが異なるディレクトリに散らばってしまうことだ。
-そのため、サブプロジェクトがある場合は、セッティングを <code>.scala</code> に置くことを好む人もいる。
-これは、<a href="../multi-project">マルチプロジェクト</a>のふるまいを理解すると、すぐ分かるようになる。）
 </p><h3 id="%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%A9%E3%82%AF%E3%83%86%E3%82%A3%E3%83%96%E3%83%A2%E3%83%BC%E3%83%89%E3%81%AB%E3%81%8A%E3%81%91%E3%82%8B%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9">インタラクティブモードにおけるビルド定義<a href="#%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%A9%E3%82%AF%E3%83%86%E3%82%A3%E3%83%96%E3%83%A2%E3%83%BC%E3%83%89%E3%81%AB%E3%81%8A%E3%81%91%E3%82%8B%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt のインタラクティブプロンプトの現プロジェクトを
 <code>project/</code> 内のビルド定義プロジェクトに切り替えることができる。
 <code>reload plugins</code> と打ち込むことで切り替わる:
@@ -206,10 +196,10 @@ sbt は、ビルド全体にスコープ付けされたセッティングを両�
 </p><p>事実、セッティングには他にも出どころがある。具体的には、以下の順で追加される:
 </p><ul><li><code>.scala</code> ファイル内の <code>Build.settings</code> と <code>Project.settings</code> 。
 </li><li>ユーザ定義のグローバルセッティング。例えば、<code>~/.sbt/build.sbt</code> に<em>全て</em>のプロジェクトに影響するセッティングを定義できる。
-</li><li>プラグインによって注入されるセッティング、次の<a href="../using-plugins">プラグインの使用</a>参照。
+</li><li>プラグインによって注入されるセッティング、次の<a href="Using-Plugins.html">プラグインの使用</a>参照。
 </li><li>プロジェクトの <code>.sbt</code> ファイル内のセッティング。
 </li><li>（<code>project</code> 内のプロジェクトである）ビルド定義プロジェクトの場合は、グローバルプラグイン（~/.sbt/plugins）が追加される。
-<a href="../using-plugins">プラグインの使用</a>で詳細が説明される。
+<a href="Using-Plugins.html">プラグインの使用</a>で詳細が説明される。
 </li></ul><p>後続のセッティングは古いものをオーバーライドする。このリスト全体でビルド定義が構成される。
 </p><div class="bottom nav span-16">
                         <em>Next Page</em>

@@ -100,7 +100,7 @@ sbt のデフォルトセッティングは 3つのプラグインによって�
 </li><li><code>IvyPlugin</code>: モジュールの公開や依存性の解決機能。
 </li><li><code>JvmPlugin</code>: Java/Scala プロジェクトのコンパイル/テスト/実行/パッケージ化。
 </li></ol><p>さらに <code>JUnitXmlReportPlugin</code> は実験的に junit-xml の生成機能を提供する。
-</p><p>古い auto plugin ではないプラグインは、、<a href="../multi-project">マルチプロジェクトビルド</a>内に
+</p><p>古い auto plugin ではないプラグインは、、<a href="Multi-Project.html">マルチプロジェクトビルド</a>内に
 異なるタイプのプロジェクトを持つことができるようにセッティングを明示的に追加することを必要とする。
 それぞれのプラグインのドキュメンテーションに設定方法が書いてあると思うけど、
 典型的にはベースとなるセッティングを追加して、必要に応じてカスタム化というパターンが多い。
@@ -118,7 +118,7 @@ lazy val core = (project in file(&quot;core&quot;)).
 <code>~/.sbt/0.13/plugins/</code> は、sbt プロジェクトで、そのクラスパスは全ての sbt ビルド定義にエクスポートされる。
 大まかに言うと、<code>~/.sbt/0.13/plugins/</code> 内の <code>.sbt</code> ファイルは、それが全てのプロジェクトの
 <code>project/</code> ディレクトリに入っているかのように振る舞う。
-</p><p><code>~/.sbt/0.13/plugins//build.sbt</code> を作って、そこに <code>addSbtPlugin()</code> 式を書くことで
+</p><p><code>~/.sbt/0.13/plugins/build.sbt</code> を作って、そこに <code>addSbtPlugin()</code> 式を書くことで
 全プロジェクトにプラグインを追加することができる。
 しかし、これを多用するとマシン環境への依存性を増やしてしまうことになるので、この機能は注意してほどほどに使うべきだ。
 <a href="../../docs/Best-Practices.html#global-vs-local-plugins">ベスト・プラクティス</a>も参照してほしい。

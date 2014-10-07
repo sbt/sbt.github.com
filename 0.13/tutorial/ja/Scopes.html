@@ -50,7 +50,7 @@
 </p><p>以下に具体例で説明する:
 </p><ul><li>ビルド定義に複数のプロジェクトがあれば、それぞれのプロジェクトにおいて同じキーが別の値を取ることができる。
 </li><li>メインのソースとテストとのソースが異なるようにコンパイルしたければ、<code>compile</code> キーは別の値をとることができる。
-</li><li>（jar パッケージの作成のオプションを表す）<code>package-option</code> キーはクラスファイルのパッケージ（<code>package-bin</code>）とソースコードのパッケージ（<code>package-src</code>）で異なる値をとることができる。
+</li><li>（jar パッケージの作成のオプションを表す）<code>packageOption</code> キーはクラスファイルのパッケージ（<code>packageBin</code>）とソースコードのパッケージ（<code>packageSrc</code>）で異なる値をとることができる。
 </li></ul><p>スコープによって値が異なる可能性があるため、<em>あるキーへの単一の値は存在しない</em>。
 </p><p>しかし、<em>スコープ付き</em>キーには単一の値が存在する。
 </p><p><a href="Basic-Def.html">これまで見てきた</a>ように、sbt が、プロジェクトを記述するキー・値のマップを生成するためにセッティングのリストを処理していくことを考えると、このキー・値マップ内のキーは、<em>スコープ付き</em>キーであることが分かる。
@@ -75,10 +75,10 @@
 </li></ul><p>デフォルトでは、コンパイル、パッケージ化、と実行に関するキーの全てはコンフィグレーションにスコープ付けされているため、
 コンフィギュレーションごとに異なる動作をする可能性がある。
 その最たる例が <code>compile</code>、<code>package</code> と <code>run</code> のタスクキーだが、
-（<code>source-directories</code> や <code>scalac-options</code> や <code>full-classpath</code> など）それらのキーに<em>影響を及ぼす</em>全てのキーもコンフィグレーションにスコープ付けされている。
-</p><h4 id="%E3%82%BF%E3%82%B9%E3%82%AF%E8%BB%B8%E3%81%AB%E3%82%88%E3%82%8B%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%91">タスク軸によるスコープ付け<a href="#%E3%82%BF%E3%82%B9%E3%82%AF%E8%BB%B8%E3%81%AB%E3%82%88%E3%82%8B%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%91" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>セッティングはタスクの動作に影響を与えることもできる。例えば、<code>pakcage-src</code> は <code>package-options</code> セッティングの影響を受ける。
-</p><p>これをサポートするため、（<code>package-src</code> のような）タスクキーは、（<code>package-option</code> のような）別のキーのスコープとなりえる。
-</p><p>パッケージを構築するさまざまなタスク（<code>package-src</code>、<code>package-bin</code>、<code>package-duc</code>）は、<code>artifact-name</code> や <code>package-option</code> などのパッケージ関連のキーを共有することができる。これらのキーはそれぞれのパッケージタスクに対して独自の値を取ることができる。
+（<code>sourceDirectories</code> や <code>scalacOptions</code> や <code>fullClasspath</code> など）それらのキーに<em>影響を及ぼす</em>全てのキーもコンフィグレーションにスコープ付けされている。
+</p><h4 id="%E3%82%BF%E3%82%B9%E3%82%AF%E8%BB%B8%E3%81%AB%E3%82%88%E3%82%8B%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%91">タスク軸によるスコープ付け<a href="#%E3%82%BF%E3%82%B9%E3%82%AF%E8%BB%B8%E3%81%AB%E3%82%88%E3%82%8B%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%91" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>セッティングはタスクの動作に影響を与えることもできる。例えば、<code>pakcageSrc</code> は <code>packageOptions</code> セッティングの影響を受ける。
+</p><p>これをサポートするため、（<code>packageSrc</code> のような）タスクキーは、（<code>packageOption</code> のような）別のキーのスコープとなりえる。
+</p><p>パッケージを構築するさまざまなタスク（<code>packageSrc</code>、<code>packageBin</code>、<code>packageDoc</code>）は、<code>artifactName</code> や <code>packageOption</code> などのパッケージ関連のキーを共有することができる。これらのキーはそれぞれのパッケージタスクに対して独自の値を取ることができる。
 </p><h3 id="%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%90%E3%83%AB%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97">グローバルスコープ<a href="#%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%90%E3%83%AB%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>それぞれのスコープ軸は、その軸の型のインスタンスを代入する（例えば、タスク軸にはタスクを代入する）か、
 もしくは、<code>Global</code> という特殊な値を代入することができる。
 </p><p><code>Global</code> は、予想通りのもので、その軸の全てのインスタンスに対して適用されるセッティングの値だ。
@@ -101,7 +101,15 @@ sbt は、<code>Global</code> や、ビルド全体スコープなど、より�
 </li><li>コンフィグレーションを省略した場合は、キーに依存したコンフィギュレーションが自動検知される。
 </li><li>タスクを省略した場合は、<code>Global</code> タスクが使われる。
 </li></ul><p>さらに詳しくは、<a href="../../docs/Inspecting-Settings.html">Interacting with the Configuration System</a> 参照。
-</p><h3 id="%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%81%AE%E6%A4%9C%E6%9F%BB">スコープの検査<a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%81%AE%E6%A4%9C%E6%9F%BB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt のインタラクティブモード内で <code>inspect</code> コマンドを使ってキーとそのスコープを理解することができる。
+</p><h3 id="%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%8D%E3%82%AD%E3%83%BC%E3%81%AE%E8%A1%A8%E8%A8%98%E4%BE%8B">スコープ付きキーの表記例<a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%8D%E3%82%AD%E3%83%BC%E3%81%AE%E8%A1%A8%E8%A8%98%E4%BE%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li><code>fullClasspath</code> はキーのみを指定し、デフォルトスコープを用いる。ここでは、現在のプロジェクト、キーに依存したコンフィギュレーション、グローバルタスクスコープとなる。
+</li><li><code>test:fullClasspath</code> はコンフィギュレーションを指定する。つまりプロジェクト軸とタスク軸はデフォルトを用いつつも <code>test</code>コンフィギュレーションにおける <code>fullClasspath</code> というキーを表す。
+</li><li><code>*:fullClasspath</code> はデフォルトコンフィギュレーションを用いずに <code>Global</code> コンフィギュレーションを用いる事を明示している。
+</li><li><code>doc::fullClasspath</code> はプロジェクト軸とコンフィギュレーション軸はデフォルトを用いつつ、 <code>doc</code> タスクスコープにおける <code>fullClasspath</code> というキーを表す。
+</li><li><code>{file:/home/hp/checkout/hello/}default-aea33a/test:fullClasspath</code> は <code>{file:/home/hp/checkout/hello/}</code> をルートディレクトリにビルドした際に含まれる <code>default-aea33a</code> というプロジェクトを指定している。さらにこのプロジェクト内の <code>test</code> コンフィギュレーションを用いる事も明示している。
+</li><li><code>{file:/home/hp/checkout/hello/}/test:fullClasspath</code> は <code>{file:/home/hp/checkout/hello/}</code> のビルド全体をプロジェクトの軸とする。
+</li><li><code>{.}/test:fullClasspath</code> は <code>{.}</code> で指定されたルートディレクトリのビルド全体をプロジェクト軸に取る。<code>{.}</code> は Scala code において <code>ThisBuild</code> と記述できる。
+</li><li><code>{file:/home/hp/checkout/hello/}/compile:doc::fullClasspath</code> は3つのスコープ軸全てを指定している。
+</li></ul><h3 id="%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%81%AE%E6%A4%9C%E6%9F%BB">スコープの検査<a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%81%AE%E6%A4%9C%E6%9F%BB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt のインタラクティブモード内で <code>inspect</code> コマンドを使ってキーとそのスコープを理解することができる。
 例えば、<code>inspect test:full-classpath</code> と試してみよう:
 </p><pre><code class="">$ sbt
 &gt; inspect test:fullClasspath
@@ -165,7 +173,7 @@ sbt は、<code>Global</code> や、ビルド全体スコープなど、より�
 <code>in</code> への引数として、どのスコープ軸のインスタンスでも渡すことができる。
 これをやる意味は全くないけど、例として <code>Compile</code> コンフィギュレーションでスコープ付けされた <code>name</code> の設定を以下に示す:
 </p><pre><code class="prettyprint lang-scala">name in Compile := &quot;hello&quot;
-</code></pre><p>また、<code>package-bin</code> タスクでスコープ付けされた <code>name</code> の設定（これも意味なし！ただの例だよ）:
+</code></pre><p>また、<code>packageBin</code> タスクでスコープ付けされた <code>name</code> の設定（これも意味なし！ただの例だよ）:
 </p><pre><code class="prettyprint lang-scala">name in packageBin := &quot;hello&quot;
 </code></pre><p>もしくは、例えば <code>Compile</code> コンフィギュレーションの <code>packageBin</code> の <code>name</code> など、複数のスコープ軸でスコープ付けする:
 </p><pre><code class="prettyprint lang-scala">name in (Compile, packageBin) := &quot;hello&quot;

@@ -153,6 +153,7 @@ sublime) <a href="https://github.com/kalmanb/sbt-ctags">https://github.com/kalma
 <a href="https://github.com/casualjim/sbt-jelastic-deploy">https://github.com/casualjim/sbt-jelastic-deploy</a>
 </li><li>sbt-elasticbeanstalk (Deploy WAR files to AWS Elastic Beanstalk): <a href="https://github.com/sqs/sbt-elasticbeanstalk">https://github.com/sqs/sbt-elasticbeanstalk</a>
 </li><li>sbt-cloudformation (AWS CloudFormation templates and stacks management): <a href="https://github.com/tptodorov/sbt-cloudformation">https://github.com/tptodorov/sbt-cloudformation</a>
+</li><li>sbt-heroku: <a href="https://github.com/heroku/sbt-heroku">https://github.com/heroku/sbt-heroku</a>
 </li></ul><h3 id="Test+plugins">Test plugins<a href="#Test+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>junit<em>xml</em>listener: <a href="https://github.com/ijuma/junit_xml_listener">https://github.com/ijuma/junit_xml_listener</a>
 </li><li>sbt-growl-plugin: <a href="https://github.com/softprops/sbt-growl-plugin">https://github.com/softprops/sbt-growl-plugin</a>
 </li><li>sbt-teamcity-test-reporting-plugin:
@@ -5490,10 +5491,10 @@ optionally set the publishing style. For example, to upload to Nexus:
 right repository depending on your artifacts: SNAPSHOT versions go to
 the /snapshot repository while other versions go to the /releases
 repository. Doing this selection can be done by using the value of the
-<code>version</code> SettingKey:
+<code>isSnapshot</code> SettingKey:
 </p><pre><code class="prettyprint lang-scala">publishTo := {
   val nexus = &quot;https://oss.sonatype.org/&quot;
-  if (version.value.trim.endsWith(&quot;SNAPSHOT&quot;)) 
+  if (isSnapshot.value)
     Some(&quot;snapshots&quot; at nexus + &quot;content/repositories/snapshots&quot;) 
   else
     Some(&quot;releases&quot;  at nexus + &quot;service/local/staging/deploy/maven2&quot;)
@@ -5569,6 +5570,18 @@ page describes how to define other types of repositories.
 <a href="https://repo1.maven.org/maven2/">https://repo1.maven.org/maven2/</a> and is included by default
 </li><li><code>JavaNet1Repository</code> This is the Maven 1 repository at
 <a href="http://download.java.net/maven/1/">http://download.java.net/maven/1/</a>
+</li><li><code>Resolver.sonatypeRepo(&quot;public&quot;)</code> (or “snapshots”, “releases”) This is Sonatype OSS Maven Repository at
+<a href="https://oss.sonatype.org/content/repositories/public">https://oss.sonatype.org/content/repositories/public</a>
+</li><li><code>Resolver.typesafeRepo(&quot;releases&quot;)</code> (or “snapshots”) This is Typesafe Repository at
+<a href="https://repo.typesafe.com/typesafe/releases">https://repo.typesafe.com/typesafe/releases</a>
+</li><li><code>Resolver.typesafeIvyRepo(&quot;releases&quot;)</code> (or “snapshots”) This is Typesafe Ivy Repository at
+<a href="https://repo.typesafe.com/typesafe/ivy-releases">https://repo.typesafe.com/typesafe/ivy-releases</a>
+</li><li><code>Resolver.sbtPluginRepo(&quot;releases&quot;)</code> (or “snapshots”) This is sbt Community Repository at
+<a href="https://repo.scala-sbt.org/scalasbt/sbt-plugin-releases">https://repo.scala-sbt.org/scalasbt/sbt-plugin-releases</a>
+</li><li><code>Resolver.bintrayRepo(&quot;owner&quot;, &quot;repo&quot;)</code> This is the Bintray repository at
+<a href="https://dl.bintray.com/[owner]/[repo]/">https://dl.bintray.com/[owner]/[repo]/</a>
+</li><li><code>Resolver.jcenterRepo</code> This is the Bintray JCenter repository at
+<a href="https://jcenter.bintray.com/">https://jcenter.bintray.com/</a>
 </li></ul><p>For example, to use the <code>java.net</code> repository, use the following setting
 in your build definition:
 </p><pre><code class="prettyprint lang-scala">resolvers += JavaNet1Repository
@@ -9009,7 +9022,7 @@ Hi
 would only want to generate sources when necessary and not every run.
 </p><p>By default, generated sources are not included in the packaged source
 artifact. To do so, add them as you would other mappings. See
-<a href="Howto-Configure-Packaging.html#modify-package-contents">Adding files to a package</a>. A source
+<a href="Howto-Package.html#modify-package-contents">Adding files to a package</a>. A source
 generator can return both Java and Scala sources mixed together in the
 same sequence. They will be distinguished by their extension later.
 </p><a name="resources"></a><h3 id="Generate+resources">Generate resources<a href="#Generate+resources" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A resource generation task should generate resources in a subdirectory
@@ -9040,7 +9053,7 @@ resources. This basic structure looks like:
 would only want to generate resources when necessary and not every run.
 </p><p>By default, generated resources are not included in the packaged source
 artifact. To do so, add them as you would other mappings. See
-<a href="Howto-Configure-Packaging.html#modify-package-contents">Adding files to a package</a>.
+<a href="Howto-Package.html#modify-package-contents">Adding files to a package</a>.
 </p><h2 id="Inspect+the+build">Inspect the build<a href="#Inspect+the+build" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><a name="taskhelp"></a><h3 id="Show+or+search+help+for+a+command%2C+task%2C+or+setting">Show or search help for a command, task, or setting<a href="#Show+or+search+help+for+a+command%2C+task%2C+or+setting" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The <code>help</code> command is used to show available commands and search the
 help for commands, tasks, or settings. If run without arguments, <code>help</code>
 lists the available commands.

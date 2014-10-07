@@ -65,10 +65,10 @@ optionally set the publishing style. For example, to upload to Nexus:
 right repository depending on your artifacts: SNAPSHOT versions go to
 the /snapshot repository while other versions go to the /releases
 repository. Doing this selection can be done by using the value of the
-<code>version</code> SettingKey:
+<code>isSnapshot</code> SettingKey:
 </p><pre><code class="prettyprint lang-scala">publishTo := {
   val nexus = &quot;https://oss.sonatype.org/&quot;
-  if (version.value.trim.endsWith(&quot;SNAPSHOT&quot;)) 
+  if (isSnapshot.value)
     Some(&quot;snapshots&quot; at nexus + &quot;content/repositories/snapshots&quot;) 
   else
     Some(&quot;releases&quot;  at nexus + &quot;service/local/staging/deploy/maven2&quot;)

@@ -171,6 +171,7 @@ your plugin to the list.
     <https://github.com/casualjim/sbt-jelastic-deploy>
 -   sbt-elasticbeanstalk (Deploy WAR files to AWS Elastic Beanstalk): <https://github.com/sqs/sbt-elasticbeanstalk>
 -   sbt-cloudformation (AWS CloudFormation templates and stacks management): <https://github.com/tptodorov/sbt-cloudformation>
+-   sbt-heroku: <https://github.com/heroku/sbt-heroku>
 
 ### Test plugins
 
@@ -8158,12 +8159,12 @@ If you're using Maven repositories you will also have to select the
 right repository depending on your artifacts: SNAPSHOT versions go to
 the /snapshot repository while other versions go to the /releases
 repository. Doing this selection can be done by using the value of the
-`version` SettingKey:
+`isSnapshot` SettingKey:
 
 ```scala
 publishTo := {
   val nexus = "https://oss.sonatype.org/"
-  if (version.value.trim.endsWith("SNAPSHOT")) 
+  if (isSnapshot.value)
     Some("snapshots" at nexus + "content/repositories/snapshots") 
   else
     Some("releases"  at nexus + "service/local/staging/deploy/maven2")
@@ -8300,6 +8301,18 @@ A few predefined repositories are available and are listed below
     <https://repo1.maven.org/maven2/> and is included by default
 -   `JavaNet1Repository` This is the Maven 1 repository at
     <http://download.java.net/maven/1/>
+-   `Resolver.sonatypeRepo("public")` (or "snapshots", "releases") This is Sonatype OSS Maven Repository at
+    <https://oss.sonatype.org/content/repositories/public>
+-   `Resolver.typesafeRepo("releases")` (or "snapshots") This is Typesafe Repository at
+    <https://repo.typesafe.com/typesafe/releases>
+-   `Resolver.typesafeIvyRepo("releases")` (or "snapshots") This is Typesafe Ivy Repository at
+    <https://repo.typesafe.com/typesafe/ivy-releases>
+-   `Resolver.sbtPluginRepo("releases")` (or "snapshots") This is sbt Community Repository at
+    <https://repo.scala-sbt.org/scalasbt/sbt-plugin-releases>
+-   `Resolver.bintrayRepo("owner", "repo")` This is the Bintray repository at
+    <https://dl.bintray.com/[owner]/[repo]/>
+-   `Resolver.jcenterRepo` This is the Bintray JCenter repository at
+    <https://jcenter.bintray.com/>
 
 For example, to use the `java.net` repository, use the following setting
 in your build definition:
@@ -13419,7 +13432,7 @@ includeFilter in (Test, unmanagedJars) := "*.jar" || "*.zip"
 > excluding hidden files.
 
 
-  [modify-package-contents]: Howto-Configure-Packaging.html#modify-package-contents
+  [modify-package-contents]: Howto-Package.html#modify-package-contents
 
 Generating files
 ----------------

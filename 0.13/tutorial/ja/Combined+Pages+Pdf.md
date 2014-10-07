@@ -12,8 +12,7 @@ Preface
 
 
 > 原文: [Getting Started Guide](../index.html)<br>
-> [誤訳の報告をする](https://github.com/scalajp/sbt-getting-started-guide-ja/issues)。<br>
-> このスタートガイドは、sbt 0.11 〜 0.12 の頃に書かれたものです。書いてある内容はまだ十分有用ですが、sbt0.13ではある程度の機能追加などもされています。
+> [誤訳の報告をする](https://github.com/sbt/website/issues)。<br>
 > sbt0.13での変更点や新機能に興味がある人は、こちら[sbt 0.13.0 の変更点](http://eed3si9n.com/ja/node/142) も一緒に読むといいでしょう。
 
 「始める sbt」で君も sbt を始めよう。
@@ -64,7 +63,7 @@ sbt プロジェクトを作るには、以下の手順をたどる:
 
 ### コツと注意
 
-`sbt` の実行に上手くいかない場合は、[[Setup Notes]] のターミナルの文字エンコーディング、HTTP プロキシ、JVM のオプションにかんする説明を参照する。
+`sbt` の実行に上手くいかない場合は、[Setup Notes][Setup-Notes] のターミナルの文字エンコーディング、HTTP プロキシ、JVM のオプションにかんする説明を参照する。
 
 
   [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.zip
@@ -353,7 +352,7 @@ sbt はリリース間で 99% ソースの互換性を持たせてある。
 ### ベースディレクトリ
 
 sbt 用語では「ベースディレクトリ」(base directory) はプロジェクトが入ったディレクトリを指す。
-[Hello, World](../hello) での例のように、`hello/build.sbt` と `hello/hw.scala` が入った
+[Hello, World][Hello] での例のように、`hello/build.sbt` と `hello/hw.scala` が入った
 `hello` プロジェクトを作ったとすると、ベースディレクトリは `hello` だ。
 
 ### ソースコード
@@ -427,7 +426,7 @@ target/
 ----
 
 このページではプロジェクトをセットアップした後の `sbt` の使い方を説明する。
-君が[sbt をインストール](../setup)して、[Hello, World](../hello)か他のプロジェクトを作ったことを前提にする。
+君が[sbt をインストール][Setup]して、[Hello, World][Hello]か他のプロジェクトを作ったことを前提にする。
 
 ### インタラクティブモード
 
@@ -578,14 +577,12 @@ sbt の特殊な慣例として、タブを一度押すとよく使われる候�
 </table>
 
 
-  [Keys]: ../sxr/sbt/Keys.scala.html
+  [Keys]: ../../sxr/sbt/Keys.scala.html
   [More-About-Settings]: More-About-Settings.html
   [Full-Def]: Full-Def.html
   [Running]: Running.html
   [Library-Dependencies]: Library-Dependencies.html
   [Input-Tasks]: ../../docs/Input-Tasks.html
-  [Using-Plugins]: Using-Plugins.html
-  [Scopes]: Scopes.html
 
 .sbt ビルド定義
 --------------
@@ -672,41 +669,63 @@ name.:=("hello")
 `String` は、`name` の型にもあらわれ、これは、`SettingKey[String]` となっている。
 この場合、返された `Setting[String]` は、キーを追加（もしくは置換）して `"hello"` という値に設定するマップの変換だ。
 
-間違った型の値を使うと、ビルド定義はコンパイルしない:
+間違った型の値を使うと、ビルド定義はコンパイルできない:
 
 ```scala
-name := 42  // コンパイルしない
+name := 42  // コンパイルできない
 ```
 
-### キーは Keys オブジェクトで定義される
+### 設定は空白行で区切る
 
-組み込みのキーは [Keys] と呼ばれるオブジェクトのフィールドにすぎない。
-`build.sbt` は、自動的に `import sbt.Keys._` するため、
-`sbt.Keys.name` は `name` として呼ぶことができる。
+こんな風に `build.sbt` を書くことはできない。
 
-カスタムのキーは [.scala ファイル][Full-Def]か
-[plugin][Using-Plugins] で定義することができる。
+```scala
+// 空白行がない場合はコンパイルしない
+name := "hello"
+version := "1.0"
+scalaVersion := "2.10.3"
+```
 
-### 設定を変換する他の方法
+sbt はどこまでで式が終わってどこからが次の式なのかを判別するために、何らかの区切りを必要とする。
 
-`:=` による置換は、最も単純な変換だけど、他にもいくつかある。
-例えば、`+=` を用いて、リスト値に追加することができる。
+`.sbt` ファイルには複数の Scala 式が含まれる。これらの式を区切った上で別々にコンパイラに渡される。
 
-他の変換は[スコープ][Scopes]の理解が必要なため、
-[次のページ][Scopes]がスコープで、
-[次の次のページ][More-About-Settings]で設定の詳細に関して説明する。
+### Keys
 
-### タスクキー
+#### 種類
 
 キーには三種類ある:
 
  - `SettingKey[T]`: 値が一度だけ計算されるキー（値はプロジェクトの読み込み時に計算され、保存される）。
- - `TaskKey[T]`: 毎回再計算され、副作用を伴う可能性のある値のキー。
+ - `TaskKey[T]`: 毎回再計算される_タスク_を呼び出す、副作用を伴う可能性のある値のキー。
  - `InputKey[T]`: コマンドラインの引数を受け取るタスクキー。
  　「初めての sbt」では `InputKey` を説明しないので、このガイドを終えた後で、
-   [[Input Tasks]] を読んでみよう。
+   [Input Tasks][Input-Tasks] を読んでみよう。
 
-`TaskKey[T]` は、_タスク_を定義しているといわれる。タスクは、`compile` や `packae` のような作業だ。
+
+#### 組み込みキー
+
+組み込みのキーは [Keys][Keys] と呼ばれるオブジェクトのフィールドにすぎない。
+`build.sbt` は、自動的に `import sbt.Keys._` するため、
+`sbt.Keys.name` は `name` として呼ぶことができる。
+
+#### カスタムキー
+
+カスタムキーは `settingKey`、 `taskKey`、 `inputKey` といった関数を用いて定義する。どの関数でもキーに関連する型パラメータを必要とする。キーの名前は `val` で宣言された変数の名前がそのまま用いられる。例えば、新しく `hello` と名づけたキーを定義してみよう。
+
+```scala
+lazy val hello = taskKey[Unit]("An example task")
+```
+
+実は `.sbt` ファイルには、設定を記述するのに必要な `val` や `def` を含めることもできる。
+これらの定義はファイル内のどこで書かれてもプロジェクトの設定より前に評価される。
+`val` や `def` を用いた定義群は空白行によって他の設定から区切らなければいけない。
+
+> **注意** 初期化順問題を避けるために val の代わりに lazy val を用いている。
+
+#### タスクキーかセッティングキーか
+
+`TaskKey[T]` は、_タスク_を定義しているといわれる。タスクは、`compile` や `package` のような作業だ。
 タスクは `Unit` を返すかもしれないし（`Unit` は、Scala での `void` だ）、
 タスクに関連した値を返すかもしれない。例えば、`package` は作成した jar ファイルを値として返す `TaskKey[File]` だ。
 
@@ -720,11 +739,23 @@ name := 42  // コンパイルしない
 _あるキーがあるとき、それは常にタスクか素のセッティングかのどちらかを参照する。_
 つまり、キーの「タスク性」（毎回再実行するかどうか）はキーの特性であり、値にはよらない。
 
-`:=` を使うことで、タスクに任意の演算を代入することができ、その演算は毎回再実行される:
+### タスクとセッティングの定義
+
+`:=` を使うことで、タスクに任意の演算を代入することができる。セッティングを定義すると、その値はプロジェクトがロードされた時に一度だけ演算が行われる。タスクを定義すると、その演算はタスクの実行毎に毎回再実行される。
+
+例えば、少し前に宣言した `hello` というタスクはこのように実装できる:
 
 ```scala
 hello := { println("Hello!") }
 ```
+
+セッティングの定義は既に何度か見ていると思うが、プロジェクト名の定義はこのようにできる:
+
+```scala
+name := "hello"
+```
+
+#### タスクとセッティングの型
 
 型システムの視点から考えると、タスクキー (task key) から作られた `Setting` は、セッティングキー (setting key) から作られたそれとは少し異なるものだ。
 `taskKey := 42` は `Setting[Task[T]]` の戻り値を返すが、`settingKey := 42` は `Setting[T]` の戻り値を返す。
@@ -732,7 +763,7 @@ hello := { println("Hello!") }
 
 `T` と `Task[T]` の型の違いによる影響が一つある。
 それは、セッティングキーはキャッシュされていて、再実行されないため、タスキキーに依存できないということだ。
-このことについては、後ほどの[他の種類のセッティング](../more-about-settings)にて詳しくみていく。
+このことについては、後ほどの[他の種類のセッティング][More-About-Settings]にて詳しくみていく。
 
 ### sbt インタラクティブモードにおけるキー
 
@@ -741,18 +772,7 @@ sbt のインタラクティブモードからタスクの名前を打ち込む�
 
 タスクキーのかわりにセッティングキーの名前を入力すると、セッティングキーの値が表示される。
 タスクキーの名前を入力すると、タスクを実行するが、その戻り値は表示されないため、
-タスクの戻り値を表示するには素の `<タスク名>` ではなく、`show <タスク名>` と入力する。
-
-Scala の慣例にのっとり、ビルド定義ファイル内ではキーはキャメルケース（`camelCase`）で命名されているけども、
-sbt コマンドラインではハイフン分けされて（`hyphen-separated-words`）命名されている。
-sbt で使われているハイフン分けされた文字列はキーの定義とともに宣言されている（[Keys] 参照）。
-例えば、`Keys.scala` に以下のキーがある:
-
-```scala
-val scalacOptions = TaskKey[Seq[String]]("scalac-options", "Options for the Scala compiler.")
-```
-
-sbt では `scalac-options` と打ち込むけど、ビルド定義ファイルでは `scalacOptions` を使う。
+タスクの戻り値を表示するには素の `<タスク名>` ではなく、`show <タスク名>` と入力する。Scala の慣例にのっとり、ビルド定義ファイル内ではキーはキャメルケース（`camelCase`）で命名する。
 
 あるキーについてより詳しい情報を得るためには、sbt インタラクティブモードで `inspect <キー名>` と打ち込む。
 `inspect` が表示する情報の中にはまだ分からないこともあると思うけど、一番上にはセッティングの値の型と、セッテイングの簡単な説明がある。
@@ -769,8 +789,8 @@ import Process._
 import Keys._
 ```
 
-（さらに、[.scala ファイル](../full-def)がある場合は、それらの全ての `Build` と `Plugin` の内容もインポートされる。
-これに関しては、[.scala ビルド定義](../full-def)でさらに詳しく。）
+（さらに、[.scala ファイル][Full-Def]がある場合は、それらの全ての `Build` と `Plugin` の内容もインポートされる。
+これに関しては、[.scala ビルド定義][Full-Def]でさらに詳しく。）
 
 ### ライブラリへの依存性を加える
 
@@ -816,7 +836,7 @@ libraryDependencies += "org.apache.derby" % "derby" % "10.4.1.3"
 
  - ビルド定義に複数のプロジェクトがあれば、それぞれのプロジェクトにおいて同じキーが別の値を取ることができる。
  - メインのソースとテストとのソースが異なるようにコンパイルしたければ、`compile` キーは別の値をとることができる。
- - （jar パッケージの作成のオプションを表す）`package-option` キーはクラスファイルのパッケージ（`package-bin`）とソースコードのパッケージ（`package-src`）で異なる値をとることができる。
+ - （jar パッケージの作成のオプションを表す）`packageOption` キーはクラスファイルのパッケージ（`packageBin`）とソースコードのパッケージ（`packageSrc`）で異なる値をとることができる。
 
 スコープによって値が異なる可能性があるため、_あるキーへの単一の値は存在しない_。
 
@@ -860,15 +880,15 @@ sbt で使われるコンフィギュレーションには以下のものがあ�
 デフォルトでは、コンパイル、パッケージ化、と実行に関するキーの全てはコンフィグレーションにスコープ付けされているため、
 コンフィギュレーションごとに異なる動作をする可能性がある。
 その最たる例が `compile`、`package` と `run` のタスクキーだが、
-（`source-directories` や `scalac-options` や `full-classpath` など）それらのキーに_影響を及ぼす_全てのキーもコンフィグレーションにスコープ付けされている。
+（`sourceDirectories` や `scalacOptions` や `fullClasspath` など）それらのキーに_影響を及ぼす_全てのキーもコンフィグレーションにスコープ付けされている。
 
 #### タスク軸によるスコープ付け
 
-セッティングはタスクの動作に影響を与えることもできる。例えば、`pakcage-src` は `package-options` セッティングの影響を受ける。
+セッティングはタスクの動作に影響を与えることもできる。例えば、`pakcageSrc` は `packageOptions` セッティングの影響を受ける。
 
-これをサポートするため、（`package-src` のような）タスクキーは、（`package-option` のような）別のキーのスコープとなりえる。
+これをサポートするため、（`packageSrc` のような）タスクキーは、（`packageOption` のような）別のキーのスコープとなりえる。
 
-パッケージを構築するさまざまなタスク（`package-src`、`package-bin`、`package-duc`）は、`artifact-name` や `package-option` などのパッケージ関連のキーを共有することができる。これらのキーはそれぞれのパッケージタスクに対して独自の値を取ることができる。
+パッケージを構築するさまざまなタスク（`packageSrc`、`packageBin`、`packageDoc`）は、`artifactName` や `packageOption` などのパッケージ関連のキーを共有することができる。これらのキーはそれぞれのパッケージタスクに対して独自の値を取ることができる。
 
 ### グローバルスコープ
 
@@ -912,6 +932,17 @@ sbt は、`Global` や、ビルド全体スコープなど、より一般的な�
  - タスクを省略した場合は、`Global` タスクが使われる。
 
 さらに詳しくは、[Interacting with the Configuration System][Inspecting-Settings] 参照。
+
+### スコープ付きキーの表記例
+
+- `fullClasspath` はキーのみを指定し、デフォルトスコープを用いる。ここでは、現在のプロジェクト、キーに依存したコンフィギュレーション、グローバルタスクスコープとなる。
+- `test:fullClasspath` はコンフィギュレーションを指定する。つまりプロジェクト軸とタスク軸はデフォルトを用いつつも `test`コンフィギュレーションにおける `fullClasspath` というキーを表す。
+- `*:fullClasspath` はデフォルトコンフィギュレーションを用いずに `Global` コンフィギュレーションを用いる事を明示している。
+- `doc::fullClasspath` はプロジェクト軸とコンフィギュレーション軸はデフォルトを用いつつ、 `doc` タスクスコープにおける `fullClasspath` というキーを表す。
+- `{file:/home/hp/checkout/hello/}default-aea33a/test:fullClasspath` は `{file:/home/hp/checkout/hello/}` をルートディレクトリにビルドした際に含まれる `default-aea33a` というプロジェクトを指定している。さらにこのプロジェクト内の `test` コンフィギュレーションを用いる事も明示している。
+- `{file:/home/hp/checkout/hello/}/test:fullClasspath` は `{file:/home/hp/checkout/hello/}` のビルド全体をプロジェクトの軸とする。
+- `{.}/test:fullClasspath` は `{.}` で指定されたルートディレクトリのビルド全体をプロジェクト軸に取る。`{.}` は Scala code において `ThisBuild` と記述できる。
+- `{file:/home/hp/checkout/hello/}/compile:doc::fullClasspath` は3つのスコープ軸全てを指定している。
 
 ### スコープの検査
 
@@ -1004,7 +1035,7 @@ sbt を実行して、`inspect name` と入力して、キーが　`{file:/home/
 name in Compile := "hello"
 ```
 
-また、`package-bin` タスクでスコープ付けされた `name` の設定（これも意味なし！ただの例だよ）:
+また、`packageBin` タスクでスコープ付けされた `name` の設定（これも意味なし！ただの例だよ）:
 
 ```scala
 name in packageBin := "hello"
@@ -1057,7 +1088,7 @@ _"Reference to undefined setting"_ のようなエラーに遭遇した場合は
   [Basic-Def]: Basic-Def.html
   [Scopes]: Scopes.html
   [Full-Def]: Full-Def.html
-  [Keys]: ../sxr/sbt/Keys.scala.html
+  [Keys]: ../../sxr/sbt/Keys.scala.html
 
 他の種類のセッティング
 -------------------
@@ -1118,84 +1149,34 @@ sourceDirectories in Compile ++= Seq(file("sources1"), file("sources2"))
 sourceDirectories in Compile := Seq(file("sources1"), file("sources2"))
 ```
 
-### 値の変換: `~=`
+### 他のキーの値を基に値を計算
 
-`sourceDirectories in Compile` の_先頭に_要素を追加したり、デフォルトのディレクトリを filter したい場合はどうすればいいだろう？
+タスクやセッティングのキーの値を使って他のタスクやセッティングのキーの値を設定してみる。値をつける関数には `:=` や `+=` や `++=` を用いて、引数に付ける値を入れてやればよい。
 
-既存の値に依存する `Setting` を作ることができる。
-
- - `~=` は、セッティングの既存の値に関数を適用して、同じ型の新たな値を作る
-
-`sourceDirectories in Compile` を変更するには、以下のように `~=` を用いる:
+最初の例として、プロジェクトの名前と同じ組織名を定義してみよう。
 
 ```scala
-// src/main/scala を filter out する
-sourceDirectories in Compile ~= { srcDirs => srcDirs filter(!_.getAbsolutePath.endsWith("src/main/scala")) }
+// プロジェクトの後に組織名を付ける (どちらも型は SettingKey[String])
+organization := name.value
 ```
 
-ここでは、`srcDirs` は匿名関数のパラメータで、`sourceDirectories in Compile` の古い値が匿名関数に渡される。
-この関数の戻り値が `sourceDirectories in Compile` の新たな値となる。
-
-もっと簡単な例だと:
+他にもディレクトリ名を用いてプロジェクトの名前をつけるとか。
 
 ```scala
-// プロジェクト名を大文字にする
-name ~= { _.toUpperCase }
+// name は Key[String]、 baseDirectory は Key[File]
+// ディレクトリ名を取ってからプロジェクトの名前を付ける
+name := baseDirectory.value.getName
 ```
 
-関数は、キーの値を同じ型の別の値に変換するため、キーの型が `SettingKey[T]` か `TaskKey[T]` のとき、`~=` に渡す関数は常に `T => T` 型でなければいけない。
+これは `java.io.File` オブジェクトにある `getName` メソッドを用いて、 `baseDirectry` から取った値へと変換している。
 
-### 別のキーの値から値を計算する: `<<=`
-
-`~=` は、キーの古い値に基づいて新たな値を定義する。
-だけど、_他の_キーの値に基づいて値を定義したいとしたらどうだろう？
-
- - `<<=` は、任意の他のキー（複数のキーも可）を使って新たな値を計算する
-
-`<<=` は、型 `Initialize[T]` の引数を一つ取る。
-`Initialize[T]` のインスタンスは、あるキーの集合に関連付けられた値をインプットに取り、その値に基づいて型`T`の値を返す。
-つまり、型`T` の値を初期化する。
-
-（`:=`、`+=`、`~=` その他同様）`Initialize[T]` を受け取った `<<=` は、`Setting[T]` を返す。
-
-#### 単純な `Initialize[T]`: 単一のキーに依存した `<<=`
-
-全てのキーは `Initilize` trait を拡張するため、最も単純な `Initialize` は、ただのキーだ:
+複数の入力値を用いる場合も同様である。
 
 ```scala
-// 意味はないけど、妥当だ
-name <<= name
+name := "project " + name.value + " from " + organization.value + " version " + version.value
 ```
 
-`Initialize[T]` として取り扱った場合、`SettingKey[T]` はその現在値を計算する。
-そのため、`name <<= name` は `name` の値を `name` の値に代入する。
-
-_別の_キーをキーに代入することで、少しは役に立つようになる。キーは同じ値の型を持たなくてはいけない。
-
-```scala
-// プロジェクト名を使って組織名を命名する（両者とも SettingKey[String]）
-organization <<= name
-```
-
-（注意: これが別のキーへのエイリアスの作り方だ）
-
-値の型が同一じゃない場合は、`Initialize[T]` から例えば `Initialize[S]` みたいな感じで別の型にしてやる必要がある。
-これには、以下のように `Initialize` の `apply` メソッドを使う:
-
-```scala
-// name は Key[String] で、baseDirectory は Key[File] だ。
-// プロジェクトの現在ディレクトリに基づいて名前を付ける。
-name <<= baseDirectory.apply(_.getName)
-```
-
-`apply` は Scala の特殊なメソッドで、関数の呼び出し構文を使ってオブジェクトを叩くことができるため、このように書ける:
-
-```scala
-name <<= baseDirectory(_.getName)
-```
-
-これは、`baseDirectory` の値を、`File` を受け取り `String` を返す `_.getName` という関数を使って変換する。
-`getName` は、普通の `java.io.File` オブジェクトにあるメソッドだ。
+ここでも前に宣言された組織名やバージョンのセッティング値を用いて名前が付けられている。
 
 #### 依存性を持ったセッティング
 
@@ -1203,7 +1184,7 @@ name <<= baseDirectory(_.getName)
 
 ```
 [info] Dependencies:
-[info] 	*:base-directory
+[info]  *:baseDirectory
 ```
 
 このようにして、sbt はどのセッティングが別のセッティングに依存するかを知っている。
@@ -1218,67 +1199,9 @@ name <<= baseDirectory(_.getName)
 このようにして、sbt の全てのビルドの依存性は、明示的には宣言されず、_自動化_されている。
 あるキーの値を別の計算で使うと、その計算はキーに依存する。とにかくちゃんと動く！
 
-#### 複雑な `Initialize[T]`: 複数のキーへ依存する `<<=`
-
-複数のキーへの依存性をサポートするために、sbt は、`Initialize` オブジェクトのタプルに `apply` メソッドと `identity` メソッドを追加する。
-Scala では、タプルを `(1, "a")` のように書く（これは、`(Int, String)` の型を持つ）。
-
-例えば、ここに三つの `Initialize` オブジェクトから成るタプルがあるとするとき、
-その型は `(Initialize[A], Initialize[B], Initialize[C])` だ。
-全ての `SettingKey[T]` は、`Initialize[T]` のインスタンスでもあるため、この `Initialize` オブジェクトはキーでもよい。
-
-以下に、全てのキーが文字列の場合の単純な例を示す:
-
-```scala
-// 三つの SettingKey[String] のタプル。三つの Initialize[String] のタプルでもある。
-(name, organization, version)
-```
-
-`Initialize` のタプルの `apply` メソッドは、関数を引数として受け取る。
-タプル中のそれぞれの `Initialize` を使って、sbt は対応する値を計算する（キーの現在値）。
-これらの値は関数に渡され、その関数は_単一の_値を返し、これは新たな `Initialize` でラッピングされる。
-明示的な型を書き下すと（Scala はこれを強要しない）、こんな感じ:
-
-```scala
-val tuple: (Initialize[String], Initialize[String], Initialize[String]) = (name, organization, version)
-val combined: Initialize[String] = tuple.apply({ (n, o, v) =>
-  "project " + n + " from " + o + " version " + v })
-val setting: Setting[String] = name <<= combined
-```
-
-それぞれのキーは既に `Initialize` 型だけど、（キーのような）単純な `Initialize` をタプルに入れて、`appy` メソッドを呼び出すことで最大九つまで一つの `Initialize` として合成できる。
-
-`SettingKey[T]` の `<<=` メソッドは、`Initialize[T]` を受け取るため、このテクニックを使って複数の任意のキーへの依存性を作ることができる。
-
-Scala では関数の呼び出し構文が `apply` メソッドを呼び出すため、明示的な `.apply` を省いて、`tupple` を関数として扱い、以下のように書きなおすことができる:
-
-```scala
-val tuple: (Initialize[String], Initialize[String], Initialize[String]) = (name, organization, version)
-val combined: Initialize[String] = tuple({ (n, o, v) =>
-  "project " + n + " from " + o + " version " + v })
-val setting: Setting[String] = name <<= combined
-```
-
-`.sbt` ファイルに書くことが許されているのは単一の式だけであり、複数の文は書けないため、
-`build.sbt` では、このような `val` を中間値として使ったコードは動作しない。
-
-そこで、`build.sbt` では、以下のような、より簡略化した構文が用いられる:
-
-```scala
-name <<= (name, organization, version) { (n, o, v) => "project " + n + " from " + o + " version " + v }
-```
-
-ここでは、`Initialize` のタプル（`SettingKey` のタプルでもある）が関数のようにはたらき、
-`{}` で囲まれた匿名関数を受け取り、`Initialize[T]`（`T` は匿名関数の戻り値の型）を返している。
-
-`Initialize` のタプルは、`identity` というメソッドも持ち、これは単にタプル値を `Initialize` に入れて返す。
-`(a: Initialize[A], b: Initialize[B]).identity`
-は、`Initialize[(A, B)]` 型の値を返す。
-`identity` は、二つの `Initialize` を値を変更したり失うこと無く一つに合成する。
-
 #### セッティングが未定義の場合
 
-セッティングが `~=` や `<<=` を使って自分自身や他のキーへの依存性を作る場合、
+セッティングが `:=` や `+=` や `++=` を使って自分自身や他のキーへの依存性を作る場合、
 依存されたキーには値が存在しなくてはならない。
 存在しなければ、sbt に怒られる。
 例えば、_"Reference to undefined setting"_ なんて言われるかもしれない。
@@ -1286,121 +1209,62 @@ name <<= (name, organization, version) { (n, o, v) => "project " + n + " from " 
 
 環状の依存性を作ってしまうことも可能で、これもまたエラーになり、sbt に怒られる。
 
-#### 依存性を持ったタスク
+#### 他のキーの値を基にしたタスク
 
-[.sbt ビルド定義][Basic-Def]でみた通り、タスクキーは `:=`、`<<=`、その他でセッティングを作ると
-`Setting[T]` ではなく、`Setting[Task[T]]`を作る。
-同様に、タスクキーは `Initialize[T]` ではなく、`Initialize[Task[T]]` のインスタンスで、
-タスクキーの `<<=` は `Initialize[Task[T]]` をパラメータとして受け取る。
+あるタスクの値を定義するために他のタスクの値を計算する必要があるかもしれない。そのような場合には、`:=` や `+=` や `++=` の引数に、`Def.task` と `taskValue` を用いた値を使えば良い。
 
-この実践上の大切さは、非タスクのセッティングはタスクを依存性としてもつことができないということだ。
-
-（[Keys] より）以下の二つのキーを例に説明する:
+例として、`sourceGenerators` にプロジェクトのルートディレクトリや `Compile`コンフィギュレーション時のクラスパスを加える事を考えてみよう。
 
 ```scala
-val scalacOptions = TaskKey[Seq[String]]("scalac-options", "Options for the Scala compiler.")
-val checksums = SettingKey[Seq[String]]("checksums", "The list of checksums to generate and to verify for dependencies.")
+sourceGenerators in Compile += Def.task {
+  myGenerator(baseDirectory.value, (managedClasspath in Compile).value)
+}.taskValue
+```
+
+#### 依存性を持ったタスク
+
+[.sbt ビルド定義][Basic-Def]でみた通り、タスクキーは `:=` などでセッティングを作ると
+`Setting[T]` ではなく、`Setting[Task[T]]`を作る。タスクを定義する際の入力には、セッティングの値を用いることができるが、セッテイングを定義する際にタスクを入力とすることはできない。
+
+（[Keys][Keys] より）以下の二つのキーを例に説明する:
+
+```scala
+val scalacOptions = taskKey[Seq[String]]("Options for the Scala compiler.")
+val checksums = settingKey[Seq[String]]("The list of checksums to generate and to verify for dependencies.")
 ```
 
 （`scalacOptions` と `checksums` は、同じ値の型を持つ二つのキーで、片方がタスクというだけで、お互い全く関係のないキーだ。）
 
-どちらか一方をもう片方のエイリアスにしようとしても、`build.sbt` をコンパイルすることができない:
+`build.sbt` で `scalacOptions` を `checksums` のエイリアスにすることは出来るのだが、その逆は出来ない。つまり、以下のような例ではコンパイルが通る:
 
 ```scala
-scalacOptions <<= checksums
-
-checksums <<= scalacOptions
+// scalacOptions タスクは checksums セッティングの値を用いて定義される
+scalacOptions := checksums.value
 ```
 
-問題は、`scalacOptions.<<=` は、`Initialize[Task[Seq[String]]]` を受け取り、
-`checksums.<<=` は、`Initialize[Seq[String]]` を受け取るということだ。
-だけど、`Initialize[T]` から `Initialize[Task[T]]` に変換する方法があり、`map` と呼ばれる。
-
-（`identity` は標準の Scala 関数で、与えられたインプットを返す）
-
-これを_逆方向_、つまりセッティングキーをタスクキーに依存されることは不可能だ。
-これは、セッティングキーがプロジェクトの読み込み時に一度だけ計算されるため、
-タスクが再実行されなくなってしまうが、
-タスクは毎回再実行されることが期待されているからだ。
-
-タスクはセッティングと他のタスクとの両方に依存することができる。
-`apply` のかわりに `map` を使うことで、`Initialize[T]` のかわりに `Initialize[Task[T]]` を作る。
-非タスクセッティングでの `apply` の用法は以下のようだ:
+逆方向への依存、つまりタスクの値に依存したセッティングキーの値を定義することは、どのようにしても出来ない。なぜなら、セッティングキーの値はプロジェクトのロード時に一度だけしか計算されないためである。逆に、タスクは何度も実行毎に評価される可能性がある。
 
 ```scala
-name <<= (name, organization, version) { (n, o, v) => "project " + n + " from " + o + " version " + v }
+// checksums セッティングは scalacOptions タスクに関連付けても、値が定まらないかもしれない
+checksums := scalacOptions.value
 ```
 
-(`(name, organization, version)` には apply メソッドがあるため、これは中括弧 `{}` で囲まれた匿名関数をパラメータとして受け取る関数だ。)
+### 依存性を用いた追加: `+=` and `++=`
 
-`Initialize[Task[T]]` を作るには、`apply` のかわりに `map` を使う:
-
-```scala
-// （<<= の左辺値の）name はタスクではなく、かつ map を使っているため、でコンパイルが通らない
-name <<= (name, organization, version) map { (n, o, v) => "project " + n + " from " + o + " version " + v }
-
-// packageBin はタスクであり、かつ map を使っているため、コンパイルは通る
-packageBin in Compile <<= (name, organization, version) map { (n, o, v) => file(o + "-" + n + "-" + v + ".jar") }
-
-// name がタスクではなく、かつ apply を使っているため、コンパイルは通る
-name <<= (name, organization, version) { (n, o, v) => "project " + n + " from " + o + " version " + v }
-
-// packageBin はタスクであり、かつ apply を使っているため、コンパイルは通らない
-packageBin in Compile <<= (name, organization, version) { (n, o, v) => file(o + "-" + n + "-" + v + ".jar") }
-```
-
-_まとめると:_ キーのタプルを `Initialize[Task[T]]` に変換したいときは `map` を使う。
-キーのタプルを `Initialize[T]` に変換したいときは `apply` を使う。
-`<<=` の左辺のキーが `SettingKey[T]` ではなくて、`TaskKey[T]` であるときに、`Initialize[Task[T]]` が必要となる。
-
-### エイリアスに必要なのは `:=` ではなく、`<<=`
-
-あるキーが別のキーのエイリアスになって欲しいとき、つい `:=` を使って以下のような間違ったエイリアスを作ってしまうかもしれない:
-
-```scala
-// 動作しないし、役に立たない
-packageBin in Compile := packageDoc in Compile
-```
-
-問題は `:=` の引数は値（タスクの場合は値を返す関数）でなくちゃいけないことだ。
-`TaskKey[File]` である `packageBin` の場合は、`File` もしくは `=> File` 関数でなければいけない。
-`packageDoc` は、キーであり、`File` ではない。
-
-正しい方法は、キーを受け取る `<<=` を使うことだ（実際に受け取っているのは `Initialize` だけど、全てのキーは `Initialize` のインスタンスでもある）:
-
-```scala
-// 動作するけど、やっぱり役に立たない
-packageBin in Compile <<= packageDoc in Compile
-```
-
-ここで、`<<=` は、後で（sbt がタスクを実行したとき）ファイルを返す計算である `Initialize[Task[File]]` を期待する。
-これが思った通りの振る舞いだ。つまり、タスクのエイリアスを作ったときに期待されるのは、そのをタスクを実行することであって、
-sbt がプロジェクトを読み込んだ時に一回だけ値を読み込むことではない。
-
-（ちなみに、`packageBin` のようなパッケージ化タスクは、グローバルではなく、コンフィギュレーションごとに定義されているので、`in Compile` スコープが無ければ「未定義」エラーが発生する。）
-
-### 依存性を持った追加: `<+=` and `<++=`
-
-リストに追加するためのメソッドにはもう二つあり、それらは `+=` や `++=` を `<<=` と組み合わせたものだ。
-つまり、他のキーへの依存性を使いながらリストの新しい値や連結するための別のリストを計算できる。
-
-これらのメソッドは、依存性から得られた値を変換するのに書く関数が `T` のかわりに `Seq[T]` を返さなくてはいけないこと以外の点では
-`<<=` と全く同じように動作する。
-
-当然、`<<=` のように既存の値を置き換えるのではなく、`<+=` と `<++=` は既存の値に追加するわけだけど。
+他のキーを用いて、既存のセッティングやタスクへ値を追加する際は、`+=` を使えば良い。
 
 例えば、プロジェクト名を使って名付けたカバレッジレポートがあるとして、それを `clean` が削除するファイルのリストに追加したいとする:
 
 ```scala
-cleanFiles <+= (name) { n => file("coverage-report-" + n + ".txt") }
+cleanFiles += file("coverage-report-" + name.value + ".txt")
 ```
 
 
-  [Keys]: ../sxr/sbt/Keys.scala.html
-  [Apache Ivy]: https://ant.apache.org/ivy/
-  [Ivy revisions]: https://ant.apache.org/ivy/history/2.3.0-rc1/ivyfile/dependency.html#revision
-  [Extra attributes]: https://ant.apache.org/ivy/history/2.3.0-rc1/concept.html#extra
-  [through Ivy]: https://ant.apache.org/ivy/history/latest-milestone/concept.html#checksum
+  [Keys]: ../../sxr/sbt/Keys.scala.html
+  [Apache Ivy]: http://ant.apache.org/ivy/
+  [Ivy revisions]: http://ant.apache.org/ivy/history/2.3.0-rc1/ivyfile/dependency.html#revision
+  [Extra attributes]: http://ant.apache.org/ivy/history/2.3.0-rc1/concept.html#extra
+  [through Ivy]: http://ant.apache.org/ivy/history/latest-milestone/concept.html#checksum
   [ScalaCheck]: http://scalacheck.org
   [specs]: http://code.google.com/p/specs/
   [ScalaTest]: http://scalatest.org
@@ -1437,36 +1301,39 @@ cleanFiles <+= (name) { n => file("coverage-report-" + n + ".txt") }
 `lib` の依存性は（`compile`、`test`、`run`、そして `console` の）全てのクラスパスに追加される。
 もし、どれか一つのクラスパスを変えたい場合は、例えば `dependencyClasspath in Compile` や
 `dependencyClasspath in Runtime` などを適宜調整する必要がある。
-`~=` を使って既存のクラスパスの値を受け取り、いらないものを filter で外して、新しいクラスパスの値を返せばいい。
-`~=` の詳細に関しては、[他の種類のセッティング][More-About-Settings]参照。
 
 アンマネージ依存性を利用するのに、`build.sbt` には何も書かなくてもいいけど、
 デフォルトの `lib` 以外のディレクトリを使いたい場合は、
-`unmanaged-base` キーを変更することができる。
+`unmanagedBase` キーを変更することができる。
 
 `lib` のかわりに、`custom_lib` を使うには:
 
 ```scala
-unmanagedBase <<= baseDirectory { base => base / "custom_lib" }
+unmanagedBase := baseDirectory.value / "custom_lib"
 ```
 
 `baseDirectory` はプロジェクトのルートディレクトリで、
 [他の種類のセッティング][More-About-Settings]で説明したとおり、ここでは `unmanagedBase`
-を `<<=` を使って `baseDirectory` の値に基づいて変更している。
+を `value` を使って取り出した `baseDirectory` の値を用いて変更している。
 
-他には、`unmanged-jars` という `unmanaged-base` ディレクトリに入っている jar ファイルのリストを返すタスクがある。
-複数のディレクトリを使うとか、何か別の複雑なことを行う場合は、この `unmanaged-jar` タスクを何か別のものに変える必要があるかもしれない。
+他には、`unmangedJars` という `unmanagedBase` ディレクトリに入っている jar ファイルのリストを返すタスクがある。
+複数のディレクトリを使うとか、何か別の複雑なことを行う場合は、この `unmanagedJar` タスクを何か別のものに変える必要があるかもしれない。
+例えば `Compile` コンフィギュレーション時に `lib`ディレクトリのファイルを無視したい、など。
+
+```scala
+unmanagedJars in Compile := Seq.empty[sbt.Attributed[java.io.File]]
+```
 
 ### マネージ依存性
 
-sbt は、[Apache Ivy] を使ってマネージ依存性を実装するため、既に Maven か Ivy に慣れていれば、違和感無く入り込めるだろう。
+sbt は、[Apache Ivy][Apache Ivy] を使ってマネージ依存性を実装するため、既に Maven か Ivy に慣れていれば、違和感無く入り込めるだろう。
 
 #### `libraryDependencies` キー
 
 依存性を `libraryDependencies` セッティングに列挙するだけで、普通はうまくいく。
 Maven POM ファイルや、Ivy コンフィギュレーションファイルを書くなどして、依存性を外部で設定してしまって、
 sbt にその外部コンフィギュレーションファイルを使わせるということも可能だ。
-これに関しては、[Library Management] を参照。
+これに関しては、[ここ][external-maven-ivy] を参照。
 
 依存性の宣言は、以下のようになる。ここで、`groupId`、`artifactId`、と `revision` は文字列だ:
 
@@ -1480,7 +1347,7 @@ libraryDependencies += groupID % artifactID % revision
 libraryDependencies += groupID % artifactID % revision % configuration
 ```
 
-`libraryDependencies` は [Keys] で以下のように定義されている:
+`libraryDependencies` は [Keys][Keys] で以下のように定義されている:
 
 ```scala
 val libraryDependencies = SettingKey[Seq[ModuleID]]("library-dependencies", "Declares managed dependencies.")
@@ -1509,7 +1376,7 @@ libraryDependencies ++= Seq(
 )
 ```
 
-`libraryDependencies` に対して `:=`、`<<=`、`<+=`、その他を使う機会があるかもしれないが、稀だろう。
+`libraryDependencies` に対して `:=`、その他を使う機会があるかもしれないが、稀だろう。
 
 #### `%%` を使って正しい Scala バージョンを入手する
 
@@ -1532,19 +1399,19 @@ libraryDependencies += "org.scala-tools" %% "scala-stm" % "0.3"
 プロジェクトに合ったものを選択したいときに使うというのが考えだ。
 
 実践上での問題として、多くの場合依存ライブラリは少しズレた Scala バージョンが使われることがあるけど、
-`%%` はそこまは賢くない。そのため、依存ライブラリが `2.9.0` までしか出てなくて、
-プロジェクトが `scalaVersion := "2.9.1"` の場合、`2.9.0` の依存ライブラリが多分動作するにも関わらず `%%` を使うことができない。
+`%%` はそこまは賢くない。そのため、依存ライブラリが `2.10.1` までしか出てなくて、
+プロジェクトが `scalaVersion := "2.10.4"` の場合、`2.10.1` の依存ライブラリが多分動作するにも関わらず `%%` を使うことができない。
 もし、`%%` が動かなくなったら、依存ライブラリが使っている実際のバージョンを確認して、
 動くだろうバージョン（それががあればの話だけど）に決め打ちすればいい。
 
-詳しくは、[Cross Build] を参照。
+詳しくは、[Cross Build][Cross-Build] を参照。
 
 #### Ivy revision
 
 `groupID % artifactID % revision` の `revision` は、単一の固定されたバージョン番号じゃなくてもいい。
 Ivy は与えられた制限の中でモジュールの最新の revision を選ぶことができる。
 `"1.6.1"` のような固定 revision ではなく、`"latest.integration"`、`"2.9.+"`、や `"[1.0,)"` など指定できる。
-詳しくは、[Ivy revisions] を参照。
+詳しくは、[Ivy revisions][Ivy revisions] を参照。
 
 <!-- TODO: Add aliases -->
 
@@ -1580,7 +1447,7 @@ sbt は、リポジトリとして追加すれば、ローカル Maven リポジ
 resolvers += "Local Maven Repository" at "file://"+Path.userHome.absolutePath+"/.m2/repository"
 ```
 
-他の種類のリポジトリの定義の詳細に関しては、[Resolvers] 参照。
+他の種類のリポジトリの定義の詳細に関しては、[Resolvers][Resolvers] 参照。
 
 #### デフォルトの resolver のオーバーライド
 
@@ -1600,6 +1467,12 @@ resolvers += "Local Maven Repository" at "file://"+Path.userHome.absolutePath+"/
 
 ```scala
 libraryDependencies += "org.apache.derby" % "derby" % "10.4.1.3" % "test"
+```
+
+以下のように書くことで、 `Test` コンフィギュレーションに合わせた型安全なバーションを用いることが出来るかもしれない:
+
+```scala
+libraryDependencies += "org.apache.derby" % "derby" % "10.4.1.3" % Test
 ```
 
 sbt のインタラクティブモードで `show compile:dependency-classpath` と打ち込んでも、Derby は出てこないはずだ。
@@ -1634,123 +1507,79 @@ sbt のインタラクティブモードで `show compile:dependency-classpath` 
 `package` を実行すると独自の jar ファイルを生成するなど、
 普通のプロジェクト同様に振る舞う。
 
-### `.scala` ファイル内でのプロジェクトの定義
-
-複数のプロジェクトを持つには、全てのプロジェクトとその関係を `.scala` ファイルで宣言する必要があり、
-`.sbt` ファイルからは不可能だ。
-だけど、それぞれのプロジェクトのセッティングは `.sbt` ファイルからでも定義することができる。
-以下に、ルートプロジェクト `hello` が、二つのサブプロジェクト `hello-foo` と `hello-bar` を
-集約（aggregate）する `.scala` ビルド定義を例に説明する:
+個々のプロジェクトは lazy val を用いて [Project](../../api/sbt/Project.html) 型の値を宣言することで定義される。例として、以下のようなものがプロジェクトだ:
 
 ```scala
-import sbt._
-import Keys._
+lazy val util = project
 
-object HelloBuild extends Build {
-    lazy val root = Project(id = "hello",
-                            base = file(".")) aggregate(foo, bar)
-
-    lazy val foo = Project(id = "hello-foo",
-                           base = file("foo"))
-
-    lazy val bar = Project(id = "hello-bar",
-                           base = file("bar"))
-}
+lazy val core = project
 ```
 
-sbt は、リフレクションを用いて `Build` オブジェクト内の
-`Project` 型を持ったフィールドを検索することで、`Project` オブジェクトの全リストを作成する。
+変数名はプロジェクトの ID 及びベースディレクトリの名前になる。 ID はコマンドラインからプロジェクトを指定する時に用いられる。ベースディレクトリは以下の様な関数を呼び出す事で変更出来る。上記の例と同じ結果になる記述を明示的に書くと、以下のようになる。
 
-プロジェクト `hello-foo` は、`base = file("foo")` と共に定義されているため、
-サブディレクトリ `foo` に置かれる。
-そのソースは、`foo/Foo.scala` のように `foo` の直下に置かれるか、
-`foo/src/main/scala` 内に置かれる。
-ビルド定義ファイルを除いては、通常の sbt [ディレクトリ構造](../directories)が `foo` 以下に適用される。
+```scala
+lazy val util = project.in(file("util"))
 
-`foo` 内の全ての `.sbt` ファイル、例えば `foo/build.sbt` は、
-`hello-foo` プロジェクトにスコープ付けされた上で、ビルド全体のビルド定義に取り込まれる。
-
-
-ルートプロジェクトが `hello` にあるとき、`hello/build.sbt`、`hello/foo/build.sbt`、
-`hello/bar/build.sbt` においてそれぞれ別々のバージョンを定義してみよう（例: `version := "0.6"`）。
-次に、インタラクティブプロンプトで `show version` と打ち込んでみる。
-以下のように表示されるはずだ（定義したバージョンによるが）:
-
-```
-> show version
-[info] hello-foo/*:version
-[info] 	0.7
-[info] hello-bar/*:version
-[info] 	0.9
-[info] hello/*:version
-[info] 	0.5
+lazy val core = project in file("core")
 ```
 
-`hello-foo/*:version` は、`hello/foo/build.sbt` 内で定義され、
-`hello-bar/*:version` は、`hello/bar/build.sbt` 内で定義され、
-`hello/*:version` は、`hello/build.sbt` 内で定義される。
-[スコープ付けされたキーの構文](../scope)を復習しておこう。
-それぞれの `version` キーは、`build.sbt` の場所により、
-特定のプロジェクトにスコープ付けされている。
-だけど、三つの `build.sbt` とも同じビルド定義の一部だ。
+### 依存関係
 
-`.scala` ファイルは、上に示したように、単にプロジェクトとそのベースディレクトリを列挙するだけの簡単なものにして、
-_それぞれのプロジェクトのセッティングは、そのプロジェクトのベースディレクトリ直下の
-`.sbt` ファイル内で宣言することができる_。
-_全てのセッティングを `.scala` ファイル内で宣言することは義務付けられいるわけではない。_
+個々のプロジェクトのビルドを他のプロジェクトと完全に独立した形で行うこともできる。しかし、大抵プロジェクトというのは他のプロジェクトと何らかの形で依存関係を持つ。ここには集約かクラスパス依存性といった2種類の依存関係が存在する:
 
-ビルド定義の全てを単一の `project` ディレクトリ内の場所にまとめるために、
-`.scala` ファイル内にセッティングも含めてしまうほうが洗練されていると思うかもしれない。
-ただし、これは好みの問題だから、好きにやっていい。
+#### 集約
 
-サブプロジェクトは、`project` サブディレクトリや、`project/*.scala` ファイルを持つことができない。
-`foo/project/Build.scala` は無視される。
+集約は、集約するプロジェクトを走らせる際に集約されるプロジェクトも同時に走らせる必要がある、といった関係のことである。例えば、以下のような例がある。
 
-### 集約
+```scala
+lazy val root = (project in file(".")).
+  aggregate(util, core)
 
-もし望むなら、ビルド内のプロジェクトは、お互いに対して完全に独立であることができる。
+lazy val util = project
 
-だけど、上の例では、`aggregate(foo, bar)` というメソッドが呼び出されていることが分かる。
-これは、`hello-foo` と `hello-bar` を、ルートプロジェクト下に集約する。
+lazy val core = project
+```
 
-集約とは、集約プロジェクトで実行されたタスクが部分プロジェクトでも実行されることを意味する。
-例のような、二つのサブプロジェクトがある状態で sbt を起動して、`compile` を実行してみよう。
-三つのプロジェクト全てがコンパイルされたことが分かると思う。
+上の例では、`root` プロジェクトが `util` と `core` を集約している。この状態で sbt を起動してコンパイルしてみよう。3つのプロジェクトが全てコンパイルされることが分かると思う。
 
 _集約プロジェクト内で_（この場合は、ルートの `hello` プロジェクトで）、
 タスクごとに集約をコントロールすることができる。
-例えば `hello/build.sbt` 内で、`update` タスクの集約を以下のようにして回避できる:
+例えば、`update` タスクの集約を以下のようにして回避できる:
 
 ```scala
-aggregate in update := false
+lazy val root = (project in file(".")).
+  aggregate(util, core).
+  settings(
+    aggregate in update := false
+  )
+
+[...]
 ```
 
 `aggregate in update` は、`update` タスクにスコープ付けされた `aggregate` キーだ
-（[スコープ](../scope)参照）。
+（[スコープ][Scopes]参照）。
 
 注意: 集約は、集約されるタスクを順不同に並列実行する。
 
-### クラスパス依存性
+#### クラスパス依存性
 
 プロジェクトは、他のプロジェクトのコードに依存することができる。
 これは、`dependsOn` メソッドを呼び出すことで実現する。
-例えば、`hello-foo` が `hello-bar` のクラスパスが必要な場合は、
-`Build.scala` 内に以下のように書く:
+例えば、`core` に `util` のクラスパスが必要な場合は、 `core` の定義を次のように書く:
 
 ```scala
-    lazy val foo = Project(id = "hello-foo",
-                           base = file("foo")) dependsOn(bar)
+lazy val core = project.dependsOn(util)
 ```
 
-これで `hello-foo` 内のコードから `hello-bar` のクラスを利用することができる。
+これで `core` 内のコードから `util` のクラスを利用することができる。
 これは、プロジェクトをコンパイルするときの順序も作り出す。
-この場合、`hello-foo` がコンパイルされる前に、`hello-bar` が更新（update）され、
+この場合、`core` がコンパイルされる前に、`util` が更新（update）され、
 コンパイルされる必要がある。
 
 複数のプロジェクトに依存するには、`dependsOn(bar, baz)` というふうに、
 `dependsOn` に複数の引数を渡せばいい。
 
-#### コンフィギュレーションごとのクラスパス依存性
+##### コンフィギュレーションごとのクラスパス依存性
 
 `foo dependsOn(bar)` は、`foo` の `Compile` コンフィギュレーションが
 `bar` の `Compile` コンフィギュレーションに依存することを意味する。
@@ -1771,12 +1600,85 @@ aggregate in update := false
 複数のコンフィギュレーション依存性を宣言する場合は、セミコロンで区切る。
 例えば、`dependsOn(bar % "test->test;compile->compile")` と書ける。
 
+### デフォルトルートプロジェクト
+
+もしプロジェクトがルートディレクトリに定義されてなかったら、 sbt はビルド時に他のプロジェクトを集約するデフォルトプロジェクトを勝手に生成する。
+
+プロジェクト `hello-foo` は、`base = file("foo")` と共に定義されているため、
+サブディレクトリ `foo` に置かれる。
+そのソースは、`foo/Foo.scala` のように `foo` の直下に置かれるか、
+`foo/src/main/scala` 内に置かれる。
+ビルド定義ファイルを除いては、通常の sbt [ディレクトリ構造][Directories]が `foo` 以下に適用される。
+
+`foo` 内の全ての `.sbt` ファイル、例えば `foo/build.sbt` は、
+`hello-foo` プロジェクトにスコープ付けされた上で、ビルド全体のビルド定義に取り込まれる。
+
+ルートプロジェクトが `hello` にあるとき、`hello/build.sbt`、`hello/foo/build.sbt`、
+`hello/bar/build.sbt` においてそれぞれ別々のバージョンを定義してみよう（例: `version := "0.6"`）。
+次に、インタラクティブプロンプトで `show version` と打ち込んでみる。
+以下のように表示されるはずだ（定義したバージョンによるが）:
+
+```
+> show version
+[info] hello-foo/*:version
+[info] 	0.7
+[info] hello-bar/*:version
+[info] 	0.9
+[info] hello/*:version
+[info] 	0.5
+```
+
+`hello-foo/*:version` は、`hello/foo/build.sbt` 内で定義され、
+`hello-bar/*:version` は、`hello/bar/build.sbt` 内で定義され、
+`hello/*:version` は、`hello/build.sbt` 内で定義される。
+[スコープ付けされたキーの構文][Scopes]を復習しておこう。
+それぞれの `version` キーは、`build.sbt` の場所により、
+特定のプロジェクトにスコープ付けされている。
+だけど、三つの `build.sbt` とも同じビルド定義の一部だ。
+
+`.scala` ファイルは、上に示したように、単にプロジェクトとそのベースディレクトリを列挙するだけの簡単なものにして、
+_それぞれのプロジェクトのセッティングは、そのプロジェクトのベースディレクトリ直下の
+`.sbt` ファイル内で宣言することができる_。
+_全てのセッティングを `.scala` ファイル内で宣言することは義務付けられいるわけではない。_
+
+ビルド定義の全てを単一の `project` ディレクトリ内の場所にまとめるために、
+`.scala` ファイル内にセッティングも含めてしまうほうが洗練されていると思うかもしれない。
+ただし、これは好みの問題だから、好きにやっていい。
+
+サブプロジェクトは、`project` サブディレクトリや、`project/*.scala` ファイルを持つことができない。
+`foo/project/Build.scala` は無視される。
+
 ### プロジェクトの切り替え
 
 sbt インタラクティブプロンプトから、`projects` と打ち込むことでプロジェクトの全リストが表示され、
 `project <プロジェクト名>` で、現在プロジェクトを選択できる。
 `compile` のようなタスクを実行すると、それは現在プロジェクトに対して実行される。
 これにより、ルートプロジェクトをコンパイルせずに、サブプロジェクトのみをコンパイルすることができる。
+
+また `subProjectID/compile` のように、他のプロジェクト ID を明示的に指定することで、そのプロジェクトのタスクを実行することもできる。
+
+### Common code
+
+`.sbt` ファイルで定義された値は、他の `.sbt` ファイルからは見えない。 `.sbt` ファイル間のコードを共有するためには、 ビルドルートにある `project/` ディレクトリに Scala ファイルを用意すれば良い。このディレクトリは sbt プロジェクトになるが、ビルドのためのプロジェクトとなる。以下がサンプルである。
+
+`<root>/project/Common.scala`:
+
+```scala
+import sbt._
+import Keys._
+
+object Common {
+  def text = "org.example"
+}
+```
+
+`<root>/build.sbt`:
+
+```scala
+organization := Common.text
+```
+
+詳細は [.scala Build Definition][Full-Def] を見てほしい。
 
 
   [Basic-Def]: Basic-Def.html
@@ -1888,7 +1790,7 @@ sbt のデフォルトセッティングは 3つのプラグインによって�
 
 さらに `JUnitXmlReportPlugin` は実験的に junit-xml の生成機能を提供する。
 
-古い auto plugin ではないプラグインは、、[マルチプロジェクトビルド](../multi-project)内に
+古い auto plugin ではないプラグインは、、[マルチプロジェクトビルド][Multi-Project]内に
 異なるタイプのプロジェクトを持つことができるようにセッティングを明示的に追加することを必要とする。
 それぞれのプラグインのドキュメンテーションに設定方法が書いてあると思うけど、
 典型的にはベースとなるセッティングを追加して、必要に応じてカスタム化というパターンが多い。
@@ -1919,7 +1821,7 @@ lazy val core = (project in file("core")).
 大まかに言うと、`~/.sbt/0.13/plugins/` 内の `.sbt` ファイルは、それが全てのプロジェクトの
 `project/` ディレクトリに入っているかのように振る舞う。
 
-`~/.sbt/0.13/plugins//build.sbt` を作って、そこに `addSbtPlugin()` 式を書くことで
+`~/.sbt/0.13/plugins/build.sbt` を作って、そこに `addSbtPlugin()` 式を書くことで
 全プロジェクトにプラグインを追加することができる。
 しかし、これを多用するとマシン環境への依存性を増やしてしまうことになるので、この機能は注意してほどほどに使うべきだ。
 [ベスト・プラクティス][global-vs-local-plugins]も参照してほしい。
@@ -1944,8 +1846,8 @@ lazy val core = (project in file("core")).
   [Input-Tasks]: ../../docs/Input-Tasks.html
   [Plugins]: ../../docs/Plugins.html
   [Tasks]: ../../docs/Tasks.html
-  [Keys]: ../sxr/sbt/Keys.scala.html
-  [Defaults]: ../sxr/sbt/Defaults.scala.html
+  [Keys]: ../../sxr/sbt/Keys.scala.html
+  [Defaults]: ../../sxr/sbt/Defaults.scala.html
   [Scaladocs-IO]: ../api/index.html#sbt.IO$
 
 カスタムセッティングとタスク
@@ -1960,8 +1862,8 @@ lazy val core = (project in file("core")).
 
 ### キーの定義
 
-[Keys] は、キーの定義の方法で満載だ。
-多くのキーは、[Defaults] で実装されている。
+[Keys][Keys] は、キーの定義の方法で満載だ。
+多くのキーは、[Defaults][Defaults] で実装されている。
 
 キーは三つの型のうちどれかを持つ。`SettingKey` と `TaskKey` は、
 [.sbt ビルド定義][Basic-Def]で説明した。`InputKey` に関しては、
@@ -1983,8 +1885,7 @@ val clean = taskKey[Unit]("Deletes files produced by the build, such as generate
 セッティングはプロジェクトが再読み込みされるまでは固定値を持ち、
 タスクは「タスク実行」のたび（sbt のインタラクティブモードかバッチモードでコマンドが打ち込まれるたび）に再計算される。
 
-（[.scala ビルド定義][Full-Def] でみたように、）`.scala` ファイル内、
-もしくは（[プラグインの使用][Using-Plugins] でみたように、）プラグイン内でキーを定義することができる。
+[.sbt file][Basic-Def] や [.scala file][Full-Def] や [a plugin][Using-Plugins] でキーを定義する事が出来る。
 `.scala` ビルド定義ファイル内の `Build` オブジェクト内の `val`、
 もしくはプラグイン内の `Plugin` オブジェクト内の `val` は全て `.sbt` ファイルに自動的にインポートされる。
 
@@ -2018,19 +1919,7 @@ sampleIntTask := {
 （その場合は、[ビルド定義にライブラリ依存性を追加して][Using-Plugins]、その HTML ライブラリに基づいたコードを書く）。
 
 sbt には、いくつかのユーティリティ・ライブラリや便利な関数があって、
-特にファイルやディレクトリの取り扱いには [Scaladocs-IO] にある API を重宝する。
-
-### 置換しない場合のタスクの拡張
-
-既存のタスクを実行して、他の別のアクションも実行したい場合は、
-`~=` か `<<=` を用いて、既存のタスクをインプットとして取り（これはそのタスクを実行することを意味する）、
-既存の実装が完了した後で、別に好きな事をできる。
-
-<pre>
-// 以下の二つのセッティングは等価だ。
-intTask <<= intTask map { (value: Int) => value + 1 }
-intTask ~= { (value: Int) => value + 1 }
-</pre>
+特にファイルやディレクトリの取り扱いには [Scaladocs-IO][Scaladocs-IO] にある API を重宝する。
 
 ### プラグインを使おう！
 
@@ -2049,6 +1938,7 @@ intTask ~= { (value: Int) => value + 1 }
   [Basic-Def]: Basic-Def.html
   [More-About-Settings]: More-About-Settings.html
   [Using-Plugins]: Using-Plugins.html
+  [Multi-Project]: Multi-Project.html
 
 .scala ビルド定義
 ----------------
@@ -2168,7 +2058,7 @@ sampleKeyC in ThisBuild := "C: in build.sbt scoped to ThisBuild"
 sampleKeyD := "D: in build.sbt"
 ```
 
-sbt のインタラクティブプロンプトを起動する。`inspect sample-a` と打ち込むと、以下のように表示されるはず（一部抜粋）:
+sbt のインタラクティブプロンプトを起動する。`inspect sampleKeyA` と打ち込むと、以下のように表示されるはず（一部抜粋）:
 
 ```
 [info] Setting: java.lang.String = A: in Build.settings in Build.scala
@@ -2176,7 +2066,7 @@ sbt のインタラクティブプロンプトを起動する。`inspect sample-
 [info]  {file:/home/hp/checkout/hello/}/*:sampleKeyA
 ```
 
-次に、`inspect sample-c` と打ち込むと、以下のように表示される:
+次に、`inspect sampleKeyC` と打ち込むと、以下のように表示される:
 
 ```
 [info] Setting: java.lang.String = C: in build.sbt scoped to ThisBuild
@@ -2189,7 +2079,7 @@ sbt のインタラクティブプロンプトを起動する。`inspect sample-
 `.scala` ファイルの `Build.settings` リストにセッティングを追加するのと等価とういうことだ。
 sbt は、ビルド全体にスコープ付けされたセッティングを両者から取り込んでビルド定義を作成する。
 
-次は、`inspect sample-b`:
+次は、`inspect sampleKeyB`:
 
 ```
 [info] Setting: java.lang.String = B: in the root project settings in Build.scala
@@ -2197,12 +2087,12 @@ sbt は、ビルド全体にスコープ付けされたセッティングを両�
 [info]  {file:/home/hp/checkout/hello/}hello/*:sampleKeyB
 ```
 
-`sample-b` は、
+`sampleKeyB` は、
 ビルド全体（`{file:/home/hp/checkout/hello/}`）ではなく、
 特定のプロジェクト（`{file:/home/hp/checkout/hello/}hello`）
 にスコープ付けされいることに注意してほしい。
 
-もうお分かりだと思うが、`inspect sample-d` は `sample-b` に対応する:
+もうお分かりだと思うが、`inspect sampleKeyD` は `sampleKeyB` に対応する:
 
 ```
 [info] Setting: java.lang.String = D: in build.sbt
@@ -2214,10 +2104,10 @@ sbt は `.sbt` ファイルからのセッティングを
 `Build.settings` と `Project.settings` に_追加する_ため、
 これは `.sbt` 内のセッティングの優先順位が高いことを意味する。
 `Build.scala` を変更して、`build.sbt` でも設定されている
-`sample-c` か `sample-d` キーを設定してみよう。
+`sampleKeyC` か `sampleKeyD` キーを設定してみよう。
 `build.sbt` 内のセッティングが、`Build.scala` 内のそれに「勝つ」はずだ。
 
-もう一つ気づいたかもしれないが、`sampleC` と `sampleD` は `build.sbt` でそのまま使うことができる。
+もう一つ気づいたかもしれないが、`sampleKeyC` と `sampleKeyD` は `build.sbt` でそのまま使うことができる。
 これは、sbt が `Build` オブジェクトのコンテンツを自動的に `.sbt` ファイルにインポートすることにより実現されている。
 具体的には、`build.sbt` ファイル内で `import HelloBuild._` が暗黙に呼ばれている。
 
@@ -2240,20 +2130,6 @@ sbt は `.sbt` ファイルからのセッティングを
 
 _推奨される方法の一つとしては、`.scala` ファイルは `val` や `object` やメソッド定義を
 くくり出すのに使用して、セッティングの定義は `.sbt` で行うことだ。_
-
-`.sbt` 形式は、単一の式のみが許されているので、式の間でコードを共有する方法を持たない。
-コードを共有したければ、共通の変数やメソッドの定義ができるように `.scala` ファイルが必要になる。
-(sbt 0.13.0 からbuild.sbtでも、val、lazy val、メソッド定義は可能になりました。classやobjectが必要な場合は引き続きbuild.scalaが必要です)
-
-`.sbt` ファイルと `.scala` ファイルの両方がコンパイルされ、一つのビルド定義が作られる。
-
-`.scala` ファイルは、単一のビルド内で複数のプロジェクトを定義する場合にも必須だ。
-これに関しては、[マルチプロジェクト](../multi-project)で後ほど説明する。
-
-（[マルチプロジェクト](../multi-project)で `.sbt` ファイルを使うことの欠点は、
-`.sbt` ファイルが異なるディレクトリに散らばってしまうことだ。
-そのため、サブプロジェクトがある場合は、セッティングを `.scala` に置くことを好む人もいる。
-これは、[マルチプロジェクト](../multi-project)のふるまいを理解すると、すぐ分かるようになる。）
 
 ### インタラクティブモードにおけるビルド定義
 
@@ -2289,10 +2165,10 @@ sbt のインタラクティブプロンプトの現プロジェクトを
 
  - `.scala` ファイル内の `Build.settings` と `Project.settings` 。
  - ユーザ定義のグローバルセッティング。例えば、`~/.sbt/build.sbt` に_全て_のプロジェクトに影響するセッティングを定義できる。
- - プラグインによって注入されるセッティング、次の[プラグインの使用](../using-plugins)参照。
+ - プラグインによって注入されるセッティング、次の[プラグインの使用][Using-Plugins]参照。
  - プロジェクトの `.sbt` ファイル内のセッティング。
  - （`project` 内のプロジェクトである）ビルド定義プロジェクトの場合は、グローバルプラグイン（~/.sbt/plugins）が追加される。
-   [プラグインの使用](../using-plugins)で詳細が説明される。
+   [プラグインの使用][Using-Plugins]で詳細が説明される。
 
 後続のセッティングは古いものをオーバーライドする。このリスト全体でビルド定義が構成される。
 
