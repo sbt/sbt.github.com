@@ -414,10 +414,14 @@ your plugin to the list.
 -   sbt-scage-plugin (Scala Game Engine):
     <https://github.com/mvallerie/sbt-scage-plugin>
 
-#### Android plugin
+#### Android plugins
 
 -   android-plugin: <https://github.com/jberkel/android-plugin>
 -   android-sdk-plugin: <https://github.com/pfn/android-sdk-plugin>
+
+#### iOS plugins
+
+-   sbt-robovm (Compiling Scala using RoboVM for iOS or native OSX): <https://github.com/roboscala/sbt-robovm>
 
 #### OSGi plugin
 
@@ -11853,7 +11857,7 @@ one property:
 -   `classifiers` - The (optional) list of additional scala artifacts to
     resolve, e.g. sources.
 
-#### 2. Applicaiton Identification
+#### 2. Application Identification
 
 The `[app]` section configures how the launcher will look for your
 application using the Ivy dependency manager. It consists of the
