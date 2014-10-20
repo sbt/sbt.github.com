@@ -69,16 +69,16 @@
 複数のディレクトリを使うとか、何か別の複雑なことを行う場合は、この <code>unmanagedJar</code> タスクを何か別のものに変える必要があるかもしれない。
 例えば <code>Compile</code> コンフィギュレーション時に <code>lib</code>ディレクトリのファイルを無視したい、など。
 </p><pre><code class="prettyprint lang-scala">unmanagedJars in Compile := Seq.empty[sbt.Attributed[java.io.File]]
-</code></pre><h3 id="%E3%83%9E%E3%83%8D%E3%83%BC%E3%82%B8%E4%BE%9D%E5%AD%98%E6%80%A7">マネージ依存性<a href="#%E3%83%9E%E3%83%8D%E3%83%BC%E3%82%B8%E4%BE%9D%E5%AD%98%E6%80%A7" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt は、<a href="http://ant.apache.org/ivy/">Apache Ivy</a> を使ってマネージ依存性を実装するため、既に Maven か Ivy に慣れていれば、違和感無く入り込めるだろう。
+</code></pre><h3 id="%E3%83%9E%E3%83%8D%E3%83%BC%E3%82%B8%E4%BE%9D%E5%AD%98%E6%80%A7">マネージ依存性<a href="#%E3%83%9E%E3%83%8D%E3%83%BC%E3%82%B8%E4%BE%9D%E5%AD%98%E6%80%A7" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt は、[Apache Ivy] を使ってマネージ依存性を実装するため、既に Maven か Ivy に慣れていれば、違和感無く入り込めるだろう。
 </p><h4 id="%E3%82%AD%E3%83%BC"><code>libraryDependencies</code> キー<a href="#%E3%82%AD%E3%83%BC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>依存性を <code>libraryDependencies</code> セッティングに列挙するだけで、普通はうまくいく。
 Maven POM ファイルや、Ivy コンフィギュレーションファイルを書くなどして、依存性を外部で設定してしまって、
 sbt にその外部コンフィギュレーションファイルを使わせるということも可能だ。
-これに関しては、<a href="../../docs/Library-Management.html#external-maven-ivy">ここ</a> を参照。
+これに関しては、[Library Management] を参照。
 </p><p>依存性の宣言は、以下のようになる。ここで、<code>groupId</code>、<code>artifactId</code>、と <code>revision</code> は文字列だ:
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += groupID % artifactID % revision
 </code></pre><p>もしくは、以下のようになる。このときの <code>configuration</code> も文字列だ。
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += groupID % artifactID % revision % configuration
-</code></pre><p><code>libraryDependencies</code> は <a href="../../sxr/sbt/Keys.scala.html">Keys</a> で以下のように定義されている:
+</code></pre><p><code>libraryDependencies</code> は [Keys] で以下のように定義されている:
 </p><pre><code class="prettyprint lang-scala">val libraryDependencies = SettingKey[Seq[ModuleID]](&quot;library-dependencies&quot;, &quot;Declares managed dependencies.&quot;)
 </code></pre><p><code>%</code> メソッドは、文字列から <code>ModuleID</code> オブジェクトを作り、その <code>ModuleID</code> を <code>libraryDependencies</code> に追加するだけでいい。
 </p><p>当然、sbt は（Ivy を通じて）モジュールをどこからダウンロードしてくるかを知らなければいけない。
@@ -108,11 +108,11 @@ sbt はプロジェクトの Scala バージョンをアーティファクト名
 プロジェクトが <code>scalaVersion := &quot;2.10.4&quot;</code> の場合、<code>2.10.1</code> の依存ライブラリが多分動作するにも関わらず <code>%%</code> を使うことができない。
 もし、<code>%%</code> が動かなくなったら、依存ライブラリが使っている実際のバージョンを確認して、
 動くだろうバージョン（それががあればの話だけど）に決め打ちすればいい。
-</p><p>詳しくは、<a href="../../docs/Cross-Build.html">Cross Build</a> を参照。
+</p><p>詳しくは、[Cross Build] を参照。
 </p><h4 id="Ivy+revision">Ivy revision<a href="#Ivy+revision" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>groupID % artifactID % revision</code> の <code>revision</code> は、単一の固定されたバージョン番号じゃなくてもいい。
 Ivy は与えられた制限の中でモジュールの最新の revision を選ぶことができる。
 <code>&quot;1.6.1&quot;</code> のような固定 revision ではなく、<code>&quot;latest.integration&quot;</code>、<code>&quot;2.9.+&quot;</code>、や <code>&quot;[1.0,)&quot;</code> など指定できる。
-詳しくは、<a href="http://ant.apache.org/ivy/history/2.3.0-rc1/ivyfile/dependency.html#revision">Ivy revisions</a> を参照。
+詳しくは、[Ivy revisions] を参照。
 </p><!-- TODO: Add aliases -->
 <h4 id="Resolvers">Resolvers<a href="#Resolvers" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>全てのパッケージが一つのサーバに置いてあるとは限らない。
 sbt は、デフォルトで standard Maven2 repository のリポジトリを使う。
@@ -121,12 +121,12 @@ sbt は、デフォルトで standard Maven2 repository のリポジトリを使
 </p><pre><code class="prettyprint lang-scala">resolvers += name at location
 </code></pre><p>例えば:
 </p><pre><code class="prettyprint lang-scala">resolvers += &quot;Sonatype OSS Snapshots&quot; at &quot;https://oss.sonatype.org/content/repositories/snapshots&quot;
-</code></pre><p><a href="../../sxr/sbt/Keys.scala.html">Keys</a> で定義されいる <code>resolvers</code> キーは以下のようになっている:
+</code></pre><p><a href="../sxr/sbt/Keys.scala.html">Keys</a> で定義されいる <code>resolvers</code> キーは以下のようになっている:
 </p><pre><code class="prettyprint lang-scala">val resolvers = settingKey[Seq[Resolver]](&quot;The user-defined additional resolvers for automatically managed dependencies.&quot;)
 </code></pre><p><code>at</code> メソッドは、二つの文字列から <code>Resolver</code> オブジェクトを作る。
 </p><p>sbt は、リポジトリとして追加すれば、ローカル Maven リポジトリも検索することができる:
 </p><pre><code class="prettyprint lang-scala">resolvers += &quot;Local Maven Repository&quot; at &quot;file://&quot;+Path.userHome.absolutePath+&quot;/.m2/repository&quot;
-</code></pre><p>他の種類のリポジトリの定義の詳細に関しては、<a href="../../docs/Resolvers.html">Resolvers</a> 参照。
+</code></pre><p>他の種類のリポジトリの定義の詳細に関しては、[Resolvers] 参照。
 </p><h4 id="%E3%83%87%E3%83%95%E3%82%A9%E3%83%AB%E3%83%88%E3%81%AE+resolver+%E3%81%AE%E3%82%AA%E3%83%BC%E3%83%90%E3%83%BC%E3%83%A9%E3%82%A4%E3%83%89">デフォルトの resolver のオーバーライド<a href="#%E3%83%87%E3%83%95%E3%82%A9%E3%83%AB%E3%83%88%E3%81%AE+resolver+%E3%81%AE%E3%82%AA%E3%83%BC%E3%83%90%E3%83%BC%E3%83%A9%E3%82%A4%E3%83%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>resolvers</code> は、デフォルトの resolver を含まず、ビルド定義によって加えられる追加のものだけを含む。
 </p><p><code>sbt</code> は、<code>resolvers</code> をデフォルトのリポジトリと組み合わせて <code>external-resolvers</code> を形成する。　
 </p><p>そのため、デフォルトの resolver を変更したり、削除したい場合は、<code>resolvers</code> ではなく、<code>external-resolvers</code> をオーバーライドする必要がある。

@@ -24,7 +24,9 @@
         <script type="text/javascript">
           Pamflet.page.language = 'zh-cn';
         </script>
-        
+        <script type="text/javascript" src="../js/prettify/prettify.js"></script><script type="text/javascript" src="../js/prettify/lang-scala.js"></script><link type="text/css" rel="stylesheet" href="../css/prettify.css"/><script type="text/javascript"><!--
+        window.onload=function() { prettyPrint(); };
+      --></script>
         <link rel="stylesheet" href="../css/custom.css" type="text/css" media="screen, projection"/>
         
         <script type="text/javascript">
@@ -41,7 +43,36 @@
           </a>
         <div class="container contentswrapper">
           <div class="span-16 prepend-1 append-1 contents">
-            <h2 id="%E8%87%AA%E5%AE%9A%E4%B9%89%E8%AE%BE%E7%BD%AE%E5%92%8C%E4%BB%BB%E5%8A%A1">自定义设置和任务<a href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E8%AE%BE%E7%BD%AE%E5%92%8C%E4%BB%BB%E5%8A%A1" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>翻译中</p><div class="bottom nav span-16">
+            <h2 id="%E8%87%AA%E5%AE%9A%E4%B9%89%E8%AE%BE%E7%BD%AE%E5%92%8C%E4%BB%BB%E5%8A%A1">自定义设置和任务<a href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E8%AE%BE%E7%BD%AE%E5%92%8C%E4%BB%BB%E5%8A%A1" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>这一小节讲解如何创建自定义设置和任务。
+</p><p>在理解本节之前，请先阅读 sbt 入门前面的章节，尤其是 <a href="Basic-Def.html">.sbt 构建定义</a>和<a href="More-About-Settings.html">更多关于设置</a>。
+</p><h3 id="%E5%AE%9A%E4%B9%89%E4%B8%80%E4%B8%AA%E9%94%AE">定义一个键<a href="#%E5%AE%9A%E4%B9%89%E4%B8%80%E4%B8%AA%E9%94%AE" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="../sxr/sbt/Keys.scala.html">这里</a>介绍了如何定义键。大多数的默认键定义在<a href="../sxr/sbt/Defaults.scala.html">这里</a>。
+</p><p>键有三种类型。<code>SettingKey</code> 和 <code>TaskKey</code> 的讲解在 <a href="Basic-Def.html">.sbt 构建定义</a>。阅读关于 <code>InputKey</code> 的内容在<a href="../docs/Input-Tasks.html">输入任务</a>页面。
+</p><p>列举一些来自 <a href="../sxr/sbt/Keys.scala.html">Keys</a> 的例子：
+</p><pre><code class="prettyprint lang-scala">val scalaVersion = settingKey [String](&quot;scala的版本&quot;)
+val clean = taskKey[Unit](&quot;删除构建产生的文件，包括生成的 source 文件，编译的类和任务缓存。&quot;)
+</code></pre><p>键的构造函数有两个字符串参数：键的名称（ <code>“scalaVersion”</code> ）和文档字符串（ <code>“用于构建工程的scala的版本。 ”</code> ）。
+</p><p>还记得<a href="Basic-Def.html"> .sbt 构建定义</a>中，类型 <code>T</code> 在 <code>SettingKey[T]</code> 中表示的设置的值的类型。类型 <code>T</code> 在 <code>TaskKey [T]</code> 中指示任务的结果的类型。
+在<a href="Basic-Def.html"> .sbt 构建定义</a>中，一个设置有一个固定的值，直到项目重装。任务会在每一个“任务执行”（用户输入一个命令算一次）被重新计算。
+</p><p>键可以在定义在<a href="Basic-Def.html"> .sbt 构建定义</a>，<a href="Full-Def.html">.scala 文件</a>或<a href="Using-Plugins.html">插件</a>。任何在 <code>.scala</code> 构建定义文件发现的 <code>val</code>，<code>Build</code> 对象或 <code>Plugin</code> 对象中 plugin 的 <code>val</code> 将被自动导入
+到你的 <code>.sbt</code> 文件。
+</p><h3 id="%E6%89%A7%E8%A1%8C%E4%BB%BB%E5%8A%A1">执行任务<a href="#%E6%89%A7%E8%A1%8C%E4%BB%BB%E5%8A%A1" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>一旦你定义了一个任务的键，你需要用它完成任务定义。您可以定义自己的任务，或者你可以重新定义现有的任务。无论哪种方式看起来是一样的；用 <code>：=</code> 使任务的键和部分代码相关联：
+</p><pre><code class="prettyprint lang-scala">val sampleStringTask = taskKey[String](&quot;A sample string task.&quot;)
+
+val sampleIntTask = taskKey[Int](&quot;A sample int task.&quot;)
+
+sampleStringTask := System.getProperty(&quot;user.home&quot;)
+
+sampleIntTask := {
+  val sum = 1 + 2
+  println(&quot;sum: &quot; + sum)
+  sum
+}
+</code></pre><p>在<a href="More-About-Settings.html">更多关于设置</a>里有描述，如果任务有依赖关系，你使用 <code>value</code> 来引用值。
+</p><p>有关任务实现最困难的部分往往不是 sbt 专用；任务只是 Scala 代码。困难的部分可能是写你的任务做什么，或者说你正在试图做的。例如，你要格式化 HTML，在这种情况下，你可能需要使用一个 HTML 库（<a href="Using-Plugins.html">您将添加一个库的依赖</a>，以构建定义和编写基于 HTML 库代码）。
+</p><p>sbt 具有一些实用工具库和方便的函数，特别是可以经常使用 API 中的 <a href="../api/index.html#sbt.IO$">IO</a> 来操作文件和目录。
+</p><h3 id="%E4%BD%BF%E7%94%A8%E6%8F%92%E4%BB%B6">使用插件<a href="#%E4%BD%BF%E7%94%A8%E6%8F%92%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>如果你发现你有很多的自定义代码，可以考虑将其移动到插件来重复利用多重构建。
+</p><p>很容易创建一个插件，在[使用插件][sing-Plugins]和[插件][Plugins]中讨论。
+</p><p>本小节是个快速的向导；更多关于自定义任务可以在<a href="../docs/Tasks.html">任务</a>中找到。</p><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>
                         <a href="Full-Def.html"> .scala 构建定义 </a>                        
@@ -53,7 +84,7 @@
       <a name="toc"></a>
       <h4 class="toctitle">Contents</h4>
       <div class="tocbody">
-      <div><a href="index.html">sbt 入门</a></div><ol class="toc"> <li><div><a href="Setup.html">安装 sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">在 Mac 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">在 Windows 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">在Linux上安装sbt</a></div></li><li><div><a href="Manual-Installation.html">手动安装 sbt</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">目录结构</a></div></li><li><div><a href="Running.html">运行</a></div></li><li><div><a href="Basic-Def.html">.sbt 构建定义</a></div></li><li><div><a href="Scopes.html">Scopes</a></div></li><li><div><a href="More-About-Settings.html">更多关于设置</a></div></li><li><div><a href="Library-Dependencies.html">库依赖</a></div></li><li><div><a href="Multi-Project.html">多项目构建</a></div></li><li><div><a href="Using-Plugins.html">使用插件</a></div></li><li><div class="current">自定义设置和任务</div></li><li><div><a href="Full-Def.html">.scala 构建定义</a></div></li><li><div><a href="Summary.html">总结</a></div></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+      <div><a href="index.html">sbt 入门</a></div><ol class="toc"> <li><div><a href="Setup.html">安装 sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">在 Mac 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">在 Windows 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">在Linux上安装sbt</a></div></li><li><div><a href="Manual-Installation.html">手动安装 sbt</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">目录结构</a></div></li><li><div><a href="Running.html">运行</a></div></li><li><div><a href="Basic-Def.html">.sbt 构建定义</a></div></li><li><div><a href="Scopes.html">Scope</a></div></li><li><div><a href="More-About-Settings.html">更多关于设置</a></div></li><li><div><a href="Library-Dependencies.html">库依赖</a></div></li><li><div><a href="Multi-Project.html">多项目构建</a></div></li><li><div><a href="Using-Plugins.html">使用插件</a></div></li><li><div class="current">自定义设置和任务</div></li><li><div><a href="Full-Def.html">.scala 构建定义</a></div></li><li><div><a href="Summary.html">总结</a></div></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
           </div>
         </div>
         <div class="header">

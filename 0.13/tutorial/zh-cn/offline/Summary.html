@@ -41,7 +41,32 @@
           </a>
         <div class="container contentswrapper">
           <div class="span-16 prepend-1 append-1 contents">
-            <h2 id="%E6%80%BB%E7%BB%93">总结<a href="#%E6%80%BB%E7%BB%93" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>翻译中</p><div class="bottom nav end span-16">
+            <h2 id="%E6%80%BB%E7%BB%93">总结<a href="#%E6%80%BB%E7%BB%93" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>这一节将入门指南总结一下。
+</p><p>为了使用 sbt，有一些概念你必须理解。这有一些学习曲线，但是乐观的讲， <em>除了</em> 这些概念对于 sbt 并不多。sbt 用一小部分核心概念来使得它工作。
+</p><p>如果你已经阅读过所有的入门指南，现在你知道了你需要知道什么。
+</p><h3 id="sbt%3A+%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5">sbt: 核心概念<a href="#sbt%3A+%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Scala 基础。不可否认，熟悉 Scala 语法非常有帮助。<a href="http://www.artima.com/shop/programming_in_scala_2ed">Programming in Scala</a>，Scala 的作者写的非常好的介绍。
+</li><li><a href="Basic-Def.html">.sbt 构建定义</a>
+</li><li>你的构建定义是一个大的 <code>Setting</code> 对象列表，sbt 使用 <code>Setting</code> 转换之后的键值对执行 task。
+</li><li>为了创建 <code>Setting</code>，在一个 key 上调用其中的一个方法：<code>:=</code>，<code>+=</code> 或者 <code>++=</code>。
+</li><li>没有可变的状态，至于转换；例如，一个 <code>Setting</code> 将 sbt 的键值对集合转换成一个新的集合。不会就地改变任何代码。
+</li><li>每一个设置都有一个特定类型的值，由 key 决定。
+</li><li><em>tasks</em> 是特殊的设置，通过 key 产生 value 的计算在每次出发 task 的时候都会重新执行。Non-task 计算只会在构建定义的第一次加载时执行。
+</li><li><a href="Scopes.html">Scopes</a>
+</li><li>每一个 key 都可能有多个 value，按照 scope 划分。
+</li><li>scope 会用三个轴：configuration，project，task。
+</li><li>scope 允许你按项目、按 task、按 configuration 有不同的行为。
+</li><li>一个 configuration 是一种类型的构建，例如 <code>Compile</code> 或者 <code>Test</code>。
+</li><li>project 轴也支持 “构建全局” scope。
+</li><li>scopes 回滚或 <em>代理</em> 到更通用的 scope。
+</li><li><a href="Basic-Def.html">.sbt</a> vs. <a href="Full-Def.html">.scala</a> 构建定义
+</li><li>将大部分配置放在 <code>build.sbt</code> 中，但是用 <code>.scala</code> 构建定义文件定义类和更大的 task 实现。
+</li><li>构建定义是一个 sbt 项目，来自于项目目录。
+</li><li><a href="Using-Plugins.html">插件</a>是对构建定义的扩展
+</li><li>通过在 <code>addSbtPlugin</code> 方法在 <code>project/plugins.sbt</code> 中添加插件。（不是在项目基目录下的 <code>build.sbt</code> 中）。
+</li></ul><p>如果你怀疑这些细枝末节中的任何一个，请<a href="../docs/faq.html#getting-help">寻求帮助</a>，返回重新阅读或者在 sbt 的交互式命令行中做实验。
+</p><p>祝你好运！
+</p><h3 id="%E9%99%84%E5%BD%95">附录<a href="#%E9%99%84%E5%BD%95" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>因为 sbt 是一个开源项目，别忘记签出项目<a href="https://github.com/sbt/sbt">源代码</a>！
+</p><div class="bottom nav end span-16">
                         <ul class="language-bar">
         <li><a href="../Summary.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/Summary.html"><span class="lang-item lang-ja">日本語</span></a></li><li><a href="../zh-cn/Summary.html"><span class="lang-item lang-zh-cn">中文 (简体)</span></a></li>
       </ul>
@@ -50,7 +75,7 @@
       <a name="toc"></a>
       <h4 class="toctitle">Contents</h4>
       <div class="tocbody">
-      <div><a href="index.html">sbt 入门</a></div><ol class="toc"> <li><div><a href="Setup.html">安装 sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">在 Mac 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">在 Windows 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">在Linux上安装sbt</a></div></li><li><div><a href="Manual-Installation.html">手动安装 sbt</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">目录结构</a></div></li><li><div><a href="Running.html">运行</a></div></li><li><div><a href="Basic-Def.html">.sbt 构建定义</a></div></li><li><div><a href="Scopes.html">Scopes</a></div></li><li><div><a href="More-About-Settings.html">更多关于设置</a></div></li><li><div><a href="Library-Dependencies.html">库依赖</a></div></li><li><div><a href="Multi-Project.html">多项目构建</a></div></li><li><div><a href="Using-Plugins.html">使用插件</a></div></li><li><div><a href="Custom-Settings.html">自定义设置和任务</a></div></li><li><div><a href="Full-Def.html">.scala 构建定义</a></div></li><li><div class="current">总结</div></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+      <div><a href="index.html">sbt 入门</a></div><ol class="toc"> <li><div><a href="Setup.html">安装 sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">在 Mac 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">在 Windows 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">在Linux上安装sbt</a></div></li><li><div><a href="Manual-Installation.html">手动安装 sbt</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">目录结构</a></div></li><li><div><a href="Running.html">运行</a></div></li><li><div><a href="Basic-Def.html">.sbt 构建定义</a></div></li><li><div><a href="Scopes.html">Scope</a></div></li><li><div><a href="More-About-Settings.html">更多关于设置</a></div></li><li><div><a href="Library-Dependencies.html">库依赖</a></div></li><li><div><a href="Multi-Project.html">多项目构建</a></div></li><li><div><a href="Using-Plugins.html">使用插件</a></div></li><li><div><a href="Custom-Settings.html">自定义设置和任务</a></div></li><li><div><a href="Full-Def.html">.scala 构建定义</a></div></li><li><div class="current">总结</div></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
           </div>
         </div>
         <div class="header">

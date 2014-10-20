@@ -24,7 +24,9 @@
         <script type="text/javascript">
           Pamflet.page.language = 'zh-cn';
         </script>
-        
+        <script type="text/javascript" src="../js/prettify/prettify.js"></script><script type="text/javascript" src="../js/prettify/lang-scala.js"></script><link type="text/css" rel="stylesheet" href="../css/prettify.css"/><script type="text/javascript"><!--
+        window.onload=function() { prettyPrint(); };
+      --></script>
         <link rel="stylesheet" href="../css/custom.css" type="text/css" media="screen, projection"/>
         
         <script type="text/javascript">
@@ -41,10 +43,90 @@
           </a>
         <div class="container contentswrapper">
           <div class="span-16 prepend-1 append-1 contents">
-            <h2 id=".sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">.sbt 构建定义<a href="#.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>翻译中</p><div class="bottom nav span-16">
+            <h2 id=".sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">.sbt 构建定义<a href="#.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>这一小节描述 sbt 构建定义，包含一些“理论”和 <code>build.sbt</code> 的语法。假设你已经知道如何 <a href="Running.html">使用 sbt</a> 并且阅读过入门指南前面的几小节。
+</p><h3 id="vs++%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89"><code>.sbt</code> vs <code>.scala</code> 构建定义<a href="#vs++%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>一个 sbt 构建定义可以包含项目基目录中以 <code>.sbt</code> 结尾的文件，也可以包含项目基目录下 <code>project/</code> 子目录中以 <code>.scala</code> 结尾的文件。
+</p><p>这一小节将讨论适用于绝大多数场景的 <code>.sbt</code> 文件。<code>.scala</code> 文件通常适用于通过与.sbt共享代码，进而定义更复杂的构建。参见 <a href="Full-Def.html">.scala 构建定义</a> （在入门指南的后面）了解
+更多关于 <code>.scala</code> 文件的内容。
+</p><h3 id="%E4%BB%80%E4%B9%88%E6%98%AF%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%EF%BC%9F">什么是构建定义？<a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%EF%BC%9F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 在检查项目和处理构建定义文件之后，形成一个不可变的映射表（immutable map）（一些键值对的集合）来描述构建。
+</p><p>例如，以 <code>name</code> 为 key，它的 value 是它的项目名称。
+</p><p><em>构建定义文件不会直接影响 sbt 的 map。</em>
+</p><p>替而代之的是，构建定义会创建一个庞大的类型为 <code>Setting[T]</code> 的对象列表，<code>T</code> 是映射表中值（value）的类型。一个 <code>Setting</code> 描述的是一次 <em>对映射表（map）的转换</em>，
+像增加一个新的键值对或者附加到一个已经存在的 value 上。（在函数式编程的使用不可变数据结构、值，在 map 上做一次转换后返回一个新的 map 的宗旨下，它不会现场更新旧的 map。）
+</p><p>在 <code>build.sbt</code> 中，你可以想这样为项目名称创建一个 <code>Setting[String]</code>：
+</p><pre><code class="prettyprint lang-scala">name := &quot;hello&quot;
+</code></pre><p>这个 <code>Setting[String]</code> 会通过增加（或着替换） name 作为 key，并给 value 赋值为 <code>&quot;hello&quot;</code> 对 map 做一次转换。转换后的 map 成为 sbt 新的 map。
+</p><p>为了创建这个 map，sbt 会先对所有的设置的列表进行排序，这样可以对同一个 key 的改变一起操作，而且如果 value 依赖于其他的 key，会先处理其他被依赖的 key。
+然后， sbt 会对 <code>Settings</code> 排好序的列表进行遍历，把每一项都按顺序应用到 map 中。
+</p><p>总结：一个构建定义是一个类型为 <code>Setting[T]</code> 的列表，<code>Setting[T]</code> 是会影响到 sbt 保存键值对的 map 的一种转换，<code>T</code> 是每一个 value 的类型。
+</p><h3 id="%E5%A6%82%E4%BD%95%E5%9C%A8+build.sbt+%E4%B8%AD%E5%AE%9A%E4%B9%89%E8%AE%BE%E7%BD%AE">如何在 build.sbt 中定义设置<a href="#%E5%A6%82%E4%BD%95%E5%9C%A8+build.sbt+%E4%B8%AD%E5%AE%9A%E4%B9%89%E8%AE%BE%E7%BD%AE" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> 定义了一个 <code>Seq[Setting[_]]</code>；它是一个以空行分隔的 Scala 表达式的列表，每一个表达式都会成为序列 （sequence）中的一个元素。
+如果你在 <code>.sbt</code> 文件的开头写上 <code>Seq(</code>，在末尾写上 <code>)</code>，并且将每一个空行替换成为一个逗号，你会看到和 <code>.scala</code> 中等效的代码。
+</p><p>下面是一个例子：
+</p><pre><code class="prettyprint lang-scala">name := &quot;hello&quot;
+
+version := &quot;1.0&quot;
+
+scalaVersion := &quot;2.10.3&quot;
+</code></pre><p>每一项 <code>Setting</code> 都定义为一个 Scala 表达式。在 <code>build.sbt</code> 中的表达式是相互独立的，而且它们仅仅是表达式，不是完整的 Scala 语句。这些表达式可以用 <code>val</code>，<code>lazy val</code>，<code>def</code> 声明。
+<code>build.sbt</code> 不允许使用顶层的 <code>object</code> 和<code>class</code>。它们必须写到 <code>project/</code> 目录下的完整的 Scala 源文件中。
+</p><p>在左边，<code>name</code>， <code>version</code> 和 <code>scalaVersion</code> 都是 <em>键（keys）</em>。一个键（key）就是一个 <code>SettingKey[T]</code>，<code>TaskKey[T]</code> 或者 <code>InputKey[T]</code> 的实例，<code>T</code> 是期待的 value 的类型。
+key 的类别将在下面讲解。
+</p><p>键（Keys）有一个返回 <code>Setting[T]</code> 的 <code>:=</code> 方法。你可以像使用 Java 的语法一样调用该方法：
+</p><pre><code class="prettyprint lang-scala">name.:=(&quot;hello&quot;)
+</code></pre><p>但是，Scala 允许这样 <code>name := &quot;hello&quot;</code> 调用（在 Scala 中，一个只有单个参数的方法可以使用任何一种语法调用）。
+</p><p>键（key）<code>name</code> 上的 <code>:=</code> 方法会返回一个 <code>Setting</code>，在这里特指 <code>Setting[String]</code>。<code>String</code> 也出现在 <code>name</code> 自身的类型 <code>SettingKey[String]</code> 中。
+在这个例子中，返回的 <code>Setting[String]</code> 是一个在 sbt 的 map 中增加或者替换键为 <code>name</code> 的转换，赋值为 <code>&quot;hello&quot;</code>。
+</p><p>如果你使用了错误类型的 value，构建定义会编译不通过：
+</p><pre><code class="prettyprint lang-scala">name := 42  // 编译不通过
+</code></pre><h3 id="%E8%AE%BE%E7%BD%AE%E5%BF%85%E9%A1%BB%E4%BB%A5%E7%A9%BA%E8%A1%8C%E5%88%86%E9%9A%94">设置必须以空行分隔<a href="#%E8%AE%BE%E7%BD%AE%E5%BF%85%E9%A1%BB%E4%BB%A5%E7%A9%BA%E8%A1%8C%E5%88%86%E9%9A%94" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>你不能像这样编写 build.sbt： 
+</p><pre><code class="prettyprint lang-scala">// 编译不通过，没有空行
+name := &quot;hello&quot;
+version := &quot;1.0&quot;
+scalaVersion := &quot;2.10.3&quot;
+</code></pre><p>sbt 需要一种分隔符来告诉它一个表达式在哪里结束，下一个表达式从哪里开始。
+</p><p><code>.sbt</code> 文件包含了一个 Scala 表达式列表，不是一个单独的 Scala 程序。这些表达式会被分开然后分别传递给编译器。
+</p><h3 id="%E9%94%AE%EF%BC%88Keys%EF%BC%89">键（Keys）<a href="#%E9%94%AE%EF%BC%88Keys%EF%BC%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="%E7%B1%BB%E5%9E%8B%EF%BC%88Types%EF%BC%89">类型（Types）<a href="#%E7%B1%BB%E5%9E%8B%EF%BC%88Types%EF%BC%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>有三种类型的 key：
+</p><ul><li><code>SettingKey[T]</code>: 一个 key 对应一个只计算一次的 value（这个值在加载项目的时候计算，然后一直保存着）。
+</li><li><code>TaskKey[T]</code>: 一个 key 对应一个称之为 <em>task</em> 的 value，每次都会重新计算，可能存在潜在的副作用。
+</li><li><code>InputKey[T]</code>: 一个可以对应一个可以接收命令行参数的 task。详细内容参见 <a href="../docs/Input-Tasks.html">Input Tasks</a>。
+</li></ul><h4 id="%E5%86%85%E7%BD%AE%E7%9A%84+Keys">内置的 Keys<a href="#%E5%86%85%E7%BD%AE%E7%9A%84+Keys" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>内置的 keys 实际上是对象 <a href="../sxr/sbt/Keys.scala.html">Keys</a> 的字段。一个 <code>build.sbt</code> 会隐式包含 <code>import sbt.Keys._</code>，所以可以通过 <code>name</code> 取到 <code>sbt.Keys.name</code>。
+</p><h4 id="%E8%87%AA%E5%AE%9A%E4%B9%89+Keys">自定义 Keys<a href="#%E8%87%AA%E5%AE%9A%E4%B9%89+Keys" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>可以通过它们各自的创建方法：<code>settingKey</code>，<code>taskKey</code> 和 <code>inputKey</code> 自定义 keys。每个方法都期待 key 和 value 的类型以及一段描述。
+key 的名称取自于赋给 <code>val</code> 变量的值。例如，给一个新的 task <code>hello</code> 定义一个 key，
+</p><pre><code class="prettyprint lang-scala">lazy val hello = taskKey[Unit](&quot;一个 task 示例&quot;)
+</code></pre><p>这里我们用事实说明了 <code>.sbt</code> 文件除了可以包含设置（settings），还可以包含 <code>val</code>s 和 <code>def</code>s。所有这些定义都会在设置（settings）之前被计算而跟它们在文件里定义的位置无关。
+<code>val</code>s 和 <code>def</code>s 必须以空行和设置（settings）分隔。
+</p><blockquote><p><strong>注意：</strong> 通常，使用 lazy val 而不是 val 可以避免初始化时顺序的问题。
+</p></blockquote><h4 id="Task+vs+Setting+keys">Task vs Setting keys<a href="#Task+vs+Setting+keys" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>TaskKey[T]</code> 是用来定义 <em>task</em> 的。Tasks 就是像 <code>compile</code> 或者 <code>package</code> 这样的操作。它们可能返回 <code>Unit</code>（<code>Unit</code> 在 Scala 中表示 <code>void</code>），或者可能返回 task 相关的返回值，
+例如 <code>package</code> 就是一个类型为 <code>TaskKey[File]</code> 的 task， 它的返回值是它生成的 jar 文件。
+</p><p>每当你执行一个 task，例如在 sbt 命令行中输入 <code>compile</code>，sbt 只会将涉及到的每个 task 执行一次。
+</p><p>sbt 描述项目的 map 会将设置（setting）保存为固定的字符串，比如像 name；但是它不得不保存一个 task 的可执行的代码，比如像 <code>compile</code> — 即使这段可执行的代码最终返回一个字符串，它也会每次都重新执行。
+</p><p><em>一个给定的 key 总是指一个 task 或者 一个普通的设置（setting）。</em> 也就是说，“taskiness” (无论是否每次都重新执行）是 key 的一个属性（property），而不是一个值（value）。
+</p><h3 id="%E5%AE%9A%E4%B9%89+tasks+%E5%92%8C+settings">定义 tasks 和 settings<a href="#%E5%AE%9A%E4%B9%89+tasks+%E5%92%8C+settings" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>你可以使用 <code>:=</code> 给一个 setting 赋一个值或者给一个 task 赋一种计算。对于 setting，这个值 value 只会在项目加载的时候执行一次。对于 task，这个计算会在 task 每次执行的时候重新计算。
+</p><p>例如，实现前面一部分中的 <code>hello</code> task：
+</p><pre><code class="prettyprint lang-scala">hello := { println(&quot;Hello!&quot;) }
+</code></pre><p>我们已经在定义项目名称时见过定义 settings 的例子，
+</p><pre><code class="prettyprint lang-scala">name := &quot;hello&quot;
+</code></pre><h4 id="Tasks+%E5%92%8C+Settings+%E7%9A%84%E7%B1%BB%E5%9E%8B">Tasks 和 Settings 的类型<a href="#Tasks+%E5%92%8C+Settings+%E7%9A%84%E7%B1%BB%E5%9E%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>从类型系统的角度来讲，通过 task key 创建的 <code>Setting</code> 和通过 setting key 创建的 <code>Setting</code> 有稍微不同。<code>taskKey := 42</code> 的类型是 <code>Setting[Task[T]]</code> 而 <code>settingKey := 42</code>
+的类型是 <code>Setting[T]</code>。这对于绝大多数情况并无影响；task key 在执行的时候仍然创建一个类型为 <code>T</code> 的 value。
+</p><p><code>T</code> 类型和 <code>Task[T]</code> 类型的不同的含义是：一个 setting 不能依赖一个 task，因为一个 setting 只会在项目加载的时候计算一次，不会重新计算。更多关于 <a href="More-About-Settings.html">更多关于设置</a> 的内容很快就会讲到。
+</p><h3 id="sbt+%E4%BA%A4%E4%BA%92%E6%A8%A1%E5%BC%8F%E4%B8%AD%E7%9A%84+Keys">sbt 交互模式中的 Keys<a href="#sbt+%E4%BA%A4%E4%BA%92%E6%A8%A1%E5%BC%8F%E4%B8%AD%E7%9A%84+Keys" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在 sbt 的交互模式下，你可以输入任何 task 的 name 来执行该 task。这就是为什么输入 <code>compile</code> 就是执行 <code>compile</code> task。<code>compile</code> 就是该 task 的 key。
+</p><p>如果你输入的是一个 setting key 的 name 而不是一个 task key 的 name，setting key 的值（value）会显示出来。输入一个 task key 的 name 会执行该 task 但是不会显示执行结果的值（value）；输入 <code>show &lt;task name&gt;</code> 而不是
+简单的 <code>&lt;task name&gt;</code> 可以看到该 task 的执行结果。对于 key name 的一个约定就是使用 <code>camelCase</code>，这样命令行里的 name 和 Scala 的标识符就一样了。
+</p><p>了解更多关于任何 key 内容，可以在 sbt 交互模式的命令行里输入 <code>inspect &lt;keyname&gt;</code>。虽然 <code>inspect</code> 显示的一些信息没有意义，但是在顶部会显示 setting 的 value 的类型和 setting 的简介。
+</p><h3 id="build.sbt+%E4%B8%AD%E7%9A%84%E5%BC%95%E5%85%A5">build.sbt 中的引入<a href="#build.sbt+%E4%B8%AD%E7%9A%84%E5%BC%95%E5%85%A5" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>你可以将引入语句放在 <code>build.sbt</code> 的顶部；它们可以不用空行分隔。
+</p><p>下面是一些默认的引入：
+</p><pre><code class="prettyprint lang-scala">import sbt._
+import Process._
+import Keys._
+</code></pre><p>（另外，如果你有 <a href="Full-Def.html">.scala 文件</a>，这些文件中任何 <code>Build</code> 或者 <code>Plugin</code> 对象你的内容都会被引入。更多关于这些的内容放在 <a href="Full-Def.html">.scala 构建定义</a>。）
+</p><h3 id="%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96%E5%BA%93">添加依赖库<a href="#%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96%E5%BA%93" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>有两种方式添加第三方的依赖。一种是将 jar 文件 放入 <code>lib/</code>（非托管的依赖）中，另一种是添加托管的依赖，在 <code>build.sbt</code> 中像这样：
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot;
+</code></pre><p>就是像这样添加版本为 10.4.1.3 的 Apache Derby 库作为依赖。
+</p><p>key <code>libraryDependencies</code> 包含两个方面的复杂性：<code>+=</code> 方法而不是 <code>:=</code>，第二个就是 <code>%</code> 方法。<code>+=</code> 方法是将新的值附加该 key 的旧值后面而不是替换它，这将在 
+<a href="More-About-Settings.html">更多关于设置</a> 中介绍。<code>%</code> 方法是用来从字符串构造 Ivy 模块 ID 的，将在 <a href="Library-Dependencies.html">库依赖</a> 中介绍。
+</p><p>目前我们跳过了库依赖的一些细节，直到入门指南的后面部分。后面有一节 <a href="Library-Dependencies.html">库依赖</a> 来介绍这些内容。</p><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>
-                        <a href="Scopes.html"> Scopes </a>                        
+                        <a href="Scopes.html"> Scope </a>                        
                         <ul class="language-bar">
         <li><a href="../Basic-Def.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/Basic-Def.html"><span class="lang-item lang-ja">日本語</span></a></li><li><a href="../es/Basic-Def.html"><span class="lang-item lang-es">Español</span></a></li><li><a href="../zh-cn/Basic-Def.html"><span class="lang-item lang-zh-cn">中文 (简体)</span></a></li>
       </ul>
@@ -53,7 +135,7 @@
       <a name="toc"></a>
       <h4 class="toctitle">Contents</h4>
       <div class="tocbody">
-      <div><a href="index.html">sbt 入门</a></div><ol class="toc"> <li><div><a href="Setup.html">安装 sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">在 Mac 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">在 Windows 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">在Linux上安装sbt</a></div></li><li><div><a href="Manual-Installation.html">手动安装 sbt</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">目录结构</a></div></li><li><div><a href="Running.html">运行</a></div></li><li><div class="current">.sbt 构建定义</div></li><li><div><a href="Scopes.html">Scopes</a></div></li><li><div><a href="More-About-Settings.html">更多关于设置</a></div></li><li><div><a href="Library-Dependencies.html">库依赖</a></div></li><li><div><a href="Multi-Project.html">多项目构建</a></div></li><li><div><a href="Using-Plugins.html">使用插件</a></div></li><li><div><a href="Custom-Settings.html">自定义设置和任务</a></div></li><li><div><a href="Full-Def.html">.scala 构建定义</a></div></li><li><div><a href="Summary.html">总结</a></div></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+      <div><a href="index.html">sbt 入门</a></div><ol class="toc"> <li><div><a href="Setup.html">安装 sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">在 Mac 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">在 Windows 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">在Linux上安装sbt</a></div></li><li><div><a href="Manual-Installation.html">手动安装 sbt</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">目录结构</a></div></li><li><div><a href="Running.html">运行</a></div></li><li><div class="current">.sbt 构建定义</div></li><li><div><a href="Scopes.html">Scope</a></div></li><li><div><a href="More-About-Settings.html">更多关于设置</a></div></li><li><div><a href="Library-Dependencies.html">库依赖</a></div></li><li><div><a href="Multi-Project.html">多项目构建</a></div></li><li><div><a href="Using-Plugins.html">使用插件</a></div></li><li><div><a href="Custom-Settings.html">自定义设置和任务</a></div></li><li><div><a href="Full-Def.html">.scala 构建定义</a></div></li><li><div><a href="Summary.html">总结</a></div></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
           </div>
         </div>
         <div class="header">
