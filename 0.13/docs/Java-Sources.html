@@ -77,7 +77,23 @@ ensure complete isolation between Java sources and Scala sources because
 they share the same output directory. So, previously compiled classes
 not involved in the current recompilation may be picked up. A clean
 compile will always provide full checking, however.
-</p><p>By default, sbt includes <code>src/main/scala</code> and <code>src/main/java</code> in its
+</p><h3 id="Known+issues+in+mixed+mode+compilation">Known issues in mixed mode compilation<a href="#Known+issues+in+mixed+mode+compilation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The Scala compiler does not identify compile-time constant variables
+(Java specification <a href="http://docs.oracle.com/javase/specs/jls/se8/html/jls-4.html#jls-4.12.4">4.12.4</a>)
+as such when parsing a Java file from source.
+This issue has several symptoms, described in the Scala ticket <a href="https://issues.scala-lang.org/browse/SI-5333">SI-5333</a>:
+</p><ol><li>The selection of a constant variable is rejected when used as an argument
+to a Java annotation (a compile-time constant expression is required).
+</li><li>The selection of a constant variable is not replaced by its value, but compiled
+as an actual field load (the
+<a href="http://www.scala-lang.org/files/archive/spec/2.11/04-basic-declarations-and-definitions.html#value-declarations-and-definitions">Scala specification 4.1</a>
+defines that constant expressions should be replaced by their values).
+</li><li>Exhaustiveness checking does not work when pattern matching on the values of a
+Java enumeration (<a href="https://issues.scala-lang.org/browse/SI-8700">SI-8700</a>).
+</li></ol><p>Since Scala 2.11.4, a similar issue arises when using a Java-defined annotation in
+a Scala class. The Scala compiler does not recognize <code>@Retention</code> annotations when
+parsing the annotation <code>@interface</code> from source and therefore emits the annotation
+with visibility <code>RUNTIME</code> (<a href="https://issues.scala-lang.org/browse/SI-8928">SI-8928</a>).
+</p><h3 id="Ignoring+the+Scala+source+directories">Ignoring the Scala source directories<a href="#Ignoring+the+Scala+source+directories" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>By default, sbt includes <code>src/main/scala</code> and <code>src/main/java</code> in its
 list of unmanaged source directories. For Java-only projects, the
 unnecessary Scala directories can be ignored by modifying
 <code>unmanagedSourceDirectories</code>:
