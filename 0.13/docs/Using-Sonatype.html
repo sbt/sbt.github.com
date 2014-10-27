@@ -60,7 +60,7 @@ line is not needed.*
 </code></pre><p>If your PGP key has not yet been distributed to the keyserver pool,
 i.e., you’ve just generated it, you’ll need to publish it. You can do so
 using the <a href="http://scala-sbt.org/sbt-pgp">sbt-pgp</a> plugin:
-</p><pre><code class="">pgp-cmd send-key keyname hkp://pool.sks-keyservers.net/
+</p><pre><code class="">pgp-cmd send-key keyname hkp://pool.sks-keyservers.net
 </code></pre><p>(where keyname is the name or email address used when creating the key or
 hexadecimal identifier for the key.)
 </p><p>If you see no output from sbt-pgp then the key name specified was not
@@ -164,8 +164,8 @@ Please enter your PGP passphrase&gt; ***********
 [info]  published scala-arm_2.9.1 to https://oss.sonatype.org/service/local/staging/deploy/maven2/com/jsuereth/scala-arm_2.9.1/1.2/scala-arm_2.9.1-1.2-javadoc.jar
 [success] Total time: 9 s, completed Jan 23, 2012 1:17:03 PM
 </code></pre><p>After publishing you have to follow the
-<a href="https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide#SonatypeOSSMavenRepositoryUsageGuide-8.ReleaseIt">Release workflow of nexus</a>.
-<a href="https://github.com/xerial/sbt-sonatype">sbt-sonatype plugin</a> allows
+<a href="http://central.sonatype.org/pages/releasing-the-deployment.html">release workflow of Nexus</a>.
+The <a href="https://github.com/xerial/sbt-sonatype">sbt-sonatype plugin</a> allows
 the release workflow procedures to be performed directly from sbt.
 </p><blockquote><ul><li>Note: Staged releases allow testing across large projects of
 independent releases before pushing the full project.*
