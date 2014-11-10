@@ -2869,13 +2869,13 @@ The Getting Started Guide (see
 settings; this page describes interacting with them and exploring them
 at the command line.
 </p><h3 id="Selecting+commands%2C+tasks%2C+and+settings">Selecting commands, tasks, and settings<a href="#Selecting+commands%2C+tasks%2C+and+settings" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A fully-qualified reference to a setting or task looks like:
-</p><pre><code class="">{&lt;build-uri&gt;}&lt;project-id&gt;/config:inkey::key
+</p><pre><code class="">{&lt;build-uri&gt;}&lt;project-id&gt;/config:intask::key
 </code></pre><p>This “scoped key” reference is used by commands like <code>last</code> and
 <code>inspect</code> and when selecting a task to run. Only <code>key</code> is usually
 required by the parser; the remaining optional pieces select the scope.
 These optional pieces are individually referred to as scope axes. In the
 above description, <code>{&lt;build-uri&gt;}</code> and <code>&lt;project-id&gt;/</code> specify the
-project axis, <code>config:</code> is the configuration axis, and <code>inkey</code> is the
+project axis, <code>config:</code> is the configuration axis, and <code>intask</code> is the
 task-specific axis. Unspecified components are taken to be the current
 project (project axis) or auto-detected (configuration and task axes).
 An asterisk (<code>*</code>) is used to explicitly refer to the <code>Global</code> context,
@@ -8637,7 +8637,7 @@ object Demo extends Build {
     BuildLoader.transform(demoTransformer) ::
     Nil
 
-  def demoBuilder: BuildLoader.TransformInfo =&gt; BuildUnit = ...
+  def demoTransformer: BuildLoader.TransformInfo =&gt; BuildUnit = ...
 
 }
 </code></pre><h4 id="API+Documentation">API Documentation<a href="#API+Documentation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Relevant API documentation for custom transformers:
@@ -8685,7 +8685,7 @@ like a local directory.
   val newcp = 
     for( (proj, deps) &lt;- deps.cp) yield
       (proj, deps map substitute)
-  new BuildDependencies(newcp, deps.aggregate)
+  BuildDependencies(newcp, deps.aggregate)
 }
 </code></pre><p>It is not limited to such basic translations, however. The configuration
 a dependency is defined in may be modified and dependencies may be added

@@ -197,7 +197,7 @@ object Demo extends Build {
     BuildLoader.transform(demoTransformer) ::
     Nil
 
-  def demoBuilder: BuildLoader.TransformInfo =&gt; BuildUnit = ...
+  def demoTransformer: BuildLoader.TransformInfo =&gt; BuildUnit = ...
 
 }
 </code></pre><h4 id="API+Documentation">API Documentation<a href="#API+Documentation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Relevant API documentation for custom transformers:
@@ -245,7 +245,7 @@ like a local directory.
   val newcp = 
     for( (proj, deps) &lt;- deps.cp) yield
       (proj, deps map substitute)
-  new BuildDependencies(newcp, deps.aggregate)
+  BuildDependencies(newcp, deps.aggregate)
 }
 </code></pre><p>It is not limited to such basic translations, however. The configuration
 a dependency is defined in may be modified and dependencies may be added
