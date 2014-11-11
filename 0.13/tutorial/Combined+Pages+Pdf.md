@@ -316,16 +316,15 @@ For example, if your project is in the directory `hello`, in
 `hello/build.sbt` you might write:
 
 ```scala
-name := "hello"
-
-version := "1.0"
-
-scalaVersion := "2.10.3"
+lazy val root = (project in file(".")).
+  settings(
+    name := "hello",
+    version := "1.0",
+    scalaVersion := "2.11.4"
+  )
 ```
 
-Notice the blank line between every item. This isn't just for show;
-they're actually required in order to separate each item. In
-[.sbt build definition][Basic-Def] you'll learn more about how to write
+In [.sbt build definition][Basic-Def] you'll learn more about how to write
 a `build.sbt` file.
 
 If you plan to package your project in a jar, you will want to set at
@@ -610,23 +609,36 @@ This page describes sbt build definitions, including some "theory" and
 the syntax of `build.sbt`. It assumes you know how to [use sbt][Running]
 and have read the previous pages in the Getting Started Guide.
 
-### `.sbt` vs `.scala` Build Definition
+### Three Flavors of Build Definition
 
-An sbt build definition can contain files ending in `.sbt`, located in the
-base directory of a project, and files ending in `.scala`, located in the
-`project/` subdirectory of the base directory.
+There are three flavors of build definition:
 
-This page discusses `.sbt` files, which are suitable for most cases. The
-`.scala` files are typically used for sharing code across `.sbt` files and
-for more complex build definitions. See
-[.scala build definition][Full-Def] (later in Getting Started) for more
-on `.scala` files.
+1. Multi-project `.sbt` build definition
+2. Bare `.sbt` build definition
+3. `.scala` build definition
+
+This page discusses the newest multi-project `.sbt` build definition, which combines the strength
+of the two older flavors, and is suitable for all cases.
+You might come across the other older flavors when dealing with builds in the wild.
+See [bare .sbt build definition][Bare-Def] and [.scala build definition][Full-Def] (later in Getting Started) for more
+on other flavors.
+
+In addition, a build definition can contain files ending in `.scala`, located in the
+`project/` subdirectory of the base directory to define commonly used functions and values.
 
 ### What is a Build Definition?
 
-After examining a project and processing build definition files, sbt
-ends up with an immutable map (set of key-value pairs) describing the
-build.
+After examining a set of directories and processing build definition files, sbt
+ends up with `Project` definitions.
+
+In `build.sbt` you might create a [Project](../api/sbt/Project.html) definition of
+the project located in the current directory like this:
+
+```scala
+lazy val root = (project in file("."))
+```
+
+Each project is associated with an immutable map (set of key-value pairs) describing the project.
 
 For example, one key is `name` and it maps to a string value, the name of
 your project.
@@ -640,11 +652,14 @@ pair or appending to an existing value. (In the spirit of functional
 programming with immutable data structures and values, a transformation
 returns a new map -- it does not update the old map in-place.)
 
-In `build.sbt`, you might create a `Setting[String]` for the name of your
-project like this:
+Here is how you associate the `Setting[String]` for the name of
+the project located in the current directory:
 
 ```scala
-name := "hello"
+lazy val root = (project in file(".")).
+  settings(
+    name := "hello"
+  )
 ```
 
 This `Setting[String]` transforms the map by adding (or replacing) the
@@ -657,31 +672,30 @@ other keys are processed after the keys they depend on. Then sbt walks
 over the sorted list of `Settings` and applies each one to the map in
 turn.
 
-Summary: A build definition defines a list of `Setting[T]`, where a
+Summary: A build definition defines `Project`s with a list of `Setting[T]`, where a
 `Setting[T]` is a transformation affecting sbt's map of key-value pairs
 and `T` is the type of each value.
 
 ### How build.sbt defines settings
 
-`build.sbt` defines a `Seq[Setting[_]]`; it's a list of Scala expressions,
-separated by blank lines, where each one becomes one element in the
-sequence. If you put `Seq(` in front of the `.sbt` file and `)` at the end and
-replace the blank lines with commas, you'd be looking at the equivalent
-`.scala` code.
+`build.sbt` defines a `Project`, which holds a list of Scala expressions called `settings`.
 
 Here's an example:
 
 ```scala
-name := "hello"
-
-version := "1.0"
-
-scalaVersion := "2.10.3"
+lazy val root = (project in file(".")).
+  settings(
+    name := "hello",
+    version := "1.0",
+    scalaVersion := "2.11.4"
+  )
 ```
 
 Each `Setting` is defined with a Scala expression. The expressions in
-`build.sbt` are independent of one another, and they are expressions,
-rather than complete Scala statements. These expressions may be
+`settings` are independent of one another, and they are expressions,
+rather than complete Scala statements.
+
+`build.sbt` may also be
 interspersed with `val`s, `lazy val`s, and `def`s. Top-level `object`s and
 `class`es are not allowed in `build.sbt`. Those should go in the `project/`
 directory as full Scala source files.
@@ -694,7 +708,10 @@ Keys have a method called `:=`, which returns a `Setting[T]`. You could use
 a Java-like syntax to call the method:
 
 ```scala
-name.:=("hello")
+lazy val root = (project in file(".")).
+  settings(
+    name.:=("hello")
+  )
 ```
 
 But Scala allows `name := "hello"` instead (in Scala, a single-parameter
@@ -709,26 +726,11 @@ the value `"hello"`.
 If you use the wrong value type, the build definition will not compile:
 
 ```scala
-name := 42  // will not compile
+lazy val root = (project in file(".")).
+  settings(
+    name := 42  // will not compile
+  )
 ```
-
-### Settings must be separated by blank lines
-
-You can't write a build.sbt like this:
-
-```scala
-// will NOT compile, no blank lines
-name := "hello"
-version := "1.0"
-scalaVersion := "2.10.3"
-```
-
-sbt needs some kind of delimiter to tell where one expression stops and
-the next begins.
-
-`.sbt` files contain a list of Scala expressions, not a single Scala
-program. These expressions have to be split up and passed to the
-compiler individually.
 
 ### Keys
 
@@ -799,14 +801,22 @@ executed.
 For example, to implement the `hello` task from the previous section, :
 
 ```scala
-hello := { println("Hello!") }
+lazy val hello = taskKey[Unit]("An example task")
+
+lazy val root = (project in file(".")).
+  settings(
+    hello := { println("Hello!") }
+  )
 ```
 
 We already saw an example of defining settings when we defined the
 project's name,
 
 ```scala
-name := "hello"
+lazy val root = (project in file(".")).
+  settings(
+    name := "hello"
+  )
 ```
 
 #### Types for tasks and settings
@@ -864,7 +874,11 @@ to drop jars in `lib/` (unmanaged dependencies) and the other is to add
 managed dependencies, which will look like this in `build.sbt`:
 
 ```scala
-libraryDependencies += "org.apache.derby" % "derby" % "10.4.1.3"
+lazy val root = (project in file(".")).
+  settings(
+    name := "hello",
+    libraryDependencies += "org.apache.derby" % "derby" % "10.4.1.3"
+  )
 ```
 
 This is how you add a managed dependency on the Apache Derby library,
@@ -1152,7 +1166,10 @@ If you create a setting in `build.sbt` with a bare key, it will be scoped
 to the current project, configuration `Global` and task `Global`:
 
 ```scala
-name := "hello"
+lazy val root = (project in file(".")).
+  settings(
+    name := "hello"
+  )
 ```
 
 Run sbt and `inspect name` to see that it's provided by
@@ -1160,13 +1177,6 @@ Run sbt and `inspect name` to see that it's provided by
 project is `{file:/home/hp/checkout/hello/}default-aea33a`, the
 configuration is `*` (meaning global), and the task is not shown (which
 also means global).
-
-<!-- TODO: Fix this. -->
-
-`build.sbt` always defines settings for a single project, so the "current
-project" is the project you're defining in that particular `build.sbt`.
-(For [multi-project builds][Multi-Project], each project has its own
-`build.sbt`.)
 
 Keys have an overloaded method called in used to set the scope. The
 argument to in can be an instance of any of the scope axes. So for
@@ -2442,6 +2452,50 @@ in this order:
 
 Later settings override earlier ones. The entire list of settings forms
 the build definition.
+
+
+  [More-About-Settings]: More-About-Settings.html
+  [Full-Def]: Full-Def.html
+  [Basic-Def]: Basic-Def.html
+
+Bare .sbt build definition
+--------------------------
+
+This page describes an old style of `.sbt` build definition.
+The current recommendation is to use [Multi-project .sbt build definition][Basic-Def].
+
+### What is a bare .sbt build definition
+
+Unlike [Multi-project .sbt build definition][Basic-Def] and [.scala build definition][Full-Def]
+that explicitly deftine a [Project](../api/sbt/Project.html) definition,
+bare build definition implicitly defines one based on the location of the `.sbt` file.
+
+Instead of defining `Project`s, bare `.sbt` build definition consists of
+a list of `Setting[_]` expressions.
+
+```scala
+name := "hello"
+
+version := "1.0"
+
+scalaVersion := "2.11.4"
+```
+
+### (Pre 0.13.7) Settings must be separated by blank lines
+
+**Note**: This blank line delimitation will no longer be needed after 0.13.7.
+
+You can't write a bare build.sbt like this:
+
+```scala
+// will NOT compile, no blank lines
+name := "hello"
+version := "1.0"
+scalaVersion := "2.10.3"
+```
+
+sbt needs some kind of delimiter to tell where one expression stops and
+the next begins.
 
 
   [Basic-Def]: Basic-Def.html
