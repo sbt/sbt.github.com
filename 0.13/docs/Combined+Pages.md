@@ -169,6 +169,7 @@ your plugin to the list.
 -   sbt-multi-jvm: <https://github.com/typesafehub/sbt-multi-jvm>
 -   sbt-testng-interface: <https://github.com/sbt/sbt-testng-interface>
 -   sbt-doctest: <https://github.com/tkawachi/sbt-doctest>
+-   sbt-cassandra-plugin: <https://github.com/hochgi/sbt-cassandra-plugin>
 
 #### Code coverage plugins
 
@@ -7372,6 +7373,7 @@ D.  There is no need to mark SNAPSHOT dependencies as `changing()`
   [Resolvers]: Resolvers.html
   [Publishing]: Publishing.html
   [Cross-Build]: Cross-Build.html
+  [Cached-Resolution]: Cached-Resolution.html
 
 Library Management
 ------------------
@@ -7772,70 +7774,56 @@ conflictManager := ConflictManager.strict
 ```
 
 With this set, any conflicts will generate an error. To resolve a
-conflict,
+conflict, you must configure a dependency override, which is explained in a later section.
 
-> -   configure a dependency override if the conflict is for a
->     transitive dependency
-> -   force the revision if it is a direct dependency
+<a name="eviction-warning"></a>
 
-Both are explained in the following sections.
+##### Eviction warning
 
-##### Forcing a revision
-
-The following direct dependencies will introduce a conflict on the log4j
-version because spark requires log4j 1.2.16.
+The following direct dependencies will introduce a conflict on the akka-actor
+version because banana-rdf requires akka-actor 2.1.4.
 
 ```scala
 libraryDependencies ++= Seq(
-  "org.spark-project" %% "spark-core" % "0.5.1",
-  "log4j" % "log4j" % "1.2.14"
+  "org.w3" %% "banana-rdf" % "0.4",
+  "com.typesafe.akka" %% "akka-actor" % "2.3.7",
 )
 ```
 
-The default conflict manager will select the newer version of log4j,
-1.2.16. This can be confirmed in the output of `show update`, which
-shows the newer version as being selected and the older version as not
-selected:
+The default conflict manager will select the newer version of akka-actor,
+2.3.7. This can be confirmed in the output of `show update`, which
+shows the newer version as being selected and the older version as evicted.
 
 ```
 > show update
 [info] compile:
-[info]    log4j:log4j:1.2.16: ...
+
+[info]  com.typesafe.akka:akka-actor_2.10
+[info]    - 2.3.7
 ...
-[info]    (EVICTED) log4j:log4j:1.2.14
+[info]    - 2.1.4
 ...
+[info]      evicted: true
+[info]      evictedReason: latest-revision
+...
+[info]      callers: org.w3:banana-rdf_2.10:0.4
 ```
 
-To say that we prefer the version we've specified over the version from
-indirect dependencies, use `force()`:
-
-```scala
-libraryDependencies ++= Seq(
-  "org.spark-project" %% "spark-core" % "0.5.1",
-  "log4j" % "log4j" % "1.2.14" force()
-)
-```
-
-The output of `show update` is now reversed:
+Furthermore, the binary version compatibility of the akka-actor 2.1.4 and 2.3.7 are not guaranteed since the second segment has bumped up. sbt 0.13.6+ detects this automatically and prints out the following warning:
 
 ```
-> show update
-[info] compile:
-[info]    log4j:log4j:1.2.14: ...
-...
-[info]    (EVICTED) log4j:log4j:1.2.16
-...
+[warn] There may be incompatibilities among your library dependencies.
+[warn] Here are some of the libraries that were evicted:
+[warn]  * com.typesafe.akka:akka-actor_2.10:2.1.4 -> 2.3.7
+[warn] Run 'evicted' to see detailed eviction warnings
 ```
 
-**Note:** this is an Ivy-only feature and cannot be included in a
-published pom.xml.
+Since akka-actor 2.1.4 and 2.3.7 are not binary compatible, the only way to fix this is to downgrade your dependency to akka-actor 2.1.4, or upgrade banana-rdf to use akka-actor 2.3.
 
-##### Forcing a revision without introducing a dependency
+##### Overriding a version
 
-Use of the `force()` method described in the previous section requires
-having a direct dependency. However, it may be desirable to force a
-revision without introducing that direct dependency. Ivy provides
-overrides for this and in sbt, overrides are configured in sbt with the
+For binary compatible conflicts, sbt provides dependency overrides.
+They are configured with the
 `dependencyOverrides` setting, which is a set of `ModuleIDs`. For
 example, the following dependency definitions conflict because spark
 uses log4j 1.2.16 and scalaxb uses log4j 1.2.17:
@@ -7877,6 +7865,34 @@ revision to be 1.2.16. This is confirmed by the output of `show update`:
 
 > **Note:** this is an Ivy-only feature and will not be included in a
 > published pom.xml.
+
+##### Unresolved dependencies error
+
+Adding the following dependency to your project will result to an unresolved dependencies error of vpp 2.2.1:
+
+```scala
+libraryDependencies += "org.apache.cayenne.plugins" % "maven-cayenne-plugin" % "3.0.2"
+```
+
+sbt 0.13.6+ will try to reconstruct dependencies tree when it fails to resolve a managed dependency. This is an approximation, but it should help you figure out where the problematic dependency is coming from. When possible sbt will display the source position next to the modules:
+
+```
+[warn]  ::::::::::::::::::::::::::::::::::::::::::::::
+[warn]  ::          UNRESOLVED DEPENDENCIES         ::
+[warn]  ::::::::::::::::::::::::::::::::::::::::::::::
+[warn]  :: foundrylogic.vpp#vpp;2.2.1: not found
+[warn]  ::::::::::::::::::::::::::::::::::::::::::::::
+[warn] 
+[warn]  Note: Unresolved dependencies path:
+[warn]      foundrylogic.vpp:vpp:2.2.1
+[warn]        +- org.apache.cayenne:cayenne-tools:3.0.2
+[warn]        +- org.apache.cayenne.plugins:maven-cayenne-plugin:3.0.2 (/foo/some-test/build.sbt#L28)
+[warn]        +- d:d_2.10:0.1-SNAPSHOT
+```
+
+##### Cached resolution
+
+See [Cached resolution][Cached-Resolution] for performance improvement option.
 
 ##### Publishing
 
@@ -8015,6 +8031,23 @@ classpathConfiguration in Test := Test
 
 classpathConfiguration in Runtime := Runtime
 ```
+
+##### Forcing a revision (Not recommended)
+
+**Note**: Forcing can create logical inconsistencies so it's no longer recommended.
+
+To say that we prefer the version we've specified over the version from
+indirect dependencies, use `force()`:
+
+```scala
+libraryDependencies ++= Seq(
+  "org.spark-project" %% "spark-core" % "0.5.1",
+  "log4j" % "log4j" % "1.2.14" force()
+)
+```
+
+**Note:** this is an Ivy-only feature and cannot be included in a
+published pom.xml.
 
 ##### Known limitations
 
@@ -8729,6 +8762,93 @@ a dependency filter, which can then be provided to the
 `UpdateReport.matches` method. Alternatively, the `UpdateReport.select`
 method may be used, which is equivalent to calling `matches` with its
 arguments combined with `&&`.
+
+
+  [1711]: https://github.com/sbt/sbt/issues/1711
+  [Library-Management]: Library-Management.html
+
+Cached resolution
+-----------------
+
+Cached resolution is an **experimental** feature of sbt added since 0.13.7 to address the scalability performance of dependency resolution.
+
+### Setup
+
+To set up cached resolution include the following setting in your project's build:
+
+```scala
+updateOptions := updateOptions.value.withCachedResolution(true)
+```
+
+### Dependency as a graph
+
+A project declares its own library dependency using `libaryDependencies` setting. The libraries you added also bring in their transitive dependencies. For example, your project may depend on dispatch-core 0.11.2; dispatch-core 0.11.2 depends on async-http-client 1.8.10; async-http-client 1.8.10 depends on netty 3.9.2.Final, and so forth. If we think of each library to be a node with arrows going out to dependent nodes, we can think of the entire dependencies to be a graph -- specifically a [directed acyclic graph](http://en.wikipedia.org/wiki/Directed_acyclic_graph).
+
+This graph-like structure, which was adopted from Apache Ivy, allows us to define [override rules and exclusions][Library-Management] transitively, but as the number of the node increases, the time it takes to resolve dependencies grows significantly. See [Motivation](#motivation) section later in this page for the full description.
+
+### Cached resolution
+
+Cached resolution feature is akin to incremental compilation, which only recompiles the sources that have been changed since the last `compile`. Unlike Scala compiler, Ivy does not have the concept of separate compilation, so that needed to be implemented.
+
+Instead of resolving the full dependency graph, cached resolution feature creates  minigraphs -- one for each direct dependency appearing in all related subprojects. These minigraphs are resolved using Ivy's resolution engine, and the result is stored locally under `~/.sbt/0.13/dependency/` (or what's specified by `sbt.dependency.base` flag) shared across all builds. After all minigraphs are resolved, they are stitched together by applying the conflict resolution algorithm (typically picking the latest version).
+
+When you add a new library to your project, cached resolution feature will check for the minigraph files under `~/.sbt/0.13/dependency/` and load the previously resolved nodes, which incurs negligible I/O overhead, and only resolve the newly added library. The intended performance improvement is that the second and third subprojects can take advantage of the resolved minigraphs from the first one and avoid duplicated work. The following figure illustrates the proj A, B, and C all hitting the same set of json file.
+
+<br>
+![fig1](files/cached-resolution.png)
+
+The actual speedup will depend case by case, but you should see significant speedup if you have many subprojects. An initial report from a user showed change from 260s to 25s. Your milage may vary.
+
+### Caveats and known issues
+
+Cached resolution is an **experimental** feature, and you might run into some issues. When you see them please report to Github Issue or sbt-dev list.
+
+#### First runs
+
+The first time you run cached resolution will likely be slow since it needs to resolve all minigraphs and save the result into filesystem. Whenever you add a new node the system has not seen, it will save the minigraph. The second run onwards should be faster, but comparing full-resolution `update` with second run onwards might not be a fair comparison.
+
+#### Ivy fidelity is not guaranteed
+
+Some of the Ivy behavior doesn't make sense, especially around Maven emulation. For example, it seem to treat all transitive dependencies introduced by Maven-published library as `force()` even when the original `pom.xml` doesn't say to:
+
+```
+$ cat ~/.ivy2/cache/com.ning/async-http-client/ivy-1.8.10.xml | grep netty
+    <dependency org="io.netty" name="netty" rev="3.9.2.Final" force="true" conf="compile->compile(*),master(*);runtime->runtime(*)"/>
+```
+
+There are also some issues around multiple dependencies to the same library with different [Maven classifiers](http://maven.apache.org/pom.html#Maven_Coordinates). In these cases, reproducing the exact result as normal `update` may not make sense or is downright impossible.
+
+#### SNAPSHOT and dynamic dependencies
+
+When a minigraph contains either a SNAPSHOT or dynamic dependency, the graph is considered dynamic, and it will be invalidated after a single task execution.
+Therefore, if you have any SNAPSHOT in your graph, your exeperience may degrade.
+(This could be improved in the future)
+
+#### Internal dependencies with `% "test"`
+
+There have been several bug reports on internal dependencies with `% "test"` like [#1711][1711]. This is still an open issue, and we hope to fix it in the next release.
+
+<a name="motivation"></a>
+
+### Motivation
+
+sbt internally uses Apache Ivy to resolve library dependencies. While sbt has benefited from not having to reinvent depenendency resolution engine all these years, we are increasingly seeing scalability challenges especially for projects with both multiple subprojects and large dependency graph. There are several factors involved in sbt's resolution scalability:
+
+- Number of transitive nodes (libraries) in the graph
+- Exclusion and override rules
+- Number of subprojects
+- Configurations
+- Number of repositories and their availability
+- Classifiers (additional sources and docs used by IDE)
+
+Of the above factors, the one that has the most impact is the number of transitive nodes.
+
+1. The more nodes there are, the chances of version conflict increases. Conflicts are resolved typically by picking the latest version within the same library.
+2. The more nodes there are, the more it needs to backtrack to check for exlusion and override rules.
+
+Exclusion and override rules are applied transitively, so any time a new node is introduced to the graph it needs to check its parent node's rules, its grandparent node's rules, great-grandparent node's rules, etc.
+
+sbt treats configurations and subprojects to be independent dependency graph. This allows us to include arbitrary libraries for different configurations and subprojects, but if the dependency resolution is slow, the linear scaling starts to hurt. There have been prior efforts to cache the result of library dependencies, but it still resulted in full resolution when `libraryDependencies` has changed.
 
 
   [Getting-Started]: ../tutorial/index.html
