@@ -1,0 +1,237 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html manifest="pamflet.manifest">
+      <head>
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+        <title>sbt Reference Manual — sbt 0.13.5+ Technology Previews</title>
+        
+        <link rel="stylesheet" href="css/blueprint/screen.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/blueprint/grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="css/blueprint/print.css" type="text/css" media="print"/> 
+        <!--[if lt IE 8]>
+          <link rel="stylesheet" href={ relativeBase + "css/blueprint/ie.css" } type="text/css" media="screen, projection"/>
+        <![endif]-->
+        <link rel="stylesheet" href="css/pamflet.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/pamflet-print.css" type="text/css" media="print"/>
+        <link rel="stylesheet" href="css/pamflet-grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="css/color_scheme-redmond.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/color_scheme-github.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/color_scheme-monokai.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/pamfletheight_80px_2em.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <script type="text/javascript" src="js/jquery-1.6.2.min.js"></script>
+        <script type="text/javascript" src="js/jquery.collapse.js"></script>
+        <script type="text/javascript" src="js/pamflet.js"></script>
+        <script type="text/javascript">
+          Pamflet.page.language = 'en';
+        </script>
+        <script type="text/javascript" src="js/prettify/prettify.js"></script><script type="text/javascript" src="js/prettify/lang-scala.js"></script><link type="text/css" rel="stylesheet" href="css/prettify.css"/><script type="text/javascript"><!--
+        window.onload=function() { prettyPrint(); };
+      --></script>
+        <link rel="stylesheet" href="css/custom.css" type="text/css" media="screen, projection"/>
+        
+        <script type="text/javascript">
+              Pamflet.twitter = '#sbt #scala';
+            </script>
+      </head>
+      <body class="color_scheme-github">
+        <a class="page prev nav" href="Changes.html">
+            <span class="space">&nbsp;</span>
+            <span class="flip arrow">&gt;</span>
+          </a><a class="page next nav" href="ChangeSummary_0.13.0.html">
+            <span class="space">&nbsp;</span>
+            <span class="arrow">&gt;</span>
+          </a>
+        <div class="container contentswrapper">
+          <div class="span-16 prepend-1 append-1 contents">
+            <h2 id="sbt+0.13.5%2B+Technology+Previews">sbt 0.13.5+ Technology Previews<a href="#sbt+0.13.5%2B+Technology+Previews" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>sbt 0.13.5+ releases of sbt are technology previews of what’s to come to sbt 1.0 with enhancements like <a href="https://typesafe.com/blog/preview-of-upcoming-sbt-10-features-read-about-the-new-plugins">auto plugins</a> and the necessary APIs changes and launcher for “sbt as a server.”, defined in the sbt-remote-control project.
+</p><p>These releases maintain binary compatibility with plugins that are published against sbt 0.13.0, but adds new features in preparation of sbt 1.0. This allows us to test new ideas like auto plugins and performance improvements on dependency resolution.
+</p><h2 id="sbt+0.13.7">sbt 0.13.7<a href="#sbt+0.13.7" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Fixes+with+compatibility+implications">Fixes with compatibility implications<a href="#Fixes+with+compatibility+implications" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Maven artifact dependencies will limit their transitive dependencies to <code>Compile</code> rather than <em>every configuration</em> if no <code>master</code> configuration is found. <a href="https://github.com/sbt/sbt/pull/1586">#1586</a> by <a href="https://github.com/jsuereth">@jsuereth</a>
+</li><li>The new natural whitspace handling parser is unable to cope with certain classes of Scala syntax. In particular, top-level pattern matches, or multi-value defintions are no longer supported.
+</li></ul><p>Here are examples:
+</p><pre><code class="prettyprint lang-scala">val x, y = project // BAD
+val x = project    // 
+val y = project    //  GOOD
+</code></pre><h3 id="Improvements">Improvements<a href="#Improvements" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Natural whitespace handling. See below. <a href="https://github.com/sbt/sbt/issues/1606">#1606</a> by <a href="https://github.com/rkrzewski">@rkrzewski</a>, <a href="https://github.com/ajozwik">@ajozwik</a>, and others at <a href="https://github.com/WarsawScala">@WarsawScala</a>
+</li><li>Adds support for publishing to a custom Maven local repository. See below. <a href="https://github.com/sbt/sbt/issues/1589">#1589</a>/<a href="https://github.com/sbt/sbt/pull/1600">#1600</a> by <a href="https://github.com/topping">@topping</a>
+</li><li>Adds circular dependency check. See below. <a href="https://github.com/sbt/sbt/pull/1601">#1601</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li><li>Adds cached resolution (minigraph caching). See below. <a href="https://github.com/sbt/sbt/pull/1631">#1631</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li><li>Allows the ”-bin” Scala version suffix to specify a bincompat version. <a href="https://github.com/sbt/sbt/pull/1573">#1573</a> by <a href="https://github.com/cunei">@cunei</a>
+</li><li>Adds support for publishing to file repositories specified in <code>~/.sbt/repositories</code>. <a href="https://github.com/sbt/sbt/pull/1579">#1579</a> by <a href="https://github.com/copumpkin">@copumpkin</a>
+</li><li>Adds support for publishing to a Maven repository with <code>file</code> URLs. <a href="https://github.com/sbt/sbt/pull/1618">#1618</a> by <a href="https://github.com/jsuereth">@jsuereth</a>
+</li><li>Don’t hardcode existing relations in <code>TextAnalysisFormat</code>. <a href="https://github.com/sbt/sbt/pull/1572">#1572</a> by <a href="https://github.com/Duhemm">@Duhemm</a>
+</li><li>Adds <code>developers</code> key. <a href="https://github.com/sbt/sbt/pull/1590">#1590</a> by <a href="https://github.com/jedesah">@jedesah</a>
+</li><li>Will warn when none or multiple main classes detected. <a href="https://github.com/sbt/sbt/pull/1648">#1648</a> by <a href="https://github.com/kretes">@kretes</a>
+</li></ul><h3 id="Bug+fixes">Bug fixes<a href="#Bug+fixes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Fixes issues with specifying <code>scalaHome</code>/<code>scalaInstance</code> and running tests. <a href="https://github.com/sbt/sbt/pull/1584">#1584</a> by <a href="https://github.com/jsuereth">@jsuereth</a>
+</li><li>Fixes StackOverflow error in dependencies extraction with macro and name hashing. <a href="https://github.com/sbt/sbt/pull/1563">#1563</a>/<a href="https://github.com/sbt/sbt/pull/1642">#1642</a>/<a href="https://github.com/sbt/sbt/issues/1237">#1237</a>/<a href="https://github.com/sbt/sbt/issues/1544">#1544</a> by <a href="https://github.com/Duhemm">@Duhemm</a>
+</li><li>Fixes <code>set every</code>. <a href="https://github.com/sbt/sbt/pull/1591">#1591</a>/<a href="https://github.com/sbt/sbt/issues/1430">#1430</a> by <a href="https://github.com/cunei">@cunei</a>
+</li><li>Ivy no longer silently flops to <code>HttpClient</code> resolver when httpclient is on the classpath. <a href="https://github.com/sbt/sbt/pull/1602">#1602</a> by <a href="https://github.com/jsuereth">@jsuereth</a>
+</li><li>Backports Ivy fix to not throw exceptions when modules are evicted.  <a href="https://github.com/sbt/sbt/pull/1607">#1607</a>/<a href="https://github.com/sbt/sbt/issues/1598">#1598</a> by <a href="https://github.com/jsuereth">@jsuereth</a>
+</li><li>When resolving from a Maven repository, and unable to read <code>maven-metadata.xml</code> file (common given the divergence in
+Maven 3 and Ivy 2), we attempt to use <code>LastModified</code> timestamp in lieu of “published” timestamp.  
+<a href="Https://github.com/sbt/sbt/issues/1611">#1611</a>/<a href="https://github.com/sbt/sbt/pull/1618">#1618</a> by <a href="https://github.com/jsuereth">@jsuereth</a>
+</li><li>Fixes NullPointerException when using <code>ChainResolver</code> and Maven repositories. <a href="Https://github.com/sbt/sbt/issues/1611">#1611</a>/<a href="https://github.com/sbt/sbt/pull/1618">#1618</a> by <a href="https://github.com/jsuereth">@jsuereth</a>
+</li><li>Fixes <code>Resolver</code>’s <code>url</code> method dropping <code>descriptorOptional</code> and <code>skipConsistencyCheck</code>. <a href="https://github.com/sbt/sbt/pull/1621">#1621</a> by <a href="https://github.com/tmandke">@tmandke</a>
+</li><li>Revert <code>useLatestSnapshot</code> on <code>updateOptions</code> to default to <code>false</code>.  Reverts chain resolver to previous behavior.  <a href="https://github.com/sbt/sbt/pull/1683">#1683</a> by <a href="https://github.com/jsuereth">@jsuereth</a>
+</li></ul><h3 id="Natural+whitespace+handling">Natural whitespace handling<a href="#Natural+whitespace+handling" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Starting sbt 0.13.7, build.sbt will be parsed using a customized Scala parser. This eliminates the requirement to use blank line as the delimiter between each settings, and also allows blank lines to be inserted at arbitrary position within a block.
+</p><p>This feature can be disabled, if necessary, via the -Dsbt.parser.simple=true flag.
+</p><p>This feature was contributed by <a href="https://github.com/ajozwik">Andrzej Jozwik (@ajozwik)</a>, <a href="https://github.com/rkrzewski">Rafał Krzewski (@rkrzewski)</a> and others at <a href="https://github.com/WarsawScala">@WarsawScala</a> inspired by Typesafe’s <a href="https://github.com/gkossakowski">@gkossakowski</a> organizing multiple <a href="http://blog.japila.pl/2014/07/gkossakowski-on-warszawscala-about-how-to-patch-scalasbt/">meetups</a> and <a href="http://blog.japila.pl/2014/07/hacking-scalasbt-with-gkossakowski-on-warszawscala-meetup-in-javeo_eu/">hackathons</a> on how to patch sbt with the focus on this blank line issue. Dziękujemy! <a href="https://github.com/sbt/sbt/issues/1606">#1606</a>
+</p><h3 id="Custom+Maven+local+repository+location">Custom Maven local repository location<a href="#Custom+Maven+local+repository+location" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Maven local repository is now resolved from the first of:
+</p><ul><li><code>&lt;localRepository/&gt;</code> element in <code>~/.m2/settings.xml</code>
+</li><li><code>&lt;localRepository/&gt;</code> element in <code>$M2_HOME/conf/settings.xml</code>, or
+</li><li>the default of <code>~/.m2/repository</code> if neither of those configuration elements exist
+</li></ul><p>If more Maven settings are required to be recovered, the proper thing to do is merge the two possible <code>settings.xml</code> files, then query against the element path of the merge. This code avoids the merge by checking sequentially.
+</p><p><a href="https://github.com/sbt/sbt/issues/1589">#1589</a>/<a href="https://github.com/sbt/sbt/pull/1600">#1600</a> by <a href="https://github.com/topping">@topping</a>
+</p><h3 id="Circular+dependency">Circular dependency<a href="#Circular+dependency" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>By default circular dependencies are warned, but they do not halt the dependency resolution. Using the following setting, circular dependencies can be treated as an error.
+</p><pre><code>updateOptions := updateOptions.value.withCircularDependencyLevel(CircularDependencyLevel.Error)
+</code></pre><p><a href="https://github.com/sbt/sbt/pull/1601">#1601</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</p><h3 id="Cached+resolution+%28minigraph+caching%29">Cached resolution (minigraph caching)<a href="#Cached+resolution+%28minigraph+caching%29" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 0.13.7 adds a new <strong>experimental</strong> update option called <em>cached resolution</em>, which replaces consolidated resolution:
+</p><pre><code>updateOptions := updateOptions.value.withCachedResolution(true)
+</code></pre><p>Unlike consolidated resolution, which only consolidated subprojects with identical dependency graph, cached resolution create an artificial graph for each direct dependency (minigraph) for all subprojects, resolves them independently, saves them into json file, and stiches the minigraphs together.
+</p><p>Once the minigraphs are resolved and saved as files, dependency resolution turns into a matter of loading json file from the second run onwards, which should complete in a matter of seconds even for large projects. Also, because the files are saved under a global <code>~/.sbt/0.13/dependency</code> (or what’s specified by <code>sbt.dependency.base</code> flag), the resolution result is shared across all builds.
+</p><p>Breaking graphs into minigraphs allows partial resolution results to be shared, which scales better for subprojects with similar but slightly different dependencies, and also for making small changes to the dependencies graph over time. See <a href="Cached-Resolution.html">documentation on cached resolution</a> for more details.
+</p><p><a href="https://github.com/sbt/sbt/pull/1631">#1631</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</p><h2 id="sbt+0.13.6">sbt 0.13.6<a href="#sbt+0.13.6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Fixes+with+compatibility+implications">Fixes with compatibility implications<a href="#Fixes+with+compatibility+implications" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Maven Central Repository, Java.net Maven 2 Repository, Typesafe Repository, and sbt Plugin repository now defaults to HTTPS. (See below)
+</li><li><code>ThisProject</code> used to resolve to the root project in a build even when it’s place in <code>subproj/build.sbt</code>. sbt 0.13.6 fixes it to resolve to the sub project. <a href="https://github.com/sbt/sbt/issues/1194">#1194</a>/<a href="https://github.com/sbt/sbt/pull/1358">#1358</a> by <a href="https://github.com/dansanduleac">@dansanduleac</a>
+</li><li>Global plugins classpath used to be injected into every build. This will no longer be the case. <a href="https://github.com/sbt/sbt/issues/1347">#1347</a>/<a href="https://github.com/sbt/sbt/pull/1352">#1352</a> by <a href="https://github.com/dansanduleac">@dansanduleac</a>
+</li><li>Fixes <code>newer</code> command in scripted. <a href="https://github.com/sbt/sbt/pull/1419">#1419</a> by <a href="https://github.com/jroper">@jroper</a>
+</li><li>Name hashing is enabled by default. <code>inc.Analysis.empty</code> also defaults to the one compatible with name hashing. <a href="https://github.com/sbt/sbt/pull/1546">#1546</a> by <a href="https://github.com/gkossakowski">@gkossakowski</a>
+</li></ul><h3 id="Improvements">Improvements<a href="#Improvements" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Derived settings can replace previously-defined but non-default settings. <a href="https://github.com/sbt/sbt/pull/1036">#1036</a> by <a href="https://github.com/dansanduleac">@dansanduleac</a>
+</li><li>Sorts setting key names in the inspect tree view. <a href="https://github.com/sbt/sbt/pull/1313">#1313</a> by <a href="https://github.com/2m">@2m</a>
+</li><li>Uses separate update caches when cross compiling scala. <a href="https://github.com/sbt/sbt/pull/1330">#1330</a> by <a href="https://github.com/pvlugter">@pvlugter</a>
+</li><li>Ensures sequences in analysis files are read in order. <a href="https://github.com/sbt/sbt/pull/1346">#1346</a> by <a href="https://github.com/benjyw">@benjyw</a>
+</li><li>Enables tab completion for scripted task. <a href="https://github.com/sbt/sbt/pull/1383">#1383</a> by <a href="https://github.com/xuwei-k">@xuwei-k</a>
+</li><li>Allows project reference to to a branch of a local git repository. <a href="https://github.com/sbt/sbt/pull/1409">#1409</a> by <a href="https://github.com/vn971">@vn971</a>
+</li><li>Triggered Execution is now aware of rename or move of files. <a href="https://github.com/sbt/sbt/pull/1401">#1401</a> by <a href="https://github.com/xuwei-k">@xuwei-k</a>
+</li><li>No longer updates classifiers of <code>projectDependencies</code>. <a href="https://github.com/sbt/sbt/issues/1366">#1366</a>/<a href="https://github.com/sbt/sbt/pull/1367">#1367</a> by <a href="https://github.com/dansanduleac">@dansanduleac</a>
+</li><li>Selects the first test fingerprint for a test name for forked tests. <a href="https://github.com/sbt/sbt/pull/1450">#1450</a> by <a href="https://github.com/pvlugter">@pvlugter</a>
+</li><li>Allows default auto plugins to be disabled. <a href="https://github.com/sbt/sbt/pull/1451">#1451</a> by <a href="https://github.com/jsuereth">@jsuereth</a>
+</li><li>Allows keys defined inside <code>build.sbt</code> to be used from sbt shell. <a href="https://github.com/sbt/sbt/issues/1059">#1059</a>/<a href="https://github.com/sbt/sbt/pull/1456">#1456</a>
+</li><li>Updates internal Ivy instance to cache the results of dependency exclusion rules. <a href="https://github.com/sbt/sbt/pull/1476">#1476</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li><li>Adds <code>Resolver.jcenterRepo</code> and <code>Resolver.bintrayRepo(owner, repo)</code> to add Bintray easier. <a href="https://github.com/sbt/sbt/pull/1405">#1405</a> by <a href="https://github.com/evgeny-goldin">@evgeny-goldin</a>
+</li><li>AutoPlugins with no requirements enabled by allRequirements can now be disable dby the user. <a href="https://github.com/sbt/sbt/pull/1516">#1516</a> by <a href="https://github.com/jsuereth">@jsuereth</a>
+</li></ul><h3 id="Bug+fixes">Bug fixes<a href="#Bug+fixes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Allows auto-generated projects to have overridden organization. <a href="https://github.com/sbt/sbt/issues/1315">#1315</a>/<a href="https://github.com/sbt/sbt/pull/1378">#1378</a> by <a href="https://github.com/jsuereth">@jsuereth</a>
+</li><li>Fixes auto plugins declared without package object. <a href="https://github.com/sbt/sbt/pull/1423">#1423</a> by <a href="https://github.com/lpiepiora">@lpiepiora</a>
+</li><li>Fixes <code>plugin</code> command. <a href="https://github.com/sbt/sbt/issues/1416">#1416</a>/<a href="https://github.com/sbt/sbt/pull/1426">#1426</a> by <a href="https://github.com/lpiepiora">@lpiepiora</a>
+</li><li>Adds <code>scala-jar</code> to the list of jar artifacts recognized by CustomPomParser. <a href="https://github.com/sbt/sbt/pull/1400">#1400</a> by <a href="https://github.com/dpratt">@dpratt</a>
+</li><li>Fixes cross versioning to recognize version number with mutiple -tags. <a href="https://github.com/sbt/sbt/pull/1433">#1433</a> by <a href="https://github.com/henrikengstrom">@henrikengstrom</a>
+</li><li>Works around “Not a simple type” breaking <code>-Xfatal-warnings</code>. <a href="https://github.com/sbt/sbt/pull/1477">#1477</a> by <a href="https://github.com/puffnfresh">@puffnfresh</a>
+</li><li>Fixes sLog usage in tandem with the <code>set</code> comamnd <a href="https://github.com/sbt/sbt/pull/1486">#1486</a> <a href="https://github.com/jsuereth">@jsuereth</a>
+</li><li>Test suites with whitespace will have prettier filenames <a href="https://github.com/sbt/sbt/pull/1487">#1487</a> <a href="https://github.com/jsuereth">@jsuereth</a>
+</li><li>sbt no longer crashes when run in root directory <a href="https://github.com/sbt/sbt/pull/1488">#1488</a> by <a href="https://github.com/jsuereth">@jsuereth</a>
+</li><li>set no longer removes any <code>++</code> scala version setting.  <a href="https://github.com/sbt/sbt/issues/856">#856</a>/<a href="https://github.com/sbt/sbt/pull/1489">#1489</a> by <a href="https://github.com/jsuereth">@jsuereth</a>
+</li><li>Fixes <code>Scope.parseScopedKey</code>. <a href="https://github.com/sbt/sbt/issues/1384">#1384</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li><li>Fixes <code>build.sbt</code> errors causing <code>ArrayIndexOutOfBoundsException</code> due to invalid source in position. <a href="https://github.com/sbt/sbt/issues/1181">#1181</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li><li>Fixes <code>http.proxyPassword</code> showing up in launcher’s update.log. <a href="https://github.com/sbt/sbt/issues/670">#670</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li><li>Fixes config-classes leak in loading build files. <a href="https://github.com/sbt/sbt/issues/1524">#1524</a> by <a href="https://github.com/jsuereth">@jsuereth</a>
+</li><li>Fixes name-conflicts in hashed settings class files. <a href="https://github.com/sbt/sbt/issues/1465">#1465</a> by <a href="https://github.com/jsuereth">@jsuereth</a>
+</li><li>Fixes the pom conversion of dynamic revisions like <code>1.1+</code>. <a href="https://github.com/sbt/sbt/issues/1275">#1275</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li><li>Fixes <code>NullPointerError</code> in tab completion by <code>FileExamples</code>. <a href="https://github.com/sbt/sbt/issues/1530">#1530</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li><li>Fixes metabuild downloading unused Scala 2.10.2. <a href="https://github.com/sbt/sbt/issues/1439">#1439</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li></ul><h3 id="HTTPS+related+changes">HTTPS related changes<a href="#HTTPS+related+changes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Thanks to Sonatype, HTTPS access to Maven Central Repository is available to public. This is now enabled by default, but if HTTP is required for some reason the following system properties can be used:
+</p><pre><code>-Dsbt.repository.secure=false
+</code></pre><p>Java.net Maven 2 repository, Typesafe repository, and sbt Plugin repository also defaults to HTTPS.
+</p><p><a href="https://github.com/sbt/sbt/pull/1494">#1494</a> by <a href="https://github.com/rtyley">@rtyley</a>, <a href="https://github.com/sbt/sbt/pull/1536">#1536</a> by <a href="https://github.com/benmccann">@benmccann</a>, and <a href="https://github.com/sbt/sbt/issues/1541">#1541</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>.
+</p><h3 id="enablePlugins%2FdisablePlugins">enablePlugins/disablePlugins<a href="#enablePlugins%2FdisablePlugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 0.13.6 now allows <code>enablePlugins</code> and <code>disablePlugins</code> to be written directly in <code>build.sbt</code>. <a href="https://github.com/sbt/sbt/issues/1213">#1213</a>/<a href="https://github.com/sbt/sbt/pull/1312">#1312</a> by <a href="https://github.com/jsuereth">@jsuereth</a>
+</p><h3 id="Unresolved+dependencies+error">Unresolved dependencies error<a href="#Unresolved+dependencies+error" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 0.13.6 will try to reconstruct dependencies tree when it fails to resolve a managed dependency.
+This is an approximation, but it should help you figure out where the problematic dependency is coming from. When possible sbt will display the source position next to the modules:
+</p><pre><code>[warn]  ::::::::::::::::::::::::::::::::::::::::::::::
+[warn]  ::          UNRESOLVED DEPENDENCIES         ::
+[warn]  ::::::::::::::::::::::::::::::::::::::::::::::
+[warn]  :: foundrylogic.vpp#vpp;2.2.1: not found
+[warn]  ::::::::::::::::::::::::::::::::::::::::::::::
+[warn] 
+[warn]  Note: Unresolved dependencies path:
+[warn]      foundrylogic.vpp:vpp:2.2.1
+[warn]        +- org.apache.cayenne:cayenne-tools:3.0.2
+[warn]        +- org.apache.cayenne.plugins:maven-cayenne-plugin:3.0.2 (/foo/some-test/build.sbt#L28)
+[warn]        +- d:d_2.10:0.1-SNAPSHOT
+</code></pre><p><a href="https://github.com/sbt/sbt/issues/528">#528</a>/<a href="https://github.com/sbt/sbt/issues/1422">#1422</a>/<a href="https://github.com/sbt/sbt/pull/1447">#1447</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</p><h3 id="Eviction+warnings">Eviction warnings<a href="#Eviction+warnings" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 0.13.6 displays eviction warnings when it resolves your project’s managed dependencies via <code>update</code> task.
+Currently the eviction warnings are categorized into three layers: <code>scalaVersion</code> eviction, direct evictions, and transitive evictions.
+By default eviction warning on <code>update</code> task will display only <code>scalaVersion</code> evictin and direct evictions.
+</p><p><code>scalaVersion</code> eviction warns you when <code>scalaVersion</code> is no longer effecitive. This happens when one of your dependency depends on a newer release of scala-library than your <code>scalaVersion</code>.
+Direct evctions are evictions related to your direct dependencies. Warnings are displayed only when API incompatibility is suspected. For Java libraries, Semantic Versioning is used for guessing, and for Scala libraries Second Segment versioning (second segment bump makes API incompatible) is used.
+</p><p>To display all eviction warnings with caller information, run <code>evicted</code> task.
+</p><pre><code>[warn] There may be incompatibilities among your library dependencies.
+[warn] Here are some of the libraries that were evicted:
+[warn]     * com.typesafe.akka:akka-actor_2.10:2.1.4 -&gt; 2.3.4 (caller: com.typesafe.akka:akka-remote_2.10:2.3.4,
+org.w3:banana-sesame_2.10:0.4, org.w3:banana-rdf_2.10:0.4)
+</code></pre><p><a href="https://github.com/sbt/sbt/issues/1200">#1200</a>/<a href="https://github.com/sbt/sbt/pull/1467">#1467</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</p><h3 id="Latest+SNAPSHOTs">Latest SNAPSHOTs<a href="#Latest+SNAPSHOTs" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 0.13.6 adds a new setting key called <code>updateOptions</code> for customizing the details of managed dependency resolution with <code>update</code> task. One of its flags is called <code>lastestSnapshots</code>, which controls the behavior of the chained resolver. Up until 0.13.6, sbt was picking the first <code>-SNAPSHOT</code> revision it found along the chain. When <code>latestSnapshots</code> is enabled (default: <code>true</code>), it will look into all resolvers on the chain, and compare them using the publish date.
+</p><p>The tradeoff is probably a longer resolution time if you have many remote repositories on the build or you live away from the severs. So here’s how to disable it:
+</p><pre><code>updateOptions := updateOptions.value.withLatestSnapshots(false)
+</code></pre><p><a href="https://github.com/sbt/sbt/issues/1514">#1514</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</p><h3 id="Consolidated+resolution">Consolidated resolution<a href="#Consolidated+resolution" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>updateOptions</code> can also be used to enable consolidated resolution for <code>update</code> task.
+</p><pre><code>updateOptions := updateOptions.value.withConsolidatedResolution(true)
+</code></pre><p>This feature is specifically targeted to address <a href="https://github.com/sbt/sbt/issues/413">Ivy resolution is beging slow for multi-module projects #413</a>. Consolidated resolution aims to fix this issue by artificially constructing an Ivy dependency graph for the unique managed dependencies. If two subprojects introduce identical external dependencies, both subprojects should consolidate to the same graph, and therefore resolve immediately for the second <code>update</code>. <a href="https://github.com/sbt/sbt/pull/1454">#1454</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</p><h2 id="sbt+0.13.5">sbt 0.13.5<a href="#sbt+0.13.5" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>sbt 0.13.5 is a technology preview of what’s to come to sbt 1.0 with enhancements like <a href="https://typesafe.com/blog/preview-of-upcoming-sbt-10-features-read-about-the-new-plugins">auto plugins</a> and the necessary APIs changes and launcher for “sbt as a server.”, defined in the sbt-remote-control project.
+</p><ul><li>The Scala version for sbt and sbt plugins is now 2.10.4. This is a compatible version bump.
+</li><li>Added a new setting testResultLogger to allow customisation of logging of test results. (#1225)
+</li><li>When test is run and there are no tests available, omit logging output. Especially useful for aggregate modules. test-only et al unaffected. (#1185)
+</li><li>sbt now uses minor-patch version of ivy 2.3 (org.scala-sbt.ivy:ivy:2.3.0-sbt-<git sha>)
+</li><li><code>sbt.Plugin</code> deprecated in favor of <code>sbt.AutoPlugin</code>
+</li><li>name-hashing incremental compiler now supports scala macros.
+</li><li><code>testResultLogger</code> is now configured.
+</li><li>sbt-server hooks for task cancellation.
+</li><li>Add <code>JUnitXmlReportPlugin</code> which generates junit-xml-reports for all tests.
+</li><li>Optionally enable forced garbage collection after tasks (<code>-Dsbt.task.forcegc=true</code>).
+</li></ul><div class="bottom nav span-16">
+                        <em>Next Page</em>
+                        <span class="arrow">&gt;</span>
+                        <a href="ChangeSummary_0.13.0.html"> sbt 0.13.0 - 0.13.2 </a>                        
+                        
+                      </div><div class="tocwrapper show">
+      <a class="tochead nav" style="display: none" href="#toc">❦</a>
+      <a name="toc"></a>
+      <h4 class="toctitle">Contents</h4>
+      <div class="tocbody">
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="General-Info.html">General Information</a></div><ol class="toc"> <li><div><a href="Credits.html">Credits</a></div></li><li><div><a href="Community-Plugins.html">Community Plugins</a></div></li><li><div><a href="Repository-Roles.html">Community Repository Policy</a></div></li><li><div><a href="Bintray-For-Plugins.html">Bintray For Plugins</a></div></li><li><div><a href="Setup-Notes.html">Setup Notes</a></div></li><li><div><a href="Using-Sonatype.html">Deploying to Sonatype</a></div></li><li><div><a href="Contibuting-to-sbt.html">Contributing to sbt</a></div></li><li><div><a href="Changes.html">Changes</a></div><ol class="toc"> <li><div class="current">sbt 0.13.5+ Technology Previews</div></li><li><div><a href="ChangeSummary_0.13.0.html">sbt 0.13.0 - 0.13.2</a></div></li><li><div><a href="ChangeSummary_0.12.0.html">sbt 0.12.4</a></div></li><li><div><a href="Older-Changes.html">Older Changes</a></div></li><li><div><a href="Migrating-from-sbt-07x.html">Migrating from 0.7 to 0.10+</a></div></li> </ol></li> </ol></li><li><div><a href="Detailed-Topics.html">Detailed Topics</a></div><ol class="toc"> <li><div><a href="Using-sbt.html">Using sbt</a></div><ol class="toc"> <li><div><a href="Command-Line-Reference.html">Command Line Reference</a></div></li><li><div><a href="Console-Project.html">Console Project</a></div></li><li><div><a href="Cross-Build.html">Cross-building</a></div></li><li><div><a href="Inspecting-Settings.html">Interacting with the Configuration System</a></div></li><li><div><a href="Triggered-Execution.html">Triggered Execution</a></div></li><li><div><a href="Scripts.html">Scripts, REPL, and Dependencies</a></div></li><li><div><a href="Understanding-Recompilation.html">Understanding Incremental Recompilation</a></div></li> </ol></li><li><div><a href="Configuration-Index.html">Configuration</a></div><ol class="toc"> <li><div><a href="Classpaths.html">Classpaths, sources, and resources</a></div></li><li><div><a href="Compiler-Plugins.html">Compiler Plugin Support</a></div></li><li><div><a href="Configuring-Scala.html">Configuring Scala</a></div></li><li><div><a href="Forking.html">Forking</a></div></li><li><div><a href="Global-Settings.html">Global Settings</a></div></li><li><div><a href="Java-Sources.html">Java Sources</a></div></li><li><div><a href="Mapping-Files.html">Mapping Files</a></div></li><li><div><a href="Local-Scala.html">Local Scala</a></div></li><li><div><a href="Macro-Projects.html">Macro Projects</a></div></li><li><div><a href="Paths.html">Paths</a></div></li><li><div><a href="Parallel-Execution.html">Parallel Execution</a></div></li><li><div><a href="Process.html">External Processes</a></div></li><li><div><a href="Running-Project-Code.html">Running Project Code</a></div></li><li><div><a href="Testing.html">Testing</a></div></li> </ol></li><li><div><a href="Dependency-Management-Index.html">Dependency Management</a></div><ol class="toc"> <li><div><a href="Artifacts.html">Artifacts</a></div></li><li><div><a href="Dependency-Management-Flow.html">Dependency Management Flow</a></div></li><li><div><a href="Library-Management.html">Library Management</a></div></li><li><div><a href="Proxy-Repositories.html">Proxy Repositories</a></div></li><li><div><a href="Publishing.html">Publishing</a></div></li><li><div><a href="Resolvers.html">Resolvers</a></div></li><li><div><a href="Update-Report.html">Update Report</a></div></li><li><div><a href="Cached-Resolution.html">Cached resolution</a></div></li> </ol></li><li><div><a href="Tasks-and-Commands.html">Tasks and Commands</a></div><ol class="toc"> <li><div><a href="Tasks.html">Tasks</a></div></li><li><div><a href="Input-Tasks.html">Input Tasks</a></div></li><li><div><a href="Commands.html">Commands</a></div></li><li><div><a href="Parsing-Input.html">Parsing and tab completion</a></div></li><li><div><a href="Build-State.html">State and actions</a></div></li><li><div><a href="Task-Inputs.html">Tasks/Settings: Motivation</a></div></li> </ol></li><li><div><a href="Plugins-and-Best-Practices.html">Plugins and Best Practices</a></div><ol class="toc"> <li><div><a href="Best-Practices.html">General Best Practices</a></div></li><li><div><a href="Plugins.html">Plugins</a></div></li><li><div><a href="Plugins-Best-Practices.html">Plugins Best Practices</a></div></li> </ol></li><li><div><a href="Sbt-Launcher.html">Sbt Launcher</a></div><ol class="toc"> <li><div><a href="Launcher-Getting-Started.html">Getting Started with the Sbt Launcher</a></div></li><li><div><a href="Launcher-Architecture.html">Sbt Launcher Architecture</a></div></li><li><div><a href="Launcher-Configuration.html">Sbt Launcher Configuration</a></div></li> </ol></li> </ol></li><li><div><a href="Developers-Guide.html">Developer’s Guide</a></div><ol class="toc"> <li><div><a href="Core-Principles.html">Core Principles</a></div></li><li><div><a href="Settings-Core.html">Settings Core</a></div></li><li><div><a href="Setting-Initialization.html">Setting Initialization</a></div></li><li><div><a href="Build-Loaders.html">Build Loaders</a></div></li><li><div><a href="Command-Line-Applications.html">Creating Command Line Applications Using sbt</a></div></li><li><div><a href="Nightly-Builds.html">Nightly Builds</a></div></li> </ol></li><li><div><a href="Howto.html">How to…</a></div><ol class="toc"> <li><div><a href="Howto-Classpaths.html">Classpaths</a></div></li><li><div><a href="Howto-Customizing-Paths.html">Customizing paths</a></div></li><li><div><a href="Howto-Generating-Files.html">Generating files</a></div></li><li><div><a href="Howto-Inspect-the-Build.html">Inspect the build</a></div></li><li><div><a href="Howto-Interactive-Mode.html">Interactive mode</a></div></li><li><div><a href="Howto-Logging.html">Configure and use logging</a></div></li><li><div><a href="Howto-Project-Metadata.html">Project metadata</a></div></li><li><div><a href="Howto-Package.html">Configure packaging</a></div></li><li><div><a href="Howto-Running-Commands.html">Running commands</a></div></li><li><div><a href="Howto-Scala.html">Configure and use Scala</a></div></li><li><div><a href="Howto-Scaladoc.html">Generate API documentation</a></div></li><li><div><a href="Howto-Triggered.html">Triggered execution</a></div></li><li><div><a href="Examples.html">Examples</a></div><ol class="toc"> <li><div><a href="Basic-Def-Examples.html">.sbt build examples</a></div></li><li><div><a href="Full-Def-Example.html">.scala build example</a></div></li><li><div><a href="Advanced-Configurations-Example.html">Advanced configurations example</a></div></li><li><div><a href="Advanced-Command-Example.html">Advanced command example</a></div></li> </ol></li> </ol></li><li><div><a href="Faq.html">Frequently Asked Questions</a></div><ol class="toc">  </ol></li><li><div><a href="Name-Index.html">Index</a></div></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+          </div>
+        </div>
+        <div class="header">
+          <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
+<div class="container navbar-static-top nav">
+    <div class="logo">
+      <a href="../../index.html"><img src="files/sbt-logo-white-72x50.png" alt="sbt"></a>
+    </div>
+    <ul class="navlist">
+      <li><a href="../../documentation.html">Documentation</a></li>
+      <li><a href="../../download.html">Download</a></li>
+      <li><a href="../../community.html">Community</a></li>
+      <li id="source-code"><a href="https://github.com/sbt/sbt"><img src="files/github-logo.png" alt="Source code"></a></li>
+      <li id="twitter"><a href="https://twitter.com/scala_sbt"><img src="files/twitter-logo-white.png" alt="sbt on Twitter"></a></li>
+    </ul>
+    <script type="text/javascript" async>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-41449189-1', 'scala-sbt.org');
+    ga('send', 'pageview');
+    </script>
+    <script type="text/javascript" async>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-23127719-1', 'typesafe.com', {'allowLinker': true, 'name': 'tsTracker'});
+      ga('tsTracker.require', 'linker');
+      ga('tsTracker.linker:autoLink', ['typesafe.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org']);
+      ga('tsTracker.send', 'pageview');
+    </script>
+</div>
+
+        </div>
+        <div class="footer">
+          
+        </div>
+        
+        <div class="highlight-outer">
+              <div class="highlight-menu">
+                <ul>
+                  <li><button id="highlight-button-twitter"><img src="img/twitter-bird-dark-bgs.png"/></button></li>
+                </ul>
+              </div>
+            </div>
+      </body>
+    </html>

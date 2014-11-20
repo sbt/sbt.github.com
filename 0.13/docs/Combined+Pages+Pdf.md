@@ -985,129 +985,440 @@ pomExtra := (
 ```
 
 
-  [ChangeSummary_0.13.0]: ChangeSummary_0.13.0.html
+  [sbt-dev]: https://groups.google.com/d/forum/sbt-dev
+  [adept]: https://github.com/adept-dm/adept
+  [Update-Report]: Update-Report.html
+
+Contributing to sbt
+-------------------
+
+Below is a running list of potential areas of contribution. This list
+may become out of date quickly, so you may want to check on the
+[sbt-dev mailing list][sbt-dev] if you are interested in a specific topic.
+
+1.  There are plenty of possible visualization and analysis
+    opportunities.
+    -   'compile' produces an Analysis of the source code containing
+        -   Source dependencies
+        -   Inter-project source dependencies
+        -   Binary dependencies (jars + class files)
+        -   data structure representing the
+            [API](https://github.com/sbt/sbt/tree/0.13/interface) of the
+            source code There is some code already for generating dot
+            files that isn't hooked up, but graphing dependencies and
+            inheritance relationships is a general area of work.
+    -   'update' produces an [Update Report][Update-Report] mapping
+        Configuration/ModuleID/Artifact to the retrieved File
+    -   Ivy produces more detailed XML reports on dependencies. These
+        come with an XSL stylesheet to view them, but this does not
+        scale to large numbers of dependencies. Working on this is
+        pretty straightforward: the XML files are created in `~/.ivy2`
+        and the `.xsl` and `.css` are there as well, so you don't even need
+        to work with sbt. Other approaches described in [the email
+        thread](https://groups.google.com/group/simple-build-tool/browse_thread/thread/7761f8b2ce51f02c/129064ea836c9baf)
+    -   Tasks are a combination of static and dynamic graphs and it
+        would be useful to view the graph of a run
+    -   Settings are a static graph and there is code to generate the
+        dot files, but isn't hooked up anywhere.
+
+2.  There is support for dependencies on external projects, like on
+    GitHub. To be more useful, this should support being able to update
+    the dependencies. It is also easy to extend this to other ways of
+    retrieving projects. Support for svn and hg was a recent
+    contribution, for example.
+3.  Dependency management: see [adept][adept]
+4.  If you like parsers, sbt commands and input tasks are written using
+    custom parser combinators that provide tab completion and error
+    handling. Among other things, the efficiency could be improved.
+5.  The javap task hasn't been reintegrated
+6.  Implement enhanced 0.11-style warn/debug/info/error/trace commands.
+    Currently, you set it like any other setting:
+
+```
+set logLevel := Level.Warn
+```
+
+> or
+> :   set logLevel in Test := Level.Warn
+>
+You could make commands that wrap this, like:
+
+```
+warn test:run
+```
+
+Also, trace is currently an integer, but should really be an abstract
+data type.
+
+​7. Each sbt version has more aggressive incremental compilation and
+reproducing bugs can be difficult. It would be helpful to have a mode
+that generates a diff between successive compilations and records the
+options passed to scalac. This could be replayed or inspected to try to
+find the cause.
+
+### Documentation
+
+1.  There's a lot to do with this documentation. If you check it out
+    from git, there's a directory called Dormant with some content that
+    needs going through.
+2.  the main page mentions external project references (e.g.
+    to a git repo) but doesn't have anything to link to that explains
+    how to use those.
+3.  API docs are much needed.
+4.  Find useful answers or types/methods/values in the other docs, and
+    pull references to them up into /faq or /Name-Index so people can
+    find the docs. In general the /faq should feel a bit more like a
+    bunch of pointers into the regular docs, rather than an alternative
+    to the docs.
+5.  A lot of the pages could probably have better names, and/or little
+    2-4 word blurbs to the right of them in the sidebar.
+
 
 Changes
 -------
 
-### 0.13.5-RC1 to 0.13.5-RC2
+These are changes made in each sbt release.
 
--   Fixes auto plugins not detecting `object autoImport`. (gh-1314)
 
-### 0.13.2 to 0.13.5
+## sbt 0.13.5+ Technology Previews
 
--   The Scala version for sbt and sbt plugins is now 2.10.4. This is a
-    compatible version bump.
--   Added a new setting `testResultLogger` to allow customisation of
-    logging of test results. (gh-1225)
--   When `test` is run and there are no tests available, omit logging
-    output. Especially useful for aggregate modules. `test-only` et al
-    unaffected. (gh-1185)
--   sbt now uses minor-patch version of ivy 2.4
-    (org.scala-sbt.ivy:ivy:2.4.0-sbt-<git sha>)
--   `sbt.Plugin` deprecated in favor of `sbt.AutoPlugin`
--   name-hashing incremental compiler now supports scala macros.
--   `testResultLogger` is now configured.
--   sbt-server hooks for task cancellation.
--   Add `JUnitXmlReportPlugin` which generates junit-xml-reports for all
-    tests.
+sbt 0.13.5+ releases of sbt are technology previews of what's to come to sbt 1.0 with enhancements like [auto plugins][Auto-Plugins-Post] and the necessary APIs changes and launcher for "sbt as a server.", defined in the sbt-remote-control project.
 
-### 0.13.1 to 0.13.2
+These releases maintain binary compatibility with plugins that are published against sbt 0.13.0, but adds new features in preparation of sbt 1.0. This allows us to test new ideas like auto plugins and performance improvements on dependency resolution.
 
--   Adding new name-hashing feature to incremental compiler. Alters how
-    scala dependencies are tracked, reducing number of recompiles
-    necessary.
--   Added the ability to launch servers via the sbt-launcher.
--   Added `.previous` feature on tasks which can load the pervious
-    value.
--   Added an `all` command which can run more than tasks in parallel.
--   Exposed the 'overwrite' flags from ivy. Added warning if overwriting
-    a release version.
--   Improve the error message when credentials are not found in Ivy.
--   Improve task macros to handle more scala constructs.
--   Fix `last` and `export` tasks to read from the correct stream.
--   Fix issue where ivy's `.+` dependency ranges were not correctly
-    translated to maven.
--   Override security manager to ignore file permissions (performance
-    issue)
--   2.11 compatibility fixes
--   Launcher can now handle ivy's `.+` revisions.
--   SessionSettings now correctly overwrite existing settings.
--   Adding a simple Logic system for inclusionary/dependency logic of
-    plugins.
--   Improve build hooks for `LoggerReporter` and `TaskProgress`.
--   Serialize incremental compiler analysis into text-file format.
--   Issue a warning when generating Paths and separate already exists in
-    the path.
--   Migrate to Ivy 2.3.0-final.
--   Docs: Use bintray as default repository host
--   Docs: improved docs on test groups.
--   Docs: updated documentation on the Launcher.
--   Docs: started architecture document.
+## sbt 0.13.7
 
-### 0.13.0 to 0.13.1
+  [Cached-Resolution]: Cached-Resolution.html
+  [@cunei]: https://github.com/cunei
+  [@eed3si9n]: https://github.com/eed3si9n
+  [@gkossakowski]: https://github.com/gkossakowski
+  [@jsuereth]: https://github.com/jsuereth
+  [@ajozwik]: https://github.com/ajozwik
+  [@copumpkin]: https://github.com/copumpkin
+  [@Duhemm]: https://github.com/Duhemm
+  [@jedesah]: https://github.com/jedesah
+  [@rkrzewski]: https://github.com/rkrzewski
+  [@tmandke]: https://github.com/tmandke
+  [@topping]: https://github.com/topping
+  [@WarsawScala]: https://github.com/WarsawScala
+  [@kretes]: https://github.com/kretes
+  [1237]: https://github.com/sbt/sbt/issues/1237
+  [1430]: https://github.com/sbt/sbt/issues/1430
+  [1544]: https://github.com/sbt/sbt/issues/1544
+  [1563]: https://github.com/sbt/sbt/pull/1563
+  [1572]: https://github.com/sbt/sbt/pull/1572
+  [1573]: https://github.com/sbt/sbt/pull/1573
+  [1579]: https://github.com/sbt/sbt/pull/1579
+  [1584]: https://github.com/sbt/sbt/pull/1584
+  [1586]: https://github.com/sbt/sbt/pull/1586
+  [1589]: https://github.com/sbt/sbt/issues/1589
+  [1590]: https://github.com/sbt/sbt/pull/1590
+  [1591]: https://github.com/sbt/sbt/pull/1591
+  [1598]: https://github.com/sbt/sbt/issues/1598
+  [1600]: https://github.com/sbt/sbt/pull/1600
+  [1601]: https://github.com/sbt/sbt/pull/1601
+  [1602]: https://github.com/sbt/sbt/pull/1602
+  [1606]: https://github.com/sbt/sbt/issues/1606
+  [1607]: https://github.com/sbt/sbt/pull/1607
+  [1611]: Https://github.com/sbt/sbt/issues/1611
+  [1618]: https://github.com/sbt/sbt/pull/1618
+  [1621]: https://github.com/sbt/sbt/pull/1621
+  [1631]: https://github.com/sbt/sbt/pull/1631
+  [1642]: https://github.com/sbt/sbt/pull/1642
+  [1683]: https://github.com/sbt/sbt/pull/1683
+  [1648]: https://github.com/sbt/sbt/pull/1648
 
--   The Scala version for sbt and sbt plugins is now 2.10.3. This is a
-    compatible version bump.
--   New method `toTask` on `Initialize[InputTask[T]]` to apply the full
-    input and get a plain task out.
--   Improved performance of `inspect tree`
--   Work around various issues with Maven local repositories, including
-    resolving -SNAPSHOTs from them. (gh-321)
--   Better representation of no cross-version suffix in suffix conflict
-    error message: now shows `<none>` instead of just `_`
--   `TrapExit` support for multiple, concurrent managed applications.
-    Now enabled by default for all `run`-like tasks. (gh-831)
--   Add minimal support for class file formats 51.0, 52.0 in incremental
-    compiler. (gh-842)
--   Allow main class to be non-public. (gh-883)
--   Convert `-classpath` to `CLASSPATH` when forking on Windows and
-    length exceeds a heuristic maximum. (gh-755)
--   `scalacOptions` for `.scala` build definitions are now also used for
-    `.sbt` files
--   `error`, `warn`, `info`, `debug` commands to set log level and
-    `--error`, ... to set the level before the project is loaded.
-    (gh-806)
--   `sLog` settings that provides a `Logger` for use by settings.
-    (gh-806)
--   Early commands: any command prefixed with `--` gets moved before
-    other commands on startup and doesn't force sbt into batch mode.
--   Deprecate internal `-`, `--`, and `---` commands in favor of `onFailure`,
-    `sbtClearOnFailure`, and `resumeFromFailure`.
--   `makePom` no longer generates `<type>` elements for standard
-    classifiers. (gh-728)
--   Fix many instances of the Turkish i bug.
--   Read https+ftp proxy environment variables into system properties
-    where Java will use them. (gh-886)
--   The `Process` methods that are redirection-like no longer discard
-    the exit code of the input. This addresses an inconsistency with
-    `Fork`, where using the `CustomOutput` `OutputStrategy` makes the
-    exit code always zero.
--   Recover from failed `reload` command in the scripted sbt handler.
--   Parse external `pom.xml` with `CustomPomParser` to handle multiple
-    definitions. (gh-758)
--   Improve key collision error message (gh-877)
--   Display the source position of an undefined setting.
--   Respect the `-nowarn` option when compiling Scala sources.
--   Improve forked test debugging by listing tests run by sbt in debug
-    output. (gh-868)
--   Fix scaladoc cache to track changes to `-doc-root-content` (gh-837)
--   Incremental compiler: Internal refactoring in preparation for
-    name-hashing (gh-936)
--   Incremental compiler: improved cache loading/saving speed by
-    internal file names (gh-931)
--   Docs: many contributed miscellaneous fixes and additions
--   Docs: link to page source now at the bottom of the page
--   Docs: sitemap now automatically generated
--   Docs: custom
-    role enables links from a key name in the docs to the val in [Keys](../sxr/sbt/Keys.scala)
--   Docs: restore sxr support and fix links to sxr'd sources. (gh-863)
+### Fixes with compatibility implications
 
-### 0.12.4 to 0.13.0
+- Maven artifact dependencies will limit their transitive dependencies to `Compile` rather than *every configuration* if no `master` configuration is found. [#1586][1586] by [@jsuereth][@jsuereth]
+- The new natural whitspace handling parser is unable to cope with certain classes of Scala syntax. In particular, top-level pattern matches, or multi-value defintions are no longer supported.
 
-The changes for 0.13.0 are listed on a separate page. See
-[sbt 0.13.0 changes][ChangeSummary_0.13.0].
+Here are examples:
 
+```scala
+val x, y = project // BAD
+val x = project    // 
+val y = project    //  GOOD
+```
+
+### Improvements
+
+- Natural whitespace handling. See below. [#1606][1606] by [@rkrzewski][@rkrzewski], [@ajozwik][@ajozwik], and others at [@WarsawScala][@WarsawScala]
+- Adds support for publishing to a custom Maven local repository. See below. [#1589][1589]/[#1600][1600] by [@topping][@topping]
+- Adds circular dependency check. See below. [#1601][1601] by [@eed3si9n][@eed3si9n]
+- Adds cached resolution (minigraph caching). See below. [#1631][1631] by [@eed3si9n][@eed3si9n]
+- Allows the "-bin" Scala version suffix to specify a bincompat version. [#1573][1573] by [@cunei][@cunei]
+- Adds support for publishing to file repositories specified in `~/.sbt/repositories`. [#1579][1579] by [@copumpkin][@copumpkin]
+- Adds support for publishing to a Maven repository with `file` URLs. [#1618][1618] by [@jsuereth][@jsuereth]
+- Don't hardcode existing relations in `TextAnalysisFormat`. [#1572][1572] by [@Duhemm][@Duhemm]
+- Adds `developers` key. [#1590][1590] by [@jedesah][@jedesah]
+- Will warn when none or multiple main classes detected. [#1648][1648] by [@kretes][@kretes]
+
+### Bug fixes
+
+- Fixes issues with specifying `scalaHome`/`scalaInstance` and running tests. [#1584][1584] by [@jsuereth][@jsuereth]
+- Fixes StackOverflow error in dependencies extraction with macro and name hashing. [#1563][1563]/[#1642][1642]/[#1237][1237]/[#1544][1544] by [@Duhemm][@Duhemm]
+- Fixes `set every`. [#1591][1591]/[#1430][1430] by [@cunei][@cunei]
+- Ivy no longer silently flops to `HttpClient` resolver when httpclient is on the classpath. [#1602][1602] by [@jsuereth][@jsuereth]
+- Backports Ivy fix to not throw exceptions when modules are evicted.  [#1607][1607]/[#1598][1598] by [@jsuereth][@jsuereth]
+- When resolving from a Maven repository, and unable to read `maven-metadata.xml` file (common given the divergence in
+  Maven 3 and Ivy 2), we attempt to use `LastModified` timestamp in lieu of "published" timestamp.  
+  [#1611][1611]/[#1618][1618] by [@jsuereth][@jsuereth]
+- Fixes NullPointerException when using `ChainResolver` and Maven repositories. [#1611][1611]/[#1618][1618] by [@jsuereth][@jsuereth]
+- Fixes `Resolver`'s `url` method dropping `descriptorOptional` and `skipConsistencyCheck`. [#1621][1621] by [@tmandke][@tmandke]
+- Revert `useLatestSnapshot` on `updateOptions` to default to `false`.  Reverts chain resolver to previous behavior.  [#1683][1683] by [@jsuereth][@jsuereth]
+
+### Natural whitespace handling
+
+Starting sbt 0.13.7, build.sbt will be parsed using a customized Scala parser. This eliminates the requirement to use blank line as the delimiter between each settings, and also allows blank lines to be inserted at arbitrary position within a block.
+
+This feature can be disabled, if necessary, via the -Dsbt.parser.simple=true flag.
+
+This feature was contributed by [Andrzej Jozwik (@ajozwik)](https://github.com/ajozwik), [Rafał Krzewski (@rkrzewski)][@rkrzewski] and others at [@WarsawScala][@WarsawScala] inspired by Typesafe's [@gkossakowski][@gkossakowski] organizing multiple [meetups](http://blog.japila.pl/2014/07/gkossakowski-on-warszawscala-about-how-to-patch-scalasbt/) and [hackathons](http://blog.japila.pl/2014/07/hacking-scalasbt-with-gkossakowski-on-warszawscala-meetup-in-javeo_eu/) on how to patch sbt with the focus on this blank line issue. Dziękujemy! [#1606][1606]
+
+### Custom Maven local repository location
+
+Maven local repository is now resolved from the first of:
+
+- `<localRepository/>` element in `~/.m2/settings.xml`
+- `<localRepository/>` element in `$M2_HOME/conf/settings.xml`, or
+- the default of `~/.m2/repository` if neither of those configuration elements exist
+
+If more Maven settings are required to be recovered, the proper thing to do is merge the two possible `settings.xml` files, then query against the element path of the merge. This code avoids the merge by checking sequentially.
+
+[#1589][1589]/[#1600][1600] by [@topping][@topping]
+
+### Circular dependency
+
+By default circular dependencies are warned, but they do not halt the dependency resolution. Using the following setting, circular dependencies can be treated as an error.
+
+    updateOptions := updateOptions.value.withCircularDependencyLevel(CircularDependencyLevel.Error)
+
+[#1601][1601] by [@eed3si9n][@eed3si9n]
+
+### Cached resolution (minigraph caching)
+
+sbt 0.13.7 adds a new **experimental** update option called *cached resolution*, which replaces consolidated resolution:
+
+    updateOptions := updateOptions.value.withCachedResolution(true)
+
+Unlike consolidated resolution, which only consolidated subprojects with identical dependency graph, cached resolution create an artificial graph for each direct dependency (minigraph) for all subprojects, resolves them independently, saves them into json file, and stiches the minigraphs together.
+
+Once the minigraphs are resolved and saved as files, dependency resolution turns into a matter of loading json file from the second run onwards, which should complete in a matter of seconds even for large projects. Also, because the files are saved under a global `~/.sbt/0.13/dependency` (or what's specified by `sbt.dependency.base` flag), the resolution result is shared across all builds.
+
+Breaking graphs into minigraphs allows partial resolution results to be shared, which scales better for subprojects with similar but slightly different dependencies, and also for making small changes to the dependencies graph over time. See [documentation on cached resolution][Cached-Resolution] for more details.
+
+[#1631][1631] by [@eed3si9n][@eed3si9n]
+
+## sbt 0.13.6
+
+  [413]: https://github.com/sbt/sbt/issues/413
+  [528]: https://github.com/sbt/sbt/issues/528
+  [670]: https://github.com/sbt/sbt/issues/670
+  [856]: https://github.com/sbt/sbt/issues/856
+  [1036]: https://github.com/sbt/sbt/pull/1036
+  [1059]: https://github.com/sbt/sbt/issues/1059
+  [1181]: https://github.com/sbt/sbt/issues/1181
+  [1194]: https://github.com/sbt/sbt/issues/1194
+  [1200]: https://github.com/sbt/sbt/issues/1200
+  [1213]: https://github.com/sbt/sbt/issues/1213
+  [1275]: https://github.com/sbt/sbt/issues/1275
+  [1312]: https://github.com/sbt/sbt/pull/1312
+  [1313]: https://github.com/sbt/sbt/pull/1313
+  [1315]: https://github.com/sbt/sbt/issues/1315
+  [1330]: https://github.com/sbt/sbt/pull/1330
+  [1346]: https://github.com/sbt/sbt/pull/1346
+  [1347]: https://github.com/sbt/sbt/issues/1347
+  [1352]: https://github.com/sbt/sbt/pull/1352
+  [1358]: https://github.com/sbt/sbt/pull/1358
+  [1366]: https://github.com/sbt/sbt/issues/1366
+  [1367]: https://github.com/sbt/sbt/pull/1367
+  [1378]: https://github.com/sbt/sbt/pull/1378
+  [1383]: https://github.com/sbt/sbt/pull/1383
+  [1384]: https://github.com/sbt/sbt/issues/1384
+  [1400]: https://github.com/sbt/sbt/pull/1400
+  [1401]: https://github.com/sbt/sbt/pull/1401
+  [1405]: https://github.com/sbt/sbt/pull/1405
+  [1409]: https://github.com/sbt/sbt/pull/1409
+  [1416]: https://github.com/sbt/sbt/issues/1416
+  [1419]: https://github.com/sbt/sbt/pull/1419
+  [1422]: https://github.com/sbt/sbt/issues/1422
+  [1423]: https://github.com/sbt/sbt/pull/1423
+  [1426]: https://github.com/sbt/sbt/pull/1426
+  [1433]: https://github.com/sbt/sbt/pull/1433
+  [1439]: https://github.com/sbt/sbt/issues/1439
+  [1447]: https://github.com/sbt/sbt/pull/1447
+  [1450]: https://github.com/sbt/sbt/pull/1450
+  [1451]: https://github.com/sbt/sbt/pull/1451
+  [1454]: https://github.com/sbt/sbt/pull/1454
+  [1456]: https://github.com/sbt/sbt/pull/1456
+  [1467]: https://github.com/sbt/sbt/pull/1467
+  [1476]: https://github.com/sbt/sbt/pull/1476
+  [1477]: https://github.com/sbt/sbt/pull/1477
+  [1484]: https://github.com/sbt/sbt/issues/1484
+  [1486]: https://github.com/sbt/sbt/pull/1486
+  [1487]: https://github.com/sbt/sbt/pull/1487
+  [1488]: https://github.com/sbt/sbt/pull/1488
+  [1489]: https://github.com/sbt/sbt/pull/1489
+  [1494]: https://github.com/sbt/sbt/pull/1494
+  [1516]: https://github.com/sbt/sbt/pull/1516
+  [1465]: https://github.com/sbt/sbt/issues/1465
+  [1514]: https://github.com/sbt/sbt/issues/1514
+  [1524]: https://github.com/sbt/sbt/issues/1524
+  [1530]: https://github.com/sbt/sbt/issues/1530
+  [1536]: https://github.com/sbt/sbt/pull/1536
+  [1541]: https://github.com/sbt/sbt/issues/1541
+  [1546]: https://github.com/sbt/sbt/pull/1546
+
+  [@benmccann]: https://github.com/benmccann
+  [@dansanduleac]: https://github.com/dansanduleac
+  [@2m]: https://github.com/2m
+  [@pvlugter]: https://github.com/pvlugter
+  [@eed3si9n]: https://github.com/eed3si9n
+  [@evgeny-goldin]: https://github.com/evgeny-goldin
+  [@gkossakowski]: https://github.com/gkossakowski
+  [@jsuereth]: https://github.com/jsuereth
+  [@benjyw]: https://github.com/benjyw
+  [@xuwei-k]: https://github.com/xuwei-k
+  [@jroper]: https://github.com/jroper
+  [@lpiepiora]: https://github.com/lpiepiora
+  [@vn971]: https://github.com/vn971
+  [@dpratt]: https://github.com/dpratt
+  [@henrikengstrom]: https://github.com/henrikengstrom
+  [@puffnfresh]: https://github.com/puffnfresh
+  [@rtyley]: https://github.com/rtyley
+
+### Fixes with compatibility implications
+
+- Maven Central Repository, Java.net Maven 2 Repository, Typesafe Repository, and sbt Plugin repository now defaults to HTTPS. (See below)
+- `ThisProject` used to resolve to the root project in a build even when it's place in `subproj/build.sbt`. sbt 0.13.6 fixes it to resolve to the sub project. [#1194][1194]/[#1358][1358] by [@dansanduleac][@dansanduleac]
+- Global plugins classpath used to be injected into every build. This will no longer be the case. [#1347][1347]/[#1352][1352] by [@dansanduleac][@dansanduleac]
+- Fixes `newer` command in scripted. [#1419][1419] by [@jroper][@jroper]
+- Name hashing is enabled by default. `inc.Analysis.empty` also defaults to the one compatible with name hashing. [#1546][1546] by [@gkossakowski][@gkossakowski]
+
+### Improvements
+
+- Derived settings can replace previously-defined but non-default settings. [#1036][1036] by [@dansanduleac][@dansanduleac]
+- Sorts setting key names in the inspect tree view. [#1313][1313] by [@2m][@2m]
+- Uses separate update caches when cross compiling scala. [#1330][1330] by [@pvlugter][@pvlugter]
+- Ensures sequences in analysis files are read in order. [#1346][1346] by [@benjyw][@benjyw]
+- Enables tab completion for scripted task. [#1383][1383] by [@xuwei-k][@xuwei-k]
+- Allows project reference to to a branch of a local git repository. [#1409][1409] by [@vn971][@vn971]
+- Triggered Execution is now aware of rename or move of files. [#1401][1401] by [@xuwei-k][@xuwei-k]
+- No longer updates classifiers of `projectDependencies`. [#1366][1366]/[#1367][1367] by [@dansanduleac][@dansanduleac]
+- Selects the first test fingerprint for a test name for forked tests. [#1450][1450] by [@pvlugter][@pvlugter]
+- Allows default auto plugins to be disabled. [#1451][1451] by [@jsuereth][@jsuereth]
+- Allows keys defined inside `build.sbt` to be used from sbt shell. [#1059][1059]/[#1456][1456]
+- Updates internal Ivy instance to cache the results of dependency exclusion rules. [#1476][1476] by [@eed3si9n][@eed3si9n]
+- Adds `Resolver.jcenterRepo` and `Resolver.bintrayRepo(owner, repo)` to add Bintray easier. [#1405][1405] by [@evgeny-goldin][@evgeny-goldin]
+- AutoPlugins with no requirements enabled by allRequirements can now be disable dby the user. [#1516][1516] by [@jsuereth][@jsuereth]
+
+### Bug fixes
+
+- Allows auto-generated projects to have overridden organization. [#1315][1315]/[#1378][1378] by [@jsuereth][@jsuereth]
+- Fixes auto plugins declared without package object. [#1423][1423] by [@lpiepiora][@lpiepiora]
+- Fixes `plugin` command. [#1416][1416]/[#1426][1426] by [@lpiepiora][@lpiepiora]
+- Adds `scala-jar` to the list of jar artifacts recognized by CustomPomParser. [#1400][1400] by [@dpratt][@dpratt]
+- Fixes cross versioning to recognize version number with mutiple -tags. [#1433][1433] by [@henrikengstrom][@henrikengstrom]
+- Works around "Not a simple type" breaking `-Xfatal-warnings`. [#1477][1477] by [@puffnfresh][@puffnfresh]
+- Fixes sLog usage in tandem with the `set` comamnd [#1486][1486] [@jsuereth][@jsuereth]
+- Test suites with whitespace will have prettier filenames [#1487][1487] [@jsuereth][@jsuereth]
+- sbt no longer crashes when run in root directory [#1488][1488] by [@jsuereth][@jsuereth]
+- set no longer removes any `++` scala version setting.  [#856][856]/[#1489][1489] by [@jsuereth][@jsuereth]
+- Fixes `Scope.parseScopedKey`. [#1384][1384] by [@eed3si9n][@eed3si9n]
+- Fixes `build.sbt` errors causing `ArrayIndexOutOfBoundsException` due to invalid source in position. [#1181][1181] by [@eed3si9n][@eed3si9n]
+- Fixes `http.proxyPassword` showing up in launcher's update.log. [#670][670] by [@eed3si9n][@eed3si9n]
+- Fixes config-classes leak in loading build files. [#1524][1524] by [@jsuereth][@jsuereth]
+- Fixes name-conflicts in hashed settings class files. [#1465][1465] by [@jsuereth][@jsuereth]
+- Fixes the pom conversion of dynamic revisions like `1.1+`. [#1275][1275] by [@eed3si9n][@eed3si9n]
+- Fixes `NullPointerError` in tab completion by `FileExamples`. [#1530][1530] by [@eed3si9n][@eed3si9n]
+- Fixes metabuild downloading unused Scala 2.10.2. [#1439][1439] by [@eed3si9n][@eed3si9n]
+
+### HTTPS related changes
+
+Thanks to Sonatype, HTTPS access to Maven Central Repository is available to public. This is now enabled by default, but if HTTP is required for some reason the following system properties can be used:
+
+    -Dsbt.repository.secure=false
+
+Java.net Maven 2 repository, Typesafe repository, and sbt Plugin repository also defaults to HTTPS.
+
+[#1494][1494] by [@rtyley][@rtyley], [#1536][1536] by [@benmccann][@benmccann], and [#1541][1541] by [@eed3si9n][@eed3si9n].
+
+### enablePlugins/disablePlugins
+
+sbt 0.13.6 now allows `enablePlugins` and `disablePlugins` to be written directly in `build.sbt`. [#1213][1213]/[#1312][1312] by [@jsuereth][@jsuereth]
+
+### Unresolved dependencies error
+
+sbt 0.13.6 will try to reconstruct dependencies tree when it fails to resolve a managed dependency.
+This is an approximation, but it should help you figure out where the problematic dependency is coming from. When possible sbt will display the source position next to the modules:
+
+    [warn]  ::::::::::::::::::::::::::::::::::::::::::::::
+    [warn]  ::          UNRESOLVED DEPENDENCIES         ::
+    [warn]  ::::::::::::::::::::::::::::::::::::::::::::::
+    [warn]  :: foundrylogic.vpp#vpp;2.2.1: not found
+    [warn]  ::::::::::::::::::::::::::::::::::::::::::::::
+    [warn] 
+    [warn]  Note: Unresolved dependencies path:
+    [warn]      foundrylogic.vpp:vpp:2.2.1
+    [warn]        +- org.apache.cayenne:cayenne-tools:3.0.2
+    [warn]        +- org.apache.cayenne.plugins:maven-cayenne-plugin:3.0.2 (/foo/some-test/build.sbt#L28)
+    [warn]        +- d:d_2.10:0.1-SNAPSHOT
+
+[#528][528]/[#1422][1422]/[#1447][1447] by [@eed3si9n][@eed3si9n]
+
+### Eviction warnings
+
+sbt 0.13.6 displays eviction warnings when it resolves your project's managed dependencies via `update` task.
+Currently the eviction warnings are categorized into three layers: `scalaVersion` eviction, direct evictions, and transitive evictions.
+By default eviction warning on `update` task will display only `scalaVersion` evictin and direct evictions.
+
+`scalaVersion` eviction warns you when `scalaVersion` is no longer effecitive. This happens when one of your dependency depends on a newer release of scala-library than your `scalaVersion`.
+Direct evctions are evictions related to your direct dependencies. Warnings are displayed only when API incompatibility is suspected. For Java libraries, Semantic Versioning is used for guessing, and for Scala libraries Second Segment versioning (second segment bump makes API incompatible) is used.
+
+To display all eviction warnings with caller information, run `evicted` task.
+
+    [warn] There may be incompatibilities among your library dependencies.
+    [warn] Here are some of the libraries that were evicted:
+    [warn]     * com.typesafe.akka:akka-actor_2.10:2.1.4 -> 2.3.4 (caller: com.typesafe.akka:akka-remote_2.10:2.3.4,
+    org.w3:banana-sesame_2.10:0.4, org.w3:banana-rdf_2.10:0.4)
+
+[#1200][1200]/[#1467][1467] by [@eed3si9n][@eed3si9n]
+
+### Latest SNAPSHOTs
+
+sbt 0.13.6 adds a new setting key called `updateOptions` for customizing the details of managed dependency resolution with `update` task. One of its flags is called `lastestSnapshots`, which controls the behavior of the chained resolver. Up until 0.13.6, sbt was picking the first `-SNAPSHOT` revision it found along the chain. When `latestSnapshots` is enabled (default: `true`), it will look into all resolvers on the chain, and compare them using the publish date.
+
+The tradeoff is probably a longer resolution time if you have many remote repositories on the build or you live away from the severs. So here's how to disable it:
+
+    updateOptions := updateOptions.value.withLatestSnapshots(false)
+
+[#1514][1514] by [@eed3si9n][@eed3si9n]
+
+### Consolidated resolution
+
+`updateOptions` can also be used to enable consolidated resolution for `update` task.
+
+    updateOptions := updateOptions.value.withConsolidatedResolution(true)
+
+This feature is specifically targeted to address [Ivy resolution is beging slow for multi-module projects #413][413]. Consolidated resolution aims to fix this issue by artificially constructing an Ivy dependency graph for the unique managed dependencies. If two subprojects introduce identical external dependencies, both subprojects should consolidate to the same graph, and therefore resolve immediately for the second `update`. [#1454][1454] by [@eed3si9n][@eed3si9n]
+
+## sbt 0.13.5
+
+  [Auto-Plugins-Post]: https://typesafe.com/blog/preview-of-upcoming-sbt-10-features-read-about-the-new-plugins
+
+sbt 0.13.5 is a technology preview of what's to come to sbt 1.0 with enhancements like [auto plugins][Auto-Plugins-Post] and the necessary APIs changes and launcher for "sbt as a server.", defined in the sbt-remote-control project.
+
+- The Scala version for sbt and sbt plugins is now 2.10.4. This is a compatible version bump.
+- Added a new setting testResultLogger to allow customisation of logging of test results. (#1225)
+- When test is run and there are no tests available, omit logging output. Especially useful for aggregate modules. test-only et al unaffected. (#1185)
+- sbt now uses minor-patch version of ivy 2.3 (org.scala-sbt.ivy:ivy:2.3.0-sbt-<git sha>)
+- `sbt.Plugin` deprecated in favor of `sbt.AutoPlugin`
+- name-hashing incremental compiler now supports scala macros.
+- `testResultLogger` is now configured.
+- sbt-server hooks for task cancellation.
+- Add `JUnitXmlReportPlugin` which generates junit-xml-reports for all tests.
+- Optionally enable forced garbage collection after tasks (`-Dsbt.task.forcegc=true`).
 
 
   [multiple-scopes]: Tasks.html#multiple-scopes
@@ -1115,10 +1426,70 @@ The changes for 0.13.0 are listed on a separate page. See
   [Setup]: ../tutorial/Setup.html
   [Input-Tasks]: Input-Tasks.html
 
-sbt 0.13.0 Changes
-------------------
+sbt 0.13.0 - 0.13.2
+-------------------
 
-### Overview
+### sbt 0.13.2
+
+- Adding new name-hashing feature to incremental compiler. Alters how scala dependencies are tracked, reducing number of recompiles necessary.
+- Added the ability to launch servers via the sbt-launcher.
+- Added `.previous` feature on tasks which can load the pervious value.
+- Added `all` command which can run more than tasks in parallel.
+- Exposed the 'overwrite' flags from ivy. Added warning if overwriting a release version.
+- Improve the error message when credentials are not found in Ivy.
+- Improve task macros to handle more scala constructs.
+- Fix `last` and `export` tasks to read from the correct stream.
+- Fix issue where ivy's `.+` dependency ranges were not correctly translated to maven.
+- Override security manager to ignore file permissions (performance issue)
+- 2.11 compatibility fixes
+- Launcher can now handle ivy's `.+` revisions.
+- `SessionSettings` now correctly overwrite existing settings.
+- Adding a simple `Logic` system for inclusionary/dependency logic of plugins.
+- Improve build hooks for `LoggerReporter` and `TaskProgress`.
+- Serialize incremental compiler analysis into text-file format.
+- Issue a warning when generating Paths and separate already exists in the path.
+- Migrate to Ivy 2.3.0-final.
+- Docs: Use bintray as default repository host
+- Docs: improved docs on test groups.
+- Docs: updated documentation on the Launcher.
+- Docs: started architecture document.
+
+### sbt 0.13.1
+
+- The Scala version for sbt and sbt plugins is now 2.10.3. This is a compatible version bump.
+- New method `toTask` on `Initialize[InputTask[T]]` to apply the full input and get a plain task out.
+- Improved performance of inspect tree
+- Work around various issues with Maven local repositories, including resolving -SNAPSHOTs from them. (#321)
+- Better representation of no cross-version suffix in suffix conflict error message: now shows `<none>` instead of just `_`
+- `TrapExit` support for multiple, concurrent managed applications. Now enabled by default for all `run`-like tasks. (#831)
+- Add minimal support for class file formats 51.0, 52.0 in incremental compiler. (#842)
+- Allow main class to be non-public. (#883)
+- Convert `-classpath` to `CLASSPATH` when forking on Windows and length exceeds a heuristic maximum. (#755)
+- `scalacOptions` for `.scala` build definitions are now also used for `.sbt` files
+- `error`, `warn`, `info`, `debug` commands to set log level and `--error`, ... to set the level before the project is loaded. (#806)
+- `sLog` settings that provides a `Logger` for use by settings. (#806)
+- Early commands: any command prefixed with `--` gets moved before other commands on startup and doesn't force sbt into batch mode.
+- Deprecate internal `-`, `--`, and `---` commands in favor of `onFailure`, `sbtClearOnFailure`, and `resumeFromFailure`.
+- `makePom` no longer generates `<type>` elements for standard classifiers. (#728)
+- Fix many instances of the Turkish i bug.
+- Read https+ftp proxy environment variables into system properties where Java will use them. (#886)
+- The `Process` methods that are redirection-like no longer discard the exit code of the input. This addresses an inconsistency with `Fork`, where using the `CustomOutput OutputStrategy` makes the exit code always zero.
+- Recover from failed `reload` command in the scripted sbt handler.
+- Parse external `pom.xml` with `CustomPomParser` to handle multiple definitions. (#758)
+- Improve key collision error message (#877)
+- Display the source position of an undefined setting.
+- Respect the `-nowarn` option when compiling Scala sources.
+- Improve forked test debugging by listing tests run by sbt in debug output. (#868)
+- Fix scaladoc cache to track changes to `-doc-root-content` (#837)
+- Incremental compiler: Internal refactoring in preparation for name-hashing (#936)
+- Incremental compiler: improved cache loading/saving speed by internal file names (#931)
+- Docs: many contributed miscellaneous fixes and additions
+- Docs: link to page source now at the bottom of the page
+- Docs: sitemap now automatically generated
+- Docs: custom `:key:` role enables links from a key name in the docs to the val in `sxr/sbt/Keys.scala`
+- Docs: restore sxr support and fix links to sxr'd sources. (#863)
+
+### sbt 0.13.0
 
 #### Features, fixes, changes with compatibility implications
 
@@ -1469,8 +1840,178 @@ The [Configuring Scala](Configuring-Scala.html) page provides full details.
   [Parallel-Execution]: Parallel-Execution.html
   [Sbt-Launcher]: Sbt-Launcher.html
 
-sbt 0.12.0 Changes
-------------------
+## sbt 0.12.4
+
+-   Work around URI problems with encoding and resolving. (gh-725)
+-   Allow -cp argument to `apply` command to be quoted. (gh-724)
+-   Make `sbtBinaryVersion` use the new approach for 0.13 and later to
+    support cross-building plugins.
+-   Pull `sbtDependency` version from `sbtVersion` to facilitate
+    cross-building plugins.
+-   Proper support for stashing on-failure handlers. (gh-732)
+-   Include files with zip extension in unmanaged jars. (gh-750)
+-   Only add automatically detected plugins to options once. (gh-757)
+-   Properly handle failure in a multi-command that includes `reload`.
+    (gh-732)
+-   Fix unsynchronized caching of Scala class loaders that could result
+    in Scala classes being loaded in multiple class loaders.
+-   Incremental compiler: remove resident compiler code (wasn't used and
+    was a compatibility liability)
+-   Incremental compiler: properly track `abstract override` modifier.
+    (gh-726)
+-   Incremental compiler: do not normalize types in the api extraction
+    phase. (gh-736)
+-   Ivy cache: account for `localOnly` when cache subclass overrides
+    `isChanging`
+-   Ivy cache: fix corruption when developing sbt or sbt plugins.
+    (gh-768)
+-   Ivy cache: invalidate when artifact download fails to avoid locking
+    into bad resolver. (gh-760)
+-   Ivy cache: use publication date from metadata instead of original
+    file's last modified time when deleting out of date artifacts.
+    (gh-764)
+
+## sbt 0.12.3
+
+-   Allow `cleanKeepFiles` to contain directories
+-   Disable Ivy debug-level logging for performance. (gh-635)
+-   Invalidate artifacts not recorded in the original metadata when a
+    module marked as changing changes. (gh-637, gh-641)
+-   Ivy Artifact needs wildcard configuration added if no explicit ones
+    are defined. (gh-439)
+-   Right precedence of sbt.boot.properties lookup, handle qualifier
+    correctly. (gh-651)
+-   Mark the tests failed exception as having already provided feedback.
+-   Handle exceptions not caught by the test framework when forking.
+    (gh-653)
+-   Support `reload plugins` after ignoring a failure to load a project.
+-   Workaround for os deadlock detection at the process level. (gh-650)
+-   Fix for dependency on class file corresponding to a package.
+    (Grzegorz K., gh-620)
+-   Fix incremental compilation problem with package objects inheriting
+    from invalidated sources in a subpackage.
+-   Use Ivy's default name for the resolution report so that links to
+    other configurations work.
+-   Include jars from java.ext.dirs in incremental classpath. (gh-678)
+-   Multi-line prompt text offset issue (Jibbers42, gh-625)
+-   Added `xml:space="preserve"` attribute to extraDependencyAttributes
+    XML Block for publishing poms for plugins dependent on other plugins
+    (Brendan M., gh-645)
+-   Tag the actual test task and not a later task. (gh-692)
+-   Make exclude-classifiers per-user instead of per-build. (gh-634)
+-   Load global plugins in their own class loader and replace the base
+    loader with that. (gh-272)
+-   Demote the default conflict warnings to the debug level. These will
+    be removed completely in 0.13. (gh-709)
+-   Fix Ivy cache issues when multiple resolvers are involved. (gh-704)
+
+## sbt 0.12.2
+
+-   Support -Yrangepos. (Lex S., gh-607)
+-   Only make one call to test frameworks per test name. (gh-520)
+-   Add `-cp` option to the `apply` method to make adding commands from
+    an external program easier.
+-   Stable representation of refinement typerefs. This fixes unnecessary
+    recompilations in some cases. (Adriaan M., gh-610)
+-   Disable aggregation for `run-main`. (gh-606)
+-   Concurrent restrictions: Untagged should be set based on the task's
+    tags, not the tags of all tasks.
+-   When preserving the last modified time of files, convert negative
+    values to 0
+-   Use `java.lang.Throwable.setStackTrace` when sending exceptions back
+    from forked tests. (Eugene V., gh-543)
+-   Don't merge dependencies with mismatched transitive/force/changing
+    values. (gh-582)
+-   Filter out null parent files when deleting empty directories.
+    (Eugene V., gh-589)
+-   Work around File constructor not accepting URIs for UNC paths.
+    (gh-564)
+-   Split ForkTests react() out to workaround SI-6526 (avoids a
+    stackoverflow in some forked test situations)
+-   Maven-style ivy repo support in the launcher config (Eric B.,
+    gh-585)
+-   Compare external binaries with canonical files (nau, gh-584)
+-   Call System.exit after the main thread is finished. (Eugene V.,
+    gh-565)
+-   Abort running tests on the first failure to communicate results back
+    to the main process. (Eugene V., gh-557)
+-   Don't let the right side of the alias command fail the parse.
+    (gh-572)
+-   API extraction: handle any type that is annotated, not just the
+    spec'd simple type. (gh-559)
+-   Don't try to look up the class file for a package. (gh-620)
+
+## sbt 0.12.1
+
+### Dependency management fixes:
+
+-   Merge multiple dependency definitions for the same ID. Workaround
+    for gh-468, gh-285, gh-419, gh-480.
+-   Don't write section of pom if scope is 'compile'.
+-   Ability to properly match on artifact type. Fixes gh-507 (Thomas).
+-   Force `update` to run on changes to last modified time of artifacts
+    or cached descriptor (part of fix for gh-532). It may also fix
+    issues when working with multiple local projects via 'publish-local'
+    and binary dependencies.
+-   Per-project resolution cache that deletes cached files before
+    update. Notes:
+
+> -   The resolution cache differs from the repository cache and does
+>     not contain dependency metadata or artifacts.
+> -   The resolution cache contains the generated ivy files, properties,
+>     and resolve reports for the project.
+> -   There will no longer be individual files directly in
+>     `~/.ivy2/cache/`
+> -   Resolve reports are now in target/resolution-cache/reports/,
+>     viewable with a browser.
+> -   Cache location includes extra attributes so that cross builds of a
+>     plugin do not overwrite each other. Fixes gh-532.
+
+### Three stage incremental compilation:
+
+-   As before, the first step recompiles sources that were edited (or
+    otherwise directly invalidated).
+-   The second step recompiles sources from the first step whose API has
+    changed, their direct dependencies, and sources forming a cycle with
+    these sources.
+-   The third step recompiles transitive dependencies of sources from
+    the second step whose API changed.
+-   Code relying mainly on composition should see decreased compilation
+    times with this approach.
+-   Code with deep inheritance hierarchies and large cycles between
+    sources may take longer to compile.
+-   `last compile` will show cycles that were processed in step 2.
+    Reducing large cycles of sources shown here may decrease compile
+    times.
+
+### Miscellaneous fixes and improvements:
+
+-   Various test forking fixes. Fixes gh-512, gh-515.
+-   Proper isolation of build definition classes. Fixes gh-536, gh-511.
+-   `orbit` packaging should be handled like a standard jar. Fixes
+    gh-499.
+-   In `IO.copyFile`, limit maximum size transferred via NIO. Fixes
+    gh-491.
+-   Add OSX JNI library extension in `includeFilter` by default. Fixes
+    gh-500. (Indrajit)
+-   Translate `show x y` into `;show x ;show y` . Fixes gh-495.
+-   Clean up temporary directory on exit. Fixes gh-502.
+-   `set` prints the scopes+keys it defines and affects.
+-   Tab completion for `set` (experimental).
+-   Report file name when an error occurs while opening a corrupt zip
+    file in incremental compilation code. (James)
+-   Defer opening logging output files until an actual write. Helps
+    reduce number of open file descriptors.
+-   Back all console loggers by a common console interface that merges
+    (overwrites) consecutive Resolving xxxx ... lines when ansi codes
+    are enabled (as first done by Play).
+
+### Forward-compatible-only change (not present in 0.12.0):
+
+-   `sourcesInBase` setting controls whether sources in base directory
+    are included. Fixes gh-494.
+
+## sbt 0.12.0
 
 #### Features, fixes, changes with compatibility implications
 
@@ -1753,177 +2294,6 @@ libraryDependencies += "org.scala-lang" % "scala-library" % "2.9.2" % "provided"
 
 Older Changes
 -------------
-
-### 0.12.3 to 0.12.4
-
--   Work around URI problems with encoding and resolving. (gh-725)
--   Allow -cp argument to `apply` command to be quoted. (gh-724)
--   Make `sbtBinaryVersion` use the new approach for 0.13 and later to
-    support cross-building plugins.
--   Pull `sbtDependency` version from `sbtVersion` to facilitate
-    cross-building plugins.
--   Proper support for stashing on-failure handlers. (gh-732)
--   Include files with zip extension in unmanaged jars. (gh-750)
--   Only add automatically detected plugins to options once. (gh-757)
--   Properly handle failure in a multi-command that includes `reload`.
-    (gh-732)
--   Fix unsynchronized caching of Scala class loaders that could result
-    in Scala classes being loaded in multiple class loaders.
--   Incremental compiler: remove resident compiler code (wasn't used and
-    was a compatibility liability)
--   Incremental compiler: properly track `abstract override` modifier.
-    (gh-726)
--   Incremental compiler: do not normalize types in the api extraction
-    phase. (gh-736)
--   Ivy cache: account for `localOnly` when cache subclass overrides
-    `isChanging`
--   Ivy cache: fix corruption when developing sbt or sbt plugins.
-    (gh-768)
--   Ivy cache: invalidate when artifact download fails to avoid locking
-    into bad resolver. (gh-760)
--   Ivy cache: use publication date from metadata instead of original
-    file's last modified time when deleting out of date artifacts.
-    (gh-764)
-
-### 0.12.2 to 0.12.3
-
--   Allow `cleanKeepFiles` to contain directories
--   Disable Ivy debug-level logging for performance. (gh-635)
--   Invalidate artifacts not recorded in the original metadata when a
-    module marked as changing changes. (gh-637, gh-641)
--   Ivy Artifact needs wildcard configuration added if no explicit ones
-    are defined. (gh-439)
--   Right precedence of sbt.boot.properties lookup, handle qualifier
-    correctly. (gh-651)
--   Mark the tests failed exception as having already provided feedback.
--   Handle exceptions not caught by the test framework when forking.
-    (gh-653)
--   Support `reload plugins` after ignoring a failure to load a project.
--   Workaround for os deadlock detection at the process level. (gh-650)
--   Fix for dependency on class file corresponding to a package.
-    (Grzegorz K., gh-620)
--   Fix incremental compilation problem with package objects inheriting
-    from invalidated sources in a subpackage.
--   Use Ivy's default name for the resolution report so that links to
-    other configurations work.
--   Include jars from java.ext.dirs in incremental classpath. (gh-678)
--   Multi-line prompt text offset issue (Jibbers42, gh-625)
--   Added `xml:space="preserve"` attribute to extraDependencyAttributes
-    XML Block for publishing poms for plugins dependent on other plugins
-    (Brendan M., gh-645)
--   Tag the actual test task and not a later task. (gh-692)
--   Make exclude-classifiers per-user instead of per-build. (gh-634)
--   Load global plugins in their own class loader and replace the base
-    loader with that. (gh-272)
--   Demote the default conflict warnings to the debug level. These will
-    be removed completely in 0.13. (gh-709)
--   Fix Ivy cache issues when multiple resolvers are involved. (gh-704)
-
-### 0.12.1 to 0.12.2
-
--   Support -Yrangepos. (Lex S., gh-607)
--   Only make one call to test frameworks per test name. (gh-520)
--   Add `-cp` option to the `apply` method to make adding commands from
-    an external program easier.
--   Stable representation of refinement typerefs. This fixes unnecessary
-    recompilations in some cases. (Adriaan M., gh-610)
--   Disable aggregation for `run-main`. (gh-606)
--   Concurrent restrictions: Untagged should be set based on the task's
-    tags, not the tags of all tasks.
--   When preserving the last modified time of files, convert negative
-    values to 0
--   Use `java.lang.Throwable.setStackTrace` when sending exceptions back
-    from forked tests. (Eugene V., gh-543)
--   Don't merge dependencies with mismatched transitive/force/changing
-    values. (gh-582)
--   Filter out null parent files when deleting empty directories.
-    (Eugene V., gh-589)
--   Work around File constructor not accepting URIs for UNC paths.
-    (gh-564)
--   Split ForkTests react() out to workaround SI-6526 (avoids a
-    stackoverflow in some forked test situations)
--   Maven-style ivy repo support in the launcher config (Eric B.,
-    gh-585)
--   Compare external binaries with canonical files (nau, gh-584)
--   Call System.exit after the main thread is finished. (Eugene V.,
-    gh-565)
--   Abort running tests on the first failure to communicate results back
-    to the main process. (Eugene V., gh-557)
--   Don't let the right side of the alias command fail the parse.
-    (gh-572)
--   API extraction: handle any type that is annotated, not just the
-    spec'd simple type. (gh-559)
--   Don't try to look up the class file for a package. (gh-620)
-
-### 0.12.0 to 0.12.1
-
-Dependency management fixes:
-
--   Merge multiple dependency definitions for the same ID. Workaround
-    for gh-468, gh-285, gh-419, gh-480.
--   Don't write section of pom if scope is 'compile'.
--   Ability to properly match on artifact type. Fixes gh-507 (Thomas).
--   Force `update` to run on changes to last modified time of artifacts
-    or cached descriptor (part of fix for gh-532). It may also fix
-    issues when working with multiple local projects via 'publish-local'
-    and binary dependencies.
--   Per-project resolution cache that deletes cached files before
-    update. Notes:
-
-> -   The resolution cache differs from the repository cache and does
->     not contain dependency metadata or artifacts.
-> -   The resolution cache contains the generated ivy files, properties,
->     and resolve reports for the project.
-> -   There will no longer be individual files directly in
->     `~/.ivy2/cache/`
-> -   Resolve reports are now in target/resolution-cache/reports/,
->     viewable with a browser.
-> -   Cache location includes extra attributes so that cross builds of a
->     plugin do not overwrite each other. Fixes gh-532.
-
-Three stage incremental compilation:
-
--   As before, the first step recompiles sources that were edited (or
-    otherwise directly invalidated).
--   The second step recompiles sources from the first step whose API has
-    changed, their direct dependencies, and sources forming a cycle with
-    these sources.
--   The third step recompiles transitive dependencies of sources from
-    the second step whose API changed.
--   Code relying mainly on composition should see decreased compilation
-    times with this approach.
--   Code with deep inheritance hierarchies and large cycles between
-    sources may take longer to compile.
--   `last compile` will show cycles that were processed in step 2.
-    Reducing large cycles of sources shown here may decrease compile
-    times.
-
-Miscellaneous fixes and improvements:
-
--   Various test forking fixes. Fixes gh-512, gh-515.
--   Proper isolation of build definition classes. Fixes gh-536, gh-511.
--   `orbit` packaging should be handled like a standard jar. Fixes
-    gh-499.
--   In `IO.copyFile`, limit maximum size transferred via NIO. Fixes
-    gh-491.
--   Add OSX JNI library extension in `includeFilter` by default. Fixes
-    gh-500. (Indrajit)
--   Translate `show x y` into `;show x ;show y` . Fixes gh-495.
--   Clean up temporary directory on exit. Fixes gh-502.
--   `set` prints the scopes+keys it defines and affects.
--   Tab completion for `set` (experimental).
--   Report file name when an error occurs while opening a corrupt zip
-    file in incremental compilation code. (James)
--   Defer opening logging output files until an actual write. Helps
-    reduce number of open file descriptors.
--   Back all console loggers by a common console interface that merges
-    (overwrites) consecutive Resolving xxxx ... lines when ansi codes
-    are enabled (as first done by Play).
-
-Forward-compatible-only change (not present in 0.12.0):
-
--   `sourcesInBase` setting controls whether sources in base directory
-    are included. Fixes gh-494.
 
 ### 0.11.3 to 0.12.0
 
@@ -3120,95 +3490,6 @@ the backup of your old project from `project-old` to `project` again.
 
 There's a section in the [FAQ][Faq] about migration from 0.7 that
 covers several other important points.
-
-
-  [sbt-dev]: https://groups.google.com/d/forum/sbt-dev
-  [adept]: https://github.com/adept-dm/adept
-  [Update-Report]: Update-Report.html
-
-Contributing to sbt
--------------------
-
-Below is a running list of potential areas of contribution. This list
-may become out of date quickly, so you may want to check on the
-[sbt-dev mailing list][sbt-dev] if you are interested in a specific topic.
-
-1.  There are plenty of possible visualization and analysis
-    opportunities.
-    -   'compile' produces an Analysis of the source code containing
-        -   Source dependencies
-        -   Inter-project source dependencies
-        -   Binary dependencies (jars + class files)
-        -   data structure representing the
-            [API](https://github.com/sbt/sbt/tree/0.13/interface) of the
-            source code There is some code already for generating dot
-            files that isn't hooked up, but graphing dependencies and
-            inheritance relationships is a general area of work.
-    -   'update' produces an [Update Report][Update-Report] mapping
-        Configuration/ModuleID/Artifact to the retrieved File
-    -   Ivy produces more detailed XML reports on dependencies. These
-        come with an XSL stylesheet to view them, but this does not
-        scale to large numbers of dependencies. Working on this is
-        pretty straightforward: the XML files are created in `~/.ivy2`
-        and the `.xsl` and `.css` are there as well, so you don't even need
-        to work with sbt. Other approaches described in [the email
-        thread](https://groups.google.com/group/simple-build-tool/browse_thread/thread/7761f8b2ce51f02c/129064ea836c9baf)
-    -   Tasks are a combination of static and dynamic graphs and it
-        would be useful to view the graph of a run
-    -   Settings are a static graph and there is code to generate the
-        dot files, but isn't hooked up anywhere.
-
-2.  There is support for dependencies on external projects, like on
-    GitHub. To be more useful, this should support being able to update
-    the dependencies. It is also easy to extend this to other ways of
-    retrieving projects. Support for svn and hg was a recent
-    contribution, for example.
-3.  Dependency management: see [adept][adept]
-4.  If you like parsers, sbt commands and input tasks are written using
-    custom parser combinators that provide tab completion and error
-    handling. Among other things, the efficiency could be improved.
-5.  The javap task hasn't been reintegrated
-6.  Implement enhanced 0.11-style warn/debug/info/error/trace commands.
-    Currently, you set it like any other setting:
-
-```
-set logLevel := Level.Warn
-```
-
-> or
-> :   set logLevel in Test := Level.Warn
->
-You could make commands that wrap this, like:
-
-```
-warn test:run
-```
-
-Also, trace is currently an integer, but should really be an abstract
-data type.
-
-​7. Each sbt version has more aggressive incremental compilation and
-reproducing bugs can be difficult. It would be helpful to have a mode
-that generates a diff between successive compilations and records the
-options passed to scalac. This could be replayed or inspected to try to
-find the cause.
-
-### Documentation
-
-1.  There's a lot to do with this documentation. If you check it out
-    from git, there's a directory called Dormant with some content that
-    needs going through.
-2.  the main page mentions external project references (e.g.
-    to a git repo) but doesn't have anything to link to that explains
-    how to use those.
-3.  API docs are much needed.
-4.  Find useful answers or types/methods/values in the other docs, and
-    pull references to them up into /faq or /Name-Index so people can
-    find the docs. In general the /faq should feel a bit more like a
-    bunch of pointers into the regular docs, rather than an alternative
-    to the docs.
-5.  A lot of the pages could probably have better names, and/or little
-    2-4 word blurbs to the right of them in the sidebar.
 
 
   [Getting-Started]: ../tutorial/index.html
