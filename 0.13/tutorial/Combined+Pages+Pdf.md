@@ -35,7 +35,7 @@ Thanks for trying out sbt and *have fun*!
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.msi
+  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.7/sbt-0.13.7.msi
   [Setup-Notes]: ../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -65,8 +65,8 @@ If you have any trouble running sbt, see [Setup Notes][Setup-Notes] on
 terminal encodings, HTTP proxies, and JVM options.
 
 
-  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.zip
-  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.tgz
+  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.7/sbt-0.13.7.zip
+  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.7/sbt-0.13.7.tgz
   [Manual-Installation]: Manual-Installation.html
  
 Installing sbt on Mac
@@ -99,9 +99,9 @@ Download [ZIP][ZIP] or [TGZ][TGZ] package, and expand it.
 See instruction to install manually.
 
 
-  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.msi
-  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.zip
-  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.tgz
+  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.7/sbt-0.13.7.msi
+  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.7/sbt-0.13.7.zip
+  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.7/sbt-0.13.7.tgz
 
 Installing sbt on Windows
 -------------------------
@@ -119,10 +119,10 @@ Download [ZIP][ZIP] or [TGZ][TGZ] package and expand it.
 See instruction to install manually.
 
 
-  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.zip
-  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.6/sbt-0.13.6.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-0.13.6.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-0.13.6.deb
+  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.7/sbt-0.13.7.zip
+  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.7/sbt-0.13.7.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-0.13.7.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-0.13.7.deb
   [Manual-Installation]: Manual-Installation.html
  
 Installing sbt on Linux
@@ -162,7 +162,7 @@ To merge sbt from this ebuilds you can do:
 See instruction to install manually.
 
 
-  [sbt-launch.jar]: https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.6/sbt-launch.jar
+  [sbt-launch.jar]: https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.7/sbt-launch.jar
 
 Installing sbt manually
 -----------------------
@@ -336,10 +336,10 @@ You can force a particular version of sbt by creating a file
 `hello/project/build.properties`. In this file, write:
 
 ```
-sbt.version=0.13.6
+sbt.version=0.13.7
 ```
 
-to force the use of sbt 0.13.6. sbt is 99% source compatible from
+to force the use of sbt 0.13.7. sbt is 99% source compatible from
 release to release. Still, setting the sbt version in
 `project/build.properties` avoids any potential confusion.
 
