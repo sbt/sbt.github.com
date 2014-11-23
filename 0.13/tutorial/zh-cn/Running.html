@@ -41,25 +41,25 @@
           </a>
         <div class="container contentswrapper">
           <div class="span-16 prepend-1 append-1 contents">
-            <h2 id="%E8%BF%90%E8%A1%8C">运行<a href="#%E8%BF%90%E8%A1%8C" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>这一小节将讲述在你建立好项目之后如何去使用 sbt。假设你已经<a href="Setup.html">安装 sbt</a> 并且已经创建过 <a href="Hello.html">Hello, World</a> 项目或其他项目。
+            <h2 id="%E8%BF%90%E8%A1%8C">运行<a href="#%E8%BF%90%E8%A1%8C" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>这一小节将讲述在你建立好项目之后如何去使用 sbt。假设你已经 <a href="Setup.html">安装 sbt</a> 并且已经创建过 <a href="Hello.html">Hello, World</a> 项目或其他项目。
 </p><h3 id="%E4%BA%A4%E4%BA%92%E6%A8%A1%E5%BC%8F">交互模式<a href="#%E4%BA%A4%E4%BA%92%E6%A8%A1%E5%BC%8F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在你的项目目录下运行 sbt 不跟任何参数：
 </p><pre><code class="">$ sbt
 </code></pre><p>执行 sbt 不跟任何命令行参数将会进入交互模式。交互模式有一个命令行（含有 tab 自动补全功能和历史记录）。
 </p><p>例如，在 sbt 命令行里输入 <code>compile</code>：
 </p><pre><code class="">&gt; compile
-</code></pre><p>再次 <code>compile</code>，只需要按方向键上然后回车。
-</p><p>输入 <code>run</code> 来启动程序。
-</p><p>输入 <code>exit</code> 或者 Ctrl+D （Unix）或者 Ctrl+Z （Windows）可以退出交互模式。
+</code></pre><p>再次 <code>compile</code>，只需要按向上的方向键，然后回车。
+输入 <code>run</code> 来启动程序。
+输入 <code>exit</code> 或者 Ctrl+D （Unix）或者 Ctrl+Z （Windows）可以退出交互模式。
 </p><h3 id="%E6%89%B9%E5%A4%84%E7%90%86%E6%A8%A1%E5%BC%8F">批处理模式<a href="#%E6%89%B9%E5%A4%84%E7%90%86%E6%A8%A1%E5%BC%8F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>你也可以用批处理模式来运行 sbt，可以以空格为分隔符指定参数。对于接受参数的 sbt 命令，将命令和参数用引号引起来一起传给 sbt。例如：
 </p><pre><code class="">$ sbt clean compile &quot;testOnly TestA TestB&quot;
 </code></pre><p>在这个例子中，<code>testOnly</code> 有两个参数 <code>TestA</code> 和 <code>TestB</code>。这个命令会按顺序执行（<code>clean</code>， <code>compile</code>， 然后 <code>testOnly</code>）。
 </p><h3 id="%E6%8C%81%E7%BB%AD%E6%9E%84%E5%BB%BA%E5%92%8C%E6%B5%8B%E8%AF%95">持续构建和测试<a href="#%E6%8C%81%E7%BB%AD%E6%9E%84%E5%BB%BA%E5%92%8C%E6%B5%8B%E8%AF%95" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>为了加快编辑-编译-测试循环，你可以让 sbt 在你保存源文件时自动重新编译或者跑测试。
-</p><p>在命令前面加上前缀 <code>~</code> 后，每当有一个或多个源文件发生变化时就会自动运行该命令。例如，在交互模式下尝试：
+在命令前面加上前缀 <code>~</code> 后，每当有一个或多个源文件发生变化时就会自动运行该命令。例如，在交互模式下尝试：
 </p><pre><code class="">&gt; ~ compile
 </code></pre><p>按回车键停止监视变化。
-</p><p>你可以在交互模式或者批处理模式下使用 <code>~</code> 前缀。
-</p><p>参见<a href="../docs/Triggered-Execution.html">触发执行</a>获取详细信息。
-</p><h3 id="%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4">常用命令<a href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>下面是一些非常常用的的 sbt 命令。更加详细的列表请参见<a href="../docs/Command-Line-Reference.html">命令行参考</a>。
+你可以在交互模式或者批处理模式下使用 <code>~</code> 前缀。
+参见 <a href="../docs/Triggered-Execution.html">触发执行</a> 获取详细信息。
+</p><h3 id="%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4">常用命令<a href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>下面是一些非常常用的的 sbt 命令。更加详细的列表请参见 <a href="../docs/Command-Line-Reference.html">命令行参考</a>。
 </p><table>
   <tr>
     <td><tt>clean</tt></td>
@@ -116,7 +116,7 @@
   </tr>
   <tr>
     <td><tt>!n</tt></td>
-    <td>执行下标为 <tt>n</tt> 的命令，顺序和 <tt>!:</tt> 命令展示的一直。</td>
+    <td>执行 <tt>!:</tt> 命令显示的结果中下标为 <tt>n</tt> 的命令。</td>
   </tr>
   <tr>
     <td><tt>!-n</tt></td>
@@ -142,7 +142,7 @@
       <a name="toc"></a>
       <h4 class="toctitle">Contents</h4>
       <div class="tocbody">
-      <div><a href="index.html">sbt 入门</a></div><ol class="toc"> <li><div><a href="Setup.html">安装 sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">在 Mac 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">在 Windows 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">在Linux上安装sbt</a></div></li><li><div><a href="Manual-Installation.html">手动安装 sbt</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">目录结构</a></div></li><li><div class="current">运行</div></li><li><div><a href="Basic-Def.html">.sbt 构建定义</a></div></li><li><div><a href="Scopes.html">Scope</a></div></li><li><div><a href="More-About-Settings.html">更多关于设置</a></div></li><li><div><a href="Library-Dependencies.html">库依赖</a></div></li><li><div><a href="Multi-Project.html">多项目构建</a></div></li><li><div><a href="Using-Plugins.html">使用插件</a></div></li><li><div><a href="Custom-Settings.html">自定义设置和任务</a></div></li><li><div><a href="Full-Def.html">.scala 构建定义</a></div></li><li><div><a href="Summary.html">总结</a></div></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+      <div><a href="index.html">sbt 入门</a></div><ol class="toc"> <li><div><a href="Setup.html">安装 sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">在 Mac 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">在 Windows 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">在 Linux 上安装 sbt</a></div></li><li><div><a href="Manual-Installation.html">手动安装 sbt</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">目录结构</a></div></li><li><div class="current">运行</div></li><li><div><a href="Basic-Def.html">.sbt 构建定义</a></div></li><li><div><a href="Scopes.html">Scope</a></div></li><li><div><a href="More-About-Settings.html">更多关于设置</a></div></li><li><div><a href="Library-Dependencies.html">库依赖</a></div></li><li><div><a href="Multi-Project.html">多项目构建</a></div></li><li><div><a href="Using-Plugins.html">使用插件</a></div></li><li><div><a href="Custom-Settings.html">自定义设置和任务</a></div></li><li><div><a href="Full-Def.html">.scala 构建定义</a></div></li><li><div><a href="Summary.html">总结</a></div></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
           </div>
         </div>
         <div class="header">

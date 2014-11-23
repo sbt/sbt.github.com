@@ -39,15 +39,15 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
 -   建立一个简单的 [hello world][Hello] 工程
     -   创建一个工程目录并且将源文件放在其中。
     -   创建你的构建定义。
--   继续去[运行 sbt][Running] 学习怎么运行 sbt。
--   然后去 [.sbt 构建定义][Basic-Def]学习更多关于构建的定义。
+-   继续前往 [运行 sbt][Running] 学习怎么运行 sbt。
+-   然后前往 [.sbt 构建定义][Basic-Def] 学习更多关于构建的定义。
 
 
-最后，安装步骤就简化为一个 Jar 文件和一个 Shell 脚本，但是取决于你的平台，我们提供了好几种方式来使得步骤不是那儿单调。 [Mac][Mac]，[Windows][Windows]，[Linux][Linux]，[手动安装][Manual-Installation]提供了相应的安装步骤。
+最后，安装步骤就简化为一个 Jar 文件和一个 Shell 脚本，但是取决于你的平台，我们提供了好几种方式来使得步骤不是那么单调。 [Mac][Mac]，[Windows][Windows]，[Linux][Linux]，[手动安装][Manual-Installation] 提供了相应的安装步骤。
 
 ### 提示和技巧
 
-如果你在运行 sbt 时遇到任何问题，查看[安装建议][Setup-Notes]中的终端编码，HTTP 代理，JVM 参数。
+如果你在运行 sbt 时遇到任何问题，查看 [安装建议][Setup-Notes] 中的终端编码（terminal encoding），HTTP 代理，JVM 参数。
 
 
   [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.7/sbt-0.13.7.zip
@@ -91,7 +91,7 @@ $ brew install sbt
 
 ### 通过 Windows 安装包安装
 
-下载 [msi 安装包][MSI]并安装。
+下载 [msi 安装包][MSI] 并安装。
 
 ### 通过通用的安装包安装
 
@@ -108,7 +108,7 @@ $ brew install sbt
   [DEB]: https://dl.bintray.com/sbt/debian/sbt-0.13.7.deb
   [Manual-Installation]: Manual-Installation.html
  
-在Linux上安装sbt
+在 Linux 上安装 sbt
 -----------------------
 
 ### 通过通用的安装包安装
@@ -134,7 +134,7 @@ $ brew install sbt
     $ echo "PORTDIR_OVERLAY=$PORTDIR_OVERLAY /usr/local/portage/overlays" >> /etc/make.conf
     $ emerge sbt-bin
 
-> **注意：** 请将任何和 ebuild 相关的问题反馈到[这里](https://github.com/whiter4bbit/overlays/issues)。
+> **注意：** 请将任何和 ebuild 相关的问题反馈到 [这里](https://github.com/whiter4bbit/overlays/issues)。
 
 ### 手动安装
 
@@ -151,7 +151,6 @@ $ brew install sbt
 ### Unix
 
 将 [sbt-launch.jar][sbt-launch.jar] 文件放在 `~/bin` 下。
-
 创建一个脚本来运行这个 jar，脚本 `~/bin/sbt` 内容如下:
 
 ```
@@ -198,7 +197,7 @@ $ chmod u+x ~/bin/sbt
 
 #### Cygwin 和 Ansi 终端
 
-如果使用 Cygwin 和 Ansi 终端(支持 Ansi 转义序列并且可以通过 stty 配置)，创建一个 bash 文件 `~/bin/sbt`：
+如果使用 Cygwin 和 Ansi 终端（支持 Ansi 转义序列并且可以通过 stty 配置），创建一个 bash 文件 `~/bin/sbt`：
 
 ```
 SBT_OPTS="-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M"
@@ -213,10 +212,10 @@ stty icanon echo > /dev/null 2>&1
 $ chmod u+x ~/bin/sbt
 ```
 
-为了让退格(backspace)能够在 scala 的控制台中正常工作，你需要确保你的退格键发送的是删除符(erase character)，和在 stty 中配置的一样。对于默认的 cygwin 终端(mintty)，
-在设置选项 -> 键中，“退格发送 ^H” 需要被选中如果你的删除符是 cygwin 默认的 ^H。
+为了让退格（backspace）能够在 Scala 的控制台中正常工作，你需要确保你的退格键发送的是删除符（erase character），和在 stty 中配置的一样。对于默认的 cygwin 终端（mintty），
+在设置选项 -> 键中，如果你的删除符是 cygwin 默认的 ^H，“退格发送 ^H” 需要被选中。
 
-> **注意:** 当前其他的配置还不支持。请[提交 pull request](https://github.com/sbt/sbt/blob/0.13/CONTRIBUTING.md) 实现或者描述已经支持的配置。
+> **注意：** 当前其他的配置还不支持。请 [提交 pull request](https://github.com/sbt/sbt/blob/0.13/CONTRIBUTING.md) 实现或者描述已经支持的配置。
 
 
   [Basic-Def]: Basic-Def.html
@@ -260,14 +259,12 @@ Hi!
 -   `lib` 中的 jar 文件
 
 默认情况下，sbt 会用和启动自身相同版本的 Scala 来构建项目。
-
 你可以通过执行 `sbt run` 来运行项目或者通过 `sbt console` 进入 [Scala REPL](http://www.scala-lang.org/node/2097)。`sbt console` 已经帮你
 设置好项目的 classpath，所以你可以根据项目的代码尝试实际的 Scala 示例。
 
 ### 构建定义
 
 大多数项目需要一些手动设置。基本的构建设置都放在项目根目录的 `build.sbt` 文件里。
-
 例如，如果你的项目放在 `hello` 下，在 `hello/build.sbt` 中可以这样写：
 
 ```scala
@@ -278,9 +275,8 @@ version := "1.0"
 scalaVersion := "2.10.3"
 ```
 
-注意相邻的两行之间都有一个空行。这不仅仅是为了好看，它们是为了能将每一项分隔必须的。在 [.sbt 构建定义][Basic-Def]这节中你将会学到更多关于
+注意相邻的两行之间都有一个空行。这不仅仅是为了好看，它们是为了能将每一项分隔开来而必须的。在 [.sbt 构建定义][Basic-Def] 这节中你将会学到更多关于
 如何编写 `build.sbt` 脚本的东西。
-
 如果你准备将你的项目打包成一个 jar 包，在 `build.sbt` 中至少要写上 name 和 version。
 
 ### 设置 sbt 版本
@@ -301,7 +297,7 @@ sbt 在不同的 release 版本中是 99% 兼容的。但是在 `project/build.p
 目录结构
 -------------------
 
-这一小节假设你已经[安装 sbt][Setup] 并且已经阅读过 [Hello, World][Hello] 了。
+这一小节假设你已经 [安装 sbt][Setup] 并且已经阅读过 [Hello, World][Hello] 了。
 
 ### 基础目录
 
@@ -309,8 +305,7 @@ sbt 在不同的 release 版本中是 99% 兼容的。但是在 `project/build.p
 
 ### 源代码
 
-源代码可以像 `hello/hw.scala` 一样的放在项目的基础目录。然而，大多数人不会在真实的项目中这样做，因为太杂乱了。
-
+源代码可以像 `hello/hw.scala` 一样的放在项目的基础目录中。然而，大多数人不会在真实的项目中这样做，因为太杂乱了。
 sbt 和 [Maven](https://maven.apache.org/) 的默认的源文件的目录结构是一样的（所有的路径都是相对于基础目录的）：
 
 ```
@@ -336,7 +331,6 @@ src/
 ### sbt 构建定义文件
 
 你已经在项目的基础目录中看到了 `build.sbt`。其他的 sbt 文件在 `project` 子目录中。
-
 `project` 目录可以包含 `.scala` 文件，这些文件最后会和 `.sbt` 文件合并共同构成完整的构建定义。想知道更多请参见 [.scala 构建定义][Full-Def]。
 
 ```
@@ -345,11 +339,11 @@ project/
   Build.scala
 ```
 
-你可能在 `project/` 中也看到了 `.sbt` 文件，但是它不等同于项目基础目录中的 `.sbt` 文件。这将在[稍后][Full-Def]解释，因为首先你需要一些背景知识。
+你可能在 `project/` 中也看到了 `.sbt` 文件，但是它不等同于项目基础目录中的 `.sbt` 文件。这将在 [稍后][Full-Def] 解释，因为首先你需要一些背景知识。
 
 ### 构建产品
 
-生成的文件（编译的 classes，打包的 jars，托管文件，caches 和文档）默认写在 `target` 目录中。
+构建出来的文件（编译的 classes，打包的 jars，托管文件，caches 和文档）默认写在 `target` 目录中。
 
 ### 配置版本管理
 
@@ -369,7 +363,7 @@ target/
 运行
 -------
 
-这一小节将讲述在你建立好项目之后如何去使用 sbt。假设你已经[安装 sbt][Setup] 并且已经创建过 [Hello, World][Hello] 项目或其他项目。
+这一小节将讲述在你建立好项目之后如何去使用 sbt。假设你已经 [安装 sbt][Setup] 并且已经创建过 [Hello, World][Hello] 项目或其他项目。
 
 ### 交互模式
 
@@ -387,10 +381,8 @@ $ sbt
 > compile
 ```
 
-再次 `compile`，只需要按方向键上然后回车。
-
+再次 `compile`，只需要按向上的方向键，然后回车。
 输入 `run` 来启动程序。
-
 输入 `exit` 或者 Ctrl+D （Unix）或者 Ctrl+Z （Windows）可以退出交互模式。
 
 ### 批处理模式
@@ -406,7 +398,6 @@ $ sbt clean compile "testOnly TestA TestB"
 ### 持续构建和测试
 
 为了加快编辑-编译-测试循环，你可以让 sbt 在你保存源文件时自动重新编译或者跑测试。
-
 在命令前面加上前缀 `~` 后，每当有一个或多个源文件发生变化时就会自动运行该命令。例如，在交互模式下尝试：
 
 ```
@@ -414,14 +405,12 @@ $ sbt clean compile "testOnly TestA TestB"
 ```
 
 按回车键停止监视变化。
-
 你可以在交互模式或者批处理模式下使用 `~` 前缀。
-
-参见[触发执行][Triggered-Execution]获取详细信息。
+参见 [触发执行][Triggered-Execution] 获取详细信息。
 
 ### 常用命令
 
-下面是一些非常常用的的 sbt 命令。更加详细的列表请参见[命令行参考][Command-Line-Reference]。
+下面是一些非常常用的的 sbt 命令。更加详细的列表请参见 [命令行参考][Command-Line-Reference]。
 
 <table>
   <tr>
@@ -487,7 +476,7 @@ $ sbt clean compile "testOnly TestA TestB"
   </tr>
   <tr>
     <td><tt>!n</tt></td>
-    <td>执行下标为 <tt>n</tt> 的命令，顺序和 <tt>!:</tt> 命令展示的一直。</td>
+    <td>执行 <tt>!:</tt> 命令显示的结果中下标为 <tt>n</tt> 的命令。</td>
   </tr>
   <tr>
     <td><tt>!-n</tt></td>
@@ -517,29 +506,24 @@ $ sbt clean compile "testOnly TestA TestB"
 
 ### `.sbt` vs `.scala` 构建定义
 
-一个 sbt 构建定义可以包含项目基目录中以 `.sbt` 结尾的文件，也可以包含项目基目录下 `project/` 子目录中以 `.scala` 结尾的文件。
-
-这一小节将讨论适用于绝大多数场景的 `.sbt` 文件。`.scala` 文件通常适用于通过与.sbt共享代码，进而定义更复杂的构建。参见 [.scala 构建定义][Full-Def] （在入门指南的后面）了解
+一个 sbt 构建定义可以包含项目基础目录中以 `.sbt` 结尾的文件，也可以包含项目基础目录下 `project/` 子目录中以 `.scala` 结尾的文件。
+这一小节将讨论适用于大多数场景的 `.sbt` 文件。`.scala` 文件通常适用于通过与 .sbt 共享代码，进而定义更复杂的构建。参见 [.scala 构建定义][Full-Def] （在入门指南的后面部分）了解
 更多关于 `.scala` 文件的内容。
 
 ### 什么是构建定义？
 
 sbt 在检查项目和处理构建定义文件之后，形成一个不可变的映射表（immutable map）（一些键值对的集合）来描述构建。
-
-例如，以 `name` 为 key，它的 value 是它的项目名称。
-
+例如，一个叫做 `name` 的 key，映射到一个字符串的值，即项目的名称。
 *构建定义文件不会直接影响 sbt 的 map。*
-
 替而代之的是，构建定义会创建一个庞大的类型为 `Setting[T]` 的对象列表，`T` 是映射表中值（value）的类型。一个 `Setting` 描述的是一次 *对映射表（map）的转换*，
-像增加一个新的键值对或者附加到一个已经存在的 value 上。（在函数式编程的使用不可变数据结构、值，在 map 上做一次转换后返回一个新的 map 的宗旨下，它不会现场更新旧的 map。）
-
-在 `build.sbt` 中，你可以想这样为项目名称创建一个 `Setting[String]`：
+像增加一个新的键值对或者追加到一个已经存在的 value 上。（在函数式编程使用不可变数据结构和值，在 map 上做一次转换后返回一个新的 map 的宗旨下，它不会就地更新旧的 map。）
+在 `build.sbt` 中，你可以像这样为项目名称创建一个 `Setting[String]`：
 
 ```scala
 name := "hello"
 ```
 
-这个 `Setting[String]` 会通过增加（或着替换） name 作为 key，并给 value 赋值为 `"hello"` 对 map 做一次转换。转换后的 map 成为 sbt 新的 map。
+这个 `Setting[String]` 会通过增加（或者替换）name 作为 key，并给 value 赋值为 `"hello"` 对 map 做一次转换。转换后的 map 成为 sbt 新的 map。
 
 为了创建这个 map，sbt 会先对所有的设置的列表进行排序，这样可以对同一个 key 的改变一起操作，而且如果 value 依赖于其他的 key，会先处理其他被依赖的 key。
 然后， sbt 会对 `Settings` 排好序的列表进行遍历，把每一项都按顺序应用到 map 中。
@@ -549,8 +533,7 @@ name := "hello"
 ### 如何在 build.sbt 中定义设置
 
 `build.sbt` 定义了一个 `Seq[Setting[_]]`；它是一个以空行分隔的 Scala 表达式的列表，每一个表达式都会成为序列 （sequence）中的一个元素。
-如果你在 `.sbt` 文件的开头写上 `Seq(`，在末尾写上 `)`，并且将每一个空行替换成为一个逗号，你会看到和 `.scala` 中等效的代码。
-
+如果你在 `.sbt` 文件的开头写上 `Seq(`，在末尾写上 `)`，并且将每一个空行替换成为一个逗号，你会看到和 `.scala` 文件中等效的代码。
 下面是一个例子：
 
 ```scala
@@ -562,7 +545,7 @@ scalaVersion := "2.10.3"
 ```
 
 每一项 `Setting` 都定义为一个 Scala 表达式。在 `build.sbt` 中的表达式是相互独立的，而且它们仅仅是表达式，不是完整的 Scala 语句。这些表达式可以用 `val`，`lazy val`，`def` 声明。
-`build.sbt` 不允许使用顶层的 `object` 和`class`。它们必须写到 `project/` 目录下的完整的 Scala 源文件中。
+`build.sbt` 不允许使用顶层的 `object` 和 `class`。它们必须写到 `project/` 目录下的完整的 Scala 源文件中。
 
 在左边，`name`， `version` 和 `scalaVersion` 都是 *键（keys）*。一个键（key）就是一个 `SettingKey[T]`，`TaskKey[T]` 或者 `InputKey[T]` 的实例，`T` 是期待的 value 的类型。
 key 的类别将在下面讲解。
@@ -596,7 +579,6 @@ scalaVersion := "2.10.3"
 ```
 
 sbt 需要一种分隔符来告诉它一个表达式在哪里结束，下一个表达式从哪里开始。
-
 `.sbt` 文件包含了一个 Scala 表达式列表，不是一个单独的 Scala 程序。这些表达式会被分开然后分别传递给编译器。
 
 ### 键（Keys）
@@ -605,9 +587,9 @@ sbt 需要一种分隔符来告诉它一个表达式在哪里结束，下一个�
 
 有三种类型的 key：
 
-- `SettingKey[T]`: 一个 key 对应一个只计算一次的 value（这个值在加载项目的时候计算，然后一直保存着）。
-- `TaskKey[T]`: 一个 key 对应一个称之为 *task* 的 value，每次都会重新计算，可能存在潜在的副作用。
-- `InputKey[T]`: 一个可以对应一个可以接收命令行参数的 task。详细内容参见 [Input Tasks][Input-Tasks]。
+- `SettingKey[T]`：一个 key 对应一个只计算一次的 value（这个值在加载项目的时候计算，然后一直保存着）。
+- `TaskKey[T]`：一个 key 对应一个称之为 *task* 的 value，每次都会重新计算，可能存在潜在的副作用。
+- `InputKey[T]`：一个可以对应一个可以接收命令行参数的 task。详细内容参见 [Input Tasks][Input-Tasks]。
 
 #### 内置的 Keys
 
@@ -615,7 +597,7 @@ sbt 需要一种分隔符来告诉它一个表达式在哪里结束，下一个�
 
 #### 自定义 Keys
 
-可以通过它们各自的创建方法：`settingKey`，`taskKey` 和 `inputKey` 自定义 keys。每个方法都期待 key 和 value 的类型以及一段描述。
+可以通过它们各自的创建方法：`settingKey`，`taskKey` 和 `inputKey` 创建自定义 keys。每个方法都期待 key 和 value 的类型以及一段描述。
 key 的名称取自于赋给 `val` 变量的值。例如，给一个新的 task `hello` 定义一个 key，
 
 ```scala
@@ -640,7 +622,7 @@ sbt 描述项目的 map 会将设置（setting）保存为固定的字符串，�
 
 ### 定义 tasks 和 settings
 
-你可以使用 `:=` 给一个 setting 赋一个值或者给一个 task 赋一种计算。对于 setting，这个值 value 只会在项目加载的时候执行一次。对于 task，这个计算会在 task 每次执行的时候重新计算。
+你可以使用 `:=` 给一个 setting 赋一个值或者给一个 task 赋一种计算。对于 setting，这个值（value）只会在项目加载的时候执行一次。对于 task，这个计算会在 task 每次执行的时候重新计算。
 
 例如，实现前面一部分中的 `hello` task：
 
@@ -657,9 +639,9 @@ name := "hello"
 #### Tasks 和 Settings 的类型
 
 从类型系统的角度来讲，通过 task key 创建的 `Setting` 和通过 setting key 创建的 `Setting` 有稍微不同。`taskKey := 42` 的类型是 `Setting[Task[T]]` 而 `settingKey := 42`
-的类型是 `Setting[T]`。这对于绝大多数情况并无影响；task key 在执行的时候仍然创建一个类型为 `T` 的 value。
+的类型是 `Setting[T]`。这对于绝大多数情况并无影响；task key 在执行的时候仍然创建一个类型为 `T` 的值（value）。
 
-`T` 类型和 `Task[T]` 类型的不同的含义是：一个 setting 不能依赖一个 task，因为一个 setting 只会在项目加载的时候计算一次，不会重新计算。更多关于 [更多关于设置][More-About-Settings] 的内容很快就会讲到。
+`T` 类型和 `Task[T]` 类型的不同的含义是：一个 setting 不能依赖一个 task，因为一个 setting 只会在项目加载的时候计算一次，不会重新计算。[更多关于设置][More-About-Settings] 的内容很快就会讲到。
 
 ### sbt 交互模式中的 Keys
 
@@ -673,7 +655,6 @@ name := "hello"
 ### build.sbt 中的引入
 
 你可以将引入语句放在 `build.sbt` 的顶部；它们可以不用空行分隔。
-
 下面是一些默认的引入：
 
 ```scala
@@ -682,7 +663,7 @@ import Process._
 import Keys._
 ```
 
-（另外，如果你有 [.scala 文件][Full-Def]，这些文件中任何 `Build` 或者 `Plugin` 对象你的内容都会被引入。更多关于这些的内容放在 [.scala 构建定义][Full-Def]。）
+（另外，如果你有 [.scala 文件][Full-Def]，这些文件中任何 `Build` 对象或者 `Plugin` 对象里的内容都会被引入。更多关于这些的内容放在 [.scala 构建定义][Full-Def]。）
 
 ### 添加依赖库
 
@@ -694,10 +675,10 @@ libraryDependencies += "org.apache.derby" % "derby" % "10.4.1.3"
 
 就是像这样添加版本为 10.4.1.3 的 Apache Derby 库作为依赖。
 
-key `libraryDependencies` 包含两个方面的复杂性：`+=` 方法而不是 `:=`，第二个就是 `%` 方法。`+=` 方法是将新的值附加该 key 的旧值后面而不是替换它，这将在 
-[更多关于设置][More-About-Settings] 中介绍。`%` 方法是用来从字符串构造 Ivy 模块 ID 的，将在 [库依赖][Library-Dependencies] 中介绍。
+key `libraryDependencies` 包含两个方面的复杂性：`+=` 方法而不是 `:=`，第二个就是 `%` 方法。`+=` 方法是将新的值追加该 key 的旧值后面而不是替换它，这将在 
+[更多设置][More-About-Settings] 中介绍。`%` 方法是用来从字符串构造 Ivy 模块 ID 的，将在 [库依赖][Library-Dependencies] 中介绍。
 
-目前我们跳过了库依赖的一些细节，直到入门指南的后面部分。后面有一节 [库依赖][Library-Dependencies] 来介绍这些内容。
+目前，一直到入门指南的后面部分，我们跳过了库依赖的一些细节。后面有一节 [库依赖][Library-Dependencies] 来介绍这些内容。
 
   [Basic-Def]: Basic-Def.html
   [More-About-Settings]: More-About-Settings.html
@@ -713,27 +694,22 @@ Scope
 ### 关于 Key 的所有故事
 
 [前一小节][Basic-Def] 我们认为像 `name` 的一个 key 相当于 sbt 保存键值对的 map 中的一条记录，这只是一种简化。
-
 事实上，每一个 key 可以在多个上下文中关联一个值，每个上下文称之为 “scope”。
-
 一些具体的例子：
 
 - 如果在你的构建定义中有多个项目，在每个项目中同一个 key 可以有不同的值。
-- 如果你想根据不同的情形编译它们，key `compile` 对于 main source 和 test source 可以有不同的值。
+- 如果你想根据不同的情形编译它们，key `compile` 对于 main 源文件和 test 源文件可以有不同的值。
 - Key `packageOptions`（包含创建 jar 包的一些选项）可以有不同的值，在对 class 文件打包时是 `packageBin`，对源代码打包时是 `packageSrc`。
 
 *给定的 key `name` 没有单一的值*，因为在不同的 scope 下它的值不同。
-
 然而，给定的 `scoped` key 的值是单一的。
-
-如果你想起 [前面我们讨论过][Basic-Def] 的，sbt 生成一个 map 来处理描述项目的 settings 列表，这个 map 中的 key 就是 *scoped* key。构建定义中定义的每一个 setting（例如在 `build.sbt` 中）都有一个 scoped key。
+如果你想起 [前面][Basic-Def] 我们讨论过的，sbt 生成一个 map 来处理描述项目的 settings 列表，这个 map 中的 key 就是 *scope 下的* key。构建定义中定义的每一个 setting（例如在 `build.sbt` 中）都有一个 scope 下的 key。
 
 一般 scope 是隐式的或者是默认的，但是一旦默认的是错误的，你就需要在 `build.sbt` 中指定你期待的 scope。
 
 ### Scope 轴
 
 *Scope 轴* 是一种类型，该类型的每个实例都能定义自己的 scope（也就是说，每个实例的 key 可以有自己唯一的值）。
-
 有三种类型的 scope 轴：
 
 - Projects
@@ -742,23 +718,22 @@ Scope
 
 #### 通过 Project 轴划分 Scope
 
-如果你 [将多个项目放在同一个构建中][Multi-Project]，每个项目需要有属于自己的 settings。也就是说，keys 可以根据项目被局限在不同的 scope 中。
-
-Project 轴可以设置成构建全局的，所以一个 setting 可以应用到全局构建而不是单个项目。当一个项目没有定义项目层级的 setting 的时候，构建层级的 setting 通常作为后备的设置。
+如果你将 [多个项目][Multi-Project] 放在同一个构建中，每个项目需要有属于自己的 settings。也就是说，keys 可以根据项目被局限在不同的上下文中。
+Project 轴可以设置成构建全局的，因此一个 setting 可以应用到全局构建而不是单个项目。当一个项目没有定义项目层级的 setting 的时候，构建层级的 setting 通常作为替代的设置。
 
 #### 通过 Configuration 轴划分 Scope
 
-一个 *configuration* 定义一种特定的构建，可能包含它自己的 classpath，sources，生成的 packages 等。Configuration 的概念来自于它用来管理 [库依赖][Library-Dependencies] 的 Ivy 
+一个 *configuration* 定义一种特定的构建，可能包含它自己的 classpath，源文件和生成的包等。Configuration 的概念来自于它用来管理 [库依赖][Library-Dependencies] 的 Ivy 
 和 [MavenScopes](http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Scope)。
 
 在 sbt 中你可以看到这些 configurations：
 
-- `Compile` 定义主构建（`src/main/scala`）。
-- `Test` 定义如何构建测试（`src/test/scala`）。
-- `Runtime` 为 task `run` 定义 classpath。
+- `Compile` 定义主构建（`src/main/scala`）
+- `Test` 定义如何构建测试（`src/test/scala`）
+- `Runtime` 为 task `run` 定义 classpath
 
-默认情况下，和编译，打包，运行相关的所有 key 都局限于一个 configuration，因此在不同的 configuration 中可能产生不同的效果。最明显的例子就是 task key：`compile`，`package` 和 `run`；
-然而能够 *影响* 到这些 key 的所有其他 key（例如 `sourceDirectories` 或者 `scalacOptions` 或者 `fullClasspath`）也都局限于该 configuration。
+默认情况下，和编译、打包、运行相关的所有 key 都局限于一个 configuration，因此在不同的 configuration 中可能产生不同的效果。最明显的例子就是 task key：`compile`，`package` 和 `run`；
+然而能够 *影响* 到这些 key 的所有其他 key（例如 `sourceDirectories`，`scalacOptions` 和 `fullClasspath`）也都局限于该 configuration。
 
 #### 通过 Task 轴划分 Scope
 
@@ -772,21 +747,21 @@ Settings 可以影响一个 task 如何工作。例如，task `packageSrc` 就�
 
 每一种 scope 轴都可以用和该轴类型一致的实例代替（例如 task 轴可以用一个 task 代替），或者该轴可以被特定的值 `Global` 代替。
 
-`Global` 的意义就是你所期待的：将 setting 的值应用到该轴所有的实例上。例如如果一个 task 轴的值是 `Global`，那么该 setting 将被应用到所有的 task 上。
+`Global` 的意义就是你所期待的：将 setting 的值应用到该轴所有的实例上。例如如果一个 task 轴的值是 `Global`，那么该 setting 的值将被应用到所有的 task 上。
 
 ### 代理
 
 如果在一个 scope 中某一个 key 没有关联的值，那么该 key 就是未定义的。
 
-对于每一个 scope，sbt 有由其他 scope 构成的后备选项的搜索路径。通常，如果一个 key 在特定的 scope 下没有关联的值，sbt 会尝试从更加一般的 scope（例如 `Global` scope 或者构建全局 scope）中获取值。
+对于每一个 scope，sbt 有由其他 scope 构成的替代选项的搜索路径。通常，如果一个 key 在特定的 scope 下没有关联的值，sbt 会尝试从更加一般的 scope（例如 `Global` scope 或者构建全局 scope）中获取值。
 
-这个特性允许你一旦在更加一般的 scope 中设置了某一 setting 的值之后，使得多个特定的 scope 能够继承该值。
+这个特性允许你一旦在更加一般的 scope 中设置了某一项设置的值之后，使得多个特定的 scope 能够继承该值。
 
-你可以像下面这样用 `inspect` 命令查看一个 key 的备选项的查找路径或者“代理”。往下看。
+你可以像下面这样用 `inspect` 命令查看一个 key 的替代选项的查找路径或者“代理”。往下看。
 
-### 运行 sbt 时涉及 scoped key
+### 运行 sbt 时涉及 scope 下的 key
 
-在命令行的交互模式下，sbt 像这样显示（和解析）scoped keys：
+在命令行的交互模式下，sbt 像这样显示（和解析）scope 下的 keys：
 
 ```
 {<build-uri>}<project-id>/config:intask::key
@@ -795,9 +770,9 @@ Settings 可以影响一个 task 如何工作。例如，task `packageSrc` 就�
 - `{<build-uri>}/<project-id>` 标识 project 轴。如果 project 轴有构建全局 scope，将没有 `<project-id>` 部分。
 - `config` 标识 configuration 轴。
 - `intask` 标识 task 轴。
-- `key` 标识 scoped key。
+- `key` 标识 scope 下的 key。
 
-`*` 可以出现在任意轴，参考 `Global` scope。
+“*”号可以出现在任意轴，参考 `Global` scope。
 
 如果你省略部分 scoped key，它会像下面这样推断：
 
@@ -820,7 +795,7 @@ Settings 可以影响一个 task 如何工作。例如，task `packageSrc` 就�
 
 ### 审查 scope
 
-在 sbt 的交互模式下，你可以使用 inspect 命令来理解 key 和它对应的 scope。尝试 `inspect test:fullClasspath`：
+在 sbt 的交互模式下，你可以使用 inspect 命令来理解 key 和它对应的 scope。尝试 `inspect test:fullClasspath`，
 
 ```
 $ sbt
@@ -866,11 +841,11 @@ $ sbt
 
 你也可以看到一些代理；如果没有定义，sbt 会通过以下途径查找：
 
-- 其他两个 configuration（`runtime:fullClasspath` 和 `compile:fullClasspath`）。在这些 scoped key中，project 没有指定的话就意味着是“当前 project”而且 task 没有指定的话就意味着是 `Global`
-- 当 project 没有指定“当前 project”并且 task 没有指定为 `Global` 时，configuration 会被设置成 `Global`（`*:fullClasspath`）。
-- 当全局构建中没有指定特定的 project时，project 会被设置成 `{.}` 或者 `ThisBuild`
-- 将 project 轴设置成 `Global`（`*/test:fullClasspath`）（记住，不指定 project 表示用当前的 current，所以这里查找 `Global` 是一个新的方式；例如：`*` 和 “显示没有 project”对于 project 轴是不一样的；例如：`*/test:fullClasspath` 和 `test:fullClasspath` 不是一回事）
-- project 轴和 configuration 轴都会被设置成 `Global` （`*/*:fullClasspath`）（还记得我们已经说过不指定 task 表示用 `Global`，所以 `*/*:fullClasspath` 表示三个轴都用 `Global`）
+- 其他两个 configuration（`runtime:fullClasspath` 和 `compile:fullClasspath`）。在这些 scoped key中，project 没有指定的话就意味着是 “当前 project” 而且 task 没有指定的话就意味着是 `Global`。
+- 当 project 没有指定 “当前 project” 并且 task 没有指定为 `Global` 时，configuration 会被设置成 `Global`（`*:fullClasspath`）。
+- 当全局构建中没有指定特定的 project 时，project 会被设置成 `{.}` 或者 `ThisBuild`。
+- 将 project 轴设置成 `Global`（`*/test:fullClasspath`）（记住，不指定 project 表示用当前的 current，所以这里查找 `Global` 是一个新的方式；例如：`*` 和 “显示没有 project” 对于 project 轴是不一样的；例如：`*/test:fullClasspath` 和 `test:fullClasspath` 不是一回事）。
+- project 轴和 configuration 轴都会被设置成 `Global`（`*/*:fullClasspath`）（还记得我们已经说过不指定 task 表示用 `Global`，所以 `*/*:fullClasspath` 表示三个轴都用 `Global`）。
 
 尝试用 `inspect fullClasspath`（和上面例子中的 inspect `test:fullClasspath` 相对）来查看它们的不同。因为 configuration 被省略了，sbt 自动检测并设置为 `compile`。
 因此 `inspect compile:fullClasspath` 得到的结果看起来应该和 `inspect fullClasspath` 得到的结果一样。
@@ -890,7 +865,7 @@ name := "hello"
 启动 sbt 并且执行 `inspect name` 可以看到它由 `{file:/home/hp/checkout/hello/}default-aea33a/*:name` 提供，也就是说，project 是 `{file:/home/hp/checkout/hello/}default-aea33a`，
 configuration 是 `*`（表示全局），task 没有显示出来（实际上也是全局）。
 
-`build.sbt` 总给单个项目定义设置，所以“当前项目”就是你在特定的 `build.sbt` 中定义的项目。（对于 [多项目构建][Multi-Project]，每个项目都有自己的 `build.sbt`。）
+`build.sbt` 总给单个项目定义设置，所以 “当前项目” 就是你在特定的 `build.sbt` 中定义的项目。（对于 [多项目构建][Multi-Project]，每个项目都有自己的 `build.sbt`。）
 
 Keys 会调用一个重载的 in 方法设置 scope。传给 in 方法的参数可以是任何 scope 轴的实例。比如说，你可以将 `name` 局限在 `Compile` configuration 中，尽管没有真实的理由要这样做：
 
@@ -933,7 +908,7 @@ name.in(Compile).:=("hello")
 
 为了改变 key `compile` 的值，你需要写成 `compile in Compile` 或者 `compile in Test`。用普通的 `compile` 会在当前 project 的 scope 中定义一个新的 task，而不是覆盖 configuration 的 scope 标准的 `compile` task。
 
-如果你遇到像 *“引用未定义的设置”* 这样的错误，通常是你指定 scope 失败了，或者你指定一个错误的 scope。你使用的 key 可能定义在其他的 scope 中。sbt 会尝试在错误消息里面提示你你的想法是什么；如“你是指 compile:compile？”
+如果你遇到像 *“引用未定义的设置”* 这样的错误，通常是你指定 scope 失败了，或者你指定了一个错误的 scope。你使用的 key 可能定义在其他的 scope 中。sbt 会尝试在错误消息里面提示你你的想法是什么；如 “你是指 compile:compile？”
 
 一种方式是你可以这样认为，name 只是 key 的 *一部分*。实际上，所有的 key 都有 name 和 scope 组成（scope 有三个轴）。换句话说，`packageOptions in (Compile, packageBin)` 是表示 key name 的完整的表达式。
 简单地，`packageOptions` 也是一个 key name，但是是一个不同的（对于没有 in 方法的 key，会隐式的假设一个 scope：当前的 project，global
@@ -950,10 +925,10 @@ config，global task）。
 
 ### 回顾：设置
 
-[还记得][Basic-Def]，一个构建定义创建了一个 `Setting` 列表，然后这些 `Setting` 被用来对 sbt 的构建描述做转换（它是一个保存键值对的 map）。一个 Setting 就是将 sbt 之前的 map 作为输入并且输出一个新的 map 的转换。
+还记得在 [.sbt 构建定义][Basic-Def] 中，一个构建定义创建了一个 `Setting` 列表，然后这些 `Setting` 被用来对 sbt 的构建描述做转换（它是一个保存键值对的 map）。一个 Setting 就是将 sbt 之前的 map 作为输入并且输出一个新的 map 的转换。
 这个新的 map 就是 sbt 的新状态。
 
-不同 setting 通过不同的方式对该 map 进行转换。[之前][Basic-Def]，你已经阅读了 `:=` 方法相关的内容。
+不同 setting 通过不同的方式对该 map 进行转换。之前在 [.sbt 构建定义][Basic-Def] 中，你已经阅读了 `:=` 方法相关的内容。
 
 通过 `:=` 创建的 `Setting` 会往转换之后新的 map 中放入一个固定的常量。例如，如果你通过 `name := "hello"` 对 map 做一次转换，新的 map 中 key `name` 就保存着一个字符串 `"hello"`。
 
@@ -988,13 +963,13 @@ sourceDirectories in Compile ++= Seq(file("sources1"), file("sources2"))
 
 `Seq(a, b, c, ...)` 是 Scala 用来构建列表的标准语法。
 
-为了完整替换默认的 source 目录，当然使用 `:=`：
+为了完整替换默认的 source 目录，当然使用 `:=` 方法：
 
 ```scala
 sourceDirectories in Compile := Seq(file("sources1"), file("sources2"))
 ```
 
-### 依赖于其他 key 的值计算一个值
+### 依赖于其他 key 的值计算值
 
 引用另一个 task 或者 setting 的值只需要调用它们各自的 value 方法。该 value 方法比较特殊而且只能在 `:=`，`+=` 或者 `++=` 方法的参数上调用。
 
@@ -1034,10 +1009,10 @@ name := "project " + name.value + " from " + organization.value + " version " + 
 
 这就是 sbt 知道一个 setting 如何依赖于另一个 setting。还记得一些 setting 描述了 task，所以这种方式也创建了 task 之间的依赖关系。
 
-例如，如果你 `inspect compile` 你会看到它依赖了另一个 key `compileInputs`，而且如果你 `inspect compileInputs` 它还会依赖于其他的 key。一直追溯依赖链会有魔法发生。例如当你输入 `compile` 时，
-sbt 自动执行了 `update`。它工作了是因为 `compile` 计算需要的输入的值需要 sbt 先执行`update` 计算。
+例如，如果你执行 `inspect compile` 你会看到它依赖了另一个 key `compileInputs`，而且如果你执行 `inspect compileInputs` 它还会依赖于其他的 key。一直追溯依赖链会有魔法发生。例如当你输入 `compile` 时，
+sbt 自动执行了 `update`。它可以工作是因为 `compile` 计算需要的输入的值需要 sbt 先执行 `update` 计算。
 
-这样，sbt 中所有的构建依赖都是 *自动的* 而不是显示声明的。如果你在另一个计算中用到了该 key 的值，那么那个计算就会依赖该 key。他就是可以工作！
+这样，sbt 中所有的构建依赖都是 *自动的* 而不是显示声明的。如果你在另一个计算中用到了该 key 的值，那么那个计算就会依赖该 key。它就是可以工作！
 
 #### 当设置未定义时
 
@@ -1047,8 +1022,8 @@ sbt 自动执行了 `update`。它工作了是因为 `compile` 计算需要的�
 可能循环引用，这是错误的；sbt 会告诉你，如果你循环引用了。
 
 #### 依赖于其他 key 的值的 task
-
-你可以计算一些 task 或者 setting 的值来定义另一个 task 或者为另一个 task 追加一直值。通过使用 `Def.task` 和 `taskValue` 可以做到，作为`:=`， `+=` 或者 `++=`的参数。
+  
+你可以计算一些 task 或者 setting 的值来定义另一个 task 或者为另一个 task 追加一直值。通过使用 `Def.task` 和 `taskValue` 作为`:=`， `+=` 或者 `++=`的参数可以做到。
 
 作为第一个例子，考虑追加一个使用项目基目录和编译 classpath 的 source generator。
 
@@ -1060,8 +1035,8 @@ sourceGenerators in Compile += Def.task {
 
 #### 包含依赖的 task
 
-在 [.sbt 构建定义][Basic-Def] 中提到过，当你通过 `:=` 或其他方法创建一个设置时 task key 创建一个 `Setting[Task[T]]` 而不是 `Setting[T]`。
-Task 可以以 setting 作为输入，但是 setting 不能以 task 作为输入。
+在 [.sbt 构建定义][Basic-Def] 中提到过，当你通过 `:=` 或其他方法创建一个设置时，task key 创建的是 `Setting[Task[T]]` 而不是 `Setting[T]`。
+Setting 可以是 Task 的输入，但 Task 不能是 Setting 的输入。
 
 取到这两个 key（从 [Keys](../sxr/sbt/Keys.scala.html) 中）：
 
@@ -1070,27 +1045,25 @@ val scalacOptions = taskKey[Seq[String]]("Options for the Scala compiler.")
 val checksums = settingKey[Seq[String]]("The list of checksums to generate and to verify for dependencies.")
 ```
 
-（`scalacOptions` 和 `checksums` 互相之间没有关系，它们只是有相同值类型的两个 key，其中一个是 task。）
+（`scalacOptions` 和 `checksums` 互相没有关系，它们只是有相同值类型的两个 key，其中一个是 task。）
 
 可以编译 `build.sbt` 将 `scalacOptions` 映射到 `checksums`，但是反过来不可以。例如，这样是允许的：
 
 ```scala
-// scalacOptions task 会依据 checksums setting 来定义
+// scalacOptions task 会依赖 checksums setting 来定义
 scalacOptions := checksums.value
 ```
 
 反向的操作是 *不可能* 的。也就是说，一个 setting 的 key 不能依赖于一个 task 的 key。是因为一个 setting 的 key 只会在项目加载的时候计算一次，所以 task 不会每次都重新执行，而 task 期待每次都重新计算。
 
 ```scala
-// checksums setting 不能依据 scalacOptions task 来定义
+// checksums setting 不能依赖 scalacOptions task 来定义
 checksums := scalacOptions.value
 ```
 
 ### 追加依赖：`+=` 和 `++=`
 
-当追加到一个已经存在的 setting 或者 task 时可以使用另一些 key，就像它们可以通过 `:=` 赋值一样。
-
-例如，比方说你有一个命名用到了项目名称的覆盖率报告，而且你想在每次清除文件的时候都清除它：
+当追加到一个已经存在的 setting 或者 task 时可以使用另一些 key，就像它们可以通过 `:=` 赋值一样。例如，比方说你有一个以项目名称命名的覆盖率报告，而且你想在每次清除文件的时候都清除它：
 
 ```scala
 cleanFiles += file("coverage-report-" + name.value + ".txt")
@@ -1116,7 +1089,7 @@ cleanFiles += file("coverage-report-" + name.value + ".txt")
 
 ### 非托管依赖
 
-大多数人会用托管依赖而非非托管依赖。但是非托管依赖在起步阶段会简单很多。
+大多数人会用托管依赖而不是非托管依赖。但是非托管依赖在起步阶段会简单很多。
 
 非托管依赖像这样工作：将 jar 文件放在 `lib` 文件夹下，然后它们将会被添加到项目的 classpath 中。没有更多的事情了！
 
@@ -1135,7 +1108,7 @@ unmanagedBase := baseDirectory.value / "custom_lib"
 
 `baseDirectory` 是项目的根目录，所以在这里你依据 `baseDirectory` 的值改变了 `unmanagedBase`，通过在 [更多关于设置][More-About-Settings] 中介绍的一个特殊的 `value` 方法。
 
-同时也有一个列举 `unmanagedBase` 目录下所有 jar 文件的 task 叫 `unmanagedJars`。如果你想用多个目录或者做一些更加复杂的事情，你可能需要用一个可以做其它事情的 task 替换整个 `unmanagedJars` task，
+同时也有一个列举 `unmanagedBase` 目录下所有 jar 文件的 task 叫 `unmanagedJars`。如果你想用多个目录或者做一些更加复杂的事情，你可能需要用一个可以做其他事情的 task 替换整个 `unmanagedJars` task，
 例如清空 `Compile` configuration 的列表，不考虑 `lib` 目录下的文件：
 
 ```scala
@@ -1216,7 +1189,7 @@ libraryDependencies += "org.scala-tools" %% "scala-stm" % "0.3"
 #### Ivy 修正
 
 `groupID % artifactID % revision` 中的 `revision` 不需要是一个固定的版本号。Ivy 能够根据你指定的约束选择一个模块的最新版本。你指定 `"latest.integration"`，`"2.9.+"` 或者 `"[1.0,)"`，而不是
-一个固定的版本号，像 `"1.6.1"`。参看[Ivy 修订](http://ant.apache.org/ivy/history/2.3.0/ivyfile/dependency.html#revision)文档获取详细内容。
+一个固定的版本号，像 `"1.6.1"`。参看 [Ivy 修订](http://ant.apache.org/ivy/history/2.3.0/ivyfile/dependency.html#revision) 文档获取详细内容。
 
 #### 解析器
 
@@ -1256,7 +1229,7 @@ resolvers += "Local Maven Repository" at "file://"+Path.userHome.absolutePath+"/
 resolvers += Resolver.mavenLocal
 ```
 
-参见[解析器][Resolvers]获取更多关于定义其他类型的仓库的内容。
+参见 [解析器][Resolvers] 获取更多关于定义其他类型的仓库的内容。
 
 #### 覆写默认的解析器
 
@@ -1285,10 +1258,8 @@ libraryDependencies += "org.apache.derby" % "derby" % "10.4.1.3" % Test
 现在，如果你在 sbt 的命令提示行里输入 `show compile:dependencyClasspath`，你不应该看到 derby jar。但是如果你输入 `show test:dependencyClasspath`，
 你应该在列表中看到 derby jar。
 
-通常，测试相关的依赖，如
-[ScalaCheck](http://scalacheck.org/)，
-[Specs2](http://specs2.org)和
-[ScalaTest](http://www.scalatest.org/) 将会被定义为 `% "test"`。
+通常，测试相关的依赖，如 [ScalaCheck](http://scalacheck.org/)，
+[Specs2](http://specs2.org) 和 [ScalaTest](http://www.scalatest.org/) 将会被定义为 `% "test"`。
 
 库依赖更详细的内容和技巧在[这里][Library-Management]。
 
