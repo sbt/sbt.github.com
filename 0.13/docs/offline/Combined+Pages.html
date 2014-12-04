@@ -305,6 +305,8 @@ simultaneously):
 <a href="https://github.com/sbt/sbt-twt">https://github.com/sbt/sbt-twt</a>
 </li><li>sbt-compile-quick-plugin (compile and package a single file):
 <a href="https://github.com/etsy/sbt-compile-quick-plugin">https://github.com/etsy/sbt-compile-quick-plugin</a>
+</li><li>sbt-meow (display ascii-fied random cat pictures):
+<a href="https://github.com/thricejamie/sbt-meow">https://github.com/thricejamie/sbt-meow</a>
 </li></ul><h4 id="Database+plugins">Database plugins<a href="#Database+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>flyway-sbt (Flyway - The agile database migration framework):
 <a href="http://flywaydb.org/getstarted/firststeps/sbt.html">http://flywaydb.org/getstarted/firststeps/sbt.html</a>
 </li><li>sbt-liquibase (Liquibase RDBMS database migrations):
@@ -5103,51 +5105,51 @@ deleted from the cache (and so needed classes are missing) or a
 dependency has been added (but will not be resolved because skip is
 true). Also, update itself will immediately fail if resolution has
 not been allowed to run since the last clean.
-</li></ol><h3 id="General+troubleshooting+steps">General troubleshooting steps<a href="#General+troubleshooting+steps" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A.  Run <code>update</code> explicitly. This will typically fix problems with out
-    of date SNAPSHOTs or locally published artifacts.
-B.  If a file cannot be found, look at the output of update to see where
-    Ivy is looking for the file. This may help diagnose an incorrectly
-    defined dependency or a dependency that is actually not present in a
-    repository.
-C.  <code>last update</code> contains more information about the most recent
-    resolution and download. The amount of debugging output from Ivy is
-    high, so you may want to use lastGrep (run help lastGrep for usage).
-D.  Run <code>clean</code> and then <code>update</code>. If this works, it could indicate a
-    bug in sbt, but the problem would need to be reproduced in order to
-    diagnose and fix it.
-E.  Before deleting all of the Ivy cache, first try deleting files in
-    <code>~/.ivy2/cache</code> related to problematic dependencies. For example, if
-    there are problems with dependency <code>&quot;org.example&quot; % &quot;demo&quot; % &quot;1.0&quot;</code>,
-    delete <code>~/.ivy2/cache/org.example/demo/1.0/</code> and retry update. This
-    avoids needing to redownload all dependencies.
-F.  Normal sbt usage should not require deleting files from
-    <code>~/.ivy2/cache</code>, especially if the first four steps have been
-    followed. If deleting the cache fixes a dependency management issue,
-    please try to reproduce the issue and submit a test case.
-</p><h3 id="Plugins">Plugins<a href="#Plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>These troubleshooting steps can be run for plugins by changing to the
+</li></ol><h3 id="General+troubleshooting+steps">General troubleshooting steps<a href="#General+troubleshooting+steps" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ol><li>Run <code>update</code> explicitly. This will typically fix problems with out
+of date SNAPSHOTs or locally published artifacts.
+</li><li>If a file cannot be found, look at the output of update to see where
+Ivy is looking for the file. This may help diagnose an incorrectly
+defined dependency or a dependency that is actually not present in a
+repository.
+</li><li><code>last update</code> contains more information about the most recent
+resolution and download. The amount of debugging output from Ivy is
+high, so you may want to use lastGrep (run help lastGrep for usage).
+</li><li>Run <code>clean</code> and then <code>update</code>. If this works, it could indicate a
+bug in sbt, but the problem would need to be reproduced in order to
+diagnose and fix it.
+</li><li>Before deleting all of the Ivy cache, first try deleting files in
+<code>~/.ivy2/cache</code> related to problematic dependencies. For example, if
+there are problems with dependency <code>&quot;org.example&quot; % &quot;demo&quot; % &quot;1.0&quot;</code>,
+delete <code>~/.ivy2/cache/org.example/demo/1.0/</code> and retry update. This
+avoids needing to redownload all dependencies.
+</li><li>Normal sbt usage should not require deleting files from
+<code>~/.ivy2/cache</code>, especially if the first four steps have been
+followed. If deleting the cache fixes a dependency management issue,
+please try to reproduce the issue and submit a test case.
+</li></ol><h3 id="Plugins">Plugins<a href="#Plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>These troubleshooting steps can be run for plugins by changing to the
 build definition project, running the commands, and then returning to
 the main project. For example:
 </p><pre><code class="">&gt; reload plugins
 &gt; update
 &gt; reload return
-</code></pre><h3 id="Notes">Notes<a href="#Notes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A.  Configure offline behavior for all projects on a machine by putting
-    <code>offline := true</code> in <code>~/.sbt/0.13/global.sbt</code>. A command that does this for
-    the user would make a nice pull request. Perhaps the setting of
-    offline should go into the output of about or should it be a warning
-    in the output of update or both?
-B.  The cache improvements in 0.12.1 address issues in the change
-    detection for update so that it will correctly re-resolve
-    automatically in more situations. A problem with an out of date
-    cache can usually be attributed to a bug in that change detection if
-    explicitly running update fixes the problem.
-C.  A common solution to dependency management problems in sbt has been
-    to remove <code>~/.ivy2/cache</code>. Before doing this with 0.12.1, be sure to
-    follow the steps in the troubleshooting section first. In
-    particular, verify that a clean and an explicit update do not solve
-    the issue.
-D.  There is no need to mark SNAPSHOT dependencies as <code>changing()</code>
-    because sbt configures Ivy to know this already.
-</p><h2 id="Library+Management">Library Management<a href="#Library+Management" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>There’s now a
+</code></pre><h3 id="Notes">Notes<a href="#Notes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ol><li>Configure offline behavior for all projects on a machine by putting
+<code>offline := true</code> in <code>~/.sbt/0.13/global.sbt</code>. A command that does this for
+the user would make a nice pull request. Perhaps the setting of
+offline should go into the output of about or should it be a warning
+in the output of update or both?
+</li><li>The cache improvements in 0.12.1 address issues in the change
+detection for update so that it will correctly re-resolve
+automatically in more situations. A problem with an out of date
+cache can usually be attributed to a bug in that change detection if
+explicitly running update fixes the problem.
+</li><li>A common solution to dependency management problems in sbt has been
+to remove <code>~/.ivy2/cache</code>. Before doing this with 0.12.1, be sure to
+follow the steps in the troubleshooting section first. In
+particular, verify that a clean and an explicit update do not solve
+the issue.
+</li><li>There is no need to mark SNAPSHOT dependencies as <code>changing()</code>
+because sbt configures Ivy to know this already.
+</li></ol><h2 id="Library+Management">Library Management<a href="#Library+Management" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>There’s now a
 <a href="../tutorial/Library-Dependencies.html">getting started page</a> about
 library management, which you may want to read first.
 </p><p><em>Documentation Maintenance Note:</em> it would be nice to remove the overlap
