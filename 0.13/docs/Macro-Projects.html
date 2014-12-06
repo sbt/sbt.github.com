@@ -53,18 +53,28 @@ main code that uses them and sometimes the implementation should not
 be distributed at all.
 </li></ol><p>The rest of the page shows example solutions to these problems.
 </p><h3 id="Defining+the+Project+Relationships">Defining the Project Relationships<a href="#Defining+the+Project+Relationships" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The macro implementation will go in a subproject in the <code>macro/</code>
-directory. The main project in the project’s base directory will depend
+directory. The core project in the <code>core/</code> directory will depend
 on this subproject and use the macro. This configuration is shown in the
-following build definition. <code>project/Build.scala</code>:
-</p><pre><code class="prettyprint lang-scala">import sbt._
-import Keys._
+following build definition. <code>build.sbt</code>:
+</p><pre><code class="prettyprint lang-scala">lazy val commonSettings = Seq(
+  scalaVersion := &quot;2.11.4&quot;,
+  organization := &quot;com.example&quot;
+)
+lazy val scalaRefect = Def.setting { &quot;org.scala-lang&quot; % &quot;scala-reflect&quot; % scalaVersion.value }
 
-object MacroBuild extends Build {
-   lazy val main = Project(&quot;main&quot;, file(&quot;.&quot;)) dependsOn(macroSub)
-   lazy val macroSub = Project(&quot;macro&quot;, file(&quot;macro&quot;)) settings(
-      libraryDependencies += &quot;org.scala-lang&quot; % &quot;scala-reflect&quot; % scalaVersion.value
-   )
-}
+lazy val core = (project in file(&quot;core&quot;)).
+  dependsOn(macroSub).
+  settings(commonSettings: _*).
+  settings(
+    // other settings here
+  )
+
+lazy val macroSub = (project in file(&quot;macro&quot;)).
+  settings(commonSettings: _*).
+  settings(
+    libraryDependencies += scalaRefect.value
+    // other settings here
+  )
 </code></pre><p>This specifies that the macro implementation goes in
 <code>macro/src/main/scala/</code> and tests go in <code>macro/src/test/scala/</code>. It also
 shows that we need a dependency on the compiler for the macro
@@ -102,7 +112,7 @@ object Usage {
 </p><p>Actual tests can be defined and run as usual with <code>macro/test</code>.
 </p><p>The main project can use the macro in the same way that the tests do.
 For example,
-</p><p><code>src/main/scala/MainUsage.scala</code>:
+</p><p><code>core/src/main/scala/MainUsage.scala</code>:
 </p><pre><code class="prettyprint lang-scala">package demo
 
 object Usage {
@@ -116,28 +126,55 @@ some common code. In this case, declare another subproject for the
 common code and have the main project and the macro subproject depend on
 the new subproject. For example, the project definitions from above
 would look like:
-</p><pre><code class="prettyprint lang-scala">lazy val main = Project(&quot;main&quot;, file(&quot;.&quot;)) dependsOn(macroSub, commonSub)
-lazy val macroSub = Project(&quot;macro&quot;, file(&quot;macro&quot;)) dependsOn(commonSub) settings(
-    libraryDependencies += &quot;org.scala-lang&quot; % &quot;scala-reflect&quot; % scalaVersion.value
+</p><pre><code class="prettyprint lang-scala">lazy val commonSettings = Seq(
+  scalaVersion := &quot;2.11.4&quot;,
+  organization := &quot;com.example&quot;
 )
-lazy val commonSub = Project(&quot;common&quot;, file(&quot;common&quot;))
-</code></pre><p>Code in <code>common/src/main/scala/</code> is available for both the <code>macro</code> and
+lazy val scalaRefect = Def.setting { &quot;org.scala-lang&quot; % &quot;scala-reflect&quot; % scalaVersion.value }
+
+lazy val core = (project in file(&quot;core&quot;)).
+  dependsOn(macroSub, util).
+  settings(commonSettings: _*).
+  settings(
+    // other settings here
+  )
+
+lazy val macroSub = (project in file(&quot;macro&quot;)).
+  dependsOn(util).
+  settings(commonSettings: _*).
+  settings(
+    libraryDependencies += scalaRefect.value
+    // other settings here
+  )
+
+lazy util = (project in file(&quot;util&quot;)).
+  settings(commonSettings: _*).
+  settings(
+    // other setting here
+  )
+</code></pre><p>Code in <code>util/src/main/scala/</code> is available for both the <code>macroSub</code> and
 <code>main</code> projects to use.
-</p><h3 id="Distribution">Distribution<a href="#Distribution" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To include the macro code with the main code, add the binary and source
-mappings from the macro subproject to the main project. For example, the
-<code>main</code> Project definition above would now look like:
-</p><pre><code class="prettyprint lang-scala">lazy val main = Project(&quot;main&quot;, file(&quot;.&quot;)) dependsOn(macroSub) settings(
-   // include the macro classes and resources in the main jar
-   mappings in (Compile, packageBin) ++= mappings.in(macroSub, Compile, packageBin).value,
-   // include the macro sources in the main source jar
-   mappings in (Compile, packageSrc) ++= mappings.in(macroSub, Compile, packageSrc).value
-)
+</p><h3 id="Distribution">Distribution<a href="#Distribution" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To include the macro code with the core code, add the binary and source
+mappings from the macro subproject to the core project. For example, the
+<code>core</code> Project definition above would now look like:
+</p><pre><code class="prettyprint lang-scala">lazy val core = (project in file(&quot;core&quot;)).
+  dependsOn(macroSub).
+  settings(commonSettings: _*).
+  settings(
+    // include the macro classes and resources in the main jar
+    mappings in (Compile, packageBin) ++= mappings.in(macroSub, Compile, packageBin).value,
+    // include the macro sources in the main source jar
+    mappings in (Compile, packageSrc) ++= mappings.in(macroSub, Compile, packageSrc).value
+  )
 </code></pre><p>You may wish to disable publishing the macro implementation. This is
 done by overriding <code>publish</code> and <code>publishLocal</code> to do nothing:
-</p><pre><code class="prettyprint lang-scala">lazy val macroSub = Project(&quot;macro&quot;, file(&quot;macro&quot;)) settings(
+</p><pre><code class="prettyprint lang-scala">lazy val macroSub = (project in file(&quot;macro&quot;)).
+  settings(commonSettings: _*).
+  settings(
+    libraryDependencies += scalaRefect.value,
     publish := {},
     publishLocal := {}
-)
+  )
 </code></pre><p>The techniques described here may also be used for the common interface
 described in the previous section.
 </p><div class="bottom nav span-16">
