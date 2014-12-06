@@ -98,92 +98,94 @@ multiple arguments separated by spaces.
 
 // &lt;arg&gt; is the suggestion printed for tab completion on an argument
 val command: Command = Command.args(&quot;name&quot;, &quot;&lt;arg&gt;&quot;)(action)
-</code></pre><h3 id="Full+Example">Full Example<a href="#Full+Example" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The following example is a valid <code>project/Build.scala</code> that adds
+</code></pre><h3 id="Full+Example">Full Example<a href="#Full+Example" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The following example is a sample build that adds
 commands to a project. To try it out:
-</p><ol><li>Copy the following build definition into <code>project/Build.scala</code> for a
-new project.
+</p><ol><li>Create <code>build.sbt</code> and <code>project/CommandExample.scala</code>.
 </li><li>Run sbt on the project.
 </li><li>Try out the <code>hello</code>, <code>helloAll</code>, <code>failIfTrue</code>, <code>color</code>, and
 printState commands.
 </li><li>Use tab-completion and the code below as guidance.
-</li></ol><pre><code class="prettyprint lang-scala">import sbt._
+</li></ol><p>Here’s <code>build.sbt</code>:
+</p><pre><code class="prettyprint lang-scala">import CommandExample._
+
+lazy val commonSettings = Seq(
+  scalaVersion := &quot;2.11.4&quot;,
+)
+
+lazy val root = (project in file(&quot;.&quot;)).
+  settings(commonSettings: _*).
+  settings(
+    commands ++= Seq(hello, helloAll, failIfTrue, changeColor, printState)
+  )
+</code></pre><p>Here’s <code>project/CommandExample.scala</code>:
+</p><pre><code class="prettyprint lang-scala">import sbt._
 import Keys._
 
 // imports standard command parsing functionality
 import complete.DefaultParsers._
 
-object CommandExample extends Build {
-    // Declare a single project, adding several new commands, which are discussed below.
-    lazy override val projects = Seq(root)
-    lazy val root = Project(&quot;root&quot;, file(&quot;.&quot;)) settings(
-        commands ++= Seq(hello, helloAll, failIfTrue, changeColor, printState)
-    )
+object CommandExample {
+  // A simple, no-argument command that prints &quot;Hi&quot;,
+  //  leaving the current state unchanged.
+  def hello = Command.command(&quot;hello&quot;) { state =&gt;
+    println(&quot;Hi!&quot;)
+    state
+  }
 
-    // A simple, no-argument command that prints &quot;Hi&quot;,
-    //  leaving the current state unchanged.
-    def hello = Command.command(&quot;hello&quot;) { state =&gt;
-        println(&quot;Hi!&quot;)
-        state
-    }
+  // A simple, multiple-argument command that prints &quot;Hi&quot; followed by the arguments.
+  //   Again, it leaves the current state unchanged.
+  def helloAll = Command.args(&quot;helloAll&quot;, &quot;&lt;name&gt;&quot;) { (state, args) =&gt;
+    println(&quot;Hi &quot; + args.mkString(&quot; &quot;))
+    state
+  }
 
+  // A command that demonstrates failing or succeeding based on the input
+  def failIfTrue = Command.single(&quot;failIfTrue&quot;) {
+    case (state, &quot;true&quot;) =&gt; state.fail
+    case (state, _) =&gt; state
+  }
 
-    // A simple, multiple-argument command that prints &quot;Hi&quot; followed by the arguments.
-    //   Again, it leaves the current state unchanged.
-    def helloAll = Command.args(&quot;helloAll&quot;, &quot;&lt;name&gt;&quot;) { (state, args) =&gt;
-        println(&quot;Hi &quot; + args.mkString(&quot; &quot;))
-        state
-    }
+  // Demonstration of a custom parser.
+  // The command changes the foreground or background terminal color
+  //  according to the input.
+  lazy val change = Space ~&gt; (reset | setColor)
+  lazy val reset = token(&quot;reset&quot; ^^^ &quot;\033[0m&quot;)
+  lazy val color = token( Space ~&gt; (&quot;blue&quot; ^^^ &quot;4&quot; | &quot;green&quot; ^^^ &quot;2&quot;) )
+  lazy val select = token( &quot;fg&quot; ^^^ &quot;3&quot; | &quot;bg&quot; ^^^ &quot;4&quot; )
+  lazy val setColor = (select ~ color) map { case (g, c) =&gt; &quot;\033[&quot; + g + c + &quot;m&quot; }
 
+  def changeColor = Command(&quot;color&quot;)(_ =&gt; change) { (state, ansicode) =&gt;
+    print(ansicode)
+    state
+  }
 
-    // A command that demonstrates failing or succeeding based on the input
-    def failIfTrue = Command.single(&quot;failIfTrue&quot;) {
-        case (state, &quot;true&quot;) =&gt; state.fail
-        case (state, _) =&gt; state
-    }
+  // A command that demonstrates getting information out of State.
+  def printState = Command.command(&quot;printState&quot;) { state =&gt;
+    import state._
+    println(definedCommands.size + &quot; registered commands&quot;)
+    println(&quot;commands to run: &quot; + show(remainingCommands))
+    println()
 
+    println(&quot;original arguments: &quot; + show(configuration.arguments))
+    println(&quot;base directory: &quot; + configuration.baseDirectory)
+    println()
 
-    // Demonstration of a custom parser.
-    // The command changes the foreground or background terminal color
-    //  according to the input.
-    lazy val change = Space ~&gt; (reset | setColor)
-    lazy val reset = token(&quot;reset&quot; ^^^ &quot;\033[0m&quot;)
-    lazy val color = token( Space ~&gt; (&quot;blue&quot; ^^^ &quot;4&quot; | &quot;green&quot; ^^^ &quot;2&quot;) )
-    lazy val select = token( &quot;fg&quot; ^^^ &quot;3&quot; | &quot;bg&quot; ^^^ &quot;4&quot; )
-    lazy val setColor = (select ~ color) map { case (g, c) =&gt; &quot;\033[&quot; + g + c + &quot;m&quot; }
+    println(&quot;sbt version: &quot; + configuration.provider.id.version)
+    println(&quot;Scala version (for sbt): &quot; + configuration.provider.scalaProvider.version)
+    println()
 
-    def changeColor = Command(&quot;color&quot;)(_ =&gt; change) { (state, ansicode) =&gt;
-        print(ansicode)
-        state
-    }
+    val extracted = Project.extract(state)
+    import extracted._
+    println(&quot;Current build: &quot; + currentRef.build)
+    println(&quot;Current project: &quot; + currentRef.project)
+    println(&quot;Original setting count: &quot; + session.original.size)
+    println(&quot;Session setting count: &quot; + session.append.size)
 
+    state
+  }
 
-    // A command that demonstrates getting information out of State.
-    def printState = Command.command(&quot;printState&quot;) { state =&gt;
-        import state._
-        println(definedCommands.size + &quot; registered commands&quot;)
-        println(&quot;commands to run: &quot; + show(remainingCommands))
-        println()
-
-        println(&quot;original arguments: &quot; + show(configuration.arguments))
-        println(&quot;base directory: &quot; + configuration.baseDirectory)
-        println()
-
-        println(&quot;sbt version: &quot; + configuration.provider.id.version)
-        println(&quot;Scala version (for sbt): &quot; + configuration.provider.scalaProvider.version)
-        println()
-
-        val extracted = Project.extract(state)
-        import extracted._
-        println(&quot;Current build: &quot; + currentRef.build)
-        println(&quot;Current project: &quot; + currentRef.project)
-        println(&quot;Original setting count: &quot; + session.original.size)
-        println(&quot;Session setting count: &quot; + session.append.size)
-
-        state
-    }
-
-    def show[T](s: Seq[T]) =
-        s.map(&quot;'&quot; + _ + &quot;'&quot;).mkString(&quot;[&quot;, &quot;, &quot;, &quot;]&quot;)
+  def show[T](s: Seq[T]) =
+    s.map(&quot;'&quot; + _ + &quot;'&quot;).mkString(&quot;[&quot;, &quot;, &quot;, &quot;]&quot;)
 }
 </code></pre><div class="bottom nav span-16">
                         <em>Next Page</em>
