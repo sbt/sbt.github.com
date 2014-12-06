@@ -15405,367 +15405,369 @@ understanding the examples.
 .sbt build examples
 -------------------
 
+**Note**: As of sbt 0.13.7 blank lines are no longer used to delimit `build.sbt` files. The following example requires sbt 0.13.7+.
+
 Listed here are some examples of settings (each setting is independent).
 See [.sbt build definition][Basic-Def] for details.
 
-*Note* that blank lines are used to separate individual settings.
-Avoid using blank lines within a single multiline expression. As
-explained in [.sbt build definition][Basic-Def], each
-setting is otherwise a normal Scala expression with expected type
-[sbt.SettingDefinition](../api/sbt/Init$SettingsDefinition.html).
-
 ```scala
-// set the name of the project
-name := "My Project"
-
-version := "1.0"
-
-organization := "org.myproject"
-
-// set the Scala version used for the project
-scalaVersion := "2.9.0-SNAPSHOT"
-
-// set the main Scala source directory to be <base>/src
-scalaSource in Compile := baseDirectory.value / "src"
-
-// set the Scala test source directory to be <base>/test
-scalaSource in Test := baseDirectory.value / "test"
-
-// add a test dependency on ScalaCheck
-libraryDependencies += "org.scala-tools.testing" %% "scalacheck" % "1.8" % "test"
-
-// add compile dependencies on some dispatch modules
-libraryDependencies ++= Seq(
-    "net.databinder" %% "dispatch-meetup" % "0.7.8",
-    "net.databinder" %% "dispatch-twitter" % "0.7.8"
+// factor out common settings into a sequence
+lazy val commonSettings = Seq(
+  organization := "org.myproject",
+  version := "0.1.0",
+  // set the Scala version used for the project
+  scalaVersion := "2.11.4"
 )
 
-// Set a dependency based partially on a val.
-{
-  val libosmVersion = "2.5.2-RC1"
-  libraryDependencies += ("net.sf.travelingsales" % "osmlib" % libosmVersion from
-    "http://downloads.sourceforge.net/project/travelingsales/libosm/"+libosmVersion+"/libosm-"+libosmVersion+".jar")
-}
+// define ModuleID for library dependencies
+lazy val scalacheck = "org.scalacheck" %% "scalacheck" % "1.12.0"
 
-// reduce the maximum number of errors shown by the Scala compiler
-maxErrors := 20
+// define ModuleID using string interpolator
+lazy val osmlibVersion = "2.5.2-RC1"
+lazy val osmlib = ("net.sf.travelingsales" % "osmlib" % osmlibVersion from
+  s"""http://downloads.sourceforge.net/project/travelingsales/libosm/$osmlibVersion/libosm-$osmlibVersion.jar""")
 
-// increase the time between polling for file changes when using continuous execution
-pollInterval := 1000
+lazy val root = (project in file(".")).
+  settings(commonSettings: _*).
+  settings(
+    // set the name of the project
+    name := "My Project",
 
-// append several options to the list of options passed to the Java compiler
-javacOptions ++= Seq("-source", "1.5", "-target", "1.5")
+    // set the main Scala source directory to be <base>/src
+    scalaSource in Compile := baseDirectory.value / "src",
 
-// append -deprecation to the options passed to the Scala compiler
-scalacOptions += "-deprecation"
+    // set the Scala test source directory to be <base>/test
+    scalaSource in Test := baseDirectory.value / "test",
 
-// define the statements initially evaluated when entering 'console', 'consoleQuick', or 'consoleProject'
-initialCommands := """
-  import System.{currentTimeMillis => now}
-  def time[T](f: => T): T = {
-    val start = now
-    try { f } finally { println("Elapsed: " + (now - start)/1000.0 + " s") }
-  }
-"""
+    // add a test dependency on ScalaCheck
+    libraryDependencies += scalacheck % Test,
 
-// set the initial commands when entering 'console' or 'consoleQuick', but not 'consoleProject'
-initialCommands in console := "import myproject._"
+    // add compile dependency on osmlib
+    libraryDependencies += osmlib,
 
-// set the main class for packaging the main jar
-// 'run' will still auto-detect and prompt
-// change Compile to Test to set it for the test jar
-mainClass in (Compile, packageBin) := Some("myproject.MyMain")
+    // reduce the maximum number of errors shown by the Scala compiler
+    maxErrors := 20,
 
-// set the main class for the main 'run' task
-// change Compile to Test to set it for 'test:run'
-mainClass in (Compile, run) := Some("myproject.MyMain")
+    // increase the time between polling for file changes when using continuous execution
+    pollInterval := 1000,
 
-// add <base>/input to the files that '~' triggers on
-watchSources += baseDirectory.value / "input"
+    // append several options to the list of options passed to the Java compiler
+    javacOptions ++= Seq("-source", "1.5", "-target", "1.5"),
 
-// add a maven-style repository
-resolvers += "name" at "url"
+    // append -deprecation to the options passed to the Scala compiler
+    scalacOptions += "-deprecation",
 
-// add a sequence of maven-style repositories
-resolvers ++= Seq("name" at "url")
+    // define the statements initially evaluated when entering 'console', 'consoleQuick', or 'consoleProject'
+    initialCommands := """
+import System.{currentTimeMillis => now}
+def time[T](f: => T): T = {
+  val start = now
+  try { f } finally { println("Elapsed: " + (now - start)/1000.0 + " s") }
+}""".stripMargin,
 
-// define the repository to publish to
-publishTo := Some("name" at "url")
+    // set the initial commands when entering 'console' or 'consoleQuick', but not 'consoleProject'
+    initialCommands in console := "import myproject._",
 
-// set Ivy logging to be at the highest level
-ivyLoggingLevel := UpdateLogging.Full
+    // set the main class for packaging the main jar
+    // 'run' will still auto-detect and prompt
+    // change Compile to Test to set it for the test jar
+    mainClass in (Compile, packageBin) := Some("myproject.MyMain"),
 
-// disable updating dynamic revisions (including -SNAPSHOT versions)
-offline := true
+    // set the main class for the main 'run' task
+    // change Compile to Test to set it for 'test:run'
+    mainClass in (Compile, run) := Some("myproject.MyMain"),
 
-// set the prompt (for this build) to include the project id.
-shellPrompt in ThisBuild := { state => Project.extract(state).currentRef.project + "> " }
+    // add <base>/input to the files that '~' triggers on
+    watchSources += baseDirectory.value / "input",
 
-// set the prompt (for the current project) to include the username
-shellPrompt := { state => System.getProperty("user.name") + "> " }
+    // add a maven-style repository
+    resolvers += "name" at "url",
 
-// disable printing timing information, but still print [success]
-showTiming := false
+    // add a sequence of maven-style repositories
+    resolvers ++= Seq("name" at "url"),
 
-// disable printing a message indicating the success or failure of running a task
-showSuccess := false
+    // define the repository to publish to
+    publishTo := Some("name" at "url"),
 
-// change the format used for printing task completion time
-timingFormat := {
-    import java.text.DateFormat
-    DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT)
-}
+    // set Ivy logging to be at the highest level
+    ivyLoggingLevel := UpdateLogging.Full,
 
-// disable using the Scala version in output paths and artifacts
-crossPaths := false
+    // disable updating dynamic revisions (including -SNAPSHOT versions)
+    offline := true,
 
-// fork a new JVM for 'run' and 'test:run'
-fork := true
+    // set the prompt (for this build) to include the project id.
+    shellPrompt in ThisBuild := { state => Project.extract(state).currentRef.project + "> " },
 
-// fork a new JVM for 'test:run', but not 'run'
-fork in Test := true
+    // set the prompt (for the current project) to include the username
+    shellPrompt := { state => System.getProperty("user.name") + "> " },
 
-// add a JVM option to use when forking a JVM for 'run'
-javaOptions += "-Xmx2G"
+    // disable printing timing information, but still print [success]
+    showTiming := false,
 
-// only use a single thread for building
-parallelExecution := false
+    // disable printing a message indicating the success or failure of running a task
+    showSuccess := false,
 
-// Execute tests in the current project serially
-//   Tests from other projects may still run concurrently.
-parallelExecution in Test := false
+    // change the format used for printing task completion time
+    timingFormat := {
+        import java.text.DateFormat
+        DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT)
+    },
 
-// set the location of the JDK to use for compiling Java code.
-// if 'fork' is true, this is used for 'run' as well
-javaHome := Some(file("/usr/lib/jvm/sun-jdk-1.6"))
+    // disable using the Scala version in output paths and artifacts
+    crossPaths := false,
 
-// Use Scala from a directory on the filesystem instead of retrieving from a repository
-scalaHome := Some(file("/home/user/scala/trunk/"))
+    // fork a new JVM for 'run' and 'test:run'
+    fork := true,
 
-// don't aggregate clean (See FullConfiguration for aggregation details)
-aggregate in clean := false
+    // fork a new JVM for 'test:run', but not 'run'
+    fork in Test := true,
 
-// only show warnings and errors on the screen for compilations.
-//  this applies to both test:compile and compile and is Info by default
-logLevel in compile := Level.Warn
+    // add a JVM option to use when forking a JVM for 'run'
+    javaOptions += "-Xmx2G",
 
-// only show warnings and errors on the screen for all tasks (the default is Info)
-//  individual tasks can then be more verbose using the previous setting
-logLevel := Level.Warn
+    // only use a single thread for building
+    parallelExecution := false,
 
-// only store messages at info and above (the default is Debug)
-//   this is the logging level for replaying logging with 'last'
-persistLogLevel := Level.Debug
+    // Execute tests in the current project serially
+    //   Tests from other projects may still run concurrently.
+    parallelExecution in Test := false,
 
-// only show 10 lines of stack traces
-traceLevel := 10
+    // set the location of the JDK to use for compiling Java code.
+    // if 'fork' is true, this is used for 'run' as well
+    javaHome := Some(file("/usr/lib/jvm/sun-jdk-1.6")),
 
-// only show stack traces up to the first sbt stack frame
-traceLevel := 0
+    // Use Scala from a directory on the filesystem instead of retrieving from a repository
+    scalaHome := Some(file("/home/user/scala/trunk/")),
 
-// add SWT to the unmanaged classpath
-unmanagedJars in Compile += Attributed.blank(file("/usr/share/java/swt.jar"))
+    // don't aggregate clean (See FullConfiguration for aggregation details)
+    aggregate in clean := false,
 
-// publish test jar, sources, and docs
-publishArtifact in Test := true
+    // only show warnings and errors on the screen for compilations.
+    //  this applies to both test:compile and compile and is Info by default
+    logLevel in compile := Level.Warn,
 
-// disable publishing of main docs
-publishArtifact in (Compile, packageDoc) := false
+    // only show warnings and errors on the screen for all tasks (the default is Info)
+    //  individual tasks can then be more verbose using the previous setting
+    logLevel := Level.Warn,
 
-// change the classifier for the docs artifact
-artifactClassifier in packageDoc := Some("doc")
+    // only store messages at info and above (the default is Debug)
+    //   this is the logging level for replaying logging with 'last'
+    persistLogLevel := Level.Debug,
 
-// Copy all managed dependencies to <build-root>/lib_managed/
-//   This is essentially a project-local cache and is different
-//   from the lib_managed/ in sbt 0.7.x.  There is only one
-//   lib_managed/ in the build root (not per-project).
-retrieveManaged := true
+    // only show 10 lines of stack traces
+    traceLevel := 10,
 
-/* Specify a file containing credentials for publishing. The format is:
-realm=Sonatype Nexus Repository Manager
-host=nexus.scala-tools.org
-user=admin
-password=admin123
-*/
-credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
+    // only show stack traces up to the first sbt stack frame
+    traceLevel := 0,
 
-// Directly specify credentials for publishing.
-credentials += Credentials("Sonatype Nexus Repository Manager", "nexus.scala-tools.org", "admin", "admin123")
+    // add SWT to the unmanaged classpath
+    unmanagedJars in Compile += Attributed.blank(file("/usr/share/java/swt.jar")),
 
-// Exclude transitive dependencies, e.g., include log4j without including logging via jdmk, jmx, or jms.
-libraryDependencies +=
-  "log4j" % "log4j" % "1.2.15" excludeAll(
-    ExclusionRule(organization = "com.sun.jdmk"),
-    ExclusionRule(organization = "com.sun.jmx"),
-    ExclusionRule(organization = "javax.jms")
+    // publish test jar, sources, and docs
+    publishArtifact in Test := true,
+
+    // disable publishing of main docs
+    publishArtifact in (Compile, packageDoc) := false,
+
+    // change the classifier for the docs artifact
+    artifactClassifier in packageDoc := Some("doc"),
+
+    // Copy all managed dependencies to <build-root>/lib_managed/
+    //   This is essentially a project-local cache and is different
+    //   from the lib_managed/ in sbt 0.7.x.  There is only one
+    //   lib_managed/ in the build root (not per-project).
+    retrieveManaged := true,
+
+    /* Specify a file containing credentials for publishing. The format is:
+    realm=Sonatype Nexus Repository Manager
+    host=nexus.scala-tools.org
+    user=admin
+    password=admin123
+    */
+    credentials += Credentials(Path.userHome / ".ivy2" / ".credentials"),
+
+    // Directly specify credentials for publishing.
+    credentials += Credentials("Sonatype Nexus Repository Manager", "nexus.scala-tools.org", "admin", "admin123"),
+
+    // Exclude transitive dependencies, e.g., include log4j without including logging via jdmk, jmx, or jms.
+    libraryDependencies +=
+      "log4j" % "log4j" % "1.2.15" excludeAll(
+        ExclusionRule(organization = "com.sun.jdmk"),
+        ExclusionRule(organization = "com.sun.jmx"),
+        ExclusionRule(organization = "javax.jms")
+      )
   )
 ```
 
 
-.scala build example
---------------------
+.sbt build with .scala files example
+------------------------------------
 
-`.scala` builds are written in Scala, so this example would be
-placed as `project/Build.scala`, not `build.sbt`. The build can be split
-into multiple files.
+`.sbt` builds can be supplemented with `project/*.scala` files.
+When the build file gets large enough, the first thing to factor out are resolvers and dependencies.
+
+### project/Resolvers.scala
 
 ```scala
 import sbt._
 import Keys._
-
-object BuildSettings {
-  val buildOrganization = "odp"
-  val buildVersion      = "2.0.29"
-  val buildScalaVersion = "2.9.0-1"
-
-  val buildSettings = Seq (
-    organization := buildOrganization,
-    version      := buildVersion,
-    scalaVersion := buildScalaVersion,
-    shellPrompt  := ShellPrompt.buildShellPrompt
-  )
-}
-
-// Shell prompt which show the current project, 
-// git branch and build version
-object ShellPrompt {
-  object devnull extends ProcessLogger {
-    def info (s: => String) {}
-    def error (s: => String) { }
-    def buffer[T] (f: => T): T = f
-  }
-  def currBranch = (
-    ("git status -sb" lines_! devnull headOption)
-      getOrElse "-" stripPrefix "## "
-  )
-
-  val buildShellPrompt = { 
-    (state: State) => {
-      val currProject = Project.extract (state).currentProject.id
-      "%s:%s:%s> ".format (
-        currProject, currBranch, BuildSettings.buildVersion
-      )
-    }
-  }
-}
 
 object Resolvers {
   val sunrepo    = "Sun Maven2 Repo" at "http://download.java.net/maven/2"
   val sunrepoGF  = "Sun GF Maven2 Repo" at "http://download.java.net/maven/glassfish" 
   val oraclerepo = "Oracle Maven2 Repo" at "http://download.oracle.com/maven"
 
-  val oracleResolvers = Seq (sunrepo, sunrepoGF, oraclerepo)
+  val oracleResolvers = Seq(sunrepo, sunrepoGF, oraclerepo)
 }
+```
+
+### project/Dependencies.scala
+
+```scala
+import sbt._
+import Keys._
 
 object Dependencies {
-  val logbackVer = "0.9.16"
-  val grizzlyVer = "1.9.19"
+  val logbackVersion = "0.9.16"
+  val grizzlyVersion = "1.9.19"
 
-  val logbackcore    = "ch.qos.logback" % "logback-core"     % logbackVer
-  val logbackclassic = "ch.qos.logback" % "logback-classic"  % logbackVer
+  val logbackcore    = "ch.qos.logback" % "logback-core"     % logbackVersion
+  val logbackclassic = "ch.qos.logback" % "logback-classic"  % logbackVersion
 
   val jacksonjson = "org.codehaus.jackson" % "jackson-core-lgpl" % "1.7.2"
 
-  val grizzlyframwork = "com.sun.grizzly" % "grizzly-framework" % grizzlyVer
-  val grizzlyhttp     = "com.sun.grizzly" % "grizzly-http"      % grizzlyVer
-  val grizzlyrcm      = "com.sun.grizzly" % "grizzly-rcm"       % grizzlyVer
-  val grizzlyutils    = "com.sun.grizzly" % "grizzly-utils"     % grizzlyVer
-  val grizzlyportunif = "com.sun.grizzly" % "grizzly-portunif"  % grizzlyVer
+  val grizzlyframwork = "com.sun.grizzly" % "grizzly-framework" % grizzlyVersion
+  val grizzlyhttp     = "com.sun.grizzly" % "grizzly-http"      % grizzlyVersion
+  val grizzlyrcm      = "com.sun.grizzly" % "grizzly-rcm"       % grizzlyVersion
+  val grizzlyutils    = "com.sun.grizzly" % "grizzly-utils"     % grizzlyVersion
+  val grizzlyportunif = "com.sun.grizzly" % "grizzly-portunif"  % grizzlyVersion
 
   val sleepycat = "com.sleepycat" % "je" % "4.0.92"
 
   val apachenet   = "commons-net"   % "commons-net"   % "2.0"
   val apachecodec = "commons-codec" % "commons-codec" % "1.4"
 
-  val scalatest = "org.scalatest" % "scalatest_2.9.0" % "1.4.1" % "test"
-}
-
-object CDAP2Build extends Build {
-  import Resolvers._
-  import Dependencies._
-  import BuildSettings._
-
-  // Sub-project specific dependencies
-  val commonDeps = Seq (
-    logbackcore,
-    logbackclassic,
-    jacksonjson,
-    scalatest
-  )
-
-  val serverDeps = Seq (
-    grizzlyframwork,
-    grizzlyhttp,
-    grizzlyrcm,
-    grizzlyutils,
-    grizzlyportunif,
-    sleepycat,
-    scalatest
-  )
-
-  val pricingDeps = Seq (apachenet, apachecodec, scalatest)
-
-  lazy val cdap2 = Project (
-    "cdap2",
-    file ("."),
-    settings = buildSettings
-  ) aggregate (common, server, compact, pricing, pricing_service)
-
-  lazy val common = Project (
-    "common",
-    file ("cdap2-common"),
-    settings = buildSettings ++ Seq (libraryDependencies ++= commonDeps)
-  )
-
-  lazy val server = Project (
-    "server",
-    file ("cdap2-server"),
-    settings = buildSettings ++ Seq (resolvers := oracleResolvers, 
-                                     libraryDependencies ++= serverDeps)
-  ) dependsOn (common)
-
-  lazy val pricing = Project (
-    "pricing",
-    file ("cdap2-pricing"),
-    settings = buildSettings ++ Seq (libraryDependencies ++= pricingDeps)
-  ) dependsOn (common, compact, server)
-
-  lazy val pricing_service = Project (
-    "pricing-service",
-    file ("cdap2-pricing-service"),
-    settings = buildSettings
-  ) dependsOn (pricing, server)
-
-  lazy val compact = Project (
-    "compact",
-    file ("compact-hashmap"),
-    settings = buildSettings
-  )
+  val scalatest = "org.scalatest" %% "scalatest" % "2.2.1"
 }
 ```
 
-### External Builds
+These files can be used mange library dependencies in one place.
 
--   [Mojolly Backchat Build](https://gist.github.com/1021873)
--   [Scalaz Build](https://github.com/scalaz/scalaz/blob/master/project/ScalazBuild.scala)
--   Source Code Generation
--   Generates Scaladoc and Scala X-Ray HTML Sources, with a unified view
-    of source from all sub-projects
--   Builds an archive will the artifacts from all modules
--   "Roll your own" approach to appending the Scala version to the
-    module id of dependencies to allow using snapshot releases of Scala.
+### project/ShellPrompPlugin.scala
+
+When you want to implement custom commands or tasks, you can organize your build by defining an one-off auto plugin.
+
+```scala
+import sbt._
+import Keys._
+
+// Shell prompt which show the current project and git branch
+object ShellPromptPlugin extends AutoPlugin {
+  override def trigger = allRequirements
+  override lazy val projectSettings = Seq(
+    shellPrompt := buildShellPrompt
+  )
+  val devnull: ProcessLogger = new ProcessLogger {
+    def info (s: => String) {}
+    def error (s: => String) { }
+    def buffer[T] (f: => T): T = f
+  }
+  def currBranch =
+    ("git status -sb" lines_! devnull headOption).
+      getOrElse("-").stripPrefix("## ")
+  val buildShellPrompt: State => String = {
+    case (state: State) =>
+      val currProject = Project.extract (state).currentProject.id
+      s"""$currProject:$currBranch> """
+  }
+}
+```
+
+This auto plugin will display the current project name and the git branch.
+
+### build.sbt
+
+Now that we factored out custom settings and dependencies out to `project/*.scala`, we can make use of them in `build.sbt`:
 
 
-  [Full-Def]: ../tutorial/Full-Def.html
+```scala
+import Resolvers._
+import Dependencies._
 
+// factor out common settings into a sequence
+lazy val buildSettings = Seq(
+  organization := "com.example",
+  version := "0.1.0",
+  scalaVersion := "2.11.4"
+)
+
+// Sub-project specific dependencies
+lazy val commonDeps = Seq(
+  logbackcore,
+  logbackclassic,
+  jacksonjson,
+  scalatest % Test
+)
+
+lazy val serverDeps = Seq(
+  grizzlyframwork,
+  grizzlyhttp,
+  grizzlyrcm,
+  grizzlyutils,
+  grizzlyportunif,
+  sleepycat,
+  scalatest % Test
+)
+
+lazy val pricingDeps = Seq(
+  apachenet,
+  apachecodec,
+  scalatest % Test
+)
+
+lazy val cdap2 = (project in file(".")).
+  aggregate(common, server, compact, pricing, pricing_service).
+  settings(buildSettings: _*)
+
+lazy val common = (project in file("cdap2-common")).
+  settings(buildSettings: _*).
+  settings(
+    libraryDependencies ++= commonDeps
+  )
+
+lazy val server = (project in file("cdap2-server")).
+  dependsOn(common).
+  settings(buildSettings: _*).
+  settings(
+    resolvers := oracleResolvers,
+    libraryDependencies ++= serverDeps
+  )
+
+lazy val pricing = (project in file("cdap2-pricing")).
+  dependsOn(common, compact, server).
+  settings(buildSettings: _*).
+  settings(
+    libraryDependencies ++= pricingDeps
+  )  
+
+lazy val pricing_service = (project in file("cdap2-pricing-service")).
+  dependsOn(pricing, server).
+  settings(buildSettings: _*)
+
+lazy val compatct = (project in file("compact-hashmap")).
+  settings(buildSettings: _*)
+```
+
+
+  [Basic-Def]: ../tutorial/Basic-Def.html
 
 Advanced configurations example
 -------------------------------
 
-This is an example [.scala build definition][Full-Def]
-that demonstrates using Ivy configurations to group dependencies.
+This is an example [.sbt build definition][Basic-Def]
+that demonstrates using configurations to group dependencies.
 
-The `utils` module provides utilities for other modules. It uses Ivy
+The `utils` module provides utilities for other modules. It uses
 configurations to group dependencies so that a dependent project doesn't
 have to pull in all dependencies if it only uses a subset of
 functionality. This can be an alternative to having multiple utilities
@@ -15780,55 +15782,60 @@ need Saxon. By depending only on the `scalate` configuration of `utils`,
 it only gets the Scalate-related dependencies.
 
 ```scala
-import sbt._
-import Keys._
+/********* Configurations *******/
 
-object B extends Build {
-   /********** Projects ************/
+// Custom configurations
+lazy val Common = config("common") describedAs("Dependencies required in all configurations.")
+lazy val Scalate = config("scalate") extend(Common) describedAs("Dependencies for using Scalate utilities.")
+lazy val Saxon = config("saxon") extend(Common) describedAs("Dependencies for using Saxon utilities.")
 
-   // An example project that only uses the Scalate utilities.
-   lazy val a = Project("a", file("a")) dependsOn(utils % "compile->scalate")
+// Define a customized compile configuration that includes
+//   dependencies defined in our other custom configurations
+lazy val CustomCompile = config("compile") extend(Saxon, Common, Scalate)
 
-   // An example project that uses the Scalate and Saxon utilities.
-   // For the configurations defined here, this is equivalent to doing dependsOn(utils),
-   //  but if there were more configurations, it would select only the Scalate and Saxon
-   //  dependencies.
-   lazy val b = Project("b", file("b")) dependsOn(utils % "compile->scalate,saxon")
+/********** Projects ************/
 
-   // Defines the utilities project
-   lazy val utils = Project("utils", file("utils")) settings(utilsSettings : _*)
+// factor out common settings into a sequence
+lazy val commonSettings = Seq(
+  organization := "com.example",
+  version := "0.1.0",
+  scalaVersion := "2.10.4"
+)
 
-   def utilsSettings: Seq[Setting[_]] =
-        // Add the src/common/scala/ compilation configuration.
-      inConfig(Common)(Defaults.configSettings) ++
-        // Publish the common artifact
-      addArtifact(artifact in (Common, packageBin), packageBin in Common) ++ Seq(
-        // We want our Common sources to have access to all of the dependencies on the classpaths
-        //   for compile and test, but when depended on, it should only require dependencies in 'common'
-      classpathConfiguration in Common := CustomCompile,
-        // Modify the default Ivy configurations.
-        //   'overrideConfigs' ensures that Compile is replaced by CustomCompile
-      ivyConfigurations := overrideConfigs(Scalate, Saxon, Common, CustomCompile)(ivyConfigurations.value),
-        // Put all dependencies without an explicit configuration into Common (optional)
-      defaultConfiguration := Some(Common),
-        // Declare dependencies in the appropriate configurations
-      libraryDependencies ++= Seq(
-         "org.fusesource.scalate" % "scalate-core" % "1.5.0" % "scalate",
-         "org.squeryl" %% "squeryl" % "0.9.4" % "scalate",
-         "net.sf.saxon" % "saxon" % "8.7" % "saxon"
-      )
-   )
+// An example project that only uses the Scalate utilities.
+lazy val a = (project in file("a")).
+  dependsOn(utils % "compile->scalate").
+  settings(commonSettings: _*)
 
-   /********* Configurations *******/
+// An example project that uses the Scalate and Saxon utilities.
+// For the configurations defined here, this is equivalent to doing dependsOn(utils),
+//  but if there were more configurations, it would select only the Scalate and Saxon
+//  dependencies.
+lazy val b = (project in file("b")).
+  dependsOn(utils % "compile->scalate,saxon").
+  settings(commonSettings: _*)
 
-   lazy val Scalate = config("scalate") extend(Common) describedAs("Dependencies for using Scalate utilities.")
-   lazy val Common = config("common") describedAs("Dependencies required in all configurations.")
-   lazy val Saxon = config("saxon") extend(Common) describedAs("Dependencies for using Saxon utilities.")
-
-     // Define a customized compile configuration that includes
-     //   dependencies defined in our other custom configurations
-   lazy val CustomCompile = config("compile") extend(Saxon, Common, Scalate)
-}
+// Defines the utilities project
+lazy val utils = (project in file("utils")).
+  settings(commonSettings: _*).
+  settings(inConfig(Common)(Defaults.configSettings): _*).  // Add the src/common/scala/ compilation configuration.
+  settings(addArtifact(artifact in (Common, packageBin), packageBin in Common): _*). // Publish the common artifact
+  settings(
+      // We want our Common sources to have access to all of the dependencies on the classpaths
+      //   for compile and test, but when depended on, it should only require dependencies in 'common'
+    classpathConfiguration in Common := CustomCompile,
+      // Modify the default Ivy configurations.
+      //   'overrideConfigs' ensures that Compile is replaced by CustomCompile
+    ivyConfigurations := overrideConfigs(Scalate, Saxon, Common, CustomCompile)(ivyConfigurations.value),
+      // Put all dependencies without an explicit configuration into Common (optional)
+    defaultConfiguration := Some(Common),
+      // Declare dependencies in the appropriate configurations
+    libraryDependencies ++= Seq(
+       "org.fusesource.scalate" % "scalate-core" % "1.5.0" % Scalate,
+       "org.squeryl" %% "squeryl" % "0.9.5-6" % Scalate,
+       "net.sf.saxon" % "saxon" % "8.7" % Saxon
+    )
+  )
 ```
 
 
