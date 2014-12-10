@@ -7420,7 +7420,7 @@ projects. In addition an auto plugin provides the following feature:
 </li></ul><h3 id="Plugin+dependencies">Plugin dependencies<a href="#Plugin+dependencies" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>When a traditional plugin wanted to reuse some functionality from an existing plugin, it would pull in the plugin as a library dependency, and then it would either:
 </p><ol><li>add the setting sequence from the dependency as part of its own setting sequence, or
 </li><li>tell the build users to include them in the right order.
-</li></ol><p>This becomes complicated as the number of plugins increase within an application, and becomes more error prone. The main goal of auto plugin is to alleviate this setting dependency problem. An auto plugin can depend on other auto plugins and lensure these dependency settings are loaded first.
+</li></ol><p>This becomes complicated as the number of plugins increase within an application, and becomes more error prone. The main goal of auto plugin is to alleviate this setting dependency problem. An auto plugin can depend on other auto plugins and ensure these dependency settings are loaded first.
 </p><p>Suppose we have the <code>SbtLessPlugin</code> and the <code>SbtCoffeeScriptPlugin</code>, which in turn depends on the <code>SbtJsTaskPlugin</code>, <code>SbtWebPlugin</code>, and <code>JvmPlugin</code>. Instead of manually activating all of these plugins, a project can just activate the <code>SbtLessPlugin</code> and <code>SbtCoffeeScriptPlugin</code> like this:
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
   enablePlugins(SbtLessPlugin, SbtCoffeeScriptPlugin)
@@ -7487,7 +7487,7 @@ object SbtLessPlugin extends AutoPlugin {
 </li><li><code>&amp;&amp;</code> operator (for defining multiple dependencies)
 </li></ul><h4 id="Root+plugins+and+triggered+plugins">Root plugins and triggered plugins<a href="#Root+plugins+and+triggered+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Some plugins should always be explicitly enabled on projects. we call
 these root plugins, i.e. plugins that are “root” nodes in the plugin
-depdendency graph. An auto plugin is by default a root plugin.
+dependency graph. An auto plugin is by default a root plugin.
 </p><p>Auto plugins also provide a way for plugins to automatically attach themselves to
 projects if their dependencies are met. We call these triggered plugins,
 and they are created by overriding the <code>trigger</code> method.
@@ -7516,12 +7516,12 @@ object SbtLessPlugin extends AutoPlugin {
   override lazy val projectSettings = ...
 }
 </code></pre><p>As it turns out, <code>PlayScala</code> plugin (in case you didn’t know, the Play framework is an sbt plugin) lists <code>SbtJsTaskPlugin</code> as one of it required plugins. So, if we define a <code>build.sbt</code> with:
-</p><pre><code class="prettyprint lang-scala">plazy val root = (project in file(&quot;.&quot;)).
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
   enablePlugins(PlayScala)
 </code></pre><p>then the setting sequence from <code>SbtLessPlugin</code> will be automatically appended somewhere after the settings from <code>PlayScala</code>.
 </p><p>This allows plugins to silently, and correctly, extend existing plugins with more features.  It also can help remove the burden of ordering from the user, allowing the plugin authors greater freedom and power when providing feature for their users.
 </p><h4 id="Controlling+the+import+with+autoImport">Controlling the import with autoImport<a href="#Controlling+the+import+with+autoImport" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>When an auto plugin provides a stable field such as <code>val</code> or <code>object</code>
-named <code>autoImport</code>, the contents of the field are wildcard imported in
+named <code>autoImport</code>, the contents of the field are wildcard imported
 in <code>set</code>, <code>eval</code>, and <code>.sbt</code> files.
 </p><pre><code class="prettyprint lang-scala">package sbthello
 

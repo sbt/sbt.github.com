@@ -11280,7 +11280,7 @@ When a traditional plugin wanted to reuse some functionality from an existing pl
 1. add the setting sequence from the dependency as part of its own setting sequence, or
 2. tell the build users to include them in the right order.
 
-This becomes complicated as the number of plugins increase within an application, and becomes more error prone. The main goal of auto plugin is to alleviate this setting dependency problem. An auto plugin can depend on other auto plugins and lensure these dependency settings are loaded first.
+This becomes complicated as the number of plugins increase within an application, and becomes more error prone. The main goal of auto plugin is to alleviate this setting dependency problem. An auto plugin can depend on other auto plugins and ensure these dependency settings are loaded first.
 
 Suppose we have the `SbtLessPlugin` and the `SbtCoffeeScriptPlugin`, which in turn depends on the `SbtJsTaskPlugin`, `SbtWebPlugin`, and `JvmPlugin`. Instead of manually activating all of these plugins, a project can just activate the `SbtLessPlugin` and `SbtCoffeeScriptPlugin` like this:
 
@@ -11392,7 +11392,7 @@ The `requires` method returns a value of type `Plugins`, which is a DSL for cons
 
 Some plugins should always be explicitly enabled on projects. we call
 these root plugins, i.e. plugins that are "root" nodes in the plugin
-depdendency graph. An auto plugin is by default a root plugin.
+dependency graph. An auto plugin is by default a root plugin.
 
 Auto plugins also provide a way for plugins to automatically attach themselves to
 projects if their dependencies are met. We call these triggered plugins,
@@ -11433,7 +11433,7 @@ object SbtLessPlugin extends AutoPlugin {
 As it turns out, `PlayScala` plugin (in case you didn't know, the Play framework is an sbt plugin) lists `SbtJsTaskPlugin` as one of it required plugins. So, if we define a `build.sbt` with:
 
 ```scala
-plazy val root = (project in file(".")).
+lazy val root = (project in file(".")).
   enablePlugins(PlayScala)
 ```
 
@@ -11444,7 +11444,7 @@ This allows plugins to silently, and correctly, extend existing plugins with mor
 #### Controlling the import with autoImport
 
 When an auto plugin provides a stable field such as `val` or `object`
-named `autoImport`, the contents of the field are wildcard imported in
+named `autoImport`, the contents of the field are wildcard imported
 in `set`, `eval`, and `.sbt` files.
 
 ```scala

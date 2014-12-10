@@ -401,11 +401,16 @@ turn.
 and <code>T</code> is the type of each value.
 </p><h3 id="How+build.sbt+defines+settings">How build.sbt defines settings<a href="#How+build.sbt+defines+settings" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> defines a <code>Project</code>, which holds a list of Scala expressions called <code>settings</code>.
 </p><p>Here’s an example:
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
+</p><pre><code class="prettyprint lang-scala">lazy val commonSettings = Seq(
+  organization := &quot;com.example&quot;,
+  version := &quot;0.1.0&quot;,
+  scalaVersion := &quot;2.11.4&quot;
+)
+
+lazy val root = (project in file(&quot;.&quot;)).
+  settings(commonSettings: _*).
   settings(
-    name := &quot;hello&quot;,
-    version := &quot;1.0&quot;,
-    scalaVersion := &quot;2.11.4&quot;
+    name := &quot;hello&quot;
   )
 </code></pre><p>Each <code>Setting</code> is defined with a Scala expression. The expressions in
 <code>settings</code> are independent of one another, and they are expressions,
@@ -522,10 +527,19 @@ when we get to <a href="Full-Def.html">.scala build definition</a>.)
 </p><h3 id="Adding+library+dependencies">Adding library dependencies<a href="#Adding+library+dependencies" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To depend on third-party libraries, there are two options. The first is
 to drop jars in <code>lib/</code> (unmanaged dependencies) and the other is to add
 managed dependencies, which will look like this in <code>build.sbt</code>:
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
+</p><pre><code class="prettyprint lang-scala">val derby = &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot;
+
+lazy val commonSettings = Seq(
+  organization := &quot;com.example&quot;,
+  version := &quot;0.1.0&quot;,
+  scalaVersion := &quot;2.11.4&quot;
+)
+
+lazy val root = (project in file(&quot;.&quot;)).
+  settings(commonSettings: _*).
   settings(
     name := &quot;hello&quot;,
-    libraryDependencies += &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot;
+    libraryDependencies += derby
   )
 </code></pre><p>This is how you add a managed dependency on the Apache Derby library,
 version 10.4.1.3.
