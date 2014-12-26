@@ -346,7 +346,7 @@ release to release. Still, setting the sbt version in
 
   [Hello]: Hello.html
   [Setup]: Setup.html
-  [Full-Def]: Full-Def.html
+  [Organizing-Build]: Organizing-Build.html
 
 Directory structure
 -------------------
@@ -398,7 +398,7 @@ You've already seen `build.sbt` in the project's base directory. Other sbt
 files appear in a `project` subdirectory.
 
 `project` can contain `.scala` files, which are combined with `.sbt` files to
-form the complete build definition. See [.scala build definition][Full-Def] for more.
+form the complete build definition. See [organizing the build][Organizing-Build] for more.
 
 ```
 build.sbt
@@ -408,7 +408,7 @@ project/
 
 You may see `.sbt` files inside `project/` but they are not equivalent to
 `.sbt` files in the project's base directory. Explaining this will
-come [later][Full-Def], since you'll need some background information first.
+come [later][Organizing-Build], since you'll need some background information first.
 
 ### Build products
 
@@ -1267,7 +1267,6 @@ config, global task).
 
   [Basic-Def]: Basic-Def.html
   [Scopes]: Scopes.html
-  [Full-Def]: Full-Def.html
 
 More kinds of setting
 ---------------------
@@ -1291,11 +1290,6 @@ The `Setting` which `:=` creates puts a fixed, constant value in the new,
 transformed map. For example, if you transform a map with the setting
 `name := "hello"` the new map has the string `"hello"` stored under the key
 name.
-
-Settings must end up in the master list of settings to do any good (all
-lines in a `build.sbt` automatically end up in the list, but in a
-[.scala file][Full-Def] you can get it wrong by creating a `Setting`
-without putting it where sbt will find it).
 
 ### Appending to previous values: `+=` and `++=`
 
@@ -1734,7 +1728,7 @@ dependencies on [this page][Library-Management].
   [Basic-Def]: Basic-Def.html
   [Scopes]: Scopes.html
   [Directories]: Directories.html
-  [Full-Def]: Full-Def.html
+  [Organizing-Build]: Organizing-Build.html
 
 Multi-project builds
 --------------------
@@ -1775,6 +1769,36 @@ lazy val util = project.in(file("util"))
 
 lazy val core = project in file("core")
 ```
+
+#### Common settings
+
+To factor out common settings across multiple projects,
+create a sequence named `commonSettings` and call `settings` method
+on each project. Note `_*` is required to pass sequence into a vararg
+method.
+
+```scala
+lazy val commonSettings = Seq(
+  organization := "com.example",
+  version := "0.1.0",
+  scalaVersion := "2.11.4"
+)
+
+lazy val core = (project in file("core")).
+  settings(commonSettings: _*).
+  settings(
+    // other settings
+  )
+
+lazy val util = (project in file("util")).
+  settings(commonSettings: _*).
+  settings(
+    // other settings
+  )
+```
+
+Now we can bump up `version` in one place, and it will be reflected
+across subprojects when you reload the build.
 
 ### Dependencies
 
@@ -1921,29 +1945,9 @@ project ID, such as `subProjectID/compile`.
 
 The definitions in `.sbt` files are not visible in other `.sbt` files. In
 order to share code between `.sbt` files, define one or more Scala files
-in the `project/` directory of the build root. This directory is also an
-sbt project, but for your build.
+in the `project/` directory of the build root.
 
-For example:
-
-`<root>/project/Common.scala`:
-
-```scala
-import sbt._
-import Keys._
-
-object Common {
-  def text = "org.example"
-}
-```
-
-`<root>/build.sbt`:
-
-```scala
-organization := Common.text
-```
-
-See [.scala Build Definition][Full-Def] for details.
+See [organizing the build][Organizing-Build] for details.
 
 
   [Basic-Def]: Basic-Def.html
@@ -2119,7 +2123,7 @@ For best practices, see
   [Basic-Def]: Basic-Def.html
   [More-About-Settings]: More-About-Settings.html
   [Using-Plugins]: Using-Plugins.html
-  [Full-Def]: Full-Def.html
+  [Organizing-Build]: Organizing-Build.html
   [Input-Tasks]: ../docs/Input-Tasks.html
   [Plugins]: ../docs/Plugins.html
   [Tasks]: ../docs/Tasks.html
@@ -2162,9 +2166,9 @@ value until project reload, while a task is re-computed for every "task
 execution" (every time someone types a command at the sbt interactive
 prompt or in batch mode).
 
-Keys may be defined in a [.sbt file][Basic-Def],
-[.scala file][Full-Def], or in [a plugin][Using-Plugins].
-Any `val` found in the `autoImport` object of an enabled auto plugin
+Keys may be defined in an [.sbt file][Basic-Def],
+a [.scala file][Organizing-Build], or in an [auto plugin][Using-Plugins].
+Any `val`s found under `autoImport` object of an enabled auto plugin
 will be imported automatically into your `.sbt` files.
 
 ### Implementing a task
@@ -2407,24 +2411,34 @@ tasks on the [Tasks][Tasks] page.
   [Basic-Def]: Basic-Def.html
   [More-About-Settings]: More-About-Settings.html
   [Using-Plugins]: Using-Plugins.html
+  [Library-Dependencies]: Library-Dependencies.html
+  [Multi-Project]: Multi-Project.html
+  [Plugins]: ../reference/Plugins.html
 
-.scala build definition
------------------------
+Organizing the build
+--------------------
 
-This page assumes you've read previous pages in the Getting Started
-Guide, *especially* [.sbt build definition][Basic-Def] and
-[more kinds of setting][More-About-Settings].
+This page discusses the organization of the build structure.
+
+Please read the earlier pages in the Getting Started Guide first, in
+particular you need to understand
+[build.sbt][Basic-Def],
+[Library dependencies][Library-Dependencies],
+and [Multi-project builds][Multi-Project]
+before reading this page.
 
 ### sbt is recursive
 
-`build.sbt` is so simple, it conceals how sbt really works. sbt builds are
+`build.sbt` conceals how sbt really works. sbt builds are
 defined with Scala code. That code, itself, has to be built. What better
 way than with sbt?
 
-The `project` directory *is another project inside your project* which
-knows how to build your project. The project inside `project` can (in
-theory) do anything any other project can do. *Your build definition is
-an sbt project.*
+The `project` directory *is another build inside your build*, which
+knows how to build your build. To distinguish the builds,
+we sometimes use the term **proper build** to refer to your build,
+and **meta-build** to refer to the build in `project`.
+The projects inside the metabuild can do anything
+any other project can do. *Your build definition is an sbt project.* 
 
 And the turtles go all the way down. If you like, you can tweak the
 build definition of the build definition project, by creating a
@@ -2433,28 +2447,30 @@ build definition of the build definition project, by creating a
 Here's an illustration.
 
 ```
-hello/                  # your project's base directory
+hello/                  # your build's root project's base directory
 
-    Hello.scala         # a source file in your project (could be in
-                        #   src/main/scala too)
+    Hello.scala         # a source file in your build's root project
+                        #   (could be in src/main/scala too)
 
-    build.sbt           # build.sbt is part of the source code for the
-                        #   build definition project inside project/
+    build.sbt           # build.sbt is part of the source code for
+                        #   meta-build's root project inside project/;
+                        #   the build definition for your build
 
-    project/            # base directory of the build definition project
+    project/            # base directory of meta-build's root project
 
-        Build.scala     # a source file in the project/ project,
+        Build.scala     # a source file in the meta-build's root project,
                         #   that is, a source file in the build definition
+                        #   the build definition for your build
 
-        build.sbt       # this is part of a build definition for a project
-                        #   in project/project ; build definition's build
-                        #   definition
+        build.sbt       # this is part of the source code for
+                        #   meta-meta-build's root project in project/project;
+                        #   build definition's build definition
 
+        project/        # base directory of meta-meta-build's root project;
+                        #   the build definition project for the build definition
 
-        project/        # base directory of the build definition project
-                        #   for the build definition
-
-            Build.scala # source file in the project/project/ project
+            Build.scala # source file in the root project of
+                        #   meta-meta-build in project/project/
 ```
 
 *Don't worry!* Most of the time you are not going to need all that. But
@@ -2464,31 +2480,200 @@ By the way: any time files ending in `.scala` or `.sbt` are used, naming
 them `build.sbt` and `Build.scala` are conventions only. This also means
 that multiple files are allowed.
 
-### `.scala` source files in the build definition project
+### Tracking dependencies in one place
 
-`.sbt` files are merged into their sibling project directory. Looking back
-at the project layout:
+One way of using the fact that `.scala` files under `project` becomes
+part of the build definition is to create `project/Dependencies.scala`
+to track dependencies in one place.
 
+```scala
+import sbt._
+
+object Dependencies {
+  // Versions
+  lazy val akkaVersion = "2.3.8"
+
+  // Libraries
+  val akkaActor = "com.typesafe.akka" %% "akka-actor" % akkaVersion
+  val akkaCluster = "com.typesafe.akka" %% "akka-cluster" % akkaVersion
+  val specs2core = "org.specs2" %% "specs2-core" % "2.4.14"
+
+  // Projects
+  val backendDeps =
+    Seq(akkaActor, specs2core % Test)
+}
 ```
-hello/                  # your project's base directory
 
-    build.sbt           # build.sbt is part of the source code for the
-                        #   build definition project inside project/
+The `Dependencies` object will be available in `build.sbt`.
+To use the `val`s under it easier, import `Dependencies._`.
 
-    project/            # base directory of the build definition project
+```scala
+import Dependencies._
 
-        Build.scala     # a source file in the project/ project,
-                        #   that is, a source file in the build definition
+lazy val commonSettings = Seq(
+  version := "0.1.0",
+  scalaVersion = "2.11.4"
+)
+
+lazy val backend = (project in file("backend")).
+  settings(commonSettings: _*).
+  settings(
+    libraryDependencies += backendDeps
+  )
 ```
 
-The Scala expressions in build.sbt are compiled alongside and merged
-with `Build.scala` (or any other `.scala` files in the `project/` directory).
+This technique is useful when you have a multi-project build that's getting
+large, and you want to make sure that subprojects to have consistent dependencies.
 
-`*.sbt` files in the base directory for a project become part of the
-project build definition project also located in that base directory.
+### When to use `.scala` files
 
-The `.sbt` file format is a convenient shorthand for adding settings to
-the build definition project.
+In `.scala` files, you can write any Scala code, including top-level
+classes and objects.
+
+The recommended approach is to define most settings in
+a multi-project `build.sbt` file,
+and using `project/*.scala` files for task implementations or to share values,
+such as keys. The use of `.scala` files also depends on how comfortable
+you or your team are with Scala.
+
+### Defining auto plugins
+
+For more advanced users, another way of organizing your build is to
+define one-off [auto plugins][Plugins] in `project/*.scala`.
+By defining triggered plugins, auto plugins can be used as a convenient
+way to inject custom tasks and commands across all subprojects.
+
+
+  [Basic-Def]: Basic-Def.html
+  [Scopes]: Scopes.html
+  [Using-Plugins]: Using-Plugins.html
+  [getting-help]: ../docs/faq.html#getting-help
+
+Getting Started summary
+-----------------------
+
+This page wraps up the Getting Started Guide.
+
+To use sbt, there are a small number of concepts you must understand.
+These have some learning curve, but on the positive side, there isn't
+much to sbt *except* these concepts. sbt uses a small core of powerful
+concepts to do everything it does.
+
+If you've read the whole Getting Started series, now you know what you
+need to know.
+
+### sbt: The Core Concepts
+
+-   the basics of Scala. It's undeniably helpful to be familiar with
+    Scala syntax. [Programming in
+    Scala](http://www.artima.com/shop/programming_in_scala_2ed) written
+    by the creator of Scala is a great introduction.
+-   [.sbt build definition][Basic-Def]
+-   your build definition is one big list of `Setting` objects, where a
+    `Setting` transforms the set of key-value pairs sbt uses to perform
+    tasks.
+-   to create a `Setting`, call one of a few methods on a key: `:=`, `+=`, or
+    `++=`.
+-   there is no mutable state, only transformation; for example, a
+    `Setting` transforms sbt's collection of key-value pairs into a new
+    collection. It doesn't change anything in-place.
+-   each setting has a value of a particular type, determined by the
+    key.
+-   *tasks* are special settings where the computation to produce the
+    key's value will be re-run each time you kick off a task. Non-tasks
+    compute the value once, when first loading the build definition.
+-   [Scopes][Scopes]
+-   each key may have multiple values, in distinct scopes.
+-   scoping may use three axes: configuration, project, and task.
+-   scoping allows you to have different behaviors per-project,
+    per-task, or per-configuration.
+-   a configuration is a kind of build, such as the main one (`Compile`)
+    or the test one (`Test`).
+-   the per-project axis also supports "entire build" scope.
+-   scopes fall back to or *delegate* to more general scopes.
+-   put most of your configuration in `build.sbt`, but use `.scala` build
+    definition files for defining classes and larger task
+    implementations.
+-   the build definition is an sbt project in its own right, rooted in
+    the project directory.
+-   [Plugins][Using-Plugins] are extensions to the build definition
+-   add plugins with the `addSbtPlugin` method in `project/plugins.sbt` (NOT
+    `build.sbt` in the project's base directory).
+
+If any of this leaves you wondering rather than nodding, please
+[ask for help][getting-help], go back and re-read, or try some
+experiments in sbt's interactive mode.
+
+Good luck!
+
+### Advanced Notes
+
+<!-- TODO: Link to reference. The rest of this wiki consists of deeper dives and less-commonly-needed
+information. -->
+
+Since sbt is open source, don't forget you can check out the
+[source code](https://github.com/sbt/sbt) too!
+
+
+  [More-About-Settings]: More-About-Settings.html
+  [Full-Def]: Full-Def.html
+  [Basic-Def]: Basic-Def.html
+
+Appendix: Bare .sbt build definition
+------------------------------------
+
+This page describes an old style of `.sbt` build definition.
+The current recommendation is to use [Multi-project .sbt build definition][Basic-Def].
+
+### What is a bare .sbt build definition
+
+Unlike [Multi-project .sbt build definition][Basic-Def] and [.scala build definition][Full-Def]
+that explicitly define a [Project](../api/sbt/Project.html) definition,
+bare build definition implicitly defines one based on the location of the `.sbt` file.
+
+Instead of defining `Project`s, bare `.sbt` build definition consists of
+a list of `Setting[_]` expressions.
+
+```scala
+name := "hello"
+
+version := "1.0"
+
+scalaVersion := "2.11.4"
+```
+
+### (Pre 0.13.7) Settings must be separated by blank lines
+
+**Note**: This blank line delimitation will no longer be needed after 0.13.7.
+
+You can't write a bare build.sbt like this:
+
+```scala
+// will NOT compile, no blank lines
+name := "hello"
+version := "1.0"
+scalaVersion := "2.10.3"
+```
+
+sbt needs some kind of delimiter to tell where one expression stops and
+the next begins.
+
+
+  [Basic-Def]: Basic-Def.html
+  [More-About-Settings]: More-About-Settings.html
+  [Using-Plugins]: Using-Plugins.html
+
+Appendix: .scala build definition
+---------------------------------
+
+This page describes an old style of `.scala` build definition.
+In the previous versions of sbt, `.scala` was the only way to create multi-project build definition,
+but sbt 0.13 added [multi-project .sbt build definition][Basic-Def],
+which is the recommended style.
+
+We assume you've read previous pages in the Getting Started
+Guide, *especially* [.sbt build definition][Basic-Def] and
+[more kinds of setting][More-About-Settings].
 
 ### Relating build.sbt to Build.scala
 
@@ -2596,16 +2781,6 @@ In summary:
 - The settings in `.sbt` files are project-scoped unless you explicitly
   specify another scope.
 
-### When to use `.scala` files
-
-In `.scala` files, you can write any Scala code, including top-level
-classes and objects. Also, there are no restrictions on blank lines,
-since they are standard `.scala` files.
-
-The recommended approach is to define most configuration in `.sbt` files,
-using `.scala` files for task implementations or to share values, such as
-keys, across `.sbt` files.
-
 ### The build definition project in interactive mode
 
 You can switch the sbt interactive prompt to have the build definition
@@ -2653,120 +2828,3 @@ in this order:
 
 Later settings override earlier ones. The entire list of settings forms
 the build definition.
-
-
-  [More-About-Settings]: More-About-Settings.html
-  [Full-Def]: Full-Def.html
-  [Basic-Def]: Basic-Def.html
-
-Bare .sbt build definition
---------------------------
-
-This page describes an old style of `.sbt` build definition.
-The current recommendation is to use [Multi-project .sbt build definition][Basic-Def].
-
-### What is a bare .sbt build definition
-
-Unlike [Multi-project .sbt build definition][Basic-Def] and [.scala build definition][Full-Def]
-that explicitly define a [Project](../api/sbt/Project.html) definition,
-bare build definition implicitly defines one based on the location of the `.sbt` file.
-
-Instead of defining `Project`s, bare `.sbt` build definition consists of
-a list of `Setting[_]` expressions.
-
-```scala
-name := "hello"
-
-version := "1.0"
-
-scalaVersion := "2.11.4"
-```
-
-### (Pre 0.13.7) Settings must be separated by blank lines
-
-**Note**: This blank line delimitation will no longer be needed after 0.13.7.
-
-You can't write a bare build.sbt like this:
-
-```scala
-// will NOT compile, no blank lines
-name := "hello"
-version := "1.0"
-scalaVersion := "2.10.3"
-```
-
-sbt needs some kind of delimiter to tell where one expression stops and
-the next begins.
-
-
-  [Basic-Def]: Basic-Def.html
-  [Scopes]: Scopes.html
-  [Full-Def]: Full-Def.html
-  [Using-Plugins]: Using-Plugins.html
-  [getting-help]: ../docs/faq.html#getting-help
-
-Getting Started summary
------------------------
-
-This page wraps up the Getting Started Guide.
-
-To use sbt, there are a small number of concepts you must understand.
-These have some learning curve, but on the positive side, there isn't
-much to sbt *except* these concepts. sbt uses a small core of powerful
-concepts to do everything it does.
-
-If you've read the whole Getting Started series, now you know what you
-need to know.
-
-### sbt: The Core Concepts
-
--   the basics of Scala. It's undeniably helpful to be familiar with
-    Scala syntax. [Programming in
-    Scala](http://www.artima.com/shop/programming_in_scala_2ed) written
-    by the creator of Scala is a great introduction.
--   [.sbt build definition][Basic-Def]
--   your build definition is one big list of `Setting` objects, where a
-    `Setting` transforms the set of key-value pairs sbt uses to perform
-    tasks.
--   to create a `Setting`, call one of a few methods on a key: `:=`, `+=`, or
-    `++=`.
--   there is no mutable state, only transformation; for example, a
-    `Setting` transforms sbt's collection of key-value pairs into a new
-    collection. It doesn't change anything in-place.
--   each setting has a value of a particular type, determined by the
-    key.
--   *tasks* are special settings where the computation to produce the
-    key's value will be re-run each time you kick off a task. Non-tasks
-    compute the value once, when first loading the build definition.
--   [Scopes][Scopes]
--   each key may have multiple values, in distinct scopes.
--   scoping may use three axes: configuration, project, and task.
--   scoping allows you to have different behaviors per-project,
-    per-task, or per-configuration.
--   a configuration is a kind of build, such as the main one (`Compile`)
-    or the test one (`Test`).
--   the per-project axis also supports "entire build" scope.
--   scopes fall back to or *delegate* to more general scopes.
--   [.sbt][Basic-Def] vs. [.scala][Full-Def] build definition
--   put most of your configuration in `build.sbt`, but use `.scala` build
-    definition files for defining classes and larger task
-    implementations.
--   the build definition is an sbt project in its own right, rooted in
-    the project directory.
--   [Plugins][Using-Plugins] are extensions to the build definition
--   add plugins with the `addSbtPlugin` method in `project/plugins.sbt` (NOT
-    `build.sbt` in the project's base directory).
-
-If any of this leaves you wondering rather than nodding, please
-[ask for help][getting-help], go back and re-read, or try some
-experiments in sbt's interactive mode.
-
-Good luck!
-
-### Advanced Notes
-
-<!-- TODO: Link to reference. The rest of this wiki consists of deeper dives and less-commonly-needed
-information. -->
-
-Since sbt is open source, don't forget you can check out the
-[source code](https://github.com/sbt/sbt) too!
