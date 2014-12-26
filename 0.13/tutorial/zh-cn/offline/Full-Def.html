@@ -37,46 +37,45 @@
         <a class="page prev nav" href="Custom-Settings.html">
             <span class="space">&nbsp;</span>
             <span class="flip arrow">&gt;</span>
-          </a><a class="page next nav" href="Summary.html">
+          </a><a class="page next nav" href="Bare-Def.html">
             <span class="space">&nbsp;</span>
             <span class="arrow">&gt;</span>
           </a>
         <div class="container contentswrapper">
           <div class="span-16 prepend-1 append-1 contents">
             <h2 id=".scala+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">.scala 构建定义<a href="#.scala+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>本小节假设你已经阅读了之前的章节，尤其是 <a href="Basic-Def.html">.sbt 构建定义</a>和<a href="More-About-Settings.html">更多关于设置</a>。
-</p><h3 id="sbt%E6%98%AF%E9%80%92%E5%BD%92%E7%9A%84">sbt是递归的<a href="#sbt%E6%98%AF%E9%80%92%E5%BD%92%E7%9A%84" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> 很简单，隐藏了 sbt 是如何工作的。sbt 建立是用 Scala 代码定义的。代码本身是必须被建立的。有比 .sbt 更好的建立方式么？
-</p><p><code>project</code> 目录 <em>另一个工程的项目</em> 知道如何建立一个工程。在 <code>project</code> 内部的项目能做任何其他项目可以做的事情。 <em>你的构建定义是一个 sbt 项目。</em>
+</p><h3 id="sbt%E6%98%AF%E9%80%92%E5%BD%92%E7%9A%84">sbt是递归的<a href="#sbt%E6%98%AF%E9%80%92%E5%BD%92%E7%9A%84" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> 很简单，隐藏了 sbt 是如何工作的。sbt 构建是用 Scala 代码定义的。代码本身也必须是能被构建的。有比 sbt 更好的建立方式么？
+</p><p><code>project</code> 目录 <em>是你的工程内另一个工程的项目</em>，它知道如何构建你的工程。在 <code>project</code> 内部的项目能做任何其他项目可以做的事情。 <em>你的构建定义是一个 sbt 项目。</em>
 </p><p>递归可以继续下去。如果你喜欢, 你可以稍稍调整项目的构建定义，比如创建 <code>project/project/</code> 目录。
 </p><p>下面是一个例子：
 </p><pre><code class="">hello/                  # 项目的基目录
 
-    Hello.scala         # 一个项目源文件
+    Hello.scala         # 一个项目源文件（也可以在src/main/scala）
 
-    build.sbt           # build.sbt 是project/ 中构建定义的一部分。
+    build.sbt           # build.sbt 是project/ 中构建定义项目的一部分。
 
     project/            # 构建定义项目的基目录
 
-        Build.scala     # 构建定义源文件
+        Build.scala     # 构建定义源文件，即project/ project的源文件
 
-        build.sbt       # 项目构建定义的一部分
+        build.sbt       # project/project中工程项目构建定义的一部分；构建定义的构建定义
 
         project/        # 构建定义项目的基目录
 
             Build.scala # project/project/ 项目中的源文件
 </code></pre><p><em>不用担心！</em> 大部分时候不需要 <code>project/project/</code> 目录。但是理解它是有帮助的。
-</p><p>文件以 <code>.scala</code> 或者 <code>.sbt</code> 结尾，一般命名 <code>build.sbt</code> 和 <code>Build.scala</code>。实际上，这只是一个惯例，更多的文件也是允许的。
-</p><h3 id="%E6%BA%90%E6%96%87%E4%BB%B6%E5%9C%A8%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E9%A1%B9%E7%9B%AE"><code>.scala</code> 源文件在构建定义项目<a href="#%E6%BA%90%E6%96%87%E4%BB%B6%E5%9C%A8%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E9%A1%B9%E7%9B%AE" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>.sbt</code> 文件被融入它的兄弟目录。再次看项目布局：
-```
-hello/                  # 项目的基目录
-</p><pre><code>build.sbt           # build.sbt 是project/ 中构建定义的一部分。
+</p><p>另外，任何以 <code>.scala</code> 或者 <code>.sbt</code> 结尾的文件都会被使用，命名为 <code>build.sbt</code> 和 <code>Build.scala</code>只是惯例。多个文件也是允许的。
+</p><h3 id="%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E9%A1%B9%E7%9B%AE%E7%9A%84+%E6%BA%90%E6%96%87%E4%BB%B6">构建定义项目的<code>.scala</code> 源文件<a href="#%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E9%A1%B9%E7%9B%AE%E7%9A%84+%E6%BA%90%E6%96%87%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>.sbt</code> 文件被融入其兄弟工程目录中。再次看项目布局：
+</p><pre><code class="">hello/                  # 项目的基目录
 
-project/            # 构建定义项目的基目录
+    build.sbt           # build.sbt 是project/ 中构建定义工程的一部分。
 
-    Build.scala     # 构建定义源文件
-</code></pre><p>```
-</p><p>在 build.sbt 中的 Scala 表达式被延续编译，和 <code>Build.scala</code> 融入在一起。（和其他在 <code>project/</code> 目录下的 <code>.scala</code> 文件）
-</p><p>在基目录中的 <code>*.sbt</code> 文件变成项目构建定义的一部分。
-</p><p><code>.sbt</code> 文件形式，对于在构建定义项目中增加设定，是一种方便的缩写
+    project/            # 构建定义项目的基目录
+
+        Build.scala     # project/ 工程源文件，即构建定义源文件
+</code></pre><p>在 build.sbt 中的 Scala 表达式被延续编译，和 <code>Build.scala</code> 融入在一起（和在 <code>project/</code> 目录下的其他 <code>.scala</code> 文件）。
+</p><p>在基目录中的 <code>*.sbt</code> 文件变成项目构建定义项目的一部分。
+</p><p><code>.sbt</code> 文件形式，对于在构建定义项目中增加设定，是一种方便的缩写。
 </p><h3 id="%E5%85%B3%E8%81%94+build.sbt+%E5%92%8C+Build.scala">关联 build.sbt 和 Build.scala<a href="#%E5%85%B3%E8%81%94+build.sbt+%E5%92%8C+Build.scala" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>为了融合<code>.sbt</code> 和 <code>.scala</code> 文件在你的构建定义中，你需要理解他们是如何关联的。
 </p><p>下面两个文件描述了这个过程。第一，如果你的项目在 hello 文件夹内，创建 <code>hello/project/Build.scala</code>：
 </p><pre><code class="prettyprint lang-scala">import sbt._
@@ -112,8 +111,7 @@ sampleKeyD := &quot;D: in build.sbt&quot;
 </p><pre><code class="">[info] Setting: java.lang.String = C: in build.sbt scoped to ThisBuild
 [info] Provided by:
 [info]  {file:/home/hp/checkout/hello/}/*:sampleKeyC
-</code></pre><p>注意 “Provided by” 会显示两个 value 的相同作用范围。那是 <code>.sbt</code> 文件中的 <code>sampleKeyC in ThisBuild</code> 等同与放置一个设置在 <code>Build.settings</code> 列表，在 <code>.scala</code> 文件中。sbt 会抽取构建范围内的设置从
-两个地方，而创建构建定义。
+</code></pre><p>注意 “Provided by” 显示两个 value 具有相同作用范围。那是 <code>.sbt</code> 文件中的 <code>sampleKeyC in ThisBuild</code> 等同与放置在 <code>.scala</code> 文件 <code>Build.settings</code> 列表中的一个设置。sbt 会从两个地方抽取构建范围内的设置，来创建构建定义。
 </p><p>然后，<code>inspect sampleKeyB</code>：
 </p><pre><code class="">[info] Setting: java.lang.String = B: in the root project settings in Build.scala
 [info] Provided by:
@@ -124,18 +122,18 @@ sampleKeyD := &quot;D: in build.sbt&quot;
 </p><pre><code class="">[info] Setting: java.lang.String = D: in build.sbt
 [info] Provided by:
 [info]  {file:/home/hp/checkout/hello/}hello/*:sampleKeyD
-</code></pre><p>sbt 附加设置从 <code>.sbt</code> 文件到 <code>Build.settings</code> 和 <code>Project.setting</code> 的设置。另句话说，<code>.sbt</code> 设置拥有优先权。
-尝试改变 <code>Build.scala</code>，使得它能设置健值 <code>sanokeC</code> 或者 <code>sampleD</code>，他们已经在 <code>build.sbt</code> 设置过。<code>build.sbt</code> 中的设置应该能赢过 <code>Build.sbt</code>。
-</p><p>另一要点应该被注意到：<code>sampleKeyC</code> 和 <code>sampleKeyD</code> 是可以在 <code>build.sbt</code> 内部获得的。这是因为 sbt 引入 <code>Build</code> 中的内容到 <code>.sbt</code> 文件中。在这种情况下，<code>import HelloBuild._</code> 是被隐含引入在 <code>build.sbt</code> 文件中。
+</code></pre><p>sbt 从 <code>.sbt</code> 文件<em>附加</em>设置到 <code>Build.settings</code> 和 <code>Project.setting</code> 的设置，换句话说，<code>.sbt</code> 设置拥有优先权。
+尝试改变 <code>Build.scala</code>，使得它能设置健值 <code>sampleC</code> 或者 <code>sampleD</code>，他们已经在 <code>build.sbt</code> 设置过。<code>build.sbt</code> 中的设置应该能“赢”过 <code>Build.sbt</code>。
+</p><p>你也许会注意到另一要点：<code>sampleKeyC</code> 和 <code>sampleKeyD</code> 是可以在 <code>build.sbt</code> 内部获得的。这是因为 sbt 引入 <code>Build</code> 中的内容到 <code>.sbt</code> 文件中。在这种情况下，<code>import HelloBuild._</code> 是被隐含引入在 <code>build.sbt</code> 文件中。
 </p><p>总结：
-- 在 <code>.scala</code> 文件中，可以在 <code>Build.settings</code> 中增加设置，会自动增加构建作用域。
-- 在 <code>.scala</code> 文件中，可以在 <code>Project.settings</code> 中增加设置，会自动增加构建作用域。
-- 任何在 <code>.scala</code> 中的 <code>Build</code> 对象将会把它的内容导入到 <code>.sbt</code> 文件中。
-- 在 <code>.sbt</code> 文件中的设置被 <em>追加</em> 到 <code>.scala</code> 中的设置。
-- 在 <code>.sbt</code> 文件中的设置是在项目作用域的，除非你指定它在其他域。
-</p><h3 id="%E4%BD%95%E6%97%B6%E7%94%A8++%E6%96%87%E4%BB%B6">何时用 <code>.scala</code> 文件<a href="#%E4%BD%95%E6%97%B6%E7%94%A8++%E6%96%87%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在 <code>.scala</code> 文件，你可以写任意的 Scala 代码，包括顶层的类和对象。另外，它没有对空白行的限制，因为它是一个 <code>.scala</code> 文件。
-推荐的方法是定义设置在 <code>.sbt</code> 文件中，用 <code>.scala</code> 文件用于任务实现，或者共享键值在 <code>.sbt</code> 文件中。
-</p><h3 id="%E5%91%BD%E4%BB%A4%E7%AA%97%E5%8F%A3%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E9%A1%B9%E7%9B%AE">命令窗口构建定义项目<a href="#%E5%91%BD%E4%BB%A4%E7%AA%97%E5%8F%A3%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E9%A1%B9%E7%9B%AE" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>你现在可以切换到 sbt 命令行的交互模式，让在 <code>project/</code> 目录下的构建定义项目作为当前项目。可以输入 <code>reload plugins</code> 来达到目的。
+</p><ul><li>在 <code>.scala</code> 文件中，可以在 <code>Build.settings</code> 中增加设置，这些设置自动成为构建作用域。
+</li><li>在 <code>.scala</code> 文件中，可以在 <code>Project.settings</code> 中增加设置，这些设置自动成为工程作用域。
+</li><li>任何在 <code>.scala</code> 中的 <code>Build</code> 对象将会把它的内容导入到 <code>.sbt</code> 文件中。
+</li><li>在 <code>.sbt</code> 文件中的设置被 <em>追加</em> 到 <code>.scala</code> 中的设置。
+</li><li>在 <code>.sbt</code> 文件中的设置是在项目作用域的，除非你指定它在其他域。
+</li></ul><h3 id="%E4%BD%95%E6%97%B6%E7%94%A8++%E6%96%87%E4%BB%B6">何时用 <code>.scala</code> 文件<a href="#%E4%BD%95%E6%97%B6%E7%94%A8++%E6%96%87%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在 <code>.scala</code> 文件，你可以写任意的 Scala 代码，包括顶层的类和对象。另外，它没有对空白行的限制，因为它是一个标准 <code>.scala</code> 文件。
+</p><p>推荐的方法是定义大部分设置在 <code>.sbt</code> 文件中，用 <code>.scala</code> 文件来做任务实现，或者在多个 <code>.sbt</code> 文件中共享键值。
+</p><h3 id="%E4%BA%A4%E4%BA%92%E6%A8%A1%E5%BC%8F%E4%B8%AD%E7%9A%84%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E9%A1%B9%E7%9B%AE">交互模式中的构建定义项目<a href="#%E4%BA%A4%E4%BA%92%E6%A8%A1%E5%BC%8F%E4%B8%AD%E7%9A%84%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E9%A1%B9%E7%9B%AE" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>你现在可以切换到 sbt 命令行的交互模式，让在 <code>project/</code> 目录下的构建定义项目作为当前项目。可以输入 <code>reload plugins</code> 来达到目的。
 </p><pre><code class="">&gt; reload plugins
 [info] Set current project to default-a0e8e4 (in build file:/home/hp/checkout/hello/project/)
 &gt; show sources
@@ -146,20 +144,20 @@ sampleKeyD := &quot;D: in build.sbt&quot;
 &gt; show sources
 [info] ArrayBuffer(/home/hp/checkout/hello/hw.scala)
 &gt;
-</code></pre><p>你可以用 <code>reload return</code> 离开构建定义项目，回到你平常的项目。
-</p><h3 id="%E6%8F%90%E9%86%92%EF%BC%9A%E5%AE%83%E6%80%BB%E6%98%AF%E4%B8%8D%E5%8F%AF%E6%94%B9%E5%8F%98%E7%9A%84">提醒：它总是不可改变的<a href="#%E6%8F%90%E9%86%92%EF%BC%9A%E5%AE%83%E6%80%BB%E6%98%AF%E4%B8%8D%E5%8F%AF%E6%94%B9%E5%8F%98%E7%9A%84" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>认为在 <code>build.sbt</code> 的设置将被添加到 <code>Build</code> 和 <code>Project</code> 对象中的 <code>settings</code> 字段是错误的。取而代之的是，<code>Build</code> 和 <code>Project</code> 中的 <code>settings</code> 列表，以及 <code>build.sbt</code> 中的设置，被
-串连到另一个不可变的列表中，然后被 sbt 使用。该 <code>Build</code> 和 <code>Project</code> 对象是“不可改变的配置”形成完整的构建定义的一部分。
+</code></pre><p>如上所示，你可以用 <code>reload return</code> 离开构建定义项目，回到你平常的项目。
+</p><h3 id="%E6%8F%90%E9%86%92%EF%BC%9A%E5%AE%83%E6%80%BB%E6%98%AF%E4%B8%8D%E5%8F%AF%E5%8F%98%E7%9A%84">提醒：它总是不可变的<a href="#%E6%8F%90%E9%86%92%EF%BC%9A%E5%AE%83%E6%80%BB%E6%98%AF%E4%B8%8D%E5%8F%AF%E5%8F%98%E7%9A%84" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>认为在 <code>build.sbt</code> 的设置将被添加到 <code>Build</code> 和 <code>Project</code> 对象中的 <code>settings</code> 字段是错误的。取而代之的是，<code>Build</code> 和 <code>Project</code> 中的 <code>settings</code> 列表，以及 <code>build.sbt</code> 中的设置，被
+串连到另一个不可变的列表中，然后被 sbt 使用。该 <code>Build</code> 和 <code>Project</code> 对象是“不可变配置”形成完整构建定义的一部分。
 </p><p>事实上，也有设置的其他来源。他们被追加顺序如下：
-</p><ul><li>从 <code>Build.settings</code> 和 <code>Project.settings</code> 在你的 <code>.scala</code> 设置文件。
-</li><li>你的用户账号的全局设置；例如在 <code>~/.sbt/0.13/global.sbt</code> 中你可以定义影响你 <em>所有</em> 项目的设置。
+</p><ul><li>来自你的 <code>.scala</code> 设置文件中的 <code>Build.settings</code> 和 <code>Project.settings</code>。
+</li><li>你的用户账号全局设置；例如在 <code>~/.sbt/0.13/global.sbt</code> 中你可以定义影响你 <em>所有</em> 项目的设置。
 </li><li>插件注入的设置，参见接下来的<a href="Using-Plugins.html">使用插件</a>。
 </li><li>项目下 <code>.sbt</code> 文件中的设置。
-</li><li>构建定义项目（即 <code>project</code> 中的项目）有从全局插件（<code>~/.sbt/0.13/plugins/</code>）的设置。<a href="Using-Plugins.html">使用插件</a>解释了更多的内容。
+</li><li>构建定义项目（即 <code>project</code> 中的项目）有来自全局插件（<code>~/.sbt/0.13/plugins/</code>）的设置。<a href="Using-Plugins.html">使用插件</a>解释了更多的内容。
 </li></ul><p>后面的设置会覆盖前面的。全部的设置列表构成了完整的构建定义。
 </p><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>
-                        <a href="Summary.html"> 总结 </a>                        
+                        <a href="Bare-Def.html"> Bare .sbt 构建定义 </a>                        
                         <ul class="language-bar">
         <li><a href="../Full-Def.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/Full-Def.html"><span class="lang-item lang-ja">日本語</span></a></li><li><a href="../zh-cn/Full-Def.html"><span class="lang-item lang-zh-cn">中文 (简体)</span></a></li>
       </ul>
@@ -168,7 +166,7 @@ sampleKeyD := &quot;D: in build.sbt&quot;
       <a name="toc"></a>
       <h4 class="toctitle">Contents</h4>
       <div class="tocbody">
-      <div><a href="index.html">sbt 入门</a></div><ol class="toc"> <li><div><a href="Setup.html">安装 sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">在 Mac 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">在 Windows 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">在 Linux 上安装 sbt</a></div></li><li><div><a href="Manual-Installation.html">手动安装 sbt</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">目录结构</a></div></li><li><div><a href="Running.html">运行</a></div></li><li><div><a href="Basic-Def.html">.sbt 构建定义</a></div></li><li><div><a href="Scopes.html">Scope</a></div></li><li><div><a href="More-About-Settings.html">更多关于设置</a></div></li><li><div><a href="Library-Dependencies.html">库依赖</a></div></li><li><div><a href="Multi-Project.html">多项目构建</a></div></li><li><div><a href="Using-Plugins.html">使用插件</a></div></li><li><div><a href="Custom-Settings.html">自定义设置和任务</a></div></li><li><div class="current">.scala 构建定义</div></li><li><div><a href="Summary.html">总结</a></div></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+      <div><a href="index.html">sbt 入门</a></div><ol class="toc"> <li><div><a href="Setup.html">安装 sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">在 Mac 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">在 Windows 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">在 Linux 上安装 sbt</a></div></li><li><div><a href="Manual-Installation.html">手动安装 sbt</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">目录结构</a></div></li><li><div><a href="Running.html">运行</a></div></li><li><div><a href="Basic-Def.html">.sbt 构建定义</a></div></li><li><div><a href="Scopes.html">Scope</a></div></li><li><div><a href="More-About-Settings.html">更多关于设置</a></div></li><li><div><a href="Library-Dependencies.html">库依赖</a></div></li><li><div><a href="Multi-Project.html">多项目构建</a></div></li><li><div><a href="Using-Plugins.html">使用插件</a></div></li><li><div><a href="Custom-Settings.html">自定义设置和任务</a></div></li><li><div class="current">.scala 构建定义</div></li><li><div><a href="Bare-Def.html">Bare .sbt 构建定义</a></div></li><li><div><a href="Summary.html">总结</a></div></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
           </div>
         </div>
         <div class="header">

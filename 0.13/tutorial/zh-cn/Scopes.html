@@ -45,22 +45,22 @@
           <div class="span-16 prepend-1 append-1 contents">
             <h2 id="Scope">Scope<a href="#Scope" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>这一小节介绍 scope。假设你已经阅读并且理解了前一小节 <a href="Basic-Def.html">.sbt 构建定义</a>。
 </p><h3 id="%E5%85%B3%E4%BA%8E+Key+%E7%9A%84%E6%89%80%E6%9C%89%E6%95%85%E4%BA%8B">关于 Key 的所有故事<a href="#%E5%85%B3%E4%BA%8E+Key+%E7%9A%84%E6%89%80%E6%9C%89%E6%95%85%E4%BA%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="Basic-Def.html">前一小节</a> 我们认为像 <code>name</code> 的一个 key 相当于 sbt 保存键值对的 map 中的一条记录，这只是一种简化。
-事实上，每一个 key 可以在多个上下文中关联一个值，每个上下文称之为 “scope”。
-一些具体的例子：
+</p><p>事实上，每一个 key 可以在多个上下文中关联一个值，每个上下文称之为 “scope”。
+</p><p>一些具体的例子：
 </p><ul><li>如果在你的构建定义中有多个项目，在每个项目中同一个 key 可以有不同的值。
 </li><li>如果你想根据不同的情形编译它们，key <code>compile</code> 对于 main 源文件和 test 源文件可以有不同的值。
 </li><li>Key <code>packageOptions</code>（包含创建 jar 包的一些选项）可以有不同的值，在对 class 文件打包时是 <code>packageBin</code>，对源代码打包时是 <code>packageSrc</code>。
 </li></ul><p><em>给定的 key <code>name</code> 没有单一的值</em>，因为在不同的 scope 下它的值不同。
-然而，给定的 <code>scoped</code> key 的值是单一的。
-如果你想起 <a href="Basic-Def.html">前面</a> 我们讨论过的，sbt 生成一个 map 来处理描述项目的 settings 列表，这个 map 中的 key 就是 <em>scope 下的</em> key。构建定义中定义的每一个 setting（例如在 <code>build.sbt</code> 中）都有一个 scope 下的 key。
+</p><p>然而，给定的 <code>scoped</code> key 的值是单一的。
+</p><p>如果你想起 <a href="Basic-Def.html">前面</a> 我们讨论过的，sbt 生成一个 map 来处理描述项目的 settings 列表，这个 map 中的 key 就是 <em>scope 下的</em> key。构建定义中定义的每一个 setting（例如在 <code>build.sbt</code> 中）都有一个 scope 下的 key。
 </p><p>一般 scope 是隐式的或者是默认的，但是一旦默认的是错误的，你就需要在 <code>build.sbt</code> 中指定你期待的 scope。
 </p><h3 id="Scope+%E8%BD%B4">Scope 轴<a href="#Scope+%E8%BD%B4" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><em>Scope 轴</em> 是一种类型，该类型的每个实例都能定义自己的 scope（也就是说，每个实例的 key 可以有自己唯一的值）。
-有三种类型的 scope 轴：
+</p><p>有三种类型的 scope 轴：
 </p><ul><li>Projects
 </li><li>Configurations
 </li><li>Tasks
 </li></ul><h4 id="%E9%80%9A%E8%BF%87+Project+%E8%BD%B4%E5%88%92%E5%88%86+Scope">通过 Project 轴划分 Scope<a href="#%E9%80%9A%E8%BF%87+Project+%E8%BD%B4%E5%88%92%E5%88%86+Scope" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>如果你将 <a href="Multi-Project.html">多个项目</a> 放在同一个构建中，每个项目需要有属于自己的 settings。也就是说，keys 可以根据项目被局限在不同的上下文中。
-Project 轴可以设置成构建全局的，因此一个 setting 可以应用到全局构建而不是单个项目。当一个项目没有定义项目层级的 setting 的时候，构建层级的 setting 通常作为替代的设置。
+</p><p>Project 轴可以设置成构建全局的，因此一个 setting 可以应用到全局构建而不是单个项目。当一个项目没有定义项目层级的 setting 的时候，构建层级的 setting 通常作为默认的设置。
 </p><h4 id="%E9%80%9A%E8%BF%87+Configuration+%E8%BD%B4%E5%88%92%E5%88%86+Scope">通过 Configuration 轴划分 Scope<a href="#%E9%80%9A%E8%BF%87+Configuration+%E8%BD%B4%E5%88%92%E5%88%86+Scope" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>一个 <em>configuration</em> 定义一种特定的构建，可能包含它自己的 classpath，源文件和生成的包等。Configuration 的概念来自于它用来管理 <a href="Library-Dependencies.html">库依赖</a> 的 Ivy 
 和 <a href="http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Scope">MavenScopes</a>。
 </p><p>在 sbt 中你可以看到这些 configurations：
@@ -145,11 +145,13 @@ Project 轴可以设置成构建全局的，因此一个 setting 可以应用到
 因此 <code>inspect compile:fullClasspath</code> 得到的结果看起来应该和 <code>inspect fullClasspath</code> 得到的结果一样。
 </p><p>尝试用 <code>inspect *:fullClasspath</code> 作为对比。默认情况下，<code>fullClasspath</code> 没有定义在 <code>Global</code> configuration 中。
 </p><p>更多详细的内容请参见 <a href="../docs/Inspecting-Settings.html">与 Configuration 系统交互</a>。
-</p><h3 id="%E5%9C%A8%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E4%B8%AD%E6%B6%89%E5%8F%8A+scope">在构建定义中涉及 scope<a href="#%E5%9C%A8%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E4%B8%AD%E6%B6%89%E5%8F%8A+scope" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>如果你创建的 <code>build.sbt</code> 中有一个光秃秃的 key，它将被局限在当前的 project 下，configuration 和 task 均为 <code>Global</code>：
-</p><pre><code class="prettyprint lang-scala">name := &quot;hello&quot;
+</p><h3 id="%E5%9C%A8%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E4%B8%AD%E6%B6%89%E5%8F%8A+scope">在构建定义中涉及 scope<a href="#%E5%9C%A8%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E4%B8%AD%E6%B6%89%E5%8F%8A+scope" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>如果你创建的 <code>build.sbt</code> 中有一个bare key，它的作用于将是当前的 project 下，configuration 和 task 均为 <code>Global</code>：
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
+  settings(
+    name := &quot;hello&quot;
+  )
 </code></pre><p>启动 sbt 并且执行 <code>inspect name</code> 可以看到它由 <code>{file:/home/hp/checkout/hello/}default-aea33a/*:name</code> 提供，也就是说，project 是 <code>{file:/home/hp/checkout/hello/}default-aea33a</code>，
 configuration 是 <code>*</code>（表示全局），task 没有显示出来（实际上也是全局）。
-</p><p><code>build.sbt</code> 总给单个项目定义设置，所以 “当前项目” 就是你在特定的 <code>build.sbt</code> 中定义的项目。（对于 <a href="Multi-Project.html">多项目构建</a>，每个项目都有自己的 <code>build.sbt</code>。）
 </p><p>Keys 会调用一个重载的 in 方法设置 scope。传给 in 方法的参数可以是任何 scope 轴的实例。比如说，你可以将 <code>name</code> 局限在 <code>Compile</code> configuration 中，尽管没有真实的理由要这样做：
 </p><pre><code class="prettyprint lang-scala">name in Compile := &quot;hello&quot;
 </code></pre><p>或者你可以把 <code>name</code> 局限在 <code>packageBin</code> task 中（没有什么意义！仅仅是个例子）：
@@ -160,14 +162,14 @@ configuration 是 <code>*</code>（表示全局），task 没有显示出来（�
 </p><pre><code class="prettyprint lang-scala">name in Global := &quot;hello&quot;
 </code></pre><p>（<code>name in Global</code> 隐式的把 scope 轴的值 <code>Global</code> 转换为 scope 所有轴的值均为 <code>Global</code>；task 和 configuration 默认是 <code>Global</code>，因此这里的效果是将 project 设置成 <code>Global</code>，
 也就是说，定义了 <code>*/*:name</code> 而不是 <code>{file:/home/hp/checkout/hello/}default-aea33a/*:name</code>）
-</p><p>如果你之前不熟悉 Scala，提醒一下：理解 in 和 <code>:=</code> 仅仅是方法，不是魔法很重要。Scala 让你用一种更好的方式编写它们，但是你也可以用 Java 的风格：
+</p><p>如果你之前不熟悉 Scala，提醒一下：in 和 <code>:=</code> 仅仅是方法，不是魔法，理解这点很重要。Scala 让你用一种更好的方式编写它们，但是你也可以用 Java 的风格：
 </p><pre><code class="prettyprint lang-scala">name.in(Compile).:=(&quot;hello&quot;)
 </code></pre><p>毫无理由使用这种丑陋的语法，但是它阐明这实际上是方法。
 </p><h3 id="%E6%8C%87%E5%AE%9A+scope+%E7%9A%84%E6%97%B6%E6%9C%BA">指定 scope 的时机<a href="#%E6%8C%87%E5%AE%9A+scope+%E7%9A%84%E6%97%B6%E6%9C%BA" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>如果一个 key 通常的作用域有问题，你需要指定 scope。例如，<code>compile</code> task 默认是在 <code>Compile</code> 和 <code>Test</code> configuration 的 scope 中，而且在这些 scope 之外它并不存在。
 </p><p>为了改变 key <code>compile</code> 的值，你需要写成 <code>compile in Compile</code> 或者 <code>compile in Test</code>。用普通的 <code>compile</code> 会在当前 project 的 scope 中定义一个新的 task，而不是覆盖 configuration 的 scope 标准的 <code>compile</code> task。
-</p><p>如果你遇到像 <em>“引用未定义的设置”</em> 这样的错误，通常是你指定 scope 失败了，或者你指定了一个错误的 scope。你使用的 key 可能定义在其他的 scope 中。sbt 会尝试在错误消息里面提示你你的想法是什么；如 “你是指 compile:compile？”
+</p><p>如果你遇到像 <em>“引用未定义的设置”</em> 这样的错误，通常是你指定 scope 失败了，或者你指定了一个错误的 scope。你使用的 key 可能定义在其他的 scope 中。sbt 会尝试在错误消息里面提示你的想法是什么；如 “你是指 compile:compile？”
 </p><p>一种方式是你可以这样认为，name 只是 key 的 <em>一部分</em>。实际上，所有的 key 都有 name 和 scope 组成（scope 有三个轴）。换句话说，<code>packageOptions in (Compile, packageBin)</code> 是表示 key name 的完整的表达式。
-简单地，<code>packageOptions</code> 也是一个 key name，但是是一个不同的（对于没有 in 方法的 key，会隐式的假设一个 scope：当前的 project，global
+其简写 <code>packageOptions</code> 也是一个 key name，但是是不同的（对于没有 in 方法的 key，会隐式的假设一个 scope：当前的 project，global
 config，global task）。</p><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>
@@ -180,7 +182,7 @@ config，global task）。</p><div class="bottom nav span-16">
       <a name="toc"></a>
       <h4 class="toctitle">Contents</h4>
       <div class="tocbody">
-      <div><a href="index.html">sbt 入门</a></div><ol class="toc"> <li><div><a href="Setup.html">安装 sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">在 Mac 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">在 Windows 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">在 Linux 上安装 sbt</a></div></li><li><div><a href="Manual-Installation.html">手动安装 sbt</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">目录结构</a></div></li><li><div><a href="Running.html">运行</a></div></li><li><div><a href="Basic-Def.html">.sbt 构建定义</a></div></li><li><div class="current">Scope</div></li><li><div><a href="More-About-Settings.html">更多关于设置</a></div></li><li><div><a href="Library-Dependencies.html">库依赖</a></div></li><li><div><a href="Multi-Project.html">多项目构建</a></div></li><li><div><a href="Using-Plugins.html">使用插件</a></div></li><li><div><a href="Custom-Settings.html">自定义设置和任务</a></div></li><li><div><a href="Full-Def.html">.scala 构建定义</a></div></li><li><div><a href="Summary.html">总结</a></div></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+      <div><a href="index.html">sbt 入门</a></div><ol class="toc"> <li><div><a href="Setup.html">安装 sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">在 Mac 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">在 Windows 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">在 Linux 上安装 sbt</a></div></li><li><div><a href="Manual-Installation.html">手动安装 sbt</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">目录结构</a></div></li><li><div><a href="Running.html">运行</a></div></li><li><div><a href="Basic-Def.html">.sbt 构建定义</a></div></li><li><div class="current">Scope</div></li><li><div><a href="More-About-Settings.html">更多关于设置</a></div></li><li><div><a href="Library-Dependencies.html">库依赖</a></div></li><li><div><a href="Multi-Project.html">多项目构建</a></div></li><li><div><a href="Using-Plugins.html">使用插件</a></div></li><li><div><a href="Custom-Settings.html">自定义设置和任务</a></div></li><li><div><a href="Full-Def.html">.scala 构建定义</a></div></li><li><div><a href="Bare-Def.html">Bare .sbt 构建定义</a></div></li><li><div><a href="Summary.html">总结</a></div></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
           </div>
         </div>
         <div class="header">

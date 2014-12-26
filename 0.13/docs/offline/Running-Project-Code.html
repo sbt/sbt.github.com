@@ -88,11 +88,11 @@ following situations must apply for user code to run in the same JVM:
 </li><li>The program ends when user-created threads terminate on their own.
 </li><li><code>System.exit</code> is used to end the program and user-created threads
 terminate when interrupted.
-</li><li>No deserialization is done, or the deserialization code avoids
+</li><li>No deserialization is done, or the deserialization code
 ensures that the right class loader is used, as in
-<a href="https://github.com/NetLogo/NetLogo/blob/master/src/main/org/nlogo/util/ClassLoaderObjectInputStream.scala">https://github.com/NetLogo/NetLogo/blob/master/src/main/org/nlogo/util/ClassLoaderObjectInputStream.scala</a>
+<a href="https://github.com/NetLogo/NetLogo/blob/5.x/src/main/org/nlogo/util/ClassLoaderObjectInputStream.scala">https://github.com/NetLogo/NetLogo/blob/5.x/src/main/org/nlogo/util/ClassLoaderObjectInputStream.scala</a>
 or
-<a href="https://github.com/scala/scala/blob/master/src/actors/scala/actors/remote/JavaSerializer.scala#L20">https://github.com/scala/scala/blob/master/src/actors/scala/actors/remote/JavaSerializer.scala#L20</a>.
+<a href="https://github.com/scala/scala/blob/2.11.x/src/actors/scala/actors/remote/JavaSerializer.scala#L20">https://github.com/scala/scala/blob/2.11.x/src/actors/scala/actors/remote/JavaSerializer.scala#L20</a>.
 </li></ol><p>The requirements on threading and shutdown hooks are required because
 the JVM does not actually shut down. So, shutdown hooks cannot be run
 and threads are not terminated unless they stop when interrupted. If

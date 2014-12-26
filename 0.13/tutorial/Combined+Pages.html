@@ -432,7 +432,7 @@ a Java-like syntax to call the method:
 method can use either syntax).
 </p><p>The <code>:=</code> method on key <code>name</code> returns a <code>Setting</code>, specifically a
 <code>Setting[String]</code>. <code>String</code> also appears in the type of <code>name</code> itself, which
-is <code>SettingKey[String]</code>. In this case, the returned Setting[String] is a
+is <code>SettingKey[String]</code>. In this case, the returned <code>Setting[String]</code> is a
 transformation to add or replace the <code>name</code> key in sbt’s map, giving it
 the value <code>&quot;hello&quot;</code>.
 </p><p>If you use the wrong value type, the build definition will not compile:
@@ -480,7 +480,7 @@ not the value.
 task. For a setting, the value will be computed once at project load
 time. For a task, the computation will be re-run each time the task is
 executed.
-</p><p>For example, to implement the <code>hello</code> task from the previous section, :
+</p><p>For example, to implement the <code>hello</code> task from the previous section:
 </p><pre><code class="prettyprint lang-scala">lazy val hello = taskKey[Unit](&quot;An example task&quot;)
 
 lazy val root = (project in file(&quot;.&quot;)).
@@ -1227,7 +1227,7 @@ In file:/home/jsuereth/projects/sbt/test-ivy-issues/
         sbt.plugins.JUnitXmlReportPlugin: enabled in scala-sbt-org
 </code></pre><p>Here, the <code>plugins</code> output is showing that the sbt default plugins are all
 enabled. sbt’s default settings are provided via three plugins:
-</p><ol><li><code>CorePlugin</code>: Provides the core parallelism controls for tasks
+</p><ol><li><code>CorePlugin</code>: Provides the core parallelism controls for tasks.
 </li><li><code>IvyPlugin</code>: Provides the mechanisms to publish/resolve modules.
 </li><li><code>JvmPlugin</code>: Provides the mechanisms to compile/test/run/package
 Java/Scala projects.
@@ -1291,31 +1291,36 @@ from <a href="Basic-Def.html">.sbt build definition</a> that a setting has a fix
 value until project reload, while a task is re-computed for every “task
 execution” (every time someone types a command at the sbt interactive
 prompt or in batch mode).
-</p><!-- TODO: FIX THIS -->
-<p>Keys may be defined in a <a href="Basic-Def.html">.sbt file</a>,
-<a href="Full-Def.html">.scala file</a>, or in <a href="Using-Plugins.html">a plugin</a>. Any <code>val</code>
-found in a <code>Build</code> object in your <code>.scala</code> build definition files or any <code>val</code>
-found in a <code>Plugin</code> object from a plugin will be imported automatically
-into your <code>.sbt</code> files.
+</p><p>Keys may be defined in a <a href="Basic-Def.html">.sbt file</a>,
+<a href="Full-Def.html">.scala file</a>, or in <a href="Using-Plugins.html">a plugin</a>.
+Any <code>val</code> found in the <code>autoImport</code> object of an enabled auto plugin
+will be imported automatically into your <code>.sbt</code> files.
 </p><h3 id="Implementing+a+task">Implementing a task<a href="#Implementing+a+task" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Once you’ve defined a key for your task, you’ll need to complete it with
 a task definition. You could be defining your own task, or you could be
 planning to redefine an existing task. Either way looks the same; use <code>:=</code>
 to associate some code with the task key:
 </p><pre><code class="prettyprint lang-scala">val sampleStringTask = taskKey[String](&quot;A sample string task.&quot;)
-
 val sampleIntTask = taskKey[Int](&quot;A sample int task.&quot;)
 
-sampleStringTask := System.getProperty(&quot;user.home&quot;)
+lazy val commonSettings = Seq(
+  organization := &quot;com.example&quot;,
+  version := &quot;0.1.0-SNAPSHOT&quot;
+)
 
-sampleIntTask := {
-  val sum = 1 + 2
-  println(&quot;sum: &quot; + sum)
-  sum
-}
+lazy val library = (project in file(&quot;library&quot;)).
+  settings(commonSettings: _*).
+  settings(
+    sampleStringTask := System.getProperty(&quot;user.home&quot;),
+    sampleIntTask := {
+      val sum = 1 + 2
+      println(&quot;sum: &quot; + sum)
+      sum
+    }
+  )
 </code></pre><p>If the task has dependencies, you’d reference their value using <code>value</code>,
 as discussed in <a href="More-About-Settings.html">more kinds of setting</a>.
 </p><p>The hardest part about implementing tasks is often not sbt-specific;
-tasks are just Scala code. The hard part could be writing the “meat” of
+tasks are just Scala code. The hard part could be writing the “body” of
 your task that does whatever you’re trying to do. For example, maybe
 you’re trying to format HTML in which case you might want to use an HTML
 library (you would
@@ -1324,7 +1329,142 @@ write code based on the HTML library, perhaps).
 </p><p>sbt has some utility libraries and convenience functions, in particular
 you can often use the convenient APIs in
 <a href="../api/index.html#sbt.IO$">IO</a> to manipulate files and directories.
-</p><h3 id="Use+plugins%21">Use plugins!<a href="#Use+plugins%21" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>If you find you have a lot of custom code, consider moving it to a
+</p><h3 id="Execution+semantics+of+tasks">Execution semantics of tasks<a href="#Execution+semantics+of+tasks" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>When depending on other tasks from a custom task using <code>value</code>,
+an important detail to note is the execution semantics of the tasks.
+By execution semantics, we mean exactly <em>when</em> these tasks are evaluated.
+</p><p>We if take <code>sampeIntTask</code> for instance, each line in the body of the task
+should be strictly evaluated one after the other. That is sequential semantics:
+</p><pre><code class="prettyprint lang-scala">sampleIntTask := {
+  val sum = 1 + 2        // first
+  println(&quot;sum: &quot; + sum) // second
+  sum                    // third
+}
+</code></pre><p>In reality JVM may inline the <code>sum</code> to <code>3</code>, but the observable <em>effect</em> of the
+task will remain identical as if each line were executed one after the other.
+</p><p>Now suppose we define two more custom tasks <code>startServer</code> and <code>stopServer</code>,
+and modify <code>sampeIntTask</code> as follows:
+</p><pre><code class="prettyprint lang-scala">val startServer = taskKey[Unit](&quot;start server&quot;)
+val stopServer = taskKey[Unit](&quot;stop server&quot;)
+val sampleIntTask = taskKey[Int](&quot;A sample int task.&quot;)
+val sampleStringTask = taskKey[String](&quot;A sample string task.&quot;)
+
+lazy val commonSettings = Seq(
+  organization := &quot;com.example&quot;,
+  version := &quot;0.1.0-SNAPSHOT&quot;
+)
+
+lazy val library = (project in file(&quot;library&quot;)).
+  settings(commonSettings: _*).
+  settings(
+    startServer := {
+      println(&quot;starting...&quot;)
+      Thread.sleep(500)
+    },
+    stopServer := {
+      println(&quot;stopping...&quot;)
+      Thread.sleep(500)
+    },
+    sampleIntTask := {
+      startServer.value
+      val sum = 1 + 2
+      println(&quot;sum: &quot; + sum)
+      stopServer.value // THIS WON'T WORK
+      sum
+    },
+    sampleStringTask := {
+      startServer.value
+      val s = sampleIntTask.value.toString
+      println(&quot;s: &quot; + s)
+      s
+    }
+  )
+</code></pre><p>Running <code>sampleIntTask</code> from sbt interactive prompt results to the following:
+</p><pre><code class="">&gt; sampleIntTask
+stopping...
+starting...
+sum: 3
+[success] Total time: 1 s, completed Dec 22, 2014 5:00:00 PM
+</code></pre><p>To review what happened, let’s look at a gaphical notation of <code>sampleIntTask</code>:
+</p><p><img src="files/task-dependency00.png" alt="task-dependency"/>
+</p><p>Unlike plain Scala method calls, invoking <code>value</code> method on tasks will not
+be evaluated strictly. Instead, they simply act as placeholders to denote
+that <code>sampleIntTask</code> depends on <code>startServer</code> and <code>stopServer</code> tasks.
+When <code>sampleIntTask</code> is invoked by you, sbt’s tasks engine will:
+</p><ul><li>evaluate the task dependencies <em>before</em> evaluating <code>sampleIntTask</code> (partial ordering)
+</li><li>try to evaluate task dependencies in parallel if they are independent (parallelization)
+</li><li>each task dependency will be evaluated once and only once per command execution (deduplication)
+</li></ul><h4 id="Deduplication+of+task+depenencies">Deduplication of task depenencies<a href="#Deduplication+of+task+depenencies" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>To demonstrate the last point, we can run <code>sampleStringTask</code> from sbt
+interactive prompt.
+</p><pre><code class="">&gt; sampleStringTask
+stopping...
+starting...
+sum: 3
+s: 3
+[success] Total time: 1 s, completed Dec 22, 2014 5:30:00 PM
+</code></pre><p>Because <code>sampleStringTask</code> depends on both <code>startServer</code> and <code>sampleIntTask</code> task,
+and <code>sampleIntTask</code> also depends on <code>startServer</code> task, it appears twice as task dependency.
+If this was a plain Scala method call it would be evaluated twice,
+but since <code>value</code> is just denoting a task dependency, it will be evaluated once.
+The following is a graphical notation of how <code>sampeStringTask</code>’s evalutation:
+</p><p><img src="files/task-dependency01.png" alt="task-dependency"/>
+</p><p>If we did not deduplicate the task dependencies, we will end up
+compiling test source code many times when <code>test</code> task is invoked
+since <code>compile in Test</code> appears many times as a task dependency of <code>test in Test</code>.
+</p><h4 id="Cleanup+task">Cleanup task<a href="#Cleanup+task" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>How should one implement <code>stopServer</code> task?
+The notion of cleanup task does not fit into the execution model of tasks because
+tasks are about tracking dependencies.
+The last operation should become the task that depends
+on other intermediate tasks. For instance <code>stopServer</code> should depend on <code>sampleStringTask</code>,
+at which point <code>stopServer</code> should be the <code>sampleStringTask</code>.
+</p><pre><code class="prettyprint lang-scala">lazy val library = (project in file(&quot;library&quot;)).
+  settings(commonSettings: _*).
+  settings(
+    startServer := {
+      println(&quot;starting...&quot;)
+      Thread.sleep(500)
+    },
+    sampleIntTask := {
+      startServer.value
+      val sum = 1 + 2
+      println(&quot;sum: &quot; + sum)
+      sum
+    },
+    sampleStringTask := {
+      startServer.value
+      val s = sampleIntTask.value.toString
+      println(&quot;s: &quot; + s)
+      s
+    },
+    sampleStringTask := {
+      val old = sampleStringTask.value
+      println(&quot;stopping...&quot;)
+      Thread.sleep(500)
+      old      
+    }
+  )
+</code></pre><p>To demonstrate that it works, run <code>sampleStringTask</code> from the interactive prompt:
+</p><pre><code class="">&gt; sampleStringTask
+starting...
+sum: 3
+s: 3
+stopping...
+[success] Total time: 1 s, completed Dec 22, 2014 6:00:00 PM
+</code></pre><p><img src="files/task-dependency02.png" alt="task-dependency"/>
+</p><h4 id="Use+plain+Scala">Use plain Scala<a href="#Use+plain+Scala" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Another way of making sure that something happens after some other thing is to use Scala.
+Implement a simple function in <code>project/ServerUtil.scala</code> for example, and you can write:
+</p><pre><code class="prettyprint lang-scala">sampleIntTask := {
+  ServerUtil.startServer
+  try {
+    val sum = 1 + 2
+    println(&quot;sum: &quot; + sum)
+  } finally {
+    ServerUtil.stopServer
+  } 
+  sum
+}
+</code></pre><p>Since plain method calls follow sequential semantics, everything happens in order.
+There’s no deduplication, so you have to be careful about that.
+</p><h3 id="Turn+them+into+plugins">Turn them into plugins<a href="#Turn+them+into+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>If you find you have a lot of custom code, consider moving it to a
 plugin for re-use across multiple builds.
 </p><p>It’s very easy to create a plugin, as <a href="Using-Plugins.html">teased earlier</a>
 and <a href="../docs/Plugins.html">discussed at more length here</a>.
@@ -1505,7 +1645,7 @@ the build definition.
 </p><h2 id="Bare+.sbt+build+definition">Bare .sbt build definition<a href="#Bare+.sbt+build+definition" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>This page describes an old style of <code>.sbt</code> build definition.
 The current recommendation is to use <a href="Basic-Def.html">Multi-project .sbt build definition</a>.
 </p><h3 id="What+is+a+bare+.sbt+build+definition">What is a bare .sbt build definition<a href="#What+is+a+bare+.sbt+build+definition" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Unlike <a href="Basic-Def.html">Multi-project .sbt build definition</a> and <a href="Full-Def.html">.scala build definition</a>
-that explicitly deftine a <a href="../api/sbt/Project.html">Project</a> definition,
+that explicitly define a <a href="../api/sbt/Project.html">Project</a> definition,
 bare build definition implicitly defines one based on the location of the <code>.sbt</code> file.
 </p><p>Instead of defining <code>Project</code>s, bare <code>.sbt</code> build definition consists of
 a list of <code>Setting[_]</code> expressions.

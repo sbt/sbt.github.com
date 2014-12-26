@@ -122,7 +122,7 @@ a Java-like syntax to call the method:
 method can use either syntax).
 </p><p>The <code>:=</code> method on key <code>name</code> returns a <code>Setting</code>, specifically a
 <code>Setting[String]</code>. <code>String</code> also appears in the type of <code>name</code> itself, which
-is <code>SettingKey[String]</code>. In this case, the returned Setting[String] is a
+is <code>SettingKey[String]</code>. In this case, the returned <code>Setting[String]</code> is a
 transformation to add or replace the <code>name</code> key in sbt’s map, giving it
 the value <code>&quot;hello&quot;</code>.
 </p><p>If you use the wrong value type, the build definition will not compile:
@@ -170,7 +170,7 @@ not the value.
 task. For a setting, the value will be computed once at project load
 time. For a task, the computation will be re-run each time the task is
 executed.
-</p><p>For example, to implement the <code>hello</code> task from the previous section, :
+</p><p>For example, to implement the <code>hello</code> task from the previous section:
 </p><pre><code class="prettyprint lang-scala">lazy val hello = taskKey[Unit](&quot;An example task&quot;)
 
 lazy val root = (project in file(&quot;.&quot;)).
