@@ -758,10 +758,10 @@ sbt はプロジェクトの Scala バージョンをアーティファクト名
 </code></pre><p>多くの依存ライブラリが複数の Scala バージョンに対してコンパイルされていて、
 プロジェクトに合ったものを選択したいときに使うというのが考えだ。
 </p><p>実践上での問題として、多くの場合依存ライブラリは少しズレた Scala バージョンが使われることがあるけど、
-<code>%%</code> はそこまは賢くない。そのため、依存ライブラリが <code>2.10.1</code> までしか出てなくて、
+<code>%%</code> はそこまでは賢くない。そのため、依存ライブラリが <code>2.10.1</code> までしか出てなくて、
 プロジェクトが <code>scalaVersion := &quot;2.10.4&quot;</code> の場合、<code>2.10.1</code> の依存ライブラリが多分動作するにも関わらず <code>%%</code> を使うことができない。
 もし、<code>%%</code> が動かなくなったら、依存ライブラリが使っている実際のバージョンを確認して、
-動くだろうバージョン（それががあればの話だけど）に決め打ちすればいい。
+動くだろうバージョン（それがあればの話だけど）に決め打ちすればいい。
 </p><p>詳しくは、[Cross Build] を参照。
 </p><h4 id="Ivy+revision">Ivy revision<a href="#Ivy+revision" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>groupID % artifactID % revision</code> の <code>revision</code> は、単一の固定されたバージョン番号じゃなくてもいい。
 Ivy は与えられた制限の中でモジュールの最新の revision を選ぶことができる。
