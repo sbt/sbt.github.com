@@ -42,19 +42,27 @@
         <div class="container contentswrapper">
           <div class="span-16 prepend-1 append-1 contents">
             <h2 id="Installing+sbt+on+Linux">Installing sbt on Linux<a href="#Installing+sbt+on+Linux" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Installing+from+a+universal+package">Installing from a universal package<a href="#Installing+from+a+universal+package" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Download <a href="https://dl.bintray.com/sbt/native-packages/sbt/0.13.7/sbt-0.13.7.zip">ZIP</a> or <a href="https://dl.bintray.com/sbt/native-packages/sbt/0.13.7/sbt-0.13.7.tgz">TGZ</a> package and expand it.
-</p><h3 id="RPM+and+DEB">RPM and DEB<a href="#RPM+and+DEB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The following packages are also officially supported:
+</p><h3 id="Ubuntu+and+other+Debian-based+distributions">Ubuntu and other Debian-based distributions<a href="#Ubuntu+and+other+Debian-based+distributions" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://dl.bintray.com/sbt/debian/sbt-0.13.7.deb">DEB</a> package is officially supported by sbt.
+</p><p>Ubuntu and other Debian-based distributions use the DEB format, but usually you don’t install your software from a local DEB file. Instead they come with package managers both for the command line (e.g. <code>apt-get</code>, <code>aptitude</code>) or with a graphical user interface (e.g. Synaptic).
+Run the following from the terminal to install <code>sbt</code> (You’ll need superuser privileges to do so, hence the <code>sudo</code>).
+</p><pre><code>echo &quot;deb http://dl.bintray.com/sbt/debian /&quot; | sudo tee -a /etc/apt/sources.list.d/sbt.list
+sudo apt-get update
+sudo apt-get install sbt
+</code></pre><p>Package managers will check a number of configured repositories for packages to offer for installation. sbt binaries are published to Bintray, and conveniently Bintray provides an APT repository. You just have to add the repository to the places your package manager will check.
+Once <code>sbt</code> is installed, you’ll be able to manage the package in <code>aptitude</code> or Synaptic after you updated their package cache. You should also be able to see the added repository at the bottom of the list in System Settings -&gt; Software &amp; Updates -&gt; Other Software:
+</p><p><img src="files/ubuntu-sources.png" title="Ubuntu Software &amp; Updates Screenshot" alt="Ubuntu Software &amp; Updates Screenshot"/>
+</p><h3 id="RPM">RPM<a href="#RPM" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The RPM packages are also officially supported:
 </p><ul><li><a href="https://dl.bintray.com/sbt/rpm/sbt-0.13.7.rpm">RPM</a> package
-</li><li><a href="https://dl.bintray.com/sbt/debian/sbt-0.13.7.deb">DEB</a> package
 </li></ul><blockquote><p><strong>Note:</strong> Please report any issues with these to the
 <a href="https://github.com/sbt/sbt-launcher-package">sbt-launcher-package</a>
 project.
 </p></blockquote><h3 id="Gentoo">Gentoo<a href="#Gentoo" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>In the official tree there is no ebuild for sbt. But there are
 <a href="https://github.com/whiter4bbit/overlays/tree/master/dev-java/sbt-bin">ebuilds</a> to merge sbt from binaries.
 To merge sbt from this ebuilds you can do:
-</p><pre><code>$ mkdir -p /usr/local/portage &amp;&amp; cd /usr/local/portage
-$ git clone git://github.com/whiter4bbit/overlays.git
-$ echo &quot;PORTDIR_OVERLAY=$PORTDIR_OVERLAY /usr/local/portage/overlays&quot; &gt;&gt; /etc/make.conf
-$ emerge sbt-bin
+</p><pre><code>mkdir -p /usr/local/portage &amp;&amp; cd /usr/local/portage
+git clone git://github.com/whiter4bbit/overlays.git
+echo &quot;PORTDIR_OVERLAY=$PORTDIR_OVERLAY /usr/local/portage/overlays&quot; &gt;&gt; /etc/make.conf
+emerge sbt-bin
 </code></pre><blockquote><p><strong>Note:</strong> Please report any issues with the ebuild
 <a href="https://github.com/whiter4bbit/overlays/issues">here</a>.
 </p></blockquote><h3 id="Installing+manually">Installing manually<a href="#Installing+manually" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>See instruction to install manually.
