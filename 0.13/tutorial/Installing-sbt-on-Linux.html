@@ -51,9 +51,14 @@ sudo apt-get install sbt
 </code></pre><p>Package managers will check a number of configured repositories for packages to offer for installation. sbt binaries are published to Bintray, and conveniently Bintray provides an APT repository. You just have to add the repository to the places your package manager will check.
 Once <code>sbt</code> is installed, you’ll be able to manage the package in <code>aptitude</code> or Synaptic after you updated their package cache. You should also be able to see the added repository at the bottom of the list in System Settings -&gt; Software &amp; Updates -&gt; Other Software:
 </p><p><img src="files/ubuntu-sources.png" title="Ubuntu Software &amp; Updates Screenshot" alt="Ubuntu Software &amp; Updates Screenshot"/>
-</p><h3 id="RPM">RPM<a href="#RPM" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The RPM packages are also officially supported:
-</p><ul><li><a href="https://dl.bintray.com/sbt/rpm/sbt-0.13.7.rpm">RPM</a> package
-</li></ul><blockquote><p><strong>Note:</strong> Please report any issues with these to the
+</p><h3 id="Red+Hat+Enterprise+Linux+and+other+RPM-based+distributions">Red Hat Enterprise Linux and other RPM-based distributions<a href="#Red+Hat+Enterprise+Linux+and+other+RPM-based+distributions" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://dl.bintray.com/sbt/rpm/sbt-0.13.7.rpm">RPM</a> package is officially supported by sbt.
+</p><p>Red Hat Enterprise Linux and other RPM-based distributions use the RPM format.
+Run the following from the terminal to install <code>sbt</code> (You’ll need superuser privileges to do so, hence the <code>sudo</code>).
+</p><pre><code>curl https://bintray.com/sbt/rpm/rpm &gt; bintray-sbt-rpm.repo
+sudo mv bintray-sbt-rpm.repo /etc/yum.repos.d/
+sudo yum install sbt
+</code></pre><p>sbt binaries are published to Bintray, and conveniently Bintray provides an RPM repository. You just have to add the repository to the places your package manager will check.
+</p><blockquote><p><strong>Note:</strong> Please report any issues with these to the
 <a href="https://github.com/sbt/sbt-launcher-package">sbt-launcher-package</a>
 project.
 </p></blockquote><h3 id="Gentoo">Gentoo<a href="#Gentoo" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>In the official tree there is no ebuild for sbt. But there are
