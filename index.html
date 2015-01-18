@@ -34,7 +34,7 @@
       <div class="container">
         <div class="row">
           <div class="col-md-12">
-            <div class="large-logo"><img src="assets/sbt-logo-white-288x200.png" alt="sbt"></div>
+            <div class="logo"><img src="assets/sbt-logo-white-72x50.png" alt="sbt"></div>
             <ul class="nav">
 <li><a href="documentation.html">Documentation</a></li>
               <li><a href="download.html">Download</a></li>
@@ -66,6 +66,20 @@
           </div>
         </div>
       </div>
-    </footer><!-- Placed at the end --><script src="assets/jquery.min.js"></script><script src="assets/bootstrap.min.js"></script>
+    </footer><!-- Placed at the end --><script src="assets/jquery.min.js" type="text/javascript"></script><script src="assets/bootstrap.min.js" type="text/javascript"></script><script type="text/javascript">
+function onResize() {
+  var w = $(window).width();
+  $('div.logo img').remove();
+  if (w > 1000) {
+    $('div.logo').append('<img src="./assets/sbt-logo-white-288x200.png" alt="sbt">');
+  } else {
+    $('div.logo').append('<img src="./assets/sbt-logo-white-72x50.png" alt="sbt">');
+  } // if-else
+}
+$(function() {
+  onResize();
+});
+$(window).on('resize', onResize);
+    </script>
 </body>
 </html>
