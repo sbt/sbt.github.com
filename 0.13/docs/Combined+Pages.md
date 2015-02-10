@@ -360,6 +360,8 @@ your plugin to the list.
     <https://github.com/etsy/sbt-compile-quick-plugin>
 -   sbt-meow (display ascii-fied random cat pictures):
     <https://github.com/thricejamie/sbt-meow>
+-   sbt-build-files-watcher (show message on build files changed):
+    <https://github.com/tototoshi/sbt-build-files-watcher>
 
 #### Database plugins
 
@@ -7216,7 +7218,7 @@ lazy val FunTest = config("fun") extend(Test)
 ```
 
 The `extend(Test)` part means to delegate to `Test` for undefined
-`CustomTest` settings. The line that adds the tasks and settings for the
+`FunTest` settings. The line that adds the tasks and settings for the
 new test configuration is:
 
 ```scala
