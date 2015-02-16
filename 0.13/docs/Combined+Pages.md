@@ -4470,7 +4470,7 @@ mode that only requires a JRE installed.
 Install [conscript](https://github.com/n8han/conscript).
 
 ```
-$ cs sbt/sbt --branch 0.12.0
+$ cs sbt/sbt --branch 0.13.7
 ```
 
 This will create two scripts: `screpl` and `scalas`.
