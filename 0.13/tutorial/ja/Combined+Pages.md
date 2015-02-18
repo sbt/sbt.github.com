@@ -39,6 +39,7 @@ sbt を試してくれて、ありがとう。_楽しもう！_
   [Windows]: Installing-sbt-on-Windows.html
   [Linux]: Installing-sbt-on-Linux.html
   [Manual-Installation]: Manual-Installation.html
+  [Activator-Installation]: Activator-Installation.html
 
 sbt のインストール
 ----------------
@@ -54,7 +55,8 @@ sbt プロジェクトを作るには、以下の手順をたどる:
 
 最終的には、sbt のインストールはランチャー JAR とシェルスクリプトの設置という 2つに絞られるけども、
 プラットフォームによってもう少し簡単なインストール方法をいくつか提供する。
-[Mac][Mac]、[Windows][Windows]、[Linux][Linux] もしくは[手動インストール][Manual-Installation]の手順に進んでほしい。
+[Mac][Mac]、[Windows][Windows]、[Linux][Linux]、[Typesafe Activator][Activator-Installation]、
+もしくは[手動インストール][Manual-Installation]の手順に進んでほしい。
 
 ### コツと注意
 
@@ -64,7 +66,8 @@ sbt プロジェクトを作るには、以下の手順をたどる:
   [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.7/sbt-0.13.7.zip
   [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.7/sbt-0.13.7.tgz
   [Manual-Installation]: Manual-Installation.html
- 
+  [Activator-Installation]: Activator-Installation.html
+
 Mac への sbt のインストール
 -------------------------
 
@@ -89,6 +92,10 @@ $ brew install sbt
 
 [ZIP][ZIP] か [TGZ][TGZ] をダウンロードしてきて解凍する。
 
+### Typesafe Activator
+
+[Typesafe Activator][Activator-Installation]の手順を参照。
+
 ### 手動インストール
 
 手動インストールの手順を参照。
@@ -97,6 +104,7 @@ $ brew install sbt
   [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.7/sbt-0.13.7.msi
   [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.7/sbt-0.13.7.zip
   [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.7/sbt-0.13.7.tgz
+  [Activator-Installation]: Activator-Installation.html
 
 Windows への sbt のインストール
 ----------------------------
@@ -109,6 +117,10 @@ Windows への sbt のインストール
 
 [ZIP][ZIP] か [TGZ][TGZ] をダウンロードしてきて解凍する。
 
+### Typesafe Activator
+
+[Typesafe Activator][Activator-Installation]の手順を参照。
+
 ### 手動インストール
 
 手動インストールの手順を参照。
@@ -119,6 +131,7 @@ Windows への sbt のインストール
   [RPM]: https://dl.bintray.com/sbt/rpm/sbt-0.13.7.rpm
   [DEB]: https://dl.bintray.com/sbt/debian/sbt-0.13.7.deb
   [Manual-Installation]: Manual-Installation.html
+  [Activator-Installation]: Activator-Installation.html
  
 Linux への sbt のインストール
 --------------------------
@@ -127,12 +140,41 @@ Linux への sbt のインストール
 
 [ZIP][ZIP] か [TGZ][TGZ] をダウンロードしてきて解凍する。
 
-### RPM and DEB
+### Ubuntu 及びその他の Debian ベースの Linux ディストリビューション
 
-以下のパッケージも公式にサポートしている:
+[DEB][DEB] は sbt による公式パッケージだ。
 
-  - [RPM][RPM] package
-  - [DEB][DEB] package
+Ubuntu 及びその他の Debian ベースのディストリビューションは DEB フォーマットを用いるが、
+ローカルの DEB ファイルからソフトウェアをインストールすることは稀だ。
+これらのディストロは通常コマンドラインや GUI 上から使えるパッケージ・マネージャがあって
+(例: `apt-get`、`aptitude`、Synaptic など)、インストールはそれらから行う。
+ターミナル上から以下を実行すると `sbt` をインストールできる (superuser 権限を必要とするため、`sudo` を使っている)。
+
+    echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
+    sudo apt-get update
+    sudo apt-get install sbt
+
+パッケージ・マネージャは設定されたリポジトリに指定されたパッケージがあるか確認しにいく。
+sbt のバイナリは Bintray にて公開されており、Bintray は APT リポジトリを提供する。
+そのため、このリポジトリをパッケージ・マネージャに追加する必要がある。
+`sbt` を最初にインストールした後は、このパッケージは `aptitude` や Synaptic
+上から管理することができる (パッケージ・キャッシュの更新を忘れずに)。
+追加された APT リポジトリは「システム設定 -> ソフトウェアとアップデート -> 他のソフトウェア」 の一番下に表示されているはずだ:
+
+![Ubuntu Software & Updates Screenshot](../files/ubuntu-sources.png "Ubuntu Software & Updates Screenshot")
+
+### Red Hat Enterprise Linux 及びその他の RPM ベースのディストリビューション
+
+[RPM][RPM] は sbt による公式パッケージだ。
+
+Red Hat Enterprise Linux 及びその他の RPM ベースのディストリビューションは RPM フォーマットを用いる。
+ターミナル上から以下を実行すると `sbt` をインストールできる (superuser 権限を必要とするため、`sudo` を使っている)。
+
+    curl https://bintray.com/sbt/rpm/rpm | sudo tee /etc/yum.repos.d/bintray-sbt-rpm.repo
+    sudo yum install sbt
+
+sbt のバイナリは Bintray にて公開されており、Bintray は RPM リポジトリを提供する。
+そのため、このリポジトリをパッケージ・マネージャに追加する必要がある。
 
 > **注意:** これらのパッケージに問題があれば、
 > [sbt-launcher-package](https://github.com/sbt/sbt-launcher-package)
@@ -144,14 +186,18 @@ Linux への sbt のインストール
 sbt をマージする [ebuild](https://github.com/whiter4bbit/overlays/tree/master/dev-java/sbt-bin)
 があるみたいだ。この ebuild を使って sbt をマージするには:
 
-    $ mkdir -p /usr/local/portage && cd /usr/local/portage
-    $ git clone git://github.com/whiter4bbit/overlays.git
-    $ echo "PORTDIR_OVERLAY=$PORTDIR_OVERLAY /usr/local/portage/overlays" >> /etc/make.conf
-    $ emerge sbt-bin
+    mkdir -p /usr/local/portage && cd /usr/local/portage
+    git clone git://github.com/whiter4bbit/overlays.git
+    echo "PORTDIR_OVERLAY=$PORTDIR_OVERLAY /usr/local/portage/overlays" >> /etc/make.conf
+    emerge sbt-bin
 
 > **注意:** この ebuild に関する問題があれば
 > [ここ](https://github.com/whiter4bbit/overlays/issues)
 > に報告してほしい。
+
+### Typesafe Activator
+
+[Typesafe Activator][Activator-Installation]の手順を参照。
 
 ### 手動インストール
 
@@ -260,7 +306,7 @@ Typesafe Activator は `activator ui` と `activator new` という
 2つのコマンドを追加するカスタム版の sbt だ。
 つまり、`activator` は sbt の上位セットであると言える。
 
-Activator は [typesafe.com](http://typesafe.com/platform/getstarted) から取得できる。
+Activator は [typesafe.com](http://typesafe.com/get-started) から取得できる。
 
 このガイドで `sbt ~test` というようなコマンドラインがあれば、
 `activator ~test` と打ち込めばそのまま動作するはずだ。
@@ -277,9 +323,9 @@ Activator をダウンロードすると `activator` スクリプトと
   コマンドラインプロンプトを強制したい場合は `activator shell` と打ち込む。
 - `activator new` を使うことで豊富な
 　[テンプレートのカタログ](https://typesafe.com/activator/templates)をもとにプロジェクトを新規作成することができる。
-  例えば、`play-scala` テンプレートを使うと Scala の [Play Framework](http://playframework.com) アプリを作れる。
+  例えば、`play-scala` テンプレートを使うと Scala の [Play Framework](https://playframework.com) アプリを作れる。
 - `activator ui` は、クイックスタート UI を起動する。
-  これを使ってテンプレート付属のチュートリアルを読みながら作業ことができる
+  これを使ってテンプレート付属のチュートリアルを読みながら作業できる
   (カタログ内の多くのテンプレートにはチュートリアルが付属している)。
 
 Activator には、起動スクリプトと起動JAR のみのミニマル版ダウンロードと、
@@ -371,13 +417,13 @@ sbt はリリース間で 99% ソースの互換性を持たせてある。
 
   [Hello]: Hello.html
   [Setup]: Setup.html
-  [Full-Def]: Full-Def.html
+  [Organizing-Build]: Organizing-Build.html
   [Maven]: https://maven.apache.org/
 
 ディレクトリ構造
 --------------
 
-このページは、君が
+このページは、
 [sbt をインストール][Setup]して、
 [Hello, World][Hello] を見たことを前提にする。
 
@@ -420,7 +466,7 @@ src/
 他の sbt 関連のファイルは　`project` サブディレクトリに置かれる。
 
 `project` には `.scala` ファイルを含むことができ、それは `.sbt` ファイルと
-組み合わさって一つのビルド定義を構成する。詳しくは、[.scala ビルド定義][Full-Def]を参照。
+組み合わさって一つのビルド定義を構成する。詳しくは、[ビルドの整理][Organizing-Build]を参照。
 
 ```
 build.sbt
@@ -430,7 +476,7 @@ project/
 
 `project` 内に `.sbt` があるのを見ることがあるかもしれないけど、それはプロジェクトの
 ベースディレクトリ下の `.sbt` とは別物だ。これに関しても、他に前提となる知識が必要なので、
-[後で説明する][Full-Def]。
+[後で説明する][Organizing-Build]。
 
 ### ビルド成果物
 
@@ -1138,7 +1184,6 @@ _"Reference to undefined setting"_ のようなエラーに遭遇した場合は
 
   [Basic-Def]: Basic-Def.html
   [Scopes]: Scopes.html
-  [Full-Def]: Full-Def.html
   [Keys]: ../../sxr/sbt/Keys.scala.html
 
 他の種類のセッティング
@@ -1156,10 +1201,6 @@ _"Reference to undefined setting"_ のようなエラーに遭遇した場合は
 
 `:=` が作る `Setting` は、不変の固定値を新たに変換されたマップに代入する。
 例えば、マップを `name := "hello"` というセッティングで変換すると、新しいマップは `name` キーの中に `"hello"` を格納する。
-
-セッティングがその効果を発揮するにはセッティングのマスターリストに入らなくてはいけない
-（`build.sbt` の全ての行は自動的にそのリストに入るけど、
-[.scala ファイル][Full-Def]の場合は、sbt が検知しない場所に `Setting` を作ってしまうことができる）。
 
 ### 既存の値に追加する: `+=` と `++=`
 
@@ -1538,7 +1579,7 @@ sbt のインタラクティブモードで `show compile:dependency-classpath` 
   [Basic-Def]: Basic-Def.html
   [Scopes]: Scopes.html
   [Directories]: Directories.html
-  [Full-Def]: Full-Def.html
+  [Organizing-Build]: Organizing-Build.html
 
 マルチプロジェクト・ビルド
 ----------------------
@@ -1573,6 +1614,35 @@ lazy val util = project.in(file("util"))
 
 lazy val core = project in file("core")
 ```
+
+#### 共通のセッティング
+
+複数のプロジェクト間に共通のセッティングを抜き出すには、
+`commonSettings` という名前で列を作って、
+各プロジェクトから `settings` メソッドを呼べばいい。
+可変引数を受け取るメソッドに列を渡すのに `_*` が必要なことに注意。
+
+```scala
+lazy val commonSettings = Seq(
+  organization := "com.example",
+  version := "0.1.0",
+  scalaVersion := "2.11.4"
+)
+
+lazy val core = (project in file("core")).
+  settings(commonSettings: _*).
+  settings(
+    // other settings
+  )
+
+lazy val util = (project in file("util")).
+  settings(commonSettings: _*).
+  settings(
+    // other settings
+  )
+```
+
+これで `version` を一箇所で変更すれば、再読み込み後に全サブプロジェクトに反映されるようになった。
 
 ### 依存関係
 
@@ -1710,26 +1780,9 @@ sbt インタラクティブプロンプトから、`projects` と打ち込む�
 
 ### Common code
 
-`.sbt` ファイルで定義された値は、他の `.sbt` ファイルからは見えない。 `.sbt` ファイル間のコードを共有するためには、 ビルドルートにある `project/` ディレクトリに Scala ファイルを用意すれば良い。このディレクトリは sbt プロジェクトになるが、ビルドのためのプロジェクトとなる。以下がサンプルである。
+`.sbt` ファイルで定義された値は、他の `.sbt` ファイルからは見えない。 `.sbt` ファイル間でコードを共有するためには、 ビルドルートにある `project/` ディレクトリに Scala ファイルを用意すれば良い。
 
-`<root>/project/Common.scala`:
-
-```scala
-import sbt._
-import Keys._
-
-object Common {
-  def text = "org.example"
-}
-```
-
-`<root>/build.sbt`:
-
-```scala
-organization := Common.text
-```
-
-詳細は [.scala Build Definition][Full-Def] を見てほしい。
+詳細は[ビルドの整理][Organizing-Build]を見てほしい。
 
 
   [Basic-Def]: Basic-Def.html
@@ -1893,7 +1946,7 @@ lazy val core = (project in file("core")).
   [Basic-Def]: Basic-Def.html
   [More-About-Settings]: More-About-Settings.html
   [Using-Plugins]: Using-Plugins.html
-  [Full-Def]: Full-Def.html
+  [Organizing-Build]: Organizing-Build.html
   [Input-Tasks]: ../../docs/Input-Tasks.html
   [Plugins]: ../../docs/Plugins.html
   [Tasks]: ../../docs/Tasks.html
@@ -1936,9 +1989,10 @@ val clean = taskKey[Unit]("Deletes files produced by the build, such as generate
 セッティングはプロジェクトが再読み込みされるまでは固定値を持ち、
 タスクは「タスク実行」のたび（sbt のインタラクティブモードかバッチモードでコマンドが打ち込まれるたび）に再計算される。
 
-[.sbt file][Basic-Def] や [.scala file][Full-Def] や [a plugin][Using-Plugins] でキーを定義する事が出来る。
-`.scala` ビルド定義ファイル内の `Build` オブジェクト内の `val`、
-もしくはプラグイン内の `Plugin` オブジェクト内の `val` は全て `.sbt` ファイルに自動的にインポートされる。
+キーは [.sbt ファイル][Basic-Def]、
+[.scala ファイル][Organizing-Build]、もしくは
+[auto plugin][Using-Plugins] 内で定義する事が出来る。
+有効化された auto plugin の `autoImport` オブジェクト内で定義された `val` は全て `.sbt` ファイルに自動的にインポートされる。
 
 ### タスクの実装
 
@@ -1949,22 +2003,29 @@ val clean = taskKey[Unit]("Deletes files produced by the build, such as generate
 
 ```scala
 val sampleStringTask = taskKey[String]("A sample string task.")
-
 val sampleIntTask = taskKey[Int]("A sample int task.")
 
-sampleStringTask := System.getProperty("user.home")
+lazy val commonSettings = Seq(
+  organization := "com.example",
+  version := "0.1.0-SNAPSHOT"
+)
 
-sampleIntTask := {
-  val sum = 1 + 2
-  println("sum: " + sum)
-  sum
-}
+lazy val library = (project in file("library")).
+  settings(commonSettings: _*).
+  settings(
+    sampleStringTask := System.getProperty("user.home"),
+    sampleIntTask := {
+      val sum = 1 + 2
+      println("sum: " + sum)
+      sum
+    }
+  )
 ```
 
 もしタスクに依存性があれば、[他の種類のセッティング][More-About-Settings]で説明したとおり `value` を使って値を参照する。
 
 タスクは、ただの Scala のコードであるため、実装の一番難しい部分は、多くの場合 sbt 特定の問題ではない。
-難しいのは、実行したい何らかの「中身」の部分を書くことで、
+難しいのは、実行したい何らかの「本体」の部分を書くことで、
 例えば HTML を整形したいとすると、
 今度は HTML のライブラリを利用する必要があるかもしれない
 （その場合は、[ビルド定義にライブラリ依存性を追加して][Using-Plugins]、その HTML ライブラリに基づいたコードを書く）。
@@ -1972,7 +2033,182 @@ sampleIntTask := {
 sbt には、いくつかのユーティリティ・ライブラリや便利な関数があって、
 特にファイルやディレクトリの取り扱いには [Scaladocs-IO][Scaladocs-IO] にある API を重宝する。
 
-### プラグインを使おう！
+### タスクの実行意味論
+
+カスタムタスクの中から `value` を使って他のタスクに依存するとき、
+タスクの実行意味論 (execution semantics) に注意する必要がある。
+ここで実行意味論とは、実際どの時点でタスクが評価されるかを決定するものとする。
+
+`sampleIntTask` を例に取ると、タスク本文の各行は一行ずつ正格評価 (strict evaluation) されているはずだ。
+これは逐次実行の意味論だ:
+
+```scala
+sampleIntTask := {
+  val sum = 1 + 2        // first
+  println("sum: " + sum) // second
+  sum                    // third
+}
+```
+
+実際には JVM は `sum` を `3` とインライン化したりするかもしれないが、観測可能なタスクの**作用**は、各行ずつ逐次実行したものと同一のものとなる。
+
+次に、`startServer` と `stopServer` という 2つのカスタムタスクを定義して、`sampleIntTask` を以下のように書き換えたとする:
+
+```scala
+val startServer = taskKey[Unit]("start server")
+val stopServer = taskKey[Unit]("stop server")
+val sampleIntTask = taskKey[Int]("A sample int task.")
+val sampleStringTask = taskKey[String]("A sample string task.")
+
+lazy val commonSettings = Seq(
+  organization := "com.example",
+  version := "0.1.0-SNAPSHOT"
+)
+
+lazy val library = (project in file("library")).
+  settings(commonSettings: _*).
+  settings(
+    startServer := {
+      println("starting...")
+      Thread.sleep(500)
+    },
+    stopServer := {
+      println("stopping...")
+      Thread.sleep(500)
+    },
+    sampleIntTask := {
+      startServer.value
+      val sum = 1 + 2
+      println("sum: " + sum)
+      stopServer.value // THIS WON'T WORK
+      sum
+    },
+    sampleStringTask := {
+      startServer.value
+      val s = sampleIntTask.value.toString
+      println("s: " + s)
+      s
+    }
+  )
+```
+
+`sampleIntTask` を sbt のインタラクティブ・プロンプトから実行すると以下の結果となる:
+
+```
+> sampleIntTask
+stopping...
+starting...
+sum: 3
+[success] Total time: 1 s, completed Dec 22, 2014 5:00:00 PM
+```
+
+何が起こったのかを考察するために、`sampleIntTask` を視覚化してみよう:
+
+![task-dependency](../files/task-dependency00.png)
+
+素の Scala のメソッド呼び出しと違って、タスクの `value` メソッドの呼び出しは正格評価されない。
+代わりに、`sampleIntTask` が `startServer` タスクと `stopServer` タスクに依存するということを表すマークとして機能する。
+`sampleIntTask` がユーザによって呼び出されると、sbt のタスクエンジンは以下を行う:
+
+- `sampleIntTask` を評価する**前**にタスク依存性を評価する。(半順序)
+- タスク依存性が独立ならば、並列に評価しようとする (並列性)
+- 各タスクは一度のコマンド実行に対して1回のみ評価される (非重複)
+
+#### タスク依存性の非重複化
+
+非重複化を説明するために、sbt インタラクティブ・プロンプトから `sampleStringTask` を実行する。
+
+```
+> sampleStringTask
+stopping...
+starting...
+sum: 3
+s: 3
+[success] Total time: 1 s, completed Dec 22, 2014 5:30:00 PM
+```
+
+`sampleStringTask` は `startServer` と `sampleIntTask` の両方に依存して、
+`sampleIntTask` もまた `startServer` タスクに依存するため、`startServer` はタスク依存性として 2度現れる。
+しかし、`value` はタスク依存性を表記するだけなので、評価は一回だけ行われる。
+以下は `sampleStringTask` の評価を視覚化したものだ:
+
+![task-dependency](../files/task-dependency01.png)
+
+もしタスク依存性を非重複化しなければ、`test in Test` のタスク依存性として `compile in Test`
+が何度も現れるため、テストのソースコードを何度もコンパイルすることになる。
+
+#### 終了処理タスク
+
+`stopServer` タスクはどう実装するべきだろうか?
+タスクは依存性を保持するものなので、終了処理タスクという考えはタスクの実行モデルにそぐわないものだ。
+最後の処理そのものもタスクになるべきで、そのタスクが他の中間タスクに依存すればいい。
+例えば、`stopServer` が　`sampleStringTask` に依存するべきだが、
+その時点で `stopServer` は `sampleStringTask` と呼ばれるべきだろう。
+
+```scala
+lazy val library = (project in file("library")).
+  settings(commonSettings: _*).
+  settings(
+    startServer := {
+      println("starting...")
+      Thread.sleep(500)
+    },
+    sampleIntTask := {
+      startServer.value
+      val sum = 1 + 2
+      println("sum: " + sum)
+      sum
+    },
+    sampleStringTask := {
+      startServer.value
+      val s = sampleIntTask.value.toString
+      println("s: " + s)
+      s
+    },
+    sampleStringTask := {
+      val old = sampleStringTask.value
+      println("stopping...")
+      Thread.sleep(500)
+      old      
+    }
+  )
+```
+
+これが動作することを調べるために、インタラクティブ・プロンプトから `sampleStringTask` を実行してみよう:
+
+```
+> sampleStringTask
+starting...
+sum: 3
+s: 3
+stopping...
+[success] Total time: 1 s, completed Dec 22, 2014 6:00:00 PM
+```
+
+![task-dependency](../files/task-dependency02.png)
+
+#### 素の Scala を使おう
+
+何かが起こったその後に別の何かが起こることを保証するもう一つの方法は Scala を使うことだ。
+例えば `project/ServerUtil.scala` に簡単な関数を書いたとすると、タスクは以下のように書ける:
+
+```scala
+sampleIntTask := {
+  ServerUtil.startServer
+  try {
+    val sum = 1 + 2
+    println("sum: " + sum)
+  } finally {
+    ServerUtil.stopServer
+  } 
+  sum
+}
+```
+
+素のメソッド呼び出しは逐次実行の意味論に従うので、全ては順序どおりに実行される。
+非重複化もされなくなるので、それは気をつける必要がある。
+
+### プラグイン化しよう
 
 `.scala` ファイルに大量のカスタムコードがあることに気づいたら、
 プラグインを作って複数のプロジェクト間で再利用できないか考えてみよう。
@@ -1989,24 +2225,31 @@ sbt には、いくつかのユーティリティ・ライブラリや便利な�
   [Basic-Def]: Basic-Def.html
   [More-About-Settings]: More-About-Settings.html
   [Using-Plugins]: Using-Plugins.html
+  [Library-Dependencies]: Library-Dependencies.html
   [Multi-Project]: Multi-Project.html
+  [Plugins]: ../../reference/Plugins.html
 
-.scala ビルド定義
-----------------
+ビルドの整理
+-----------
 
-このページは、このガイドのこれまでのページ、特に 
-[.sbt ビルド定義][Basic-Def] と
-[他の種類のセッティング][More-About-Settings]を読んでいることを前提とする。
+このページではビルド構造の整理について説明する。
+
+このガイドの前のページ、特に
+[build.sbt][Basic-Def]、
+[ライブラリ依存性][Library-Dependencies]、
+そして[マルチプロジェクト・ビルド][Multi-Project]を理解していることが必要になる。
 
 ### sbt は再帰的だ
 
-`build.sbt` は単純化しすぎていて、sbt の実際の動作を隠蔽している。
+`build.sbt` は sbt の実際の動作を隠蔽している。
 sbt のビルドは、Scala コードにより定義されている。そのコード自身もビルドされなければいけない。
 当然これも sbt でビルドされる。
 
-`project` ディレクトリは君のプロジェクトのビルド方法を記述した_プロジェクトの中のプロジェクトだ_。
-`project` 内のプロジェクトは、他のプロジェクトができる全てのことを（理論的には）こなすことができる。
-つまり、_ビルド定義は sbt プロジェクトである_ということだ_。
+`project` ディレクトリは現行のビルドのビルド方法を記述した**ビルドの中のビルド**だ。
+これらのビルドを区別するために、一番上のビルドは**プロパービルド** (proper build) と呼んで、
+`project` 内のビルドは**メタビルド** (meta-build) という用語で呼ぶことがある。
+メタビルド内のプロジェクトは、他のプロジェクトができる全てのことを（理論的には）こなすことができる。
+つまり、**ビルド定義は sbt プロジェクトである**ということだ。
 
 この入れ子構造は永遠に続く。`project/project` ディレクトリを作ることで
 ビルド定義のビルド定義プロジェクトをカスタム化することができる。
@@ -2014,61 +2257,220 @@ sbt のビルドは、Scala コードにより定義されている。そのコ�
 以下に具体例で説明する:
 
 ```
-hello/                  # プロジェクトのベースディレクトリ
+hello/                  # ビルドのルート・プロジェクトのベースディレクトリ
 
-    Hello.scala         # プロジェクトのソースファイル  
+    Hello.scala         # ビルドのルート・プロジェクトのソースファイル  
                         # （src/main/scala に入れることもできる）
 
-    build.sbt           # build.sbt は、project/ 内のビルド定義プロジェクトの
-                        # 一部となる
+    build.sbt           # build.sbt は、project/ 内のメタビルドの
+                        # ルート・プロジェクトのソースの一部となる。
+                        # つまり、プロパービルドのビルド定義
 
-    project/            # ビルド定義プロジェクトのベースディレクトリ
-	   
-        Build.scala     # project/ プロジェクトのソースファイル、
-                        # つまり、ビルド定義のソースファイル
+    project/            # メタビルドのルート・プロジェクトのベースディレクトリ
+     
+        Build.scala     # メタビルドのルート・プロジェクトのソースファイル、
+                        # つまり、ビルド定義のソースファイル。
+                        # プロパービルドのビルド定義
 
-        build.sbt       # これは、project/project 内のビルド定義プロジェクトの
-		                    # 一部となり、ビルド定義のビルド定義となる
-						   
-        project/        # ビルド定義プロジェクトのためのビルド定義プロジェクトの
-                        # ベースディレクトリ
+        build.sbt       # これは、project/project 内のメタメタビルドの
+                        # ルート・プロジェクトのソースの一部となり、
+                        # ビルド定義のビルド定義となる
+               
+        project/        # メタメタビルドのルート・プロジェクトのベースディレクトリ
 
-            Build.scala # project/project/ プロジェクトのソースファイル
+            Build.scala # project/project/ 内のメタメタビルドの
+                        # ルート・プロジェクトのソースファイル
 ```
 
-普通はこういうことをする必要は全く無いので、_安心してほしい！_ 
+普通はこういうことをする必要は全く無いので、安心してほしい！
 だけど、原理を理解すると役立つことがある。
 
 ちなみに、`.scala` や `.sbt` で終わる全てのファイルが用いられ、
 `build.sbt` や `Build.scala` と命名するのは慣例にすぎない。
 これは複数のファイルを使っていいということも意味する。
 
-### ビルド定義プロジェクトにおける `.scala` ソースファイル
+### ライブラリ依存性をまとめる
 
-`.sbt` ファイルは、その兄弟の `project` ディレクトリにマージされる。
-プロジェクトの構造をもう一度見てみる:
+`project` 内の `.scala` ファイルがビルド定義の一部となることを利用する一つの例として
+`project/Dependencies.scala` というファイルを作ってライブラリ依存性を一箇所にまとめるということができる。
 
+```scala
+import sbt._
+
+object Dependencies {
+  // Versions
+  lazy val akkaVersion = "2.3.8"
+
+  // Libraries
+  val akkaActor = "com.typesafe.akka" %% "akka-actor" % akkaVersion
+  val akkaCluster = "com.typesafe.akka" %% "akka-cluster" % akkaVersion
+  val specs2core = "org.specs2" %% "specs2-core" % "2.4.14"
+
+  // Projects
+  val backendDeps =
+    Seq(akkaActor, specs2core % Test)
+}
 ```
-hello/                  # プロジェクトのベースディレクトリ
 
-    build.sbt           # build.sbt は、project/ 内のビルド定義プロジェクトの
-                        # 一部となる
+この `Dependencies` は `build.sbt` 内で利用可能となる。
+定義されている `val` が使いやすいように `Dependencies._` を import しておこう。
 
-    project/            # ビルド定義プロジェクトのベースディレクトリ
+```scala
+import Dependencies._
 
-        Build.scala     # project/ プロジェクトのソースファイル、
-                        # つまり、ビルド定義のソースファイル
+lazy val commonSettings = Seq(
+  version := "0.1.0",
+  scalaVersion = "2.11.4"
+)
+
+lazy val backend = (project in file("backend")).
+  settings(commonSettings: _*).
+  settings(
+    libraryDependencies += backendDeps
+  )
 ```
 
-`build.sbt` 内の Scala 式は別々にコンパイルされ、
-`Build.scala`（もしくは、`project/` ディレクトリ内の他の `.scala` ファイル）
-に編入される。
+マルチプロジェクト・ビルドが大きくなってきて、サブプロジェクト間の一貫性を保証したいときに
+このようなテクニックが有用になってくる。
 
-_ベースディレクトリの `.sbt` ファイルは、
-ベースディレクトリ直下の `project` 内のビルド定義プロジェクトの一部となる。_
+### いつ `.scala` ファイルを使うか
 
-つまり、`.sbt` ファイルは、ビルド定義プロジェクトにセッティングを追加するための、
-便利な略記法ということだ。
+`.scala` ファイルでは、クラスやオブジェクト定義を含む Scala コードを自由に書ける。
+
+
+推奨される方法はセッティングは基本的にマルチプロジェクト `build.sbt` ファイル内で行って、
+`project/*.scala` ファイルはタスクの実装や、共有したい値やキーを定義するのに使うことだ。
+`.scala` ファイルの利用は君または、君のチームがどれだけ Scala 慣れしてるかにもよる。
+
+### auto plugin を定義する
+
+上級ユーザ向けのビルドの整理方法として、`project/*.scala`
+内に専用の auto plugin を書くという方法がある。
+連鎖プラグイン (triggered plugin) を定義することで auto plugin
+を全サブプロジェクトにカスタムタスクやコマンドを追加する手段として使うことができる。
+
+
+  [Basic-Def]: Basic-Def.html
+  [Scopes]: Scopes.html
+  [Using-Plugins]: Using-Plugins.html
+  [getting-help]: ../../docs/Faq.html#getting-help
+  [Organizing-Build]: Organizing-Build.html
+
+まとめ
+-----
+
+このページで、このガイドを総括してみよう。
+
+sbt を使うのに、理解しなければいけない概念は少しの数しかない。
+確かに、これらには多少の学習曲線があるが、
+sbt にはこれらの概念_以外_のことは特にないとも考えることもできる。
+sbt は、強力なコア・コンセプトだけを用いて全てを実現している。
+
+もし、この「始める sbt」シリーズをここまで読破したなら、何を知るべきかはもう分かっていると思う。
+
+### sbt: コア・コンセプト
+
+ - Scala の基本。Scala の構文に慣れていると役立つのは言うまでもない。
+   Scala の設計者自身による [Scalaスケーラブルプログラミング](http://www.impressjapan.jp/books/3084)
+   （[原著](http://www.artima.com/shop/programming_in_scala_2ed)）は、素晴らしい入門書だ。
+ - [.sbt ビルド定義][Basic-Def]  
+   - ビルド定義は、`Setting` オブジェクトが入った一つの大きなリストであり、
+   　`Setting` は、sbt がタスクを実行するのに使うキー・値のペアを変換する。
+   - `Setting` を作成するには、キーに定義されているメソッドを呼び出す
+     （特に、`:=` と `<<=` メソッドが大切だ）。
+   - 可変の内部状態は無く、変換があるだけだ。例えば、`Setting` は、
+     sbt のキー・値のペアのコレクションを新たなコレクションへと変換され、上書き更新はされない。
+   - 全てのセッティングは、キーにより決定された特定の型の値を持つ。
+   - _タスク_は、特殊なセッティングで、タスクを実行するたびに、
+     キーの値を生成する計算が再実行される。
+	 非タスクのセッティングは、ビルド定義の読み込み時に値が一度だけ計算される。
+ - [スコープ][Scopes]
+   - それぞれのキーは、異なるスコープごとに別の値を取ることができる。
+   - スコープ付けには、コンフィギュレーション、プロジェクト、タスクの三つの軸を用いることができる。
+   - スコープ付けにより、プロジェクトごと、タスクごと、またはコンフィギュレーションごとに、異なる振る舞いを持たせることができる。
+   - コンフィギュレーションは、メインのもの（`Compile`）や、テスト用のもの（`Test`）のようなビルドの種類だ。
+   - プロジェクト軸は、「ビルド全体」を指すスコープにも設定することができる。
+   - スコープは、より一般的なスコープにフォールバックし、これを_委譲_（delegate）という。
+ - [ビルドの整理][Organizing-Build]
+   - `build.sbt` にセッティングのほとんどを置き、
+     `.scala` ビルドファイルは、共通の値、オブジェクト、メソッドなどをくくり出すのに使う。
+   - ビルド定義そのものも、れっきとした sbt プロジェクトで、`project` ディレクトリを基とする。
+ - [プラグイン][Using-Plugins]はビルド定義の拡張だ。
+   - プラグインは、`addSbtPlugin` メソッドを用いて `project/build.sbt` に追加する。
+     （プロジェクトのベースディレクトリにある `build.sbt` ではないことに注意）
+
+以上のうち、一つでも分からないことがあれば、[質問してみるか][getting-help]、
+もう一度再読してみるか、
+sbt のインタラクティブモードで実験してみよう。
+
+じゃ、頑張って！
+
+### 上級者への注意
+
+<!-- TODO: Link to reference. The rest of this wiki consists of deeper dives and less-commonly-needed
+information. -->
+
+sbt はオープンソースであるため、いつでもソースを見れることも忘れずに！
+
+
+  [More-About-Settings]: More-About-Settings.html
+  [Full-Def]: Full-Def.html
+  [Basic-Def]: Basic-Def.html
+
+付録: bare .sbt ビルド定義
+------------------------
+
+このページでは旧式の `.sbt` ビルド定義の説明をする。
+現在は[マルチ・プロジェクト .sbt ビルド定義][Basic-Def]が推奨される。
+
+### bare .sbt ビルド定義とは何か
+
+明示的に [Project](../api/sbt/Project.html) を定義する
+[マルチ・プロジェクト .sbt ビルド定義][Basic-Def]や [.scala ビルド定義][Full-Def]と違って
+bare ビルド定義は `.sbt` ファイルの位置から暗黙にプロジェクトが定義される。
+
+`Project` を定義する代わりに、bare `.sbt` ビルド定義は
+`Setting[_]` 式のリストから構成される。
+
+```scala
+name := "hello"
+
+version := "1.0"
+
+scalaVersion := "2.11.4"
+```
+
+### (0.13.7 以前) 設定は空白行で区切る
+
+**注意**: 0.13.7 以降は空白行の区切りを必要としない。
+
+こんな風に `build.sbt` を書くことはできない。
+
+```scala
+// 空白行がない場合はコンパイルしない
+name := "hello"
+version := "1.0"
+scalaVersion := "2.10.3"
+```
+
+sbt はどこまでで式が終わってどこからが次の式なのかを判別するために、何らかの区切りを必要とする。
+
+
+  [Basic-Def]: Basic-Def.html
+  [More-About-Settings]: More-About-Settings.html
+  [Using-Plugins]: Using-Plugins.html
+  [Multi-Project]: Multi-Project.html
+
+付録: .scala ビルド定義
+---------------------
+
+このページでは、旧式の `.scala` ビルド定義の説明をする。
+以前のバージョンの sbt で複数のプロジェクトを扱うには `.scala` ビルド定義を使う以外に方法が無かったけども、
+sbt 0.13 になって[マルチ・プロジェクト .sbt ビルド定義][Basic-Def]が追加され、今はそのスタイルが推奨されている。
+
+このページは、このガイドのこれまでのページ、特に 
+[.sbt ビルド定義][Basic-Def] と
+[他の種類のセッティング][More-About-Settings]を読んでいることを前提とする。
 
 ### `build.sbt` と `Build.scala` の関係
 
@@ -2174,14 +2576,6 @@ sbt は `.sbt` ファイルからのセッティングを
  - `.sbt` ファイル内のセッティングは、明示的に指定されない限り
    プロジェクトにスコープ付けされる。
 
-### いつ `.scala` ファイルを使うか
-
-`.scala` ファイルでは、セッティング式の羅列に限定されない。
-`val`、`object` やメソッド定義など、Scala コードを自由に書ける。
-
-_推奨される方法の一つとしては、`.scala` ファイルは `val` や `object` やメソッド定義を
-くくり出すのに使用して、セッティングの定義は `.sbt` で行うことだ。_
-
 ### インタラクティブモードにおけるビルド定義
 
 sbt のインタラクティブプロンプトの現プロジェクトを
@@ -2222,110 +2616,3 @@ sbt のインタラクティブプロンプトの現プロジェクトを
    [プラグインの使用][Using-Plugins]で詳細が説明される。
 
 後続のセッティングは古いものをオーバーライドする。このリスト全体でビルド定義が構成される。
-
-
-  [More-About-Settings]: More-About-Settings.html
-  [Full-Def]: Full-Def.html
-  [Basic-Def]: Basic-Def.html
-
-bare .sbt ビルド定義
--------------------
-
-このページでは旧式の `.sbt` ビルド定義の説明をする。
-現在は[マルチ・プロジェクト .sbt ビルド定義][Basic-Def]が推奨される。
-
-### bare .sbt ビルド定義とは何か
-
-明示的に [Project](../api/sbt/Project.html) を定義する
-[マルチ・プロジェクト .sbt ビルド定義][Basic-Def]や [.scala ビルド定義][Full-Def]と違って
-bare ビルド定義は `.sbt` ファイルの位置から暗黙にプロジェクトが定義される。
-
-`Project` を定義する代わりに、bare `.sbt` ビルド定義は
-`Setting[_]` 式のリストから構成される。
-
-```scala
-name := "hello"
-
-version := "1.0"
-
-scalaVersion := "2.11.4"
-```
-
-### (0.13.7 以前) 設定は空白行で区切る
-
-**注意**: 0.13.7 以降は空白行の区切りを必要としない。
-
-こんな風に `build.sbt` を書くことはできない。
-
-```scala
-// 空白行がない場合はコンパイルしない
-name := "hello"
-version := "1.0"
-scalaVersion := "2.10.3"
-```
-
-sbt はどこまでで式が終わってどこからが次の式なのかを判別するために、何らかの区切りを必要とする。
-
-
-  [Basic-Def]: Basic-Def.html
-  [Scopes]: Scopes.html
-  [Full-Def]: Full-Def.html
-  [Using-Plugins]: Using-Plugins.html
-  [getting-help]: ../../docs/Faq.html#getting-help
-
-まとめ
------
-
-このページで、このガイドを総括してみよう。
-
-sbt を使うのに、理解しなければいけない概念は少しの数しかない。
-確かに、これらには多少の学習曲線があるが、
-sbt にはこれらの概念_以外_のことは特にないとも考えることもできる。
-sbt は、強力なコア・コンセプトだけを用いて全てを実現している。
-
-もし、この「始める sbt」シリーズをここまで読破したなら、何を知るべきかはもう分かっていると思う。
-
-### sbt: コア・コンセプト
-
- - Scala の基本。Scala の構文に慣れていると役立つのは言うまでもない。
-   Scala の設計者自身による [Scalaスケーラブルプログラミング](http://www.impressjapan.jp/books/3084)
-   （[原著](http://www.artima.com/shop/programming_in_scala_2ed)）は、素晴らしい入門書だ。
- - [.sbt ビルド定義][Basic-Def]  
-   - ビルド定義は、`Setting` オブジェクトが入った一つの大きなリストであり、
-   　`Setting` は、sbt がタスクを実行するのに使うキー・値のペアを変換する。
-   - `Setting` を作成するには、キーに定義されているメソッドを呼び出す
-     （特に、`:=` と `<<=` メソッドが大切だ）。
-   - 可変の内部状態は無く、変換があるだけだ。例えば、`Setting` は、
-     sbt のキー・値のペアのコレクションを新たなコレクションへと変換され、上書き更新はされない。
-   - 全てのセッティングは、キーにより決定された特定の型の値を持つ。
-   - _タスク_は、特殊なセッティングで、タスクを実行するたびに、
-     キーの値を生成する計算が再実行される。
-	 非タスクのセッティングは、ビルド定義の読み込み時に値が一度だけ計算される。
- - [スコープ][Scopes]
-   - それぞれのキーは、異なるスコープごとに別の値を取ることができる。
-   - スコープ付けには、コンフィギュレーション、プロジェクト、タスクの三つの軸を用いることができる。
-   - スコープ付けにより、プロジェクトごと、タスクごと、またはコンフィギュレーションごとに、異なる振る舞いを持たせることができる。
-   - コンフィギュレーションは、メインのもの（`Compile`）や、テスト用のもの（`Test`）のようなビルドの種類だ。
-   - プロジェクト軸は、「ビルド全体」を指すスコープにも設定することができる。
-   - スコープは、より一般的なスコープにフォールバックし、これを_委譲_（delegate）という。
-   
- - [.sbt][Basic-Def] 対 [.scala][Full-Def] ビルド定義
-   - `build.sbt` にセッティングのほとんどを置き、
-     `.scala` ビルドファイルは、共通の値、オブジェクト、メソッドなどをくくり出すのに使う。
-   - ビルド定義そのものも、れっきとした sbt プロジェクトで、`project` ディレクトリを基とする。
- - [プラグイン][Using-Plugins]はビルド定義の拡張だ。
-   - プラグインは、`addSbtPlugin` メソッドを用いて `project/build.sbt` に追加する。
-     （プロジェクトのベースディレクトリにある `build.sbt` ではないことに注意）
-
-以上のうち、一つでも分からないことがあれば、[質問してみるか][getting-help]、
-もう一度再読してみるか、
-sbt のインタラクティブモードで実験してみよう。
-
-じゃ、頑張って！
-
-### 上級者への注意
-
-<!-- TODO: Link to reference. The rest of this wiki consists of deeper dives and less-commonly-needed
-information. -->
-
-sbt はオープンソースであるため、いつでもソースを見れることも忘れずに！

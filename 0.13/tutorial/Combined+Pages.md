@@ -165,8 +165,7 @@ Once `sbt` is installed, you'll be able to manage the package in `aptitude` or S
 Red Hat Enterprise Linux and other RPM-based distributions use the RPM format.
 Run the following from the terminal to install `sbt` (You'll need superuser privileges to do so, hence the `sudo`).
 
-    curl https://bintray.com/sbt/rpm/rpm > bintray-sbt-rpm.repo
-    sudo mv bintray-sbt-rpm.repo /etc/yum.repos.d/
+    curl https://bintray.com/sbt/rpm/rpm | sudo tee /etc/yum.repos.d/bintray-sbt-rpm.repo
     sudo yum install sbt
 
 sbt binaries are published to Bintray, and conveniently Bintray provides an RPM repository. You just have to add the repository to the places your package manager will check.
@@ -302,7 +301,7 @@ commands, `activator ui` and `activator new`. The `activator`
 command is a superset of sbt, in short.
 
 You can obtain Activator from
-[typesafe.com](http://typesafe.com/platform/getstarted).
+[typesafe.com](http://typesafe.com/get-started).
 
 If you see a command line such as `sbt ~test` in the
 documentation, you will also be able to type `activator ~test`.
@@ -322,7 +321,7 @@ differences between Activator and a
  * `activator new` allows you to create projects from a large
    [catalog of template projects](https://typesafe.com/activator/templates),
    for example the `play-scala` template is a skeleton
-   [Play Framework](http://playframework.com) Scala app.
+   [Play Framework](https://playframework.com) Scala app.
  * `activator ui` launches a quick start UI that can be used to
    work through tutorials from the template catalog (many
    templates in the catalog have accompanying tutorials).
