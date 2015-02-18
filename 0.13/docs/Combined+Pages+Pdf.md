@@ -323,6 +323,8 @@ your plugin to the list.
     <http://software.clapper.org/sbt-editsource/>
 -   sbt-conflict-classes (Show conclict classes from classpath):
     <https://github.com/todesking/sbt-conflict-classes>
+-   sbt-cross (An alternative to `crossScalaVersions`):
+    <https://github.com/lucidsoftware/sbt-cross>
 -   sbt-cross-building (Simplifies building your plugins for multiple
     versions of sbt): <https://github.com/jrudolph/sbt-cross-building>
 -   sbt-doge (aggregates tasks across subprojects and their `crossScalaVersions`):
@@ -4475,7 +4477,7 @@ mode that only requires a JRE installed.
 Install [conscript](https://github.com/n8han/conscript).
 
 ```
-$ cs sbt/sbt --branch 0.12.0
+$ cs sbt/sbt --branch 0.13.7
 ```
 
 This will create two scripts: `screpl` and `scalas`.

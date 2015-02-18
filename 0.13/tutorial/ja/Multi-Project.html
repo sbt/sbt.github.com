@@ -63,7 +63,7 @@ lazy val core = project in file(&quot;core&quot;)
 </code></pre><h4 id="%E5%85%B1%E9%80%9A%E3%81%AE%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0">共通のセッティング<a href="#%E5%85%B1%E9%80%9A%E3%81%AE%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>複数のプロジェクト間に共通のセッティングを抜き出すには、
 <code>commonSettings</code> という名前で列を作って、
 各プロジェクトから <code>settings</code> メソッドを呼べばいい。
-可変引数を受け取るメソッドに列を渡すのに <code>_*</code> が必要なことに注意。
+可変長引数を受け取るメソッドに列を渡すのに <code>_*</code> が必要なことに注意。
 </p><pre><code class="prettyprint lang-scala">lazy val commonSettings = Seq(
   organization := &quot;com.example&quot;,
   version := &quot;0.1.0&quot;,
