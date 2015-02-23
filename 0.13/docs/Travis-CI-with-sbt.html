@@ -1,0 +1,349 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html>
+      <head>
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+        <title>sbt Reference Manual — Setting up Travis CI with sbt</title>
+        <link rel="shortcut icon" href="favicon.ico"/>
+        <link rel="stylesheet" href="css/blueprint/screen.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/blueprint/grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="css/blueprint/print.css" type="text/css" media="print"/> 
+        <!--[if lt IE 8]>
+          <link rel="stylesheet" href={ relativeBase + "css/blueprint/ie.css" } type="text/css" media="screen, projection"/>
+        <![endif]-->
+        <link rel="stylesheet" href="css/pamflet.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/pamflet-print.css" type="text/css" media="print"/>
+        <link rel="stylesheet" href="css/pamflet-grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="css/color_scheme-redmond.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/color_scheme-github.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/color_scheme-monokai.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/pamfletheight_80px_2em.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <script type="text/javascript" src="js/jquery-1.6.2.min.js"></script>
+        <script type="text/javascript" src="js/jquery.collapse.js"></script>
+        <script type="text/javascript" src="js/pamflet.js"></script>
+        <script type="text/javascript">
+          Pamflet.page.language = 'en';
+        </script>
+        <script type="text/javascript" src="js/prettify/prettify.js"></script><link type="text/css" rel="stylesheet" href="css/prettify.css"/><script type="text/javascript"><!--
+        window.onload=function() { prettyPrint(); };
+      --></script>
+        <link rel="stylesheet" href="css/custom.css" type="text/css" media="screen, projection"/>
+        
+        <script type="text/javascript">
+              Pamflet.twitter = '#sbt #scala';
+            </script>
+      </head>
+      <body class="color_scheme-github">
+        <a class="page prev nav" href="Plugins-Best-Practices.html">
+            <span class="space">&nbsp;</span>
+            <span class="flip arrow">&gt;</span>
+          </a><a class="page next nav" href="Sbt-Launcher.html">
+            <span class="space">&nbsp;</span>
+            <span class="arrow">&gt;</span>
+          </a>
+        <div class="container contentswrapper">
+          <div class="span-16 prepend-1 append-1 contents">
+            <h2 id="Setting+up+Travis+CI+with+sbt">Setting up Travis CI with sbt<a href="#Setting+up+Travis+CI+with+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p><a href="https://travis-ci.com/">Travis CI</a> is a hosted continuous integration service for open source and private projects. Many of the OSS projects hosted on Github uses <a href="https://travis-ci.org/">open source edition of Travis CI</a> to validate pushes and pull requests. We’ll discuss some of the best practices setting up Travis CI.
+</p><h3 id="Set">Set <code>project/build.properties</code><a href="#Set" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Continuous integration is a great way of checking that your code works outside of your machine.
+If you haven’t created one already, make sure to create <code>project/build.properties</code> and explicitly set the
+<code>sbt.version</code> number:
+</p><pre><code class="prettyprint lang-yml">sbt.version=0.13.7
+</code></pre><p>Your build will now use 0.13.7.
+</p><h3 id="Read+the+Travis+manual">Read the Travis manual<a href="#Read+the+Travis+manual" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A treasure trove of Travis tricks can be found in the Travis’s <a href="http://docs.travis-ci.com/">official documentation</a>.
+Use this guide as an inspiration, but consult the official source for more details.
+</p><h3 id="Basic+setup">Basic setup<a href="#Basic+setup" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Setting up your build for Travis CI is mostly about setting up <code>.travis.yml</code>.
+<a href="http://docs.travis-ci.com/user/languages/scala/">Scala</a> page says the basic file can look like:
+</p><pre><code class="prettyprint lang-yml">language: scala
+
+scala:
+   - 2.10.4
+   - 2.11.5
+</code></pre><p>By default Travis CI executes <code>sbt ++$TRAVIS_SCALA_VERSION test</code>.
+Let’s specify that explicitly:
+</p><pre><code class="prettyprint lang-yml">language: scala
+
+scala:
+   - 2.10.4
+   - 2.11.5
+
+script:
+   - sbt ++$TRAVIS_SCALA_VERSION test
+</code></pre><p>More info on <code>script</code> section can be found in <a href="http://docs.travis-ci.com/user/build-configuration/">Configuring your build</a>.
+</p><p>As noted on the <a href="http://docs.travis-ci.com/user/languages/scala/">Scala</a> page, Travis CI uses <a href="https://github.com/paulp/sbt-extras">paulp/sbt-extras</a> as the <code>sbt</code> command.
+This becomes relevant when you want to override JVM options, which we’ll see later.
+</p><h3 id="Plugin+build+setup">Plugin build setup<a href="#Plugin+build+setup" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>For sbt plugins, there is no need for cross building on Scala, so the following is all you need:
+</p><pre><code class="prettyprint lang-yml">language: scala
+
+script:
+   - sbt scripted
+</code></pre><p>Another source of good information is to read the output by Travis CI itself to learn about how the virtual environment is set up.
+For example, from the following output we learn that it is using <code>JVM_OPTS</code> environment variable to pass in the JVM options.
+</p><pre><code class="">$ export JVM_OPTS=@/etc/sbt/jvmopts
+$ export SBT_OPTS=@/etc/sbt/sbtopts
+</code></pre><h3 id="Custom+JVM+options">Custom JVM options<a href="#Custom+JVM+options" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The default <a href="https://github.com/travis-ci/travis-cookbooks/blob/master/ci_environment/sbt-extras/templates/default/sbtopts.erb">sbt</a> and <a href="https://github.com/travis-ci/travis-cookbooks/blob/master/ci_environment/sbt-extras/templates/default/jvmopts.erb">JVM</a> options are set by Travis CI people,
+and it should work for most cases.
+If you do decide to customize it, read what they currently use as the defaults first.
+Because Travis is already using the environment varible <code>JVM_OPTS</code>, we can instead create a file <code>travis/jvmopts</code>:
+</p><pre><code class="">-Dfile.encoding=UTF8
+-Xms2048M
+-Xmx2048M
+-Xss6M
+-XX:MaxPermSize=512M
+-XX:ReservedCodeCacheSize=256M
+</code></pre><p>and then write out the <code>script</code> section with <code>-jvm-opts</code> option:
+</p><pre><code class="">script:
+   - sbt ++$TRAVIS_SCALA_VERSION -jvm-opts travis/jvmopts test
+</code></pre><p>After making the change, confirm on the Travis log to see if the flags are taking effect:
+</p><pre><code class=""># Executing command line:
+/usr/lib/jvm/java-7-oracle/bin/java
+-Dfile.encoding=UTF8
+-Xms2048M
+-Xmx2048M
+-Xss6M
+-XX:MaxPermSize=512M
+-XX:ReservedCodeCacheSize=256M
+-jar
+/home/travis/.sbt/launchers/0.13.6/sbt-launch.jar
+</code></pre><p>It seems to be working. One downside of setting all of the parameters is that we might be left behind when the environment updates and the default values gives us more memory in the future.
+</p><p>Here’s how we can add just a few JVM options:
+</p><pre><code class="">script:
+   - sbt ++$TRAVIS_SCALA_VERSION -Dfile.encoding=UTF8 -J-XX:ReservedCodeCacheSize=256M -J-Xms1024M test
+</code></pre><p>sbt-extra script passes any arguments starting with either <code>-D</code> or <code>-J</code> directly to JVM.
+</p><p>Again, let’s check the Travis log to see if the flags are taking effect:
+</p><pre><code class=""># Executing command line:
+/usr/lib/jvm/java-7-oracle/bin/java
+-Xms2048M
+-Xmx2048M
+-Xss6M
+-XX:MaxPermSize=512M
+-Dfile.encoding=UTF8
+-XX:ReservedCodeCacheSize=256M
+-Xms1024M
+-jar
+/home/travis/.sbt/launchers/0.13.6/sbt-launch.jar
+</code></pre><p><strong>Note</strong>: This duplicates the <code>-Xms</code> flag as intended, which might not the best thing to do.
+</p><h3 id="%28Experimental%29+Reusing+Ivy+cache">(Experimental) Reusing Ivy cache<a href="#%28Experimental%29+Reusing+Ivy+cache" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>In late 2014, thanks to Travis CI members sending pull requests on Github, we learned that Ivy cache can be shared across the Travis builds.
+The public availability of <a href="http://docs.travis-ci.com/user/caching/">caching</a> is part of the benefit for trying the new <a href="http://docs.travis-ci.com/user/workers/container-based-infrastructure/">container-based infrastructure</a>.
+</p><blockquote><p>Jobs running on container-based infrastructure:
+</p><ol><li>start up faster
+</li><li>allow the use of caches for public repositories
+</li><li>disallow the use of <code>sudo</code>, setuid and setgid executables
+</li></ol></blockquote><p>To opt into the container-based infrastructure, put the following in <code>.travis.yml</code>:
+</p><pre><code class="prettyprint lang-yml"># Use container-based infrastructure
+sudo: false
+</code></pre><p>Next, we can put <code>cache</code> section as follows:
+</p><pre><code class="prettyprint lang-yml"># These directories are cached to S3 at the end of the build
+cache:
+  directories:
+    - $HOME/.ivy2/cache
+    - $HOME/.sbt/boot/scala-$TRAVIS_SCALA_VERSION
+</code></pre><p>Finally, the following a few lines of cleanup script are added:
+</p><pre><code class="prettyprint lang-yml">script:
+  # Your normal script
+  - sbt ++$TRAVIS_SCALA_VERSION -J-XX:ReservedCodeCacheSize=256M test
+
+  # Tricks to avoid unnecessary cache updates
+  - find $HOME/.sbt -name &quot;*.lock&quot; | xargs rm
+  - find $HOME/.ivy2 -name &quot;ivydata-*.properties&quot; | xargs rm
+</code></pre><p>With the above changes combined Travis CI will tar up the cached directories and uploads them to Amazon S3.
+Overall, the use of the new infrastructure and caching seems to shave off a few minutes of build time per job.
+</p><p><strong>Note</strong>: The Travis documentation states caching features are still experimental.
+</p><h3 id="Build+matrix">Build matrix<a href="#Build+matrix" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>We’ve already seen the example of Scala cross building.
+</p><pre><code class="prettyprint lang-yml">language: scala
+
+scala:
+   - 2.10.4
+   - 2.11.5
+
+script:
+   - sbt ++$TRAVIS_SCALA_VERSION test
+</code></pre><p>This is a form of a build matrix. Travis CI comes with variety of the ways to run builds against different runtimes and parameters. Here’s how to build on OpenJDK 6, OpenJDK 7, and Oracle JDK 8.
+</p><pre><code class="prettyprint lang-yml">jdk:
+  - openjdk6
+  - openjdk7
+  - oraclejdk8
+</code></pre><p>We can also form a build matrix using environment variables:
+</p><pre><code class="prettyprint lang-yml">env:
+  global:
+    - SOME_VAR=&quot;1&quot;
+
+  # This splits the build into two parts 
+  matrix:
+    - TEST_COMMAND=&quot;scripted sbt-assembly/*&quot;
+    - TEST_COMMAND=&quot;scripted merging/* caching/*&quot;
+
+script:
+   - sbt &quot;$TEST_COMMAND&quot;
+</code></pre><p>Now two jobs will be created to build this sbt plugin, simultaneously running different integration tests.
+This technique is described in <a href="http://docs.travis-ci.com/user/speeding-up-the-build/">Parallelizing your builds across virtual machines</a>.
+</p><h3 id="Notification">Notification<a href="#Notification" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>You can configure Travis CI to <a href="http://docs.travis-ci.com/user/notifications/">notify you</a>.
+</p><blockquote><p>By default, email notifications will be sent to the committer and the commit author, if they are members of the repository[…].
+</p><p>And it will by default send emails when, on the given branch:
+</p><ul><li>a build was just broken or still is broken
+</li><li>a previously broken build was just fixed
+</li></ul></blockquote><p>The default behavior looks reasonable, but if you want, we can override the <code>notifications</code> section to email you on successful builds too, or to use some other channel of communication like IRC.
+</p><pre><code class="prettyprint lang-yml"># Email specific recipient all the time
+notifications:
+  email:
+    recipients:
+      - one@example.com
+  on_success: always # default: change
+</code></pre><p>This might also be a good time to read up on <a href="http://docs.travis-ci.com/user/encryption-keys/">encryption</a> using the command line <code>travis</code> tool.
+</p><pre><code class="">$ travis encrypt one@example.com
+</code></pre><h3 id="Dealing+with+flaky+network+or+tests">Dealing with flaky network or tests<a href="#Dealing+with+flaky+network+or+tests" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>For builds that are more prone to flaky network or tests, Travis CI has created some tricks
+described in the page <a href="http://docs.travis-ci.com/user/build-timeouts/">My builds is timing out</a>.
+</p><p>Starting your command with <code>travis_retry</code> retries the command three times if the return code is non-zero.
+With caching, hopefully the effect of flaky network is reduced, but it’s an interesting one nonetheless.
+Here are some cautionary words from the documentation:
+</p><blockquote><p>We recommend careful use of <code>travis_retry</code>, as overusing it can extend your build time when there could be a deeper underlying issue.
+</p></blockquote><p>Another tidbit about Travis is the output timeout:
+</p><blockquote><p>Our builds have a global timeout and a timeout that’s based on the output. If no output is received from a build for 10 minutes, it’s assumed to have stalled for unknown reasons and is subsequently killed.
+</p></blockquote><p>There’s a function called <code>travis_wait</code> that can extend this to 20 minutes.
+</p><h3 id="More+things">More things<a href="#More+things" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>There are more thing you can do, such as <a href="http://docs.travis-ci.com/user/database-setup/">set up databases</a>, <a href="http://docs.travis-ci.com/user/installing-dependencies/">installing Ubuntu packages</a>, and <a href="http://docs.travis-ci.com/user/deployment/">deploy continuously</a>.
+</p><h3 id="Sample+setting">Sample setting<a href="#Sample+setting" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Here’s a sample that puts them all together. Remember, most of the sections are optional.
+</p><pre><code class="prettyprint lang-yml"># Use container-based infrastructure
+sudo: false
+
+language: scala
+
+# These directories are cached to S3 at the end of the build
+cache:
+  directories:
+    - $HOME/.ivy2/cache
+    - $HOME/.sbt/boot/scala-$TRAVIS_SCALA_VERSION
+
+# This is an sbt plugin, so this section is for demo purpose
+scala:
+   - 2.10.4
+
+jdk:
+  - openjdk7
+
+env:
+  # This splits the build into two parts
+  matrix:
+    - TEST_COMMAND=&quot;scripted sbt-assembly/*&quot;
+    - TEST_COMMAND=&quot;scripted merging/* caching/*&quot;
+
+script:
+  - sbt ++$TRAVIS_SCALA_VERSION -Dfile.encoding=UTF8 -J-XX:ReservedCodeCacheSize=256M &quot;$TEST_COMMAND&quot;
+
+  # Tricks to avoid unnecessary cache updates
+  - find $HOME/.sbt -name &quot;*.lock&quot; | xargs rm
+  - find $HOME/.ivy2 -name &quot;ivydata-*.properties&quot; | xargs rm
+
+# Email specific recipient all the time
+notifications:
+  email:
+    recipients:
+      secure: &quot;Some/BASE64/STUFF=&quot;
+    on_success: always # default: change
+</code></pre><div class="bottom nav span-16">
+                        <em>Next Page</em>
+                        <span class="arrow">&gt;</span>
+                        <a href="Sbt-Launcher.html"> Sbt Launcher </a>                        
+                        
+                      </div><div class="tocwrapper show">
+      <a class="tochead nav" style="display: none" href="#toc">❦</a>
+      <a name="toc"></a>
+      <h4 class="toctitle">Contents</h4>
+      <div class="tocbody">
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="General-Info.html">General Information</a></div><ol class="toc"> <li><div><a href="Credits.html">Credits</a></div></li><li><div><a href="Community-Plugins.html">Community Plugins</a></div></li><li><div><a href="Repository-Roles.html">Community Repository Policy</a></div></li><li><div><a href="Bintray-For-Plugins.html">Bintray For Plugins</a></div></li><li><div><a href="Setup-Notes.html">Setup Notes</a></div></li><li><div><a href="Using-Sonatype.html">Deploying to Sonatype</a></div></li><li><div><a href="Contibuting-to-sbt.html">Contributing to sbt</a></div></li><li><div><a href="Changes.html">Changes</a></div><ol class="toc"> <li><div><a href="sbt-0.13-Tech-Previews.html">sbt 0.13.5+ Technology Previews</a></div></li><li><div><a href="ChangeSummary_0.13.0.html">sbt 0.13.0 - 0.13.2</a></div></li><li><div><a href="ChangeSummary_0.12.0.html">sbt 0.12.4</a></div></li><li><div><a href="Older-Changes.html">Older Changes</a></div></li><li><div><a href="Migrating-from-sbt-07x.html">Migrating from 0.7 to 0.10+</a></div></li> </ol></li> </ol></li><li><div><a href="Detailed-Topics.html">Detailed Topics</a></div><ol class="toc"> <li><div><a href="Using-sbt.html">Using sbt</a></div><ol class="toc"> <li><div><a href="Command-Line-Reference.html">Command Line Reference</a></div></li><li><div><a href="Console-Project.html">Console Project</a></div></li><li><div><a href="Cross-Build.html">Cross-building</a></div></li><li><div><a href="Inspecting-Settings.html">Interacting with the Configuration System</a></div></li><li><div><a href="Triggered-Execution.html">Triggered Execution</a></div></li><li><div><a href="Scripts.html">Scripts, REPL, and Dependencies</a></div></li><li><div><a href="Understanding-Recompilation.html">Understanding Incremental Recompilation</a></div></li> </ol></li><li><div><a href="Configuration-Index.html">Configuration</a></div><ol class="toc"> <li><div><a href="Classpaths.html">Classpaths, sources, and resources</a></div></li><li><div><a href="Compiler-Plugins.html">Compiler Plugin Support</a></div></li><li><div><a href="Configuring-Scala.html">Configuring Scala</a></div></li><li><div><a href="Forking.html">Forking</a></div></li><li><div><a href="Global-Settings.html">Global Settings</a></div></li><li><div><a href="Java-Sources.html">Java Sources</a></div></li><li><div><a href="Mapping-Files.html">Mapping Files</a></div></li><li><div><a href="Local-Scala.html">Local Scala</a></div></li><li><div><a href="Macro-Projects.html">Macro Projects</a></div></li><li><div><a href="Paths.html">Paths</a></div></li><li><div><a href="Parallel-Execution.html">Parallel Execution</a></div></li><li><div><a href="Process.html">External Processes</a></div></li><li><div><a href="Running-Project-Code.html">Running Project Code</a></div></li><li><div><a href="Testing.html">Testing</a></div></li> </ol></li><li><div><a href="Dependency-Management-Index.html">Dependency Management</a></div><ol class="toc"> <li><div><a href="Artifacts.html">Artifacts</a></div></li><li><div><a href="Dependency-Management-Flow.html">Dependency Management Flow</a></div></li><li><div><a href="Library-Management.html">Library Management</a></div></li><li><div><a href="Proxy-Repositories.html">Proxy Repositories</a></div></li><li><div><a href="Publishing.html">Publishing</a></div></li><li><div><a href="Resolvers.html">Resolvers</a></div></li><li><div><a href="Update-Report.html">Update Report</a></div></li><li><div><a href="Cached-Resolution.html">Cached resolution</a></div></li> </ol></li><li><div><a href="Tasks-and-Commands.html">Tasks and Commands</a></div><ol class="toc"> <li><div><a href="Tasks.html">Tasks</a></div></li><li><div><a href="Input-Tasks.html">Input Tasks</a></div></li><li><div><a href="Commands.html">Commands</a></div></li><li><div><a href="Parsing-Input.html">Parsing and tab completion</a></div></li><li><div><a href="Build-State.html">State and actions</a></div></li><li><div><a href="Task-Inputs.html">Tasks/Settings: Motivation</a></div></li> </ol></li><li><div><a href="Plugins-and-Best-Practices.html">Plugins and Best Practices</a></div><ol class="toc"> <li><div><a href="Best-Practices.html">General Best Practices</a></div></li><li><div><a href="Plugins.html">Plugins</a></div></li><li><div><a href="Plugins-Best-Practices.html">Plugins Best Practices</a></div></li><li><div class="current">Setting up Travis CI with sbt</div></li> </ol></li><li><div><a href="Sbt-Launcher.html">Sbt Launcher</a></div><ol class="toc"> <li><div><a href="Launcher-Getting-Started.html">Getting Started with the Sbt Launcher</a></div></li><li><div><a href="Launcher-Architecture.html">Sbt Launcher Architecture</a></div></li><li><div><a href="Launcher-Configuration.html">Sbt Launcher Configuration</a></div></li> </ol></li> </ol></li><li><div><a href="Developers-Guide.html">Developer’s Guide</a></div><ol class="toc"> <li><div><a href="Core-Principles.html">Core Principles</a></div></li><li><div><a href="Settings-Core.html">Settings Core</a></div></li><li><div><a href="Setting-Initialization.html">Setting Initialization</a></div></li><li><div><a href="Build-Loaders.html">Build Loaders</a></div></li><li><div><a href="Command-Line-Applications.html">Creating Command Line Applications Using sbt</a></div></li><li><div><a href="Nightly-Builds.html">Nightly Builds</a></div></li> </ol></li><li><div><a href="Howto.html">How to…</a></div><ol class="toc"> <li><div><a href="Howto-Classpaths.html">Classpaths</a></div></li><li><div><a href="Howto-Customizing-Paths.html">Customizing paths</a></div></li><li><div><a href="Howto-Generating-Files.html">Generating files</a></div></li><li><div><a href="Howto-Inspect-the-Build.html">Inspect the build</a></div></li><li><div><a href="Howto-Interactive-Mode.html">Interactive mode</a></div></li><li><div><a href="Howto-Logging.html">Configure and use logging</a></div></li><li><div><a href="Howto-Project-Metadata.html">Project metadata</a></div></li><li><div><a href="Howto-Package.html">Configure packaging</a></div></li><li><div><a href="Howto-Running-Commands.html">Running commands</a></div></li><li><div><a href="Howto-Scala.html">Configure and use Scala</a></div></li><li><div><a href="Howto-Scaladoc.html">Generate API documentation</a></div></li><li><div><a href="Howto-Triggered.html">Triggered execution</a></div></li><li><div><a href="Examples.html">Examples</a></div><ol class="toc"> <li><div><a href="Basic-Def-Examples.html">.sbt build examples</a></div></li><li><div><a href="Scala-Files-Example.html">.sbt build with .scala files example</a></div></li><li><div><a href="Advanced-Configurations-Example.html">Advanced configurations example</a></div></li><li><div><a href="Advanced-Command-Example.html">Advanced command example</a></div></li> </ol></li> </ol></li><li><div><a href="Faq.html">Frequently Asked Questions</a></div><ol class="toc">  </ol></li><li><div><a href="Name-Index.html">Index</a></div></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+          </div>
+        </div>
+        <div class="header">
+          <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
+<div class="container">
+    <div class="logo">
+      <a href="../../index.html"><img src="files/typesafe_sbt_svg.svg" alt="sbt"></a>
+    </div>
+    <div class="nav">
+      <a href="../../documentation.html">Documentation</a>
+      <a href="../../download.html">Download</a>
+      <a href="../../community.html">Community</a>
+      <a id="source-code" href="https://github.com/sbt/sbt"><img src="files/github-logo-teal.png" alt="Source code"></a>
+      <a id="twitter" href="https://twitter.com/scala_sbt"><img src="files/twitter-logo-teal.png" alt="sbt on Twitter"></a>
+    </div>
+    <script type="text/javascript" async>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-41449189-1', 'scala-sbt.org');
+    ga('send', 'pageview');
+    </script>
+    <script type="text/javascript" async>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-23127719-1', 'typesafe.com', {'allowLinker': true, 'name': 'tsTracker'});
+      ga('tsTracker.require', 'linker');
+      ga('tsTracker.linker:autoLink', ['typesafe.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org']);
+      ga('tsTracker.send', 'pageview');
+    </script>
+</div>
+        </div>
+        <div class="footer">
+          <div class="fw-wrapper navy-ltr support-strip">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="support-item">
+          <div class="support-icon">
+            <svg class="svg-icon svg-icon-chat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.5 85.2" enable-background="new 0 0 97.5 85.2"><path stroke="#fff" stroke-width="4.282" stroke-linecap="round" stroke-miterlimit="10" d="M27 29.5h-16.3c-4.7 0-8.6 3.9-8.6 8.6v25.7c0 4.7 3.9 8.6 8.6 8.6h2.7c.8 0 1.5.7 1.5 1.5v7.8c0 1.3 1.6 2 2.5 1l9.5-9.5c.5-.5 1.2-.8 2-.8h20.2c4.7 0 8.6-3.9 8.6-8.6v-7.8" fill="none"/><path fill="#fff" d="M85 0h-40c-6.9 0-12.5 5.6-12.5 12.5v33.4c0 2.2 1.8 4.1 4.1 4.1h29.9c.7 0 1.3.3 1.8.7l10 10c1.6 1.6 4.3.5 4.3-1.8v-6.5c0-1.4 1.1-2.5 2.5-2.5 6.9 0 12.5-5.6 12.5-12.5v-25c-.1-6.8-5.8-12.4-12.6-12.4z"/></svg>
+          </div>
+          <div class="support-detail">
+            <h2>Community Support</h2>
+            <a href="https://groups.google.com/forum/#!forum/sbt-dev">Mailing List</a>
+            <a href="https://stackoverflow.com/questions/tagged/sbt">StackOverflow</a>
+          </div>
+        </div>
+        <div class="support-item">
+          <div class="support-icon">
+            <svg class="svg-icon svg-icon-typesafe" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 154 154" enable-background="new 0 0 154 154"><path fill="#fff" d="M49.7 114c-4.8 0-8.7-5.1-8.7-9.9v-.2c0-4.8 3.9-7.9 8.7-7.9h100c.9-3 1.6-7 2-11h-84c-4.8 0-8.7-3.7-8.7-8.5s3.9-8.5 8.7-8.5h83.7c-.5-4-1.2-8-2.3-11h-63.4c-4.8 0-8.7-3.7-8.7-8.5s3.9-8.5 8.7-8.5h56c-13.1-23-37.2-37.8-64.7-37.8-41.4 0-75 33.3-75 74.7s33.6 75.6 75 75.6c28.4 0 53.1-15.4 65.8-38.4h-93.1z"/></svg>
+          </div>
+          <div class="support-detail">
+            <h2>Commercial Support</h2>
+            <a href="http://typesafe.com/subscription">Typesafe Subscription</a>
+            <a href="http://typesafe.com/subscription/training">Training</a>
+            <a href="http://typesafe.com/subscription/consulting">Consulting</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div><footer>
+  <div class="container footer">
+    <div class="row">
+      <div class="col-md-8 sbt">
+        <nav>
+          <a href="../../index.html">
+            <img src="files/typesafe_sbt_reverse_svg.svg" alt="sbt">
+          </a>
+          <a href="../../documentation.html">Documentation</a>
+          <a href="../../download.html">Download</a>
+          <a href="../../community.html">Community</a>
+        </nav>
+      </div>
+      <div class="col-md-4 text-right ts">
+        &copy; 2015 Typesafe Inc.
+        <a href="https://typesafe.com">
+          <img src="files/typesafe_reverse.svg" alt="Typesafe, Inc.">
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+        </div>
+        
+        <div class="highlight-outer">
+              <div class="highlight-menu">
+                <ul>
+                  <li><button id="highlight-button-twitter"><img src="img/twitter-bird-dark-bgs.png"/></button></li>
+                </ul>
+              </div>
+            </div>
+      </body>
+    </html>
