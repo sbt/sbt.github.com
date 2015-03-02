@@ -1,9 +1,9 @@
 <!DOCTYPE html SYSTEM "about:legacy-compat">
-<html>
+<html manifest="pamflet.manifest">
       <head>
         <meta charset="utf-8"/>
         <meta content="width=device-width, initial-scale=1" name="viewport"/>
-        <title>sbt 入门 — 目录结构</title>
+        <title>sbt 入门 — 安装 Typesafe Activator (包含sbt)</title>
         <link rel="shortcut icon" href="../favicon.ico"/>
         <link rel="stylesheet" href="../css/blueprint/screen.css" type="text/css" media="screen, projection"/>
         <link rel="stylesheet" href="../css/blueprint/grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
@@ -32,57 +32,36 @@
             </script>
       </head>
       <body class="color_scheme-github">
-        <a class="page prev nav" href="Hello.html">
+        <a class="page prev nav" href="Manual-Installation.html">
             <span class="space">&nbsp;</span>
             <span class="flip arrow">&gt;</span>
-          </a><a class="page next nav" href="Running.html">
+          </a><a class="page next nav" href="Hello.html">
             <span class="space">&nbsp;</span>
             <span class="arrow">&gt;</span>
           </a>
         <div class="container contentswrapper">
           <div class="span-16 prepend-1 append-1 contents">
-            <h2 id="%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84">目录结构<a href="#%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>这一小节假设你已经 <a href="Setup.html">安装 sbt</a> 并且已经阅读过 <a href="Hello.html">Hello, World</a> 了。
-</p><h3 id="%E5%9F%BA%E7%A1%80%E7%9B%AE%E5%BD%95">基础目录<a href="#%E5%9F%BA%E7%A1%80%E7%9B%AE%E5%BD%95" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在 sbt 的术语里，“基础目录”是包含项目的目录。所以，如果你创建了一个和 <a href="Hello.html">Hello, World</a> 一样的项目 <code>hello</code> ，包含 <code>hello/build.sbt</code> 和 <code>hello/hw.scala</code>， <code>hello</code> 就是基础目录。
-</p><h3 id="%E6%BA%90%E4%BB%A3%E7%A0%81">源代码<a href="#%E6%BA%90%E4%BB%A3%E7%A0%81" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>源代码可以像 <code>hello/hw.scala</code> 一样的放在项目的基础目录中。然而，大多数人不会在真实的项目中这样做，因为太杂乱了。
-sbt 和 <a href="https://maven.apache.org/">Maven</a> 的默认的源文件的目录结构是一样的（所有的路径都是相对于基础目录的）：
-</p><pre><code class="">src/
-  main/
-    resources/
-       &lt;files to include in main jar here&gt;
-    scala/
-       &lt;main Scala sources&gt;
-    java/
-       &lt;main Java sources&gt;
-  test/
-    resources
-       &lt;files to include in test jar here&gt;
-    scala/
-       &lt;test Scala sources&gt;
-    java/
-       &lt;test Java sources&gt;
-</code></pre><p><code>src/</code> 中其他的目录将被忽略。而且，所有的隐藏目录也会被忽略。
-</p><h3 id="sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E6%96%87%E4%BB%B6">sbt 构建定义文件<a href="#sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E6%96%87%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>你已经在项目的基础目录中看到了 <code>build.sbt</code>。其他的 sbt 文件在 <code>project</code> 子目录中。
-<code>project</code> 目录可以包含 <code>.scala</code> 文件，这些文件最后会和 <code>.sbt</code> 文件合并共同构成完整的构建定义。想知道更多请参见 <a href="Organizing-Build.html">组织构建</a>。
-</p><pre><code class="">build.sbt
-project/
-  Build.scala
-</code></pre><p>你可能在 <code>project/</code> 中也看到了 <code>.sbt</code> 文件，但是它不等同于项目基础目录中的 <code>.sbt</code> 文件。这将在 <a href="Organizing-Build.html">稍后</a> 解释，因为首先你需要一些背景知识。
-</p><h3 id="%E6%9E%84%E5%BB%BA%E4%BA%A7%E5%93%81">构建产品<a href="#%E6%9E%84%E5%BB%BA%E4%BA%A7%E5%93%81" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>构建出来的文件（编译的 classes，打包的 jars，托管文件，caches 和文档）默认写在 <code>target</code> 目录中。
-</p><h3 id="%E9%85%8D%E7%BD%AE%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86">配置版本管理<a href="#%E9%85%8D%E7%BD%AE%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>你的 <code>.gitignore</code> 文件（或者其他版本控制系统等同的文件）应该包含：
-</p><pre><code class="">target/
-</code></pre><p>注意：这里后面需要跟一个 <code>/</code> （只匹配目录）且前面不能有 <code>/</code> （除了匹配普通的 <code>target/</code> 还匹配 <code>project/target/</code> ）。</p><div class="bottom nav span-16">
+            <h2 id="%E5%AE%89%E8%A3%85+Typesafe+Activator+%28%E5%8C%85%E5%90%ABsbt%29">安装 Typesafe Activator (包含sbt)<a href="#%E5%AE%89%E8%A3%85+Typesafe+Activator+%28%E5%8C%85%E5%90%ABsbt%29" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Typesafe Activator 是sbt的一个自定义版本，它添加两个额外的命令<code>activator ui</code>和<code>activator new</code>。<code>activator</code>命令简言之就是sbt的一个超集。
+</p><p>你可以从 <a href="http://typesafe.com/platform/getstarted">typesafe.com</a>获得Activator。
+</p><p>If you see a command line such as <code>sbt ~test</code> in the documentation, you will also be able to type <code>activator ~test</code>. Any Activator project can be opened in sbt and vice versa because Activator is “sbt powered.”
+</p><p>如果你在文档中看到一个命令行如<code>sbt ~test</code>，你也将可以键入<code>activator ~test</code>。任意一个Activator工程能都可以用sbt打开，反之亦然，因为Activator是“基于sbt“的。
+</p><p>Activator下载包括<code>activator</code>脚本和一个<code>activator-launch.jar</code>，分别相当于<a href="Manual-Installation.html">手动安装</a>所述的sbt脚本和启动jar。这里Activator和一个<a href="Manual-Installation.html">手动安装</a>的sbt之间的差异如下：
+</p><ul><li>键入不带参数的<code>activator</code>将尝试猜测是否进入<code>activator shell</code>或<code>activator ui</code>模式；键入<code>activator shell</code>来明确进入命令行提示符。
+</li><li><code>activator new</code>允许你从一个大的<a href="https://typesafe.com/activator/templates">项目模板目录</a>中创建项目，例如<code>play-scala</code>模板是一个<a href="http://playframework.com">Play Framework</a>Scala应用程序骨架
+</li><li><code>activator ui</code>启动一种快速启动用户界面，可用于从模板目录浏览教程（在目录中的许多模板有陪同教程）。
+</li></ul><p>Activator提供两种下载；小的“minimal“下载包只包含包装脚本和启动jar，而大的“full“下载包含预装的Ivy缓存，包括Scala，Akka和Play框架。</p><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>
-                        <a href="Running.html"> 运行 </a>                        
+                        <a href="Hello.html"> Hello, World </a>                        
                         <ul class="language-bar">
-        <li><a href="../Directories.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/Directories.html"><span class="lang-item lang-ja">日本語</span></a></li><li><a href="../es/Directories.html"><span class="lang-item lang-es">Español</span></a></li><li><a href="../zh-cn/Directories.html"><span class="lang-item lang-zh-cn">中文 (简体)</span></a></li>
+        <li><a href="../Activator-Installation.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/Activator-Installation.html"><span class="lang-item lang-ja">日本語</span></a></li><li><a href="../zh-cn/Activator-Installation.html"><span class="lang-item lang-zh-cn">中文 (简体)</span></a></li>
       </ul>
                       </div><div class="tocwrapper show">
       <a class="tochead nav" style="display: none" href="#toc">❦</a>
       <a name="toc"></a>
       <h4 class="toctitle">Contents</h4>
       <div class="tocbody">
-      <div><a href="index.html">sbt 入门</a></div><ol class="toc"> <li><div><a href="Setup.html">安装 sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">在 Mac 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">在 Windows 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">在 Linux 上安装 sbt</a></div></li><li><div><a href="Manual-Installation.html">手动安装 sbt</a></div></li><li><div><a href="Activator-Installation.html">安装 Typesafe Activator (包含sbt)</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div class="current">目录结构</div></li><li><div><a href="Running.html">运行</a></div></li><li><div><a href="Basic-Def.html">.sbt 构建定义</a></div></li><li><div><a href="Scopes.html">Scope</a></div></li><li><div><a href="More-About-Settings.html">更多关于设置</a></div></li><li><div><a href="Library-Dependencies.html">库依赖</a></div></li><li><div><a href="Multi-Project.html">多项目构建</a></div></li><li><div><a href="Using-Plugins.html">使用插件</a></div></li><li><div><a href="Custom-Settings.html">自定义设置和任务</a></div></li><li><div><a href="Organizing-Build.html">组织构建</a></div></li><li><div><a href="Summary.html">总结</a></div></li><li><div><a href="Bare-Def.html">附录：Bare .sbt 构建定义</a></div></li><li><div><a href="Full-Def.html">附录：.scala 构建定义</a></div></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+      <div><a href="index.html">sbt 入门</a></div><ol class="toc"> <li><div><a href="Setup.html">安装 sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">在 Mac 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">在 Windows 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">在 Linux 上安装 sbt</a></div></li><li><div><a href="Manual-Installation.html">手动安装 sbt</a></div></li><li><div class="current">安装 Typesafe Activator (包含sbt)</div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">目录结构</a></div></li><li><div><a href="Running.html">运行</a></div></li><li><div><a href="Basic-Def.html">.sbt 构建定义</a></div></li><li><div><a href="Scopes.html">Scope</a></div></li><li><div><a href="More-About-Settings.html">更多关于设置</a></div></li><li><div><a href="Library-Dependencies.html">库依赖</a></div></li><li><div><a href="Multi-Project.html">多项目构建</a></div></li><li><div><a href="Using-Plugins.html">使用插件</a></div></li><li><div><a href="Custom-Settings.html">自定义设置和任务</a></div></li><li><div><a href="Organizing-Build.html">组织构建</a></div></li><li><div><a href="Summary.html">总结</a></div></li><li><div><a href="Bare-Def.html">附录：Bare .sbt 构建定义</a></div></li><li><div><a href="Full-Def.html">附录：.scala 构建定义</a></div></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
           </div>
         </div>
         <div class="header">

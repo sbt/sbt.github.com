@@ -45,7 +45,7 @@
       <a name="toc"></a>
       <h4 class="toctitle">Contents</h4>
       <div class="tocbody">
-      <div><a href="#sbt+%E5%85%A5%E9%97%A8">sbt 入门</a></div><ol class="toc"> <li><div><a href="#%E5%AE%89%E8%A3%85+sbt">安装 sbt</a></div><ol class="toc"> <li><div><a href="#%E5%9C%A8+Mac+%E4%B8%8A%E5%AE%89%E8%A3%85+sbt">在 Mac 上安装 sbt</a></div></li><li><div><a href="#%E5%9C%A8+Windows+%E4%B8%8A%E5%AE%89%E8%A3%85+sbt">在 Windows 上安装 sbt</a></div></li><li><div><a href="#%E5%9C%A8+Linux+%E4%B8%8A%E5%AE%89%E8%A3%85+sbt">在 Linux 上安装 sbt</a></div></li><li><div><a href="#%E6%89%8B%E5%8A%A8%E5%AE%89%E8%A3%85+sbt">手动安装 sbt</a></div></li> </ol></li><li><div><a href="#Hello%2C+World">Hello, World</a></div></li><li><div><a href="#%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84">目录结构</a></div></li><li><div><a href="#%E8%BF%90%E8%A1%8C">运行</a></div></li><li><div><a href="#.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">.sbt 构建定义</a></div></li><li><div><a href="#Scope">Scope</a></div></li><li><div><a href="#%E6%9B%B4%E5%A4%9A%E5%85%B3%E4%BA%8E%E8%AE%BE%E7%BD%AE">更多关于设置</a></div></li><li><div><a href="#%E5%BA%93%E4%BE%9D%E8%B5%96">库依赖</a></div></li><li><div><a href="#%E5%A4%9A%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA">多项目构建</a></div></li><li><div><a href="#%E4%BD%BF%E7%94%A8%E6%8F%92%E4%BB%B6">使用插件</a></div></li><li><div><a href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E8%AE%BE%E7%BD%AE%E5%92%8C%E4%BB%BB%E5%8A%A1">自定义设置和任务</a></div></li><li><div><a href="#.scala+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">.scala 构建定义</a></div></li><li><div><a href="#Bare+.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">Bare .sbt 构建定义</a></div></li><li><div><a href="#%E6%80%BB%E7%BB%93">总结</a></div></li> </ol></div></div><h1 id="sbt+%E5%85%A5%E9%97%A8">sbt 入门<a href="#sbt+%E5%85%A5%E9%97%A8" class="header-link"><span class="header-link-content">&nbsp;</span></a></h1><p>sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。其实没有太多的概念，但是 sbt 并不完全像其他的构建体系，而且如果你没有看过文档的话，你偶尔 <em>将会</em> 遇到一些细节问题。
+      <div><a href="#sbt+%E5%85%A5%E9%97%A8">sbt 入门</a></div><ol class="toc"> <li><div><a href="#%E5%AE%89%E8%A3%85+sbt">安装 sbt</a></div><ol class="toc"> <li><div><a href="#%E5%9C%A8+Mac+%E4%B8%8A%E5%AE%89%E8%A3%85+sbt">在 Mac 上安装 sbt</a></div></li><li><div><a href="#%E5%9C%A8+Windows+%E4%B8%8A%E5%AE%89%E8%A3%85+sbt">在 Windows 上安装 sbt</a></div></li><li><div><a href="#%E5%9C%A8+Linux+%E4%B8%8A%E5%AE%89%E8%A3%85+sbt">在 Linux 上安装 sbt</a></div></li><li><div><a href="#%E6%89%8B%E5%8A%A8%E5%AE%89%E8%A3%85+sbt">手动安装 sbt</a></div></li><li><div><a href="#%E5%AE%89%E8%A3%85+Typesafe+Activator+%28%E5%8C%85%E5%90%ABsbt%29">安装 Typesafe Activator (包含sbt)</a></div></li> </ol></li><li><div><a href="#Hello%2C+World">Hello, World</a></div></li><li><div><a href="#%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84">目录结构</a></div></li><li><div><a href="#%E8%BF%90%E8%A1%8C">运行</a></div></li><li><div><a href="#.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">.sbt 构建定义</a></div></li><li><div><a href="#Scope">Scope</a></div></li><li><div><a href="#%E6%9B%B4%E5%A4%9A%E5%85%B3%E4%BA%8E%E8%AE%BE%E7%BD%AE">更多关于设置</a></div></li><li><div><a href="#%E5%BA%93%E4%BE%9D%E8%B5%96">库依赖</a></div></li><li><div><a href="#%E5%A4%9A%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA">多项目构建</a></div></li><li><div><a href="#%E4%BD%BF%E7%94%A8%E6%8F%92%E4%BB%B6">使用插件</a></div></li><li><div><a href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E8%AE%BE%E7%BD%AE%E5%92%8C%E4%BB%BB%E5%8A%A1">自定义设置和任务</a></div></li><li><div><a href="#%E7%BB%84%E7%BB%87%E6%9E%84%E5%BB%BA">组织构建</a></div></li><li><div><a href="#%E6%80%BB%E7%BB%93">总结</a></div></li><li><div><a href="#%E9%99%84%E5%BD%95%EF%BC%9ABare+.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">附录：Bare .sbt 构建定义</a></div></li><li><div><a href="#%E9%99%84%E5%BD%95%EF%BC%9A.scala+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">附录：.scala 构建定义</a></div></li> </ol></div></div><h1 id="sbt+%E5%85%A5%E9%97%A8">sbt 入门<a href="#sbt+%E5%85%A5%E9%97%A8" class="header-link"><span class="header-link-content">&nbsp;</span></a></h1><p>sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。其实没有太多的概念，但是 sbt 并不完全像其他的构建体系，而且如果你没有看过文档的话，你偶尔 <em>将会</em> 遇到一些细节问题。
 </p><p>这篇入门指南覆盖了一些你在创建和维护一个 sbt 构建定义时需要知道的概念。
 </p><p><em>强烈建议</em>看完该入门指南！
 </p><p>如果你非常急切，你可以直接进入以下几小节了解最重要的概念背景 <a href="Basic-Def.html">.sbt 构建定义</a>，<a href="Scopes.html">scopes</a>，<a href="More-About-Settings.html">更多关于设置</a>。
@@ -59,29 +59,45 @@
 </li><li>创建你的构建定义。
 </li></ul></li><li>继续前往 <a href="Running.html">运行 sbt</a> 学习怎么运行 sbt。
 </li><li>然后前往 <a href="Basic-Def.html">.sbt 构建定义</a> 学习更多关于构建的定义。
-</li></ul><p>最后，安装步骤就简化为一个 Jar 文件和一个 Shell 脚本，但是取决于你的平台，我们提供了好几种方式来使得步骤不是那么单调。 <a href="Installing-sbt-on-Mac.html">Mac</a>，<a href="Installing-sbt-on-Windows.html">Windows</a>，<a href="Installing-sbt-on-Linux.html">Linux</a>，<a href="Manual-Installation.html">手动安装</a> 提供了相应的安装步骤。
+</li></ul><p>最后，安装步骤就简化为一个 Jar 文件和一个 Shell 脚本，但是取决于你的平台，我们提供了好几种方式来使得步骤不是那么单调。 <a href="Installing-sbt-on-Mac.html">Mac</a>，<a href="Installing-sbt-on-Windows.html">Windows</a>，<a href="Installing-sbt-on-Linux.html">Linux</a>，<a href="Activator-Installation.html">Typesafe Activator</a>，或<a href="Manual-Installation.html">手动安装</a> 提供了相应的安装步骤。
 </p><h3 id="%E6%8F%90%E7%A4%BA%E5%92%8C%E6%8A%80%E5%B7%A7">提示和技巧<a href="#%E6%8F%90%E7%A4%BA%E5%92%8C%E6%8A%80%E5%B7%A7" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>如果你在运行 sbt 时遇到任何问题，查看 <a href="../docs/Setup-Notes.html">安装建议</a> 中的终端编码（terminal encoding），HTTP 代理，JVM 参数。
 </p><h2 id="%E5%9C%A8+Mac+%E4%B8%8A%E5%AE%89%E8%A3%85+sbt">在 Mac 上安装 sbt<a href="#%E5%9C%A8+Mac+%E4%B8%8A%E5%AE%89%E8%A3%85+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="%E9%80%9A%E8%BF%87%E7%AC%AC%E4%B8%89%E6%96%B9%E7%9A%84%E5%8C%85%E5%AE%89%E8%A3%85">通过第三方的包安装<a href="#%E9%80%9A%E8%BF%87%E7%AC%AC%E4%B8%89%E6%96%B9%E7%9A%84%E5%8C%85%E5%AE%89%E8%A3%85" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><blockquote><p><strong>注意：</strong> 第三方的包可能没有提供最新的版本，请记得将任何问题反馈给这些包相关的维护者。
 </p></blockquote><h4 id="%E9%80%9A%E8%BF%87++%E5%AE%89%E8%A3%85">通过 <a href="http://macports.org/">Macports</a> 安装<a href="#%E9%80%9A%E8%BF%87++%E5%AE%89%E8%A3%85" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="">$ port install sbt
 </code></pre><h4 id="%E9%80%9A%E8%BF%87++%E5%AE%89%E8%A3%85">通过 <a href="http://mxcl.github.com/homebrew/">Homebrew</a> 安装<a href="#%E9%80%9A%E8%BF%87++%E5%AE%89%E8%A3%85" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="">$ brew install sbt
 </code></pre><h3 id="%E9%80%9A%E8%BF%87%E9%80%9A%E7%94%A8%E7%9A%84%E5%8C%85%E5%AE%89%E8%A3%85">通过通用的包安装<a href="#%E9%80%9A%E8%BF%87%E9%80%9A%E7%94%A8%E7%9A%84%E5%8C%85%E5%AE%89%E8%A3%85" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>下载 <a href="https://dl.bintray.com/sbt/native-packages/sbt/0.13.7/sbt-0.13.7.zip">ZIP</a> 或者 <a href="https://dl.bintray.com/sbt/native-packages/sbt/0.13.7/sbt-0.13.7.tgz">TGZ</a> 包并解压。
+</p><h3 id="Typesafe+Activator">Typesafe Activator<a href="#Typesafe+Activator" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>参见 <a href="Activator-Installation.html">Typesafe Activator安装指南</a>.
 </p><h3 id="%E6%89%8B%E5%8A%A8%E5%AE%89%E8%A3%85">手动安装<a href="#%E6%89%8B%E5%8A%A8%E5%AE%89%E8%A3%85" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>参见手动安装指南。
 </p><h2 id="%E5%9C%A8+Windows+%E4%B8%8A%E5%AE%89%E8%A3%85+sbt">在 Windows 上安装 sbt<a href="#%E5%9C%A8+Windows+%E4%B8%8A%E5%AE%89%E8%A3%85+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="%E9%80%9A%E8%BF%87+Windows+%E5%AE%89%E8%A3%85%E5%8C%85%E5%AE%89%E8%A3%85">通过 Windows 安装包安装<a href="#%E9%80%9A%E8%BF%87+Windows+%E5%AE%89%E8%A3%85%E5%8C%85%E5%AE%89%E8%A3%85" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>下载 <a href="https://dl.bintray.com/sbt/native-packages/sbt/0.13.7/sbt-0.13.7.msi">msi 安装包</a> 并安装。
 </p><h3 id="%E9%80%9A%E8%BF%87%E9%80%9A%E7%94%A8%E7%9A%84%E5%AE%89%E8%A3%85%E5%8C%85%E5%AE%89%E8%A3%85">通过通用的安装包安装<a href="#%E9%80%9A%E8%BF%87%E9%80%9A%E7%94%A8%E7%9A%84%E5%AE%89%E8%A3%85%E5%8C%85%E5%AE%89%E8%A3%85" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>下载 <a href="https://dl.bintray.com/sbt/native-packages/sbt/0.13.7/sbt-0.13.7.zip">ZIP</a> 或者 <a href="https://dl.bintray.com/sbt/native-packages/sbt/0.13.7/sbt-0.13.7.tgz">TGZ</a> 包并解压。
+</p><h3 id="Typesafe+Activator">Typesafe Activator<a href="#Typesafe+Activator" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>参见 <a href="Activator-Installation.html">Typesafe Activator安装指南</a>.
 </p><h3 id="%E6%89%8B%E5%8A%A8%E5%AE%89%E8%A3%85">手动安装<a href="#%E6%89%8B%E5%8A%A8%E5%AE%89%E8%A3%85" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>参见手动安装指南。
 </p><h2 id="%E5%9C%A8+Linux+%E4%B8%8A%E5%AE%89%E8%A3%85+sbt">在 Linux 上安装 sbt<a href="#%E5%9C%A8+Linux+%E4%B8%8A%E5%AE%89%E8%A3%85+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="%E9%80%9A%E8%BF%87%E9%80%9A%E7%94%A8%E7%9A%84%E5%AE%89%E8%A3%85%E5%8C%85%E5%AE%89%E8%A3%85">通过通用的安装包安装<a href="#%E9%80%9A%E8%BF%87%E9%80%9A%E7%94%A8%E7%9A%84%E5%AE%89%E8%A3%85%E5%8C%85%E5%AE%89%E8%A3%85" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>下载 <a href="https://dl.bintray.com/sbt/native-packages/sbt/0.13.7/sbt-0.13.7.zip">ZIP</a> 或者 <a href="https://dl.bintray.com/sbt/native-packages/sbt/0.13.7/sbt-0.13.7.tgz">TGZ</a> 包并解压。
-</p><h3 id="RPM+%E5%92%8C+DEB">RPM 和 DEB<a href="#RPM+%E5%92%8C+DEB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>官方也提供下面这两种包：
-</p><ul><li><a href="https://dl.bintray.com/sbt/rpm/sbt-0.13.7.rpm">RPM</a> 包
-</li><li><a href="https://dl.bintray.com/sbt/debian/sbt-0.13.7.deb">DEB</a> 包
-</li></ul><blockquote><p><strong>注意：</strong> 请将任何和这两个包相关的问题反馈到 <a href="https://github.com/sbt/sbt-launcher-package">sbt-launcher-package</a> 项目。
+</p><h3 id="Ubuntu%E5%92%8C%E5%85%B6%E4%BB%96%E5%9F%BA%E4%BA%8EDebian%E7%9A%84%E5%8F%91%E8%A1%8C%E7%89%88">Ubuntu和其他基于Debian的发行版<a href="#Ubuntu%E5%92%8C%E5%85%B6%E4%BB%96%E5%9F%BA%E4%BA%8EDebian%E7%9A%84%E5%8F%91%E8%A1%8C%E7%89%88" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://dl.bintray.com/sbt/debian/sbt-0.13.7.deb">DEB</a> 安装包由sbt官方支持。
+</p><p>Ubuntu和其他基于Debian的发行版使用DEB格式，但通常你不从本地的DEB文件安装软件。相反，他们由程序包管理器安装，通过命令行（如<code>apt-get</code>，<code>aptitude</code>）或图形用户界面 （如Synaptic）。
+从终端运行下面的命令安装<code>sbt</code>（你需要超级用户权限，因此需要<code>sudo</code>）。
+</p><pre><code>echo &quot;deb https://dl.bintray.com/sbt/debian /&quot; | sudo tee -a /etc/apt/sources.list.d/sbt.list
+sudo apt-get update
+sudo apt-get install sbt
+</code></pre><p>软件包管理器将检查若干个提供安装软件包的配置存储库。sbt 二进制文件发布到 Bintray，而Bintray 方便地提供了APT资源库。你只需要将存储库添加到你的软件包管理器将检查的地方。
+一旦安装了<code>sbt</code>，你会能够在<code>aptitude</code>或Synaptic的包缓存更新后管理了。你也应该能够看到添加的存储库，在底部的<code>System Settings -&gt; Software &amp; Updates -&gt; Other Software</code>：
+</p><p><img src="../files/ubuntu-sources.png" title="Ubuntu Software &amp; Updates Screenshot" alt="Ubuntu Software &amp; Updates Screenshot"/>
+</p><h3 id="%E7%BA%A2%E5%B8%BD%E4%BC%81%E4%B8%9A%E7%89%88Linux%E5%92%8C%E5%85%B6%E4%BB%96%E5%9F%BA%E4%BA%8ERPM%E7%9A%84%E5%8F%91%E8%A1%8C%E7%89%88">红帽企业版Linux和其他基于RPM的发行版<a href="#%E7%BA%A2%E5%B8%BD%E4%BC%81%E4%B8%9A%E7%89%88Linux%E5%92%8C%E5%85%B6%E4%BB%96%E5%9F%BA%E4%BA%8ERPM%E7%9A%84%E5%8F%91%E8%A1%8C%E7%89%88" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://dl.bintray.com/sbt/rpm/sbt-0.13.7.rpm">RPM</a> 安装包由sbt官方支持。
+</p><p>红帽企业版Linux和其他基于RPM的发行版使用RPM格式。
+从终端运行下面的命令安装<code>sbt</code>（你需要超级用户权限，因此需要<code>sudo</code>）。
+</p><pre><code>curl https://bintray.com/sbt/rpm/rpm &gt; bintray-sbt-rpm.repo
+sudo mv bintray-sbt-rpm.repo /etc/yum.repos.d/
+sudo yum install sbt
+</code></pre><p>sbt 二进制文件发布到 Bintray，而Bintray 方便地提供了RPM资源库。你只需要将存储库添加到你的软件包管理器将检查的地方。
+</p><blockquote><p><strong>注意：</strong> 请将任何和这两个包相关的问题反馈到 <a href="https://github.com/sbt/sbt-launcher-package">sbt-launcher-package</a> 项目。
 </p></blockquote><h3 id="Gentoo">Gentoo<a href="#Gentoo" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在 sbt 官方的树中没有提供 ebuild。 但是有从二进制合并 sbt 的 <a href="https://github.com/whiter4bbit/overlays/tree/master/dev-java/sbt-bin">ebuilds</a>。
 可以通过以下方式从这些 ebuilds 中合并 sbt：
-</p><pre><code>$ mkdir -p /usr/local/portage &amp;&amp; cd /usr/local/portage
-$ git clone git://github.com/whiter4bbit/overlays.git
-$ echo &quot;PORTDIR_OVERLAY=$PORTDIR_OVERLAY /usr/local/portage/overlays&quot; &gt;&gt; /etc/make.conf
-$ emerge sbt-bin
+</p><pre><code>mkdir -p /usr/local/portage &amp;&amp; cd /usr/local/portage
+git clone git://github.com/whiter4bbit/overlays.git
+echo &quot;PORTDIR_OVERLAY=$PORTDIR_OVERLAY /usr/local/portage/overlays&quot; &gt;&gt; /etc/make.conf
+emerge sbt-bin
 </code></pre><blockquote><p><strong>注意：</strong> 请将任何和 ebuild 相关的问题反馈到 <a href="https://github.com/whiter4bbit/overlays/issues">这里</a>。
-</p></blockquote><h3 id="%E6%89%8B%E5%8A%A8%E5%AE%89%E8%A3%85">手动安装<a href="#%E6%89%8B%E5%8A%A8%E5%AE%89%E8%A3%85" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>参见手动安装指南。
+</p></blockquote><h3 id="Typesafe+Activator">Typesafe Activator<a href="#Typesafe+Activator" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>参见 <a href="Activator-Installation.html">Typesafe Activator安装指南</a>.
+</p><h3 id="%E6%89%8B%E5%8A%A8%E5%AE%89%E8%A3%85">手动安装<a href="#%E6%89%8B%E5%8A%A8%E5%AE%89%E8%A3%85" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>参见<a href="Manual-Installation.html">手动安装指南</a>。
 </p><h2 id="%E6%89%8B%E5%8A%A8%E5%AE%89%E8%A3%85+sbt">手动安装 sbt<a href="#%E6%89%8B%E5%8A%A8%E5%AE%89%E8%A3%85+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>手动安装需要下载 <a href="https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.7/sbt-launch.jar">sbt-launch.jar</a>，然后创建脚本来运行它。
 </p><h3 id="Unix">Unix<a href="#Unix" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>将 <a href="https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.7/sbt-launch.jar">sbt-launch.jar</a> 文件放在 <code>~/bin</code> 下。
 创建一个脚本来运行这个 jar，脚本 <code>~/bin/sbt</code> 内容如下:
@@ -110,7 +126,15 @@ stty icanon echo &gt; /dev/null 2&gt;&amp;1
 </code></pre><p>为了让退格（backspace）能够在 Scala 的控制台中正常工作，你需要确保你的退格键发送的是删除符（erase character），和在 stty 中配置的一样。对于默认的 cygwin 终端（mintty），
 在设置选项 -&gt; 键中，如果你的删除符是 cygwin 默认的 ^H，“退格发送 ^H” 需要被选中。
 </p><blockquote><p><strong>注意：</strong> 当前其他的配置还不支持。请 <a href="https://github.com/sbt/sbt/blob/0.13/CONTRIBUTING.md">提交 pull request</a> 实现或者描述已经支持的配置。
-</p></blockquote><h2 id="Hello%2C+World">Hello, World<a href="#Hello%2C+World" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>这一小节假设你已经 <a href="Setup.html">安装 sbt</a> 了。
+</p></blockquote><h2 id="%E5%AE%89%E8%A3%85+Typesafe+Activator+%28%E5%8C%85%E5%90%ABsbt%29">安装 Typesafe Activator (包含sbt)<a href="#%E5%AE%89%E8%A3%85+Typesafe+Activator+%28%E5%8C%85%E5%90%ABsbt%29" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Typesafe Activator 是sbt的一个自定义版本，它添加两个额外的命令<code>activator ui</code>和<code>activator new</code>。<code>activator</code>命令简言之就是sbt的一个超集。
+</p><p>你可以从 <a href="http://typesafe.com/platform/getstarted">typesafe.com</a>获得Activator。
+</p><p>If you see a command line such as <code>sbt ~test</code> in the documentation, you will also be able to type <code>activator ~test</code>. Any Activator project can be opened in sbt and vice versa because Activator is “sbt powered.”
+</p><p>如果你在文档中看到一个命令行如<code>sbt ~test</code>，你也将可以键入<code>activator ~test</code>。任意一个Activator工程能都可以用sbt打开，反之亦然，因为Activator是“基于sbt“的。
+</p><p>Activator下载包括<code>activator</code>脚本和一个<code>activator-launch.jar</code>，分别相当于<a href="Manual-Installation.html">手动安装</a>所述的sbt脚本和启动jar。这里Activator和一个<a href="Manual-Installation.html">手动安装</a>的sbt之间的差异如下：
+</p><ul><li>键入不带参数的<code>activator</code>将尝试猜测是否进入<code>activator shell</code>或<code>activator ui</code>模式；键入<code>activator shell</code>来明确进入命令行提示符。
+</li><li><code>activator new</code>允许你从一个大的<a href="https://typesafe.com/activator/templates">项目模板目录</a>中创建项目，例如<code>play-scala</code>模板是一个<a href="http://playframework.com">Play Framework</a>Scala应用程序骨架
+</li><li><code>activator ui</code>启动一种快速启动用户界面，可用于从模板目录浏览教程（在目录中的许多模板有陪同教程）。
+</li></ul><p>Activator提供两种下载；小的“minimal“下载包只包含包装脚本和启动jar，而大的“full“下载包含预装的Ivy缓存，包括Scala，Akka和Play框架。</p><h2 id="Hello%2C+World">Hello, World<a href="#Hello%2C+World" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>这一小节假设你已经 <a href="Setup.html">安装 sbt</a> 了。
 </p><h3 id="%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%9C%89%E6%BA%90%E7%A0%81%E7%9A%84%E9%A1%B9%E7%9B%AE%E7%9B%AE%E5%BD%95">创建一个有源码的项目目录<a href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%9C%89%E6%BA%90%E7%A0%81%E7%9A%84%E9%A1%B9%E7%9B%AE%E7%9B%AE%E5%BD%95" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>一个合法的 sbt 项目可以是一个包含单个源码文件的目录。
 尝试创建一个 <code>hello</code> 目录，包含内容如下的源码文件 <code>hw.scala</code>：
 </p><pre><code class="prettyprint lang-scala">object Hi {
@@ -169,11 +193,11 @@ sbt 和 <a href="https://maven.apache.org/">Maven</a> 的默认的源文件的�
        &lt;test Java sources&gt;
 </code></pre><p><code>src/</code> 中其他的目录将被忽略。而且，所有的隐藏目录也会被忽略。
 </p><h3 id="sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E6%96%87%E4%BB%B6">sbt 构建定义文件<a href="#sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E6%96%87%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>你已经在项目的基础目录中看到了 <code>build.sbt</code>。其他的 sbt 文件在 <code>project</code> 子目录中。
-<code>project</code> 目录可以包含 <code>.scala</code> 文件，这些文件最后会和 <code>.sbt</code> 文件合并共同构成完整的构建定义。想知道更多请参见 <a href="Full-Def.html">.scala 构建定义</a>。
+<code>project</code> 目录可以包含 <code>.scala</code> 文件，这些文件最后会和 <code>.sbt</code> 文件合并共同构成完整的构建定义。想知道更多请参见 <a href="Organizing-Build.html">组织构建</a>。
 </p><pre><code class="">build.sbt
 project/
   Build.scala
-</code></pre><p>你可能在 <code>project/</code> 中也看到了 <code>.sbt</code> 文件，但是它不等同于项目基础目录中的 <code>.sbt</code> 文件。这将在 <a href="Full-Def.html">稍后</a> 解释，因为首先你需要一些背景知识。
+</code></pre><p>你可能在 <code>project/</code> 中也看到了 <code>.sbt</code> 文件，但是它不等同于项目基础目录中的 <code>.sbt</code> 文件。这将在 <a href="Organizing-Build.html">稍后</a> 解释，因为首先你需要一些背景知识。
 </p><h3 id="%E6%9E%84%E5%BB%BA%E4%BA%A7%E5%93%81">构建产品<a href="#%E6%9E%84%E5%BB%BA%E4%BA%A7%E5%93%81" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>构建出来的文件（编译的 classes，打包的 jars，托管文件，caches 和文档）默认写在 <code>target</code> 目录中。
 </p><h3 id="%E9%85%8D%E7%BD%AE%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86">配置版本管理<a href="#%E9%85%8D%E7%BD%AE%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>你的 <code>.gitignore</code> 文件（或者其他版本控制系统等同的文件）应该包含：
 </p><pre><code class="">target/
@@ -513,7 +537,6 @@ config，global task）。</p><h2 id="%E6%9B%B4%E5%A4%9A%E5%85%B3%E4%BA%8E%E8%AE
 这个新的 map 就是 sbt 的新状态。
 </p><p>不同 setting 通过不同的方式对该 map 进行转换。之前在 <a href="Basic-Def.html">.sbt 构建定义</a> 中，你已经阅读了 <code>:=</code> 方法相关的内容。
 </p><p>通过 <code>:=</code> 创建的 <code>Setting</code> 会往转换之后新的 map 中放入一个固定的常量。例如，如果你通过 <code>name := &quot;hello&quot;</code> 对 map 做一次转换，新的 map 中 key <code>name</code> 就保存着一个字符串 <code>&quot;hello&quot;</code>。
-</p><p>最终 Settings 必须在主列表中来工作（<code>build.sbt</code> 中的所有行最后都会自动到该列表中，但是 <a href="Full-Def.html">.scala 文件</a> 中的内容如果在创建 <code>Setting</code> 时没有放在 sbt 能够找到的位置就会出错）。
 </p><h3 id="%E8%BF%BD%E5%8A%A0%E5%80%BC%EF%BC%9A++%E5%92%8C">追加值： <code>+=</code> 和 <code>++=</code><a href="#%E8%BF%BD%E5%8A%A0%E5%80%BC%EF%BC%9A++%E5%92%8C" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>通过 <code>:=</code> 方法赋值是最简单的转换，但是 key 也有很多其他的方法。如果 <code>SettingKey[T]</code> 中的 <code>T</code> 是一个列表，例如，一个 key 的值的类型是 sequence，你就可以往列表中追加而不是替换。
 </p><ul><li><code>+=</code> 会追加单个元素到列表中。
 </li><li><code>++=</code> 会连接两个列表。
@@ -655,7 +678,27 @@ lazy val core = project
 </p><pre><code class="prettyprint lang-scala">lazy val util = project.in(file(&quot;util&quot;))
 
 lazy val core = project in file(&quot;core&quot;)
-</code></pre><h3 id="%E4%BE%9D%E8%B5%96">依赖<a href="#%E4%BE%9D%E8%B5%96" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>构建中的项目完全可以彼此独立，但是通常情况下它们会有依赖上的一些相关性。有两种类型的依赖：aggregate 和 classpath。
+</code></pre><h4 id="%E5%85%AC%E5%85%B1%E8%AE%BE%E5%AE%9A">公共设定<a href="#%E5%85%AC%E5%85%B1%E8%AE%BE%E5%AE%9A" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>To factor out common settings across multiple projects, create a sequence named <code>commonSettings</code> and call <code>settings</code> method on each project. Note <code>_*</code> is required to pass sequence into a vararg method.
+要跨多个项目提取公共设置，请创建一个名为<code>commonSettings</code>的序列，并在每个项目上调用<code>settings</code>方法。注意要传入序列给变参数方法时需要调用<code>_*</code>。
+</p><pre><code class="prettyprint lang-scala">lazy val commonSettings = Seq(
+  organization := &quot;com.example&quot;,
+  version := &quot;0.1.0&quot;,
+  scalaVersion := &quot;2.11.4&quot;
+)
+
+lazy val core = (project in file(&quot;core&quot;)).
+  settings(commonSettings: _*).
+  settings(
+    // other settings
+  )
+
+lazy val util = (project in file(&quot;util&quot;)).
+  settings(commonSettings: _*).
+  settings(
+    // other settings
+  )
+</code></pre><p>现在我们可以在一处修改<code>version</code>，当重新加载构建时，将在各个子项目相应更新。
+</p><h3 id="%E4%BE%9D%E8%B5%96">依赖<a href="#%E4%BE%9D%E8%B5%96" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>构建中的项目完全可以彼此独立，但是通常情况下它们会有依赖上的一些相关性。有两种类型的依赖：aggregate 和 classpath。
 </p><h4 id="Aggregation">Aggregation<a href="#Aggregation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Aggregation 意味着在 aggregate 项目上执行一个 task 也会在 aggregated 的项目执行。例如，
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).aggregate(util, core)
 
@@ -703,18 +746,8 @@ lazy val core = project
 </p><h3 id="%E4%BA%A4%E4%BA%92%E5%BC%8F%E5%BC%95%E5%AF%BC%E9%A1%B9%E7%9B%AE">交互式引导项目<a href="#%E4%BA%A4%E4%BA%92%E5%BC%8F%E5%BC%95%E5%AF%BC%E9%A1%B9%E7%9B%AE" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在 sbt 的命令行中，输入 <code>projects</code> 列出你的项目，执行 <code>project &lt;projectname&gt;</code> 可以选择当前项目。当你执行 task 像 <code>compile</code>，它会在当前项目上执行。
 所以你没有必要去编译 root 项目，你可以只编译子项目。
 </p><p>你可以通过显示的指定项目 ID 在另一个项目上执行一个 task，例如 <code>subProjectID/compile</code>。
-</p><h3 id="%E9%80%9A%E7%94%A8%E4%BB%A3%E7%A0%81">通用代码<a href="#%E9%80%9A%E7%94%A8%E4%BB%A3%E7%A0%81" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在一个 <code>.sbt</code> 文件中的定义对于其他的 <code>.sbt</code> 文件不可见。为了在不同的 <code>.sbt</code> 文件中共享代码，在构建根目录下的 <code>project/</code> 目录下定义一个或多个 Scala 文件。该目录也是一个 sbt 项目，但是只针对你的构建。
-</p><p>例如：
-</p><p><code>&lt;root&gt;/project/Common.scala</code>：
-</p><pre><code class="prettyprint lang-scala">import sbt._
-import Keys._
-
-object Common {
-  def text = &quot;org.example&quot;
-}
-</code></pre><p><code>&lt;root&gt;/build.sbt</code>：
-</p><pre><code class="prettyprint lang-scala">organization := Common.text
-</code></pre><p>参见 <a href="Full-Def.html">.scala 构建定义</a> 获取详细内容。
+</p><h3 id="%E9%80%9A%E7%94%A8%E4%BB%A3%E7%A0%81">通用代码<a href="#%E9%80%9A%E7%94%A8%E4%BB%A3%E7%A0%81" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在一个 <code>.sbt</code> 文件中的定义对于其他的 <code>.sbt</code> 文件不可见。为了在不同的 <code>.sbt</code> 文件中共享代码，在构建根目录下的 <code>project/</code> 目录下定义一个或多个 Scala 文件。
+</p><p>参见 <a href="Organizing-Build.html">组织构建</a> 获取详细内容。
 </p><h2 id="%E4%BD%BF%E7%94%A8%E6%8F%92%E4%BB%B6">使用插件<a href="#%E4%BD%BF%E7%94%A8%E6%8F%92%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>请先阅读入门指南前面的内容，尤其需要在阅读本小节之前理解 <a href="Basic-Def.html">build.sbt</a> 和 <a href="Library-Dependencies.html">库依赖</a>。
 </p><h3 id="%E4%BB%80%E4%B9%88%E6%98%AF%E6%8F%92%E4%BB%B6">什么是插件<a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%8F%92%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>插件继承了构建定义，大多数通常是通过添加设置。新的设置可以是新的 task。例如，一个插件可以添加一个 <code>codeCoverage</code> task 来生成一个测试覆盖率报告。
 </p><h3 id="%E5%A3%B0%E6%98%8E%E4%B8%80%E4%B8%AA%E6%8F%92%E4%BB%B6">声明一个插件<a href="#%E5%A3%B0%E6%98%8E%E4%B8%80%E4%B8%AA%E6%8F%92%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>如果你的项目在 <code>hello</code> 目录下，而且你正在往构建定义中添加一个 sbt-site 插件，创建 <code>hello/project/site.sbt</code> 并且通过传递插件的 Ivy 模块 ID 声明插件依赖 给 <code>addSbtPlugin</code>：
@@ -782,58 +815,244 @@ val clean = taskKey[Unit](&quot;删除构建产生的文件，包括生成的 so
 </code></pre><p>键的构造函数有两个字符串参数：键的名称（ <code>“scalaVersion”</code> ）和文档字符串（ <code>“用于构建工程的scala的版本。 ”</code> ）。
 </p><p>还记得<a href="Basic-Def.html"> .sbt 构建定义</a>中，类型 <code>T</code> 在 <code>SettingKey[T]</code> 中表示的设置的值的类型。类型 <code>T</code> 在 <code>TaskKey [T]</code> 中指示任务的结果的类型。
 在<a href="Basic-Def.html"> .sbt 构建定义</a>中，一个设置有一个固定的值，直到项目重新加载。任务会在每一个“任务执行”（用户在交互输入中或在batch模式下输入一个命令）被重新计算。
-</p><p>键可以在定义在<a href="Basic-Def.html"> .sbt 构建定义</a>，<a href="Full-Def.html">.scala 文件</a>或<a href="Using-Plugins.html">插件</a>。任何在 <code>.scala</code> 构建定义文件发现的 <code>val</code>，<code>Build</code> 对象或 <code>Plugin</code> 对象中 plugin 的 <code>val</code> 将被自动导入
+</p><p>键可以在定义在<a href="Basic-Def.html">.sbt 构建定义</a>，<a href="Organizing-Build.html">.scala 文件</a>或一个<a href="Using-Plugins.html">自动插件</a>中。任何在启用的自动插件的<code>autoImport</code>对象的 <code>val</code> 将被自动导入
 到你的 <code>.sbt</code> 文件。
 </p><h3 id="%E6%89%A7%E8%A1%8C%E4%BB%BB%E5%8A%A1">执行任务<a href="#%E6%89%A7%E8%A1%8C%E4%BB%BB%E5%8A%A1" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>一旦你定义了一个任务的键，你需要用它完成任务定义。你可以定义自己的任务，或者重新定义现有的任务。无论哪种方式看起来是一样的；用 <code>:=</code> 使任务的键和部分代码相关联：
 </p><pre><code class="prettyprint lang-scala">val sampleStringTask = taskKey[String](&quot;A sample string task.&quot;)
-
 val sampleIntTask = taskKey[Int](&quot;A sample int task.&quot;)
 
-sampleStringTask := System.getProperty(&quot;user.home&quot;)
+lazy val commonSettings = Seq(
+  organization := &quot;com.example&quot;,
+  version := &quot;0.1.0-SNAPSHOT&quot;
+)
 
-sampleIntTask := {
-  val sum = 1 + 2
-  println(&quot;sum: &quot; + sum)
+lazy val library = (project in file(&quot;library&quot;)).
+  settings(commonSettings: _*).
+  settings(
+    sampleStringTask := System.getProperty(&quot;user.home&quot;),
+    sampleIntTask := {
+      val sum = 1 + 2
+      println(&quot;sum: &quot; + sum)
+      sum
+    }
+  )
+</code></pre><p>在<a href="More-About-Settings.html">更多关于设置</a>里有描述，如果任务有依赖关系，你使用 <code>value</code> 来引用值。
+</p><p>有关任务实现最困难的部分往往不是 sbt 专用；任务只是 Scala 代码。困难的部分可能是写你的任务体，即做什么，或者说你正在试图做的。例如，你要格式化 HTML，在这种情况下，你可能需要使用一个 HTML 库（也许你将<a href="Using-Plugins.html">为构建定义添加一个库的依赖</a>来编写基于 HTML 库代码）。
+</p><p>sbt 具有一些实用工具库和方便的函数，特别是可以经常使用 API 中的 <a href="../../api/index.html#sbt.IO$">IO</a> 来操作文件和目录。
+</p><h3 id="%E4%BB%BB%E5%8A%A1%E7%9A%84%E6%89%A7%E8%A1%8C%E8%AF%AD%E4%B9%89">任务的执行语义<a href="#%E4%BB%BB%E5%8A%A1%E7%9A%84%E6%89%A7%E8%A1%8C%E8%AF%AD%E4%B9%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>当从依赖于其他任务的自定义任务中使用<code>value</code>时，一个要注意的重要细节是是任务的执行语义。对执行语义，我们的意思是到底<em>何时</em>这些任务被取值。
+</p><p>以<code>sampeIntTask</code>为例，任务体中的每一行应严格地一个接一个被取值。这就是顺序语义：
+</p><pre><code class="prettyprint lang-scala">sampleIntTask := {
+  val sum = 1 + 2        // first
+  println(&quot;sum: &quot; + sum) // second
+  sum                    // third
+}
+</code></pre><p>在现实中，JVM可能内联<code>sum</code>为<code>3</code>，但任务可观察到的<em>行为</em>仍将与严格地一个接一个被执行完全相同。
+</p><p>现在假设我们定义了另外两个的自定义任务<code>startServer</code>和<code>stopServer</code>，并修改<code>sampeIntTask</code>，如下所示：
+</p><pre><code class="prettyprint lang-scala">val startServer = taskKey[Unit](&quot;start server&quot;)
+val stopServer = taskKey[Unit](&quot;stop server&quot;)
+val sampleIntTask = taskKey[Int](&quot;A sample int task.&quot;)
+val sampleStringTask = taskKey[String](&quot;A sample string task.&quot;)
+
+lazy val commonSettings = Seq(
+  organization := &quot;com.example&quot;,
+  version := &quot;0.1.0-SNAPSHOT&quot;
+)
+
+lazy val library = (project in file(&quot;library&quot;)).
+  settings(commonSettings: _*).
+  settings(
+    startServer := {
+      println(&quot;starting...&quot;)
+      Thread.sleep(500)
+    },
+    stopServer := {
+      println(&quot;stopping...&quot;)
+      Thread.sleep(500)
+    },
+    sampleIntTask := {
+      startServer.value
+      val sum = 1 + 2
+      println(&quot;sum: &quot; + sum)
+      stopServer.value // THIS WON'T WORK
+      sum
+    },
+    sampleStringTask := {
+      startServer.value
+      val s = sampleIntTask.value.toString
+      println(&quot;s: &quot; + s)
+      s
+    }
+  )
+</code></pre><p>从sbt交互式提示符中运行<code>sampleIntTask</code>将得到如下结果：
+</p><pre><code class="">&gt; sampleIntTask
+stopping...
+starting...
+sum: 3
+[success] Total time: 1 s, completed Dec 22, 2014 5:00:00 PM
+</code></pre><p>若要查看发生了什么事，让我们看一下<code>sampleIntTask</code>图形表示：
+</p><p><img src="../files/task-dependency00.png" alt="task-dependency"/>
+</p><p>不同于普通的Scala方法调用，调用任务的<code>value</code>方法将不被严格取值。相反，他们只是充当占位符来表示<code>sampleIntTask</code>依赖于<code>startServer</code>和<code>stopServer</code>任务。当你调用<code>sampleIntTask</code>时，sbt的任务引擎将：
+</p><ul><li>在对<code>sampleIntTask</code>取值前对依赖任务取值（偏序）
+</li><li>如果依赖任物是相互独立的，尝试并行取值（并行）
+</li><li>每次命令执行，每个任务依赖项将被评估且仅被评估一次（去重）
+</li></ul><h4 id="%E4%BB%BB%E5%8A%A1%E4%BE%9D%E8%B5%96%E9%A1%B9%E5%8E%BB%E9%87%8D">任务依赖项去重<a href="#%E4%BB%BB%E5%8A%A1%E4%BE%9D%E8%B5%96%E9%A1%B9%E5%8E%BB%E9%87%8D" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>为证明这最后一点，我们可以从 sbt 交互式提示符运行 <code>sampleStringTask</code>。
+</p><pre><code class="">&gt; sampleStringTask
+stopping...
+starting...
+sum: 3
+s: 3
+[success] Total time: 1 s, completed Dec 22, 2014 5:30:00 PM
+</code></pre><p>因为<code>sampleStringTask</code>依赖于<code>startServer</code>和<code>sampleIntTask</code>两个任务，而<code>sampleIntTask</code>也依赖于<code>startServer</code>任务，它作为任务依赖出现了两次。如果这是一个普通的 Scala 方法调用，它会被计算两次，但由于任务的依赖项被标记为<code>value</code>类型，它将只被计算一次。以下是<code>sampeStringTask</code>如何取值的图形表示：
+</p><p><img src="../files/task-dependency01.png" alt="task-dependency"/>
+</p><p>如果我们不做重复任务相关项的去重，则当我们执行<code>test</code>时最终会编译测试源代码很多次，因为<code>compile in Test</code>作为<code>test in Test</code>的依赖项出现了很多次。
+</p><h4 id="%E6%B8%85%E7%90%86%E4%BB%BB%E5%8A%A1">清理任务<a href="#%E6%B8%85%E7%90%86%E4%BB%BB%E5%8A%A1" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>应该如何实现<code>stopServer</code>任务？清理任务的概念并不适合任务的执行模型，因为任务关心的是依赖项跟踪。最后一次操作应成为依赖其他中间任务的任务。例如<code>stopServer</code>应依赖于<code>sampleStringTask</code>，在其中<code>stopServer</code>应该是 <code>sampleStringTask</code>。
+</p><pre><code class="prettyprint lang-scala">lazy val library = (project in file(&quot;library&quot;)).
+  settings(commonSettings: _*).
+  settings(
+    startServer := {
+      println(&quot;starting...&quot;)
+      Thread.sleep(500)
+    },
+    sampleIntTask := {
+      startServer.value
+      val sum = 1 + 2
+      println(&quot;sum: &quot; + sum)
+      sum
+    },
+    sampleStringTask := {
+      startServer.value
+      val s = sampleIntTask.value.toString
+      println(&quot;s: &quot; + s)
+      s
+    },
+    sampleStringTask := {
+      val old = sampleStringTask.value
+      println(&quot;stopping...&quot;)
+      Thread.sleep(500)
+      old
+    }
+  )
+</code></pre><p>为了证明它可以工作，在交互式提示符中运行 <code>sampleStringTask</code>：
+</p><pre><code class="">&gt; sampleStringTask
+starting...
+sum: 3
+s: 3
+stopping...
+[success] Total time: 1 s, completed Dec 22, 2014 6:00:00 PM
+</code></pre><p><img src="../files/task-dependency02.png" alt="task-dependency"/>
+</p><h4 id="%E7%9B%B4%E6%8E%A5%E4%BD%BF%E7%94%A8Scala">直接使用Scala<a href="#%E7%9B%B4%E6%8E%A5%E4%BD%BF%E7%94%A8Scala" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>确保一些事发生在其它一些事物之后的另一种方式是使用Scala。例如，在<code>project/ServerUtil.scala</code>中实现一个简单的函数，你可以编写：
+</p><pre><code class="prettyprint lang-scala">sampleIntTask := {
+  ServerUtil.startServer
+  try {
+    val sum = 1 + 2
+    println(&quot;sum: &quot; + sum)
+  } finally {
+    ServerUtil.stopServer
+  }
   sum
 }
-</code></pre><p>在<a href="More-About-Settings.html">更多关于设置</a>里有描述，如果任务有依赖关系，你使用 <code>value</code> 来引用值。
-</p><p>有关任务实现最困难的部分往往不是 sbt 专用；任务只是 Scala 代码。困难的部分可能是写你的任务做什么，或者说你正在试图做的。例如，你要格式化 HTML，在这种情况下，你可能需要使用一个 HTML 库（也许你将<a href="Using-Plugins.html">为构建定义添加一个库的依赖</a>来编写基于 HTML 库代码）。
-</p><p>sbt 具有一些实用工具库和方便的函数，特别是可以经常使用 API 中的 <a href="../../api/index.html#sbt.IO$">IO</a> 来操作文件和目录。
-</p><h3 id="%E4%BD%BF%E7%94%A8%E6%8F%92%E4%BB%B6">使用插件<a href="#%E4%BD%BF%E7%94%A8%E6%8F%92%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>如果你发现自己有很多自定义代码，可以考虑将其移动到插件，从而可以在多个构建中重复利用。
+</code></pre><p>因为普通的方法调用遵循顺序语义，所有事情按顺序发生。这里没有去重，所以你必须要小心。
+</p><h3 id="%E5%B0%86%E5%AE%83%E4%BB%AC%E8%BD%AC%E4%B8%BA%E6%8F%92%E4%BB%B6">将它们转为插件<a href="#%E5%B0%86%E5%AE%83%E4%BB%AC%E8%BD%AC%E4%B8%BA%E6%8F%92%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>如果你发现自己有很多自定义代码，可以考虑将其移动到插件，从而可以在多个构建中重复利用。
 </p><p>创建一个插件很容易，在[使用插件][sing-Plugins]和[插件][Plugins]中有详细讨论。
-</p><p>本小节是个快速的向导；更多关于自定义任务可以在<a href="../docs/Tasks.html">任务</a>中找到。</p><h2 id=".scala+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">.scala 构建定义<a href="#.scala+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>本小节假设你已经阅读了之前的章节，尤其是 <a href="Basic-Def.html">.sbt 构建定义</a>和<a href="More-About-Settings.html">更多关于设置</a>。
+</p><p>本小节是个快速的向导；更多关于自定义任务可以在<a href="../docs/Tasks.html">任务</a>中找到。</p><h2 id="%E7%BB%84%E7%BB%87%E6%9E%84%E5%BB%BA">组织构建<a href="#%E7%BB%84%E7%BB%87%E6%9E%84%E5%BB%BA" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>本页面将讨论构建结构的组织。
+</p><p>本小节假设你已经阅读了之前的章节，尤其是 <a href="Basic-Def.html">build.sbt</a>，<a href="Library-Dependencies.html">库依赖</a>和<a href="Multi-Project.html">多工程构建</a>。
 </p><h3 id="sbt%E6%98%AF%E9%80%92%E5%BD%92%E7%9A%84">sbt是递归的<a href="#sbt%E6%98%AF%E9%80%92%E5%BD%92%E7%9A%84" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> 很简单，隐藏了 sbt 是如何工作的。sbt 构建是用 Scala 代码定义的。代码本身也必须是能被构建的。有比 sbt 更好的建立方式么？
-</p><p><code>project</code> 目录 <em>是你的工程内另一个工程的项目</em>，它知道如何构建你的工程。在 <code>project</code> 内部的项目能做任何其他项目可以做的事情。 <em>你的构建定义是一个 sbt 项目。</em>
-</p><p>递归可以继续下去。如果你喜欢, 你可以稍稍调整项目的构建定义，比如创建 <code>project/project/</code> 目录。
+</p><p><code>project</code> 目录 <em>是你的工程内另一个工程的项目</em>，它知道如何构建你的工程。为了区分这两种构建，我们有时使用<strong>正常构建</strong>表示你的构建，使用<strong>元构建</strong>指代在 <code>project</code>中的构建。在元构建中的项目能做任何其他项目可以做的事情。 <em>你的构建定义是一个 sbt 项目。</em>
+</p><p>递归可以继续下去。如果你喜欢, 你可以通过创建 <code>project/project/</code> 目录稍稍调整项目的构建定义。
 </p><p>下面是一个例子：
 </p><pre><code class="">hello/                  # 项目的基目录
 
     Hello.scala         # 一个项目源文件（也可以在src/main/scala）
 
-    build.sbt           # build.sbt 是project/ 中构建定义项目的一部分。
+    build.sbt           # build.sbt 是project/ 中元构建根项目的源代码。是构建定义项目的一部分。
 
-    project/            # 构建定义项目的基目录
+    project/            # 元构建根项目的基目录
 
-        Build.scala     # 构建定义源文件，即project/ project的源文件
+        Build.scala     # 元构建根项目的一个源文件，是你的构建定义的构建定义源文件
 
-        build.sbt       # project/project中工程项目构建定义的一部分；构建定义的构建定义
+        build.sbt       # 元元构建的根项目——project/project的源代码；构建定义的构建定义
 
-        project/        # 构建定义项目的基目录
+        project/        # 元元构建的根项目的基目录；构建定义的构建定义工程
 
-            Build.scala # project/project/ 项目中的源文件
+            Build.scala # project/project/ 元元构建的根项目中的源文件
 </code></pre><p><em>不用担心！</em> 大部分时候不需要 <code>project/project/</code> 目录。但是理解它是有帮助的。
 </p><p>另外，任何以 <code>.scala</code> 或者 <code>.sbt</code> 结尾的文件都会被使用，命名为 <code>build.sbt</code> 和 <code>Build.scala</code>只是惯例。多个文件也是允许的。
-</p><h3 id="%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E9%A1%B9%E7%9B%AE%E7%9A%84+%E6%BA%90%E6%96%87%E4%BB%B6">构建定义项目的<code>.scala</code> 源文件<a href="#%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E9%A1%B9%E7%9B%AE%E7%9A%84+%E6%BA%90%E6%96%87%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>.sbt</code> 文件被融入其兄弟工程目录中。再次看项目布局：
-</p><pre><code class="">hello/                  # 项目的基目录
+</p><h3 id="%E5%9C%A8%E5%90%8C%E4%B8%80%E4%B8%AA%E5%9C%B0%E6%96%B9%E8%B7%9F%E8%B8%AA%E4%BE%9D%E8%B5%96%E9%A1%B9">在同一个地方跟踪依赖项<a href="#%E5%9C%A8%E5%90%8C%E4%B8%80%E4%B8%AA%E5%9C%B0%E6%96%B9%E8%B7%9F%E8%B8%AA%E4%BE%9D%E8%B5%96%E9%A1%B9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>用<code>project</code>下的<code>.scala</code>文件组成构建定义的一个实际用例是创建<code>project/Dependencies.scala</code>来在同一个地方跟踪依赖项。
+</p><pre><code class="prettyprint lang-scala">import sbt._
 
-    build.sbt           # build.sbt 是project/ 中构建定义工程的一部分。
+object Dependencies {
+  // Versions
+  lazy val akkaVersion = &quot;2.3.8&quot;
 
-    project/            # 构建定义项目的基目录
+  // Libraries
+  val akkaActor = &quot;com.typesafe.akka&quot; %% &quot;akka-actor&quot; % akkaVersion
+  val akkaCluster = &quot;com.typesafe.akka&quot; %% &quot;akka-cluster&quot; % akkaVersion
+  val specs2core = &quot;org.specs2&quot; %% &quot;specs2-core&quot; % &quot;2.4.14&quot;
 
-        Build.scala     # project/ 工程源文件，即构建定义源文件
-</code></pre><p>在 build.sbt 中的 Scala 表达式被延续编译，和 <code>Build.scala</code> 融入在一起（和在 <code>project/</code> 目录下的其他 <code>.scala</code> 文件）。
-</p><p>在基目录中的 <code>*.sbt</code> 文件变成项目构建定义项目的一部分。
-</p><p><code>.sbt</code> 文件形式，对于在构建定义项目中增加设定，是一种方便的缩写。
+  // Projects
+  val backendDeps =
+    Seq(akkaActor, specs2core % Test)
+}
+</code></pre><p><code>Dependencies</code>对象将在<code>build.sbt</code>中可用。如果要让使用<code>val</code>的代码更加简单，可以引入<code>Dependencies._</code>。
+</p><pre><code class="prettyprint lang-scala">import Dependencies._
+
+lazy val commonSettings = Seq(
+  version := &quot;0.1.0&quot;,
+  scalaVersion = &quot;2.11.4&quot;
+)
+
+lazy val backend = (project in file(&quot;backend&quot;)).
+  settings(commonSettings: _*).
+  settings(
+    libraryDependencies += backendDeps
+  )
+</code></pre><p>当你的多工程构建变得很大，并且想要确保子项目有一致的依赖关系时，这种技术很有用。
+</p><h3 id="%E4%BD%95%E6%97%B6%E7%94%A8++%E6%96%87%E4%BB%B6">何时用 <code>.scala</code> 文件<a href="#%E4%BD%95%E6%97%B6%E7%94%A8++%E6%96%87%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在 <code>.scala</code> 文件，你可以写任意的 Scala 代码，包括顶层的类和对象。
+</p><p>推荐的方法是定义大部分设置在多工程的 <code>build.sbt</code> 文件中，并且使用 <code>project/*.scala</code> 文件来做任务实现或在多个文件中共享键值。对<code>.scala</code>文件的使用也取决于你的团队对scala的熟练程度。
+</p><h3 id="%E5%AE%9A%E4%B9%89%E8%87%AA%E5%8A%A8%E6%8F%92%E4%BB%B6">定义自动插件<a href="#%E5%AE%9A%E4%B9%89%E8%87%AA%E5%8A%A8%E6%8F%92%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>对于更高级的用户，另一种方式组织你的构建是在<code>project/*.scala</code>中定义一次性<a href="../reference/Plugins.html">自动插件</a>。通过定义触发的插件，自动插件可以用作一种简便方法来注入跨所有子项目的自定义任务和命令。
+</p><h2 id="%E6%80%BB%E7%BB%93">总结<a href="#%E6%80%BB%E7%BB%93" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>这一节将入门指南总结一下。
+</p><p>为了使用 sbt，有一些概念你必须理解。这有一些学习曲线，但是乐观的讲， <em>除了</em> 这些概念对于 sbt 并不多。sbt 用一小部分核心概念来使得它工作。
+</p><p>如果你已经阅读过所有的入门指南，现在你知道了你需要知道什么。
+</p><h3 id="sbt%3A+%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5">sbt: 核心概念<a href="#sbt%3A+%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Scala 基础。不可否认，熟悉 Scala 语法非常有帮助。<a href="http://www.artima.com/shop/programming_in_scala_2ed">Programming in Scala</a>，Scala 的作者写的非常好的介绍。
+</li><li><a href="Basic-Def.html">.sbt 构建定义</a>
+</li><li>你的构建定义是一个大的 <code>Setting</code> 对象列表，sbt 使用 <code>Setting</code> 转换之后的键值对执行 task。
+</li><li>为了创建 <code>Setting</code>，在一个 key 上调用其中的一个方法：<code>:=</code>，<code>+=</code> 或者 <code>++=</code>。
+</li><li>没有可变的状态，至于转换；例如，一个 <code>Setting</code> 将 sbt 的键值对集合转换成一个新的集合。不会就地改变任何代码。
+</li><li>每一个设置都有一个特定类型的值，由 key 决定。
+</li><li><em>tasks</em> 是特殊的设置，通过 key 产生 value 的计算在每次出发 task 的时候都会重新执行。Non-task 计算只会在构建定义的第一次加载时执行。
+</li><li><a href="Scopes.html">Scopes</a>
+</li><li>每一个 key 都可能有多个 value，按照 scope 划分。
+</li><li>scope 会用三个轴：configuration，project，task。
+</li><li>scope 允许你按项目、按 task、按 configuration 有不同的行为。
+</li><li>一个 configuration 是一种类型的构建，例如 <code>Compile</code> 或者 <code>Test</code>。
+</li><li>project 轴也支持 “构建全局” scope。
+</li><li>scopes 回滚或 <em>代理</em> 到更通用的 scope。
+</li><li>将大部分配置放在 <code>build.sbt</code> 中，但是用 <code>.scala</code> 构建定义文件定义类和更大的 task 实现。
+</li><li>构建定义是一个 sbt 项目，来自于项目目录。
+</li><li><a href="Using-Plugins.html">插件</a>是对构建定义的扩展
+</li><li>通过在 <code>addSbtPlugin</code> 方法在 <code>project/plugins.sbt</code> 中添加插件。（不是在项目基目录下的 <code>build.sbt</code> 中）。
+</li></ul><p>如果你怀疑这些细枝末节中的任何一个，请<a href="../docs/faq.html#getting-help">寻求帮助</a>，返回重新阅读或者在 sbt 的交互式命令行中做实验。
+</p><p>祝你好运！
+</p><h3 id="%E9%99%84%E5%BD%95">附录<a href="#%E9%99%84%E5%BD%95" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>因为 sbt 是一个开源项目，别忘记签出项目<a href="https://github.com/sbt/sbt">源代码</a>！
+</p><h2 id="%E9%99%84%E5%BD%95%EF%BC%9ABare+.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">附录：Bare .sbt 构建定义<a href="#%E9%99%84%E5%BD%95%EF%BC%9ABare+.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>这一小节讲述一种老式风格的 <code>.sbt</code> 构建定义。
+现在推荐使用 <a href="Basic-Def.html">多项目 .sbt 构建定义</a>。
+</p><h3 id="%E4%BB%80%E4%B9%88%E6%98%AFbare+.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">什么是bare .sbt 构建定义<a href="#%E4%BB%80%E4%B9%88%E6%98%AFbare+.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>不像 <a href="Basic-Def.html">多项目 .sbt 构建定义</a> 和 [.scala 构建定义][Full-Def] 显式地定义一个 [项目](../api/sbt/Project.html)，
+bare构建定义会根据 <code>.sbt</code> 文件所在的位置隐式地定义一个项目。
+</p><p>bare <code>.sbt</code> 构建定义由一个 <code>Setting[_]</code> 表达式的列表组成，而不是定义 <code>Project</code>。
+</p><pre><code class="prettyprint lang-scala">name := &quot;hello&quot;
+
+version := &quot;1.0&quot;
+
+scalaVersion := &quot;2.11.4&quot;
+</code></pre><h3 id="%28%E5%9C%A8+0.13.7+%E4%B9%8B%E5%89%8D%29+%E8%AE%BE%E7%BD%AE%E9%A1%B9%E5%BF%85%E9%A1%BB%E4%BB%A5%E7%A9%BA%E8%A1%8C%E5%88%86%E9%9A%94">(在 0.13.7 之前) 设置项必须以空行分隔<a href="#%28%E5%9C%A8+0.13.7+%E4%B9%8B%E5%89%8D%29+%E8%AE%BE%E7%BD%AE%E9%A1%B9%E5%BF%85%E9%A1%BB%E4%BB%A5%E7%A9%BA%E8%A1%8C%E5%88%86%E9%9A%94" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><strong>注意</strong>：这种空行限定在 0.13.7 之后将不再需要。
+</p><p>你不能像这样写bare build.sbt：
+</p><pre><code class="prettyprint lang-scala">// 没有空行，会编译不过
+name := &quot;hello&quot;
+version := &quot;1.0&quot;
+scalaVersion := &quot;2.10.3&quot;
+</code></pre><p>sbt 需要有分隔符来辨别一个表达式从哪里开始，到哪里结束。
+</p><h2 id="%E9%99%84%E5%BD%95%EF%BC%9A.scala+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">附录：.scala 构建定义<a href="#%E9%99%84%E5%BD%95%EF%BC%9A.scala+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>本页面描述了<code>.scala</code>构建定义的旧的风格。在以前的版本的sbt中，<code>.scala</code>是用来创建多项目构建定义的唯一方式，但sbt 0.13 添加了<a href="Basic-Def.html">多项目.sbt 生成定义</a>，这也是推荐的样式。
+</p><p>这里假设你已经阅读了之前的章节，尤其是 <a href="Basic-Def.html">.sbt 构建定义</a>和<a href="More-About-Settings.html">更多关于设置</a>。
 </p><h3 id="%E5%85%B3%E8%81%94+build.sbt+%E5%92%8C+Build.scala">关联 build.sbt 和 Build.scala<a href="#%E5%85%B3%E8%81%94+build.sbt+%E5%92%8C+Build.scala" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>为了融合<code>.sbt</code> 和 <code>.scala</code> 文件在你的构建定义中，你需要理解他们是如何关联的。
 </p><p>下面两个文件描述了这个过程。第一，如果你的项目在 hello 文件夹内，创建 <code>hello/project/Build.scala</code>：
 </p><pre><code class="prettyprint lang-scala">import sbt._
@@ -888,10 +1107,8 @@ sampleKeyD := &quot;D: in build.sbt&quot;
 </li><li>在 <code>.scala</code> 文件中，可以在 <code>Project.settings</code> 中增加设置，这些设置自动成为工程作用域。
 </li><li>任何在 <code>.scala</code> 中的 <code>Build</code> 对象将会把它的内容导入到 <code>.sbt</code> 文件中。
 </li><li>在 <code>.sbt</code> 文件中的设置被 <em>追加</em> 到 <code>.scala</code> 中的设置。
-</li><li>在 <code>.sbt</code> 文件中的设置是在项目作用域的，除非你指定它在其他域。
-</li></ul><h3 id="%E4%BD%95%E6%97%B6%E7%94%A8++%E6%96%87%E4%BB%B6">何时用 <code>.scala</code> 文件<a href="#%E4%BD%95%E6%97%B6%E7%94%A8++%E6%96%87%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在 <code>.scala</code> 文件，你可以写任意的 Scala 代码，包括顶层的类和对象。另外，它没有对空白行的限制，因为它是一个标准 <code>.scala</code> 文件。
-</p><p>推荐的方法是定义大部分设置在 <code>.sbt</code> 文件中，用 <code>.scala</code> 文件来做任务实现，或者在多个 <code>.sbt</code> 文件中共享键值。
-</p><h3 id="%E4%BA%A4%E4%BA%92%E6%A8%A1%E5%BC%8F%E4%B8%AD%E7%9A%84%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E9%A1%B9%E7%9B%AE">交互模式中的构建定义项目<a href="#%E4%BA%A4%E4%BA%92%E6%A8%A1%E5%BC%8F%E4%B8%AD%E7%9A%84%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E9%A1%B9%E7%9B%AE" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>你现在可以切换到 sbt 命令行的交互模式，让在 <code>project/</code> 目录下的构建定义项目作为当前项目。可以输入 <code>reload plugins</code> 来达到目的。
+</li><li>在 <code>.sbt</code> 文件中的设置是在项目作用域里，除非你指定它在其他域。
+</li></ul><h3 id="%E4%BA%A4%E4%BA%92%E6%A8%A1%E5%BC%8F%E4%B8%AD%E7%9A%84%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E9%A1%B9%E7%9B%AE">交互模式中的构建定义项目<a href="#%E4%BA%A4%E4%BA%92%E6%A8%A1%E5%BC%8F%E4%B8%AD%E7%9A%84%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E9%A1%B9%E7%9B%AE" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>你现在可以切换到 sbt 命令行的交互模式，让在 <code>project/</code> 目录下的构建定义项目作为当前项目。可以输入 <code>reload plugins</code> 来达到目的。
 </p><pre><code class="">&gt; reload plugins
 [info] Set current project to default-a0e8e4 (in build file:/home/hp/checkout/hello/project/)
 &gt; show sources
@@ -912,48 +1129,6 @@ sampleKeyD := &quot;D: in build.sbt&quot;
 </li><li>项目下 <code>.sbt</code> 文件中的设置。
 </li><li>构建定义项目（即 <code>project</code> 中的项目）有来自全局插件（<code>~/.sbt/0.13/plugins/</code>）的设置。<a href="Using-Plugins.html">使用插件</a>解释了更多的内容。
 </li></ul><p>后面的设置会覆盖前面的。全部的设置列表构成了完整的构建定义。
-</p><h2 id="Bare+.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">Bare .sbt 构建定义<a href="#Bare+.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>这一小节讲述一种老式风格的 <code>.sbt</code> 构建定义。
-现在推荐使用 <a href="Basic-Def.html">多项目 .sbt 构建定义</a>。
-</p><h3 id="%E4%BB%80%E4%B9%88%E6%98%AFbare+.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">什么是bare .sbt 构建定义<a href="#%E4%BB%80%E4%B9%88%E6%98%AFbare+.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>不像 <a href="Basic-Def.html">多项目 .sbt 构建定义</a> 和 <a href="Full-Def.html">.scala 构建定义</a> 显式地定义一个 <a href="../api/sbt/Project.html">项目</a>，
-bare构建定义会根据 <code>.sbt</code> 文件所在的位置隐式地定义一个项目。
-</p><p>bare <code>.sbt</code> 构建定义由一个 <code>Setting[_]</code> 表达式的列表组成，而不是定义 <code>Project</code>。
-</p><pre><code class="prettyprint lang-scala">name := &quot;hello&quot;
-
-version := &quot;1.0&quot;
-
-scalaVersion := &quot;2.11.4&quot;
-</code></pre><h3 id="%28%E5%9C%A8+0.13.7+%E4%B9%8B%E5%89%8D%29+%E8%AE%BE%E7%BD%AE%E9%A1%B9%E5%BF%85%E9%A1%BB%E4%BB%A5%E7%A9%BA%E8%A1%8C%E5%88%86%E9%9A%94">(在 0.13.7 之前) 设置项必须以空行分隔<a href="#%28%E5%9C%A8+0.13.7+%E4%B9%8B%E5%89%8D%29+%E8%AE%BE%E7%BD%AE%E9%A1%B9%E5%BF%85%E9%A1%BB%E4%BB%A5%E7%A9%BA%E8%A1%8C%E5%88%86%E9%9A%94" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><strong>注意</strong>：这种空行限定在 0.13.7 之后将不再需要。
-</p><p>你不能像这样写bare build.sbt：
-</p><pre><code class="prettyprint lang-scala">// 没有空行，会编译不过
-name := &quot;hello&quot;
-version := &quot;1.0&quot;
-scalaVersion := &quot;2.10.3&quot;
-</code></pre><p>sbt 需要有分隔符来辨别一个表达式从哪里开始，到哪里结束。
-</p><h2 id="%E6%80%BB%E7%BB%93">总结<a href="#%E6%80%BB%E7%BB%93" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>这一节将入门指南总结一下。
-</p><p>为了使用 sbt，有一些概念你必须理解。这有一些学习曲线，但是乐观的讲， <em>除了</em> 这些概念对于 sbt 并不多。sbt 用一小部分核心概念来使得它工作。
-</p><p>如果你已经阅读过所有的入门指南，现在你知道了你需要知道什么。
-</p><h3 id="sbt%3A+%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5">sbt: 核心概念<a href="#sbt%3A+%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Scala 基础。不可否认，熟悉 Scala 语法非常有帮助。<a href="http://www.artima.com/shop/programming_in_scala_2ed">Programming in Scala</a>，Scala 的作者写的非常好的介绍。
-</li><li><a href="Basic-Def.html">.sbt 构建定义</a>
-</li><li>你的构建定义是一个大的 <code>Setting</code> 对象列表，sbt 使用 <code>Setting</code> 转换之后的键值对执行 task。
-</li><li>为了创建 <code>Setting</code>，在一个 key 上调用其中的一个方法：<code>:=</code>，<code>+=</code> 或者 <code>++=</code>。
-</li><li>没有可变的状态，至于转换；例如，一个 <code>Setting</code> 将 sbt 的键值对集合转换成一个新的集合。不会就地改变任何代码。
-</li><li>每一个设置都有一个特定类型的值，由 key 决定。
-</li><li><em>tasks</em> 是特殊的设置，通过 key 产生 value 的计算在每次出发 task 的时候都会重新执行。Non-task 计算只会在构建定义的第一次加载时执行。
-</li><li><a href="Scopes.html">Scopes</a>
-</li><li>每一个 key 都可能有多个 value，按照 scope 划分。
-</li><li>scope 会用三个轴：configuration，project，task。
-</li><li>scope 允许你按项目、按 task、按 configuration 有不同的行为。
-</li><li>一个 configuration 是一种类型的构建，例如 <code>Compile</code> 或者 <code>Test</code>。
-</li><li>project 轴也支持 “构建全局” scope。
-</li><li>scopes 回滚或 <em>代理</em> 到更通用的 scope。
-</li><li><a href="Basic-Def.html">.sbt</a> vs. <a href="Full-Def.html">.scala</a> 构建定义
-</li><li>将大部分配置放在 <code>build.sbt</code> 中，但是用 <code>.scala</code> 构建定义文件定义类和更大的 task 实现。
-</li><li>构建定义是一个 sbt 项目，来自于项目目录。
-</li><li><a href="Using-Plugins.html">插件</a>是对构建定义的扩展
-</li><li>通过在 <code>addSbtPlugin</code> 方法在 <code>project/plugins.sbt</code> 中添加插件。（不是在项目基目录下的 <code>build.sbt</code> 中）。
-</li></ul><p>如果你怀疑这些细枝末节中的任何一个，请<a href="../docs/faq.html#getting-help">寻求帮助</a>，返回重新阅读或者在 sbt 的交互式命令行中做实验。
-</p><p>祝你好运！
-</p><h3 id="%E9%99%84%E5%BD%95">附录<a href="#%E9%99%84%E5%BD%95" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>因为 sbt 是一个开源项目，别忘记签出项目<a href="https://github.com/sbt/sbt">源代码</a>！
 </p>
           </div>
         </div>

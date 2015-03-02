@@ -55,7 +55,27 @@ lazy val core = project
 </p><pre><code class="prettyprint lang-scala">lazy val util = project.in(file(&quot;util&quot;))
 
 lazy val core = project in file(&quot;core&quot;)
-</code></pre><h3 id="%E4%BE%9D%E8%B5%96">依赖<a href="#%E4%BE%9D%E8%B5%96" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>构建中的项目完全可以彼此独立，但是通常情况下它们会有依赖上的一些相关性。有两种类型的依赖：aggregate 和 classpath。
+</code></pre><h4 id="%E5%85%AC%E5%85%B1%E8%AE%BE%E5%AE%9A">公共设定<a href="#%E5%85%AC%E5%85%B1%E8%AE%BE%E5%AE%9A" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>To factor out common settings across multiple projects, create a sequence named <code>commonSettings</code> and call <code>settings</code> method on each project. Note <code>_*</code> is required to pass sequence into a vararg method.
+要跨多个项目提取公共设置，请创建一个名为<code>commonSettings</code>的序列，并在每个项目上调用<code>settings</code>方法。注意要传入序列给变参数方法时需要调用<code>_*</code>。
+</p><pre><code class="prettyprint lang-scala">lazy val commonSettings = Seq(
+  organization := &quot;com.example&quot;,
+  version := &quot;0.1.0&quot;,
+  scalaVersion := &quot;2.11.4&quot;
+)
+
+lazy val core = (project in file(&quot;core&quot;)).
+  settings(commonSettings: _*).
+  settings(
+    // other settings
+  )
+
+lazy val util = (project in file(&quot;util&quot;)).
+  settings(commonSettings: _*).
+  settings(
+    // other settings
+  )
+</code></pre><p>现在我们可以在一处修改<code>version</code>，当重新加载构建时，将在各个子项目相应更新。
+</p><h3 id="%E4%BE%9D%E8%B5%96">依赖<a href="#%E4%BE%9D%E8%B5%96" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>构建中的项目完全可以彼此独立，但是通常情况下它们会有依赖上的一些相关性。有两种类型的依赖：aggregate 和 classpath。
 </p><h4 id="Aggregation">Aggregation<a href="#Aggregation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Aggregation 意味着在 aggregate 项目上执行一个 task 也会在 aggregated 的项目执行。例如，
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).aggregate(util, core)
 
@@ -103,18 +123,8 @@ lazy val core = project
 </p><h3 id="%E4%BA%A4%E4%BA%92%E5%BC%8F%E5%BC%95%E5%AF%BC%E9%A1%B9%E7%9B%AE">交互式引导项目<a href="#%E4%BA%A4%E4%BA%92%E5%BC%8F%E5%BC%95%E5%AF%BC%E9%A1%B9%E7%9B%AE" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在 sbt 的命令行中，输入 <code>projects</code> 列出你的项目，执行 <code>project &lt;projectname&gt;</code> 可以选择当前项目。当你执行 task 像 <code>compile</code>，它会在当前项目上执行。
 所以你没有必要去编译 root 项目，你可以只编译子项目。
 </p><p>你可以通过显示的指定项目 ID 在另一个项目上执行一个 task，例如 <code>subProjectID/compile</code>。
-</p><h3 id="%E9%80%9A%E7%94%A8%E4%BB%A3%E7%A0%81">通用代码<a href="#%E9%80%9A%E7%94%A8%E4%BB%A3%E7%A0%81" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在一个 <code>.sbt</code> 文件中的定义对于其他的 <code>.sbt</code> 文件不可见。为了在不同的 <code>.sbt</code> 文件中共享代码，在构建根目录下的 <code>project/</code> 目录下定义一个或多个 Scala 文件。该目录也是一个 sbt 项目，但是只针对你的构建。
-</p><p>例如：
-</p><p><code>&lt;root&gt;/project/Common.scala</code>：
-</p><pre><code class="prettyprint lang-scala">import sbt._
-import Keys._
-
-object Common {
-  def text = &quot;org.example&quot;
-}
-</code></pre><p><code>&lt;root&gt;/build.sbt</code>：
-</p><pre><code class="prettyprint lang-scala">organization := Common.text
-</code></pre><p>参见 <a href="Full-Def.html">.scala 构建定义</a> 获取详细内容。
+</p><h3 id="%E9%80%9A%E7%94%A8%E4%BB%A3%E7%A0%81">通用代码<a href="#%E9%80%9A%E7%94%A8%E4%BB%A3%E7%A0%81" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在一个 <code>.sbt</code> 文件中的定义对于其他的 <code>.sbt</code> 文件不可见。为了在不同的 <code>.sbt</code> 文件中共享代码，在构建根目录下的 <code>project/</code> 目录下定义一个或多个 Scala 文件。
+</p><p>参见 <a href="Organizing-Build.html">组织构建</a> 获取详细内容。
 </p><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>
@@ -127,7 +137,7 @@ object Common {
       <a name="toc"></a>
       <h4 class="toctitle">Contents</h4>
       <div class="tocbody">
-      <div><a href="index.html">sbt 入门</a></div><ol class="toc"> <li><div><a href="Setup.html">安装 sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">在 Mac 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">在 Windows 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">在 Linux 上安装 sbt</a></div></li><li><div><a href="Manual-Installation.html">手动安装 sbt</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">目录结构</a></div></li><li><div><a href="Running.html">运行</a></div></li><li><div><a href="Basic-Def.html">.sbt 构建定义</a></div></li><li><div><a href="Scopes.html">Scope</a></div></li><li><div><a href="More-About-Settings.html">更多关于设置</a></div></li><li><div><a href="Library-Dependencies.html">库依赖</a></div></li><li><div class="current">多项目构建</div></li><li><div><a href="Using-Plugins.html">使用插件</a></div></li><li><div><a href="Custom-Settings.html">自定义设置和任务</a></div></li><li><div><a href="Full-Def.html">.scala 构建定义</a></div></li><li><div><a href="Bare-Def.html">Bare .sbt 构建定义</a></div></li><li><div><a href="Summary.html">总结</a></div></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+      <div><a href="index.html">sbt 入门</a></div><ol class="toc"> <li><div><a href="Setup.html">安装 sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">在 Mac 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">在 Windows 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">在 Linux 上安装 sbt</a></div></li><li><div><a href="Manual-Installation.html">手动安装 sbt</a></div></li><li><div><a href="Activator-Installation.html">安装 Typesafe Activator (包含sbt)</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">目录结构</a></div></li><li><div><a href="Running.html">运行</a></div></li><li><div><a href="Basic-Def.html">.sbt 构建定义</a></div></li><li><div><a href="Scopes.html">Scope</a></div></li><li><div><a href="More-About-Settings.html">更多关于设置</a></div></li><li><div><a href="Library-Dependencies.html">库依赖</a></div></li><li><div class="current">多项目构建</div></li><li><div><a href="Using-Plugins.html">使用插件</a></div></li><li><div><a href="Custom-Settings.html">自定义设置和任务</a></div></li><li><div><a href="Organizing-Build.html">组织构建</a></div></li><li><div><a href="Summary.html">总结</a></div></li><li><div><a href="Bare-Def.html">附录：Bare .sbt 构建定义</a></div></li><li><div><a href="Full-Def.html">附录：.scala 构建定义</a></div></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
           </div>
         </div>
         <div class="header">

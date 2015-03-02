@@ -34,6 +34,7 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
   [Windows]: Installing-sbt-on-Windows.html
   [Linux]: Installing-sbt-on-Linux.html
   [Manual-Installation]: Manual-Installation.html
+  [Activator-Installation]: Activator-Installation.html
 
 安装 sbt
 --------------
@@ -48,7 +49,7 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
 -   然后前往 [.sbt 构建定义][Basic-Def] 学习更多关于构建的定义。
 
 
-最后，安装步骤就简化为一个 Jar 文件和一个 Shell 脚本，但是取决于你的平台，我们提供了好几种方式来使得步骤不是那么单调。 [Mac][Mac]，[Windows][Windows]，[Linux][Linux]，[手动安装][Manual-Installation] 提供了相应的安装步骤。
+最后，安装步骤就简化为一个 Jar 文件和一个 Shell 脚本，但是取决于你的平台，我们提供了好几种方式来使得步骤不是那么单调。 [Mac][Mac]，[Windows][Windows]，[Linux][Linux]，[Typesafe Activator][Activator-Installation]，或[手动安装][Manual-Installation] 提供了相应的安装步骤。
 
 ### 提示和技巧
 
@@ -58,7 +59,8 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
   [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.7/sbt-0.13.7.zip
   [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.7/sbt-0.13.7.tgz
   [Manual-Installation]: Manual-Installation.html
- 
+  [Activator-Installation]: Activator-Installation.html
+
 在 Mac 上安装 sbt
 ---------------------
 
@@ -82,6 +84,10 @@ $ brew install sbt
 
 下载 [ZIP][ZIP] 或者 [TGZ][TGZ] 包并解压。
 
+### Typesafe Activator
+
+参见 [Typesafe Activator安装指南][Activator-Installation].
+
 ### 手动安装
 
 参见手动安装指南。
@@ -90,6 +96,7 @@ $ brew install sbt
   [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.7/sbt-0.13.7.msi
   [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.7/sbt-0.13.7.zip
   [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.7/sbt-0.13.7.tgz
+  [Activator-Installation]: Activator-Installation.html
 
 在 Windows 上安装 sbt
 -------------------------
@@ -102,6 +109,10 @@ $ brew install sbt
 
 下载 [ZIP][ZIP] 或者 [TGZ][TGZ] 包并解压。
 
+### Typesafe Activator
+
+参见 [Typesafe Activator安装指南][Activator-Installation].
+
 ### 手动安装
 
 参见手动安装指南。
@@ -112,7 +123,8 @@ $ brew install sbt
   [RPM]: https://dl.bintray.com/sbt/rpm/sbt-0.13.7.rpm
   [DEB]: https://dl.bintray.com/sbt/debian/sbt-0.13.7.deb
   [Manual-Installation]: Manual-Installation.html
- 
+  [Activator-Installation]: Activator-Installation.html
+
 在 Linux 上安装 sbt
 -----------------------
 
@@ -120,12 +132,35 @@ $ brew install sbt
 
 下载 [ZIP][ZIP] 或者 [TGZ][TGZ] 包并解压。
 
-### RPM 和 DEB
+### Ubuntu和其他基于Debian的发行版
 
-官方也提供下面这两种包：
+[DEB][DEB] 安装包由sbt官方支持。
 
-  - [RPM][RPM] 包
-  - [DEB][DEB] 包
+Ubuntu和其他基于Debian的发行版使用DEB格式，但通常你不从本地的DEB文件安装软件。相反，他们由程序包管理器安装，通过命令行（如`apt-get`，`aptitude`）或图形用户界面 （如Synaptic）。
+从终端运行下面的命令安装`sbt`（你需要超级用户权限，因此需要`sudo`）。
+
+
+    echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
+    sudo apt-get update
+    sudo apt-get install sbt
+
+软件包管理器将检查若干个提供安装软件包的配置存储库。sbt 二进制文件发布到 Bintray，而Bintray 方便地提供了APT资源库。你只需要将存储库添加到你的软件包管理器将检查的地方。
+一旦安装了`sbt`，你会能够在`aptitude`或Synaptic的包缓存更新后管理了。你也应该能够看到添加的存储库，在底部的``System Settings -> Software & Updates -> Other Software``：
+
+![Ubuntu Software & Updates Screenshot](../files/ubuntu-sources.png "Ubuntu Software & Updates Screenshot")
+
+### 红帽企业版Linux和其他基于RPM的发行版
+
+[RPM][RPM] 安装包由sbt官方支持。
+
+红帽企业版Linux和其他基于RPM的发行版使用RPM格式。
+从终端运行下面的命令安装`sbt`（你需要超级用户权限，因此需要`sudo`）。
+
+    curl https://bintray.com/sbt/rpm/rpm > bintray-sbt-rpm.repo
+    sudo mv bintray-sbt-rpm.repo /etc/yum.repos.d/
+    sudo yum install sbt
+
+sbt 二进制文件发布到 Bintray，而Bintray 方便地提供了RPM资源库。你只需要将存储库添加到你的软件包管理器将检查的地方。
 
 > **注意：** 请将任何和这两个包相关的问题反馈到 [sbt-launcher-package](https://github.com/sbt/sbt-launcher-package) 项目。
 
@@ -134,16 +169,20 @@ $ brew install sbt
 在 sbt 官方的树中没有提供 ebuild。 但是有从二进制合并 sbt 的 [ebuilds](https://github.com/whiter4bbit/overlays/tree/master/dev-java/sbt-bin)。
 可以通过以下方式从这些 ebuilds 中合并 sbt：
 
-    $ mkdir -p /usr/local/portage && cd /usr/local/portage
-    $ git clone git://github.com/whiter4bbit/overlays.git
-    $ echo "PORTDIR_OVERLAY=$PORTDIR_OVERLAY /usr/local/portage/overlays" >> /etc/make.conf
-    $ emerge sbt-bin
+    mkdir -p /usr/local/portage && cd /usr/local/portage
+    git clone git://github.com/whiter4bbit/overlays.git
+    echo "PORTDIR_OVERLAY=$PORTDIR_OVERLAY /usr/local/portage/overlays" >> /etc/make.conf
+    emerge sbt-bin
 
 > **注意：** 请将任何和 ebuild 相关的问题反馈到 [这里](https://github.com/whiter4bbit/overlays/issues)。
 
+### Typesafe Activator
+
+参见 [Typesafe Activator安装指南][Activator-Installation].
+
 ### 手动安装
 
-参见手动安装指南。
+参见[手动安装指南][Manual-Installation]。
 
 
   [sbt-launch.jar]: https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.7/sbt-launch.jar
@@ -223,6 +262,27 @@ $ chmod u+x ~/bin/sbt
 > **注意：** 当前其他的配置还不支持。请 [提交 pull request](https://github.com/sbt/sbt/blob/0.13/CONTRIBUTING.md) 实现或者描述已经支持的配置。
 
 
+  [Manual-Installation]: Manual-Installation.html
+
+安装 Typesafe Activator (包含sbt)
+---------------------
+
+Typesafe Activator 是sbt的一个自定义版本，它添加两个额外的命令`activator ui`和`activator new`。`activator`命令简言之就是sbt的一个超集。
+
+你可以从 [typesafe.com](http://typesafe.com/platform/getstarted)获得Activator。
+
+If you see a command line such as `sbt ~test` in the documentation, you will also be able to type `activator ~test`. Any Activator project can be opened in sbt and vice versa because Activator is "sbt powered."
+
+如果你在文档中看到一个命令行如`sbt ~test`，你也将可以键入`activator ~test`。任意一个Activator工程能都可以用sbt打开，反之亦然，因为Activator是"基于sbt"的。
+
+Activator下载包括`activator`脚本和一个`activator-launch.jar`，分别相当于[手动安装][Manual-Installation]所述的sbt脚本和启动jar。这里Activator和一个[手动安装][Manual-Installation]的sbt之间的差异如下：
+
+ * 键入不带参数的`activator`将尝试猜测是否进入`activator shell`或`activator ui`模式；键入`activator shell`来明确进入命令行提示符。
+ * `activator new`允许你从一个大的[项目模板目录](https://typesafe.com/activator/templates)中创建项目，例如`play-scala`模板是一个[Play Framework](http://playframework.com)Scala应用程序骨架
+ * `activator ui`启动一种快速启动用户界面，可用于从模板目录浏览教程（在目录中的许多模板有陪同教程）。
+
+Activator提供两种下载；小的"minimal"下载包只包含包装脚本和启动jar，而大的"full"下载包含预装的Ivy缓存，包括Scala，Akka和Play框架。
+
   [Basic-Def]: Basic-Def.html
   [Setup]: Setup.html
 
@@ -299,7 +359,7 @@ sbt 在不同的 release 版本中是 99% 兼容的。但是在 `project/build.p
 
   [Hello]: Hello.html
   [Setup]: Setup.html
-  [Full-Def]: Full-Def.html
+  [Organizing-Build]: Organizing-Build.html
 
 目录结构
 -------------------
@@ -338,7 +398,7 @@ src/
 ### sbt 构建定义文件
 
 你已经在项目的基础目录中看到了 `build.sbt`。其他的 sbt 文件在 `project` 子目录中。
-`project` 目录可以包含 `.scala` 文件，这些文件最后会和 `.sbt` 文件合并共同构成完整的构建定义。想知道更多请参见 [.scala 构建定义][Full-Def]。
+`project` 目录可以包含 `.scala` 文件，这些文件最后会和 `.sbt` 文件合并共同构成完整的构建定义。想知道更多请参见 [组织构建][Organizing-Build]。
 
 ```
 build.sbt
@@ -346,7 +406,7 @@ project/
   Build.scala
 ```
 
-你可能在 `project/` 中也看到了 `.sbt` 文件，但是它不等同于项目基础目录中的 `.sbt` 文件。这将在 [稍后][Full-Def] 解释，因为首先你需要一些背景知识。
+你可能在 `project/` 中也看到了 `.sbt` 文件，但是它不等同于项目基础目录中的 `.sbt` 文件。这将在 [稍后][Organizing-Build] 解释，因为首先你需要一些背景知识。
 
 ### 构建产品
 
@@ -973,7 +1033,6 @@ config，global task）。
 
   [Basic-Def]: Basic-Def.html
   [Scopes]: Scopes.html
-  [Full-Def]: Full-Def.html
 
 更多关于设置
 ---------------------
@@ -988,8 +1047,6 @@ config，global task）。
 不同 setting 通过不同的方式对该 map 进行转换。之前在 [.sbt 构建定义][Basic-Def] 中，你已经阅读了 `:=` 方法相关的内容。
 
 通过 `:=` 创建的 `Setting` 会往转换之后新的 map 中放入一个固定的常量。例如，如果你通过 `name := "hello"` 对 map 做一次转换，新的 map 中 key `name` 就保存着一个字符串 `"hello"`。
-
-最终 Settings 必须在主列表中来工作（`build.sbt` 中的所有行最后都会自动到该列表中，但是 [.scala 文件][Full-Def] 中的内容如果在创建 `Setting` 时没有放在 sbt 能够找到的位置就会出错）。
 
 ### 追加值： `+=` 和 `++=`
 
@@ -1324,7 +1381,7 @@ libraryDependencies += "org.apache.derby" % "derby" % "10.4.1.3" % Test
   [Basic-Def]: Basic-Def.html
   [Scopes]: Scopes.html
   [Directories]: Directories.html
-  [Full-Def]: Full-Def.html
+  [Organizing-Build]: Organizing-Build.html
 
 多项目构建
 --------------------
@@ -1354,6 +1411,33 @@ lazy val util = project.in(file("util"))
 
 lazy val core = project in file("core")
 ```
+
+#### 公共设定
+
+To factor out common settings across multiple projects, create a sequence named `commonSettings` and call `settings` method on each project. Note `_*` is required to pass sequence into a vararg method.
+要跨多个项目提取公共设置，请创建一个名为`commonSettings`的序列，并在每个项目上调用`settings`方法。注意要传入序列给变参数方法时需要调用`_*`。
+
+```scala
+lazy val commonSettings = Seq(
+  organization := "com.example",
+  version := "0.1.0",
+  scalaVersion := "2.11.4"
+)
+
+lazy val core = (project in file("core")).
+  settings(commonSettings: _*).
+  settings(
+    // other settings
+  )
+
+lazy val util = (project in file("util")).
+  settings(commonSettings: _*).
+  settings(
+    // other settings
+  )
+```
+
+现在我们可以在一处修改`version`，当重新加载构建时，将在各个子项目相应更新。
 
 ### 依赖
 
@@ -1453,28 +1537,9 @@ lazy val core = project.dependsOn(util)
 
 ### 通用代码
 
-在一个 `.sbt` 文件中的定义对于其他的 `.sbt` 文件不可见。为了在不同的 `.sbt` 文件中共享代码，在构建根目录下的 `project/` 目录下定义一个或多个 Scala 文件。该目录也是一个 sbt 项目，但是只针对你的构建。
+在一个 `.sbt` 文件中的定义对于其他的 `.sbt` 文件不可见。为了在不同的 `.sbt` 文件中共享代码，在构建根目录下的 `project/` 目录下定义一个或多个 Scala 文件。
 
-例如：
-
-`<root>/project/Common.scala`：
-
-```scala
-import sbt._
-import Keys._
-
-object Common {
-  def text = "org.example"
-}
-```
-
-`<root>/build.sbt`：
-
-```scala
-organization := Common.text
-```
-
-参见 [.scala 构建定义][Full-Def] 获取详细内容。
+参见 [组织构建][Organizing-Build] 获取详细内容。
 
 
   [Basic-Def]: Basic-Def.html
@@ -1608,7 +1673,7 @@ lazy val core = (project in file("core")).
   [Basic-Def]: Basic-Def.html
   [More-About-Settings]: More-About-Settings.html
   [Using-Plugins]: Using-Plugins.html
-  [Full-Def]: Full-Def.html
+  [Organizing-Build]: Organizing-Build.html
   [Input-Tasks]: ../docs/Input-Tasks.html
   [Plugins]: ../docs/Plugins.html
   [Tasks]: ../docs/Tasks.html
@@ -1638,7 +1703,7 @@ val clean = taskKey[Unit]("删除构建产生的文件，包括生成的 source 
 还记得[ .sbt 构建定义][Basic-Def]中，类型 `T` 在 `SettingKey[T]` 中表示的设置的值的类型。类型 `T` 在 `TaskKey [T]` 中指示任务的结果的类型。
 在[ .sbt 构建定义][Basic-Def]中，一个设置有一个固定的值，直到项目重新加载。任务会在每一个“任务执行”（用户在交互输入中或在batch模式下输入一个命令）被重新计算。
 
-键可以在定义在[ .sbt 构建定义][Basic-Def]，[.scala 文件][Full-Def]或[插件][Using-Plugins]。任何在 `.scala` 构建定义文件发现的 `val`，`Build` 对象或 `Plugin` 对象中 plugin 的 `val` 将被自动导入
+键可以在定义在[.sbt 构建定义][Basic-Def]，[.scala 文件][Organizing-Build]或一个[自动插件][Using-Plugins]中。任何在启用的自动插件的`autoImport`对象的 `val` 将被自动导入
 到你的 `.sbt` 文件。
 
 ### 执行任务
@@ -1647,25 +1712,194 @@ val clean = taskKey[Unit]("删除构建产生的文件，包括生成的 source 
 
 ```scala
 val sampleStringTask = taskKey[String]("A sample string task.")
-
 val sampleIntTask = taskKey[Int]("A sample int task.")
 
-sampleStringTask := System.getProperty("user.home")
+lazy val commonSettings = Seq(
+  organization := "com.example",
+  version := "0.1.0-SNAPSHOT"
+)
 
-sampleIntTask := {
-  val sum = 1 + 2
-  println("sum: " + sum)
-  sum
-}
+lazy val library = (project in file("library")).
+  settings(commonSettings: _*).
+  settings(
+    sampleStringTask := System.getProperty("user.home"),
+    sampleIntTask := {
+      val sum = 1 + 2
+      println("sum: " + sum)
+      sum
+    }
+  )
 ```
 
 在[更多关于设置][More-About-Settings]里有描述，如果任务有依赖关系，你使用 `value` 来引用值。
 
-有关任务实现最困难的部分往往不是 sbt 专用；任务只是 Scala 代码。困难的部分可能是写你的任务做什么，或者说你正在试图做的。例如，你要格式化 HTML，在这种情况下，你可能需要使用一个 HTML 库（也许你将[为构建定义添加一个库的依赖][Using-Plugins]来编写基于 HTML 库代码）。
+有关任务实现最困难的部分往往不是 sbt 专用；任务只是 Scala 代码。困难的部分可能是写你的任务体，即做什么，或者说你正在试图做的。例如，你要格式化 HTML，在这种情况下，你可能需要使用一个 HTML 库（也许你将[为构建定义添加一个库的依赖][Using-Plugins]来编写基于 HTML 库代码）。
 
 sbt 具有一些实用工具库和方便的函数，特别是可以经常使用 API 中的 [IO](../../api/index.html#sbt.IO$) 来操作文件和目录。
 
-### 使用插件
+### 任务的执行语义
+
+当从依赖于其他任务的自定义任务中使用`value`时，一个要注意的重要细节是是任务的执行语义。对执行语义，我们的意思是到底*何时*这些任务被取值。
+
+以`sampeIntTask`为例，任务体中的每一行应严格地一个接一个被取值。这就是顺序语义：
+
+```scala
+sampleIntTask := {
+  val sum = 1 + 2        // first
+  println("sum: " + sum) // second
+  sum                    // third
+}
+```
+
+在现实中，JVM可能内联`sum`为`3`，但任务可观察到的*行为*仍将与严格地一个接一个被执行完全相同。
+
+现在假设我们定义了另外两个的自定义任务`startServer`和`stopServer`，并修改`sampeIntTask`，如下所示：
+
+```scala
+val startServer = taskKey[Unit]("start server")
+val stopServer = taskKey[Unit]("stop server")
+val sampleIntTask = taskKey[Int]("A sample int task.")
+val sampleStringTask = taskKey[String]("A sample string task.")
+
+lazy val commonSettings = Seq(
+  organization := "com.example",
+  version := "0.1.0-SNAPSHOT"
+)
+
+lazy val library = (project in file("library")).
+  settings(commonSettings: _*).
+  settings(
+    startServer := {
+      println("starting...")
+      Thread.sleep(500)
+    },
+    stopServer := {
+      println("stopping...")
+      Thread.sleep(500)
+    },
+    sampleIntTask := {
+      startServer.value
+      val sum = 1 + 2
+      println("sum: " + sum)
+      stopServer.value // THIS WON'T WORK
+      sum
+    },
+    sampleStringTask := {
+      startServer.value
+      val s = sampleIntTask.value.toString
+      println("s: " + s)
+      s
+    }
+  )
+```
+
+从sbt交互式提示符中运行`sampleIntTask`将得到如下结果：
+
+```
+> sampleIntTask
+stopping...
+starting...
+sum: 3
+[success] Total time: 1 s, completed Dec 22, 2014 5:00:00 PM
+```
+
+若要查看发生了什么事，让我们看一下`sampleIntTask`图形表示：
+
+![task-dependency](../files/task-dependency00.png)
+
+不同于普通的Scala方法调用，调用任务的`value`方法将不被严格取值。相反，他们只是充当占位符来表示`sampleIntTask`依赖于`startServer`和`stopServer`任务。当你调用`sampleIntTask`时，sbt的任务引擎将：
+
+- 在对`sampleIntTask`取值前对依赖任务取值（偏序）
+- 如果依赖任物是相互独立的，尝试并行取值（并行）
+- 每次命令执行，每个任务依赖项将被评估且仅被评估一次（去重）
+
+#### 任务依赖项去重
+
+为证明这最后一点，我们可以从 sbt 交互式提示符运行 `sampleStringTask`。
+
+```
+> sampleStringTask
+stopping...
+starting...
+sum: 3
+s: 3
+[success] Total time: 1 s, completed Dec 22, 2014 5:30:00 PM
+```
+
+因为`sampleStringTask`依赖于`startServer`和`sampleIntTask`两个任务，而`sampleIntTask`也依赖于`startServer`任务，它作为任务依赖出现了两次。如果这是一个普通的 Scala 方法调用，它会被计算两次，但由于任务的依赖项被标记为`value`类型，它将只被计算一次。以下是`sampeStringTask`如何取值的图形表示：
+
+![task-dependency](../files/task-dependency01.png)
+
+如果我们不做重复任务相关项的去重，则当我们执行`test`时最终会编译测试源代码很多次，因为`compile in Test`作为`test in Test`的依赖项出现了很多次。
+
+#### 清理任务
+
+应该如何实现`stopServer`任务？清理任务的概念并不适合任务的执行模型，因为任务关心的是依赖项跟踪。最后一次操作应成为依赖其他中间任务的任务。例如`stopServer`应依赖于`sampleStringTask`，在其中`stopServer`应该是 `sampleStringTask`。
+
+```scala
+lazy val library = (project in file("library")).
+  settings(commonSettings: _*).
+  settings(
+    startServer := {
+      println("starting...")
+      Thread.sleep(500)
+    },
+    sampleIntTask := {
+      startServer.value
+      val sum = 1 + 2
+      println("sum: " + sum)
+      sum
+    },
+    sampleStringTask := {
+      startServer.value
+      val s = sampleIntTask.value.toString
+      println("s: " + s)
+      s
+    },
+    sampleStringTask := {
+      val old = sampleStringTask.value
+      println("stopping...")
+      Thread.sleep(500)
+      old
+    }
+  )
+```
+
+为了证明它可以工作，在交互式提示符中运行 `sampleStringTask`：
+
+```
+> sampleStringTask
+starting...
+sum: 3
+s: 3
+stopping...
+[success] Total time: 1 s, completed Dec 22, 2014 6:00:00 PM
+```
+
+![task-dependency](../files/task-dependency02.png)
+
+
+
+#### 直接使用Scala
+
+确保一些事发生在其它一些事物之后的另一种方式是使用Scala。例如，在`project/ServerUtil.scala`中实现一个简单的函数，你可以编写：
+
+```scala
+sampleIntTask := {
+  ServerUtil.startServer
+  try {
+    val sum = 1 + 2
+    println("sum: " + sum)
+  } finally {
+    ServerUtil.stopServer
+  }
+  sum
+}
+```
+
+因为普通的方法调用遵循顺序语义，所有事情按顺序发生。这里没有去重，所以你必须要小心。
+
+### 将它们转为插件
 
 如果你发现自己有很多自定义代码，可以考虑将其移动到插件，从而可以在多个构建中重复利用。
 
@@ -1676,19 +1910,24 @@ sbt 具有一些实用工具库和方便的函数，特别是可以经常使用 
   [Basic-Def]: Basic-Def.html
   [More-About-Settings]: More-About-Settings.html
   [Using-Plugins]: Using-Plugins.html
+  [Library-Dependencies]: Library-Dependencies.html
+  [Multi-Project]: Multi-Project.html
+  [Plugins]: ../reference/Plugins.html
 
-.scala 构建定义
------------------------
+组织构建
+--------------------
 
-本小节假设你已经阅读了之前的章节，尤其是 [.sbt 构建定义][Basic-Def]和[更多关于设置][More-About-Settings]。
+本页面将讨论构建结构的组织。
+
+本小节假设你已经阅读了之前的章节，尤其是 [build.sbt][Basic-Def]，[库依赖][Library-Dependencies]和[多工程构建][Multi-Project]。
 
 ### sbt是递归的
 
 `build.sbt` 很简单，隐藏了 sbt 是如何工作的。sbt 构建是用 Scala 代码定义的。代码本身也必须是能被构建的。有比 sbt 更好的建立方式么？
 
-`project` 目录 *是你的工程内另一个工程的项目*，它知道如何构建你的工程。在 `project` 内部的项目能做任何其他项目可以做的事情。 *你的构建定义是一个 sbt 项目。*
+`project` 目录 *是你的工程内另一个工程的项目*，它知道如何构建你的工程。为了区分这两种构建，我们有时使用**正常构建**表示你的构建，使用**元构建**指代在 `project`中的构建。在元构建中的项目能做任何其他项目可以做的事情。 *你的构建定义是一个 sbt 项目。*
 
-递归可以继续下去。如果你喜欢, 你可以稍稍调整项目的构建定义，比如创建 `project/project/` 目录。
+递归可以继续下去。如果你喜欢, 你可以通过创建 `project/project/` 目录稍稍调整项目的构建定义。
 
 下面是一个例子：
 
@@ -1697,42 +1936,169 @@ hello/                  # 项目的基目录
 
     Hello.scala         # 一个项目源文件（也可以在src/main/scala）
 
-    build.sbt           # build.sbt 是project/ 中构建定义项目的一部分。
+    build.sbt           # build.sbt 是project/ 中元构建根项目的源代码。是构建定义项目的一部分。
 
-    project/            # 构建定义项目的基目录
+    project/            # 元构建根项目的基目录
 
-        Build.scala     # 构建定义源文件，即project/ project的源文件
+        Build.scala     # 元构建根项目的一个源文件，是你的构建定义的构建定义源文件
 
-        build.sbt       # project/project中工程项目构建定义的一部分；构建定义的构建定义
+        build.sbt       # 元元构建的根项目——project/project的源代码；构建定义的构建定义
 
-        project/        # 构建定义项目的基目录
+        project/        # 元元构建的根项目的基目录；构建定义的构建定义工程
 
-            Build.scala # project/project/ 项目中的源文件
+            Build.scala # project/project/ 元元构建的根项目中的源文件
 ```
 
 *不用担心！* 大部分时候不需要 `project/project/` 目录。但是理解它是有帮助的。
 
 另外，任何以 `.scala` 或者 `.sbt` 结尾的文件都会被使用，命名为 `build.sbt` 和 `Build.scala`只是惯例。多个文件也是允许的。
 
-### 构建定义项目的`.scala` 源文件
+### 在同一个地方跟踪依赖项
 
-`.sbt` 文件被融入其兄弟工程目录中。再次看项目布局：
+用`project`下的`.scala`文件组成构建定义的一个实际用例是创建`project/Dependencies.scala`来在同一个地方跟踪依赖项。
 
+```scala
+import sbt._
+
+object Dependencies {
+  // Versions
+  lazy val akkaVersion = "2.3.8"
+
+  // Libraries
+  val akkaActor = "com.typesafe.akka" %% "akka-actor" % akkaVersion
+  val akkaCluster = "com.typesafe.akka" %% "akka-cluster" % akkaVersion
+  val specs2core = "org.specs2" %% "specs2-core" % "2.4.14"
+
+  // Projects
+  val backendDeps =
+    Seq(akkaActor, specs2core % Test)
+}
 ```
-hello/                  # 项目的基目录
 
-    build.sbt           # build.sbt 是project/ 中构建定义工程的一部分。
+`Dependencies`对象将在`build.sbt`中可用。如果要让使用`val`的代码更加简单，可以引入`Dependencies._`。
 
-    project/            # 构建定义项目的基目录
+```scala
+import Dependencies._
 
-        Build.scala     # project/ 工程源文件，即构建定义源文件
+lazy val commonSettings = Seq(
+  version := "0.1.0",
+  scalaVersion = "2.11.4"
+)
+
+lazy val backend = (project in file("backend")).
+  settings(commonSettings: _*).
+  settings(
+    libraryDependencies += backendDeps
+  )
 ```
 
-在 build.sbt 中的 Scala 表达式被延续编译，和 `Build.scala` 融入在一起（和在 `project/` 目录下的其他 `.scala` 文件）。
+当你的多工程构建变得很大，并且想要确保子项目有一致的依赖关系时，这种技术很有用。
 
-在基目录中的 `*.sbt` 文件变成项目构建定义项目的一部分。
+### 何时用 `.scala` 文件
 
-`.sbt` 文件形式，对于在构建定义项目中增加设定，是一种方便的缩写。
+在 `.scala` 文件，你可以写任意的 Scala 代码，包括顶层的类和对象。
+
+推荐的方法是定义大部分设置在多工程的 `build.sbt` 文件中，并且使用 `project/*.scala` 文件来做任务实现或在多个文件中共享键值。对`.scala`文件的使用也取决于你的团队对scala的熟练程度。
+
+### 定义自动插件
+
+对于更高级的用户，另一种方式组织你的构建是在`project/*.scala`中定义一次性[自动插件][Plugins]。通过定义触发的插件，自动插件可以用作一种简便方法来注入跨所有子项目的自定义任务和命令。
+
+
+  [Basic-Def]: Basic-Def.html
+  [Scopes]: Scopes.html
+  [Using-Plugins]: Using-Plugins.html
+  [getting-help]: ../docs/faq.html#getting-help
+
+总结
+-----------------------
+
+这一节将入门指南总结一下。
+
+为了使用 sbt，有一些概念你必须理解。这有一些学习曲线，但是乐观的讲， *除了* 这些概念对于 sbt 并不多。sbt 用一小部分核心概念来使得它工作。
+
+如果你已经阅读过所有的入门指南，现在你知道了你需要知道什么。
+
+### sbt: 核心概念
+
+-   Scala 基础。不可否认，熟悉 Scala 语法非常有帮助。[Programming in Scala](http://www.artima.com/shop/programming_in_scala_2ed)，Scala 的作者写的非常好的介绍。
+-   [.sbt 构建定义][Basic-Def]
+-   你的构建定义是一个大的 `Setting` 对象列表，sbt 使用 `Setting` 转换之后的键值对执行 task。
+-   为了创建 `Setting`，在一个 key 上调用其中的一个方法：`:=`，`+=` 或者 `++=`。
+-   没有可变的状态，至于转换；例如，一个 `Setting` 将 sbt 的键值对集合转换成一个新的集合。不会就地改变任何代码。
+-   每一个设置都有一个特定类型的值，由 key 决定。
+-   *tasks* 是特殊的设置，通过 key 产生 value 的计算在每次出发 task 的时候都会重新执行。Non-task 计算只会在构建定义的第一次加载时执行。
+-   [Scopes][Scopes]
+-   每一个 key 都可能有多个 value，按照 scope 划分。
+-   scope 会用三个轴：configuration，project，task。
+-   scope 允许你按项目、按 task、按 configuration 有不同的行为。
+-   一个 configuration 是一种类型的构建，例如 `Compile` 或者 `Test`。
+-   project 轴也支持 "构建全局" scope。
+-   scopes 回滚或 *代理* 到更通用的 scope。
+-   将大部分配置放在 `build.sbt` 中，但是用 `.scala` 构建定义文件定义类和更大的 task 实现。
+-   构建定义是一个 sbt 项目，来自于项目目录。
+-   [插件][Using-Plugins]是对构建定义的扩展
+-   通过在 `addSbtPlugin` 方法在 `project/plugins.sbt` 中添加插件。（不是在项目基目录下的 `build.sbt` 中）。
+
+如果你怀疑这些细枝末节中的任何一个，请[寻求帮助][getting-help]，返回重新阅读或者在 sbt 的交互式命令行中做实验。
+
+祝你好运！
+
+### 附录
+
+因为 sbt 是一个开源项目，别忘记签出项目[源代码](https://github.com/sbt/sbt)！
+
+
+  [More-About-Settings]: More-About-Settings.html
+  [Basic-Def]: Basic-Def.html
+
+附录：Bare .sbt 构建定义
+------------------
+
+这一小节讲述一种老式风格的 `.sbt` 构建定义。
+现在推荐使用 [多项目 .sbt 构建定义][Basic-Def]。
+
+### 什么是bare .sbt 构建定义
+
+不像 [多项目 .sbt 构建定义][Basic-Def] 和 [.scala 构建定义][Full-Def] 显式地定义一个 [项目](../api/sbt/Project.html)，
+bare构建定义会根据 `.sbt` 文件所在的位置隐式地定义一个项目。
+
+bare `.sbt` 构建定义由一个 `Setting[_]` 表达式的列表组成，而不是定义 `Project`。
+
+```scala
+name := "hello"
+
+version := "1.0"
+
+scalaVersion := "2.11.4"
+```
+
+### (在 0.13.7 之前) 设置项必须以空行分隔
+
+**注意**：这种空行限定在 0.13.7 之后将不再需要。
+
+你不能像这样写bare build.sbt：
+
+```scala
+// 没有空行，会编译不过
+name := "hello"
+version := "1.0"
+scalaVersion := "2.10.3"
+```
+
+sbt 需要有分隔符来辨别一个表达式从哪里开始，到哪里结束。
+
+
+  [Basic-Def]: Basic-Def.html
+  [More-About-Settings]: More-About-Settings.html
+  [Using-Plugins]: Using-Plugins.html
+
+附录：.scala 构建定义
+-----------------------
+
+本页面描述了`.scala`构建定义的旧的风格。在以前的版本的sbt中，`.scala`是用来创建多项目构建定义的唯一方式，但sbt 0.13 添加了[多项目.sbt 生成定义][Basic-Def]，这也是推荐的样式。
+
+这里假设你已经阅读了之前的章节，尤其是 [.sbt 构建定义][Basic-Def]和[更多关于设置][More-About-Settings]。
 
 ### 关联 build.sbt 和 Build.scala
 
@@ -1819,15 +2185,7 @@ sbt 从 `.sbt` 文件*附加*设置到 `Build.settings` 和 `Project.setting` �
 - 在 `.scala` 文件中，可以在 `Project.settings` 中增加设置，这些设置自动成为工程作用域。
 - 任何在 `.scala` 中的 `Build` 对象将会把它的内容导入到 `.sbt` 文件中。
 - 在 `.sbt` 文件中的设置被 *追加* 到 `.scala` 中的设置。
-- 在 `.sbt` 文件中的设置是在项目作用域的，除非你指定它在其他域。
-
-
-### 何时用 `.scala` 文件
-
-在 `.scala` 文件，你可以写任意的 Scala 代码，包括顶层的类和对象。另外，它没有对空白行的限制，因为它是一个标准 `.scala` 文件。
-
-推荐的方法是定义大部分设置在 `.sbt` 文件中，用 `.scala` 文件来做任务实现，或者在多个 `.sbt` 文件中共享键值。
-
+- 在 `.sbt` 文件中的设置是在项目作用域里，除非你指定它在其他域。
 
 ### 交互模式中的构建定义项目
 
@@ -1862,90 +2220,3 @@ sbt 从 `.sbt` 文件*附加*设置到 `Build.settings` 和 `Project.setting` �
  - 构建定义项目（即 `project` 中的项目）有来自全局插件（`~/.sbt/0.13/plugins/`）的设置。[使用插件][Using-Plugins]解释了更多的内容。
 
 后面的设置会覆盖前面的。全部的设置列表构成了完整的构建定义。
-
-
-  [More-About-Settings]: More-About-Settings.html
-  [Full-Def]: Full-Def.html
-  [Basic-Def]: Basic-Def.html
-
-Bare .sbt 构建定义
-------------------
-
-这一小节讲述一种老式风格的 `.sbt` 构建定义。
-现在推荐使用 [多项目 .sbt 构建定义][Basic-Def]。
-
-### 什么是bare .sbt 构建定义
-
-不像 [多项目 .sbt 构建定义][Basic-Def] 和 [.scala 构建定义][Full-Def] 显式地定义一个 [项目](../api/sbt/Project.html)，
-bare构建定义会根据 `.sbt` 文件所在的位置隐式地定义一个项目。
-
-bare `.sbt` 构建定义由一个 `Setting[_]` 表达式的列表组成，而不是定义 `Project`。
-
-```scala
-name := "hello"
-
-version := "1.0"
-
-scalaVersion := "2.11.4"
-```
-
-### (在 0.13.7 之前) 设置项必须以空行分隔
-
-**注意**：这种空行限定在 0.13.7 之后将不再需要。
-
-你不能像这样写bare build.sbt：
-
-```scala
-// 没有空行，会编译不过
-name := "hello"
-version := "1.0"
-scalaVersion := "2.10.3"
-```
-
-sbt 需要有分隔符来辨别一个表达式从哪里开始，到哪里结束。
-
-
-  [Basic-Def]: Basic-Def.html
-  [Scopes]: Scopes.html
-  [Full-Def]: Full-Def.html
-  [Using-Plugins]: Using-Plugins.html
-  [getting-help]: ../docs/faq.html#getting-help
-
-总结
------------------------
-
-这一节将入门指南总结一下。
-
-为了使用 sbt，有一些概念你必须理解。这有一些学习曲线，但是乐观的讲， *除了* 这些概念对于 sbt 并不多。sbt 用一小部分核心概念来使得它工作。
-
-如果你已经阅读过所有的入门指南，现在你知道了你需要知道什么。
-
-### sbt: 核心概念
-
--   Scala 基础。不可否认，熟悉 Scala 语法非常有帮助。[Programming in Scala](http://www.artima.com/shop/programming_in_scala_2ed)，Scala 的作者写的非常好的介绍。
--   [.sbt 构建定义][Basic-Def]
--   你的构建定义是一个大的 `Setting` 对象列表，sbt 使用 `Setting` 转换之后的键值对执行 task。
--   为了创建 `Setting`，在一个 key 上调用其中的一个方法：`:=`，`+=` 或者 `++=`。
--   没有可变的状态，至于转换；例如，一个 `Setting` 将 sbt 的键值对集合转换成一个新的集合。不会就地改变任何代码。
--   每一个设置都有一个特定类型的值，由 key 决定。
--   *tasks* 是特殊的设置，通过 key 产生 value 的计算在每次出发 task 的时候都会重新执行。Non-task 计算只会在构建定义的第一次加载时执行。
--   [Scopes][Scopes]
--   每一个 key 都可能有多个 value，按照 scope 划分。
--   scope 会用三个轴：configuration，project，task。
--   scope 允许你按项目、按 task、按 configuration 有不同的行为。
--   一个 configuration 是一种类型的构建，例如 `Compile` 或者 `Test`。
--   project 轴也支持 "构建全局" scope。
--   scopes 回滚或 *代理* 到更通用的 scope。
--   [.sbt][Basic-Def] vs. [.scala][Full-Def] 构建定义
--   将大部分配置放在 `build.sbt` 中，但是用 `.scala` 构建定义文件定义类和更大的 task 实现。
--   构建定义是一个 sbt 项目，来自于项目目录。
--   [插件][Using-Plugins]是对构建定义的扩展
--   通过在 `addSbtPlugin` 方法在 `project/plugins.sbt` 中添加插件。（不是在项目基目录下的 `build.sbt` 中）。
-
-如果你怀疑这些细枝末节中的任何一个，请[寻求帮助][getting-help]，返回重新阅读或者在 sbt 的交互式命令行中做实验。
-
-祝你好运！
-
-### 附录
-
-因为 sbt 是一个开源项目，别忘记签出项目[源代码](https://github.com/sbt/sbt)！
