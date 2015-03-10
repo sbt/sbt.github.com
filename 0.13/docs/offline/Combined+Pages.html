@@ -783,6 +783,123 @@ to the docs.
 </p></li></ol><h2 id="Changes">Changes<a href="#Changes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>These are changes made in each sbt release.
 </p><h2 id="sbt+0.13.5%2B+Technology+Previews">sbt 0.13.5+ Technology Previews<a href="#sbt+0.13.5%2B+Technology+Previews" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>sbt 0.13.5+ releases of sbt are technology previews of what’s to come to sbt 1.0 with enhancements like <a href="https://typesafe.com/blog/preview-of-upcoming-sbt-10-features-read-about-the-new-plugins">auto plugins</a>, launcher enhacements for sbt server, defined in the sbt-remote-control project, and other necessary API changes.
 </p><p>These releases maintain binary compatibility with plugins that are published against sbt 0.13.0, but add new features in preparation for sbt 1.0. The tech previews allow us to test new ideas like auto plugins and performance improvements on dependency resolution; the build users can try new features without losing the existing plugin resources; and plugin authors can gradually migrate to the new plugin system before sbt 1.0 arrives.
+</p><h2 id="sbt+0.13.8">sbt 0.13.8<a href="#sbt+0.13.8" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Changes+with+compatibility+implications">Changes with compatibility implications<a href="#Changes+with+compatibility+implications" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Rolls back XML parsing workaround. See below.
+</li><li>Enables cross-version support for Scala sources. See below.
+</li></ul><h3 id="Improvements">Improvements<a href="#Improvements" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Adds Maven resolver plugin. See below.
+</li><li>Adds project-level dependency exclusions. See below.
+</li><li>Adds sequential tasks. See below.
+</li><li>Discovered main classes will be sorted. <a href="https://github.com/sbt/sbt/issues/1180">#1180</a> by <a href="https://github.com/kretes">@kretes</a>
+</li><li>Implemented a new mechanism of forking javac, whereby errors are captured.  Also more likely to run in-process. <a href="https://github.com/sbt/sbt/pull/1702">#1702</a> by <a href="https://github.com/jsuereth">@jsuereth</a>
+</li><li><code>evicted</code> will display all evictions (including the ones not suspected of binary incompatibility). <a href="https://github.com/sbt/sbt/issues/1615">#1615</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li><li>Better abstration to track new kinds of dependencies for incremental compiler. <a href="https://github.com/sbt/sbt/pull/1340">#1340</a> by <a href="https://github.com/Duhemm">@Duhemm</a>
+</li><li>Source dependency uses <code>--depth 1</code> for git clone. <a href="https://github.com/sbt/sbt/pull/1787">#1787</a> by <a href="https://github.com/xuwei-k">@xuwei-k</a>
+</li><li>Facilitate nicer ways of declaring project settings. See below. <a href="https://github.com/sbt/sbt/pull/1902">#1902</a> by <a href="http://github.com/dwijnand">@dwijnand</a>
+</li></ul><h3 id="Fixes">Fixes<a href="#Fixes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Javac warnings are treated as warnings.  <a href="https://github.com/sbt/sbt/pull/1702">#1702</a>/<a href="https://github.com/sbt/sbt/issues/875">#875</a> by <a href="https://github.com/jsuereth">@jsuereth</a>
+</li><li><code>compilerReporter</code> is fed to javac during incremental compilation. <a href="https://github.com/sbt/sbt/issues/1542">#1542</a> by <a href="https://github.com/jsuereth">@jsuereth</a>
+</li><li>Ignores hidden build files from the build. <a href="https://github.com/sbt/sbt/pull/1746">#1746</a> by <a href="https://github.com/j-keck">@j-keck</a>
+</li><li>Fixes build.sbt parsing of multiple import. <a href="https://github.com/sbt/sbt/pull/1741">#1741</a> by <a href="https://github.com/ajozwik">@ajozwik</a>
+</li><li>Fixes ANSI escape code for overwriting lines on Windows. <a href="https://github.com/sbt/sbt/pull/1771">#1771</a> by <a href="https://github.com/dwickern">@dwickern</a>
+</li><li>Adds null check in incremental compiler’s type tree extraction. <a href="https://github.com/sbt/sbt/pull/1754">#1754</a>/<a href="https://github.com/sbt/sbt/issues/1655">#1655</a> by <a href="https://github.com/Duhemm">@Duhemm</a>
+</li><li>sbt doesn’t honor Maven’s uniqueVersions (use sbt-maven-resolver to fix). <a href="https://github.com/sbt/sbt/issues/1322">#1322</a>  by <a href="https://github.com/jsuereth">@jsuereth</a>
+</li><li>sbt doesn’t see new SNAPSHOT dependency versions in local maven repos (use withLatestSnapshots + sbt-maven-resolver to fix) <a href="https://github.com/sbt/sbt/issues/321">#321</a> by <a href="https://github.com/jsuereth">@jsuereth</a>
+</li><li>Property in pom’s version field results to wrong dependency resolution (use sbt-maven-resolver to fix). <a href="https://github.com/sbt/sbt/issues/647">#647</a> by <a href="https://github.com/jsuereth">@jsuereth</a>
+</li><li>Maven local resolver with parent POM (use sbt-maven-resolver). <a href="https://github.com/sbt/sbt/issues/1616">#1616</a> by <a href="https://github.com/jsuereth">@jsuereth</a>
+</li><li>Fixes eviction warning being too noisy. <a href="https://github.com/sbt/sbt/issues/1615">#1615</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li><li>Issues warning if multiple dependencies to a same library is found with different version. <a href="https://github.com/sbt/sbt/pull/1634">#1634</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li><li>Removes “No main class detected” warning. <a href="https://github.com/sbt/sbt/pull/1766">#1766</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li><li>Disable publishing on implicitly created root project by not enabling <code>IvyPlugin</code> by default (<code>-Dsbt.root.ivyplugin=true</code> will revert this behavior). <a href="https://github.com/sbt/sbt/pull/1871">#1871</a>/<a href="https://github.com/sbt/sbt/issues/1869">#1869</a> by <a href="http://github.com/dwijnand">@dwijnand</a>
+</li><li>Fixes sporadic ConcurrentModificationException from JUnitXmlTestsListener. <a href="https://github.com/sbt/sbt/issues/1881">#1881</a> by <a href="https://github.com/aerskine">@aerskine</a>
+</li><li>Fixes handling of ANSI CSI codes. <a href="https://github.com/sbt/sbt/issues/1885">#1885</a> by <a href="https://github.com/jsuereth">@jsuereth</a>
+</li><li>Exempt org.scala-lang:scala-actors-migration and org.scala-lang:scala-pickling from scala binary version checks. <a href="https://github.com/sbt/sbt/pull/1818">#1818</a>/<a href="https://github.com/sbt/sbt/pull/1899">#1899</a> by <a href="http://github.com/dwijnand">@dwijnand</a>
+</li><li>Fixes cached resolution handling of internal depdendencies. <a href="https://github.com/sbt/sbt/issues/1711">#1711</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li><li>Fixes cached resolution being too verbose. <a href="https://github.com/sbt/sbt/pull/1752">#1752</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li><li>Fixes cached resolution not evicting modules transitively. [#1760][#1760] by [@eed3si9n][@eed3si9n]
+</li></ul><h3 id="Rolling+back+XML+parsing+workaround">Rolling back XML parsing workaround<a href="#Rolling+back+XML+parsing+workaround" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 0.13.7 implemented natural whitespace handling by switching <code>build.sbt</code> parsing to use Scala compiler, instead of blank line delimiting. We realized that some build definitions no longer parsed due to the difference in XML handling.
+</p><pre><code>val a = &lt;x/&gt;&lt;y/&gt;
+val b = 0
+</code></pre><p>At the time, we thought adding parentheses around XML nodes could work around this behavior. However, the workaround has caused <a href="https://github.com/sbt/sbt/issues/1738">more issues</a>, and since then we have realized that this is a compiler issue <a href="https://issues.scala-lang.org/browse/SI-9027">SI-9027</a>, so we have decided to roll back our workaround. In the meantime, if you have consecutive XML elements in your build.sbt, enclose them in <code>&lt;xml:group&gt;</code> tag, or parentheses.
+</p><pre><code>val a = &lt;xml:group&gt;&lt;x/&gt;&lt;y/&gt;&lt;/xml:group&gt;
+val b = 0
+</code></pre><p><a href="https://github.com/sbt/sbt/pull/1765">#1765</a> by <a href="https://github.com/ajozwik">@ajozwik</a>
+</p><h3 id="Cross-version+support+for+Scala+sources">Cross-version support for Scala sources<a href="#Cross-version+support+for+Scala+sources" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>When <code>crossPaths</code> setting is set to <code>true</code> (it is <code>true</code> by default), sbt 0.13.8 will include
+<code>src/main/scala-&lt;scalaBinaryVersion&gt;/</code> to the <code>Compile</code> compilation in addition to
+<code>src/main/scala</code>. For example, it will include <code>src/main/scala-2.11/</code> for Scala 2.11.5, and
+<code>src/main/scala-2.9.3</code> for Scala 2.9.3. [#1799][1799] by [@indrajitr][@indrajitr]
+</p><h3 id="Maven+resolver+plugin">Maven resolver plugin<a href="#Maven+resolver+plugin" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 0.13.8 adds an extension point in the dependency resolution to customize Maven resolvers.
+This allows us to write sbt-maven-resolver auto plugin, which internally uses Eclipse Aether
+to resolve Maven dependencies instead of Apache Ivy.
+</p><p>To enable this plugin, add the following to <code>project/maven.sbt</code> (or <code>project/plugin.sbt</code> the file name doesn’t matter):
+</p><pre><code>addMavenResolverPlugin
+</code></pre><p>This will create a new <code>~/.ivy2/maven-cache</code> directory, which contains the Aether cache of files.
+You may notice some file will be re-downloaded for the new cache layout.
+Additionally, sbt will now be able to fully construct
+<code>maven-metadata.xml</code> files when publishing to remote repositories or when publishing to the local <code>~/.m2/repository</code>.
+This should help erase many of the deficiencies encountered when using Maven and sbt together.
+</p><p><strong>Notes and known limitations</strong>:
+</p><ul><li>sbt-maven-resolver requires sbt 0.13.8 and above.
+</li><li>The current implementation does not support Ivy-style dynamic revisions, such as “2.10.+” or “latest.snapshot”.  This
+is a fixable situation, but the version range query and Ivy -&gt; Maven version range translation code has not been migrated.
+</li></ul><p><a href="https://github.com/sbt/sbt/pull/1793">#1793</a> by <a href="https://github.com/jsuereth">@jsuereth</a>
+</p><h3 id="Project-level+dependency+exclusions">Project-level dependency exclusions<a href="#Project-level+dependency+exclusions" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 0.13.8 adds <strong>experimental</strong> project-level dependency exclusions:
+</p><pre><code>excludeDependencies += &quot;org.apache.logging.log4j&quot;
+excludeDependencies += &quot;com.example&quot; %% &quot;foo&quot;
+</code></pre><p>In the first example, all artifacts from the organization <code>&quot;org.apache.logging.log4j&quot;</code> are excluded from the managed dependency.
+In the second example, artifacts with the organization <code>&quot;com.example&quot;</code> and the name <code>&quot;foo&quot;</code> cross versioned to the current <code>scalaVersion</code> are excluded.
+</p><p><strong>Note</strong>: This feature currently does not translate to <code>pom.xml</code>!
+</p><p><a href="https://github.com/sbt/sbt/issues/1748">#1748</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</p><h3 id="Sequential+tasks">Sequential tasks<a href="#Sequential+tasks" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 0.13.8 adds a new <code>Def.sequential</code> function to run tasks under semi-sequential semantics.
+Here’s an example usage:
+</p><pre><code>lazy val root = project.
+  settings(
+    testFile := target.value / &quot;test.txt&quot;,
+    sideEffect0 := {
+      val t = testFile.value
+      IO.append(t, &quot;0&quot;)
+      t
+    },
+    sideEffect1 := {
+      val t = testFile.value
+      IO.append(t, &quot;1&quot;)
+      t
+    },
+    foo := Def.sequential(compile in Compile, sideEffect0, sideEffect1, test in Test).value
+  )
+</code></pre><p>Normally sbt’s task engine will reorder tasks based on the dependencies among the tasks,
+and run as many tasks in parallel (See <a href="http://www.scala-sbt.org/0.13/tutorial/Custom-Settings.html">Custom settings and tasks</a> for more details on this).
+<code>Def.sequential</code> instead tries to run the tasks in the specified order.
+However, the task engine will still deduplicate tasks. For instance, when <code>foo</code> is executed, it will only compile once,
+even though <code>test in Test</code> depends on compile. <a href="https://github.com/sbt/sbt/pull/1817">#1817</a>/<a href="https://github.com/sbt/sbt/issues/1001">#1001</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</p><h3 id="Nicer+ways+of+declaring+project+settings">Nicer ways of declaring project settings<a href="#Nicer+ways+of+declaring+project+settings" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Now a <code>Seq[Setting[_]]</code> can be passed to <code>Project.settings</code> without the needs for “varargs expansion”, ie. <code>: _*</code>
+</p><p>Instead of:
+</p><pre><code>lazy val foo = project settings (sharedSettings: _*)
+</code></pre><p>It is now possible to do:
+</p><pre><code>lazy val foo = project settings sharedSettings
+</code></pre><p>Also, <code>Seq[Setting[_]]</code> can be declared at the same level as individual settings in <code>Project.settings</code>, for instance:
+</p><pre><code>lazy val foo = project settings (
+  sharedSettings,
+  version := &quot;1.0&quot;,
+  someMoreSettings
+)
+</code></pre><p><a href="https://github.com/sbt/sbt/pull/1902">#1902</a> by <a href="http://github.com/dwijnand">@dwijnand</a>
+</p><h3 id="Bytecode+Enhancers">Bytecode Enhancers<a href="#Bytecode+Enhancers" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 0.13.8 adds an extension point whereby users can effectively manipulate java bytecode (.class files) <em>before</em> the
+incremental compiler attempts to cache the classfile hashes.  This allows libraries like ebean to function with sbt
+without corrupting the compiler cache and rerunning compile every few seconds.
+</p><p>This splits the compile task into several subTasks:
+</p><ol><li><code>previousCompile</code>:  This task returns the previously persisted <code>Analysis</code> object for this project.
+</li><li><code>compileIncremental</code>: This is the core logic of compiling Scala/Java files together.   This task actually does the
+work of compiling a project incrementally, including ensuring a minimum number of source files are compiled.
+After this method, all .class files that would be generated by scalac + javac will be available.
+</li><li><code>manipulateByteCode</code>: This is a stub task which takes the <code>compileIncremental</code> result and returns it.
+Plugins which need to manipulate bytecode are expected to override this task with their own implementation, ensuring
+to call the previous behavior.
+</li><li><code>compile</code>:  This task depends on <code>manipulateBytecode</code> and then persists the <code>Analysis</code> object containing all
+incremental compiler information.
+</li></ol><p>Here’s an example of how to hook the new <code>manipulateBytecode</code> key in your own plugin:
+</p><pre><code>manipulateBytecode in Compile := {
+  val previous = (manipulateBytecode in Compile).value
+  doManipulateBytecode(previous)  // Note: This must return a new Compiler.CompileResult with our changes.
+}
+</code></pre><p>See <a href="https://github.com/sbt/sbt/issues/1714">#1714</a> for the full details of the implementation.
 </p><h2 id="sbt+0.13.7">sbt 0.13.7<a href="#sbt+0.13.7" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Fixes+with+compatibility+implications">Fixes with compatibility implications<a href="#Fixes+with+compatibility+implications" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Maven artifact dependencies will limit their transitive dependencies to <code>Compile</code> rather than <em>every configuration</em> if no <code>master</code> configuration is found. <a href="https://github.com/sbt/sbt/pull/1586">#1586</a> by <a href="https://github.com/jsuereth">@jsuereth</a>
 </li><li>The new natural whitspace handling parser is unable to cope with certain classes of Scala syntax. In particular, top-level pattern matches, or multi-value defintions are no longer supported.
 </li></ul><p>Here are examples:
