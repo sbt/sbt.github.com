@@ -45,7 +45,8 @@
           <div class="span-16 prepend-1 append-1 contents">
             <h2 id="sbt+0.13.5%2B+Technology+Previews">sbt 0.13.5+ Technology Previews<a href="#sbt+0.13.5%2B+Technology+Previews" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>sbt 0.13.5+ releases of sbt are technology previews of what’s to come to sbt 1.0 with enhancements like <a href="https://typesafe.com/blog/preview-of-upcoming-sbt-10-features-read-about-the-new-plugins">auto plugins</a>, launcher enhacements for sbt server, defined in the sbt-remote-control project, and other necessary API changes.
 </p><p>These releases maintain binary compatibility with plugins that are published against sbt 0.13.0, but add new features in preparation for sbt 1.0. The tech previews allow us to test new ideas like auto plugins and performance improvements on dependency resolution; the build users can try new features without losing the existing plugin resources; and plugin authors can gradually migrate to the new plugin system before sbt 1.0 arrives.
-</p><h2 id="sbt+0.13.8">sbt 0.13.8<a href="#sbt+0.13.8" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Changes+with+compatibility+implications">Changes with compatibility implications<a href="#Changes+with+compatibility+implications" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Rolls back XML parsing workaround. See below.
+</p><h2 id="sbt+0.13.8">sbt 0.13.8<a href="#sbt+0.13.8" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Changes+with+compatibility+implications">Changes with compatibility implications<a href="#Changes+with+compatibility+implications" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Disable publishing on implicitly created root project by not enabling <code>IvyPlugin</code> by default (<code>-Dsbt.root.ivyplugin=true</code> will revert this behavior). <a href="https://github.com/sbt/sbt/pull/1871">#1871</a>/<a href="https://github.com/sbt/sbt/issues/1869">#1869</a> by <a href="http://github.com/dwijnand">@dwijnand</a>
+</li><li>Rolls back XML parsing workaround. See below.
 </li><li>Enables cross-version support for Scala sources. See below.
 </li></ul><h3 id="Improvements">Improvements<a href="#Improvements" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Adds Maven resolver plugin. See below.
 </li><li>Adds project-level dependency exclusions. See below.
@@ -69,13 +70,12 @@
 </li><li>Fixes eviction warning being too noisy. <a href="https://github.com/sbt/sbt/issues/1615">#1615</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
 </li><li>Issues warning if multiple dependencies to a same library is found with different version. <a href="https://github.com/sbt/sbt/pull/1634">#1634</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
 </li><li>Removes “No main class detected” warning. <a href="https://github.com/sbt/sbt/pull/1766">#1766</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
-</li><li>Disable publishing on implicitly created root project by not enabling <code>IvyPlugin</code> by default (<code>-Dsbt.root.ivyplugin=true</code> will revert this behavior). <a href="https://github.com/sbt/sbt/pull/1871">#1871</a>/<a href="https://github.com/sbt/sbt/issues/1869">#1869</a> by <a href="http://github.com/dwijnand">@dwijnand</a>
 </li><li>Fixes sporadic ConcurrentModificationException from JUnitXmlTestsListener. <a href="https://github.com/sbt/sbt/issues/1881">#1881</a> by <a href="https://github.com/aerskine">@aerskine</a>
 </li><li>Fixes handling of ANSI CSI codes. <a href="https://github.com/sbt/sbt/issues/1885">#1885</a> by <a href="https://github.com/jsuereth">@jsuereth</a>
 </li><li>Exempt org.scala-lang:scala-actors-migration and org.scala-lang:scala-pickling from scala binary version checks. <a href="https://github.com/sbt/sbt/pull/1818">#1818</a>/<a href="https://github.com/sbt/sbt/pull/1899">#1899</a> by <a href="http://github.com/dwijnand">@dwijnand</a>
 </li><li>Fixes cached resolution handling of internal depdendencies. <a href="https://github.com/sbt/sbt/issues/1711">#1711</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
 </li><li>Fixes cached resolution being too verbose. <a href="https://github.com/sbt/sbt/pull/1752">#1752</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
-</li><li>Fixes cached resolution not evicting modules transitively. [#1760][#1760] by [@eed3si9n][@eed3si9n]
+</li><li>Fixes cached resolution not evicting modules transitively. <a href="https://github.com/sbt/sbt/pull/1760">#1760</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
 </li></ul><h3 id="Rolling+back+XML+parsing+workaround">Rolling back XML parsing workaround<a href="#Rolling+back+XML+parsing+workaround" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 0.13.7 implemented natural whitespace handling by switching <code>build.sbt</code> parsing to use Scala compiler, instead of blank line delimiting. We realized that some build definitions no longer parsed due to the difference in XML handling.
 </p><pre><code>val a = &lt;x/&gt;&lt;y/&gt;
 val b = 0
@@ -86,7 +86,7 @@ val b = 0
 </p><h3 id="Cross-version+support+for+Scala+sources">Cross-version support for Scala sources<a href="#Cross-version+support+for+Scala+sources" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>When <code>crossPaths</code> setting is set to <code>true</code> (it is <code>true</code> by default), sbt 0.13.8 will include
 <code>src/main/scala-&lt;scalaBinaryVersion&gt;/</code> to the <code>Compile</code> compilation in addition to
 <code>src/main/scala</code>. For example, it will include <code>src/main/scala-2.11/</code> for Scala 2.11.5, and
-<code>src/main/scala-2.9.3</code> for Scala 2.9.3. [#1799][1799] by [@indrajitr][@indrajitr]
+<code>src/main/scala-2.9.3</code> for Scala 2.9.3. <a href="https://github.com/sbt/sbt/pull/1799">#1799</a> by <a href="https://github.com/indrajitr">@indrajitr</a>
 </p><h3 id="Maven+resolver+plugin">Maven resolver plugin<a href="#Maven+resolver+plugin" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 0.13.8 adds an extension point in the dependency resolution to customize Maven resolvers.
 This allows us to write sbt-maven-resolver auto plugin, which internally uses Eclipse Aether
 to resolve Maven dependencies instead of Apache Ivy.
