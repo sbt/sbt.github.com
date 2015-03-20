@@ -842,6 +842,7 @@ This should help erase many of the deficiencies encountered when using Maven and
 </p><ul><li>sbt-maven-resolver requires sbt 0.13.8 and above.
 </li><li>The current implementation does not support Ivy-style dynamic revisions, such as “2.10.+” or “latest.snapshot”.  This
 is a fixable situation, but the version range query and Ivy -&gt; Maven version range translation code has not been migrated.
+</li><li>The current implementation does not support Maven-style range revisions if found on transitive dependencies. <a href="https://github.com/sbt/sbt/issues/1921">#1921</a>
 </li></ul><p><a href="https://github.com/sbt/sbt/pull/1793">#1793</a> by <a href="https://github.com/jsuereth">@jsuereth</a>
 </p><h3 id="Project-level+dependency+exclusions">Project-level dependency exclusions<a href="#Project-level+dependency+exclusions" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 0.13.8 adds <strong>experimental</strong> project-level dependency exclusions:
 </p><pre><code>excludeDependencies += &quot;org.apache.logging.log4j&quot;
