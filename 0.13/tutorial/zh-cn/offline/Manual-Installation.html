@@ -41,8 +41,8 @@
           </a>
         <div class="container contentswrapper">
           <div class="span-16 prepend-1 append-1 contents">
-            <h2 id="%E6%89%8B%E5%8A%A8%E5%AE%89%E8%A3%85+sbt">手动安装 sbt<a href="#%E6%89%8B%E5%8A%A8%E5%AE%89%E8%A3%85+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>手动安装需要下载 <a href="https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.7/sbt-launch.jar">sbt-launch.jar</a>，然后创建脚本来运行它。
-</p><h3 id="Unix">Unix<a href="#Unix" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>将 <a href="https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.7/sbt-launch.jar">sbt-launch.jar</a> 文件放在 <code>~/bin</code> 下。
+            <h2 id="%E6%89%8B%E5%8A%A8%E5%AE%89%E8%A3%85+sbt">手动安装 sbt<a href="#%E6%89%8B%E5%8A%A8%E5%AE%89%E8%A3%85+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>手动安装需要下载 <a href="https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.8/sbt-launch.jar">sbt-launch.jar</a>，然后创建脚本来运行它。
+</p><h3 id="Unix">Unix<a href="#Unix" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>将 <a href="https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.8/sbt-launch.jar">sbt-launch.jar</a> 文件放在 <code>~/bin</code> 下。
 创建一个脚本来运行这个 jar，脚本 <code>~/bin/sbt</code> 内容如下:
 </p><pre><code class="">SBT_OPTS=&quot;-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M&quot;
 java $SBT_OPTS -jar `路径名 $0`/sbt-launch.jar &quot;$@&quot;
@@ -53,18 +53,18 @@ java $SBT_OPTS -jar `路径名 $0`/sbt-launch.jar &quot;$@&quot;
 </p><h4 id="Non-Cygwin">Non-Cygwin<a href="#Non-Cygwin" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>对于使用标准 Windows 终端的非 Cygwin 用户，创建如 <code>sbt.bat</code> 的 batch 文件：
 </p><pre><code class="">set SCRIPT_DIR=%~dp0
 java -Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M -jar &quot;%SCRIPT_DIR%sbt-launch.jar&quot; %*
-</code></pre><p>然后将下载好的 <a href="https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.7/sbt-launch.jar">sbt-launch.jar</a> 放在和 <code>sbt.bat</code> 相同的路径下。
+</code></pre><p>然后将下载好的 <a href="https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.8/sbt-launch.jar">sbt-launch.jar</a> 放在和 <code>sbt.bat</code> 相同的路径下。
 </p><h4 id="Cygwin+%E5%92%8C%E6%A0%87%E5%87%86%E7%9A%84+Windows+%E7%BB%88%E7%AB%AF">Cygwin 和标准的 Windows 终端<a href="#Cygwin+%E5%92%8C%E6%A0%87%E5%87%86%E7%9A%84+Windows+%E7%BB%88%E7%AB%AF" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>如果使用 Cygwin 和标准的 Windows 终端，创建如下的 bash 脚本 <code>~/bin/sbt</code>：
 </p><pre><code class="">SBT_OPTS=&quot;-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M&quot;
 java $SBT_OPTS -jar sbt-launch.jar &quot;$@&quot;
-</code></pre><p>用下载好的 <a href="https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.7/sbt-launch.jar">sbt-launch.jar</a> 文件的路径替换掉 sbt-launch.jar，如果需要的话记得使用 cygpath。给脚本赋予可执行权限：
+</code></pre><p>用下载好的 <a href="https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.8/sbt-launch.jar">sbt-launch.jar</a> 文件的路径替换掉 sbt-launch.jar，如果需要的话记得使用 cygpath。给脚本赋予可执行权限：
 </p><pre><code class="">$ chmod u+x ~/bin/sbt
 </code></pre><h4 id="Cygwin+%E5%92%8C+Ansi+%E7%BB%88%E7%AB%AF">Cygwin 和 Ansi 终端<a href="#Cygwin+%E5%92%8C+Ansi+%E7%BB%88%E7%AB%AF" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>如果使用 Cygwin 和 Ansi 终端（支持 Ansi 转义序列并且可以通过 stty 配置），创建一个 bash 文件 <code>~/bin/sbt</code>：
 </p><pre><code class="">SBT_OPTS=&quot;-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M&quot;
 stty -icanon min 1 -echo &gt; /dev/null 2&gt;&amp;1
 java -Djline.terminal=jline.UnixTerminal -Dsbt.cygwin=true $SBT_OPTS -jar sbt-launch.jar &quot;$@&quot;
 stty icanon echo &gt; /dev/null 2&gt;&amp;1
-</code></pre><p>用下载好的 <a href="https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.7/sbt-launch.jar">sbt-launch.jar</a> 文件的路径替换掉 sbt-launch.jar，如果需要的话记得使用 cygpath。给脚本赋予可执行权限：
+</code></pre><p>用下载好的 <a href="https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.8/sbt-launch.jar">sbt-launch.jar</a> 文件的路径替换掉 sbt-launch.jar，如果需要的话记得使用 cygpath。给脚本赋予可执行权限：
 </p><pre><code class="">$ chmod u+x ~/bin/sbt
 </code></pre><p>为了让退格（backspace）能够在 Scala 的控制台中正常工作，你需要确保你的退格键发送的是删除符（erase character），和在 stty 中配置的一样。对于默认的 cygwin 终端（mintty），
 在设置选项 -&gt; 键中，如果你的删除符是 cygwin 默认的 ^H，“退格发送 ^H” 需要被选中。
