@@ -43,42 +43,53 @@
           </a>
         <div class="container contentswrapper">
           <div class="span-16 prepend-1 append-1 contents">
-            <h2 id="Understanding+Incremental+Recompilation">Understanding Incremental Recompilation<a href="#Understanding+Incremental+Recompilation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Compiling Scala code is slow, and sbt makes it often faster. By
-understanding how, you can even understand how to make compilation even
+            <h2 id="Understanding+Incremental+Recompilation">Understanding Incremental Recompilation<a href="#Understanding+Incremental+Recompilation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Compiling Scala code with Scalac is slow, but sbt often makes it faster.
+By understanding how, you can even understand how to make compilation even
 faster. Modifying source files with many dependencies might require
-recompiling only those source files—which might take, say, 5
-seconds—instead of all the dependencies—which might take, say, 2
-minutes. Often you can control which will be your case and make
-development much faster by some simple coding practices.
-</p><p>In fact, improving Scala compilation times is one major goal of sbt, and
-conversely the speedups it gives are one of the major motivations to use
-it. A significant portion of sbt sources and development efforts deals
+recompiling only those source files
+(which might take 5 seconds for instance)
+instead of all the dependencies
+(which might take 2 minutes for instance).
+Often you can control which will be your case and make
+development faster by a few coding practices.
+</p><p>Improving Scala compilation performance is a major goal of sbt,
+and thus the speedups it gives are one of the major motivations to use it.
+A significant portion of sbt sources and development efforts deals
 with strategies for speeding up compilation.
 </p><p>To reduce compile times, sbt uses two strategies:
-</p><ol><li>reduce the overhead for restarting Scalac;
-</li><li>implement smart and transparent strategies for incremental
-recompilation, so that only modified files and the needed
-dependencies are recompiled.
-</li><li>sbt runs Scalac always in the same virtual machine. If one compiles
-source code using sbt, keeps sbt alive, modifies source code and
-triggers a new compilation, this compilation will be faster because
-(part of) Scalac will have already been JIT-compiled. In the future,
-sbt will reintroduce support for reusing the same compiler instance,
-similarly to fsc.
-</li><li>When a source file <code>A.scala</code> is modified, sbt goes to great effort
-to recompile other source files depending on A.scala only if
-required - that is, only if the interface of A.scala was modified.
-With other build management tools (especially for Java, like ant),
-when a developer changes a source file in a non-binary-compatible
-way, he needs to manually ensure that dependencies are also
-recompiled - often by manually running the clean command to remove
-existing compilation output; otherwise compilation might succeed
-even when dependent class files might need to be recompiled. What is
-worse, the change to one source might make dependencies incorrect,
-but this is not discovered automatically: One might get a
-compilation success with incorrect source code. Since Scala compile
-times are so high, running clean is particularly undesirable.
-</li></ol><p>By organizing your source code appropriately, you can minimize the
+</p><ol>
+<li>Reduce the overhead for restarting Scalac
+    <ul>
+    <li>Implement smart and transparent strategies for incremental
+      recompilation, so that only modified files and the needed
+      dependencies are recompiled.</li>
+    <li>sbt always runs Scalac in the same virtual machine. If one compiles
+      source code using sbt, keeps sbt alive, modifies source code and
+      triggers a new compilation, this compilation will be faster because
+      (part of) Scalac will have already been JIT-compiled. In the future,
+      sbt will reintroduce support for reusing the same compiler instance,
+      similarly to fsc.</li>
+    </ul>
+</li>
+<li>Reduce the number of recompiled source. 
+    <ul>
+    <li>When a source file <code>A.scala</code> is modified, sbt goes to great effort
+        to recompile other source files depending on A.scala only if
+        required - that is, only if the interface of A.scala was modified.
+        With other build management tools (especially for Java, like ant),
+        when a developer changes a source file in a non-binary-compatible
+        way, she needs to manually ensure that dependencies are also
+        recompiled - often by manually running the clean command to remove
+        existing compilation output; otherwise compilation might succeed
+        even when dependent class files might need to be recompiled. What is
+        worse, the change to one source might make dependencies incorrect,
+        but this is not discovered automatically: One might get a
+        compilation success with incorrect source code. Since Scala compile
+        times are so high, running clean is particularly undesirable.
+    </li>
+    </ul>
+</li>
+</ol><p>By organizing your source code appropriately, you can minimize the
 amount of code affected by a change. sbt cannot determine precisely
 which dependencies have to be recompiled; the goal is to compute a
 conservative approximation, so that whenever a file must be recompiled,
@@ -89,14 +100,14 @@ each source file, sbt tracks files which depend on it directly; if the
 dependent on that source must be recompiled. At the moment sbt uses the
 following algorithm to calculate source files dependent on a given
 source file:
-</p><ul><li>dependencies introduced through inheritance are included
-</li></ul><p>   <em>transitively</em>; a dependency is introduced through inheritance if
-   a class/trait in one file inherits from a trait/class in another file
--  all other direct dependencies are included; other dependencies are
-   also called “meber reference” dependencies because they are
-   introduced by referring to a member (class, method, type, etc.)
-   defined in some other source file
-</p><p>Here’s an example illustrating the definition above:
+</p><ul><li>dependencies introduced through inheritance are included <em>transitively</em>;
+a dependency is introduced through inheritance if
+a class/trait in one file inherits from a trait/class in another file
+</li><li>all other direct dependencies are included; other dependencies are
+also called “meber reference” dependencies because they are
+introduced by referring to a member (class, method, type, etc.)
+defined in some other source file
+</li></ul><p>Here’s an example illustrating the definition above:
 </p><pre><code class="prettyprint lang-scala">//A.scala
 class A {
   def foo: Int = 123
@@ -159,7 +170,7 @@ a trait.
 abstract method called <code>fullyQualifiedTraitName$$super$methodName</code>;
 such methods only exist if they are used. Hence, adding the first
 call to super.methodName for a specific methodName changes the
-interface. At present, this is not yet handled—see gh-466.
+interface. At present, this is not yet handled—see <a href="https://github.com/sbt/sbt/issues/466">#466</a>.
 </li><li><code>sealed</code> hierarchies of case classes allow to check exhaustiveness
 of pattern matching. Hence pattern matches using case classes must
 depend on the complete hierarchy - this is one reason why
@@ -171,18 +182,17 @@ what changes to an extracted interface cause incremental recompilation
 then sbt 0.13 has the right tools for that.
 </p><p>In order to debug the interface representation and its changes as you
 modify and recompile source code you need to do two things:
-</p><blockquote><ol><li>Enable incremental compiler’s apiDebug option.
-</li><li>Add <a href="https://code.google.com/p/java-diff-utils/">diff-utils
-library</a> to sbt’s
-classpath. Check documentation of sbt.extraClasspath system
+</p><ol><li>Enable incremental compiler’s apiDebug option.
+</li><li>Add <a href="https://code.google.com/p/java-diff-utils/">diff-utils library</a> to sbt’s
+classpath. Check documentation of <code>sbt.extraClasspath</code> system
 property in the Command-Line-Reference.
-</li></ol></blockquote><blockquote><p><strong>warning</strong>
+</li></ol><blockquote><p><strong>warning</strong>
 </p><p>Enabling the <code>apiDebug</code> option increases significantly
-:   memory consumption and degrades performance of the incremental
-    compiler. The underlying reason is that in order to produce
-    meaningful debugging information about interface differences
-    incremental compiler has to retain the full representation of the
-    interface instead of just hash sum as it does by default.
+memory consumption and degrades performance of the incremental
+compiler. The underlying reason is that in order to produce
+meaningful debugging information about interface differences
+incremental compiler has to retain the full representation of the
+interface instead of just hash sum as it does by default.
 </p><p>Keep this option enabled when you are debugging incremental compiler
 problem only.
 </p></blockquote><p>Below is complete transcript which shows how to enable interface
@@ -227,10 +237,10 @@ type of <code>b</code> method.
 </p><h3 id="How+to+take+advantage+of+sbt+heuristics">How to take advantage of sbt heuristics<a href="#How+to+take+advantage+of+sbt+heuristics" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The heuristics used by sbt imply the following user-visible
 consequences, which determine whether a change to a class affects other
 classes.
-</p><p>XXX Please note that this part of the documentation is a first draft;
+</p><!-- XXX Please note that this part of the documentation is a first draft;
 part of the strategy might be unsound, part of it might be not yet
-implemented.
-</p><ol><li>Adding, removing, modifying <code>private</code> methods does not require
+implemented. -->
+<ol><li>Adding, removing, modifying <code>private</code> methods does not require
 recompilation of client classes. Therefore, suppose you add a method
 to a class with a lot of dependencies, and that this method is only
 used in the declaring class; marking it private will prevent
@@ -316,7 +326,8 @@ simplified example and in a real-world extension of the above code.
 val a: Seq[Writer] =
   new BufferedWriter(new FileWriter(&quot;bar.input&quot;)) +:
   A.openFiles(List(new File(&quot;foo.input&quot;)))
-</code></pre><p>XXX the rest of the section must be reintegrated or dropped: In general,
+</code></pre><p>&lt;!—
+XXX the rest of the section must be reintegrated or dropped: In general,
 changing the return type of a method might be source-compatible, for
 instance if the new type is more specific, or if it is less specific,
 but still more specific than the type required by clients (note however
@@ -333,11 +344,12 @@ between different modules become important—specifying such interface
 documents the intended behavior and helps ensuring binary compatibility,
 which is especially important when the exposed interface is used by
 other software component.
-</p><h4 id="Why+adding+a+member+requires+recompiling+existing+clients">Why adding a member requires recompiling existing clients<a href="#Why+adding+a+member+requires+recompiling+existing+clients" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>In Java adding a member does not require recompiling existing valid
+—&gt;
+</p><h4 id="Why+adding+a+member+requires+recompiling+existing+clients">Why adding a member requires recompiling existing clients<a href="#Why+adding+a+member+requires+recompiling+existing+clients" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>In Java, adding a member does not require recompiling existing valid
 source code. The same should seemingly hold also in Scala, but this is
 not the case: implicit conversions might enrich class <code>Foo</code> with method
-<code>bar</code> without modifying class <code>Foo</code> itself (see discussion in issue
-gh-288 - XXX integrate more). However, if another method <code>bar</code> is
+<code>bar</code> without modifying class <code>Foo</code> itself (see discussion in <a href="https://github.com/sbt/sbt/issues/288">#288</a>).
+However, if another method <code>bar</code> is
 introduced in class <code>Foo</code>, this method should be used in preference to
 the one added through implicit conversions. Therefore any class
 depending on <code>Foo</code> should be recompiled. One can imagine more
@@ -345,10 +357,8 @@ fine-grained tracking of dependencies, but this is currently not
 implemented.
 </p><h3 id="Further+references">Further references<a href="#Further+references" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The incremental compilation logic is implemented in
 <a href="https://github.com/sbt/sbt/blob/0.13/compile/inc/src/main/scala/inc/Incremental.scala">https://github.com/sbt/sbt/blob/0.13/compile/inc/src/main/scala/inc/Incremental.scala</a>.
-Some related documentation for sbt 0.7 is available at:
-<a href="https://code.google.com/p/simple-build-tool/wiki/ChangeDetectionAndTesting">https://code.google.com/p/simple-build-tool/wiki/ChangeDetectionAndTesting</a>.
 Some discussion on the incremental recompilation policies is available
-in issue gh-322 and gh-288.
+in issue <a href="https://github.com/sbt/sbt/issues/322">#322</a> and <a href="https://github.com/sbt/sbt/issues/288">#288</a>.
 </p><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>
