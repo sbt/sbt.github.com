@@ -149,7 +149,7 @@ Ubuntu 及びその他の Debian ベースのディストリビューション�
 (例: `apt-get`、`aptitude`、Synaptic など)、インストールはそれらから行う。
 ターミナル上から以下を実行すると `sbt` をインストールできる (superuser 権限を必要とするため、`sudo` を使っている)。
 
-    echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
+    echo "deb http://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
     sudo apt-get update
     sudo apt-get install sbt
 
@@ -1432,7 +1432,7 @@ sbt にその外部コンフィギュレーションファイルを使わせる�
 libraryDependencies += groupID % artifactID % revision
 ```
 
-もしくは、以下のようになる。このときの `configuration` も文字列だ。
+もしくは、以下のようになる。このときの `configuration` は文字列もしくは [Configuration](../../sxr/sbt/Configuration.scala.html#sbt.Configuration) の値だ。
 
 ```scala
 libraryDependencies += groupID % artifactID % revision % configuration
@@ -2319,13 +2319,13 @@ import Dependencies._
 
 lazy val commonSettings = Seq(
   version := "0.1.0",
-  scalaVersion = "2.11.4"
+  scalaVersion := "2.11.4"
 )
 
 lazy val backend = (project in file("backend")).
   settings(commonSettings: _*).
   settings(
-    libraryDependencies += backendDeps
+    libraryDependencies ++= backendDeps
   )
 ```
 

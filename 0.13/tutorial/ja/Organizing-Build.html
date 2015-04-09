@@ -110,13 +110,13 @@ object Dependencies {
 
 lazy val commonSettings = Seq(
   version := &quot;0.1.0&quot;,
-  scalaVersion = &quot;2.11.4&quot;
+  scalaVersion := &quot;2.11.4&quot;
 )
 
 lazy val backend = (project in file(&quot;backend&quot;)).
   settings(commonSettings: _*).
   settings(
-    libraryDependencies += backendDeps
+    libraryDependencies ++= backendDeps
   )
 </code></pre><p>マルチプロジェクト・ビルドが大きくなってきて、サブプロジェクト間の一貫性を保証したいときに
 このようなテクニックが有用になってくる。

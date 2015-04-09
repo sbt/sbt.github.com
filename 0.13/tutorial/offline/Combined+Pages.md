@@ -134,6 +134,7 @@ See instruction to install manually.
   [DEB]: https://dl.bintray.com/sbt/debian/sbt-0.13.8.deb
   [Manual-Installation]: Manual-Installation.html
   [Activator-Installation]: Activator-Installation.html
+  [website127]: https://github.com/sbt/website/issues/127
 
 Installing sbt on Linux
 -----------------------
@@ -149,11 +150,14 @@ Download [ZIP][ZIP] or [TGZ][TGZ] package and expand it.
 Ubuntu and other Debian-based distributions use the DEB format, but usually you don't install your software from a local DEB file. Instead they come with package managers both for the command line (e.g. `apt-get`, `aptitude`) or with a graphical user interface (e.g. Synaptic).
 Run the following from the terminal to install `sbt` (You'll need superuser privileges to do so, hence the `sudo`).
 
-    echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
+    echo "deb http://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
     sudo apt-get update
     sudo apt-get install sbt
 
 Package managers will check a number of configured repositories for packages to offer for installation. sbt binaries are published to Bintray, and conveniently Bintray provides an APT repository. You just have to add the repository to the places your package manager will check.
+
+> **Note:** Due to [sbt/website#127][website127] using https might cause segmentation fault.
+
 Once `sbt` is installed, you'll be able to manage the package in `aptitude` or Synaptic after you updated their package cache. You should also be able to see the added repository at the bottom of the list in System Settings -> Software & Updates -> Other Software:
 
 ![Ubuntu Software & Updates Screenshot](files/ubuntu-sources.png "Ubuntu Software & Updates Screenshot")
@@ -1627,7 +1631,7 @@ libraryDependencies += groupID % artifactID % revision
 ```
 
 or like this, where `configuration` can be a string or
-[Configuration](../sxr/sbt/Configurations.scala.html#sbt.Configuration) val:
+[Configuration](../sxr/sbt/Configuration.scala.html#sbt.Configuration) val:
 
 ```scala
 libraryDependencies += groupID % artifactID % revision % configuration
@@ -2588,13 +2592,13 @@ import Dependencies._
 
 lazy val commonSettings = Seq(
   version := "0.1.0",
-  scalaVersion = "2.11.4"
+  scalaVersion := "2.11.4"
 )
 
 lazy val backend = (project in file("backend")).
   settings(commonSettings: _*).
   settings(
-    libraryDependencies += backendDeps
+    libraryDependencies ++= backendDeps
   )
 ```
 

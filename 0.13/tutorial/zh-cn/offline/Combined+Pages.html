@@ -75,7 +75,7 @@
 </p><h3 id="Ubuntu%E5%92%8C%E5%85%B6%E4%BB%96%E5%9F%BA%E4%BA%8EDebian%E7%9A%84%E5%8F%91%E8%A1%8C%E7%89%88">Ubuntu和其他基于Debian的发行版<a href="#Ubuntu%E5%92%8C%E5%85%B6%E4%BB%96%E5%9F%BA%E4%BA%8EDebian%E7%9A%84%E5%8F%91%E8%A1%8C%E7%89%88" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://dl.bintray.com/sbt/debian/sbt-0.13.8.deb">DEB</a> 安装包由sbt官方支持。
 </p><p>Ubuntu和其他基于Debian的发行版使用DEB格式，但通常你不从本地的DEB文件安装软件。相反，他们由程序包管理器安装，通过命令行（如<code>apt-get</code>，<code>aptitude</code>）或图形用户界面 （如Synaptic）。
 从终端运行下面的命令安装<code>sbt</code>（你需要超级用户权限，因此需要<code>sudo</code>）。
-</p><pre><code>echo &quot;deb https://dl.bintray.com/sbt/debian /&quot; | sudo tee -a /etc/apt/sources.list.d/sbt.list
+</p><pre><code>echo &quot;deb http://dl.bintray.com/sbt/debian /&quot; | sudo tee -a /etc/apt/sources.list.d/sbt.list
 sudo apt-get update
 sudo apt-get install sbt
 </code></pre><p>软件包管理器将检查若干个提供安装软件包的配置存储库。sbt 二进制文件发布到 Bintray，而Bintray 方便地提供了APT资源库。你只需要将存储库添加到你的软件包管理器将检查的地方。
@@ -613,7 +613,7 @@ cleanFiles += file(&quot;coverage-report-&quot; + name.value + &quot;.txt&quot;)
 你可以从<a href="../docs/Library-Management.html#external-maven-ivy">这里</a>获取更详细的内容。
 </p><p>可以像这样定义一个依赖，其中 <code>groupId</code>， <code>artifactId</code> 和 <code>revision</code> 都是字符串：
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += groupID % artifactID % revision
-</code></pre><p>或者像这样， 用字符串或者 <a href="../../sxr/sbt/Configurations.scala.html#sbt.Configuration">Configuration</a> val 当做 <code>configuration</code>：
+</code></pre><p>或者像这样， 用字符串或者 <a href="../../sxr/sbt/Configuration.scala.html#sbt.Configuration">Configuration</a> val 当做 <code>configuration</code>：
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += groupID % artifactID % revision % configuration
 </code></pre><p><code>libraryDependencies</code> 在 <a href="../../sxr/sbt/Keys.scala.html#sbt.Keys.libraryDependencies">Keys</a> 中像这样声明：
 </p><pre><code class="prettyprint lang-scala">val libraryDependencies = settingKey[Seq[ModuleID]](&quot;Declares managed dependencies.&quot;)
@@ -998,13 +998,13 @@ object Dependencies {
 
 lazy val commonSettings = Seq(
   version := &quot;0.1.0&quot;,
-  scalaVersion = &quot;2.11.4&quot;
+  scalaVersion := &quot;2.11.4&quot;
 )
 
 lazy val backend = (project in file(&quot;backend&quot;)).
   settings(commonSettings: _*).
   settings(
-    libraryDependencies += backendDeps
+    libraryDependencies ++= backendDeps
   )
 </code></pre><p>当你的多工程构建变得很大，并且想要确保子项目有一致的依赖关系时，这种技术很有用。
 </p><h3 id="%E4%BD%95%E6%97%B6%E7%94%A8++%E6%96%87%E4%BB%B6">何时用 <code>.scala</code> 文件<a href="#%E4%BD%95%E6%97%B6%E7%94%A8++%E6%96%87%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在 <code>.scala</code> 文件，你可以写任意的 Scala 代码，包括顶层的类和对象。

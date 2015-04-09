@@ -76,7 +76,7 @@ sbt にその外部コンフィギュレーションファイルを使わせる�
 これに関しては、[Library Management] を参照。
 </p><p>依存性の宣言は、以下のようになる。ここで、<code>groupId</code>、<code>artifactId</code>、と <code>revision</code> は文字列だ:
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += groupID % artifactID % revision
-</code></pre><p>もしくは、以下のようになる。このときの <code>configuration</code> も文字列だ。
+</code></pre><p>もしくは、以下のようになる。このときの <code>configuration</code> は文字列もしくは <a href="../../sxr/sbt/Configuration.scala.html#sbt.Configuration">Configuration</a> の値だ。
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += groupID % artifactID % revision % configuration
 </code></pre><p><code>libraryDependencies</code> は [Keys] で以下のように定義されている:
 </p><pre><code class="prettyprint lang-scala">val libraryDependencies = SettingKey[Seq[ModuleID]](&quot;library-dependencies&quot;, &quot;Declares managed dependencies.&quot;)

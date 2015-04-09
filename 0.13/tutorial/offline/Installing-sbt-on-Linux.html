@@ -45,11 +45,12 @@
 </p><h3 id="Ubuntu+and+other+Debian-based+distributions">Ubuntu and other Debian-based distributions<a href="#Ubuntu+and+other+Debian-based+distributions" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://dl.bintray.com/sbt/debian/sbt-0.13.8.deb">DEB</a> package is officially supported by sbt.
 </p><p>Ubuntu and other Debian-based distributions use the DEB format, but usually you don’t install your software from a local DEB file. Instead they come with package managers both for the command line (e.g. <code>apt-get</code>, <code>aptitude</code>) or with a graphical user interface (e.g. Synaptic).
 Run the following from the terminal to install <code>sbt</code> (You’ll need superuser privileges to do so, hence the <code>sudo</code>).
-</p><pre><code>echo &quot;deb https://dl.bintray.com/sbt/debian /&quot; | sudo tee -a /etc/apt/sources.list.d/sbt.list
+</p><pre><code>echo &quot;deb http://dl.bintray.com/sbt/debian /&quot; | sudo tee -a /etc/apt/sources.list.d/sbt.list
 sudo apt-get update
 sudo apt-get install sbt
 </code></pre><p>Package managers will check a number of configured repositories for packages to offer for installation. sbt binaries are published to Bintray, and conveniently Bintray provides an APT repository. You just have to add the repository to the places your package manager will check.
-Once <code>sbt</code> is installed, you’ll be able to manage the package in <code>aptitude</code> or Synaptic after you updated their package cache. You should also be able to see the added repository at the bottom of the list in System Settings -&gt; Software &amp; Updates -&gt; Other Software:
+</p><blockquote><p><strong>Note:</strong> Due to [sbt/website#127][website127] using https might cause segmentation fault.
+</p></blockquote><p>Once <code>sbt</code> is installed, you’ll be able to manage the package in <code>aptitude</code> or Synaptic after you updated their package cache. You should also be able to see the added repository at the bottom of the list in System Settings -&gt; Software &amp; Updates -&gt; Other Software:
 </p><p><img src="files/ubuntu-sources.png" title="Ubuntu Software &amp; Updates Screenshot" alt="Ubuntu Software &amp; Updates Screenshot"/>
 </p><h3 id="Red+Hat+Enterprise+Linux+and+other+RPM-based+distributions">Red Hat Enterprise Linux and other RPM-based distributions<a href="#Red+Hat+Enterprise+Linux+and+other+RPM-based+distributions" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://dl.bintray.com/sbt/rpm/sbt-0.13.8.rpm">RPM</a> package is officially supported by sbt.
 </p><p>Red Hat Enterprise Linux and other RPM-based distributions use the RPM format.
@@ -76,7 +77,7 @@ emerge sbt-bin
                         <span class="arrow">&gt;</span>
                         <a href="Manual-Installation.html"> Installing sbt manually </a>                        
                         <ul class="language-bar">
-        <li><a href="Installing-sbt-on-Linux.html"><span class="lang-item lang-en">English</span></a></li><li><a href="ja/Installing-sbt-on-Linux.html"><span class="lang-item lang-ja">日本語</span></a></li><li><a href="es/Installing-sbt-on-Linux.html"><span class="lang-item lang-es">Español</span></a></li><li><a href="zh-cn/Installing-sbt-on-Linux.html"><span class="lang-item lang-zh-cn">中文 (简体)</span></a></li>
+        <li><a href="Installing-sbt-on-Linux.html"><span class="lang-item lang-en">English</span></a></li><li><a href="ja/Installing-sbt-on-Linux.html"><span class="lang-item lang-ja">日本語</span></a></li><li><a href="zh-cn/Installing-sbt-on-Linux.html"><span class="lang-item lang-zh-cn">中文 (简体)</span></a></li><li><a href="es/Installing-sbt-on-Linux.html"><span class="lang-item lang-es">Español</span></a></li>
       </ul>
                       </div><div class="tocwrapper show">
       <a class="tochead nav" style="display: none" href="#toc">❦</a>

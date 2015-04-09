@@ -116,13 +116,13 @@ To use the <code>val</code>s under it easier, import <code>Dependencies._</code>
 
 lazy val commonSettings = Seq(
   version := &quot;0.1.0&quot;,
-  scalaVersion = &quot;2.11.4&quot;
+  scalaVersion := &quot;2.11.4&quot;
 )
 
 lazy val backend = (project in file(&quot;backend&quot;)).
   settings(commonSettings: _*).
   settings(
-    libraryDependencies += backendDeps
+    libraryDependencies ++= backendDeps
   )
 </code></pre><p>This technique is useful when you have a multi-project build that’s getting
 large, and you want to make sure that subprojects to have consistent dependencies.

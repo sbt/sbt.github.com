@@ -89,7 +89,7 @@ sbt0.13での変更点や新機能に興味がある人は、こちら<a href="h
 これらのディストロは通常コマンドラインや GUI 上から使えるパッケージ・マネージャがあって
 (例: <code>apt-get</code>、<code>aptitude</code>、Synaptic など)、インストールはそれらから行う。
 ターミナル上から以下を実行すると <code>sbt</code> をインストールできる (superuser 権限を必要とするため、<code>sudo</code> を使っている)。
-</p><pre><code>echo &quot;deb https://dl.bintray.com/sbt/debian /&quot; | sudo tee -a /etc/apt/sources.list.d/sbt.list
+</p><pre><code>echo &quot;deb http://dl.bintray.com/sbt/debian /&quot; | sudo tee -a /etc/apt/sources.list.d/sbt.list
 sudo apt-get update
 sudo apt-get install sbt
 </code></pre><p>パッケージ・マネージャは設定されたリポジトリに指定されたパッケージがあるか確認しにいく。
@@ -774,7 +774,7 @@ sbt にその外部コンフィギュレーションファイルを使わせる�
 これに関しては、[Library Management] を参照。
 </p><p>依存性の宣言は、以下のようになる。ここで、<code>groupId</code>、<code>artifactId</code>、と <code>revision</code> は文字列だ:
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += groupID % artifactID % revision
-</code></pre><p>もしくは、以下のようになる。このときの <code>configuration</code> も文字列だ。
+</code></pre><p>もしくは、以下のようになる。このときの <code>configuration</code> は文字列もしくは <a href="../../sxr/sbt/Configuration.scala.html#sbt.Configuration">Configuration</a> の値だ。
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += groupID % artifactID % revision % configuration
 </code></pre><p><code>libraryDependencies</code> は [Keys] で以下のように定義されている:
 </p><pre><code class="prettyprint lang-scala">val libraryDependencies = SettingKey[Seq[ModuleID]](&quot;library-dependencies&quot;, &quot;Declares managed dependencies.&quot;)
@@ -1308,13 +1308,13 @@ object Dependencies {
 
 lazy val commonSettings = Seq(
   version := &quot;0.1.0&quot;,
-  scalaVersion = &quot;2.11.4&quot;
+  scalaVersion := &quot;2.11.4&quot;
 )
 
 lazy val backend = (project in file(&quot;backend&quot;)).
   settings(commonSettings: _*).
   settings(
-    libraryDependencies += backendDeps
+    libraryDependencies ++= backendDeps
   )
 </code></pre><p>マルチプロジェクト・ビルドが大きくなってきて、サブプロジェクト間の一貫性を保証したいときに
 このようなテクニックが有用になってくる。

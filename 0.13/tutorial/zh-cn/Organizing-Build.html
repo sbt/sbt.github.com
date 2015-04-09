@@ -87,13 +87,13 @@ object Dependencies {
 
 lazy val commonSettings = Seq(
   version := &quot;0.1.0&quot;,
-  scalaVersion = &quot;2.11.4&quot;
+  scalaVersion := &quot;2.11.4&quot;
 )
 
 lazy val backend = (project in file(&quot;backend&quot;)).
   settings(commonSettings: _*).
   settings(
-    libraryDependencies += backendDeps
+    libraryDependencies ++= backendDeps
   )
 </code></pre><p>当你的多工程构建变得很大，并且想要确保子项目有一致的依赖关系时，这种技术很有用。
 </p><h3 id="%E4%BD%95%E6%97%B6%E7%94%A8++%E6%96%87%E4%BB%B6">何时用 <code>.scala</code> 文件<a href="#%E4%BD%95%E6%97%B6%E7%94%A8++%E6%96%87%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在 <code>.scala</code> 文件，你可以写任意的 Scala 代码，包括顶层的类和对象。

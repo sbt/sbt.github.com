@@ -135,7 +135,7 @@ Ubuntu和其他基于Debian的发行版使用DEB格式，但通常你不从本�
 从终端运行下面的命令安装`sbt`（你需要超级用户权限，因此需要`sudo`）。
 
 
-    echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
+    echo "deb http://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
     sudo apt-get update
     sudo apt-get install sbt
 
@@ -1239,7 +1239,7 @@ sbt 使用 [Apache Ivy](http://ant.apache.org/ivy/) 来实现托管依赖，所�
 libraryDependencies += groupID % artifactID % revision
 ```
 
-或者像这样， 用字符串或者 [Configuration](../../sxr/sbt/Configurations.scala.html#sbt.Configuration) val 当做 `configuration`：
+或者像这样， 用字符串或者 [Configuration](../../sxr/sbt/Configuration.scala.html#sbt.Configuration) val 当做 `configuration`：
 
 ```scala
 libraryDependencies += groupID % artifactID % revision % configuration
@@ -1977,13 +1977,13 @@ import Dependencies._
 
 lazy val commonSettings = Seq(
   version := "0.1.0",
-  scalaVersion = "2.11.4"
+  scalaVersion := "2.11.4"
 )
 
 lazy val backend = (project in file("backend")).
   settings(commonSettings: _*).
   settings(
-    libraryDependencies += backendDeps
+    libraryDependencies ++= backendDeps
   )
 ```
 
