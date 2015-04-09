@@ -66,9 +66,7 @@ with strategies for speeding up compilation.
     <li>sbt always runs Scalac in the same virtual machine. If one compiles
       source code using sbt, keeps sbt alive, modifies source code and
       triggers a new compilation, this compilation will be faster because
-      (part of) Scalac will have already been JIT-compiled. In the future,
-      sbt will reintroduce support for reusing the same compiler instance,
-      similarly to fsc.</li>
+      (part of) Scalac will have already been JIT-compiled.</li>
     </ul>
 </li>
 <li>Reduce the number of recompiled source. 
@@ -176,7 +174,8 @@ of pattern matching. Hence pattern matches using case classes must
 depend on the complete hierarchy - this is one reason why
 dependencies cannot be easily tracked at the class level (see Scala
 issue <a href="https://issues.scala-lang.org/browse/SI-2559">SI-2559</a> for an
-example.)
+example.). Check <a href="https://github.com/sbt/sbt/issues/1104">#1104</a> for detailed discussion of tracking
+dependencies at class level.
 </li></ol><h4 id="Debugging+an+interface+representation">Debugging an interface representation<a href="#Debugging+an+interface+representation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>If you see spurious incremental recompilations or you want understand
 what changes to an extracted interface cause incremental recompilation
 then sbt 0.13 has the right tools for that.
