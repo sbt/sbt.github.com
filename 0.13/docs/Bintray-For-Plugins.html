@@ -73,34 +73,28 @@ bintray, create a generic repository called <code>sbt-plugins</code>.
 publish to bintray.
 </p><h3 id="Add+the+bintray-sbt+plugin+to+your+build.">Add the bintray-sbt plugin to your build.<a href="#Add+the+bintray-sbt+plugin+to+your+build." class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>First, add the bintray-sbt to your plugin build.
 </p><p>First, create a <code>project/bintray.sbt</code> file
-</p><pre><code class="prettyprint lang-scala">resolvers += Resolver.url(
-  &quot;bintray-sbt-plugin-releases&quot;,
-   url(&quot;https://dl.bintray.com/content/sbt/sbt-plugin-releases&quot;))(
-       Resolver.ivyStylePatterns)
-
-addSbtPlugin(&quot;me.lessis&quot; % &quot;bintray-sbt&quot; % &quot;0.1.1&quot;)
-</code></pre><p>Next, a make sure your <code>build.sbt</code> file has the following settings :
+</p><pre><code class="prettyprint lang-scala">addSbtPlugin(&quot;me.lessis&quot; % &quot;bintray-sbt&quot; % &quot;0.2.1&quot;)
+</code></pre><p>Next, a make sure your <code>build.sbt</code> file has the following settings
 </p><pre><code class="prettyprint lang-scala">import bintray.Keys._
 
-sbtPlugin := true
+lazy val commonSettings = Seq(
+  version in ThisBuild := &quot;&lt;YOUR PLUGIN VERSION HERE&gt;&quot;,
+  organization in ThisBuild := &quot;&lt;INSERT YOUR ORG HERE&gt;&quot;
+)
 
-name := &quot;&lt;YOUR PLUGIN HERE&gt;&quot;
-
-organization := &quot;&lt;INSERT YOUR ORG HERE&gt;&quot;
-
-version := &quot;&lt;YOUR PLUGIN VERSION HERE&gt;&quot;
-
-publishMavenStyle := false
-
-bintrayPublishSettings
-
-repository in bintray := &quot;sbt-plugins&quot;
-
-// This is an example.  bintray-sbt requires licenses to be specified 
-// (using a canonical name).
-licenses += (&quot;Apache-2.0&quot;, url(&quot;https://www.apache.org/licenses/LICENSE-2.0.html&quot;))
-
-bintrayOrganization in bintray := None
+lazy val root = (project in file(&quot;.&quot;)).
+  settings(commonSettings ++ bintrayPublishSettings: _*).
+  settings(
+    sbtPlugin := true,
+    name := &quot;&lt;YOUR PLUGIN HERE&gt;&quot;,
+    description := &quot;&lt;YOUR DESCRIPTION HERE&gt;&quot;,
+    // This is an example.  bintray-sbt requires licenses to be specified 
+    // (using a canonical name).
+    licenses += (&quot;Apache-2.0&quot;, url(&quot;https://www.apache.org/licenses/LICENSE-2.0.html&quot;)),
+    publishMavenStyle := false,
+    repository in bintray := &quot;sbt-plugins&quot;,
+    bintrayOrganization in bintray := None
+  )
 </code></pre><p>Make sure your project has a valid license specified, as well as unique
 name and organization.
 </p><h3 id="Make+a+release">Make a release<a href="#Make+a+release" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><blockquote><ul><li>Note: bintray does not support snapshots. We recommend using
