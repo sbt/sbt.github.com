@@ -18,7 +18,9 @@ $(document).ready(function() {
       var v = versions[i];
       var sel = '';
       if (v == selected) sel = 'selected ';
-      select.append('<option ' + sel + 'value="' + v + '">Version ' + v + '</option>');
+      var label = 'Version ' + v;
+      if (i == 0) label = 'Latest version'; 
+      select.append('<option ' + sel + 'value="' + v + '">' + label + '</option>');
    }
 
    // check if primary exists, go there if it does, or go to fallback if it does not
