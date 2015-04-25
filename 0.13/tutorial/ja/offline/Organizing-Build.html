@@ -50,12 +50,12 @@
 そして<a href="Multi-Project.html">マルチプロジェクト・ビルド</a>を理解していることが必要になる。
 </p><h3 id="sbt+%E3%81%AF%E5%86%8D%E5%B8%B0%E7%9A%84%E3%81%A0">sbt は再帰的だ<a href="#sbt+%E3%81%AF%E5%86%8D%E5%B8%B0%E7%9A%84%E3%81%A0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> は sbt の実際の動作を隠蔽している。
 sbt のビルドは、Scala コードにより定義されている。そのコード自身もビルドされなければいけない。
-当然これも sbt でビルドされる。
-</p><p><code>project</code> ディレクトリは現行のビルドのビルド方法を記述した<strong>ビルドの中のビルド</strong>だ。
-これらのビルドを区別するために、一番上のビルドは<strong>プロパービルド</strong> (proper build) と呼んで、
-<code>project</code> 内のビルドは<strong>メタビルド</strong> (meta-build) という用語で呼ぶことがある。
-メタビルド内のプロジェクトは、他のプロジェクトができる全てのことを（理論的には）こなすことができる。
-つまり、<strong>ビルド定義は sbt プロジェクトである</strong>ということだ。
+当然これも sbt でビルドされる。sbt でやるより良い方法があるだろうか？
+</p><p><code>project</code> ディレクトリは、ビルドをビルドする方法を記述した<strong>ビルドの中のビルド</strong>だ。
+これらのビルドを区別するために、一番上のビルドを<strong>プロパービルド</strong> (proper build) 、
+<code>project</code> 内のビルドを<strong>メタビルド</strong> (meta-build) と呼んだりする。
+メタビルド内のプロジェクトは、他のプロジェクトができる全てのことをこなすことができる。
+つまり、<strong>ビルド定義もまた sbt プロジェクトなのだ</strong>。
 </p><p>この入れ子構造は永遠に続く。<code>project/project</code> ディレクトリを作ることで
 ビルド定義のビルド定義プロジェクトをカスタム化することができる。
 </p><p>以下に具体例で説明する:
@@ -82,12 +82,11 @@ sbt のビルドは、Scala コードにより定義されている。そのコ�
 
             Build.scala # project/project/ 内のメタメタビルドの
                         # ルート・プロジェクトのソースファイル
-</code></pre><p>普通はこういうことをする必要は全く無いので、安心してほしい！
-だけど、原理を理解すると役立つことがある。
-</p><p>ちなみに、<code>.scala</code> や <code>.sbt</code> で終わる全てのファイルが用いられ、
-<code>build.sbt</code> や <code>Build.scala</code> と命名するのは慣例にすぎない。
-これは複数のファイルを使っていいということも意味する。
-</p><h3 id="%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%92%E3%81%BE%E3%81%A8%E3%82%81%E3%82%8B">ライブラリ依存性をまとめる<a href="#%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%92%E3%81%BE%E3%81%A8%E3%82%81%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>project</code> 内の <code>.scala</code> ファイルがビルド定義の一部となることを利用する一つの例として
+</code></pre><p><em>心配しないでほしい！</em> 普通はこういうことをする必要は全くない。
+しかし、原理を理解しておくことはきっと役立つことだろう。
+</p><p>ちなみに、<code>.scala</code> や <code>.sbt</code> の拡張子で終わっていればどんなファイル名でもよく、<code>build.sbt</code> や <code>Build.scala</code> と命名するのは慣例にすぎない。
+これは複数のファイルを使うことができるということも意味する。
+</p><h3 id="%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%92%E4%B8%80%E7%AE%87%E6%89%80%E3%81%AB%E3%81%BE%E3%81%A8%E3%82%81%E3%82%8B">ライブラリ依存性を一箇所にまとめる<a href="#%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%92%E4%B8%80%E7%AE%87%E6%89%80%E3%81%AB%E3%81%BE%E3%81%A8%E3%82%81%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>project</code> 内の任意の <code>.scala</code> ファイルがビルド定義の一部となることを利用する一つの例として
 <code>project/Dependencies.scala</code> というファイルを作ってライブラリ依存性を一箇所にまとめるということができる。
 </p><pre><code class="prettyprint lang-scala">import sbt._
 
@@ -118,16 +117,13 @@ lazy val backend = (project in file(&quot;backend&quot;)).
   settings(
     libraryDependencies ++= backendDeps
   )
-</code></pre><p>マルチプロジェクト・ビルドが大きくなってきて、サブプロジェクト間の一貫性を保証したいときに
-このようなテクニックが有用になってくる。
-</p><h3 id="%E3%81%84%E3%81%A4++%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E4%BD%BF%E3%81%86%E3%81%8B">いつ <code>.scala</code> ファイルを使うか<a href="#%E3%81%84%E3%81%A4++%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E4%BD%BF%E3%81%86%E3%81%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>.scala</code> ファイルでは、クラスやオブジェクト定義を含む Scala コードを自由に書ける。
-</p><p>推奨される方法はセッティングは基本的にマルチプロジェクト <code>build.sbt</code> ファイル内で行って、
+</code></pre><p>マルチプロジェクトでのビルド定義が肥大化して、サブプロジェクト間で同じ依存ライブラリを持っているかを保証したくなったとき、このようなテクニックは有効だ。
+</p><h3 id="%E3%81%84%E3%81%A4++%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E4%BD%BF%E3%81%86%E3%81%B9%E3%81%8D%E3%81%8B">いつ <code>.scala</code> ファイルを使うべきか<a href="#%E3%81%84%E3%81%A4++%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E4%BD%BF%E3%81%86%E3%81%B9%E3%81%8D%E3%81%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>.scala</code> ファイルでは、トップレベルの class や object 定義を含む Scala コードを自由に記述できる。
+</p><p>推奨される方法はマルチプロジェクトを定義する <code>build.sbt</code> ファイル内にほとんどのセッティングを定義し、
 <code>project/*.scala</code> ファイルはタスクの実装や、共有したい値やキーを定義するのに使うことだ。
-<code>.scala</code> ファイルの利用は君または、君のチームがどれだけ Scala 慣れしてるかにもよる。
-</p><h3 id="auto+plugin+%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B">auto plugin を定義する<a href="#auto+plugin+%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>上級ユーザ向けのビルドの整理方法として、<code>project/*.scala</code>
-内に専用の auto plugin を書くという方法がある。
-連鎖プラグイン (triggered plugin) を定義することで auto plugin
-を全サブプロジェクトにカスタムタスクやコマンドを追加する手段として使うことができる。
+また <code>.scala</code> ファイルを使うかどうかの判断には、君や君のチームがどれくらい Scala に慣れているかということも関係するだろう。
+</p><h3 id="auto+plugin+%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B">auto plugin を定義する<a href="#auto+plugin+%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>上級ユーザ向けのビルドの整理方法として、<code>project/*.scala</code> 内に専用の auto plugin を書くという方法がある。
+連鎖プラグイン (triggered plugin) を定義することで auto plugin を全サブプロジェクトにカスタムタスクやコマンドを追加する手段として使うことができる。
 </p><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>

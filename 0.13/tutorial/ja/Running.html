@@ -42,42 +42,41 @@
         <div class="container contentswrapper">
           <div class="span-16 prepend-1 append-1 contents">
             <h2 id="%E5%AE%9F%E8%A1%8C">実行<a href="#%E5%AE%9F%E8%A1%8C" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このページではプロジェクトをセットアップした後の <code>sbt</code> の使い方を説明する。
-君が<a href="Setup.html">sbt をインストール</a>して、<a href="Hello.html">Hello, World</a>か他のプロジェクトを作ったことを前提にする。
-</p><h3 id="%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%A9%E3%82%AF%E3%83%86%E3%82%A3%E3%83%96%E3%83%A2%E3%83%BC%E3%83%89">インタラクティブモード<a href="#%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%A9%E3%82%AF%E3%83%86%E3%82%A3%E3%83%96%E3%83%A2%E3%83%BC%E3%83%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>プロジェクトのディレクトリで、sbt を引数なしで実行する:
+君が<a href="Setup.html">sbt をインストール</a>して、<a href="Hello.html">Hello, World</a>か他のプロジェクトを作ったことを前提とする。
+</p><h3 id="%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%A9%E3%82%AF%E3%83%86%E3%82%A3%E3%83%96%E3%83%A2%E3%83%BC%E3%83%89">インタラクティブモード<a href="#%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%A9%E3%82%AF%E3%83%86%E3%82%A3%E3%83%96%E3%83%A2%E3%83%BC%E3%83%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>プロジェクトのベースディレクトリで、sbt を引数なしで実行する:
 </p><pre><code class="">$ sbt
-</code></pre><p>sbt をコマンドライン引数なしで実行するとインタラクティブモードが開始する。
+</code></pre><p>sbt をコマンドライン引数なしで実行するとインタラクティブモードで起動する。
 インタラクティブモードにはコマンドプロンプト（とタブ補完と履歴も！）がある。
-</p><p>例えば、<code>compile</code> と sbt プロンプトに打ち込む:
+</p><p>例えば、<code>compile</code> と sbt プロンプトに入力する:
 </p><pre><code class="">&gt; compile
-</code></pre><p>もう一度 <code>compile</code> するには、上矢印を押して、エンターを押す。
-</p><p>君のプログラムを実行するには、<code>run</code> と打ち込む。
-</p><p>インタラクティブモードを終了するには、<code>exit</code> と打ち込むか、Ctrl+D (Unix) か Ctrl+Z (Windows) を用いる。
-</p><h3 id="%E3%83%90%E3%83%83%E3%83%81%E3%83%A2%E3%83%BC%E3%83%89">バッチモード<a href="#%E3%83%90%E3%83%83%E3%83%81%E3%83%A2%E3%83%BC%E3%83%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt アクションを空白で区切られたリストとして引数に渡すことで、sbt をバッチモードで実行することができる。
-引数を取る sbt コマンドに関しては、コマンドと引数の両方を引用符で囲むことで一つの引数として <code>sbt</code> に渡す。
+</code></pre><p>もう一度 <code>compile</code> するには、上矢印を押して、エンターキーを押す。
+</p><p>君のプログラムを実行するには、<code>run</code> と入力する。
+</p><p>インタラクティブモードを終了するには、<code>exit</code> と入力するか、Ctrl+D (Unix) か Ctrl+Z (Windows) を押す。
+</p><h3 id="%E3%83%90%E3%83%83%E3%83%81%E3%83%A2%E3%83%BC%E3%83%89">バッチモード<a href="#%E3%83%90%E3%83%83%E3%83%81%E3%83%A2%E3%83%BC%E3%83%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt のコマンドを空白で区切られたリストとして引数に指定すると sbt をバッチモードで実行することができる。
+引数を取る sbt コマンドの場合は、コマンドと引数の両方を引用符で囲むことで一つの引数として <code>sbt</code> に渡す。
 例えば、
 </p><pre><code class="">$ sbt clean compile &quot;testOnly TestA TestB&quot;
 </code></pre><p>この例では、<code>testOnly</code> は <code>TestA</code> と <code>TestB</code> の二つの引数を取る。
-アクションは順に実行される（<code>clean</code>、<code>compile</code>、そして <code>testOnly</code>）。
-</p><h3 id="%E7%B6%99%E7%B6%9A%E7%9A%84%E3%83%93%E3%83%AB%E3%83%89%E3%81%A8%E3%83%86%E3%82%B9%E3%83%88">継続的ビルドとテスト<a href="#%E7%B6%99%E7%B6%9A%E7%9A%84%E3%83%93%E3%83%AB%E3%83%89%E3%81%A8%E3%83%86%E3%82%B9%E3%83%88" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>編集-コンパイル-テストのサイクルを速めるために、ソースファイルを保存するたびに
-sbt を使って自動的に再コンパイルすることができる。
-</p><p>ソースファイルが変更されたことを検知してアクションを実行するには、
-アクションの先頭に <code>~</code> を書く。例えば、インタラクティブモードで、これを試してみよう:
+コマンドは順に実行される（この場合 <code>clean</code>、<code>compile</code>、そして <code>testOnly</code>）。
+</p><h3 id="%E7%B6%99%E7%B6%9A%E7%9A%84%E3%83%93%E3%83%AB%E3%83%89%E3%81%A8%E3%83%86%E3%82%B9%E3%83%88">継続的ビルドとテスト<a href="#%E7%B6%99%E7%B6%9A%E7%9A%84%E3%83%93%E3%83%AB%E3%83%89%E3%81%A8%E3%83%86%E3%82%B9%E3%83%88" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>編集〜コンパイル〜テストのサイクルを速めるために、ソースファイルを保存する度
+sbt に自動的に再コンパイルを実行させることができる。
+</p><p>ソースファイルが変更されたことを検知してコマンドを実行するには、コマンドの先頭に <code>~</code> をつける。
+例えば、インタラクティブモードで、これを試してみよう:
 </p><pre><code class="">&gt; ~ compile
-</code></pre><p>エンターを押すと、変更の監視を中止できる。
+</code></pre><p>このファイル変更監視状態を止めるにはエンターキーを押す。
 </p><p>先頭の <code>~</code> はインタラクティブモードでもバッチモードでも使うことができる。
 </p><p>詳しくは、<a href="../../docs/Triggered-Execution.html">Triggered Execution</a> 参照。
-</p><h3 id="%E3%82%88%E3%81%8F%E4%BD%BF%E3%82%8F%E3%82%8C%E3%82%8B%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89">よく使われるコマンド<a href="#%E3%82%88%E3%81%8F%E4%BD%BF%E3%82%8F%E3%82%8C%E3%82%8B%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>以下に、最もよく使われる sbt コマンドを紹介する。より完全な一覧は
-<a href="../../docs/Command-Line-Reference.html">Command Line Reference</a> にある。
+</p><h3 id="%E3%82%88%E3%81%8F%E4%BD%BF%E3%82%8F%E3%82%8C%E3%82%8B%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89">よく使われるコマンド<a href="#%E3%82%88%E3%81%8F%E4%BD%BF%E3%82%8F%E3%82%8C%E3%82%8B%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>最もよく使われる sbt コマンドを紹介する。全ての一覧は <a href="../../docs/Command-Line-Reference.html">Command Line Reference</a> を参照。
 </p><table>
   <tr>
     <td><tt>clean</tt></td>
-    <td>全ての生成されたファイル（<tt>target</tt> ディレクトリ）を削除する。</td>
+    <td>（<tt>target</tt> ディレクトリにある）全ての生成されたファイルを削除する。</td>
   </tr>
   <tr>
     <td><tt>compile</tt></td>
-    <td>メインのソース
-    (<tt>src/main/scala</tt> と <tt>src/main/java</tt> ディレクトリにある
-    をコンパイルする。</td>
+    <td>
+    （<tt>src/main/scala</tt> と <tt>src/main/java</tt> ディレクトリにある）
+    メインのソースをコンパイルする。</td>
   </tr>
   <tr>
     <td><tt>test</tt></td>
@@ -85,8 +84,8 @@ sbt を使って自動的に再コンパイルすることができる。
   </tr>
   <tr>
     <td><tt>console</tt></td>
-    <td>コンパイル済みソースと依存ライブラリにクラスパスを通して、Scala インタプリタを開始する。
-  sbt に戻るには、<tt>:quit</tt> と打ち込むか、Ctrl+D (Unix) か Ctrl+Z (Windows) を使う。</td>
+    <td>コンパイル済のソースと依存ライブラリにクラスパスを通して、Scala インタプリタを開始する。
+  sbt に戻るには、<tt>:quit</tt> と入力するか、Ctrl+D (Unix) か Ctrl+Z (Windows) を押す。</td>
   </tr>
   <tr>
     <td><nobr><tt>run &lt;argument&gt;*</tt></nobr></td>
@@ -96,11 +95,11 @@ sbt を使って自動的に再コンパイルすることができる。
     <td><tt>package</tt></td>
     <td><tt>src/main/resources</tt> 内のファイルと <tt>src/main/scala</tt> と
     <tt>src/main/java</tt>
-    からコンパイルされたクラスを含む jar を作る。</td>
+    からコンパイルされたクラスファイルを含む jar を作る。</td>
   </tr>
   <tr>
     <td><tt>help &lt;command&gt;</tt></td>
-    <td>指定されたコマンドの詳しい説明を表示する。コマンドが指定されていない場合は、
+    <td>指定されたコマンドの詳細なヘルプを表示する。コマンドが指定されていない場合は、
   全てのコマンドの簡単な説明を表示する。</td>
   </tr>
   <tr>
@@ -111,8 +110,8 @@ sbt を使って自動的に再コンパイルすることができる。
   </tr>
 </table><h3 id="%E3%82%BF%E3%83%96%E8%A3%9C%E5%AE%8C">タブ補完<a href="#%E3%82%BF%E3%83%96%E8%A3%9C%E5%AE%8C" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>インタラクティブモードには、空のプロンプトの状態を含め、タブ補完がある。
 sbt の特殊な慣例として、タブを一度押すとよく使われる候補だけが表示され、
-複数回押すと、より回りくどい候補が表示される。
-</p><h3 id="%E5%B1%A5%E6%AD%B4%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89">履歴コマンド<a href="#%E5%B1%A5%E6%AD%B4%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>インタラクティブモードは、たとえ sbt を終了して再起動した後でも履歴を覚えている。
+複数回押すと、より多くの冗長な候補一覧が表示される。
+</p><h3 id="%E5%B1%A5%E6%AD%B4%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89">履歴コマンド<a href="#%E5%B1%A5%E6%AD%B4%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>インタラクティブモードは、 sbt を終了して再起動した後でも履歴を覚えている。
 履歴にアクセスする最も簡単な方法は矢印キーを使うことだ。以下のコマンドも使うことができる:
 </p><table>
   <tr>

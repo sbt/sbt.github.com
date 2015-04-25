@@ -44,26 +44,27 @@
         <div class="container contentswrapper">
           <div class="span-16 prepend-1 append-1 contents">
             <h2 id="%E3%83%9E%E3%83%AB%E3%83%81%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%83%BB%E3%83%93%E3%83%AB%E3%83%89">マルチプロジェクト・ビルド<a href="#%E3%83%9E%E3%83%AB%E3%83%81%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%83%BB%E3%83%93%E3%83%AB%E3%83%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このページでは、一つのプロジェクトで複数のプロジェクトを管理する方法を紹介する。
-</p><p>このガイドの前のページ、特に
-<a href="Basic-Def.html">build.sbt</a> を理解していることが必要になる。
-</p><h3 id="%E8%A4%87%E6%95%B0%E3%81%AE%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88">複数のプロジェクト<a href="#%E8%A4%87%E6%95%B0%E3%81%AE%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>単一のビルドに複数のプロジェクトを入れておくと、
-プロジェクト間に依存性がある場合や、
-プロジェクトが同時に変更されることが多い場合などで便利だ。
-</p><p>ビルド内のサブプロジェクトは、それぞれに独自の <code>src/main/scala</code> を持ち、
-<code>package</code> を実行すると独自の jar ファイルを生成するなど、
-普通のプロジェクト同様に振る舞う。
+このガイドのこれまでのページを読んでおいてほしい。
+特に <a href="Basic-Def.html">build.sbt</a> を理解していることが必要になる。
+</p><h3 id="%E8%A4%87%E6%95%B0%E3%81%AE%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88">複数のプロジェクト<a href="#%E8%A4%87%E6%95%B0%E3%81%AE%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>一つのビルドに複数の関連するプロジェクトを入れておくと、
+プロジェクト間に依存性がある場合や同時に変更されることが多い場合に便利だ。
+</p><p>ビルド内の個々のサブプロジェクトは、それぞれ独自のソースディレクトリを持ち、
+<code>package</code> を実行すると独自の jar ファイルを生成するなど、概ね通常のプロジェクトと同様に動作する。
 </p><p>個々のプロジェクトは lazy val を用いて <a href="../../api/sbt/Project.html">Project</a> 型の値を宣言することで定義される。例として、以下のようなものがプロジェクトだ:
 </p><pre><code class="prettyprint lang-scala">lazy val util = project
 
 lazy val core = project
-</code></pre><p>変数名はプロジェクトの ID 及びベースディレクトリの名前になる。 ID はコマンドラインからプロジェクトを指定する時に用いられる。ベースディレクトリは以下の様な関数を呼び出す事で変更出来る。上記の例と同じ結果になる記述を明示的に書くと、以下のようになる。
+</code></pre><p>val で定義された名前はプロジェクトの ID 及びベースディレクトリの名前になる。
+ID はコマンドラインからプロジェクトを指定する時に用いられる。
+ベースディレクトリは <code>in</code> メソッドを使ってこのデフォルトから変更することができる。
+上記の例と同じ結果になる記述を明示的に書くと、以下のようになる。
 </p><pre><code class="prettyprint lang-scala">lazy val util = project.in(file(&quot;util&quot;))
 
 lazy val core = project in file(&quot;core&quot;)
-</code></pre><h4 id="%E5%85%B1%E9%80%9A%E3%81%AE%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0">共通のセッティング<a href="#%E5%85%B1%E9%80%9A%E3%81%AE%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>複数のプロジェクト間に共通のセッティングを抜き出すには、
-<code>commonSettings</code> という名前で列を作って、
-各プロジェクトから <code>settings</code> メソッドを呼べばいい。
-可変長引数を受け取るメソッドに列を渡すのに <code>_*</code> が必要なことに注意。
+</code></pre><h4 id="%E5%85%B1%E9%80%9A%E3%81%AE%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0">共通のセッティング<a href="#%E5%85%B1%E9%80%9A%E3%81%AE%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>複数プロジェクトに共通なセッティングをくくり出す場合、
+<code>commonSettings</code> という名前のセッティングの Seq を作って、
+それを引数として各プロジェクトの <code>settings</code> メソッドを呼び出せばよい。
+（可変長引数を受け取るメソッドに Seq を渡すには <code>_*</code> が必要なので注意）
 </p><pre><code class="prettyprint lang-scala">lazy val commonSettings = Seq(
   organization := &quot;com.example&quot;,
   version := &quot;0.1.0&quot;,
@@ -81,17 +82,21 @@ lazy val util = (project in file(&quot;util&quot;)).
   settings(
     // other settings
   )
-</code></pre><p>これで <code>version</code> を一箇所で変更すれば、再読み込み後に全サブプロジェクトに反映されるようになった。
-</p><h3 id="%E4%BE%9D%E5%AD%98%E9%96%A2%E4%BF%82">依存関係<a href="#%E4%BE%9D%E5%AD%98%E9%96%A2%E4%BF%82" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>個々のプロジェクトのビルドを他のプロジェクトと完全に独立した形で行うこともできる。しかし、大抵プロジェクトというのは他のプロジェクトと何らかの形で依存関係を持つ。ここには集約かクラスパス依存性といった2種類の依存関係が存在する:
-</p><h4 id="%E9%9B%86%E7%B4%84">集約<a href="#%E9%9B%86%E7%B4%84" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>集約は、集約するプロジェクトを走らせる際に集約されるプロジェクトも同時に走らせる必要がある、といった関係のことである。例えば、以下のような例がある。
+</code></pre><p>これで <code>version</code> を一箇所で変更すれば、再読み込み後に全サブプロジェクトに反映されるようになる。
+</p><h3 id="%E4%BE%9D%E5%AD%98%E9%96%A2%E4%BF%82">依存関係<a href="#%E4%BE%9D%E5%AD%98%E9%96%A2%E4%BF%82" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>一つのビルドの中の個々のプロジェクトはお互いに完全に独立した状態であってもよいが、
+普通、何らかの形で依存関係を持っているだろう。
+ここでは集約（<code>aggregate</code>）とクラスパス（<code>classpath</code>）という二種類の依存関係がある。
+</p><h4 id="%E9%9B%86%E7%B4%84">集約<a href="#%E9%9B%86%E7%B4%84" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>集約とは、集約する側のプロジェクトであるタスクを実行するとき、集約される側の複数のプロジェクトでも同じタスクを実行するという関係を意味する。例えば、
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
   aggregate(util, core)
 
 lazy val util = project
 
 lazy val core = project
-</code></pre><p>上の例では、<code>root</code> プロジェクトが <code>util</code> と <code>core</code> を集約している。この状態で sbt を起動してコンパイルしてみよう。3つのプロジェクトが全てコンパイルされることが分かると思う。
-</p><p><em>集約プロジェクト内で</em>（この場合は、ルートの <code>hello</code> プロジェクトで）、
+</code></pre><p>上の例では、<code>root</code> プロジェクトが <code>util</code> と <code>core</code> を集約している。
+この状態で sbt を起動してコンパイルしてみよう。
+3 つのプロジェクトが全てコンパイルされることが分かると思う。
+</p><p><em>集約プロジェクト内で</em>（この場合は <code>root</code> プロジェクトで）、
 タスクごとに集約をコントロールすることができる。
 例えば、<code>update</code> タスクの集約を以下のようにして回避できる:
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
@@ -104,20 +109,19 @@ lazy val core = project
 </code></pre><p><code>aggregate in update</code> は、<code>update</code> タスクにスコープ付けされた <code>aggregate</code> キーだ
 （<a href="Scopes.html">スコープ</a>参照）。
 </p><p>注意: 集約は、集約されるタスクを順不同に並列実行する。
-</p><h4 id="%E3%82%AF%E3%83%A9%E3%82%B9%E3%83%91%E3%82%B9%E4%BE%9D%E5%AD%98%E6%80%A7">クラスパス依存性<a href="#%E3%82%AF%E3%83%A9%E3%82%B9%E3%83%91%E3%82%B9%E4%BE%9D%E5%AD%98%E6%80%A7" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>プロジェクトは、他のプロジェクトのコードに依存することができる。
-これは、<code>dependsOn</code> メソッドを呼び出すことで実現する。
-例えば、<code>core</code> に <code>util</code> のクラスパスが必要な場合は、 <code>core</code> の定義を次のように書く:
+</p><h4 id="%E3%82%AF%E3%83%A9%E3%82%B9%E3%83%91%E3%82%B9%E4%BE%9D%E5%AD%98%E6%80%A7">クラスパス依存性<a href="#%E3%82%AF%E3%83%A9%E3%82%B9%E3%83%91%E3%82%B9%E4%BE%9D%E5%AD%98%E6%80%A7" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>あるプロジェクトが、他のプロジェクトにあるコードに依存させたい場合、
+<code>dependsOn</code> メソッドを呼び出して実現すればよい。
+</p><p>例えば、<code>core</code> に <code>util</code> のクラスパスが必要な場合は <code>core</code> の定義を次のように書く:
 </p><pre><code class="prettyprint lang-scala">lazy val core = project.dependsOn(util)
-</code></pre><p>これで <code>core</code> 内のコードから <code>util</code> のクラスを利用することができる。
-これは、プロジェクトをコンパイルするときの順序も作り出す。
-この場合、<code>core</code> がコンパイルされる前に、<code>util</code> が更新（update）され、
-コンパイルされる必要がある。
+</code></pre><p>これで <code>core</code> 内のコードから <code>util</code> の class を利用することができるようになった。
+</p><p>また、これにより <code>core</code> がコンパイルされる前に <code>util</code> の <code>update</code> と <code>compile</code> が実行されている必要があるので
+プロジェクト間でコンパイル実行が順序付けられることになる。
 </p><p>複数のプロジェクトに依存するには、<code>dependsOn(bar, baz)</code> というふうに、
-<code>dependsOn</code> に複数の引数を渡せばいい。
+<code>dependsOn</code> に複数の引数を渡せばよい。
 </p><h5 id="%E3%82%B3%E3%83%B3%E3%83%95%E3%82%A3%E3%82%AE%E3%83%A5%E3%83%AC%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E3%81%94%E3%81%A8%E3%81%AE%E3%82%AF%E3%83%A9%E3%82%B9%E3%83%91%E3%82%B9%E4%BE%9D%E5%AD%98%E6%80%A7">コンフィギュレーションごとのクラスパス依存性<a href="#%E3%82%B3%E3%83%B3%E3%83%95%E3%82%A3%E3%82%AE%E3%83%A5%E3%83%AC%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E3%81%94%E3%81%A8%E3%81%AE%E3%82%AF%E3%83%A9%E3%82%B9%E3%83%91%E3%82%B9%E4%BE%9D%E5%AD%98%E6%80%A7" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p><code>foo dependsOn(bar)</code> は、<code>foo</code> の <code>Compile</code> コンフィギュレーションが
 <code>bar</code> の <code>Compile</code> コンフィギュレーションに依存することを意味する。
 これを明示的に書くと、<code>dependsOn(bar % &quot;compile-&gt;compile&quot;)</code> となる。
-</p><p>この <code>&quot;compile-&gt;compile&quot;</code> 内の <code>-&gt;</code> は、「依存する」という意味だから、
+</p><p>この <code>&quot;compile-&gt;compile&quot;</code> 内の <code>-&gt;</code> は、「依存する」という意味で、
 <code>&quot;test-&gt;compile&quot;</code> は、<code>foo</code> の <code>Test</code> コンフィギュレーションが
 <code>bar</code> の <code>Compile</code> コンフィギュレーションに依存することを意味する。
 </p><p><code>-&gt;config</code> の部分を省くと、<code>-&gt;compile</code> だと解釈されるため、
@@ -153,7 +157,7 @@ lazy val core = project
 <a href="Scopes.html">スコープ付けされたキーの構文</a>を復習しておこう。
 それぞれの <code>version</code> キーは、<code>build.sbt</code> の場所により、
 特定のプロジェクトにスコープ付けされている。
-だけど、三つの <code>build.sbt</code> とも同じビルド定義の一部だ。
+だが、三つの <code>build.sbt</code> とも同じビルド定義の一部だ。
 </p><p><code>.scala</code> ファイルは、上に示したように、単にプロジェクトとそのベースディレクトリを列挙するだけの簡単なものにして、
 <em>それぞれのプロジェクトのセッティングは、そのプロジェクトのベースディレクトリ直下の
 <code>.sbt</code> ファイル内で宣言することができる</em>。
@@ -163,13 +167,13 @@ lazy val core = project
 ただし、これは好みの問題だから、好きにやっていい。
 </p><p>サブプロジェクトは、<code>project</code> サブディレクトリや、<code>project/*.scala</code> ファイルを持つことができない。
 <code>foo/project/Build.scala</code> は無視される。
-</p><h3 id="%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%AE%E5%88%87%E3%82%8A%E6%9B%BF%E3%81%88">プロジェクトの切り替え<a href="#%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%AE%E5%88%87%E3%82%8A%E6%9B%BF%E3%81%88" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt インタラクティブプロンプトから、<code>projects</code> と打ち込むことでプロジェクトの全リストが表示され、
-<code>project &lt;プロジェクト名&gt;</code> で、現在プロジェクトを選択できる。
-<code>compile</code> のようなタスクを実行すると、それは現在プロジェクトに対して実行される。
+</p><h3 id="%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%AE%E5%88%87%E3%82%8A%E6%9B%BF%E3%81%88">プロジェクトの切り替え<a href="#%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%AE%E5%88%87%E3%82%8A%E6%9B%BF%E3%81%88" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt インタラクティブプロンプトから、<code>projects</code> と入力することでプロジェクトの全リストが表示され、
+<code>project &lt;プロジェクト名&gt;</code> で、カレントプロジェクトを選択できる。
+<code>compile</code> のようなタスクを実行すると、それはカレントプロジェクトに対して実行される。
 これにより、ルートプロジェクトをコンパイルせずに、サブプロジェクトのみをコンパイルすることができる。
-</p><p>また <code>subProjectID/compile</code> のように、他のプロジェクト ID を明示的に指定することで、そのプロジェクトのタスクを実行することもできる。
-</p><h3 id="Common+code">Common code<a href="#Common+code" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>.sbt</code> ファイルで定義された値は、他の <code>.sbt</code> ファイルからは見えない。 <code>.sbt</code> ファイル間でコードを共有するためには、 ビルドルートにある <code>project/</code> ディレクトリに Scala ファイルを用意すれば良い。
-</p><p>詳細は<a href="Organizing-Build.html">ビルドの整理</a>を見てほしい。
+</p><p>また <code>subProjectID/compile</code> のように、プロジェクト ID を明示的に指定することで、そのプロジェクトのタスクを実行することもできる。
+</p><h3 id="%E5%85%B1%E9%80%9A%E3%81%AE%E3%82%B3%E3%83%BC%E3%83%89">共通のコード<a href="#%E5%85%B1%E9%80%9A%E3%81%AE%E3%82%B3%E3%83%BC%E3%83%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>.sbt</code> ファイルで定義された値は、他の <code>.sbt</code> ファイルからは見えない。 <code>.sbt</code> ファイル間でコードを共有するためには、 ベースディレクトリにある <code>project/</code> 配下に Scala ファイルを用意すればよい。
+</p><p>詳細は<a href="Organizing-Build.html">ビルドの整理</a>を参照。
 </p><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>

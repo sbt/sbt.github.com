@@ -52,9 +52,10 @@
 sudo apt-get update
 sudo apt-get install sbt
 </code></pre><p>パッケージ・マネージャは設定されたリポジトリに指定されたパッケージがあるか確認しにいく。
-sbt のバイナリは Bintray にて公開されており、Bintray は APT リポジトリを提供する。
-そのため、このリポジトリをパッケージ・マネージャに追加する必要がある。
-<code>sbt</code> を最初にインストールした後は、このパッケージは <code>aptitude</code> や Synaptic
+sbt のバイナリは Bintray にて公開されており、都合の良いことに Bintray は APT リポジトリを提供している。
+そのため、このリポジトリをパッケージ・マネージャに追加しさえすればよい。
+</p><blockquote><p><strong>注意</strong> [sbt/website#127][website127] で報告されている通り、https を使用するとセグメンテーション違反が発生する場合がある。
+</p></blockquote><p><code>sbt</code> を最初にインストールした後は、このパッケージは <code>aptitude</code> や Synaptic
 上から管理することができる (パッケージ・キャッシュの更新を忘れずに)。
 追加された APT リポジトリは「システム設定 -&gt; ソフトウェアとアップデート -&gt; 他のソフトウェア」 の一番下に表示されているはずだ:
 </p><p><img src="../files/ubuntu-sources.png" title="Ubuntu Software &amp; Updates Screenshot" alt="Ubuntu Software &amp; Updates Screenshot"/>
@@ -68,16 +69,16 @@ sudo yum install sbt
 </p><blockquote><p><strong>注意:</strong> これらのパッケージに問題があれば、
 <a href="https://github.com/sbt/sbt-launcher-package">sbt-launcher-package</a>
 プロジェクトに報告してほしい。
-</p></blockquote><h3 id="Gentoo">Gentoo<a href="#Gentoo" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>公式には sbt の ebuild は提供していないけども、バイナリから
-sbt をマージする <a href="https://github.com/whiter4bbit/overlays/tree/master/dev-java/sbt-bin">ebuild</a>
-があるみたいだ。この ebuild を使って sbt をマージするには:
+</p></blockquote><h3 id="Gentoo">Gentoo<a href="#Gentoo" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>公式には sbt の ebuild は提供されていないが、
+バイナリから sbt をマージする <a href="https://github.com/whiter4bbit/overlays/tree/master/dev-java/sbt-bin">ebuild</a> が公開されているようだ。
+この ebuild を使って sbt をマージするには:
 </p><pre><code>mkdir -p /usr/local/portage &amp;&amp; cd /usr/local/portage
 git clone git://github.com/whiter4bbit/overlays.git
 echo &quot;PORTDIR_OVERLAY=$PORTDIR_OVERLAY /usr/local/portage/overlays&quot; &gt;&gt; /etc/make.conf
 emerge sbt-bin
-</code></pre><blockquote><p><strong>注意:</strong> この ebuild に関する問題があれば
-<a href="https://github.com/whiter4bbit/overlays/issues">ここ</a>
-に報告してほしい。
+</code></pre><blockquote><p><strong>注意:</strong> この ebuild に関する問題は
+<a href="https://github.com/whiter4bbit/overlays/issues">こちら</a>
+へ報告してほしい。
 </p></blockquote><h3 id="Typesafe+Activator">Typesafe Activator<a href="#Typesafe+Activator" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="Activator-Installation.html">Typesafe Activator</a>の手順を参照。
 </p><h3 id="%E6%89%8B%E5%8B%95%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">手動インストール<a href="#%E6%89%8B%E5%8B%95%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>手動インストールの手順を参照。
 </p><div class="bottom nav span-16">

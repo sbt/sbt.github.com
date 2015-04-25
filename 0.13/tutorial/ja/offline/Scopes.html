@@ -44,18 +44,20 @@
         <div class="container contentswrapper">
           <div class="span-16 prepend-1 append-1 contents">
             <h2 id="%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97">スコープ<a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このページではスコープの説明をする。君が、前のページの <a href="Basic-Def.html">.sbt ビルド定義</a>を読んで理解したことを前提とする。
-</p><h3 id="%E3%82%AD%E3%83%BC%E3%81%AB%E9%96%A2%E3%81%99%E3%82%8B%E6%9C%AC%E5%BD%93%E3%81%AE%E8%A9%B1">キーに関する本当の話<a href="#%E3%82%AD%E3%83%BC%E3%81%AB%E9%96%A2%E3%81%99%E3%82%8B%E6%9C%AC%E5%BD%93%E3%81%AE%E8%A9%B1" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="Basic-Def.html">これまでは</a>、あたかも <code>name</code> のようなキーは単一の sbt のマップのキー・値ペアの項目に対応するフリをして話を進めてきた。
-それは単純化した話だ。
-</p><p>実のところは、全てのキーは、「スコープ」と呼ばれる文脈に関連付けられた値を複数もつことができる。
+</p><h3 id="%E3%82%AD%E3%83%BC%E3%81%AB%E9%96%A2%E3%81%99%E3%82%8B%E6%9C%AC%E5%BD%93%E3%81%AE%E8%A9%B1">キーに関する本当の話<a href="#%E3%82%AD%E3%83%BC%E3%81%AB%E9%96%A2%E3%81%99%E3%82%8B%E6%9C%AC%E5%BD%93%E3%81%AE%E8%A9%B1" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="Basic-Def.html">前のページでは</a>、あたかも <code>name</code> のようなキーは単一の sbt の Map のキー・値ペアの項目に対応するかのように説明をしてきた。
+しかし、それは実際よりも物事を単純化している。
+</p><p>実のところ、全てのキーは「スコープ」と呼ばれる文脈に関連付けられた値を複数もつことができる。
 </p><p>以下に具体例で説明する:
 </p><ul><li>ビルド定義に複数のプロジェクトがあれば、それぞれのプロジェクトにおいて同じキーが別の値を取ることができる。
 </li><li>メインのソースとテストとのソースが異なるようにコンパイルしたければ、<code>compile</code> キーは別の値をとることができる。
 </li><li>（jar パッケージの作成のオプションを表す）<code>packageOption</code> キーはクラスファイルのパッケージ（<code>packageBin</code>）とソースコードのパッケージ（<code>packageSrc</code>）で異なる値をとることができる。
 </li></ul><p>スコープによって値が異なる可能性があるため、<em>あるキーへの単一の値は存在しない</em>。
 </p><p>しかし、<em>スコープ付き</em>キーには単一の値が存在する。
-</p><p><a href="Basic-Def.html">これまで見てきた</a>ように、sbt が、プロジェクトを記述するキー・値のマップを生成するためにセッティングのリストを処理していくことを考えると、このキー・値マップ内のキーは、<em>スコープ付き</em>キーであることが分かる。
-また、（<code>build.sbt</code> などの）ビルド定義内の、セッティングもスコープ付きキーに適用されるものだ。
-</p><p>スコープは、デフォルトがあったり、暗示されていたりするが、デフォルトが間違っていれば <code>build.sbt</code> にてスコープを指定しなければいけない。
+</p><p> <a href="Basic-Def.html">これまで見てきた</a>ように sbt がプロジェクトを記述するキーと値のマップを生成するためのセッティングキーのリストを処理していると考えるなら、
+そのキーと値の Map におけるキーとは、実は<em>スコープ付き</em>キーである。
+また、（<code>build.sbt</code> などの）ビルド定義内のセッティングもまたスコープ付きキーである。
+</p><p>スコープは、暗黙に存在していたり、デフォルトのものがあったりするが、
+もしそのデフォルトが適切でなければ <code>build.sbt</code> で必要なスコープを指定する必要があるだろう。
 </p><h3 id="%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E8%BB%B8">スコープ軸<a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E8%BB%B8" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><em>スコープ軸</em>（scope axis）は、型であり、そのインスタンスは独自のスコープを定義する
 （つまり、各インスタンスはキーの独自の値を持つことができる）。
 </p><p>スコープ軸は三つある:
@@ -72,7 +74,7 @@
 </p><ul><li><code>Compile</code> は、メインのビルド（<code>src/main/scala</code>）を定義する。
 </li><li><code>Test</code> は、テスト（<code>src/test/scala</code>）のビルド方法を定義する。
 </li><li><code>Runtime</code> は、<code>run</code> タスクのクラスパスを定義する。
-</li></ul><p>デフォルトでは、コンパイル、パッケージ化、と実行に関するキーの全てはコンフィグレーションにスコープ付けされているため、
+</li></ul><p>デフォルトでは、コンパイル、パッケージ化と実行に関するキーの全てはコンフィグレーションにスコープ付けされているため、
 コンフィギュレーションごとに異なる動作をする可能性がある。
 その最たる例が <code>compile</code>、<code>package</code> と <code>run</code> のタスクキーだが、
 （<code>sourceDirectories</code> や <code>scalacOptions</code> や <code>fullClasspath</code> など）それらのキーに<em>影響を及ぼす</em>全てのキーもコンフィグレーションにスコープ付けされている。
@@ -81,15 +83,14 @@
 </p><p>パッケージを構築するさまざまなタスク（<code>packageSrc</code>、<code>packageBin</code>、<code>packageDoc</code>）は、<code>artifactName</code> や <code>packageOption</code> などのパッケージ関連のキーを共有することができる。これらのキーはそれぞれのパッケージタスクに対して独自の値を取ることができる。
 </p><h3 id="%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%90%E3%83%AB%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97">グローバルスコープ<a href="#%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%90%E3%83%AB%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>それぞれのスコープ軸は、その軸の型のインスタンスを代入する（例えば、タスク軸にはタスクを代入する）か、
 もしくは、<code>Global</code> という特殊な値を代入することができる。
-</p><p><code>Global</code> は、予想通りのもので、その軸の全てのインスタンスに対して適用されるセッティングの値だ。
+</p><p><code>Global</code> はご想像通りのもので、その軸の全てのインスタンスに対して適用されるセッティングの値だ。
 例えば、タスク軸が <code>Global</code> ならば、全てのタスクに適用される。
 </p><h3 id="%E5%A7%94%E8%AD%B2">委譲<a href="#%E5%A7%94%E8%AD%B2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>スコープ付きキーは、そのスコープに関連付けられた値がなければ未定義であることもできる。
 </p><p>全てのスコープに対して、sbt には他のスコープからなるフォールバック検索パス（fallback search path）がある。
-通常は、より特定のスコープに関連付けられた値が見つからなければ、
-sbt は、<code>Global</code> や、ビルド全体スコープなど、より一般的なスコープから値を見つけ出そうとする。
+通常は、より特定のスコープに関連付けられた値が見つからなければ、sbt は、<code>Global</code> や、ビルド全体スコープなど、より一般的なスコープから値を見つけ出そうとする。
 </p><p>この機能により、より一般的なスコープで一度値を代入することで、複数のより特定なスコープがその値を継承することを可能とする。
 </p><p>以下に、<code>inspect</code> を使ったキーのフォールバック検索パス、別名「委譲」（delegate）の探し方を説明する。
-</p><h3 id="sbt+%E5%AE%9F%E8%A1%8C%E4%B8%AD%E3%81%AE%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%8D%E3%82%AD%E3%83%BC%E3%81%AE%E5%8F%82%E7%85%A7%E6%96%B9%E6%B3%95">sbt 実行中のスコープ付きキーの参照方法<a href="#sbt+%E5%AE%9F%E8%A1%8C%E4%B8%AD%E3%81%AE%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%8D%E3%82%AD%E3%83%BC%E3%81%AE%E5%8F%82%E7%85%A7%E6%96%B9%E6%B3%95" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>コマンドラインとインタラクティブモードにおいて、sbt はスコープ付きキーを以下のように表示し（パースする）:
+</p><h3 id="sbt+%E5%AE%9F%E8%A1%8C%E4%B8%AD%E3%81%AE%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%8D%E3%82%AD%E3%83%BC%E3%81%AE%E5%8F%82%E7%85%A7%E6%96%B9%E6%B3%95">sbt 実行中のスコープ付きキーの参照方法<a href="#sbt+%E5%AE%9F%E8%A1%8C%E4%B8%AD%E3%81%AE%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%8D%E3%82%AD%E3%83%BC%E3%81%AE%E5%8F%82%E7%85%A7%E6%96%B9%E6%B3%95" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>コマンドラインとインタラクティブモードにおいて、sbt はスコープ付きキーを以下のように表示する（そして、パースする）:
 </p><pre><code class="">{&lt;ビルド-uri&gt;}&lt;プロジェクト-id&gt;/コンフィギュレーション:タスクキー::キー
 </code></pre><ul><li><code>{&lt;ビルド-uri&gt;}&lt;プロジェクト-id&gt;</code> は、プロジェクト軸を特定する。&lt;プロジェクト-id&gt; がなければ、プロジェクト軸は「ビルド全体」スコープとなる。
 </li><li><code>コンフィギュレーション</code> は、コンフィギュレーション軸を特定する。
@@ -97,11 +98,11 @@ sbt は、<code>Global</code> や、ビルド全体スコープなど、より�
 </li><li><code>キー</code> は、スコープ付けされるキーを特定する。
 </li></ul><p>全ての軸において、<code>*</code> を使って <code>Global</code> スコープを表すことができる。
 </p><p>スコープ付きキーの一部を省略すると、以下の手順で推論される:
-</p><ul><li>プロジェクトを省略した場合は、現在のプロジェクトが使われる。
+</p><ul><li>プロジェクトを省略した場合は、カレントプロジェクトが使われる。
 </li><li>コンフィグレーションを省略した場合は、キーに依存したコンフィギュレーションが自動検知される。
 </li><li>タスクを省略した場合は、<code>Global</code> タスクが使われる。
 </li></ul><p>さらに詳しくは、<a href="../../docs/Inspecting-Settings.html">Interacting with the Configuration System</a> 参照。
-</p><h3 id="%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%8D%E3%82%AD%E3%83%BC%E3%81%AE%E8%A1%A8%E8%A8%98%E4%BE%8B">スコープ付きキーの表記例<a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%8D%E3%82%AD%E3%83%BC%E3%81%AE%E8%A1%A8%E8%A8%98%E4%BE%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li><code>fullClasspath</code> はキーのみを指定し、デフォルトスコープを用いる。ここでは、現在のプロジェクト、キーに依存したコンフィギュレーション、グローバルタスクスコープとなる。
+</p><h3 id="%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%8D%E3%82%AD%E3%83%BC%E3%81%AE%E8%A1%A8%E8%A8%98%E4%BE%8B">スコープ付きキーの表記例<a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%8D%E3%82%AD%E3%83%BC%E3%81%AE%E8%A1%A8%E8%A8%98%E4%BE%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li><code>fullClasspath</code> はキーのみを指定し、デフォルトスコープを用いる。ここでは、カレントプロジェクト、キーに依存したコンフィギュレーション、グローバルタスクスコープとなる。
 </li><li><code>test:fullClasspath</code> はコンフィギュレーションを指定する。つまりプロジェクト軸とタスク軸はデフォルトを用いつつも <code>test</code>コンフィギュレーションにおける <code>fullClasspath</code> というキーを表す。
 </li><li><code>*:fullClasspath</code> はデフォルトコンフィギュレーションを用いずに <code>Global</code> コンフィギュレーションを用いる事を明示している。
 </li><li><code>doc::fullClasspath</code> はプロジェクト軸とコンフィギュレーション軸はデフォルトを用いつつ、 <code>doc</code> タスクスコープにおける <code>fullClasspath</code> というキーを表す。
@@ -109,7 +110,7 @@ sbt は、<code>Global</code> や、ビルド全体スコープなど、より�
 </li><li><code>{file:/home/hp/checkout/hello/}/test:fullClasspath</code> は <code>{file:/home/hp/checkout/hello/}</code> のビルド全体をプロジェクトの軸とする。
 </li><li><code>{.}/test:fullClasspath</code> は <code>{.}</code> で指定されたルートディレクトリのビルド全体をプロジェクト軸に取る。<code>{.}</code> は Scala code において <code>ThisBuild</code> と記述できる。
 </li><li><code>{file:/home/hp/checkout/hello/}/compile:doc::fullClasspath</code> は3つのスコープ軸全てを指定している。
-</li></ul><h3 id="%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%81%AE%E6%A4%9C%E6%9F%BB">スコープの検査<a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%81%AE%E6%A4%9C%E6%9F%BB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt のインタラクティブモード内で <code>inspect</code> コマンドを使ってキーとそのスコープを理解することができる。
+</li></ul><h3 id="%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%81%AE%E6%A4%9C%E6%9F%BB">スコープの検査<a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%81%AE%E6%A4%9C%E6%9F%BB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt のインタラクティブモードで <code>inspect</code> コマンドを使ってキーとそのスコープを把握することができる。
 例えば、<code>inspect test:full-classpath</code> と試してみよう:
 </p><pre><code class="">$ sbt
 &gt; inspect test:fullClasspath
@@ -149,7 +150,7 @@ sbt は、<code>Global</code> や、ビルド全体スコープなど、より�
 </p><p>“Provided by” は、この値を定義するスコープ付きキーを指し、この場合は、
 <code>{file:/home/hp/checkout/hello/}default-aea33a/test:full-classpath</code>
 （<code>test</code> コンフィギュレーションと <code>{file:/home/hp/checkout/hello/}default-aea33a</code> プロジェクトにスコープ付けされた <code>full-classpath</code> キー）。
-</p><p>“Dependencies” は、まだ意味不明だろうけど、<a href="More-About-Settings.html">次のページ</a>まで待ってて。
+</p><p>“Dependencies” はまだよく分からないかもしれないが、これの説明は<a href="More-About-Settings.html">次のページ</a>まで待ってほしい。
 </p><p>ここで委譲も見ることができ、もし値が定義されていなければ、sbt は以下を検索する:
 </p><ul><li>他の二つのコンフィギュレーション（<code>runtime:full-classpath</code> と <code>compile:full-classpath</code>）。
 これらのスコープ付きキーは、プロジェクトは特定されていないため「現プロジェクト」で、タスクも特定されていない <code>Global</code> だ。
@@ -189,7 +190,7 @@ Scala ではキレイに書くことができるけど、Java 風に以下のよ
 例えば、<code>compile</code> タスクは、デフォルトで <code>Compile</code> と <code>Test</code> コンフィギュレーションにスコープ付けされているけど、
 これらのスコープ外には存在しない。
 </p><p>そのため、<code>compile</code> キーに関連付けられた値を変更するには、<code>compile in Compile</code> か <code>compile in Test</code> のどちらかを書く必要がある。
-素の <code>compile</code> を使うと、コンフィグレーションにスコープ付けされた標準のコンパイルタスクをオーバーライドするかわりに、現在のプロジェクトにスコープ付けされた新しいコンパイルタスクを定義してしまう。
+素の <code>compile</code> を使うと、コンフィグレーションにスコープ付けされた標準のコンパイルタスクをオーバーライドするかわりに、カレントプロジェクトにスコープ付けされた新しいコンパイルタスクを定義してしまう。
 </p><p><em>“Reference to undefined setting“</em> のようなエラーに遭遇した場合は、スコープを指定していないか、間違ったスコープを指定したことによることが多い。
 君が使っているキーは何か別のスコープの中で定義されている可能性がある。
 エラーメッセージの一部として sbt は、君が意味したであろうものを推測してくれるから、“Did you mean compile:compile?” を探そう。

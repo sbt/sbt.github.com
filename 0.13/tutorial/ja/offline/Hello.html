@@ -43,15 +43,13 @@
           </a>
         <div class="container contentswrapper">
           <div class="span-16 prepend-1 append-1 contents">
-            <h2 id="Hello%2C+World">Hello, World<a href="#Hello%2C+World" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このページは、君が<a href="Setup.html">sbt をインストール</a>したことを前提にする。
-</p><h3 id="%E3%82%BD%E3%83%BC%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%89%E3%81%AE%E5%85%A5%E3%81%A3%E3%81%9F%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%83%87%E3%82%A3%E3%83%AC%E3%82%AF%E3%83%88%E3%83%AA%E3%82%92%E4%BD%9C%E3%82%8B">ソースコードの入ったプロジェクトディレクトリを作る<a href="#%E3%82%BD%E3%83%BC%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%89%E3%81%AE%E5%85%A5%E3%81%A3%E3%81%9F%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%83%87%E3%82%A3%E3%83%AC%E3%82%AF%E3%83%88%E3%83%AA%E3%82%92%E4%BD%9C%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>一つのソースファイルを含むディレクトリでも、一応有効な sbt プロジェクトとなりうる。試しに、<code>hello</code>
-ディレクトリを作って、以下の内容の <code>hw.scala</code> というファイルを作成する:
+            <h2 id="Hello%2C+World">Hello, World<a href="#Hello%2C+World" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このページは、既に<a href="Setup.html">sbt をインストール</a>したことを前提とする。
+</p><h3 id="%E3%82%BD%E3%83%BC%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%89%E3%81%AE%E5%85%A5%E3%81%A3%E3%81%9F%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%83%87%E3%82%A3%E3%83%AC%E3%82%AF%E3%83%88%E3%83%AA%E3%82%92%E4%BD%9C%E3%82%8B">ソースコードの入ったプロジェクトディレクトリを作る<a href="#%E3%82%BD%E3%83%BC%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%89%E3%81%AE%E5%85%A5%E3%81%A3%E3%81%9F%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%83%87%E3%82%A3%E3%83%AC%E3%82%AF%E3%83%88%E3%83%AA%E3%82%92%E4%BD%9C%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>一つのソースファイルを含むディレクトリでも、一応有効な sbt プロジェクトとなりうる。試しに、<code>hello</code> ディレクトリを作って、以下の内容の <code>hw.scala</code> というファイルを作成する:
 </p><pre><code class="prettyprint lang-scala">object Hi {
   def main(args: Array[String]) = println(&quot;Hi!&quot;)
 }
-</code></pre><p>次に <code>hello</code> ディレクトリ内から sbt を起動して 
-sbt のインタラクティブコンソールに <code>run</code> と打ち込む。
-Linux か OS X を使っていならばコマンドは以下のようになる:
+</code></pre><p>次に <code>hello</code> ディレクトリ内から sbt を起動して sbt のインタラクティブコンソールに <code>run</code> と入力する。
+Linux、Mac OS X の場合、コマンドは以下のようになる:
 </p><pre><code class="">$ mkdir hello
 $ cd hello
 $ echo 'object Hi { def main(args: Array[String]) = println(&quot;Hi!&quot;) }' &gt; hw.scala
@@ -60,19 +58,18 @@ $ sbt
 &gt; run
 ...
 Hi!
-</code></pre><p>この例では、sbt は純粋に convention（デフォルトの慣例）だけを使って動作している。
-sbt は以下を自動的に検知する:
-</p><ul><li>ベースディレクトリ内のソース
-</li><li><code>src/main/scala</code> か <code>src/main/java</code> 内のソース
-</li><li><code>src/test/scala</code> か <code>src/test/java</code> 内のテスト
+</code></pre><p>この例では、sbt はただデフォルトの規約によって動作している。sbt は以下のものを自動的に検知する:
+</p><ul><li>ベースディレクトリにあるソースファイル　
+</li><li><code>src/main/scala</code> か <code>src/main/java</code> 内のソースファイル
+</li><li><code>src/test/scala</code> か <code>src/test/java</code> 内のテストソースファイル
 </li><li><code>src/main/resources</code> か <code>src/test/resources</code> 内のデータファイル
 </li><li><code>lib</code> 内の jar ファイル
 </li></ul><p>デフォルトでは、sbt は sbt 自身が使っている Scala のバージョンを使ってプロジェクトをビルドする。
-</p><p><code>sbt run</code> を用いてプロジェクトを実行したり、<code>sbt console</code> を用いて <a href="http://www.scala-lang.org/node/2097">Scala REPL</a> に入ることができる。<code>sbt console</code> は君のプロジェクトにクラスパスを通すから、
-君のプロジェクトのコードを使った Scala の例をライブで試すことができる。
-</p><h3 id="%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9">ビルド定義<a href="#%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>ほとんどのプロジェクトは何らかの手動設定が必要だ。基本的なビルド設定は <code>build.sbt</code> というファイルに書かれ、
-プロジェクトのベースディレクトリ (base directory) に置かれる。
-</p><p>例えば、君のプロジェクトが <code>hello</code> ディレクトリにあるなら、<code>hello/build.sbt</code> をこんな感じで書く:
+</p><p><code>sbt run</code> でプロジェクトを実行したり、<code>sbt console</code> で <a href="http://www.scala-lang.org/node/2097">Scala REPL</a> に入ることができる。
+<code>sbt console</code> は君のプロジェクトにクラスパスを通すので、プロジェクトのコードを使った Scala コード例をその場で試すことができる。
+</p><h3 id="%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9">ビルド定義<a href="#%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>ほとんどのプロジェクトでは何らかの手動設定が必要になるだろう。
+基本的なビルド設定方法はプロジェクトのベースディレクトリに <code>build.sbt</code> というファイルとして配置されるものだ。
+例えば、君のプロジェクトが <code>hello</code> ディレクトリにある場合、<code>hello/build.sbt</code> はこんな感じになる：
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
   settings(
     name := &quot;hello&quot;,
@@ -80,12 +77,12 @@ sbt は以下を自動的に検知する:
     scalaVersion := &quot;2.11.4&quot;
   )
 </code></pre><p><a href="Basic-Def.html">.sbt ビルド定義</a>で、<code>build.sbt</code> の書き方をもっと詳しく説明する。
-</p><p>君のプロジェクトを jar ファイルにパッケージ化する予定なら、最低でも <code>build.sbt</code> に name と version は書いておこう。
+もし君のプロジェクトを jar ファイルにパッケージ化するつもりなら、最低でも <code>build.sbt</code> に name と version は書いておこう。
 </p><h3 id="sbt+%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3%E3%81%AE%E8%A8%AD%E5%AE%9A">sbt バージョンの設定<a href="#sbt+%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3%E3%81%AE%E8%A8%AD%E5%AE%9A" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>hello/project/build.properties</code> というファイルを作ることで、特定のバージョンの sbt を強制することができる。
 このファイルに、以下のように書く:
 </p><pre><code class="">sbt.version=0.13.8
-</code></pre><p>sbt はリリース間で 99% ソースの互換性を持たせてある。
-だけど、sbt バージョンを <code>project/build.properties</code> に設定することで混乱を予防することできる。
+</code></pre><p>sbt はリリース間で 99% ソースコード互換性を維持しているが、
+sbt バージョンを <code>project/build.properties</code> に設定しておくことで、不要な混乱を避けることができるだろう。
 </p><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>
