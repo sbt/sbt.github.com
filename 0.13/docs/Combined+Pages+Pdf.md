@@ -6552,7 +6552,7 @@ lazy val commonSettings = Seq(
   scalaVersion := "2.11.5",
   organization := "com.example"
 )
-lazy val scalaRefect = Def.setting { "org.scala-lang" % "scala-reflect" % scalaVersion.value }
+lazy val scalaReflect = Def.setting { "org.scala-lang" % "scala-reflect" % scalaVersion.value }
 
 lazy val core = (project in file("core")).
   dependsOn(macroSub).
@@ -6564,7 +6564,7 @@ lazy val core = (project in file("core")).
 lazy val macroSub = (project in file("macro")).
   settings(commonSettings: _*).
   settings(
-    libraryDependencies += scalaRefect.value
+    libraryDependencies += scalaReflect.value
     // other settings here
   )
 ```
@@ -6644,7 +6644,7 @@ lazy val commonSettings = Seq(
   scalaVersion := "2.11.5",
   organization := "com.example"
 )
-lazy val scalaRefect = Def.setting { "org.scala-lang" % "scala-reflect" % scalaVersion.value }
+lazy val scalaReflect = Def.setting { "org.scala-lang" % "scala-reflect" % scalaVersion.value }
 
 lazy val core = (project in file("core")).
   dependsOn(macroSub, util).
@@ -6657,7 +6657,7 @@ lazy val macroSub = (project in file("macro")).
   dependsOn(util).
   settings(commonSettings: _*).
   settings(
-    libraryDependencies += scalaRefect.value
+    libraryDependencies += scalaReflect.value
     // other settings here
   )
 
@@ -6696,7 +6696,7 @@ done by overriding `publish` and `publishLocal` to do nothing:
 lazy val macroSub = (project in file("macro")).
   settings(commonSettings: _*).
   settings(
-    libraryDependencies += scalaRefect.value,
+    libraryDependencies += scalaReflect.value,
     publish := {},
     publishLocal := {}
   )

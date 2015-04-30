@@ -60,7 +60,7 @@ following build definition. <code>build.sbt</code>:
   scalaVersion := &quot;2.11.5&quot;,
   organization := &quot;com.example&quot;
 )
-lazy val scalaRefect = Def.setting { &quot;org.scala-lang&quot; % &quot;scala-reflect&quot; % scalaVersion.value }
+lazy val scalaReflect = Def.setting { &quot;org.scala-lang&quot; % &quot;scala-reflect&quot; % scalaVersion.value }
 
 lazy val core = (project in file(&quot;core&quot;)).
   dependsOn(macroSub).
@@ -72,7 +72,7 @@ lazy val core = (project in file(&quot;core&quot;)).
 lazy val macroSub = (project in file(&quot;macro&quot;)).
   settings(commonSettings: _*).
   settings(
-    libraryDependencies += scalaRefect.value
+    libraryDependencies += scalaReflect.value
     // other settings here
   )
 </code></pre><p>This specifies that the macro implementation goes in
@@ -130,7 +130,7 @@ would look like:
   scalaVersion := &quot;2.11.5&quot;,
   organization := &quot;com.example&quot;
 )
-lazy val scalaRefect = Def.setting { &quot;org.scala-lang&quot; % &quot;scala-reflect&quot; % scalaVersion.value }
+lazy val scalaReflect = Def.setting { &quot;org.scala-lang&quot; % &quot;scala-reflect&quot; % scalaVersion.value }
 
 lazy val core = (project in file(&quot;core&quot;)).
   dependsOn(macroSub, util).
@@ -143,7 +143,7 @@ lazy val macroSub = (project in file(&quot;macro&quot;)).
   dependsOn(util).
   settings(commonSettings: _*).
   settings(
-    libraryDependencies += scalaRefect.value
+    libraryDependencies += scalaReflect.value
     // other settings here
   )
 
@@ -171,7 +171,7 @@ done by overriding <code>publish</code> and <code>publishLocal</code> to do noth
 </p><pre><code class="prettyprint lang-scala">lazy val macroSub = (project in file(&quot;macro&quot;)).
   settings(commonSettings: _*).
   settings(
-    libraryDependencies += scalaRefect.value,
+    libraryDependencies += scalaReflect.value,
     publish := {},
     publishLocal := {}
   )
