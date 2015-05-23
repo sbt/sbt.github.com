@@ -953,8 +953,9 @@ stopping...
 }
 </code></pre><p>因为普通的方法调用遵循顺序语义，所有事情按顺序发生。这里没有去重，所以你必须要小心。
 </p><h3 id="%E5%B0%86%E5%AE%83%E4%BB%AC%E8%BD%AC%E4%B8%BA%E6%8F%92%E4%BB%B6">将它们转为插件<a href="#%E5%B0%86%E5%AE%83%E4%BB%AC%E8%BD%AC%E4%B8%BA%E6%8F%92%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>如果你发现自己有很多自定义代码，可以考虑将其移动到插件，从而可以在多个构建中重复利用。
-</p><p>创建一个插件很容易，在[使用插件][sing-Plugins]和[插件][Plugins]中有详细讨论。
-</p><p>本小节是个快速的向导；更多关于自定义任务可以在<a href="../docs/Tasks.html">任务</a>中找到。</p><h2 id="%E7%BB%84%E7%BB%87%E6%9E%84%E5%BB%BA">组织构建<a href="#%E7%BB%84%E7%BB%87%E6%9E%84%E5%BB%BA" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>本页面将讨论构建结构的组织。
+</p><p>创建一个插件很容易，在<a href="Using-Plugins.html">使用插件</a>和<a href="../docs/Plugins.html">插件</a>中有详细讨论。
+</p><p>本小节是个快速的向导；更多关于自定义任务可以在<a href="../docs/Tasks.html">任务</a>中找到。
+</p><h2 id="%E7%BB%84%E7%BB%87%E6%9E%84%E5%BB%BA">组织构建<a href="#%E7%BB%84%E7%BB%87%E6%9E%84%E5%BB%BA" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>本页面将讨论构建结构的组织。
 </p><p>本小节假设你已经阅读了之前的章节，尤其是 <a href="Basic-Def.html">build.sbt</a>，<a href="Library-Dependencies.html">库依赖</a>和<a href="Multi-Project.html">多工程构建</a>。
 </p><h3 id="sbt%E6%98%AF%E9%80%92%E5%BD%92%E7%9A%84">sbt是递归的<a href="#sbt%E6%98%AF%E9%80%92%E5%BD%92%E7%9A%84" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> 很简单，隐藏了 sbt 是如何工作的。sbt 构建是用 Scala 代码定义的。代码本身也必须是能被构建的。有比 sbt 更好的建立方式么？
 </p><p><code>project</code> 目录 <em>是你的工程内另一个工程的项目</em>，它知道如何构建你的工程。为了区分这两种构建，我们有时使用<strong>正常构建</strong>表示你的构建，使用<strong>元构建</strong>指代在 <code>project</code>中的构建。在元构建中的项目能做任何其他项目可以做的事情。 <em>你的构建定义是一个 sbt 项目。</em>
