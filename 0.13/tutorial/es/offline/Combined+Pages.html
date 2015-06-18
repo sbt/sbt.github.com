@@ -110,7 +110,8 @@ creación de un script para ejecutarlo.
 </p><h3 id="Unix">Unix<a href="#Unix" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Ponga <a href="https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.8/sbt-launch.jar">sbt-launch.jar</a> en <code>~/bin</code>.
 </p><p>Cree un script para ejecutar el jar, mediante la creación de <code>~/bin/sbt</code>
 con el siguiente contenido:
-</p><pre><code class="">SBT_OPTS=&quot;-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M&quot;
+</p><pre><code class="">#!/bin/bash
+SBT_OPTS=&quot;-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M&quot;
 java $SBT_OPTS -jar `dirname $0`/sbt-launch.jar &quot;$@&quot;
 </code></pre><p>Haga el script ejecutable con:
 </p><pre><code class="">$ chmod u+x ~/bin/sbt

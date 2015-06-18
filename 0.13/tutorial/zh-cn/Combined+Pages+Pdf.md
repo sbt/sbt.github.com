@@ -198,6 +198,7 @@ sbt 二进制文件发布到 Bintray，而Bintray 方便地提供了RPM资源库
 创建一个脚本来运行这个 jar，脚本 `~/bin/sbt` 内容如下:
 
 ```
+#!/bin/bash
 SBT_OPTS="-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M"
 java $SBT_OPTS -jar `路径名 $0`/sbt-launch.jar "$@"
 ```

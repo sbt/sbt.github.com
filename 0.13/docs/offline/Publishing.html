@@ -67,7 +67,7 @@ the /snapshot repository while other versions go to the /releases
 repository. Doing this selection can be done by using the value of the
 <code>isSnapshot</code> SettingKey:
 </p><pre><code class="prettyprint lang-scala">publishTo := {
-  val nexus = &quot;https://oss.sonatype.org/&quot;
+  val nexus = &quot;https://my.artifact.repo.net/&quot;
   if (isSnapshot.value)
     Some(&quot;snapshots&quot; at nexus + &quot;content/repositories/snapshots&quot;) 
   else
@@ -75,13 +75,13 @@ repository. Doing this selection can be done by using the value of the
 }
 </code></pre><h3 id="Credentials">Credentials<a href="#Credentials" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>There are two ways to specify credentials for such a repository. The
 first is to specify them inline:
-</p><pre><code class="prettyprint lang-scala">credentials += Credentials(&quot;Sonatype Nexus Repository Manager&quot;, &quot;nexus.scala-tools.org&quot;, &quot;admin&quot;, &quot;admin123&quot;)
+</p><pre><code class="prettyprint lang-scala">credentials += Credentials(&quot;Some Nexus Repository Manager&quot;, &quot;my.artifact.repo.net&quot;, &quot;admin&quot;, &quot;admin123&quot;)
 </code></pre><p>The second and better way is to load them from a file, for example:
 </p><pre><code class="prettyprint lang-scala">credentials += Credentials(Path.userHome / &quot;.ivy2&quot; / &quot;.credentials&quot;)
 </code></pre><p>The credentials file is a properties file with keys <code>realm</code>, <code>host</code>,
 <code>user</code>, and <code>password</code>. For example:
-</p><pre><code class="">realm=Sonatype Nexus Repository Manager
-host=nexus.scala-tools.org
+</p><pre><code class="">realm=My Nexus Repository Manager
+host=my.artifact.repo.net
 user=admin
 password=admin123
 </code></pre><h3 id="Cross-publishing">Cross-publishing<a href="#Cross-publishing" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To support multiple incompatible Scala versions, enable cross building
