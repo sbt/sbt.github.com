@@ -45,6 +45,71 @@
           <div class="span-16 prepend-1 append-1 contents">
             <h2 id="sbt+0.13.5%2B+Technology+Previews">sbt 0.13.5+ Technology Previews<a href="#sbt+0.13.5%2B+Technology+Previews" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>sbt 0.13.5+ releases of sbt are technology previews of what’s to come to sbt 1.0 with enhancements like <a href="https://typesafe.com/blog/preview-of-upcoming-sbt-10-features-read-about-the-new-plugins">auto plugins</a>, launcher enhacements for sbt server, defined in the sbt-remote-control project, and other necessary API changes.
 </p><p>These releases maintain binary compatibility with plugins that are published against sbt 0.13.0, but add new features in preparation for sbt 1.0. The tech previews allow us to test new ideas like auto plugins and performance improvements on dependency resolution; the build users can try new features without losing the existing plugin resources; and plugin authors can gradually migrate to the new plugin system before sbt 1.0 arrives.
+</p><h2 id="sbt+0.13.9">sbt 0.13.9<a href="#sbt+0.13.9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Fixes+with+compatibility+implications">Fixes with compatibility implications<a href="#Fixes+with+compatibility+implications" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Starting 0.13.9, <code>crossScalaVersions</code> default value is fixed back to the older 0.12.x behavior. See below for details.
+</li><li>Starting 0.13.9, the generated POM files no longer include dependencies on source or javadoc jars obtained via <code>withSources()</code> or <code>withJavadoc()</code>. See below for details.
+</li><li>Scala version is bumped to 2.10.5. This brings in the fix for <a href="https://issues.scala-lang.org/browse/SI-9027">SI-9027</a>: XML node sequence literal bug. <a href="https://github.com/sbt/sbt/issues/1666">#1666</a>/<a href="https://github.com/sbt/sbt/pull/2068">#2068</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li></ul><h3 id="Improvements">Improvements<a href="#Improvements" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Adds <code>retrieveManaged</code> related improvements. See below for details.
+</li><li>Adds <code>-=</code> and <code>--=</code> for settings and tasks, which are the opposites of <code>+=</code> and <code>++=</code>. <a href="https://github.com/sbt/sbt/pull/1922">#1922</a> by <a href="http://github.com/dwijnand">@dwijnand</a>
+</li><li>Adds <code>inThisBuild</code>, similar to <code>inConfig</code>, to allow specifying multiple settings in <code>ThisBuild</code> scope. <a href="https://github.com/sbt/sbt/issues/1847">#1847</a>/<a href="https://github.com/sbt/sbt/pull/1989">#1989</a> by <a href="http://github.com/dwijnand">@dwijnand</a>
+</li><li>Adds a nicer toString to SimpleCommand to make it more human-friendly. <a href="https://github.com/sbt/sbt/issues/1998">#1998</a>/<a href="https://github.com/sbt/sbt/pull/2000">#2000</a> by <a href="http://github.com/dwijnand">@dwijnand</a>
+</li><li>Adds <code>forceUpdatePeriod</code> key, that takes values of <code>Option[FiniteDuration]</code>.  If set, a full <code>update</code> will occur after that amount of time without needing to explicitly run the <code>update</code> task. By <a href="https://github.com/ajsquared">@ajsquared</a>
+</li><li>Updates <code>ForkError.getMessage()</code> to include exception’s original name. <a href="https://github.com/sbt/sbt/issues/2028">#2028</a> by <a href="https://github.com/kamilkloch">@kamilkloch</a>
+</li><li>Adds help message for <code>inspect actual</code>. <a href="https://github.com/sbt/sbt/issues/1651">#1651</a>/<a href="https://github.com/sbt/sbt/pull/1990">#1990</a> by <a href="http://github.com/dwijnand">@dwijnand</a>
+</li><li>Supports excluding tests in <code>testOnly</code>/<code>testQuick</code> with <code>-</code>, for example <code>-MySpec</code>.
+<a href="https://github.com/sbt/sbt/pull/1970">#1970</a> by <a href="http://github.com/matthewfarwell">@matthewfarwell</a>
+</li><li>Adds more diagnostic info for underfined settings.
+<a href="https://github.com/sbt/sbt/issues/2008">#2008</a>/<a href="https://github.com/sbt/sbt/pull/2009">#2009</a> by <a href="https://github.com/DavidPerezIngeniero">@DavidPerezIngeniero</a>
+</li><li>Adds an <code>Extracted.runInputTask</code> helper to assist with imperatively executing input tasks. <a href="https://github.com/sbt/sbt/pull/2006">#2006</a> by <a href="https://github.com/jroper">@jroper</a>
+</li><li>Renames <code>distinct</code> method on <code>PathFinder</code> to <code>distinctName</code>. <a href="https://github.com/sbt/sbt/issues/1973">#1973</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li><li>Adds <code>distinctPath</code> method on <code>PathFinder</code>. <a href="https://github.com/sbt/sbt/issues/1973">#1973</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li></ul><h3 id="Bug+fixes">Bug fixes<a href="#Bug+fixes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Fixes memory/performance issue with cached resolution. See below.
+</li><li>Correct incremental compile debug message for invalidated products <a href="https://github.com/sbt/sbt/issues/1961">#1961</a> by <a href="https://github.com/jroper">@jroper</a>
+</li><li>Enables forced GC by default. See below.
+</li><li>Fixes Maven compatibility to read <code>maven-metadata.xml</code>. See below.
+</li><li>Captures errors on <code>help</code> command. <a href="https://github.com/sbt/sbt/issues/1900">#1900</a>/<a href="https://github.com/sbt/sbt/pull/1940">#1940</a> by <a href="https://github.com/DavidPerezIngeniero">@DavidPerezIngeniero</a>
+</li><li>Prevents history command(s) from going into an infinite loop <a href="https://github.com/sbt/sbt/issues/1562">#1562</a> by <a href="https://github.com/PanAeon">@PanAeon</a>
+</li><li>Honors overwrite flag when publishing locally. <a href="https://github.com/sbt/sbt/pull/1960">#1960</a> by <a href="http://github.com/asflierl">@asflierl</a>
+</li><li>Fixes a certain class of pom corruption that can occur in the presence of parent-poms. <a href="https://github.com/sbt/sbt/issues/1856">#1856</a> by <a href="https://github.com/jsuereth">@jsuereth</a>
+</li><li>Adds dependency-level exclusions in the POM for project-level exclusions. <a href="https://github.com/sbt/sbt/issues/1877">#1877</a>/<a href="https://github.com/sbt/sbt/pull/2035">#2035</a> by <a href="http://github.com/dwijnand">@dwijnand</a>
+</li></ul><h3 id="default+value"><code>crossScalaVersions</code> default value<a href="#default+value" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>As of this fix <code>crossScalaVersions</code> returns to the behaviour present in <code>0.12.4</code> whereby it defaults to what
+<code>scalaVersion</code> is set to, for example if <code>scalaVersion</code> is set to <code>&quot;2.11.6&quot;</code>, <code>crossScalaVersions</code> now defaults
+to <code>Seq(&quot;2.11.6&quot;)</code>.
+</p><p>Therefore when upgrading from any version between <code>0.13.0</code> and <code>0.13.8</code> be aware of this new default if
+your build setup depended on it.
+</p><p><a href="https://github.com/sbt/sbt/issues/1828">#1828</a>/<a href="https://github.com/sbt/sbt/pull/1992">#1992</a> by <a href="http://github.com/dwijnand">@dwijnand</a>
+</p><h3 id="POM+files+no+longer+include+certain+source+and+javadoc+jars">POM files no longer include certain source and javadoc jars<a href="#POM+files+no+longer+include+certain+source+and+javadoc+jars" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>When declaring library dependencies using the withSources() or withJavadoc() options, sbt was also including
+in the pom file, as dependencies, the source or javadoc jars using the default Maven scope. Such dependencies
+might be erroneously processed as they were regular jars by automated tools
+</p><p><a href="https://github.com/sbt/sbt/issues/2001">#2001</a>/<a href="https://github.com/sbt/sbt/pull/2027">#2027</a> by <a href="https://github.com/cunei">@cunei</a>
+</p><h3 id="related+improvements"><code>retrieveManaged</code> related improvements<a href="#related+improvements" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 0.13.9 adds <code>retrieveManagedSync</code> key that, when set to <code>true</code>, enables synchronizing retrieved to the current build by removed unneeded files.
+</p><p>It also adds <code>configurationsToRetrieve</code> key, that takes values of <code>Option[Set[Configuration]]</code>. If set, when <code>retrieveManaged</code> is true only artifacts in the specified configurations will be retrieved to the current build. 
+</p><p><a href="https://github.com/sbt/sbt/pull/1950">#1950</a>/<a href="https://github.com/sbt/sbt/pull/1987">#1987</a> by <a href="https://github.com/ajsquared">@ajsquared</a>
+</p><h3 id="Cached+resolution+fixes">Cached resolution fixes<a href="#Cached+resolution+fixes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>On a larger dependency graph, the JSON file growing to be 100MB+
+with 97% of taken up by <em>caller</em> information.
+The caller information is not useful once the graph is successfully resolved.
+To make the matter worse, these large JSON files were never cleaned up.
+</p><p>sbt 0.13.9 creates a single caller to represent all callers,
+which fixes <code>OutOfMemoryException</code> seen on some builds.
+This generally shrinks the size of JSON, so it should make the IO operations faster.
+Dynamic graphs will be rotated with directories named after <code>yyyy-mm-dd</code>,
+and stale JSON files will be cleaned up after few days.
+</p><p><a href="https://github.com/sbt/sbt/pull/2030">#2030</a>/<a href="https://github.com/sbt/sbt/issues/1721">#1721</a>/<a href="https://github.com/sbt/sbt/issues/2014">#2014</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</p><h3 id="Force+GC">Force GC<a href="#Force+GC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://github.com/cunei">@cunei</a> in <a href="https://github.com/sbt/sbt/issues/1223">#1223</a> discovered that sbt leaks PermGen
+when it creates classloaders to call Scala Compilers.
+sbt 0.13.9 will call GC on a set interval (default: 60s).
+It will also call GC right before cross building.
+This behavior can diabled using by setting false to <code>forcegc</code>
+setting or <code>sbt.task.forcegc</code> flag.
+</p><p><a href="https://github.com/sbt/sbt/pull/1773">#1773</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</p><h3 id="Maven+compatibility+fix">Maven compatibility fix<a href="#Maven+compatibility+fix" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To resolve dynamic versions such as <code>SNAPSHOT</code> and version ranges, the dependency resolution engine
+queries for the list of available versions.
+For Maven repositories, it was supposed read <code>maven-metadata.xml</code> first, but
+because sbt customizes the repository layout for cross building, it has been falling back
+to screen scraping of the Apache directory listing.
+This problem surfaced as:
+</p><ul><li>Version range not working for artifacts hosted on Bintray. <a href="https://github.com/sbt/sbt/issues/2005">#2005</a>
+</li><li>Potentially other <code>SNAPSHOT</code> related issues.
+</li></ul><p>sbt 0.13.9 fixes this by relaxing the Maven compatiblity check, so it will read <code>maven-metadata.xml</code>. <a href="https://github.com/sbt/sbt/pull/2075">#2075</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
 </p><h2 id="sbt+0.13.8">sbt 0.13.8<a href="#sbt+0.13.8" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Changes+with+compatibility+implications">Changes with compatibility implications<a href="#Changes+with+compatibility+implications" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Disable publishing on implicitly created root project by not enabling <code>IvyPlugin</code> by default (<code>-Dsbt.root.ivyplugin=true</code> will revert this behavior). <a href="https://github.com/sbt/sbt/pull/1871">#1871</a>/<a href="https://github.com/sbt/sbt/issues/1869">#1869</a> by <a href="http://github.com/dwijnand">@dwijnand</a>
 </li><li>Rolls back XML parsing workaround. See below.
 </li><li>Enables cross-version support for Scala sources. See below.
