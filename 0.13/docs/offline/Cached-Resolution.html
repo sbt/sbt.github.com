@@ -63,7 +63,6 @@
 </p><h4 id="SNAPSHOT+and+dynamic+dependencies">SNAPSHOT and dynamic dependencies<a href="#SNAPSHOT+and+dynamic+dependencies" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>When a minigraph contains either a SNAPSHOT or dynamic dependency, the graph is considered dynamic, and it will be invalidated after a single task execution.
 Therefore, if you have any SNAPSHOT in your graph, your exeperience may degrade.
 (This could be improved in the future)
-</p><h4 id="Internal+dependencies+with">Internal dependencies with <code>% &quot;test&quot;</code><a href="#Internal+dependencies+with" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>There have been several bug reports on internal dependencies with <code>% &quot;test&quot;</code> like <a href="https://github.com/sbt/sbt/issues/1711">#1711</a>. This is still an open issue, and we hope to fix it in the next release.
 </p><a name="motivation"></a><h3 id="Motivation">Motivation<a href="#Motivation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt internally uses Apache Ivy to resolve library dependencies. While sbt has benefited from not having to reinvent depenendency resolution engine all these years, we are increasingly seeing scalability challenges especially for projects with both multiple subprojects and large dependency graph. There are several factors involved in sbt’s resolution scalability:
 </p><ul><li>Number of transitive nodes (libraries) in the graph
 </li><li>Exclusion and override rules

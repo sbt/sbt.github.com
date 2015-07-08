@@ -3613,23 +3613,23 @@ will fail because of type mismatch in <code>B.bar</code> method and that error w
 user. That’s where incremental compilation terminates in this case.
 </p><p>Let’s identify the two main pieces of information that were needed to make decisions in the examples
 presented above. The incremental compiler algorithm needs to:
-</p><ul><li>index source files so it knows whether there were API changes that might affect other source
-files; e.g. it needs to detect changes to method signatures as in the example above
-</li><li>track dependencies between source files; once the change to an API is detected the algorithm
-needs to determine the set of files that might be potentially affected by this change
-</li></ul><p>Both of those pieces of information are extracted from the Scala compiler.
+  <em> index source files so it knows whether there were API changes that might affect other source
+    files; e.g. it needs to detect changes to method signatures as in the example above
+  </em> track dependencies between source files; once the change to an API is detected the algorithm
+    needs to determine the set of files that might be potentially affected by this change
+</p><p>Both of those pieces of information are extracted from the Scala compiler.
 </p><h3 id="Interaction+with+the+Scala+compiler">Interaction with the Scala compiler<a href="#Interaction+with+the+Scala+compiler" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Incremental compiler interacts with Scala compiler in many ways:
-</p><ul><li><p>provides three phases additional phases that extract needed information:
-</p><ul><li>api phase extracts public interface of compiled sources by walking trees and indexing types
-</li><li>dependency phase which extracts dependencies between source files (compilation units)
-</li><li>analyzer phase which captures the list of emitted class files
-</li></ul></li><li>defines a custom reporter which allows sbt to gather errors and warnings
-</li><li><p>subclasses Global to:
-</p><ul><li>add the api, dependency and analyzer phases
-</li><li>set the custom reporter
-</li></ul></li><li>manages instances of the custom Global and uses them to compile files it determined that need
-to be compiled
-</li></ul><h4 id="API+extraction+phase">API extraction phase<a href="#API+extraction+phase" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The API extraction phase extracts information from Trees, Types and Symbols and maps it to
+  <em> provides three phases additional phases that extract needed information:
+    - api phase extracts public interface of compiled sources by walking trees and indexing types
+    - dependency phase which extracts dependencies between source files (compilation units)
+    - analyzer phase which captures the list of emitted class files
+  </em> defines a custom reporter which allows sbt to gather errors and warnings
+  <em> subclasses Global to:
+    - add the api, dependency and analyzer phases
+    - set the custom reporter
+  </em> manages instances of the custom Global and uses them to compile files it determined that need
+    to be compiled
+</p><h4 id="API+extraction+phase">API extraction phase<a href="#API+extraction+phase" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The API extraction phase extracts information from Trees, Types and Symbols and maps it to
 incremental compiler’s internal data structures described in the
 <a href="https://raw.github.com/sbt/sbt/0.13/api.specification">api.specification</a> file.Those data
 structures allow to express an API in a way that is independent from Scala compiler version. Also,
@@ -6460,7 +6460,6 @@ arguments combined with <code>&amp;&amp;</code>.
 </p><h4 id="SNAPSHOT+and+dynamic+dependencies">SNAPSHOT and dynamic dependencies<a href="#SNAPSHOT+and+dynamic+dependencies" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>When a minigraph contains either a SNAPSHOT or dynamic dependency, the graph is considered dynamic, and it will be invalidated after a single task execution.
 Therefore, if you have any SNAPSHOT in your graph, your exeperience may degrade.
 (This could be improved in the future)
-</p><h4 id="Internal+dependencies+with">Internal dependencies with <code>% &quot;test&quot;</code><a href="#Internal+dependencies+with" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>There have been several bug reports on internal dependencies with <code>% &quot;test&quot;</code> like <a href="https://github.com/sbt/sbt/issues/1711">#1711</a>. This is still an open issue, and we hope to fix it in the next release.
 </p><a name="motivation"></a><h3 id="Motivation">Motivation<a href="#Motivation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt internally uses Apache Ivy to resolve library dependencies. While sbt has benefited from not having to reinvent depenendency resolution engine all these years, we are increasingly seeing scalability challenges especially for projects with both multiple subprojects and large dependency graph. There are several factors involved in sbt’s resolution scalability:
 </p><ul><li>Number of transitive nodes (libraries) in the graph
 </li><li>Exclusion and override rules
