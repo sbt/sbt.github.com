@@ -154,10 +154,10 @@ val classpath: Seq[File] = attributedClasspath.files
 <a href="Commands.html">command</a> (<em>not from another task</em>) and get its result. For
 example, an IDE-related command might want to get the classpath from a
 project or a task might analyze the results of a compilation. The
-relevant method is <code>Project.evaluateTask</code>, which has the following
+relevant method is <code>Project.runTask</code>, which has the following
 signature:
-</p><pre><code class="prettyprint lang-scala">def evaluateTask[T](taskKey: ScopedKey[Task[T]], state: State,
-  checkCycles: Boolean = false, maxWorkers: Int = ...): Option[Result[T]]
+</p><pre><code class="prettyprint lang-scala">def runTask[T](taskKey: ScopedKey[Task[T]], state: State,
+  checkCycles: Boolean = false): Option[(State, Result[T])]
 </code></pre><p>For example,
 </p><pre><code class="prettyprint lang-scala">val eval: State =&gt; State = (state: State) =&gt; {
 
@@ -170,13 +170,13 @@ signature:
     // None if the key is not defined
     // Some(Inc) if the task does not complete successfully (Inc for incomplete)
     // Some(Value(v)) with the resulting value
-    val result: Option[Result[inc.Analysis]] = Project.evaluateTask(taskKey, state)
+    val result: Option[(State, Result[inc.Analysis])] = Project.runTask(taskKey, state)
     // handle the result
     result match
     {
         case None =&gt; // Key wasn't defined.
-        case Some(Inc(inc)) =&gt; // error detail, inc is of type Incomplete, use Incomplete.show(inc.tpe) to get an error message
-        case Some(Value(v)) =&gt; // do something with v: inc.Analysis
+        case Some((newState, Inc(inc))) =&gt; // error detail, inc is of type Incomplete, use Incomplete.show(inc.tpe) to get an error message
+        case Some((newState, Value(v))) =&gt; // do something with v: inc.Analysis
     }
 }
 </code></pre><p>For getting the test classpath of a specific project, use this key:
@@ -203,7 +203,7 @@ input. For example,
           <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
 <div class="container">
     <div class="logo">
-      <a href="../../index.html"><img src="files/typesafe_sbt_reverse-pride.png" alt="sbt"></a>
+      <a href="../../index.html"><img src="files/typesafe_sbt_svg.svg" alt="sbt"></a>
       <span class="versions"><select id="versions"></select></span>
     </div>
     <div class="nav">
