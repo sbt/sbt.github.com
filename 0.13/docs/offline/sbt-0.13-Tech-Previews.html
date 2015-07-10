@@ -86,14 +86,17 @@ might be erroneously processed as they were regular jars by automated tools
 </p><p><a href="https://github.com/sbt/sbt/pull/1950">#1950</a>/<a href="https://github.com/sbt/sbt/pull/1987">#1987</a> by <a href="https://github.com/ajsquared">@ajsquared</a>
 </p><h3 id="Cached+resolution+fixes">Cached resolution fixes<a href="#Cached+resolution+fixes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>On a larger dependency graph, the JSON file growing to be 100MB+
 with 97% of taken up by <em>caller</em> information.
-The caller information is not useful once the graph is successfully resolved.
 To make the matter worse, these large JSON files were never cleaned up.
-</p><p>sbt 0.13.9 creates a single caller to represent all callers,
+</p><p>sbt 0.13.9 filters out artificial callers,
 which fixes <code>OutOfMemoryException</code> seen on some builds.
 This generally shrinks the size of JSON, so it should make the IO operations faster.
 Dynamic graphs will be rotated with directories named after <code>yyyy-mm-dd</code>,
 and stale JSON files will be cleaned up after few days.
-</p><p><a href="https://github.com/sbt/sbt/pull/2030">#2030</a>/<a href="https://github.com/sbt/sbt/issues/1721">#1721</a>/<a href="https://github.com/sbt/sbt/issues/2014">#2014</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</p><p>sbt 0.13.9 also fixes a correctness issue that was found in the earlier releases.
+Under some circumstances, libraries that shouldn’t have been evicted was being evicted.
+This occured when library <code>A1</code> depended on <code>B2</code>, but a newer <code>A2</code> dropped the dependency,
+and <code>A2</code> and <code>B1</code> are also is in the graph. This is fixed by sorting the graph prior to eviction.
+</p><p><a href="https://github.com/sbt/sbt/pull/2030">#2030</a>/<a href="https://github.com/sbt/sbt/issues/1721">#1721</a>/<a href="https://github.com/sbt/sbt/issues/2014">#2014</a>/<a href="https://github.com/sbt/sbt/issues/2046">#2046</a>/<a href="https://github.com/sbt/sbt/pull/2097">#2097</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
 </p><h3 id="Force+GC">Force GC<a href="#Force+GC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://github.com/cunei">@cunei</a> in <a href="https://github.com/sbt/sbt/issues/1223">#1223</a> discovered that sbt leaks PermGen
 when it creates classloaders to call Scala Compilers.
 sbt 0.13.9 will call GC on a set interval (default: 60s).
