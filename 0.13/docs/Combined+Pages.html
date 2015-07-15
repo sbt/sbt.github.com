@@ -9787,12 +9787,12 @@ val files: Seq[File] = cp.files
 </code></pre><a name="classpath-entry-module"></a><h3 id="Get+the+module+and+artifact+that+produced+a+classpath+entry">Get the module and artifact that produced a classpath entry<a href="#Get+the+module+and+artifact+that+produced+a+classpath+entry" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A classpath has type <code>Seq[Attributed[File]]</code>, which means that each
 entry carries additional metadata. This metadata is in the form of an
 <a href="../api/sbt/AttributeMap.html">AttributeMap</a>. Useful keys for
-entries in the map are <code>artifact.key</code>, <code>module.key</code>, and <code>analysis</code>. For
+entries in the map are <code>artifact.key</code>, <code>moduleID.key</code>, and <code>analysis</code>. For
 example,
 </p><pre><code class="prettyprint lang-scala">val classpath: Seq[Attributed[File]] = ???
 for(entry &lt;- classpath) yield {
    val art: Option[Artifact] = entry.get(artifact.key)
-   val mod: Option[ModuleID] = entry.get(module.key)
+   val mod: Option[ModuleID] = entry.get(moduleID.key)
    val an: Option[inc.Analysis] = entry.get(analysis)
    ...
 }
