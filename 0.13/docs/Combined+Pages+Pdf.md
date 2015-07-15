@@ -292,6 +292,8 @@ your plugin to the list.
     <https://github.com/laughedelic/literator>
 -   sbt-class-diagram (Create a class diagram)
     <https://github.com/xuwei-k/sbt-class-diagram>
+-   sbt-api-mappings (Resolves external links in ScalaDoc for common Scala libraries)
+    <https://github.com/ThoughtWorksInc/sbt-api-mappings>
 
 #### Library dependency plugins
 
@@ -395,6 +397,8 @@ your plugin to the list.
 
 -   sbt-buildinfo (Generate Scala source for any settings):
     <https://github.com/sbt/sbt-buildinfo>
+-   pttrt (Pass any data from compile-time to run-time):
+    <https://github.com/Atry/pttrt>
 -   sbt-haxe (Compiling [Haxe](http://www.haxe.org/) to Java):
     <https://bitbucket.org/qforce/sbt-haxe>
 -   sbt-scalabuff (Google Protocol Buffers with native scala suppport
