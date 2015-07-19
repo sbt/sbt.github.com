@@ -836,7 +836,7 @@ might be erroneously processed as they were regular jars by automated tools
 </p><h3 id="Cached+resolution+fixes">Cached resolution fixes<a href="#Cached+resolution+fixes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>On a larger dependency graph, the JSON file growing to be 100MB+
 with 97% of taken up by <em>caller</em> information.
 To make the matter worse, these large JSON files were never cleaned up.
-</p><p>sbt 0.13.9 filters out artificial callers,
+</p><p>sbt 0.13.9 filters out artificial or duplicate callers,
 which fixes <code>OutOfMemoryException</code> seen on some builds.
 This generally shrinks the size of JSON, so it should make the IO operations faster.
 Dynamic graphs will be rotated with directories named after <code>yyyy-mm-dd</code>,
