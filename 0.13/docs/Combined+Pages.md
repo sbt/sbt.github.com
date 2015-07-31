@@ -378,6 +378,8 @@ your plugin to the list.
     <https://github.com/sensatus/sbt-backup>
 -   sbt-project-graph (visualise inter-project dependencies):
     <https://github.com/dwijnand/sbt-project-graph>
+-   solr-plugin (start solr search engine from sbt)
+    <https://github.com/sgrouples/sbt-solr-plugin>
 
 #### Database plugins
 
@@ -439,6 +441,8 @@ your plugin to the list.
     <https://github.com/Geal/sbt-clojure>
 -   sbt-build-info-conf (Generates resources.conf file with build information):
     <https://github.com/Sensatus/sbt-build-info-conf>
+-   sbt-frege (Build [Frege](https://github.com/frege/frege) code):
+    <https://github.com/earldouglas/sbt-frege>
 
 #### Game development plugins
 
