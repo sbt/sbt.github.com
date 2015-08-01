@@ -186,6 +186,8 @@ your plugin to the list.
 
 #### Static code analysis plugins
 
+-   wartremover: <https://github.com/puffnfresh/wartremover> (WartRemover -
+    Scala static analysis)
 -   cpd4sbt: <https://github.com/sbt/cpd4sbt> (copy/paste detection,
     works for Scala, too)
 -   findbugs4sbt: <https://github.com/sbt/findbugs4sbt> (FindBugs only
@@ -256,7 +258,7 @@ your plugin to the list.
 #### Web and frontend development plugins
 
 -   xsbt-web-plugin:
-    <https://github.com/JamesEarlDouglas/xsbt-web-plugin>
+    <https://github.com/earldouglas/xsbt-web-plugin>
 -   xsbt-webstart: <https://github.com/ritschwumm/xsbt-webstart>
 -   sbt-gwt-plugin: <https://github.com/cdietze/sbt-gwt-plugin>
 -   coffeescripted-sbt:
@@ -282,6 +284,7 @@ your plugin to the list.
 
 #### Documentation plugins
 
+-   tut (Scala literate programming): <https://github.com/tpolecat/tut>
 -   sbt-site (Site generation for sbt):
     <https://github.com/sbt/sbt-site>
 -   sbt-lwm (Convert lightweight markup files, e.g., Markdown and
@@ -2904,7 +2907,7 @@ Some of the more visible changes:
     sources
 -   Merged plugins and processors into improved plugins system:
     [Plugins][Plugins]
--   [Web application](https://github.com/JamesEarlDouglas/xsbt-web-plugin)
+-   [Web application](https://github.com/earldouglas/xsbt-web-plugin)
     and webstart support moved to plugins instead of core features
 -   Fixed all of the issues in (Google Code) issue #44
 -   Managed dependencies automatically updated when configuration
@@ -4948,7 +4951,7 @@ chmod u+x shout.scala
 /***         
 scalaVersion := "2.10.4"
  
-resolvers += Resolver.url("typesafe-ivy-repo", url("http://typesafe.artifactoryonline.com/typesafe/releases"))(Resolver.ivyStylePatterns)
+resolvers += Resolver.url("typesafe-ivy-repo", url("http://repo.typesafe.com/typesafe/releases"))(Resolver.ivyStylePatterns)
  
 libraryDependencies += "org.scala-sbt" % "io" % "0.13.8"
 */         
@@ -17882,7 +17885,7 @@ parallelExecution := false
 #### What happened to the web development and Web Start support since 0.7?
 
 Web application support was split out into a plugin. See the
-[xsbt-web-plugin](https://github.com/JamesEarlDouglas/xsbt-web-plugin)
+[xsbt-web-plugin](https://github.com/earldouglas/xsbt-web-plugin)
 project.
 
 For an early version of an xsbt Web Start plugin, visit the

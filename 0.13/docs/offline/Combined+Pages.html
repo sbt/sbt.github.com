@@ -157,7 +157,9 @@ sublime) <a href="https://github.com/kalmanb/sbt-ctags">https://github.com/kalma
 </li><li>sbt-scoverage: <a href="https://github.com/scoverage/sbt-scoverage">https://github.com/scoverage/sbt-scoverage</a>
 </li><li>jacoco4sbt: <a href="https://github.com/sbt/jacoco4sbt">https://github.com/sbt/jacoco4sbt</a>
 </li><li>sbt-coveralls: <a href="https://github.com/scoverage/sbt-coveralls">https://github.com/scoverage/sbt-coveralls</a>
-</li></ul><h4 id="Static+code+analysis+plugins">Static code analysis plugins<a href="#Static+code+analysis+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>cpd4sbt: <a href="https://github.com/sbt/cpd4sbt">https://github.com/sbt/cpd4sbt</a> (copy/paste detection,
+</li></ul><h4 id="Static+code+analysis+plugins">Static code analysis plugins<a href="#Static+code+analysis+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>wartremover: <a href="https://github.com/puffnfresh/wartremover">https://github.com/puffnfresh/wartremover</a> (WartRemover -
+Scala static analysis)
+</li><li>cpd4sbt: <a href="https://github.com/sbt/cpd4sbt">https://github.com/sbt/cpd4sbt</a> (copy/paste detection,
 works for Scala, too)
 </li><li>findbugs4sbt: <a href="https://github.com/sbt/findbugs4sbt">https://github.com/sbt/findbugs4sbt</a> (FindBugs only
 supports Java projects atm)
@@ -212,7 +214,7 @@ programs): <a href="https://github.com/ngocdaothanh/xitrum-package">https://gith
 </li><li>sbt-heroku: <a href="https://github.com/heroku/sbt-heroku">https://github.com/heroku/sbt-heroku</a>
 </li></ul><h4 id="Monitoring+integration+plugins">Monitoring integration plugins<a href="#Monitoring+integration+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>sbt-newrelic: <a href="https://github.com/gilt/sbt-newrelic">https://github.com/gilt/sbt-newrelic</a>
 </li></ul><h4 id="Web+and+frontend+development+plugins">Web and frontend development plugins<a href="#Web+and+frontend+development+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>xsbt-web-plugin:
-<a href="https://github.com/JamesEarlDouglas/xsbt-web-plugin">https://github.com/JamesEarlDouglas/xsbt-web-plugin</a>
+<a href="https://github.com/earldouglas/xsbt-web-plugin">https://github.com/earldouglas/xsbt-web-plugin</a>
 </li><li>xsbt-webstart: <a href="https://github.com/ritschwumm/xsbt-webstart">https://github.com/ritschwumm/xsbt-webstart</a>
 </li><li>sbt-gwt-plugin: <a href="https://github.com/cdietze/sbt-gwt-plugin">https://github.com/cdietze/sbt-gwt-plugin</a>
 </li><li>coffeescripted-sbt:
@@ -235,7 +237,8 @@ programs): <a href="https://github.com/ngocdaothanh/xitrum-package">https://gith
 </li><li>sbt-phantomjs (Automated installer and configurator for PhantomJS): <a href="https://github.com/saturday06/sbt-phantomjs">https://github.com/saturday06/sbt-phantomjs</a>
 </li><li>sbt-play-scalajs: <a href="https://github.com/vmunier/sbt-play-scalajs">https://github.com/vmunier/sbt-play-scalajs</a>
 </li><li>scalatra-sbt: <a href="https://github.com/scalatra/scalatra-sbt">https://github.com/scalatra/scalatra-sbt</a>
-</li></ul><h4 id="Documentation+plugins">Documentation plugins<a href="#Documentation+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>sbt-site (Site generation for sbt):
+</li></ul><h4 id="Documentation+plugins">Documentation plugins<a href="#Documentation+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>tut (Scala literate programming): <a href="https://github.com/tpolecat/tut">https://github.com/tpolecat/tut</a>
+</li><li>sbt-site (Site generation for sbt):
 <a href="https://github.com/sbt/sbt-site">https://github.com/sbt/sbt-site</a>
 </li><li>sbt-lwm (Convert lightweight markup files, e.g., Markdown and
 Textile, to HTML): <a href="http://software.clapper.org/sbt-lwm/">http://software.clapper.org/sbt-lwm/</a>
@@ -1936,7 +1939,7 @@ entry (moduleID, artifact, and configuration keys). gh-41
 sources
 </li><li>Merged plugins and processors into improved plugins system:
 <a href="Plugins.html">Plugins</a>
-</li><li><a href="https://github.com/JamesEarlDouglas/xsbt-web-plugin">Web application</a>
+</li><li><a href="https://github.com/earldouglas/xsbt-web-plugin">Web application</a>
 and webstart support moved to plugins instead of core features
 </li><li>Fixed all of the issues in (Google Code) issue #44
 </li><li>Managed dependencies automatically updated when configuration
@@ -3434,7 +3437,7 @@ compile the script, and run it directly. For example, if you name it
 /***         
 scalaVersion := &quot;2.10.4&quot;
  
-resolvers += Resolver.url(&quot;typesafe-ivy-repo&quot;, url(&quot;http://typesafe.artifactoryonline.com/typesafe/releases&quot;))(Resolver.ivyStylePatterns)
+resolvers += Resolver.url(&quot;typesafe-ivy-repo&quot;, url(&quot;http://repo.typesafe.com/typesafe/releases&quot;))(Resolver.ivyStylePatterns)
  
 libraryDependencies += &quot;org.scala-sbt&quot; % &quot;io&quot; % &quot;0.13.8&quot;
 */         
@@ -11513,7 +11516,7 @@ parallelExecution in Test := false
 // Execute everything serially (including compilation and tests)
 parallelExecution := false
 </code></pre><h4 id="What+happened+to+the+web+development+and+Web+Start+support+since+0.7%3F">What happened to the web development and Web Start support since 0.7?<a href="#What+happened+to+the+web+development+and+Web+Start+support+since+0.7%3F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Web application support was split out into a plugin. See the
-<a href="https://github.com/JamesEarlDouglas/xsbt-web-plugin">xsbt-web-plugin</a>
+<a href="https://github.com/earldouglas/xsbt-web-plugin">xsbt-web-plugin</a>
 project.
 </p><p>For an early version of an xsbt Web Start plugin, visit the
 <a href="https://github.com/ritschwumm/xsbt-webstart">xsbt-webstart</a> project.
