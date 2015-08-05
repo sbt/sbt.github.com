@@ -176,6 +176,7 @@ your plugin to the list.
 -   sbt-doctest: <https://github.com/tkawachi/sbt-doctest>
 -   sbt-cassandra-plugin: <https://github.com/hochgi/sbt-cassandra-plugin>
 -   sbt-tabular-test-reporter: <https://github.com/programmiersportgruppe/sbt-tabular-test-reporter>
+-   sbt-notifications: <https://github.com/PavelPenkov/sbt-notifications> (sends notifications when test run is finished)
 
 #### Code coverage plugins
 
@@ -451,6 +452,8 @@ your plugin to the list.
     <https://github.com/Sensatus/sbt-build-info-conf>
 -   sbt-frege (Build [Frege](https://github.com/frege/frege) code):
     <https://github.com/earldouglas/sbt-frege>
+-   sbt-swagger-codegen (Models, Client and Server code generation integrated as an SBT plugin. Generate code from your Swagger(https://github.com/swagger-api) files):
+    <https://github.com/unicredit/sbt-swagger-codegen>
 
 #### Game development plugins
 
