@@ -166,7 +166,7 @@ your plugin to the list.
     <https://github.com/guardian/sbt-teamcity-test-reporting-plugin>
 -   xsbt-cucumber-plugin:
     <https://github.com/skipoleschris/xsbt-cucumber-plugin>
--   sbt-multi-jvm: <https://github.com/typesafehub/sbt-multi-jvm>
+-   sbt-multi-jvm: <https://github.com/sbt/sbt-multi-jvm>
 -   sbt-testng-interface: <https://github.com/sbt/sbt-testng-interface>
 -   sbt-doctest: <https://github.com/tkawachi/sbt-doctest>
 -   sbt-cassandra-plugin: <https://github.com/hochgi/sbt-cassandra-plugin>
@@ -449,6 +449,8 @@ your plugin to the list.
     <https://github.com/earldouglas/sbt-frege>
 -   sbt-swagger-codegen (Models, Client and Server code generation integrated as an SBT plugin. Generate code from your Swagger(https://github.com/swagger-api) files):
     <https://github.com/unicredit/sbt-swagger-codegen>
+-   sbt-heroku-deploy ( Deploy Scala Web applications to Heroku):
+    <https://github.com/earldouglas/sbt-heroku-deploy>
 
 #### Game development plugins
 
@@ -468,7 +470,7 @@ your plugin to the list.
 
 #### OSGi plugin
 
--   sbtosgi: <https://github.com/typesafehub/sbtosgi>
+-   sbtosgi: <https://github.com/sbt/sbt-osgi>
 
 #### Plugin bundles
 
