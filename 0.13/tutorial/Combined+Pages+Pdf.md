@@ -35,7 +35,7 @@ Thanks for trying out sbt and *have fun*!
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.8/sbt-0.13.8.msi
+  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.9/sbt-0.13.9.msi
   [Setup-Notes]: ../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -69,8 +69,8 @@ If you have any trouble running sbt, see [Setup Notes][Setup-Notes] on
 terminal encodings, HTTP proxies, and JVM options.
 
 
-  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.8/sbt-0.13.8.zip
-  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.8/sbt-0.13.8.tgz
+  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.9/sbt-0.13.9.zip
+  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.9/sbt-0.13.9.tgz
   [Manual-Installation]: Manual-Installation.html
   [Activator-Installation]: Activator-Installation.html
 
@@ -108,9 +108,9 @@ See the [Typesafe Activator instructions][Activator-Installation].
 See instruction to install manually.
 
 
-  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.8/sbt-0.13.8.msi
-  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.8/sbt-0.13.8.zip
-  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.8/sbt-0.13.8.tgz
+  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.9/sbt-0.13.9.msi
+  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.9/sbt-0.13.9.zip
+  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.9/sbt-0.13.9.tgz
   [Activator-Installation]: Activator-Installation.html
 
 Installing sbt on Windows
@@ -133,10 +133,10 @@ See the [Typesafe Activator instructions][Activator-Installation].
 See instruction to install manually.
 
 
-  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.8/sbt-0.13.8.zip
-  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.8/sbt-0.13.8.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-0.13.8.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-0.13.8.deb
+  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.9/sbt-0.13.9.zip
+  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.9/sbt-0.13.9.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-0.13.9.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-0.13.9.deb
   [Manual-Installation]: Manual-Installation.html
   [Activator-Installation]: Activator-Installation.html
   [website127]: https://github.com/sbt/website/issues/127
@@ -206,7 +206,7 @@ See the [Typesafe Activator instructions][Activator-Installation].
 See [instructions to install manually][Manual-Installation].
 
 
-  [sbt-launch.jar]: https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.8/sbt-launch.jar
+  [sbt-launch.jar]: https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.9/sbt-launch.jar
 
 Installing sbt manually
 -----------------------
@@ -422,10 +422,10 @@ You can force a particular version of sbt by creating a file
 `hello/project/build.properties`. In this file, write:
 
 ```
-sbt.version=0.13.8
+sbt.version=0.13.9
 ```
 
-to force the use of sbt 0.13.8. sbt is 99% source compatible from
+to force the use of sbt 0.13.9. sbt is 99% source compatible from
 release to release. Still, setting the sbt version in
 `project/build.properties` avoids any potential confusion.
 
