@@ -89,7 +89,8 @@ sbt0.13での変更点や新機能に興味があるなら、<a href="http://eed
 これらのディストロは通常コマンドラインや GUI 上から使えるパッケージ・マネージャがあって
 (例: <code>apt-get</code>、<code>aptitude</code>、Synaptic など)、インストールはそれらから行う。
 ターミナル上から以下を実行すると <code>sbt</code> をインストールできる (superuser 権限を必要とするため、<code>sudo</code> を使っている)。
-</p><pre><code>echo &quot;deb http://dl.bintray.com/sbt/debian /&quot; | sudo tee -a /etc/apt/sources.list.d/sbt.list
+</p><pre><code>echo &quot;deb https://dl.bintray.com/sbt/debian /&quot; | sudo tee -a /etc/apt/sources.list.d/sbt.list
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 642AC823
 sudo apt-get update
 sudo apt-get install sbt
 </code></pre><p>パッケージ・マネージャは設定されたリポジトリに指定されたパッケージがあるか確認しにいく。
