@@ -13142,11 +13142,7 @@ notifications:
 ```
 
 
-  [pickling]: https://github.com/scala/pickling
   [HowCanIHelp]: http://www.scala-sbt.org/community.html#how-can-I-help
-  [Sbt-Launcher]: Sbt-Launcher.html
-  [Compiler-Interface]: Compiler-Interface.html
-  [launcher-inject]: https://github.com/sbt/sbt/blob/0.13/project/SbtLauncherPlugin.scala#L24-L34
 
 Developer's Guide (Work in progress)
 ------------------------------------
@@ -13154,108 +13150,6 @@ Developer's Guide (Work in progress)
 This is the set of documentation about the future architecture of sbt.
 The target audience of this document is the sbt plugin authors
 and sbt developers. See also [How can I help?][HowCanIHelp]
-
-### Currently Modularized
-
-Here is a list of projects that have already been modularized 
-
-#### [sbt/serialization](https://github.com/sbt/serialization)
-
-sbt serialization is an opinionated wrapper around [Scala Pickling][pickling] focused on sbt's usage.
-
-#### [launcher][Sbt-Launcher]
-
-The sbt launcher provides a generic container that can load and run
-programs resolved using the Ivy dependency manager. Sbt uses this as its
-own deployment mechanism. (Hosted at [sbt/launcher](https://github.com/sbt/launcher))
-
-The sbt launcher provides two parts:
-
-1. An interface for launched applications to interact with the launcher code
-2. A minimal sbt-launch.jar that can launch application by resolving them
-   through ivy.
-
-The launch jar will look in its own classpath for a boot properties file.  The 
-[sbt/sbt](https://github.com/sbt/sbt) project then pulls in the raw JAR and
-[injects the appropriate boot.properties files for sbt](launcher-inject).
-
-#### [compiler-interface][Compiler-Interface]
-
-The compiler interface is the part of sbt that is recompiled against the version of
-the Scala compiler that is used to compile your projects.
-
-It is in charge of extracting information from your source code by walking the compiled
-trees and is therefore very sensitive to the Scala version in use.
-
-### Plans for modularization
-
-The process we aim to take for sbt 1.0 is to disassemble sbt into small modules.
-To be clear sbt 0.13's codebase already does consists of numerous subprojects.
-
-Here's what we envision the modilarization process to look like:
-
-- pull apart subprojects by feature
-- make separate Github repositories
-- distinguish public API and internal implemention
-- document the usages
-- clean up the code since we can break bincompat
-- publish to Maven
-
-Here are some of the pending modularization we'd like to do.
-
-
-#### [sbt/sbt-remote-control](https://github.com/sbt/sbt-remote-control)
-
-sbt-remote-control is the project name for sbt client-server via JSON API.
-
-
-### Client API + Protocol
-
-We plan to fragment the protocol and client APIs into their own module.  These
-APIs will define a "nearly forever" compatible protocol for interacting with any
-sbt-server.  Included in this portion of code are protocol stability tests.
-We'd also like to create a set of re-usable semantic tests for use when
-building sbt/sbt.
-
-### Sbt Server
-
-This module we plan to unify with the sbt/sbt project, after it has
-fully stabilized.
-
-#### [sbt/website](https://github.com/sbt/website)
-
-This website's source.
-
-#### [sbt/sbt](https://github.com/sbt/sbt)
-
-Most of the sbt codebase still lives here.
-Here are some of the potential modules we can pull out.
-
-#### Compiler API
-
-At the core of sbt is the incremental compiler of Scala. This API is so fundamental,
-that we now seldom think of it as a feature of sbt.
-There are number of subprojects/classes involved that are actually internal details
-that we should use this opportunity to hide.
-
-#### Library management API
-
-sbt's library management system is based on Apache Ivy, and the concepts and
-terminology around library management system is borrowed from Apache Ivy.
-However in 0.13.x technology preview series there has been a number of improvements
-that goes beyond wrapping Ivy, namely cached resolution and Maven repository resolver.
-
-#### IO API
-
-Low level API to deal with files and directories.
-
-#### Completion API
-
-Combinator parser with tab completion.
-
-#### Task DSL
-
-This is the part that's exposed to `build.sbt`.
 
 ### Towards sbt 1.0
 
@@ -13273,14 +13167,14 @@ and innovate where it matters. There are several levels of stability:
 
 #### Concepts
 
-Concepturally we are stable on what sbt does:
+Concepturally, sbt has been stable on what it does:
 
 1. incremental compilation that supports Scala
 2. dependency management that's aware of Scala's binary compatibility
 3. task and plugins system that's extensible using Scala
 4. a text-based interactive shell
 
-The only thing that will change is the last point.
+The only thing that we plan to change is the last point.
 In sbt 1.0, we will replace the interactive shell with sbt server
 that's accessible via JSON API and a text-based client.
 
@@ -13304,6 +13198,103 @@ From the development perspective, maintaining binary compatibility becomes
 an additional constraint that we need to worry about whenever we make changes.
 The of the problem is that sbt 0.13 does not distinguish between public API
 and internal impelmentation. Most things are open to plugins.
+
+
+### Modularization
+
+The process we aim to take for sbt 1.0 is to disassemble sbt into small modules.
+To be clear sbt 0.13's codebase already does consists of numerous subprojects.
+
+Modules are more course-grained sets of subproject(s) that can be used independently.
+Another purpose of the modules is to distinguish between public API and internal implementation.
+Reducing the surface area of the sbt code base have several benefits:
+
+- It makes it easier for the build users and the plugin authors to learn the APIs.
+- It makes it easier for us to maintain binary and semantic compatibilities.
+- It encourages the reuse of the modules.
+
+The following is a conceptual diagram of the modules:
+
+![Module diagram](files/module-diagram.png)
+
+We'll discuss the details in the next page.
+
+
+  [iorepo]: https://github.com/sbt/io
+  [serializationrepo]: https://github.com/sbt/serialization
+  [Sbt-Launcher]: Sbt-Launcher.html
+  [Compiler-Interface]: Compiler-Interface.html
+  [pickling]: https://github.com/scala/pickling
+  [utilrepo]: https://github.com/sbt/util
+  [librarymanagementrepo]: https://github.com/sbt/librarymanagement
+  [incrementalcompilerrepo]: https://github.com/sbt/incrementalcompiler
+  [launcherrepo]: https://github.com/sbt/launcher
+  [conscriptrepo]: https://github.com/n8han/conscript
+  [websiterepo]: https://github.com/sbt/website
+
+### Module summary
+
+The following is a conceptual diagram of the modules:
+
+![Module diagram](files/module-diagram.png)
+
+This diagram is arranged such that each layer depends only on the layers underneath it.
+
+#### Website ([sbt/website][websiterepo])
+
+This website's source.
+
+#### IO API ([sbt/io][iorepo])
+
+IO API is a low level API to deal with files and directories.
+
+#### Serialization API ([sbt/serialization][serializationrepo])
+
+Serialization API is an opinionated wrapper around [Scala Pickling][pickling].
+The responsibility of the serialization API is to turn values into JSON.
+
+#### Util APIs ([sbt/util][utilrepo])
+
+Util APIs provide commonly used features like logging and internal datatypes used by sbt.
+
+#### LibraryManagement API ([sbt/librarymanagement][librarymanagementrepo])
+
+sbt's library management system is based on Apache Ivy, and as such
+the concepts and terminology around library management system is also influenced by Ivy.
+The responsibility of the library management API is to calcuate the transitive dependency graph,
+and download artifacts from the given repositories.
+
+#### IncrementalCompiler API ([sbt/incrementalcompiler][incrementalcompilerrepo])
+
+Incremental compiler of Scala is so fundamental,
+that we now seldom think of it as a feature of sbt.
+There are number of subprojects/classes involved that are actually internal details
+that we should use this opportunity to hide.
+
+#### Build API (tbd)
+
+This is the part that's exposed to `build.sbt`.
+The responsibility of the module is to load the build files and plugins,
+and provide a way for commands to be executed on the state.
+
+This might remain at [sbt/sbt](https://github.com/sbt/sbt).
+
+#### sbt Launcher ([sbt/launcher][launcherrepo])
+
+The sbt launcher provides a generic container that can load and run
+programs resolved using the Ivy dependency manager.
+sbt uses this as the deployment mechanism, but it can be used for other purposes.
+
+See [n8han/conscript][conscriptrepo] and [Launcher][Sbt-Launcher] for more details.
+
+#### Client/Server (tbd)
+
+Currently developed in [sbt/sbt-remote-control](https://github.com/sbt/sbt-remote-control).
+sbt Server provides a JSON-based API wrapping functionality of the commandline experience.
+
+One of the clients will be the "terminal client",
+which subsumes the commandline sbt shell.
+Other clients that are planned are integration with the IDEs.
 
 
 Compiler Interface
@@ -13369,9 +13360,16 @@ The code is hosted at [sbt/launcher](https://github.com/sbt/launcher).
 
 
   [Launcher-Configuration]: Launcher-Configuration.html
+  [launcher-inject]: https://github.com/sbt/sbt/blob/0.13/project/SbtLauncherPlugin.scala#L24-L34
 
-Getting Started with the Sbt Launcher
+Getting Started with the sbt launcher
 -------------------------------------
+
+The sbt launcher provides two parts:
+
+1. An interface for launched applications to interact with the launcher code
+2. A minimal sbt-launch.jar that can launch application by resolving them
+   through ivy.
 
 The sbt launcher component is a self-contained jar that boots a Scala
 application or server without Scala or the application already existing
@@ -13386,6 +13384,10 @@ For unix, the script would look like: `java -jar sbt-launcher.jar "$@"`
 
 The user can now launch servers and applications which provide sbt
 launcher configuration.
+
+Alternatively, you can repackage the launcher with a launcher configuration file.
+The [sbt/sbt](https://github.com/sbt/sbt) for example pulls in the raw JAR and
+[injects the appropriate boot.properties files for sbt](launcher-inject).
 
 #### Applications
 
