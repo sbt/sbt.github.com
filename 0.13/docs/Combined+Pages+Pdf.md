@@ -13207,18 +13207,18 @@ and internal impelmentation. Most things are open to plugins.
 
 ### Modularization
 
-The process we aim to take for sbt 1.0 is to disassemble sbt into small modules.
+The process we aim to take for sbt 1.0 is to disassemble sbt into smaller modules and layers.
 To be clear sbt 0.13's codebase already does consists of numerous subprojects.
 
-Modules are more course-grained sets of subproject(s) that can be used independently.
-Another purpose of the modules is to distinguish between public API and internal implementation.
+Layers are more course-grained sets of subproject(s) that can be used independently.
+Another purpose of the modularization is to distinguish between public API and internal implementation.
 Reducing the surface area of the sbt code base have several benefits:
 
 - It makes it easier for the build users and the plugin authors to learn the APIs.
 - It makes it easier for us to maintain binary and semantic compatibilities.
 - It encourages the reuse of the modules.
 
-The following is a conceptual diagram of the modules:
+The following is a conceptual diagram of the layers:
 
 ![Module diagram](files/module-diagram.png)
 
@@ -13239,15 +13239,11 @@ We'll discuss the details in the next page.
 
 ### Module summary
 
-The following is a conceptual diagram of the modules:
+The following is a conceptual diagram of the modular layers:
 
 ![Module diagram](files/module-diagram.png)
 
 This diagram is arranged such that each layer depends only on the layers underneath it.
-
-#### Website ([sbt/website][websiterepo])
-
-This website's source.
 
 #### IO API ([sbt/io][iorepo])
 
@@ -13300,6 +13296,212 @@ sbt Server provides a JSON-based API wrapping functionality of the commandline e
 One of the clients will be the "terminal client",
 which subsumes the commandline sbt shell.
 Other clients that are planned are integration with the IDEs.
+
+#### Website ([sbt/website][websiterepo])
+
+This website's source.
+
+
+  [jsuereth2012]: http://jsuereth.com/scala/2012/04/22/scaladays.html
+  [pins_trait127]: http://www.artima.com/pins1ed/traits.html#12.7
+  [mima]: https://github.com/typesafehub/migration-manager
+
+sbt Coding Guideline
+--------------------
+
+This page discusses the coding style and other guidelines for sbt 1.0.
+
+### General goal
+
+sbt 1.0 will primarily target Scala 2.11.
+We will cross build against Scala 2.10.
+
+#### Clean up old deprecation
+
+Before 1.0 is release, we should clean up deprecations.
+
+#### Aim for zero warnings (except deprecation)
+
+On Scala 2.11 we should aim for zero warnings.
+One exception may be deprecation if it's required for 2.10 cross building.
+
+### Modular design
+
+#### Aim small
+
+The fewer methods we can expose to the build user, the easier it becomes to maintain it.
+
+#### Public APIs should be coded against "interfaces"
+
+Code against interface.
+
+#### Hide implementation details
+
+The implementation details should be hidden behind `sbt.internal.x` package,
+where `x` could be the name of the main package (like `io`).
+
+#### Depend less
+
+Making independent modules with fewer dependent libraries make it easier to reuse them.
+
+#### Hide external classes
+
+Avoid exposing external classes out to API, except for standard Scala and Java classes.
+
+#### Hide internal modules
+
+A module may be declared internal if there's no use for public.
+
+#### Compiler flags
+
+```
+-encoding utf8
+-deprecation
+-feature
+-unchecked
+-Xlint
+-language:higherKinds
+-language:implicitConversions
+-Xfuture
+-Yinline-warnings
+-Yno-adapted-args
+-Ywarn-dead-code
+-Ywarn-numeric-widen
+-Ywarn-value-discard
+-Xfatal-warnings
+```
+
+The `-Xfatal-warnings` may be removed if there are unavoidable warnings.
+
+#### Package name and organization name
+
+Use the package name appended with the layer name, such as `sbt.io` for IO layer.
+The organization name for the publish artifacts should remain `org.scala-sbt`.
+
+### Binary resiliency
+
+A good overview on the topic of binary resiliency is [Josh's 2012][jsuereth2012] talk
+Binary resiliency.
+The guideline here applies mostly to publicly exposed APIs.
+
+#### MiMa
+
+Use [MiMa][mima].
+
+#### Public traits should contain `def` declarations only
+
+- `val` or `var` in `trait` results to codegen at subclass and at the artificial `Foo$class.$init$`.
+- `lazy val` results to codegen at subclass
+
+#### Abstract classes are also useful
+
+[To trait, or not to trait?][pins_trait127].
+It is less flexible compared to trait, but easier to maintain binary compatibility. It also has better Java interop.
+
+#### Seal the traits and abstract classes
+
+If there's no need to keep the classes open, seal it.
+
+#### Finalize the leaf classes
+
+If there's no need to keep the classes open, finalize it.
+
+#### Typeclass and subclass inheritance
+
+Typeclass pattern with pure trait might be easier to maintain binary compatibility than subclassing.
+
+#### Avoid case classes, use sbt-datatype
+
+case class involves various codegen, which makes it harder to maintain binary compatibility over time.
+
+#### Prefer method overloading over default parameter values
+
+The default parameter values are effectively codegen,
+which makes it difficult to maintain.
+
+### Other public API matter
+
+Here are other guidelines about public API.
+
+#### Avoid Stringly-typed programming
+
+Define datatypes.
+
+#### Avoid overuse of `def apply`
+
+`def apply` should be reserved for factory methods
+in a companion object that returns type `T`.
+
+#### Use specific datatype (`Vector`, `List`, or `Array`) rather than `Seq`.
+
+`scala.Seq` is `scala.collection.Seq`, which is not immutable.
+Default to `Vector`. Use `List` if constant prepending is needed.
+Use `Array` if Java interop is needed.
+Note using mutable collection is perfectly fine within the implementation.
+
+#### Avoid calling `toSeq` or anything side-effecty on `Set`
+
+`Set` is fine if you stick with set operations, like `contains` and `subsetOf`.
+More often than not, `toSeq` is called explicitly or implicitly,
+or some side effecting method is called from `map`.
+This introduces non-determinism to the code.
+
+#### Avoid calling `toSeq` on `Map`
+
+Same as above. That will introduce non-determinism.
+
+#### Avoid functions and tuples in the signature, if Java interop is needed
+
+Instead of functions and tuples, turn them into a trait.
+This is if Java interop is a concern, like implementing
+incremental compiler.
+
+### Style matter
+
+#### Use scalariform
+
+sbt-houserules comes with scalariform.
+
+#### Avoid procedure syntax
+
+Return `Unit`.
+
+#### Typeclass instances are encouraged to be defined in the companions
+
+```scala
+final class FooID {}
+object FooID {
+  implicit val fooIdPicklerUnpicker: PicklerUnpickler[FooID] = ???
+}
+```
+
+#### Implicit converter for syntax (enrich-my-library) should be imported
+
+Avoid defining implicit converters in companion objects and package objects.
+
+Suppose IO module introduces `URL` enrichment called `RichURI`;
+and LibraryManagement introduces `String` enrichment called `GroupID` (for `ModuleID` syntax).
+These implicit converters should be defined in an object named `syntax` in respective packge:
+
+```scala
+package sbt.io
+
+object syntax {
+  implicit def uriToRichURI(uri: URI): RichURI = new RichURI(uri)
+}
+```
+
+When all the layers are available, `sbt` package should also define an object called `syntax`,
+which forwards all the implicit converters from all the layers:
+
+```scala
+package sbt
+
+object syntax {
+  implicit def uriToRichURI(uri: URI): io.RichURI = io.syntax.uriToRichURI(uri)
+  ....
+}
+```
 
 
 Compiler Interface
