@@ -70,7 +70,8 @@ String value.
 }
 </code></pre><p>Or, to read the manifest from a file:
 </p><pre><code class="prettyprint lang-scala">packageOptions in (Compile, packageBin) +=  {
-  val manifest = Using.fileInputStream( in =&gt; new java.util.jar.Manifest(in) )
+  val file = new java.io.File(&quot;META-INF/MANIFEST.MF&quot;)
+  val manifest = Using.fileInputStream(file)( in =&gt; new java.util.jar.Manifest(in) )
   Package.JarManifest( manifest )
 }
 </code></pre><a name="name"></a><h3 id="Change+the+file+name+of+a+package">Change the file name of a package<a href="#Change+the+file+name+of+a+package" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The <code>artifactName</code> setting controls the name of generated packages. See

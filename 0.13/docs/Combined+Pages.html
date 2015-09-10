@@ -392,8 +392,10 @@ code): <a href="https://github.com/sbt/sbt-boilerplate">https://github.com/sbt/s
 <a href="https://github.com/earldouglas/sbt-frege">https://github.com/earldouglas/sbt-frege</a>
 </li><li>sbt-swagger-codegen (Models, Client and Server code generation integrated as an SBT plugin. Generate code from your Swagger(https://github.com/swagger-api) files):
 <a href="https://github.com/unicredit/sbt-swagger-codegen">https://github.com/unicredit/sbt-swagger-codegen</a>
-</li><li>sbt-heroku-deploy ( Deploy Scala Web applications to Heroku):
+</li><li>sbt-heroku-deploy (Deploy Scala Web applications to Heroku):
 <a href="https://github.com/earldouglas/sbt-heroku-deploy">https://github.com/earldouglas/sbt-heroku-deploy</a>
+</li><li>scavro (Code generation from <a href="http://avro.apache.org/">Avro</a> schema): 
+<a href="https://github.com/oysterbooks/scavro">https://github.com/oysterbooks/scavro</a>
 </li></ul><h4 id="Game+development+plugins">Game development plugins<a href="#Game+development+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>sbt-lwjgl-plugin (Light Weight Java Game Library):
 <a href="https://github.com/philcali/sbt-lwjgl-plugin">https://github.com/philcali/sbt-lwjgl-plugin</a>
 </li><li>sbt-scage-plugin (Scala Game Engine):
@@ -10574,7 +10576,8 @@ String value.
 }
 </code></pre><p>Or, to read the manifest from a file:
 </p><pre><code class="prettyprint lang-scala">packageOptions in (Compile, packageBin) +=  {
-  val manifest = Using.fileInputStream( in =&gt; new java.util.jar.Manifest(in) )
+  val file = new java.io.File(&quot;META-INF/MANIFEST.MF&quot;)
+  val manifest = Using.fileInputStream(file)( in =&gt; new java.util.jar.Manifest(in) )
   Package.JarManifest( manifest )
 }
 </code></pre><a name="name"></a><h3 id="Change+the+file+name+of+a+package">Change the file name of a package<a href="#Change+the+file+name+of+a+package" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The <code>artifactName</code> setting controls the name of generated packages. See

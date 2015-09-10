@@ -454,8 +454,10 @@ your plugin to the list.
     <https://github.com/earldouglas/sbt-frege>
 -   sbt-swagger-codegen (Models, Client and Server code generation integrated as an SBT plugin. Generate code from your Swagger(https://github.com/swagger-api) files):
     <https://github.com/unicredit/sbt-swagger-codegen>
--   sbt-heroku-deploy ( Deploy Scala Web applications to Heroku):
+-   sbt-heroku-deploy (Deploy Scala Web applications to Heroku):
     <https://github.com/earldouglas/sbt-heroku-deploy>
+-   scavro (Code generation from [Avro](http://avro.apache.org/) schema): 
+    <https://github.com/oysterbooks/scavro>
 
 #### Game development plugins
 
@@ -16479,7 +16481,8 @@ Or, to read the manifest from a file:
 
 ```scala
 packageOptions in (Compile, packageBin) +=  {
-  val manifest = Using.fileInputStream( in => new java.util.jar.Manifest(in) )
+  val file = new java.io.File("META-INF/MANIFEST.MF")
+  val manifest = Using.fileInputStream(file)( in => new java.util.jar.Manifest(in) )
   Package.JarManifest( manifest )
 }
 ```
