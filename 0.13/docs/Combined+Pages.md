@@ -416,7 +416,6 @@ your plugin to the list.
     <https://github.com/sbt/sbt-protobuf>
 -   sbt-cppp (Cross-Project Protobuf Plugin for Sbt):
     <https://github.com/Atry/sbt-cppp>
--   sbt-avro (Apache Avro): <https://github.com/cavorite/sbt-avro>
 -   sbt-xjc (XSD binding, using
     [JAXB XJC](http://download.oracle.com/javase/6/docs/technotes/tools/share/xjc.html) ):
     <https://github.com/sbt/sbt-xjc>
@@ -453,8 +452,11 @@ your plugin to the list.
     <https://github.com/unicredit/sbt-swagger-codegen>
 -   sbt-heroku-deploy (Deploy Scala Web applications to Heroku):
     <https://github.com/earldouglas/sbt-heroku-deploy>
+-   sbt-avro (Apache Avro): <https://github.com/cavorite/sbt-avro>
 -   scavro (Code generation from [Avro](http://avro.apache.org/) schema): 
     <https://github.com/oysterbooks/scavro>
+-   sbt-datatype (Generates pseudo case classes from Avro-like schema):
+    <https://github.com/sbt/sbt-datatype>
 
 #### Game development plugins
 
@@ -13530,7 +13532,7 @@ To enable the plugin for your build, put the following line in
 `project/datatype.sbt`:
 
 ```scala
-addSbtPlugin("org.scala-sbt" % "sbt-datatype" % "0.0.3")
+addSbtPlugin("org.scala-sbt" % "sbt-datatype" % "0.1.0")
 ```
 
 Your datatype definitions should be placed by default in `src/main/datatype`
