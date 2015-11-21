@@ -42,11 +42,16 @@
         <div class="container contentswrapper">
           <div class="span-16 prepend-1 append-1 contents">
             <h2 id="Running+Project+Code">Running Project Code<a href="#Running+Project+Code" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>The <code>run</code> and <code>console</code> actions provide a means for running user code in
-the same virtual machine as sbt. This page describes the problems with
-doing so, how sbt handles these problems, what types of code can use
-this feature, and what types of code must use a <a href="Forking.html">forked jvm</a>.
-Skip to User Code if you just want to see when you should use a
-<a href="Forking.html">forked jvm</a>.
+the same virtual machine as sbt.
+</p><p><code>run</code> also exists in a variant called <code>runMain</code> that takes an
+additional initial argument allowing you to specify the fully
+qualified name of the main class you want to run.  <code>run</code> and<code>runMain</code>
+share the same configuration and cannot be configured separately.
+</p><p>This page describes the problems with running user code in the same
+virtual machine as sbt, how sbt handles these problems, what types of
+code can use this feature, and what types of code must use a
+<a href="Forking.html">forked jvm</a>.  Skip to User Code if you just want to see when
+you should use a <a href="Forking.html">forked jvm</a>.
 </p><h3 id="Problems">Problems<a href="#Problems" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="System.exit">System.exit<a href="#System.exit" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>User code can call <code>System.exit</code>, which normally shuts down the JVM.
 Because the <code>run</code> and <code>console</code> actions run inside the same JVM as sbt,
 this also ends the build and requires restarting sbt.

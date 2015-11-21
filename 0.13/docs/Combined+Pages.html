@@ -158,6 +158,7 @@ sublime) <a href="https://github.com/kalmanb/sbt-ctags">https://github.com/kalma
 </li><li>sbt-scoverage: <a href="https://github.com/scoverage/sbt-scoverage">https://github.com/scoverage/sbt-scoverage</a>
 </li><li>jacoco4sbt: <a href="https://github.com/sbt/jacoco4sbt">https://github.com/sbt/jacoco4sbt</a>
 </li><li>sbt-coveralls: <a href="https://github.com/scoverage/sbt-coveralls">https://github.com/scoverage/sbt-coveralls</a>
+</li><li>sbt-clover: <a href="https://github.com/shanbin/sbt-clover">https://github.com/shanbin/sbt-clover</a>
 </li></ul><h4 id="Static+code+analysis+plugins">Static code analysis plugins<a href="#Static+code+analysis+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>wartremover: <a href="https://github.com/puffnfresh/wartremover">https://github.com/puffnfresh/wartremover</a> (WartRemover -
 Scala static analysis)
 </li><li>cpd4sbt: <a href="https://github.com/sbt/cpd4sbt">https://github.com/sbt/cpd4sbt</a> (copy/paste detection,
@@ -267,7 +268,8 @@ tree): <a href="https://github.com/jrudolph/sbt-dependency-graph">https://github
 <a href="https://github.com/hmrc/sbt-bobby">https://github.com/hmrc/sbt-bobby</a>
 </li></ul><h4 id="Build+interoperability+plugins">Build interoperability plugins<a href="#Build+interoperability+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>ant4sbt: <a href="https://github.com/sbt/ant4sbt">https://github.com/sbt/ant4sbt</a>
 </li><li>sbt-pom-reader: <a href="https://github.com/sbt/sbt-pom-reader">https://github.com/sbt/sbt-pom-reader</a>
-</li></ul><h4 id="Utility+and+system+plugins">Utility and system plugins<a href="#Utility+and+system+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>sbt-scalariform (adding support for source code formatting using
+</li></ul><h4 id="Utility+and+system+plugins">Utility and system plugins<a href="#Utility+and+system+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>sbt-javaversioncheck (enforces build requirement for specific version level of Java): <a href="https://github.com/sbt/sbt-javaversioncheck">https://github.com/sbt/sbt-javaversioncheck</a>
+</li><li>sbt-scalariform (adding support for source code formatting using
 Scalariform): <a href="https://github.com/sbt/sbt-scalariform">https://github.com/sbt/sbt-scalariform</a>
 </li><li>sbt-process-runner (Run your own applications from SBT console)
 <a href="https://github.com/whysoserious/sbt-process-runner">https://github.com/whysoserious/sbt-process-runner</a>
@@ -359,6 +361,7 @@ thru ScalaBuff): <a href="https://github.com/sbt/sbt-scalabuff">https://github.c
 <a href="https://github.com/sbt/sbt-protobuf">https://github.com/sbt/sbt-protobuf</a>
 </li><li>sbt-cppp (Cross-Project Protobuf Plugin for Sbt):
 <a href="https://github.com/Atry/sbt-cppp">https://github.com/Atry/sbt-cppp</a>
+</li><li>sbt-avro (Apache Avro): <a href="https://github.com/cavorite/sbt-avro">https://github.com/cavorite/sbt-avro</a>
 </li><li>sbt-xjc (XSD binding, using
 <a href="http://download.oracle.com/javase/6/docs/technotes/tools/share/xjc.html">JAXB XJC</a> ):
 <a href="https://github.com/sbt/sbt-xjc">https://github.com/sbt/sbt-xjc</a>
@@ -395,11 +398,8 @@ code): <a href="https://github.com/sbt/sbt-boilerplate">https://github.com/sbt/s
 <a href="https://github.com/unicredit/sbt-swagger-codegen">https://github.com/unicredit/sbt-swagger-codegen</a>
 </li><li>sbt-heroku-deploy (Deploy Scala Web applications to Heroku):
 <a href="https://github.com/earldouglas/sbt-heroku-deploy">https://github.com/earldouglas/sbt-heroku-deploy</a>
-</li><li>sbt-avro (Apache Avro): <a href="https://github.com/cavorite/sbt-avro">https://github.com/cavorite/sbt-avro</a>
 </li><li>scavro (Code generation from <a href="http://avro.apache.org/">Avro</a> schema): 
 <a href="https://github.com/oysterbooks/scavro">https://github.com/oysterbooks/scavro</a>
-</li><li>sbt-datatype (Generates pseudo case classes from Avro-like schema):
-<a href="https://github.com/sbt/sbt-datatype">https://github.com/sbt/sbt-datatype</a>
 </li></ul><h4 id="Game+development+plugins">Game development plugins<a href="#Game+development+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>sbt-lwjgl-plugin (Light Weight Java Game Library):
 <a href="https://github.com/philcali/sbt-lwjgl-plugin">https://github.com/philcali/sbt-lwjgl-plugin</a>
 </li><li>sbt-scage-plugin (Scala Game Engine):
@@ -5119,11 +5119,16 @@ val dispatch = url(&quot;http://databinder.net/dispatch/About&quot;)
 val build = file(&quot;project/build.properties&quot;)
 cat(spde, dispatch, build) #| &quot;grep -i scala&quot; !
 </code></pre><h2 id="Running+Project+Code">Running Project Code<a href="#Running+Project+Code" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>The <code>run</code> and <code>console</code> actions provide a means for running user code in
-the same virtual machine as sbt. This page describes the problems with
-doing so, how sbt handles these problems, what types of code can use
-this feature, and what types of code must use a <a href="Forking.html">forked jvm</a>.
-Skip to User Code if you just want to see when you should use a
-<a href="Forking.html">forked jvm</a>.
+the same virtual machine as sbt.
+</p><p><code>run</code> also exists in a variant called <code>runMain</code> that takes an
+additional initial argument allowing you to specify the fully
+qualified name of the main class you want to run.  <code>run</code> and<code>runMain</code>
+share the same configuration and cannot be configured separately.
+</p><p>This page describes the problems with running user code in the same
+virtual machine as sbt, how sbt handles these problems, what types of
+code can use this feature, and what types of code must use a
+<a href="Forking.html">forked jvm</a>.  Skip to User Code if you just want to see when
+you should use a <a href="Forking.html">forked jvm</a>.
 </p><h3 id="Problems">Problems<a href="#Problems" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="System.exit">System.exit<a href="#System.exit" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>User code can call <code>System.exit</code>, which normally shuts down the JVM.
 Because the <code>run</code> and <code>console</code> actions run inside the same JVM as sbt,
 this also ends the build and requires restarting sbt.
@@ -6071,7 +6076,7 @@ repository. The first is the <code>~/.sbt/repositories</code> file, and the seco
 is the launcher script.
 </p><h3 id=""><code>~/.sbt/repositories</code><a href="#" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The repositories file is an external configuration for the Launcher. The
 exact syntax for the configuration file is detailed in the
-<a href="Sbt-Launcher.html">sbt Launcher</a>.
+<a href="Launcher-Configuration.html">sbt Launcher Configuration</a>.
 </p><p>Here’s an example config:
 </p><pre><code class="">[repositories]
   local
@@ -8725,7 +8730,7 @@ classes to remain binary compatible with previous versions of the datatype.
 <a href="https://github.com/sbt/sbt-datatype">can be found on GitHub</a>.
 </p><h3 id="Using+the+plugin">Using the plugin<a href="#Using+the+plugin" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To enable the plugin for your build, put the following line in
 <code>project/datatype.sbt</code>:
-</p><pre><code class="prettyprint lang-scala">addSbtPlugin(&quot;org.scala-sbt&quot; % &quot;sbt-datatype&quot; % &quot;0.1.0&quot;)
+</p><pre><code class="prettyprint lang-scala">addSbtPlugin(&quot;org.scala-sbt&quot; % &quot;sbt-datatype&quot; % &quot;0.0.3&quot;)
 </code></pre><p>Your datatype definitions should be placed by default in <code>src/main/datatype</code>
 and <code>src/test/datatype</code>. This location can be changed by setting a new location
 in your build definition:
@@ -9378,7 +9383,7 @@ but this can be overriden via user configuration.*
 </li></ul><p>There are several built-in strings that can be used for common
 repositories:
 </p><ul><li><code>local</code> - the local ivy repository <code>~/.ivy2/local</code>.
-</li><li><code>maven-local</code> - The local maven repository <code>~/.ivy2/local</code>.
+</li><li><code>maven-local</code> - The local maven repository <code>~/.m2/repository</code>.
 </li><li><code>maven-central</code> - The maven central repository <code>repo.maven.org</code>.
 </li></ul><p>Besides built in repositories, other repositories can be configured
 using the following syntax:

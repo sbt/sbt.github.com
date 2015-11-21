@@ -184,6 +184,7 @@ your plugin to the list.
 -   sbt-scoverage: <https://github.com/scoverage/sbt-scoverage>
 -   jacoco4sbt: <https://github.com/sbt/jacoco4sbt>
 -   sbt-coveralls: <https://github.com/scoverage/sbt-coveralls>
+-   sbt-clover: <https://github.com/shanbin/sbt-clover>
 
 #### Static code analysis plugins
 
@@ -323,6 +324,7 @@ your plugin to the list.
 
 #### Utility and system plugins
 
+-   sbt-javaversioncheck (enforces build requirement for specific version level of Java): <https://github.com/sbt/sbt-javaversioncheck>
 -   sbt-scalariform (adding support for source code formatting using
     Scalariform): <https://github.com/sbt/sbt-scalariform>
 -   sbt-process-runner (Run your own applications from SBT console)
@@ -421,6 +423,7 @@ your plugin to the list.
     <https://github.com/sbt/sbt-protobuf>
 -   sbt-cppp (Cross-Project Protobuf Plugin for Sbt):
     <https://github.com/Atry/sbt-cppp>
+-   sbt-avro (Apache Avro): <https://github.com/cavorite/sbt-avro>
 -   sbt-xjc (XSD binding, using
     [JAXB XJC](http://download.oracle.com/javase/6/docs/technotes/tools/share/xjc.html) ):
     <https://github.com/sbt/sbt-xjc>
@@ -457,11 +460,8 @@ your plugin to the list.
     <https://github.com/unicredit/sbt-swagger-codegen>
 -   sbt-heroku-deploy (Deploy Scala Web applications to Heroku):
     <https://github.com/earldouglas/sbt-heroku-deploy>
--   sbt-avro (Apache Avro): <https://github.com/cavorite/sbt-avro>
 -   scavro (Code generation from [Avro](http://avro.apache.org/) schema): 
     <https://github.com/oysterbooks/scavro>
--   sbt-datatype (Generates pseudo case classes from Avro-like schema):
-    <https://github.com/sbt/sbt-datatype>
 
 #### Game development plugins
 
@@ -7601,11 +7601,18 @@ Running Project Code
 --------------------
 
 The `run` and `console` actions provide a means for running user code in
-the same virtual machine as sbt. This page describes the problems with
-doing so, how sbt handles these problems, what types of code can use
-this feature, and what types of code must use a [forked jvm][Forking].
-Skip to User Code if you just want to see when you should use a
-[forked jvm][Forking].
+the same virtual machine as sbt.
+
+`run` also exists in a variant called `runMain` that takes an
+additional initial argument allowing you to specify the fully
+qualified name of the main class you want to run.  `run` and`runMain`
+share the same configuration and cannot be configured separately.
+
+This page describes the problems with running user code in the same
+virtual machine as sbt, how sbt handles these problems, what types of
+code can use this feature, and what types of code must use a
+[forked jvm][Forking].  Skip to User Code if you just want to see when
+you should use a [forked jvm][Forking].
 
 ### Problems
 
@@ -9211,7 +9218,7 @@ with this support:
 
 
 
-  [Sbt-Launcher]: Sbt-Launcher.html
+  [Launcher-Configuration]: Launcher-Configuration.html
 
 Proxy Repositories
 ------------------
@@ -9254,7 +9261,7 @@ is the launcher script.
 
 The repositories file is an external configuration for the Launcher. The
 exact syntax for the configuration file is detailed in the
-[sbt Launcher][Sbt-Launcher].
+[sbt Launcher Configuration][Launcher-Configuration].
 
 Here's an example config:
 
@@ -13537,7 +13544,7 @@ To enable the plugin for your build, put the following line in
 `project/datatype.sbt`:
 
 ```scala
-addSbtPlugin("org.scala-sbt" % "sbt-datatype" % "0.1.0")
+addSbtPlugin("org.scala-sbt" % "sbt-datatype" % "0.0.3")
 ```
 
 Your datatype definitions should be placed by default in `src/main/datatype`
@@ -14468,7 +14475,7 @@ There are several built-in strings that can be used for common
 repositories:
 
 -   `local` - the local ivy repository `~/.ivy2/local`.
--   `maven-local` - The local maven repository `~/.ivy2/local`.
+-   `maven-local` - The local maven repository `~/.m2/repository`.
 -   `maven-central` - The maven central repository `repo.maven.org`.
 
 Besides built in repositories, other repositories can be configured
