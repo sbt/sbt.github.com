@@ -52,6 +52,12 @@ are available to these settings. For example, to change the default
 </p><pre><code class="prettyprint lang-scala">shellPrompt := { state =&gt;
   &quot;sbt (%s)&gt; &quot;.format(Project.extract(state).currentProject.id)
 }
+</code></pre><p>You can also configure plugins globally added in <code>~/.sbt/0.13/plugins/build.sbt</code>
+(see next paragraph) in that file, but you need to use fully qualified
+names for their properties. For example, for sbt-eclipse property <code>withSource</code>
+documented in https://github.com/typesafehub/sbteclipse/wiki/Using-sbteclipse,
+you need to use:
+</p><pre><code class="prettyprint lang-scala">com.typesafe.sbteclipse.core.EclipsePlugin.EclipseKeys.withSource := true
 </code></pre><h3 id="Global+Settings+using+a+Global+Plugin">Global Settings using a Global Plugin<a href="#Global+Settings+using+a+Global+Plugin" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The <code>~/.sbt/0.13/plugins/</code> directory is a global plugin project. This
 can be used to provide global commands, plugins, or other code.
 </p><p>To add a plugin globally, create <code>~/.sbt/0.13/plugins/build.sbt</code> containing

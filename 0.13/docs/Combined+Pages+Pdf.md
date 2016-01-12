@@ -177,6 +177,7 @@ your plugin to the list.
 -   sbt-cassandra-plugin: <https://github.com/hochgi/sbt-cassandra-plugin>
 -   sbt-tabular-test-reporter: <https://github.com/programmiersportgruppe/sbt-tabular-test-reporter>
 -   sbt-notifications: <https://github.com/PavelPenkov/sbt-notifications> (sends notifications when test run is finished)
+-   sbt-dynamodb: <https://github.com/localytics/sbt-dynamodb> (downloads and runs DynamoDB Local)
 
 #### Code coverage plugins
 
@@ -201,7 +202,7 @@ your plugin to the list.
     extensible source code statistics)
 -   sbt-checkstyle-plugin: <https://github.com/etsy/sbt-checkstyle-plugin>
     (Checkstyle - static analysis for Java code)
--   sbt-jcheckstyle: <https://github.com/xerial/sbt-jcheckstyle> 
+-   sbt-jcheckstyle: <https://github.com/xerial/sbt-jcheckstyle>
     (handy checkstyle runner for Java projects)
 
 #### One jar plugins
@@ -393,6 +394,8 @@ your plugin to the list.
     <https://github.com/sgrouples/sbt-solr-plugin>
 -   sbt-todolist (find TODOs in source files and print them to console):
     <https://github.com/fedragon/sbt-todolist>
+-   sbt-ortho (simple spell and English style checker):
+    <https://github.com/henrikengstrom/sbt-ortho>
 
 #### Database plugins
 
@@ -460,7 +463,7 @@ your plugin to the list.
     <https://github.com/unicredit/sbt-swagger-codegen>
 -   sbt-heroku-deploy (Deploy Scala Web applications to Heroku):
     <https://github.com/earldouglas/sbt-heroku-deploy>
--   scavro (Code generation from [Avro](http://avro.apache.org/) schema): 
+-   scavro (Code generation from [Avro](http://avro.apache.org/) schema):
     <https://github.com/oedura/scavro>
 
 #### Game development plugins
@@ -6425,6 +6428,17 @@ shellPrompt := { state =>
   "sbt (%s)> ".format(Project.extract(state).currentProject.id)
 }
 ```
+
+You can also configure plugins globally added in `~/.sbt/0.13/plugins/build.sbt`
+(see next paragraph) in that file, but you need to use fully qualified
+names for their properties. For example, for sbt-eclipse property `withSource`
+documented in https://github.com/typesafehub/sbteclipse/wiki/Using-sbteclipse,
+you need to use:
+
+```scala
+com.typesafe.sbteclipse.core.EclipsePlugin.EclipseKeys.withSource := true
+```
+
 
 ### Global Settings using a Global Plugin
 
