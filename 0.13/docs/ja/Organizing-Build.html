@@ -1,0 +1,236 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html>
+      <head>
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+        <title>sbt Reference Manual — ビルドの整理</title>
+        <link rel="shortcut icon" href="../favicon.ico"/>
+        <link rel="stylesheet" href="../css/blueprint/screen.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/blueprint/grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="../css/blueprint/print.css" type="text/css" media="print"/> 
+        <!--[if lt IE 8]>
+          <link rel="stylesheet" href={ relativeBase + "css/blueprint/ie.css" } type="text/css" media="screen, projection"/>
+        <![endif]-->
+        <link rel="stylesheet" href="../css/pamflet.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamflet-print.css" type="text/css" media="print"/>
+        <link rel="stylesheet" href="../css/pamflet-grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-redmond.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-github.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-monokai.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamfletheight_80px_2em.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <script type="text/javascript" src="../js/jquery-1.6.2.min.js"></script>
+        <script type="text/javascript" src="../js/jquery.collapse.js"></script>
+        <script type="text/javascript" src="../js/pamflet.js"></script>
+        <script type="text/javascript">
+          Pamflet.page.language = 'ja';
+        </script>
+        <script type="text/javascript" src="../js/prettify/prettify.js"></script><script type="text/javascript" src="../js/prettify/lang-scala.js"></script><link type="text/css" rel="stylesheet" href="../css/prettify.css"/><script type="text/javascript"><!--
+        window.onload=function() { prettyPrint(); };
+      --></script>
+        <link rel="stylesheet" href="../css/custom.css" type="text/css" media="screen, projection"/>
+        
+        <script type="text/javascript">
+              Pamflet.twitter = '#sbt #scala';
+            </script>
+      </head>
+      <body class="color_scheme-github">
+        <a class="page prev nav" href="Custom-Settings.html">
+            <span class="space">&nbsp;</span>
+            <span class="flip arrow">&gt;</span>
+          </a><a class="page next nav" href="Summary.html">
+            <span class="space">&nbsp;</span>
+            <span class="arrow">&gt;</span>
+          </a>
+        <div class="container contentswrapper">
+          <div class="span-16 prepend-1 append-1 contents">
+            <h2 id="%E3%83%93%E3%83%AB%E3%83%89%E3%81%AE%E6%95%B4%E7%90%86">ビルドの整理<a href="#%E3%83%93%E3%83%AB%E3%83%89%E3%81%AE%E6%95%B4%E7%90%86" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このページではビルド構造の整理について説明する。
+</p><p>このガイドの前のページ、特に
+<a href="Basic-Def.html">build.sbt</a>、
+<a href="Library-Dependencies.html">ライブラリ依存性</a>、
+そして<a href="Multi-Project.html">マルチプロジェクト・ビルド</a>を理解していることが必要になる。
+</p><h3 id="sbt+%E3%81%AF%E5%86%8D%E5%B8%B0%E7%9A%84%E3%81%A0">sbt は再帰的だ<a href="#sbt+%E3%81%AF%E5%86%8D%E5%B8%B0%E7%9A%84%E3%81%A0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> は sbt の実際の動作を隠蔽している。
+sbt のビルドは、Scala コードにより定義されている。そのコード自身もビルドされなければいけない。
+当然これも sbt でビルドされる。sbt でやるより良い方法があるだろうか？
+</p><p><code>project</code> ディレクトリは、ビルドをビルドする方法を記述した<strong>ビルドの中のビルド</strong>だ。
+これらのビルドを区別するために、一番上のビルドを<strong>プロパービルド</strong> (proper build) 、
+<code>project</code> 内のビルドを<strong>メタビルド</strong> (meta-build) と呼んだりする。
+メタビルド内のプロジェクトは、他のプロジェクトができる全てのことをこなすことができる。
+つまり、<strong>ビルド定義もまた sbt プロジェクトなのだ</strong>。
+</p><p>この入れ子構造は永遠に続く。<code>project/project</code> ディレクトリを作ることで
+ビルド定義のビルド定義プロジェクトをカスタム化することができる。
+</p><p>以下に具体例で説明する:
+</p><pre><code class="">hello/                  # ビルドのルート・プロジェクトのベースディレクトリ
+
+    Hello.scala         # ビルドのルート・プロジェクトのソースファイル  
+                        # （src/main/scala に入れることもできる）
+
+    build.sbt           # build.sbt は、project/ 内のメタビルドの
+                        # ルート・プロジェクトのソースの一部となる。
+                        # つまり、プロパービルドのビルド定義
+
+    project/            # メタビルドのルート・プロジェクトのベースディレクトリ
+     
+        Build.scala     # メタビルドのルート・プロジェクトのソースファイル、
+                        # つまり、ビルド定義のソースファイル。
+                        # プロパービルドのビルド定義
+
+        build.sbt       # これは、project/project 内のメタメタビルドの
+                        # ルート・プロジェクトのソースの一部となり、
+                        # ビルド定義のビルド定義となる
+               
+        project/        # メタメタビルドのルート・プロジェクトのベースディレクトリ
+
+            Build.scala # project/project/ 内のメタメタビルドの
+                        # ルート・プロジェクトのソースファイル
+</code></pre><p><em>心配しないでほしい！</em> 普通はこういうことをする必要は全くない。
+しかし、原理を理解しておくことはきっと役立つことだろう。
+</p><p>ちなみに、<code>.scala</code> や <code>.sbt</code> の拡張子で終わっていればどんなファイル名でもよく、<code>build.sbt</code> や <code>Build.scala</code> と命名するのは慣例にすぎない。
+これは複数のファイルを使うことができるということも意味する。
+</p><h3 id="%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%92%E4%B8%80%E7%AE%87%E6%89%80%E3%81%AB%E3%81%BE%E3%81%A8%E3%82%81%E3%82%8B">ライブラリ依存性を一箇所にまとめる<a href="#%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%92%E4%B8%80%E7%AE%87%E6%89%80%E3%81%AB%E3%81%BE%E3%81%A8%E3%82%81%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>project</code> 内の任意の <code>.scala</code> ファイルがビルド定義の一部となることを利用する一つの例として
+<code>project/Dependencies.scala</code> というファイルを作ってライブラリ依存性を一箇所にまとめるということができる。
+</p><pre><code class="prettyprint lang-scala">import sbt._
+
+object Dependencies {
+  // Versions
+  lazy val akkaVersion = &quot;2.3.8&quot;
+
+  // Libraries
+  val akkaActor = &quot;com.typesafe.akka&quot; %% &quot;akka-actor&quot; % akkaVersion
+  val akkaCluster = &quot;com.typesafe.akka&quot; %% &quot;akka-cluster&quot; % akkaVersion
+  val specs2core = &quot;org.specs2&quot; %% &quot;specs2-core&quot; % &quot;2.4.14&quot;
+
+  // Projects
+  val backendDeps =
+    Seq(akkaActor, specs2core % Test)
+}
+</code></pre><p>この <code>Dependencies</code> は <code>build.sbt</code> 内で利用可能となる。
+定義されている <code>val</code> が使いやすいように <code>Dependencies._</code> を import しておこう。
+</p><pre><code class="prettyprint lang-scala">import Dependencies._
+
+lazy val commonSettings = Seq(
+  version := &quot;0.1.0&quot;,
+  scalaVersion := &quot;2.11.5&quot;
+)
+
+lazy val backend = (project in file(&quot;backend&quot;)).
+  settings(commonSettings: _*).
+  settings(
+    libraryDependencies ++= backendDeps
+  )
+</code></pre><p>マルチプロジェクトでのビルド定義が肥大化して、サブプロジェクト間で同じ依存ライブラリを持っているかを保証したくなったとき、このようなテクニックは有効だ。
+</p><h3 id="%E3%81%84%E3%81%A4++%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E4%BD%BF%E3%81%86%E3%81%B9%E3%81%8D%E3%81%8B">いつ <code>.scala</code> ファイルを使うべきか<a href="#%E3%81%84%E3%81%A4++%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E4%BD%BF%E3%81%86%E3%81%B9%E3%81%8D%E3%81%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>.scala</code> ファイルでは、トップレベルの class や object 定義を含む Scala コードを自由に記述できる。
+</p><p>推奨される方法はマルチプロジェクトを定義する <code>build.sbt</code> ファイル内にほとんどのセッティングを定義し、
+<code>project/*.scala</code> ファイルはタスクの実装や、共有したい値やキーを定義するのに使うことだ。
+また <code>.scala</code> ファイルを使うかどうかの判断には、君や君のチームがどれくらい Scala に慣れているかということも関係するだろう。
+</p><h3 id="auto+plugin+%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B">auto plugin を定義する<a href="#auto+plugin+%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>上級ユーザ向けのビルドの整理方法として、<code>project/*.scala</code> 内に専用の auto plugin を書くという方法がある。
+連鎖プラグイン (triggered plugin) を定義することで auto plugin を全サブプロジェクトにカスタムタスクやコマンドを追加する手段として使うことができる。
+</p><div class="bottom nav span-16">
+                        <em>Next Page</em>
+                        <span class="arrow">&gt;</span>
+                        <a href="Summary.html"> まとめ </a>                        
+                        <ul class="language-bar">
+        <li><a href="../Organizing-Build.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/Organizing-Build.html"><span class="lang-item lang-ja">日本語</span></a></li><li><a href="../zh-cn/Organizing-Build.html"><span class="lang-item lang-zh-cn">中文 (简体)</span></a></li>
+      </ul>
+                      </div><div class="tocwrapper show">
+      <a class="tochead nav" style="display: none" href="#toc">❦</a>
+      <a name="toc"></a>
+      <h4 class="toctitle">Contents</h4>
+      <div class="tocbody">
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">始める sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">sbt のインストール</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Mac への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Linux への sbt のインストール</a></div></li><li><div><a href="Manual-Installation.html">手動インストール</a></div></li><li><div><a href="Activator-Installation.html">Typesafe Activator (sbt を含む) のインストール</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">ディレクトリ構造</a></div></li><li><div><a href="Running.html">実行</a></div></li><li><div><a href="Basic-Def.html">.sbt ビルド定義</a></div></li><li><div><a href="Scopes.html">スコープ</a></div></li><li><div><a href="More-About-Settings.html">他の種類のセッティング</a></div></li><li><div><a href="Library-Dependencies.html">ライブラリ依存性</a></div></li><li><div><a href="Multi-Project.html">マルチプロジェクト・ビルド</a></div></li><li><div><a href="Using-Plugins.html">プラグインの使用</a></div></li><li><div><a href="Custom-Settings.html">カスタムセッティングとタスク</a></div></li><li><div class="current">ビルドの整理</div></li><li><div><a href="Summary.html">まとめ</a></div></li><li><div><a href="Bare-Def.html">付録: bare .sbt ビルド定義</a></div></li><li><div><a href="Full-Def.html">付録: .scala ビルド定義</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+          </div>
+        </div>
+        <div class="header">
+          <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
+<div class="container">
+    <div class="logo">
+      <a href="../../../index.html"><img src="../files/typesafe_sbt_svg.svg" alt="sbt"></a>
+    </div>
+    <div class="nav">
+      <a href="../../../documentation.html">Documentation</a>
+      <a href="../../../download.html">Download</a>
+      <a href="../../../community.html">Get Involved</a>
+      <a id="source-code" href="https://github.com/sbt/sbt"><img src="../files/github-logo-teal.png" alt="Source code"></a>
+      <a id="twitter" href="https://twitter.com/scala_sbt"><img src="../files/twitter-logo-teal.png" alt="sbt on Twitter"></a>
+    </div>
+    <script type="text/javascript" async>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-41449189-1', 'scala-sbt.org');
+    ga('send', 'pageview');
+    </script>
+    <script type="text/javascript" async>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-23127719-1', 'typesafe.com', {'allowLinker': true, 'name': 'tsTracker'});
+      ga('tsTracker.require', 'linker');
+      ga('tsTracker.linker:autoLink', ['typesafe.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org']);
+      ga('tsTracker.send', 'pageview');
+    </script>
+</div>
+        </div>
+        <div class="footer">
+          <div class="fw-wrapper navy-ltr support-strip">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="support-item">
+          <div class="support-icon">
+            <svg class="svg-icon svg-icon-chat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.5 85.2" enable-background="new 0 0 97.5 85.2"><path stroke="#fff" stroke-width="4.282" stroke-linecap="round" stroke-miterlimit="10" d="M27 29.5h-16.3c-4.7 0-8.6 3.9-8.6 8.6v25.7c0 4.7 3.9 8.6 8.6 8.6h2.7c.8 0 1.5.7 1.5 1.5v7.8c0 1.3 1.6 2 2.5 1l9.5-9.5c.5-.5 1.2-.8 2-.8h20.2c4.7 0 8.6-3.9 8.6-8.6v-7.8" fill="none"/><path fill="#fff" d="M85 0h-40c-6.9 0-12.5 5.6-12.5 12.5v33.4c0 2.2 1.8 4.1 4.1 4.1h29.9c.7 0 1.3.3 1.8.7l10 10c1.6 1.6 4.3.5 4.3-1.8v-6.5c0-1.4 1.1-2.5 2.5-2.5 6.9 0 12.5-5.6 12.5-12.5v-25c-.1-6.8-5.8-12.4-12.6-12.4z"/></svg>
+          </div>
+          <div class="support-detail">
+            <h2>コミュニティー・サポート</h2>
+            <a href="https://ja.stackoverflow.com/questions/tagged/sbt">StackOverflow</a>
+          </div>
+        </div>
+        <div class="support-item">
+          <div class="support-icon">
+            <svg class="svg-icon svg-icon-typesafe" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 154 154" enable-background="new 0 0 154 154"><path fill="#fff" d="M49.7 114c-4.8 0-8.7-5.1-8.7-9.9v-.2c0-4.8 3.9-7.9 8.7-7.9h100c.9-3 1.6-7 2-11h-84c-4.8 0-8.7-3.7-8.7-8.5s3.9-8.5 8.7-8.5h83.7c-.5-4-1.2-8-2.3-11h-63.4c-4.8 0-8.7-3.7-8.7-8.5s3.9-8.5 8.7-8.5h56c-13.1-23-37.2-37.8-64.7-37.8-41.4 0-75 33.3-75 74.7s33.6 75.6 75 75.6c28.4 0 53.1-15.4 65.8-38.4h-93.1z"/></svg>
+          </div>
+          <div class="support-detail">
+            <h2>商用サポート</h2>
+            <a href="http://typesafe.com/subscription">Typesafe Subscription</a>
+            <a href="http://typesafe.com/subscription/training">Training</a>
+            <a href="http://typesafe.com/subscription/consulting">Consulting</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div><footer>
+  <div class="container footer">
+    <div class="row">
+      <div class="col-md-8 sbt">
+        <nav>
+          <a href="../../../index.html">
+            <img src="../files/typesafe_sbt_reverse_svg.svg" alt="sbt">
+          </a>
+          <a href="../../../documentation.html">Documentation</a>
+          <a href="../../../download.html">Download</a>
+          <a href="../../../community.html">Get Involved</a>
+        </nav>
+      </div>
+      <div class="col-md-4 text-right ts">
+        &copy; 2015 Typesafe Inc.
+        <a href="https://typesafe.com">
+          <img src="../files/typesafe_reverse.svg" alt="Typesafe, Inc.">
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+        </div>
+        
+        <div class="highlight-outer">
+              <div class="highlight-menu">
+                <ul>
+                  <li><button id="highlight-button-twitter"><img src="../img/twitter-bird-dark-bgs.png"/></button></li>
+                </ul>
+              </div>
+            </div>
+      </body>
+    </html>
