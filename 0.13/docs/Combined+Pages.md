@@ -8009,7 +8009,7 @@ disadvantage of these approaches is the startup time involved.
 To set up these entry points, you can either use
 [conscript](https://github.com/n8han/conscript) or manually construct
 the startup scripts. In addition, there is a
-[setup script](https://github.com/paulp/xsbtscript) for the script
+[setup script](https://github.com/paulp/sbt-extras) for the script
 mode that only requires a JRE installed.
 
 #### Setup with Conscript
@@ -13685,7 +13685,38 @@ on `intTask` is only introduced in non-dev mode.
 > result. In the example above, there would be a circular dependency if
 > the code passed to taskDyn referenced myTask.
 
-#### Handling Failure
+
+### Using Def.sequential
+
+sbt 0.13.8 added `Def.sequential` function to run tasks under semi-sequential semantics.
+This is similar to the dynamic task, but easier to define.
+To demonstrate the sequential task, let's create a custom task called `compilecheck` that runs `compile in Compile` and then `scalastyle in Compile` task added by [scalastyle-sbt-plugin](http://www.scalastyle.org/sbt.html).
+
+```scala
+lazy val compilecheck = taskKey[Unit]("compile and then scalastyle")
+
+lazy val root = (project in file(".")).
+  settings(
+    compilecheck in Compile := Def.sequential(
+      compile in Compile,
+      (scalastyle in Compile).toTask("")
+    ).value
+  )
+```
+
+To call this task type in `compilecheck` from the shell. If the compilation fails, `compilecheck` would stop the execution.
+
+```
+root> compilecheck
+[info] Compiling 1 Scala source to /Users/x/proj/target/scala-2.10/classes...
+[error] /Users/x/proj/src/main/scala/Foo.scala:3: Unmatched closing brace '}' ignored here
+[error] }
+[error] ^
+[error] one error found
+[error] (compile:compileIncremental) Compilation failed
+```
+
+### Handling Failure
 
 This section discusses the `failure`, `result`, and `andFinally`
 methods, which are used to handle failure of other tasks.
@@ -16285,6 +16316,3598 @@ notifications:
 ```
 
 
+How to...
+---------
+
+See [Detailed Table of Contents](Contents+in+Depth.html) for the list of all the how-tos.
+
+
+  [Update-Report]: Update-Report.html
+
+Classpaths
+----------
+
+<a name="classpath-types"></a>
+
+### Include a new type of managed artifact on the classpath, such as `mar`
+
+The `classpathTypes` setting controls the types of managed artifacts
+that are included on the classpath by default. To add a new type, such
+as `mar`,
+
+```scala
+classpathTypes += "mar"
+```
+
+<a name="get-compile-classpath"></a>
+
+### Get the classpath used for compilation
+
+See the default types included by running `show classpathTypes` at the
+sbt prompt.
+
+The `dependencyClasspath` task scoped to `Compile` provides the
+classpath to use for compilation. Its type is `Seq[Attributed[File]]`,
+which means that each entry carries additional metadata. The `files`
+method provides just the raw `Seq[File]` for the classpath. For example,
+to use the files for the compilation classpath in another task, :
+
+```scala
+example := {
+  val cp: Seq[File] = (dependencyClasspath in Compile).value.files
+  ...
+}
+```
+
+> **Note**: This classpath does not include the class directory, which may be
+> necessary for compilation in some situations.
+
+<a name="get-runtime-classpath"></a>
+
+### Get the runtime classpath, including the project's compiled classes
+
+The `fullClasspath` task provides a classpath including both the
+dependencies and the products of project. For the runtime classpath,
+this means the main resources and compiled classes for the project as
+well as all runtime dependencies.
+
+The type of a classpath is `Seq[Attributed[File]]`, which means that
+each entry carries additional metadata. The `files` method provides just
+the raw `Seq[File]` for the classpath. For example, to use the files for
+the runtime classpath in another task, :
+
+```scala
+example := {
+  val cp: Seq[File] = (fullClasspath in Runtime).value.files
+  ...
+}
+```
+
+<a name="get-test-classpath"></a>
+
+### Get the test classpath, including the project's compiled test classes
+
+The `fullClasspath` task provides a classpath including both the
+dependencies and the products of a project. For the test classpath, this
+includes the main and test resources and compiled classes for the
+project as well as all dependencies for testing.
+
+The type of a classpath is `Seq[Attributed[File]]`, which means that
+each entry carries additional metadata. The `files` method provides just
+the raw `Seq[File]` for the classpath. For example, to use the files for
+the test classpath in another task, :
+
+```scala
+example := {
+  val cp: Seq[File] = (fullClasspath in Test).value.files
+  ...
+}
+```
+
+<a name="export-jars"></a>
+
+### Use packaged jars on classpaths instead of class directories
+
+By default, `fullClasspath` includes a directory containing class files
+and resources for a project. This in turn means that tasks like
+`compile`, `test`, and `run` have these class directories on their
+classpath. To use the packaged artifact (such as a jar) instead,
+configure `exportJars` :
+
+```scala
+exportJars := true
+```
+
+This will use the result of `packageBin` on the classpath instead of the
+class directory.
+
+> **Note**: Specifically, fullClasspath is the concatentation of
+> dependencyClasspath and exportedProducts. When exportJars is true,
+> exportedProducts is the output of packageBin. When exportJars is
+> false, exportedProducts is just products, which is by default the
+> directory containing class files and resources.
+
+<a name="managed-jars-in-config"></a>
+
+### Get all managed jars for a configuration
+
+The result of the `update` task has type
+[UpdateReport][Update-Report], which contains the
+results of dependency resolution. This can be used to extract the files
+for specific types of artifacts in a specific configuration. For
+example, to get the jars and zips of dependencies in the `Compile`
+configuration, :
+
+```scala
+example := {
+   val artifactTypes = Set("jar", "zip")
+   val files: Seq[File] =
+      Classpaths.managedJars(Compile, artifactTypes, update.value)
+   ...
+}
+```
+
+<a name="classpath-files"></a>
+
+### Get the files included in a classpath
+
+A classpath has type `Seq[Attributed[File]]`, which means that each
+entry carries additional metadata. The `files` method provides just the
+raw `Seq[File]` for the classpath. For example, :
+
+```scala
+val cp: Seq[Attributed[File]] = ...
+val files: Seq[File] = cp.files
+```
+
+<a name="classpath-entry-module"></a>
+
+### Get the module and artifact that produced a classpath entry
+
+A classpath has type `Seq[Attributed[File]]`, which means that each
+entry carries additional metadata. This metadata is in the form of an
+[AttributeMap](../api/sbt/AttributeMap.html). Useful keys for
+entries in the map are `artifact.key`, `moduleID.key`, and `analysis`. For
+example,
+
+```scala
+val classpath: Seq[Attributed[File]] = ???
+for(entry <- classpath) yield {
+   val art: Option[Artifact] = entry.get(artifact.key)
+   val mod: Option[ModuleID] = entry.get(moduleID.key)
+   val an: Option[inc.Analysis] = entry.get(analysis)
+   ...
+}
+```
+
+> **Note**: Entries may not have some or all metadata. Only entries from source
+> dependencies, such as internal projects, have an incremental
+> compilation [Analysis](../api/sbt/inc/Analysis.html). Only entries
+> for managed dependencies have an
+> [Artifact](../api/sbt/Artifact.html) and
+> [ModuleID](../api/sbt/ModuleID.html).
+
+
+  [file-filter]: Paths.html#file-filter
+  [Howto-Generating-Files]: Howto-Generating-Files.html
+
+Customizing paths
+-----------------
+
+This page describes how to modify the default source, resource, and
+library directories and what files get included from them.
+
+<a name="scala-source-directory"></a>
+
+### Change the default Scala source directory
+
+The directory that contains the main Scala sources is by default
+`src/main/scala`. For test Scala sources, it is `src/test/scala`. To
+change this, modify `scalaSource` in the `Compile` (for main sources) or
+`Test` (for test sources). For example,
+
+```scala
+scalaSource in Compile := baseDirectory.value / "src"
+
+scalaSource in Test := baseDirectory.value / "test-src"
+```
+
+> **Note**: The Scala source directory can be the same as the Java source
+> directory.
+
+<a name="java-source-directory"></a>
+
+### Change the default Java source directory
+
+The directory that contains the main Java sources is by default
+`src/main/java`. For test Java sources, it is `src/test/java`. To change
+this, modify `javaSource` in the `Compile` (for main sources) or `Test`
+(for test sources).
+
+For example,
+
+```scala
+javaSource in Compile := baseDirectory.value / "src"
+
+javaSource in Test := baseDirectory.value / "test-src"
+```
+
+> **Note**: The Scala source directory can be the same as the Java source
+> directory.
+
+<a name="resource-directory"></a>
+
+### Change the default resource directory
+
+The directory that contains the main resources is by default
+`src/main/resources`. For test resources, it is `src/test/resources`. To
+change this, modify `resourceDirectory` in either the `Compile` or
+`Test` configuration.
+
+For example,
+
+```scala
+resourceDirectory in Compile := baseDirectory.value / "resources"
+
+resourceDirectory in Test := baseDirectory.value / "test-resources"
+```
+
+<a name="unmanaged-base-directory"></a>
+
+### Change the default (unmanaged) library directory
+
+The directory that contains the unmanaged libraries is by default
+`lib/`. To change this, modify `unmanagedBase`. This setting can be
+changed at the project level or in the `Compile`, `Runtime`, or `Test`
+configurations.
+
+When defined without a configuration, the directory is the default
+directory for all configurations. For example, the following declares
+`jars/` as containing libraries:
+
+```scala
+unmanagedBase := baseDirectory.value / "jars"
+```
+
+When set for `Compile`, `Runtime`, or `Test`, `unmanagedBase` is the
+directory containing libraries for that configuration, overriding the
+default. For example, the following declares `lib/main/` to contain jars
+only for `Compile` and not for running or testing: :
+
+```scala
+unmanagedBase in Compile := baseDirectory.value / "lib" / "main"
+```
+
+<a name="disable-base-sources"></a>
+
+### Disable using the project's base directory as a source directory
+
+By default, sbt includes `.scala` files from the project's base
+directory as main source files. To disable this, configure
+`sourcesInBase`:
+
+```scala
+sourcesInBase := false
+```
+
+<a name="add-source-directory"></a>
+
+### Add an additional source directory
+
+sbt collects `sources` from `unmanagedSourceDirectories`, which by
+default consists of `scalaSource` and `javaSource`. Add a directory to
+`unmanagedSourceDirectories` in the appropriate configuration to add a
+source directory. For example, to add `extra-src` to be an additional
+directory containing main sources,
+
+```scala
+unmanagedSourceDirectories in Compile += baseDirectory.value / "extra-src"
+```
+
+> **Note**: This directory should only contain unmanaged sources, which are
+> sources that are manually created and managed. See
+> [Generating Files][Howto-Generating-Files] for working with automatically generated sources.
+
+<a name="add-resource-directory"></a>
+
+### Add an additional resource directory
+
+sbt collects `resources` from `unmanagedResourceDirectories`, which by
+default consists of `resourceDirectory`. Add a directory to
+`unmanagedResourceDirectories` in the appropriate configuration to add
+another resource directory. For example, to add `extra-resources` to be
+an additional directory containing main resources,
+
+```scala
+unmanagedResourceDirectories in Compile += baseDirectory.value / "extra-resources"
+```
+
+> **Note**: This directory should only contain unmanaged resources, which are
+> resources that are manually created and managed. See
+> [Generating Files][Howto-Generating-Files] for working with automatically generated
+> resources.
+
+<a name="source-include-filter"></a>
+
+### Include/exclude files in the source directory
+
+When sbt traverses `unmanagedSourceDirectories` for sources, it only
+includes directories and files that match `includeFilter` and do not
+match `excludeFilter`. `includeFilter` and `excludeFilter` have type
+`java.io.FileFilter` and sbt
+[provides some useful combinators][file-filter] for constructing a
+`FileFilter`. For example, in addition to the default hidden files
+exclusion, the following also ignores files containing `impl` in their
+name,
+
+```scala
+excludeFilter in unmanagedSources := HiddenFileFilter || "*impl*"
+```
+
+To have different filters for main and test libraries, configure
+`Compile` and `Test` separately:
+
+```scala
+includeFilter in (Compile, unmanagedSources) := "*.scala" || "*.java"
+
+includeFilter in (Test, unmanagedSources) := HiddenFileFilter || "*impl*"
+```
+
+> **Note**: By default, sbt includes `.scala` and `.java` sources, excluding hidden
+> files.
+
+<a name="resource-include-filter"></a>
+
+### Include/exclude files in the resource directory
+
+When sbt traverses `unmanagedResourceDirectories` for resources, it only
+includes directories and files that match `includeFilter` and do not
+match `excludeFilter`. `includeFilter` and `excludeFilter` have type
+`java.io.FileFilter` and sbt
+[provides some useful combinators][file-filter] for constructing a
+`FileFilter`. For example, in addition to the default hidden files
+exclusion, the following also ignores files containing `impl` in their
+name,
+
+```scala
+excludeFilter in unmanagedSources := HiddenFileFilter || "*impl*"
+```
+
+To have different filters for main and test libraries, configure
+`Compile` and `Test` separately:
+
+```scala
+includeFilter in (Compile, unmanagedSources) := "*.txt"
+
+includeFilter in (Test, unmanagedSources) := "*.html"
+```
+
+> **Note**: By default, sbt includes all files that are not hidden.
+
+<a name="lib-include-filter"></a>
+
+### Include only certain (unmanaged) libraries
+
+When sbt traverses `unmanagedBase` for resources, it only includes
+directories and files that match `includeFilter` and do not match
+`excludeFilter`. `includeFilter` and `excludeFilter` have type
+`java.io.FileFilter` and sbt
+[provides some useful combinators][file-filter] for constructing a
+`FileFilter`. For example, in addition to the default hidden files
+exclusion, the following also ignores zips,
+
+```scala
+excludeFilter in unmanagedJars := HiddenFileFilter || "*.zip"
+```
+
+To have different filters for main and test libraries, configure
+`Compile` and `Test` separately:
+
+```scala
+includeFilter in (Compile, unmanagedJars) := "*.jar"
+
+includeFilter in (Test, unmanagedJars) := "*.jar" || "*.zip"
+```
+
+> **Note**: By default, sbt includes jars, zips, and native dynamic libraries,
+> excluding hidden files.
+
+
+  [modify-package-contents]: Howto-Package.html#modify-package-contents
+
+Generating files
+----------------
+
+sbt provides standard hooks for adding source and resource generation
+tasks.
+
+<a name="sources"></a>
+
+### Generate sources
+
+A source generation task should generate sources in a subdirectory of
+`sourceManaged` and return a sequence of files generated. The signature
+of a source generation function (that becomes a basis for a task) is
+usually as follows:
+
+```scala
+def makeSomeSources(base: File): Seq[File]
+```
+
+The key to add the task to is called `sourceGenerators`. Because we want
+to add the task, and not the value after its execution, we use
+`taskValue` instead of the usual `value`. `sourceGenerators` should be
+scoped according to whether the generated files are main (`Compile`) or
+test (`Test`) sources. This basic structure looks like:
+
+```scala
+sourceGenerators in Compile += <task of type Seq[File]>.taskValue
+```
+
+For example, assuming a method
+`def makeSomeSources(base: File): Seq[File]`,
+
+```scala
+sourceGenerators in Compile += Def.task {
+  makeSomeSources((sourceManaged in Compile).value / "demo")
+}.taskValue
+```
+
+As a specific example, the following source generator generates
+`Test.scala` application object that once executed, prints `"Hi"` to the
+console:
+
+```scala
+sourceGenerators in Compile += Def.task {
+  val file = (sourceManaged in Compile).value / "demo" / "Test.scala"
+  IO.write(file, """object Test extends App { println("Hi") }""")
+  Seq(file)
+}.taskValue
+```
+
+Executing `run` will print `"Hi"`.
+
+```
+> run
+[info] Running Test
+Hi
+```
+
+Change `Compile` to `Test` to make it a test source. For efficiency, you
+would only want to generate sources when necessary and not every run.
+
+By default, generated sources are not included in the packaged source
+artifact. To do so, add them as you would other mappings. See
+[Adding files to a package][modify-package-contents]. A source
+generator can return both Java and Scala sources mixed together in the
+same sequence. They will be distinguished by their extension later.
+
+<a name="resources"></a>
+
+### Generate resources
+
+A resource generation task should generate resources in a subdirectory
+of `resourceManaged` and return a sequence of files generated. Like a
+source generation function, the signature of a resource generation
+function (that becomes a basis for a task) is usually as follows:
+
+```scala
+def makeSomeResources(base: File): Seq[File]
+```
+
+The key to add the task to is called `resourceGenerators`. Because we
+want to add the task, and not the value after its execution, we use
+`taskValue` instead of the usual `value`. It should be scoped according
+to whether the generated files are main (`Compile`) or test (`Test`)
+resources. This basic structure looks like:
+
+```scala
+resourceGenerators in Compile += <task of type Seq[File]>.taskValue
+```
+
+For example, assuming a method
+`def makeSomeResources(base: File): Seq[File]`,
+
+```scala
+resourceGenerators in Compile += Def.task {
+  makeSomeResources((resourceManaged in Compile).value / "demo")
+}.taskValue
+```
+
+As a specific example, the following generates a properties file
+`myapp.properties` containing the application name and version:
+
+```scala
+resourceGenerators in Compile += Def.task {
+  val file = (resourceManaged in Compile).value / "demo" / "myapp.properties"
+  val contents = "name=%s\nversion=%s".format(name.value,version.value)
+  IO.write(file, contents)
+  Seq(file)
+}.taskValue
+```
+
+Change `Compile` to `Test` to make it a test resource. Normally, you
+would only want to generate resources when necessary and not every run.
+
+By default, generated resources are not included in the packaged source
+artifact. To do so, add them as you would other mappings. See
+[Adding files to a package][modify-package-contents].
+
+
+  [Inspecting-Settings]: Inspecting-Settings.html
+
+Inspect the build
+-----------------
+
+<a name="taskhelp"></a>
+
+### Show or search help for a command, task, or setting
+
+The `help` command is used to show available commands and search the
+help for commands, tasks, or settings. If run without arguments, `help`
+lists the available commands.
+
+```
+> help
+
+  help                         Displays this help message or prints detailed help on 
+                                  requested commands (run 'help <command>').
+  about                        Displays basic information about sbt and the build.
+  reload                       (Re)loads the project in the current directory
+  ...
+
+> help compile
+```
+
+If the argument passed to `help` is the name of an existing command,
+setting or task, the help for that entity is displayed. Otherwise, the
+argument is interpreted as a regular expression that is used to search
+the help of all commands, settings and tasks.
+
+The `tasks` command is like `help`, but operates only on tasks.
+Similarly, the `settings` command only operates on settings.
+
+See also `help help`, `help tasks`, and `help settings`.
+
+<a name="listtasks"></a>
+
+### List available tasks
+
+The `tasks` command, without arguments, lists the most commonly used
+tasks. It can take a regular expression to search task names and
+descriptions. The verbosity can be increased to show or search less
+commonly used tasks. See `help tasks` for details.
+
+The `settings` command, without arguments, lists the most commonly used
+settings. It can take a regular expression to search setting names and
+descriptions. The verbosity can be increased to show or search less
+commonly used settings. See `help settings` for details.
+
+<a name="listsettings"></a>
+
+### List available settings
+
+The `inspect` command displays several pieces of information about a
+given setting or task, including the dependencies of a task/setting as
+well as the tasks/settings that depend on the it. For example,
+
+```
+> inspect test:compile
+...
+[info] Dependencies:
+[info]  test:compile::compileInputs
+[info]  test:compile::streams
+[info] Reverse dependencies:
+[info]  test:definedTestNames
+[info]  test:definedSbtPlugins
+[info]  test:printWarnings
+[info]  test:discoveredMainClasses
+[info]  test:definedTests
+[info]  test:exportedProducts
+[info]  test:products
+...
+```
+
+See the [Inspecting Settings][Inspecting-Settings] page for details.
+
+<a name="taskdependencytree"></a>
+### Display tree of setting/task dependencies
+
+In addition to displaying immediate forward and reverse dependencies as
+described in the previous section, the `inspect` command can display the
+full dependency tree for a task or setting. For example,
+
+```
+> inspect tree clean
+[info] *:clean = Task[Unit]
+[info]   +-*:cleanFiles = List(<project>/lib_managed, <project>/target)
+[info]   | +-{.}/*:managedDirectory = lib_managed
+[info]   | +-*:target = target
+[info]   |   +-*:baseDirectory = <project>
+[info]   |     +-*:thisProject = Project(id: demo, base: <project>, ...
+[info]   |     
+[info]   +-*:cleanKeepFiles = List(<project>/target/.history)
+[info]     +-*:history = Some(<project>/target/.history)
+...
+```
+
+For each task, `inspect tree` show the type of the value generated by
+the task. For a setting, the `toString` of the setting is displayed. See
+the [Inspecting Settings][Inspecting-Settings] page for details on the
+`inspect` command.
+
+<a name="description"></a>
+
+### Display the description and type of a setting or task
+
+While the `help`, `settings`, and `tasks` commands display a description
+of a task, the `inspect` command also shows the type of a setting or
+task and the value of a setting. For example:
+
+```
+> inspect update
+[info] Task: sbt.UpdateReport
+[info] Description:
+[info]  Resolves and optionally retrieves dependencies, producing a report.
+...
+```
+
+```
+> inspect scalaVersion
+[info] Setting: java.lang.String = 2.9.2
+[info] Description:
+[info]  The version of Scala used for building.
+...
+```
+
+See the [Inspecting Settings][Inspecting-Settings] page for details.
+
+<a name="delegates"></a>
+
+### Display the delegation chain of a setting or task
+
+See the [Inspecting Settings][Inspecting-Settings] page for details.
+
+<a name="related"></a>
+### Display related settings or tasks
+
+The `inspect` command can help find scopes where a setting or task is
+defined. The following example shows that different options may be
+specified to the Scala for testing and API documentation generation.
+
+```
+> inspect scalacOptions
+...
+[info] Related:
+[info]  compile:doc::scalacOptions
+[info]  test:scalacOptions
+[info]  */*:scalacOptions
+[info]  test:doc::scalacOptions
+```
+
+See the [Inspecting Settings][Inspecting-Settings] page for details.
+
+<a name="projects"></a>
+
+### Show the list of projects and builds
+
+The `projects` command displays the currently loaded projects. The
+projects are grouped by their enclosing build and the current project is
+indicated by an asterisk. For example,
+
+```
+> projects
+[info] In file:/home/user/demo/
+[info]   * parent
+[info]     sub
+[info] In file:/home/user/dep/
+[info]     sample
+```
+
+<a name="session"></a>
+
+### Show the current session (temporary) settings
+
+`session list` displays the settings that have been added at the command
+line for the current project. For example,
+
+```
+> session list
+  1. maxErrors := 5
+  2. scalacOptions += "-explaintypes"
+```
+
+`session list-all` displays the settings added for all projects. For
+details, see `help session`.
+
+<a name="about"></a>
+
+### Show basic information about sbt and the current build
+
+```
+> about
+[info] This is sbt 0.12.0
+[info] The current project is {file:~/code/sbt.github.com/}default
+[info] The current project is built against Scala 2.9.2
+[info] Available Plugins: com.jsuereth.ghpages.GhPages, com.jsuereth.git.GitPlugin, com.jsuereth.sbtsite.SitePlugin
+[info] sbt, sbt plugins, and build definitions are using Scala 2.9.2
+```
+
+<a name="value"></a>
+
+### Show the value of a setting
+
+The `inspect` command shows the value of a setting as part of its
+output, but the `show` command is dedicated to this job. It shows the
+output of the setting provided as an argument. For example,
+
+```
+> show organization
+[info] com.github.sbt 
+```
+
+The `show` command also works for tasks, described next.
+
+<a name="result"></a>
+
+### Show the result of executing a task
+
+```
+> show update
+... <output of update> ...
+[info] Update report:
+[info]  Resolve time: 122 ms, Download time: 5 ms, Download size: 0 bytes
+[info]  compile:
+[info]      org.scala-lang:scala-library:2.9.2: ...
+```
+
+The `show` command will execute the task provided as an argument and
+then print the result. Note that this is different from the behavior of
+the `inspect` command (described in other sections), which does not
+execute a task and thus can only display its type and not its generated
+value.
+
+```
+> show compile:dependencyClasspath
+...
+[info] ArrayBuffer(Attributed(~/.sbt/0.12.0/boot/scala-2.9.2/lib/scala-library.jar))
+```
+
+<a name="classpath"></a>
+
+### Show the classpath used for compilation or testing
+
+For the test classpath,
+
+```
+> show test:dependencyClasspath
+...
+[info] ArrayBuffer(Attributed(~/code/sbt.github.com/target/scala-2.9.2/classes), Attributed(~/.sbt/0.12.0/boot/scala-2.9.2/lib/scala-library.jar), Attributed(~/.ivy2/cache/junit/junit/jars/junit-4.8.2.jar))
+```
+
+<a name="applications"></a>
+
+### Show the main classes detected in a project
+
+sbt detects the classes with public, static main methods for use by the
+`run` method and to tab-complete the `runMain` method. The
+`discoveredMainClasses` task does this discovery and provides as its
+result the list of class names. For example, the following shows the
+main classes discovered in the main sources:
+
+```
+> show compile:discoveredMainClasses
+... <runs compile if out of date> ...
+[info] List(org.example.Main)
+```
+
+<a name="tests"></a>
+
+### Show the test classes detected in a project
+
+sbt detects tests according to fingerprints provided by test frameworks.
+The `definedTestNames` task provides as its result the list of test
+names detected in this way. For example,
+
+```
+> show test:definedTestNames
+... < runs test:compile if out of date > ...
+[info] List(org.example.TestA, org.example.TestB)
+```
+
+
+  [Build-State]: Build-State.html
+
+Interactive mode
+----------------
+
+<a name="basic_completion"></a>
+
+### Use tab completion
+
+By default, sbt's interactive mode is started when no commands are
+provided on the command line or when the `shell` command is invoked.
+
+As the name suggests, tab completion is invoked by hitting the tab key.
+Suggestions are provided that can complete the text entered to the left
+of the current cursor position. Any part of the suggestion that is
+unambiguous is automatically appended to the current text. Commands
+typically support tab completion for most of their syntax.
+
+As an example, entering `tes` and hitting tab:
+
+```
+> tes<TAB>
+```
+
+results in sbt appending a `t`:
+
+```
+> test
+```
+
+To get further completions, hit tab again:
+
+```
+> test<TAB>
+testFrameworks   testListeners    testLoader       testOnly         testOptions      test:
+```
+
+Now, there is more than one possibility for the next character, so sbt
+prints the available options. We will select `testOnly` and get more
+suggestions by entering the rest of the command and hitting tab twice:
+
+```
+> testOnly<TAB><TAB>
+--                      sbt.DagSpecification    sbt.EmptyRelationTest   sbt.KeyTest             sbt.RelationTest        sbt.SettingsTest
+```
+
+The first tab inserts an unambiguous space and the second suggests names
+of tests to run. The suggestion of `--` is for the separator between
+test names and options provided to the test framework. The other
+suggestions are names of test classes for one of sbt's modules. Test
+name suggestions require tests to be compiled first. If tests have been
+added, renamed, or removed since the last test compilation, the
+completions will be out of date until another successful compile.
+
+<a name="verbose_completion"></a>
+
+### Show more tab completion suggestions
+
+Some commands have different levels of completion. Hitting tab multiple
+times increases the verbosity of completions. (Presently, this feature
+is only used by the `set` command.)
+
+<a name="change_keybindings"></a>
+
+### Modify the default JLine keybindings
+
+JLine, used by both Scala and sbt, uses a configuration file for many of
+its keybindings. The location of this file can be changed with the
+system property `jline.keybindings`. The default keybindings file is
+included in the sbt launcher and may be used as a starting point for
+customization.
+
+<a name="prompt"></a>
+
+### Configure the prompt string
+
+By default, sbt only displays `>` to prompt for a command. This can be
+changed through the `shellPrompt` setting, which has type
+`State => String`. [State][Build-State] contains all state
+for sbt and thus provides access to all build information for use in the
+prompt string.
+
+Examples:
+
+```scala
+// set the prompt (for this build) to include the project id.
+shellPrompt in ThisBuild := { state => Project.extract(state).currentRef.project + "> " }
+
+// set the prompt (for the current project) to include the username
+shellPrompt := { state => System.getProperty("user.name") + "> " }
+```
+
+<a name="history"></a>
+
+### Use history
+
+Interactive mode remembers history even if you exit sbt and restart it.
+The simplest way to access history is to press the up arrow key to cycle
+through previously entered commands. Use `Ctrl+r` to incrementally
+search history backwards. The following commands are supported:
+
+-   `!` Show history command help.
+-   `!!` Execute the previous command again.
+-   `!:` Show all previous commands.
+-   `!:n` Show the last n commands.
+-   `!n` Execute the command with index `n`, as shown by the `!:`
+    command.
+-   `!-n` Execute the nth command before this one.
+-   `!string` Execute the most recent command starting with 'string'
+-   `!?string` Execute the most recent command containing 'string'
+
+<a name="history_file"></a>
+
+### Change the location of the interactive history file
+
+By default, interactive history is stored in the `target/` directory for
+the current project (but is not removed by a `clean`). History is thus
+separate for each subproject. The location can be changed with the
+`historyPath` setting, which has type `Option[File]`. For example,
+history can be stored in the root directory for the project instead of
+the output directory:
+
+```scala
+historyPath := Some(baseDirectory.value / ".history")
+```
+
+The history path needs to be set for each project, since sbt will use
+the value of `historyPath` for the current project (as selected by the
+`project` command).
+
+<a name="share_history"></a>
+
+### Use the same history for all projects
+
+The previous section describes how to configure the location of the
+history file. This setting can be used to share the interactive history
+among all projects in a build instead of using a different history for
+each project. The way this is done is to set `historyPath` to be the
+same file, such as a file in the root project's `target/` directory:
+
+```scala
+historyPath :=
+  Some( (target in LocalRootProject).value / ".history")
+```
+
+The `in LocalRootProject` part means to get the output directory for the
+root project for the build.
+
+<a name="disable_history"></a>
+
+### Disable interactive history
+
+If, for whatever reason, you want to disable history, set `historyPath`
+to `None` in each project it should be disabled in:
+
+```
+> historyPath := None
+```
+
+<a name="pre_commands"></a>
+
+### Run commands before entering interactive mode
+
+Interactive mode is implemented by the `shell` command. By default, the
+`shell` command is run if no commands are provided to sbt on the command
+line. To run commands before entering interactive mode, specify them on
+the command line followed by `shell`. For example,
+
+```
+$ sbt clean compile shell
+```
+
+This runs `clean` and then `compile` before entering the interactive
+prompt. If either `clean` or `compile` fails, sbt will exit without
+going to the prompt. To enter the prompt whether or not these initial
+commands succeed, prepend `-shell`, which means to run `shell` if any
+command fails. For example,
+
+```
+$ sbt -shell clean compile shell
+```
+
+
+Configure and use logging
+-------------------------
+
+<a name="last"></a>
+
+### View the logging output of the previously executed command
+
+When a command is run, more detailed logging output is sent to a file
+than to the screen (by default). This output can be recalled for the
+command just executed by running `last`.
+
+For example, the output of `run` when the sources are uptodate is:
+
+```
+> run
+[info] Running A
+Hi!
+[success] Total time: 0 s, completed Feb 25, 2012 1:00:00 PM
+```
+
+The details of this execution can be recalled by running `last`:
+
+```
+> last
+[debug] Running task... Cancelable: false, max worker threads: 4, check cycles: false
+[debug]
+[debug] Initial source changes:
+[debug]     removed:Set()
+[debug]     added: Set()
+[debug]     modified: Set()
+[debug] Removed products: Set()
+[debug] Modified external sources: Set()
+[debug] Modified binary dependencies: Set()
+[debug] Initial directly invalidated sources: Set()
+[debug]
+[debug] Sources indirectly invalidated by:
+[debug]     product: Set()
+[debug]     binary dep: Set()
+[debug]     external source: Set()
+[debug] Initially invalidated: Set()
+[debug] Copy resource mappings:
+[debug]
+[info] Running A
+[debug] Starting sandboxed run...
+[debug] Waiting for threads to exit or System.exit to be called.
+[debug]   Classpath:
+[debug]     /tmp/e/target/scala-2.9.2/classes
+[debug]     /tmp/e/.sbt/0.12.0/boot/scala-2.9.2/lib/scala-library.jar
+[debug] Waiting for thread runMain to exit
+[debug]     Thread runMain exited.
+[debug] Interrupting remaining threads (should be all daemons).
+[debug] Sandboxed run complete..
+[debug] Exited with code 0
+[success] Total time: 0 s, completed Jan 1, 2012 1:00:00 PM
+```
+
+Configuration of the logging level for the console and for the backing
+file are described in following sections.
+
+<a name="tasklast"></a>
+
+### View the previous logging output of a specific task
+
+When a task is run, more detailed logging output is sent to a file than
+to the screen (by default). This output can be recalled for a specific
+task by running `last <task>`. For example, the first time `compile` is
+run, output might look like:
+
+```
+> compile
+[info] Updating {file:/.../demo/}example...
+[info] Resolving org.scala-lang#scala-library;2.9.2 ...
+[info] Done updating.
+[info] Compiling 1 Scala source to .../demo/target/scala-2.9.2/classes...
+[success] Total time: 0 s, completed Jun 1, 2012 1:11:11 PM
+```
+
+The output indicates that both dependency resolution and compilation
+were performed. The detailed output of each of these may be recalled
+individually. For example,
+
+```
+> last compile
+[debug]
+[debug] Initial source changes:
+[debug]     removed:Set()
+[debug]     added: Set(/home/mark/tmp/a/b/A.scala)
+[debug]     modified: Set()
+...
+```
+
+and:
+
+```
+> last update
+[info] Updating {file:/.../demo/}example...
+[debug] post 1.3 ivy file: using exact as default matcher
+[debug] :: resolving dependencies :: example#example_2.9.2;0.1-SNAPSHOT
+[debug]     confs: [compile, runtime, test, provided, optional, compile-internal, runtime-internal, test-internal, plugin, sources, docs, pom]
+[debug]     validate = true
+[debug]     refresh = false
+[debug] resolving dependencies for configuration 'compile'
+...
+```
+
+<a name="printwarnings"></a>
+
+### Show warnings from the previous compilation
+
+The Scala compiler does not print the full details of warnings by
+default. Compiling code that uses the deprecated `error` method from
+Predef might generate the following output:
+
+```
+> compile
+[info] Compiling 1 Scala source to <...>/classes...
+[warn] there were 1 deprecation warnings; re-run with -deprecation for details
+[warn] one warning found
+```
+
+The details aren't provided, so it is necessary to add `-deprecation` to
+the options passed to the compiler (`scalacOptions`) and recompile. An
+alternative when using Scala 2.10 and later is to run `printWarnings`.
+This task will display all warnings from the previous compilation. For
+example,
+
+```
+> printWarnings
+[warn] A.scala:2: method error in object Predef is deprecated: Use sys.error(message) instead
+[warn]  def x = error("Failed.")
+[warn]          ^
+```
+
+<a name="level"></a>
+
+### Change the logging level globally
+
+The quickest way to change logging levels is by using the `error`,
+`warn`, `info`, or `debug` commands. These set the default logging level
+for commands and tasks. For example,
+
+```
+> warn
+```
+
+will by default show only warnings and errors. To set the logging level
+before any commands are executed on startup, use `--` before the logging
+level. For example,
+
+```
+$ sbt --warn
+> compile
+[warn] there were 2 feature warning(s); re-run with -feature for details
+[warn] one warning found
+[success] Total time: 4 s, completed ...
+>
+```
+
+The logging level can be overridden at a finer granularity, which is
+described next.
+
+<a name="tasklevel"></a>
+
+### Change the logging level for a specific task, configuration, or project
+
+The amount of logging is controlled by the `logLevel` setting, which
+takes values from the `Level` enumeration. Valid values are `Error`,
+`Warn`, `Info`, and `Debug` in order of increasing verbosity. The
+logging level may be configured globally, as described in the previous
+section, or it may be applied to a specific project, configuration, or
+task. For example, to change the logging level for compilation to only
+show warnings and errors:
+
+```scala
+> set logLevel in compile := Level.Warn
+```
+
+To enable debug logging for all tasks in the current project,
+
+```scala
+> set logLevel := Level.Warn
+```
+
+A common scenario is that after running a task, you notice that you need
+more information than was shown by default. A `logLevel` based solution
+typically requires changing the logging level and running a task again.
+However, there are two cases where this is unnecessary. First, warnings
+from a previous compilation may be displayed using `printWarnings` for
+the main sources or `test:printWarnings` for test sources. Second,
+output from the previous execution is available either for a single task
+or for in its entirety. See the section on
+[printWarnings](#printwarnings) and the sections on
+[previous output](#last).
+
+<a name="trace"></a>
+
+### Configure printing of stack traces
+
+By default, sbt hides the stack trace of most exceptions thrown during
+execution. It prints a message that indicates how to display the
+exception. However, you may want to show more of stack traces by
+default.
+
+The setting to configure is `traceLevel`, which is a setting with an Int
+value. When `traceLevel` is set to a negative value, no stack traces are
+shown. When it is zero, the stack trace is displayed up to the first sbt
+stack frame. When positive, the stack trace is shown up to that many
+stack frames.
+
+For example, the following configures sbt to show stack traces up to the
+first sbt frame:
+
+```scala
+> set every traceLevel := 0
+```
+
+The `every` part means to override the setting in all scopes. To change
+the trace printing behavior for a single project, configuration, or
+task, scope `traceLevel` appropriately:
+
+```scala
+> set traceLevel in Test := 5
+> set traceLevel in update := 0
+> set traceLevel in ThisProject := -1
+```
+
+<a name="nobuffer"></a>
+
+### Print the output of tests immediately instead of buffering
+
+By default, sbt buffers the logging output of a test until the whole
+class finishes. This is so that output does not get mixed up when
+executing in parallel. To disable buffering, set the `logBuffered`
+setting to false:
+
+```scala
+logBuffered := false
+```
+
+<a name="custom"></a>
+
+### Add a custom logger
+
+
+The setting `extraLoggers` can be used to add custom loggers. A custom
+logger should implement [AbstractLogger]. `extraLoggers` is a function
+`ScopedKey[_] => Seq[AbstractLogger]`. This means that it can provide
+different logging based on the task that requests the logger.
+
+```scala
+extraLoggers := {
+  val currentFunction = extraLoggers.value
+    (key: ScopedKey[_]) => {
+        myCustomLogger(key) +: currentFunction(key)
+    }
+}
+```
+
+Here, we take the current function `currentFunction` for the setting and
+provide a new function. The new function prepends our custom logger to
+the ones provided by the old function.
+
+<a name="log"></a>
+
+### Log messages in a task
+
+The special task `streams` provides per-task logging and I/O via a
+[Streams](../api/#sbt.std.Streams) instance. To log, a task uses
+the `log` member from the `streams` task:
+
+```scala
+myTask := {
+  val log = streams.value.log
+  log.warn("A warning.")
+}
+```
+
+
+Project metadata
+----------------
+
+<a name="name"></a>
+
+### Set the project name
+
+A project should define `name` and `version`. These will be used in
+various parts of the build, such as the names of generated artifacts.
+Projects that are published to a repository should also override
+`organization`.
+
+```scala
+name := "Your project name"
+```
+
+For published projects, this name is normalized to be suitable for use
+as an artifact name and dependency ID. This normalized name is stored in
+`normalizedName`.
+
+<a name="version"></a>
+
+### Set the project version
+
+```scala
+version := "1.0"
+```
+
+<a name="organization"></a>
+
+### Set the project organization
+
+```scala
+organization := "org.example"
+```
+
+By convention, this is a reverse domain name that you own, typically one
+specific to your project. It is used as a namespace for projects.
+
+A full/formal name can be defined in the `organizationName` setting.
+This is used in the generated pom.xml. If the organization has a web
+site, it may be set in the `organizationHomepage` setting. For example:
+
+```scala
+organizationName := "Example, Inc."
+
+organizationHomepage := Some(url("http://example.org"))
+```
+
+<a name="other"></a>
+
+### Set the project's homepage and other metadata
+
+```scala
+homepage := Some(url("http://scala-sbt.org"))
+
+startYear := Some(2008)
+
+description := "A build tool for Scala."
+
+licenses += "GPLv2" -> url("https://www.gnu.org/licenses/gpl-2.0.html")
+```
+
+
+  [Artifacts]: Artifacts.html
+  [Mapping-Files]: Mapping-Files.html
+
+Configure packaging
+-------------------
+
+<a name="export"></a>
+
+### Use the packaged jar on classpaths instead of class directory
+
+By default, a project exports a directory containing its resources and
+compiled class files. Set `exportJars` to true to export the packaged
+jar instead. For example,
+
+```scala
+exportJars := true
+```
+
+The jar will be used by `run`, `test`, `console`, and other tasks that
+use the full classpath.
+
+<a name="manifest"></a>
+
+### Add manifest attributes
+
+By default, sbt constructs a manifest for the binary package from
+settings such as `organization` and `mainClass`. Additional attributes
+may be added to the `packageOptions` setting scoped by the configuration
+and package task.
+
+Main attributes may be added with `Package.ManifestAttributes`. There
+are two variants of this method, once that accepts repeated arguments
+that map an attribute of type `java.util.jar.Attributes.Name` to a
+String value and other that maps attribute names (type String) to the
+String value.
+
+For example,
+
+```scala
+packageOptions in (Compile, packageBin) += 
+  Package.ManifestAttributes( java.util.jar.Attributes.Name.SEALED -> "true" )
+```
+
+Other attributes may be added with `Package.JarManifest`.
+
+```scala
+packageOptions in (Compile, packageBin) +=  {
+  import java.util.jar.{Attributes, Manifest}
+  val manifest = new Manifest
+  manifest.getAttributes("foo/bar/").put(Attributes.Name.SEALED, "false")
+  Package.JarManifest( manifest )
+}
+```
+
+Or, to read the manifest from a file:
+
+```scala
+packageOptions in (Compile, packageBin) +=  {
+  val file = new java.io.File("META-INF/MANIFEST.MF")
+  val manifest = Using.fileInputStream(file)( in => new java.util.jar.Manifest(in) )
+  Package.JarManifest( manifest )
+}
+```
+
+<a name="name"></a>
+
+### Change the file name of a package
+
+The `artifactName` setting controls the name of generated packages. See
+the [Artifacts][Artifacts] page for details.
+
+<a name="contents"></a>
+
+### Modify the contents of the package
+
+The contents of a package are defined by the `mappings` task, of type
+`Seq[(File,String)]`. The `mappings` task is a sequence of mappings from
+a file to include in the package to the path in the package. See
+[Mapping Files][Mapping-Files] for convenience functions for
+generating these mappings. For example, to add the file `in/example.txt`
+to the main binary jar with the path "out/example.txt",
+
+```scala
+mappings in (Compile, packageBin) += {
+  (baseDirectory.value / "in" / "example.txt") -> "out/example.txt"
+}
+```
+
+Note that `mappings` is scoped by the configuration and the specific
+package task. For example, the mappings for the test source package are
+defined by the `mappings in (Test, packageSrc)` task.
+
+
+Running commands
+----------------
+
+<a name="batch"></a>
+
+### Pass arguments to a command or task in batch mode
+
+sbt interprets each command line argument provided to it as a command
+together with the command's arguments. Therefore, to run a command that
+takes arguments in batch mode, quote the command and its arguments. For
+example,
+
+```
+$ sbt 'project X' clean '~ compile'
+```
+
+<a name="multi"></a>
+
+### Provide multiple commands to run consecutively
+
+Multiple commands can be scheduled at once by prefixing each command
+with a semicolon. This is useful for specifying multiple commands where
+a single command string is accepted. For example, the syntax for
+triggered execution is `~ <command>`. To have more than one command run
+for each triggering, use semicolons. For example, the following runs
+`clean` and then `compile` each time a source file changes:
+
+```
+> ~ ;clean;compile
+```
+
+<a name="read"></a>
+
+### Read commands from a file
+
+The `<` command reads commands from the files provided to it as
+arguments. Run `help <` at the sbt prompt for details.
+
+<a name="alias"></a>
+
+### Define an alias for a command or task
+
+The `alias` command defines, removes, and displays aliases for commands.
+Run `help alias` at the sbt prompt for details.
+
+Example usage:
+
+```
+> alias a=about
+> alias
+    a = about    
+> a
+[info] This is sbt ...
+> alias a=
+> alias
+> a
+[error] Not a valid command: a ...
+```
+
+<a name="eval"></a>
+
+### Quickly evaluate a Scala expression
+
+The `eval` command compiles and runs the Scala expression passed to it
+as an argument. The result is printed along with its type. For example,
+
+```
+> eval 2+2
+4: Int
+```
+
+Variables defined by an `eval` are not visible to subsequent `eval`s,
+although changes to system properties persist and affect the JVM that is
+running sbt. Use the Scala REPL (`console` and related commands) for
+full support for evaluating Scala code interactively.
+
+
+  [Cross-Build]: Cross-Build.html
+  [Console-Project]: Console-Project.html
+
+Configure and use Scala
+-----------------------
+
+<a name="version"></a>
+
+### Set the Scala version used for building the project
+
+The `scalaVersion` configures the version of Scala used for compilation.
+By default, sbt also adds a dependency on the Scala library with this
+version. See the next section for how to disable this automatic
+dependency. If the Scala version is not specified, the version sbt was
+built against is used. It is recommended to explicitly specify the
+version of Scala.
+
+For example, to set the Scala version to "2.11.1",
+
+```scala
+scalaVersion := "2.11.1"
+```
+
+<a name="noauto"></a>
+
+### Disable the automatic dependency on the Scala library
+
+sbt adds a dependency on the Scala standard library by default. To
+disable this behavior, set the `autoScalaLibrary` setting to false.
+
+```scala
+autoScalaLibrary := false
+```
+
+<a name="temporary"></a>
+
+### Temporarily switch to a different Scala version
+
+To set the Scala version in all scopes to a specific value, use the `++`
+command. For example, to temporarily use Scala 2.10.4, run:
+
+```
+> ++ 2.10.4
+```
+
+<a name="local"></a>
+
+### Use a local Scala installation for building a project
+
+Defining the `scalaHome` setting with the path to the Scala home
+directory will use that Scala installation. sbt still requires
+`scalaVersion` to be set when a local Scala version is used. For
+example,
+
+```scala
+scalaVersion := "2.10.0-local"
+
+scalaHome := Some(file("/path/to/scala/home/"))
+```
+
+<a name="cross"></a>
+
+### Build a project against multiple Scala versions
+
+See [cross building][Cross-Build].
+
+<a name="consoleQuick"></a>
+
+### Enter the Scala REPL with a project's dependencies on the classpath, but not the compiled project classes
+
+The `consoleQuick` action retrieves dependencies and puts them on the
+classpath of the Scala REPL. The project's sources are not compiled, but
+sources of any source dependencies are compiled. To enter the REPL with
+test dependencies on the classpath but without compiling test sources,
+run `test:consoleQuick`. This will force compilation of main sources.
+
+<a name="console"></a>
+
+### Enter the Scala REPL with a project's dependencies and compiled code on the classpath
+
+The `console` action retrieves dependencies and compiles sources and
+puts them on the classpath of the Scala REPL. To enter the REPL with
+test dependencies and compiled test sources on the classpath, run
+`test:console`.
+
+<a name="consoleProject"></a>
+
+### Enter the Scala REPL with plugins and the build definition on the classpath
+
+```
+> consoleProject
+```
+
+For details, see the [consoleProject][Console-Project]
+page.
+
+<a name="initial"></a>
+
+### Define the initial commands evaluated when entering the Scala REPL
+
+Set `initialCommands in console` to set the initial statements to
+evaluate when `console` and `consoleQuick` are run. To configure
+`consoleQuick` separately, use `initialCommands in consoleQuick`. For
+example,
+
+```scala
+initialCommands in console := """println("Hello from console")"""
+
+initialCommands in consoleQuick := """println("Hello from consoleQuick")"""
+```
+
+The `consoleProject` command is configured separately by
+`initialCommands in consoleProject`. It does not use the value from
+`initialCommands in console` by default. For example,
+
+```scala
+initialCommands in consoleProject := """println("Hello from consoleProject")"""
+```
+
+<a name="cleanup"></a>
+
+### Define the commands evaluated when exiting the Scala REPL
+
+Set `cleanupCommands in console` to set the statements to evaluate after
+exiting the Scala REPL started by `console` and `consoleQuick`. To
+configure `consoleQuick` separately, use
+`cleanupCommands in consoleQuick`. For example,
+
+```scala
+cleanupCommands in console := """println("Bye from console")"""
+
+cleanupCommands in consoleQuick := """println("Bye from consoleQuick")"""
+```
+
+The `consoleProject` command is configured separately by
+`cleanupCommands in consoleProject`. It does not use the value from
+`cleanupCommands in console` by default. For example,
+
+```scala
+cleanupCommands in consoleProject := """println("Bye from consoleProject")"""
+```
+
+<a name="embed"></a>
+
+### Use the Scala REPL from project code
+
+sbt runs tests in the same JVM as sbt itself and Scala classes are not
+in the same class loader as the application classes. This is also the
+case in `console` and when `run` is not forked. Therefore, when using
+the Scala interpreter, it is important to set it up properly to avoid an
+error message like:
+
+```
+Failed to initialize compiler: class scala.runtime.VolatileBooleanRef not found.
+** Note that as of 2.8 scala does not assume use of the java classpath.
+** For the old behavior pass -usejavacp to scala, or if using a Settings
+** object programmatically, settings.usejavacp.value = true.
+```
+
+The key is to initialize the Settings for the interpreter using
+*embeddedDefaults*. For example:
+
+```scala
+val settings = new Settings
+settings.embeddedDefaults[MyType]
+val interpreter = new Interpreter(settings, ...)
+```
+
+Here, `MyType` is a representative class that should be included on the
+interpreter's classpath and in its application class loader. For more
+background, see the
+[original proposal](https://gist.github.com/404272) that resulted in
+*embeddedDefaults* being added.
+
+Similarly, use a representative class as the type argument when using
+the *break* and *breakIf* methods of *ILoop*, as in the following
+example:
+
+```scala
+def x(a: Int, b: Int) = {
+  import scala.tools.nsc.interpreter.ILoop
+  ILoop.breakIf[MyType](a != b, "a" -> a, "b" -> b )
+}
+```    
+
+
+Generate API documentation
+--------------------------
+
+<a name="generate-javadoc-or-scaladoc"></a>
+
+### Select javadoc or scaladoc
+
+sbt will run `javadoc` if there are only Java sources in the project. If
+there are any Scala sources, sbt will run `scaladoc`. (This situation
+results from `scaladoc` not processing Javadoc comments in Java sources
+nor linking to Javadoc.)
+
+<a name="definitive-doc-options"></a>
+
+### Set the options used for generating scaladoc independently of compilation
+
+Scope `scalacOptions` to the `doc` task to configure `scaladoc`. Use
+`:=` to definitively set the options without appending to the options
+for `compile`. Scope to `Compile` for main sources or to `Test` for test
+sources. For example,
+
+```scala
+scalacOptions in (Compile,doc) := Seq("-groups", "-implicits")
+```
+
+<a name="additional-doc-options"></a>
+
+### Add options for scaladoc to the compilation options
+
+Scope `scalacOptions` to the `doc` task to configure `scaladoc`. Use
+`+=` or `++=` to append options to the base options. To append a single
+option, use `+=`. To append a `Seq[String]`, use `++=`. Scope to
+`Compile` for main sources or to `Test` for test sources. For example,
+
+```scala
+scalacOptions in (Compile,doc) ++= Seq("-groups", "-implicits")
+```
+
+<a name="definitive-javadoc-options"></a>
+
+### Set the options used for generating javadoc independently of compilation
+
+Scope `javacOptions` to the `doc` task to configure `javadoc`. Use `:=`
+to definitively set the options without appending to the options for
+`compile`. Scope to `Compile` for main sources or to `Test` for test
+sources.
+
+
+<a name="additional-doc-options"></a>
+
+### Add options for javadoc to the compilation options
+
+Scope `javacOptions` to the `doc` task to configure `javadoc`. Use `+=`
+or `++=` to append options to the base options. To append a single
+option, use `+=`. To append a `Seq[String]`, use `++=`. Scope to
+`Compile` for main sources or to `Test` for test sources. For example,
+
+```scala
+javacOptions in (Compile,doc) ++= Seq("-notimestamp", "-linksource")
+```
+
+<a name="auto-link"></a>
+
+### Enable automatic linking to the external Scaladoc of managed dependencies
+
+Set `autoAPIMappings := true` for sbt to tell `scaladoc` where it can
+find the API documentation for managed dependencies. This requires that
+dependencies have this information in its metadata and you are using
+`scaladoc` for Scala 2.10.2 or later.
+
+<a name="manual-api-links"></a>
+
+### Enable manual linking to the external Scaladoc of managed dependencies
+
+Add mappings of type `(File, URL)` to `apiMappings` to manually tell
+`scaladoc` where it can find the API documentation for dependencies.
+(This requires `scaladoc` for Scala 2.10.2 or later.) These mappings are
+used in addition to `autoAPIMappings`, so this manual configuration is
+typically done for unmanaged dependencies. The `File` key is the
+location of the dependency as passed to the classpath. The `URL` value
+is the base URL of the API documentation for the dependency. For
+example,
+
+```scala
+apiMappings += (
+  (unmanagedBase.value / "a-library.jar") -> 
+    url("https://example.org/api/")
+)
+```
+
+<a name="define-api-url"></a>
+
+### Define the location of API documentation for a library
+
+Set `apiURL` to define the base `URL` for the Scaladocs for your
+library. This will enable clients of your library to automatically link
+against the API documentation using `autoAPIMappings`. (This only works
+for Scala 2.10.2 and later.) For example,
+
+```scala
+apiURL := Some(url("https://example.org/api/"))
+```
+
+This information will get included in a property of the published
+`pom.xml`, where it can be automatically consumed by sbt.
+
+
+  [Full-Def]: Full-Def.html
+
+Triggered execution
+-------------------
+
+<a name="basic"></a>
+
+### Run a command when sources change
+
+You can make a command run when certain files change by prefixing the
+command with `~`. Monitoring is terminated when `enter` is pressed. This
+triggered execution is configured by the `watch` setting, but typically
+the basic settings `watchSources` and `pollInterval` are modified as
+described in later sections.
+
+The original use-case for triggered execution was continuous
+compilation:
+
+```
+> ~ test:compile
+
+> ~ compile
+```
+
+You can use the triggered execution feature to run any command or task,
+however. The following will poll for changes to your source code (main
+or test) and run `testOnly` for the specified test.
+
+```
+> ~ testOnly example.TestA
+```
+
+<a name="multi"></a>
+
+### Run multiple commands when sources change
+
+The command passed to `~` may be any command string, so multiple
+commands may be run by separating them with a semicolon. For example,
+
+```
+> ~ ;a ;b
+```
+
+This runs `a` and then `b` when sources change.
+
+<a name="sources"></a>
+
+### Configure the sources that are checked for changes
+
+-   `watchSources` defines the files for a single project that are
+    monitored for changes. By default, a project watches resources and
+    Scala and Java sources.
+-   `watchTransitiveSources` then combines the `watchSources` for the
+    current project and all execution and classpath dependencies (see
+    [.scala build definition][Full-Def] for details on inter-project
+    dependencies).
+
+To add the file `demo/example.txt` to the files to watch,
+
+```scala
+watchSources += baseDirectory.value / "demo" / "examples.txt"
+```
+
+<a name="interval"></a>
+
+### Set the time interval between checks for changes to sources
+
+`pollInterval` selects the interval between polling for changes in
+milliseconds. The default value is `500 ms`. To change it to `1 s`,
+
+```scala
+pollInterval := 1000 // in ms
+```
+
+Define Custom Tasks 
+-------------------
+
+### Define a Task that runs tests in specific sub-projects
+
+Consider a hypothetical multi-build project with 3 subprojects. The following defines a task `myTestTask` that will 
+run the `test` Task in specific subprojects  `core` and `tools` but not `client`:
+
+```
+lazy val core = project.in(file("./core"))
+
+lazy val tools = project.in(file("./tools"))
+
+lazy val client = project.in(file("./client"))
+
+lazy val myTestTask = TaskKey[Unit]("my-test-task")
+
+myTestTask <<= Seq(
+  test in (core, Test)
+  test in (tools, Test)
+).dependOn
+```
+
+  [ExecutionSemantics]: Custom-Settings.html#Execution+semantics+of+tasks
+
+Sequencing
+----------
+
+One of the most frequently asked questions is in the form of "how do I do X *and then* do Y in sbt"?
+
+Generally speaking, that's not how sbt tasks are set up. build.sbt is a DSL to define dependency graph of tasks. This is covered in [Execution semantics of tasks][ExecutionSemantics]. So ideally, what you should do is define task Y yourself, and depend on the task X.
+
+```scala
+taskY := {
+  val x = taskX.value
+  x + 1
+}
+```
+
+This is more constrained compared to the imperative style plain Scala code with side effects such as the follows:
+
+```scala
+def foo(): Unit = {
+  doX()
+  doY()
+}
+```
+
+The benefit of the dependency-oriented programming model is that sbt's task engine is able to reorder the task execution. When possible we run dependent tasks in parallel. Another benefit is that we can deduplicate the graph, and make sure that the task evaluation, such as `compile in Compile`, is called once per command execution, as opposed to compiling the same source many times.
+
+Because task system is generally set up this way, running something sequentially is possible, but you will be fighting the system a bit, and it's not always going to be easy.
+
+- [Defining a sequential task with Def.sequential](Howto-Sequential-Task.html)
+- [Defining a dynamic task with Def.taskDyn](Howto-Dynamic-Task.html)
+- [Doing something after an input task](Howto-After-Input-Task.html)
+- [Defining a dynamic input task with Def.inputTaskDyn](Howto-Dynamic-Input-Task.html)
+- [How to sequence using commands](Howto-Sequence-using-Commands.html)
+
+
+### Defining a sequential task with Def.sequential
+
+sbt 0.13.8 added `Def.sequential` function to run tasks under semi-sequential semantics.
+To demonstrate the sequential task, let's create a custom task called `compilecheck` that runs `compile in Compile` and then `scalastyle in Compile` task added by [scalastyle-sbt-plugin](http://www.scalastyle.org/sbt.html).
+
+Here's how to set it up
+
+#### project/build.properties
+
+```
+sbt.version=0.13.9
+```
+
+#### project/style.sbt
+
+```
+addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.8.0")
+```
+
+#### build.sbt
+
+```scala
+lazy val compilecheck = taskKey[Unit]("compile and then scalastyle")
+
+lazy val root = (project in file(".")).
+  settings(
+    compilecheck in Compile := Def.sequential(
+      compile in Compile,
+      (scalastyle in Compile).toTask("")
+    ).value
+  )
+```
+
+To call this task type in `compilecheck` from the shell. If the compilation fails, `compilecheck` would stop the execution.
+
+```
+root> compilecheck
+[info] Compiling 1 Scala source to /Users/x/proj/target/scala-2.10/classes...
+[error] /Users/x/proj/src/main/scala/Foo.scala:3: Unmatched closing brace '}' ignored here
+[error] }
+[error] ^
+[error] one error found
+[error] (compile:compileIncremental) Compilation failed
+```
+
+Looks like we were able to sequence these tasks.
+
+
+  [Howto-Sequential-Task]: Howto-Sequential-Task.html
+  [Tasks]: Tasks.html
+
+### Defining a dynamic task with Def.taskDyn
+
+If [sequential task][Howto-Sequential-Task] is not enough, another step up is [the dynamic task][Tasks]. Unlike `Def.task` which expects you to return pure value `A`, with a `Def.taskDyn` you return a task `sbt.Def.Initialize[sbt.Task[A]]` which the task engine can continue the rest of the computation with.
+
+Let's try implementing a custom task called `compilecheck` that runs `compile in Compile` and then `scalastyle in Compile` task added by [scalastyle-sbt-plugin](http://www.scalastyle.org/sbt.html).
+
+
+#### project/build.properties
+
+```
+sbt.version=0.13.9
+```
+
+#### project/style.sbt
+
+```
+addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.8.0")
+```
+
+#### build.sbt v1
+
+```scala
+lazy val compilecheck = taskKey[sbt.inc.Analysis]("compile and then scalastyle")
+
+lazy val root = (project in file(".")).
+  settings(
+    compilecheck := (Def.taskDyn {
+      val c = (compile in Compile).value
+      Def.task {
+        val x = (scalastyle in Compile).toTask("").value
+        c
+      }
+    }).value
+  )
+```
+
+Now we have the same thing as the sequential task, except we can now return the result `c` from the first task.
+
+#### build.sbt v2
+
+If we can return the same return type as `compile in Compile`, might actually rewire the key to our dynamic task.
+
+```scala
+lazy val root = (project in file(".")).
+  settings(
+    compile in Compile := (Def.taskDyn {
+      val c = (compile in Compile).value
+      Def.task {
+        val x = (scalastyle in Compile).toTask("").value
+        c
+      }
+    }).value
+  )
+```
+
+Now we can actually call `compile in Compile` from the shell and make it do what we want it to do.
+
+
+  [Input-Tasks]: Input-Tasks.html
+
+### Doing something after an input task
+
+Thus far we've mostly looked at tasks. There's another kind of tasks called input tasks that accepts user input from the shell.
+A typical example for this is the `run in Compile` task. The `scalastyle` task is actually an input task too. See [input task][Input-Tasks] for the details of the input tasks.
+
+Now suppose we want to call `run in Compile` task and then open the browser for testing purposes.
+
+#### src/main/scala/Greeting.scala
+
+```scala
+object Greeting extends App {
+  println("hello " + args.toList)
+}
+```
+
+#### build.sbt v1
+
+```scala
+lazy val runopen = inputKey[Unit]("run and then open the browser")
+
+lazy val root = (project in file(".")).
+  settings(
+    runopen := {
+      (run in Compile).evaluated
+      println("open browser!")
+    }
+  )
+```
+
+Here, I'm faking the browser opening using `println` as the side effect. We can now call this task from the shell:
+
+```
+> runopen foo
+[info] Compiling 1 Scala source to /x/proj/...
+[info] Running Greeting foo
+hello List(foo)
+open browser!
+```
+
+#### build.sbt v2
+
+We can actually remove `runopen` key, by rewriting the new input task to `run in Compile`:
+
+```scala
+lazy val root = (project in file(".")).
+  settings(
+    run in Compile := {
+      (run in Compile).evaluated
+      println("open browser!")
+    }
+  )
+```
+
+
+### Defining a dynamic input task with Def.inputTaskDyn
+
+Let's suppose that there's a task already that does the bowser opening called `openbrowser` because of a plugin. Here's how we can sequence a task after an input tasks.
+
+#### build.sbt
+
+```scala
+lazy val runopen = inputKey[Unit]("run and then open the browser")
+lazy val openbrowser = taskKey[Unit]("open the browser")
+
+lazy val root = (project in file(".")).
+  settings(
+    runopen := (Def.inputTaskDyn {
+      import sbt.complete.Parsers.spaceDelimited
+      val args = spaceDelimited("<args>").parsed
+      Def.taskDyn {
+        (run in Compile).toTask(" " + args.mkString(" ")).value
+        openbrowser
+      }
+    }).evaluated,
+    openbrowser := {
+      println("open browser!")
+    }
+  )
+```
+
+#### build.sbt v2
+
+Trying to rewire `run in Compile` is going to be complicated. Since the reference to the inner `run in Compile` is already inside the continuation task, simply rewiring `runopen` to `run in Compile` will create a cyclic reference.
+To break the cycle, we will introduce a clone of `run in Compile` called `actualRun in Compile`:
+
+```scala
+lazy val actualRun = inputKey[Unit]("The actual run task")
+lazy val openbrowser = taskKey[Unit]("open the browser")
+
+lazy val root = (project in file(".")).
+  settings(
+    run in Compile := (Def.inputTaskDyn {
+      import sbt.complete.Parsers.spaceDelimited
+      val args = spaceDelimited("<args>").parsed
+      Def.taskDyn {
+        (actualRun in Compile).toTask(" " + args.mkString(" ")).value
+        openbrowser
+      }
+    }).evaluated,
+    actualRun in Compile := Defaults.runTask(
+      fullClasspath in Runtime,
+      mainClass in (Compile, run),
+      runner in (Compile, run)
+    ).evaluated,
+    openbrowser := {
+      println("open browser!")
+    }
+  )
+```
+
+The `actualRun in Compile`'s implementation was copy-pasted from `run` task's implementation in Default.scala.
+
+Now we can call `run foo` from the shell and it will evaluate `actualRun in Compile` with the passed in argument, and then evaluate the `openbrowser` task.
+
+
+### How to sequence using commands
+
+If all you care about is the side effects, and you really just want to emulate humans typing in one command after another, a custom command might be just want you need. This comes in handy for release procedures.
+
+Here's from the build script of sbt itself:
+
+```scala
+  commands += Command.command("releaseNightly") { state =>
+    "stampVersion" ::
+      "clean" ::
+      "compile" ::
+      "publish" ::
+      "bintrayRelease" ::
+      state
+  }
+```
+
+
+  [Getting-Started]: Getting-Started.html
+
+Examples
+--------
+
+This section of the documentation has example sbt build definitions and
+code. Contributions are welcome!
+
+You may want to read the
+[Getting Started Guide][Getting-Started] as a foundation for
+understanding the examples.
+
+
+  [Basic-Def]: Basic-Def.html
+
+.sbt build examples
+-------------------
+
+**Note**: As of sbt 0.13.7 blank lines are no longer used to delimit `build.sbt` files. The following example requires sbt 0.13.7+.
+
+Listed here are some examples of settings (each setting is independent).
+See [.sbt build definition][Basic-Def] for details.
+
+```scala
+// factor out common settings into a sequence
+lazy val commonSettings = Seq(
+  organization := "org.myproject",
+  version := "0.1.0",
+  // set the Scala version used for the project
+  scalaVersion := "2.11.5"
+)
+
+// define ModuleID for library dependencies
+lazy val scalacheck = "org.scalacheck" %% "scalacheck" % "1.12.0"
+
+// define ModuleID using string interpolator
+lazy val osmlibVersion = "2.5.2-RC1"
+lazy val osmlib = ("net.sf.travelingsales" % "osmlib" % osmlibVersion from
+  s"""http://downloads.sourceforge.net/project/travelingsales/libosm/$osmlibVersion/libosm-$osmlibVersion.jar""")
+
+lazy val root = (project in file(".")).
+  settings(commonSettings: _*).
+  settings(
+    // set the name of the project
+    name := "My Project",
+
+    // set the main Scala source directory to be <base>/src
+    scalaSource in Compile := baseDirectory.value / "src",
+
+    // set the Scala test source directory to be <base>/test
+    scalaSource in Test := baseDirectory.value / "test",
+
+    // add a test dependency on ScalaCheck
+    libraryDependencies += scalacheck % Test,
+
+    // add compile dependency on osmlib
+    libraryDependencies += osmlib,
+
+    // reduce the maximum number of errors shown by the Scala compiler
+    maxErrors := 20,
+
+    // increase the time between polling for file changes when using continuous execution
+    pollInterval := 1000,
+
+    // append several options to the list of options passed to the Java compiler
+    javacOptions ++= Seq("-source", "1.5", "-target", "1.5"),
+
+    // append -deprecation to the options passed to the Scala compiler
+    scalacOptions += "-deprecation",
+
+    // define the statements initially evaluated when entering 'console', 'consoleQuick', or 'consoleProject'
+    initialCommands := """
+      |import System.{currentTimeMillis => now}
+      |def time[T](f: => T): T = {
+      |  val start = now
+      |  try { f } finally { println("Elapsed: " + (now - start)/1000.0 + " s") }
+      |}""".stripMargin,
+
+    // set the initial commands when entering 'console' or 'consoleQuick', but not 'consoleProject'
+    initialCommands in console := "import myproject._",
+
+    // set the main class for packaging the main jar
+    // 'run' will still auto-detect and prompt
+    // change Compile to Test to set it for the test jar
+    mainClass in (Compile, packageBin) := Some("myproject.MyMain"),
+
+    // set the main class for the main 'run' task
+    // change Compile to Test to set it for 'test:run'
+    mainClass in (Compile, run) := Some("myproject.MyMain"),
+
+    // add <base>/input to the files that '~' triggers on
+    watchSources += baseDirectory.value / "input",
+
+    // add a maven-style repository
+    resolvers += "name" at "url",
+
+    // add a sequence of maven-style repositories
+    resolvers ++= Seq("name" at "url"),
+
+    // define the repository to publish to
+    publishTo := Some("name" at "url"),
+
+    // set Ivy logging to be at the highest level
+    ivyLoggingLevel := UpdateLogging.Full,
+
+    // disable updating dynamic revisions (including -SNAPSHOT versions)
+    offline := true,
+
+    // set the prompt (for this build) to include the project id.
+    shellPrompt in ThisBuild := { state => Project.extract(state).currentRef.project + "> " },
+
+    // set the prompt (for the current project) to include the username
+    shellPrompt := { state => System.getProperty("user.name") + "> " },
+
+    // disable printing timing information, but still print [success]
+    showTiming := false,
+
+    // disable printing a message indicating the success or failure of running a task
+    showSuccess := false,
+
+    // change the format used for printing task completion time
+    timingFormat := {
+        import java.text.DateFormat
+        DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT)
+    },
+
+    // disable using the Scala version in output paths and artifacts
+    crossPaths := false,
+
+    // fork a new JVM for 'run' and 'test:run'
+    fork := true,
+
+    // fork a new JVM for 'test:run', but not 'run'
+    fork in Test := true,
+
+    // add a JVM option to use when forking a JVM for 'run'
+    javaOptions += "-Xmx2G",
+
+    // only use a single thread for building
+    parallelExecution := false,
+
+    // Execute tests in the current project serially
+    //   Tests from other projects may still run concurrently.
+    parallelExecution in Test := false,
+
+    // set the location of the JDK to use for compiling Java code.
+    // if 'fork' is true, this is used for 'run' as well
+    javaHome := Some(file("/usr/lib/jvm/sun-jdk-1.6")),
+
+    // Use Scala from a directory on the filesystem instead of retrieving from a repository
+    scalaHome := Some(file("/home/user/scala/trunk/")),
+
+    // don't aggregate clean (See FullConfiguration for aggregation details)
+    aggregate in clean := false,
+
+    // only show warnings and errors on the screen for compilations.
+    //  this applies to both test:compile and compile and is Info by default
+    logLevel in compile := Level.Warn,
+
+    // only show warnings and errors on the screen for all tasks (the default is Info)
+    //  individual tasks can then be more verbose using the previous setting
+    logLevel := Level.Warn,
+
+    // only store messages at info and above (the default is Debug)
+    //   this is the logging level for replaying logging with 'last'
+    persistLogLevel := Level.Debug,
+
+    // only show 10 lines of stack traces
+    traceLevel := 10,
+
+    // only show stack traces up to the first sbt stack frame
+    traceLevel := 0,
+
+    // add SWT to the unmanaged classpath
+    unmanagedJars in Compile += Attributed.blank(file("/usr/share/java/swt.jar")),
+
+    // publish test jar, sources, and docs
+    publishArtifact in Test := true,
+
+    // disable publishing of main docs
+    publishArtifact in (Compile, packageDoc) := false,
+
+    // change the classifier for the docs artifact
+    artifactClassifier in packageDoc := Some("doc"),
+
+    // Copy all managed dependencies to <build-root>/lib_managed/
+    //   This is essentially a project-local cache and is different
+    //   from the lib_managed/ in sbt 0.7.x.  There is only one
+    //   lib_managed/ in the build root (not per-project).
+    retrieveManaged := true,
+
+    /* Specify a file containing credentials for publishing. The format is:
+    realm=Sonatype Nexus Repository Manager
+    host=nexus.scala-tools.org
+    user=admin
+    password=admin123
+    */
+    credentials += Credentials(Path.userHome / ".ivy2" / ".credentials"),
+
+    // Directly specify credentials for publishing.
+    credentials += Credentials("Sonatype Nexus Repository Manager", "nexus.scala-tools.org", "admin", "admin123"),
+
+    // Exclude transitive dependencies, e.g., include log4j without including logging via jdmk, jmx, or jms.
+    libraryDependencies +=
+      "log4j" % "log4j" % "1.2.15" excludeAll(
+        ExclusionRule(organization = "com.sun.jdmk"),
+        ExclusionRule(organization = "com.sun.jmx"),
+        ExclusionRule(organization = "javax.jms")
+      )
+  )
+```
+
+
+.sbt build with .scala files example
+------------------------------------
+
+`.sbt` builds can be supplemented with `project/*.scala` files.
+When the build file gets large enough, the first thing to factor out are resolvers and dependencies.
+
+### project/Resolvers.scala
+
+```scala
+import sbt._
+import Keys._
+
+object Resolvers {
+  val sunrepo    = "Sun Maven2 Repo" at "http://download.java.net/maven/2"
+  val sunrepoGF  = "Sun GF Maven2 Repo" at "http://download.java.net/maven/glassfish" 
+  val oraclerepo = "Oracle Maven2 Repo" at "http://download.oracle.com/maven"
+
+  val oracleResolvers = Seq(sunrepo, sunrepoGF, oraclerepo)
+}
+```
+
+### project/Dependencies.scala
+
+```scala
+import sbt._
+import Keys._
+
+object Dependencies {
+  val logbackVersion = "0.9.16"
+  val grizzlyVersion = "1.9.19"
+
+  val logbackcore    = "ch.qos.logback" % "logback-core"     % logbackVersion
+  val logbackclassic = "ch.qos.logback" % "logback-classic"  % logbackVersion
+
+  val jacksonjson = "org.codehaus.jackson" % "jackson-core-lgpl" % "1.7.2"
+
+  val grizzlyframwork = "com.sun.grizzly" % "grizzly-framework" % grizzlyVersion
+  val grizzlyhttp     = "com.sun.grizzly" % "grizzly-http"      % grizzlyVersion
+  val grizzlyrcm      = "com.sun.grizzly" % "grizzly-rcm"       % grizzlyVersion
+  val grizzlyutils    = "com.sun.grizzly" % "grizzly-utils"     % grizzlyVersion
+  val grizzlyportunif = "com.sun.grizzly" % "grizzly-portunif"  % grizzlyVersion
+
+  val sleepycat = "com.sleepycat" % "je" % "4.0.92"
+
+  val apachenet   = "commons-net"   % "commons-net"   % "2.0"
+  val apachecodec = "commons-codec" % "commons-codec" % "1.4"
+
+  val scalatest = "org.scalatest" %% "scalatest" % "2.2.1"
+}
+```
+
+These files can be used mange library dependencies in one place.
+
+### project/ShellPrompPlugin.scala
+
+When you want to implement custom commands or tasks, you can organize your build by defining an one-off auto plugin.
+
+```scala
+import sbt._
+import Keys._
+
+// Shell prompt which show the current project and git branch
+object ShellPromptPlugin extends AutoPlugin {
+  override def trigger = allRequirements
+  override lazy val projectSettings = Seq(
+    shellPrompt := buildShellPrompt
+  )
+  val devnull: ProcessLogger = new ProcessLogger {
+    def info (s: => String) {}
+    def error (s: => String) { }
+    def buffer[T] (f: => T): T = f
+  }
+  def currBranch =
+    ("git status -sb" lines_! devnull headOption).
+      getOrElse("-").stripPrefix("## ")
+  val buildShellPrompt: State => String = {
+    case (state: State) =>
+      val currProject = Project.extract (state).currentProject.id
+      s"""$currProject:$currBranch> """
+  }
+}
+```
+
+This auto plugin will display the current project name and the git branch.
+
+### build.sbt
+
+Now that we factored out custom settings and dependencies out to `project/*.scala`, we can make use of them in `build.sbt`:
+
+
+```scala
+import Resolvers._
+import Dependencies._
+
+// factor out common settings into a sequence
+lazy val buildSettings = Seq(
+  organization := "com.example",
+  version := "0.1.0",
+  scalaVersion := "2.11.5"
+)
+
+// Sub-project specific dependencies
+lazy val commonDeps = Seq(
+  logbackcore,
+  logbackclassic,
+  jacksonjson,
+  scalatest % Test
+)
+
+lazy val serverDeps = Seq(
+  grizzlyframwork,
+  grizzlyhttp,
+  grizzlyrcm,
+  grizzlyutils,
+  grizzlyportunif,
+  sleepycat,
+  scalatest % Test
+)
+
+lazy val pricingDeps = Seq(
+  apachenet,
+  apachecodec,
+  scalatest % Test
+)
+
+lazy val cdap2 = (project in file(".")).
+  aggregate(common, server, compact, pricing, pricing_service).
+  settings(buildSettings: _*)
+
+lazy val common = (project in file("cdap2-common")).
+  settings(buildSettings: _*).
+  settings(
+    libraryDependencies ++= commonDeps
+  )
+
+lazy val server = (project in file("cdap2-server")).
+  dependsOn(common).
+  settings(buildSettings: _*).
+  settings(
+    resolvers := oracleResolvers,
+    libraryDependencies ++= serverDeps
+  )
+
+lazy val pricing = (project in file("cdap2-pricing")).
+  dependsOn(common, compact, server).
+  settings(buildSettings: _*).
+  settings(
+    libraryDependencies ++= pricingDeps
+  )  
+
+lazy val pricing_service = (project in file("cdap2-pricing-service")).
+  dependsOn(pricing, server).
+  settings(buildSettings: _*)
+
+lazy val compatct = (project in file("compact-hashmap")).
+  settings(buildSettings: _*)
+```
+
+
+  [Basic-Def]: Basic-Def.html
+
+Advanced configurations example
+-------------------------------
+
+This is an example [.sbt build definition][Basic-Def]
+that demonstrates using configurations to group dependencies.
+
+The `utils` module provides utilities for other modules. It uses
+configurations to group dependencies so that a dependent project doesn't
+have to pull in all dependencies if it only uses a subset of
+functionality. This can be an alternative to having multiple utilities
+modules (and consequently, multiple utilities jars).
+
+In this example, consider a `utils` project that provides utilities
+related to both Scalate and Saxon. It therefore needs both Scalate and
+Saxon on the compilation classpath and a project that uses all of the
+functionality of 'utils' will need these dependencies as well. However,
+project `a` only needs the utilities related to Scalate, so it doesn't
+need Saxon. By depending only on the `scalate` configuration of `utils`,
+it only gets the Scalate-related dependencies.
+
+```scala
+/********* Configurations *******/
+
+// Custom configurations
+lazy val Common = config("common") describedAs("Dependencies required in all configurations.")
+lazy val Scalate = config("scalate") extend(Common) describedAs("Dependencies for using Scalate utilities.")
+lazy val Saxon = config("saxon") extend(Common) describedAs("Dependencies for using Saxon utilities.")
+
+// Define a customized compile configuration that includes
+//   dependencies defined in our other custom configurations
+lazy val CustomCompile = config("compile") extend(Saxon, Common, Scalate)
+
+/********** Projects ************/
+
+// factor out common settings into a sequence
+lazy val commonSettings = Seq(
+  organization := "com.example",
+  version := "0.1.0",
+  scalaVersion := "2.10.4"
+)
+
+// An example project that only uses the Scalate utilities.
+lazy val a = (project in file("a")).
+  dependsOn(utils % "compile->scalate").
+  settings(commonSettings: _*)
+
+// An example project that uses the Scalate and Saxon utilities.
+// For the configurations defined here, this is equivalent to doing dependsOn(utils),
+//  but if there were more configurations, it would select only the Scalate and Saxon
+//  dependencies.
+lazy val b = (project in file("b")).
+  dependsOn(utils % "compile->scalate,saxon").
+  settings(commonSettings: _*)
+
+// Defines the utilities project
+lazy val utils = (project in file("utils")).
+  settings(commonSettings: _*).
+  settings(inConfig(Common)(Defaults.configSettings): _*).  // Add the src/common/scala/ compilation configuration.
+  settings(addArtifact(artifact in (Common, packageBin), packageBin in Common): _*). // Publish the common artifact
+  settings(
+      // We want our Common sources to have access to all of the dependencies on the classpaths
+      //   for compile and test, but when depended on, it should only require dependencies in 'common'
+    classpathConfiguration in Common := CustomCompile,
+      // Modify the default Ivy configurations.
+      //   'overrideConfigs' ensures that Compile is replaced by CustomCompile
+    ivyConfigurations := overrideConfigs(Scalate, Saxon, Common, CustomCompile)(ivyConfigurations.value),
+      // Put all dependencies without an explicit configuration into Common (optional)
+    defaultConfiguration := Some(Common),
+      // Declare dependencies in the appropriate configurations
+    libraryDependencies ++= Seq(
+       "org.fusesource.scalate" % "scalate-core" % "1.5.0" % Scalate,
+       "org.squeryl" %% "squeryl" % "0.9.5-6" % Scalate,
+       "net.sf.saxon" % "saxon" % "8.7" % Saxon
+    )
+  )
+```
+
+
+Advanced command example
+------------------------
+
+This is an advanced example showing some of the power of the new
+settings system. It shows how to temporarily modify all declared
+dependencies in the build, regardless of where they are defined. It
+directly operates on the final `Seq[Setting[_]]` produced from every
+setting involved in the build.
+
+The modifications are applied by running *canonicalize*. A *reload* or
+using *set* reverts the modifications, requiring *canonicalize* to be
+run again.
+
+This particular example shows how to transform all declared dependencies
+on ScalaCheck to use version 1.8. As an exercise, you might try
+transforming other dependencies, the repositories used, or the scalac
+options used. It is possible to add or remove settings as well.
+
+This kind of transformation is possible directly on the settings of
+Project, but it would not include settings automatically added from
+plugins or build.sbt files. What this example shows is doing it
+unconditionally on all settings in all projects in all builds, including
+external builds.
+
+```scala
+import sbt._
+import Keys._
+
+object Canon extends Plugin {
+  // Registers the canonicalize command in every project
+  override def settings = Seq(commands += canonicalize)
+
+  // Define the command.  This takes the existing settings (including any session settings)
+  // and applies 'f' to each Setting[_]
+  def canonicalize = Command.command("canonicalize") { (state: State) =>
+    val extracted = Project.extract(state)
+    import extracted._
+    val transformed = session.mergeSettings map ( s => f(s) )
+    val newStructure = Load.reapply(transformed, structure)
+    Project.setProject(session, newStructure, state)
+  }
+
+  // Transforms a Setting[_].
+  def f(s: Setting[_]): Setting[_] = s.key.key match {
+    // transform all settings that modify libraryDependencies
+    case Keys.libraryDependencies.key =>
+      // hey scalac.  T == Seq[ModuleID]
+      s.asInstanceOf[Setting[Seq[ModuleID]]].mapInit(mapLibraryDependencies)
+      // preserve other settings
+    case _ => s
+  }
+  // This must be idempotent because it gets applied after every transformation.
+  // That is, if the user does:
+  //  libraryDependencies += a
+  //  libraryDependencies += b
+  // then this method will be called for Seq(a) and Seq(a,b)
+  def mapLibraryDependencies(key: ScopedKey[Seq[ModuleID]], value: Seq[ModuleID]): Seq[ModuleID] =
+    value map mapSingle
+
+  // This is the fundamental transformation.
+  // Here we map all declared ScalaCheck dependencies to be version 1.8
+  def mapSingle(module: ModuleID): ModuleID =
+    if(module.name == "scalacheck") module.copy(revision = "1.8") 
+    else module
+}
+```
+
+
+  [Getting-Started]: Getting-Started.html
+  [Basic-Def]: Basic-Def.html
+  [More-About-Settings]: More-About-Settings.html
+  [Running]: Running.html
+  [Scopes]: Scopes.html
+  [Library-Dependencies]: Library-Dependencies.html
+  [Custom-Settings]: Custom-Settings.html
+  [Multi-Project]: Multi-Project.html
+  [Name-Index]: Name-Index.html
+  [Mapping-Files]: Mapping-Files.html
+  [Testing]: Testing.html
+  [additional-test-configurations]: Testing.html#additional-test-configurations
+  [Library-Management]: Library-Management.html
+  [Migrating-from-sbt-07x]: Migrating-from-sbt-07x.html
+  [Update-Report]: Update-Report.html
+  [Commands]: Commands.html
+  [Build-State]: Build-State.html
+  [Howto-Generating-Files]: Howto-Generating-Files.html
+  [Contributing-to-sbt]: Contributing-to-sbt.html
+  [Community-Plugins]: Community-Plugins.html
+  [ivy-configurations]: Library-Management.html#ivy-configurations
+
+Frequently Asked Questions
+--------------------------
+
+### Project Information
+
+#### How do I get help?
+
+-  See [Get Involved](http://www.scala-sbt.org/community.html#how-can-I-get-help)
+
+#### How do I report a bug?
+
+-  See [Get Involved](http://www.scala-sbt.org/community.html#how-can-I-help)
+
+#### How can I help?
+
+-  See [Get Involved](http://www.scala-sbt.org/community.html#how-can-I-help)
+
+### Usage
+
+#### My last command didn't work but I can't see an explanation. Why?
+
+sbt 0.13.9 by default suppresses most stack traces and debugging
+information. It has the nice side effect of giving you less noise on
+screen, but as a newcomer it can leave you lost for explanation. To see
+the previous output of a command at a higher verbosity, type
+`last <task>` where `<task>` is the task that failed or that you want to
+view detailed output for. For example, if you find that your `update`
+fails to load all the dependencies as you expect you can enter:
+
+```
+> last update
+```
+
+and it will display the full output from the last run of the `update`
+command.
+
+#### How do I disable ansi codes in the output?
+
+Sometimes sbt doesn't detect that ansi codes aren't supported and you
+get output that looks like:
+
+```
+[0m[ [0minfo [0m]  [0mSet current project to root
+```
+
+or ansi codes are supported but you want to disable colored output. To
+completely disable ansi codes, set the `sbt.log.format` system property
+to `false`. For example,
+
+#### How can I start a Scala interpreter (REPL) with sbt project configuration (dependencies, etc.)?
+
+You may run `sbt console`.
+
+### Build definitions
+
+#### What are the `:=`, `+=`, and `++=` methods?
+
+These are methods on keys used to construct a `Setting` or a `Task`. The
+Getting Started Guide covers all these methods, see
+[.sbt build definition][Basic-Def] and
+[more kinds of setting][More-About-Settings] for
+example.
+
+#### What is the `%` method?
+
+It's used to create a `ModuleID` from strings, when specifying managed
+dependencies. Read the Getting Started Guide about
+[library dependencies][Library-Dependencies].
+
+#### What is `ModuleID`, `Project`, ...?
+
+To figure out an unknown type or method, have a look at the
+[Getting Started Guide][Getting-Started] if you have not. Also
+try the [index][Name-Index] of commonly used methods, values, and
+types, the [API Documentation](../api/) and the
+[hyperlinked sources](../sxr/).
+
+#### How do I add files to a jar package?
+
+The files included in an artifact are configured by default by a task
+`mappings` that is scoped by the relevant package task. The `mappings`
+task returns a sequence `Seq[(File,String)]` of mappings from the file
+to include to the path within the jar. See
+[mapping files][Mapping-Files] for details on creating these mappings.
+
+For example, to add generated sources to the packaged source artifact:
+
+```scala
+mappings in (Compile, packageSrc) ++= {
+  import Path.{flat, relativeTo}
+  val base = (sourceManaged in Compile).value
+  val srcs = (managedSources in Compile).value
+  srcs x (relativeTo(base) | flat)
+}
+```
+
+This takes sources from the `managedSources` task and relativizes them
+against the `managedSource` base directory, falling back to a flattened
+mapping. If a source generation task doesn't write the sources to the
+`managedSource` directory, the mapping function would have to be
+adjusted to try relativizing against additional directories or something
+more appropriate for the generator.
+
+#### How can I generate source code or resources?
+
+See [Generating Files][Howto-Generating-Files].
+
+#### How can a task avoid redoing work if the input files are unchanged?
+
+There is basic support for only doing work when input files have changed
+or when the outputs haven't been generated yet. This support is
+primitive and subject to change.
+
+The relevant methods are two overloaded methods called
+[FileFunction.cached](../api/sbt/FileFunction$.html). Each requires a
+directory in which to store cached data. Sample usage is:
+
+```scala
+// define a task that takes some inputs
+//   and generates files in an output directory
+myTask := {
+  // wraps a function taskImpl in an uptodate check
+  //   taskImpl takes the input files, the output directory,
+  //   generates the output files and returns the set of generated files
+  val cachedFun = FileFunction.cached(cacheDirectory.value / "my-task") { (in: Set[File]) =>
+    taskImpl(in, target.value) : Set[File]
+  }
+  // Applies the cached function to the inputs files
+  cachedFun(inputs.value)
+}
+```
+
+There are two additional arguments for the first parameter list that
+allow the file tracking style to be explicitly specified. By default,
+the input tracking style is `FilesInfo.lastModified`, based on a file's
+last modified time, and the output tracking style is `FilesInfo.exists`,
+based only on whether the file exists. The other available style is
+`FilesInfo.hash`, which tracks a file based on a hash of its contents.
+See the [FilesInfo API](../api/sbt/FilesInfo$.html) for details.
+
+A more advanced version of `FileFunction.cached` passes a data structure
+of type [ChangeReport](../api/sbt/ChangeReport.html) describing the
+changes to input and output files since the last evaluation. This
+version of `cached` also expects the set of files generated as output to
+be the result of the evaluated function.
+
+### Extending sbt
+
+#### How can I add a new configuration?
+
+The following example demonstrates adding a new set of compilation
+settings and tasks to a new configuration called `samples`. The sources
+for this configuration go in `src/samples/scala/`. Unspecified settings
+delegate to those defined for the `compile` configuration. For example,
+if `scalacOptions` are not overridden for `samples`, the options for the
+main sources are used.
+
+Options specific to `samples` may be declared like:
+
+```scala
+scalacOptions in Samples += "-deprecation"
+```
+
+This uses the main options as base options because of `+=`. Use `:=` to
+ignore the main options:
+
+```scala
+scalacOptions in Samples := "-deprecation" :: Nil
+```
+
+The example adds all of the usual compilation related settings and tasks
+to `samples`:
+
+```
+samples:run
+samples:runMain
+samples:compile
+samples:console
+samples:consoleQuick
+samples:scalacOptions
+samples:fullClasspath
+samples:package
+samples:packageSrc
+...
+```
+
+#### How do I add a test configuration?
+
+See the [Additional test configurations][additional-test-configurations] section of
+[Testing][Testing].
+
+#### How can I create a custom run task, in addition to `run`?
+
+This answer is extracted from a
+[mailing list discussion](https://groups.google.com/group/simple-build-tool/browse_thread/thread/4c28ee5b7e18b46a/).
+
+Read the Getting Started Guide up to
+[custom settings][Custom-Settings] for background.
+
+A basic run task is created by:
+
+```scala
+lazy val myRunTask = taskKey[Unit]("A custom run task.")
+
+// this can go either in a `build.sbt` or the settings member
+//   of a Project in a full configuration
+fullRunTask(myRunTask, Test, "foo.Foo", "arg1", "arg2")
+```
+
+If you want to be able to supply arguments on the command line, replace
+`TaskKey` with `InputKey` and `fullRunTask` with `fullRunInputTask`. The
+`Test` part can be replaced with another configuration, such as
+`Compile`, to use that configuration's classpath.
+
+This run task can be configured individually by specifying the task key
+in the scope. For example:
+
+```scala
+fork in myRunTask := true
+
+javaOptions in myRunTask += "-Xmx6144m"
+```
+
+#### How should I express a dependency on an outside tool such as proguard?
+
+Tool dependencies are used to implement a task and are not needed by
+project source code. These dependencies can be declared in their own
+configuration and classpaths. These are the steps:
+
+1.  Define a new [configuration][ivy-configurations].
+2.  Declare the tool
+    [dependencies][Library-Management] in that
+    configuration.
+3.  Define a classpath that pulls the dependencies from the
+    [Update Report][Update-Report] produced by `update`.
+4.  Use the classpath to implement the task.
+
+As an example, consider a `proguard` task. This task needs the ProGuard
+jars in order to run the tool. First, define and add the new
+configuration:
+
+```scala
+val ProguardConfig = config("proguard") hide
+
+ivyConfigurations += ProguardConfig
+```
+
+Then,
+
+```scala
+// Add proguard as a dependency in the custom configuration.
+//  This keeps it separate from project dependencies.
+libraryDependencies +=
+   "net.sf.proguard" % "proguard" % "4.4" % ProguardConfig.name
+
+// Extract the dependencies from the UpdateReport.
+managedClasspath in proguard := {
+    // these are the types of artifacts to include
+    val artifactTypes: Set[String] = (classpathTypes in proguard).value
+    Classpaths.managedJars(proguardConfig, artifactTypes, update.value)
+}
+
+// Use the dependencies in a task, typically by putting them
+//  in a ClassLoader and reflectively calling an appropriate
+//  method.
+proguard := {
+    val cp: Seq[File] = (managedClasspath in proguard).value
+  // ... do something with , which includes proguard ...
+}
+```
+
+Defining the intermediate classpath is optional, but it can be useful
+for debugging or if it needs to be used by multiple tasks. It is also
+possible to specify artifact types inline. This alternative `proguard`
+task would look like:
+
+```scala
+proguard := {
+   val artifactTypes = Set("jar")
+    val cp: Seq[File] =
+      Classpaths.managedJars(proguardConfig, artifactTypes, update.value)
+  // ... do something with , which includes proguard ...
+}
+```
+
+#### How would I change sbt's classpath dynamically?
+
+It is possible to register additional jars that will be placed on sbt's
+classpath (since version 0.10.1). Through
+[State](../api/sbt/State$.html), it is possible to obtain a
+[xsbti.ComponentProvider](../api/xsbti/ComponentProvider.html), which
+manages application components. Components are groups of files in the
+`~/.sbt/boot/` directory and, in this case, the application is sbt. In
+addition to the base classpath, components in the "extra" component are
+included on sbt's classpath.
+
+(Note: the additional components on an application's classpath are
+declared by the `components` property in the `[main]` section of the
+launcher configuration file `boot.properties`.)
+
+Because these components are added to the `~/.sbt/boot/` directory and
+`~/.sbt/boot/` may be read-only, this can fail. In this case, the user
+has generally intentionally set sbt up this way, so error recovery is
+not typically necessary (just a short error message explaining the
+situation.)
+
+#### Example of dynamic classpath augmentation
+
+The following code can be used where a `State => State` is required,
+such as in the `onLoad` setting (described below) or in a
+[command][Commands]. It adds some files to the "extra"
+component and reloads sbt if they were not already added. Note that
+reloading will drop the user's session state.
+
+```scala
+def augment(extra: Seq[File])(s: State): State = {
+    // Get the component provider
+  val cs: xsbti.ComponentProvider = s.configuration.provider.components()
+
+    // Adds the files in 'extra' to the "extra" component
+    //   under an exclusive machine-wide lock.
+    //   The returned value is 'true' if files were actually copied and 'false'
+    //   if the target files already exists (based on name only).
+  val copied: Boolean = s.locked(cs.lockFile, cs.addToComponent("extra", extra.toArray))
+
+    // If files were copied, reload so that we use the new classpath.
+  if(copied) s.reload else s
+}
+```
+
+#### How can I take action when the project is loaded or unloaded?
+
+The single, global setting `onLoad` is of type `State => State` (see
+[State and Actions][Build-State]) and is executed once, after all projects are
+built and loaded. There is a similar hook `onUnload` for when a project
+is unloaded. Project unloading typically occurs as a result of a
+`reload` command or a `set` command. Because the `onLoad` and `onUnload`
+hooks are global, modifying this setting typically involves composing a
+new function with the previous value. The following example shows the
+basic structure of defining `onLoad`:
+
+```scala
+// Compose our new function 'f' with the existing transformation.
+{
+  val f: State => State = ...
+  onLoad in Global := {
+    val previous = (onLoad in Global).value
+    f compose previous
+  }
+}
+```
+
+#### Example of project load/unload hooks
+
+The following example maintains a count of the number of times a project
+has been loaded and prints that number:
+
+```scala
+{
+  // the key for the current count
+  val key = AttributeKey[Int]("loadCount")
+  // the State transformer
+  val f = (s: State) => {
+    val previous = s get key getOrElse 0
+    println("Project load count: " + previous)
+    s.put(key, previous + 1)
+  }
+  onLoad in Global := {
+    val previous = (onLoad in Global).value
+    f compose previous
+  }
+}
+```
+
+### Errors
+
+#### On project load, "Reference to uninitialized setting"
+
+Setting initializers are executed in order. If the initialization of a
+setting depends on other settings that has not been initialized, sbt
+will stop loading.
+
+In this example, we try to append a library to `libraryDependencies`
+before it is initialized with an empty sequence.
+
+```scala
+object MyBuild extends Build {
+  val root = Project(id = "root", base = file("."),
+    settings = Seq(
+      libraryDependencies += "commons-io" % "commons-io" % "1.4" % "test"
+    )
+  ).disablePlugins(plugins.IvyModule)
+}
+```
+
+To correct this, include the IvyModule plugin settings, which includes
+`libraryDependencies := Seq()`. So, we just drop the explicit disabling.
+
+```scala
+object MyBuild extends Build {
+  val root = Project(id = "root", base = file("."),
+    settings = Seq(
+      libraryDependencies += "commons-io" % "commons-io" % "1.4" % "test"
+    )
+  )
+}
+```
+
+A more subtle variation of this error occurs when using
+[scoped settings][Scopes].
+
+```scala
+// error: Reference to uninitialized setting
+settings = Seq(
+  libraryDependencies += "commons-io" % "commons-io" % "1.2" % "test",
+  fullClasspath := fullClasspath.value.filterNot(_.data.name.contains("commons-io"))
+)
+```
+
+This setting varies between the test and compile scopes. The solution is
+use the scoped setting, both as the input to the initializer, and the
+setting that we update.
+
+```scala
+fullClasspath in Compile := (fullClasspath in Compile).value.filterNot(_.data.name.contains("commons-io"))
+```
+
+### Dependency Management
+
+#### How do I resolve a checksum error?
+
+This error occurs when the published checksum, such as a sha1 or md5
+hash, differs from the checksum computed for a downloaded artifact, such
+as a jar or pom.xml. An example of such an error is:
+
+```
+[warn]  problem while downloading module descriptor:
+https://repo1.maven.org/maven2/commons-fileupload/commons-fileupload/1.2.2/commons-fileupload-1.2.2.pom:
+invalid sha1: expected=ad3fda4adc95eb0d061341228cc94845ddb9a6fe computed=0ce5d4a03b07c8b00ab60252e5cacdc708a4e6d8 (1070ms)
+```
+
+The invalid checksum should generally be reported to the repository
+owner (as
+[was done](https://issues.sonatype.org/browse/MVNCENTRAL-46) for the
+above error). In the meantime, you can temporarily disable checking with
+the following setting:
+
+```scala
+checksums in update := Nil
+```
+
+See [library management][Library-Management] for details.
+
+#### I've added a plugin, and now my cross-compilations fail!
+
+This problem crops up frequently. Plugins are only published for the
+Scala version that sbt uses (currently, 2.9.1). You can still *use*
+plugins during cross-compilation, because sbt only looks for a 2.9.1
+version of the plugin.
+
+**... unless you specify the plugin in the wrong place!**
+
+A typical mistake is to put global plugin definitions in
+`~/.sbt/plugins.sbt`. **THIS IS WRONG.** `.sbt` files in `~/.sbt` are
+loaded for *each* build--that is, for *each* cross-compilation. So, if
+you build for Scala 2.9.0, sbt will try to find a version of the plugin
+that's compiled for 2.9.0--and it usually won't. That's because it
+doesn't *know* the dependency is a plugin.
+
+To tell sbt that the dependency is an sbt plugin, make sure you define
+your global plugins in a `.sbt` file in `~/.sbt/plugins/`. sbt knows
+that files in `~/.sbt/plugins` are only to be used by sbt itself, not as
+part of the general build definition. If you define your plugins in a
+file under *that* directory, they won't foul up your cross-compilations.
+Any file name ending in `.sbt` will do, but most people use
+`~/.sbt/plugins/build.sbt` or `~/.sbt/plugins/plugins.sbt`.
+
+### Miscellaneous
+
+#### How do I use the Scala interpreter in my code?
+
+sbt runs tests in the same JVM as sbt itself and Scala classes are not
+in the same class loader as the application classes. Therefore, when
+using the Scala interpreter, it is important to set it up properly to
+avoid an error message like:
+
+```
+Failed to initialize compiler: class scala.runtime.VolatileBooleanRef not found.
+** Note that as of 2.8 scala does not assume use of the java classpath.
+** For the old behavior pass -usejavacp to scala, or if using a Settings
+** object programmatically, settings.usejavacp.value = true.
+```
+
+The key is to initialize the Settings for the interpreter using
+*embeddedDefaults*. For example:
+
+```scala
+ val settings = new Settings
+ settings.embeddedDefaults[MyType]
+ val interpreter = new Interpreter(settings, ...)
+```
+
+Here, MyType is a representative class that should be included on the
+interpreter's classpath and in its application class loader. For more
+background, see the
+[original proposal](https://gist.github.com/404272) that resulted in
+*embeddedDefaults* being added.
+
+Similarly, use a representative class as the type argument when using
+the *break* and *breakIf* methods of *ILoop*, as in the following
+example:
+
+```scala
+def x(a: Int, b: Int) = {
+  import scala.tools.nsc.interpreter.ILoop
+  ILoop.breakIf[MyType](a != b, "a" -> a, "b" -> b )
+}
+```
+
+### 0.7 to 0.10+ Migration
+
+#### How do I migrate from 0.7 to 0.10+?
+
+See the
+[migration page][Migrating-from-sbt-07x]
+first and then the following questions.
+
+#### Where has 0.7's `lib_managed` gone?
+
+By default, sbt 0.13.9 loads managed libraries from your ivy cache
+without copying them to a `lib_managed` directory. This fixes some bugs
+with the previous solution and keeps your project directory small. If
+you want to insulate your builds from the ivy cache being cleared, set
+`retrieveManaged := true` and the dependencies will be copied to
+`lib_managed` as a build-local cache (while avoiding the issues of
+`lib_managed` in 0.7.x).
+
+This does mean that existing solutions for sharing libraries with your
+favoured IDE may not work. Refer to [Community Plugins page][Community-Plugins]
+for a list of currently available plugins for your IDE.
+
+#### What are the commands I can use in 0.13.9 vs. 0.7?
+
+For a list of commands, run `help`. For details on a specific command,
+run `help <command>`. To view a list of tasks defined on the current
+project, run `tasks`. Alternatively, see the
+[Running][Running] page in the Getting Started Guide
+for descriptions of common commands and tasks.
+
+If in doubt start by just trying the old command as it may just work.
+The built in TAB completion will also assist you, so you can just press
+TAB at the beginning of a line and see what you get.
+
+The following commands work pretty much as in 0.7 out of the box:
+
+```
+reload
+update
+compile
+test
+testOnly
+publishLocal
+exit
+```
+
+#### Why have the resolved dependencies in a multi-module project changed since 0.7?
+
+sbt 0.10 fixes a flaw in how dependencies get resolved in multi-module
+projects. This change ensures that only one version of a library appears
+on a classpath.
+
+Use `last update` to view the debugging output for the last `update`
+run. Use `show update` to view a summary of files comprising managed
+classpaths.
+
+### My tests all run really fast but some are broken that weren't in 0.7!
+
+Be aware that compilation and tests run in parallel by default in sbt
+0.13.9. If your test code isn't thread-safe then you may want to
+change this behaviour by adding one of the following to your
+`build.sbt`:
+
+```scala
+// Execute tests in the current project serially.
+// Tests from other projects may still run concurrently.
+parallelExecution in Test := false
+
+// Execute everything serially (including compilation and tests)
+parallelExecution := false
+```
+
+#### What happened to the web development and Web Start support since 0.7?
+
+Web application support was split out into a plugin. See the
+[xsbt-web-plugin](https://github.com/earldouglas/xsbt-web-plugin)
+project.
+
+For an early version of an xsbt Web Start plugin, visit the
+[xsbt-webstart](https://github.com/ritschwumm/xsbt-webstart) project.
+
+#### How are inter-project dependencies different in 0.13.9 vs. 0.7?
+
+In 0.13.9, there are three types of project dependencies (classpath,
+execution, and configuration) and they are independently defined. These
+were combined in a single dependency type in 0.7.x. A declaration like:
+
+```scala
+lazy val a = project("a", "A")
+lazy val b = project("b", "B", a)
+```
+
+meant that the `B` project had a classpath and execution dependency on
+`A` and `A` had a configuration dependency on `B`. Specifically, in
+0.7.x:
+
+1.  Classpath: Classpaths for `A` were available on the appropriate
+    classpath for B.
+2.  Execution: A task executed on `B` would be executed on `A` first.
+3.  Configuration: For some settings, if they were not overridden in A,
+    they would default to the value provided in B.
+
+In 0.13.9, declare the specific type of dependency you want. Read
+about [multi-project builds][Multi-Project] in the
+Getting Started Guide for details.
+
+#### Where did class/object X go since 0.7?
+
+<table>
+  <tr>
+    <th>0.7</th>
+    <th>0.13.9</th>
+  </tr>
+
+  <tr>
+    <td><a href="https://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/FileUtilities$object.html">FileUtilities</a></td>
+    <td><a href="../api/sbt/IO$.html)">IO</a></td>
+  </tr>
+
+  <tr>
+    <td><a href="https://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/Path.html">Path class</a> and
+    <a href="https://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/Path$.html">object</a></td>
+    <td>
+      <a href="../api/sbt/Path$.html">Path object</a>, <tt>File</tt>,
+      <a href="../api/sbt/RichFile.html">RichFile</a>
+
+    </td>
+  </tr>
+
+  <tr>
+    <td><a href="https://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/PathFinder.html">PathFinder class</a></td>
+    <td>
+      <tt>Seq[File]</tt>, 
+      <a href="../api/sbt/PathFinder.html)">PathFinder class</a>,
+      <a href="../api/sbt/PathFinder$.html">PathFinder object</a>
+    </td>
+  </tr>
+</table>
+
+#### Where can I find plugins for 0.13.9?
+
+See [Community Plugins][Community-Plugins] for a list of currently available
+plugins.
+
+
+  [Running]: Running.html
+  [Scopes]: Scopes.html
+  [Community-Plugins]: Communitiy-Plugins.html
+  [Full-Def]: Full-Def.html
+  [Basic-Def]: Basic-Def.html
+  [Using-Plugins]: Using-Plugins.html
+  [More-About-Settings]: More-About-Settings.html
+  [Library-Management]: Library-Management.html
+  [Artifacts]: Artifacts.html
+  [Paths]: Paths.html
+  [Parsing-Input]: Parsing-Input.html
+  [Mapping-Files]: Mapping-Files.html
+  [Cross-Build]: Cross-Build.html
+  [Parsing-Input]: Parsing-Input.html
+  [Process]: Process.html
+  [Commands]: Commands.html
+  [Input-Tasks]: Input-Tasks.html
+  [Build-State]: Build-State.html
+  [ivy-configurations]: Library-Management.html#ivy-configurations
+
+Index
+-----
+
+This is an index of common methods, types, and values you might find in
+an sbt build definition. For command names, see
+[Running][Running]. For available plugins, see
+[the plugins list][Community-Plugins].
+
+### Values and Types
+
+#### Dependency Management
+
+-   [ModuleID](../api/sbt/ModuleID.html) is the type of a dependency
+    definition. See
+    [Library Management][Library-Management].
+-   [Artifact](../api/sbt/Artifact.html) represents a single artifact
+    (such as a jar or a pom) to be built and published. See
+    [Library Management][Library-Management] and [Artifacts][Artifacts].
+-   A [Resolver](../api/sbt/Resolver.html) can resolve and retrieve
+    dependencies. Many types of Resolvers can publish dependencies as
+    well. A repository is a closely linked idea that typically refers to
+    the actual location of the dependencies. However, sbt is not very
+    consistent with this terminology and repository and resolver are
+    occasionally used interchangeably.
+-   A [ModuleConfiguration] defines a specific resolver to use for a
+    group of dependencies.
+-   A [Configuration](../api/sbt/Configuration.html) is a useful Ivy
+    construct for grouping dependencies. See ivy-configurations. It is
+    also used for [scoping settings][Scopes].
+-   `Compile`, `Test`, `Runtime`, `Provided`, and `Optional` are
+    predefined [configurations][ivy-configurations].
+
+#### Settings and Tasks
+
+-   A [Setting](../api/sbt/Init$Setting.html) describes how to
+    initialize a specific setting in the build. It can use the values of
+    other settings or the previous value of the setting being
+    initialized.
+-   A [SettingsDefinition](../api/sbt/Init$SettingsDefinition.html)
+    is the actual type of an expression in a build.sbt. This allows
+    either a single [Setting](../api/sbt/Init$Setting.html) or a
+    sequence of settings
+    ([SettingList](../api/sbt/Init$SettingList.html)) to be defined at
+    once. The types in a [.scala build definition][Full-Def] always use just a
+    plain [Setting](../api/sbt/Init$Setting.html).
+-   [Initialize](../api/sbt/Init$Initialize.html) describes how to
+    initialize a setting using other settings, but isn't bound to a
+    particular setting yet. Combined with an initialization method and a
+    setting to initialize, it produces a full
+    [Setting](../api/sbt/Init$Setting.html).
+-   [TaskKey](../api/sbt/TaskKey.html),
+    [SettingKey](../api/sbt/SettingKey.html), and
+    [InputKey](../api/sbt/InputKey.html) are keys that represent a task
+    or setting. These are not the actual tasks, but keys that are used
+    to refer to them. They can be scoped to produce
+    [ScopedTask](../api/sbt/ScopedTask.html),
+    [ScopedSetting](../api/sbt/ScopedSetting.html), and
+    [ScopedInput](../api/sbt/ScopedInput.html). These form the base
+    types that provide the Settings methods.
+-   [InputTask](../api/sbt/InputTask.html) parses and tab completes
+    user input, producing a task to run.
+-   [Task](../api/sbt/Task.html) is the type of a task. A task is an
+    action that runs on demand. This is in contrast to a setting, which
+    is run once at project initialization.
+
+#### Process
+
+-   A [ProcessBuilder](../api/sbt/ProcessBuilder.html) is the type
+    used to define a process. It provides combinators for building up
+    processes from smaller processes.
+-   A [Process](../api/sbt/Process.html) represents the actual forked
+    process.
+-   The [Process companion object](../api/sbt/Process$.html) provides
+    methods for constructing primitive processes.
+
+#### Build Structure
+
+-   [Build](../api/sbt/Build.html) is the trait implemented for a
+    [.scala build definition][Full-Def], which defines project
+    relationships and settings.
+-   [Plugin](../api/sbt/Plugin.html) is the trait implemented for sbt
+    [plugins][Using-Plugins].
+-   [Project](../api/sbt/Project.html) is both a trait and a
+    companion object that declares a single module in a build. See
+    [.scala build definition][Full-Def].
+-   [Keys](../api/sbt/Keys$.html) is an object that provides all of
+    the built-in keys for settings and tasks.
+-   [State](../api/sbt/State.html) contains the full state for a
+    build. It is mainly used by [Commands][Commands] and sometimes
+    [Input Tasks][Input-Tasks]. See also [State and Actions][Build-State].
+
+### Methods
+
+#### Settings and Tasks
+
+See the [Getting Started Guide][Basic-Def] for
+details.
+
+-   `:=`, `+=`, `++=` These construct a
+    [Setting](../api/sbt/Init$Setting.html), which is the fundamental
+    type in the [settings][Basic-Def] system.
+-   `value` This uses the value of another setting or task in the
+    definition of a new setting or task. This method is special (it is a
+    macro) and cannot be used except in the argument of one of the
+    setting definition methods above (:=, ...) or in the standalone
+    construction methods Def.setting and Def.task. See
+    [more about settings][More-About-Settings] for
+    details.
+-   `in` specifies the [Scope](../api/sbt/Scope.html) or part of the
+    [Scope](../api/sbt/Scope.html) of a setting being referenced. See
+    [scopes][Scopes].
+
+#### File and IO
+
+See [RichFile](../api/sbt/RichFile.html),
+[PathFinder](../api/sbt/PathFinder.html), and
+[Paths][Paths] for the full documentation.
+
+-   `/` When called on a single File, this is `new File(x,y)`. For
+    Seq[File], this is applied for each member of the sequence..
+-   `*` and `**` are methods for selecting children (`*`) or descendants
+    (`**`) of a File or Seq[File] that match a filter.
+-   `|`, `||`, `&&`, `&`, `-`, and `--` are methods for combining
+    filters, which are often used for selecting Files. See
+    [NameFilter](../api/sbt/NameFilter.html) and
+    [FileFilter](../api/sbt/FileFilter.html). Note that methods with
+    these names also exist for other types, such as collections (like
+    Seq) and [Parser](../api/sbt/complete/Parser.html) (see
+    [Parsing Input][Parsing-Input]).
+-   `pair` Used to construct mappings from a `File` to another `File` or
+    to a String. See [Mapping Files][Mapping-Files].
+-   `get` forces a [PathFinder](../api/sbt/PathFinder.html) (a
+    call-by-name data structure) to a strict `Seq[File]` representation.
+    This is a common name in Scala, used by types like Option.
+
+#### Dependency Management
+
+See [Library Management][Library-Management] for full documentation.
+
+-   `%` This is used to build up a [ModuleID](../api/sbt/ModuleID.html).
+-   `%%` This is similar to `%` except that it identifies a dependency
+    that has been [cross built][Cross-Build].
+-   `from` Used to specify the fallback URL for a dependency
+-   `classifier` Used to specify the classifier for a dependency.
+-   `at` Used to define a Maven-style resolver.
+-   `intransitive` Marks a [dependency](../api/sbt/ModuleID.html) or
+    [Configuration](../api/sbt/Configuration.html) as being
+    intransitive.
+-   `hide` Marks a [Configuration](../api/sbt/Configuration.html) as
+    internal and not to be included in the published metadata.
+
+#### Parsing
+
+These methods are used to build up
+[Parser](../api/sbt/complete/Parser.html)s from smaller
+[Parser](../api/sbt/complete/Parser.html)s. They closely follow the
+names of the standard library's parser combinators. See
+[Parsing Input][Parsing-Input] for the full documentation. These are
+used for
+[Input Tasks][Input-Tasks] and
+[Commands][Commands].
+
+-   `~`, `~>`, `<~` Sequencing methods.
+-   `??`, `?` Methods for making a Parser optional. `?` is postfix.
+-   `id` Used for turning a Char or String literal into a Parser. It is
+    generally used to trigger an implicit conversion to a Parser.
+-   `|`, `||` Choice methods. These are common method names in Scala.
+-   `^^^` Produces a constant value when a Parser matches.
+-   `+`, `*` Postfix repetition methods. These are common method names
+    in Scala.
+-   `map`, `flatMap` Transforms the result of a Parser. These are common
+    method names in Scala.
+-   `filter` Restricts the inputs that a Parser matches on. This is a
+    common method name in Scala.
+-   `-` Prefix negation. Only matches the input when the original parser
+    doesn't match the input.
+-   `examples`, `token` Tab completion
+-   `!!!` Provides an error message to use when the original parser
+    doesn't match the input.
+
+#### Processes
+
+These methods are used to
+[fork external processes][Process]. Note that this API
+has been included in the Scala standard library for version 2.9.
+[ProcessBuilder](../api/sbt/ProcessBuilder.html) is the builder type
+and [Process](../api/sbt/Process.html) is the type representing the
+actual forked process. The methods to combine processes start with `#`
+so that they share the same precedence.
+
+-   `run`, `!`, `!!`, `!<`, `lines`, `lines_!` are different ways to
+    start a process once it has been defined. The lines variants produce
+    a Stream[String] to obtain the output lines.
+-   `#<`, `#<<`, `#>` are used to get input for a process from a source
+    or send the output of a process to a sink.
+-   `#|` is used to pipe output from one process into the input of
+    another.
+-   `#||`, `#&&`, `###` sequence processes in different ways.
+
+
+
   [HowCanIHelp]: http://www.scala-sbt.org/community.html#how-can-I-help
 
 Developer's Guide (Work in progress)
@@ -18731,3315 +22354,3 @@ version of sbt is being used to build a project by running `about`.
 
 To reduce problems, it is recommended to not use a launcher jar for one
 nightly version to launch a different nightly version of sbt.
-
-
-How to...
----------
-
-See [Detailed Table of Contents](Contents+in+Depth.html) for the list of all the how-tos.
-
-
-  [Update-Report]: Update-Report.html
-
-Classpaths
-----------
-
-<a name="classpath-types"></a>
-
-### Include a new type of managed artifact on the classpath, such as `mar`
-
-The `classpathTypes` setting controls the types of managed artifacts
-that are included on the classpath by default. To add a new type, such
-as `mar`,
-
-```scala
-classpathTypes += "mar"
-```
-
-<a name="get-compile-classpath"></a>
-
-### Get the classpath used for compilation
-
-See the default types included by running `show classpathTypes` at the
-sbt prompt.
-
-The `dependencyClasspath` task scoped to `Compile` provides the
-classpath to use for compilation. Its type is `Seq[Attributed[File]]`,
-which means that each entry carries additional metadata. The `files`
-method provides just the raw `Seq[File]` for the classpath. For example,
-to use the files for the compilation classpath in another task, :
-
-```scala
-example := {
-  val cp: Seq[File] = (dependencyClasspath in Compile).value.files
-  ...
-}
-```
-
-> **Note**: This classpath does not include the class directory, which may be
-> necessary for compilation in some situations.
-
-<a name="get-runtime-classpath"></a>
-
-### Get the runtime classpath, including the project's compiled classes
-
-The `fullClasspath` task provides a classpath including both the
-dependencies and the products of project. For the runtime classpath,
-this means the main resources and compiled classes for the project as
-well as all runtime dependencies.
-
-The type of a classpath is `Seq[Attributed[File]]`, which means that
-each entry carries additional metadata. The `files` method provides just
-the raw `Seq[File]` for the classpath. For example, to use the files for
-the runtime classpath in another task, :
-
-```scala
-example := {
-  val cp: Seq[File] = (fullClasspath in Runtime).value.files
-  ...
-}
-```
-
-<a name="get-test-classpath"></a>
-
-### Get the test classpath, including the project's compiled test classes
-
-The `fullClasspath` task provides a classpath including both the
-dependencies and the products of a project. For the test classpath, this
-includes the main and test resources and compiled classes for the
-project as well as all dependencies for testing.
-
-The type of a classpath is `Seq[Attributed[File]]`, which means that
-each entry carries additional metadata. The `files` method provides just
-the raw `Seq[File]` for the classpath. For example, to use the files for
-the test classpath in another task, :
-
-```scala
-example := {
-  val cp: Seq[File] = (fullClasspath in Test).value.files
-  ...
-}
-```
-
-<a name="export-jars"></a>
-
-### Use packaged jars on classpaths instead of class directories
-
-By default, `fullClasspath` includes a directory containing class files
-and resources for a project. This in turn means that tasks like
-`compile`, `test`, and `run` have these class directories on their
-classpath. To use the packaged artifact (such as a jar) instead,
-configure `exportJars` :
-
-```scala
-exportJars := true
-```
-
-This will use the result of `packageBin` on the classpath instead of the
-class directory.
-
-> **Note**: Specifically, fullClasspath is the concatentation of
-> dependencyClasspath and exportedProducts. When exportJars is true,
-> exportedProducts is the output of packageBin. When exportJars is
-> false, exportedProducts is just products, which is by default the
-> directory containing class files and resources.
-
-<a name="managed-jars-in-config"></a>
-
-### Get all managed jars for a configuration
-
-The result of the `update` task has type
-[UpdateReport][Update-Report], which contains the
-results of dependency resolution. This can be used to extract the files
-for specific types of artifacts in a specific configuration. For
-example, to get the jars and zips of dependencies in the `Compile`
-configuration, :
-
-```scala
-example := {
-   val artifactTypes = Set("jar", "zip")
-   val files: Seq[File] =
-      Classpaths.managedJars(Compile, artifactTypes, update.value)
-   ...
-}
-```
-
-<a name="classpath-files"></a>
-
-### Get the files included in a classpath
-
-A classpath has type `Seq[Attributed[File]]`, which means that each
-entry carries additional metadata. The `files` method provides just the
-raw `Seq[File]` for the classpath. For example, :
-
-```scala
-val cp: Seq[Attributed[File]] = ...
-val files: Seq[File] = cp.files
-```
-
-<a name="classpath-entry-module"></a>
-
-### Get the module and artifact that produced a classpath entry
-
-A classpath has type `Seq[Attributed[File]]`, which means that each
-entry carries additional metadata. This metadata is in the form of an
-[AttributeMap](../api/sbt/AttributeMap.html). Useful keys for
-entries in the map are `artifact.key`, `moduleID.key`, and `analysis`. For
-example,
-
-```scala
-val classpath: Seq[Attributed[File]] = ???
-for(entry <- classpath) yield {
-   val art: Option[Artifact] = entry.get(artifact.key)
-   val mod: Option[ModuleID] = entry.get(moduleID.key)
-   val an: Option[inc.Analysis] = entry.get(analysis)
-   ...
-}
-```
-
-> **Note**: Entries may not have some or all metadata. Only entries from source
-> dependencies, such as internal projects, have an incremental
-> compilation [Analysis](../api/sbt/inc/Analysis.html). Only entries
-> for managed dependencies have an
-> [Artifact](../api/sbt/Artifact.html) and
-> [ModuleID](../api/sbt/ModuleID.html).
-
-
-  [file-filter]: Paths.html#file-filter
-  [Howto-Generating-Files]: Howto-Generating-Files.html
-
-Customizing paths
------------------
-
-This page describes how to modify the default source, resource, and
-library directories and what files get included from them.
-
-<a name="scala-source-directory"></a>
-
-### Change the default Scala source directory
-
-The directory that contains the main Scala sources is by default
-`src/main/scala`. For test Scala sources, it is `src/test/scala`. To
-change this, modify `scalaSource` in the `Compile` (for main sources) or
-`Test` (for test sources). For example,
-
-```scala
-scalaSource in Compile := baseDirectory.value / "src"
-
-scalaSource in Test := baseDirectory.value / "test-src"
-```
-
-> **Note**: The Scala source directory can be the same as the Java source
-> directory.
-
-<a name="java-source-directory"></a>
-
-### Change the default Java source directory
-
-The directory that contains the main Java sources is by default
-`src/main/java`. For test Java sources, it is `src/test/java`. To change
-this, modify `javaSource` in the `Compile` (for main sources) or `Test`
-(for test sources).
-
-For example,
-
-```scala
-javaSource in Compile := baseDirectory.value / "src"
-
-javaSource in Test := baseDirectory.value / "test-src"
-```
-
-> **Note**: The Scala source directory can be the same as the Java source
-> directory.
-
-<a name="resource-directory"></a>
-
-### Change the default resource directory
-
-The directory that contains the main resources is by default
-`src/main/resources`. For test resources, it is `src/test/resources`. To
-change this, modify `resourceDirectory` in either the `Compile` or
-`Test` configuration.
-
-For example,
-
-```scala
-resourceDirectory in Compile := baseDirectory.value / "resources"
-
-resourceDirectory in Test := baseDirectory.value / "test-resources"
-```
-
-<a name="unmanaged-base-directory"></a>
-
-### Change the default (unmanaged) library directory
-
-The directory that contains the unmanaged libraries is by default
-`lib/`. To change this, modify `unmanagedBase`. This setting can be
-changed at the project level or in the `Compile`, `Runtime`, or `Test`
-configurations.
-
-When defined without a configuration, the directory is the default
-directory for all configurations. For example, the following declares
-`jars/` as containing libraries:
-
-```scala
-unmanagedBase := baseDirectory.value / "jars"
-```
-
-When set for `Compile`, `Runtime`, or `Test`, `unmanagedBase` is the
-directory containing libraries for that configuration, overriding the
-default. For example, the following declares `lib/main/` to contain jars
-only for `Compile` and not for running or testing: :
-
-```scala
-unmanagedBase in Compile := baseDirectory.value / "lib" / "main"
-```
-
-<a name="disable-base-sources"></a>
-
-### Disable using the project's base directory as a source directory
-
-By default, sbt includes `.scala` files from the project's base
-directory as main source files. To disable this, configure
-`sourcesInBase`:
-
-```scala
-sourcesInBase := false
-```
-
-<a name="add-source-directory"></a>
-
-### Add an additional source directory
-
-sbt collects `sources` from `unmanagedSourceDirectories`, which by
-default consists of `scalaSource` and `javaSource`. Add a directory to
-`unmanagedSourceDirectories` in the appropriate configuration to add a
-source directory. For example, to add `extra-src` to be an additional
-directory containing main sources,
-
-```scala
-unmanagedSourceDirectories in Compile += baseDirectory.value / "extra-src"
-```
-
-> **Note**: This directory should only contain unmanaged sources, which are
-> sources that are manually created and managed. See
-> [Generating Files][Howto-Generating-Files] for working with automatically generated sources.
-
-<a name="add-resource-directory"></a>
-
-### Add an additional resource directory
-
-sbt collects `resources` from `unmanagedResourceDirectories`, which by
-default consists of `resourceDirectory`. Add a directory to
-`unmanagedResourceDirectories` in the appropriate configuration to add
-another resource directory. For example, to add `extra-resources` to be
-an additional directory containing main resources,
-
-```scala
-unmanagedResourceDirectories in Compile += baseDirectory.value / "extra-resources"
-```
-
-> **Note**: This directory should only contain unmanaged resources, which are
-> resources that are manually created and managed. See
-> [Generating Files][Howto-Generating-Files] for working with automatically generated
-> resources.
-
-<a name="source-include-filter"></a>
-
-### Include/exclude files in the source directory
-
-When sbt traverses `unmanagedSourceDirectories` for sources, it only
-includes directories and files that match `includeFilter` and do not
-match `excludeFilter`. `includeFilter` and `excludeFilter` have type
-`java.io.FileFilter` and sbt
-[provides some useful combinators][file-filter] for constructing a
-`FileFilter`. For example, in addition to the default hidden files
-exclusion, the following also ignores files containing `impl` in their
-name,
-
-```scala
-excludeFilter in unmanagedSources := HiddenFileFilter || "*impl*"
-```
-
-To have different filters for main and test libraries, configure
-`Compile` and `Test` separately:
-
-```scala
-includeFilter in (Compile, unmanagedSources) := "*.scala" || "*.java"
-
-includeFilter in (Test, unmanagedSources) := HiddenFileFilter || "*impl*"
-```
-
-> **Note**: By default, sbt includes `.scala` and `.java` sources, excluding hidden
-> files.
-
-<a name="resource-include-filter"></a>
-
-### Include/exclude files in the resource directory
-
-When sbt traverses `unmanagedResourceDirectories` for resources, it only
-includes directories and files that match `includeFilter` and do not
-match `excludeFilter`. `includeFilter` and `excludeFilter` have type
-`java.io.FileFilter` and sbt
-[provides some useful combinators][file-filter] for constructing a
-`FileFilter`. For example, in addition to the default hidden files
-exclusion, the following also ignores files containing `impl` in their
-name,
-
-```scala
-excludeFilter in unmanagedSources := HiddenFileFilter || "*impl*"
-```
-
-To have different filters for main and test libraries, configure
-`Compile` and `Test` separately:
-
-```scala
-includeFilter in (Compile, unmanagedSources) := "*.txt"
-
-includeFilter in (Test, unmanagedSources) := "*.html"
-```
-
-> **Note**: By default, sbt includes all files that are not hidden.
-
-<a name="lib-include-filter"></a>
-
-### Include only certain (unmanaged) libraries
-
-When sbt traverses `unmanagedBase` for resources, it only includes
-directories and files that match `includeFilter` and do not match
-`excludeFilter`. `includeFilter` and `excludeFilter` have type
-`java.io.FileFilter` and sbt
-[provides some useful combinators][file-filter] for constructing a
-`FileFilter`. For example, in addition to the default hidden files
-exclusion, the following also ignores zips,
-
-```scala
-excludeFilter in unmanagedJars := HiddenFileFilter || "*.zip"
-```
-
-To have different filters for main and test libraries, configure
-`Compile` and `Test` separately:
-
-```scala
-includeFilter in (Compile, unmanagedJars) := "*.jar"
-
-includeFilter in (Test, unmanagedJars) := "*.jar" || "*.zip"
-```
-
-> **Note**: By default, sbt includes jars, zips, and native dynamic libraries,
-> excluding hidden files.
-
-
-  [modify-package-contents]: Howto-Package.html#modify-package-contents
-
-Generating files
-----------------
-
-sbt provides standard hooks for adding source and resource generation
-tasks.
-
-<a name="sources"></a>
-
-### Generate sources
-
-A source generation task should generate sources in a subdirectory of
-`sourceManaged` and return a sequence of files generated. The signature
-of a source generation function (that becomes a basis for a task) is
-usually as follows:
-
-```scala
-def makeSomeSources(base: File): Seq[File]
-```
-
-The key to add the task to is called `sourceGenerators`. Because we want
-to add the task, and not the value after its execution, we use
-`taskValue` instead of the usual `value`. `sourceGenerators` should be
-scoped according to whether the generated files are main (`Compile`) or
-test (`Test`) sources. This basic structure looks like:
-
-```scala
-sourceGenerators in Compile += <task of type Seq[File]>.taskValue
-```
-
-For example, assuming a method
-`def makeSomeSources(base: File): Seq[File]`,
-
-```scala
-sourceGenerators in Compile += Def.task {
-  makeSomeSources((sourceManaged in Compile).value / "demo")
-}.taskValue
-```
-
-As a specific example, the following source generator generates
-`Test.scala` application object that once executed, prints `"Hi"` to the
-console:
-
-```scala
-sourceGenerators in Compile += Def.task {
-  val file = (sourceManaged in Compile).value / "demo" / "Test.scala"
-  IO.write(file, """object Test extends App { println("Hi") }""")
-  Seq(file)
-}.taskValue
-```
-
-Executing `run` will print `"Hi"`.
-
-```
-> run
-[info] Running Test
-Hi
-```
-
-Change `Compile` to `Test` to make it a test source. For efficiency, you
-would only want to generate sources when necessary and not every run.
-
-By default, generated sources are not included in the packaged source
-artifact. To do so, add them as you would other mappings. See
-[Adding files to a package][modify-package-contents]. A source
-generator can return both Java and Scala sources mixed together in the
-same sequence. They will be distinguished by their extension later.
-
-<a name="resources"></a>
-
-### Generate resources
-
-A resource generation task should generate resources in a subdirectory
-of `resourceManaged` and return a sequence of files generated. Like a
-source generation function, the signature of a resource generation
-function (that becomes a basis for a task) is usually as follows:
-
-```scala
-def makeSomeResources(base: File): Seq[File]
-```
-
-The key to add the task to is called `resourceGenerators`. Because we
-want to add the task, and not the value after its execution, we use
-`taskValue` instead of the usual `value`. It should be scoped according
-to whether the generated files are main (`Compile`) or test (`Test`)
-resources. This basic structure looks like:
-
-```scala
-resourceGenerators in Compile += <task of type Seq[File]>.taskValue
-```
-
-For example, assuming a method
-`def makeSomeResources(base: File): Seq[File]`,
-
-```scala
-resourceGenerators in Compile += Def.task {
-  makeSomeResources((resourceManaged in Compile).value / "demo")
-}.taskValue
-```
-
-As a specific example, the following generates a properties file
-`myapp.properties` containing the application name and version:
-
-```scala
-resourceGenerators in Compile += Def.task {
-  val file = (resourceManaged in Compile).value / "demo" / "myapp.properties"
-  val contents = "name=%s\nversion=%s".format(name.value,version.value)
-  IO.write(file, contents)
-  Seq(file)
-}.taskValue
-```
-
-Change `Compile` to `Test` to make it a test resource. Normally, you
-would only want to generate resources when necessary and not every run.
-
-By default, generated resources are not included in the packaged source
-artifact. To do so, add them as you would other mappings. See
-[Adding files to a package][modify-package-contents].
-
-
-  [Inspecting-Settings]: Inspecting-Settings.html
-
-Inspect the build
------------------
-
-<a name="taskhelp"></a>
-
-### Show or search help for a command, task, or setting
-
-The `help` command is used to show available commands and search the
-help for commands, tasks, or settings. If run without arguments, `help`
-lists the available commands.
-
-```
-> help
-
-  help                         Displays this help message or prints detailed help on 
-                                  requested commands (run 'help <command>').
-  about                        Displays basic information about sbt and the build.
-  reload                       (Re)loads the project in the current directory
-  ...
-
-> help compile
-```
-
-If the argument passed to `help` is the name of an existing command,
-setting or task, the help for that entity is displayed. Otherwise, the
-argument is interpreted as a regular expression that is used to search
-the help of all commands, settings and tasks.
-
-The `tasks` command is like `help`, but operates only on tasks.
-Similarly, the `settings` command only operates on settings.
-
-See also `help help`, `help tasks`, and `help settings`.
-
-<a name="listtasks"></a>
-
-### List available tasks
-
-The `tasks` command, without arguments, lists the most commonly used
-tasks. It can take a regular expression to search task names and
-descriptions. The verbosity can be increased to show or search less
-commonly used tasks. See `help tasks` for details.
-
-The `settings` command, without arguments, lists the most commonly used
-settings. It can take a regular expression to search setting names and
-descriptions. The verbosity can be increased to show or search less
-commonly used settings. See `help settings` for details.
-
-<a name="listsettings"></a>
-
-### List available settings
-
-The `inspect` command displays several pieces of information about a
-given setting or task, including the dependencies of a task/setting as
-well as the tasks/settings that depend on the it. For example,
-
-```
-> inspect test:compile
-...
-[info] Dependencies:
-[info]  test:compile::compileInputs
-[info]  test:compile::streams
-[info] Reverse dependencies:
-[info]  test:definedTestNames
-[info]  test:definedSbtPlugins
-[info]  test:printWarnings
-[info]  test:discoveredMainClasses
-[info]  test:definedTests
-[info]  test:exportedProducts
-[info]  test:products
-...
-```
-
-See the [Inspecting Settings][Inspecting-Settings] page for details.
-
-<a name="taskdependencytree"></a>
-### Display tree of setting/task dependencies
-
-In addition to displaying immediate forward and reverse dependencies as
-described in the previous section, the `inspect` command can display the
-full dependency tree for a task or setting. For example,
-
-```
-> inspect tree clean
-[info] *:clean = Task[Unit]
-[info]   +-*:cleanFiles = List(<project>/lib_managed, <project>/target)
-[info]   | +-{.}/*:managedDirectory = lib_managed
-[info]   | +-*:target = target
-[info]   |   +-*:baseDirectory = <project>
-[info]   |     +-*:thisProject = Project(id: demo, base: <project>, ...
-[info]   |     
-[info]   +-*:cleanKeepFiles = List(<project>/target/.history)
-[info]     +-*:history = Some(<project>/target/.history)
-...
-```
-
-For each task, `inspect tree` show the type of the value generated by
-the task. For a setting, the `toString` of the setting is displayed. See
-the [Inspecting Settings][Inspecting-Settings] page for details on the
-`inspect` command.
-
-<a name="description"></a>
-
-### Display the description and type of a setting or task
-
-While the `help`, `settings`, and `tasks` commands display a description
-of a task, the `inspect` command also shows the type of a setting or
-task and the value of a setting. For example:
-
-```
-> inspect update
-[info] Task: sbt.UpdateReport
-[info] Description:
-[info]  Resolves and optionally retrieves dependencies, producing a report.
-...
-```
-
-```
-> inspect scalaVersion
-[info] Setting: java.lang.String = 2.9.2
-[info] Description:
-[info]  The version of Scala used for building.
-...
-```
-
-See the [Inspecting Settings][Inspecting-Settings] page for details.
-
-<a name="delegates"></a>
-
-### Display the delegation chain of a setting or task
-
-See the [Inspecting Settings][Inspecting-Settings] page for details.
-
-<a name="related"></a>
-### Display related settings or tasks
-
-The `inspect` command can help find scopes where a setting or task is
-defined. The following example shows that different options may be
-specified to the Scala for testing and API documentation generation.
-
-```
-> inspect scalacOptions
-...
-[info] Related:
-[info]  compile:doc::scalacOptions
-[info]  test:scalacOptions
-[info]  */*:scalacOptions
-[info]  test:doc::scalacOptions
-```
-
-See the [Inspecting Settings][Inspecting-Settings] page for details.
-
-<a name="projects"></a>
-
-### Show the list of projects and builds
-
-The `projects` command displays the currently loaded projects. The
-projects are grouped by their enclosing build and the current project is
-indicated by an asterisk. For example,
-
-```
-> projects
-[info] In file:/home/user/demo/
-[info]   * parent
-[info]     sub
-[info] In file:/home/user/dep/
-[info]     sample
-```
-
-<a name="session"></a>
-
-### Show the current session (temporary) settings
-
-`session list` displays the settings that have been added at the command
-line for the current project. For example,
-
-```
-> session list
-  1. maxErrors := 5
-  2. scalacOptions += "-explaintypes"
-```
-
-`session list-all` displays the settings added for all projects. For
-details, see `help session`.
-
-<a name="about"></a>
-
-### Show basic information about sbt and the current build
-
-```
-> about
-[info] This is sbt 0.12.0
-[info] The current project is {file:~/code/sbt.github.com/}default
-[info] The current project is built against Scala 2.9.2
-[info] Available Plugins: com.jsuereth.ghpages.GhPages, com.jsuereth.git.GitPlugin, com.jsuereth.sbtsite.SitePlugin
-[info] sbt, sbt plugins, and build definitions are using Scala 2.9.2
-```
-
-<a name="value"></a>
-
-### Show the value of a setting
-
-The `inspect` command shows the value of a setting as part of its
-output, but the `show` command is dedicated to this job. It shows the
-output of the setting provided as an argument. For example,
-
-```
-> show organization
-[info] com.github.sbt 
-```
-
-The `show` command also works for tasks, described next.
-
-<a name="result"></a>
-
-### Show the result of executing a task
-
-```
-> show update
-... <output of update> ...
-[info] Update report:
-[info]  Resolve time: 122 ms, Download time: 5 ms, Download size: 0 bytes
-[info]  compile:
-[info]      org.scala-lang:scala-library:2.9.2: ...
-```
-
-The `show` command will execute the task provided as an argument and
-then print the result. Note that this is different from the behavior of
-the `inspect` command (described in other sections), which does not
-execute a task and thus can only display its type and not its generated
-value.
-
-```
-> show compile:dependencyClasspath
-...
-[info] ArrayBuffer(Attributed(~/.sbt/0.12.0/boot/scala-2.9.2/lib/scala-library.jar))
-```
-
-<a name="classpath"></a>
-
-### Show the classpath used for compilation or testing
-
-For the test classpath,
-
-```
-> show test:dependencyClasspath
-...
-[info] ArrayBuffer(Attributed(~/code/sbt.github.com/target/scala-2.9.2/classes), Attributed(~/.sbt/0.12.0/boot/scala-2.9.2/lib/scala-library.jar), Attributed(~/.ivy2/cache/junit/junit/jars/junit-4.8.2.jar))
-```
-
-<a name="applications"></a>
-
-### Show the main classes detected in a project
-
-sbt detects the classes with public, static main methods for use by the
-`run` method and to tab-complete the `runMain` method. The
-`discoveredMainClasses` task does this discovery and provides as its
-result the list of class names. For example, the following shows the
-main classes discovered in the main sources:
-
-```
-> show compile:discoveredMainClasses
-... <runs compile if out of date> ...
-[info] List(org.example.Main)
-```
-
-<a name="tests"></a>
-
-### Show the test classes detected in a project
-
-sbt detects tests according to fingerprints provided by test frameworks.
-The `definedTestNames` task provides as its result the list of test
-names detected in this way. For example,
-
-```
-> show test:definedTestNames
-... < runs test:compile if out of date > ...
-[info] List(org.example.TestA, org.example.TestB)
-```
-
-
-  [Build-State]: Build-State.html
-
-Interactive mode
-----------------
-
-<a name="basic_completion"></a>
-
-### Use tab completion
-
-By default, sbt's interactive mode is started when no commands are
-provided on the command line or when the `shell` command is invoked.
-
-As the name suggests, tab completion is invoked by hitting the tab key.
-Suggestions are provided that can complete the text entered to the left
-of the current cursor position. Any part of the suggestion that is
-unambiguous is automatically appended to the current text. Commands
-typically support tab completion for most of their syntax.
-
-As an example, entering `tes` and hitting tab:
-
-```
-> tes<TAB>
-```
-
-results in sbt appending a `t`:
-
-```
-> test
-```
-
-To get further completions, hit tab again:
-
-```
-> test<TAB>
-testFrameworks   testListeners    testLoader       testOnly         testOptions      test:
-```
-
-Now, there is more than one possibility for the next character, so sbt
-prints the available options. We will select `testOnly` and get more
-suggestions by entering the rest of the command and hitting tab twice:
-
-```
-> testOnly<TAB><TAB>
---                      sbt.DagSpecification    sbt.EmptyRelationTest   sbt.KeyTest             sbt.RelationTest        sbt.SettingsTest
-```
-
-The first tab inserts an unambiguous space and the second suggests names
-of tests to run. The suggestion of `--` is for the separator between
-test names and options provided to the test framework. The other
-suggestions are names of test classes for one of sbt's modules. Test
-name suggestions require tests to be compiled first. If tests have been
-added, renamed, or removed since the last test compilation, the
-completions will be out of date until another successful compile.
-
-<a name="verbose_completion"></a>
-
-### Show more tab completion suggestions
-
-Some commands have different levels of completion. Hitting tab multiple
-times increases the verbosity of completions. (Presently, this feature
-is only used by the `set` command.)
-
-<a name="change_keybindings"></a>
-
-### Modify the default JLine keybindings
-
-JLine, used by both Scala and sbt, uses a configuration file for many of
-its keybindings. The location of this file can be changed with the
-system property `jline.keybindings`. The default keybindings file is
-included in the sbt launcher and may be used as a starting point for
-customization.
-
-<a name="prompt"></a>
-
-### Configure the prompt string
-
-By default, sbt only displays `>` to prompt for a command. This can be
-changed through the `shellPrompt` setting, which has type
-`State => String`. [State][Build-State] contains all state
-for sbt and thus provides access to all build information for use in the
-prompt string.
-
-Examples:
-
-```scala
-// set the prompt (for this build) to include the project id.
-shellPrompt in ThisBuild := { state => Project.extract(state).currentRef.project + "> " }
-
-// set the prompt (for the current project) to include the username
-shellPrompt := { state => System.getProperty("user.name") + "> " }
-```
-
-<a name="history"></a>
-
-### Use history
-
-Interactive mode remembers history even if you exit sbt and restart it.
-The simplest way to access history is to press the up arrow key to cycle
-through previously entered commands. Use `Ctrl+r` to incrementally
-search history backwards. The following commands are supported:
-
--   `!` Show history command help.
--   `!!` Execute the previous command again.
--   `!:` Show all previous commands.
--   `!:n` Show the last n commands.
--   `!n` Execute the command with index `n`, as shown by the `!:`
-    command.
--   `!-n` Execute the nth command before this one.
--   `!string` Execute the most recent command starting with 'string'
--   `!?string` Execute the most recent command containing 'string'
-
-<a name="history_file"></a>
-
-### Change the location of the interactive history file
-
-By default, interactive history is stored in the `target/` directory for
-the current project (but is not removed by a `clean`). History is thus
-separate for each subproject. The location can be changed with the
-`historyPath` setting, which has type `Option[File]`. For example,
-history can be stored in the root directory for the project instead of
-the output directory:
-
-```scala
-historyPath := Some(baseDirectory.value / ".history")
-```
-
-The history path needs to be set for each project, since sbt will use
-the value of `historyPath` for the current project (as selected by the
-`project` command).
-
-<a name="share_history"></a>
-
-### Use the same history for all projects
-
-The previous section describes how to configure the location of the
-history file. This setting can be used to share the interactive history
-among all projects in a build instead of using a different history for
-each project. The way this is done is to set `historyPath` to be the
-same file, such as a file in the root project's `target/` directory:
-
-```scala
-historyPath :=
-  Some( (target in LocalRootProject).value / ".history")
-```
-
-The `in LocalRootProject` part means to get the output directory for the
-root project for the build.
-
-<a name="disable_history"></a>
-
-### Disable interactive history
-
-If, for whatever reason, you want to disable history, set `historyPath`
-to `None` in each project it should be disabled in:
-
-```
-> historyPath := None
-```
-
-<a name="pre_commands"></a>
-
-### Run commands before entering interactive mode
-
-Interactive mode is implemented by the `shell` command. By default, the
-`shell` command is run if no commands are provided to sbt on the command
-line. To run commands before entering interactive mode, specify them on
-the command line followed by `shell`. For example,
-
-```
-$ sbt clean compile shell
-```
-
-This runs `clean` and then `compile` before entering the interactive
-prompt. If either `clean` or `compile` fails, sbt will exit without
-going to the prompt. To enter the prompt whether or not these initial
-commands succeed, prepend `-shell`, which means to run `shell` if any
-command fails. For example,
-
-```
-$ sbt -shell clean compile shell
-```
-
-
-Configure and use logging
--------------------------
-
-<a name="last"></a>
-
-### View the logging output of the previously executed command
-
-When a command is run, more detailed logging output is sent to a file
-than to the screen (by default). This output can be recalled for the
-command just executed by running `last`.
-
-For example, the output of `run` when the sources are uptodate is:
-
-```
-> run
-[info] Running A
-Hi!
-[success] Total time: 0 s, completed Feb 25, 2012 1:00:00 PM
-```
-
-The details of this execution can be recalled by running `last`:
-
-```
-> last
-[debug] Running task... Cancelable: false, max worker threads: 4, check cycles: false
-[debug]
-[debug] Initial source changes:
-[debug]     removed:Set()
-[debug]     added: Set()
-[debug]     modified: Set()
-[debug] Removed products: Set()
-[debug] Modified external sources: Set()
-[debug] Modified binary dependencies: Set()
-[debug] Initial directly invalidated sources: Set()
-[debug]
-[debug] Sources indirectly invalidated by:
-[debug]     product: Set()
-[debug]     binary dep: Set()
-[debug]     external source: Set()
-[debug] Initially invalidated: Set()
-[debug] Copy resource mappings:
-[debug]
-[info] Running A
-[debug] Starting sandboxed run...
-[debug] Waiting for threads to exit or System.exit to be called.
-[debug]   Classpath:
-[debug]     /tmp/e/target/scala-2.9.2/classes
-[debug]     /tmp/e/.sbt/0.12.0/boot/scala-2.9.2/lib/scala-library.jar
-[debug] Waiting for thread runMain to exit
-[debug]     Thread runMain exited.
-[debug] Interrupting remaining threads (should be all daemons).
-[debug] Sandboxed run complete..
-[debug] Exited with code 0
-[success] Total time: 0 s, completed Jan 1, 2012 1:00:00 PM
-```
-
-Configuration of the logging level for the console and for the backing
-file are described in following sections.
-
-<a name="tasklast"></a>
-
-### View the previous logging output of a specific task
-
-When a task is run, more detailed logging output is sent to a file than
-to the screen (by default). This output can be recalled for a specific
-task by running `last <task>`. For example, the first time `compile` is
-run, output might look like:
-
-```
-> compile
-[info] Updating {file:/.../demo/}example...
-[info] Resolving org.scala-lang#scala-library;2.9.2 ...
-[info] Done updating.
-[info] Compiling 1 Scala source to .../demo/target/scala-2.9.2/classes...
-[success] Total time: 0 s, completed Jun 1, 2012 1:11:11 PM
-```
-
-The output indicates that both dependency resolution and compilation
-were performed. The detailed output of each of these may be recalled
-individually. For example,
-
-```
-> last compile
-[debug]
-[debug] Initial source changes:
-[debug]     removed:Set()
-[debug]     added: Set(/home/mark/tmp/a/b/A.scala)
-[debug]     modified: Set()
-...
-```
-
-and:
-
-```
-> last update
-[info] Updating {file:/.../demo/}example...
-[debug] post 1.3 ivy file: using exact as default matcher
-[debug] :: resolving dependencies :: example#example_2.9.2;0.1-SNAPSHOT
-[debug]     confs: [compile, runtime, test, provided, optional, compile-internal, runtime-internal, test-internal, plugin, sources, docs, pom]
-[debug]     validate = true
-[debug]     refresh = false
-[debug] resolving dependencies for configuration 'compile'
-...
-```
-
-<a name="printwarnings"></a>
-
-### Show warnings from the previous compilation
-
-The Scala compiler does not print the full details of warnings by
-default. Compiling code that uses the deprecated `error` method from
-Predef might generate the following output:
-
-```
-> compile
-[info] Compiling 1 Scala source to <...>/classes...
-[warn] there were 1 deprecation warnings; re-run with -deprecation for details
-[warn] one warning found
-```
-
-The details aren't provided, so it is necessary to add `-deprecation` to
-the options passed to the compiler (`scalacOptions`) and recompile. An
-alternative when using Scala 2.10 and later is to run `printWarnings`.
-This task will display all warnings from the previous compilation. For
-example,
-
-```
-> printWarnings
-[warn] A.scala:2: method error in object Predef is deprecated: Use sys.error(message) instead
-[warn]  def x = error("Failed.")
-[warn]          ^
-```
-
-<a name="level"></a>
-
-### Change the logging level globally
-
-The quickest way to change logging levels is by using the `error`,
-`warn`, `info`, or `debug` commands. These set the default logging level
-for commands and tasks. For example,
-
-```
-> warn
-```
-
-will by default show only warnings and errors. To set the logging level
-before any commands are executed on startup, use `--` before the logging
-level. For example,
-
-```
-$ sbt --warn
-> compile
-[warn] there were 2 feature warning(s); re-run with -feature for details
-[warn] one warning found
-[success] Total time: 4 s, completed ...
->
-```
-
-The logging level can be overridden at a finer granularity, which is
-described next.
-
-<a name="tasklevel"></a>
-
-### Change the logging level for a specific task, configuration, or project
-
-The amount of logging is controlled by the `logLevel` setting, which
-takes values from the `Level` enumeration. Valid values are `Error`,
-`Warn`, `Info`, and `Debug` in order of increasing verbosity. The
-logging level may be configured globally, as described in the previous
-section, or it may be applied to a specific project, configuration, or
-task. For example, to change the logging level for compilation to only
-show warnings and errors:
-
-```scala
-> set logLevel in compile := Level.Warn
-```
-
-To enable debug logging for all tasks in the current project,
-
-```scala
-> set logLevel := Level.Warn
-```
-
-A common scenario is that after running a task, you notice that you need
-more information than was shown by default. A `logLevel` based solution
-typically requires changing the logging level and running a task again.
-However, there are two cases where this is unnecessary. First, warnings
-from a previous compilation may be displayed using `printWarnings` for
-the main sources or `test:printWarnings` for test sources. Second,
-output from the previous execution is available either for a single task
-or for in its entirety. See the section on
-[printWarnings](#printwarnings) and the sections on
-[previous output](#last).
-
-<a name="trace"></a>
-
-### Configure printing of stack traces
-
-By default, sbt hides the stack trace of most exceptions thrown during
-execution. It prints a message that indicates how to display the
-exception. However, you may want to show more of stack traces by
-default.
-
-The setting to configure is `traceLevel`, which is a setting with an Int
-value. When `traceLevel` is set to a negative value, no stack traces are
-shown. When it is zero, the stack trace is displayed up to the first sbt
-stack frame. When positive, the stack trace is shown up to that many
-stack frames.
-
-For example, the following configures sbt to show stack traces up to the
-first sbt frame:
-
-```scala
-> set every traceLevel := 0
-```
-
-The `every` part means to override the setting in all scopes. To change
-the trace printing behavior for a single project, configuration, or
-task, scope `traceLevel` appropriately:
-
-```scala
-> set traceLevel in Test := 5
-> set traceLevel in update := 0
-> set traceLevel in ThisProject := -1
-```
-
-<a name="nobuffer"></a>
-
-### Print the output of tests immediately instead of buffering
-
-By default, sbt buffers the logging output of a test until the whole
-class finishes. This is so that output does not get mixed up when
-executing in parallel. To disable buffering, set the `logBuffered`
-setting to false:
-
-```scala
-logBuffered := false
-```
-
-<a name="custom"></a>
-
-### Add a custom logger
-
-
-The setting `extraLoggers` can be used to add custom loggers. A custom
-logger should implement [AbstractLogger]. `extraLoggers` is a function
-`ScopedKey[_] => Seq[AbstractLogger]`. This means that it can provide
-different logging based on the task that requests the logger.
-
-```scala
-extraLoggers := {
-  val currentFunction = extraLoggers.value
-    (key: ScopedKey[_]) => {
-        myCustomLogger(key) +: currentFunction(key)
-    }
-}
-```
-
-Here, we take the current function `currentFunction` for the setting and
-provide a new function. The new function prepends our custom logger to
-the ones provided by the old function.
-
-<a name="log"></a>
-
-### Log messages in a task
-
-The special task `streams` provides per-task logging and I/O via a
-[Streams](../api/#sbt.std.Streams) instance. To log, a task uses
-the `log` member from the `streams` task:
-
-```scala
-myTask := {
-  val log = streams.value.log
-  log.warn("A warning.")
-}
-```
-
-
-Project metadata
-----------------
-
-<a name="name"></a>
-
-### Set the project name
-
-A project should define `name` and `version`. These will be used in
-various parts of the build, such as the names of generated artifacts.
-Projects that are published to a repository should also override
-`organization`.
-
-```scala
-name := "Your project name"
-```
-
-For published projects, this name is normalized to be suitable for use
-as an artifact name and dependency ID. This normalized name is stored in
-`normalizedName`.
-
-<a name="version"></a>
-
-### Set the project version
-
-```scala
-version := "1.0"
-```
-
-<a name="organization"></a>
-
-### Set the project organization
-
-```scala
-organization := "org.example"
-```
-
-By convention, this is a reverse domain name that you own, typically one
-specific to your project. It is used as a namespace for projects.
-
-A full/formal name can be defined in the `organizationName` setting.
-This is used in the generated pom.xml. If the organization has a web
-site, it may be set in the `organizationHomepage` setting. For example:
-
-```scala
-organizationName := "Example, Inc."
-
-organizationHomepage := Some(url("http://example.org"))
-```
-
-<a name="other"></a>
-
-### Set the project's homepage and other metadata
-
-```scala
-homepage := Some(url("http://scala-sbt.org"))
-
-startYear := Some(2008)
-
-description := "A build tool for Scala."
-
-licenses += "GPLv2" -> url("https://www.gnu.org/licenses/gpl-2.0.html")
-```
-
-
-  [Artifacts]: Artifacts.html
-  [Mapping-Files]: Mapping-Files.html
-
-Configure packaging
--------------------
-
-<a name="export"></a>
-
-### Use the packaged jar on classpaths instead of class directory
-
-By default, a project exports a directory containing its resources and
-compiled class files. Set `exportJars` to true to export the packaged
-jar instead. For example,
-
-```scala
-exportJars := true
-```
-
-The jar will be used by `run`, `test`, `console`, and other tasks that
-use the full classpath.
-
-<a name="manifest"></a>
-
-### Add manifest attributes
-
-By default, sbt constructs a manifest for the binary package from
-settings such as `organization` and `mainClass`. Additional attributes
-may be added to the `packageOptions` setting scoped by the configuration
-and package task.
-
-Main attributes may be added with `Package.ManifestAttributes`. There
-are two variants of this method, once that accepts repeated arguments
-that map an attribute of type `java.util.jar.Attributes.Name` to a
-String value and other that maps attribute names (type String) to the
-String value.
-
-For example,
-
-```scala
-packageOptions in (Compile, packageBin) += 
-  Package.ManifestAttributes( java.util.jar.Attributes.Name.SEALED -> "true" )
-```
-
-Other attributes may be added with `Package.JarManifest`.
-
-```scala
-packageOptions in (Compile, packageBin) +=  {
-  import java.util.jar.{Attributes, Manifest}
-  val manifest = new Manifest
-  manifest.getAttributes("foo/bar/").put(Attributes.Name.SEALED, "false")
-  Package.JarManifest( manifest )
-}
-```
-
-Or, to read the manifest from a file:
-
-```scala
-packageOptions in (Compile, packageBin) +=  {
-  val file = new java.io.File("META-INF/MANIFEST.MF")
-  val manifest = Using.fileInputStream(file)( in => new java.util.jar.Manifest(in) )
-  Package.JarManifest( manifest )
-}
-```
-
-<a name="name"></a>
-
-### Change the file name of a package
-
-The `artifactName` setting controls the name of generated packages. See
-the [Artifacts][Artifacts] page for details.
-
-<a name="contents"></a>
-
-### Modify the contents of the package
-
-The contents of a package are defined by the `mappings` task, of type
-`Seq[(File,String)]`. The `mappings` task is a sequence of mappings from
-a file to include in the package to the path in the package. See
-[Mapping Files][Mapping-Files] for convenience functions for
-generating these mappings. For example, to add the file `in/example.txt`
-to the main binary jar with the path "out/example.txt",
-
-```scala
-mappings in (Compile, packageBin) += {
-  (baseDirectory.value / "in" / "example.txt") -> "out/example.txt"
-}
-```
-
-Note that `mappings` is scoped by the configuration and the specific
-package task. For example, the mappings for the test source package are
-defined by the `mappings in (Test, packageSrc)` task.
-
-
-Running commands
-----------------
-
-<a name="batch"></a>
-
-### Pass arguments to a command or task in batch mode
-
-sbt interprets each command line argument provided to it as a command
-together with the command's arguments. Therefore, to run a command that
-takes arguments in batch mode, quote the command and its arguments. For
-example,
-
-```
-$ sbt 'project X' clean '~ compile'
-```
-
-<a name="multi"></a>
-
-### Provide multiple commands to run consecutively
-
-Multiple commands can be scheduled at once by prefixing each command
-with a semicolon. This is useful for specifying multiple commands where
-a single command string is accepted. For example, the syntax for
-triggered execution is `~ <command>`. To have more than one command run
-for each triggering, use semicolons. For example, the following runs
-`clean` and then `compile` each time a source file changes:
-
-```
-> ~ ;clean;compile
-```
-
-<a name="read"></a>
-
-### Read commands from a file
-
-The `<` command reads commands from the files provided to it as
-arguments. Run `help <` at the sbt prompt for details.
-
-<a name="alias"></a>
-
-### Define an alias for a command or task
-
-The `alias` command defines, removes, and displays aliases for commands.
-Run `help alias` at the sbt prompt for details.
-
-Example usage:
-
-```
-> alias a=about
-> alias
-    a = about    
-> a
-[info] This is sbt ...
-> alias a=
-> alias
-> a
-[error] Not a valid command: a ...
-```
-
-<a name="eval"></a>
-
-### Quickly evaluate a Scala expression
-
-The `eval` command compiles and runs the Scala expression passed to it
-as an argument. The result is printed along with its type. For example,
-
-```
-> eval 2+2
-4: Int
-```
-
-Variables defined by an `eval` are not visible to subsequent `eval`s,
-although changes to system properties persist and affect the JVM that is
-running sbt. Use the Scala REPL (`console` and related commands) for
-full support for evaluating Scala code interactively.
-
-
-  [Cross-Build]: Cross-Build.html
-  [Console-Project]: Console-Project.html
-
-Configure and use Scala
------------------------
-
-<a name="version"></a>
-
-### Set the Scala version used for building the project
-
-The `scalaVersion` configures the version of Scala used for compilation.
-By default, sbt also adds a dependency on the Scala library with this
-version. See the next section for how to disable this automatic
-dependency. If the Scala version is not specified, the version sbt was
-built against is used. It is recommended to explicitly specify the
-version of Scala.
-
-For example, to set the Scala version to "2.11.1",
-
-```scala
-scalaVersion := "2.11.1"
-```
-
-<a name="noauto"></a>
-
-### Disable the automatic dependency on the Scala library
-
-sbt adds a dependency on the Scala standard library by default. To
-disable this behavior, set the `autoScalaLibrary` setting to false.
-
-```scala
-autoScalaLibrary := false
-```
-
-<a name="temporary"></a>
-
-### Temporarily switch to a different Scala version
-
-To set the Scala version in all scopes to a specific value, use the `++`
-command. For example, to temporarily use Scala 2.10.4, run:
-
-```
-> ++ 2.10.4
-```
-
-<a name="local"></a>
-
-### Use a local Scala installation for building a project
-
-Defining the `scalaHome` setting with the path to the Scala home
-directory will use that Scala installation. sbt still requires
-`scalaVersion` to be set when a local Scala version is used. For
-example,
-
-```scala
-scalaVersion := "2.10.0-local"
-
-scalaHome := Some(file("/path/to/scala/home/"))
-```
-
-<a name="cross"></a>
-
-### Build a project against multiple Scala versions
-
-See [cross building][Cross-Build].
-
-<a name="consoleQuick"></a>
-
-### Enter the Scala REPL with a project's dependencies on the classpath, but not the compiled project classes
-
-The `consoleQuick` action retrieves dependencies and puts them on the
-classpath of the Scala REPL. The project's sources are not compiled, but
-sources of any source dependencies are compiled. To enter the REPL with
-test dependencies on the classpath but without compiling test sources,
-run `test:consoleQuick`. This will force compilation of main sources.
-
-<a name="console"></a>
-
-### Enter the Scala REPL with a project's dependencies and compiled code on the classpath
-
-The `console` action retrieves dependencies and compiles sources and
-puts them on the classpath of the Scala REPL. To enter the REPL with
-test dependencies and compiled test sources on the classpath, run
-`test:console`.
-
-<a name="consoleProject"></a>
-
-### Enter the Scala REPL with plugins and the build definition on the classpath
-
-```
-> consoleProject
-```
-
-For details, see the [consoleProject][Console-Project]
-page.
-
-<a name="initial"></a>
-
-### Define the initial commands evaluated when entering the Scala REPL
-
-Set `initialCommands in console` to set the initial statements to
-evaluate when `console` and `consoleQuick` are run. To configure
-`consoleQuick` separately, use `initialCommands in consoleQuick`. For
-example,
-
-```scala
-initialCommands in console := """println("Hello from console")"""
-
-initialCommands in consoleQuick := """println("Hello from consoleQuick")"""
-```
-
-The `consoleProject` command is configured separately by
-`initialCommands in consoleProject`. It does not use the value from
-`initialCommands in console` by default. For example,
-
-```scala
-initialCommands in consoleProject := """println("Hello from consoleProject")"""
-```
-
-<a name="cleanup"></a>
-
-### Define the commands evaluated when exiting the Scala REPL
-
-Set `cleanupCommands in console` to set the statements to evaluate after
-exiting the Scala REPL started by `console` and `consoleQuick`. To
-configure `consoleQuick` separately, use
-`cleanupCommands in consoleQuick`. For example,
-
-```scala
-cleanupCommands in console := """println("Bye from console")"""
-
-cleanupCommands in consoleQuick := """println("Bye from consoleQuick")"""
-```
-
-The `consoleProject` command is configured separately by
-`cleanupCommands in consoleProject`. It does not use the value from
-`cleanupCommands in console` by default. For example,
-
-```scala
-cleanupCommands in consoleProject := """println("Bye from consoleProject")"""
-```
-
-<a name="embed"></a>
-
-### Use the Scala REPL from project code
-
-sbt runs tests in the same JVM as sbt itself and Scala classes are not
-in the same class loader as the application classes. This is also the
-case in `console` and when `run` is not forked. Therefore, when using
-the Scala interpreter, it is important to set it up properly to avoid an
-error message like:
-
-```
-Failed to initialize compiler: class scala.runtime.VolatileBooleanRef not found.
-** Note that as of 2.8 scala does not assume use of the java classpath.
-** For the old behavior pass -usejavacp to scala, or if using a Settings
-** object programmatically, settings.usejavacp.value = true.
-```
-
-The key is to initialize the Settings for the interpreter using
-*embeddedDefaults*. For example:
-
-```scala
-val settings = new Settings
-settings.embeddedDefaults[MyType]
-val interpreter = new Interpreter(settings, ...)
-```
-
-Here, `MyType` is a representative class that should be included on the
-interpreter's classpath and in its application class loader. For more
-background, see the
-[original proposal](https://gist.github.com/404272) that resulted in
-*embeddedDefaults* being added.
-
-Similarly, use a representative class as the type argument when using
-the *break* and *breakIf* methods of *ILoop*, as in the following
-example:
-
-```scala
-def x(a: Int, b: Int) = {
-  import scala.tools.nsc.interpreter.ILoop
-  ILoop.breakIf[MyType](a != b, "a" -> a, "b" -> b )
-}
-```    
-
-
-Generate API documentation
---------------------------
-
-<a name="generate-javadoc-or-scaladoc"></a>
-
-### Select javadoc or scaladoc
-
-sbt will run `javadoc` if there are only Java sources in the project. If
-there are any Scala sources, sbt will run `scaladoc`. (This situation
-results from `scaladoc` not processing Javadoc comments in Java sources
-nor linking to Javadoc.)
-
-<a name="definitive-doc-options"></a>
-
-### Set the options used for generating scaladoc independently of compilation
-
-Scope `scalacOptions` to the `doc` task to configure `scaladoc`. Use
-`:=` to definitively set the options without appending to the options
-for `compile`. Scope to `Compile` for main sources or to `Test` for test
-sources. For example,
-
-```scala
-scalacOptions in (Compile,doc) := Seq("-groups", "-implicits")
-```
-
-<a name="additional-doc-options"></a>
-
-### Add options for scaladoc to the compilation options
-
-Scope `scalacOptions` to the `doc` task to configure `scaladoc`. Use
-`+=` or `++=` to append options to the base options. To append a single
-option, use `+=`. To append a `Seq[String]`, use `++=`. Scope to
-`Compile` for main sources or to `Test` for test sources. For example,
-
-```scala
-scalacOptions in (Compile,doc) ++= Seq("-groups", "-implicits")
-```
-
-<a name="definitive-javadoc-options"></a>
-
-### Set the options used for generating javadoc independently of compilation
-
-Scope `javacOptions` to the `doc` task to configure `javadoc`. Use `:=`
-to definitively set the options without appending to the options for
-`compile`. Scope to `Compile` for main sources or to `Test` for test
-sources.
-
-
-<a name="additional-doc-options"></a>
-
-### Add options for javadoc to the compilation options
-
-Scope `javacOptions` to the `doc` task to configure `javadoc`. Use `+=`
-or `++=` to append options to the base options. To append a single
-option, use `+=`. To append a `Seq[String]`, use `++=`. Scope to
-`Compile` for main sources or to `Test` for test sources. For example,
-
-```scala
-javacOptions in (Compile,doc) ++= Seq("-notimestamp", "-linksource")
-```
-
-<a name="auto-link"></a>
-
-### Enable automatic linking to the external Scaladoc of managed dependencies
-
-Set `autoAPIMappings := true` for sbt to tell `scaladoc` where it can
-find the API documentation for managed dependencies. This requires that
-dependencies have this information in its metadata and you are using
-`scaladoc` for Scala 2.10.2 or later.
-
-<a name="manual-api-links"></a>
-
-### Enable manual linking to the external Scaladoc of managed dependencies
-
-Add mappings of type `(File, URL)` to `apiMappings` to manually tell
-`scaladoc` where it can find the API documentation for dependencies.
-(This requires `scaladoc` for Scala 2.10.2 or later.) These mappings are
-used in addition to `autoAPIMappings`, so this manual configuration is
-typically done for unmanaged dependencies. The `File` key is the
-location of the dependency as passed to the classpath. The `URL` value
-is the base URL of the API documentation for the dependency. For
-example,
-
-```scala
-apiMappings += (
-  (unmanagedBase.value / "a-library.jar") -> 
-    url("https://example.org/api/")
-)
-```
-
-<a name="define-api-url"></a>
-
-### Define the location of API documentation for a library
-
-Set `apiURL` to define the base `URL` for the Scaladocs for your
-library. This will enable clients of your library to automatically link
-against the API documentation using `autoAPIMappings`. (This only works
-for Scala 2.10.2 and later.) For example,
-
-```scala
-apiURL := Some(url("https://example.org/api/"))
-```
-
-This information will get included in a property of the published
-`pom.xml`, where it can be automatically consumed by sbt.
-
-
-  [Full-Def]: Full-Def.html
-
-Triggered execution
--------------------
-
-<a name="basic"></a>
-
-### Run a command when sources change
-
-You can make a command run when certain files change by prefixing the
-command with `~`. Monitoring is terminated when `enter` is pressed. This
-triggered execution is configured by the `watch` setting, but typically
-the basic settings `watchSources` and `pollInterval` are modified as
-described in later sections.
-
-The original use-case for triggered execution was continuous
-compilation:
-
-```
-> ~ test:compile
-
-> ~ compile
-```
-
-You can use the triggered execution feature to run any command or task,
-however. The following will poll for changes to your source code (main
-or test) and run `testOnly` for the specified test.
-
-```
-> ~ testOnly example.TestA
-```
-
-<a name="multi"></a>
-
-### Run multiple commands when sources change
-
-The command passed to `~` may be any command string, so multiple
-commands may be run by separating them with a semicolon. For example,
-
-```
-> ~ ;a ;b
-```
-
-This runs `a` and then `b` when sources change.
-
-<a name="sources"></a>
-
-### Configure the sources that are checked for changes
-
--   `watchSources` defines the files for a single project that are
-    monitored for changes. By default, a project watches resources and
-    Scala and Java sources.
--   `watchTransitiveSources` then combines the `watchSources` for the
-    current project and all execution and classpath dependencies (see
-    [.scala build definition][Full-Def] for details on inter-project
-    dependencies).
-
-To add the file `demo/example.txt` to the files to watch,
-
-```scala
-watchSources += baseDirectory.value / "demo" / "examples.txt"
-```
-
-<a name="interval"></a>
-
-### Set the time interval between checks for changes to sources
-
-`pollInterval` selects the interval between polling for changes in
-milliseconds. The default value is `500 ms`. To change it to `1 s`,
-
-```scala
-pollInterval := 1000 // in ms
-```
-
-Define Custom Tasks 
--------------------
-
-### Define a Task that runs tests in specific sub-projects
-
-Consider a hypothetical multi-build project with 3 subprojects. The following defines a task `myTestTask` that will 
-run the `test` Task in specific subprojects  `core` and `tools` but not `client`:
-
-```
-lazy val core = project.in(file("./core"))
-
-lazy val tools = project.in(file("./tools"))
-
-lazy val client = project.in(file("./client"))
-
-lazy val myTestTask = TaskKey[Unit]("my-test-task")
-
-myTestTask <<= Seq(
-  test in (core, Test)
-  test in (tools, Test)
-).dependOn
-```
-
-  [Getting-Started]: Getting-Started.html
-
-Examples
---------
-
-This section of the documentation has example sbt build definitions and
-code. Contributions are welcome!
-
-You may want to read the
-[Getting Started Guide][Getting-Started] as a foundation for
-understanding the examples.
-
-
-  [Basic-Def]: Basic-Def.html
-
-.sbt build examples
--------------------
-
-**Note**: As of sbt 0.13.7 blank lines are no longer used to delimit `build.sbt` files. The following example requires sbt 0.13.7+.
-
-Listed here are some examples of settings (each setting is independent).
-See [.sbt build definition][Basic-Def] for details.
-
-```scala
-// factor out common settings into a sequence
-lazy val commonSettings = Seq(
-  organization := "org.myproject",
-  version := "0.1.0",
-  // set the Scala version used for the project
-  scalaVersion := "2.11.5"
-)
-
-// define ModuleID for library dependencies
-lazy val scalacheck = "org.scalacheck" %% "scalacheck" % "1.12.0"
-
-// define ModuleID using string interpolator
-lazy val osmlibVersion = "2.5.2-RC1"
-lazy val osmlib = ("net.sf.travelingsales" % "osmlib" % osmlibVersion from
-  s"""http://downloads.sourceforge.net/project/travelingsales/libosm/$osmlibVersion/libosm-$osmlibVersion.jar""")
-
-lazy val root = (project in file(".")).
-  settings(commonSettings: _*).
-  settings(
-    // set the name of the project
-    name := "My Project",
-
-    // set the main Scala source directory to be <base>/src
-    scalaSource in Compile := baseDirectory.value / "src",
-
-    // set the Scala test source directory to be <base>/test
-    scalaSource in Test := baseDirectory.value / "test",
-
-    // add a test dependency on ScalaCheck
-    libraryDependencies += scalacheck % Test,
-
-    // add compile dependency on osmlib
-    libraryDependencies += osmlib,
-
-    // reduce the maximum number of errors shown by the Scala compiler
-    maxErrors := 20,
-
-    // increase the time between polling for file changes when using continuous execution
-    pollInterval := 1000,
-
-    // append several options to the list of options passed to the Java compiler
-    javacOptions ++= Seq("-source", "1.5", "-target", "1.5"),
-
-    // append -deprecation to the options passed to the Scala compiler
-    scalacOptions += "-deprecation",
-
-    // define the statements initially evaluated when entering 'console', 'consoleQuick', or 'consoleProject'
-    initialCommands := """
-      |import System.{currentTimeMillis => now}
-      |def time[T](f: => T): T = {
-      |  val start = now
-      |  try { f } finally { println("Elapsed: " + (now - start)/1000.0 + " s") }
-      |}""".stripMargin,
-
-    // set the initial commands when entering 'console' or 'consoleQuick', but not 'consoleProject'
-    initialCommands in console := "import myproject._",
-
-    // set the main class for packaging the main jar
-    // 'run' will still auto-detect and prompt
-    // change Compile to Test to set it for the test jar
-    mainClass in (Compile, packageBin) := Some("myproject.MyMain"),
-
-    // set the main class for the main 'run' task
-    // change Compile to Test to set it for 'test:run'
-    mainClass in (Compile, run) := Some("myproject.MyMain"),
-
-    // add <base>/input to the files that '~' triggers on
-    watchSources += baseDirectory.value / "input",
-
-    // add a maven-style repository
-    resolvers += "name" at "url",
-
-    // add a sequence of maven-style repositories
-    resolvers ++= Seq("name" at "url"),
-
-    // define the repository to publish to
-    publishTo := Some("name" at "url"),
-
-    // set Ivy logging to be at the highest level
-    ivyLoggingLevel := UpdateLogging.Full,
-
-    // disable updating dynamic revisions (including -SNAPSHOT versions)
-    offline := true,
-
-    // set the prompt (for this build) to include the project id.
-    shellPrompt in ThisBuild := { state => Project.extract(state).currentRef.project + "> " },
-
-    // set the prompt (for the current project) to include the username
-    shellPrompt := { state => System.getProperty("user.name") + "> " },
-
-    // disable printing timing information, but still print [success]
-    showTiming := false,
-
-    // disable printing a message indicating the success or failure of running a task
-    showSuccess := false,
-
-    // change the format used for printing task completion time
-    timingFormat := {
-        import java.text.DateFormat
-        DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT)
-    },
-
-    // disable using the Scala version in output paths and artifacts
-    crossPaths := false,
-
-    // fork a new JVM for 'run' and 'test:run'
-    fork := true,
-
-    // fork a new JVM for 'test:run', but not 'run'
-    fork in Test := true,
-
-    // add a JVM option to use when forking a JVM for 'run'
-    javaOptions += "-Xmx2G",
-
-    // only use a single thread for building
-    parallelExecution := false,
-
-    // Execute tests in the current project serially
-    //   Tests from other projects may still run concurrently.
-    parallelExecution in Test := false,
-
-    // set the location of the JDK to use for compiling Java code.
-    // if 'fork' is true, this is used for 'run' as well
-    javaHome := Some(file("/usr/lib/jvm/sun-jdk-1.6")),
-
-    // Use Scala from a directory on the filesystem instead of retrieving from a repository
-    scalaHome := Some(file("/home/user/scala/trunk/")),
-
-    // don't aggregate clean (See FullConfiguration for aggregation details)
-    aggregate in clean := false,
-
-    // only show warnings and errors on the screen for compilations.
-    //  this applies to both test:compile and compile and is Info by default
-    logLevel in compile := Level.Warn,
-
-    // only show warnings and errors on the screen for all tasks (the default is Info)
-    //  individual tasks can then be more verbose using the previous setting
-    logLevel := Level.Warn,
-
-    // only store messages at info and above (the default is Debug)
-    //   this is the logging level for replaying logging with 'last'
-    persistLogLevel := Level.Debug,
-
-    // only show 10 lines of stack traces
-    traceLevel := 10,
-
-    // only show stack traces up to the first sbt stack frame
-    traceLevel := 0,
-
-    // add SWT to the unmanaged classpath
-    unmanagedJars in Compile += Attributed.blank(file("/usr/share/java/swt.jar")),
-
-    // publish test jar, sources, and docs
-    publishArtifact in Test := true,
-
-    // disable publishing of main docs
-    publishArtifact in (Compile, packageDoc) := false,
-
-    // change the classifier for the docs artifact
-    artifactClassifier in packageDoc := Some("doc"),
-
-    // Copy all managed dependencies to <build-root>/lib_managed/
-    //   This is essentially a project-local cache and is different
-    //   from the lib_managed/ in sbt 0.7.x.  There is only one
-    //   lib_managed/ in the build root (not per-project).
-    retrieveManaged := true,
-
-    /* Specify a file containing credentials for publishing. The format is:
-    realm=Sonatype Nexus Repository Manager
-    host=nexus.scala-tools.org
-    user=admin
-    password=admin123
-    */
-    credentials += Credentials(Path.userHome / ".ivy2" / ".credentials"),
-
-    // Directly specify credentials for publishing.
-    credentials += Credentials("Sonatype Nexus Repository Manager", "nexus.scala-tools.org", "admin", "admin123"),
-
-    // Exclude transitive dependencies, e.g., include log4j without including logging via jdmk, jmx, or jms.
-    libraryDependencies +=
-      "log4j" % "log4j" % "1.2.15" excludeAll(
-        ExclusionRule(organization = "com.sun.jdmk"),
-        ExclusionRule(organization = "com.sun.jmx"),
-        ExclusionRule(organization = "javax.jms")
-      )
-  )
-```
-
-
-.sbt build with .scala files example
-------------------------------------
-
-`.sbt` builds can be supplemented with `project/*.scala` files.
-When the build file gets large enough, the first thing to factor out are resolvers and dependencies.
-
-### project/Resolvers.scala
-
-```scala
-import sbt._
-import Keys._
-
-object Resolvers {
-  val sunrepo    = "Sun Maven2 Repo" at "http://download.java.net/maven/2"
-  val sunrepoGF  = "Sun GF Maven2 Repo" at "http://download.java.net/maven/glassfish" 
-  val oraclerepo = "Oracle Maven2 Repo" at "http://download.oracle.com/maven"
-
-  val oracleResolvers = Seq(sunrepo, sunrepoGF, oraclerepo)
-}
-```
-
-### project/Dependencies.scala
-
-```scala
-import sbt._
-import Keys._
-
-object Dependencies {
-  val logbackVersion = "0.9.16"
-  val grizzlyVersion = "1.9.19"
-
-  val logbackcore    = "ch.qos.logback" % "logback-core"     % logbackVersion
-  val logbackclassic = "ch.qos.logback" % "logback-classic"  % logbackVersion
-
-  val jacksonjson = "org.codehaus.jackson" % "jackson-core-lgpl" % "1.7.2"
-
-  val grizzlyframwork = "com.sun.grizzly" % "grizzly-framework" % grizzlyVersion
-  val grizzlyhttp     = "com.sun.grizzly" % "grizzly-http"      % grizzlyVersion
-  val grizzlyrcm      = "com.sun.grizzly" % "grizzly-rcm"       % grizzlyVersion
-  val grizzlyutils    = "com.sun.grizzly" % "grizzly-utils"     % grizzlyVersion
-  val grizzlyportunif = "com.sun.grizzly" % "grizzly-portunif"  % grizzlyVersion
-
-  val sleepycat = "com.sleepycat" % "je" % "4.0.92"
-
-  val apachenet   = "commons-net"   % "commons-net"   % "2.0"
-  val apachecodec = "commons-codec" % "commons-codec" % "1.4"
-
-  val scalatest = "org.scalatest" %% "scalatest" % "2.2.1"
-}
-```
-
-These files can be used mange library dependencies in one place.
-
-### project/ShellPrompPlugin.scala
-
-When you want to implement custom commands or tasks, you can organize your build by defining an one-off auto plugin.
-
-```scala
-import sbt._
-import Keys._
-
-// Shell prompt which show the current project and git branch
-object ShellPromptPlugin extends AutoPlugin {
-  override def trigger = allRequirements
-  override lazy val projectSettings = Seq(
-    shellPrompt := buildShellPrompt
-  )
-  val devnull: ProcessLogger = new ProcessLogger {
-    def info (s: => String) {}
-    def error (s: => String) { }
-    def buffer[T] (f: => T): T = f
-  }
-  def currBranch =
-    ("git status -sb" lines_! devnull headOption).
-      getOrElse("-").stripPrefix("## ")
-  val buildShellPrompt: State => String = {
-    case (state: State) =>
-      val currProject = Project.extract (state).currentProject.id
-      s"""$currProject:$currBranch> """
-  }
-}
-```
-
-This auto plugin will display the current project name and the git branch.
-
-### build.sbt
-
-Now that we factored out custom settings and dependencies out to `project/*.scala`, we can make use of them in `build.sbt`:
-
-
-```scala
-import Resolvers._
-import Dependencies._
-
-// factor out common settings into a sequence
-lazy val buildSettings = Seq(
-  organization := "com.example",
-  version := "0.1.0",
-  scalaVersion := "2.11.5"
-)
-
-// Sub-project specific dependencies
-lazy val commonDeps = Seq(
-  logbackcore,
-  logbackclassic,
-  jacksonjson,
-  scalatest % Test
-)
-
-lazy val serverDeps = Seq(
-  grizzlyframwork,
-  grizzlyhttp,
-  grizzlyrcm,
-  grizzlyutils,
-  grizzlyportunif,
-  sleepycat,
-  scalatest % Test
-)
-
-lazy val pricingDeps = Seq(
-  apachenet,
-  apachecodec,
-  scalatest % Test
-)
-
-lazy val cdap2 = (project in file(".")).
-  aggregate(common, server, compact, pricing, pricing_service).
-  settings(buildSettings: _*)
-
-lazy val common = (project in file("cdap2-common")).
-  settings(buildSettings: _*).
-  settings(
-    libraryDependencies ++= commonDeps
-  )
-
-lazy val server = (project in file("cdap2-server")).
-  dependsOn(common).
-  settings(buildSettings: _*).
-  settings(
-    resolvers := oracleResolvers,
-    libraryDependencies ++= serverDeps
-  )
-
-lazy val pricing = (project in file("cdap2-pricing")).
-  dependsOn(common, compact, server).
-  settings(buildSettings: _*).
-  settings(
-    libraryDependencies ++= pricingDeps
-  )  
-
-lazy val pricing_service = (project in file("cdap2-pricing-service")).
-  dependsOn(pricing, server).
-  settings(buildSettings: _*)
-
-lazy val compatct = (project in file("compact-hashmap")).
-  settings(buildSettings: _*)
-```
-
-
-  [Basic-Def]: Basic-Def.html
-
-Advanced configurations example
--------------------------------
-
-This is an example [.sbt build definition][Basic-Def]
-that demonstrates using configurations to group dependencies.
-
-The `utils` module provides utilities for other modules. It uses
-configurations to group dependencies so that a dependent project doesn't
-have to pull in all dependencies if it only uses a subset of
-functionality. This can be an alternative to having multiple utilities
-modules (and consequently, multiple utilities jars).
-
-In this example, consider a `utils` project that provides utilities
-related to both Scalate and Saxon. It therefore needs both Scalate and
-Saxon on the compilation classpath and a project that uses all of the
-functionality of 'utils' will need these dependencies as well. However,
-project `a` only needs the utilities related to Scalate, so it doesn't
-need Saxon. By depending only on the `scalate` configuration of `utils`,
-it only gets the Scalate-related dependencies.
-
-```scala
-/********* Configurations *******/
-
-// Custom configurations
-lazy val Common = config("common") describedAs("Dependencies required in all configurations.")
-lazy val Scalate = config("scalate") extend(Common) describedAs("Dependencies for using Scalate utilities.")
-lazy val Saxon = config("saxon") extend(Common) describedAs("Dependencies for using Saxon utilities.")
-
-// Define a customized compile configuration that includes
-//   dependencies defined in our other custom configurations
-lazy val CustomCompile = config("compile") extend(Saxon, Common, Scalate)
-
-/********** Projects ************/
-
-// factor out common settings into a sequence
-lazy val commonSettings = Seq(
-  organization := "com.example",
-  version := "0.1.0",
-  scalaVersion := "2.10.4"
-)
-
-// An example project that only uses the Scalate utilities.
-lazy val a = (project in file("a")).
-  dependsOn(utils % "compile->scalate").
-  settings(commonSettings: _*)
-
-// An example project that uses the Scalate and Saxon utilities.
-// For the configurations defined here, this is equivalent to doing dependsOn(utils),
-//  but if there were more configurations, it would select only the Scalate and Saxon
-//  dependencies.
-lazy val b = (project in file("b")).
-  dependsOn(utils % "compile->scalate,saxon").
-  settings(commonSettings: _*)
-
-// Defines the utilities project
-lazy val utils = (project in file("utils")).
-  settings(commonSettings: _*).
-  settings(inConfig(Common)(Defaults.configSettings): _*).  // Add the src/common/scala/ compilation configuration.
-  settings(addArtifact(artifact in (Common, packageBin), packageBin in Common): _*). // Publish the common artifact
-  settings(
-      // We want our Common sources to have access to all of the dependencies on the classpaths
-      //   for compile and test, but when depended on, it should only require dependencies in 'common'
-    classpathConfiguration in Common := CustomCompile,
-      // Modify the default Ivy configurations.
-      //   'overrideConfigs' ensures that Compile is replaced by CustomCompile
-    ivyConfigurations := overrideConfigs(Scalate, Saxon, Common, CustomCompile)(ivyConfigurations.value),
-      // Put all dependencies without an explicit configuration into Common (optional)
-    defaultConfiguration := Some(Common),
-      // Declare dependencies in the appropriate configurations
-    libraryDependencies ++= Seq(
-       "org.fusesource.scalate" % "scalate-core" % "1.5.0" % Scalate,
-       "org.squeryl" %% "squeryl" % "0.9.5-6" % Scalate,
-       "net.sf.saxon" % "saxon" % "8.7" % Saxon
-    )
-  )
-```
-
-
-Advanced command example
-------------------------
-
-This is an advanced example showing some of the power of the new
-settings system. It shows how to temporarily modify all declared
-dependencies in the build, regardless of where they are defined. It
-directly operates on the final `Seq[Setting[_]]` produced from every
-setting involved in the build.
-
-The modifications are applied by running *canonicalize*. A *reload* or
-using *set* reverts the modifications, requiring *canonicalize* to be
-run again.
-
-This particular example shows how to transform all declared dependencies
-on ScalaCheck to use version 1.8. As an exercise, you might try
-transforming other dependencies, the repositories used, or the scalac
-options used. It is possible to add or remove settings as well.
-
-This kind of transformation is possible directly on the settings of
-Project, but it would not include settings automatically added from
-plugins or build.sbt files. What this example shows is doing it
-unconditionally on all settings in all projects in all builds, including
-external builds.
-
-```scala
-import sbt._
-import Keys._
-
-object Canon extends Plugin {
-  // Registers the canonicalize command in every project
-  override def settings = Seq(commands += canonicalize)
-
-  // Define the command.  This takes the existing settings (including any session settings)
-  // and applies 'f' to each Setting[_]
-  def canonicalize = Command.command("canonicalize") { (state: State) =>
-    val extracted = Project.extract(state)
-    import extracted._
-    val transformed = session.mergeSettings map ( s => f(s) )
-    val newStructure = Load.reapply(transformed, structure)
-    Project.setProject(session, newStructure, state)
-  }
-
-  // Transforms a Setting[_].
-  def f(s: Setting[_]): Setting[_] = s.key.key match {
-    // transform all settings that modify libraryDependencies
-    case Keys.libraryDependencies.key =>
-      // hey scalac.  T == Seq[ModuleID]
-      s.asInstanceOf[Setting[Seq[ModuleID]]].mapInit(mapLibraryDependencies)
-      // preserve other settings
-    case _ => s
-  }
-  // This must be idempotent because it gets applied after every transformation.
-  // That is, if the user does:
-  //  libraryDependencies += a
-  //  libraryDependencies += b
-  // then this method will be called for Seq(a) and Seq(a,b)
-  def mapLibraryDependencies(key: ScopedKey[Seq[ModuleID]], value: Seq[ModuleID]): Seq[ModuleID] =
-    value map mapSingle
-
-  // This is the fundamental transformation.
-  // Here we map all declared ScalaCheck dependencies to be version 1.8
-  def mapSingle(module: ModuleID): ModuleID =
-    if(module.name == "scalacheck") module.copy(revision = "1.8") 
-    else module
-}
-```
-
-
-  [Getting-Started]: Getting-Started.html
-  [Basic-Def]: Basic-Def.html
-  [More-About-Settings]: More-About-Settings.html
-  [Running]: Running.html
-  [Scopes]: Scopes.html
-  [Library-Dependencies]: Library-Dependencies.html
-  [Custom-Settings]: Custom-Settings.html
-  [Multi-Project]: Multi-Project.html
-  [Name-Index]: Name-Index.html
-  [Mapping-Files]: Mapping-Files.html
-  [Testing]: Testing.html
-  [additional-test-configurations]: Testing.html#additional-test-configurations
-  [Library-Management]: Library-Management.html
-  [Migrating-from-sbt-07x]: Migrating-from-sbt-07x.html
-  [Update-Report]: Update-Report.html
-  [Commands]: Commands.html
-  [Build-State]: Build-State.html
-  [Howto-Generating-Files]: Howto-Generating-Files.html
-  [Contributing-to-sbt]: Contributing-to-sbt.html
-  [Community-Plugins]: Community-Plugins.html
-  [ivy-configurations]: Library-Management.html#ivy-configurations
-
-Frequently Asked Questions
---------------------------
-
-### Project Information
-
-#### How do I get help?
-
--  See [Get Involved](http://www.scala-sbt.org/community.html#how-can-I-get-help)
-
-#### How do I report a bug?
-
--  See [Get Involved](http://www.scala-sbt.org/community.html#how-can-I-help)
-
-#### How can I help?
-
--  See [Get Involved](http://www.scala-sbt.org/community.html#how-can-I-help)
-
-### Usage
-
-#### My last command didn't work but I can't see an explanation. Why?
-
-sbt 0.13.9 by default suppresses most stack traces and debugging
-information. It has the nice side effect of giving you less noise on
-screen, but as a newcomer it can leave you lost for explanation. To see
-the previous output of a command at a higher verbosity, type
-`last <task>` where `<task>` is the task that failed or that you want to
-view detailed output for. For example, if you find that your `update`
-fails to load all the dependencies as you expect you can enter:
-
-```
-> last update
-```
-
-and it will display the full output from the last run of the `update`
-command.
-
-#### How do I disable ansi codes in the output?
-
-Sometimes sbt doesn't detect that ansi codes aren't supported and you
-get output that looks like:
-
-```
-[0m[ [0minfo [0m]  [0mSet current project to root
-```
-
-or ansi codes are supported but you want to disable colored output. To
-completely disable ansi codes, set the `sbt.log.format` system property
-to `false`. For example,
-
-#### How can I start a Scala interpreter (REPL) with sbt project configuration (dependencies, etc.)?
-
-You may run `sbt console`.
-
-### Build definitions
-
-#### What are the `:=`, `+=`, and `++=` methods?
-
-These are methods on keys used to construct a `Setting` or a `Task`. The
-Getting Started Guide covers all these methods, see
-[.sbt build definition][Basic-Def] and
-[more kinds of setting][More-About-Settings] for
-example.
-
-#### What is the `%` method?
-
-It's used to create a `ModuleID` from strings, when specifying managed
-dependencies. Read the Getting Started Guide about
-[library dependencies][Library-Dependencies].
-
-#### What is `ModuleID`, `Project`, ...?
-
-To figure out an unknown type or method, have a look at the
-[Getting Started Guide][Getting-Started] if you have not. Also
-try the [index][Name-Index] of commonly used methods, values, and
-types, the [API Documentation](../api/) and the
-[hyperlinked sources](../sxr/).
-
-#### How do I add files to a jar package?
-
-The files included in an artifact are configured by default by a task
-`mappings` that is scoped by the relevant package task. The `mappings`
-task returns a sequence `Seq[(File,String)]` of mappings from the file
-to include to the path within the jar. See
-[mapping files][Mapping-Files] for details on creating these mappings.
-
-For example, to add generated sources to the packaged source artifact:
-
-```scala
-mappings in (Compile, packageSrc) ++= {
-  import Path.{flat, relativeTo}
-  val base = (sourceManaged in Compile).value
-  val srcs = (managedSources in Compile).value
-  srcs x (relativeTo(base) | flat)
-}
-```
-
-This takes sources from the `managedSources` task and relativizes them
-against the `managedSource` base directory, falling back to a flattened
-mapping. If a source generation task doesn't write the sources to the
-`managedSource` directory, the mapping function would have to be
-adjusted to try relativizing against additional directories or something
-more appropriate for the generator.
-
-#### How can I generate source code or resources?
-
-See [Generating Files][Howto-Generating-Files].
-
-#### How can a task avoid redoing work if the input files are unchanged?
-
-There is basic support for only doing work when input files have changed
-or when the outputs haven't been generated yet. This support is
-primitive and subject to change.
-
-The relevant methods are two overloaded methods called
-[FileFunction.cached](../api/sbt/FileFunction$.html). Each requires a
-directory in which to store cached data. Sample usage is:
-
-```scala
-// define a task that takes some inputs
-//   and generates files in an output directory
-myTask := {
-  // wraps a function taskImpl in an uptodate check
-  //   taskImpl takes the input files, the output directory,
-  //   generates the output files and returns the set of generated files
-  val cachedFun = FileFunction.cached(cacheDirectory.value / "my-task") { (in: Set[File]) =>
-    taskImpl(in, target.value) : Set[File]
-  }
-  // Applies the cached function to the inputs files
-  cachedFun(inputs.value)
-}
-```
-
-There are two additional arguments for the first parameter list that
-allow the file tracking style to be explicitly specified. By default,
-the input tracking style is `FilesInfo.lastModified`, based on a file's
-last modified time, and the output tracking style is `FilesInfo.exists`,
-based only on whether the file exists. The other available style is
-`FilesInfo.hash`, which tracks a file based on a hash of its contents.
-See the [FilesInfo API](../api/sbt/FilesInfo$.html) for details.
-
-A more advanced version of `FileFunction.cached` passes a data structure
-of type [ChangeReport](../api/sbt/ChangeReport.html) describing the
-changes to input and output files since the last evaluation. This
-version of `cached` also expects the set of files generated as output to
-be the result of the evaluated function.
-
-### Extending sbt
-
-#### How can I add a new configuration?
-
-The following example demonstrates adding a new set of compilation
-settings and tasks to a new configuration called `samples`. The sources
-for this configuration go in `src/samples/scala/`. Unspecified settings
-delegate to those defined for the `compile` configuration. For example,
-if `scalacOptions` are not overridden for `samples`, the options for the
-main sources are used.
-
-Options specific to `samples` may be declared like:
-
-```scala
-scalacOptions in Samples += "-deprecation"
-```
-
-This uses the main options as base options because of `+=`. Use `:=` to
-ignore the main options:
-
-```scala
-scalacOptions in Samples := "-deprecation" :: Nil
-```
-
-The example adds all of the usual compilation related settings and tasks
-to `samples`:
-
-```
-samples:run
-samples:runMain
-samples:compile
-samples:console
-samples:consoleQuick
-samples:scalacOptions
-samples:fullClasspath
-samples:package
-samples:packageSrc
-...
-```
-
-#### How do I add a test configuration?
-
-See the [Additional test configurations][additional-test-configurations] section of
-[Testing][Testing].
-
-#### How can I create a custom run task, in addition to `run`?
-
-This answer is extracted from a
-[mailing list discussion](https://groups.google.com/group/simple-build-tool/browse_thread/thread/4c28ee5b7e18b46a/).
-
-Read the Getting Started Guide up to
-[custom settings][Custom-Settings] for background.
-
-A basic run task is created by:
-
-```scala
-lazy val myRunTask = taskKey[Unit]("A custom run task.")
-
-// this can go either in a `build.sbt` or the settings member
-//   of a Project in a full configuration
-fullRunTask(myRunTask, Test, "foo.Foo", "arg1", "arg2")
-```
-
-If you want to be able to supply arguments on the command line, replace
-`TaskKey` with `InputKey` and `fullRunTask` with `fullRunInputTask`. The
-`Test` part can be replaced with another configuration, such as
-`Compile`, to use that configuration's classpath.
-
-This run task can be configured individually by specifying the task key
-in the scope. For example:
-
-```scala
-fork in myRunTask := true
-
-javaOptions in myRunTask += "-Xmx6144m"
-```
-
-#### How should I express a dependency on an outside tool such as proguard?
-
-Tool dependencies are used to implement a task and are not needed by
-project source code. These dependencies can be declared in their own
-configuration and classpaths. These are the steps:
-
-1.  Define a new [configuration][ivy-configurations].
-2.  Declare the tool
-    [dependencies][Library-Management] in that
-    configuration.
-3.  Define a classpath that pulls the dependencies from the
-    [Update Report][Update-Report] produced by `update`.
-4.  Use the classpath to implement the task.
-
-As an example, consider a `proguard` task. This task needs the ProGuard
-jars in order to run the tool. First, define and add the new
-configuration:
-
-```scala
-val ProguardConfig = config("proguard") hide
-
-ivyConfigurations += ProguardConfig
-```
-
-Then,
-
-```scala
-// Add proguard as a dependency in the custom configuration.
-//  This keeps it separate from project dependencies.
-libraryDependencies +=
-   "net.sf.proguard" % "proguard" % "4.4" % ProguardConfig.name
-
-// Extract the dependencies from the UpdateReport.
-managedClasspath in proguard := {
-    // these are the types of artifacts to include
-    val artifactTypes: Set[String] = (classpathTypes in proguard).value
-    Classpaths.managedJars(proguardConfig, artifactTypes, update.value)
-}
-
-// Use the dependencies in a task, typically by putting them
-//  in a ClassLoader and reflectively calling an appropriate
-//  method.
-proguard := {
-    val cp: Seq[File] = (managedClasspath in proguard).value
-  // ... do something with , which includes proguard ...
-}
-```
-
-Defining the intermediate classpath is optional, but it can be useful
-for debugging or if it needs to be used by multiple tasks. It is also
-possible to specify artifact types inline. This alternative `proguard`
-task would look like:
-
-```scala
-proguard := {
-   val artifactTypes = Set("jar")
-    val cp: Seq[File] =
-      Classpaths.managedJars(proguardConfig, artifactTypes, update.value)
-  // ... do something with , which includes proguard ...
-}
-```
-
-#### How would I change sbt's classpath dynamically?
-
-It is possible to register additional jars that will be placed on sbt's
-classpath (since version 0.10.1). Through
-[State](../api/sbt/State$.html), it is possible to obtain a
-[xsbti.ComponentProvider](../api/xsbti/ComponentProvider.html), which
-manages application components. Components are groups of files in the
-`~/.sbt/boot/` directory and, in this case, the application is sbt. In
-addition to the base classpath, components in the "extra" component are
-included on sbt's classpath.
-
-(Note: the additional components on an application's classpath are
-declared by the `components` property in the `[main]` section of the
-launcher configuration file `boot.properties`.)
-
-Because these components are added to the `~/.sbt/boot/` directory and
-`~/.sbt/boot/` may be read-only, this can fail. In this case, the user
-has generally intentionally set sbt up this way, so error recovery is
-not typically necessary (just a short error message explaining the
-situation.)
-
-#### Example of dynamic classpath augmentation
-
-The following code can be used where a `State => State` is required,
-such as in the `onLoad` setting (described below) or in a
-[command][Commands]. It adds some files to the "extra"
-component and reloads sbt if they were not already added. Note that
-reloading will drop the user's session state.
-
-```scala
-def augment(extra: Seq[File])(s: State): State = {
-    // Get the component provider
-  val cs: xsbti.ComponentProvider = s.configuration.provider.components()
-
-    // Adds the files in 'extra' to the "extra" component
-    //   under an exclusive machine-wide lock.
-    //   The returned value is 'true' if files were actually copied and 'false'
-    //   if the target files already exists (based on name only).
-  val copied: Boolean = s.locked(cs.lockFile, cs.addToComponent("extra", extra.toArray))
-
-    // If files were copied, reload so that we use the new classpath.
-  if(copied) s.reload else s
-}
-```
-
-#### How can I take action when the project is loaded or unloaded?
-
-The single, global setting `onLoad` is of type `State => State` (see
-[State and Actions][Build-State]) and is executed once, after all projects are
-built and loaded. There is a similar hook `onUnload` for when a project
-is unloaded. Project unloading typically occurs as a result of a
-`reload` command or a `set` command. Because the `onLoad` and `onUnload`
-hooks are global, modifying this setting typically involves composing a
-new function with the previous value. The following example shows the
-basic structure of defining `onLoad`:
-
-```scala
-// Compose our new function 'f' with the existing transformation.
-{
-  val f: State => State = ...
-  onLoad in Global := {
-    val previous = (onLoad in Global).value
-    f compose previous
-  }
-}
-```
-
-#### Example of project load/unload hooks
-
-The following example maintains a count of the number of times a project
-has been loaded and prints that number:
-
-```scala
-{
-  // the key for the current count
-  val key = AttributeKey[Int]("loadCount")
-  // the State transformer
-  val f = (s: State) => {
-    val previous = s get key getOrElse 0
-    println("Project load count: " + previous)
-    s.put(key, previous + 1)
-  }
-  onLoad in Global := {
-    val previous = (onLoad in Global).value
-    f compose previous
-  }
-}
-```
-
-### Errors
-
-#### On project load, "Reference to uninitialized setting"
-
-Setting initializers are executed in order. If the initialization of a
-setting depends on other settings that has not been initialized, sbt
-will stop loading.
-
-In this example, we try to append a library to `libraryDependencies`
-before it is initialized with an empty sequence.
-
-```scala
-object MyBuild extends Build {
-  val root = Project(id = "root", base = file("."),
-    settings = Seq(
-      libraryDependencies += "commons-io" % "commons-io" % "1.4" % "test"
-    )
-  ).disablePlugins(plugins.IvyModule)
-}
-```
-
-To correct this, include the IvyModule plugin settings, which includes
-`libraryDependencies := Seq()`. So, we just drop the explicit disabling.
-
-```scala
-object MyBuild extends Build {
-  val root = Project(id = "root", base = file("."),
-    settings = Seq(
-      libraryDependencies += "commons-io" % "commons-io" % "1.4" % "test"
-    )
-  )
-}
-```
-
-A more subtle variation of this error occurs when using
-[scoped settings][Scopes].
-
-```scala
-// error: Reference to uninitialized setting
-settings = Seq(
-  libraryDependencies += "commons-io" % "commons-io" % "1.2" % "test",
-  fullClasspath := fullClasspath.value.filterNot(_.data.name.contains("commons-io"))
-)
-```
-
-This setting varies between the test and compile scopes. The solution is
-use the scoped setting, both as the input to the initializer, and the
-setting that we update.
-
-```scala
-fullClasspath in Compile := (fullClasspath in Compile).value.filterNot(_.data.name.contains("commons-io"))
-```
-
-### Dependency Management
-
-#### How do I resolve a checksum error?
-
-This error occurs when the published checksum, such as a sha1 or md5
-hash, differs from the checksum computed for a downloaded artifact, such
-as a jar or pom.xml. An example of such an error is:
-
-```
-[warn]  problem while downloading module descriptor:
-https://repo1.maven.org/maven2/commons-fileupload/commons-fileupload/1.2.2/commons-fileupload-1.2.2.pom:
-invalid sha1: expected=ad3fda4adc95eb0d061341228cc94845ddb9a6fe computed=0ce5d4a03b07c8b00ab60252e5cacdc708a4e6d8 (1070ms)
-```
-
-The invalid checksum should generally be reported to the repository
-owner (as
-[was done](https://issues.sonatype.org/browse/MVNCENTRAL-46) for the
-above error). In the meantime, you can temporarily disable checking with
-the following setting:
-
-```scala
-checksums in update := Nil
-```
-
-See [library management][Library-Management] for details.
-
-#### I've added a plugin, and now my cross-compilations fail!
-
-This problem crops up frequently. Plugins are only published for the
-Scala version that sbt uses (currently, 2.9.1). You can still *use*
-plugins during cross-compilation, because sbt only looks for a 2.9.1
-version of the plugin.
-
-**... unless you specify the plugin in the wrong place!**
-
-A typical mistake is to put global plugin definitions in
-`~/.sbt/plugins.sbt`. **THIS IS WRONG.** `.sbt` files in `~/.sbt` are
-loaded for *each* build--that is, for *each* cross-compilation. So, if
-you build for Scala 2.9.0, sbt will try to find a version of the plugin
-that's compiled for 2.9.0--and it usually won't. That's because it
-doesn't *know* the dependency is a plugin.
-
-To tell sbt that the dependency is an sbt plugin, make sure you define
-your global plugins in a `.sbt` file in `~/.sbt/plugins/`. sbt knows
-that files in `~/.sbt/plugins` are only to be used by sbt itself, not as
-part of the general build definition. If you define your plugins in a
-file under *that* directory, they won't foul up your cross-compilations.
-Any file name ending in `.sbt` will do, but most people use
-`~/.sbt/plugins/build.sbt` or `~/.sbt/plugins/plugins.sbt`.
-
-### Miscellaneous
-
-#### How do I use the Scala interpreter in my code?
-
-sbt runs tests in the same JVM as sbt itself and Scala classes are not
-in the same class loader as the application classes. Therefore, when
-using the Scala interpreter, it is important to set it up properly to
-avoid an error message like:
-
-```
-Failed to initialize compiler: class scala.runtime.VolatileBooleanRef not found.
-** Note that as of 2.8 scala does not assume use of the java classpath.
-** For the old behavior pass -usejavacp to scala, or if using a Settings
-** object programmatically, settings.usejavacp.value = true.
-```
-
-The key is to initialize the Settings for the interpreter using
-*embeddedDefaults*. For example:
-
-```scala
- val settings = new Settings
- settings.embeddedDefaults[MyType]
- val interpreter = new Interpreter(settings, ...)
-```
-
-Here, MyType is a representative class that should be included on the
-interpreter's classpath and in its application class loader. For more
-background, see the
-[original proposal](https://gist.github.com/404272) that resulted in
-*embeddedDefaults* being added.
-
-Similarly, use a representative class as the type argument when using
-the *break* and *breakIf* methods of *ILoop*, as in the following
-example:
-
-```scala
-def x(a: Int, b: Int) = {
-  import scala.tools.nsc.interpreter.ILoop
-  ILoop.breakIf[MyType](a != b, "a" -> a, "b" -> b )
-}
-```
-
-### 0.7 to 0.10+ Migration
-
-#### How do I migrate from 0.7 to 0.10+?
-
-See the
-[migration page][Migrating-from-sbt-07x]
-first and then the following questions.
-
-#### Where has 0.7's `lib_managed` gone?
-
-By default, sbt 0.13.9 loads managed libraries from your ivy cache
-without copying them to a `lib_managed` directory. This fixes some bugs
-with the previous solution and keeps your project directory small. If
-you want to insulate your builds from the ivy cache being cleared, set
-`retrieveManaged := true` and the dependencies will be copied to
-`lib_managed` as a build-local cache (while avoiding the issues of
-`lib_managed` in 0.7.x).
-
-This does mean that existing solutions for sharing libraries with your
-favoured IDE may not work. Refer to [Community Plugins page][Community-Plugins]
-for a list of currently available plugins for your IDE.
-
-#### What are the commands I can use in 0.13.9 vs. 0.7?
-
-For a list of commands, run `help`. For details on a specific command,
-run `help <command>`. To view a list of tasks defined on the current
-project, run `tasks`. Alternatively, see the
-[Running][Running] page in the Getting Started Guide
-for descriptions of common commands and tasks.
-
-If in doubt start by just trying the old command as it may just work.
-The built in TAB completion will also assist you, so you can just press
-TAB at the beginning of a line and see what you get.
-
-The following commands work pretty much as in 0.7 out of the box:
-
-```
-reload
-update
-compile
-test
-testOnly
-publishLocal
-exit
-```
-
-#### Why have the resolved dependencies in a multi-module project changed since 0.7?
-
-sbt 0.10 fixes a flaw in how dependencies get resolved in multi-module
-projects. This change ensures that only one version of a library appears
-on a classpath.
-
-Use `last update` to view the debugging output for the last `update`
-run. Use `show update` to view a summary of files comprising managed
-classpaths.
-
-### My tests all run really fast but some are broken that weren't in 0.7!
-
-Be aware that compilation and tests run in parallel by default in sbt
-0.13.9. If your test code isn't thread-safe then you may want to
-change this behaviour by adding one of the following to your
-`build.sbt`:
-
-```scala
-// Execute tests in the current project serially.
-// Tests from other projects may still run concurrently.
-parallelExecution in Test := false
-
-// Execute everything serially (including compilation and tests)
-parallelExecution := false
-```
-
-#### What happened to the web development and Web Start support since 0.7?
-
-Web application support was split out into a plugin. See the
-[xsbt-web-plugin](https://github.com/earldouglas/xsbt-web-plugin)
-project.
-
-For an early version of an xsbt Web Start plugin, visit the
-[xsbt-webstart](https://github.com/ritschwumm/xsbt-webstart) project.
-
-#### How are inter-project dependencies different in 0.13.9 vs. 0.7?
-
-In 0.13.9, there are three types of project dependencies (classpath,
-execution, and configuration) and they are independently defined. These
-were combined in a single dependency type in 0.7.x. A declaration like:
-
-```scala
-lazy val a = project("a", "A")
-lazy val b = project("b", "B", a)
-```
-
-meant that the `B` project had a classpath and execution dependency on
-`A` and `A` had a configuration dependency on `B`. Specifically, in
-0.7.x:
-
-1.  Classpath: Classpaths for `A` were available on the appropriate
-    classpath for B.
-2.  Execution: A task executed on `B` would be executed on `A` first.
-3.  Configuration: For some settings, if they were not overridden in A,
-    they would default to the value provided in B.
-
-In 0.13.9, declare the specific type of dependency you want. Read
-about [multi-project builds][Multi-Project] in the
-Getting Started Guide for details.
-
-#### Where did class/object X go since 0.7?
-
-<table>
-  <tr>
-    <th>0.7</th>
-    <th>0.13.9</th>
-  </tr>
-
-  <tr>
-    <td><a href="https://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/FileUtilities$object.html">FileUtilities</a></td>
-    <td><a href="../api/sbt/IO$.html)">IO</a></td>
-  </tr>
-
-  <tr>
-    <td><a href="https://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/Path.html">Path class</a> and
-    <a href="https://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/Path$.html">object</a></td>
-    <td>
-      <a href="../api/sbt/Path$.html">Path object</a>, <tt>File</tt>,
-      <a href="../api/sbt/RichFile.html">RichFile</a>
-
-    </td>
-  </tr>
-
-  <tr>
-    <td><a href="https://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/PathFinder.html">PathFinder class</a></td>
-    <td>
-      <tt>Seq[File]</tt>, 
-      <a href="../api/sbt/PathFinder.html)">PathFinder class</a>,
-      <a href="../api/sbt/PathFinder$.html">PathFinder object</a>
-    </td>
-  </tr>
-</table>
-
-#### Where can I find plugins for 0.13.9?
-
-See [Community Plugins][Community-Plugins] for a list of currently available
-plugins.
-
-
-  [Running]: Running.html
-  [Scopes]: Scopes.html
-  [Community-Plugins]: Communitiy-Plugins.html
-  [Full-Def]: Full-Def.html
-  [Basic-Def]: Basic-Def.html
-  [Using-Plugins]: Using-Plugins.html
-  [More-About-Settings]: More-About-Settings.html
-  [Library-Management]: Library-Management.html
-  [Artifacts]: Artifacts.html
-  [Paths]: Paths.html
-  [Parsing-Input]: Parsing-Input.html
-  [Mapping-Files]: Mapping-Files.html
-  [Cross-Build]: Cross-Build.html
-  [Parsing-Input]: Parsing-Input.html
-  [Process]: Process.html
-  [Commands]: Commands.html
-  [Input-Tasks]: Input-Tasks.html
-  [Build-State]: Build-State.html
-  [ivy-configurations]: Library-Management.html#ivy-configurations
-
-Index
------
-
-This is an index of common methods, types, and values you might find in
-an sbt build definition. For command names, see
-[Running][Running]. For available plugins, see
-[the plugins list][Community-Plugins].
-
-### Values and Types
-
-#### Dependency Management
-
--   [ModuleID](../api/sbt/ModuleID.html) is the type of a dependency
-    definition. See
-    [Library Management][Library-Management].
--   [Artifact](../api/sbt/Artifact.html) represents a single artifact
-    (such as a jar or a pom) to be built and published. See
-    [Library Management][Library-Management] and [Artifacts][Artifacts].
--   A [Resolver](../api/sbt/Resolver.html) can resolve and retrieve
-    dependencies. Many types of Resolvers can publish dependencies as
-    well. A repository is a closely linked idea that typically refers to
-    the actual location of the dependencies. However, sbt is not very
-    consistent with this terminology and repository and resolver are
-    occasionally used interchangeably.
--   A [ModuleConfiguration] defines a specific resolver to use for a
-    group of dependencies.
--   A [Configuration](../api/sbt/Configuration.html) is a useful Ivy
-    construct for grouping dependencies. See ivy-configurations. It is
-    also used for [scoping settings][Scopes].
--   `Compile`, `Test`, `Runtime`, `Provided`, and `Optional` are
-    predefined [configurations][ivy-configurations].
-
-#### Settings and Tasks
-
--   A [Setting](../api/sbt/Init$Setting.html) describes how to
-    initialize a specific setting in the build. It can use the values of
-    other settings or the previous value of the setting being
-    initialized.
--   A [SettingsDefinition](../api/sbt/Init$SettingsDefinition.html)
-    is the actual type of an expression in a build.sbt. This allows
-    either a single [Setting](../api/sbt/Init$Setting.html) or a
-    sequence of settings
-    ([SettingList](../api/sbt/Init$SettingList.html)) to be defined at
-    once. The types in a [.scala build definition][Full-Def] always use just a
-    plain [Setting](../api/sbt/Init$Setting.html).
--   [Initialize](../api/sbt/Init$Initialize.html) describes how to
-    initialize a setting using other settings, but isn't bound to a
-    particular setting yet. Combined with an initialization method and a
-    setting to initialize, it produces a full
-    [Setting](../api/sbt/Init$Setting.html).
--   [TaskKey](../api/sbt/TaskKey.html),
-    [SettingKey](../api/sbt/SettingKey.html), and
-    [InputKey](../api/sbt/InputKey.html) are keys that represent a task
-    or setting. These are not the actual tasks, but keys that are used
-    to refer to them. They can be scoped to produce
-    [ScopedTask](../api/sbt/ScopedTask.html),
-    [ScopedSetting](../api/sbt/ScopedSetting.html), and
-    [ScopedInput](../api/sbt/ScopedInput.html). These form the base
-    types that provide the Settings methods.
--   [InputTask](../api/sbt/InputTask.html) parses and tab completes
-    user input, producing a task to run.
--   [Task](../api/sbt/Task.html) is the type of a task. A task is an
-    action that runs on demand. This is in contrast to a setting, which
-    is run once at project initialization.
-
-#### Process
-
--   A [ProcessBuilder](../api/sbt/ProcessBuilder.html) is the type
-    used to define a process. It provides combinators for building up
-    processes from smaller processes.
--   A [Process](../api/sbt/Process.html) represents the actual forked
-    process.
--   The [Process companion object](../api/sbt/Process$.html) provides
-    methods for constructing primitive processes.
-
-#### Build Structure
-
--   [Build](../api/sbt/Build.html) is the trait implemented for a
-    [.scala build definition][Full-Def], which defines project
-    relationships and settings.
--   [Plugin](../api/sbt/Plugin.html) is the trait implemented for sbt
-    [plugins][Using-Plugins].
--   [Project](../api/sbt/Project.html) is both a trait and a
-    companion object that declares a single module in a build. See
-    [.scala build definition][Full-Def].
--   [Keys](../api/sbt/Keys$.html) is an object that provides all of
-    the built-in keys for settings and tasks.
--   [State](../api/sbt/State.html) contains the full state for a
-    build. It is mainly used by [Commands][Commands] and sometimes
-    [Input Tasks][Input-Tasks]. See also [State and Actions][Build-State].
-
-### Methods
-
-#### Settings and Tasks
-
-See the [Getting Started Guide][Basic-Def] for
-details.
-
--   `:=`, `+=`, `++=` These construct a
-    [Setting](../api/sbt/Init$Setting.html), which is the fundamental
-    type in the [settings][Basic-Def] system.
--   `value` This uses the value of another setting or task in the
-    definition of a new setting or task. This method is special (it is a
-    macro) and cannot be used except in the argument of one of the
-    setting definition methods above (:=, ...) or in the standalone
-    construction methods Def.setting and Def.task. See
-    [more about settings][More-About-Settings] for
-    details.
--   `in` specifies the [Scope](../api/sbt/Scope.html) or part of the
-    [Scope](../api/sbt/Scope.html) of a setting being referenced. See
-    [scopes][Scopes].
-
-#### File and IO
-
-See [RichFile](../api/sbt/RichFile.html),
-[PathFinder](../api/sbt/PathFinder.html), and
-[Paths][Paths] for the full documentation.
-
--   `/` When called on a single File, this is `new File(x,y)`. For
-    Seq[File], this is applied for each member of the sequence..
--   `*` and `**` are methods for selecting children (`*`) or descendants
-    (`**`) of a File or Seq[File] that match a filter.
--   `|`, `||`, `&&`, `&`, `-`, and `--` are methods for combining
-    filters, which are often used for selecting Files. See
-    [NameFilter](../api/sbt/NameFilter.html) and
-    [FileFilter](../api/sbt/FileFilter.html). Note that methods with
-    these names also exist for other types, such as collections (like
-    Seq) and [Parser](../api/sbt/complete/Parser.html) (see
-    [Parsing Input][Parsing-Input]).
--   `pair` Used to construct mappings from a `File` to another `File` or
-    to a String. See [Mapping Files][Mapping-Files].
--   `get` forces a [PathFinder](../api/sbt/PathFinder.html) (a
-    call-by-name data structure) to a strict `Seq[File]` representation.
-    This is a common name in Scala, used by types like Option.
-
-#### Dependency Management
-
-See [Library Management][Library-Management] for full documentation.
-
--   `%` This is used to build up a [ModuleID](../api/sbt/ModuleID.html).
--   `%%` This is similar to `%` except that it identifies a dependency
-    that has been [cross built][Cross-Build].
--   `from` Used to specify the fallback URL for a dependency
--   `classifier` Used to specify the classifier for a dependency.
--   `at` Used to define a Maven-style resolver.
--   `intransitive` Marks a [dependency](../api/sbt/ModuleID.html) or
-    [Configuration](../api/sbt/Configuration.html) as being
-    intransitive.
--   `hide` Marks a [Configuration](../api/sbt/Configuration.html) as
-    internal and not to be included in the published metadata.
-
-#### Parsing
-
-These methods are used to build up
-[Parser](../api/sbt/complete/Parser.html)s from smaller
-[Parser](../api/sbt/complete/Parser.html)s. They closely follow the
-names of the standard library's parser combinators. See
-[Parsing Input][Parsing-Input] for the full documentation. These are
-used for
-[Input Tasks][Input-Tasks] and
-[Commands][Commands].
-
--   `~`, `~>`, `<~` Sequencing methods.
--   `??`, `?` Methods for making a Parser optional. `?` is postfix.
--   `id` Used for turning a Char or String literal into a Parser. It is
-    generally used to trigger an implicit conversion to a Parser.
--   `|`, `||` Choice methods. These are common method names in Scala.
--   `^^^` Produces a constant value when a Parser matches.
--   `+`, `*` Postfix repetition methods. These are common method names
-    in Scala.
--   `map`, `flatMap` Transforms the result of a Parser. These are common
-    method names in Scala.
--   `filter` Restricts the inputs that a Parser matches on. This is a
-    common method name in Scala.
--   `-` Prefix negation. Only matches the input when the original parser
-    doesn't match the input.
--   `examples`, `token` Tab completion
--   `!!!` Provides an error message to use when the original parser
-    doesn't match the input.
-
-#### Processes
-
-These methods are used to
-[fork external processes][Process]. Note that this API
-has been included in the Scala standard library for version 2.9.
-[ProcessBuilder](../api/sbt/ProcessBuilder.html) is the builder type
-and [Process](../api/sbt/Process.html) is the type representing the
-actual forked process. The methods to combine processes start with `#`
-so that they share the same precedence.
-
--   `run`, `!`, `!!`, `!<`, `lines`, `lines_!` are different ways to
-    start a process once it has been defined. The lines variants produce
-    a Stream[String] to obtain the output lines.
--   `#<`, `#<<`, `#>` are used to get input for a process from a source
-    or send the output of a process to a sink.
--   `#|` is used to pipe output from one process into the input of
-    another.
--   `#||`, `#&&`, `###` sequence processes in different ways.
-
