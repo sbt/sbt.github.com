@@ -44,7 +44,7 @@
         <div class="container contentswrapper">
           <div class="span-16 prepend-1 append-1 contents">
             <h3 id="Defining+a+dynamic+input+task+with+Def.inputTaskDyn">Defining a dynamic input task with Def.inputTaskDyn<a href="#Defining+a+dynamic+input+task+with+Def.inputTaskDyn" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Let’s suppose that there’s a task already that does the bowser opening called <code>openbrowser</code> because of a plugin. Here’s how we can sequence a task after an input tasks.
-</p><h4 id="build.sbt">build.sbt<a href="#build.sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">lazy val runopen = inputKey[Unit](&quot;run and then open the browser&quot;)
+</p><h4 id="build.sbt+v1">build.sbt v1<a href="#build.sbt+v1" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">lazy val runopen = inputKey[Unit](&quot;run and then open the browser&quot;)
 lazy val openbrowser = taskKey[Unit](&quot;open the browser&quot;)
 
 lazy val root = (project in file(&quot;.&quot;)).
@@ -85,14 +85,14 @@ lazy val root = (project in file(&quot;.&quot;)).
       println(&quot;open browser!&quot;)
     }
   )
-</code></pre><p>The <code>actualRun in Compile</code>’s implementation was copy-pasted from <code>run</code> task’s implementation in Default.scala.
+</code></pre><p>The <code>actualRun in Compile</code>’s implementation was copy-pasted from <code>run</code> task’s implementation in Defaults.scala.
 </p><p>Now we can call <code>run foo</code> from the shell and it will evaluate <code>actualRun in Compile</code> with the passed in argument, and then evaluate the <code>openbrowser</code> task.
 </p><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>
                         <a href="Howto-Sequence-using-Commands.html"> How to sequence using commands </a>                        
                         <ul class="language-bar">
-        
+        <li><a href="Howto-Dynamic-Input-Task.html"><span class="lang-item lang-en">English</span></a></li><li><a href="ja/Howto-Dynamic-Input-Task.html"><span class="lang-item lang-ja">日本語</span></a></li>
       </ul>
                       </div><div class="tocwrapper show">
       <a class="tochead nav" style="display: none" href="#toc">❦</a>

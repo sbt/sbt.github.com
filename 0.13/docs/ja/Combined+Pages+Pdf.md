@@ -2625,3 +2625,288 @@ sbt のインタラクティブプロンプトでカレントプロジェクト�
    [プラグインの使用][Using-Plugins]で詳細が説明される。
 
 後続のセッティングは古いものをオーバーライドする。このリスト全体でビルド定義が構成される。
+
+
+How to
+------
+
+How to 記事の一覧は[目次](Contents+in+Depth.html)を参照してください。
+
+
+  [ExecutionSemantics]: Custom-Settings.html#Execution+semantics+of+tasks
+
+逐次実行
+-------
+
+sbt で最もよくある質問の一つに「X をやった後で Y をするにはどうすればいいのか?」というものがある。
+
+一般論としては、sbt のタスクはそのように作られていない。なぜなら、build.sbt はタスクの依存グラフ作るための DSL だからだ。これに関しては[タスクの実行意味論][ExecutionSemantics]で解説してある。そのため、理想的にはタスク Y を自分で定義して、そこからタスク X に依存させるべきだ。
+
+```scala
+taskY := {
+  val x = taskX.value
+  x + 1
+}
+```
+
+これは、以下のような、副作用のあるメソッド呼び出しを続けて行っているような命令型の素の Scala と比べるとより制限されていると言える:
+
+```scala
+def foo(): Unit = {
+  doX()
+  doY()
+}
+```
+
+この依存指向なプログラミング・モデルの利点は sbt のタスク・エンジンがタスクの実行の順序を入れ替えることができることにある。実際、可能な限り sbt は依存タスクを並列に実行する。もう一つの利点は、グラフを非重複化して一回のコマンド実行に対して `compile in Compile` などのタスクは一度だけ実行することで、同じソースを何度もコンパイルすることを回避している。
+
+タスク・システムがこのような設計になっているため、何かを逐次実行させるというのは一応可能ではあるけども、システムの流れに反する行為であり、簡単だとは言えない。
+
+- [Def.sequential を用いて逐次タスクを定義する](Howto-Sequential-Task.html)
+- [Def.taskDyn を用いて動的タスクを定義する](Howto-Dynamic-Task.html)
+- [タスクの後で何かする](Howto-After-Input-Task.html)
+- [Def.inputTaskDyn を用いた動的インプットタスクの定義](Howto-Dynamic-Input-Task.html)
+- [コマンドを用いた逐次実行](Howto-Sequence-using-Commands.html)
+
+
+### Def.sequential を用いて逐次タスクを定義する
+
+sbt 0.13.8 で `Def.sequential` という関数が追加されて、準逐次な意味論でタスクを実行できるようになった。
+逐次タスクの説明として `compilecheck` というカスタムタスクを定義してみよう。これは、まず `compile in Compile` を実行して、その後で [scalastyle-sbt-plugin](http://www.scalastyle.org/sbt.html) の `scalastyle in Compile` を呼び出す。
+
+セットアップはこのようになる。
+
+#### project/build.properties
+
+```
+sbt.version=0.13.9
+```
+
+#### project/style.sbt
+
+```
+addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.8.0")
+```
+
+#### build.sbt
+
+```scala
+lazy val compilecheck = taskKey[Unit]("compile and then scalastyle")
+
+lazy val root = (project in file(".")).
+  settings(
+    compilecheck in Compile := Def.sequential(
+      compile in Compile,
+      (scalastyle in Compile).toTask("")
+    ).value
+  )
+```
+
+このタスクを呼び出すには、シェルから `compilecheck` と打ち込む。もしコンパイルが失敗すると、`compilecheck` はそこで実行を中止する。
+
+```
+root> compilecheck
+[info] Compiling 1 Scala source to /Users/x/proj/target/scala-2.10/classes...
+[error] /Users/x/proj/src/main/scala/Foo.scala:3: Unmatched closing brace '}' ignored here
+[error] }
+[error] ^
+[error] one error found
+[error] (compile:compileIncremental) Compilation failed
+```
+
+これで、タスクを逐次実行できた。
+
+
+  [Howto-Sequential-Task]: Howto-Sequential-Task.html
+  [Tasks]: Tasks.html
+
+### Def.taskDyn を用いて動的タスクを定義する
+
+[逐次タスク][Howto-Sequential-Task]だけで十分じゃなければ、次のステップは[動的タスク][Tasks]だ。純粋な型 `A` の値を返すことを期待する `Def.task` と違って、`Def.taskDyn` は `sbt.Def.Initialize[sbt.Task[A]]` という型のタスク・エンジンが残りの計算を継続するタスクを返す。
+
+`compile in Compile` を実行した後で [scalastyle-sbt-plugin](http://www.scalastyle.org/sbt.html) の `scalastyle in Compile` タスクを実行するカスタムタスク、`compilecheck` を実装してみよう。
+
+#### project/build.properties
+
+```
+sbt.version=0.13.9
+```
+
+#### project/style.sbt
+
+```
+addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.8.0")
+```
+
+#### build.sbt v1
+
+```scala
+lazy val compilecheck = taskKey[sbt.inc.Analysis]("compile and then scalastyle")
+
+lazy val root = (project in file(".")).
+  settings(
+    compilecheck := (Def.taskDyn {
+      val c = (compile in Compile).value
+      Def.task {
+        val x = (scalastyle in Compile).toTask("").value
+        c
+      }
+    }).value
+  )
+```
+
+これで逐次タスクと同じものができたけども、違いは最初のタスクの結果である `c` を返していることだ。
+
+#### build.sbt v2
+
+`compile in Compile` の戻り値と同じ型を返せるようになったので、もとのキーをこの動的タスクで再配線 (rewire) できるかもしれない。
+
+```scala
+lazy val root = (project in file(".")).
+  settings(
+    compile in Compile := (Def.taskDyn {
+      val c = (compile in Compile).value
+      Def.task {
+        val x = (scalastyle in Compile).toTask("").value
+        c
+      }
+    }).value
+  )
+```
+
+これで、`compild in Compile` をシェルから呼び出してやりたかったことをやらせれるようになった。
+
+
+  [Input-Tasks]: Input-Tasks.html
+
+### インプットタスクの後で何かする
+
+ここまでタスクに焦点を当ててみてきた。タスクには他にインプットタスクというものがあって、これはユーザからの入力をシェル上で受け取る。
+典型的な例としては `run in Compile` タスクがある。`scalastyle` タスクも実はインプットタスクだ。インプットタスクの詳細は [Input Task][Input-Tasks] 参照。
+
+ここで、`run in Compile` タスクの実行後にテスト用にブラウザを開く方法を考えてみる。
+
+#### src/main/scala/Greeting.scala
+
+```scala
+object Greeting extends App {
+  println("hello " + args.toList)
+}
+```
+
+#### build.sbt v1
+
+```scala
+lazy val runopen = inputKey[Unit]("run and then open the browser")
+
+lazy val root = (project in file(".")).
+  settings(
+    runopen := {
+      (run in Compile).evaluated
+      println("open browser!")
+    }
+  )
+```
+
+ここでは、ブラウザを本当に開く代わりに副作用のある `println` で例示した。シェルからこのタスクを呼び出してみよう:
+
+```
+> runopen foo
+[info] Compiling 1 Scala source to /x/proj/...
+[info] Running Greeting foo
+hello List(foo)
+open browser!
+```
+
+#### build.sbt v2
+
+この新しいインプットタスクを `run in Compile` に再配線することで、実は `runopen` キーを外すことができる:
+
+```scala
+lazy val root = (project in file(".")).
+  settings(
+    run in Compile := {
+      (run in Compile).evaluated
+      println("open browser!")
+    }
+  )
+```
+
+
+### Def.inputTaskDyn を用いた動的インプットタスクの定義
+
+ここで、プラグインが `openbrowser` というブラウザを開くタスクを既に提供していると仮定する。それをインプットタスクの後で呼び出す方法を考察する。
+
+#### build.sbt v1
+
+```scala
+lazy val runopen = inputKey[Unit]("run and then open the browser")
+lazy val openbrowser = taskKey[Unit]("open the browser")
+
+lazy val root = (project in file(".")).
+  settings(
+    runopen := (Def.inputTaskDyn {
+      import sbt.complete.Parsers.spaceDelimited
+      val args = spaceDelimited("<args>").parsed
+      Def.taskDyn {
+        (run in Compile).toTask(" " + args.mkString(" ")).value
+        openbrowser
+      }
+    }).evaluated,
+    openbrowser := {
+      println("open browser!")
+    }
+  )
+```
+
+#### build.sbt v2
+
+この動的インプットタスクを `run in Compile` に再配線するのは複雑な作業だ。内側の `run in Compile` は既に継続タスクの中に入ってしまっているので、単純に再配線しただけだと循環参照を作ってしまうことになる。
+この循環を断ち切るためには、`run in Compile` のクローンである `actualRun in Compile` を導入する必要がある:
+
+```scala
+lazy val actualRun = inputKey[Unit]("The actual run task")
+lazy val openbrowser = taskKey[Unit]("open the browser")
+
+lazy val root = (project in file(".")).
+  settings(
+    run in Compile := (Def.inputTaskDyn {
+      import sbt.complete.Parsers.spaceDelimited
+      val args = spaceDelimited("<args>").parsed
+      Def.taskDyn {
+        (actualRun in Compile).toTask(" " + args.mkString(" ")).value
+        openbrowser
+      }
+    }).evaluated,
+    actualRun in Compile := Defaults.runTask(
+      fullClasspath in Runtime,
+      mainClass in (Compile, run),
+      runner in (Compile, run)
+    ).evaluated,
+    openbrowser := {
+      println("open browser!")
+    }
+  )
+```
+
+この `actualRun in Compile` の実装は Defaults.scala にある `run` の実装からコピペしてきた。
+
+これで `run foo` をシェルから打ち込むと、`actualRun in Compile` を引数とともに評価して、その後で `openbrowser` タスクを評価するようになった。
+
+
+### コマンドを用いた逐次実行
+
+副作用にしか使っていなくて、人間がコマンドを打ち込んでいるのを真似したいだけならば、カスタムコマンドを作れば済むことかもしれない。これは例えば、リリース手順とかに役立つ。
+
+これは sbt そのもののビルドスクリプトから抜粋だ:
+
+```scala
+  commands += Command.command("releaseNightly") { state =>
+    "stampVersion" ::
+      "clean" ::
+      "compile" ::
+      "publish" ::
+      "bintrayRelease" ::
+      state
+  }
+```

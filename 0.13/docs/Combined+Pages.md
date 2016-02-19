@@ -18406,7 +18406,7 @@ lazy val root = (project in file(".")).
 
 Let's suppose that there's a task already that does the bowser opening called `openbrowser` because of a plugin. Here's how we can sequence a task after an input tasks.
 
-#### build.sbt
+#### build.sbt v1
 
 ```scala
 lazy val runopen = inputKey[Unit]("run and then open the browser")
@@ -18458,7 +18458,7 @@ lazy val root = (project in file(".")).
   )
 ```
 
-The `actualRun in Compile`'s implementation was copy-pasted from `run` task's implementation in Default.scala.
+The `actualRun in Compile`'s implementation was copy-pasted from `run` task's implementation in Defaults.scala.
 
 Now we can call `run foo` from the shell and it will evaluate `actualRun in Compile` with the passed in argument, and then evaluate the `openbrowser` task.
 

@@ -11477,7 +11477,7 @@ open browser!
     }
   )
 </code></pre><h3 id="Defining+a+dynamic+input+task+with+Def.inputTaskDyn">Defining a dynamic input task with Def.inputTaskDyn<a href="#Defining+a+dynamic+input+task+with+Def.inputTaskDyn" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Let’s suppose that there’s a task already that does the bowser opening called <code>openbrowser</code> because of a plugin. Here’s how we can sequence a task after an input tasks.
-</p><h4 id="build.sbt">build.sbt<a href="#build.sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">lazy val runopen = inputKey[Unit](&quot;run and then open the browser&quot;)
+</p><h4 id="build.sbt+v1">build.sbt v1<a href="#build.sbt+v1" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">lazy val runopen = inputKey[Unit](&quot;run and then open the browser&quot;)
 lazy val openbrowser = taskKey[Unit](&quot;open the browser&quot;)
 
 lazy val root = (project in file(&quot;.&quot;)).
@@ -11518,7 +11518,7 @@ lazy val root = (project in file(&quot;.&quot;)).
       println(&quot;open browser!&quot;)
     }
   )
-</code></pre><p>The <code>actualRun in Compile</code>’s implementation was copy-pasted from <code>run</code> task’s implementation in Default.scala.
+</code></pre><p>The <code>actualRun in Compile</code>’s implementation was copy-pasted from <code>run</code> task’s implementation in Defaults.scala.
 </p><p>Now we can call <code>run foo</code> from the shell and it will evaluate <code>actualRun in Compile</code> with the passed in argument, and then evaluate the <code>openbrowser</code> task.
 </p><h3 id="How+to+sequence+using+commands">How to sequence using commands<a href="#How+to+sequence+using+commands" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>If all you care about is the side effects, and you really just want to emulate humans typing in one command after another, a custom command might be just want you need. This comes in handy for release procedures.
 </p><p>Here’s from the build script of sbt itself:
