@@ -46,7 +46,7 @@
             <h3 id="Defining+a+sequential+task+with+Def.sequential">Defining a sequential task with Def.sequential<a href="#Defining+a+sequential+task+with+Def.sequential" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 0.13.8 added <code>Def.sequential</code> function to run tasks under semi-sequential semantics.
 To demonstrate the sequential task, let’s create a custom task called <code>compilecheck</code> that runs <code>compile in Compile</code> and then <code>scalastyle in Compile</code> task added by <a href="http://www.scalastyle.org/sbt.html">scalastyle-sbt-plugin</a>.
 </p><p>Here’s how to set it up
-</p><h4 id="project%2Fbuild.properties">project/build.properties<a href="#project%2Fbuild.properties" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="">sbt.version=0.13.9
+</p><h4 id="project%2Fbuild.properties">project/build.properties<a href="#project%2Fbuild.properties" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="">sbt.version=0.13.11
 </code></pre><h4 id="project%2Fstyle.sbt">project/style.sbt<a href="#project%2Fstyle.sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="">addSbtPlugin(&quot;org.scalastyle&quot; %% &quot;scalastyle-sbt-plugin&quot; % &quot;0.8.0&quot;)
 </code></pre><h4 id="build.sbt">build.sbt<a href="#build.sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">lazy val compilecheck = taskKey[Unit](&quot;compile and then scalastyle&quot;)
 

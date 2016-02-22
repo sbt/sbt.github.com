@@ -27,7 +27,7 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.9/sbt-0.13.9.msi
+  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.msi
   [Setup-Notes]: ../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -55,8 +55,8 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
 如果你在运行 sbt 时遇到任何问题，查看 [安装建议][Setup-Notes] 中的终端编码（terminal encoding），HTTP 代理，JVM 参数。
 
 
-  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.9/sbt-0.13.9.zip
-  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.9/sbt-0.13.9.tgz
+  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.zip
+  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.tgz
   [Manual-Installation]: Manual-Installation.html
   [Activator-Installation]: Activator-Installation.html
 
@@ -92,9 +92,9 @@ $ brew install sbt
 参见手动安装指南。
 
 
-  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.9/sbt-0.13.9.msi
-  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.9/sbt-0.13.9.zip
-  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.9/sbt-0.13.9.tgz
+  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.msi
+  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.zip
+  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.tgz
   [Activator-Installation]: Activator-Installation.html
 
 在 Windows 上安装 sbt
@@ -117,10 +117,10 @@ $ brew install sbt
 参见手动安装指南。
 
 
-  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.9/sbt-0.13.9.zip
-  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.9/sbt-0.13.9.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-0.13.9.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-0.13.9.deb
+  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.zip
+  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-0.13.11.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-0.13.11.deb
   [Manual-Installation]: Manual-Installation.html
   [Activator-Installation]: Activator-Installation.html
 
@@ -185,7 +185,7 @@ sbt 二进制文件发布到 Bintray，而Bintray 方便地提供了RPM资源库
 参见[手动安装指南][Manual-Installation]。
 
 
-  [sbt-launch.jar]: https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.9/sbt-launch.jar
+  [sbt-launch.jar]: https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.11/sbt-launch.jar
 
 手动安装 sbt
 -----------------------
@@ -338,7 +338,7 @@ lazy val root = (project in file(".")).
   settings(
     name := "hello",
     version := "1.0",
-    scalaVersion := "2.11.5"
+    scalaVersion := "2.11.7"
   )
 ```
 
@@ -349,10 +349,10 @@ lazy val root = (project in file(".")).
 
 ### 设置 sbt 版本
 
-你可以通过创建 `hello/project/build.properties` 文件强制指定一个版本的 sbt。在这个文件里，编写如下内容来强制使用 0.13.9：
+你可以通过创建 `hello/project/build.properties` 文件强制指定一个版本的 sbt。在这个文件里，编写如下内容来强制使用 0.13.11：
 
 ```
-sbt.version=0.13.9
+sbt.version=0.13.11
 ```
 
 sbt 在不同的 release 版本中是 99% 兼容的。但是在 `project/build.properties` 文件中设置 sbt 的版本仍然能避免一些潜在的混淆。
@@ -629,7 +629,7 @@ lazy val root = (project in file(".")).
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.11.5"
+  scalaVersion := "2.11.7"
 )
 
 lazy val root = (project in file(".")).
@@ -773,7 +773,7 @@ val derby = "org.apache.derby" % "derby" % "10.4.1.3"
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.11.5"
+  scalaVersion := "2.11.7"
 )
 
 lazy val root = (project in file(".")).
@@ -1422,7 +1422,7 @@ To factor out common settings across multiple projects, create a sequence named 
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.11.5"
+  scalaVersion := "2.11.7"
 )
 
 lazy val core = (project in file("core")).
@@ -1985,7 +1985,7 @@ import Dependencies._
 
 lazy val commonSettings = Seq(
   version := "0.1.0",
-  scalaVersion := "2.11.5"
+  scalaVersion := "2.11.7"
 )
 
 lazy val backend = (project in file("backend")).
@@ -2073,7 +2073,7 @@ name := "hello"
 
 version := "1.0"
 
-scalaVersion := "2.11.5"
+scalaVersion := "2.11.7"
 ```
 
 ### (在 0.13.7 之前) 设置项必须以空行分隔

@@ -35,7 +35,7 @@ sbt を試してくれることに感謝する。_ぜひ楽しいんでほしい
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.9/sbt-0.13.9.msi
+  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.msi
   [Setup-Notes]: ../../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -66,8 +66,8 @@ sbt プロジェクトを作るためには、以下の手順をたどる必要�
 
 
 
-  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.9/sbt-0.13.9.zip
-  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.9/sbt-0.13.9.tgz
+  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.zip
+  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.tgz
   [Manual-Installation]: Manual-Installation.html
   [Activator-Installation]: Activator-Installation.html
 
@@ -104,9 +104,9 @@ $ brew install sbt
 手動インストールの手順を参照。
 
 
-  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.9/sbt-0.13.9.msi
-  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.9/sbt-0.13.9.zip
-  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.9/sbt-0.13.9.tgz
+  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.msi
+  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.zip
+  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.tgz
   [Activator-Installation]: Activator-Installation.html
 
 Windows への sbt のインストール
@@ -129,10 +129,10 @@ Windows への sbt のインストール
 手動インストールの手順を参照。
 
 
-  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.9/sbt-0.13.9.zip
-  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.9/sbt-0.13.9.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-0.13.9.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-0.13.9.deb
+  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.zip
+  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-0.13.11.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-0.13.11.deb
   [Manual-Installation]: Manual-Installation.html
   [Activator-Installation]: Activator-Installation.html
   [website127]: https://github.com/sbt/website/issues/12
@@ -212,7 +212,7 @@ sbt のバイナリは Bintray にて公開されており、Bintray は RPM リ
 手動インストールの手順を参照。
 
 
-  [sbt-launch.jar]: https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.9/sbt-launch.jar
+  [sbt-launch.jar]: https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.11/sbt-launch.jar
 
 手動インストール
 --------------
@@ -398,7 +398,7 @@ lazy val root = (project in file(".")).
   settings(
     name := "hello",
     version := "1.0",
-    scalaVersion := "2.11.5"
+    scalaVersion := "2.11.7"
   )
 ```
 
@@ -411,7 +411,7 @@ lazy val root = (project in file(".")).
 このファイルに、以下のように書く:
 
 ```
-sbt.version=0.13.9
+sbt.version=0.13.11
 ```
 
 sbt はリリース間で 99% ソースコード互換性を維持しているが、
@@ -738,7 +738,7 @@ sbt はまず `Setting` のリストをソートする。
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.11.5"
+  scalaVersion := "2.11.7"
 )
 
 lazy val root = (project in file(".")).
@@ -1655,7 +1655,7 @@ lazy val core = project in file("core")
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.11.5"
+  scalaVersion := "2.11.7"
 )
 
 lazy val core = (project in file("core")).
@@ -2337,7 +2337,7 @@ import Dependencies._
 
 lazy val commonSettings = Seq(
   version := "0.1.0",
-  scalaVersion := "2.11.5"
+  scalaVersion := "2.11.7"
 )
 
 lazy val backend = (project in file("backend")).
@@ -2442,7 +2442,7 @@ name := "hello"
 
 version := "1.0"
 
-scalaVersion := "2.11.5"
+scalaVersion := "2.11.7"
 ```
 
 ### (0.13.7 以前) 設定は空白行で区切る
@@ -2674,7 +2674,7 @@ sbt 0.13.8 で `Def.sequential` という関数が追加されて、準逐次な
 #### project/build.properties
 
 ```
-sbt.version=0.13.9
+sbt.version=0.13.11
 ```
 
 #### project/style.sbt
@@ -2724,7 +2724,7 @@ root> compilecheck
 #### project/build.properties
 
 ```
-sbt.version=0.13.9
+sbt.version=0.13.11
 ```
 
 #### project/style.sbt
