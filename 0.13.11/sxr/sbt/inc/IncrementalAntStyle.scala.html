@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/inc/IncrementalAntStyle.scala</title>
+        <script type="text/javascript" src="../../jquery-all.js"></script>
+        <script type="text/javascript" src="../../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="keyword">package</span> sbt
+<span class="keyword">package</span> inc
+
+<span class="keyword">import</span> java.io.File
+<span class="keyword">import</span> xsbti.api.Source
+
+<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">class</span> <a title="class IncrementalAntStyle extends sbt.inc.IncrementalCommon" id="sbt.inc;IncrementalAntStyle">IncrementalAntStyle</a><a href="#sbt.inc;IncrementalAntStyle" title="sbt.inc.IncrementalAntStyle" class="delimiter">(</a><a title="sbt.Logger" id="sbt.inc;IncrementalAntStyle.log">log</a>: <a href="../Logger.scala.html#sbt;Logger" title="sbt.Logger">Logger</a>, <a title="sbt.inc.IncOptions" id="sbt.inc;IncrementalAntStyle.options">options</a>: <a href="IncOptions.scala.html#sbt.inc;IncOptions" title="sbt.inc.IncOptions">IncOptions</a><span class="delimiter">)</span> <span class="keyword">extends</span> <a href="IncrementalCommon.scala.html#sbt.inc;IncrementalCommon" title="sbt.inc.IncrementalCommon">IncrementalCommon</a><span class="delimiter">(</span><a href="#sbt.inc;IncrementalAntStyle.log" title="sbt.Logger">log</a>, <a href="#sbt.inc;IncrementalAntStyle.options" title="sbt.inc.IncOptions">options</a><span class="delimiter">)</span> <span class="delimiter">{</span>
+
+  <span class="comment">/** Ant-style mode doesn't do anything special with package objects */</span>
+  <span class="keyword">override</span> <span class="keyword">protected</span> <span class="keyword">def</span> <a title="(invalidated: Set[java.io.File], relations: sbt.inc.Relations)Set[java.io.File]" id="sbt.inc;IncrementalAntStyle.invalidatedPackageObjects">invalidatedPackageObjects</a><span class="delimiter">(</span><a title="Set[java.io.File]" id="sbt.inc;IncrementalAntStyle.invalidatedPackageObjects.invalidated">invalidated</a>: <span title="Set[java.io.File]">Set</span><span class="delimiter">[</span>File<span class="delimiter">]</span>, <a title="sbt.inc.Relations" id="sbt.inc;IncrementalAntStyle.invalidatedPackageObjects.relations">relations</a>: <a href="Relations.scala.html#sbt.inc;Relations" title="sbt.inc.Relations">Relations</a><span class="delimiter">)</span>: <span title="Set[java.io.File]">Set</span><span class="delimiter">[</span>File<span class="delimiter">]</span> = <span title="=&gt; scala.collection.immutable.Set.type">Set</span>.<span title="scala.collection.immutable.Set[java.io.File]">empty</span>
+
+  <span class="comment">/** In Ant-style mode we don't need to compare APIs because we don't perform any invalidation */</span>
+  <span class="keyword">override</span> <span class="keyword">protected</span> <span class="keyword">def</span> <a title="[T](src: T, a: xsbti.api.Source, b: xsbti.api.Source)Option[sbt.inc.APIChange[T]]" id="sbt.inc;IncrementalAntStyle.sameAPI">sameAPI</a><span class="delimiter">[</span><a title="" id="sbt.inc;IncrementalAntStyle.sameAPI;T">T</a><span class="delimiter">]</span><span class="delimiter">(</span><a title="T" id="sbt.inc;IncrementalAntStyle.sameAPI.src">src</a>: <a href="#sbt.inc;IncrementalAntStyle.sameAPI;T" title="T">T</a>, <a title="xsbti.api.Source" id="sbt.inc;IncrementalAntStyle.sameAPI.a">a</a>: <a href="../../xsbti/api/Source.java.html#xsbti.api;Source" title="xsbti.api.Source">Source</a>, <a title="xsbti.api.Source" id="sbt.inc;IncrementalAntStyle.sameAPI.b">b</a>: <a href="../../xsbti/api/Source.java.html#xsbti.api;Source" title="xsbti.api.Source">Source</a><span class="delimiter">)</span>: <span title="Option[sbt.inc.APIChange[T]]">Option</span><span class="delimiter">[</span>APIChange<span class="delimiter">[</span>T<span class="delimiter">]</span><span class="delimiter">]</span> = <span title="None.type">None</span>
+
+  <span class="comment">/** In Ant-style mode we don't perform any invalidation */</span>
+  <span class="keyword">override</span> <span class="keyword">protected</span> <span class="keyword">def</span> <a title="(relations: sbt.inc.Relations, externalAPIChange: sbt.inc.APIChange[String])Set[java.io.File]" id="sbt.inc;IncrementalAntStyle.invalidateByExternal">invalidateByExternal</a><span class="delimiter">(</span><a title="sbt.inc.Relations" id="sbt.inc;IncrementalAntStyle.invalidateByExternal.relations">relations</a>: <a href="Relations.scala.html#sbt.inc;Relations" title="sbt.inc.Relations">Relations</a>, <a title="sbt.inc.APIChange[String]" id="sbt.inc;IncrementalAntStyle.invalidateByExternal.externalAPIChange">externalAPIChange</a>: <a href="Changes.scala.html#sbt.inc;APIChange" title="sbt.inc.APIChange[String]">APIChange</a><span class="delimiter">[</span>String<span class="delimiter">]</span><span class="delimiter">)</span>: <span title="Set[java.io.File]">Set</span><span class="delimiter">[</span>File<span class="delimiter">]</span> = <span title="=&gt; scala.collection.immutable.Set.type">Set</span>.<span title="scala.collection.immutable.Set[java.io.File]">empty</span>
+
+  <span class="comment">/** In Ant-style mode we don't perform any invalidation */</span>
+  <span class="keyword">override</span> <span class="keyword">protected</span> <span class="keyword">def</span> <a title="(relations: sbt.inc.Relations, change: sbt.inc.APIChange[java.io.File])Set[java.io.File]" id="sbt.inc;IncrementalAntStyle.invalidateSource">invalidateSource</a><span class="delimiter">(</span><a title="sbt.inc.Relations" id="sbt.inc;IncrementalAntStyle.invalidateSource.relations">relations</a>: <a href="Relations.scala.html#sbt.inc;Relations" title="sbt.inc.Relations">Relations</a>, <a title="sbt.inc.APIChange[java.io.File]" id="sbt.inc;IncrementalAntStyle.invalidateSource.change">change</a>: <a href="Changes.scala.html#sbt.inc;APIChange" title="sbt.inc.APIChange[java.io.File]">APIChange</a><span class="delimiter">[</span>File<span class="delimiter">]</span><span class="delimiter">)</span>: <span title="Set[java.io.File]">Set</span><span class="delimiter">[</span>File<span class="delimiter">]</span> = <span title="=&gt; scala.collection.immutable.Set.type">Set</span>.<span title="scala.collection.immutable.Set[java.io.File]">empty</span>
+
+  <span class="comment">/** In Ant-style mode we don't need to perform any dependency analysis hence we can always return an empty set. */</span>
+  <span class="keyword">override</span> <span class="keyword">protected</span> <span class="keyword">def</span> <a title="(relations: sbt.inc.Relations)java.io.File =&gt; Set[java.io.File]" id="sbt.inc;IncrementalAntStyle.allDeps">allDeps</a><span class="delimiter">(</span><a title="sbt.inc.Relations" id="sbt.inc;IncrementalAntStyle.allDeps.relations">relations</a>: <a href="Relations.scala.html#sbt.inc;Relations" title="sbt.inc.Relations">Relations</a><span class="delimiter">)</span>: File =&gt; Set<span class="delimiter">[</span>File<span class="delimiter">]</span> = <a title="java.io.File" id="sbt.inc;IncrementalAntStyle.allDeps.$anonfun.x$1">_</a> =&gt; <span title="=&gt; scala.collection.immutable.Set.type">Set</span>.<span title="scala.collection.immutable.Set[java.io.File]">empty</span>
+
+<span class="delimiter">}</span>
+
+        </pre>
+    </body>
+</html>
