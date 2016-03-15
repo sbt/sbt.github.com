@@ -3,7 +3,7 @@
       <head>
         <meta charset="utf-8"/>
         <meta content="width=device-width, initial-scale=1" name="viewport"/>
-        <title>sbt Reference Manual — 手动安装 sbt</title>
+        <title>sbt Reference Manual — ÊâãÂä®ÂÆâË£Ö sbt</title>
         <link rel="shortcut icon" href="../favicon.ico"/>
         <link rel="stylesheet" href="../css/blueprint/screen.css" type="text/css" media="screen, projection"/>
         <link rel="stylesheet" href="../css/blueprint/grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
@@ -41,39 +41,39 @@
           </a>
         <div class="container contentswrapper">
           <div class="span-16 prepend-1 append-1 contents">
-            <h2 id="%E6%89%8B%E5%8A%A8%E5%AE%89%E8%A3%85+sbt">手动安装 sbt<a href="#%E6%89%8B%E5%8A%A8%E5%AE%89%E8%A3%85+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>手动安装需要下载 <a href="https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.11/sbt-launch.jar">sbt-launch.jar</a>，然后创建脚本来运行它。
-</p><h3 id="Unix">Unix<a href="#Unix" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>将 <a href="https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.11/sbt-launch.jar">sbt-launch.jar</a> 文件放在 <code>~/bin</code> 下。
-创建一个脚本来运行这个 jar，脚本 <code>~/bin/sbt</code> 内容如下:
+            <h2 id="%C3%8A%C3%A2%C3%A3%C3%82%C3%A4%C2%AE%C3%82%C3%86%C3%A2%C3%8B%C2%A3%C3%96+sbt">ÊâãÂä®ÂÆâË£Ö sbt<a href="#%C3%8A%C3%A2%C3%A3%C3%82%C3%A4%C2%AE%C3%82%C3%86%C3%A2%C3%8B%C2%A3%C3%96+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>ÊâãÂä®ÂÆâË£ÖÈúÄË¶Å‰∏ãËΩΩ <a href="https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.11/sbt-launch.jar">sbt-launch.jar</a>ÔºåÁÑ∂ÂêéÂàõÂª∫ËÑöÊú¨Êù•ËøêË°åÂÆÉ„ÄÇ
+</p><h3 id="Unix">Unix<a href="#Unix" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Â∞Ü <a href="https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.11/sbt-launch.jar">sbt-launch.jar</a> Êñá‰ª∂ÊîæÂú® <code>~/bin</code> ‰∏ã„ÄÇ
+ÂàõÂª∫‰∏Ä‰∏™ËÑöÊú¨Êù•ËøêË°åËøô‰∏™ jarÔºåËÑöÊú¨ <code>~/bin/sbt</code> ÂÜÖÂÆπÂ¶Ç‰∏ã:
 </p><pre><code class="">#!/bin/bash
 SBT_OPTS=&quot;-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M&quot;
-java $SBT_OPTS -jar `路径名 $0`/sbt-launch.jar &quot;$@&quot;
-</code></pre><p>给该脚本赋予可执行权限：
+java $SBT_OPTS -jar `Ë∑ØÂæÑÂêç $0`/sbt-launch.jar &quot;$@&quot;
+</code></pre><p>ÁªôËØ•ËÑöÊú¨Ëµã‰∫àÂèØÊâßË°åÊùÉÈôêÔºö
 </p><pre><code class="">$ chmod u+x ~/bin/sbt
-</code></pre><h3 id="Windows">Windows<a href="#Windows" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在 Windows 上手动安装的步骤根据是否使用 Cygwin 和终端的不同而不同。 在任何情况下，将 batch 文件或者脚本文件添加到 path 中，使得可以在任意路径下的命令行中敲 <code>sbt</code> 来运行 sbt。
-同时，如果需要的话，根据机器调节一下 JVM 的参数设置。
-</p><h4 id="Non-Cygwin">Non-Cygwin<a href="#Non-Cygwin" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>对于使用标准 Windows 终端的非 Cygwin 用户，创建如 <code>sbt.bat</code> 的 batch 文件：
+</code></pre><h3 id="Windows">Windows<a href="#Windows" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Âú® Windows ‰∏äÊâãÂä®ÂÆâË£ÖÁöÑÊ≠•È™§Ê†πÊçÆÊòØÂê¶‰ΩøÁî® Cygwin ÂíåÁªàÁ´ØÁöÑ‰∏çÂêåËÄå‰∏çÂêå„ÄÇ Âú®‰ªª‰ΩïÊÉÖÂÜµ‰∏ãÔºåÂ∞Ü batch Êñá‰ª∂ÊàñËÄÖËÑöÊú¨Êñá‰ª∂Ê∑ªÂä†Âà∞ path ‰∏≠Ôºå‰ΩøÂæóÂèØ‰ª•Âú®‰ªªÊÑèË∑ØÂæÑ‰∏ãÁöÑÂëΩ‰ª§Ë°å‰∏≠Êï≤ <code>sbt</code> Êù•ËøêË°å sbt„ÄÇ
+ÂêåÊó∂ÔºåÂ¶ÇÊûúÈúÄË¶ÅÁöÑËØùÔºåÊ†πÊçÆÊú∫Âô®Ë∞ÉËäÇ‰∏Ä‰∏ã JVM ÁöÑÂèÇÊï∞ËÆæÁΩÆ„ÄÇ
+</p><h4 id="Non-Cygwin">Non-Cygwin<a href="#Non-Cygwin" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>ÂØπ‰∫é‰ΩøÁî®Ê†áÂáÜ Windows ÁªàÁ´ØÁöÑÈùû Cygwin Áî®Êà∑ÔºåÂàõÂª∫Â¶Ç <code>sbt.bat</code> ÁöÑ batch Êñá‰ª∂Ôºö
 </p><pre><code class="">set SCRIPT_DIR=%~dp0
 java -Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M -jar &quot;%SCRIPT_DIR%sbt-launch.jar&quot; %*
-</code></pre><p>然后将下载好的 <a href="https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.11/sbt-launch.jar">sbt-launch.jar</a> 放在和 <code>sbt.bat</code> 相同的路径下。
-</p><h4 id="Cygwin+%E5%92%8C%E6%A0%87%E5%87%86%E7%9A%84+Windows+%E7%BB%88%E7%AB%AF">Cygwin 和标准的 Windows 终端<a href="#Cygwin+%E5%92%8C%E6%A0%87%E5%87%86%E7%9A%84+Windows+%E7%BB%88%E7%AB%AF" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>如果使用 Cygwin 和标准的 Windows 终端，创建如下的 bash 脚本 <code>~/bin/sbt</code>：
+</code></pre><p>ÁÑ∂ÂêéÂ∞Ü‰∏ãËΩΩÂ•ΩÁöÑ <a href="https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.11/sbt-launch.jar">sbt-launch.jar</a> ÊîæÂú®Âíå <code>sbt.bat</code> Áõ∏ÂêåÁöÑË∑ØÂæÑ‰∏ã„ÄÇ
+</p><h4 id="Cygwin+%C3%82%C3%AD%C3%A5%C3%8A%E2%80%A0%C3%A1%C3%82%C3%A1%C3%9C%C3%81%C3%B6%C3%91+Windows+%C3%81%C2%AA%C3%A0%C3%81%C2%B4%C3%98">Cygwin ÂíåÊ†áÂáÜÁöÑ Windows ÁªàÁ´Ø<a href="#Cygwin+%C3%82%C3%AD%C3%A5%C3%8A%E2%80%A0%C3%A1%C3%82%C3%A1%C3%9C%C3%81%C3%B6%C3%91+Windows+%C3%81%C2%AA%C3%A0%C3%81%C2%B4%C3%98" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Â¶ÇÊûú‰ΩøÁî® Cygwin ÂíåÊ†áÂáÜÁöÑ Windows ÁªàÁ´ØÔºåÂàõÂª∫Â¶Ç‰∏ãÁöÑ bash ËÑöÊú¨ <code>~/bin/sbt</code>Ôºö
 </p><pre><code class="">SBT_OPTS=&quot;-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M&quot;
 java $SBT_OPTS -jar sbt-launch.jar &quot;$@&quot;
-</code></pre><p>用下载好的 <a href="https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.11/sbt-launch.jar">sbt-launch.jar</a> 文件的路径替换掉 sbt-launch.jar，如果需要的话记得使用 cygpath。给脚本赋予可执行权限：
+</code></pre><p>Áî®‰∏ãËΩΩÂ•ΩÁöÑ <a href="https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.11/sbt-launch.jar">sbt-launch.jar</a> Êñá‰ª∂ÁöÑË∑ØÂæÑÊõøÊç¢Êéâ sbt-launch.jarÔºåÂ¶ÇÊûúÈúÄË¶ÅÁöÑËØùËÆ∞Âæó‰ΩøÁî® cygpath„ÄÇÁªôËÑöÊú¨Ëµã‰∫àÂèØÊâßË°åÊùÉÈôêÔºö
 </p><pre><code class="">$ chmod u+x ~/bin/sbt
-</code></pre><h4 id="Cygwin+%E5%92%8C+Ansi+%E7%BB%88%E7%AB%AF">Cygwin 和 Ansi 终端<a href="#Cygwin+%E5%92%8C+Ansi+%E7%BB%88%E7%AB%AF" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>如果使用 Cygwin 和 Ansi 终端（支持 Ansi 转义序列并且可以通过 stty 配置），创建一个 bash 文件 <code>~/bin/sbt</code>：
+</code></pre><h4 id="Cygwin+%C3%82%C3%AD%C3%A5+Ansi+%C3%81%C2%AA%C3%A0%C3%81%C2%B4%C3%98">Cygwin Âíå Ansi ÁªàÁ´Ø<a href="#Cygwin+%C3%82%C3%AD%C3%A5+Ansi+%C3%81%C2%AA%C3%A0%C3%81%C2%B4%C3%98" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Â¶ÇÊûú‰ΩøÁî® Cygwin Âíå Ansi ÁªàÁ´ØÔºàÊîØÊåÅ Ansi ËΩ¨‰πâÂ∫èÂàóÂπ∂‰∏îÂèØ‰ª•ÈÄöËøá stty ÈÖçÁΩÆÔºâÔºåÂàõÂª∫‰∏Ä‰∏™ bash Êñá‰ª∂ <code>~/bin/sbt</code>Ôºö
 </p><pre><code class="">SBT_OPTS=&quot;-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M&quot;
 stty -icanon min 1 -echo &gt; /dev/null 2&gt;&amp;1
 java -Djline.terminal=jline.UnixTerminal -Dsbt.cygwin=true $SBT_OPTS -jar sbt-launch.jar &quot;$@&quot;
 stty icanon echo &gt; /dev/null 2&gt;&amp;1
-</code></pre><p>用下载好的 <a href="https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.11/sbt-launch.jar">sbt-launch.jar</a> 文件的路径替换掉 sbt-launch.jar，如果需要的话记得使用 cygpath。给脚本赋予可执行权限：
+</code></pre><p>Áî®‰∏ãËΩΩÂ•ΩÁöÑ <a href="https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.11/sbt-launch.jar">sbt-launch.jar</a> Êñá‰ª∂ÁöÑË∑ØÂæÑÊõøÊç¢Êéâ sbt-launch.jarÔºåÂ¶ÇÊûúÈúÄË¶ÅÁöÑËØùËÆ∞Âæó‰ΩøÁî® cygpath„ÄÇÁªôËÑöÊú¨Ëµã‰∫àÂèØÊâßË°åÊùÉÈôêÔºö
 </p><pre><code class="">$ chmod u+x ~/bin/sbt
-</code></pre><p>为了让退格（backspace）能够在 Scala 的控制台中正常工作，你需要确保你的退格键发送的是删除符（erase character），和在 stty 中配置的一样。对于默认的 cygwin 终端（mintty），
-在设置选项 -&gt; 键中，如果你的删除符是 cygwin 默认的 ^H，“退格发送 ^H” 需要被选中。
-</p><blockquote><p><strong>注意：</strong> 当前其他的配置还不支持。请 <a href="https://github.com/sbt/sbt/blob/0.13/CONTRIBUTING.md">提交 pull request</a> 实现或者描述已经支持的配置。
+</code></pre><p>‰∏∫‰∫ÜËÆ©ÈÄÄÊ†ºÔºàbackspaceÔºâËÉΩÂ§üÂú® Scala ÁöÑÊéßÂà∂Âè∞‰∏≠Ê≠£Â∏∏Â∑•‰ΩúÔºå‰Ω†ÈúÄË¶ÅÁ°Æ‰øù‰Ω†ÁöÑÈÄÄÊ†ºÈîÆÂèëÈÄÅÁöÑÊòØÂà†Èô§Á¨¶Ôºàerase characterÔºâÔºåÂíåÂú® stty ‰∏≠ÈÖçÁΩÆÁöÑ‰∏ÄÊ†∑„ÄÇÂØπ‰∫éÈªòËÆ§ÁöÑ cygwin ÁªàÁ´ØÔºàminttyÔºâÔºå
+Âú®ËÆæÁΩÆÈÄâÈ°π -&gt; ÈîÆ‰∏≠ÔºåÂ¶ÇÊûú‰Ω†ÁöÑÂà†Èô§Á¨¶ÊòØ cygwin ÈªòËÆ§ÁöÑ ^HÔºå‚ÄúÈÄÄÊ†ºÂèëÈÄÅ ^H‚Äù ÈúÄË¶ÅË¢´ÈÄâ‰∏≠„ÄÇ
+</p><blockquote><p><strong>Ê≥®ÊÑèÔºö</strong> ÂΩìÂâçÂÖ∂‰ªñÁöÑÈÖçÁΩÆËøò‰∏çÊîØÊåÅ„ÄÇËØ∑ <a href="https://github.com/sbt/sbt/blob/0.13/CONTRIBUTING.md">Êèê‰∫§ pull request</a> ÂÆûÁé∞ÊàñËÄÖÊèèËø∞Â∑≤ÁªèÊîØÊåÅÁöÑÈÖçÁΩÆ„ÄÇ
 </p></blockquote><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>
-                        <a href="Activator-Installation.html"> 安装 Typesafe Activator (包含sbt) </a>                        
+                        <a href="Activator-Installation.html"> ÂÆâË£Ö Typesafe Activator (ÂåÖÂê´sbt) </a>                        
                         <ul class="language-bar">
         <li><a href="../Manual-Installation.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/Manual-Installation.html"><span class="lang-item lang-ja">日本語</span></a></li><li><a href="../zh-cn/Manual-Installation.html"><span class="lang-item lang-zh-cn">中文 (简体)</span></a></li><li><a href="../es/Manual-Installation.html"><span class="lang-item lang-es">Español</span></a></li>
       </ul>
@@ -82,7 +82,7 @@ stty icanon echo &gt; /dev/null 2&gt;&amp;1
       <a name="toc"></a>
       <h4 class="toctitle">Contents</h4>
       <div class="tocbody">
-      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">sbt 入门</a></div><ol class="toc"> <li><div><a href="Setup.html">安装 sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">在 Mac 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">在 Windows 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">在 Linux 上安装 sbt</a></div></li><li><div class="current">手动安装 sbt</div></li><li><div><a href="Activator-Installation.html">安装 Typesafe Activator (包含sbt)</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">目录结构</a></div></li><li><div><a href="Running.html">运行</a></div></li><li><div><a href="Basic-Def.html">.sbt 构建定义</a></div></li><li><div><a href="Scopes.html">Scope</a></div></li><li><div><a href="More-About-Settings.html">更多关于设置</a></div></li><li><div><a href="Library-Dependencies.html">库依赖</a></div></li><li><div><a href="Multi-Project.html">多项目构建</a></div></li><li><div><a href="Using-Plugins.html">使用插件</a></div></li><li><div><a href="Custom-Settings.html">自定义设置和任务</a></div></li><li><div><a href="Organizing-Build.html">组织构建</a></div></li><li><div><a href="Summary.html">总结</a></div></li><li><div><a href="Bare-Def.html">附录：Bare .sbt 构建定义</a></div></li><li><div><a href="Full-Def.html">附录：.scala 构建定义</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">sbt ÂÖ•Èó®</a></div><ol class="toc"> <li><div><a href="Setup.html">ÂÆâË£Ö sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Âú® Mac ‰∏äÂÆâË£Ö sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Âú® Windows ‰∏äÂÆâË£Ö sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Âú® Linux ‰∏äÂÆâË£Ö sbt</a></div></li><li><div class="current">ÊâãÂä®ÂÆâË£Ö sbt</div></li><li><div><a href="Activator-Installation.html">ÂÆâË£Ö Typesafe Activator (ÂåÖÂê´sbt)</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">ÁõÆÂΩïÁªìÊûÑ</a></div></li><li><div><a href="Running.html">ËøêË°å</a></div></li><li><div><a href="Basic-Def.html">.sbt ÊûÑÂª∫ÂÆö‰πâ</a></div></li><li><div><a href="Scopes.html">Scope</a></div></li><li><div><a href="More-About-Settings.html">Êõ¥Â§öÂÖ≥‰∫éËÆæÁΩÆ</a></div></li><li><div><a href="Library-Dependencies.html">Â∫ì‰æùËµñ</a></div></li><li><div><a href="Multi-Project.html">Â§öÈ°πÁõÆÊûÑÂª∫</a></div></li><li><div><a href="Using-Plugins.html">‰ΩøÁî®Êèí‰ª∂</a></div></li><li><div><a href="Custom-Settings.html">Ëá™ÂÆö‰πâËÆæÁΩÆÂíå‰ªªÂä°</a></div></li><li><div><a href="Organizing-Build.html">ÁªÑÁªáÊûÑÂª∫</a></div></li><li><div><a href="Summary.html">ÊÄªÁªì</a></div></li><li><div><a href="Bare-Def.html">ÈôÑÂΩïÔºöBare .sbt ÊûÑÂª∫ÂÆö‰πâ</a></div></li><li><div><a href="Full-Def.html">ÈôÑÂΩïÔºö.scala ÊûÑÂª∫ÂÆö‰πâ</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
           </div>
         </div>
         <div class="header">

@@ -3126,7 +3126,7 @@ your plugin to the list.
 -   sbt-deploy: <https://github.com/reaktor/sbt-deploy>
 -   sbt-appbundle (os x standalone):
     <https://github.com/sbt/sbt-appbundle>
--   sbt-onejar (Packages your project using One-JAR™):
+-   sbt-onejar (Packages your project using One-JAR‚Ñ¢):
     <https://github.com/sbt/sbt-onejar>
 
 #### Release plugins
@@ -3236,6 +3236,15 @@ your plugin to the list.
 -   ant4sbt: <https://github.com/sbt/ant4sbt>
 -   sbt-pom-reader: <https://github.com/sbt/sbt-pom-reader>
 
+#### Create new project plugins
+
+-   np (Dead simple new project directory generation):
+    <https://github.com/softprops/np>
+-   npt (Creates new project skeletons based on templates):
+    <https://github.com/reikje/npt>
+-   sbt-fresh (create an opinionated fresh sbt project):
+    <https://github.com/sbt/sbt-fresh>
+
 #### Utility and system plugins
 
 -   sbt-javaversioncheck (enforces build requirement for specific version level of Java): <https://github.com/sbt/sbt-javaversioncheck>
@@ -3245,10 +3254,6 @@ your plugin to the list.
     <https://github.com/whysoserious/sbt-process-runner>
 -   jot (Write down your ideas lest you forget them)
     <https://github.com/softprops/jot>
--   np (Dead simple new project directory generation):
-    <https://github.com/softprops/np>
--   npt (Creates new project skeletons based on templates):
-    <https://github.com/reikje/npt>
 -   sbt-editsource (A poor man's *sed*(1), for sbt):
     <http://software.clapper.org/sbt-editsource/>
 -   sbt-conflict-classes (Show conclict classes from classpath):
@@ -3378,6 +3383,8 @@ your plugin to the list.
     <https://github.com/earldouglas/sbt-heroku-deploy>
 -   scavro (Code generation from [Avro](http://avro.apache.org/) schema):
     <https://github.com/oedura/scavro>
+-   sbt-spi-plugin (Generates provider-configuration files in the resource directory META-INF/services for later use with ServiceLoader)
+    <https://github.com/nyavro/spi-plugin>
 
 #### Game development plugins
 
@@ -4006,7 +4013,7 @@ warn test:run
 Also, trace is currently an integer, but should really be an abstract
 data type.
 
-​7. Each sbt version has more aggressive incremental compilation and
+‚Äã7. Each sbt version has more aggressive incremental compilation and
 reproducing bugs can be difficult. It would be helpful to have a mode
 that generates a diff between successive compilations and records the
 options passed to scalac. This could be replayed or inspected to try to
@@ -4739,7 +4746,7 @@ Starting sbt 0.13.7, build.sbt will be parsed using a customized Scala parser. T
 
 This feature can be disabled, if necessary, via the -Dsbt.parser.simple=true flag.
 
-This feature was contributed by [Andrzej Jozwik (@ajozwik)](https://github.com/ajozwik), [Rafał Krzewski (@rkrzewski)][@rkrzewski] and others at [@WarsawScala][@WarsawScala] inspired by Typesafe's [@gkossakowski][@gkossakowski] organizing multiple [meetups](http://blog.japila.pl/2014/07/gkossakowski-on-warszawscala-about-how-to-patch-scalasbt/) and [hackathons](http://blog.japila.pl/2014/07/hacking-scalasbt-with-gkossakowski-on-warszawscala-meetup-in-javeo_eu/) on how to patch sbt with the focus on this blank line issue. Dziękujemy! [#1606][1606]
+This feature was contributed by [Andrzej Jozwik (@ajozwik)](https://github.com/ajozwik), [Rafa≈Ç Krzewski (@rkrzewski)][@rkrzewski] and others at [@WarsawScala][@WarsawScala] inspired by Typesafe's [@gkossakowski][@gkossakowski] organizing multiple [meetups](http://blog.japila.pl/2014/07/gkossakowski-on-warszawscala-about-how-to-patch-scalasbt/) and [hackathons](http://blog.japila.pl/2014/07/hacking-scalasbt-with-gkossakowski-on-warszawscala-meetup-in-javeo_eu/) on how to patch sbt with the focus on this blank line issue. Dziƒôkujemy! [#1606][1606]
 
 ### Custom Maven local repository location
 
@@ -7072,7 +7079,7 @@ a foundation.
 
 Other resources include the
 [How to][Howto] and
-[Developer’s Guide][Developers-Guide]
+[Developer‚Äôs Guide][Developers-Guide]
 sections in this reference, and the
 [API Documentation](../api/index.html)
 
@@ -8766,7 +8773,7 @@ just to illustrate the ideas; this list is not intended to be complete.
     abstract method called `fullyQualifiedTraitName$$super$methodName`;
     such methods only exist if they are used. Hence, adding the first
     call to super.methodName for a specific methodName changes the
-    interface. At present, this is not yet handled—see [#466][466].
+    interface. At present, this is not yet handled‚Äîsee [#466][466].
 4.  `sealed` hierarchies of case classes allow to check exhaustiveness
     of pattern matching. Hence pattern matches using case classes must
     depend on the complete hierarchy - this is one reason why
@@ -15330,7 +15337,7 @@ by extending `sbt.AutoPlugin`.
 
 #### projectSettings and buildSettings
 
-With auto plugins, all provided settings (e.g. `assemblySettings`) are provided by the plugin directly via the `projectSettings` method. Here’s an example plugin that adds a command named hello to sbt projects:
+With auto plugins, all provided settings (e.g. `assemblySettings`) are provided by the plugin directly via the `projectSettings` method. Here‚Äôs an example plugin that adds a command named hello to sbt projects:
 
 ```scala
 package sbthello
@@ -16182,13 +16189,10 @@ cache:
 Finally, the following a few lines of cleanup script are added:
 
 ```yml
-script:
-  # Your normal script
-  - sbt ++$TRAVIS_SCALA_VERSION -J-XX:ReservedCodeCacheSize=256M test
-
+before_cache:
   # Tricks to avoid unnecessary cache updates
-  - find $HOME/.sbt -name "*.lock" | xargs rm
-  - find $HOME/.ivy2 -name "ivydata-*.properties" | xargs rm
+  - find $HOME/.ivy2 -name "ivydata-*.properties" -delete
+  - find $HOME/.sbt -name "*.lock" -delete
 ```
 
 With the above changes combined Travis CI will tar up the cached directories and uploads them to Amazon S3.

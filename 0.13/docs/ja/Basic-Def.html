@@ -3,7 +3,7 @@
       <head>
         <meta charset="utf-8"/>
         <meta content="width=device-width, initial-scale=1" name="viewport"/>
-        <title>sbt Reference Manual — .sbt ビルド定義</title>
+        <title>sbt Reference Manual — .sbt „Éì„É´„ÉâÂÆöÁæ©</title>
         <link rel="shortcut icon" href="../favicon.ico"/>
         <link rel="stylesheet" href="../css/blueprint/screen.css" type="text/css" media="screen, projection"/>
         <link rel="stylesheet" href="../css/blueprint/grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
@@ -43,43 +43,43 @@
           </a>
         <div class="container contentswrapper">
           <div class="span-16 prepend-1 append-1 contents">
-            <h2 id=".sbt+%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9">.sbt ビルド定義<a href="#.sbt+%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このページでは、多少の「理論」も含めた sbt のビルド定義 (build definition) と <code>build.sbt</code> の構文を説明する。
-君が<a href="Running.html">sbt の使い方</a>を分かっていて、「始める sbt」の前のページも読んだことを前提とする。
-</p><h3 id="3+%E7%A8%AE%E9%A1%9E%E3%81%AE%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9">3 種類のビルド定義<a href="#3+%E7%A8%AE%E9%A1%9E%E3%81%AE%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>ビルド定義には以下の 3 種類がある:
-</p><ol><li>マルチプロジェクトでの <code>.sbt</code> ビルド定義
-</li><li>bare <code>.sbt</code> ビルド定義
-</li><li><code>.scala</code> ビルド定義
-</li></ol><p>このページでは最も新しいマルチプロジェクトでの <code>.sbt</code> ビルド定義を紹介する。
-これは従来の 2 つのビルド定義の長所を組み合わせたもので、全ての用途に適している。
-以前に書かれたビルド定義を使って作業をするときは、古い種類のものも目にするかもしれない。
-それらに関しては (このガイドの後ほどの) <a href="Bare-Def.html">bare .sbt ビルド定義</a>と <a href="Full-Def.html">.scala ビルド定義</a>を参照。
-</p><p>さらに、ビルド定義は <code>project/</code> ディレクトリ直下に置かれた <code>.scala</code> で終わるファイルを含むことができ、そこで共通の関数や値を定義することもできる。
-</p><h3 id="%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%81%A8%E3%81%AF%E4%BD%95%E3%81%8B">ビルド定義とは何か<a href="#%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%81%A8%E3%81%AF%E4%BD%95%E3%81%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><strong> ここは読んで下さい </strong>
-</p><p>あらかじめ決められたディレクトリを走査し、ビルド定義に関するファイル群を処理した後、最終的に sbt は <code>Project</code> の定義群を作る。
-</p><p>例えば、カレントディレクトリにあるプロジェクトの <a href="../../api/sbt/Project.html">Project</a> 定義は <code>build.sbt</code> に以下のように記述できる：
+            <h2 id=".sbt+%E2%80%9E%C3%89%C3%AC%E2%80%9E%C3%89%C2%B4%E2%80%9E%C3%89%C3%A2%C3%82%C3%86%C3%B6%C3%81%C3%A6%C2%A9">.sbt „Éì„É´„ÉâÂÆöÁæ©<a href="#.sbt+%E2%80%9E%C3%89%C3%AC%E2%80%9E%C3%89%C2%B4%E2%80%9E%C3%89%C3%A2%C3%82%C3%86%C3%B6%C3%81%C3%A6%C2%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>„Åì„ÅÆ„Éö„Éº„Ç∏„Åß„ÅØ„ÄÅÂ§öÂ∞ë„ÅÆ„ÄåÁêÜË´ñ„Äç„ÇÇÂê´„ÇÅ„Åü sbt „ÅÆ„Éì„É´„ÉâÂÆöÁæ© (build definition) „Å® <code>build.sbt</code> „ÅÆÊßãÊñá„ÇíË™¨Êòé„Åô„Çã„ÄÇ
+Âêõ„Åå<a href="Running.html">sbt „ÅÆ‰Ωø„ÅÑÊñπ</a>„ÇíÂàÜ„Åã„Å£„Å¶„ÅÑ„Å¶„ÄÅ„ÄåÂßã„ÇÅ„Çã sbt„Äç„ÅÆÂâç„ÅÆ„Éö„Éº„Ç∏„ÇÇË™≠„Çì„Å†„Åì„Å®„ÇíÂâçÊèê„Å®„Åô„Çã„ÄÇ
+</p><h3 id="3+%C3%81%C2%AE%C3%86%C3%88%C2%B0%C3%BB%E2%80%9E%C3%85%C3%86%E2%80%9E%C3%89%C3%AC%E2%80%9E%C3%89%C2%B4%E2%80%9E%C3%89%C3%A2%C3%82%C3%86%C3%B6%C3%81%C3%A6%C2%A9">3 Á®ÆÈ°û„ÅÆ„Éì„É´„ÉâÂÆöÁæ©<a href="#3+%C3%81%C2%AE%C3%86%C3%88%C2%B0%C3%BB%E2%80%9E%C3%85%C3%86%E2%80%9E%C3%89%C3%AC%E2%80%9E%C3%89%C2%B4%E2%80%9E%C3%89%C3%A2%C3%82%C3%86%C3%B6%C3%81%C3%A6%C2%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>„Éì„É´„ÉâÂÆöÁæ©„Å´„ÅØ‰ª•‰∏ã„ÅÆ 3 Á®ÆÈ°û„Åå„ÅÇ„Çã:
+</p><ol><li>„Éû„É´„ÉÅ„Éó„É≠„Ç∏„Çß„ÇØ„Éà„Åß„ÅÆ <code>.sbt</code> „Éì„É´„ÉâÂÆöÁæ©
+</li><li>bare <code>.sbt</code> „Éì„É´„ÉâÂÆöÁæ©
+</li><li><code>.scala</code> „Éì„É´„ÉâÂÆöÁæ©
+</li></ol><p>„Åì„ÅÆ„Éö„Éº„Ç∏„Åß„ÅØÊúÄ„ÇÇÊñ∞„Åó„ÅÑ„Éû„É´„ÉÅ„Éó„É≠„Ç∏„Çß„ÇØ„Éà„Åß„ÅÆ <code>.sbt</code> „Éì„É´„ÉâÂÆöÁæ©„ÇíÁ¥π‰ªã„Åô„Çã„ÄÇ
+„Åì„Çå„ÅØÂæìÊù•„ÅÆ 2 „Å§„ÅÆ„Éì„É´„ÉâÂÆöÁæ©„ÅÆÈï∑ÊâÄ„ÇíÁµÑ„ÅøÂêà„Çè„Åõ„Åü„ÇÇ„ÅÆ„Åß„ÄÅÂÖ®„Å¶„ÅÆÁî®ÈÄî„Å´ÈÅ©„Åó„Å¶„ÅÑ„Çã„ÄÇ
+‰ª•Ââç„Å´Êõ∏„Åã„Çå„Åü„Éì„É´„ÉâÂÆöÁæ©„Çí‰Ωø„Å£„Å¶‰ΩúÊ•≠„Çí„Åô„Çã„Å®„Åç„ÅØ„ÄÅÂè§„ÅÑÁ®ÆÈ°û„ÅÆ„ÇÇ„ÅÆ„ÇÇÁõÆ„Å´„Åô„Çã„Åã„ÇÇ„Åó„Çå„Å™„ÅÑ„ÄÇ
+„Åù„Çå„Çâ„Å´Èñ¢„Åó„Å¶„ÅØ („Åì„ÅÆ„Ç¨„Ç§„Éâ„ÅÆÂæå„Åª„Å©„ÅÆ) <a href="Bare-Def.html">bare .sbt „Éì„É´„ÉâÂÆöÁæ©</a>„Å® <a href="Full-Def.html">.scala „Éì„É´„ÉâÂÆöÁæ©</a>„ÇíÂèÇÁÖß„ÄÇ
+</p><p>„Åï„Çâ„Å´„ÄÅ„Éì„É´„ÉâÂÆöÁæ©„ÅØ <code>project/</code> „Éá„Ç£„É¨„ÇØ„Éà„É™Áõ¥‰∏ã„Å´ÁΩÆ„Åã„Çå„Åü <code>.scala</code> „ÅßÁµÇ„Çè„Çã„Éï„Ç°„Ç§„É´„ÇíÂê´„ÇÄ„Åì„Å®„Åå„Åß„Åç„ÄÅ„Åù„Åì„ÅßÂÖ±ÈÄö„ÅÆÈñ¢Êï∞„ÇÑÂÄ§„ÇíÂÆöÁæ©„Åô„Çã„Åì„Å®„ÇÇ„Åß„Åç„Çã„ÄÇ
+</p><h3 id="%E2%80%9E%C3%89%C3%AC%E2%80%9E%C3%89%C2%B4%E2%80%9E%C3%89%C3%A2%C3%82%C3%86%C3%B6%C3%81%C3%A6%C2%A9%E2%80%9E%C3%85%C2%AE%E2%80%9E%C3%85%C3%98%E2%80%B0%CE%A9%C3%AF%E2%80%9E%C3%85%C3%A3">„Éì„É´„ÉâÂÆöÁæ©„Å®„ÅØ‰Ωï„Åã<a href="#%E2%80%9E%C3%89%C3%AC%E2%80%9E%C3%89%C2%B4%E2%80%9E%C3%89%C3%A2%C3%82%C3%86%C3%B6%C3%81%C3%A6%C2%A9%E2%80%9E%C3%85%C2%AE%E2%80%9E%C3%85%C3%98%E2%80%B0%CE%A9%C3%AF%E2%80%9E%C3%85%C3%A3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><strong> „Åì„Åì„ÅØË™≠„Çì„Åß‰∏ã„Åï„ÅÑ </strong>
+</p><p>„ÅÇ„Çâ„Åã„Åò„ÇÅÊ±∫„ÇÅ„Çâ„Çå„Åü„Éá„Ç£„É¨„ÇØ„Éà„É™„ÇíËµ∞Êüª„Åó„ÄÅ„Éì„É´„ÉâÂÆöÁæ©„Å´Èñ¢„Åô„Çã„Éï„Ç°„Ç§„É´Áæ§„ÇíÂá¶ÁêÜ„Åó„ÅüÂæå„ÄÅÊúÄÁµÇÁöÑ„Å´ sbt „ÅØ <code>Project</code> „ÅÆÂÆöÁæ©Áæ§„Çí‰Ωú„Çã„ÄÇ
+</p><p>‰æã„Åà„Å∞„ÄÅ„Ç´„É¨„É≥„Éà„Éá„Ç£„É¨„ÇØ„Éà„É™„Å´„ÅÇ„Çã„Éó„É≠„Ç∏„Çß„ÇØ„Éà„ÅÆ <a href="../../api/sbt/Project.html">Project</a> ÂÆöÁæ©„ÅØ <code>build.sbt</code> „Å´‰ª•‰∏ã„ÅÆ„Çà„ÅÜ„Å´Ë®òËø∞„Åß„Åç„ÇãÔºö
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
-</code></pre><p>それぞれのプロジェクトは、そのプロジェクトを記述する不変 Map （キーと値のペア群のセット）に関連付けられる。
-</p><p>例えば、<code>name</code> というキーがあるが、それはプロジェクト名という文字列の値に関連付けられる。
-</p><p><em>ビルド定義ファイルは直接的には sbt の Map に影響を与えない。</em>
-</p><p>その代わり、ビルド定義は <code>Setting[T]</code> 型のオブジェクトを含む巨大なリストを作る。
-<code>T</code> は Map における値の型だ。（Scala の <code>Setting[T]</code> は Java の <code>Setting&lt;T&gt;</code> と同様。）
-<code>Setting</code> は、新しいキーと値のペアの追加、既存の値への付加のような<em> Map の変換</em>を記述する。
-（不変データ構造と関数型プログラミングの精神に則り、この変換は新しい Map を返し、古い Map は更新されない。）
-</p><p>カレントディレクトリに位置するプロジェクトに対してプロジェクト名のための <code>Setting[String]</code>
-を関連付けるためには以下のように書く:
+</code></pre><p>„Åù„Çå„Åû„Çå„ÅÆ„Éó„É≠„Ç∏„Çß„ÇØ„Éà„ÅØ„ÄÅ„Åù„ÅÆ„Éó„É≠„Ç∏„Çß„ÇØ„Éà„ÇíË®òËø∞„Åô„Çã‰∏çÂ§â Map Ôºà„Ç≠„Éº„Å®ÂÄ§„ÅÆ„Éö„Ç¢Áæ§„ÅÆ„Çª„ÉÉ„ÉàÔºâ„Å´Èñ¢ÈÄ£‰ªò„Åë„Çâ„Çå„Çã„ÄÇ
+</p><p>‰æã„Åà„Å∞„ÄÅ<code>name</code> „Å®„ÅÑ„ÅÜ„Ç≠„Éº„Åå„ÅÇ„Çã„Åå„ÄÅ„Åù„Çå„ÅØ„Éó„É≠„Ç∏„Çß„ÇØ„ÉàÂêç„Å®„ÅÑ„ÅÜÊñáÂ≠óÂàó„ÅÆÂÄ§„Å´Èñ¢ÈÄ£‰ªò„Åë„Çâ„Çå„Çã„ÄÇ
+</p><p><em>„Éì„É´„ÉâÂÆöÁæ©„Éï„Ç°„Ç§„É´„ÅØÁõ¥Êé•ÁöÑ„Å´„ÅØ sbt „ÅÆ Map „Å´ÂΩ±Èüø„Çí‰∏é„Åà„Å™„ÅÑ„ÄÇ</em>
+</p><p>„Åù„ÅÆ‰ª£„Çè„Çä„ÄÅ„Éì„É´„ÉâÂÆöÁæ©„ÅØ <code>Setting[T]</code> Âûã„ÅÆ„Ç™„Éñ„Ç∏„Çß„ÇØ„Éà„ÇíÂê´„ÇÄÂ∑®Â§ß„Å™„É™„Çπ„Éà„Çí‰Ωú„Çã„ÄÇ
+<code>T</code> „ÅØ Map „Å´„Åä„Åë„ÇãÂÄ§„ÅÆÂûã„Å†„ÄÇÔºàScala „ÅÆ <code>Setting[T]</code> „ÅØ Java „ÅÆ <code>Setting&lt;T&gt;</code> „Å®ÂêåÊßò„ÄÇÔºâ
+<code>Setting</code> „ÅØ„ÄÅÊñ∞„Åó„ÅÑ„Ç≠„Éº„Å®ÂÄ§„ÅÆ„Éö„Ç¢„ÅÆËøΩÂä†„ÄÅÊó¢Â≠ò„ÅÆÂÄ§„Å∏„ÅÆ‰ªòÂä†„ÅÆ„Çà„ÅÜ„Å™<em> Map „ÅÆÂ§âÊèõ</em>„ÇíË®òËø∞„Åô„Çã„ÄÇ
+Ôºà‰∏çÂ§â„Éá„Éº„ÇøÊßãÈÄ†„Å®Èñ¢Êï∞Âûã„Éó„É≠„Ç∞„É©„Éü„É≥„Ç∞„ÅÆÁ≤æÁ•û„Å´Ââá„Çä„ÄÅ„Åì„ÅÆÂ§âÊèõ„ÅØÊñ∞„Åó„ÅÑ Map „ÇíËøî„Åó„ÄÅÂè§„ÅÑ Map „ÅØÊõ¥Êñ∞„Åï„Çå„Å™„ÅÑ„ÄÇÔºâ
+</p><p>„Ç´„É¨„É≥„Éà„Éá„Ç£„É¨„ÇØ„Éà„É™„Å´‰ΩçÁΩÆ„Åô„Çã„Éó„É≠„Ç∏„Çß„ÇØ„Éà„Å´ÂØæ„Åó„Å¶„Éó„É≠„Ç∏„Çß„ÇØ„ÉàÂêç„ÅÆ„Åü„ÇÅ„ÅÆ <code>Setting[String]</code>
+„ÇíÈñ¢ÈÄ£‰ªò„Åë„Çã„Åü„ÇÅ„Å´„ÅØ‰ª•‰∏ã„ÅÆ„Çà„ÅÜ„Å´Êõ∏„Åè:
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
   settings(
     name := &quot;hello&quot;
   )
-</code></pre><p>この <code>Setting[String]</code> は <code>name</code> キーを追加（もしくは置換）して <code>&quot;hello&quot;</code> という値に設定することで Map を変換する。
-変換された Map は新しい sbt の Map となる。
-</p><p> Map を作るにあたり、同じキーへのすべての変更が同時に実行されるため、そして、他のキーに依存する値の処理が依存するキーの後に処理されるように、
-sbt はまず <code>Setting</code> のリストをソートする。
-次にソートされた <code>Setting</code> のリストを順番にみていって、一つずつ Map に適用する。
-</p><p>まとめ: <em>ビルド定義とは <code>Setting[T]</code> のリストを持った <code>Project</code> を定義するものであり、
-<code>Setting[T]</code> は sbt が持つキーと値のペアの Map に作用する変換を表し、その <code>T</code> は値の型である。</em>
-</p><h3 id="%E3%81%AF%E3%81%A9%E3%81%AE%E3%82%88%E3%81%86%E3%81%AB+settings+%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B%E3%81%8B"><code>build.sbt</code> はどのように settings を定義するか<a href="#%E3%81%AF%E3%81%A9%E3%81%AE%E3%82%88%E3%81%86%E3%81%AB+settings+%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B%E3%81%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> が定義する <code>Project</code> は <code>settings</code> と呼ばれる Scala の式のリストを持つ。
-</p><p>以下に具体例を示す:
+</code></pre><p>„Åì„ÅÆ <code>Setting[String]</code> „ÅØ <code>name</code> „Ç≠„Éº„ÇíËøΩÂä†Ôºà„ÇÇ„Åó„Åè„ÅØÁΩÆÊèõÔºâ„Åó„Å¶ <code>&quot;hello&quot;</code> „Å®„ÅÑ„ÅÜÂÄ§„Å´Ë®≠ÂÆö„Åô„Çã„Åì„Å®„Åß Map „ÇíÂ§âÊèõ„Åô„Çã„ÄÇ
+Â§âÊèõ„Åï„Çå„Åü Map „ÅØÊñ∞„Åó„ÅÑ sbt „ÅÆ Map „Å®„Å™„Çã„ÄÇ
+</p><p> Map „Çí‰Ωú„Çã„Å´„ÅÇ„Åü„Çä„ÄÅÂêå„Åò„Ç≠„Éº„Å∏„ÅÆ„Åô„Åπ„Å¶„ÅÆÂ§âÊõ¥„ÅåÂêåÊôÇ„Å´ÂÆüË°å„Åï„Çå„Çã„Åü„ÇÅ„ÄÅ„Åù„Åó„Å¶„ÄÅ‰ªñ„ÅÆ„Ç≠„Éº„Å´‰æùÂ≠ò„Åô„ÇãÂÄ§„ÅÆÂá¶ÁêÜ„Åå‰æùÂ≠ò„Åô„Çã„Ç≠„Éº„ÅÆÂæå„Å´Âá¶ÁêÜ„Åï„Çå„Çã„Çà„ÅÜ„Å´„ÄÅ
+sbt „ÅØ„Åæ„Åö <code>Setting</code> „ÅÆ„É™„Çπ„Éà„Çí„ÇΩ„Éº„Éà„Åô„Çã„ÄÇ
+Ê¨°„Å´„ÇΩ„Éº„Éà„Åï„Çå„Åü <code>Setting</code> „ÅÆ„É™„Çπ„Éà„ÇíÈ†ÜÁï™„Å´„Åø„Å¶„ÅÑ„Å£„Å¶„ÄÅ‰∏Ä„Å§„Åö„Å§ Map „Å´ÈÅ©Áî®„Åô„Çã„ÄÇ
+</p><p>„Åæ„Å®„ÇÅ: <em>„Éì„É´„ÉâÂÆöÁæ©„Å®„ÅØ <code>Setting[T]</code> „ÅÆ„É™„Çπ„Éà„ÇíÊåÅ„Å£„Åü <code>Project</code> „ÇíÂÆöÁæ©„Åô„Çã„ÇÇ„ÅÆ„Åß„ÅÇ„Çä„ÄÅ
+<code>Setting[T]</code> „ÅØ sbt „ÅåÊåÅ„Å§„Ç≠„Éº„Å®ÂÄ§„ÅÆ„Éö„Ç¢„ÅÆ Map „Å´‰ΩúÁî®„Åô„ÇãÂ§âÊèõ„ÇíË°®„Åó„ÄÅ„Åù„ÅÆ <code>T</code> „ÅØÂÄ§„ÅÆÂûã„Åß„ÅÇ„Çã„ÄÇ</em>
+</p><h3 id="%E2%80%9E%C3%85%C3%98%E2%80%9E%C3%85%C2%A9%E2%80%9E%C3%85%C3%86%E2%80%9E%C3%87%C3%A0%E2%80%9E%C3%85%C3%9C%E2%80%9E%C3%85%C2%B4+settings+%E2%80%9E%C3%87%C3%AD%C3%82%C3%86%C3%B6%C3%81%C3%A6%C2%A9%E2%80%9E%C3%85%C3%B4%E2%80%9E%C3%87%C3%A3%E2%80%9E%C3%85%C3%A3"><code>build.sbt</code> „ÅØ„Å©„ÅÆ„Çà„ÅÜ„Å´ settings „ÇíÂÆöÁæ©„Åô„Çã„Åã<a href="#%E2%80%9E%C3%85%C3%98%E2%80%9E%C3%85%C2%A9%E2%80%9E%C3%85%C3%86%E2%80%9E%C3%87%C3%A0%E2%80%9E%C3%85%C3%9C%E2%80%9E%C3%85%C2%B4+settings+%E2%80%9E%C3%87%C3%AD%C3%82%C3%86%C3%B6%C3%81%C3%A6%C2%A9%E2%80%9E%C3%85%C3%B4%E2%80%9E%C3%87%C3%A3%E2%80%9E%C3%85%C3%A3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> „ÅåÂÆöÁæ©„Åô„Çã <code>Project</code> „ÅØ <code>settings</code> „Å®Âëº„Å∞„Çå„Çã Scala „ÅÆÂºè„ÅÆ„É™„Çπ„Éà„ÇíÊåÅ„Å§„ÄÇ
+</p><p>‰ª•‰∏ã„Å´ÂÖ∑‰Ωì‰æã„ÇíÁ§∫„Åô:
 </p><pre><code class="prettyprint lang-scala">lazy val commonSettings = Seq(
   organization := &quot;com.example&quot;,
   version := &quot;0.1.0&quot;,
@@ -91,95 +91,95 @@ lazy val root = (project in file(&quot;.&quot;)).
   settings(
     name := &quot;hello&quot;
   )
-</code></pre><p>それぞれの <code>Setting</code> は Scala の式で定義される。
-<code>settings</code> 内の式は、それぞれ独立しており、完全な Scala の文ではなく、式である。
-</p><p><code>build.sbt</code> 内には <code>val</code>、<code>lazy val</code>、<code>def</code> を定義することもできる。
-<code>build.sbt</code> において、トップレベルで <code>object</code> や <code>class</code> を定義することはできない。
-それらが必要なら <code>project/</code> 配下に <code>.scala</code> ビルド定義として完全な Scala ソースファイルを置くべきだろう。
-</p><p>左辺値の <code>name</code>、<code>version</code>、および <code>scalaVersion</code> は <em>キー</em>である。
-キーは <code>SettingKey[T]</code>、<code>TaskKey[T]</code>、もしくは <code>InputKey[T]</code> のインスタンスで、
-<code>T</code> はその値の型である。キーの種類に関しては後述する。
-</p><p>キーには <code>:=</code> というメソッドがあり、このメソッドは <code>Setting[T]</code> を返す。
-Java っぽい構文でこのメソッドを呼び出すこともできる:
+</code></pre><p>„Åù„Çå„Åû„Çå„ÅÆ <code>Setting</code> „ÅØ Scala „ÅÆÂºè„ÅßÂÆöÁæ©„Åï„Çå„Çã„ÄÇ
+<code>settings</code> ÂÜÖ„ÅÆÂºè„ÅØ„ÄÅ„Åù„Çå„Åû„ÇåÁã¨Á´ã„Åó„Å¶„Åä„Çä„ÄÅÂÆåÂÖ®„Å™ Scala „ÅÆÊñá„Åß„ÅØ„Å™„Åè„ÄÅÂºè„Åß„ÅÇ„Çã„ÄÇ
+</p><p><code>build.sbt</code> ÂÜÖ„Å´„ÅØ <code>val</code>„ÄÅ<code>lazy val</code>„ÄÅ<code>def</code> „ÇíÂÆöÁæ©„Åô„Çã„Åì„Å®„ÇÇ„Åß„Åç„Çã„ÄÇ
+<code>build.sbt</code> „Å´„Åä„ÅÑ„Å¶„ÄÅ„Éà„ÉÉ„Éó„É¨„Éô„É´„Åß <code>object</code> „ÇÑ <code>class</code> „ÇíÂÆöÁæ©„Åô„Çã„Åì„Å®„ÅØ„Åß„Åç„Å™„ÅÑ„ÄÇ
+„Åù„Çå„Çâ„ÅåÂøÖË¶Å„Å™„Çâ <code>project/</code> ÈÖç‰∏ã„Å´ <code>.scala</code> „Éì„É´„ÉâÂÆöÁæ©„Å®„Åó„Å¶ÂÆåÂÖ®„Å™ Scala „ÇΩ„Éº„Çπ„Éï„Ç°„Ç§„É´„ÇíÁΩÆ„Åè„Åπ„Åç„Å†„Çç„ÅÜ„ÄÇ
+</p><p>Â∑¶Ëæ∫ÂÄ§„ÅÆ <code>name</code>„ÄÅ<code>version</code>„ÄÅ„Åä„Çà„Å≥ <code>scalaVersion</code> „ÅØ <em>„Ç≠„Éº</em>„Åß„ÅÇ„Çã„ÄÇ
+„Ç≠„Éº„ÅØ <code>SettingKey[T]</code>„ÄÅ<code>TaskKey[T]</code>„ÄÅ„ÇÇ„Åó„Åè„ÅØ <code>InputKey[T]</code> „ÅÆ„Ç§„É≥„Çπ„Çø„É≥„Çπ„Åß„ÄÅ
+<code>T</code> „ÅØ„Åù„ÅÆÂÄ§„ÅÆÂûã„Åß„ÅÇ„Çã„ÄÇ„Ç≠„Éº„ÅÆÁ®ÆÈ°û„Å´Èñ¢„Åó„Å¶„ÅØÂæåËø∞„Åô„Çã„ÄÇ
+</p><p>„Ç≠„Éº„Å´„ÅØ <code>:=</code> „Å®„ÅÑ„ÅÜ„É°„ÇΩ„ÉÉ„Éâ„Åå„ÅÇ„Çä„ÄÅ„Åì„ÅÆ„É°„ÇΩ„ÉÉ„Éâ„ÅØ <code>Setting[T]</code> „ÇíËøî„Åô„ÄÇ
+Java „Å£„ÅΩ„ÅÑÊßãÊñá„Åß„Åì„ÅÆ„É°„ÇΩ„ÉÉ„Éâ„ÇíÂëº„Å≥Âá∫„Åô„Åì„Å®„ÇÇ„Åß„Åç„Çã:
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
   settings(
     name.:=(&quot;hello&quot;)
   )
-</code></pre><p>しかし、Scala なら <code>name := &quot;hello&quot;</code> と書くこともできる（Scala では全てのメソッドがどちらの構文でも書ける）。
-</p><p><code>name</code> キーの <code>:=</code> メソッドは <code>Setting</code> を返すが、特に <code>Setting[String]</code> を返す。
-<code>String</code> は <code>name</code> 自体の型にも表れていて、そちらは <code>SettingKey[String]</code> となる。
-ここで返された <code>Setting[String]</code> は、sbt の Map における <code>name</code> というキーを追加または置換して <code>&quot;hello&quot;</code> という値に設定する変換である。
-</p><p>誤った型の値を使おうとするとビルド定義はコンパイルエラーになる:
+</code></pre><p>„Åó„Åã„Åó„ÄÅScala „Å™„Çâ <code>name := &quot;hello&quot;</code> „Å®Êõ∏„Åè„Åì„Å®„ÇÇ„Åß„Åç„ÇãÔºàScala „Åß„ÅØÂÖ®„Å¶„ÅÆ„É°„ÇΩ„ÉÉ„Éâ„Åå„Å©„Å°„Çâ„ÅÆÊßãÊñá„Åß„ÇÇÊõ∏„Åë„ÇãÔºâ„ÄÇ
+</p><p><code>name</code> „Ç≠„Éº„ÅÆ <code>:=</code> „É°„ÇΩ„ÉÉ„Éâ„ÅØ <code>Setting</code> „ÇíËøî„Åô„Åå„ÄÅÁâπ„Å´ <code>Setting[String]</code> „ÇíËøî„Åô„ÄÇ
+<code>String</code> „ÅØ <code>name</code> Ëá™‰Ωì„ÅÆÂûã„Å´„ÇÇË°®„Çå„Å¶„ÅÑ„Å¶„ÄÅ„Åù„Å°„Çâ„ÅØ <code>SettingKey[String]</code> „Å®„Å™„Çã„ÄÇ
+„Åì„Åì„ÅßËøî„Åï„Çå„Åü <code>Setting[String]</code> „ÅØ„ÄÅsbt „ÅÆ Map „Å´„Åä„Åë„Çã <code>name</code> „Å®„ÅÑ„ÅÜ„Ç≠„Éº„ÇíËøΩÂä†„Åæ„Åü„ÅØÁΩÆÊèõ„Åó„Å¶ <code>&quot;hello&quot;</code> „Å®„ÅÑ„ÅÜÂÄ§„Å´Ë®≠ÂÆö„Åô„ÇãÂ§âÊèõ„Åß„ÅÇ„Çã„ÄÇ
+</p><p>Ë™§„Å£„ÅüÂûã„ÅÆÂÄ§„Çí‰Ωø„Åä„ÅÜ„Å®„Åô„Çã„Å®„Éì„É´„ÉâÂÆöÁæ©„ÅØ„Ç≥„É≥„Éë„Ç§„É´„Ç®„É©„Éº„Å´„Å™„Çã:
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
   settings(
-    name := 42  // コンパイルできない
+    name := 42  // „Ç≥„É≥„Éë„Ç§„É´„Åß„Åç„Å™„ÅÑ
   )
-</code></pre><h3 id="%E3%82%AD%E3%83%BC">キー<a href="#%E3%82%AD%E3%83%BC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="%E7%A8%AE%E9%A1%9E">種類<a href="#%E7%A8%AE%E9%A1%9E" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>キーには三種類ある:
-</p><ul><li><code>SettingKey[T]</code>: 一度だけ値が計算されるキー（値はプロジェクトの読み込み時に計算され、保存される）。
-</li><li><code>TaskKey[T]</code>: 毎回再計算される<em>タスク</em>を呼び出す、副作用を伴う可能性のある値のキー。
-</li><li><code>InputKey[T]</code>: コマンドラインの引数を入力として受け取るタスクのキー。
-　「始める sbt」では <code>InputKey</code> を説明しないので、このガイドを終えた後で、<a href="../../docs/Input-Tasks.html">Input Tasks</a> を読んでみよう。
-</li></ul><h4 id="%E7%B5%84%E3%81%BF%E8%BE%BC%E3%81%BF%E3%81%AE%E3%82%AD%E3%83%BC">組み込みのキー<a href="#%E7%B5%84%E3%81%BF%E8%BE%BC%E3%81%BF%E3%81%AE%E3%82%AD%E3%83%BC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>組み込みのキーは <a href="../../sxr/sbt/Keys.scala.html">Keys</a> と呼ばれるオブジェクトのフィールドにすぎない。
-<code>build.sbt</code> は、自動的に <code>import sbt.Keys._</code> するため、<code>sbt.Keys.name</code> は <code>name</code> として参照することができる。
-</p><h4 id="%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0%E3%82%AD%E3%83%BC">カスタムキー<a href="#%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0%E3%82%AD%E3%83%BC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>カスタムキーは <code>settingKey</code>、 <code>taskKey</code>、 <code>inputKey</code> といった生成メソッドを用いて定義する。
-どのメソッドでもキーに関連する型パラメータを必要とする。
-キーの名前は <code>val</code> で宣言された変数の名前がそのまま用いられる。
-例として、新しく <code>hello</code> と名づけたキーを定義してみよう。
+</code></pre><h3 id="%E2%80%9E%C3%87%E2%89%A0%E2%80%9E%C3%89%C2%BA">„Ç≠„Éº<a href="#%E2%80%9E%C3%87%E2%89%A0%E2%80%9E%C3%89%C2%BA" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="%C3%81%C2%AE%C3%86%C3%88%C2%B0%C3%BB">Á®ÆÈ°û<a href="#%C3%81%C2%AE%C3%86%C3%88%C2%B0%C3%BB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>„Ç≠„Éº„Å´„ÅØ‰∏âÁ®ÆÈ°û„ÅÇ„Çã:
+</p><ul><li><code>SettingKey[T]</code>: ‰∏ÄÂ∫¶„Å†„ÅëÂÄ§„ÅåË®àÁÆó„Åï„Çå„Çã„Ç≠„ÉºÔºàÂÄ§„ÅØ„Éó„É≠„Ç∏„Çß„ÇØ„Éà„ÅÆË™≠„ÅøËæº„ÅøÊôÇ„Å´Ë®àÁÆó„Åï„Çå„ÄÅ‰øùÂ≠ò„Åï„Çå„ÇãÔºâ„ÄÇ
+</li><li><code>TaskKey[T]</code>: ÊØéÂõûÂÜçË®àÁÆó„Åï„Çå„Çã<em>„Çø„Çπ„ÇØ</em>„ÇíÂëº„Å≥Âá∫„Åô„ÄÅÂâØ‰ΩúÁî®„Çí‰º¥„ÅÜÂèØËÉΩÊÄß„ÅÆ„ÅÇ„ÇãÂÄ§„ÅÆ„Ç≠„Éº„ÄÇ
+</li><li><code>InputKey[T]</code>: „Ç≥„Éû„É≥„Éâ„É©„Ç§„É≥„ÅÆÂºïÊï∞„ÇíÂÖ•Âäõ„Å®„Åó„Å¶Âèó„ÅëÂèñ„Çã„Çø„Çπ„ÇØ„ÅÆ„Ç≠„Éº„ÄÇ
+„ÄÄ„ÄåÂßã„ÇÅ„Çã sbt„Äç„Åß„ÅØ <code>InputKey</code> „ÇíË™¨Êòé„Åó„Å™„ÅÑ„ÅÆ„Åß„ÄÅ„Åì„ÅÆ„Ç¨„Ç§„Éâ„ÇíÁµÇ„Åà„ÅüÂæå„Åß„ÄÅ<a href="../../docs/Input-Tasks.html">Input Tasks</a> „ÇíË™≠„Çì„Åß„Åø„Çà„ÅÜ„ÄÇ
+</li></ul><h4 id="%C3%81%C2%B5%C3%91%E2%80%9E%C3%85%C3%B8%C3%8B%C3%A6%C2%BA%E2%80%9E%C3%85%C3%B8%E2%80%9E%C3%85%C3%86%E2%80%9E%C3%87%E2%89%A0%E2%80%9E%C3%89%C2%BA">ÁµÑ„ÅøËæº„Åø„ÅÆ„Ç≠„Éº<a href="#%C3%81%C2%B5%C3%91%E2%80%9E%C3%85%C3%B8%C3%8B%C3%A6%C2%BA%E2%80%9E%C3%85%C3%B8%E2%80%9E%C3%85%C3%86%E2%80%9E%C3%87%E2%89%A0%E2%80%9E%C3%89%C2%BA" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>ÁµÑ„ÅøËæº„Åø„ÅÆ„Ç≠„Éº„ÅØ <a href="../../sxr/sbt/Keys.scala.html">Keys</a> „Å®Âëº„Å∞„Çå„Çã„Ç™„Éñ„Ç∏„Çß„ÇØ„Éà„ÅÆ„Éï„Ç£„Éº„É´„Éâ„Å´„Åô„Åé„Å™„ÅÑ„ÄÇ
+<code>build.sbt</code> „ÅØ„ÄÅËá™ÂãïÁöÑ„Å´ <code>import sbt.Keys._</code> „Åô„Çã„Åü„ÇÅ„ÄÅ<code>sbt.Keys.name</code> „ÅØ <code>name</code> „Å®„Åó„Å¶ÂèÇÁÖß„Åô„Çã„Åì„Å®„Åå„Åß„Åç„Çã„ÄÇ
+</p><h4 id="%E2%80%9E%C3%87%C2%B4%E2%80%9E%C3%87%CF%80%E2%80%9E%C3%87%C3%B8%E2%80%9E%C3%89%E2%80%A0%E2%80%9E%C3%87%E2%89%A0%E2%80%9E%C3%89%C2%BA">„Ç´„Çπ„Çø„É†„Ç≠„Éº<a href="#%E2%80%9E%C3%87%C2%B4%E2%80%9E%C3%87%CF%80%E2%80%9E%C3%87%C3%B8%E2%80%9E%C3%89%E2%80%A0%E2%80%9E%C3%87%E2%89%A0%E2%80%9E%C3%89%C2%BA" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>„Ç´„Çπ„Çø„É†„Ç≠„Éº„ÅØ <code>settingKey</code>„ÄÅ <code>taskKey</code>„ÄÅ <code>inputKey</code> „Å®„ÅÑ„Å£„ÅüÁîüÊàê„É°„ÇΩ„ÉÉ„Éâ„ÇíÁî®„ÅÑ„Å¶ÂÆöÁæ©„Åô„Çã„ÄÇ
+„Å©„ÅÆ„É°„ÇΩ„ÉÉ„Éâ„Åß„ÇÇ„Ç≠„Éº„Å´Èñ¢ÈÄ£„Åô„ÇãÂûã„Éë„É©„É°„Éº„Çø„ÇíÂøÖË¶Å„Å®„Åô„Çã„ÄÇ
+„Ç≠„Éº„ÅÆÂêçÂâç„ÅØ <code>val</code> „ÅßÂÆ£Ë®Ä„Åï„Çå„ÅüÂ§âÊï∞„ÅÆÂêçÂâç„Åå„Åù„ÅÆ„Åæ„ÅæÁî®„ÅÑ„Çâ„Çå„Çã„ÄÇ
+‰æã„Å®„Åó„Å¶„ÄÅÊñ∞„Åó„Åè <code>hello</code> „Å®Âêç„Å•„Åë„Åü„Ç≠„Éº„ÇíÂÆöÁæ©„Åó„Å¶„Åø„Çà„ÅÜ„ÄÇ
 </p><pre><code class="prettyprint lang-scala">lazy val hello = taskKey[Unit](&quot;An example task&quot;)
-</code></pre><p>実は <code>.sbt</code> ファイルには、設定を記述するのに必要な <code>val</code> や <code>def</code> を含めることもできる。
-これらの定義はファイル内のどこで書かれてもプロジェクトの設定より前に評価される。
-<code>val</code> や <code>def</code> を用いた定義群は空白行によって他の設定から区切らなければいけない。
-</p><blockquote><p><strong>注意</strong> 一般的に、初期化順問題を避けるために val の代わりに lazy val が用いられることが多い。
-</p></blockquote><h4 id="%E3%82%BF%E3%82%B9%E3%82%AF%E3%82%AD%E3%83%BC%E3%81%8B%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%82%AD%E3%83%BC%E3%81%8B">タスクキーかセッティングキーか<a href="#%E3%82%BF%E3%82%B9%E3%82%AF%E3%82%AD%E3%83%BC%E3%81%8B%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%82%AD%E3%83%BC%E3%81%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>TaskKey[T]</code> は、<em>タスク</em>を定義しているといわれる。タスクは、<code>compile</code> や <code>package</code> のような作業だ。
-タスクは <code>Unit</code> を返すかもしれないし（<code>Unit</code> は、Scala での <code>void</code> だ）、
-タスクに関連した値を返すかもしれない。例えば、<code>package</code> は作成した jar ファイルを値として返す <code>TaskKey[File]</code> だ。
-</p><p>例えばインタラクティブモードの sbt プロンプトに <code>compile</code> と入力するなど、何らかのタスクを実行する度に、
-sbt はそのタスクを一回だけ再実行する。
-</p><p>プロジェクトを記述する sbt の Map は、<code>name</code> のようなセッティング (setting) であれば、
-その文字列の値をキャッシュすることができるが、
-<code>compile</code> のようなタスク（task）の場合は実行可能コードを保持しておく必要がある
-（たとえその実行可能コードが最終的に文字列を返したとしても、それは毎回再実行されなければならない）。
-</p><p><em>あるキーがあるとき、それは常にタスクかただのセッティングかのどちらかを参照する。</em>
-つまり、キーの「タスク性」（毎回再実行するかどうか）はそのキーの特性であり、その値にはよらない。
-</p><h3 id="%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%A8%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AE%E5%AE%9A%E7%BE%A9">タスクとセッティングの定義<a href="#%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%A8%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AE%E5%AE%9A%E7%BE%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>:=</code> を使うことで、タスクに任意の演算を代入することができる。
-セッティングを定義すると、その値はプロジェクトがロードされた時に一度だけ演算が行われる。
-タスクを定義すると、その演算はタスクの実行毎に毎回再実行される。
-</p><p>例えば、少し前に宣言した <code>hello</code> というタスクはこのように実装できる:
+</code></pre><p>ÂÆü„ÅØ <code>.sbt</code> „Éï„Ç°„Ç§„É´„Å´„ÅØ„ÄÅË®≠ÂÆö„ÇíË®òËø∞„Åô„Çã„ÅÆ„Å´ÂøÖË¶Å„Å™ <code>val</code> „ÇÑ <code>def</code> „ÇíÂê´„ÇÅ„Çã„Åì„Å®„ÇÇ„Åß„Åç„Çã„ÄÇ
+„Åì„Çå„Çâ„ÅÆÂÆöÁæ©„ÅØ„Éï„Ç°„Ç§„É´ÂÜÖ„ÅÆ„Å©„Åì„ÅßÊõ∏„Åã„Çå„Å¶„ÇÇ„Éó„É≠„Ç∏„Çß„ÇØ„Éà„ÅÆË®≠ÂÆö„Çà„ÇäÂâç„Å´Ë©ï‰æ°„Åï„Çå„Çã„ÄÇ
+<code>val</code> „ÇÑ <code>def</code> „ÇíÁî®„ÅÑ„ÅüÂÆöÁæ©Áæ§„ÅØÁ©∫ÁôΩË°å„Å´„Çà„Å£„Å¶‰ªñ„ÅÆË®≠ÂÆö„Åã„ÇâÂå∫Âàá„Çâ„Å™„Åë„Çå„Å∞„ÅÑ„Åë„Å™„ÅÑ„ÄÇ
+</p><blockquote><p><strong>Ê≥®ÊÑè</strong> ‰∏ÄËà¨ÁöÑ„Å´„ÄÅÂàùÊúüÂåñÈ†ÜÂïèÈ°å„ÇíÈÅø„Åë„Çã„Åü„ÇÅ„Å´ val „ÅÆ‰ª£„Çè„Çä„Å´ lazy val „ÅåÁî®„ÅÑ„Çâ„Çå„Çã„Åì„Å®„ÅåÂ§ö„ÅÑ„ÄÇ
+</p></blockquote><h4 id="%E2%80%9E%C3%87%C3%B8%E2%80%9E%C3%87%CF%80%E2%80%9E%C3%87%C3%98%E2%80%9E%C3%87%E2%89%A0%E2%80%9E%C3%89%C2%BA%E2%80%9E%C3%85%C3%A3%E2%80%9E%C3%87%C2%AA%E2%80%9E%C3%89%C3%89%E2%80%9E%C3%89%C3%9C%E2%80%9E%C3%87%C2%A3%E2%80%9E%C3%89%E2%89%A5%E2%80%9E%C3%87%E2%88%9E%E2%80%9E%C3%87%E2%89%A0%E2%80%9E%C3%89%C2%BA%E2%80%9E%C3%85%C3%A3">„Çø„Çπ„ÇØ„Ç≠„Éº„Åã„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„Ç≠„Éº„Åã<a href="#%E2%80%9E%C3%87%C3%B8%E2%80%9E%C3%87%CF%80%E2%80%9E%C3%87%C3%98%E2%80%9E%C3%87%E2%89%A0%E2%80%9E%C3%89%C2%BA%E2%80%9E%C3%85%C3%A3%E2%80%9E%C3%87%C2%AA%E2%80%9E%C3%89%C3%89%E2%80%9E%C3%89%C3%9C%E2%80%9E%C3%87%C2%A3%E2%80%9E%C3%89%E2%89%A5%E2%80%9E%C3%87%E2%88%9E%E2%80%9E%C3%87%E2%89%A0%E2%80%9E%C3%89%C2%BA%E2%80%9E%C3%85%C3%A3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>TaskKey[T]</code> „ÅØ„ÄÅ<em>„Çø„Çπ„ÇØ</em>„ÇíÂÆöÁæ©„Åó„Å¶„ÅÑ„Çã„Å®„ÅÑ„Çè„Çå„Çã„ÄÇ„Çø„Çπ„ÇØ„ÅØ„ÄÅ<code>compile</code> „ÇÑ <code>package</code> „ÅÆ„Çà„ÅÜ„Å™‰ΩúÊ•≠„Å†„ÄÇ
+„Çø„Çπ„ÇØ„ÅØ <code>Unit</code> „ÇíËøî„Åô„Åã„ÇÇ„Åó„Çå„Å™„ÅÑ„ÅóÔºà<code>Unit</code> „ÅØ„ÄÅScala „Åß„ÅÆ <code>void</code> „Å†Ôºâ„ÄÅ
+„Çø„Çπ„ÇØ„Å´Èñ¢ÈÄ£„Åó„ÅüÂÄ§„ÇíËøî„Åô„Åã„ÇÇ„Åó„Çå„Å™„ÅÑ„ÄÇ‰æã„Åà„Å∞„ÄÅ<code>package</code> „ÅØ‰ΩúÊàê„Åó„Åü jar „Éï„Ç°„Ç§„É´„ÇíÂÄ§„Å®„Åó„Å¶Ëøî„Åô <code>TaskKey[File]</code> „Å†„ÄÇ
+</p><p>‰æã„Åà„Å∞„Ç§„É≥„Çø„É©„ÇØ„ÉÜ„Ç£„Éñ„É¢„Éº„Éâ„ÅÆ sbt „Éó„É≠„É≥„Éó„Éà„Å´ <code>compile</code> „Å®ÂÖ•Âäõ„Åô„Çã„Å™„Å©„ÄÅ‰Ωï„Çâ„Åã„ÅÆ„Çø„Çπ„ÇØ„ÇíÂÆüË°å„Åô„ÇãÂ∫¶„Å´„ÄÅ
+sbt „ÅØ„Åù„ÅÆ„Çø„Çπ„ÇØ„Çí‰∏ÄÂõû„Å†„ÅëÂÜçÂÆüË°å„Åô„Çã„ÄÇ
+</p><p>„Éó„É≠„Ç∏„Çß„ÇØ„Éà„ÇíË®òËø∞„Åô„Çã sbt „ÅÆ Map „ÅØ„ÄÅ<code>name</code> „ÅÆ„Çà„ÅÜ„Å™„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞ (setting) „Åß„ÅÇ„Çå„Å∞„ÄÅ
+„Åù„ÅÆÊñáÂ≠óÂàó„ÅÆÂÄ§„Çí„Ç≠„É£„ÉÉ„Ç∑„É•„Åô„Çã„Åì„Å®„Åå„Åß„Åç„Çã„Åå„ÄÅ
+<code>compile</code> „ÅÆ„Çà„ÅÜ„Å™„Çø„Çπ„ÇØÔºàtaskÔºâ„ÅÆÂ†¥Âêà„ÅØÂÆüË°åÂèØËÉΩ„Ç≥„Éº„Éâ„Çí‰øùÊåÅ„Åó„Å¶„Åä„ÅèÂøÖË¶Å„Åå„ÅÇ„Çã
+Ôºà„Åü„Å®„Åà„Åù„ÅÆÂÆüË°åÂèØËÉΩ„Ç≥„Éº„Éâ„ÅåÊúÄÁµÇÁöÑ„Å´ÊñáÂ≠óÂàó„ÇíËøî„Åó„Åü„Å®„Åó„Å¶„ÇÇ„ÄÅ„Åù„Çå„ÅØÊØéÂõûÂÜçÂÆüË°å„Åï„Çå„Å™„Åë„Çå„Å∞„Å™„Çâ„Å™„ÅÑÔºâ„ÄÇ
+</p><p><em>„ÅÇ„Çã„Ç≠„Éº„Åå„ÅÇ„Çã„Å®„Åç„ÄÅ„Åù„Çå„ÅØÂ∏∏„Å´„Çø„Çπ„ÇØ„Åã„Åü„Å†„ÅÆ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„Åã„ÅÆ„Å©„Å°„Çâ„Åã„ÇíÂèÇÁÖß„Åô„Çã„ÄÇ</em>
+„Å§„Åæ„Çä„ÄÅ„Ç≠„Éº„ÅÆ„Äå„Çø„Çπ„ÇØÊÄß„ÄçÔºàÊØéÂõûÂÜçÂÆüË°å„Åô„Çã„Åã„Å©„ÅÜ„ÅãÔºâ„ÅØ„Åù„ÅÆ„Ç≠„Éº„ÅÆÁâπÊÄß„Åß„ÅÇ„Çä„ÄÅ„Åù„ÅÆÂÄ§„Å´„ÅØ„Çà„Çâ„Å™„ÅÑ„ÄÇ
+</p><h3 id="%E2%80%9E%C3%87%C3%B8%E2%80%9E%C3%87%CF%80%E2%80%9E%C3%87%C3%98%E2%80%9E%C3%85%C2%AE%E2%80%9E%C3%87%C2%AA%E2%80%9E%C3%89%C3%89%E2%80%9E%C3%89%C3%9C%E2%80%9E%C3%87%C2%A3%E2%80%9E%C3%89%E2%89%A5%E2%80%9E%C3%87%E2%88%9E%E2%80%9E%C3%85%C3%86%C3%82%C3%86%C3%B6%C3%81%C3%A6%C2%A9">„Çø„Çπ„ÇØ„Å®„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„ÅÆÂÆöÁæ©<a href="#%E2%80%9E%C3%87%C3%B8%E2%80%9E%C3%87%CF%80%E2%80%9E%C3%87%C3%98%E2%80%9E%C3%85%C2%AE%E2%80%9E%C3%87%C2%AA%E2%80%9E%C3%89%C3%89%E2%80%9E%C3%89%C3%9C%E2%80%9E%C3%87%C2%A3%E2%80%9E%C3%89%E2%89%A5%E2%80%9E%C3%87%E2%88%9E%E2%80%9E%C3%85%C3%86%C3%82%C3%86%C3%B6%C3%81%C3%A6%C2%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>:=</code> „Çí‰Ωø„ÅÜ„Åì„Å®„Åß„ÄÅ„Çø„Çπ„ÇØ„Å´‰ªªÊÑè„ÅÆÊºîÁÆó„Çí‰ª£ÂÖ•„Åô„Çã„Åì„Å®„Åå„Åß„Åç„Çã„ÄÇ
+„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„ÇíÂÆöÁæ©„Åô„Çã„Å®„ÄÅ„Åù„ÅÆÂÄ§„ÅØ„Éó„É≠„Ç∏„Çß„ÇØ„Éà„Åå„É≠„Éº„Éâ„Åï„Çå„ÅüÊôÇ„Å´‰∏ÄÂ∫¶„Å†„ÅëÊºîÁÆó„ÅåË°å„Çè„Çå„Çã„ÄÇ
+„Çø„Çπ„ÇØ„ÇíÂÆöÁæ©„Åô„Çã„Å®„ÄÅ„Åù„ÅÆÊºîÁÆó„ÅØ„Çø„Çπ„ÇØ„ÅÆÂÆüË°åÊØé„Å´ÊØéÂõûÂÜçÂÆüË°å„Åï„Çå„Çã„ÄÇ
+</p><p>‰æã„Åà„Å∞„ÄÅÂ∞ë„ÅóÂâç„Å´ÂÆ£Ë®Ä„Åó„Åü <code>hello</code> „Å®„ÅÑ„ÅÜ„Çø„Çπ„ÇØ„ÅØ„Åì„ÅÆ„Çà„ÅÜ„Å´ÂÆüË£Ö„Åß„Åç„Çã:
 </p><pre><code class="prettyprint lang-scala">lazy val hello = taskKey[Unit](&quot;An example task&quot;)
 
 lazy val root = (project in file(&quot;.&quot;)).
   settings(
     hello := { println(&quot;Hello!&quot;) }
   )
-</code></pre><p>セッティングの定義は既に何度か見ていると思うが、プロジェクト名の定義はこのようにできる:
+</code></pre><p>„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„ÅÆÂÆöÁæ©„ÅØÊó¢„Å´‰ΩïÂ∫¶„ÅãË¶ã„Å¶„ÅÑ„Çã„Å®ÊÄù„ÅÜ„Åå„ÄÅ„Éó„É≠„Ç∏„Çß„ÇØ„ÉàÂêç„ÅÆÂÆöÁæ©„ÅØ„Åì„ÅÆ„Çà„ÅÜ„Å´„Åß„Åç„Çã:
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
   settings(
     name := &quot;hello&quot;
   )
-</code></pre><h4 id="%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%A8%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AE%E5%9E%8B">タスクとセッティングの型<a href="#%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%A8%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AE%E5%9E%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>型システムの視点から考えると、タスクキー (task key) から作られた <code>Setting</code> は、セッティングキー (setting key) から作られたそれとは少し異なるものだ。
-<code>taskKey := 42</code> は <code>Setting[Task[T]]</code> の戻り値を返すが、<code>settingKey := 42</code> は <code>Setting[T]</code> の戻り値を返す。
-タスクが実行されるとタスクキーは型<code>T</code> の値を返すため、ほとんどの用途において、これによる影響は特にない。
-</p><p><code>T</code> と <code>Task[T]</code> の型の違いによる影響が一つある。
-それは、セッティングキーはキャッシュされていて、再実行されないため、タスキキーに依存できないということだ。
-このことについては、後ほどの<a href="More-About-Settings.html">他の種類のセッティング</a>にて詳しくみていく。
-</p><h3 id="sbt+%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%A9%E3%82%AF%E3%83%86%E3%82%A3%E3%83%96%E3%83%A2%E3%83%BC%E3%83%89%E3%81%AB%E3%81%8A%E3%81%91%E3%82%8B%E3%82%AD%E3%83%BC">sbt インタラクティブモードにおけるキー<a href="#sbt+%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%A9%E3%82%AF%E3%83%86%E3%82%A3%E3%83%96%E3%83%A2%E3%83%BC%E3%83%89%E3%81%AB%E3%81%8A%E3%81%91%E3%82%8B%E3%82%AD%E3%83%BC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt のインタラクティブモードからタスクの名前を入力することで、どのタスクでも実行することができる。
-それが <code>compile</code> と入力することでコンパイルタスクが起動する仕組みだ。つまり、<code>compile</code> はタスクキーだ。
-</p><p>タスクキーのかわりにセッティングキーの名前を入力すると、セッティングキーの値が表示される。
-タスクキーの名前を入力すると、タスクを実行するが、その戻り値は表示されないため、
-タスクの戻り値を表示するには素の <code>&lt;タスク名&gt;</code> ではなく、<code>show &lt;タスク名&gt;</code> と入力する。
-Scala の慣例にならい、ビルド定義ファイル内ではキーはキャメルケース（<code>camelCase</code>）で命名する。
-</p><p>あるキーについてより詳しい情報を得るには、sbt インタラクティブモードで <code>inspect &lt;キー名&gt;</code> と入力する。
-<code>inspect</code> が表示する情報の中にはまだよく分からない点もあるかもしれないが、一番上にはセッティングの値の型と、セッティングの簡単な説明が表示されていることだろう。
-</p><h3 id="%E5%86%85%E3%81%AE+import+%E6%96%87"><code>build.sbt</code> 内の import 文<a href="#%E5%86%85%E3%81%AE+import+%E6%96%87" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> の一番上に import 文を書くことができ、それらは空行で分けなくてもよい。
-</p><p>デフォルトでは以下のものが自動的にインポートされる:
+</code></pre><h4 id="%E2%80%9E%C3%87%C3%B8%E2%80%9E%C3%87%CF%80%E2%80%9E%C3%87%C3%98%E2%80%9E%C3%85%C2%AE%E2%80%9E%C3%87%C2%AA%E2%80%9E%C3%89%C3%89%E2%80%9E%C3%89%C3%9C%E2%80%9E%C3%87%C2%A3%E2%80%9E%C3%89%E2%89%A5%E2%80%9E%C3%87%E2%88%9E%E2%80%9E%C3%85%C3%86%C3%82%C3%BB%C3%A3">„Çø„Çπ„ÇØ„Å®„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„ÅÆÂûã<a href="#%E2%80%9E%C3%87%C3%B8%E2%80%9E%C3%87%CF%80%E2%80%9E%C3%87%C3%98%E2%80%9E%C3%85%C2%AE%E2%80%9E%C3%87%C2%AA%E2%80%9E%C3%89%C3%89%E2%80%9E%C3%89%C3%9C%E2%80%9E%C3%87%C2%A3%E2%80%9E%C3%89%E2%89%A5%E2%80%9E%C3%87%E2%88%9E%E2%80%9E%C3%85%C3%86%C3%82%C3%BB%C3%A3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Âûã„Ç∑„Çπ„ÉÜ„É†„ÅÆË¶ñÁÇπ„Åã„ÇâËÄÉ„Åà„Çã„Å®„ÄÅ„Çø„Çπ„ÇØ„Ç≠„Éº (task key) „Åã„Çâ‰Ωú„Çâ„Çå„Åü <code>Setting</code> „ÅØ„ÄÅ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„Ç≠„Éº (setting key) „Åã„Çâ‰Ωú„Çâ„Çå„Åü„Åù„Çå„Å®„ÅØÂ∞ë„ÅóÁï∞„Å™„Çã„ÇÇ„ÅÆ„Å†„ÄÇ
+<code>taskKey := 42</code> „ÅØ <code>Setting[Task[T]]</code> „ÅÆÊàª„ÇäÂÄ§„ÇíËøî„Åô„Åå„ÄÅ<code>settingKey := 42</code> „ÅØ <code>Setting[T]</code> „ÅÆÊàª„ÇäÂÄ§„ÇíËøî„Åô„ÄÇ
+„Çø„Çπ„ÇØ„ÅåÂÆüË°å„Åï„Çå„Çã„Å®„Çø„Çπ„ÇØ„Ç≠„Éº„ÅØÂûã<code>T</code> „ÅÆÂÄ§„ÇíËøî„Åô„Åü„ÇÅ„ÄÅ„Åª„Å®„Çì„Å©„ÅÆÁî®ÈÄî„Å´„Åä„ÅÑ„Å¶„ÄÅ„Åì„Çå„Å´„Çà„ÇãÂΩ±Èüø„ÅØÁâπ„Å´„Å™„ÅÑ„ÄÇ
+</p><p><code>T</code> „Å® <code>Task[T]</code> „ÅÆÂûã„ÅÆÈÅï„ÅÑ„Å´„Çà„ÇãÂΩ±Èüø„Åå‰∏Ä„Å§„ÅÇ„Çã„ÄÇ
+„Åù„Çå„ÅØ„ÄÅ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„Ç≠„Éº„ÅØ„Ç≠„É£„ÉÉ„Ç∑„É•„Åï„Çå„Å¶„ÅÑ„Å¶„ÄÅÂÜçÂÆüË°å„Åï„Çå„Å™„ÅÑ„Åü„ÇÅ„ÄÅ„Çø„Çπ„Ç≠„Ç≠„Éº„Å´‰æùÂ≠ò„Åß„Åç„Å™„ÅÑ„Å®„ÅÑ„ÅÜ„Åì„Å®„Å†„ÄÇ
+„Åì„ÅÆ„Åì„Å®„Å´„Å§„ÅÑ„Å¶„ÅØ„ÄÅÂæå„Åª„Å©„ÅÆ<a href="More-About-Settings.html">‰ªñ„ÅÆÁ®ÆÈ°û„ÅÆ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞</a>„Å´„Å¶Ë©≥„Åó„Åè„Åø„Å¶„ÅÑ„Åè„ÄÇ
+</p><h3 id="sbt+%E2%80%9E%C3%87%C2%A7%E2%80%9E%C3%89%E2%89%A5%E2%80%9E%C3%87%C3%B8%E2%80%9E%C3%89%C2%A9%E2%80%9E%C3%87%C3%98%E2%80%9E%C3%89%C3%9C%E2%80%9E%C3%87%C2%A3%E2%80%9E%C3%89%C3%B1%E2%80%9E%C3%89%C2%A2%E2%80%9E%C3%89%C2%BA%E2%80%9E%C3%89%C3%A2%E2%80%9E%C3%85%C2%B4%E2%80%9E%C3%85%C3%A4%E2%80%9E%C3%85%C3%AB%E2%80%9E%C3%87%C3%A3%E2%80%9E%C3%87%E2%89%A0%E2%80%9E%C3%89%C2%BA">sbt „Ç§„É≥„Çø„É©„ÇØ„ÉÜ„Ç£„Éñ„É¢„Éº„Éâ„Å´„Åä„Åë„Çã„Ç≠„Éº<a href="#sbt+%E2%80%9E%C3%87%C2%A7%E2%80%9E%C3%89%E2%89%A5%E2%80%9E%C3%87%C3%B8%E2%80%9E%C3%89%C2%A9%E2%80%9E%C3%87%C3%98%E2%80%9E%C3%89%C3%9C%E2%80%9E%C3%87%C2%A3%E2%80%9E%C3%89%C3%B1%E2%80%9E%C3%89%C2%A2%E2%80%9E%C3%89%C2%BA%E2%80%9E%C3%89%C3%A2%E2%80%9E%C3%85%C2%B4%E2%80%9E%C3%85%C3%A4%E2%80%9E%C3%85%C3%AB%E2%80%9E%C3%87%C3%A3%E2%80%9E%C3%87%E2%89%A0%E2%80%9E%C3%89%C2%BA" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt „ÅÆ„Ç§„É≥„Çø„É©„ÇØ„ÉÜ„Ç£„Éñ„É¢„Éº„Éâ„Åã„Çâ„Çø„Çπ„ÇØ„ÅÆÂêçÂâç„ÇíÂÖ•Âäõ„Åô„Çã„Åì„Å®„Åß„ÄÅ„Å©„ÅÆ„Çø„Çπ„ÇØ„Åß„ÇÇÂÆüË°å„Åô„Çã„Åì„Å®„Åå„Åß„Åç„Çã„ÄÇ
+„Åù„Çå„Åå <code>compile</code> „Å®ÂÖ•Âäõ„Åô„Çã„Åì„Å®„Åß„Ç≥„É≥„Éë„Ç§„É´„Çø„Çπ„ÇØ„ÅåËµ∑Âãï„Åô„Çã‰ªïÁµÑ„Åø„Å†„ÄÇ„Å§„Åæ„Çä„ÄÅ<code>compile</code> „ÅØ„Çø„Çπ„ÇØ„Ç≠„Éº„Å†„ÄÇ
+</p><p>„Çø„Çπ„ÇØ„Ç≠„Éº„ÅÆ„Åã„Çè„Çä„Å´„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„Ç≠„Éº„ÅÆÂêçÂâç„ÇíÂÖ•Âäõ„Åô„Çã„Å®„ÄÅ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„Ç≠„Éº„ÅÆÂÄ§„ÅåË°®Á§∫„Åï„Çå„Çã„ÄÇ
+„Çø„Çπ„ÇØ„Ç≠„Éº„ÅÆÂêçÂâç„ÇíÂÖ•Âäõ„Åô„Çã„Å®„ÄÅ„Çø„Çπ„ÇØ„ÇíÂÆüË°å„Åô„Çã„Åå„ÄÅ„Åù„ÅÆÊàª„ÇäÂÄ§„ÅØË°®Á§∫„Åï„Çå„Å™„ÅÑ„Åü„ÇÅ„ÄÅ
+„Çø„Çπ„ÇØ„ÅÆÊàª„ÇäÂÄ§„ÇíË°®Á§∫„Åô„Çã„Å´„ÅØÁ¥†„ÅÆ <code>&lt;„Çø„Çπ„ÇØÂêç&gt;</code> „Åß„ÅØ„Å™„Åè„ÄÅ<code>show &lt;„Çø„Çπ„ÇØÂêç&gt;</code> „Å®ÂÖ•Âäõ„Åô„Çã„ÄÇ
+Scala „ÅÆÊÖ£‰æã„Å´„Å™„Çâ„ÅÑ„ÄÅ„Éì„É´„ÉâÂÆöÁæ©„Éï„Ç°„Ç§„É´ÂÜÖ„Åß„ÅØ„Ç≠„Éº„ÅØ„Ç≠„É£„É°„É´„Ç±„Éº„ÇπÔºà<code>camelCase</code>Ôºâ„ÅßÂëΩÂêç„Åô„Çã„ÄÇ
+</p><p>„ÅÇ„Çã„Ç≠„Éº„Å´„Å§„ÅÑ„Å¶„Çà„ÇäË©≥„Åó„ÅÑÊÉÖÂ†±„ÇíÂæó„Çã„Å´„ÅØ„ÄÅsbt „Ç§„É≥„Çø„É©„ÇØ„ÉÜ„Ç£„Éñ„É¢„Éº„Éâ„Åß <code>inspect &lt;„Ç≠„ÉºÂêç&gt;</code> „Å®ÂÖ•Âäõ„Åô„Çã„ÄÇ
+<code>inspect</code> „ÅåË°®Á§∫„Åô„ÇãÊÉÖÂ†±„ÅÆ‰∏≠„Å´„ÅØ„Åæ„Å†„Çà„ÅèÂàÜ„Åã„Çâ„Å™„ÅÑÁÇπ„ÇÇ„ÅÇ„Çã„Åã„ÇÇ„Åó„Çå„Å™„ÅÑ„Åå„ÄÅ‰∏ÄÁï™‰∏ä„Å´„ÅØ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„ÅÆÂÄ§„ÅÆÂûã„Å®„ÄÅ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„ÅÆÁ∞°Âçò„Å™Ë™¨Êòé„ÅåË°®Á§∫„Åï„Çå„Å¶„ÅÑ„Çã„Åì„Å®„Å†„Çç„ÅÜ„ÄÇ
+</p><h3 id="%C3%82%C3%9C%C3%96%E2%80%9E%C3%85%C3%86+import+%C3%8A%C3%B1%C3%A1"><code>build.sbt</code> ÂÜÖ„ÅÆ import Êñá<a href="#%C3%82%C3%9C%C3%96%E2%80%9E%C3%85%C3%86+import+%C3%8A%C3%B1%C3%A1" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> „ÅÆ‰∏ÄÁï™‰∏ä„Å´ import Êñá„ÇíÊõ∏„Åè„Åì„Å®„Åå„Åß„Åç„ÄÅ„Åù„Çå„Çâ„ÅØÁ©∫Ë°å„ÅßÂàÜ„Åë„Å™„Åè„Å¶„ÇÇ„Çà„ÅÑ„ÄÇ
+</p><p>„Éá„Éï„Ç©„É´„Éà„Åß„ÅØ‰ª•‰∏ã„ÅÆ„ÇÇ„ÅÆ„ÅåËá™ÂãïÁöÑ„Å´„Ç§„É≥„Éù„Éº„Éà„Åï„Çå„Çã:
 </p><pre><code class="prettyprint lang-scala">import sbt._
 import Process._
 import Keys._
-</code></pre><p>（さらに、<a href="Full-Def.html">.scala ファイル</a>がある場合は、それらの全ての <code>Build</code> と <code>Plugin</code> の内容もインポートされる。
-これに関しては、<a href="Full-Def.html">.scala ビルド定義</a>でさらに詳しく。）
-</p><h3 id="%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E3%81%B8%E3%81%AE%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%92%E5%8A%A0%E3%81%88%E3%82%8B">ライブラリへの依存性を加える<a href="#%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E3%81%B8%E3%81%AE%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%92%E5%8A%A0%E3%81%88%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>サードパーティのライブラリに依存するには二つの方法がある。
-第一は <code>lib/</code> に jar ファイルを入れてしまう方法で（アンマネージ依存性、unmanged dependency）、
-第二はマネージ依存性（managed dependency）を加えることで、<code>build.sbt</code> ではこのようになる:
+</code></pre><p>Ôºà„Åï„Çâ„Å´„ÄÅ<a href="Full-Def.html">.scala „Éï„Ç°„Ç§„É´</a>„Åå„ÅÇ„ÇãÂ†¥Âêà„ÅØ„ÄÅ„Åù„Çå„Çâ„ÅÆÂÖ®„Å¶„ÅÆ <code>Build</code> „Å® <code>Plugin</code> „ÅÆÂÜÖÂÆπ„ÇÇ„Ç§„É≥„Éù„Éº„Éà„Åï„Çå„Çã„ÄÇ
+„Åì„Çå„Å´Èñ¢„Åó„Å¶„ÅØ„ÄÅ<a href="Full-Def.html">.scala „Éì„É´„ÉâÂÆöÁæ©</a>„Åß„Åï„Çâ„Å´Ë©≥„Åó„Åè„ÄÇÔºâ
+</p><h3 id="%E2%80%9E%C3%89%C2%A9%E2%80%9E%C3%87%C2%A7%E2%80%9E%C3%89%C3%B1%E2%80%9E%C3%89%C2%A9%E2%80%9E%C3%89%E2%84%A2%E2%80%9E%C3%85%E2%88%8F%E2%80%9E%C3%85%C3%86%E2%80%B0%C3%A6%C3%B9%C3%82%E2%89%A0%C3%B2%C3%8A%C3%84%C3%9F%E2%80%9E%C3%87%C3%AD%C3%82%C3%A4%E2%80%A0%E2%80%9E%C3%85%C3%A0%E2%80%9E%C3%87%C3%A3">„É©„Ç§„Éñ„É©„É™„Å∏„ÅÆ‰æùÂ≠òÊÄß„ÇíÂä†„Åà„Çã<a href="#%E2%80%9E%C3%89%C2%A9%E2%80%9E%C3%87%C2%A7%E2%80%9E%C3%89%C3%B1%E2%80%9E%C3%89%C2%A9%E2%80%9E%C3%89%E2%84%A2%E2%80%9E%C3%85%E2%88%8F%E2%80%9E%C3%85%C3%86%E2%80%B0%C3%A6%C3%B9%C3%82%E2%89%A0%C3%B2%C3%8A%C3%84%C3%9F%E2%80%9E%C3%87%C3%AD%C3%82%C3%A4%E2%80%A0%E2%80%9E%C3%85%C3%A0%E2%80%9E%C3%87%C3%A3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>„Çµ„Éº„Éâ„Éë„Éº„ÉÜ„Ç£„ÅÆ„É©„Ç§„Éñ„É©„É™„Å´‰æùÂ≠ò„Åô„Çã„Å´„ÅØ‰∫å„Å§„ÅÆÊñπÊ≥ï„Åå„ÅÇ„Çã„ÄÇ
+Á¨¨‰∏Ä„ÅØ <code>lib/</code> „Å´ jar „Éï„Ç°„Ç§„É´„ÇíÂÖ•„Çå„Å¶„Åó„Åæ„ÅÜÊñπÊ≥ï„ÅßÔºà„Ç¢„É≥„Éû„Éç„Éº„Ç∏‰æùÂ≠òÊÄß„ÄÅunmanged dependencyÔºâ„ÄÅ
+Á¨¨‰∫å„ÅØ„Éû„Éç„Éº„Ç∏‰æùÂ≠òÊÄßÔºàmanaged dependencyÔºâ„ÇíÂä†„Åà„Çã„Åì„Å®„Åß„ÄÅ<code>build.sbt</code> „Åß„ÅØ„Åì„ÅÆ„Çà„ÅÜ„Å´„Å™„Çã:
 </p><pre><code class="prettyprint lang-scala">val derby = &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot;
 
 lazy val commonSettings = Seq(
@@ -194,17 +194,17 @@ lazy val root = (project in file(&quot;.&quot;)).
     name := &quot;hello&quot;,
     libraryDependencies += derby
   )
-</code></pre><p>これで Apache Derby ライブラリのバージョン 10.4.1.3 へのマネージ依存性を加えることができた。
-</p><p><code>libraryDependencies</code> キーは二つの複雑な点がある:
-<code>:=</code> ではなく <code>+=</code> を使うことと、<code>%</code> メソッドだ。
-後で<a href="More-About-Settings.html">他の種類のセッティング</a>で説明するが、<code>+=</code> はキーの古い値を上書きする代わりに新しい値を追加する。
-<code>%</code> メソッドは文字列から Ivy モジュール ID を構築するのに使われ、これは<a href="Library-Dependencies.html">ライブラリ依存性</a>で説明する。
-</p><p>ライブラリ依存性に関する詳細については、このガイドの後ろの方までとっておくことにする。
-後ほど<a href="Library-Dependencies.html">一ページ</a>を割いて丁寧に説明する。
+</code></pre><p>„Åì„Çå„Åß Apache Derby „É©„Ç§„Éñ„É©„É™„ÅÆ„Éê„Éº„Ç∏„Éß„É≥ 10.4.1.3 „Å∏„ÅÆ„Éû„Éç„Éº„Ç∏‰æùÂ≠òÊÄß„ÇíÂä†„Åà„Çã„Åì„Å®„Åå„Åß„Åç„Åü„ÄÇ
+</p><p><code>libraryDependencies</code> „Ç≠„Éº„ÅØ‰∫å„Å§„ÅÆË§áÈõë„Å™ÁÇπ„Åå„ÅÇ„Çã:
+<code>:=</code> „Åß„ÅØ„Å™„Åè <code>+=</code> „Çí‰Ωø„ÅÜ„Åì„Å®„Å®„ÄÅ<code>%</code> „É°„ÇΩ„ÉÉ„Éâ„Å†„ÄÇ
+Âæå„Åß<a href="More-About-Settings.html">‰ªñ„ÅÆÁ®ÆÈ°û„ÅÆ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞</a>„ÅßË™¨Êòé„Åô„Çã„Åå„ÄÅ<code>+=</code> „ÅØ„Ç≠„Éº„ÅÆÂè§„ÅÑÂÄ§„Çí‰∏äÊõ∏„Åç„Åô„Çã‰ª£„Çè„Çä„Å´Êñ∞„Åó„ÅÑÂÄ§„ÇíËøΩÂä†„Åô„Çã„ÄÇ
+<code>%</code> „É°„ÇΩ„ÉÉ„Éâ„ÅØÊñáÂ≠óÂàó„Åã„Çâ Ivy „É¢„Ç∏„É•„Éº„É´ ID „ÇíÊßãÁØâ„Åô„Çã„ÅÆ„Å´‰Ωø„Çè„Çå„ÄÅ„Åì„Çå„ÅØ<a href="Library-Dependencies.html">„É©„Ç§„Éñ„É©„É™‰æùÂ≠òÊÄß</a>„ÅßË™¨Êòé„Åô„Çã„ÄÇ
+</p><p>„É©„Ç§„Éñ„É©„É™‰æùÂ≠òÊÄß„Å´Èñ¢„Åô„ÇãË©≥Á¥∞„Å´„Å§„ÅÑ„Å¶„ÅØ„ÄÅ„Åì„ÅÆ„Ç¨„Ç§„Éâ„ÅÆÂæå„Çç„ÅÆÊñπ„Åæ„Åß„Å®„Å£„Å¶„Åä„Åè„Åì„Å®„Å´„Åô„Çã„ÄÇ
+Âæå„Åª„Å©<a href="Library-Dependencies.html">‰∏Ä„Éö„Éº„Ç∏</a>„ÇíÂâ≤„ÅÑ„Å¶‰∏ÅÂØß„Å´Ë™¨Êòé„Åô„Çã„ÄÇ
 </p><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>
-                        <a href="Scopes.html"> スコープ </a>                        
+                        <a href="Scopes.html"> „Çπ„Ç≥„Éº„Éó </a>                        
                         <ul class="language-bar">
         <li><a href="../Basic-Def.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/Basic-Def.html"><span class="lang-item lang-ja">日本語</span></a></li><li><a href="../zh-cn/Basic-Def.html"><span class="lang-item lang-zh-cn">中文 (简体)</span></a></li><li><a href="../es/Basic-Def.html"><span class="lang-item lang-es">Español</span></a></li>
       </ul>
@@ -213,7 +213,7 @@ lazy val root = (project in file(&quot;.&quot;)).
       <a name="toc"></a>
       <h4 class="toctitle">Contents</h4>
       <div class="tocbody">
-      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">始める sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">sbt のインストール</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Mac への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Linux への sbt のインストール</a></div></li><li><div><a href="Manual-Installation.html">手動インストール</a></div></li><li><div><a href="Activator-Installation.html">Typesafe Activator (sbt を含む) のインストール</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">ディレクトリ構造</a></div></li><li><div><a href="Running.html">実行</a></div></li><li><div class="current">.sbt ビルド定義</div></li><li><div><a href="Scopes.html">スコープ</a></div></li><li><div><a href="More-About-Settings.html">他の種類のセッティング</a></div></li><li><div><a href="Library-Dependencies.html">ライブラリ依存性</a></div></li><li><div><a href="Multi-Project.html">マルチプロジェクト・ビルド</a></div></li><li><div><a href="Using-Plugins.html">プラグインの使用</a></div></li><li><div><a href="Custom-Settings.html">カスタムセッティングとタスク</a></div></li><li><div><a href="Organizing-Build.html">ビルドの整理</a></div></li><li><div><a href="Summary.html">まとめ</a></div></li><li><div><a href="Bare-Def.html">付録: bare .sbt ビルド定義</a></div></li><li><div><a href="Full-Def.html">付録: .scala ビルド定義</a></div></li> </ol></li><li><div><a href="Howto.html">How to</a></div><ol class="toc"> <li><div><a href="Howto-Sequencing.html">逐次実行</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Def.sequential を用いて逐次タスクを定義する</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Def.taskDyn を用いて動的タスクを定義する</a></div></li><li><div><a href="Howto-After-Input-Task.html">インプットタスクの後で何かする</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn を用いた動的インプットタスクの定義</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">コマンドを用いた逐次実行</a></div></li> </ol></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">Âßã„ÇÅ„Çã sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">sbt „ÅÆ„Ç§„É≥„Çπ„Éà„Éº„É´</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Mac „Å∏„ÅÆ sbt „ÅÆ„Ç§„É≥„Çπ„Éà„Éº„É´</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows „Å∏„ÅÆ sbt „ÅÆ„Ç§„É≥„Çπ„Éà„Éº„É´</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Linux „Å∏„ÅÆ sbt „ÅÆ„Ç§„É≥„Çπ„Éà„Éº„É´</a></div></li><li><div><a href="Manual-Installation.html">ÊâãÂãï„Ç§„É≥„Çπ„Éà„Éº„É´</a></div></li><li><div><a href="Activator-Installation.html">Typesafe Activator (sbt „ÇíÂê´„ÇÄ) „ÅÆ„Ç§„É≥„Çπ„Éà„Éº„É´</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">„Éá„Ç£„É¨„ÇØ„Éà„É™ÊßãÈÄ†</a></div></li><li><div><a href="Running.html">ÂÆüË°å</a></div></li><li><div class="current">.sbt „Éì„É´„ÉâÂÆöÁæ©</div></li><li><div><a href="Scopes.html">„Çπ„Ç≥„Éº„Éó</a></div></li><li><div><a href="More-About-Settings.html">‰ªñ„ÅÆÁ®ÆÈ°û„ÅÆ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞</a></div></li><li><div><a href="Library-Dependencies.html">„É©„Ç§„Éñ„É©„É™‰æùÂ≠òÊÄß</a></div></li><li><div><a href="Multi-Project.html">„Éû„É´„ÉÅ„Éó„É≠„Ç∏„Çß„ÇØ„Éà„Éª„Éì„É´„Éâ</a></div></li><li><div><a href="Using-Plugins.html">„Éó„É©„Ç∞„Ç§„É≥„ÅÆ‰ΩøÁî®</a></div></li><li><div><a href="Custom-Settings.html">„Ç´„Çπ„Çø„É†„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„Å®„Çø„Çπ„ÇØ</a></div></li><li><div><a href="Organizing-Build.html">„Éì„É´„Éâ„ÅÆÊï¥ÁêÜ</a></div></li><li><div><a href="Summary.html">„Åæ„Å®„ÇÅ</a></div></li><li><div><a href="Bare-Def.html">‰ªòÈå≤: bare .sbt „Éì„É´„ÉâÂÆöÁæ©</a></div></li><li><div><a href="Full-Def.html">‰ªòÈå≤: .scala „Éì„É´„ÉâÂÆöÁæ©</a></div></li> </ol></li><li><div><a href="Howto.html">How to</a></div><ol class="toc"> <li><div><a href="Howto-Sequencing.html">ÈÄêÊ¨°ÂÆüË°å</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Def.sequential „ÇíÁî®„ÅÑ„Å¶ÈÄêÊ¨°„Çø„Çπ„ÇØ„ÇíÂÆöÁæ©„Åô„Çã</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Def.taskDyn „ÇíÁî®„ÅÑ„Å¶ÂãïÁöÑ„Çø„Çπ„ÇØ„ÇíÂÆöÁæ©„Åô„Çã</a></div></li><li><div><a href="Howto-After-Input-Task.html">„Ç§„É≥„Éó„ÉÉ„Éà„Çø„Çπ„ÇØ„ÅÆÂæå„Åß‰Ωï„Åã„Åô„Çã</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn „ÇíÁî®„ÅÑ„ÅüÂãïÁöÑ„Ç§„É≥„Éó„ÉÉ„Éà„Çø„Çπ„ÇØ„ÅÆÂÆöÁæ©</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">„Ç≥„Éû„É≥„Éâ„ÇíÁî®„ÅÑ„ÅüÈÄêÊ¨°ÂÆüË°å</a></div></li> </ol></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
           </div>
         </div>
         <div class="header">
@@ -259,7 +259,7 @@ lazy val root = (project in file(&quot;.&quot;)).
             <svg class="svg-icon svg-icon-chat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.5 85.2" enable-background="new 0 0 97.5 85.2"><path stroke="#fff" stroke-width="4.282" stroke-linecap="round" stroke-miterlimit="10" d="M27 29.5h-16.3c-4.7 0-8.6 3.9-8.6 8.6v25.7c0 4.7 3.9 8.6 8.6 8.6h2.7c.8 0 1.5.7 1.5 1.5v7.8c0 1.3 1.6 2 2.5 1l9.5-9.5c.5-.5 1.2-.8 2-.8h20.2c4.7 0 8.6-3.9 8.6-8.6v-7.8" fill="none"/><path fill="#fff" d="M85 0h-40c-6.9 0-12.5 5.6-12.5 12.5v33.4c0 2.2 1.8 4.1 4.1 4.1h29.9c.7 0 1.3.3 1.8.7l10 10c1.6 1.6 4.3.5 4.3-1.8v-6.5c0-1.4 1.1-2.5 2.5-2.5 6.9 0 12.5-5.6 12.5-12.5v-25c-.1-6.8-5.8-12.4-12.6-12.4z"/></svg>
           </div>
           <div class="support-detail">
-            <h2>コミュニティー・サポート</h2>
+            <h2>„Ç≥„Éü„É•„Éã„ÉÜ„Ç£„Éº„Éª„Çµ„Éù„Éº„Éà</h2>
             <a href="https://ja.stackoverflow.com/questions/tagged/sbt">StackOverflow</a>
           </div>
         </div>
@@ -268,7 +268,7 @@ lazy val root = (project in file(&quot;.&quot;)).
             <svg class="svg-icon svg-icon-typesafe" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 154 154" enable-background="new 0 0 154 154"><path fill="#fff" d="M49.7 114c-4.8 0-8.7-5.1-8.7-9.9v-.2c0-4.8 3.9-7.9 8.7-7.9h100c.9-3 1.6-7 2-11h-84c-4.8 0-8.7-3.7-8.7-8.5s3.9-8.5 8.7-8.5h83.7c-.5-4-1.2-8-2.3-11h-63.4c-4.8 0-8.7-3.7-8.7-8.5s3.9-8.5 8.7-8.5h56c-13.1-23-37.2-37.8-64.7-37.8-41.4 0-75 33.3-75 74.7s33.6 75.6 75 75.6c28.4 0 53.1-15.4 65.8-38.4h-93.1z"/></svg>
           </div>
           <div class="support-detail">
-            <h2>商用サポート</h2>
+            <h2>ÂïÜÁî®„Çµ„Éù„Éº„Éà</h2>
             <a href="http://typesafe.com/subscription">Typesafe Subscription</a>
             <a href="http://typesafe.com/subscription/training">Training</a>
             <a href="http://typesafe.com/subscription/consulting">Consulting</a>

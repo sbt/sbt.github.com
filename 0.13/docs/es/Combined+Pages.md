@@ -7,29 +7,29 @@ sbt Reference Manual
   [Scopes]: Scopes.html
   [More-About-Settings]: More-About-Settings.html
 
-Guía de Inicio de sbt 
+Gu√≠a de Inicio de sbt 
 =====================
 
-sbt usa un número pequeño de conceptos para soportar *build definitions*
-(definiciones de construcción de software) flexibles y poderosas. No hay
+sbt usa un n√∫mero peque√±o de conceptos para soportar *build definitions*
+(definiciones de construcci√≥n de software) flexibles y poderosas. No hay
 tantos conceptos, pero sbt no es exactamente como cualquier otro sistema
-de construcción de sofware y hay detalles con los que *usted tropezará*
-si no ha leído la documentación.
+de construcci√≥n de sofware y hay detalles con los que *usted tropezar√°*
+si no ha le√≠do la documentaci√≥n.
 
-La Guía de inicio cubre los conceptos que usted necesita para crear y
+La Gu√≠a de inicio cubre los conceptos que usted necesita para crear y
 mantnere una *build definition*.
 
-¡Es *altamente recomendable* leer la Guía de inicio!
+¬°Es *altamente recomendable* leer la Gu√≠a de inicio!
 
-Si usted tiene mucha prisa, los conceptos más importantes pueden
+Si usted tiene mucha prisa, los conceptos m√°s importantes pueden
 encontrarse en [sbt build definition][Basic-Def], [scopes][Scopes], y
-[más sobre settings][More-About-Settings]. Pero no prometemos que sea
-una buena idea dejar de leer las otras páginas de la guía.
+[m√°s sobre settings][More-About-Settings]. Pero no prometemos que sea
+una buena idea dejar de leer las otras p√°ginas de la gu√≠a.
 
-Es mejor leer en orden, ya que las páginas posteriores de la Guía de
+Es mejor leer en orden, ya que las p√°ginas posteriores de la Gu√≠a de
 inicio utilizan conceptos introducidos con anterioridad.
 
-Gracias por utilizar sbt *¡Diviértase!*
+Gracias por utilizar sbt *¬°Divi√©rtase!*
 
 
   [Basic-Def]: Basic-Def.html
@@ -45,15 +45,15 @@ Gracias por utilizar sbt *¡Diviértase!*
 Instalando sbt
 --------------
 
-Para crear un proyecto de sbt, necesitará dar los siguientes pasos:
+Para crear un proyecto de sbt, necesitar√° dar los siguientes pasos:
 
 - Instalar sbt y crear un script para iniciarlo.
 - Configurar un proyecto simple [hola mundo][Hello].
-  - Crear un directorio llamado project con archivos de código fuente en él.
-  - Crear su *build definition* (definición de construcción del proyecto).
-- Continuar con [ejecución][Running] para aprender a ejecutar sbt.
+  - Crear un directorio llamado project con archivos de c√≥digo fuente en √©l.
+  - Crear su *build definition* (definici√≥n de construcci√≥n del proyecto).
+- Continuar con [ejecuci√≥n][Running] para aprender a ejecutar sbt.
 - Enseguida continuar con [.sbt build definition][Basic-Def] para
-  aprender más sobre las *build definitions*.
+  aprender m√°s sobre las *build definitions*.
 
 <!-- TODO: Translate to Spanish. -->
 
@@ -63,7 +63,7 @@ Head over to the installation steps for [Mac][Mac], [Windows][Windows], [Linux][
 
 ### Tips y notas
 
-Si tiene algún problema ejecutando sbt, vea
+Si tiene alg√∫n problema ejecutando sbt, vea
 [Setup Notes][Setup-Notes] en las codificaciones de la terminal,
 HTTP proxies, y opciones de la JVM.
 
@@ -79,8 +79,8 @@ Installing sbt on Mac
 
 ### Installing from a third-party package
 
-> **Note:** Los paquetes de terceros pueden no proporcionar la última versión
-> disponible. Por favor asegúrese de reportar cualquier problema con
+> **Note:** Los paquetes de terceros pueden no proporcionar la √∫ltima versi√≥n
+> disponible. Por favor aseg√∫rese de reportar cualquier problema con
 > estos paquetes a los mantenedores respectivos.
 
 #### [Macports](http://macports.org/)
@@ -152,7 +152,7 @@ The following packages are also officially supported:
 
 ### Gentoo
 
-En el árbol oficial no hay ebuild para sbt. Pero existen [ebuilds](https://github.com/whiter4bbit/overlays/tree/master/dev-java/sbt-bin) para
+En el √°rbol oficial no hay ebuild para sbt. Pero existen [ebuilds](https://github.com/whiter4bbit/overlays/tree/master/dev-java/sbt-bin) para
 hacer un *merge* de sbt a partir de los binarios.
 Para hacer un merge de sbt a partir de estos ebuilds, puede hacer lo
 siguiente:
@@ -163,9 +163,9 @@ siguiente:
     $ emerge sbt-bin
 
 > **Note:** Por favor reporte cualquier problema con el ebuild
-> [aquí](https://github.com/whiter4bbit/overlays/issues).
+> [aqu√≠](https://github.com/whiter4bbit/overlays/issues).
 
-### Instalación manual
+### Instalaci√≥n manual
 
 See instruction to install manually.
 
@@ -175,14 +175,14 @@ See instruction to install manually.
 Installing sbt manually
 -----------------------
 
-La instalación manual requiere la descarga de [sbt-launch.jar][sbt-launch.jar] y la
-creación de un script para ejecutarlo.
+La instalaci√≥n manual requiere la descarga de [sbt-launch.jar][sbt-launch.jar] y la
+creaci√≥n de un script para ejecutarlo.
 
 ### Unix
 
 Ponga [sbt-launch.jar][sbt-launch.jar] en `~/bin`.
 
-Cree un script para ejecutar el jar, mediante la creación de `~/bin/sbt`
+Cree un script para ejecutar el jar, mediante la creaci√≥n de `~/bin/sbt`
 con el siguiente contenido:
 
 ```
@@ -199,11 +199,11 @@ $ chmod u+x ~/bin/sbt
 
 ### Windows
 
-La instalación manual para Windows varía según el tipo de terminal y
+La instalaci√≥n manual para Windows var√≠a seg√∫n el tipo de terminal y
 dependiendo de si Cygwin es usado o no. En todos los casos, ponga el
 archivo batch o el script en el *path* de modo que pueda iniciar `sbt`
-en cualquier directorio mediante teclear `sbt` en la línea de comandos.
-También, ajuste los settings de la JVM de acuerdo con su máquina si es
+en cualquier directorio mediante teclear `sbt` en la l√≠nea de comandos.
+Tambi√©n, ajuste los settings de la JVM de acuerdo con su m√°quina si es
 necesario.
 
 #### Non-Cygwin
@@ -216,7 +216,7 @@ set SCRIPT_DIR=%~dp0
 java -Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M -jar "%SCRIPT_DIR%sbt-launch.jar" %*
 ```
 
-y ponga el [sbt-launch.jar][sbt-launch.jar] que descargó en el mismo directorio que
+y ponga el [sbt-launch.jar][sbt-launch.jar] que descarg√≥ en el mismo directorio que
 archivo batch.
 
 #### Cygwin con la terminal standard de Windows
@@ -230,7 +230,7 @@ java $SBT_OPTS -jar sbt-launch.jar "$@"
 ```
 
 Reemplace `sbt-launch.jar` con la ruta hasta el [sbt-launch.jar][sbt-launch.jar] que
-descargó y recuerde utilizar `cygpath` si es necesario. Haga el scrip
+descarg√≥ y recuerde utilizar `cygpath` si es necesario. Haga el scrip
 ejecutable con:
 
 ```
@@ -251,7 +251,7 @@ stty icanon echo > /dev/null 2>&1
 ```
 
 Reemplace `sbt-launch.jar` con la ruta hasta el [sbt-launch.jar][sbt-launch.jar] que
-descargó y recuerde utilizar `cygpath` si es necesario. Entonces, haga
+descarg√≥ y recuerde utilizar `cygpath` si es necesario. Entonces, haga
 que el script sea ejecutable con:
 
 ```
@@ -259,13 +259,13 @@ $ chmod u+x ~/bin/sbt
 ```
 
 Para que la tecla *backspace* funcione correctamente en la consola de
-scala, necesita asegurarse de que dicha tecla esté enviando el caracter
-de borrado, de acuerdo a la configuración de `stty`. Para la terminal por
-default de cygwin (mintty) puede encontrar una configuración en Options
--> Keys "Backspace sends ^H" que necesitará estar palomeada si su
-tecla de borrado envía el caracter por default de cygwin `^H`.
+scala, necesita asegurarse de que dicha tecla est√© enviando el caracter
+de borrado, de acuerdo a la configuraci√≥n de `stty`. Para la terminal por
+default de cygwin (mintty) puede encontrar una configuraci√≥n en Options
+-> Keys "Backspace sends ^H" que necesitar√° estar palomeada si su
+tecla de borrado env√≠a el caracter por default de cygwin `^H`.
 
-> **Note:** Otras configuraciones no están actualmente soportadas. Por favor envíe
+> **Note:** Otras configuraciones no est√°n actualmente soportadas. Por favor env√≠e
 > [pull requests](https://github.com/sbt/sbt/blob/0.13/CONTRIBUTING.md)
 > implementando o describiendo dicho soporte.
 
@@ -276,28 +276,28 @@ tecla de borrado envía el caracter por default de cygwin `^H`.
 Hello, World
 ------------
 
-Esta página asume que usted ha [instalado sbt][Setup].
+Esta p√°gina asume que usted ha [instalado sbt][Setup].
 
-### Cree un directorio project con código fuente
+### Cree un directorio project con c√≥digo fuente
 
-Un proyecto válido de sbt puede ser un directorio que contenga un único
-archivo de código fuente. Intente crear un directorio `hello` con un
+Un proyecto v√°lido de sbt puede ser un directorio que contenga un √∫nico
+archivo de c√≥digo fuente. Intente crear un directorio `hello` con un
 archivo `hw.scala`, que contenga lo siguiente:
 
 ```scala
 object Hola {
-  def main(args: Array[String]) = println("¡Hola!")
+  def main(args: Array[String]) = println("¬°Hola!")
 }
 ```
 
-Después, desde el directorio `hello`, inicie sbt y teclee `run` en la
+Despu√©s, desde el directorio `hello`, inicie sbt y teclee `run` en la
 consola interactiva de sbt. En Linux u OS X los comandos tal vez se vean
 de la siguiente manera:
 
 ```
 $ mkdir hello
 $ cd hello
-$ echo 'object Hola { def main(args: Array[String]) = println("¡Hola!") }' > hw.scala
+$ echo 'object Hola { def main(args: Array[String]) = println("¬°Hola!") }' > hw.scala
 $ sbt
 ...
 > run
@@ -305,43 +305,43 @@ $ sbt
 Hola!
 ```
 
-En este caso, sbt funciona simplemente por convención. sbt encontrará lo
-siguiente de manera automática:
+En este caso, sbt funciona simplemente por convenci√≥n. sbt encontrar√° lo
+siguiente de manera autom√°tica:
 
-- Código fuente en el directorio base.
-- Código fuente en `src/main/scala` o `src/main/java`.
+- C√≥digo fuente en el directorio base.
+- C√≥digo fuente en `src/main/scala` o `src/main/java`.
 - Pruebas en `src/test/scala` o `src/test/java`
 - Archivos de datos en `src/main/resources` o `src/test/resources`
 - jars en `lib`
 
-Por default, sbt construirá proyectos con la misma versión de Scala
-utilizada para ejecutar sbt en sí mismo.
+Por default, sbt construir√° proyectos con la misma versi√≥n de Scala
+utilizada para ejecutar sbt en s√≠ mismo.
 
 Usted puede ejecutar el proyecto con `sbt run` o ingresar a la
 [REPL de Scala](http://www.scala-lang.org/node/2097) con
 `sbt console`. `sbt console` configura el classpath de su proyecto para
-que pueda probar ejemplos de Scala basados en el código de su proyecto.
+que pueda probar ejemplos de Scala basados en el c√≥digo de su proyecto.
 
-### Build definition (Definición de la construcción)
+### Build definition (Definici√≥n de la construcci√≥n)
 
-La mayoría de los proyectos necesitarán algo de configuración manual. La
-configuración básica de la construcción va en un archivo llamado
+La mayor√≠a de los proyectos necesitar√°n algo de configuraci√≥n manual. La
+configuraci√≥n b√°sica de la construcci√≥n va en un archivo llamado
 `build.sbt`, localizado en el directorio base del proyecto.
 
-Por ejemplo, si su proyecto está en el directorio `hello`, en
+Por ejemplo, si su proyecto est√° en el directorio `hello`, en
 `hello/build.sbt` usted puede escribir:
 
-Note la línea en blanco entre cada ítem. Esto no es simplemente porque
-sí; se requieren las líneas en blanco para separar cada ítem. En
-[.sbt build definition][Basic-Def]  usted aprenderá más sobre cómo
+Note la l√≠nea en blanco entre cada √≠tem. Esto no es simplemente porque
+s√≠; se requieren las l√≠neas en blanco para separar cada √≠tem. En
+[.sbt build definition][Basic-Def]  usted aprender√° m√°s sobre c√≥mo
 escribir un archivo `build.sbt`.
 
 Si usted planea empaquetar su proyecto en un jar, tal vez desee
-configurar al menos el nombre y la versión en un archivo `build.sbt`.
+configurar al menos el nombre y la versi√≥n en un archivo `build.sbt`.
 
-### Configurando la versión de sbt
+### Configurando la versi√≥n de sbt
 
-Usted puede forzar una versión partivular de sbt al crear un archivo
+Usted puede forzar una versi√≥n partivular de sbt al crear un archivo
 `hello/project/build.properties`. En este archivo, escriba:
 
 ```
@@ -349,9 +349,9 @@ sbt.version=0.13.11
 ```
 
 para forzar el uso de sbt 0.13.11. sbt es 99% compatible (con respecto
-al código fuente) de una *release* a otra. Sin embargo, configurar la versión
+al c√≥digo fuente) de una *release* a otra. Sin embargo, configurar la versi√≥n
 de sbt en `project/build.properties`
-evita cualquier confusión potencial.
+evita cualquier confusi√≥n potencial.
 
 
   [Hello]: Hello.html
@@ -361,57 +361,57 @@ evita cualquier confusión potencial.
 Estructura de directorios
 -------------------------
 
-Esta página asume que usted ha [instalado sbt][Setup] y ha visto el
+Esta p√°gina asume que usted ha [instalado sbt][Setup] y ha visto el
 ejemplo [Hello, World][Hello].
 
 ### Directorio base
 
-En la terminología de sbt, el "directorio base" es el directorio que
-contiene al proyecto. De modo que si usted creó el proyecto `hello` que
-contiene `hello/build.sbt` y `hello/hw.scala` como se indicó en el
+En la terminolog√≠a de sbt, el "directorio base" es el directorio que
+contiene al proyecto. De modo que si usted cre√≥ el proyecto `hello` que
+contiene `hello/build.sbt` y `hello/hw.scala` como se indic√≥ en el
 ejemplo [Hello, World][Hello], `hello` es su directorio base.
 
-### Código fuente
+### C√≥digo fuente
 
-El código fu8ente puede ponerse en el directorio base del proyecto como
-en el caso de `hello/hw.scala`. Sin embargo, la mayoría de las personas
+El c√≥digo fu8ente puede ponerse en el directorio base del proyecto como
+en el caso de `hello/hw.scala`. Sin embargo, la mayor√≠a de las personas
 no hacen esto para proyectos reales; se traduce en mucho desorden.
 
 sbt utiliza la misma estructura de directorios que
-[Maven](https://maven.apache.org/) para el código fuente por default
+[Maven](https://maven.apache.org/) para el c√≥digo fuente por default
 (todos las rutas son relativas al directorio base):
 
 ```
 src/
   main/
     resources/
-       <archivos que se incluyen en el jar principal van aquí>
+       <archivos que se incluyen en el jar principal van aqu√≠>
     scala/
-       <código fuente de Scala de main>
+       <c√≥digo fuente de Scala de main>
     java/
-       <código fuente de Java de main>
+       <c√≥digo fuente de Java de main>
   test/
     resources
-       <archivos que se incluyen en el jar de test van aquí>
+       <archivos que se incluyen en el jar de test van aqu√≠>
     scala/
-       <código fuente de Scala para test>
+       <c√≥digo fuente de Scala para test>
     java/
-       <código fuente de Java para test>
+       <c√≥digo fuente de Java para test>
 ```
 
-Otros directorios en `src/` serán ignorados. Adicionalmente, todos los
-directorios ocultos serán ignorados.
+Otros directorios en `src/` ser√°n ignorados. Adicionalmente, todos los
+directorios ocultos ser√°n ignorados.
 
-### Archivos de definición de la construcción de sbt (sbt build definition files)
+### Archivos de definici√≥n de la construcci√≥n de sbt (sbt build definition files)
 
 Ya ha visto `build.sbt` en el directorio base del proyecto. Otros
 archivos sbt aparecen en el subdirectorio `project`.
 
 El subdirectorio `project` puede contener archivos `.scala`, que se
-combinan con los archivos `.sbt` para formar la definición completa de
-la construcción.
+combinan con los archivos `.sbt` para formar la definici√≥n completa de
+la construcci√≥n.
 
-Vea [.scala build definition][Full-Def] para más información.
+Vea [.scala build definition][Full-Def] para m√°s informaci√≥n.
 
 ```
 build.sbt
@@ -421,13 +421,13 @@ project/
 
 Tal vez pueda ver archivos `.sbt` dentro de `project/` pero no son
 equivalentes a archivos `.sbt` en el directorio base del proyecto. La
-explicación de esto [viene después][Full-Def], dado que necesitará algo
+explicaci√≥n de esto [viene despu√©s][Full-Def], dado que necesitar√° algo
 de antecedentes primero.
 
-### Productos de la construcción
+### Productos de la construcci√≥n
 
 Los archivos generados (clases compiladas, paquetes en jars, archivos
-gestionados (*managed files*), caches, y documentación) será escrita al
+gestionados (*managed files*), caches, y documentaci√≥n) ser√° escrita al
 directorio `target` por default.
 
 ### Configurando el sistema de control de versiones
@@ -440,9 +440,9 @@ target/
 ```
 
 Note que el texto anterior tiene una `/` de forma deliberada (para que
-únicamente los directorios sean seleccionados) y de manera deliberada no
+√∫nicamente los directorios sean seleccionados) y de manera deliberada no
 tiene una `/` al inicio (para que el directorio `project/target/`
-también sea seleccionado, además de simplemente el directorio
+tambi√©n sea seleccionado, adem√°s de simplemente el directorio
 `target/`).
 
 
@@ -451,10 +451,10 @@ también sea seleccionado, además de simplemente el directorio
   [Triggered-Execution]: ../docs/Triggered-Execution.html
   [Command-Line-Reference]: ../docs/Command-Line-Reference.html
 
-Ejecución
+Ejecuci√≥n
 ---------
 
-Esta página describe cómo utilizar `sbt` una vez que usted a configurado
+Esta p√°gina describe c√≥mo utilizar `sbt` una vez que usted a configurado
 su proyecto. Se asume que usted ha [instalado sbt][Setup] y que ha
 creado un proyecto [Hello, World][Hello] u otro proyecto.
 
@@ -466,8 +466,8 @@ Ejecute sbt en el directorio de su proyecto sin argumentos:
 $ sbt
 ```
 
-Ejecutar sbt sin ningún argumento en la línea de comandos, inicia sbt en
-modo interactivo. El modo interactivo tiene una línea de comandos (¡con
+Ejecutar sbt sin ning√∫n argumento en la l√≠nea de comandos, inicia sbt en
+modo interactivo. El modo interactivo tiene una l√≠nea de comandos (¬°con
 *tab completion* e historia!).
 
 Por ejemplo, usted puede teclear `compile` en el prompt de sbt:
@@ -486,7 +486,7 @@ Ctrl+Z (Windows).
 
 ### Modo Batch (por lotes)
 
-También puede ejecutar sbt en modo batch, especificando una lista
+Tambi√©n puede ejecutar sbt en modo batch, especificando una lista
 separada por espacios de comandos de sbt como argumentos. Para comandos
 de sbt que toman argumentos, pase el comando y los argumentos como uno
 solo a `sbt` mediante encerrarlos entre comillas. Por ejemplo:
@@ -496,17 +496,17 @@ $ sbt clean compile "testOnly TestA TestB"
 ```
 
 En este ejemplo, la *key* `testOnly` tiene argumentos, `TestA` y
-`TestB`. Los comandos se ejecutarán en sequencia (`clean`, `compile`, y
+`TestB`. Los comandos se ejecutar√°n en sequencia (`clean`, `compile`, y
 entonces `testOnly`).
 
-### Construcción y test continuos
+### Construcci√≥n y test continuos
 
-Para acelerar el ciclo de edición-compilación-prueba, puede pedir a sbt
-que recompile automáticamente o que ejecute los tests siempre que se
-guarde un archivo de código fuente.
+Para acelerar el ciclo de edici√≥n-compilaci√≥n-prueba, puede pedir a sbt
+que recompile autom√°ticamente o que ejecute los tests siempre que se
+guarde un archivo de c√≥digo fuente.
 
-Puede conseguir que un comando se ejecute siempre que uno o más archivos
-de código fuente cambien al agregar como prefijo `~`. Por ejemplo, en
+Puede conseguir que un comando se ejecute siempre que uno o m√°s archivos
+de c√≥digo fuente cambien al agregar como prefijo `~`. Por ejemplo, en
 modo interactivo, intente:
 
 ```
@@ -518,12 +518,12 @@ Presione enter para dejar de observar sus cambios.
 Usted puede usar el prefijo `~` ya sea en modo interactivo o en modo
 *batch*.
 
-Vea [Triggered Execution][Triggered-Execution] para más detalles.
+Vea [Triggered Execution][Triggered-Execution] para m√°s detalles.
 
 ### Comandos comunes
 
-Aquí encontrará algunos de los comandos de sbt más comunes. Para una
-lista más completa, vea [Command Line Reference][Command-Line-Reference].
+Aqu√≠ encontrar√° algunos de los comandos de sbt m√°s comunes. Para una
+lista m√°s completa, vea [Command Line Reference][Command-Line-Reference].
 
 <table>
   <tr>
@@ -532,7 +532,7 @@ lista más completa, vea [Command Line Reference][Command-Line-Reference].
   </tr>
   <tr>
     <td><tt>compile</tt></td>
-    <td>Compila los archivos de código fuente de main (en los
+    <td>Compila los archivos de c√≥digo fuente de main (en los
     directorios <tt>src/main/scala</tt> y
    <tt>src/main/java</tt>).</td>
   </tr>
@@ -543,13 +543,13 @@ lista más completa, vea [Command Line Reference][Command-Line-Reference].
   <tr>
     <td><tt>console</tt></td>
     <td>Inicia el interprete de Scala con un classpath que incluye
-    el código fuente compilado y todas las dependencias. Para regresar a
+    el c√≥digo fuente compilado y todas las dependencias. Para regresar a
     sbt, teclee :quit, Ctrl+D (Unix), o Ctrl+Z (Windows).</td>
   </tr>
   <tr>
     <td><nobr><tt>run &lt;argument&gt;*</tt></nobr></td>
     <td>Ejecuta la clase principal para el proyecto en la
-    misma máquina virtual que sbt.</td>
+    misma m√°quina virtual que sbt.</td>
   </tr>
   <tr>
     <td><tt>package</tt></td>
@@ -560,31 +560,31 @@ lista más completa, vea [Command Line Reference][Command-Line-Reference].
   <tr>
     <td><tt>help &lt;command&gt;</tt></td>
     <td>Despliega ayuda detallada para el comando
-    especificado. Si no se proporciona ningún comando, despliega una
-    breve descripción de todos los comandos.</td>
+    especificado. Si no se proporciona ning√∫n comando, despliega una
+    breve descripci√≥n de todos los comandos.</td>
   </tr>
   <tr>
     <td><tt>reload</tt></td>
-    <td>Recarga la definición de la construcción (los archivos
+    <td>Recarga la definici√≥n de la construcci√≥n (los archivos
     <tt>build.sbt</tt>, <tt>project/*.scala</tt>,
     <tt>project/*.sbt</tt>). Este comando es
-    necario si cambia la definición de la construcción.</td>
+    necario si cambia la definici√≥n de la construcci√≥n.</td>
   </tr>
 </table>
 
 ### Tab completion
 
 El modo interactivo tiene *tab completion*, incluyendo el caso cuando se
-tiene un prompt vacio. Una convención especial de sbt es que presionar
-tab una vez puede mostrar únicamente un subconjunto de *completions* más
-probables, mientras que presionarlo más veces muestra opciones más
+tiene un prompt vacio. Una convenci√≥n especial de sbt es que presionar
+tab una vez puede mostrar √∫nicamente un subconjunto de *completions* m√°s
+probables, mientras que presionarlo m√°s veces muestra opciones m√°s
 verbosas.
 
 ### Comandos de historia
 
 El modo interactivo recuerda la historia, incluso si usted sale de sbt y
-lo reinicia. La manera más simple de acceder a la historia es con la
-tecla "arriba". También se soportan los siguientes comandos:
+lo reinicia. La manera m√°s simple de acceder a la historia es con la
+tecla "arriba". Tambi√©n se soportan los siguientes comandos:
 
 <table>
   <tr>
@@ -605,7 +605,7 @@ tecla "arriba". También se soportan los siguientes comandos:
   </tr>
   <tr>
     <td><tt>!n</tt></td>
-    <td>Ejecuta el comando con índice <tt>n</tt>, como se indica con el
+    <td>Ejecuta el comando con √≠ndice <tt>n</tt>, como se indica con el
     comando <tt>!:</tt>.</td>
   </tr>
   <tr>
@@ -614,11 +614,11 @@ tecla "arriba". También se soportan los siguientes comandos:
   </tr>
   <tr>
     <td><tt>!cadena</tt></td>
-    <td>Ejecuta el comando más reciente que comienza con 'cadena'.</td>
+    <td>Ejecuta el comando m√°s reciente que comienza con 'cadena'.</td>
   </tr>
   <tr>
     <td><tt>!?cadena</tt></td>
-    <td>Ejecuta el comando más reciente que contenga 'cadena'.</td>
+    <td>Ejecuta el comando m√°s reciente que contenga 'cadena'.</td>
   </tr>
 </table>
 
@@ -632,79 +632,79 @@ tecla "arriba". También se soportan los siguientes comandos:
 `.sbt` build definition
 -----------------------
 
-Esta página describe las *build definitions*, incluyendo algo de
-"teoría" y la sintaxis de `build.sbt`. Se asume que usted sabe como
-[usar sbt][Running] y que ha leído las páginas previas en la
-Guía de inicio.
+Esta p√°gina describe las *build definitions*, incluyendo algo de
+"teor√≠a" y la sintaxis de `build.sbt`. Se asume que usted sabe como
+[usar sbt][Running] y que ha le√≠do las p√°ginas previas en la
+Gu√≠a de inicio.
 
 ### `.sbt` vs `.scala` Build Definition
 
-Una *build definition* para sbt puede contener archivos con terminación
+Una *build definition* para sbt puede contener archivos con terminaci√≥n
 `.sbt`, localizados en el directorio base de un proyecto, y archivos con
-extensión `.scala`, localizados en el subdirectorio `project/` del
+extensi√≥n `.scala`, localizados en el subdirectorio `project/` del
 directorio base.
 
-Esta página trata sobre los archivos `.sbt`, que son apropiados para la
-mayoría de los casos. Los archivos `.scala` se usan típicamente para
-compartir código entre archivos `.sbt` y para *build definitions* más
+Esta p√°gina trata sobre los archivos `.sbt`, que son apropiados para la
+mayor√≠a de los casos. Los archivos `.scala` se usan t√≠picamente para
+compartir c√≥digo entre archivos `.sbt` y para *build definitions* m√°s
 complicadas.
 
-Vea [.scala build definition][Full-Def] (más adelante en la *Guía de
-inicio*) para más información sobre los archivos `.scala`.
+Vea [.scala build definition][Full-Def] (m√°s adelante en la *Gu√≠a de
+inicio*) para m√°s informaci√≥n sobre los archivos `.scala`.
 
-### ¿Qué es una *Build Definition*?
+### ¬øQu√© es una *Build Definition*?
 
-Después de examinar un proyecto y procesar los archivos para la
-definición de la construcción del proyecto, sbt termina con un mapa
+Despu√©s de examinar un proyecto y procesar los archivos para la
+definici√≥n de la construcci√≥n del proyecto, sbt termina con un mapa
 inmutable (un conjunto de pares llave-valor) describiendo la
-construcción.
+construcci√≥n.
 
 Por ejemplo, una llave es `name` y se mapea a un valor de tipo cadena
 (`String`), el nombre de su proyecto.
 
-*Los archivos de definición de la construcción no afectan el mapa de sbt
+*Los archivos de definici√≥n de la construcci√≥n no afectan el mapa de sbt
 directamente.*
 
-En lugar de esto, la definición de la construcción crea una lista enorme
+En lugar de esto, la definici√≥n de la construcci√≥n crea una lista enorme
 de objectos con el tipo `Setting[T]` donde `T` es el tipo del valor en
-el mapa. Un `Setting` describe una *transformación del mapa*, tal como
-añadir un nuevo valor llave-valor o agregar a un valor existente. (En el
-espíritu de la programación funcional con estructuras de datos y valores
-inmutables, una transformación regresa un nuevo mapa -- no se actualiza
-el viejo mapa en sí mismo).
+el mapa. Un `Setting` describe una *transformaci√≥n del mapa*, tal como
+a√±adir un nuevo valor llave-valor o agregar a un valor existente. (En el
+esp√≠ritu de la programaci√≥n funcional con estructuras de datos y valores
+inmutables, una transformaci√≥n regresa un nuevo mapa -- no se actualiza
+el viejo mapa en s√≠ mismo).
 
 En `build.sbt`, usted puede crear un `Setting[String]` para el nombre de
-su proyecto como se indica a continuación:
+su proyecto como se indica a continuaci√≥n:
 
 ```scala
 name := "hello"
 ```
 
-Este `Setting[String]` transforma el mapa al añadir (o reemplazar) la
-llave `name`, dándole el valor
+Este `Setting[String]` transforma el mapa al a√±adir (o reemplazar) la
+llave `name`, d√°ndole el valor
 
 `"hello"`. El mapa transformado se convierte en el nuevo mapa de sbt.
 
 Para crear el mapa, sbt primero ordena la lista de *settings*
 (configuraciones) de modo que todos los cambios al mismo se realicen
-juntos, y los valores que dependen de otras llaves se procesan después
+juntos, y los valores que dependen de otras llaves se procesan despu√©s
 de las llaves de las que dependen. Entonces sbt visita la lista ordenada
 de `Settings`s y aplica cada uno al mapa a la vez.
 
-Resumen: Una definición de construcción define una lista de
-`Setting[T]`, donde un `Setting[T]` es una transformación que afecta el
+Resumen: Una definici√≥n de construcci√≥n define una lista de
+`Setting[T]`, donde un `Setting[T]` es una transformaci√≥n que afecta el
 mapa de pares de llaves-valores de sbt y `T` es el tipo de cada valor.
 
-### De qué manera `build.sbt` define la configuración
+### De qu√© manera `build.sbt` define la configuraci√≥n
 
 `build.sbt` define una `Seq[Setting[_]]`; se trata de una lista de
-expresiones de Scala, separada por líneas en blanco, donde cada una se
+expresiones de Scala, separada por l√≠neas en blanco, donde cada una se
 convierte en un elemento de la secuencia. Si usted colocara `Seq(` antes
 del contenido de un archivo `.sbt` y `)` al final y reemplazara las
-líneas blancas con comas, entonces estaría observando el código `.scala`
+l√≠neas blancas con comas, entonces estar√≠a observando el c√≥digo `.scala`
 equivalente.
 
-A continuación se muestra un ejemplo:
+A continuaci√≥n se muestra un ejemplo:
 
 ```scala
 name := "hello"
@@ -714,61 +714,61 @@ version := "1.0"
 scalaVersion := "2.10.3"
 ```
 
-Cada `Setting` se define con una expresión de Scala. Las expresiones en
-`build.sbt` son independientes la una de la otra, y son expresiones, más
+Cada `Setting` se define con una expresi√≥n de Scala. Las expresiones en
+`build.sbt` son independientes la una de la otra, y son expresiones, m√°s
 bien que sentencias completas de Scala. Estas expresiones pueden estar
 entremezcladas con `val`s, `lazy val`s, y `def`s. No se permiten
 `object`s ni `class`es en `build.sbt`. Estos deben ir en el directorio
-`project/` como archivos de código fuente completos.
+`project/` como archivos de c√≥digo fuente completos.
 
 Por la izquierda, `name`, `version`, y `scalaVersion` son *keys*
 (llaves). Una *key* es una instancia de `SettingKey[T]`, `TaskKey[T]`, o
 `InputKey[T]` donde `T` es el valor esperado para el tipo. La clase de
 *keys* se explican abajo.
 
-Las *keys* tienen un método llamado `:=`, que regresa un `Setting[T]`.
-Usted podría usar una sintáxis similar a la de Java para invocar al
-método:
+Las *keys* tienen un m√©todo llamado `:=`, que regresa un `Setting[T]`.
+Usted podr√≠a usar una sint√°xis similar a la de Java para invocar al
+m√©todo:
 
 ```scala
 name.:=("hello")
 ```
 
 Pero Scala permite usar `name := "hello"` en lugar de lo anterior (en
-Scala, un método con un único parámetro puede utilizar cualquiera de las
+Scala, un m√©todo con un √∫nico par√°metro puede utilizar cualquiera de las
 dos sintaxis).
 
-El método `:=` en la *key* `name` regresa un `Setting`, específicamente
-un `Setting[String]`. `String` también aparece en el tipo de `name` en
-sí misma, el cuál es `SettingKey[String]`. En este caso, el valor
-`Setting[String]` regresado es una transformación para agregar o
-reemplazar la *key* `name` en el mapa de sbt, dándole el valor
+El m√©todo `:=` en la *key* `name` regresa un `Setting`, espec√≠ficamente
+un `Setting[String]`. `String` tambi√©n aparece en el tipo de `name` en
+s√≠ misma, el cu√°l es `SettingKey[String]`. En este caso, el valor
+`Setting[String]` regresado es una transformaci√≥n para agregar o
+reemplazar la *key* `name` en el mapa de sbt, d√°ndole el valor
 `"hello"`.
 
-Si usted usa el tipo de valor equivocado, la definición de la
-construcción no compilará:
+Si usted usa el tipo de valor equivocado, la definici√≥n de la
+construcci√≥n no compilar√°:
 
 ```scala
 name := 42  // no compila
 ```
 
-### Las *settings* (configuraciones) deben estar separadas por líneas en blanco
+### Las *settings* (configuraciones) deben estar separadas por l√≠neas en blanco
 
 No es posible escribir un `build.sbt` como el siguiente:
 
 
 ```scala
-// NO compila, pues no hay líneas en blanco
+// NO compila, pues no hay l√≠neas en blanco
 name := "hello"
 version := "1.0"
 scalaVersion := "2.10.3"
 ```
 
 sbt necesita un tipo de delimitador para indicar donde termina una
-expresión y comienza la siguiente.
+expresi√≥n y comienza la siguiente.
 
 Los archivos `.sbt` contienen una lista de expresiones de Scala, no un
-único programa de Scala. Estas expresiones tienen que separarse y
+√∫nico programa de Scala. Estas expresiones tienen que separarse y
 pasarse al compilador de manera individual.
 
 ### Keys
@@ -783,52 +783,52 @@ Existen tres tipos de llaves:
     que tiene que ser recalculada cada vez, potencialmente con efectos
     laterales.
 -   `InputKey[T]`: una *key* para una *task* que tiene argumentos para
-    la línea de comandos como entrada. Vea /Extending/Input-Tasks para
-    más detalles.
+    la l√≠nea de comandos como entrada. Vea /Extending/Input-Tasks para
+    m√°s detalles.
 
-#### Built-in Keys (Llaves ya incluídas)
+#### Built-in Keys (Llaves ya inclu√≠das)
 
-Las llaves ya incluídas son simplemente campos de un objeto llamado
+Las llaves ya inclu√≠das son simplemente campos de un objeto llamado
 [Keys](../sxr/sbt/Keys.scala.html). Un archivo `build.sbt` tiene
-implícitamente un `import sbt.Keys._`, de modo que `sbt.Keys.name` puede
+impl√≠citamente un `import sbt.Keys._`, de modo que `sbt.Keys.name` puede
 ser referido como `name`.
 
 #### Custom Keys (llaves personalizadas)
 
-Las llaves personalizadas pueden definirse con sus métodos de creación
-respectivos: `settingKey`, `taskKey`, e `inputKey`. Cada método espera
-el tipo del valor asociado con la llave así como una descripción. El
-nombre de la llave se toma del `val` al que se le asignó la llave. Por
+Las llaves personalizadas pueden definirse con sus m√©todos de creaci√≥n
+respectivos: `settingKey`, `taskKey`, e `inputKey`. Cada m√©todo espera
+el tipo del valor asociado con la llave as√≠ como una descripci√≥n. El
+nombre de la llave se toma del `val` al que se le asign√≥ la llave. Por
 ejemplo, para definir una llave para una nueva tarea llamado `hello`, :
 
 ```scala
 lazy val hello = taskKey[Unit]("An example task")
 ```
 
-Aquí se usó el hecho de que un archivo `.sbt` puede contener `val`s y
-`def`s además de *settings* (configuraciones). Todas estas definiciones
+Aqu√≠ se us√≥ el hecho de que un archivo `.sbt` puede contener `val`s y
+`def`s adem√°s de *settings* (configuraciones). Todas estas definiciones
 son evaluadas antes que las configuraciones sin importar donde se
 definan en el archivo. `val`s y `def`s deben estar separadas de las
-*settings* mediante líneas blancas.
+*settings* mediante l√≠neas blancas.
 
-> **Note**: Típicamente, se utilizan lazy vals en lugar de vals para evitar
-> problemas de inicialización.
+> **Note**: T√≠picamente, se utilizan lazy vals en lugar de vals para evitar
+> problemas de inicializaci√≥n.
 
 #### Task vs. Setting keys (Llaves para *Tasks* vs. Llaves para *Settings*)
 
 Se dice que una `TaskKey[T]` define una *task*. Las *tasks* son
 operaciones tales como `compile` o `package`. Pueden regresar `Unit`
-(`Unit` es el tipo de Scala análogo a `void`), o pueden regresar un
+(`Unit` es el tipo de Scala an√°logo a `void`), o pueden regresar un
 valor relacionado con la tarea, por ejemplo, `package` es una
 `TaskKey[File]` y su valor es el archivo jar que este crea.
 
-Cada vez que inicia una tarea de ejecución, por ejemplo mediante teclear
-`compile` en el prompt interactivo de sbt, sbt volverá a ejecutar
+Cada vez que inicia una tarea de ejecuci√≥n, por ejemplo mediante teclear
+`compile` en el prompt interactivo de sbt, sbt volver√° a ejecutar
 cualquier *task* envuelta exactamente una vez.
 
 El mapa de sbt que describe el proyecto puede mantener una cadena fija
-para un *setting* tal como `name`, pero tiene que haber algo de código
-ejecutable para una tarea como `compile` -- incluso si dicho código
+para un *setting* tal como `name`, pero tiene que haber algo de c√≥digo
+ejecutable para una tarea como `compile` -- incluso si dicho c√≥digo
 ejecutable eventualmente regresa una cadena, tiene que ejecutarse cada
 vez.
 
@@ -838,18 +838,18 @@ decir, "taskiness" (si debe ejecutarse cada vez) es una propiedad de la
 
 ### Definiendo tasks y settings
 
-Usando `:=`, usted puede asignar un valor a un *setting* y un cómputo a
-una *task*. En el caso de un *setting*, el valor será calculado una sola
-vez al momento de cargar el proyecto. Para una tarea, el cómputo se
-realizará cada vez que se ejecute la tarea.
+Usando `:=`, usted puede asignar un valor a un *setting* y un c√≥mputo a
+una *task*. En el caso de un *setting*, el valor ser√° calculado una sola
+vez al momento de cargar el proyecto. Para una tarea, el c√≥mputo se
+realizar√° cada vez que se ejecute la tarea.
 
-Por ejemplo, para implementar la tarea `hello` de la sección anterior, :
+Por ejemplo, para implementar la tarea `hello` de la secci√≥n anterior, :
 
 ```scala
 hello := { println("Hello!") }
 ```
 
-Ya vimos un ejemplo de definición de un *setting* para el nombre del
+Ya vimos un ejemplo de definici√≥n de un *setting* para el nombre del
 proyecto, :
 
 ```scala
@@ -862,43 +862,43 @@ Desde la perspectiva del sistema de tipos, el `Setting` creado a partir
 de una *task key* es ligeramente distinta de la creada a partir de una
 *setting key*. `taskKey := 42` resulta en una `Setting[Task[T]]`
 mientras que `settingKey := 42` resulta en una `Setting[T]`. Para la
-mayoría de los propósitos no hay diferencia, la *task key* todavía crea
+mayor√≠a de los prop√≥sitos no hay diferencia, la *task key* todav√≠a crea
 un valor de tipo `T` cuando la tarea se ejecuta.
 
 La diferencia entre los tipos `T` y `Task[T]` tiene la siguiente
-implicación: un *setting* no puede depender de una *task*, poque un
-*setting* es evaluado únicamente una vez al momento de cargar el
-proyecto y no se vuelve a ejecutar. Se escribirá más sobre este asunto
+implicaci√≥n: un *setting* no puede depender de una *task*, poque un
+*setting* es evaluado √∫nicamente una vez al momento de cargar el
+proyecto y no se vuelve a ejecutar. Se escribir√° m√°s sobre este asunto
 pronto en [more kinds of setting][More-About-Settings].
 
 ### Keys en modo sbt interactivo
 
 En el modo interactivo de sbt, usted puede teclear el nombre de
 cualquier tarea para ejecutar dicha tarea. Es por esto que al teclear
-`compile` se ejecuta la *task* de compilación. La *key* `compile` es una
+`compile` se ejecuta la *task* de compilaci√≥n. La *key* `compile` es una
 llave para una *task*.
 
-Si usted teclea el nombre de una *key* para *setting* más bien que una
-para *task*, entonces el valor de la *key* para *setting* será mostrado.
+Si usted teclea el nombre de una *key* para *setting* m√°s bien que una
+para *task*, entonces el valor de la *key* para *setting* ser√° mostrado.
 Al teclear el nombre de una *task* se ejecuta dicha *task*, pero no se
 despliega el valor resultante; para ver el resultado de la *task*, use
-`show <nombre de la tarea>` más bien que simplemente
-`<nombre de la tarea`. La convención para los nombres de las llaves es
-usar `estiloDeCamello` de modo que el nombre utilizado en la línea de
-comandos y el identificador de Scala sean idénticos.
+`show <nombre de la tarea>` m√°s bien que simplemente
+`<nombre de la tarea`. La convenci√≥n para los nombres de las llaves es
+usar `estiloDeCamello` de modo que el nombre utilizado en la l√≠nea de
+comandos y el identificador de Scala sean id√©nticos.
 
-Para aprender más sobre cualquier *key*, teclee
+Para aprender m√°s sobre cualquier *key*, teclee
 `inspect <nombre de la key>` en el prompt interactivo de sbt. Algo de la
-información que `inspect` despliega no tendrá sentido todavía, pero en
-la parte superior le mostrará el tipo del valor para el *setting* y una
-breve descripción del tal.
+informaci√≥n que `inspect` despliega no tendr√° sentido todav√≠a, pero en
+la parte superior le mostrar√° el tipo del valor para el *setting* y una
+breve descripci√≥n del tal.
 
 ### Imports en `build.sbt`
 
 Puede poner sentencias import en la parte superior de `build.sbt`; no
-necesitan estar separadas por líneas en blanco.
+necesitan estar separadas por l√≠neas en blanco.
 
-Hay algunos imports por default, como se indica a continuación:
+Hay algunos imports por default, como se indica a continuaci√≥n:
 
 ```scala
 import sbt._
@@ -906,37 +906,37 @@ import Process._
 import Keys._
 ```
 
-(Además, si usted tiene [archivos .scala][Full-Def], el contenido de
-cualquier objeto `Build` o `Plugin` en estos archivos será importado.
-Más sobre este asunto cuando se llegue a
+(Adem√°s, si usted tiene [archivos .scala][Full-Def], el contenido de
+cualquier objeto `Build` o `Plugin` en estos archivos ser√° importado.
+M√°s sobre este asunto cuando se llegue a
 [definiciones de construccion .scala][Full-Def].)
 
-### Añadiendo dependencias (librerías)
+### A√±adiendo dependencias (librer√≠as)
 
-Para agregar dependencias de librerías de terceros, hay dos opciones. La
-primera es añadir jars en el directorio `lib/` (para *unmanaged
-dependencies*) y la otra es agregar *managed dependencies*, que se verán
-como se muestra a continuación en `build.sbt`:
+Para agregar dependencias de librer√≠as de terceros, hay dos opciones. La
+primera es a√±adir jars en el directorio `lib/` (para *unmanaged
+dependencies*) y la otra es agregar *managed dependencies*, que se ver√°n
+como se muestra a continuaci√≥n en `build.sbt`:
 
 ```scala
 libraryDependencies += "org.apache.derby" % "derby" % "10.4.1.3"
 ```
 
-Así es como se agrega una *managed dependency* sobre la librería Apache
-Derby, versión 10.4.1.3.
+As√≠ es como se agrega una *managed dependency* sobre la librer√≠a Apache
+Derby, versi√≥n 10.4.1.3.
 
-La key `libraryDependencies` envuelve dos complejidades: `+=` más bien
-que `:=`, y el método `%`. `+=` agrega algo al valor anterior de la
-*key* más bien que reemplazarlo; esto se explica en
-[más sobre los settings][More-About-Settings]. El
-método `%` se usa para construir un ID para un módulo de Ivy a partir de
+La key `libraryDependencies` envuelve dos complejidades: `+=` m√°s bien
+que `:=`, y el m√©todo `%`. `+=` agrega algo al valor anterior de la
+*key* m√°s bien que reemplazarlo; esto se explica en
+[m√°s sobre los settings][More-About-Settings]. El
+m√©todo `%` se usa para construir un ID para un m√≥dulo de Ivy a partir de
 cadenas, como se explica en
 [library dependencies][Library-Dependencies].
 
 Por lo pronto, omitiremos los detalles del manejo de las dependencias
-(librerías) hasta más tarde en la Guía de inicio. Hay una
-[página completa][Library-Dependencies] que cubre el
-tema más tarde.
+(librer√≠as) hasta m√°s tarde en la Gu√≠a de inicio. Hay una
+[p√°gina completa][Library-Dependencies] que cubre el
+tema m√°s tarde.
 
 
   [Basic-Def]: Basic-Def.html
@@ -948,54 +948,54 @@ tema más tarde.
 Scopes
 ------
 
-Esta página describe los *scopes*. Se asume que usted ha leído y
-comprendido la página previa, [.sbt build definition][Basic-Def].
+Esta p√°gina describe los *scopes*. Se asume que usted ha le√≠do y
+comprendido la p√°gina previa, [.sbt build definition][Basic-Def].
 
 ### La historia completa sobre las *keys*
 
 [Previamente][Basic-Def] supusimos que una *key* como `name`
-correspondía a una entrada en el mapa de sbt de pares llave-valor
-(key-value). Esto fue una simplificación.
+correspond√≠a a una entrada en el mapa de sbt de pares llave-valor
+(key-value). Esto fue una simplificaci√≥n.
 
-En verdad, cada llave puede tener un valor asociado en más de un
+En verdad, cada llave puede tener un valor asociado en m√°s de un
 contexto, llamado un "scope".
 
 Algunos ejemplos concretos:
 
--   Si usted tiene múltiples proyectos en la definición de la
-    construcción, una *key* puede tener un valor diferente en cada
+-   Si usted tiene m√∫ltiples proyectos en la definici√≥n de la
+    construcci√≥n, una *key* puede tener un valor diferente en cada
     proyecto.
 -   La *key* `compile` puede tener un valor diferente para sus archivos
-    de código fuente de main comparado con el correspondiente valor para
-    el código fuente de test, si usted desea que se compilen de manera
+    de c√≥digo fuente de main comparado con el correspondiente valor para
+    el c√≥digo fuente de test, si usted desea que se compilen de manera
     distinta.
 -   La *key* `packageOpitons` (que contiene opciones para crear paquetes
     jar) puede tener diferentes valores para el empaquetado de archivos
-    class (packageBin) o para el empaquetado de código fuente
+    class (packageBin) o para el empaquetado de c√≥digo fuente
     (packageSrc).
 
-*No hay un único valor para una key dada*, porque el valor puede variar
+*No hay un √∫nico valor para una key dada*, porque el valor puede variar
 de acuerdo con el *scope*.
 
-Sin embargo, existe un único valor para una *scoped key* (llaves con un
+Sin embargo, existe un √∫nico valor para una *scoped key* (llaves con un
 contexto).
 
-Si usted se imagina que sbt está procesando una lista de *settings* para
+Si usted se imagina que sbt est√° procesando una lista de *settings* para
 generar un mapa de llave-valor (*key-value*) que describe al proyecto,
-como [se discutió anteriormente][Basic-Def], las *keys* en dicho mapa
-son *scoped keys*. Cada *setting* definido en la definición de la
-construcción del proyecto (por ejemplo en `build.sbt`) aplica a una
-*scoped key* también.
+como [se discuti√≥ anteriormente][Basic-Def], las *keys* en dicho mapa
+son *scoped keys*. Cada *setting* definido en la definici√≥n de la
+construcci√≥n del proyecto (por ejemplo en `build.sbt`) aplica a una
+*scoped key* tambi√©n.
 
-Con frecuencia el *scope* es implícito o tiene un valor por default,
-pero si dichos valores son incorrectos, entonces tendrá que indicar el
+Con frecuencia el *scope* es impl√≠cito o tiene un valor por default,
+pero si dichos valores son incorrectos, entonces tendr√° que indicar el
 *scope* deseado en `build.sbt`.
 
 ### Ejes del Scope
 
 Un *eje del scope* es un tipo, donde cada instancia del tipo puede
 definir su propio *scope* (esto es, cada instancia puede tener sus
-propios valores únicos para las *keys*).
+propios valores √∫nicos para las *keys*).
 
 Hay tres ejes del scope:
 
@@ -1006,42 +1006,42 @@ Hay tres ejes del scope:
 ### Scoping mediante del eje del proyecto
 
 Si usted
-[coloca múltiples proyectos en una construcción única][Multi-Project],
+[coloca m√∫ltiples proyectos en una construcci√≥n √∫nica][Multi-Project],
 cada proyecto necesita sus propios *settings*. Es decir, las *keys*
 pueden estar en *scope* de acuerdo al proyecto.
 
-Los ejes del proyecto también pueden configurarse para la "entera
-construcción", de modo que un *setting* aplique a la construcción
-completa más bien que a un solo proyecto. Los *settings* de *nivel de
-construcción* con frecuencia se usan como un plan de reserva cuando un
-proyecto no define un *setting* específico para un proyecto.
+Los ejes del proyecto tambi√©n pueden configurarse para la "entera
+construcci√≥n", de modo que un *setting* aplique a la construcci√≥n
+completa m√°s bien que a un solo proyecto. Los *settings* de *nivel de
+construcci√≥n* con frecuencia se usan como un plan de reserva cuando un
+proyecto no define un *setting* espec√≠fico para un proyecto.
 
-#### Scoping mendiante el eje de configuración
+#### Scoping mendiante el eje de configuraci√≥n
 
-Una configuración define el tipo de construcción, potencialmente con su
-propio classpath, código fuente, paquetes generados, etc. El concepto de
-configuración viene de Iviy, que sbt usa para
+Una configuraci√≥n define el tipo de construcci√≥n, potencialmente con su
+propio classpath, c√≥digo fuente, paquetes generados, etc. El concepto de
+configuraci√≥n viene de Iviy, que sbt usa para
 [managed dependencies][Library-Dependencies], y para
 [MavenScopes](https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Scope).
 
-Algunas configuraciones que verá en sbt:
+Algunas configuraciones que ver√° en sbt:
 
--   `Compile` que define la construcción principal (*main*)
+-   `Compile` que define la construcci√≥n principal (*main*)
     (`src/main/scala`).
--   `Test` que define cómo construir tests (`src/test/scala`).
+-   `Test` que define c√≥mo construir tests (`src/test/scala`).
 -   `Runtime` que define el classpath para la *task* `run`.
 
-Por default, todas las llaves asociadas con la compilación,
-empaquetamiento y la ejecución tienen un scope de configuración y por lo
-tanto pueden funcionar de manera diferente en cada configuración. Los
-ejemplos más obvios son las *keys* para *tasks* `compile`, `package`, y
+Por default, todas las llaves asociadas con la compilaci√≥n,
+empaquetamiento y la ejecuci√≥n tienen un scope de configuraci√≥n y por lo
+tanto pueden funcionar de manera diferente en cada configuraci√≥n. Los
+ejemplos m√°s obvios son las *keys* para *tasks* `compile`, `package`, y
 `run`; pero todas las llaves que *afectan* dichas *keys* (tales como
-`sourceDirectories` o `scalacOptions` o `fullClasspath`) también tienen
-scope de configuración.
+`sourceDirectories` o `scalacOptions` o `fullClasspath`) tambi√©n tienen
+scope de configuraci√≥n.
 
 #### Scoping mediante el eje task
 
-Los *settings* pueden afectar cómo funcionan las *tasks*. Por ejemplo,
+Los *settings* pueden afectar c√≥mo funcionan las *tasks*. Por ejemplo,
 la *key* de *setting* `packageOptions` afecta a la *key* `packageSrc` de
 *task*.
 
@@ -1062,7 +1062,7 @@ llenarse con el valor especial `Global`.
 
 `Global` significa lo que usted espera: el valor del *setting* aplica a
 todas las instancias de ese eje. Por ejemplo, si el eje de la *task* es
-`Global`, entonces dicho *setting* aplicaría a todas las *tasks*.
+`Global`, entonces dicho *setting* aplicar√≠a a todas las *tasks*.
 
 <!-- TODO: Translate to Spanish -->
 

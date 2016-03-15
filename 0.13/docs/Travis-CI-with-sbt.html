@@ -138,13 +138,10 @@ cache:
     - $HOME/.ivy2/cache
     - $HOME/.sbt/boot/
 </code></pre><p>Finally, the following a few lines of cleanup script are added:
-</p><pre><code class="prettyprint lang-yml">script:
-  # Your normal script
-  - sbt ++$TRAVIS_SCALA_VERSION -J-XX:ReservedCodeCacheSize=256M test
-
+</p><pre><code class="prettyprint lang-yml">before_cache:
   # Tricks to avoid unnecessary cache updates
-  - find $HOME/.sbt -name &quot;*.lock&quot; | xargs rm
-  - find $HOME/.ivy2 -name &quot;ivydata-*.properties&quot; | xargs rm
+  - find $HOME/.ivy2 -name &quot;ivydata-*.properties&quot; -delete
+  - find $HOME/.sbt -name &quot;*.lock&quot; -delete
 </code></pre><p>With the above changes combined Travis CI will tar up the cached directories and uploads them to Amazon S3.
 Overall, the use of the new infrastructure and caching seems to shave off a few minutes of build time per job.
 </p><p><strong>Note</strong>: The Travis documentation states caching features are still experimental.
