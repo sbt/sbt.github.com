@@ -3,7 +3,7 @@
       <head>
         <meta charset="utf-8"/>
         <meta content="width=device-width, initial-scale=1" name="viewport"/>
-        <title>sbt Reference Manual — ÁªÑÁªáÊûÑÂª∫</title>
+        <title>sbt Reference Manual — 组织构建</title>
         <link rel="shortcut icon" href="../favicon.ico"/>
         <link rel="stylesheet" href="../css/blueprint/screen.css" type="text/css" media="screen, projection"/>
         <link rel="stylesheet" href="../css/blueprint/grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
@@ -43,30 +43,30 @@
           </a>
         <div class="container contentswrapper">
           <div class="span-16 prepend-1 append-1 contents">
-            <h2 id="%C3%81%C2%AA%C3%91%C3%81%C2%AA%C3%A1%C3%8A%C3%BB%C3%91%C3%82%C2%AA%E2%88%AB">ÁªÑÁªáÊûÑÂª∫<a href="#%C3%81%C2%AA%C3%91%C3%81%C2%AA%C3%A1%C3%8A%C3%BB%C3%91%C3%82%C2%AA%E2%88%AB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Êú¨È°µÈù¢Â∞ÜËÆ®ËÆ∫ÊûÑÂª∫ÁªìÊûÑÁöÑÁªÑÁªá„ÄÇ
-</p><p>Êú¨Â∞èËäÇÂÅáËÆæ‰Ω†Â∑≤ÁªèÈòÖËØª‰∫Ü‰πãÂâçÁöÑÁ´†ËäÇÔºåÂ∞§ÂÖ∂ÊòØ <a href="Basic-Def.html">build.sbt</a>Ôºå<a href="Library-Dependencies.html">Â∫ì‰æùËµñ</a>Âíå<a href="Multi-Project.html">Â§öÂ∑•Á®ãÊûÑÂª∫</a>„ÄÇ
-</p><h3 id="sbt%C3%8A%C3%B2%C3%98%C3%88%C3%84%C3%AD%C3%82%CE%A9%C3%AD%C3%81%C3%B6%C3%91">sbtÊòØÈÄíÂΩíÁöÑ<a href="#sbt%C3%8A%C3%B2%C3%98%C3%88%C3%84%C3%AD%C3%82%CE%A9%C3%AD%C3%81%C3%B6%C3%91" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> ÂæàÁÆÄÂçïÔºåÈöêËóè‰∫Ü sbt ÊòØÂ¶Ç‰ΩïÂ∑•‰ΩúÁöÑ„ÄÇsbt ÊûÑÂª∫ÊòØÁî® Scala ‰ª£Á†ÅÂÆö‰πâÁöÑ„ÄÇ‰ª£Á†ÅÊú¨Ë∫´‰πüÂøÖÈ°ªÊòØËÉΩË¢´ÊûÑÂª∫ÁöÑ„ÄÇÊúâÊØî sbt Êõ¥Â•ΩÁöÑÂª∫Á´ãÊñπÂºè‰πàÔºü
-</p><p><code>project</code> ÁõÆÂΩï <em>ÊòØ‰Ω†ÁöÑÂ∑•Á®ãÂÜÖÂè¶‰∏Ä‰∏™Â∑•Á®ãÁöÑÈ°πÁõÆ</em>ÔºåÂÆÉÁü•ÈÅìÂ¶Ç‰ΩïÊûÑÂª∫‰Ω†ÁöÑÂ∑•Á®ã„ÄÇ‰∏∫‰∫ÜÂå∫ÂàÜËøô‰∏§ÁßçÊûÑÂª∫ÔºåÊàë‰ª¨ÊúâÊó∂‰ΩøÁî®<strong>Ê≠£Â∏∏ÊûÑÂª∫</strong>Ë°®Á§∫‰Ω†ÁöÑÊûÑÂª∫Ôºå‰ΩøÁî®<strong>ÂÖÉÊûÑÂª∫</strong>Êåá‰ª£Âú® <code>project</code>‰∏≠ÁöÑÊûÑÂª∫„ÄÇÂú®ÂÖÉÊûÑÂª∫‰∏≠ÁöÑÈ°πÁõÆËÉΩÂÅö‰ªª‰ΩïÂÖ∂‰ªñÈ°πÁõÆÂèØ‰ª•ÂÅöÁöÑ‰∫ãÊÉÖ„ÄÇ <em>‰Ω†ÁöÑÊûÑÂª∫ÂÆö‰πâÊòØ‰∏Ä‰∏™ sbt È°πÁõÆ„ÄÇ</em>
-</p><p>ÈÄíÂΩíÂèØ‰ª•ÁªßÁª≠‰∏ãÂéª„ÄÇÂ¶ÇÊûú‰Ω†ÂñúÊ¨¢, ‰Ω†ÂèØ‰ª•ÈÄöËøáÂàõÂª∫ <code>project/project/</code> ÁõÆÂΩïÁ®çÁ®çË∞ÉÊï¥È°πÁõÆÁöÑÊûÑÂª∫ÂÆö‰πâ„ÄÇ
-</p><p>‰∏ãÈù¢ÊòØ‰∏Ä‰∏™‰æãÂ≠êÔºö
-</p><pre><code class="">hello/                  # È°πÁõÆÁöÑÂü∫ÁõÆÂΩï
+            <h2 id="%E7%BB%84%E7%BB%87%E6%9E%84%E5%BB%BA">组织构建<a href="#%E7%BB%84%E7%BB%87%E6%9E%84%E5%BB%BA" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>本页面将讨论构建结构的组织。
+</p><p>本小节假设你已经阅读了之前的章节，尤其是 <a href="Basic-Def.html">build.sbt</a>，<a href="Library-Dependencies.html">库依赖</a>和<a href="Multi-Project.html">多工程构建</a>。
+</p><h3 id="sbt%E6%98%AF%E9%80%92%E5%BD%92%E7%9A%84">sbt是递归的<a href="#sbt%E6%98%AF%E9%80%92%E5%BD%92%E7%9A%84" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> 很简单，隐藏了 sbt 是如何工作的。sbt 构建是用 Scala 代码定义的。代码本身也必须是能被构建的。有比 sbt 更好的建立方式么？
+</p><p><code>project</code> 目录 <em>是你的工程内另一个工程的项目</em>，它知道如何构建你的工程。为了区分这两种构建，我们有时使用<strong>正常构建</strong>表示你的构建，使用<strong>元构建</strong>指代在 <code>project</code>中的构建。在元构建中的项目能做任何其他项目可以做的事情。 <em>你的构建定义是一个 sbt 项目。</em>
+</p><p>递归可以继续下去。如果你喜欢, 你可以通过创建 <code>project/project/</code> 目录稍稍调整项目的构建定义。
+</p><p>下面是一个例子：
+</p><pre><code class="">hello/                  # 项目的基目录
 
-    Hello.scala         # ‰∏Ä‰∏™È°πÁõÆÊ∫êÊñá‰ª∂Ôºà‰πüÂèØ‰ª•Âú®src/main/scalaÔºâ
+    Hello.scala         # 一个项目源文件（也可以在src/main/scala）
 
-    build.sbt           # build.sbt ÊòØproject/ ‰∏≠ÂÖÉÊûÑÂª∫Ê†πÈ°πÁõÆÁöÑÊ∫ê‰ª£Á†Å„ÄÇÊòØÊûÑÂª∫ÂÆö‰πâÈ°πÁõÆÁöÑ‰∏ÄÈÉ®ÂàÜ„ÄÇ
+    build.sbt           # build.sbt 是project/ 中元构建根项目的源代码。是构建定义项目的一部分。
 
-    project/            # ÂÖÉÊûÑÂª∫Ê†πÈ°πÁõÆÁöÑÂü∫ÁõÆÂΩï
+    project/            # 元构建根项目的基目录
 
-        Build.scala     # ÂÖÉÊûÑÂª∫Ê†πÈ°πÁõÆÁöÑ‰∏Ä‰∏™Ê∫êÊñá‰ª∂ÔºåÊòØ‰Ω†ÁöÑÊûÑÂª∫ÂÆö‰πâÁöÑÊûÑÂª∫ÂÆö‰πâÊ∫êÊñá‰ª∂
+        Build.scala     # 元构建根项目的一个源文件，是你的构建定义的构建定义源文件
 
-        build.sbt       # ÂÖÉÂÖÉÊûÑÂª∫ÁöÑÊ†πÈ°πÁõÆ‚Äî‚Äîproject/projectÁöÑÊ∫ê‰ª£Á†ÅÔºõÊûÑÂª∫ÂÆö‰πâÁöÑÊûÑÂª∫ÂÆö‰πâ
+        build.sbt       # 元元构建的根项目——project/project的源代码；构建定义的构建定义
 
-        project/        # ÂÖÉÂÖÉÊûÑÂª∫ÁöÑÊ†πÈ°πÁõÆÁöÑÂü∫ÁõÆÂΩïÔºõÊûÑÂª∫ÂÆö‰πâÁöÑÊûÑÂª∫ÂÆö‰πâÂ∑•Á®ã
+        project/        # 元元构建的根项目的基目录；构建定义的构建定义工程
 
-            Build.scala # project/project/ ÂÖÉÂÖÉÊûÑÂª∫ÁöÑÊ†πÈ°πÁõÆ‰∏≠ÁöÑÊ∫êÊñá‰ª∂
-</code></pre><p><em>‰∏çÁî®ÊãÖÂøÉÔºÅ</em> Â§ßÈÉ®ÂàÜÊó∂ÂÄô‰∏çÈúÄË¶Å <code>project/project/</code> ÁõÆÂΩï„ÄÇ‰ΩÜÊòØÁêÜËß£ÂÆÉÊòØÊúâÂ∏ÆÂä©ÁöÑ„ÄÇ
-</p><p>Âè¶Â§ñÔºå‰ªª‰Ωï‰ª• <code>.scala</code> ÊàñËÄÖ <code>.sbt</code> ÁªìÂ∞æÁöÑÊñá‰ª∂ÈÉΩ‰ºöË¢´‰ΩøÁî®ÔºåÂëΩÂêç‰∏∫ <code>build.sbt</code> Âíå <code>Build.scala</code>Âè™ÊòØÊÉØ‰æã„ÄÇÂ§ö‰∏™Êñá‰ª∂‰πüÊòØÂÖÅËÆ∏ÁöÑ„ÄÇ
-</p><h3 id="%C3%82%C3%BA%C2%AE%C3%82%C3%AA%C3%A5%E2%80%B0%E2%88%8F%C3%84%E2%80%B0%E2%88%8F%E2%84%A2%C3%82%C3%BA%E2%88%9E%C3%8A%C3%B1%CF%80%C3%8B%E2%88%91%C3%BC%C3%8B%E2%88%8F%E2%84%A2%E2%80%B0%C3%A6%C3%B9%C3%8B%C2%B5%C3%B1%C3%88%C2%B0%CF%80">Âú®Âêå‰∏Ä‰∏™Âú∞ÊñπË∑üË∏™‰æùËµñÈ°π<a href="#%C3%82%C3%BA%C2%AE%C3%82%C3%AA%C3%A5%E2%80%B0%E2%88%8F%C3%84%E2%80%B0%E2%88%8F%E2%84%A2%C3%82%C3%BA%E2%88%9E%C3%8A%C3%B1%CF%80%C3%8B%E2%88%91%C3%BC%C3%8B%E2%88%8F%E2%84%A2%E2%80%B0%C3%A6%C3%B9%C3%8B%C2%B5%C3%B1%C3%88%C2%B0%CF%80" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Áî®<code>project</code>‰∏ãÁöÑ<code>.scala</code>Êñá‰ª∂ÁªÑÊàêÊûÑÂª∫ÂÆö‰πâÁöÑ‰∏Ä‰∏™ÂÆûÈôÖÁî®‰æãÊòØÂàõÂª∫<code>project/Dependencies.scala</code>Êù•Âú®Âêå‰∏Ä‰∏™Âú∞ÊñπË∑üË∏™‰æùËµñÈ°π„ÄÇ
+            Build.scala # project/project/ 元元构建的根项目中的源文件
+</code></pre><p><em>不用担心！</em> 大部分时候不需要 <code>project/project/</code> 目录。但是理解它是有帮助的。
+</p><p>另外，任何以 <code>.scala</code> 或者 <code>.sbt</code> 结尾的文件都会被使用，命名为 <code>build.sbt</code> 和 <code>Build.scala</code>只是惯例。多个文件也是允许的。
+</p><h3 id="%E5%9C%A8%E5%90%8C%E4%B8%80%E4%B8%AA%E5%9C%B0%E6%96%B9%E8%B7%9F%E8%B8%AA%E4%BE%9D%E8%B5%96%E9%A1%B9">在同一个地方跟踪依赖项<a href="#%E5%9C%A8%E5%90%8C%E4%B8%80%E4%B8%AA%E5%9C%B0%E6%96%B9%E8%B7%9F%E8%B8%AA%E4%BE%9D%E8%B5%96%E9%A1%B9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>用<code>project</code>下的<code>.scala</code>文件组成构建定义的一个实际用例是创建<code>project/Dependencies.scala</code>来在同一个地方跟踪依赖项。
 </p><pre><code class="prettyprint lang-scala">import sbt._
 
 object Dependencies {
@@ -82,7 +82,7 @@ object Dependencies {
   val backendDeps =
     Seq(akkaActor, specs2core % Test)
 }
-</code></pre><p><code>Dependencies</code>ÂØπË±°Â∞ÜÂú®<code>build.sbt</code>‰∏≠ÂèØÁî®„ÄÇÂ¶ÇÊûúË¶ÅËÆ©‰ΩøÁî®<code>val</code>ÁöÑ‰ª£Á†ÅÊõ¥Âä†ÁÆÄÂçïÔºåÂèØ‰ª•ÂºïÂÖ•<code>Dependencies._</code>„ÄÇ
+</code></pre><p><code>Dependencies</code>对象将在<code>build.sbt</code>中可用。如果要让使用<code>val</code>的代码更加简单，可以引入<code>Dependencies._</code>。
 </p><pre><code class="prettyprint lang-scala">import Dependencies._
 
 lazy val commonSettings = Seq(
@@ -95,14 +95,14 @@ lazy val backend = (project in file(&quot;backend&quot;)).
   settings(
     libraryDependencies ++= backendDeps
   )
-</code></pre><p>ÂΩì‰Ω†ÁöÑÂ§öÂ∑•Á®ãÊûÑÂª∫ÂèòÂæóÂæàÂ§ßÔºåÂπ∂‰∏îÊÉ≥Ë¶ÅÁ°Æ‰øùÂ≠êÈ°πÁõÆÊúâ‰∏ÄËá¥ÁöÑ‰æùËµñÂÖ≥Á≥ªÊó∂ÔºåËøôÁßçÊäÄÊúØÂæàÊúâÁî®„ÄÇ
-</p><h3 id="%E2%80%B0%CE%A9%C3%AF%C3%8A%C3%B3%E2%88%82%C3%81%C3%AE%C2%AE++%C3%8A%C3%B1%C3%A1%E2%80%B0%C2%AA%E2%88%82">‰ΩïÊó∂Áî® <code>.scala</code> Êñá‰ª∂<a href="#%E2%80%B0%CE%A9%C3%AF%C3%8A%C3%B3%E2%88%82%C3%81%C3%AE%C2%AE++%C3%8A%C3%B1%C3%A1%E2%80%B0%C2%AA%E2%88%82" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Âú® <code>.scala</code> Êñá‰ª∂Ôºå‰Ω†ÂèØ‰ª•ÂÜô‰ªªÊÑèÁöÑ Scala ‰ª£Á†ÅÔºåÂåÖÊã¨È°∂Â±ÇÁöÑÁ±ªÂíåÂØπË±°„ÄÇ
-</p><p>Êé®ËçêÁöÑÊñπÊ≥ïÊòØÂÆö‰πâÂ§ßÈÉ®ÂàÜËÆæÁΩÆÂú®Â§öÂ∑•Á®ãÁöÑ <code>build.sbt</code> Êñá‰ª∂‰∏≠ÔºåÂπ∂‰∏î‰ΩøÁî® <code>project/*.scala</code> Êñá‰ª∂Êù•ÂÅö‰ªªÂä°ÂÆûÁé∞ÊàñÂú®Â§ö‰∏™Êñá‰ª∂‰∏≠ÂÖ±‰∫´ÈîÆÂÄº„ÄÇÂØπ<code>.scala</code>Êñá‰ª∂ÁöÑ‰ΩøÁî®‰πüÂèñÂÜ≥‰∫é‰Ω†ÁöÑÂõ¢ÈòüÂØπscalaÁöÑÁÜüÁªÉÁ®ãÂ∫¶„ÄÇ
-</p><h3 id="%C3%82%C3%86%C3%B6%E2%80%B0%CF%80%C3%A2%C3%8B%C3%A1%E2%84%A2%C3%82%C3%A4%C2%AE%C3%8A%C3%A8%C3%AD%E2%80%B0%C2%AA%E2%88%82">ÂÆö‰πâËá™Âä®Êèí‰ª∂<a href="#%C3%82%C3%86%C3%B6%E2%80%B0%CF%80%C3%A2%C3%8B%C3%A1%E2%84%A2%C3%82%C3%A4%C2%AE%C3%8A%C3%A8%C3%AD%E2%80%B0%C2%AA%E2%88%82" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>ÂØπ‰∫éÊõ¥È´òÁ∫ßÁöÑÁî®Êà∑ÔºåÂè¶‰∏ÄÁßçÊñπÂºèÁªÑÁªá‰Ω†ÁöÑÊûÑÂª∫ÊòØÂú®<code>project/*.scala</code>‰∏≠ÂÆö‰πâ‰∏ÄÊ¨°ÊÄß<a href="../reference/Plugins.html">Ëá™Âä®Êèí‰ª∂</a>„ÄÇÈÄöËøáÂÆö‰πâËß¶ÂèëÁöÑÊèí‰ª∂ÔºåËá™Âä®Êèí‰ª∂ÂèØ‰ª•Áî®‰Ωú‰∏ÄÁßçÁÆÄ‰æøÊñπÊ≥ïÊù•Ê≥®ÂÖ•Ë∑®ÊâÄÊúâÂ≠êÈ°πÁõÆÁöÑËá™ÂÆö‰πâ‰ªªÂä°ÂíåÂëΩ‰ª§„ÄÇ
+</code></pre><p>当你的多工程构建变得很大，并且想要确保子项目有一致的依赖关系时，这种技术很有用。
+</p><h3 id="%E4%BD%95%E6%97%B6%E7%94%A8++%E6%96%87%E4%BB%B6">何时用 <code>.scala</code> 文件<a href="#%E4%BD%95%E6%97%B6%E7%94%A8++%E6%96%87%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在 <code>.scala</code> 文件，你可以写任意的 Scala 代码，包括顶层的类和对象。
+</p><p>推荐的方法是定义大部分设置在多工程的 <code>build.sbt</code> 文件中，并且使用 <code>project/*.scala</code> 文件来做任务实现或在多个文件中共享键值。对<code>.scala</code>文件的使用也取决于你的团队对scala的熟练程度。
+</p><h3 id="%E5%AE%9A%E4%B9%89%E8%87%AA%E5%8A%A8%E6%8F%92%E4%BB%B6">定义自动插件<a href="#%E5%AE%9A%E4%B9%89%E8%87%AA%E5%8A%A8%E6%8F%92%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>对于更高级的用户，另一种方式组织你的构建是在<code>project/*.scala</code>中定义一次性<a href="../reference/Plugins.html">自动插件</a>。通过定义触发的插件，自动插件可以用作一种简便方法来注入跨所有子项目的自定义任务和命令。
 </p><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>
-                        <a href="Summary.html"> ÊÄªÁªì </a>                        
+                        <a href="Summary.html"> 总结 </a>                        
                         <ul class="language-bar">
         <li><a href="../Organizing-Build.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/Organizing-Build.html"><span class="lang-item lang-ja">日本語</span></a></li><li><a href="../zh-cn/Organizing-Build.html"><span class="lang-item lang-zh-cn">中文 (简体)</span></a></li>
       </ul>
@@ -111,7 +111,7 @@ lazy val backend = (project in file(&quot;backend&quot;)).
       <a name="toc"></a>
       <h4 class="toctitle">Contents</h4>
       <div class="tocbody">
-      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">sbt ÂÖ•Èó®</a></div><ol class="toc"> <li><div><a href="Setup.html">ÂÆâË£Ö sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Âú® Mac ‰∏äÂÆâË£Ö sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Âú® Windows ‰∏äÂÆâË£Ö sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Âú® Linux ‰∏äÂÆâË£Ö sbt</a></div></li><li><div><a href="Manual-Installation.html">ÊâãÂä®ÂÆâË£Ö sbt</a></div></li><li><div><a href="Activator-Installation.html">ÂÆâË£Ö Typesafe Activator (ÂåÖÂê´sbt)</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">ÁõÆÂΩïÁªìÊûÑ</a></div></li><li><div><a href="Running.html">ËøêË°å</a></div></li><li><div><a href="Basic-Def.html">.sbt ÊûÑÂª∫ÂÆö‰πâ</a></div></li><li><div><a href="Scopes.html">Scope</a></div></li><li><div><a href="More-About-Settings.html">Êõ¥Â§öÂÖ≥‰∫éËÆæÁΩÆ</a></div></li><li><div><a href="Library-Dependencies.html">Â∫ì‰æùËµñ</a></div></li><li><div><a href="Multi-Project.html">Â§öÈ°πÁõÆÊûÑÂª∫</a></div></li><li><div><a href="Using-Plugins.html">‰ΩøÁî®Êèí‰ª∂</a></div></li><li><div><a href="Custom-Settings.html">Ëá™ÂÆö‰πâËÆæÁΩÆÂíå‰ªªÂä°</a></div></li><li><div class="current">ÁªÑÁªáÊûÑÂª∫</div></li><li><div><a href="Summary.html">ÊÄªÁªì</a></div></li><li><div><a href="Bare-Def.html">ÈôÑÂΩïÔºöBare .sbt ÊûÑÂª∫ÂÆö‰πâ</a></div></li><li><div><a href="Full-Def.html">ÈôÑÂΩïÔºö.scala ÊûÑÂª∫ÂÆö‰πâ</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">sbt 入门</a></div><ol class="toc"> <li><div><a href="Setup.html">安装 sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">在 Mac 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">在 Windows 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">在 Linux 上安装 sbt</a></div></li><li><div><a href="Manual-Installation.html">手动安装 sbt</a></div></li><li><div><a href="Activator-Installation.html">安装 Typesafe Activator (包含sbt)</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">目录结构</a></div></li><li><div><a href="Running.html">运行</a></div></li><li><div><a href="Basic-Def.html">.sbt 构建定义</a></div></li><li><div><a href="Scopes.html">Scope</a></div></li><li><div><a href="More-About-Settings.html">更多关于设置</a></div></li><li><div><a href="Library-Dependencies.html">库依赖</a></div></li><li><div><a href="Multi-Project.html">多项目构建</a></div></li><li><div><a href="Using-Plugins.html">使用插件</a></div></li><li><div><a href="Custom-Settings.html">自定义设置和任务</a></div></li><li><div class="current">组织构建</div></li><li><div><a href="Summary.html">总结</a></div></li><li><div><a href="Bare-Def.html">附录：Bare .sbt 构建定义</a></div></li><li><div><a href="Full-Def.html">附录：.scala 构建定义</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
           </div>
         </div>
         <div class="header">

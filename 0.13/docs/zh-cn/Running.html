@@ -3,7 +3,7 @@
       <head>
         <meta charset="utf-8"/>
         <meta content="width=device-width, initial-scale=1" name="viewport"/>
-        <title>sbt Reference Manual — ËøêË°å</title>
+        <title>sbt Reference Manual — 运行</title>
         <link rel="shortcut icon" href="../favicon.ico"/>
         <link rel="stylesheet" href="../css/blueprint/screen.css" type="text/css" media="screen, projection"/>
         <link rel="stylesheet" href="../css/blueprint/grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
@@ -41,99 +41,99 @@
           </a>
         <div class="container contentswrapper">
           <div class="span-16 prepend-1 append-1 contents">
-            <h2 id="%C3%8B%C3%B8%C3%AA%C3%8B%C2%B0%C3%A5">ËøêË°å<a href="#%C3%8B%C3%B8%C3%AA%C3%8B%C2%B0%C3%A5" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Ëøô‰∏ÄÂ∞èËäÇÂ∞ÜËÆ≤Ëø∞Âú®‰Ω†Âª∫Á´ãÂ•ΩÈ°πÁõÆ‰πãÂêéÂ¶Ç‰ΩïÂéª‰ΩøÁî® sbt„ÄÇÂÅáËÆæ‰Ω†Â∑≤Áªè <a href="Setup.html">ÂÆâË£Ö sbt</a> Âπ∂‰∏îÂ∑≤ÁªèÂàõÂª∫Ëøá <a href="Hello.html">Hello, World</a> È°πÁõÆÊàñÂÖ∂‰ªñÈ°πÁõÆ„ÄÇ
-</p><h3 id="%E2%80%B0%E2%88%AB%C2%A7%E2%80%B0%E2%88%AB%C3%AD%C3%8A%C2%AE%C2%B0%C3%82%C2%BA%C3%A8">‰∫§‰∫íÊ®°Âºè<a href="#%E2%80%B0%E2%88%AB%C2%A7%E2%80%B0%E2%88%AB%C3%AD%C3%8A%C2%AE%C2%B0%C3%82%C2%BA%C3%A8" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Âú®‰Ω†ÁöÑÈ°πÁõÆÁõÆÂΩï‰∏ãËøêË°å sbt ‰∏çË∑ü‰ªª‰ΩïÂèÇÊï∞Ôºö
+            <h2 id="%E8%BF%90%E8%A1%8C">运行<a href="#%E8%BF%90%E8%A1%8C" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>这一小节将讲述在你建立好项目之后如何去使用 sbt。假设你已经 <a href="Setup.html">安装 sbt</a> 并且已经创建过 <a href="Hello.html">Hello, World</a> 项目或其他项目。
+</p><h3 id="%E4%BA%A4%E4%BA%92%E6%A8%A1%E5%BC%8F">交互模式<a href="#%E4%BA%A4%E4%BA%92%E6%A8%A1%E5%BC%8F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在你的项目目录下运行 sbt 不跟任何参数：
 </p><pre><code class="">$ sbt
-</code></pre><p>ÊâßË°å sbt ‰∏çË∑ü‰ªª‰ΩïÂëΩ‰ª§Ë°åÂèÇÊï∞Â∞Ü‰ºöËøõÂÖ•‰∫§‰∫íÊ®°Âºè„ÄÇ‰∫§‰∫íÊ®°ÂºèÊúâ‰∏Ä‰∏™ÂëΩ‰ª§Ë°åÔºàÂê´Êúâ tab Ëá™Âä®Ë°•ÂÖ®ÂäüËÉΩÂíåÂéÜÂè≤ËÆ∞ÂΩïÔºâ„ÄÇ
-</p><p>‰æãÂ¶ÇÔºåÂú® sbt ÂëΩ‰ª§Ë°åÈáåËæìÂÖ• <code>compile</code>Ôºö
+</code></pre><p>执行 sbt 不跟任何命令行参数将会进入交互模式。交互模式有一个命令行（含有 tab 自动补全功能和历史记录）。
+</p><p>例如，在 sbt 命令行里输入 <code>compile</code>：
 </p><pre><code class="">&gt; compile
-</code></pre><p>ÂÜçÊ¨° <code>compile</code>ÔºåÂè™ÈúÄË¶ÅÊåâÂêë‰∏äÁöÑÊñπÂêëÈîÆÔºåÁÑ∂ÂêéÂõûËΩ¶„ÄÇ
-ËæìÂÖ• <code>run</code> Êù•ÂêØÂä®Á®ãÂ∫è„ÄÇ
-ËæìÂÖ• <code>exit</code> ÊàñËÄÖ Ctrl+D ÔºàUnixÔºâÊàñËÄÖ Ctrl+Z ÔºàWindowsÔºâÂèØ‰ª•ÈÄÄÂá∫‰∫§‰∫íÊ®°Âºè„ÄÇ
-</p><h3 id="%C3%8A%C3%A2%CF%80%C3%82%C2%A7%C3%91%C3%81%C3%AA%C3%9C%C3%8A%C2%AE%C2%B0%C3%82%C2%BA%C3%A8">ÊâπÂ§ÑÁêÜÊ®°Âºè<a href="#%C3%8A%C3%A2%CF%80%C3%82%C2%A7%C3%91%C3%81%C3%AA%C3%9C%C3%8A%C2%AE%C2%B0%C3%82%C2%BA%C3%A8" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>‰Ω†‰πüÂèØ‰ª•Áî®ÊâπÂ§ÑÁêÜÊ®°ÂºèÊù•ËøêË°å sbtÔºåÂèØ‰ª•‰ª•Á©∫Ê†º‰∏∫ÂàÜÈöîÁ¨¶ÊåáÂÆöÂèÇÊï∞„ÄÇÂØπ‰∫éÊé•ÂèóÂèÇÊï∞ÁöÑ sbt ÂëΩ‰ª§ÔºåÂ∞ÜÂëΩ‰ª§ÂíåÂèÇÊï∞Áî®ÂºïÂè∑ÂºïËµ∑Êù•‰∏ÄËµ∑‰º†Áªô sbt„ÄÇ‰æãÂ¶ÇÔºö
+</code></pre><p>再次 <code>compile</code>，只需要按向上的方向键，然后回车。
+输入 <code>run</code> 来启动程序。
+输入 <code>exit</code> 或者 Ctrl+D （Unix）或者 Ctrl+Z （Windows）可以退出交互模式。
+</p><h3 id="%E6%89%B9%E5%A4%84%E7%90%86%E6%A8%A1%E5%BC%8F">批处理模式<a href="#%E6%89%B9%E5%A4%84%E7%90%86%E6%A8%A1%E5%BC%8F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>你也可以用批处理模式来运行 sbt，可以以空格为分隔符指定参数。对于接受参数的 sbt 命令，将命令和参数用引号引起来一起传给 sbt。例如：
 </p><pre><code class="">$ sbt clean compile &quot;testOnly TestA TestB&quot;
-</code></pre><p>Âú®Ëøô‰∏™‰æãÂ≠ê‰∏≠Ôºå<code>testOnly</code> Êúâ‰∏§‰∏™ÂèÇÊï∞ <code>TestA</code> Âíå <code>TestB</code>„ÄÇËøô‰∏™ÂëΩ‰ª§‰ºöÊåâÈ°∫Â∫èÊâßË°åÔºà<code>clean</code>Ôºå <code>compile</code>Ôºå ÁÑ∂Âêé <code>testOnly</code>Ôºâ„ÄÇ
-</p><h3 id="%C3%8A%C3%A5%C3%85%C3%81%C2%AA%E2%89%A0%C3%8A%C3%BB%C3%91%C3%82%C2%AA%E2%88%AB%C3%82%C3%AD%C3%A5%C3%8A%C2%B5%C3%A3%C3%8B%C3%98%C3%AF">ÊåÅÁª≠ÊûÑÂª∫ÂíåÊµãËØï<a href="#%C3%8A%C3%A5%C3%85%C3%81%C2%AA%E2%89%A0%C3%8A%C3%BB%C3%91%C3%82%C2%AA%E2%88%AB%C3%82%C3%AD%C3%A5%C3%8A%C2%B5%C3%A3%C3%8B%C3%98%C3%AF" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>‰∏∫‰∫ÜÂä†Âø´ÁºñËæë-ÁºñËØë-ÊµãËØïÂæ™ÁéØÔºå‰Ω†ÂèØ‰ª•ËÆ© sbt Âú®‰Ω†‰øùÂ≠òÊ∫êÊñá‰ª∂Êó∂Ëá™Âä®ÈáçÊñ∞ÁºñËØëÊàñËÄÖË∑ëÊµãËØï„ÄÇ
-Âú®ÂëΩ‰ª§ÂâçÈù¢Âä†‰∏äÂâçÁºÄ <code>~</code> ÂêéÔºåÊØèÂΩìÊúâ‰∏Ä‰∏™ÊàñÂ§ö‰∏™Ê∫êÊñá‰ª∂ÂèëÁîüÂèòÂåñÊó∂Â∞±‰ºöËá™Âä®ËøêË°åËØ•ÂëΩ‰ª§„ÄÇ‰æãÂ¶ÇÔºåÂú®‰∫§‰∫íÊ®°Âºè‰∏ãÂ∞ùËØïÔºö
+</code></pre><p>在这个例子中，<code>testOnly</code> 有两个参数 <code>TestA</code> 和 <code>TestB</code>。这个命令会按顺序执行（<code>clean</code>， <code>compile</code>， 然后 <code>testOnly</code>）。
+</p><h3 id="%E6%8C%81%E7%BB%AD%E6%9E%84%E5%BB%BA%E5%92%8C%E6%B5%8B%E8%AF%95">持续构建和测试<a href="#%E6%8C%81%E7%BB%AD%E6%9E%84%E5%BB%BA%E5%92%8C%E6%B5%8B%E8%AF%95" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>为了加快编辑-编译-测试循环，你可以让 sbt 在你保存源文件时自动重新编译或者跑测试。
+在命令前面加上前缀 <code>~</code> 后，每当有一个或多个源文件发生变化时就会自动运行该命令。例如，在交互模式下尝试：
 </p><pre><code class="">&gt; ~ compile
-</code></pre><p>ÊåâÂõûËΩ¶ÈîÆÂÅúÊ≠¢ÁõëËßÜÂèòÂåñ„ÄÇ
-‰Ω†ÂèØ‰ª•Âú®‰∫§‰∫íÊ®°ÂºèÊàñËÄÖÊâπÂ§ÑÁêÜÊ®°Âºè‰∏ã‰ΩøÁî® <code>~</code> ÂâçÁºÄ„ÄÇ
-ÂèÇËßÅ <a href="../docs/Triggered-Execution.html">Ëß¶ÂèëÊâßË°å</a> Ëé∑ÂèñËØ¶ÁªÜ‰ø°ÊÅØ„ÄÇ
-</p><h3 id="%C3%82%E2%88%8F%E2%88%8F%C3%81%C3%AE%C2%AE%C3%82%C3%AB%CE%A9%E2%80%B0%C2%AA%C2%A7">Â∏∏Áî®ÂëΩ‰ª§<a href="#%C3%82%E2%88%8F%E2%88%8F%C3%81%C3%AE%C2%AE%C3%82%C3%AB%CE%A9%E2%80%B0%C2%AA%C2%A7" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>‰∏ãÈù¢ÊòØ‰∏Ä‰∫õÈùûÂ∏∏Â∏∏Áî®ÁöÑÁöÑ sbt ÂëΩ‰ª§„ÄÇÊõ¥Âä†ËØ¶ÁªÜÁöÑÂàóË°®ËØ∑ÂèÇËßÅ <a href="../docs/Command-Line-Reference.html">ÂëΩ‰ª§Ë°åÂèÇËÄÉ</a>„ÄÇ
+</code></pre><p>按回车键停止监视变化。
+你可以在交互模式或者批处理模式下使用 <code>~</code> 前缀。
+参见 <a href="../docs/Triggered-Execution.html">触发执行</a> 获取详细信息。
+</p><h3 id="%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4">常用命令<a href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>下面是一些非常常用的的 sbt 命令。更加详细的列表请参见 <a href="../docs/Command-Line-Reference.html">命令行参考</a>。
 </p><table>
   <tr>
     <td><tt>clean</tt></td>
-    <td>Âà†Èô§ÊâÄÊúâÁîüÊàêÁöÑÊñá‰ª∂ ÔºàÂú® <tt>target</tt> ÁõÆÂΩï‰∏ãÔºâ„ÄÇ</td>
+    <td>删除所有生成的文件 （在 <tt>target</tt> 目录下）。</td>
   </tr>
   <tr>
     <td><tt>compile</tt></td>
-    <td>ÁºñËØëÊ∫êÊñá‰ª∂ÔºàÂú® <tt>src/main/scala</tt> Âíå
-   <tt>src/main/java</tt> ÁõÆÂΩï‰∏ãÔºâ„ÄÇ</td>
+    <td>编译源文件（在 <tt>src/main/scala</tt> 和
+   <tt>src/main/java</tt> 目录下）。</td>
   </tr>
   <tr>
     <td><tt>test</tt></td>
-    <td>ÁºñËØëÂíåËøêË°åÊâÄÊúâÊµãËØï„ÄÇ</td>
+    <td>编译和运行所有测试。</td>
   </tr>
   <tr>
     <td><tt>console</tt></td>
-    <td>ËøõÂÖ•Âà∞‰∏Ä‰∏™ÂåÖÂê´ÊâÄÊúâÁºñËØëÁöÑÊñá‰ª∂ÂíåÊâÄÊúâ‰æùËµñÁöÑ classpath ÁöÑ Scala Ëß£ÊûêÂô®„ÄÇËæìÂÖ• <tt>:quit</tt>Ôºå
-   Ctrl+D ÔºàUnixÔºâÔºåÊàñËÄÖ Ctrl+Z ÔºàWindowsÔºâ ËøîÂõûÂà∞ sbt„ÄÇ</td>
+    <td>进入到一个包含所有编译的文件和所有依赖的 classpath 的 Scala 解析器。输入 <tt>:quit</tt>，
+   Ctrl+D （Unix），或者 Ctrl+Z （Windows） 返回到 sbt。</td>
   </tr>
   <tr>
-    <td><nobr><tt>run &lt;ÂèÇÊï∞&gt;*</tt></nobr></td>
-    <td>Âú®Âíå sbt ÊâÄÂ§ÑÁöÑÂêå‰∏Ä‰∏™ËôöÊãüÊú∫‰∏äÊâßË°åÈ°πÁõÆÁöÑ main class„ÄÇ</td>
+    <td><nobr><tt>run &lt;参数&gt;*</tt></nobr></td>
+    <td>在和 sbt 所处的同一个虚拟机上执行项目的 main class。</td>
   </tr>
   <tr>
     <td><tt>package</tt></td>
-    <td>Â∞Ü <tt>src/main/resources</tt> ‰∏ãÁöÑÊñá‰ª∂Âíå <tt>src/main/scala</tt> ‰ª•Âèä <tt>src/main/java</tt> ‰∏≠ÁºñËØëÂá∫Êù•ÁöÑ class Êñá‰ª∂ÊâìÂåÖÊàê‰∏Ä‰∏™ jar Êñá‰ª∂„ÄÇ</td>
+    <td>将 <tt>src/main/resources</tt> 下的文件和 <tt>src/main/scala</tt> 以及 <tt>src/main/java</tt> 中编译出来的 class 文件打包成一个 jar 文件。</td>
   </tr>
   <tr>
-    <td><tt>help &lt;ÂëΩ‰ª§&gt;</tt></td>
-    <td>ÊòæÁ§∫ÊåáÂÆöÁöÑÂëΩ‰ª§ÁöÑËØ¶ÁªÜÂ∏ÆÂä©‰ø°ÊÅØ„ÄÇÂ¶ÇÊûúÊ≤°ÊúâÊåáÂÆöÂëΩ‰ª§Ôºå‰ºöÊòæÁ§∫ÊâÄÊúâÂëΩ‰ª§ÁöÑÁÆÄ‰ªã„ÄÇ</td>
+    <td><tt>help &lt;命令&gt;</tt></td>
+    <td>显示指定的命令的详细帮助信息。如果没有指定命令，会显示所有命令的简介。</td>
   </tr>
   <tr>
     <td><tt>reload</tt></td>
-    <td>ÈáçÊñ∞Âä†ËΩΩÊûÑÂª∫ÂÆö‰πâÔºà<tt>build.sbt</tt>Ôºå <tt>project/*.scala</tt>Ôºå <tt>project/*.sbt</tt> Ëøô‰∫õÊñá‰ª∂‰∏≠ÂÆö‰πâÁöÑÂÜÖÂÆπ)„ÄÇÂú®‰øÆÊîπ‰∫ÜÊûÑÂª∫ÂÆö‰πâÊñá‰ª∂‰πãÂêéÈúÄË¶ÅÈáçÊñ∞Âä†ËΩΩ„ÄÇ</td>
+    <td>重新加载构建定义（<tt>build.sbt</tt>， <tt>project/*.scala</tt>， <tt>project/*.sbt</tt> 这些文件中定义的内容)。在修改了构建定义文件之后需要重新加载。</td>
   </tr>
-</table><h3 id="Tab+%C3%8B%C3%A1%E2%84%A2%C3%82%C3%A4%C2%AE%C3%8B%C2%B0%E2%80%A2%C3%82%C3%96%C2%AE">Tab Ëá™Âä®Ë°•ÂÖ®<a href="#Tab+%C3%8B%C3%A1%E2%84%A2%C3%82%C3%A4%C2%AE%C3%8B%C2%B0%E2%80%A2%C3%82%C3%96%C2%AE" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>‰∫§‰∫íÊ®°Âºè‰∏ãÂåÖÊã¨Á©∫ÁöÑÂëΩ‰ª§Ë°åÈÉΩÊúâ tab Ëá™Âä®Ë°•ÂÖ®„ÄÇsbt ÁöÑ‰∏Ä‰∏™ÁâπÂà´ÁöÑÁ∫¶ÂÆöÊòØÔºåÂΩìÊåâ tab ÈîÆ‰∏ÄÊ¨°ÁöÑÊó∂ÂÄôÂèØËÉΩÂè™‰ºöÊòæÁ§∫ÊâÄÊúâÂëΩ‰ª§‰∏≠ÊúÄÊúâÂèØËÉΩÁöÑËá™Âä®Ë°•ÂÖ®ÁöÑÂ≠êÈõÜÔºåÂΩìÊåâÂ§öÊ¨°Êó∂Êâç‰ºöÊòæÁ§∫ËØ¶ÁªÜÁöÑÈÄâÈ°π„ÄÇ
-</p><h3 id="%C3%82%C3%AB%CE%A9%E2%80%B0%C2%AA%C2%A7%C3%82%C3%A9%C3%9C%C3%82%C3%A8%E2%89%A4%C3%8B%C3%86%E2%88%9E%C3%82%CE%A9%C3%AF">ÂëΩ‰ª§ÂéÜÂè≤ËÆ∞ÂΩï<a href="#%C3%82%C3%AB%CE%A9%E2%80%B0%C2%AA%C2%A7%C3%82%C3%A9%C3%9C%C3%82%C3%A8%E2%89%A4%C3%8B%C3%86%E2%88%9E%C3%82%CE%A9%C3%AF" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>‰∫§‰∫íÊ®°ÂºèÊúâÂéÜÂè≤ËÆ∞ÂΩïÔºåÂç≥‰Ωø‰Ω†ÈÄÄÂá∫ sbt ÁÑ∂ÂêéÈáçÊñ∞ËøõÂÖ•„ÄÇÊúÄÁÆÄÂçïÁöÑËÆøÈóÆÂéÜÂè≤ËÆ∞ÂΩïÁöÑÊñπÊ≥ïÊó∂Áî®‰∏äÊñπÂêëÈîÆ„ÄÇËøòÊîØÊåÅ‰ª•‰∏ã‰∏Ä‰∫õÂëΩ‰ª§Ôºö
+</table><h3 id="Tab+%E8%87%AA%E5%8A%A8%E8%A1%A5%E5%85%A8">Tab 自动补全<a href="#Tab+%E8%87%AA%E5%8A%A8%E8%A1%A5%E5%85%A8" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>交互模式下包括空的命令行都有 tab 自动补全。sbt 的一个特别的约定是，当按 tab 键一次的时候可能只会显示所有命令中最有可能的自动补全的子集，当按多次时才会显示详细的选项。
+</p><h3 id="%E5%91%BD%E4%BB%A4%E5%8E%86%E5%8F%B2%E8%AE%B0%E5%BD%95">命令历史记录<a href="#%E5%91%BD%E4%BB%A4%E5%8E%86%E5%8F%B2%E8%AE%B0%E5%BD%95" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>交互模式有历史记录，即使你退出 sbt 然后重新进入。最简单的访问历史记录的方法时用上方向键。还支持以下一些命令：
 </p><table>
   <tr>
     <td><tt>!</tt></td>
-    <td>ÊòæÁ§∫ÂéÜÂè≤ËÆ∞ÂΩïÂëΩ‰ª§Â∏ÆÂä©„ÄÇ</td>
+    <td>显示历史记录命令帮助。</td>
   </tr>
   <tr>
     <td><tt>!!</tt></td>
-    <td>ÈáçÊñ∞ÊâßË°åÂâç‰∏ÄÊù°ÂëΩ‰ª§„ÄÇ</td>
+    <td>重新执行前一条命令。</td>
   </tr>
   <tr>
     <td><tt>!:</tt></td>
-    <td>ÊòæÁ§∫ÊâÄÊúâ‰πãÂâçÁöÑÂëΩ‰ª§„ÄÇ</td>
+    <td>显示所有之前的命令。</td>
   </tr>  
   <tr>
     <td><tt>!:n</tt></td>
-    <td>ÊòæÁ§∫‰πãÂâçÁöÑÊúÄÂêé <tt>n</tt> Êù°ÂëΩ‰ª§„ÄÇ</td>
+    <td>显示之前的最后 <tt>n</tt> 条命令。</td>
   </tr>
   <tr>
     <td><tt>!n</tt></td>
-    <td>ÊâßË°å <tt>!:</tt> ÂëΩ‰ª§ÊòæÁ§∫ÁöÑÁªìÊûú‰∏≠‰∏ãÊ†á‰∏∫ <tt>n</tt> ÁöÑÂëΩ‰ª§„ÄÇ</td>
+    <td>执行 <tt>!:</tt> 命令显示的结果中下标为 <tt>n</tt> 的命令。</td>
   </tr>
   <tr>
     <td><tt>!-n</tt></td>
-    <td>ÊâßË°å‰ªéËØ•ÂëΩ‰ª§ÂæÄÂâçÊï∞Á¨¨ n Êù°ÂëΩ‰ª§„ÄÇ</td>
+    <td>执行从该命令往前数第 n 条命令。</td>
   </tr>
   <tr>
     <td><tt>!string</tt></td>
-    <td>ÊâßË°åÊúÄËøëÊâßË°åËøáÁöÑ‰ª• string ÊâìÂ§¥ÁöÑÂëΩ‰ª§„ÄÇ</td>
+    <td>执行最近执行过的以 string 打头的命令。</td>
   </tr>
   <tr>
     <td><tt>!?string</tt></td>
-    <td>ÊâßË°åÊúÄËøëÊâßË°åËøáÁöÑÂåÖÂê´ string ÁöÑÂëΩ‰ª§„ÄÇ</td>
+    <td>执行最近执行过的包含 string 的命令。</td>
   </tr>
 </table><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>
-                        <a href="Basic-Def.html"> .sbt ÊûÑÂª∫ÂÆö‰πâ </a>                        
+                        <a href="Basic-Def.html"> .sbt 构建定义 </a>                        
                         <ul class="language-bar">
         <li><a href="../Running.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/Running.html"><span class="lang-item lang-ja">日本語</span></a></li><li><a href="../zh-cn/Running.html"><span class="lang-item lang-zh-cn">中文 (简体)</span></a></li><li><a href="../es/Running.html"><span class="lang-item lang-es">Español</span></a></li>
       </ul>
@@ -142,7 +142,7 @@
       <a name="toc"></a>
       <h4 class="toctitle">Contents</h4>
       <div class="tocbody">
-      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">sbt ÂÖ•Èó®</a></div><ol class="toc"> <li><div><a href="Setup.html">ÂÆâË£Ö sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Âú® Mac ‰∏äÂÆâË£Ö sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Âú® Windows ‰∏äÂÆâË£Ö sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Âú® Linux ‰∏äÂÆâË£Ö sbt</a></div></li><li><div><a href="Manual-Installation.html">ÊâãÂä®ÂÆâË£Ö sbt</a></div></li><li><div><a href="Activator-Installation.html">ÂÆâË£Ö Typesafe Activator (ÂåÖÂê´sbt)</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">ÁõÆÂΩïÁªìÊûÑ</a></div></li><li><div class="current">ËøêË°å</div></li><li><div><a href="Basic-Def.html">.sbt ÊûÑÂª∫ÂÆö‰πâ</a></div></li><li><div><a href="Scopes.html">Scope</a></div></li><li><div><a href="More-About-Settings.html">Êõ¥Â§öÂÖ≥‰∫éËÆæÁΩÆ</a></div></li><li><div><a href="Library-Dependencies.html">Â∫ì‰æùËµñ</a></div></li><li><div><a href="Multi-Project.html">Â§öÈ°πÁõÆÊûÑÂª∫</a></div></li><li><div><a href="Using-Plugins.html">‰ΩøÁî®Êèí‰ª∂</a></div></li><li><div><a href="Custom-Settings.html">Ëá™ÂÆö‰πâËÆæÁΩÆÂíå‰ªªÂä°</a></div></li><li><div><a href="Organizing-Build.html">ÁªÑÁªáÊûÑÂª∫</a></div></li><li><div><a href="Summary.html">ÊÄªÁªì</a></div></li><li><div><a href="Bare-Def.html">ÈôÑÂΩïÔºöBare .sbt ÊûÑÂª∫ÂÆö‰πâ</a></div></li><li><div><a href="Full-Def.html">ÈôÑÂΩïÔºö.scala ÊûÑÂª∫ÂÆö‰πâ</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">sbt 入门</a></div><ol class="toc"> <li><div><a href="Setup.html">安装 sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">在 Mac 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">在 Windows 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">在 Linux 上安装 sbt</a></div></li><li><div><a href="Manual-Installation.html">手动安装 sbt</a></div></li><li><div><a href="Activator-Installation.html">安装 Typesafe Activator (包含sbt)</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">目录结构</a></div></li><li><div class="current">运行</div></li><li><div><a href="Basic-Def.html">.sbt 构建定义</a></div></li><li><div><a href="Scopes.html">Scope</a></div></li><li><div><a href="More-About-Settings.html">更多关于设置</a></div></li><li><div><a href="Library-Dependencies.html">库依赖</a></div></li><li><div><a href="Multi-Project.html">多项目构建</a></div></li><li><div><a href="Using-Plugins.html">使用插件</a></div></li><li><div><a href="Custom-Settings.html">自定义设置和任务</a></div></li><li><div><a href="Organizing-Build.html">组织构建</a></div></li><li><div><a href="Summary.html">总结</a></div></li><li><div><a href="Bare-Def.html">附录：Bare .sbt 构建定义</a></div></li><li><div><a href="Full-Def.html">附录：.scala 构建定义</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
           </div>
         </div>
         <div class="header">

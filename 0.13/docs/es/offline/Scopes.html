@@ -43,72 +43,72 @@
           </a>
         <div class="container contentswrapper">
           <div class="span-16 prepend-1 append-1 contents">
-            <h2 id="Scopes">Scopes<a href="#Scopes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Esta p√°gina describe los <em>scopes</em>. Se asume que usted ha le√≠do y
-comprendido la p√°gina previa, <a href="Basic-Def.html">.sbt build definition</a>.
+            <h2 id="Scopes">Scopes<a href="#Scopes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Esta página describe los <em>scopes</em>. Se asume que usted ha leído y
+comprendido la página previa, <a href="Basic-Def.html">.sbt build definition</a>.
 </p><h3 id="La+historia+completa+sobre+las">La historia completa sobre las <em>keys</em><a href="#La+historia+completa+sobre+las" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="Basic-Def.html">Previamente</a> supusimos que una <em>key</em> como <code>name</code>
-correspond√≠a a una entrada en el mapa de sbt de pares llave-valor
-(key-value). Esto fue una simplificaci√≥n.
-</p><p>En verdad, cada llave puede tener un valor asociado en m√°s de un
+correspondía a una entrada en el mapa de sbt de pares llave-valor
+(key-value). Esto fue una simplificación.
+</p><p>En verdad, cada llave puede tener un valor asociado en más de un
 contexto, llamado un “scope”.
 </p><p>Algunos ejemplos concretos:
-</p><ul><li>Si usted tiene m√∫ltiples proyectos en la definici√≥n de la
-construcci√≥n, una <em>key</em> puede tener un valor diferente en cada
+</p><ul><li>Si usted tiene múltiples proyectos en la definición de la
+construcción, una <em>key</em> puede tener un valor diferente en cada
 proyecto.
 </li><li>La <em>key</em> <code>compile</code> puede tener un valor diferente para sus archivos
-de c√≥digo fuente de main comparado con el correspondiente valor para
-el c√≥digo fuente de test, si usted desea que se compilen de manera
+de código fuente de main comparado con el correspondiente valor para
+el código fuente de test, si usted desea que se compilen de manera
 distinta.
 </li><li>La <em>key</em> <code>packageOpitons</code> (que contiene opciones para crear paquetes
 jar) puede tener diferentes valores para el empaquetado de archivos
-class (packageBin) o para el empaquetado de c√≥digo fuente
+class (packageBin) o para el empaquetado de código fuente
 (packageSrc).
-</li></ul><p><em>No hay un √∫nico valor para una key dada</em>, porque el valor puede variar
+</li></ul><p><em>No hay un único valor para una key dada</em>, porque el valor puede variar
 de acuerdo con el <em>scope</em>.
-</p><p>Sin embargo, existe un √∫nico valor para una <em>scoped key</em> (llaves con un
+</p><p>Sin embargo, existe un único valor para una <em>scoped key</em> (llaves con un
 contexto).
-</p><p>Si usted se imagina que sbt est√° procesando una lista de <em>settings</em> para
+</p><p>Si usted se imagina que sbt está procesando una lista de <em>settings</em> para
 generar un mapa de llave-valor (<em>key-value</em>) que describe al proyecto,
-como <a href="Basic-Def.html">se discuti√≥ anteriormente</a>, las <em>keys</em> en dicho mapa
-son <em>scoped keys</em>. Cada <em>setting</em> definido en la definici√≥n de la
-construcci√≥n del proyecto (por ejemplo en <code>build.sbt</code>) aplica a una
-<em>scoped key</em> tambi√©n.
-</p><p>Con frecuencia el <em>scope</em> es impl√≠cito o tiene un valor por default,
-pero si dichos valores son incorrectos, entonces tendr√° que indicar el
+como <a href="Basic-Def.html">se discutió anteriormente</a>, las <em>keys</em> en dicho mapa
+son <em>scoped keys</em>. Cada <em>setting</em> definido en la definición de la
+construcción del proyecto (por ejemplo en <code>build.sbt</code>) aplica a una
+<em>scoped key</em> también.
+</p><p>Con frecuencia el <em>scope</em> es implícito o tiene un valor por default,
+pero si dichos valores son incorrectos, entonces tendrá que indicar el
 <em>scope</em> deseado en <code>build.sbt</code>.
 </p><h3 id="Ejes+del+Scope">Ejes del Scope<a href="#Ejes+del+Scope" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Un <em>eje del scope</em> es un tipo, donde cada instancia del tipo puede
 definir su propio <em>scope</em> (esto es, cada instancia puede tener sus
-propios valores √∫nicos para las <em>keys</em>).
+propios valores únicos para las <em>keys</em>).
 </p><p>Hay tres ejes del scope:
 </p><ul><li>Projects
 </li><li>Configurations
 </li><li>Tasks
 </li></ul><h3 id="Scoping+mediante+del+eje+del+proyecto">Scoping mediante del eje del proyecto<a href="#Scoping+mediante+del+eje+del+proyecto" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Si usted
-<a href="Multi-Project.html">coloca m√∫ltiples proyectos en una construcci√≥n √∫nica</a>,
+<a href="Multi-Project.html">coloca múltiples proyectos en una construcción única</a>,
 cada proyecto necesita sus propios <em>settings</em>. Es decir, las <em>keys</em>
 pueden estar en <em>scope</em> de acuerdo al proyecto.
-</p><p>Los ejes del proyecto tambi√©n pueden configurarse para la “entera
-construcci√≥n”, de modo que un <em>setting</em> aplique a la construcci√≥n
-completa m√°s bien que a un solo proyecto. Los <em>settings</em> de <em>nivel de
-construcci√≥n</em> con frecuencia se usan como un plan de reserva cuando un
-proyecto no define un <em>setting</em> espec√≠fico para un proyecto.
-</p><h4 id="Scoping+mendiante+el+eje+de+configuraci%E2%88%9A%E2%89%A5n">Scoping mendiante el eje de configuraci√≥n<a href="#Scoping+mendiante+el+eje+de+configuraci%E2%88%9A%E2%89%A5n" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Una configuraci√≥n define el tipo de construcci√≥n, potencialmente con su
-propio classpath, c√≥digo fuente, paquetes generados, etc. El concepto de
-configuraci√≥n viene de Iviy, que sbt usa para
+</p><p>Los ejes del proyecto también pueden configurarse para la “entera
+construcción”, de modo que un <em>setting</em> aplique a la construcción
+completa más bien que a un solo proyecto. Los <em>settings</em> de <em>nivel de
+construcción</em> con frecuencia se usan como un plan de reserva cuando un
+proyecto no define un <em>setting</em> específico para un proyecto.
+</p><h4 id="Scoping+mendiante+el+eje+de+configuraci%C3%B3n">Scoping mendiante el eje de configuración<a href="#Scoping+mendiante+el+eje+de+configuraci%C3%B3n" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Una configuración define el tipo de construcción, potencialmente con su
+propio classpath, código fuente, paquetes generados, etc. El concepto de
+configuración viene de Iviy, que sbt usa para
 <a href="Library-Dependencies.html">managed dependencies</a>, y para
 <a href="https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Scope">MavenScopes</a>.
-</p><p>Algunas configuraciones que ver√° en sbt:
-</p><ul><li><code>Compile</code> que define la construcci√≥n principal (<em>main</em>)
+</p><p>Algunas configuraciones que verá en sbt:
+</p><ul><li><code>Compile</code> que define la construcción principal (<em>main</em>)
 (<code>src/main/scala</code>).
-</li><li><code>Test</code> que define c√≥mo construir tests (<code>src/test/scala</code>).
+</li><li><code>Test</code> que define cómo construir tests (<code>src/test/scala</code>).
 </li><li><code>Runtime</code> que define el classpath para la <em>task</em> <code>run</code>.
-</li></ul><p>Por default, todas las llaves asociadas con la compilaci√≥n,
-empaquetamiento y la ejecuci√≥n tienen un scope de configuraci√≥n y por lo
-tanto pueden funcionar de manera diferente en cada configuraci√≥n. Los
-ejemplos m√°s obvios son las <em>keys</em> para <em>tasks</em> <code>compile</code>, <code>package</code>, y
+</li></ul><p>Por default, todas las llaves asociadas con la compilación,
+empaquetamiento y la ejecución tienen un scope de configuración y por lo
+tanto pueden funcionar de manera diferente en cada configuración. Los
+ejemplos más obvios son las <em>keys</em> para <em>tasks</em> <code>compile</code>, <code>package</code>, y
 <code>run</code>; pero todas las llaves que <em>afectan</em> dichas <em>keys</em> (tales como
-<code>sourceDirectories</code> o <code>scalacOptions</code> o <code>fullClasspath</code>) tambi√©n tienen
-scope de configuraci√≥n.
-</p><h4 id="Scoping+mediante+el+eje+task">Scoping mediante el eje task<a href="#Scoping+mediante+el+eje+task" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Los <em>settings</em> pueden afectar c√≥mo funcionan las <em>tasks</em>. Por ejemplo,
+<code>sourceDirectories</code> o <code>scalacOptions</code> o <code>fullClasspath</code>) también tienen
+scope de configuración.
+</p><h4 id="Scoping+mediante+el+eje+task">Scoping mediante el eje task<a href="#Scoping+mediante+el+eje+task" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Los <em>settings</em> pueden afectar cómo funcionan las <em>tasks</em>. Por ejemplo,
 la <em>key</em> de <em>setting</em> <code>packageOptions</code> afecta a la <em>key</em> <code>packageSrc</code> de
 <em>task</em>.
 </p><p>Para soportar esto, una <em>key de task</em> (tal como <code>packageSrc</code>) puede ser
@@ -123,7 +123,7 @@ ejemplo el eje de <em>task</em> puede llevarse con una <em>task</em>), o el eje 
 llenarse con el valor especial <code>Global</code>.
 </p><p><code>Global</code> significa lo que usted espera: el valor del <em>setting</em> aplica a
 todas las instancias de ese eje. Por ejemplo, si el eje de la <em>task</em> es
-<code>Global</code>, entonces dicho <em>setting</em> aplicar√≠a a todas las <em>tasks</em>.
+<code>Global</code>, entonces dicho <em>setting</em> aplicaría a todas las <em>tasks</em>.
 </p><!-- TODO: Translate to Spanish -->
 <h3 id="Delegation">Delegation<a href="#Delegation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A scoped key may be undefined, if it has no value associated with it in
 its scope.
@@ -309,7 +309,7 @@ config, global task).
       <a name="toc"></a>
       <h4 class="toctitle">Contents</h4>
       <div class="tocbody">
-      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Gettnig-Started.html">Gu√≠a de Inicio de sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">Instalando sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Installing sbt on Mac</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Installing sbt on Windows</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Installing sbt on Linux</a></div></li><li><div><a href="Manual-Installation.html">Installing sbt manually</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">Estructura de directorios</a></div></li><li><div><a href="Running.html">Ejecuci√≥n</a></div></li><li><div><a href="Basic-Def.html"> build definition</a></div></li><li><div class="current">Scopes</div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Gettnig-Started.html">Guía de Inicio de sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">Instalando sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Installing sbt on Mac</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Installing sbt on Windows</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Installing sbt on Linux</a></div></li><li><div><a href="Manual-Installation.html">Installing sbt manually</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">Estructura de directorios</a></div></li><li><div><a href="Running.html">Ejecución</a></div></li><li><div><a href="Basic-Def.html"> build definition</a></div></li><li><div class="current">Scopes</div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
           </div>
         </div>
         <div class="header">

@@ -3,7 +3,7 @@
       <head>
         <meta charset="utf-8"/>
         <meta content="width=device-width, initial-scale=1" name="viewport"/>
-        <title>sbt Reference Manual — .sbt ÊûÑÂª∫ÂÆö‰πâ</title>
+        <title>sbt Reference Manual — .sbt 构建定义</title>
         <link rel="shortcut icon" href="../favicon.ico"/>
         <link rel="stylesheet" href="../css/blueprint/screen.css" type="text/css" media="screen, projection"/>
         <link rel="stylesheet" href="../css/blueprint/grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
@@ -43,32 +43,32 @@
           </a>
         <div class="container contentswrapper">
           <div class="span-16 prepend-1 append-1 contents">
-            <h2 id=".sbt+%C3%8A%C3%BB%C3%91%C3%82%C2%AA%E2%88%AB%C3%82%C3%86%C3%B6%E2%80%B0%CF%80%C3%A2">.sbt ÊûÑÂª∫ÂÆö‰πâ<a href="#.sbt+%C3%8A%C3%BB%C3%91%C3%82%C2%AA%E2%88%AB%C3%82%C3%86%C3%B6%E2%80%B0%CF%80%C3%A2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Ëøô‰∏ÄÂ∞èËäÇÊèèËø∞ sbt ÊûÑÂª∫ÂÆö‰πâÔºåÂåÖÂê´‰∏Ä‰∫õ‚ÄúÁêÜËÆ∫‚ÄùÂíå <code>build.sbt</code> ÁöÑËØ≠Ê≥ï„ÄÇÂÅáËÆæ‰Ω†Â∑≤ÁªèÁü•ÈÅìÂ¶Ç‰Ωï <a href="Running.html">‰ΩøÁî® sbt</a> Âπ∂‰∏îÈòÖËØªËøáÂÖ•Èó®ÊåáÂçóÂâçÈù¢ÁöÑÂá†Â∞èËäÇ„ÄÇ
-</p><h3 id="%C3%8A%C3%BB%C3%91%C3%82%C2%AA%E2%88%AB%C3%82%C3%86%C3%B6%E2%80%B0%CF%80%C3%A2%C3%81%C3%B6%C3%91%E2%80%B0%E2%88%8F%C3%A2%C3%81%C3%9F%C3%A7%C3%88%C2%A3%C3%A9%C3%8A%E2%80%A0%C2%BA">ÊûÑÂª∫ÂÆö‰πâÁöÑ‰∏âÁßçÈ£éÊ†º<a href="#%C3%8A%C3%BB%C3%91%C3%82%C2%AA%E2%88%AB%C3%82%C3%86%C3%B6%E2%80%B0%CF%80%C3%A2%C3%81%C3%B6%C3%91%E2%80%B0%E2%88%8F%C3%A2%C3%81%C3%9F%C3%A7%C3%88%C2%A3%C3%A9%C3%8A%E2%80%A0%C2%BA" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>ÊûÑÂª∫ÂÆö‰πâÊúâ‰∏âÁßçÈ£éÊ†º„ÄÇ
-</p><ol><li>Â§öÂ∑•Á®ã <code>.sbt</code> ÊûÑÂª∫ÂÆö‰πâ
-</li><li>bare <code>.sbt</code> ÊûÑÂª∫ÂÆö‰πâ
-</li><li><code>.scala</code> ÊûÑÂª∫ÂÆö‰πâ
-</li></ol><p>Ëøô‰∏ÄÂ∞èËäÇÂ∞ÜËÆ®ËÆ∫ÊúÄÊñ∞ÁöÑÂ§öÂ∑•Á®ã.sbt ÊûÑÂª∫ÂÆö‰πâÔºåÂÆÉÁªìÂêà‰∫Ü‰∏§ÁßçËÄÅÈ£éÊ†ºÁöÑ‰ºòÁÇπÔºåÂπ∂‰∏îÈÄÇÁî®‰∫éÊâÄÊúâÊÉÖÂÜµ„ÄÇÂΩì‰Ω†Â§ÑÁêÜÊñ∞ÁöÑÊûÑÂª∫ÁöÑÊó∂ÂÄôÂèØËÉΩ‰ºöÈÅáËßÅÂè¶Â§ñ‰∏§‰∏™ËÄÅÁöÑÈ£éÊ†º„ÄÇÂèÇËßÅ[bare .sbt ÊûÑÂª∫ÂÆö‰πâ][Bare-Def]Âíå[.scala ÊûÑÂª∫ÂÆö‰πâ][Full-Def]ÔºàÂú®ÂÖ•Èó®ÊåáÂçóÁöÑÂêéÈù¢ÈÉ®ÂàÜÔºâ‰∫ÜËß£Êõ¥Â§öÂÖ∂ÂÆÉÈ£éÊ†ºÁöÑÂÜÖÂÆπ„ÄÇ
-</p><p>Ê≠§Â§ñÔºåÊûÑÂª∫ÂÆö‰πâÂèØ‰ª•ÂåÖÂê´‰ª•<code>.scala</code>ÁªìÂ∞æÁöÑÊñá‰ª∂Ôºå‰Ωç‰∫éÂü∫ÁõÆÂΩïÁöÑ<code>project/</code>Êñá‰ª∂Â§π‰∏ãÔºåÊù•ÂÆö‰πâÂ∏∏Áî®ÁöÑÂáΩÊï∞ÂíåÂÄº„ÄÇ
-</p><h3 id="%E2%80%B0%C2%AA%C3%84%E2%80%B0%CF%80%C3%A0%C3%8A%C3%B2%C3%98%C3%8A%C3%BB%C3%91%C3%82%C2%AA%E2%88%AB%C3%82%C3%86%C3%B6%E2%80%B0%CF%80%C3%A2%C3%94%C2%BA%C3%BC">‰ªÄ‰πàÊòØÊûÑÂª∫ÂÆö‰πâÔºü<a href="#%E2%80%B0%C2%AA%C3%84%E2%80%B0%CF%80%C3%A0%C3%8A%C3%B2%C3%98%C3%8A%C3%BB%C3%91%C3%82%C2%AA%E2%88%AB%C3%82%C3%86%C3%B6%E2%80%B0%CF%80%C3%A2%C3%94%C2%BA%C3%BC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt Âú®Ê£ÄÊü•È°πÁõÆÂíåÂ§ÑÁêÜÊûÑÂª∫ÂÆö‰πâÊñá‰ª∂‰πãÂêéÔºåÂΩ¢Êàê‰∏Ä‰∏™<code>Project</code>ÂÆö‰πâ„ÄÇ
-</p><p>Âú®<code>build.sbt</code>‰∏≠‰Ω†ÂèØ‰ª•ÂàõÂª∫‰∏Ä‰∏™Êú¨ÁõÆÂΩïÁöÑ<a href="../../api/sbt/Project.html">Project</a>Â∑•Á®ãÂÆö‰πâÔºåÂÉèËøôÊ†∑Ôºö
+            <h2 id=".sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">.sbt 构建定义<a href="#.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>这一小节描述 sbt 构建定义，包含一些“理论”和 <code>build.sbt</code> 的语法。假设你已经知道如何 <a href="Running.html">使用 sbt</a> 并且阅读过入门指南前面的几小节。
+</p><h3 id="%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E7%9A%84%E4%B8%89%E7%A7%8D%E9%A3%8E%E6%A0%BC">构建定义的三种风格<a href="#%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E7%9A%84%E4%B8%89%E7%A7%8D%E9%A3%8E%E6%A0%BC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>构建定义有三种风格。
+</p><ol><li>多工程 <code>.sbt</code> 构建定义
+</li><li>bare <code>.sbt</code> 构建定义
+</li><li><code>.scala</code> 构建定义
+</li></ol><p>这一小节将讨论最新的多工程.sbt 构建定义，它结合了两种老风格的优点，并且适用于所有情况。当你处理新的构建的时候可能会遇见另外两个老的风格。参见[bare .sbt 构建定义][Bare-Def]和[.scala 构建定义][Full-Def]（在入门指南的后面部分）了解更多其它风格的内容。
+</p><p>此外，构建定义可以包含以<code>.scala</code>结尾的文件，位于基目录的<code>project/</code>文件夹下，来定义常用的函数和值。
+</p><h3 id="%E4%BB%80%E4%B9%88%E6%98%AF%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%EF%BC%9F">什么是构建定义？<a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%EF%BC%9F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 在检查项目和处理构建定义文件之后，形成一个<code>Project</code>定义。
+</p><p>在<code>build.sbt</code>中你可以创建一个本目录的<a href="../../api/sbt/Project.html">Project</a>工程定义，像这样：
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
-</code></pre><p>ÊØè‰∏Ä‰∏™Â∑•Á®ãÂØπÂ∫î‰∏Ä‰∏™‰∏çÂèØÂèòÁöÑÊò†Â∞ÑË°®Ôºàimmutable mapÔºâÔºà‰∏Ä‰∫õÈîÆÂÄºÂØπÁöÑÈõÜÂêàÔºâÊù•ÊèèËø∞Â∑•Á®ã„ÄÇ
-</p><p>‰æãÂ¶ÇÔºå‰∏Ä‰∏™Âè´ÂÅö <code>name</code> ÁöÑ keyÔºåÊò†Â∞ÑÂà∞‰∏Ä‰∏™Â≠óÁ¨¶‰∏≤ÁöÑÂÄºÔºåÂç≥È°πÁõÆÁöÑÂêçÁß∞„ÄÇ
-</p><p><em>ÊûÑÂª∫ÂÆö‰πâÊñá‰ª∂‰∏ç‰ºöÁõ¥Êé•ÂΩ±Âìç sbt ÁöÑ map„ÄÇ</em>
-</p><p>ÂèñËÄå‰ª£‰πãÁöÑÊòØÔºåÊûÑÂª∫ÂÆö‰πâ‰ºöÂàõÂª∫‰∏Ä‰∏™Á±ªÂûã‰∏∫ <code>Setting[T]</code> ÁöÑÂ∫ûÂ§ßÁöÑÂØπË±°ÂàóË°®Ôºå<code>T</code> ÊòØÊò†Â∞ÑË°®‰∏≠ÂÄºÔºàvalueÔºâÁöÑÁ±ªÂûã„ÄÇ‰∏Ä‰∏™ <code>Setting</code> ÊèèËø∞ÁöÑÊòØ‰∏ÄÊ¨° <em>ÂØπÊò†Â∞ÑË°®ÔºàmapÔºâÁöÑËΩ¨Êç¢</em>Ôºå
-ÂÉèÂ¢ûÂä†‰∏Ä‰∏™Êñ∞ÁöÑÈîÆÂÄºÂØπÊàñËÄÖËøΩÂä†Âà∞‰∏Ä‰∏™Â∑≤ÁªèÂ≠òÂú®ÁöÑ value ‰∏ä„ÄÇÔºàÂú®ÂáΩÊï∞ÂºèÁºñÁ®ãÂÖ≥‰∫é‰ΩøÁî®‰∏çÂèØÂèòÊï∞ÊçÆÁªìÊûÑÂíåÂÄºÁöÑÊÄùÊÉ≥‰∏≠Ôºå‰∏ÄÊ¨°ËΩ¨Êç¢ËøîÂõû‰∏Ä‰∏™Êñ∞ÁöÑmap ‚Äî‚Äî ÂÆÉ‰∏ç‰ºöÂ∞±Âú∞Êõ¥Êñ∞ÊóßÁöÑ map„ÄÇÔºâ
-</p><p>‰Ω†ÂèØ‰ª•‰∏∫Êú¨ÁõÆÂΩï‰∏ãÁöÑÈ°πÁõÆÂêçÁß∞ÂÖ≥ËÅî‰∏Ä‰∏™ <code>Setting[String]</code>ÔºåÂÉèËøôÊ†∑Ôºö
+</code></pre><p>每一个工程对应一个不可变的映射表（immutable map）（一些键值对的集合）来描述工程。
+</p><p>例如，一个叫做 <code>name</code> 的 key，映射到一个字符串的值，即项目的名称。
+</p><p><em>构建定义文件不会直接影响 sbt 的 map。</em>
+</p><p>取而代之的是，构建定义会创建一个类型为 <code>Setting[T]</code> 的庞大的对象列表，<code>T</code> 是映射表中值（value）的类型。一个 <code>Setting</code> 描述的是一次 <em>对映射表（map）的转换</em>，
+像增加一个新的键值对或者追加到一个已经存在的 value 上。（在函数式编程关于使用不可变数据结构和值的思想中，一次转换返回一个新的map —— 它不会就地更新旧的 map。）
+</p><p>你可以为本目录下的项目名称关联一个 <code>Setting[String]</code>，像这样：
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
   settings(
     name := &quot;hello&quot;
   )
-</code></pre><p>Ëøô‰∏™ <code>Setting[String]</code> ‰ºöÈÄöËøáÂ¢ûÂä†ÔºàÊàñËÄÖÊõøÊç¢Ôºâ<code>name</code>ÈîÆÁöÑÂÄº‰∏∫ <code>&quot;hello&quot;</code> Êù•ÂØπ map ÂÅö‰∏ÄÊ¨°ËΩ¨Êç¢„ÄÇËΩ¨Êç¢ÂêéÁöÑ map Êàê‰∏∫ sbt Êñ∞ÁöÑ map„ÄÇ
-</p><p>‰∏∫‰∫ÜÂàõÂª∫Ëøô‰∏™ mapÔºåsbt ‰ºöÂÖàÂØπÊâÄÊúâËÆæÁΩÆÁöÑÂàóË°®ËøõË°åÊéíÂ∫èÔºåËøôÊ†∑ÂØπÂêå‰∏Ä‰∏™ key ÁöÑÊîπÂèòÂèØ‰ª•ÊîæÂú®‰∏ÄËµ∑Êìç‰ΩúÔºåËÄå‰∏îÂ¶ÇÊûú value ‰æùËµñ‰∫éÂÖ∂‰ªñÁöÑ keyÔºå‰ºöÂÖàÂ§ÑÁêÜÂÖ∂‰ªñË¢´‰æùËµñÁöÑ key„ÄÇ
-ÁÑ∂ÂêéÔºå sbt ‰ºöÂØπ <code>Settings</code> ÊéíÂ•ΩÂ∫èÁöÑÂàóË°®ËøõË°åÈÅçÂéÜÔºåÊåâÈ°∫Â∫èÊääÊØè‰∏ÄÈ°πÈÉΩÂ∫îÁî®Âà∞ map ‰∏≠„ÄÇ
-</p><p>ÊÄªÁªìÔºö‰∏Ä‰∏™ÊûÑÂª∫ÂÆö‰πâÊòØ‰∏Ä‰∏™<code>Project</code>ÔºåÊã•Êúâ‰∏Ä‰∏™Á±ªÂûã‰∏∫ <code>Setting[T]</code> ÁöÑÂàóË°®Ôºå<code>Setting[T]</code> ÊòØ‰ºöÂΩ±ÂìçÂà∞ sbt ‰øùÂ≠òÈîÆÂÄºÂØπÁöÑ map ÁöÑ‰∏ÄÁßçËΩ¨Êç¢Ôºå<code>T</code> ÊòØÊØè‰∏Ä‰∏™ value ÁöÑÁ±ªÂûã„ÄÇ
-</p><h3 id="%C3%82%C2%B6%C3%87%E2%80%B0%CE%A9%C3%AF%C3%82%C3%BA%C2%AE+build.sbt+%E2%80%B0%E2%88%8F%E2%89%A0%C3%82%C3%86%C3%B6%E2%80%B0%CF%80%C3%A2%C3%8B%C3%86%C3%A6%C3%81%CE%A9%C3%86">Â¶Ç‰ΩïÂú® build.sbt ‰∏≠ÂÆö‰πâËÆæÁΩÆ<a href="#%C3%82%C2%B6%C3%87%E2%80%B0%CE%A9%C3%AF%C3%82%C3%BA%C2%AE+build.sbt+%E2%80%B0%E2%88%8F%E2%89%A0%C3%82%C3%86%C3%B6%E2%80%B0%CF%80%C3%A2%C3%8B%C3%86%C3%A6%C3%81%CE%A9%C3%86" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> ÂÆö‰πâ‰∫Ü‰∏Ä‰∏™ <code>Project</code>ÔºåÂÆÉÊåÅÊúâ‰∏Ä‰∏™Âêç‰∏∫<code>settings</code>ÁöÑscalaË°®ËææÂºèÂàóË°®„ÄÇ
-</p><p>‰∏ãÈù¢ÊòØ‰∏Ä‰∏™‰æãÂ≠êÔºö
+</code></pre><p>这个 <code>Setting[String]</code> 会通过增加（或者替换）<code>name</code>键的值为 <code>&quot;hello&quot;</code> 来对 map 做一次转换。转换后的 map 成为 sbt 新的 map。
+</p><p>为了创建这个 map，sbt 会先对所有设置的列表进行排序，这样对同一个 key 的改变可以放在一起操作，而且如果 value 依赖于其他的 key，会先处理其他被依赖的 key。
+然后， sbt 会对 <code>Settings</code> 排好序的列表进行遍历，按顺序把每一项都应用到 map 中。
+</p><p>总结：一个构建定义是一个<code>Project</code>，拥有一个类型为 <code>Setting[T]</code> 的列表，<code>Setting[T]</code> 是会影响到 sbt 保存键值对的 map 的一种转换，<code>T</code> 是每一个 value 的类型。
+</p><h3 id="%E5%A6%82%E4%BD%95%E5%9C%A8+build.sbt+%E4%B8%AD%E5%AE%9A%E4%B9%89%E8%AE%BE%E7%BD%AE">如何在 build.sbt 中定义设置<a href="#%E5%A6%82%E4%BD%95%E5%9C%A8+build.sbt+%E4%B8%AD%E5%AE%9A%E4%B9%89%E8%AE%BE%E7%BD%AE" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> 定义了一个 <code>Project</code>，它持有一个名为<code>settings</code>的scala表达式列表。
+</p><p>下面是一个例子：
 </p><pre><code class="prettyprint lang-scala">lazy val commonSettings = Seq(
   organization := &quot;com.example&quot;,
   version := &quot;0.1.0&quot;,
@@ -80,67 +80,67 @@ lazy val root = (project in file(&quot;.&quot;)).
   settings(
     name := &quot;hello&quot;
   )
-</code></pre><p>ÊØè‰∏ÄÈ°π <code>Setting</code> ÈÉΩÂÆö‰πâ‰∏∫‰∏Ä‰∏™ Scala Ë°®ËææÂºè„ÄÇÂú® <code>settings</code> ‰∏≠ÁöÑË°®ËææÂºèÊòØÁõ∏‰∫íÁã¨Á´ãÁöÑÔºåËÄå‰∏îÂÆÉ‰ª¨‰ªÖ‰ªÖÊòØË°®ËææÂºèÔºå‰∏çÊòØÂÆåÊï¥ÁöÑ Scala ËØ≠Âè•„ÄÇ
-</p><p>Ëøô‰∫õË°®ËææÂºèÂèØ‰ª•Áî® <code>val</code>Ôºå<code>lazy val</code>Ôºå<code>def</code> Â£∞Êòé„ÄÇ
-<code>build.sbt</code> ‰∏çÂÖÅËÆ∏‰ΩøÁî®È°∂Â±ÇÁöÑ <code>object</code> Âíå <code>class</code>„ÄÇÂÆÉ‰ª¨ÂøÖÈ°ªÂÜôÂà∞ <code>project/</code> ÁõÆÂΩï‰∏ã‰Ωú‰∏∫ÂÆåÊï¥ÁöÑ Scala Ê∫êÊñá‰ª∂„ÄÇ
-</p><p>Âú®Â∑¶ËæπÔºå<code>name</code>Ôºå <code>version</code> Âíå <code>scalaVersion</code> ÈÉΩÊòØ <em>ÈîÆÔºàkeysÔºâ</em>„ÄÇ‰∏Ä‰∏™ÈîÆÔºàkeyÔºâÂ∞±ÊòØ‰∏Ä‰∏™ <code>SettingKey[T]</code>Ôºå<code>TaskKey[T]</code> ÊàñËÄÖ <code>InputKey[T]</code> ÁöÑÂÆû‰æãÔºå<code>T</code> ÊòØÊúüÊúõÁöÑ value ÁöÑÁ±ªÂûã„ÄÇ
-key ÁöÑÁ±ªÂà´Â∞ÜÂú®‰∏ãÈù¢ËÆ≤Ëß£„ÄÇ
-</p><p>ÈîÆÔºàKeysÔºâÊúâ‰∏Ä‰∏™ËøîÂõû <code>Setting[T]</code> ÁöÑ <code>:=</code> ÊñπÊ≥ï„ÄÇ‰Ω†ÂèØ‰ª•ÂÉè‰ΩøÁî® Java ÁöÑËØ≠Ê≥ï‰∏ÄÊ†∑Ë∞ÉÁî®ËØ•ÊñπÊ≥ïÔºö
+</code></pre><p>每一项 <code>Setting</code> 都定义为一个 Scala 表达式。在 <code>settings</code> 中的表达式是相互独立的，而且它们仅仅是表达式，不是完整的 Scala 语句。
+</p><p>这些表达式可以用 <code>val</code>，<code>lazy val</code>，<code>def</code> 声明。
+<code>build.sbt</code> 不允许使用顶层的 <code>object</code> 和 <code>class</code>。它们必须写到 <code>project/</code> 目录下作为完整的 Scala 源文件。
+</p><p>在左边，<code>name</code>， <code>version</code> 和 <code>scalaVersion</code> 都是 <em>键（keys）</em>。一个键（key）就是一个 <code>SettingKey[T]</code>，<code>TaskKey[T]</code> 或者 <code>InputKey[T]</code> 的实例，<code>T</code> 是期望的 value 的类型。
+key 的类别将在下面讲解。
+</p><p>键（Keys）有一个返回 <code>Setting[T]</code> 的 <code>:=</code> 方法。你可以像使用 Java 的语法一样调用该方法：
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
   settings(
     name.:=(&quot;hello&quot;)
   )
-</code></pre><p>‰ΩÜÊòØÔºåScala ÂÖÅËÆ∏ <code>name := &quot;hello&quot;</code> ËøôÊ†∑Ë∞ÉÁî®ÔºàÂú® Scala ‰∏≠Ôºå‰∏Ä‰∏™Âè™ÊúâÂçï‰∏™ÂèÇÊï∞ÁöÑÊñπÊ≥ïÂèØ‰ª•‰ΩøÁî®‰ªª‰Ωï‰∏ÄÁßçËØ≠Ê≥ïË∞ÉÁî®Ôºâ„ÄÇ
-</p><p>ÈîÆÔºàkeyÔºâ<code>name</code> ‰∏äÁöÑ <code>:=</code> ÊñπÊ≥ï‰ºöËøîÂõû‰∏Ä‰∏™ <code>Setting</code>ÔºåÂú®ËøôÈáåÁâπÊåá <code>Setting[String]</code>„ÄÇ<code>String</code> ‰πüÂá∫Áé∞Âú® <code>name</code> Ëá™Ë∫´ÁöÑÁ±ªÂûã <code>SettingKey[String]</code> ‰∏≠„ÄÇ
-Âú®Ëøô‰∏™‰æãÂ≠ê‰∏≠ÔºåËøîÂõûÁöÑ <code>Setting[String]</code> ÊòØ‰∏Ä‰∏™Âú® sbt ÁöÑ map ‰∏≠Â¢ûÂä†ÊàñËÄÖÊõøÊç¢ÈîÆ‰∏∫ <code>name</code> ÁöÑËΩ¨Êç¢ÔºåËµãÂÄº‰∏∫ <code>&quot;hello&quot;</code>„ÄÇ
-</p><p>Â¶ÇÊûú‰Ω†‰ΩøÁî®‰∫ÜÈîôËØØÁ±ªÂûãÁöÑ valueÔºåÊûÑÂª∫ÂÆö‰πâ‰ºöÁºñËØë‰∏çÈÄöËøáÔºö
+</code></pre><p>但是，Scala 允许 <code>name := &quot;hello&quot;</code> 这样调用（在 Scala 中，一个只有单个参数的方法可以使用任何一种语法调用）。
+</p><p>键（key）<code>name</code> 上的 <code>:=</code> 方法会返回一个 <code>Setting</code>，在这里特指 <code>Setting[String]</code>。<code>String</code> 也出现在 <code>name</code> 自身的类型 <code>SettingKey[String]</code> 中。
+在这个例子中，返回的 <code>Setting[String]</code> 是一个在 sbt 的 map 中增加或者替换键为 <code>name</code> 的转换，赋值为 <code>&quot;hello&quot;</code>。
+</p><p>如果你使用了错误类型的 value，构建定义会编译不通过：
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
   settings(
-    name := 42  // ÁºñËØë‰∏çÈÄöËøá
+    name := 42  // 编译不通过
   )
-</code></pre><h3 id="%C3%88%C3%AE%C3%86%C3%94%C2%BA%C3%A0Keys%C3%94%C2%BA%C3%A2">ÈîÆÔºàKeysÔºâ<a href="#%C3%88%C3%AE%C3%86%C3%94%C2%BA%C3%A0Keys%C3%94%C2%BA%C3%A2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="%C3%81%C2%B1%C2%AA%C3%82%C3%BB%C3%A3%C3%94%C2%BA%C3%A0Types%C3%94%C2%BA%C3%A2">Á±ªÂûãÔºàTypesÔºâ<a href="#%C3%81%C2%B1%C2%AA%C3%82%C3%BB%C3%A3%C3%94%C2%BA%C3%A0Types%C3%94%C2%BA%C3%A2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Êúâ‰∏âÁßçÁ±ªÂûãÁöÑ keyÔºö
-</p><ul><li><code>SettingKey[T]</code>Ôºö‰∏Ä‰∏™ key ÂØπÂ∫î‰∏Ä‰∏™Âè™ËÆ°ÁÆó‰∏ÄÊ¨°ÁöÑ valueÔºàËøô‰∏™ÂÄºÂú®Âä†ËΩΩÈ°πÁõÆÁöÑÊó∂ÂÄôËÆ°ÁÆóÔºåÁÑ∂Âêé‰∏ÄÁõ¥‰øùÂ≠òÁùÄÔºâ„ÄÇ
-</li><li><code>TaskKey[T]</code>Ôºö‰∏Ä‰∏™ key ÂØπÂ∫î‰∏Ä‰∏™Áß∞‰πã‰∏∫ <em>task</em> ÁöÑ valueÔºåÊØèÊ¨°ÈÉΩ‰ºöÈáçÊñ∞ËÆ°ÁÆóÔºåÂèØËÉΩÂ≠òÂú®ÊΩúÂú®ÁöÑÂâØ‰ΩúÁî®„ÄÇ
-</li><li><code>InputKey[T]</code>Ôºö‰∏Ä‰∏™ key ÂØπÂ∫î‰∏Ä‰∏™ÂèØ‰ª•Êé•Êî∂ÂëΩ‰ª§Ë°åÂèÇÊï∞ÁöÑ task„ÄÇËØ¶ÁªÜÂÜÖÂÆπÂèÇËßÅ <a href="../docs/Input-Tasks.html">Input Tasks</a>„ÄÇ
-</li></ul><h4 id="%C3%82%C3%9C%C3%96%C3%81%CE%A9%C3%86%C3%81%C3%B6%C3%91+Keys">ÂÜÖÁΩÆÁöÑ Keys<a href="#%C3%82%C3%9C%C3%96%C3%81%CE%A9%C3%86%C3%81%C3%B6%C3%91+Keys" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>ÂÜÖÁΩÆÁöÑ keys ÂÆûÈôÖ‰∏äÊòØÂØπË±° <a href="../../sxr/sbt/Keys.scala.html">Keys</a> ÁöÑÂ≠óÊÆµ„ÄÇ<code>build.sbt</code> ‰ºöÈöêÂºèÂåÖÂê´ <code>import sbt.Keys._</code>ÔºåÊâÄ‰ª•ÂèØ‰ª•ÈÄöËøá <code>name</code> ÂèñÂà∞ <code>sbt.Keys.name</code>„ÄÇ
-</p><h4 id="%C3%8B%C3%A1%E2%84%A2%C3%82%C3%86%C3%B6%E2%80%B0%CF%80%C3%A2+Keys">Ëá™ÂÆö‰πâ Keys<a href="#%C3%8B%C3%A1%E2%84%A2%C3%82%C3%86%C3%B6%E2%80%B0%CF%80%C3%A2+Keys" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>ÂèØ‰ª•ÈÄöËøáÂÆÉ‰ª¨ÂêÑËá™ÁöÑÂàõÂª∫ÊñπÊ≥ïÔºö<code>settingKey</code>Ôºå<code>taskKey</code> Âíå <code>inputKey</code> ÂàõÂª∫Ëá™ÂÆö‰πâ keys„ÄÇÊØè‰∏™ÊñπÊ≥ïÈÉΩÊúüÂæÖ key Âíå value ÁöÑÁ±ªÂûã‰ª•Âèä‰∏ÄÊÆµÊèèËø∞„ÄÇ
-key ÁöÑÂêçÁß∞ÂèñËá™‰∫éËµãÁªô <code>val</code> ÂèòÈáèÁöÑÂÄº„ÄÇ‰æãÂ¶ÇÔºåÁªô‰∏Ä‰∏™Êñ∞ÁöÑ task <code>hello</code> ÂÆö‰πâ‰∏Ä‰∏™ keyÔºå
-</p><pre><code class="prettyprint lang-scala">lazy val hello = taskKey[Unit](&quot;‰∏Ä‰∏™ task Á§∫‰æã&quot;)
-</code></pre><p>ËøôÈáåÊàë‰ª¨Áî®‰∫ãÂÆûËØ¥Êòé‰∫Ü <code>.sbt</code> Êñá‰ª∂Èô§‰∫ÜÂèØ‰ª•ÂåÖÂê´ËÆæÁΩÆÔºàsettingsÔºâÂ§ñÔºåËøòÂèØ‰ª•ÂåÖÂê´ <code>val</code>s Âíå <code>def</code>s„ÄÇÊâÄÊúâËøô‰∫õÂÆö‰πâÈÉΩ‰ºöÂú®ËÆæÁΩÆÔºàsettingsÔºâ‰πãÂâçË¢´ËÆ°ÁÆóËÄåË∑üÂÆÉ‰ª¨Âú®Êñá‰ª∂ÈáåÂÆö‰πâÁöÑ‰ΩçÁΩÆÊó†ÂÖ≥„ÄÇ
-<code>val</code>s Âíå <code>def</code>s ÂøÖÈ°ª‰ª•Á©∫Ë°åÂíåËÆæÁΩÆÔºàsettingsÔºâÂàÜÈöî„ÄÇ
-</p><blockquote><p><strong>Ê≥®ÊÑèÔºö</strong> ÈÄöÂ∏∏Ôºå‰ΩøÁî® lazy val ËÄå‰∏çÊòØ val ÂèØ‰ª•ÈÅøÂÖçÂàùÂßãÂåñÈ°∫Â∫èÁöÑÈóÆÈ¢ò„ÄÇ
-</p></blockquote><h4 id="Task+vs+Setting+keys">Task vs Setting keys<a href="#Task+vs+Setting+keys" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>TaskKey[T]</code> ÊòØÁî®Êù•ÂÆö‰πâ <em>task</em> ÁöÑ„ÄÇTasks Â∞±ÊòØÂÉè <code>compile</code> ÊàñËÄÖ <code>package</code> ËøôÊ†∑ÁöÑÊìç‰Ωú„ÄÇÂÆÉ‰ª¨ÂèØËÉΩËøîÂõû <code>Unit</code>Ôºà<code>Unit</code> Âú® Scala ‰∏≠Ë°®Á§∫ <code>void</code>ÔºâÔºåÊàñËÄÖÂèØËÉΩËøîÂõû task Áõ∏ÂÖ≥ÁöÑËøîÂõûÂÄºÔºå
-‰æãÂ¶Ç <code>package</code> Â∞±ÊòØ‰∏Ä‰∏™Á±ªÂûã‰∏∫ <code>TaskKey[File]</code> ÁöÑ taskÔºå ÂÆÉÁöÑËøîÂõûÂÄºÊòØÂÖ∂ÁîüÊàêÁöÑ jar Êñá‰ª∂„ÄÇ
-</p><p>ÊØèÂΩì‰Ω†ÊâßË°å‰∏Ä‰∏™ taskÔºå‰æãÂ¶ÇÂú® sbt ÂëΩ‰ª§Ë°å‰∏≠ËæìÂÖ• <code>compile</code>Ôºåsbt Â∞Ü‰ºöÂØπÊ∂âÂèäÂà∞ÁöÑÊØè‰∏™ task ÊÅ∞Â•ΩÊâßË°å‰∏ÄÊ¨°„ÄÇ
-</p><p>sbt ÊèèËø∞È°πÁõÆÁöÑ map ‰ºöÂ∞ÜËÆæÁΩÆÔºàsettingÔºâ‰øùÂ≠ò‰∏∫Âõ∫ÂÆöÁöÑÂ≠óÁ¨¶‰∏≤ÔºåÊØîÂ¶ÇÂÉè nameÔºõ‰ΩÜÊòØÂÆÉ‰∏çÂæó‰∏ç‰øùÂ≠ò task ÁöÑÂèØÊâßË°å‰ª£Á†ÅÔºåÊØîÂ¶Ç <code>compile</code> — Âç≥‰ΩøËøôÊÆµÂèØÊâßË°åÁöÑ‰ª£Á†ÅÊúÄÁªàËøîÂõû‰∏Ä‰∏™Â≠óÁ¨¶‰∏≤ÔºåÂÆÉ‰πüÈúÄË¶ÅÊØèÊ¨°ÈÉΩÈáçÊñ∞ÊâßË°å„ÄÇ
-</p><p><em>‰∏Ä‰∏™ÁªôÂÆöÁöÑ key ÊÄªÊòØÊåáÂêë‰∏Ä‰∏™ task ÊàñËÄÖ ‰∏Ä‰∏™ÊôÆÈÄöÁöÑËÆæÁΩÆÔºàsettingÔºâ„ÄÇ</em> ‰πüÂ∞±ÊòØËØ¥Ôºå“taskiness” (ÊòØÂê¶ÊØèÊ¨°ÈÉΩÈáçÊñ∞ÊâßË°åÔºâÊòØ key ÁöÑ‰∏Ä‰∏™Â±ûÊÄßÔºàpropertyÔºâÔºåËÄå‰∏çÊòØ‰∏Ä‰∏™ÂÄºÔºàvalueÔºâ„ÄÇ
-</p><h3 id="%C3%82%C3%86%C3%B6%E2%80%B0%CF%80%C3%A2+tasks+%C3%82%C3%AD%C3%A5+settings">ÂÆö‰πâ tasks Âíå settings<a href="#%C3%82%C3%86%C3%B6%E2%80%B0%CF%80%C3%A2+tasks+%C3%82%C3%AD%C3%A5+settings" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>‰Ω†ÂèØ‰ª•‰ΩøÁî® <code>:=</code> Áªô‰∏Ä‰∏™ setting Ëµã‰∏Ä‰∏™ÂÄºÊàñËÄÖÁªô‰∏Ä‰∏™ task Ëµã‰∏ÄÁßçËÆ°ÁÆó„ÄÇÂØπ‰∫é settingÔºåËøô‰∏™ÂÄºÔºàvalueÔºâÂè™‰ºöÂú®È°πÁõÆÂä†ËΩΩÁöÑÊó∂ÂÄôÊâßË°å‰∏ÄÊ¨°„ÄÇÂØπ‰∫é taskÔºåËøô‰∏™ËÆ°ÁÆó‰ºöÂú® task ÊØèÊ¨°ÊâßË°åÁöÑÊó∂ÂÄôÈáçÊñ∞ËÆ°ÁÆó„ÄÇ
-</p><p>‰æãÂ¶ÇÔºåÂÆûÁé∞ÂâçÈù¢‰∏ÄÈÉ®ÂàÜ‰∏≠ÁöÑ <code>hello</code> taskÔºö
+</code></pre><h3 id="%E9%94%AE%EF%BC%88Keys%EF%BC%89">键（Keys）<a href="#%E9%94%AE%EF%BC%88Keys%EF%BC%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="%E7%B1%BB%E5%9E%8B%EF%BC%88Types%EF%BC%89">类型（Types）<a href="#%E7%B1%BB%E5%9E%8B%EF%BC%88Types%EF%BC%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>有三种类型的 key：
+</p><ul><li><code>SettingKey[T]</code>：一个 key 对应一个只计算一次的 value（这个值在加载项目的时候计算，然后一直保存着）。
+</li><li><code>TaskKey[T]</code>：一个 key 对应一个称之为 <em>task</em> 的 value，每次都会重新计算，可能存在潜在的副作用。
+</li><li><code>InputKey[T]</code>：一个 key 对应一个可以接收命令行参数的 task。详细内容参见 <a href="../docs/Input-Tasks.html">Input Tasks</a>。
+</li></ul><h4 id="%E5%86%85%E7%BD%AE%E7%9A%84+Keys">内置的 Keys<a href="#%E5%86%85%E7%BD%AE%E7%9A%84+Keys" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>内置的 keys 实际上是对象 <a href="../../sxr/sbt/Keys.scala.html">Keys</a> 的字段。<code>build.sbt</code> 会隐式包含 <code>import sbt.Keys._</code>，所以可以通过 <code>name</code> 取到 <code>sbt.Keys.name</code>。
+</p><h4 id="%E8%87%AA%E5%AE%9A%E4%B9%89+Keys">自定义 Keys<a href="#%E8%87%AA%E5%AE%9A%E4%B9%89+Keys" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>可以通过它们各自的创建方法：<code>settingKey</code>，<code>taskKey</code> 和 <code>inputKey</code> 创建自定义 keys。每个方法都期待 key 和 value 的类型以及一段描述。
+key 的名称取自于赋给 <code>val</code> 变量的值。例如，给一个新的 task <code>hello</code> 定义一个 key，
+</p><pre><code class="prettyprint lang-scala">lazy val hello = taskKey[Unit](&quot;一个 task 示例&quot;)
+</code></pre><p>这里我们用事实说明了 <code>.sbt</code> 文件除了可以包含设置（settings）外，还可以包含 <code>val</code>s 和 <code>def</code>s。所有这些定义都会在设置（settings）之前被计算而跟它们在文件里定义的位置无关。
+<code>val</code>s 和 <code>def</code>s 必须以空行和设置（settings）分隔。
+</p><blockquote><p><strong>注意：</strong> 通常，使用 lazy val 而不是 val 可以避免初始化顺序的问题。
+</p></blockquote><h4 id="Task+vs+Setting+keys">Task vs Setting keys<a href="#Task+vs+Setting+keys" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>TaskKey[T]</code> 是用来定义 <em>task</em> 的。Tasks 就是像 <code>compile</code> 或者 <code>package</code> 这样的操作。它们可能返回 <code>Unit</code>（<code>Unit</code> 在 Scala 中表示 <code>void</code>），或者可能返回 task 相关的返回值，
+例如 <code>package</code> 就是一个类型为 <code>TaskKey[File]</code> 的 task， 它的返回值是其生成的 jar 文件。
+</p><p>每当你执行一个 task，例如在 sbt 命令行中输入 <code>compile</code>，sbt 将会对涉及到的每个 task 恰好执行一次。
+</p><p>sbt 描述项目的 map 会将设置（setting）保存为固定的字符串，比如像 name；但是它不得不保存 task 的可执行代码，比如 <code>compile</code> — 即使这段可执行的代码最终返回一个字符串，它也需要每次都重新执行。
+</p><p><em>一个给定的 key 总是指向一个 task 或者 一个普通的设置（setting）。</em> 也就是说，“taskiness” (是否每次都重新执行）是 key 的一个属性（property），而不是一个值（value）。
+</p><h3 id="%E5%AE%9A%E4%B9%89+tasks+%E5%92%8C+settings">定义 tasks 和 settings<a href="#%E5%AE%9A%E4%B9%89+tasks+%E5%92%8C+settings" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>你可以使用 <code>:=</code> 给一个 setting 赋一个值或者给一个 task 赋一种计算。对于 setting，这个值（value）只会在项目加载的时候执行一次。对于 task，这个计算会在 task 每次执行的时候重新计算。
+</p><p>例如，实现前面一部分中的 <code>hello</code> task：
 </p><pre><code class="prettyprint lang-scala">lazy val hello = taskKey[Unit](&quot;An example task&quot;)
 
 lazy val root = (project in file(&quot;.&quot;)).
   settings(
     hello := { println(&quot;Hello!&quot;) }
   )
-</code></pre><p>Êàë‰ª¨Â∑≤ÁªèÂú®ÂÆö‰πâÈ°πÁõÆÂêçÁß∞Êó∂ËßÅËøáÂÆö‰πâ settings ÁöÑ‰æãÂ≠êÔºå
+</code></pre><p>我们已经在定义项目名称时见过定义 settings 的例子，
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
   settings(
     name := &quot;hello&quot;
   )
-</code></pre><h4 id="Tasks+%C3%82%C3%AD%C3%A5+Settings+%C3%81%C3%B6%C3%91%C3%81%C2%B1%C2%AA%C3%82%C3%BB%C3%A3">Tasks Âíå Settings ÁöÑÁ±ªÂûã<a href="#Tasks+%C3%82%C3%AD%C3%A5+Settings+%C3%81%C3%B6%C3%91%C3%81%C2%B1%C2%AA%C3%82%C3%BB%C3%A3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>‰ªéÁ±ªÂûãÁ≥ªÁªüÁöÑËßíÂ∫¶Êù•ËÆ≤ÔºåÈÄöËøá task key ÂàõÂª∫ÁöÑ <code>Setting</code> ÂíåÈÄöËøá setting key ÂàõÂª∫ÁöÑ <code>Setting</code> ÊúâÁ®çÂæÆ‰∏çÂêå„ÄÇ<code>taskKey := 42</code> ÁöÑÁ±ªÂûãÊòØ <code>Setting[Task[T]]</code> ËÄå <code>settingKey := 42</code>
-ÁöÑÁ±ªÂûãÊòØ <code>Setting[T]</code>„ÄÇËøôÂØπ‰∫éÁªùÂ§ßÂ§öÊï∞ÊÉÖÂÜµÂπ∂Êó†ÂΩ±ÂìçÔºõtask key Âú®ÊâßË°åÁöÑÊó∂ÂÄô‰ªçÁÑ∂ÂàõÂª∫‰∏Ä‰∏™Á±ªÂûã‰∏∫ <code>T</code> ÁöÑÂÄºÔºàvalueÔºâ„ÄÇ
-</p><p><code>T</code> Á±ªÂûãÂíå <code>Task[T]</code> Á±ªÂûãÁöÑ‰∏çÂêåÁöÑÂê´‰πâÊòØÔºö‰∏Ä‰∏™ setting ‰∏çËÉΩ‰æùËµñ‰∏Ä‰∏™ taskÔºåÂõ†‰∏∫‰∏Ä‰∏™ setting Âè™‰ºöÂú®È°πÁõÆÂä†ËΩΩÁöÑÊó∂ÂÄôËÆ°ÁÆó‰∏ÄÊ¨°Ôºå‰∏ç‰ºöÈáçÊñ∞ËÆ°ÁÆó„ÄÇ<a href="More-About-Settings.html">Êõ¥Â§öÂÖ≥‰∫éËÆæÁΩÆ</a> ÁöÑÂÜÖÂÆπÂæàÂø´Â∞±‰ºöËÆ≤Âà∞„ÄÇ
-</p><h3 id="sbt+%E2%80%B0%E2%88%AB%C2%A7%E2%80%B0%E2%88%AB%C3%AD%C3%8A%C2%AE%C2%B0%C3%82%C2%BA%C3%A8%E2%80%B0%E2%88%8F%E2%89%A0%C3%81%C3%B6%C3%91+Keys">sbt ‰∫§‰∫íÊ®°Âºè‰∏≠ÁöÑ Keys<a href="#sbt+%E2%80%B0%E2%88%AB%C2%A7%E2%80%B0%E2%88%AB%C3%AD%C3%8A%C2%AE%C2%B0%C3%82%C2%BA%C3%A8%E2%80%B0%E2%88%8F%E2%89%A0%C3%81%C3%B6%C3%91+Keys" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Âú® sbt ÁöÑ‰∫§‰∫íÊ®°Âºè‰∏ãÔºå‰Ω†ÂèØ‰ª•ËæìÂÖ•‰ªª‰Ωï task ÁöÑ name Êù•ÊâßË°åËØ• task„ÄÇËøôÂ∞±ÊòØ‰∏∫‰ªÄ‰πàËæìÂÖ• <code>compile</code> Â∞±ÊòØÊâßË°å <code>compile</code> task„ÄÇ<code>compile</code> Â∞±ÊòØËØ• task ÁöÑ key„ÄÇ
-</p><p>Â¶ÇÊûú‰Ω†ËæìÂÖ•ÁöÑÊòØ‰∏Ä‰∏™ setting key ÁöÑ name ËÄå‰∏çÊòØ‰∏Ä‰∏™ task key ÁöÑ nameÔºåsetting key ÁöÑÂÄºÔºàvalueÔºâ‰ºöÊòæÁ§∫Âá∫Êù•„ÄÇËæìÂÖ•‰∏Ä‰∏™ task key ÁöÑ name ‰ºöÊâßË°åËØ• task ‰ΩÜÊòØ‰∏ç‰ºöÊòæÁ§∫ÊâßË°åÁªìÊûúÁöÑÂÄºÔºàvalueÔºâÔºõËæìÂÖ• <code>show &lt;task name&gt;</code> ËÄå‰∏çÊòØ
-ÁÆÄÂçïÁöÑ <code>&lt;task name&gt;</code> ÂèØ‰ª•ÁúãÂà∞ËØ• task ÁöÑÊâßË°åÁªìÊûú„ÄÇÂØπ‰∫é key name ÁöÑ‰∏Ä‰∏™Á∫¶ÂÆöÂ∞±ÊòØ‰ΩøÁî® <code>camelCase</code>ÔºåËøôÊ†∑ÂëΩ‰ª§Ë°åÈáåÁöÑ name Âíå Scala ÁöÑÊ†áËØÜÁ¨¶Â∞±‰∏ÄÊ†∑‰∫Ü„ÄÇ
-</p><p>‰∫ÜËß£Êõ¥Â§öÂÖ≥‰∫é‰ªª‰Ωï key ÂÜÖÂÆπÔºåÂèØ‰ª•Âú® sbt ‰∫§‰∫íÊ®°ÂºèÁöÑÂëΩ‰ª§Ë°åÈáåËæìÂÖ• <code>inspect &lt;keyname&gt;</code>„ÄÇËôΩÁÑ∂ <code>inspect</code> ÊòæÁ§∫ÁöÑ‰∏Ä‰∫õ‰ø°ÊÅØÊ≤°ÊúâÊÑè‰πâÔºå‰ΩÜÊòØÂú®È°∂ÈÉ®‰ºöÊòæÁ§∫ setting ÁöÑ value ÁöÑÁ±ªÂûãÂíå setting ÁöÑÁÆÄ‰ªã„ÄÇ
-</p><h3 id="build.sbt+%E2%80%B0%E2%88%8F%E2%89%A0%C3%81%C3%B6%C3%91%C3%82%C2%BA%C3%AF%C3%82%C3%96%E2%80%A2">build.sbt ‰∏≠ÁöÑÂºïÂÖ•<a href="#build.sbt+%E2%80%B0%E2%88%8F%E2%89%A0%C3%81%C3%B6%C3%91%C3%82%C2%BA%C3%AF%C3%82%C3%96%E2%80%A2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>‰Ω†ÂèØ‰ª•Â∞Ü <code>import</code> ËØ≠Âè•ÊîæÂú® <code>build.sbt</code> ÁöÑÈ°∂ÈÉ®ÔºõÂÆÉ‰ª¨ÂèØ‰ª•‰∏çÁî®Á©∫Ë°åÂàÜÈöî„ÄÇ
-</p><p>‰∏ãÈù¢ÊòØ‰∏Ä‰∫õÈªòËÆ§ÁöÑÂºïÂÖ•Ôºö
+</code></pre><h4 id="Tasks+%E5%92%8C+Settings+%E7%9A%84%E7%B1%BB%E5%9E%8B">Tasks 和 Settings 的类型<a href="#Tasks+%E5%92%8C+Settings+%E7%9A%84%E7%B1%BB%E5%9E%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>从类型系统的角度来讲，通过 task key 创建的 <code>Setting</code> 和通过 setting key 创建的 <code>Setting</code> 有稍微不同。<code>taskKey := 42</code> 的类型是 <code>Setting[Task[T]]</code> 而 <code>settingKey := 42</code>
+的类型是 <code>Setting[T]</code>。这对于绝大多数情况并无影响；task key 在执行的时候仍然创建一个类型为 <code>T</code> 的值（value）。
+</p><p><code>T</code> 类型和 <code>Task[T]</code> 类型的不同的含义是：一个 setting 不能依赖一个 task，因为一个 setting 只会在项目加载的时候计算一次，不会重新计算。<a href="More-About-Settings.html">更多关于设置</a> 的内容很快就会讲到。
+</p><h3 id="sbt+%E4%BA%A4%E4%BA%92%E6%A8%A1%E5%BC%8F%E4%B8%AD%E7%9A%84+Keys">sbt 交互模式中的 Keys<a href="#sbt+%E4%BA%A4%E4%BA%92%E6%A8%A1%E5%BC%8F%E4%B8%AD%E7%9A%84+Keys" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在 sbt 的交互模式下，你可以输入任何 task 的 name 来执行该 task。这就是为什么输入 <code>compile</code> 就是执行 <code>compile</code> task。<code>compile</code> 就是该 task 的 key。
+</p><p>如果你输入的是一个 setting key 的 name 而不是一个 task key 的 name，setting key 的值（value）会显示出来。输入一个 task key 的 name 会执行该 task 但是不会显示执行结果的值（value）；输入 <code>show &lt;task name&gt;</code> 而不是
+简单的 <code>&lt;task name&gt;</code> 可以看到该 task 的执行结果。对于 key name 的一个约定就是使用 <code>camelCase</code>，这样命令行里的 name 和 Scala 的标识符就一样了。
+</p><p>了解更多关于任何 key 内容，可以在 sbt 交互模式的命令行里输入 <code>inspect &lt;keyname&gt;</code>。虽然 <code>inspect</code> 显示的一些信息没有意义，但是在顶部会显示 setting 的 value 的类型和 setting 的简介。
+</p><h3 id="build.sbt+%E4%B8%AD%E7%9A%84%E5%BC%95%E5%85%A5">build.sbt 中的引入<a href="#build.sbt+%E4%B8%AD%E7%9A%84%E5%BC%95%E5%85%A5" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>你可以将 <code>import</code> 语句放在 <code>build.sbt</code> 的顶部；它们可以不用空行分隔。
+</p><p>下面是一些默认的引入：
 </p><pre><code class="prettyprint lang-scala">import sbt._
 import Process._
 import Keys._
-</code></pre><p>ÔºàÂè¶Â§ñÔºåÂ¶ÇÊûú‰Ω†Êúâ <a href="Full-Def.html">.scala Êñá‰ª∂</a>ÔºåËøô‰∫õÊñá‰ª∂‰∏≠‰ªª‰Ωï <code>Build</code> ÂØπË±°ÊàñËÄÖ <code>Plugin</code> ÂØπË±°ÈáåÁöÑÂÜÖÂÆπÈÉΩ‰ºöË¢´ÂºïÂÖ•„ÄÇÊõ¥Â§öÂÖ≥‰∫éËøô‰∫õÁöÑÂÜÖÂÆπÊîæÂú® <a href="Full-Def.html">.scala ÊûÑÂª∫ÂÆö‰πâ</a>„ÄÇÔºâ
-</p><h3 id="%C3%8A%E2%88%91%C2%AA%C3%82%C3%A4%E2%80%A0%E2%80%B0%C3%A6%C3%B9%C3%8B%C2%B5%C3%B1%C3%82%E2%88%AB%C3%AC">Ê∑ªÂä†‰æùËµñÂ∫ì<a href="#%C3%8A%E2%88%91%C2%AA%C3%82%C3%A4%E2%80%A0%E2%80%B0%C3%A6%C3%B9%C3%8B%C2%B5%C3%B1%C3%82%E2%88%AB%C3%AC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Êúâ‰∏§ÁßçÊñπÂºèÊ∑ªÂä†Á¨¨‰∏âÊñπÁöÑ‰æùËµñ„ÄÇ‰∏ÄÁßçÊòØÂ∞Ü jar Êñá‰ª∂ ÊîæÂÖ• <code>lib/</code>ÔºàÈùûÊâòÁÆ°ÁöÑ‰æùËµñÔºâ‰∏≠ÔºåÂè¶‰∏ÄÁßçÊòØÂú® <code>build.sbt</code> ‰∏≠Ê∑ªÂä†ÊâòÁÆ°ÁöÑ‰æùËµñÔºåÂÉèËøôÊ†∑Ôºö
+</code></pre><p>（另外，如果你有 <a href="Full-Def.html">.scala 文件</a>，这些文件中任何 <code>Build</code> 对象或者 <code>Plugin</code> 对象里的内容都会被引入。更多关于这些的内容放在 <a href="Full-Def.html">.scala 构建定义</a>。）
+</p><h3 id="%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96%E5%BA%93">添加依赖库<a href="#%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96%E5%BA%93" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>有两种方式添加第三方的依赖。一种是将 jar 文件 放入 <code>lib/</code>（非托管的依赖）中，另一种是在 <code>build.sbt</code> 中添加托管的依赖，像这样：
 </p><pre><code class="prettyprint lang-scala">val derby = &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot;
 
 lazy val commonSettings = Seq(
@@ -155,10 +155,10 @@ lazy val root = (project in file(&quot;.&quot;)).
     name := &quot;hello&quot;,
     libraryDependencies += derby
   )
-</code></pre><p>Â∞±ÊòØÂÉèËøôÊ†∑Ê∑ªÂä†ÁâàÊú¨‰∏∫ 10.4.1.3 ÁöÑ Apache Derby Â∫ì‰Ωú‰∏∫‰æùËµñ„ÄÇ
-</p><p>key <code>libraryDependencies</code> ÂåÖÂê´‰∏§‰∏™ÊñπÈù¢ÁöÑÂ§çÊùÇÊÄßÔºö<code>+=</code> ÊñπÊ≥ïËÄå‰∏çÊòØ <code>:=</code>ÔºåÁ¨¨‰∫å‰∏™Â∞±ÊòØ <code>%</code> ÊñπÊ≥ï„ÄÇ<code>+=</code> ÊñπÊ≥ïÊòØÂ∞ÜÊñ∞ÁöÑÂÄºËøΩÂä†ËØ• key ÁöÑÊóßÂÄºÂêéÈù¢ËÄå‰∏çÊòØÊõøÊç¢ÂÆÉÔºåËøôÂ∞ÜÂú® 
-<a href="More-About-Settings.html">Êõ¥Â§öËÆæÁΩÆ</a> ‰∏≠‰ªãÁªç„ÄÇ<code>%</code> ÊñπÊ≥ïÊòØÁî®Êù•‰ªéÂ≠óÁ¨¶‰∏≤ÊûÑÈÄ† Ivy Ê®°Âùó ID ÁöÑÔºåÂ∞ÜÂú® <a href="Library-Dependencies.html">Â∫ì‰æùËµñ</a> ‰∏≠‰ªãÁªç„ÄÇ
-</p><p>ÁõÆÂâçÔºå‰∏ÄÁõ¥Âà∞ÂÖ•Èó®ÊåáÂçóÁöÑÂêéÈù¢ÈÉ®ÂàÜÔºåÊàë‰ª¨Ë∑≥Ëøá‰∫ÜÂ∫ì‰æùËµñÁöÑ‰∏Ä‰∫õÁªÜËäÇ„ÄÇÂêéÈù¢Êúâ‰∏ÄÊï¥ËäÇ <a href="Library-Dependencies.html">Â∫ì‰æùËµñ</a> Êù•‰ªãÁªçËøô‰∫õÂÜÖÂÆπ„ÄÇ</p><div class="bottom nav span-16">
+</code></pre><p>就是像这样添加版本为 10.4.1.3 的 Apache Derby 库作为依赖。
+</p><p>key <code>libraryDependencies</code> 包含两个方面的复杂性：<code>+=</code> 方法而不是 <code>:=</code>，第二个就是 <code>%</code> 方法。<code>+=</code> 方法是将新的值追加该 key 的旧值后面而不是替换它，这将在 
+<a href="More-About-Settings.html">更多设置</a> 中介绍。<code>%</code> 方法是用来从字符串构造 Ivy 模块 ID 的，将在 <a href="Library-Dependencies.html">库依赖</a> 中介绍。
+</p><p>目前，一直到入门指南的后面部分，我们跳过了库依赖的一些细节。后面有一整节 <a href="Library-Dependencies.html">库依赖</a> 来介绍这些内容。</p><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>
                         <a href="Scopes.html"> Scope </a>                        
@@ -170,7 +170,7 @@ lazy val root = (project in file(&quot;.&quot;)).
       <a name="toc"></a>
       <h4 class="toctitle">Contents</h4>
       <div class="tocbody">
-      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">sbt ÂÖ•Èó®</a></div><ol class="toc"> <li><div><a href="Setup.html">ÂÆâË£Ö sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Âú® Mac ‰∏äÂÆâË£Ö sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Âú® Windows ‰∏äÂÆâË£Ö sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Âú® Linux ‰∏äÂÆâË£Ö sbt</a></div></li><li><div><a href="Manual-Installation.html">ÊâãÂä®ÂÆâË£Ö sbt</a></div></li><li><div><a href="Activator-Installation.html">ÂÆâË£Ö Typesafe Activator (ÂåÖÂê´sbt)</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">ÁõÆÂΩïÁªìÊûÑ</a></div></li><li><div><a href="Running.html">ËøêË°å</a></div></li><li><div class="current">.sbt ÊûÑÂª∫ÂÆö‰πâ</div></li><li><div><a href="Scopes.html">Scope</a></div></li><li><div><a href="More-About-Settings.html">Êõ¥Â§öÂÖ≥‰∫éËÆæÁΩÆ</a></div></li><li><div><a href="Library-Dependencies.html">Â∫ì‰æùËµñ</a></div></li><li><div><a href="Multi-Project.html">Â§öÈ°πÁõÆÊûÑÂª∫</a></div></li><li><div><a href="Using-Plugins.html">‰ΩøÁî®Êèí‰ª∂</a></div></li><li><div><a href="Custom-Settings.html">Ëá™ÂÆö‰πâËÆæÁΩÆÂíå‰ªªÂä°</a></div></li><li><div><a href="Organizing-Build.html">ÁªÑÁªáÊûÑÂª∫</a></div></li><li><div><a href="Summary.html">ÊÄªÁªì</a></div></li><li><div><a href="Bare-Def.html">ÈôÑÂΩïÔºöBare .sbt ÊûÑÂª∫ÂÆö‰πâ</a></div></li><li><div><a href="Full-Def.html">ÈôÑÂΩïÔºö.scala ÊûÑÂª∫ÂÆö‰πâ</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">sbt 入门</a></div><ol class="toc"> <li><div><a href="Setup.html">安装 sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">在 Mac 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">在 Windows 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">在 Linux 上安装 sbt</a></div></li><li><div><a href="Manual-Installation.html">手动安装 sbt</a></div></li><li><div><a href="Activator-Installation.html">安装 Typesafe Activator (包含sbt)</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">目录结构</a></div></li><li><div><a href="Running.html">运行</a></div></li><li><div class="current">.sbt 构建定义</div></li><li><div><a href="Scopes.html">Scope</a></div></li><li><div><a href="More-About-Settings.html">更多关于设置</a></div></li><li><div><a href="Library-Dependencies.html">库依赖</a></div></li><li><div><a href="Multi-Project.html">多项目构建</a></div></li><li><div><a href="Using-Plugins.html">使用插件</a></div></li><li><div><a href="Custom-Settings.html">自定义设置和任务</a></div></li><li><div><a href="Organizing-Build.html">组织构建</a></div></li><li><div><a href="Summary.html">总结</a></div></li><li><div><a href="Bare-Def.html">附录：Bare .sbt 构建定义</a></div></li><li><div><a href="Full-Def.html">附录：.scala 构建定义</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
           </div>
         </div>
         <div class="header">

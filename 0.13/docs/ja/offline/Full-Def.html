@@ -3,7 +3,7 @@
       <head>
         <meta charset="utf-8"/>
         <meta content="width=device-width, initial-scale=1" name="viewport"/>
-        <title>sbt Reference Manual — ‰ªòÈå≤: .scala „Éì„É´„ÉâÂÆöÁæ©</title>
+        <title>sbt Reference Manual — 付録: .scala ビルド定義</title>
         <link rel="shortcut icon" href="../favicon.ico"/>
         <link rel="stylesheet" href="../css/blueprint/screen.css" type="text/css" media="screen, projection"/>
         <link rel="stylesheet" href="../css/blueprint/grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
@@ -43,16 +43,16 @@
           </a>
         <div class="container contentswrapper">
           <div class="span-16 prepend-1 append-1 contents">
-            <h2 id="%E2%80%B0%C2%AA%C3%B2%C3%88%C3%A5%E2%89%A4%3A+.scala+%E2%80%9E%C3%89%C3%AC%E2%80%9E%C3%89%C2%B4%E2%80%9E%C3%89%C3%A2%C3%82%C3%86%C3%B6%C3%81%C3%A6%C2%A9">‰ªòÈå≤: .scala „Éì„É´„ÉâÂÆöÁæ©<a href="#%E2%80%B0%C2%AA%C3%B2%C3%88%C3%A5%E2%89%A4%3A+.scala+%E2%80%9E%C3%89%C3%AC%E2%80%9E%C3%89%C2%B4%E2%80%9E%C3%89%C3%A2%C3%82%C3%86%C3%B6%C3%81%C3%A6%C2%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>„Åì„ÅÆ„Éö„Éº„Ç∏„Åß„ÅØ„ÄÅÊóßÂºè„ÅÆ <code>.scala</code> „Éì„É´„ÉâÂÆöÁæ©„ÅÆË™¨Êòé„Çí„Åô„Çã„ÄÇ
-‰ª•Ââç„ÅÆ„Éê„Éº„Ç∏„Éß„É≥„ÅÆ sbt „ÅßË§áÊï∞„ÅÆ„Éó„É≠„Ç∏„Çß„ÇØ„Éà„ÇíÊâ±„ÅÜ„Å´„ÅØ <code>.scala</code> „Éì„É´„ÉâÂÆöÁæ©„Çí‰Ωø„ÅÜ‰ª•Â§ñ„Åó„Åã„Å™„Åã„Å£„Åü„Åå„ÄÅ
-sbt 0.13 „Åã„Çâ„ÅØ<a href="Basic-Def.html">„Éû„É´„ÉÅ„Éó„É≠„Ç∏„Çß„ÇØ„Éà .sbt „Éì„É´„ÉâÂÆöÁæ©</a>„ÅåËøΩÂä†„Åï„Çå„ÄÅÁèæÂú®„ÅØ„Åù„ÅÆ„Çπ„Çø„Ç§„É´„ÅåÊé®Â•®„Åï„Çå„Å¶„ÅÑ„Çã„ÄÇ
-</p><p>„Åì„ÅÆ„Éö„Éº„Ç∏„ÅØ„ÄÅ„Åì„ÅÆ„Ç¨„Ç§„Éâ„ÅÆ„Åì„Çå„Åæ„Åß„ÅÆ„Éö„Éº„Ç∏„ÄÅÁâπ„Å´ 
-<a href="Basic-Def.html">.sbt „Éì„É´„ÉâÂÆöÁæ©</a> „Å®
-<a href="More-About-Settings.html">‰ªñ„ÅÆÁ®ÆÈ°û„ÅÆ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞</a>„ÇíË™≠„Çì„Åß„ÅÑ„Çã„Åì„Å®„ÇíÂâçÊèê„Å®„Åô„Çã„ÄÇ
-</p><h3 id="%E2%80%9E%C3%85%C2%AE++%E2%80%9E%C3%85%C3%86%C3%88%C3%B1%C2%A2%E2%80%B0%C3%B8%C3%87"><code>build.sbt</code> „Å® <code>Build.scala</code> „ÅÆÈñ¢‰øÇ<a href="#%E2%80%9E%C3%85%C2%AE++%E2%80%9E%C3%85%C3%86%C3%88%C3%B1%C2%A2%E2%80%B0%C3%B8%C3%87" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>„Éì„É´„ÉâÂÆöÁæ©„ÅÆ‰∏≠„Åß„ÄÅ<code>.sbt</code> „Å® <code>.scala</code> „ÇíÊ∑∑„Åú„Å¶‰Ωø„ÅÜ„Å´„ÅØ„ÄÅ‰∏°ËÄÖ„ÅÆÈñ¢‰øÇ„ÇíÁêÜËß£„Åô„ÇãÂøÖË¶Å„Åå„ÅÇ„Çã„ÄÇ
-</p><p>ÂÆüÈöõ„Å´ 2 „Å§„ÅÆ„Éï„Ç°„Ç§„É´„Çí‰Ωø„Å£„Å¶Ë™¨Êòé„Åó„Çà„ÅÜ„ÄÇ
-„Åæ„Åö„ÄÅ„Éó„É≠„Ç∏„Çß„ÇØ„Éà„Åå <code>hello</code> „Å®„ÅÑ„ÅÜ„Éá„Ç£„É¨„ÇØ„Éà„É™„Å´„ÅÇ„Çã„Å™„Çâ 
-<code>hello/project/Build.scala</code> „Çí‰ª•‰∏ã„ÅÆ„Çà„ÅÜ„Å´‰Ωú„Çã:
+            <h2 id="%E4%BB%98%E9%8C%B2%3A+.scala+%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9">付録: .scala ビルド定義<a href="#%E4%BB%98%E9%8C%B2%3A+.scala+%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このページでは、旧式の <code>.scala</code> ビルド定義の説明をする。
+以前のバージョンの sbt で複数のプロジェクトを扱うには <code>.scala</code> ビルド定義を使う以外しかなかったが、
+sbt 0.13 からは<a href="Basic-Def.html">マルチプロジェクト .sbt ビルド定義</a>が追加され、現在はそのスタイルが推奨されている。
+</p><p>このページは、このガイドのこれまでのページ、特に 
+<a href="Basic-Def.html">.sbt ビルド定義</a> と
+<a href="More-About-Settings.html">他の種類のセッティング</a>を読んでいることを前提とする。
+</p><h3 id="%E3%81%A8++%E3%81%AE%E9%96%A2%E4%BF%82"><code>build.sbt</code> と <code>Build.scala</code> の関係<a href="#%E3%81%A8++%E3%81%AE%E9%96%A2%E4%BF%82" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>ビルド定義の中で、<code>.sbt</code> と <code>.scala</code> を混ぜて使うには、両者の関係を理解する必要がある。
+</p><p>実際に 2 つのファイルを使って説明しよう。
+まず、プロジェクトが <code>hello</code> というディレクトリにあるなら 
+<code>hello/project/Build.scala</code> を以下のように作る:
 </p><pre><code class="prettyprint lang-scala">import sbt._
 import Keys._
 
@@ -74,54 +74,54 @@ object HelloBuild extends Build {
       sampleKeyB := &quot;B: in the root project settings in Build.scala&quot;
     ))
 }
-</code></pre><p>Ê¨°„Å´ <code>hello/build.sbt</code> „Çí‰ª•‰∏ã„ÅÆ„Çà„ÅÜ„Å™ÂÜÖÂÆπ„Åß‰ΩúÊàê„Åô„Çã:
+</code></pre><p>次に <code>hello/build.sbt</code> を以下のような内容で作成する:
 </p><pre><code class="prettyprint lang-scala">sampleKeyC in ThisBuild := &quot;C: in build.sbt scoped to ThisBuild&quot;
 
 sampleKeyD := &quot;D: in build.sbt&quot;
-</code></pre><p>sbt „ÅÆ„Ç§„É≥„Çø„É©„ÇØ„ÉÜ„Ç£„Éñ„Éó„É≠„É≥„Éó„Éà„ÇíËµ∑Âãï„Åô„Çã„ÄÇ
-<code>inspect sampleKeyA</code> „Å®ÂÖ•Âäõ„Åô„Çã„Å®„ÄÅ‰ª•‰∏ã„ÅÆ„Çà„ÅÜ„Å´Ë°®Á§∫„Åï„Çå„Çã„ÅØ„Åö„Å†Ôºà‰∏ÄÈÉ®ÊäúÁ≤ãÔºâ:
+</code></pre><p>sbt のインタラクティブプロンプトを起動する。
+<code>inspect sampleKeyA</code> と入力すると、以下のように表示されるはずだ（一部抜粋）:
 </p><pre><code class="">[info] Setting: java.lang.String = A: in Build.settings in Build.scala
 [info] Provided by:
 [info]  {file:/home/hp/checkout/hello/}/*:sampleKeyA
-</code></pre><p>Ê¨°„Å´ <code>inspect sampleKeyC</code> „Å®ÂÖ•Âäõ„Åô„Çã„Å®„ÄÅ‰ª•‰∏ã„ÅÆ„Çà„ÅÜ„Å´Ë°®Á§∫„Åï„Çå„Çã:
+</code></pre><p>次に <code>inspect sampleKeyC</code> と入力すると、以下のように表示される:
 </p><pre><code class="">[info] Setting: java.lang.String = C: in build.sbt scoped to ThisBuild
 [info] Provided by:
 [info]  {file:/home/hp/checkout/hello/}/*:sampleKeyC
-</code></pre><p>‰∫å„Å§„ÅÆÂÄ§„Å®„ÇÇ “Provided by” „ÅØÂêå„Åò„Çπ„Ç≥„Éº„Éó„ÇíË°®Á§∫„Åó„Å¶„ÅÑ„Çã„Åì„Å®„Å´Ê≥®ÁõÆ„Åó„Å¶„Åª„Åó„ÅÑ„ÄÇ
-„Å§„Åæ„Çä„ÄÅ<code>.sbt</code> „Éï„Ç°„Ç§„É´„ÅÆ <code>sampleKeyC in ThisBuild</code> „ÅØ„ÄÅ
-<code>.scala</code> „Éï„Ç°„Ç§„É´„ÅÆ <code>Build.settings</code> „É™„Çπ„Éà„Å´„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„ÇíËøΩÂä†„Åô„Çã„Åì„Å®„Å®Á≠â‰æ°„Å®„ÅÑ„ÅÜ„Åì„Å®„Å†„ÄÇ
-sbt „ÅØ„Éì„É´„ÉâÂÖ®‰Ωì„Å´„Çπ„Ç≥„Éº„Éó‰ªò„Åë„Åï„Çå„Åü„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„Çí‰∏°ËÄÖ„Åã„ÇâÂèñ„ÇäËæº„Çì„Åß„Éì„É´„ÉâÂÆöÁæ©„Çí‰ΩúÊàê„Åô„Çã„ÄÇ
-</p><p>Ê¨°„ÅØ„ÄÅ<code>inspect sampleKeyB</code>:
+</code></pre><p>二つの値とも “Provided by” は同じスコープを表示していることに注目してほしい。
+つまり、<code>.sbt</code> ファイルの <code>sampleKeyC in ThisBuild</code> は、
+<code>.scala</code> ファイルの <code>Build.settings</code> リストにセッティングを追加することと等価ということだ。
+sbt はビルド全体にスコープ付けされたセッティングを両者から取り込んでビルド定義を作成する。
+</p><p>次は、<code>inspect sampleKeyB</code>:
 </p><pre><code class="">[info] Setting: java.lang.String = B: in the root project settings in Build.scala
 [info] Provided by:
 [info]  {file:/home/hp/checkout/hello/}hello/*:sampleKeyB
-</code></pre><p><code>sampleKeyB</code> „ÅØ„ÄÅ„Éì„É´„ÉâÂÖ®‰ΩìÔºà<code>{file:/home/hp/checkout/hello/}</code>Ôºâ„Åß„ÅØ„Å™„Åè„ÄÅ
-ÁâπÂÆö„ÅÆ„Éó„É≠„Ç∏„Çß„ÇØ„ÉàÔºà<code>{file:/home/hp/checkout/hello/}hello</code>Ôºâ
-„Å´„Çπ„Ç≥„Éº„Éó‰ªò„Åë„Åï„Çå„ÅÑ„Çã„Åì„Å®„Å´Ê≥®ÊÑè„Åó„Å¶„Åª„Åó„ÅÑ„ÄÇ
-</p><p>„ÇÇ„ÅÜ„ÅäÂàÜ„Åã„Çä„Å†„Å®ÊÄù„ÅÜ„Åå„ÄÅ<code>inspect sampleKeyD</code> „ÅØ <code>sampleKeyB</code> „Å´ÂØæÂøú„Åô„Çã:
+</code></pre><p><code>sampleKeyB</code> は、ビルド全体（<code>{file:/home/hp/checkout/hello/}</code>）ではなく、
+特定のプロジェクト（<code>{file:/home/hp/checkout/hello/}hello</code>）
+にスコープ付けされいることに注意してほしい。
+</p><p>もうお分かりだと思うが、<code>inspect sampleKeyD</code> は <code>sampleKeyB</code> に対応する:
 </p><pre><code class="">[info] Setting: java.lang.String = D: in build.sbt
 [info] Provided by:
 [info]  {file:/home/hp/checkout/hello/}hello/*:sampleKeyD
-</code></pre><p>sbt „ÅØ <code>.sbt</code> „Éï„Ç°„Ç§„É´„Åã„Çâ„ÅÆ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„Çí <code>Build.settings</code> „Å® <code>Project.settings</code> „Å´<em>ËøΩÂä†„Åó</em>„ÄÅ
-„Åì„Çå„ÅØ <code>.sbt</code> ÂÜÖ„ÅÆ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„ÅÆÂÑ™ÂÖàÈ†Ü‰Ωç„ÅåÈ´ò„ÅÑ„Åì„Å®„ÇíÊÑèÂë≥„Åô„Çã„ÄÇ
-<code>Build.scala</code> „ÇíÂ§âÊõ¥„Åó„Å¶„ÄÅ<code>build.sbt</code> „Åß„ÇÇË®≠ÂÆö„Åï„Çå„Å¶„ÅÑ„Çã <code>sampleKeyC</code> „Åã <code>sampleKeyD</code> „Ç≠„Éº„ÇíË®≠ÂÆö„Åó„Å¶„Åø„Çà„ÅÜ„ÄÇ
-<code>build.sbt</code> ÂÜÖ„ÅÆ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„Åå <code>Build.scala</code> ÂÜÖ„ÅÆ„Åù„Çå„Å´„ÄåÂãù„Å£„Å¶„ÄçÂÑ™ÂÖà„Åï„Çå„Çã„ÅØ„Åö„Å†„ÄÇ
-</p><p>„ÇÇ„ÅÜ‰∏Ä„Å§Ê∞ó„Å•„ÅÑ„Åü„Åã„ÇÇ„Åó„Çå„Å™„ÅÑ„Åå„ÄÅ<code>sampleKeyC</code> „Å® <code>sampleKeyD</code> „ÅØ <code>build.sbt</code> „Åß„Åù„ÅÆ„Åæ„Åæ‰Ωø„ÅÜ„Åì„Å®„Åå„Åß„Åç„Çã„ÄÇ
-„Åì„Çå„ÅØ sbt „Åå <code>Build</code> „Ç™„Éñ„Ç∏„Çß„ÇØ„Éà„ÅÆ„Ç≥„É≥„ÉÜ„É≥„ÉÑ„ÇíËá™ÂãïÁöÑ„Å´ <code>.sbt</code> „Éï„Ç°„Ç§„É´„Å´„Ç§„É≥„Éù„Éº„Éà„Åô„Çã„Åì„Å®„Å´„Çà„ÇäÂÆüÁèæ„Åï„Çå„Å¶„ÅÑ„Çã„ÄÇ
-ÂÖ∑‰ΩìÁöÑ„Å´„ÅØ <code>build.sbt</code> „Éï„Ç°„Ç§„É´ÂÜÖ„Åß <code>import HelloBuild._</code> „ÅåÊöóÈªô„Å´Âëº„Å∞„Çå„Å¶„ÅÑ„Çã„ÄÇ
-</p><p>„Åæ„Å®„ÇÅ„Çã„Å®:
-</p><ul><li><code>.scala</code> „Éï„Ç°„Ç§„É´ÂÜÖ„Åß„ÄÅ<code>Build.settings</code> „Å´„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„ÇíËøΩÂä†„Åô„Çã„Å®„ÄÅ
-Ëá™ÂãïÁöÑ„Å´„Éì„É´„ÉâÂÖ®‰Ωì„Å´„Çπ„Ç≥„Éº„Éó‰ªò„Åë„Åï„Çå„Çã„ÄÇ
-</li><li><code>.scala</code> „Éï„Ç°„Ç§„É´ÂÜÖ„Åß„ÄÅ<code>Project.settings</code> „Å´„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„ÇíËøΩÂä†„Åô„Çã„Å®„ÄÅ
-Ëá™ÂãïÁöÑ„Å´„Éó„É≠„Ç∏„Çß„ÇØ„Éà„Å´„Çπ„Ç≥„Éº„Éó‰ªò„Åë„Åï„Çå„Çã„ÄÇ
-</li><li><code>.scala</code> „Éï„Ç°„Ç§„É´„Å´Êõ∏„ÅÑ„ÅüÂÖ®„Å¶„ÅÆ <code>Build</code> „Ç™„Éñ„Ç∏„Çß„ÇØ„Éà„ÅÆ„Ç≥„É≥„ÉÜ„É≥„ÉÑ„ÅØ
-<code>.sbt</code> „Éï„Ç°„Ç§„É´„Å´„Ç§„É≥„Éù„Éº„Éà„Åï„Çå„Çã„ÄÇ
-</li><li><code>.sbt</code> „Éï„Ç°„Ç§„É´ÂÜÖ„ÅÆ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„ÅØ <code>.scala</code> „Éï„Ç°„Ç§„É´„ÅÆ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„Å´<em>ËøΩÂä†</em>„Åï„Çå„Çã„ÄÇ
-</li><li><code>.sbt</code> „Éï„Ç°„Ç§„É´ÂÜÖ„ÅÆ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„ÅØ„ÄÅÊòéÁ§∫ÁöÑ„Å´ÊåáÂÆö„Åï„Çå„Å™„ÅÑÈôê„Çä
-„Éó„É≠„Ç∏„Çß„ÇØ„Éà„Å´„Çπ„Ç≥„Éº„Éó‰ªò„Åë„Åï„Çå„Çã„ÄÇ
-</li></ul><h3 id="%E2%80%9E%C3%87%C2%A7%E2%80%9E%C3%89%E2%89%A5%E2%80%9E%C3%87%C3%B8%E2%80%9E%C3%89%C2%A9%E2%80%9E%C3%87%C3%98%E2%80%9E%C3%89%C3%9C%E2%80%9E%C3%87%C2%A3%E2%80%9E%C3%89%C3%B1%E2%80%9E%C3%89%C2%A2%E2%80%9E%C3%89%C2%BA%E2%80%9E%C3%89%C3%A2%E2%80%9E%C3%85%C2%B4%E2%80%9E%C3%85%C3%A4%E2%80%9E%C3%85%C3%AB%E2%80%9E%C3%87%C3%A3%E2%80%9E%C3%89%C3%AC%E2%80%9E%C3%89%C2%B4%E2%80%9E%C3%89%C3%A2%C3%82%C3%86%C3%B6%C3%81%C3%A6%C2%A9">„Ç§„É≥„Çø„É©„ÇØ„ÉÜ„Ç£„Éñ„É¢„Éº„Éâ„Å´„Åä„Åë„Çã„Éì„É´„ÉâÂÆöÁæ©<a href="#%E2%80%9E%C3%87%C2%A7%E2%80%9E%C3%89%E2%89%A5%E2%80%9E%C3%87%C3%B8%E2%80%9E%C3%89%C2%A9%E2%80%9E%C3%87%C3%98%E2%80%9E%C3%89%C3%9C%E2%80%9E%C3%87%C2%A3%E2%80%9E%C3%89%C3%B1%E2%80%9E%C3%89%C2%A2%E2%80%9E%C3%89%C2%BA%E2%80%9E%C3%89%C3%A2%E2%80%9E%C3%85%C2%B4%E2%80%9E%C3%85%C3%A4%E2%80%9E%C3%85%C3%AB%E2%80%9E%C3%87%C3%A3%E2%80%9E%C3%89%C3%AC%E2%80%9E%C3%89%C2%B4%E2%80%9E%C3%89%C3%A2%C3%82%C3%86%C3%B6%C3%81%C3%A6%C2%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt „ÅÆ„Ç§„É≥„Çø„É©„ÇØ„ÉÜ„Ç£„Éñ„Éó„É≠„É≥„Éó„Éà„Åß„Ç´„É¨„É≥„Éà„Éó„É≠„Ç∏„Çß„ÇØ„Éà„Çí
-<code>project/</code> ÂÜÖ„ÅÆ„Éì„É´„ÉâÂÆöÁæ©„Éó„É≠„Ç∏„Çß„ÇØ„Éà„Å´Âàá„ÇäÊõø„Åà„Çã„Åì„Å®„Åå„Åß„Åç„Çã„ÄÇ
-<code>reload plugins</code> „Å®Êâì„Å°Ëæº„ÇÄ„Åì„Å®„ÅßÂàá„ÇäÊõø„Çè„Çã:
+</code></pre><p>sbt は <code>.sbt</code> ファイルからのセッティングを <code>Build.settings</code> と <code>Project.settings</code> に<em>追加し</em>、
+これは <code>.sbt</code> 内のセッティングの優先順位が高いことを意味する。
+<code>Build.scala</code> を変更して、<code>build.sbt</code> でも設定されている <code>sampleKeyC</code> か <code>sampleKeyD</code> キーを設定してみよう。
+<code>build.sbt</code> 内のセッティングが <code>Build.scala</code> 内のそれに「勝って」優先されるはずだ。
+</p><p>もう一つ気づいたかもしれないが、<code>sampleKeyC</code> と <code>sampleKeyD</code> は <code>build.sbt</code> でそのまま使うことができる。
+これは sbt が <code>Build</code> オブジェクトのコンテンツを自動的に <code>.sbt</code> ファイルにインポートすることにより実現されている。
+具体的には <code>build.sbt</code> ファイル内で <code>import HelloBuild._</code> が暗黙に呼ばれている。
+</p><p>まとめると:
+</p><ul><li><code>.scala</code> ファイル内で、<code>Build.settings</code> にセッティングを追加すると、
+自動的にビルド全体にスコープ付けされる。
+</li><li><code>.scala</code> ファイル内で、<code>Project.settings</code> にセッティングを追加すると、
+自動的にプロジェクトにスコープ付けされる。
+</li><li><code>.scala</code> ファイルに書いた全ての <code>Build</code> オブジェクトのコンテンツは
+<code>.sbt</code> ファイルにインポートされる。
+</li><li><code>.sbt</code> ファイル内のセッティングは <code>.scala</code> ファイルのセッティングに<em>追加</em>される。
+</li><li><code>.sbt</code> ファイル内のセッティングは、明示的に指定されない限り
+プロジェクトにスコープ付けされる。
+</li></ul><h3 id="%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%A9%E3%82%AF%E3%83%86%E3%82%A3%E3%83%96%E3%83%A2%E3%83%BC%E3%83%89%E3%81%AB%E3%81%8A%E3%81%91%E3%82%8B%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9">インタラクティブモードにおけるビルド定義<a href="#%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%A9%E3%82%AF%E3%83%86%E3%82%A3%E3%83%96%E3%83%A2%E3%83%BC%E3%83%89%E3%81%AB%E3%81%8A%E3%81%91%E3%82%8B%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt のインタラクティブプロンプトでカレントプロジェクトを
+<code>project/</code> 内のビルド定義プロジェクトに切り替えることができる。
+<code>reload plugins</code> と打ち込むことで切り替わる:
 </p><pre><code class="">&gt; reload plugins
 [info] Set current project to default-a0e8e4 (in build file:/home/hp/checkout/hello/project/)
 &gt; show sources
@@ -132,21 +132,21 @@ sbt „ÅØ„Éì„É´„ÉâÂÖ®‰Ωì„Å´„Çπ„Ç≥„Éº„É�
 &gt; show sources
 [info] ArrayBuffer(/home/hp/checkout/hello/hw.scala)
 &gt;
-</code></pre><p>‰∏äË®ò„Å´„ÅÇ„Çã„Å®„Åä„Çä„ÄÅ<code>reload return</code> „Çí‰Ωø„Å£„Å¶„Éì„É´„ÉâÂÆöÁæ©„Éó„É≠„Ç∏„Çß„ÇØ„Éà„Åã„ÇâÊôÆÈÄö„ÅÆ„Éó„É≠„Ç∏„Çß„ÇØ„Éà„Å´Êàª„Çã„ÄÇ
-</p><h3 id="%C3%8A%E2%89%A5%C2%AE%C3%8A%C3%91%C3%A8%3A+%C3%82%C3%96%C2%AE%E2%80%9E%C3%85%C2%B6%E2%80%9E%C3%85%C3%A5+immutable+%E2%80%9E%C3%85%E2%80%A0">Ê≥®ÊÑè: ÂÖ®„Å¶„Åå immutable „Å†<a href="#%C3%8A%E2%89%A5%C2%AE%C3%8A%C3%91%C3%A8%3A+%C3%82%C3%96%C2%AE%E2%80%9E%C3%85%C2%B6%E2%80%9E%C3%85%C3%A5+immutable+%E2%80%9E%C3%85%E2%80%A0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> ÂÜÖ„ÅÆ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„Åå„ÄÅ<code>Build</code> „ÇÑ <code>Project</code> „Ç™„Éñ„Ç∏„Çß„ÇØ„Éà„ÅÆ <code>settings</code> „Éï„Ç£„Éº„É´„Éâ„Å´
-ËøΩÂä†„Åï„Çå„Çã„Å®ËÄÉ„Åà„Çã„ÅÆ„ÅØÈñìÈÅï„Å£„Å¶„ÅÑ„Çã„ÄÇ
-„Åù„ÅÜ„Åß„ÅØ„Å™„Åè„ÄÅ<code>Build</code> „ÇÑ <code>Project</code> „ÅÆ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„É™„Çπ„Éà„Å® <code>build.sbt</code> „ÅÆ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„Åå
-ÈÄ£Áµê„Åï„Çå„Å¶Âà•„ÅÆ immutable „Å™„É™„Çπ„Éà„Å´„Å™„Å£„Å¶„ÄÅ„Åù„Çå„Åå sbt „Å´‰Ωø„Çè„Çå„Çã„Å®„ÅÑ„ÅÜ„ÅÆ„ÅåÊ≠£„Åó„ÅÑ„ÄÇ
-<code>Build</code> „Å® <code>Project</code> „Ç™„Éñ„Ç∏„Çß„ÇØ„Éà„ÅØ„ÄÅimmutable „Å™„Ç≥„É≥„Éï„Ç£„ÇÆ„É•„É¨„Éº„Ç∑„Éß„É≥„Åß„ÅÇ„Çä„ÄÅ
-„Éì„É´„ÉâÂÆöÁæ©„ÅÆÂÖ®‰Ωì„Åã„Çâ„Åô„Çã„Å®„ÄÅ„Åü„Å£„Åü‰∏ÄÈÉ®„Å´„Åô„Åé„Å™„ÅÑ„ÄÇ
-</p><p>‰∫ãÂÆü„ÄÅ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„Å´„ÅØ‰ªñ„Å´„ÇÇÂá∫„Å©„Åì„Çç„Åå„ÅÇ„Çã„ÄÇÂÖ∑‰ΩìÁöÑ„Å´„ÅØ„ÄÅ‰ª•‰∏ã„ÅÆÈ†Ü„ÅßËøΩÂä†„Åï„Çå„Çã:
-</p><ul><li><code>.scala</code> „Éï„Ç°„Ç§„É´ÂÜÖ„ÅÆ <code>Build.settings</code> „Å® <code>Project.settings</code> „ÄÇ
-</li><li>„É¶„Éº„Ç∂ÂÆöÁæ©„ÅÆ„Ç∞„É≠„Éº„Éê„É´„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„ÄÇ‰æã„Åà„Å∞„ÄÅ<code>~/.sbt/build.sbt</code> „Å´<em>ÂÖ®„Å¶</em>„ÅÆ„Éó„É≠„Ç∏„Çß„ÇØ„Éà„Å´ÂΩ±Èüø„Åô„Çã„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„ÇíÂÆöÁæ©„Åß„Åç„Çã„ÄÇ
-</li><li>„Éó„É©„Ç∞„Ç§„É≥„Å´„Çà„Å£„Å¶Ê≥®ÂÖ•„Åï„Çå„Çã„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„ÄÅÊ¨°„ÅÆ<a href="Using-Plugins.html">„Éó„É©„Ç∞„Ç§„É≥„ÅÆ‰ΩøÁî®</a>ÂèÇÁÖß„ÄÇ
-</li><li>„Éó„É≠„Ç∏„Çß„ÇØ„Éà„ÅÆ <code>.sbt</code> „Éï„Ç°„Ç§„É´ÂÜÖ„ÅÆ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„ÄÇ
-</li><li>Ôºà<code>project</code> ÂÜÖ„ÅÆ„Éó„É≠„Ç∏„Çß„ÇØ„Éà„Åß„ÅÇ„ÇãÔºâ„Éì„É´„ÉâÂÆöÁæ©„Éó„É≠„Ç∏„Çß„ÇØ„Éà„ÅÆÂ†¥Âêà„ÅØ„ÄÅ„Ç∞„É≠„Éº„Éê„É´„Éó„É©„Ç∞„Ç§„É≥Ôºà~/.sbt/pluginsÔºâ„ÅåËøΩÂä†„Åï„Çå„Çã„ÄÇ
-<a href="Using-Plugins.html">„Éó„É©„Ç∞„Ç§„É≥„ÅÆ‰ΩøÁî®</a>„ÅßË©≥Á¥∞„ÅåË™¨Êòé„Åï„Çå„Çã„ÄÇ
-</li></ul><p>ÂæåÁ∂ö„ÅÆ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„ÅØÂè§„ÅÑ„ÇÇ„ÅÆ„Çí„Ç™„Éº„Éê„Éº„É©„Ç§„Éâ„Åô„Çã„ÄÇ„Åì„ÅÆ„É™„Çπ„ÉàÂÖ®‰Ωì„Åß„Éì„É´„ÉâÂÆöÁæ©„ÅåÊßãÊàê„Åï„Çå„Çã„ÄÇ
+</code></pre><p>上記にあるとおり、<code>reload return</code> を使ってビルド定義プロジェクトから普通のプロジェクトに戻る。
+</p><h3 id="%E6%B3%A8%E6%84%8F%3A+%E5%85%A8%E3%81%A6%E3%81%8C+immutable+%E3%81%A0">注意: 全てが immutable だ<a href="#%E6%B3%A8%E6%84%8F%3A+%E5%85%A8%E3%81%A6%E3%81%8C+immutable+%E3%81%A0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> 内のセッティングが、<code>Build</code> や <code>Project</code> オブジェクトの <code>settings</code> フィールドに
+追加されると考えるのは間違っている。
+そうではなく、<code>Build</code> や <code>Project</code> のセッティングリストと <code>build.sbt</code> のセッティングが
+連結されて別の immutable なリストになって、それが sbt に使われるというのが正しい。
+<code>Build</code> と <code>Project</code> オブジェクトは、immutable なコンフィギュレーションであり、
+ビルド定義の全体からすると、たった一部にすぎない。
+</p><p>事実、セッティングには他にも出どころがある。具体的には、以下の順で追加される:
+</p><ul><li><code>.scala</code> ファイル内の <code>Build.settings</code> と <code>Project.settings</code> 。
+</li><li>ユーザ定義のグローバルセッティング。例えば、<code>~/.sbt/build.sbt</code> に<em>全て</em>のプロジェクトに影響するセッティングを定義できる。
+</li><li>プラグインによって注入されるセッティング、次の<a href="Using-Plugins.html">プラグインの使用</a>参照。
+</li><li>プロジェクトの <code>.sbt</code> ファイル内のセッティング。
+</li><li>（<code>project</code> 内のプロジェクトである）ビルド定義プロジェクトの場合は、グローバルプラグイン（~/.sbt/plugins）が追加される。
+<a href="Using-Plugins.html">プラグインの使用</a>で詳細が説明される。
+</li></ul><p>後続のセッティングは古いものをオーバーライドする。このリスト全体でビルド定義が構成される。
 </p><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>
@@ -159,7 +159,7 @@ sbt „ÅØ„Éì„É´„ÉâÂÖ®‰Ωì„Å´„Çπ„Ç≥„Éº„É�
       <a name="toc"></a>
       <h4 class="toctitle">Contents</h4>
       <div class="tocbody">
-      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">Âßã„ÇÅ„Çã sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">sbt „ÅÆ„Ç§„É≥„Çπ„Éà„Éº„É´</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Mac „Å∏„ÅÆ sbt „ÅÆ„Ç§„É≥„Çπ„Éà„Éº„É´</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows „Å∏„ÅÆ sbt „ÅÆ„Ç§„É≥„Çπ„Éà„Éº„É´</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Linux „Å∏„ÅÆ sbt „ÅÆ„Ç§„É≥„Çπ„Éà„Éº„É´</a></div></li><li><div><a href="Manual-Installation.html">ÊâãÂãï„Ç§„É≥„Çπ„Éà„Éº„É´</a></div></li><li><div><a href="Activator-Installation.html">Typesafe Activator (sbt „ÇíÂê´„ÇÄ) „ÅÆ„Ç§„É≥„Çπ„Éà„Éº„É´</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">„Éá„Ç£„É¨„ÇØ„Éà„É™ÊßãÈÄ†</a></div></li><li><div><a href="Running.html">ÂÆüË°å</a></div></li><li><div><a href="Basic-Def.html">.sbt „Éì„É´„ÉâÂÆöÁæ©</a></div></li><li><div><a href="Scopes.html">„Çπ„Ç≥„Éº„Éó</a></div></li><li><div><a href="More-About-Settings.html">‰ªñ„ÅÆÁ®ÆÈ°û„ÅÆ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞</a></div></li><li><div><a href="Library-Dependencies.html">„É©„Ç§„Éñ„É©„É™‰æùÂ≠òÊÄß</a></div></li><li><div><a href="Multi-Project.html">„Éû„É´„ÉÅ„Éó„É≠„Ç∏„Çß„ÇØ„Éà„Éª„Éì„É´„Éâ</a></div></li><li><div><a href="Using-Plugins.html">„Éó„É©„Ç∞„Ç§„É≥„ÅÆ‰ΩøÁî®</a></div></li><li><div><a href="Custom-Settings.html">„Ç´„Çπ„Çø„É†„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„Å®„Çø„Çπ„ÇØ</a></div></li><li><div><a href="Organizing-Build.html">„Éì„É´„Éâ„ÅÆÊï¥ÁêÜ</a></div></li><li><div><a href="Summary.html">„Åæ„Å®„ÇÅ</a></div></li><li><div><a href="Bare-Def.html">‰ªòÈå≤: bare .sbt „Éì„É´„ÉâÂÆöÁæ©</a></div></li><li><div class="current">‰ªòÈå≤: .scala „Éì„É´„ÉâÂÆöÁæ©</div></li> </ol></li><li><div><a href="Howto.html">How to</a></div><ol class="toc"> <li><div><a href="Howto-Sequencing.html">ÈÄêÊ¨°ÂÆüË°å</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Def.sequential „ÇíÁî®„ÅÑ„Å¶ÈÄêÊ¨°„Çø„Çπ„ÇØ„ÇíÂÆöÁæ©„Åô„Çã</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Def.taskDyn „ÇíÁî®„ÅÑ„Å¶ÂãïÁöÑ„Çø„Çπ„ÇØ„ÇíÂÆöÁæ©„Åô„Çã</a></div></li><li><div><a href="Howto-After-Input-Task.html">„Ç§„É≥„Éó„ÉÉ„Éà„Çø„Çπ„ÇØ„ÅÆÂæå„Åß‰Ωï„Åã„Åô„Çã</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn „ÇíÁî®„ÅÑ„ÅüÂãïÁöÑ„Ç§„É≥„Éó„ÉÉ„Éà„Çø„Çπ„ÇØ„ÅÆÂÆöÁæ©</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">„Ç≥„Éû„É≥„Éâ„ÇíÁî®„ÅÑ„ÅüÈÄêÊ¨°ÂÆüË°å</a></div></li> </ol></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">始める sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">sbt のインストール</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Mac への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Linux への sbt のインストール</a></div></li><li><div><a href="Manual-Installation.html">手動インストール</a></div></li><li><div><a href="Activator-Installation.html">Typesafe Activator (sbt を含む) のインストール</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">ディレクトリ構造</a></div></li><li><div><a href="Running.html">実行</a></div></li><li><div><a href="Basic-Def.html">.sbt ビルド定義</a></div></li><li><div><a href="Scopes.html">スコープ</a></div></li><li><div><a href="More-About-Settings.html">他の種類のセッティング</a></div></li><li><div><a href="Library-Dependencies.html">ライブラリ依存性</a></div></li><li><div><a href="Multi-Project.html">マルチプロジェクト・ビルド</a></div></li><li><div><a href="Using-Plugins.html">プラグインの使用</a></div></li><li><div><a href="Custom-Settings.html">カスタムセッティングとタスク</a></div></li><li><div><a href="Organizing-Build.html">ビルドの整理</a></div></li><li><div><a href="Summary.html">まとめ</a></div></li><li><div><a href="Bare-Def.html">付録: bare .sbt ビルド定義</a></div></li><li><div class="current">付録: .scala ビルド定義</div></li> </ol></li><li><div><a href="Howto.html">How to</a></div><ol class="toc"> <li><div><a href="Howto-Sequencing.html">逐次実行</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Def.sequential を用いて逐次タスクを定義する</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Def.taskDyn を用いて動的タスクを定義する</a></div></li><li><div><a href="Howto-After-Input-Task.html">インプットタスクの後で何かする</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn を用いた動的インプットタスクの定義</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">コマンドを用いた逐次実行</a></div></li> </ol></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
           </div>
         </div>
         <div class="header">
@@ -205,7 +205,7 @@ sbt „ÅØ„Éì„É´„ÉâÂÖ®‰Ωì„Å´„Çπ„Ç≥„Éº„É�
             <svg class="svg-icon svg-icon-chat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.5 85.2" enable-background="new 0 0 97.5 85.2"><path stroke="#fff" stroke-width="4.282" stroke-linecap="round" stroke-miterlimit="10" d="M27 29.5h-16.3c-4.7 0-8.6 3.9-8.6 8.6v25.7c0 4.7 3.9 8.6 8.6 8.6h2.7c.8 0 1.5.7 1.5 1.5v7.8c0 1.3 1.6 2 2.5 1l9.5-9.5c.5-.5 1.2-.8 2-.8h20.2c4.7 0 8.6-3.9 8.6-8.6v-7.8" fill="none"/><path fill="#fff" d="M85 0h-40c-6.9 0-12.5 5.6-12.5 12.5v33.4c0 2.2 1.8 4.1 4.1 4.1h29.9c.7 0 1.3.3 1.8.7l10 10c1.6 1.6 4.3.5 4.3-1.8v-6.5c0-1.4 1.1-2.5 2.5-2.5 6.9 0 12.5-5.6 12.5-12.5v-25c-.1-6.8-5.8-12.4-12.6-12.4z"/></svg>
           </div>
           <div class="support-detail">
-            <h2>„Ç≥„Éü„É•„Éã„ÉÜ„Ç£„Éº„Éª„Çµ„Éù„Éº„Éà</h2>
+            <h2>コミュニティー・サポート</h2>
             <a href="https://ja.stackoverflow.com/questions/tagged/sbt">StackOverflow</a>
           </div>
         </div>
@@ -214,7 +214,7 @@ sbt „ÅØ„Éì„É´„ÉâÂÖ®‰Ωì„Å´„Çπ„Ç≥„Éº„É�
             <svg class="svg-icon svg-icon-typesafe" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 154 154" enable-background="new 0 0 154 154"><path fill="#fff" d="M49.7 114c-4.8 0-8.7-5.1-8.7-9.9v-.2c0-4.8 3.9-7.9 8.7-7.9h100c.9-3 1.6-7 2-11h-84c-4.8 0-8.7-3.7-8.7-8.5s3.9-8.5 8.7-8.5h83.7c-.5-4-1.2-8-2.3-11h-63.4c-4.8 0-8.7-3.7-8.7-8.5s3.9-8.5 8.7-8.5h56c-13.1-23-37.2-37.8-64.7-37.8-41.4 0-75 33.3-75 74.7s33.6 75.6 75 75.6c28.4 0 53.1-15.4 65.8-38.4h-93.1z"/></svg>
           </div>
           <div class="support-detail">
-            <h2>ÂïÜÁî®„Çµ„Éù„Éº„Éà</h2>
+            <h2>商用サポート</h2>
             <a href="http://typesafe.com/subscription">Typesafe Subscription</a>
             <a href="http://typesafe.com/subscription/training">Training</a>
             <a href="http://typesafe.com/subscription/consulting">Consulting</a>
