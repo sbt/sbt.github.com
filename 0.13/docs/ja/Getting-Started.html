@@ -3,7 +3,7 @@
       <head>
         <meta charset="utf-8"/>
         <meta content="width=device-width, initial-scale=1" name="viewport"/>
-        <title>sbt Reference Manual — 始める sbt</title>
+        <title>sbt Reference Manual — Âßã„ÇÅ„Çã sbt</title>
         <link rel="shortcut icon" href="../favicon.ico"/>
         <link rel="stylesheet" href="../css/blueprint/screen.css" type="text/css" media="screen, projection"/>
         <link rel="stylesheet" href="../css/blueprint/grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
@@ -41,24 +41,24 @@
           </a>
         <div class="container contentswrapper">
           <div class="span-16 prepend-1 append-1 contents">
-            <h1 id="%E5%A7%8B%E3%82%81%E3%82%8B+sbt">始める sbt<a href="#%E5%A7%8B%E3%82%81%E3%82%8B+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h1><p>sbt には、柔軟かつ強力なビルド定義（Build Definition）を支えるための独自の概念がいくつか存在している。
-その概念は決して多くはないが、sbt は他のビルドシステムとは一味違うので、ドキュメントを読まずに使おうとすると、きっと細かい点でつまづいてしまうだろう。
-</p><p>この「始める sbt」では、sbt ビルド定義を作成してメンテナンスしていく上で知っておくべき概念を説明していく。
-</p><p>このガイドを一通り読んでおくことを<em>強く推奨したい</em>。
-</p><p>もしどうしても時間がないというなら、最も重要な概念は
-<a href="Basic-Def.html">.sbt ビルド定義</a>、
-<a href="Scopes.html">スコープ</a>、と
-<a href="More-About-Settings.html">他の種類のセッティング</a>
-に書かれている。
-ただし、それ以外のページを読み飛ばしても大丈夫かは保証できない。
-</p><p>このガイドの読み方だが、後ろの方のページはその前のページで紹介された概念の理解を前提に書かれているので、最初から順番に読み進めていくのがベストだ。
-</p><p>sbt を試してくれることに感謝する。<em>ぜひ楽しいんでほしい！</em>
-</p><blockquote><p>誤訳の報告は<a href="https://github.com/sbt/website/issues">こちらへ</a>。<br>
-sbt0.13での変更点や新機能に興味があるなら、<a href="http://eed3si9n.com/ja/node/142">sbt 0.13.0 の変更点</a> を読むとよいだろう。
+            <h1 id="%C3%82%C3%9F%C3%A3%E2%80%9E%C3%87%C3%85%E2%80%9E%C3%87%C3%A3+sbt">Âßã„ÇÅ„Çã sbt<a href="#%C3%82%C3%9F%C3%A3%E2%80%9E%C3%87%C3%85%E2%80%9E%C3%87%C3%A3+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h1><p>sbt „Å´„ÅØ„ÄÅÊüîËªü„Åã„Å§Âº∑Âäõ„Å™„Éì„É´„ÉâÂÆöÁæ©ÔºàBuild DefinitionÔºâ„ÇíÊîØ„Åà„Çã„Åü„ÇÅ„ÅÆÁã¨Ëá™„ÅÆÊ¶ÇÂøµ„Åå„ÅÑ„Åè„Å§„ÅãÂ≠òÂú®„Åó„Å¶„ÅÑ„Çã„ÄÇ
+„Åù„ÅÆÊ¶ÇÂøµ„ÅØÊ±∫„Åó„Å¶Â§ö„Åè„ÅØ„Å™„ÅÑ„Åå„ÄÅsbt „ÅØ‰ªñ„ÅÆ„Éì„É´„Éâ„Ç∑„Çπ„ÉÜ„É†„Å®„ÅØ‰∏ÄÂë≥ÈÅï„ÅÜ„ÅÆ„Åß„ÄÅ„Éâ„Ç≠„É•„É°„É≥„Éà„ÇíË™≠„Åæ„Åö„Å´‰Ωø„Åä„ÅÜ„Å®„Åô„Çã„Å®„ÄÅ„Åç„Å£„Å®Á¥∞„Åã„ÅÑÁÇπ„Åß„Å§„Åæ„Å•„ÅÑ„Å¶„Åó„Åæ„ÅÜ„Å†„Çç„ÅÜ„ÄÇ
+</p><p>„Åì„ÅÆ„ÄåÂßã„ÇÅ„Çã sbt„Äç„Åß„ÅØ„ÄÅsbt „Éì„É´„ÉâÂÆöÁæ©„Çí‰ΩúÊàê„Åó„Å¶„É°„É≥„ÉÜ„Éä„É≥„Çπ„Åó„Å¶„ÅÑ„Åè‰∏ä„ÅßÁü•„Å£„Å¶„Åä„Åè„Åπ„ÅçÊ¶ÇÂøµ„ÇíË™¨Êòé„Åó„Å¶„ÅÑ„Åè„ÄÇ
+</p><p>„Åì„ÅÆ„Ç¨„Ç§„Éâ„Çí‰∏ÄÈÄö„ÇäË™≠„Çì„Åß„Åä„Åè„Åì„Å®„Çí<em>Âº∑„ÅèÊé®Â•®„Åó„Åü„ÅÑ</em>„ÄÇ
+</p><p>„ÇÇ„Åó„Å©„ÅÜ„Åó„Å¶„ÇÇÊôÇÈñì„Åå„Å™„ÅÑ„Å®„ÅÑ„ÅÜ„Å™„Çâ„ÄÅÊúÄ„ÇÇÈáçË¶Å„Å™Ê¶ÇÂøµ„ÅØ
+<a href="Basic-Def.html">.sbt „Éì„É´„ÉâÂÆöÁæ©</a>„ÄÅ
+<a href="Scopes.html">„Çπ„Ç≥„Éº„Éó</a>„ÄÅ„Å®
+<a href="More-About-Settings.html">‰ªñ„ÅÆÁ®ÆÈ°û„ÅÆ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞</a>
+„Å´Êõ∏„Åã„Çå„Å¶„ÅÑ„Çã„ÄÇ
+„Åü„Å†„Åó„ÄÅ„Åù„Çå‰ª•Â§ñ„ÅÆ„Éö„Éº„Ç∏„ÇíË™≠„ÅøÈ£õ„Å∞„Åó„Å¶„ÇÇÂ§ß‰∏àÂ§´„Åã„ÅØ‰øùË®º„Åß„Åç„Å™„ÅÑ„ÄÇ
+</p><p>„Åì„ÅÆ„Ç¨„Ç§„Éâ„ÅÆË™≠„ÅøÊñπ„Å†„Åå„ÄÅÂæå„Çç„ÅÆÊñπ„ÅÆ„Éö„Éº„Ç∏„ÅØ„Åù„ÅÆÂâç„ÅÆ„Éö„Éº„Ç∏„ÅßÁ¥π‰ªã„Åï„Çå„ÅüÊ¶ÇÂøµ„ÅÆÁêÜËß£„ÇíÂâçÊèê„Å´Êõ∏„Åã„Çå„Å¶„ÅÑ„Çã„ÅÆ„Åß„ÄÅÊúÄÂàù„Åã„ÇâÈ†ÜÁï™„Å´Ë™≠„ÅøÈÄ≤„ÇÅ„Å¶„ÅÑ„Åè„ÅÆ„Åå„Éô„Çπ„Éà„Å†„ÄÇ
+</p><p>sbt „ÇíË©¶„Åó„Å¶„Åè„Çå„Çã„Åì„Å®„Å´ÊÑüË¨ù„Åô„Çã„ÄÇ<em>„Åú„Å≤Ê•Ω„Åó„ÅÑ„Çì„Åß„Åª„Åó„ÅÑÔºÅ</em>
+</p><blockquote><p>Ë™§Ë®≥„ÅÆÂ†±Âëä„ÅØ<a href="https://github.com/sbt/website/issues">„Åì„Å°„Çâ„Å∏</a>„ÄÇ<br>
+sbt0.13„Åß„ÅÆÂ§âÊõ¥ÁÇπ„ÇÑÊñ∞Ê©üËÉΩ„Å´ËààÂë≥„Åå„ÅÇ„Çã„Å™„Çâ„ÄÅ<a href="http://eed3si9n.com/ja/node/142">sbt 0.13.0 „ÅÆÂ§âÊõ¥ÁÇπ</a> „ÇíË™≠„ÇÄ„Å®„Çà„ÅÑ„Å†„Çç„ÅÜ„ÄÇ
 </p></blockquote><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>
-                        <a href="Setup.html"> sbt のインストール </a>                        
+                        <a href="Setup.html"> sbt „ÅÆ„Ç§„É≥„Çπ„Éà„Éº„É´ </a>                        
                         <ul class="language-bar">
         <li><a href="../Getting-Started.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/Getting-Started.html"><span class="lang-item lang-ja">日本語</span></a></li><li><a href="../zh-cn/Getting-Started.html"><span class="lang-item lang-zh-cn">中文 (简体)</span></a></li><li><a href="../es/Gettnig-Started.html"><span class="lang-item lang-es">Español</span></a></li>
       </ul>
@@ -67,7 +67,7 @@ sbt0.13での変更点や新機能に興味があるなら、<a href="http://eed
       <a name="toc"></a>
       <h4 class="toctitle">Contents</h4>
       <div class="tocbody">
-      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div class="current">始める sbt</div><ol class="toc"> <li><div><a href="Setup.html">sbt のインストール</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Mac への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Linux への sbt のインストール</a></div></li><li><div><a href="Manual-Installation.html">手動インストール</a></div></li><li><div><a href="Activator-Installation.html">Typesafe Activator (sbt を含む) のインストール</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">ディレクトリ構造</a></div></li><li><div><a href="Running.html">実行</a></div></li><li><div><a href="Basic-Def.html">.sbt ビルド定義</a></div></li><li><div><a href="Scopes.html">スコープ</a></div></li><li><div><a href="More-About-Settings.html">他の種類のセッティング</a></div></li><li><div><a href="Library-Dependencies.html">ライブラリ依存性</a></div></li><li><div><a href="Multi-Project.html">マルチプロジェクト・ビルド</a></div></li><li><div><a href="Using-Plugins.html">プラグインの使用</a></div></li><li><div><a href="Custom-Settings.html">カスタムセッティングとタスク</a></div></li><li><div><a href="Organizing-Build.html">ビルドの整理</a></div></li><li><div><a href="Summary.html">まとめ</a></div></li><li><div><a href="Bare-Def.html">付録: bare .sbt ビルド定義</a></div></li><li><div><a href="Full-Def.html">付録: .scala ビルド定義</a></div></li> </ol></li><li><div><a href="Howto.html">How to</a></div><ol class="toc"> <li><div><a href="Howto-Sequencing.html">逐次実行</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Def.sequential を用いて逐次タスクを定義する</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Def.taskDyn を用いて動的タスクを定義する</a></div></li><li><div><a href="Howto-After-Input-Task.html">インプットタスクの後で何かする</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn を用いた動的インプットタスクの定義</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">コマンドを用いた逐次実行</a></div></li> </ol></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div class="current">Âßã„ÇÅ„Çã sbt</div><ol class="toc"> <li><div><a href="Setup.html">sbt „ÅÆ„Ç§„É≥„Çπ„Éà„Éº„É´</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Mac „Å∏„ÅÆ sbt „ÅÆ„Ç§„É≥„Çπ„Éà„Éº„É´</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows „Å∏„ÅÆ sbt „ÅÆ„Ç§„É≥„Çπ„Éà„Éº„É´</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Linux „Å∏„ÅÆ sbt „ÅÆ„Ç§„É≥„Çπ„Éà„Éº„É´</a></div></li><li><div><a href="Manual-Installation.html">ÊâãÂãï„Ç§„É≥„Çπ„Éà„Éº„É´</a></div></li><li><div><a href="Activator-Installation.html">Typesafe Activator (sbt „ÇíÂê´„ÇÄ) „ÅÆ„Ç§„É≥„Çπ„Éà„Éº„É´</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">„Éá„Ç£„É¨„ÇØ„Éà„É™ÊßãÈÄ†</a></div></li><li><div><a href="Running.html">ÂÆüË°å</a></div></li><li><div><a href="Basic-Def.html">.sbt „Éì„É´„ÉâÂÆöÁæ©</a></div></li><li><div><a href="Scopes.html">„Çπ„Ç≥„Éº„Éó</a></div></li><li><div><a href="More-About-Settings.html">‰ªñ„ÅÆÁ®ÆÈ°û„ÅÆ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞</a></div></li><li><div><a href="Library-Dependencies.html">„É©„Ç§„Éñ„É©„É™‰æùÂ≠òÊÄß</a></div></li><li><div><a href="Multi-Project.html">„Éû„É´„ÉÅ„Éó„É≠„Ç∏„Çß„ÇØ„Éà„Éª„Éì„É´„Éâ</a></div></li><li><div><a href="Using-Plugins.html">„Éó„É©„Ç∞„Ç§„É≥„ÅÆ‰ΩøÁî®</a></div></li><li><div><a href="Custom-Settings.html">„Ç´„Çπ„Çø„É†„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„Å®„Çø„Çπ„ÇØ</a></div></li><li><div><a href="Organizing-Build.html">„Éì„É´„Éâ„ÅÆÊï¥ÁêÜ</a></div></li><li><div><a href="Summary.html">„Åæ„Å®„ÇÅ</a></div></li><li><div><a href="Bare-Def.html">‰ªòÈå≤: bare .sbt „Éì„É´„ÉâÂÆöÁæ©</a></div></li><li><div><a href="Full-Def.html">‰ªòÈå≤: .scala „Éì„É´„ÉâÂÆöÁæ©</a></div></li> </ol></li><li><div><a href="Howto.html">How to</a></div><ol class="toc"> <li><div><a href="Howto-Sequencing.html">ÈÄêÊ¨°ÂÆüË°å</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Def.sequential „ÇíÁî®„ÅÑ„Å¶ÈÄêÊ¨°„Çø„Çπ„ÇØ„ÇíÂÆöÁæ©„Åô„Çã</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Def.taskDyn „ÇíÁî®„ÅÑ„Å¶ÂãïÁöÑ„Çø„Çπ„ÇØ„ÇíÂÆöÁæ©„Åô„Çã</a></div></li><li><div><a href="Howto-After-Input-Task.html">„Ç§„É≥„Éó„ÉÉ„Éà„Çø„Çπ„ÇØ„ÅÆÂæå„Åß‰Ωï„Åã„Åô„Çã</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn „ÇíÁî®„ÅÑ„ÅüÂãïÁöÑ„Ç§„É≥„Éó„ÉÉ„Éà„Çø„Çπ„ÇØ„ÅÆÂÆöÁæ©</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">„Ç≥„Éû„É≥„Éâ„ÇíÁî®„ÅÑ„ÅüÈÄêÊ¨°ÂÆüË°å</a></div></li> </ol></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
           </div>
         </div>
         <div class="header">
@@ -113,7 +113,7 @@ sbt0.13での変更点や新機能に興味があるなら、<a href="http://eed
             <svg class="svg-icon svg-icon-chat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.5 85.2" enable-background="new 0 0 97.5 85.2"><path stroke="#fff" stroke-width="4.282" stroke-linecap="round" stroke-miterlimit="10" d="M27 29.5h-16.3c-4.7 0-8.6 3.9-8.6 8.6v25.7c0 4.7 3.9 8.6 8.6 8.6h2.7c.8 0 1.5.7 1.5 1.5v7.8c0 1.3 1.6 2 2.5 1l9.5-9.5c.5-.5 1.2-.8 2-.8h20.2c4.7 0 8.6-3.9 8.6-8.6v-7.8" fill="none"/><path fill="#fff" d="M85 0h-40c-6.9 0-12.5 5.6-12.5 12.5v33.4c0 2.2 1.8 4.1 4.1 4.1h29.9c.7 0 1.3.3 1.8.7l10 10c1.6 1.6 4.3.5 4.3-1.8v-6.5c0-1.4 1.1-2.5 2.5-2.5 6.9 0 12.5-5.6 12.5-12.5v-25c-.1-6.8-5.8-12.4-12.6-12.4z"/></svg>
           </div>
           <div class="support-detail">
-            <h2>コミュニティー・サポート</h2>
+            <h2>„Ç≥„Éü„É•„Éã„ÉÜ„Ç£„Éº„Éª„Çµ„Éù„Éº„Éà</h2>
             <a href="https://ja.stackoverflow.com/questions/tagged/sbt">StackOverflow</a>
           </div>
         </div>
@@ -122,7 +122,7 @@ sbt0.13での変更点や新機能に興味があるなら、<a href="http://eed
             <svg class="svg-icon svg-icon-typesafe" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 154 154" enable-background="new 0 0 154 154"><path fill="#fff" d="M49.7 114c-4.8 0-8.7-5.1-8.7-9.9v-.2c0-4.8 3.9-7.9 8.7-7.9h100c.9-3 1.6-7 2-11h-84c-4.8 0-8.7-3.7-8.7-8.5s3.9-8.5 8.7-8.5h83.7c-.5-4-1.2-8-2.3-11h-63.4c-4.8 0-8.7-3.7-8.7-8.5s3.9-8.5 8.7-8.5h56c-13.1-23-37.2-37.8-64.7-37.8-41.4 0-75 33.3-75 74.7s33.6 75.6 75 75.6c28.4 0 53.1-15.4 65.8-38.4h-93.1z"/></svg>
           </div>
           <div class="support-detail">
-            <h2>商用サポート</h2>
+            <h2>ÂïÜÁî®„Çµ„Éù„Éº„Éà</h2>
             <a href="http://typesafe.com/subscription">Typesafe Subscription</a>
             <a href="http://typesafe.com/subscription/training">Training</a>
             <a href="http://typesafe.com/subscription/consulting">Consulting</a>

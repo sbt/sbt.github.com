@@ -142,7 +142,7 @@ integrate.
 The plugin can be used as described in the previous section.
 </p><p>First, in an appropriate namespace, define your auto plugin object
 by extending <code>sbt.AutoPlugin</code>.
-</p><h4 id="projectSettings+and+buildSettings">projectSettings and buildSettings<a href="#projectSettings+and+buildSettings" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>With auto plugins, all provided settings (e.g. <code>assemblySettings</code>) are provided by the plugin directly via the <code>projectSettings</code> method. Here’s an example plugin that adds a command named hello to sbt projects:
+</p><h4 id="projectSettings+and+buildSettings">projectSettings and buildSettings<a href="#projectSettings+and+buildSettings" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>With auto plugins, all provided settings (e.g. <code>assemblySettings</code>) are provided by the plugin directly via the <code>projectSettings</code> method. Here‚Äôs an example plugin that adds a command named hello to sbt projects:
 </p><pre><code class="prettyprint lang-scala">package sbthello
 
 import sbt._
@@ -220,7 +220,9 @@ object SbtLessPlugin extends AutoPlugin {
 </p><p>This allows plugins to silently, and correctly, extend existing plugins with more features.  It also can help remove the burden of ordering from the user, allowing the plugin authors greater freedom and power when providing feature for their users.
 </p><h4 id="Controlling+the+import+with+autoImport">Controlling the import with autoImport<a href="#Controlling+the+import+with+autoImport" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>When an auto plugin provides a stable field such as <code>val</code> or <code>object</code>
 named <code>autoImport</code>, the contents of the field are wildcard imported
-in <code>set</code>, <code>eval</code>, and <code>.sbt</code> files.
+in <code>set</code>, <code>eval</code>, and <code>.sbt</code> files. In the next example, we’ll replace
+our hello command with a task to get the value of <code>greeting</code> easily.
+In practice, it’s recommended <a href="Plugins-Best-Practices.html#Use+settings+and+tasks.+Avoid+commands.">to prefer settings or tasks to commands</a>.
 </p><pre><code class="prettyprint lang-scala">package sbthello
 
 import sbt._
@@ -229,16 +231,16 @@ import Keys._
 object HelloPlugin3 extends AutoPlugin {
   object autoImport {
     val greeting = settingKey[String](&quot;greeting&quot;)
+    val hello = taskKey[Unit](&quot;say hello&quot;)
   }
   import autoImport._
   override def trigger = allRequirements
   override lazy val buildSettings = Seq(
     greeting := &quot;Hi!&quot;,
-    commands += helloCommand)
-  lazy val helloCommand =
-    Command.command(&quot;hello&quot;) { (state: State) =&gt;
+    hello := helloTask.value)
+  lazy val helloTask =
+    Def.task {
       println(greeting.value)
-      state
     }
 }
 </code></pre><p>Typically, <code>autoImport</code> is used to provide new keys - <code>SettingKey</code>s, <code>TaskKey</code>s,

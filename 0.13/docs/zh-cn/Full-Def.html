@@ -3,7 +3,7 @@
       <head>
         <meta charset="utf-8"/>
         <meta content="width=device-width, initial-scale=1" name="viewport"/>
-        <title>sbt Reference Manual — 附录：.scala 构建定义</title>
+        <title>sbt Reference Manual — ÈôÑÂΩïÔºö.scala ÊûÑÂª∫ÂÆö‰πâ</title>
         <link rel="shortcut icon" href="../favicon.ico"/>
         <link rel="stylesheet" href="../css/blueprint/screen.css" type="text/css" media="screen, projection"/>
         <link rel="stylesheet" href="../css/blueprint/grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
@@ -43,10 +43,10 @@
           </a>
         <div class="container contentswrapper">
           <div class="span-16 prepend-1 append-1 contents">
-            <h2 id="%E9%99%84%E5%BD%95%EF%BC%9A.scala+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">附录：.scala 构建定义<a href="#%E9%99%84%E5%BD%95%EF%BC%9A.scala+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>本页面描述了<code>.scala</code>构建定义的旧的风格。在以前的版本的sbt中，<code>.scala</code>是用来创建多项目构建定义的唯一方式，但sbt 0.13 添加了<a href="Basic-Def.html">多项目.sbt 生成定义</a>，这也是推荐的样式。
-</p><p>这里假设你已经阅读了之前的章节，尤其是 <a href="Basic-Def.html">.sbt 构建定义</a>和<a href="More-About-Settings.html">更多关于设置</a>。
-</p><h3 id="%E5%85%B3%E8%81%94+build.sbt+%E5%92%8C+Build.scala">关联 build.sbt 和 Build.scala<a href="#%E5%85%B3%E8%81%94+build.sbt+%E5%92%8C+Build.scala" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>为了融合<code>.sbt</code> 和 <code>.scala</code> 文件在你的构建定义中，你需要理解他们是如何关联的。
-</p><p>下面两个文件描述了这个过程。第一，如果你的项目在 hello 文件夹内，创建 <code>hello/project/Build.scala</code>：
+            <h2 id="%C3%88%C3%B4%C3%91%C3%82%CE%A9%C3%AF%C3%94%C2%BA%C3%B6.scala+%C3%8A%C3%BB%C3%91%C3%82%C2%AA%E2%88%AB%C3%82%C3%86%C3%B6%E2%80%B0%CF%80%C3%A2">ÈôÑÂΩïÔºö.scala ÊûÑÂª∫ÂÆö‰πâ<a href="#%C3%88%C3%B4%C3%91%C3%82%CE%A9%C3%AF%C3%94%C2%BA%C3%B6.scala+%C3%8A%C3%BB%C3%91%C3%82%C2%AA%E2%88%AB%C3%82%C3%86%C3%B6%E2%80%B0%CF%80%C3%A2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Êú¨È°µÈù¢ÊèèËø∞‰∫Ü<code>.scala</code>ÊûÑÂª∫ÂÆö‰πâÁöÑÊóßÁöÑÈ£éÊ†º„ÄÇÂú®‰ª•ÂâçÁöÑÁâàÊú¨ÁöÑsbt‰∏≠Ôºå<code>.scala</code>ÊòØÁî®Êù•ÂàõÂª∫Â§öÈ°πÁõÆÊûÑÂª∫ÂÆö‰πâÁöÑÂîØ‰∏ÄÊñπÂºèÔºå‰ΩÜsbt 0.13 Ê∑ªÂä†‰∫Ü<a href="Basic-Def.html">Â§öÈ°πÁõÆ.sbt ÁîüÊàêÂÆö‰πâ</a>ÔºåËøô‰πüÊòØÊé®ËçêÁöÑÊ†∑Âºè„ÄÇ
+</p><p>ËøôÈáåÂÅáËÆæ‰Ω†Â∑≤ÁªèÈòÖËØª‰∫Ü‰πãÂâçÁöÑÁ´†ËäÇÔºåÂ∞§ÂÖ∂ÊòØ <a href="Basic-Def.html">.sbt ÊûÑÂª∫ÂÆö‰πâ</a>Âíå<a href="More-About-Settings.html">Êõ¥Â§öÂÖ≥‰∫éËÆæÁΩÆ</a>„ÄÇ
+</p><h3 id="%C3%82%C3%96%E2%89%A5%C3%8B%C3%85%C3%AE+build.sbt+%C3%82%C3%AD%C3%A5+Build.scala">ÂÖ≥ËÅî build.sbt Âíå Build.scala<a href="#%C3%82%C3%96%E2%89%A5%C3%8B%C3%85%C3%AE+build.sbt+%C3%82%C3%AD%C3%A5+Build.scala" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>‰∏∫‰∫ÜËûçÂêà<code>.sbt</code> Âíå <code>.scala</code> Êñá‰ª∂Âú®‰Ω†ÁöÑÊûÑÂª∫ÂÆö‰πâ‰∏≠Ôºå‰Ω†ÈúÄË¶ÅÁêÜËß£‰ªñ‰ª¨ÊòØÂ¶Ç‰ΩïÂÖ≥ËÅîÁöÑ„ÄÇ
+</p><p>‰∏ãÈù¢‰∏§‰∏™Êñá‰ª∂ÊèèËø∞‰∫ÜËøô‰∏™ËøáÁ®ã„ÄÇÁ¨¨‰∏ÄÔºåÂ¶ÇÊûú‰Ω†ÁöÑÈ°πÁõÆÂú® hello Êñá‰ª∂Â§πÂÜÖÔºåÂàõÂª∫ <code>hello/project/Build.scala</code>Ôºö
 </p><pre><code class="prettyprint lang-scala">import sbt._
 import Keys._
 
@@ -68,39 +68,39 @@ object HelloBuild extends Build {
       sampleKeyB := &quot;B: in the root project settings in Build.scala&quot;
     ))
 }
-</code></pre><p>现在，创建 <code>hello/build.sbt</code>：
+</code></pre><p>Áé∞Âú®ÔºåÂàõÂª∫ <code>hello/build.sbt</code>Ôºö
 </p><pre><code class="prettyprint lang-scala">sampleKeyC in ThisBuild := &quot;C: in build.sbt scoped to ThisBuild&quot;
 
 sampleKeyD := &quot;D: in build.sbt&quot;
-</code></pre><p>打开 sbt 终端命令窗口。敲入 <code>inspect sampleKeyA</code>，你将会看到：
+</code></pre><p>ÊâìÂºÄ sbt ÁªàÁ´ØÂëΩ‰ª§Á™óÂè£„ÄÇÊï≤ÂÖ• <code>inspect sampleKeyA</code>Ôºå‰Ω†Â∞Ü‰ºöÁúãÂà∞Ôºö
 </p><pre><code class="">[info] Setting: java.lang.String = A: in Build.settings in Build.scala
 [info] Provided by:
 [info]  {file:/home/hp/checkout/hello/}/*:sampleKeyA
-</code></pre><p>然后敲入 <code>inspect sampleKeyC</code>，你将会看到：
+</code></pre><p>ÁÑ∂ÂêéÊï≤ÂÖ• <code>inspect sampleKeyC</code>Ôºå‰Ω†Â∞Ü‰ºöÁúãÂà∞Ôºö
 </p><pre><code class="">[info] Setting: java.lang.String = C: in build.sbt scoped to ThisBuild
 [info] Provided by:
 [info]  {file:/home/hp/checkout/hello/}/*:sampleKeyC
-</code></pre><p>注意 “Provided by” 显示两个 value 具有相同作用范围。那是 <code>.sbt</code> 文件中的 <code>sampleKeyC in ThisBuild</code> 等同与放置在 <code>.scala</code> 文件 <code>Build.settings</code> 列表中的一个设置。sbt 会从两个地方抽取构建范围内的设置，来创建构建定义。
-</p><p>然后，<code>inspect sampleKeyB</code>：
+</code></pre><p>Ê≥®ÊÑè “Provided by” ÊòæÁ§∫‰∏§‰∏™ value ÂÖ∑ÊúâÁõ∏Âêå‰ΩúÁî®ËåÉÂõ¥„ÄÇÈÇ£ÊòØ <code>.sbt</code> Êñá‰ª∂‰∏≠ÁöÑ <code>sampleKeyC in ThisBuild</code> Á≠âÂêå‰∏éÊîæÁΩÆÂú® <code>.scala</code> Êñá‰ª∂ <code>Build.settings</code> ÂàóË°®‰∏≠ÁöÑ‰∏Ä‰∏™ËÆæÁΩÆ„ÄÇsbt ‰ºö‰ªé‰∏§‰∏™Âú∞ÊñπÊäΩÂèñÊûÑÂª∫ËåÉÂõ¥ÂÜÖÁöÑËÆæÁΩÆÔºåÊù•ÂàõÂª∫ÊûÑÂª∫ÂÆö‰πâ„ÄÇ
+</p><p>ÁÑ∂ÂêéÔºå<code>inspect sampleKeyB</code>Ôºö
 </p><pre><code class="">[info] Setting: java.lang.String = B: in the root project settings in Build.scala
 [info] Provided by:
 [info]  {file:/home/hp/checkout/hello/}hello/*:sampleKeyB
-</code></pre><p>注意 <code>sampleKeyB</code> 是被作用的这个项目：
-<code>({file:/home/hp/checkout/hello/}hello)</code> 而不是整个构建 <code>({file:/home/hp/checkout/hello/})</code>。
-</p><p>你应该已经猜测到了，<code>inspect sampleKeyD</code> 等同于 <code>sampleKeyB</code>：
+</code></pre><p>Ê≥®ÊÑè <code>sampleKeyB</code> ÊòØË¢´‰ΩúÁî®ÁöÑËøô‰∏™È°πÁõÆÔºö
+<code>({file:/home/hp/checkout/hello/}hello)</code> ËÄå‰∏çÊòØÊï¥‰∏™ÊûÑÂª∫ <code>({file:/home/hp/checkout/hello/})</code>„ÄÇ
+</p><p>‰Ω†Â∫îËØ•Â∑≤ÁªèÁåúÊµãÂà∞‰∫ÜÔºå<code>inspect sampleKeyD</code> Á≠âÂêå‰∫é <code>sampleKeyB</code>Ôºö
 </p><pre><code class="">[info] Setting: java.lang.String = D: in build.sbt
 [info] Provided by:
 [info]  {file:/home/hp/checkout/hello/}hello/*:sampleKeyD
-</code></pre><p>sbt 从 <code>.sbt</code> 文件<em>附加</em>设置到 <code>Build.settings</code> 和 <code>Project.setting</code> 的设置，换句话说，<code>.sbt</code> 设置拥有优先权。
-尝试改变 <code>Build.scala</code>，使得它能设置健值 <code>sampleC</code> 或者 <code>sampleD</code>，他们已经在 <code>build.sbt</code> 设置过。<code>build.sbt</code> 中的设置应该能“赢”过 <code>Build.sbt</code>。
-</p><p>你也许会注意到另一要点：<code>sampleKeyC</code> 和 <code>sampleKeyD</code> 是可以在 <code>build.sbt</code> 内部获得的。这是因为 sbt 引入 <code>Build</code> 中的内容到 <code>.sbt</code> 文件中。在这种情况下，<code>import HelloBuild._</code> 是被隐含引入在 <code>build.sbt</code> 文件中。
-</p><p>总结：
-</p><ul><li>在 <code>.scala</code> 文件中，可以在 <code>Build.settings</code> 中增加设置，这些设置自动成为构建作用域。
-</li><li>在 <code>.scala</code> 文件中，可以在 <code>Project.settings</code> 中增加设置，这些设置自动成为工程作用域。
-</li><li>任何在 <code>.scala</code> 中的 <code>Build</code> 对象将会把它的内容导入到 <code>.sbt</code> 文件中。
-</li><li>在 <code>.sbt</code> 文件中的设置被 <em>追加</em> 到 <code>.scala</code> 中的设置。
-</li><li>在 <code>.sbt</code> 文件中的设置是在项目作用域里，除非你指定它在其他域。
-</li></ul><h3 id="%E4%BA%A4%E4%BA%92%E6%A8%A1%E5%BC%8F%E4%B8%AD%E7%9A%84%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E9%A1%B9%E7%9B%AE">交互模式中的构建定义项目<a href="#%E4%BA%A4%E4%BA%92%E6%A8%A1%E5%BC%8F%E4%B8%AD%E7%9A%84%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E9%A1%B9%E7%9B%AE" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>你现在可以切换到 sbt 命令行的交互模式，让在 <code>project/</code> 目录下的构建定义项目作为当前项目。可以输入 <code>reload plugins</code> 来达到目的。
+</code></pre><p>sbt ‰ªé <code>.sbt</code> Êñá‰ª∂<em>ÈôÑÂä†</em>ËÆæÁΩÆÂà∞ <code>Build.settings</code> Âíå <code>Project.setting</code> ÁöÑËÆæÁΩÆÔºåÊç¢Âè•ËØùËØ¥Ôºå<code>.sbt</code> ËÆæÁΩÆÊã•Êúâ‰ºòÂÖàÊùÉ„ÄÇ
+Â∞ùËØïÊîπÂèò <code>Build.scala</code>Ôºå‰ΩøÂæóÂÆÉËÉΩËÆæÁΩÆÂÅ•ÂÄº <code>sampleC</code> ÊàñËÄÖ <code>sampleD</code>Ôºå‰ªñ‰ª¨Â∑≤ÁªèÂú® <code>build.sbt</code> ËÆæÁΩÆËøá„ÄÇ<code>build.sbt</code> ‰∏≠ÁöÑËÆæÁΩÆÂ∫îËØ•ËÉΩ‚ÄúËµ¢‚ÄùËøá <code>Build.sbt</code>„ÄÇ
+</p><p>‰Ω†‰πüËÆ∏‰ºöÊ≥®ÊÑèÂà∞Âè¶‰∏ÄË¶ÅÁÇπÔºö<code>sampleKeyC</code> Âíå <code>sampleKeyD</code> ÊòØÂèØ‰ª•Âú® <code>build.sbt</code> ÂÜÖÈÉ®Ëé∑ÂæóÁöÑ„ÄÇËøôÊòØÂõ†‰∏∫ sbt ÂºïÂÖ• <code>Build</code> ‰∏≠ÁöÑÂÜÖÂÆπÂà∞ <code>.sbt</code> Êñá‰ª∂‰∏≠„ÄÇÂú®ËøôÁßçÊÉÖÂÜµ‰∏ãÔºå<code>import HelloBuild._</code> ÊòØË¢´ÈöêÂê´ÂºïÂÖ•Âú® <code>build.sbt</code> Êñá‰ª∂‰∏≠„ÄÇ
+</p><p>ÊÄªÁªìÔºö
+</p><ul><li>Âú® <code>.scala</code> Êñá‰ª∂‰∏≠ÔºåÂèØ‰ª•Âú® <code>Build.settings</code> ‰∏≠Â¢ûÂä†ËÆæÁΩÆÔºåËøô‰∫õËÆæÁΩÆËá™Âä®Êàê‰∏∫ÊûÑÂª∫‰ΩúÁî®Âüü„ÄÇ
+</li><li>Âú® <code>.scala</code> Êñá‰ª∂‰∏≠ÔºåÂèØ‰ª•Âú® <code>Project.settings</code> ‰∏≠Â¢ûÂä†ËÆæÁΩÆÔºåËøô‰∫õËÆæÁΩÆËá™Âä®Êàê‰∏∫Â∑•Á®ã‰ΩúÁî®Âüü„ÄÇ
+</li><li>‰ªª‰ΩïÂú® <code>.scala</code> ‰∏≠ÁöÑ <code>Build</code> ÂØπË±°Â∞Ü‰ºöÊääÂÆÉÁöÑÂÜÖÂÆπÂØºÂÖ•Âà∞ <code>.sbt</code> Êñá‰ª∂‰∏≠„ÄÇ
+</li><li>Âú® <code>.sbt</code> Êñá‰ª∂‰∏≠ÁöÑËÆæÁΩÆË¢´ <em>ËøΩÂä†</em> Âà∞ <code>.scala</code> ‰∏≠ÁöÑËÆæÁΩÆ„ÄÇ
+</li><li>Âú® <code>.sbt</code> Êñá‰ª∂‰∏≠ÁöÑËÆæÁΩÆÊòØÂú®È°πÁõÆ‰ΩúÁî®ÂüüÈáåÔºåÈô§Èùû‰Ω†ÊåáÂÆöÂÆÉÂú®ÂÖ∂‰ªñÂüü„ÄÇ
+</li></ul><h3 id="%E2%80%B0%E2%88%AB%C2%A7%E2%80%B0%E2%88%AB%C3%AD%C3%8A%C2%AE%C2%B0%C3%82%C2%BA%C3%A8%E2%80%B0%E2%88%8F%E2%89%A0%C3%81%C3%B6%C3%91%C3%8A%C3%BB%C3%91%C3%82%C2%AA%E2%88%AB%C3%82%C3%86%C3%B6%E2%80%B0%CF%80%C3%A2%C3%88%C2%B0%CF%80%C3%81%C3%B5%C3%86">‰∫§‰∫íÊ®°Âºè‰∏≠ÁöÑÊûÑÂª∫ÂÆö‰πâÈ°πÁõÆ<a href="#%E2%80%B0%E2%88%AB%C2%A7%E2%80%B0%E2%88%AB%C3%AD%C3%8A%C2%AE%C2%B0%C3%82%C2%BA%C3%A8%E2%80%B0%E2%88%8F%E2%89%A0%C3%81%C3%B6%C3%91%C3%8A%C3%BB%C3%91%C3%82%C2%AA%E2%88%AB%C3%82%C3%86%C3%B6%E2%80%B0%CF%80%C3%A2%C3%88%C2%B0%CF%80%C3%81%C3%B5%C3%86" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>‰Ω†Áé∞Âú®ÂèØ‰ª•ÂàáÊç¢Âà∞ sbt ÂëΩ‰ª§Ë°åÁöÑ‰∫§‰∫íÊ®°ÂºèÔºåËÆ©Âú® <code>project/</code> ÁõÆÂΩï‰∏ãÁöÑÊûÑÂª∫ÂÆö‰πâÈ°πÁõÆ‰Ωú‰∏∫ÂΩìÂâçÈ°πÁõÆ„ÄÇÂèØ‰ª•ËæìÂÖ• <code>reload plugins</code> Êù•ËææÂà∞ÁõÆÁöÑ„ÄÇ
 </p><pre><code class="">&gt; reload plugins
 [info] Set current project to default-a0e8e4 (in build file:/home/hp/checkout/hello/project/)
 &gt; show sources
@@ -111,16 +111,16 @@ sampleKeyD := &quot;D: in build.sbt&quot;
 &gt; show sources
 [info] ArrayBuffer(/home/hp/checkout/hello/hw.scala)
 &gt;
-</code></pre><p>如上所示，你可以用 <code>reload return</code> 离开构建定义项目，回到你平常的项目。
-</p><h3 id="%E6%8F%90%E9%86%92%EF%BC%9A%E5%AE%83%E6%80%BB%E6%98%AF%E4%B8%8D%E5%8F%AF%E5%8F%98%E7%9A%84">提醒：它总是不可变的<a href="#%E6%8F%90%E9%86%92%EF%BC%9A%E5%AE%83%E6%80%BB%E6%98%AF%E4%B8%8D%E5%8F%AF%E5%8F%98%E7%9A%84" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>认为在 <code>build.sbt</code> 的设置将被添加到 <code>Build</code> 和 <code>Project</code> 对象中的 <code>settings</code> 字段是错误的。取而代之的是，<code>Build</code> 和 <code>Project</code> 中的 <code>settings</code> 列表，以及 <code>build.sbt</code> 中的设置，被
-串连到另一个不可变的列表中，然后被 sbt 使用。该 <code>Build</code> 和 <code>Project</code> 对象是“不可变配置”形成完整构建定义的一部分。
-</p><p>事实上，也有设置的其他来源。他们被追加顺序如下：
-</p><ul><li>来自你的 <code>.scala</code> 设置文件中的 <code>Build.settings</code> 和 <code>Project.settings</code>。
-</li><li>你的用户账号全局设置；例如在 <code>~/.sbt/0.13/global.sbt</code> 中你可以定义影响你 <em>所有</em> 项目的设置。
-</li><li>插件注入的设置，参见接下来的<a href="Using-Plugins.html">使用插件</a>。
-</li><li>项目下 <code>.sbt</code> 文件中的设置。
-</li><li>构建定义项目（即 <code>project</code> 中的项目）有来自全局插件（<code>~/.sbt/0.13/plugins/</code>）的设置。<a href="Using-Plugins.html">使用插件</a>解释了更多的内容。
-</li></ul><p>后面的设置会覆盖前面的。全部的设置列表构成了完整的构建定义。
+</code></pre><p>Â¶Ç‰∏äÊâÄÁ§∫Ôºå‰Ω†ÂèØ‰ª•Áî® <code>reload return</code> Á¶ªÂºÄÊûÑÂª∫ÂÆö‰πâÈ°πÁõÆÔºåÂõûÂà∞‰Ω†Âπ≥Â∏∏ÁöÑÈ°πÁõÆ„ÄÇ
+</p><h3 id="%C3%8A%C3%A8%C3%AA%C3%88%C3%9C%C3%AD%C3%94%C2%BA%C3%B6%C3%82%C3%86%C3%89%C3%8A%C3%84%C2%AA%C3%8A%C3%B2%C3%98%E2%80%B0%E2%88%8F%C3%A7%C3%82%C3%A8%C3%98%C3%82%C3%A8%C3%B2%C3%81%C3%B6%C3%91">ÊèêÈÜíÔºöÂÆÉÊÄªÊòØ‰∏çÂèØÂèòÁöÑ<a href="#%C3%8A%C3%A8%C3%AA%C3%88%C3%9C%C3%AD%C3%94%C2%BA%C3%B6%C3%82%C3%86%C3%89%C3%8A%C3%84%C2%AA%C3%8A%C3%B2%C3%98%E2%80%B0%E2%88%8F%C3%A7%C3%82%C3%A8%C3%98%C3%82%C3%A8%C3%B2%C3%81%C3%B6%C3%91" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>ËÆ§‰∏∫Âú® <code>build.sbt</code> ÁöÑËÆæÁΩÆÂ∞ÜË¢´Ê∑ªÂä†Âà∞ <code>Build</code> Âíå <code>Project</code> ÂØπË±°‰∏≠ÁöÑ <code>settings</code> Â≠óÊÆµÊòØÈîôËØØÁöÑ„ÄÇÂèñËÄå‰ª£‰πãÁöÑÊòØÔºå<code>Build</code> Âíå <code>Project</code> ‰∏≠ÁöÑ <code>settings</code> ÂàóË°®Ôºå‰ª•Âèä <code>build.sbt</code> ‰∏≠ÁöÑËÆæÁΩÆÔºåË¢´
+‰∏≤ËøûÂà∞Âè¶‰∏Ä‰∏™‰∏çÂèØÂèòÁöÑÂàóË°®‰∏≠ÔºåÁÑ∂ÂêéË¢´ sbt ‰ΩøÁî®„ÄÇËØ• <code>Build</code> Âíå <code>Project</code> ÂØπË±°ÊòØ‚Äú‰∏çÂèØÂèòÈÖçÁΩÆ‚ÄùÂΩ¢ÊàêÂÆåÊï¥ÊûÑÂª∫ÂÆö‰πâÁöÑ‰∏ÄÈÉ®ÂàÜ„ÄÇ
+</p><p>‰∫ãÂÆû‰∏äÔºå‰πüÊúâËÆæÁΩÆÁöÑÂÖ∂‰ªñÊù•Ê∫ê„ÄÇ‰ªñ‰ª¨Ë¢´ËøΩÂä†È°∫Â∫èÂ¶Ç‰∏ãÔºö
+</p><ul><li>Êù•Ëá™‰Ω†ÁöÑ <code>.scala</code> ËÆæÁΩÆÊñá‰ª∂‰∏≠ÁöÑ <code>Build.settings</code> Âíå <code>Project.settings</code>„ÄÇ
+</li><li>‰Ω†ÁöÑÁî®Êà∑Ë¥¶Âè∑ÂÖ®Â±ÄËÆæÁΩÆÔºõ‰æãÂ¶ÇÂú® <code>~/.sbt/0.13/global.sbt</code> ‰∏≠‰Ω†ÂèØ‰ª•ÂÆö‰πâÂΩ±Âìç‰Ω† <em>ÊâÄÊúâ</em> È°πÁõÆÁöÑËÆæÁΩÆ„ÄÇ
+</li><li>Êèí‰ª∂Ê≥®ÂÖ•ÁöÑËÆæÁΩÆÔºåÂèÇËßÅÊé•‰∏ãÊù•ÁöÑ<a href="Using-Plugins.html">‰ΩøÁî®Êèí‰ª∂</a>„ÄÇ
+</li><li>È°πÁõÆ‰∏ã <code>.sbt</code> Êñá‰ª∂‰∏≠ÁöÑËÆæÁΩÆ„ÄÇ
+</li><li>ÊûÑÂª∫ÂÆö‰πâÈ°πÁõÆÔºàÂç≥ <code>project</code> ‰∏≠ÁöÑÈ°πÁõÆÔºâÊúâÊù•Ëá™ÂÖ®Â±ÄÊèí‰ª∂Ôºà<code>~/.sbt/0.13/plugins/</code>ÔºâÁöÑËÆæÁΩÆ„ÄÇ<a href="Using-Plugins.html">‰ΩøÁî®Êèí‰ª∂</a>Ëß£Èáä‰∫ÜÊõ¥Â§öÁöÑÂÜÖÂÆπ„ÄÇ
+</li></ul><p>ÂêéÈù¢ÁöÑËÆæÁΩÆ‰ºöË¶ÜÁõñÂâçÈù¢ÁöÑ„ÄÇÂÖ®ÈÉ®ÁöÑËÆæÁΩÆÂàóË°®ÊûÑÊàê‰∫ÜÂÆåÊï¥ÁöÑÊûÑÂª∫ÂÆö‰πâ„ÄÇ
 </p><div class="bottom nav end span-16">
                         <ul class="language-bar">
         <li><a href="../Full-Def.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/Full-Def.html"><span class="lang-item lang-ja">日本語</span></a></li><li><a href="../zh-cn/Full-Def.html"><span class="lang-item lang-zh-cn">中文 (简体)</span></a></li>
@@ -130,7 +130,7 @@ sampleKeyD := &quot;D: in build.sbt&quot;
       <a name="toc"></a>
       <h4 class="toctitle">Contents</h4>
       <div class="tocbody">
-      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">sbt 入门</a></div><ol class="toc"> <li><div><a href="Setup.html">安装 sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">在 Mac 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">在 Windows 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">在 Linux 上安装 sbt</a></div></li><li><div><a href="Manual-Installation.html">手动安装 sbt</a></div></li><li><div><a href="Activator-Installation.html">安装 Typesafe Activator (包含sbt)</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">目录结构</a></div></li><li><div><a href="Running.html">运行</a></div></li><li><div><a href="Basic-Def.html">.sbt 构建定义</a></div></li><li><div><a href="Scopes.html">Scope</a></div></li><li><div><a href="More-About-Settings.html">更多关于设置</a></div></li><li><div><a href="Library-Dependencies.html">库依赖</a></div></li><li><div><a href="Multi-Project.html">多项目构建</a></div></li><li><div><a href="Using-Plugins.html">使用插件</a></div></li><li><div><a href="Custom-Settings.html">自定义设置和任务</a></div></li><li><div><a href="Organizing-Build.html">组织构建</a></div></li><li><div><a href="Summary.html">总结</a></div></li><li><div><a href="Bare-Def.html">附录：Bare .sbt 构建定义</a></div></li><li><div class="current">附录：.scala 构建定义</div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">sbt ÂÖ•Èó®</a></div><ol class="toc"> <li><div><a href="Setup.html">ÂÆâË£Ö sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Âú® Mac ‰∏äÂÆâË£Ö sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Âú® Windows ‰∏äÂÆâË£Ö sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Âú® Linux ‰∏äÂÆâË£Ö sbt</a></div></li><li><div><a href="Manual-Installation.html">ÊâãÂä®ÂÆâË£Ö sbt</a></div></li><li><div><a href="Activator-Installation.html">ÂÆâË£Ö Typesafe Activator (ÂåÖÂê´sbt)</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">ÁõÆÂΩïÁªìÊûÑ</a></div></li><li><div><a href="Running.html">ËøêË°å</a></div></li><li><div><a href="Basic-Def.html">.sbt ÊûÑÂª∫ÂÆö‰πâ</a></div></li><li><div><a href="Scopes.html">Scope</a></div></li><li><div><a href="More-About-Settings.html">Êõ¥Â§öÂÖ≥‰∫éËÆæÁΩÆ</a></div></li><li><div><a href="Library-Dependencies.html">Â∫ì‰æùËµñ</a></div></li><li><div><a href="Multi-Project.html">Â§öÈ°πÁõÆÊûÑÂª∫</a></div></li><li><div><a href="Using-Plugins.html">‰ΩøÁî®Êèí‰ª∂</a></div></li><li><div><a href="Custom-Settings.html">Ëá™ÂÆö‰πâËÆæÁΩÆÂíå‰ªªÂä°</a></div></li><li><div><a href="Organizing-Build.html">ÁªÑÁªáÊûÑÂª∫</a></div></li><li><div><a href="Summary.html">ÊÄªÁªì</a></div></li><li><div><a href="Bare-Def.html">ÈôÑÂΩïÔºöBare .sbt ÊûÑÂª∫ÂÆö‰πâ</a></div></li><li><div class="current">ÈôÑÂΩïÔºö.scala ÊûÑÂª∫ÂÆö‰πâ</div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
           </div>
         </div>
         <div class="header">

@@ -3126,7 +3126,7 @@ your plugin to the list.
 -   sbt-deploy: <https://github.com/reaktor/sbt-deploy>
 -   sbt-appbundle (os x standalone):
     <https://github.com/sbt/sbt-appbundle>
--   sbt-onejar (Packages your project using One-JAR™):
+-   sbt-onejar (Packages your project using One-JAR‚Ñ¢):
     <https://github.com/sbt/sbt-onejar>
 
 #### Release plugins
@@ -3314,6 +3314,8 @@ your plugin to the list.
     <https://github.com/fedragon/sbt-todolist>
 -   sbt-ortho (simple spell and English style checker):
     <https://github.com/henrikengstrom/sbt-ortho>
+-   sbt-write-output-to-file (redirect the output of `run` to a file):
+    <https://github.com/cb372/sbt-write-output-to-file>
 
 #### Database plugins
 
@@ -3405,6 +3407,14 @@ your plugin to the list.
 #### OSGi plugin
 
 -   sbtosgi: <https://github.com/sbt/sbt-osgi>
+
+#### C++ interop plugins
+
+- sbt-javacpp (JavaCPP is the missing bridge between Java and native C++; this lib helps you download platform-specific presets): <https://github.com/lloydmeta/sbt-javacpp>
+
+#### Computer vision plugins
+
+- sbt-opencv (Start an OpenCV via JavaCV project in 1 line): <https://github.com/lloydmeta/sbt-opencv>
 
 #### Plugin bundles
 
@@ -4013,7 +4023,7 @@ warn test:run
 Also, trace is currently an integer, but should really be an abstract
 data type.
 
-​7. Each sbt version has more aggressive incremental compilation and
+‚Äã7. Each sbt version has more aggressive incremental compilation and
 reproducing bugs can be difficult. It would be helpful to have a mode
 that generates a diff between successive compilations and records the
 options passed to scalac. This could be replayed or inspected to try to
@@ -4746,7 +4756,7 @@ Starting sbt 0.13.7, build.sbt will be parsed using a customized Scala parser. T
 
 This feature can be disabled, if necessary, via the -Dsbt.parser.simple=true flag.
 
-This feature was contributed by [Andrzej Jozwik (@ajozwik)](https://github.com/ajozwik), [Rafał Krzewski (@rkrzewski)][@rkrzewski] and others at [@WarsawScala][@WarsawScala] inspired by Typesafe's [@gkossakowski][@gkossakowski] organizing multiple [meetups](http://blog.japila.pl/2014/07/gkossakowski-on-warszawscala-about-how-to-patch-scalasbt/) and [hackathons](http://blog.japila.pl/2014/07/hacking-scalasbt-with-gkossakowski-on-warszawscala-meetup-in-javeo_eu/) on how to patch sbt with the focus on this blank line issue. Dziękujemy! [#1606][1606]
+This feature was contributed by [Andrzej Jozwik (@ajozwik)](https://github.com/ajozwik), [Rafa≈Ç Krzewski (@rkrzewski)][@rkrzewski] and others at [@WarsawScala][@WarsawScala] inspired by Typesafe's [@gkossakowski][@gkossakowski] organizing multiple [meetups](http://blog.japila.pl/2014/07/gkossakowski-on-warszawscala-about-how-to-patch-scalasbt/) and [hackathons](http://blog.japila.pl/2014/07/hacking-scalasbt-with-gkossakowski-on-warszawscala-meetup-in-javeo_eu/) on how to patch sbt with the focus on this blank line issue. Dziƒôkujemy! [#1606][1606]
 
 ### Custom Maven local repository location
 
@@ -7079,7 +7089,7 @@ a foundation.
 
 Other resources include the
 [How to][Howto] and
-[Developer’s Guide][Developers-Guide]
+[Developer‚Äôs Guide][Developers-Guide]
 sections in this reference, and the
 [API Documentation](../api/index.html)
 
@@ -8773,7 +8783,7 @@ just to illustrate the ideas; this list is not intended to be complete.
     abstract method called `fullyQualifiedTraitName$$super$methodName`;
     such methods only exist if they are used. Hence, adding the first
     call to super.methodName for a specific methodName changes the
-    interface. At present, this is not yet handled—see [#466][466].
+    interface. At present, this is not yet handled‚Äîsee [#466][466].
 4.  `sealed` hierarchies of case classes allow to check exhaustiveness
     of pattern matching. Hence pattern matches using case classes must
     depend on the complete hierarchy - this is one reason why
@@ -15181,6 +15191,7 @@ lazy val parser: Parser[Int] =
   [Full-Def]: Full-Def.html
   [Best-Practices]: Best-Practices.html
   [Plugins-Best-Practices]: Plugins-Best-Practices.html
+  [Use-Settings-And-Tasks]: Plugins-Best-Practices.html#Use+settings+and+tasks.+Avoid+commands.
   [Commands]: Commands.html
 
 Plugins
@@ -15337,7 +15348,7 @@ by extending `sbt.AutoPlugin`.
 
 #### projectSettings and buildSettings
 
-With auto plugins, all provided settings (e.g. `assemblySettings`) are provided by the plugin directly via the `projectSettings` method. Here’s an example plugin that adds a command named hello to sbt projects:
+With auto plugins, all provided settings (e.g. `assemblySettings`) are provided by the plugin directly via the `projectSettings` method. Here‚Äôs an example plugin that adds a command named hello to sbt projects:
 
 ```scala
 package sbthello
@@ -15457,7 +15468,9 @@ This allows plugins to silently, and correctly, extend existing plugins with mor
 
 When an auto plugin provides a stable field such as `val` or `object`
 named `autoImport`, the contents of the field are wildcard imported
-in `set`, `eval`, and `.sbt` files.
+in `set`, `eval`, and `.sbt` files. In the next example, we'll replace
+our hello command with a task to get the value of `greeting` easily.
+In practice, it's recommended [to prefer settings or tasks to commands][Use-Settings-And-Tasks].
 
 ```scala
 package sbthello
@@ -15468,16 +15481,16 @@ import Keys._
 object HelloPlugin3 extends AutoPlugin {
   object autoImport {
     val greeting = settingKey[String]("greeting")
+    val hello = taskKey[Unit]("say hello")
   }
   import autoImport._
   override def trigger = allRequirements
   override lazy val buildSettings = Seq(
     greeting := "Hi!",
-    commands += helloCommand)
-  lazy val helloCommand =
-    Command.command("hello") { (state: State) =>
+    hello := helloTask.value)
+  lazy val helloTask =
+    Def.task {
       println(greeting.value)
-      state
     }
 }
 ```
@@ -15743,6 +15756,22 @@ Make sure people can find your plugin. Here are some of the recommended steps:
 
 Users who have their build files in some package will not be able to use
 your plugin if it's defined in default (no-name) package.
+
+### Follow the naming conventions
+
+Use the `sbt-$projectname` scheme to name your library and artifact.
+A plugin ecosystem with a consistent naming convention makes it easier for users to tell whether a
+project or dependency is an SBT plugin.
+
+If the project's name is `foobar` the following holds:
+
+ - BAD: `foobar`
+ - BAD: `foobar-sbt`
+ - BAD: `sbt-foobar-plugin`
+ - GOOD: `sbt-foobar`
+
+If your plugin provides an obvious "main" task, consider naming it `foobar` or `foobar...` to make
+it more intuitive to explore the capabilities of your plugin within the sbt shell and tab-completion.
 
 ### Use settings and tasks. Avoid commands.
 

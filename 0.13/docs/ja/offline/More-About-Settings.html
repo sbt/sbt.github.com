@@ -3,7 +3,7 @@
       <head>
         <meta charset="utf-8"/>
         <meta content="width=device-width, initial-scale=1" name="viewport"/>
-        <title>sbt Reference Manual — 他の種類のセッティング</title>
+        <title>sbt Reference Manual — ‰ªñ„ÅÆÁ®ÆÈ°û„ÅÆ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞</title>
         <link rel="shortcut icon" href="../favicon.ico"/>
         <link rel="stylesheet" href="../css/blueprint/screen.css" type="text/css" media="screen, projection"/>
         <link rel="stylesheet" href="../css/blueprint/grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
@@ -43,86 +43,86 @@
           </a>
         <div class="container contentswrapper">
           <div class="span-16 prepend-1 append-1 contents">
-            <h2 id="%E4%BB%96%E3%81%AE%E7%A8%AE%E9%A1%9E%E3%81%AE%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0">他の種類のセッティング<a href="#%E4%BB%96%E3%81%AE%E7%A8%AE%E9%A1%9E%E3%81%AE%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このページでは、基本的な <code>:=</code> メソッドを超えた、より高度な <code>Settings</code> の作り方を説明する。
-君が<a href="Basic-Def.html">.sbt ビルド定義</a>と<a href="Scopes.html">スコープ</a>を読んだことを前提とする。
-</p><h3 id="%E5%BE%A9%E7%BF%92%3A+%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0">復習: セッティング<a href="#%E5%BE%A9%E7%BF%92%3A+%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>ビルド定義は <code>Setting</code> のリストを作り、それが sbt の（キーと値のペアの Map で表現される）ビルドの記述を変換するのに使われるということは<a href="Basic-Def.html">覚えている</a>と思う。
-セッティング（<code>Setting</code>）は古い Map を入力としてとり、新しい Map を出力する変換である。そして、新しい Map が sbt の新しい内部状態となる。
-</p><p>セッティングは種類により異なる方法で Map を変換する。<a href="Basic-Def.html">これまでは</a>、<code>:=</code> メソッドをみてきた。
-</p><p><code>:=</code> が作る <code>Setting</code> は、不変の固定値を新たに変換された Map に代入する。
-例えば Map を <code>name := &quot;hello&quot;</code> というセッティングで変換すると、新しい Map は <code>name</code> キーの中に <code>&quot;hello&quot;</code> を格納する。
-</p><h3 id="%E6%97%A2%E5%AD%98%E3%81%AE%E5%80%A4%E3%81%AB%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B%3A++%E3%81%A8">既存の値に追加する: <code>+=</code> と <code>++=</code><a href="#%E6%97%A2%E5%AD%98%E3%81%AE%E5%80%A4%E3%81%AB%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B%3A++%E3%81%A8" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>:=</code> による置換が最も単純な変換だが、キーには他のメソッドもある。
-<code>SettingKey[T]</code> の <code>T</code> が列の場合、つまりキーの値の型が列の場合は、置換のかわりに列に追加することができる。
-</p><ul><li><code>+=</code> は、列に単一要素を追加する。
-</li><li><code>++=</code> は、別の列を連結する。
-</li></ul><p>例えば、<code>sourceDirectories in Compile</code> というキーの値の型は <code>Seq[File]</code> だ。
-デフォルトで、このキーの値は <code>src/main/scala</code> を含む。
-（どうしても標準的なやり方では気が済まない君が）<code>source</code> という名前のディレクトリに入ったソースもコンパイルしたい場合、
-以下のようにして設定できる:
+            <h2 id="%E2%80%B0%C2%AA%C3%B1%E2%80%9E%C3%85%C3%86%C3%81%C2%AE%C3%86%C3%88%C2%B0%C3%BB%E2%80%9E%C3%85%C3%86%E2%80%9E%C3%87%C2%AA%E2%80%9E%C3%89%C3%89%E2%80%9E%C3%89%C3%9C%E2%80%9E%C3%87%C2%A3%E2%80%9E%C3%89%E2%89%A5%E2%80%9E%C3%87%E2%88%9E">‰ªñ„ÅÆÁ®ÆÈ°û„ÅÆ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞<a href="#%E2%80%B0%C2%AA%C3%B1%E2%80%9E%C3%85%C3%86%C3%81%C2%AE%C3%86%C3%88%C2%B0%C3%BB%E2%80%9E%C3%85%C3%86%E2%80%9E%C3%87%C2%AA%E2%80%9E%C3%89%C3%89%E2%80%9E%C3%89%C3%9C%E2%80%9E%C3%87%C2%A3%E2%80%9E%C3%89%E2%89%A5%E2%80%9E%C3%87%E2%88%9E" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>„Åì„ÅÆ„Éö„Éº„Ç∏„Åß„ÅØ„ÄÅÂü∫Êú¨ÁöÑ„Å™ <code>:=</code> „É°„ÇΩ„ÉÉ„Éâ„ÇíË∂Ö„Åà„Åü„ÄÅ„Çà„ÇäÈ´òÂ∫¶„Å™ <code>Settings</code> „ÅÆ‰Ωú„ÇäÊñπ„ÇíË™¨Êòé„Åô„Çã„ÄÇ
+Âêõ„Åå<a href="Basic-Def.html">.sbt „Éì„É´„ÉâÂÆöÁæ©</a>„Å®<a href="Scopes.html">„Çπ„Ç≥„Éº„Éó</a>„ÇíË™≠„Çì„Å†„Åì„Å®„ÇíÂâçÊèê„Å®„Åô„Çã„ÄÇ
+</p><h3 id="%C3%82%C3%A6%C2%A9%C3%81%C3%B8%C3%AD%3A+%E2%80%9E%C3%87%C2%AA%E2%80%9E%C3%89%C3%89%E2%80%9E%C3%89%C3%9C%E2%80%9E%C3%87%C2%A3%E2%80%9E%C3%89%E2%89%A5%E2%80%9E%C3%87%E2%88%9E">Âæ©Áøí: „Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞<a href="#%C3%82%C3%A6%C2%A9%C3%81%C3%B8%C3%AD%3A+%E2%80%9E%C3%87%C2%AA%E2%80%9E%C3%89%C3%89%E2%80%9E%C3%89%C3%9C%E2%80%9E%C3%87%C2%A3%E2%80%9E%C3%89%E2%89%A5%E2%80%9E%C3%87%E2%88%9E" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>„Éì„É´„ÉâÂÆöÁæ©„ÅØ <code>Setting</code> „ÅÆ„É™„Çπ„Éà„Çí‰Ωú„Çä„ÄÅ„Åù„Çå„Åå sbt „ÅÆÔºà„Ç≠„Éº„Å®ÂÄ§„ÅÆ„Éö„Ç¢„ÅÆ Map „ÅßË°®Áèæ„Åï„Çå„ÇãÔºâ„Éì„É´„Éâ„ÅÆË®òËø∞„ÇíÂ§âÊèõ„Åô„Çã„ÅÆ„Å´‰Ωø„Çè„Çå„Çã„Å®„ÅÑ„ÅÜ„Åì„Å®„ÅØ<a href="Basic-Def.html">Ë¶ö„Åà„Å¶„ÅÑ„Çã</a>„Å®ÊÄù„ÅÜ„ÄÇ
+„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞Ôºà<code>Setting</code>Ôºâ„ÅØÂè§„ÅÑ Map „ÇíÂÖ•Âäõ„Å®„Åó„Å¶„Å®„Çä„ÄÅÊñ∞„Åó„ÅÑ Map „ÇíÂá∫Âäõ„Åô„ÇãÂ§âÊèõ„Åß„ÅÇ„Çã„ÄÇ„Åù„Åó„Å¶„ÄÅÊñ∞„Åó„ÅÑ Map „Åå sbt „ÅÆÊñ∞„Åó„ÅÑÂÜÖÈÉ®Áä∂ÊÖã„Å®„Å™„Çã„ÄÇ
+</p><p>„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„ÅØÁ®ÆÈ°û„Å´„Çà„ÇäÁï∞„Å™„ÇãÊñπÊ≥ï„Åß Map „ÇíÂ§âÊèõ„Åô„Çã„ÄÇ<a href="Basic-Def.html">„Åì„Çå„Åæ„Åß„ÅØ</a>„ÄÅ<code>:=</code> „É°„ÇΩ„ÉÉ„Éâ„Çí„Åø„Å¶„Åç„Åü„ÄÇ
+</p><p><code>:=</code> „Åå‰Ωú„Çã <code>Setting</code> „ÅØ„ÄÅ‰∏çÂ§â„ÅÆÂõ∫ÂÆöÂÄ§„ÇíÊñ∞„Åü„Å´Â§âÊèõ„Åï„Çå„Åü Map „Å´‰ª£ÂÖ•„Åô„Çã„ÄÇ
+‰æã„Åà„Å∞ Map „Çí <code>name := &quot;hello&quot;</code> „Å®„ÅÑ„ÅÜ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„ÅßÂ§âÊèõ„Åô„Çã„Å®„ÄÅÊñ∞„Åó„ÅÑ Map „ÅØ <code>name</code> „Ç≠„Éº„ÅÆ‰∏≠„Å´ <code>&quot;hello&quot;</code> „ÇíÊ†ºÁ¥ç„Åô„Çã„ÄÇ
+</p><h3 id="%C3%8A%C3%B3%C2%A2%C3%82%E2%89%A0%C3%B2%E2%80%9E%C3%85%C3%86%C3%82%C3%84%C2%A7%E2%80%9E%C3%85%C2%B4%C3%8B%C3%B8%CE%A9%C3%82%C3%A4%E2%80%A0%E2%80%9E%C3%85%C3%B4%E2%80%9E%C3%87%C3%A3%3A++%E2%80%9E%C3%85%C2%AE">Êó¢Â≠ò„ÅÆÂÄ§„Å´ËøΩÂä†„Åô„Çã: <code>+=</code> „Å® <code>++=</code><a href="#%C3%8A%C3%B3%C2%A2%C3%82%E2%89%A0%C3%B2%E2%80%9E%C3%85%C3%86%C3%82%C3%84%C2%A7%E2%80%9E%C3%85%C2%B4%C3%8B%C3%B8%CE%A9%C3%82%C3%A4%E2%80%A0%E2%80%9E%C3%85%C3%B4%E2%80%9E%C3%87%C3%A3%3A++%E2%80%9E%C3%85%C2%AE" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>:=</code> „Å´„Çà„ÇãÁΩÆÊèõ„ÅåÊúÄ„ÇÇÂçòÁ¥î„Å™Â§âÊèõ„Å†„Åå„ÄÅ„Ç≠„Éº„Å´„ÅØ‰ªñ„ÅÆ„É°„ÇΩ„ÉÉ„Éâ„ÇÇ„ÅÇ„Çã„ÄÇ
+<code>SettingKey[T]</code> „ÅÆ <code>T</code> „ÅåÂàó„ÅÆÂ†¥Âêà„ÄÅ„Å§„Åæ„Çä„Ç≠„Éº„ÅÆÂÄ§„ÅÆÂûã„ÅåÂàó„ÅÆÂ†¥Âêà„ÅØ„ÄÅÁΩÆÊèõ„ÅÆ„Åã„Çè„Çä„Å´Âàó„Å´ËøΩÂä†„Åô„Çã„Åì„Å®„Åå„Åß„Åç„Çã„ÄÇ
+</p><ul><li><code>+=</code> „ÅØ„ÄÅÂàó„Å´Âçò‰∏ÄË¶ÅÁ¥†„ÇíËøΩÂä†„Åô„Çã„ÄÇ
+</li><li><code>++=</code> „ÅØ„ÄÅÂà•„ÅÆÂàó„ÇíÈÄ£Áµê„Åô„Çã„ÄÇ
+</li></ul><p>‰æã„Åà„Å∞„ÄÅ<code>sourceDirectories in Compile</code> „Å®„ÅÑ„ÅÜ„Ç≠„Éº„ÅÆÂÄ§„ÅÆÂûã„ÅØ <code>Seq[File]</code> „Å†„ÄÇ
+„Éá„Éï„Ç©„É´„Éà„Åß„ÄÅ„Åì„ÅÆ„Ç≠„Éº„ÅÆÂÄ§„ÅØ <code>src/main/scala</code> „ÇíÂê´„ÇÄ„ÄÇ
+Ôºà„Å©„ÅÜ„Åó„Å¶„ÇÇÊ®ôÊ∫ñÁöÑ„Å™„ÇÑ„ÇäÊñπ„Åß„ÅØÊ∞ó„ÅåÊ∏à„Åæ„Å™„ÅÑÂêõ„ÅåÔºâ<code>source</code> „Å®„ÅÑ„ÅÜÂêçÂâç„ÅÆ„Éá„Ç£„É¨„ÇØ„Éà„É™„Å´ÂÖ•„Å£„Åü„ÇΩ„Éº„Çπ„ÇÇ„Ç≥„É≥„Éë„Ç§„É´„Åó„Åü„ÅÑÂ†¥Âêà„ÄÅ
+‰ª•‰∏ã„ÅÆ„Çà„ÅÜ„Å´„Åó„Å¶Ë®≠ÂÆö„Åß„Åç„Çã:
 </p><pre><code class="prettyprint lang-scala">sourceDirectories in Compile += new File(&quot;source&quot;)
-</code></pre><p>もしくは、sbt パッケージに入っている <code>file()</code> 関数を使って:
+</code></pre><p>„ÇÇ„Åó„Åè„ÅØ„ÄÅsbt „Éë„ÉÉ„Ç±„Éº„Ç∏„Å´ÂÖ•„Å£„Å¶„ÅÑ„Çã <code>file()</code> Èñ¢Êï∞„Çí‰Ωø„Å£„Å¶:
 </p><pre><code class="prettyprint lang-scala">sourceDirectories in Compile += file(&quot;source&quot;)
-</code></pre><p>（<code>file()</code> は、単に新しい <code>File</code> 作る）
-</p><p><code>++=</code> を使って複数のディレクトリを一度に加える事もできる:
+</code></pre><p>Ôºà<code>file()</code> „ÅØ„ÄÅÂçò„Å´Êñ∞„Åó„ÅÑ <code>File</code> ‰Ωú„ÇãÔºâ
+</p><p><code>++=</code> „Çí‰Ωø„Å£„Å¶Ë§áÊï∞„ÅÆ„Éá„Ç£„É¨„ÇØ„Éà„É™„Çí‰∏ÄÂ∫¶„Å´Âä†„Åà„Çã‰∫ã„ÇÇ„Åß„Åç„Çã:
 </p><pre><code class="prettyprint lang-scala">sourceDirectories in Compile ++= Seq(file(&quot;sources1&quot;), file(&quot;sources2&quot;))
-</code></pre><p>ここでの <code>Seq(a, b, c, ...)</code> は、列を構築する標準的な Scala の構文だ。
-</p><p>デフォルトのソースディレクトリを完全に置き換えてしまいたい場合は、当然 <code>:=</code> を使えばいい:
+</code></pre><p>„Åì„Åì„Åß„ÅÆ <code>Seq(a, b, c, ...)</code> „ÅØ„ÄÅÂàó„ÇíÊßãÁØâ„Åô„ÇãÊ®ôÊ∫ñÁöÑ„Å™ Scala „ÅÆÊßãÊñá„Å†„ÄÇ
+</p><p>„Éá„Éï„Ç©„É´„Éà„ÅÆ„ÇΩ„Éº„Çπ„Éá„Ç£„É¨„ÇØ„Éà„É™„ÇíÂÆåÂÖ®„Å´ÁΩÆ„ÅçÊèõ„Åà„Å¶„Åó„Åæ„ÅÑ„Åü„ÅÑÂ†¥Âêà„ÅØ„ÄÅÂΩìÁÑ∂ <code>:=</code> „Çí‰Ωø„Åà„Å∞„ÅÑ„ÅÑ:
 </p><pre><code class="prettyprint lang-scala">sourceDirectories in Compile := Seq(file(&quot;sources1&quot;), file(&quot;sources2&quot;))
-</code></pre><h3 id="%E4%BB%96%E3%81%AE%E3%82%AD%E3%83%BC%E3%81%AE%E5%80%A4%E3%82%92%E5%9F%BA%E3%81%AB%E5%80%A4%E3%82%92%E8%A8%88%E7%AE%97">他のキーの値を基に値を計算<a href="#%E4%BB%96%E3%81%AE%E3%82%AD%E3%83%BC%E3%81%AE%E5%80%A4%E3%82%92%E5%9F%BA%E3%81%AB%E5%80%A4%E3%82%92%E8%A8%88%E7%AE%97" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>タスクキーやセッティングキーの値を使って他のタスクキー、セッティングキーの値を設定してみる。
-これらの値を返すメソッドは特別なもので、単に <code>:=</code> や <code>+=</code> や <code>++=</code> の引数の中で呼び出してやればよい。
-</p><p>まず一つ目の例として、プロジェクトの名前と同じ organization（訳注：Ivy のもの、Maven でいう groupId）を定義してみよう。
-</p><pre><code class="prettyprint lang-scala">// プロジェクトの後に組織名を付ける (どちらも型は SettingKey[String])
+</code></pre><h3 id="%E2%80%B0%C2%AA%C3%B1%E2%80%9E%C3%85%C3%86%E2%80%9E%C3%87%E2%89%A0%E2%80%9E%C3%89%C2%BA%E2%80%9E%C3%85%C3%86%C3%82%C3%84%C2%A7%E2%80%9E%C3%87%C3%AD%C3%82%C3%BC%E2%88%AB%E2%80%9E%C3%85%C2%B4%C3%82%C3%84%C2%A7%E2%80%9E%C3%87%C3%AD%C3%8B%C2%AE%C3%A0%C3%81%C3%86%C3%B3">‰ªñ„ÅÆ„Ç≠„Éº„ÅÆÂÄ§„ÇíÂü∫„Å´ÂÄ§„ÇíË®àÁÆó<a href="#%E2%80%B0%C2%AA%C3%B1%E2%80%9E%C3%85%C3%86%E2%80%9E%C3%87%E2%89%A0%E2%80%9E%C3%89%C2%BA%E2%80%9E%C3%85%C3%86%C3%82%C3%84%C2%A7%E2%80%9E%C3%87%C3%AD%C3%82%C3%BC%E2%88%AB%E2%80%9E%C3%85%C2%B4%C3%82%C3%84%C2%A7%E2%80%9E%C3%87%C3%AD%C3%8B%C2%AE%C3%A0%C3%81%C3%86%C3%B3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>„Çø„Çπ„ÇØ„Ç≠„Éº„ÇÑ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„Ç≠„Éº„ÅÆÂÄ§„Çí‰Ωø„Å£„Å¶‰ªñ„ÅÆ„Çø„Çπ„ÇØ„Ç≠„Éº„ÄÅ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„Ç≠„Éº„ÅÆÂÄ§„ÇíË®≠ÂÆö„Åó„Å¶„Åø„Çã„ÄÇ
+„Åì„Çå„Çâ„ÅÆÂÄ§„ÇíËøî„Åô„É°„ÇΩ„ÉÉ„Éâ„ÅØÁâπÂà•„Å™„ÇÇ„ÅÆ„Åß„ÄÅÂçò„Å´ <code>:=</code> „ÇÑ <code>+=</code> „ÇÑ <code>++=</code> „ÅÆÂºïÊï∞„ÅÆ‰∏≠„ÅßÂëº„Å≥Âá∫„Åó„Å¶„ÇÑ„Çå„Å∞„Çà„ÅÑ„ÄÇ
+</p><p>„Åæ„Åö‰∏Ä„Å§ÁõÆ„ÅÆ‰æã„Å®„Åó„Å¶„ÄÅ„Éó„É≠„Ç∏„Çß„ÇØ„Éà„ÅÆÂêçÂâç„Å®Âêå„Åò organizationÔºàË®≥Ê≥®ÔºöIvy „ÅÆ„ÇÇ„ÅÆ„ÄÅMaven „Åß„ÅÑ„ÅÜ groupIdÔºâ„ÇíÂÆöÁæ©„Åó„Å¶„Åø„Çà„ÅÜ„ÄÇ
+</p><pre><code class="prettyprint lang-scala">// „Éó„É≠„Ç∏„Çß„ÇØ„Éà„ÅÆÂæå„Å´ÁµÑÁπîÂêç„Çí‰ªò„Åë„Çã („Å©„Å°„Çâ„ÇÇÂûã„ÅØ SettingKey[String])
 organization := name.value
-</code></pre><p>次にこれはディレクトリ名を用いてプロジェクトの名前をつける例。
-</p><pre><code class="prettyprint lang-scala">// name は Key[String]、 baseDirectory は Key[File]
-// ディレクトリ名を取ってからプロジェクトの名前を付ける
+</code></pre><p>Ê¨°„Å´„Åì„Çå„ÅØ„Éá„Ç£„É¨„ÇØ„Éà„É™Âêç„ÇíÁî®„ÅÑ„Å¶„Éó„É≠„Ç∏„Çß„ÇØ„Éà„ÅÆÂêçÂâç„Çí„Å§„Åë„Çã‰æã„ÄÇ
+</p><pre><code class="prettyprint lang-scala">// name „ÅØ Key[String]„ÄÅ baseDirectory „ÅØ Key[File]
+// „Éá„Ç£„É¨„ÇØ„Éà„É™Âêç„ÇíÂèñ„Å£„Å¶„Åã„Çâ„Éó„É≠„Ç∏„Çß„ÇØ„Éà„ÅÆÂêçÂâç„Çí‰ªò„Åë„Çã
 name := baseDirectory.value.getName
-</code></pre><p>この例では標準的な <code>java.io.File</code> オブジェクトの <code>getName</code> メソッドを使って  <code>baseDirectry</code> の値を変換している。
-</p><p>複数の入力値を用いる場合も同様である。例えばこのようになる：
+</code></pre><p>„Åì„ÅÆ‰æã„Åß„ÅØÊ®ôÊ∫ñÁöÑ„Å™ <code>java.io.File</code> „Ç™„Éñ„Ç∏„Çß„ÇØ„Éà„ÅÆ <code>getName</code> „É°„ÇΩ„ÉÉ„Éâ„Çí‰Ωø„Å£„Å¶  <code>baseDirectry</code> „ÅÆÂÄ§„ÇíÂ§âÊèõ„Åó„Å¶„ÅÑ„Çã„ÄÇ
+</p><p>Ë§áÊï∞„ÅÆÂÖ•ÂäõÂÄ§„ÇíÁî®„ÅÑ„ÇãÂ†¥Âêà„ÇÇÂêåÊßò„Åß„ÅÇ„Çã„ÄÇ‰æã„Åà„Å∞„Åì„ÅÆ„Çà„ÅÜ„Å´„Å™„ÇãÔºö
 </p><pre><code class="prettyprint lang-scala">name := &quot;project &quot; + name.value + &quot; from &quot; + organization.value + &quot; version &quot; + version.value
-</code></pre><p>既に宣言されている name の値だけでなく organization や version といったセッティングの値を使って、新たに name というセッティングが設定されている。
-</p><h4 id="%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%92%E6%8C%81%E3%81%A3%E3%81%9F%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0">依存性を持ったセッティング<a href="#%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%92%E6%8C%81%E3%81%A3%E3%81%9F%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>name &lt;&lt;= baseDirectory(_.getName)</code> というセッティングにおいて、<code>name</code> は、<code>baseDirectory</code> への<em>依存性</em>（dependency）を持つ。上記の内容を <code>build.sbt</code> に記述して sbt のインタラクティブモードを立ち上げ、<code>inspect name</code> と入力すると、以下のように表示されるだろう（一部抜粋）:
+</code></pre><p>Êó¢„Å´ÂÆ£Ë®Ä„Åï„Çå„Å¶„ÅÑ„Çã name „ÅÆÂÄ§„Å†„Åë„Åß„Å™„Åè organization „ÇÑ version „Å®„ÅÑ„Å£„Åü„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„ÅÆÂÄ§„Çí‰Ωø„Å£„Å¶„ÄÅÊñ∞„Åü„Å´ name „Å®„ÅÑ„ÅÜ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„ÅåË®≠ÂÆö„Åï„Çå„Å¶„ÅÑ„Çã„ÄÇ
+</p><h4 id="%E2%80%B0%C3%A6%C3%B9%C3%82%E2%89%A0%C3%B2%C3%8A%C3%84%C3%9F%E2%80%9E%C3%87%C3%AD%C3%8A%C3%A5%C3%85%E2%80%9E%C3%85%C2%A3%E2%80%9E%C3%85%C3%BC%E2%80%9E%C3%87%C2%AA%E2%80%9E%C3%89%C3%89%E2%80%9E%C3%89%C3%9C%E2%80%9E%C3%87%C2%A3%E2%80%9E%C3%89%E2%89%A5%E2%80%9E%C3%87%E2%88%9E">‰æùÂ≠òÊÄß„ÇíÊåÅ„Å£„Åü„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞<a href="#%E2%80%B0%C3%A6%C3%B9%C3%82%E2%89%A0%C3%B2%C3%8A%C3%84%C3%9F%E2%80%9E%C3%87%C3%AD%C3%8A%C3%A5%C3%85%E2%80%9E%C3%85%C2%A3%E2%80%9E%C3%85%C3%BC%E2%80%9E%C3%87%C2%AA%E2%80%9E%C3%89%C3%89%E2%80%9E%C3%89%C3%9C%E2%80%9E%C3%87%C2%A3%E2%80%9E%C3%89%E2%89%A5%E2%80%9E%C3%87%E2%88%9E" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>name &lt;&lt;= baseDirectory(_.getName)</code> „Å®„ÅÑ„ÅÜ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„Å´„Åä„ÅÑ„Å¶„ÄÅ<code>name</code> „ÅØ„ÄÅ<code>baseDirectory</code> „Å∏„ÅÆ<em>‰æùÂ≠òÊÄß</em>ÔºàdependencyÔºâ„ÇíÊåÅ„Å§„ÄÇ‰∏äË®ò„ÅÆÂÜÖÂÆπ„Çí <code>build.sbt</code> „Å´Ë®òËø∞„Åó„Å¶ sbt „ÅÆ„Ç§„É≥„Çø„É©„ÇØ„ÉÜ„Ç£„Éñ„É¢„Éº„Éâ„ÇíÁ´ã„Å°‰∏ä„Åí„ÄÅ<code>inspect name</code> „Å®ÂÖ•Âäõ„Åô„Çã„Å®„ÄÅ‰ª•‰∏ã„ÅÆ„Çà„ÅÜ„Å´Ë°®Á§∫„Åï„Çå„Çã„Å†„Çç„ÅÜÔºà‰∏ÄÈÉ®ÊäúÁ≤ãÔºâ:
 </p><pre><code class="">[info] Dependencies:
 [info]  *:baseDirectory
-</code></pre><p>これは sbt が、どのセッティングが他のセッティングに依存しているかをどう把握しているかを示している。
-タスクを記述するセッティングを思い出してほしい。そう、タスク間に依存関係を持たせることも可能であるということだ。
-</p><p>例えば <code>inspect compile</code> すれば compile は別のキー <code>compileInputs</code> に依存するということが分かり、
-<code>compileInputs</code> を inspect すると、それがまた別のキーに依存していることが分かる。
-依存性の連鎖をたどっていくと、魔法に出会う。
-例えば <code>compile</code> と打ち込むと、sbt は自動的に <code>update</code> を実行する。
-これが「とにかくちゃんと動く」理由は、<code>compile</code> の計算に入力として必要な値が sbt に <code>update</code> の計算を先に行うことを強制しているからだ。
-</p><p>このようにして、sbt の全てのビルドの依存性は、明示的には宣言されず、<em>自動化</em>されている。
-あるキーの値を別の計算で使うと、その計算はキーに依存することになる。
-とにかくちゃんと動いてくれるというわけだ！
-</p><h4 id="%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%8C%E6%9C%AA%E5%AE%9A%E7%BE%A9%E3%81%AE%E5%A0%B4%E5%90%88">セッティングが未定義の場合<a href="#%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%8C%E6%9C%AA%E5%AE%9A%E7%BE%A9%E3%81%AE%E5%A0%B4%E5%90%88" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>セッティングが <code>:=</code> や <code>+=</code> や <code>++=</code> を使って自分自身や他のキーへの依存が生まれるとき、その依存されるキーの値が存在しなくてならない。
-もしそれが存在しなければ sbt に怒られることになるだろう。例えば、<em>“Reference to undefined setting“</em> のようなエラーだ。
-これが起こった場合は、キーが定義されている正しい<a href="Scopes.html">スコープ</a>で使っているか確認しよう。
-</p><p>これはエラーになるが、循環した依存性を作ってしまうことも起こりうる。sbt が君がそうしてしまったことを教えてくれるだろう。
-</p><h4 id="%E4%BB%96%E3%81%AE%E3%82%AD%E3%83%BC%E3%81%AE%E5%80%A4%E3%82%92%E5%9F%BA%E3%81%AB%E3%81%97%E3%81%9F%E3%82%BF%E3%82%B9%E3%82%AF">他のキーの値を基にしたタスク<a href="#%E4%BB%96%E3%81%AE%E3%82%AD%E3%83%BC%E3%81%AE%E5%80%A4%E3%82%92%E5%9F%BA%E3%81%AB%E3%81%97%E3%81%9F%E3%82%BF%E3%82%B9%E3%82%AF" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>あるタスクの値を定義するために他のタスクの値を計算する必要があるかもしれない。
-そのような場合には、<code>:=</code> や <code>+=</code> や <code>++=</code> の引数に <code>Def.task</code> と <code>taskValue</code> を使えばよい。
-</p><p>例として、<code>sourceGenerators</code> にプロジェクトのベースディレクトリやコンパイル時のクラスパスを加える設定をみてみよう。
+</code></pre><p>„Åì„Çå„ÅØ sbt „Åå„ÄÅ„Å©„ÅÆ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„Åå‰ªñ„ÅÆ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„Å´‰æùÂ≠ò„Åó„Å¶„ÅÑ„Çã„Åã„Çí„Å©„ÅÜÊääÊè°„Åó„Å¶„ÅÑ„Çã„Åã„ÇíÁ§∫„Åó„Å¶„ÅÑ„Çã„ÄÇ
+„Çø„Çπ„ÇØ„ÇíË®òËø∞„Åô„Çã„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„ÇíÊÄù„ÅÑÂá∫„Åó„Å¶„Åª„Åó„ÅÑ„ÄÇ„Åù„ÅÜ„ÄÅ„Çø„Çπ„ÇØÈñì„Å´‰æùÂ≠òÈñ¢‰øÇ„ÇíÊåÅ„Åü„Åõ„Çã„Åì„Å®„ÇÇÂèØËÉΩ„Åß„ÅÇ„Çã„Å®„ÅÑ„ÅÜ„Åì„Å®„Å†„ÄÇ
+</p><p>‰æã„Åà„Å∞ <code>inspect compile</code> „Åô„Çå„Å∞ compile „ÅØÂà•„ÅÆ„Ç≠„Éº <code>compileInputs</code> „Å´‰æùÂ≠ò„Åô„Çã„Å®„ÅÑ„ÅÜ„Åì„Å®„ÅåÂàÜ„Åã„Çä„ÄÅ
+<code>compileInputs</code> „Çí inspect „Åô„Çã„Å®„ÄÅ„Åù„Çå„Åå„Åæ„ÅüÂà•„ÅÆ„Ç≠„Éº„Å´‰æùÂ≠ò„Åó„Å¶„ÅÑ„Çã„Åì„Å®„ÅåÂàÜ„Åã„Çã„ÄÇ
+‰æùÂ≠òÊÄß„ÅÆÈÄ£Èéñ„Çí„Åü„Å©„Å£„Å¶„ÅÑ„Åè„Å®„ÄÅÈ≠îÊ≥ï„Å´Âá∫‰ºö„ÅÜ„ÄÇ
+‰æã„Åà„Å∞ <code>compile</code> „Å®Êâì„Å°Ëæº„ÇÄ„Å®„ÄÅsbt „ÅØËá™ÂãïÁöÑ„Å´ <code>update</code> „ÇíÂÆüË°å„Åô„Çã„ÄÇ
+„Åì„Çå„Åå„Äå„Å®„Å´„Åã„Åè„Å°„ÇÉ„Çì„Å®Âãï„Åè„ÄçÁêÜÁî±„ÅØ„ÄÅ<code>compile</code> „ÅÆË®àÁÆó„Å´ÂÖ•Âäõ„Å®„Åó„Å¶ÂøÖË¶Å„Å™ÂÄ§„Åå sbt „Å´ <code>update</code> „ÅÆË®àÁÆó„ÇíÂÖà„Å´Ë°å„ÅÜ„Åì„Å®„ÇíÂº∑Âà∂„Åó„Å¶„ÅÑ„Çã„Åã„Çâ„Å†„ÄÇ
+</p><p>„Åì„ÅÆ„Çà„ÅÜ„Å´„Åó„Å¶„ÄÅsbt „ÅÆÂÖ®„Å¶„ÅÆ„Éì„É´„Éâ„ÅÆ‰æùÂ≠òÊÄß„ÅØ„ÄÅÊòéÁ§∫ÁöÑ„Å´„ÅØÂÆ£Ë®Ä„Åï„Çå„Åö„ÄÅ<em>Ëá™ÂãïÂåñ</em>„Åï„Çå„Å¶„ÅÑ„Çã„ÄÇ
+„ÅÇ„Çã„Ç≠„Éº„ÅÆÂÄ§„ÇíÂà•„ÅÆË®àÁÆó„Åß‰Ωø„ÅÜ„Å®„ÄÅ„Åù„ÅÆË®àÁÆó„ÅØ„Ç≠„Éº„Å´‰æùÂ≠ò„Åô„Çã„Åì„Å®„Å´„Å™„Çã„ÄÇ
+„Å®„Å´„Åã„Åè„Å°„ÇÉ„Çì„Å®Âãï„ÅÑ„Å¶„Åè„Çå„Çã„Å®„ÅÑ„ÅÜ„Çè„Åë„Å†ÔºÅ
+</p><h4 id="%E2%80%9E%C3%87%C2%AA%E2%80%9E%C3%89%C3%89%E2%80%9E%C3%89%C3%9C%E2%80%9E%C3%87%C2%A3%E2%80%9E%C3%89%E2%89%A5%E2%80%9E%C3%87%E2%88%9E%E2%80%9E%C3%85%C3%A5%C3%8A%C3%BA%E2%84%A2%C3%82%C3%86%C3%B6%C3%81%C3%A6%C2%A9%E2%80%9E%C3%85%C3%86%C3%82%E2%80%A0%C2%A5%C3%82%C3%AA%C3%A0">„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„ÅåÊú™ÂÆöÁæ©„ÅÆÂ†¥Âêà<a href="#%E2%80%9E%C3%87%C2%AA%E2%80%9E%C3%89%C3%89%E2%80%9E%C3%89%C3%9C%E2%80%9E%C3%87%C2%A3%E2%80%9E%C3%89%E2%89%A5%E2%80%9E%C3%87%E2%88%9E%E2%80%9E%C3%85%C3%A5%C3%8A%C3%BA%E2%84%A2%C3%82%C3%86%C3%B6%C3%81%C3%A6%C2%A9%E2%80%9E%C3%85%C3%86%C3%82%E2%80%A0%C2%A5%C3%82%C3%AA%C3%A0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„Åå <code>:=</code> „ÇÑ <code>+=</code> „ÇÑ <code>++=</code> „Çí‰Ωø„Å£„Å¶Ëá™ÂàÜËá™Ë∫´„ÇÑ‰ªñ„ÅÆ„Ç≠„Éº„Å∏„ÅÆ‰æùÂ≠ò„ÅåÁîü„Åæ„Çå„Çã„Å®„Åç„ÄÅ„Åù„ÅÆ‰æùÂ≠ò„Åï„Çå„Çã„Ç≠„Éº„ÅÆÂÄ§„ÅåÂ≠òÂú®„Åó„Å™„Åè„Å¶„Å™„Çâ„Å™„ÅÑ„ÄÇ
+„ÇÇ„Åó„Åù„Çå„ÅåÂ≠òÂú®„Åó„Å™„Åë„Çå„Å∞ sbt „Å´ÊÄí„Çâ„Çå„Çã„Åì„Å®„Å´„Å™„Çã„Å†„Çç„ÅÜ„ÄÇ‰æã„Åà„Å∞„ÄÅ<em>“Reference to undefined setting“</em> „ÅÆ„Çà„ÅÜ„Å™„Ç®„É©„Éº„Å†„ÄÇ
+„Åì„Çå„ÅåËµ∑„Åì„Å£„ÅüÂ†¥Âêà„ÅØ„ÄÅ„Ç≠„Éº„ÅåÂÆöÁæ©„Åï„Çå„Å¶„ÅÑ„ÇãÊ≠£„Åó„ÅÑ<a href="Scopes.html">„Çπ„Ç≥„Éº„Éó</a>„Åß‰Ωø„Å£„Å¶„ÅÑ„Çã„ÅãÁ¢∫Ë™ç„Åó„Çà„ÅÜ„ÄÇ
+</p><p>„Åì„Çå„ÅØ„Ç®„É©„Éº„Å´„Å™„Çã„Åå„ÄÅÂæ™Áí∞„Åó„Åü‰æùÂ≠òÊÄß„Çí‰Ωú„Å£„Å¶„Åó„Åæ„ÅÜ„Åì„Å®„ÇÇËµ∑„Åì„Çä„ÅÜ„Çã„ÄÇsbt „ÅåÂêõ„Åå„Åù„ÅÜ„Åó„Å¶„Åó„Åæ„Å£„Åü„Åì„Å®„ÇíÊïô„Åà„Å¶„Åè„Çå„Çã„Å†„Çç„ÅÜ„ÄÇ
+</p><h4 id="%E2%80%B0%C2%AA%C3%B1%E2%80%9E%C3%85%C3%86%E2%80%9E%C3%87%E2%89%A0%E2%80%9E%C3%89%C2%BA%E2%80%9E%C3%85%C3%86%C3%82%C3%84%C2%A7%E2%80%9E%C3%87%C3%AD%C3%82%C3%BC%E2%88%AB%E2%80%9E%C3%85%C2%B4%E2%80%9E%C3%85%C3%B3%E2%80%9E%C3%85%C3%BC%E2%80%9E%C3%87%C3%B8%E2%80%9E%C3%87%CF%80%E2%80%9E%C3%87%C3%98">‰ªñ„ÅÆ„Ç≠„Éº„ÅÆÂÄ§„ÇíÂü∫„Å´„Åó„Åü„Çø„Çπ„ÇØ<a href="#%E2%80%B0%C2%AA%C3%B1%E2%80%9E%C3%85%C3%86%E2%80%9E%C3%87%E2%89%A0%E2%80%9E%C3%89%C2%BA%E2%80%9E%C3%85%C3%86%C3%82%C3%84%C2%A7%E2%80%9E%C3%87%C3%AD%C3%82%C3%BC%E2%88%AB%E2%80%9E%C3%85%C2%B4%E2%80%9E%C3%85%C3%B3%E2%80%9E%C3%85%C3%BC%E2%80%9E%C3%87%C3%B8%E2%80%9E%C3%87%CF%80%E2%80%9E%C3%87%C3%98" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>„ÅÇ„Çã„Çø„Çπ„ÇØ„ÅÆÂÄ§„ÇíÂÆöÁæ©„Åô„Çã„Åü„ÇÅ„Å´‰ªñ„ÅÆ„Çø„Çπ„ÇØ„ÅÆÂÄ§„ÇíË®àÁÆó„Åô„ÇãÂøÖË¶Å„Åå„ÅÇ„Çã„Åã„ÇÇ„Åó„Çå„Å™„ÅÑ„ÄÇ
+„Åù„ÅÆ„Çà„ÅÜ„Å™Â†¥Âêà„Å´„ÅØ„ÄÅ<code>:=</code> „ÇÑ <code>+=</code> „ÇÑ <code>++=</code> „ÅÆÂºïÊï∞„Å´ <code>Def.task</code> „Å® <code>taskValue</code> „Çí‰Ωø„Åà„Å∞„Çà„ÅÑ„ÄÇ
+</p><p>‰æã„Å®„Åó„Å¶„ÄÅ<code>sourceGenerators</code> „Å´„Éó„É≠„Ç∏„Çß„ÇØ„Éà„ÅÆ„Éô„Éº„Çπ„Éá„Ç£„É¨„ÇØ„Éà„É™„ÇÑ„Ç≥„É≥„Éë„Ç§„É´ÊôÇ„ÅÆ„ÇØ„É©„Çπ„Éë„Çπ„ÇíÂä†„Åà„ÇãË®≠ÂÆö„Çí„Åø„Å¶„Åø„Çà„ÅÜ„ÄÇ
 </p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile += Def.task {
   myGenerator(baseDirectory.value, (managedClasspath in Compile).value)
 }.taskValue
-</code></pre><h4 id="%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%92%E6%8C%81%E3%81%A3%E3%81%9F%E3%82%BF%E3%82%B9%E3%82%AF">依存性を持ったタスク<a href="#%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%92%E6%8C%81%E3%81%A3%E3%81%9F%E3%82%BF%E3%82%B9%E3%82%AF" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><a href="Basic-Def.html">.sbt ビルド定義</a>でみたように、タスクキーは <code>:=</code> などでセッティングを作ると <code>Setting[T]</code> ではなく、<code>Setting[Task[T]]</code>を作る。
-タスク定義の入力にセッティングの値を用いることができるが、セッティング定義の入力にタスクをとることはできない。
-</p><p>（<a href="../../sxr/sbt/Keys.scala.html">Keys</a> より）以下の二つのキーを例に説明する:
+</code></pre><h4 id="%E2%80%B0%C3%A6%C3%B9%C3%82%E2%89%A0%C3%B2%C3%8A%C3%84%C3%9F%E2%80%9E%C3%87%C3%AD%C3%8A%C3%A5%C3%85%E2%80%9E%C3%85%C2%A3%E2%80%9E%C3%85%C3%BC%E2%80%9E%C3%87%C3%B8%E2%80%9E%C3%87%CF%80%E2%80%9E%C3%87%C3%98">‰æùÂ≠òÊÄß„ÇíÊåÅ„Å£„Åü„Çø„Çπ„ÇØ<a href="#%E2%80%B0%C3%A6%C3%B9%C3%82%E2%89%A0%C3%B2%C3%8A%C3%84%C3%9F%E2%80%9E%C3%87%C3%AD%C3%8A%C3%A5%C3%85%E2%80%9E%C3%85%C2%A3%E2%80%9E%C3%85%C3%BC%E2%80%9E%C3%87%C3%B8%E2%80%9E%C3%87%CF%80%E2%80%9E%C3%87%C3%98" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><a href="Basic-Def.html">.sbt „Éì„É´„ÉâÂÆöÁæ©</a>„Åß„Åø„Åü„Çà„ÅÜ„Å´„ÄÅ„Çø„Çπ„ÇØ„Ç≠„Éº„ÅØ <code>:=</code> „Å™„Å©„Åß„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„Çí‰Ωú„Çã„Å® <code>Setting[T]</code> „Åß„ÅØ„Å™„Åè„ÄÅ<code>Setting[Task[T]]</code>„Çí‰Ωú„Çã„ÄÇ
+„Çø„Çπ„ÇØÂÆöÁæ©„ÅÆÂÖ•Âäõ„Å´„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„ÅÆÂÄ§„ÇíÁî®„ÅÑ„Çã„Åì„Å®„Åå„Åß„Åç„Çã„Åå„ÄÅ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞ÂÆöÁæ©„ÅÆÂÖ•Âäõ„Å´„Çø„Çπ„ÇØ„Çí„Å®„Çã„Åì„Å®„ÅØ„Åß„Åç„Å™„ÅÑ„ÄÇ
+</p><p>Ôºà<a href="../../sxr/sbt/Keys.scala.html">Keys</a> „Çà„ÇäÔºâ‰ª•‰∏ã„ÅÆ‰∫å„Å§„ÅÆ„Ç≠„Éº„Çí‰æã„Å´Ë™¨Êòé„Åô„Çã:
 </p><pre><code class="prettyprint lang-scala">val scalacOptions = taskKey[Seq[String]](&quot;Options for the Scala compiler.&quot;)
 val checksums = settingKey[Seq[String]](&quot;The list of checksums to generate and to verify for dependencies.&quot;)
-</code></pre><p>（<code>scalacOptions</code> と <code>checksums</code> はお互い何の関係もない、ただ同じ値の型を持つ二つのキーで片方がタスクというだけだ）
-</p><p><code>build.sbt</code> の中で <code>scalacOptions</code> を <code>checksums</code> のエイリアスにすることはできるが、その逆はできない。例えば、以下の例はコンパイルが通る:
-</p><pre><code class="prettyprint lang-scala">// scalacOptions タスクは checksums セッティングの値を用いて定義される
+</code></pre><p>Ôºà<code>scalacOptions</code> „Å® <code>checksums</code> „ÅØ„Åä‰∫í„ÅÑ‰Ωï„ÅÆÈñ¢‰øÇ„ÇÇ„Å™„ÅÑ„ÄÅ„Åü„Å†Âêå„ÅòÂÄ§„ÅÆÂûã„ÇíÊåÅ„Å§‰∫å„Å§„ÅÆ„Ç≠„Éº„ÅßÁâáÊñπ„Åå„Çø„Çπ„ÇØ„Å®„ÅÑ„ÅÜ„Å†„Åë„Å†Ôºâ
+</p><p><code>build.sbt</code> „ÅÆ‰∏≠„Åß <code>scalacOptions</code> „Çí <code>checksums</code> „ÅÆ„Ç®„Ç§„É™„Ç¢„Çπ„Å´„Åô„Çã„Åì„Å®„ÅØ„Åß„Åç„Çã„Åå„ÄÅ„Åù„ÅÆÈÄÜ„ÅØ„Åß„Åç„Å™„ÅÑ„ÄÇ‰æã„Åà„Å∞„ÄÅ‰ª•‰∏ã„ÅÆ‰æã„ÅØ„Ç≥„É≥„Éë„Ç§„É´„ÅåÈÄö„Çã:
+</p><pre><code class="prettyprint lang-scala">// scalacOptions „Çø„Çπ„ÇØ„ÅØ checksums „Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„ÅÆÂÄ§„ÇíÁî®„ÅÑ„Å¶ÂÆöÁæ©„Åï„Çå„Çã
 scalacOptions := checksums.value
-</code></pre><p>逆方向への依存、つまりタスクの値に依存したセッティングキーの値を定義することはどうしてもできない。
-なぜなら、セッティングキーの値はプロジェクトのロード時に一度だけしか計算されず、毎回再実行されるべきタスクが毎回実行されなくなってしまうからだ。
-</p><pre><code class="prettyprint lang-scala">// checksums セッティングは scalacOptions タスクに関連付けても、値が定まらないかもしれない
+</code></pre><p>ÈÄÜÊñπÂêë„Å∏„ÅÆ‰æùÂ≠ò„ÄÅ„Å§„Åæ„Çä„Çø„Çπ„ÇØ„ÅÆÂÄ§„Å´‰æùÂ≠ò„Åó„Åü„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„Ç≠„Éº„ÅÆÂÄ§„ÇíÂÆöÁæ©„Åô„Çã„Åì„Å®„ÅØ„Å©„ÅÜ„Åó„Å¶„ÇÇ„Åß„Åç„Å™„ÅÑ„ÄÇ
+„Å™„Åú„Å™„Çâ„ÄÅ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„Ç≠„Éº„ÅÆÂÄ§„ÅØ„Éó„É≠„Ç∏„Çß„ÇØ„Éà„ÅÆ„É≠„Éº„ÉâÊôÇ„Å´‰∏ÄÂ∫¶„Å†„Åë„Åó„ÅãË®àÁÆó„Åï„Çå„Åö„ÄÅÊØéÂõûÂÜçÂÆüË°å„Åï„Çå„Çã„Åπ„Åç„Çø„Çπ„ÇØ„ÅåÊØéÂõûÂÆüË°å„Åï„Çå„Å™„Åè„Å™„Å£„Å¶„Åó„Åæ„ÅÜ„Åã„Çâ„Å†„ÄÇ
+</p><pre><code class="prettyprint lang-scala">// checksums „Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„ÅØ scalacOptions „Çø„Çπ„ÇØ„Å´Èñ¢ÈÄ£‰ªò„Åë„Å¶„ÇÇ„ÄÅÂÄ§„ÅåÂÆö„Åæ„Çâ„Å™„ÅÑ„Åã„ÇÇ„Åó„Çå„Å™„ÅÑ
 checksums := scalacOptions.value
-</code></pre><h3 id="%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%92%E7%94%A8%E3%81%84%E3%81%9F%E8%BF%BD%E5%8A%A0%3A++%E3%81%A8">依存性を用いた追加: <code>+=</code> と <code>++=</code><a href="#%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%92%E7%94%A8%E3%81%84%E3%81%9F%E8%BF%BD%E5%8A%A0%3A++%E3%81%A8" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>他のキーを使って既存のセッティングキーやタスクキーへ値を追加するには <code>+=</code> を使えばよい。
-</p><p>例えば、プロジェクト名を使って名付けたカバレッジレポートがあって、それを <code>clean</code> が削除するファイルリストに追加するなら、このようになる:
+</code></pre><h3 id="%E2%80%B0%C3%A6%C3%B9%C3%82%E2%89%A0%C3%B2%C3%8A%C3%84%C3%9F%E2%80%9E%C3%87%C3%AD%C3%81%C3%AE%C2%AE%E2%80%9E%C3%85%C3%91%E2%80%9E%C3%85%C3%BC%C3%8B%C3%B8%CE%A9%C3%82%C3%A4%E2%80%A0%3A++%E2%80%9E%C3%85%C2%AE">‰æùÂ≠òÊÄß„ÇíÁî®„ÅÑ„ÅüËøΩÂä†: <code>+=</code> „Å® <code>++=</code><a href="#%E2%80%B0%C3%A6%C3%B9%C3%82%E2%89%A0%C3%B2%C3%8A%C3%84%C3%9F%E2%80%9E%C3%87%C3%AD%C3%81%C3%AE%C2%AE%E2%80%9E%C3%85%C3%91%E2%80%9E%C3%85%C3%BC%C3%8B%C3%B8%CE%A9%C3%82%C3%A4%E2%80%A0%3A++%E2%80%9E%C3%85%C2%AE" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>‰ªñ„ÅÆ„Ç≠„Éº„Çí‰Ωø„Å£„Å¶Êó¢Â≠ò„ÅÆ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„Ç≠„Éº„ÇÑ„Çø„Çπ„ÇØ„Ç≠„Éº„Å∏ÂÄ§„ÇíËøΩÂä†„Åô„Çã„Å´„ÅØ <code>+=</code> „Çí‰Ωø„Åà„Å∞„Çà„ÅÑ„ÄÇ
+</p><p>‰æã„Åà„Å∞„ÄÅ„Éó„É≠„Ç∏„Çß„ÇØ„ÉàÂêç„Çí‰Ωø„Å£„Å¶Âêç‰ªò„Åë„Åü„Ç´„Éê„É¨„ÉÉ„Ç∏„É¨„Éù„Éº„Éà„Åå„ÅÇ„Å£„Å¶„ÄÅ„Åù„Çå„Çí <code>clean</code> „ÅåÂâäÈô§„Åô„Çã„Éï„Ç°„Ç§„É´„É™„Çπ„Éà„Å´ËøΩÂä†„Åô„Çã„Å™„Çâ„ÄÅ„Åì„ÅÆ„Çà„ÅÜ„Å´„Å™„Çã:
 </p><pre><code class="prettyprint lang-scala">cleanFiles += file(&quot;coverage-report-&quot; + name.value + &quot;.txt&quot;)
 </code></pre><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>
-                        <a href="Library-Dependencies.html"> ライブラリ依存性 </a>                        
+                        <a href="Library-Dependencies.html"> „É©„Ç§„Éñ„É©„É™‰æùÂ≠òÊÄß </a>                        
                         <ul class="language-bar">
         <li><a href="../More-About-Settings.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/More-About-Settings.html"><span class="lang-item lang-ja">日本語</span></a></li><li><a href="../zh-cn/More-About-Settings.html"><span class="lang-item lang-zh-cn">中文 (简体)</span></a></li>
       </ul>
@@ -131,7 +131,7 @@ checksums := scalacOptions.value
       <a name="toc"></a>
       <h4 class="toctitle">Contents</h4>
       <div class="tocbody">
-      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">始める sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">sbt のインストール</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Mac への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Linux への sbt のインストール</a></div></li><li><div><a href="Manual-Installation.html">手動インストール</a></div></li><li><div><a href="Activator-Installation.html">Typesafe Activator (sbt を含む) のインストール</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">ディレクトリ構造</a></div></li><li><div><a href="Running.html">実行</a></div></li><li><div><a href="Basic-Def.html">.sbt ビルド定義</a></div></li><li><div><a href="Scopes.html">スコープ</a></div></li><li><div class="current">他の種類のセッティング</div></li><li><div><a href="Library-Dependencies.html">ライブラリ依存性</a></div></li><li><div><a href="Multi-Project.html">マルチプロジェクト・ビルド</a></div></li><li><div><a href="Using-Plugins.html">プラグインの使用</a></div></li><li><div><a href="Custom-Settings.html">カスタムセッティングとタスク</a></div></li><li><div><a href="Organizing-Build.html">ビルドの整理</a></div></li><li><div><a href="Summary.html">まとめ</a></div></li><li><div><a href="Bare-Def.html">付録: bare .sbt ビルド定義</a></div></li><li><div><a href="Full-Def.html">付録: .scala ビルド定義</a></div></li> </ol></li><li><div><a href="Howto.html">How to</a></div><ol class="toc"> <li><div><a href="Howto-Sequencing.html">逐次実行</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Def.sequential を用いて逐次タスクを定義する</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Def.taskDyn を用いて動的タスクを定義する</a></div></li><li><div><a href="Howto-After-Input-Task.html">インプットタスクの後で何かする</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn を用いた動的インプットタスクの定義</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">コマンドを用いた逐次実行</a></div></li> </ol></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">Âßã„ÇÅ„Çã sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">sbt „ÅÆ„Ç§„É≥„Çπ„Éà„Éº„É´</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Mac „Å∏„ÅÆ sbt „ÅÆ„Ç§„É≥„Çπ„Éà„Éº„É´</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows „Å∏„ÅÆ sbt „ÅÆ„Ç§„É≥„Çπ„Éà„Éº„É´</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Linux „Å∏„ÅÆ sbt „ÅÆ„Ç§„É≥„Çπ„Éà„Éº„É´</a></div></li><li><div><a href="Manual-Installation.html">ÊâãÂãï„Ç§„É≥„Çπ„Éà„Éº„É´</a></div></li><li><div><a href="Activator-Installation.html">Typesafe Activator (sbt „ÇíÂê´„ÇÄ) „ÅÆ„Ç§„É≥„Çπ„Éà„Éº„É´</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">„Éá„Ç£„É¨„ÇØ„Éà„É™ÊßãÈÄ†</a></div></li><li><div><a href="Running.html">ÂÆüË°å</a></div></li><li><div><a href="Basic-Def.html">.sbt „Éì„É´„ÉâÂÆöÁæ©</a></div></li><li><div><a href="Scopes.html">„Çπ„Ç≥„Éº„Éó</a></div></li><li><div class="current">‰ªñ„ÅÆÁ®ÆÈ°û„ÅÆ„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞</div></li><li><div><a href="Library-Dependencies.html">„É©„Ç§„Éñ„É©„É™‰æùÂ≠òÊÄß</a></div></li><li><div><a href="Multi-Project.html">„Éû„É´„ÉÅ„Éó„É≠„Ç∏„Çß„ÇØ„Éà„Éª„Éì„É´„Éâ</a></div></li><li><div><a href="Using-Plugins.html">„Éó„É©„Ç∞„Ç§„É≥„ÅÆ‰ΩøÁî®</a></div></li><li><div><a href="Custom-Settings.html">„Ç´„Çπ„Çø„É†„Çª„ÉÉ„ÉÜ„Ç£„É≥„Ç∞„Å®„Çø„Çπ„ÇØ</a></div></li><li><div><a href="Organizing-Build.html">„Éì„É´„Éâ„ÅÆÊï¥ÁêÜ</a></div></li><li><div><a href="Summary.html">„Åæ„Å®„ÇÅ</a></div></li><li><div><a href="Bare-Def.html">‰ªòÈå≤: bare .sbt „Éì„É´„ÉâÂÆöÁæ©</a></div></li><li><div><a href="Full-Def.html">‰ªòÈå≤: .scala „Éì„É´„ÉâÂÆöÁæ©</a></div></li> </ol></li><li><div><a href="Howto.html">How to</a></div><ol class="toc"> <li><div><a href="Howto-Sequencing.html">ÈÄêÊ¨°ÂÆüË°å</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Def.sequential „ÇíÁî®„ÅÑ„Å¶ÈÄêÊ¨°„Çø„Çπ„ÇØ„ÇíÂÆöÁæ©„Åô„Çã</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Def.taskDyn „ÇíÁî®„ÅÑ„Å¶ÂãïÁöÑ„Çø„Çπ„ÇØ„ÇíÂÆöÁæ©„Åô„Çã</a></div></li><li><div><a href="Howto-After-Input-Task.html">„Ç§„É≥„Éó„ÉÉ„Éà„Çø„Çπ„ÇØ„ÅÆÂæå„Åß‰Ωï„Åã„Åô„Çã</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn „ÇíÁî®„ÅÑ„ÅüÂãïÁöÑ„Ç§„É≥„Éó„ÉÉ„Éà„Çø„Çπ„ÇØ„ÅÆÂÆöÁæ©</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">„Ç≥„Éû„É≥„Éâ„ÇíÁî®„ÅÑ„ÅüÈÄêÊ¨°ÂÆüË°å</a></div></li> </ol></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
           </div>
         </div>
         <div class="header">
@@ -177,7 +177,7 @@ checksums := scalacOptions.value
             <svg class="svg-icon svg-icon-chat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.5 85.2" enable-background="new 0 0 97.5 85.2"><path stroke="#fff" stroke-width="4.282" stroke-linecap="round" stroke-miterlimit="10" d="M27 29.5h-16.3c-4.7 0-8.6 3.9-8.6 8.6v25.7c0 4.7 3.9 8.6 8.6 8.6h2.7c.8 0 1.5.7 1.5 1.5v7.8c0 1.3 1.6 2 2.5 1l9.5-9.5c.5-.5 1.2-.8 2-.8h20.2c4.7 0 8.6-3.9 8.6-8.6v-7.8" fill="none"/><path fill="#fff" d="M85 0h-40c-6.9 0-12.5 5.6-12.5 12.5v33.4c0 2.2 1.8 4.1 4.1 4.1h29.9c.7 0 1.3.3 1.8.7l10 10c1.6 1.6 4.3.5 4.3-1.8v-6.5c0-1.4 1.1-2.5 2.5-2.5 6.9 0 12.5-5.6 12.5-12.5v-25c-.1-6.8-5.8-12.4-12.6-12.4z"/></svg>
           </div>
           <div class="support-detail">
-            <h2>コミュニティー・サポート</h2>
+            <h2>„Ç≥„Éü„É•„Éã„ÉÜ„Ç£„Éº„Éª„Çµ„Éù„Éº„Éà</h2>
             <a href="https://ja.stackoverflow.com/questions/tagged/sbt">StackOverflow</a>
           </div>
         </div>
@@ -186,7 +186,7 @@ checksums := scalacOptions.value
             <svg class="svg-icon svg-icon-typesafe" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 154 154" enable-background="new 0 0 154 154"><path fill="#fff" d="M49.7 114c-4.8 0-8.7-5.1-8.7-9.9v-.2c0-4.8 3.9-7.9 8.7-7.9h100c.9-3 1.6-7 2-11h-84c-4.8 0-8.7-3.7-8.7-8.5s3.9-8.5 8.7-8.5h83.7c-.5-4-1.2-8-2.3-11h-63.4c-4.8 0-8.7-3.7-8.7-8.5s3.9-8.5 8.7-8.5h56c-13.1-23-37.2-37.8-64.7-37.8-41.4 0-75 33.3-75 74.7s33.6 75.6 75 75.6c28.4 0 53.1-15.4 65.8-38.4h-93.1z"/></svg>
           </div>
           <div class="support-detail">
-            <h2>商用サポート</h2>
+            <h2>ÂïÜÁî®„Çµ„Éù„Éº„Éà</h2>
             <a href="http://typesafe.com/subscription">Typesafe Subscription</a>
             <a href="http://typesafe.com/subscription/training">Training</a>
             <a href="http://typesafe.com/subscription/consulting">Consulting</a>

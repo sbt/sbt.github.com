@@ -60,6 +60,16 @@ in.
 </li><li>Send a pull req to <a href="https://github.com/sbt/website">sbt/website</a> and add your plugin on <a href="Community-Plugins.html">the plugins list</a>.
 </li></ol><h3 id="Don%E2%80%99t+use+default+package">Don’t use default package<a href="#Don%E2%80%99t+use+default+package" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Users who have their build files in some package will not be able to use
 your plugin if it’s defined in default (no-name) package.
+</p><h3 id="Follow+the+naming+conventions">Follow the naming conventions<a href="#Follow+the+naming+conventions" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Use the <code>sbt-$projectname</code> scheme to name your library and artifact.
+A plugin ecosystem with a consistent naming convention makes it easier for users to tell whether a
+project or dependency is an SBT plugin.
+</p><p>If the project’s name is <code>foobar</code> the following holds:
+</p><ul><li>BAD: <code>foobar</code>
+</li><li>BAD: <code>foobar-sbt</code>
+</li><li>BAD: <code>sbt-foobar-plugin</code>
+</li><li>GOOD: <code>sbt-foobar</code>
+</li></ul><p>If your plugin provides an obvious “main” task, consider naming it <code>foobar</code> or <code>foobar...</code> to make
+it more intuitive to explore the capabilities of your plugin within the sbt shell and tab-completion.
 </p><h3 id="Use+settings+and+tasks.+Avoid+commands.">Use settings and tasks. Avoid commands.<a href="#Use+settings+and+tasks.+Avoid+commands." class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Your plugin should fit in naturally with the rest of the sbt ecosystem.
 The first thing you can do is to avoid defining <a href="Commands.html">commands</a>,
 and use settings and <a href="Tasks.html">tasks</a> and task-scoping instead (see below for more on task-scoping).

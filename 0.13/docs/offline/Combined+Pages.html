@@ -1944,7 +1944,7 @@ extensible source code statistics)
 </li><li>sbt-deploy: <a href="https://github.com/reaktor/sbt-deploy">https://github.com/reaktor/sbt-deploy</a>
 </li><li>sbt-appbundle (os x standalone):
 <a href="https://github.com/sbt/sbt-appbundle">https://github.com/sbt/sbt-appbundle</a>
-</li><li>sbt-onejar (Packages your project using One-JAR™):
+</li><li>sbt-onejar (Packages your project using One-JAR‚Ñ¢):
 <a href="https://github.com/sbt/sbt-onejar">https://github.com/sbt/sbt-onejar</a>
 </li></ul><h4 id="Release+plugins">Release plugins<a href="#Release+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>sbt-native-packager: <a href="https://github.com/sbt/sbt-native-packager">https://github.com/sbt/sbt-native-packager</a>
 </li><li>sbt-ghpages (publishes generated site and api):
@@ -2105,6 +2105,8 @@ simultaneously):
 <a href="https://github.com/fedragon/sbt-todolist">https://github.com/fedragon/sbt-todolist</a>
 </li><li>sbt-ortho (simple spell and English style checker):
 <a href="https://github.com/henrikengstrom/sbt-ortho">https://github.com/henrikengstrom/sbt-ortho</a>
+</li><li>sbt-write-output-to-file (redirect the output of <code>run</code> to a file):
+<a href="https://github.com/cb372/sbt-write-output-to-file">https://github.com/cb372/sbt-write-output-to-file</a>
 </li></ul><h4 id="Database+plugins">Database plugins<a href="#Database+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>flyway-sbt (Flyway - The agile database migration framework):
 <a href="http://flywaydb.org/getstarted/firststeps/sbt.html">http://flywaydb.org/getstarted/firststeps/sbt.html</a>
 </li><li>sbt-liquibase (Liquibase RDBMS database migrations):
@@ -2178,6 +2180,8 @@ code): <a href="https://github.com/sbt/sbt-boilerplate">https://github.com/sbt/s
 </li><li>android-sdk-plugin: <a href="https://github.com/pfn/android-sdk-plugin">https://github.com/pfn/android-sdk-plugin</a>
 </li></ul><h4 id="iOS+plugins">iOS plugins<a href="#iOS+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>sbt-robovm (Compiling Scala using RoboVM for iOS or native OSX): <a href="https://github.com/roboscala/sbt-robovm">https://github.com/roboscala/sbt-robovm</a>
 </li></ul><h4 id="OSGi+plugin">OSGi plugin<a href="#OSGi+plugin" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>sbtosgi: <a href="https://github.com/sbt/sbt-osgi">https://github.com/sbt/sbt-osgi</a>
+</li></ul><h4 id="C%2B%2B+interop+plugins">C++ interop plugins<a href="#C%2B%2B+interop+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>sbt-javacpp (JavaCPP is the missing bridge between Java and native C++; this lib helps you download platform-specific presets): <a href="https://github.com/lloydmeta/sbt-javacpp">https://github.com/lloydmeta/sbt-javacpp</a>
+</li></ul><h4 id="Computer+vision+plugins">Computer vision plugins<a href="#Computer+vision+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>sbt-opencv (Start an OpenCV via JavaCV project in 1 line): <a href="https://github.com/lloydmeta/sbt-opencv">https://github.com/lloydmeta/sbt-opencv</a>
 </li></ul><h4 id="Plugin+bundles">Plugin bundles<a href="#Plugin+bundles" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>tl-os-sbt-plugins (Version, Release, and Package Management, Play 2.0 and Git utilities) :
 <a href="https://github.com/trafficland/tl-os-sbt-plugins">https://github.com/trafficland/tl-os-sbt-plugins</a>
 </li></ul><h2 id="Community+Repository+Policy">Community Repository Policy<a href="#Community+Repository+Policy" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>The community repository has the following guideline for artifacts
@@ -2562,7 +2566,7 @@ Currently, you set it like any other setting:
 </p></blockquote><pre><code class="">warn test:run
 </code></pre><p>Also, trace is currently an integer, but should really be an abstract
 data type.
-</p><p>​7. Each sbt version has more aggressive incremental compilation and
+</p><p>‚Äã7. Each sbt version has more aggressive incremental compilation and
 reproducing bugs can be difficult. It would be helpful to have a mode
 that generates a diff between successive compilations and records the
 options passed to scalac. This could be replayed or inspected to try to
@@ -2885,7 +2889,7 @@ Maven 3 and Ivy 2), we attempt to use <code>LastModified</code> timestamp in lie
 </li><li>Revert <code>useLatestSnapshot</code> on <code>updateOptions</code> to default to <code>false</code>.  Reverts chain resolver to previous behavior.  <a href="https://github.com/sbt/sbt/pull/1683">#1683</a> by <a href="https://github.com/jsuereth">@jsuereth</a>
 </li></ul><h3 id="Natural+whitespace+handling">Natural whitespace handling<a href="#Natural+whitespace+handling" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Starting sbt 0.13.7, build.sbt will be parsed using a customized Scala parser. This eliminates the requirement to use blank line as the delimiter between each settings, and also allows blank lines to be inserted at arbitrary position within a block.
 </p><p>This feature can be disabled, if necessary, via the -Dsbt.parser.simple=true flag.
-</p><p>This feature was contributed by <a href="https://github.com/ajozwik">Andrzej Jozwik (@ajozwik)</a>, <a href="https://github.com/rkrzewski">Rafał Krzewski (@rkrzewski)</a> and others at <a href="https://github.com/WarsawScala">@WarsawScala</a> inspired by Typesafe’s <a href="https://github.com/gkossakowski">@gkossakowski</a> organizing multiple <a href="http://blog.japila.pl/2014/07/gkossakowski-on-warszawscala-about-how-to-patch-scalasbt/">meetups</a> and <a href="http://blog.japila.pl/2014/07/hacking-scalasbt-with-gkossakowski-on-warszawscala-meetup-in-javeo_eu/">hackathons</a> on how to patch sbt with the focus on this blank line issue. Dziękujemy! <a href="https://github.com/sbt/sbt/issues/1606">#1606</a>
+</p><p>This feature was contributed by <a href="https://github.com/ajozwik">Andrzej Jozwik (@ajozwik)</a>, <a href="https://github.com/rkrzewski">Rafa≈Ç Krzewski (@rkrzewski)</a> and others at <a href="https://github.com/WarsawScala">@WarsawScala</a> inspired by Typesafe’s <a href="https://github.com/gkossakowski">@gkossakowski</a> organizing multiple <a href="http://blog.japila.pl/2014/07/gkossakowski-on-warszawscala-about-how-to-patch-scalasbt/">meetups</a> and <a href="http://blog.japila.pl/2014/07/hacking-scalasbt-with-gkossakowski-on-warszawscala-meetup-in-javeo_eu/">hackathons</a> on how to patch sbt with the focus on this blank line issue. Dziƒôkujemy! <a href="https://github.com/sbt/sbt/issues/1606">#1606</a>
 </p><h3 id="Custom+Maven+local+repository+location">Custom Maven local repository location<a href="#Custom+Maven+local+repository+location" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Maven local repository is now resolved from the first of:
 </p><ul><li><code>&lt;localRepository/&gt;</code> element in <code>~/.m2/settings.xml</code>
 </li><li><code>&lt;localRepository/&gt;</code> element in <code>$M2_HOME/conf/settings.xml</code>, or
@@ -4637,7 +4641,7 @@ information in the
 a foundation.
 </p><p>Other resources include the
 <a href="Howto.html">How to</a> and
-<a href="Developers-Guide.html">Developer’s Guide</a>
+<a href="Developers-Guide.html">Developer‚Äôs Guide</a>
 sections in this reference, and the
 <a href="../api/index.html">API Documentation</a>
 </p><h2 id="Using+sbt">Using sbt<a href="#Using+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>This part of the documentation has pages documenting particular sbt
@@ -5780,7 +5784,7 @@ a trait.
 abstract method called <code>fullyQualifiedTraitName$$super$methodName</code>;
 such methods only exist if they are used. Hence, adding the first
 call to super.methodName for a specific methodName changes the
-interface. At present, this is not yet handled—see <a href="https://github.com/sbt/sbt/issues/466">#466</a>.
+interface. At present, this is not yet handled‚Äîsee <a href="https://github.com/sbt/sbt/issues/466">#466</a>.
 </li><li><code>sealed</code> hierarchies of case classes allow to check exhaustiveness
 of pattern matching. Hence pattern matches using case classes must
 depend on the complete hierarchy - this is one reason why
@@ -9815,7 +9819,7 @@ integrate.
 The plugin can be used as described in the previous section.
 </p><p>First, in an appropriate namespace, define your auto plugin object
 by extending <code>sbt.AutoPlugin</code>.
-</p><h4 id="projectSettings+and+buildSettings">projectSettings and buildSettings<a href="#projectSettings+and+buildSettings" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>With auto plugins, all provided settings (e.g. <code>assemblySettings</code>) are provided by the plugin directly via the <code>projectSettings</code> method. Here’s an example plugin that adds a command named hello to sbt projects:
+</p><h4 id="projectSettings+and+buildSettings">projectSettings and buildSettings<a href="#projectSettings+and+buildSettings" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>With auto plugins, all provided settings (e.g. <code>assemblySettings</code>) are provided by the plugin directly via the <code>projectSettings</code> method. Here‚Äôs an example plugin that adds a command named hello to sbt projects:
 </p><pre><code class="prettyprint lang-scala">package sbthello
 
 import sbt._
@@ -9893,7 +9897,9 @@ object SbtLessPlugin extends AutoPlugin {
 </p><p>This allows plugins to silently, and correctly, extend existing plugins with more features.  It also can help remove the burden of ordering from the user, allowing the plugin authors greater freedom and power when providing feature for their users.
 </p><h4 id="Controlling+the+import+with+autoImport">Controlling the import with autoImport<a href="#Controlling+the+import+with+autoImport" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>When an auto plugin provides a stable field such as <code>val</code> or <code>object</code>
 named <code>autoImport</code>, the contents of the field are wildcard imported
-in <code>set</code>, <code>eval</code>, and <code>.sbt</code> files.
+in <code>set</code>, <code>eval</code>, and <code>.sbt</code> files. In the next example, we’ll replace
+our hello command with a task to get the value of <code>greeting</code> easily.
+In practice, it’s recommended <a href="Plugins-Best-Practices.html#Use+settings+and+tasks.+Avoid+commands.">to prefer settings or tasks to commands</a>.
 </p><pre><code class="prettyprint lang-scala">package sbthello
 
 import sbt._
@@ -9902,16 +9908,16 @@ import Keys._
 object HelloPlugin3 extends AutoPlugin {
   object autoImport {
     val greeting = settingKey[String](&quot;greeting&quot;)
+    val hello = taskKey[Unit](&quot;say hello&quot;)
   }
   import autoImport._
   override def trigger = allRequirements
   override lazy val buildSettings = Seq(
     greeting := &quot;Hi!&quot;,
-    commands += helloCommand)
-  lazy val helloCommand =
-    Command.command(&quot;hello&quot;) { (state: State) =&gt;
+    hello := helloTask.value)
+  lazy val helloTask =
+    Def.task {
       println(greeting.value)
-      state
     }
 }
 </code></pre><p>Typically, <code>autoImport</code> is used to provide new keys - <code>SettingKey</code>s, <code>TaskKey</code>s,
@@ -10068,6 +10074,16 @@ in.
 </li><li>Send a pull req to <a href="https://github.com/sbt/website">sbt/website</a> and add your plugin on <a href="Community-Plugins.html">the plugins list</a>.
 </li></ol><h3 id="Don%E2%80%99t+use+default+package">Don’t use default package<a href="#Don%E2%80%99t+use+default+package" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Users who have their build files in some package will not be able to use
 your plugin if it’s defined in default (no-name) package.
+</p><h3 id="Follow+the+naming+conventions">Follow the naming conventions<a href="#Follow+the+naming+conventions" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Use the <code>sbt-$projectname</code> scheme to name your library and artifact.
+A plugin ecosystem with a consistent naming convention makes it easier for users to tell whether a
+project or dependency is an SBT plugin.
+</p><p>If the project’s name is <code>foobar</code> the following holds:
+</p><ul><li>BAD: <code>foobar</code>
+</li><li>BAD: <code>foobar-sbt</code>
+</li><li>BAD: <code>sbt-foobar-plugin</code>
+</li><li>GOOD: <code>sbt-foobar</code>
+</li></ul><p>If your plugin provides an obvious “main” task, consider naming it <code>foobar</code> or <code>foobar...</code> to make
+it more intuitive to explore the capabilities of your plugin within the sbt shell and tab-completion.
 </p><h3 id="Use+settings+and+tasks.+Avoid+commands.">Use settings and tasks. Avoid commands.<a href="#Use+settings+and+tasks.+Avoid+commands." class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Your plugin should fit in naturally with the rest of the sbt ecosystem.
 The first thing you can do is to avoid defining <a href="Commands.html">commands</a>,
 and use settings and <a href="Tasks.html">tasks</a> and task-scoping instead (see below for more on task-scoping).
