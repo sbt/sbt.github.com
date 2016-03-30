@@ -3126,7 +3126,7 @@ your plugin to the list.
 -   sbt-deploy: <https://github.com/reaktor/sbt-deploy>
 -   sbt-appbundle (os x standalone):
     <https://github.com/sbt/sbt-appbundle>
--   sbt-onejar (Packages your project using One-JAR‚Ñ¢):
+-   sbt-onejar (Packages your project using One-JAR™):
     <https://github.com/sbt/sbt-onejar>
 
 #### Release plugins
@@ -4023,7 +4023,7 @@ warn test:run
 Also, trace is currently an integer, but should really be an abstract
 data type.
 
-‚Äã7. Each sbt version has more aggressive incremental compilation and
+​7. Each sbt version has more aggressive incremental compilation and
 reproducing bugs can be difficult. It would be helpful to have a mode
 that generates a diff between successive compilations and records the
 options passed to scalac. This could be replayed or inspected to try to
@@ -4756,7 +4756,7 @@ Starting sbt 0.13.7, build.sbt will be parsed using a customized Scala parser. T
 
 This feature can be disabled, if necessary, via the -Dsbt.parser.simple=true flag.
 
-This feature was contributed by [Andrzej Jozwik (@ajozwik)](https://github.com/ajozwik), [Rafa≈Ç Krzewski (@rkrzewski)][@rkrzewski] and others at [@WarsawScala][@WarsawScala] inspired by Typesafe's [@gkossakowski][@gkossakowski] organizing multiple [meetups](http://blog.japila.pl/2014/07/gkossakowski-on-warszawscala-about-how-to-patch-scalasbt/) and [hackathons](http://blog.japila.pl/2014/07/hacking-scalasbt-with-gkossakowski-on-warszawscala-meetup-in-javeo_eu/) on how to patch sbt with the focus on this blank line issue. Dziƒôkujemy! [#1606][1606]
+This feature was contributed by [Andrzej Jozwik (@ajozwik)](https://github.com/ajozwik), [Rafał Krzewski (@rkrzewski)][@rkrzewski] and others at [@WarsawScala][@WarsawScala] inspired by Typesafe's [@gkossakowski][@gkossakowski] organizing multiple [meetups](http://blog.japila.pl/2014/07/gkossakowski-on-warszawscala-about-how-to-patch-scalasbt/) and [hackathons](http://blog.japila.pl/2014/07/hacking-scalasbt-with-gkossakowski-on-warszawscala-meetup-in-javeo_eu/) on how to patch sbt with the focus on this blank line issue. Dziękujemy! [#1606][1606]
 
 ### Custom Maven local repository location
 
@@ -7089,7 +7089,7 @@ a foundation.
 
 Other resources include the
 [How to][Howto] and
-[Developer‚Äôs Guide][Developers-Guide]
+[Developer’s Guide][Developers-Guide]
 sections in this reference, and the
 [API Documentation](../api/index.html)
 
@@ -8783,7 +8783,7 @@ just to illustrate the ideas; this list is not intended to be complete.
     abstract method called `fullyQualifiedTraitName$$super$methodName`;
     such methods only exist if they are used. Hence, adding the first
     call to super.methodName for a specific methodName changes the
-    interface. At present, this is not yet handled‚Äîsee [#466][466].
+    interface. At present, this is not yet handled—see [#466][466].
 4.  `sealed` hierarchies of case classes allow to check exhaustiveness
     of pattern matching. Hence pattern matches using case classes must
     depend on the complete hierarchy - this is one reason why
@@ -15348,7 +15348,7 @@ by extending `sbt.AutoPlugin`.
 
 #### projectSettings and buildSettings
 
-With auto plugins, all provided settings (e.g. `assemblySettings`) are provided by the plugin directly via the `projectSettings` method. Here‚Äôs an example plugin that adds a command named hello to sbt projects:
+With auto plugins, all provided settings (e.g. `assemblySettings`) are provided by the plugin directly via the `projectSettings` method. Here’s an example plugin that adds a command named hello to sbt projects:
 
 ```scala
 package sbthello
