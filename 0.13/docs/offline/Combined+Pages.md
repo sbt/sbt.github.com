@@ -129,7 +129,7 @@ Ultimately, the installation of sbt boils down to a launcher JAR
 and a shell script, but depending on your platform, we provide
 several ways to make the process less tedious.  Head over to the
 installation steps for [Mac][Mac], [Windows][Windows],
-[Linux][Linux], [Typesafe Activator][Activator-Installation], or
+[Linux][Linux], [Lightbend Activator][Activator-Installation], or
 [manual installation][Manual-Installation].
 
 ### Tips and Notes
@@ -168,9 +168,9 @@ $ brew install sbt
 
 Download [ZIP][ZIP] or [TGZ][TGZ] package, and expand it.
 
-### Typesafe Activator
+### Lightbend Activator
 
-See the [Typesafe Activator instructions][Activator-Installation].
+See the [Lightbend Activator instructions][Activator-Installation].
 
 ### Installing manually
 
@@ -193,9 +193,9 @@ Download [msi installer][MSI] and install it.
 
 Download [ZIP][ZIP] or [TGZ][TGZ] package and expand it.
 
-### Typesafe Activator
+### Lightbend Activator
 
-See the [Typesafe Activator instructions][Activator-Installation].
+See the [Lightbend Activator instructions][Activator-Installation].
 
 ### Installing manually
 
@@ -265,9 +265,9 @@ To merge sbt from this ebuilds you can do:
 > **Note:** Please report any issues with the ebuild
 > [here](https://github.com/whiter4bbit/overlays/issues).
 
-### Typesafe Activator
+### Lightbend Activator
 
-See the [Typesafe Activator instructions][Activator-Installation].
+See the [Lightbend Activator instructions][Activator-Installation].
 
 ### Installing manually
 
@@ -371,10 +371,10 @@ need to be checked if your erase key is the cygwin default of ^H.
 
   [Manual-Installation]: Manual-Installation.html
 
-Installing Typesafe Activator (including sbt)
+Installing Lightbend Activator (including sbt)
 ---------------------
 
-Typesafe Activator is a custom version of sbt which adds two extra
+Lightbend Activator is a custom version of sbt which adds two extra
 commands, `activator ui` and `activator new`. The `activator`
 command is a superset of sbt, in short.
 
@@ -3101,6 +3101,7 @@ your plugin to the list.
     Scala static analysis)
 -   cpd4sbt: <https://github.com/sbt/cpd4sbt> (copy/paste detection,
     works for Scala, too)
+-   sbt-findbugs-plugin: <https://github.com/lenioapp/sbt-findbugs-plugin> (FindBugs - static analysis for Java code)
 -   findbugs4sbt: <https://github.com/sbt/findbugs4sbt> (FindBugs only
     supports Java projects atm)
 -   scalastyle: <https://github.com/scalastyle/scalastyle-sbt-plugin>
@@ -3112,6 +3113,8 @@ your plugin to the list.
     (Checkstyle - static analysis for Java code)
 -   sbt-jcheckstyle: <https://github.com/xerial/sbt-jcheckstyle>
     (handy checkstyle runner for Java projects)
+-   sbt-verify-plugin: <https://github.com/lenioapp/sbt-verify-plugin>
+    (statically verify the integrity of downloaded dependencies)
 
 #### One jar plugins
 
@@ -3192,6 +3195,8 @@ your plugin to the list.
 -   sbt-phantomjs (Automated installer and configurator for PhantomJS): <https://github.com/saturday06/sbt-phantomjs>
 -   sbt-play-scalajs: <https://github.com/vmunier/sbt-play-scalajs>
 -   scalatra-sbt: <https://github.com/scalatra/scalatra-sbt>
+-   sbt-scala-js-map (Configures source mapping for Scala.js projects hosted on Github):
+    <https://github.com/ThoughtWorksInc/sbt-scala-js-map>
 
 #### Documentation plugins
 
@@ -3320,6 +3325,8 @@ your plugin to the list.
     <https://github.com/bigtoast/sbt-liquibase>
 -   sbt-dbdeploy (dbdeploy, a database change management tool):
     <https://github.com/mr-ken/sbt-dbdeploy>
+-   sbt-pillar (tasks for managing Cassandra DB migrations using Pillar library):
+    <https://github.com/henders/sbt-pillar-plugin>
 
 #### Code generator plugins
 
@@ -16361,6 +16368,225 @@ notifications:
 ```
 
 
+  [sbtScriptedTests]: https://github.com/sbt/sbt/tree/0.13/sbt/src/sbt-test
+  [xsbt-web-plugin]: https://github.com/JamesEarlDouglas/xsbt-web-plugin/tree/master/src/sbt-test
+  [sbt-assembly]: https://github.com/sbt/sbt-assembly/tree/master/src/sbt-test/sbt-assembly
+  [feabb2]: https://github.com/JamesEarlDouglas/xsbt-web-plugin/commit/feabb2eb554940d9b28049bd0618b6a790d9e141
+
+Testing sbt plugins
+-------------------
+
+Let's talk about testing. Once you write a plugin, it turns into a long-term thing. To keep adding new features (or to keep fixing bugs), writing tests makes sense.
+
+### scripted test framework
+
+sbt comes with scripted test framework, which let's you script a build scenario. It was written to test sbt itself on complex scenarios -- such as change detection and partial compilation:
+
+> Now, consider what happens if you were to delete B.scala but do not update A.scala. When you recompile, you should get an error because B no longer exists for A to reference.
+> [... (really complicated stuff)]
+>
+> The scripted test framework is used to verify that sbt handles cases such as that described above.
+
+The framework is made available via scripted-plugin. The rest of this page explains how to include the scripted-plugin into your plugin.
+
+### step 1: snapshot
+
+Before you start, set your version to a **-SNAPSHOT** one because scripted-plugin will publish your plugin locally. If you don't use SNAPSHOT, you could get into a horrible inconsistent state of you and the rest of the world seeing different artifacts.
+
+### step 2: scripted-plugin
+
+Add scripted-plugin to your plugin build. `project/scripted.sbt`:
+
+```scala
+libraryDependencies += { "org.scala-sbt" % "scripted-plugin" % sbtVersion.value }
+```
+
+Then add the following settings to `scripted.sbt`:
+
+```scala
+ScriptedPlugin.scriptedSettings
+scriptedLaunchOpts := { scriptedLaunchOpts.value ++
+  Seq("-Xmx1024M", "-XX:MaxPermSize=256M", "-Dplugin.version=" + version.value)
+}
+scriptedBufferLog := false
+```
+
+### step 3: src/sbt-test
+
+Make dir structure `src/sbt-test/<test-group>/<test-name>`. For starters, try something like `src/sbt-test/<your-plugin-name>/simple`.
+
+Now ready? Create an initial build in `simple`. Like a real build using your plugin. I'm sure you already have several of them to test manually. Here's an example `build.sbt`:
+
+```scala
+lazy val root = (project in file(".")).
+  settings(
+    version := "0.1",
+    scalaVersion := "2.10.6",
+    assemblyJarName in assembly := "foo.jar"
+  )
+```
+
+In `project/plugins.sbt`:
+
+```scala
+sys.props.get("plugin.version") match {
+  case Some(x) => addSbtPlugin("com.eed3si9n" % "sbt-assembly" % x)
+  case _ => sys.error("""|The system property 'plugin.version' is not defined.
+                         |Specify this property using the scriptedLaunchOpts -D.""".stripMargin)
+}
+```
+
+This a trick I picked up from [JamesEarlDouglas/xsbt-web-plugin@feabb2][feabb2], which allows us to pass version number into the test.
+
+I also have `src/main/scala/hello.scala`:
+
+```scala
+object Main extends App {
+  println("hello")
+}
+```
+
+### step 4: write a script
+
+Now, write a script to describe your scenario in a file called `test` located at the root dir of your test project.
+
+```
+# check if the file gets created
+> assembly
+$ exists target/scala-2.10/foo.jar
+```
+
+Here is the syntax for the script:
+
+1. **`#`** starts a one-line comment
+2. **`>`** `name` sends a task to sbt (and tests if it succeeds)
+3. **`$`** `name arg*` performs a file command (and tests if it succeeds)
+4. **`->`** `name` sends a task to sbt, but expects it to fail
+5. **`-$`** `name arg*` performs a file command, but expects it to fail
+
+File commands are:
+
+- **`touch`** `path+` creates or updates the timestamp on the files
+- **`delete`** `path+` deletes the files
+- **`exists`** `path+` checks if the files exist
+- **`mkdir`** `path+` creates dirs
+- **`absent`** `path+` checks if the files don't exist
+- **`newer`** `source target` checks if `source` is newer
+- **`must-mirror`** `source target` checks if `source` is identical
+- **`pause`** pauses until enter is pressed
+- **`sleep`** `time` sleeps
+- **`exec`** `command args*` runs the command in another process
+- **`copy-file`** `fromPath toPath` copies the file
+- **`copy`** `fromPath+ toDir` copies the paths to `toDir` preserving relative structure
+- **`copy-flat`** `fromPath+ toDir` copies the paths to `toDir` flat
+
+So my script will run `assembly` task, and checks if `foo.jar` gets created. We'll cover more complex tests later.
+
+### step 5: run the script
+To run the scripts, go back to your plugin project, and run:
+
+```
+> scripted
+```
+
+This will copy your test build into a temporary dir, and executes the `test` script. If everything works out, you'd see `publishLocal` running, then:
+
+```
+Running sbt-assembly / simple
+[success] Total time: 18 s, completed Sep 17, 2011 3:00:58 AM
+```
+
+### step 6: custom assertion
+
+The file commands are great, but not nearly enough because none of them test the actual contents. An easy way to test the contents is to implement a custom task in your test build.
+
+For my hello project, I'd like to check if the resulting jar prints out "hello". I can take advantage of `sbt.Process` to run the jar. To express a failure, just throw an error. Here's `build.sbt`:
+
+```scala
+lazy val root = (project in file(".")).
+  settings(
+    version := "0.1",
+    scalaVersion := "2.10.6",
+    assemblyJarName in assembly := "foo.jar",
+    TaskKey[Unit]("check") := {
+      val process = sbt.Process("java", Seq("-jar", (crossTarget.value / "foo.jar").toString))
+      val out = (process!!)
+      if (out.trim != "bye") error("unexpected output: " + out)
+      ()
+    }
+  )
+```
+
+I am intentionally testing if it matches "bye", to see how the test fails.
+
+Here's `test`:
+
+```
+# check if the file gets created
+> assembly
+$ exists target/foo.jar
+
+# check if it says hello
+> check
+```
+
+Running `scripted` fails the test as expected:
+
+```
+[info] [error] {file:/private/var/folders/Ab/AbC1EFghIj4LMNOPqrStUV+++XX/-Tmp-/sbt_cdd1b3c4/simple/}default-0314bd/*:check: unexpected output: hello
+[info] [error] Total time: 0 s, completed Sep 21, 2011 8:43:03 PM
+[error] x sbt-assembly / simple
+[error]    {line 6}  Command failed: check failed
+[error] {file:/Users/foo/work/sbt-assembly/}default-373f46/*:scripted: sbt-assembly / simple failed
+[error] Total time: 14 s, completed Sep 21, 2011 8:00:00 PM
+```
+
+### step 7: testing the test
+Until you get the hang of it, it might take a while for the test itself to behave correctly. There are several techniques that may come in handy.
+
+First place to start is turning off the log buffering.
+
+
+```
+> set scriptedBufferLog := false
+```
+
+This for example should print out the location of the temporary dir:
+
+```
+[info] [info] Set current project to default-c6500b (in build file:/private/var/folders/Ab/AbC1EFghIj4LMNOPqrStUV+++XX/-Tmp-/sbt_8d950687/simple/project/plugins/)
+...
+```
+
+Add the following line to your `test` script to suspend the test until you hit the enter key:
+
+```
+$ pause
+```
+
+If you're thinking about going down to the `sbt/sbt-test/sbt-foo/simple` and running `sbt`, don't do it. The right way, is to copy the dir somewhere else and run it.
+
+### step 8: get inspired
+
+There are literally [100+ scripted tests][sbtScriptedTests] under sbt project itself. Browse around to get inspirations.
+
+For example, here's the one called by-name.
+
+```
+> compile
+
+# change => Int to Function0
+$ copy-file changes/A.scala A.scala
+
+# Both A.scala and B.scala need to be recompiled because the type has changed
+-> compile
+```
+
+[xsbt-web-plugin][xsbt-web-plugin] and [sbt-assembly][sbt-assembly] have some scripted tests too.
+
+That's it! Let me know about your experience in testing plugins!
+
+
 How to...
 ---------
 
@@ -21210,214 +21436,9 @@ An error is generated if none of these attempts succeed.
 
 The default configuration file for sbt as an application looks like:
 
-Let's look at all the launcher configuration sections in detail:
-
-#### 1. Scala Configuration
-
-The `[scala]` section is used to configure the version of Scala. It has
-one property:
-
--   `version` - The version of scala an application uses, or `auto` if
-    the application is not cross-versioned.
--   `classifiers` - The (optional) list of additional scala artifacts to
-    resolve, e.g. sources.
-
-#### 2. Application Identification
-
-The `[app]` section configures how the launcher will look for your
-application using the Ivy dependency manager. It consists of the
-following properties:
-
--   `org` - The organization associated with the Ivy module. (groupId in
-    maven vernacular)
--   `name` - The name of the Ivy module. (`artifactId` in maven
-    vernacular)
--   `version` - The revision of the Ivy module.
--   `class` - The name of the "entry point" into the application. An
-    entry point must be a class which meets one of the following critera
-    -   Extends the xsbti.AppMain interface.
-    -   Extends the xsbti.ServerMain interfaces.
-    -   Contains a method with the signature static void main(String[])
-    -   Contains a method with the signature static int main(String[])
-
-    - Contains a method with the signature
-    static xsbti.Exit main(String[])
--   `components` - An optional list of additional components that Ivy
-    should resolve.
--   `cross-versioned` - An optional string denoting how this application
-    is published. If app.cross-versioned is binary, the resolved module
-    ID is
-    `{app.name+'_'+CrossVersion.binaryScalaVersion(scala.version)}`. If
-    app.cross-versioned is true or full, the resolved module ID is
-    `{app.name+'_'+scala.version}`. The scala.version property must be
-    specified and cannot be auto when cross-versioned.
--   `resources` - An optional list of jar files that should be added to
-    the application's classpath.
--   `classifiers` - An optional list of additional classifiers that
-    should be resolved with this application, e.g. sources.
-
-#### 3. Repositories Section
-
-The `[repositories]` section configures where and how Ivy will look for
-your application. Each line denotes a repository where Ivy will look.
-
-*Note: This section configured the default location where Ivy will look,
-but this can be overriden via user configuration.*
-
-There are several built-in strings that can be used for common
-repositories:
-
--   `local` - the local ivy repository `~/.ivy2/local`.
--   `maven-local` - The local maven repository `~/.m2/repository`.
--   `maven-central` - The maven central repository `repo.maven.org`.
-
-Besides built in repositories, other repositories can be configured
-using the following syntax:
-
-> name: url(, pattern)(,descriptorOptional)(,skipConsistencyCheck)
-
-The `name` property is an identifier which Ivy uses to cache modules
-resolved from this location. The `name` should be unique across all
-repositories.
-
-The `url` property is the base `url` where Ivy should look for modules.
-
-The `pattern` property is an optional specification of *how* Ivy should
-look for modules. By default, the launcher assumes repositories are in
-the maven style format.
-
-The `skipConsistencyCheck` string is used to tell ivy not to validate
-checksums and signatures of files it resolves.
-
-#### 4. The Boot section
-
-The `[boot]` section is used to configure where the sbt launcher will
-store its cache and configuration information. It consists of the
-following properties:
-
--   `directory` - The directory defined here is used to store all cached
-    JARs resolved launcher.
--   `properties` - (optional) A properties file to use for any `read`
-    variables.
-
-#### 5. The Ivy section
-
-The `[ivy]` section is used to configure the Ivy dependency manager for
-resolving applications. It consists of the following properties:
-
--   `ivy-home` - The home directory for Ivy. This determines where the
-    ivy-local repository is located, and also where the ivy cache is
-    stored. Defaults to `~/.ivy2`
--   `checksums` - The comma-separated list of checksums that Ivy should
-    use to verify artifacts have correctly resolved, e.g. md5 or sha1.
--   `override-build-repos` - If this is set, then the
-    `isOverrideRepositories` method on xsbti.Launcher interface will
-    return its value. The use of this method is application specific,
-    but in the case of sbt denotes that the configuration of
-    repositories in the launcher should override those used by any
-    build. Applications should respect this convention if they can.
--   `repository-config` - This specifies a configuration location where
-    ivy repositories can also be configured. If this file exists, then
-    its contents override the [repositories] section.
-
-#### 6. The Server Section
-
-When using the `--locate` feature of the launcher, this section
-configures how a server is started. It consists of the following
-properties:
-
--   `lock` - The file that controls access to the running server. This
-    file will contain the active port used by a server and must be
-    located on a a filesystem that supports locking.
--   `jvmargs` - A file that contains line-separated JVM arguments that where
-    :   use when starting the server.
-
--   `jvmprops` - The location of a properties file that will define
-    override properties in the server. All properties defined in this
-    file will be set as -D java properties.
-
-### Variable Substitution
-
-Property values may include variable substitutions. A variable
-substitution has one of these forms:
-
--   `${variable.name}`
--   `${variable.name-default}`
-
-where `variable.name` is the name of a system property. If a system
-property by that name exists, the value is substituted. If it does not
-exists and a default is specified, the default is substituted after
-recursively substituting variables in it. If the system property does
-not exist and no default is specified, the original string is not
-substituted.
-
-There is also a special variable substitution:
-
--   `read(property.name)[default]`
-
-This will look in the file configured by `boot.properties` for a value.
-If there is no `boot.properties` file configured, or the property does
-not existt, then the default value is chosen.
-
-### Syntax
-
-The configuration file is line-based, read as UTF-8 encoded, and defined
-by the following grammar. `'nl'` is a newline or end of file and
-`'text'` is plain text without newlines or the surrounding delimiters
-(such as parentheses or square brackets):
-
-```scala
-configuration: scala app repositories boot log appProperties
-scala: "[" "scala" "]" nl version nl classifiers nl
-app: "[" "app" "]" nl org nl name nl version nl components nl class nl crossVersioned nl resources nl classifiers nl
-repositories: "[" "repositories" "]" nl (repository nl)*
-boot: "[" "boot" "]" nl directory nl bootProperties nl search nl promptCreate nl promptFill nl quickOption nl
-log: "["' "log" "]" nl logLevel nl
-appProperties: "[" "app-properties" "]" nl (property nl)*
-ivy: "[" "ivy" "]" nl homeDirectory nl checksums nl overrideRepos nl repoConfig nl
-directory: "directory" ":" path
-bootProperties: "properties" ":" path
-search: "search" ":" ("none" | "nearest" | "root-first" | "only" ) ("," path)*
-logLevel: "level" ":" ("debug" | "info" | "warn" | "error")
-promptCreate: "prompt-create"  ":"  label
-promptFill: "prompt-fill" ":" boolean
-quickOption: "quick-option" ":" boolean
-version: "version" ":" versionSpecification
-versionSpecification: readProperty | fixedVersion
-readProperty: "read"  "(" propertyName ")"  "[" default "]"
-fixedVersion: text
-classifiers: "classifiers" ":" text ("," text)*
-homeDirectory: "ivy-home" ":" path
-checksums: "checksums" ":" checksum ("," checksum)*
-overrideRepos: "override-build-repos" ":" boolean
-repoConfig: "repository-config" ":" path
-org: "org" ":" text
-name: "name" ":" text
-class: "class" ":" text
-components: "components" ":" component ("," component)*
-crossVersioned: "cross-versioned" ":"  ("true" | "false" | "none" | "binary" | "full")
-resources: "resources" ":" path ("," path)*
-repository: ( predefinedRepository | customRepository ) nl
-predefinedRepository: "local" | "maven-local" | "maven-central"
-customRepository: label ":" url [ ["," ivyPattern] ["," artifactPattern] [", mavenCompatible"] [", bootOnly"]]
-property: label ":" propertyDefinition ("," propertyDefinition)*
-propertyDefinition: mode "=" (set | prompt)
-mode: "quick" | "new" | "fill"
-set: "set" "(" value ")"
-prompt: "prompt"  "(" label ")" ("[" default "]")?
-boolean: "true" | "false"
-nl: "\r\n" | "\n" | "\r"
-path: text
-propertyName: text
-label: text
-default: text
-checksum: text
-ivyPattern: text
-artifactPattern: text
-url: text
-component: text
 ```
-
+[scala]
+  version: 
 
 Notes
 -----

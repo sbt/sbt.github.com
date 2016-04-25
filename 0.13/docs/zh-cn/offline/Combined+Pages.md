@@ -48,7 +48,7 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
 -   然后前往 [.sbt 构建定义][Basic-Def] 学习更多关于构建的定义。
 
 
-最后，安装步骤就简化为一个 Jar 文件和一个 Shell 脚本，但是取决于你的平台，我们提供了好几种方式来使得步骤不是那么单调。 [Mac][Mac]，[Windows][Windows]，[Linux][Linux]，[Typesafe Activator][Activator-Installation]，或[手动安装][Manual-Installation] 提供了相应的安装步骤。
+最后，安装步骤就简化为一个 Jar 文件和一个 Shell 脚本，但是取决于你的平台，我们提供了好几种方式来使得步骤不是那么单调。 [Mac][Mac]，[Windows][Windows]，[Linux][Linux]，[Lightbend Activator][Activator-Installation]，或[手动安装][Manual-Installation] 提供了相应的安装步骤。
 
 ### 提示和技巧
 
@@ -83,9 +83,9 @@ $ brew install sbt
 
 下载 [ZIP][ZIP] 或者 [TGZ][TGZ] 包并解压。
 
-### Typesafe Activator
+### Lightbend Activator
 
-参见 [Typesafe Activator安装指南][Activator-Installation].
+参见 [Lightbend Activator安装指南][Activator-Installation].
 
 ### 手动安装
 
@@ -108,9 +108,9 @@ $ brew install sbt
 
 下载 [ZIP][ZIP] 或者 [TGZ][TGZ] 包并解压。
 
-### Typesafe Activator
+### Lightbend Activator
 
-参见 [Typesafe Activator安装指南][Activator-Installation].
+参见 [Lightbend Activator安装指南][Activator-Installation].
 
 ### 手动安装
 
@@ -176,9 +176,9 @@ sbt 二进制文件发布到 Bintray，而Bintray 方便地提供了RPM资源库
 
 > **注意：** 请将任何和 ebuild 相关的问题反馈到 [这里](https://github.com/whiter4bbit/overlays/issues)。
 
-### Typesafe Activator
+### Lightbend Activator
 
-参见 [Typesafe Activator安装指南][Activator-Installation].
+参见 [Lightbend Activator安装指南][Activator-Installation].
 
 ### 手动安装
 
@@ -265,10 +265,10 @@ $ chmod u+x ~/bin/sbt
 
   [Manual-Installation]: Manual-Installation.html
 
-安装 Typesafe Activator (包含sbt)
+安装 Lightbend Activator (包含sbt)
 ---------------------
 
-Typesafe Activator 是sbt的一个自定义版本，它添加两个额外的命令`activator ui`和`activator new`。`activator`命令简言之就是sbt的一个超集。
+Lightbend Activator 是sbt的一个自定义版本，它添加两个额外的命令`activator ui`和`activator new`。`activator`命令简言之就是sbt的一个超集。
 
 你可以从 [typesafe.com](http://typesafe.com/platform/getstarted)获得Activator。
 
@@ -283,6 +283,7 @@ Activator下载包括`activator`脚本和一个`activator-launch.jar`，分别�
  * `activator ui`启动一种快速启动用户界面，可用于从模板目录浏览教程（在目录中的许多模板有陪同教程）。
 
 Activator提供两种下载；小的"minimal"下载包只包含包装脚本和启动jar，而大的"full"下载包含预装的Ivy缓存，包括Scala，Akka和Play框架。
+
 
   [Basic-Def]: Basic-Def.html
   [Setup]: Setup.html
