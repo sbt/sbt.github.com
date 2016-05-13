@@ -210,7 +210,7 @@ implementing or describing that support.
 commands, <code>activator ui</code> and <code>activator new</code>. The <code>activator</code>
 command is a superset of sbt, in short.
 </p><p>You can obtain Activator from
-<a href="http://typesafe.com/get-started">typesafe.com</a>.
+<a href="http://www.lightbend.com/activator/download">lightbend.com</a>.
 </p><p>If you see a command line such as <code>sbt ~test</code> in the
 documentation, you will also be able to type <code>activator ~test</code>.
 Any Activator project can be opened in sbt and vice versa because
@@ -225,7 +225,7 @@ differences between Activator and a
 whether to enter <code>activator shell</code> or <code>activator ui</code> mode;
 type <code>activator shell</code> to force the command line prompt.
 </li><li><code>activator new</code> allows you to create projects from a large
-<a href="https://typesafe.com/activator/templates">catalog of template projects</a>,
+<a href="https://www.lightbend.com/activator/templates">catalog of template projects</a>,
 for example the <code>play-scala</code> template is a skeleton
 <a href="https://playframework.com">Play Framework</a> Scala app.
 </li><li><code>activator ui</code> launches a quick start UI that can be used to
@@ -1881,7 +1881,7 @@ and its access. The goal of the sbt organization is to organize sbt
 software into one central location.
 </p><p>A side benefit to using the sbt organization for projects is that you
 can use gh-pages to host websites under the http://scala-sbt.org domain.
-</p><h3 id="Community+Ivy+Repository">Community Ivy Repository<a href="#Community+Ivy+Repository" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://www.typesafe.com">Typesafe</a> has provided a freely available
+</p><h3 id="Community+Ivy+Repository">Community Ivy Repository<a href="#Community+Ivy+Repository" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://www.lightbend.com">Lightbend</a> has provided a freely available
 <a href="https://repo.scala-sbt.org/scalasbt">Ivy Repository</a> for sbt projects
 to use. This Ivy repository is mirrored from the freely available
 <a href="https://bintray.com">Bintray service</a>.
@@ -2139,6 +2139,7 @@ thru ScalaBuff): <a href="https://github.com/sbt/sbt-scalabuff">https://github.c
 </li><li>sbt-cppp (Cross-Project Protobuf Plugin for Sbt):
 <a href="https://github.com/Atry/sbt-cppp">https://github.com/Atry/sbt-cppp</a>
 </li><li>sbt-avro (Apache Avro): <a href="https://github.com/cavorite/sbt-avro">https://github.com/cavorite/sbt-avro</a>
+</li><li>courier (Type safe data bindings for web + mobile): <a href="https://github.com/coursera/courier">https://github.com/coursera/courier</a>
 </li><li>sbt-xjc (XSD binding, using
 <a href="http://download.oracle.com/javase/6/docs/technotes/tools/share/xjc.html">JAXB XJC</a> ):
 <a href="https://github.com/sbt/sbt-xjc">https://github.com/sbt/sbt-xjc</a>
@@ -13484,9 +13485,191 @@ working directory, then against the user’s home directory, and then
 against the directory containing the launcher jar.
 </li></ul><p>An error is generated if none of these attempts succeed.
 </p><h3 id="Example">Example<a href="#Example" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The default configuration file for sbt as an application looks like:
-</p><p>```
-[scala]
-  version: </p><h2 id="Notes">Notes<a href="#Notes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Here are some more docs that used to be part of Developer Guide.
+</p><pre><code class="">[scala]
+  version: ${sbt.scala.version-auto}
+
+[app]
+  org: ${sbt.organization-org.scala-sbt}
+  name: sbt
+  version: ${sbt.version-read(sbt.version)[0.13.5]}
+  class: ${sbt.main.class-sbt.xMain}
+  components: xsbti,extra
+  cross-versioned: ${sbt.cross.versioned-false}
+
+[repositories]
+  local
+  typesafe-ivy-releases: http://repo.typesafe.com/typesafe/ivy-releases/, [organization]/[module]/[revision]/[type]s/[artifact](-[classifier]).[ext], bootOnly
+  maven-central
+  sonatype-snapshots: https://oss.sonatype.org/content/repositories/snapshots
+
+[boot]
+  directory: ${sbt.boot.directory-${sbt.global.base-${user.home}/.sbt}/boot/}
+
+[ivy]
+  ivy-home: ${sbt.ivy.home-${user.home}/.ivy2/}
+  checksums: ${sbt.checksums-sha1,md5}
+  override-build-repos: ${sbt.override.build.repos-false}
+  repository-config: ${sbt.repository.config-${sbt.global.base-${user.home}/.sbt}/repositories}
+</code></pre><p>Let’s look at all the launcher configuration sections in detail:
+</p><h4 id="1.+Scala+Configuration">1. Scala Configuration<a href="#1.+Scala+Configuration" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The <code>[scala]</code> section is used to configure the version of Scala. It has
+one property:
+</p><ul><li><code>version</code> - The version of scala an application uses, or <code>auto</code> if
+the application is not cross-versioned.
+</li><li><code>classifiers</code> - The (optional) list of additional scala artifacts to
+resolve, e.g. sources.
+</li></ul><h4 id="2.+Application+Identification">2. Application Identification<a href="#2.+Application+Identification" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The <code>[app]</code> section configures how the launcher will look for your
+application using the Ivy dependency manager. It consists of the
+following properties:
+</p><ul><li><code>org</code> - The organization associated with the Ivy module. (groupId in
+maven vernacular)
+</li><li><code>name</code> - The name of the Ivy module. (<code>artifactId</code> in maven
+vernacular)
+</li><li><code>version</code> - The revision of the Ivy module.
+</li><li><p><code>class</code> - The name of the “entry point” into the application. An
+entry point must be a class which meets one of the following critera
+</p><ul><li>Extends the xsbti.AppMain interface.
+</li><li>Extends the xsbti.ServerMain interfaces.
+</li><li>Contains a method with the signature static void main(String[])
+</li><li>Contains a method with the signature static int main(String[])
+</li></ul><ul><li>Contains a method with the signature
+static xsbti.Exit main(String[])
+</li></ul></li><li><code>components</code> - An optional list of additional components that Ivy
+should resolve.
+</li><li><code>cross-versioned</code> - An optional string denoting how this application
+is published. If app.cross-versioned is binary, the resolved module
+ID is
+<code>{app.name+'_'+CrossVersion.binaryScalaVersion(scala.version)}</code>. If
+app.cross-versioned is true or full, the resolved module ID is
+<code>{app.name+'_'+scala.version}</code>. The scala.version property must be
+specified and cannot be auto when cross-versioned.
+</li><li><code>resources</code> - An optional list of jar files that should be added to
+the application’s classpath.
+</li><li><code>classifiers</code> - An optional list of additional classifiers that
+should be resolved with this application, e.g. sources.
+</li></ul><h4 id="3.+Repositories+Section">3. Repositories Section<a href="#3.+Repositories+Section" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The <code>[repositories]</code> section configures where and how Ivy will look for
+your application. Each line denotes a repository where Ivy will look.
+</p><ul><li>Note: This section configured the default location where Ivy will look,
+but this can be overriden via user configuration.*
+</li></ul><p>There are several built-in strings that can be used for common
+repositories:
+</p><ul><li><code>local</code> - the local ivy repository <code>~/.ivy2/local</code>.
+</li><li><code>maven-local</code> - The local maven repository <code>~/.m2/repository</code>.
+</li><li><code>maven-central</code> - The maven central repository <code>repo.maven.org</code>.
+</li></ul><p>Besides built in repositories, other repositories can be configured
+using the following syntax:
+</p><blockquote><p>name: url(, pattern)(,descriptorOptional)(,skipConsistencyCheck)
+</p></blockquote><p>The <code>name</code> property is an identifier which Ivy uses to cache modules
+resolved from this location. The <code>name</code> should be unique across all
+repositories.
+</p><p>The <code>url</code> property is the base <code>url</code> where Ivy should look for modules.
+</p><p>The <code>pattern</code> property is an optional specification of <em>how</em> Ivy should
+look for modules. By default, the launcher assumes repositories are in
+the maven style format.
+</p><p>The <code>skipConsistencyCheck</code> string is used to tell ivy not to validate
+checksums and signatures of files it resolves.
+</p><h4 id="4.+The+Boot+section">4. The Boot section<a href="#4.+The+Boot+section" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The <code>[boot]</code> section is used to configure where the sbt launcher will
+store its cache and configuration information. It consists of the
+following properties:
+</p><ul><li><code>directory</code> - The directory defined here is used to store all cached
+JARs resolved launcher.
+</li><li><code>properties</code> - (optional) A properties file to use for any <code>read</code>
+variables.
+</li></ul><h4 id="5.+The+Ivy+section">5. The Ivy section<a href="#5.+The+Ivy+section" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The <code>[ivy]</code> section is used to configure the Ivy dependency manager for
+resolving applications. It consists of the following properties:
+</p><ul><li><code>ivy-home</code> - The home directory for Ivy. This determines where the
+ivy-local repository is located, and also where the ivy cache is
+stored. Defaults to <code>~/.ivy2</code>
+</li><li><code>checksums</code> - The comma-separated list of checksums that Ivy should
+use to verify artifacts have correctly resolved, e.g. md5 or sha1.
+</li><li><code>override-build-repos</code> - If this is set, then the
+<code>isOverrideRepositories</code> method on xsbti.Launcher interface will
+return its value. The use of this method is application specific,
+but in the case of sbt denotes that the configuration of
+repositories in the launcher should override those used by any
+build. Applications should respect this convention if they can.
+</li><li><code>repository-config</code> - This specifies a configuration location where
+ivy repositories can also be configured. If this file exists, then
+its contents override the [repositories] section.
+</li></ul><h4 id="6.+The+Server+Section">6. The Server Section<a href="#6.+The+Server+Section" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>When using the <code>--locate</code> feature of the launcher, this section
+configures how a server is started. It consists of the following
+properties:
+</p><ul><li><code>lock</code> - The file that controls access to the running server. This
+file will contain the active port used by a server and must be
+located on a a filesystem that supports locking.
+</li><li><code>jvmargs</code> - A file that contains line-separated JVM arguments that where
+:   use when starting the server.
+</li><li><code>jvmprops</code> - The location of a properties file that will define
+override properties in the server. All properties defined in this
+file will be set as -D java properties.
+</li></ul><h3 id="Variable+Substitution">Variable Substitution<a href="#Variable+Substitution" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Property values may include variable substitutions. A variable
+substitution has one of these forms:
+</p><ul><li><code>${variable.name}</code>
+</li><li><code>${variable.name-default}</code>
+</li></ul><p>where <code>variable.name</code> is the name of a system property. If a system
+property by that name exists, the value is substituted. If it does not
+exists and a default is specified, the default is substituted after
+recursively substituting variables in it. If the system property does
+not exist and no default is specified, the original string is not
+substituted.
+</p><p>There is also a special variable substitution:
+</p><ul><li><code>read(property.name)[default]</code>
+</li></ul><p>This will look in the file configured by <code>boot.properties</code> for a value.
+If there is no <code>boot.properties</code> file configured, or the property does
+not existt, then the default value is chosen.
+</p><h3 id="Syntax">Syntax<a href="#Syntax" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The configuration file is line-based, read as UTF-8 encoded, and defined
+by the following grammar. <code>'nl'</code> is a newline or end of file and
+<code>'text'</code> is plain text without newlines or the surrounding delimiters
+(such as parentheses or square brackets):
+</p><pre><code class="prettyprint lang-scala">configuration: scala app repositories boot log appProperties
+scala: &quot;[&quot; &quot;scala&quot; &quot;]&quot; nl version nl classifiers nl
+app: &quot;[&quot; &quot;app&quot; &quot;]&quot; nl org nl name nl version nl components nl class nl crossVersioned nl resources nl classifiers nl
+repositories: &quot;[&quot; &quot;repositories&quot; &quot;]&quot; nl (repository nl)*
+boot: &quot;[&quot; &quot;boot&quot; &quot;]&quot; nl directory nl bootProperties nl search nl promptCreate nl promptFill nl quickOption nl
+log: &quot;[&quot; &quot;log&quot; &quot;]&quot; nl logLevel nl
+appProperties: &quot;[&quot; &quot;app-properties&quot; &quot;]&quot; nl (property nl)*
+ivy: &quot;[&quot; &quot;ivy&quot; &quot;]&quot; nl homeDirectory nl checksums nl overrideRepos nl repoConfig nl
+directory: &quot;directory&quot; &quot;:&quot; path
+bootProperties: &quot;properties&quot; &quot;:&quot; path
+search: &quot;search&quot; &quot;:&quot; (&quot;none&quot; | &quot;nearest&quot; | &quot;root-first&quot; | &quot;only&quot; ) (&quot;,&quot; path)*
+logLevel: &quot;level&quot; &quot;:&quot; (&quot;debug&quot; | &quot;info&quot; | &quot;warn&quot; | &quot;error&quot;)
+promptCreate: &quot;prompt-create&quot;  &quot;:&quot;  label
+promptFill: &quot;prompt-fill&quot; &quot;:&quot; boolean
+quickOption: &quot;quick-option&quot; &quot;:&quot; boolean
+version: &quot;version&quot; &quot;:&quot; versionSpecification
+versionSpecification: readProperty | fixedVersion
+readProperty: &quot;read&quot;  &quot;(&quot; propertyName &quot;)&quot;  &quot;[&quot; default &quot;]&quot;
+fixedVersion: text
+classifiers: &quot;classifiers&quot; &quot;:&quot; text (&quot;,&quot; text)*
+homeDirectory: &quot;ivy-home&quot; &quot;:&quot; path
+checksums: &quot;checksums&quot; &quot;:&quot; checksum (&quot;,&quot; checksum)*
+overrideRepos: &quot;override-build-repos&quot; &quot;:&quot; boolean
+repoConfig: &quot;repository-config&quot; &quot;:&quot; path
+org: &quot;org&quot; &quot;:&quot; text
+name: &quot;name&quot; &quot;:&quot; text
+class: &quot;class&quot; &quot;:&quot; text
+components: &quot;components&quot; &quot;:&quot; component (&quot;,&quot; component)*
+crossVersioned: &quot;cross-versioned&quot; &quot;:&quot;  (&quot;true&quot; | &quot;false&quot; | &quot;none&quot; | &quot;binary&quot; | &quot;full&quot;)
+resources: &quot;resources&quot; &quot;:&quot; path (&quot;,&quot; path)*
+repository: ( predefinedRepository | customRepository ) nl
+predefinedRepository: &quot;local&quot; | &quot;maven-local&quot; | &quot;maven-central&quot;
+customRepository: label &quot;:&quot; url [ [&quot;,&quot; ivyPattern] [&quot;,&quot; artifactPattern] [&quot;, mavenCompatible&quot;] [&quot;, bootOnly&quot;]]
+property: label &quot;:&quot; propertyDefinition (&quot;,&quot; propertyDefinition)*
+propertyDefinition: mode &quot;=&quot; (set | prompt)
+mode: &quot;quick&quot; | &quot;new&quot; | &quot;fill&quot;
+set: &quot;set&quot; &quot;(&quot; value &quot;)&quot;
+prompt: &quot;prompt&quot;  &quot;(&quot; label &quot;)&quot; (&quot;[&quot; default &quot;]&quot;)?
+boolean: &quot;true&quot; | &quot;false&quot;
+nl: &quot;\r\n&quot; | &quot;\n&quot; | &quot;\r&quot;
+path: text
+propertyName: text
+label: text
+default: text
+checksum: text
+ivyPattern: text
+artifactPattern: text
+url: text
+component: text
+</code></pre><h2 id="Notes">Notes<a href="#Notes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Here are some more docs that used to be part of Developer Guide.
 </p><h2 id="Core+Principles">Core Principles<a href="#Core+Principles" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>This document details the core principles overarching sbt’s design and
 code style. Sbt’s core principles can be stated quite simply:
 </p><ol><li>Everything should have a <code>Type</code>, enforced as much as is practical.
@@ -14227,9 +14410,9 @@ nightly version to launch a different nightly version of sbt.
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-      ga('create', 'UA-23127719-1', 'typesafe.com', {'allowLinker': true, 'name': 'tsTracker'});
+      ga('create', 'UA-23127719-1', 'lightbend.com', {'allowLinker': true, 'name': 'tsTracker'});
       ga('tsTracker.require', 'linker');
-      ga('tsTracker.linker:autoLink', ['typesafe.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org']);
+      ga('tsTracker.linker:autoLink', ['lightbend.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org']);
       ga('tsTracker.send', 'pageview');
     </script>
     <script type="text/javascript">
@@ -14268,9 +14451,9 @@ $(function() {
           </div>
           <div class="support-detail">
             <h2>Commercial Support</h2>
-            <a href="http://typesafe.com/subscription">Typesafe Subscription</a>
-            <a href="http://typesafe.com/subscription/training">Training</a>
-            <a href="http://typesafe.com/subscription/consulting">Consulting</a>
+            <a href="https://www.lightbend.com/services/expert-support">Lightbend Subscription</a>
+            <a href="https://www.lightbend.com/services/training">Training</a>
+            <a href="https://www.lightbend.com/services/consulting">Consulting</a>
           </div>
         </div>
       </div>
@@ -14291,9 +14474,9 @@ $(function() {
         </nav>
       </div>
       <div class="col-md-4 text-right ts">
-        &copy; 2015 Typesafe Inc.
-        <a href="https://typesafe.com">
-          <img src="files/typesafe_reverse.svg" alt="Typesafe, Inc.">
+        &copy; 2016 Lightbend Inc.
+        <a href="https://www.lightbend.com">
+          <img src="files/typesafe_reverse.svg" alt="Lightbend, Inc.">
         </a>
       </div>
     </div>
