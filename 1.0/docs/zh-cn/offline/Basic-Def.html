@@ -44,10 +44,9 @@
         <div class="container contentswrapper">
           <div class="span-16 prepend-1 append-1 contents">
             <h2 id=".sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">.sbt 构建定义<a href="#.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>这一小节描述 sbt 构建定义，包含一些“理论”和 <code>build.sbt</code> 的语法。假设你已经知道如何 <a href="Running.html">使用 sbt</a> 并且阅读过入门指南前面的几小节。
-</p><h3 id="%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E7%9A%84%E4%B8%89%E7%A7%8D%E9%A3%8E%E6%A0%BC">构建定义的三种风格<a href="#%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E7%9A%84%E4%B8%89%E7%A7%8D%E9%A3%8E%E6%A0%BC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>构建定义有三种风格。
+</p><h3 id="%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E7%9A%84%E4%BA%8C%E7%A7%8D%E9%A3%8E%E6%A0%BC">构建定义的二种风格<a href="#%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E7%9A%84%E4%BA%8C%E7%A7%8D%E9%A3%8E%E6%A0%BC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>构建定义有二种风格。
 </p><ol><li>多工程 <code>.sbt</code> 构建定义
 </li><li>bare <code>.sbt</code> 构建定义
-</li><li><code>.scala</code> 构建定义
 </li></ol><p>这一小节将讨论最新的多工程.sbt 构建定义，它结合了两种老风格的优点，并且适用于所有情况。当你处理新的构建的时候可能会遇见另外两个老的风格。参见[bare .sbt 构建定义][Bare-Def]和[.scala 构建定义][Full-Def]（在入门指南的后面部分）了解更多其它风格的内容。
 </p><p>此外，构建定义可以包含以<code>.scala</code>结尾的文件，位于基目录的<code>project/</code>文件夹下，来定义常用的函数和值。
 </p><h3 id="%E4%BB%80%E4%B9%88%E6%98%AF%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%EF%BC%9F">什么是构建定义？<a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%EF%BC%9F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 在检查项目和处理构建定义文件之后，形成一个<code>Project</code>定义。
@@ -140,7 +139,11 @@ lazy val root = (project in file(&quot;.&quot;)).
 import Process._
 import Keys._
 </code></pre><p>（另外，如果你有 <a href="Full-Def.html">.scala 文件</a>，这些文件中任何 <code>Build</code> 对象或者 <code>Plugin</code> 对象里的内容都会被引入。更多关于这些的内容放在 <a href="Full-Def.html">.scala 构建定义</a>。）
-</p><h3 id="%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96%E5%BA%93">添加依赖库<a href="#%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96%E5%BA%93" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>有两种方式添加第三方的依赖。一种是将 jar 文件 放入 <code>lib/</code>（非托管的依赖）中，另一种是在 <code>build.sbt</code> 中添加托管的依赖，像这样：
+</p><h3 id="bare+.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">bare .sbt 构建定义<a href="#bare+.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>bare <code>.sbt</code> 构建定义由一个 <code>Setting[_]</code> 表达式的列表组成，而不是定义 <code>Project</code>。
+</p><pre><code class="prettyprint lang-scala">name := &quot;hello&quot;
+version := &quot;1.0&quot;
+scalaVersion := &quot;2.11.8&quot;
+</code></pre><h3 id="%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96%E5%BA%93">添加依赖库<a href="#%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96%E5%BA%93" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>有两种方式添加第三方的依赖。一种是将 jar 文件 放入 <code>lib/</code>（非托管的依赖）中，另一种是在 <code>build.sbt</code> 中添加托管的依赖，像这样：
 </p><pre><code class="prettyprint lang-scala">val derby = &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot;
 
 lazy val commonSettings = Seq(
@@ -170,7 +173,7 @@ lazy val root = (project in file(&quot;.&quot;)).
       <a name="toc"></a>
       <h4 class="toctitle">Contents</h4>
       <div class="tocbody">
-      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">sbt 入门</a></div><ol class="toc"> <li><div><a href="Setup.html">安装 sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">在 Mac 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">在 Windows 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">在 Linux 上安装 sbt</a></div></li><li><div><a href="Manual-Installation.html">手动安装 sbt</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">目录结构</a></div></li><li><div><a href="Running.html">运行</a></div></li><li><div class="current">.sbt 构建定义</div></li><li><div><a href="Scopes.html">Scope</a></div></li><li><div><a href="More-About-Settings.html">更多关于设置</a></div></li><li><div><a href="Library-Dependencies.html">库依赖</a></div></li><li><div><a href="Multi-Project.html">多项目构建</a></div></li><li><div><a href="Using-Plugins.html">使用插件</a></div></li><li><div><a href="Custom-Settings.html">自定义设置和任务</a></div></li><li><div><a href="Organizing-Build.html">组织构建</a></div></li><li><div><a href="Summary.html">总结</a></div></li><li><div><a href="Bare-Def.html">附录：Bare .sbt 构建定义</a></div></li><li><div><a href="Full-Def.html">附录：.scala 构建定义</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">sbt 入门</a></div><ol class="toc"> <li><div><a href="Setup.html">安装 sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">在 Mac 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">在 Windows 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">在 Linux 上安装 sbt</a></div></li><li><div><a href="Manual-Installation.html">手动安装 sbt</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">目录结构</a></div></li><li><div><a href="Running.html">运行</a></div></li><li><div class="current">.sbt 构建定义</div></li><li><div><a href="Scopes.html">Scope</a></div></li><li><div><a href="More-About-Settings.html">更多关于设置</a></div></li><li><div><a href="Library-Dependencies.html">库依赖</a></div></li><li><div><a href="Multi-Project.html">多项目构建</a></div></li><li><div><a href="Using-Plugins.html">使用插件</a></div></li><li><div><a href="Custom-Settings.html">自定义设置和任务</a></div></li><li><div><a href="Organizing-Build.html">组织构建</a></div></li><li><div><a href="Summary.html">总结</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
           </div>
         </div>
         <div class="header">
