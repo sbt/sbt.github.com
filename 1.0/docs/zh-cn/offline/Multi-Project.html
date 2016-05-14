@@ -1,0 +1,237 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html manifest="pamflet.manifest">
+      <head>
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+        <title>sbt Reference Manual — 多项目构建</title>
+        <link rel="shortcut icon" href="../favicon.ico"/>
+        <link rel="stylesheet" href="../css/blueprint/screen.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/blueprint/grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="../css/blueprint/print.css" type="text/css" media="print"/> 
+        <!--[if lt IE 8]>
+          <link rel="stylesheet" href={ relativeBase + "css/blueprint/ie.css" } type="text/css" media="screen, projection"/>
+        <![endif]-->
+        <link rel="stylesheet" href="../css/pamflet.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamflet-print.css" type="text/css" media="print"/>
+        <link rel="stylesheet" href="../css/pamflet-grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-redmond.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-github.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-monokai.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamfletheight_80px_2em.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <script type="text/javascript" src="../js/jquery-1.6.2.min.js"></script>
+        <script type="text/javascript" src="../js/jquery.collapse.js"></script>
+        <script type="text/javascript" src="../js/pamflet.js"></script>
+        <script type="text/javascript">
+          Pamflet.page.language = 'zh-cn';
+        </script>
+        <script type="text/javascript" src="../js/prettify/prettify.js"></script><script type="text/javascript" src="../js/prettify/lang-scala.js"></script><link type="text/css" rel="stylesheet" href="../css/prettify.css"/><script type="text/javascript"><!--
+        window.onload=function() { prettyPrint(); };
+      --></script>
+        <link rel="stylesheet" href="../css/custom.css" type="text/css" media="screen, projection"/>
+        
+        <script type="text/javascript">
+              Pamflet.twitter = '#sbt #scala';
+            </script>
+      </head>
+      <body class="color_scheme-github">
+        <a class="page prev nav" href="Library-Dependencies.html">
+            <span class="space">&nbsp;</span>
+            <span class="flip arrow">&gt;</span>
+          </a><a class="page next nav" href="Using-Plugins.html">
+            <span class="space">&nbsp;</span>
+            <span class="arrow">&gt;</span>
+          </a>
+        <div class="container contentswrapper">
+          <div class="span-16 prepend-1 append-1 contents">
+            <h2 id="%E5%A4%9A%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA">多项目构建<a href="#%E5%A4%9A%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>这一小节介绍在一个构建中定义多个项目。
+</p><p>请先阅读入门指南前面的内容，尤其需要在阅读本小节之前理解 <a href="Basic-Def.html">.sbt 构建定义</a>。
+</p><h3 id="%E5%A4%9A%E9%A1%B9%E7%9B%AE">多项目<a href="#%E5%A4%9A%E9%A1%B9%E7%9B%AE" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>将多个相关的项目定义在一个构建中是很有用的，尤其是如果它们依赖另一个，而且你倾向于一起修改它们。
+</p><p>每个子项目在构建中都有它们自己的源文件夹，当打包时生成各自的 jar 文件，而且通常和其他的项目一样运转。
+</p><p>通过声明一个类型为 <a href="../../api/sbt/Project.html">Project</a> 的 lazy val 定义一个项目，例如：
+</p><pre><code class="prettyprint lang-scala">lazy val util = project
+
+lazy val core = project
+</code></pre><p>val 的名称被用作项目的 ID 和基目录名。该 ID 用于在命令行中引用该项目。基目录可能通过 <code>in</code> 方法改变。例如，下面是一个更加显示的方式来实现前一个例子：
+</p><pre><code class="prettyprint lang-scala">lazy val util = project.in(file(&quot;util&quot;))
+
+lazy val core = project in file(&quot;core&quot;)
+</code></pre><h4 id="%E5%85%AC%E5%85%B1%E8%AE%BE%E5%AE%9A">公共设定<a href="#%E5%85%AC%E5%85%B1%E8%AE%BE%E5%AE%9A" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>To factor out common settings across multiple projects, create a sequence named <code>commonSettings</code> and call <code>settings</code> method on each project. Note <code>_*</code> is required to pass sequence into a vararg method.
+要跨多个项目提取公共设置，请创建一个名为<code>commonSettings</code>的序列，并在每个项目上调用<code>settings</code>方法。注意要传入序列给变参数方法时需要调用<code>_*</code>。
+</p><pre><code class="prettyprint lang-scala">lazy val commonSettings = Seq(
+  organization := &quot;com.example&quot;,
+  version := &quot;0.1.0&quot;,
+  scalaVersion := &quot;2.11.7&quot;
+)
+
+lazy val core = (project in file(&quot;core&quot;)).
+  settings(commonSettings: _*).
+  settings(
+    // other settings
+  )
+
+lazy val util = (project in file(&quot;util&quot;)).
+  settings(commonSettings: _*).
+  settings(
+    // other settings
+  )
+</code></pre><p>现在我们可以在一处修改<code>version</code>，当重新加载构建时，将在各个子项目相应更新。
+</p><h3 id="%E4%BE%9D%E8%B5%96">依赖<a href="#%E4%BE%9D%E8%B5%96" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>构建中的项目完全可以彼此独立，但是通常情况下它们会有依赖上的一些相关性。有两种类型的依赖：aggregate 和 classpath。
+</p><h4 id="Aggregation">Aggregation<a href="#Aggregation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Aggregation 意味着在 aggregate 项目上执行一个 task 也会在 aggregated 的项目执行。例如，
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).aggregate(util, core)
+
+lazy val util = project
+
+lazy val core = project
+</code></pre><p>在上面的例子中，root 项目聚合了 <code>util</code> 和 <code>core</code>。像例子中一样，随着有两个子项目的情况下启动 sbt，然后尝试编译。你应该会看到全部的三个项目都被编译了。
+</p><p><em>在进行聚合的项目中</em>，像这个例子中的 root 项目一样，你可以按 task 来控制聚合。例如，为了避免聚合 <code>update</code> task：
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
+  aggregate(util, core).
+  settings(
+    aggregate in update := false
+  )
+
+[...]
+</code></pre><p><code>aggregate in update</code> 是 <code>update</code> task 的 scope 下的聚合的 key。（参见 <a href="Scopes.html">scopes</a>。）
+</p><p>注意：聚合会并行的执行聚合的 task，task 之间的顺序是不确定的。
+</p><h4 id="Classpath+%E4%BE%9D%E8%B5%96">Classpath 依赖<a href="#Classpath+%E4%BE%9D%E8%B5%96" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>一个项目可能依赖另一个项目的代码。这是通过添加 <code>dependsOn</code> 方法来实现的。例如，如果 core 在 classpath 中需要 util，你将这样定义 core：
+</p><pre><code class="prettyprint lang-scala">lazy val core = project.dependsOn(util)
+</code></pre><p>现在 <code>core</code> 中的代码可以使用 <code>util</code> 的类。在编译时也会在两个项目之间创建顺序；在编译 core 之前，<code>util</code> 必须被更新和编译过。
+</p><p>为了依赖多个项目，像这样 <code>dependsOn(bar, baz)</code> 给 <code>dependsOn</code> 多个参数。
+</p><h5 id="configuration+%E7%B2%92%E5%BA%A6%E7%9A%84+classpath+%E4%BE%9D%E8%B5%96">configuration 粒度的 classpath 依赖<a href="#configuration+%E7%B2%92%E5%BA%A6%E7%9A%84+classpath+%E4%BE%9D%E8%B5%96" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p><code>foo dependsOn(bar)</code> 表示 <code>foo</code> 中的 <code>compile</code> configuration 依赖于 <code>bar</code> 中的 <code>compile</code> configuration。你可以显示的写成这样：<code>dependsOn(bar % &quot;compile-&gt;compile&quot;)</code>。
+</p><p><code>&quot;compile-&gt;compile&quot;</code> 中的 <code>-&gt;</code> 表示 “depends on“，所以 <code>&quot;test-&gt;compile&quot;</code> 表示 <code>foo</code> 中的 <code>test</code> configuration 将依赖于 <code>bar</code> 中的 <code>compile</code> configuration。
+</p><p>省略 <code>-&gt;config</code> 部分暗示 <code>-&gt;compile</code>，所以 <code>dependsOn(bar % &quot;test&quot;)</code> 表示 <code>foo</code> 中的 <code>test</code> configuration 依赖于 <code>bar</code> 中的 <code>Compile</code> configuration。
+</p><p>一个实用的声明 <code>&quot;test-&gt;test&quot;</code> 表示 <code>test</code> 依赖于 <code>test</code>。例如，这样允许你将测试工具代码放在 <code>bar/src/test/scala</code> 中，然后在 <code>foo/src/test/scala</code> 中使用这些代码，
+</p><p>对于一个依赖你可以有多个 configuration，以分号分隔，例如：<code>dependsOn(bar % &quot;test-&gt;test;compile-&gt;compile&quot;)</code>。
+</p><h3 id="%E9%BB%98%E8%AE%A4%E7%9A%84+root+%E9%A1%B9%E7%9B%AE">默认的 root 项目<a href="#%E9%BB%98%E8%AE%A4%E7%9A%84+root+%E9%A1%B9%E7%9B%AE" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>如果在构建中根目录没有定义项目，sbt 会在构建中创建一个默认的项目并将其他项目也聚合起来。
+</p><p>因为 <code>hello-foo</code> 项目定义了 <code>base = file(&quot;foo&quot;)</code>，它将会被包含在 foo 子目录中。
+它的源文件可以直接放在 <code>foo</code> 下，像 <code>foo/Foo.scala</code>，或者在 <code>foo/src/main/scala</code> 中。通常 sbt 的 <a href="Directories.html">目录结构</a> 应用在 <code>foo</code> 目录下除了构建定义文件。
+</p><p><code>foo</code> 中的任何 <code>.sbt</code> 文件，比如说 <code>foo/build.sbt</code>，将会和整个构建合并，但是在 <code>hello-foo</code> 项目的 scope 中。
+</p><p>如果你的的整个项目都在 hello 中，尝试在 <code>hello/build.sbt</code>，<code>hello/bar/build.sbt</code> 和 <code>hello/foo/build.sbt</code> 中定义一个不同的版本（<code>version := &quot;0.6&quot;</code>）。
+现在在 sbt 的命令行中执行 <code>show version</code>。你应该得到这样的信息（随着你定义的任何版本）：
+</p><pre><code class="">&gt; show version
+[info] hello-foo/*:version
+[info]  0.7
+[info] hello-bar/*:version
+[info]  0.9
+[info] hello/*:version
+[info]  0.5
+</code></pre><p><code>hello-foo/*:version</code> 定义在 <code>hello/foo/build.sbt</code> 中，<code>hello-bar/*:version</code> 定义在 <code>hello/bar/build.sbt</code> 中，<code>hello/*:version</code> 定义在 <code>hello/build.sbt</code> 中。
+记住 <a href="Scopes.html">scoped keys 的语法</a>。每个 <code>version</code> key 在对应的项目的 scope 中，基于 <code>build.sbt</code> 文件的位置。但是所有的三个 <code>build.sbt</code> 文件都只是整个构建定义的一部分。
+</p><p><em>每个项目的设置都可以放该项目基目录下的 <code>.sbt</code> 文件中</em>，然而 <code>.scala</code> 文件可以和上面展示的一样简单，列出项目和基目录。<em>没必要将设置放到 <code>.scala</code> 文件中。</em>
+</p><p>然而，为了将所有构建定义都放在一个项目目录下，你会发现将所有的设置都放在 <code>.scala</code> 中会干净很多。由你做主。
+</p><p>在子项目中，你不能有项目的子目录或者 <code>project/*.scala</code> 文件。<code>foo/project/Build.scala</code> 将会被忽略。
+</p><h3 id="%E4%BA%A4%E4%BA%92%E5%BC%8F%E5%BC%95%E5%AF%BC%E9%A1%B9%E7%9B%AE">交互式引导项目<a href="#%E4%BA%A4%E4%BA%92%E5%BC%8F%E5%BC%95%E5%AF%BC%E9%A1%B9%E7%9B%AE" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在 sbt 的命令行中，输入 <code>projects</code> 列出你的项目，执行 <code>project &lt;projectname&gt;</code> 可以选择当前项目。当你执行 task 像 <code>compile</code>，它会在当前项目上执行。
+所以你没有必要去编译 root 项目，你可以只编译子项目。
+</p><p>你可以通过显示的指定项目 ID 在另一个项目上执行一个 task，例如 <code>subProjectID/compile</code>。
+</p><h3 id="%E9%80%9A%E7%94%A8%E4%BB%A3%E7%A0%81">通用代码<a href="#%E9%80%9A%E7%94%A8%E4%BB%A3%E7%A0%81" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在一个 <code>.sbt</code> 文件中的定义对于其他的 <code>.sbt</code> 文件不可见。为了在不同的 <code>.sbt</code> 文件中共享代码，在构建根目录下的 <code>project/</code> 目录下定义一个或多个 Scala 文件。
+</p><p>参见 <a href="Organizing-Build.html">组织构建</a> 获取详细内容。
+</p><div class="bottom nav span-16">
+                        <em>Next Page</em>
+                        <span class="arrow">&gt;</span>
+                        <a href="Using-Plugins.html"> 使用插件 </a>                        
+                        <ul class="language-bar">
+        <li><a href="../Multi-Project.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/Multi-Project.html"><span class="lang-item lang-ja">日本語</span></a></li><li><a href="../zh-cn/Multi-Project.html"><span class="lang-item lang-zh-cn">中文 (简体)</span></a></li>
+      </ul>
+                      </div><div class="tocwrapper show">
+      <a class="tochead nav" style="display: none" href="#toc">❦</a>
+      <a name="toc"></a>
+      <h4 class="toctitle">Contents</h4>
+      <div class="tocbody">
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">sbt 入门</a></div><ol class="toc"> <li><div><a href="Setup.html">安装 sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">在 Mac 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">在 Windows 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">在 Linux 上安装 sbt</a></div></li><li><div><a href="Manual-Installation.html">手动安装 sbt</a></div></li><li><div><a href="Activator-Installation.html">安装 Lightbend Activator (包含sbt)</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">目录结构</a></div></li><li><div><a href="Running.html">运行</a></div></li><li><div><a href="Basic-Def.html">.sbt 构建定义</a></div></li><li><div><a href="Scopes.html">Scope</a></div></li><li><div><a href="More-About-Settings.html">更多关于设置</a></div></li><li><div><a href="Library-Dependencies.html">库依赖</a></div></li><li><div class="current">多项目构建</div></li><li><div><a href="Using-Plugins.html">使用插件</a></div></li><li><div><a href="Custom-Settings.html">自定义设置和任务</a></div></li><li><div><a href="Organizing-Build.html">组织构建</a></div></li><li><div><a href="Summary.html">总结</a></div></li><li><div><a href="Bare-Def.html">附录：Bare .sbt 构建定义</a></div></li><li><div><a href="Full-Def.html">附录：.scala 构建定义</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+          </div>
+        </div>
+        <div class="header">
+          <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
+<div class="container">
+    <div class="logo">
+      <a href="../../../index.html"><img src="../files/typesafe_sbt_svg.svg" alt="sbt"></a>
+    </div>
+    <div class="nav">
+      <a href="../../../documentation.html">Documentation</a>
+      <a href="../../../download.html">Download</a>
+      <a href="../../../community.html">Get Involved</a>
+      <a id="source-code" href="https://github.com/sbt/sbt"><img src="../files/github-logo-teal.png" alt="Source code"></a>
+      <a id="twitter" href="https://twitter.com/scala_sbt"><img src="../files/twitter-logo-teal.png" alt="sbt on Twitter"></a>
+    </div>
+    <script type="text/javascript" async>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-41449189-1', 'scala-sbt.org');
+    ga('send', 'pageview');
+    </script>
+    <script type="text/javascript" async>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-23127719-1', 'typesafe.com', {'allowLinker': true, 'name': 'tsTracker'});
+      ga('tsTracker.require', 'linker');
+      ga('tsTracker.linker:autoLink', ['typesafe.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org']);
+      ga('tsTracker.send', 'pageview');
+    </script>
+</div>
+        </div>
+        <div class="footer">
+          <div class="fw-wrapper navy-ltr support-strip">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="support-item">
+          <div class="support-icon">
+            <svg class="svg-icon svg-icon-chat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.5 85.2" enable-background="new 0 0 97.5 85.2"><path stroke="#fff" stroke-width="4.282" stroke-linecap="round" stroke-miterlimit="10" d="M27 29.5h-16.3c-4.7 0-8.6 3.9-8.6 8.6v25.7c0 4.7 3.9 8.6 8.6 8.6h2.7c.8 0 1.5.7 1.5 1.5v7.8c0 1.3 1.6 2 2.5 1l9.5-9.5c.5-.5 1.2-.8 2-.8h20.2c4.7 0 8.6-3.9 8.6-8.6v-7.8" fill="none"/><path fill="#fff" d="M85 0h-40c-6.9 0-12.5 5.6-12.5 12.5v33.4c0 2.2 1.8 4.1 4.1 4.1h29.9c.7 0 1.3.3 1.8.7l10 10c1.6 1.6 4.3.5 4.3-1.8v-6.5c0-1.4 1.1-2.5 2.5-2.5 6.9 0 12.5-5.6 12.5-12.5v-25c-.1-6.8-5.8-12.4-12.6-12.4z"/></svg>
+          </div>
+          <div class="support-detail">
+            <h2>Community Support</h2>
+            <a href="https://stackoverflow.com/questions/tagged/sbt">StackOverflow</a>
+          </div>
+        </div>
+        <div class="support-item">
+          <div class="support-icon">
+            <svg class="svg-icon svg-icon-typesafe" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 154 154" enable-background="new 0 0 154 154"><path fill="#fff" d="M49.7 114c-4.8 0-8.7-5.1-8.7-9.9v-.2c0-4.8 3.9-7.9 8.7-7.9h100c.9-3 1.6-7 2-11h-84c-4.8 0-8.7-3.7-8.7-8.5s3.9-8.5 8.7-8.5h83.7c-.5-4-1.2-8-2.3-11h-63.4c-4.8 0-8.7-3.7-8.7-8.5s3.9-8.5 8.7-8.5h56c-13.1-23-37.2-37.8-64.7-37.8-41.4 0-75 33.3-75 74.7s33.6 75.6 75 75.6c28.4 0 53.1-15.4 65.8-38.4h-93.1z"/></svg>
+          </div>
+          <div class="support-detail">
+            <h2>Commercial Support</h2>
+            <a href="http://typesafe.com/subscription">Typesafe Subscription</a>
+            <a href="http://typesafe.com/subscription/training">Training</a>
+            <a href="http://typesafe.com/subscription/consulting">Consulting</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div><footer>
+  <div class="container footer">
+    <div class="row">
+      <div class="col-md-8 sbt">
+        <nav>
+          <a href="../../../index.html">
+            <img src="../files/typesafe_sbt_reverse_svg.svg" alt="sbt">
+          </a>
+          <a href="../../../documentation.html">Documentation</a>
+          <a href="../../../download.html">Download</a>
+          <a href="../../../community.html">Get Involved</a>
+        </nav>
+      </div>
+      <div class="col-md-4 text-right ts">
+        &copy; 2015 Typesafe Inc.
+        <a href="https://typesafe.com">
+          <img src="../files/typesafe_reverse.svg" alt="Typesafe, Inc.">
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+        </div>
+        
+        <div class="highlight-outer">
+              <div class="highlight-menu">
+                <ul>
+                  <li><button id="highlight-button-twitter"><img src="../img/twitter-bird-dark-bgs.png"/></button></li>
+                </ul>
+              </div>
+            </div>
+      </body>
+    </html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html manifest="pamflet.manifest">
+      <head>
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+        <title>sbt Reference Manual — 库依赖</title>
+        <link rel="shortcut icon" href="../favicon.ico"/>
+        <link rel="stylesheet" href="../css/blueprint/screen.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/blueprint/grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="../css/blueprint/print.css" type="text/css" media="print"/> 
+        <!--[if lt IE 8]>
+          <link rel="stylesheet" href={ relativeBase + "css/blueprint/ie.css" } type="text/css" media="screen, projection"/>
+        <![endif]-->
+        <link rel="stylesheet" href="../css/pamflet.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamflet-print.css" type="text/css" media="print"/>
+        <link rel="stylesheet" href="../css/pamflet-grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-redmond.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-github.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-monokai.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamfletheight_80px_2em.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <script type="text/javascript" src="../js/jquery-1.6.2.min.js"></script>
+        <script type="text/javascript" src="../js/jquery.collapse.js"></script>
+        <script type="text/javascript" src="../js/pamflet.js"></script>
+        <script type="text/javascript">
+          Pamflet.page.language = 'zh-cn';
+        </script>
+        <script type="text/javascript" src="../js/prettify/prettify.js"></script><script type="text/javascript" src="../js/prettify/lang-scala.js"></script><link type="text/css" rel="stylesheet" href="../css/prettify.css"/><script type="text/javascript"><!--
+        window.onload=function() { prettyPrint(); };
+      --></script>
+        <link rel="stylesheet" href="../css/custom.css" type="text/css" media="screen, projection"/>
+        
+        <script type="text/javascript">
+              Pamflet.twitter = '#sbt #scala';
+            </script>
+      </head>
+      <body class="color_scheme-github">
+        <a class="page prev nav" href="More-About-Settings.html">
+            <span class="space">&nbsp;</span>
+            <span class="flip arrow">&gt;</span>
+          </a><a class="page next nav" href="Multi-Project.html">
+            <span class="space">&nbsp;</span>
+            <span class="arrow">&gt;</span>
+          </a>
+        <div class="container contentswrapper">
+          <div class="span-16 prepend-1 append-1 contents">
+            <h2 id="%E5%BA%93%E4%BE%9D%E8%B5%96">库依赖<a href="#%E5%BA%93%E4%BE%9D%E8%B5%96" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>阅读这一小节时，假设你已经阅读过新手入门前面的内容，特别是 <a href="Basic-Def.html">.sbt 构建定义</a>，<a href="Scopes.html">Scopes</a> 和 <a href="More-About-Settings.html">更多关于设置</a>。
+</p><p>可以通过下面这两种方式添加库依赖：
+</p><ul><li><em>非托管依赖</em> 为放在 <code>lib</code> 目录下的 jar 文件
+</li><li><em>托管依赖</em> 配置在构建定义中，并且会自动从仓库（repository）中下载
+</li></ul><h3 id="%E9%9D%9E%E6%89%98%E7%AE%A1%E4%BE%9D%E8%B5%96">非托管依赖<a href="#%E9%9D%9E%E6%89%98%E7%AE%A1%E4%BE%9D%E8%B5%96" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>大多数人会用托管依赖而不是非托管依赖。但是非托管依赖在起步阶段会简单很多。
+</p><p>非托管依赖像这样工作：将 jar 文件放在 <code>lib</code> 文件夹下，然后它们将会被添加到项目的 classpath 中。没有更多的事情了！
+</p><p>你也可以将测试依赖的 jar 文件放在 <code>lib</code> 目录下，比如 <a href="http://scalacheck.org/">ScalaCheck</a>，<a href="http://specs2.org">Specs2</a>，<a href="http://www.scalatest.org/">ScalaTest</a>。
+</p><p><code>lib</code> 目录下的所有依赖都会在 classpaths（对 <code>compile</code>， <code>test</code>， <code>run</code> 和 <code>console</code> 都成立）。如果你想对其中的一个改变 classpath，
+你需要做适当调整，例如 <code>dependencyClasspath in Compile</code> 或者 <code>dependencyClasspath in Runtime</code>。
+</p><p>如果用非托管依赖的话，不用往 <code>build.sbt</code> 文件中添加任何内容，不过你可以改变 <code>unmanagedBase</code> key，如果你想用一个不同的目录而非 <code>lib</code>。
+</p><p>用 <code>custom_lib</code> 替代 <code>lib</code>：
+</p><pre><code class="prettyprint lang-scala">unmanagedBase := baseDirectory.value / &quot;custom_lib&quot;
+</code></pre><p><code>baseDirectory</code> 是项目的根目录，所以在这里你依据 <code>baseDirectory</code> 的值改变了 <code>unmanagedBase</code>，通过在 <a href="More-About-Settings.html">更多关于设置</a> 中介绍的一个特殊的 <code>value</code> 方法。
+</p><p>同时也有一个列举 <code>unmanagedBase</code> 目录下所有 jar 文件的 task 叫 <code>unmanagedJars</code>。如果你想用多个目录或者做一些更加复杂的事情，你可能需要用一个可以做其他事情的 task 替换整个 <code>unmanagedJars</code> task，
+例如清空 <code>Compile</code> configuration 的列表，不考虑 <code>lib</code> 目录下的文件：
+</p><pre><code class="prettyprint lang-scala">unmanagedJars in Compile := Seq.empty[sbt.Attributed[java.io.File]]
+</code></pre><h3 id="%E6%89%98%E7%AE%A1%E4%BE%9D%E8%B5%96">托管依赖<a href="#%E6%89%98%E7%AE%A1%E4%BE%9D%E8%B5%96" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 使用 <a href="http://ant.apache.org/ivy/">Apache Ivy</a> 来实现托管依赖，所以如果你对 Ivy 或者 Maven 比较熟悉的话，你不会有太多的麻烦。
+</p><h4 id="Key"><code>libraryDependencies</code> Key<a href="#Key" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>大多数时候，你可以很简单的在 <code>libraryDependencies</code> 设置项中列出你的依赖。也可以通过 Maven POM 文件或者 Ivy 配置文件来配置依赖，而且可以通过 sbt 来调用这些外部的配置文件。
+你可以从<a href="../docs/Library-Management.html#external-maven-ivy">这里</a>获取更详细的内容。
+</p><p>可以像这样定义一个依赖，其中 <code>groupId</code>， <code>artifactId</code> 和 <code>revision</code> 都是字符串：
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += groupID % artifactID % revision
+</code></pre><p>或者像这样， 用字符串或者 <a href="../../sxr/sbt/Configuration.scala.html#sbt.Configuration">Configuration</a> val 当做 <code>configuration</code>：
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += groupID % artifactID % revision % configuration
+</code></pre><p><code>libraryDependencies</code> 在 <a href="../../sxr/sbt/Keys.scala.html#sbt.Keys.libraryDependencies">Keys</a> 中像这样声明：
+</p><pre><code class="prettyprint lang-scala">val libraryDependencies = settingKey[Seq[ModuleID]](&quot;Declares managed dependencies.&quot;)
+</code></pre><p>方法 <code>%</code> 从字符串创建 <code>ModuleID</code> 对象，然后将 <code>ModuleID</code> 添加到 <code>libraryDependencies</code> 中。
+</p><p>当然，要让 sbt（通过 Ivy）知道从哪里下载模块。如果你的模块和 sbt 来自相同的某个默认的仓库，这样就会工作。例如，Apache Derby 在标准的 Maven2 仓库中：
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot;
+</code></pre><p>如果你在 <code>build.sbt</code> 中输入上面这些内容，然后执行 <code>update</code>，sbt 会将 Derby 下载到 <code>~/.ivy2/cache/org.apache.derby/</code>。（顺便提一下， <code>compile</code> 依赖于 <code>update</code>，所以
+大多数时候不需要手动的执行 <code>update</code>。）
+</p><p>当然，你也可以通过 <code>++=</code> 一次将所有依赖作为一个列表添加：
+</p><pre><code class="prettyprint lang-scala">libraryDependencies ++= Seq(
+  groupID % artifactID % revision,
+  groupID % otherID % otherRevision
+)
+</code></pre><p>在很少情况下，你也会需要在 <code>libraryDependencies</code> 上用 <code>:=</code> 方法。
+</p><h4 id="%E9%80%9A%E8%BF%87++%E6%96%B9%E6%B3%95%E8%8E%B7%E5%8F%96%E6%AD%A3%E7%A1%AE%E7%9A%84+Scala+%E7%89%88%E6%9C%AC">通过 <code>%%</code> 方法获取正确的 Scala 版本<a href="#%E9%80%9A%E8%BF%87++%E6%96%B9%E6%B3%95%E8%8E%B7%E5%8F%96%E6%AD%A3%E7%A1%AE%E7%9A%84+Scala+%E7%89%88%E6%9C%AC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>如果你用是 <code>groupID %% artifactID % revision</code> 而不是 <code>groupID % artifactID % revision</code>（区别在于 <code>groupID</code> 后面是 <code>%%</code>），sbt 会在 工件名称中加上项目的 Scala 版本号。
+这只是一种快捷方法。你可以这样写不用 <code>%%</code>：
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-tools&quot; % &quot;scala-stm_2.11.1&quot; % &quot;0.3&quot;
+</code></pre><p>假设这个构建的 <code>scalaVersion</code> 是 <code>2.11.1</code>，下面这种方式是等效的（注意 <code>&quot;org.scala-tools&quot;</code> 后面是 <code>%%</code>）：
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-tools&quot; %% &quot;scala-stm&quot; % &quot;0.3&quot;
+</code></pre><p>这个想法是很多依赖都会被编译给多个 Scala 版本，而你想确保和项目匹配的jar是二进制兼容的。
+</p><p>实践中的复杂度在于通常一个依赖会和稍微不同的 Scala 版本一起工作；但是 <code>%%</code> 就没有那么智能了。所以如果一个依赖要求版本为 <code>2.10.1</code>，但是你使用的 <code>scalaVersion := &quot;2.10.4&quot;</code>，
+你无法使用 <code>%%</code> 方法即使 <code>2.10.1</code> 的版本很可能也可以工作。如果 <code>%%</code> 无法达到目的，只需要去检查那个依赖是基于哪个 Scala 版本构建的，然后硬编码你认为可以工作的版本号（假设已经有一个）。
+</p><p>参见 <a href="../docs/Cross-Build.html">交叉构建</a> 获取更多信息。
+</p><h4 id="Ivy+%E4%BF%AE%E6%AD%A3">Ivy 修正<a href="#Ivy+%E4%BF%AE%E6%AD%A3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>groupID % artifactID % revision</code> 中的 <code>revision</code> 不需要是一个固定的版本号。Ivy 能够根据你指定的约束选择一个模块的最新版本。你指定 <code>&quot;latest.integration&quot;</code>，<code>&quot;2.9.+&quot;</code> 或者 <code>&quot;[1.0,)&quot;</code>，而不是
+一个固定的版本号，像 <code>&quot;1.6.1&quot;</code>。参看 <a href="http://ant.apache.org/ivy/history/2.3.0/ivyfile/dependency.html#revision">Ivy 修订</a> 文档获取详细内容。
+</p><h4 id="%E8%A7%A3%E6%9E%90%E5%99%A8">解析器<a href="#%E8%A7%A3%E6%9E%90%E5%99%A8" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>不是所有的依赖包都放在同一台服务器上，sbt 默认使用标准的 Maven2 仓库。如果你的依赖不在默认的仓库中，你需要添加 <em>resolver</em> 来帮助 Ivy 找到它。
+</p><p>通过以下形式添加额外的仓库：
+</p><pre><code class="prettyprint lang-scala">resolvers += name at location
+</code></pre><p>在两个字符串中间有一个特殊的 <code>at</code>。
+</p><p>例如：
+</p><pre><code class="prettyprint lang-scala">resolvers += &quot;Sonatype OSS Snapshots&quot; at &quot;https://oss.sonatype.org/content/repositories/snapshots&quot;
+</code></pre><p><code>resolvers</code> key 在 <a href="../../sxr/sbt/Keys.scala.html#sbt.Keys.resolvers">Keys</a> 中像这样定义：
+</p><pre><code class="prettyprint lang-scala">val resolvers = settingKey[Seq[Resolver]](&quot;用户为托管依赖定义的额外的解析器。&quot;)
+</code></pre><p><code>at</code> 方法通过两个字符串创建了一个 <code>Resolver</code> 对象。
+</p><p>sbt 会搜索你的本地 Maven 仓库如果你将它添加为一个仓库：
+</p><pre><code class="prettyprint lang-scala">resolvers += &quot;Local Maven Repository&quot; at &quot;file://&quot;+Path.userHome.absolutePath+&quot;/.m2/repository&quot;
+</code></pre><p>或者，为了方便起见：
+</p><pre><code class="prettyprint lang-scala">resolvers += Resolver.mavenLocal
+</code></pre><p>参见 <a href="../docs/Resolvers.html">解析器</a> 获取更多关于定义其他类型的仓库的内容。
+</p><h4 id="%E8%A6%86%E5%86%99%E9%BB%98%E8%AE%A4%E7%9A%84%E8%A7%A3%E6%9E%90%E5%99%A8">覆写默认的解析器<a href="#%E8%A6%86%E5%86%99%E9%BB%98%E8%AE%A4%E7%9A%84%E8%A7%A3%E6%9E%90%E5%99%A8" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>resolvers</code> 不包含默认的解析器，仅仅通过构建定义添加额外的解析器。
+</p><p>sbt 将 <code>resolvers</code> 和一些默认的仓库组合起来构成 <code>externalResolvers</code>。
+</p><p>然而，为了改变或者移除默认的解析器，你需要覆写<code>externalResolvers</code> 而不是 <code>resolvers</code>。
+</p><h4 id="Per-configuration+dependencies">Per-configuration dependencies<a href="#Per-configuration+dependencies" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>通常会有依赖只被测试代码使用（在 <code>src/test/scala</code> 中，通过 <code>Test</code> configuration 编译）而没有在主应用中使用。
+</p><p>如果你想要一个依赖只在 <code>Test</code> configuration 的 classpath 中出现而不是 <code>Compile</code> configuration，像这样添加 <code>% &quot;test&quot;</code>：
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot; % &quot;test&quot;
+</code></pre><p>也可能也会像这样使用类型安全的 <code>Test</code> configuration：
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot; % Test
+</code></pre><p>现在，如果你在 sbt 的命令提示行里输入 <code>show compile:dependencyClasspath</code>，你不应该看到 derby jar。但是如果你输入 <code>show test:dependencyClasspath</code>，
+你应该在列表中看到 derby jar。
+</p><p>通常，测试相关的依赖，如 <a href="http://scalacheck.org/">ScalaCheck</a>，
+<a href="http://specs2.org">Specs2</a> 和 <a href="http://www.scalatest.org/">ScalaTest</a> 将会被定义为 <code>% &quot;test&quot;</code>。
+</p><p>库依赖更详细的内容和技巧在<a href="../docs/Library-Management.html">这里</a>。
+</p><div class="bottom nav span-16">
+                        <em>Next Page</em>
+                        <span class="arrow">&gt;</span>
+                        <a href="Multi-Project.html"> 多项目构建 </a>                        
+                        <ul class="language-bar">
+        <li><a href="../Library-Dependencies.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/Library-Dependencies.html"><span class="lang-item lang-ja">日本語</span></a></li><li><a href="../zh-cn/Library-Dependencies.html"><span class="lang-item lang-zh-cn">中文 (简体)</span></a></li>
+      </ul>
+                      </div><div class="tocwrapper show">
+      <a class="tochead nav" style="display: none" href="#toc">❦</a>
+      <a name="toc"></a>
+      <h4 class="toctitle">Contents</h4>
+      <div class="tocbody">
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">sbt 入门</a></div><ol class="toc"> <li><div><a href="Setup.html">安装 sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">在 Mac 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">在 Windows 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">在 Linux 上安装 sbt</a></div></li><li><div><a href="Manual-Installation.html">手动安装 sbt</a></div></li><li><div><a href="Activator-Installation.html">安装 Lightbend Activator (包含sbt)</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">目录结构</a></div></li><li><div><a href="Running.html">运行</a></div></li><li><div><a href="Basic-Def.html">.sbt 构建定义</a></div></li><li><div><a href="Scopes.html">Scope</a></div></li><li><div><a href="More-About-Settings.html">更多关于设置</a></div></li><li><div class="current">库依赖</div></li><li><div><a href="Multi-Project.html">多项目构建</a></div></li><li><div><a href="Using-Plugins.html">使用插件</a></div></li><li><div><a href="Custom-Settings.html">自定义设置和任务</a></div></li><li><div><a href="Organizing-Build.html">组织构建</a></div></li><li><div><a href="Summary.html">总结</a></div></li><li><div><a href="Bare-Def.html">附录：Bare .sbt 构建定义</a></div></li><li><div><a href="Full-Def.html">附录：.scala 构建定义</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+          </div>
+        </div>
+        <div class="header">
+          <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
+<div class="container">
+    <div class="logo">
+      <a href="../../../index.html"><img src="../files/typesafe_sbt_svg.svg" alt="sbt"></a>
+    </div>
+    <div class="nav">
+      <a href="../../../documentation.html">Documentation</a>
+      <a href="../../../download.html">Download</a>
+      <a href="../../../community.html">Get Involved</a>
+      <a id="source-code" href="https://github.com/sbt/sbt"><img src="../files/github-logo-teal.png" alt="Source code"></a>
+      <a id="twitter" href="https://twitter.com/scala_sbt"><img src="../files/twitter-logo-teal.png" alt="sbt on Twitter"></a>
+    </div>
+    <script type="text/javascript" async>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-41449189-1', 'scala-sbt.org');
+    ga('send', 'pageview');
+    </script>
+    <script type="text/javascript" async>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-23127719-1', 'typesafe.com', {'allowLinker': true, 'name': 'tsTracker'});
+      ga('tsTracker.require', 'linker');
+      ga('tsTracker.linker:autoLink', ['typesafe.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org']);
+      ga('tsTracker.send', 'pageview');
+    </script>
+</div>
+        </div>
+        <div class="footer">
+          <div class="fw-wrapper navy-ltr support-strip">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="support-item">
+          <div class="support-icon">
+            <svg class="svg-icon svg-icon-chat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.5 85.2" enable-background="new 0 0 97.5 85.2"><path stroke="#fff" stroke-width="4.282" stroke-linecap="round" stroke-miterlimit="10" d="M27 29.5h-16.3c-4.7 0-8.6 3.9-8.6 8.6v25.7c0 4.7 3.9 8.6 8.6 8.6h2.7c.8 0 1.5.7 1.5 1.5v7.8c0 1.3 1.6 2 2.5 1l9.5-9.5c.5-.5 1.2-.8 2-.8h20.2c4.7 0 8.6-3.9 8.6-8.6v-7.8" fill="none"/><path fill="#fff" d="M85 0h-40c-6.9 0-12.5 5.6-12.5 12.5v33.4c0 2.2 1.8 4.1 4.1 4.1h29.9c.7 0 1.3.3 1.8.7l10 10c1.6 1.6 4.3.5 4.3-1.8v-6.5c0-1.4 1.1-2.5 2.5-2.5 6.9 0 12.5-5.6 12.5-12.5v-25c-.1-6.8-5.8-12.4-12.6-12.4z"/></svg>
+          </div>
+          <div class="support-detail">
+            <h2>Community Support</h2>
+            <a href="https://stackoverflow.com/questions/tagged/sbt">StackOverflow</a>
+          </div>
+        </div>
+        <div class="support-item">
+          <div class="support-icon">
+            <svg class="svg-icon svg-icon-typesafe" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 154 154" enable-background="new 0 0 154 154"><path fill="#fff" d="M49.7 114c-4.8 0-8.7-5.1-8.7-9.9v-.2c0-4.8 3.9-7.9 8.7-7.9h100c.9-3 1.6-7 2-11h-84c-4.8 0-8.7-3.7-8.7-8.5s3.9-8.5 8.7-8.5h83.7c-.5-4-1.2-8-2.3-11h-63.4c-4.8 0-8.7-3.7-8.7-8.5s3.9-8.5 8.7-8.5h56c-13.1-23-37.2-37.8-64.7-37.8-41.4 0-75 33.3-75 74.7s33.6 75.6 75 75.6c28.4 0 53.1-15.4 65.8-38.4h-93.1z"/></svg>
+          </div>
+          <div class="support-detail">
+            <h2>Commercial Support</h2>
+            <a href="http://typesafe.com/subscription">Typesafe Subscription</a>
+            <a href="http://typesafe.com/subscription/training">Training</a>
+            <a href="http://typesafe.com/subscription/consulting">Consulting</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div><footer>
+  <div class="container footer">
+    <div class="row">
+      <div class="col-md-8 sbt">
+        <nav>
+          <a href="../../../index.html">
+            <img src="../files/typesafe_sbt_reverse_svg.svg" alt="sbt">
+          </a>
+          <a href="../../../documentation.html">Documentation</a>
+          <a href="../../../download.html">Download</a>
+          <a href="../../../community.html">Get Involved</a>
+        </nav>
+      </div>
+      <div class="col-md-4 text-right ts">
+        &copy; 2015 Typesafe Inc.
+        <a href="https://typesafe.com">
+          <img src="../files/typesafe_reverse.svg" alt="Typesafe, Inc.">
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+        </div>
+        
+        <div class="highlight-outer">
+              <div class="highlight-menu">
+                <ul>
+                  <li><button id="highlight-button-twitter"><img src="../img/twitter-bird-dark-bgs.png"/></button></li>
+                </ul>
+              </div>
+            </div>
+      </body>
+    </html>
