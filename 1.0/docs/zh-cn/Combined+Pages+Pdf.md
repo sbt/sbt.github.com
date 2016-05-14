@@ -32,7 +32,7 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.msi
+  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.msi
   [Setup-Notes]: ../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -60,46 +60,26 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
 如果你在运行 sbt 时遇到任何问题，查看 [安装建议][Setup-Notes] 中的终端编码（terminal encoding），HTTP 代理，JVM 参数。
 
 
-  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.zip
-  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.tgz
+  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.zip
+  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.tgz
   [Manual-Installation]: Manual-Installation.html
   [Activator-Installation]: Activator-Installation.html
 
 在 Mac 上安装 sbt
 ---------------------
 
-### 通过第三方的包安装
-
-> **注意：** 第三方的包可能没有提供最新的版本，请记得将任何问题反馈给这些包相关的维护者。
-
-#### 通过 [Macports](http://macports.org/) 安装
-
-```
-$ port install sbt
-```
-
-#### 通过 [Homebrew](http://mxcl.github.com/homebrew/) 安装
-
-```
-$ brew install sbt
-```
-
 ### 通过通用的包安装
 
 下载 [ZIP][ZIP] 或者 [TGZ][TGZ] 包并解压。
-
-### Lightbend Activator
-
-参见 [Lightbend Activator安装指南][Activator-Installation].
 
 ### 手动安装
 
 参见手动安装指南。
 
 
-  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.msi
-  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.zip
-  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.tgz
+  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.msi
+  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.zip
+  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.tgz
   [Activator-Installation]: Activator-Installation.html
 
 在 Windows 上安装 sbt
@@ -113,19 +93,15 @@ $ brew install sbt
 
 下载 [ZIP][ZIP] 或者 [TGZ][TGZ] 包并解压。
 
-### Lightbend Activator
-
-参见 [Lightbend Activator安装指南][Activator-Installation].
-
 ### 手动安装
 
 参见手动安装指南。
 
 
-  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.zip
-  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-0.13.11.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-0.13.11.deb
+  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.zip
+  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm-experimental/sbt-1.0.0-M4.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian-experimental/sbt-1.0.0-M4.deb
   [Manual-Installation]: Manual-Installation.html
   [Activator-Installation]: Activator-Installation.html
 
@@ -144,7 +120,7 @@ Ubuntu和其他基于Debian的发行版使用DEB格式，但通常你不从本�
 从终端运行下面的命令安装`sbt`（你需要超级用户权限，因此需要`sudo`）。
 
 
-    echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
+    echo "deb https://dl.bintray.com/sbt/debian-experimental /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
     sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 642AC823
     sudo apt-get update
     sudo apt-get install sbt
@@ -161,7 +137,7 @@ Ubuntu和其他基于Debian的发行版使用DEB格式，但通常你不从本�
 红帽企业版Linux和其他基于RPM的发行版使用RPM格式。
 从终端运行下面的命令安装`sbt`（你需要超级用户权限，因此需要`sudo`）。
 
-    curl https://bintray.com/sbt/rpm/rpm > bintray-sbt-rpm.repo
+    curl https://bintray.com/sbt/rpm/rpm-experimental > bintray-sbt-rpm.repo
     sudo mv bintray-sbt-rpm.repo /etc/yum.repos.d/
     sudo yum install sbt
 
@@ -181,16 +157,12 @@ sbt 二进制文件发布到 Bintray，而Bintray 方便地提供了RPM资源库
 
 > **注意：** 请将任何和 ebuild 相关的问题反馈到 [这里](https://github.com/whiter4bbit/overlays/issues)。
 
-### Lightbend Activator
-
-参见 [Lightbend Activator安装指南][Activator-Installation].
-
 ### 手动安装
 
 参见[手动安装指南][Manual-Installation]。
 
 
-  [sbt-launch.jar]: https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.11/sbt-launch.jar
+  [sbt-launch.jar]: https://repo1.maven.org/maven2/org/scala-sbt/sbt-launch/1.0.0-M4/sbt-launch.jar
 
 手动安装 sbt
 -----------------------
@@ -268,28 +240,6 @@ $ chmod u+x ~/bin/sbt
 > **注意：** 当前其他的配置还不支持。请 [提交 pull request](https://github.com/sbt/sbt/blob/0.13/CONTRIBUTING.md) 实现或者描述已经支持的配置。
 
 
-  [Manual-Installation]: Manual-Installation.html
-
-安装 Lightbend Activator (包含sbt)
----------------------
-
-Lightbend Activator 是sbt的一个自定义版本，它添加两个额外的命令`activator ui`和`activator new`。`activator`命令简言之就是sbt的一个超集。
-
-你可以从 [typesafe.com](http://typesafe.com/platform/getstarted)获得Activator。
-
-If you see a command line such as `sbt ~test` in the documentation, you will also be able to type `activator ~test`. Any Activator project can be opened in sbt and vice versa because Activator is "sbt powered."
-
-如果你在文档中看到一个命令行如`sbt ~test`，你也将可以键入`activator ~test`。任意一个Activator工程能都可以用sbt打开，反之亦然，因为Activator是"基于sbt"的。
-
-Activator下载包括`activator`脚本和一个`activator-launch.jar`，分别相当于[手动安装][Manual-Installation]所述的sbt脚本和启动jar。这里Activator和一个[手动安装][Manual-Installation]的sbt之间的差异如下：
-
- * 键入不带参数的`activator`将尝试猜测是否进入`activator shell`或`activator ui`模式；键入`activator shell`来明确进入命令行提示符。
- * `activator new`允许你从一个大的[项目模板目录](https://typesafe.com/activator/templates)中创建项目，例如`play-scala`模板是一个[Play Framework](http://playframework.com)Scala应用程序骨架
- * `activator ui`启动一种快速启动用户界面，可用于从模板目录浏览教程（在目录中的许多模板有陪同教程）。
-
-Activator提供两种下载；小的"minimal"下载包只包含包装脚本和启动jar，而大的"full"下载包含预装的Ivy缓存，包括Scala，Akka和Play框架。
-
-
   [Basic-Def]: Basic-Def.html
   [Setup]: Setup.html
 
@@ -344,7 +294,7 @@ lazy val root = (project in file(".")).
   settings(
     name := "hello",
     version := "1.0",
-    scalaVersion := "2.11.7"
+    scalaVersion := "2.11.8"
   )
 ```
 
@@ -355,10 +305,10 @@ lazy val root = (project in file(".")).
 
 ### 设置 sbt 版本
 
-你可以通过创建 `hello/project/build.properties` 文件强制指定一个版本的 sbt。在这个文件里，编写如下内容来强制使用 0.13.11：
+你可以通过创建 `hello/project/build.properties` 文件强制指定一个版本的 sbt。在这个文件里，编写如下内容来强制使用 1.0.0-M4：
 
 ```
-sbt.version=0.13.11
+sbt.version=1.0.0-M4
 ```
 
 sbt 在不同的 release 版本中是 99% 兼容的。但是在 `project/build.properties` 文件中设置 sbt 的版本仍然能避免一些潜在的混淆。
@@ -635,7 +585,7 @@ lazy val root = (project in file(".")).
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.11.7"
+  scalaVersion := "2.11.8"
 )
 
 lazy val root = (project in file(".")).
@@ -779,7 +729,7 @@ val derby = "org.apache.derby" % "derby" % "10.4.1.3"
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.11.7"
+  scalaVersion := "2.11.8"
 )
 
 lazy val root = (project in file(".")).
@@ -1428,7 +1378,7 @@ To factor out common settings across multiple projects, create a sequence named 
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.11.7"
+  scalaVersion := "2.11.8"
 )
 
 lazy val core = (project in file("core")).
@@ -1659,10 +1609,10 @@ lazy val core = (project in file("core")).
 
 ### 全局插件
 
-可以一次给所有项目安装插件，只要在 `~/.sbt/0.13/plugins/` 中声明它们。`~/.sbt/0.13/plugins/` 是一个将自己的 classpath 导出给所有项目的 sbt 构建定义。
-概略地讲，在 `~/.sbt/0.13/plugins/` 中的任何 `.sbt` 或者 `.scala` 文件就和所有项目的 `project/` 目录下的一样。
+可以一次给所有项目安装插件，只要在 `~/.sbt/1.0.0-M4/plugins/` 中声明它们。`~/.sbt/1.0.0-M4/plugins/` 是一个将自己的 classpath 导出给所有项目的 sbt 构建定义。
+概略地讲，在 `~/.sbt/1.0.0-M4/plugins/` 中的任何 `.sbt` 或者 `.scala` 文件就和所有项目的 `project/` 目录下的一样。
 
-为了一次给所有的项目添加插件，你可以创建 `~/.sbt/0.13/plugins//build.sbt` 并且添加 `addSbtPlugin()` 表达式。因为这样做会增加机器上的依赖，所以这个特性应该少用。
+为了一次给所有的项目添加插件，你可以创建 `~/.sbt/1.0.0-M4/plugins//build.sbt` 并且添加 `addSbtPlugin()` 表达式。因为这样做会增加机器上的依赖，所以这个特性应该少用。
 参见[最佳实践][global-vs-local-plugins]。
 
 ### 可用的插件
@@ -1991,7 +1941,7 @@ import Dependencies._
 
 lazy val commonSettings = Seq(
   version := "0.1.0",
-  scalaVersion := "2.11.7"
+  scalaVersion := "2.11.8"
 )
 
 lazy val backend = (project in file("backend")).
@@ -2079,7 +2029,7 @@ name := "hello"
 
 version := "1.0"
 
-scalaVersion := "2.11.7"
+scalaVersion := "2.11.8"
 ```
 
 ### (在 0.13.7 之前) 设置项必须以空行分隔
@@ -2223,9 +2173,9 @@ sbt 从 `.sbt` 文件*附加*设置到 `Build.settings` 和 `Project.setting` �
 事实上，也有设置的其他来源。他们被追加顺序如下：
 
  - 来自你的 `.scala` 设置文件中的 `Build.settings` 和 `Project.settings`。
- - 你的用户账号全局设置；例如在 `~/.sbt/0.13/global.sbt` 中你可以定义影响你 *所有* 项目的设置。
+ - 你的用户账号全局设置；例如在 `~/.sbt/1.0.0-M4/global.sbt` 中你可以定义影响你 *所有* 项目的设置。
  - 插件注入的设置，参见接下来的[使用插件][Using-Plugins]。
  - 项目下 `.sbt` 文件中的设置。
- - 构建定义项目（即 `project` 中的项目）有来自全局插件（`~/.sbt/0.13/plugins/`）的设置。[使用插件][Using-Plugins]解释了更多的内容。
+ - 构建定义项目（即 `project` 中的项目）有来自全局插件（`~/.sbt/1.0.0-M4/plugins/`）的设置。[使用插件][Using-Plugins]解释了更多的内容。
 
 后面的设置会覆盖前面的。全部的设置列表构成了完整的构建定义。

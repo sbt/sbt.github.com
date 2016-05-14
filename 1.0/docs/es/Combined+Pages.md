@@ -35,7 +35,7 @@ Gracias por utilizar sbt *¡Diviértase!*
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.msi
+  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.msi
   [Setup-Notes]: ../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -68,32 +68,14 @@ Si tiene algún problema ejecutando sbt, vea
 HTTP proxies, y opciones de la JVM.
 
 
-  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.zip
-  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.tgz
+  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.zip
+  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.tgz
   [Manual-Installation]: Manual-Installation.html
  
 <!-- TODO: Translate to Spanish -->
 
 Installing sbt on Mac
 ---------------------
-
-### Installing from a third-party package
-
-> **Note:** Los paquetes de terceros pueden no proporcionar la última versión
-> disponible. Por favor asegúrese de reportar cualquier problema con
-> estos paquetes a los mantenedores respectivos.
-
-#### [Macports](http://macports.org/)
-
-```
-$ port install sbt
-```
-
-#### [Homebrew](http://mxcl.github.com/homebrew/)
-
-```
-$ brew install sbt
-```
 
 ### Installing from a universal package
 
@@ -104,9 +86,9 @@ Download [ZIP][ZIP] or [TGZ][TGZ] package, and expand it.
 See instruction to install manually.
 
 
-  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.msi
-  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.zip
-  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.tgz
+  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.msi
+  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.zip
+  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.tgz
 
 Installing sbt on Windows
 -------------------------
@@ -124,10 +106,10 @@ Download [ZIP][ZIP] or [TGZ][TGZ] package and expand it.
 See instruction to install manually.
 
 
-  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.zip
-  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-0.13.11.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-0.13.11.deb
+  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.zip
+  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm-experimental/sbt-1.0.0-M4.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian-experimental/sbt-1.0.0-M4.deb
   [Manual-Installation]: Manual-Installation.html
 
 <!-- TODO: Translate to Spanish -->
@@ -170,7 +152,7 @@ siguiente:
 See instruction to install manually.
 
 
-  [sbt-launch.jar]: https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.11/sbt-launch.jar
+  [sbt-launch.jar]: https://repo1.maven.org/maven2/org/scala-sbt/sbt-launch/1.0.0-M4/sbt-launch.jar
 
 Installing sbt manually
 -----------------------
@@ -345,10 +327,10 @@ Usted puede forzar una versión partivular de sbt al crear un archivo
 `hello/project/build.properties`. En este archivo, escriba:
 
 ```
-sbt.version=0.13.11
+sbt.version=1.0.0-M4
 ```
 
-para forzar el uso de sbt 0.13.11. sbt es 99% compatible (con respecto
+para forzar el uso de sbt 1.0.0-M4. sbt es 99% compatible (con respecto
 al código fuente) de una *release* a otra. Sin embargo, configurar la versión
 de sbt en `project/build.properties`
 evita cualquier confusión potencial.

@@ -40,7 +40,7 @@ sbt を試してくれることに感謝する。_ぜひ楽しいんでほしい
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.msi
+  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.msi
   [Setup-Notes]: ../../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -71,47 +71,26 @@ sbt プロジェクトを作るためには、以下の手順をたどる必要�
 
 
 
-  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.zip
-  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.tgz
+  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.zip
+  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.tgz
   [Manual-Installation]: Manual-Installation.html
   [Activator-Installation]: Activator-Installation.html
 
 Mac への sbt のインストール
 -------------------------
 
-### サードパーティパッケージを使ってのインストール
-
-> **注意:** サードパーティが提供するパッケージは最新版を使っているとは限らない。
-> 何か問題があれば、パッケージメンテナに報告してほしい。
-
-#### [Macports](http://macports.org/)
-
-```
-$ port install sbt
-```
-
-#### [Homebrew](http://mxcl.github.com/homebrew/)
-
-```
-$ brew install sbt
-```
-
 ### ユニバーサルパッケージからのインストール
 
 [ZIP][ZIP] か [TGZ][TGZ] をダウンロードしてきて解凍する。
-
-### Lightbend Activator
-
-[Lightbend Activator][Activator-Installation]の手順を参照。
 
 ### 手動インストール
 
 手動インストールの手順を参照。
 
 
-  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.msi
-  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.zip
-  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.tgz
+  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.msi
+  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.zip
+  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.tgz
   [Activator-Installation]: Activator-Installation.html
 
 Windows への sbt のインストール
@@ -125,23 +104,19 @@ Windows への sbt のインストール
 
 [ZIP][ZIP] か [TGZ][TGZ] をダウンロードしてきて解凍する。
 
-### Lightbend Activator
-
-[Lightbend Activator][Activator-Installation]の手順を参照。
-
 ### 手動インストール
 
 手動インストールの手順を参照。
 
 
-  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.zip
-  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.11/sbt-0.13.11.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-0.13.11.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-0.13.11.deb
+  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.zip
+  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm-experimental/sbt-1.0.0-M4.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian-experimental/sbt-1.0.0-M4.deb
   [Manual-Installation]: Manual-Installation.html
   [Activator-Installation]: Activator-Installation.html
   [website127]: https://github.com/sbt/website/issues/12
- 
+
 Linux への sbt のインストール
 --------------------------
 
@@ -159,7 +134,7 @@ Ubuntu 及びその他の Debian ベースのディストリビューション�
 (例: `apt-get`、`aptitude`、Synaptic など)、インストールはそれらから行う。
 ターミナル上から以下を実行すると `sbt` をインストールできる (superuser 権限を必要とするため、`sudo` を使っている)。
 
-    echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
+    echo "deb https://dl.bintray.com/sbt/debian-experimental /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
     sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 642AC823
     sudo apt-get update
     sudo apt-get install sbt
@@ -183,7 +158,7 @@ sbt のバイナリは Bintray にて公開されており、都合の良いこ�
 Red Hat Enterprise Linux 及びその他の RPM ベースのディストリビューションは RPM フォーマットを用いる。
 ターミナル上から以下を実行すると `sbt` をインストールできる (superuser 権限を必要とするため、`sudo` を使っている)。
 
-    curl https://bintray.com/sbt/rpm/rpm | sudo tee /etc/yum.repos.d/bintray-sbt-rpm.repo
+    curl https://bintray.com/sbt/rpm/rpm-experimental | sudo tee /etc/yum.repos.d/bintray-sbt-rpm.repo
     sudo yum install sbt
 
 sbt のバイナリは Bintray にて公開されており、Bintray は RPM リポジトリを提供する。
@@ -208,16 +183,12 @@ sbt のバイナリは Bintray にて公開されており、Bintray は RPM リ
 > [こちら](https://github.com/whiter4bbit/overlays/issues)
 > へ報告してほしい。
 
-### Lightbend Activator
-
-[Lightbend Activator][Activator-Installation]の手順を参照。
-
 ### 手動インストール
 
 手動インストールの手順を参照。
 
 
-  [sbt-launch.jar]: https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.11/sbt-launch.jar
+  [sbt-launch.jar]: https://repo1.maven.org/maven2/org/scala-sbt/sbt-launch/1.0.0-M4/sbt-launch.jar
 
 手動インストール
 --------------
@@ -311,42 +282,6 @@ Options -> Keys "Backspace sends ^H"  の設定をチェックする必要があ
  - sbt0.13.0以降、windows の場合は、 `-Dinput.encoding=Cp1252` を指定しないと矢印キーでの履歴参照などが文字化けするようなので、設定してください。 [詳しい議論などはここを参照](https://github.com/sbt/sbt/issues/871)
 
 
-  [Manual-Installation]: Manual-Installation.html
-
-Lightbend Activator (sbt を含む) のインストール 
--------------------------------------------
-
-Lightbend Activator は `activator ui` と `activator new` という
-2つのコマンドを追加するカスタム版の sbt だ。
-つまり、`activator` は sbt のスーパーセットであると言える。
-
-Activator は [typesafe.com](http://typesafe.com/get-started) で入手できる。
-
-このガイドで `sbt ~test` というようなコマンドラインがあれば、
-`activator ~test` と打ち込めばそのまま動作するはずだ。
-Activator の「中の人」は sbt なので、全ての
-Activator プロジェクトは sbt で開くことができ、そのまた逆も成り立つ。
-
-Activator をダウンロードすると `activator` スクリプトと
-`activator-launch.jar` が含まれている。これは[手動インストール][Manual-Installation]で
-解説されている sbt スクリプトと sbt launcher JAR に相当する。
-以下が sbt の[手動インストール][Manual-Installation]との違いだ:
-
-- 引数なしで `activator` と入力すると `activator shell` モードか
-  `activator ui` モードに入るかを推論する。
-  コマンドラインプロンプトを強制したい場合は `activator shell` と入力する。
-- `activator new` を使うことで豊富な
-　[テンプレートのカタログ](https://typesafe.com/activator/templates)を元にプロジェクトを新規作成することができる。
-  例えば、`play-scala` テンプレートを使うと Scala の [Play Framework](https://playframework.com) アプリを作れる。
-- `activator ui` は、クイックスタート UI を起動する。
-  これを使ってテンプレート付属のチュートリアルを読みながら作業できる
-  (カタログ内の多くのテンプレートにはチュートリアルが付属している)。
-
-Activator には、起動スクリプトと起動JAR のみのミニマル版ダウンロードと、
-Scala、Akka、そして Play Framework の JAR がすぐに使えるよう
-Ivy リポジトリを含む完全版ダウンロードの 2 種類がある。
-
-
   [Basic-Def]: Basic-Def.html
   [Setup]: Setup.html
 
@@ -403,7 +338,7 @@ lazy val root = (project in file(".")).
   settings(
     name := "hello",
     version := "1.0",
-    scalaVersion := "2.11.7"
+    scalaVersion := "2.11.8"
   )
 ```
 
@@ -416,7 +351,7 @@ lazy val root = (project in file(".")).
 このファイルに、以下のように書く:
 
 ```
-sbt.version=0.13.11
+sbt.version=1.0.0-M4
 ```
 
 sbt はリリース間で 99% ソースコード互換性を維持しているが、
@@ -743,7 +678,7 @@ sbt はまず `Setting` のリストをソートする。
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.11.7"
+  scalaVersion := "2.11.8"
 )
 
 lazy val root = (project in file(".")).
@@ -1660,7 +1595,7 @@ lazy val core = project in file("core")
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.11.7"
+  scalaVersion := "2.11.8"
 )
 
 lazy val core = (project in file("core")).
@@ -1952,11 +1887,11 @@ lazy val core = (project in file("core")).
 
 ### グローバル・プラグイン
 
-プラグインを `~/.sbt/0.13/plugins/` 以下で宣言することで全てのプロジェクトに対して一括してプラグインをインストールすることができる。
-`~/.sbt/0.13/plugins/` はそのクラスパスをすべての sbt ビルド定義に対して export する sbt プロジェクトだ。
-大雑把に言えば、`~/.sbt/0.13/plugins/` 内の `.sbt` ファイルや `.scala` ファイルは、それが全てのプロジェクトの `project/` ディレクトリに入っているかのようにふるまう。
+プラグインを `~/.sbt/1.0.0-M4/plugins/` 以下で宣言することで全てのプロジェクトに対して一括してプラグインをインストールすることができる。
+`~/.sbt/1.0.0-M4/plugins/` はそのクラスパスをすべての sbt ビルド定義に対して export する sbt プロジェクトだ。
+大雑把に言えば、`~/.sbt/1.0.0-M4/plugins/` 内の `.sbt` ファイルや `.scala` ファイルは、それが全てのプロジェクトの `project/` ディレクトリに入っているかのようにふるまう。
 
-`~/.sbt/0.13/plugins/build.sbt` を作って、そこに `addSbtPlugin()` 式を書くことで
+`~/.sbt/1.0.0-M4/plugins/build.sbt` を作って、そこに `addSbtPlugin()` 式を書くことで
 全プロジェクトにプラグインを追加することができる。
 しかし、これを多用するとマシン環境への依存性を増やしてしまうことになるので、この機能は注意してほどほどに使うべきだ。
 [ベスト・プラクティス][global-vs-local-plugins]も参照してほしい。
@@ -2342,7 +2277,7 @@ import Dependencies._
 
 lazy val commonSettings = Seq(
   version := "0.1.0",
-  scalaVersion := "2.11.7"
+  scalaVersion := "2.11.8"
 )
 
 lazy val backend = (project in file("backend")).
@@ -2447,7 +2382,7 @@ name := "hello"
 
 version := "1.0"
 
-scalaVersion := "2.11.7"
+scalaVersion := "2.11.8"
 ```
 
 ### (0.13.7 以前) 設定は空白行で区切る
@@ -2910,7 +2845,7 @@ sbt 0.13.8 で `Def.sequential` という関数が追加されて、準逐次な
 #### project/build.properties
 
 ```
-sbt.version=0.13.11
+sbt.version=1.0.0-M4
 ```
 
 #### project/style.sbt
@@ -2960,7 +2895,7 @@ root> compilecheck
 #### project/build.properties
 
 ```
-sbt.version=0.13.11
+sbt.version=1.0.0-M4
 ```
 
 #### project/style.sbt
