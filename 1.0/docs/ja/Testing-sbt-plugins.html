@@ -52,10 +52,9 @@
 このページはプラグインにどのようにして scripted-plugin を導入するかを解説する。
 </p><h3 id="%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+1%3A+snapshot">ステップ 1: snapshot<a href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+1%3A+snapshot" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>scripted-plugin はプラグインをローカルに publish するため、まずは version を <strong>-SNAPSHOT</strong> なものに設定しよう。ここで SNAPSHOT を使わないと、あなたと世界のあなた以外の人が別々のアーティファクトを観測するといった酷い不整合な状態に入り込む場合があるからだ。
 </p><h3 id="%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+2%3A+scripted-plugin">ステップ 2: scripted-plugin<a href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+2%3A+scripted-plugin" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>次に、scripted-plugin をプラグインのビルドに加える。<code>project/scripted.sbt</code>:
-</p><pre><code class="prettyprint lang-scala">libraryDependencies += { &quot;org.scala-sbt&quot; % &quot;scripted-plugin&quot; % sbtVersion.value }
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += { &quot;org.scala-sbt&quot; %% &quot;scripted-plugin&quot; % sbtVersion.value }
 </code></pre><p>以下のセッティングを <code>scripted.sbt</code> に加える:
-</p><pre><code class="prettyprint lang-scala">ScriptedPlugin.scriptedSettings
-scriptedLaunchOpts := { scriptedLaunchOpts.value ++
+</p><pre><code class="prettyprint lang-scala">scriptedLaunchOpts := { scriptedLaunchOpts.value ++
   Seq(&quot;-Xmx1024M&quot;, &quot;-XX:MaxPermSize=256M&quot;, &quot;-Dplugin.version=&quot; + version.value)
 }
 scriptedBufferLog := false
