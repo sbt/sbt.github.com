@@ -3120,6 +3120,8 @@ your plugin to the list.
     (handy checkstyle runner for Java projects)
 -   sbt-verify-plugin: <https://github.com/lenioapp/sbt-verify-plugin>
     (statically verify the integrity of downloaded dependencies)
+-   sbt-dependency-check: <https://github.com/albuch/sbt-dependency-check>
+    (check project dependencies for publicly known vulnerabilities/CVEs)
 
 #### One jar plugins
 
@@ -3202,6 +3204,7 @@ your plugin to the list.
 -   scalatra-sbt: <https://github.com/scalatra/scalatra-sbt>
 -   sbt-scala-js-map (Configures source mapping for Scala.js projects hosted on Github):
     <https://github.com/ThoughtWorksInc/sbt-scala-js-map>
+-   Naptime API framework plugin: <http://coursera.github.io/naptime> (<https://github.com/coursera/naptime>)
 
 #### Documentation plugins
 
@@ -3321,6 +3324,8 @@ your plugin to the list.
     <https://github.com/henrikengstrom/sbt-ortho>
 -   sbt-write-output-to-file (redirect the output of `run` to a file):
     <https://github.com/cb372/sbt-write-output-to-file>
+-   sbt-jol (OpenJDK JOL (Java Object Layout) integration for sbt and Scala):
+    <https://github.com/ktoso/sbt-jol>
 
 #### Database plugins
 
@@ -3407,6 +3412,8 @@ your plugin to the list.
 
 -   android-plugin: <https://github.com/jberkel/android-plugin>
 -   android-sdk-plugin: <https://github.com/pfn/android-sdk-plugin>
+-   sbt-crashlytics (Provides [crashlytics](https://fabric.io/kits/android/crashlytics/) support for android applications):
+    <https://github.com/seroperson/sbt-crashlytics>
 
 #### iOS plugins
 
@@ -3416,9 +3423,14 @@ your plugin to the list.
 
 -   sbtosgi: <https://github.com/sbt/sbt-osgi>
 
-#### C++ interop plugins
+#### Native interop plugins
 
 - sbt-javacpp (JavaCPP is the missing bridge between Java and native C++; this lib helps you download platform-specific presets): <https://github.com/lloydmeta/sbt-javacpp>
+- sbt-jni (Suite of sbt plugins for simplifying creation and distribution of JNI programs): <https://github.com/jodersky/sbt-jni>
+
+#### Benchmarking plugins 
+
+- sbt-jmh (OpenJDK JMH (Java Microbenchmark Harness) integration for Scala): <https://github.com/ktoso/sbt-jmh>
 
 #### Computer vision plugins
 
