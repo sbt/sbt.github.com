@@ -164,7 +164,28 @@ suggestions becomes unmanageable. A better parser is:
 <code>token(&quot;green&quot; ~ token(&quot;blue&quot;))</code>. The behavior is unspecified (and
 should generate an error in the future), but typically the outer most
 token definition will be used.
-</p><div class="bottom nav span-16">
+</p><h3 id="Dependent+parsers">Dependent parsers<a href="#Dependent+parsers" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Sometimes a parser must analyze some data and then more data needs to be parsed, 
+and it is dependent on the previous one.  
+<br/>
+The key for obtaining this behaviour is to use the <code>flatMap</code> function.
+</p><p>As an example, it will shown how to select several items from a list of valid ones 
+with completion, but no duplicates are possible.  A space is used to separate the 
+different items.
+</p><pre><code class="prettyprint lang-scala">def select1(items: Iterable[String]) =
+  token(Space ~&gt; StringBasic.examples(FixedSetExamples(items)))
+
+def selectSome(items: Seq[String]): Parser[Seq[String]] = {
+   select1(items).flatMap { v ⇒
+   val remaining = items filter { _ != v }
+   if (remaining.size == 0)
+     success(v :: Nil)
+   else
+     selectSome(remaining).?.map(v +: _.getOrElse(Seq()))
+ } 
+</code></pre><p> As you can see, the <code>flatMap</code> function provides the previous value.  With this info, a new
+ parser is constructed for the remaining items.  The <code>map</code> combinator is also used in order
+ to transform the output of the parser.
+</p><p> The parser is called recursively, until it is found the trivial case of no possible choices.</p><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>
                         <a href="Build-State.html"> State and actions </a>                        
