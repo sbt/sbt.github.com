@@ -1333,7 +1333,7 @@ enabled. sbt’s default settings are provided via three plugins:
 Java/Scala projects.
 </li></ol><p>In addition, <code>JUnitXmlReportPlugin</code> provides an experimental support for
 generating junit-xml.
-</p><p>Older non-auto plugins often require settings to be added explictly, so
+</p><p>Older non-auto plugins often require settings to be added explicitly, so
 that <a href="Multi-Project.html">multi-project build</a> could have different types of
 projects. The plugin documentation will indicate how to configure it,
 but typically for older plugins this involves adding the base settings
@@ -1432,7 +1432,7 @@ you can often use the convenient APIs in
 </p><h3 id="Execution+semantics+of+tasks">Execution semantics of tasks<a href="#Execution+semantics+of+tasks" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>When depending on other tasks from a custom task using <code>value</code>,
 an important detail to note is the execution semantics of the tasks.
 By execution semantics, we mean exactly <em>when</em> these tasks are evaluated.
-</p><p>We if take <code>sampeIntTask</code> for instance, each line in the body of the task
+</p><p>If we take <code>sampleIntTask</code> for instance, each line in the body of the task
 should be strictly evaluated one after the other. That is sequential semantics:
 </p><pre><code class="prettyprint lang-scala">sampleIntTask := {
   val sum = 1 + 2        // first
@@ -1442,7 +1442,7 @@ should be strictly evaluated one after the other. That is sequential semantics:
 </code></pre><p>In reality JVM may inline the <code>sum</code> to <code>3</code>, but the observable <em>effect</em> of the
 task will remain identical as if each line were executed one after the other.
 </p><p>Now suppose we define two more custom tasks <code>startServer</code> and <code>stopServer</code>,
-and modify <code>sampeIntTask</code> as follows:
+and modify <code>sampleIntTask</code> as follows:
 </p><pre><code class="prettyprint lang-scala">val startServer = taskKey[Unit](&quot;start server&quot;)
 val stopServer = taskKey[Unit](&quot;stop server&quot;)
 val sampleIntTask = taskKey[Int](&quot;A sample int task.&quot;)
@@ -1505,7 +1505,7 @@ s: 3
 and <code>sampleIntTask</code> also depends on <code>startServer</code> task, it appears twice as task dependency.
 If this was a plain Scala method call it would be evaluated twice,
 but since <code>value</code> is just denoting a task dependency, it will be evaluated once.
-The following is a graphical notation of how <code>sampeStringTask</code>’s evalutation:
+The following is a graphical notation of <code>sampleStringTask</code>’s evaluation:
 </p><p><img src="files/task-dependency01.png" alt="task-dependency"/>
 </p><p>If we did not deduplicate the task dependencies, we will end up
 compiling test source code many times when <code>test</code> task is invoked
@@ -2612,7 +2612,7 @@ benefit fixes <a href="https://github.com/sbt/sbt/issues/2286">#2286</a>. The ol
 <code>ivyScala := { ivyScala.value map {_.copy(overrideScalaVersion = sbtPlugin.value)} }</code>
 to your build. <a href="https://github.com/sbt/sbt/issues/2286">#2286</a>/<a href="https://github.com/sbt/sbt/pull/2634">#2634</a> by <a href="https://github.com/milessabin">@milessabin</a>
 </li><li>The Build trait is deprecated in favor of the <code>.sbt</code> format <a href="https://github.com/sbt/sbt/pull/2530">#2530</a> by <a href="http://github.com/dwijnand">@dwijnand</a>
-</li></ul><h3 id="Improvements">Improvements<a href="#Improvements" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>When <code>RecompileOnMacroDef</code> is enabled, sbt will now print out a info level log indicating that some sources are being recompiled because it’s used from a source that contains a macro definition. <a href="https://github.com/sbt/sbt/pull/2637">#2637</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li></ul><h3 id="Improvements">Improvements<a href="#Improvements" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>When <code>RecompileOnMacroDef</code> is enabled, sbt will now print out a info level log indicating that some sources are being recompiled because it’s used from a source that contains a macro definition. Can be disabled with <code>incOptions := incOptions.value.withLogRecompileOnMacro(false)</code> <a href="https://github.com/sbt/sbt/pull/2637">#2637</a>/[#2659][2659] by [@eed3si9n][@eed3si9n]/[@dwijnand][@dwijnand]
 </li><li>Adds Windows script support and native file extensions on Unix platforms. <a href="https://github.com/sbt/sbt/pull/2603">#2603</a> by <a href="https://github.com/ekrich">@ekrich</a>
 </li><li>Improves loading time of large builds. <a href="https://github.com/sbt/sbt/pull/2630">#2630</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
 </li><li>Adds the ability to call <code>dependsOn</code> for the current project inside a <code>.sbt</code> file. <a href="https://github.com/sbt/sbt/pull/2653">#2653</a> by <a href="https://github.com/anatolydwnld">@anatolydwnld</a>

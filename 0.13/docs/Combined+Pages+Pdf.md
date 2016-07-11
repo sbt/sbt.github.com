@@ -2223,7 +2223,7 @@ enabled. sbt's default settings are provided via three plugins:
 In addition, `JUnitXmlReportPlugin` provides an experimental support for
 generating junit-xml.
 
-Older non-auto plugins often require settings to be added explictly, so
+Older non-auto plugins often require settings to be added explicitly, so
 that [multi-project build][Multi-Project] could have different types of
 projects. The plugin documentation will indicate how to configure it,
 but typically for older plugins this involves adding the base settings
@@ -2379,7 +2379,7 @@ When depending on other tasks from a custom task using `value`,
 an important detail to note is the execution semantics of the tasks.
 By execution semantics, we mean exactly *when* these tasks are evaluated.
 
-We if take `sampeIntTask` for instance, each line in the body of the task
+If we take `sampleIntTask` for instance, each line in the body of the task
 should be strictly evaluated one after the other. That is sequential semantics:
 
 ```scala
@@ -2394,7 +2394,7 @@ In reality JVM may inline the `sum` to `3`, but the observable *effect* of the
 task will remain identical as if each line were executed one after the other.
 
 Now suppose we define two more custom tasks `startServer` and `stopServer`,
-and modify `sampeIntTask` as follows:
+and modify `sampleIntTask` as follows:
 
 ```scala
 val startServer = taskKey[Unit]("start server")
@@ -2475,7 +2475,7 @@ Because `sampleStringTask` depends on both `startServer` and `sampleIntTask` tas
 and `sampleIntTask` also depends on `startServer` task, it appears twice as task dependency.
 If this was a plain Scala method call it would be evaluated twice,
 but since `value` is just denoting a task dependency, it will be evaluated once.
-The following is a graphical notation of how `sampeStringTask`'s evalutation:
+The following is a graphical notation of `sampleStringTask`'s evaluation:
 
 ![task-dependency](files/task-dependency01.png)
 
@@ -4120,7 +4120,7 @@ These releases maintain binary compatibility with plugins that are published aga
 
 ### Improvements
 
-- When `RecompileOnMacroDef` is enabled, sbt will now print out a info level log indicating that some sources are being recompiled because it's used from a source that contains a macro definition. [#2637][2637] by [@eed3si9n][@eed3si9n]
+- When `RecompileOnMacroDef` is enabled, sbt will now print out a info level log indicating that some sources are being recompiled because it's used from a source that contains a macro definition. Can be disabled with `incOptions := incOptions.value.withLogRecompileOnMacro(false)` [#2637][2637]/[#2659][2659] by [@eed3si9n][@eed3si9n]/[@dwijnand][@dwijnand]
 - Adds Windows script support and native file extensions on Unix platforms. [#2603][2603] by [@ekrich][@ekrich]
 - Improves loading time of large builds. [#2630][2630] by [@eed3si9n][@eed3si9n]
 - Adds the ability to call `dependsOn` for the current project inside a `.sbt` file. [#2653][2653] by [@anatolydwnld][@anatolydwnld]
