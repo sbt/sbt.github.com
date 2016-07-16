@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/compiler/javac/JavaCompiler.scala</title>
+        <script type="text/javascript" src="../../../jquery-all.js"></script>
+        <script type="text/javascript" src="../../../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="keyword">package</span> sbt.compiler.javac
+
+<span class="keyword">import</span> sbt.ClasspathOptions
+<span class="keyword">import</span> sbt.<span class="delimiter">{</span> ClasspathOptions =&gt; _, _ <span class="delimiter">}</span>
+<span class="keyword">import</span> sbt.compiler._
+<span class="keyword">import</span> java.io.<span class="delimiter">{</span> PrintWriter, File <span class="delimiter">}</span>
+
+<span class="keyword">import</span> javax.tools.<span class="delimiter">{</span> DiagnosticListener, Diagnostic, JavaFileObject, DiagnosticCollector <span class="delimiter">}</span>
+<span class="keyword">import</span> xsbti.compile.ScalaInstance
+<span class="keyword">import</span> xsbti.compile._
+<span class="keyword">import</span> xsbti.<span class="delimiter">{</span> Severity, Reporter <span class="delimiter">}</span>
+
+<span class="comment">/**
+ * An interface to the toolchain of Java.
+ *
+ * Specifically, access to run javadoc + javac.
+ */</span>
+<span class="keyword">sealed</span> <span class="keyword">trait</span> <a title="trait JavaTools extends AnyRef" id="sbt.compiler.javac;JavaTools">JavaTools</a> <span class="delimiter">{</span>
+  <span class="comment">/** The raw interface of the java compiler for direct access. */</span>
+  <span class="keyword">def</span> <a title="=&gt; sbt.compiler.javac.JavaTool" id="sbt.compiler.javac;JavaTools.compiler">compiler</a>: <a href="#sbt.compiler.javac;JavaTool" title="sbt.compiler.javac.JavaTool">JavaTool</a>
+  <span class="comment">/**
+   * This will run a java compiler.
+   *
+   *
+   * @param sources  The list of java source files to compile.
+   * @param options  The set of options to pass to the java compiler (includes the classpath).
+   * @param log      The logger to dump output into.
+   * @param reporter The reporter for semantic error messages.
+   * @return true if no errors, false otherwise.
+   */</span>
+  <span class="keyword">def</span> <a title="(sources: Seq[java.io.File], options: Seq[String])(implicit log: sbt.Logger, implicit reporter: xsbti.Reporter)Boolean" id="sbt.compiler.javac;JavaTools.compile">compile</a><span class="delimiter">(</span><a title="Seq[java.io.File]" id="sbt.compiler.javac;JavaTools.compile.sources">sources</a>: <span title="Seq[java.io.File]">Seq</span><span class="delimiter">[</span>File<span class="delimiter">]</span>, <a title="Seq[String]" id="sbt.compiler.javac;JavaTools.compile.options">options</a>: <span title="Seq[String]">Seq</span><span class="delimiter">[</span>String<span class="delimiter">]</span><span class="delimiter">)</span><span class="delimiter">(</span><span class="keyword">implicit</span> <a title="sbt.Logger" id="sbt.compiler.javac;JavaTools.compile.log">log</a>: <a href="../../Logger.scala.html#sbt;Logger" title="sbt.Logger">Logger</a>, <a title="xsbti.Reporter" id="sbt.compiler.javac;JavaTools.compile.reporter">reporter</a>: <a href="../../../xsbti/Reporter.java.html#xsbti;Reporter" title="xsbti.Reporter">Reporter</a><span class="delimiter">)</span>: <span title="Boolean">Boolean</span>
+  <span class="comment">/**
+   * This will run a java compiler.
+   *
+   *
+   * @param sources  The list of java source files to compile.
+   * @param options  The set of options to pass to the java compiler (includes the classpath).
+   * @param log      The logger to dump output into.
+   * @param reporter The reporter for semantic error messages.
+   * @return true if no errors, false otherwise.
+   */</span>
+  <span class="keyword">def</span> <a title="(sources: Seq[java.io.File], options: Seq[String])(implicit log: sbt.Logger, implicit reporter: xsbti.Reporter)Boolean" id="sbt.compiler.javac;JavaTools.doc">doc</a><span class="delimiter">(</span><a title="Seq[java.io.File]" id="sbt.compiler.javac;JavaTools.doc.sources">sources</a>: <span title="Seq[java.io.File]">Seq</span><span class="delimiter">[</span>File<span class="delimiter">]</span>, <a title="Seq[String]" id="sbt.compiler.javac;JavaTools.doc.options">options</a>: <span title="Seq[String]">Seq</span><span class="delimiter">[</span>String<span class="delimiter">]</span><span class="delimiter">)</span><span class="delimiter">(</span><span class="keyword">implicit</span> <a title="sbt.Logger" id="sbt.compiler.javac;JavaTools.doc.log">log</a>: <a href="../../Logger.scala.html#sbt;Logger" title="sbt.Logger">Logger</a>, <a title="xsbti.Reporter" id="sbt.compiler.javac;JavaTools.doc.reporter">reporter</a>: <a href="../../../xsbti/Reporter.java.html#xsbti;Reporter" title="xsbti.Reporter">Reporter</a><span class="delimiter">)</span>: <span title="Boolean">Boolean</span>
+<span class="delimiter">}</span>
+
+<span class="comment">/**
+ * An extension of the JavaTools trait that also includes interfaces specific to running
+ * the java compiler inside of the incremental comppiler.
+ */</span>
+<span title="AnyRef" class="keyword">sealed</span> <span class="keyword">trait</span> <a title="trait IncrementalCompilerJavaTools extends AnyRef with sbt.compiler.javac.JavaTools" id="sbt.compiler.javac;IncrementalCompilerJavaTools">IncrementalCompilerJavaTools</a> <span class="keyword">extends</span> <a href="#sbt.compiler.javac;JavaTools" title="sbt.compiler.javac.JavaTools">JavaTools</a> <span class="delimiter">{</span>
+  <span class="comment">/** An instance of the java Compiler for use with incremental compilation. */</span>
+  <span class="keyword">def</span> <a title="=&gt; xsbti.compile.JavaCompiler" id="sbt.compiler.javac;IncrementalCompilerJavaTools.xsbtiCompiler">xsbtiCompiler</a>: xsbti.compile.<a href="../../../xsbti/compile/JavaCompiler.java.html#xsbti.compile;JavaCompiler" title="xsbti.compile.JavaCompiler">JavaCompiler</a>
+<span class="delimiter">}</span>
+<span class="comment">/** Factory methods for getting a java toolchain. */</span>
+<span class="keyword">object</span> <a title="sbt.compiler.javac.JavaTools.type" id="sbt.compiler.javac.JavaTools">JavaTools</a> <a href="#sbt.compiler.javac.JavaTools" title="sbt.compiler.javac.JavaTools.type" class="delimiter">{</a>
+  <span class="comment">/** Create a new aggregate tool from existing tools. */</span>
+  <span class="keyword">def</span> <a title="(c: sbt.compiler.javac.JavaCompiler, docgen: sbt.compiler.javac.Javadoc)sbt.compiler.javac.JavaTools" id="sbt.compiler.javac.JavaTools.apply">apply</a><span class="delimiter">(</span><a title="sbt.compiler.javac.JavaCompiler" id="sbt.compiler.javac.JavaTools.apply.c">c</a>: <a href="#sbt.compiler.javac;JavaCompiler" title="sbt.compiler.javac.JavaCompiler">JavaCompiler</a>, <a title="sbt.compiler.javac.Javadoc" id="sbt.compiler.javac.JavaTools.apply.docgen">docgen</a>: <a href="#sbt.compiler.javac;Javadoc" title="sbt.compiler.javac.Javadoc">Javadoc</a><span class="delimiter">)</span>: <a href="#sbt.compiler.javac;JavaTools" title="sbt.compiler.javac.JavaTools">JavaTools</a> =
+    <a href="#sbt.compiler.javac.JavaTools.apply;$anon" title="sbt.compiler.javac.JavaTools" class="keyword">new</a> <a title="anonymous class $anon extends AnyRef with sbt.compiler.javac.JavaTools" id="sbt.compiler.javac.JavaTools.apply;$anon">JavaTools</a> <span class="delimiter">{</span>
+      <span class="keyword">override</span> <span class="keyword">def</span> <a title="=&gt; sbt.compiler.javac.JavaCompiler" id="sbt.compiler.javac.JavaTools.apply;$anon.compiler">compiler</a> = <a href="#sbt.compiler.javac.JavaTools.apply.c" title="sbt.compiler.javac.JavaCompiler">c</a>
+      <span class="keyword">def</span> <a title="(sources: Seq[java.io.File], options: Seq[String])(implicit log: sbt.Logger, implicit reporter: xsbti.Reporter)Boolean" id="sbt.compiler.javac.JavaTools.apply;$anon.compile">compile</a><span class="delimiter">(</span><a title="Seq[java.io.File]" id="sbt.compiler.javac.JavaTools.apply;$anon.compile.sources">sources</a>: <span title="Seq[java.io.File]">Seq</span><span class="delimiter">[</span>File<span class="delimiter">]</span>, <a title="Seq[String]" id="sbt.compiler.javac.JavaTools.apply;$anon.compile.options">options</a>: <span title="Seq[String]">Seq</span><span class="delimiter">[</span>String<span class="delimiter">]</span><span class="delimiter">)</span><span class="delimiter">(</span><span class="keyword">implicit</span> <a title="sbt.Logger" id="sbt.compiler.javac.JavaTools.apply;$anon.compile.log">log</a>: <a href="../../Logger.scala.html#sbt;Logger" title="sbt.Logger">Logger</a>, <a title="xsbti.Reporter" id="sbt.compiler.javac.JavaTools.apply;$anon.compile.reporter">reporter</a>: <a href="../../../xsbti/Reporter.java.html#xsbti;Reporter" title="xsbti.Reporter">Reporter</a><span class="delimiter">)</span>: <span title="Boolean">Boolean</span> =
+        <a href="#sbt.compiler.javac.JavaTools.apply.c" title="sbt.compiler.javac.JavaCompiler">c</a>.<a href="#sbt.compiler.javac;JavaTool.run" title="(sources: Seq[java.io.File], options: Seq[String])(implicit log: sbt.Logger, implicit reporter: xsbti.Reporter)Boolean">run</a><a href="#sbt.compiler.javac.JavaTools.apply;$anon.compile.log" title="sbt.Logger" class="delimiter">(</a><a href="#sbt.compiler.javac.JavaTools.apply;$anon.compile.sources" title="Seq[java.io.File]">sources</a>, <a href="#sbt.compiler.javac.JavaTools.apply;$anon.compile.options" title="Seq[String]">options</a><span class="delimiter">)</span>
+      <span class="keyword">def</span> <a title="(sources: Seq[java.io.File], options: Seq[String])(implicit log: sbt.Logger, implicit reporter: xsbti.Reporter)Boolean" id="sbt.compiler.javac.JavaTools.apply;$anon.doc">doc</a><span class="delimiter">(</span><a title="Seq[java.io.File]" id="sbt.compiler.javac.JavaTools.apply;$anon.doc.sources">sources</a>: <span title="Seq[java.io.File]">Seq</span><span class="delimiter">[</span>File<span class="delimiter">]</span>, <a title="Seq[String]" id="sbt.compiler.javac.JavaTools.apply;$anon.doc.options">options</a>: <span title="Seq[String]">Seq</span><span class="delimiter">[</span>String<span class="delimiter">]</span><span class="delimiter">)</span><span class="delimiter">(</span><span class="keyword">implicit</span> <a title="sbt.Logger" id="sbt.compiler.javac.JavaTools.apply;$anon.doc.log">log</a>: <a href="../../Logger.scala.html#sbt;Logger" title="sbt.Logger">Logger</a>, <a title="xsbti.Reporter" id="sbt.compiler.javac.JavaTools.apply;$anon.doc.reporter">reporter</a>: <a href="../../../xsbti/Reporter.java.html#xsbti;Reporter" title="xsbti.Reporter">Reporter</a><span class="delimiter">)</span>: <span title="Boolean">Boolean</span> =
+        <a href="#sbt.compiler.javac.JavaTools.apply.docgen" title="sbt.compiler.javac.Javadoc">docgen</a>.<a href="#sbt.compiler.javac;JavaTool.run" title="(sources: Seq[java.io.File], options: Seq[String])(implicit log: sbt.Logger, implicit reporter: xsbti.Reporter)Boolean">run</a><a href="#sbt.compiler.javac.JavaTools.apply;$anon.doc.log" title="sbt.Logger" class="delimiter">(</a><a href="#sbt.compiler.javac.JavaTools.apply;$anon.doc.sources" title="Seq[java.io.File]">sources</a>, <a href="#sbt.compiler.javac.JavaTools.apply;$anon.doc.options" title="Seq[String]">options</a><span class="delimiter">)</span>
+    <span class="delimiter">}</span>
+
+  <span class="comment">/**
+   * Constructs a new set of java toolchain for incremental compilation.
+   *
+   * @param instance
+   *            The scalaInstance being used in this incremental compile.  Used if we need to append
+   *            scala to the classpath (yeah.... the classpath doesn't already have it).
+   * @param cpOptions
+   *            Classpath options configured for this incremental compiler. Basically, should we append scala or not.
+   * @param javaHome
+   *            If this is defined, the location where we should look for javac when we run.
+   * @return
+   *            A new set of the Java toolchain that also includes and instance of xsbti.compile.JavaCompiler
+   */</span>
+  <span class="keyword">def</span> <a title="(instance: xsbti.compile.ScalaInstance, cpOptions: xsbti.compile.ClasspathOptions, javaHome: Option[java.io.File])sbt.compiler.javac.IncrementalCompilerJavaTools" id="sbt.compiler.javac.JavaTools.directOrFork">directOrFork</a><span class="delimiter">(</span><a title="xsbti.compile.ScalaInstance" id="sbt.compiler.javac.JavaTools.directOrFork.instance">instance</a>: xsbti.compile.<a href="../../../xsbti/compile/ScalaInstance.java.html#xsbti.compile;ScalaInstance" title="xsbti.compile.ScalaInstance">ScalaInstance</a>, <a title="xsbti.compile.ClasspathOptions" id="sbt.compiler.javac.JavaTools.directOrFork.cpOptions">cpOptions</a>: xsbti.compile.<a href="../../../xsbti/compile/ClasspathOptions.java.html#xsbti.compile;ClasspathOptions" title="xsbti.compile.ClasspathOptions">ClasspathOptions</a>, <a title="Option[java.io.File]" id="sbt.compiler.javac.JavaTools.directOrFork.javaHome">javaHome</a>: <span title="Option[java.io.File]">Option</span><span class="delimiter">[</span>File<span class="delimiter">]</span><span class="delimiter">)</span>: <a href="#sbt.compiler.javac;IncrementalCompilerJavaTools" title="sbt.compiler.javac.IncrementalCompilerJavaTools">IncrementalCompilerJavaTools</a> = <span class="delimiter">{</span>
+    <span class="keyword">val</span> <a href="#sbt.compiler.javac.JavaTools.directOrFork.compiler" title="(sbt.compiler.javac.JavaCompiler, sbt.compiler.javac.Javadoc)" class="delimiter">(</a><a href="#sbt.compiler.javac.JavaTools.directOrFork.x$1" title="sbt.compiler.javac.JavaCompiler" id="sbt.compiler.javac.JavaTools.directOrFork.compiler">compiler</a>, <a href="#sbt.compiler.javac.JavaTools.directOrFork.x$1" title="sbt.compiler.javac.Javadoc" id="sbt.compiler.javac.JavaTools.directOrFork.doc">doc</a><span class="delimiter">)</span> = <a href="#sbt.compiler.javac.JavaTools.directOrFork.javaHome" title="Option[java.io.File]">javaHome</a> <span title="(sbt.compiler.javac.JavaCompiler, sbt.compiler.javac.Javadoc)" class="keyword">match</span> <span class="delimiter">{</span>
+      <span class="keyword">case</span> Some<span class="delimiter">(</span>_<span class="delimiter">)</span> =&gt; <span title="(_1: sbt.compiler.javac.JavaCompiler, _2: sbt.compiler.javac.Javadoc)(sbt.compiler.javac.JavaCompiler, sbt.compiler.javac.Javadoc)" class="delimiter">(</span><a href="#sbt.compiler.javac.JavaCompiler" title="sbt.compiler.javac.JavaCompiler.type">JavaCompiler</a>.<a href="#sbt.compiler.javac.JavaCompiler.fork" title="(javaHome: Option[java.io.File])sbt.compiler.javac.JavaCompiler">fork</a><span class="delimiter">(</span><a href="#sbt.compiler.javac.JavaTools.directOrFork.javaHome" title="Option[java.io.File]">javaHome</a><span class="delimiter">)</span>, <a href="#sbt.compiler.javac.Javadoc" title="sbt.compiler.javac.Javadoc.type">Javadoc</a>.<a href="#sbt.compiler.javac.Javadoc.fork" title="(javaHome: Option[java.io.File])sbt.compiler.javac.Javadoc">fork</a><span class="delimiter">(</span><a href="#sbt.compiler.javac.JavaTools.directOrFork.javaHome" title="Option[java.io.File]">javaHome</a><span class="delimiter">)</span><span class="delimiter">)</span>
+      <span class="keyword">case</span> _ =&gt;
+        <span class="keyword">val</span> <a title="sbt.compiler.javac.JavaCompiler" id="sbt.compiler.javac.JavaTools.directOrFork.x$1.c">c</a> = <a href="#sbt.compiler.javac.JavaCompiler" title="sbt.compiler.javac.JavaCompiler.type">JavaCompiler</a>.<a href="#sbt.compiler.javac.JavaCompiler.local" title="=&gt; Option[sbt.compiler.javac.JavaCompiler]">local</a>.<span title="(default: =&gt; sbt.compiler.javac.JavaCompiler)sbt.compiler.javac.JavaCompiler">getOrElse</span><span class="delimiter">(</span><a href="#sbt.compiler.javac.JavaCompiler" title="sbt.compiler.javac.JavaCompiler.type">JavaCompiler</a>.<a href="#sbt.compiler.javac.JavaCompiler.fork" title="(javaHome: Option[java.io.File])sbt.compiler.javac.JavaCompiler">fork</a><span class="delimiter">(</span><span title="None.type">None</span><span class="delimiter">)</span><span class="delimiter">)</span>
+        <span class="keyword">val</span> <a title="sbt.compiler.javac.Javadoc" id="sbt.compiler.javac.JavaTools.directOrFork.x$1.d">d</a> = <a href="#sbt.compiler.javac.Javadoc" title="sbt.compiler.javac.Javadoc.type">Javadoc</a>.<a href="#sbt.compiler.javac.Javadoc.local" title="=&gt; Option[sbt.compiler.javac.Javadoc]">local</a>.<span title="(default: =&gt; sbt.compiler.javac.Javadoc)sbt.compiler.javac.Javadoc">getOrElse</span><span class="delimiter">(</span><a href="#sbt.compiler.javac.Javadoc" title="sbt.compiler.javac.Javadoc.type">Javadoc</a>.<a href="#sbt.compiler.javac.Javadoc.fork" title="(javaHome: Option[java.io.File])sbt.compiler.javac.Javadoc">fork</a><span class="delimiter">(</span><span class="delimiter">)</span><span class="delimiter">)</span>
+        <span title="(_1: sbt.compiler.javac.JavaCompiler, _2: sbt.compiler.javac.Javadoc)(sbt.compiler.javac.JavaCompiler, sbt.compiler.javac.Javadoc)" class="delimiter">(</span><a href="#sbt.compiler.javac.JavaTools.directOrFork.x$1.c" title="sbt.compiler.javac.JavaCompiler">c</a>, <a href="#sbt.compiler.javac.JavaTools.directOrFork.x$1.d" title="sbt.compiler.javac.Javadoc">d</a><span class="delimiter">)</span>
+    <span class="delimiter">}</span>
+    <span class="keyword">val</span> <a title="sbt.compiler.javac.JavaTools" id="sbt.compiler.javac.JavaTools.directOrFork.delegate">delegate</a> = <a href="#sbt.compiler.javac.JavaTools.apply" title="(c: sbt.compiler.javac.JavaCompiler, docgen: sbt.compiler.javac.Javadoc)sbt.compiler.javac.JavaTools">apply</a><span class="delimiter">(</span><a href="#sbt.compiler.javac.JavaTools.directOrFork.compiler" title="sbt.compiler.javac.JavaCompiler">compiler</a>, <a href="#sbt.compiler.javac.JavaTools.directOrFork.doc" title="sbt.compiler.javac.Javadoc">doc</a><span class="delimiter">)</span>
+    <a href="#sbt.compiler.javac.JavaTools.directOrFork;$anon" title="sbt.compiler.javac.IncrementalCompilerJavaTools{}" class="keyword">new</a> <a title="anonymous class $anon extends AnyRef with sbt.compiler.javac.IncrementalCompilerJavaTools" id="sbt.compiler.javac.JavaTools.directOrFork;$anon">IncrementalCompilerJavaTools</a> <span class="delimiter">{</span>
+      <span class="keyword">val</span> <a title="sbt.compiler.javac.JavaCompilerAdapter" id="sbt.compiler.javac.JavaTools.directOrFork;$anon.xsbtiCompiler">xsbtiCompiler</a> = <span title="sbt.compiler.javac.JavaCompilerAdapter" class="keyword">new</span> <a href="JavaCompilerAdapter.scala.html#sbt.compiler.javac;JavaCompilerAdapter" title="sbt.compiler.javac.JavaCompilerAdapter">JavaCompilerAdapter</a><span class="delimiter">(</span><a href="#sbt.compiler.javac.JavaTools.directOrFork.delegate" title="sbt.compiler.javac.JavaTools">delegate</a>.<a href="#sbt.compiler.javac;JavaTools.compiler" title="=&gt; sbt.compiler.javac.JavaTool">compiler</a>, <a href="#sbt.compiler.javac.JavaTools.directOrFork.instance" title="xsbti.compile.ScalaInstance">instance</a>, <a href="#sbt.compiler.javac.JavaTools.directOrFork.cpOptions" title="xsbti.compile.ClasspathOptions">cpOptions</a><span class="delimiter">)</span>
+      <span class="keyword">def</span> <a title="=&gt; sbt.compiler.javac.JavaTool" id="sbt.compiler.javac.JavaTools.directOrFork;$anon.compiler">compiler</a> = <a href="#sbt.compiler.javac.JavaTools.directOrFork.delegate" title="sbt.compiler.javac.JavaTools">delegate</a>.<a href="#sbt.compiler.javac;JavaTools.compiler" title="=&gt; sbt.compiler.javac.JavaTool">compiler</a>
+      <span class="keyword">def</span> <a title="(sources: Seq[java.io.File], options: Seq[String])(implicit log: sbt.Logger, implicit reporter: xsbti.Reporter)Boolean" id="sbt.compiler.javac.JavaTools.directOrFork;$anon.compile">compile</a><span class="delimiter">(</span><a title="Seq[java.io.File]" id="sbt.compiler.javac.JavaTools.directOrFork;$anon.compile.sources">sources</a>: <span title="Seq[java.io.File]">Seq</span><span class="delimiter">[</span>File<span class="delimiter">]</span>, <a title="Seq[String]" id="sbt.compiler.javac.JavaTools.directOrFork;$anon.compile.options">options</a>: <span title="Seq[String]">Seq</span><span class="delimiter">[</span>String<span class="delimiter">]</span><span class="delimiter">)</span><span class="delimiter">(</span><span class="keyword">implicit</span> <a title="sbt.Logger" id="sbt.compiler.javac.JavaTools.directOrFork;$anon.compile.log">log</a>: <a href="../../Logger.scala.html#sbt;Logger" title="sbt.Logger">Logger</a>, <a title="xsbti.Reporter" id="sbt.compiler.javac.JavaTools.directOrFork;$anon.compile.reporter">reporter</a>: <a href="../../../xsbti/Reporter.java.html#xsbti;Reporter" title="xsbti.Reporter">Reporter</a><span class="delimiter">)</span>: <span title="Boolean">Boolean</span> =
+        <a href="#sbt.compiler.javac.JavaTools.directOrFork.delegate" title="sbt.compiler.javac.JavaTools">delegate</a>.<a href="#sbt.compiler.javac;JavaTools.compile" title="(sources: Seq[java.io.File], options: Seq[String])(implicit log: sbt.Logger, implicit reporter: xsbti.Reporter)Boolean">compile</a><a href="#sbt.compiler.javac.JavaTools.directOrFork;$anon.compile.log" title="sbt.Logger" class="delimiter">(</a><a href="#sbt.compiler.javac.JavaTools.directOrFork;$anon.compile.sources" title="Seq[java.io.File]">sources</a>, <a href="#sbt.compiler.javac.JavaTools.directOrFork;$anon.compile.options" title="Seq[String]">options</a><span class="delimiter">)</span>
+      <span class="keyword">def</span> <a title="(sources: Seq[java.io.File], options: Seq[String])(implicit log: sbt.Logger, implicit reporter: xsbti.Reporter)Boolean" id="sbt.compiler.javac.JavaTools.directOrFork;$anon.doc">doc</a><span class="delimiter">(</span><a title="Seq[java.io.File]" id="sbt.compiler.javac.JavaTools.directOrFork;$anon.doc.sources">sources</a>: <span title="Seq[java.io.File]">Seq</span><span class="delimiter">[</span>File<span class="delimiter">]</span>, <a title="Seq[String]" id="sbt.compiler.javac.JavaTools.directOrFork;$anon.doc.options">options</a>: <span title="Seq[String]">Seq</span><span class="delimiter">[</span>String<span class="delimiter">]</span><span class="delimiter">)</span><span class="delimiter">(</span><span class="keyword">implicit</span> <a title="sbt.Logger" id="sbt.compiler.javac.JavaTools.directOrFork;$anon.doc.log">log</a>: <a href="../../Logger.scala.html#sbt;Logger" title="sbt.Logger">Logger</a>, <a title="xsbti.Reporter" id="sbt.compiler.javac.JavaTools.directOrFork;$anon.doc.reporter">reporter</a>: <a href="../../../xsbti/Reporter.java.html#xsbti;Reporter" title="xsbti.Reporter">Reporter</a><span class="delimiter">)</span>: <span title="Boolean">Boolean</span> =
+        <a href="#sbt.compiler.javac.JavaTools.directOrFork.delegate" title="sbt.compiler.javac.JavaTools">delegate</a>.<a href="#sbt.compiler.javac;JavaTools.doc" title="(sources: Seq[java.io.File], options: Seq[String])(implicit log: sbt.Logger, implicit reporter: xsbti.Reporter)Boolean">doc</a><a href="#sbt.compiler.javac.JavaTools.directOrFork;$anon.doc.log" title="sbt.Logger" class="delimiter">(</a><a href="#sbt.compiler.javac.JavaTools.directOrFork;$anon.doc.sources" title="Seq[java.io.File]">sources</a>, <a href="#sbt.compiler.javac.JavaTools.directOrFork;$anon.doc.options" title="Seq[String]">options</a><span class="delimiter">)</span>
+    <span class="delimiter">}</span>
+  <span class="delimiter">}</span>
+<span class="delimiter">}</span>
+
+<span class="comment">/**
+ * An interface for on of the tools in the java tool chain.
+ *
+ * We assume the following is true of tools:
+ * - The all take sources and options and log error messages
+ * - They return success or failure.
+ */</span>
+<span title="AnyRef" class="keyword">sealed</span> <span class="keyword">trait</span> <a title="trait JavaTool extends AnyRef" id="sbt.compiler.javac;JavaTool">JavaTool</a> <span class="delimiter">{</span>
+  <span class="comment">/**
+   * This will run a java compiler / or other like tool (e.g. javadoc).
+   *
+   *
+   * @param sources  The list of java source files to compile.
+   * @param options  The set of options to pass to the java compiler (includes the classpath).
+   * @param log      The logger to dump output into.
+   * @param reporter The reporter for semantic error messages.
+   * @return true if no errors, false otherwise.
+   */</span>
+  <span class="keyword">def</span> <a title="(sources: Seq[java.io.File], options: Seq[String])(implicit log: sbt.Logger, implicit reporter: xsbti.Reporter)Boolean" id="sbt.compiler.javac;JavaTool.run">run</a><span class="delimiter">(</span><a title="Seq[java.io.File]" id="sbt.compiler.javac;JavaTool.run.sources">sources</a>: <span title="Seq[java.io.File]">Seq</span><span class="delimiter">[</span>File<span class="delimiter">]</span>, <a title="Seq[String]" id="sbt.compiler.javac;JavaTool.run.options">options</a>: <span title="Seq[String]">Seq</span><span class="delimiter">[</span>String<span class="delimiter">]</span><span class="delimiter">)</span><span class="delimiter">(</span><span class="keyword">implicit</span> <a title="sbt.Logger" id="sbt.compiler.javac;JavaTool.run.log">log</a>: <a href="../../Logger.scala.html#sbt;Logger" title="sbt.Logger">Logger</a>, <a title="xsbti.Reporter" id="sbt.compiler.javac;JavaTool.run.reporter">reporter</a>: <a href="../../../xsbti/Reporter.java.html#xsbti;Reporter" title="xsbti.Reporter">Reporter</a><span class="delimiter">)</span>: <span title="Boolean">Boolean</span>
+<span class="delimiter">}</span>
+
+<span class="comment">/** Interface we use to compile java code. This is mostly a tag over the raw JavaTool interface. */</span>
+<span title="AnyRef" class="keyword">trait</span> <a title="trait JavaCompiler extends AnyRef with sbt.compiler.javac.JavaTool" id="sbt.compiler.javac;JavaCompiler">JavaCompiler</a> <span class="keyword">extends</span> <a href="#sbt.compiler.javac;JavaTool" title="sbt.compiler.javac.JavaTool">JavaTool</a> <span class="delimiter">{</span><span class="delimiter">}</span>
+<span class="comment">/** Factory methods for constructing a java compiler. */</span>
+<span class="keyword">object</span> <a title="sbt.compiler.javac.JavaCompiler.type" id="sbt.compiler.javac.JavaCompiler">JavaCompiler</a> <a href="#sbt.compiler.javac.JavaCompiler" title="sbt.compiler.javac.JavaCompiler.type" class="delimiter">{</a>
+  <span class="comment">/** Returns a local compiler, if the current runtime supports it. */</span>
+  <span class="keyword">def</span> <a title="=&gt; Option[sbt.compiler.javac.JavaCompiler]" id="sbt.compiler.javac.JavaCompiler.local">local</a>: <span title="Option[sbt.compiler.javac.JavaCompiler]">Option</span><span class="delimiter">[</span>JavaCompiler<span class="delimiter">]</span> =
+    <span class="keyword">for</span> <span class="delimiter">{</span>
+      <a title="javax.tools.JavaCompiler" id="sbt.compiler.javac.JavaCompiler.local.$anonfun.compiler">compiler</a> &lt;- <span title="(x: javax.tools.JavaCompiler)Option[javax.tools.JavaCompiler]">Option</span><span title="(f: javax.tools.JavaCompiler =&gt; sbt.compiler.javac.LocalJavaCompiler)Option[sbt.compiler.javac.LocalJavaCompiler]" class="delimiter">(</span>javax.tools.<span title="javax.tools.ToolProvider.type">ToolProvider</span>.<span title="()javax.tools.JavaCompiler">getSystemJavaCompiler</span><span class="delimiter">)</span>
+    <span class="delimiter">}</span> <span class="keyword">yield</span> <span title="sbt.compiler.javac.LocalJavaCompiler" class="keyword">new</span> <a href="LocalJava.scala.html#sbt.compiler.javac;LocalJavaCompiler" title="sbt.compiler.javac.LocalJavaCompiler">LocalJavaCompiler</a><span class="delimiter">(</span><a href="#sbt.compiler.javac.JavaCompiler.local.$anonfun.compiler" title="javax.tools.JavaCompiler">compiler</a><span class="delimiter">)</span>
+
+  <span class="comment">/** Returns a local compiler that will fork javac when needed. */</span>
+  <span class="keyword">def</span> <a title="(javaHome: Option[java.io.File])sbt.compiler.javac.JavaCompiler" id="sbt.compiler.javac.JavaCompiler.fork">fork</a><span class="delimiter">(</span><a title="Option[java.io.File]" id="sbt.compiler.javac.JavaCompiler.fork$default$1">javaHome</a>: <span title="Option[java.io.File]">Option</span><span class="delimiter">[</span>File<span class="delimiter">]</span> = <span title="None.type">None</span><span class="delimiter">)</span>: <a href="#sbt.compiler.javac;JavaCompiler" title="sbt.compiler.javac.JavaCompiler">JavaCompiler</a> =
+    <span title="sbt.compiler.javac.ForkedJavaCompiler" class="keyword">new</span> <a href="ForkedJava.scala.html#sbt.compiler.javac;ForkedJavaCompiler" title="sbt.compiler.javac.ForkedJavaCompiler">ForkedJavaCompiler</a><span class="delimiter">(</span><a href="#sbt.compiler.javac.JavaCompiler.fork$default$1" title="Option[java.io.File]">javaHome</a><span class="delimiter">)</span>
+
+<span class="delimiter">}</span>
+
+<span class="comment">/** Interface we use to document java code. This is a tag over the raw JavaTool interface. */</span>
+<span title="AnyRef" class="keyword">trait</span> <a title="trait Javadoc extends AnyRef with sbt.compiler.javac.JavaTool" id="sbt.compiler.javac;Javadoc">Javadoc</a> <span class="keyword">extends</span> <a href="#sbt.compiler.javac;JavaTool" title="sbt.compiler.javac.JavaTool">JavaTool</a> <span class="delimiter">{</span><span class="delimiter">}</span>
+<span class="comment">/** Factory methods for constructing a javadoc. */</span>
+<span class="keyword">object</span> <a title="sbt.compiler.javac.Javadoc.type" id="sbt.compiler.javac.Javadoc">Javadoc</a> <a href="#sbt.compiler.javac.Javadoc" title="sbt.compiler.javac.Javadoc.type" class="delimiter">{</a>
+  <span class="comment">/** Returns a local compiler, if the current runtime supports it. */</span>
+  <span class="keyword">def</span> <a title="=&gt; Option[sbt.compiler.javac.Javadoc]" id="sbt.compiler.javac.Javadoc.local">local</a>: <span title="Option[sbt.compiler.javac.Javadoc]">Option</span><span class="delimiter">[</span>Javadoc<span class="delimiter">]</span> =
+    <span class="comment">// TODO - javax doc tool not supported in JDK6</span>
+    <span class="comment">//Option(javax.tools.ToolProvider.getSystemDocumentationTool)</span>
+    <span title="Option[sbt.compiler.javac.Javadoc]" class="keyword">if</span> <span class="delimiter">(</span><a href="LocalJava.scala.html#sbt.compiler.javac.LocalJava" title="sbt.compiler.javac.LocalJava.type">LocalJava</a>.<a href="LocalJava.scala.html#sbt.compiler.javac.LocalJava.hasLocalJavadoc" title="=&gt; Boolean">hasLocalJavadoc</a><span class="delimiter">)</span> <span title="(x: sbt.compiler.javac.LocalJavadoc)Some[sbt.compiler.javac.LocalJavadoc]">Some</span><span class="delimiter">(</span><span title="sbt.compiler.javac.LocalJavadoc" class="keyword">new</span> <a href="LocalJava.scala.html#sbt.compiler.javac;LocalJavadoc" title="sbt.compiler.javac.LocalJavadoc">LocalJavadoc</a><span class="delimiter">)</span>
+    <span class="keyword">else</span> <span title="None.type">None</span>
+
+  <span class="comment">/** Returns a local compiler that will fork javac when needed. */</span>
+  <span class="keyword">def</span> <a title="(javaHome: Option[java.io.File])sbt.compiler.javac.Javadoc" id="sbt.compiler.javac.Javadoc.fork">fork</a><span class="delimiter">(</span><a title="Option[java.io.File]" id="sbt.compiler.javac.Javadoc.fork$default$1">javaHome</a>: <span title="Option[java.io.File]">Option</span><span class="delimiter">[</span>File<span class="delimiter">]</span> = <span title="None.type">None</span><span class="delimiter">)</span>: <a href="#sbt.compiler.javac;Javadoc" title="sbt.compiler.javac.Javadoc">Javadoc</a> =
+    <span title="sbt.compiler.javac.ForkedJavadoc" class="keyword">new</span> <a href="ForkedJava.scala.html#sbt.compiler.javac;ForkedJavadoc" title="sbt.compiler.javac.ForkedJavadoc">ForkedJavadoc</a><span class="delimiter">(</span><a href="#sbt.compiler.javac.Javadoc.fork$default$1" title="Option[java.io.File]">javaHome</a><span class="delimiter">)</span>
+
+<span class="delimiter">}</span>
+
+
+        </pre>
+    </body>
+</html>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/GCUtil.scala</title>
+        <script type="text/javascript" src="../jquery-all.js"></script>
+        <script type="text/javascript" src="../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="keyword">package</span> sbt
+
+<span class="keyword">import</span> java.util.concurrent.atomic.AtomicLong
+<span class="keyword">import</span> scala.concurrent.duration._
+<span class="keyword">import</span> scala.util.control.NonFatal
+
+<span class="keyword">private</span><span class="delimiter">[</span>sbt<span class="delimiter">]</span> <span class="keyword">object</span> <a title="sbt.GCUtil.type" id="sbt.GCUtil">GCUtil</a> <a href="#sbt.GCUtil" title="sbt.GCUtil.type" class="delimiter">{</a>
+  <span class="comment">// Returns the default force garbage collection flag,</span>
+  <span class="comment">// as specified by system properties.</span>
+  <span class="keyword">val</span> <a title="Boolean" id="sbt.GCUtil.defaultForceGarbageCollection">defaultForceGarbageCollection</a>: <span title="Boolean">Boolean</span> = <span title="Boolean(true)" class="keyword">true</span>
+  <span class="keyword">val</span> <a title="scala.concurrent.duration.Duration" id="sbt.GCUtil.defaultMinForcegcInterval">defaultMinForcegcInterval</a>: <span title="scala.concurrent.duration.Duration">Duration</span> = <span title="implicit scala.concurrent.duration.package.DurationInt : (n: Int)concurrent.duration.DurationInt" class="int">60</span>.<span title="=&gt; scala.concurrent.duration.FiniteDuration">seconds</span>
+  <span class="keyword">val</span> <a title="java.util.concurrent.atomic.AtomicLong" id="sbt.GCUtil.lastGcCheck">lastGcCheck</a>: <span title="java.util.concurrent.atomic.AtomicLong">AtomicLong</span> = <span title="java.util.concurrent.atomic.AtomicLong" class="keyword">new</span> <span title="java.util.concurrent.atomic.AtomicLong">AtomicLong</span><span class="delimiter">(</span><span title="Long(0L)" class="long">0L</span><span class="delimiter">)</span>
+
+  <span class="keyword">def</span> <a title="(minForcegcInterval: scala.concurrent.duration.Duration, log: sbt.Logger)Unit" id="sbt.GCUtil.forceGcWithInterval">forceGcWithInterval</a><span class="delimiter">(</span><a title="scala.concurrent.duration.Duration" id="sbt.GCUtil.forceGcWithInterval.minForcegcInterval">minForcegcInterval</a>: <span title="scala.concurrent.duration.Duration">Duration</span>, <a title="sbt.Logger" id="sbt.GCUtil.forceGcWithInterval.log">log</a>: <a href="Logger.scala.html#sbt;Logger" title="sbt.Logger">Logger</a><span class="delimiter">)</span>: <span title="Unit">Unit</span> =
+    <span class="delimiter">{</span>
+      <span class="keyword">val</span> <a title="Long" id="sbt.GCUtil.forceGcWithInterval.now">now</a> = <span title="System.type">System</span>.<span title="()Long">currentTimeMillis</span>
+      <span class="keyword">val</span> <a title="Long" id="sbt.GCUtil.forceGcWithInterval.last">last</a> = <a href="#sbt.GCUtil.lastGcCheck" title="=&gt; java.util.concurrent.atomic.AtomicLong">lastGcCheck</a>.<span title="()Long">get</span>
+      <span class="comment">// This throttles System.gc calls to interval</span>
+      <span title="Unit" class="keyword">if</span> <span class="delimiter">(</span><a href="#sbt.GCUtil.forceGcWithInterval.now" title="Long">now</a> <span title="(x: Long)Long">-</span> <a href="#sbt.GCUtil.forceGcWithInterval.last" title="Long">last</a> <span title="(x: Long)Boolean">&gt;</span> <a href="#sbt.GCUtil.forceGcWithInterval.minForcegcInterval" title="scala.concurrent.duration.Duration">minForcegcInterval</a>.<span title="=&gt; Long">toMillis</span><span class="delimiter">)</span> <span class="delimiter">{</span>
+        <a href="#sbt.GCUtil.lastGcCheck" title="=&gt; java.util.concurrent.atomic.AtomicLong">lastGcCheck</a>.<span title="(x$1: Long)Unit">lazySet</span><span class="delimiter">(</span><a href="#sbt.GCUtil.forceGcWithInterval.now" title="Long">now</a><span class="delimiter">)</span>
+        <a href="#sbt.GCUtil.forceGc" title="(log: sbt.Logger)Unit">forceGc</a><span class="delimiter">(</span><a href="#sbt.GCUtil.forceGcWithInterval.log" title="sbt.Logger">log</a><span class="delimiter">)</span>
+      <span class="delimiter">}</span>
+    <span class="delimiter">}</span>
+
+  <span class="keyword">def</span> <a title="(log: sbt.Logger)Unit" id="sbt.GCUtil.forceGc">forceGc</a><span class="delimiter">(</span><a title="sbt.Logger" id="sbt.GCUtil.forceGc.log">log</a>: <a href="Logger.scala.html#sbt;Logger" title="sbt.Logger">Logger</a><span class="delimiter">)</span>: <span title="Unit">Unit</span> =
+    <span class="keyword">try</span> <span class="delimiter">{</span>
+      <a href="#sbt.GCUtil.forceGc.log" title="sbt.Logger">log</a>.<a href="Logger.scala.html#sbt;Logger.debug(83d3728a3c)" title="(message: =&gt; String)Unit">debug</a><span class="delimiter">(</span><span title="(args: Any*)String">s</span>&quot;<span title="String(&quot;Forcing garbage collection...&quot;)" class="string">Forcing garbage collection...&quot;</span><span class="delimiter">)</span>
+      <span class="comment">// Force the detection of finalizers for scala.reflect weakhashsets</span>
+      <span title="System.type">System</span>.<span title="()Unit">gc</span><span class="delimiter">(</span><span class="delimiter">)</span>
+      <span class="comment">// Force finalizers to run.</span>
+      <span title="System.type">System</span>.<span title="()Unit">runFinalization</span><span class="delimiter">(</span><span class="delimiter">)</span>
+      <span class="comment">// Force actually cleaning the weak hash maps.</span>
+      <span title="System.type">System</span>.<span title="()Unit">gc</span><span class="delimiter">(</span><span class="delimiter">)</span>
+    <span class="delimiter">}</span> <span class="keyword">catch</span> <span class="delimiter">{</span>
+      <span class="keyword">case</span> <a href="#sbt.GCUtil.forceGc.<unapply-selector>" title="(t: Throwable)Option[Throwable]">NonFatal</a><span class="delimiter">(</span>_<span class="delimiter">)</span> =&gt; <span class="comment">// gotta catch em all</span>
+    <span class="delimiter">}</span>
+<span class="delimiter">}</span>
+
+        </pre>
+    </body>
+</html>

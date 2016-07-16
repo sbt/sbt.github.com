@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/CircularDependencyLevel.scala</title>
+        <script type="text/javascript" src="../jquery-all.js"></script>
+        <script type="text/javascript" src="../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="keyword">package</span> sbt
+
+<span class="keyword">import</span> org.apache.ivy.plugins.circular.<span class="delimiter">{</span> CircularDependencyStrategy, WarnCircularDependencyStrategy, IgnoreCircularDependencyStrategy, ErrorCircularDependencyStrategy <span class="delimiter">}</span>
+
+<span class="comment">/**
+ * Wrapper around circular dependency strategy.
+ */</span>
+<span class="keyword">sealed</span> <span class="keyword">trait</span> <a title="trait CircularDependencyLevel extends AnyRef" id="sbt;CircularDependencyLevel">CircularDependencyLevel</a> <span title="Unit" class="delimiter">{</span>
+  <span class="keyword">private</span><span class="delimiter">[</span>sbt<span class="delimiter">]</span> <span class="keyword">def</span> <a title="=&gt; org.apache.ivy.plugins.circular.CircularDependencyStrategy" id="sbt;CircularDependencyLevel.ivyStrategy">ivyStrategy</a>: <span title="org.apache.ivy.plugins.circular.CircularDependencyStrategy">CircularDependencyStrategy</span>
+  <span class="keyword">private</span><span class="delimiter">[</span>sbt<span class="delimiter">]</span> <span class="keyword">def</span> <a title="=&gt; String" id="sbt;CircularDependencyLevel.name">name</a>: <span title="String">String</span>
+  <span class="keyword">override</span> <span class="keyword">def</span> <a title="()String" id="sbt;CircularDependencyLevel.toString">toString</a>: <span title="String">String</span> = <a href="#sbt;CircularDependencyLevel.name" title="=&gt; String">name</a>
+<span class="delimiter">}</span>
+
+<span title="AnyRef" class="keyword">object</span> <a title="sbt.CircularDependencyLevel.type" id="sbt.CircularDependencyLevel">CircularDependencyLevel</a> <a href="#sbt.CircularDependencyLevel" title="sbt.CircularDependencyLevel.type" class="delimiter">{</a>
+  <span class="keyword">val</span> <a title="sbt.CircularDependencyLevel" id="sbt.CircularDependencyLevel.Warn">Warn</a>: <a href="#sbt;CircularDependencyLevel" title="sbt.CircularDependencyLevel">CircularDependencyLevel</a> = <a href="#sbt.CircularDependencyLevel.Warn;$anon" title="sbt.CircularDependencyLevel" class="keyword">new</a> <a title="anonymous class $anon extends AnyRef with sbt.CircularDependencyLevel" id="sbt.CircularDependencyLevel.Warn;$anon">CircularDependencyLevel</a> <span class="delimiter">{</span>
+    <span class="keyword">def</span> <a title="=&gt; org.apache.ivy.plugins.circular.CircularDependencyStrategy" id="sbt.CircularDependencyLevel.Warn;$anon.ivyStrategy">ivyStrategy</a>: <span title="org.apache.ivy.plugins.circular.CircularDependencyStrategy">CircularDependencyStrategy</span> = <span title="org.apache.ivy.plugins.circular.WarnCircularDependencyStrategy.type">WarnCircularDependencyStrategy</span>.<span title="()org.apache.ivy.plugins.circular.CircularDependencyStrategy">getInstance</span>
+    <span class="keyword">def</span> <a title="=&gt; String" id="sbt.CircularDependencyLevel.Warn;$anon.name">name</a>: <span title="String">String</span> = <span title="String(&quot;warn&quot;)" class="string">&quot;warn&quot;</span>
+  <span class="delimiter">}</span>
+  <span class="keyword">val</span> <a title="sbt.CircularDependencyLevel" id="sbt.CircularDependencyLevel.Ignore">Ignore</a>: <a href="#sbt;CircularDependencyLevel" title="sbt.CircularDependencyLevel">CircularDependencyLevel</a> = <a href="#sbt.CircularDependencyLevel.Ignore;$anon" title="sbt.CircularDependencyLevel" class="keyword">new</a> <a title="anonymous class $anon extends AnyRef with sbt.CircularDependencyLevel" id="sbt.CircularDependencyLevel.Ignore;$anon">CircularDependencyLevel</a> <span class="delimiter">{</span>
+    <span class="keyword">def</span> <a title="=&gt; org.apache.ivy.plugins.circular.CircularDependencyStrategy" id="sbt.CircularDependencyLevel.Ignore;$anon.ivyStrategy">ivyStrategy</a>: <span title="org.apache.ivy.plugins.circular.CircularDependencyStrategy">CircularDependencyStrategy</span> = <span title="org.apache.ivy.plugins.circular.IgnoreCircularDependencyStrategy.type">IgnoreCircularDependencyStrategy</span>.<span title="()org.apache.ivy.plugins.circular.CircularDependencyStrategy">getInstance</span>
+    <span class="keyword">def</span> <a title="=&gt; String" id="sbt.CircularDependencyLevel.Ignore;$anon.name">name</a>: <span title="String">String</span> = <span title="String(&quot;ignore&quot;)" class="string">&quot;ignore&quot;</span>
+  <span class="delimiter">}</span>
+  <span class="keyword">val</span> <a title="sbt.CircularDependencyLevel" id="sbt.CircularDependencyLevel.Error">Error</a>: <a href="#sbt;CircularDependencyLevel" title="sbt.CircularDependencyLevel">CircularDependencyLevel</a> = <a href="#sbt.CircularDependencyLevel.Error;$anon" title="sbt.CircularDependencyLevel" class="keyword">new</a> <a title="anonymous class $anon extends AnyRef with sbt.CircularDependencyLevel" id="sbt.CircularDependencyLevel.Error;$anon">CircularDependencyLevel</a> <span class="delimiter">{</span>
+    <span class="keyword">def</span> <a title="=&gt; org.apache.ivy.plugins.circular.CircularDependencyStrategy" id="sbt.CircularDependencyLevel.Error;$anon.ivyStrategy">ivyStrategy</a>: <span title="org.apache.ivy.plugins.circular.CircularDependencyStrategy">CircularDependencyStrategy</span> = <span title="org.apache.ivy.plugins.circular.ErrorCircularDependencyStrategy.type">ErrorCircularDependencyStrategy</span>.<span title="()org.apache.ivy.plugins.circular.CircularDependencyStrategy">getInstance</span>
+    <span class="keyword">def</span> <a title="=&gt; String" id="sbt.CircularDependencyLevel.Error;$anon.name">name</a>: <span title="String">String</span> = <span title="String(&quot;error&quot;)" class="string">&quot;error&quot;</span>
+  <span class="delimiter">}</span>
+<span class="delimiter">}</span>
+
+        </pre>
+    </body>
+</html>

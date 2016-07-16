@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/ShowLines.scala</title>
+        <script type="text/javascript" src="../jquery-all.js"></script>
+        <script type="text/javascript" src="../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="keyword">package</span> sbt
+
+<span class="keyword">trait</span> <a title="trait ShowLines[A] extends AnyRef" id="sbt;ShowLines">ShowLines</a><span class="delimiter">[</span><a title="" id="sbt;ShowLines;A">A</a><span class="delimiter">]</span> <span class="delimiter">{</span>
+  <span class="keyword">def</span> <a title="(a: A)Seq[String]" id="sbt;ShowLines.showLines">showLines</a><span class="delimiter">(</span><a title="A" id="sbt;ShowLines.showLines.a">a</a>: <a href="#sbt;ShowLines;A" title="A">A</a><span class="delimiter">)</span>: <span title="Seq[String]">Seq</span><span class="delimiter">[</span>String<span class="delimiter">]</span>
+<span class="delimiter">}</span>
+<span title="AnyRef" class="keyword">object</span> <a title="sbt.ShowLines.type" id="sbt.ShowLines">ShowLines</a> <a href="#sbt.ShowLines" title="sbt.ShowLines.type" class="delimiter">{</a>
+  <span class="keyword">def</span> <a title="[A](f: A =&gt; Seq[String])sbt.ShowLines[A]" id="sbt.ShowLines.apply">apply</a><span class="delimiter">[</span><a title="" id="sbt.ShowLines.apply;A">A</a><span class="delimiter">]</span><span class="delimiter">(</span><a title="A =&gt; Seq[String]" id="sbt.ShowLines.apply.f">f</a>: A =&gt; Seq<span class="delimiter">[</span>String<span class="delimiter">]</span><span class="delimiter">)</span>: <a href="#sbt;ShowLines" title="sbt.ShowLines[A]">ShowLines</a><span class="delimiter">[</span>A<span class="delimiter">]</span> =
+    <a href="#sbt.ShowLines.apply;$anon" title="sbt.ShowLines[A]" class="keyword">new</a> <a title="anonymous class $anon extends AnyRef with sbt.ShowLines[A]" id="sbt.ShowLines.apply;$anon">ShowLines</a><span class="delimiter">[</span>A<span class="delimiter">]</span> <span class="delimiter">{</span>
+      <span class="keyword">def</span> <a title="(a: A)Seq[String]" id="sbt.ShowLines.apply;$anon.showLines">showLines</a><span class="delimiter">(</span><a title="A" id="sbt.ShowLines.apply;$anon.showLines.a">a</a>: <a href="#sbt.ShowLines.apply;A" title="A">A</a><span class="delimiter">)</span>: <span title="Seq[String]">Seq</span><span class="delimiter">[</span>String<span class="delimiter">]</span> = <a href="#sbt.ShowLines.apply.f" title="(v1: A)Seq[String]">f</a><span class="delimiter">(</span><a href="#sbt.ShowLines.apply;$anon.showLines.a" title="A">a</a><span class="delimiter">)</span>
+    <span class="delimiter">}</span>
+
+  <span class="keyword">implicit</span> <span class="keyword">class</span> <a href="#sbt.ShowLines.ShowLinesOp.a" title="class ShowLinesOp[A] extends AnyRef" id="sbt.ShowLines.ShowLinesOp">ShowLinesOp</a><span class="delimiter">[</span><a title="" id="sbt.ShowLines.ShowLinesOp;A">A</a>: ShowLines<span class="delimiter">]</span><span class="delimiter">(</span><a title="A" id="sbt.ShowLines.ShowLinesOp.a">a</a>: <a href="#sbt.ShowLines.ShowLinesOp;A" title="A">A</a><span class="delimiter">)</span> <span class="delimiter">{</span>
+    <span class="keyword">def</span> <a title="=&gt; Seq[String]" id="sbt.ShowLines;ShowLinesOp.lines">lines</a>: <span title="Seq[String]">Seq</span><span class="delimiter">[</span>String<span class="delimiter">]</span> = <span title="[T](implicit e: T)T">implicitly</span><a href="#sbt.ShowLines;ShowLinesOp.evidence$1" title="(implicit e: sbt.ShowLines[A])sbt.ShowLines[A]" class="delimiter">[</a><a href="#sbt;ShowLines" title="sbt.ShowLines[A]">ShowLines</a><span class="delimiter">[</span>A<span class="delimiter">]</span><span class="delimiter">]</span>.<a href="#sbt;ShowLines.showLines" title="(a: A)Seq[String]">showLines</a><span class="delimiter">(</span><a href="#sbt.ShowLines.ShowLinesOp.a" title="A">a</a><span class="delimiter">)</span>
+  <span class="delimiter">}</span>
+<span title="AnyRef" class="delimiter">}</span>
+
+        </pre>
+    </body>
+</html>

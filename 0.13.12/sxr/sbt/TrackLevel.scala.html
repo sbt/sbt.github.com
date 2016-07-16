@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/TrackLevel.scala</title>
+        <script type="text/javascript" src="../jquery-all.js"></script>
+        <script type="text/javascript" src="../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="keyword">package</span> sbt
+
+<span class="comment">/**
+ * An enumeration defining the tracking of dependencies.  A level includes all of the levels
+ * with id larger than its own id.  For example, Warn (id=3) includes Error (id=4).
+ */</span>
+<span class="keyword">object</span> <a title="sbt.TrackLevel.type" id="sbt.TrackLevel">TrackLevel</a> <a href="#sbt.TrackLevel" title="sbt.TrackLevel.type" class="delimiter">{</a>
+  <span class="keyword">case object</span> <a href="#sbt.TrackLevel.NoTracking.productElement.x$1" title="sbt.TrackLevel.NoTracking.type" id="sbt.TrackLevel.NoTracking.readResolve">NoTracking</a> <span title="Product" class="keyword">extends</span> <a href="#sbt;TrackLevel" title="sbt.TrackLevel">TrackLevel</a> <span class="delimiter">{</span>
+    <span class="keyword">override</span> <span class="keyword">def</span> <a title="=&gt; Int" id="sbt.TrackLevel.NoTracking.id">id</a>: <span title="Int">Int</span> = <span title="Int(0)" class="int">0</span>
+  <span class="delimiter">}</span>
+  <span class="keyword">case object</span> <a href="#sbt.TrackLevel.TrackIfMissing.productElement.x$1" title="sbt.TrackLevel.TrackIfMissing.type" id="sbt.TrackLevel.TrackIfMissing.readResolve">TrackIfMissing</a> <span title="Product" class="keyword">extends</span> <a href="#sbt;TrackLevel" title="sbt.TrackLevel">TrackLevel</a> <span class="delimiter">{</span>
+    <span class="keyword">override</span> <span class="keyword">def</span> <a title="=&gt; Int" id="sbt.TrackLevel.TrackIfMissing.id">id</a>: <span title="Int">Int</span> = <span title="Int(1)" class="int">1</span>
+  <span class="delimiter">}</span>
+  <span class="keyword">case object</span> <a href="#sbt.TrackLevel.TrackAlways.productElement.x$1" title="sbt.TrackLevel.TrackAlways.type" id="sbt.TrackLevel.TrackAlways.readResolve">TrackAlways</a> <span title="Product" class="keyword">extends</span> <a href="#sbt;TrackLevel" title="sbt.TrackLevel">TrackLevel</a> <span class="delimiter">{</span>
+    <span class="keyword">override</span> <span class="keyword">def</span> <a title="=&gt; Int" id="sbt.TrackLevel.TrackAlways.id">id</a>: <span title="Int">Int</span> = <span title="Int(10)" class="int">10</span>
+  <span class="delimiter">}</span>
+
+  <span class="keyword">private</span><span class="delimiter">[</span>sbt<span class="delimiter">]</span> <span class="keyword">def</span> <a title="(x: Int)sbt.TrackLevel" id="sbt.TrackLevel.apply">apply</a><span class="delimiter">(</span><a title="Int" id="sbt.TrackLevel.apply.x">x</a>: <span title="Int">Int</span><span class="delimiter">)</span>: <a href="#sbt;TrackLevel" title="sbt.TrackLevel">TrackLevel</a> =
+    <a href="#sbt.TrackLevel.apply.x" title="Int">x</a> <span title="sbt.TrackLevel" class="keyword">match</span> <span class="delimiter">{</span>
+      <span class="keyword">case</span> <span title="Int(0)" class="int">0</span>  =&gt; <a href="#sbt.TrackLevel.NoTracking.readResolve" title="sbt.TrackLevel.NoTracking.type">NoTracking</a>
+      <span class="keyword">case</span> <span title="Int(1)" class="int">1</span>  =&gt; <a href="#sbt.TrackLevel.TrackIfMissing.readResolve" title="sbt.TrackLevel.TrackIfMissing.type">TrackIfMissing</a>
+      <span class="keyword">case</span> <span title="Int(10)" class="int">10</span> =&gt; <a href="#sbt.TrackLevel.TrackAlways.readResolve" title="sbt.TrackLevel.TrackAlways.type">TrackAlways</a>
+    <span class="delimiter">}</span>
+
+  <span class="keyword">def</span> <a title="(a: sbt.TrackLevel, b: sbt.TrackLevel)sbt.TrackLevel" id="sbt.TrackLevel.intersection">intersection</a><span class="delimiter">(</span><a title="sbt.TrackLevel" id="sbt.TrackLevel.intersection.a">a</a>: <a href="#sbt;TrackLevel" title="sbt.TrackLevel">TrackLevel</a>, <a title="sbt.TrackLevel" id="sbt.TrackLevel.intersection.b">b</a>: <a href="#sbt;TrackLevel" title="sbt.TrackLevel">TrackLevel</a><span class="delimiter">)</span>: <a href="#sbt;TrackLevel" title="sbt.TrackLevel">TrackLevel</a> =
+    <span title="sbt.TrackLevel" class="keyword">if</span> <span class="delimiter">(</span><a href="#sbt.TrackLevel.intersection.a" title="sbt.TrackLevel">a</a>.<a href="#sbt;TrackLevel.id" title="=&gt; Int">id</a> <span title="(x: Int)Boolean">&lt;</span> <a href="#sbt.TrackLevel.intersection.b" title="sbt.TrackLevel">b</a>.<a href="#sbt;TrackLevel.id" title="=&gt; Int">id</a><span class="delimiter">)</span> <a href="#sbt.TrackLevel.intersection.a" title="sbt.TrackLevel">a</a>
+    <span class="keyword">else</span> <a href="#sbt.TrackLevel.intersection.b" title="sbt.TrackLevel">b</a>
+  <span class="keyword">def</span> <a title="(vs: List[sbt.TrackLevel])sbt.TrackLevel" id="sbt.TrackLevel.intersectionAll">intersectionAll</a><span class="delimiter">(</span><a title="List[sbt.TrackLevel]" id="sbt.TrackLevel.intersectionAll.vs">vs</a>: <span title="List[sbt.TrackLevel]">List</span><span class="delimiter">[</span>TrackLevel<span class="delimiter">]</span><span class="delimiter">)</span>: <a href="#sbt;TrackLevel" title="sbt.TrackLevel">TrackLevel</a> = <a href="#sbt.TrackLevel.intersectionAll.vs" title="List[sbt.TrackLevel]">vs</a> <span title="(f: (sbt.TrackLevel, sbt.TrackLevel) =&gt; sbt.TrackLevel)sbt.TrackLevel">reduceLeft</span> <a href="#sbt.TrackLevel.intersection" title="(a: sbt.TrackLevel, b: sbt.TrackLevel)sbt.TrackLevel">intersection</a>
+<span class="delimiter">}</span>
+
+<span title="AnyRef" class="keyword">sealed</span> <span class="keyword">trait</span> <a title="trait TrackLevel extends AnyRef" id="sbt;TrackLevel">TrackLevel</a> <span class="delimiter">{</span>
+  <span class="keyword">def</span> <a title="=&gt; Int" id="sbt;TrackLevel.id">id</a>: <span title="Int">Int</span>
+<span class="delimiter">}</span>
+
+        </pre>
+    </body>
+</html>
