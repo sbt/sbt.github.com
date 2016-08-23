@@ -3166,6 +3166,7 @@ your plugin to the list.
 -   sbt-cloudformation (AWS CloudFormation templates and stacks management): <https://github.com/tptodorov/sbt-cloudformation>
 -   sbt-codedeploy: <https://github.com/gilt/sbt-codedeploy>
 -   sbt-heroku: <https://github.com/heroku/sbt-heroku>
+-   sbt-aws-fun (Deploy Jar files to AWS Lambda): <https://github.com/TailrecIO/sbt-aws-fun>
 
 #### Monitoring integration plugins
 
@@ -3215,6 +3216,8 @@ your plugin to the list.
     <https://github.com/xuwei-k/sbt-class-diagram>
 -   sbt-api-mappings (Resolves external links in ScalaDoc for common Scala libraries)
     <https://github.com/ThoughtWorksInc/sbt-api-mappings>
+-   sbt-scaliterate (generates source code from a programming book written in Markdown)
+    <https://github.com/wookietreiber/sbt-scaliterate>
 
 #### Library dependency plugins
 
@@ -3320,6 +3323,8 @@ your plugin to the list.
     <https://github.com/cb372/sbt-write-output-to-file>
 -   sbt-jol (OpenJDK JOL (Java Object Layout) integration for sbt and Scala):
     <https://github.com/ktoso/sbt-jol>
+-   sbt-hocon (operations on HOCON data against reference configuration aggregated from project dependencies):
+    <https://github.com/aalleexxeeii/sbt-hocon>
 
 #### Database plugins
 
@@ -3394,6 +3399,8 @@ your plugin to the list.
     <https://github.com/oedura/scavro>
 -   sbt-spi-plugin (Generates provider-configuration files in the resource directory META-INF/services for later use with ServiceLoader)
     <https://github.com/nyavro/spi-plugin>
+-   sbt-dsl-platform ([DSL Platform](https://dsl-platform.com/) compiler plugin. Code/library generation from various languages. Postgres/Oracle database migrations):
+    <https://github.com/ngs-doo/dsl-compiler-client>
 
 #### Game development plugins
 
@@ -18122,11 +18129,11 @@ Running commands
 
 sbt interprets each command line argument provided to it as a command
 together with the command's arguments. Therefore, to run a command that
-takes arguments in batch mode, quote the command and its arguments. For
-example,
+takes arguments in batch mode, quote the command using double quotes,
+and its arguments. For example,
 
 ```
-$ sbt 'project X' clean '~ compile'
+$ sbt "project X" clean "~ compile"
 ```
 
 <a name="multi"></a>
