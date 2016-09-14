@@ -3073,6 +3073,7 @@ your plugin to the list.
 -   sbt-mode for Emacs: <https://github.com/hvesalai/sbt-mode>
 -   sbt-ctags (manage library dependency sources for vim, emacs,
     sublime) <https://github.com/kalmanb/sbt-ctags>
+-   sbt-scuggest (generates Scuggest import entries for Sublime Text) <https://github.com/ssanj/sbt-scuggest>
 
 ### Test plugins
 
@@ -3172,6 +3173,7 @@ your plugin to the list.
 -   sbt-codedeploy: <https://github.com/gilt/sbt-codedeploy>
 -   sbt-heroku: <https://github.com/heroku/sbt-heroku>
 -   sbt-aws-fun (Deploy Jar files to AWS Lambda): <https://github.com/TailrecIO/sbt-aws-fun>
+-   sbt-aws-serverless (Deploy code to AWS Serverless Architecture): <https://github.com/yoshiyoshifujii/sbt-aws-serverless>
 
 #### Monitoring integration plugins
 
@@ -3200,7 +3202,7 @@ your plugin to the list.
 -   sbt-js-test (Run javascript tests on the JVM with browser APIs): <https://github.com/joescii/sbt-js-test>
 -   sbt-javafx (Package JavaFX applications): <https://github.com/kavedaa/sbt-javafx>
 -   sbt-phantomjs (Automated installer and configurator for PhantomJS): <https://github.com/saturday06/sbt-phantomjs>
--   sbt-play-scalajs: <https://github.com/vmunier/sbt-play-scalajs>
+-   sbt-web-scalajs: <https://github.com/vmunier/sbt-web-scalajs>
 -   scalatra-sbt: <https://github.com/scalatra/scalatra-sbt>
 -   sbt-scala-js-map (Configures source mapping for Scala.js projects hosted on Github):
     <https://github.com/ThoughtWorksInc/sbt-scala-js-map>
@@ -13193,7 +13195,7 @@ updateOptions := updateOptions.value.withCachedResolution(true)
 
 ### Dependency as a graph
 
-A project declares its own library dependency using `libaryDependencies` setting. The libraries you added also bring in their transitive dependencies. For example, your project may depend on dispatch-core 0.11.2; dispatch-core 0.11.2 depends on async-http-client 1.8.10; async-http-client 1.8.10 depends on netty 3.9.2.Final, and so forth. If we think of each library to be a node with arrows going out to dependent nodes, we can think of the entire dependencies to be a graph -- specifically a [directed acyclic graph](http://en.wikipedia.org/wiki/Directed_acyclic_graph).
+A project declares its own library dependency using `libraryDependencies` setting. The libraries you added also bring in their transitive dependencies. For example, your project may depend on dispatch-core 0.11.2; dispatch-core 0.11.2 depends on async-http-client 1.8.10; async-http-client 1.8.10 depends on netty 3.9.2.Final, and so forth. If we think of each library to be a node with arrows going out to dependent nodes, we can think of the entire dependencies to be a graph -- specifically a [directed acyclic graph](http://en.wikipedia.org/wiki/Directed_acyclic_graph).
 
 This graph-like structure, which was adopted from Apache Ivy, allows us to define [override rules and exclusions][Library-Management] transitively, but as the number of the node increases, the time it takes to resolve dependencies grows significantly. See [Motivation](#motivation) section later in this page for the full description.
 
