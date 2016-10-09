@@ -135,7 +135,7 @@ maintainers.
 </p><p>Ubuntu and other Debian-based distributions use the DEB format, but usually you don’t install your software from a local DEB file. Instead they come with package managers both for the command line (e.g. <code>apt-get</code>, <code>aptitude</code>) or with a graphical user interface (e.g. Synaptic).
 Run the following from the terminal to install <code>sbt</code> (You’ll need superuser privileges to do so, hence the <code>sudo</code>).
 </p><pre><code>echo &quot;deb https://dl.bintray.com/sbt/debian /&quot; | sudo tee -a /etc/apt/sources.list.d/sbt.list
-sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 642AC823
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2EE0EA64E40A89B84B2DF73499E82A75642AC823
 sudo apt-get update
 sudo apt-get install sbt
 </code></pre><p>Package managers will check a number of configured repositories for packages to offer for installation. sbt binaries are published to Bintray, and conveniently Bintray provides an APT repository. You just have to add the repository to the places your package manager will check.
@@ -5468,7 +5468,7 @@ REPL classpath:
 </p><pre><code class="">$ screpl &quot;sonatype-releases at https://oss.sonatype.org/content/repositories/snapshots/&quot; &quot;org.scalaz%%scalaz-core%7.0-SNAPSHOT&quot;
 </code></pre><p>This syntax was a quick hack. Feel free to improve it. The relevant
 class is <a href="../sxr/sbt/IvyConsole.scala.html">IvyConsole</a>.
-</p><h2 id="Understanding+Incremental+Recompilation">Understanding Incremental Recompilation<a href="#Understanding+Incremental+Recompilation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Compiling Scala code with Scalac is slow, but sbt often makes it faster.
+</p><h2 id="Understanding+Incremental+Recompilation">Understanding Incremental Recompilation<a href="#Understanding+Incremental+Recompilation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Compiling Scala code with scalac is slow, but sbt often makes it faster.
 By understanding how, you can even understand how to make compilation even
 faster. Modifying source files with many dependencies might require
 recompiling only those source files
@@ -5476,10 +5476,10 @@ recompiling only those source files
 instead of all the dependencies
 (which might take 2 minutes for instance).
 Often you can control which will be your case and make
-development faster by a few coding practices.
-</p><p>Improving Scala compilation performance is a major goal of sbt,
+development faster with a few coding practices.
+</p><p>Improving the Scala compilation performance is a major goal of sbt,
 and thus the speedups it gives are one of the major motivations to use it.
-A significant portion of sbt sources and development efforts deals
+A significant portion of sbt’s sources and development efforts deal
 with strategies for speeding up compilation.
 </p><p>To reduce compile times, sbt uses two strategies:
 </p><ol>
@@ -5623,17 +5623,24 @@ files; e.g. it needs to detect changes to method signatures as in the example ab
 needs to determine the set of files that might be potentially affected by this change
 </li></ul><p>Both of those pieces of information are extracted from the Scala compiler.
 </p><h3 id="Interaction+with+the+Scala+compiler">Interaction with the Scala compiler<a href="#Interaction+with+the+Scala+compiler" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Incremental compiler interacts with Scala compiler in many ways:
-</p><ul><li><p>provides three phases additional phases that extract needed information:
-</p><ul><li>api phase extracts public interface of compiled sources by walking trees and indexing types
-</li><li>dependency phase which extracts dependencies between source files (compilation units)
-</li><li>analyzer phase which captures the list of emitted class files
-</li></ul></li><li>defines a custom reporter which allows sbt to gather errors and warnings
-</li><li><p>subclasses Global to:
-</p><ul><li>add the api, dependency and analyzer phases
-</li><li>set the custom reporter
-</li></ul></li><li>manages instances of the custom Global and uses them to compile files it determined that need
-to be compiled
-</li></ul><h4 id="API+extraction+phase">API extraction phase<a href="#API+extraction+phase" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The API extraction phase extracts information from Trees, Types and Symbols and maps it to
+</p><ul>
+  <li>provides three phases additional phases that extract needed information:
+  <ul>
+    <li>api phase extracts public interface of compiled sources by walking trees and indexing types</li>
+    <li>dependency phase which extracts dependencies between source files (compilation units)</li>
+    <li>analyzer phase which captures the list of emitted class files</li>
+  </ul>
+  </li>
+  <li>defines a custom reporter which allows sbt to gather errors and warnings</li>
+  <li>subclasses Global to:
+  <ul>
+    <li>add the api, dependency and analyzer phases</li>
+    <li>set the custom reporter</li>
+  </ul>
+  </li>
+  <li>manages instances of the custom Global and uses them to compile files it determined that need
+    to be compiled</li>
+</ul><h4 id="API+extraction+phase">API extraction phase<a href="#API+extraction+phase" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The API extraction phase extracts information from Trees, Types and Symbols and maps it to
 incremental compiler’s internal data structures described in the
 <a href="https://raw.github.com/sbt/sbt/0.13/api.specification">api.specification</a> file.Those data
 structures allow to express an API in a way that is independent from Scala compiler version. Also,
@@ -5715,19 +5722,19 @@ and <code>ReversedRoutes</code>) but changes to specific route definition usuall
 all templates and controllers.
 </p><p>The idea behind name hashing is to exploit that observation and make the invalidation algorithm
 smarter about changes that can possibly affect a small number of files.
-</p><h4 id="Detection+of+irrelevant+dependencies+%28direct+approach%29">Detection of irrelevant dependencies (direct approach)<a href="#Detection+of+irrelevant+dependencies+%28direct+approach%29" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>I call call a change to API of given source file <code>X.scala</code> irrelevant if doesn’t affect compilation
-result of other file <code>Y.scala</code> even if <code>Y.scala</code> does depend on <code>X.scala</code>.
-</p><p>From that definition one can easily see that change can be declared irrelevant only in respect to
-given dependency. Conversely, one can declare a dependency between two source files irrelevant in
-respect to given change of an API in one of the files if the change doesn’t affect compilation
+</p><h4 id="Detection+of+irrelevant+dependencies+%28direct+approach%29">Detection of irrelevant dependencies (direct approach)<a href="#Detection+of+irrelevant+dependencies+%28direct+approach%29" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>A change to the API of a given source file <code>X.scala</code> can be called irrelevant if it doesn’t affect the compilation
+result of file <code>Y.scala</code> even if <code>Y.scala</code> depends on <code>X.scala</code>.
+</p><p>From that definition one can easily see that a change can be declared irrelevant only with respect to
+a given dependency. Conversely, one can declare a dependency between two source files irrelevant with
+respect to a given change of API in one of the files if the change doesn’t affect the compilation
 result of the other file. From now on we’ll focus on detection of irrelevant dependencies.
 </p><p>A very naive way of solving a problem of detecting irrelevant dependencies would be to say that we
 keep track of all used methods in <code>Y.scala</code> so if a method in <code>X.scala</code> is added/removed/modified we
-just check if it’s being used in <code>Y.scala</code> and if it’s not then we consider dependency of <code>Y.scala</code>
+just check if it’s being used in <code>Y.scala</code> and if it’s not then we consider the dependency of <code>Y.scala</code>
 on <code>X.scala</code> irrelevant in this particular case.
 </p><p>Just to give you a sneak preview of problems that quickly arise if you consider that strategy let’s
 consider those two scenarios.
-</p><h5 id="Inheritance">Inheritance<a href="#Inheritance" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p>We’ll see how method not used in other source file might affect it’s compilation result. Let’s
+</p><h5 id="Inheritance">Inheritance<a href="#Inheritance" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p>We’ll see how a method not used in another source file might affect its compilation result. Let’s
 consider this structure:
 </p><pre><code class="prettyprint lang-scala">// A.scala
 abstract class A
@@ -5740,7 +5747,7 @@ abstract class A {
   def foo(x: Int): Int
 }
 </code></pre><p>Now, once we recompile <code>A.scala</code> we could just say that since <code>A.foo</code> is not used in <code>B</code> class then
-we don’t need to recompile <code>B.scala</code>. However, it’s not true because B doesn’t implement a newly
+we don’t need to recompile <code>B.scala</code>. However, this is not true because <code>B</code> doesn’t implement a newly
 introduced, abstract method and an error should be reported.
 </p><p>Therefore, a simple strategy of looking at used methods for determining whether a given dependency
 is relevant or not is not enough.
@@ -5764,30 +5771,30 @@ class B {
 class A {
   def foo(x: Int): Int = x-1
 }
-</code></pre><p>Now, once we recompile <code>A.scala</code> and detect that there’s a new method defined in <code>A</code> class we would
-need to consider whether this is relevant to dependency of <code>B.scala</code> on <code>A.scala</code>. Notice that in
+</code></pre><p>Now, once we recompile <code>A.scala</code> and detect that there’s a new method defined in the <code>A</code> class we would
+need to consider whether this is relevant to the dependency of <code>B.scala</code> on <code>A.scala</code>. Notice that in
 <code>B.scala</code> we do not use <code>A.foo</code> (it didn’t exist at the time <code>B.scala</code> was compiled) but we use
 <code>AOps.foo</code> and it’s not immediately clear that <code>AOps.foo</code> has anything to do with <code>A.foo</code>. One would
 need to detect the fact that a call to <code>AOps.foo</code> as a result of implicit conversion <code>richA</code> that
 was inserted because we failed to find <code>foo</code> on <code>A</code> before.
-</p><p>This kind of analysis gets us very quickly to implementation complexity of Scala’s type checker and
+</p><p>This kind of analysis gets us very quickly to the implementation complexity of Scala’s type checker and
 is not feasible to implement in a general case.
-</p><h5 id="Too+much+information+to+track">Too much information to track<a href="#Too+much+information+to+track" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p>All above assumed we actually have full information about structure of API and used methods
+</p><h5 id="Too+much+information+to+track">Too much information to track<a href="#Too+much+information+to+track" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p>All of the above assumed we actually have full information about the structure of the API and used methods
 preserved so we can make use of it. However, as described in
 <a href="#hashing-an-api-representation">Hashing an API representation</a> we do not store the whole
 representation of the API but only its hash sum. Also, dependencies are tracked at source file
 level and not at class/method level.
-</p><p>One could imagine reworking current design to track more information but it would be a very big
-undertake. Also, incremental compiler used to preserve a whole API structure but it switched to
-hashing due to infeasible memory requirements.
-</p><h4 id="Detection+of+irrelevant+dependencies+%28name+hashing%29">Detection of irrelevant dependencies (name hashing)<a href="#Detection+of+irrelevant+dependencies+%28name+hashing%29" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>As we saw in previous chapter, the direct approach of tracking more information about what’s being
-used in files becomes tricky very quickly. One would wish to come up with some simpler and less
-precise approach that still yields big improvements over existing implementation.
-</p><p>The idea is to not track all used members and reason very precisely when given change to some
-members affects result of compilation of other files. We would track just used <em>simple names</em>
-instead and we would also track hash sums for all members with given simple name. The simple name
+</p><p>One could imagine reworking the current design to track more information but it would be a very big
+undertaking. Also, the incremental compiler used to preserve the whole API structure but it switched to
+hashing due to the resulting infeasible memory requirements.
+</p><h4 id="Detection+of+irrelevant+dependencies+%28name+hashing%29">Detection of irrelevant dependencies (name hashing)<a href="#Detection+of+irrelevant+dependencies+%28name+hashing%29" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>As we saw in the previous chapter, the direct approach of tracking more information about what’s being
+used in the source files becomes tricky very quickly. One would wish to come up with a simpler and less
+precise approach that would still yield big improvements over the existing implementation.
+</p><p>The idea is to not track all the used members and reason very precisely about when a given change to some
+members affects the result of the compilation of other files. We would track just the used <em>simple names</em>
+instead and we would also track the hash sums for all members with the given simple name. The simple name
 means just an unqualified name of a term or a type.
-</p><p>Let’s see first how this simplified strategy addresses the problem with 
+</p><p>Let’s see first how this simplified strategy addresses the problem with the
 <a href="#enrichment-pattern">enrichment pattern</a>. We’ll do that by simulating the name hashing algorithm.
 Let’s start with the original code:
 </p><pre><code class="prettyprint lang-scala">// A.scala
@@ -5801,17 +5808,17 @@ class B {
   implicit def richA(a: A): AOps = new AOps(a)
   def bar(a: A): Int = a.foo(12) // this is expanded to richA(a).foo so we are calling AOPs.foo method
 }
-</code></pre><p>During compilation of those two files we’ll extract the following information:
+</code></pre><p>During the compilation of those two files we’ll extract the following information:
 </p><pre><code class="">usedNames(&quot;A.scala&quot;): A
 usedNames(&quot;B.scala&quot;): B, AOps, a, A, foo, x, Int, richA, AOps, bar
 
 nameHashes(&quot;A.scala&quot;): A -&gt; ...
 nameHashes(&quot;B.scala&quot;): B -&gt; ..., AOps -&gt; ..., foo -&gt; ..., richA -&gt; ..., bar -&gt; ...
-</code></pre><p>The <code>usedNames</code> relation track all names mentioned in given source file. The <code>nameHashes</code> relation
-gives us a hash sum of groups of members that are put together in one bucket if they have the same
-simple name. In addition to information presented above we still track dependency of <code>B.scala</code> on
+</code></pre><p>The <code>usedNames</code> relation track all the names mentioned in the given source file. The <code>nameHashes</code> relation
+gives us a hash sum of the groups of members that are put together in one bucket if they have the same
+simple name. In addition to the information presented above we still track the dependency of <code>B.scala</code> on
 <code>A.scala</code>.
-</p><p>Now, if we add <code>foo</code> method to <code>A</code> class:
+</p><p>Now, if we add a <code>foo</code> method to <code>A</code> class:
 </p><pre><code class="prettyprint lang-scala">// A.scala
 class A {
   def foo(x: Int): Int = x-1
@@ -5819,32 +5826,32 @@ class A {
 </code></pre><p>and recompile, we’ll get the following (updated) information:
 </p><pre><code class="">usedNames(&quot;A.scala&quot;): A, foo
 nameHashes(&quot;A.scala&quot;): A -&gt; ..., foo -&gt; ...
-</code></pre><p>The incremental compiler compares name hashes before and after the change and detects that the hash
-sum of <code>foo</code> name has changed (it’s been added). Therefore, it looks at all source files that depend
-on <code>A.scala</code>, in our case it’s just <code>B.scala</code>, and checks whether <code>foo</code> appears as used name. It
-does, therefore it recompiles <code>B.scala</code> as intendent.
-</p><p>You can see now, that if we added other method to <code>A</code> like <code>xyz</code> then <code>B.scala</code> wouldn’t be
-recompiled because nowhere in <code>B.scala</code> the name <code>xyz</code> is mentioned. Therefore, if you have
+</code></pre><p>The incremental compiler compares the name hashes before and after the change and detects that the hash
+sum of <code>foo</code> has changed (it’s been added). Therefore, it looks at all the source files that depend
+on <code>A.scala</code>, in our case it’s just <code>B.scala</code>, and checks whether <code>foo</code> appears as a used name. It
+does, therefore it recompiles <code>B.scala</code> as intended.
+</p><p>You can see now, that if we added another method to <code>A</code> like <code>xyz</code> then <code>B.scala</code> wouldn’t be
+recompiled because nowhere in <code>B.scala</code> is the name <code>xyz</code> mentioned. Therefore, if you have
 reasonably non-clashing names you should benefit from a lot of dependencies between source files
 marked as irrelevant.
-</p><p>It’s very nice that this simple, name-based heuristic manages to withstand “enrichment pattern”
-test. However,  name-hashing fails to pass other test of <a href="#inheritance">inheritance</a>. In order to
-address that problem, we’ll need to have a closer look at dependencies introduced by inheritance vs
+</p><p>It’s very nice that this simple, name-based heuristic manages to withstand the “enrichment pattern”
+test. However, name-hashing fails to pass the other test of <a href="#inheritance">inheritance</a>. In order to
+address that problem, we’ll need to take a closer look at the dependencies introduced by inheritance vs
 dependencies introduced by member references.
-</p><h4 id="Dependencies+introduced+by+member+reference+and+inheritance">Dependencies introduced by member reference and inheritance<a href="#Dependencies+introduced+by+member+reference+and+inheritance" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The core assumption behind name-hashing algorithm is that if a user adds/modifies/removes a member
-of a class (e.g. a method) then other results of compilation of classes won’t be affected unless
-they are using that particular member. Inheritance with various override checks makes the whole
-situation much more complicated; if you combine it with mix-in composition that introduces a new
+</p><h4 id="Dependencies+introduced+by+member+reference+and+inheritance">Dependencies introduced by member reference and inheritance<a href="#Dependencies+introduced+by+member+reference+and+inheritance" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The core assumption behind the name-hashing algorithm is that if a user adds/modifies/removes a member
+of a class (e.g. a method) then the results of compilation of other classes won’t be affected unless
+they are using that particular member. Inheritance with its various override checks makes the whole
+situation much more complicated; if you combine it with mix-in composition that introduces new
 fields to classes inheriting from traits then you quickly realize that inheritance requires special
 handling.
 </p><p>The idea is that for now we would switch back to the old scheme whenever inheritance is involved.
 Therefore, we track dependencies introduced by member reference separately from dependencies
-introduced by inheritance. All dependencies introduced by inheritance are <em>not</em> a subject to name-
-hashing analysis so they are never marked as irrelevant.
-</p><p>The intuition behind dependency introduced by inheritance is very simple: it’s a dependency a
-class/trait introduces by inheriting from other class/trait. All other dependencies are called
+introduced by inheritance. All dependencies introduced by inheritance are <em>not</em> subject to name-hashing
+analysis so they are never marked as irrelevant.
+</p><p>The intuition behind the dependency introduced by inheritance is very simple: it’s a dependency a
+class/trait introduces by inheriting from another class/trait. All other dependencies are called
 dependencies by member reference because they are introduced by referring (selecting) a member
-(method, type alis, inner class, val, etc.) from another class. Notice that in order to inherit from
+(method, type alias, inner class, val, etc.) from another class. Notice that in order to inherit from
 a class you need to refer to it so dependencies introduced by inheritance are a strict subset of
 member reference dependencies.
 </p><p>Here’s an example which illustrates the distinction:
@@ -5874,16 +5881,16 @@ class Y {
   // dependencies by member reference: B, Int, A
 }
 </code></pre><p>There are two things to notice:
-</p><ol><li><p><code>X</code> does not depend on <code>B</code> by inheritance because <code>B</code> is passed as type parameter to <code>D</code>; we
+</p><ol><li><p><code>X</code> does not depend on <code>B</code> by inheritance because <code>B</code> is passed as a type parameter to <code>D</code>; we
 </p><p> consider only types that appear as parents to <code>X</code>
-</p></li><li><p><code>Y</code> does depend on <code>A</code> even if there’s no explicit mention of <code>A</code> in the source file; we
+</p></li><li><p><code>Y</code> <em>does</em> depend on <code>A</code> even if there’s no explicit mention of <code>A</code> in the source file; we
 </p><p> select a method <code>foo</code> defined in <code>A</code> and that’s enough to introduce a dependency
-</p></li></ol><p>To sum it up, the way we want to handle inheritance and problems it introduces is to track all
-dependencies introduced by inheritance separately and have much more strict way of invalidating
+</p></li></ol><p>To sum it up, the way we want to handle inheritance and the problems it introduces is to track all
+dependencies introduced by inheritance separately and have a much more strict way of invalidating
 dependencies. Essentially, whenever there’s a dependency by inheritance it will react to any
 (even minor) change in parent types.
 </p><h4 id="Computing+name+hashes">Computing name hashes<a href="#Computing+name+hashes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>One thing we skimmed over so far is how name hashes are actually computed.
-</p><p>As mentioned before, all definitions are grouped together by simple name and then hashed as one
+</p><p>As mentioned before, all definitions are grouped together by their simple name and then hashed as one
 bucket. If a definition (for example a class) contains other definition then those nested
 definitions do <em>not</em> contribute to a hash sum. The nested definitions will contribute to hashes of
 buckets selected by their name.
@@ -5900,7 +5907,7 @@ a trait.
 </li><li>Calls to <code>super.methodName</code> in traits are resolved to calls to an
 abstract method called <code>fullyQualifiedTraitName$$super$methodName</code>;
 such methods only exist if they are used. Hence, adding the first
-call to super.methodName for a specific methodName changes the
+call to <code>super.methodName</code> for a specific method name changes the
 interface. At present, this is not yet handled—see <a href="https://github.com/sbt/sbt/issues/466">#466</a>.
 </li><li><code>sealed</code> hierarchies of case classes allow to check exhaustiveness
 of pattern matching. Hence pattern matches using case classes must
@@ -5909,25 +5916,25 @@ dependencies cannot be easily tracked at the class level (see Scala
 issue <a href="https://issues.scala-lang.org/browse/SI-2559">SI-2559</a> for an
 example.). Check <a href="https://github.com/sbt/sbt/issues/1104">#1104</a> for detailed discussion of tracking
 dependencies at class level.
-</li></ol><h4 id="Debugging+an+interface+representation">Debugging an interface representation<a href="#Debugging+an+interface+representation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>If you see spurious incremental recompilations or you want understand
+</li></ol><h4 id="Debugging+an+interface+representation">Debugging an interface representation<a href="#Debugging+an+interface+representation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>If you see spurious incremental recompilations or you want to understand
 what changes to an extracted interface cause incremental recompilation
 then sbt 0.13 has the right tools for that.
 </p><p>In order to debug the interface representation and its changes as you
 modify and recompile source code you need to do two things:
-</p><ol><li>Enable incremental compiler’s apiDebug option.
+</p><ol><li>Enable the incremental compiler’s <code>apiDebug</code> option.
 </li><li>Add <a href="https://code.google.com/p/java-diff-utils/">diff-utils library</a> to sbt’s
 classpath. Check documentation of <code>sbt.extraClasspath</code> system
 property in the Command-Line-Reference.
 </li></ol><blockquote><p><strong>warning</strong>
 </p><p>Enabling the <code>apiDebug</code> option increases significantly
-memory consumption and degrades performance of the incremental
+the memory consumption and degrades the performance of the incremental
 compiler. The underlying reason is that in order to produce
 meaningful debugging information about interface differences
-incremental compiler has to retain the full representation of the
-interface instead of just hash sum as it does by default.
-</p><p>Keep this option enabled when you are debugging incremental compiler
+the incremental compiler has to retain the full representation of the
+interface instead of just the hash sum as it does by default.
+</p><p>Keep this option enabled when you are debugging the incremental compiler
 problem only.
-</p></blockquote><p>Below is complete transcript which shows how to enable interface
+</p></blockquote><p>Below is a complete transcript which shows how to enable interface
 debugging in your project. First, we download the <code>diffutils</code> jar and
 pass it to sbt:
 </p><pre><code class="prettyprint lang-">curl -O https://java-diff-utils.googlecode.com/files/diffutils-1.2.1.jar
@@ -5947,7 +5954,7 @@ sbt -Dsbt.extraClasspath=diffutils-1.2.1.jar
 </p><pre><code class="prettyprint lang-scala">class A {
    def b: String = &quot;abc&quot;
 }
-</code></pre><p>and run <code>compile</code> task again. Now if you run <code>last compile</code> you should
+</code></pre><p>and run <code>compile</code> again. Now if you run <code>last compile</code> you should
 see the following lines in the debugging log
 </p><pre><code class="prettyprint lang-">&gt; last compile
 [...]
@@ -5963,14 +5970,14 @@ see the following lines in the debugging log
 [debug] -def b: scala.this#Int
 [debug] +def b: java.lang.this#String
 [debug]  }
-</code></pre><p>You can see an unified diff of two interface textual represetantions. As
+</code></pre><p>You can see a unified diff of the two interface textual represetantions. As
 you can see, the incremental compiler detected a change to the return
 type of <code>b</code> method.
 </p><h4 id="Why+changing+the+implementation+of+a+method+might+affect+clients%2C+and+why+type+annotations+help">Why changing the implementation of a method might affect clients, and why type annotations help<a href="#Why+changing+the+implementation+of+a+method+might+affect+clients%2C+and+why+type+annotations+help" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>This section explains why relying on type inference for return types of
 public methods is not always appropriate. However this is an important
 design issue, so we cannot give fixed rules. Moreover, this change is
 often invasive, and reducing compilation times is not often a good
-enough motivation. That is why we discuss also some of the implications
+enough motivation. That is also why we discuss some of the implications
 from the point of view of binary compatibility and software engineering.
 </p><p>Consider the following source file <code>A.scala</code>:
 </p><pre><code class="prettyprint lang-scala">import java.io._
@@ -5981,24 +5988,24 @@ object A {
 </code></pre><p>Let us now consider the public interface of trait <code>A</code>. Note that the
 return type of method <code>openFiles</code> is not specified explicitly, but
 computed by type inference to be <code>List[FileWriter]</code>. Suppose that after
-writing this source code, we introduce client code and then modify
+writing this source code, we introduce some client code and then modify
 <code>A.scala</code> as follows:
 </p><pre><code class="prettyprint lang-scala">import java.io._
 object A {
   def openFiles(list: List[File]) =
     Vector(list.map(name =&gt; new BufferedWriter(new FileWriter(name))): _*)
 }
-</code></pre><p>Type inference will now compute as result type <code>Vector[BufferedWriter]</code>;
-in other words, changing the implementation lead to a change of the
+</code></pre><p>Type inference will now compute the result type as <code>Vector[BufferedWriter]</code>;
+in other words, changing the implementation lead to a change to the
 public interface, with two undesirable consequences:
-</p><ol><li>Concerning our topic, client code needs to be recompiled, since
+</p><ol><li>Concerning our topic, the client code needs to be recompiled, since
 changing the return type of a method, in the JVM, is a
 binary-incompatible interface change.
 </li><li>If our component is a released library, using our new version
 requires recompiling all client code, changing the version number,
 and so on. Often not good, if you distribute a library where binary
 compatibility becomes an issue.
-</li><li>More in general, client code might now even be invalid. The
+</li><li>More in general, the client code might now even be invalid. The
 following code will for instance become invalid after the change:
 </li></ol><pre><code class="prettyprint lang-scala">val res: List[FileWriter] = A.openFiles(List(new File(&quot;foo.input&quot;)))
 </code></pre><p>Also the following code will break:
@@ -9050,9 +9057,9 @@ present to the user during tab completion.
 </p><p>For example, the following task prints the current Scala version and
 then echoes the arguments passed to it on their own line.
 </p><pre><code class="prettyprint lang-scala">demo := {
-    // get the result of parsing
+  // get the result of parsing
   val args: Seq[String] = spaceDelimited(&quot;&lt;arg&gt;&quot;).parsed
-    // Here, we also use the value of the `scalaVersion` setting
+  // Here, we also use the value of the `scalaVersion` setting
   println(&quot;The current Scala version is &quot; + scalaVersion.value)
   println(&quot;The arguments to demo were:&quot;)
   args foreach println
@@ -9205,7 +9212,7 @@ input. In this section, applying input produces a <code>Task</code>. The <code>t
 method on <code>Initialize[InputTask[T]]</code> accepts the <code>String</code> input to apply
 and produces a task that can be used normally. For example, the
 following defines a plain task <code>runFixed</code> that can be used by other
-tasks or run directly without providing any input, :
+tasks or run directly without providing any input:
 </p><pre><code class="prettyprint lang-scala">lazy val runFixed = taskKey[Unit](&quot;A task that hard codes the values to `run`&quot;)
 
 runFixed := {
@@ -9222,7 +9229,7 @@ green
 Done!
 </code></pre><p>Each call to <code>toTask</code> generates a new task, but each task is configured
 the same as the original <code>InputTask</code> (in this case, <code>run</code>) but with
-different input applied. For example, :
+different input applied. For example:
 </p><pre><code class="prettyprint lang-scala">lazy val runFixed2 = taskKey[Unit](&quot;A task that hard codes the values to `run`&quot;)
 
 fork in run := true

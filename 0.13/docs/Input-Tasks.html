@@ -67,9 +67,9 @@ present to the user during tab completion.
 </p><p>For example, the following task prints the current Scala version and
 then echoes the arguments passed to it on their own line.
 </p><pre><code class="prettyprint lang-scala">demo := {
-    // get the result of parsing
+  // get the result of parsing
   val args: Seq[String] = spaceDelimited(&quot;&lt;arg&gt;&quot;).parsed
-    // Here, we also use the value of the `scalaVersion` setting
+  // Here, we also use the value of the `scalaVersion` setting
   println(&quot;The current Scala version is &quot; + scalaVersion.value)
   println(&quot;The arguments to demo were:&quot;)
   args foreach println
@@ -222,7 +222,7 @@ input. In this section, applying input produces a <code>Task</code>. The <code>t
 method on <code>Initialize[InputTask[T]]</code> accepts the <code>String</code> input to apply
 and produces a task that can be used normally. For example, the
 following defines a plain task <code>runFixed</code> that can be used by other
-tasks or run directly without providing any input, :
+tasks or run directly without providing any input:
 </p><pre><code class="prettyprint lang-scala">lazy val runFixed = taskKey[Unit](&quot;A task that hard codes the values to `run`&quot;)
 
 runFixed := {
@@ -239,7 +239,7 @@ green
 Done!
 </code></pre><p>Each call to <code>toTask</code> generates a new task, but each task is configured
 the same as the original <code>InputTask</code> (in this case, <code>run</code>) but with
-different input applied. For example, :
+different input applied. For example:
 </p><pre><code class="prettyprint lang-scala">lazy val runFixed2 = taskKey[Unit](&quot;A task that hard codes the values to `run`&quot;)
 
 fork in run := true
