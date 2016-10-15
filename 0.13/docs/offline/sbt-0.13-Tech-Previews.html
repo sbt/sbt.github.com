@@ -45,28 +45,35 @@
           <div class="span-16 prepend-1 append-1 contents">
             <h2 id="sbt+0.13.5%2B+Technology+Previews">sbt 0.13.5+ Technology Previews<a href="#sbt+0.13.5%2B+Technology+Previews" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>sbt 0.13.5+ releases of sbt are technology previews of what’s to come to sbt 1.0 with enhancements like <a href="https://typesafe.com/blog/preview-of-upcoming-sbt-10-features-read-about-the-new-plugins">auto plugins</a>, launcher enhacements for sbt server, defined in the sbt-remote-control project, and other necessary API changes.
 </p><p>These releases maintain binary compatibility with plugins that are published against sbt 0.13.0, but add new features in preparation for sbt 1.0. The tech previews allow us to test new ideas like auto plugins and performance improvements on dependency resolution; the build users can try new features without losing the existing plugin resources; and plugin authors can gradually migrate to the new plugin system before sbt 1.0 arrives.
-</p><h2 id="sbt+0.13.13">sbt 0.13.13<a href="#sbt+0.13.13" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Fixes+with+compatibility+implications">Fixes with compatibility implications<a href="#Fixes+with+compatibility+implications" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Deprecates the old symbolic operators, to be removed in sbt 1.0. See below for more details.
+</p><h3 id="Fixes+with+compatibility+implications">Fixes with compatibility implications<a href="#Fixes+with+compatibility+implications" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Deprecates the old sbt 0.12 DSL, to be removed in sbt 1.0. See below for more details.
 </li><li>The <code>.value</code> method is deprecated for input tasks. Calling <code>.value</code> on an input key returns an <code>InputTask[A]</code>,
 which is completely unintuitive and often results in a bug. In most cases <code>.evaluated</code> should be called,
 which returns <code>A</code> by evaluating the task.
 Just in case <code>InputTask[A]</code> is needed, <code>.inputTaskValue</code> method is now provided. <a href="https://github.com/sbt/sbt/pull/2709">#2709</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
 </li><li>sbt 0.13.13 renames the early command <code>--&lt;command&gt;</code> that was added in 0.13.1 to <code>early(&lt;command&gt;)</code>. This fixes the regression <a href="https://github.com/sbt/sbt/issues/1041">#1041</a>. For backward compatibility <code>--error</code>, <code>--warn</code>, <code>--info</code>, and <code>--debug</code> will continue to function during the 0.13 series, but it is strongly encouraged to migrate to the single hyphen options: <code>-error</code>, <code>-warn</code>, <code>-info</code>, and <code>-debug</code>. <a href="https://github.com/sbt/sbt/pull/2742">#2742</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
-</li></ul><h3 id="Improvements">Improvements<a href="#Improvements" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Adds <code>new</code> command and <code>templateResolvers</code>. See below for more details.
+</li><li>Improve <code>show</code> when key returns a <code>Seq</code> by showing the elements one per line. Disable with <code>-Dsbt.disable.show.seq=true</code>. <a href="https://github.com/sbt/sbt/pull/2755">#2755</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li><li>Recycles classloaders to be anti-hostile to JIT. Disable with <code>-Dsbt.disable.interface.classloader.cache=true</code>. <a href="https://github.com/sbt/sbt/pull/2754">#2754</a> by <a href="https://github.com/retronym">@retronym</a>
+</li></ul><h3 id="Improvements">Improvements<a href="#Improvements" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Adds <code>new</code> command and <code>templateResolverInfos</code>. See below for more details.
 </li><li>Auto plugins can add synthetic subprojects. See below for more details.
 </li><li>Supports wildcard exclusions in POMs <a href="https://github.com/sbt/sbt/issues/1431">#1431</a>/<a href="https://github.com/sbt/ivy/pull/22">sbt/ivy#22</a>/<a href="https://github.com/sbt/sbt/pull/2731">#2731</a> by <a href="https://github.com/jtgrabowski">@jtgrabowski</a>
 </li><li>Adds the ability to call <code>aggregateProjects(..)</code> for the current project inside a build sbt file. <a href="https://github.com/sbt/sbt/pull/2682">#2682</a> by <a href="https://github.com/xuwei-k">@xuwei-k</a>
 </li><li>Adds <code>.jvmopts</code> support to the launcher script. <a href="https://github.com/sbt/sbt-launcher-package/pull/111">sbt/sbt-launcher-package#111</a> by <a href="https://github.com/fommil">@fommil</a>
 </li><li>Adds <code>.java-version</code> support to the Windows launcher script. <a href="https://github.com/sbt/sbt-launcher-package/pull/111">sbt/sbt-launcher-package#111</a> by <a href="https://github.com/fommil">@fommil</a>
 </li><li>The startup log level is dropped to <code>-error</code> in script mode using <code>scalas</code>. <a href="https://github.com/sbt/sbt/issues/840">#840</a>/<a href="https://github.com/sbt/sbt/pull/2746">#2746</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li><li>Adds <code>CrossVersion.patch</code> which sits in between <code>CrossVersion.binary</code> and <code>CrossVersion.full</code> in that it strips off any
+trailing <code>-bin-...</code> suffix which is used to distinguish variant but binary compatible Scala toolchain builds. Most things
+which are currently <code>CrossVersion.full</code> (eg. Scala compiler plugins, esp. macro-paradise) would be more appropriately
+depended on as <code>CrossVersion.patch</code> from this release on.
 </li></ul><h3 id="Bug+fixes">Bug fixes<a href="#Bug+fixes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Fixes a regression in sbt 0.13.12 that wrongly reports build-level keys to be ambiguous. <a href="https://github.com/sbt/sbt/issues/2707">#2707</a>/<a href="https://github.com/sbt/sbt/issues/2708">#2708</a> by <a href="https://github.com/Duhemm">@Duhemm</a>
 </li><li>Fixes a regression in sbt 0.13.12 that was misfiring Scala version enforcement when an alternative <code>scalaOrganization</code> is set. <a href="https://github.com/sbt/sbt/pull/2703">#2703</a> by <a href="https://github.com/milessabin">@milessabin</a>
 </li><li>Fixes <code>Tags.ForkedTestGroup</code>. <a href="https://github.com/sbt/sbt/issues/2677">#2677</a>/<a href="https://github.com/sbt/sbt/pull/2681">#2681</a> by <a href="https://github.com/pauldraper">@pauldraper</a>
 </li><li>Fixes forked tests being reported as successful when the test harness fails. <a href="https://github.com/sbt/sbt/issues/2442">#2442</a>/<a href="https://github.com/sbt/sbt/issues/2722">#2722</a>/<a href="https://github.com/sbt/sbt/pull/2730">#2730</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>/<a href="https://github.com/dwijnand">@dwijnand</a>
 </li><li>Fixes incorrect installation path on Windows. <a href="https://github.com/sbt/sbt-launcher-package/pull/110">sbt/sbt-launcher-package#110</a> by <a href="https://github.com/dwijnand">@dwijnand</a>
-</li></ul><h3 id="new+command+and+templateResolvers">new command and templateResolvers<a href="#new+command+and+templateResolvers" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 0.13.13 adds a <code>new</code> command, which helps create new build definitions.
-The <code>new</code> command is extensible via a mechanism called the template resolver,
-which evaluates the arguments passed to the command to find and run a template.
-As a reference implementation <a href="http://www.foundweekends.org/giter8/">Giter8</a> is provided. For instance:
+</li></ul><h3 id="new+command+and+templateResolverInfos">new command and templateResolverInfos<a href="#new+command+and+templateResolverInfos" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 0.13.13 adds a <code>new</code> command, which helps create new build definitions.
+The <code>new</code> command is extensible via a mechanism called the template resolver.
+A template resolver pattern matches on the passed in arguments after <code>new</code>,
+and if it’s a match it will apply the template.
+</p><p>As a reference implementation, template resolver for <a href="http://www.foundweekends.org/giter8/">Giter8</a> is provided. For instance:
 </p><pre><code>sbt new eed3si9n/hello.g8
 </code></pre><p>will run <a href="https://github.com/eed3si9n/hello.g8">eed3si9n/hello.g8</a> using Giter8.
 </p><p><a href="https://github.com/sbt/sbt/pull/2705">#2705</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
@@ -105,15 +112,25 @@ object DerivedProjectsPlugin extends AutoPlugin {
     else Nil
 }
 </code></pre><p><a href="https://github.com/sbt/sbt/issues/2532">#2532</a>/<a href="https://github.com/sbt/sbt/pull/2717">#2717</a>/<a href="https://github.com/sbt/sbt/issues/2738">#2738</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
-</p><h3 id="Deprecate+old+operators">Deprecate old operators<a href="#Deprecate+old+operators" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The no-longer-documented operators <code>&lt;&lt;=</code>, <code>&lt;+=</code>, and <code>&lt;++=</code> are deprecated,
+</p><h3 id="Deprecate+old+sbt+0.12+DSL">Deprecate old sbt 0.12 DSL<a href="#Deprecate+old+sbt+0.12+DSL" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The no-longer-documented operators <code>&lt;&lt;=</code>, <code>&lt;+=</code>, and <code>&lt;++=</code> and tuple enrichments are deprecated,
 and will be removed in sbt 1.0.
-</p><p>For <code>&lt;&lt;=</code>, the suggested migration would be to use either <code>:=</code> or <code>~=</code> operators.
-The RHS of <code>&lt;&lt;=</code> takes an <code>Initialize[_]</code> expression, which can be converted to <code>:=</code> style
-by wrapping the expression in parenthesis, and calling <code>.value</code> at the end.
-For example:
-</p><pre><code>key := (key.dependsOn(compile in Test)).value
-</code></pre><p>For <code>&lt;+=</code> and <code>&lt;++=</code>, use <code>+= { x.value }</code> and <code>++= { x.value }</code>.
-</p><p><a href="https://github.com/sbt/sbt/pull/2716">#2716</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</p><p>Generally,
+</p><pre><code>task3 &lt;&lt;= (task1, task2) map { (t1, t2) =&gt; println(t1 + t2); t1 + t2 }
+</code></pre><p>should migrate to
+</p><pre><code>task3 := {
+  println(task1.value + task2.value)
+  task1.value + task2.value
+}
+</code></pre><p>Except for source generators, which requires task values:
+</p><pre><code>sourceGenerators in Compile &lt;+= buildInfo
+</code></pre><p>This becomes:
+</p><pre><code>sourceGenerators in Compile += buildInfo.taskValue
+</code></pre><p>Another exception is input task:
+</p><pre><code>run &lt;&lt;= docsRunSetting
+</code></pre><p>This becomes:
+</p><pre><code>run := docsRunSetting.evaluated
+</code></pre><p>See <a href="http://www.scala-sbt.org/0.13/docs/Migrating-from-sbt-012x.html">Migrating from sbt 0.12.x</a> for more details.
+</p><p><a href="https://github.com/sbt/sbt/pull/2716">#2716</a>/<a href="https://github.com/sbt/sbt/issues/2763">#2763</a>/<a href="https://github.com/sbt/sbt/pull/2764">#2764</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a> and <a href="https://github.com/dwijnand">@dwijnand</a>
 </p><h2 id="sbt+0.13.12">sbt 0.13.12<a href="#sbt+0.13.12" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Fixes+with+compatibility+implications">Fixes with compatibility implications<a href="#Fixes+with+compatibility+implications" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>By default the Scala toolchain artifacts are now transitively resolved using the provided <code>scalaVersion</code> and
 <code>scalaOrganization</code>. Previously a user specified <code>scalaOrganization</code> would not have affected transitive
 dependencies on, eg. <code>scala-reflect</code>. An Ivy-level mechanism is used for this purpose, and as a consequence
