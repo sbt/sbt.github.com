@@ -4213,6 +4213,7 @@ sbt 0.13.5+ releases of sbt are technology previews of what's to come to sbt 1.0
 
 These releases maintain binary compatibility with plugins that are published against sbt 0.13.0, but add new features in preparation for sbt 1.0. The tech previews allow us to test new ideas like auto plugins and performance improvements on dependency resolution; the build users can try new features without losing the existing plugin resources; and plugin authors can gradually migrate to the new plugin system before sbt 1.0 arrives.
 
+## sbt 0.13.13
 
 ### Fixes with compatibility implications
 
