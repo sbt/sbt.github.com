@@ -115,7 +115,6 @@ Thanks for trying out sbt and *have fun*!
   [Windows]: Installing-sbt-on-Windows.html
   [Linux]: Installing-sbt-on-Linux.html
   [Manual-Installation]: Manual-Installation.html
-  [Activator-Installation]: Activator-Installation.html
 
 Installing sbt
 --------------
@@ -134,7 +133,7 @@ Ultimately, the installation of sbt boils down to a launcher JAR
 and a shell script, but depending on your platform, we provide
 several ways to make the process less tedious.  Head over to the
 installation steps for [Mac][Mac], [Windows][Windows],
-[Linux][Linux], [Lightbend Activator][Activator-Installation], or
+[Linux][Linux], or
 [manual installation][Manual-Installation].
 
 ### Tips and Notes
@@ -146,7 +145,6 @@ terminal encodings, HTTP proxies, and JVM options.
   [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.12/sbt-0.13.12.zip
   [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.12/sbt-0.13.12.tgz
   [Manual-Installation]: Manual-Installation.html
-  [Activator-Installation]: Activator-Installation.html
 
 Installing sbt on Mac
 ---------------------
@@ -173,10 +171,6 @@ $ brew install sbt
 
 Download [ZIP][ZIP] or [TGZ][TGZ] package, and expand it.
 
-### Lightbend Activator
-
-See the [Lightbend Activator instructions][Activator-Installation].
-
 ### Installing manually
 
 See instruction to install manually.
@@ -185,7 +179,6 @@ See instruction to install manually.
   [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.12/sbt-0.13.12.msi
   [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.12/sbt-0.13.12.zip
   [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.12/sbt-0.13.12.tgz
-  [Activator-Installation]: Activator-Installation.html
 
 Installing sbt on Windows
 -------------------------
@@ -198,10 +191,6 @@ Download [msi installer][MSI] and install it.
 
 Download [ZIP][ZIP] or [TGZ][TGZ] package and expand it.
 
-### Lightbend Activator
-
-See the [Lightbend Activator instructions][Activator-Installation].
-
 ### Installing manually
 
 See instruction to install manually.
@@ -212,7 +201,6 @@ See instruction to install manually.
   [RPM]: https://dl.bintray.com/sbt/rpm/sbt-0.13.12.rpm
   [DEB]: https://dl.bintray.com/sbt/debian/sbt-0.13.12.deb
   [Manual-Installation]: Manual-Installation.html
-  [Activator-Installation]: Activator-Installation.html
   [website127]: https://github.com/sbt/website/issues/127
 
 Installing sbt on Linux
@@ -269,10 +257,6 @@ To merge sbt from this ebuilds you can do:
 
 > **Note:** Please report any issues with the ebuild
 > [here](https://github.com/whiter4bbit/overlays/issues).
-
-### Lightbend Activator
-
-See the [Lightbend Activator instructions][Activator-Installation].
 
 ### Installing manually
 
@@ -382,37 +366,6 @@ Installing Lightbend Activator (including sbt)
 Lightbend Activator is a custom version of sbt which adds two extra
 commands, `activator ui` and `activator new`. The `activator`
 command is a superset of sbt, in short.
-
-You can obtain Activator from
-[lightbend.com](http://www.lightbend.com/activator/download).
-
-If you see a command line such as `sbt ~test` in the
-documentation, you will also be able to type `activator ~test`.
-Any Activator project can be opened in sbt and vice versa because
-Activator is "sbt powered."
-
-The Activator download includes an `activator` script and an
-`activator-launch.jar`, which are equivalent to the sbt script and
-launch jar described under
-[manual installation][Manual-Installation].  Here are the
-differences between Activator and a
-[manual installation][Manual-Installation] of sbt:
-
- * typing `activator` with no arguments will attempt to guess
-   whether to enter `activator shell` or `activator ui` mode;
-   type `activator shell` to force the command line prompt.
- * `activator new` allows you to create projects from a large
-   [catalog of template projects](https://www.lightbend.com/activator/templates),
-   for example the `play-scala` template is a skeleton
-   [Play Framework](https://playframework.com) Scala app.
- * `activator ui` launches a quick start UI that can be used to
-   work through tutorials from the template catalog (many
-   templates in the catalog have accompanying tutorials).
-
-Activator offers two downloads; the small "minimal" download
-contains only the wrapper script and launch jar, while the large
-"full" download contains a preloaded Ivy cache with jars for
-Scala, Akka, and the Play Framework.
 
 
   [Basic-Def]: Basic-Def.html

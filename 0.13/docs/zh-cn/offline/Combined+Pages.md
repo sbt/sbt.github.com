@@ -33,7 +33,6 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
   [Windows]: Installing-sbt-on-Windows.html
   [Linux]: Installing-sbt-on-Linux.html
   [Manual-Installation]: Manual-Installation.html
-  [Activator-Installation]: Activator-Installation.html
 
 安装 sbt
 --------------
@@ -48,7 +47,7 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
 -   然后前往 [.sbt 构建定义][Basic-Def] 学习更多关于构建的定义。
 
 
-最后，安装步骤就简化为一个 Jar 文件和一个 Shell 脚本，但是取决于你的平台，我们提供了好几种方式来使得步骤不是那么单调。 [Mac][Mac]，[Windows][Windows]，[Linux][Linux]，[Lightbend Activator][Activator-Installation]，或[手动安装][Manual-Installation] 提供了相应的安装步骤。
+最后，安装步骤就简化为一个 Jar 文件和一个 Shell 脚本，但是取决于你的平台，我们提供了好几种方式来使得步骤不是那么单调。 [Mac][Mac]，[Windows][Windows]，[Linux][Linux]，或[手动安装][Manual-Installation] 提供了相应的安装步骤。
 
 ### 提示和技巧
 
@@ -58,7 +57,6 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
   [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.12/sbt-0.13.12.zip
   [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.12/sbt-0.13.12.tgz
   [Manual-Installation]: Manual-Installation.html
-  [Activator-Installation]: Activator-Installation.html
 
 在 Mac 上安装 sbt
 ---------------------
@@ -83,10 +81,6 @@ $ brew install sbt
 
 下载 [ZIP][ZIP] 或者 [TGZ][TGZ] 包并解压。
 
-### Lightbend Activator
-
-参见 [Lightbend Activator安装指南][Activator-Installation].
-
 ### 手动安装
 
 参见手动安装指南。
@@ -95,7 +89,6 @@ $ brew install sbt
   [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.12/sbt-0.13.12.msi
   [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.12/sbt-0.13.12.zip
   [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.12/sbt-0.13.12.tgz
-  [Activator-Installation]: Activator-Installation.html
 
 在 Windows 上安装 sbt
 -------------------------
@@ -107,10 +100,6 @@ $ brew install sbt
 ### 通过通用的安装包安装
 
 下载 [ZIP][ZIP] 或者 [TGZ][TGZ] 包并解压。
-
-### Lightbend Activator
-
-参见 [Lightbend Activator安装指南][Activator-Installation].
 
 ### 手动安装
 
@@ -269,20 +258,6 @@ $ chmod u+x ~/bin/sbt
 ---------------------
 
 Lightbend Activator 是sbt的一个自定义版本，它添加两个额外的命令`activator ui`和`activator new`。`activator`命令简言之就是sbt的一个超集。
-
-你可以从 [typesafe.com](http://typesafe.com/platform/getstarted)获得Activator。
-
-If you see a command line such as `sbt ~test` in the documentation, you will also be able to type `activator ~test`. Any Activator project can be opened in sbt and vice versa because Activator is "sbt powered."
-
-如果你在文档中看到一个命令行如`sbt ~test`，你也将可以键入`activator ~test`。任意一个Activator工程能都可以用sbt打开，反之亦然，因为Activator是"基于sbt"的。
-
-Activator下载包括`activator`脚本和一个`activator-launch.jar`，分别相当于[手动安装][Manual-Installation]所述的sbt脚本和启动jar。这里Activator和一个[手动安装][Manual-Installation]的sbt之间的差异如下：
-
- * 键入不带参数的`activator`将尝试猜测是否进入`activator shell`或`activator ui`模式；键入`activator shell`来明确进入命令行提示符。
- * `activator new`允许你从一个大的[项目模板目录](https://typesafe.com/activator/templates)中创建项目，例如`play-scala`模板是一个[Play Framework](http://playframework.com)Scala应用程序骨架
- * `activator ui`启动一种快速启动用户界面，可用于从模板目录浏览教程（在目录中的许多模板有陪同教程）。
-
-Activator提供两种下载；小的"minimal"下载包只包含包装脚本和启动jar，而大的"full"下载包含预装的Ivy缓存，包括Scala，Akka和Play框架。
 
 
   [Basic-Def]: Basic-Def.html
