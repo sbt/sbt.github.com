@@ -2330,7 +2330,7 @@ configure HTTPS or FTP.
 </p><h2 id="Deploying+to+Sonatype">Deploying to Sonatype<a href="#Deploying+to+Sonatype" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Deploying to sonatype is easy! Just follow these simple steps:
 </p><h3 id="First+-+PGP+Signatures">First - PGP Signatures<a href="#First+-+PGP+Signatures" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>You’ll need to PGP sign your artifacts for the Sonatype repository.
 Don’t worry, there’s a
-<a href="http://scala-sbt.org/sbt-pgp">plugin for that</a>.
+<a href="http://scala-sbt.org/sbt-pgp/">plugin for that</a>.
 Follow the instructions for the plugin and you’ll have PGP signed artifacts in no
 time.
 </p><blockquote><ul><li>Note: The plugin is a jvm-only solution to generate PGP keys and sign
@@ -2343,7 +2343,7 @@ line is not needed.*
 [info] /home/username/.sbt/.gnupg/pubring.gpg
 </code></pre><p>If your PGP key has not yet been distributed to the keyserver pool,
 i.e., you’ve just generated it, you’ll need to publish it. You can do so
-using the <a href="http://scala-sbt.org/sbt-pgp">sbt-pgp</a> plugin:
+using the <a href="http://scala-sbt.org/sbt-pgp/">sbt-pgp</a> plugin:
 </p><pre><code class="">pgp-cmd send-key keyname hkp://pool.sks-keyservers.net
 </code></pre><p>(where keyname is the name or email address used when creating the key or
 hexadecimal identifier for the key.)
@@ -2464,7 +2464,7 @@ need to:
 </p><ul><li>Have GPG key pair, with published public key,
 </li><li>An sbt file with your Sonatype credentials <em>that is not pushed to
 the VCS</em>,
-</li><li>Add the <a href="http://scala-sbt.org/sbt-pgp">sbt-pgp plugin</a> to sign
+</li><li>Add the <a href="http://scala-sbt.org/sbt-pgp/">sbt-pgp plugin</a> to sign
 the artefacts,
 </li><li>Modify <code>build.sbt</code> with the required elements in the generated POM.
 </li></ul><p>Starting with a project that is not being published, you’ll need to
@@ -2476,7 +2476,7 @@ settings:
                            &quot;oss.sonatype.org&quot;,
                            &quot;your-sonatype-username&quot;,
                            &quot;your-sonatype-password&quot;)
-</code></pre><h4 id="%7E%2F.sbt%2Fplugins%2Fgpg.sbt">~/.sbt/plugins/gpg.sbt<a href="#%7E%2F.sbt%2Fplugins%2Fgpg.sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The <a href="http://scala-sbt.org/sbt-pgp">sbt-pgp plugin</a> allows you to sign
+</code></pre><h4 id="%7E%2F.sbt%2Fplugins%2Fgpg.sbt">~/.sbt/plugins/gpg.sbt<a href="#%7E%2F.sbt%2Fplugins%2Fgpg.sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The <a href="http://scala-sbt.org/sbt-pgp/">sbt-pgp plugin</a> allows you to sign
 and publish your artefacts by running <code>publishSigned</code> in sbt:
 </p><pre><code class="prettyprint lang-scala">addSbtPlugin(&quot;com.typesafe.sbt&quot; % &quot;sbt-pgp&quot; % &quot;0.8&quot;)
 </code></pre><h4 id="build.sbt">build.sbt<a href="#build.sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Finally, you’ll need to tweak the generated POM in your <code>build.sbt</code>. The
@@ -2634,8 +2634,10 @@ task4 := { println(sett1.value + sett2.value); sett1.value + sett2.value }
 </code></pre><p>define it as:
 </p><pre><code class="prettyprint lang-scala">a := (a dependsOn b).value
 </code></pre><h3 id="Migrating+when+you+need+to+set+s">Migrating when you need to set <code>Task</code>s<a href="#Migrating+when+you+need+to+set+s" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>For keys such as <code>sourceGenerators</code> and <code>resourceGenerators</code> which use sbt’s Task type:
-</p><pre><code class="prettyprint lang-scala">val sourceGenerators = SettingKey[Seq[Task[Seq[File]]]](&quot;source-generators&quot;, &quot;List of tasks that generate sources.&quot;, CSetting)
-val resourceGenerators = SettingKey[Seq[Task[Seq[File]]]](&quot;resource-generators&quot;, &quot;List of tasks that generate resources.&quot;, CSetting)
+</p><pre><code class="prettyprint lang-scala">val sourceGenerators =
+  settingKey[Seq[Task[Seq[File]]]](&quot;List of tasks that generate sources&quot;)
+val resourceGenerators =
+  settingKey[Seq[Task[Seq[File]]]](&quot;List of tasks that generate resources&quot;)
 </code></pre><p>Where you previous would define things as:
 </p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile &lt;+= buildInfo
 </code></pre><p>now you define them as:

@@ -94,8 +94,10 @@ task4 := { println(sett1.value + sett2.value); sett1.value + sett2.value }
 </code></pre><p>define it as:
 </p><pre><code class="prettyprint lang-scala">a := (a dependsOn b).value
 </code></pre><h3 id="Migrating+when+you+need+to+set+s">Migrating when you need to set <code>Task</code>s<a href="#Migrating+when+you+need+to+set+s" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>For keys such as <code>sourceGenerators</code> and <code>resourceGenerators</code> which use sbt’s Task type:
-</p><pre><code class="prettyprint lang-scala">val sourceGenerators = SettingKey[Seq[Task[Seq[File]]]](&quot;source-generators&quot;, &quot;List of tasks that generate sources.&quot;, CSetting)
-val resourceGenerators = SettingKey[Seq[Task[Seq[File]]]](&quot;resource-generators&quot;, &quot;List of tasks that generate resources.&quot;, CSetting)
+</p><pre><code class="prettyprint lang-scala">val sourceGenerators =
+  settingKey[Seq[Task[Seq[File]]]](&quot;List of tasks that generate sources&quot;)
+val resourceGenerators =
+  settingKey[Seq[Task[Seq[File]]]](&quot;List of tasks that generate resources&quot;)
 </code></pre><p>Where you previous would define things as:
 </p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile &lt;+= buildInfo
 </code></pre><p>now you define them as:
