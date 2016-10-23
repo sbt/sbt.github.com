@@ -50,9 +50,9 @@
 </li></ul><p>The resources may be accessed from tests by using the <code>getResource</code>
 methods of <code>java.lang.Class</code> or <code>java.lang.ClassLoader</code>.
 </p><p>The main Scala testing frameworks (
-<a href="http://specs2.org/">specs2</a>,
-<a href="http://scalacheck.org/">ScalaCheck</a>, and
-<a href="http://scalatest.org/">ScalaTest</a>) provide an implementation of the
+<a href="http://scalacheck.org/">ScalaCheck</a>,
+<a href="http://scalatest.org/">ScalaTest</a>, and
+<a href="http://specs2.org/">specs2</a>) provide an implementation of the
 common test interface and only need to be added to the classpath to work
 with sbt. For example, ScalaCheck may be used by declaring it as a
 <a href="../tutorial/Library-Dependencies.html">managed dependency</a>:
@@ -179,14 +179,14 @@ per project.
   scalaVersion := &quot;2.11.8&quot;,
   organization := &quot;com.example&quot;
 )
-lazy val specs2core = &quot;org.specs2&quot; %% &quot;specs2-core&quot; % &quot;2.4.14&quot;
+lazy val scalatest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.0.0&quot;
 
 lazy val root = (project in file(&quot;.&quot;)).
   configs(IntegrationTest).
   settings(commonSettings: _*).
   settings(Defaults.itSettings: _*).
   settings(
-    libraryDependencies += specs2core % &quot;it,test&quot;
+    libraryDependencies += scalatest % &quot;it,test&quot;
     // other settings here
   )
 </code></pre><ul><li><code>configs(IntegrationTest)</code> adds the predefined integration test
@@ -194,7 +194,7 @@ configuration. This configuration is referred to by the name it.
 </li><li><code>settings(Defaults.itSettings : _*)</code> adds compilation, packaging,
 and testing actions and settings in the IntegrationTest
 configuration.
-</li><li><code>settings(libraryDependencies += specs2core % &quot;it,test&quot;)</code> adds specs2 to both the
+</li><li><code>settings(libraryDependencies += scalatest % &quot;it,test&quot;)</code> adds scalatest to both the
 standard test configuration and the integration test configuration
 it. To define a dependency only for integration tests, use “it” as
 the configuration instead of “it,test”.
@@ -224,7 +224,7 @@ the definitive integration test options:
   scalaVersion := &quot;2.11.8&quot;,
   organization := &quot;com.example&quot;
 )
-lazy val specs2core = &quot;org.specs2&quot; %% &quot;specs2-core&quot; % &quot;2.4.14&quot;
+lazy val scalatest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.0.0&quot;
 lazy val FunTest = config(&quot;fun&quot;) extend(Test)
 
 lazy val root = (project in file(&quot;.&quot;)).
@@ -232,7 +232,7 @@ lazy val root = (project in file(&quot;.&quot;)).
   settings(commonSettings: _*).
   settings(inConfig(FunTest)(Defaults.testSettings): _*).
   settings(
-    libraryDependencies += specs2core % FunTest
+    libraryDependencies += scalatest % FunTest
     // other settings here
   )
 </code></pre><p>Instead of using the built-in configuration, we defined a new one:
@@ -260,7 +260,7 @@ However, different tests are run depending on the configuration.
   scalaVersion := &quot;2.11.8&quot;,
   organization := &quot;com.example&quot;
 )
-lazy val specs2core = &quot;org.specs2&quot; %% &quot;specs2-core&quot; % &quot;2.4.14&quot;
+lazy val scalatest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.0.0&quot;
 lazy val FunTest = config(&quot;fun&quot;) extend(Test)
 
 def itFilter(name: String): Boolean = name endsWith &quot;ITest&quot;
@@ -271,7 +271,7 @@ lazy val root = (project in file(&quot;.&quot;)).
   settings(commonSettings: _*).
   settings(inConfig(FunTest)(Defaults.testTasks): _*).
   settings(
-    libraryDependencies += specs2core % FunTest,
+    libraryDependencies += scalatest % FunTest,
     testOptions in Test := Seq(Tests.Filter(unitFilter)),
     testOptions in FunTest := Seq(Tests.Filter(itFilter))
     // other settings here
