@@ -35,7 +35,7 @@ sbt を試してくれることに感謝する。_ぜひ楽しいんでほしい
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.12/sbt-0.13.12.msi
+  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.13/sbt-0.13.13.msi
   [Setup-Notes]: ../../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -64,8 +64,8 @@ sbt プロジェクトを作るためには、以下の手順をたどる必要�
 
 
 
-  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.12/sbt-0.13.12.zip
-  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.12/sbt-0.13.12.tgz
+  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.13/sbt-0.13.13.zip
+  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.13/sbt-0.13.13.tgz
   [Manual-Installation]: Manual-Installation.html
 
 Mac への sbt のインストール
@@ -97,9 +97,9 @@ $ brew install sbt
 手動インストールの手順を参照。
 
 
-  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.12/sbt-0.13.12.msi
-  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.12/sbt-0.13.12.zip
-  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.12/sbt-0.13.12.tgz
+  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.13/sbt-0.13.13.msi
+  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.13/sbt-0.13.13.zip
+  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.13/sbt-0.13.13.tgz
 
 Windows への sbt のインストール
 ----------------------------
@@ -117,10 +117,10 @@ Windows への sbt のインストール
 手動インストールの手順を参照。
 
 
-  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.12/sbt-0.13.12.zip
-  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.12/sbt-0.13.12.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-0.13.12.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-0.13.12.deb
+  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.13/sbt-0.13.13.zip
+  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.13/sbt-0.13.13.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-0.13.13.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-0.13.13.deb
   [Manual-Installation]: Manual-Installation.html
   [website127]: https://github.com/sbt/website/issues/12
  
@@ -195,7 +195,7 @@ sbt のバイナリは Bintray にて公開されており、Bintray は RPM リ
 手動インストールの手順を参照。
 
 
-  [sbt-launch.jar]: https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.12/sbt-launch.jar
+  [sbt-launch.jar]: https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.13/sbt-launch.jar
 
 手動インストール
 --------------
@@ -368,7 +368,7 @@ lazy val root = (project in file(".")).
 このファイルに、以下のように書く:
 
 ```
-sbt.version=0.13.12
+sbt.version=0.13.13
 ```
 
 sbt はリリース間で 99% ソースコード互換性を維持しているが、
@@ -2862,7 +2862,7 @@ sbt 0.13.8 で `Def.sequential` という関数が追加されて、準逐次な
 #### project/build.properties
 
 ```
-sbt.version=0.13.12
+sbt.version=0.13.13
 ```
 
 #### project/style.sbt
@@ -2912,7 +2912,7 @@ root> compilecheck
 #### project/build.properties
 
 ```
-sbt.version=0.13.12
+sbt.version=0.13.13
 ```
 
 #### project/style.sbt
