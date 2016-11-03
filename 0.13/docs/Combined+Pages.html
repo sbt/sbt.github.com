@@ -2629,11 +2629,13 @@ task1 := { println(&quot;t1&quot;); &quot;t1&quot; }
 task2 := { println(&quot;t2&quot;); &quot;t2&quot; }
 task3 := { println(task1.value + task2.value); task1.value + task2.value }
 task4 := { println(sett1.value + sett2.value); sett1.value + sett2.value }
-</code></pre><h3 id="Migrating+when+using">Migrating when using <code>.dependsOn</code><a href="#Migrating+when+using" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>When instead calling <code>.dependsOn</code>, instead of:
+</code></pre><h3 id="Migrating+when+using+%2C++or">Migrating when using <code>.dependsOn</code>, <code>.triggeredBy</code> or <code>.runBefore</code><a href="#Migrating+when+using+%2C++or" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>When instead calling <code>.dependsOn</code>, instead of:
 </p><pre><code class="prettyprint lang-scala">a &lt;&lt;= a dependsOn b
 </code></pre><p>define it as:
 </p><pre><code class="prettyprint lang-scala">a := (a dependsOn b).value
-</code></pre><h3 id="Migrating+when+you+need+to+set+s">Migrating when you need to set <code>Task</code>s<a href="#Migrating+when+you+need+to+set+s" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>For keys such as <code>sourceGenerators</code> and <code>resourceGenerators</code> which use sbt’s Task type:
+</code></pre><p>Note that you’ll need to use the <code>&lt;&lt;=</code> operator with <code>.triggeredBy</code> and <code>.runBefore</code> in SBT 0.13.13 and
+earlier due to issue <a href="https://github.com/sbt/sbt/issues/1444">#1444</a>.
+</p><h3 id="Migrating+when+you+need+to+set+s">Migrating when you need to set <code>Task</code>s<a href="#Migrating+when+you+need+to+set+s" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>For keys such as <code>sourceGenerators</code> and <code>resourceGenerators</code> which use sbt’s Task type:
 </p><pre><code class="prettyprint lang-scala">val sourceGenerators =
   settingKey[Seq[Task[Seq[File]]]](&quot;List of tasks that generate sources&quot;)
 val resourceGenerators =
