@@ -3158,7 +3158,7 @@ your plugin to the list.
 -   sbt-phantomjs (Automated installer and configurator for PhantomJS): <https://github.com/saturday06/sbt-phantomjs>
 -   sbt-web-scalajs: <https://github.com/vmunier/sbt-web-scalajs>
 -   scalatra-sbt: <https://github.com/scalatra/scalatra-sbt>
--   sbt-scala-js-map (Configures source mapping for Scala.js projects hosted on Github):
+-   sbt-scala-js-map (Configures source mapping for Scala.js projects hosted on GitHub):
     <https://github.com/ThoughtWorksInc/sbt-scala-js-map>
 -   Naptime API framework plugin: <http://coursera.github.io/naptime> (<https://github.com/coursera/naptime>)
 
@@ -13478,7 +13478,7 @@ The actual speedup will depend case by case, but you should see significant spee
 
 ### Caveats and known issues
 
-Cached resolution is an **experimental** feature, and you might run into some issues. When you see them please report to Github Issue or sbt-dev list.
+Cached resolution is an **experimental** feature, and you might run into some issues. When you see them please report to GitHub Issue or sbt-dev list.
 
 #### First runs
 
@@ -16438,7 +16438,7 @@ object MyPlugin extends AutoPlugin {
 Setting up Travis CI with sbt
 -----------------------------
 
-[Travis CI][Travis] is a hosted continuous integration service for open source and private projects. Many of the OSS projects hosted on Github uses [open source edition of Travis CI][Travis-org] to validate pushes and pull requests. We'll discuss some of the best practices setting up Travis CI.
+[Travis CI][Travis] is a hosted continuous integration service for open source and private projects. Many of the OSS projects hosted on GitHub uses [open source edition of Travis CI][Travis-org] to validate pushes and pull requests. We'll discuss some of the best practices setting up Travis CI.
 
 ### Set `project/build.properties`
 
@@ -16577,7 +16577,7 @@ Again, let's check the Travis log to see if the flags are taking effect:
 
 ### (Experimental) Reusing Ivy cache
 
-In late 2014, thanks to Travis CI members sending pull requests on Github, we learned that Ivy cache can be shared across the Travis builds.
+In late 2014, thanks to Travis CI members sending pull requests on GitHub, we learned that Ivy cache can be shared across the Travis builds.
 The public availability of [caching][Travis-caching] is part of the benefit for trying the new [container-based infrastructure][Travis-container].
 
 > Jobs running on container-based infrastructure:
@@ -17006,7 +17006,7 @@ This ran the template [eed3si9n/hello.g8](https://github.com/eed3si9n/hello.g8) 
 ### Giter8 support
 
 [Giter8][giter8] is a templating project originally started by Nathan Hamblen in 2010, and now maintained by the [foundweekends][foundweekends] project.
-The unique aspect of Giter8 is that it uses Github (or any other git repository) to host the templates, so it allows anyone to participate in template creation.
+The unique aspect of Giter8 is that it uses GitHub (or any other git repository) to host the templates, so it allows anyone to participate in template creation.
 
 sbt provides out-of-the-box support for Giter8 templates by shipping with a template resolver for Giter8.
 
@@ -17051,7 +17051,7 @@ A template resolver is a partial function that looks at the arguments
 after `sbt new` and determines whether it can resolve to a particular template. This is analogous to `resolvers` resolving a `ModuleID` from the Internet.
 
 The `Giter8TemplateResolver` takes the first argument that does not start with a hyphen (`-`), and checks whether it looks like
-a Github repo or a git repo that ends in ".g8".
+a GitHub repo or a git repo that ends in ".g8".
 If it matches one of the patterns, it will pass the arguments to Giter8 to process.
 
 To create your own template resolver, create a library that has `template-resolver` as a dependency:

@@ -58,7 +58,7 @@ scala_version [2.11.8]:
 Template applied in ./hello
 </code></pre><p>This ran the template <a href="https://github.com/eed3si9n/hello.g8">eed3si9n/hello.g8</a> using <a href="http://www.foundweekends.org/giter8/">Giter8</a>, prompted for values for “name” and “scala_version” (which have defaults “hello” and “2.11.8”, which we accepted hitting <code>[Enter]</code>), and created a build under <code>./hello</code>.
 </p><h3 id="Giter8+support">Giter8 support<a href="#Giter8+support" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="http://www.foundweekends.org/giter8/">Giter8</a> is a templating project originally started by Nathan Hamblen in 2010, and now maintained by the <a href="http://www.foundweekends.org/">foundweekends</a> project.
-The unique aspect of Giter8 is that it uses Github (or any other git repository) to host the templates, so it allows anyone to participate in template creation.
+The unique aspect of Giter8 is that it uses GitHub (or any other git repository) to host the templates, so it allows anyone to participate in template creation.
 </p><p>sbt provides out-of-the-box support for Giter8 templates by shipping with a template resolver for Giter8.
 </p><h4 id="How+to+create+a+Giter8+template">How to create a Giter8 template<a href="#How+to+create+a+Giter8+template" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>See <a href="http://www.foundweekends.org/giter8/template.html">Making your own templates</a> for the details on how to create a new Giter8 template.
 </p><pre><code class="">$ sbt new foundweekends/giter8.g8
@@ -82,7 +82,7 @@ You can skip this section if you’re not interested in extending <code>new</cod
 </p><h4 id="Template+Resolver">Template Resolver<a href="#Template+Resolver" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>A template resolver is a partial function that looks at the arguments
 after <code>sbt new</code> and determines whether it can resolve to a particular template. This is analogous to <code>resolvers</code> resolving a <code>ModuleID</code> from the Internet.
 </p><p>The <code>Giter8TemplateResolver</code> takes the first argument that does not start with a hyphen (<code>-</code>), and checks whether it looks like
-a Github repo or a git repo that ends in ”.g8”.
+a GitHub repo or a git repo that ends in ”.g8”.
 If it matches one of the patterns, it will pass the arguments to Giter8 to process.
 </p><p>To create your own template resolver, create a library that has <code>template-resolver</code> as a dependency:
 </p><pre><code class="prettyprint lang-scala">val templateResolverApi = &quot;org.scala-sbt&quot; % &quot;template-resolver&quot; % &quot;0.1&quot;
