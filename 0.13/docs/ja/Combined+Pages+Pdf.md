@@ -102,7 +102,7 @@ $ brew install sbt
 手動インストールの手順を参照。
 
 
-  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.13/sbt-0.13.13.msi
+  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.13.1/sbt-0.13.13.1.msi
   [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.13/sbt-0.13.13.zip
   [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.13/sbt-0.13.13.tgz
 

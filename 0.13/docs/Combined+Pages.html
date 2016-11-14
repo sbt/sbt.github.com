@@ -125,7 +125,7 @@ maintainers.
 </code></pre><h4 id=""><a href="http://mxcl.github.com/homebrew/">Homebrew</a><a href="#" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="">$ brew install sbt
 </code></pre><h3 id="Installing+from+a+universal+package">Installing from a universal package<a href="#Installing+from+a+universal+package" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Download <a href="https://dl.bintray.com/sbt/native-packages/sbt/0.13.13/sbt-0.13.13.zip">ZIP</a> or <a href="https://dl.bintray.com/sbt/native-packages/sbt/0.13.13/sbt-0.13.13.tgz">TGZ</a> package, and expand it.
 </p><h3 id="Installing+manually">Installing manually<a href="#Installing+manually" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>See instruction to install manually.
-</p><h2 id="Installing+sbt+on+Windows">Installing sbt on Windows<a href="#Installing+sbt+on+Windows" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Windows+installer">Windows installer<a href="#Windows+installer" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Download <a href="https://dl.bintray.com/sbt/native-packages/sbt/0.13.13/sbt-0.13.13.msi">msi installer</a> and install it.
+</p><h2 id="Installing+sbt+on+Windows">Installing sbt on Windows<a href="#Installing+sbt+on+Windows" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Windows+installer">Windows installer<a href="#Windows+installer" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Download <a href="https://dl.bintray.com/sbt/native-packages/sbt/0.13.13.1/sbt-0.13.13.1.msi">msi installer</a> and install it.
 </p><h3 id="Installing+from+a+universal+package">Installing from a universal package<a href="#Installing+from+a+universal+package" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Download <a href="https://dl.bintray.com/sbt/native-packages/sbt/0.13.13/sbt-0.13.13.zip">ZIP</a> or <a href="https://dl.bintray.com/sbt/native-packages/sbt/0.13.13/sbt-0.13.13.tgz">TGZ</a> package and expand it.
 </p><h3 id="Installing+manually">Installing manually<a href="#Installing+manually" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>See instruction to install manually.
 </p><h2 id="Installing+sbt+on+Linux">Installing sbt on Linux<a href="#Installing+sbt+on+Linux" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Installing+from+a+universal+package">Installing from a universal package<a href="#Installing+from+a+universal+package" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Download <a href="https://dl.bintray.com/sbt/native-packages/sbt/0.13.13/sbt-0.13.13.zip">ZIP</a> or <a href="https://dl.bintray.com/sbt/native-packages/sbt/0.13.13/sbt-0.13.13.tgz">TGZ</a> package and expand it.
@@ -233,7 +233,7 @@ following automatically:
 </li></ul><p>By default, sbt will build projects with the same version of Scala used
 to run sbt itself.
 </p><p>You can run the project with <code>sbt run</code> or enter the <a href="http://www.scala-lang.org/node/2097">Scala
-REPL</a> with <code>sbt console</code>. <code>sbt console</code>
+REPL</a> with <code>sbt console</code>. Invoking <code>sbt console</code>
 sets up your project’s classpath so you can try out live Scala examples
 based on your project’s code.
 </p><h3 id="Build+definition">Build definition<a href="#Build+definition" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Most projects will need some manual setup. Basic build settings go in a
@@ -10770,13 +10770,13 @@ Normally the exact version for the <code>sbt</code> launcher does not matter
 because it will use the version specified by <code>sbt.version</code> in <code>project/build.properties</code>;
 however for new sbt’s launcher 0.13.13 or above is required as the command functions without a <code>project/build.properties</code> present.
 </p><p>Next, run:
-</p><pre><code class="">$ sbt new eed3si9n/hello.g8
+</p><pre><code class="">$ sbt new scala/scala-seed.g8
 ....
 name [hello]:
-scala_version [2.11.8]:
 
 Template applied in ./hello
-</code></pre><p>This ran the template <a href="https://github.com/eed3si9n/hello.g8">eed3si9n/hello.g8</a> using <a href="http://www.foundweekends.org/giter8/">Giter8</a>, prompted for values for “name” and “scala_version” (which have defaults “hello” and “2.11.8”, which we accepted hitting <code>[Enter]</code>), and created a build under <code>./hello</code>.
+</code></pre><p>This ran the template <a href="https://github.com/scala/scala-seed.g8">scala/scala-seed.g8</a> using <a href="http://www.foundweekends.org/giter8/">Giter8</a>, prompted for values for “name” (which has a default value of “hello”, which we accepted hitting <code>[Enter]</code>), and created a build under <code>./hello</code>.
+</p><p><code>scala-seed</code> is the official template for a “minimal” Scala project, but it’s definitely not the only one out there. We expect other templates to emerge for other purposes, e.g. web or backend applications. 
 </p><h3 id="Giter8+support">Giter8 support<a href="#Giter8+support" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="http://www.foundweekends.org/giter8/">Giter8</a> is a templating project originally started by Nathan Hamblen in 2010, and now maintained by the <a href="http://www.foundweekends.org/">foundweekends</a> project.
 The unique aspect of Giter8 is that it uses GitHub (or any other git repository) to host the templates, so it allows anyone to participate in template creation.
 </p><p>sbt provides out-of-the-box support for Giter8 templates by shipping with a template resolver for Giter8.
