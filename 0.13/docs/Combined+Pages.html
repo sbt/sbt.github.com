@@ -5442,11 +5442,11 @@ the classpath
 </li></ul><p>These entry points should be considered experimental. A notable
 disadvantage of these approaches is the startup time involved.
 </p><h3 id="Setup">Setup<a href="#Setup" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To set up these entry points, you can either use
-<a href="https://github.com/n8han/conscript">conscript</a> or manually construct
+<a href="https://github.com/foundweekends/conscript">conscript</a> or manually construct
 the startup scripts. In addition, there is a
 <a href="https://github.com/paulp/sbt-extras">setup script</a> for the script
 mode that only requires a JRE installed.
-</p><h4 id="Setup+with+Conscript">Setup with Conscript<a href="#Setup+with+Conscript" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Install <a href="https://github.com/n8han/conscript">conscript</a>.
+</p><h4 id="Setup+with+Conscript">Setup with Conscript<a href="#Setup+with+Conscript" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Install <a href="https://github.com/foundweekends/conscript">conscript</a>.
 </p><pre><code class="">$ cs sbt/sbt --branch 0.13.13
 </code></pre><p>This will create two scripts: <code>screpl</code> and <code>scalas</code>.
 </p><h4 id="Manual+Setup">Manual Setup<a href="#Manual+Setup" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Duplicate your standard <code>sbt</code> script, which was set up according to
@@ -8135,7 +8135,7 @@ is important, make sure that yours matches the one shown or you may not
 be able to resolve sbt plugins.
 </p><p>The final resolver is <code>my-maven-proxy-releases</code>. This repository is a
 proxy for all standard maven repositories, including maven central.
-</p><p>This repositories file is all that’s required to use a proxy repository.  These repositories will get included first in any sbt build, however you can add some addtiionaly configuration to force the use of the proxy repository instead of other configurations.
+</p><p>This repositories file is all that’s required to use a proxy repository.  These repositories will get included first in any sbt build, however you can add some additional configuration to force the use of the proxy repository instead of other configurations.
 </p><h4 id="Launcher+Script">Launcher Script<a href="#Launcher+Script" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The sbt launcher supports two configuration options that allow the usage
 of proxy repositories. The first is the <code>sbt.override.build.repos</code>
 setting and the second is the <code>sbt.repository.config</code> setting.
@@ -8520,7 +8520,7 @@ arguments combined with <code>&amp;&amp;</code>.
 </p><pre><code class="prettyprint lang-scala">updateOptions := updateOptions.value.withCachedResolution(true)
 </code></pre><h3 id="Dependency+as+a+graph">Dependency as a graph<a href="#Dependency+as+a+graph" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A project declares its own library dependency using <code>libraryDependencies</code> setting. The libraries you added also bring in their transitive dependencies. For example, your project may depend on dispatch-core 0.11.2; dispatch-core 0.11.2 depends on async-http-client 1.8.10; async-http-client 1.8.10 depends on netty 3.9.2.Final, and so forth. If we think of each library to be a node with arrows going out to dependent nodes, we can think of the entire dependencies to be a graph — specifically a <a href="http://en.wikipedia.org/wiki/Directed_acyclic_graph">directed acyclic graph</a>.
 </p><p>This graph-like structure, which was adopted from Apache Ivy, allows us to define <a href="Library-Management.html">override rules and exclusions</a> transitively, but as the number of the node increases, the time it takes to resolve dependencies grows significantly. See <a href="#motivation">Motivation</a> section later in this page for the full description.
-</p><h3 id="Cached+resolution">Cached resolution<a href="#Cached+resolution" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Cached resolution feature is akin to incremental compilation, which only recompiles the sources that have been changed since the last <code>compile</code>. Unlike Scala compiler, Ivy does not have the concept of separate compilation, so that needed to be implemented.
+</p><h3 id="Cached+resolution">Cached resolution<a href="#Cached+resolution" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Cached resolution feature is akin to incremental compilation, which only recompiles the sources that have been changed since the last <code>compile</code>. Unlike the Scala compiler, Ivy does not have the concept of separate compilation, so that needed to be implemented.
 </p><p>Instead of resolving the full dependency graph, cached resolution feature creates  minigraphs — one for each direct dependency appearing in all related subprojects. These minigraphs are resolved using Ivy’s resolution engine, and the result is stored locally under <code>~/.sbt/0.13/dependency/</code> (or what’s specified by <code>sbt.dependency.base</code> flag) shared across all builds. After all minigraphs are resolved, they are stitched together by applying the conflict resolution algorithm (typically picking the latest version).
 </p><p>When you add a new library to your project, cached resolution feature will check for the minigraph files under <code>~/.sbt/0.13/dependency/</code> and load the previously resolved nodes, which incurs negligible I/O overhead, and only resolve the newly added library. The intended performance improvement is that the second and third subprojects can take advantage of the resolved minigraphs from the first one and avoid duplicated work. The following figure illustrates the proj A, B, and C all hitting the same set of json file.
 </p><p><br>
@@ -8535,7 +8535,7 @@ arguments combined with <code>&amp;&amp;</code>.
 </p><h4 id="SNAPSHOT+and+dynamic+dependencies">SNAPSHOT and dynamic dependencies<a href="#SNAPSHOT+and+dynamic+dependencies" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>When a minigraph contains either a SNAPSHOT or dynamic dependency, the graph is considered dynamic, and it will be invalidated after a single task execution.
 Therefore, if you have any SNAPSHOT in your graph, your exeperience may degrade.
 (This could be improved in the future)
-</p><a name="motivation"></a><h3 id="Motivation">Motivation<a href="#Motivation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt internally uses Apache Ivy to resolve library dependencies. While sbt has benefited from not having to reinvent depenendency resolution engine all these years, we are increasingly seeing scalability challenges especially for projects with both multiple subprojects and large dependency graph. There are several factors involved in sbt’s resolution scalability:
+</p><a name="motivation"></a><h3 id="Motivation">Motivation<a href="#Motivation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt internally uses Apache Ivy to resolve library dependencies. While sbt has benefited from not having to reinvent its own dependency resolution engine all these years, we are increasingly seeing scalability challenges especially for projects with both multiple subprojects and large dependency graph. There are several factors involved in sbt’s resolution scalability:
 </p><ul><li>Number of transitive nodes (libraries) in the graph
 </li><li>Exclusion and override rules
 </li><li>Number of subprojects
@@ -10131,6 +10131,7 @@ organization := &quot;org.example&quot;
 </p><pre><code class="prettyprint lang-scala">package sbtobfuscate
 
 import sbt._
+import sbt.Keys._
 
 object ObfuscatePlugin extends AutoPlugin {
   // by defining autoImport, the settings are automatically imported into user's `*.sbt`
@@ -10161,7 +10162,10 @@ object ObfuscatePlugin extends AutoPlugin {
 }
 
 object Obfuscate {
-    def apply(sources: Seq[File]): Seq[File] := sources
+  def apply(sources: Seq[File], obfuscateLiterals: Boolean): Seq[File] = {
+    // TODO obfuscate stuff!
+    sources
+  }
 }
 </code></pre><h4 id="Usage+example">Usage example<a href="#Usage+example" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>A build definition that uses the plugin might look like. <code>obfuscate.sbt</code>:
 </p><pre><code class="prettyprint lang-scala">obfuscateLiterals in obfuscate := true
@@ -13034,7 +13038,7 @@ and provide a way for commands to be executed on the state.
 </p><h4 id="sbt+Launcher+%28%29">sbt Launcher (<a href="https://github.com/sbt/launcher">sbt/launcher</a>)<a href="#sbt+Launcher+%28%29" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The sbt launcher provides a generic container that can load and run
 programs resolved using the Ivy dependency manager.
 sbt uses this as the deployment mechanism, but it can be used for other purposes.
-</p><p>See <a href="https://github.com/n8han/conscript">n8han/conscript</a> and <a href="Sbt-Launcher.html">Launcher</a> for more details.
+</p><p>See <a href="https://github.com/foundweekends/conscript">foundweekends/conscript</a> and <a href="Sbt-Launcher.html">Launcher</a> for more details.
 </p><h4 id="Client%2FServer+%28tbd%29">Client/Server (tbd)<a href="#Client%2FServer+%28tbd%29" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Currently developed in <a href="https://github.com/sbt/sbt-remote-control">sbt/sbt-remote-control</a>.
 sbt Server provides a JSON-based API wrapping functionality of the commandline experience.
 </p><p>One of the clients will be the “terminal client”,

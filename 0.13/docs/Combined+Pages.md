@@ -8383,14 +8383,14 @@ disadvantage of these approaches is the startup time involved.
 ### Setup
 
 To set up these entry points, you can either use
-[conscript](https://github.com/n8han/conscript) or manually construct
+[conscript](https://github.com/foundweekends/conscript) or manually construct
 the startup scripts. In addition, there is a
 [setup script](https://github.com/paulp/sbt-extras) for the script
 mode that only requires a JRE installed.
 
 #### Setup with Conscript
 
-Install [conscript](https://github.com/n8han/conscript).
+Install [conscript](https://github.com/foundweekends/conscript).
 
 ```
 $ cs sbt/sbt --branch 0.13.13
@@ -12797,7 +12797,7 @@ be able to resolve sbt plugins.
 The final resolver is `my-maven-proxy-releases`. This repository is a
 proxy for all standard maven repositories, including maven central.
 
-This repositories file is all that's required to use a proxy repository.  These repositories will get included first in any sbt build, however you can add some addtiionaly configuration to force the use of the proxy repository instead of other configurations.
+This repositories file is all that's required to use a proxy repository.  These repositories will get included first in any sbt build, however you can add some additional configuration to force the use of the proxy repository instead of other configurations.
 
 #### Launcher Script
 
@@ -13460,7 +13460,7 @@ This graph-like structure, which was adopted from Apache Ivy, allows us to defin
 
 ### Cached resolution
 
-Cached resolution feature is akin to incremental compilation, which only recompiles the sources that have been changed since the last `compile`. Unlike Scala compiler, Ivy does not have the concept of separate compilation, so that needed to be implemented.
+Cached resolution feature is akin to incremental compilation, which only recompiles the sources that have been changed since the last `compile`. Unlike the Scala compiler, Ivy does not have the concept of separate compilation, so that needed to be implemented.
 
 Instead of resolving the full dependency graph, cached resolution feature creates  minigraphs -- one for each direct dependency appearing in all related subprojects. These minigraphs are resolved using Ivy's resolution engine, and the result is stored locally under `~/.sbt/0.13/dependency/` (or what's specified by `sbt.dependency.base` flag) shared across all builds. After all minigraphs are resolved, they are stitched together by applying the conflict resolution algorithm (typically picking the latest version).
 
@@ -13500,7 +13500,7 @@ Therefore, if you have any SNAPSHOT in your graph, your exeperience may degrade.
 
 ### Motivation
 
-sbt internally uses Apache Ivy to resolve library dependencies. While sbt has benefited from not having to reinvent depenendency resolution engine all these years, we are increasingly seeing scalability challenges especially for projects with both multiple subprojects and large dependency graph. There are several factors involved in sbt's resolution scalability:
+sbt internally uses Apache Ivy to resolve library dependencies. While sbt has benefited from not having to reinvent its own dependency resolution engine all these years, we are increasingly seeing scalability challenges especially for projects with both multiple subprojects and large dependency graph. There are several factors involved in sbt's resolution scalability:
 
 - Number of transitive nodes (libraries) in the graph
 - Exclusion and override rules
@@ -15901,6 +15901,7 @@ organization := "org.example"
 package sbtobfuscate
 
 import sbt._
+import sbt.Keys._
 
 object ObfuscatePlugin extends AutoPlugin {
   // by defining autoImport, the settings are automatically imported into user's `*.sbt`
@@ -15931,7 +15932,10 @@ object ObfuscatePlugin extends AutoPlugin {
 }
 
 object Obfuscate {
-    def apply(sources: Seq[File]): Seq[File] := sources
+  def apply(sources: Seq[File], obfuscateLiterals: Boolean): Seq[File] = {
+    // TODO obfuscate stuff!
+    sources
+  }
 }
 ```
 
@@ -20780,7 +20784,7 @@ We'll discuss the details in the next page.
   [librarymanagementrepo]: https://github.com/sbt/librarymanagement
   [incrementalcompilerrepo]: https://github.com/sbt/incrementalcompiler
   [launcherrepo]: https://github.com/sbt/launcher
-  [conscriptrepo]: https://github.com/n8han/conscript
+  [conscriptrepo]: https://github.com/foundweekends/conscript
   [websiterepo]: https://github.com/sbt/website
 
 ### Module summary
@@ -20832,7 +20836,7 @@ The sbt launcher provides a generic container that can load and run
 programs resolved using the Ivy dependency manager.
 sbt uses this as the deployment mechanism, but it can be used for other purposes.
 
-See [n8han/conscript][conscriptrepo] and [Launcher][Sbt-Launcher] for more details.
+See [foundweekends/conscript][conscriptrepo] and [Launcher][Sbt-Launcher] for more details.
 
 #### Client/Server (tbd)
 
