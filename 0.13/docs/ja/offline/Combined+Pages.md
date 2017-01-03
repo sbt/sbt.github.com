@@ -355,7 +355,7 @@ lazy val root = (project in file(".")).
   settings(
     name := "hello",
     version := "1.0",
-    scalaVersion := "2.11.8"
+    scalaVersion := "2.12.1"
   )
 ```
 
@@ -695,7 +695,7 @@ sbt はまず `Setting` のリストをソートする。
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.11.8"
+  scalaVersion := "2.12.1"
 )
 
 lazy val root = (project in file(".")).
@@ -1612,7 +1612,7 @@ lazy val core = project in file("core")
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.11.8"
+  scalaVersion := "2.12.1"
 )
 
 lazy val core = (project in file("core")).
@@ -2278,7 +2278,7 @@ object Dependencies {
   // Libraries
   val akkaActor = "com.typesafe.akka" %% "akka-actor" % akkaVersion
   val akkaCluster = "com.typesafe.akka" %% "akka-cluster" % akkaVersion
-  val specs2core = "org.specs2" %% "specs2-core" % "2.4.14"
+  val specs2core = "org.specs2" %% "specs2-core" % "2.4.17"
 
   // Projects
   val backendDeps =
@@ -2294,7 +2294,7 @@ import Dependencies._
 
 lazy val commonSettings = Seq(
   version := "0.1.0",
-  scalaVersion := "2.11.8"
+  scalaVersion := "2.12.1"
 )
 
 lazy val backend = (project in file("backend")).
@@ -2399,7 +2399,7 @@ name := "hello"
 
 version := "1.0"
 
-scalaVersion := "2.11.8"
+scalaVersion := "2.12.1"
 ```
 
 ### (0.13.7 以前) 設定は空白行で区切る
