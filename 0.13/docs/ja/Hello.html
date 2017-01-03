@@ -24,9 +24,7 @@
         <script type="text/javascript">
           Pamflet.page.language = 'ja';
         </script>
-        <script type="text/javascript" src="../js/prettify/prettify.js"></script><script type="text/javascript" src="../js/prettify/lang-scala.js"></script><link type="text/css" rel="stylesheet" href="../css/prettify.css"/><script type="text/javascript"><!--
-        window.onload=function() { prettyPrint(); };
-      --></script>
+        
         <link rel="stylesheet" href="../css/custom.css" type="text/css" media="screen, projection"/>
         
         <script type="text/javascript">
@@ -34,7 +32,7 @@
             </script>
       </head>
       <body class="color_scheme-github">
-        <a class="page prev nav" href="Activator-Installation.html">
+        <a class="page prev nav" href="Installing-sbt-on-Linux.html">
             <span class="space">&nbsp;</span>
             <span class="flip arrow">&gt;</span>
           </a><a class="page next nav" href="Directories.html">
@@ -43,46 +41,35 @@
           </a>
         <div class="container contentswrapper">
           <div class="span-16 prepend-1 append-1 contents">
-            <h2 id="Hello%2C+World">Hello, World<a href="#Hello%2C+World" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このページは、既に<a href="Setup.html">sbt をインストール</a>したことを前提とする。
-</p><h3 id="%E3%82%BD%E3%83%BC%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%89%E3%81%AE%E5%85%A5%E3%81%A3%E3%81%9F%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%83%87%E3%82%A3%E3%83%AC%E3%82%AF%E3%83%88%E3%83%AA%E3%82%92%E4%BD%9C%E3%82%8B">ソースコードの入ったプロジェクトディレクトリを作る<a href="#%E3%82%BD%E3%83%BC%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%89%E3%81%AE%E5%85%A5%E3%81%A3%E3%81%9F%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%83%87%E3%82%A3%E3%83%AC%E3%82%AF%E3%83%88%E3%83%AA%E3%82%92%E4%BD%9C%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>一つのソースファイルを含むディレクトリでも、一応有効な sbt プロジェクトとなりうる。試しに、<code>hello</code> ディレクトリを作って、以下の内容の <code>hw.scala</code> というファイルを作成する:
-</p><pre><code class="prettyprint lang-scala">object Hi {
-  def main(args: Array[String]) = println(&quot;Hi!&quot;)
-}
-</code></pre><p>次に <code>hello</code> ディレクトリ内から sbt を起動して sbt のインタラクティブコンソールに <code>run</code> と入力する。
-Linux、Mac OS X の場合、コマンドは以下のようになる:
-</p><pre><code class="">$ mkdir hello
-$ cd hello
-$ echo 'object Hi { def main(args: Array[String]) = println(&quot;Hi!&quot;) }' &gt; hw.scala
+            <h2 id="Hello%2C+World">Hello, World<a href="#Hello%2C+World" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このページは、既に<a href="Setup.html">sbt 0.13.13 以上をインストール</a>したことを前提とする。
+</p><h3 id="sbt+new+%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89">sbt new コマンド<a href="#sbt+new+%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 0.13.13 以降を使っている場合は、sbt <code>new</code>
+コマンドを使って手早く簡単な Hello world ビルドをセットアップすることができる。
+以下をターミナルから打ち込む。
+</p><pre><code class="">$ sbt new sbt/scala-seed.g8
+....
+Minimum Scala build.
+
+name [My Something Project]: hello
+
+Template applied in ./hello
+</code></pre><p>プロジェクト名を入力するプロンプトが出てきたら <code>hello</code> と入力する。
+</p><p>これで、<code>hello</code> ディレクトリ以下に新しいプロジェクトができた。
+</p><h3 id="%E3%82%A2%E3%83%97%E3%83%AA%E3%81%AE%E5%AE%9F%E8%A1%8C">アプリの実行<a href="#%E3%82%A2%E3%83%97%E3%83%AA%E3%81%AE%E5%AE%9F%E8%A1%8C" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>次に <code>hello</code> ディレクトリ内から sbt を起動して sbt のシェルから
+<code>run</code> と入力する。Linux や OS X の場合、コマンドは以下のようになる:
+</p><pre><code class="">$ cd hello
 $ sbt
 ...
 &gt; run
 ...
-Hi!
-</code></pre><p>この例では、sbt はただデフォルトの規約によって動作している。sbt は以下のものを自動的に検知する:
-</p><ul><li>ベースディレクトリにあるソースファイル　
-</li><li><code>src/main/scala</code> か <code>src/main/java</code> 内のソースファイル
-</li><li><code>src/test/scala</code> か <code>src/test/java</code> 内のテストソースファイル
-</li><li><code>src/main/resources</code> か <code>src/test/resources</code> 内のデータファイル
-</li><li><code>lib</code> 内の jar ファイル
-</li></ul><p>デフォルトでは、sbt は sbt 自身が使っている Scala のバージョンを使ってプロジェクトをビルドする。
-</p><p><code>sbt run</code> でプロジェクトを実行したり、<code>sbt console</code> で <a href="http://www.scala-lang.org/node/2097">Scala REPL</a> に入ることができる。
-<code>sbt console</code> は君のプロジェクトにクラスパスを通すので、プロジェクトのコードを使った Scala コード例をその場で試すことができる。
-</p><h3 id="%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9">ビルド定義<a href="#%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>ほとんどのプロジェクトでは何らかの手動設定が必要になるだろう。
-基本的なビルド設定方法はプロジェクトのベースディレクトリに <code>build.sbt</code> というファイルとして配置されるものだ。
-例えば、君のプロジェクトが <code>hello</code> ディレクトリにある場合、<code>hello/build.sbt</code> はこんな感じになる：
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
-  settings(
-    name := &quot;hello&quot;,
-    version := &quot;1.0&quot;,
-    scalaVersion := &quot;2.12.1&quot;
-  )
-</code></pre><p><a href="Basic-Def.html">.sbt ビルド定義</a>で、<code>build.sbt</code> の書き方をもっと詳しく説明する。
-もし君のプロジェクトを jar ファイルにパッケージ化するつもりなら、最低でも <code>build.sbt</code> に name と version は書いておこう。
-</p><h3 id="sbt+%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3%E3%81%AE%E8%A8%AD%E5%AE%9A">sbt バージョンの設定<a href="#sbt+%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3%E3%81%AE%E8%A8%AD%E5%AE%9A" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>hello/project/build.properties</code> というファイルを作ることで、特定のバージョンの sbt を強制することができる。
-このファイルに、以下のように書く:
-</p><pre><code class="">sbt.version=0.13.13
-</code></pre><p>sbt はリリース間で 99% ソースコード互換性を維持しているが、
-sbt バージョンを <code>project/build.properties</code> に設定しておくことで、不要な混乱を避けることができるだろう。
+[info] Compiling 1 Scala source to /xxx/hello/target/scala-2.12/classes...
+[info] Running example.Hello
+hello
+</code></pre><p><a href="Running.html">後で</a>他のタスクもみていく。
+</p><h3 id="sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%AE%E7%B5%82%E4%BA%86">sbt シェルの終了<a href="#sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%AE%E7%B5%82%E4%BA%86" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt シェルを終了するには、<code>exit</code> と入力するか、Ctrl+D (Unix) か Ctrl+Z (Windows) を押す。
+</p><pre><code class="">&gt; exit
+</code></pre><h3 id="%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9">ビルド定義<a href="#%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>ビルド設定方法はプロジェクトのベースディレクトリに <code>build.sbt</code> というファイルとして配置される。
+ファイルを読んでみてもいいが、このビルドファイルに書いてあることが分からなくても心配しないでほしい。
+<a href="Basic-Def.html">ビルド定義</a>で、<code>build.sbt</code> の書き方を説明する。
 </p><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>
@@ -95,7 +82,7 @@ sbt バージョンを <code>project/build.properties</code> に設定してお�
       <a name="toc"></a>
       <h4 class="toctitle">Contents</h4>
       <div class="tocbody">
-      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">始める sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">sbt のインストール</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Mac への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Linux への sbt のインストール</a></div></li><li><div><a href="Manual-Installation.html">手動インストール</a></div></li><li><div><a href="Activator-Installation.html">Lightbend Activator (sbt を含む) のインストール</a></div></li> </ol></li><li><div class="current">Hello, World</div></li><li><div><a href="Directories.html">ディレクトリ構造</a></div></li><li><div><a href="Running.html">実行</a></div></li><li><div><a href="Basic-Def.html">.sbt ビルド定義</a></div></li><li><div><a href="Scopes.html">スコープ</a></div></li><li><div><a href="More-About-Settings.html">他の種類のセッティング</a></div></li><li><div><a href="Library-Dependencies.html">ライブラリ依存性</a></div></li><li><div><a href="Multi-Project.html">マルチプロジェクト・ビルド</a></div></li><li><div><a href="Using-Plugins.html">プラグインの使用</a></div></li><li><div><a href="Custom-Settings.html">カスタムセッティングとタスク</a></div></li><li><div><a href="Organizing-Build.html">ビルドの整理</a></div></li><li><div><a href="Summary.html">まとめ</a></div></li><li><div><a href="Bare-Def.html">付録: bare .sbt ビルド定義</a></div></li><li><div><a href="Full-Def.html">付録: .scala ビルド定義</a></div></li> </ol></li><li><div><a href="Detailed-Topics.html">各論</a></div><ol class="toc"> <li><div><a href="Plugins-and-Best-Practices.html">プラグインとベストプラクティス</a></div><ol class="toc"> <li><div><a href="Testing-sbt-plugins.html">sbt プラグインをテストする</a></div></li> </ol></li> </ol></li><li><div><a href="Howto.html">How to</a></div><ol class="toc"> <li><div><a href="Howto-Sequencing.html">逐次実行</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Def.sequential を用いて逐次タスクを定義する</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Def.taskDyn を用いて動的タスクを定義する</a></div></li><li><div><a href="Howto-After-Input-Task.html">インプットタスクの後で何かする</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn を用いた動的インプットタスクの定義</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">コマンドを用いた逐次実行</a></div></li> </ol></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">始める sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">sbt のインストール</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Mac への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Linux への sbt のインストール</a></div></li> </ol></li><li><div class="current">Hello, World</div></li><li><div><a href="Directories.html">ディレクトリ構造</a></div></li><li><div><a href="Running.html">実行</a></div></li><li><div><a href="Basic-Def.html">ビルド定義</a></div></li><li><div><a href="Task-Graph.html">タスク・グラフ</a></div></li><li><div><a href="Scopes.html">スコープ</a></div></li><li><div><a href="Appending-Values.html">値の追加</a></div></li><li><div><a href="Library-Dependencies.html">ライブラリ依存性</a></div></li><li><div><a href="Multi-Project.html">マルチプロジェクト・ビルド</a></div></li><li><div><a href="Using-Plugins.html">プラグインの使用</a></div></li><li><div><a href="Custom-Settings.html">カスタムセッティングとタスク</a></div></li><li><div><a href="Organizing-Build.html">ビルドの整理</a></div></li><li><div><a href="Summary.html">まとめ</a></div></li><li><div><a href="Bare-Def.html">付録: bare .sbt ビルド定義</a></div></li><li><div><a href="Full-Def.html">付録: .scala ビルド定義</a></div></li> </ol></li><li><div><a href="Detailed-Topics.html">各論</a></div><ol class="toc"> <li><div><a href="Plugins-and-Best-Practices.html">プラグインとベストプラクティス</a></div><ol class="toc"> <li><div><a href="Testing-sbt-plugins.html">sbt プラグインをテストする</a></div></li> </ol></li> </ol></li><li><div><a href="Howto.html">How to</a></div><ol class="toc"> <li><div><a href="Howto-Sequencing.html">逐次実行</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Def.sequential を用いて逐次タスクを定義する</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Def.taskDyn を用いて動的タスクを定義する</a></div></li><li><div><a href="Howto-After-Input-Task.html">インプットタスクの後で何かする</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn を用いた動的インプットタスクの定義</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">コマンドを用いた逐次実行</a></div></li> </ol></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
           </div>
         </div>
         <div class="header">

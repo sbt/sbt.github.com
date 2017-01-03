@@ -40,7 +40,6 @@ Gracias por utilizar sbt *¡Diviértase!*
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
   [Linux]: Installing-sbt-on-Linux.html
-  [Manual-Installation]: Manual-Installation.html
 
 Instalando sbt
 --------------
@@ -59,7 +58,7 @@ Para crear un proyecto de sbt, necesitará dar los siguientes pasos:
 
 Ultimately, the installation of sbt boils down to a launcher JAR and a shell script,
 but depending on your platform, we provide several ways to make the process less tedious.
-Head over to the installation steps for [Mac][Mac], [Windows][Windows], [Linux][Linux], or [manual installation][Manual-Installation].
+Head over to the installation steps for [Mac][Mac], [Windows][Windows], or [Linux][Linux].
 
 ### Tips y notas
 
@@ -83,16 +82,16 @@ Installing sbt on Mac
 > disponible. Por favor asegúrese de reportar cualquier problema con
 > estos paquetes a los mantenedores respectivos.
 
-#### [Macports](http://macports.org/)
-
-```
-$ port install sbt
-```
-
 #### [Homebrew](http://mxcl.github.com/homebrew/)
 
 ```
 $ brew install sbt
+```
+
+#### [Macports](http://macports.org/)
+
+```
+$ port install sbt
 ```
 
 ### Installing from a universal package

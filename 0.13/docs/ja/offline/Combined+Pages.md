@@ -5,7 +5,7 @@ sbt Reference Manual
 
   [Basic-Def]: Basic-Def.html
   [Scopes]: Scopes.html
-  [More-About-Settings]: More-About-Settings.html
+  [Task-Graph]: Task-Graph.html
 
 始める sbt
 =========
@@ -20,7 +20,7 @@ sbt には、柔軟かつ強力なビルド定義（Build Definition）を支え
 もしどうしても時間がないというなら、最も重要な概念は
 [.sbt ビルド定義][Basic-Def]、
 [スコープ][Scopes]、と
-[他の種類のセッティング][More-About-Settings]
+[タスク・グラフ][Task-Graph]
 に書かれている。
 ただし、それ以外のページを読み飛ばしても大丈夫かは保証できない。
 
@@ -40,14 +40,13 @@ sbt を試してくれることに感謝する。_ぜひ楽しいんでほしい
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
   [Linux]: Installing-sbt-on-Linux.html
-  [Manual-Installation]: Manual-Installation.html
 
 sbt のインストール
 ----------------
 
 sbt プロジェクトを作るためには、以下の手順をたどる必要がある:
 
- - sbt をインストールして起動スクリプトを作る。
+ - sbt をインストールする。
  - 簡単な [hello world][Hello] プロジェクトをセットアップする。
    - ソースファイルの入ったプロジェクトディレクトリを作る。
    - ビルド定義を作る。
@@ -56,7 +55,8 @@ sbt プロジェクトを作るためには、以下の手順をたどる必要�
 
 究極的には sbt のインストールはランチャー JAR とシェルスクリプトの 2 つを用意するだけだが、
 利用するプラットフォームによってはもう少し簡単なインストール方法もいくつか提供されている。
-[Mac][Mac]、[Windows][Windows]、[Linux][Linux]、もしくは[手動インストール][Manual-Installation]の手順を参照してほしい。
+[Mac][Mac]、[Windows][Windows]、もしくは
+[Linux][Linux] の手順を参照してほしい。
 
 ### 豆知識
 
@@ -71,16 +71,14 @@ sbt プロジェクトを作るためには、以下の手順をたどる必要�
 Mac への sbt のインストール
 -------------------------
 
+### ユニバーサルパッケージからのインストール
+
+[ZIP][ZIP] か [TGZ][TGZ] をダウンロードしてきて解凍する。
+
 ### サードパーティパッケージを使ってのインストール
 
 > **注意:** サードパーティが提供するパッケージは最新版を使っているとは限らない。
 > 何か問題があれば、パッケージメンテナに報告してほしい。
-
-#### [Macports](http://macports.org/)
-
-```
-$ port install sbt
-```
 
 #### [Homebrew](http://mxcl.github.com/homebrew/)
 
@@ -88,13 +86,11 @@ $ port install sbt
 $ brew install sbt
 ```
 
-### ユニバーサルパッケージからのインストール
+#### [Macports](http://macports.org/)
 
-[ZIP][ZIP] か [TGZ][TGZ] をダウンロードしてきて解凍する。
-
-### 手動インストール
-
-手動インストールの手順を参照。
+```
+$ port install sbt
+```
 
 
   [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.13.1/sbt-0.13.13.1.msi
@@ -104,17 +100,13 @@ $ brew install sbt
 Windows への sbt のインストール
 ----------------------------
 
-### Windows インストーラ
-
-[msi インストーラ][MSI]をダウンロードしてインストールする。
-
 ### ユニバーサルパッケージからのインストール
 
 [ZIP][ZIP] か [TGZ][TGZ] をダウンロードしてきて解凍する。
 
-### 手動インストール
+### Windows インストーラ
 
-手動インストールの手順を参照。
+[msi インストーラ][MSI]をダウンロードしてインストールする。
 
 
   [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.13/sbt-0.13.13.zip
@@ -123,7 +115,7 @@ Windows への sbt のインストール
   [DEB]: https://dl.bintray.com/sbt/debian/sbt-0.13.13.deb
   [Manual-Installation]: Manual-Installation.html
   [website127]: https://github.com/sbt/website/issues/12
- 
+
 Linux への sbt のインストール
 --------------------------
 
@@ -190,189 +182,67 @@ sbt のバイナリは Bintray にて公開されており、Bintray は RPM リ
 > [こちら](https://github.com/whiter4bbit/overlays/issues)
 > へ報告してほしい。
 
-### 手動インストール
-
-手動インストールの手順を参照。
-
-
-  [sbt-launch.jar]: https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.13/sbt-launch.jar
-
-手動インストール
---------------
-
-[sbt-launch.jar][sbt-launch.jar] をダウンロードして起動スクリプトを書くことで手動でインストールできる。
-
-### Unix
-
-[sbt-launch.jar][sbt-launch.jar] を `~/bin` 配下に置く。
-
-以下のようなスクリプトを `~/bin/sbt` として作成し JAR を起動する:
-
-```
-#!/bin/bash
-SBT_OPTS="-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M"
-java $SBT_OPTS -jar `dirname $0`/sbt-launch.jar "$@"
-```
-
-スクリプトを実行可能にする:
-
-```
-$ chmod u+x ~/bin/sbt
-```
-
-### Windows
-
-ターミナルの種類と Cygwin を使っているかによって Windows
-環境での手動インストールは変わってくる。
-いずれにせよ、バッチファイルもしくはスクリプトにパスを通すことでコマンドプロンプトから
-`sbt` と打ち込めば sbt が起動できるようにする。
-あとは、必要に応じて JVM の起動設定も調整する。
-
-#### 非Cygwin
-
-標準の Windows ターミナルを使っている非Cygwin ユーザは、以下のバッチファイル `sbt.bat` を作る:
-
-```
-set SCRIPT_DIR=%~dp0
-java -Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M -jar "%SCRIPT_DIR%sbt-launch.jar" %*
-```
-
-そしてダウンロードしてきた [sbt-launch.jar][sbt-launch.jar] はバッチファイルと同じディレクトリに置く。
-
-#### 標準 Windows ターミナルを使った Cygwin
-
-標準 Windows ターミナルとともに Cygwin を使っている場合は、`~/bin/sbt` という名前で bash スクリプトを作る:
-
-```
-SBT_OPTS="-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M"
-java $SBT_OPTS -jar sbt-launch.jar "$@"
-```
-
-sbt-launch.jar の所はダウンロードしてきた [sbt-launch.jar][sbt-launch.jar] へのパスで置き換える。
-必要ならば `cygpath` を使う。スクリプトを実行可能にする:
-
-```
-$ chmod u+x ~/bin/sbt
-```
-
-#### Ansi ターミナルを使った Cygwin
-
-Ansi ターミナル (Ansi エスケープをサポートして、stty によって設定できる) を使って Cygwin を実行している場合は、`~/bin/sbt` という名前で bash スクリプトを作る:
-
-```
-SBT_OPTS="-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M"
-stty -icanon min 1 -echo > /dev/null 2>&1
-java -Djline.terminal=jline.UnixTerminal -Dsbt.cygwin=true $SBT_OPTS -jar sbt-launch.jar "$@"
-stty icanon echo > /dev/null 2>&1
-```
-
-sbt-launch.jar の所はダウンロードしてきた [sbt-launch.jar][sbt-launch.jar] へのパスで置き換える。
-必要ならば `cygpath` を使う。そして、スクリプトを実行可能にする:
-
-```
-$ chmod u+x ~/bin/sbt
-```
-
-scala コンソールでバックスペースが正しく動作するためには、バックスペースが
-stty で設定された消去文字を送信している必要がある。
-デフォルトの Cygwin のターミナル (mintty) を使っていて、
-消去文字が Cygwin のデフォルトである ^H を使っている場合は
-Options -> Keys "Backspace sends ^H"  の設定をチェックする必要がある。
-
-> **注意:** 他の設定は現在サポートしていない。
-> 何か良い方法があれば [pull request](https://github.com/sbt/sbt/blob/0.13/CONTRIBUTING.md)
-> を送ってほしい。
-
-訳注:
-
- - 32bitOSの場合 `-Xmx1536M` だとJVMのメモリの制限によりうまくいかないので、`-Xmx1024M` などに減らす必要がある。
- - sbt0.13.0以降、windows の場合は、 `-Dinput.encoding=Cp1252` を指定しないと矢印キーでの履歴参照などが文字化けするようなので、設定してください。 [詳しい議論などはここを参照](https://github.com/sbt/sbt/issues/871)
-
-
-  [Manual-Installation]: Manual-Installation.html
-
-Lightbend Activator (sbt を含む) のインストール 
--------------------------------------------
-
-Lightbend Activator は `activator ui` と `activator new` という
-2つのコマンドを追加するカスタム版の sbt だ。
-つまり、`activator` は sbt のスーパーセットであると言える。
-
 
   [Basic-Def]: Basic-Def.html
   [Setup]: Setup.html
+  [Running]: Running.html
 
 Hello, World
 ------------
 
-このページは、既に[sbt をインストール][Setup]したことを前提とする。
+このページは、既に[sbt 0.13.13 以上をインストール][Setup]したことを前提とする。
 
-### ソースコードの入ったプロジェクトディレクトリを作る
+### sbt new コマンド
 
-一つのソースファイルを含むディレクトリでも、一応有効な sbt プロジェクトとなりうる。試しに、`hello` ディレクトリを作って、以下の内容の `hw.scala` というファイルを作成する:
-
-```scala
-object Hi {
-  def main(args: Array[String]) = println("Hi!")
-}
-```
-
-次に `hello` ディレクトリ内から sbt を起動して sbt のインタラクティブコンソールに `run` と入力する。
-Linux、Mac OS X の場合、コマンドは以下のようになる:
+sbt 0.13.13 以降を使っている場合は、sbt `new`
+コマンドを使って手早く簡単な Hello world ビルドをセットアップすることができる。
+以下をターミナルから打ち込む。
 
 ```
-$ mkdir hello
+$ sbt new sbt/scala-seed.g8
+....
+Minimum Scala build.
+
+name [My Something Project]: hello
+
+Template applied in ./hello
+```
+
+プロジェクト名を入力するプロンプトが出てきたら `hello` と入力する。
+
+これで、`hello` ディレクトリ以下に新しいプロジェクトができた。
+
+### アプリの実行
+
+次に `hello` ディレクトリ内から sbt を起動して sbt のシェルから
+`run` と入力する。Linux や OS X の場合、コマンドは以下のようになる:
+
+```
 $ cd hello
-$ echo 'object Hi { def main(args: Array[String]) = println("Hi!") }' > hw.scala
 $ sbt
 ...
 > run
 ...
-Hi!
+[info] Compiling 1 Scala source to /xxx/hello/target/scala-2.12/classes...
+[info] Running example.Hello
+hello
 ```
 
-この例では、sbt はただデフォルトの規約によって動作している。sbt は以下のものを自動的に検知する:
+[後で][Running]他のタスクもみていく。
 
- - ベースディレクトリにあるソースファイル　
- - `src/main/scala` か `src/main/java` 内のソースファイル
- - `src/test/scala` か `src/test/java` 内のテストソースファイル
- - `src/main/resources` か `src/test/resources` 内のデータファイル
- - `lib` 内の jar ファイル
+### sbt シェルの終了
 
-デフォルトでは、sbt は sbt 自身が使っている Scala のバージョンを使ってプロジェクトをビルドする。
+sbt シェルを終了するには、`exit` と入力するか、Ctrl+D (Unix) か Ctrl+Z (Windows) を押す。
 
-`sbt run` でプロジェクトを実行したり、`sbt console` で [Scala REPL](http://www.scala-lang.org/node/2097) に入ることができる。
-`sbt console` は君のプロジェクトにクラスパスを通すので、プロジェクトのコードを使った Scala コード例をその場で試すことができる。
+```
+> exit
+```
 
 ### ビルド定義
 
-ほとんどのプロジェクトでは何らかの手動設定が必要になるだろう。
-基本的なビルド設定方法はプロジェクトのベースディレクトリに `build.sbt` というファイルとして配置されるものだ。
-例えば、君のプロジェクトが `hello` ディレクトリにある場合、`hello/build.sbt` はこんな感じになる：
-
-```scala
-lazy val root = (project in file(".")).
-  settings(
-    name := "hello",
-    version := "1.0",
-    scalaVersion := "2.12.1"
-  )
-```
-
-[.sbt ビルド定義][Basic-Def]で、`build.sbt` の書き方をもっと詳しく説明する。
-もし君のプロジェクトを jar ファイルにパッケージ化するつもりなら、最低でも `build.sbt` に name と version は書いておこう。
-
-### sbt バージョンの設定
-
-`hello/project/build.properties` というファイルを作ることで、特定のバージョンの sbt を強制することができる。
-このファイルに、以下のように書く:
-
-```
-sbt.version=0.13.13
-```
-
-sbt はリリース間で 99% ソースコード互換性を維持しているが、
-sbt バージョンを `project/build.properties` に設定しておくことで、不要な混乱を避けることができるだろう。
+ビルド設定方法はプロジェクトのベースディレクトリに `build.sbt` というファイルとして配置される。
+ファイルを読んでみてもいいが、このビルドファイルに書いてあることが分からなくても心配しないでほしい。
+[ビルド定義][Basic-Def]で、`build.sbt` の書き方を説明する。
 
 
   [Hello]: Hello.html
@@ -390,13 +260,10 @@ sbt バージョンを `project/build.properties` に設定しておくことで
 ### ベースディレクトリ
 
 sbt 用語では「ベースディレクトリ(base directory) 」はプロジェクトが入ったディレクトリを指す。
-[Hello, World][Hello] での例のように、`hello/build.sbt` と `hello/hw.scala` が入った
+[Hello, World][Hello] での例のように、`hello/build.sbt` が入った
 `hello` プロジェクトを作った場合、ベースディレクトリは `hello` となる。
 
 ### ソースコード
-
-ソースコードは `hello/hw.scala` のようにプロジェクトのベースディレクトリに置くこともできる。
-しかし、現実のプロジェクトでは、ほとんどの場合、そのようにはしないだろう。きっとプロジェクトがゴチャゴチャになってしまうからだ。
 
 sbt はデフォルトで [Maven][Maven] と同じディレクトリ構造を使う（全てのパスはベースディレクトリからの相対パスとする）:
 
@@ -420,18 +287,32 @@ src/
 
 `src/` 内の他のディレクトリは無視される。また、隠しディレクトリも無視される。
 
+ソースコードは `hello/app.scala` のようにプロジェクトのベースディレクトリに置くこともできるが、
+小さいプロジェクトはともかくとして、通常のプロジェクトでは
+`src/main/` 以下のディレクトリにソースを入れて整理するのが普通だ。
+ルートに `*.scala` ソースコードを配置できるのは小手先だけのトリックに見えるかもしれないが、
+この機能は[後ほど][Organizing-Build]重要になる。
+
 ### sbt ビルド定義ファイル
 
-プロジェクトのベースディレクトリに `build.sbt` を置くことはご理解いただけたかと思う。
-それ以外の sbt 関連の設定ファイルは `project` 配下のサブディレクトリに置かれる。
+ビルド定義はプロジェクトのベースディレクトリ以下の `build.sbt`
+(実は `*.sbt` ならどのファイルでもいい) にて記述する。
 
-`project` には `.scala` ファイルを含むことができ、それは `.sbt` ファイルと組み合わさって一つの完全なビルド定義を構成する。
+```
+build.sbt
+```
+
+### ビルドサポートファイル
+
+`build.sbt` の他に、`project`
+ディレクトリにはヘルパーオブジェクトや一点物のプラグインを定義した
+`*.scala` ファイルを含むことができる。
 詳しくは、[ビルドの整理][Organizing-Build]を参照。
 
 ```
 build.sbt
 project/
-  Build.scala
+  Dependencies.scala
 ```
 
 `project` 内に `.sbt` があるのを見ることがあるかもしれないが、それはプロジェクトのベースディレクトリ下の `.sbt` とはまた別物だ。
@@ -465,7 +346,7 @@ target/
 このページではプロジェクトをセットアップした後の `sbt` の使い方を説明する。
 君が[sbt をインストール][Setup]して、[Hello, World][Hello]か他のプロジェクトを作ったことを前提とする。
 
-### インタラクティブモード
+### sbt シェル
 
 プロジェクトのベースディレクトリで、sbt を引数なしで実行する:
 
@@ -473,10 +354,10 @@ target/
 $ sbt
 ```
 
-sbt をコマンドライン引数なしで実行するとインタラクティブモードで起動する。
+sbt をコマンドライン引数なしで実行すると sbt シェルが起動される。
 インタラクティブモードにはコマンドプロンプト（とタブ補完と履歴も！）がある。
 
-例えば、`compile` と sbt プロンプトに入力する:
+例えば、`compile` と sbt シェルに入力する:
 
 ```
 > compile
@@ -484,9 +365,9 @@ sbt をコマンドライン引数なしで実行するとインタラクティ�
 
 もう一度 `compile` するには、上矢印を押して、エンターキーを押す。
 
-君のプログラムを実行するには、`run` と入力する。
+プログラムを実行するには、`run` と入力する。
 
-インタラクティブモードを終了するには、`exit` と入力するか、Ctrl+D (Unix) か Ctrl+Z (Windows) を押す。
+sbt シェルを終了するには、`exit` と入力するか、Ctrl+D (Unix) か Ctrl+Z (Windows) を押す。
 
 ### バッチモード
 
@@ -501,6 +382,10 @@ $ sbt clean compile "testOnly TestA TestB"
 この例では、`testOnly` は `TestA` と `TestB` の二つの引数を取る。
 コマンドは順に実行される（この場合 `clean`、`compile`、そして `testOnly`）。
 
+**Note**: バッチモードでの実行は JVM のスピンアップと JIT を毎回行うため、**ビルドかなり遅くなる。**
+普段のコーディングでは sbt シェル、
+もしくは以下に説明する継続的ビルドとテストを使うことを推奨する。
+
 ### 継続的ビルドとテスト
 
 編集〜コンパイル〜テストのサイクルを速めるために、ソースファイルを保存する度
@@ -510,12 +395,12 @@ sbt に自動的に再コンパイルを実行させることができる。
 例えば、インタラクティブモードで、これを試してみよう:
 
 ```
-> ~ compile
+> ~testQuick
 ```
 
 このファイル変更監視状態を止めるにはエンターキーを押す。
 
-先頭の `~` はインタラクティブモードでもバッチモードでも使うことができる。
+先頭の `~` は sbt シェルでもバッチモードでも使うことができる。
 
 詳しくは、[Triggered Execution][Triggered-Execution] 参照。
 
@@ -568,13 +453,13 @@ sbt に自動的に再コンパイルを実行させることができる。
 
 ### タブ補完
 
-インタラクティブモードには、空のプロンプトの状態を含め、タブ補完がある。
+sbt シェルには、空のプロンプトの状態を含め、タブ補完がある。
 sbt の特殊な慣例として、タブを一度押すとよく使われる候補だけが表示され、
 複数回押すと、より多くの冗長な候補一覧が表示される。
 
 ### 履歴コマンド
 
-インタラクティブモードは、 sbt を終了して再起動した後でも履歴を覚えている。
+sbt シェルは、 sbt を終了して再起動した後でも履歴を覚えている。
 履歴にアクセスする最も簡単な方法は矢印キーを使うことだ。以下のコマンドも使うことができる:
 
 <table>
@@ -589,7 +474,7 @@ sbt の特殊な慣例として、タブを一度押すとよく使われる候�
   <tr>
     <td><tt>!:</tt></td>
     <td>全てのコマンド履歴を表示する。</td>
-  </tr>  
+  </tr>
   <tr>
     <td><tt>!:n</tt></td>
     <td>最後の <tt>n</tt> コマンドを表示する。</td>
@@ -614,132 +499,114 @@ sbt の特殊な慣例として、タブを一度押すとよく使われる候�
 
 
   [Keys]: ../../sxr/sbt/Keys.scala.html
-  [More-About-Settings]: More-About-Settings.html
+  [Task-Graph]: Task-Graph.html
   [Bare-Def]: Bare-Def.html
   [Full-Def]: Full-Def.html
   [Running]: Running.html
   [Library-Dependencies]: Library-Dependencies.html
   [Input-Tasks]: ../../docs/Input-Tasks.html
 
-.sbt ビルド定義
---------------
+ビルド定義
+---------
 
 このページでは、多少の「理論」も含めた sbt のビルド定義 (build definition) と `build.sbt` の構文を説明する。
-君が[sbt の使い方][Running]を分かっていて、「始める sbt」の前のページも読んだことを前提とする。
+sbt 0.13.13 など最近のバージョンをインストール済みで、
+[sbt の使い方][Running]を分かっていて、「始める sbt」の前のページも読んだことを前提とする。
 
-### 3 種類のビルド定義
+このページでは `build.sbt` ビルド定義を紹介する。
 
-ビルド定義には以下の 3 種類がある:
+### sbt バージョンの指定
 
-1. マルチプロジェクトでの `.sbt` ビルド定義
-2. bare `.sbt` ビルド定義
-3. `.scala` ビルド定義
+ビルド定義の一部としてビルドに用いる sbt のバージョンを指定する。
+これによって異なる sbt ランチャーを持つ複数の人がいても同じプロジェクトを同じようにビルドすることができる。
+そのためには、`project/build.properties`
+という名前のファイルを作成して以下のように
+sbt バージョンを指定する:
 
-このページでは最も新しいマルチプロジェクトでの `.sbt` ビルド定義を紹介する。
-これは従来の 2 つのビルド定義の長所を組み合わせたもので、全ての用途に適している。
-以前に書かれたビルド定義を使って作業をするときは、古い種類のものも目にするかもしれない。
-それらに関しては (このガイドの後ほどの) [bare .sbt ビルド定義][Bare-Def]と [.scala ビルド定義][Full-Def]を参照。
+```
+sbt.version=0.13.13
+```
 
-さらに、ビルド定義は `project/` ディレクトリ直下に置かれた `.scala` で終わるファイルを含むことができ、そこで共通の関数や値を定義することもできる。
+もしも指定されたバージョンがローカルマシンに無ければ、
+`sbt` ランチャーは自動的にダウンロードを行う。
+このファイルが無ければ、`sbt` ランチャーは任意のバージョンを選択する。
+これはビルドの移植性を下げるため、推奨されない。
 
 ### ビルド定義とは何か
 
-** ここは読んで下さい **
+**ビルド定義**は、`build.sbt`
+にて定義され、プロジェクト (型は [Project](../../api/sbt/Project.html))
+の集合によって構成される。
+プロジェクトという用語が曖昧であることがあるため、このガイドではこれらを**サブプロジェクト**と呼ぶことが多い。
 
-あらかじめ決められたディレクトリを走査し、ビルド定義に関するファイル群を処理した後、最終的に sbt は `Project` の定義群を作る。
-
-例えば、カレントディレクトリにあるプロジェクトの [Project](../../api/sbt/Project.html) 定義は `build.sbt` に以下のように記述できる：
+例えば、カレントディレクトリにあるサブプロジェクトは `build.sbt` に以下のように定義できる：
 
 ```scala
 lazy val root = (project in file("."))
-```
-
-それぞれのプロジェクトは、そのプロジェクトを記述する不変 Map （キーと値のペア群のセット）に関連付けられる。
-
-例えば、`name` というキーがあるが、それはプロジェクト名という文字列の値に関連付けられる。
-
-_ビルド定義ファイルは直接的には sbt の Map に影響を与えない。_
-
-その代わり、ビルド定義は `Setting[T]` 型のオブジェクトを含む巨大なリストを作る。
-`T` は Map における値の型だ。（Scala の `Setting[T]` は Java の `Setting<T>` と同様。）
-`Setting` は、新しいキーと値のペアの追加、既存の値への付加のような_ Map の変換_を記述する。
-（不変データ構造と関数型プログラミングの精神に則り、この変換は新しい Map を返し、古い Map は更新されない。）
-
-カレントディレクトリに位置するプロジェクトに対してプロジェクト名のための `Setting[String]`
-を関連付けるためには以下のように書く:
-
-```scala
-lazy val root = (project in file(".")).
-  settings(
-    name := "hello"
+  .settings(
+    name := "Hello",
+    scalaVersion := "2.12.1"
   )
 ```
 
-この `Setting[String]` は `name` キーを追加（もしくは置換）して `"hello"` という値に設定することで Map を変換する。
-変換された Map は新しい sbt の Map となる。
+それぞれのサブプロジェクトは、それを記述するキーと値のペアの列に関連付けられる。
 
- Map を作るにあたり、同じキーへのすべての変更が同時に実行されるため、そして、他のキーに依存する値の処理が依存するキーの後に処理されるように、
-sbt はまず `Setting` のリストをソートする。
-次にソートされた `Setting` のリストを順番にみていって、一つずつ Map に適用する。
+例えば、`name` というキーがあるが、それはサブプロジェクト名という文字列の値に関連付けられる。
+キーと値のペア列は `.settings(...)` メソッド内に列挙される:
 
-まとめ: _ビルド定義とは `Setting[T]` のリストを持った `Project` を定義するものであり、
-`Setting[T]` は sbt が持つキーと値のペアの Map に作用する変換を表し、その `T` は値の型である。_
+```scala
+lazy val root = (project in file("."))
+  .settings(
+    name := "Hello",
+    scalaVersion := "2.12.1"
+  )
+```
 
 ### `build.sbt` はどのように settings を定義するか
 
-`build.sbt` が定義する `Project` は `settings` と呼ばれる Scala の式のリストを持つ。
-
-以下に具体例を示す:
+`build.sbt` において定義されるサブプロジェクトは、キーと値のペア列を持つと言ったが、
+このペアは**セッティング式** (setting expression) と呼ばれ、**build.sbt DSL** にて記述される。
 
 ```scala
-lazy val commonSettings = Seq(
-  organization := "com.example",
-  version := "0.1.0",
-  scalaVersion := "2.12.1"
-)
-
-lazy val root = (project in file(".")).
-  settings(commonSettings: _*).
-  settings(
-    name := "hello"
+lazy val root = (project in file("."))
+  .settings(
+    name         := "hello",
+    organization := "com.example",
+    scalaVersion := "2.12.1",
+    version      := "0.1.0-SNAPSHOT"
   )
 ```
 
-それぞれの `Setting` は Scala の式で定義される。
-`settings` 内の式は、それぞれ独立しており、完全な Scala の文ではなく、式である。
+build.sbt DSL を詳しくみてみよう:
+![setting expression](../files/setting-expression.png)<br>
+<br>
+それぞれのエントリーは**セッティング式** (setting expression) と呼ばれる。
+中にはタスク式と呼ばれるものもある。この違いはこのページの後で説明する。
 
-`build.sbt` 内には `val`、`lazy val`、`def` を定義することもできる。
-`build.sbt` において、トップレベルで `object` や `class` を定義することはできない。
-それらが必要なら `project/` 配下に `.scala` ビルド定義として完全な Scala ソースファイルを置くべきだろう。
+セッティング式は以下の 3部から構成される:
 
-左辺値の `name`、`version`、および `scalaVersion` は _キー_である。
+1. 左辺項を**キー** (key) という。
+2. **演算子**。この場合は `:=`。
+3. 右辺項は**本文** (body)、もしくは**セッティング本文**という。
+
+左辺値の `name`、`version`、および `scalaVersion` は**キー**である。
 キーは `SettingKey[T]`、`TaskKey[T]`、もしくは `InputKey[T]` のインスタンスで、
 `T` はその値の型である。キーの種類に関しては後述する。
 
-キーには `:=` というメソッドがあり、このメソッドは `Setting[T]` を返す。
-Java っぽい構文でこのメソッドを呼び出すこともできる:
-
-```scala
-lazy val root = (project in file(".")).
-  settings(
-    name.:=("hello")
-  )
-```
-
-しかし、Scala なら `name := "hello"` と書くこともできる（Scala では全てのメソッドがどちらの構文でも書ける）。
-
-`name` キーの `:=` メソッドは `Setting` を返すが、特に `Setting[String]` を返す。
-`String` は `name` 自体の型にも表れていて、そちらは `SettingKey[String]` となる。
-ここで返された `Setting[String]` は、sbt の Map における `name` というキーを追加または置換して `"hello"` という値に設定する変換である。
-
+`name` キーは `SettingKey[String]` に型付けされているため、
+`name` の `:=` 演算子も `String` に型付けされている。
 誤った型の値を使おうとするとビルド定義はコンパイルエラーになる:
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     name := 42  // コンパイルできない
   )
 ```
+
+`build.sbt` 内には `val`、`lazy val`、`def` を定義することもできる。
+`build.sbt` において、トップレベルで `object` や `class` を定義することはできない。
+それらが必要なら `project/` 配下にScala ソースファイル (`.scala`) を置くべきだろう。
 
 ### キー
 
@@ -747,8 +614,8 @@ lazy val root = (project in file(".")).
 
 キーには三種類ある:
 
- - `SettingKey[T]`: 一度だけ値が計算されるキー（値はプロジェクトの読み込み時に計算され、保存される）。
- - `TaskKey[T]`: 毎回再計算される_タスク_を呼び出す、副作用を伴う可能性のある値のキー。
+ - `SettingKey[T]`: 一度だけ値が計算されるキー（値はサブプロジェクトの読み込み時に計算され、保存される）。
+ - `TaskKey[T]`: 毎回再計算される**タスク**を呼び出す、副作用を伴う可能性のある値のキー。
  - `InputKey[T]`: コマンドラインの引数を入力として受け取るタスクのキー。
  　「始める sbt」では `InputKey` を説明しないので、このガイドを終えた後で、[Input Tasks][Input-Tasks] を読んでみよう。
 
@@ -770,7 +637,6 @@ lazy val hello = taskKey[Unit]("An example task")
 
 実は `.sbt` ファイルには、設定を記述するのに必要な `val` や `def` を含めることもできる。
 これらの定義はファイル内のどこで書かれてもプロジェクトの設定より前に評価される。
-`val` や `def` を用いた定義群は空白行によって他の設定から区切らなければいけない。
 
 > **注意** 一般的に、初期化順問題を避けるために val の代わりに lazy val が用いられることが多い。
 
@@ -783,7 +649,7 @@ lazy val hello = taskKey[Unit]("An example task")
 例えばインタラクティブモードの sbt プロンプトに `compile` と入力するなど、何らかのタスクを実行する度に、
 sbt はそのタスクを一回だけ再実行する。
 
-プロジェクトを記述する sbt の Map は、`name` のようなセッティング (setting) であれば、
+サブプロジェクトを記述する sbt のキーと値の列は、`name` のようなセッティング (setting) であれば、
 その文字列の値をキャッシュすることができるが、
 `compile` のようなタスク（task）の場合は実行可能コードを保持しておく必要がある
 （たとえその実行可能コードが最終的に文字列を返したとしても、それは毎回再実行されなければならない）。
@@ -802,8 +668,8 @@ _あるキーがあるとき、それは常にタスクかただのセッティ�
 ```scala
 lazy val hello = taskKey[Unit]("An example task")
 
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     hello := { println("Hello!") }
   )
 ```
@@ -811,8 +677,8 @@ lazy val root = (project in file(".")).
 セッティングの定義は既に何度か見ていると思うが、プロジェクト名の定義はこのようにできる:
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     name := "hello"
   )
 ```
@@ -825,9 +691,9 @@ lazy val root = (project in file(".")).
 
 `T` と `Task[T]` の型の違いによる影響が一つある。
 それは、セッティングキーはキャッシュされていて、再実行されないため、タスキキーに依存できないということだ。
-このことについては、後ほどの[他の種類のセッティング][More-About-Settings]にて詳しくみていく。
+このことについては、後ほどの[タスク・グラフ][Task-Graph]にて詳しくみていく。
 
-### sbt インタラクティブモードにおけるキー
+### sbt シェルにおけるキー
 
 sbt のインタラクティブモードからタスクの名前を入力することで、どのタスクでも実行することができる。
 それが `compile` と入力することでコンパイルタスクが起動する仕組みだ。つまり、`compile` はタスクキーだ。
@@ -855,6 +721,8 @@ import Keys._
 （さらに、[.scala ファイル][Full-Def]がある場合は、それらの全ての `Build` と `Plugin` の内容もインポートされる。
 これに関しては、[.scala ビルド定義][Full-Def]でさらに詳しく。）
 
+(さらに、auto plugin があれば `autoImport` 以下の名前がインポートされる。)
+
 ### ライブラリへの依存性を加える
 
 サードパーティのライブラリに依存するには二つの方法がある。
@@ -866,14 +734,14 @@ val derby = "org.apache.derby" % "derby" % "10.4.1.3"
 
 lazy val commonSettings = Seq(
   organization := "com.example",
-  version := "0.1.0",
-  scalaVersion := "2.11.4"
+  version := "0.1.0-SNAPSHOT",
+  scalaVersion := "2.12.1"
 )
 
-lazy val root = (project in file(".")).
-  settings(commonSettings: _*).
-  settings(
-    name := "hello",
+lazy val root = (project in file("."))
+  .settings(
+    commonSettings,
+    name := "Hello",
     libraryDependencies += derby
   )
 ```
@@ -882,16 +750,422 @@ lazy val root = (project in file(".")).
 
 `libraryDependencies` キーは二つの複雑な点がある:
 `:=` ではなく `+=` を使うことと、`%` メソッドだ。
-後で[他の種類のセッティング][More-About-Settings]で説明するが、`+=` はキーの古い値を上書きする代わりに新しい値を追加する。
+後で[タスク・グラフ][Task-Graph]で説明するが、`+=` はキーの古い値を上書きする代わりに新しい値を追加する。
 `%` メソッドは文字列から Ivy モジュール ID を構築するのに使われ、これは[ライブラリ依存性][Library-Dependencies]で説明する。
 
 ライブラリ依存性に関する詳細については、このガイドの後ろの方までとっておくことにする。
 後ほど[一ページ][Library-Dependencies]を割いて丁寧に説明する。
 
 
+  [Basic-Def]: Basic-Def.html
+  [Scopes]: Scopes.html
+  [Make]: https://en.wikipedia.org/wiki/Make_(software)
+  [Ant]: http://ant.apache.org/
+  [Rake]: https://ruby.github.io/rake/
+
+タスク・グラフ
+------------
+
+[ビルド定義][Basic-Def]に引き続き、このページでは `build.sbt` 定義をより詳しく解説する。
+
+`settings` をキーと値のペア群だと考えるよりも、
+より良いアナロジーは、辺を事前発生 (happens-before) 関係とするタスクの**有向非巡回グラフ** (DAG)
+だと考える事だ。
+これを**タスク・グラフ**と呼ぼう。
+
+### 用語に関して
+
+重要な用語をおさらいしておく。
+
+- セッティング/タスク式: `.settings(...)` 内のエントリー。
+- キー: セッティング式の左辺項。`SettingKey[A]`、 `TaskKey[A]`、もしくは `InputKey[A]` となる。
+- セッティング: `SettingKey[A]` を持つセッティング式によって定義される。値はロード時に一度だけ計算される。
+- タスク: `TaskKey[A]` を持つタスク式によって定義される。値は呼び出さるたびに計算される。
+
+### 他のタスクへの依存性の宣言
+
+`build.sbt` DSL では `.value` メソッドを用いて他のタスクやセッティングへの依存性を表現する。
+この `value` メソッドは特殊なもので、`:=` (もしくは後に見る `+=` や `++=`) の右辺項内でしか使うことができない。
+
+最初の例として、`update` と `clean` というタスクに依存した形で
+`scalacOption` を定義したいとする。
+（[Keys](../sxr/sbt/Keys.scala.html) より）以下の二つのキーを例に説明する。
+
+**注意**: ここで計算される `scalacOptions` の値はナンセンスなもので、説明のためだけのものだ:
+
+```scala
+val scalacOptions = taskKey[Seq[String]]("Options for the Scala compiler.")
+val update = taskKey[UpdateReport]("Resolves and optionally retrieves dependencies, producing a report.")
+val clean = taskKey[Unit]("Deletes files produced by the build, such as generated sources, compiled classes, and task caches.")
+```
+
+以下のように `scalacOptions` を再配線できる:
+
+```scala
+scalacOptions := {
+  val ur = update.value  // update タスクは scalacOptions よりも事前発生する
+  val x = clean.value    // clean タスクは scalacOptions よりも事前発生する
+  // ---- scalacOptions はここから始まる ----
+  ur.allConfigurations.take(3)
+}
+```
+
+`update.value` と `clean.value` はタスク依存性を宣言していて、
+`ur.allConfigurations.take(3)` がタスクの本文となる。
+
+`.value` は普通の Scala のメソッド呼び出しではない。
+`build.sbt` DSL はマクロを用いてこれらをタスクの本文から持ち上げる。
+** `update` と `clean` の両タスクとも、本文内のどの行に現れようと、
+タスクエンジンが `scalacOption`
+の開始中括弧 (`{`) を評価するときには既に完了済みである。**
+
+具体例で説明しよう:
+
+```scala
+lazy val root = (project in file(".")).
+  settings(
+    name := "Hello",
+    organization := "com.example",
+    scalaVersion := "2.12.1",
+    version      := "0.1.0-SNAPSHOT",
+    scalacOptions := {
+      val out = streams.value // stream タスクは scalacOptions よりも事前発生する
+      val log = out.log
+      log.info("123")
+      val ur = update.value   // update タスクは scalacOptions よりも事前発生する
+      log.info("456")
+      ur.allConfigurations.take(3)
+    }
+  )
+```
+
+次に、sbt シェル内で `scalacOptions` と打ち込む:
+
+```
+> scalacOptions
+[info] Updating {file:/xxx/}root...
+[info] Resolving jline#jline;2.14.1 ...
+[info] Done updating.
+[info] 123
+[info] 456
+[success] Total time: 0 s, completed Jan 2, 2017 10:38:24 PM
+```
+
+`val ur = ...` は `log.info("123")` と
+`log.info("456")` の間に挟まっているが、
+`update` タスクは両者よりも事前発生している。
+
+もう一つの例:
+
+```scala
+lazy val root = (project in file(".")).
+  settings(
+    name := "Hello",
+    organization := "com.example",
+    scalaVersion := "2.12.1",
+    version      := "0.1.0-SNAPSHOT",
+    scalacOptions := {
+      val ur = update.value  // update task happens-before scalacOptions
+      if (false) {
+        val x = clean.value  // clean task happens-before scalacOptions
+      }
+      ur.allConfigurations.take(3)
+    }
+  )
+```
+
+sbt シェル内で `run` それから `scalacOptions` と打ち込む:
+
+```
+> run
+[info] Updating {file:/xxx/}root...
+[info] Resolving jline#jline;2.14.1 ...
+[info] Done updating.
+[info] Compiling 1 Scala source to /Users/eugene/work/quick-test/task-graph/target/scala-2.12/classes...
+[info] Running example.Hello
+hello
+[success] Total time: 0 s, completed Jan 2, 2017 10:45:19 PM
+> scalacOptions
+[info] Updating {file:/xxx/}root...
+[info] Resolving jline#jline;2.14.1 ...
+[info] Done updating.
+[success] Total time: 0 s, completed Jan 2, 2017 10:45:23 PM
+```
+
+ここで `target/scala-2.12/classes/` を探してみてほしい。
+`if (false)` に囲まれていても `clean` タスクが実行されたため、そのディレクトリは存在しないはずだ。
+
+もう一つ重要なのは、`update` と `clean` のタスクの間では順序付けの保証が無いことだ。
+`update` してから `clean` が実行されるかもしれないし、
+`clean` してから `update` が実行されるかもしれないし、
+両者が並列に実行される可能性もある。
+
+### .value 呼び出しのインライン化
+
+上で解説したように、`.value` は他のタスクやセッティングへの依存性を表現するための特殊なメソッドだ。
+build.sbt に慣れるまでは、`.value` の呼び出しをタスク本文の一番上にまとめておくことをお勧めする。
+
+しかし、慣れてくると `.value` 呼び出しをインライン化して、
+タスクやセッティングを簡略に書きたいと思うようになるだろう。
+変数名をいちいち考えなくてもいいのも楽だ。
+
+インライン化するとこう書ける:
+
+```scala
+scalacOptions := {
+  val x = clean.value
+  update.value.allConfigurations.take(3)
+}
+```
+
+`.value` の呼び出しがインライン化されていようが、タスク本文内のどこに書かれていても
+タスク本文に入る前に評価は完了する。
+
+#### タスクのインスペクト
+
+上の例では `scalacOptions` は `update` と `clean` というタスクに**依存性** (dependency) を持つ。
+上のタスクを `build.sbt` に書いて、sbt シェル内から `inspect scalacOptions` と打ち込むと以下のように表示される (一部抜粋):
+
+```
+> inspect scalacOptions
+[info] Task: scala.collection.Seq[java.lang.String]
+[info] Description:
+[info]  Options for the Scala compiler.
+....
+[info] Dependencies:
+[info]  *:clean
+[info]  *:update
+....
+```
+
+これは sbt が、どのセッティングが他のセッティングに依存しているかをどう把握しているかを示している。
+
+また、`inspect tree compile` と打ち込むと、`compile` は `incCompileSetup`
+に依存していて、それは `dependencyClasspath` などの他のキーに依存していることが分かる。
+依存性の連鎖をたどっていくと、魔法に出会う。
+
+```
+> inspect tree compile
+[info] compile:compile = Task[sbt.inc.Analysis]
+[info]   +-compile:incCompileSetup = Task[sbt.Compiler$IncSetup]
+[info]   | +-*/*:skip = Task[Boolean]
+[info]   | +-compile:compileAnalysisFilename = Task[java.lang.String]
+[info]   | | +-*/*:crossPaths = true
+[info]   | | +-{.}/*:scalaBinaryVersion = 2.12
+[info]   | |
+[info]   | +-*/*:compilerCache = Task[xsbti.compile.GlobalsCache]
+[info]   | +-*/*:definesClass = Task[scala.Function1[java.io.File, scala.Function1[java.lang.String, Boolean]]]
+[info]   | +-compile:dependencyClasspath = Task[scala.collection.Seq[sbt.Attributed[java.io.File]]]
+[info]   | | +-compile:dependencyClasspath::streams = Task[sbt.std.TaskStreams[sbt.Init$ScopedKey[_ <: Any]]]
+[info]   | | | +-*/*:streamsManager = Task[sbt.std.Streams[sbt.Init$ScopedKey[_ <: Any]]]
+[info]   | | |
+[info]   | | +-compile:externalDependencyClasspath = Task[scala.collection.Seq[sbt.Attributed[java.io.File]]]
+[info]   | | | +-compile:externalDependencyClasspath::streams = Task[sbt.std.TaskStreams[sbt.Init$ScopedKey[_ <: Any]]]
+[info]   | | | | +-*/*:streamsManager = Task[sbt.std.Streams[sbt.Init$ScopedKey[_ <: Any]]]
+[info]   | | | |
+[info]   | | | +-compile:managedClasspath = Task[scala.collection.Seq[sbt.Attributed[java.io.File]]]
+[info]   | | | | +-compile:classpathConfiguration = Task[sbt.Configuration]
+[info]   | | | | | +-compile:configuration = compile
+[info]   | | | | | +-*/*:internalConfigurationMap = <function1>
+[info]   | | | | | +-*:update = Task[sbt.UpdateReport]
+[info]   | | | | |
+....
+```
+
+例えば `compile` と打ち込むと、sbt は自動的に `update` を実行する。
+これが「とにかくちゃんと動く」理由は、`compile` の計算に入力として必要な値が sbt に `update` の計算を先に行うことを強制しているからだ。
+
+このようにして、sbt の全てのビルドの依存性は、明示的には宣言されず、自動化されている。 あるキーの値を別の計算で使うと、その計算はキーに依存することになる。
+
+#### 他のセッティングに依存したタスクの定義
+
+`scalacOptions` はタスク・キーだ。
+何らかの値に既に設定されていて、Scala 2.12 以外の場合は
+`"-Xfatal-warnings"` と `"-deprecation"` を除外したいとする。
+
+```scala
+lazy val root = (project in file(".")).
+  settings(
+    name := "Hello",
+    organization := "com.example",
+    scalaVersion := "2.12.1",
+    version      := "0.1.0-SNAPSHOT",
+    scalacOptions := List("-encoding", "utf8", "-Xfatal-warnings", "-deprecation", "-unchecked"),
+    scalacOptions := {
+      val old = scalacOptions.value
+      scalaBinaryVersion.value match {
+        case "2.12" => old
+        case _      => old filterNot (Set("-Xfatal-warnings", "-deprecation").apply)
+      }
+    }
+  )
+```
+
+sbt シェルで試すとこうなるはずだ:
+
+```
+> show scalacOptions
+[info] * -encoding
+[info] * utf8
+[info] * -Xfatal-warnings
+[info] * -deprecation
+[info] * -unchecked
+[success] Total time: 0 s, completed Jan 2, 2017 11:44:44 PM
+> ++2.11.8
+[info] Setting version to 2.11.8
+[info] Reapplying settings...
+[info] Set current project to Hello (in build file:/xxx/)
+> show scalacOptions
+[info] * -encoding
+[info] * utf8
+[info] * -unchecked
+[success] Total time: 0 s, completed Jan 2, 2017 11:44:51 PM
+```
+
+次に ([Keys](../sxr/sbt/Keys.scala.html) より) 以下の二つのキーを例に説明する:
+
+```scala
+val scalacOptions = taskKey[Seq[String]]("Options for the Scala compiler.")
+val checksums = settingKey[Seq[String]]("The list of checksums to generate and to verify for dependencies.")
+```
+
+**注意**: `scalacOptions` と `checksums`はお互い何の関係もない、ただ同じ値の型を持つ二つのキーで片方がタスクというだけだ。
+
+`build.sbt` の中で `scalacOptions` を `checksums`
+のエイリアスにすることはできるが、その逆はできない。例えば、以下の例はコンパイルが通る:
+
+```scala
+// scalacOptions タスクは checksums セッティングの値を用いて定義される
+scalacOptions := checksums.value
+```
+
+
+逆方向への依存、つまりタスクの値に依存したセッティングキーの値を定義することはどうしてもできない。
+なぜなら、セッティングキーの値はプロジェクトのロード時に一度だけしか計算されず、毎回再実行されるべきタスクが毎回実行されなくなってしまうからだ。
+
+```scala
+// checksums セッティングは scalacOptions タスクに関連付けても、値が定まらないかもしれない
+checksums := scalacOptions.value
+```
+
+#### 他のセッティングに依存したセッティングの定義
+
+実行のタイミングという観点から見ると、セッティングはロード時に評価される特殊なタスクと考えることができる。
+
+プロジェクトの名前と同じ `organization` を定義してみよう。
+
+```scala
+// プロジェクトの name に基いて organization 名を付ける (どちらも型は SettingKey[String])
+organization := name.value
+```
+
+実用的な例もみてみる。
+これは `scalaSource in Compile` というキーを `scalaBinaryVersion` が `"2.11"`
+の場合のみ別のディレクトリに再配線する。
+
+```scala
+scalaSource in Compile := {
+  val old = (scalaSource in Compile).value
+  scalaBinaryVersion.value match {
+    case "2.11" => baseDirectory.value / "src-2.11" / "main" / "scala"
+    case _      => old
+  }
+}
+```
+
+### そもそも build.sbt DSL は何のためにある?
+
+以前みたように[ビルド定義][Basic-Def]は、`settings`
+というキーと値のペア群を持つサブプロジェクトの集合から構成される。
+実は、それには奥がある。
+`settings` をキーと値のペア群だと考えるよりも、
+より良いアナロジーは、辺を**事前発生** (happens-before) 関係とするタスクの有向非巡回グラフだと考える事だ。
+
+つまり、`Setting` 列がエンコードするのはタスクとタスク間の依存性であって、
+[Make][Make] (1976)、 [Ant][Ant] (2000)、 [Rake][Rake] (2003)
+などにも類似する。
+
+#### Make 入門
+
+Makefile の基本的な構文は以下のようになる:
+
+```
+target: dependencies
+[tab] system command1
+[tab] system command2
+```
+
+対象 (target、デフォルトの target は `all` と呼ばれる) が与えられたとき、
+
+1. Make は対象の依存性が既にビルドされたかを調べて、ビルドされていないものをビルドする。
+2. Make は順番にシステムコマンドを実行する。
+
+`Makefile` の具体例で説明しよう:
+
+```
+CC=g++
+CFLAGS=-Wall
+
+all: hello
+
+hello: main.o hello.o
+    $(CC) main.o hello.o -o hello
+
+%.o: %.cpp
+    $(CC) $(CFLAGS) -c $< -o $@
+```
+
+`make` を実行すると、デフォルトで　`all` という名前の対象を選択する。
+その対象は `hello` を依存性として列挙するが、それは未だビルドされいないので、Make は次に `hello` をビルドする。
+
+次に、Make は `hello` という対象の依存性がビルド済みかを調べる。
+`hello` は `main.o` と `hello.o` という 2つの対象を列挙する。
+これらの対象が最後のパターンマッチを用いたルールによってビルドされた後でやっと
+`main.o` と `hello.o` をリンクするシステムコマンドが実行される。
+
+`make` を実行しているだけなら、対象として何がほしいのかだけを考えればよく、
+中間成果物をビルドするための正確なタイミングやコマンドなどは Make がやってくれる。
+これを依存性指向プログラミングもしくはフローベースプログラミングだと考えることができる。
+DSL は対象の依存性を記述するが、アクションはシステムコマンドに委譲されるため、正確には
+Make はハイブリッドシステムに分類される。
+
+#### Rake
+
+このハイブリッド性も実は Make の後継である Ant、Rake、sbt といったツールにも受け継がれている。
+Rakefile の基本的な構文をみてほしい:
+
+```ruby
+task name: [:prereq1, :prereq2] do |t|
+  # actions (may reference prereq as t.name etc)
+end
+```
+
+Rake でのブレークスルーは、アクションをシステムコマンドの代わりにプログラミング言語を使って記述したことだ。
+
+#### ハイブリッド・フローベースプログラミングの利点
+
+ビルドをこのように構成する動機がいくつかある。
+
+第一は非重複化だ。フローベースプログラミングではあるタスクが複数のタスクから依存されていても一度だけしか実行されない。
+例えば、タスクグラフ上の複数のタスクが `compile in Compile` に依存していたとしても、実際のコンパイルは唯一一回のみ実行される。
+
+第二は並列処理だ。タスクグラフを用いることでタスクエンジンは相互に非依存なタスクを並列にスケジュールすることができる。
+
+第三は関心事の分離と柔軟さだ。
+タスクグラフはビルドの作者が複数のタスクを異なる方法で配線することを可能にする。
+一方、sbt やプラグインはコンパイルやライブラリ依存性の管理といった機能を再利用な形で提供できる。
+
+### まとめ
+
+ビルド定義のコアなデータ構造は、辺を事前発生 (happens-before) 関係とするタスクの DAG だ。
+`build.sbt` は、依存性指向プログラミングもしくはフローベースプログラミングを表現するための DSL で、`Makefile` や `Rakefile` に似ている。
+
+フローベースプログラミングを行う動機は、非重複化、並列処理、とカスタム化の容易さだ。
+
+
   [MavenScopes]: https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Scope
   [Basic-Def]: Basic-Def.html
-  [More-About-Settings]: More-About-Settings.html
+  [Task-Graph]: Task-Graph.html
   [Library-Dependencies]: Library-Dependencies.html
   [Multi-Project]: Multi-Project.html
   [Inspecting-Settings]: ../../docs/Inspecting-Settings.html
@@ -899,7 +1173,10 @@ lazy val root = (project in file(".")).
 スコープ
 -------
 
-このページではスコープの説明をする。君が、前のページの [.sbt ビルド定義][Basic-Def]を読んで理解したことを前提とする。
+このページではスコープの説明をする。君が、前のページの
+[.sbt ビルド定義][Basic-Def]、
+[タスク・グラフ][Task-Graph]
+を読んで理解したことを前提とする。
 
 ### キーに関する本当の話
 
@@ -910,13 +1187,13 @@ lazy val root = (project in file(".")).
 
 以下に具体例で説明する:
 
- - ビルド定義に複数のプロジェクトがあれば、それぞれのプロジェクトにおいて同じキーが別の値を取ることができる。
+ - ビルド定義に複数のプロジェクト (サブプロジェクトとも呼ばれる) があれば、それぞれのプロジェクトにおいて同じキーが別の値を取ることができる。
  - メインのソースとテストとのソースが異なるようにコンパイルしたければ、`compile` キーは別の値をとることができる。
  - （jar パッケージの作成のオプションを表す）`packageOption` キーはクラスファイルのパッケージ（`packageBin`）とソースコードのパッケージ（`packageSrc`）で異なる値をとることができる。
 
 スコープによって値が異なる可能性があるため、_あるキーへの単一の値は存在しない_。
 
-しかし、_スコープ付き_キーには単一の値が存在する。
+しかし、**スコープ付きキー**には単一の値が存在する。
 
  [これまで見てきた][Basic-Def]ように sbt がプロジェクトを記述するキーと値のマップを生成するためのセッティングキーのリストを処理していると考えるなら、
 そのキーと値の Map におけるキーとは、実は_スコープ付き_キーである。
@@ -927,16 +1204,16 @@ lazy val root = (project in file(".")).
 
 ### スコープ軸
 
-_スコープ軸_（scope axis）は、型であり、そのインスタンスは独自のスコープを定義する
+**スコープ軸**（scope axis）は、型であり、そのインスタンスは独自のスコープを定義する
 （つまり、各インスタンスはキーの独自の値を持つことができる）。
 
 スコープ軸は三つある:
 
- - プロジェクト
- - コンフィギュレーション
+ - サブプロジェクト
+ - 依存性コンフィギュレーション
  - タスク
 
-#### プロジェクト軸によるスコープ付け
+#### サブプロジェクト軸によるスコープ付け
 
 [一つのビルドに複数のプロジェクトを入れる][Multi-Project]場合、それぞれのプロジェクトにセッティングが必要だ。
 つまり、キーはプロジェクトによりスコープ付けされる。
@@ -944,19 +1221,19 @@ _スコープ軸_（scope axis）は、型であり、そのインスタンス�
 プロジェクト軸は「ビルド全体」に設定することもでき、その場合はセッティングは単一のプロジェクトではなくビルド全体に適用される。
 ビルドレベルでのセッティングは、プロジェクトが特定のセッティングを定義しない場合のフォールバックとして使われることがよくある。
 
-#### コンフィギュレーション軸によるスコープ付け
+#### 依存性コンフィギュレーション軸によるスコープ付け
 
-_コンフィギュレーション_（configuration）は、ビルドの種類を定義し、独自のクラスパス、ソース、生成パッケージなどをもつことができる。
+**依存性コンフィギュレーション**（dependency configuration）は、ライブラリ依存性のグラフを定義し、独自のクラスパス、ソース、生成パッケージなどをもつことができる。
 コンフィギュレーションの概念は、sbt が [マネージ依存性][Library-Dependencies] に使っている Ivy と、[MavenScopes][MavenScopes] に由来する。
 
-sbt で使われるコンフィギュレーションには以下のものがある:
+sbt で使われる代表的なコンフィギュレーションには以下のものがある:
 
  - `Compile` は、メインのビルド（`src/main/scala`）を定義する。
  - `Test` は、テスト（`src/test/scala`）のビルド方法を定義する。
  - `Runtime` は、`run` タスクのクラスパスを定義する。
 
-デフォルトでは、コンパイル、パッケージ化と実行に関するキーの全てはコンフィグレーションにスコープ付けされているため、
-コンフィギュレーションごとに異なる動作をする可能性がある。
+デフォルトでは、コンパイル、パッケージ化と実行に関するキーの全ては依存性コンフィグレーションにスコープ付けされているため、
+依存性コンフィギュレーションごとに異なる動作をする可能性がある。
 その最たる例が `compile`、`package` と `run` のタスクキーだが、
 （`sourceDirectories` や `scalacOptions` や `fullClasspath` など）それらのキーに_影響を及ぼす_全てのキーもコンフィグレーションにスコープ付けされている。
 
@@ -1023,7 +1300,7 @@ sbt で使われるコンフィギュレーションには以下のものがあ�
 
 ### スコープの検査
 
-sbt のインタラクティブモードで `inspect` コマンドを使ってキーとそのスコープを把握することができる。
+sbt シェルで `inspect` コマンドを使ってキーとそのスコープを把握することができる。
 例えば、`inspect test:full-classpath` と試してみよう:
 
 ```
@@ -1069,7 +1346,7 @@ $ sbt
 `{file:/home/hp/checkout/hello/}default-aea33a/test:full-classpath`
 （`test` コンフィギュレーションと `{file:/home/hp/checkout/hello/}default-aea33a` プロジェクトにスコープ付けされた `full-classpath` キー）。
 
-"Dependencies" はまだよく分からないかもしれないが、これの説明は[次のページ][More-About-Settings]まで待ってほしい。
+"Dependencies" に関しては、[前のページ][Task-Graph]で解説した。
 
 ここで委譲も見ることができ、もし値が定義されていなければ、sbt は以下を検索する:
 
@@ -1159,26 +1436,52 @@ _"Reference to undefined setting"_ のようなエラーに遭遇した場合は
 単に `packageOptions` と言っただけでもキー名だけど、それは別のキーだ
 （`in` 無しのキーのスコープは暗黙で決定され、現プロジェクト、`Global` コンフィグレーション、`Global` タスクとなる）。
 
+#### ビルドワイド・セッティング
 
-  [Basic-Def]: Basic-Def.html
+サブプロジェクト間に共通なセッティングを一度に定義するための上級テクニックとしてセッティングを
+`ThisBuild` にスコープ付けするという方法がある。
+
+もし特定のサブプロジェクトにスコープ付けされたキーが見つから無かった場合、
+sbt はフォールバックとして `ThisBuild` 内を探す。
+この仕組みを利用して、
+`version`、 `scalaVersion`、 `organization`
+といったよく使われるキーに対してビルドワイドなデフォルトのセッティングを定義することができる。
+
+便宜のため、セッティング式のキーと本文の両方を `ThisBuild`
+にスコープ付けする
+`inThisBuild(...)` という関数が用意されている。
+
+```scala
+lazy val root = (project in file("."))
+  .settings(
+    inThisBuild(List(
+      // Same as:
+      // organization in ThisBuild := "com.example"
+      organization := "com.example",
+      scalaVersion := "2.12.1",
+      version      := "0.1.0-SNAPSHOT"
+    )),
+    name := "Hello",
+    publish := (),
+    publishLocal := ()
+  )
+
+lazy val core = (project in file("core")).
+  settings(
+    // other settings
+  )
+
+lazy val util = (project in file("util")).
+  settings(
+    // other settings
+  )
+```
+
+
   [Scopes]: Scopes.html
-  [Keys]: ../../sxr/sbt/Keys.scala.html
 
-他の種類のセッティング
--------------------
-
-このページでは、基本的な `:=` メソッドを超えた、より高度な `Settings` の作り方を説明する。
-君が[.sbt ビルド定義][Basic-Def]と[スコープ][Scopes]を読んだことを前提とする。
-
-### 復習: セッティング
-
-ビルド定義は `Setting` のリストを作り、それが sbt の（キーと値のペアの Map で表現される）ビルドの記述を変換するのに使われるということは[覚えている][Basic-Def]と思う。
-セッティング（`Setting`）は古い Map を入力としてとり、新しい Map を出力する変換である。そして、新しい Map が sbt の新しい内部状態となる。
-
-セッティングは種類により異なる方法で Map を変換する。[これまでは][Basic-Def]、`:=` メソッドをみてきた。
-
-`:=` が作る `Setting` は、不変の固定値を新たに変換された Map に代入する。
-例えば Map を `name := "hello"` というセッティングで変換すると、新しい Map は `name` キーの中に `"hello"` を格納する。
+値の追加
+-------
 
 ### 既存の値に追加する: `+=` と `++=`
 
@@ -1219,58 +1522,6 @@ sourceDirectories in Compile ++= Seq(file("sources1"), file("sources2"))
 sourceDirectories in Compile := Seq(file("sources1"), file("sources2"))
 ```
 
-### 他のキーの値を基に値を計算
-
-タスクキーやセッティングキーの値を使って他のタスクキー、セッティングキーの値を設定してみる。
-これらの値を返すメソッドは特別なもので、単に `:=` や `+=` や `++=` の引数の中で呼び出してやればよい。
-
-まず一つ目の例として、プロジェクトの名前と同じ organization（訳注：Ivy のもの、Maven でいう groupId）を定義してみよう。
-
-```scala
-// プロジェクトの後に組織名を付ける (どちらも型は SettingKey[String])
-organization := name.value
-```
-
-次にこれはディレクトリ名を用いてプロジェクトの名前をつける例。
-
-```scala
-// name は Key[String]、 baseDirectory は Key[File]
-// ディレクトリ名を取ってからプロジェクトの名前を付ける
-name := baseDirectory.value.getName
-```
-
-この例では標準的な `java.io.File` オブジェクトの `getName` メソッドを使って  `baseDirectry` の値を変換している。
-
-複数の入力値を用いる場合も同様である。例えばこのようになる：
-
-```scala
-name := "project " + name.value + " from " + organization.value + " version " + version.value
-```
-
-既に宣言されている name の値だけでなく organization や version といったセッティングの値を使って、新たに name というセッティングが設定されている。
-
-#### 依存性を持ったセッティング
-
-`name <<= baseDirectory(_.getName)` というセッティングにおいて、`name` は、`baseDirectory` への_依存性_（dependency）を持つ。上記の内容を `build.sbt` に記述して sbt のインタラクティブモードを立ち上げ、`inspect name` と入力すると、以下のように表示されるだろう（一部抜粋）:
-
-```
-[info] Dependencies:
-[info]  *:baseDirectory
-```
-
-これは sbt が、どのセッティングが他のセッティングに依存しているかをどう把握しているかを示している。
-タスクを記述するセッティングを思い出してほしい。そう、タスク間に依存関係を持たせることも可能であるということだ。
-
-例えば `inspect compile` すれば compile は別のキー `compileInputs` に依存するということが分かり、
-`compileInputs` を inspect すると、それがまた別のキーに依存していることが分かる。
-依存性の連鎖をたどっていくと、魔法に出会う。
-例えば `compile` と打ち込むと、sbt は自動的に `update` を実行する。
-これが「とにかくちゃんと動く」理由は、`compile` の計算に入力として必要な値が sbt に `update` の計算を先に行うことを強制しているからだ。
-
-このようにして、sbt の全てのビルドの依存性は、明示的には宣言されず、_自動化_されている。
-あるキーの値を別の計算で使うと、その計算はキーに依存することになる。
-とにかくちゃんと動いてくれるというわけだ！
-
 #### セッティングが未定義の場合
 
 セッティングが `:=` や `+=` や `++=` を使って自分自身や他のキーへの依存が生まれるとき、その依存されるキーの値が存在しなくてならない。
@@ -1290,35 +1541,6 @@ name := "project " + name.value + " from " + organization.value + " version " + 
 sourceGenerators in Compile += Def.task {
   myGenerator(baseDirectory.value, (managedClasspath in Compile).value)
 }.taskValue
-```
-
-#### 依存性を持ったタスク
-
-[.sbt ビルド定義][Basic-Def]でみたように、タスクキーは `:=` などでセッティングを作ると `Setting[T]` ではなく、`Setting[Task[T]]`を作る。
-タスク定義の入力にセッティングの値を用いることができるが、セッティング定義の入力にタスクをとることはできない。
-
-（[Keys][Keys] より）以下の二つのキーを例に説明する:
-
-```scala
-val scalacOptions = taskKey[Seq[String]]("Options for the Scala compiler.")
-val checksums = settingKey[Seq[String]]("The list of checksums to generate and to verify for dependencies.")
-```
-
-（`scalacOptions` と `checksums` はお互い何の関係もない、ただ同じ値の型を持つ二つのキーで片方がタスクというだけだ）
-
-`build.sbt` の中で `scalacOptions` を `checksums` のエイリアスにすることはできるが、その逆はできない。例えば、以下の例はコンパイルが通る:
-
-```scala
-// scalacOptions タスクは checksums セッティングの値を用いて定義される
-scalacOptions := checksums.value
-```
-
-逆方向への依存、つまりタスクの値に依存したセッティングキーの値を定義することはどうしてもできない。
-なぜなら、セッティングキーの値はプロジェクトのロード時に一度だけしか計算されず、毎回再実行されるべきタスクが毎回実行されなくなってしまうからだ。
-
-```scala
-// checksums セッティングは scalacOptions タスクに関連付けても、値が定まらないかもしれない
-checksums := scalacOptions.value
 ```
 
 ### 依存性を用いた追加: `+=` と `++=`
@@ -1342,7 +1564,7 @@ cleanFiles += file("coverage-report-" + name.value + ".txt")
   [ScalaTest]: http://scalatest.org
   [Basic-Def]: Basic-Def.html
   [Scopes]: Scopes.html
-  [More-About-Settings]: More-About-Settings.html
+  [Task-Graph]: Task-Graph.html
   [external-maven-ivy]: ../../docs/Library-Management.html#external-maven-ivy
   [Cross-Build]: ../../docs/Cross-Build.html
   [Resolvers]: ../../docs/Resolvers.html
@@ -1353,7 +1575,7 @@ cleanFiles += file("coverage-report-" + name.value + ".txt")
 
 このページは、このガイドのこれまでのページ、特に
 [.sbt ビルド定義][Basic-Def]、[スコープ][Scopes]、と
-[他の種類のセッティング][More-About-Settings]
+[タスク・グラフ][Task-Graph]
 を読んでいることを前提とする。
 
 ライブラリ依存性は二つの方法で加えることができる:
@@ -1383,7 +1605,7 @@ unmanagedBase := baseDirectory.value / "custom_lib"
 ```
 
 `baseDirectory` はプロジェクトのベースディレクトリで、
-[他の種類のセッティング][More-About-Settings]で説明したとおり、ここでは `unmanagedBase`
+[タスク・グラフ][Task-Graph]で説明したとおり、ここでは `unmanagedBase`
 を `value` を使って取り出した `baseDirectory` の値を用いて変更している。
 
 他には、`unmangedJars` という `unmanagedBase` ディレクトリに入っている jar ファイルのリストを返すタスクがある。
@@ -1570,14 +1792,14 @@ libraryDependencies += "org.apache.derby" % "derby" % "10.4.1.3" % Test
 マルチプロジェクト・ビルド
 ----------------------
 
-このページでは、一つのプロジェクトで複数のプロジェクトを管理する方法を紹介する。
+このページでは、一つのビルドで複数のサブプロジェクトを管理する方法を紹介する。
 このガイドのこれまでのページを読んでおいてほしい。
 特に [build.sbt][Basic-Def] を理解していることが必要になる。
 
-### 複数のプロジェクト
+### 複数のサブプロジェクト
 
-一つのビルドに複数の関連するプロジェクトを入れておくと、
-プロジェクト間に依存性がある場合や同時に変更されることが多い場合に便利だ。
+一つのビルドに複数の関連するサブプロジェクトを入れておくと、
+サブプロジェクト間に依存性がある場合や同時に変更されることが多い場合に便利だ。
 
 ビルド内の個々のサブプロジェクトは、それぞれ独自のソースディレクトリを持ち、
 `package` を実行すると独自の jar ファイルを生成するなど、概ね通常のプロジェクトと同様に動作する。
@@ -1585,20 +1807,20 @@ libraryDependencies += "org.apache.derby" % "derby" % "10.4.1.3" % Test
 個々のプロジェクトは lazy val を用いて [Project](../../api/sbt/Project.html) 型の値を宣言することで定義される。例として、以下のようなものがプロジェクトだ:
 
 ```scala
-lazy val util = project
+lazy val util = (project in file("util"))
 
-lazy val core = project
+lazy val core = (project in file("core"))
 ```
 
 val で定義された名前はプロジェクトの ID 及びベースディレクトリの名前になる。
-ID はコマンドラインからプロジェクトを指定する時に用いられる。
-ベースディレクトリは `in` メソッドを使ってこのデフォルトから変更することができる。
-上記の例と同じ結果になる記述を明示的に書くと、以下のようになる。
+ID は sbt シェルからプロジェクトを指定する時に用いられる。
+
+ベースディレクトリ名が ID と同じ名前であるときは省略することができる。
 
 ```scala
-lazy val util = project.in(file("util"))
+lazy val util = project
 
-lazy val core = project in file("core")
+lazy val core = project
 ```
 
 #### 共通のセッティング
@@ -1606,7 +1828,6 @@ lazy val core = project in file("core")
 複数プロジェクトに共通なセッティングをくくり出す場合、
 `commonSettings` という名前のセッティングの Seq を作って、
 それを引数として各プロジェクトの `settings` メソッドを呼び出せばよい。
-（可変長引数を受け取るメソッドに Seq を渡すには `_*` が必要なので注意）
 
 ```scala
 lazy val commonSettings = Seq(
@@ -1616,19 +1837,24 @@ lazy val commonSettings = Seq(
 )
 
 lazy val core = (project in file("core")).
-  settings(commonSettings: _*).
   settings(
+    commonSettings,
     // other settings
   )
 
 lazy val util = (project in file("util")).
-  settings(commonSettings: _*).
   settings(
+    commonSettings,
     // other settings
   )
 ```
 
 これで `version` を一箇所で変更すれば、再読み込み後に全サブプロジェクトに反映されるようになる。
+
+#### ビルドワイド・セッティング
+
+サブプロジェクト間に共通なセッティングを一度に定義するためのもう一つの方法として、
+`ThisBuild` にスコープ付けするという少し上級なテクニックがある。（[スコープ][Scopes]参照）
 
 ### 依存関係
 
@@ -1641,12 +1867,12 @@ lazy val util = (project in file("util")).
 集約とは、集約する側のプロジェクトであるタスクを実行するとき、集約される側の複数のプロジェクトでも同じタスクを実行するという関係を意味する。例えば、
 
 ```scala
-lazy val root = (project in file(".")).
-  aggregate(util, core)
+lazy val root = (project in file("."))
+  .aggregate(util, core)
 
-lazy val util = project
+lazy val util = (project in file("util"))
 
-lazy val core = project
+lazy val core = (project in file("core"))
 ```
 
 上の例では、`root` プロジェクトが `util` と `core` を集約している。
@@ -1658,9 +1884,9 @@ _集約プロジェクト内で_（この場合は `root` プロジェクトで�
 例えば、`update` タスクの集約を以下のようにして回避できる:
 
 ```scala
-lazy val root = (project in file(".")).
-  aggregate(util, core).
-  settings(
+lazy val root = (project in file("."))
+  .aggregate(util, core)
+  .settings(
     aggregate in update := false
   )
 
@@ -1783,12 +2009,15 @@ sbt インタラクティブプロンプトから、`projects` と入力する�
   [Community-Plugins]: ../../docs/Community-Plugins.html
   [Plugins]: ../../docs/Plugins.html
   [Plugins-Best-Practices]: ../../docs/Plugins-Best-Practices.html
+  [Task-Graph]: Task-Graph.html
 
 プラグインの使用
 --------------
 
 このガイドのこれまでのページを読んでおいてほしい。
-特に [build.sbt][Basic-Def]と[ライブラリ依存性][Library-Dependencies]を理解していることが必要になる。
+特に [build.sbt][Basic-Def]、
+[タスク・グラフ][Task-Graph]、
+と[ライブラリ依存性][Library-Dependencies]を理解していることが必要になる。
 
 ### プラグインとは何か
 
@@ -1928,7 +2157,7 @@ lazy val core = (project in file("core")).
 
 
   [Basic-Def]: Basic-Def.html
-  [More-About-Settings]: More-About-Settings.html
+  [Task-Graph]: Task-Graph.html
   [Using-Plugins]: Using-Plugins.html
   [Organizing-Build]: Organizing-Build.html
   [Input-Tasks]: ../../docs/Input-Tasks.html
@@ -1944,7 +2173,8 @@ lazy val core = (project in file("core")).
 このページでは、独自のセッティングやタスクの作成を紹介する。
 
 このページを理解するには、このガイドの前のページ、
-特に [build.sbt][Basic-Def] と [他の種類のセッティング][More-About-Settings] を読んである必要がある。
+特に [build.sbt][Basic-Def] と
+[タスク・グラフ][Task-Graph] を読んである必要がある。
 
 ### キーを定義する
 
@@ -2001,7 +2231,7 @@ lazy val library = (project in file("library")).
   )
 ```
 
-もしタスクに依存してるものがあれば、[他の種類のセッティング][More-About-Settings]で説明したとおり `value` を使ってその値を参照すればよい。
+もしタスクに依存してるものがあれば、[タスク・グラフ][More-About-Settings]で説明したとおり `value` を使ってその値を参照すればよい。
 
 タスクを実装する上で一番難しい点は、多くの場合 sbt 固有の問題ではない。なぜならタスクはただの Scala コードだからだ。
 難しいのはそのタスクが実行したいことの「本体」部分を書くことだ。
@@ -2147,7 +2377,7 @@ lazy val library = (project in file("library")).
       val old = sampleStringTask.value
       println("stopping...")
       Thread.sleep(500)
-      old      
+      old
     }
   )
 ```
@@ -2178,7 +2408,7 @@ sampleIntTask := {
     println("sum: " + sum)
   } finally {
     ServerUtil.stopServer
-  } 
+  }
   sum
 }
 ```
@@ -2198,7 +2428,7 @@ sampleIntTask := {
 
 
   [Basic-Def]: Basic-Def.html
-  [More-About-Settings]: More-About-Settings.html
+  [Task-Graph]: Task-Graph.html
   [Using-Plugins]: Using-Plugins.html
   [Library-Dependencies]: Library-Dependencies.html
   [Multi-Project]: Multi-Project.html
@@ -2211,6 +2441,7 @@ sampleIntTask := {
 
 このガイドの前のページ、特に
 [build.sbt][Basic-Def]、
+[タスク・グラフ][Task-Graph]、
 [ライブラリ依存性][Library-Dependencies]、
 そして[マルチプロジェクト・ビルド][Multi-Project]を理解していることが必要になる。
 
@@ -2232,35 +2463,34 @@ sbt のビルドは、Scala コードにより定義されている。そのコ�
 以下に具体例で説明する:
 
 ```
-hello/                  # ビルドのルート・プロジェクトのベースディレクトリ
+hello/                     # ビルドのルート・プロジェクトのベースディレクトリ
 
-    Hello.scala         # ビルドのルート・プロジェクトのソースファイル  
-                        # （src/main/scala に入れることもできる）
+    Hello.scala            # ビルドのルート・プロジェクトのソースファイル
+                           # （src/main/scala に入れることもできる）
 
-    build.sbt           # build.sbt は、project/ 内のメタビルドの
-                        # ルート・プロジェクトのソースの一部となる。
-                        # つまり、プロパービルドのビルド定義
+    build.sbt              # build.sbt は、project/ 内のメタビルドの
+                           # ルート・プロジェクトのソースの一部となる。
+                           # つまり、プロパービルドのビルド定義
 
-    project/            # メタビルドのルート・プロジェクトのベースディレクトリ
-     
-        Build.scala     # メタビルドのルート・プロジェクトのソースファイル、
-                        # つまり、ビルド定義のソースファイル。
-                        # プロパービルドのビルド定義
+    project/               # メタビルドのルート・プロジェクトのベースディレクトリ
+        Dependencies.scala # メタビルドのルート・プロジェクトのソースファイル、
+                           # つまり、ビルド定義のソースファイル。
+                           # プロパービルドのビルド定義
 
-        build.sbt       # これは、project/project 内のメタメタビルドの
-                        # ルート・プロジェクトのソースの一部となり、
-                        # ビルド定義のビルド定義となる
-               
-        project/        # メタメタビルドのルート・プロジェクトのベースディレクトリ
+        assembly.sbt       # これは、project/project 内のメタメタビルドの
+                           # ルート・プロジェクトのソースの一部となり、
+                           # ビルド定義のビルド定義となる
 
-            Build.scala # project/project/ 内のメタメタビルドの
-                        # ルート・プロジェクトのソースファイル
+        project/           # メタメタビルドのルート・プロジェクトのベースディレクトリ
+
+            MetaDeps.scala # project/project/ 内のメタメタビルドの
+                           # ルート・プロジェクトのソースファイル
 ```
 
 _心配しないでほしい！_ 普通はこういうことをする必要は全くない。
 しかし、原理を理解しておくことはきっと役立つことだろう。
 
-ちなみに、`.scala` や `.sbt` の拡張子で終わっていればどんなファイル名でもよく、`build.sbt` や `Build.scala` と命名するのは慣例にすぎない。
+ちなみに、`.scala` や `.sbt` の拡張子で終わっていればどんなファイル名でもよく、`build.sbt` や `Dependencies.scala` と命名するのは慣例にすぎない。
 これは複数のファイルを使うことができるということも意味する。
 
 ### ライブラリ依存性を一箇所にまとめる
@@ -2344,10 +2574,8 @@ sbt は、強力なコア・コンセプトだけを用いて全てを実現し�
    Scala の設計者自身による [Scalaスケーラブルプログラミング](http://www.impressjapan.jp/books/3084)
    （[原著](http://www.artima.com/shop/programming_in_scala_2ed)）は、素晴らしい入門書だ。
  - [.sbt ビルド定義][Basic-Def]  
-   - ビルド定義とは、一つの大きな `Setting` オブジェクトのリストであり、
-   　`Setting` とは、sbt がタスクを実行するために使うキーと値のペアを変換するものだ。
+   - ビルド定義はタスクとタスク間のそ依存性の大きな DAG だ。
    - `Setting` を作成するために `:=`、`+=`、`++=` のようなキーに定義されたメソッドを呼び出す。
-   - mutable な状態は存在せず、ただ変換があるだけだ。例えば `Setting` は sbt のキーと値のペアのコレクションを新しいコレクションに変換する、上書き更新はしない。
    - 各セッティングは、キーにより決定された固有の型の値を持つ。
    - _タスク_は、特殊なセッティングで、タスクを実行するたびに、キーの値を生成する計算が再実行される。
 	 非タスクのセッティングは、ビルド定義の読み込み時に一度だけ値が計算される。
@@ -2376,7 +2604,6 @@ information. -->
 sbt はオープンソースであるため、いつでも[ソース](https://github.com/sbt/sbt)を見れることも忘れずに！
 
 
-  [More-About-Settings]: More-About-Settings.html
   [Full-Def]: Full-Def.html
   [Basic-Def]: Basic-Def.html
 
@@ -2419,7 +2646,6 @@ sbt はどこまでで式が終わってどこからが次の式なのかを判�
 
 
   [Basic-Def]: Basic-Def.html
-  [More-About-Settings]: More-About-Settings.html
   [Using-Plugins]: Using-Plugins.html
   [Multi-Project]: Multi-Project.html
 
@@ -2430,9 +2656,9 @@ sbt はどこまでで式が終わってどこからが次の式なのかを判�
 以前のバージョンの sbt で複数のプロジェクトを扱うには `.scala` ビルド定義を使う以外しかなかったが、
 sbt 0.13 からは[マルチプロジェクト .sbt ビルド定義][Basic-Def]が追加され、現在はそのスタイルが推奨されている。
 
-このページは、このガイドのこれまでのページ、特に 
-[.sbt ビルド定義][Basic-Def] と
-[他の種類のセッティング][More-About-Settings]を読んでいることを前提とする。
+このページは、このガイドのこれまでのページ、特に
+[.sbt ビルド定義][Basic-Def]
+を読んでいることを前提とする。
 
 ### `build.sbt` と `Build.scala` の関係
 

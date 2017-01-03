@@ -37,7 +37,6 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
   [Linux]: Installing-sbt-on-Linux.html
-  [Manual-Installation]: Manual-Installation.html
 
 安装 sbt
 --------------
@@ -52,7 +51,7 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
 -   然后前往 [.sbt 构建定义][Basic-Def] 学习更多关于构建的定义。
 
 
-最后，安装步骤就简化为一个 Jar 文件和一个 Shell 脚本，但是取决于你的平台，我们提供了好几种方式来使得步骤不是那么单调。 [Mac][Mac]，[Windows][Windows]，[Linux][Linux]，或[手动安装][Manual-Installation] 提供了相应的安装步骤。
+最后，安装步骤就简化为一个 Jar 文件和一个 Shell 脚本，但是取决于你的平台，我们提供了好几种方式来使得步骤不是那么单调。 [Mac][Mac]，[Windows][Windows]，或[Linux][Linux] 提供了相应的安装步骤。
 
 ### 提示和技巧
 
@@ -66,15 +65,13 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
 在 Mac 上安装 sbt
 ---------------------
 
+### 通过通用的包安装
+
+下载 [ZIP][ZIP] 或者 [TGZ][TGZ] 包并解压。
+
 ### 通过第三方的包安装
 
 > **注意：** 第三方的包可能没有提供最新的版本，请记得将任何问题反馈给这些包相关的维护者。
-
-#### 通过 [Macports](http://macports.org/) 安装
-
-```
-$ port install sbt
-```
 
 #### 通过 [Homebrew](http://mxcl.github.com/homebrew/) 安装
 
@@ -82,13 +79,11 @@ $ port install sbt
 $ brew install sbt
 ```
 
-### 通过通用的包安装
+#### 通过 [Macports](http://macports.org/) 安装
 
-下载 [ZIP][ZIP] 或者 [TGZ][TGZ] 包并解压。
-
-### 手动安装
-
-参见手动安装指南。
+```
+$ port install sbt
+```
 
 
   [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.13.1/sbt-0.13.13.1.msi
@@ -98,25 +93,19 @@ $ brew install sbt
 在 Windows 上安装 sbt
 -------------------------
 
-### 通过 Windows 安装包安装
-
-下载 [msi 安装包][MSI] 并安装。
-
 ### 通过通用的安装包安装
 
 下载 [ZIP][ZIP] 或者 [TGZ][TGZ] 包并解压。
 
-### 手动安装
+### 通过 Windows 安装包安装
 
-参见手动安装指南。
+下载 [msi 安装包][MSI] 并安装。
 
 
   [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.13/sbt-0.13.13.zip
   [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.13/sbt-0.13.13.tgz
   [RPM]: https://dl.bintray.com/sbt/rpm/sbt-0.13.13.rpm
   [DEB]: https://dl.bintray.com/sbt/debian/sbt-0.13.13.deb
-  [Manual-Installation]: Manual-Installation.html
-  [Activator-Installation]: Activator-Installation.html
 
 在 Linux 上安装 sbt
 -----------------------
@@ -169,100 +158,6 @@ sbt 二进制文件发布到 Bintray，而Bintray 方便地提供了RPM资源库
     emerge sbt-bin
 
 > **注意：** 请将任何和 ebuild 相关的问题反馈到 [这里](https://github.com/whiter4bbit/overlays/issues)。
-
-### Lightbend Activator
-
-参见 [Lightbend Activator安装指南][Activator-Installation].
-
-### 手动安装
-
-参见[手动安装指南][Manual-Installation]。
-
-
-  [sbt-launch.jar]: https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.13/sbt-launch.jar
-
-手动安装 sbt
------------------------
-
-手动安装需要下载 [sbt-launch.jar][sbt-launch.jar]，然后创建脚本来运行它。
-
-### Unix
-
-将 [sbt-launch.jar][sbt-launch.jar] 文件放在 `~/bin` 下。
-创建一个脚本来运行这个 jar，脚本 `~/bin/sbt` 内容如下:
-
-```
-#!/bin/bash
-SBT_OPTS="-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M"
-java $SBT_OPTS -jar `路径名 $0`/sbt-launch.jar "$@"
-```
-
-给该脚本赋予可执行权限：
-
-```
-$ chmod u+x ~/bin/sbt
-```
-
-### Windows
-
-在 Windows 上手动安装的步骤根据是否使用 Cygwin 和终端的不同而不同。 在任何情况下，将 batch 文件或者脚本文件添加到 path 中，使得可以在任意路径下的命令行中敲 `sbt` 来运行 sbt。
-同时，如果需要的话，根据机器调节一下 JVM 的参数设置。
-
-#### Non-Cygwin
-
-对于使用标准 Windows 终端的非 Cygwin 用户，创建如 `sbt.bat` 的 batch 文件：
-
-```
-set SCRIPT_DIR=%~dp0
-java -Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M -jar "%SCRIPT_DIR%sbt-launch.jar" %*
-```
-
-然后将下载好的 [sbt-launch.jar][sbt-launch.jar] 放在和 `sbt.bat` 相同的路径下。
-
-#### Cygwin 和标准的 Windows 终端
-
-如果使用 Cygwin 和标准的 Windows 终端，创建如下的 bash 脚本 `~/bin/sbt`：
-
-```
-SBT_OPTS="-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M"
-java $SBT_OPTS -jar sbt-launch.jar "$@"
-```
-
-用下载好的 [sbt-launch.jar][sbt-launch.jar] 文件的路径替换掉 sbt-launch.jar，如果需要的话记得使用 cygpath。给脚本赋予可执行权限：
-
-```
-$ chmod u+x ~/bin/sbt
-```
-
-#### Cygwin 和 Ansi 终端
-
-如果使用 Cygwin 和 Ansi 终端（支持 Ansi 转义序列并且可以通过 stty 配置），创建一个 bash 文件 `~/bin/sbt`：
-
-```
-SBT_OPTS="-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M"
-stty -icanon min 1 -echo > /dev/null 2>&1
-java -Djline.terminal=jline.UnixTerminal -Dsbt.cygwin=true $SBT_OPTS -jar sbt-launch.jar "$@"
-stty icanon echo > /dev/null 2>&1
-```
-
-用下载好的 [sbt-launch.jar][sbt-launch.jar] 文件的路径替换掉 sbt-launch.jar，如果需要的话记得使用 cygpath。给脚本赋予可执行权限：
-
-```
-$ chmod u+x ~/bin/sbt
-```
-
-为了让退格（backspace）能够在 Scala 的控制台中正常工作，你需要确保你的退格键发送的是删除符（erase character），和在 stty 中配置的一样。对于默认的 cygwin 终端（mintty），
-在设置选项 -> 键中，如果你的删除符是 cygwin 默认的 ^H，“退格发送 ^H” 需要被选中。
-
-> **注意：** 当前其他的配置还不支持。请 [提交 pull request](https://github.com/sbt/sbt/blob/0.13/CONTRIBUTING.md) 实现或者描述已经支持的配置。
-
-
-  [Manual-Installation]: Manual-Installation.html
-
-安装 Lightbend Activator (包含sbt)
----------------------
-
-Lightbend Activator 是sbt的一个自定义版本，它添加两个额外的命令`activator ui`和`activator new`。`activator`命令简言之就是sbt的一个超集。
 
 
   [Basic-Def]: Basic-Def.html
