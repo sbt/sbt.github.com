@@ -70,7 +70,7 @@ the subproject located in the current directory like this:
     name := &quot;Hello&quot;,
     scalaVersion := &quot;2.12.1&quot;
   )
-</code></pre><p>Each subproject is associated with a sequence of key-value pairs describing the subproject.
+</code></pre><p>Each subproject is configured by key-value pairs.
 </p><p>For example, one key is <code>name</code> and it maps to a string value, the name of
 your subproject.
 The key-value pairs are listed under the <code>.settings(...)</code> method as follows:
@@ -88,7 +88,7 @@ called <em>setting expressions</em> using <em>build.sbt DSL</em>.
     scalaVersion := &quot;2.12.1&quot;,
     version      := &quot;0.1.0-SNAPSHOT&quot;
   )
-</code></pre><p>Let’s take a closer look at the build.sbt DSL:
+</code></pre><p>Let’s take a closer look at the <code>build.sbt</code> DSL:
 <img src="files/setting-expression.png" alt="setting expression"/><br>
 <br>
 Each entry is called a <em>setting expression</em>.
@@ -99,7 +99,10 @@ We will see more on the difference later in this page.
 </li><li><em>Operator</em>, which in this case is <code>:=</code>
 </li><li>Right-hand side is called the <em>body</em>, or the <em>setting body</em>.
 </li></ol><p>On the left-hand side, <code>name</code>, <code>version</code>, and <code>scalaVersion</code> are <em>keys</em>.
-A key is an instance of <code>SettingKey[T]</code>, <code>TaskKey[T]</code>, or <code>InputKey[T]</code> where <code>T</code> is the
+A key is an instance of
+<a href="../api/index.html#sbt.SettingKey"><code>SettingKey[T]</code></a>,
+<a href="../api/index.html#sbt.TaskKey"><code>TaskKey[T]</code></a>, or
+<a href="../api/index.html#sbt.InputKey"><code>InputKey[T]</code></a> where <code>T</code> is the
 expected value type. The kinds of key are explained below.
 </p><p>Because key <code>name</code> is typed to <code>SettingKey[String]</code>,
 the <code>:=</code> operator on <code>name</code> is also typed specifically to <code>String</code>.

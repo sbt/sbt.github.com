@@ -172,7 +172,7 @@ hello
 </p><p>ソースコードは <code>hello/app.scala</code> のようにプロジェクトのベースディレクトリに置くこともできるが、
 小さいプロジェクトはともかくとして、通常のプロジェクトでは
 <code>src/main/</code> 以下のディレクトリにソースを入れて整理するのが普通だ。
-ルートに <code>*.scala</code> ソースコードを配置できるのは小手先だけのトリックに見えるかもしれないが、
+ベースディレクトリに <code>*.scala</code> ソースコードを配置できるのは小手先だけのトリックに見えるかもしれないが、
 この機能は<a href="Organizing-Build.html">後ほど</a>重要になる。
 </p><h3 id="sbt+%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB">sbt ビルド定義ファイル<a href="#sbt+%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>ビルド定義はプロジェクトのベースディレクトリ以下の <code>build.sbt</code>
 (実は <code>*.sbt</code> ならどのファイルでもいい) にて記述する。
@@ -324,7 +324,7 @@ sbt バージョンを指定する:
     name := &quot;Hello&quot;,
     scalaVersion := &quot;2.12.1&quot;
   )
-</code></pre><p>それぞれのサブプロジェクトは、それを記述するキーと値のペアの列に関連付けられる。
+</code></pre><p>それぞれのサブプロジェクトは、キーと値のペアによって詳細が設定される。
 </p><p>例えば、<code>name</code> というキーがあるが、それはサブプロジェクト名という文字列の値に関連付けられる。
 キーと値のペア列は <code>.settings(...)</code> メソッド内に列挙される:
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
@@ -351,7 +351,10 @@ sbt バージョンを指定する:
 </li><li><strong>演算子</strong>。この場合は <code>:=</code>。
 </li><li>右辺項は<strong>本文</strong> (body)、もしくは<strong>セッティング本文</strong>という。
 </li></ol><p>左辺値の <code>name</code>、<code>version</code>、および <code>scalaVersion</code> は<strong>キー</strong>である。
-キーは <code>SettingKey[T]</code>、<code>TaskKey[T]</code>、もしくは <code>InputKey[T]</code> のインスタンスで、
+キーは
+<a href="../api/index.html#sbt.SettingKey"><code>SettingKey[T]</code></a>、
+<a href="../api/index.html#sbt.TaskKey"><code>TaskKey[T]</code></a>、もしくは
+<a href="(../api/index.html#sbt.InputKey)"><code>InputKey[T]</code></a> のインスタンスで、
 <code>T</code> はその値の型である。キーの種類に関しては後述する。
 </p><p><code>name</code> キーは <code>SettingKey[String]</code> に型付けされているため、
 <code>name</code> の <code>:=</code> 演算子も <code>String</code> に型付けされている。
@@ -489,9 +492,9 @@ val clean = taskKey[Unit](&quot;Deletes files produced by the build, such as gen
     name := &quot;Hello&quot;,
     organization := &quot;com.example&quot;,
     scalaVersion := &quot;2.12.1&quot;,
-    version      := &quot;0.1.0-SNAPSHOT&quot;,
+    version := &quot;0.1.0-SNAPSHOT&quot;,
     scalacOptions := {
-      val out = streams.value // stream タスクは scalacOptions よりも事前発生する
+      val out = streams.value // streams タスクは scalacOptions よりも事前発生する
       val log = out.log
       log.info(&quot;123&quot;)
       val ur = update.value   // update タスクは scalacOptions よりも事前発生する
@@ -516,7 +519,7 @@ val clean = taskKey[Unit](&quot;Deletes files produced by the build, such as gen
     name := &quot;Hello&quot;,
     organization := &quot;com.example&quot;,
     scalaVersion := &quot;2.12.1&quot;,
-    version      := &quot;0.1.0-SNAPSHOT&quot;,
+    version := &quot;0.1.0-SNAPSHOT&quot;,
     scalacOptions := {
       val ur = update.value  // update task happens-before scalacOptions
       if (false) {
@@ -608,7 +611,7 @@ build.sbt に慣れるまでは、<code>.value</code> の呼び出しをタス�
     name := &quot;Hello&quot;,
     organization := &quot;com.example&quot;,
     scalaVersion := &quot;2.12.1&quot;,
-    version      := &quot;0.1.0-SNAPSHOT&quot;,
+    version := &quot;0.1.0-SNAPSHOT&quot;,
     scalacOptions := List(&quot;-encoding&quot;, &quot;utf8&quot;, &quot;-Xfatal-warnings&quot;, &quot;-deprecation&quot;, &quot;-unchecked&quot;),
     scalacOptions := {
       val old = scalacOptions.value
@@ -645,7 +648,7 @@ val checksums = settingKey[Seq[String]](&quot;The list of checksums to generate 
 scalacOptions := checksums.value
 </code></pre><p>逆方向への依存、つまりタスクの値に依存したセッティングキーの値を定義することはどうしてもできない。
 なぜなら、セッティングキーの値はプロジェクトのロード時に一度だけしか計算されず、毎回再実行されるべきタスクが毎回実行されなくなってしまうからだ。
-</p><pre><code class="prettyprint lang-scala">// checksums セッティングは scalacOptions タスクに関連付けても、値が定まらないかもしれない
+</p><pre><code class="prettyprint lang-scala">// 悪い例: checksums セッティングは scalacOptions タスクに関連付けて定義することはできない!
 checksums := scalacOptions.value
 </code></pre><h4 id="%E4%BB%96%E3%81%AE%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AB%E4%BE%9D%E5%AD%98%E3%81%97%E3%81%9F%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AE%E5%AE%9A%E7%BE%A9">他のセッティングに依存したセッティングの定義<a href="#%E4%BB%96%E3%81%AE%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AB%E4%BE%9D%E5%AD%98%E3%81%97%E3%81%9F%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AE%E5%AE%9A%E7%BE%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>実行のタイミングという観点から見ると、セッティングはロード時に評価される特殊なタスクと考えることができる。
 </p><p>プロジェクトの名前と同じ <code>organization</code> を定義してみよう。
@@ -661,14 +664,11 @@ organization := name.value
     case _      =&gt; old
   }
 }
-</code></pre><h3 id="%E3%81%9D%E3%82%82%E3%81%9D%E3%82%82+build.sbt+DSL+%E3%81%AF%E4%BD%95%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AB%E3%81%82%E3%82%8B%3F">そもそも build.sbt DSL は何のためにある?<a href="#%E3%81%9D%E3%82%82%E3%81%9D%E3%82%82+build.sbt+DSL+%E3%81%AF%E4%BD%95%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AB%E3%81%82%E3%82%8B%3F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>以前みたように<a href="Basic-Def.html">ビルド定義</a>は、<code>settings</code>
-というキーと値のペア群を持つサブプロジェクトの集合から構成される。
-実は、それには奥がある。
-<code>settings</code> をキーと値のペア群だと考えるよりも、
-より良いアナロジーは、辺を<strong>事前発生</strong> (happens-before) 関係とするタスクの有向非巡回グラフだと考える事だ。
-</p><p>つまり、<code>Setting</code> 列がエンコードするのはタスクとタスク間の依存性であって、
+</code></pre><h3 id="%E3%81%9D%E3%82%82%E3%81%9D%E3%82%82+build.sbt+DSL+%E3%81%AF%E4%BD%95%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AB%E3%81%82%E3%82%8B%3F">そもそも build.sbt DSL は何のためにある?<a href="#%E3%81%9D%E3%82%82%E3%81%9D%E3%82%82+build.sbt+DSL+%E3%81%AF%E4%BD%95%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AB%E3%81%82%E3%82%8B%3F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> DSL は、セッティングやタスクの有向非巡回グラフを構築するためのドメイン特化言語だ。
+セッティング式はセッティング、タスク、そしてそれらの間の依存性をエンコードする。
+</p><p>この構造は
 <a href="https://en.wikipedia.org/wiki/Make_(software)">Make</a> (1976)、 <a href="http://ant.apache.org/">Ant</a> (2000)、 <a href="https://ruby.github.io/rake/">Rake</a> (2003)
-などにも類似する。
+などにも共通する。
 </p><h4 id="Make+%E5%85%A5%E9%96%80">Make 入門<a href="#Make+%E5%85%A5%E9%96%80" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Makefile の基本的な構文は以下のようになる:
 </p><pre><code class="">target: dependencies
 [tab] system command1
@@ -883,6 +883,7 @@ sbt はフォールバックとして <code>ThisBuild</code> 内を探す。
 </p><p>便宜のため、セッティング式のキーと本文の両方を <code>ThisBuild</code>
 にスコープ付けする
 <code>inThisBuild(...)</code> という関数が用意されている。
+セッティング式を渡すと、それに <code>in ThisBuild</code> を可能な所に追加したのと同じものが得られる。
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
   .settings(
     inThisBuild(List(

@@ -82,9 +82,9 @@ val clean = taskKey[Unit](&quot;Deletes files produced by the build, such as gen
     name := &quot;Hello&quot;,
     organization := &quot;com.example&quot;,
     scalaVersion := &quot;2.12.1&quot;,
-    version      := &quot;0.1.0-SNAPSHOT&quot;,
+    version := &quot;0.1.0-SNAPSHOT&quot;,
     scalacOptions := {
-      val out = streams.value // stream タスクは scalacOptions よりも事前発生する
+      val out = streams.value // streams タスクは scalacOptions よりも事前発生する
       val log = out.log
       log.info(&quot;123&quot;)
       val ur = update.value   // update タスクは scalacOptions よりも事前発生する
@@ -109,7 +109,7 @@ val clean = taskKey[Unit](&quot;Deletes files produced by the build, such as gen
     name := &quot;Hello&quot;,
     organization := &quot;com.example&quot;,
     scalaVersion := &quot;2.12.1&quot;,
-    version      := &quot;0.1.0-SNAPSHOT&quot;,
+    version := &quot;0.1.0-SNAPSHOT&quot;,
     scalacOptions := {
       val ur = update.value  // update task happens-before scalacOptions
       if (false) {
@@ -201,7 +201,7 @@ build.sbt に慣れるまでは、<code>.value</code> の呼び出しをタス�
     name := &quot;Hello&quot;,
     organization := &quot;com.example&quot;,
     scalaVersion := &quot;2.12.1&quot;,
-    version      := &quot;0.1.0-SNAPSHOT&quot;,
+    version := &quot;0.1.0-SNAPSHOT&quot;,
     scalacOptions := List(&quot;-encoding&quot;, &quot;utf8&quot;, &quot;-Xfatal-warnings&quot;, &quot;-deprecation&quot;, &quot;-unchecked&quot;),
     scalacOptions := {
       val old = scalacOptions.value
@@ -238,7 +238,7 @@ val checksums = settingKey[Seq[String]](&quot;The list of checksums to generate 
 scalacOptions := checksums.value
 </code></pre><p>逆方向への依存、つまりタスクの値に依存したセッティングキーの値を定義することはどうしてもできない。
 なぜなら、セッティングキーの値はプロジェクトのロード時に一度だけしか計算されず、毎回再実行されるべきタスクが毎回実行されなくなってしまうからだ。
-</p><pre><code class="prettyprint lang-scala">// checksums セッティングは scalacOptions タスクに関連付けても、値が定まらないかもしれない
+</p><pre><code class="prettyprint lang-scala">// 悪い例: checksums セッティングは scalacOptions タスクに関連付けて定義することはできない!
 checksums := scalacOptions.value
 </code></pre><h4 id="%E4%BB%96%E3%81%AE%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AB%E4%BE%9D%E5%AD%98%E3%81%97%E3%81%9F%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AE%E5%AE%9A%E7%BE%A9">他のセッティングに依存したセッティングの定義<a href="#%E4%BB%96%E3%81%AE%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AB%E4%BE%9D%E5%AD%98%E3%81%97%E3%81%9F%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AE%E5%AE%9A%E7%BE%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>実行のタイミングという観点から見ると、セッティングはロード時に評価される特殊なタスクと考えることができる。
 </p><p>プロジェクトの名前と同じ <code>organization</code> を定義してみよう。
@@ -254,14 +254,11 @@ organization := name.value
     case _      =&gt; old
   }
 }
-</code></pre><h3 id="%E3%81%9D%E3%82%82%E3%81%9D%E3%82%82+build.sbt+DSL+%E3%81%AF%E4%BD%95%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AB%E3%81%82%E3%82%8B%3F">そもそも build.sbt DSL は何のためにある?<a href="#%E3%81%9D%E3%82%82%E3%81%9D%E3%82%82+build.sbt+DSL+%E3%81%AF%E4%BD%95%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AB%E3%81%82%E3%82%8B%3F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>以前みたように<a href="Basic-Def.html">ビルド定義</a>は、<code>settings</code>
-というキーと値のペア群を持つサブプロジェクトの集合から構成される。
-実は、それには奥がある。
-<code>settings</code> をキーと値のペア群だと考えるよりも、
-より良いアナロジーは、辺を<strong>事前発生</strong> (happens-before) 関係とするタスクの有向非巡回グラフだと考える事だ。
-</p><p>つまり、<code>Setting</code> 列がエンコードするのはタスクとタスク間の依存性であって、
+</code></pre><h3 id="%E3%81%9D%E3%82%82%E3%81%9D%E3%82%82+build.sbt+DSL+%E3%81%AF%E4%BD%95%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AB%E3%81%82%E3%82%8B%3F">そもそも build.sbt DSL は何のためにある?<a href="#%E3%81%9D%E3%82%82%E3%81%9D%E3%82%82+build.sbt+DSL+%E3%81%AF%E4%BD%95%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AB%E3%81%82%E3%82%8B%3F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> DSL は、セッティングやタスクの有向非巡回グラフを構築するためのドメイン特化言語だ。
+セッティング式はセッティング、タスク、そしてそれらの間の依存性をエンコードする。
+</p><p>この構造は
 <a href="https://en.wikipedia.org/wiki/Make_(software)">Make</a> (1976)、 <a href="http://ant.apache.org/">Ant</a> (2000)、 <a href="https://ruby.github.io/rake/">Rake</a> (2003)
-などにも類似する。
+などにも共通する。
 </p><h4 id="Make+%E5%85%A5%E9%96%80">Make 入門<a href="#Make+%E5%85%A5%E9%96%80" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Makefile の基本的な構文は以下のようになる:
 </p><pre><code class="">target: dependencies
 [tab] system command1

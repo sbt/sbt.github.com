@@ -290,7 +290,7 @@ src/
 ソースコードは `hello/app.scala` のようにプロジェクトのベースディレクトリに置くこともできるが、
 小さいプロジェクトはともかくとして、通常のプロジェクトでは
 `src/main/` 以下のディレクトリにソースを入れて整理するのが普通だ。
-ルートに `*.scala` ソースコードを配置できるのは小手先だけのトリックに見えるかもしれないが、
+ベースディレクトリに `*.scala` ソースコードを配置できるのは小手先だけのトリックに見えるかもしれないが、
 この機能は[後ほど][Organizing-Build]重要になる。
 
 ### sbt ビルド定義ファイル
@@ -549,7 +549,7 @@ lazy val root = (project in file("."))
   )
 ```
 
-それぞれのサブプロジェクトは、それを記述するキーと値のペアの列に関連付けられる。
+それぞれのサブプロジェクトは、キーと値のペアによって詳細が設定される。
 
 例えば、`name` というキーがあるが、それはサブプロジェクト名という文字列の値に関連付けられる。
 キーと値のペア列は `.settings(...)` メソッド内に列挙される:
@@ -590,7 +590,10 @@ build.sbt DSL を詳しくみてみよう:<br>
 3. 右辺項は**本文** (body)、もしくは**セッティング本文**という。
 
 左辺値の `name`、`version`、および `scalaVersion` は**キー**である。
-キーは `SettingKey[T]`、`TaskKey[T]`、もしくは `InputKey[T]` のインスタンスで、
+キーは
+[`SettingKey[T]`](../api/index.html#sbt.SettingKey)、
+[`TaskKey[T]`](../api/index.html#sbt.TaskKey)、もしくは
+[`InputKey[T]`]((../api/index.html#sbt.InputKey)) のインスタンスで、
 `T` はその値の型である。キーの種類に関しては後述する。
 
 `name` キーは `SettingKey[String]` に型付けされているため、
@@ -827,9 +830,9 @@ lazy val root = (project in file(".")).
     name := "Hello",
     organization := "com.example",
     scalaVersion := "2.12.1",
-    version      := "0.1.0-SNAPSHOT",
+    version := "0.1.0-SNAPSHOT",
     scalacOptions := {
-      val out = streams.value // stream タスクは scalacOptions よりも事前発生する
+      val out = streams.value // streams タスクは scalacOptions よりも事前発生する
       val log = out.log
       log.info("123")
       val ur = update.value   // update タスクは scalacOptions よりも事前発生する
@@ -863,7 +866,7 @@ lazy val root = (project in file(".")).
     name := "Hello",
     organization := "com.example",
     scalaVersion := "2.12.1",
-    version      := "0.1.0-SNAPSHOT",
+    version := "0.1.0-SNAPSHOT",
     scalacOptions := {
       val ur = update.value  // update task happens-before scalacOptions
       if (false) {
@@ -989,7 +992,7 @@ lazy val root = (project in file(".")).
     name := "Hello",
     organization := "com.example",
     scalaVersion := "2.12.1",
-    version      := "0.1.0-SNAPSHOT",
+    version := "0.1.0-SNAPSHOT",
     scalacOptions := List("-encoding", "utf8", "-Xfatal-warnings", "-deprecation", "-unchecked"),
     scalacOptions := {
       val old = scalacOptions.value
@@ -1044,7 +1047,7 @@ scalacOptions := checksums.value
 なぜなら、セッティングキーの値はプロジェクトのロード時に一度だけしか計算されず、毎回再実行されるべきタスクが毎回実行されなくなってしまうからだ。
 
 ```scala
-// checksums セッティングは scalacOptions タスクに関連付けても、値が定まらないかもしれない
+// 悪い例: checksums セッティングは scalacOptions タスクに関連付けて定義することはできない!
 checksums := scalacOptions.value
 ```
 
@@ -1075,15 +1078,12 @@ scalaSource in Compile := {
 
 ### そもそも build.sbt DSL は何のためにある?
 
-以前みたように[ビルド定義][Basic-Def]は、`settings`
-というキーと値のペア群を持つサブプロジェクトの集合から構成される。
-実は、それには奥がある。
-`settings` をキーと値のペア群だと考えるよりも、
-より良いアナロジーは、辺を**事前発生** (happens-before) 関係とするタスクの有向非巡回グラフだと考える事だ。
+`build.sbt` DSL は、セッティングやタスクの有向非巡回グラフを構築するためのドメイン特化言語だ。
+セッティング式はセッティング、タスク、そしてそれらの間の依存性をエンコードする。
 
-つまり、`Setting` 列がエンコードするのはタスクとタスク間の依存性であって、
+この構造は
 [Make][Make] (1976)、 [Ant][Ant] (2000)、 [Rake][Rake] (2003)
-などにも類似する。
+などにも共通する。
 
 #### Make 入門
 
@@ -1450,6 +1450,7 @@ sbt はフォールバックとして `ThisBuild` 内を探す。
 便宜のため、セッティング式のキーと本文の両方を `ThisBuild`
 にスコープ付けする
 `inThisBuild(...)` という関数が用意されている。
+セッティング式を渡すと、それに `in ThisBuild` を可能な所に追加したのと同じものが得られる。
 
 ```scala
 lazy val root = (project in file("."))

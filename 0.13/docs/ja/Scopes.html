@@ -212,6 +212,7 @@ sbt はフォールバックとして <code>ThisBuild</code> 内を探す。
 </p><p>便宜のため、セッティング式のキーと本文の両方を <code>ThisBuild</code>
 にスコープ付けする
 <code>inThisBuild(...)</code> という関数が用意されている。
+セッティング式を渡すと、それに <code>in ThisBuild</code> を可能な所に追加したのと同じものが得られる。
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
   .settings(
     inThisBuild(List(

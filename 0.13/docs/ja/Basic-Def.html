@@ -67,7 +67,7 @@ sbt バージョンを指定する:
     name := &quot;Hello&quot;,
     scalaVersion := &quot;2.12.1&quot;
   )
-</code></pre><p>それぞれのサブプロジェクトは、それを記述するキーと値のペアの列に関連付けられる。
+</code></pre><p>それぞれのサブプロジェクトは、キーと値のペアによって詳細が設定される。
 </p><p>例えば、<code>name</code> というキーがあるが、それはサブプロジェクト名という文字列の値に関連付けられる。
 キーと値のペア列は <code>.settings(...)</code> メソッド内に列挙される:
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
@@ -94,7 +94,10 @@ sbt バージョンを指定する:
 </li><li><strong>演算子</strong>。この場合は <code>:=</code>。
 </li><li>右辺項は<strong>本文</strong> (body)、もしくは<strong>セッティング本文</strong>という。
 </li></ol><p>左辺値の <code>name</code>、<code>version</code>、および <code>scalaVersion</code> は<strong>キー</strong>である。
-キーは <code>SettingKey[T]</code>、<code>TaskKey[T]</code>、もしくは <code>InputKey[T]</code> のインスタンスで、
+キーは
+<a href="../api/index.html#sbt.SettingKey"><code>SettingKey[T]</code></a>、
+<a href="../api/index.html#sbt.TaskKey"><code>TaskKey[T]</code></a>、もしくは
+<a href="(../api/index.html#sbt.InputKey)"><code>InputKey[T]</code></a> のインスタンスで、
 <code>T</code> はその値の型である。キーの種類に関しては後述する。
 </p><p><code>name</code> キーは <code>SettingKey[String]</code> に型付けされているため、
 <code>name</code> の <code>:=</code> 演算子も <code>String</code> に型付けされている。

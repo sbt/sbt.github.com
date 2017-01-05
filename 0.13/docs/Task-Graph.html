@@ -45,7 +45,7 @@
           <div class="span-16 prepend-1 append-1 contents">
             <h2 id="Task+graph">Task graph<a href="#Task+graph" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Continuing from <a href="Basic-Def.html">build definition</a>,
 this page explains <code>build.sbt</code> definition in more detail.
-</p><p>Rather than thinking <code>settings</code> as a key-value pairs,
+</p><p>Rather than thinking of <code>settings</code> as key-value pairs,
 a better analogy would be to think of it as a <em>directed acyclic graph</em> (DAG)
 of tasks where the edges denote <strong>happens-before</strong>. Let’s call this the <em>task graph</em>.
 </p><h3 id="Terminology">Terminology<a href="#Terminology" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Let’s review the key terms before we dive in.
@@ -83,9 +83,9 @@ regardless of which line it appears in the body.</strong>
     name := &quot;Hello&quot;,
     organization := &quot;com.example&quot;,
     scalaVersion := &quot;2.12.1&quot;,
-    version      := &quot;0.1.0-SNAPSHOT&quot;,
+    version := &quot;0.1.0-SNAPSHOT&quot;,
     scalacOptions := {
-      val out = streams.value // stream task happens-before scalacOptions
+      val out = streams.value // streams task happens-before scalacOptions
       val log = out.log
       log.info(&quot;123&quot;)
       val ur = update.value   // update task happens-before scalacOptions
@@ -110,7 +110,7 @@ either of them.
     name := &quot;Hello&quot;,
     organization := &quot;com.example&quot;,
     scalaVersion := &quot;2.12.1&quot;,
-    version      := &quot;0.1.0-SNAPSHOT&quot;,
+    version := &quot;0.1.0-SNAPSHOT&quot;,
     scalacOptions := {
       val ur = update.value  // update task happens-before scalacOptions
       if (false) {
@@ -211,7 +211,7 @@ filter out <code>&quot;-Xfatal-warnings&quot;</code> and <code>&quot;-deprecatio
     name := &quot;Hello&quot;,
     organization := &quot;com.example&quot;,
     scalaVersion := &quot;2.12.1&quot;,
-    version      := &quot;0.1.0-SNAPSHOT&quot;,
+    version := &quot;0.1.0-SNAPSHOT&quot;,
     scalacOptions := List(&quot;-encoding&quot;, &quot;utf8&quot;, &quot;-Xfatal-warnings&quot;, &quot;-deprecation&quot;, &quot;-unchecked&quot;),
     scalacOptions := {
       val old = scalacOptions.value
@@ -241,8 +241,8 @@ filter out <code>&quot;-Xfatal-warnings&quot;</code> and <code>&quot;-deprecatio
 </code></pre><p>Next, take these two keys (from <a href="../sxr/sbt/Keys.scala.html">Keys</a>):
 </p><pre><code class="prettyprint lang-scala">val scalacOptions = taskKey[Seq[String]](&quot;Options for the Scala compiler.&quot;)
 val checksums = settingKey[Seq[String]](&quot;The list of checksums to generate and to verify for dependencies.&quot;)
-</code></pre><p><strong>Note</strong>: <code>scalacOptions</code> and <code>checksums</code> have nothing to do with each other, they
-are just two keys with the same value type, where one is a task.
+</code></pre><p><strong>Note</strong>: <code>scalacOptions</code> and <code>checksums</code> have nothing to do with each other.
+They are just two keys with the same value type, where one is a task.
 </p><p>It is possible to compile a <code>build.sbt</code> that aliases <code>scalacOptions</code> to
 <code>checksums</code>, but not the other way. For example, this is allowed:
 </p><pre><code class="prettyprint lang-scala">// The scalacOptions task may be defined in terms of the checksums setting
@@ -251,10 +251,10 @@ scalacOptions := checksums.value
 can’t depend on a task key. That’s because a setting key is only
 computed once on project load, so the task would not be re-run every
 time, and tasks expect to re-run every time.
-</p><pre><code class="prettyprint lang-scala">// The checksums setting may not be defined in terms of the scalacOptions task
+</p><pre><code class="prettyprint lang-scala">// Bad example: The checksums setting cannot be defined in terms of the scalacOptions task!
 checksums := scalacOptions.value
 </code></pre><h4 id="Defining+a+setting+that+depends+on+other+settings">Defining a setting that depends on other settings<a href="#Defining+a+setting+that+depends+on+other+settings" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>In terms of the execution timing, we can think of the settings
-as a special tasks that evaluate during the loading time.
+as a special tasks that evaluate during loading time.
 </p><p>Consider defining the project organization to be the same as the project name.
 </p><pre><code class="prettyprint lang-scala">// name our organization after our project (both are SettingKey[String])
 organization := name.value
@@ -268,14 +268,9 @@ only when <code>scalaBinaryVersion</code> is <code>&quot;2.11&quot;</code>.
     case _      =&gt; old
   }
 }
-</code></pre><h3 id="What%E2%80%99s+the+point+of+the+build.sbt+DSL%3F">What’s the point of the build.sbt DSL?<a href="#What%E2%80%99s+the+point+of+the+build.sbt+DSL%3F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>As we saw before, a <a href="Basic-Def.html">build definition</a> consists of subprojects
-with a sequence of key-value pairs called <code>settings</code> describing the subproject.
-There’s more to the story.
-Rather than thinking <code>settings</code> as a key-value pairs,
-a better analogy would be to think of it as a DAG
-of tasks where the edges denote <strong>happens-before</strong>.
-</p><p>What the <code>Setting</code> sequence encodes is tasks and the dependencies among them,
-similar to <a href="https://en.wikipedia.org/wiki/Make_(software)">Make</a> (1976), <a href="http://ant.apache.org/">Ant</a> (2000), and <a href="https://ruby.github.io/rake/">Rake</a> (2003).
+</code></pre><h3 id="What%E2%80%99s+the+point+of+the+build.sbt+DSL%3F">What’s the point of the build.sbt DSL?<a href="#What%E2%80%99s+the+point+of+the+build.sbt+DSL%3F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The <code>build.sbt</code> DSL is a domain-specific language used construct a DAG of settings and tasks.
+The setting expressions encode settings, tasks and the dependencies among them.
+</p><p>This structure is common to <a href="https://en.wikipedia.org/wiki/Make_(software)">Make</a> (1976), <a href="http://ant.apache.org/">Ant</a> (2000), and <a href="https://ruby.github.io/rake/">Rake</a> (2003).
 </p><h4 id="Intro+to+Make">Intro to Make<a href="#Intro+to+Make" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The basic Makefile syntax looks like the following:
 </p><pre><code class="">target: dependencies
 [tab] system command1

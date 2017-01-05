@@ -212,7 +212,7 @@ directories will be ignored.
 <code>hello/app.scala</code>, which may be for small projects,
 though for normal projects people tend to keep the projects in
 the <code>src/main/</code> directory to keep things neat.
-The fact that you can place <code>*.scala</code> source code might seem like
+The fact that you can place <code>*.scala</code> source code in the base directory might seem like
 an odd trick, but this fact becomes relevant <a href="Organizing-Build.html">later</a>.
 </p><h3 id="sbt+build+definition+files">sbt build definition files<a href="#sbt+build+definition+files" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The build definition is described in <code>build.sbt</code> (actually any files named <code>*.sbt</code>) in the project’s base directory.
 </p><pre><code class="">build.sbt
@@ -377,7 +377,7 @@ the subproject located in the current directory like this:
     name := &quot;Hello&quot;,
     scalaVersion := &quot;2.12.1&quot;
   )
-</code></pre><p>Each subproject is associated with a sequence of key-value pairs describing the subproject.
+</code></pre><p>Each subproject is configured by key-value pairs.
 </p><p>For example, one key is <code>name</code> and it maps to a string value, the name of
 your subproject.
 The key-value pairs are listed under the <code>.settings(...)</code> method as follows:
@@ -395,7 +395,7 @@ called <em>setting expressions</em> using <em>build.sbt DSL</em>.
     scalaVersion := &quot;2.12.1&quot;,
     version      := &quot;0.1.0-SNAPSHOT&quot;
   )
-</code></pre><p>Let’s take a closer look at the build.sbt DSL:
+</code></pre><p>Let’s take a closer look at the <code>build.sbt</code> DSL:
 <img src="files/setting-expression.png" alt="setting expression"/><br>
 <br>
 Each entry is called a <em>setting expression</em>.
@@ -406,7 +406,10 @@ We will see more on the difference later in this page.
 </li><li><em>Operator</em>, which in this case is <code>:=</code>
 </li><li>Right-hand side is called the <em>body</em>, or the <em>setting body</em>.
 </li></ol><p>On the left-hand side, <code>name</code>, <code>version</code>, and <code>scalaVersion</code> are <em>keys</em>.
-A key is an instance of <code>SettingKey[T]</code>, <code>TaskKey[T]</code>, or <code>InputKey[T]</code> where <code>T</code> is the
+A key is an instance of
+<a href="../api/index.html#sbt.SettingKey"><code>SettingKey[T]</code></a>,
+<a href="../api/index.html#sbt.TaskKey"><code>TaskKey[T]</code></a>, or
+<a href="../api/index.html#sbt.InputKey"><code>InputKey[T]</code></a> where <code>T</code> is the
 expected value type. The kinds of key are explained below.
 </p><p>Because key <code>name</code> is typed to <code>SettingKey[String]</code>,
 the <code>:=</code> operator on <code>name</code> is also typed specifically to <code>String</code>.
@@ -529,7 +532,7 @@ Getting Started Guide. There’s a
 <a href="Library-Dependencies.html">whole page</a> covering it later on.
 </p><h2 id="Task+graph">Task graph<a href="#Task+graph" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Continuing from <a href="Basic-Def.html">build definition</a>,
 this page explains <code>build.sbt</code> definition in more detail.
-</p><p>Rather than thinking <code>settings</code> as a key-value pairs,
+</p><p>Rather than thinking of <code>settings</code> as key-value pairs,
 a better analogy would be to think of it as a <em>directed acyclic graph</em> (DAG)
 of tasks where the edges denote <strong>happens-before</strong>. Let’s call this the <em>task graph</em>.
 </p><h3 id="Terminology">Terminology<a href="#Terminology" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Let’s review the key terms before we dive in.
@@ -567,9 +570,9 @@ regardless of which line it appears in the body.</strong>
     name := &quot;Hello&quot;,
     organization := &quot;com.example&quot;,
     scalaVersion := &quot;2.12.1&quot;,
-    version      := &quot;0.1.0-SNAPSHOT&quot;,
+    version := &quot;0.1.0-SNAPSHOT&quot;,
     scalacOptions := {
-      val out = streams.value // stream task happens-before scalacOptions
+      val out = streams.value // streams task happens-before scalacOptions
       val log = out.log
       log.info(&quot;123&quot;)
       val ur = update.value   // update task happens-before scalacOptions
@@ -594,7 +597,7 @@ either of them.
     name := &quot;Hello&quot;,
     organization := &quot;com.example&quot;,
     scalaVersion := &quot;2.12.1&quot;,
-    version      := &quot;0.1.0-SNAPSHOT&quot;,
+    version := &quot;0.1.0-SNAPSHOT&quot;,
     scalacOptions := {
       val ur = update.value  // update task happens-before scalacOptions
       if (false) {
@@ -695,7 +698,7 @@ filter out <code>&quot;-Xfatal-warnings&quot;</code> and <code>&quot;-deprecatio
     name := &quot;Hello&quot;,
     organization := &quot;com.example&quot;,
     scalaVersion := &quot;2.12.1&quot;,
-    version      := &quot;0.1.0-SNAPSHOT&quot;,
+    version := &quot;0.1.0-SNAPSHOT&quot;,
     scalacOptions := List(&quot;-encoding&quot;, &quot;utf8&quot;, &quot;-Xfatal-warnings&quot;, &quot;-deprecation&quot;, &quot;-unchecked&quot;),
     scalacOptions := {
       val old = scalacOptions.value
@@ -725,8 +728,8 @@ filter out <code>&quot;-Xfatal-warnings&quot;</code> and <code>&quot;-deprecatio
 </code></pre><p>Next, take these two keys (from <a href="../sxr/sbt/Keys.scala.html">Keys</a>):
 </p><pre><code class="prettyprint lang-scala">val scalacOptions = taskKey[Seq[String]](&quot;Options for the Scala compiler.&quot;)
 val checksums = settingKey[Seq[String]](&quot;The list of checksums to generate and to verify for dependencies.&quot;)
-</code></pre><p><strong>Note</strong>: <code>scalacOptions</code> and <code>checksums</code> have nothing to do with each other, they
-are just two keys with the same value type, where one is a task.
+</code></pre><p><strong>Note</strong>: <code>scalacOptions</code> and <code>checksums</code> have nothing to do with each other.
+They are just two keys with the same value type, where one is a task.
 </p><p>It is possible to compile a <code>build.sbt</code> that aliases <code>scalacOptions</code> to
 <code>checksums</code>, but not the other way. For example, this is allowed:
 </p><pre><code class="prettyprint lang-scala">// The scalacOptions task may be defined in terms of the checksums setting
@@ -735,10 +738,10 @@ scalacOptions := checksums.value
 can’t depend on a task key. That’s because a setting key is only
 computed once on project load, so the task would not be re-run every
 time, and tasks expect to re-run every time.
-</p><pre><code class="prettyprint lang-scala">// The checksums setting may not be defined in terms of the scalacOptions task
+</p><pre><code class="prettyprint lang-scala">// Bad example: The checksums setting cannot be defined in terms of the scalacOptions task!
 checksums := scalacOptions.value
 </code></pre><h4 id="Defining+a+setting+that+depends+on+other+settings">Defining a setting that depends on other settings<a href="#Defining+a+setting+that+depends+on+other+settings" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>In terms of the execution timing, we can think of the settings
-as a special tasks that evaluate during the loading time.
+as a special tasks that evaluate during loading time.
 </p><p>Consider defining the project organization to be the same as the project name.
 </p><pre><code class="prettyprint lang-scala">// name our organization after our project (both are SettingKey[String])
 organization := name.value
@@ -752,14 +755,9 @@ only when <code>scalaBinaryVersion</code> is <code>&quot;2.11&quot;</code>.
     case _      =&gt; old
   }
 }
-</code></pre><h3 id="What%E2%80%99s+the+point+of+the+build.sbt+DSL%3F">What’s the point of the build.sbt DSL?<a href="#What%E2%80%99s+the+point+of+the+build.sbt+DSL%3F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>As we saw before, a <a href="Basic-Def.html">build definition</a> consists of subprojects
-with a sequence of key-value pairs called <code>settings</code> describing the subproject.
-There’s more to the story.
-Rather than thinking <code>settings</code> as a key-value pairs,
-a better analogy would be to think of it as a DAG
-of tasks where the edges denote <strong>happens-before</strong>.
-</p><p>What the <code>Setting</code> sequence encodes is tasks and the dependencies among them,
-similar to <a href="https://en.wikipedia.org/wiki/Make_(software)">Make</a> (1976), <a href="http://ant.apache.org/">Ant</a> (2000), and <a href="https://ruby.github.io/rake/">Rake</a> (2003).
+</code></pre><h3 id="What%E2%80%99s+the+point+of+the+build.sbt+DSL%3F">What’s the point of the build.sbt DSL?<a href="#What%E2%80%99s+the+point+of+the+build.sbt+DSL%3F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The <code>build.sbt</code> DSL is a domain-specific language used construct a DAG of settings and tasks.
+The setting expressions encode settings, tasks and the dependencies among them.
+</p><p>This structure is common to <a href="https://en.wikipedia.org/wiki/Make_(software)">Make</a> (1976), <a href="http://ant.apache.org/">Ant</a> (2000), and <a href="https://ruby.github.io/rake/">Rake</a> (2003).
 </p><h4 id="Intro+to+Make">Intro to Make<a href="#Intro+to+Make" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The basic Makefile syntax looks like the following:
 </p><pre><code class="">target: dependencies
 [tab] system command1
@@ -1052,12 +1050,13 @@ with no in, a scope is implicitly assumed: current project, global
 config, global task).
 </p><h4 id="Build-wide+settings">Build-wide settings<a href="#Build-wide+settings" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>An advanced technique for factoring out common settings
 across subprojects is to define the settings scoped to <code>ThisBuild</code>.
-</p><p>If a key is not defined scoped to a particular subproject,
+</p><p>If a key that is scoped to a particular subproject is not found,
 sbt will look for it in <code>ThisBuild</code> as a fallback.
 Using the mechanism, we can define a build-wide default setting for
 frequently used keys such as <code>version</code>, <code>scalaVersion</code>, and <code>organization</code>.
 </p><p>For convenience, there is <code>inThisBuild(...)</code> function that will
 scope both the key and the body of the setting expression to <code>ThisBuild</code>.
+Putting setting expressions in there would be equivalent to appending <code>in ThisBuild</code> where possible.
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
   .settings(
     inThisBuild(List(
@@ -1109,7 +1108,7 @@ for example. When this happens, be sure you’re using the key in the
 [scope][Scopes] that defines it.
 </p><p>It’s possible to create cycles, which is an error; sbt will tell you if
 you do this.
-</p><h4 id="Tasks+based+on+other+keys%E2%80%99+values">Tasks based on other keys’ values<a href="#Tasks+based+on+other+keys%E2%80%99+values" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>You can compute values of some tasks or settings to define or append value for another task. It’s done by using <code>Def.task</code> and <code>taskValue</code>, as argument to <code>:=</code>, <code>+=</code> or <code>++=</code>.
+</p><h4 id="Tasks+based+on+other+keys%E2%80%99+values">Tasks based on other keys’ values<a href="#Tasks+based+on+other+keys%E2%80%99+values" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>You can compute values of some tasks or settings to define or append a value for another task. It’s done by using <code>Def.task</code> and <code>taskValue</code> as an argument to <code>:=</code>, <code>+=</code>, or <code>++=</code>.
 </p><p>As a first example, consider appending a source generator using the project base directory and compilation classpath.
 </p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile += Def.task {
   myGenerator(baseDirectory.value, (managedClasspath in Compile).value)
@@ -1273,7 +1272,7 @@ other project.
 lazy val core = (project in file(&quot;core&quot;))
 </code></pre><p>The name of the val is used as the subproject’s ID, which
 is used to refer to the subproject at the sbt shell.
-</p><p>Optionally the base directory may be omitted if it’s same as the name of the val.
+</p><p>Optionally the base directory may be omitted if it’s the same as the name of the val.
 </p><pre><code class="prettyprint lang-scala">lazy val util = project
 
 lazy val core = project
