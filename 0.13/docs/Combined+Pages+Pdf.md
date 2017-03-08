@@ -1419,7 +1419,7 @@ scoped keys like this:
 {<build-uri>}<project-id>/config:intask::key
 ```
 
-- `{<build-uri>}/<project-id>` identifies the project axis. The
+- `{<build-uri>}<project-id>` identifies the project axis. The
   `<project-id>` part will be missing if the project axis has "entire build" scope.
 - `config` identifies the configuration axis.
 - `intask` identifies the task axis.
@@ -3616,13 +3616,14 @@ plugin).
 
 To do this, we need to perform the following steps:
 
-### Create an account on Bintray
+### Create an Open Source Distribution account on Bintray
 
-First, go to <https://bintray.com>. Click on the sign in link on the top
-left, and then the sign up button.
+First, go to <https://bintray.com/signup/oss> to create an Open Source Distribution Bintray Account.
 
-*Note: If you had an account on repo.scala-sbt.org previous, please use
-the same email address when you create this account.*
+If you end up at the [Bintray home page](https://bintray.com), do NOT click on the Free Trial,
+but click on the link that reads **"For Open Source Distribution Sign Up Here"**.
+
+<img src="files/bintray-signup.png" style="width: 100%; height: 100%">
 
 ### Create a repository for your sbt plugins
 
@@ -3655,7 +3656,7 @@ First, add the bintray-sbt to your plugin build.
 First, create a `project/bintray.sbt` file
 
 ```scala
-addSbtPlugin("me.lessis" % "bintray-sbt" % "0.2.1")
+addSbtPlugin("me.lessis" % "bintray-sbt" % "0.3.0")
 ```
 
 Next, a make sure your `build.sbt` file has the following settings
@@ -3669,7 +3670,7 @@ lazy val commonSettings = Seq(
 )
 
 lazy val root = (project in file(".")).
-  settings(commonSettings ++ bintrayPublishSettings: _*).
+  settings(commonSettings).
   settings(
     sbtPlugin := true,
     name := "<YOUR PLUGIN HERE>",
@@ -3678,7 +3679,7 @@ lazy val root = (project in file(".")).
     // (using a canonical name).
     licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html")),
     publishMavenStyle := false,
-    repository in bintray := "sbt-plugins",
+    bintrayRepository := "sbt-plugins",
     bintrayOrganization in bintray := None
   )
 ```
@@ -10552,12 +10553,14 @@ Code in `util/src/main/scala/` is available for both the `macroSub` and
 ### Distribution
 
 To include the macro code with the core code, add the binary and source
-mappings from the macro subproject to the core project. For example, the
-`core` Project definition above would now look like:
+mappings from the macro subproject to the core project. And also
+macro subproject should be removed from core project dependency in
+publishing. For example, the `core` Project definition above would now
+look like:
 
 ```scala
 lazy val core = (project in file("core")).
-  dependsOn(macroSub).
+  dependsOn(macroSub % "compile-internal, test-internal").
   settings(commonSettings: _*).
   settings(
     // include the macro classes and resources in the main jar
@@ -16755,7 +16758,7 @@ Again, let's check the Travis log to see if the flags are taking effect:
 
 **Note**: This duplicates the `-Xms` flag as intended, which might not the best thing to do.
 
-### (Experimental) Reusing Ivy cache
+### Caching
 
 In late 2014, thanks to Travis CI members sending pull requests on GitHub, we learned that Ivy cache can be shared across the Travis builds.
 The public availability of [caching][Travis-caching] is part of the benefit for trying the new [container-based infrastructure][Travis-container].
@@ -16780,16 +16783,16 @@ Next, we can put `cache` section as follows:
 cache:
   directories:
     - $HOME/.ivy2/cache
-    - $HOME/.sbt/boot/
+    - $HOME/.sbt
 ```
 
 Finally, the following a few lines of cleanup script are added:
 
 ```yml
 before_cache:
-  # Tricks to avoid unnecessary cache updates
-  - find $HOME/.ivy2 -name "ivydata-*.properties" -delete
-  - find $HOME/.sbt -name "*.lock" -delete
+  # Cleanup the cached directories to avoid unnecessary cache updates
+  - find $HOME/.ivy2/cache -name "ivydata-*.properties" -print -delete
+  - find $HOME/.sbt        -name "*.lock"               -print -delete
 ```
 
 With the above changes combined Travis CI will tar up the cached directories and uploads them to Amazon S3.
@@ -18537,11 +18540,28 @@ the ones provided by the old function.
 
 The special task `streams` provides per-task logging and I/O via a
 [Streams](../api/#sbt.std.Streams) instance. To log, a task uses
-the `log` member from the `streams` task:
+the `log` member from the `streams` task. Calling `log` provides
+a [Logger](../api/#sbt.Logger).
+
+:
 
 ```scala
 myTask := {
   val log = streams.value.log
+  log.warn("A warning.")
+}
+```
+
+### Log messages in a setting
+
+Since settings cannot reference tasks, the special task `streams`
+cannot be used to provide logging during setting initialization.
+The recommented way is to use `sLog`. Calling `sLog.value` provides
+a [Logger](../api/#sbt.Logger).
+
+```scala
+mySetting := {
+  val log = sLog.value
   log.warn("A warning.")
 }
 ```
@@ -20045,7 +20065,7 @@ to `false`. For example,
 
 #### How can I start a Scala interpreter (REPL) with sbt project configuration (dependencies, etc.)?
 
-You may run `sbt console`.
+In sbt's shell run `console`.
 
 ### Build definitions
 
@@ -20896,16 +20916,16 @@ Mark remained the primary author of sbt until sbt 0.13.1 (2013-12-11).
 In 2014, sbt project was handed over to the authors of this document Josh Suereth
 and Eugene Yokota.
 
-As we move towards sbt 1.0, we wish to stablize what's already stable
+As we move towards sbt 1.0, we wish to stabilize what's already stable
 and innovate where it matters. There are several levels of stability:
 
 - conceptual stability
-- source compatibility of the build defnition
+- source compatibility of the build definition
 - binary compatibility of the plugins
 
 #### Concepts
 
-Concepturally, sbt has been stable on what it does:
+Conceptually, sbt has been stable on what it does:
 
 1. incremental compilation that supports Scala
 2. dependency management that's aware of Scala's binary compatibility
@@ -20916,7 +20936,7 @@ The only thing that we plan to change is the last point.
 In sbt 1.0, we will replace the interactive shell with sbt server
 that's accessible via JSON API and a text-based client.
 
-#### Source compatibility of the build deinition
+#### Source compatibility of the build definition
 
 Source compatibility means that a build source that worked for sbt version A
 works for another version B without modification.
@@ -20926,26 +20946,26 @@ source compatibility of the build during 1.x.y.
 #### Binary compatibility of the plugins
 
 Binary compatibility ("bincompat") of the plugins means that a plugin
-that was published  for sbt version A works for another version B without recompilaition.
+that was published for sbt version A works for another version B without recompilation.
 sbt 0.13 has kept binary compatibility for 18 months as of March 2015.
-The stability here helps maintaining sbt plug ecosystem.
+The stability here helps maintain the sbt plugin ecosystem.
 Our goal for sbt 1.0 is to adopt Semantic Versioning, and maintain
 binary compatibility of the build during 1.x.y.
 
 From the development perspective, maintaining binary compatibility becomes
 an additional constraint that we need to worry about whenever we make changes.
-The of the problem is that sbt 0.13 does not distinguish between public API
-and internal impelmentation. Most things are open to plugins.
+The root of the problem is that sbt 0.13 does not distinguish between public API
+and internal implementation. Most things are open to plugins.
 
 
 ### Modularization
 
 The process we aim to take for sbt 1.0 is to disassemble sbt into smaller modules and layers.
-To be clear sbt 0.13's codebase already does consists of numerous subprojects.
+To be clear, sbt 0.13's codebase already does consist of numerous subprojects.
 
-Layers are more course-grained sets of subproject(s) that can be used independently.
+Layers are more coarse-grained sets of subproject(s) that can be used independently.
 Another purpose of the modularization is to distinguish between public API and internal implementation.
-Reducing the surface area of the sbt code base have several benefits:
+Reducing the surface area of the sbt code base has several benefits:
 
 - It makes it easier for the build users and the plugin authors to learn the APIs.
 - It makes it easier for us to maintain binary and semantic compatibilities.
@@ -20994,16 +21014,16 @@ Util APIs provide commonly used features like logging and internal datatypes use
 #### LibraryManagement API ([sbt/librarymanagement][librarymanagementrepo])
 
 sbt's library management system is based on Apache Ivy, and as such
-the concepts and terminology around library management system is also influenced by Ivy.
-The responsibility of the library management API is to calcuate the transitive dependency graph,
+the concepts and terminology around the library management system are also influenced by Ivy.
+The responsibility of the library management API is to calculate the transitive dependency graph,
 and download artifacts from the given repositories.
 
 #### IncrementalCompiler API ([sbt/incrementalcompiler][incrementalcompilerrepo])
 
-Incremental compiler of Scala is so fundamental,
+Incremental compilation of Scala is so fundamental
 that we now seldom think of it as a feature of sbt.
-There are number of subprojects/classes involved that are actually internal details
-that we should use this opportunity to hide.
+There are number of subprojects/classes involved that are actually internal details,
+and we should use this opportunity to hide them.
 
 #### Build API (tbd)
 
@@ -21024,11 +21044,11 @@ See [foundweekends/conscript][conscriptrepo] and [Launcher][Sbt-Launcher] for mo
 #### Client/Server (tbd)
 
 Currently developed in [sbt/sbt-remote-control](https://github.com/sbt/sbt-remote-control).
-sbt Server provides a JSON-based API wrapping functionality of the commandline experience.
+sbt Server provides a JSON-based API wrapping functionality of the command line experience.
 
 One of the clients will be the "terminal client",
-which subsumes the commandline sbt shell.
-Other clients that are planned are integration with the IDEs.
+which subsumes the command line sbt shell.
+Other clients that are planned are IDE integrations.
 
 #### Website ([sbt/website][websiterepo])
 
@@ -21046,8 +21066,8 @@ This page discusses the coding style and other guidelines for sbt 1.0.
 
 ### General goal
 
-sbt 1.0 will primarily target Scala 2.11.
-We will cross build against Scala 2.10.
+sbt 1.0 will primarily target Scala 2.12.
+We will cross-build against Scala 2.10.
 
 #### Clean up old deprecation
 
@@ -21055,35 +21075,35 @@ Before 1.0 is release, we should clean up deprecations.
 
 #### Aim for zero warnings (except deprecation)
 
-On Scala 2.11 we should aim for zero warnings.
-One exception may be deprecation if it's required for 2.10 cross building.
+On Scala 2.12 we should aim for zero warnings.
+One exception may be deprecation if it's required for cross-building.
 
 ### Modular design
 
 #### Aim small
 
-The fewer methods we can expose to the build user, the easier it becomes to maintain it.
+The fewer methods we can expose to the build user, the easier sbt becomes to maintain.
 
 #### Public APIs should be coded against "interfaces"
 
-Code against interface.
+Code against interfaces.
 
 #### Hide implementation details
 
-The implementation details should be hidden behind `sbt.internal.x` package,
+The implementation details should be hidden behind `sbt.internal.x` packages,
 where `x` could be the name of the main package (like `io`).
 
-#### Depend less
+#### Less interdependence
 
-Making independent modules with fewer dependent libraries make it easier to reuse them.
+Independent modules with fewer dependent libraries are easier to reuse.
 
 #### Hide external classes
 
-Avoid exposing external classes out to API, except for standard Scala and Java classes.
+Avoid exposing external classes in the API, except for standard Scala and Java classes.
 
 #### Hide internal modules
 
-A module may be declared internal if there's no use for public.
+A module may be declared internal if it has no use to the public.
 
 #### Compiler flags
 
@@ -21109,11 +21129,11 @@ The `-Xfatal-warnings` may be removed if there are unavoidable warnings.
 #### Package name and organization name
 
 Use the package name appended with the layer name, such as `sbt.io` for IO layer.
-The organization name for the publish artifacts should remain `org.scala-sbt`.
+The organization name for published artifacts should remain `org.scala-sbt`.
 
 ### Binary resiliency
 
-A good overview on the topic of binary resiliency is [Josh's 2012][jsuereth2012] talk
+A good overview on the topic of binary resiliency is [Josh's 2012 talk][jsuereth2012] on
 Binary resiliency.
 The guideline here applies mostly to publicly exposed APIs.
 
@@ -21123,38 +21143,38 @@ Use [MiMa][mima].
 
 #### Public traits should contain `def` declarations only
 
-- `val` or `var` in `trait` results to codegen at subclass and at the artificial `Foo$class.$init$`.
-- `lazy val` results to codegen at subclass
+- `val` or `var` in a `trait` results in code generated at subclass and in the artificial `Foo$class.$init$`
+- `lazy val` results in code generated at subclass
 
 #### Abstract classes are also useful
 
 [To trait, or not to trait?][pins_trait127].
-It is less flexible compared to trait, but easier to maintain binary compatibility. It also has better Java interop.
+Abstract classes are less flexible than traits, but traits pose more problems for binary compatibility. Abstract classes also have better Java interoperability.
 
-#### Seal the traits and abstract classes
+#### Seal traits and abstract classes
 
-If there's no need to keep the classes open, seal it.
+If there's no need to keep a class open, seal it.
 
 #### Finalize the leaf classes
 
-If there's no need to keep the classes open, finalize it.
+If there's no need to keep a class open, finalize it.
 
 #### Typeclass and subclass inheritance
 
-Typeclass pattern with pure trait might be easier to maintain binary compatibility than subclassing.
+The typeclass pattern with pure traits might ease maintaining binary compatibility more so than subclassing.
 
 #### Avoid case classes, use sbt-datatype
 
-case class involves various codegen, which makes it harder to maintain binary compatibility over time.
+Case classes involve code generation that makes it harder to maintain binary compatibility over time.
 
 #### Prefer method overloading over default parameter values
 
-The default parameter values are effectively codegen,
-which makes it difficult to maintain.
+Default parameter values are effectively code generation,
+which makes them difficult to maintain.
 
-### Other public API matter
+### Other public API matters
 
-Here are other guidelines about public API.
+Here are other guidelines about the sbt public API.
 
 #### Avoid Stringly-typed programming
 
@@ -21165,41 +21185,43 @@ Define datatypes.
 `def apply` should be reserved for factory methods
 in a companion object that returns type `T`.
 
-#### Use specific datatype (`Vector`, `List`, or `Array`) rather than `Seq`.
+#### Use specific datatypes (`Vector`, `List`, or `Array`), rather than `Seq`
 
 `scala.Seq` is `scala.collection.Seq`, which is not immutable.
 Default to `Vector`. Use `List` if constant prepending is needed.
-Use `Array` if Java interop is needed.
-Note using mutable collection is perfectly fine within the implementation.
+Use `Array` if Java interoperability is needed.
+Note that using mutable collections is perfectly fine within the implementation.
 
-#### Avoid calling `toSeq` or anything side-effecty on `Set`
+#### Avoid calling `toSeq` or anything with side-effects on `Set`
 
-`Set` is fine if you stick with set operations, like `contains` and `subsetOf`.
+`Set` is fine if you stick to set operations, like `contains` and `subsetOf`.
 More often than not, `toSeq` is called explicitly or implicitly,
-or some side effecting method is called from `map`.
+or some side-effecting method is called from `map`.
 This introduces non-determinism to the code.
 
 #### Avoid calling `toSeq` on `Map`
 
-Same as above. That will introduce non-determinism.
+Same as above. This will introduce non-determinism.
 
-#### Avoid functions and tuples in the signature, if Java interop is needed
+#### Avoid functions and tuples in the signature, if Java interoperability is needed
 
 Instead of functions and tuples, turn them into a trait.
-This is if Java interop is a concern, like implementing
-incremental compiler.
+This applies where interoperability is a concern, like implementing
+incremental compilation.
 
-### Style matter
+### Style matters
 
 #### Use scalariform
 
-sbt-houserules comes with scalariform.
+sbt-houserules comes with scalariform for formatting source code consistently.
 
 #### Avoid procedure syntax
 
-Return `Unit`.
+Declare an explicit `Unit` return.
 
-#### Typeclass instances are encouraged to be defined in the companions
+#### Define instances of typeclasses in their companion objects, when possible
+
+This style is encouraged:
 
 ```scala
 final class FooID {}
@@ -21208,13 +21230,13 @@ object FooID {
 }
 ```
 
-#### Implicit converter for syntax (enrich-my-library) should be imported
+#### Implicit conversions for syntax (enrich-my-library pattern) should be imported
 
 Avoid defining implicit converters in companion objects and package objects.
 
-Suppose IO module introduces `URL` enrichment called `RichURI`;
-and LibraryManagement introduces `String` enrichment called `GroupID` (for `ModuleID` syntax).
-These implicit converters should be defined in an object named `syntax` in respective packge:
+Suppose the IO module introduces a `URL` enrichment called `RichURI`,
+and LibraryManagement introduces a `String` enrichment called `GroupID` (for `ModuleID` syntax).
+These implicit conversions should be defined in an object named `syntax` in the respective package:
 
 ```scala
 package sbt.io
@@ -21224,8 +21246,8 @@ object syntax {
 }
 ```
 
-When all the layers are available, `sbt` package should also define an object called `syntax`,
-which forwards all the implicit converters from all the layers:
+When all the layers are available, the `sbt` package should also define an object called `syntax`
+which forwards implicit conversions from all the layers:
 
 ```scala
 package sbt
@@ -21245,7 +21267,7 @@ growable datatypes and helps developers avoid breakage of binary compatibility.
 
 Unlike standard Scala case classes, the datatypes (or pseudo case classes) generated
 by this library allow the developer to add new fields to the defined datatypes without breaking
-binary compatibility while offering (almost) the same functionalities as plain
+binary compatibility, while offering (almost) the same functionality as plain
 case classes. The only difference is that datatype doesn't generate `unapply` or `copy`
 methods, because they would break binary compatibility.
 
@@ -21256,7 +21278,7 @@ Our plugin takes as input a datatype schema in the form of a `JSON` object,
 whose format is based on the format defined by
 [Apache Avro](http://avro.apache.org), and generates the corresponding code in
 Java or Scala along with the boilerplate code that will allow the generated
-classes to remain binary compatible with previous versions of the datatype.
+classes to remain binary-compatible with previous versions of the datatype.
 
 The source code of the library and autoplugin
 [can be found on GitHub](https://github.com/sbt/sbt-datatype).
@@ -21659,7 +21681,7 @@ q: com.example.Person = Person(Bob, 20)
 scala> assert(p == q)
 ```
 
-### Existing parameters for records, interfaces, etc.
+### Existing parameters for protocols, records, etc.
 
 All the elements of the schema definition accept a number of parameters that
 will influence the generated code. These parameters are not available for
@@ -21685,22 +21707,20 @@ The Javadoc that will accompany the generated element.
 
 ###### `fields`
 
-For a `record` or `interface` only, it describes all the fields that compose
+For a `protocol` or a `record` only, it describes all the fields that compose
 the generated entity.
 
 ###### `types`
 
-For a `interface`, it defines the child `interface`s and `record`s that extend
+For a `protocol`, it defines the child `protocol`s and `record`s that extend
 it.
 
-###### `symbols`
-
-For an `enum` only, it defines the values of the enumeration.
+For an `enumeration`, it defines the values of the enumeration.
 
 ###### `since`
 
 This parameter exists for `field`s only. It indicates the version in which the
-field has been added to its parent `interface` or `record`.
+field has been added to its parent `protocol` or `record`.
 
 When this parameter is defined, `default` must also be defined.
 
@@ -21708,24 +21728,24 @@ When this parameter is defined, `default` must also be defined.
 
 This parameter exists for `field`s only. It indicates what the default value
 should be for this field, in case it is used by a class that has been compiled
-against an ealier version of this datatype.
+against an earlier version of this datatype.
 
 It must contain an expression which is valid in the `target` language of the
-parent `interface` or `record`.
+parent `protocol` or `record`.
 
 ###### `type` for `field`s
 
 It indicates what is the underlying type of the field.
 
 Always use the type that you want to see in Scala. For instance, if your field
-will contain an integer value, use `Int` rather than Java's `int`. datatype
+will contain an integer value, use `Int` rather than Java's `int`. `datatype`
 will automatically use Java's primitive types if they are available.
 
-For non-primitive types, it is recommended to write the fully qualified type.
+For non-primitive types, it is recommended to write the fully-qualified type.
 
 ###### `type` for other definitions
 
-It simply indicates the kind of entity that you want to generate: `interface`,
+It simply indicates the kind of entity that you want to generate: `protocol`,
 `record` or `enumeration`.
 
 ### Settings
@@ -21806,9 +21826,9 @@ The compiler interface is the communication link between sbt and the
 Scala compiler.
 
 It is used to get information from the Scala compiler, and must therefore
-be compiled against the Scala version in used for the configured projects.
+be compiled against the Scala version in use for the configured projects.
 
-The code for this project can be found in the folder [compile/interface](https://github.com/sbt/sbt/tree/0.13/compile/interface).
+The code for this project can be found in the directory [compile/interface](https://github.com/sbt/sbt/tree/0.13/compile/interface).
 
 
 Fetching the most specific sources
@@ -21825,7 +21845,7 @@ compiler authors:
    the Scala compiler.
 1. sbt cannot use new APIs defined in the Scala compiler.
 1. sbt must implement [all kinds of hackery](https://github.com/sbt/sbt/blob/0.13/compile/interface/src/main/scala/xsbt/Compat.scala#L6)
-   to remain source compatible all versions of the Scala compiler and support
+   to remain source-compatible with all versions of the Scala compiler and support
    new features.
 
 To circumvent this problem, a new mechanism that allows sbt to fetch the
@@ -21870,25 +21890,25 @@ Getting Started with the sbt launcher
 The sbt launcher provides two parts:
 
 1. An interface for launched applications to interact with the launcher code
-2. A minimal sbt-launch.jar that can launch application by resolving them
+2. A minimal sbt-launch.jar that can launch applications by resolving them
    through ivy.
 
 The sbt launcher component is a self-contained jar that boots a Scala
 application or server without Scala or the application already existing
 on the system. The only prerequisites are the launcher jar itself, an
-optional configuration file, and a java runtime version 1.6 or greater.
+optional configuration file, and a Java runtime version 1.6 or greater.
 
 ### Overview
 
 A user downloads the launcher jar and creates a script to run it. In
 this documentation, the script will be assumed to be called `launch`.
-For unix, the script would look like: `java -jar sbt-launcher.jar "$@"`
+For Unix, the script would look like: `java -jar sbt-launcher.jar "$@"`
 
 The user can now launch servers and applications which provide sbt
 launcher configuration.
 
 Alternatively, you can repackage the launcher with a launcher configuration file.
-The [sbt/sbt](https://github.com/sbt/sbt) for example pulls in the raw JAR and
+For example, [sbt/sbt](https://github.com/sbt/sbt) pulls in the raw JAR and
 [injects the appropriate boot.properties files for sbt](launcher-inject).
 
 #### Applications
@@ -21896,7 +21916,10 @@ The [sbt/sbt](https://github.com/sbt/sbt) for example pulls in the raw JAR and
 To launch an application, the user then downloads the configuration file
 for the application (call it `my.app.configuration`) and creates a
 script to launch it (call it `myapp`):
-`launch @my.app.configuration "$@"`
+
+```
+launch @my.app.configuration "$@"
+```
 
 The user can then launch the application using `myapp arg1 arg2 ...`
 
@@ -21915,17 +21938,20 @@ To discover where a server is running (or launch it if it is not
 running), the user downloads the configuration file for the server (call
 it `my.server.configuration`) and creates a script to discover the
 server (call it `find-myserver`):
-`launch --locate @my.server.properties`.
+
+```
+launch --locate @my.server.properties.
+```
 
 This command will print out one string, the URI at which to reach the
 server, e.g. `sbt://127.0.0.1:65501`. Clients should use the IP/port to
 connect to to the server and initiate their connection.
 
-When using the `locate` feature, the sbt launcher makes these following
+When using the `locate` feature, the sbt launcher makes the following
 restrictions to servers:
 
 -   The Server must have a starting class that extends the
-    xsbti.ServerMain class
+    `xsbti.ServerMain` class
 -   The Server must have an entry point (URI) that clients can use to
     detect the server
 -   The server must have defined a lock file which the launcher can use
@@ -21966,7 +21992,7 @@ configuring, writing, distributing, and running the application.
 #### Creating a Launched Application
 
 This section shows how to make an application that is launched by this
-launcher. First, declare a dependency on the launcher-interface. Do not
+launcher. First, declare a dependency on the `launcher-interface`. Do not
 declare a dependency on the launcher itself. The launcher interface
 consists strictly of Java interfaces in order to avoid binary
 incompatibility between the version of Scala used to compile the
@@ -21975,11 +22001,18 @@ interface class will be provided by the launcher, so it is only a
 compile-time dependency. If you are building with sbt, your dependency
 definition would be:
 
-Make the entry point to your class implement 'xsbti.AppMain'. An example
+```scala
+libraryDependencies += "org.scala-sbt" % "launcher-interface" % "1.0.0" % "provided"
+
+resolvers += sbtResolver.value
+```
+
+Make the entry point to your class implement `xsbti.AppMain`. An example
 that uses some of the information:
 
 ```scala
-package xsbt.test
+package com.acme.launcherapp
+
 class Main extends xsbti.AppMain
 {
     def run(configuration: xsbti.AppConfiguration) =
@@ -21995,14 +22028,14 @@ class Main extends xsbti.AppMain
         // and how to return the code to exit with
         scalaVersion match
         {
-            case "2.9.3" =>
+            case "2.10.6" =>
                 new xsbti.Reboot {
                     def arguments = configuration.arguments
                     def baseDirectory = configuration.baseDirectory
-                    def scalaVersion = "2.10.2
+                    def scalaVersion = "2.11.8"
                     def app = configuration.provider.id
                 }
-            case "2.10.2" => new Exit(1)
+            case "2.11.8" => new Exit(1)
             case _ => new Exit(0)
         }
     }
@@ -22013,7 +22046,23 @@ class Main extends xsbti.AppMain
 Next, define a configuration file for the launcher. For the above class,
 it might look like:
 
-Then, `publishLocal` or `+publishLocal` the application to make it
+```
+[scala]
+  version: 2.11.8
+[app]
+  org: com.acme
+  name: launcherapp
+  version: 0.0.1
+  class: com.acme.launcherapp.Main
+  cross-versioned: true
+[repositories]
+  local
+  maven-central
+[boot]
+ directory: ${user.home}/.myapp/boot
+```
+
+Then, `publishLocal` or `+publishLocal` the application in sbt's shell to make it
 available. For more information, see
 [Launcher Configuration][Launcher-Configuration].
 
@@ -22062,13 +22111,13 @@ ${boot.directory}/${scala.version}/${app.org}/${app.name}/.
 Once all required code is downloaded, the class loaders are set up. The
 launcher creates a class loader for the requested version of Scala. It
 then creates a child class loader containing the jars for the requested
-'app.components' and with the paths specified in `app.resources`. An
+`app.components` and with the paths specified in `app.resources`. An
 application that does not use components will have all of its jars in
 this class loader.
 
 The main class for the application is then instantiated. It must be a
 public class with a public no-argument constructor and must conform to
-xsbti.AppMain. The `run` method is invoked and execution passes to the
+`xsbti.AppMain`. The `run` method is invoked and execution passes to the
 application. The argument to the 'run' method provides configuration
 information and a callback to obtain a class loader for any version of
 Scala that can be obtained from a repository in [repositories]. The
@@ -22080,14 +22129,14 @@ the application or that it should exit with the provided exit code.
 Sbt Launcher Architecture
 -------------------------
 
-The sbt launcher is a mechanism whereby modules can be loaded from ivy
-and executed within a jvm. It abstracts the mechanism of grabbing and
-caching jars, allowing users to focus on what application they want and
+The sbt launcher is a mechanism whereby modules can be loaded from Ivy
+and executed within a JVM. It abstracts the mechanism of grabbing and
+caching jars, allowing users to focus on what application they want, and
 control its versions.
 
-The launcher's primary goal is to take configuration for applications,
-mostly just ivy coordinates and a main class, and start the application.
-The launcher resolves the ivy module, caches the required runtime jars
+The launcher's primary goal is to take configuration for applications—
+mostly Ivy coordinates and a main class—and start the application.
+The launcher resolves the Ivy module, caches the required runtime jars,
 and starts the application.
 
 The sbt launcher provides the application with the means to load a
@@ -22108,27 +22157,27 @@ run them. This is done through the `[app]` configuration section. See
 [launcher configuration][Launcher-Configuration] for more information on how to configure module
 resolution.
 
-Module resolution is performed using the Ivy dependency managemnet
+Module resolution is performed using the Ivy dependency management
 library. This library supports loading artifacts from Maven repositories
 as well.
 
 ### Classloader Caching and Isolation
 
 The sbt launcher's classloading structure is different than just
-starting an application in the standard java mechanism. Every
+starting an application in the standard Java mechanism. Every
 application loaded by by the launcher is given its own classloader. This
 classloader is a child of the Scala classloader used by the application.
 The Scala classloader can see all of the `xsbti.*` classes from the
 launcher itself.
 
-Here's an example classloader layout from an sbt launched application.
+Here's an example classloader layout from an sbt-launched application.
 
 ![image](files/classloaders.png)
 
 In this diagram, three different applications were loaded. Two of these
 use the same version of Scala (2.9.2). In this case, sbt can share the
 same classloader for these applications. This has the benefit that any
-JIT optimisations performed on scala classes can be re-used between
+JIT optimisations performed on Scala classes can be re-used between
 applications thanks to the shared classloader.
 
 ### Caching
@@ -22171,12 +22220,12 @@ following:
 5.  Release all locks and shutdown.
 
 The configured `server.lock` file is thus used to prevent multiple
-servers from running. Sbt itself uses this to prevent more than one
+servers from running. sbt itself uses this to prevent more than one
 server running on any given project directory by configuring
 `server.lock` to be `${user.dir}/.sbtserver`.
 
 
-Sbt Launcher Configuration
+sbt Launcher Configuration
 --------------------------
 
 The launcher may be configured in one of the following ways in
@@ -22189,7 +22238,7 @@ increasing order of precedence:
     line, either as a path or an absolute URI. This can be done by
     either specifying the location as the system property
     sbt.boot.properties or as the first argument to the launcher
-    prefixed by '@'. The system property has lower precedence.
+    prefixed by `@`. The system property has lower precedence.
     Resolution of a relative path is first attempted against the current
     working directory, then against the user's home directory, and then
     against the directory containing the launcher jar.
@@ -22235,9 +22284,9 @@ Let's look at all the launcher configuration sections in detail:
 The `[scala]` section is used to configure the version of Scala. It has
 one property:
 
--   `version` - The version of scala an application uses, or `auto` if
+-   `version` - The version of Scala an application uses, or `auto` if
     the application is not cross-versioned.
--   `classifiers` - The (optional) list of additional scala artifacts to
+-   `classifiers` - The (optional) list of additional Scala artifacts to
     resolve, e.g. sources.
 
 #### 2. Application Identification
@@ -22246,29 +22295,27 @@ The `[app]` section configures how the launcher will look for your
 application using the Ivy dependency manager. It consists of the
 following properties:
 
--   `org` - The organization associated with the Ivy module. (groupId in
-    maven vernacular)
--   `name` - The name of the Ivy module. (`artifactId` in maven
+-   `org` - The organization associated with the Ivy module. (`groupId` in
+    Maven vernacular)
+-   `name` - The name of the Ivy module. (`artifactId` in Maven
     vernacular)
 -   `version` - The revision of the Ivy module.
 -   `class` - The name of the "entry point" into the application. An
     entry point must be a class which meets one of the following critera
-    -   Extends the xsbti.AppMain interface.
-    -   Extends the xsbti.ServerMain interfaces.
-    -   Contains a method with the signature static void main(String[])
-    -   Contains a method with the signature static int main(String[])
-
-    - Contains a method with the signature
-    static xsbti.Exit main(String[])
+    -   Extends the `xsbti.AppMain` interface.
+    -   Extends the `xsbti.ServerMain` interfaces.
+    -   Contains a method with the signature `static void main(String[])`
+    -   Contains a method with the signature `static int main(String[])`
+    - Contains a method with the signature `static xsbti.Exit main(String[])`
 -   `components` - An optional list of additional components that Ivy
     should resolve.
 -   `cross-versioned` - An optional string denoting how this application
-    is published. If app.cross-versioned is binary, the resolved module
+    is published. If `app.cross-versioned` is binary, the resolved module
     ID is
     `{app.name+'_'+CrossVersion.binaryScalaVersion(scala.version)}`. If
-    app.cross-versioned is true or full, the resolved module ID is
-    `{app.name+'_'+scala.version}`. The scala.version property must be
-    specified and cannot be auto when cross-versioned.
+    `app.cross-versioned` is `true` or `full`, the resolved module ID is
+    `{app.name+'_'+scala.version}`. The `scala.version` property must be
+    specified and cannot be `auto` when cross-versioned.
 -   `resources` - An optional list of jar files that should be added to
     the application's classpath.
 -   `classifiers` - An optional list of additional classifiers that
@@ -22285,9 +22332,9 @@ but this can be overriden via user configuration.*
 There are several built-in strings that can be used for common
 repositories:
 
--   `local` - the local ivy repository `~/.ivy2/local`.
--   `maven-local` - The local maven repository `~/.m2/repository`.
--   `maven-central` - The maven central repository `repo.maven.org`.
+-   `local` - the local Ivy repository `~/.ivy2/local`.
+-   `maven-local` - The local Maven repository `~/.m2/repository`.
+-   `maven-central` - The Maven Central repository `repo.maven.org`.
 
 Besides built in repositories, other repositories can be configured
 using the following syntax:
@@ -22304,7 +22351,7 @@ The `pattern` property is an optional specification of *how* Ivy should
 look for modules. By default, the launcher assumes repositories are in
 the maven style format.
 
-The `skipConsistencyCheck` string is used to tell ivy not to validate
+The `skipConsistencyCheck` string is used to tell Ivy not to validate
 checksums and signatures of files it resolves.
 
 #### 4. The Boot section
@@ -22324,19 +22371,19 @@ The `[ivy]` section is used to configure the Ivy dependency manager for
 resolving applications. It consists of the following properties:
 
 -   `ivy-home` - The home directory for Ivy. This determines where the
-    ivy-local repository is located, and also where the ivy cache is
+    ivy-local repository is located, and also where the Ivy cache is
     stored. Defaults to `~/.ivy2`
 -   `checksums` - The comma-separated list of checksums that Ivy should
     use to verify artifacts have correctly resolved, e.g. md5 or sha1.
 -   `override-build-repos` - If this is set, then the
-    `isOverrideRepositories` method on xsbti.Launcher interface will
-    return its value. The use of this method is application specific,
+    `isOverrideRepositories` method on `xsbti.Launcher` interface will
+    return its value. The use of this method is application-specific,
     but in the case of sbt denotes that the configuration of
     repositories in the launcher should override those used by any
     build. Applications should respect this convention if they can.
 -   `repository-config` - This specifies a configuration location where
-    ivy repositories can also be configured. If this file exists, then
-    its contents override the [repositories] section.
+    Ivy repositories can also be configured. If this file exists, then
+    its contents override the `[repositories]` section.
 
 #### 6. The Server Section
 
@@ -22347,12 +22394,11 @@ properties:
 -   `lock` - The file that controls access to the running server. This
     file will contain the active port used by a server and must be
     located on a a filesystem that supports locking.
--   `jvmargs` - A file that contains line-separated JVM arguments that where
-    :   use when starting the server.
-
+-   `jvmargs` - A file that contains line-separated JVM arguments that were
+    used when starting the server.
 -   `jvmprops` - The location of a properties file that will define
     override properties in the server. All properties defined in this
-    file will be set as -D java properties.
+    file will be set as `-D` Java properties.
 
 ### Variable Substitution
 
@@ -22371,11 +22417,11 @@ substituted.
 
 There is also a special variable substitution:
 
--   `read(property.name)[default]`
+    read(property.name)[default]
 
 This will look in the file configured by `boot.properties` for a value.
 If there is no `boot.properties` file configured, or the property does
-not existt, then the default value is chosen.
+not exist, then the default value is chosen.
 
 ### Syntax
 
@@ -22447,7 +22493,7 @@ Core Principles
 ---------------
 
 This document details the core principles overarching sbt's design and
-code style. Sbt's core principles can be stated quite simply:
+code style. sbt's core principles can be stated quite simply:
 
 1.  Everything should have a `Type`, enforced as much as is practical.
 2.  Dependencies should be **explicit**.
@@ -22459,7 +22505,7 @@ sbt.
 
 ### Introduction to build state
 
-This is the first piece you hit when starting sbt. Sbt's command engine
+This is the first piece you hit when starting sbt. sbt's command engine
 is the means by which it processes user requests using the build state.
 The command engine is essentially a means of applying **state
 transformations** on the build state, to execute user requests.
@@ -22476,12 +22522,12 @@ needs a mechanism to store the state from any potential client. In
 dynamic languages, this can be done directly on objects.
 
 A naive approach in Scala is to use a `Map<String,Any>`. However, this
-vioaltes tennant #1: Everythign should have a `Type`. So, sbt defines a
+violates tenant #1: Everything should have a `Type`. So, sbt defines a
 new type of map called an `AttributeMap`. An `AttributeMap` is a
 key-value storage mechanism where keys are both strings *and* expected
 `Type`s for their value.
 
-Here is what the typesafe `AttributeKey` key looks like :
+Here is what the type-safe `AttributeKey` key looks like :
 
     sealed trait AttributeKey[T] {
       /** The label is the identifier for the key and is camelCase by convention. */
@@ -22491,20 +22537,21 @@ Here is what the typesafe `AttributeKey` key looks like :
     }
 
 These keys store both a `label` (`string`) and some runtime type
-information (`manifest`). To put or get something on the AttributeMap,
+information (`manifest`). To put or get something on the `AttributeMap`,
 we first need to construct one of these keys. Let's look at the basic
-definition of the `AttributeMap` :
+definition of the `AttributeMap`:
 
-    trait AttributeMap {
-      /** Gets the value of type ``T`` associated with the key ``k`` or ``None`` if no value is associated. 
-      * If a key with the same label but a different type is defined, this method will return ``None``. */
-      def get[T](k: AttributeKey[T]): Option[T]
+```scala
+trait AttributeMap {
+  /** Gets the value of type ``T`` associated with the key ``k`` or ``None`` if no value is associated. 
+  * If a key with the same label but a different type is defined, this method will return ``None``. */
+  def get[T](k: AttributeKey[T]): Option[T]
 
-
-      /** Adds the mapping ``k -> value`` to this map, replacing any existing mapping for ``k``.
-      * Any mappings for keys with the same label but different types are unaffected. */
-      def put[T](k: AttributeKey[T], value: T): AttributeMap
-    }
+  /** Adds the mapping ``k -> value`` to this map, replacing any existing mapping for ``k``.
+  * Any mappings for keys with the same label but different types are unaffected. */
+  def put[T](k: AttributeKey[T], value: T): AttributeMap
+}
+```
 
 Now that there's a definition of what build state is, there needs to be
 a way to dynamically construct it. In sbt, this is done through the
@@ -22521,16 +22568,16 @@ setting consists of two pieces:
 2.  An `Initialize[T]` object which is able to construct the value for
     this setting.
 
-Sbt's initialization time is basically just taking a sequence of these
+sbt's initialization time is basically just taking a sequence of these
 `Setting[_]` objects and running their initialization objects and then
 storing the value into the `AttributeMap`. This means overwriting an
-exisitng value at a key is as easy as appending a `Setting[_]` to the
+existing value at a key is as easy as appending a `Setting[_]` to the
 end of the sequence which does so.
 
 Where it gets interesting is that `Initialize[T]` can depend on other
 `AttributeKey[_]`s in the build state. Each `Initialize[_]` can pull
 values from any `AttributeKey[_]` in the build state's `AttributeMap` to
-compute its value. Sbt ensures a few things when it comes to
+compute its value. sbt ensures a few things when it comes to
 `Initialize[_]` dependencies:
 
 1.  There can be no circular dependencies
@@ -22545,8 +22592,8 @@ Let's look at what gets stored for the setting :
 ![image](files/overview-setting-example.png)
 
 Here, a `Setting[_]` is constructed that understands it depends on the
-value in the `name` AttributeKey. Its initialize block first grabs the
-value of the `name` key, then runs the function normalize on it to
+value in the `name` `AttributeKey`. Its initialize block first grabs the
+value of the `name` key, then runs the function `normalize` on it to
 compute its value.
 
 This represents the core mechanism of how to construct sbt's build
@@ -22557,21 +22604,21 @@ requests.
 
 ### Task Architecture
 
-The next layer in sbt is around these user request, or tasks. When a
+The next layer in sbt is around these user requests, or tasks. When a
 user configures a build, they are defining a set of repeatable tasks
 that they can run on their project. Things like `compile` or `test`.
 These tasks *also* have a dependency graph, where e.g. the `test` task
 requires that `compile` has run before it can successfully execute.
 
-Sbt's defines a class `Task[T]`. The `T` type parameter represents the
+sbt defines a class `Task[T]`. The `T` type parameter represents the
 type of data returned by a task. Remember the tenets of sbt? "All things
 have types" and "Dependencies are explicit" both hold true for tasks.
-Sbt promotes a style of task dependencies that is closer to functional
-programming: Return data for your users rather than using shared mutable
+sbt promotes a style of task dependencies that is closer to functional
+programming: return data for your users rather than using shared mutable
 state.
 
-Most build tools communciate over the filesystem, and indeed sbt, by
-necessity, does some of this. However, for stable parallelization it is
+Most build tools communicate over the filesystem, and indeed by necessity
+sbt does some of this. However, for stable parallelization it is
 far better to keep tasks isolated on the filesystem and communicate
 directly through types.
 
@@ -22583,7 +22630,7 @@ TODO - More on `Task[_]`
 
 TODO - Transition into `InputTask[_]`, rehash Command
 
-TODO - Tansition into Scope.
+TODO - Transition into Scope.
 
 
   [Sdocs-Global]: ../api/sbt/Global$.html
@@ -22626,19 +22673,19 @@ and `SettingsUsage.scala`. Finally, run sbt and enter the REPL using
 The first part of the example defines the custom settings system. There
 are three main parts:
 
-1.  Define the Scope type.
-2.  Define a function that converts that Scope (plus an AttributeKey) to
-    a String.
-3.  Define a delegation function that defines the sequence of Scopes in
+1.  Define the `Scope` type.
+2.  Define a function that converts that `Scope` (plus an `AttributeKey`) to
+    a `String`.
+3.  Define a delegation function that defines the sequence of `Scope`s in
     which to look up a value.
 
 There is also a fourth, but its usage is likely to be specific to sbt at
 this time. The example uses a trivial implementation for this part.
 
-`SettingsExample.scala`
+`SettingsExample.scala`:
 
 ```scala
-  import sbt._
+import sbt._
 
 /** Define our settings system */
 
@@ -22675,14 +22722,16 @@ This part shows how to use the system we just defined. The end result is
 a `Settings[Scope]` value. This type is basically a mapping
 `Scope -> AttributeKey[T] -> Option[T]`. See the
 [Settings API documentation](../api/sbt/Settings.html) for
-details. `SettingsUsage.scala`:
+details.
+
+`SettingsUsage.scala`:
 
 ```scala
 /** Usage Example **/
 
-   import sbt._
-   import SettingsExample._
-   import Types._
+import sbt._
+import SettingsExample._
+import Types._
 
 object SettingsUsage {
 
@@ -22733,16 +22782,16 @@ a5 = Some(4)
 b5 = Some(9)
 ```
 
--   For the None results, we never defined the value and there was no
+-   For the `None` results, we never defined the value and there was no
     value to delegate to.
--   For a3, we explicitly defined it to be 3.
--   a4 wasn't defined, so it delegates to a3 according to our delegates
+-   For `a3`, we explicitly defined it to be 3.
+-   `a4` wasn't defined, so it delegates to `a3` according to our `delegates`
     function.
--   b4 gets the value for a4 (which delegates to a3, so it is 3) and
+-   `b4` gets the value for `a4` (which delegates to `a3`, so it is 3) and
     multiplies by 3
--   a5 is defined as the previous value of a5 + 1 and since no previous
-    value of a5 was defined, it delegates to a4, resulting in 3+1=4.
--   b5 isn't defined explicitly, so it delegates to b4 and is therefore
+-   `a5` is defined as the previous value of `a5` + 1 and since no previous
+    value of `a5` was defined, it delegates to `a4`, resulting in 3+1=4.
+-   `b5` isn't defined explicitly, so it delegates to `b4` and is therefore
     equal to 9 as well
 
 ### sbt Settings Discussion
@@ -22767,8 +22816,8 @@ For example, in a project, a
 [Select][Sdocs-Select] referring to the defining project. All other axes that are
 [This][Sdocs-This] are
 translated to
-[Global][Sdocs-Global]. Functions like inConfig and inTask transform
-This into a
+[Global][Sdocs-Global]. Functions like `inConfig` and `inTask` transform
+`This` into a
 [Select][Sdocs-Select] for a specific value. For example,
 `inConfig(Compile)(someSettings)` translates the configuration axis for
 all settings in *someSettings* to be `Select(Compile)` if the axis value
@@ -22777,20 +22826,20 @@ is
 
 So, from the example and from sbt's scopes, you can see that the core
 settings engine does not impose much on the structure of a scope. All it
-requires is a delegates function `Scope => Seq[Scope]` and a `display`
+requires is a `delegates` function `Scope => Seq[Scope]` and a `display`
 function. You can choose a scope type that makes sense for your
 situation.
 
 #### Constructing settings
 
-The *app*, *value*, *update*, and related methods are the core methods
+The `app`, `value`, `update`, and related methods are the core methods
 for constructing settings. This example obviously looks rather different
 from sbt's interface because these methods are not typically used
 directly, but are wrapped in a higher-level abstraction.
 
-With the core settings engine, you work with HLists to access other
-settings. In sbt's higher-level system, there are wrappers around HList
-for TupleN and FunctionN for N = 1-9 (except Tuple1 isn't actually
+With the core settings engine, you work with `HList`s to access other
+settings. In sbt's higher-level system, there are wrappers around `HList`
+for `TupleN` and `FunctionN` for N = 1-9 (except `Tuple1` isn't actually
 used). When working with arbitrary arity, it is useful to make these
 wrappers at the highest level possible. This is because once wrappers
 are defined, code must be duplicated for every N. By making the wrappers
@@ -22810,13 +22859,13 @@ to `setting(a, value( task { 3 } ) )`. See
 
 #### Settings definitions
 
-sbt also provides a way to define these settings in a file (build.sbt
-and Build.scala). This is done for build.sbt using basic parsing and
+sbt also provides a way to define these settings in a file (`build.sbt`
+and `Build.scala`). This is done for `build.sbt` using basic parsing and
 then passing the resulting chunks of code to `compile/Eval.scala`. For
 all definitions, sbt manages the classpaths and recompilation process to
 obtain the settings. It also provides a way for users to define project,
 task, and configuration delegation, which ends up being used by the
-delegates function.
+`delegates` function.
 
 
 Setting Initialization
@@ -22828,11 +22877,10 @@ ordering of everything.
 
 As stated elsewhere, sbt constructs its initialization graph and task
 graph via `Setting[_]` objects. A setting is something which can take
-the values stored at other Keys in the build state, and generates a new
-value for a particular build key. Sbt converts all registered
+the values stored at other `Keys` in the build state, and generates a new
+value for a particular build key. sbt converts all registered
 `Setting[_]` objects into a giant linear sequence and *compiles* them
-into the a task graph. This task graph is then used to execute your
-build.
+into a task graph. This task graph is then used to execute your build.
 
 All of sbt's loading semantics are contained within the
 [Load.scala](../sxr/sbt/Load.scala.html) file. It is approximately
@@ -22868,17 +22916,17 @@ shows the two most important:
     }
     ```
 
-    or in a `build.sbt` file :
+    or in a `build.sbt` file:
 
     ```scala
     foo in ThisBuild := "hi"
     ```
 
 -   `projectSettings` - These are settings specific to a project. They
-    are specific to a *particular sub project* in the build. A plugin
+    are specific to a *particular subproject* in the build. A plugin
     may be contributing its settings to more than on project, in which
     case the values are duplicated for each project. You add project
-    specific settings, eg. in `project/build.scala` :
+    specific settings, eg. in `project/build.scala`:
 
     ```scala
     object MyBuild extends Build {
@@ -22901,7 +22949,7 @@ default inclusion order for sbt is:
 The order which sbt uses to load settings is configurable at a *project*
 level. This means that we can't control the order of settings added to
 Build/Global namespace, but we can control how each project loads, e.g.
-plugins and `.sbt` files. To do so, use the `AddSettings` class :
+plugins and `.sbt` files. To do so, use the `AddSettings` class:
 
 ```scala
 import sbt._
@@ -22927,7 +22975,7 @@ What we've excluded:
 -   All settings from the user directory (`~/.sbt/<verison>`)
 -   All `*.sbt` settings.
 
-The AddSettings object provides the following "groups" of settings you
+The `AddSettings` object provides the following "groups" of settings you
 can use for ordering:
 
 - `autoPlugins` All the ordered settings of plugins after they've gone through
@@ -22945,7 +22993,7 @@ can use for ordering:
 For example, let's see what happens if we move the `build.sbt` files
 *before* the `buildScalaFile`.
 
-Let's create an example project the following defintiion. `project/build.scala` :
+Let's create an example project the following definition. `project/build.scala`:
 
 ```scala
 object MyTestBuild extends Build {
@@ -22958,17 +23006,17 @@ object MyTestBuild extends Build {
 }
 ```
 
-This build defines a version string which appends the scala version if
-the current scala version is not the in the `2.10.x` series. Now, when
+This build defines a version string which appends the Scala version if
+the current Scala version is not the in the `2.10.x` series. Now, when
 issuing a release we want to lock down the version. Most tools assume
-this can happen by writing a `version.sbt` file. `version.sbt` :
+this can happen by writing a `version.sbt` file. `version.sbt`:
 
 ```scala
 version := "1.0.0"
 ```
 
 However, when we load this new build, we find that the `version` in
-`version.sbt` has been **overriden** by the one defined in
+`version.sbt` has been **overridden** by the one defined in
 `project/Build.scala` because of the order we defined for settings, so
 the new `version.sbt` file has no effect.
 
@@ -23284,7 +23332,7 @@ There are three files in this example:
 To try out this example:
 
 1.  Put the first two files in a new directory
-2.  Run `sbt publishLocal` in that directory
+2.  In sbt's shell run `publishLocal` in that directory
 3.  Run `sbt @path/to/hello.build.properties` to run the application.
 
 Like for sbt itself, you can specify commands from the command line
