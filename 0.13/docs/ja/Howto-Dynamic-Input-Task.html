@@ -47,8 +47,8 @@
 </p><h4 id="build.sbt+v1">build.sbt v1<a href="#build.sbt+v1" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">lazy val runopen = inputKey[Unit](&quot;run and then open the browser&quot;)
 lazy val openbrowser = taskKey[Unit](&quot;open the browser&quot;)
 
-lazy val root = (project in file(&quot;.&quot;)).
-  settings(
+lazy val root = (project in file(&quot;.&quot;))
+  .settings(
     runopen := (Def.inputTaskDyn {
       import sbt.complete.Parsers.spaceDelimited
       val args = spaceDelimited(&quot;&lt;args&gt;&quot;).parsed
@@ -66,8 +66,8 @@ lazy val root = (project in file(&quot;.&quot;)).
 </p><pre><code class="prettyprint lang-scala">lazy val actualRun = inputKey[Unit](&quot;The actual run task&quot;)
 lazy val openbrowser = taskKey[Unit](&quot;open the browser&quot;)
 
-lazy val root = (project in file(&quot;.&quot;)).
-  settings(
+lazy val root = (project in file(&quot;.&quot;))
+  .settings(
     run in Compile := (Def.inputTaskDyn {
       import sbt.complete.Parsers.spaceDelimited
       val args = spaceDelimited(&quot;&lt;args&gt;&quot;).parsed

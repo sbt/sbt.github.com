@@ -66,18 +66,18 @@ Ivy のモジュール ID を <code>addSbtPlugin</code> メソッドに渡して
 </p><p>sbt 0.13.5 から、プラグインを自動的に追加して、そのセッティング群と依存関係がプロジェクトに設定されていることを安全に保証する <a href="../../docs/Plugins.html">auto plugin</a> という機能が追加された。
 </p><p>auto plugin の多くはデフォルトのセッティング群を自動的に追加するが、中には明示的な有効化を必要とするものもある。
 </p><p>明示的な有効化が必要な auto plugin を使っている場合は、以下を <code>build.sbt</code> に追加する必要がある:
-</p><pre><code class="prettyprint lang-scala">lazy val util = (project in file(&quot;util&quot;)).
-  enablePlugins(FooPlugin, BarPlugin).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val util = (project in file(&quot;util&quot;))
+  .enablePlugins(FooPlugin, BarPlugin)
+  .settings(
     name := &quot;hello-util&quot;
   )
 </code></pre><p><code>enablePlugins</code> メソッドを使えば、そのプロジェクトで使用したい auto plugin を明示的に定義できる。
 逆に <code>disablePlugins</code> メソッドを使ってプラグインを除外することもできる。
 例えば、<code>util</code> から <code>IvyPlugin</code> のセッティングを除外したいとすると、<code>build.sbt</code> を以下のように変更する:
-</p><pre><code class="prettyprint lang-scala">lazy val util = (project in file(&quot;util&quot;)).
-  enablePlugins(FooPlugin, BarPlugin).
-  disablePlugins(plugins.IvyPlugin).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val util = (project in file(&quot;util&quot;))
+  .enablePlugins(FooPlugin, BarPlugin)
+  .disablePlugins(plugins.IvyPlugin)
+  .settings(
     name := &quot;hello-util&quot;
   )
 </code></pre><p>明示的な有効化が必要か否かは、それぞれの auto plugin がドキュメントで明記しておくべきだ。
@@ -108,8 +108,8 @@ sbt のデフォルトセッティングは 3 つのプラグインによって�
 lazy val util = (project in file(&quot;util&quot;))
 
 // enable the site plugin for the `core` project
-lazy val core = (project in file(&quot;core&quot;)).
-  settings(site.settings : _*)
+lazy val core = (project in file(&quot;core&quot;))
+  .settings(site.settings)
 </code></pre><h3 id="%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%90%E3%83%AB%E3%83%BB%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3">グローバル・プラグイン<a href="#%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%90%E3%83%AB%E3%83%BB%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>プラグインを <code>~/.sbt/0.13/plugins/</code> 以下で宣言することで全てのプロジェクトに対して一括してプラグインをインストールすることができる。
 <code>~/.sbt/0.13/plugins/</code> はそのクラスパスをすべての sbt ビルド定義に対して export する sbt プロジェクトだ。
 大雑把に言えば、<code>~/.sbt/0.13/plugins/</code> 内の <code>.sbt</code> ファイルや <code>.scala</code> ファイルは、それが全てのプロジェクトの <code>project/</code> ディレクトリに入っているかのようにふるまう。

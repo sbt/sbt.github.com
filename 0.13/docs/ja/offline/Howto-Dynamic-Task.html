@@ -49,8 +49,8 @@
 </code></pre><h4 id="project%2Fstyle.sbt">project/style.sbt<a href="#project%2Fstyle.sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="">addSbtPlugin(&quot;org.scalastyle&quot; %% &quot;scalastyle-sbt-plugin&quot; % &quot;0.8.0&quot;)
 </code></pre><h4 id="build.sbt+v1">build.sbt v1<a href="#build.sbt+v1" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">lazy val compilecheck = taskKey[sbt.inc.Analysis](&quot;compile and then scalastyle&quot;)
 
-lazy val root = (project in file(&quot;.&quot;)).
-  settings(
+lazy val root = (project in file(&quot;.&quot;))
+  .settings(
     compilecheck := (Def.taskDyn {
       val c = (compile in Compile).value
       Def.task {
@@ -61,8 +61,8 @@ lazy val root = (project in file(&quot;.&quot;)).
   )
 </code></pre><p>これで逐次タスクと同じものができたけども、違いは最初のタスクの結果である <code>c</code> を返していることだ。
 </p><h4 id="build.sbt+v2">build.sbt v2<a href="#build.sbt+v2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>compile in Compile</code> の戻り値と同じ型を返せるようになったので、もとのキーをこの動的タスクで再配線 (rewire) できるかもしれない。
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
     compile in Compile := (Def.taskDyn {
       val c = (compile in Compile).value
       Def.task {

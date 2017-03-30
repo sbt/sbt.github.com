@@ -112,9 +112,9 @@ lazy val commonSettings = Seq(
   scalaVersion := &quot;2.12.1&quot;
 )
 
-lazy val backend = (project in file(&quot;backend&quot;)).
-  settings(commonSettings: _*).
-  settings(
+lazy val backend = (project in file(&quot;backend&quot;))
+  .settings(
+    commonSettings,
     libraryDependencies ++= backendDeps
   )
 </code></pre><p>マルチプロジェクトでのビルド定義が肥大化して、サブプロジェクト間で同じ依存ライブラリを持っているかを保証したくなったとき、このようなテクニックは有効だ。

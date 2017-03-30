@@ -119,8 +119,8 @@ Hi!
 设置好项目的 classpath，所以你可以根据项目的代码尝试实际的 Scala 示例。
 </p><h3 id="%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">构建定义<a href="#%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>大多数项目需要一些手动设置。基本的构建设置都放在项目根目录的 <code>build.sbt</code> 文件里。
 例如，如果你的项目放在 <code>hello</code> 下，在 <code>hello/build.sbt</code> 中可以这样写：
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
     name := &quot;hello&quot;,
     version := &quot;1.0&quot;,
     scalaVersion := &quot;2.12.1&quot;
@@ -265,8 +265,8 @@ project/
 </p><p>取而代之的是，构建定义会创建一个类型为 <code>Setting[T]</code> 的庞大的对象列表，<code>T</code> 是映射表中值（value）的类型。一个 <code>Setting</code> 描述的是一次 <em>对映射表（map）的转换</em>，
 像增加一个新的键值对或者追加到一个已经存在的 value 上。（在函数式编程关于使用不可变数据结构和值的思想中，一次转换返回一个新的map —— 它不会就地更新旧的 map。）
 </p><p>你可以为本目录下的项目名称关联一个 <code>Setting[String]</code>，像这样：
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
     name := &quot;hello&quot;
   )
 </code></pre><p>这个 <code>Setting[String]</code> 会通过增加（或者替换）<code>name</code>键的值为 <code>&quot;hello&quot;</code> 来对 map 做一次转换。转换后的 map 成为 sbt 新的 map。
@@ -281,9 +281,9 @@ project/
   scalaVersion := &quot;2.12.1&quot;
 )
 
-lazy val root = (project in file(&quot;.&quot;)).
-  settings(commonSettings: _*).
-  settings(
+lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    commonSettings,
     name := &quot;hello&quot;
   )
 </code></pre><p>每一项 <code>Setting</code> 都定义为一个 Scala 表达式。在 <code>settings</code> 中的表达式是相互独立的，而且它们仅仅是表达式，不是完整的 Scala 语句。
@@ -292,16 +292,16 @@ lazy val root = (project in file(&quot;.&quot;)).
 </p><p>在左边，<code>name</code>， <code>version</code> 和 <code>scalaVersion</code> 都是 <em>键（keys）</em>。一个键（key）就是一个 <code>SettingKey[T]</code>，<code>TaskKey[T]</code> 或者 <code>InputKey[T]</code> 的实例，<code>T</code> 是期望的 value 的类型。
 key 的类别将在下面讲解。
 </p><p>键（Keys）有一个返回 <code>Setting[T]</code> 的 <code>:=</code> 方法。你可以像使用 Java 的语法一样调用该方法：
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
     name.:=(&quot;hello&quot;)
   )
 </code></pre><p>但是，Scala 允许 <code>name := &quot;hello&quot;</code> 这样调用（在 Scala 中，一个只有单个参数的方法可以使用任何一种语法调用）。
 </p><p>键（key）<code>name</code> 上的 <code>:=</code> 方法会返回一个 <code>Setting</code>，在这里特指 <code>Setting[String]</code>。<code>String</code> 也出现在 <code>name</code> 自身的类型 <code>SettingKey[String]</code> 中。
 在这个例子中，返回的 <code>Setting[String]</code> 是一个在 sbt 的 map 中增加或者替换键为 <code>name</code> 的转换，赋值为 <code>&quot;hello&quot;</code>。
 </p><p>如果你使用了错误类型的 value，构建定义会编译不通过：
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
     name := 42  // 编译不通过
   )
 </code></pre><h3 id="%E9%94%AE%EF%BC%88Keys%EF%BC%89">键（Keys）<a href="#%E9%94%AE%EF%BC%88Keys%EF%BC%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="%E7%B1%BB%E5%9E%8B%EF%BC%88Types%EF%BC%89">类型（Types）<a href="#%E7%B1%BB%E5%9E%8B%EF%BC%88Types%EF%BC%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>有三种类型的 key：
@@ -324,13 +324,13 @@ key 的名称取自于赋给 <code>val</code> 变量的值。例如，给一个�
 </p><p>例如，实现前面一部分中的 <code>hello</code> task：
 </p><pre><code class="prettyprint lang-scala">lazy val hello = taskKey[Unit](&quot;An example task&quot;)
 
-lazy val root = (project in file(&quot;.&quot;)).
-  settings(
+lazy val root = (project in file(&quot;.&quot;))
+  .settings(
     hello := { println(&quot;Hello!&quot;) }
   )
 </code></pre><p>我们已经在定义项目名称时见过定义 settings 的例子，
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
     name := &quot;hello&quot;
   )
 </code></pre><h4 id="Tasks+%E5%92%8C+Settings+%E7%9A%84%E7%B1%BB%E5%9E%8B">Tasks 和 Settings 的类型<a href="#Tasks+%E5%92%8C+Settings+%E7%9A%84%E7%B1%BB%E5%9E%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>从类型系统的角度来讲，通过 task key 创建的 <code>Setting</code> 和通过 setting key 创建的 <code>Setting</code> 有稍微不同。<code>taskKey := 42</code> 的类型是 <code>Setting[Task[T]]</code> 而 <code>settingKey := 42</code>
@@ -355,16 +355,17 @@ lazy val commonSettings = Seq(
   scalaVersion := &quot;2.12.1&quot;
 )
 
-lazy val root = (project in file(&quot;.&quot;)).
-  settings(commonSettings: _*).
-  settings(
+lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    commonSettings,
     name := &quot;hello&quot;,
     libraryDependencies += derby
   )
 </code></pre><p>就是像这样添加版本为 10.4.1.3 的 Apache Derby 库作为依赖。
 </p><p>key <code>libraryDependencies</code> 包含两个方面的复杂性：<code>+=</code> 方法而不是 <code>:=</code>，第二个就是 <code>%</code> 方法。<code>+=</code> 方法是将新的值追加该 key 的旧值后面而不是替换它，这将在 
 <a href="More-About-Settings.html">更多设置</a> 中介绍。<code>%</code> 方法是用来从字符串构造 Ivy 模块 ID 的，将在 <a href="Library-Dependencies.html">库依赖</a> 中介绍。
-</p><p>目前，一直到入门指南的后面部分，我们跳过了库依赖的一些细节。后面有一整节 <a href="Library-Dependencies.html">库依赖</a> 来介绍这些内容。</p><h2 id="Scope">Scope<a href="#Scope" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>这一小节介绍 scope。假设你已经阅读并且理解了前一小节 <a href="Basic-Def.html">.sbt 构建定义</a>。
+</p><p>目前，一直到入门指南的后面部分，我们跳过了库依赖的一些细节。后面有一整节 <a href="Library-Dependencies.html">库依赖</a> 来介绍这些内容。
+</p><h2 id="Scope">Scope<a href="#Scope" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>这一小节介绍 scope。假设你已经阅读并且理解了前一小节 <a href="Basic-Def.html">.sbt 构建定义</a>。
 </p><h3 id="%E5%85%B3%E4%BA%8E+Key+%E7%9A%84%E6%89%80%E6%9C%89%E6%95%85%E4%BA%8B">关于 Key 的所有故事<a href="#%E5%85%B3%E4%BA%8E+Key+%E7%9A%84%E6%89%80%E6%9C%89%E6%95%85%E4%BA%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="Basic-Def.html">前一小节</a> 我们认为像 <code>name</code> 的一个 key 相当于 sbt 保存键值对的 map 中的一条记录，这只是一种简化。
 </p><p>事实上，每一个 key 可以在多个上下文中关联一个值，每个上下文称之为 “scope”。
 </p><p>一些具体的例子：
@@ -467,8 +468,8 @@ lazy val root = (project in file(&quot;.&quot;)).
 </p><p>尝试用 <code>inspect *:fullClasspath</code> 作为对比。默认情况下，<code>fullClasspath</code> 没有定义在 <code>Global</code> configuration 中。
 </p><p>更多详细的内容请参见 <a href="../docs/Inspecting-Settings.html">与 Configuration 系统交互</a>。
 </p><h3 id="%E5%9C%A8%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E4%B8%AD%E6%B6%89%E5%8F%8A+scope">在构建定义中涉及 scope<a href="#%E5%9C%A8%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E4%B8%AD%E6%B6%89%E5%8F%8A+scope" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>如果你创建的 <code>build.sbt</code> 中有一个bare key，它的作用于将是当前的 project 下，configuration 和 task 均为 <code>Global</code>：
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
     name := &quot;hello&quot;
   )
 </code></pre><p>启动 sbt 并且执行 <code>inspect name</code> 可以看到它由 <code>{file:/home/hp/checkout/hello/}default-aea33a/*:name</code> 提供，也就是说，project 是 <code>{file:/home/hp/checkout/hello/}default-aea33a</code>，
@@ -491,7 +492,8 @@ configuration 是 <code>*</code>（表示全局），task 没有显示出来（�
 </p><p>如果你遇到像 <em>“引用未定义的设置”</em> 这样的错误，通常是你指定 scope 失败了，或者你指定了一个错误的 scope。你使用的 key 可能定义在其他的 scope 中。sbt 会尝试在错误消息里面提示你的想法是什么；如 “你是指 compile:compile？”
 </p><p>一种方式是你可以这样认为，name 只是 key 的 <em>一部分</em>。实际上，所有的 key 都有 name 和 scope 组成（scope 有三个轴）。换句话说，<code>packageOptions in (Compile, packageBin)</code> 是表示 key name 的完整的表达式。
 其简写 <code>packageOptions</code> 也是一个 key name，但是是不同的（对于没有 in 方法的 key，会隐式的假设一个 scope：当前的 project，global
-config，global task）。</p><h2 id="%E6%9B%B4%E5%A4%9A%E5%85%B3%E4%BA%8E%E8%AE%BE%E7%BD%AE">更多关于设置<a href="#%E6%9B%B4%E5%A4%9A%E5%85%B3%E4%BA%8E%E8%AE%BE%E7%BD%AE" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>这一小节将介绍除了用基本的 <code>:=</code> 方法创建设置，还有其他的方法可以创建。假设你已经阅读了 <a href="Basic-Def.html">.sbt 构建定义</a> 和 <a href="Scopes.html">scope</a>。
+config，global task）。
+</p><h2 id="%E6%9B%B4%E5%A4%9A%E5%85%B3%E4%BA%8E%E8%AE%BE%E7%BD%AE">更多关于设置<a href="#%E6%9B%B4%E5%A4%9A%E5%85%B3%E4%BA%8E%E8%AE%BE%E7%BD%AE" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>这一小节将介绍除了用基本的 <code>:=</code> 方法创建设置，还有其他的方法可以创建。假设你已经阅读了 <a href="Basic-Def.html">.sbt 构建定义</a> 和 <a href="Scopes.html">scope</a>。
 </p><h3 id="%E5%9B%9E%E9%A1%BE%EF%BC%9A%E8%AE%BE%E7%BD%AE">回顾：设置<a href="#%E5%9B%9E%E9%A1%BE%EF%BC%9A%E8%AE%BE%E7%BD%AE" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>还记得在 <a href="Basic-Def.html">.sbt 构建定义</a> 中，一个构建定义创建了一个 <code>Setting</code> 列表，然后这些 <code>Setting</code> 被用来对 sbt 的构建描述做转换（它是一个保存键值对的 map）。一个 Setting 就是将 sbt 之前的 map 作为输入并且输出一个新的 map 的转换。
 这个新的 map 就是 sbt 的新状态。
 </p><p>不同 setting 通过不同的方式对该 map 进行转换。之前在 <a href="Basic-Def.html">.sbt 构建定义</a> 中，你已经阅读了 <code>:=</code> 方法相关的内容。
@@ -637,23 +639,23 @@ lazy val core = project
 </p><pre><code class="prettyprint lang-scala">lazy val util = project.in(file(&quot;util&quot;))
 
 lazy val core = project in file(&quot;core&quot;)
-</code></pre><h4 id="%E5%85%AC%E5%85%B1%E8%AE%BE%E5%AE%9A">公共设定<a href="#%E5%85%AC%E5%85%B1%E8%AE%BE%E5%AE%9A" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>To factor out common settings across multiple projects, create a sequence named <code>commonSettings</code> and call <code>settings</code> method on each project. Note <code>_*</code> is required to pass sequence into a vararg method.
-要跨多个项目提取公共设置，请创建一个名为<code>commonSettings</code>的序列，并在每个项目上调用<code>settings</code>方法。注意要传入序列给变参数方法时需要调用<code>_*</code>。
+</code></pre><h4 id="%E5%85%AC%E5%85%B1%E8%AE%BE%E5%AE%9A">公共设定<a href="#%E5%85%AC%E5%85%B1%E8%AE%BE%E5%AE%9A" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>To factor out common settings across multiple projects, create a sequence named <code>commonSettings</code> and call <code>settings</code> method on each project.
+要跨多个项目提取公共设置，请创建一个名为<code>commonSettings</code>的序列，并在每个项目上调用<code>settings</code>方法。
 </p><pre><code class="prettyprint lang-scala">lazy val commonSettings = Seq(
   organization := &quot;com.example&quot;,
   version := &quot;0.1.0&quot;,
   scalaVersion := &quot;2.12.1&quot;
 )
 
-lazy val core = (project in file(&quot;core&quot;)).
-  settings(commonSettings: _*).
-  settings(
+lazy val core = (project in file(&quot;core&quot;))
+  .settings(
+    commonSettings,
     // other settings
   )
 
-lazy val util = (project in file(&quot;util&quot;)).
-  settings(commonSettings: _*).
-  settings(
+lazy val util = (project in file(&quot;util&quot;))
+  .settings(
+    commonSettings,
     // other settings
   )
 </code></pre><p>现在我们可以在一处修改<code>version</code>，当重新加载构建时，将在各个子项目相应更新。
@@ -666,9 +668,9 @@ lazy val util = project
 lazy val core = project
 </code></pre><p>在上面的例子中，root 项目聚合了 <code>util</code> 和 <code>core</code>。像例子中一样，随着有两个子项目的情况下启动 sbt，然后尝试编译。你应该会看到全部的三个项目都被编译了。
 </p><p><em>在进行聚合的项目中</em>，像这个例子中的 root 项目一样，你可以按 task 来控制聚合。例如，为了避免聚合 <code>update</code> task：
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
-  aggregate(util, core).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .aggregate(util, core)
+  .settings(
     aggregate in update := false
   )
 
@@ -719,17 +721,17 @@ lazy val core = project
 </p><h3 id="%E5%90%AF%E7%94%A8%E5%92%8C%E7%A6%81%E7%94%A8%E8%87%AA%E5%8A%A8%E6%8F%92%E4%BB%B6">启用和禁用自动插件<a href="#%E5%90%AF%E7%94%A8%E5%92%8C%E7%A6%81%E7%94%A8%E8%87%AA%E5%8A%A8%E6%8F%92%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>一个插件能够声明它自己的设置被自动添加到构建定义中去，在这种情况下你不需要为添加它做任何事情。
 </p><p>作为 0.13.5 版本的 sbt，有一个新的特性叫<a href="../docs/Plugins.html">自动插件</a>，它能够在自动的、安全的、确保所有依赖都在项目里的前提下开启插件。很多自动插件应该能够自动开启，然而有些却需要显式开启。
 </p><p>如果你正在使用一个需要显示开启的自动插件，那么你需要添加这样的代码到你的 <code>build.sbt</code> 文件：
-</p><pre><code class="prettyprint lang-scala">lazy val util = (project in file(&quot;util&quot;)).
-  enablePlugins(FooPlugin, BarPlugin).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val util = (project in file(&quot;util&quot;))
+  .enablePlugins(FooPlugin, BarPlugin)
+  .settings(
     name := &quot;hello-util&quot;
   )
 </code></pre><p><code>enablePlugins</code> 方法允许项目显式定义它们需要使用的自动插件。
 </p><p>项目也可以使用 <code>disablePlugins</code> 方法排除掉一些插件。例如，如果我们希望能够从 <code>util</code> 中移除 <code>IvyPlugin</code> 插件的设置，我们将 <code>build.sbt</code> 修改如下：
-</p><pre><code class="prettyprint lang-scala">lazy val util = (project in file(&quot;util&quot;)).
-  enablePlugins(FooPlugin, BarPlugin).
-  disablePlugins(plugins.IvyPlugin).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val util = (project in file(&quot;util&quot;))
+  .enablePlugins(FooPlugin, BarPlugin)
+  .disablePlugins(plugins.IvyPlugin)
+  .settings(
     name := &quot;hello-util&quot;
   )
 </code></pre><p>自动插件会在文档中说明是否需要显示的开启。如果你对一个项目中开启了哪些插件好奇，只需要在 sbt 命令行中执行 <code>plugins</code> 命令。
@@ -753,8 +755,8 @@ In file:/home/jsuereth/projects/sbt/test-ivy-issues/
 lazy val util = (project in file(&quot;util&quot;))
 
 // 在`core` 项目中开启 site 插件
-lazy val core = (project in file(&quot;core&quot;)).
-  settings(site.settings : _*)
+lazy val core = (project in file(&quot;core&quot;))
+  .settings(site.settings)
 </code></pre><h3 id="%E5%85%A8%E5%B1%80%E6%8F%92%E4%BB%B6">全局插件<a href="#%E5%85%A8%E5%B1%80%E6%8F%92%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>可以一次给所有项目安装插件，只要在 <code>~/.sbt/0.13/plugins/</code> 中声明它们。<code>~/.sbt/0.13/plugins/</code> 是一个将自己的 classpath 导出给所有项目的 sbt 构建定义。
 概略地讲，在 <code>~/.sbt/0.13/plugins/</code> 中的任何 <code>.sbt</code> 或者 <code>.scala</code> 文件就和所有项目的 <code>project/</code> 目录下的一样。
 </p><p>为了一次给所有的项目添加插件，你可以创建 <code>~/.sbt/0.13/plugins//build.sbt</code> 并且添加 <code>addSbtPlugin()</code> 表达式。因为这样做会增加机器上的依赖，所以这个特性应该少用。
@@ -786,9 +788,9 @@ lazy val commonSettings = Seq(
   version := &quot;0.1.0-SNAPSHOT&quot;
 )
 
-lazy val library = (project in file(&quot;library&quot;)).
-  settings(commonSettings: _*).
-  settings(
+lazy val library = (project in file(&quot;library&quot;))
+  .settings(
+    commonSettings,
     sampleStringTask := System.getProperty(&quot;user.home&quot;),
     sampleIntTask := {
       val sum = 1 + 2
@@ -818,9 +820,9 @@ lazy val commonSettings = Seq(
   version := &quot;0.1.0-SNAPSHOT&quot;
 )
 
-lazy val library = (project in file(&quot;library&quot;)).
-  settings(commonSettings: _*).
-  settings(
+lazy val library = (project in file(&quot;library&quot;))
+  .settings(
+    commonSettings,
     startServer := {
       println(&quot;starting...&quot;)
       Thread.sleep(500)
@@ -866,9 +868,9 @@ s: 3
 </p><p><img src="../files/task-dependency01.png" alt="task-dependency"/>
 </p><p>如果我们不做重复任务相关项的去重，则当我们执行<code>test</code>时最终会编译测试源代码很多次，因为<code>compile in Test</code>作为<code>test in Test</code>的依赖项出现了很多次。
 </p><h4 id="%E6%B8%85%E7%90%86%E4%BB%BB%E5%8A%A1">清理任务<a href="#%E6%B8%85%E7%90%86%E4%BB%BB%E5%8A%A1" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>应该如何实现<code>stopServer</code>任务？清理任务的概念并不适合任务的执行模型，因为任务关心的是依赖项跟踪。最后一次操作应成为依赖其他中间任务的任务。例如<code>stopServer</code>应依赖于<code>sampleStringTask</code>，在其中<code>stopServer</code>应该是 <code>sampleStringTask</code>。
-</p><pre><code class="prettyprint lang-scala">lazy val library = (project in file(&quot;library&quot;)).
-  settings(commonSettings: _*).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val library = (project in file(&quot;library&quot;))
+  .settings(
+    commonSettings,
     startServer := {
       println(&quot;starting...&quot;)
       Thread.sleep(500)
@@ -962,9 +964,9 @@ lazy val commonSettings = Seq(
   scalaVersion := &quot;2.12.1&quot;
 )
 
-lazy val backend = (project in file(&quot;backend&quot;)).
-  settings(commonSettings: _*).
-  settings(
+lazy val backend = (project in file(&quot;backend&quot;))
+  .settings(
+    commonSettings,
     libraryDependencies ++= backendDeps
   )
 </code></pre><p>当你的多工程构建变得很大，并且想要确保子项目有一致的依赖关系时，这种技术很有用。

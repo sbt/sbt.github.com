@@ -61,8 +61,8 @@ scriptedLaunchOpts := { scriptedLaunchOpts.value ++
 scriptedBufferLog := false
 </code></pre><h3 id="%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+3%3A+src%2Fsbt-test">ステップ 3: src/sbt-test<a href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+3%3A+src%2Fsbt-test" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>src/sbt-test/&lt;テストグループ&gt;/&lt;テスト名&gt;</code> というディレクトリ構造を作る。とりあえず、<code>src/sbt-test/&lt;プラグイン名&gt;/simple</code> から始めるとする。
 </p><p>ここがポイントなんだけど、<code>simple</code> 下にビルドを作成する。プラグインを使った普通のビルド。手動でテストするために、いくつか既にあると思うけど。以下に、<code>build.sbt</code> の例を示す:
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
     version := &quot;0.1&quot;,
     scalaVersion := &quot;2.10.6&quot;,
     assemblyJarName in assembly := &quot;foo.jar&quot;
@@ -110,8 +110,8 @@ $ exists target/scala-2.10/foo.jar
 [success] Total time: 18 s, completed Sep 17, 2011 3:00:58 AM
 </code></pre><h3 id="%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+6%3A+%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0%E3%82%A2%E3%82%B5%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3">ステップ 6: カスタムアサーション<a href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+6%3A+%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0%E3%82%A2%E3%82%B5%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>ファイルコマンドは便利だけど、実際のコンテンツをテストしないため、それだけでは不十分だ。コンテンツをテストする簡単な方法は、テストビルドにカスタムのタスクを実装してしまうことだ。
 </p><p>上記の hello プロジェクトを例に取ると、生成された jar が “hello” と表示するかを確認したいとする。<code>sbt.Process</code> を用いて jar を走らせることができる。失敗を表すには、単にエラーを投げればいい。以下に <code>build.sbt</code> を示す:
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
     version := &quot;0.1&quot;,
     scalaVersion := &quot;2.10.6&quot;,
     assemblyJarName in assembly := &quot;foo.jar&quot;,

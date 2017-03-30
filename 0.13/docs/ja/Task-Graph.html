@@ -77,8 +77,8 @@ val clean = taskKey[Unit](&quot;Deletes files produced by the build, such as gen
 タスクエンジンが <code>scalacOption</code>
 の開始中括弧 (<code>{</code>) を評価するときには既に完了済みである。</strong>
 </p><p>具体例で説明しよう:
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
     name := &quot;Hello&quot;,
     organization := &quot;com.example&quot;,
     scalaVersion := &quot;2.12.1&quot;,
@@ -104,8 +104,8 @@ val clean = taskKey[Unit](&quot;Deletes files produced by the build, such as gen
 <code>log.info(&quot;456&quot;)</code> の間に挟まっているが、
 <code>update</code> タスクは両者よりも事前発生している。
 </p><p>もう一つの例:
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
     name := &quot;Hello&quot;,
     organization := &quot;com.example&quot;,
     scalaVersion := &quot;2.12.1&quot;,
@@ -196,8 +196,8 @@ build.sbt に慣れるまでは、<code>.value</code> の呼び出しをタス�
 </p><h4 id="%E4%BB%96%E3%81%AE%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AB%E4%BE%9D%E5%AD%98%E3%81%97%E3%81%9F%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%AE%E5%AE%9A%E7%BE%A9">他のセッティングに依存したタスクの定義<a href="#%E4%BB%96%E3%81%AE%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AB%E4%BE%9D%E5%AD%98%E3%81%97%E3%81%9F%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%AE%E5%AE%9A%E7%BE%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>scalacOptions</code> はタスク・キーだ。
 何らかの値に既に設定されていて、Scala 2.12 以外の場合は
 <code>&quot;-Xfatal-warnings&quot;</code> と <code>&quot;-deprecation&quot;</code> を除外したいとする。
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
     name := &quot;Hello&quot;,
     organization := &quot;com.example&quot;,
     scalaVersion := &quot;2.12.1&quot;,

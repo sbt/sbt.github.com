@@ -90,9 +90,9 @@ lazy val commonSettings = Seq(
   scalaVersion := &quot;2.12.1&quot;
 )
 
-lazy val backend = (project in file(&quot;backend&quot;)).
-  settings(commonSettings: _*).
-  settings(
+lazy val backend = (project in file(&quot;backend&quot;))
+  .settings(
+    commonSettings,
     libraryDependencies ++= backendDeps
   )
 </code></pre><p>当你的多工程构建变得很大，并且想要确保子项目有一致的依赖关系时，这种技术很有用。

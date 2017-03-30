@@ -64,9 +64,9 @@ lazy val commonSettings = Seq(
   version := &quot;0.1.0-SNAPSHOT&quot;
 )
 
-lazy val library = (project in file(&quot;library&quot;)).
-  settings(commonSettings: _*).
-  settings(
+lazy val library = (project in file(&quot;library&quot;))
+  .settings(
+    commonSettings,
     sampleStringTask := System.getProperty(&quot;user.home&quot;),
     sampleIntTask := {
       val sum = 1 + 2
@@ -96,9 +96,9 @@ lazy val commonSettings = Seq(
   version := &quot;0.1.0-SNAPSHOT&quot;
 )
 
-lazy val library = (project in file(&quot;library&quot;)).
-  settings(commonSettings: _*).
-  settings(
+lazy val library = (project in file(&quot;library&quot;))
+  .settings(
+    commonSettings,
     startServer := {
       println(&quot;starting...&quot;)
       Thread.sleep(500)
@@ -144,9 +144,9 @@ s: 3
 </p><p><img src="../files/task-dependency01.png" alt="task-dependency"/>
 </p><p>如果我们不做重复任务相关项的去重，则当我们执行<code>test</code>时最终会编译测试源代码很多次，因为<code>compile in Test</code>作为<code>test in Test</code>的依赖项出现了很多次。
 </p><h4 id="%E6%B8%85%E7%90%86%E4%BB%BB%E5%8A%A1">清理任务<a href="#%E6%B8%85%E7%90%86%E4%BB%BB%E5%8A%A1" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>应该如何实现<code>stopServer</code>任务？清理任务的概念并不适合任务的执行模型，因为任务关心的是依赖项跟踪。最后一次操作应成为依赖其他中间任务的任务。例如<code>stopServer</code>应依赖于<code>sampleStringTask</code>，在其中<code>stopServer</code>应该是 <code>sampleStringTask</code>。
-</p><pre><code class="prettyprint lang-scala">lazy val library = (project in file(&quot;library&quot;)).
-  settings(commonSettings: _*).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val library = (project in file(&quot;library&quot;))
+  .settings(
+    commonSettings,
     startServer := {
       println(&quot;starting...&quot;)
       Thread.sleep(500)

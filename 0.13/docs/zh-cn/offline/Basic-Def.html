@@ -59,8 +59,8 @@
 </p><p>取而代之的是，构建定义会创建一个类型为 <code>Setting[T]</code> 的庞大的对象列表，<code>T</code> 是映射表中值（value）的类型。一个 <code>Setting</code> 描述的是一次 <em>对映射表（map）的转换</em>，
 像增加一个新的键值对或者追加到一个已经存在的 value 上。（在函数式编程关于使用不可变数据结构和值的思想中，一次转换返回一个新的map —— 它不会就地更新旧的 map。）
 </p><p>你可以为本目录下的项目名称关联一个 <code>Setting[String]</code>，像这样：
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
     name := &quot;hello&quot;
   )
 </code></pre><p>这个 <code>Setting[String]</code> 会通过增加（或者替换）<code>name</code>键的值为 <code>&quot;hello&quot;</code> 来对 map 做一次转换。转换后的 map 成为 sbt 新的 map。
@@ -75,9 +75,9 @@
   scalaVersion := &quot;2.12.1&quot;
 )
 
-lazy val root = (project in file(&quot;.&quot;)).
-  settings(commonSettings: _*).
-  settings(
+lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    commonSettings,
     name := &quot;hello&quot;
   )
 </code></pre><p>每一项 <code>Setting</code> 都定义为一个 Scala 表达式。在 <code>settings</code> 中的表达式是相互独立的，而且它们仅仅是表达式，不是完整的 Scala 语句。
@@ -86,16 +86,16 @@ lazy val root = (project in file(&quot;.&quot;)).
 </p><p>在左边，<code>name</code>， <code>version</code> 和 <code>scalaVersion</code> 都是 <em>键（keys）</em>。一个键（key）就是一个 <code>SettingKey[T]</code>，<code>TaskKey[T]</code> 或者 <code>InputKey[T]</code> 的实例，<code>T</code> 是期望的 value 的类型。
 key 的类别将在下面讲解。
 </p><p>键（Keys）有一个返回 <code>Setting[T]</code> 的 <code>:=</code> 方法。你可以像使用 Java 的语法一样调用该方法：
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
     name.:=(&quot;hello&quot;)
   )
 </code></pre><p>但是，Scala 允许 <code>name := &quot;hello&quot;</code> 这样调用（在 Scala 中，一个只有单个参数的方法可以使用任何一种语法调用）。
 </p><p>键（key）<code>name</code> 上的 <code>:=</code> 方法会返回一个 <code>Setting</code>，在这里特指 <code>Setting[String]</code>。<code>String</code> 也出现在 <code>name</code> 自身的类型 <code>SettingKey[String]</code> 中。
 在这个例子中，返回的 <code>Setting[String]</code> 是一个在 sbt 的 map 中增加或者替换键为 <code>name</code> 的转换，赋值为 <code>&quot;hello&quot;</code>。
 </p><p>如果你使用了错误类型的 value，构建定义会编译不通过：
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
     name := 42  // 编译不通过
   )
 </code></pre><h3 id="%E9%94%AE%EF%BC%88Keys%EF%BC%89">键（Keys）<a href="#%E9%94%AE%EF%BC%88Keys%EF%BC%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="%E7%B1%BB%E5%9E%8B%EF%BC%88Types%EF%BC%89">类型（Types）<a href="#%E7%B1%BB%E5%9E%8B%EF%BC%88Types%EF%BC%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>有三种类型的 key：
@@ -118,13 +118,13 @@ key 的名称取自于赋给 <code>val</code> 变量的值。例如，给一个�
 </p><p>例如，实现前面一部分中的 <code>hello</code> task：
 </p><pre><code class="prettyprint lang-scala">lazy val hello = taskKey[Unit](&quot;An example task&quot;)
 
-lazy val root = (project in file(&quot;.&quot;)).
-  settings(
+lazy val root = (project in file(&quot;.&quot;))
+  .settings(
     hello := { println(&quot;Hello!&quot;) }
   )
 </code></pre><p>我们已经在定义项目名称时见过定义 settings 的例子，
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
     name := &quot;hello&quot;
   )
 </code></pre><h4 id="Tasks+%E5%92%8C+Settings+%E7%9A%84%E7%B1%BB%E5%9E%8B">Tasks 和 Settings 的类型<a href="#Tasks+%E5%92%8C+Settings+%E7%9A%84%E7%B1%BB%E5%9E%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>从类型系统的角度来讲，通过 task key 创建的 <code>Setting</code> 和通过 setting key 创建的 <code>Setting</code> 有稍微不同。<code>taskKey := 42</code> 的类型是 <code>Setting[Task[T]]</code> 而 <code>settingKey := 42</code>
@@ -149,16 +149,17 @@ lazy val commonSettings = Seq(
   scalaVersion := &quot;2.12.1&quot;
 )
 
-lazy val root = (project in file(&quot;.&quot;)).
-  settings(commonSettings: _*).
-  settings(
+lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    commonSettings,
     name := &quot;hello&quot;,
     libraryDependencies += derby
   )
 </code></pre><p>就是像这样添加版本为 10.4.1.3 的 Apache Derby 库作为依赖。
 </p><p>key <code>libraryDependencies</code> 包含两个方面的复杂性：<code>+=</code> 方法而不是 <code>:=</code>，第二个就是 <code>%</code> 方法。<code>+=</code> 方法是将新的值追加该 key 的旧值后面而不是替换它，这将在 
 <a href="More-About-Settings.html">更多设置</a> 中介绍。<code>%</code> 方法是用来从字符串构造 Ivy 模块 ID 的，将在 <a href="Library-Dependencies.html">库依赖</a> 中介绍。
-</p><p>目前，一直到入门指南的后面部分，我们跳过了库依赖的一些细节。后面有一整节 <a href="Library-Dependencies.html">库依赖</a> 来介绍这些内容。</p><div class="bottom nav span-16">
+</p><p>目前，一直到入门指南的后面部分，我们跳过了库依赖的一些细节。后面有一整节 <a href="Library-Dependencies.html">库依赖</a> 来介绍这些内容。
+</p><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>
                         <a href="Scopes.html"> Scope </a>                        

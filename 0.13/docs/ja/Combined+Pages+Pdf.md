@@ -830,8 +830,8 @@ scalacOptions := {
 具体例で説明しよう:
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     name := "Hello",
     organization := "com.example",
     scalaVersion := "2.12.1",
@@ -866,8 +866,8 @@ lazy val root = (project in file(".")).
 もう一つの例:
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     name := "Hello",
     organization := "com.example",
     scalaVersion := "2.12.1",
@@ -992,8 +992,8 @@ scalacOptions := {
 `"-Xfatal-warnings"` と `"-deprecation"` を除外したいとする。
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     name := "Hello",
     organization := "com.example",
     scalaVersion := "2.12.1",
@@ -1376,8 +1376,8 @@ $ sbt
 `build.sbt` で裸のキーを使ってセッティングを作った場合は、現プロジェクト、`Global` コンフィグレーション、`Global` タスクにスコープ付けされる:
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     name := "hello"
   )
 ```
@@ -1472,13 +1472,13 @@ lazy val root = (project in file("."))
     publishLocal := ()
   )
 
-lazy val core = (project in file("core")).
-  settings(
+lazy val core = (project in file("core"))
+  .settings(
     // other settings
   )
 
-lazy val util = (project in file("util")).
-  settings(
+lazy val util = (project in file("util"))
+  .settings(
     // other settings
   )
 ```
@@ -1842,14 +1842,14 @@ lazy val commonSettings = Seq(
   scalaVersion := "2.12.1"
 )
 
-lazy val core = (project in file("core")).
-  settings(
+lazy val core = (project in file("core"))
+  .settings(
     commonSettings,
     // other settings
   )
 
-lazy val util = (project in file("util")).
-  settings(
+lazy val util = (project in file("util"))
+  .settings(
     commonSettings,
     // other settings
   )
@@ -2069,9 +2069,9 @@ auto plugin の多くはデフォルトのセッティング群を自動的に�
 明示的な有効化が必要な auto plugin を使っている場合は、以下を `build.sbt` に追加する必要がある:
 
 ```scala
-lazy val util = (project in file("util")).
-  enablePlugins(FooPlugin, BarPlugin).
-  settings(
+lazy val util = (project in file("util"))
+  .enablePlugins(FooPlugin, BarPlugin)
+  .settings(
     name := "hello-util"
   )
 ```
@@ -2080,10 +2080,10 @@ lazy val util = (project in file("util")).
 例えば、`util` から `IvyPlugin` のセッティングを除外したいとすると、`build.sbt` を以下のように変更する:
 
 ```scala
-lazy val util = (project in file("util")).
-  enablePlugins(FooPlugin, BarPlugin).
-  disablePlugins(plugins.IvyPlugin).
-  settings(
+lazy val util = (project in file("util"))
+  .enablePlugins(FooPlugin, BarPlugin)
+  .disablePlugins(plugins.IvyPlugin)
+  .settings(
     name := "hello-util"
   )
 ```
@@ -2133,8 +2133,8 @@ site.settings
 lazy val util = (project in file("util"))
 
 // enable the site plugin for the `core` project
-lazy val core = (project in file("core")).
-  settings(site.settings : _*)
+lazy val core = (project in file("core"))
+  .settings(site.settings)
 ```
 
 ### グローバル・プラグイン
@@ -2225,9 +2225,9 @@ lazy val commonSettings = Seq(
   version := "0.1.0-SNAPSHOT"
 )
 
-lazy val library = (project in file("library")).
-  settings(commonSettings: _*).
-  settings(
+lazy val library = (project in file("library"))
+  .settings(
+    commonSettings,
     sampleStringTask := System.getProperty("user.home"),
     sampleIntTask := {
       val sum = 1 + 2
@@ -2279,9 +2279,9 @@ lazy val commonSettings = Seq(
   version := "0.1.0-SNAPSHOT"
 )
 
-lazy val library = (project in file("library")).
-  settings(commonSettings: _*).
-  settings(
+lazy val library = (project in file("library"))
+  .settings(
+    commonSettings,
     startServer := {
       println("starting...")
       Thread.sleep(500)
@@ -2360,9 +2360,9 @@ s: 3
 その時点で `stopServer` は `sampleStringTask` と呼ばれるべきだろう。
 
 ```scala
-lazy val library = (project in file("library")).
-  settings(commonSettings: _*).
-  settings(
+lazy val library = (project in file("library"))
+  .settings(
+    commonSettings,
     startServer := {
       println("starting...")
       Thread.sleep(500)
@@ -2533,9 +2533,9 @@ lazy val commonSettings = Seq(
   scalaVersion := "2.12.1"
 )
 
-lazy val backend = (project in file("backend")).
-  settings(commonSettings: _*).
-  settings(
+lazy val backend = (project in file("backend"))
+  .settings(
+    commonSettings,
     libraryDependencies ++= backendDeps
   )
 ```
@@ -2873,8 +2873,8 @@ scriptedBufferLog := false
 ここがポイントなんだけど、`simple` 下にビルドを作成する。プラグインを使った普通のビルド。手動でテストするために、いくつか既にあると思うけど。以下に、`build.sbt` の例を示す:
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     version := "0.1",
     scalaVersion := "2.10.6",
     assemblyJarName in assembly := "foo.jar"
@@ -2958,8 +2958,8 @@ Running sbt-assembly / simple
 上記の hello プロジェクトを例に取ると、生成された jar が "hello" と表示するかを確認したいとする。`sbt.Process` を用いて jar を走らせることができる。失敗を表すには、単にエラーを投げればいい。以下に `build.sbt` を示す:
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     version := "0.1",
     scalaVersion := "2.10.6",
     assemblyJarName in assembly := "foo.jar",
@@ -3108,8 +3108,8 @@ addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.8.0")
 ```scala
 lazy val compilecheck = taskKey[Unit]("compile and then scalastyle")
 
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     compilecheck in Compile := Def.sequential(
       compile in Compile,
       (scalastyle in Compile).toTask("")
@@ -3158,8 +3158,8 @@ addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.8.0")
 ```scala
 lazy val compilecheck = taskKey[sbt.inc.Analysis]("compile and then scalastyle")
 
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     compilecheck := (Def.taskDyn {
       val c = (compile in Compile).value
       Def.task {
@@ -3177,8 +3177,8 @@ lazy val root = (project in file(".")).
 `compile in Compile` の戻り値と同じ型を返せるようになったので、もとのキーをこの動的タスクで再配線 (rewire) できるかもしれない。
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     compile in Compile := (Def.taskDyn {
       val c = (compile in Compile).value
       Def.task {
@@ -3214,8 +3214,8 @@ object Greeting extends App {
 ```scala
 lazy val runopen = inputKey[Unit]("run and then open the browser")
 
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     runopen := {
       (run in Compile).evaluated
       println("open browser!")
@@ -3238,8 +3238,8 @@ open browser!
 この新しいインプットタスクを `run in Compile` に再配線することで、実は `runopen` キーを外すことができる:
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     run in Compile := {
       (run in Compile).evaluated
       println("open browser!")
@@ -3258,8 +3258,8 @@ lazy val root = (project in file(".")).
 lazy val runopen = inputKey[Unit]("run and then open the browser")
 lazy val openbrowser = taskKey[Unit]("open the browser")
 
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     runopen := (Def.inputTaskDyn {
       import sbt.complete.Parsers.spaceDelimited
       val args = spaceDelimited("<args>").parsed
@@ -3283,8 +3283,8 @@ lazy val root = (project in file(".")).
 lazy val actualRun = inputKey[Unit]("The actual run task")
 lazy val openbrowser = taskKey[Unit]("open the browser")
 
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     run in Compile := (Def.inputTaskDyn {
       import sbt.complete.Parsers.spaceDelimited
       val args = spaceDelimited("<args>").parsed

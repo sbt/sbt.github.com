@@ -55,17 +55,17 @@
 </p><h3 id="%E5%90%AF%E7%94%A8%E5%92%8C%E7%A6%81%E7%94%A8%E8%87%AA%E5%8A%A8%E6%8F%92%E4%BB%B6">启用和禁用自动插件<a href="#%E5%90%AF%E7%94%A8%E5%92%8C%E7%A6%81%E7%94%A8%E8%87%AA%E5%8A%A8%E6%8F%92%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>一个插件能够声明它自己的设置被自动添加到构建定义中去，在这种情况下你不需要为添加它做任何事情。
 </p><p>作为 0.13.5 版本的 sbt，有一个新的特性叫<a href="../docs/Plugins.html">自动插件</a>，它能够在自动的、安全的、确保所有依赖都在项目里的前提下开启插件。很多自动插件应该能够自动开启，然而有些却需要显式开启。
 </p><p>如果你正在使用一个需要显示开启的自动插件，那么你需要添加这样的代码到你的 <code>build.sbt</code> 文件：
-</p><pre><code class="prettyprint lang-scala">lazy val util = (project in file(&quot;util&quot;)).
-  enablePlugins(FooPlugin, BarPlugin).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val util = (project in file(&quot;util&quot;))
+  .enablePlugins(FooPlugin, BarPlugin)
+  .settings(
     name := &quot;hello-util&quot;
   )
 </code></pre><p><code>enablePlugins</code> 方法允许项目显式定义它们需要使用的自动插件。
 </p><p>项目也可以使用 <code>disablePlugins</code> 方法排除掉一些插件。例如，如果我们希望能够从 <code>util</code> 中移除 <code>IvyPlugin</code> 插件的设置，我们将 <code>build.sbt</code> 修改如下：
-</p><pre><code class="prettyprint lang-scala">lazy val util = (project in file(&quot;util&quot;)).
-  enablePlugins(FooPlugin, BarPlugin).
-  disablePlugins(plugins.IvyPlugin).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val util = (project in file(&quot;util&quot;))
+  .enablePlugins(FooPlugin, BarPlugin)
+  .disablePlugins(plugins.IvyPlugin)
+  .settings(
     name := &quot;hello-util&quot;
   )
 </code></pre><p>自动插件会在文档中说明是否需要显示的开启。如果你对一个项目中开启了哪些插件好奇，只需要在 sbt 命令行中执行 <code>plugins</code> 命令。
@@ -89,8 +89,8 @@ In file:/home/jsuereth/projects/sbt/test-ivy-issues/
 lazy val util = (project in file(&quot;util&quot;))
 
 // 在`core` 项目中开启 site 插件
-lazy val core = (project in file(&quot;core&quot;)).
-  settings(site.settings : _*)
+lazy val core = (project in file(&quot;core&quot;))
+  .settings(site.settings)
 </code></pre><h3 id="%E5%85%A8%E5%B1%80%E6%8F%92%E4%BB%B6">全局插件<a href="#%E5%85%A8%E5%B1%80%E6%8F%92%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>可以一次给所有项目安装插件，只要在 <code>~/.sbt/0.13/plugins/</code> 中声明它们。<code>~/.sbt/0.13/plugins/</code> 是一个将自己的 classpath 导出给所有项目的 sbt 构建定义。
 概略地讲，在 <code>~/.sbt/0.13/plugins/</code> 中的任何 <code>.sbt</code> 或者 <code>.scala</code> 文件就和所有项目的 <code>project/</code> 目录下的一样。
 </p><p>为了一次给所有的项目添加插件，你可以创建 <code>~/.sbt/0.13/plugins//build.sbt</code> 并且添加 <code>addSbtPlugin()</code> 表达式。因为这样做会增加机器上的依赖，所以这个特性应该少用。

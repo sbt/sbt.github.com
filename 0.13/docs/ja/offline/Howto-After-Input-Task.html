@@ -51,8 +51,8 @@
 }
 </code></pre><h4 id="build.sbt+v1">build.sbt v1<a href="#build.sbt+v1" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">lazy val runopen = inputKey[Unit](&quot;run and then open the browser&quot;)
 
-lazy val root = (project in file(&quot;.&quot;)).
-  settings(
+lazy val root = (project in file(&quot;.&quot;))
+  .settings(
     runopen := {
       (run in Compile).evaluated
       println(&quot;open browser!&quot;)
@@ -65,8 +65,8 @@ lazy val root = (project in file(&quot;.&quot;)).
 hello List(foo)
 open browser!
 </code></pre><h4 id="build.sbt+v2">build.sbt v2<a href="#build.sbt+v2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>この新しいインプットタスクを <code>run in Compile</code> に再配線することで、実は <code>runopen</code> キーを外すことができる:
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
     run in Compile := {
       (run in Compile).evaluated
       println(&quot;open browser!&quot;)

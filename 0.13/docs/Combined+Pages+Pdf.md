@@ -921,8 +921,8 @@ regardless of which line it appears in the body.**
 See the following example:
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     name := "Hello",
     organization := "com.example",
     scalaVersion := "2.12.1",
@@ -957,8 +957,8 @@ either of them.
 Here's another example:
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     name := "Hello",
     organization := "com.example",
     scalaVersion := "2.12.1",
@@ -1092,8 +1092,8 @@ Let's say it's been set to some values already, but you want to
 filter out `"-Xfatal-warnings"` and `"-deprecation"` for non-2.12.
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     name := "Hello",
     organization := "com.example",
     scalaVersion := "2.12.1",
@@ -1544,8 +1544,8 @@ If you create a setting in `build.sbt` with a bare key, it will be scoped
 to the current project, configuration `Global` and task `Global`:
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     name := "hello"
   )
 ```
@@ -1656,13 +1656,13 @@ lazy val root = (project in file("."))
     publishLocal := ()
   )
 
-lazy val core = (project in file("core")).
-  settings(
+lazy val core = (project in file("core"))
+  .settings(
     // other settings
   )
 
-lazy val util = (project in file("util")).
-  settings(
+lazy val util = (project in file("util"))
+  .settings(
     // other settings
   )
 ```
@@ -2066,14 +2066,14 @@ lazy val commonSettings = Seq(
   scalaVersion := "2.12.1"
 )
 
-lazy val core = (project in file("core")).
-  settings(
+lazy val core = (project in file("core"))
+  .settings(
     commonSettings,
     // other settings
   )
 
-lazy val util = (project in file("util")).
-  settings(
+lazy val util = (project in file("util"))
+  .settings(
     commonSettings,
     // other settings
   )
@@ -2303,9 +2303,9 @@ If you're using an auto plugin that requires explicit enablement, then you
 have to add the following to your `build.sbt`:
 
 ```scala
-lazy val util = (project in file("util")).
-  enablePlugins(FooPlugin, BarPlugin).
-  settings(
+lazy val util = (project in file("util"))
+  .enablePlugins(FooPlugin, BarPlugin)
+  .settings(
     name := "hello-util"
   )
 ```
@@ -2318,10 +2318,10 @@ method. For example, if we wish to remove the `IvyPlugin` settings
 from `util`, we modify our `build.sbt` as follows:
 
 ```scala
-lazy val util = (project in file("util")).
-  enablePlugins(FooPlugin, BarPlugin).
-  disablePlugins(plugins.IvyPlugin).
-  settings(
+lazy val util = (project in file("util"))
+  .enablePlugins(FooPlugin, BarPlugin)
+  .disablePlugins(plugins.IvyPlugin)
+  .settings(
     name := "hello-util"
   )
 ```
@@ -2374,8 +2374,8 @@ project:
 lazy val util = (project in file("util"))
 
 // enable the site plugin for the `core` project
-lazy val core = (project in file("core")).
-  settings(site.settings : _*)
+lazy val core = (project in file("core"))
+  .settings(site.settings)
 ```
 
 ### Global plugins
@@ -2475,9 +2475,9 @@ lazy val commonSettings = Seq(
   version := "0.1.0-SNAPSHOT"
 )
 
-lazy val library = (project in file("library")).
-  settings(commonSettings: _*).
-  settings(
+lazy val library = (project in file("library"))
+  .settings(
+    commonSettings,
     sampleStringTask := System.getProperty("user.home"),
     sampleIntTask := {
       val sum = 1 + 2
@@ -2536,9 +2536,9 @@ lazy val commonSettings = Seq(
   version := "0.1.0-SNAPSHOT"
 )
 
-lazy val library = (project in file("library")).
-  settings(commonSettings: _*).
-  settings(
+lazy val library = (project in file("library"))
+  .settings(
+    commonSettings,
     startServer := {
       println("starting...")
       Thread.sleep(500)
@@ -2622,9 +2622,9 @@ on other intermediate tasks. For instance `stopServer` should depend on `sampleS
 at which point `stopServer` should be the `sampleStringTask`.
 
 ```scala
-lazy val library = (project in file("library")).
-  settings(commonSettings: _*).
-  settings(
+lazy val library = (project in file("library"))
+  .settings(
+    commonSettings,
     startServer := {
       println("starting...")
       Thread.sleep(500)
@@ -2804,9 +2804,9 @@ lazy val commonSettings = Seq(
   scalaVersion := "2.12.1"
 )
 
-lazy val backend = (project in file("backend")).
-  settings(commonSettings: _*).
-  settings(
+lazy val backend = (project in file("backend"))
+  .settings(
+    commonSettings,
     libraryDependencies ++= backendDeps
   )
 ```
@@ -3213,6 +3213,8 @@ your plugin to the list.
 -   sbt-dynamodb: <https://github.com/localytics/sbt-dynamodb> (downloads and runs DynamoDB Local for testing)
 -   sbt-sqs: <https://github.com/localytics/sbt-sqs> (downloads and runs ElasticMQ for testing)
 -   sbt-s3: <https://github.com/localytics/sbt-s3> (downloads and runs S3Proxy for testing)
+-   sbt-scripted-scalatest: <https://github.com/daniel-shuy/scripted-scalatest-sbt-plugin> (test SBT plugins with ScalaTest)
+-   sbt-flaky <https://github.com/otrebski/sbt-flaky> (detects flaky tests by running tests multiple times)
 
 #### Code coverage plugins
 
@@ -3248,6 +3250,8 @@ your plugin to the list.
 #### One jar plugins
 
 -   sbt-assembly: <https://github.com/sbt/sbt-assembly>
+    -   sbt-assembly-log4j2 (sbt-assembly MergeStrategy for log4j2 plugins):
+        <https://github.com/idio/sbt-assembly-log4j2>
 -   xsbt-proguard-plugin:
     <https://github.com/adamw/xsbt-proguard-plugin>
 -   sbt-deploy: <https://github.com/reaktor/sbt-deploy>
@@ -3294,6 +3298,7 @@ your plugin to the list.
 -   sbt-cloudformation (AWS CloudFormation templates and stacks management): <https://github.com/tptodorov/sbt-cloudformation>
 -   sbt-codedeploy: <https://github.com/gilt/sbt-codedeploy>
 -   sbt-heroku: <https://github.com/heroku/sbt-heroku>
+-   sbt-heroku-deploy: <https://github.com/earldouglas/sbt-heroku-deploy>
 -   sbt-aws-fun (Deploy Jar files to AWS Lambda): <https://github.com/TailrecIO/sbt-aws-fun>
 -   sbt-aws-serverless (Deploy code to AWS Serverless Architecture): <https://github.com/yoshiyoshifujii/sbt-aws-serverless>
 
@@ -3479,7 +3484,7 @@ your plugin to the list.
     <https://github.com/Atry/pttrt>
 -   sbt-haxe (Compiling [Haxe](http://www.haxe.org/) to Java):
     <https://github.com/qifun/sbt-haxe>
--   sbt-scalabuff (Google Protocol Buffers with native scala suppport
+-   sbt-scalabuff (Google Protocol Buffers with native scala support
     thru ScalaBuff): <https://github.com/sbt/sbt-scalabuff>
 -   sbt-fmpp (FreeMarker Scala/Java Templating):
     <https://github.com/sbt/sbt-fmpp>
@@ -3525,8 +3530,6 @@ your plugin to the list.
     <https://github.com/earldouglas/sbt-frege>
 -   sbt-swagger-codegen (Models, Client and Server code generation integrated as an SBT plugin. Generate code from your Swagger(https://github.com/swagger-api) files):
     <https://github.com/unicredit/sbt-swagger-codegen>
--   sbt-heroku-deploy (Deploy Scala Web applications to Heroku):
-    <https://github.com/earldouglas/sbt-heroku-deploy>
 -   scavro (Code generation from [Avro](http://avro.apache.org/) schema):
     <https://github.com/oedura/scavro>
 -   sbt-spi-plugin (Generates provider-configuration files in the resource directory META-INF/services for later use with ServiceLoader)
@@ -3606,7 +3609,7 @@ plugins, while sbt can aggregate them together in a common repository.
 This document walks you through the means to create your own repository
 for hosting your sbt plugins and then linking them into the sbt shared
 repository. This will make your plugins available for all sbt users
-without additonal configuration (besides declaring a dependency on your
+without additional configuration (besides declaring a dependency on your
 plugin).
 
 To do this, we need to perform the following steps:
@@ -3664,9 +3667,9 @@ lazy val commonSettings = Seq(
   organization in ThisBuild := "<INSERT YOUR ORG HERE>"
 )
 
-lazy val root = (project in file(".")).
-  settings(commonSettings).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
+    commonSettings,
     sbtPlugin := true,
     name := "<YOUR PLUGIN HERE>",
     description := "<YOUR DESCRIPTION HERE>",
@@ -3829,26 +3832,89 @@ Replace `http` with `https` or `ftp` in the above command line to
 configure HTTPS or FTP.
 
 
+  [sonatype-ossrhguide]: http://central.sonatype.org/pages/ossrh-guide.html
+  [sonatype-signup]: https://issues.sonatype.org/secure/Signup!default.jspa
+  [sonatype-new-project]: https://issues.sonatype.org/secure/CreateIssue.jspa?issuetype=21&pid=10134
+  [sonatype-requirements]: http://central.sonatype.org/pages/requirements.html
+  [sonatype-coordinates]: http://central.sonatype.org/pages/choosing-your-coordinates.html
+  [sonatype-nexus]: https://oss.sonatype.org/#welcome
+  [sonatype-pgp]: http://central.sonatype.org/pages/working-with-pgp-signatures.html
   [sbt-pgp]: http://scala-sbt.org/sbt-pgp/
+  [sbt-sonatype]: https://github.com/xerial/sbt-sonatype
+  [sbt-release]: https://github.com/sbt/sbt-release
+  [gnupg]: https://www.gnupg.org/
 
-Deploying to Sonatype
+Using Sonatype
 ---------------------
-
 Deploying to sonatype is easy! Just follow these simple steps:
 
-### First - PGP Signatures
+### Sonatype setup
+> *Note:* The reference process for configuring and publishing to Sonatype is 
+described in their [OSSRH Guide][sonatype-ossrhguide].
+ 
+In short, you need two publicly available URLs: 
+* the website of the project e.g. https://github.com/sonatype/nexus-oss
+* the project's source code e.g. https://github.com/sonatype/nexus-oss.git
 
-You'll need to PGP sign your artifacts for the Sonatype repository.
-Don't worry, there's a
-[plugin for that][sbt-pgp].
-Follow the instructions for the plugin and you'll have PGP signed artifacts in no
+The [OSSRH Guide][sonatype-ossrhguide] walks you through the required 
+process of setting up the account with Sonatype. It’s as simple as 
+[creating a Sonatype's JIRA account][sonatype-signup] and afterwards creating a 
+[New Project ticket][sonatype-new-project]. When creating the account try to 
+use the same domain in your email address as the project is hosted on. I guess 
+it makes it easier to validate the relationship with the groupId requested in 
+the ticket, but is not the only method used to confirm the ownership. 
+
+Creation of the New Project ticket is as simple as:
+* providing the name of the library in the ticket’s subject,
+* naming the groupId you want to use for distributing the library (make sure 
+it is matching the root package of your code). Sonatype provides you with 
+additional hints on choosing the right groupId for publishing your library in 
+[Choosing your coordinates guide][sonatype-coordinates].
+* providing the SCM and Project URLs to the source code and homepage of the 
+library.
+
+> *Note:* After creating you Sonatype account (on their JIRA) you can login 
+using the same credentials to the [Nexus Repository Manager][sonatype-nexus] 
+which is not required to be used in this guide, but can be used later to check 
+on the published artifacts.
+
+Notice that Sonatype advises that responding to the New Project ticket might 
+take up to two business days, but in my case it was few minutes.
+
+### SBT setup
+
+To address [Sonatype's requirements for publishing to the central repository]
+[sonatype-requirements] and to simplify the publishing process I recommend you
+to use community plugins [sbt-pgp for signing the files with GPG/PGP][sbt-pgp] 
+and [sbt-sonatype for publishing to Sonatype repository][sbt-sonatype]. 
+
+#### First - PGP Signatures
+
+Having the PGP key that you want to use, you need to sign the artifacts 
+published to the Sonatype repository with the [sbt-pgp plugin][sbt-pgp]. Follow 
+the instructions for the plugin and you'll have PGP signed artifacts in no 
 time.
 
-> *Note: The plugin is a jvm-only solution to generate PGP keys and sign
-artifacts. It can work with the GPG command line tool, but the command
-line is not needed.*
+In short, add the following line to your ~/.sbt/0.13/plugins/gpg.sbt file to 
+enable it globally for SBT projects:
+```
+addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.0.0")
+```
 
-If the command to generate your key fails execute the following commands and remove the displayed files:
+> *Note:* The plugin is a jvm-only solution to generate PGP keys and sign 
+artifacts. It can also work with the GPG command line tool.
+
+If you don't have the PGP keys to sign your code with, one of the ways to 
+achieve that is to install the [GNU Privacy Guard][gnupg] and:
+* use it to generate the keypair you will use to sign your library,
+* publish your certificate to enable remote verification of the signatures,
+* make sure that the `gpg` command is in PATH available to the sbt,
+* add `useGpg := true` to your `build.sbt` to make the plugin `gpg`-aware 
+
+#### PGP Tips'n'tricks 
+
+If the command to generate your key fails, execute the following commands and 
+remove the displayed files:
 
 ```
 > show */*:pgpSecretRing
@@ -3857,53 +3923,39 @@ If the command to generate your key fails execute the following commands and rem
 [info] /home/username/.sbt/.gnupg/pubring.gpg
 ```
 
-If your PGP key has not yet been distributed to the keyserver pool,
-i.e., you've just generated it, you'll need to publish it. You can do so
-using the [sbt-pgp][sbt-pgp] plugin:
+If your PGP key has not yet been distributed to the keyserver pool, e.g., 
+you've just generated it, you'll need to publish it. You can do so using the 
+[sbt-pgp][sbt-pgp] plugin:
 
 ```
 pgp-cmd send-key keyname hkp://pool.sks-keyservers.net
 ```
 
-(where keyname is the name or email address used when creating the key or
+(where keyname is the name or email address used when creating the key or 
 hexadecimal identifier for the key.)
 
 If you see no output from sbt-pgp then the key name specified was not
 found.
 
-If it fails to run the `SendKey` command you can try another server (for example: hkp://keyserver.ubuntu.com). A list of servers can be found at [the status page](https://sks-keyservers.net/status/) of sks-keyservers.net.
+If it fails to run the `SendKey` command you can try another server (for 
+example: hkp://keyserver.ubuntu.com). A list of servers can be found at 
+[the status page](https://sks-keyservers.net/status/) of sks-keyservers.net.
 
-### Second - Maven Publishing Settings
+### Second - configure sonatype integration 
 
-To publish to a maven repository, you'll need to configure a few
-settings so that the correct metadata is generated.
-
-```scala
-publishMavenStyle := true
-```
-
-is used to ensure POMs are generated and pushed. Next, you have to set
-up the repositories you wish to push too. Luckily, Sonatype's OSSRH uses
-the same URLs for everyone:
+The credentials for your Sonatype OSSRH account need to be stored
+somewhere safe (*e.g. NOT in the repository*). Common convention is a 
+`~/.sbt/0.13/sonatype.sbt` file (e.g. `) with the following:
 
 ```scala
-publishTo := {
-  val nexus = "https://oss.sonatype.org/"
-  if (isSnapshot.value)
-    Some("snapshots" at nexus + "content/repositories/snapshots")
-  else
-    Some("releases"  at nexus + "service/local/staging/deploy/maven2")
-}
+credentials += Credentials("Sonatype Nexus Repository Manager",
+                           "oss.sonatype.org",
+                           "<your username>",
+                           "<your password>")
 ```
 
-Another good idea is to not publish your test artifacts (this is the
-default):
-
-```scala
-publishArtifact in Test := false
-```
-
-### Third - POM Metadata
+> *Note:* The first two strings must be `"Sonatype Nexus Repository Manager"`
+and `"oss.sonatype.org"` for Ivy to use the credentials.
 
 Now, we want to control what's available in the `pom.xml` file. This
 file describes our project in the maven repository and is used by
@@ -3921,107 +3973,91 @@ optional dependencies in our artifact:
 pomIncludeRepository := { _ => false }
 ```
 
-Next, the POM metadata that isn't generated by sbt must be added. This
-is done through the `pomExtra` configuration option:
-
-```scala
-pomExtra := (
-  <url>http://jsuereth.com/scala-arm</url>
-  <licenses>
-    <license>
-      <name>BSD-style</name>
-      <url>http://www.opensource.org/licenses/bsd-license.php</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
-  <scm>
-    <url>git@github.com:jsuereth/scala-arm.git</url>
-    <connection>scm:git:git@github.com:jsuereth/scala-arm.git</connection>
-  </scm>
-  <developers>
-    <developer>
-      <id>jsuereth</id>
-      <name>Josh Suereth</name>
-      <url>http://jsuereth.com</url>
-    </developer>
-  </developers>)
+To publish to a maven repository, you'll need to configure a few
+settings so that the correct metadata is generated.
+Specifically, the build should provide data for `organization`, `url`,
+`license`, `scm.url`, `scm.connection` and `developer` keys. For example:
 ```
-
-Specifically, the `url`, `license`, `scm.url`, `scm.connection` and
-`developer` sections are required. The above is an example from the
-[scala-arm](http://jsuereth.com/scala-arm) project.
-
-> *Note* that sbt will automatically inject `licenses` and `url` nodes if
-they are already present in your build file. Thus an alternative to the
-above `pomExtra` is to include the following entries:
-
-```scala
 licenses := Seq("BSD-style" -> url("http://www.opensource.org/licenses/bsd-license.php"))
 
-homepage := Some(url("http://jsuereth.com/scala-arm"))
+homepage := Some(url("http://example.com"))
+
+scmInfo := Some(
+  ScmInfo(
+    url("https://github.com/your-account/your-project"),
+    "scm:git@github.com:your-account/your-project.git"
+  )
+)
+
+developers := List(
+  Developer(
+    id    = "Your identifier",
+    name  = "Your Name",
+    email = "your@email",
+    url   = url("http://your.url")
+  )
+)
 ```
 
-This might be advantageous if those keys are used also by other plugins
-(e.g. `ls`). You **cannot use both** the sbt `licenses` key and the
-`licenses` section in `pomExtra` at the same time, as this will produce
-duplicate entries in the final POM file, leading to a rejection in
-Sonatype's staging process.
+#### Maven configuration tips'n'tricks
 
-*The full format of a pom.xml file is
-[outlined here](https://maven.apache.org/pom.html).*
+The full format of a `pom.xml` (an end product of the project configuration 
+used by Maven) file is [outlined here](https://maven.apache.org/pom.html).
+You can add more data to it with the `pomExtra` option in `build.sbt`.
 
-### Fourth - Adding credentials
 
-The credentials for your Sonatype OSSRH account need to be added
-somewhere. Common convention is a `~/.sbt/0.13/sonatype.sbt` file
-with the following:
-
+To ensure the POMs are generated and pushed:
 ```scala
-credentials += Credentials("Sonatype Nexus Repository Manager",
-                           "oss.sonatype.org",
-                           "<your username>",
-                           "<your password>")
+publishMavenStyle := true
 ```
 
-> *Note: The first two strings must be
-`"Sonatype Nexus Repository Manager"` and `"oss.sonatype.org"` for Ivy
-to use the credentials.*
-
-### Finally - Publish
-
-In sbt, run `publishSigned` and you should see something like the
-following:
-
+Setting repositories to publish to:
+```scala
+publishTo := {
+  val nexus = "https://oss.sonatype.org/"
+  if (isSnapshot.value)
+    Some("snapshots" at nexus + "content/repositories/snapshots")
+  else
+    Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+}
 ```
-> publishSigned
-Please enter your PGP passphrase> ***********
-[info] Packaging /home/josh/projects/typesafe/scala-arm/target/scala-2.9.1/scala-arm_2.9.1-1.2.jar ...
-[info] Wrote /home/josh/projects/typesafe/scala-arm/target/scala-2.9.1/scala-arm_2.9.1-1.2.pom
-[info] Packaging /home/josh/projects/typesafe/scala-arm/target/scala-2.9.1/scala-arm_2.9.1-1.2-javadoc.jar ...
-[info] Packaging /home/josh/projects/typesafe/scala-arm/target/scala-2.9.1/scala-arm_2.9.1-1.2-sources.jar ...
-[info] :: delivering :: com.jsuereth#scala-arm_2.9.1;1.2 :: 1.2 :: release :: Mon Jan 23 13:16:57 EST 2012
-[info] Done packaging.
-[info] Done packaging.
-[info] Done packaging.
-[info]  delivering ivy file to /home/josh/projects/typesafe/scala-arm/target/scala-2.9.1/ivy-1.2.xml
-[info]  published scala-arm_2.9.1 to https://oss.sonatype.org/service/local/staging/deploy/maven2/com/jsuereth/scala-arm_2.9.1/1.2/scala-arm_2.9.1-1.2-sources.jar
-[info]  published scala-arm_2.9.1 to https://oss.sonatype.org/service/local/staging/deploy/maven2/com/jsuereth/scala-arm_2.9.1/1.2/scala-arm_2.9.1-1.2-javadoc.jar.asc
-[info]  published scala-arm_2.9.1 to https://oss.sonatype.org/service/local/staging/deploy/maven2/com/jsuereth/scala-arm_2.9.1/1.2/scala-arm_2.9.1-1.2-sources.jar.asc
-[info]  published scala-arm_2.9.1 to https://oss.sonatype.org/service/local/staging/deploy/maven2/com/jsuereth/scala-arm_2.9.1/1.2/scala-arm_2.9.1-1.2.jar
-[info]  published scala-arm_2.9.1 to https://oss.sonatype.org/service/local/staging/deploy/maven2/com/jsuereth/scala-arm_2.9.1/1.2/scala-arm_2.9.1-1.2.jar.asc
-[info]  published scala-arm_2.9.1 to https://oss.sonatype.org/service/local/staging/deploy/maven2/com/jsuereth/scala-arm_2.9.1/1.2/scala-arm_2.9.1-1.2.pom.asc
-[info]  published scala-arm_2.9.1 to https://oss.sonatype.org/service/local/staging/deploy/maven2/com/jsuereth/scala-arm_2.9.1/1.2/scala-arm_2.9.1-1.2.pom
-[info]  published scala-arm_2.9.1 to https://oss.sonatype.org/service/local/staging/deploy/maven2/com/jsuereth/scala-arm_2.9.1/1.2/scala-arm_2.9.1-1.2-javadoc.jar
-[success] Total time: 9 s, completed Jan 23, 2012 1:17:03 PM
+
+Not publishing the test artifacts (this is the default):
+```scala
+publishArtifact in Test := false
 ```
+
+### Third - Publish to the staging repository
+
+> *Note:* sbt-sonatype is a third-party plugin meaning it is not covered by Lightbend subscription.
+
+To simplify the usage of the Sonatype's Nexus, add the following line to 
+`build.sbt` to import the [sbt-sonatype plugin][sbt-sonatype] to your project:
+```
+addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "1.1")
+```
+
+This plugin will facilitate the publishing process, but in short, these are 
+the main steps for publishing the libraries to the repository:
+1. Create a new staging repository: 
+`sonatypeOpen "your groupId" "Some staging name"`
+2. Sign and publish the library to the staging repository:
+`publishSigned`
+> *Note:* You can and should check the published artifacts in the [Nexus 
+Repository Manager][sonatype-nexus] (same login as Sonatype's Jira account)
+3. Close the staging repository and promote the release to central:
+`sonatypeRelease`
 
 After publishing you have to follow the
 [release workflow of Nexus](http://central.sonatype.org/pages/releasing-the-deployment.html).
-The [sbt-sonatype plugin](https://github.com/xerial/sbt-sonatype) allows
-the release workflow procedures to be performed directly from sbt.
 
-> *Note: Staged releases allow testing across large projects of
-independent releases before pushing the full project.*
+> *Note:* the sbt-sonatype plugin can be used also for other non-sonatype 
+repositories
+
+#### Publishing tips'n'tricks
+
+Use staged releases for testing across large projects of independent releases 
+before pushing the full project.
 
 > *Note:* An error message of `PGPException: checksum mismatch at 0 of 20`
 indicates that you got the passphrase wrong. We have found at least on
@@ -4030,85 +4066,21 @@ range (e.g. Umlauts). If you are absolutely sure that you typed the
 right phrase and the error doesn't disappear, try changing the
 passphrase.
 
-### Summary
+### Fourth - Integrate with the release process
 
-To get your project hosted on Sonatype (and Maven Central), you will
-need to:
+> *Note:* sbt-release is a third-party plugin meaning it is not covered by Lightbend subscription.
 
--   Have GPG key pair, with published public key,
--   An sbt file with your Sonatype credentials *that is not pushed to
-    the VCS*,
--   Add the [sbt-pgp plugin][sbt-pgp] to sign
-    the artefacts,
--   Modify `build.sbt` with the required elements in the generated POM.
-
-Starting with a project that is not being published, you'll need to
-install GPG, generate and publish your key. Swtiching to sbt, you'll
-then need to:
-
-#### ~/.sbt/sonatype.sbt
-
-This file (kept *outside the VCS*) contains the Sonatype credentials
-settings:
-
-```scala
-credentials += Credentials("Sonatype Nexus Repository Manager",
-                           "oss.sonatype.org",
-                           "your-sonatype-username",
-                           "your-sonatype-password")
+To automate the above publishing approach with the [sbt-release plugin]
+[sbt-release], you should simply add the publishing commands as steps in the
+`releaseProcess` option:
 ```
-
-#### ~/.sbt/plugins/gpg.sbt
-
-The [sbt-pgp plugin][sbt-pgp] allows you to sign
-and publish your artefacts by running `publishSigned` in sbt:
-
-```scala
-addSbtPlugin("com.typesafe.sbt" % "sbt-pgp" % "0.8")
-```
-
-#### build.sbt
-
-Finally, you'll need to tweak the generated POM in your `build.sbt`. The
-tweaks include specifying the project's authors, URL, SCM and many
-others:
-
-```scala
-publishTo := {
-  val nexus = "https://oss.sonatype.org/"
-  if (isSnapshot.value)
-    Some("snapshots" at nexus + "content/repositories/snapshots")
-  else
-    Some("releases" at nexus + "service/local/staging/deploy/maven2")
-}
-
-publishMavenStyle := true
-
-publishArtifact in Test := false
-
-pomIncludeRepository := { _ => false }
-
-pomExtra := (
-  <url>http://your.project.url</url>
-  <licenses>
-    <license>
-      <name>BSD-style</name>
-      <url>http://www.opensource.org/licenses/bsd-license.php</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
-  <scm>
-    <url>git@github.com:your-account/your-project.git</url>
-    <connection>scm:git:git@github.com:your-account/your-project.git</connection>
-  </scm>
-  <developers>
-    <developer>
-      <id>you</id>
-      <name>Your Name</name>
-      <url>http://your.url</url>
-    </developer>
-  </developers>
-)
+...
+ReleaseStep(action = Command.process("sonatypeOpen \"your groupId\" \"Some staging name\"", _)),
+...
+ReleaseStep(action = Command.process("publishSigned", _)),
+...
+ReleaseStep(action = Command.process("sonatypeRelease", _)),
+...
 ```
 
 
@@ -4503,8 +4475,8 @@ by overriding the `extraProjects` method:
         List("foo", "bar", "baz") map generateProject
 
       def generateProject(id: String): Project =
-        Project(id, file(id)).
-          settings(
+        Project(id, file(id))
+          .settings(
             name := id
           )
     }
@@ -4524,8 +4496,8 @@ by overriding `derivedProjects`:
         if (proj.projectOrigin != ProjectOrigin.DerivedProject) {
           val id = proj.id + "1"
           Seq(
-            Project(id, file(id)).
-              enablePlugins(DatabasePlugin)
+            Project(id, file(id))
+              .enablePlugins(DatabasePlugin)
           )
         }
         else Nil
@@ -5632,7 +5604,7 @@ sbt 0.13.0 - 0.13.2
 
 - Adding new name-hashing feature to incremental compiler. Alters how scala dependencies are tracked, reducing number of recompiles necessary.
 - Added the ability to launch servers via the sbt-launcher.
-- Added `.previous` feature on tasks which can load the pervious value.
+- Added `.previous` feature on tasks which can load the previous value.
 - Added `all` command which can run more than tasks in parallel.
 - Exposed the 'overwrite' flags from ivy. Added warning if overwriting a release version.
 - Improve the error message when credentials are not found in Ivy.
@@ -5716,7 +5688,7 @@ sbt 0.13.0 - 0.13.2
 -   JLine is now configured differently for Cygwin. See
     [Installing sbt][Setup].
 -   Jline and Ansi codes work better on Windows now. CI servers might
-    have to explictly disable Ansi codes via `-Dsbt.log.format=false`.
+    have to explicitly disable Ansi codes via `-Dsbt.log.format=false`.
 -   JLine now tries to respect `~/.inputrc`.
 -   Forked tests and runs now use the project's base directory as the
     current working directory.
@@ -6058,7 +6030,7 @@ The [Configuring Scala](Configuring-Scala.html) page provides full details.
     was a compatibility liability)
 -   Incremental compiler: properly track `abstract override` modifier.
     (gh-726)
--   Incremental compiler: do not normalize types in the api extraction
+-   Incremental compiler: do not normalize types in the API extraction
     phase. (gh-736)
 -   Ivy cache: account for `localOnly` when cache subclass overrides
     `isChanging`
@@ -6385,12 +6357,12 @@ parts to this.
 Additionally, Sanjin's patches to add support for hg and svn URIs are
 included.
 
-1.  sbt uses subversion to retrieve URIs beginning with `svn` or
+1.  sbt uses Subversion to retrieve URIs beginning with `svn` or
     svn+ssh. An optional fragment identifies a specific revision to
     checkout.
-2.  Because a URI for mercurial doesn't have a mercurial-specific
+2.  Because a URI for Mercurial doesn't have a Mercurial-specific
     scheme, sbt requires the URI to be prefixed with hg: to identify it
-    as a mercurial repository.
+    as a Mercurial repository.
 3.  Also, URIs that end with `.git` are now handled properly.
 
 #### Cross building
@@ -6862,7 +6834,7 @@ Some of the more visible changes:
 -   Stack trace detail can be controlled with `'on'`, `'off'`, 'nosbt',
     or an integer level. 'nosbt' means to show stack frames up to the
     first sbt method. An integer level denotes the number of frames to
-    show for each cause. This feature is courtesty of Tony Sloane.
+    show for each cause. This feature is courtesy of Tony Sloane.
 -   New action 'test-run' method that is analogous to 'run', but for
     test classes.
 -   New action 'clean-plugins' task that clears built plugins (useful
@@ -7302,7 +7274,7 @@ Some of the more visible changes:
     stack traces
 -   Project.loadProject and related methods now accept a Logger to use
 -   Made hidden files and files that start with `'.'` excluded by
-    default (`'.*'` is required because subversion seems to not mark `.svn`
+    default (`'.*'` is required because Subversion seems to not mark `.svn`
     directories hidden on Windows)
 -   Implemented exit codes
 -   Added continuous compilation command `cc`
@@ -8009,7 +7981,7 @@ influence SBT execution. Also see [sbt launcher][Sbt-Launcher].
         launcher. The format is the same as a
         <tt>[repositories]</tt> section for a
         <a href="Launcher.html">sbt launcher</a> configuration file.
-        This setting is typically used in conjuction with setting
+        This setting is typically used in conjunction with setting
         <tt>sbt.override.build.repos</tt> to
         <tt>true</tt> (see previous row and the
         <a href="Launcher.html">sbt launcher</a> documentation).</td>
@@ -8219,7 +8191,7 @@ are independent of the others. `sbt` will resolve your dependencies for
 each version separately. This way, for example, you get the version of
 Dispatch compiled against 2.8.1 for your 2.8.1 build, the version
 compiled against 2.10 for your 2.10.x builds, and so on. You can have
-fine-grained control over the behavior for for different Scala versions
+fine-grained control over the behavior for different Scala versions
 by using the `cross` method on `ModuleID` These are equivalent:
 
 ```scala
@@ -8239,6 +8211,14 @@ of the binary Scala version:
 
 ```scala
 "a" % "b" % "1.0" cross CrossVersion.full
+```
+
+`CrossVersion.patch` sites between `CrossVersion.binary` and `CrossVersion.full`
+in that it strips off any trailing `-bin-...` suffix which is used to
+distinguish varaint but binary compatible Scala toolchain builds.
+
+```scala
+"a" % "b" % "1.0" cross CrossVersion.patch
 ```
 
 This uses a custom function to determine the Scala version to use based
@@ -8973,7 +8953,7 @@ incremental compilation is determining whether changes applied to `A.scala` may 
 In the example above only the constant returned by method `foo` has changed and that does not affect
 compilation results of other files.
 
-Let's consider an other change to `A.scala`:
+Let's consider another change to `A.scala`:
 
 ```scala
 // A.scala
@@ -9033,7 +9013,7 @@ structures allow to express an API in a way that is independent from Scala compi
 such representation is persistent so it is serialized on disk and reused between compiler runs or
 even sbt runs.
 
-The api extraction phase consist of two major components:
+The API extraction phase consist of two major components:
 
   1. mapping Types and Symbols to incremental compiler representation of an extracted API
   2. hashing that representation
@@ -10526,16 +10506,16 @@ lazy val commonSettings = Seq(
 )
 lazy val scalaReflect = Def.setting { "org.scala-lang" % "scala-reflect" % scalaVersion.value }
 
-lazy val core = (project in file("core")).
-  dependsOn(macroSub).
-  settings(commonSettings: _*).
-  settings(
+lazy val core = (project in file("core"))
+  .dependsOn(macroSub)
+  .settings(
+    commonSettings,
     // other settings here
   )
 
-lazy val macroSub = (project in file("macro")).
-  settings(commonSettings: _*).
-  settings(
+lazy val macroSub = (project in file("macro"))
+  .settings(
+    commonSettings,
     libraryDependencies += scalaReflect.value
     // other settings here
   )
@@ -10618,24 +10598,24 @@ lazy val commonSettings = Seq(
 )
 lazy val scalaReflect = Def.setting { "org.scala-lang" % "scala-reflect" % scalaVersion.value }
 
-lazy val core = (project in file("core")).
-  dependsOn(macroSub, util).
-  settings(commonSettings: _*).
-  settings(
+lazy val core = (project in file("core"))
+  .dependsOn(macroSub, util)
+  .settings(
+    commonSettings,
     // other settings here
   )
 
-lazy val macroSub = (project in file("macro")).
-  dependsOn(util).
-  settings(commonSettings: _*).
-  settings(
+lazy val macroSub = (project in file("macro"))
+  .dependsOn(util)
+  .settings(
+    commonSettings,
     libraryDependencies += scalaReflect.value
     // other settings here
   )
 
-lazy util = (project in file("util")).
-  settings(commonSettings: _*).
-  settings(
+lazy util = (project in file("util"))
+  .settings(
+    commonSettings,
     // other setting here
   )
 ```
@@ -10652,10 +10632,10 @@ publishing. For example, the `core` Project definition above would now
 look like:
 
 ```scala
-lazy val core = (project in file("core")).
-  dependsOn(macroSub % "compile-internal, test-internal").
-  settings(commonSettings: _*).
-  settings(
+lazy val core = (project in file("core"))
+  .dependsOn(macroSub % "compile-internal, test-internal")
+  .settings(
+    commonSettings,
     // include the macro classes and resources in the main jar
     mappings in (Compile, packageBin) ++= mappings.in(macroSub, Compile, packageBin).value,
     // include the macro sources in the main source jar
@@ -10667,9 +10647,9 @@ You may wish to disable publishing the macro implementation. This is
 done by overriding `publish` and `publishLocal` to do nothing:
 
 ```scala
-lazy val macroSub = (project in file("macro")).
-  settings(commonSettings: _*).
-  settings(
+lazy val macroSub = (project in file("macro"))
+  .settings(
+    commonSettings,
     libraryDependencies += scalaReflect.value,
     publish := {},
     publishLocal := {}
@@ -11746,11 +11726,11 @@ lazy val commonSettings = Seq(
 )
 lazy val scalatest = "org.scalatest" %% "scalatest" % "3.0.1"
 
-lazy val root = (project in file(".")).
-  configs(IntegrationTest).
-  settings(commonSettings: _*).
-  settings(Defaults.itSettings: _*).
-  settings(
+lazy val root = (project in file("."))
+  .configs(IntegrationTest)
+  .settings(
+    commonSettings,
+    Defaults.itSettings,
     libraryDependencies += scalatest % "it,test"
     // other settings here
   )
@@ -11758,7 +11738,7 @@ lazy val root = (project in file(".")).
 
 -   `configs(IntegrationTest)` adds the predefined integration test
     configuration. This configuration is referred to by the name it.
--   `settings(Defaults.itSettings : _*)` adds compilation, packaging,
+-   `settings(Defaults.itSettings)` adds compilation, packaging,
     and testing actions and settings in the IntegrationTest
     configuration.
 -   `settings(libraryDependencies += scalatest % "it,test")` adds scalatest to both the
@@ -11817,11 +11797,11 @@ lazy val commonSettings = Seq(
 lazy val scalatest = "org.scalatest" %% "scalatest" % "3.0.1"
 lazy val FunTest = config("fun") extend(Test)
 
-lazy val root = (project in file(".")).
-  configs(FunTest).
-  settings(commonSettings: _*).
-  settings(inConfig(FunTest)(Defaults.testSettings): _*).
-  settings(
+lazy val root = (project in file("."))
+  .configs(FunTest)
+  .settings(
+    commonSettings,
+    inConfig(FunTest)(Defaults.testSettings),
     libraryDependencies += scalatest % FunTest
     // other settings here
   )
@@ -11838,7 +11818,7 @@ The `extend(Test)` part means to delegate to `Test` for undefined
 new test configuration is:
 
 ```scala
-settings(inConfig(FunTest)(Defaults.testSettings): _*)
+settings(inConfig(FunTest)(Defaults.testSettings))
 ```
 
 This says to add test and settings tasks in the `FunTest` configuration.
@@ -11879,11 +11859,11 @@ lazy val FunTest = config("fun") extend(Test)
 def itFilter(name: String): Boolean = name endsWith "ITest"
 def unitFilter(name: String): Boolean = (name endsWith "Test") && !itFilter(name)
 
-lazy val root = (project in file(".")).
-  configs(FunTest).
-  settings(commonSettings: _*).
-  settings(inConfig(FunTest)(Defaults.testTasks): _*).
-  settings(
+lazy val root = (project in file("."))
+  .configs(FunTest)
+  .settings(
+    commonSettings,
+    inConfig(FunTest)(Defaults.testTasks),
     libraryDependencies += scalatest % FunTest,
     testOptions in Test := Seq(Tests.Filter(unitFilter)),
     testOptions in FunTest := Seq(Tests.Filter(itFilter))
@@ -12150,8 +12130,8 @@ full build configuration, usage looks like:
 
 ```scala
 ...
-lazy val proj = Project(...).
-  settings( addArtifact(...).settings : _* )
+lazy val proj = Project(...)
+  .settings( addArtifact(...).settings )
 ...
 ```
 
@@ -13976,7 +13956,7 @@ postfix methods have lower precedence than infix methods.
     according to the specific character it starts with. See the Scala
     specification for details.)
 
-Therefore, the the previous example is equivalent to the following:
+Therefore, the previous example is equivalent to the following:
 
 
 ```scala
@@ -14358,8 +14338,8 @@ To demonstrate the sequential task, let's create a custom task called `compilech
 ```scala
 lazy val compilecheck = taskKey[Unit]("compile and then scalastyle")
 
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     compilecheck in Compile := Def.sequential(
       compile in Compile,
       (scalastyle in Compile).toTask("")
@@ -15031,9 +15011,9 @@ lazy val commonSettings = Seq(
   scalaVersion := "2.12.1",
 )
 
-lazy val root = (project in file(".")).
-  settings(commonSettings: _*).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
+    commonSettings,
     commands ++= Seq(hello, helloAll, failIfTrue, changeColor, printState)
   )
 ```
@@ -15903,10 +15883,10 @@ Many of the auto plugins automatically add settings into projects,
 however, some may require explicit enablement. Here's an example:
 
 ```scala
-lazy val util = (project in file("util")).
-  enablePlugins(FooPlugin, BarPlugin).
-  disablePlugins(plugins.IvyPlugin).
-  settings(
+lazy val util = (project in file("util"))
+  .enablePlugins(FooPlugin, BarPlugin)
+  .disablePlugins(plugins.IvyPlugin)
+  .settings(
     name := "hello-util"
   )
 ```
@@ -15968,8 +15948,8 @@ This becomes complicated as the number of plugins increase within an application
 Suppose we have the `SbtLessPlugin` and the `SbtCoffeeScriptPlugin`, which in turn depends on the `SbtJsTaskPlugin`, `SbtWebPlugin`, and `JvmPlugin`. Instead of manually activating all of these plugins, a project can just activate the `SbtLessPlugin` and `SbtCoffeeScriptPlugin` like this:
 
 ```scala
-lazy val root = (project in file(".")).
-  enablePlugins(SbtLessPlugin, SbtCoffeeScriptPlugin)
+lazy val root = (project in file("."))
+  .enablePlugins(SbtLessPlugin, SbtCoffeeScriptPlugin)
 ```
 
 This will pull in the right setting sequence from the plugins in the right order.  The key notion here is you declare the plugins you want, and sbt can fill in the gap.
@@ -16116,8 +16096,8 @@ object SbtLessPlugin extends AutoPlugin {
 As it turns out, `PlayScala` plugin (in case you didn't know, the Play framework is an sbt plugin) lists `SbtJsTaskPlugin` as one of it required plugins. So, if we define a `build.sbt` with:
 
 ```scala
-lazy val root = (project in file(".")).
-  enablePlugins(PlayScala)
+lazy val root = (project in file("."))
+  .enablePlugins(PlayScala)
 ```
 
 then the setting sequence from `SbtLessPlugin` will be automatically appended somewhere after the settings from `PlayScala`.
@@ -16645,8 +16625,8 @@ settings may be reused:
 ```scala
 import sbtobfuscate.ObfuscatePlugin
 
-lazy val app = (project in file("app")).
-  settings(inConfig(Test)(ObfuscatePlugin.baseObfuscateSettings): _*)
+lazy val app = (project in file("app"))
+  .settings(inConfig(Test)(ObfuscatePlugin.baseObfuscateSettings))
 ```
 
 #### Using a "main" task scope for settings
@@ -16789,7 +16769,7 @@ $ export SBT_OPTS=@/etc/sbt/sbtopts
 The default [sbt][cookbook-sbt] and [JVM][cookbook-jvm] options are set by Travis CI people,
 and it should work for most cases.
 If you do decide to customize it, read what they currently use as the defaults first.
-Because Travis is already using the environment varible `JVM_OPTS`, we can instead create a file `travis/jvmopts`:
+Because Travis is already using the environment variable `JVM_OPTS`, we can instead create a file `travis/jvmopts`:
 
 ```
 -Dfile.encoding=UTF8
@@ -17042,7 +17022,7 @@ Let's talk about testing. Once you write a plugin, it turns into a long-term thi
 
 ### scripted test framework
 
-sbt comes with scripted test framework, which let's you script a build scenario. It was written to test sbt itself on complex scenarios -- such as change detection and partial compilation:
+sbt comes with scripted test framework, which lets you script a build scenario. It was written to test sbt itself on complex scenarios -- such as change detection and partial compilation:
 
 > Now, consider what happens if you were to delete B.scala but do not update A.scala. When you recompile, you should get an error because B no longer exists for A to reference.
 > [... (really complicated stuff)]
@@ -17080,8 +17060,8 @@ Make dir structure `src/sbt-test/<test-group>/<test-name>`. For starters, try so
 Now ready? Create an initial build in `simple`. Like a real build using your plugin. I'm sure you already have several of them to test manually. Here's an example `build.sbt`:
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     version := "0.1",
     scalaVersion := "2.10.6",
     assemblyJarName in assembly := "foo.jar"
@@ -17165,8 +17145,8 @@ The file commands are great, but not nearly enough because none of them test the
 For my hello project, I'd like to check if the resulting jar prints out "hello". I can take advantage of `sbt.Process` to run the jar. To express a failure, just throw an error. Here's `build.sbt`:
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     version := "0.1",
     scalaVersion := "2.10.6",
     assemblyJarName in assembly := "foo.jar",
@@ -17487,7 +17467,7 @@ exportJars := true
 This will use the result of `packageBin` on the classpath instead of the
 class directory.
 
-> **Note**: Specifically, fullClasspath is the concatentation of
+> **Note**: Specifically, fullClasspath is the concatenation of
 > dependencyClasspath and exportedProducts. When exportJars is true,
 > exportedProducts is the output of packageBin. When exportJars is
 > false, exportedProducts is just products, which is by default the
@@ -18649,7 +18629,7 @@ myTask := {
 
 Since settings cannot reference tasks, the special task `streams`
 cannot be used to provide logging during setting initialization.
-The recommented way is to use `sLog`. Calling `sLog.value` provides
+The recommended way is to use `sLog`. Calling `sLog.value` provides
 a [Logger](../api/#sbt.Logger).
 
 ```scala
@@ -19344,8 +19324,8 @@ addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.8.0")
 ```scala
 lazy val compilecheck = taskKey[Unit]("compile and then scalastyle")
 
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     compilecheck in Compile := Def.sequential(
       compile in Compile,
       (scalastyle in Compile).toTask("")
@@ -19395,8 +19375,8 @@ addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.8.0")
 ```scala
 lazy val compilecheck = taskKey[sbt.inc.Analysis]("compile and then scalastyle")
 
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     compilecheck := (Def.taskDyn {
       val c = (compile in Compile).value
       Def.task {
@@ -19414,8 +19394,8 @@ Now we have the same thing as the sequential task, except we can now return the 
 If we can return the same return type as `compile in Compile`, might actually rewire the key to our dynamic task.
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     compile in Compile := (Def.taskDyn {
       val c = (compile in Compile).value
       Def.task {
@@ -19451,8 +19431,8 @@ object Greeting extends App {
 ```scala
 lazy val runopen = inputKey[Unit]("run and then open the browser")
 
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     runopen := {
       (run in Compile).evaluated
       println("open browser!")
@@ -19475,8 +19455,8 @@ open browser!
 We can actually remove `runopen` key, by rewriting the new input task to `run in Compile`:
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     run in Compile := {
       (run in Compile).evaluated
       println("open browser!")
@@ -19495,8 +19475,8 @@ Let's suppose that there's a task already that does the bowser opening called `o
 lazy val runopen = inputKey[Unit]("run and then open the browser")
 lazy val openbrowser = taskKey[Unit]("open the browser")
 
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     runopen := (Def.inputTaskDyn {
       import sbt.complete.Parsers.spaceDelimited
       val args = spaceDelimited("<args>").parsed
@@ -19520,8 +19500,8 @@ To break the cycle, we will introduce a clone of `run in Compile` called `actual
 lazy val actualRun = inputKey[Unit]("The actual run task")
 lazy val openbrowser = taskKey[Unit]("open the browser")
 
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     run in Compile := (Def.inputTaskDyn {
       import sbt.complete.Parsers.spaceDelimited
       val args = spaceDelimited("<args>").parsed
@@ -19604,9 +19584,10 @@ lazy val osmlibVersion = "2.5.2-RC1"
 lazy val osmlib = ("net.sf.travelingsales" % "osmlib" % osmlibVersion from
   s"""http://downloads.sourceforge.net/project/travelingsales/libosm/$osmlibVersion/libosm-$osmlibVersion.jar""")
 
-lazy val root = (project in file(".")).
-  settings(commonSettings: _*).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
+    commonSettings,
+
     // set the name of the project
     name := "My Project",
 
@@ -19850,8 +19831,8 @@ object ShellPromptPlugin extends AutoPlugin {
     def buffer[T] (f: => T): T = f
   }
   def currBranch =
-    ("git status -sb" lines_! devnull headOption).
-      getOrElse("-").stripPrefix("## ")
+    ("git status -sb" lines_! devnull headOption)
+      .getOrElse("-").stripPrefix("## ")
   val buildShellPrompt: State => String = {
     case (state: State) =>
       val currProject = Project.extract (state).currentProject.id
@@ -19902,37 +19883,37 @@ lazy val pricingDeps = Seq(
   scalatest % Test
 )
 
-lazy val cdap2 = (project in file(".")).
-  aggregate(common, server, compact, pricing, pricing_service).
-  settings(buildSettings: _*)
+lazy val cdap2 = (project in file("."))
+  .aggregate(common, server, compact, pricing, pricing_service)
+  .settings(buildSettings)
 
-lazy val common = (project in file("cdap2-common")).
-  settings(buildSettings: _*).
-  settings(
+lazy val common = (project in file("cdap2-common"))
+  .settings(
+    buildSettings,
     libraryDependencies ++= commonDeps
   )
 
-lazy val server = (project in file("cdap2-server")).
-  dependsOn(common).
-  settings(buildSettings: _*).
-  settings(
+lazy val server = (project in file("cdap2-server"))
+  .dependsOn(common)
+  .settings(
+    buildSettings,
     resolvers := oracleResolvers,
     libraryDependencies ++= serverDeps
   )
 
-lazy val pricing = (project in file("cdap2-pricing")).
-  dependsOn(common, compact, server).
-  settings(buildSettings: _*).
-  settings(
+lazy val pricing = (project in file("cdap2-pricing"))
+  .dependsOn(common, compact, server)
+  .settings(
+    buildSettings,
     libraryDependencies ++= pricingDeps
   )  
 
-lazy val pricing_service = (project in file("cdap2-pricing-service")).
-  dependsOn(pricing, server).
-  settings(buildSettings: _*)
+lazy val pricing_service = (project in file("cdap2-pricing-service"))
+  .dependsOn(pricing, server)
+  .settings(buildSettings)
 
-lazy val compatct = (project in file("compact-hashmap")).
-  settings(buildSettings: _*)
+lazy val compatct = (project in file("compact-hashmap"))
+  .settings(buildSettings)
 ```
 
 
@@ -19980,24 +19961,26 @@ lazy val commonSettings = Seq(
 )
 
 // An example project that only uses the Scalate utilities.
-lazy val a = (project in file("a")).
-  dependsOn(utils % "compile->scalate").
-  settings(commonSettings: _*)
+lazy val a = (project in file("a"))
+  .dependsOn(utils % "compile->scalate")
+  .settings(commonSettings)
 
 // An example project that uses the Scalate and Saxon utilities.
 // For the configurations defined here, this is equivalent to doing dependsOn(utils),
 //  but if there were more configurations, it would select only the Scalate and Saxon
 //  dependencies.
-lazy val b = (project in file("b")).
-  dependsOn(utils % "compile->scalate,saxon").
-  settings(commonSettings: _*)
+lazy val b = (project in file("b"))
+  .dependsOn(utils % "compile->scalate,saxon")
+  .settings(commonSettings)
 
 // Defines the utilities project
-lazy val utils = (project in file("utils")).
-  settings(commonSettings: _*).
-  settings(inConfig(Common)(Defaults.configSettings): _*).  // Add the src/common/scala/ compilation configuration.
-  settings(addArtifact(artifact in (Common, packageBin), packageBin in Common): _*). // Publish the common artifact
-  settings(
+lazy val utils = (project in file("utils"))
+  .settings(
+    commonSettings,
+
+    inConfig(Common)(Defaults.configSettings),  // Add the src/common/scala/ compilation configuration.
+    addArtifact(artifact in (Common, packageBin), packageBin in Common), // Publish the common artifact
+
       // We want our Common sources to have access to all of the dependencies on the classpaths
       //   for compile and test, but when depended on, it should only require dependencies in 'common'
     classpathConfiguration in Common := CustomCompile,
@@ -21389,9 +21372,9 @@ Your datatype definitions should be placed by default in `src/main/datatype`
 and `src/test/datatype`. Here's how your build should be configured:
 
 ```scala
-lazy val library = (project in file("library")).
-  enablePlugins(DatatypePlugin).
-  settings(
+lazy val library = (project in file("library"))
+  .enablePlugins(DatatypePlugin)
+  .settings(
     name := "foo library",
   )
 ```
@@ -21708,9 +21691,9 @@ will still run.
 Adding `JsonCodecPlugin` to the subproject will generate sjson-new JSON codes for
 the datatypes.
 
-lazy val root = (project in file(".")).
-  enablePlugins(DatatypePlugin, JsonCodecPlugin).
-  settings(
+lazy val root = (project in file("."))
+  .enablePlugins(DatatypePlugin, JsonCodecPlugin)
+  .settings(
     scalaVersion := "2.11.8",
     libraryDependencies += "com.eed3si9n" %% "sjson-new-scalajson" % "0.4.1"
   )
@@ -21931,7 +21914,7 @@ Because the compiler interface is recompiled against each Scala version
 in use in your project, its source must stay compatible with all the Scala
 versions that sbt supports (from Scala 2.8 to the latest version of Scala).
 
-This comes at great cost for both the the sbt maintainers and the Scala
+This comes at great cost for both the sbt maintainers and the Scala
 compiler authors:
 
 1. The compiler authors cannot remove old and deprecated public APIs from
@@ -22258,7 +22241,7 @@ as well.
 
 The sbt launcher's classloading structure is different than just
 starting an application in the standard Java mechanism. Every
-application loaded by by the launcher is given its own classloader. This
+application loaded by the launcher is given its own classloader. This
 classloader is a child of the Scala classloader used by the application.
 The Scala classloader can see all of the `xsbti.*` classes from the
 launcher itself.
@@ -22394,7 +22377,7 @@ following properties:
     vernacular)
 -   `version` - The revision of the Ivy module.
 -   `class` - The name of the "entry point" into the application. An
-    entry point must be a class which meets one of the following critera
+    entry point must be a class which meets one of the following criteria
     -   Extends the `xsbti.AppMain` interface.
     -   Extends the `xsbti.ServerMain` interfaces.
     -   Contains a method with the signature `static void main(String[])`
@@ -22420,7 +22403,7 @@ The `[repositories]` section configures where and how Ivy will look for
 your application. Each line denotes a repository where Ivy will look.
 
 *Note: This section configured the default location where Ivy will look,
-but this can be overriden via user configuration.*
+but this can be overridden via user configuration.*
 
 There are several built-in strings that can be used for common
 repositories:
@@ -22486,7 +22469,7 @@ properties:
 
 -   `lock` - The file that controls access to the running server. This
     file will contain the active port used by a server and must be
-    located on a a filesystem that supports locking.
+    located on a filesystem that supports locking.
 -   `jvmargs` - A file that contains line-separated JVM arguments that were
     used when starting the server.
 -   `jvmprops` - The location of a properties file that will define
@@ -23034,7 +23017,7 @@ default inclusion order for sbt is:
 1.  All AutoPlugin settings
 2.  All settings defined in `project/Build.scala`
 3.  All settings defined in the user directory
-    (`~/.sbt/<verison>/*.sbt`)
+    (`~/.sbt/<version>/*.sbt`)
 4.  All local configurations (`build.sbt`)
 
 ### Controlling Initialization
@@ -23065,7 +23048,7 @@ In the above project, we've modified the order of settings to be:
 
 What we've excluded:
 
--   All settings from the user directory (`~/.sbt/<verison>`)
+-   All settings from the user directory (`~/.sbt/<version>`)
 -   All `*.sbt` settings.
 
 The `AddSettings` object provides the following "groups" of settings you
@@ -23285,7 +23268,7 @@ object Demo extends Build
 
     val n = Project.normalizeProjectID(model.getName)
     val base = Option(model.getProjectDirectory) getOrElse info.base
-    val root = Project(n, base) settings( pomSettings(model) : _*)
+    val root = Project(n, base) settings( pomSettings(model) )
     val build = new Build { override def projects = Seq(root) }
     val loader = this.getClass.getClassLoader
     val definitions = new LoadedDefinitions(info.base, Nil, loader, build :: Nil, Nil)

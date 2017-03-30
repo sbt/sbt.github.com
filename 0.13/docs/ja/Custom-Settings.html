@@ -74,9 +74,9 @@ lazy val commonSettings = Seq(
   version := &quot;0.1.0-SNAPSHOT&quot;
 )
 
-lazy val library = (project in file(&quot;library&quot;)).
-  settings(commonSettings: _*).
-  settings(
+lazy val library = (project in file(&quot;library&quot;))
+  .settings(
+    commonSettings,
     sampleStringTask := System.getProperty(&quot;user.home&quot;),
     sampleIntTask := {
       val sum = 1 + 2
@@ -112,9 +112,9 @@ lazy val commonSettings = Seq(
   version := &quot;0.1.0-SNAPSHOT&quot;
 )
 
-lazy val library = (project in file(&quot;library&quot;)).
-  settings(commonSettings: _*).
-  settings(
+lazy val library = (project in file(&quot;library&quot;))
+  .settings(
+    commonSettings,
     startServer := {
       println(&quot;starting...&quot;)
       Thread.sleep(500)
@@ -170,9 +170,9 @@ s: 3
 最後の処理そのものもタスクになるべきで、そのタスクが他の中間タスクに依存すればいい。
 例えば、<code>stopServer</code> が　<code>sampleStringTask</code> に依存するべきだが、
 その時点で <code>stopServer</code> は <code>sampleStringTask</code> と呼ばれるべきだろう。
-</p><pre><code class="prettyprint lang-scala">lazy val library = (project in file(&quot;library&quot;)).
-  settings(commonSettings: _*).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val library = (project in file(&quot;library&quot;))
+  .settings(
+    commonSettings,
     startServer := {
       println(&quot;starting...&quot;)
       Thread.sleep(500)

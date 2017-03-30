@@ -55,23 +55,23 @@ lazy val core = project
 </p><pre><code class="prettyprint lang-scala">lazy val util = project.in(file(&quot;util&quot;))
 
 lazy val core = project in file(&quot;core&quot;)
-</code></pre><h4 id="%E5%85%AC%E5%85%B1%E8%AE%BE%E5%AE%9A">公共设定<a href="#%E5%85%AC%E5%85%B1%E8%AE%BE%E5%AE%9A" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>To factor out common settings across multiple projects, create a sequence named <code>commonSettings</code> and call <code>settings</code> method on each project. Note <code>_*</code> is required to pass sequence into a vararg method.
-要跨多个项目提取公共设置，请创建一个名为<code>commonSettings</code>的序列，并在每个项目上调用<code>settings</code>方法。注意要传入序列给变参数方法时需要调用<code>_*</code>。
+</code></pre><h4 id="%E5%85%AC%E5%85%B1%E8%AE%BE%E5%AE%9A">公共设定<a href="#%E5%85%AC%E5%85%B1%E8%AE%BE%E5%AE%9A" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>To factor out common settings across multiple projects, create a sequence named <code>commonSettings</code> and call <code>settings</code> method on each project.
+要跨多个项目提取公共设置，请创建一个名为<code>commonSettings</code>的序列，并在每个项目上调用<code>settings</code>方法。
 </p><pre><code class="prettyprint lang-scala">lazy val commonSettings = Seq(
   organization := &quot;com.example&quot;,
   version := &quot;0.1.0&quot;,
   scalaVersion := &quot;2.12.1&quot;
 )
 
-lazy val core = (project in file(&quot;core&quot;)).
-  settings(commonSettings: _*).
-  settings(
+lazy val core = (project in file(&quot;core&quot;))
+  .settings(
+    commonSettings,
     // other settings
   )
 
-lazy val util = (project in file(&quot;util&quot;)).
-  settings(commonSettings: _*).
-  settings(
+lazy val util = (project in file(&quot;util&quot;))
+  .settings(
+    commonSettings,
     // other settings
   )
 </code></pre><p>现在我们可以在一处修改<code>version</code>，当重新加载构建时，将在各个子项目相应更新。
@@ -84,9 +84,9 @@ lazy val util = project
 lazy val core = project
 </code></pre><p>在上面的例子中，root 项目聚合了 <code>util</code> 和 <code>core</code>。像例子中一样，随着有两个子项目的情况下启动 sbt，然后尝试编译。你应该会看到全部的三个项目都被编译了。
 </p><p><em>在进行聚合的项目中</em>，像这个例子中的 root 项目一样，你可以按 task 来控制聚合。例如，为了避免聚合 <code>update</code> task：
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
-  aggregate(util, core).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .aggregate(util, core)
+  .settings(
     aggregate in update := false
   )
 

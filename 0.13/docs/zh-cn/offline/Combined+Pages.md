@@ -205,8 +205,8 @@ Hi!
 例如，如果你的项目放在 `hello` 下，在 `hello/build.sbt` 中可以这样写：
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     name := "hello",
     version := "1.0",
     scalaVersion := "2.12.1"
@@ -477,8 +477,8 @@ lazy val root = (project in file("."))
 你可以为本目录下的项目名称关联一个 `Setting[String]`，像这样：
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     name := "hello"
   )
 ```
@@ -503,9 +503,9 @@ lazy val commonSettings = Seq(
   scalaVersion := "2.12.1"
 )
 
-lazy val root = (project in file(".")).
-  settings(commonSettings: _*).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
+    commonSettings,
     name := "hello"
   )
 ```
@@ -521,8 +521,8 @@ key 的类别将在下面讲解。
 键（Keys）有一个返回 `Setting[T]` 的 `:=` 方法。你可以像使用 Java 的语法一样调用该方法：
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     name.:=("hello")
   )
 ```
@@ -535,8 +535,8 @@ lazy val root = (project in file(".")).
 如果你使用了错误类型的 value，构建定义会编译不通过：
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     name := 42  // 编译不通过
   )
 ```
@@ -589,8 +589,8 @@ sbt 描述项目的 map 会将设置（setting）保存为固定的字符串，�
 ```scala
 lazy val hello = taskKey[Unit]("An example task")
 
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     hello := { println("Hello!") }
   )
 ```
@@ -598,8 +598,8 @@ lazy val root = (project in file(".")).
 我们已经在定义项目名称时见过定义 settings 的例子，
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     name := "hello"
   )
 ```
@@ -647,9 +647,9 @@ lazy val commonSettings = Seq(
   scalaVersion := "2.12.1"
 )
 
-lazy val root = (project in file(".")).
-  settings(commonSettings: _*).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
+    commonSettings,
     name := "hello",
     libraryDependencies += derby
   )
@@ -661,6 +661,7 @@ key `libraryDependencies` 包含两个方面的复杂性：`+=` 方法而不是 
 [更多设置][More-About-Settings] 中介绍。`%` 方法是用来从字符串构造 Ivy 模块 ID 的，将在 [库依赖][Library-Dependencies] 中介绍。
 
 目前，一直到入门指南的后面部分，我们跳过了库依赖的一些细节。后面有一整节 [库依赖][Library-Dependencies] 来介绍这些内容。
+
 
   [Basic-Def]: Basic-Def.html
   [More-About-Settings]: More-About-Settings.html
@@ -847,8 +848,8 @@ $ sbt
 如果你创建的 `build.sbt` 中有一个bare key，它的作用于将是当前的 project 下，configuration 和 task 均为 `Global`：
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     name := "hello"
   )
 ```
@@ -902,6 +903,7 @@ name.in(Compile).:=("hello")
 一种方式是你可以这样认为，name 只是 key 的 *一部分*。实际上，所有的 key 都有 name 和 scope 组成（scope 有三个轴）。换句话说，`packageOptions in (Compile, packageBin)` 是表示 key name 的完整的表达式。
 其简写 `packageOptions` 也是一个 key name，但是是不同的（对于没有 in 方法的 key，会隐式的假设一个 scope：当前的 project，global
 config，global task）。
+
 
   [Basic-Def]: Basic-Def.html
   [Scopes]: Scopes.html
@@ -1286,8 +1288,8 @@ lazy val core = project in file("core")
 
 #### 公共设定
 
-To factor out common settings across multiple projects, create a sequence named `commonSettings` and call `settings` method on each project. Note `_*` is required to pass sequence into a vararg method.
-要跨多个项目提取公共设置，请创建一个名为`commonSettings`的序列，并在每个项目上调用`settings`方法。注意要传入序列给变参数方法时需要调用`_*`。
+To factor out common settings across multiple projects, create a sequence named `commonSettings` and call `settings` method on each project.
+要跨多个项目提取公共设置，请创建一个名为`commonSettings`的序列，并在每个项目上调用`settings`方法。
 
 ```scala
 lazy val commonSettings = Seq(
@@ -1296,15 +1298,15 @@ lazy val commonSettings = Seq(
   scalaVersion := "2.12.1"
 )
 
-lazy val core = (project in file("core")).
-  settings(commonSettings: _*).
-  settings(
+lazy val core = (project in file("core"))
+  .settings(
+    commonSettings,
     // other settings
   )
 
-lazy val util = (project in file("util")).
-  settings(commonSettings: _*).
-  settings(
+lazy val util = (project in file("util"))
+  .settings(
+    commonSettings,
     // other settings
   )
 ```
@@ -1332,9 +1334,9 @@ lazy val core = project
 *在进行聚合的项目中*，像这个例子中的 root 项目一样，你可以按 task 来控制聚合。例如，为了避免聚合 `update` task：
 
 ```scala
-lazy val root = (project in file(".")).
-  aggregate(util, core).
-  settings(
+lazy val root = (project in file("."))
+  .aggregate(util, core)
+  .settings(
     aggregate in update := false
   )
 
@@ -1462,9 +1464,9 @@ resolvers += Resolver.sonatypeRepo("public")
 如果你正在使用一个需要显示开启的自动插件，那么你需要添加这样的代码到你的 `build.sbt` 文件：
 
 ```scala
-lazy val util = (project in file("util")).
-  enablePlugins(FooPlugin, BarPlugin).
-  settings(
+lazy val util = (project in file("util"))
+  .enablePlugins(FooPlugin, BarPlugin)
+  .settings(
     name := "hello-util"
   )
 ```
@@ -1474,10 +1476,10 @@ lazy val util = (project in file("util")).
 项目也可以使用 `disablePlugins` 方法排除掉一些插件。例如，如果我们希望能够从 `util` 中移除 `IvyPlugin` 插件的设置，我们将 `build.sbt` 修改如下：
 
 ```scala
-lazy val util = (project in file("util")).
-  enablePlugins(FooPlugin, BarPlugin).
-  disablePlugins(plugins.IvyPlugin).
-  settings(
+lazy val util = (project in file("util"))
+  .enablePlugins(FooPlugin, BarPlugin)
+  .disablePlugins(plugins.IvyPlugin)
+  .settings(
     name := "hello-util"
   )
 ```
@@ -1518,8 +1520,8 @@ site.settings
 lazy val util = (project in file("util"))
 
 // 在`core` 项目中开启 site 插件
-lazy val core = (project in file("core")).
-  settings(site.settings : _*)
+lazy val core = (project in file("core"))
+  .settings(site.settings)
 ```
 
 ### 全局插件
@@ -1592,9 +1594,9 @@ lazy val commonSettings = Seq(
   version := "0.1.0-SNAPSHOT"
 )
 
-lazy val library = (project in file("library")).
-  settings(commonSettings: _*).
-  settings(
+lazy val library = (project in file("library"))
+  .settings(
+    commonSettings,
     sampleStringTask := System.getProperty("user.home"),
     sampleIntTask := {
       val sum = 1 + 2
@@ -1639,9 +1641,9 @@ lazy val commonSettings = Seq(
   version := "0.1.0-SNAPSHOT"
 )
 
-lazy val library = (project in file("library")).
-  settings(commonSettings: _*).
-  settings(
+lazy val library = (project in file("library"))
+  .settings(
+    commonSettings,
     startServer := {
       println("starting...")
       Thread.sleep(500)
@@ -1710,9 +1712,9 @@ s: 3
 应该如何实现`stopServer`任务？清理任务的概念并不适合任务的执行模型，因为任务关心的是依赖项跟踪。最后一次操作应成为依赖其他中间任务的任务。例如`stopServer`应依赖于`sampleStringTask`，在其中`stopServer`应该是 `sampleStringTask`。
 
 ```scala
-lazy val library = (project in file("library")).
-  settings(commonSettings: _*).
-  settings(
+lazy val library = (project in file("library"))
+  .settings(
+    commonSettings,
     startServer := {
       println("starting...")
       Thread.sleep(500)
@@ -1859,9 +1861,9 @@ lazy val commonSettings = Seq(
   scalaVersion := "2.12.1"
 )
 
-lazy val backend = (project in file("backend")).
-  settings(commonSettings: _*).
-  settings(
+lazy val backend = (project in file("backend"))
+  .settings(
+    commonSettings,
     libraryDependencies ++= backendDeps
   )
 ```
