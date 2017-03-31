@@ -2476,12 +2476,12 @@ if applicable, username and password. For example, for HTTP:
 </code></pre><p>Replace <code>http</code> with <code>https</code> or <code>ftp</code> in the above command line to
 configure HTTPS or FTP.
 </p><h2 id="Using+Sonatype">Using Sonatype<a href="#Using+Sonatype" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Deploying to sonatype is easy! Just follow these simple steps:
-</p><h3 id="Sonatype+setup">Sonatype setup<a href="#Sonatype+setup" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><blockquote><p><em>Note:</em> The reference process for configuring and publishing to Sonatype is 
-described in their [OSSRH Guide][sonatype-ossrhguide].
-</p></blockquote><p>In short, you need two publicly available URLs: 
-<em> the website of the project e.g. https://github.com/sonatype/nexus-oss
-</em> the project’s source code e.g. https://github.com/sonatype/nexus-oss.git
-</p><p>The <a href="http://central.sonatype.org/pages/ossrh-guide.html">OSSRH Guide</a> walks you through the required 
+</p><h3 id="Sonatype+setup">Sonatype setup<a href="#Sonatype+setup" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The reference process for configuring and publishing to Sonatype is 
+described in their <a href="http://central.sonatype.org/pages/ossrh-guide.html">OSSRH Guide</a>.
+In short, you need two publicly available URLs: 
+</p><ul><li>the website of the project e.g. https://github.com/sonatype/nexus-oss
+</li><li>the project’s source code e.g. https://github.com/sonatype/nexus-oss.git
+</li></ul><p>The <a href="http://central.sonatype.org/pages/ossrh-guide.html">OSSRH Guide</a> walks you through the required 
 process of setting up the account with Sonatype. It’s as simple as 
 <a href="https://issues.sonatype.org/secure/Signup!default.jspa">creating a Sonatype's JIRA account</a> and afterwards creating a 
 <a href="https://issues.sonatype.org/secure/CreateIssue.jspa?issuetype=21&amp;pid=10134">New Project ticket</a>. When creating the account try to 
@@ -2489,18 +2489,18 @@ use the same domain in your email address as the project is hosted on. I guess
 it makes it easier to validate the relationship with the groupId requested in 
 the ticket, but is not the only method used to confirm the ownership. 
 </p><p>Creation of the New Project ticket is as simple as:
-<em> providing the name of the library in the ticket’s subject,
-</em> naming the groupId you want to use for distributing the library (make sure 
+</p><ul><li>providing the name of the library in the ticket’s subject,
+</li><li>naming the groupId you want to use for distributing the library (make sure 
 it is matching the root package of your code). Sonatype provides you with 
 additional hints on choosing the right groupId for publishing your library in 
 <a href="http://central.sonatype.org/pages/choosing-your-coordinates.html">Choosing your coordinates guide</a>.
-* providing the SCM and Project URLs to the source code and homepage of the 
+</li><li>providing the SCM and Project URLs to the source code and homepage of the 
 library.
-</p><blockquote><p><em>Note:</em> After creating you Sonatype account (on their JIRA) you can login 
-using the same credentials to the [Nexus Repository Manager][sonatype-nexus] 
+</li></ul><p><em>Note:</em> After creating you Sonatype account (on their JIRA) you can login 
+using the same credentials to the <a href="https://oss.sonatype.org/#welcome">Nexus Repository Manager</a> 
 which is not required to be used in this guide, but can be used later to check 
 on the published artifacts.
-</p></blockquote><p>Notice that Sonatype advises that responding to the New Project ticket might 
+</p><p>Notice that Sonatype advises that responding to the New Project ticket might 
 take up to two business days, but in my case it was few minutes.
 </p><h3 id="SBT+setup">SBT setup<a href="#SBT+setup" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To address <a href="http://central.sonatype.org/pages/requirements.html">Sonatype's requirements for publishing to the central repository</a> and to simplify the publishing process I recommend you
 to use community plugins <a href="http://scala-sbt.org/sbt-pgp/">sbt-pgp for signing the files with GPG/PGP</a> 
@@ -2509,20 +2509,18 @@ and <a href="https://github.com/xerial/sbt-sonatype">sbt-sonatype for publishing
 published to the Sonatype repository with the <a href="http://scala-sbt.org/sbt-pgp/">sbt-pgp plugin</a>. Follow 
 the instructions for the plugin and you’ll have PGP signed artifacts in no 
 time.
-</p><p>In short, add the following line to your ~/.sbt/0.13/plugins/gpg.sbt file to 
+</p><p>In short, add the following line to your <code>~/.sbt/0.13/plugins/gpg.sbt</code> file to 
 enable it globally for SBT projects:
-<code>`
-addSbtPlugin(&quot;com.jsuereth&quot; % &quot;sbt-pgp&quot; % &quot;1.0.0&quot;)
-</code>`
-</p><blockquote><p><em>Note:</em> The plugin is a jvm-only solution to generate PGP keys and sign 
+</p><pre><code class="">addSbtPlugin(&quot;com.jsuereth&quot; % &quot;sbt-pgp&quot; % &quot;1.0.0&quot;)
+</code></pre><blockquote><p><em>Note:</em> The plugin is a jvm-only solution to generate PGP keys and sign 
 artifacts. It can also work with the GPG command line tool.
 </p></blockquote><p>If you don’t have the PGP keys to sign your code with, one of the ways to 
 achieve that is to install the <a href="https://www.gnupg.org/">GNU Privacy Guard</a> and:
-<em> use it to generate the keypair you will use to sign your library,
-</em> publish your certificate to enable remote verification of the signatures,
-<em> make sure that the <code>gpg</code> command is in PATH available to the sbt,
-</em> add <code>useGpg := true</code> to your <code>build.sbt</code> to make the plugin <code>gpg</code>-aware 
-</p><h4 id="PGP+Tips%E2%80%99n%E2%80%99tricks">PGP Tips’n’tricks<a href="#PGP+Tips%E2%80%99n%E2%80%99tricks" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>If the command to generate your key fails, execute the following commands and 
+</p><ul><li>use it to generate the keypair you will use to sign your library,
+</li><li>publish your certificate to enable remote verification of the signatures,
+</li><li>make sure that the <code>gpg</code> command is in PATH available to the sbt,
+</li><li>add <code>useGpg := true</code> to your <code>build.sbt</code> to make the plugin <code>gpg</code>-aware 
+</li></ul><h4 id="PGP+Tips%E2%80%99n%E2%80%99tricks">PGP Tips’n’tricks<a href="#PGP+Tips%E2%80%99n%E2%80%99tricks" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>If the command to generate your key fails, execute the following commands and 
 remove the displayed files:
 </p><pre><code class="">&gt; show */*:pgpSecretRing
 [info] /home/username/.sbt/.gnupg/secring.gpg
@@ -2532,8 +2530,8 @@ remove the displayed files:
 you’ve just generated it, you’ll need to publish it. You can do so using the 
 <a href="http://scala-sbt.org/sbt-pgp/">sbt-pgp</a> plugin:
 </p><pre><code class="">pgp-cmd send-key keyname hkp://pool.sks-keyservers.net
-</code></pre><p>(where keyname is the name or email address used when creating the key or 
-hexadecimal identifier for the key.)
+</code></pre><p>Where <code>keyname</code> is the name or email address used when creating the key or 
+hexadecimal identifier for the key.
 </p><p>If you see no output from sbt-pgp then the key name specified was not
 found.
 </p><p>If it fails to run the <code>SendKey</code> command you can try another server (for 
@@ -2563,62 +2561,56 @@ optional dependencies in our artifact:
 settings so that the correct metadata is generated.
 Specifically, the build should provide data for <code>organization</code>, <code>url</code>,
 <code>license</code>, <code>scm.url</code>, <code>scm.connection</code> and <code>developer</code> keys. For example:
-```
-licenses := Seq(“BSD-style” -&gt; url(“http://www.opensource.org/licenses/bsd-license.php”))
-</p><p>homepage := Some(url(“http://example.com”))
-</p><p>scmInfo := Some(
+</p><pre><code class="">licenses := Seq(&quot;BSD-style&quot; -&gt; url(&quot;http://www.opensource.org/licenses/bsd-license.php&quot;))
+
+homepage := Some(url(&quot;http://example.com&quot;))
+
+scmInfo := Some(
   ScmInfo(
-    url(“https://github.com/your-account/your-project”),
-    “scm:git@github.com:your-account/your-project.git”
+    url(&quot;https://github.com/your-account/your-project&quot;),
+    &quot;scm:git@github.com:your-account/your-project.git&quot;
   )
 )
-</p><p>developers := List(
+
+developers := List(
   Developer(
-    id    = “Your identifier”,
-    name  = “Your Name”,
-    email = “your@email”,
-    url   = url(“http://your.url”)
+    id    = &quot;Your identifier&quot;,
+    name  = &quot;Your Name&quot;,
+    email = &quot;your@email&quot;,
+    url   = url(&quot;http://your.url&quot;)
   )
 )
-```
-</p><h4 id="Maven+configuration+tips%E2%80%99n%E2%80%99tricks">Maven configuration tips’n’tricks<a href="#Maven+configuration+tips%E2%80%99n%E2%80%99tricks" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The full format of a <code>pom.xml</code> (an end product of the project configuration 
+</code></pre><h4 id="Maven+configuration+tips%E2%80%99n%E2%80%99tricks">Maven configuration tips’n’tricks<a href="#Maven+configuration+tips%E2%80%99n%E2%80%99tricks" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The full format of a <code>pom.xml</code> (an end product of the project configuration 
 used by Maven) file is <a href="https://maven.apache.org/pom.html">outlined here</a>.
 You can add more data to it with the <code>pomExtra</code> option in <code>build.sbt</code>.
 </p><p>To ensure the POMs are generated and pushed:
-<code>`scala
-publishMavenStyle := true
-</code>`
-</p><p>Setting repositories to publish to:
-<code>`scala
-publishTo := {
+</p><pre><code class="prettyprint lang-scala">publishMavenStyle := true
+</code></pre><p>Setting repositories to publish to:
+</p><pre><code class="prettyprint lang-scala">publishTo := {
   val nexus = &quot;https://oss.sonatype.org/&quot;
   if (isSnapshot.value)
     Some(&quot;snapshots&quot; at nexus + &quot;content/repositories/snapshots&quot;)
   else
     Some(&quot;releases&quot;  at nexus + &quot;service/local/staging/deploy/maven2&quot;)
 }
-</code>`
-</p><p>Not publishing the test artifacts (this is the default):
-<code>`scala
-publishArtifact in Test := false
-</code>`
-</p><h3 id="Third+-+Publish+to+the+staging+repository">Third - Publish to the staging repository<a href="#Third+-+Publish+to+the+staging+repository" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><blockquote><p><em>Note:</em> sbt-sonatype is a third-party plugin meaning it is not covered by Lightbend subscription.
+</code></pre><p>Not publishing the test artifacts (this is the default):
+</p><pre><code class="prettyprint lang-scala">publishArtifact in Test := false
+</code></pre><h3 id="Third+-+Publish+to+the+staging+repository">Third - Publish to the staging repository<a href="#Third+-+Publish+to+the+staging+repository" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><blockquote><p><em>Note:</em> sbt-sonatype is a third-party plugin meaning it is not covered by Lightbend subscription.
 </p></blockquote><p>To simplify the usage of the Sonatype’s Nexus, add the following line to 
 <code>build.sbt</code> to import the <a href="https://github.com/xerial/sbt-sonatype">sbt-sonatype plugin</a> to your project:
-<code>`
-addSbtPlugin(&quot;org.xerial.sbt&quot; % &quot;sbt-sonatype&quot; % &quot;1.1&quot;)
-</code>`
-</p><p>This plugin will facilitate the publishing process, but in short, these are 
+</p><pre><code class="">addSbtPlugin(&quot;org.xerial.sbt&quot; % &quot;sbt-sonatype&quot; % &quot;1.1&quot;)
+</code></pre><p>This plugin will facilitate the publishing process, but in short, these are 
 the main steps for publishing the libraries to the repository:
-1. Create a new staging repository: 
+</p><ol><li>Create a new staging repository: 
 <code>sonatypeOpen &quot;your groupId&quot; &quot;Some staging name&quot;</code>
-2. Sign and publish the library to the staging repository:
+</li><li>Sign and publish the library to the staging repository:
 <code>publishSigned</code>
-&gt; <em>Note:</em> You can and should check the published artifacts in the <a href="https://oss.sonatype.org/#welcome">Nexus 
-Repository Manager</a> (same login as Sonatype’s Jira account)
-3. Close the staging repository and promote the release to central:
+</li><li>You can and should check the published artifacts in the
+<a href="https://oss.sonatype.org/#welcome">Nexus Repository Manager</a> (same login as Sonatype’s
+Jira account)
+</li><li>Close the staging repository and promote the release to central:
 <code>sonatypeRelease</code>
-</p><p>After publishing you have to follow the
+</li></ol><p>After publishing you have to follow the
 <a href="http://central.sonatype.org/pages/releasing-the-deployment.html">release workflow of Nexus</a>.
 </p><blockquote><p><em>Note:</em> the sbt-sonatype plugin can be used also for other non-sonatype 
 repositories
@@ -2633,16 +2625,14 @@ passphrase.
 </p></blockquote><h3 id="Fourth+-+Integrate+with+the+release+process">Fourth - Integrate with the release process<a href="#Fourth+-+Integrate+with+the+release+process" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><blockquote><p><em>Note:</em> sbt-release is a third-party plugin meaning it is not covered by Lightbend subscription.
 </p></blockquote><p>To automate the above publishing approach with the <a href="https://github.com/sbt/sbt-release">sbt-release plugin</a>, you should simply add the publishing commands as steps in the
 <code>releaseProcess</code> option:
-<code>`
-...
+</p><pre><code class="">...
 ReleaseStep(action = Command.process(&quot;sonatypeOpen \&quot;your groupId\&quot; \&quot;Some staging name\&quot;&quot;, _)),
 ...
 ReleaseStep(action = Command.process(&quot;publishSigned&quot;, _)),
 ...
 ReleaseStep(action = Command.process(&quot;sonatypeRelease&quot;, _)),
 ...
-</code>`
-</p><h2 id="Contributing+to+sbt">Contributing to sbt<a href="#Contributing+to+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Below is a running list of potential areas of contribution. This list
+</code></pre><h2 id="Contributing+to+sbt">Contributing to sbt<a href="#Contributing+to+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Below is a running list of potential areas of contribution. This list
 may become out of date quickly, so you may want to check on the
 <a href="https://groups.google.com/d/forum/sbt-dev">sbt-dev mailing list</a> if you are interested in a specific topic.
 </p><ol><li><p>There are plenty of possible visualization and analysis
