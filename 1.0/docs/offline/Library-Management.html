@@ -200,6 +200,15 @@ to be generated. For example,
     ExclusionRule(organization = &quot;javax.jms&quot;)
   )
 </code></pre><p>See <a href="../api/sbt/ModuleID.html">ModuleID</a> for API details.
+</p><p>In certain cases a transitive dependency should be exluded from
+all dependencies. This can be achieved by setting up <code>SbtExclusionRules</code>
+in <code>excludeDependencies</code>. 
+</p><pre><code class="prettyprint lang-scala">excludeDependencies ++= Seq(
+  // commons-logging is replaced by jcl-over-slf4j
+  SbtExclusionRule(&quot;commons-logging&quot;, &quot;commons-logging&quot;)
+)
+</code></pre><p>Available since sbt 0.13.9.
+</p><p>See <a href="../api/sbt/SbtExclusionRule.html">SbtExclusionRule</a> for API details.
 </p><h5 id="Download+Sources">Download Sources<a href="#Download+Sources" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p>Downloading source and API documentation jars is usually handled by an
 IDE plugin. These plugins use the <code>updateClassifiers</code> and
 <code>updateSbtClassifiers</code> tasks, which produce an <code>Update-Report</code>

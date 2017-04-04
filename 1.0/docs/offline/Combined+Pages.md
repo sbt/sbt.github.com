@@ -2317,7 +2317,7 @@ When depending on other tasks from a custom task using `value`,
 an important detail to note is the execution semantics of the tasks.
 By execution semantics, we mean exactly *when* these tasks are evaluated.
 
-We if take `sampeIntTask` for instance, each line in the body of the task
+We if take `sampleIntTask` for instance, each line in the body of the task
 should be strictly evaluated one after the other. That is sequential semantics:
 
 ```scala
@@ -11349,6 +11349,21 @@ libraryDependencies +=
 
 See [ModuleID](../api/sbt/ModuleID.html) for API details.
 
+In certain cases a transitive dependency should be exluded from
+all dependencies. This can be achieved by setting up `SbtExclusionRules`
+in `excludeDependencies`. 
+
+```scala
+excludeDependencies ++= Seq(
+  // commons-logging is replaced by jcl-over-slf4j
+  SbtExclusionRule("commons-logging", "commons-logging")
+)
+```
+
+Available since sbt 0.13.9.
+
+See [SbtExclusionRule](../api/sbt/SbtExclusionRule.html) for API details.
+
 ##### Download Sources
 
 Downloading source and API documentation jars is usually handled by an
@@ -19374,8 +19389,8 @@ an sbt build definition. For command names, see
     the actual location of the dependencies. However, sbt is not very
     consistent with this terminology and repository and resolver are
     occasionally used interchangeably.
--   A [ModuleConfiguration] defines a specific resolver to use for a
-    group of dependencies.
+-   A [ModuleConfiguration](../api/sbt/ModuleConfiguration.html) defines
+    a specific resolver to use for a group of dependencies.
 -   A [Configuration](../api/sbt/Configuration.html) is a useful Ivy
     construct for grouping dependencies. See ivy-configurations. It is
     also used for [scoping settings][Scopes].

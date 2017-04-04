@@ -1401,7 +1401,7 @@ you can often use the convenient APIs in
 </p><h3 id="Execution+semantics+of+tasks">Execution semantics of tasks<a href="#Execution+semantics+of+tasks" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>When depending on other tasks from a custom task using <code>value</code>,
 an important detail to note is the execution semantics of the tasks.
 By execution semantics, we mean exactly <em>when</em> these tasks are evaluated.
-</p><p>We if take <code>sampeIntTask</code> for instance, each line in the body of the task
+</p><p>We if take <code>sampleIntTask</code> for instance, each line in the body of the task
 should be strictly evaluated one after the other. That is sequential semantics:
 </p><pre><code class="prettyprint lang-scala">sampleIntTask := {
   val sum = 1 + 2        // first
@@ -7250,6 +7250,15 @@ to be generated. For example,
     ExclusionRule(organization = &quot;javax.jms&quot;)
   )
 </code></pre><p>See <a href="../api/sbt/ModuleID.html">ModuleID</a> for API details.
+</p><p>In certain cases a transitive dependency should be exluded from
+all dependencies. This can be achieved by setting up <code>SbtExclusionRules</code>
+in <code>excludeDependencies</code>. 
+</p><pre><code class="prettyprint lang-scala">excludeDependencies ++= Seq(
+  // commons-logging is replaced by jcl-over-slf4j
+  SbtExclusionRule(&quot;commons-logging&quot;, &quot;commons-logging&quot;)
+)
+</code></pre><p>Available since sbt 0.13.9.
+</p><p>See <a href="../api/sbt/SbtExclusionRule.html">SbtExclusionRule</a> for API details.
 </p><h5 id="Download+Sources">Download Sources<a href="#Download+Sources" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p>Downloading source and API documentation jars is usually handled by an
 IDE plugin. These plugins use the <code>updateClassifiers</code> and
 <code>updateSbtClassifiers</code> tasks, which produce an <code>Update-Report</code>
@@ -12099,8 +12108,8 @@ well. A repository is a closely linked idea that typically refers to
 the actual location of the dependencies. However, sbt is not very
 consistent with this terminology and repository and resolver are
 occasionally used interchangeably.
-</li><li>A [ModuleConfiguration] defines a specific resolver to use for a
-group of dependencies.
+</li><li>A <a href="../api/sbt/ModuleConfiguration.html">ModuleConfiguration</a> defines
+a specific resolver to use for a group of dependencies.
 </li><li>A <a href="../api/sbt/Configuration.html">Configuration</a> is a useful Ivy
 construct for grouping dependencies. See ivy-configurations. It is
 also used for <a href="Scopes.html">scoping settings</a>.
