@@ -2842,7 +2842,7 @@ val resourceGenerators =
   settingKey[Seq[Task[Seq[File]]]](&quot;List of tasks that generate resources&quot;)
 </code></pre><p>Where you previous would define things as:
 </p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile &lt;+= buildInfo
-</code></pre><p>now you define them as for sbt 0.13.14+:
+</code></pre><p>for sbt 0.13.14+, you define them as:
 </p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile += buildInfo.value
 </code></pre><p><strong>Note</strong>: In sbt 0.13.13 and earlier you’ll need to write <code>sourceGenerators in Compile += buildInfo.taskValue</code>.
 </p><h3 id="Migrating+with">Migrating with <code>InputKey</code><a href="#Migrating+with" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>When using <code>InputKey</code> instead of:
