@@ -107,7 +107,9 @@ val resourceGenerators =
 </code></pre><p>Where you previous would define things as:
 </p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile &lt;+= buildInfo
 </code></pre><p>for sbt 0.13.14+, you define them as:
-</p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile += buildInfo.value
+</p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile += buildInfo
+</code></pre><p>or in general,
+</p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile += Def.task { List(file1, file2) }
 </code></pre><p><strong>Note</strong>: In sbt 0.13.13 and earlier you’ll need to write <code>sourceGenerators in Compile += buildInfo.taskValue</code>.
 </p><h3 id="Migrating+with">Migrating with <code>InputKey</code><a href="#Migrating+with" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>When using <code>InputKey</code> instead of:
 </p><pre><code class="prettyprint lang-scala">run &lt;&lt;= docsRunSetting
