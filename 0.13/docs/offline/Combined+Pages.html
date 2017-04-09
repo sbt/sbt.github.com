@@ -2007,8 +2007,6 @@ your plugin to the list.
 </p><h4 id="Plugins+for+IDEs">Plugins for IDEs<a href="#Plugins+for+IDEs" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li><p>IntelliJ IDEA
 </p><ul><li>sbt Plugin to generate IDEA project configuration:
 <a href="https://github.com/mpeltonen/sbt-idea">https://github.com/mpeltonen/sbt-idea</a>
-</li><li>IDEA Plugin to embed an sbt Console into the IDE:
-<a href="https://github.com/orfjackal/idea-sbt-plugin">https://github.com/orfjackal/idea-sbt-plugin</a>
 </li></ul></li><li><p>Netbeans (no support to create a new sbt project yet)
 </p><ul><li>sbt-netbeans-plugin (older):
 <a href="https://github.com/remeniuk/sbt-netbeans-plugin">https://github.com/remeniuk/sbt-netbeans-plugin</a>
@@ -2214,6 +2212,8 @@ your plugin to the list.
 <a href="https://github.com/ThoughtWorksInc/sbt-api-mappings">https://github.com/ThoughtWorksInc/sbt-api-mappings</a>
 </li><li>sbt-scaliterate (generates source code from a programming book written in Markdown):
 <a href="https://github.com/wookietreiber/sbt-scaliterate">https://github.com/wookietreiber/sbt-scaliterate</a>
+</li><li>sbt-dash (Creates a Dash docset from Scaladoc)
+<a href="https://bintray.com/jastice/sbt-plugins/sbt-dash">https://bintray.com/jastice/sbt-plugins/sbt-dash</a>
 </li></ul><h4 id="Library+dependency+plugins">Library dependency plugins<a href="#Library+dependency+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>sbt-dependency-graph (Creates a graphml file of the dependency tree):
 <a href="https://github.com/jrudolph/sbt-dependency-graph">https://github.com/jrudolph/sbt-dependency-graph</a>
 </li><li>ls-sbt (An sbt interface for ls.implicit.ly):
@@ -2842,7 +2842,7 @@ val resourceGenerators =
   settingKey[Seq[Task[Seq[File]]]](&quot;List of tasks that generate resources&quot;)
 </code></pre><p>Where you previous would define things as:
 </p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile &lt;+= buildInfo
-</code></pre><p>for sbt 0.13.14+, you define them as:
+</code></pre><p>for sbt 0.13.15+, you define them as:
 </p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile += buildInfo
 </code></pre><p>or in general,
 </p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile += Def.task { List(file1, file2) }
@@ -2921,8 +2921,8 @@ def scalaXml = Def.setting {
 </li></ol><p><strong>Note</strong>: <code>Build</code> traits is deprecated, but you can still use <code>project/*.scala</code> file to organize your build and/or define ad-hoc plugins. See <a href="Organizing-Build.html">Organizing the build</a>.
 </p><h2 id="sbt+0.13.5%2B+Technology+Previews">sbt 0.13.5+ Technology Previews<a href="#sbt+0.13.5%2B+Technology+Previews" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>sbt 0.13.5+ releases of sbt are technology previews of what’s to come to sbt 1.0 with enhancements like <a href="https://typesafe.com/blog/preview-of-upcoming-sbt-10-features-read-about-the-new-plugins">auto plugins</a>, launcher enhacements for sbt server, defined in the sbt-remote-control project, and other necessary API changes.
 </p><p>These releases maintain binary compatibility with plugins that are published against sbt 0.13.0, but add new features in preparation for sbt 1.0. The tech previews allow us to test new ideas like auto plugins and performance improvements on dependency resolution; the build users can try new features without losing the existing plugin resources; and plugin authors can gradually migrate to the new plugin system before sbt 1.0 arrives.
-</p><h2 id="sbt+0.13.14">sbt 0.13.14<a href="#sbt+0.13.14" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Fixes+with+compatibility+implications">Fixes with compatibility implications<a href="#Fixes+with+compatibility+implications" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>sbt 0.13.14 removes the Maven version range when possible. See below.
-</li></ul><h3 id="Improvements">Improvements<a href="#Improvements" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Adds preliminary compatibility with JDK 9. Using this requires 0.13.14+ launcher. <a href="https://github.com/sbt/sbt/pull/2951">#2951</a>/<a href="https://github.com/sbt/sbt-launcher-package/pull/143">143</a> by <a href="https://github.com/retronym">@retronym</a>
+</p><h2 id="sbt+0.13.15">sbt 0.13.15<a href="#sbt+0.13.15" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Fixes+with+compatibility+implications">Fixes with compatibility implications<a href="#Fixes+with+compatibility+implications" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>sbt 0.13.15 removes the Maven version range when possible. See below.
+</li></ul><h3 id="Improvements">Improvements<a href="#Improvements" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Adds preliminary compatibility with JDK 9. Using this requires 0.13.15+ launcher. <a href="https://github.com/sbt/sbt/pull/2951">#2951</a>/<a href="https://github.com/sbt/sbt-launcher-package/pull/143">143</a> by <a href="https://github.com/retronym">@retronym</a>
 </li><li>Adds “local-preloaded” repository for offline installation. See below.
 </li><li>Notifies and enables users to stay in sbt’s shell on the warm JVM by hitting <code>[ENTER]</code> while sbt is running. <a href="https://github.com/sbt/sbt/issues/2987">#2987</a>/<a href="https://github.com/sbt/sbt/pull/2996">#2996</a> by <a href="https://github.com/dwijnand">@dwijnand</a>
 </li><li>Adds an <code>Append</code> instance to support <code>sourceGenerators += Def.task { ... }</code>, instead of needing <code>.taskValue</code>. <a href="https://github.com/sbt/sbt/pull/2943">#2943</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
@@ -2956,11 +2956,11 @@ scripted tests on a CI, to benefit from the available parallelism. <a href="http
 it would go out to the Internet to find the latest version.
 This would result to a surprising behavior where the eventual version keeps changing over time
 <em>even when there’s a version of the library that satisfies the range condition</em>.
-</p><p>Starting sbt 0.13.14, some Maven version ranges would be replaced with its lower bound
+</p><p>Starting sbt 0.13.15, some Maven version ranges would be replaced with its lower bound
 so that when a satisfactory version is found in the dependency graph it will be used.
 You can disable this behavior using the JVM flag <code>-Dsbt.modversionrange=false</code>.
 </p><p><a href="https://github.com/sbt/sbt/issues/2954">#2954</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
-</p><h3 id="Offline+installation">Offline installation<a href="#Offline+installation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 0.13.14 adds two new repositories called “local-preloaded-ivy”
+</p><h3 id="Offline+installation">Offline installation<a href="#Offline+installation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 0.13.15 adds two new repositories called “local-preloaded-ivy”
 and “local-preloaded” that point to <code>~/.sbt/preloaded/</code>.
 The purpose for the repositories is to preload them with
 sbt artifacts so the installation of sbt will not require access to the Internet.
@@ -2969,7 +2969,8 @@ since the resolution happens off of a local-preloaded repository.
 </p><p><a href="https://github.com/sbt/sbt/pull/2993">#2993</a>/<a href="https://github.com/sbt/sbt-launcher-package/pull/145">#145</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
 </p><h3 id="Notes">Notes<a href="#Notes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>No changes should be necessary to your project definition and all plugins published for sbt 0.13.{x|x&lt;14} should still work.
 </p><p>See <a href="http://www.scala-sbt.org/0.13/docs/Migrating-from-sbt-012x.html">Migrating from sbt 0.12.x</a> for details on the old operator deprecation.
-</p><p>Special thanks to the contributors for making this release a success. According to <code>git shortlog -sn --no-merges v0.13.13..0.13.14</code>, compared to 0.13.13, there were 59 (non-merge) commits, by eleven contributors: Eugene Yokota, Dale Wijnand, Guillaume Martres, Jason Zaugg, Lars Hupel, Petro Verkhogliad, Eric Richardson, Claudio Bley, Haochi Chen, Paul Draper, Ashley Mercer. Thank you!
+</p><p>Special thanks to the contributors for making this release a success. According to <code>git shortlog -sn --no-merges v0.13.13..0.13.15</code>, compared to 0.13.13, there were 64 (non-merge) commits, by eleven contributors: Eugene Yokota, Dale Wijnand, Guillaume Martres, Jason Zaugg, Lars Hupel, Petro Verkhogliad, Eric Richardson, Claudio Bley, Haochi Chen, Paul Draper, Ashley Mercer. Thank you!
+</p><h2 id="sbt+0.13.14">sbt 0.13.14<a href="#sbt+0.13.14" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>sbt 0.13.14 did not happen due a bug that was found after the artifact was published.
 </p><h2 id="sbt+0.13.13">sbt 0.13.13<a href="#sbt+0.13.13" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Fixes+with+compatibility+implications">Fixes with compatibility implications<a href="#Fixes+with+compatibility+implications" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Deprecates the old sbt 0.12 DSL, to be removed in sbt 1.0. See below for more details.
 </li><li>The <code>.value</code> method is deprecated for input tasks. Calling <code>.value</code> on an input key returns an <code>InputTask[A]</code>,
 which is completely unintuitive and often results in a bug. In most cases <code>.evaluated</code> should be called,

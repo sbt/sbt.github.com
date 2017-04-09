@@ -106,7 +106,7 @@ val resourceGenerators =
   settingKey[Seq[Task[Seq[File]]]](&quot;List of tasks that generate resources&quot;)
 </code></pre><p>Where you previous would define things as:
 </p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile &lt;+= buildInfo
-</code></pre><p>for sbt 0.13.14+, you define them as:
+</code></pre><p>for sbt 0.13.15+, you define them as:
 </p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile += buildInfo
 </code></pre><p>or in general,
 </p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile += Def.task { List(file1, file2) }

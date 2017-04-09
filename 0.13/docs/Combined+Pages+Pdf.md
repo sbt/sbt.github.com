@@ -3184,8 +3184,6 @@ your plugin to the list.
 -   IntelliJ IDEA
     -   sbt Plugin to generate IDEA project configuration:
         <https://github.com/mpeltonen/sbt-idea>
-    -   IDEA Plugin to embed an sbt Console into the IDE:
-        <https://github.com/orfjackal/idea-sbt-plugin>
 -   Netbeans (no support to create a new sbt project yet)
     -   sbt-netbeans-plugin (older):
         <https://github.com/remeniuk/sbt-netbeans-plugin>
@@ -3418,6 +3416,8 @@ your plugin to the list.
     <https://github.com/ThoughtWorksInc/sbt-api-mappings>
 -   sbt-scaliterate (generates source code from a programming book written in Markdown):
     <https://github.com/wookietreiber/sbt-scaliterate>
+-   sbt-dash (Creates a Dash docset from Scaladoc)
+    <https://bintray.com/jastice/sbt-plugins/sbt-dash>
 
 #### Library dependency plugins
 
@@ -4388,7 +4388,7 @@ Where you previous would define things as:
 sourceGenerators in Compile <+= buildInfo
 ```
 
-for sbt 0.13.14+, you define them as:
+for sbt 0.13.15+, you define them as:
 
 ```scala
 sourceGenerators in Compile += buildInfo
@@ -4504,15 +4504,15 @@ sbt 0.13.5+ releases of sbt are technology previews of what's to come to sbt 1.0
 
 These releases maintain binary compatibility with plugins that are published against sbt 0.13.0, but add new features in preparation for sbt 1.0. The tech previews allow us to test new ideas like auto plugins and performance improvements on dependency resolution; the build users can try new features without losing the existing plugin resources; and plugin authors can gradually migrate to the new plugin system before sbt 1.0 arrives.
 
-## sbt 0.13.14
+## sbt 0.13.15
 
 ### Fixes with compatibility implications
 
-- sbt 0.13.14 removes the Maven version range when possible. See below.
+- sbt 0.13.15 removes the Maven version range when possible. See below.
 
 ### Improvements
 
-- Adds preliminary compatibility with JDK 9. Using this requires 0.13.14+ launcher. [#2951][2951]/[143][143] by [@retronym][@retronym]
+- Adds preliminary compatibility with JDK 9. Using this requires 0.13.15+ launcher. [#2951][2951]/[143][143] by [@retronym][@retronym]
 - Adds "local-preloaded" repository for offline installation. See below.
 - Notifies and enables users to stay in sbt's shell on the warm JVM by hitting `[ENTER]` while sbt is running. [#2987][2987]/[#2996][2996] by [@dwijnand][@dwijnand]
 - Adds an `Append` instance to support `sourceGenerators += Def.task { ... }`, instead of needing `.taskValue`. [#2943][2943] by [@eed3si9n][@eed3si9n]
@@ -4553,7 +4553,7 @@ it would go out to the Internet to find the latest version.
 This would result to a surprising behavior where the eventual version keeps changing over time
 *even when there's a version of the library that satisfies the range condition*.
 
-Starting sbt 0.13.14, some Maven version ranges would be replaced with its lower bound
+Starting sbt 0.13.15, some Maven version ranges would be replaced with its lower bound
 so that when a satisfactory version is found in the dependency graph it will be used.
 You can disable this behavior using the JVM flag `-Dsbt.modversionrange=false`.
 
@@ -4561,7 +4561,7 @@ You can disable this behavior using the JVM flag `-Dsbt.modversionrange=false`.
 
 ### Offline installation
 
-sbt 0.13.14 adds two new repositories called "local-preloaded-ivy"
+sbt 0.13.15 adds two new repositories called "local-preloaded-ivy"
 and "local-preloaded" that point to `~/.sbt/preloaded/`.
 The purpose for the repositories is to preload them with
 sbt artifacts so the installation of sbt will not require access to the Internet.
@@ -4577,7 +4577,7 @@ No changes should be necessary to your project definition and all plugins publis
 
 See [Migrating from sbt 0.12.x](http://www.scala-sbt.org/0.13/docs/Migrating-from-sbt-012x.html) for details on the old operator deprecation.
 
-Special thanks to the contributors for making this release a success. According to `git shortlog -sn --no-merges v0.13.13..0.13.14`, compared to 0.13.13, there were 59 (non-merge) commits, by eleven contributors: Eugene Yokota, Dale Wijnand, Guillaume Martres, Jason Zaugg, Lars Hupel, Petro Verkhogliad, Eric Richardson, Claudio Bley, Haochi Chen, Paul Draper, Ashley Mercer. Thank you!
+Special thanks to the contributors for making this release a success. According to `git shortlog -sn --no-merges v0.13.13..0.13.15`, compared to 0.13.13, there were 64 (non-merge) commits, by eleven contributors: Eugene Yokota, Dale Wijnand, Guillaume Martres, Jason Zaugg, Lars Hupel, Petro Verkhogliad, Eric Richardson, Claudio Bley, Haochi Chen, Paul Draper, Ashley Mercer. Thank you!
 
   [143]: https://github.com/sbt/sbt-launcher-package/pull/143
   [145]: https://github.com/sbt/sbt-launcher-package/pull/145
@@ -4618,6 +4618,10 @@ Special thanks to the contributors for making this release a success. According 
   [dotty]: http://dotty.epfl.ch/
   [@smarter]: https://github.com/smarter
   [@larsrh]: https://github.com/larsrh
+
+## sbt 0.13.14
+
+sbt 0.13.14 did not happen due a bug that was found after the artifact was published.
 
 ## sbt 0.13.13
 
