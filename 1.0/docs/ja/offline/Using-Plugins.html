@@ -44,7 +44,9 @@
         <div class="container contentswrapper">
           <div class="span-16 prepend-1 append-1 contents">
             <h2 id="%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%81%AE%E4%BD%BF%E7%94%A8">プラグインの使用<a href="#%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%81%AE%E4%BD%BF%E7%94%A8" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このガイドのこれまでのページを読んでおいてほしい。
-特に <a href="Basic-Def.html">build.sbt</a>と<a href="Library-Dependencies.html">ライブラリ依存性</a>を理解していることが必要になる。
+特に <a href="Basic-Def.html">build.sbt</a>、
+<a href="Task-Graph.html">タスク・グラフ</a>、
+と<a href="Library-Dependencies.html">ライブラリ依存性</a>を理解していることが必要になる。
 </p><h3 id="%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%81%A8%E3%81%AF%E4%BD%95%E3%81%8B">プラグインとは何か<a href="#%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%81%A8%E3%81%AF%E4%BD%95%E3%81%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt のプラグインは、最も一般的には新しいセッティングを追加することでビルド定義を拡張するものである。
 その新しいセッティングは新しいタスクでもよい。
 例えば、テストカバレッジレポートを生成する <code>codeCoverage</code> というタスクを追加するプラグインなどが考えられる。
@@ -64,18 +66,18 @@ Ivy のモジュール ID を <code>addSbtPlugin</code> メソッドに渡して
 </p><p>sbt 0.13.5 から、プラグインを自動的に追加して、そのセッティング群と依存関係がプロジェクトに設定されていることを安全に保証する <a href="../../docs/Plugins.html">auto plugin</a> という機能が追加された。
 </p><p>auto plugin の多くはデフォルトのセッティング群を自動的に追加するが、中には明示的な有効化を必要とするものもある。
 </p><p>明示的な有効化が必要な auto plugin を使っている場合は、以下を <code>build.sbt</code> に追加する必要がある:
-</p><pre><code class="prettyprint lang-scala">lazy val util = (project in file(&quot;util&quot;)).
-  enablePlugins(FooPlugin, BarPlugin).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val util = (project in file(&quot;util&quot;))
+  .enablePlugins(FooPlugin, BarPlugin)
+  .settings(
     name := &quot;hello-util&quot;
   )
 </code></pre><p><code>enablePlugins</code> メソッドを使えば、そのプロジェクトで使用したい auto plugin を明示的に定義できる。
 逆に <code>disablePlugins</code> メソッドを使ってプラグインを除外することもできる。
 例えば、<code>util</code> から <code>IvyPlugin</code> のセッティングを除外したいとすると、<code>build.sbt</code> を以下のように変更する:
-</p><pre><code class="prettyprint lang-scala">lazy val util = (project in file(&quot;util&quot;)).
-  enablePlugins(FooPlugin, BarPlugin).
-  disablePlugins(plugins.IvyPlugin).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val util = (project in file(&quot;util&quot;))
+  .enablePlugins(FooPlugin, BarPlugin)
+  .disablePlugins(plugins.IvyPlugin)
+  .settings(
     name := &quot;hello-util&quot;
   )
 </code></pre><p>明示的な有効化が必要か否かは、それぞれの auto plugin がドキュメントで明記しておくべきだ。
@@ -106,8 +108,8 @@ sbt のデフォルトセッティングは 3 つのプラグインによって�
 lazy val util = (project in file(&quot;util&quot;))
 
 // enable the site plugin for the `core` project
-lazy val core = (project in file(&quot;core&quot;)).
-  settings(site.settings : _*)
+lazy val core = (project in file(&quot;core&quot;))
+  .settings(site.settings)
 </code></pre><h3 id="%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%90%E3%83%AB%E3%83%BB%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3">グローバル・プラグイン<a href="#%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%90%E3%83%AB%E3%83%BB%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>プラグインを <code>~/.sbt/1.0.0-M4/plugins/</code> 以下で宣言することで全てのプロジェクトに対して一括してプラグインをインストールすることができる。
 <code>~/.sbt/1.0.0-M4/plugins/</code> はそのクラスパスをすべての sbt ビルド定義に対して export する sbt プロジェクトだ。
 大雑把に言えば、<code>~/.sbt/1.0.0-M4/plugins/</code> 内の <code>.sbt</code> ファイルや <code>.scala</code> ファイルは、それが全てのプロジェクトの <code>project/</code> ディレクトリに入っているかのようにふるまう。
@@ -133,7 +135,7 @@ lazy val core = (project in file(&quot;core&quot;)).
       <a name="toc"></a>
       <h4 class="toctitle">Contents</h4>
       <div class="tocbody">
-      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">始める sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">sbt のインストール</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Mac への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Linux への sbt のインストール</a></div></li><li><div><a href="Manual-Installation.html">手動インストール</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">ディレクトリ構造</a></div></li><li><div><a href="Running.html">実行</a></div></li><li><div><a href="Basic-Def.html">.sbt ビルド定義</a></div></li><li><div><a href="Scopes.html">スコープ</a></div></li><li><div><a href="More-About-Settings.html">他の種類のセッティング</a></div></li><li><div><a href="Library-Dependencies.html">ライブラリ依存性</a></div></li><li><div><a href="Multi-Project.html">マルチプロジェクト・ビルド</a></div></li><li><div class="current">プラグインの使用</div></li><li><div><a href="Custom-Settings.html">カスタムセッティングとタスク</a></div></li><li><div><a href="Organizing-Build.html">ビルドの整理</a></div></li><li><div><a href="Summary.html">まとめ</a></div></li><li><div><a href="Bare-Def.html">付録: bare .sbt ビルド定義</a></div></li> </ol></li><li><div><a href="Detailed-Topics.html">各論</a></div><ol class="toc"> <li><div><a href="Plugins-and-Best-Practices.html">プラグインとベストプラクティス</a></div><ol class="toc"> <li><div><a href="Testing-sbt-plugins.html">sbt プラグインをテストする</a></div></li> </ol></li> </ol></li><li><div><a href="Howto.html">How to</a></div><ol class="toc"> <li><div><a href="Howto-Sequencing.html">逐次実行</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Def.sequential を用いて逐次タスクを定義する</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Def.taskDyn を用いて動的タスクを定義する</a></div></li><li><div><a href="Howto-After-Input-Task.html">インプットタスクの後で何かする</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn を用いた動的インプットタスクの定義</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">コマンドを用いた逐次実行</a></div></li> </ol></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">始める sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">sbt のインストール</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Mac への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Linux への sbt のインストール</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">ディレクトリ構造</a></div></li><li><div><a href="Running.html">実行</a></div></li><li><div><a href="Basic-Def.html">ビルド定義</a></div></li><li><div><a href="Task-Graph.html">タスク・グラフ</a></div></li><li><div><a href="Scopes.html">スコープ</a></div></li><li><div><a href="Appending-Values.html">値の追加</a></div></li><li><div><a href="Library-Dependencies.html">ライブラリ依存性</a></div></li><li><div><a href="Multi-Project.html">マルチプロジェクト・ビルド</a></div></li><li><div class="current">プラグインの使用</div></li><li><div><a href="Custom-Settings.html">カスタムセッティングとタスク</a></div></li><li><div><a href="Organizing-Build.html">ビルドの整理</a></div></li><li><div><a href="Summary.html">まとめ</a></div></li><li><div><a href="Bare-Def.html">付録: bare .sbt ビルド定義</a></div></li> </ol></li><li><div><a href="Detailed-Topics.html">各論</a></div><ol class="toc"> <li><div><a href="Plugins-and-Best-Practices.html">プラグインとベストプラクティス</a></div><ol class="toc"> <li><div><a href="Testing-sbt-plugins.html">sbt プラグインをテストする</a></div></li> </ol></li> </ol></li><li><div><a href="Howto.html">How to</a></div><ol class="toc"> <li><div><a href="Howto-Sequencing.html">逐次実行</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Def.sequential を用いて逐次タスクを定義する</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Def.taskDyn を用いて動的タスクを定義する</a></div></li><li><div><a href="Howto-After-Input-Task.html">インプットタスクの後で何かする</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn を用いた動的インプットタスクの定義</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">コマンドを用いた逐次実行</a></div></li> </ol></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
           </div>
         </div>
         <div class="header">
@@ -185,17 +187,17 @@ lazy val core = (project in file(&quot;core&quot;)).
         </div>
         <div class="support-item">
           <div class="support-icon">
-            <svg class="svg-icon svg-icon-typesafe" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 154 154" enable-background="new 0 0 154 154"><path fill="#fff" d="M49.7 114c-4.8 0-8.7-5.1-8.7-9.9v-.2c0-4.8 3.9-7.9 8.7-7.9h100c.9-3 1.6-7 2-11h-84c-4.8 0-8.7-3.7-8.7-8.5s3.9-8.5 8.7-8.5h83.7c-.5-4-1.2-8-2.3-11h-63.4c-4.8 0-8.7-3.7-8.7-8.5s3.9-8.5 8.7-8.5h56c-13.1-23-37.2-37.8-64.7-37.8-41.4 0-75 33.3-75 74.7s33.6 75.6 75 75.6c28.4 0 53.1-15.4 65.8-38.4h-93.1z"/></svg>
+            <svg id="lightbend-icon-reverse" class="svg-icon svg-icon-lightbend-reverse" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 302 262"><title>lightbend-icon</title><g id="icon"><path d="M1,195v56a10,10,0,0,0,10,10H291a10,10,0,0,0,10-10V195a557.85,557.85,0,0,1-150,20A557.85,557.85,0,0,1,1,195Z" style="fill:#fff"/><path d="M291,1H11A10,10,0,0,0,1,11V176a539.94,539.94,0,0,0,150,21,539.94,539.94,0,0,0,150-21V11A10,10,0,0,0,291,1Z" style="fill:#fff"/></g></svg>
           </div>
           <div class="support-detail">
             <h2>商用サポート</h2>
-            <a href="http://typesafe.com/subscription">Typesafe Subscription</a>
-            <a href="http://typesafe.com/subscription/training">Training</a>
-            <a href="http://typesafe.com/subscription/consulting">Consulting</a>
+            <a href="https://www.lightbend.com/services/expert-support">Lightbend Subscription</a>
+            <a href="https://www.lightbend.com/services/training">Training</a>
+            <a href="https://www.lightbend.com/services/consulting">Consulting</a>
           </div>
         </div>
-      </div>
 
+      </div>
     </div>
   </div>
 </div><footer>
@@ -212,9 +214,9 @@ lazy val core = (project in file(&quot;core&quot;)).
         </nav>
       </div>
       <div class="col-md-4 text-right ts">
-        &copy; 2015 Typesafe Inc.
-        <a href="https://typesafe.com">
-          <img src="../files/typesafe_reverse.svg" alt="Typesafe, Inc.">
+        &copy; 2016 Lightbend Inc.
+        <a href="https://www.lightbend.com">
+          <img src="files/lightbend-reverse.svg" alt="Lightbend, Inc.">
         </a>
       </div>
     </div>

@@ -58,8 +58,8 @@
 </p><p>取而代之的是，构建定义会创建一个类型为 <code>Setting[T]</code> 的庞大的对象列表，<code>T</code> 是映射表中值（value）的类型。一个 <code>Setting</code> 描述的是一次 <em>对映射表（map）的转换</em>，
 像增加一个新的键值对或者追加到一个已经存在的 value 上。（在函数式编程关于使用不可变数据结构和值的思想中，一次转换返回一个新的map —— 它不会就地更新旧的 map。）
 </p><p>你可以为本目录下的项目名称关联一个 <code>Setting[String]</code>，像这样：
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
     name := &quot;hello&quot;
   )
 </code></pre><p>这个 <code>Setting[String]</code> 会通过增加（或者替换）<code>name</code>键的值为 <code>&quot;hello&quot;</code> 来对 map 做一次转换。转换后的 map 成为 sbt 新的 map。
@@ -71,12 +71,12 @@
 </p><pre><code class="prettyprint lang-scala">lazy val commonSettings = Seq(
   organization := &quot;com.example&quot;,
   version := &quot;0.1.0&quot;,
-  scalaVersion := &quot;2.11.8&quot;
+  scalaVersion := &quot;2.12.1&quot;
 )
 
-lazy val root = (project in file(&quot;.&quot;)).
-  settings(commonSettings: _*).
-  settings(
+lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    commonSettings,
     name := &quot;hello&quot;
   )
 </code></pre><p>每一项 <code>Setting</code> 都定义为一个 Scala 表达式。在 <code>settings</code> 中的表达式是相互独立的，而且它们仅仅是表达式，不是完整的 Scala 语句。
@@ -85,16 +85,16 @@ lazy val root = (project in file(&quot;.&quot;)).
 </p><p>在左边，<code>name</code>， <code>version</code> 和 <code>scalaVersion</code> 都是 <em>键（keys）</em>。一个键（key）就是一个 <code>SettingKey[T]</code>，<code>TaskKey[T]</code> 或者 <code>InputKey[T]</code> 的实例，<code>T</code> 是期望的 value 的类型。
 key 的类别将在下面讲解。
 </p><p>键（Keys）有一个返回 <code>Setting[T]</code> 的 <code>:=</code> 方法。你可以像使用 Java 的语法一样调用该方法：
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
     name.:=(&quot;hello&quot;)
   )
 </code></pre><p>但是，Scala 允许 <code>name := &quot;hello&quot;</code> 这样调用（在 Scala 中，一个只有单个参数的方法可以使用任何一种语法调用）。
 </p><p>键（key）<code>name</code> 上的 <code>:=</code> 方法会返回一个 <code>Setting</code>，在这里特指 <code>Setting[String]</code>。<code>String</code> 也出现在 <code>name</code> 自身的类型 <code>SettingKey[String]</code> 中。
 在这个例子中，返回的 <code>Setting[String]</code> 是一个在 sbt 的 map 中增加或者替换键为 <code>name</code> 的转换，赋值为 <code>&quot;hello&quot;</code>。
 </p><p>如果你使用了错误类型的 value，构建定义会编译不通过：
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
     name := 42  // 编译不通过
   )
 </code></pre><h3 id="%E9%94%AE%EF%BC%88Keys%EF%BC%89">键（Keys）<a href="#%E9%94%AE%EF%BC%88Keys%EF%BC%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="%E7%B1%BB%E5%9E%8B%EF%BC%88Types%EF%BC%89">类型（Types）<a href="#%E7%B1%BB%E5%9E%8B%EF%BC%88Types%EF%BC%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>有三种类型的 key：
@@ -117,13 +117,13 @@ key 的名称取自于赋给 <code>val</code> 变量的值。例如，给一个�
 </p><p>例如，实现前面一部分中的 <code>hello</code> task：
 </p><pre><code class="prettyprint lang-scala">lazy val hello = taskKey[Unit](&quot;An example task&quot;)
 
-lazy val root = (project in file(&quot;.&quot;)).
-  settings(
+lazy val root = (project in file(&quot;.&quot;))
+  .settings(
     hello := { println(&quot;Hello!&quot;) }
   )
 </code></pre><p>我们已经在定义项目名称时见过定义 settings 的例子，
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
     name := &quot;hello&quot;
   )
 </code></pre><h4 id="Tasks+%E5%92%8C+Settings+%E7%9A%84%E7%B1%BB%E5%9E%8B">Tasks 和 Settings 的类型<a href="#Tasks+%E5%92%8C+Settings+%E7%9A%84%E7%B1%BB%E5%9E%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>从类型系统的角度来讲，通过 task key 创建的 <code>Setting</code> 和通过 setting key 创建的 <code>Setting</code> 有稍微不同。<code>taskKey := 42</code> 的类型是 <code>Setting[Task[T]]</code> 而 <code>settingKey := 42</code>
@@ -142,26 +142,27 @@ import Keys._
 </p><h3 id="bare+.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">bare .sbt 构建定义<a href="#bare+.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>bare <code>.sbt</code> 构建定义由一个 <code>Setting[_]</code> 表达式的列表组成，而不是定义 <code>Project</code>。
 </p><pre><code class="prettyprint lang-scala">name := &quot;hello&quot;
 version := &quot;1.0&quot;
-scalaVersion := &quot;2.11.8&quot;
+scalaVersion := &quot;2.12.1&quot;
 </code></pre><h3 id="%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96%E5%BA%93">添加依赖库<a href="#%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96%E5%BA%93" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>有两种方式添加第三方的依赖。一种是将 jar 文件 放入 <code>lib/</code>（非托管的依赖）中，另一种是在 <code>build.sbt</code> 中添加托管的依赖，像这样：
 </p><pre><code class="prettyprint lang-scala">val derby = &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot;
 
 lazy val commonSettings = Seq(
   organization := &quot;com.example&quot;,
   version := &quot;0.1.0&quot;,
-  scalaVersion := &quot;2.11.8&quot;
+  scalaVersion := &quot;2.12.1&quot;
 )
 
-lazy val root = (project in file(&quot;.&quot;)).
-  settings(commonSettings: _*).
-  settings(
+lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    commonSettings,
     name := &quot;hello&quot;,
     libraryDependencies += derby
   )
 </code></pre><p>就是像这样添加版本为 10.4.1.3 的 Apache Derby 库作为依赖。
 </p><p>key <code>libraryDependencies</code> 包含两个方面的复杂性：<code>+=</code> 方法而不是 <code>:=</code>，第二个就是 <code>%</code> 方法。<code>+=</code> 方法是将新的值追加该 key 的旧值后面而不是替换它，这将在 
 <a href="More-About-Settings.html">更多设置</a> 中介绍。<code>%</code> 方法是用来从字符串构造 Ivy 模块 ID 的，将在 <a href="Library-Dependencies.html">库依赖</a> 中介绍。
-</p><p>目前，一直到入门指南的后面部分，我们跳过了库依赖的一些细节。后面有一整节 <a href="Library-Dependencies.html">库依赖</a> 来介绍这些内容。</p><div class="bottom nav span-16">
+</p><p>目前，一直到入门指南的后面部分，我们跳过了库依赖的一些细节。后面有一整节 <a href="Library-Dependencies.html">库依赖</a> 来介绍这些内容。
+</p><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>
                         <a href="Scopes.html"> Scope </a>                        
@@ -173,7 +174,7 @@ lazy val root = (project in file(&quot;.&quot;)).
       <a name="toc"></a>
       <h4 class="toctitle">Contents</h4>
       <div class="tocbody">
-      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">sbt 入门</a></div><ol class="toc"> <li><div><a href="Setup.html">安装 sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">在 Mac 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">在 Windows 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">在 Linux 上安装 sbt</a></div></li><li><div><a href="Manual-Installation.html">手动安装 sbt</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">目录结构</a></div></li><li><div><a href="Running.html">运行</a></div></li><li><div class="current">.sbt 构建定义</div></li><li><div><a href="Scopes.html">Scope</a></div></li><li><div><a href="More-About-Settings.html">更多关于设置</a></div></li><li><div><a href="Library-Dependencies.html">库依赖</a></div></li><li><div><a href="Multi-Project.html">多项目构建</a></div></li><li><div><a href="Using-Plugins.html">使用插件</a></div></li><li><div><a href="Custom-Settings.html">自定义设置和任务</a></div></li><li><div><a href="Organizing-Build.html">组织构建</a></div></li><li><div><a href="Summary.html">总结</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">sbt 入门</a></div><ol class="toc"> <li><div><a href="Setup.html">安装 sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">在 Mac 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">在 Windows 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">在 Linux 上安装 sbt</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">目录结构</a></div></li><li><div><a href="Running.html">运行</a></div></li><li><div class="current">.sbt 构建定义</div></li><li><div><a href="Scopes.html">Scope</a></div></li><li><div><a href="More-About-Settings.html">更多关于设置</a></div></li><li><div><a href="Library-Dependencies.html">库依赖</a></div></li><li><div><a href="Multi-Project.html">多项目构建</a></div></li><li><div><a href="Using-Plugins.html">使用插件</a></div></li><li><div><a href="Custom-Settings.html">自定义设置和任务</a></div></li><li><div><a href="Organizing-Build.html">组织构建</a></div></li><li><div><a href="Summary.html">总结</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
           </div>
         </div>
         <div class="header">
@@ -225,17 +226,17 @@ lazy val root = (project in file(&quot;.&quot;)).
         </div>
         <div class="support-item">
           <div class="support-icon">
-            <svg class="svg-icon svg-icon-typesafe" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 154 154" enable-background="new 0 0 154 154"><path fill="#fff" d="M49.7 114c-4.8 0-8.7-5.1-8.7-9.9v-.2c0-4.8 3.9-7.9 8.7-7.9h100c.9-3 1.6-7 2-11h-84c-4.8 0-8.7-3.7-8.7-8.5s3.9-8.5 8.7-8.5h83.7c-.5-4-1.2-8-2.3-11h-63.4c-4.8 0-8.7-3.7-8.7-8.5s3.9-8.5 8.7-8.5h56c-13.1-23-37.2-37.8-64.7-37.8-41.4 0-75 33.3-75 74.7s33.6 75.6 75 75.6c28.4 0 53.1-15.4 65.8-38.4h-93.1z"/></svg>
+            <svg id="lightbend-icon-reverse" class="svg-icon svg-icon-lightbend-reverse" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 302 262"><title>lightbend-icon</title><g id="icon"><path d="M1,195v56a10,10,0,0,0,10,10H291a10,10,0,0,0,10-10V195a557.85,557.85,0,0,1-150,20A557.85,557.85,0,0,1,1,195Z" style="fill:#fff"/><path d="M291,1H11A10,10,0,0,0,1,11V176a539.94,539.94,0,0,0,150,21,539.94,539.94,0,0,0,150-21V11A10,10,0,0,0,291,1Z" style="fill:#fff"/></g></svg>
           </div>
           <div class="support-detail">
             <h2>Commercial Support</h2>
-            <a href="http://typesafe.com/subscription">Typesafe Subscription</a>
-            <a href="http://typesafe.com/subscription/training">Training</a>
-            <a href="http://typesafe.com/subscription/consulting">Consulting</a>
+            <a href="https://www.lightbend.com/services/expert-support">Lightbend Subscription</a>
+            <a href="https://www.lightbend.com/services/training">Training</a>
+            <a href="https://www.lightbend.com/services/consulting">Consulting</a>
           </div>
         </div>
-      </div>
 
+      </div>
     </div>
   </div>
 </div><footer>
@@ -252,9 +253,9 @@ lazy val root = (project in file(&quot;.&quot;)).
         </nav>
       </div>
       <div class="col-md-4 text-right ts">
-        &copy; 2015 Typesafe Inc.
-        <a href="https://typesafe.com">
-          <img src="../files/typesafe_reverse.svg" alt="Typesafe, Inc.">
+        &copy; 2016 Lightbend Inc.
+        <a href="https://www.lightbend.com">
+          <img src="files/lightbend-reverse.svg" alt="Lightbend, Inc.">
         </a>
       </div>
     </div>

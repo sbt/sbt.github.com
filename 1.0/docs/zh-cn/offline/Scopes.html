@@ -146,8 +146,8 @@
 </p><p>尝试用 <code>inspect *:fullClasspath</code> 作为对比。默认情况下，<code>fullClasspath</code> 没有定义在 <code>Global</code> configuration 中。
 </p><p>更多详细的内容请参见 <a href="../docs/Inspecting-Settings.html">与 Configuration 系统交互</a>。
 </p><h3 id="%E5%9C%A8%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E4%B8%AD%E6%B6%89%E5%8F%8A+scope">在构建定义中涉及 scope<a href="#%E5%9C%A8%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E4%B8%AD%E6%B6%89%E5%8F%8A+scope" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>如果你创建的 <code>build.sbt</code> 中有一个bare key，它的作用于将是当前的 project 下，configuration 和 task 均为 <code>Global</code>：
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
     name := &quot;hello&quot;
   )
 </code></pre><p>启动 sbt 并且执行 <code>inspect name</code> 可以看到它由 <code>{file:/home/hp/checkout/hello/}default-aea33a/*:name</code> 提供，也就是说，project 是 <code>{file:/home/hp/checkout/hello/}default-aea33a</code>，
@@ -170,19 +170,20 @@ configuration 是 <code>*</code>（表示全局），task 没有显示出来（�
 </p><p>如果你遇到像 <em>“引用未定义的设置”</em> 这样的错误，通常是你指定 scope 失败了，或者你指定了一个错误的 scope。你使用的 key 可能定义在其他的 scope 中。sbt 会尝试在错误消息里面提示你的想法是什么；如 “你是指 compile:compile？”
 </p><p>一种方式是你可以这样认为，name 只是 key 的 <em>一部分</em>。实际上，所有的 key 都有 name 和 scope 组成（scope 有三个轴）。换句话说，<code>packageOptions in (Compile, packageBin)</code> 是表示 key name 的完整的表达式。
 其简写 <code>packageOptions</code> 也是一个 key name，但是是不同的（对于没有 in 方法的 key，会隐式的假设一个 scope：当前的 project，global
-config，global task）。</p><div class="bottom nav span-16">
+config，global task）。
+</p><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>
                         <a href="More-About-Settings.html"> 更多关于设置 </a>                        
                         <ul class="language-bar">
-        <li><a href="../Scopes.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/Scopes.html"><span class="lang-item lang-ja">日本語</span></a></li><li><a href="../zh-cn/Scopes.html"><span class="lang-item lang-zh-cn">中文 (简体)</span></a></li><li><a href="../es/Scopes.html"><span class="lang-item lang-es">Español</span></a></li>
+        <li><a href="../zh-cn/Scopes.html"><span class="lang-item lang-zh-cn">中文 (简体)</span></a></li><li><a href="../es/Scopes.html"><span class="lang-item lang-es">Español</span></a></li>
       </ul>
                       </div><div class="tocwrapper show">
       <a class="tochead nav" style="display: none" href="#toc">❦</a>
       <a name="toc"></a>
       <h4 class="toctitle">Contents</h4>
       <div class="tocbody">
-      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">sbt 入门</a></div><ol class="toc"> <li><div><a href="Setup.html">安装 sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">在 Mac 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">在 Windows 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">在 Linux 上安装 sbt</a></div></li><li><div><a href="Manual-Installation.html">手动安装 sbt</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">目录结构</a></div></li><li><div><a href="Running.html">运行</a></div></li><li><div><a href="Basic-Def.html">.sbt 构建定义</a></div></li><li><div class="current">Scope</div></li><li><div><a href="More-About-Settings.html">更多关于设置</a></div></li><li><div><a href="Library-Dependencies.html">库依赖</a></div></li><li><div><a href="Multi-Project.html">多项目构建</a></div></li><li><div><a href="Using-Plugins.html">使用插件</a></div></li><li><div><a href="Custom-Settings.html">自定义设置和任务</a></div></li><li><div><a href="Organizing-Build.html">组织构建</a></div></li><li><div><a href="Summary.html">总结</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">sbt 入门</a></div><ol class="toc"> <li><div><a href="Setup.html">安装 sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">在 Mac 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">在 Windows 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">在 Linux 上安装 sbt</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">目录结构</a></div></li><li><div><a href="Running.html">运行</a></div></li><li><div><a href="Basic-Def.html">.sbt 构建定义</a></div></li><li><div class="current">Scope</div></li><li><div><a href="More-About-Settings.html">更多关于设置</a></div></li><li><div><a href="Library-Dependencies.html">库依赖</a></div></li><li><div><a href="Multi-Project.html">多项目构建</a></div></li><li><div><a href="Using-Plugins.html">使用插件</a></div></li><li><div><a href="Custom-Settings.html">自定义设置和任务</a></div></li><li><div><a href="Organizing-Build.html">组织构建</a></div></li><li><div><a href="Summary.html">总结</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
           </div>
         </div>
         <div class="header">
@@ -234,17 +235,17 @@ config，global task）。</p><div class="bottom nav span-16">
         </div>
         <div class="support-item">
           <div class="support-icon">
-            <svg class="svg-icon svg-icon-typesafe" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 154 154" enable-background="new 0 0 154 154"><path fill="#fff" d="M49.7 114c-4.8 0-8.7-5.1-8.7-9.9v-.2c0-4.8 3.9-7.9 8.7-7.9h100c.9-3 1.6-7 2-11h-84c-4.8 0-8.7-3.7-8.7-8.5s3.9-8.5 8.7-8.5h83.7c-.5-4-1.2-8-2.3-11h-63.4c-4.8 0-8.7-3.7-8.7-8.5s3.9-8.5 8.7-8.5h56c-13.1-23-37.2-37.8-64.7-37.8-41.4 0-75 33.3-75 74.7s33.6 75.6 75 75.6c28.4 0 53.1-15.4 65.8-38.4h-93.1z"/></svg>
+            <svg id="lightbend-icon-reverse" class="svg-icon svg-icon-lightbend-reverse" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 302 262"><title>lightbend-icon</title><g id="icon"><path d="M1,195v56a10,10,0,0,0,10,10H291a10,10,0,0,0,10-10V195a557.85,557.85,0,0,1-150,20A557.85,557.85,0,0,1,1,195Z" style="fill:#fff"/><path d="M291,1H11A10,10,0,0,0,1,11V176a539.94,539.94,0,0,0,150,21,539.94,539.94,0,0,0,150-21V11A10,10,0,0,0,291,1Z" style="fill:#fff"/></g></svg>
           </div>
           <div class="support-detail">
             <h2>Commercial Support</h2>
-            <a href="http://typesafe.com/subscription">Typesafe Subscription</a>
-            <a href="http://typesafe.com/subscription/training">Training</a>
-            <a href="http://typesafe.com/subscription/consulting">Consulting</a>
+            <a href="https://www.lightbend.com/services/expert-support">Lightbend Subscription</a>
+            <a href="https://www.lightbend.com/services/training">Training</a>
+            <a href="https://www.lightbend.com/services/consulting">Consulting</a>
           </div>
         </div>
-      </div>
 
+      </div>
     </div>
   </div>
 </div><footer>
@@ -261,9 +262,9 @@ config，global task）。</p><div class="bottom nav span-16">
         </nav>
       </div>
       <div class="col-md-4 text-right ts">
-        &copy; 2015 Typesafe Inc.
-        <a href="https://typesafe.com">
-          <img src="../files/typesafe_reverse.svg" alt="Typesafe, Inc.">
+        &copy; 2016 Lightbend Inc.
+        <a href="https://www.lightbend.com">
+          <img src="files/lightbend-reverse.svg" alt="Lightbend, Inc.">
         </a>
       </div>
     </div>

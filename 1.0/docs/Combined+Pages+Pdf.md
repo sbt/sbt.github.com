@@ -80,7 +80,7 @@ See also the [API Documentation](../api/index.html),
 
   [Basic-Def]: Basic-Def.html
   [Scopes]: Scopes.html
-  [More-About-Settings]: More-About-Settings.html
+  [Task-Graph]: Task-Graph.html
 
 Getting Started with sbt
 ========================
@@ -96,8 +96,8 @@ and maintain an sbt build definition.
 It is *highly recommended* to read the Getting Started Guide!
 
 If you are in a huge hurry, the most important conceptual background can
-be found in [.sbt build definition][Basic-Def], [scopes][Scopes], and
-[more kinds of setting][More-About-Settings]. But we don't promise that
+be found in [build definition][Basic-Def], [scopes][Scopes], and
+[task graph][Task-Graph]. But we don't promise that
 it's a good idea to skip the other pages in the guide.
 
 It's best to read in order, as later pages in the Getting Started Guide
@@ -109,20 +109,18 @@ Thanks for trying out sbt and *have fun*!
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.msi
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.0-M4/sbt-1.0.0-M4.msi
   [Setup-Notes]: ../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
   [Linux]: Installing-sbt-on-Linux.html
-  [Manual-Installation]: Manual-Installation.html
-  [Activator-Installation]: Activator-Installation.html
 
 Installing sbt
 --------------
 
 To create an sbt project, you'll need to take these steps:
 
--   Install sbt and create a script to launch it.
+-   Install sbt.
 -   Setup a simple [hello world][Hello] project
     -   Create a project directory with source files in it.
     -   Create your build definition.
@@ -133,9 +131,8 @@ To create an sbt project, you'll need to take these steps:
 Ultimately, the installation of sbt boils down to a launcher JAR
 and a shell script, but depending on your platform, we provide
 several ways to make the process less tedious.  Head over to the
-installation steps for [Mac][Mac], [Windows][Windows],
-[Linux][Linux], [Lightbend Activator][Activator-Installation], or
-[manual installation][Manual-Installation].
+installation steps for [Mac][Mac], [Windows][Windows], or
+[Linux][Linux].
 
 ### Tips and Notes
 
@@ -143,10 +140,9 @@ If you have any trouble running sbt, see [Setup Notes][Setup-Notes] on
 terminal encodings, HTTP proxies, and JVM options.
 
 
-  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.zip
-  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.tgz
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0-M4/sbt-1.0.0-M4.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0-M4/sbt-1.0.0-M4.tgz
   [Manual-Installation]: Manual-Installation.html
-  [Activator-Installation]: Activator-Installation.html
 
 Installing sbt on Mac
 ---------------------
@@ -155,38 +151,46 @@ Installing sbt on Mac
 
 Download [ZIP][ZIP] or [TGZ][TGZ] package, and expand it.
 
-### Installing manually
+### Installing from a third-party package
 
-See instruction to install manually.
+> **Note:** Third-party packages may not provide the latest version. Please make
+> sure to report any issues with these packages to the relevant
+> maintainers.
+
+#### [Homebrew](http://mxcl.github.com/homebrew/)
+
+```
+$ brew install sbt -devel
+```
+
+#### [Macports](http://macports.org/)
+
+```
+$ port install sbt
+```
 
 
-  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.msi
-  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.zip
-  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.tgz
-  [Activator-Installation]: Activator-Installation.html
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.0-M4/sbt-1.0.0-M4.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0-M4/sbt-1.0.0-M4.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0-M4/sbt-1.0.0-M4.tgz
 
 Installing sbt on Windows
 -------------------------
-
-### Windows installer
-
-Download [msi installer][MSI] and install it.
 
 ### Installing from a universal package
 
 Download [ZIP][ZIP] or [TGZ][TGZ] package and expand it.
 
-### Installing manually
+### Windows installer
 
-See instruction to install manually.
+Download [msi installer][MSI] and install it.
 
 
-  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.zip
-  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm-experimental/sbt-1.0.0-M4.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian-experimental/sbt-1.0.0-M4.deb
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0-M4/sbt-1.0.0-M4.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0-M4/sbt-1.0.0-M4.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.0.0-M4.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.0.0-M4.deb
   [Manual-Installation]: Manual-Installation.html
-  [Activator-Installation]: Activator-Installation.html
   [website127]: https://github.com/sbt/website/issues/127
 
 Installing sbt on Linux
@@ -204,7 +208,7 @@ Ubuntu and other Debian-based distributions use the DEB format, but usually you 
 Run the following from the terminal to install `sbt` (You'll need superuser privileges to do so, hence the `sudo`).
 
     echo "deb https://dl.bintray.com/sbt/debian-experimental /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
-    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 642AC823
+    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2EE0EA64E40A89B84B2DF73499E82A75642AC823
     sudo apt-get update
     sudo apt-get install sbt
 
@@ -232,204 +236,70 @@ sbt binaries are published to Bintray, and conveniently Bintray provides an RPM 
 
 ### Gentoo
 
-In the official tree there is no ebuild for sbt. But there are
-[ebuilds](https://github.com/whiter4bbit/overlays/tree/master/dev-java/sbt-bin) to merge sbt from binaries.
-To merge sbt from this ebuilds you can do:
+The official tree contains ebuilds for sbt. To install the latest available version do:
 
-    mkdir -p /usr/local/portage && cd /usr/local/portage
-    git clone git://github.com/whiter4bbit/overlays.git
-    echo "PORTDIR_OVERLAY=$PORTDIR_OVERLAY /usr/local/portage/overlays" >> /etc/make.conf
-    emerge sbt-bin
-
-> **Note:** Please report any issues with the ebuild
-> [here](https://github.com/whiter4bbit/overlays/issues).
-
-### Installing manually
-
-See [instructions to install manually][Manual-Installation].
-
-
-  [sbt-launch.jar]: https://repo1.maven.org/maven2/org/scala-sbt/sbt-launch/1.0.0-M4/sbt-launch.jar
-
-Installing sbt manually
------------------------
-
-Manual installation requires downloading [sbt-launch.jar][sbt-launch.jar] and creating a
-script to start it.
-
-### Unix
-
-Put [sbt-launch.jar][sbt-launch.jar] in `~/bin`.
-
-Create a script to run the jar, by creating `~/bin/sbt` with these
-contents:
-
-```
-#!/bin/bash
-SBT_OPTS="-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M"
-java $SBT_OPTS -jar `dirname $0`/sbt-launch.jar "$@"
-```
-
-Make the script executable:
-
-```
-$ chmod u+x ~/bin/sbt
-```
-
-### Windows
-
-Manual installation for Windows varies by terminal type and whether
-Cygwin is used. In all cases, put the batch file or script on the path
-so that you can launch sbt in any directory by typing `sbt` at the command
-prompt. Also, adjust JVM settings according to your machine if
-necessary.
-
-#### Non-Cygwin
-
-For non-Cygwin users using the standard Windows terminal, create a batch file `sbt.bat`:
-
-```
-set SCRIPT_DIR=%~dp0
-java -Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M -jar "%SCRIPT_DIR%sbt-launch.jar" %*
-```
-
-and put the downloaded [sbt-launch.jar][sbt-launch.jar] in the same directory as the
-batch file.
-
-#### Cygwin with the standard Windows termnial
-
-If using Cygwin with the standard Windows terminal, create a bash
-script `~/bin/sbt`:
-
-```
-SBT_OPTS="-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M"
-java $SBT_OPTS -jar sbt-launch.jar "$@"
-```
-
-Replace sbt-launch.jar with the path to your downloaded [sbt-launch.jar][sbt-launch.jar]
-and remember to use cygpath if necessary. Make the script executable:
-
-```
-$ chmod u+x ~/bin/sbt
-```
-
-#### Cygwin with an Ansi terminal
-
-Cygwin with an Ansi terminal (supports Ansi escape sequences and is configurable via stty), create a bash script
-`~/bin/sbt`:
-
-```
-SBT_OPTS="-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M"
-stty -icanon min 1 -echo > /dev/null 2>&1
-java -Djline.terminal=jline.UnixTerminal -Dsbt.cygwin=true $SBT_OPTS -jar sbt-launch.jar "$@"
-stty icanon echo > /dev/null 2>&1
-```
-
-Replace sbt-launch.jar with the path to your downloaded [sbt-launch.jar][sbt-launch.jar]
-and remember to use cygpath if necessary. Then, make the script
-executable:
-
-```
-$ chmod u+x ~/bin/sbt
-```
-
-In order for backspace to work correctly in the scala console, you need
-to make sure your backspace key is sending the erase character as
-configured by stty. For the default cygwin terminal (mintty) you can
-find a setting under Options -> Keys "Backspace sends ^H" which will
-need to be checked if your erase key is the cygwin default of ^H.
-
-> **Note:** Other configurations are currently unsupported. Please [submit a pull
-> request](https://github.com/sbt/sbt/blob/0.13/CONTRIBUTING.md)
-> implementing or describing that support.
+    emerge dev-java/sbt
 
 
   [Basic-Def]: Basic-Def.html
   [Setup]: Setup.html
+  [Running]: Running.html
 
 Hello, World
 ------------
 
-This page assumes you've [installed sbt][Setup].
+This page assumes you've [installed sbt][Setup] 0.13.13 or later.
 
-### Create a project directory with source code
+### sbt new command
 
-A valid sbt project can be a directory containing a single source file.
-Try creating a directory `hello` with a file `hw.scala`, containing the
-following:
-
-```scala
-object Hi {
-  def main(args: Array[String]) = println("Hi!")
-}
-```
-
-Now from inside the `hello` directory, start sbt and type `run` at the sbt
-interactive console. On Linux or OS X the commands might look like this:
+If you're using sbt 0.13.13 or later, you can use sbt `new` command to quickly setup a simple Hello world build. Type the following command to the terminal.
 
 ```
-$ mkdir hello
+$ sbt new sbt/scala-seed.g8
+....
+Minimum Scala build.
+
+name [My Something Project]: hello
+
+Template applied in ./hello
+```
+
+When prompted for the project name, type `hello`.
+
+This will create a new project under a directory named `hello`.
+
+### Running your app
+
+Now from inside the `hello` directory, start `sbt` and type `run` at the sbt shell. On Linux or OS X the commands might look like this:
+
+```
 $ cd hello
-$ echo 'object Hi { def main(args: Array[String]) = println("Hi!") }' > hw.scala
 $ sbt
 ...
 > run
 ...
-Hi!
+[info] Compiling 1 Scala source to /xxx/hello/target/scala-2.12/classes...
+[info] Running example.Hello
+hello
 ```
 
-In this case, sbt works purely by convention. sbt will find the
-following automatically:
+We will see more tasks [later][Running].
 
--   Sources in the base directory
--   Sources in `src/main/scala` or `src/main/java`
--   Tests in `src/test/scala` or `src/test/java`
--   Data files in `src/main/resources` or `src/test/resources`
--   jars in `lib`
+### Exiting sbt shell
 
-By default, sbt will build projects with the same version of Scala used
-to run sbt itself.
+To leave sbt shell, type `exit` or use Ctrl+D (Unix) or Ctrl+Z
+(Windows).
 
-You can run the project with `sbt run` or enter the [Scala
-REPL](http://www.scala-lang.org/node/2097) with `sbt console`. `sbt console`
-sets up your project's classpath so you can try out live Scala examples
-based on your project's code.
+```
+> exit
+```
 
 ### Build definition
 
-Most projects will need some manual setup. Basic build settings go in a
-file called `build.sbt`, located in the project's base directory.
-
-For example, if your project is in the directory `hello`, in
-`hello/build.sbt` you might write:
-
-```scala
-lazy val root = (project in file(".")).
-  settings(
-    name := "hello",
-    version := "1.0",
-    scalaVersion := "2.11.8"
-  )
-```
-
+The build definition goes in a file called `build.sbt`, located in the project's base directory.
+You can take a look at the file, but don't worry if the details of this build file aren't clear yet.
 In [.sbt build definition][Basic-Def] you'll learn more about how to write
 a `build.sbt` file.
-
-If you plan to package your project in a jar, you will want to set at
-least the name and version in a `build.sbt`.
-
-### Setting the sbt version
-
-You can force a particular version of sbt by creating a file
-`hello/project/build.properties`. In this file, write:
-
-```
-sbt.version=1.0.0-M4
-```
-
-to force the use of sbt 1.0.0-M4. sbt is 99% source compatible from
-release to release. Still, setting the sbt version in
-`project/build.properties` avoids any potential confusion.
 
 
   [Hello]: Hello.html
@@ -446,14 +316,10 @@ This page assumes you've [installed sbt][Setup] and seen the
 
 In sbt's terminology, the "base directory" is the directory containing
 the project. So if you created a project `hello` containing
-`hello/build.sbt` and `hello/hw.scala` as in the [Hello, World][Hello]
+`hello/build.sbt` as in the [Hello, World][Hello]
 example, `hello` is your base directory.
 
 ### Source code
-
-Source code can be placed in the project's base directory as with
-`hello/hw.scala`. However, most people don't do this for real projects;
-too much clutter.
 
 sbt uses the same directory structure as
 [Maven](https://maven.apache.org/) for source files by default (all paths
@@ -480,18 +346,31 @@ src/
 Other directories in `src/` will be ignored. Additionally, all hidden
 directories will be ignored.
 
+Source code can be placed in the project's base directory as
+`hello/app.scala`, which may be for small projects,
+though for normal projects people tend to keep the projects in
+the `src/main/` directory to keep things neat.
+The fact that you can place `*.scala` source code in the base directory might seem like
+an odd trick, but this fact becomes relevant [later][Organizing-Build].
+
 ### sbt build definition files
 
-You've already seen `build.sbt` in the project's base directory. Other sbt
-files appear in a `project` subdirectory.
+The build definition is described in `build.sbt` (actually any files named `*.sbt`) in the project's base directory.
 
-`project` can contain `.scala` files, which are combined with `.sbt` files to
-form the complete build definition. See [organizing the build][Organizing-Build] for more.
+```
+build.sbt
+```
+
+### Build support files
+
+In addition to `build.sbt`, `project` directory can contain `.scala` files
+that defines helper objects and one-off plugins.
+See [organizing the build][Organizing-Build] for more.
 
 ```
 build.sbt
 project/
-  Build.scala
+  Dependencies.scala
 ```
 
 You may see `.sbt` files inside `project/` but they are not equivalent to
@@ -529,7 +408,7 @@ This page describes how to use sbt once you have set up your project. It
 assumes you've [installed sbt][Setup] and created a
 [Hello, World][Hello] or other project.
 
-### Interactive mode
+### sbt shell
 
 Run sbt in your project directory with no arguments:
 
@@ -537,11 +416,11 @@ Run sbt in your project directory with no arguments:
 $ sbt
 ```
 
-Running sbt with no command line arguments starts it in interactive
-mode. Interactive mode has a command prompt (with tab completion and
+Running sbt with no command line arguments starts sbt shell.
+sbt shell has a command prompt (with tab completion and
 history!).
 
-For example, you could type `compile` at the sbt prompt:
+For example, you could type `compile` at the sbt shell:
 
 ```
 > compile
@@ -551,7 +430,7 @@ To `compile` again, press up arrow and then enter.
 
 To run your program, type `run`.
 
-To leave interactive mode, type `exit` or use Ctrl+D (Unix) or Ctrl+Z
+To leave sbt shell, type `exit` or use Ctrl+D (Unix) or Ctrl+Z
 (Windows).
 
 ### Batch mode
@@ -568,21 +447,26 @@ $ sbt clean compile "testOnly TestA TestB"
 In this example, `testOnly` has arguments, `TestA` and `TestB`. The commands
 will be run in sequence (`clean`, `compile`, then `testOnly`).
 
+**Note**: Running in batch mode requires JVM spinup and JIT each time,
+so **your build will run much slower**.
+For day-to-day coding, we recommend using the sbt shell
+or Continuous build and test feature described below.
+
 ### Continuous build and test
 
 To speed up your edit-compile-test cycle, you can ask sbt to
 automatically recompile or run tests whenever you save a source file.
 
 Make a command run when one or more source files change by prefixing the
-command with `~`. For example, in interactive mode try:
+command with `~`. For example, in sbt shell try:
 
 ```
-> ~ compile
+> ~testQuick
 ```
 
 Press enter to stop watching for changes.
 
-You can use the `~` prefix with either interactive mode or batch mode.
+You can use the `~` prefix with either sbt shell or batch mode.
 
 See [Triggered Execution][Triggered-Execution] for more details.
 
@@ -637,14 +521,14 @@ see [Command Line Reference][Command-Line-Reference].
 
 ### Tab completion
 
-Interactive mode has tab completion, including at an empty prompt. A
+sbt shell has tab completion, including at an empty prompt. A
 special sbt convention is that pressing tab once may show only a subset
 of most likely completions, while pressing it more times shows more
 verbose choices.
 
 ### History Commands
 
-Interactive mode remembers history, even if you exit sbt and restart it.
+sbt shell remembers history, even if you exit sbt and restart it.
 The simplest way to access history is with the up arrow key. The
 following commands are also supported:
 
@@ -660,7 +544,7 @@ following commands are also supported:
   <tr>
     <td><tt>!:</tt></td>
     <td>Show all previous commands.</td>
-  </tr>  
+  </tr>
   <tr>
     <td><tt>!:n</tt></td>
     <td>Show the last <tt>n</tt> commands.</td>
@@ -684,146 +568,123 @@ following commands are also supported:
 </table>
 
 
-  [More-About-Settings]: More-About-Settings.html
+  [Task-Graph]: Task-Graph.html
   [Bare-Def]: Bare-Def.html
   [Full-Def]: Full-Def.html
   [Running]: Running.html
   [Library-Dependencies]: Library-Dependencies.html
   [Input-Tasks]: ../docs/Input-Tasks.html
 
-.sbt build definition
----------------------
+Build definition
+----------------
 
 This page describes sbt build definitions, including some "theory" and
-the syntax of `build.sbt`. It assumes you know how to [use sbt][Running]
+the syntax of `build.sbt`.
+It assumes you have installed a recent version of sbt, such as sbt 0.13.13,
+know how to [use sbt][Running],
 and have read the previous pages in the Getting Started Guide.
 
-### Two Flavors of Build Definition
+This page discusses the `build.sbt` build definition.
 
-There are two flavors of build definition:
+### Specifying the sbt version
 
-1. Multi-project `.sbt` build definition
-2. Bare `.sbt` build definition
+As part of your build definition you will specify the version of
+sbt that your build uses.
+This allows people with different versions of the sbt launcher to
+build the same projects with consistent results.
+To do this, create a file named `project/build.properties` that specifies the sbt version as follows:
 
-This page discusses the newest multi-project `.sbt` build definition, which combines the strength
-of the two older flavors, and is suitable for all cases.
-You might come across the other older flavors when dealing with builds in the wild.
-See [bare .sbt build definition][Bare-Def] and [.scala build definition][Full-Def] (later in Getting Started) for more
-on other flavors.
+```
+sbt.version=1.0.0-M4
+```
 
-In addition, a build definition can contain files ending in `.scala`, located in the
-`project/` subdirectory of the base directory to define commonly used functions and values.
+If the required version is not available locally,
+the `sbt` launcher will download it for you.
+If this file is not present, the `sbt` launcher will choose an arbitrary version,
+which is discouraged because it makes your build non-portable.
 
-### What is a Build Definition?
+### What is a build definition?
 
-After examining a set of directories and processing build definition files, sbt
-ends up with `Project` definitions.
+A *build definition* is defined in `build.sbt`,
+and it consists of a set of projects (of type [`Project`](../api/sbt/Project.html)).
+Because the term *project* can be ambiguous,
+we often call it a *subproject* in this guide.
 
-In `build.sbt` you might create a [Project](../api/sbt/Project.html) definition of
-the project located in the current directory like this:
+For instance, in `build.sbt` you define
+the subproject located in the current directory like this:
 
 ```scala
 lazy val root = (project in file("."))
-```
-
-Each project is associated with an immutable map (set of key-value pairs) describing the project.
-
-For example, one key is `name` and it maps to a string value, the name of
-your project.
-
-*Build definition files do not affect sbt's map directly.*
-
-Instead, the build definition creates a huge list of objects with type
-`Setting[T]` where `T` is the type of the value in the map. A `Setting`
-describes a *transformation to the map*, such as adding a new key-value
-pair or appending to an existing value. (In the spirit of functional
-programming with immutable data structures and values, a transformation
-returns a new map -- it does not update the old map in-place.)
-
-Here is how you associate the `Setting[String]` for the name of
-the project located in the current directory:
-
-```scala
-lazy val root = (project in file(".")).
-  settings(
-    name := "hello"
+  .settings(
+    name := "Hello",
+    scalaVersion := "2.12.1"
   )
 ```
 
-This `Setting[String]` transforms the map by adding (or replacing) the
-name key, giving it the value `"hello"`. The transformed map becomes sbt's
-new map.
+Each subproject is configured by key-value pairs.
 
-To create the map, sbt first sorts the list of settings so that all
-changes to the same key are made together, and values that depend on
-other keys are processed after the keys they depend on. Then sbt walks
-over the sorted list of `Settings` and applies each one to the map in
-turn.
+For example, one key is `name` and it maps to a string value, the name of
+your subproject.
+The key-value pairs are listed under the `.settings(...)` method as follows:
 
-Summary: A build definition defines `Project`s with a list of `Setting[T]`, where a
-`Setting[T]` is a transformation affecting sbt's map of key-value pairs
-and `T` is the type of each value.
+```scala
+lazy val root = (project in file("."))
+  .settings(
+    name := "Hello",
+    scalaVersion := "2.12.1"
+  )
+```
 
 ### How build.sbt defines settings
 
-`build.sbt` defines a `Project`, which holds a list of Scala expressions called `settings`.
-
-Here's an example:
+`build.sbt` defines subprojects, which holds a sequence of key-value pairs
+called *setting expressions* using *build.sbt DSL*.
 
 ```scala
-lazy val commonSettings = Seq(
-  organization := "com.example",
-  version := "0.1.0",
-  scalaVersion := "2.11.8"
-)
-
-lazy val root = (project in file(".")).
-  settings(commonSettings: _*).
-  settings(
-    name := "hello"
+lazy val root = (project in file("."))
+  .settings(
+    name         := "hello",
+    organization := "com.example",
+    scalaVersion := "2.12.1",
+    version      := "0.1.0-SNAPSHOT"
   )
 ```
 
-Each `Setting` is defined with a Scala expression. The expressions in
-`settings` are independent of one another, and they are expressions,
-rather than complete Scala statements.
+Let's take a closer look at the `build.sbt` DSL:
+![setting expression](files/setting-expression.png)<br>
+<br>
+Each entry is called a *setting expression*.
+Some among them are also called task expressions.
+We will see more on the difference later in this page.
+
+A setting expression consists of three parts:
+
+1. Left-hand side is a *key*.
+2. *Operator*, which in this case is `:=`
+3. Right-hand side is called the *body*, or the *setting body*.
+
+On the left-hand side, `name`, `version`, and `scalaVersion` are *keys*.
+A key is an instance of
+[`SettingKey[T]`](../api/index.html#sbt.SettingKey),
+[`TaskKey[T]`](../api/index.html#sbt.TaskKey), or
+[`InputKey[T]`](../api/index.html#sbt.InputKey) where `T` is the
+expected value type. The kinds of key are explained below.
+
+Because key `name` is typed to `SettingKey[String]`,
+the `:=` operator on `name` is also typed specifically to `String`.
+If you use the wrong value type, the build definition will not compile:
+
+```scala
+lazy val root = (project in file("."))
+  .settings(
+    name := 42  // will not compile
+  )
+```
 
 `build.sbt` may also be
 interspersed with `val`s, `lazy val`s, and `def`s. Top-level `object`s and
 `class`es are not allowed in `build.sbt`. Those should go in the `project/`
-directory as full Scala source files.
-
-On the left, `name`, `version`, and `scalaVersion` are *keys*. A key is an
-instance of `SettingKey[T]`, `TaskKey[T]`, or `InputKey[T]` where `T` is the
-expected value type. The kinds of key are explained below.
-
-Keys have a method called `:=`, which returns a `Setting[T]`. You could use
-a Java-like syntax to call the method:
-
-```scala
-lazy val root = (project in file(".")).
-  settings(
-    name.:=("hello")
-  )
-```
-
-But Scala allows `name := "hello"` instead (in Scala, a single-parameter
-method can use either syntax).
-
-The `:=` method on key `name` returns a `Setting`, specifically a
-`Setting[String]`. `String` also appears in the type of `name` itself, which
-is `SettingKey[String]`. In this case, the returned `Setting[String]` is a
-transformation to add or replace the `name` key in sbt's map, giving it
-the value `"hello"`.
-
-If you use the wrong value type, the build definition will not compile:
-
-```scala
-lazy val root = (project in file(".")).
-  settings(
-    name := 42  // will not compile
-  )
-```
+directory as Scala source files.
 
 ### Keys
 
@@ -832,7 +693,7 @@ lazy val root = (project in file(".")).
 There are three flavors of key:
 
 - `SettingKey[T]`: a key for a value computed once (the value is
-  computed when loading the project, and kept around).
+  computed when loading the subproject, and kept around).
 - `TaskKey[T]`: a key for a value, called a *task*, that has to be
   recomputed each time, potentially with side effects.
 - `InputKey[T]`: a key for a task that has command line arguments as
@@ -858,8 +719,7 @@ lazy val hello = taskKey[Unit]("An example task")
 
 Here we have used the fact that an `.sbt` file can contain `val`s and `def`s
 in addition to settings. All such definitions are evaluated before
-settings regardless of where they are defined in the file. `val`s and `def`s
-must be separated from settings by blank lines.
+settings regardless of where they are defined in the file.
 
 > **Note:** Typically, lazy vals are used instead of vals to avoid initialization
 > order problems.
@@ -875,7 +735,7 @@ Each time you start a task execution, for example by typing `compile` at
 the interactive sbt prompt, sbt will re-run any tasks involved exactly
 once.
 
-sbt's map describing the project can keep around a fixed string value
+sbt's key-value pairs describing the subproject can keep around a fixed string value
 for a setting such as name, but it has to keep around some executable
 code for a task such as `compile` -- even if that executable code
 eventually returns a string, it has to be re-run every time.
@@ -896,8 +756,8 @@ For example, to implement the `hello` task from the previous section:
 ```scala
 lazy val hello = taskKey[Unit]("An example task")
 
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     hello := { println("Hello!") }
   )
 ```
@@ -906,8 +766,8 @@ We already saw an example of defining settings when we defined the
 project's name,
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     name := "hello"
   )
 ```
@@ -922,12 +782,11 @@ task key still creates a value of type `T` when the task executes.
 
 The `T` vs. `Task[T]` type difference has this implication: a setting can't
 depend on a task, because a setting is evaluated only once on project
-load and is not re-run. More on this in
-[more kinds of setting][More-About-Settings], coming up soon.
+load and is not re-run. More on this in [task graph][Task-Graph].
 
-### Keys in sbt interactive mode
+### Keys in sbt shell
 
-In sbt's interactive mode, you can type the name of any task to execute
+In sbt shell, you can type the name of any task to execute
 that task. This is why typing `compile` runs the `compile` task. `compile` is
 a task key.
 
@@ -956,9 +815,7 @@ import Process._
 import Keys._
 ```
 
-(In addition, if you have [.scala files][Full-Def], the contents of any
-`Build` or `Plugin` objects in those files will be imported. More on that
-when we get to [.scala build definition][Full-Def].)
+(In addition, if you have auto plugins, the names marked under `autoImport` will be imported.)
 
 
 ### Bare .sbt build definition
@@ -969,7 +826,7 @@ a list of `Setting[_]` expressions.
 ```scala
 name := "hello"
 version := "1.0"
-scalaVersion := "2.11.8"
+scalaVersion := "2.12.1"
 ```
 
 This syntax is recommended mostly for using plugins. See later section
@@ -986,14 +843,14 @@ val derby = "org.apache.derby" % "derby" % "10.4.1.3"
 
 lazy val commonSettings = Seq(
   organization := "com.example",
-  version := "0.1.0",
-  scalaVersion := "2.11.8"
+  version := "0.1.0-SNAPSHOT",
+  scalaVersion := "2.12.1"
 )
 
-lazy val root = (project in file(".")).
-  settings(commonSettings: _*).
-  settings(
-    name := "hello",
+lazy val root = (project in file("."))
+  .settings(
+    commonSettings,
+    name := "Hello",
     libraryDependencies += derby
   )
 ```
@@ -1004,7 +861,7 @@ version 10.4.1.3.
 The `libraryDependencies` key involves two complexities: `+=` rather than
 `:=`, and the `%` method. `+=` appends to the key's old value rather than
 replacing it, this is explained in
-[more kinds of setting][More-About-Settings]. The `%`
+[Task Graph][Task-Graph]. The `%`
 method is used to construct an Ivy module ID from strings, explained in
 [Library dependencies][Library-Dependencies].
 
@@ -1014,7 +871,427 @@ Getting Started Guide. There's a
 
 
   [Basic-Def]: Basic-Def.html
-  [More-About-Settings]: More-About-Settings.html
+  [Scopes]: Scopes.html
+  [Make]: https://en.wikipedia.org/wiki/Make_(software)
+  [Ant]: http://ant.apache.org/
+  [Rake]: https://ruby.github.io/rake/
+
+Task graph
+----------
+
+Continuing from [build definition][Basic-Def],
+this page explains `build.sbt` definition in more detail.
+
+Rather than thinking of `settings` as key-value pairs,
+a better analogy would be to think of it as a _directed acyclic graph_ (DAG)
+of tasks where the edges denote **happens-before**. Let's call this the _task graph_.
+
+### Terminology
+
+Let's review the key terms before we dive in.
+
+- Setting/Task expression: entry inside `.settings(...)`.
+- Key: Left hand side of a setting expression. It could be a `SettingKey[A]`, a `TaskKey[A]`, or an `InputKey[A]`.
+- Setting: Defined by a setting expression with `SettingKey[A]`. The value is calculated once during load.
+- Task: Defined by a task expression with `TaskKey[A]`. The value is calculated each time it is invoked.
+
+### Declaring dependency to other tasks
+
+In `build.sbt` DSL, we use `.value` method to express the dependency to
+another task or setting. The value method is special and may only be
+called in the argument to `:=` (or, `+=` or `++=`, which we'll see later).
+
+As a first example, consider defining the `scalacOption` that depends on
+`update` and `clean` tasks. Here are the definitions of these keys (from [Keys](../sxr/sbt/Keys.scala.html)).
+
+**Note**: The values calculated below are nonsensical for `scalaOptions`,
+and it's just for demonstration purpose only:
+
+```scala
+val scalacOptions = taskKey[Seq[String]]("Options for the Scala compiler.")
+val update = taskKey[UpdateReport]("Resolves and optionally retrieves dependencies, producing a report.")
+val clean = taskKey[Unit]("Deletes files produced by the build, such as generated sources, compiled classes, and task caches.")
+```
+
+Here's how we can rewire `scalacOptions`:
+
+```scala
+scalacOptions := {
+  val ur = update.value  // update task happens-before scalacOptions
+  val x = clean.value    // clean task happens-before scalacOptions
+  // ---- scalacOptions begins here ----
+  ur.allConfigurations.take(3)
+}
+```
+
+`update.value` and `clean.value` declare task dependencies,
+whereas `ur.allConfigurations.take(3)` is the body of the task.
+
+`.value` is not a normal Scala method call. `build.sbt` DSL
+uses a macro to lift these outside of the task body.
+**Both `update` and `clean` tasks are completed
+by the time task engine evaluates the opening `{` of `scalacOptions`
+regardless of which line it appears in the body.**
+
+See the following example:
+
+```scala
+lazy val root = (project in file("."))
+  .settings(
+    name := "Hello",
+    organization := "com.example",
+    scalaVersion := "2.12.1",
+    version := "0.1.0-SNAPSHOT",
+    scalacOptions := {
+      val out = streams.value // streams task happens-before scalacOptions
+      val log = out.log
+      log.info("123")
+      val ur = update.value   // update task happens-before scalacOptions
+      log.info("456")
+      ur.allConfigurations.take(3)
+    }
+  )
+```
+
+Next, from sbt shell type `scalacOptions`:
+
+```
+> scalacOptions
+[info] Updating {file:/xxx/}root...
+[info] Resolving jline#jline;2.14.1 ...
+[info] Done updating.
+[info] 123
+[info] 456
+[success] Total time: 0 s, completed Jan 2, 2017 10:38:24 PM
+```
+
+Even though `val ur = ...` appears in between `log.info("123")` and
+`log.info("456")` the evaluation of `update` task happens before
+either of them.
+
+Here's another example:
+
+```scala
+lazy val root = (project in file("."))
+  .settings(
+    name := "Hello",
+    organization := "com.example",
+    scalaVersion := "2.12.1",
+    version := "0.1.0-SNAPSHOT",
+    scalacOptions := {
+      val ur = update.value  // update task happens-before scalacOptions
+      if (false) {
+        val x = clean.value  // clean task happens-before scalacOptions
+      }
+      ur.allConfigurations.take(3)
+    }
+  )
+```
+
+Next, from sbt shell type `run` then `scalacOptions`:
+
+```
+> run
+[info] Updating {file:/xxx/}root...
+[info] Resolving jline#jline;2.14.1 ...
+[info] Done updating.
+[info] Compiling 1 Scala source to /Users/eugene/work/quick-test/task-graph/target/scala-2.12/classes...
+[info] Running example.Hello
+hello
+[success] Total time: 0 s, completed Jan 2, 2017 10:45:19 PM
+> scalacOptions
+[info] Updating {file:/xxx/}root...
+[info] Resolving jline#jline;2.14.1 ...
+[info] Done updating.
+[success] Total time: 0 s, completed Jan 2, 2017 10:45:23 PM
+```
+
+Now if you check for `target/scala-2.12/classes/`,
+it won't exist because `clean` task has run even though it is inside
+the `if (false)`.
+
+Another important thing to note is that there's no guarantee
+about the ordering of `update` and `clean` tasks.
+They might run `update` then `clean`, `clean` then `update`,
+or both in parallel.
+
+### Inlining .value calls
+
+As explained above, `.value` is a special method that is used to express
+the dependency to other tasks and settings.
+Until you're familiar with build.sbt, we recommend you
+put all `.value` calls at the top of the task body.
+
+However, as you get more comfortable, you might wish to inline the `.value` calls
+because it could make the task/setting more concise, and you don't have to
+come up with variable names.
+
+We've inlined a few examples:
+
+```scala
+scalacOptions := {
+  val x = clean.value
+  update.value.allConfigurations.take(3)
+}
+```
+
+Note whether `.value` calls are inlined, or placed anywhere in the task body,
+they are still evaluated before entering the task body.
+
+#### Inspecting the task
+
+In the above example, `scalacOptions` has a *dependency* on
+`update` and `clean` tasks.
+If you place the above in `build.sbt` and
+run the sbt interactive console, then type `inspect scalacOptions`, you should see
+(in part):
+
+```
+> inspect scalacOptions
+[info] Task: scala.collection.Seq[java.lang.String]
+[info] Description:
+[info]  Options for the Scala compiler.
+....
+[info] Dependencies:
+[info]  *:clean
+[info]  *:update
+....
+```
+
+This is how sbt knows which tasks depend on which other tasks.
+
+For example, if you `inspect tree compile` you'll see it depends on another key
+`incCompileSetup`, which it in turn depends on
+other keys like `dependencyClasspath`. Keep following the dependency chains and magic happens.
+
+```
+> inspect tree compile
+[info] compile:compile = Task[sbt.inc.Analysis]
+[info]   +-compile:incCompileSetup = Task[sbt.Compiler$IncSetup]
+[info]   | +-*/*:skip = Task[Boolean]
+[info]   | +-compile:compileAnalysisFilename = Task[java.lang.String]
+[info]   | | +-*/*:crossPaths = true
+[info]   | | +-{.}/*:scalaBinaryVersion = 2.12
+[info]   | |
+[info]   | +-*/*:compilerCache = Task[xsbti.compile.GlobalsCache]
+[info]   | +-*/*:definesClass = Task[scala.Function1[java.io.File, scala.Function1[java.lang.String, Boolean]]]
+[info]   | +-compile:dependencyClasspath = Task[scala.collection.Seq[sbt.Attributed[java.io.File]]]
+[info]   | | +-compile:dependencyClasspath::streams = Task[sbt.std.TaskStreams[sbt.Init$ScopedKey[_ <: Any]]]
+[info]   | | | +-*/*:streamsManager = Task[sbt.std.Streams[sbt.Init$ScopedKey[_ <: Any]]]
+[info]   | | |
+[info]   | | +-compile:externalDependencyClasspath = Task[scala.collection.Seq[sbt.Attributed[java.io.File]]]
+[info]   | | | +-compile:externalDependencyClasspath::streams = Task[sbt.std.TaskStreams[sbt.Init$ScopedKey[_ <: Any]]]
+[info]   | | | | +-*/*:streamsManager = Task[sbt.std.Streams[sbt.Init$ScopedKey[_ <: Any]]]
+[info]   | | | |
+[info]   | | | +-compile:managedClasspath = Task[scala.collection.Seq[sbt.Attributed[java.io.File]]]
+[info]   | | | | +-compile:classpathConfiguration = Task[sbt.Configuration]
+[info]   | | | | | +-compile:configuration = compile
+[info]   | | | | | +-*/*:internalConfigurationMap = <function1>
+[info]   | | | | | +-*:update = Task[sbt.UpdateReport]
+[info]   | | | | |
+....
+```
+
+When you type `compile` sbt automatically performs an `update`, for example. It
+Just Works because the values required as inputs to the `compile`
+computation require sbt to do the `update` computation first.
+
+In this way, all build dependencies in sbt are *automatic* rather than
+explicitly declared. If you use a key's value in another computation,
+then the computation depends on that key.
+
+#### Defining a task that depends on other settings
+
+`scalacOptions` is a task key.
+Let's say it's been set to some values already, but you want to
+filter out `"-Xfatal-warnings"` and `"-deprecation"` for non-2.12.
+
+```scala
+lazy val root = (project in file("."))
+  .settings(
+    name := "Hello",
+    organization := "com.example",
+    scalaVersion := "2.12.1",
+    version := "0.1.0-SNAPSHOT",
+    scalacOptions := List("-encoding", "utf8", "-Xfatal-warnings", "-deprecation", "-unchecked"),
+    scalacOptions := {
+      val old = scalacOptions.value
+      scalaBinaryVersion.value match {
+        case "2.12" => old
+        case _      => old filterNot (Set("-Xfatal-warnings", "-deprecation").apply)
+      }
+    }
+  )
+```
+
+Here's how it should look on the sbt shell:
+
+```
+> show scalacOptions
+[info] * -encoding
+[info] * utf8
+[info] * -Xfatal-warnings
+[info] * -deprecation
+[info] * -unchecked
+[success] Total time: 0 s, completed Jan 2, 2017 11:44:44 PM
+> ++2.11.8
+[info] Setting version to 2.11.8
+[info] Reapplying settings...
+[info] Set current project to Hello (in build file:/xxx/)
+> show scalacOptions
+[info] * -encoding
+[info] * utf8
+[info] * -unchecked
+[success] Total time: 0 s, completed Jan 2, 2017 11:44:51 PM
+```
+
+Next, take these two keys (from [Keys](../sxr/sbt/Keys.scala.html)):
+
+```scala
+val scalacOptions = taskKey[Seq[String]]("Options for the Scala compiler.")
+val checksums = settingKey[Seq[String]]("The list of checksums to generate and to verify for dependencies.")
+```
+
+**Note**: `scalacOptions` and `checksums` have nothing to do with each other.
+They are just two keys with the same value type, where one is a task.
+
+It is possible to compile a `build.sbt` that aliases `scalacOptions` to
+`checksums`, but not the other way. For example, this is allowed:
+
+```scala
+// The scalacOptions task may be defined in terms of the checksums setting
+scalacOptions := checksums.value
+```
+
+There is no way to go the *other* direction. That is, a setting key
+can't depend on a task key. That's because a setting key is only
+computed once on project load, so the task would not be re-run every
+time, and tasks expect to re-run every time.
+
+```scala
+// Bad example: The checksums setting cannot be defined in terms of the scalacOptions task!
+checksums := scalacOptions.value
+```
+
+#### Defining a setting that depends on other settings
+
+In terms of the execution timing, we can think of the settings
+as a special tasks that evaluate during loading time.
+
+Consider defining the project organization to be the same as the project name.
+
+```scala
+// name our organization after our project (both are SettingKey[String])
+organization := name.value
+```
+
+Here's a realistic example.
+This rewires `scalaSource in Compile` key to a different directory
+only when `scalaBinaryVersion` is `"2.11"`.
+
+```scala
+scalaSource in Compile := {
+  val old = (scalaSource in Compile).value
+  scalaBinaryVersion.value match {
+    case "2.11" => baseDirectory.value / "src-2.11" / "main" / "scala"
+    case _      => old
+  }
+}
+```
+
+### What's the point of the build.sbt DSL?
+
+The `build.sbt` DSL is a domain-specific language used construct a DAG of settings and tasks.
+The setting expressions encode settings, tasks and the dependencies among them.
+
+This structure is common to [Make][Make] (1976), [Ant][Ant] (2000), and [Rake][Rake] (2003).
+
+#### Intro to Make
+
+The basic Makefile syntax looks like the following:
+
+```
+target: dependencies
+[tab] system command1
+[tab] system command2
+```
+
+Given a target (the default target is named `all`),
+
+1. Make checks if the target's dependencies have been built, and builds any of the dependencies that hasn't been built yet.
+2. Make runs the system commands in order.
+
+Let's take a look at a `Makefile`:
+
+```
+CC=g++
+CFLAGS=-Wall
+
+all: hello
+
+hello: main.o hello.o
+    $(CC) main.o hello.o -o hello
+
+%.o: %.cpp
+    $(CC) $(CFLAGS) -c $< -o $@
+```
+
+Running `make`, it will by default pick the target named `all`.
+The target lists `hello` as its dependency, which hasn't been built yet, so Make will build `hello`.
+
+Next, Make checks if the `hello` target's dependencies have been built yet.
+`hello` lists two targets: `main.o` and `hello.o`.
+Once those targets are created using the last pattern matching rule,
+only then the system command is executed to link `main.o` and `hello.o` to `hello`.
+
+If you're just running `make`, you can focus on what you want as the target,
+and the exact timing and commands necessary to build the intermediate products are figured out by Make.
+We can think of this as dependency-oriented programming, or flow-based programming.
+Make is actually considered a hybrid system because while the DSL describes the task dependencies, the actions are delegated to system commands.
+
+#### Rake
+
+This hybridity is continued for Make successors such as Ant, Rake, and sbt.
+Take a look at the basic syntax for Rakefile:
+
+```ruby
+task name: [:prereq1, :prereq2] do |t|
+  # actions (may reference prereq as t.name etc)
+end
+```
+
+The breakthrough made with Rake was that it used a programming language to
+describe the actions instead of the system commands.
+
+#### Benefits of hybrid flow-based programming
+
+There are several motivation to organizing the build this way.
+
+First is de-duplication. With flow-based programming, a task is executed only once even when it is depended by multiple tasks.
+For example, even when multiple tasks along the task graph depend on `compile in Compile`,
+the compilation will be executed exactly once.
+
+Second is parallel processing. Using the task graph, the task engine can
+schedule mutually non-dependent tasks in parallel.
+
+Third is the separation of concern and the flexibility.
+The task graph lets the build user wire the tasks together in different ways,
+while sbt and plugins can provide various features such as compilation and
+library dependency management as functions that can be reused.
+
+### Summary
+
+The core data structure of the build definition is a DAG of tasks,
+where the edges denote happens-before relationships.
+`build.sbt` is a DSL designed to express dependency-oriented programming,
+or flow-based programming, similar to `Makefile` and `Rakefile`.
+
+The key motivation for the flow-based programming is de-duplication,
+parallel processing, and customizability.
+
+
+  [Basic-Def]: Basic-Def.html
+  [Task-Graph]: Task-Graph.html
   [Library-Dependencies]: Library-Dependencies.html
   [Multi-Project]: Multi-Project.html
   [Inspecting-Settings]: ../docs/Inspecting-Settings.html
@@ -1023,7 +1300,7 @@ Scopes
 ------
 
 This page describes scopes. It assumes you've read and understood the
-previous page, [.sbt build definition][Basic-Def].
+previous pages, [build definition][Basic-Def] and [task graph][Task-Graph].
 
 ### The whole story about keys
 
@@ -1035,7 +1312,7 @@ context, called a "scope."
 
 Some concrete examples:
 
-- if you have multiple projects in your build definition, a key can
+- if you have multiple projects (also called subprojects) in your build definition, a key can
   have a different value in each project.
 - the `compile` key may have a different value for your main sources and
   your test sources, if you want to compile them differently.
@@ -1065,11 +1342,11 @@ keys).
 
 There are three scope axes:
 
-- Projects
-- Configurations
+- Subprojects
+- Dependency configurations
 - Tasks
 
-#### Scoping by project axis
+#### Scoping by subproject axis
 
 If you [put multiple projects in a single build][Multi-Project], each
 project needs its own settings. That is, keys can be scoped according to
@@ -1080,10 +1357,10 @@ to the entire build rather than a single project. Build-level settings
 are often used as a fallback when a project doesn't define a
 project-specific setting.
 
-#### Scoping by configuration axis
+#### Scoping by dependency configuration axis
 
-A *configuration* defines a flavor of build, potentially with its own
-classpath, sources, generated packages, etc. The configuration concept
+A *dependency configuration* defines a graph of library dependencies, potentially with its own
+classpath, sources, generated packages, etc. The dependency configuration concept
 comes from Ivy, which sbt uses for
 managed dependencies [Library Dependencies][Library-Dependencies], and from
 [MavenScopes](https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Scope).
@@ -1095,8 +1372,8 @@ Some configurations you'll see in sbt:
 - `Runtime` which defines the classpath for the `run` task.
 
 By default, all the keys associated with compiling, packaging, and
-running are scoped to a configuration and therefore may work differently
-in each configuration. The most obvious examples are the task keys
+running are scoped to a dependency configuration and therefore may work differently
+in each dependency configuration. The most obvious examples are the task keys
 `compile`, `package`, and `run`; but all the keys which *affect* those keys
 (such as `sourceDirectories` or `scalacOptions` or `fullClasspath`) are also
 scoped to the configuration.
@@ -1149,7 +1426,7 @@ scoped keys like this:
 {<build-uri>}<project-id>/config:intask::key
 ```
 
-- `{<build-uri>}/<project-id>` identifies the project axis. The
+- `{<build-uri>}<project-id>` identifies the project axis. The
   `<project-id>` part will be missing if the project axis has "entire build" scope.
 - `config` identifies the configuration axis.
 - `intask` identifies the task axis.
@@ -1193,7 +1470,7 @@ For more details, see [Interacting with the Configuration System][Inspecting-Set
 
 ### Inspecting scopes
 
-In sbt's interactive mode, you can use the inspect command to understand
+In sbt shell, you can use the `inspect` command to understand
 keys and their scopes. Try `inspect test:fullClasspath`:
 
 ```
@@ -1243,8 +1520,7 @@ this case
 is the `fullClasspath` key scoped to the `test` configuration and the
 `{file:/home/hp/checkout/hello/}default-aea33a` project).
 
-"Dependencies" may not make sense yet; stay tuned for the
-[next page][More-About-Settings].
+"Dependencies" was discussed in detail in the [previous page][Task-Graph].
 
 You can also see the delegates; if the value were not defined, sbt would
 search through:
@@ -1283,8 +1559,8 @@ If you create a setting in `build.sbt` with a bare key, it will be scoped
 to the current project, configuration `Global` and task `Global`:
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     name := "hello"
   )
 ```
@@ -1366,32 +1642,49 @@ Simply `packageOptions` is also a key name, but a different one (for keys
 with no in, a scope is implicitly assumed: current project, global
 config, global task).
 
+#### Build-wide settings
 
-  [Basic-Def]: Basic-Def.html
-  [Scopes]: Scopes.html
+An advanced technique for factoring out common settings
+across subprojects is to define the settings scoped to `ThisBuild`.
 
-More kinds of setting
----------------------
+If a key that is scoped to a particular subproject is not found,
+sbt will look for it in `ThisBuild` as a fallback.
+Using the mechanism, we can define a build-wide default setting for
+frequently used keys such as `version`, `scalaVersion`, and `organization`.
 
-This page explains other ways to create a Setting, beyond the basic `:=`
-method. It assumes you've read [.sbt build definition][Basic-Def] and
-[scopes][Scopes].
+For convenience, there is `inThisBuild(...)` function that will
+scope both the key and the body of the setting expression to `ThisBuild`.
+Putting setting expressions in there would be equivalent to appending `in ThisBuild` where possible.
 
-### Refresher: Settings
+```scala
+lazy val root = (project in file("."))
+  .settings(
+    inThisBuild(List(
+      // Same as:
+      // organization in ThisBuild := "com.example"
+      organization := "com.example",
+      scalaVersion := "2.12.1",
+      version      := "0.1.0-SNAPSHOT"
+    )),
+    name := "Hello",
+    publish := (),
+    publishLocal := ()
+  )
 
-[Remember][Basic-Def], a build definition creates a list of `Setting`,
-which is then used to transform sbt's description of the build (which is
-a map of key-value pairs). A Setting is a transformation with sbt's
-earlier map as input and a new map as output. The new map becomes sbt's
-new state.
+lazy val core = (project in file("core"))
+  .settings(
+    // other settings
+  )
 
-Different settings transform the map in different ways.
-[Earlier][Basic-Def], you read about the `:=` method.
+lazy val util = (project in file("util"))
+  .settings(
+    // other settings
+  )
+```
 
-The `Setting` which `:=` creates puts a fixed, constant value in the new,
-transformed map. For example, if you transform a map with the setting
-`name := "hello"` the new map has the string `"hello"` stored under the key
-name.
+
+Appending values
+----------------
 
 ### Appending to previous values: `+=` and `++=`
 
@@ -1436,67 +1729,6 @@ course:
 sourceDirectories in Compile := Seq(file("sources1"), file("sources2"))
 ```
 
-### Computing a value based on other keys' values
-
-Reference the value of another task or setting by calling value on the
-key for the task or setting. The value method is special and may only be
-called in the argument to `:=`, `+=`, or `++=`.
-
-As a first example, consider defining the project organization to be the
-same as the project name.
-
-```scala
-// name our organization after our project (both are SettingKey[String])
-organization := name.value
-```
-
-Or, set the name to the name of the project's directory:
-
-```scala
-// name is a Key[String], baseDirectory is a Key[File]
-// name the project after the directory it's inside
-name := baseDirectory.value.getName
-```
-
-This transforms the value of `baseDirectory` using the standard `getName`
-method of `java.io.File`.
-
-Using multiple inputs is similar. For example,
-
-```scala
-name := "project " + name.value + " from " + organization.value + " version " + version.value
-```
-
-This sets the name in terms of its previous value as well as the
-organization and version settings.
-
-#### Settings with dependencies
-
-In the setting `name := baseDirectory.value.getName`, `name` will have a
-*dependency* on `baseDirectory`. If you place the above in `build.sbt` and
-run the sbt interactive console, then type `inspect name`, you should see
-(in part):
-
-```
-[info] Dependencies:
-[info]  *:baseDirectory
-```
-
-This is how sbt knows which settings depend on which other settings.
-Remember that some settings describe tasks, so this approach also
-creates dependencies between tasks.
-
-For example, if you `inspect compile` you'll see it depends on another key
-`compileInputs`, and if you `inspect compileInputs` it in turn depends on
-other keys. Keep following the dependency chains and magic happens. When
-you type `compile` sbt automatically performs an `update`, for example. It
-Just Works because the values required as inputs to the `compile`
-computation require sbt to do the `update` computation first.
-
-In this way, all build dependencies in sbt are *automatic* rather than
-explicitly declared. If you use a key's value in another computation,
-then the computation depends on that key. It just works!
-
 #### When settings are undefined
 
 Whenever a setting uses `:=`, `+=`, or `++=` to create a dependency on itself
@@ -1510,7 +1742,7 @@ you do this.
 
 #### Tasks based on other keys' values
 
-You can compute values of some tasks or settings to define or append value for another task. It's done by using `Def.task` and `taskValue`, as argument to `:=`, `+=` or `++=`.
+You can compute values of some tasks or settings to define or append a value for another task. It's done by using `Def.task` and `taskValue` as an argument to `:=`, `+=`, or `++=`.
 
 As a first example, consider appending a source generator using the project base directory and compilation classpath.
 
@@ -1518,41 +1750,6 @@ As a first example, consider appending a source generator using the project base
 sourceGenerators in Compile += Def.task {
   myGenerator(baseDirectory.value, (managedClasspath in Compile).value)
 }.taskValue
-```
-
-#### Tasks with dependencies
-
-As noted in [.sbt build definition][Basic-Def], task keys create a
-`Setting[Task[T]]` rather than a `Setting[T]` when you build a setting with
-`:=`, etc. Tasks can use settings as inputs, but settings cannot use tasks
-as inputs.
-
-Take these two keys (from [Keys](../sxr/sbt/Keys.scala.html)):
-
-```scala
-val scalacOptions = taskKey[Seq[String]]("Options for the Scala compiler.")
-val checksums = settingKey[Seq[String]]("The list of checksums to generate and to verify for dependencies.")
-```
-
-(`scalacOptions` and `checksums` have nothing to do with each other, they
-are just two keys with the same value type, where one is a task.)
-
-It is possible to compile a `build.sbt` that aliases `scalacOptions` to
-`checksums`, but not the other way. For example, this is allowed:
-
-```scala
-// The scalacOptions task may be defined in terms of the checksums setting
-scalacOptions := checksums.value
-```
-
-There is no way to go the *other* direction. That is, a setting key
-can't depend on a task key. That's because a setting key is only
-computed once on project load, so the task would not be re-run every
-time, and tasks expect to re-run every time.
-
-```scala
-// The checksums setting may not be defined in terms of the scalacOptions task
-checksums := scalacOptions.value
 ```
 
 ### Appending with dependencies: `+=` and `++=`
@@ -1570,7 +1767,7 @@ cleanFiles += file("coverage-report-" + name.value + ".txt")
 
   [Basic-Def]: Basic-Def.html
   [Scopes]: Scopes.html
-  [More-About-Settings]: More-About-Settings.html
+  [Task-Graph]: Task-Graph.html
   [external-maven-ivy]: ../docs/Library-Management.html#external-maven-ivy
   [Cross-Build]: ../docs/Cross-Build.html
   [Resolvers]: ../docs/Resolvers.html
@@ -1580,8 +1777,8 @@ Library dependencies
 --------------------
 
 This page assumes you've already read the earlier Getting Started pages, in
-particular [.sbt build definition][Basic-Def], [scopes][Scopes], and
-[more kinds of setting][More-About-Settings].
+particular [build definition][Basic-Def], [scopes][Scopes], and
+[task graph][Task-Graph].
 
 Library dependencies can be added in two ways:
 
@@ -1619,7 +1816,7 @@ unmanagedBase := baseDirectory.value / "custom_lib"
 
 `baseDirectory` is the project's root directory, so here you're changing
 `unmanagedBase` depending on `baseDirectory` using the special `value` method
-as explained in [more kinds of setting][More-About-Settings].
+as explained in [task graph][Task-Graph].
 
 There's also an `unmanagedJars` task which lists the jars from the
 `unmanagedBase` directory. If you wanted to use multiple directories or do
@@ -1835,19 +2032,19 @@ dependencies on [this page][Library-Management].
 Multi-project builds
 --------------------
 
-This page introduces multiple projects in a single build.
+This page introduces multiple subprojects in a single build.
 
 Please read the earlier pages in the Getting Started Guide first, in
 particular you need to understand [build.sbt][Basic-Def] before reading
 this page.
 
-### Multiple projects
+### Multiple subprojects
 
-It can be useful to keep multiple related projects in a single build,
+It can be useful to keep multiple related subprojects in a single build,
 especially if they depend on one another and you tend to modify them
 together.
 
-Each sub-project in a build has its own source directories, generates
+Each subproject in a build has its own source directories, generates
 its own jar file when you run package, and in general works like any
 other project.
 
@@ -1855,52 +2052,55 @@ A project is defined by declaring a lazy val of type
 [Project](../api/sbt/Project.html). For example, :
 
 ```scala
+lazy val util = (project in file("util"))
+
+lazy val core = (project in file("core"))
+```
+
+The name of the val is used as the subproject's ID, which
+is used to refer to the subproject at the sbt shell.
+
+Optionally the base directory may be omitted if it's the same as the name of the val.
+
+```scala
 lazy val util = project
 
 lazy val core = project
-```
-
-The name of the val is used as the project's ID and base directory name.
-The ID is used to refer to the project at the command line. The base
-directory may be changed from the default using the in method. For
-example, the following is a more explicit way to write the previous
-example:
-
-```scala
-lazy val util = project.in(file("util"))
-
-lazy val core = project in file("core")
 ```
 
 #### Common settings
 
 To factor out common settings across multiple projects,
 create a sequence named `commonSettings` and call `settings` method
-on each project. Note `_*` is required to pass sequence into a vararg
-method.
+on each project.
 
 ```scala
 lazy val commonSettings = Seq(
   organization := "com.example",
-  version := "0.1.0",
-  scalaVersion := "2.11.8"
+  version := "0.1.0-SNAPSHOT",
+  scalaVersion := "2.12.1"
 )
 
-lazy val core = (project in file("core")).
-  settings(commonSettings: _*).
-  settings(
+lazy val core = (project in file("core"))
+  .settings(
+    commonSettings,
     // other settings
   )
 
-lazy val util = (project in file("util")).
-  settings(commonSettings: _*).
-  settings(
+lazy val util = (project in file("util"))
+  .settings(
+    commonSettings,
     // other settings
   )
 ```
 
 Now we can bump up `version` in one place, and it will be reflected
 across subprojects when you reload the build.
+
+#### Build-wide settings
+
+Another a bit advanced technique for factoring out common settings
+across subprojects is to define the settings scoped to `ThisBuild`. (See [Scopes][Scopes])
 
 ### Dependencies
 
@@ -1914,12 +2114,12 @@ Aggregation means that running a task on the aggregate project will also
 run it on the aggregated projects. For example,
 
 ```scala
-lazy val root = (project in file(".")).
-  aggregate(util, core)
+lazy val root = (project in file("."))
+  .aggregate(util, core)
 
-lazy val util = project
+lazy val util = (project in file("util"))
 
-lazy val core = project
+lazy val core = (project in file("core"))
 ```
 
 In the above example, the root project aggregates `util` and `core`. Start
@@ -1931,9 +2131,9 @@ you can control aggregation per-task. For example, to avoid aggregating
 the `update` task:
 
 ```scala
-lazy val root = (project in file(".")).
-  aggregate(util, core).
-  settings(
+lazy val root = (project in file("."))
+  .aggregate(util, core)
+  .settings(
     aggregate in update := false
   )
 
@@ -2059,12 +2259,13 @@ See [organizing the build][Organizing-Build] for details.
   [Community-Plugins]: ../docs/Community-Plugins.html
   [Plugins]: ../docs/Plugins.html
   [Plugins-Best-Practices]: ../docs/Plugins-Best-Practices.html
+  [Task-Graph]: Task-Graph.html
 
 Using plugins
 -------------
 
 Please read the earlier pages in the Getting Started Guide first, in
-particular you need to understand [build.sbt][Basic-Def] and
+particular you need to understand [build.sbt][Basic-Def], [task graph][Task-Graph],
 [library dependencies][Library-Dependencies], before reading this page.
 
 ### What is a plugin?
@@ -2117,9 +2318,9 @@ If you're using an auto plugin that requires explicit enablement, then you
 have to add the following to your `build.sbt`:
 
 ```scala
-lazy val util = (project in file("util")).
-  enablePlugins(FooPlugin, BarPlugin).
-  settings(
+lazy val util = (project in file("util"))
+  .enablePlugins(FooPlugin, BarPlugin)
+  .settings(
     name := "hello-util"
   )
 ```
@@ -2132,10 +2333,10 @@ method. For example, if we wish to remove the `IvyPlugin` settings
 from `util`, we modify our `build.sbt` as follows:
 
 ```scala
-lazy val util = (project in file("util")).
-  enablePlugins(FooPlugin, BarPlugin).
-  disablePlugins(plugins.IvyPlugin).
-  settings(
+lazy val util = (project in file("util"))
+  .enablePlugins(FooPlugin, BarPlugin)
+  .disablePlugins(plugins.IvyPlugin)
+  .settings(
     name := "hello-util"
   )
 ```
@@ -2166,7 +2367,7 @@ enabled. sbt's default settings are provided via three plugins:
 In addition, `JUnitXmlReportPlugin` provides an experimental support for
 generating junit-xml.
 
-Older non-auto plugins often require settings to be added explictly, so
+Older non-auto plugins often require settings to be added explicitly, so
 that [multi-project build][Multi-Project] could have different types of
 projects. The plugin documentation will indicate how to configure it,
 but typically for older plugins this involves adding the base settings
@@ -2188,8 +2389,8 @@ project:
 lazy val util = (project in file("util"))
 
 // enable the site plugin for the `core` project
-lazy val core = (project in file("core")).
-  settings(site.settings : _*)
+lazy val core = (project in file("core"))
+  .settings(site.settings)
 ```
 
 ### Global plugins
@@ -2223,7 +2424,7 @@ For best practices, see
 
 
   [Basic-Def]: Basic-Def.html
-  [More-About-Settings]: More-About-Settings.html
+  [Task-Graph]: Task-Graph.html
   [Using-Plugins]: Using-Plugins.html
   [Organizing-Build]: Organizing-Build.html
   [Input-Tasks]: ../docs/Input-Tasks.html
@@ -2236,8 +2437,8 @@ Custom settings and tasks
 This page gets you started creating your own settings and tasks.
 
 To understand this page, be sure you've read earlier pages in the
-Getting Started Guide, especially [.build.sbt][Basic-Def] and
-[more kinds of setting][More-About-Settings].
+Getting Started Guide, especially [build.sbt][Basic-Def] and
+[task graph][Task-Graph].
 
 ### Defining a key
 
@@ -2289,9 +2490,9 @@ lazy val commonSettings = Seq(
   version := "0.1.0-SNAPSHOT"
 )
 
-lazy val library = (project in file("library")).
-  settings(commonSettings: _*).
-  settings(
+lazy val library = (project in file("library"))
+  .settings(
+    commonSettings,
     sampleStringTask := System.getProperty("user.home"),
     sampleIntTask := {
       val sum = 1 + 2
@@ -2302,7 +2503,7 @@ lazy val library = (project in file("library")).
 ```
 
 If the task has dependencies, you'd reference their value using `value`,
-as discussed in [more kinds of setting][More-About-Settings].
+as discussed in [task graph][Task-Graph].
 
 The hardest part about implementing tasks is often not sbt-specific;
 tasks are just Scala code. The hard part could be writing the "body" of
@@ -2322,7 +2523,7 @@ When depending on other tasks from a custom task using `value`,
 an important detail to note is the execution semantics of the tasks.
 By execution semantics, we mean exactly *when* these tasks are evaluated.
 
-We if take `sampleIntTask` for instance, each line in the body of the task
+If we take `sampleIntTask` for instance, each line in the body of the task
 should be strictly evaluated one after the other. That is sequential semantics:
 
 ```scala
@@ -2337,7 +2538,7 @@ In reality JVM may inline the `sum` to `3`, but the observable *effect* of the
 task will remain identical as if each line were executed one after the other.
 
 Now suppose we define two more custom tasks `startServer` and `stopServer`,
-and modify `sampeIntTask` as follows:
+and modify `sampleIntTask` as follows:
 
 ```scala
 val startServer = taskKey[Unit]("start server")
@@ -2350,9 +2551,9 @@ lazy val commonSettings = Seq(
   version := "0.1.0-SNAPSHOT"
 )
 
-lazy val library = (project in file("library")).
-  settings(commonSettings: _*).
-  settings(
+lazy val library = (project in file("library"))
+  .settings(
+    commonSettings,
     startServer := {
       println("starting...")
       Thread.sleep(500)
@@ -2418,7 +2619,7 @@ Because `sampleStringTask` depends on both `startServer` and `sampleIntTask` tas
 and `sampleIntTask` also depends on `startServer` task, it appears twice as task dependency.
 If this was a plain Scala method call it would be evaluated twice,
 but since `value` is just denoting a task dependency, it will be evaluated once.
-The following is a graphical notation of how `sampeStringTask`'s evalutation:
+The following is a graphical notation of `sampleStringTask`'s evaluation:
 
 ![task-dependency](files/task-dependency01.png)
 
@@ -2436,9 +2637,9 @@ on other intermediate tasks. For instance `stopServer` should depend on `sampleS
 at which point `stopServer` should be the `sampleStringTask`.
 
 ```scala
-lazy val library = (project in file("library")).
-  settings(commonSettings: _*).
-  settings(
+lazy val library = (project in file("library"))
+  .settings(
+    commonSettings,
     startServer := {
       println("starting...")
       Thread.sleep(500)
@@ -2459,7 +2660,7 @@ lazy val library = (project in file("library")).
       val old = sampleStringTask.value
       println("stopping...")
       Thread.sleep(500)
-      old      
+      old
     }
   )
 ```
@@ -2490,7 +2691,7 @@ sampleIntTask := {
     println("sum: " + sum)
   } finally {
     ServerUtil.stopServer
-  } 
+  }
   sum
 }
 ```
@@ -2511,7 +2712,7 @@ tasks on the [Tasks][Tasks] page.
 
 
   [Basic-Def]: Basic-Def.html
-  [More-About-Settings]: More-About-Settings.html
+  [Task-Graph]: Task-Graph.html
   [Using-Plugins]: Using-Plugins.html
   [Library-Dependencies]: Library-Dependencies.html
   [Multi-Project]: Multi-Project.html
@@ -2525,6 +2726,7 @@ This page discusses the organization of the build structure.
 Please read the earlier pages in the Getting Started Guide first, in
 particular you need to understand
 [build.sbt][Basic-Def],
+[task graph][Task-Graph],
 [Library dependencies][Library-Dependencies],
 and [Multi-project builds][Multi-Project]
 before reading this page.
@@ -2540,7 +2742,7 @@ knows how to build your build. To distinguish the builds,
 we sometimes use the term **proper build** to refer to your build,
 and **meta-build** to refer to the build in `project`.
 The projects inside the metabuild can do anything
-any other project can do. *Your build definition is an sbt project.* 
+any other project can do. *Your build definition is an sbt project.*
 
 And the turtles go all the way down. If you like, you can tweak the
 build definition of the build definition project, by creating a
@@ -2549,37 +2751,37 @@ build definition of the build definition project, by creating a
 Here's an illustration.
 
 ```
-hello/                  # your build's root project's base directory
+hello/                     # your build's root project's base directory
 
-    Hello.scala         # a source file in your build's root project
-                        #   (could be in src/main/scala too)
+    Hello.scala            # a source file in your build's root project
+                           #   (could be in src/main/scala too)
 
-    build.sbt           # build.sbt is part of the source code for
-                        #   meta-build's root project inside project/;
-                        #   the build definition for your build
+    build.sbt              # build.sbt is part of the source code for
+                           #   meta-build's root project inside project/;
+                           #   the build definition for your build
 
-    project/            # base directory of meta-build's root project
+    project/               # base directory of meta-build's root project
 
-        Build.scala     # a source file in the meta-build's root project,
-                        #   that is, a source file in the build definition
-                        #   the build definition for your build
+        Dependencies.scala # a source file in the meta-build's root project,
+                           #   that is, a source file in the build definition
+                           #   the build definition for your build
 
-        build.sbt       # this is part of the source code for
-                        #   meta-meta-build's root project in project/project;
-                        #   build definition's build definition
+        assembly.sbt       # this is part of the source code for
+                           #   meta-meta-build's root project in project/project;
+                           #   build definition's build definition
 
-        project/        # base directory of meta-meta-build's root project;
-                        #   the build definition project for the build definition
+        project/           # base directory of meta-meta-build's root project;
+                           #   the build definition project for the build definition
 
-            Build.scala # source file in the root project of
-                        #   meta-meta-build in project/project/
+            MetaDeps.scala # source file in the root project of
+                           #   meta-meta-build in project/project/
 ```
 
 *Don't worry!* Most of the time you are not going to need all that. But
 understanding the principle can be helpful.
 
 By the way: any time files ending in `.scala` or `.sbt` are used, naming
-them `build.sbt` and `Build.scala` are conventions only. This also means
+them `build.sbt` and `Dependencies.scala` are conventions only. This also means
 that multiple files are allowed.
 
 ### Tracking dependencies in one place
@@ -2598,7 +2800,7 @@ object Dependencies {
   // Libraries
   val akkaActor = "com.typesafe.akka" %% "akka-actor" % akkaVersion
   val akkaCluster = "com.typesafe.akka" %% "akka-cluster" % akkaVersion
-  val specs2core = "org.specs2" %% "specs2-core" % "2.4.14"
+  val specs2core = "org.specs2" %% "specs2-core" % "2.4.17"
 
   // Projects
   val backendDeps =
@@ -2614,12 +2816,12 @@ import Dependencies._
 
 lazy val commonSettings = Seq(
   version := "0.1.0",
-  scalaVersion := "2.11.8"
+  scalaVersion := "2.12.1"
 )
 
-lazy val backend = (project in file("backend")).
-  settings(commonSettings: _*).
-  settings(
+lazy val backend = (project in file("backend"))
+  .settings(
+    commonSettings,
     libraryDependencies ++= backendDeps
   )
 ```
@@ -2671,16 +2873,10 @@ need to know.
     Scala](http://www.artima.com/shop/programming_in_scala_2ed) written
     by the creator of Scala is a great introduction.
 -   [.sbt build definition][Basic-Def]
--   your build definition is one big list of `Setting` objects, where a
-    `Setting` transforms the set of key-value pairs sbt uses to perform
-    tasks.
+-   your build definition is a big DAG of tasks and their dependencies.
 -   to create a `Setting`, call one of a few methods on a key: `:=`, `+=`, or
     `++=`.
--   there is no mutable state, only transformation; for example, a
-    `Setting` transforms sbt's collection of key-value pairs into a new
-    collection. It doesn't change anything in-place.
--   each setting has a value of a particular type, determined by the
-    key.
+-   each setting has a value of a particular type, determined by the key.
 -   *tasks* are special settings where the computation to produce the
     key's value will be re-run each time you kick off a task. Non-tasks
     compute the value once, when first loading the build definition.
@@ -2833,18 +3029,19 @@ plugins, while sbt can aggregate them together in a common repository.
 This document walks you through the means to create your own repository
 for hosting your sbt plugins and then linking them into the sbt shared
 repository. This will make your plugins available for all sbt users
-without additonal configuration (besides declaring a dependency on your
+without additional configuration (besides declaring a dependency on your
 plugin).
 
 To do this, we need to perform the following steps:
 
-### Create an account on Bintray
+### Create an Open Source Distribution account on Bintray
 
-First, go to <https://bintray.com>. Click on the sign in link on the top
-left, and then the sign up button.
+First, go to <https://bintray.com/signup/oss> to create an Open Source Distribution Bintray Account.
 
-*Note: If you had an account on repo.scala-sbt.org previous, please use
-the same email address when you create this account.*
+If you end up at the [Bintray home page](https://bintray.com), do NOT click on the Free Trial,
+but click on the link that reads **"For Open Source Distribution Sign Up Here"**.
+
+<img src="files/bintray-signup.png" style="width: 100%; height: 100%">
 
 ### Create a repository for your sbt plugins
 
@@ -2877,7 +3074,7 @@ First, add the bintray-sbt to your plugin build.
 First, create a `project/bintray.sbt` file
 
 ```scala
-addSbtPlugin("me.lessis" % "bintray-sbt" % "0.2.1")
+addSbtPlugin("me.lessis" % "bintray-sbt" % "0.3.0")
 ```
 
 Next, a make sure your `build.sbt` file has the following settings
@@ -2890,9 +3087,9 @@ lazy val commonSettings = Seq(
   organization in ThisBuild := "<INSERT YOUR ORG HERE>"
 )
 
-lazy val root = (project in file(".")).
-  settings(commonSettings ++ bintrayPublishSettings: _*).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
+    commonSettings,
     sbtPlugin := true,
     name := "<YOUR PLUGIN HERE>",
     description := "<YOUR DESCRIPTION HERE>",
@@ -2900,7 +3097,7 @@ lazy val root = (project in file(".")).
     // (using a canonical name).
     licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html")),
     publishMavenStyle := false,
-    repository in bintray := "sbt-plugins",
+    bintrayRepository := "sbt-plugins",
     bintrayOrganization in bintray := None
   )
 ```
@@ -3055,26 +3252,94 @@ Replace `http` with `https` or `ftp` in the above command line to
 configure HTTPS or FTP.
 
 
-  [sbt-pgp]: http://scala-sbt.org/sbt-pgp
+  [sonatype-ossrhguide]: http://central.sonatype.org/pages/ossrh-guide.html
+  [sonatype-signup]: https://issues.sonatype.org/secure/Signup!default.jspa
+  [sonatype-new-project]: https://issues.sonatype.org/secure/CreateIssue.jspa?issuetype=21&pid=10134
+  [sonatype-requirements]: http://central.sonatype.org/pages/requirements.html
+  [sonatype-coordinates]: http://central.sonatype.org/pages/choosing-your-coordinates.html
+  [sonatype-nexus]: https://oss.sonatype.org/#welcome
+  [sonatype-pgp]: http://central.sonatype.org/pages/working-with-pgp-signatures.html
+  [sbt-pgp]: http://scala-sbt.org/sbt-pgp/
+  [sbt-sonatype]: https://github.com/xerial/sbt-sonatype
+  [sbt-release]: https://github.com/sbt/sbt-release
+  [gnupg]: https://www.gnupg.org/
 
-Deploying to Sonatype
----------------------
+Using Sonatype
+--------------
 
 Deploying to sonatype is easy! Just follow these simple steps:
 
-### First - PGP Signatures
+### Sonatype setup
 
-You'll need to PGP sign your artifacts for the Sonatype repository.
-Don't worry, there's a
-[plugin for that][sbt-pgp].
-Follow the instructions for the plugin and you'll have PGP signed artifacts in no
+The reference process for configuring and publishing to Sonatype is 
+described in their [OSSRH Guide][sonatype-ossrhguide].
+In short, you need two publicly available URLs: 
+
+* the website of the project e.g. https://github.com/sonatype/nexus-oss
+* the project's source code e.g. https://github.com/sonatype/nexus-oss.git
+
+The [OSSRH Guide][sonatype-ossrhguide] walks you through the required 
+process of setting up the account with Sonatype. It’s as simple as 
+[creating a Sonatype's JIRA account][sonatype-signup] and afterwards creating a 
+[New Project ticket][sonatype-new-project]. When creating the account try to 
+use the same domain in your email address as the project is hosted on. I guess 
+it makes it easier to validate the relationship with the groupId requested in 
+the ticket, but is not the only method used to confirm the ownership. 
+
+Creation of the New Project ticket is as simple as:
+
+* providing the name of the library in the ticket’s subject,
+* naming the groupId you want to use for distributing the library (make sure 
+it is matching the root package of your code). Sonatype provides you with 
+additional hints on choosing the right groupId for publishing your library in 
+[Choosing your coordinates guide][sonatype-coordinates].
+* providing the SCM and Project URLs to the source code and homepage of the 
+library.
+
+*Note:* After creating you Sonatype account (on their JIRA) you can login 
+using the same credentials to the [Nexus Repository Manager][sonatype-nexus] 
+which is not required to be used in this guide, but can be used later to check 
+on the published artifacts.
+
+Notice that Sonatype advises that responding to the New Project ticket might 
+take up to two business days, but in my case it was few minutes.
+
+### SBT setup
+
+To address [Sonatype's requirements for publishing to the central repository]
+[sonatype-requirements] and to simplify the publishing process I recommend you
+to use community plugins [sbt-pgp for signing the files with GPG/PGP][sbt-pgp] 
+and [sbt-sonatype for publishing to Sonatype repository][sbt-sonatype]. 
+
+#### First - PGP Signatures
+
+Having the PGP key that you want to use, you need to sign the artifacts 
+published to the Sonatype repository with the [sbt-pgp plugin][sbt-pgp]. Follow 
+the instructions for the plugin and you'll have PGP signed artifacts in no 
 time.
 
-> *Note: The plugin is a jvm-only solution to generate PGP keys and sign
-artifacts. It can work with the GPG command line tool, but the command
-line is not needed.*
+In short, add the following line to your `~/.sbt/0.13/plugins/gpg.sbt` file to 
+enable it globally for SBT projects:
 
-If the command to generate your key fails execute the following commands and remove the displayed files:
+```
+addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.0.0")
+```
+
+> *Note:* The plugin is a jvm-only solution to generate PGP keys and sign 
+artifacts. It can also work with the GPG command line tool.
+
+If you don't have the PGP keys to sign your code with, one of the ways to 
+achieve that is to install the [GNU Privacy Guard][gnupg] and:
+
+* use it to generate the keypair you will use to sign your library,
+* publish your certificate to enable remote verification of the signatures,
+* make sure that the `gpg` command is in PATH available to the sbt,
+* add `useGpg := true` to your `build.sbt` to make the plugin `gpg`-aware 
+
+#### PGP Tips'n'tricks 
+
+If the command to generate your key fails, execute the following commands and 
+remove the displayed files:
 
 ```
 > show */*:pgpSecretRing
@@ -3083,53 +3348,39 @@ If the command to generate your key fails execute the following commands and rem
 [info] /home/username/.sbt/.gnupg/pubring.gpg
 ```
 
-If your PGP key has not yet been distributed to the keyserver pool,
-i.e., you've just generated it, you'll need to publish it. You can do so
-using the [sbt-pgp][sbt-pgp] plugin:
+If your PGP key has not yet been distributed to the keyserver pool, e.g., 
+you've just generated it, you'll need to publish it. You can do so using the 
+[sbt-pgp][sbt-pgp] plugin:
 
 ```
 pgp-cmd send-key keyname hkp://pool.sks-keyservers.net
 ```
 
-(where keyname is the name or email address used when creating the key or
-hexadecimal identifier for the key.)
+Where `keyname` is the name or email address used when creating the key or 
+hexadecimal identifier for the key.
 
 If you see no output from sbt-pgp then the key name specified was not
 found.
 
-If it fails to run the `SendKey` command you can try another server (for example: hkp://keyserver.ubuntu.com). A list of servers can be found at [the status page](https://sks-keyservers.net/status/) of sks-keyservers.net.
+If it fails to run the `SendKey` command you can try another server (for 
+example: hkp://keyserver.ubuntu.com). A list of servers can be found at 
+[the status page](https://sks-keyservers.net/status/) of sks-keyservers.net.
 
-### Second - Maven Publishing Settings
+### Second - configure sonatype integration 
 
-To publish to a maven repository, you'll need to configure a few
-settings so that the correct metadata is generated.
-
-```scala
-publishMavenStyle := true
-```
-
-is used to ensure POMs are generated and pushed. Next, you have to set
-up the repositories you wish to push too. Luckily, Sonatype's OSSRH uses
-the same URLs for everyone:
+The credentials for your Sonatype OSSRH account need to be stored
+somewhere safe (*e.g. NOT in the repository*). Common convention is a 
+`~/.sbt/1.0.0-M4/sonatype.sbt` file (e.g. `) with the following:
 
 ```scala
-publishTo := {
-  val nexus = "https://oss.sonatype.org/"
-  if (isSnapshot.value)
-    Some("snapshots" at nexus + "content/repositories/snapshots")
-  else
-    Some("releases"  at nexus + "service/local/staging/deploy/maven2")
-}
+credentials += Credentials("Sonatype Nexus Repository Manager",
+                           "oss.sonatype.org",
+                           "<your username>",
+                           "<your password>")
 ```
 
-Another good idea is to not publish your test artifacts (this is the
-default):
-
-```scala
-publishArtifact in Test := false
-```
-
-### Third - POM Metadata
+> *Note:* The first two strings must be `"Sonatype Nexus Repository Manager"`
+and `"oss.sonatype.org"` for Ivy to use the credentials.
 
 Now, we want to control what's available in the `pom.xml` file. This
 file describes our project in the maven repository and is used by
@@ -3147,107 +3398,98 @@ optional dependencies in our artifact:
 pomIncludeRepository := { _ => false }
 ```
 
-Next, the POM metadata that isn't generated by sbt must be added. This
-is done through the `pomExtra` configuration option:
+To publish to a maven repository, you'll need to configure a few
+settings so that the correct metadata is generated.
+Specifically, the build should provide data for `organization`, `url`,
+`license`, `scm.url`, `scm.connection` and `developer` keys. For example:
 
-```scala
-pomExtra := (
-  <url>http://jsuereth.com/scala-arm</url>
-  <licenses>
-    <license>
-      <name>BSD-style</name>
-      <url>http://www.opensource.org/licenses/bsd-license.php</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
-  <scm>
-    <url>git@github.com:jsuereth/scala-arm.git</url>
-    <connection>scm:git:git@github.com:jsuereth/scala-arm.git</connection>
-  </scm>
-  <developers>
-    <developer>
-      <id>jsuereth</id>
-      <name>Josh Suereth</name>
-      <url>http://jsuereth.com</url>
-    </developer>
-  </developers>)
 ```
-
-Specifically, the `url`, `license`, `scm.url`, `scm.connection` and
-`developer` sections are required. The above is an example from the
-[scala-arm](http://jsuereth.com/scala-arm) project.
-
-> *Note* that sbt will automatically inject `licenses` and `url` nodes if
-they are already present in your build file. Thus an alternative to the
-above `pomExtra` is to include the following entries:
-
-```scala
 licenses := Seq("BSD-style" -> url("http://www.opensource.org/licenses/bsd-license.php"))
 
-homepage := Some(url("http://jsuereth.com/scala-arm"))
+homepage := Some(url("http://example.com"))
+
+scmInfo := Some(
+  ScmInfo(
+    url("https://github.com/your-account/your-project"),
+    "scm:git@github.com:your-account/your-project.git"
+  )
+)
+
+developers := List(
+  Developer(
+    id    = "Your identifier",
+    name  = "Your Name",
+    email = "your@email",
+    url   = url("http://your.url")
+  )
+)
 ```
 
-This might be advantageous if those keys are used also by other plugins
-(e.g. `ls`). You **cannot use both** the sbt `licenses` key and the
-`licenses` section in `pomExtra` at the same time, as this will produce
-duplicate entries in the final POM file, leading to a rejection in
-Sonatype's staging process.
+#### Maven configuration tips'n'tricks
 
-*The full format of a pom.xml file is
-[outlined here](https://maven.apache.org/pom.html).*
+The full format of a `pom.xml` (an end product of the project configuration 
+used by Maven) file is [outlined here](https://maven.apache.org/pom.html).
+You can add more data to it with the `pomExtra` option in `build.sbt`.
 
-### Fourth - Adding credentials
 
-The credentials for your Sonatype OSSRH account need to be added
-somewhere. Common convention is a `~/.sbt/1.0.0-M4/sonatype.sbt` file
-with the following:
+To ensure the POMs are generated and pushed:
 
 ```scala
-credentials += Credentials("Sonatype Nexus Repository Manager",
-                           "oss.sonatype.org",
-                           "<your username>",
-                           "<your password>")
+publishMavenStyle := true
 ```
 
-> *Note: The first two strings must be
-`"Sonatype Nexus Repository Manager"` and `"oss.sonatype.org"` for Ivy
-to use the credentials.*
+Setting repositories to publish to:
 
-### Finally - Publish
+```scala
+publishTo := {
+  val nexus = "https://oss.sonatype.org/"
+  if (isSnapshot.value)
+    Some("snapshots" at nexus + "content/repositories/snapshots")
+  else
+    Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+}
+```
 
-In sbt, run `publishSigned` and you should see something like the
-following:
+Not publishing the test artifacts (this is the default):
+
+```scala
+publishArtifact in Test := false
+```
+
+### Third - Publish to the staging repository
+
+> *Note:* sbt-sonatype is a third-party plugin meaning it is not covered by Lightbend subscription.
+
+To simplify the usage of the Sonatype's Nexus, add the following line to 
+`build.sbt` to import the [sbt-sonatype plugin][sbt-sonatype] to your project:
 
 ```
-> publishSigned
-Please enter your PGP passphrase> ***********
-[info] Packaging /home/josh/projects/typesafe/scala-arm/target/scala-2.9.1/scala-arm_2.9.1-1.2.jar ...
-[info] Wrote /home/josh/projects/typesafe/scala-arm/target/scala-2.9.1/scala-arm_2.9.1-1.2.pom
-[info] Packaging /home/josh/projects/typesafe/scala-arm/target/scala-2.9.1/scala-arm_2.9.1-1.2-javadoc.jar ...
-[info] Packaging /home/josh/projects/typesafe/scala-arm/target/scala-2.9.1/scala-arm_2.9.1-1.2-sources.jar ...
-[info] :: delivering :: com.jsuereth#scala-arm_2.9.1;1.2 :: 1.2 :: release :: Mon Jan 23 13:16:57 EST 2012
-[info] Done packaging.
-[info] Done packaging.
-[info] Done packaging.
-[info]  delivering ivy file to /home/josh/projects/typesafe/scala-arm/target/scala-2.9.1/ivy-1.2.xml
-[info]  published scala-arm_2.9.1 to https://oss.sonatype.org/service/local/staging/deploy/maven2/com/jsuereth/scala-arm_2.9.1/1.2/scala-arm_2.9.1-1.2-sources.jar
-[info]  published scala-arm_2.9.1 to https://oss.sonatype.org/service/local/staging/deploy/maven2/com/jsuereth/scala-arm_2.9.1/1.2/scala-arm_2.9.1-1.2-javadoc.jar.asc
-[info]  published scala-arm_2.9.1 to https://oss.sonatype.org/service/local/staging/deploy/maven2/com/jsuereth/scala-arm_2.9.1/1.2/scala-arm_2.9.1-1.2-sources.jar.asc
-[info]  published scala-arm_2.9.1 to https://oss.sonatype.org/service/local/staging/deploy/maven2/com/jsuereth/scala-arm_2.9.1/1.2/scala-arm_2.9.1-1.2.jar
-[info]  published scala-arm_2.9.1 to https://oss.sonatype.org/service/local/staging/deploy/maven2/com/jsuereth/scala-arm_2.9.1/1.2/scala-arm_2.9.1-1.2.jar.asc
-[info]  published scala-arm_2.9.1 to https://oss.sonatype.org/service/local/staging/deploy/maven2/com/jsuereth/scala-arm_2.9.1/1.2/scala-arm_2.9.1-1.2.pom.asc
-[info]  published scala-arm_2.9.1 to https://oss.sonatype.org/service/local/staging/deploy/maven2/com/jsuereth/scala-arm_2.9.1/1.2/scala-arm_2.9.1-1.2.pom
-[info]  published scala-arm_2.9.1 to https://oss.sonatype.org/service/local/staging/deploy/maven2/com/jsuereth/scala-arm_2.9.1/1.2/scala-arm_2.9.1-1.2-javadoc.jar
-[success] Total time: 9 s, completed Jan 23, 2012 1:17:03 PM
+addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "1.1")
 ```
+
+This plugin will facilitate the publishing process, but in short, these are 
+the main steps for publishing the libraries to the repository:
+
+1. Create a new staging repository: 
+`sonatypeOpen "your groupId" "Some staging name"`
+2. Sign and publish the library to the staging repository:
+`publishSigned`
+3. You can and should check the published artifacts in the
+[Nexus Repository Manager][sonatype-nexus] (same login as Sonatype's
+Jira account)
+4. Close the staging repository and promote the release to central:
+`sonatypeRelease`
 
 After publishing you have to follow the
 [release workflow of Nexus](http://central.sonatype.org/pages/releasing-the-deployment.html).
-The [sbt-sonatype plugin](https://github.com/xerial/sbt-sonatype) allows
-the release workflow procedures to be performed directly from sbt.
 
-> *Note: Staged releases allow testing across large projects of
-independent releases before pushing the full project.*
+> *Note:* the sbt-sonatype plugin can be used also for other non-sonatype 
+repositories
+
+#### Publishing tips'n'tricks
+
+Use staged releases for testing across large projects of independent releases 
+before pushing the full project.
 
 > *Note:* An error message of `PGPException: checksum mismatch at 0 of 20`
 indicates that you got the passphrase wrong. We have found at least on
@@ -3256,85 +3498,22 @@ range (e.g. Umlauts). If you are absolutely sure that you typed the
 right phrase and the error doesn't disappear, try changing the
 passphrase.
 
-### Summary
+### Fourth - Integrate with the release process
 
-To get your project hosted on Sonatype (and Maven Central), you will
-need to:
+> *Note:* sbt-release is a third-party plugin meaning it is not covered by Lightbend subscription.
 
--   Have GPG key pair, with published public key,
--   An sbt file with your Sonatype credentials *that is not pushed to
-    the VCS*,
--   Add the [sbt-pgp plugin][sbt-pgp] to sign
-    the artefacts,
--   Modify `build.sbt` with the required elements in the generated POM.
+To automate the above publishing approach with the [sbt-release plugin]
+[sbt-release], you should simply add the publishing commands as steps in the
+`releaseProcess` option:
 
-Starting with a project that is not being published, you'll need to
-install GPG, generate and publish your key. Swtiching to sbt, you'll
-then need to:
-
-#### ~/.sbt/sonatype.sbt
-
-This file (kept *outside the VCS*) contains the Sonatype credentials
-settings:
-
-```scala
-credentials += Credentials("Sonatype Nexus Repository Manager",
-                           "oss.sonatype.org",
-                           "your-sonatype-username",
-                           "your-sonatype-password")
 ```
-
-#### ~/.sbt/plugins/gpg.sbt
-
-The [sbt-pgp plugin][sbt-pgp] allows you to sign
-and publish your artefacts by running `publishSigned` in sbt:
-
-```scala
-addSbtPlugin("com.typesafe.sbt" % "sbt-pgp" % "0.8")
-```
-
-#### build.sbt
-
-Finally, you'll need to tweak the generated POM in your `build.sbt`. The
-tweaks include specifying the project's authors, URL, SCM and many
-others:
-
-```scala
-publishTo := {
-  val nexus = "https://oss.sonatype.org/"
-  if (isSnapshot.value)
-    Some("snapshots" at nexus + "content/repositories/snapshots")
-  else
-    Some("releases" at nexus + "service/local/staging/deploy/maven2")
-}
-
-publishMavenStyle := true
-
-publishArtifact in Test := false
-
-pomIncludeRepository := { _ => false }
-
-pomExtra := (
-  <url>http://your.project.url</url>
-  <licenses>
-    <license>
-      <name>BSD-style</name>
-      <url>http://www.opensource.org/licenses/bsd-license.php</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
-  <scm>
-    <url>git@github.com:your-account/your-project.git</url>
-    <connection>scm:git:git@github.com:your-account/your-project.git</connection>
-  </scm>
-  <developers>
-    <developer>
-      <id>you</id>
-      <name>Your Name</name>
-      <url>http://your.url</url>
-    </developer>
-  </developers>
-)
+...
+ReleaseStep(action = Command.process("sonatypeOpen \"your groupId\" \"Some staging name\"", _)),
+...
+ReleaseStep(action = Command.process("publishSigned", _)),
+...
+ReleaseStep(action = Command.process("sonatypeRelease", _)),
+...
 ```
 
 
@@ -3433,30 +3612,589 @@ Changes
 These are changes made in each sbt release.
 
 
+  [Organizing-Build]: Organizing-Build.html
+
+## Migrating from sbt 0.12.x
+
+### Introduction
+
+Before sbt 0.13 (sbt 0.9 to 0.12) it was very common to see in builds the usage of three aspects of sbt:
+
+* the key dependency operators: `<<=`, `<+=`, `<++=`
+* the tuple enrichments (apply and map) for TaskKey's and SettingKey's (eg. `(foo, bar) map { (f, b) => ... }`)
+* the use of `Build` trait in `project/Build.scala`
+
+The release of sbt 0.13 (which was over 3 years ago!) introduced the `.value` DSL which allowed for much
+easier to read and write code, effectively making the first two aspects redundant and they were removed from the official
+documentation.
+
+Similarly, sbt 0.13's introduction of multi-project `build.sbt` made the `Build` trait redundant.
+In addition, the auto plugin feature that's now standard in sbt 0.13 enabled automatic sorting of plugin settings
+and auto import feature, but it made `Build.scala` more difficult to maintain.
+
+As they will be removed in upcoming release of sbt 1.0.0 we've deprecated them in sbt 0.13.13, and here we'll
+help guide you to how to migrate your code.
+
+### Migrating simple expressions
+
+With simple expressions such as:
+
+```scala
+a <<= aTaskDef
+b <+= bTaskDef
+c <++= cTaskDefs
+```
+
+it is sufficient to replace them with the equivalent:
+
+```scala
+a := aTaskDef.value
+b += bTaskDef.value
+c ++= cTaskDefs.value
+```
+
+### Migrating from the tuple enrichments
+
+As mentioned above, there are two tupe enrichments `.apply` and `.map`. The difference used to be for whether
+you're defining a setting for a `SettingKey` or a `TaskKey`, you use `.apply` for the former and `.map` for the
+latter:
+
+```scala
+val sett1 = settingKey[String]("SettingKey 1")
+val sett2 = settingKey[String]("SettingKey 2")
+val sett3 = settingKey[String]("SettingKey 3")
+
+val task1 = taskKey[String]("TaskKey 1")
+val task2 = taskKey[String]("TaskKey 2")
+val task3 = taskKey[String]("TaskKey 3")
+val task4 = taskKey[String]("TaskKey 4")
+
+sett1 := "s1"
+sett2 := "s2"
+sett3 <<= (sett1, sett2)(_ + _)
+
+task1 := { println("t1"); "t1" }
+task2 := { println("t2"); "t2" }
+task3 <<= (task1, task2) map { (t1, t2) => println(t1 + t2); t1 + t2 }
+task4 <<= (sett1, sett2) map { (s1, s2) => println(s1 + s2); s1 + s2 }
+```
+
+(Remember you can define tasks in terms of settings, but not the other way round)
+
+With the `.value` DSL you don't have to know or remember if your key is a `SettingKey` or a `TaskKey`:
+
+```scala
+sett1 := "s1"
+sett2 := "s2"
+sett3 := sett1.value + sett2.value
+
+task1 := { println("t1"); "t1" }
+task2 := { println("t2"); "t2" }
+task3 := { println(task1.value + task2.value); task1.value + task2.value }
+task4 := { println(sett1.value + sett2.value); sett1.value + sett2.value }
+```
+
+### Migrating when using `.dependsOn`, `.triggeredBy` or `.runBefore`
+
+When instead calling `.dependsOn`, instead of:
+
+```scala
+a <<= a dependsOn b
+```
+
+define it as:
+
+```scala
+a := (a dependsOn b).value
+```
+
+**Note**: You'll need to use the `<<=` operator with `.triggeredBy` and `.runBefore` in sbt 0.13.13 and
+earlier due to issue [#1444](https://github.com/sbt/sbt/issues/1444).
+
+### Migrating when you need to set `Task`s
+
+For keys such as `sourceGenerators` and `resourceGenerators` which use sbt's Task type:
+
+```scala
+val sourceGenerators =
+  settingKey[Seq[Task[Seq[File]]]]("List of tasks that generate sources")
+val resourceGenerators =
+  settingKey[Seq[Task[Seq[File]]]]("List of tasks that generate resources")
+```
+
+Where you previous would define things as:
+
+```scala
+sourceGenerators in Compile <+= buildInfo
+```
+
+for sbt 0.13.15+, you define them as:
+
+```scala
+sourceGenerators in Compile += buildInfo
+```
+
+or in general,
+
+```scala
+sourceGenerators in Compile += Def.task { List(file1, file2) }
+```
+
+**Note**: In sbt 0.13.13 and earlier you'll need to write `sourceGenerators in Compile += buildInfo.taskValue`.
+
+### Migrating with `InputKey`
+
+When using `InputKey` instead of:
+
+```scala
+run <<= docsRunSetting
+```
+
+when migrating you mustn't use `.value` but `.evaluated`:
+
+```scala
+run := docsRunSetting.evaluated
+```
+
+### Migrating from the Build trait
+
+With `Build` trait based build such as:
+
+```scala
+import sbt._
+import Keys._
+import xyz.XyzPlugin.autoImport._
+
+object HelloBuild extends Build {
+  val shared = Defaults.defaultSettings ++ xyz.XyzPlugin.projectSettings ++ Seq(
+    organization := "com.example",
+    version      := "0.1.0",
+    scalaVersion := "2.12.1")
+
+  lazy val hello =
+    Project("Hello", file("."),
+      settings = shared ++ Seq(
+        xyzSkipWrite := true)
+    ).aggregate(core)
+
+  lazy val core =
+    Project("hello-core", file("core"),
+      settings = shared ++ Seq(
+        description := "Core interfaces",
+        libraryDependencies ++= scalaXml.value)
+    )
+
+  def scalaXml = Def.setting {
+    scalaBinaryVersion.value match {
+      case "2.10" => Nil
+      case _      => ("org.scala-lang.modules" %% "scala-xml" % "1.0.6") :: Nil
+    }
+  }
+}
+```
+
+You can migrate to `build.sbt`:
+
+```scala
+val shared = Seq(
+  organization := "com.example",
+  version      := "0.1.0",
+  scalaVersion := "2.12.1"
+)
+
+lazy val helloRoot = (project in file("."))
+  .aggregate(core)
+  .enablePlugins(XyzPlugin)
+  .settings(
+    shared,
+    name := "Hello",
+    xyzSkipWrite := true
+  )
+
+lazy val core = (project in file("core"))
+  .enablePlugins(XyzPlugin)
+  .settings(
+    shared,
+    name := "hello-core",
+    description := "Core interfaces",
+    libraryDependencies ++= scalaXml.value
+  )
+
+def scalaXml = Def.setting {
+  scalaBinaryVersion.value match {
+    case "2.10" => Nil
+    case _      => ("org.scala-lang.modules" %% "scala-xml" % "1.0.6") :: Nil
+  }
+}
+```
+
+1. Rename `project/Build.scala` to `build.sbt`.
+2. Remove import statements `import sbt._`, `import Keys._`, and any auto imports.
+3. Move all of the inner definitions (like `shared`, `helloRoot`, etc) out of the `object HelloBuild`, and remove `HelloBuild`.
+4. Change `Project(...)` to `(project in file("x"))` style, and call its `settings(...)` method to pass in the settings. This is so the auto plugins can reorder their setting sequence based on the plugin dependencies. `name` setting should be set to keep the old names.
+5. Remove `Defaults.defaultSettings` out of `shared` since these settings are already set by the built-in auto plugins, also remove `xyz.XyzPlugin.projectSettings` out of `shared` and call `enablePlugins(XyzPlugin)` instead.
+
+**Note**: `Build` traits is deprecated, but you can still use `project/*.scala` file to organize your build and/or define ad-hoc plugins. See [Organizing the build][Organizing-Build].
+
+
+
 ## sbt 0.13.5+ Technology Previews
 
 sbt 0.13.5+ releases of sbt are technology previews of what's to come to sbt 1.0 with enhancements like [auto plugins][Auto-Plugins-Post], launcher enhacements for sbt server, defined in the sbt-remote-control project, and other necessary API changes.
 
 These releases maintain binary compatibility with plugins that are published against sbt 0.13.0, but add new features in preparation for sbt 1.0. The tech previews allow us to test new ideas like auto plugins and performance improvements on dependency resolution; the build users can try new features without losing the existing plugin resources; and plugin authors can gradually migrate to the new plugin system before sbt 1.0 arrives.
 
-## sbt 0.13.11
+## sbt 0.13.15
+
+### Fixes with compatibility implications
+
+- sbt 0.13.15 removes the Maven version range when possible. See below.
+
+### Improvements
+
+- Adds preliminary compatibility with JDK 9. Using this requires 0.13.15+ launcher. [#2951][2951]/[143][143] by [@retronym][@retronym]
+- Adds "local-preloaded" repository for offline installation. See below.
+- Notifies and enables users to stay in sbt's shell on the warm JVM by hitting `[ENTER]` while sbt is running. [#2987][2987]/[#2996][2996] by [@dwijnand][@dwijnand]
+- Adds an `Append` instance to support `sourceGenerators += Def.task { ... }`, instead of needing `.taskValue`. [#2943][2943] by [@eed3si9n][@eed3si9n]
+- Writes out the sbt.version in `project/build.properties` if it is missing. [#754][754]/[#3025][3025] by [@dwijnand][@dwijnand]
+- XML generated by JUnitXmlTestsListener now correctly flags ignored, skipped and pending tests. [#2198][2198]/[#2854][2854] by [@ashleymercer][@ashleymercer]
+- When sbt detects that the project is compiled with dotty, it now automatically
+  sets `scalaCompilerBridgeSource` correctly, this reduces the boilerplate needed
+  to make a dotty project. Note that dotty support in sbt is still considered
+  experimental and not officially supported, see [dotty.epfl.ch][dotty] for
+  more information. [#2902][2902] by [@smarter][@smarter]
+- Updates sbt new's reference implementation to Giter8 0.7.2.
+- ScriptedPlugin: Add the ability to paginate scripted tests.
+  It is now possible to run a subset of scripted tests in a directory at once,
+  for example:
+  ```
+  scripted source-dependencies/*1of3
+  ```
+  Will create three pages and run page 1. This is especially useful when running
+  scripted tests on a CI, to benefit from the available parallelism. [3013][3013] by [@smarter][@smarter]
+
+### Bug fixes
+
+- Fixes .triggeredBy/.storeAs/etc not working when using `:=` and `.value` macros. [#1444][1444]/[#2908][2908] by [@dwijnand][@dwijnand]
+- Fixes Ctrl-C not working on Windows by bumping up JLine. [#1855][1855] by [@eed3si9n][@eed3si9n]
+- Fixes regressions in sbt 0.13.11 - 0.13.13 that processed build-level keys incorrectly. [#2851][2851]/[#2460][2460] by [@eed3si9n][@eed3si9n]
+- Fixes a regression in sbt 0.13.12 that was misfiring Scala version enforcement when configuration does not extend `Compile`. [#2827][2827]/[#2786][2786] by [@eed3si9n][@eed3si9n]
+- Fixes Scala binary version checking misfiring on configurations that do not extend `Compile`. [#2828][2828]/[#1466][1466] by [@eed3si9n][@eed3si9n]
+- Fixes script mode ignoring quotation. [#2551][2551] by [@ekrich][@ekrich]
+- Fixes IllegalStateException that Ivy gets into sometimes. [#2827][2827]/[#2015][2015] by [@eed3si9n][@eed3si9n]
+- Fixes null sourceFile causing NPE. [#2766][2766] by [@avdv][@avdv]
+- Fixes version parsing in validation. [#3011][3011] by [@eed3si9n][@eed3si9n]
+- Fixes `Package.makeJar` deleting directory recursively. [#3014][3014] by [@larsrh][@larsrh]
+
+### Maven version range improvement
+
+Previously, when the dependency resolver (Ivy) encountered a Maven version range such as `[1.3.0,)`
+it would go out to the Internet to find the latest version.
+This would result to a surprising behavior where the eventual version keeps changing over time
+*even when there's a version of the library that satisfies the range condition*.
+
+Starting sbt 0.13.15, some Maven version ranges would be replaced with its lower bound
+so that when a satisfactory version is found in the dependency graph it will be used.
+You can disable this behavior using the JVM flag `-Dsbt.modversionrange=false`.
+
+[#2954][2954] by [@eed3si9n][@eed3si9n]
+
+### Offline installation
+
+sbt 0.13.15 adds two new repositories called "local-preloaded-ivy"
+and "local-preloaded" that point to `~/.sbt/preloaded/`.
+The purpose for the repositories is to preload them with
+sbt artifacts so the installation of sbt will not require access to the Internet.
+
+This also improves the startup time of sbt when you first run it
+since the resolution happens off of a local-preloaded repository.
+
+[#2993][2993]/[#145][145] by [@eed3si9n][@eed3si9n]
+
+### Notes
+
+No changes should be necessary to your project definition and all plugins published for sbt 0.13.{x|x<14} should still work.
+
+See [Migrating from sbt 0.12.x](http://www.scala-sbt.org/0.13/docs/Migrating-from-sbt-012x.html) for details on the old operator deprecation.
+
+Special thanks to the contributors for making this release a success. According to `git shortlog -sn --no-merges v0.13.13..0.13.15`, compared to 0.13.13, there were 64 (non-merge) commits, by eleven contributors: Eugene Yokota, Dale Wijnand, Guillaume Martres, Jason Zaugg, Lars Hupel, Petro Verkhogliad, Eric Richardson, Claudio Bley, Haochi Chen, Paul Draper, Ashley Mercer. Thank you!
+
+  [143]: https://github.com/sbt/sbt-launcher-package/pull/143
+  [145]: https://github.com/sbt/sbt-launcher-package/pull/145
+  [754]: https://github.com/sbt/sbt/issues/754
+  [2766]: https://github.com/sbt/sbt/issues/2766
+  [1855]: https://github.com/sbt/sbt/issues/1855
+  [1466]: https://github.com/sbt/sbt/issues/1466
+  [2786]: https://github.com/sbt/sbt/issues/2786
+  [2827]: https://github.com/sbt/sbt/pull/2827
+  [2828]: https://github.com/sbt/sbt/pull/2828
+  [2551]: https://github.com/sbt/sbt/issues/2551
+  [2987]: https://github.com/sbt/sbt/issues/2987
+  [2996]: https://github.com/sbt/sbt/pull/2996
+  [2851]: https://github.com/sbt/sbt/issues/2851
+  [2460]: https://github.com/sbt/sbt/issues/2460
+  [2951]: https://github.com/sbt/sbt/pull/2951
+  [2954]: https://github.com/sbt/sbt/issues/2954
+  [2015]: https://github.com/sbt/sbt/issues/2015
+  [2827]: https://github.com/sbt/sbt/pull/2827
+  [2198]: https://github.com/sbt/sbt/issues/2198
+  [2854]: https://github.com/sbt/sbt/pull/2854
+  [1444]: https://github.com/sbt/sbt/issues/1444
+  [2908]: https://github.com/sbt/sbt/pull/2908
+  [2902]: https://github.com/sbt/sbt/pull/2902
+  [2993]: https://github.com/sbt/sbt/pull/2993
+  [2943]: https://github.com/sbt/sbt/pull/2943
+  [3011]: https://github.com/sbt/sbt/issues/3011
+  [3025]: https://github.com/sbt/sbt/issues/3025
+  [3013]: https://github.com/sbt/sbt/pull/3013
+  [3014]: https://github.com/sbt/sbt/pull/3014
+  [@eed3si9n]: https://github.com/eed3si9n
+  [@dwijnand]: https://github.com/dwijnand
+  [@Duhemm]: https://github.com/Duhemm
+  [@avdv]: https://github.com/avdv
+  [@ekrich]: https://github.com/ekrich
+  [@retronym]: https://github.com/retronym
+  [@ashleymercer]: https://github.com/ashleymercer
+  [dotty]: http://dotty.epfl.ch/
+  [@smarter]: https://github.com/smarter
+  [@larsrh]: https://github.com/larsrh
+
+## sbt 0.13.14
+
+sbt 0.13.14 did not happen due a bug that was found after the artifact was published.
+
+## sbt 0.13.13
+
+### Fixes with compatibility implications
+
+- Deprecates the old sbt 0.12 DSL, to be removed in sbt 1.0. See below for more details.
+- The `.value` method is deprecated for input tasks. Calling `.value` on an input key returns an `InputTask[A]`,
+  which is completely unintuitive and often results in a bug. In most cases `.evaluated` should be called,
+  which returns `A` by evaluating the task.
+  Just in case `InputTask[A]` is needed, `.inputTaskValue` method is now provided. [#2709][2709] by [@eed3si9n][@eed3si9n]
+- sbt 0.13.13 renames the early command `--<command>` that was added in 0.13.1 to `early(<command>)`. This fixes the regression [#1041][1041]. For backward compatibility `--error`, `--warn`, `--info`, and `--debug` will continue to function during the 0.13 series, but it is strongly encouraged to migrate to the single hyphen options: `-error`, `-warn`, `-info`, and `-debug`. [#2742][2742] by [@eed3si9n][@eed3si9n]
+- Improve `show` when key returns a `Seq` by showing the elements one per line. Disable with `-Dsbt.disable.show.seq=true`. [#2755][2755] by [@eed3si9n][@eed3si9n]
+- Recycles classloaders to be anti-hostile to JIT. Disable with `-Dsbt.disable.interface.classloader.cache=true`. [#2754][2754] by [@retronym][@retronym]
+
+### Improvements
+
+- Adds `new` command and `templateResolverInfos`. See below for more details.
+- Auto plugins can add synthetic subprojects. See below for more details.
+- Supports wildcard exclusions in POMs [#1431][1431]/[sbt/ivy#22][sbt-ivy-22]/[#2731][2731] by [@jtgrabowski][@jtgrabowski]
+- Adds the ability to call `aggregateProjects(..)` for the current project inside a build sbt file. [#2682][2682] by [@xuwei-k][@xuwei-k]
+- Adds `.jvmopts` support to the launcher script. [sbt/sbt-launcher-package#111][111] by [@fommil][@fommil]
+- Adds `.java-version` support to the Windows launcher script. [sbt/sbt-launcher-package#111][111] by [@fommil][@fommil]
+- The startup log level is dropped to `-error` in script mode using `scalas`. [#840][840]/[#2746][2746] by [@eed3si9n][@eed3si9n]
+- Adds `CrossVersion.patch` which sits in between `CrossVersion.binary` and `CrossVersion.full` in that it strips off any
+  trailing `-bin-...` suffix which is used to distinguish variant but binary compatible Scala toolchain builds. Most things
+  which are currently `CrossVersion.full` (eg. Scala compiler plugins, esp. macro-paradise) would be more appropriately
+  depended on as `CrossVersion.patch` from this release on.
+
+### Bug fixes
+
+- Fixes a regression in sbt 0.13.12 that wrongly reports build-level keys to be ambiguous. [#2707][2707]/[#2708][2708] by [@Duhemm][@Duhemm]
+- Fixes a regression in sbt 0.13.12 that was misfiring Scala version enforcement when an alternative `scalaOrganization` is set. [#2703][2703] by [@milessabin][@milessabin]
+- Fixes `Tags.ForkedTestGroup`. [#2677][2677]/[#2681][2681] by [@pauldraper][@pauldraper]
+- Fixes forked tests being reported as successful when the test harness fails. [#2442][2442]/[#2722][2722]/[#2730][2730] by [@eed3si9n][@eed3si9n]/[@dwijnand][@dwijnand]
+- Fixes incorrect installation path on Windows. [sbt/sbt-launcher-package#110][110] by [@dwijnand][@dwijnand]
+
+### new command and templateResolverInfos
+
+sbt 0.13.13 adds a `new` command, which helps create new build definitions.
+The `new` command is extensible via a mechanism called the template resolver.
+A template resolver pattern matches on the passed in arguments after `new`,
+and if it's a match it will apply the template.
+
+As a reference implementation, template resolver for [Giter8][g8] is provided. For instance:
+
+    sbt new eed3si9n/hello.g8
+
+will run [eed3si9n/hello.g8][] using Giter8.
+
+[#2705][2705] by [@eed3si9n][@eed3si9n]
+
+### Synthetic subprojects
+
+sbt 0.13.13 adds support for `AutoPlugin`s to define subprojects programmatically,
+by overriding the `extraProjects` method:
+
+    import sbt._, Keys._
+
+    object ExtraProjectsPlugin extends AutoPlugin {
+      override def extraProjects: Seq[Project] =
+        List("foo", "bar", "baz") map generateProject
+
+      def generateProject(id: String): Project =
+        Project(id, file(id))
+          .settings(
+            name := id
+          )
+    }
+
+In addition, subprojects may be derived from an existing subproject
+by overriding `derivedProjects`:
+
+    import sbt._, Keys._
+
+    object DerivedProjectsPlugin extends AutoPlugin {
+      // Enable this plugin by default
+      override def requires: Plugins = sbt.plugins.CorePlugin
+      override def trigger = allRequirements
+
+      override def derivedProjects(proj: ProjectDefinition[_]): Seq[Project] =
+        // Make sure to exclude project extras to avoid recursive generation
+        if (proj.projectOrigin != ProjectOrigin.DerivedProject) {
+          val id = proj.id + "1"
+          Seq(
+            Project(id, file(id))
+              .enablePlugins(DatabasePlugin)
+          )
+        }
+        else Nil
+    }
+
+[#2532][2532]/[#2717][2717]/[#2738][2738] by [@eed3si9n][@eed3si9n]
+
+### Deprecate old sbt 0.12 DSL
+
+The no-longer-documented operators `<<=`, `<+=`, and `<++=` and tuple enrichments are deprecated,
+and will be removed in sbt 1.0.
+
+Generally,
+
+    task3 <<= (task1, task2) map { (t1, t2) => println(t1 + t2); t1 + t2 }
+
+should migrate to
+
+    task3 := {
+      println(task1.value + task2.value)
+      task1.value + task2.value
+    }
+
+Except for source generators, which requires task values:
+
+    sourceGenerators in Compile <+= buildInfo
+
+This becomes:
+
+    sourceGenerators in Compile += buildInfo.taskValue
+
+Another exception is input task:
+
+    run <<= docsRunSetting
+
+This becomes:
+
+    run := docsRunSetting.evaluated
+
+See [Migrating from sbt 0.12.x](http://www.scala-sbt.org/0.13/docs/Migrating-from-sbt-012x.html) for more details.
+
+[#2716][2716]/[#2763][2763]/[#2764][2764] by [@eed3si9n][@eed3si9n] and [@dwijnand][@dwijnand]
+
+  [g8]: http://www.foundweekends.org/giter8/
+  [eed3si9n/hello.g8]: https://github.com/eed3si9n/hello.g8
+
+  [840]: https://github.com/sbt/sbt/issues/840
+  [1041]: https://github.com/sbt/sbt/issues/1041
+  [1431]: https://github.com/sbt/sbt/issues/1431
+  [2442]: https://github.com/sbt/sbt/issues/2442
+  [2532]: https://github.com/sbt/sbt/issues/2532
+  [2677]: https://github.com/sbt/sbt/issues/2677
+  [2681]: https://github.com/sbt/sbt/pull/2681
+  [2705]: https://github.com/sbt/sbt/pull/2705
+  [2682]: https://github.com/sbt/sbt/pull/2682
+  [2703]: https://github.com/sbt/sbt/pull/2703
+  [2707]: https://github.com/sbt/sbt/issues/2707
+  [2708]: https://github.com/sbt/sbt/issues/2708
+  [2709]: https://github.com/sbt/sbt/pull/2709
+  [2716]: https://github.com/sbt/sbt/pull/2716
+  [2717]: https://github.com/sbt/sbt/pull/2717
+  [2722]: https://github.com/sbt/sbt/issues/2722
+  [2730]: https://github.com/sbt/sbt/pull/2730
+  [2731]: https://github.com/sbt/sbt/pull/2731
+  [2738]: https://github.com/sbt/sbt/issues/2738
+  [2742]: https://github.com/sbt/sbt/pull/2742
+  [2746]: https://github.com/sbt/sbt/pull/2746
+  [2754]: https://github.com/sbt/sbt/pull/2754
+  [2755]: https://github.com/sbt/sbt/pull/2755
+  [2763]: https://github.com/sbt/sbt/issues/2763
+  [2764]: https://github.com/sbt/sbt/pull/2764
+  [110]: https://github.com/sbt/sbt-launcher-package/pull/110
+  [111]: https://github.com/sbt/sbt-launcher-package/pull/111
+  [sbt-ivy-22]: https://github.com/sbt/ivy/pull/22
 
   [@eed3si9n]: https://github.com/eed3si9n
-  [@jsuereth]: https://github.com/jsuereth
-  [@dwijnand]: http://github.com/dwijnand
-  [@Duhemm]: http://github.com/Duhemm
-  [@gkossakowski]: https://github.com/gkossakowski
-  [@adriaanm]: https://github.com/adriaanm
-  [@jrudolph]: https://github.com/jrudolph
-  [@stuhood]: https://github.com/stuhood
-  [@pdalpra]: https://github.com/pdalpra
-  [@fkorotkov]: http://github.com/fkorotkov
-  [@hgiddens]: https://github.com/hgiddens
-  [@DavidPerezIngeniero]: https://github.com/DavidPerezIngeniero
-  [@romanowski]: https://github.com/romanowski
-  [@timcharper]: https://github.com/timcharper
-  [@smarter]: https://github.com/smarter
+  [@dwijnand]: https://github.com/dwijnand
+  [@Duhemm]: https://github.com/Duhemm
+  [@xuwei-k]: https://github.com/xuwei-k
+  [@jtgrabowski]: https://github.com/jtgrabowski
+  [@fommil]: https://github.com/fommil
+  [@milessabin]: https://github.com/milessabin
+  [@pauldraper]: https://github.com/pauldraper
   [@retronym]: https://github.com/retronym
+
+## sbt 0.13.12
+
+  [2637]: https://github.com/sbt/sbt/pull/2637
+  [2286]: https://github.com/sbt/sbt/issues/2286
+  [2634]: https://github.com/sbt/sbt/pull/2634
+  [2530]: https://github.com/sbt/sbt/pull/2530
+  [2460]: https://github.com/sbt/sbt/issues/2460
+  [2469]: https://github.com/sbt/sbt/pull/2469
+  [2432]: https://github.com/sbt/sbt/pull/2432
+  [2326]: https://github.com/sbt/sbt/issues/2326
+  [2438]: https://github.com/sbt/sbt/pull/2438
+  [2431]: https://github.com/sbt/sbt/issues/2431
+  [2500]: https://github.com/sbt/sbt/pull/2500
+  [2435]: https://github.com/sbt/sbt/issues/2435
+  [2513]: https://github.com/sbt/sbt/pull/2513
+  [2560]: https://github.com/sbt/sbt/issues/2560
+  [2563]: https://github.com/sbt/sbt/pull/2563
+  [2519]: https://github.com/sbt/sbt/issues/2519
+  [2569]: https://github.com/sbt/sbt/pull/2569
+  [2497]: https://github.com/sbt/sbt/issues/2497
+  [2557]: https://github.com/sbt/sbt/pull/2557
+  [2603]: https://github.com/sbt/sbt/pull/2603
+  [2630]: https://github.com/sbt/sbt/pull/2630
+  [2653]: https://github.com/sbt/sbt/pull/2653
+  [2642]: https://github.com/sbt/sbt/pull/2642
+  [2002]: https://github.com/sbt/sbt/issues/2002
+  [1500]: https://github.com/sbt/sbt/issues/1500
+  [2537]: https://github.com/sbt/sbt/issues/2537
+  [2659]: https://github.com/sbt/sbt/pull/2659
+
+### Fixes with compatibility implications
+
+- By default the Scala toolchain artifacts are now transitively resolved using the provided `scalaVersion` and
+  `scalaOrganization`. Previously a user specified `scalaOrganization` would not have affected transitive
+  dependencies on, eg. `scala-reflect`. An Ivy-level mechanism is used for this purpose, and as a consequence
+  the overriding happens early in the resolution process which might improve resolution times, and as a side
+  benefit fixes [#2286][2286]. The old behavior can be restored by adding
+  `ivyScala := { ivyScala.value map {_.copy(overrideScalaVersion = sbtPlugin.value)} }`
+  to your build. [#2286][2286]/[#2634][2634] by [@milessabin][milessabin]
+- The Build trait is deprecated in favor of the `.sbt` format [#2530][2530] by [@dwijnand][@dwijnand]
+
+### Improvements
+
+- When `RecompileOnMacroDef` is enabled, sbt will now print out a info level log indicating that some sources are being recompiled because it's used from a source that contains a macro definition. Can be disabled with `incOptions := incOptions.value.withLogRecompileOnMacro(false)` [#2637][2637]/[#2659][2659] by [@eed3si9n][@eed3si9n]/[@dwijnand][@dwijnand]
+- Adds Windows script support and native file extensions on Unix platforms. [#2603][2603] by [@ekrich][@ekrich]
+- Improves loading time of large builds. [#2630][2630] by [@eed3si9n][@eed3si9n]
+- Adds the ability to call `dependsOn` for the current project inside a `.sbt` file. [#2653][2653] by [@anatolydwnld][@anatolydwnld]
+
+### Bug fixes
+
+- Fixes a 0.13.11 regression: dependency resolution hitting Maven Central even with repository overrides. [#2519][2519]/[#2569][2569] by [@eed3si9n][@eed3si9n]
+- Fixes a 0.13.11 regression in incremental compiler: `IndexOutOfBoundsException` in ExtractAPI [#2497][2497]/[#2557][2557] by [@smarter][@smarter]
+- Fixes merged dependency descriptors dropping configuration specification. [#2002][2002]/[#1500][1500] by [@eed3si9n][@eed3si9n]
+- Fixes merged dependency descriptors creating non-existing artifacts. [#2431][2431]/[#2500][2500] by [@Duhemm][@Duhemm]
+- Fixes incremental compilation misses when macro expansion references another source. [#2560][2560]/[#2563][2563] by [@eed3si9n][@eed3si9n]
+- Fixes incremental compilation of package objects transitively in name hashing. [#2432][2432]/[#2326][2326] by [@gkossakowski][@gkossakowski]
+- Fixes incremental compilation relying on filename of package objects. [#2438][2438] by [@Duhemm][@Duhemm]
+- Provides a workaround flag `incOptions := incOptions.value.withIncludeSynthToNameHashing(true)` for name hashing not including synthetic methods. This will not be enabled by default in sbt 0.13. It can also enabled by passing `sbt.inc.include_synth=true` to JVM. [#2537][2537] by [@eed3si9n][@eed3si9n]
+- Fixes tab completion for tasks defined in AutoPlugin's buildSettings [#2460][2460]/[#2469][2469] by [@Duhemm][@Duhemm]
+- Fixes configuration merging during cached resolution. [#2435][2435]/[#2513][2513] by [@Duhemm][@Duhemm]
+
+## sbt 0.13.11
 
   [Dotty]: https://github.com/lampepfl/dotty
   [JLine2]: https://github.com/jline/jline2
@@ -4382,6 +5120,27 @@ sbt 0.13.5 is a technology preview of what's to come to sbt 1.0 with enhancement
 - Add `JUnitXmlReportPlugin` which generates junit-xml-reports for all tests.
 - Optionally enable forced garbage collection after tasks (`-Dsbt.task.forcegc=true`).
 
+  [@eed3si9n]: https://github.com/eed3si9n
+  [@jsuereth]: https://github.com/jsuereth
+  [@dwijnand]: http://github.com/dwijnand
+  [@Duhemm]: http://github.com/Duhemm
+  [@gkossakowski]: https://github.com/gkossakowski
+  [@adriaanm]: https://github.com/adriaanm
+  [@jrudolph]: https://github.com/jrudolph
+  [@stuhood]: https://github.com/stuhood
+  [@pdalpra]: https://github.com/pdalpra
+  [@fkorotkov]: http://github.com/fkorotkov
+  [@hgiddens]: https://github.com/hgiddens
+  [@DavidPerezIngeniero]: https://github.com/DavidPerezIngeniero
+  [@romanowski]: https://github.com/romanowski
+  [@timcharper]: https://github.com/timcharper
+  [@smarter]: https://github.com/smarter
+  [@retronym]: https://github.com/retronym
+  [milessabin]: https://github.com/milessabin
+  [@ekrich]: https://github.com/ekrich
+  [@smarter]: https://github.com/smarter
+  [@anatolydwnld]: https://github.com/anatolydwnld
+
 
   [multiple-scopes]: Tasks.html#multiple-scopes
   [conflict-management]: Library-Management.html#conflict-management
@@ -4395,7 +5154,7 @@ sbt 0.13.0 - 0.13.2
 
 - Adding new name-hashing feature to incremental compiler. Alters how scala dependencies are tracked, reducing number of recompiles necessary.
 - Added the ability to launch servers via the sbt-launcher.
-- Added `.previous` feature on tasks which can load the pervious value.
+- Added `.previous` feature on tasks which can load the previous value.
 - Added `all` command which can run more than tasks in parallel.
 - Exposed the 'overwrite' flags from ivy. Added warning if overwriting a release version.
 - Improve the error message when credentials are not found in Ivy.
@@ -4479,7 +5238,7 @@ sbt 0.13.0 - 0.13.2
 -   JLine is now configured differently for Cygwin. See
     [Installing sbt][Setup].
 -   Jline and Ansi codes work better on Windows now. CI servers might
-    have to explictly disable Ansi codes via `-Dsbt.log.format=false`.
+    have to explicitly disable Ansi codes via `-Dsbt.log.format=false`.
 -   JLine now tries to respect `~/.inputrc`.
 -   Forked tests and runs now use the project's base directory as the
     current working directory.
@@ -4821,7 +5580,7 @@ The [Configuring Scala](Configuring-Scala.html) page provides full details.
     was a compatibility liability)
 -   Incremental compiler: properly track `abstract override` modifier.
     (gh-726)
--   Incremental compiler: do not normalize types in the api extraction
+-   Incremental compiler: do not normalize types in the API extraction
     phase. (gh-736)
 -   Ivy cache: account for `localOnly` when cache subclass overrides
     `isChanging`
@@ -5148,12 +5907,12 @@ parts to this.
 Additionally, Sanjin's patches to add support for hg and svn URIs are
 included.
 
-1.  sbt uses subversion to retrieve URIs beginning with `svn` or
+1.  sbt uses Subversion to retrieve URIs beginning with `svn` or
     svn+ssh. An optional fragment identifies a specific revision to
     checkout.
-2.  Because a URI for mercurial doesn't have a mercurial-specific
+2.  Because a URI for Mercurial doesn't have a Mercurial-specific
     scheme, sbt requires the URI to be prefixed with hg: to identify it
-    as a mercurial repository.
+    as a Mercurial repository.
 3.  Also, URIs that end with `.git` are now handled properly.
 
 #### Cross building
@@ -5625,7 +6384,7 @@ Some of the more visible changes:
 -   Stack trace detail can be controlled with `'on'`, `'off'`, 'nosbt',
     or an integer level. 'nosbt' means to show stack frames up to the
     first sbt method. An integer level denotes the number of frames to
-    show for each cause. This feature is courtesty of Tony Sloane.
+    show for each cause. This feature is courtesy of Tony Sloane.
 -   New action 'test-run' method that is analogous to 'run', but for
     test classes.
 -   New action 'clean-plugins' task that clears built plugins (useful
@@ -6065,7 +6824,7 @@ Some of the more visible changes:
     stack traces
 -   Project.loadProject and related methods now accept a Logger to use
 -   Made hidden files and files that start with `'.'` excluded by
-    default (`'.*'` is required because subversion seems to not mark `.svn`
+    default (`'.*'` is required because Subversion seems to not mark `.svn`
     directories hidden on Windows)
 -   Implemented exit codes
 -   Added continuous compilation command `cc`
@@ -6772,7 +7531,7 @@ influence SBT execution. Also see [sbt launcher][Sbt-Launcher].
         launcher. The format is the same as a
         <tt>[repositories]</tt> section for a
         <a href="Launcher.html">sbt launcher</a> configuration file.
-        This setting is typically used in conjuction with setting
+        This setting is typically used in conjunction with setting
         <tt>sbt.override.build.repos</tt> to
         <tt>true</tt> (see previous row and the
         <a href="Launcher.html">sbt launcher</a> documentation).</td>
@@ -6970,7 +7729,7 @@ In order to make this process as quick as possible, different output and
 managed dependency directories are used for different versions of Scala.
 For example, when building against Scala 2.10.0,
 
--   `./target/` becomes `./target/scala_2.1.0/`
+-   `./target/` becomes `./target/scala_2.10.0/`
 -   `./lib_managed/` becomes `./lib_managed/scala_2.10/`
 
 Packaged jars, wars, and other artifacts have `_<scala-version>`
@@ -6982,7 +7741,7 @@ are independent of the others. `sbt` will resolve your dependencies for
 each version separately. This way, for example, you get the version of
 Dispatch compiled against 2.8.1 for your 2.8.1 build, the version
 compiled against 2.10 for your 2.10.x builds, and so on. You can have
-fine-grained control over the behavior for for different Scala versions
+fine-grained control over the behavior for different Scala versions
 by using the `cross` method on `ModuleID` These are equivalent:
 
 ```scala
@@ -7002,6 +7761,14 @@ of the binary Scala version:
 
 ```scala
 "a" % "b" % "1.0" cross CrossVersion.full
+```
+
+`CrossVersion.patch` sites between `CrossVersion.binary` and `CrossVersion.full`
+in that it strips off any trailing `-bin-...` suffix which is used to
+distinguish varaint but binary compatible Scala toolchain builds.
+
+```scala
+"a" % "b" % "1.0" cross CrossVersion.patch
 ```
 
 This uses a custom function to determine the Scala version to use based
@@ -7421,14 +8188,14 @@ disadvantage of these approaches is the startup time involved.
 ### Setup
 
 To set up these entry points, you can either use
-[conscript](https://github.com/n8han/conscript) or manually construct
+[conscript](https://github.com/foundweekends/conscript) or manually construct
 the startup scripts. In addition, there is a
 [setup script](https://github.com/paulp/sbt-extras) for the script
 mode that only requires a JRE installed.
 
 #### Setup with Conscript
 
-Install [conscript](https://github.com/n8han/conscript).
+Install [conscript](https://github.com/foundweekends/conscript).
 
 ```
 $ cs sbt/sbt --branch 1.0.0-M4
@@ -7488,7 +8255,7 @@ chmod u+x shout.scala
 #!/usr/bin/env scalas
  
 /***         
-scalaVersion := "2.11.8"
+scalaVersion := "2.12.1"
  
 resolvers += Resolver.url("typesafe-ivy-repo", url("http://repo.typesafe.com/typesafe/releases"))(Resolver.ivyStylePatterns)
  
@@ -7569,7 +8336,7 @@ class is [IvyConsole](../sxr/sbt/IvyConsole.scala.html).
 Understanding Incremental Recompilation
 ---------------------------------------
 
-Compiling Scala code with Scalac is slow, but sbt often makes it faster.
+Compiling Scala code with scalac is slow, but sbt often makes it faster.
 By understanding how, you can even understand how to make compilation even
 faster. Modifying source files with many dependencies might require
 recompiling only those source files
@@ -7577,11 +8344,11 @@ recompiling only those source files
 instead of all the dependencies
 (which might take 2 minutes for instance).
 Often you can control which will be your case and make
-development faster by a few coding practices.
+development faster with a few coding practices.
 
-Improving Scala compilation performance is a major goal of sbt,
+Improving the Scala compilation performance is a major goal of sbt,
 and thus the speedups it gives are one of the major motivations to use it.
-A significant portion of sbt sources and development efforts deals
+A significant portion of sbt's sources and development efforts deal
 with strategies for speeding up compilation.
 
 To reduce compile times, sbt uses two strategies:
@@ -7736,7 +8503,7 @@ incremental compilation is determining whether changes applied to `A.scala` may 
 In the example above only the constant returned by method `foo` has changed and that does not affect
 compilation results of other files.
 
-Let's consider an other change to `A.scala`:
+Let's consider another change to `A.scala`:
 
 ```scala
 // A.scala
@@ -7756,6 +8523,7 @@ user. That's where incremental compilation terminates in this case.
 
 Let's identify the two main pieces of information that were needed to make decisions in the examples
 presented above. The incremental compiler algorithm needs to:
+
   * index source files so it knows whether there were API changes that might affect other source
     files; e.g. it needs to detect changes to method signatures as in the example above
   * track dependencies between source files; once the change to an API is detected the algorithm
@@ -7766,16 +8534,25 @@ Both of those pieces of information are extracted from the Scala compiler.
 ### Interaction with the Scala compiler
 
 Incremental compiler interacts with Scala compiler in many ways:
-  * provides three phases additional phases that extract needed information:
-    - api phase extracts public interface of compiled sources by walking trees and indexing types
-    - dependency phase which extracts dependencies between source files (compilation units)
-    - analyzer phase which captures the list of emitted class files
-  * defines a custom reporter which allows sbt to gather errors and warnings
-  * subclasses Global to:
-    - add the api, dependency and analyzer phases
-    - set the custom reporter
-  * manages instances of the custom Global and uses them to compile files it determined that need
-    to be compiled
+
+<ul>
+  <li>provides three phases additional phases that extract needed information:
+  <ul>
+    <li>api phase extracts public interface of compiled sources by walking trees and indexing types</li>
+    <li>dependency phase which extracts dependencies between source files (compilation units)</li>
+    <li>analyzer phase which captures the list of emitted class files</li>
+  </ul>
+  </li>
+  <li>defines a custom reporter which allows sbt to gather errors and warnings</li>
+  <li>subclasses Global to:
+  <ul>
+    <li>add the api, dependency and analyzer phases</li>
+    <li>set the custom reporter</li>
+  </ul>
+  </li>
+  <li>manages instances of the custom Global and uses them to compile files it determined that need
+    to be compiled</li>
+</ul>
 
 #### API extraction phase
 
@@ -7786,7 +8563,7 @@ structures allow to express an API in a way that is independent from Scala compi
 such representation is persistent so it is serialized on disk and reused between compiler runs or
 even sbt runs.
 
-The api extraction phase consist of two major components:
+The API extraction phase consist of two major components:
 
   1. mapping Types and Symbols to incremental compiler representation of an extracted API
   2. hashing that representation
@@ -7901,17 +8678,17 @@ smarter about changes that can possibly affect a small number of files.
 
 #### Detection of irrelevant dependencies (direct approach)
 
-I call call a change to API of given source file `X.scala` irrelevant if doesn't affect compilation
-result of other file `Y.scala` even if `Y.scala` does depend on `X.scala`.
+A change to the API of a given source file `X.scala` can be called irrelevant if it doesn't affect the compilation
+result of file `Y.scala` even if `Y.scala` depends on `X.scala`.
 
-From that definition one can easily see that change can be declared irrelevant only in respect to
-given dependency. Conversely, one can declare a dependency between two source files irrelevant in
-respect to given change of an API in one of the files if the change doesn't affect compilation
+From that definition one can easily see that a change can be declared irrelevant only with respect to
+a given dependency. Conversely, one can declare a dependency between two source files irrelevant with
+respect to a given change of API in one of the files if the change doesn't affect the compilation
 result of the other file. From now on we'll focus on detection of irrelevant dependencies.
 
 A very naive way of solving a problem of detecting irrelevant dependencies would be to say that we
 keep track of all used methods in `Y.scala` so if a method in `X.scala` is added/removed/modified we
-just check if it's being used in `Y.scala` and if it's not then we consider dependency of `Y.scala`
+just check if it's being used in `Y.scala` and if it's not then we consider the dependency of `Y.scala`
 on `X.scala` irrelevant in this particular case.
 
 Just to give you a sneak preview of problems that quickly arise if you consider that strategy let's
@@ -7919,7 +8696,7 @@ consider those two scenarios.
 
 ##### Inheritance
 
-We'll see how method not used in other source file might affect it's compilation result. Let's
+We'll see how a method not used in another source file might affect its compilation result. Let's
 consider this structure:
 
 ```scala
@@ -7940,7 +8717,7 @@ abstract class A {
 ```
 
 Now, once we recompile `A.scala` we could just say that since `A.foo` is not used in `B` class then
-we don't need to recompile `B.scala`. However, it's not true because B doesn't implement a newly
+we don't need to recompile `B.scala`. However, this is not true because `B` doesn't implement a newly
 introduced, abstract method and an error should be reported.
 
 Therefore, a simple strategy of looking at used methods for determining whether a given dependency
@@ -7977,40 +8754,40 @@ class A {
 }
 ```
 
-Now, once we recompile `A.scala` and detect that there's a new method defined in `A` class we would
-need to consider whether this is relevant to dependency of `B.scala` on `A.scala`. Notice that in
+Now, once we recompile `A.scala` and detect that there's a new method defined in the `A` class we would
+need to consider whether this is relevant to the dependency of `B.scala` on `A.scala`. Notice that in
 `B.scala` we do not use `A.foo` (it didn't exist at the time `B.scala` was compiled) but we use
 `AOps.foo` and it's not immediately clear that `AOps.foo` has anything to do with `A.foo`. One would
 need to detect the fact that a call to `AOps.foo` as a result of implicit conversion `richA` that
 was inserted because we failed to find `foo` on `A` before.
 
-This kind of analysis gets us very quickly to implementation complexity of Scala's type checker and
+This kind of analysis gets us very quickly to the implementation complexity of Scala's type checker and
 is not feasible to implement in a general case.
 
 ##### Too much information to track
 
-All above assumed we actually have full information about structure of API and used methods
+All of the above assumed we actually have full information about the structure of the API and used methods
 preserved so we can make use of it. However, as described in
 [Hashing an API representation](#hashing-an-api-representation) we do not store the whole
 representation of the API but only its hash sum. Also, dependencies are tracked at source file
 level and not at class/method level.
 
-One could imagine reworking current design to track more information but it would be a very big
-undertake. Also, incremental compiler used to preserve a whole API structure but it switched to
-hashing due to infeasible memory requirements.
+One could imagine reworking the current design to track more information but it would be a very big
+undertaking. Also, the incremental compiler used to preserve the whole API structure but it switched to
+hashing due to the resulting infeasible memory requirements.
 
 #### Detection of irrelevant dependencies (name hashing)
 
-As we saw in previous chapter, the direct approach of tracking more information about what's being
-used in files becomes tricky very quickly. One would wish to come up with some simpler and less
-precise approach that still yields big improvements over existing implementation.
+As we saw in the previous chapter, the direct approach of tracking more information about what's being
+used in the source files becomes tricky very quickly. One would wish to come up with a simpler and less
+precise approach that would still yield big improvements over the existing implementation.
 
-The idea is to not track all used members and reason very precisely when given change to some
-members affects result of compilation of other files. We would track just used _simple names_
-instead and we would also track hash sums for all members with given simple name. The simple name
+The idea is to not track all the used members and reason very precisely about when a given change to some
+members affects the result of the compilation of other files. We would track just the used _simple names_
+instead and we would also track the hash sums for all members with the given simple name. The simple name
 means just an unqualified name of a term or a type.
 
-Let's see first how this simplified strategy addresses the problem with 
+Let's see first how this simplified strategy addresses the problem with the
 [enrichment pattern](#enrichment-pattern). We'll do that by simulating the name hashing algorithm.
 Let's start with the original code:
 
@@ -8028,7 +8805,7 @@ class B {
 }
 ```
 
-During compilation of those two files we'll extract the following information:
+During the compilation of those two files we'll extract the following information:
 
 ```
 usedNames("A.scala"): A
@@ -8038,12 +8815,12 @@ nameHashes("A.scala"): A -> ...
 nameHashes("B.scala"): B -> ..., AOps -> ..., foo -> ..., richA -> ..., bar -> ...
 ```
 
-The `usedNames` relation track all names mentioned in given source file. The `nameHashes` relation
-gives us a hash sum of groups of members that are put together in one bucket if they have the same
-simple name. In addition to information presented above we still track dependency of `B.scala` on
+The `usedNames` relation track all the names mentioned in the given source file. The `nameHashes` relation
+gives us a hash sum of the groups of members that are put together in one bucket if they have the same
+simple name. In addition to the information presented above we still track the dependency of `B.scala` on
 `A.scala`.
 
-Now, if we add `foo` method to `A` class:
+Now, if we add a `foo` method to `A` class:
 
 ```scala
 // A.scala
@@ -8059,39 +8836,39 @@ usedNames("A.scala"): A, foo
 nameHashes("A.scala"): A -> ..., foo -> ...
 ```
 
-The incremental compiler compares name hashes before and after the change and detects that the hash
-sum of `foo` name has changed (it's been added). Therefore, it looks at all source files that depend
-on `A.scala`, in our case it's just `B.scala`, and checks whether `foo` appears as used name. It
-does, therefore it recompiles `B.scala` as intendent.
+The incremental compiler compares the name hashes before and after the change and detects that the hash
+sum of `foo` has changed (it's been added). Therefore, it looks at all the source files that depend
+on `A.scala`, in our case it's just `B.scala`, and checks whether `foo` appears as a used name. It
+does, therefore it recompiles `B.scala` as intended.
 
-You can see now, that if we added other method to `A` like `xyz` then `B.scala` wouldn't be
-recompiled because nowhere in `B.scala` the name `xyz` is mentioned. Therefore, if you have
+You can see now, that if we added another method to `A` like `xyz` then `B.scala` wouldn't be
+recompiled because nowhere in `B.scala` is the name `xyz` mentioned. Therefore, if you have
 reasonably non-clashing names you should benefit from a lot of dependencies between source files
 marked as irrelevant.
 
-It's very nice that this simple, name-based heuristic manages to withstand "enrichment pattern"
-test. However,  name-hashing fails to pass other test of [inheritance](#inheritance). In order to
-address that problem, we'll need to have a closer look at dependencies introduced by inheritance vs
+It's very nice that this simple, name-based heuristic manages to withstand the "enrichment pattern"
+test. However, name-hashing fails to pass the other test of [inheritance](#inheritance). In order to
+address that problem, we'll need to take a closer look at the dependencies introduced by inheritance vs
 dependencies introduced by member references.
 
 #### Dependencies introduced by member reference and inheritance
 
-The core assumption behind name-hashing algorithm is that if a user adds/modifies/removes a member
-of a class (e.g. a method) then other results of compilation of classes won't be affected unless
-they are using that particular member. Inheritance with various override checks makes the whole
-situation much more complicated; if you combine it with mix-in composition that introduces a new
+The core assumption behind the name-hashing algorithm is that if a user adds/modifies/removes a member
+of a class (e.g. a method) then the results of compilation of other classes won't be affected unless
+they are using that particular member. Inheritance with its various override checks makes the whole
+situation much more complicated; if you combine it with mix-in composition that introduces new
 fields to classes inheriting from traits then you quickly realize that inheritance requires special
 handling.
 
 The idea is that for now we would switch back to the old scheme whenever inheritance is involved.
 Therefore, we track dependencies introduced by member reference separately from dependencies
-introduced by inheritance. All dependencies introduced by inheritance are _not_ a subject to name-
-hashing analysis so they are never marked as irrelevant.
+introduced by inheritance. All dependencies introduced by inheritance are _not_ subject to name-hashing
+analysis so they are never marked as irrelevant.
 
-The intuition behind dependency introduced by inheritance is very simple: it's a dependency a
-class/trait introduces by inheriting from other class/trait. All other dependencies are called
+The intuition behind the dependency introduced by inheritance is very simple: it's a dependency a
+class/trait introduces by inheriting from another class/trait. All other dependencies are called
 dependencies by member reference because they are introduced by referring (selecting) a member
-(method, type alis, inner class, val, etc.) from another class. Notice that in order to inherit from
+(method, type alias, inner class, val, etc.) from another class. Notice that in order to inherit from
 a class you need to refer to it so dependencies introduced by inheritance are a strict subset of
 member reference dependencies.
 
@@ -8127,13 +8904,13 @@ class Y {
 
 There are two things to notice:
 
-  1. `X` does not depend on `B` by inheritance because `B` is passed as type parameter to `D`; we
+  1. `X` does not depend on `B` by inheritance because `B` is passed as a type parameter to `D`; we
      consider only types that appear as parents to `X`
-  2. `Y` does depend on `A` even if there's no explicit mention of `A` in the source file; we
+  2. `Y` _does_ depend on `A` even if there's no explicit mention of `A` in the source file; we
      select a method `foo` defined in `A` and that's enough to introduce a dependency
 
-To sum it up, the way we want to handle inheritance and problems it introduces is to track all
-dependencies introduced by inheritance separately and have much more strict way of invalidating
+To sum it up, the way we want to handle inheritance and the problems it introduces is to track all
+dependencies introduced by inheritance separately and have a much more strict way of invalidating
 dependencies. Essentially, whenever there's a dependency by inheritance it will react to any
 (even minor) change in parent types.
 
@@ -8141,7 +8918,7 @@ dependencies. Essentially, whenever there's a dependency by inheritance it will 
 
 One thing we skimmed over so far is how name hashes are actually computed.
 
-As mentioned before, all definitions are grouped together by simple name and then hashed as one
+As mentioned before, all definitions are grouped together by their simple name and then hashed as one
 bucket. If a definition (for example a class) contains other definition then those nested
 definitions do _not_ contribute to a hash sum. The nested definitions will contribute to hashes of
 buckets selected by their name.
@@ -8162,7 +8939,7 @@ just to illustrate the ideas; this list is not intended to be complete.
 3.  Calls to `super.methodName` in traits are resolved to calls to an
     abstract method called `fullyQualifiedTraitName$$super$methodName`;
     such methods only exist if they are used. Hence, adding the first
-    call to super.methodName for a specific methodName changes the
+    call to `super.methodName` for a specific method name changes the
     interface. At present, this is not yet handled—see [#466][466].
 4.  `sealed` hierarchies of case classes allow to check exhaustiveness
     of pattern matching. Hence pattern matches using case classes must
@@ -8174,14 +8951,14 @@ just to illustrate the ideas; this list is not intended to be complete.
 
 #### Debugging an interface representation
 
-If you see spurious incremental recompilations or you want understand
+If you see spurious incremental recompilations or you want to understand
 what changes to an extracted interface cause incremental recompilation
 then sbt 0.13 has the right tools for that.
 
 In order to debug the interface representation and its changes as you
 modify and recompile source code you need to do two things:
 
-1.  Enable incremental compiler's apiDebug option.
+1.  Enable the incremental compiler's `apiDebug` option.
 2.  Add [diff-utils library](https://code.google.com/p/java-diff-utils/) to sbt's
     classpath. Check documentation of `sbt.extraClasspath` system
     property in the Command-Line-Reference.
@@ -8189,16 +8966,16 @@ modify and recompile source code you need to do two things:
 > **warning**
 >
 > Enabling the `apiDebug` option increases significantly
-> memory consumption and degrades performance of the incremental
+> the memory consumption and degrades the performance of the incremental
 > compiler. The underlying reason is that in order to produce
 > meaningful debugging information about interface differences
-> incremental compiler has to retain the full representation of the
-> interface instead of just hash sum as it does by default.
+> the incremental compiler has to retain the full representation of the
+> interface instead of just the hash sum as it does by default.
 >
-> Keep this option enabled when you are debugging incremental compiler
+> Keep this option enabled when you are debugging the incremental compiler
 > problem only.
 
-Below is complete transcript which shows how to enable interface
+Below is a complete transcript which shows how to enable interface
 debugging in your project. First, we download the `diffutils` jar and
 pass it to sbt:
 
@@ -8230,7 +9007,7 @@ class A {
 }
 ```
 
-and run `compile` task again. Now if you run `last compile` you should
+and run `compile` again. Now if you run `last compile` you should
 see the following lines in the debugging log
 
 ``` 
@@ -8250,7 +9027,7 @@ see the following lines in the debugging log
 [debug]  }
 ```
 
-You can see an unified diff of two interface textual represetantions. As
+You can see a unified diff of the two interface textual represetantions. As
 you can see, the incremental compiler detected a change to the return
 type of `b` method.
 
@@ -8260,7 +9037,7 @@ This section explains why relying on type inference for return types of
 public methods is not always appropriate. However this is an important
 design issue, so we cannot give fixed rules. Moreover, this change is
 often invasive, and reducing compilation times is not often a good
-enough motivation. That is why we discuss also some of the implications
+enough motivation. That is also why we discuss some of the implications
 from the point of view of binary compatibility and software engineering.
 
 Consider the following source file `A.scala`:
@@ -8276,7 +9053,7 @@ object A {
 Let us now consider the public interface of trait `A`. Note that the
 return type of method `openFiles` is not specified explicitly, but
 computed by type inference to be `List[FileWriter]`. Suppose that after
-writing this source code, we introduce client code and then modify
+writing this source code, we introduce some client code and then modify
 `A.scala` as follows:
 
 ```scala
@@ -8287,18 +9064,18 @@ object A {
 }
 ```
 
-Type inference will now compute as result type `Vector[BufferedWriter]`;
-in other words, changing the implementation lead to a change of the
+Type inference will now compute the result type as `Vector[BufferedWriter]`;
+in other words, changing the implementation lead to a change to the
 public interface, with two undesirable consequences:
 
-1.  Concerning our topic, client code needs to be recompiled, since
+1.  Concerning our topic, the client code needs to be recompiled, since
     changing the return type of a method, in the JVM, is a
     binary-incompatible interface change.
 2.  If our component is a released library, using our new version
     requires recompiling all client code, changing the version number,
     and so on. Often not good, if you distribute a library where binary
     compatibility becomes an issue.
-3.  More in general, client code might now even be invalid. The
+3.  More in general, the client code might now even be invalid. The
     following code will for instance become invalid after the change:
 
 ```scala
@@ -8750,7 +9527,7 @@ sbt needs Scala jars to run itself since it is written in Scala. sbt
 uses that same version of Scala to compile the build definitions that
 you write for your project because they use sbt APIs. This version of
 Scala is fixed for a specific sbt release and cannot be changed. For sbt
-1.0.0-M4, this version is Scala 2.11.8. Because this Scala
+1.0.0-M4, this version is Scala 2.12.1. Because this Scala
 version is needed before sbt runs, the repositories used to retrieve
 this version are configured in the sbt
 [launcher][Sbt-Launcher].
@@ -9274,21 +10051,21 @@ following build definition. `build.sbt`:
 
 ```scala
 lazy val commonSettings = Seq(
-  scalaVersion := "2.11.8",
+  scalaVersion := "2.12.1",
   organization := "com.example"
 )
 lazy val scalaReflect = Def.setting { "org.scala-lang" % "scala-reflect" % scalaVersion.value }
 
-lazy val core = (project in file("core")).
-  dependsOn(macroSub).
-  settings(commonSettings: _*).
-  settings(
+lazy val core = (project in file("core"))
+  .dependsOn(macroSub)
+  .settings(
+    commonSettings,
     // other settings here
   )
 
-lazy val macroSub = (project in file("macro")).
-  settings(commonSettings: _*).
-  settings(
+lazy val macroSub = (project in file("macro"))
+  .settings(
+    commonSettings,
     libraryDependencies += scalaReflect.value
     // other settings here
   )
@@ -9366,29 +10143,29 @@ would look like:
 
 ```scala
 lazy val commonSettings = Seq(
-  scalaVersion := "2.11.8",
+  scalaVersion := "2.12.1",
   organization := "com.example"
 )
 lazy val scalaReflect = Def.setting { "org.scala-lang" % "scala-reflect" % scalaVersion.value }
 
-lazy val core = (project in file("core")).
-  dependsOn(macroSub, util).
-  settings(commonSettings: _*).
-  settings(
+lazy val core = (project in file("core"))
+  .dependsOn(macroSub, util)
+  .settings(
+    commonSettings,
     // other settings here
   )
 
-lazy val macroSub = (project in file("macro")).
-  dependsOn(util).
-  settings(commonSettings: _*).
-  settings(
+lazy val macroSub = (project in file("macro"))
+  .dependsOn(util)
+  .settings(
+    commonSettings,
     libraryDependencies += scalaReflect.value
     // other settings here
   )
 
-lazy util = (project in file("util")).
-  settings(commonSettings: _*).
-  settings(
+lazy util = (project in file("util"))
+  .settings(
+    commonSettings,
     // other setting here
   )
 ```
@@ -9399,14 +10176,16 @@ Code in `util/src/main/scala/` is available for both the `macroSub` and
 ### Distribution
 
 To include the macro code with the core code, add the binary and source
-mappings from the macro subproject to the core project. For example, the
-`core` Project definition above would now look like:
+mappings from the macro subproject to the core project. And also
+macro subproject should be removed from core project dependency in
+publishing. For example, the `core` Project definition above would now
+look like:
 
 ```scala
-lazy val core = (project in file("core")).
-  dependsOn(macroSub).
-  settings(commonSettings: _*).
-  settings(
+lazy val core = (project in file("core"))
+  .dependsOn(macroSub % "compile-internal, test-internal")
+  .settings(
+    commonSettings,
     // include the macro classes and resources in the main jar
     mappings in (Compile, packageBin) ++= mappings.in(macroSub, Compile, packageBin).value,
     // include the macro sources in the main source jar
@@ -9418,9 +10197,9 @@ You may wish to disable publishing the macro implementation. This is
 done by overriding `publish` and `publishLocal` to do nothing:
 
 ```scala
-lazy val macroSub = (project in file("macro")).
-  settings(commonSettings: _*).
-  settings(
+lazy val macroSub = (project in file("macro"))
+  .settings(
+    commonSettings,
     libraryDependencies += scalaReflect.value,
     publish := {},
     publishLocal := {}
@@ -10260,15 +11039,15 @@ The resources may be accessed from tests by using the `getResource`
 methods of `java.lang.Class` or `java.lang.ClassLoader`.
 
 The main Scala testing frameworks (
-[specs2](http://specs2.org/),
-[ScalaCheck](http://scalacheck.org/), and
-[ScalaTest](http://scalatest.org/)) provide an implementation of the
+[ScalaCheck](http://scalacheck.org/),
+[ScalaTest](http://scalatest.org/), and
+[specs2](http://specs2.org/)) provide an implementation of the
 common test interface and only need to be added to the classpath to work
 with sbt. For example, ScalaCheck may be used by declaring it as a
 [managed dependency][Library-Dependencies]:
 
 ```scala
-lazy val scalacheck = "org.scalacheck" %% "scalacheck" % "1.12.0"
+lazy val scalacheck = "org.scalacheck" %% "scalacheck" % "1.13.4"
 libraryDependencies += scalacheck % Test
 ```
 
@@ -10492,27 +11271,27 @@ The following full build configuration demonstrates integration tests.
 
 ```scala
 lazy val commonSettings = Seq(
-  scalaVersion := "2.11.8",
+  scalaVersion := "2.12.1",
   organization := "com.example"
 )
-lazy val specs2core = "org.specs2" %% "specs2-core" % "2.4.14"
+lazy val scalatest = "org.scalatest" %% "scalatest" % "3.0.1"
 
-lazy val root = (project in file(".")).
-  configs(IntegrationTest).
-  settings(commonSettings: _*).
-  settings(Defaults.itSettings: _*).
-  settings(
-    libraryDependencies += specs2core % "it,test"
+lazy val root = (project in file("."))
+  .configs(IntegrationTest)
+  .settings(
+    commonSettings,
+    Defaults.itSettings,
+    libraryDependencies += scalatest % "it,test"
     // other settings here
   )
 ```
 
 -   `configs(IntegrationTest)` adds the predefined integration test
     configuration. This configuration is referred to by the name it.
--   `settings(Defaults.itSettings : _*)` adds compilation, packaging,
+-   `settings(Defaults.itSettings)` adds compilation, packaging,
     and testing actions and settings in the IntegrationTest
     configuration.
--   `settings(libraryDependencies += specs2core % "it,test")` adds specs2 to both the
+-   `settings(libraryDependencies += scalatest % "it,test")` adds scalatest to both the
     standard test configuration and the integration test configuration
     it. To define a dependency only for integration tests, use "it" as
     the configuration instead of "it,test".
@@ -10562,18 +11341,18 @@ The previous example may be generalized to a custom test configuration.
 
 ```scala
 lazy val commonSettings = Seq(
-  scalaVersion := "2.11.8",
+  scalaVersion := "2.12.1",
   organization := "com.example"
 )
-lazy val specs2core = "org.specs2" %% "specs2-core" % "2.4.14"
+lazy val scalatest = "org.scalatest" %% "scalatest" % "3.0.1"
 lazy val FunTest = config("fun") extend(Test)
 
-lazy val root = (project in file(".")).
-  configs(FunTest).
-  settings(commonSettings: _*).
-  settings(inConfig(FunTest)(Defaults.testSettings): _*).
-  settings(
-    libraryDependencies += specs2core % FunTest
+lazy val root = (project in file("."))
+  .configs(FunTest)
+  .settings(
+    commonSettings,
+    inConfig(FunTest)(Defaults.testSettings),
+    libraryDependencies += scalatest % FunTest
     // other settings here
   )
 ```
@@ -10589,7 +11368,7 @@ The `extend(Test)` part means to delegate to `Test` for undefined
 new test configuration is:
 
 ```scala
-settings(inConfig(FunTest)(Defaults.testSettings): _*)
+settings(inConfig(FunTest)(Defaults.testSettings))
 ```
 
 This says to add test and settings tasks in the `FunTest` configuration.
@@ -10621,21 +11400,21 @@ However, different tests are run depending on the configuration.
 
 ```scala
 lazy val commonSettings = Seq(
-  scalaVersion := "2.11.8",
+  scalaVersion := "2.12.1",
   organization := "com.example"
 )
-lazy val specs2core = "org.specs2" %% "specs2-core" % "2.4.14"
+lazy val scalatest = "org.scalatest" %% "scalatest" % "3.0.1"
 lazy val FunTest = config("fun") extend(Test)
 
 def itFilter(name: String): Boolean = name endsWith "ITest"
 def unitFilter(name: String): Boolean = (name endsWith "Test") && !itFilter(name)
 
-lazy val root = (project in file(".")).
-  configs(FunTest).
-  settings(commonSettings: _*).
-  settings(inConfig(FunTest)(Defaults.testTasks): _*).
-  settings(
-    libraryDependencies += specs2core % FunTest,
+lazy val root = (project in file("."))
+  .configs(FunTest)
+  .settings(
+    commonSettings,
+    inConfig(FunTest)(Defaults.testTasks),
+    libraryDependencies += scalatest % FunTest,
     testOptions in Test := Seq(Tests.Filter(unitFilter)),
     testOptions in FunTest := Seq(Tests.Filter(itFilter))
     // other settings here
@@ -10901,8 +11680,8 @@ full build configuration, usage looks like:
 
 ```scala
 ...
-lazy val proj = Project(...).
-  settings( addArtifact(...).settings : _* )
+lazy val proj = Project(...)
+  .settings( addArtifact(...).settings )
 ...
 ```
 
@@ -11840,7 +12619,7 @@ be able to resolve sbt plugins.
 The final resolver is `my-maven-proxy-releases`. This repository is a
 proxy for all standard maven repositories, including maven central.
 
-This repositories file is all that's required to use a proxy repository.  These repositories will get included first in any sbt build, however you can add some addtiionaly configuration to force the use of the proxy repository instead of other configurations.
+This repositories file is all that's required to use a proxy repository.  These repositories will get included first in any sbt build, however you can add some additional configuration to force the use of the proxy repository instead of other configurations.
 
 #### Launcher Script
 
@@ -12497,13 +13276,13 @@ updateOptions := updateOptions.value.withCachedResolution(true)
 
 ### Dependency as a graph
 
-A project declares its own library dependency using `libaryDependencies` setting. The libraries you added also bring in their transitive dependencies. For example, your project may depend on dispatch-core 0.11.2; dispatch-core 0.11.2 depends on async-http-client 1.8.10; async-http-client 1.8.10 depends on netty 3.9.2.Final, and so forth. If we think of each library to be a node with arrows going out to dependent nodes, we can think of the entire dependencies to be a graph -- specifically a [directed acyclic graph](http://en.wikipedia.org/wiki/Directed_acyclic_graph).
+A project declares its own library dependency using `libraryDependencies` setting. The libraries you added also bring in their transitive dependencies. For example, your project may depend on dispatch-core 0.11.2; dispatch-core 0.11.2 depends on async-http-client 1.8.10; async-http-client 1.8.10 depends on netty 3.9.2.Final, and so forth. If we think of each library to be a node with arrows going out to dependent nodes, we can think of the entire dependencies to be a graph -- specifically a [directed acyclic graph](http://en.wikipedia.org/wiki/Directed_acyclic_graph).
 
 This graph-like structure, which was adopted from Apache Ivy, allows us to define [override rules and exclusions][Library-Management] transitively, but as the number of the node increases, the time it takes to resolve dependencies grows significantly. See [Motivation](#motivation) section later in this page for the full description.
 
 ### Cached resolution
 
-Cached resolution feature is akin to incremental compilation, which only recompiles the sources that have been changed since the last `compile`. Unlike Scala compiler, Ivy does not have the concept of separate compilation, so that needed to be implemented.
+Cached resolution feature is akin to incremental compilation, which only recompiles the sources that have been changed since the last `compile`. Unlike the Scala compiler, Ivy does not have the concept of separate compilation, so that needed to be implemented.
 
 Instead of resolving the full dependency graph, cached resolution feature creates  minigraphs -- one for each direct dependency appearing in all related subprojects. These minigraphs are resolved using Ivy's resolution engine, and the result is stored locally under `~/.sbt/1.0.0-M4/dependency/` (or what's specified by `sbt.dependency.base` flag) shared across all builds. After all minigraphs are resolved, they are stitched together by applying the conflict resolution algorithm (typically picking the latest version).
 
@@ -12516,7 +13295,7 @@ The actual speedup will depend case by case, but you should see significant spee
 
 ### Caveats and known issues
 
-Cached resolution is an **experimental** feature, and you might run into some issues. When you see them please report to Github Issue or sbt-dev list.
+Cached resolution is an **experimental** feature, and you might run into some issues. When you see them please report to GitHub Issue or sbt-dev list.
 
 #### First runs
 
@@ -12543,7 +13322,7 @@ Therefore, if you have any SNAPSHOT in your graph, your exeperience may degrade.
 
 ### Motivation
 
-sbt internally uses Apache Ivy to resolve library dependencies. While sbt has benefited from not having to reinvent depenendency resolution engine all these years, we are increasingly seeing scalability challenges especially for projects with both multiple subprojects and large dependency graph. There are several factors involved in sbt's resolution scalability:
+sbt internally uses Apache Ivy to resolve library dependencies. While sbt has benefited from not having to reinvent its own dependency resolution engine all these years, we are increasingly seeing scalability challenges especially for projects with both multiple subprojects and large dependency graph. There are several factors involved in sbt's resolution scalability:
 
 - Number of transitive nodes (libraries) in the graph
 - Exclusion and override rules
@@ -12742,7 +13521,7 @@ postfix methods have lower precedence than infix methods.
     according to the specific character it starts with. See the Scala
     specification for details.)
 
-Therefore, the the previous example is equivalent to the following:
+Therefore, the previous example is equivalent to the following:
 
 
 ```scala
@@ -13124,8 +13903,8 @@ To demonstrate the sequential task, let's create a custom task called `compilech
 ```scala
 lazy val compilecheck = taskKey[Unit]("compile and then scalastyle")
 
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     compilecheck in Compile := Def.sequential(
       compile in Compile,
       (scalastyle in Compile).toTask("")
@@ -13400,9 +14179,9 @@ then echoes the arguments passed to it on their own line.
 
 ```scala
 demo := {
-    // get the result of parsing
+  // get the result of parsing
   val args: Seq[String] = spaceDelimited("<arg>").parsed
-    // Here, we also use the value of the `scalaVersion` setting
+  // Here, we also use the value of the `scalaVersion` setting
   println("The current Scala version is " + scalaVersion.value)
   println("The arguments to demo were:")
   args foreach println
@@ -13450,7 +14229,7 @@ Def.setting {
 This Parser definition will produce a value of type `(String,String)`.
 The input syntax defined isn't very flexible; it is just a
 demonstration. It will produce one of the following values for a
-successful parse (assuming the current Scala version is 2.11.8,
+successful parse (assuming the current Scala version is 2.12.1,
 the current sbt version is 1.0.0-M4, and there are 3 commands left to
 run):
 
@@ -13617,7 +14396,7 @@ input. In this section, applying input produces a `Task`. The `toTask`
 method on `Initialize[InputTask[T]]` accepts the `String` input to apply
 and produces a task that can be used normally. For example, the
 following defines a plain task `runFixed` that can be used by other
-tasks or run directly without providing any input, :
+tasks or run directly without providing any input:
 
 ```scala
 lazy val runFixed = taskKey[Unit]("A task that hard codes the values to `run`")
@@ -13642,7 +14421,7 @@ Done!
 
 Each call to `toTask` generates a new task, but each task is configured
 the same as the original `InputTask` (in this case, `run`) but with
-different input applied. For example, :
+different input applied. For example:
 
 ```scala
 lazy val runFixed2 = taskKey[Unit]("A task that hard codes the values to `run`")
@@ -13794,12 +14573,12 @@ Here's `build.sbt`:
 import CommandExample._
 
 lazy val commonSettings = Seq(
-  scalaVersion := "2.11.8",
+  scalaVersion := "2.12.1",
 )
 
-lazy val root = (project in file(".")).
-  settings(commonSettings: _*).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
+    commonSettings,
     commands ++= Seq(hello, helloAll, failIfTrue, changeColor, printState)
   )
 ```
@@ -14057,6 +14836,37 @@ should generate an error in the future), but typically the outer most
 token definition will be used.
 
 
+### Dependent parsers
+
+Sometimes a parser must analyze some data and then more data needs to be parsed, 
+and it is dependent on the previous one.  
+The key for obtaining this behaviour is to use the `flatMap` function.
+
+As an example, it will shown how to select several items from a list of valid ones 
+with completion, but no duplicates are possible.  A space is used to separate the 
+different items.
+
+
+```scala
+def select1(items: Iterable[String]) =
+  token(Space ~> StringBasic.examples(FixedSetExamples(items)))
+
+def selectSome(items: Seq[String]): Parser[Seq[String]] = {
+   select1(items).flatMap { v ⇒
+   val remaining = items filter { _ != v }
+   if (remaining.size == 0)
+     success(v :: Nil)
+   else
+     selectSome(remaining).?.map(v +: _.getOrElse(Seq()))
+ } 
+```
+ 
+ As you can see, the `flatMap` function provides the previous value.  With this info, a new
+ parser is constructed for the remaining items.  The `map` combinator is also used in order
+ to transform the output of the parser.
+ 
+ The parser is called recursively, until it is found the trivial case of no possible choices.
+
   [Commands]: Commands.html
 
 State and actions
@@ -14281,7 +15091,7 @@ myTask := ... state.value ...
 ```
 
 
-  [More-About-Settings]: More-About-Settings.html
+  [Task-Graph]: Task-Graph.html
   [Tasks]: Tasks.html
   [Mapping-Files]: Mapping-Files.html
 
@@ -14290,7 +15100,7 @@ Tasks/Settings: Motivation
 
 This page motivates the task and settings system. You should already
 know how to use tasks and settings, which are described in the
-[getting started guide][More-About-Settings] and on
+[getting started guide][Task-Graph] and on
 the [Tasks][Tasks] page.
 
 An important aspect of the task system is to combine two common, related
@@ -14604,7 +15414,7 @@ declared for selected projects. For example, a plugin might add a
 `proguard` task and associated (overridable) settings. Finally, a plugin
 can define new commands (via the `commands` setting).
 
-sbt 0.13.5 intoduces auto plugin with improved dependency management
+sbt 0.13.5 introduces auto plugins, with improved dependency management
 among the plugins and explicitly scoped auto importing.
 Going forward, our recommendation is to migrate to the auto plugins.
 The [Plugins Best Practices][Plugins-Best-Practices] page describes
@@ -14634,14 +15444,14 @@ libraryDependencies += "org.example" % "utilities" % "1.3"
 resolvers += "Example Plugin Repository" at "https://example.org/repo/"
 ```
 
-Many of the auto plugins automatically adds settings into projects,
+Many of the auto plugins automatically add settings into projects,
 however, some may require explicit enablement. Here's an example:
 
 ```scala
-lazy val util = (project in file("util")).
-  enablePlugins(FooPlugin, BarPlugin).
-  disablePlugins(plugins.IvyPlugin).
-  settings(
+lazy val util = (project in file("util"))
+  .enablePlugins(FooPlugin, BarPlugin)
+  .disablePlugins(plugins.IvyPlugin)
+  .settings(
     name := "hello-util"
   )
 ```
@@ -14683,7 +15493,7 @@ the build definition project like a normal project. `reload return` changes back
 to the original build. Any session settings for the plugin definition
 project that have not been saved are dropped.
 
-An auto plugin is a module that defines settings to automatically inject to
+An auto plugin is a module that defines settings to automatically inject into
 projects. In addition an auto plugin provides the following feature:
 
 - Automatically import selective names to `.sbt` files and the `eval` and `set` commands.
@@ -14703,8 +15513,8 @@ This becomes complicated as the number of plugins increase within an application
 Suppose we have the `SbtLessPlugin` and the `SbtCoffeeScriptPlugin`, which in turn depends on the `SbtJsTaskPlugin`, `SbtWebPlugin`, and `JvmPlugin`. Instead of manually activating all of these plugins, a project can just activate the `SbtLessPlugin` and `SbtCoffeeScriptPlugin` like this:
 
 ```scala
-lazy val root = (project in file(".")).
-  enablePlugins(SbtLessPlugin, SbtCoffeeScriptPlugin)
+lazy val root = (project in file("."))
+  .enablePlugins(SbtLessPlugin, SbtCoffeeScriptPlugin)
 ```
 
 This will pull in the right setting sequence from the plugins in the right order.  The key notion here is you declare the plugins you want, and sbt can fill in the gap.
@@ -14722,7 +15532,7 @@ above for per-project plugins.
 ### Creating an auto plugin
 
 A minimal sbt plugin is a Scala library that is built against the version of
-Scala that sbt runs (currently, 2.11.8) or a Java library.
+Scala that sbt runs (currently, 2.12.1) or a Java library.
 Nothing special needs to be done for this type of library.
 A more typical plugin will provide sbt tasks, commands, or settings.
 This kind of plugin may provide these settings
@@ -14761,7 +15571,7 @@ object HelloPlugin extends AutoPlugin {
 }
 ```
 
-This example demonstrates how to take a Command (here, `helloCommand`) and
+This example demonstrates how to take a `Command` (here, `helloCommand`) and
 distribute it in a plugin. Note that multiple commands can be included
 in one plugin (for example, use `commands ++= Seq(a,b)`). See
 [Commands][Commands]
@@ -14851,8 +15661,8 @@ object SbtLessPlugin extends AutoPlugin {
 As it turns out, `PlayScala` plugin (in case you didn't know, the Play framework is an sbt plugin) lists `SbtJsTaskPlugin` as one of it required plugins. So, if we define a `build.sbt` with:
 
 ```scala
-lazy val root = (project in file(".")).
-  enablePlugins(PlayScala)
+lazy val root = (project in file("."))
+  .enablePlugins(PlayScala)
 ```
 
 then the setting sequence from `SbtLessPlugin` will be automatically appended somewhere after the settings from `PlayScala`.
@@ -14913,6 +15723,7 @@ organization := "org.example"
 package sbtobfuscate
 
 import sbt._
+import sbt.Keys._
 
 object ObfuscatePlugin extends AutoPlugin {
   // by defining autoImport, the settings are automatically imported into user's `*.sbt`
@@ -14926,7 +15737,7 @@ object ObfuscatePlugin extends AutoPlugin {
       obfuscate := {
         Obfuscate(sources.value, (obfuscateLiterals in obfuscate).value)
       },
-      obfuscateLiterals in obfuscate := false                
+      obfuscateLiterals in obfuscate := false
     )
   }
 
@@ -14943,7 +15754,10 @@ object ObfuscatePlugin extends AutoPlugin {
 }
 
 object Obfuscate {
-    def apply(sources: Seq[File]): Seq[File] := sources
+  def apply(sources: Seq[File], obfuscateLiterals: Boolean): Seq[File] = {
+    // TODO obfuscate stuff!
+    sources
+  }
 }
 ```
 
@@ -15376,8 +16190,8 @@ settings may be reused:
 ```scala
 import sbtobfuscate.ObfuscatePlugin
 
-lazy val app = (project in file("app")).
-  settings(inConfig(Test)(ObfuscatePlugin.baseObfuscateSettings): _*)
+lazy val app = (project in file("app"))
+  .settings(inConfig(Test)(ObfuscatePlugin.baseObfuscateSettings))
 ```
 
 #### Using a "main" task scope for settings
@@ -15445,7 +16259,7 @@ object MyPlugin extends AutoPlugin {
 Setting up Travis CI with sbt
 -----------------------------
 
-[Travis CI][Travis] is a hosted continuous integration service for open source and private projects. Many of the OSS projects hosted on Github uses [open source edition of Travis CI][Travis-org] to validate pushes and pull requests. We'll discuss some of the best practices setting up Travis CI.
+[Travis CI][Travis] is a hosted continuous integration service for open source and private projects. Many of the OSS projects hosted on GitHub uses [open source edition of Travis CI][Travis-org] to validate pushes and pull requests. We'll discuss some of the best practices setting up Travis CI.
 
 ### Set `project/build.properties`
 
@@ -15474,7 +16288,7 @@ language: scala
 
 scala:
    - 2.10.4
-   - 2.11.8
+   - 2.12.1
 ```
 
 By default Travis CI executes `sbt ++$TRAVIS_SCALA_VERSION test`.
@@ -15485,7 +16299,7 @@ language: scala
 
 scala:
    - 2.10.4
-   - 2.11.8
+   - 2.12.1
 
 script:
    - sbt ++$TRAVIS_SCALA_VERSION test
@@ -15520,7 +16334,7 @@ $ export SBT_OPTS=@/etc/sbt/sbtopts
 The default [sbt][cookbook-sbt] and [JVM][cookbook-jvm] options are set by Travis CI people,
 and it should work for most cases.
 If you do decide to customize it, read what they currently use as the defaults first.
-Because Travis is already using the environment varible `JVM_OPTS`, we can instead create a file `travis/jvmopts`:
+Because Travis is already using the environment variable `JVM_OPTS`, we can instead create a file `travis/jvmopts`:
 
 ```
 -Dfile.encoding=UTF8
@@ -15582,9 +16396,9 @@ Again, let's check the Travis log to see if the flags are taking effect:
 
 **Note**: This duplicates the `-Xms` flag as intended, which might not the best thing to do.
 
-### (Experimental) Reusing Ivy cache
+### Caching
 
-In late 2014, thanks to Travis CI members sending pull requests on Github, we learned that Ivy cache can be shared across the Travis builds.
+In late 2014, thanks to Travis CI members sending pull requests on GitHub, we learned that Ivy cache can be shared across the Travis builds.
 The public availability of [caching][Travis-caching] is part of the benefit for trying the new [container-based infrastructure][Travis-container].
 
 > Jobs running on container-based infrastructure:
@@ -15607,16 +16421,16 @@ Next, we can put `cache` section as follows:
 cache:
   directories:
     - $HOME/.ivy2/cache
-    - $HOME/.sbt/boot/
+    - $HOME/.sbt
 ```
 
 Finally, the following a few lines of cleanup script are added:
 
 ```yml
 before_cache:
-  # Tricks to avoid unnecessary cache updates
-  - find $HOME/.ivy2 -name "ivydata-*.properties" -delete
-  - find $HOME/.sbt -name "*.lock" -delete
+  # Cleanup the cached directories to avoid unnecessary cache updates
+  - find $HOME/.ivy2/cache -name "ivydata-*.properties" -print -delete
+  - find $HOME/.sbt        -name "*.lock"               -print -delete
 ```
 
 With the above changes combined Travis CI will tar up the cached directories and uploads them to Amazon S3.
@@ -15633,7 +16447,7 @@ language: scala
 
 scala:
    - 2.10.4
-   - 2.11.8
+   - 2.12.1
 
 script:
    - sbt ++$TRAVIS_SCALA_VERSION test
@@ -15773,7 +16587,7 @@ Let's talk about testing. Once you write a plugin, it turns into a long-term thi
 
 ### scripted test framework
 
-sbt comes with scripted test framework, which let's you script a build scenario. It was written to test sbt itself on complex scenarios -- such as change detection and partial compilation:
+sbt comes with scripted test framework, which lets you script a build scenario. It was written to test sbt itself on complex scenarios -- such as change detection and partial compilation:
 
 > Now, consider what happens if you were to delete B.scala but do not update A.scala. When you recompile, you should get an error because B no longer exists for A to reference.
 > [... (really complicated stuff)]
@@ -15810,8 +16624,8 @@ Make dir structure `src/sbt-test/<test-group>/<test-name>`. For starters, try so
 Now ready? Create an initial build in `simple`. Like a real build using your plugin. I'm sure you already have several of them to test manually. Here's an example `build.sbt`:
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     version := "0.1",
     scalaVersion := "2.10.6",
     assemblyJarName in assembly := "foo.jar"
@@ -15895,8 +16709,8 @@ The file commands are great, but not nearly enough because none of them test the
 For my hello project, I'd like to check if the resulting jar prints out "hello". I can take advantage of `sbt.Process` to run the jar. To express a failure, just throw an error. Here's `build.sbt`:
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     version := "0.1",
     scalaVersion := "2.10.6",
     assemblyJarName in assembly := "foo.jar",
@@ -15977,6 +16791,139 @@ $ copy-file changes/A.scala A.scala
 [xsbt-web-plugin][xsbt-web-plugin] and [sbt-assembly][sbt-assembly] have some scripted tests too.
 
 That's it! Let me know about your experience in testing plugins!
+
+
+  [giter8]: http://www.foundweekends.org/giter8/
+  [foundweekends]: http://www.foundweekends.org/
+  [CC0]: https://creativecommons.org/publicdomain/zero/1.0/
+
+sbt new and Templates
+---------------------
+
+sbt 0.13.13 adds a new command called new, to create new build definitions from a template.
+The `new` command is extensible via a mechanism called the [template resolver](#Template+Resolver).
+
+### Trying new command
+
+First, you need sbt's launcher version 0.13.13 or above.
+Normally the exact version for the `sbt` launcher does not matter
+because it will use the version specified by `sbt.version` in `project/build.properties`;
+however for new sbt's launcher 0.13.13 or above is required as the command functions without a `project/build.properties` present.
+
+Next, run:
+
+```
+$ sbt new scala/scala-seed.g8
+....
+name [hello]:
+
+Template applied in ./hello
+```
+
+This ran the template [scala/scala-seed.g8](https://github.com/scala/scala-seed.g8) using [Giter8][giter8], prompted for values for "name" (which has a default value of "hello", which we accepted hitting `[Enter]`), and created a build under `./hello`.
+
+`scala-seed` is the official template for a "minimal" Scala project, but it's definitely not the only one out there. We expect other templates to emerge for other purposes, e.g. web or backend applications. 
+
+### Giter8 support
+
+[Giter8][giter8] is a templating project originally started by Nathan Hamblen in 2010, and now maintained by the [foundweekends][foundweekends] project.
+The unique aspect of Giter8 is that it uses GitHub (or any other git repository) to host the templates, so it allows anyone to participate in template creation.
+
+sbt provides out-of-the-box support for Giter8 templates by shipping with a template resolver for Giter8.
+
+#### How to create a Giter8 template
+
+See [Making your own templates](http://www.foundweekends.org/giter8/template.html) for the details on how to create a new Giter8 template.
+
+```
+$ sbt new foundweekends/giter8.g8
+```
+
+#### Use CC0 1.0 for template licensing
+
+We recommend licensing software templates under [CC0 1.0][CC0],
+which waives all copyrights and related rights, similar to the "public domain."
+
+If you reside in a country covered by the Berne Convention, such as the US,
+copyright will arise automatically without registration.
+Thus, people won't have legal right to use your template if you do not
+declare the terms of license.
+The tricky thing is that even permissive licenses such as MIT License and Apache License will require attribution to your template in the template user's software.
+To remove all claims to the templated snippets, distribute it under CC0, which is an international equivalent to public domain.
+
+```
+License
+-------
+Written in <YEAR> by <AUTHOR NAME> <AUTHOR E-MAIL ADDRESS>
+[other author/contributor lines as appropriate]
+To the extent possible under law, the author(s) have dedicated all copyright and related and neighboring rights to this software to the public domain worldwide. This software is distributed without any warranty.
+You should have received a copy of the CC0 Public Domain Dedication along with this software. If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
+```
+
+### How to extend sbt new
+
+The rest of this page explains how to extend the `sbt new` command
+to provide support for something other than Giter8 templates.
+You can skip this section if you're not interested in extending `new`.
+
+#### Template Resolver
+
+A template resolver is a partial function that looks at the arguments
+after `sbt new` and determines whether it can resolve to a particular template. This is analogous to `resolvers` resolving a `ModuleID` from the Internet.
+
+The `Giter8TemplateResolver` takes the first argument that does not start with a hyphen (`-`), and checks whether it looks like
+a GitHub repo or a git repo that ends in ".g8".
+If it matches one of the patterns, it will pass the arguments to Giter8 to process.
+
+To create your own template resolver, create a library that has `template-resolver` as a dependency:
+
+```scala
+val templateResolverApi = "org.scala-sbt" % "template-resolver" % "0.1"
+```
+
+and extend `TemplateResolver`, which is defined as:
+
+```java
+package sbt.template;
+
+/** A way of specifying template resolver.
+ */
+public interface TemplateResolver {
+  /** Returns true if this resolver can resolve the given argument.
+   */
+  public boolean isDefined(String[] arguments);
+  /** Resolve the given argument and run the template.
+   */
+  public void run(String[] arguments);
+}
+```
+
+Publish the library to sbt community repo or Maven Central.
+
+#### templateResolverInfos
+
+Next, create an sbt plugin that adds a `TemplateResolverInfo` to `templateResolverInfos`.
+
+```scala
+import Def.Setting
+import Keys._
+
+/** An experimental plugin that adds the ability for Giter8 templates to be resolved
+ */
+object Giter8TemplatePlugin extends AutoPlugin {
+  override def requires = CorePlugin
+  override def trigger = allRequirements
+
+  override lazy val globalSettings: Seq[Setting[_]] =
+    Seq(
+      templateResolverInfos +=
+        TemplateResolverInfo(ModuleID("org.scala-sbt.sbt-giter8-resolver", "sbt-giter8-resolver", "0.1.0") cross CrossVersion.binary,
+          "sbtgiter8resolver.Giter8TemplateResolver")
+    )
+}
+```
+
+This indirecton allows template resolvers to have a classpath independent from the rest of the build.
 
 
 How to...
@@ -16084,7 +17031,7 @@ exportJars := true
 This will use the result of `packageBin` on the classpath instead of the
 class directory.
 
-> **Note**: Specifically, fullClasspath is the concatentation of
+> **Note**: Specifically, fullClasspath is the concatenation of
 > dependencyClasspath and exportedProducts. When exportJars is true,
 > exportedProducts is the output of packageBin. When exportJars is
 > false, exportedProducts is just products, which is by default the
@@ -17230,11 +18177,28 @@ the ones provided by the old function.
 
 The special task `streams` provides per-task logging and I/O via a
 [Streams](../api/#sbt.std.Streams) instance. To log, a task uses
-the `log` member from the `streams` task:
+the `log` member from the `streams` task. Calling `log` provides
+a [Logger](../api/#sbt.Logger).
+
+:
 
 ```scala
 myTask := {
   val log = streams.value.log
+  log.warn("A warning.")
+}
+```
+
+### Log messages in a setting
+
+Since settings cannot reference tasks, the special task `streams`
+cannot be used to provide logging during setting initialization.
+The recommended way is to use `sLog`. Calling `sLog.value` provides
+a [Logger](../api/#sbt.Logger).
+
+```scala
+mySetting := {
+  val log = sLog.value
   log.warn("A warning.")
 }
 ```
@@ -17406,11 +18370,11 @@ Running commands
 
 sbt interprets each command line argument provided to it as a command
 together with the command's arguments. Therefore, to run a command that
-takes arguments in batch mode, quote the command and its arguments. For
-example,
+takes arguments in batch mode, quote the command using double quotes,
+and its arguments. For example,
 
 ```
-$ sbt 'project X' clean '~ compile'
+$ sbt "project X" clean "~ compile"
 ```
 
 <a name="multi"></a>
@@ -17924,8 +18888,8 @@ addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.8.0")
 ```scala
 lazy val compilecheck = taskKey[Unit]("compile and then scalastyle")
 
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     compilecheck in Compile := Def.sequential(
       compile in Compile,
       (scalastyle in Compile).toTask("")
@@ -17975,8 +18939,8 @@ addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.8.0")
 ```scala
 lazy val compilecheck = taskKey[sbt.inc.Analysis]("compile and then scalastyle")
 
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     compilecheck := (Def.taskDyn {
       val c = (compile in Compile).value
       Def.task {
@@ -17994,8 +18958,8 @@ Now we have the same thing as the sequential task, except we can now return the 
 If we can return the same return type as `compile in Compile`, might actually rewire the key to our dynamic task.
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     compile in Compile := (Def.taskDyn {
       val c = (compile in Compile).value
       Def.task {
@@ -18031,8 +18995,8 @@ object Greeting extends App {
 ```scala
 lazy val runopen = inputKey[Unit]("run and then open the browser")
 
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     runopen := {
       (run in Compile).evaluated
       println("open browser!")
@@ -18055,8 +19019,8 @@ open browser!
 We can actually remove `runopen` key, by rewriting the new input task to `run in Compile`:
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     run in Compile := {
       (run in Compile).evaluated
       println("open browser!")
@@ -18075,8 +19039,8 @@ Let's suppose that there's a task already that does the bowser opening called `o
 lazy val runopen = inputKey[Unit]("run and then open the browser")
 lazy val openbrowser = taskKey[Unit]("open the browser")
 
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     runopen := (Def.inputTaskDyn {
       import sbt.complete.Parsers.spaceDelimited
       val args = spaceDelimited("<args>").parsed
@@ -18100,8 +19064,8 @@ To break the cycle, we will introduce a clone of `run in Compile` called `actual
 lazy val actualRun = inputKey[Unit]("The actual run task")
 lazy val openbrowser = taskKey[Unit]("open the browser")
 
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     run in Compile := (Def.inputTaskDyn {
       import sbt.complete.Parsers.spaceDelimited
       val args = spaceDelimited("<args>").parsed
@@ -18173,20 +19137,21 @@ lazy val commonSettings = Seq(
   organization := "org.myproject",
   version := "0.1.0",
   // set the Scala version used for the project
-  scalaVersion := "2.11.8"
+  scalaVersion := "2.12.1"
 )
 
 // define ModuleID for library dependencies
-lazy val scalacheck = "org.scalacheck" %% "scalacheck" % "1.12.0"
+lazy val scalacheck = "org.scalacheck" %% "scalacheck" % "1.13.4"
 
 // define ModuleID using string interpolator
 lazy val osmlibVersion = "2.5.2-RC1"
 lazy val osmlib = ("net.sf.travelingsales" % "osmlib" % osmlibVersion from
   s"""http://downloads.sourceforge.net/project/travelingsales/libosm/$osmlibVersion/libosm-$osmlibVersion.jar""")
 
-lazy val root = (project in file(".")).
-  settings(commonSettings: _*).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
+    commonSettings,
+
     // set the name of the project
     name := "My Project",
 
@@ -18404,7 +19369,7 @@ object Dependencies {
   val apachenet   = "commons-net"   % "commons-net"   % "2.0"
   val apachecodec = "commons-codec" % "commons-codec" % "1.4"
 
-  val scalatest = "org.scalatest" %% "scalatest" % "2.2.1"
+  val scalatest = "org.scalatest" %% "scalatest" % "3.0.1"
 }
 ```
 
@@ -18430,8 +19395,8 @@ object ShellPromptPlugin extends AutoPlugin {
     def buffer[T] (f: => T): T = f
   }
   def currBranch =
-    ("git status -sb" lines_! devnull headOption).
-      getOrElse("-").stripPrefix("## ")
+    ("git status -sb" lines_! devnull headOption)
+      .getOrElse("-").stripPrefix("## ")
   val buildShellPrompt: State => String = {
     case (state: State) =>
       val currProject = Project.extract (state).currentProject.id
@@ -18455,7 +19420,7 @@ import Dependencies._
 lazy val buildSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.11.8"
+  scalaVersion := "2.12.1"
 )
 
 // Sub-project specific dependencies
@@ -18482,37 +19447,37 @@ lazy val pricingDeps = Seq(
   scalatest % Test
 )
 
-lazy val cdap2 = (project in file(".")).
-  aggregate(common, server, compact, pricing, pricing_service).
-  settings(buildSettings: _*)
+lazy val cdap2 = (project in file("."))
+  .aggregate(common, server, compact, pricing, pricing_service)
+  .settings(buildSettings)
 
-lazy val common = (project in file("cdap2-common")).
-  settings(buildSettings: _*).
-  settings(
+lazy val common = (project in file("cdap2-common"))
+  .settings(
+    buildSettings,
     libraryDependencies ++= commonDeps
   )
 
-lazy val server = (project in file("cdap2-server")).
-  dependsOn(common).
-  settings(buildSettings: _*).
-  settings(
+lazy val server = (project in file("cdap2-server"))
+  .dependsOn(common)
+  .settings(
+    buildSettings,
     resolvers := oracleResolvers,
     libraryDependencies ++= serverDeps
   )
 
-lazy val pricing = (project in file("cdap2-pricing")).
-  dependsOn(common, compact, server).
-  settings(buildSettings: _*).
-  settings(
+lazy val pricing = (project in file("cdap2-pricing"))
+  .dependsOn(common, compact, server)
+  .settings(
+    buildSettings,
     libraryDependencies ++= pricingDeps
   )  
 
-lazy val pricing_service = (project in file("cdap2-pricing-service")).
-  dependsOn(pricing, server).
-  settings(buildSettings: _*)
+lazy val pricing_service = (project in file("cdap2-pricing-service"))
+  .dependsOn(pricing, server)
+  .settings(buildSettings)
 
-lazy val compatct = (project in file("compact-hashmap")).
-  settings(buildSettings: _*)
+lazy val compatct = (project in file("compact-hashmap"))
+  .settings(buildSettings)
 ```
 
 
@@ -18560,24 +19525,26 @@ lazy val commonSettings = Seq(
 )
 
 // An example project that only uses the Scalate utilities.
-lazy val a = (project in file("a")).
-  dependsOn(utils % "compile->scalate").
-  settings(commonSettings: _*)
+lazy val a = (project in file("a"))
+  .dependsOn(utils % "compile->scalate")
+  .settings(commonSettings)
 
 // An example project that uses the Scalate and Saxon utilities.
 // For the configurations defined here, this is equivalent to doing dependsOn(utils),
 //  but if there were more configurations, it would select only the Scalate and Saxon
 //  dependencies.
-lazy val b = (project in file("b")).
-  dependsOn(utils % "compile->scalate,saxon").
-  settings(commonSettings: _*)
+lazy val b = (project in file("b"))
+  .dependsOn(utils % "compile->scalate,saxon")
+  .settings(commonSettings)
 
 // Defines the utilities project
-lazy val utils = (project in file("utils")).
-  settings(commonSettings: _*).
-  settings(inConfig(Common)(Defaults.configSettings): _*).  // Add the src/common/scala/ compilation configuration.
-  settings(addArtifact(artifact in (Common, packageBin), packageBin in Common): _*). // Publish the common artifact
-  settings(
+lazy val utils = (project in file("utils"))
+  .settings(
+    commonSettings,
+
+    inConfig(Common)(Defaults.configSettings),  // Add the src/common/scala/ compilation configuration.
+    addArtifact(artifact in (Common, packageBin), packageBin in Common), // Publish the common artifact
+
       // We want our Common sources to have access to all of the dependencies on the classpaths
       //   for compile and test, but when depended on, it should only require dependencies in 'common'
     classpathConfiguration in Common := CustomCompile,
@@ -18666,7 +19633,7 @@ object Canon extends Plugin {
 
   [Getting-Started]: Getting-Started.html
   [Basic-Def]: Basic-Def.html
-  [More-About-Settings]: More-About-Settings.html
+  [Task-Graph]: Task-Graph.html
   [Running]: Running.html
   [Scopes]: Scopes.html
   [Library-Dependencies]: Library-Dependencies.html
@@ -18685,6 +19652,7 @@ object Canon extends Plugin {
   [Contributing-to-sbt]: Contributing-to-sbt.html
   [Community-Plugins]: Community-Plugins.html
   [ivy-configurations]: Library-Management.html#ivy-configurations
+  [Appending-Values]: Appending-Values.html
 
 Frequently Asked Questions
 --------------------------
@@ -18737,7 +19705,7 @@ to `false`. For example,
 
 #### How can I start a Scala interpreter (REPL) with sbt project configuration (dependencies, etc.)?
 
-You may run `sbt console`.
+In sbt's shell run `console`.
 
 ### Build definitions
 
@@ -18745,8 +19713,9 @@ You may run `sbt console`.
 
 These are methods on keys used to construct a `Setting` or a `Task`. The
 Getting Started Guide covers all these methods, see
-[.sbt build definition][Basic-Def] and
-[more kinds of setting][More-About-Settings] for
+[.sbt build definition][Basic-Def],
+[task graph][Task-Graph], and
+[appending values][Appending-Values] for
 example.
 
 #### What is the `%` method?
@@ -19356,7 +20325,7 @@ plugins.
   [Full-Def]: Full-Def.html
   [Basic-Def]: Basic-Def.html
   [Using-Plugins]: Using-Plugins.html
-  [More-About-Settings]: More-About-Settings.html
+  [Task-Graph]: Task-Graph.html
   [Library-Management]: Library-Management.html
   [Artifacts]: Artifacts.html
   [Paths]: Paths.html
@@ -19476,7 +20445,7 @@ details.
     macro) and cannot be used except in the argument of one of the
     setting definition methods above (:=, ...) or in the standalone
     construction methods Def.setting and Def.task. See
-    [more about settings][More-About-Settings] for
+    [Task-Graph][Task-Graph] for
     details.
 -   `in` specifies the [Scope](../api/sbt/Scope.html) or part of the
     [Scope](../api/sbt/Scope.html) of a setting being referenced. See
@@ -19587,16 +20556,16 @@ Mark remained the primary author of sbt until sbt 0.13.1 (2013-12-11).
 In 2014, sbt project was handed over to the authors of this document Josh Suereth
 and Eugene Yokota.
 
-As we move towards sbt 1.0, we wish to stablize what's already stable
+As we move towards sbt 1.0, we wish to stabilize what's already stable
 and innovate where it matters. There are several levels of stability:
 
 - conceptual stability
-- source compatibility of the build defnition
+- source compatibility of the build definition
 - binary compatibility of the plugins
 
 #### Concepts
 
-Concepturally, sbt has been stable on what it does:
+Conceptually, sbt has been stable on what it does:
 
 1. incremental compilation that supports Scala
 2. dependency management that's aware of Scala's binary compatibility
@@ -19607,7 +20576,7 @@ The only thing that we plan to change is the last point.
 In sbt 1.0, we will replace the interactive shell with sbt server
 that's accessible via JSON API and a text-based client.
 
-#### Source compatibility of the build deinition
+#### Source compatibility of the build definition
 
 Source compatibility means that a build source that worked for sbt version A
 works for another version B without modification.
@@ -19617,26 +20586,26 @@ source compatibility of the build during 1.x.y.
 #### Binary compatibility of the plugins
 
 Binary compatibility ("bincompat") of the plugins means that a plugin
-that was published  for sbt version A works for another version B without recompilaition.
+that was published for sbt version A works for another version B without recompilation.
 sbt 0.13 has kept binary compatibility for 18 months as of March 2015.
-The stability here helps maintaining sbt plug ecosystem.
+The stability here helps maintain the sbt plugin ecosystem.
 Our goal for sbt 1.0 is to adopt Semantic Versioning, and maintain
 binary compatibility of the build during 1.x.y.
 
 From the development perspective, maintaining binary compatibility becomes
 an additional constraint that we need to worry about whenever we make changes.
-The of the problem is that sbt 0.13 does not distinguish between public API
-and internal impelmentation. Most things are open to plugins.
+The root of the problem is that sbt 0.13 does not distinguish between public API
+and internal implementation. Most things are open to plugins.
 
 
 ### Modularization
 
 The process we aim to take for sbt 1.0 is to disassemble sbt into smaller modules and layers.
-To be clear sbt 0.13's codebase already does consists of numerous subprojects.
+To be clear, sbt 0.13's codebase already does consist of numerous subprojects.
 
-Layers are more course-grained sets of subproject(s) that can be used independently.
+Layers are more coarse-grained sets of subproject(s) that can be used independently.
 Another purpose of the modularization is to distinguish between public API and internal implementation.
-Reducing the surface area of the sbt code base have several benefits:
+Reducing the surface area of the sbt code base has several benefits:
 
 - It makes it easier for the build users and the plugin authors to learn the APIs.
 - It makes it easier for us to maintain binary and semantic compatibilities.
@@ -19658,7 +20627,7 @@ We'll discuss the details in the next page.
   [librarymanagementrepo]: https://github.com/sbt/librarymanagement
   [incrementalcompilerrepo]: https://github.com/sbt/incrementalcompiler
   [launcherrepo]: https://github.com/sbt/launcher
-  [conscriptrepo]: https://github.com/n8han/conscript
+  [conscriptrepo]: https://github.com/foundweekends/conscript
   [websiterepo]: https://github.com/sbt/website
 
 ### Module summary
@@ -19685,16 +20654,16 @@ Util APIs provide commonly used features like logging and internal datatypes use
 #### LibraryManagement API ([sbt/librarymanagement][librarymanagementrepo])
 
 sbt's library management system is based on Apache Ivy, and as such
-the concepts and terminology around library management system is also influenced by Ivy.
-The responsibility of the library management API is to calcuate the transitive dependency graph,
+the concepts and terminology around the library management system are also influenced by Ivy.
+The responsibility of the library management API is to calculate the transitive dependency graph,
 and download artifacts from the given repositories.
 
 #### IncrementalCompiler API ([sbt/incrementalcompiler][incrementalcompilerrepo])
 
-Incremental compiler of Scala is so fundamental,
+Incremental compilation of Scala is so fundamental
 that we now seldom think of it as a feature of sbt.
-There are number of subprojects/classes involved that are actually internal details
-that we should use this opportunity to hide.
+There are number of subprojects/classes involved that are actually internal details,
+and we should use this opportunity to hide them.
 
 #### Build API (tbd)
 
@@ -19710,16 +20679,16 @@ The sbt launcher provides a generic container that can load and run
 programs resolved using the Ivy dependency manager.
 sbt uses this as the deployment mechanism, but it can be used for other purposes.
 
-See [n8han/conscript][conscriptrepo] and [Launcher][Sbt-Launcher] for more details.
+See [foundweekends/conscript][conscriptrepo] and [Launcher][Sbt-Launcher] for more details.
 
 #### Client/Server (tbd)
 
 Currently developed in [sbt/sbt-remote-control](https://github.com/sbt/sbt-remote-control).
-sbt Server provides a JSON-based API wrapping functionality of the commandline experience.
+sbt Server provides a JSON-based API wrapping functionality of the command line experience.
 
 One of the clients will be the "terminal client",
-which subsumes the commandline sbt shell.
-Other clients that are planned are integration with the IDEs.
+which subsumes the command line sbt shell.
+Other clients that are planned are IDE integrations.
 
 #### Website ([sbt/website][websiterepo])
 
@@ -19737,8 +20706,8 @@ This page discusses the coding style and other guidelines for sbt 1.0.
 
 ### General goal
 
-sbt 1.0 will primarily target Scala 2.11.
-We will cross build against Scala 2.10.
+sbt 1.0 will primarily target Scala 2.12.
+We will cross-build against Scala 2.10.
 
 #### Clean up old deprecation
 
@@ -19746,35 +20715,35 @@ Before 1.0 is release, we should clean up deprecations.
 
 #### Aim for zero warnings (except deprecation)
 
-On Scala 2.11 we should aim for zero warnings.
-One exception may be deprecation if it's required for 2.10 cross building.
+On Scala 2.12 we should aim for zero warnings.
+One exception may be deprecation if it's required for cross-building.
 
 ### Modular design
 
 #### Aim small
 
-The fewer methods we can expose to the build user, the easier it becomes to maintain it.
+The fewer methods we can expose to the build user, the easier sbt becomes to maintain.
 
 #### Public APIs should be coded against "interfaces"
 
-Code against interface.
+Code against interfaces.
 
 #### Hide implementation details
 
-The implementation details should be hidden behind `sbt.internal.x` package,
+The implementation details should be hidden behind `sbt.internal.x` packages,
 where `x` could be the name of the main package (like `io`).
 
-#### Depend less
+#### Less interdependence
 
-Making independent modules with fewer dependent libraries make it easier to reuse them.
+Independent modules with fewer dependent libraries are easier to reuse.
 
 #### Hide external classes
 
-Avoid exposing external classes out to API, except for standard Scala and Java classes.
+Avoid exposing external classes in the API, except for standard Scala and Java classes.
 
 #### Hide internal modules
 
-A module may be declared internal if there's no use for public.
+A module may be declared internal if it has no use to the public.
 
 #### Compiler flags
 
@@ -19800,11 +20769,11 @@ The `-Xfatal-warnings` may be removed if there are unavoidable warnings.
 #### Package name and organization name
 
 Use the package name appended with the layer name, such as `sbt.io` for IO layer.
-The organization name for the publish artifacts should remain `org.scala-sbt`.
+The organization name for published artifacts should remain `org.scala-sbt`.
 
 ### Binary resiliency
 
-A good overview on the topic of binary resiliency is [Josh's 2012][jsuereth2012] talk
+A good overview on the topic of binary resiliency is [Josh's 2012 talk][jsuereth2012] on
 Binary resiliency.
 The guideline here applies mostly to publicly exposed APIs.
 
@@ -19814,38 +20783,38 @@ Use [MiMa][mima].
 
 #### Public traits should contain `def` declarations only
 
-- `val` or `var` in `trait` results to codegen at subclass and at the artificial `Foo$class.$init$`.
-- `lazy val` results to codegen at subclass
+- `val` or `var` in a `trait` results in code generated at subclass and in the artificial `Foo$class.$init$`
+- `lazy val` results in code generated at subclass
 
 #### Abstract classes are also useful
 
 [To trait, or not to trait?][pins_trait127].
-It is less flexible compared to trait, but easier to maintain binary compatibility. It also has better Java interop.
+Abstract classes are less flexible than traits, but traits pose more problems for binary compatibility. Abstract classes also have better Java interoperability.
 
-#### Seal the traits and abstract classes
+#### Seal traits and abstract classes
 
-If there's no need to keep the classes open, seal it.
+If there's no need to keep a class open, seal it.
 
 #### Finalize the leaf classes
 
-If there's no need to keep the classes open, finalize it.
+If there's no need to keep a class open, finalize it.
 
 #### Typeclass and subclass inheritance
 
-Typeclass pattern with pure trait might be easier to maintain binary compatibility than subclassing.
+The typeclass pattern with pure traits might ease maintaining binary compatibility more so than subclassing.
 
 #### Avoid case classes, use sbt-datatype
 
-case class involves various codegen, which makes it harder to maintain binary compatibility over time.
+Case classes involve code generation that makes it harder to maintain binary compatibility over time.
 
 #### Prefer method overloading over default parameter values
 
-The default parameter values are effectively codegen,
-which makes it difficult to maintain.
+Default parameter values are effectively code generation,
+which makes them difficult to maintain.
 
-### Other public API matter
+### Other public API matters
 
-Here are other guidelines about public API.
+Here are other guidelines about the sbt public API.
 
 #### Avoid Stringly-typed programming
 
@@ -19856,41 +20825,43 @@ Define datatypes.
 `def apply` should be reserved for factory methods
 in a companion object that returns type `T`.
 
-#### Use specific datatype (`Vector`, `List`, or `Array`) rather than `Seq`.
+#### Use specific datatypes (`Vector`, `List`, or `Array`), rather than `Seq`
 
 `scala.Seq` is `scala.collection.Seq`, which is not immutable.
 Default to `Vector`. Use `List` if constant prepending is needed.
-Use `Array` if Java interop is needed.
-Note using mutable collection is perfectly fine within the implementation.
+Use `Array` if Java interoperability is needed.
+Note that using mutable collections is perfectly fine within the implementation.
 
-#### Avoid calling `toSeq` or anything side-effecty on `Set`
+#### Avoid calling `toSeq` or anything with side-effects on `Set`
 
-`Set` is fine if you stick with set operations, like `contains` and `subsetOf`.
+`Set` is fine if you stick to set operations, like `contains` and `subsetOf`.
 More often than not, `toSeq` is called explicitly or implicitly,
-or some side effecting method is called from `map`.
+or some side-effecting method is called from `map`.
 This introduces non-determinism to the code.
 
 #### Avoid calling `toSeq` on `Map`
 
-Same as above. That will introduce non-determinism.
+Same as above. This will introduce non-determinism.
 
-#### Avoid functions and tuples in the signature, if Java interop is needed
+#### Avoid functions and tuples in the signature, if Java interoperability is needed
 
 Instead of functions and tuples, turn them into a trait.
-This is if Java interop is a concern, like implementing
-incremental compiler.
+This applies where interoperability is a concern, like implementing
+incremental compilation.
 
-### Style matter
+### Style matters
 
 #### Use scalariform
 
-sbt-houserules comes with scalariform.
+sbt-houserules comes with scalariform for formatting source code consistently.
 
 #### Avoid procedure syntax
 
-Return `Unit`.
+Declare an explicit `Unit` return.
 
-#### Typeclass instances are encouraged to be defined in the companions
+#### Define instances of typeclasses in their companion objects, when possible
+
+This style is encouraged:
 
 ```scala
 final class FooID {}
@@ -19899,13 +20870,13 @@ object FooID {
 }
 ```
 
-#### Implicit converter for syntax (enrich-my-library) should be imported
+#### Implicit conversions for syntax (enrich-my-library pattern) should be imported
 
 Avoid defining implicit converters in companion objects and package objects.
 
-Suppose IO module introduces `URL` enrichment called `RichURI`;
-and LibraryManagement introduces `String` enrichment called `GroupID` (for `ModuleID` syntax).
-These implicit converters should be defined in an object named `syntax` in respective packge:
+Suppose the IO module introduces a `URL` enrichment called `RichURI`,
+and LibraryManagement introduces a `String` enrichment called `GroupID` (for `ModuleID` syntax).
+These implicit conversions should be defined in an object named `syntax` in the respective package:
 
 ```scala
 package sbt.io
@@ -19915,8 +20886,8 @@ object syntax {
 }
 ```
 
-When all the layers are available, `sbt` package should also define an object called `syntax`,
-which forwards all the implicit converters from all the layers:
+When all the layers are available, the `sbt` package should also define an object called `syntax`
+which forwards implicit conversions from all the layers:
 
 ```scala
 package sbt
@@ -19928,23 +20899,26 @@ object syntax {
 ```
 
 
-Datatype
---------
+sbt-datatype
+------------
 
 sbt-datatype is a code generation library and an sbt autoplugin that generates
 growable datatypes and helps developers avoid breakage of binary compatibility.
 
-Unlike standard Scala case classes, the datatypes generated by this library
-allow the developer to add new fields to the defined datatypes without breaking
-binary compatibility while offering (almost) the same functionalities as plain
-case classes. The only difference is that datatype doesn't generate `unapply`
+Unlike standard Scala case classes, the datatypes (or pseudo case classes) generated
+by this library allow the developer to add new fields to the defined datatypes without breaking
+binary compatibility, while offering (almost) the same functionality as plain
+case classes. The only difference is that datatype doesn't generate `unapply` or `copy`
 methods, because they would break binary compatibility.
 
-Our plugin takes as input a datatype definition in the form of a `JSON` object,
+In addition, sbt-datatype is also able to generate JSON codec for sjson-new,
+which can work against various JSON backends.
+
+Our plugin takes as input a datatype schema in the form of a `JSON` object,
 whose format is based on the format defined by
 [Apache Avro](http://avro.apache.org), and generates the corresponding code in
 Java or Scala along with the boilerplate code that will allow the generated
-classes to remain binary compatible with previous versions of the datatype.
+classes to remain binary-compatible with previous versions of the datatype.
 
 The source code of the library and autoplugin
 [can be found on GitHub](https://github.com/sbt/sbt-datatype).
@@ -19955,48 +20929,40 @@ To enable the plugin for your build, put the following line in
 `project/datatype.sbt`:
 
 ```scala
-addSbtPlugin("org.scala-sbt" % "sbt-datatype" % "0.0.3")
+addSbtPlugin("org.scala-sbt" % "sbt-datatype" % "0.2.2")
 ```
 
 Your datatype definitions should be placed by default in `src/main/datatype`
-and `src/test/datatype`. This location can be changed by setting a new location
-in your build definition:
+and `src/test/datatype`. Here's how your build should be configured:
 
 ```scala
-datatypeSource in generateDatatypes := file("some/location")
+lazy val library = (project in file("library"))
+  .enablePlugins(DatatypePlugin)
+  .settings(
+    name := "foo library",
+  )
 ```
 
-The plugin exposes two other settings for Scala code generation:
+### Datatype schema
 
- 1. `datatypeScalaFileNames in generateDatatypes`    
-    This setting accepts a function `Definition => File` which will determine
-    the filename for every generated Scala definition.
- 1. `datatypeScalaSealProtocols in generateDatatypes`    
-    This setting accepts a boolean value, and will determine whether protocols
-    should be `seal`ed or not.
+Datatype is able to generate three kinds of types:
 
-### Types generated
-
-datatype is able to generate three kinds of types:
-
- 1. Protocols
  1. Records
- 1. Enumerations
+ 1. Interfaces
+ 1. Enums
 
-#### Protocols
+#### Records
 
-Protocols are mapped to Java `abstract class`es or Scala
-`sealed abstract classes`. They can be extended by other protocols or records.
-
-##### Example:
+Records are mapped to Java or Scala `class`es, corresponding to
+the standard case classes in Scala.
 
 ```json
 {
   "types": [
     {
       "name": "Person",
-      "type": "protocol",
-      "target": "Java",
+      "type": "record",
+      "target": "Scala",
       "fields": [
         {
           "name": "name",
@@ -20010,49 +20976,12 @@ Protocols are mapped to Java `abstract class`es or Scala
     }
   ]
 }
-
 ```
 
-This definition will generate the following Java class:
-
-```java
-public abstract class Person implements java.io.Serializable {
-    private String name;
-    private int age;
-    public Person(String _name, int _age) {
-        super();
-        name = _name;
-        age = _age;
-    }
-    public String name() {
-        return this.name;
-    }
-    public int age() {
-        return this.age;
-    }
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        } else if (!(obj instanceof Person)) {
-            return false;
-        } else {
-            Person o = (Person)obj;
-            return name().equals(o.name()) && (age() == o.age());
-        }
-    }
-    public int hashCode() {
-        return 37 * (37 * (17 + name().hashCode()) + (new Integer(age())).hashCode());
-    }
-    public String toString() {
-        return "Person("  + "name: " + name() + ", " + "age: " + age() + ")";
-    }
-}
-```
-
-Or the following Scala class (after changing the `target` property):
+This schema will produce the following Scala class:
 
 ```scala
-abstract class Person(
+final class Person(
   val name: String,
   val age: Int) extends Serializable {
   override def equals(o: Any): Boolean = o match {
@@ -20065,39 +20994,22 @@ abstract class Person(
   override def toString: String = {
     "Person(" + name + ", " + age + ")"
   }
+  private[this] def copy(name: String = name, age: Int = age): Person = {
+    new Person(name, age)
+  }
+  def withName(name: String): Person = {
+    copy(name = name)
+  }
+  def withAge(age: Int): Person = {
+    copy(age = age)
+  }
+}
+object Person {
+  def apply(name: String, age: Int): Person = new Person(name, age)
 }
 ```
 
-
-#### Records
-
-Records are mapped to Java or Scala `class`es.
-
-##### Example:
-
-```json
-{
-  "types": [
-    {
-      "name": "Person",
-      "type": "record",
-      "target": "Java"
-      "fields": [
-        {
-          "name": "name",
-          "type": "String"
-        },
-        {
-          "name": "age",
-          "type": "int"
-        }
-      ]
-    }
-  ]
-}
-```
-
-This schema will produce the following Java class:
+Or the following Scala code (after changing the `target` property to `"Java"`):
 
 ```java
 public final class Person implements java.io.Serializable {
@@ -20133,51 +21045,82 @@ public final class Person implements java.io.Serializable {
 }
 ```
 
-Or the following Scala code (after changing the `target` property):
+#### Interfaces
 
-```scala
-final class Person(
-  val name: String,
-  val age: Int) extends Serializable {
-  override def equals(o: Any): Boolean = o match {
-    case x: Person => (this.name == x.name) && (this.age == x.age)
-    case _ => false
-  }
-  override def hashCode: Int = {
-    37 * (37 * (17 + name.##) + age.##)
-  }
-  override def toString: String = {
-    "Person(" + name + ", " + age + ")"
-  }
-  private[this] def copy(name: String = name, age: Int = age): Person = {
-    new Person(name, age)
-  }
-  def withName(name: String): Person = {
-    copy(name = name)
-  }
-  def withAge(age: Int): Person = {
-    copy(age = age)
-  }
-}
-object Person {
-  def apply(name: String, age: Int): Person = new Person(name, age)
+Interfaces are mapped to Java `abstract class`es or Scala
+`abstract classes`. They can be extended by other interfaces or records.
+
+```json
+{
+  "types": [
+    {
+      "name": "Greeting",
+      "namespace": "com.example",
+      "target": "Scala",
+      "type": "interface",
+      "fields": [
+        {
+          "name": "message",
+          "type": "String"
+        }
+      ],
+      "types": [
+        {
+          "name": "SimpleGreeting",
+          "namespace": "com.example",
+          "target": "Scala",
+          "type": "record"
+        }
+      ]
+    }
+  ]
 }
 ```
 
-#### Enumerations
+This generates abstract class named `Greeting` and a class named `SimpleGreeting`
+that extends `Greeting`.
 
-Enumerations are mapped to Java enumerations or Scala case objects.
+In addition, interfaces can define `messages`, which generates abstract method declarations.
 
-##### Example:
+```json
+{
+  "types": [
+    {
+      "name": "FooService",
+      "target": "Scala",
+      "type": "interface",
+      "messages": [
+        {
+          "name": "doSomething",
+          "response": "int*",
+          "request": [
+            {
+              "name": "arg0",
+              "type": "int*",
+              "doc": [
+                "The first argument of the message.",
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+#### Enums
+
+Enums are mapped to Java enumerations or Scala case objects.
 
 ```json
 {
   "types": [
     {
       "name": "Weekdays",
-      "type": "enumeration",
+      "type": "enum",
       "target": "Java",
-      "types": [
+      "symbols": [
         "Monday", "Tuesday", "Wednesday", "Thursday",
         "Friday", "Saturday", "Sunday"
       ]
@@ -20214,73 +21157,6 @@ object Weekdays {
   case object Sunday extends Weekdays
 }
 ```
-
-### Existing parameters for protocols, records, etc.
-
-All the elements of the schema definition accept a number of parameters that
-will influence the generated code. These parameters are not available for
-every node of the schema. Please refer to the syntax summary to see whether a
-parameters can be defined for a node.
-
-###### `name`
-
-This parameter defines the name of a field, record, field, etc.
-
-###### `target`
-
-This parameter determines whether the code will be generated in Java or Scala.
-
-###### `namespace`
-
-This parameter exists only for `Definition`s. It determines the package in
-which the code will be generated.
-
-###### `doc`
-
-The Javadoc that will accompany the generated element.
-
-###### `fields`
-
-For a `protocol` or a `record` only, it describes all the fields that compose
-the generated entity.
-
-###### `types`
-
-For a `protocol`, it defines the child `protocol`s and `record`s that extend
-it.
-
-For an `enumeration`, it defines the values of the enumeration.
-
-###### `since`
-
-This parameter exists for `field`s only. It indicates the version in which the
-field has been added to its parent `protocol` or `record`.
-
-When this parameter is defined, `default` must also be defined.
-
-###### `default`
-
-This parameter exists for `field`s only. It indicates what the default value
-should be for this field, in case it is used by a class that has been compiled
-against an ealier version of this datatype.
-
-It must contain an expression which is valid in the `target` language of the
-parent `protocol` or `record`.
-
-###### `type` for `field`s
-
-It indicates what is the underlying type of the field.
-
-Always use the type that you want to see in Scala. For instance, if your field
-will contain an integer value, use `Int` rather than Java's `int`. datatype
-will automatically use Java's primitive types if they are available.
-
-For non-primitive types, it is recommended to write the fully qualified type.
-
-###### `type` for other definitions
-
-It simply indicates the kind of entity that you want to generate: `protocol`,
-`record` or `enumeration`.
 
 ### Using datatype to retain binary compatibility
 
@@ -20374,20 +21250,170 @@ datatype definition:
 Now the code that was compiled against previous definitions of the datatype
 will still run.
 
+### JSON codec generation
+
+Adding `JsonCodecPlugin` to the subproject will generate sjson-new JSON codes for
+the datatypes.
+
+lazy val root = (project in file("."))
+  .enablePlugins(DatatypePlugin, JsonCodecPlugin)
+  .settings(
+    scalaVersion := "2.11.8",
+    libraryDependencies += "com.eed3si9n" %% "sjson-new-scalajson" % "0.4.1"
+  )
+
+
+`codecNamespace` can be used to specify the package name for the codecs.
+
+```json
+{
+  "codecNamespace": "com.example.codec",
+  "fullCodec": "CustomJsonProtocol",
+  "types": [
+    {
+      "name": "Person",
+      "namespace": "com.example",
+      "type": "record",
+      "target": "Scala",
+      "fields": [
+        {
+          "name": "name",
+          "type": "String"
+        },
+        {
+          "name": "age",
+          "type": "int"
+        }
+      ]
+    }
+  ]
+}
+```
+
+JsonFormat traits will be generated under `com.example.codec` package,
+along with a full codec named `CustomJsonProtocol` that mixes in all the traits.
+
+```
+scala> import sjsonnew.support.scalajson.unsafe.{ Converter, CompactPrinter, Parser }
+import sjsonnew.support.scalajson.unsafe.{Converter, CompactPrinter, Parser}
+
+scala> import com.example.codec.CustomJsonProtocol._
+import com.example.codec.CustomJsonProtocol._
+
+scala> import com.example.Person
+import com.example.Person
+
+scala> val p = Person("Bob", 20)
+p: com.example.Person = Person(Bob, 20)
+
+scala> val j = Converter.toJsonUnsafe(p)
+j: scala.json.ast.unsafe.JValue = JObject([Lscala.json.ast.unsafe.JField;@6731ad72)
+
+scala> val s = CompactPrinter(j)
+s: String = {"name":"Bob","age":20}
+
+scala> val x = Parser.parseUnsafe(s)
+x: scala.json.ast.unsafe.JValue = JObject([Lscala.json.ast.unsafe.JField;@7331f7f8)
+
+scala> val q = Converter.fromJsonUnsafe[Person](x)
+q: com.example.Person = Person(Bob, 20)
+
+scala> assert(p == q)
+```
+
+### Existing parameters for protocols, records, etc.
+
+All the elements of the schema definition accept a number of parameters that
+will influence the generated code. These parameters are not available for
+every node of the schema. Please refer to the syntax summary to see whether a
+parameters can be defined for a node.
+
+###### `name`
+
+This parameter defines the name of a field, record, field, etc.
+
+###### `target`
+
+This parameter determines whether the code will be generated in Java or Scala.
+
+###### `namespace`
+
+This parameter exists only for `Definition`s. It determines the package in
+which the code will be generated.
+
+###### `doc`
+
+The Javadoc that will accompany the generated element.
+
+###### `fields`
+
+For a `protocol` or a `record` only, it describes all the fields that compose
+the generated entity.
+
+###### `types`
+
+For a `protocol`, it defines the child `protocol`s and `record`s that extend
+it.
+
+For an `enumeration`, it defines the values of the enumeration.
+
+###### `since`
+
+This parameter exists for `field`s only. It indicates the version in which the
+field has been added to its parent `protocol` or `record`.
+
+When this parameter is defined, `default` must also be defined.
+
+###### `default`
+
+This parameter exists for `field`s only. It indicates what the default value
+should be for this field, in case it is used by a class that has been compiled
+against an earlier version of this datatype.
+
+It must contain an expression which is valid in the `target` language of the
+parent `protocol` or `record`.
+
+###### `type` for `field`s
+
+It indicates what is the underlying type of the field.
+
+Always use the type that you want to see in Scala. For instance, if your field
+will contain an integer value, use `Int` rather than Java's `int`. `datatype`
+will automatically use Java's primitive types if they are available.
+
+For non-primitive types, it is recommended to write the fully-qualified type.
+
+###### `type` for other definitions
+
+It simply indicates the kind of entity that you want to generate: `protocol`,
+`record` or `enumeration`.
+
+### Settings
+
+This location can be changed by setting a new location
+in your build definition:
+
+```scala
+datatypeSource in generateDatatypes := file("some/location")
+```
+
+The plugin exposes other settings for Scala code generation:
+
+ 1. `datatypeScalaFileNames in (Compile, generateDatatypes)`
+    This setting accepts a function `Definition => File` which will determine
+    the filename for every generated Scala definition.
+ 1. `datatypeScalaSealInterfaces in (Compile, generateDatatypes)`
+    This setting accepts a boolean value, and will determine whether interfaces
+    should be `seal`ed or not.
+
 ### Syntax summary
 
 ```
-Schema           := { "types": [ Definition* ] }
+Schema           := {   "types": [ Definition* ]
+                     (, "codecNamespace": string constant)?
+                     (, "fullCodec": string constant)? }
 
-Definition       := Protocol | Record | Enumeration
-
-Protocol         := {   "name": ID,
-                        "type": "protocol",
-                        "target": ("Scala" | "Java")
-                     (, "namespace": string constant)?
-                     (, "doc": string constant)?
-                     (, "fields": [ Field* ])?
-                     (, "types": [ Definition* ])? }
+Definition       := Record | Interface | Enumeration
 
 Record           := {   "name": ID,
                         "type": "record",
@@ -20396,14 +21422,23 @@ Record           := {   "name": ID,
                      (, "doc": string constant)?
                      (, "fields": [ Field* ])? }
 
-Enumeration      := {   "name": ID,
-                        "type": "enumeration",
+Interface        := {   "name": ID,
+                        "type": "interface",
                         "target": ("Scala" | "Java")
                      (, "namespace": string constant)?
                      (, "doc": string constant)?
-                     (, "types": [ EnumerationValue* ])? }
+                     (, "fields": [ Field* ])?
+                     (, "messages": [ Message* ])?
+                     (, "types": [ Definition* ])? }
 
-EnumerationValue := ID
+Enumeration      := {   "name": ID,
+                        "type": "enum",
+                        "target": ("Scala" | "Java")
+                     (, "namespace": string constant)?
+                     (, "doc": string constant)?
+                     (, "symbols": [ Symbol* ])? }
+
+Symbol           := ID
  {   "name": ID
                      (, "doc": string constant)? }
 
@@ -20412,19 +21447,16 @@ Field            := {   "name": ID,
                      (, "doc": string constant)?
                      (, "since": version number string)?
                      (, "default": string constant)? }
+
+Message          := {   "name": ID,
+                        "response": ID
+                     (, "request": [ Request* ])?
+                     (, "doc": string constant)? }
+
+Request          := {   "name": ID,
+                        "type": ID
+                     (, "doc": string constant)? }
 ```
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 Compiler Interface
@@ -20434,9 +21466,9 @@ The compiler interface is the communication link between sbt and the
 Scala compiler.
 
 It is used to get information from the Scala compiler, and must therefore
-be compiled against the Scala version in used for the configured projects.
+be compiled against the Scala version in use for the configured projects.
 
-The code for this project can be found in the folder [compile/interface](https://github.com/sbt/sbt/tree/0.13/compile/interface).
+The code for this project can be found in the directory [compile/interface](https://github.com/sbt/sbt/tree/0.13/compile/interface).
 
 
 Fetching the most specific sources
@@ -20446,14 +21478,14 @@ Because the compiler interface is recompiled against each Scala version
 in use in your project, its source must stay compatible with all the Scala
 versions that sbt supports (from Scala 2.8 to the latest version of Scala).
 
-This comes at great cost for both the the sbt maintainers and the Scala
+This comes at great cost for both the sbt maintainers and the Scala
 compiler authors:
 
 1. The compiler authors cannot remove old and deprecated public APIs from
    the Scala compiler.
 1. sbt cannot use new APIs defined in the Scala compiler.
 1. sbt must implement [all kinds of hackery](https://github.com/sbt/sbt/blob/0.13/compile/interface/src/main/scala/xsbt/Compat.scala#L6)
-   to remain source compatible all versions of the Scala compiler and support
+   to remain source-compatible with all versions of the Scala compiler and support
    new features.
 
 To circumvent this problem, a new mechanism that allows sbt to fetch the
@@ -20498,25 +21530,25 @@ Getting Started with the sbt launcher
 The sbt launcher provides two parts:
 
 1. An interface for launched applications to interact with the launcher code
-2. A minimal sbt-launch.jar that can launch application by resolving them
+2. A minimal sbt-launch.jar that can launch applications by resolving them
    through ivy.
 
 The sbt launcher component is a self-contained jar that boots a Scala
 application or server without Scala or the application already existing
 on the system. The only prerequisites are the launcher jar itself, an
-optional configuration file, and a java runtime version 1.6 or greater.
+optional configuration file, and a Java runtime version 1.6 or greater.
 
 ### Overview
 
 A user downloads the launcher jar and creates a script to run it. In
 this documentation, the script will be assumed to be called `launch`.
-For unix, the script would look like: `java -jar sbt-launcher.jar "$@"`
+For Unix, the script would look like: `java -jar sbt-launcher.jar "$@"`
 
 The user can now launch servers and applications which provide sbt
 launcher configuration.
 
 Alternatively, you can repackage the launcher with a launcher configuration file.
-The [sbt/sbt](https://github.com/sbt/sbt) for example pulls in the raw JAR and
+For example, [sbt/sbt](https://github.com/sbt/sbt) pulls in the raw JAR and
 [injects the appropriate boot.properties files for sbt](launcher-inject).
 
 #### Applications
@@ -20524,7 +21556,10 @@ The [sbt/sbt](https://github.com/sbt/sbt) for example pulls in the raw JAR and
 To launch an application, the user then downloads the configuration file
 for the application (call it `my.app.configuration`) and creates a
 script to launch it (call it `myapp`):
-`launch @my.app.configuration "$@"`
+
+```
+launch @my.app.configuration "$@"
+```
 
 The user can then launch the application using `myapp arg1 arg2 ...`
 
@@ -20543,17 +21578,20 @@ To discover where a server is running (or launch it if it is not
 running), the user downloads the configuration file for the server (call
 it `my.server.configuration`) and creates a script to discover the
 server (call it `find-myserver`):
-`launch --locate @my.server.properties`.
+
+```
+launch --locate @my.server.properties.
+```
 
 This command will print out one string, the URI at which to reach the
 server, e.g. `sbt://127.0.0.1:65501`. Clients should use the IP/port to
 connect to to the server and initiate their connection.
 
-When using the `locate` feature, the sbt launcher makes these following
+When using the `locate` feature, the sbt launcher makes the following
 restrictions to servers:
 
 -   The Server must have a starting class that extends the
-    xsbti.ServerMain class
+    `xsbti.ServerMain` class
 -   The Server must have an entry point (URI) that clients can use to
     detect the server
 -   The server must have defined a lock file which the launcher can use
@@ -20594,7 +21632,7 @@ configuring, writing, distributing, and running the application.
 #### Creating a Launched Application
 
 This section shows how to make an application that is launched by this
-launcher. First, declare a dependency on the launcher-interface. Do not
+launcher. First, declare a dependency on the `launcher-interface`. Do not
 declare a dependency on the launcher itself. The launcher interface
 consists strictly of Java interfaces in order to avoid binary
 incompatibility between the version of Scala used to compile the
@@ -20603,11 +21641,18 @@ interface class will be provided by the launcher, so it is only a
 compile-time dependency. If you are building with sbt, your dependency
 definition would be:
 
-Make the entry point to your class implement 'xsbti.AppMain'. An example
+```scala
+libraryDependencies += "org.scala-sbt" % "launcher-interface" % "1.0.0" % "provided"
+
+resolvers += sbtResolver.value
+```
+
+Make the entry point to your class implement `xsbti.AppMain`. An example
 that uses some of the information:
 
 ```scala
-package xsbt.test
+package com.acme.launcherapp
+
 class Main extends xsbti.AppMain
 {
     def run(configuration: xsbti.AppConfiguration) =
@@ -20623,14 +21668,14 @@ class Main extends xsbti.AppMain
         // and how to return the code to exit with
         scalaVersion match
         {
-            case "2.9.3" =>
+            case "2.10.6" =>
                 new xsbti.Reboot {
                     def arguments = configuration.arguments
                     def baseDirectory = configuration.baseDirectory
-                    def scalaVersion = "2.10.2
+                    def scalaVersion = "2.11.8"
                     def app = configuration.provider.id
                 }
-            case "2.10.2" => new Exit(1)
+            case "2.11.8" => new Exit(1)
             case _ => new Exit(0)
         }
     }
@@ -20641,7 +21686,23 @@ class Main extends xsbti.AppMain
 Next, define a configuration file for the launcher. For the above class,
 it might look like:
 
-Then, `publishLocal` or `+publishLocal` the application to make it
+```
+[scala]
+  version: 2.11.8
+[app]
+  org: com.acme
+  name: launcherapp
+  version: 0.0.1
+  class: com.acme.launcherapp.Main
+  cross-versioned: true
+[repositories]
+  local
+  maven-central
+[boot]
+ directory: ${user.home}/.myapp/boot
+```
+
+Then, `publishLocal` or `+publishLocal` the application in sbt's shell to make it
 available. For more information, see
 [Launcher Configuration][Launcher-Configuration].
 
@@ -20690,13 +21751,13 @@ ${boot.directory}/${scala.version}/${app.org}/${app.name}/.
 Once all required code is downloaded, the class loaders are set up. The
 launcher creates a class loader for the requested version of Scala. It
 then creates a child class loader containing the jars for the requested
-'app.components' and with the paths specified in `app.resources`. An
+`app.components` and with the paths specified in `app.resources`. An
 application that does not use components will have all of its jars in
 this class loader.
 
 The main class for the application is then instantiated. It must be a
 public class with a public no-argument constructor and must conform to
-xsbti.AppMain. The `run` method is invoked and execution passes to the
+`xsbti.AppMain`. The `run` method is invoked and execution passes to the
 application. The argument to the 'run' method provides configuration
 information and a callback to obtain a class loader for any version of
 Scala that can be obtained from a repository in [repositories]. The
@@ -20708,14 +21769,14 @@ the application or that it should exit with the provided exit code.
 Sbt Launcher Architecture
 -------------------------
 
-The sbt launcher is a mechanism whereby modules can be loaded from ivy
-and executed within a jvm. It abstracts the mechanism of grabbing and
-caching jars, allowing users to focus on what application they want and
+The sbt launcher is a mechanism whereby modules can be loaded from Ivy
+and executed within a JVM. It abstracts the mechanism of grabbing and
+caching jars, allowing users to focus on what application they want, and
 control its versions.
 
-The launcher's primary goal is to take configuration for applications,
-mostly just ivy coordinates and a main class, and start the application.
-The launcher resolves the ivy module, caches the required runtime jars
+The launcher's primary goal is to take configuration for applications—
+mostly Ivy coordinates and a main class—and start the application.
+The launcher resolves the Ivy module, caches the required runtime jars,
 and starts the application.
 
 The sbt launcher provides the application with the means to load a
@@ -20736,27 +21797,27 @@ run them. This is done through the `[app]` configuration section. See
 [launcher configuration][Launcher-Configuration] for more information on how to configure module
 resolution.
 
-Module resolution is performed using the Ivy dependency managemnet
+Module resolution is performed using the Ivy dependency management
 library. This library supports loading artifacts from Maven repositories
 as well.
 
 ### Classloader Caching and Isolation
 
 The sbt launcher's classloading structure is different than just
-starting an application in the standard java mechanism. Every
-application loaded by by the launcher is given its own classloader. This
+starting an application in the standard Java mechanism. Every
+application loaded by the launcher is given its own classloader. This
 classloader is a child of the Scala classloader used by the application.
 The Scala classloader can see all of the `xsbti.*` classes from the
 launcher itself.
 
-Here's an example classloader layout from an sbt launched application.
+Here's an example classloader layout from an sbt-launched application.
 
 ![image](files/classloaders.png)
 
 In this diagram, three different applications were loaded. Two of these
 use the same version of Scala (2.9.2). In this case, sbt can share the
 same classloader for these applications. This has the benefit that any
-JIT optimisations performed on scala classes can be re-used between
+JIT optimisations performed on Scala classes can be re-used between
 applications thanks to the shared classloader.
 
 ### Caching
@@ -20799,12 +21860,12 @@ following:
 5.  Release all locks and shutdown.
 
 The configured `server.lock` file is thus used to prevent multiple
-servers from running. Sbt itself uses this to prevent more than one
+servers from running. sbt itself uses this to prevent more than one
 server running on any given project directory by configuring
 `server.lock` to be `${user.dir}/.sbtserver`.
 
 
-Sbt Launcher Configuration
+sbt Launcher Configuration
 --------------------------
 
 The launcher may be configured in one of the following ways in
@@ -20817,7 +21878,7 @@ increasing order of precedence:
     line, either as a path or an absolute URI. This can be done by
     either specifying the location as the system property
     sbt.boot.properties or as the first argument to the launcher
-    prefixed by '@'. The system property has lower precedence.
+    prefixed by `@`. The system property has lower precedence.
     Resolution of a relative path is first attempted against the current
     working directory, then against the user's home directory, and then
     against the directory containing the launcher jar.
@@ -20863,9 +21924,9 @@ Let's look at all the launcher configuration sections in detail:
 The `[scala]` section is used to configure the version of Scala. It has
 one property:
 
--   `version` - The version of scala an application uses, or `auto` if
+-   `version` - The version of Scala an application uses, or `auto` if
     the application is not cross-versioned.
--   `classifiers` - The (optional) list of additional scala artifacts to
+-   `classifiers` - The (optional) list of additional Scala artifacts to
     resolve, e.g. sources.
 
 #### 2. Application Identification
@@ -20874,29 +21935,27 @@ The `[app]` section configures how the launcher will look for your
 application using the Ivy dependency manager. It consists of the
 following properties:
 
--   `org` - The organization associated with the Ivy module. (groupId in
-    maven vernacular)
--   `name` - The name of the Ivy module. (`artifactId` in maven
+-   `org` - The organization associated with the Ivy module. (`groupId` in
+    Maven vernacular)
+-   `name` - The name of the Ivy module. (`artifactId` in Maven
     vernacular)
 -   `version` - The revision of the Ivy module.
 -   `class` - The name of the "entry point" into the application. An
-    entry point must be a class which meets one of the following critera
-    -   Extends the xsbti.AppMain interface.
-    -   Extends the xsbti.ServerMain interfaces.
-    -   Contains a method with the signature static void main(String[])
-    -   Contains a method with the signature static int main(String[])
-
-    - Contains a method with the signature
-    static xsbti.Exit main(String[])
+    entry point must be a class which meets one of the following criteria
+    -   Extends the `xsbti.AppMain` interface.
+    -   Extends the `xsbti.ServerMain` interfaces.
+    -   Contains a method with the signature `static void main(String[])`
+    -   Contains a method with the signature `static int main(String[])`
+    - Contains a method with the signature `static xsbti.Exit main(String[])`
 -   `components` - An optional list of additional components that Ivy
     should resolve.
 -   `cross-versioned` - An optional string denoting how this application
-    is published. If app.cross-versioned is binary, the resolved module
+    is published. If `app.cross-versioned` is binary, the resolved module
     ID is
     `{app.name+'_'+CrossVersion.binaryScalaVersion(scala.version)}`. If
-    app.cross-versioned is true or full, the resolved module ID is
-    `{app.name+'_'+scala.version}`. The scala.version property must be
-    specified and cannot be auto when cross-versioned.
+    `app.cross-versioned` is `true` or `full`, the resolved module ID is
+    `{app.name+'_'+scala.version}`. The `scala.version` property must be
+    specified and cannot be `auto` when cross-versioned.
 -   `resources` - An optional list of jar files that should be added to
     the application's classpath.
 -   `classifiers` - An optional list of additional classifiers that
@@ -20908,14 +21967,14 @@ The `[repositories]` section configures where and how Ivy will look for
 your application. Each line denotes a repository where Ivy will look.
 
 *Note: This section configured the default location where Ivy will look,
-but this can be overriden via user configuration.*
+but this can be overridden via user configuration.*
 
 There are several built-in strings that can be used for common
 repositories:
 
--   `local` - the local ivy repository `~/.ivy2/local`.
--   `maven-local` - The local maven repository `~/.m2/repository`.
--   `maven-central` - The maven central repository `repo.maven.org`.
+-   `local` - the local Ivy repository `~/.ivy2/local`.
+-   `maven-local` - The local Maven repository `~/.m2/repository`.
+-   `maven-central` - The Maven Central repository `repo.maven.org`.
 
 Besides built in repositories, other repositories can be configured
 using the following syntax:
@@ -20932,7 +21991,7 @@ The `pattern` property is an optional specification of *how* Ivy should
 look for modules. By default, the launcher assumes repositories are in
 the maven style format.
 
-The `skipConsistencyCheck` string is used to tell ivy not to validate
+The `skipConsistencyCheck` string is used to tell Ivy not to validate
 checksums and signatures of files it resolves.
 
 #### 4. The Boot section
@@ -20952,19 +22011,19 @@ The `[ivy]` section is used to configure the Ivy dependency manager for
 resolving applications. It consists of the following properties:
 
 -   `ivy-home` - The home directory for Ivy. This determines where the
-    ivy-local repository is located, and also where the ivy cache is
+    ivy-local repository is located, and also where the Ivy cache is
     stored. Defaults to `~/.ivy2`
 -   `checksums` - The comma-separated list of checksums that Ivy should
     use to verify artifacts have correctly resolved, e.g. md5 or sha1.
 -   `override-build-repos` - If this is set, then the
-    `isOverrideRepositories` method on xsbti.Launcher interface will
-    return its value. The use of this method is application specific,
+    `isOverrideRepositories` method on `xsbti.Launcher` interface will
+    return its value. The use of this method is application-specific,
     but in the case of sbt denotes that the configuration of
     repositories in the launcher should override those used by any
     build. Applications should respect this convention if they can.
 -   `repository-config` - This specifies a configuration location where
-    ivy repositories can also be configured. If this file exists, then
-    its contents override the [repositories] section.
+    Ivy repositories can also be configured. If this file exists, then
+    its contents override the `[repositories]` section.
 
 #### 6. The Server Section
 
@@ -20974,13 +22033,12 @@ properties:
 
 -   `lock` - The file that controls access to the running server. This
     file will contain the active port used by a server and must be
-    located on a a filesystem that supports locking.
--   `jvmargs` - A file that contains line-separated JVM arguments that where
-    :   use when starting the server.
-
+    located on a filesystem that supports locking.
+-   `jvmargs` - A file that contains line-separated JVM arguments that were
+    used when starting the server.
 -   `jvmprops` - The location of a properties file that will define
     override properties in the server. All properties defined in this
-    file will be set as -D java properties.
+    file will be set as `-D` Java properties.
 
 ### Variable Substitution
 
@@ -20999,11 +22057,11 @@ substituted.
 
 There is also a special variable substitution:
 
--   `read(property.name)[default]`
+    read(property.name)[default]
 
 This will look in the file configured by `boot.properties` for a value.
 If there is no `boot.properties` file configured, or the property does
-not existt, then the default value is chosen.
+not exist, then the default value is chosen.
 
 ### Syntax
 
@@ -21075,7 +22133,7 @@ Core Principles
 ---------------
 
 This document details the core principles overarching sbt's design and
-code style. Sbt's core principles can be stated quite simply:
+code style. sbt's core principles can be stated quite simply:
 
 1.  Everything should have a `Type`, enforced as much as is practical.
 2.  Dependencies should be **explicit**.
@@ -21087,7 +22145,7 @@ sbt.
 
 ### Introduction to build state
 
-This is the first piece you hit when starting sbt. Sbt's command engine
+This is the first piece you hit when starting sbt. sbt's command engine
 is the means by which it processes user requests using the build state.
 The command engine is essentially a means of applying **state
 transformations** on the build state, to execute user requests.
@@ -21104,12 +22162,12 @@ needs a mechanism to store the state from any potential client. In
 dynamic languages, this can be done directly on objects.
 
 A naive approach in Scala is to use a `Map<String,Any>`. However, this
-vioaltes tennant #1: Everythign should have a `Type`. So, sbt defines a
+violates tenant #1: Everything should have a `Type`. So, sbt defines a
 new type of map called an `AttributeMap`. An `AttributeMap` is a
 key-value storage mechanism where keys are both strings *and* expected
 `Type`s for their value.
 
-Here is what the typesafe `AttributeKey` key looks like :
+Here is what the type-safe `AttributeKey` key looks like :
 
     sealed trait AttributeKey[T] {
       /** The label is the identifier for the key and is camelCase by convention. */
@@ -21119,20 +22177,21 @@ Here is what the typesafe `AttributeKey` key looks like :
     }
 
 These keys store both a `label` (`string`) and some runtime type
-information (`manifest`). To put or get something on the AttributeMap,
+information (`manifest`). To put or get something on the `AttributeMap`,
 we first need to construct one of these keys. Let's look at the basic
-definition of the `AttributeMap` :
+definition of the `AttributeMap`:
 
-    trait AttributeMap {
-      /** Gets the value of type ``T`` associated with the key ``k`` or ``None`` if no value is associated. 
-      * If a key with the same label but a different type is defined, this method will return ``None``. */
-      def get[T](k: AttributeKey[T]): Option[T]
+```scala
+trait AttributeMap {
+  /** Gets the value of type ``T`` associated with the key ``k`` or ``None`` if no value is associated. 
+  * If a key with the same label but a different type is defined, this method will return ``None``. */
+  def get[T](k: AttributeKey[T]): Option[T]
 
-
-      /** Adds the mapping ``k -> value`` to this map, replacing any existing mapping for ``k``.
-      * Any mappings for keys with the same label but different types are unaffected. */
-      def put[T](k: AttributeKey[T], value: T): AttributeMap
-    }
+  /** Adds the mapping ``k -> value`` to this map, replacing any existing mapping for ``k``.
+  * Any mappings for keys with the same label but different types are unaffected. */
+  def put[T](k: AttributeKey[T], value: T): AttributeMap
+}
+```
 
 Now that there's a definition of what build state is, there needs to be
 a way to dynamically construct it. In sbt, this is done through the
@@ -21149,16 +22208,16 @@ setting consists of two pieces:
 2.  An `Initialize[T]` object which is able to construct the value for
     this setting.
 
-Sbt's initialization time is basically just taking a sequence of these
+sbt's initialization time is basically just taking a sequence of these
 `Setting[_]` objects and running their initialization objects and then
 storing the value into the `AttributeMap`. This means overwriting an
-exisitng value at a key is as easy as appending a `Setting[_]` to the
+existing value at a key is as easy as appending a `Setting[_]` to the
 end of the sequence which does so.
 
 Where it gets interesting is that `Initialize[T]` can depend on other
 `AttributeKey[_]`s in the build state. Each `Initialize[_]` can pull
 values from any `AttributeKey[_]` in the build state's `AttributeMap` to
-compute its value. Sbt ensures a few things when it comes to
+compute its value. sbt ensures a few things when it comes to
 `Initialize[_]` dependencies:
 
 1.  There can be no circular dependencies
@@ -21173,8 +22232,8 @@ Let's look at what gets stored for the setting :
 ![image](files/overview-setting-example.png)
 
 Here, a `Setting[_]` is constructed that understands it depends on the
-value in the `name` AttributeKey. Its initialize block first grabs the
-value of the `name` key, then runs the function normalize on it to
+value in the `name` `AttributeKey`. Its initialize block first grabs the
+value of the `name` key, then runs the function `normalize` on it to
 compute its value.
 
 This represents the core mechanism of how to construct sbt's build
@@ -21185,21 +22244,21 @@ requests.
 
 ### Task Architecture
 
-The next layer in sbt is around these user request, or tasks. When a
+The next layer in sbt is around these user requests, or tasks. When a
 user configures a build, they are defining a set of repeatable tasks
 that they can run on their project. Things like `compile` or `test`.
 These tasks *also* have a dependency graph, where e.g. the `test` task
 requires that `compile` has run before it can successfully execute.
 
-Sbt's defines a class `Task[T]`. The `T` type parameter represents the
+sbt defines a class `Task[T]`. The `T` type parameter represents the
 type of data returned by a task. Remember the tenets of sbt? "All things
 have types" and "Dependencies are explicit" both hold true for tasks.
-Sbt promotes a style of task dependencies that is closer to functional
-programming: Return data for your users rather than using shared mutable
+sbt promotes a style of task dependencies that is closer to functional
+programming: return data for your users rather than using shared mutable
 state.
 
-Most build tools communciate over the filesystem, and indeed sbt, by
-necessity, does some of this. However, for stable parallelization it is
+Most build tools communicate over the filesystem, and indeed by necessity
+sbt does some of this. However, for stable parallelization it is
 far better to keep tasks isolated on the filesystem and communicate
 directly through types.
 
@@ -21211,7 +22270,7 @@ TODO - More on `Task[_]`
 
 TODO - Transition into `InputTask[_]`, rehash Command
 
-TODO - Tansition into Scope.
+TODO - Transition into Scope.
 
 
   [Sdocs-Global]: ../api/sbt/Global$.html
@@ -21254,19 +22313,19 @@ and `SettingsUsage.scala`. Finally, run sbt and enter the REPL using
 The first part of the example defines the custom settings system. There
 are three main parts:
 
-1.  Define the Scope type.
-2.  Define a function that converts that Scope (plus an AttributeKey) to
-    a String.
-3.  Define a delegation function that defines the sequence of Scopes in
+1.  Define the `Scope` type.
+2.  Define a function that converts that `Scope` (plus an `AttributeKey`) to
+    a `String`.
+3.  Define a delegation function that defines the sequence of `Scope`s in
     which to look up a value.
 
 There is also a fourth, but its usage is likely to be specific to sbt at
 this time. The example uses a trivial implementation for this part.
 
-`SettingsExample.scala`
+`SettingsExample.scala`:
 
 ```scala
-  import sbt._
+import sbt._
 
 /** Define our settings system */
 
@@ -21303,14 +22362,16 @@ This part shows how to use the system we just defined. The end result is
 a `Settings[Scope]` value. This type is basically a mapping
 `Scope -> AttributeKey[T] -> Option[T]`. See the
 [Settings API documentation](../api/sbt/Settings.html) for
-details. `SettingsUsage.scala`:
+details.
+
+`SettingsUsage.scala`:
 
 ```scala
 /** Usage Example **/
 
-   import sbt._
-   import SettingsExample._
-   import Types._
+import sbt._
+import SettingsExample._
+import Types._
 
 object SettingsUsage {
 
@@ -21361,16 +22422,16 @@ a5 = Some(4)
 b5 = Some(9)
 ```
 
--   For the None results, we never defined the value and there was no
+-   For the `None` results, we never defined the value and there was no
     value to delegate to.
--   For a3, we explicitly defined it to be 3.
--   a4 wasn't defined, so it delegates to a3 according to our delegates
+-   For `a3`, we explicitly defined it to be 3.
+-   `a4` wasn't defined, so it delegates to `a3` according to our `delegates`
     function.
--   b4 gets the value for a4 (which delegates to a3, so it is 3) and
+-   `b4` gets the value for `a4` (which delegates to `a3`, so it is 3) and
     multiplies by 3
--   a5 is defined as the previous value of a5 + 1 and since no previous
-    value of a5 was defined, it delegates to a4, resulting in 3+1=4.
--   b5 isn't defined explicitly, so it delegates to b4 and is therefore
+-   `a5` is defined as the previous value of `a5` + 1 and since no previous
+    value of `a5` was defined, it delegates to `a4`, resulting in 3+1=4.
+-   `b5` isn't defined explicitly, so it delegates to `b4` and is therefore
     equal to 9 as well
 
 ### sbt Settings Discussion
@@ -21395,8 +22456,8 @@ For example, in a project, a
 [Select][Sdocs-Select] referring to the defining project. All other axes that are
 [This][Sdocs-This] are
 translated to
-[Global][Sdocs-Global]. Functions like inConfig and inTask transform
-This into a
+[Global][Sdocs-Global]. Functions like `inConfig` and `inTask` transform
+`This` into a
 [Select][Sdocs-Select] for a specific value. For example,
 `inConfig(Compile)(someSettings)` translates the configuration axis for
 all settings in *someSettings* to be `Select(Compile)` if the axis value
@@ -21405,20 +22466,20 @@ is
 
 So, from the example and from sbt's scopes, you can see that the core
 settings engine does not impose much on the structure of a scope. All it
-requires is a delegates function `Scope => Seq[Scope]` and a `display`
+requires is a `delegates` function `Scope => Seq[Scope]` and a `display`
 function. You can choose a scope type that makes sense for your
 situation.
 
 #### Constructing settings
 
-The *app*, *value*, *update*, and related methods are the core methods
+The `app`, `value`, `update`, and related methods are the core methods
 for constructing settings. This example obviously looks rather different
 from sbt's interface because these methods are not typically used
 directly, but are wrapped in a higher-level abstraction.
 
-With the core settings engine, you work with HLists to access other
-settings. In sbt's higher-level system, there are wrappers around HList
-for TupleN and FunctionN for N = 1-9 (except Tuple1 isn't actually
+With the core settings engine, you work with `HList`s to access other
+settings. In sbt's higher-level system, there are wrappers around `HList`
+for `TupleN` and `FunctionN` for N = 1-9 (except `Tuple1` isn't actually
 used). When working with arbitrary arity, it is useful to make these
 wrappers at the highest level possible. This is because once wrappers
 are defined, code must be duplicated for every N. By making the wrappers
@@ -21438,13 +22499,13 @@ to `setting(a, value( task { 3 } ) )`. See
 
 #### Settings definitions
 
-sbt also provides a way to define these settings in a file (build.sbt
-and Build.scala). This is done for build.sbt using basic parsing and
+sbt also provides a way to define these settings in a file (`build.sbt`
+and `Build.scala`). This is done for `build.sbt` using basic parsing and
 then passing the resulting chunks of code to `compile/Eval.scala`. For
 all definitions, sbt manages the classpaths and recompilation process to
 obtain the settings. It also provides a way for users to define project,
 task, and configuration delegation, which ends up being used by the
-delegates function.
+`delegates` function.
 
 
 Setting Initialization
@@ -21456,11 +22517,10 @@ ordering of everything.
 
 As stated elsewhere, sbt constructs its initialization graph and task
 graph via `Setting[_]` objects. A setting is something which can take
-the values stored at other Keys in the build state, and generates a new
-value for a particular build key. Sbt converts all registered
+the values stored at other `Keys` in the build state, and generates a new
+value for a particular build key. sbt converts all registered
 `Setting[_]` objects into a giant linear sequence and *compiles* them
-into the a task graph. This task graph is then used to execute your
-build.
+into a task graph. This task graph is then used to execute your build.
 
 All of sbt's loading semantics are contained within the
 [Load.scala](../sxr/sbt/Load.scala.html) file. It is approximately
@@ -21496,17 +22556,17 @@ shows the two most important:
     }
     ```
 
-    or in a `build.sbt` file :
+    or in a `build.sbt` file:
 
     ```scala
     foo in ThisBuild := "hi"
     ```
 
 -   `projectSettings` - These are settings specific to a project. They
-    are specific to a *particular sub project* in the build. A plugin
+    are specific to a *particular subproject* in the build. A plugin
     may be contributing its settings to more than on project, in which
     case the values are duplicated for each project. You add project
-    specific settings, eg. in `project/build.scala` :
+    specific settings, eg. in `project/build.scala`:
 
     ```scala
     object MyBuild extends Build {
@@ -21521,7 +22581,7 @@ default inclusion order for sbt is:
 1.  All AutoPlugin settings
 2.  All settings defined in `project/Build.scala`
 3.  All settings defined in the user directory
-    (`~/.sbt/<verison>/*.sbt`)
+    (`~/.sbt/<version>/*.sbt`)
 4.  All local configurations (`build.sbt`)
 
 ### Controlling Initialization
@@ -21529,7 +22589,7 @@ default inclusion order for sbt is:
 The order which sbt uses to load settings is configurable at a *project*
 level. This means that we can't control the order of settings added to
 Build/Global namespace, but we can control how each project loads, e.g.
-plugins and `.sbt` files. To do so, use the `AddSettings` class :
+plugins and `.sbt` files. To do so, use the `AddSettings` class:
 
 ```scala
 import sbt._
@@ -21552,10 +22612,10 @@ In the above project, we've modified the order of settings to be:
 
 What we've excluded:
 
--   All settings from the user directory (`~/.sbt/<verison>`)
+-   All settings from the user directory (`~/.sbt/<version>`)
 -   All `*.sbt` settings.
 
-The AddSettings object provides the following "groups" of settings you
+The `AddSettings` object provides the following "groups" of settings you
 can use for ordering:
 
 - `autoPlugins` All the ordered settings of plugins after they've gone through
@@ -21573,7 +22633,7 @@ can use for ordering:
 For example, let's see what happens if we move the `build.sbt` files
 *before* the `buildScalaFile`.
 
-Let's create an example project the following defintiion. `project/build.scala` :
+Let's create an example project the following definition. `project/build.scala`:
 
 ```scala
 object MyTestBuild extends Build {
@@ -21586,17 +22646,17 @@ object MyTestBuild extends Build {
 }
 ```
 
-This build defines a version string which appends the scala version if
-the current scala version is not the in the `2.10.x` series. Now, when
+This build defines a version string which appends the Scala version if
+the current Scala version is not the in the `2.10.x` series. Now, when
 issuing a release we want to lock down the version. Most tools assume
-this can happen by writing a `version.sbt` file. `version.sbt` :
+this can happen by writing a `version.sbt` file. `version.sbt`:
 
 ```scala
 version := "1.0.0"
 ```
 
 However, when we load this new build, we find that the `version` in
-`version.sbt` has been **overriden** by the one defined in
+`version.sbt` has been **overridden** by the one defined in
 `project/Build.scala` because of the order we defined for settings, so
 the new `version.sbt` file has no effect.
 
@@ -21772,7 +22832,7 @@ object Demo extends Build
 
     val n = Project.normalizeProjectID(model.getName)
     val base = Option(model.getProjectDirectory) getOrElse info.base
-    val root = Project(n, base) settings( pomSettings(model) : _*)
+    val root = Project(n, base) settings( pomSettings(model) )
     val build = new Build { override def projects = Seq(root) }
     val loader = this.getClass.getClassLoader
     val definitions = new LoadedDefinitions(info.base, Nil, loader, build :: Nil, Nil)
@@ -21912,7 +22972,7 @@ There are three files in this example:
 To try out this example:
 
 1.  Put the first two files in a new directory
-2.  Run `sbt publishLocal` in that directory
+2.  In sbt's shell run `publishLocal` in that directory
 3.  Run `sbt @path/to/hello.build.properties` to run the application.
 
 Like for sbt itself, you can specify commands from the command line

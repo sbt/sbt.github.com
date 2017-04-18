@@ -3,7 +3,7 @@
       <head>
         <meta charset="utf-8"/>
         <meta content="width=device-width, initial-scale=1" name="viewport"/>
-        <title>sbt Reference Manual — .sbt ビルド定義</title>
+        <title>sbt Reference Manual — ビルド定義</title>
         <link rel="shortcut icon" href="../favicon.ico"/>
         <link rel="stylesheet" href="../css/blueprint/screen.css" type="text/css" media="screen, projection"/>
         <link rel="stylesheet" href="../css/blueprint/grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
@@ -37,85 +37,81 @@
         <a class="page prev nav" href="Running.html">
             <span class="space">&nbsp;</span>
             <span class="flip arrow">&gt;</span>
-          </a><a class="page next nav" href="Scopes.html">
+          </a><a class="page next nav" href="Task-Graph.html">
             <span class="space">&nbsp;</span>
             <span class="arrow">&gt;</span>
           </a>
         <div class="container contentswrapper">
           <div class="span-16 prepend-1 append-1 contents">
-            <h2 id=".sbt+%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9">.sbt ビルド定義<a href="#.sbt+%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このページでは、多少の「理論」も含めた sbt のビルド定義 (build definition) と <code>build.sbt</code> の構文を説明する。
-君が<a href="Running.html">sbt の使い方</a>を分かっていて、「始める sbt」の前のページも読んだことを前提とする。
-</p><h3 id="2+%E7%A8%AE%E9%A1%9E%E3%81%AE%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9">2 種類のビルド定義<a href="#2+%E7%A8%AE%E9%A1%9E%E3%81%AE%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>ビルド定義には以下の 2 種類がある:
-</p><ol><li>マルチプロジェクトでの <code>.sbt</code> ビルド定義
-</li><li>bare <code>.sbt</code> ビルド定義
-</li></ol><p>このページでは最も新しいマルチプロジェクトでの <code>.sbt</code> ビルド定義を紹介する。
-これは従来の 2 つのビルド定義の長所を組み合わせたもので、全ての用途に適している。
-以前に書かれたビルド定義を使って作業をするときは、古い種類のものも目にするかもしれない。
-それらに関しては (このガイドの後ほどの) <a href="Bare-Def.html">bare .sbt ビルド定義</a>と <a href="Full-Def.html">.scala ビルド定義</a>を参照。
-</p><p>さらに、ビルド定義は <code>project/</code> ディレクトリ直下に置かれた <code>.scala</code> で終わるファイルを含むことができ、そこで共通の関数や値を定義することもできる。
-</p><h3 id="%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%81%A8%E3%81%AF%E4%BD%95%E3%81%8B">ビルド定義とは何か<a href="#%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%81%A8%E3%81%AF%E4%BD%95%E3%81%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><strong> ここは読んで下さい </strong>
-</p><p>あらかじめ決められたディレクトリを走査し、ビルド定義に関するファイル群を処理した後、最終的に sbt は <code>Project</code> の定義群を作る。
-</p><p>例えば、カレントディレクトリにあるプロジェクトの <a href="../../api/sbt/Project.html">Project</a> 定義は <code>build.sbt</code> に以下のように記述できる：
+            <h2 id="%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9">ビルド定義<a href="#%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このページでは、多少の「理論」も含めた sbt のビルド定義 (build definition) と <code>build.sbt</code> の構文を説明する。
+sbt 0.13.13 など最近のバージョンをインストール済みで、
+<a href="Running.html">sbt の使い方</a>を分かっていて、「始める sbt」の前のページも読んだことを前提とする。
+</p><p>このページでは <code>build.sbt</code> ビルド定義を紹介する。
+</p><h3 id="sbt+%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3%E3%81%AE%E6%8C%87%E5%AE%9A">sbt バージョンの指定<a href="#sbt+%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3%E3%81%AE%E6%8C%87%E5%AE%9A" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>ビルド定義の一部としてビルドに用いる sbt のバージョンを指定する。
+これによって異なる sbt ランチャーを持つ複数の人がいても同じプロジェクトを同じようにビルドすることができる。
+そのためには、<code>project/build.properties</code>
+という名前のファイルを作成して以下のように
+sbt バージョンを指定する:
+</p><pre><code class="">sbt.version=1.0.0-M4
+</code></pre><p>もしも指定されたバージョンがローカルマシンに無ければ、
+<code>sbt</code> ランチャーは自動的にダウンロードを行う。
+このファイルが無ければ、<code>sbt</code> ランチャーは任意のバージョンを選択する。
+これはビルドの移植性を下げるため、推奨されない。
+</p><h3 id="%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%81%A8%E3%81%AF%E4%BD%95%E3%81%8B">ビルド定義とは何か<a href="#%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%81%A8%E3%81%AF%E4%BD%95%E3%81%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><strong>ビルド定義</strong>は、<code>build.sbt</code>
+にて定義され、プロジェクト (型は <a href="../../api/sbt/Project.html">Project</a>)
+の集合によって構成される。
+プロジェクトという用語が曖昧であることがあるため、このガイドではこれらを<strong>サブプロジェクト</strong>と呼ぶことが多い。
+</p><p>例えば、カレントディレクトリにあるサブプロジェクトは <code>build.sbt</code> に以下のように定義できる：
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
-</code></pre><p>それぞれのプロジェクトは、そのプロジェクトを記述する不変 Map （キーと値のペア群のセット）に関連付けられる。
-</p><p>例えば、<code>name</code> というキーがあるが、それはプロジェクト名という文字列の値に関連付けられる。
-</p><p><em>ビルド定義ファイルは直接的には sbt の Map に影響を与えない。</em>
-</p><p>その代わり、ビルド定義は <code>Setting[T]</code> 型のオブジェクトを含む巨大なリストを作る。
-<code>T</code> は Map における値の型だ。（Scala の <code>Setting[T]</code> は Java の <code>Setting&lt;T&gt;</code> と同様。）
-<code>Setting</code> は、新しいキーと値のペアの追加、既存の値への付加のような<em> Map の変換</em>を記述する。
-（不変データ構造と関数型プログラミングの精神に則り、この変換は新しい Map を返し、古い Map は更新されない。）
-</p><p>カレントディレクトリに位置するプロジェクトに対してプロジェクト名のための <code>Setting[String]</code>
-を関連付けるためには以下のように書く:
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
-  settings(
-    name := &quot;hello&quot;
+  .settings(
+    name := &quot;Hello&quot;,
+    scalaVersion := &quot;2.12.1&quot;
   )
-</code></pre><p>この <code>Setting[String]</code> は <code>name</code> キーを追加（もしくは置換）して <code>&quot;hello&quot;</code> という値に設定することで Map を変換する。
-変換された Map は新しい sbt の Map となる。
-</p><p> Map を作るにあたり、同じキーへのすべての変更が同時に実行されるため、そして、他のキーに依存する値の処理が依存するキーの後に処理されるように、
-sbt はまず <code>Setting</code> のリストをソートする。
-次にソートされた <code>Setting</code> のリストを順番にみていって、一つずつ Map に適用する。
-</p><p>まとめ: <em>ビルド定義とは <code>Setting[T]</code> のリストを持った <code>Project</code> を定義するものであり、
-<code>Setting[T]</code> は sbt が持つキーと値のペアの Map に作用する変換を表し、その <code>T</code> は値の型である。</em>
-</p><h3 id="%E3%81%AF%E3%81%A9%E3%81%AE%E3%82%88%E3%81%86%E3%81%AB+settings+%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B%E3%81%8B"><code>build.sbt</code> はどのように settings を定義するか<a href="#%E3%81%AF%E3%81%A9%E3%81%AE%E3%82%88%E3%81%86%E3%81%AB+settings+%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B%E3%81%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> が定義する <code>Project</code> は <code>settings</code> と呼ばれる Scala の式のリストを持つ。
-</p><p>以下に具体例を示す:
-</p><pre><code class="prettyprint lang-scala">lazy val commonSettings = Seq(
-  organization := &quot;com.example&quot;,
-  version := &quot;0.1.0&quot;,
-  scalaVersion := &quot;2.11.8&quot;
-)
-
-lazy val root = (project in file(&quot;.&quot;)).
-  settings(commonSettings: _*).
-  settings(
-    name := &quot;hello&quot;
+</code></pre><p>それぞれのサブプロジェクトは、キーと値のペアによって詳細が設定される。
+</p><p>例えば、<code>name</code> というキーがあるが、それはサブプロジェクト名という文字列の値に関連付けられる。
+キーと値のペア列は <code>.settings(...)</code> メソッド内に列挙される:
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    name := &quot;Hello&quot;,
+    scalaVersion := &quot;2.12.1&quot;
   )
-</code></pre><p>それぞれの <code>Setting</code> は Scala の式で定義される。
-<code>settings</code> 内の式は、それぞれ独立しており、完全な Scala の文ではなく、式である。
-</p><p><code>build.sbt</code> 内には <code>val</code>、<code>lazy val</code>、<code>def</code> を定義することもできる。
-<code>build.sbt</code> において、トップレベルで <code>object</code> や <code>class</code> を定義することはできない。
-それらが必要なら <code>project/</code> 配下に <code>.scala</code> ビルド定義として完全な Scala ソースファイルを置くべきだろう。
-</p><p>左辺値の <code>name</code>、<code>version</code>、および <code>scalaVersion</code> は <em>キー</em>である。
-キーは <code>SettingKey[T]</code>、<code>TaskKey[T]</code>、もしくは <code>InputKey[T]</code> のインスタンスで、
+</code></pre><h3 id="%E3%81%AF%E3%81%A9%E3%81%AE%E3%82%88%E3%81%86%E3%81%AB+settings+%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B%E3%81%8B"><code>build.sbt</code> はどのように settings を定義するか<a href="#%E3%81%AF%E3%81%A9%E3%81%AE%E3%82%88%E3%81%86%E3%81%AB+settings+%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B%E3%81%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> において定義されるサブプロジェクトは、キーと値のペア列を持つと言ったが、
+このペアは<strong>セッティング式</strong> (setting expression) と呼ばれ、<strong>build.sbt DSL</strong> にて記述される。
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    name         := &quot;hello&quot;,
+    organization := &quot;com.example&quot;,
+    scalaVersion := &quot;2.12.1&quot;,
+    version      := &quot;0.1.0-SNAPSHOT&quot;
+  )
+</code></pre><p>build.sbt DSL を詳しくみてみよう:<br>
+<img src="../files/setting-expression.png" alt="setting expression"/><br>
+<br>
+それぞれのエントリーは<strong>セッティング式</strong> (setting expression) と呼ばれる。
+中にはタスク式と呼ばれるものもある。この違いはこのページの後で説明する。
+</p><p>セッティング式は以下の 3部から構成される:
+</p><ol><li>左辺項を<strong>キー</strong> (key) という。
+</li><li><strong>演算子</strong>。この場合は <code>:=</code>。
+</li><li>右辺項は<strong>本文</strong> (body)、もしくは<strong>セッティング本文</strong>という。
+</li></ol><p>左辺値の <code>name</code>、<code>version</code>、および <code>scalaVersion</code> は<strong>キー</strong>である。
+キーは
+<a href="../api/index.html#sbt.SettingKey"><code>SettingKey[T]</code></a>、
+<a href="../api/index.html#sbt.TaskKey"><code>TaskKey[T]</code></a>、もしくは
+<a href="(../api/index.html#sbt.InputKey)"><code>InputKey[T]</code></a> のインスタンスで、
 <code>T</code> はその値の型である。キーの種類に関しては後述する。
-</p><p>キーには <code>:=</code> というメソッドがあり、このメソッドは <code>Setting[T]</code> を返す。
-Java っぽい構文でこのメソッドを呼び出すこともできる:
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
-  settings(
-    name.:=(&quot;hello&quot;)
-  )
-</code></pre><p>しかし、Scala なら <code>name := &quot;hello&quot;</code> と書くこともできる（Scala では全てのメソッドがどちらの構文でも書ける）。
-</p><p><code>name</code> キーの <code>:=</code> メソッドは <code>Setting</code> を返すが、特に <code>Setting[String]</code> を返す。
-<code>String</code> は <code>name</code> 自体の型にも表れていて、そちらは <code>SettingKey[String]</code> となる。
-ここで返された <code>Setting[String]</code> は、sbt の Map における <code>name</code> というキーを追加または置換して <code>&quot;hello&quot;</code> という値に設定する変換である。
-</p><p>誤った型の値を使おうとするとビルド定義はコンパイルエラーになる:
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
-  settings(
+</p><p><code>name</code> キーは <code>SettingKey[String]</code> に型付けされているため、
+<code>name</code> の <code>:=</code> 演算子も <code>String</code> に型付けされている。
+誤った型の値を使おうとするとビルド定義はコンパイルエラーになる:
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
     name := 42  // コンパイルできない
   )
-</code></pre><h3 id="%E3%82%AD%E3%83%BC">キー<a href="#%E3%82%AD%E3%83%BC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="%E7%A8%AE%E9%A1%9E">種類<a href="#%E7%A8%AE%E9%A1%9E" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>キーには三種類ある:
-</p><ul><li><code>SettingKey[T]</code>: 一度だけ値が計算されるキー（値はプロジェクトの読み込み時に計算され、保存される）。
-</li><li><code>TaskKey[T]</code>: 毎回再計算される<em>タスク</em>を呼び出す、副作用を伴う可能性のある値のキー。
+</code></pre><p><code>build.sbt</code> 内には <code>val</code>、<code>lazy val</code>、<code>def</code> を定義することもできる。
+<code>build.sbt</code> において、トップレベルで <code>object</code> や <code>class</code> を定義することはできない。
+それらが必要なら <code>project/</code> 配下にScala ソースファイル (<code>.scala</code>) を置くべきだろう。
+</p><h3 id="%E3%82%AD%E3%83%BC">キー<a href="#%E3%82%AD%E3%83%BC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="%E7%A8%AE%E9%A1%9E">種類<a href="#%E7%A8%AE%E9%A1%9E" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>キーには三種類ある:
+</p><ul><li><code>SettingKey[T]</code>: 一度だけ値が計算されるキー（値はサブプロジェクトの読み込み時に計算され、保存される）。
+</li><li><code>TaskKey[T]</code>: 毎回再計算される<strong>タスク</strong>を呼び出す、副作用を伴う可能性のある値のキー。
 </li><li><code>InputKey[T]</code>: コマンドラインの引数を入力として受け取るタスクのキー。
 　「始める sbt」では <code>InputKey</code> を説明しないので、このガイドを終えた後で、<a href="../../docs/Input-Tasks.html">Input Tasks</a> を読んでみよう。
 </li></ul><h4 id="%E7%B5%84%E3%81%BF%E8%BE%BC%E3%81%BF%E3%81%AE%E3%82%AD%E3%83%BC">組み込みのキー<a href="#%E7%B5%84%E3%81%BF%E8%BE%BC%E3%81%BF%E3%81%AE%E3%82%AD%E3%83%BC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>組み込みのキーは <a href="../../sxr/sbt/Keys.scala.html">Keys</a> と呼ばれるオブジェクトのフィールドにすぎない。
@@ -127,14 +123,13 @@ Java っぽい構文でこのメソッドを呼び出すこともできる:
 </p><pre><code class="prettyprint lang-scala">lazy val hello = taskKey[Unit](&quot;An example task&quot;)
 </code></pre><p>実は <code>.sbt</code> ファイルには、設定を記述するのに必要な <code>val</code> や <code>def</code> を含めることもできる。
 これらの定義はファイル内のどこで書かれてもプロジェクトの設定より前に評価される。
-<code>val</code> や <code>def</code> を用いた定義群は空白行によって他の設定から区切らなければいけない。
 </p><blockquote><p><strong>注意</strong> 一般的に、初期化順問題を避けるために val の代わりに lazy val が用いられることが多い。
 </p></blockquote><h4 id="%E3%82%BF%E3%82%B9%E3%82%AF%E3%82%AD%E3%83%BC%E3%81%8B%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%82%AD%E3%83%BC%E3%81%8B">タスクキーかセッティングキーか<a href="#%E3%82%BF%E3%82%B9%E3%82%AF%E3%82%AD%E3%83%BC%E3%81%8B%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%82%AD%E3%83%BC%E3%81%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>TaskKey[T]</code> は、<em>タスク</em>を定義しているといわれる。タスクは、<code>compile</code> や <code>package</code> のような作業だ。
 タスクは <code>Unit</code> を返すかもしれないし（<code>Unit</code> は、Scala での <code>void</code> だ）、
 タスクに関連した値を返すかもしれない。例えば、<code>package</code> は作成した jar ファイルを値として返す <code>TaskKey[File]</code> だ。
 </p><p>例えばインタラクティブモードの sbt プロンプトに <code>compile</code> と入力するなど、何らかのタスクを実行する度に、
 sbt はそのタスクを一回だけ再実行する。
-</p><p>プロジェクトを記述する sbt の Map は、<code>name</code> のようなセッティング (setting) であれば、
+</p><p>サブプロジェクトを記述する sbt のキーと値の列は、<code>name</code> のようなセッティング (setting) であれば、
 その文字列の値をキャッシュすることができるが、
 <code>compile</code> のようなタスク（task）の場合は実行可能コードを保持しておく必要がある
 （たとえその実行可能コードが最終的に文字列を返したとしても、それは毎回再実行されなければならない）。
@@ -146,13 +141,13 @@ sbt はそのタスクを一回だけ再実行する。
 </p><p>例えば、少し前に宣言した <code>hello</code> というタスクはこのように実装できる:
 </p><pre><code class="prettyprint lang-scala">lazy val hello = taskKey[Unit](&quot;An example task&quot;)
 
-lazy val root = (project in file(&quot;.&quot;)).
-  settings(
+lazy val root = (project in file(&quot;.&quot;))
+  .settings(
     hello := { println(&quot;Hello!&quot;) }
   )
 </code></pre><p>セッティングの定義は既に何度か見ていると思うが、プロジェクト名の定義はこのようにできる:
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
     name := &quot;hello&quot;
   )
 </code></pre><h4 id="%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%A8%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AE%E5%9E%8B">タスクとセッティングの型<a href="#%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%A8%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AE%E5%9E%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>型システムの視点から考えると、タスクキー (task key) から作られた <code>Setting</code> は、セッティングキー (setting key) から作られたそれとは少し異なるものだ。
@@ -160,8 +155,8 @@ lazy val root = (project in file(&quot;.&quot;)).
 タスクが実行されるとタスクキーは型<code>T</code> の値を返すため、ほとんどの用途において、これによる影響は特にない。
 </p><p><code>T</code> と <code>Task[T]</code> の型の違いによる影響が一つある。
 それは、セッティングキーはキャッシュされていて、再実行されないため、タスキキーに依存できないということだ。
-このことについては、後ほどの<a href="More-About-Settings.html">他の種類のセッティング</a>にて詳しくみていく。
-</p><h3 id="sbt+%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%A9%E3%82%AF%E3%83%86%E3%82%A3%E3%83%96%E3%83%A2%E3%83%BC%E3%83%89%E3%81%AB%E3%81%8A%E3%81%91%E3%82%8B%E3%82%AD%E3%83%BC">sbt インタラクティブモードにおけるキー<a href="#sbt+%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%A9%E3%82%AF%E3%83%86%E3%82%A3%E3%83%96%E3%83%A2%E3%83%BC%E3%83%89%E3%81%AB%E3%81%8A%E3%81%91%E3%82%8B%E3%82%AD%E3%83%BC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt のインタラクティブモードからタスクの名前を入力することで、どのタスクでも実行することができる。
+このことについては、後ほどの<a href="Task-Graph.html">タスク・グラフ</a>にて詳しくみていく。
+</p><h3 id="sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%AB%E3%81%8A%E3%81%91%E3%82%8B%E3%82%AD%E3%83%BC">sbt シェルにおけるキー<a href="#sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%AB%E3%81%8A%E3%81%91%E3%82%8B%E3%82%AD%E3%83%BC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt のインタラクティブモードからタスクの名前を入力することで、どのタスクでも実行することができる。
 それが <code>compile</code> と入力することでコンパイルタスクが起動する仕組みだ。つまり、<code>compile</code> はタスクキーだ。
 </p><p>タスクキーのかわりにセッティングキーの名前を入力すると、セッティングキーの値が表示される。
 タスクキーの名前を入力すると、タスクを実行するが、その戻り値は表示されないため、
@@ -174,13 +169,7 @@ Scala の慣例にならい、ビルド定義ファイル内ではキーはキ�
 </p><pre><code class="prettyprint lang-scala">import sbt._
 import Process._
 import Keys._
-</code></pre><p>（さらに、<a href="Full-Def.html">.scala ファイル</a>がある場合は、それらの全ての <code>Build</code> と <code>Plugin</code> の内容もインポートされる。
-これに関しては、<a href="Full-Def.html">.scala ビルド定義</a>でさらに詳しく。）
-</p><h3 id="bare+.sbt+%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9">bare .sbt ビルド定義<a href="#bare+.sbt+%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>Project</code> を定義する代わりに、bare <code>.sbt</code> ビルド定義は <code>Setting[_]</code> 式のリストから構成される。
-</p><pre><code class="prettyprint lang-scala">name := &quot;hello&quot;
-version := &quot;1.0&quot;
-scalaVersion := &quot;2.11.8&quot;
-</code></pre><p>この構文は主にプラグインを使用するのに用いることを推奨する。プラグインに関しては、後のページを参照。
+</code></pre><p>(さらに、auto plugin があれば <code>autoImport</code> 以下の名前がインポートされる。)
 </p><h3 id="%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E3%81%B8%E3%81%AE%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%92%E5%8A%A0%E3%81%88%E3%82%8B">ライブラリへの依存性を加える<a href="#%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E3%81%B8%E3%81%AE%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%92%E5%8A%A0%E3%81%88%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>サードパーティのライブラリに依存するには二つの方法がある。
 第一は <code>lib/</code> に jar ファイルを入れてしまう方法で（アンマネージ依存性、unmanged dependency）、
 第二はマネージ依存性（managed dependency）を加えることで、<code>build.sbt</code> ではこのようになる:
@@ -188,27 +177,27 @@ scalaVersion := &quot;2.11.8&quot;
 
 lazy val commonSettings = Seq(
   organization := &quot;com.example&quot;,
-  version := &quot;0.1.0&quot;,
-  scalaVersion := &quot;2.11.4&quot;
+  version := &quot;0.1.0-SNAPSHOT&quot;,
+  scalaVersion := &quot;2.12.1&quot;
 )
 
-lazy val root = (project in file(&quot;.&quot;)).
-  settings(commonSettings: _*).
-  settings(
-    name := &quot;hello&quot;,
+lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    commonSettings,
+    name := &quot;Hello&quot;,
     libraryDependencies += derby
   )
 </code></pre><p>これで Apache Derby ライブラリのバージョン 10.4.1.3 へのマネージ依存性を加えることができた。
 </p><p><code>libraryDependencies</code> キーは二つの複雑な点がある:
 <code>:=</code> ではなく <code>+=</code> を使うことと、<code>%</code> メソッドだ。
-後で<a href="More-About-Settings.html">他の種類のセッティング</a>で説明するが、<code>+=</code> はキーの古い値を上書きする代わりに新しい値を追加する。
+後で<a href="Task-Graph.html">タスク・グラフ</a>で説明するが、<code>+=</code> はキーの古い値を上書きする代わりに新しい値を追加する。
 <code>%</code> メソッドは文字列から Ivy モジュール ID を構築するのに使われ、これは<a href="Library-Dependencies.html">ライブラリ依存性</a>で説明する。
 </p><p>ライブラリ依存性に関する詳細については、このガイドの後ろの方までとっておくことにする。
 後ほど<a href="Library-Dependencies.html">一ページ</a>を割いて丁寧に説明する。
 </p><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>
-                        <a href="Scopes.html"> スコープ </a>                        
+                        <a href="Task-Graph.html"> タスク・グラフ </a>                        
                         <ul class="language-bar">
         <li><a href="../Basic-Def.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/Basic-Def.html"><span class="lang-item lang-ja">日本語</span></a></li><li><a href="../zh-cn/Basic-Def.html"><span class="lang-item lang-zh-cn">中文 (简体)</span></a></li><li><a href="../es/Basic-Def.html"><span class="lang-item lang-es">Español</span></a></li>
       </ul>
@@ -217,7 +206,7 @@ lazy val root = (project in file(&quot;.&quot;)).
       <a name="toc"></a>
       <h4 class="toctitle">Contents</h4>
       <div class="tocbody">
-      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">始める sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">sbt のインストール</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Mac への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Linux への sbt のインストール</a></div></li><li><div><a href="Manual-Installation.html">手動インストール</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">ディレクトリ構造</a></div></li><li><div><a href="Running.html">実行</a></div></li><li><div class="current">.sbt ビルド定義</div></li><li><div><a href="Scopes.html">スコープ</a></div></li><li><div><a href="More-About-Settings.html">他の種類のセッティング</a></div></li><li><div><a href="Library-Dependencies.html">ライブラリ依存性</a></div></li><li><div><a href="Multi-Project.html">マルチプロジェクト・ビルド</a></div></li><li><div><a href="Using-Plugins.html">プラグインの使用</a></div></li><li><div><a href="Custom-Settings.html">カスタムセッティングとタスク</a></div></li><li><div><a href="Organizing-Build.html">ビルドの整理</a></div></li><li><div><a href="Summary.html">まとめ</a></div></li><li><div><a href="Bare-Def.html">付録: bare .sbt ビルド定義</a></div></li> </ol></li><li><div><a href="Detailed-Topics.html">各論</a></div><ol class="toc"> <li><div><a href="Plugins-and-Best-Practices.html">プラグインとベストプラクティス</a></div><ol class="toc"> <li><div><a href="Testing-sbt-plugins.html">sbt プラグインをテストする</a></div></li> </ol></li> </ol></li><li><div><a href="Howto.html">How to</a></div><ol class="toc"> <li><div><a href="Howto-Sequencing.html">逐次実行</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Def.sequential を用いて逐次タスクを定義する</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Def.taskDyn を用いて動的タスクを定義する</a></div></li><li><div><a href="Howto-After-Input-Task.html">インプットタスクの後で何かする</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn を用いた動的インプットタスクの定義</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">コマンドを用いた逐次実行</a></div></li> </ol></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">始める sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">sbt のインストール</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Mac への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Linux への sbt のインストール</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">ディレクトリ構造</a></div></li><li><div><a href="Running.html">実行</a></div></li><li><div class="current">ビルド定義</div></li><li><div><a href="Task-Graph.html">タスク・グラフ</a></div></li><li><div><a href="Scopes.html">スコープ</a></div></li><li><div><a href="Appending-Values.html">値の追加</a></div></li><li><div><a href="Library-Dependencies.html">ライブラリ依存性</a></div></li><li><div><a href="Multi-Project.html">マルチプロジェクト・ビルド</a></div></li><li><div><a href="Using-Plugins.html">プラグインの使用</a></div></li><li><div><a href="Custom-Settings.html">カスタムセッティングとタスク</a></div></li><li><div><a href="Organizing-Build.html">ビルドの整理</a></div></li><li><div><a href="Summary.html">まとめ</a></div></li><li><div><a href="Bare-Def.html">付録: bare .sbt ビルド定義</a></div></li> </ol></li><li><div><a href="Detailed-Topics.html">各論</a></div><ol class="toc"> <li><div><a href="Plugins-and-Best-Practices.html">プラグインとベストプラクティス</a></div><ol class="toc"> <li><div><a href="Testing-sbt-plugins.html">sbt プラグインをテストする</a></div></li> </ol></li> </ol></li><li><div><a href="Howto.html">How to</a></div><ol class="toc"> <li><div><a href="Howto-Sequencing.html">逐次実行</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Def.sequential を用いて逐次タスクを定義する</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Def.taskDyn を用いて動的タスクを定義する</a></div></li><li><div><a href="Howto-After-Input-Task.html">インプットタスクの後で何かする</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn を用いた動的インプットタスクの定義</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">コマンドを用いた逐次実行</a></div></li> </ol></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
           </div>
         </div>
         <div class="header">
@@ -269,17 +258,17 @@ lazy val root = (project in file(&quot;.&quot;)).
         </div>
         <div class="support-item">
           <div class="support-icon">
-            <svg class="svg-icon svg-icon-typesafe" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 154 154" enable-background="new 0 0 154 154"><path fill="#fff" d="M49.7 114c-4.8 0-8.7-5.1-8.7-9.9v-.2c0-4.8 3.9-7.9 8.7-7.9h100c.9-3 1.6-7 2-11h-84c-4.8 0-8.7-3.7-8.7-8.5s3.9-8.5 8.7-8.5h83.7c-.5-4-1.2-8-2.3-11h-63.4c-4.8 0-8.7-3.7-8.7-8.5s3.9-8.5 8.7-8.5h56c-13.1-23-37.2-37.8-64.7-37.8-41.4 0-75 33.3-75 74.7s33.6 75.6 75 75.6c28.4 0 53.1-15.4 65.8-38.4h-93.1z"/></svg>
+            <svg id="lightbend-icon-reverse" class="svg-icon svg-icon-lightbend-reverse" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 302 262"><title>lightbend-icon</title><g id="icon"><path d="M1,195v56a10,10,0,0,0,10,10H291a10,10,0,0,0,10-10V195a557.85,557.85,0,0,1-150,20A557.85,557.85,0,0,1,1,195Z" style="fill:#fff"/><path d="M291,1H11A10,10,0,0,0,1,11V176a539.94,539.94,0,0,0,150,21,539.94,539.94,0,0,0,150-21V11A10,10,0,0,0,291,1Z" style="fill:#fff"/></g></svg>
           </div>
           <div class="support-detail">
             <h2>商用サポート</h2>
-            <a href="http://typesafe.com/subscription">Typesafe Subscription</a>
-            <a href="http://typesafe.com/subscription/training">Training</a>
-            <a href="http://typesafe.com/subscription/consulting">Consulting</a>
+            <a href="https://www.lightbend.com/services/expert-support">Lightbend Subscription</a>
+            <a href="https://www.lightbend.com/services/training">Training</a>
+            <a href="https://www.lightbend.com/services/consulting">Consulting</a>
           </div>
         </div>
-      </div>
 
+      </div>
     </div>
   </div>
 </div><footer>
@@ -296,9 +285,9 @@ lazy val root = (project in file(&quot;.&quot;)).
         </nav>
       </div>
       <div class="col-md-4 text-right ts">
-        &copy; 2015 Typesafe Inc.
-        <a href="https://typesafe.com">
-          <img src="../files/typesafe_reverse.svg" alt="Typesafe, Inc.">
+        &copy; 2016 Lightbend Inc.
+        <a href="https://www.lightbend.com">
+          <img src="files/lightbend-reverse.svg" alt="Lightbend, Inc.">
         </a>
       </div>
     </div>

@@ -27,13 +27,11 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.msi
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.0-M4/sbt-1.0.0-M4.msi
   [Setup-Notes]: ../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
   [Linux]: Installing-sbt-on-Linux.html
-  [Manual-Installation]: Manual-Installation.html
-  [Activator-Installation]: Activator-Installation.html
 
 安装 sbt
 --------------
@@ -48,17 +46,16 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
 -   然后前往 [.sbt 构建定义][Basic-Def] 学习更多关于构建的定义。
 
 
-最后，安装步骤就简化为一个 Jar 文件和一个 Shell 脚本，但是取决于你的平台，我们提供了好几种方式来使得步骤不是那么单调。 [Mac][Mac]，[Windows][Windows]，[Linux][Linux]，[Lightbend Activator][Activator-Installation]，或[手动安装][Manual-Installation] 提供了相应的安装步骤。
+最后，安装步骤就简化为一个 Jar 文件和一个 Shell 脚本，但是取决于你的平台，我们提供了好几种方式来使得步骤不是那么单调。 [Mac][Mac]，[Windows][Windows]，或[Linux][Linux] 提供了相应的安装步骤。
 
 ### 提示和技巧
 
 如果你在运行 sbt 时遇到任何问题，查看 [安装建议][Setup-Notes] 中的终端编码（terminal encoding），HTTP 代理，JVM 参数。
 
 
-  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.zip
-  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.tgz
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0-M4/sbt-1.0.0-M4.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0-M4/sbt-1.0.0-M4.tgz
   [Manual-Installation]: Manual-Installation.html
-  [Activator-Installation]: Activator-Installation.html
 
 在 Mac 上安装 sbt
 ---------------------
@@ -67,38 +64,43 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
 
 下载 [ZIP][ZIP] 或者 [TGZ][TGZ] 包并解压。
 
-### 手动安装
+### 通过第三方的包安装
 
-参见手动安装指南。
+> **注意：** 第三方的包可能没有提供最新的版本，请记得将任何问题反馈给这些包相关的维护者。
+
+#### 通过 [Homebrew](http://mxcl.github.com/homebrew/) 安装
+
+```
+$ brew install sbt -devel
+```
+
+#### 通过 [Macports](http://macports.org/) 安装
+
+```
+$ port install sbt
+```
 
 
-  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.msi
-  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.zip
-  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.tgz
-  [Activator-Installation]: Activator-Installation.html
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.0-M4/sbt-1.0.0-M4.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0-M4/sbt-1.0.0-M4.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0-M4/sbt-1.0.0-M4.tgz
 
 在 Windows 上安装 sbt
 -------------------------
-
-### 通过 Windows 安装包安装
-
-下载 [msi 安装包][MSI] 并安装。
 
 ### 通过通用的安装包安装
 
 下载 [ZIP][ZIP] 或者 [TGZ][TGZ] 包并解压。
 
-### 手动安装
+### 通过 Windows 安装包安装
 
-参见手动安装指南。
+下载 [msi 安装包][MSI] 并安装。
 
 
-  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.zip
-  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/1.0.0-M4/sbt-1.0.0-M4.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm-experimental/sbt-1.0.0-M4.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian-experimental/sbt-1.0.0-M4.deb
-  [Manual-Installation]: Manual-Installation.html
-  [Activator-Installation]: Activator-Installation.html
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0-M4/sbt-1.0.0-M4.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0-M4/sbt-1.0.0-M4.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.0.0-M4.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.0.0-M4.deb
 
 在 Linux 上安装 sbt
 -----------------------
@@ -114,9 +116,8 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
 Ubuntu和其他基于Debian的发行版使用DEB格式，但通常你不从本地的DEB文件安装软件。相反，他们由程序包管理器安装，通过命令行（如`apt-get`，`aptitude`）或图形用户界面 （如Synaptic）。
 从终端运行下面的命令安装`sbt`（你需要超级用户权限，因此需要`sudo`）。
 
-
     echo "deb https://dl.bintray.com/sbt/debian-experimental /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
-    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 642AC823
+    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2EE0EA64E40A89B84B2DF73499E82A75642AC823
     sudo apt-get update
     sudo apt-get install sbt
 
@@ -145,94 +146,7 @@ sbt 二进制文件发布到 Bintray，而Bintray 方便地提供了RPM资源库
 在 sbt 官方的树中没有提供 ebuild。 但是有从二进制合并 sbt 的 [ebuilds](https://github.com/whiter4bbit/overlays/tree/master/dev-java/sbt-bin)。
 可以通过以下方式从这些 ebuilds 中合并 sbt：
 
-    mkdir -p /usr/local/portage && cd /usr/local/portage
-    git clone git://github.com/whiter4bbit/overlays.git
-    echo "PORTDIR_OVERLAY=$PORTDIR_OVERLAY /usr/local/portage/overlays" >> /etc/make.conf
-    emerge sbt-bin
-
-> **注意：** 请将任何和 ebuild 相关的问题反馈到 [这里](https://github.com/whiter4bbit/overlays/issues)。
-
-### 手动安装
-
-参见[手动安装指南][Manual-Installation]。
-
-
-  [sbt-launch.jar]: https://repo1.maven.org/maven2/org/scala-sbt/sbt-launch/1.0.0-M4/sbt-launch.jar
-
-手动安装 sbt
------------------------
-
-手动安装需要下载 [sbt-launch.jar][sbt-launch.jar]，然后创建脚本来运行它。
-
-### Unix
-
-将 [sbt-launch.jar][sbt-launch.jar] 文件放在 `~/bin` 下。
-创建一个脚本来运行这个 jar，脚本 `~/bin/sbt` 内容如下:
-
-```
-#!/bin/bash
-SBT_OPTS="-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M"
-java $SBT_OPTS -jar `路径名 $0`/sbt-launch.jar "$@"
-```
-
-给该脚本赋予可执行权限：
-
-```
-$ chmod u+x ~/bin/sbt
-```
-
-### Windows
-
-在 Windows 上手动安装的步骤根据是否使用 Cygwin 和终端的不同而不同。 在任何情况下，将 batch 文件或者脚本文件添加到 path 中，使得可以在任意路径下的命令行中敲 `sbt` 来运行 sbt。
-同时，如果需要的话，根据机器调节一下 JVM 的参数设置。
-
-#### Non-Cygwin
-
-对于使用标准 Windows 终端的非 Cygwin 用户，创建如 `sbt.bat` 的 batch 文件：
-
-```
-set SCRIPT_DIR=%~dp0
-java -Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M -jar "%SCRIPT_DIR%sbt-launch.jar" %*
-```
-
-然后将下载好的 [sbt-launch.jar][sbt-launch.jar] 放在和 `sbt.bat` 相同的路径下。
-
-#### Cygwin 和标准的 Windows 终端
-
-如果使用 Cygwin 和标准的 Windows 终端，创建如下的 bash 脚本 `~/bin/sbt`：
-
-```
-SBT_OPTS="-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M"
-java $SBT_OPTS -jar sbt-launch.jar "$@"
-```
-
-用下载好的 [sbt-launch.jar][sbt-launch.jar] 文件的路径替换掉 sbt-launch.jar，如果需要的话记得使用 cygpath。给脚本赋予可执行权限：
-
-```
-$ chmod u+x ~/bin/sbt
-```
-
-#### Cygwin 和 Ansi 终端
-
-如果使用 Cygwin 和 Ansi 终端（支持 Ansi 转义序列并且可以通过 stty 配置），创建一个 bash 文件 `~/bin/sbt`：
-
-```
-SBT_OPTS="-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M"
-stty -icanon min 1 -echo > /dev/null 2>&1
-java -Djline.terminal=jline.UnixTerminal -Dsbt.cygwin=true $SBT_OPTS -jar sbt-launch.jar "$@"
-stty icanon echo > /dev/null 2>&1
-```
-
-用下载好的 [sbt-launch.jar][sbt-launch.jar] 文件的路径替换掉 sbt-launch.jar，如果需要的话记得使用 cygpath。给脚本赋予可执行权限：
-
-```
-$ chmod u+x ~/bin/sbt
-```
-
-为了让退格（backspace）能够在 Scala 的控制台中正常工作，你需要确保你的退格键发送的是删除符（erase character），和在 stty 中配置的一样。对于默认的 cygwin 终端（mintty），
-在设置选项 -> 键中，如果你的删除符是 cygwin 默认的 ^H，“退格发送 ^H” 需要被选中。
-
-> **注意：** 当前其他的配置还不支持。请 [提交 pull request](https://github.com/sbt/sbt/blob/0.13/CONTRIBUTING.md) 实现或者描述已经支持的配置。
+    emerge dev-java/sbt
 
 
   [Basic-Def]: Basic-Def.html
@@ -285,11 +199,11 @@ Hi!
 例如，如果你的项目放在 `hello` 下，在 `hello/build.sbt` 中可以这样写：
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     name := "hello",
     version := "1.0",
-    scalaVersion := "2.11.8"
+    scalaVersion := "2.12.1"
   )
 ```
 
@@ -556,8 +470,8 @@ lazy val root = (project in file("."))
 你可以为本目录下的项目名称关联一个 `Setting[String]`，像这样：
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     name := "hello"
   )
 ```
@@ -579,12 +493,12 @@ lazy val root = (project in file(".")).
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.11.8"
+  scalaVersion := "2.12.1"
 )
 
-lazy val root = (project in file(".")).
-  settings(commonSettings: _*).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
+    commonSettings,
     name := "hello"
   )
 ```
@@ -600,8 +514,8 @@ key 的类别将在下面讲解。
 键（Keys）有一个返回 `Setting[T]` 的 `:=` 方法。你可以像使用 Java 的语法一样调用该方法：
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     name.:=("hello")
   )
 ```
@@ -614,8 +528,8 @@ lazy val root = (project in file(".")).
 如果你使用了错误类型的 value，构建定义会编译不通过：
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     name := 42  // 编译不通过
   )
 ```
@@ -668,8 +582,8 @@ sbt 描述项目的 map 会将设置（setting）保存为固定的字符串，�
 ```scala
 lazy val hello = taskKey[Unit]("An example task")
 
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     hello := { println("Hello!") }
   )
 ```
@@ -677,8 +591,8 @@ lazy val root = (project in file(".")).
 我们已经在定义项目名称时见过定义 settings 的例子，
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     name := "hello"
   )
 ```
@@ -720,7 +634,7 @@ bare `.sbt` 构建定义由一个 `Setting[_]` 表达式的列表组成，而不
 ```scala
 name := "hello"
 version := "1.0"
-scalaVersion := "2.11.8"
+scalaVersion := "2.12.1"
 ```
 
 ### 添加依赖库
@@ -733,12 +647,12 @@ val derby = "org.apache.derby" % "derby" % "10.4.1.3"
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.11.8"
+  scalaVersion := "2.12.1"
 )
 
-lazy val root = (project in file(".")).
-  settings(commonSettings: _*).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
+    commonSettings,
     name := "hello",
     libraryDependencies += derby
   )
@@ -750,6 +664,7 @@ key `libraryDependencies` 包含两个方面的复杂性：`+=` 方法而不是 
 [更多设置][More-About-Settings] 中介绍。`%` 方法是用来从字符串构造 Ivy 模块 ID 的，将在 [库依赖][Library-Dependencies] 中介绍。
 
 目前，一直到入门指南的后面部分，我们跳过了库依赖的一些细节。后面有一整节 [库依赖][Library-Dependencies] 来介绍这些内容。
+
 
   [Basic-Def]: Basic-Def.html
   [More-About-Settings]: More-About-Settings.html
@@ -936,8 +851,8 @@ $ sbt
 如果你创建的 `build.sbt` 中有一个bare key，它的作用于将是当前的 project 下，configuration 和 task 均为 `Global`：
 
 ```scala
-lazy val root = (project in file(".")).
-  settings(
+lazy val root = (project in file("."))
+  .settings(
     name := "hello"
   )
 ```
@@ -991,6 +906,7 @@ name.in(Compile).:=("hello")
 一种方式是你可以这样认为，name 只是 key 的 *一部分*。实际上，所有的 key 都有 name 和 scope 组成（scope 有三个轴）。换句话说，`packageOptions in (Compile, packageBin)` 是表示 key name 的完整的表达式。
 其简写 `packageOptions` 也是一个 key name，但是是不同的（对于没有 in 方法的 key，会隐式的假设一个 scope：当前的 project，global
 config，global task）。
+
 
   [Basic-Def]: Basic-Def.html
   [Scopes]: Scopes.html
@@ -1375,25 +1291,25 @@ lazy val core = project in file("core")
 
 #### 公共设定
 
-To factor out common settings across multiple projects, create a sequence named `commonSettings` and call `settings` method on each project. Note `_*` is required to pass sequence into a vararg method.
-要跨多个项目提取公共设置，请创建一个名为`commonSettings`的序列，并在每个项目上调用`settings`方法。注意要传入序列给变参数方法时需要调用`_*`。
+To factor out common settings across multiple projects, create a sequence named `commonSettings` and call `settings` method on each project.
+要跨多个项目提取公共设置，请创建一个名为`commonSettings`的序列，并在每个项目上调用`settings`方法。
 
 ```scala
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.11.8"
+  scalaVersion := "2.12.1"
 )
 
-lazy val core = (project in file("core")).
-  settings(commonSettings: _*).
-  settings(
+lazy val core = (project in file("core"))
+  .settings(
+    commonSettings,
     // other settings
   )
 
-lazy val util = (project in file("util")).
-  settings(commonSettings: _*).
-  settings(
+lazy val util = (project in file("util"))
+  .settings(
+    commonSettings,
     // other settings
   )
 ```
@@ -1421,9 +1337,9 @@ lazy val core = project
 *在进行聚合的项目中*，像这个例子中的 root 项目一样，你可以按 task 来控制聚合。例如，为了避免聚合 `update` task：
 
 ```scala
-lazy val root = (project in file(".")).
-  aggregate(util, core).
-  settings(
+lazy val root = (project in file("."))
+  .aggregate(util, core)
+  .settings(
     aggregate in update := false
   )
 
@@ -1551,9 +1467,9 @@ resolvers += Resolver.sonatypeRepo("public")
 如果你正在使用一个需要显示开启的自动插件，那么你需要添加这样的代码到你的 `build.sbt` 文件：
 
 ```scala
-lazy val util = (project in file("util")).
-  enablePlugins(FooPlugin, BarPlugin).
-  settings(
+lazy val util = (project in file("util"))
+  .enablePlugins(FooPlugin, BarPlugin)
+  .settings(
     name := "hello-util"
   )
 ```
@@ -1563,10 +1479,10 @@ lazy val util = (project in file("util")).
 项目也可以使用 `disablePlugins` 方法排除掉一些插件。例如，如果我们希望能够从 `util` 中移除 `IvyPlugin` 插件的设置，我们将 `build.sbt` 修改如下：
 
 ```scala
-lazy val util = (project in file("util")).
-  enablePlugins(FooPlugin, BarPlugin).
-  disablePlugins(plugins.IvyPlugin).
-  settings(
+lazy val util = (project in file("util"))
+  .enablePlugins(FooPlugin, BarPlugin)
+  .disablePlugins(plugins.IvyPlugin)
+  .settings(
     name := "hello-util"
   )
 ```
@@ -1607,8 +1523,8 @@ site.settings
 lazy val util = (project in file("util"))
 
 // 在`core` 项目中开启 site 插件
-lazy val core = (project in file("core")).
-  settings(site.settings : _*)
+lazy val core = (project in file("core"))
+  .settings(site.settings)
 ```
 
 ### 全局插件
@@ -1681,9 +1597,9 @@ lazy val commonSettings = Seq(
   version := "0.1.0-SNAPSHOT"
 )
 
-lazy val library = (project in file("library")).
-  settings(commonSettings: _*).
-  settings(
+lazy val library = (project in file("library"))
+  .settings(
+    commonSettings,
     sampleStringTask := System.getProperty("user.home"),
     sampleIntTask := {
       val sum = 1 + 2
@@ -1728,9 +1644,9 @@ lazy val commonSettings = Seq(
   version := "0.1.0-SNAPSHOT"
 )
 
-lazy val library = (project in file("library")).
-  settings(commonSettings: _*).
-  settings(
+lazy val library = (project in file("library"))
+  .settings(
+    commonSettings,
     startServer := {
       println("starting...")
       Thread.sleep(500)
@@ -1799,9 +1715,9 @@ s: 3
 应该如何实现`stopServer`任务？清理任务的概念并不适合任务的执行模型，因为任务关心的是依赖项跟踪。最后一次操作应成为依赖其他中间任务的任务。例如`stopServer`应依赖于`sampleStringTask`，在其中`stopServer`应该是 `sampleStringTask`。
 
 ```scala
-lazy val library = (project in file("library")).
-  settings(commonSettings: _*).
-  settings(
+lazy val library = (project in file("library"))
+  .settings(
+    commonSettings,
     startServer := {
       println("starting...")
       Thread.sleep(500)
@@ -1930,7 +1846,7 @@ object Dependencies {
   // Libraries
   val akkaActor = "com.typesafe.akka" %% "akka-actor" % akkaVersion
   val akkaCluster = "com.typesafe.akka" %% "akka-cluster" % akkaVersion
-  val specs2core = "org.specs2" %% "specs2-core" % "2.4.14"
+  val specs2core = "org.specs2" %% "specs2-core" % "2.4.17"
 
   // Projects
   val backendDeps =
@@ -1945,12 +1861,12 @@ import Dependencies._
 
 lazy val commonSettings = Seq(
   version := "0.1.0",
-  scalaVersion := "2.11.8"
+  scalaVersion := "2.12.1"
 )
 
-lazy val backend = (project in file("backend")).
-  settings(commonSettings: _*).
-  settings(
+lazy val backend = (project in file("backend"))
+  .settings(
+    commonSettings,
     libraryDependencies ++= backendDeps
   )
 ```
