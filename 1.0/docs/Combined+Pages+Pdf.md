@@ -71,7 +71,7 @@ corrections and add documentation.
 
 Documentation for 0.7.x has been
 [archived here](http://www.scala-sbt.org/0.7.7/docs/home.html). This
-documentation applies to sbt 1.0.0-M4.
+documentation applies to sbt 1.0.0-M5.
 
 See also the [API Documentation](../api/index.html),
 [SXR Documentation](../sxr/index.html), and the
@@ -109,7 +109,7 @@ Thanks for trying out sbt and *have fun*!
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.0-M4/sbt-1.0.0-M4.msi
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.0-M5/sbt-1.0.0-M5.msi
   [Setup-Notes]: ../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -140,8 +140,8 @@ If you have any trouble running sbt, see [Setup Notes][Setup-Notes] on
 terminal encodings, HTTP proxies, and JVM options.
 
 
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0-M4/sbt-1.0.0-M4.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0-M4/sbt-1.0.0-M4.tgz
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0-M5/sbt-1.0.0-M5.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0-M5/sbt-1.0.0-M5.tgz
   [Manual-Installation]: Manual-Installation.html
 
 Installing sbt on Mac
@@ -170,9 +170,9 @@ $ port install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.0-M4/sbt-1.0.0-M4.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0-M4/sbt-1.0.0-M4.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0-M4/sbt-1.0.0-M4.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.0-M5/sbt-1.0.0-M5.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0-M5/sbt-1.0.0-M5.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0-M5/sbt-1.0.0-M5.tgz
 
 Installing sbt on Windows
 -------------------------
@@ -186,10 +186,10 @@ Download [ZIP][ZIP] or [TGZ][TGZ] package and expand it.
 Download [msi installer][MSI] and install it.
 
 
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0-M4/sbt-1.0.0-M4.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0-M4/sbt-1.0.0-M4.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.0.0-M4.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.0.0-M4.deb
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0-M5/sbt-1.0.0-M5.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0-M5/sbt-1.0.0-M5.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.0.0-M5.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.0.0-M5.deb
   [Manual-Installation]: Manual-Installation.html
   [website127]: https://github.com/sbt/website/issues/127
 
@@ -595,7 +595,7 @@ build the same projects with consistent results.
 To do this, create a file named `project/build.properties` that specifies the sbt version as follows:
 
 ```
-sbt.version=1.0.0-M4
+sbt.version=1.0.0-M5
 ```
 
 If the required version is not available locally,
@@ -2396,12 +2396,12 @@ lazy val core = (project in file("core"))
 ### Global plugins
 
 Plugins can be installed for all your projects at once by declaring them
-in `~/.sbt/1.0.0-M4/plugins/`. `~/.sbt/1.0.0-M4/plugins/` is an sbt project whose
+in `~/.sbt/1.0.0-M5/plugins/`. `~/.sbt/1.0.0-M5/plugins/` is an sbt project whose
 classpath is exported to all sbt build definition projects. Roughly
-speaking, any `.sbt` or `.scala` files in `~/.sbt/1.0.0-M4/plugins/` behave as if
+speaking, any `.sbt` or `.scala` files in `~/.sbt/1.0.0-M5/plugins/` behave as if
 they were in the `project/` directory for all projects.
 
-You can create `~/.sbt/1.0.0-M4/plugins//build.sbt` and put `addSbtPlugin()`
+You can create `~/.sbt/1.0.0-M5/plugins//build.sbt` and put `addSbtPlugin()`
 expressions in there to add plugins to all your projects at once.
 Because doing so would increase the dependency on the machine environment, 
 this feature should be used sparingly. See
@@ -3370,7 +3370,7 @@ example: hkp://keyserver.ubuntu.com). A list of servers can be found at
 
 The credentials for your Sonatype OSSRH account need to be stored
 somewhere safe (*e.g. NOT in the repository*). Common convention is a 
-`~/.sbt/1.0.0-M4/sonatype.sbt` file (e.g. `) with the following:
+`~/.sbt/1.0.0-M5/sonatype.sbt` file (e.g. `) with the following:
 
 ```scala
 credentials += Credentials("Sonatype Nexus Repository Manager",
@@ -7098,12 +7098,12 @@ Migrating from 0.7 to 0.10+
 ---------------------------
 
 The assumption here is that you are familiar with sbt 0.7 but new to sbt
-1.0.0-M4.
+1.0.0-M5.
 
-sbt 1.0.0-M4's many new capabilities can be a bit overwhelming, but
-this page should help you migrate to 1.0.0-M4 with a minimum of fuss.
+sbt 1.0.0-M5's many new capabilities can be a bit overwhelming, but
+this page should help you migrate to 1.0.0-M5 with a minimum of fuss.
 
-### Why move to 1.0.0-M4?
+### Why move to 1.0.0-M5?
 
 1.  Faster builds (because it is smarter at re-compiling only what it
     must)
@@ -7116,17 +7116,17 @@ this page should help you migrate to 1.0.0-M4 with a minimum of fuss.
 5.  Terser output. (Yet you can ask for more details if something goes
     wrong.)
 
-#### Step 1: Read the Getting Started Guide for sbt 1.0.0-M4
+#### Step 1: Read the Getting Started Guide for sbt 1.0.0-M5
 
 Reading the [Getting Started Guide][Getting-Started] will
 probably save you a lot of confusion.
 
-#### Step 2: Install sbt 1.0.0-M4
+#### Step 2: Install sbt 1.0.0-M5
 
-Download sbt 1.0.0-M4 as described on
+Download sbt 1.0.0-M5 as described on
 [the setup page][Setup].
 
-You can run 1.0.0-M4 the same way that you run 0.7.x, either simply:
+You can run 1.0.0-M5 the same way that you run 0.7.x, either simply:
 
 ```
 $ java -jar sbt-launch.jar
@@ -7140,7 +7140,7 @@ For more details see
 
 #### Step 3: A technique for switching an existing project
 
-Here is a technique for switching an existing project to 1.0.0-M4 while
+Here is a technique for switching an existing project to 1.0.0-M5 while
 retaining the ability to switch back again at will. Some builds, such as
 those with subprojects, are not suited for this technique, but if you
 learn how to transition a simple project it will help you do a more
@@ -7149,10 +7149,10 @@ complex one next.
 ### Preserve `project/` for 0.7.x project
 
 Rename your `project/` directory to something like `project-old`. This
-will hide it from sbt 1.0.0-M4 but keep it in case you want to switch
+will hide it from sbt 1.0.0-M5 but keep it in case you want to switch
 back to 0.7.x.
 
-### Create `build.sbt` for 1.0.0-M4
+### Create `build.sbt` for 1.0.0-M5
 
 Create a `build.sbt` file in the root directory of your project. See
 [.sbt build definition][Basic-Def] in the Getting
@@ -7195,7 +7195,7 @@ scalaVersion := "2.9.2"
 Currently, a `project/build.properties` is still needed to explicitly
 select the sbt version. For example:
 
-### Run sbt 1.0.0-M4
+### Run sbt 1.0.0-M5
 
 Now launch sbt. If you're lucky it works and you're done. For help
 debugging, see below.
@@ -7204,7 +7204,7 @@ debugging, see below.
 
 If you get stuck and want to switch back, you can leave your `build.sbt`
 file alone. sbt 0.7.x will not understand or notice it. Just rename your
-1.0.0-M4 `project` directory to something like `project10` and rename
+1.0.0-M5 `project` directory to something like `project10` and rename
 the backup of your old project from `project-old` to `project` again.
 
 #### FAQs
@@ -7453,7 +7453,7 @@ influence SBT execution. Also see [sbt launcher][Sbt-Launcher].
   <tr>
     <td><tt>sbt.global.base`</tt></td>
     <td>Directory</td>
-    <td><tt>~/.sbt/1.0.0-M4</tt></td>
+    <td><tt>~/.sbt/1.0.0-M5</tt></td>
     <td>The directory containing global settings and plugins</td>
   </tr>
 
@@ -7499,7 +7499,7 @@ influence SBT execution. Also see [sbt launcher][Sbt-Launcher].
   <tr>
     <td><tt>sbt.version</tt></td>
     <td>Version</td>
-    <td><tt>1.0.0-M4</tt></td>
+    <td><tt>1.0.0-M5</tt></td>
     <td>sbt version to use, usually taken from <tt>project/build.properties</tt>.</td>
   </tr>
 
@@ -8198,7 +8198,7 @@ mode that only requires a JRE installed.
 Install [conscript](https://github.com/foundweekends/conscript).
 
 ```
-$ cs sbt/sbt --branch 1.0.0-M4
+$ cs sbt/sbt --branch 1.0.0-M5
 ```
 
 This will create two scripts: `screpl` and `scalas`.
@@ -8259,7 +8259,7 @@ scalaVersion := "2.12.1"
  
 resolvers += Resolver.url("typesafe-ivy-repo", url("http://repo.typesafe.com/typesafe/releases"))(Resolver.ivyStylePatterns)
  
-libraryDependencies += "org.scala-sbt" % "io" % "1.0.0-M4"
+libraryDependencies += "org.scala-sbt" % "io" % "1.0.0-M5"
 */         
  
 import sbt._, Path._
@@ -9527,7 +9527,7 @@ sbt needs Scala jars to run itself since it is written in Scala. sbt
 uses that same version of Scala to compile the build definitions that
 you write for your project because they use sbt APIs. This version of
 Scala is fixed for a specific sbt release and cannot be changed. For sbt
-1.0.0-M4, this version is Scala 2.12.1. Because this Scala
+1.0.0-M5, this version is Scala 2.12.1. Because this Scala
 version is needed before sbt runs, the repositories used to retrieve
 this version are configured in the sbt
 [launcher][Sbt-Launcher].
@@ -9718,12 +9718,12 @@ Global Settings
 ### Basic global configuration file
 
 Settings that should be applied to all projects can go in
-`~/.sbt/1.0.0-M4/global.sbt` (or any file in `~/.sbt/1.0.0-M4` with a `.sbt`
-extension). Plugins that are defined globally in `~/.sbt/1.0.0-M4/plugins/`
+`~/.sbt/1.0.0-M5/global.sbt` (or any file in `~/.sbt/1.0.0-M5` with a `.sbt`
+extension). Plugins that are defined globally in `~/.sbt/1.0.0-M5/plugins/`
 are available to these settings. For example, to change the default
 `shellPrompt` for your projects:
 
-`~/.sbt/1.0.0-M4/global.sbt`
+`~/.sbt/1.0.0-M5/global.sbt`
 
 ```scala
 shellPrompt := { state =>
@@ -9731,7 +9731,7 @@ shellPrompt := { state =>
 }
 ```
 
-You can also configure plugins globally added in `~/.sbt/1.0.0-M4/plugins/build.sbt`
+You can also configure plugins globally added in `~/.sbt/1.0.0-M5/plugins/build.sbt`
 (see next paragraph) in that file, but you need to use fully qualified
 names for their properties. For example, for sbt-eclipse property `withSource`
 documented in https://github.com/typesafehub/sbteclipse/wiki/Using-sbteclipse,
@@ -9744,10 +9744,10 @@ com.typesafe.sbteclipse.core.EclipsePlugin.EclipseKeys.withSource := true
 
 ### Global Settings using a Global Plugin
 
-The `~/.sbt/1.0.0-M4/plugins/` directory is a global plugin project. This
+The `~/.sbt/1.0.0-M5/plugins/` directory is a global plugin project. This
 can be used to provide global commands, plugins, or other code.
 
-To add a plugin globally, create `~/.sbt/1.0.0-M4/plugins/build.sbt` containing
+To add a plugin globally, create `~/.sbt/1.0.0-M5/plugins/build.sbt` containing
 the dependency definitions. For example:
 
 ```scala
@@ -9755,7 +9755,7 @@ addSbtPlugin("org.example" % "plugin" % "1.0")
 ```
 
 To change the default `shellPrompt` for every project using this
-approach, create a local plugin `~/.sbt/1.0.0-M4/plugins/ShellPrompt.scala`:
+approach, create a local plugin `~/.sbt/1.0.0-M5/plugins/ShellPrompt.scala`:
 
 ```scala
 import sbt._
@@ -9769,11 +9769,11 @@ object ShellPrompt extends Plugin {
 }
 ```
 
-The `~/.sbt/1.0.0-M4/plugins/` directory is a full project that is
+The `~/.sbt/1.0.0-M5/plugins/` directory is a full project that is
 included as an external dependency of every plugin project. In practice,
 settings and code defined here effectively work as if they were defined
 in a project's `project/` directory. This means that
-`~/.sbt/1.0.0-M4/plugins/` can be used to try out ideas for plugins such as
+`~/.sbt/1.0.0-M5/plugins/` can be used to try out ideas for plugins such as
 shown in the `shellPrompt` example.
 
 
@@ -11820,7 +11820,7 @@ the main project. For example:
 ### Notes
 
 1.  Configure offline behavior for all projects on a machine by putting
-    `offline := true` in `~/.sbt/1.0.0-M4/global.sbt`. A command that does this for
+    `offline := true` in `~/.sbt/1.0.0-M5/global.sbt`. A command that does this for
     the user would make a nice pull request. Perhaps the setting of
     offline should go into the output of about or should it be a warning
     in the output of update or both?
@@ -13284,9 +13284,9 @@ This graph-like structure, which was adopted from Apache Ivy, allows us to defin
 
 Cached resolution feature is akin to incremental compilation, which only recompiles the sources that have been changed since the last `compile`. Unlike the Scala compiler, Ivy does not have the concept of separate compilation, so that needed to be implemented.
 
-Instead of resolving the full dependency graph, cached resolution feature creates  minigraphs -- one for each direct dependency appearing in all related subprojects. These minigraphs are resolved using Ivy's resolution engine, and the result is stored locally under `~/.sbt/1.0.0-M4/dependency/` (or what's specified by `sbt.dependency.base` flag) shared across all builds. After all minigraphs are resolved, they are stitched together by applying the conflict resolution algorithm (typically picking the latest version).
+Instead of resolving the full dependency graph, cached resolution feature creates  minigraphs -- one for each direct dependency appearing in all related subprojects. These minigraphs are resolved using Ivy's resolution engine, and the result is stored locally under `~/.sbt/1.0.0-M5/dependency/` (or what's specified by `sbt.dependency.base` flag) shared across all builds. After all minigraphs are resolved, they are stitched together by applying the conflict resolution algorithm (typically picking the latest version).
 
-When you add a new library to your project, cached resolution feature will check for the minigraph files under `~/.sbt/1.0.0-M4/dependency/` and load the previously resolved nodes, which incurs negligible I/O overhead, and only resolve the newly added library. The intended performance improvement is that the second and third subprojects can take advantage of the resolved minigraphs from the first one and avoid duplicated work. The following figure illustrates the proj A, B, and C all hitting the same set of json file.
+When you add a new library to your project, cached resolution feature will check for the minigraph files under `~/.sbt/1.0.0-M5/dependency/` and load the previously resolved nodes, which incurs negligible I/O overhead, and only resolve the newly added library. The intended performance improvement is that the second and third subprojects can take advantage of the resolved minigraphs from the first one and avoid duplicated work. The following figure illustrates the proj A, B, and C all hitting the same set of json file.
 
 <br>
 ![fig1](files/cached-resolution.png)
@@ -14230,7 +14230,7 @@ This Parser definition will produce a value of type `(String,String)`.
 The input syntax defined isn't very flexible; it is just a
 demonstration. It will produce one of the following values for a
 successful parse (assuming the current Scala version is 2.12.1,
-the current sbt version is 1.0.0-M4, and there are 3 commands left to
+the current sbt version is 1.0.0-M5, and there are 3 commands left to
 run):
 
 Again, we were able to access the current Scala and sbt version for the
@@ -15263,7 +15263,7 @@ resolvers := {
 ```
 
 1.  Put settings specific to a user in a global `.sbt` file, such as
-    `~/.sbt/1.0.0-M4/global.sbt`. These settings will be applied to all projects.
+    `~/.sbt/1.0.0-M5/global.sbt`. These settings will be applied to all projects.
 2.  Put settings in a `.sbt` file in a project that isn't checked into
     version control, such as `<project>/local.sbt`. sbt combines the
     settings from multiple .sbt files, so you can still have the
@@ -15524,7 +15524,7 @@ It is a convenience for plugin consumers and because of the automatic nature, it
 
 #### Global plugins
 
-The `~/.sbt/1.0.0-M4/plugins/` directory is treated as a global plugin
+The `~/.sbt/1.0.0-M5/plugins/` directory is treated as a global plugin
 definition project. It is a normal sbt project whose classpath is
 available to all sbt project definitions for that user as described
 above for per-project plugins.
@@ -15772,7 +15772,7 @@ obfuscateLiterals in obfuscate := true
 #### Global plugins example
 
 The simplest global plugin definition is declaring a library or plugin
-in `~/.sbt/1.0.0-M4/plugins/build.sbt`:
+in `~/.sbt/1.0.0-M5/plugins/build.sbt`:
 
 ```scala
 libraryDependencies += "org.example" %% "example-plugin" % "0.1"
@@ -15783,15 +15783,15 @@ user.
 
 In addition:
 
-- Jars may be placed directly in `~/.sbt/1.0.0-M4/plugins/lib/`
+- Jars may be placed directly in `~/.sbt/1.0.0-M5/plugins/lib/`
    and will be available to every build definition for the current user.
 - Dependencies on plugins built from source may be declared in
-   `~/.sbt/1.0.0-M4/plugins/project/Build.scala` as described at
+   `~/.sbt/1.0.0-M5/plugins/project/Build.scala` as described at
    [.scala build definition][Full-Def].
 - A Plugin may be directly defined in Scala
-   source files in `~/.sbt/1.0.0-M4/plugins/`, such as
-   `~/.sbt/1.0.0-M4/plugins/MyPlugin.scala`.
-   `~/.sbt/1.0.0-M4/plugins//build.sbt`
+   source files in `~/.sbt/1.0.0-M5/plugins/`, such as
+   `~/.sbt/1.0.0-M5/plugins/MyPlugin.scala`.
+   `~/.sbt/1.0.0-M5/plugins//build.sbt`
    should contain `sbtPlugin := true`. This can be used for quicker
    turnaround when developing a plugin initially:
    
@@ -15803,7 +15803,7 @@ In addition:
        overhead of `publishLocal` and `clean`ing the plugins directory of the
        project using the plugin.
 
-These are all consequences of `~/.sbt/1.0.0-M4/plugins/` being a standard
+These are all consequences of `~/.sbt/1.0.0-M5/plugins/` being a standard
 project whose classpath is added to every sbt project's build
 definition.
 
@@ -16268,10 +16268,10 @@ If you haven't created one already, make sure to create `project/build.propertie
 `sbt.version` number:
 
 ```yml
-sbt.version=1.0.0-M4
+sbt.version=1.0.0-M5
 ```
 
-Your build will now use 1.0.0-M4.
+Your build will now use 1.0.0-M5.
 
 ### Read the Travis manual
 
@@ -18874,7 +18874,7 @@ Here's how to set it up
 #### project/build.properties
 
 ```
-sbt.version=1.0.0-M4
+sbt.version=1.0.0-M5
 ```
 
 #### project/style.sbt
@@ -18925,7 +18925,7 @@ Let's try implementing a custom task called `compilecheck` that runs `compile in
 #### project/build.properties
 
 ```
-sbt.version=1.0.0-M4
+sbt.version=1.0.0-M5
 ```
 
 #### project/style.sbt
@@ -19675,7 +19675,7 @@ Frequently Asked Questions
 
 #### My last command didn't work but I can't see an explanation. Why?
 
-sbt 1.0.0-M4 by default suppresses most stack traces and debugging
+sbt 1.0.0-M5 by default suppresses most stack traces and debugging
 information. It has the nice side effect of giving you less noise on
 screen, but as a newcomer it can leave you lost for explanation. To see
 the previous output of a command at a higher verbosity, type
@@ -20184,7 +20184,7 @@ first and then the following questions.
 
 #### Where has 0.7's `lib_managed` gone?
 
-By default, sbt 1.0.0-M4 loads managed libraries from your ivy cache
+By default, sbt 1.0.0-M5 loads managed libraries from your ivy cache
 without copying them to a `lib_managed` directory. This fixes some bugs
 with the previous solution and keeps your project directory small. If
 you want to insulate your builds from the ivy cache being cleared, set
@@ -20196,7 +20196,7 @@ This does mean that existing solutions for sharing libraries with your
 favoured IDE may not work. Refer to [Community Plugins page][Community-Plugins]
 for a list of currently available plugins for your IDE.
 
-#### What are the commands I can use in 1.0.0-M4 vs. 0.7?
+#### What are the commands I can use in 1.0.0-M5 vs. 0.7?
 
 For a list of commands, run `help`. For details on a specific command,
 run `help <command>`. To view a list of tasks defined on the current
@@ -20233,7 +20233,7 @@ classpaths.
 ### My tests all run really fast but some are broken that weren't in 0.7!
 
 Be aware that compilation and tests run in parallel by default in sbt
-1.0.0-M4. If your test code isn't thread-safe then you may want to
+1.0.0-M5. If your test code isn't thread-safe then you may want to
 change this behaviour by adding one of the following to your
 `build.sbt`:
 
@@ -20255,9 +20255,9 @@ project.
 For an early version of an xsbt Web Start plugin, visit the
 [xsbt-webstart](https://github.com/ritschwumm/xsbt-webstart) project.
 
-#### How are inter-project dependencies different in 1.0.0-M4 vs. 0.7?
+#### How are inter-project dependencies different in 1.0.0-M5 vs. 0.7?
 
-In 1.0.0-M4, there are three types of project dependencies (classpath,
+In 1.0.0-M5, there are three types of project dependencies (classpath,
 execution, and configuration) and they are independently defined. These
 were combined in a single dependency type in 0.7.x. A declaration like:
 
@@ -20276,7 +20276,7 @@ meant that the `B` project had a classpath and execution dependency on
 3.  Configuration: For some settings, if they were not overridden in A,
     they would default to the value provided in B.
 
-In 1.0.0-M4, declare the specific type of dependency you want. Read
+In 1.0.0-M5, declare the specific type of dependency you want. Read
 about [multi-project builds][Multi-Project] in the
 Getting Started Guide for details.
 
@@ -20285,7 +20285,7 @@ Getting Started Guide for details.
 <table>
   <tr>
     <th>0.7</th>
-    <th>1.0.0-M4</th>
+    <th>1.0.0-M5</th>
   </tr>
 
   <tr>
@@ -20313,7 +20313,7 @@ Getting Started Guide for details.
   </tr>
 </table>
 
-#### Where can I find plugins for 1.0.0-M4?
+#### Where can I find plugins for 1.0.0-M5?
 
 See [Community Plugins][Community-Plugins] for a list of currently available
 plugins.
@@ -23079,7 +23079,7 @@ application. `hello.build.properties`:
 Nightly Builds
 --------------
 
-The latest development versions of 1.0.0-M4 are available as nightly
+The latest development versions of 1.0.0-M5 are available as nightly
 builds on [Typesafe Snapshots](https://repo.typesafe.com/typesafe/ivy-snapshots/).
 
 To use a nightly build, the instructions are the same for
@@ -23089,7 +23089,7 @@ To use a nightly build, the instructions are the same for
 nightly-launcher|. They should be listed in chronological order, so
     the most recent one will be last.
 2.  The version number is the name of the subdirectory and is of the
-    form `1.0.0-M4.x-yyyyMMdd-HHmmss`. Use this in a build.properties
+    form `1.0.0-M5.x-yyyyMMdd-HHmmss`. Use this in a build.properties
     file.
 3.  Call your script something like `sbt-nightly` to retain access to a
     stable sbt launcher. The documentation will refer to the script as

@@ -40,7 +40,7 @@ sbt を試してくれることに感謝する。_ぜひ楽しいんでほしい
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.0-M4/sbt-1.0.0-M4.msi
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.0-M5/sbt-1.0.0-M5.msi
   [Setup-Notes]: ../../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -69,8 +69,8 @@ sbt プロジェクトを作るためには、以下の手順をたどる必要�
 
 
 
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0-M4/sbt-1.0.0-M4.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0-M4/sbt-1.0.0-M4.tgz
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0-M5/sbt-1.0.0-M5.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0-M5/sbt-1.0.0-M5.tgz
   [Manual-Installation]: Manual-Installation.html
 
 Mac への sbt のインストール
@@ -98,9 +98,9 @@ $ port install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.0-M4/sbt-1.0.0-M4.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0-M4/sbt-1.0.0-M4.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0-M4/sbt-1.0.0-M4.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.0-M5/sbt-1.0.0-M5.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0-M5/sbt-1.0.0-M5.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0-M5/sbt-1.0.0-M5.tgz
 
 Windows への sbt のインストール
 ----------------------------
@@ -114,10 +114,10 @@ Windows への sbt のインストール
 [msi インストーラ][MSI]をダウンロードしてインストールする。
 
 
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0-M4/sbt-1.0.0-M4.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0-M4/sbt-1.0.0-M4.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.0.0-M4.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.0.0-M4.deb
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0-M5/sbt-1.0.0-M5.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0-M5/sbt-1.0.0-M5.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.0.0-M5.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.0.0-M5.deb
   [Manual-Installation]: Manual-Installation.html
   [website127]: https://github.com/sbt/website/issues/12
 
@@ -522,7 +522,7 @@ sbt 0.13.13 など最近のバージョンをインストール済みで、
 sbt バージョンを指定する:
 
 ```
-sbt.version=1.0.0-M4
+sbt.version=1.0.0-M5
 ```
 
 もしも指定されたバージョンがローカルマシンに無ければ、
@@ -2129,11 +2129,11 @@ lazy val core = (project in file("core"))
 
 ### グローバル・プラグイン
 
-プラグインを `~/.sbt/1.0.0-M4/plugins/` 以下で宣言することで全てのプロジェクトに対して一括してプラグインをインストールすることができる。
-`~/.sbt/1.0.0-M4/plugins/` はそのクラスパスをすべての sbt ビルド定義に対して export する sbt プロジェクトだ。
-大雑把に言えば、`~/.sbt/1.0.0-M4/plugins/` 内の `.sbt` ファイルや `.scala` ファイルは、それが全てのプロジェクトの `project/` ディレクトリに入っているかのようにふるまう。
+プラグインを `~/.sbt/1.0.0-M5/plugins/` 以下で宣言することで全てのプロジェクトに対して一括してプラグインをインストールすることができる。
+`~/.sbt/1.0.0-M5/plugins/` はそのクラスパスをすべての sbt ビルド定義に対して export する sbt プロジェクトだ。
+大雑把に言えば、`~/.sbt/1.0.0-M5/plugins/` 内の `.sbt` ファイルや `.scala` ファイルは、それが全てのプロジェクトの `project/` ディレクトリに入っているかのようにふるまう。
 
-`~/.sbt/1.0.0-M4/plugins/build.sbt` を作って、そこに `addSbtPlugin()` 式を書くことで
+`~/.sbt/1.0.0-M5/plugins/build.sbt` を作って、そこに `addSbtPlugin()` 式を書くことで
 全プロジェクトにプラグインを追加することができる。
 しかし、これを多用するとマシン環境への依存性を増やしてしまうことになるので、この機能は注意してほどほどに使うべきだ。
 [ベスト・プラクティス][global-vs-local-plugins]も参照してほしい。
@@ -2923,7 +2923,7 @@ sbt 0.13.8 で `Def.sequential` という関数が追加されて、準逐次な
 #### project/build.properties
 
 ```
-sbt.version=1.0.0-M4
+sbt.version=1.0.0-M5
 ```
 
 #### project/style.sbt
@@ -2973,7 +2973,7 @@ root> compilecheck
 #### project/build.properties
 
 ```
-sbt.version=1.0.0-M4
+sbt.version=1.0.0-M5
 ```
 
 #### project/style.sbt
