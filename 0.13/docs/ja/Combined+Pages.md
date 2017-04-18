@@ -35,7 +35,7 @@ sbt を試してくれることに感謝する。_ぜひ楽しいんでほしい
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.15/sbt-0.13.15.msi
+  [MSI]: https://downloads.lightbend.com/sbt/0.13.15/sbt-0.13.15.msi
   [Setup-Notes]: ../../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -64,8 +64,8 @@ sbt プロジェクトを作るためには、以下の手順をたどる必要�
 
 
 
-  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.15/sbt-0.13.15.zip
-  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.15/sbt-0.13.15.tgz
+  [ZIP]: https://downloads.lightbend.com/sbt/0.13.15/sbt-0.13.15.zip
+  [TGZ]: https://downloads.lightbend.com/sbt/0.13.15/sbt-0.13.15.tgz
   [Manual-Installation]: Manual-Installation.html
 
 Mac への sbt のインストール
@@ -93,9 +93,9 @@ $ port install sbt
 ```
 
 
-  [MSI]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.15/sbt-0.13.15.msi
-  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.15/sbt-0.13.15.zip
-  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.15/sbt-0.13.15.tgz
+  [MSI]: https://downloads.lightbend.com/sbt/0.13.15/sbt-0.13.15.msi
+  [ZIP]: https://downloads.lightbend.com/sbt/0.13.15/sbt-0.13.15.zip
+  [TGZ]: https://downloads.lightbend.com/sbt/0.13.15/sbt-0.13.15.tgz
 
 Windows への sbt のインストール
 ----------------------------
@@ -109,8 +109,8 @@ Windows への sbt のインストール
 [msi インストーラ][MSI]をダウンロードしてインストールする。
 
 
-  [ZIP]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.15/sbt-0.13.15.zip
-  [TGZ]: https://dl.bintray.com/sbt/native-packages/sbt/0.13.15/sbt-0.13.15.tgz
+  [ZIP]: https://downloads.lightbend.com/sbt/0.13.15/sbt-0.13.15.zip
+  [TGZ]: https://downloads.lightbend.com/sbt/0.13.15/sbt-0.13.15.tgz
   [RPM]: https://dl.bintray.com/sbt/rpm/sbt-0.13.15.rpm
   [DEB]: https://dl.bintray.com/sbt/debian/sbt-0.13.15.deb
   [Manual-Installation]: Manual-Installation.html
