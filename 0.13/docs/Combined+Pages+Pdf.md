@@ -109,7 +109,7 @@ Thanks for trying out sbt and *have fun*!
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://downloads.lightbend.com/sbt/0.13.15/sbt-0.13.15.msi
+  [MSI]: https://github.com/sbt/sbt/releases/download/v0.13.15/sbt-0.13.15.msi
   [Setup-Notes]: ../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -140,8 +140,8 @@ If you have any trouble running sbt, see [Setup Notes][Setup-Notes] on
 terminal encodings, HTTP proxies, and JVM options.
 
 
-  [ZIP]: https://downloads.lightbend.com/sbt/0.13.15/sbt-0.13.15.zip
-  [TGZ]: https://downloads.lightbend.com/sbt/0.13.15/sbt-0.13.15.tgz
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v0.13.15/sbt-0.13.15.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v0.13.15/sbt-0.13.15.tgz
   [Manual-Installation]: Manual-Installation.html
 
 Installing sbt on Mac
@@ -170,9 +170,9 @@ $ port install sbt
 ```
 
 
-  [MSI]: https://downloads.lightbend.com/sbt/0.13.15/sbt-0.13.15.msi
-  [ZIP]: https://downloads.lightbend.com/sbt/0.13.15/sbt-0.13.15.zip
-  [TGZ]: https://downloads.lightbend.com/sbt/0.13.15/sbt-0.13.15.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v0.13.15/sbt-0.13.15.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v0.13.15/sbt-0.13.15.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v0.13.15/sbt-0.13.15.tgz
 
 Installing sbt on Windows
 -------------------------
@@ -186,8 +186,8 @@ Download [ZIP][ZIP] or [TGZ][TGZ] package and expand it.
 Download [msi installer][MSI] and install it.
 
 
-  [ZIP]: https://downloads.lightbend.com/sbt/0.13.15/sbt-0.13.15.zip
-  [TGZ]: https://downloads.lightbend.com/sbt/0.13.15/sbt-0.13.15.tgz
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v0.13.15/sbt-0.13.15.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v0.13.15/sbt-0.13.15.tgz
   [RPM]: https://dl.bintray.com/sbt/rpm/sbt-0.13.15.rpm
   [DEB]: https://dl.bintray.com/sbt/debian/sbt-0.13.15.deb
   [Manual-Installation]: Manual-Installation.html

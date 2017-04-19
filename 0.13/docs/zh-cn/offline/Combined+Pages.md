@@ -27,7 +27,7 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://downloads.lightbend.com/sbt/0.13.15/sbt-0.13.15.msi
+  [MSI]: https://github.com/sbt/sbt/releases/download/v0.13.15/sbt-0.13.15.msi
   [Setup-Notes]: ../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -53,8 +53,8 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
 如果你在运行 sbt 时遇到任何问题，查看 [安装建议][Setup-Notes] 中的终端编码（terminal encoding），HTTP 代理，JVM 参数。
 
 
-  [ZIP]: https://downloads.lightbend.com/sbt/0.13.15/sbt-0.13.15.zip
-  [TGZ]: https://downloads.lightbend.com/sbt/0.13.15/sbt-0.13.15.tgz
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v0.13.15/sbt-0.13.15.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v0.13.15/sbt-0.13.15.tgz
   [Manual-Installation]: Manual-Installation.html
 
 在 Mac 上安装 sbt
@@ -81,9 +81,9 @@ $ port install sbt
 ```
 
 
-  [MSI]: https://downloads.lightbend.com/sbt/0.13.15/sbt-0.13.15.msi
-  [ZIP]: https://downloads.lightbend.com/sbt/0.13.15/sbt-0.13.15.zip
-  [TGZ]: https://downloads.lightbend.com/sbt/0.13.15/sbt-0.13.15.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v0.13.15/sbt-0.13.15.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v0.13.15/sbt-0.13.15.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v0.13.15/sbt-0.13.15.tgz
 
 在 Windows 上安装 sbt
 -------------------------
@@ -97,8 +97,8 @@ $ port install sbt
 下载 [msi 安装包][MSI] 并安装。
 
 
-  [ZIP]: https://downloads.lightbend.com/sbt/0.13.15/sbt-0.13.15.zip
-  [TGZ]: https://downloads.lightbend.com/sbt/0.13.15/sbt-0.13.15.tgz
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v0.13.15/sbt-0.13.15.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v0.13.15/sbt-0.13.15.tgz
   [RPM]: https://dl.bintray.com/sbt/rpm/sbt-0.13.15.rpm
   [DEB]: https://dl.bintray.com/sbt/debian/sbt-0.13.15.deb
 
