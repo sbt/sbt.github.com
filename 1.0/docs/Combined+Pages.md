@@ -2947,6 +2947,7 @@ code to sbt but are not recorded in either of the above:
 
 
   [Bintray-For-Plugins]: Bintray-For-Plugins.html
+  [Cross-Build-Plugins]: Cross-Build-Plugins.html
 
 Community Plugins
 -----------------
@@ -2971,22 +2972,22 @@ to use. This Ivy repository is mirrored from the freely available
 If you'd like to submit your plugin, please follow these instructions:
 [Bintray For Plugins][Bintray-For-Plugins].
 
-### Plugins available for sbt 1.0.0-M4
+### Cross building plugins from sbt 0.13
+
+See [Cross Build Plugins][Cross-Build-Plugins].
+
+### Plugins available for sbt 1.0.0-M5
 
 Please feel free to
 [submit a pull request](https://github.com/sbt/website/pulls) that adds
 your plugin to the list.
 
+- sbt-bintray: <https://github.com/sbt/sbt-bintray>
+- [Scripted plugin](Testing-sbt-plugins.html)
+
+### Plugins available for sbt 1.0.0-M4
+
 - bintray-sbt: <https://github.com/softprops/bintray-sbt>
-
-Put this into `project/bintray.sbt`:
-
-```scala
-lazy val bintraySbt = RootProject(uri("git://github.com/eed3si9n/bintray-sbt#topic/sbt1.0.0-M4"))
-lazy val root = (project in file(".")).
-  dependsOn(bintraySbt)
-```
-
 - [Scripted plugin](Testing-sbt-plugins.html)
 - sbt-assembly 0.14.3: <https://github.com/sbt/sbt-assembly>
 - sbt-doge 0.1.5: <https://github.com/sbt/sbt-doge>
@@ -8348,7 +8349,7 @@ chmod u+x shout.scala
 #!/usr/bin/env scalas
  
 /***         
-scalaVersion := "2.12.1"
+scalaVersion := "2.12.2"
  
 resolvers += Resolver.url("typesafe-ivy-repo", url("http://repo.typesafe.com/typesafe/releases"))(Resolver.ivyStylePatterns)
  
@@ -9620,7 +9621,7 @@ sbt needs Scala jars to run itself since it is written in Scala. sbt
 uses that same version of Scala to compile the build definitions that
 you write for your project because they use sbt APIs. This version of
 Scala is fixed for a specific sbt release and cannot be changed. For sbt
-1.0.0-M5, this version is Scala 2.12.1. Because this Scala
+1.0.0-M5, this version is Scala 2.12.2. Because this Scala
 version is needed before sbt runs, the repositories used to retrieve
 this version are configured in the sbt
 [launcher][Sbt-Launcher].
@@ -14322,7 +14323,7 @@ Def.setting {
 This Parser definition will produce a value of type `(String,String)`.
 The input syntax defined isn't very flexible; it is just a
 demonstration. It will produce one of the following values for a
-successful parse (assuming the current Scala version is 2.12.1,
+successful parse (assuming the current Scala version is 2.12.2,
 the current sbt version is 1.0.0-M5, and there are 3 commands left to
 run):
 
@@ -15625,7 +15626,7 @@ above for per-project plugins.
 ### Creating an auto plugin
 
 A minimal sbt plugin is a Scala library that is built against the version of
-Scala that sbt runs (currently, 2.12.1) or a Java library.
+Scala that sbt runs (currently, 2.12.2) or a Java library.
 Nothing special needs to be done for this type of library.
 A more typical plugin will provide sbt tasks, commands, or settings.
 This kind of plugin may provide these settings
@@ -17017,6 +17018,30 @@ object Giter8TemplatePlugin extends AutoPlugin {
 ```
 
 This indirecton allows template resolvers to have a classpath independent from the rest of the build.
+
+
+Cross Build Plugins
+-------------------
+
+Like we are able to cross build against multiple Scala versions, we can cross build sbt 1.0 plugins while staying on sbt 0.13. This is useful because we can port one plugin at a time.
+
+1. If the plugin depends on libraries, make sure there are Scala 2.12 artifacts for them.
+2. Use the latest sbt 0.13.15.
+3. Append the following settings to your plugin project:
+
+```scala
+  .settings(
+    scalaVersion := "2.12.2",
+    sbtVersion in Global := "1.0.0-M5",
+    scalaCompilerBridgeSource := {
+      val sv = appConfiguration.value.provider.id.version
+      ("org.scala-sbt" % "compiler-interface" % sv % "component").sources
+    }
+  )
+```
+
+Hopefully the last step will be simplified using @jrudolph's sbt-cross-building in the future.
+If you run into problems upgrading a plugin, please report to [GitHub issue](https://github.com/sbt/sbt/issues).
 
 
 How to...
