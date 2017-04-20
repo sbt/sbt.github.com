@@ -7744,6 +7744,7 @@ Show the number of currently registered commands:
 
   [Command-Line-Reference]: Command-Line-Reference.html
   [Publishing]: Publishing.html
+  [Cross-Build-Plugins]: Cross-Build-Plugins.html
 
 Cross-building
 --------------
@@ -7895,6 +7896,10 @@ Scala version currently being used to build. `<version>` should be
 either a version for Scala published to a repository, as in `++ 2.10.0`
 or the path to a Scala home directory, as in `++ /path/to/scala/home`.
 See [Command Line Reference][Command-Line-Reference] for details.
+
+### Cross building plugins
+
+See [Cross Build Plugins][Cross-Build-Plugins] for cross building plugins.
 
 
   [Basic-Def]: Basic-Def.html
