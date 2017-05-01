@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>xsbti/DependencyContext.java</title>
+        <script type="text/javascript" src="../jquery-all.js"></script>
+        <script type="text/javascript" src="../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+package xsbti;
+
+/**
+ * Enumeration of existing dependency contexts.
+ * Dependency contexts represent the various kind of dependencies that
+ * can exist between symbols.
+ */
+public enum DependencyContext {
+	/**
+	 * Represents a direct dependency between two symbols :
+	 * object Foo
+	 * object Bar { def foo = Foo }
+	 */
+	DependencyByMemberRef,
+
+	/**
+	 * Represents an inheritance dependency between two symbols :
+	 * class A
+	 * class B extends A
+	 */
+	DependencyByInheritance
+}
+
+        </pre>
+    </body>
+</html>

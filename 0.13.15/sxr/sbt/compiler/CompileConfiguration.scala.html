@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/compiler/CompileConfiguration.scala</title>
+        <script type="text/javascript" src="../../jquery-all.js"></script>
+        <script type="text/javascript" src="../../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="keyword">package</span> sbt.compiler
+
+<span class="keyword">import</span> java.io.File
+
+<span class="keyword">import</span> sbt.CompileSetup
+<span class="keyword">import</span> sbt.inc.<span class="delimiter">{</span> IncOptions, Analysis <span class="delimiter">}</span>
+<span class="keyword">import</span> sbt.inc.<a href="../inc/Locate.scala.html#sbt.inc.Locate" title="sbt.inc.Locate.type">Locate</a>._
+<span class="keyword">import</span> xsbti.Reporter
+<span class="keyword">import</span> xsbti.compile.<span class="delimiter">{</span> GlobalsCache, CompileProgress <span class="delimiter">}</span>
+
+<span class="comment">/**
+ * Configuration used for running an analyzing compiler (a compiler which can extract dependencies between source files and JARs).
+ *
+ * @param sources
+ * @param classpath
+ * @param previousAnalysis
+ * @param previousSetup
+ * @param currentSetup
+ * @param progress
+ * @param getAnalysis
+ * @param definesClass
+ * @param reporter
+ * @param compiler
+ * @param javac
+ * @param cache
+ * @param incOptions
+ */</span>
+<span class="keyword">final</span> <span class="keyword">class</span> <a title="class CompileConfiguration extends AnyRef" id="sbt.compiler;CompileConfiguration">CompileConfiguration</a><a href="#sbt.compiler;CompileConfiguration" title="sbt.compiler.CompileConfiguration" class="delimiter">(</a>
+  <span class="keyword">val</span> <a title="Seq[java.io.File]" id="sbt.compiler;CompileConfiguration.sources">sources</a>: <span title="Seq[java.io.File]">Seq</span><span class="delimiter">[</span>File<span class="delimiter">]</span>,
+  <span class="keyword">val</span> <a title="Seq[java.io.File]" id="sbt.compiler;CompileConfiguration.classpath">classpath</a>: <span title="Seq[java.io.File]">Seq</span><span class="delimiter">[</span>File<span class="delimiter">]</span>,
+  <span class="keyword">val</span> <a title="sbt.inc.Analysis" id="sbt.compiler;CompileConfiguration.previousAnalysis">previousAnalysis</a>: <a href="../inc/Analysis.scala.html#sbt.inc;Analysis" title="sbt.inc.Analysis">Analysis</a>,
+  <span class="keyword">val</span> <a title="Option[sbt.CompileSetup]" id="sbt.compiler;CompileConfiguration.previousSetup">previousSetup</a>: <span title="Option[sbt.CompileSetup]">Option</span><span class="delimiter">[</span>CompileSetup<span class="delimiter">]</span>,
+  <span class="keyword">val</span> <a title="sbt.CompileSetup" id="sbt.compiler;CompileConfiguration.currentSetup">currentSetup</a>: <a href="../CompileSetup.scala.html#sbt;CompileSetup" title="sbt.CompileSetup">CompileSetup</a>,
+  <span class="keyword">val</span> <a title="Option[xsbti.compile.CompileProgress]" id="sbt.compiler;CompileConfiguration.progress">progress</a>: <span title="Option[xsbti.compile.CompileProgress]">Option</span><span class="delimiter">[</span>CompileProgress<span class="delimiter">]</span>,
+  <span class="keyword">val</span> <a title="java.io.File =&gt; Option[sbt.inc.Analysis]" id="sbt.compiler;CompileConfiguration.getAnalysis">getAnalysis</a>: File =&gt; Option<span class="delimiter">[</span>Analysis<span class="delimiter">]</span>,
+  <span class="keyword">val</span> <a title="java.io.File =&gt; (String =&gt; Boolean)" id="sbt.compiler;CompileConfiguration.definesClass">definesClass</a>: <span title="java.io.File =&gt; (String =&gt; Boolean)">DefinesClass</span>,
+  <span class="keyword">val</span> <a title="xsbti.Reporter" id="sbt.compiler;CompileConfiguration.reporter">reporter</a>: <a href="../../xsbti/Reporter.java.html#xsbti;Reporter" title="xsbti.Reporter">Reporter</a>,
+  <span class="keyword">val</span> <a title="sbt.compiler.AnalyzingCompiler" id="sbt.compiler;CompileConfiguration.compiler">compiler</a>: <a href="AnalyzingCompiler.scala.html#sbt.compiler;AnalyzingCompiler" title="sbt.compiler.AnalyzingCompiler">AnalyzingCompiler</a>,
+  <span class="keyword">val</span> <a title="xsbti.compile.JavaCompiler" id="sbt.compiler;CompileConfiguration.javac">javac</a>: xsbti.compile.<a href="../../xsbti/compile/JavaCompiler.java.html#xsbti.compile;JavaCompiler" title="xsbti.compile.JavaCompiler">JavaCompiler</a>,
+  <span class="keyword">val</span> <a title="xsbti.compile.GlobalsCache" id="sbt.compiler;CompileConfiguration.cache">cache</a>: <a href="../../xsbti/compile/GlobalsCache.java.html#xsbti.compile;GlobalsCache" title="xsbti.compile.GlobalsCache">GlobalsCache</a>,
+  <span class="keyword">val</span> <a title="sbt.inc.IncOptions" id="sbt.compiler;CompileConfiguration.incOptions">incOptions</a>: <a href="../inc/IncOptions.scala.html#sbt.inc;IncOptions" title="sbt.inc.IncOptions">IncOptions</a><span class="delimiter">)</span>
+
+        </pre>
+    </body>
+</html>

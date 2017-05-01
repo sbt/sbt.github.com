@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/UpdateOptions.scala</title>
+        <script type="text/javascript" src="../jquery-all.js"></script>
+        <script type="text/javascript" src="../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="keyword">package</span> sbt
+
+<span class="keyword">import</span> java.io.File
+<span class="keyword">import</span> org.apache.ivy.plugins.resolver.DependencyResolver
+<span class="keyword">import</span> org.apache.ivy.core.settings.IvySettings
+
+<span class="comment">/**
+ * Represents configurable options for update task.
+ * While UpdateConfiguration is passed into update at runtime,
+ * UpdateOption is intended to be used while setting up the Ivy object.
+ *
+ * See also UpdateConfiguration in IvyActions.scala.
+ */</span>
+<span class="keyword">final</span> <span class="keyword">class</span> <a title="class UpdateOptions extends AnyRef" id="sbt;UpdateOptions">UpdateOptions</a> <a href="#sbt;UpdateOptions" title="sbt.UpdateOptions" class="keyword">private</a><span class="delimiter">[</span>sbt<span class="delimiter">]</span> <span class="delimiter">(</span>
+    <span class="comment">/** If set to CircularDependencyLevel.Error, halt the dependency resolution. */</span>
+    <span class="keyword">val</span> <a title="sbt.CircularDependencyLevel" id="sbt;UpdateOptions.circularDependencyLevel">circularDependencyLevel</a>: <a href="CircularDependencyLevel.scala.html#sbt;CircularDependencyLevel" title="sbt.CircularDependencyLevel">CircularDependencyLevel</a>,
+    <span class="comment">// If set to true, prioritize inter-project resolver</span>
+    <span class="keyword">val</span> <a title="Boolean" id="sbt;UpdateOptions.interProjectFirst">interProjectFirst</a>: <span title="Boolean">Boolean</span>,
+    <span class="comment">/** If set to true, check all resolvers for snapshots. */</span>
+    <span class="keyword">val</span> <a title="Boolean" id="sbt;UpdateOptions.latestSnapshots">latestSnapshots</a>: <span title="Boolean">Boolean</span>,
+    <span class="comment">/** If set to true, use consolidated resolution. */</span>
+    <span class="keyword">val</span> <a title="Boolean" id="sbt;UpdateOptions.consolidatedResolution">consolidatedResolution</a>: <span title="Boolean">Boolean</span>,
+    <span class="comment">/** If set to true, use cached resolution. */</span>
+    <span class="keyword">val</span> <a title="Boolean" id="sbt;UpdateOptions.cachedResolution">cachedResolution</a>: <span title="Boolean">Boolean</span>,
+    <span class="comment">/** Extention point for an alternative resolver converter. */</span>
+    <span class="keyword">val</span> <a title="sbt.UpdateOptions.ResolverConverter" id="sbt;UpdateOptions.resolverConverter">resolverConverter</a>: UpdateOptions.<span title="sbt.UpdateOptions.ResolverConverter">ResolverConverter</span><span class="delimiter">)</span> <span class="delimiter">{</span>
+  <span class="keyword">def</span> <a title="(circularDependencyLevel: sbt.CircularDependencyLevel)sbt.UpdateOptions" id="sbt;UpdateOptions.withCircularDependencyLevel">withCircularDependencyLevel</a><span class="delimiter">(</span><a title="sbt.CircularDependencyLevel" id="sbt;UpdateOptions.withCircularDependencyLevel.circularDependencyLevel">circularDependencyLevel</a>: <a href="CircularDependencyLevel.scala.html#sbt;CircularDependencyLevel" title="sbt.CircularDependencyLevel">CircularDependencyLevel</a><span class="delimiter">)</span>: <a href="#sbt;UpdateOptions" title="sbt.UpdateOptions">UpdateOptions</a> =
+    <a href="#sbt;UpdateOptions.copy" title="(circularDependencyLevel: sbt.CircularDependencyLevel, interProjectFirst: Boolean, latestSnapshots: Boolean, consolidatedResolution: Boolean, cachedResolution: Boolean, resolverConverter: sbt.UpdateOptions.ResolverConverter)sbt.UpdateOptions">copy</a><span class="delimiter">(</span>circularDependencyLevel = <a href="#sbt;UpdateOptions.withCircularDependencyLevel.circularDependencyLevel" title="sbt.CircularDependencyLevel">circularDependencyLevel</a><span class="delimiter">)</span>
+  <span class="keyword">def</span> <a title="(interProjectFirst: Boolean)sbt.UpdateOptions" id="sbt;UpdateOptions.withInterProjectFirst">withInterProjectFirst</a><span class="delimiter">(</span><a title="Boolean" id="sbt;UpdateOptions.withInterProjectFirst.interProjectFirst">interProjectFirst</a>: <span title="Boolean">Boolean</span><span class="delimiter">)</span>: <a href="#sbt;UpdateOptions" title="sbt.UpdateOptions">UpdateOptions</a> =
+    <a href="#sbt;UpdateOptions.copy$default$1" title="sbt.CircularDependencyLevel" id="sbt;UpdateOptions.withInterProjectFirst.x$6">copy</a><span class="delimiter">(</span>interProjectFirst = <a href="#sbt;UpdateOptions.withInterProjectFirst.interProjectFirst" title="Boolean" id="sbt;UpdateOptions.withInterProjectFirst.x$1">interProjectFirst</a><span class="delimiter">)</span>
+  <span class="keyword">def</span> <a title="(latestSnapshots: Boolean)sbt.UpdateOptions" id="sbt;UpdateOptions.withLatestSnapshots">withLatestSnapshots</a><span class="delimiter">(</span><a title="Boolean" id="sbt;UpdateOptions.withLatestSnapshots.latestSnapshots">latestSnapshots</a>: <span title="Boolean">Boolean</span><span class="delimiter">)</span>: <a href="#sbt;UpdateOptions" title="sbt.UpdateOptions">UpdateOptions</a> =
+    <a href="#sbt;UpdateOptions.copy$default$1" title="sbt.CircularDependencyLevel" id="sbt;UpdateOptions.withLatestSnapshots.x$12">copy</a><span class="delimiter">(</span>latestSnapshots = <a href="#sbt;UpdateOptions.withLatestSnapshots.latestSnapshots" title="Boolean" id="sbt;UpdateOptions.withLatestSnapshots.x$7">latestSnapshots</a><span class="delimiter">)</span>
+  @deprecated<span class="delimiter">(</span><span class="string">&quot;Use withCachedResolution instead.&quot;</span>, <span class="string">&quot;0.13.7&quot;</span><span class="delimiter">)</span>
+  <span class="keyword">def</span> <a title="(consolidatedResolution: Boolean)sbt.UpdateOptions" id="sbt;UpdateOptions.withConsolidatedResolution">withConsolidatedResolution</a><span class="delimiter">(</span><a title="Boolean" id="sbt;UpdateOptions.withConsolidatedResolution.consolidatedResolution">consolidatedResolution</a>: <span title="Boolean">Boolean</span><span class="delimiter">)</span>: <a href="#sbt;UpdateOptions" title="sbt.UpdateOptions">UpdateOptions</a> =
+    <a href="#sbt;UpdateOptions.copy$default$1" title="sbt.CircularDependencyLevel" id="sbt;UpdateOptions.withConsolidatedResolution.x$18">copy</a><span class="delimiter">(</span>consolidatedResolution = <a href="#sbt;UpdateOptions.withConsolidatedResolution.consolidatedResolution" title="Boolean" id="sbt;UpdateOptions.withConsolidatedResolution.x$13">consolidatedResolution</a>,
+      cachedResolution = <a href="#sbt;UpdateOptions.withConsolidatedResolution.consolidatedResolution" title="Boolean" id="sbt;UpdateOptions.withConsolidatedResolution.x$14">consolidatedResolution</a><span class="delimiter">)</span>
+  <span class="keyword">def</span> <a title="(cachedResoluton: Boolean)sbt.UpdateOptions" id="sbt;UpdateOptions.withCachedResolution">withCachedResolution</a><span class="delimiter">(</span><a title="Boolean" id="sbt;UpdateOptions.withCachedResolution.cachedResoluton">cachedResoluton</a>: <span title="Boolean">Boolean</span><span class="delimiter">)</span>: <a href="#sbt;UpdateOptions" title="sbt.UpdateOptions">UpdateOptions</a> =
+    <a href="#sbt;UpdateOptions.copy$default$1" title="sbt.CircularDependencyLevel" id="sbt;UpdateOptions.withCachedResolution.x$24">copy</a><span class="delimiter">(</span>cachedResolution = <a href="#sbt;UpdateOptions.withCachedResolution.cachedResoluton" title="Boolean" id="sbt;UpdateOptions.withCachedResolution.x$19">cachedResoluton</a>,
+      consolidatedResolution = <a href="#sbt;UpdateOptions.cachedResolution" title="Boolean" id="sbt;UpdateOptions.withCachedResolution.x$20">cachedResolution</a><span class="delimiter">)</span>
+  <span class="comment">/** Extention point for an alternative resolver converter. */</span>
+  <span class="keyword">def</span> <a title="(resolverConverter: sbt.UpdateOptions.ResolverConverter)sbt.UpdateOptions" id="sbt;UpdateOptions.withResolverConverter">withResolverConverter</a><span class="delimiter">(</span><a title="sbt.UpdateOptions.ResolverConverter" id="sbt;UpdateOptions.withResolverConverter.resolverConverter">resolverConverter</a>: UpdateOptions.<span title="sbt.UpdateOptions.ResolverConverter">ResolverConverter</span><span class="delimiter">)</span>: <a href="#sbt;UpdateOptions" title="sbt.UpdateOptions">UpdateOptions</a> =
+    <a href="#sbt;UpdateOptions.copy$default$1" title="sbt.CircularDependencyLevel" id="sbt;UpdateOptions.withResolverConverter.x$30">copy</a><span class="delimiter">(</span>resolverConverter = <a href="#sbt;UpdateOptions.withResolverConverter.resolverConverter" title="sbt.UpdateOptions.ResolverConverter" id="sbt;UpdateOptions.withResolverConverter.x$25">resolverConverter</a><span class="delimiter">)</span>
+
+  <span class="keyword">private</span><span class="delimiter">[</span>sbt<span class="delimiter">]</span> <span class="keyword">def</span> <a title="(circularDependencyLevel: sbt.CircularDependencyLevel, interProjectFirst: Boolean, latestSnapshots: Boolean, consolidatedResolution: Boolean, cachedResolution: Boolean, resolverConverter: sbt.UpdateOptions.ResolverConverter)sbt.UpdateOptions" id="sbt;UpdateOptions.copy">copy</a><span class="delimiter">(</span>
+    <a title="sbt.CircularDependencyLevel" id="sbt;UpdateOptions.copy$default$1">circularDependencyLevel</a>: <a href="CircularDependencyLevel.scala.html#sbt;CircularDependencyLevel" title="sbt.CircularDependencyLevel">CircularDependencyLevel</a> = <a href="#sbt;UpdateOptions" title="UpdateOptions.this.type" class="keyword">this</a>.<a href="#sbt;UpdateOptions.circularDependencyLevel" title="=&gt; sbt.CircularDependencyLevel">circularDependencyLevel</a>,
+    <a title="Boolean" id="sbt;UpdateOptions.copy$default$2">interProjectFirst</a>: <span title="Boolean">Boolean</span> = <a href="#sbt;UpdateOptions" title="UpdateOptions.this.type" class="keyword">this</a>.<a href="#sbt;UpdateOptions.interProjectFirst" title="=&gt; Boolean">interProjectFirst</a>,
+    <a title="Boolean" id="sbt;UpdateOptions.copy$default$3">latestSnapshots</a>: <span title="Boolean">Boolean</span> = <a href="#sbt;UpdateOptions" title="UpdateOptions.this.type" class="keyword">this</a>.<a href="#sbt;UpdateOptions.latestSnapshots" title="=&gt; Boolean">latestSnapshots</a>,
+    <a title="Boolean" id="sbt;UpdateOptions.copy$default$4">consolidatedResolution</a>: <span title="Boolean">Boolean</span> = <a href="#sbt;UpdateOptions" title="UpdateOptions.this.type" class="keyword">this</a>.<a href="#sbt;UpdateOptions.consolidatedResolution" title="=&gt; Boolean">consolidatedResolution</a>,
+    <a title="Boolean" id="sbt;UpdateOptions.copy$default$5">cachedResolution</a>: <span title="Boolean">Boolean</span> = <a href="#sbt;UpdateOptions" title="UpdateOptions.this.type" class="keyword">this</a>.<a href="#sbt;UpdateOptions.cachedResolution" title="=&gt; Boolean">cachedResolution</a>,
+    <a title="sbt.UpdateOptions.ResolverConverter" id="sbt;UpdateOptions.copy$default$6">resolverConverter</a>: UpdateOptions.<span title="sbt.UpdateOptions.ResolverConverter">ResolverConverter</span> = <a href="#sbt;UpdateOptions" title="UpdateOptions.this.type" class="keyword">this</a>.<a href="#sbt;UpdateOptions.resolverConverter" title="=&gt; sbt.UpdateOptions.ResolverConverter">resolverConverter</a><span class="delimiter">)</span>: <a href="#sbt;UpdateOptions" title="sbt.UpdateOptions">UpdateOptions</a> =
+    <span title="sbt.UpdateOptions" class="keyword">new</span> <a href="#sbt;UpdateOptions" title="sbt.UpdateOptions">UpdateOptions</a><span class="delimiter">(</span><a href="#sbt;UpdateOptions.copy$default$1" title="sbt.CircularDependencyLevel">circularDependencyLevel</a>,
+      <a href="#sbt;UpdateOptions.copy$default$2" title="Boolean">interProjectFirst</a>,
+      <a href="#sbt;UpdateOptions.copy$default$3" title="Boolean">latestSnapshots</a>,
+      <a href="#sbt;UpdateOptions.copy$default$4" title="Boolean">consolidatedResolution</a>,
+      <a href="#sbt;UpdateOptions.copy$default$5" title="Boolean">cachedResolution</a>,
+      <a href="#sbt;UpdateOptions.copy$default$6" title="sbt.UpdateOptions.ResolverConverter">resolverConverter</a><span class="delimiter">)</span>
+
+  <span class="keyword">override</span> <span class="keyword">def</span> <a title="(o: Any)Boolean" id="sbt;UpdateOptions.equals">equals</a><span class="delimiter">(</span><span title="Any">o</span>: <span title="Any">Any</span><span class="delimiter">)</span>: <span title="Boolean">Boolean</span> = <span title="Any">o</span> <span title="Boolean" class="keyword">match</span> <span class="delimiter">{</span>
+    <span class="keyword">case</span> <span title="sbt.UpdateOptions">o</span>: <a href="#sbt;UpdateOptions" title="sbt.UpdateOptions">UpdateOptions</a> =&gt;
+      <a href="#sbt;UpdateOptions" title="UpdateOptions.this.type" class="keyword">this</a>.<a href="#sbt;UpdateOptions.circularDependencyLevel" title="=&gt; sbt.CircularDependencyLevel">circularDependencyLevel</a> <span title="(x$1: AnyRef)Boolean">==</span> <span title="sbt.UpdateOptions">o</span>.<a href="#sbt;UpdateOptions.circularDependencyLevel" title="=&gt; sbt.CircularDependencyLevel">circularDependencyLevel</a> <span title="(x: Boolean)Boolean">&amp;&amp;</span>
+        <a href="#sbt;UpdateOptions" title="UpdateOptions.this.type" class="keyword">this</a>.<a href="#sbt;UpdateOptions.interProjectFirst" title="=&gt; Boolean">interProjectFirst</a> <span title="(x: Boolean)Boolean">==</span> <span title="sbt.UpdateOptions">o</span>.<a href="#sbt;UpdateOptions.interProjectFirst" title="=&gt; Boolean">interProjectFirst</a> <span title="(x: Boolean)Boolean">&amp;&amp;</span>
+        <a href="#sbt;UpdateOptions" title="UpdateOptions.this.type" class="keyword">this</a>.<a href="#sbt;UpdateOptions.latestSnapshots" title="=&gt; Boolean">latestSnapshots</a> <span title="(x: Boolean)Boolean">==</span> <span title="sbt.UpdateOptions">o</span>.<a href="#sbt;UpdateOptions.latestSnapshots" title="=&gt; Boolean">latestSnapshots</a> <span title="(x: Boolean)Boolean">&amp;&amp;</span>
+        <a href="#sbt;UpdateOptions" title="UpdateOptions.this.type" class="keyword">this</a>.<a href="#sbt;UpdateOptions.cachedResolution" title="=&gt; Boolean">cachedResolution</a> <span title="(x: Boolean)Boolean">==</span> <span title="sbt.UpdateOptions">o</span>.<a href="#sbt;UpdateOptions.cachedResolution" title="=&gt; Boolean">cachedResolution</a> <span title="(x: Boolean)Boolean">&amp;&amp;</span>
+        <a href="#sbt;UpdateOptions" title="UpdateOptions.this.type" class="keyword">this</a>.<a href="#sbt;UpdateOptions.resolverConverter" title="=&gt; sbt.UpdateOptions.ResolverConverter">resolverConverter</a> <span title="(x$1: AnyRef)Boolean">==</span> <span title="sbt.UpdateOptions">o</span>.<a href="#sbt;UpdateOptions.resolverConverter" title="=&gt; sbt.UpdateOptions.ResolverConverter">resolverConverter</a>
+    <span class="keyword">case</span> _ =&gt; <span title="Boolean(false)" class="keyword">false</span>
+  <span class="delimiter">}</span>
+
+  <span class="keyword">override</span> <span class="keyword">def</span> <a title="()Int" id="sbt;UpdateOptions.hashCode">hashCode</a>: <span title="Int">Int</span> =
+    <span class="delimiter">{</span>
+      <span class="keyword">var</span> <a title="Int" id="sbt;UpdateOptions.hashCode.hash">hash</a> = <span title="Int(1)" class="int">1</span>
+      <a href="#sbt;UpdateOptions.hashCode.hash" title="Int">hash</a> = <a href="#sbt;UpdateOptions.hashCode.hash" title="Int">hash</a> <span title="(x: Int)Int">*</span> <span title="Int(31)" class="int">31</span> <span title="(x: Int)Int">+</span> <a href="#sbt;UpdateOptions" title="UpdateOptions.this.type" class="keyword">this</a>.<a href="#sbt;UpdateOptions.circularDependencyLevel" title="=&gt; sbt.CircularDependencyLevel">circularDependencyLevel</a>.<span title="()Int">##</span>
+      <a href="#sbt;UpdateOptions.hashCode.hash" title="Int">hash</a> = <a href="#sbt;UpdateOptions.hashCode.hash" title="Int">hash</a> <span title="(x: Int)Int">*</span> <span title="Int(31)" class="int">31</span> <span title="(x: Int)Int">+</span> <a href="#sbt;UpdateOptions" title="UpdateOptions.this.type" class="keyword">this</a>.<a href="#sbt;UpdateOptions.interProjectFirst" title="=&gt; Boolean">interProjectFirst</a>.<span title="()Int">##</span>
+      <a href="#sbt;UpdateOptions.hashCode.hash" title="Int">hash</a> = <a href="#sbt;UpdateOptions.hashCode.hash" title="Int">hash</a> <span title="(x: Int)Int">*</span> <span title="Int(31)" class="int">31</span> <span title="(x: Int)Int">+</span> <a href="#sbt;UpdateOptions" title="UpdateOptions.this.type" class="keyword">this</a>.<a href="#sbt;UpdateOptions.latestSnapshots" title="=&gt; Boolean">latestSnapshots</a>.<span title="()Int">##</span>
+      <a href="#sbt;UpdateOptions.hashCode.hash" title="Int">hash</a> = <a href="#sbt;UpdateOptions.hashCode.hash" title="Int">hash</a> <span title="(x: Int)Int">*</span> <span title="Int(31)" class="int">31</span> <span title="(x: Int)Int">+</span> <a href="#sbt;UpdateOptions" title="UpdateOptions.this.type" class="keyword">this</a>.<a href="#sbt;UpdateOptions.cachedResolution" title="=&gt; Boolean">cachedResolution</a>.<span title="()Int">##</span>
+      <a href="#sbt;UpdateOptions.hashCode.hash" title="Int">hash</a> = <a href="#sbt;UpdateOptions.hashCode.hash" title="Int">hash</a> <span title="(x: Int)Int">*</span> <span title="Int(31)" class="int">31</span> <span title="(x: Int)Int">+</span> <a href="#sbt;UpdateOptions" title="UpdateOptions.this.type" class="keyword">this</a>.<a href="#sbt;UpdateOptions.resolverConverter" title="=&gt; sbt.UpdateOptions.ResolverConverter">resolverConverter</a>.<span title="()Int">##</span>
+      <a href="#sbt;UpdateOptions.hashCode.hash" title="Int">hash</a>
+    <span class="delimiter">}</span>
+<span class="delimiter">}</span>
+
+<span title="AnyRef" class="keyword">object</span> <a title="sbt.UpdateOptions.type" id="sbt.UpdateOptions">UpdateOptions</a> <a href="#sbt.UpdateOptions" title="sbt.UpdateOptions.type" class="delimiter">{</a>
+  <span class="keyword">type</span> <a title="PartialFunction[(sbt.Resolver, org.apache.ivy.core.settings.IvySettings, sbt.Logger),org.apache.ivy.plugins.resolver.DependencyResolver]" id="sbt.UpdateOptions;ResolverConverter">ResolverConverter</a> = <span title="PartialFunction[(sbt.Resolver, org.apache.ivy.core.settings.IvySettings, sbt.Logger),org.apache.ivy.plugins.resolver.DependencyResolver]">PartialFunction</span><span class="delimiter">[</span><span class="delimiter">(</span>Resolver, IvySettings, Logger<span class="delimiter">)</span>, DependencyResolver<span class="delimiter">]</span>
+
+  <span class="keyword">def</span> <a title="()sbt.UpdateOptions" id="sbt.UpdateOptions.apply">apply</a><span class="delimiter">(</span><span class="delimiter">)</span>: <a href="#sbt;UpdateOptions" title="sbt.UpdateOptions">UpdateOptions</a> =
+    <span title="sbt.UpdateOptions" class="keyword">new</span> <a href="#sbt;UpdateOptions" title="sbt.UpdateOptions">UpdateOptions</a><span class="delimiter">(</span>
+      circularDependencyLevel = <a href="CircularDependencyLevel.scala.html#sbt.CircularDependencyLevel" title="sbt.CircularDependencyLevel.type">CircularDependencyLevel</a>.<a href="CircularDependencyLevel.scala.html#sbt.CircularDependencyLevel.Warn" title="=&gt; sbt.CircularDependencyLevel">Warn</a>,
+      interProjectFirst = <span title="Boolean(true)" class="keyword">true</span>,
+      latestSnapshots = <span title="Boolean(true)" class="keyword">true</span>,
+      consolidatedResolution = <span title="Boolean(false)" class="keyword">false</span>,
+      cachedResolution = <span title="Boolean(false)" class="keyword">false</span>,
+      resolverConverter = <span title="PartialFunction.type">PartialFunction</span>.<span title="PartialFunction[Any,Nothing]">empty</span><span class="delimiter">)</span>
+<span class="delimiter">}</span>
+
+        </pre>
+    </body>
+</html>
