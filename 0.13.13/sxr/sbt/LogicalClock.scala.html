@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/LogicalClock.scala</title>
+        <script type="text/javascript" src="../jquery-all.js"></script>
+        <script type="text/javascript" src="../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="keyword">package</span> sbt
+
+<span class="comment">/**
+ * Represents a logical time point for dependency resolution.
+ * This is used to cache dependencies across subproject resolution which may change over time.
+ */</span>
+<span class="keyword">trait</span> <a title="trait LogicalClock extends AnyRef" id="sbt;LogicalClock">LogicalClock</a> <span class="delimiter">{</span>
+  <span class="keyword">def</span> <a title="()String" id="sbt;LogicalClock.toString">toString</a>: <span title="String">String</span>
+<span class="delimiter">}</span>
+
+<span title="AnyRef" class="keyword">object</span> <a title="sbt.LogicalClock.type" id="sbt.LogicalClock">LogicalClock</a> <a href="#sbt.LogicalClock" title="sbt.LogicalClock.type" class="delimiter">{</a>
+  <span class="keyword">def</span> <a title="(hashCode: Int)sbt.LogicalClock" id="sbt.LogicalClock.apply(3d892f1802)">apply</a><span class="delimiter">(</span><a title="Int" id="sbt.LogicalClock.apply(3d892f1802).hashCode">hashCode</a>: <span title="Int">Int</span><span class="delimiter">)</span>: <a href="#sbt;LogicalClock" title="sbt.LogicalClock">LogicalClock</a> = <span class="delimiter">{</span>
+    <span class="keyword">def</span> <a title="(x: Int)Array[Byte]" id="sbt.LogicalClock.apply(3d892f1802).intToByteArray">intToByteArray</a><span class="delimiter">(</span><a title="Int" id="sbt.LogicalClock.apply(3d892f1802).intToByteArray.x">x</a>: <span title="Int">Int</span><span class="delimiter">)</span>: <span title="Array[Byte]">Array</span><span class="delimiter">[</span>Byte<span class="delimiter">]</span> =
+      <span title="(x: Byte, xs: Byte*)Array[Byte]">Array</span><span class="delimiter">(</span><span class="delimiter">(</span><a href="#sbt.LogicalClock.apply(3d892f1802).intToByteArray.x" title="Int">x</a> <span title="(x: Int)Int">&gt;&gt;&gt;</span> <span title="Int(24)" class="int">24</span><span class="delimiter">)</span>.<span title="=&gt; Byte">toByte</span>, <span class="delimiter">(</span><a href="#sbt.LogicalClock.apply(3d892f1802).intToByteArray.x" title="Int">x</a> <span title="(x: Int)Int">&gt;&gt;</span> <span title="Int(16)" class="int">16</span> <span title="(x: Int)Int">&amp;</span> <span title="Int(255)" class="int">0xff</span><span class="delimiter">)</span>.<span title="=&gt; Byte">toByte</span>, <span class="delimiter">(</span><a href="#sbt.LogicalClock.apply(3d892f1802).intToByteArray.x" title="Int">x</a> <span title="(x: Int)Int">&gt;&gt;</span> <span title="Int(8)" class="int">8</span> <span title="(x: Int)Int">&amp;</span> <span title="Int(255)" class="int">0xff</span><span class="delimiter">)</span>.<span title="=&gt; Byte">toByte</span>, <span class="delimiter">(</span><a href="#sbt.LogicalClock.apply(3d892f1802).intToByteArray.x" title="Int">x</a> <span title="(x: Int)Int">&amp;</span> <span title="Int(255)" class="int">0xff</span><span class="delimiter">)</span>.<span title="=&gt; Byte">toByte</span><span class="delimiter">)</span>
+    <a href="#sbt.LogicalClock.apply(0717b4970e)" title="(x: String)sbt.LogicalClock">apply</a><span class="delimiter">(</span><a href="Hash.scala.html#sbt.Hash" title="sbt.Hash.type">Hash</a>.<a href="Hash.scala.html#sbt.Hash.toHex(f717a17611)" title="(bytes: Array[Byte])String">toHex</a><span class="delimiter">(</span><a href="#sbt.LogicalClock.apply(3d892f1802).intToByteArray" title="(x: Int)Array[Byte]">intToByteArray</a><span class="delimiter">(</span><a href="#sbt.LogicalClock.apply(3d892f1802).hashCode" title="Int">hashCode</a><span class="delimiter">)</span><span class="delimiter">)</span><span class="delimiter">)</span>
+  <span class="delimiter">}</span>
+  <span class="keyword">def</span> <a title="(x: String)sbt.LogicalClock" id="sbt.LogicalClock.apply(0717b4970e)">apply</a><span class="delimiter">(</span><a title="String" id="sbt.LogicalClock.apply(0717b4970e).x">x</a>: <span title="String">String</span><span class="delimiter">)</span>: <a href="#sbt;LogicalClock" title="sbt.LogicalClock">LogicalClock</a> = <a href="#sbt.LogicalClock.apply(0717b4970e);$anon" title="sbt.LogicalClock" class="keyword">new</a> <a title="anonymous class $anon extends AnyRef with sbt.LogicalClock" id="sbt.LogicalClock.apply(0717b4970e);$anon">LogicalClock</a> <span class="delimiter">{</span>
+    <span class="keyword">override</span> <span class="keyword">def</span> <a title="()String" id="sbt.LogicalClock.apply(0717b4970e);$anon.toString">toString</a>: <span title="String">String</span> = <a href="#sbt.LogicalClock.apply(0717b4970e).x" title="String">x</a>
+  <span class="delimiter">}</span>
+  <span class="keyword">def</span> <a title="=&gt; sbt.LogicalClock" id="sbt.LogicalClock.unknown">unknown</a>: <a href="#sbt;LogicalClock" title="sbt.LogicalClock">LogicalClock</a> = <a href="#sbt.LogicalClock.apply(0717b4970e)" title="(x: String)sbt.LogicalClock">apply</a><span class="delimiter">(</span><span title="String(&quot;unknown&quot;)" class="string">&quot;unknown&quot;</span><span class="delimiter">)</span>
+<span class="delimiter">}</span>
+
+        </pre>
+    </body>
+</html>

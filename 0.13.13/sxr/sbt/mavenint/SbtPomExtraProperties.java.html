@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/mavenint/SbtPomExtraProperties.java</title>
+        <script type="text/javascript" src="../../jquery-all.js"></script>
+        <script type="text/javascript" src="../../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+package sbt.mavenint;
+
+/**
+ * Extra properties we dump from Aether into the properties list.
+ */
+public class SbtPomExtraProperties {
+
+    public static final String MAVEN_PACKAGING_KEY = &quot;sbt.pom.packaging&quot;;
+    public static final String SCALA_VERSION_KEY = &quot;sbt.pom.scalaversion&quot;;
+    public static final String SBT_VERSION_KEY = &quot;sbt.pom.sbtversion&quot;;
+
+    public static final String POM_INFO_KEY_PREFIX = &quot;info.&quot;;
+    public static final String POM_SCALA_VERSION = &quot;scalaVersion&quot;;
+    public static final String POM_SBT_VERSION = &quot;sbtVersion&quot;;
+    public static final String POM_API_KEY = &quot;info.apiURL&quot;;
+
+    public static final String LICENSE_COUNT_KEY = &quot;license.count&quot;;
+
+    public static String makeLicenseName(int i) {
+        return &quot;license.&quot; + i + &quot;.name&quot;;
+    }
+    public static String makeLicenseUrl(int i) {
+        return &quot;license.&quot; + i + &quot;.url&quot;;
+    }
+}
+
+        </pre>
+    </body>
+</html>

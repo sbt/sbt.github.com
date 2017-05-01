@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/Remove.scala</title>
+        <script type="text/javascript" src="../jquery-all.js"></script>
+        <script type="text/javascript" src="../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="keyword">package</span> sbt
+
+<span class="keyword">import</span> scala.annotation.implicitNotFound
+
+<span class="keyword">object</span> <a title="sbt.Remove.type" id="sbt.Remove">Remove</a> <a href="#sbt.Remove" title="sbt.Remove.type" class="delimiter">{</a>
+  @implicitNotFound<span class="delimiter">(</span>msg = <span class="string">&quot;No implicit for Remove.Value[${A}, ${B}] found,\n  so ${B} cannot be removed from ${A}&quot;</span><span class="delimiter">)</span>
+  <span class="keyword">trait</span> <a title="trait Value[A, B] extends Any" id="sbt.Remove;Value">Value</a><span class="delimiter">[</span><a title="" id="sbt.Remove;Value;A">A</a>, <a title="" id="sbt.Remove;Value;B">B</a><span class="delimiter">]</span> <span class="keyword">extends</span> <span title="Any">Any</span> <span class="delimiter">{</span>
+    <span class="keyword">def</span> <a title="(a: A, b: B)A" id="sbt.Remove;Value.removeValue">removeValue</a><span class="delimiter">(</span><a title="A" id="sbt.Remove;Value.removeValue.a">a</a>: <a href="#sbt.Remove;Value;A" title="A">A</a>, <a title="B" id="sbt.Remove;Value.removeValue.b">b</a>: <a href="#sbt.Remove;Value;B" title="B">B</a><span class="delimiter">)</span>: <a href="#sbt.Remove;Value;A" title="A">A</a>
+  <span class="delimiter">}</span>
+  @implicitNotFound<span class="delimiter">(</span>msg = <span class="string">&quot;No implicit for Remove.Values[${A}, ${B}] found,\n  so ${B} cannot be removed from ${A}&quot;</span><span class="delimiter">)</span>
+  <span class="keyword">trait</span> <a title="trait Values[A, -B] extends Any" id="sbt.Remove;Values">Values</a><span class="delimiter">[</span><a title="" id="sbt.Remove;Values;A">A</a>, -<a title="" id="sbt.Remove;Values;B">B</a><span class="delimiter">]</span> <span class="keyword">extends</span> <span title="Any">Any</span> <span class="delimiter">{</span>
+    <span class="keyword">def</span> <a title="(a: A, b: B)A" id="sbt.Remove;Values.removeValues">removeValues</a><span class="delimiter">(</span><a title="A" id="sbt.Remove;Values.removeValues.a">a</a>: <a href="#sbt.Remove;Values;A" title="A">A</a>, <a title="B" id="sbt.Remove;Values.removeValues.b">b</a>: <a href="#sbt.Remove;Values;B" title="B">B</a><span class="delimiter">)</span>: <a href="#sbt.Remove;Values;A" title="A">A</a>
+  <span class="delimiter">}</span>
+  <span class="keyword">sealed</span> <span class="keyword">trait</span> <a title="trait Sequence[A, -B, T] extends AnyRef with sbt.Remove.Value[A,T] with sbt.Remove.Values[A,B]" id="sbt.Remove;Sequence">Sequence</a><span class="delimiter">[</span><a title="" id="sbt.Remove;Sequence;A">A</a>, -<a title="" id="sbt.Remove;Sequence;B">B</a>, <a title="" id="sbt.Remove;Sequence;T">T</a><span class="delimiter">]</span> <span class="keyword">extends</span> <a href="#sbt.Remove;Value" title="sbt.Remove.Value[A,T]">Value</a><span class="delimiter">[</span>A, T<span class="delimiter">]</span> <span class="keyword">with</span> <a href="#sbt.Remove;Values" title="sbt.Remove.Values[A,B]">Values</a><span class="delimiter">[</span>A, B<span class="delimiter">]</span>
+
+  <span class="keyword">implicit</span> <span class="keyword">def</span> <a title="[T, V &lt;: T]=&gt; sbt.Remove.Sequence[Seq[T],Seq[V],V]" id="sbt.Remove.removeSeq">removeSeq</a><span class="delimiter">[</span><a title="" id="sbt.Remove.removeSeq;T">T</a>, <a title=" &lt;: T" id="sbt.Remove.removeSeq;V">V</a> &lt;: T<span class="delimiter">]</span>: <a href="#sbt.Remove;Sequence" title="sbt.Remove.Sequence[Seq[T],Seq[V],V]">Sequence</a><span class="delimiter">[</span>Seq<span class="delimiter">[</span>T<span class="delimiter">]</span>, Seq<span class="delimiter">[</span>V<span class="delimiter">]</span>, V<span class="delimiter">]</span> = <a href="#sbt.Remove.removeSeq;$anon" title="sbt.Remove.Sequence[Seq[T],Seq[V],V]" class="keyword">new</a> <a title="anonymous class $anon extends AnyRef with sbt.Remove.Sequence[Seq[T],Seq[V],V]" id="sbt.Remove.removeSeq;$anon">Sequence</a><span class="delimiter">[</span>Seq<span class="delimiter">[</span>T<span class="delimiter">]</span>, Seq<span class="delimiter">[</span>V<span class="delimiter">]</span>, V<span class="delimiter">]</span> <span class="delimiter">{</span>
+    <span class="keyword">def</span> <a title="(a: Seq[T], b: V)Seq[T]" id="sbt.Remove.removeSeq;$anon.removeValue">removeValue</a><span class="delimiter">(</span><a title="Seq[T]" id="sbt.Remove.removeSeq;$anon.removeValue.a">a</a>: <span title="Seq[T]">Seq</span><span class="delimiter">[</span>T<span class="delimiter">]</span>, <a title="V" id="sbt.Remove.removeSeq;$anon.removeValue.b">b</a>: <a href="#sbt.Remove.removeSeq;V" title="V">V</a><span class="delimiter">)</span>: <span title="Seq[T]">Seq</span><span class="delimiter">[</span>T<span class="delimiter">]</span> = <a href="#sbt.Remove.removeSeq;$anon.removeValue.a" title="Seq[T]">a</a> <span title="(p: T =&gt; Boolean)Seq[T]">filterNot</span> <a href="#sbt.Remove.removeSeq;$anon.removeValue.b" title="V">b</a>.<a href="#sbt.Remove.removeSeq;$anon.removeValue.$anonfun.x$1" title="(x$1: Any)Boolean">==</a>
+    <span class="keyword">def</span> <a title="(a: Seq[T], b: Seq[V])Seq[T]" id="sbt.Remove.removeSeq;$anon.removeValues">removeValues</a><span class="delimiter">(</span><a title="Seq[T]" id="sbt.Remove.removeSeq;$anon.removeValues.a">a</a>: <span title="Seq[T]">Seq</span><span class="delimiter">[</span>T<span class="delimiter">]</span>, <a title="Seq[V]" id="sbt.Remove.removeSeq;$anon.removeValues.b">b</a>: <span title="Seq[V]">Seq</span><span class="delimiter">[</span>V<span class="delimiter">]</span><span class="delimiter">)</span>: <span title="Seq[T]">Seq</span><span class="delimiter">[</span>T<span class="delimiter">]</span> = <a href="#sbt.Remove.removeSeq;$anon.removeValues.a" title="Seq[T]">a</a> <span title="(that: scala.collection.GenSeq[T])Seq[T]">diff</span> <a href="#sbt.Remove.removeSeq;$anon.removeValues.b" title="Seq[V]">b</a>
+  <span class="delimiter">}</span>
+<span class="delimiter">}</span>
+
+        </pre>
+    </body>
+</html>
