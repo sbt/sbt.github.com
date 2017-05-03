@@ -66,7 +66,9 @@ built-in parser for space-delimited arguments is constructed via the
 present to the user during tab completion.
 </p><p>For example, the following task prints the current Scala version and
 then echoes the arguments passed to it on their own line.
-</p><pre><code class="prettyprint lang-scala">demo := {
+</p><pre><code class="prettyprint lang-scala">import complete.DefaultParsers._
+
+demo := {
   // get the result of parsing
   val args: Seq[String] = spaceDelimited(&quot;&lt;arg&gt;&quot;).parsed
   // Here, we also use the value of the `scalaVersion` setting

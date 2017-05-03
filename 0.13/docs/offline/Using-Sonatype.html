@@ -51,30 +51,30 @@ In short, you need two publicly available URLs:
 </li><li>the project’s source code e.g. https://github.com/sonatype/nexus-oss.git
 </li></ul><p>The <a href="http://central.sonatype.org/pages/ossrh-guide.html">OSSRH Guide</a> walks you through the required 
 process of setting up the account with Sonatype. It’s as simple as 
-<a href="https://issues.sonatype.org/secure/Signup!default.jspa">creating a Sonatype's JIRA account</a> and afterwards creating a 
-<a href="https://issues.sonatype.org/secure/CreateIssue.jspa?issuetype=21&amp;pid=10134">New Project ticket</a>. When creating the account try to 
-use the same domain in your email address as the project is hosted on. I guess 
-it makes it easier to validate the relationship with the groupId requested in 
-the ticket, but is not the only method used to confirm the ownership. 
-</p><p>Creation of the New Project ticket is as simple as:
+<a href="https://issues.sonatype.org/secure/Signup!default.jspa">creating a Sonatype's JIRA account</a> and then a 
+<a href="https://issues.sonatype.org/secure/CreateIssue.jspa?issuetype=21&amp;pid=10134">New Project ticket</a>. When creating the account, try to 
+use the same domain in your email address that the project is hosted on.
+It makes it easier for Sonatype to validate the relationship with the groupId requested in 
+the ticket, but it is not the only method used to confirm the ownership. 
+</p><p>Creation of the <em>New Project ticket</em> is as simple as:
 </p><ul><li>providing the name of the library in the ticket’s subject,
-</li><li>naming the groupId you want to use for distributing the library (make sure 
-it is matching the root package of your code). Sonatype provides you with 
+</li><li>naming the groupId for distributing the library (make sure 
+it matches the root package of your code). Sonatype provides
 additional hints on choosing the right groupId for publishing your library in 
 <a href="http://central.sonatype.org/pages/choosing-your-coordinates.html">Choosing your coordinates guide</a>.
 </li><li>providing the SCM and Project URLs to the source code and homepage of the 
 library.
-</li></ul><p><em>Note:</em> After creating you Sonatype account (on their JIRA) you can login 
-using the same credentials to the <a href="https://oss.sonatype.org/#welcome">Nexus Repository Manager</a> 
-which is not required to be used in this guide, but can be used later to check 
-on the published artifacts.
-</p><p>Notice that Sonatype advises that responding to the New Project ticket might 
-take up to two business days, but in my case it was few minutes.
-</p><h3 id="SBT+setup">SBT setup<a href="#SBT+setup" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To address <a href="http://central.sonatype.org/pages/requirements.html">Sonatype's requirements for publishing to the central repository</a> and to simplify the publishing process I recommend you
-to use community plugins <a href="http://scala-sbt.org/sbt-pgp/">sbt-pgp for signing the files with GPG/PGP</a> 
-and <a href="https://github.com/xerial/sbt-sonatype">sbt-sonatype for publishing to Sonatype repository</a>. 
-</p><h4 id="First+-+PGP+Signatures">First - PGP Signatures<a href="#First+-+PGP+Signatures" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Having the PGP key that you want to use, you need to sign the artifacts 
-published to the Sonatype repository with the <a href="http://scala-sbt.org/sbt-pgp/">sbt-pgp plugin</a>. Follow 
+</li></ul><p>After creating your Sonatype account on JIRA, you can log in 
+to the <a href="https://oss.sonatype.org/#welcome">Nexus Repository Manager</a> using the same credentials,
+although this is not required in the guide, it can be helpful later to check 
+on published artifacts.
+</p><blockquote><p><em>Note:</em> Sonatype advises that responding to a <strong>New Project ticket</strong> might 
+take up to two business days, but in my case it was a few minutes.
+</p></blockquote><h3 id="SBT+setup">SBT setup<a href="#SBT+setup" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To address Sonatype’s <a href="http://central.sonatype.org/pages/requirements.html">requirements</a> for publishing to the central repository and to simplify the publishing process, you can
+use two community plugins. The <a href="http://scala-sbt.org/sbt-pgp/">sbt-pgp plugin</a> can sign the files with GPG/PGP
+and <a href="https://github.com/xerial/sbt-sonatype">sbt-sonatype</a> can publish to a Sonatype repository. 
+</p><h4 id="First+-+PGP+Signatures">First - PGP Signatures<a href="#First+-+PGP+Signatures" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>With the PGP key you want to use, you can sign the artifacts 
+you want to publish to the Sonatype repository with the <a href="http://scala-sbt.org/sbt-pgp/">sbt-pgp plugin</a>. Follow 
 the instructions for the plugin and you’ll have PGP signed artifacts in no 
 time.
 </p><p>In short, add the following line to your <code>~/.sbt/0.13/plugins/gpg.sbt</code> file to 
@@ -105,7 +105,7 @@ found.
 </p><p>If it fails to run the <code>SendKey</code> command you can try another server (for 
 example: hkp://keyserver.ubuntu.com). A list of servers can be found at 
 <a href="https://sks-keyservers.net/status/">the status page</a> of sks-keyservers.net.
-</p><h3 id="Second+-+configure+sonatype+integration">Second - configure sonatype integration<a href="#Second+-+configure+sonatype+integration" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The credentials for your Sonatype OSSRH account need to be stored
+</p><h3 id="Second+-+Configure+Sonatype+integration">Second - Configure Sonatype integration<a href="#Second+-+Configure+Sonatype+integration" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The credentials for your Sonatype OSSRH account need to be stored
 somewhere safe (<em>e.g. NOT in the repository</em>). Common convention is a 
 <code>~/.sbt/0.13/sonatype.sbt</code> file (e.g. `) with the following:
 </p><pre><code class="prettyprint lang-scala">credentials += Credentials(&quot;Sonatype Nexus Repository Manager&quot;,
@@ -180,9 +180,9 @@ Jira account)
 <code>sonatypeRelease</code>
 </li></ol><p>After publishing you have to follow the
 <a href="http://central.sonatype.org/pages/releasing-the-deployment.html">release workflow of Nexus</a>.
-</p><blockquote><p><em>Note:</em> the sbt-sonatype plugin can be used also for other non-sonatype 
+</p><blockquote><p><em>Note:</em> the sbt-sonatype plugin can also be used to publish to other non-sonatype 
 repositories
-</p></blockquote><h4 id="Publishing+tips%E2%80%99n%E2%80%99tricks">Publishing tips’n’tricks<a href="#Publishing+tips%E2%80%99n%E2%80%99tricks" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Use staged releases for testing across large projects of independent releases 
+</p></blockquote><h4 id="Publishing+tips%E2%80%99n%E2%80%99tricks">Publishing tips’n’tricks<a href="#Publishing+tips%E2%80%99n%E2%80%99tricks" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Use staged releases to test across large projects of independent releases 
 before pushing the full project.
 </p><blockquote><p><em>Note:</em> An error message of <code>PGPException: checksum mismatch at 0 of 20</code>
 indicates that you got the passphrase wrong. We have found at least on
@@ -191,8 +191,8 @@ range (e.g. Umlauts). If you are absolutely sure that you typed the
 right phrase and the error doesn’t disappear, try changing the
 passphrase.
 </p></blockquote><h3 id="Fourth+-+Integrate+with+the+release+process">Fourth - Integrate with the release process<a href="#Fourth+-+Integrate+with+the+release+process" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><blockquote><p><em>Note:</em> sbt-release is a third-party plugin meaning it is not covered by Lightbend subscription.
-</p></blockquote><p>To automate the above publishing approach with the <a href="https://github.com/sbt/sbt-release">sbt-release plugin</a>, you should simply add the publishing commands as steps in the
-<code>releaseProcess</code> option:
+</p></blockquote><p>To automate the publishing approach above with the <a href="https://github.com/sbt/sbt-release">sbt-release plugin</a>, you should simply add the publishing commands as steps in the
+<code>releaseProcess</code> task:
 </p><pre><code class="">...
 ReleaseStep(action = Command.process(&quot;sonatypeOpen \&quot;your groupId\&quot; \&quot;Some staging name\&quot;&quot;, _)),
 ...
