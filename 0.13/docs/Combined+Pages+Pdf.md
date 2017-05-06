@@ -1407,7 +1407,7 @@ example the task axis can be filled in with a task), or the axis can be
 filled in with the special value `Global`, which is also written as `*`.
 
 `*` is a universal fallback for all scope axes,
-but its direct use should be reversed to sbt and plugin authors in most cases.
+but its direct use should be reserved to sbt and plugin authors in most cases.
 
 ### Referring to scopes in a build definition
 
@@ -1932,7 +1932,7 @@ lazy val projC = (project in file("c"))
   )
 ```
 
-What is the expected `name in projC` value in the following build?
+What is value of `name in projC`?
 
 1. `"foo-2.12.2"`
 2. `"foo-2.11.11"`
@@ -1966,8 +1966,10 @@ What would you see if you ran `projD/test`?
 3. something else?
 
 The answer is `List(-Ywarn-unused-import)`.
-Rule 2 finds `(projD, *, console)`, Rule 3 finds `(projD, Compile, *)`,
-and Rule 4 finds `(ThisBuild, *, *)`. Rule 1 selects `(projD, Compile, *)`
+Rule 2 finds `(projD, Compile, *)`,
+Rule 3 finds `(projD, *, console)`,
+and Rule 4 finds `(ThisBuild, *, *)`.
+Rule 1 selects `(projD, Compile, *)`
 because it has the subproject axis `projD`, and the configuration axis has higher
 precedence over the task axis.
 
@@ -2017,7 +2019,7 @@ listed in the order of precedence!
   then `ThisBuild` (`{.}`), and `*`.
 - Within a subproject, scopes with `Compile` scoping on the configuration axis
   are listed first, then falls back to `*`.
-- Finally, the task axis scoping lists the given task value `console::` and the one without.
+- Finally, the task axis scoping lists the given task scoping `console::` and the one without.
 
 ### .value lookup vs dynamic dispatch
 

@@ -1169,11 +1169,12 @@ Rake でのブレークスルーは、アクションをシステムコマンド
   [Library-Dependencies]: Library-Dependencies.html
   [Multi-Project]: Multi-Project.html
   [Inspecting-Settings]: ../../docs/Inspecting-Settings.html
+  [Scope-Delegation]: Scope-Delegation.html
 
 スコープ
 -------
 
-このページではスコープの説明をする。君が、前のページの
+このページではスコープの説明をする。前のページの
 [.sbt ビルド定義][Basic-Def]、
 [タスク・グラフ][Task-Graph]
 を読んで理解したことを前提とする。
@@ -1213,17 +1214,29 @@ Rake でのブレークスルーは、アクションをシステムコマンド
  - 依存性コンフィギュレーション
  - タスク
 
+**軸**という概念に馴染みがなければ、RGB 色空間を例に取ってみるといいかもしれない。
+
+![color cube](../files/rgb_color_solid_cube.png)
+
+RBG 色モデルにおいて、全ての色は赤、緑、青の成分を軸とする立方体内の点として表すことができ、それぞれの成分は数値化することができる。
+同様に、sbt におけるスコープはサブプロジェクト、コンフィギュレーション、タスクの**タプル**により成り立つ:
+
+```scala
+scalacOptions in (projA, Compile, console)
+```
+
 #### サブプロジェクト軸によるスコープ付け
 
 [一つのビルドに複数のプロジェクトを入れる][Multi-Project]場合、それぞれのプロジェクトにセッティングが必要だ。
 つまり、キーはプロジェクトによりスコープ付けされる。
 
-プロジェクト軸は「ビルド全体」に設定することもでき、その場合はセッティングは単一のプロジェクトではなくビルド全体に適用される。
+プロジェクト軸は `ThisBuild` という「ビルド全体」を表す値に設定することもでき、その場合はセッティングは単一のプロジェクトではなくビルド全体に適用される。
 ビルドレベルでのセッティングは、プロジェクトが特定のセッティングを定義しない場合のフォールバックとして使われることがよくある。
 
 #### 依存性コンフィギュレーション軸によるスコープ付け
 
-**依存性コンフィギュレーション**（dependency configuration）は、ライブラリ依存性のグラフを定義し、独自のクラスパス、ソース、生成パッケージなどをもつことができる。
+**依存性コンフィギュレーション**（dependency configuration、もしく単に「コンフィギュレーション」）
+は、ライブラリ依存性のグラフを定義し、独自のクラスパス、ソース、生成パッケージなどをもつことができる。
 コンフィギュレーションの概念は、sbt が [マネージ依存性][Library-Dependencies] に使っている Ivy と、[MavenScopes][MavenScopes] に由来する。
 
 sbt で使われる代表的なコンフィギュレーションには以下のものがある:
@@ -1237,6 +1250,14 @@ sbt で使われる代表的なコンフィギュレーションには以下の�
 その最たる例が `compile`、`package` と `run` のタスクキーだが、
 （`sourceDirectories` や `scalacOptions` や `fullClasspath` など）それらのキーに_影響を及ぼす_全てのキーもコンフィグレーションにスコープ付けされている。
 
+もう一つコンフィギュレーションで大切なのは、他のコンフィギュレーションを拡張できることだ。
+以下に代表的なコンフィギュレーションの拡張関係を図で示す。
+
+![dependency configurations](../files/sbt-configurations.png)
+
+`Test` と `IntegrationTest` は `Runtime` を拡張し、`Runtime` は `Compile` を拡張し、
+`CompileInternal` は `Compile`、`Optional`、`Provided` の 3つを拡張する。
+
 #### タスク軸によるスコープ付け
 
 セッティングはタスクの動作に影響を与えることもできる。例えば、`packageSrc` は `packageOptions` セッティングの影響を受ける。
@@ -1245,34 +1266,74 @@ sbt で使われる代表的なコンフィギュレーションには以下の�
 
 パッケージを構築するさまざまなタスク（`packageSrc`、`packageBin`、`packageDoc`）は、`artifactName` や `packageOption` などのパッケージ関連のキーを共有することができる。これらのキーはそれぞれのパッケージタスクに対して独自の値を取ることができる。
 
-### グローバルスコープ
+### グローバルスコープ成分
 
 それぞれのスコープ軸は、その軸の型のインスタンスを代入する（例えば、タスク軸にはタスクを代入する）か、
-もしくは、`Global` という特殊な値を代入することができる。
+もしくは、`Global` という特殊な値を代入することができる。これは `*` とも表記される。
 
-`Global` はご想像通りのもので、その軸の全てのインスタンスに対して適用されるセッティングの値だ。
-例えば、タスク軸が `Global` ならば、全てのタスクに適用される。
+`*` は全てのスコープ軸に対応する普遍的なフォールバックであるが、多くの場合直接それを使うのは sbt 本体もしくはプラグインの作者に限定されるべきだ。
 
-### 委譲
+### ビルド定義からスコープを参照する
 
-スコープ付きキーは、そのスコープに関連付けられた値がなければ未定義であることもできる。
+`build.sbt` で裸のキーを使ってセッティングを作った場合は、(現プロジェクト, `Global` コンフィグレーション, `Global` タスク) にスコープ付けされる:
 
-全てのスコープに対して、sbt には他のスコープからなるフォールバック検索パス（fallback search path）がある。
-通常は、より特定のスコープに関連付けられた値が見つからなければ、sbt は、`Global` や、ビルド全体スコープなど、より一般的なスコープから値を見つけ出そうとする。
+```scala
+lazy val root = (project in file("."))
+  .settings(
+    name := "hello"
+  )
+```
 
-この機能により、より一般的なスコープで一度値を代入することで、複数のより特定なスコープがその値を継承することを可能とする。
+sbt を実行して、`inspect name` と入力して、キーが　`{file:/home/hp/checkout/hello/}default-aea33a/*:name` により提供されていることを確認しよう。つまり、プロジェクトは、`{file:/home/hp/checkout/hello/}default-aea33a` で、コンフィギュレーションは `*` で、タスクは表示されていない（グローバルを指す）ということだ。
 
-以下に、`inspect` を使ったキーのフォールバック検索パス、別名「委譲」（delegate）の探し方を説明する。
+右辺項に置かれた裸のキーも (現プロジェクト, `Global` コンフィグレーション, `Global` タスク) にスコープ付けされる:
 
-### sbt 実行中のスコープ付きキーの参照方法
+```scala
+organization := name.value
+```
 
-コマンドラインとインタラクティブモードにおいて、sbt はスコープ付きキーを以下のように表示する（そして、パースする）:
+
+キーにはオーバーロードされた `.in` メソッドがあり、それによりスコープを設定できる。
+`.in(...)` への引数として、どのスコープ軸のインスタンスでも渡すことができる。
+これをやる意味は全くないけど、例として `Compile` コンフィギュレーションでスコープ付けされた `name` の設定を以下に示す:
+
+```scala
+name in Compile := "hello"
+```
+
+また、`packageBin` タスクでスコープ付けされた `name` の設定（これも意味なし！ただの例だよ）:
+
+```scala
+name in packageBin := "hello"
+```
+
+もしくは、例えば `Compile` コンフィギュレーションの `packageBin` の `name` など、複数のスコープ軸でスコープ付けする:
+
+```scala
+name in (Compile, packageBin) := "hello"
+```
+
+もしくは、全ての軸に対して `Global` を使う:
+
+```scala
+// concurrentRestrictions in (Global, Global, Global) と同じ
+concurrentRestrictions in Global := Seq(
+  Tags.limitAll(1)
+)
+```
+
+（`concurrentRestrictions in Global` は、`concurrentRestrictions in (Global, Global, Global)` へと暗黙の変換が行われ、全ての軸を `Global` に設定する。
+タスクとコンフィギュレーションは既にデフォルトで `Global` であるため、事実上行なっているのはプロジェクトを `Global` に指定することだ。つまり、`{file:/home/hp/checkout/hello/}default-aea33a/*:concurrentRestrictions` ではなく、`*/*:concurrentRestrictions` が定義される。）
+
+### sbt シェルからのスコープ付きキーの参照方法
+
+コマンドラインと sbt シェルにおいて、sbt はスコープ付きキーを以下のように表示する（そして、パースする）:
 
 ```
 {<ビルド-uri>}<プロジェクト-id>/コンフィギュレーション:タスクキー::キー
 ```
 
- - `{<ビルド-uri>}<プロジェクト-id>` は、プロジェクト軸を特定する。<プロジェクト-id> がなければ、プロジェクト軸は「ビルド全体」スコープとなる。
+ - `{<ビルド-uri>}<プロジェクト-id>` は、サブプロジェクト軸を特定する。<プロジェクト-id> がなければ、サブプロジェクト軸は「ビルド全体」スコープとなる。
  - `コンフィギュレーション` は、コンフィギュレーション軸を特定する。
  - `タスクキー` は、タスク軸を特定する。
  - `キー` は、スコープ付けされるキーを特定する。
@@ -1343,79 +1404,21 @@ $ sbt
 このタスクの戻り値は `scala.collection.Seq[sbt.Attributed[java.io.File]]` の型をとる。
 
 "Provided by" は、この値を定義するスコープ付きキーを指し、この場合は、
-`{file:/home/hp/checkout/hello/}default-aea33a/test:full-classpath`
-（`test` コンフィギュレーションと `{file:/home/hp/checkout/hello/}default-aea33a` プロジェクトにスコープ付けされた `full-classpath` キー）。
+`{file:/home/hp/checkout/hello/}default-aea33a/test:fullClasspath`
+（`test` コンフィギュレーションと `{file:/home/hp/checkout/hello/}default-aea33a` プロジェクトにスコープ付けされた `fullClasspath` キー）。
 
 "Dependencies" に関しては、[前のページ][Task-Graph]で解説した。
 
-ここで委譲も見ることができ、もし値が定義されていなければ、sbt は以下を検索する:
+"Delegates" (委譲) に関してはまた後で。
 
- - 他の二つのコンフィギュレーション（`runtime:full-classpath` と `compile:full-classpath`）。
-   これらのスコープ付きキーは、プロジェクトは特定されていないため「現プロジェクト」で、タスクも特定されていない `Global` だ。
- - `Global` に設定されたコンフィギュレーション (`*:full-classpath`)。プロジェクトはまだ特定されていないため「現プロジェクト」で、タスクもまだ特定されていないため `Global` だ。
- - `{.}` 別名 `ThisBuild` に設定されたプロジェクト（つまり、特定のプロジェクトではなく、ビルド全体）。
- - `Global` に設定されたプロジェクト軸（`*/test:full-classpath`）（プロジェクトが特定されていない場合は、現プロジェクトを意味するため、`Global` を検索することは新しく、`*` と「プロジェクトが未表示」はプロジェクト軸に対して異なる値を持ち、`*/test:full-classpath` と `test:full-classpath` は等価ではない。）
- - プロジェクトとコンフィギュレーションの両方とも `Global` を設定する（`*/*:full-classpath`）（特定されていないタスクは `Global` であるため、`*/*:full-classpath` は三つの軸全てが `Global` を取る。）
-
-今度は、（`inspect test:full-class` のかわりに）`inspect full-classpath` を試してみて、違いをみてみよう。
+今度は、（`inspect test:full-class` のかわりに）`inspect fullClasspath` を試してみて、違いをみてみよう。
 コンフィグレーションが省略されたため、`compile` だと自動検知される。
-そのため、`inspect compile:full-classpath` は `inspect full-classpath` と同じになるはずだ。
+そのため、`inspect compile:fullClasspath` は `inspect fullClasspath` と同じになるはずだ。
 
-次に、`inspect *:full-classpath` も実行して違いを比べてみよう。
-`full-classpath` はデフォルトでは、`Global` コンフィギュレーションには定義されていない。
+次に、`inspect *:fullClasspath` も実行して違いを比べてみよう。
+`fullClasspath` はデフォルトでは、`Global` スコープには定義されていない。
 
 より詳しくは、[Interacting with the Configuration System][Inspecting-Settings] 参照。
-
-### ビルド定義からスコープを参照する
-
-`build.sbt` で裸のキーを使ってセッティングを作った場合は、現プロジェクト、`Global` コンフィグレーション、`Global` タスクにスコープ付けされる:
-
-```scala
-lazy val root = (project in file("."))
-  .settings(
-    name := "hello"
-  )
-```
-
-sbt を実行して、`inspect name` と入力して、キーが　`{file:/home/hp/checkout/hello/}default-aea33a/*:name` により提供されていることを確認しよう。つまり、プロジェクトは、`{file:/home/hp/checkout/hello/}default-aea33a` で、コンフィギュレーションは `*` で、タスクは表示されていない（グローバルを指す）ということだ。
-
-キーにはオーバーロードされた `in` メソッドがあり、それによりスコープを設定できる。
-`in` への引数として、どのスコープ軸のインスタンスでも渡すことができる。
-これをやる意味は全くないけど、例として `Compile` コンフィギュレーションでスコープ付けされた `name` の設定を以下に示す:
-
-```scala
-name in Compile := "hello"
-```
-
-また、`packageBin` タスクでスコープ付けされた `name` の設定（これも意味なし！ただの例だよ）:
-
-```scala
-name in packageBin := "hello"
-```
-
-もしくは、例えば `Compile` コンフィギュレーションの `packageBin` の `name` など、複数のスコープ軸でスコープ付けする:
-
-```scala
-name in (Compile, packageBin) := "hello"
-```
-
-もしくは、全ての軸に対して `Global` を使う:
-
-```scala
-name in Global := "hello"
-```
-
-（`name in Global`  は、スコープ軸である `Global` を全ての軸を `Global` に設定したスコープに暗黙の変換が行われる。
-タスクとコンフィギュレーションは既にデフォルトで `Global` であるため、事実上行なっているのはプロジェクトを `Global` に指定することだ。つまり、`{file:/home/hp/checkout/hello/}default-aea33a/*:name` ではなく、`*/*:name` が定義される。）
-
-Scala に慣れていない場合に注意して欲しいのは、`in` や `:=` はただのメソッドであって、魔法ではないということだ。
-Scala ではキレイに書くことができるけど、Java 風に以下のようにも書き下すこともできる:
-
-```scala
-name.in(Compile).:=("hello")
-```
-
-こんな醜い構文で書く必要は一切無いけど、これらが実際にメソッドであることを示している。
 
 ### いつスコープを指定するべきか
 
@@ -1436,7 +1439,7 @@ _"Reference to undefined setting"_ のようなエラーに遭遇した場合は
 単に `packageOptions` と言っただけでもキー名だけど、それは別のキーだ
 （`in` 無しのキーのスコープは暗黙で決定され、現プロジェクト、`Global` コンフィグレーション、`Global` タスクとなる）。
 
-#### ビルドワイド・セッティング
+### ビルドレベル・セッティング
 
 サブプロジェクト間に共通なセッティングを一度に定義するための上級テクニックとしてセッティングを
 `ThisBuild` にスコープ付けするという方法がある。
@@ -1445,7 +1448,7 @@ _"Reference to undefined setting"_ のようなエラーに遭遇した場合は
 sbt はフォールバックとして `ThisBuild` 内を探す。
 この仕組みを利用して、
 `version`、 `scalaVersion`、 `organization`
-といったよく使われるキーに対してビルドワイドなデフォルトのセッティングを定義することができる。
+といったよく使われるキーに対してビルドレベルのデフォルトのセッティングを定義することができる。
 
 便宜のため、セッティング式のキーと本文の両方を `ThisBuild`
 にスコープ付けする
@@ -1477,6 +1480,18 @@ lazy val util = (project in file("util"))
     // other settings
   )
 ```
+
+ただし、後で説明する[スコープ委譲][Scope-Delegation]の性質上、ビルドレベル・セッティングを単純な値の代入以外に使うことは推奨しない。
+
+### スコープ委譲
+
+スコープ付きキーは、そのスコープに関連付けられた値がなければ未定義であることもできる。
+
+全てのスコープ軸に対して、sbt には他のスコープ値からなるフォールバック検索パス（fallback search path）がある。
+通常は、より特定のスコープに関連付けられた値が見つからなければ、sbt は、`ThisBuild` など、より一般的なスコープから値を見つけ出そうとする。
+
+この機能により、より一般的なスコープで一度だけ値を代入して、複数のより特定なスコープがその値を継承することを可能とする。
+[スコープ委譲][Scope-Delegation]に関する詳細は後ほど解説する。
 
 
   [Scopes]: Scopes.html
@@ -1552,6 +1567,409 @@ sourceGenerators in Compile += Def.task {
 
 ```scala
 cleanFiles += file("coverage-report-" + name.value + ".txt")
+```
+
+
+  [Basic-Def]: Basic-Def.html
+  [Scopes]: Scopes.html
+
+スコープ委譲 (.value の照会)
+--------------------------
+
+このページはスコープ委譲を説明する。前のページの
+[.sbt ビルド定義][Basic-Def]、
+[スコープ][Scopes-Graph]
+を読んで理解したことを前提とする。
+
+スコープ付けの説明が全て終わったので、`.value` 照会の詳細を解説できる。
+難易度は高めなので、始めてこのガイドを読む場合はこのページは飛ばしてもいい。
+
+`Global` という用語はスコープ成分としての `*` と、
+`(Global, Global, Global)` の短縮形の両方の意味で使われて分かりづらいので、
+このページでスコープ成分を指すときは `*` というシンボルを用いる。
+
+これまでに習ったことをおさらいしておこう。
+
+- スコープは、サブプロジェクト軸、コンフィギュレーション軸、タスク軸という 3つの軸の成分を持つタプルである。
+- 全てのスコープ軸には、`*` (`Global` とも呼ばれる) 特殊なスコープ成分がある。
+- **サブプロジェクト軸**においてのみ、`ThisBuild` (シェルでは `{.}` と表記される) 特殊なスコープ成分がある。
+- `Test` コンフィギュレーションは `Runtime` を拡張し、`Runtime` は `Compile` を拡張する。
+- build.sbt に書かれたキーは、デフォルトで `(${current subproject}, *, *)` にスコープ付けされる。
+- キーは、`.in(...)` メソッドを使ってさらにスコープ付けできる。
+
+以下のようなビルド定義を考える:
+
+```scala
+lazy val foo = settingKey[Int]("")
+lazy val bar = settingKey[Int]("")
+
+lazy val projX = (project in file("x"))
+  .settings(
+    foo := {
+      (bar in Test).value + 1
+    },
+    bar in Compile := 1
+  )
+```
+
+`foo` のセッティング本文内において、スコープ付きキー `(bar in Test)` への依存性が宣言されている。
+しかし、`projX` において `bar in Test` が未定義であるにも関わらず、sbt
+は別のスコープ付きキーへと解決して `foo` は `2` に初期化される。
+
+sbt はキーのフォールバックのための検索パスを厳密に定義し、これを**スコープ委譲** (scope delegation) と呼ぶ。
+この機能により、より一般的なスコープで一度だけ値を代入して、複数のより特定なスコープがその値を継承することを可能とする。
+
+### スコープ委譲のルール
+
+スコープ委譲のルールは以下の通り:
+
+- ルール 1: スコープ軸は以下の優先順位を持つ: サブプロジェクト軸、コンフィギュレーション軸、そしてタスク軸。
+- ルール 2: あるスコープが与えられたとき、委譲スコープは以下の順にタスク軸を置換することで検索される:
+  与えられたタスクスコープ、それから `*` (`Global`、これはタスクスコープ付けを行わないもののこと)。
+- ルール 3: あるスコープが与えられたとき、委譲スコープは以下の順にコンフィギュレーション軸を置換することで検索される:
+  与えられたコンフィギュレーション、その親、その親の親...、そして `*` (`Global` これはコンフィギュレーションのスコープ付けを行わないものと同じ)。
+- ルール 4: あるスコープが与えられたとき、委譲スコープは以下の順にサブプロジェクト軸を置換することで検索される:
+  与えられたサブプロジェクト、`ThisBuild` そして `*` (`Global`)。
+- ルール 5: 委譲されたスコープ付きのキー及びそれが依存するセッティングとタスクは、元のコンテキストを一切引き継がずに評価される。
+
+それぞれのルールを以下に説明していく。
+
+### ルール 1: スコープ軸の優先順位
+
+- ルール 1: スコープ軸は以下の優先順位を持つ: サブプロジェクト軸、コンフィギュレーション軸、そしてタスク軸。
+
+言い換えると、2つのスコープ候補があるとき、一方がサブプロジェクト軸により特定な値を持つとき、コンフィギュレーションやタスク軸のスコープに関わらず必ず勝つということだ。
+同様に、サブプロジェクトが同じ場合、コンフィギュレーションに特定な値を持つものがタスクのスコープ付けに関わらず勝つ。
+「より特定」とは何かは、以下のルールで定義していく。
+
+### ルール 2: タスク軸の委譲
+
+- ルール 2: あるスコープが与えられたとき、委譲スコープは以下の順にタスク軸を置換することで検索される:
+  与えられたタスクスコープ、それから `*` (`Global`、これはタスクスコープ付けを行わないもののこと)。
+
+ここでやっとキーが与えられたとき sbt がどのようにして委譲スコープを生成するかの具体的なルールが出てきた。
+任意の `(xxx in yyy).value` が与えられたときに、どのような検索パスを取るかを示していることに注目してほしい。
+
+**練習問題 A**: 以下のビルド定義を考える:
+
+```scala
+lazy val projA = (project in file("a"))
+  .settings(
+    name := {
+      "foo-" + (scalaVersion in packageBin).value
+    },
+    scalaVersion := "2.11.11"
+  )
+```
+
+`name in projA` (sbt シェルだと `projA/name`) の値は何か?
+
+1. `"foo-2.11.11"`
+2. `"foo-2.12.1"`
+3. その他
+
+正解は `"foo-2.11.11"`。
+`.settings(...)` 内において、`scalaVersion` は自動的に `(projA, *, *)` にスコープ付けされるため、
+`scalaVersion in packageBin` は `scalaVersion in (projA, *, packageBin)` となる。
+そのスコープ付きキーは未定義だ。
+ルール 2に基いて、sbt はタスク軸を `*` に置換して `(projA, *, *)` になる (シェル表記だと `proj/scalaVersion`)。
+そのスコープ付きキーは `"2.11.11"` として定義されている。
+
+### ルール 3: コンフィギュレーション軸の検索パス
+
+- ルール 3: あるスコープが与えられたとき、委譲スコープは以下の順にコンフィギュレーション軸を置換することで検索される:
+  与えられたコンフィギュレーション、その親、その親の親...、そして `*` (`Global` これはコンフィギュレーションのスコープ付けを行わないものと同じ)。
+
+これを説明する例は上に見た `projX` だ:
+
+```scala
+lazy val foo = settingKey[Int]("")
+lazy val bar = settingKey[Int]("")
+
+lazy val projX = (project in file("x"))
+  .settings(
+    foo := {
+      (bar in Test).value + 1
+    },
+    bar in Compile := 1
+  )
+```
+
+フルスコープを書き出してみると `(projX, Test, *)` となる。
+また、`Test` コンフィギュレーションは `Runtime` を拡張し、`Runtime` は `Compile` を拡張することを思い出してほしい。
+
+`(bar in Test)` は未定義だが、ルール3 に基いて sbt
+は `(projX, Test, *)`、`(projX, Runtime, *)`、そして
+`(projX, Compile, *)` の順に `bar` をスコープ付けして検索していく。
+最後のものが見つかり、それは `bar in Compile` だ。
+
+### ルール 4: サブプロジェクト軸の検索パス
+
+- ルール 4: あるスコープが与えられたとき、委譲スコープは以下の順にサブプロジェクト軸を置換することで検索される:
+  与えられたサブプロジェクト、`ThisBuild` そして `*` (`Global`)。
+
+**練習問題 B**: 以下のビルド定義を考える:
+
+```scala
+organization in ThisBuild := "com.example"
+
+lazy val projB = (project in file("b"))
+  .settings(
+    name := "abc-" + organization.value,
+    organization := "org.tempuri"
+  )
+```
+
+`name in projB` (sbt シェルだと `projB/name`) の値は何か?
+
+1. `"abc-com.example"`
+2. `"abc-org.tempuri"`
+3. その他
+
+正解は `abc-org.tempuri` だ。
+ルール 4に基づき、最初の検索パスは `(projB, *, *)` にスコープ付けされた `organization` で、
+これは `projB` 内で `"org.tempuri"` として定義されている。
+これは、ビルドレベルのセッティングである `organization in ThisBuild` よりも高い優先順位を持つ。
+
+#### スコープ軸の優先順位、再び
+
+**練習問題 C**: 以下のビルド定義を考える:
+
+```scala
+scalaVersion in (ThisBuild, packageBin) := "2.12.2"
+
+lazy val projC = (project in file("c"))
+  .settings(
+    name := {
+      "foo-" + (scalaVersion in packageBin).value
+    },
+    scalaVersion := "2.11.11"
+  )
+```
+
+`name in projC` の値は何か?
+
+1. `"foo-2.12.2"`
+2. `"foo-2.11.11"`
+3. その他
+
+正解は `foo-2.11.11`。
+`(projC, *, packageBin)` にスコープ付けされた `scalaVersion` は未定義だ。
+ルール 2 は `(projC, *, *)` を見つける。ルール 4 は `(ThisBuild, *, packageBin)` を見つける。
+ルール 1 の規定により、より特定なサブプロジェクト軸が勝ち、それは
+`(projC, *, *)` で `"2.11.11"` と定義されている。
+
+**練習問題 D**: 以下のビルド定義を考える:
+
+```scala
+scalacOptions in ThisBuild += "-Ywarn-unused-import"
+
+lazy val projD = (project in file("d"))
+  .settings(
+    test := {
+      println((scalacOptions in (Compile, console)).value)
+    },
+    scalacOptions in console -= "-Ywarn-unused-import",
+    scalacOptions in Compile := scalacOptions.value // added by sbt
+  )
+```
+
+`projD/test` を実行した場合の出力は何か?
+
+1. `List()`
+2. `List(-Ywarn-unused-import)`
+3. その他
+
+正解は `List(-Ywarn-unused-import)`。
+ルール 2 は `(projD, Compile, *)` を見つけ、
+ルール 3 は `(projD, *, console)` を見つけ、
+ルール 4 は `(ThisBuild, *, *)` を見つける。
+`(projD, Compile, *)` はサブプロジェクト軸に `projD` を持ち、
+またコンフィギュレーション軸はタスク軸よりも高い優先順位を持つのでルール 1 は
+`(projD, Compile, *)` を選択する。
+
+次に、`scalacOptions in Compile` は `scalacOptions.value` を参照するため、
+`(projD, *, *)` のための委譲を探す必要がある。
+ルール 4 は `(ThisBuild, *, *)` を見つけ、これは `List(-Ywarn-unused-import)` に解決される。
+
+### inspect コマンドは委譲スコープを列挙する
+
+何が起こっているのか手早く調べたい場合は `inspect` を使えばいい。
+
+```
+Hello> inspect projD/compile:console::scalacOptions
+[info] Task: scala.collection.Seq[java.lang.String]
+[info] Description:
+[info]  Options for the Scala compiler.
+[info] Provided by:
+[info]  {file:/Users/xxxx/}projD/compile:scalacOptions
+[info] Defined at:
+[info]  /Users/xxxx/build.sbt:47
+[info] Reverse dependencies:
+[info]  projD/compile:console
+[info]  projD/*:test
+[info] Delegates:
+[info]  projD/compile:console::scalacOptions
+[info]  projD/compile:scalacOptions
+[info]  projD/*:console::scalacOptions
+[info]  projD/*:scalacOptions
+[info]  {.}/compile:console::scalacOptions
+[info]  {.}/compile:scalacOptions
+[info]  {.}/*:console::scalacOptions
+[info]  {.}/*:scalacOptions
+[info]  */compile:console::scalacOptions
+[info]  */compile:scalacOptions
+[info]  */*:console::scalacOptions
+[info]  */*:scalacOptions
+....
+```
+
+"Provided by" は `projD/compile:console::scalacOptions` が
+`projD/compile:scalacOptions` によって提供されることを表示しているのに注目してほしい。
+"Delegates" 以下に**全て**の委譲スコープ候補が優先順に列挙されている!
+
+- サブプロジェクト軸が `projD` にスコープ付けされているスコープが当然最初に表示されて、`ThisBuild` (`{.}`)、`*` と続いている。
+- サブプロジェクト内だと、コンフィギュレーション軸が `Compile` にスコープ付けされいるのが最初に表示されて、`*` にフォールバックしている。
+- 最後に、タスク軸は与えられたタスクスコープ付けの `cosole::` が来て、次にタスクスコープ無しが来ている。
+
+### .value 参照 vs 動的ディスパッチ
+
+- ルール 5: 委譲されたスコープ付きのキー及びそれが依存するセッティングとタスクは、元のコンテキストを一切引き継がずに評価される。
+
+スコープ委譲はオブジェクト指向言語のクラス継承に似ていると思うかもしれないが、注意するべき違いがある。
+Scala のような OO言語では、`Shape` トレイトに `drawShape` というメソッドがあれば、たとえそれが
+`Shape` トレイトの他のメソッドから呼ばれているとしても子クラス側で振る舞いをオーバーライドすることができ、これは動的ディスパッチと呼ばれる。
+
+一方 sbt は、スコープ委譲によってあるスコープをより一般的なスコープに委譲することができ、
+例えばプロジェクトレベルのセッティングからビルドレベルのセッティングへ委譲といったことができるが、
+ビルドレベルのセッティングはプロジェクトレベルのセッティングを参照することはできない。
+
+**練習問題 E**: 以下のビルド定義を考える:
+
+```scala
+lazy val root = (project in file("."))
+  .settings(
+    inThisBuild(List(
+      organization := "com.example",
+      scalaVersion := "2.12.2",
+      version      := scalaVersion.value + "_0.1.0"
+    )),
+    name := "Hello"
+  )
+
+lazy val projE = (project in file("e"))
+  .settings(
+    scalaVersion := "2.11.11"
+  )
+```
+
+`projE/version` の値は何か?
+
+1. `"2.12.2_0.1.0"`
+2. `"2.11.11_0.1.0"`
+3. その他
+
+正解は `"2.12.2_0.1.0"`。
+`projD/version` は `version in ThisBuild` に委譲する。
+一方 `version in ThisBuild` は `scalaVersion in ThisBuild` に依存する。
+このように振る舞うため、ビルドレベルのセッティングは単純な値の代入に限定するべきだ。
+
+**練習問題 F**: 以下のビルド定義を考える:
+
+```scala
+scalacOptions in ThisBuild += "-D0"
+scalacOptions += "-D1"
+
+lazy val projF = (project in file("f"))
+  .settings(
+    scalacOptions in compile += "-D2",
+    scalacOptions in Compile += "-D3",
+    scalacOptions in (Compile, compile) += "-D4",
+    test := {
+      println("bippy" + (scalacOptions in (Compile, compile)).value.mkString)
+    }
+  )
+```
+
+`projF/test` を実行した場合の出力は何か?
+
+1. `"bippy-D4"`
+2. `"bippy-D2-D4"`
+3. `"bippy-D0-D3-D4"`
+4. その他
+
+正解は `"bippy-D0-D3-D4"`。
+これは、[Paul Phillips](https://gist.github.com/paulp/923154ab2d61882195cdea47483592ca)
+さんが考案した練習問題を元にしている。
+
+`someKey += "x"` は以下のように展開されるため、全てのルールをデモする素晴らしい問題だ。
+
+```scala
+someKey += {
+  val old = someKey.value
+  old :+ "x"
+}
+```
+
+このとき、古い方の `.value` を取得するときに委譲が発生して、ルール5 に基いてそれは別のスコープ付きキー扱いする必要がある。
+まずは `+=` を取り除いて、古い `.value` の委譲が何になるかをコメントで注釈する。
+
+```scala
+scalacOptions in ThisBuild := {
+  // scalacOptions in Global <- ルール 4
+  val old = (scalacOptions in ThisBuild).value
+  old :+ "-D0"
+}
+
+scalacOptions := {
+  // scalacOptions in ThisBuild <- ルール 4
+  val old = scalacOptions.value
+  old :+ "-D1"
+}
+
+lazy val projF = (project in file("f"))
+  .settings(
+    scalacOptions in compile := {
+      // scalacOptions in ThisBuild <- ルール 2 と 4
+      val old = (scalacOptions in compile).value
+      old :+ "-D2"
+    },
+    scalacOptions in Compile := {
+      // scalacOptions in ThisBuild <- ルール 3 と 4
+      val old = (scalacOptions in Compile).value
+      old :+ "-D3"
+    },
+    scalacOptions in (Compile, compile) := {
+      // scalacOptions in (projF, Compile) <- ルール 1 と 2
+      val old = (scalacOptions in (Compile, compile)).value
+      old :+ "-D4"
+    },
+    test := {
+      println("bippy" + (scalacOptions in (Compile, compile)).value.mkString)
+    }
+  )
+```
+
+評価するとこうなる:
+
+```scala
+scalacOptions in ThisBuild := {
+  Nil :+ "-D0"
+}
+
+scalacOptions := {
+  List("-D0") :+ "-D1"
+}
+
+lazy val projF = (project in file("f"))
+  .settings(
+    scalacOptions in compile := List("-D0") :+ "-D2",
+    scalacOptions in Compile := List("-D0") :+ "-D3",
+    scalacOptions in (Compile, compile) := List("-D0", "-D3") :+ "-D4",
+    test := {
+      println("bippy" + (scalacOptions in (Compile, compile)).value.mkString)
+    }
+  )
 ```
 
 

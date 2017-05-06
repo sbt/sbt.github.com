@@ -158,7 +158,7 @@ lazy val projC = (project in file(&quot;c&quot;))
     },
     scalaVersion := &quot;2.11.11&quot;
   )
-</code></pre><p>What is the expected <code>name in projC</code> value in the following build?
+</code></pre><p>What is value of <code>name in projC</code>?
 </p><ol><li><code>&quot;foo-2.12.2&quot;</code>
 </li><li><code>&quot;foo-2.11.11&quot;</code>
 </li><li>something else?
@@ -183,8 +183,10 @@ lazy val projD = (project in file(&quot;d&quot;))
 </li><li><code>List(-Ywarn-unused-import)</code>
 </li><li>something else?
 </li></ol><p>The answer is <code>List(-Ywarn-unused-import)</code>.
-Rule 2 finds <code>(projD, *, console)</code>, Rule 3 finds <code>(projD, Compile, *)</code>,
-and Rule 4 finds <code>(ThisBuild, *, *)</code>. Rule 1 selects <code>(projD, Compile, *)</code>
+Rule 2 finds <code>(projD, Compile, *)</code>,
+Rule 3 finds <code>(projD, *, console)</code>,
+and Rule 4 finds <code>(ThisBuild, *, *)</code>.
+Rule 1 selects <code>(projD, Compile, *)</code>
 because it has the subproject axis <code>projD</code>, and the configuration axis has higher
 precedence over the task axis.
 </p><p>Next, <code>scalacOptions in Compile</code> refers to <code>scalacOptions.value</code>,
@@ -225,7 +227,7 @@ listed in the order of precedence!
 then <code>ThisBuild</code> (<code>{.}</code>), and <code>*</code>.
 </li><li>Within a subproject, scopes with <code>Compile</code> scoping on the configuration axis
 are listed first, then falls back to <code>*</code>.
-</li><li>Finally, the task axis scoping lists the given task value <code>console::</code> and the one without.
+</li><li>Finally, the task axis scoping lists the given task scoping <code>console::</code> and the one without.
 </li></ul><h3 id=".value+lookup+vs+dynamic+dispatch">.value lookup vs dynamic dispatch<a href="#.value+lookup+vs+dynamic+dispatch" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Rule 5: A delegated scoped key and its dependent settings/tasks are evaluated without carrying the original context.
 </li></ul><p>Note that scope delegation feels similar to class inheritance in an object-oriented language,
 but there’s a difference. In an OO language like Scala if there’s a method named
@@ -341,7 +343,7 @@ lazy val projF = (project in file(&quot;f&quot;))
                         <span class="arrow">&gt;</span>
                         <a href="Library-Dependencies.html"> Library dependencies </a>                        
                         <ul class="language-bar">
-        
+        <li><a href="Scope-Delegation.html"><span class="lang-item lang-en">English</span></a></li><li><a href="ja/Scope-Delegation.html"><span class="lang-item lang-ja">日本語</span></a></li>
       </ul>
                       </div><div class="tocwrapper show">
       <a class="tochead nav" style="display: none" href="#toc">❦</a>
