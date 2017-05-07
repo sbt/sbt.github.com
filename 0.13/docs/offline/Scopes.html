@@ -67,9 +67,8 @@ key-value map describing the project, as
 in <code>build.sbt</code>) applies to a scoped key as well.
 </p><p>Often the scope is implied or has a default, but if the defaults are
 wrong, you’ll need to mention the desired scope in <code>build.sbt</code>.
-</p><h3 id="Scope+axes">Scope axes<a href="#Scope+axes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A <em>scope axis</em> is a type, where each instance of the type can define its
-own scope (that is, each instance can have its own unique values for
-keys).
+</p><h3 id="Scope+axes">Scope axes<a href="#Scope+axes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A <em>scope axis</em> is a type constructor similar to <code>Option[A]</code>,
+that is used to form a component in a scope.
 </p><p>There are three scope axes:
 </p><ul><li>The subproject axis
 </li><li>The dependency configuration axis
@@ -82,6 +81,10 @@ correspond to red, green, and blue components encoded by a number.
 Similarly, a full scope in sbt is formed by a <strong>tuple</strong> of a subproject,
 a configuration, and a task value:
 </p><pre><code class="prettyprint lang-scala">scalacOptions in (projA, Compile, console)
+</code></pre><p>To be more precise, it actually looks like this:
+</p><pre><code class="prettyprint lang-scala">scalacOptions in (Select(projA: Reference),
+                  Select(Compile: ConfigKey),
+                  Select(console.key))
 </code></pre><h4 id="Scoping+by+the+subproject+axis">Scoping by the subproject axis<a href="#Scoping+by+the+subproject+axis" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>If you <a href="Multi-Project.html">put multiple projects in a single build</a>, each
 project needs its own settings. That is, keys can be scoped according to
 the project.
@@ -118,11 +121,12 @@ another key (such as <code>packageOptions</code>).
 <code>packageDoc</code>) can share keys related to packaging, such as <code>artifactName</code>
 and <code>packageOptions</code>. Those keys can have distinct values for each
 packaging task.
-</p><h3 id="Global+scope+component">Global scope component<a href="#Global+scope+component" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Each scope axis can be filled in with an instance of the axis type (for
+</p><h4 id="Global+scope+component">Global scope component<a href="#Global+scope+component" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Each scope axis can be filled in with an instance of the axis type (for
 example the task axis can be filled in with a task), or the axis can be
-filled in with the special value <code>Global</code>, which is also written as <code>*</code>.
+filled in with the special value <code>Global</code>, which is also written as <code>*</code>. So we can think of <code>Global</code> as <code>None</code>.
 </p><p><code>*</code> is a universal fallback for all scope axes,
 but its direct use should be reserved to sbt and plugin authors in most cases.
+</p><p>To the make the matter confusing, <code>someKey in Global</code> appearing in build definition implicitly converts to <code>someKey in (Global, Global, Global)</code>.
 </p><h3 id="Referring+to+scopes+in+a+build+definition">Referring to scopes in a build definition<a href="#Referring+to+scopes+in+a+build+definition" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>If you create a setting in <code>build.sbt</code> with a bare key, it will be scoped
 to (current subproject, configuration <code>Global</code>, task <code>Global</code>):
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
