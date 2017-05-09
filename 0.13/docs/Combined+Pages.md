@@ -3951,6 +3951,10 @@ your plugin to the list.
     <https://github.com/ktoso/sbt-jol>
 -   sbt-hocon (operations on HOCON data against reference configuration aggregated from project dependencies):
     <https://github.com/aalleexxeeii/sbt-hocon>
+-   sbt-gitlab (SBT plugin for interacting with GitLab and GitLabCI through the available API's):
+    <https://gitlab.com/kpmeen/sbt-gitlab>
+-   sbt-tmpfs (SBT plugin that automatically "tmpfsifies" directories to speed up development.)
+    <https://github.com/cuzfrog/sbt-tmpfs>
 
 #### Database plugins
 
