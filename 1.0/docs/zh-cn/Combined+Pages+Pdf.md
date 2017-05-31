@@ -32,7 +32,7 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.0-M5/sbt-1.0.0-M5.msi
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.0-M6/sbt-1.0.0-M6.msi
   [Setup-Notes]: ../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -58,8 +58,8 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
 如果你在运行 sbt 时遇到任何问题，查看 [安装建议][Setup-Notes] 中的终端编码（terminal encoding），HTTP 代理，JVM 参数。
 
 
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0-M5/sbt-1.0.0-M5.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0-M5/sbt-1.0.0-M5.tgz
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0-M6/sbt-1.0.0-M6.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0-M6/sbt-1.0.0-M6.tgz
   [Manual-Installation]: Manual-Installation.html
 
 在 Mac 上安装 sbt
@@ -86,9 +86,9 @@ $ port install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.0-M5/sbt-1.0.0-M5.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0-M5/sbt-1.0.0-M5.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0-M5/sbt-1.0.0-M5.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.0-M6/sbt-1.0.0-M6.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0-M6/sbt-1.0.0-M6.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0-M6/sbt-1.0.0-M6.tgz
 
 在 Windows 上安装 sbt
 -------------------------
@@ -102,10 +102,10 @@ $ port install sbt
 下载 [msi 安装包][MSI] 并安装。
 
 
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0-M5/sbt-1.0.0-M5.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0-M5/sbt-1.0.0-M5.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.0.0-M5.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.0.0-M5.deb
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0-M6/sbt-1.0.0-M6.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0-M6/sbt-1.0.0-M6.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.0.0-M6.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.0.0-M6.deb
 
 在 Linux 上安装 sbt
 -----------------------
@@ -219,10 +219,10 @@ lazy val root = (project in file("."))
 
 ### 设置 sbt 版本
 
-你可以通过创建 `hello/project/build.properties` 文件强制指定一个版本的 sbt。在这个文件里，编写如下内容来强制使用 1.0.0-M5：
+你可以通过创建 `hello/project/build.properties` 文件强制指定一个版本的 sbt。在这个文件里，编写如下内容来强制使用 1.0.0-M6：
 
 ```
-sbt.version=1.0.0-M5
+sbt.version=1.0.0-M6
 ```
 
 sbt 在不同的 release 版本中是 99% 兼容的。但是在 `project/build.properties` 文件中设置 sbt 的版本仍然能避免一些潜在的混淆。

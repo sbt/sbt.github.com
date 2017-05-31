@@ -71,7 +71,7 @@ corrections and add documentation.
 
 Documentation for 0.7.x has been
 [archived here](http://www.scala-sbt.org/0.7.7/docs/home.html). This
-documentation applies to sbt 1.0.0-M5.
+documentation applies to sbt 1.0.0-M6.
 
 See also the [API Documentation](../api/index.html),
 [SXR Documentation](../sxr/index.html), and the
@@ -109,7 +109,7 @@ Thanks for trying out sbt and *have fun*!
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.0-M5/sbt-1.0.0-M5.msi
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.0-M6/sbt-1.0.0-M6.msi
   [Setup-Notes]: ../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -140,8 +140,8 @@ If you have any trouble running sbt, see [Setup Notes][Setup-Notes] on
 terminal encodings, HTTP proxies, and JVM options.
 
 
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0-M5/sbt-1.0.0-M5.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0-M5/sbt-1.0.0-M5.tgz
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0-M6/sbt-1.0.0-M6.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0-M6/sbt-1.0.0-M6.tgz
   [Manual-Installation]: Manual-Installation.html
 
 Installing sbt on Mac
@@ -170,9 +170,9 @@ $ port install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.0-M5/sbt-1.0.0-M5.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0-M5/sbt-1.0.0-M5.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0-M5/sbt-1.0.0-M5.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.0-M6/sbt-1.0.0-M6.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0-M6/sbt-1.0.0-M6.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0-M6/sbt-1.0.0-M6.tgz
 
 Installing sbt on Windows
 -------------------------
@@ -186,10 +186,10 @@ Download [ZIP][ZIP] or [TGZ][TGZ] package and expand it.
 Download [msi installer][MSI] and install it.
 
 
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0-M5/sbt-1.0.0-M5.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0-M5/sbt-1.0.0-M5.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.0.0-M5.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.0.0-M5.deb
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0-M6/sbt-1.0.0-M6.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0-M6/sbt-1.0.0-M6.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.0.0-M6.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.0.0-M6.deb
   [Manual-Installation]: Manual-Installation.html
   [website127]: https://github.com/sbt/website/issues/127
 
@@ -595,7 +595,7 @@ build the same projects with consistent results.
 To do this, create a file named `project/build.properties` that specifies the sbt version as follows:
 
 ```
-sbt.version=1.0.0-M5
+sbt.version=1.0.0-M6
 ```
 
 If the required version is not available locally,
@@ -7329,12 +7329,12 @@ Migrating from 0.7 to 0.10+
 ---------------------------
 
 The assumption here is that you are familiar with sbt 0.7 but new to sbt
-1.0.0-M5.
+1.0.0-M6.
 
-sbt 1.0.0-M5's many new capabilities can be a bit overwhelming, but
-this page should help you migrate to 1.0.0-M5 with a minimum of fuss.
+sbt 1.0.0-M6's many new capabilities can be a bit overwhelming, but
+this page should help you migrate to 1.0.0-M6 with a minimum of fuss.
 
-### Why move to 1.0.0-M5?
+### Why move to 1.0.0-M6?
 
 1.  Faster builds (because it is smarter at re-compiling only what it
     must)
@@ -7347,17 +7347,17 @@ this page should help you migrate to 1.0.0-M5 with a minimum of fuss.
 5.  Terser output. (Yet you can ask for more details if something goes
     wrong.)
 
-#### Step 1: Read the Getting Started Guide for sbt 1.0.0-M5
+#### Step 1: Read the Getting Started Guide for sbt 1.0.0-M6
 
 Reading the [Getting Started Guide][Getting-Started] will
 probably save you a lot of confusion.
 
-#### Step 2: Install sbt 1.0.0-M5
+#### Step 2: Install sbt 1.0.0-M6
 
-Download sbt 1.0.0-M5 as described on
+Download sbt 1.0.0-M6 as described on
 [the setup page][Setup].
 
-You can run 1.0.0-M5 the same way that you run 0.7.x, either simply:
+You can run 1.0.0-M6 the same way that you run 0.7.x, either simply:
 
 ```
 $ java -jar sbt-launch.jar
@@ -7371,7 +7371,7 @@ For more details see
 
 #### Step 3: A technique for switching an existing project
 
-Here is a technique for switching an existing project to 1.0.0-M5 while
+Here is a technique for switching an existing project to 1.0.0-M6 while
 retaining the ability to switch back again at will. Some builds, such as
 those with subprojects, are not suited for this technique, but if you
 learn how to transition a simple project it will help you do a more
@@ -7380,10 +7380,10 @@ complex one next.
 ### Preserve `project/` for 0.7.x project
 
 Rename your `project/` directory to something like `project-old`. This
-will hide it from sbt 1.0.0-M5 but keep it in case you want to switch
+will hide it from sbt 1.0.0-M6 but keep it in case you want to switch
 back to 0.7.x.
 
-### Create `build.sbt` for 1.0.0-M5
+### Create `build.sbt` for 1.0.0-M6
 
 Create a `build.sbt` file in the root directory of your project. See
 [.sbt build definition][Basic-Def] in the Getting
@@ -7426,7 +7426,7 @@ scalaVersion := "2.9.2"
 Currently, a `project/build.properties` is still needed to explicitly
 select the sbt version. For example:
 
-### Run sbt 1.0.0-M5
+### Run sbt 1.0.0-M6
 
 Now launch sbt. If you're lucky it works and you're done. For help
 debugging, see below.
@@ -7435,7 +7435,7 @@ debugging, see below.
 
 If you get stuck and want to switch back, you can leave your `build.sbt`
 file alone. sbt 0.7.x will not understand or notice it. Just rename your
-1.0.0-M5 `project` directory to something like `project10` and rename
+1.0.0-M6 `project` directory to something like `project10` and rename
 the backup of your old project from `project-old` to `project` again.
 
 #### FAQs
@@ -7730,7 +7730,7 @@ influence SBT execution. Also see [sbt launcher][Sbt-Launcher].
   <tr>
     <td><tt>sbt.version</tt></td>
     <td>Version</td>
-    <td><tt>1.0.0-M5</tt></td>
+    <td><tt>1.0.0-M6</tt></td>
     <td>sbt version to use, usually taken from <tt>project/build.properties</tt>.</td>
   </tr>
 
@@ -8434,7 +8434,7 @@ mode that only requires a JRE installed.
 Install [conscript](https://github.com/foundweekends/conscript).
 
 ```
-$ cs sbt/sbt --branch 1.0.0-M5
+$ cs sbt/sbt --branch 1.0.0-M6
 ```
 
 This will create two scripts: `screpl` and `scalas`.
@@ -8495,7 +8495,7 @@ scalaVersion := "2.12.2"
  
 resolvers += Resolver.url("typesafe-ivy-repo", url("http://repo.typesafe.com/typesafe/releases"))(Resolver.ivyStylePatterns)
  
-libraryDependencies += "org.scala-sbt" % "io" % "1.0.0-M5"
+libraryDependencies += "org.scala-sbt" % "io" % "1.0.0-M6"
 */         
  
 import sbt._, Path._
@@ -9763,7 +9763,7 @@ sbt needs Scala jars to run itself since it is written in Scala. sbt
 uses that same version of Scala to compile the build definitions that
 you write for your project because they use sbt APIs. This version of
 Scala is fixed for a specific sbt release and cannot be changed. For sbt
-1.0.0-M5, this version is Scala 2.12.2. Because this Scala
+1.0.0-M6, this version is Scala 2.12.2. Because this Scala
 version is needed before sbt runs, the repositories used to retrieve
 this version are configured in the sbt
 [launcher][Sbt-Launcher].
@@ -14466,7 +14466,7 @@ This Parser definition will produce a value of type `(String,String)`.
 The input syntax defined isn't very flexible; it is just a
 demonstration. It will produce one of the following values for a
 successful parse (assuming the current Scala version is 2.12.2,
-the current sbt version is 1.0.0-M5, and there are 3 commands left to
+the current sbt version is 1.0.0-M6, and there are 3 commands left to
 run):
 
 Again, we were able to access the current Scala and sbt version for the
@@ -16504,10 +16504,10 @@ If you haven't created one already, make sure to create `project/build.propertie
 `sbt.version` number:
 
 ```yml
-sbt.version=1.0.0-M5
+sbt.version=1.0.0-M6
 ```
 
-Your build will now use 1.0.0-M5.
+Your build will now use 1.0.0-M6.
 
 ### Read the Travis manual
 
@@ -17174,7 +17174,7 @@ Like we are able to cross build against multiple Scala versions, we can cross bu
 ```scala
   .settings(
     scalaVersion := "2.12.2",
-    sbtVersion in Global := "1.0.0-M5",
+    sbtVersion in Global := "1.0.0-M6",
     scalaCompilerBridgeSource := {
       val sv = appConfiguration.value.provider.id.version
       ("org.scala-sbt" % "compiler-interface" % sv % "component").sources
@@ -19134,7 +19134,7 @@ Here's how to set it up
 #### project/build.properties
 
 ```
-sbt.version=1.0.0-M5
+sbt.version=1.0.0-M6
 ```
 
 #### project/style.sbt
@@ -19185,7 +19185,7 @@ Let's try implementing a custom task called `compilecheck` that runs `compile in
 #### project/build.properties
 
 ```
-sbt.version=1.0.0-M5
+sbt.version=1.0.0-M6
 ```
 
 #### project/style.sbt
@@ -19935,7 +19935,7 @@ Frequently Asked Questions
 
 #### My last command didn't work but I can't see an explanation. Why?
 
-sbt 1.0.0-M5 by default suppresses most stack traces and debugging
+sbt 1.0.0-M6 by default suppresses most stack traces and debugging
 information. It has the nice side effect of giving you less noise on
 screen, but as a newcomer it can leave you lost for explanation. To see
 the previous output of a command at a higher verbosity, type
@@ -20444,7 +20444,7 @@ first and then the following questions.
 
 #### Where has 0.7's `lib_managed` gone?
 
-By default, sbt 1.0.0-M5 loads managed libraries from your ivy cache
+By default, sbt 1.0.0-M6 loads managed libraries from your ivy cache
 without copying them to a `lib_managed` directory. This fixes some bugs
 with the previous solution and keeps your project directory small. If
 you want to insulate your builds from the ivy cache being cleared, set
@@ -20456,7 +20456,7 @@ This does mean that existing solutions for sharing libraries with your
 favoured IDE may not work. Refer to [Community Plugins page][Community-Plugins]
 for a list of currently available plugins for your IDE.
 
-#### What are the commands I can use in 1.0.0-M5 vs. 0.7?
+#### What are the commands I can use in 1.0.0-M6 vs. 0.7?
 
 For a list of commands, run `help`. For details on a specific command,
 run `help <command>`. To view a list of tasks defined on the current
@@ -20493,7 +20493,7 @@ classpaths.
 ### My tests all run really fast but some are broken that weren't in 0.7!
 
 Be aware that compilation and tests run in parallel by default in sbt
-1.0.0-M5. If your test code isn't thread-safe then you may want to
+1.0.0-M6. If your test code isn't thread-safe then you may want to
 change this behaviour by adding one of the following to your
 `build.sbt`:
 
@@ -20515,9 +20515,9 @@ project.
 For an early version of an xsbt Web Start plugin, visit the
 [xsbt-webstart](https://github.com/ritschwumm/xsbt-webstart) project.
 
-#### How are inter-project dependencies different in 1.0.0-M5 vs. 0.7?
+#### How are inter-project dependencies different in 1.0.0-M6 vs. 0.7?
 
-In 1.0.0-M5, there are three types of project dependencies (classpath,
+In 1.0.0-M6, there are three types of project dependencies (classpath,
 execution, and configuration) and they are independently defined. These
 were combined in a single dependency type in 0.7.x. A declaration like:
 
@@ -20536,7 +20536,7 @@ meant that the `B` project had a classpath and execution dependency on
 3.  Configuration: For some settings, if they were not overridden in A,
     they would default to the value provided in B.
 
-In 1.0.0-M5, declare the specific type of dependency you want. Read
+In 1.0.0-M6, declare the specific type of dependency you want. Read
 about [multi-project builds][Multi-Project] in the
 Getting Started Guide for details.
 
@@ -20545,7 +20545,7 @@ Getting Started Guide for details.
 <table>
   <tr>
     <th>0.7</th>
-    <th>1.0.0-M5</th>
+    <th>1.0.0-M6</th>
   </tr>
 
   <tr>
@@ -20573,7 +20573,7 @@ Getting Started Guide for details.
   </tr>
 </table>
 
-#### Where can I find plugins for 1.0.0-M5?
+#### Where can I find plugins for 1.0.0-M6?
 
 See [Community Plugins][Community-Plugins] for a list of currently available
 plugins.
@@ -23339,7 +23339,7 @@ application. `hello.build.properties`:
 Nightly Builds
 --------------
 
-The latest development versions of 1.0.0-M5 are available as nightly
+The latest development versions of 1.0.0-M6 are available as nightly
 builds on [Typesafe Snapshots](https://repo.typesafe.com/typesafe/ivy-snapshots/).
 
 To use a nightly build, the instructions are the same for
@@ -23349,7 +23349,7 @@ To use a nightly build, the instructions are the same for
 nightly-launcher|. They should be listed in chronological order, so
     the most recent one will be last.
 2.  The version number is the name of the subdirectory and is of the
-    form `1.0.0-M5.x-yyyyMMdd-HHmmss`. Use this in a build.properties
+    form `1.0.0-M6.x-yyyyMMdd-HHmmss`. Use this in a build.properties
     file.
 3.  Call your script something like `sbt-nightly` to retain access to a
     stable sbt launcher. The documentation will refer to the script as
