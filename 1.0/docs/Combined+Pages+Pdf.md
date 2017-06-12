@@ -2981,11 +2981,15 @@ If you'd like to submit your plugin, please follow these instructions:
 
 See [Cross Build Plugins][Cross-Build-Plugins].
 
-### Plugins available for sbt 1.0.0-M5
+### Plugins available for sbt 1.0.0-M6
 
-Please feel free to
-[submit a pull request](https://github.com/sbt/website/pulls) that adds
+Please submit a pull request](https://github.com/sbt/website/pulls) that adds
 your plugin to the list.
+
+- sbt-bintray 0.4.0: <https://github.com/sbt/sbt-bintray>
+- [Scripted plugin](Testing-sbt-plugins.html)
+
+### Plugins available for sbt 1.0.0-M5
 
 - sbt-bintray 0.4.0: <https://github.com/sbt/sbt-bintray>
 - [Scripted plugin](Testing-sbt-plugins.html)
@@ -2995,8 +2999,9 @@ your plugin to the list.
 - Scalafmt 0.7.0-RC1 <http://scalameta.org/scalafmt/>
 - neo-sbt-scalafmt 0.3 <https://github.com/lucidsoftware/neo-sbt-scalafmt>
 - Coursier 1.0.0-RC2 <https://github.com/coursier/coursier>
-- sbt-pgp 1.1.0-M1: http://www.scala-sbt.org/sbt-pgp/
+- sbt-pgp 1.1.0-M1: <http://www.scala-sbt.org/sbt-pgp/>
 - sbt-sonatype 2.0.0-M1: <https://github.com/xerial/sbt-sonatype>
+- sbt-updates 0.3.1: <https://github.com/rtimush/sbt-updates>
 
 
 Community Repository Policy
