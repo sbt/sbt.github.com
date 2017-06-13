@@ -97,7 +97,7 @@ that would should work together to allow dependency locking.
 [warn]
 [warn] Run 'evicted' to see detailed eviction warnings
 </code></pre><p><a href="https://github.com/sbt/sbt/pull/3202">#3202</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
-</p><h4 id="sbt-cross-building">sbt-cross-building<a href="#sbt-cross-building" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>[@jrudolph][@jrudolph]’s sbt-cross-building is a plugin author’s plugin.
+</p><h4 id="sbt-cross-building">sbt-cross-building<a href="#sbt-cross-building" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><a href="https://github.com/jrudolph">@jrudolph</a>’s sbt-cross-building is a plugin author’s plugin.
 It adds cross command <code>^</code> and sbtVersion switch command <code>^^</code>, similar to <code>+</code> and <code>++</code>,
 but for switching between multiple sbt versions across major versions.
 sbt 0.13.16 merges these commands into sbt because the feature it provides is useful as we migrate plugins to sbt 1.0.
@@ -110,11 +110,11 @@ and <code>src/main/scala-sbt-1.0.0-M5</code>, where the binary sbt version numbe
 </p><pre><code class="prettyprint lang-scala">crossSbtVersions := Vector(&quot;0.13.15&quot;, &quot;1.0.0-M5&quot;)
 </code></pre><p>Then, run:
 </p><pre><code class="">^ compile
-</code></pre><p>[#3133][3133] by [@eed3si9n][@eed3si9n] (forward ported from 0.13.16-M1)
-</p><h4 id="notes">notes<a href="#notes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>https://github.com/sbt/sbt/compare/v1.0.0-M5…v1.0.0-M6
-</li><li>https://github.com/sbt/zinc/compare/v1.0.0-X14…v1.0.0-X16
-</li><li>https://github.com/sbt/librarymanagement/compare/v1.0.0-X10…v1.0.0-X15
-</li><li>https://github.com/sbt/util/compare/v1.0.0-M23…v1.0.0-M24
+</code></pre><p><a href="https://github.com/sbt/sbt/pull/3133">#3133</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a> (forward ported from 0.13.16-M1)
+</p><h4 id="notes">notes<a href="#notes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li><a href="https://github.com/sbt/sbt/compare/v1.0.0-M5...v1.0.0-M6">https://github.com/sbt/sbt/compare/v1.0.0-M5...v1.0.0-M6</a>
+</li><li><a href="https://github.com/sbt/zinc/compare/v1.0.0-X14...v1.0.0-X16">https://github.com/sbt/zinc/compare/v1.0.0-X14...v1.0.0-X16</a>
+</li><li><a href="https://github.com/sbt/librarymanagement/compare/v1.0.0-X10...v1.0.0-X15">https://github.com/sbt/librarymanagement/compare/v1.0.0-X10...v1.0.0-X15</a>
+</li><li><a href="https://github.com/sbt/util/compare/v1.0.0-M23...v1.0.0-M24">https://github.com/sbt/util/compare/v1.0.0-M23...v1.0.0-M24</a>
 </li></ul><h3 id="sbt+1.0.0-M5">sbt 1.0.0-M5<a href="#sbt+1.0.0-M5" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>This is the beta-1 release of sbt 1.0.
 There’s no binary compatibility with sbt 0.13 or other future 1.0.0-Mx versions.
 </p><h4 id="Features%2C+fixes%2C+changes+with+compatibility+implications">Features, fixes, changes with compatibility implications<a href="#Features%2C+fixes%2C+changes+with+compatibility+implications" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>We are working with Scala Center to provide [an automatic migration tool][sbt-migration-rewrites].
