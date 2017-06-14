@@ -1295,6 +1295,7 @@ parallel processing, and customizability.
   [Library-Dependencies]: Library-Dependencies.html
   [Multi-Project]: Multi-Project.html
   [Inspecting-Settings]: ../docs/Inspecting-Settings.html
+  [Scope-Delegation]: Scope-Delegation.html
 
 Scopes
 ------
@@ -1308,7 +1309,7 @@ previous pages, [build definition][Basic-Def] and [task graph][Task-Graph].
 to one entry in sbt's map of key-value pairs. This was a simplification.
 
 In truth, each key can have an associated value in more than one
-context, called a "scope."
+context, called a *scope.*
 
 Some concrete examples:
 
@@ -1336,30 +1337,52 @@ wrong, you'll need to mention the desired scope in `build.sbt`.
 
 ### Scope axes
 
-A *scope axis* is a type, where each instance of the type can define its
-own scope (that is, each instance can have its own unique values for
-keys).
+A *scope axis* is a type constructor similar to `Option[A]`,
+that is used to form a component in a scope.
 
 There are three scope axes:
 
-- Subprojects
-- Dependency configurations
-- Tasks
+- The subproject axis
+- The dependency configuration axis
+- The task axis
 
-#### Scoping by subproject axis
+If you're not familiar with the notion of *axis*, we can think of the RGB color cube
+as an example:
+
+![color cube](files/rgb_color_solid_cube.png)
+
+In the RGB color model, all colors are represented by a point in the cube whose axes
+correspond to red, green, and blue components encoded by a number.
+Similarly, a full scope in sbt is formed by a **tuple** of a subproject,
+a configuration, and a task value:
+
+```scala
+scalacOptions in (projA, Compile, console)
+```
+
+To be more precise, it actually looks like this:
+
+```scala
+scalacOptions in (Select(projA: Reference),
+                  Select(Compile: ConfigKey),
+                  Select(console.key))
+```
+
+#### Scoping by the subproject axis
 
 If you [put multiple projects in a single build][Multi-Project], each
 project needs its own settings. That is, keys can be scoped according to
 the project.
 
-The project axis can also be set to "entire build", so a setting applies
-to the entire build rather than a single project. Build-level settings
-are often used as a fallback when a project doesn't define a
-project-specific setting.
+The project axis can also be set to `ThisBuild`, which means the "entire build",
+so a setting applies to the entire build rather than a single project.
+Build-level settings are often used as a fallback when a project doesn't define a
+project-specific setting. We will discuss more on build-level settings later in this page.
 
-#### Scoping by dependency configuration axis
+#### Scoping by the configuration axis
 
-A *dependency configuration* defines a graph of library dependencies, potentially with its own
+A *dependency configuration* (or "configuration" for short) defines
+a graph of library dependencies, potentially with its own
 classpath, sources, generated packages, etc. The dependency configuration concept
 comes from Ivy, which sbt uses for
 managed dependencies [Library Dependencies][Library-Dependencies], and from
@@ -1372,13 +1395,21 @@ Some configurations you'll see in sbt:
 - `Runtime` which defines the classpath for the `run` task.
 
 By default, all the keys associated with compiling, packaging, and
-running are scoped to a dependency configuration and therefore may work differently
-in each dependency configuration. The most obvious examples are the task keys
+running are scoped to a configuration and therefore may work differently
+in each configuration. The most obvious examples are the task keys
 `compile`, `package`, and `run`; but all the keys which *affect* those keys
 (such as `sourceDirectories` or `scalacOptions` or `fullClasspath`) are also
 scoped to the configuration.
 
-#### Scoping by task axis
+Another thing to note about a configuration is that it can extend other configurations.
+The following figure shows the extension relationship among the most common configurations.
+
+![dependency configurations](files/sbt-configurations.png)
+
+`Test` and `IntegrationTest` extends `Runtime`; `Runtime` extends `Compile`;
+`CompileInternal` extends `Compile`, `Optional`, and `Provided`.
+
+#### Scoping by Task axis
 
 Settings can affect how a task works. For example, the `packageSrc` task
 is affected by the `packageOptions` setting.
@@ -1391,43 +1422,92 @@ The various tasks that build a package (`packageSrc`, `packageBin`,
 and `packageOptions`. Those keys can have distinct values for each
 packaging task.
 
-### Global scope
+#### Global scope component
 
 Each scope axis can be filled in with an instance of the axis type (for
 example the task axis can be filled in with a task), or the axis can be
-filled in with the special value `Global`.
+filled in with the special value `Global`, which is also written as `*`. So we can think of `Global` as `None`.
 
-`Global` means what you would expect: the setting's value applies to all
-instances of that axis. For example if the task axis is Global, then the
-setting would apply to all tasks.
+`*` is a universal fallback for all scope axes,
+but its direct use should be reserved to sbt and plugin authors in most cases.
 
-### Delegation
+To the make the matter confusing, `someKey in Global` appearing in build definition implicitly converts to `someKey in (Global, Global, Global)`.
 
-A scoped key may be undefined, if it has no value associated with it in
-its scope.
+### Referring to scopes in a build definition
 
-For each scope, sbt has a fallback search path made up of other scopes.
-Typically, if a key has no associated value in a more-specific scope,
-sbt will try to get a value from a more general scope, such as the
-`Global` scope or the entire-build scope.
+If you create a setting in `build.sbt` with a bare key, it will be scoped
+to (current subproject, configuration `Global`, task `Global`):
 
-This feature allows you to set a value once in a more general scope,
-allowing multiple more-specific scopes to inherit the value.
+```scala
+lazy val root = (project in file("."))
+  .settings(
+    name := "hello"
+  )
+```
 
-You can see the fallback search path or "delegates" for a key using the
-`inspect` command, as described below. Read on.
+Run sbt and `inspect name` to see that it's provided by
+`{file:/home/hp/checkout/hello/}default-aea33a/*:name`, that is, the
+project is `{file:/home/hp/checkout/hello/}default-aea33a`, the
+configuration is `*` (means `Global`), and the task is not shown (which
+also means `Global`).
 
-### Referring to scoped keys when running sbt
+A bare key on the right hand side is also scoped to
+(current subproject, configuration `Global`, task `Global`):
 
-On the command line and in interactive mode, sbt displays (and parses)
+```
+organization := name.value
+```
+
+Keys have an overloaded method called `.in` that is used to set the scope.
+The argument to `.in(...)` can be an instance of any of the scope axes. So for
+example, though there's no real reason to do this, you could set the
+`name` scoped to the `Compile` configuration:
+
+```scala
+name in Compile := "hello"
+```
+
+or you could set the name scoped to the `packageBin` task (pointless! just
+an example):
+
+```scala
+name in packageBin := "hello"
+```
+
+or you could set the `name` with multiple scope axes, for example in the
+`packageBin` task in the `Compile` configuration:
+
+```scala
+name in (Compile, packageBin) := "hello"
+```
+
+or you could use `Global` for all axes:
+
+```scala
+// same as concurrentRestrictions in (Global, Global, Global)
+concurrentRestrictions in Global := Seq(
+  Tags.limitAll(1)
+)
+```
+
+(`concurrentRestrictions in Global` implicitly converts to
+`concurrentRestrictions in (Global, Global, Global)`, setting
+all axes to `Global` scope component; the task and configuration are already
+`Global` by default, so here the effect is to make the project `Global`,
+that is, define `*/*:concurrentRestrictions` rather than
+`{file:/home/hp/checkout/hello/}default-aea33a/*:concurrentRestrictions`)
+
+### Referring to scoped keys from the sbt shell
+
+On the command line and in the sbt shell, sbt displays (and parses)
 scoped keys like this:
 
 ```
 {<build-uri>}<project-id>/config:intask::key
 ```
 
-- `{<build-uri>}<project-id>` identifies the project axis. The
-  `<project-id>` part will be missing if the project axis has "entire build" scope.
+- `{<build-uri>}<project-id>` identifies the subproject axis. The
+  `<project-id>` part will be missing if the subproject axis has "entire build" scope.
 - `config` identifies the configuration axis.
 - `intask` identifies the task axis.
 - `key` identifies the key being scoped.
@@ -1522,25 +1602,7 @@ is the `fullClasspath` key scoped to the `test` configuration and the
 
 "Dependencies" was discussed in detail in the [previous page][Task-Graph].
 
-You can also see the delegates; if the value were not defined, sbt would
-search through:
-
-- two other configurations (`runtime:fullClasspath`,
-  `compile:fullClasspath`). In these scoped keys, the project is
-  unspecified meaning "current project" and the task is unspecified
-  meaning `Global`
-- configuration set to `Global` (`*:fullClasspath`), since project is
-  still unspecified it's "current project" and task is still
-  unspecified so `Global`
-- project set to `{.}` or `ThisBuild` (meaning the entire build, no
-  specific project)
-- project axis set to `Global` (`*/test:fullClasspath`) (remember, an
-  unspecified project means current, so searching `Global` here is new;
-  i.e. `*` and "no project shown" are different for the project axis;
-  i.e. `*/test:fullClasspath` is not the same as `test:fullClasspath`)
-- both project and configuration set to `Global` (`*/*:fullClasspath`)
-  (remember that unspecified task means `Global` already, so
-  `*/*:fullClasspath` uses `Global` for all three axes)
+We'll discuss "Delegates" later.
 
 Try `inspect fullClasspath` (as opposed to the above example,
 inspect `test:fullClasspath`) to get a sense of the difference. Because
@@ -1549,73 +1611,9 @@ the configuration is omitted, it is autodetected as `compile`.
 `inspect fullClasspath`.
 
 Try `inspect *:fullClasspath` for another contrast. `fullClasspath` is not
-defined in the `Global` configuration by default.
+defined in the `Global` scope by default.
 
 Again, for more details, see [Interacting with the Configuration System][Inspecting-Settings].
-
-### Referring to scopes in a build definition
-
-If you create a setting in `build.sbt` with a bare key, it will be scoped
-to the current project, configuration `Global` and task `Global`:
-
-```scala
-lazy val root = (project in file("."))
-  .settings(
-    name := "hello"
-  )
-```
-
-Run sbt and `inspect name` to see that it's provided by
-`{file:/home/hp/checkout/hello/}default-aea33a/*:name`, that is, the
-project is `{file:/home/hp/checkout/hello/}default-aea33a`, the
-configuration is `*` (meaning global), and the task is not shown (which
-also means global).
-
-Keys have an overloaded method called in used to set the scope. The
-argument to in can be an instance of any of the scope axes. So for
-example, though there's no real reason to do this, you could set the
-`name` scoped to the `Compile` configuration:
-
-```scala
-name in Compile := "hello"
-```
-
-or you could set the name scoped to the `packageBin` task (pointless! just
-an example):
-
-```scala
-name in packageBin := "hello"
-```
-
-or you could set the `name` with multiple scope axes, for example in the
-`packageBin` task in the `Compile` configuration:
-
-```scala
-name in (Compile, packageBin) := "hello"
-```
-
-or you could use `Global` for all axes:
-
-```scala
-name in Global := "hello"
-```
-
-(`name in Global` implicitly converts the scope axis `Global` to a scope
-with all axes set to `Global`; the task and configuration are already
-`Global` by default, so here the effect is to make the project `Global`,
-that is, define `*/*:name` rather than
-`{file:/home/hp/checkout/hello/}default-aea33a/*:name`)
-
-If you aren't used to Scala, a reminder: it's important to understand
-that in and `:=` are just methods, not magic. Scala lets you write them in
-a nicer way, but you could also use the Java style:
-
-```scala
-name.in(Compile).:=("hello")
-```
-
-There's no reason to use this ugly syntax, but it illustrates that these
-are in fact methods.
 
 ### When to specify a scope
 
@@ -1642,14 +1640,14 @@ Simply `packageOptions` is also a key name, but a different one (for keys
 with no in, a scope is implicitly assumed: current project, global
 config, global task).
 
-#### Build-wide settings
+### Build-level settings
 
 An advanced technique for factoring out common settings
 across subprojects is to define the settings scoped to `ThisBuild`.
 
 If a key that is scoped to a particular subproject is not found,
 sbt will look for it in `ThisBuild` as a fallback.
-Using the mechanism, we can define a build-wide default setting for
+Using the mechanism, we can define a build-level default setting for
 frequently used keys such as `version`, `scalaVersion`, and `organization`.
 
 For convenience, there is `inThisBuild(...)` function that will
@@ -1682,6 +1680,24 @@ lazy val util = (project in file("util"))
   )
 ```
 
+Due to the nature of [scope delegation][Scope-Delegation] that we will cover later,
+we do not recommend using build-level settings beyond simple value assignments.
+
+### Scope delegation
+
+A scoped key may be undefined, if it has no value associated with it in
+its scope.
+
+For each scope axis, sbt has a fallback search path made up of other scope values.
+Typically, if a key has no associated value in a more-specific scope,
+sbt will try to get a value from a more general scope, such as the `ThisBuild` scope.
+
+This feature allows you to set a value once in a more general scope,
+allowing multiple more-specific scopes to inherit the value.
+We will disscuss [scope delegation][Scope-Delegation] in detail later.
+
+
+  [Scopes]: Scopes.html
 
 Appending values
 ----------------
@@ -1762,6 +1778,414 @@ you want to add it to the files removed by clean:
 
 ```scala
 cleanFiles += file("coverage-report-" + name.value + ".txt")
+```
+
+
+  [Basic-Def]: Basic-Def.html
+  [Scopes]: Scopes.html
+
+Scope delegation (.value lookup)
+--------------------------------
+
+This page describes scope delegation. It assumes you've read and understood the
+previous pages, [build definition][Basic-Def] and [scopes][Scopes].
+
+Now that we've covered all the details of scoping, we can explain the `.value`
+lookup in detail. It's ok to skip this section if this is your first time reading this page.
+
+Because the term `Global` is used for both a scope component `*`,
+and as shorthand for the scope `(Global, Global, Global)`,
+in this page we will use the symbol `*` when we mean it as the scope component.
+
+To summarize what we've learned so far:
+
+- A scope is a tuple of components in three axes: the subproject axis, the configuration axis, and the task axis.
+- There's a special scope component `*` (also called `Global`) for any of the scope axes.
+- There's a special scope component `ThisBuild` (written as `{.}` in shell) for **the subprojects axis** only.
+- `Test` extends `Runtime`, and `Runtime` extends `Compile` configuration.
+- A key placed in build.sbt is scoped to `(${current subproject}, *, *)` by default.
+- A key can be further scoped using `.in(...)` method.
+
+Now let's suppose we have the following build definition:
+
+```scala
+lazy val foo = settingKey[Int]("")
+lazy val bar = settingKey[Int]("")
+
+lazy val projX = (project in file("x"))
+  .settings(
+    foo := {
+      (bar in Test).value + 1
+    },
+    bar in Compile := 1
+  )
+```
+
+Inside of `foo`'s setting body a dependency on the scoped key `(bar in Test)` is declared.
+However, despite `bar in Test` being undefined in `projX`,
+sbt is still able to resolve `(bar in Test)` to another scoped key,
+resulting in `foo` initialized as `2`.
+
+sbt has a well-defined fallback search path called *scope delegation*.
+This feature allows you to set a value once in a more general scope,
+allowing multiple more-specific scopes to inherit the value.
+
+### Scope delegation rules
+
+Here are the rules for scope delegation:
+
+- Rule 1: Scope axes have the following precedence: the subproject axis, the configuration axis, and then the task axis.
+- Rule 2: Given a scope, delegate scopes are searched by substituting the task axis in the following order:
+  the given task scoping, and then `*` (`Global`), which is non-task scoped version of the scope.
+- Rule 3: Given a scope, delegate scopes are searched by substituting the configuration axis in the following order:
+  the given configuration, its parents, their parents and so on, and then `*` (`Global`, same as unscoped configuration axis).
+- Rule 4: Given a scope, delegate scopes are searched by substituting the subproject axis in the following order:
+  the given subproject, `ThisBuild`, and then `*` (`Global`).
+- Rule 5: A delegated scoped key and its dependent settings/tasks are evaluated without carrying the original context.
+
+We will look at each rule in the rest of this page.
+
+### Rule 1: Scope axis precedence
+
+- Rule 1: Scope axes have the following precedence: the subproject axis, the configuration axis, and then the task axis.
+
+In other words, given two scopes candidates, if one has more specific value on the subproject axis,
+it will always win regardless of the configuration or the task scoping.
+Similarly, if subprojects are the same, one with more specific configuration value will always win regardless
+of the task scoping. We will see more rules to define *more specific*.
+
+### Rule 2: The task axis delegation
+
+- Rule 2: Given a scope, delegate scopes are searched by **substituting** the task axis in the following order:
+  the given task scoping, and then `*` (`Global`), which is non-task scoped version of the scope.
+
+Here we have a concrete rule for how sbt will generate delegate scopes given a key.
+Remember, we are trying to show the search path given an arbitrary `(xxx in yyy).value`.
+
+**Exercise A**: Given the following build definition:
+
+```scala
+lazy val projA = (project in file("a"))
+  .settings(
+    name := {
+      "foo-" + (scalaVersion in packageBin).value
+    },
+    scalaVersion := "2.11.11"
+  )
+```
+
+What is the value of `name in projA` (`projA/name` in sbt shell)?
+
+1. `"foo-2.11.11"`
+2. `"foo-2.12.1"`
+3. something else?
+
+The answer is `"foo-2.11.11"`.
+Inside of `.settings(...)`, `scalaVersion` is automatically scoped to `(projA, *, *)`,
+so `scalaVersion in packageBin` becomes `scalaVersion in (projA, *, packageBin)`.
+That particular scoped key is undefined.
+By using Rule 2, sbt will substitute the task axis to `*` as `(projA, *, *)` (or `proj/scalaVersion` in shell).
+That scoped key is defined to be `"2.11.11"`.
+
+### Rule 3: The configuration axis search path
+
+- Rule 3: Given a scope, delegate scopes are searched by substituting the configuration axis in the following order:
+  the given configuration, its parents, their parents and so on, and then `*` (`Global`, same as unscoped configuration axis).
+
+The example for that is `projX` that we saw earlier:
+
+```scala
+lazy val foo = settingKey[Int]("")
+lazy val bar = settingKey[Int]("")
+
+lazy val projX = (project in file("x"))
+  .settings(
+    foo := {
+      (bar in Test).value + 1
+    },
+    bar in Compile := 1
+  )
+```
+
+If we write out the full scope again, it's `(projX, Test, *)`.
+Also recall that `Test` extends `Runtime`, and `Runtime` extends `Compile`.
+
+`(bar in Test)` is undefined, but due to Rule 3 sbt will look for
+`bar` scoped in `(projX, Test, *)`, `(projX, Runtime, *)`, and then
+`(projX, Compile, *)`. The last one is found, which is `bar in Compile`.
+
+### Rule 4: The subproject axis search path
+
+- Rule 4: Given a scope, delegate scopes are searched by substituting the subproject axis in the following order:
+  the given subproject, `ThisBuild`, and then `*` (`Global`).
+
+**Exercise B**: Given the following build definition:
+
+```scala
+organization in ThisBuild := "com.example"
+
+lazy val projB = (project in file("b"))
+  .settings(
+    name := "abc-" + organization.value,
+    organization := "org.tempuri"
+  )
+```
+
+What is the value of `name in projB` (`projB/name` in shell)?
+
+1. `"abc-com.example"`
+2. `"abc-org.tempuri"`
+3. something else?
+
+The answer is `abc-org.tempuri`.
+So based on Rule 4, the first search path is `organization` scoped to `(projB, *, *)`,
+which is defined in `projB` as `"org.tempuri"`.
+This has higher precedence than the build-level setting `organization in ThisBuild`.
+
+#### Scope axis precedence, again
+
+**Exercise C**: Given the following build definition:
+
+```scala
+scalaVersion in (ThisBuild, packageBin) := "2.12.2"
+
+lazy val projC = (project in file("c"))
+  .settings(
+    name := {
+      "foo-" + (scalaVersion in packageBin).value
+    },
+    scalaVersion := "2.11.11"
+  )
+```
+
+What is value of `name in projC`?
+
+1. `"foo-2.12.2"`
+2. `"foo-2.11.11"`
+3. something else?
+
+The answer is `foo-2.11.11`.
+`scalaVersion` scoped to `(projC, *, packageBin)` is undefined.
+Rule 2 finds `(projC, *, *)`. Rule 4 finds `(ThisBuild, *, packageBin)`.
+In this case Rule 1 dictates that more specific value on the subproject axis wins,
+which is `(projC, *, *)` that is defined to `"2.11.11"`.
+
+**Exercise D**: Given the following build definition:
+
+```scala
+scalacOptions in ThisBuild += "-Ywarn-unused-import"
+
+lazy val projD = (project in file("d"))
+  .settings(
+    test := {
+      println((scalacOptions in (Compile, console)).value)
+    },
+    scalacOptions in console -= "-Ywarn-unused-import",
+    scalacOptions in Compile := scalacOptions.value // added by sbt
+  )
+```
+
+What would you see if you ran `projD/test`?
+
+1. `List()`
+2. `List(-Ywarn-unused-import)`
+3. something else?
+
+The answer is `List(-Ywarn-unused-import)`.
+Rule 2 finds `(projD, Compile, *)`,
+Rule 3 finds `(projD, *, console)`,
+and Rule 4 finds `(ThisBuild, *, *)`.
+Rule 1 selects `(projD, Compile, *)`
+because it has the subproject axis `projD`, and the configuration axis has higher
+precedence over the task axis.
+
+Next, `scalacOptions in Compile` refers to `scalacOptions.value`,
+we next need to find a delegate for `(projD, *, *)`.
+Rule 4 finds `(ThisBuild, *, *)` and thus it resolves to `List(-Ywarn-unused-import)`.
+
+### Inspect command lists the delegates
+
+You might want to look up quickly what is going on.
+This is where `inspect` can be used.
+
+```
+Hello> inspect projD/compile:console::scalacOptions
+[info] Task: scala.collection.Seq[java.lang.String]
+[info] Description:
+[info]  Options for the Scala compiler.
+[info] Provided by:
+[info]  {file:/Users/xxxx/}projD/compile:scalacOptions
+[info] Defined at:
+[info]  /Users/xxxx/build.sbt:47
+[info] Reverse dependencies:
+[info]  projD/compile:console
+[info]  projD/*:test
+[info] Delegates:
+[info]  projD/compile:console::scalacOptions
+[info]  projD/compile:scalacOptions
+[info]  projD/*:console::scalacOptions
+[info]  projD/*:scalacOptions
+[info]  {.}/compile:console::scalacOptions
+[info]  {.}/compile:scalacOptions
+[info]  {.}/*:console::scalacOptions
+[info]  {.}/*:scalacOptions
+[info]  */compile:console::scalacOptions
+[info]  */compile:scalacOptions
+[info]  */*:console::scalacOptions
+[info]  */*:scalacOptions
+....
+```
+
+Note how "Provided by" shows that `projD/compile:console::scalacOptions`
+is provided by `projD/compile:scalacOptions`.
+Also under "Delegates", *all* of the possible delegate candidates
+listed in the order of precedence!
+
+- All the scopes with `projD` scoping on the subproject axis are listed first,
+  then `ThisBuild` (`{.}`), and `*`.
+- Within a subproject, scopes with `Compile` scoping on the configuration axis
+  are listed first, then falls back to `*`.
+- Finally, the task axis scoping lists the given task scoping `console::` and the one without.
+
+### .value lookup vs dynamic dispatch
+
+- Rule 5: A delegated scoped key and its dependent settings/tasks are evaluated without carrying the original context.
+
+Note that scope delegation feels similar to class inheritance in an object-oriented language,
+but there's a difference. In an OO language like Scala if there's a method named
+`drawShape` on a trait `Shape`, its subclasses can override the behavior even when `drawShape` is used
+by other methods in the `Shape` trait, which is called dynamic dispatch.
+
+In sbt, however, scope delegation can delegate a scope to a more general scope,
+like a project-level setting to a build-level settings,
+but that build-level setting cannot refer to the project-level setting.
+
+**Exercise E**: Given the following build definition:
+
+```scala
+lazy val root = (project in file("."))
+  .settings(
+    inThisBuild(List(
+      organization := "com.example",
+      scalaVersion := "2.12.2",
+      version      := scalaVersion.value + "_0.1.0"
+    )),
+    name := "Hello"
+  )
+
+lazy val projE = (project in file("e"))
+  .settings(
+    scalaVersion := "2.11.11"
+  )
+```
+
+What will `projE/version` return?
+
+1. `"2.12.2_0.1.0"`
+2. `"2.11.11_0.1.0"`
+3. something else?
+
+The answer is `2.12.2_0.1.0`.
+`projD/version` delegates to `version in ThisBuild`,
+which depends on `scalaVersion in ThisBuild`.
+Because of this reason, build level setting should be limited mostly to simple value assignments.
+
+**Exercise F**: Given the following build definition:
+
+```scala
+scalacOptions in ThisBuild += "-D0"
+scalacOptions += "-D1"
+
+lazy val projF = (project in file("f"))
+  .settings(
+    scalacOptions in compile += "-D2",
+    scalacOptions in Compile += "-D3",
+    scalacOptions in (Compile, compile) += "-D4",
+    test := {
+      println("bippy" + (scalacOptions in (Compile, compile)).value.mkString)
+    }
+  )
+```
+
+What will `projF/test` show?
+
+1. `"bippy-D4"`
+2. `"bippy-D2-D4"`
+3. `"bippy-D0-D3-D4"`
+4. something else?
+
+The answer is `"bippy-D0-D3-D4"`. This is a variation of an exercise
+originally created by [Paul Phillips](https://gist.github.com/paulp/923154ab2d61882195cdea47483592ca).
+
+It's a great demonstration of all the rules because `someKey += "x"` expands to
+
+```scala
+someKey += {
+  val old = someKey.value
+  old :+ "x"
+}
+```
+
+Retrieving the old value would cause delegation, and due to Rule 5,
+it will go to another scoped key.
+Let's get rid of `+=` first, and annotate the delegates for old values:
+
+```scala
+scalacOptions in ThisBuild := {
+  // scalacOptions in Global <- Rule 4
+  val old = (scalacOptions in ThisBuild).value
+  old :+ "-D0"
+}
+
+scalacOptions := {
+  // scalacOptions in ThisBuild <- Rule 4
+  val old = scalacOptions.value
+  old :+ "-D1"
+}
+
+lazy val projF = (project in file("f"))
+  .settings(
+    scalacOptions in compile := {
+      // scalacOptions in ThisBuild <- Rules 2 and 4
+      val old = (scalacOptions in compile).value
+      old :+ "-D2"
+    },
+    scalacOptions in Compile := {
+      // scalacOptions in ThisBuild <- Rules 3 and 4
+      val old = (scalacOptions in Compile).value
+      old :+ "-D3"
+    },
+    scalacOptions in (Compile, compile) := {
+      // scalacOptions in (projF, Compile) <- Rules 1 and 2
+      val old = (scalacOptions in (Compile, compile)).value
+      old :+ "-D4"
+    },
+    test := {
+      println("bippy" + (scalacOptions in (Compile, compile)).value.mkString)
+    }
+  )
+```
+
+This becomes:
+
+```scala
+scalacOptions in ThisBuild := {
+  Nil :+ "-D0"
+}
+
+scalacOptions := {
+  List("-D0") :+ "-D1"
+}
+
+lazy val projF = (project in file("f"))
+  .settings(
+    scalacOptions in compile := List("-D0") :+ "-D2",
+    scalacOptions in Compile := List("-D0") :+ "-D3",
+    scalacOptions in (Compile, compile) := List("-D0", "-D3") :+ "-D4",
+    test := {
+      println("bippy" + (scalacOptions in (Compile, compile)).value.mkString)
+    }
+  )
 ```
 
 
@@ -3294,41 +3718,41 @@ In short, you need two publicly available URLs:
 
 The [OSSRH Guide][sonatype-ossrhguide] walks you through the required 
 process of setting up the account with Sonatype. It’s as simple as 
-[creating a Sonatype's JIRA account][sonatype-signup] and afterwards creating a 
-[New Project ticket][sonatype-new-project]. When creating the account try to 
-use the same domain in your email address as the project is hosted on. I guess 
-it makes it easier to validate the relationship with the groupId requested in 
-the ticket, but is not the only method used to confirm the ownership. 
+[creating a Sonatype's JIRA account][sonatype-signup] and then a 
+[New Project ticket][sonatype-new-project]. When creating the account, try to 
+use the same domain in your email address that the project is hosted on.
+It makes it easier for Sonatype to validate the relationship with the groupId requested in 
+the ticket, but it is not the only method used to confirm the ownership. 
 
-Creation of the New Project ticket is as simple as:
+Creation of the *New Project ticket* is as simple as:
 
 * providing the name of the library in the ticket’s subject,
-* naming the groupId you want to use for distributing the library (make sure 
-it is matching the root package of your code). Sonatype provides you with 
+* naming the groupId for distributing the library (make sure 
+it matches the root package of your code). Sonatype provides
 additional hints on choosing the right groupId for publishing your library in 
 [Choosing your coordinates guide][sonatype-coordinates].
 * providing the SCM and Project URLs to the source code and homepage of the 
 library.
 
-*Note:* After creating you Sonatype account (on their JIRA) you can login 
-using the same credentials to the [Nexus Repository Manager][sonatype-nexus] 
-which is not required to be used in this guide, but can be used later to check 
-on the published artifacts.
+After creating your Sonatype account on JIRA, you can log in 
+to the [Nexus Repository Manager][sonatype-nexus] using the same credentials,
+although this is not required in the guide, it can be helpful later to check 
+on published artifacts.
 
-Notice that Sonatype advises that responding to the New Project ticket might 
-take up to two business days, but in my case it was few minutes.
+> *Note:* Sonatype advises that responding to a **New Project ticket** might 
+take up to two business days, but in my case it was a few minutes.
 
 ### SBT setup
 
-To address [Sonatype's requirements for publishing to the central repository]
-[sonatype-requirements] and to simplify the publishing process I recommend you
-to use community plugins [sbt-pgp for signing the files with GPG/PGP][sbt-pgp] 
-and [sbt-sonatype for publishing to Sonatype repository][sbt-sonatype]. 
+To address Sonatype's [requirements]
+[sonatype-requirements] for publishing to the central repository and to simplify the publishing process, you can
+use two community plugins. The [sbt-pgp plugin][sbt-pgp] can sign the files with GPG/PGP
+and [sbt-sonatype][sbt-sonatype] can publish to a Sonatype repository. 
 
 #### First - PGP Signatures
 
-Having the PGP key that you want to use, you need to sign the artifacts 
-published to the Sonatype repository with the [sbt-pgp plugin][sbt-pgp]. Follow 
+With the PGP key you want to use, you can sign the artifacts 
+you want to publish to the Sonatype repository with the [sbt-pgp plugin][sbt-pgp]. Follow 
 the instructions for the plugin and you'll have PGP signed artifacts in no 
 time.
 
@@ -3380,7 +3804,7 @@ If it fails to run the `SendKey` command you can try another server (for
 example: hkp://keyserver.ubuntu.com). A list of servers can be found at 
 [the status page](https://sks-keyservers.net/status/) of sks-keyservers.net.
 
-### Second - configure sonatype integration 
+### Second - Configure Sonatype integration 
 
 The credentials for your Sonatype OSSRH account need to be stored
 somewhere safe (*e.g. NOT in the repository*). Common convention is a 
@@ -3497,12 +3921,12 @@ Jira account)
 After publishing you have to follow the
 [release workflow of Nexus](http://central.sonatype.org/pages/releasing-the-deployment.html).
 
-> *Note:* the sbt-sonatype plugin can be used also for other non-sonatype 
+> *Note:* the sbt-sonatype plugin can also be used to publish to other non-sonatype 
 repositories
 
 #### Publishing tips'n'tricks
 
-Use staged releases for testing across large projects of independent releases 
+Use staged releases to test across large projects of independent releases 
 before pushing the full project.
 
 > *Note:* An error message of `PGPException: checksum mismatch at 0 of 20`
@@ -3516,9 +3940,9 @@ passphrase.
 
 > *Note:* sbt-release is a third-party plugin meaning it is not covered by Lightbend subscription.
 
-To automate the above publishing approach with the [sbt-release plugin]
+To automate the publishing approach above with the [sbt-release plugin]
 [sbt-release], you should simply add the publishing commands as steps in the
-`releaseProcess` option:
+`releaseProcess` task:
 
 ```
 ...
@@ -3669,7 +4093,7 @@ c ++= cTaskDefs.value
 
 ### Migrating from the tuple enrichments
 
-As mentioned above, there are two tupe enrichments `.apply` and `.map`. The difference used to be for whether
+As mentioned above, there are two tuple enrichments `.apply` and `.map`. The difference used to be for whether
 you're defining a setting for a `SettingKey` or a `TaskKey`, you use `.apply` for the former and `.map` for the
 latter:
 
@@ -3862,7 +4286,7 @@ This is the beta-2 release of sbt 1.0.
 
 #### Features, fixes, changes with compatibility implications
 
-We are working with Scala Center to provide [an automatic migration tool](https://github.com/scalacenter/sbt-migration-rewrites).
+The Scala Center is working with Lightbend to provide [an automatic migration tool](https://github.com/scalacenter/sbt-migration-rewrites).
 
 - sbt 1.0 renames `Global` as scope component to `Zero` to disambiguate from `GlobalScope`. [@eed3si9n][@eed3si9n]
 
@@ -3893,7 +4317,7 @@ We are working with Scala Center to provide [an automatic migration tool](https:
 
 #### Static validation of build.sbt
 
-sbt 1.0 prohibits `.value` calls inside the bodies of if and else expressions in a task. `@sbtUnchecked` annotation can be used to override the check.
+sbt 1.0 prohibits `.value` calls inside the bodies of if expressions and anonymous functions in a task, `@sbtUnchecked` annotation can be used to override the check.
 
 The static validation also catches if you forget to call `.value` in a body of a task.
 
@@ -7988,7 +8412,24 @@ the action to run with `+`. For example:
 
 A typical way to use this feature is to do development on a single Scala
 version (no `+` prefix) and then cross-build (using `+`) occasionally
-and when releasing. The ultimate purpose of `+` is to cross-publish your
+and when releasing.
+
+You can use `++ <version>` to temporarily switch the Scala version currently
+being used to build.
+For example:
+
+```
+> ++ 2.12.2
+[info] Setting version to 2.12.2
+> ++ 2.11.11
+[info] Setting version to 2.11.11
+> compile
+```
+`<version>` should be either a version for Scala published to a repository or
+the path to a Scala home directory, as in `++ /path/to/scala/home`.
+See [Command Line Reference][Command-Line-Reference] for details.
+
+The ultimate purpose of `+` is to cross-publish your
 project. That is, by doing:
 
 ```
@@ -8068,16 +8509,6 @@ on the full Scala version:
 A custom function is mainly used when cross-building and a dependency
 isn't available for all Scala versions or it uses a different convention
 than the default.
-
-As a final note, you can use `++ <version>` to temporarily switch the
-Scala version currently being used to build. `<version>` should be
-either a version for Scala published to a repository, as in `++ 2.10.0`
-or the path to a Scala home directory, as in `++ /path/to/scala/home`.
-See [Command Line Reference][Command-Line-Reference] for details.
-
-### Cross building plugins
-
-See [Cross Build Plugins][Cross-Build-Plugins] for cross building plugins.
 
 
   [Basic-Def]: Basic-Def.html
@@ -14455,6 +14886,8 @@ For example, the following task prints the current Scala version and
 then echoes the arguments passed to it on their own line.
 
 ```scala
+import complete.DefaultParsers._
+
 demo := {
   // get the result of parsing
   val args: Seq[String] = spaceDelimited("<arg>").parsed
@@ -16235,8 +16668,7 @@ Here are some current plugin best practices.
 Make sure people can find your plugin. Here are some of the recommended steps:
 
 1. Mention [@scala_sbt](https://twitter.com/scala_sbt) in your announcement, and we will RT it.
-2. Accounce it on [implicit.ly](http://notes.implicit.ly/) using [n8han/herald](https://github.com/n8han/herald).
-3. Send a pull req to [sbt/website](https://github.com/sbt/website) and add your plugin on [the plugins list][Community-Plugins].
+2. Send a pull req to [sbt/website](https://github.com/sbt/website) and add your plugin on [the plugins list][Community-Plugins].
 
 ### Don't use default package
 
@@ -16839,6 +17271,7 @@ env:
 script:
   - sbt ++$TRAVIS_SCALA_VERSION -Dfile.encoding=UTF8 -J-XX:ReservedCodeCacheSize=256M "$TEST_COMMAND"
 
+before_cache:
   # Tricks to avoid unnecessary cache updates
   - find $HOME/.sbt -name "*.lock" | xargs rm
   - find $HOME/.ivy2 -name "ivydata-*.properties" | xargs rm
@@ -17099,14 +17532,32 @@ Template applied in ./hello
 
 This ran the template [scala/scala-seed.g8](https://github.com/scala/scala-seed.g8) using [Giter8][giter8], prompted for values for "name" (which has a default value of "hello", which we accepted hitting `[Enter]`), and created a build under `./hello`.
 
-`scala-seed` is the official template for a "minimal" Scala project, but it's definitely not the only one out there. We expect other templates to emerge for other purposes, e.g. web or backend applications. 
+`scala-seed` is the official template for a "minimal" Scala project, but it's definitely not the only one out there.
 
 ### Giter8 support
 
 [Giter8][giter8] is a templating project originally started by Nathan Hamblen in 2010, and now maintained by the [foundweekends][foundweekends] project.
-The unique aspect of Giter8 is that it uses GitHub (or any other git repository) to host the templates, so it allows anyone to participate in template creation.
+The unique aspect of Giter8 is that it uses GitHub (or any other git repository) to host the templates, so it allows anyone to participate in template creation. Here are some of the templates provided by official sources:
 
-sbt provides out-of-the-box support for Giter8 templates by shipping with a template resolver for Giter8.
+- [foundweekends/giter8.g8](https://github.com/foundweekends/giter8.g8)                 (A template for Giter8 templates)
+- [scala/scala-seed.g8](https://github.com/scala/scala-seed.g8)                         (Seed template for Scala)
+- [scala/hello-world.g8](https://github.com/scala/hello-world.g8)                       (A template to demonstrate a minimal Scala application)
+- [akka/akka-scala-seed.g8](https://github.com/akka/akka-scala-seed.g8)                 (A minimal seed template for an Akka with Scala build
+)
+- [akka/akka-java-seed.g8](https://github.com/akka/akka-java-seed.g8)                   (A minimal seed template for an Akka in Java
+)
+- [akka/hello-akka.g8](https://github.com/akka/hello-akka.g8)                           (Simple Akka application)
+- [playframework/play-scala-seed.g8](https://github.com/playframework/play-scala-seed.g8) (Play Scala Seed Template)
+- [playframework/play-java-seed.g8](https://github.com/playframework/play-java-seed.g8)   (Play Java Seed template)
+- [lagom/lagom-scala.g8](https://github.com/lagom/lagom-scala.g8/)                      (A [Lagom](https://www.lagomframework.com/) Scala seed template for sbt)
+- [lagom/lagom-java.g8](https://github.com/lagom/lagom-java.g8/)                        (A [Lagom](https://www.lagomframework.com/) Java seed template for sbt)
+- [scala-native/scala-native.g8](https://github.com/scala-native/scala-native.g8)       (Scala Native)
+- [scala-native/sbt-crossproject.g8](https://github.com/scala-native/sbt-crossproject.g8) (sbt-crosspoject)
+- [http4s/http4s.g8](https://github.com/http4s/http4s.g8)                               (http4s services)
+- [unfiltered/unfiltered.g8](https://github.com/unfiltered/unfiltered.g8)               ([Unfiltered](http://unfiltered.ws/) application)
+- [scalatra/scalatra-sbt.g8](https://github.com/scalatra/scalatra-sbt.g8)               (Basic Scalatra template using SBT 0.13.x.)
+
+For more, see [Giter8 templates](https://github.com/foundweekends/giter8/wiki/giter8-templates) on the Giter8 wiki. sbt provides out-of-the-box support for Giter8 templates by shipping with a template resolver for Giter8.
 
 #### How to create a Giter8 template
 
@@ -17725,6 +18176,12 @@ resourceGenerators in Compile += Def.task {
 }.taskValue
 ```
 
+Executing `run` (or `package`, not `compile`) will add a file `demo` to
+`resourceManaged`, which is `target/scala-*/resource_managed"`. By default,
+generated resources are not included in the packaged source artifact. To do so,
+add them as you would other mappings.
+See [Adding files to a package][modify-package-contents].
+
 As a specific example, the following generates a properties file
 `myapp.properties` containing the application name and version:
 
@@ -17739,10 +18196,6 @@ resourceGenerators in Compile += Def.task {
 
 Change `Compile` to `Test` to make it a test resource. Normally, you
 would only want to generate resources when necessary and not every run.
-
-By default, generated resources are not included in the packaged source
-artifact. To do so, add them as you would other mappings. See
-[Adding files to a package][modify-package-contents].
 
 
   [Inspecting-Settings]: Inspecting-Settings.html
