@@ -1,3 +1,10 @@
+---
+  title: sbt Reference Manual
+  ntags: [scala, sbt]
+---
+
+Preface
+-------
 
   [Getting-Started]: Getting-Started.html
   [Setup]: Setup.html
@@ -10,8 +17,6 @@
   [Testing]: Testing.html
   [Parallel-Execution]: Parallel-Execution.html
 
-sbt Reference Manual
-====================
 
 sbt is a build tool for Scala, Java, and
 [more](https://github.com/d40cht/sbt-cpp). It requires Java 1.8 or
@@ -17409,7 +17414,7 @@ In `project/plugins.sbt`:
 sys.props.get("plugin.version") match {
   case Some(x) => addSbtPlugin("com.eed3si9n" % "sbt-assembly" % x)
   case _ => sys.error("""|The system property 'plugin.version' is not defined.
-                         |Specify this property using the scriptedLaunchOpts -D.""".stripMargin)
+Specify this property using the scriptedLaunchOpts -D.""".stripMargin)
 }
 ```
 
@@ -19996,11 +20001,11 @@ lazy val root = (project in file("."))
 
     // define the statements initially evaluated when entering 'console', 'consoleQuick', or 'consoleProject'
     initialCommands := """
-      |import System.{currentTimeMillis => now}
-      |def time[T](f: => T): T = {
-      |  val start = now
-      |  try { f } finally { println("Elapsed: " + (now - start)/1000.0 + " s") }
-      |}""".stripMargin,
+import System.{currentTimeMillis => now}
+def time[T](f: => T): T = {
+  val start = now
+  try { f } finally { println("Elapsed: " + (now - start)/1000.0 + " s") }
+}""".stripMargin,
 
     // set the initial commands when entering 'console' or 'consoleQuick', but not 'consoleProject'
     initialCommands in console := "import myproject._",
@@ -22254,7 +22259,7 @@ Enumeration      := {   "name": ID,
                      (, "symbols": [ Symbol* ])? }
 
 Symbol           := ID
-                  | {   "name": ID
+ {   "name": ID
                      (, "doc": string constant)? }
 
 Field            := {   "name": ID,
@@ -23901,7 +23906,7 @@ To use a nightly build, the instructions are the same for
 [normal manual setup][Manual-Installation] except:
 
 1.  Download the launcher jar from one of the subdirectories of
-    |nightly-launcher|. They should be listed in chronological order, so
+nightly-launcher|. They should be listed in chronological order, so
     the most recent one will be last.
 2.  The version number is the name of the subdirectory and is of the
     form `1.0.0-M6.x-yyyyMMdd-HHmmss`. Use this in a build.properties

@@ -14,7 +14,7 @@ sbt Reference Manual
 ====================
 
 sbt is a build tool for Scala, Java, and
-[more](https://github.com/d40cht/sbt-cpp). It requires Java 1.6 or
+[more](https://github.com/d40cht/sbt-cpp). It requires Java 1.8 or
 later.
 
 ### Install
@@ -3399,6 +3399,14 @@ If you'd like to submit your plugin, please follow these instructions:
 ### Cross building plugins from sbt 0.13
 
 See [Cross Build Plugins][Cross-Build-Plugins].
+
+### Plugins available for sbt 1.0 (including RC-x)
+
+- sbt-bintray 0.5.0: <https://github.com/sbt/sbt-bintray>
+- sbt-pgp 1.1.0-M1: <http://www.scala-sbt.org/sbt-pgp/>
+- sbt-protobuf 0.6.2 <https://github.com/sbt/sbt-protobuf>
+- sbt-contraband 0.3.0-M9: <http://www.scala-sbt.org/contraband/>
+- sbt-git 0.9.3: <https://github.com/sbt/sbt-git>
 
 ### Plugins available for sbt 1.0.0-M6
 
