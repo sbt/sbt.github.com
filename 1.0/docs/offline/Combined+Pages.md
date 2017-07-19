@@ -3455,6 +3455,8 @@ your plugin to the list.
 
 #### Code generator plugins
 
+- sbt-buildinfo (Generate Scala source for any settings):
+    <https://github.com/sbt/sbt-buildinfo>
 - sbt-protobuf (Google Protocol Buffers):
     <https://github.com/sbt/sbt-protobuf>
 - sbt-contraband (Generate pseudo-case class from GraphQL schema):
