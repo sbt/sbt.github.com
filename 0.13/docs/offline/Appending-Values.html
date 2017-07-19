@@ -68,7 +68,7 @@ course:
 or another key’s value, the value it depends on must exist. If it does
 not, sbt will complain. It might say <em>“Reference to undefined setting“</em>,
 for example. When this happens, be sure you’re using the key in the
-[scope][Scopes] that defines it.
+<a href="Scopes.html">scope</a> that defines it.
 </p><p>It’s possible to create cycles, which is an error; sbt will tell you if
 you do this.
 </p><h4 id="Tasks+based+on+other+keys%E2%80%99+values">Tasks based on other keys’ values<a href="#Tasks+based+on+other+keys%E2%80%99+values" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>You can compute values of some tasks or settings to define or append a value for another task. It’s done by using <code>Def.task</code> and <code>taskValue</code> as an argument to <code>:=</code>, <code>+=</code>, or <code>++=</code>.

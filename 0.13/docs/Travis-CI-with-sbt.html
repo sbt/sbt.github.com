@@ -225,6 +225,7 @@ env:
 script:
   - sbt ++$TRAVIS_SCALA_VERSION -Dfile.encoding=UTF8 -J-XX:ReservedCodeCacheSize=256M &quot;$TEST_COMMAND&quot;
 
+before_cache:
   # Tricks to avoid unnecessary cache updates
   - find $HOME/.sbt -name &quot;*.lock&quot; | xargs rm
   - find $HOME/.ivy2 -name &quot;ivydata-*.properties&quot; | xargs rm

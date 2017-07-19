@@ -1682,6 +1682,8 @@ allowing multiple more-specific scopes to inherit the value.
 We will disscuss [scope delegation][Scope-Delegation] in detail later.
 
 
+  [Scopes]: Scopes.html
+
 Appending values
 ----------------
 
@@ -3658,6 +3660,8 @@ your plugin to the list.
     <https://github.com/daniel-shuy/scripted-scalatest-sbt-plugin>
 -   sbt-flaky (detects flaky tests by running tests multiple times):
     <https://github.com/otrebski/sbt-flaky>
+-   sbt-jupiter-interface (test framework for JUnit Jupiter)
+    <https://github.com/maichler/sbt-jupiter-interface>
 
 #### Code coverage plugins
 
@@ -3675,7 +3679,7 @@ your plugin to the list.
 #### Static code analysis plugins
 
 -   wartremover (WartRemover - Scala static analysis):
-    <https://github.com/puffnfresh/wartremover>
+    <https://github.com/wartremover/wartremover>
 -   cpd4sbt (copy/paste detection, works for Scala, too):
     <https://github.com/sbt/cpd4sbt>
 -   sbt-findbugs-plugin (FindBugs - static analysis for Java code):
@@ -4743,7 +4747,7 @@ c ++= cTaskDefs.value
 
 ### Migrating from the tuple enrichments
 
-As mentioned above, there are two tupe enrichments `.apply` and `.map`. The difference used to be for whether
+As mentioned above, there are two tuple enrichments `.apply` and `.map`. The difference used to be for whether
 you're defining a setting for a `SettingKey` or a `TaskKey`, you use `.apply` for the former and `.map` for the
 latter:
 
@@ -8803,7 +8807,24 @@ the action to run with `+`. For example:
 
 A typical way to use this feature is to do development on a single Scala
 version (no `+` prefix) and then cross-build (using `+`) occasionally
-and when releasing. The ultimate purpose of `+` is to cross-publish your
+and when releasing.
+
+You can use `++ <version>` to temporarily switch the Scala version currently
+being used to build.
+For example:
+
+```
+> ++ 2.12.2
+[info] Setting version to 2.12.2
+> ++ 2.11.11
+[info] Setting version to 2.11.11
+> compile
+```
+`<version>` should be either a version for Scala published to a repository or
+the path to a Scala home directory, as in `++ /path/to/scala/home`.
+See [Command Line Reference][Command-Line-Reference] for details.
+
+The ultimate purpose of `+` is to cross-publish your
 project. That is, by doing:
 
 ```
@@ -8883,12 +8904,6 @@ on the full Scala version:
 A custom function is mainly used when cross-building and a dependency
 isn't available for all Scala versions or it uses a different convention
 than the default.
-
-As a final note, you can use `++ <version>` to temporarily switch the
-Scala version currently being used to build. `<version>` should be
-either a version for Scala published to a repository, as in `++ 2.10.0`
-or the path to a Scala home directory, as in `++ /path/to/scala/home`.
-See [Command Line Reference][Command-Line-Reference] for details.
 
 
   [Basic-Def]: Basic-Def.html
@@ -17033,8 +17048,7 @@ Here are some current plugin best practices.
 Make sure people can find your plugin. Here are some of the recommended steps:
 
 1. Mention [@scala_sbt](https://twitter.com/scala_sbt) in your announcement, and we will RT it.
-2. Accounce it on [implicit.ly](http://notes.implicit.ly/) using [n8han/herald](https://github.com/n8han/herald).
-3. Send a pull req to [sbt/website](https://github.com/sbt/website) and add your plugin on [the plugins list][Community-Plugins].
+2. Send a pull req to [sbt/website](https://github.com/sbt/website) and add your plugin on [the plugins list][Community-Plugins].
 
 ### Don't use default package
 
@@ -17637,6 +17651,7 @@ env:
 script:
   - sbt ++$TRAVIS_SCALA_VERSION -Dfile.encoding=UTF8 -J-XX:ReservedCodeCacheSize=256M "$TEST_COMMAND"
 
+before_cache:
   # Tricks to avoid unnecessary cache updates
   - find $HOME/.sbt -name "*.lock" | xargs rm
   - find $HOME/.ivy2 -name "ivydata-*.properties" | xargs rm
@@ -18518,6 +18533,12 @@ resourceGenerators in Compile += Def.task {
 }.taskValue
 ```
 
+Executing `run` (or `package`, not `compile`) will add a file `demo` to
+`resourceManaged`, which is `target/scala-*/resource_managed"`. By default,
+generated resources are not included in the packaged source artifact. To do so,
+add them as you would other mappings.
+See [Adding files to a package][modify-package-contents].
+
 As a specific example, the following generates a properties file
 `myapp.properties` containing the application name and version:
 
@@ -18532,10 +18553,6 @@ resourceGenerators in Compile += Def.task {
 
 Change `Compile` to `Test` to make it a test resource. Normally, you
 would only want to generate resources when necessary and not every run.
-
-By default, generated resources are not included in the packaged source
-artifact. To do so, add them as you would other mappings. See
-[Adding files to a package][modify-package-contents].
 
 
   [Inspecting-Settings]: Inspecting-Settings.html

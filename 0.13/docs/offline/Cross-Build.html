@@ -74,7 +74,19 @@ the action to run with <code>+</code>. For example:
 </p><pre><code class="">&gt; + package
 </code></pre><p>A typical way to use this feature is to do development on a single Scala
 version (no <code>+</code> prefix) and then cross-build (using <code>+</code>) occasionally
-and when releasing. The ultimate purpose of <code>+</code> is to cross-publish your
+and when releasing.
+</p><p>You can use <code>++ &lt;version&gt;</code> to temporarily switch the Scala version currently
+being used to build.
+For example:
+</p><pre><code class="">&gt; ++ 2.12.2
+[info] Setting version to 2.12.2
+&gt; ++ 2.11.11
+[info] Setting version to 2.11.11
+&gt; compile
+</code></pre><p><code>&lt;version&gt;</code> should be either a version for Scala published to a repository or
+the path to a Scala home directory, as in <code>++ /path/to/scala/home</code>.
+See <a href="Command-Line-Reference.html">Command Line Reference</a> for details.
+</p><p>The ultimate purpose of <code>+</code> is to cross-publish your
 project. That is, by doing:
 </p><pre><code class="">&gt; + publish
 </code></pre><p>you make your project available to users for different versions of
@@ -122,11 +134,6 @@ on the full Scala version:
 </code></pre><p>A custom function is mainly used when cross-building and a dependency
 isn’t available for all Scala versions or it uses a different convention
 than the default.
-</p><p>As a final note, you can use <code>++ &lt;version&gt;</code> to temporarily switch the
-Scala version currently being used to build. <code>&lt;version&gt;</code> should be
-either a version for Scala published to a repository, as in <code>++ 2.10.0</code>
-or the path to a Scala home directory, as in <code>++ /path/to/scala/home</code>.
-See <a href="Command-Line-Reference.html">Command Line Reference</a> for details.
 </p><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>

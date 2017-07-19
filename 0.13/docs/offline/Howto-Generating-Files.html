@@ -96,7 +96,12 @@ resources. This basic structure looks like:
 </p><pre><code class="prettyprint lang-scala">resourceGenerators in Compile += Def.task {
   makeSomeResources((resourceManaged in Compile).value / &quot;demo&quot;)
 }.taskValue
-</code></pre><p>As a specific example, the following generates a properties file
+</code></pre><p>Executing <code>run</code> (or <code>package</code>, not <code>compile</code>) will add a file <code>demo</code> to
+<code>resourceManaged</code>, which is <code>target/scala-*/resource_managed&quot;</code>. By default,
+generated resources are not included in the packaged source artifact. To do so,
+add them as you would other mappings.
+See <a href="Howto-Package.html#modify-package-contents">Adding files to a package</a>.
+</p><p>As a specific example, the following generates a properties file
 <code>myapp.properties</code> containing the application name and version:
 </p><pre><code class="prettyprint lang-scala">resourceGenerators in Compile += Def.task {
   val file = (resourceManaged in Compile).value / &quot;demo&quot; / &quot;myapp.properties&quot;
@@ -106,9 +111,6 @@ resources. This basic structure looks like:
 }.taskValue
 </code></pre><p>Change <code>Compile</code> to <code>Test</code> to make it a test resource. Normally, you
 would only want to generate resources when necessary and not every run.
-</p><p>By default, generated resources are not included in the packaged source
-artifact. To do so, add them as you would other mappings. See
-<a href="Howto-Package.html#modify-package-contents">Adding files to a package</a>.
 </p><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>

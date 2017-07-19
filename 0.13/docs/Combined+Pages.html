@@ -1099,7 +1099,7 @@ course:
 or another key’s value, the value it depends on must exist. If it does
 not, sbt will complain. It might say <em>“Reference to undefined setting“</em>,
 for example. When this happens, be sure you’re using the key in the
-[scope][Scopes] that defines it.
+<a href="Scopes.html">scope</a> that defines it.
 </p><p>It’s possible to create cycles, which is an error; sbt will tell you if
 you do this.
 </p><h4 id="Tasks+based+on+other+keys%E2%80%99+values">Tasks based on other keys’ values<a href="#Tasks+based+on+other+keys%E2%80%99+values" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>You can compute values of some tasks or settings to define or append a value for another task. It’s done by using <code>Def.task</code> and <code>taskValue</code> as an argument to <code>:=</code>, <code>+=</code>, or <code>++=</code>.
@@ -2352,6 +2352,8 @@ your plugin to the list.
 <a href="https://github.com/daniel-shuy/scripted-scalatest-sbt-plugin">https://github.com/daniel-shuy/scripted-scalatest-sbt-plugin</a>
 </li><li>sbt-flaky (detects flaky tests by running tests multiple times):
 <a href="https://github.com/otrebski/sbt-flaky">https://github.com/otrebski/sbt-flaky</a>
+</li><li>sbt-jupiter-interface (test framework for JUnit Jupiter)
+<a href="https://github.com/maichler/sbt-jupiter-interface">https://github.com/maichler/sbt-jupiter-interface</a>
 </li></ul><h4 id="Code+coverage+plugins">Code coverage plugins<a href="#Code+coverage+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>sbt-scct:
 <a href="https://github.com/sqality/sbt-scct">https://github.com/sqality/sbt-scct</a>
 </li><li>sbt-scoverage:
@@ -2363,7 +2365,7 @@ your plugin to the list.
 </li><li>sbt-clover:
 <a href="https://github.com/shanbin/sbt-clover">https://github.com/shanbin/sbt-clover</a>
 </li></ul><h4 id="Static+code+analysis+plugins">Static code analysis plugins<a href="#Static+code+analysis+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>wartremover (WartRemover - Scala static analysis):
-<a href="https://github.com/puffnfresh/wartremover">https://github.com/puffnfresh/wartremover</a>
+<a href="https://github.com/wartremover/wartremover">https://github.com/wartremover/wartremover</a>
 </li><li>cpd4sbt (copy/paste detection, works for Scala, too):
 <a href="https://github.com/sbt/cpd4sbt">https://github.com/sbt/cpd4sbt</a>
 </li><li>sbt-findbugs-plugin (FindBugs - static analysis for Java code):
@@ -3101,7 +3103,7 @@ c &lt;++= cTaskDefs
 </p><pre><code class="prettyprint lang-scala">a := aTaskDef.value
 b += bTaskDef.value
 c ++= cTaskDefs.value
-</code></pre><h3 id="Migrating+from+the+tuple+enrichments">Migrating from the tuple enrichments<a href="#Migrating+from+the+tuple+enrichments" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>As mentioned above, there are two tupe enrichments <code>.apply</code> and <code>.map</code>. The difference used to be for whether
+</code></pre><h3 id="Migrating+from+the+tuple+enrichments">Migrating from the tuple enrichments<a href="#Migrating+from+the+tuple+enrichments" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>As mentioned above, there are two tuple enrichments <code>.apply</code> and <code>.map</code>. The difference used to be for whether
 you’re defining a setting for a <code>SettingKey</code> or a <code>TaskKey</code>, you use <code>.apply</code> for the former and <code>.map</code> for the
 latter:
 </p><pre><code class="prettyprint lang-scala">val sett1 = settingKey[String](&quot;SettingKey 1&quot;)
@@ -5772,7 +5774,19 @@ the action to run with <code>+</code>. For example:
 </p><pre><code class="">&gt; + package
 </code></pre><p>A typical way to use this feature is to do development on a single Scala
 version (no <code>+</code> prefix) and then cross-build (using <code>+</code>) occasionally
-and when releasing. The ultimate purpose of <code>+</code> is to cross-publish your
+and when releasing.
+</p><p>You can use <code>++ &lt;version&gt;</code> to temporarily switch the Scala version currently
+being used to build.
+For example:
+</p><pre><code class="">&gt; ++ 2.12.2
+[info] Setting version to 2.12.2
+&gt; ++ 2.11.11
+[info] Setting version to 2.11.11
+&gt; compile
+</code></pre><p><code>&lt;version&gt;</code> should be either a version for Scala published to a repository or
+the path to a Scala home directory, as in <code>++ /path/to/scala/home</code>.
+See <a href="Command-Line-Reference.html">Command Line Reference</a> for details.
+</p><p>The ultimate purpose of <code>+</code> is to cross-publish your
 project. That is, by doing:
 </p><pre><code class="">&gt; + publish
 </code></pre><p>you make your project available to users for different versions of
@@ -5820,11 +5834,6 @@ on the full Scala version:
 </code></pre><p>A custom function is mainly used when cross-building and a dependency
 isn’t available for all Scala versions or it uses a different convention
 than the default.
-</p><p>As a final note, you can use <code>++ &lt;version&gt;</code> to temporarily switch the
-Scala version currently being used to build. <code>&lt;version&gt;</code> should be
-either a version for Scala published to a repository, as in <code>++ 2.10.0</code>
-or the path to a Scala home directory, as in <code>++ /path/to/scala/home</code>.
-See <a href="Command-Line-Reference.html">Command Line Reference</a> for details.
 </p><h2 id="Interacting+with+the+Configuration+System">Interacting with the Configuration System<a href="#Interacting+with+the+Configuration+System" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Central to sbt is the new configuration system, which is designed to
 enable extensive customization. The goal of this page is to explain the
 general model behind the configuration system and how to work with it.
@@ -10903,7 +10912,6 @@ in.
 </p><blockquote><p><strong>Note:</strong> Best practices are evolving, so check back frequently.
 </p></blockquote><h3 id="Get+your+plugins+known">Get your plugins known<a href="#Get+your+plugins+known" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Make sure people can find your plugin. Here are some of the recommended steps:
 </p><ol><li>Mention <a href="https://twitter.com/scala_sbt">@scala_sbt</a> in your announcement, and we will RT it.
-</li><li>Accounce it on <a href="http://notes.implicit.ly/">implicit.ly</a> using <a href="https://github.com/n8han/herald">n8han/herald</a>.
 </li><li>Send a pull req to <a href="https://github.com/sbt/website">sbt/website</a> and add your plugin on <a href="Community-Plugins.html">the plugins list</a>.
 </li></ol><h3 id="Don%E2%80%99t+use+default+package">Don’t use default package<a href="#Don%E2%80%99t+use+default+package" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Users who have their build files in some package will not be able to use
 your plugin if it’s defined in default (no-name) package.
@@ -11275,6 +11283,7 @@ env:
 script:
   - sbt ++$TRAVIS_SCALA_VERSION -Dfile.encoding=UTF8 -J-XX:ReservedCodeCacheSize=256M &quot;$TEST_COMMAND&quot;
 
+before_cache:
   # Tricks to avoid unnecessary cache updates
   - find $HOME/.sbt -name &quot;*.lock&quot; | xargs rm
   - find $HOME/.ivy2 -name &quot;ivydata-*.properties&quot; | xargs rm
@@ -11744,7 +11753,12 @@ resources. This basic structure looks like:
 </p><pre><code class="prettyprint lang-scala">resourceGenerators in Compile += Def.task {
   makeSomeResources((resourceManaged in Compile).value / &quot;demo&quot;)
 }.taskValue
-</code></pre><p>As a specific example, the following generates a properties file
+</code></pre><p>Executing <code>run</code> (or <code>package</code>, not <code>compile</code>) will add a file <code>demo</code> to
+<code>resourceManaged</code>, which is <code>target/scala-*/resource_managed&quot;</code>. By default,
+generated resources are not included in the packaged source artifact. To do so,
+add them as you would other mappings.
+See <a href="Howto-Package.html#modify-package-contents">Adding files to a package</a>.
+</p><p>As a specific example, the following generates a properties file
 <code>myapp.properties</code> containing the application name and version:
 </p><pre><code class="prettyprint lang-scala">resourceGenerators in Compile += Def.task {
   val file = (resourceManaged in Compile).value / &quot;demo&quot; / &quot;myapp.properties&quot;
@@ -11754,9 +11768,6 @@ resources. This basic structure looks like:
 }.taskValue
 </code></pre><p>Change <code>Compile</code> to <code>Test</code> to make it a test resource. Normally, you
 would only want to generate resources when necessary and not every run.
-</p><p>By default, generated resources are not included in the packaged source
-artifact. To do so, add them as you would other mappings. See
-<a href="Howto-Package.html#modify-package-contents">Adding files to a package</a>.
 </p><h2 id="Inspect+the+build">Inspect the build<a href="#Inspect+the+build" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><a name="taskhelp"></a><h3 id="Show+or+search+help+for+a+command%2C+task%2C+or+setting">Show or search help for a command, task, or setting<a href="#Show+or+search+help+for+a+command%2C+task%2C+or+setting" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The <code>help</code> command is used to show available commands and search the
 help for commands, tasks, or settings. If run without arguments, <code>help</code>
 lists the available commands.
