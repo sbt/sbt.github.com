@@ -32,7 +32,7 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.0-M6/sbt-1.0.0-M6.msi
+  [MSI]: https://cocl.us/sbt100rc2msi
   [Setup-Notes]: ../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -58,8 +58,8 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
 如果你在运行 sbt 时遇到任何问题，查看 [安装建议][Setup-Notes] 中的终端编码（terminal encoding），HTTP 代理，JVM 参数。
 
 
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0-M6/sbt-1.0.0-M6.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0-M6/sbt-1.0.0-M6.tgz
+  [ZIP]: https://cocl.us/sbt100rc2zip
+  [TGZ]: https://cocl.us/sbt100rc2tgz
   [Manual-Installation]: Manual-Installation.html
 
 在 Mac 上安装 sbt
@@ -86,9 +86,9 @@ $ port install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.0-M6/sbt-1.0.0-M6.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0-M6/sbt-1.0.0-M6.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0-M6/sbt-1.0.0-M6.tgz
+  [MSI]: https://cocl.us/sbt100rc2msi
+  [ZIP]: https://cocl.us/sbt100rc2zip
+  [TGZ]: https://cocl.us/sbt100rc2tgz
 
 在 Windows 上安装 sbt
 -------------------------
@@ -102,10 +102,10 @@ $ port install sbt
 下载 [msi 安装包][MSI] 并安装。
 
 
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0-M6/sbt-1.0.0-M6.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0-M6/sbt-1.0.0-M6.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.0.0-M6.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.0.0-M6.deb
+  [ZIP]: https://cocl.us/sbt100rc2zip
+  [TGZ]: https://cocl.us/sbt100rc2tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.0.0-RC2.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.0.0-RC2.deb
 
 在 Linux 上安装 sbt
 -----------------------
@@ -208,7 +208,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "hello",
     version := "1.0",
-    scalaVersion := "2.12.1"
+    scalaVersion := "2.12.2"
   )
 ```
 
@@ -219,10 +219,10 @@ lazy val root = (project in file("."))
 
 ### 设置 sbt 版本
 
-你可以通过创建 `hello/project/build.properties` 文件强制指定一个版本的 sbt。在这个文件里，编写如下内容来强制使用 1.0.0-M6：
+你可以通过创建 `hello/project/build.properties` 文件强制指定一个版本的 sbt。在这个文件里，编写如下内容来强制使用 1.0.0-RC2：
 
 ```
-sbt.version=1.0.0-M6
+sbt.version=1.0.0-RC2
 ```
 
 sbt 在不同的 release 版本中是 99% 兼容的。但是在 `project/build.properties` 文件中设置 sbt 的版本仍然能避免一些潜在的混淆。
@@ -498,7 +498,7 @@ lazy val root = (project in file("."))
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.12.1"
+  scalaVersion := "2.12.2"
 )
 
 lazy val root = (project in file("."))
@@ -639,7 +639,7 @@ bare `.sbt` 构建定义由一个 `Setting[_]` 表达式的列表组成，而不
 ```scala
 name := "hello"
 version := "1.0"
-scalaVersion := "2.12.1"
+scalaVersion := "2.12.2"
 ```
 
 ### 添加依赖库
@@ -652,7 +652,7 @@ val derby = "org.apache.derby" % "derby" % "10.4.1.3"
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.12.1"
+  scalaVersion := "2.12.2"
 )
 
 lazy val root = (project in file("."))
@@ -1303,7 +1303,7 @@ To factor out common settings across multiple projects, create a sequence named 
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.12.1"
+  scalaVersion := "2.12.2"
 )
 
 lazy val core = (project in file("core"))
@@ -1534,10 +1534,10 @@ lazy val core = (project in file("core"))
 
 ### 全局插件
 
-可以一次给所有项目安装插件，只要在 `~/.sbt/1.0.0-M5/plugins/` 中声明它们。`~/.sbt/1.0.0-M5/plugins/` 是一个将自己的 classpath 导出给所有项目的 sbt 构建定义。
-概略地讲，在 `~/.sbt/1.0.0-M5/plugins/` 中的任何 `.sbt` 或者 `.scala` 文件就和所有项目的 `project/` 目录下的一样。
+可以一次给所有项目安装插件，只要在 `~/.sbt/1.0/plugins/` 中声明它们。`~/.sbt/1.0/plugins/` 是一个将自己的 classpath 导出给所有项目的 sbt 构建定义。
+概略地讲，在 `~/.sbt/1.0/plugins/` 中的任何 `.sbt` 或者 `.scala` 文件就和所有项目的 `project/` 目录下的一样。
 
-为了一次给所有的项目添加插件，你可以创建 `~/.sbt/1.0.0-M5/plugins//build.sbt` 并且添加 `addSbtPlugin()` 表达式。因为这样做会增加机器上的依赖，所以这个特性应该少用。
+为了一次给所有的项目添加插件，你可以创建 `~/.sbt/1.0/plugins//build.sbt` 并且添加 `addSbtPlugin()` 表达式。因为这样做会增加机器上的依赖，所以这个特性应该少用。
 参见[最佳实践][global-vs-local-plugins]。
 
 ### 可用的插件
@@ -1866,7 +1866,7 @@ import Dependencies._
 
 lazy val commonSettings = Seq(
   version := "0.1.0",
-  scalaVersion := "2.12.1"
+  scalaVersion := "2.12.2"
 )
 
 lazy val backend = (project in file("backend"))

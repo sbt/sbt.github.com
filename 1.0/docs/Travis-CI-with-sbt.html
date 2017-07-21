@@ -47,8 +47,8 @@
 </p><h3 id="Set">Set <code>project/build.properties</code><a href="#Set" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Continuous integration is a great way of checking that your code works outside of your machine.
 If you haven’t created one already, make sure to create <code>project/build.properties</code> and explicitly set the
 <code>sbt.version</code> number:
-</p><pre><code class="prettyprint lang-yml">sbt.version=1.0.0-M6
-</code></pre><p>Your build will now use 1.0.0-M6.
+</p><pre><code class="prettyprint lang-yml">sbt.version=1.0.0-RC2
+</code></pre><p>Your build will now use 1.0.0-RC2.
 </p><h3 id="Read+the+Travis+manual">Read the Travis manual<a href="#Read+the+Travis+manual" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A treasure trove of Travis tricks can be found in the Travis’s <a href="http://docs.travis-ci.com/">official documentation</a>.
 Use this guide as an inspiration, but consult the official source for more details.
 </p><h3 id="Basic+setup">Basic setup<a href="#Basic+setup" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Setting up your build for Travis CI is mostly about setting up <code>.travis.yml</code>.
@@ -57,14 +57,14 @@ Use this guide as an inspiration, but consult the official source for more detai
 
 scala:
    - 2.10.4
-   - 2.12.1
+   - 2.12.2
 </code></pre><p>By default Travis CI executes <code>sbt ++$TRAVIS_SCALA_VERSION test</code>.
 Let’s specify that explicitly:
 </p><pre><code class="prettyprint lang-yml">language: scala
 
 scala:
    - 2.10.4
-   - 2.12.1
+   - 2.12.2
 
 script:
    - sbt ++$TRAVIS_SCALA_VERSION test
@@ -150,7 +150,7 @@ Overall, the use of the new infrastructure and caching seems to shave off a few 
 
 scala:
    - 2.10.4
-   - 2.12.1
+   - 2.12.2
 
 script:
    - sbt ++$TRAVIS_SCALA_VERSION test

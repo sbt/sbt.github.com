@@ -54,7 +54,7 @@ sbt that your build uses.
 This allows people with different versions of the sbt launcher to
 build the same projects with consistent results.
 To do this, create a file named <code>project/build.properties</code> that specifies the sbt version as follows:
-</p><pre><code class="">sbt.version=1.0.0-M6
+</p><pre><code class="">sbt.version=1.0.0-RC2
 </code></pre><p>If the required version is not available locally,
 the <code>sbt</code> launcher will download it for you.
 If this file is not present, the <code>sbt</code> launcher will choose an arbitrary version,
@@ -68,7 +68,7 @@ the subproject located in the current directory like this:
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
   .settings(
     name := &quot;Hello&quot;,
-    scalaVersion := &quot;2.12.1&quot;
+    scalaVersion := &quot;2.12.2&quot;
   )
 </code></pre><p>Each subproject is configured by key-value pairs.
 </p><p>For example, one key is <code>name</code> and it maps to a string value, the name of
@@ -77,7 +77,7 @@ The key-value pairs are listed under the <code>.settings(...)</code> method as f
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
   .settings(
     name := &quot;Hello&quot;,
-    scalaVersion := &quot;2.12.1&quot;
+    scalaVersion := &quot;2.12.2&quot;
   )
 </code></pre><h3 id="How+build.sbt+defines+settings">How build.sbt defines settings<a href="#How+build.sbt+defines+settings" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> defines subprojects, which holds a sequence of key-value pairs
 called <em>setting expressions</em> using <em>build.sbt DSL</em>.
@@ -85,7 +85,7 @@ called <em>setting expressions</em> using <em>build.sbt DSL</em>.
   .settings(
     name         := &quot;hello&quot;,
     organization := &quot;com.example&quot;,
-    scalaVersion := &quot;2.12.1&quot;,
+    scalaVersion := &quot;2.12.2&quot;,
     version      := &quot;0.1.0-SNAPSHOT&quot;
   )
 </code></pre><p>Let’s take a closer look at the <code>build.sbt</code> DSL:
@@ -199,7 +199,7 @@ import Keys._
 a list of <code>Setting[_]</code> expressions.
 </p><pre><code class="prettyprint lang-scala">name := &quot;hello&quot;
 version := &quot;1.0&quot;
-scalaVersion := &quot;2.12.1&quot;
+scalaVersion := &quot;2.12.2&quot;
 </code></pre><p>This syntax is recommended mostly for using plugins. See later section
 about the plugins.
 </p><h3 id="Adding+library+dependencies">Adding library dependencies<a href="#Adding+library+dependencies" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To depend on third-party libraries, there are two options. The first is
@@ -210,7 +210,7 @@ managed dependencies, which will look like this in <code>build.sbt</code>:
 lazy val commonSettings = Seq(
   organization := &quot;com.example&quot;,
   version := &quot;0.1.0-SNAPSHOT&quot;,
-  scalaVersion := &quot;2.12.1&quot;
+  scalaVersion := &quot;2.12.2&quot;
 )
 
 lazy val root = (project in file(&quot;.&quot;))

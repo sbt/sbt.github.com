@@ -125,7 +125,7 @@ projects. In addition an auto plugin provides the following feature:
 </code></pre><p>This will pull in the right setting sequence from the plugins in the right order.  The key notion here is you declare the plugins you want, and sbt can fill in the gap.
 </p><p>A plugin implementation is not required to produce an auto plugin, however.
 It is a convenience for plugin consumers and because of the automatic nature, it is not always appropriate.
-</p><h4 id="Global+plugins">Global plugins<a href="#Global+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The <code>~/.sbt/1.0.0-M5/plugins/</code> directory is treated as a global plugin
+</p><h4 id="Global+plugins">Global plugins<a href="#Global+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The <code>~/.sbt/1.0/plugins/</code> directory is treated as a global plugin
 definition project. It is a normal sbt project whose classpath is
 available to all sbt project definitions for that user as described
 above for per-project plugins.
@@ -295,20 +295,20 @@ object Obfuscate {
 </code></pre><h4 id="Usage+example">Usage example<a href="#Usage+example" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>A build definition that uses the plugin might look like. <code>obfuscate.sbt</code>:
 </p><pre><code class="prettyprint lang-scala">obfuscateLiterals in obfuscate := true
 </code></pre><h4 id="Global+plugins+example">Global plugins example<a href="#Global+plugins+example" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The simplest global plugin definition is declaring a library or plugin
-in <code>~/.sbt/1.0.0-M5/plugins/build.sbt</code>:
+in <code>~/.sbt/1.0/plugins/build.sbt</code>:
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.example&quot; %% &quot;example-plugin&quot; % &quot;0.1&quot;
 </code></pre><p>This plugin will be available for every sbt project for the current
 user.
 </p><p>In addition:
-</p><ul><li>Jars may be placed directly in <code>~/.sbt/1.0.0-M5/plugins/lib/</code>
+</p><ul><li>Jars may be placed directly in <code>~/.sbt/1.0/plugins/lib/</code>
 and will be available to every build definition for the current user.
 </li><li>Dependencies on plugins built from source may be declared in
-<code>~/.sbt/1.0.0-M5/plugins/project/Build.scala</code> as described at
+<code>~/.sbt/1.0/plugins/project/Build.scala</code> as described at
 <a href="Full-Def.html">.scala build definition</a>.
 </li><li>A Plugin may be directly defined in Scala
-source files in <code>~/.sbt/1.0.0-M5/plugins/</code>, such as
-<code>~/.sbt/1.0.0-M5/plugins/MyPlugin.scala</code>.
-<code>~/.sbt/1.0.0-M5/plugins//build.sbt</code>
+source files in <code>~/.sbt/1.0/plugins/</code>, such as
+<code>~/.sbt/1.0/plugins/MyPlugin.scala</code>.
+<code>~/.sbt/1.0/plugins//build.sbt</code>
 should contain <code>sbtPlugin := true</code>. This can be used for quicker
 turnaround when developing a plugin initially:
 </li></ul><ol><li>Edit the global plugin code
@@ -318,7 +318,7 @@ turnaround when developing a plugin initially:
    the machine without recompiling again. This approach skips the
    overhead of <code>publishLocal</code> and <code>clean</code>ing the plugins directory of the
    project using the plugin.
-</p></li></ol><p>These are all consequences of <code>~/.sbt/1.0.0-M5/plugins/</code> being a standard
+</p></li></ol><p>These are all consequences of <code>~/.sbt/1.0/plugins/</code> being a standard
 project whose classpath is added to every sbt project’s build
 definition.
 </p><h3 id="Using+a+library+in+a+build+definition+example">Using a library in a build definition example<a href="#Using+a+library+in+a+build+definition+example" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>As an example, we’ll add the Grizzled Scala library as a plugin.
