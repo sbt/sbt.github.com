@@ -11350,7 +11350,7 @@ notifications:
 </p><h3 id="step+1%3A+snapshot">step 1: snapshot<a href="#step+1%3A+snapshot" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Before you start, set your version to a <strong>-SNAPSHOT</strong> one because scripted-plugin will publish your plugin locally. If you don’t use SNAPSHOT, you could get into a horrible inconsistent state of you and the rest of the world seeing different artifacts.
 </p><h3 id="step+2%3A+scripted-plugin">step 2: scripted-plugin<a href="#step+2%3A+scripted-plugin" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Add scripted-plugin to your plugin build. <code>project/scripted.sbt</code>:
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += { &quot;org.scala-sbt&quot; % &quot;scripted-plugin&quot; % sbtVersion.value }
-</code></pre><p>Then add the following settings to <code>scripted.sbt</code>:
+</code></pre><p>Then add the following settings to <code>build.sbt</code>:
 </p><pre><code class="prettyprint lang-scala">ScriptedPlugin.scriptedSettings
 scriptedLaunchOpts := { scriptedLaunchOpts.value ++
   Seq(&quot;-Xmx1024M&quot;, &quot;-XX:MaxPermSize=256M&quot;, &quot;-Dplugin.version=&quot; + version.value)
@@ -11415,7 +11415,7 @@ $ exists target/scala-2.10/foo.jar
     TaskKey[Unit](&quot;check&quot;) := {
       val process = sbt.Process(&quot;java&quot;, Seq(&quot;-jar&quot;, (crossTarget.value / &quot;foo.jar&quot;).toString))
       val out = (process!!)
-      if (out.trim != &quot;bye&quot;) error(&quot;unexpected output: &quot; + out)
+      if (out.trim != &quot;bye&quot;) sys.error(&quot;unexpected output: &quot; + out)
       ()
     }
   )
@@ -15544,7 +15544,7 @@ $(function() {
         </nav>
       </div>
       <div class="col-md-4 text-right ts">
-        &copy; 2016 Lightbend Inc.
+        &copy; 2016-2017 Lightbend Inc.
         <a href="https://www.lightbend.com">
           <img src="files/lightbend-reverse.svg" alt="Lightbend, Inc.">
         </a>
