@@ -85,7 +85,7 @@ lazy val root = (project in file(&quot;.&quot;))
       println(&quot;open browser!&quot;)
     }
   )
-</code></pre><p>* Note that some tasks (ie. <code>testOnly</code>) will fail with trailing spaces, so a <code>trim</code> of the string built for <code>toTask</code> might be needed to handle empty <code>args</code>.
+</code></pre><p>* Note that some tasks (ie. <code>testOnly</code>) will fail with trailing spaces, so a right trim (<code>.replaceAll(&quot;\s+$&quot;, &quot;&quot;)</code>) of the string built for <code>toTask</code> might be needed to handle empty <code>args</code>.\
 </p><p>The <code>actualRun in Compile</code>’s implementation was copy-pasted from <code>run</code> task’s implementation in Defaults.scala.
 </p><p>Now we can call <code>run foo</code> from the shell and it will evaluate <code>actualRun in Compile</code> with the passed in argument, and then evaluate the <code>openbrowser</code> task.
 </p><div class="bottom nav span-16">
