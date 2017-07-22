@@ -45,6 +45,53 @@
           <div class="span-16 prepend-1 append-1 contents">
             <h2 id="sbt+0.13.5%2B+Technology+Previews">sbt 0.13.5+ Technology Previews<a href="#sbt+0.13.5%2B+Technology+Previews" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>sbt 0.13.5+ releases of sbt are technology previews of what’s to come to sbt 1.0 with enhancements like <a href="https://typesafe.com/blog/preview-of-upcoming-sbt-10-features-read-about-the-new-plugins">auto plugins</a>, launcher enhacements for sbt server, defined in the sbt-remote-control project, and other necessary API changes.
 </p><p>These releases maintain binary compatibility with plugins that are published against sbt 0.13.0, but add new features in preparation for sbt 1.0. The tech previews allow us to test new ideas like auto plugins and performance improvements on dependency resolution; the build users can try new features without losing the existing plugin resources; and plugin authors can gradually migrate to the new plugin system before sbt 1.0 arrives.
+</p><h2 id="sbt+0.13.16">sbt 0.13.16<a href="#sbt+0.13.16" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Fixes+with+compatibility+implications">Fixes with compatibility implications<a href="#Fixes+with+compatibility+implications" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Removes the “hit [ENTER] to switch to interactive mode” feature. Run <code>sbt xxx shell</code> to stay in shell after <code>xxx</code>. <a href="https://github.com/sbt/sbt/issues/3091">#3091</a>/<a href="https://github.com/sbt/sbt/pull/3153">#3153</a> by <a href="https://github.com/dwijnand">@dwijnand</a>
+</li></ul><h3 id="Improvements">Improvements<a href="#Improvements" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Improves the new startup messages. See below.
+</li><li>Ports sbt-cross-building’s <code>^</code> and <code>^^</code> commands for plugin cross building. See below.
+</li><li>Adds <code>Zero</code> scope component for sbt 1.0 compatibility. <a href="https://github.com/sbt/sbt/pull/3179">#3179</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li><li>Backports <code>withXXX</code> methods for <code>ModuleID</code> and <code>Artifact</code> for sbt 1.0 compatibility. <a href="https://github.com/sbt/sbt/pull/3215">#3215</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li></ul><h3 id="Bug+fixes">Bug fixes<a href="#Bug+fixes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Fixes the new startup messages. See below.
+</li><li>Fixes forward compatibility of Scripted plugin with sbt 1.0.0-RC2. <a href="https://github.com/sbt/sbt/pull/3329">#3329</a> by <a href="https://github.com/dwijnand">@dwijnand</a>
+</li><li>Fixes ScalaTest nested suite test names being reported as ”(It is not a test)”. [#3154][3154] by [@jameskoch][@jameskoch]
+</li><li>Fixes default <code>scalaBinaryVersion</code> for Dotty. <a href="https://github.com/sbt/sbt/pull/3152">#3152</a> by [@smarter][@smater]
+</li><li>Updates JLine dependency to 2.14.4 to work around ncurses change causing <code>NumberFormatException</code>. <a href="https://github.com/sbt/sbt/pull/3265">#3265</a> by <a href="https://github.com/Rogach">@Rogach</a>
+</li></ul><h3 id="sbt-cross-building">sbt-cross-building<a href="#sbt-cross-building" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://github.com/jrudolph">@jrudolph</a>’s sbt-cross-building is a plugin author’s plugin.
+It adds cross command <code>^</code> and sbtVersion switch command <code>^^</code>, similar to <code>+</code> and <code>++</code>,
+but for switching between multiple sbt versions across major versions.
+sbt 0.13.16 merges these commands into sbt because the feature it provides is useful as we migrate plugins to sbt 1.0.
+</p><p>To switch the <code>sbtVersion in pluginCrossBuild</code> from the shell use:
+</p><pre><code class="">^^ 1.0.0-RC2
+</code></pre><p>Your plugin will now build with sbt 1.0.0-RC2 (and its Scala version 2.12.2).
+</p><p>If you need to make changes specific to a sbt version, you can now include them into <code>src/main/scala-sbt-0.13</code>,
+and <code>src/main/scala-sbt-1.0</code>, where the binary sbt version number is used as postfix.
+</p><p>To run a command across multiple sbt versions, set:
+</p><pre><code class="prettyprint lang-scala">crossSbtVersions := Vector(&quot;0.13.15&quot;, &quot;1.0.0-RC2&quot;)
+</code></pre><p>Then, run:
+</p><pre><code class="">^ compile
+</code></pre><p><a href="https://github.com/sbt/sbt/pull/3133">#3133</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</p><h4 id="Eviction+warning+presentation">Eviction warning presentation<a href="#Eviction+warning+presentation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>sbt 0.13.16 improves the eviction warning presetation.
+</p><p>Before:
+</p><pre><code>[warn] There may be incompatibilities among your library dependencies.
+[warn] Here are some of the libraries that were evicted:
+[warn]  * com.google.code.findbugs:jsr305:2.0.1 -&gt; 3.0.0
+[warn] Run 'evicted' to see detailed eviction warnings
+</code></pre><p>After:
+</p><pre><code>[warn] Found version conflict(s) in library dependencies; some are suspected to be binary incompatible:
+[warn]
+[warn]      * com.typesafe.akka:akka-actor_2.12:2.5.0 is selected over 2.4.17
+[warn]          +- de.heikoseeberger:akka-log4j_2.12:1.4.0            (depends on 2.5.0)
+[warn]          +- com.typesafe.akka:akka-parsing_2.12:10.0.6         (depends on 2.4.17)
+[warn]          +- com.typesafe.akka:akka-stream_2.12:2.4.17 ()       (depends on 2.4.17)
+[warn]
+[warn] Run 'evicted' to see detailed eviction warnings
+</code></pre><p><a href="https://github.com/sbt/sbt/pull/3202">#3202</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</p><h3 id="Improvements+and+bug+fixes+to+the+startup+messages">Improvements and bug fixes to the startup messages<a href="#Improvements+and+bug+fixes+to+the+startup+messages" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt writes out the <code>sbt.version</code> in <code>project/build.properties</code> if it is missing.
+sbt 0.13.16 fixes the logging when it happens by using the logger.
+</p><p>We encourage the use of the sbt shell by running <code>sbt</code>, instead of running <code>sbt compile</code> from the terminal repreatedly.
+The sbt shell keeps the JVM warm, and there is a significant performance improvement gained for your compilation.
+The startup message that we added in sbt 0.13.15 was a bit too aggressive, so we are toning it down in 0.13.16.
+It will only be triggered for <code>sbt compile</code>, and it can also be supressed with <code>suppressSbtShellNotification := true</code>.
+</p><p><a href="https://github.com/sbt/sbt/issues/3091">#3091</a>/<a href="https://github.com/sbt/sbt/issues/3097">#3097</a>/<a href="https://github.com/sbt/sbt/pull/3147">#3147</a> by <a href="https://github.com/dwijnand">@dwijnand</a>
 </p><h2 id="sbt+0.13.15">sbt 0.13.15<a href="#sbt+0.13.15" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Fixes+with+compatibility+implications">Fixes with compatibility implications<a href="#Fixes+with+compatibility+implications" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>sbt 0.13.15 removes the Maven version range when possible. See below.
 </li></ul><h3 id="Improvements">Improvements<a href="#Improvements" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Adds preliminary compatibility with JDK 9. Using this requires 0.13.15+ launcher. <a href="https://github.com/sbt/sbt/pull/2951">#2951</a>/<a href="https://github.com/sbt/sbt-launcher-package/pull/143">143</a> by <a href="https://github.com/retronym">@retronym</a>
 </li><li>Adds “local-preloaded” repository for offline installation. See below.
