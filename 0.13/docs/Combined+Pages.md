@@ -4110,7 +4110,7 @@ Bintray For Plugins
 
 sbt hosts their community plugin repository on
 [Bintray](https://bintray.com/sbt).
-Bintray is a repository hosting site, similar to github, which allows users to contribute their own
+Bintray is a repository hosting site, similar to GitHub, which allows users to contribute their own
 plugins, while sbt can aggregate them together in a common repository.
 
 This document walks you through the means to create your own repository
@@ -4133,7 +4133,7 @@ but click on the link that reads **"For Open Source Distribution Sign Up Here"**
 ### Create a repository for your sbt plugins
 
 Now, we'll create a repository to host our personal sbt plugins. In
-bintray, create a generic repository called `sbt-plugins`.
+Bintray, create a generic repository called `sbt-plugins`.
 
 First, go to your user page and click on the `new repository` link:
 
@@ -4152,23 +4152,21 @@ Fill it out similarly to the above image, the settings are:
 - Tags:   sbt
 
 Once this is done, you can begin to configure your sbt-plugins to
-publish to bintray.
+publish to Bintray.
 
-### Add the bintray-sbt plugin to your build.
+### Add the sbt-bintray plugin to your build.
 
-First, add the bintray-sbt to your plugin build.
+First, add the sbt-bintray to your plugin build.
 
 First, create a `project/bintray.sbt` file
 
 ```scala
-addSbtPlugin("me.lessis" % "bintray-sbt" % "0.3.0")
+addSbtPlugin("org.foundweekends" % "sbt-bintray" % "0.5.1")
 ```
 
-Next, a make sure your `build.sbt` file has the following settings
+Next, make sure your `build.sbt` file has the following settings
 
 ```scala
-import bintray.Keys._
-
 lazy val commonSettings = Seq(
   version in ThisBuild := "<YOUR PLUGIN VERSION HERE>",
   organization in ThisBuild := "<INSERT YOUR ORG HERE>"
@@ -4180,7 +4178,7 @@ lazy val root = (project in file("."))
     sbtPlugin := true,
     name := "<YOUR PLUGIN HERE>",
     description := "<YOUR DESCRIPTION HERE>",
-    // This is an example.  bintray-sbt requires licenses to be specified 
+    // This is an example. sbt-bintray requires licenses to be specified 
     // (using a canonical name).
     licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html")),
     publishMavenStyle := false,
@@ -4194,7 +4192,7 @@ name and organization.
 
 ### Make a release
 
-> *Note: bintray does not support snapshots. We recommend using
+> *Note: Bintray does not support snapshots. We recommend using
 [git-revisions supplied by the sbt-git plugin](https://github.com/sbt/sbt-git#versioning-with-git)*.
 
 Once your build is configured, open the sbt console in your build and run
@@ -4203,7 +4201,7 @@ Once your build is configured, open the sbt console in your build and run
 sbt> publish
 ```
 
-The plugin will ask you for your credentials. If you don't know where
+The plugin will need your credentials. If you don't know where
 they are, you can find them on [Bintray](https://bintray.com).
 
 1.  Login to the website with your credentials.
@@ -4211,15 +4209,16 @@ they are, you can find them on [Bintray](https://bintray.com).
 3.  Click on edit profile
 4.  Click on API Key
 
-This will get you your password. The bintray-sbt plugin will save your
-API key for future use.
+This will get you your password. You can create a credentials file
+with the `bintrayChangeCredentials` task. The sbt-bintray plugin will
+save your API key for future use.
 
 *NOTE: We have to do this before we can link our package to the sbt
 org.*
 
 ### Linking your package to the sbt organization
 
-Now that your plugin is packaged on bintray, you can include it in the
+Now that your plugin is packaged on Bintray, you can include it in the
 community sbt repository. To do so, go to the
 [Community sbt repository](https://bintray.com/sbt/sbt-plugin-releases)
 screen.
@@ -4239,7 +4238,7 @@ your contributions!
 
 ### Linking your package to the sbt organization (sbt org admins)
 
-If you're a member of the sbt organization on bintray, you can link your
+If you're a member of the sbt organization on Bintray, you can link your
 package to the sbt organization, but via a different means. To do so,
 first navigate to the plugin you wish to include and click on the link
 button:
