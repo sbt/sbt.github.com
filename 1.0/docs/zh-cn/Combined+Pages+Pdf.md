@@ -626,7 +626,6 @@ lazy val root = (project in file("."))
 
 ```scala
 import sbt._
-import Process._
 import Keys._
 ```
 

@@ -338,7 +338,6 @@ lazy val root = (project in file(&quot;.&quot;))
 </p><h3 id="build.sbt+%E4%B8%AD%E7%9A%84%E5%BC%95%E5%85%A5">build.sbt 中的引入<a href="#build.sbt+%E4%B8%AD%E7%9A%84%E5%BC%95%E5%85%A5" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>你可以将 <code>import</code> 语句放在 <code>build.sbt</code> 的顶部；它们可以不用空行分隔。
 </p><p>下面是一些默认的引入：
 </p><pre><code class="prettyprint lang-scala">import sbt._
-import Process._
 import Keys._
 </code></pre><p>（另外，如果你有 <a href="Full-Def.html">.scala 文件</a>，这些文件中任何 <code>Build</code> 对象或者 <code>Plugin</code> 对象里的内容都会被引入。更多关于这些的内容放在 <a href="Full-Def.html">.scala 构建定义</a>。）
 </p><h3 id="bare+.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">bare .sbt 构建定义<a href="#bare+.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>bare <code>.sbt</code> 构建定义由一个 <code>Setting[_]</code> 表达式的列表组成，而不是定义 <code>Project</code>。
