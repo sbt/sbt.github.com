@@ -1,0 +1,306 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html>
+      <head>
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+        <title>sbt Reference Manual — ビルド定義</title>
+        <link rel="shortcut icon" href="../favicon.ico"/>
+        <link rel="stylesheet" href="../css/blueprint/screen.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/blueprint/grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="../css/blueprint/print.css" type="text/css" media="print"/> 
+        <!--[if lt IE 8]>
+          <link rel="stylesheet" href={ relativeBase + "css/blueprint/ie.css" } type="text/css" media="screen, projection"/>
+        <![endif]-->
+        <link rel="stylesheet" href="../css/pamflet.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamflet-print.css" type="text/css" media="print"/>
+        <link rel="stylesheet" href="../css/pamflet-grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-redmond.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-github.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-monokai.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamfletheight_80px_2em.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <script type="text/javascript" src="../js/jquery-1.6.2.min.js"></script>
+        <script type="text/javascript" src="../js/jquery.collapse.js"></script>
+        <script type="text/javascript" src="../js/pamflet.js"></script>
+        <script type="text/javascript">
+          Pamflet.page.language = 'ja';
+        </script>
+        <script type="text/javascript" src="../js/prettify/prettify.js"></script><script type="text/javascript" src="../js/prettify/lang-scala.js"></script><link type="text/css" rel="stylesheet" href="../css/prettify.css"/><script type="text/javascript"><!--
+        window.onload=function() { prettyPrint(); };
+      --></script>
+        <link rel="stylesheet" href="../css/custom.css" type="text/css" media="screen, projection"/>
+        
+        <script type="text/javascript">
+              Pamflet.twitter = '#sbt #scala';
+            </script>
+      </head>
+      <body class="color_scheme-github">
+        <a class="page prev nav" href="Running.html">
+            <span class="space">&nbsp;</span>
+            <span class="flip arrow">&gt;</span>
+          </a><a class="page next nav" href="Task-Graph.html">
+            <span class="space">&nbsp;</span>
+            <span class="arrow">&gt;</span>
+          </a>
+        <div class="container contentswrapper">
+          <div class="span-16 prepend-1 append-1 contents">
+            <h2 id="%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9">ビルド定義<a href="#%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このページでは、多少の「理論」も含めた sbt のビルド定義 (build definition) と <code>build.sbt</code> の構文を説明する。
+sbt 0.13.13 など最近のバージョンをインストール済みで、
+<a href="Running.html">sbt の使い方</a>を分かっていて、「始める sbt」の前のページも読んだことを前提とする。
+</p><p>このページでは <code>build.sbt</code> ビルド定義を紹介する。
+</p><h3 id="sbt+%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3%E3%81%AE%E6%8C%87%E5%AE%9A">sbt バージョンの指定<a href="#sbt+%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3%E3%81%AE%E6%8C%87%E5%AE%9A" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>ビルド定義の一部としてビルドに用いる sbt のバージョンを指定する。
+これによって異なる sbt ランチャーを持つ複数の人がいても同じプロジェクトを同じようにビルドすることができる。
+そのためには、<code>project/build.properties</code>
+という名前のファイルを作成して以下のように
+sbt バージョンを指定する:
+</p><pre><code class="">sbt.version=1.0.0-RC2
+</code></pre><p>もしも指定されたバージョンがローカルマシンに無ければ、
+<code>sbt</code> ランチャーは自動的にダウンロードを行う。
+このファイルが無ければ、<code>sbt</code> ランチャーは任意のバージョンを選択する。
+これはビルドの移植性を下げるため、推奨されない。
+</p><h3 id="%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%81%A8%E3%81%AF%E4%BD%95%E3%81%8B">ビルド定義とは何か<a href="#%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%81%A8%E3%81%AF%E4%BD%95%E3%81%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><strong>ビルド定義</strong>は、<code>build.sbt</code>
+にて定義され、プロジェクト (型は <a href="../../api/sbt/Project.html">Project</a>)
+の集合によって構成される。
+プロジェクトという用語が曖昧であることがあるため、このガイドではこれらを<strong>サブプロジェクト</strong>と呼ぶことが多い。
+</p><p>例えば、カレントディレクトリにあるサブプロジェクトは <code>build.sbt</code> に以下のように定義できる：
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    name := &quot;Hello&quot;,
+    scalaVersion := &quot;2.12.2&quot;
+  )
+</code></pre><p>それぞれのサブプロジェクトは、キーと値のペアによって詳細が設定される。
+</p><p>例えば、<code>name</code> というキーがあるが、それはサブプロジェクト名という文字列の値に関連付けられる。
+キーと値のペア列は <code>.settings(...)</code> メソッド内に列挙される:
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    name := &quot;Hello&quot;,
+    scalaVersion := &quot;2.12.2&quot;
+  )
+</code></pre><h3 id="%E3%81%AF%E3%81%A9%E3%81%AE%E3%82%88%E3%81%86%E3%81%AB+settings+%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B%E3%81%8B"><code>build.sbt</code> はどのように settings を定義するか<a href="#%E3%81%AF%E3%81%A9%E3%81%AE%E3%82%88%E3%81%86%E3%81%AB+settings+%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B%E3%81%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> において定義されるサブプロジェクトは、キーと値のペア列を持つと言ったが、
+このペアは<strong>セッティング式</strong> (setting expression) と呼ばれ、<strong>build.sbt DSL</strong> にて記述される。
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    name         := &quot;hello&quot;,
+    organization := &quot;com.example&quot;,
+    scalaVersion := &quot;2.12.2&quot;,
+    version      := &quot;0.1.0-SNAPSHOT&quot;
+  )
+</code></pre><p>build.sbt DSL を詳しくみてみよう:<br>
+<img src="../files/setting-expression.png" alt="setting expression"/><br>
+<br>
+それぞれのエントリーは<strong>セッティング式</strong> (setting expression) と呼ばれる。
+中にはタスク式と呼ばれるものもある。この違いはこのページの後で説明する。
+</p><p>セッティング式は以下の 3部から構成される:
+</p><ol><li>左辺項を<strong>キー</strong> (key) という。
+</li><li><strong>演算子</strong>。この場合は <code>:=</code>。
+</li><li>右辺項は<strong>本文</strong> (body)、もしくは<strong>セッティング本文</strong>という。
+</li></ol><p>左辺値の <code>name</code>、<code>version</code>、および <code>scalaVersion</code> は<strong>キー</strong>である。
+キーは
+<a href="../api/index.html#sbt.SettingKey"><code>SettingKey[T]</code></a>、
+<a href="../api/index.html#sbt.TaskKey"><code>TaskKey[T]</code></a>、もしくは
+<a href="(../api/index.html#sbt.InputKey)"><code>InputKey[T]</code></a> のインスタンスで、
+<code>T</code> はその値の型である。キーの種類に関しては後述する。
+</p><p><code>name</code> キーは <code>SettingKey[String]</code> に型付けされているため、
+<code>name</code> の <code>:=</code> 演算子も <code>String</code> に型付けされている。
+誤った型の値を使おうとするとビルド定義はコンパイルエラーになる:
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    name := 42  // コンパイルできない
+  )
+</code></pre><p><code>build.sbt</code> 内には <code>val</code>、<code>lazy val</code>、<code>def</code> を定義することもできる。
+<code>build.sbt</code> において、トップレベルで <code>object</code> や <code>class</code> を定義することはできない。
+それらが必要なら <code>project/</code> 配下にScala ソースファイル (<code>.scala</code>) を置くべきだろう。
+</p><h3 id="%E3%82%AD%E3%83%BC">キー<a href="#%E3%82%AD%E3%83%BC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="%E7%A8%AE%E9%A1%9E">種類<a href="#%E7%A8%AE%E9%A1%9E" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>キーには三種類ある:
+</p><ul><li><code>SettingKey[T]</code>: 一度だけ値が計算されるキー（値はサブプロジェクトの読み込み時に計算され、保存される）。
+</li><li><code>TaskKey[T]</code>: 毎回再計算される<strong>タスク</strong>を呼び出す、副作用を伴う可能性のある値のキー。
+</li><li><code>InputKey[T]</code>: コマンドラインの引数を入力として受け取るタスクのキー。
+　「始める sbt」では <code>InputKey</code> を説明しないので、このガイドを終えた後で、<a href="../../docs/Input-Tasks.html">Input Tasks</a> を読んでみよう。
+</li></ul><h4 id="%E7%B5%84%E3%81%BF%E8%BE%BC%E3%81%BF%E3%81%AE%E3%82%AD%E3%83%BC">組み込みのキー<a href="#%E7%B5%84%E3%81%BF%E8%BE%BC%E3%81%BF%E3%81%AE%E3%82%AD%E3%83%BC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>組み込みのキーは <a href="../../sxr/sbt/Keys.scala.html">Keys</a> と呼ばれるオブジェクトのフィールドにすぎない。
+<code>build.sbt</code> は、自動的に <code>import sbt.Keys._</code> するため、<code>sbt.Keys.name</code> は <code>name</code> として参照することができる。
+</p><h4 id="%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0%E3%82%AD%E3%83%BC">カスタムキー<a href="#%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0%E3%82%AD%E3%83%BC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>カスタムキーは <code>settingKey</code>、 <code>taskKey</code>、 <code>inputKey</code> といった生成メソッドを用いて定義する。
+どのメソッドでもキーに関連する型パラメータを必要とする。
+キーの名前は <code>val</code> で宣言された変数の名前がそのまま用いられる。
+例として、新しく <code>hello</code> と名づけたキーを定義してみよう。
+</p><pre><code class="prettyprint lang-scala">lazy val hello = taskKey[Unit](&quot;An example task&quot;)
+</code></pre><p>実は <code>.sbt</code> ファイルには、設定を記述するのに必要な <code>val</code> や <code>def</code> を含めることもできる。
+これらの定義はファイル内のどこで書かれてもプロジェクトの設定より前に評価される。
+</p><blockquote><p><strong>注意</strong> 一般的に、初期化順問題を避けるために val の代わりに lazy val が用いられることが多い。
+</p></blockquote><h4 id="%E3%82%BF%E3%82%B9%E3%82%AF%E3%82%AD%E3%83%BC%E3%81%8B%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%82%AD%E3%83%BC%E3%81%8B">タスクキーかセッティングキーか<a href="#%E3%82%BF%E3%82%B9%E3%82%AF%E3%82%AD%E3%83%BC%E3%81%8B%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%82%AD%E3%83%BC%E3%81%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>TaskKey[T]</code> は、<em>タスク</em>を定義しているといわれる。タスクは、<code>compile</code> や <code>package</code> のような作業だ。
+タスクは <code>Unit</code> を返すかもしれないし（<code>Unit</code> は、Scala での <code>void</code> だ）、
+タスクに関連した値を返すかもしれない。例えば、<code>package</code> は作成した jar ファイルを値として返す <code>TaskKey[File]</code> だ。
+</p><p>例えばインタラクティブモードの sbt プロンプトに <code>compile</code> と入力するなど、何らかのタスクを実行する度に、
+sbt はそのタスクを一回だけ再実行する。
+</p><p>サブプロジェクトを記述する sbt のキーと値の列は、<code>name</code> のようなセッティング (setting) であれば、
+その文字列の値をキャッシュすることができるが、
+<code>compile</code> のようなタスク（task）の場合は実行可能コードを保持しておく必要がある
+（たとえその実行可能コードが最終的に文字列を返したとしても、それは毎回再実行されなければならない）。
+</p><p><em>あるキーがあるとき、それは常にタスクかただのセッティングかのどちらかを参照する。</em>
+つまり、キーの「タスク性」（毎回再実行するかどうか）はそのキーの特性であり、その値にはよらない。
+</p><h3 id="%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%A8%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AE%E5%AE%9A%E7%BE%A9">タスクとセッティングの定義<a href="#%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%A8%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AE%E5%AE%9A%E7%BE%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>:=</code> を使うことで、タスクに任意の演算を代入することができる。
+セッティングを定義すると、その値はプロジェクトがロードされた時に一度だけ演算が行われる。
+タスクを定義すると、その演算はタスクの実行毎に毎回再実行される。
+</p><p>例えば、少し前に宣言した <code>hello</code> というタスクはこのように実装できる:
+</p><pre><code class="prettyprint lang-scala">lazy val hello = taskKey[Unit](&quot;An example task&quot;)
+
+lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    hello := { println(&quot;Hello!&quot;) }
+  )
+</code></pre><p>セッティングの定義は既に何度か見ていると思うが、プロジェクト名の定義はこのようにできる:
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    name := &quot;hello&quot;
+  )
+</code></pre><h4 id="%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%A8%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AE%E5%9E%8B">タスクとセッティングの型<a href="#%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%A8%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AE%E5%9E%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>型システムの視点から考えると、タスクキー (task key) から作られた <code>Setting</code> は、セッティングキー (setting key) から作られたそれとは少し異なるものだ。
+<code>taskKey := 42</code> は <code>Setting[Task[T]]</code> の戻り値を返すが、<code>settingKey := 42</code> は <code>Setting[T]</code> の戻り値を返す。
+タスクが実行されるとタスクキーは型<code>T</code> の値を返すため、ほとんどの用途において、これによる影響は特にない。
+</p><p><code>T</code> と <code>Task[T]</code> の型の違いによる影響が一つある。
+それは、セッティングキーはキャッシュされていて、再実行されないため、タスキキーに依存できないということだ。
+このことについては、後ほどの<a href="Task-Graph.html">タスク・グラフ</a>にて詳しくみていく。
+</p><h3 id="sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%AB%E3%81%8A%E3%81%91%E3%82%8B%E3%82%AD%E3%83%BC">sbt シェルにおけるキー<a href="#sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%AB%E3%81%8A%E3%81%91%E3%82%8B%E3%82%AD%E3%83%BC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt のインタラクティブモードからタスクの名前を入力することで、どのタスクでも実行することができる。
+それが <code>compile</code> と入力することでコンパイルタスクが起動する仕組みだ。つまり、<code>compile</code> はタスクキーだ。
+</p><p>タスクキーのかわりにセッティングキーの名前を入力すると、セッティングキーの値が表示される。
+タスクキーの名前を入力すると、タスクを実行するが、その戻り値は表示されないため、
+タスクの戻り値を表示するには素の <code>&lt;タスク名&gt;</code> ではなく、<code>show &lt;タスク名&gt;</code> と入力する。
+Scala の慣例にならい、ビルド定義ファイル内ではキーはキャメルケース（<code>camelCase</code>）で命名する。
+</p><p>あるキーについてより詳しい情報を得るには、sbt インタラクティブモードで <code>inspect &lt;キー名&gt;</code> と入力する。
+<code>inspect</code> が表示する情報の中にはまだよく分からない点もあるかもしれないが、一番上にはセッティングの値の型と、セッティングの簡単な説明が表示されていることだろう。
+</p><h3 id="%E5%86%85%E3%81%AE+import+%E6%96%87"><code>build.sbt</code> 内の import 文<a href="#%E5%86%85%E3%81%AE+import+%E6%96%87" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> の一番上に import 文を書くことができ、それらは空行で分けなくてもよい。
+</p><p>デフォルトでは以下のものが自動的にインポートされる:
+</p><pre><code class="prettyprint lang-scala">import sbt._
+import Keys._
+</code></pre><p>(さらに、auto plugin があれば <code>autoImport</code> 以下の名前がインポートされる。)
+</p><h3 id="%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E3%81%B8%E3%81%AE%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%92%E5%8A%A0%E3%81%88%E3%82%8B">ライブラリへの依存性を加える<a href="#%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E3%81%B8%E3%81%AE%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%92%E5%8A%A0%E3%81%88%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>サードパーティのライブラリに依存するには二つの方法がある。
+第一は <code>lib/</code> に jar ファイルを入れてしまう方法で（アンマネージ依存性、unmanged dependency）、
+第二はマネージ依存性（managed dependency）を加えることで、<code>build.sbt</code> ではこのようになる:
+</p><pre><code class="prettyprint lang-scala">val derby = &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot;
+
+lazy val commonSettings = Seq(
+  organization := &quot;com.example&quot;,
+  version := &quot;0.1.0-SNAPSHOT&quot;,
+  scalaVersion := &quot;2.12.2&quot;
+)
+
+lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    commonSettings,
+    name := &quot;Hello&quot;,
+    libraryDependencies += derby
+  )
+</code></pre><p>これで Apache Derby ライブラリのバージョン 10.4.1.3 へのマネージ依存性を加えることができた。
+</p><p><code>libraryDependencies</code> キーは二つの複雑な点がある:
+<code>:=</code> ではなく <code>+=</code> を使うことと、<code>%</code> メソッドだ。
+後で<a href="Task-Graph.html">タスク・グラフ</a>で説明するが、<code>+=</code> はキーの古い値を上書きする代わりに新しい値を追加する。
+<code>%</code> メソッドは文字列から Ivy モジュール ID を構築するのに使われ、これは<a href="Library-Dependencies.html">ライブラリ依存性</a>で説明する。
+</p><p>ライブラリ依存性に関する詳細については、このガイドの後ろの方までとっておくことにする。
+後ほど<a href="Library-Dependencies.html">一ページ</a>を割いて丁寧に説明する。
+</p><div class="bottom nav span-16">
+                        <em>Next Page</em>
+                        <span class="arrow">&gt;</span>
+                        <a href="Task-Graph.html"> タスク・グラフ </a>                        
+                        <ul class="language-bar">
+        <li><a href="../Basic-Def.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/Basic-Def.html"><span class="lang-item lang-ja">日本語</span></a></li><li><a href="../zh-cn/Basic-Def.html"><span class="lang-item lang-zh-cn">中文 (简体)</span></a></li><li><a href="../es/Basic-Def.html"><span class="lang-item lang-es">Español</span></a></li>
+      </ul>
+                      </div><div class="tocwrapper show">
+      <a class="tochead nav" style="display: none" href="#toc">❦</a>
+      <a name="toc"></a>
+      <h4 class="toctitle">Contents</h4>
+      <div class="tocbody">
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">始める sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">sbt のインストール</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Mac への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Linux への sbt のインストール</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">ディレクトリ構造</a></div></li><li><div><a href="Running.html">実行</a></div></li><li><div class="current">ビルド定義</div></li><li><div><a href="Task-Graph.html">タスク・グラフ</a></div></li><li><div><a href="Scopes.html">スコープ</a></div></li><li><div><a href="Appending-Values.html">値の追加</a></div></li><li><div><a href="Scope-Delegation.html">スコープ委譲 (.value の照会)</a></div></li><li><div><a href="Library-Dependencies.html">ライブラリ依存性</a></div></li><li><div><a href="Multi-Project.html">マルチプロジェクト・ビルド</a></div></li><li><div><a href="Using-Plugins.html">プラグインの使用</a></div></li><li><div><a href="Custom-Settings.html">カスタムセッティングとタスク</a></div></li><li><div><a href="Organizing-Build.html">ビルドの整理</a></div></li><li><div><a href="Summary.html">まとめ</a></div></li><li><div><a href="Bare-Def.html">付録: bare .sbt ビルド定義</a></div></li> </ol></li><li><div><a href="Detailed-Topics.html">各論</a></div><ol class="toc"> <li><div><a href="Plugins-and-Best-Practices.html">プラグインとベストプラクティス</a></div><ol class="toc"> <li><div><a href="Testing-sbt-plugins.html">sbt プラグインをテストする</a></div></li> </ol></li> </ol></li><li><div><a href="Howto.html">How to</a></div><ol class="toc"> <li><div><a href="Howto-Sequencing.html">逐次実行</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Def.sequential を用いて逐次タスクを定義する</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Def.taskDyn を用いて動的タスクを定義する</a></div></li><li><div><a href="Howto-After-Input-Task.html">インプットタスクの後で何かする</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn を用いた動的インプットタスクの定義</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">コマンドを用いた逐次実行</a></div></li> </ol></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+          </div>
+        </div>
+        <div class="header">
+          <link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
+<div class="container">
+    <div class="logo">
+      <a href="../../../index.html"><img src="../files/typesafe_sbt_svg.svg" alt="sbt"></a>
+    </div>
+    <div class="nav">
+      <a href="../../../documentation.html">Documentation</a>
+      <a href="../../../download.html">Download</a>
+      <a href="../../../community.html">Get Involved</a>
+      <a id="source-code" href="https://github.com/sbt/sbt"><img src="../files/github-logo-teal.png" alt="Source code"></a>
+      <a id="twitter" href="https://twitter.com/scala_sbt"><img src="../files/twitter-logo-teal.png" alt="sbt on Twitter"></a>
+    </div>
+    <script type="text/javascript" async>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-41449189-1', 'scala-sbt.org');
+    ga('send', 'pageview');
+    </script>
+    <script type="text/javascript" async>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-23127719-1', 'typesafe.com', {'allowLinker': true, 'name': 'tsTracker'});
+      ga('tsTracker.require', 'linker');
+      ga('tsTracker.linker:autoLink', ['typesafe.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org']);
+      ga('tsTracker.send', 'pageview');
+    </script>
+</div>
+        </div>
+        <div class="footer">
+          <div class="fw-wrapper navy-ltr support-strip">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="support-item">
+          <div class="support-icon">
+            <svg class="svg-icon svg-icon-chat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.5 85.2" enable-background="new 0 0 97.5 85.2"><path stroke="#fff" stroke-width="4.282" stroke-linecap="round" stroke-miterlimit="10" d="M27 29.5h-16.3c-4.7 0-8.6 3.9-8.6 8.6v25.7c0 4.7 3.9 8.6 8.6 8.6h2.7c.8 0 1.5.7 1.5 1.5v7.8c0 1.3 1.6 2 2.5 1l9.5-9.5c.5-.5 1.2-.8 2-.8h20.2c4.7 0 8.6-3.9 8.6-8.6v-7.8" fill="none"/><path fill="#fff" d="M85 0h-40c-6.9 0-12.5 5.6-12.5 12.5v33.4c0 2.2 1.8 4.1 4.1 4.1h29.9c.7 0 1.3.3 1.8.7l10 10c1.6 1.6 4.3.5 4.3-1.8v-6.5c0-1.4 1.1-2.5 2.5-2.5 6.9 0 12.5-5.6 12.5-12.5v-25c-.1-6.8-5.8-12.4-12.6-12.4z"/></svg>
+          </div>
+          <div class="support-detail">
+            <h2>コミュニティー・サポート</h2>
+            <a href="https://ja.stackoverflow.com/questions/tagged/sbt">StackOverflow</a>
+          </div>
+        </div>
+        <div class="support-item">
+          <div class="support-icon">
+            <svg id="lightbend-icon-reverse" class="svg-icon svg-icon-lightbend-reverse" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 302 262"><title>lightbend-icon</title><g id="icon"><path d="M1,195v56a10,10,0,0,0,10,10H291a10,10,0,0,0,10-10V195a557.85,557.85,0,0,1-150,20A557.85,557.85,0,0,1,1,195Z" style="fill:#fff"/><path d="M291,1H11A10,10,0,0,0,1,11V176a539.94,539.94,0,0,0,150,21,539.94,539.94,0,0,0,150-21V11A10,10,0,0,0,291,1Z" style="fill:#fff"/></g></svg>
+          </div>
+          <div class="support-detail">
+            <h2>商用サポート</h2>
+            <a href="https://www.lightbend.com/services/expert-support">Lightbend Subscription</a>
+            <a href="https://www.lightbend.com/services/training">Training</a>
+            <a href="https://www.lightbend.com/services/consulting">Consulting</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div><footer>
+  <div class="container footer">
+    <div class="row">
+      <div class="col-md-8 sbt">
+        <nav>
+          <a href="../../../index.html">
+            <img src="../files/typesafe_sbt_reverse_svg.svg" alt="sbt">
+          </a>
+          <a href="../../../documentation.html">Documentation</a>
+          <a href="../../../download.html">Download</a>
+          <a href="../../../community.html">Get Involved</a>
+        </nav>
+      </div>
+      <div class="col-md-4 text-right ts">
+        &copy; 2016 Lightbend Inc.
+        <a href="https://www.lightbend.com">
+          <img src="files/lightbend-reverse.svg" alt="Lightbend, Inc.">
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+        </div>
+        
+        <div class="highlight-outer">
+              <div class="highlight-menu">
+                <ul>
+                  <li><button id="highlight-button-twitter"><img src="../img/twitter-bird-dark-bgs.png"/></button></li>
+                </ul>
+              </div>
+            </div>
+      </body>
+    </html>

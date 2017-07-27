@@ -1,0 +1,236 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html>
+      <head>
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+        <title>sbt Reference Manual — プラグインの使用</title>
+        <link rel="shortcut icon" href="../favicon.ico"/>
+        <link rel="stylesheet" href="../css/blueprint/screen.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/blueprint/grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="../css/blueprint/print.css" type="text/css" media="print"/> 
+        <!--[if lt IE 8]>
+          <link rel="stylesheet" href={ relativeBase + "css/blueprint/ie.css" } type="text/css" media="screen, projection"/>
+        <![endif]-->
+        <link rel="stylesheet" href="../css/pamflet.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamflet-print.css" type="text/css" media="print"/>
+        <link rel="stylesheet" href="../css/pamflet-grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-redmond.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-github.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-monokai.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamfletheight_80px_2em.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <script type="text/javascript" src="../js/jquery-1.6.2.min.js"></script>
+        <script type="text/javascript" src="../js/jquery.collapse.js"></script>
+        <script type="text/javascript" src="../js/pamflet.js"></script>
+        <script type="text/javascript">
+          Pamflet.page.language = 'ja';
+        </script>
+        <script type="text/javascript" src="../js/prettify/prettify.js"></script><script type="text/javascript" src="../js/prettify/lang-scala.js"></script><link type="text/css" rel="stylesheet" href="../css/prettify.css"/><script type="text/javascript"><!--
+        window.onload=function() { prettyPrint(); };
+      --></script>
+        <link rel="stylesheet" href="../css/custom.css" type="text/css" media="screen, projection"/>
+        
+        <script type="text/javascript">
+              Pamflet.twitter = '#sbt #scala';
+            </script>
+      </head>
+      <body class="color_scheme-github">
+        <a class="page prev nav" href="Multi-Project.html">
+            <span class="space">&nbsp;</span>
+            <span class="flip arrow">&gt;</span>
+          </a><a class="page next nav" href="Custom-Settings.html">
+            <span class="space">&nbsp;</span>
+            <span class="arrow">&gt;</span>
+          </a>
+        <div class="container contentswrapper">
+          <div class="span-16 prepend-1 append-1 contents">
+            <h2 id="%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%81%AE%E4%BD%BF%E7%94%A8">プラグインの使用<a href="#%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%81%AE%E4%BD%BF%E7%94%A8" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このガイドのこれまでのページを読んでおいてほしい。
+特に <a href="Basic-Def.html">build.sbt</a>、
+<a href="Task-Graph.html">タスク・グラフ</a>、
+と<a href="Library-Dependencies.html">ライブラリ依存性</a>を理解していることが必要になる。
+</p><h3 id="%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%81%A8%E3%81%AF%E4%BD%95%E3%81%8B">プラグインとは何か<a href="#%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%81%A8%E3%81%AF%E4%BD%95%E3%81%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt のプラグインは、最も一般的には新しいセッティングを追加することでビルド定義を拡張するものである。
+その新しいセッティングは新しいタスクでもよい。
+例えば、テストカバレッジレポートを生成する <code>codeCoverage</code> というタスクを追加するプラグインなどが考えられる。
+</p><h3 id="%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%81%AE%E5%AE%A3%E8%A8%80">プラグインの宣言<a href="#%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%81%AE%E5%AE%A3%E8%A8%80" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>プロジェクトが <code>hello</code> ディレクトリにあり、ビルド定義に sbt-site プラグインを追加する場合、
+<code>hello/project/site.sbt</code> を新しく作成し、
+Ivy のモジュール ID を <code>addSbtPlugin</code> メソッドに渡してプラグイン依存性を定義する:
+</p><pre><code class="prettyprint lang-scala">addSbtPlugin(&quot;com.typesafe.sbt&quot; % &quot;sbt-site&quot; % &quot;0.7.0&quot;)
+</code></pre><p>sbt-assembly プラグインを追加するなら、以下のような内容で <code>hello/project/assembly.sbt</code> をつくる:
+</p><pre><code class="prettyprint lang-scala">addSbtPlugin(&quot;com.eed3si9n&quot; % &quot;sbt-assembly&quot; % &quot;0.11.2&quot;)
+</code></pre><p>全てのプラグインがデフォルトのリポジトリに存在するわけではないので、
+プラグインのドキュメントでそのプラグインが見つかるリポジトリを resolvers に追加するよう指示されていることもあるだろう。
+</p><pre><code class="prettyprint lang-scala">resolvers += Resolver.sonatypeRepo(&quot;public&quot;)
+</code></pre><p>プラグインは普通、プロジェクトでそのプラグインの機能を有効にするためのセッティング群を提供している。
+これは次のセクションで説明する。
+</p><h3 id="auto+plugin+%E3%81%AE%E6%9C%89%E5%8A%B9%E5%8C%96%E3%81%A8%E7%84%A1%E5%8A%B9%E5%8C%96">auto plugin の有効化と無効化<a href="#auto+plugin+%E3%81%AE%E6%9C%89%E5%8A%B9%E5%8C%96%E3%81%A8%E7%84%A1%E5%8A%B9%E5%8C%96" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>プラグインは、自身が持つセッティング群がビルド定義に自動的に追加されるよう宣言することができ、
+その場合、プラグインの利用者は何もしなくてもいい。
+</p><p>sbt 0.13.5 から、プラグインを自動的に追加して、そのセッティング群と依存関係がプロジェクトに設定されていることを安全に保証する <a href="../../docs/Plugins.html">auto plugin</a> という機能が追加された。
+</p><p>auto plugin の多くはデフォルトのセッティング群を自動的に追加するが、中には明示的な有効化を必要とするものもある。
+</p><p>明示的な有効化が必要な auto plugin を使っている場合は、以下を <code>build.sbt</code> に追加する必要がある:
+</p><pre><code class="prettyprint lang-scala">lazy val util = (project in file(&quot;util&quot;))
+  .enablePlugins(FooPlugin, BarPlugin)
+  .settings(
+    name := &quot;hello-util&quot;
+  )
+</code></pre><p><code>enablePlugins</code> メソッドを使えば、そのプロジェクトで使用したい auto plugin を明示的に定義できる。
+逆に <code>disablePlugins</code> メソッドを使ってプラグインを除外することもできる。
+例えば、<code>util</code> から <code>IvyPlugin</code> のセッティングを除外したいとすると、<code>build.sbt</code> を以下のように変更する:
+</p><pre><code class="prettyprint lang-scala">lazy val util = (project in file(&quot;util&quot;))
+  .enablePlugins(FooPlugin, BarPlugin)
+  .disablePlugins(plugins.IvyPlugin)
+  .settings(
+    name := &quot;hello-util&quot;
+  )
+</code></pre><p>明示的な有効化が必要か否かは、それぞれの auto plugin がドキュメントで明記しておくべきだ。
+あるプロジェクトでどんな auto plugin が有効化されているか気になったら、
+sbt コンソールから <code>plugins</code> コマンドを実行してみよう。
+</p><p>例えば、このようになる。
+</p><pre><code class="">&gt; plugins
+In file:/home/jsuereth/projects/sbt/test-ivy-issues/
+        sbt.plugins.IvyPlugin: enabled in scala-sbt-org
+        sbt.plugins.JvmPlugin: enabled in scala-sbt-org
+        sbt.plugins.CorePlugin: enabled in scala-sbt-org
+        sbt.plugins.JUnitXmlReportPlugin: enabled in scala-sbt-org
+</code></pre><p>ここでは、<code>plugins</code> の表示によって sbt のデフォルトのプラグインが全て有効化されていることが分かる。
+sbt のデフォルトセッティングは 3 つのプラグインによって提供される:
+</p><ol><li><code>CorePlugin</code>: タスクの並列実行などのコア機能。
+</li><li><code>IvyPlugin</code>: モジュールの公開や依存性の解決機能。
+</li><li><code>JvmPlugin</code>: Java/Scala プロジェクトのコンパイル/テスト/実行/パッケージ化。
+</li></ol><p>さらに <code>JUnitXmlReportPlugin</code> は実験的に junit-xml の生成機能を提供する。
+</p><p>古くからある auto plugin ではないプラグインは、<a href="Multi-Project.html">マルチプロジェクトビルド</a>内に
+異なるタイプのプロジェクトを持つことができるように、セッティング群を明示的に追加することを必要とする。
+</p><p>各プラグインのドキュメントに設定方法が明記されているかと思うが、
+一般的にはベースとなるセッティング群を追加して、必要に応じてカスタマイズするというパターンが多い。
+</p><p>例えば sbt-site プラグインの例で説明すると <code>site.sbt</code> というファイルを新しく作って
+</p><pre><code class="prettyprint lang-scala">site.settings
+</code></pre><p>を <code>site.sbt</code> に記述することで有効化できる。
+</p><p>ビルド定義がマルチプロジェクトの場合は、プロジェクトに直接追加する:
+</p><pre><code class="prettyprint lang-scala">// don't use the site plugin for the `util` project
+lazy val util = (project in file(&quot;util&quot;))
+
+// enable the site plugin for the `core` project
+lazy val core = (project in file(&quot;core&quot;))
+  .settings(site.settings)
+</code></pre><h3 id="%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%90%E3%83%AB%E3%83%BB%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3">グローバル・プラグイン<a href="#%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%90%E3%83%AB%E3%83%BB%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>プラグインを <code>~/.sbt/1.0/plugins/</code> 以下で宣言することで全てのプロジェクトに対して一括してプラグインをインストールすることができる。
+<code>~/.sbt/1.0/plugins/</code> はそのクラスパスをすべての sbt ビルド定義に対して export する sbt プロジェクトだ。
+大雑把に言えば、<code>~/.sbt/1.0/plugins/</code> 内の <code>.sbt</code> ファイルや <code>.scala</code> ファイルは、それが全てのプロジェクトの <code>project/</code> ディレクトリに入っているかのようにふるまう。
+</p><p><code>~/.sbt/1.0/plugins/build.sbt</code> を作って、そこに <code>addSbtPlugin()</code> 式を書くことで
+全プロジェクトにプラグインを追加することができる。
+しかし、これを多用するとマシン環境への依存性を増やしてしまうことになるので、この機能は注意してほどほどに使うべきだ。
+<a href="../../docs/Best-Practices.html#global-vs-local-plugins">ベスト・プラクティス</a>も参照してほしい。
+</p><h3 id="%E5%88%A9%E7%94%A8%E5%8F%AF%E8%83%BD%E3%81%AA%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3">利用可能なプラグイン<a href="#%E5%88%A9%E7%94%A8%E5%8F%AF%E8%83%BD%E3%81%AA%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="../../docs/Community-Plugins.html">プラグインのリスト</a>がある。
+</p><p>特に人気のプラグインは:
+</p><ul><li>IDE のためのプラグイン（sbt プロジェクトを好みの IDE にインポートするためのもの）
+</li><li><a href="https://github.com/earldouglas/xsbt-web-plugin">xsbt-web-plugin</a> のような Web フレームワークをサポートするプラグイン
+</li></ul><p>プラグイン開発の方法など、プラグインに関する詳細は <a href="../../docs/Plugins.html">Plugins</a> を参照。
+ベストプラクティスを知りたいなら、<a href="../../docs/Plugins-Best-Practices.html">ベスト・プラクティス</a> を見てほしい。
+</p><div class="bottom nav span-16">
+                        <em>Next Page</em>
+                        <span class="arrow">&gt;</span>
+                        <a href="Custom-Settings.html"> カスタムセッティングとタスク </a>                        
+                        <ul class="language-bar">
+        <li><a href="../Using-Plugins.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/Using-Plugins.html"><span class="lang-item lang-ja">日本語</span></a></li><li><a href="../zh-cn/Using-Plugins.html"><span class="lang-item lang-zh-cn">中文 (简体)</span></a></li>
+      </ul>
+                      </div><div class="tocwrapper show">
+      <a class="tochead nav" style="display: none" href="#toc">❦</a>
+      <a name="toc"></a>
+      <h4 class="toctitle">Contents</h4>
+      <div class="tocbody">
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">始める sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">sbt のインストール</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Mac への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Linux への sbt のインストール</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">ディレクトリ構造</a></div></li><li><div><a href="Running.html">実行</a></div></li><li><div><a href="Basic-Def.html">ビルド定義</a></div></li><li><div><a href="Task-Graph.html">タスク・グラフ</a></div></li><li><div><a href="Scopes.html">スコープ</a></div></li><li><div><a href="Appending-Values.html">値の追加</a></div></li><li><div><a href="Scope-Delegation.html">スコープ委譲 (.value の照会)</a></div></li><li><div><a href="Library-Dependencies.html">ライブラリ依存性</a></div></li><li><div><a href="Multi-Project.html">マルチプロジェクト・ビルド</a></div></li><li><div class="current">プラグインの使用</div></li><li><div><a href="Custom-Settings.html">カスタムセッティングとタスク</a></div></li><li><div><a href="Organizing-Build.html">ビルドの整理</a></div></li><li><div><a href="Summary.html">まとめ</a></div></li><li><div><a href="Bare-Def.html">付録: bare .sbt ビルド定義</a></div></li> </ol></li><li><div><a href="Detailed-Topics.html">各論</a></div><ol class="toc"> <li><div><a href="Plugins-and-Best-Practices.html">プラグインとベストプラクティス</a></div><ol class="toc"> <li><div><a href="Testing-sbt-plugins.html">sbt プラグインをテストする</a></div></li> </ol></li> </ol></li><li><div><a href="Howto.html">How to</a></div><ol class="toc"> <li><div><a href="Howto-Sequencing.html">逐次実行</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Def.sequential を用いて逐次タスクを定義する</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Def.taskDyn を用いて動的タスクを定義する</a></div></li><li><div><a href="Howto-After-Input-Task.html">インプットタスクの後で何かする</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn を用いた動的インプットタスクの定義</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">コマンドを用いた逐次実行</a></div></li> </ol></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+          </div>
+        </div>
+        <div class="header">
+          <link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
+<div class="container">
+    <div class="logo">
+      <a href="../../../index.html"><img src="../files/typesafe_sbt_svg.svg" alt="sbt"></a>
+    </div>
+    <div class="nav">
+      <a href="../../../documentation.html">Documentation</a>
+      <a href="../../../download.html">Download</a>
+      <a href="../../../community.html">Get Involved</a>
+      <a id="source-code" href="https://github.com/sbt/sbt"><img src="../files/github-logo-teal.png" alt="Source code"></a>
+      <a id="twitter" href="https://twitter.com/scala_sbt"><img src="../files/twitter-logo-teal.png" alt="sbt on Twitter"></a>
+    </div>
+    <script type="text/javascript" async>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-41449189-1', 'scala-sbt.org');
+    ga('send', 'pageview');
+    </script>
+    <script type="text/javascript" async>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-23127719-1', 'typesafe.com', {'allowLinker': true, 'name': 'tsTracker'});
+      ga('tsTracker.require', 'linker');
+      ga('tsTracker.linker:autoLink', ['typesafe.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org']);
+      ga('tsTracker.send', 'pageview');
+    </script>
+</div>
+        </div>
+        <div class="footer">
+          <div class="fw-wrapper navy-ltr support-strip">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="support-item">
+          <div class="support-icon">
+            <svg class="svg-icon svg-icon-chat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.5 85.2" enable-background="new 0 0 97.5 85.2"><path stroke="#fff" stroke-width="4.282" stroke-linecap="round" stroke-miterlimit="10" d="M27 29.5h-16.3c-4.7 0-8.6 3.9-8.6 8.6v25.7c0 4.7 3.9 8.6 8.6 8.6h2.7c.8 0 1.5.7 1.5 1.5v7.8c0 1.3 1.6 2 2.5 1l9.5-9.5c.5-.5 1.2-.8 2-.8h20.2c4.7 0 8.6-3.9 8.6-8.6v-7.8" fill="none"/><path fill="#fff" d="M85 0h-40c-6.9 0-12.5 5.6-12.5 12.5v33.4c0 2.2 1.8 4.1 4.1 4.1h29.9c.7 0 1.3.3 1.8.7l10 10c1.6 1.6 4.3.5 4.3-1.8v-6.5c0-1.4 1.1-2.5 2.5-2.5 6.9 0 12.5-5.6 12.5-12.5v-25c-.1-6.8-5.8-12.4-12.6-12.4z"/></svg>
+          </div>
+          <div class="support-detail">
+            <h2>コミュニティー・サポート</h2>
+            <a href="https://ja.stackoverflow.com/questions/tagged/sbt">StackOverflow</a>
+          </div>
+        </div>
+        <div class="support-item">
+          <div class="support-icon">
+            <svg id="lightbend-icon-reverse" class="svg-icon svg-icon-lightbend-reverse" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 302 262"><title>lightbend-icon</title><g id="icon"><path d="M1,195v56a10,10,0,0,0,10,10H291a10,10,0,0,0,10-10V195a557.85,557.85,0,0,1-150,20A557.85,557.85,0,0,1,1,195Z" style="fill:#fff"/><path d="M291,1H11A10,10,0,0,0,1,11V176a539.94,539.94,0,0,0,150,21,539.94,539.94,0,0,0,150-21V11A10,10,0,0,0,291,1Z" style="fill:#fff"/></g></svg>
+          </div>
+          <div class="support-detail">
+            <h2>商用サポート</h2>
+            <a href="https://www.lightbend.com/services/expert-support">Lightbend Subscription</a>
+            <a href="https://www.lightbend.com/services/training">Training</a>
+            <a href="https://www.lightbend.com/services/consulting">Consulting</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div><footer>
+  <div class="container footer">
+    <div class="row">
+      <div class="col-md-8 sbt">
+        <nav>
+          <a href="../../../index.html">
+            <img src="../files/typesafe_sbt_reverse_svg.svg" alt="sbt">
+          </a>
+          <a href="../../../documentation.html">Documentation</a>
+          <a href="../../../download.html">Download</a>
+          <a href="../../../community.html">Get Involved</a>
+        </nav>
+      </div>
+      <div class="col-md-4 text-right ts">
+        &copy; 2016 Lightbend Inc.
+        <a href="https://www.lightbend.com">
+          <img src="files/lightbend-reverse.svg" alt="Lightbend, Inc.">
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+        </div>
+        
+        <div class="highlight-outer">
+              <div class="highlight-menu">
+                <ul>
+                  <li><button id="highlight-button-twitter"><img src="../img/twitter-bird-dark-bgs.png"/></button></li>
+                </ul>
+              </div>
+            </div>
+      </body>
+    </html>

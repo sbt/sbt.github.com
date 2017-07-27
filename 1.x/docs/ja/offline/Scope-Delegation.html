@@ -1,0 +1,446 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html manifest="pamflet.manifest">
+      <head>
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+        <title>sbt Reference Manual — スコープ委譲 (.value の照会)</title>
+        <link rel="shortcut icon" href="../favicon.ico"/>
+        <link rel="stylesheet" href="../css/blueprint/screen.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/blueprint/grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="../css/blueprint/print.css" type="text/css" media="print"/> 
+        <!--[if lt IE 8]>
+          <link rel="stylesheet" href={ relativeBase + "css/blueprint/ie.css" } type="text/css" media="screen, projection"/>
+        <![endif]-->
+        <link rel="stylesheet" href="../css/pamflet.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamflet-print.css" type="text/css" media="print"/>
+        <link rel="stylesheet" href="../css/pamflet-grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-redmond.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-github.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-monokai.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamfletheight_80px_2em.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <script type="text/javascript" src="../js/jquery-1.6.2.min.js"></script>
+        <script type="text/javascript" src="../js/jquery.collapse.js"></script>
+        <script type="text/javascript" src="../js/pamflet.js"></script>
+        <script type="text/javascript">
+          Pamflet.page.language = 'ja';
+        </script>
+        <script type="text/javascript" src="../js/prettify/prettify.js"></script><script type="text/javascript" src="../js/prettify/lang-scala.js"></script><link type="text/css" rel="stylesheet" href="../css/prettify.css"/><script type="text/javascript"><!--
+        window.onload=function() { prettyPrint(); };
+      --></script>
+        <link rel="stylesheet" href="../css/custom.css" type="text/css" media="screen, projection"/>
+        
+        <script type="text/javascript">
+              Pamflet.twitter = '#sbt #scala';
+            </script>
+      </head>
+      <body class="color_scheme-github">
+        <a class="page prev nav" href="Appending-Values.html">
+            <span class="space">&nbsp;</span>
+            <span class="flip arrow">&gt;</span>
+          </a><a class="page next nav" href="Library-Dependencies.html">
+            <span class="space">&nbsp;</span>
+            <span class="arrow">&gt;</span>
+          </a>
+        <div class="container contentswrapper">
+          <div class="span-16 prepend-1 append-1 contents">
+            <h2 id="%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E5%A7%94%E8%AD%B2+%28.value+%E3%81%AE%E7%85%A7%E4%BC%9A%29">スコープ委譲 (.value の照会)<a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E5%A7%94%E8%AD%B2+%28.value+%E3%81%AE%E7%85%A7%E4%BC%9A%29" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このページはスコープ委譲を説明する。前のページの
+<a href="Basic-Def.html">.sbt ビルド定義</a>、
+[スコープ][Scopes-Graph]
+を読んで理解したことを前提とする。
+</p><p>スコープ付けの説明が全て終わったので、<code>.value</code> 照会の詳細を解説できる。
+難易度は高めなので、始めてこのガイドを読む場合はこのページは飛ばしてもいい。
+</p><p><code>Global</code> という用語はスコープ成分としての <code>*</code> と、
+<code>(Global, Global, Global)</code> の短縮形の両方の意味で使われて分かりづらいので、
+このページでスコープ成分を指すときは <code>*</code> というシンボルを用いる。
+</p><p>これまでに習ったことをおさらいしておこう。
+</p><ul><li>スコープは、サブプロジェクト軸、コンフィギュレーション軸、タスク軸という 3つの軸の成分を持つタプルである。
+</li><li>全てのスコープ軸には、<code>*</code> (<code>Global</code> とも呼ばれる) 特殊なスコープ成分がある。
+</li><li><strong>サブプロジェクト軸</strong>においてのみ、<code>ThisBuild</code> (シェルでは <code>{.}</code> と表記される) 特殊なスコープ成分がある。
+</li><li><code>Test</code> コンフィギュレーションは <code>Runtime</code> を拡張し、<code>Runtime</code> は <code>Compile</code> を拡張する。
+</li><li>build.sbt に書かれたキーは、デフォルトで <code>(${current subproject}, *, *)</code> にスコープ付けされる。
+</li><li>キーは、<code>.in(...)</code> メソッドを使ってさらにスコープ付けできる。
+</li></ul><p>以下のようなビルド定義を考える:
+</p><pre><code class="prettyprint lang-scala">lazy val foo = settingKey[Int](&quot;&quot;)
+lazy val bar = settingKey[Int](&quot;&quot;)
+
+lazy val projX = (project in file(&quot;x&quot;))
+  .settings(
+    foo := {
+      (bar in Test).value + 1
+    },
+    bar in Compile := 1
+  )
+</code></pre><p><code>foo</code> のセッティング本文内において、スコープ付きキー <code>(bar in Test)</code> への依存性が宣言されている。
+しかし、<code>projX</code> において <code>bar in Test</code> が未定義であるにも関わらず、sbt
+は別のスコープ付きキーへと解決して <code>foo</code> は <code>2</code> に初期化される。
+</p><p>sbt はキーのフォールバックのための検索パスを厳密に定義し、これを<strong>スコープ委譲</strong> (scope delegation) と呼ぶ。
+この機能により、より一般的なスコープで一度だけ値を代入して、複数のより特定なスコープがその値を継承することを可能とする。
+</p><h3 id="%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E5%A7%94%E8%AD%B2%E3%81%AE%E3%83%AB%E3%83%BC%E3%83%AB">スコープ委譲のルール<a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E5%A7%94%E8%AD%B2%E3%81%AE%E3%83%AB%E3%83%BC%E3%83%AB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>スコープ委譲のルールは以下の通り:
+</p><ul><li>ルール 1: スコープ軸は以下の優先順位を持つ: サブプロジェクト軸、コンフィギュレーション軸、そしてタスク軸。
+</li><li>ルール 2: あるスコープが与えられたとき、委譲スコープは以下の順にタスク軸を置換することで検索される:
+与えられたタスクスコープ、それから <code>*</code> (<code>Global</code>、これはタスクスコープ付けを行わないもののこと)。
+</li><li>ルール 3: あるスコープが与えられたとき、委譲スコープは以下の順にコンフィギュレーション軸を置換することで検索される:
+与えられたコンフィギュレーション、その親、その親の親…、そして <code>*</code> (<code>Global</code> これはコンフィギュレーションのスコープ付けを行わないものと同じ)。
+</li><li>ルール 4: あるスコープが与えられたとき、委譲スコープは以下の順にサブプロジェクト軸を置換することで検索される:
+与えられたサブプロジェクト、<code>ThisBuild</code> そして <code>*</code> (<code>Global</code>)。
+</li><li>ルール 5: 委譲されたスコープ付きのキー及びそれが依存するセッティングとタスクは、元のコンテキストを一切引き継がずに評価される。
+</li></ul><p>それぞれのルールを以下に説明していく。
+</p><h3 id="%E3%83%AB%E3%83%BC%E3%83%AB+1%3A+%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E8%BB%B8%E3%81%AE%E5%84%AA%E5%85%88%E9%A0%86%E4%BD%8D">ルール 1: スコープ軸の優先順位<a href="#%E3%83%AB%E3%83%BC%E3%83%AB+1%3A+%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E8%BB%B8%E3%81%AE%E5%84%AA%E5%85%88%E9%A0%86%E4%BD%8D" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>ルール 1: スコープ軸は以下の優先順位を持つ: サブプロジェクト軸、コンフィギュレーション軸、そしてタスク軸。
+</li></ul><p>言い換えると、2つのスコープ候補があるとき、一方がサブプロジェクト軸により特定な値を持つとき、コンフィギュレーションやタスク軸のスコープに関わらず必ず勝つということだ。
+同様に、サブプロジェクトが同じ場合、コンフィギュレーションに特定な値を持つものがタスクのスコープ付けに関わらず勝つ。
+「より特定」とは何かは、以下のルールで定義していく。
+</p><h3 id="%E3%83%AB%E3%83%BC%E3%83%AB+2%3A+%E3%82%BF%E3%82%B9%E3%82%AF%E8%BB%B8%E3%81%AE%E5%A7%94%E8%AD%B2">ルール 2: タスク軸の委譲<a href="#%E3%83%AB%E3%83%BC%E3%83%AB+2%3A+%E3%82%BF%E3%82%B9%E3%82%AF%E8%BB%B8%E3%81%AE%E5%A7%94%E8%AD%B2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>ルール 2: あるスコープが与えられたとき、委譲スコープは以下の順にタスク軸を置換することで検索される:
+与えられたタスクスコープ、それから <code>*</code> (<code>Global</code>、これはタスクスコープ付けを行わないもののこと)。
+</li></ul><p>ここでやっとキーが与えられたとき sbt がどのようにして委譲スコープを生成するかの具体的なルールが出てきた。
+任意の <code>(xxx in yyy).value</code> が与えられたときに、どのような検索パスを取るかを示していることに注目してほしい。
+</p><p><strong>練習問題 A</strong>: 以下のビルド定義を考える:
+</p><pre><code class="prettyprint lang-scala">lazy val projA = (project in file(&quot;a&quot;))
+  .settings(
+    name := {
+      &quot;foo-&quot; + (scalaVersion in packageBin).value
+    },
+    scalaVersion := &quot;2.11.11&quot;
+  )
+</code></pre><p><code>name in projA</code> (sbt シェルだと <code>projA/name</code>) の値は何か?
+</p><ol><li><code>&quot;foo-2.11.11&quot;</code>
+</li><li><code>&quot;foo-2.12.2&quot;</code>
+</li><li>その他
+</li></ol><p>正解は <code>&quot;foo-2.11.11&quot;</code>。
+<code>.settings(...)</code> 内において、<code>scalaVersion</code> は自動的に <code>(projA, *, *)</code> にスコープ付けされるため、
+<code>scalaVersion in packageBin</code> は <code>scalaVersion in (projA, *, packageBin)</code> となる。
+そのスコープ付きキーは未定義だ。
+ルール 2に基いて、sbt はタスク軸を <code>*</code> に置換して <code>(projA, *, *)</code> になる (シェル表記だと <code>proj/scalaVersion</code>)。
+そのスコープ付きキーは <code>&quot;2.11.11&quot;</code> として定義されている。
+</p><h3 id="%E3%83%AB%E3%83%BC%E3%83%AB+3%3A+%E3%82%B3%E3%83%B3%E3%83%95%E3%82%A3%E3%82%AE%E3%83%A5%E3%83%AC%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E8%BB%B8%E3%81%AE%E6%A4%9C%E7%B4%A2%E3%83%91%E3%82%B9">ルール 3: コンフィギュレーション軸の検索パス<a href="#%E3%83%AB%E3%83%BC%E3%83%AB+3%3A+%E3%82%B3%E3%83%B3%E3%83%95%E3%82%A3%E3%82%AE%E3%83%A5%E3%83%AC%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E8%BB%B8%E3%81%AE%E6%A4%9C%E7%B4%A2%E3%83%91%E3%82%B9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>ルール 3: あるスコープが与えられたとき、委譲スコープは以下の順にコンフィギュレーション軸を置換することで検索される:
+与えられたコンフィギュレーション、その親、その親の親…、そして <code>*</code> (<code>Global</code> これはコンフィギュレーションのスコープ付けを行わないものと同じ)。
+</li></ul><p>これを説明する例は上に見た <code>projX</code> だ:
+</p><pre><code class="prettyprint lang-scala">lazy val foo = settingKey[Int](&quot;&quot;)
+lazy val bar = settingKey[Int](&quot;&quot;)
+
+lazy val projX = (project in file(&quot;x&quot;))
+  .settings(
+    foo := {
+      (bar in Test).value + 1
+    },
+    bar in Compile := 1
+  )
+</code></pre><p>フルスコープを書き出してみると <code>(projX, Test, *)</code> となる。
+また、<code>Test</code> コンフィギュレーションは <code>Runtime</code> を拡張し、<code>Runtime</code> は <code>Compile</code> を拡張することを思い出してほしい。
+</p><p><code>(bar in Test)</code> は未定義だが、ルール3 に基いて sbt
+は <code>(projX, Test, *)</code>、<code>(projX, Runtime, *)</code>、そして
+<code>(projX, Compile, *)</code> の順に <code>bar</code> をスコープ付けして検索していく。
+最後のものが見つかり、それは <code>bar in Compile</code> だ。
+</p><h3 id="%E3%83%AB%E3%83%BC%E3%83%AB+4%3A+%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E8%BB%B8%E3%81%AE%E6%A4%9C%E7%B4%A2%E3%83%91%E3%82%B9">ルール 4: サブプロジェクト軸の検索パス<a href="#%E3%83%AB%E3%83%BC%E3%83%AB+4%3A+%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E8%BB%B8%E3%81%AE%E6%A4%9C%E7%B4%A2%E3%83%91%E3%82%B9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>ルール 4: あるスコープが与えられたとき、委譲スコープは以下の順にサブプロジェクト軸を置換することで検索される:
+与えられたサブプロジェクト、<code>ThisBuild</code> そして <code>*</code> (<code>Global</code>)。
+</li></ul><p><strong>練習問題 B</strong>: 以下のビルド定義を考える:
+</p><pre><code class="prettyprint lang-scala">organization in ThisBuild := &quot;com.example&quot;
+
+lazy val projB = (project in file(&quot;b&quot;))
+  .settings(
+    name := &quot;abc-&quot; + organization.value,
+    organization := &quot;org.tempuri&quot;
+  )
+</code></pre><p><code>name in projB</code> (sbt シェルだと <code>projB/name</code>) の値は何か?
+</p><ol><li><code>&quot;abc-com.example&quot;</code>
+</li><li><code>&quot;abc-org.tempuri&quot;</code>
+</li><li>その他
+</li></ol><p>正解は <code>abc-org.tempuri</code> だ。
+ルール 4に基づき、最初の検索パスは <code>(projB, *, *)</code> にスコープ付けされた <code>organization</code> で、
+これは <code>projB</code> 内で <code>&quot;org.tempuri&quot;</code> として定義されている。
+これは、ビルドレベルのセッティングである <code>organization in ThisBuild</code> よりも高い優先順位を持つ。
+</p><h4 id="%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E8%BB%B8%E3%81%AE%E5%84%AA%E5%85%88%E9%A0%86%E4%BD%8D%E3%80%81%E5%86%8D%E3%81%B3">スコープ軸の優先順位、再び<a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E8%BB%B8%E3%81%AE%E5%84%AA%E5%85%88%E9%A0%86%E4%BD%8D%E3%80%81%E5%86%8D%E3%81%B3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><strong>練習問題 C</strong>: 以下のビルド定義を考える:
+</p><pre><code class="prettyprint lang-scala">scalaVersion in (ThisBuild, packageBin) := &quot;2.12.2&quot;
+
+lazy val projC = (project in file(&quot;c&quot;))
+  .settings(
+    name := {
+      &quot;foo-&quot; + (scalaVersion in packageBin).value
+    },
+    scalaVersion := &quot;2.11.11&quot;
+  )
+</code></pre><p><code>name in projC</code> の値は何か?
+</p><ol><li><code>&quot;foo-2.12.2&quot;</code>
+</li><li><code>&quot;foo-2.11.11&quot;</code>
+</li><li>その他
+</li></ol><p>正解は <code>foo-2.11.11</code>。
+<code>(projC, *, packageBin)</code> にスコープ付けされた <code>scalaVersion</code> は未定義だ。
+ルール 2 は <code>(projC, *, *)</code> を見つける。ルール 4 は <code>(ThisBuild, *, packageBin)</code> を見つける。
+ルール 1 の規定により、より特定なサブプロジェクト軸が勝ち、それは
+<code>(projC, *, *)</code> で <code>&quot;2.11.11&quot;</code> と定義されている。
+</p><p><strong>練習問題 D</strong>: 以下のビルド定義を考える:
+</p><pre><code class="prettyprint lang-scala">scalacOptions in ThisBuild += &quot;-Ywarn-unused-import&quot;
+
+lazy val projD = (project in file(&quot;d&quot;))
+  .settings(
+    test := {
+      println((scalacOptions in (Compile, console)).value)
+    },
+    scalacOptions in console -= &quot;-Ywarn-unused-import&quot;,
+    scalacOptions in Compile := scalacOptions.value // added by sbt
+  )
+</code></pre><p><code>projD/test</code> を実行した場合の出力は何か?
+</p><ol><li><code>List()</code>
+</li><li><code>List(-Ywarn-unused-import)</code>
+</li><li>その他
+</li></ol><p>正解は <code>List(-Ywarn-unused-import)</code>。
+ルール 2 は <code>(projD, Compile, *)</code> を見つけ、
+ルール 3 は <code>(projD, *, console)</code> を見つけ、
+ルール 4 は <code>(ThisBuild, *, *)</code> を見つける。
+<code>(projD, Compile, *)</code> はサブプロジェクト軸に <code>projD</code> を持ち、
+またコンフィギュレーション軸はタスク軸よりも高い優先順位を持つのでルール 1 は
+<code>(projD, Compile, *)</code> を選択する。
+</p><p>次に、<code>scalacOptions in Compile</code> は <code>scalacOptions.value</code> を参照するため、
+<code>(projD, *, *)</code> のための委譲を探す必要がある。
+ルール 4 は <code>(ThisBuild, *, *)</code> を見つけ、これは <code>List(-Ywarn-unused-import)</code> に解決される。
+</p><h3 id="inspect+%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%81%AF%E5%A7%94%E8%AD%B2%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%82%92%E5%88%97%E6%8C%99%E3%81%99%E3%82%8B">inspect コマンドは委譲スコープを列挙する<a href="#inspect+%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%81%AF%E5%A7%94%E8%AD%B2%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%82%92%E5%88%97%E6%8C%99%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>何が起こっているのか手早く調べたい場合は <code>inspect</code> を使えばいい。
+</p><pre><code class="">Hello&gt; inspect projD/compile:console::scalacOptions
+[info] Task: scala.collection.Seq[java.lang.String]
+[info] Description:
+[info]  Options for the Scala compiler.
+[info] Provided by:
+[info]  {file:/Users/xxxx/}projD/compile:scalacOptions
+[info] Defined at:
+[info]  /Users/xxxx/build.sbt:47
+[info] Reverse dependencies:
+[info]  projD/compile:console
+[info]  projD/*:test
+[info] Delegates:
+[info]  projD/compile:console::scalacOptions
+[info]  projD/compile:scalacOptions
+[info]  projD/*:console::scalacOptions
+[info]  projD/*:scalacOptions
+[info]  {.}/compile:console::scalacOptions
+[info]  {.}/compile:scalacOptions
+[info]  {.}/*:console::scalacOptions
+[info]  {.}/*:scalacOptions
+[info]  */compile:console::scalacOptions
+[info]  */compile:scalacOptions
+[info]  */*:console::scalacOptions
+[info]  */*:scalacOptions
+....
+</code></pre><p>“Provided by” は <code>projD/compile:console::scalacOptions</code> が
+<code>projD/compile:scalacOptions</code> によって提供されることを表示しているのに注目してほしい。
+“Delegates” 以下に<strong>全て</strong>の委譲スコープ候補が優先順に列挙されている!
+</p><ul><li>サブプロジェクト軸が <code>projD</code> にスコープ付けされているスコープが当然最初に表示されて、<code>ThisBuild</code> (<code>{.}</code>)、<code>*</code> と続いている。
+</li><li>サブプロジェクト内だと、コンフィギュレーション軸が <code>Compile</code> にスコープ付けされいるのが最初に表示されて、<code>*</code> にフォールバックしている。
+</li><li>最後に、タスク軸は与えられたタスクスコープ付けの <code>cosole::</code> が来て、次にタスクスコープ無しが来ている。
+</li></ul><h3 id=".value+%E5%8F%82%E7%85%A7+vs+%E5%8B%95%E7%9A%84%E3%83%87%E3%82%A3%E3%82%B9%E3%83%91%E3%83%83%E3%83%81">.value 参照 vs 動的ディスパッチ<a href="#.value+%E5%8F%82%E7%85%A7+vs+%E5%8B%95%E7%9A%84%E3%83%87%E3%82%A3%E3%82%B9%E3%83%91%E3%83%83%E3%83%81" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>ルール 5: 委譲されたスコープ付きのキー及びそれが依存するセッティングとタスクは、元のコンテキストを一切引き継がずに評価される。
+</li></ul><p>スコープ委譲はオブジェクト指向言語のクラス継承に似ていると思うかもしれないが、注意するべき違いがある。
+Scala のような OO言語では、<code>Shape</code> トレイトに <code>drawShape</code> というメソッドがあれば、たとえそれが
+<code>Shape</code> トレイトの他のメソッドから呼ばれているとしても子クラス側で振る舞いをオーバーライドすることができ、これは動的ディスパッチと呼ばれる。
+</p><p>一方 sbt は、スコープ委譲によってあるスコープをより一般的なスコープに委譲することができ、
+例えばプロジェクトレベルのセッティングからビルドレベルのセッティングへ委譲といったことができるが、
+ビルドレベルのセッティングはプロジェクトレベルのセッティングを参照することはできない。
+</p><p><strong>練習問題 E</strong>: 以下のビルド定義を考える:
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    inThisBuild(List(
+      organization := &quot;com.example&quot;,
+      scalaVersion := &quot;2.12.2&quot;,
+      version      := scalaVersion.value + &quot;_0.1.0&quot;
+    )),
+    name := &quot;Hello&quot;
+  )
+
+lazy val projE = (project in file(&quot;e&quot;))
+  .settings(
+    scalaVersion := &quot;2.11.11&quot;
+  )
+</code></pre><p><code>projE/version</code> の値は何か?
+</p><ol><li><code>&quot;2.12.2_0.1.0&quot;</code>
+</li><li><code>&quot;2.11.11_0.1.0&quot;</code>
+</li><li>その他
+</li></ol><p>正解は <code>&quot;2.12.2_0.1.0&quot;</code>。
+<code>projD/version</code> は <code>version in ThisBuild</code> に委譲する。
+一方 <code>version in ThisBuild</code> は <code>scalaVersion in ThisBuild</code> に依存する。
+このように振る舞うため、ビルドレベルのセッティングは単純な値の代入に限定するべきだ。
+</p><p><strong>練習問題 F</strong>: 以下のビルド定義を考える:
+</p><pre><code class="prettyprint lang-scala">scalacOptions in ThisBuild += &quot;-D0&quot;
+scalacOptions += &quot;-D1&quot;
+
+lazy val projF = (project in file(&quot;f&quot;))
+  .settings(
+    scalacOptions in compile += &quot;-D2&quot;,
+    scalacOptions in Compile += &quot;-D3&quot;,
+    scalacOptions in (Compile, compile) += &quot;-D4&quot;,
+    test := {
+      println(&quot;bippy&quot; + (scalacOptions in (Compile, compile)).value.mkString)
+    }
+  )
+</code></pre><p><code>projF/test</code> を実行した場合の出力は何か?
+</p><ol><li><code>&quot;bippy-D4&quot;</code>
+</li><li><code>&quot;bippy-D2-D4&quot;</code>
+</li><li><code>&quot;bippy-D0-D3-D4&quot;</code>
+</li><li>その他
+</li></ol><p>正解は <code>&quot;bippy-D0-D3-D4&quot;</code>。
+これは、<a href="https://gist.github.com/paulp/923154ab2d61882195cdea47483592ca">Paul Phillips</a>
+さんが考案した練習問題を元にしている。
+</p><p><code>someKey += &quot;x&quot;</code> は以下のように展開されるため、全てのルールをデモする素晴らしい問題だ。
+</p><pre><code class="prettyprint lang-scala">someKey += {
+  val old = someKey.value
+  old :+ &quot;x&quot;
+}
+</code></pre><p>このとき、古い方の <code>.value</code> を取得するときに委譲が発生して、ルール5 に基いてそれは別のスコープ付きキー扱いする必要がある。
+まずは <code>+=</code> を取り除いて、古い <code>.value</code> の委譲が何になるかをコメントで注釈する。
+</p><pre><code class="prettyprint lang-scala">scalacOptions in ThisBuild := {
+  // scalacOptions in Global &lt;- ルール 4
+  val old = (scalacOptions in ThisBuild).value
+  old :+ &quot;-D0&quot;
+}
+
+scalacOptions := {
+  // scalacOptions in ThisBuild &lt;- ルール 4
+  val old = scalacOptions.value
+  old :+ &quot;-D1&quot;
+}
+
+lazy val projF = (project in file(&quot;f&quot;))
+  .settings(
+    scalacOptions in compile := {
+      // scalacOptions in ThisBuild &lt;- ルール 2 と 4
+      val old = (scalacOptions in compile).value
+      old :+ &quot;-D2&quot;
+    },
+    scalacOptions in Compile := {
+      // scalacOptions in ThisBuild &lt;- ルール 3 と 4
+      val old = (scalacOptions in Compile).value
+      old :+ &quot;-D3&quot;
+    },
+    scalacOptions in (Compile, compile) := {
+      // scalacOptions in (projF, Compile) &lt;- ルール 1 と 2
+      val old = (scalacOptions in (Compile, compile)).value
+      old :+ &quot;-D4&quot;
+    },
+    test := {
+      println(&quot;bippy&quot; + (scalacOptions in (Compile, compile)).value.mkString)
+    }
+  )
+</code></pre><p>評価するとこうなる:
+</p><pre><code class="prettyprint lang-scala">scalacOptions in ThisBuild := {
+  Nil :+ &quot;-D0&quot;
+}
+
+scalacOptions := {
+  List(&quot;-D0&quot;) :+ &quot;-D1&quot;
+}
+
+lazy val projF = (project in file(&quot;f&quot;))
+  .settings(
+    scalacOptions in compile := List(&quot;-D0&quot;) :+ &quot;-D2&quot;,
+    scalacOptions in Compile := List(&quot;-D0&quot;) :+ &quot;-D3&quot;,
+    scalacOptions in (Compile, compile) := List(&quot;-D0&quot;, &quot;-D3&quot;) :+ &quot;-D4&quot;,
+    test := {
+      println(&quot;bippy&quot; + (scalacOptions in (Compile, compile)).value.mkString)
+    }
+  )
+</code></pre><div class="bottom nav span-16">
+                        <em>Next Page</em>
+                        <span class="arrow">&gt;</span>
+                        <a href="Library-Dependencies.html"> ライブラリ依存性 </a>                        
+                        <ul class="language-bar">
+        <li><a href="../Scope-Delegation.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/Scope-Delegation.html"><span class="lang-item lang-ja">日本語</span></a></li>
+      </ul>
+                      </div><div class="tocwrapper show">
+      <a class="tochead nav" style="display: none" href="#toc">❦</a>
+      <a name="toc"></a>
+      <h4 class="toctitle">Contents</h4>
+      <div class="tocbody">
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">始める sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">sbt のインストール</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Mac への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Linux への sbt のインストール</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">ディレクトリ構造</a></div></li><li><div><a href="Running.html">実行</a></div></li><li><div><a href="Basic-Def.html">ビルド定義</a></div></li><li><div><a href="Task-Graph.html">タスク・グラフ</a></div></li><li><div><a href="Scopes.html">スコープ</a></div></li><li><div><a href="Appending-Values.html">値の追加</a></div></li><li><div class="current">スコープ委譲 (.value の照会)</div></li><li><div><a href="Library-Dependencies.html">ライブラリ依存性</a></div></li><li><div><a href="Multi-Project.html">マルチプロジェクト・ビルド</a></div></li><li><div><a href="Using-Plugins.html">プラグインの使用</a></div></li><li><div><a href="Custom-Settings.html">カスタムセッティングとタスク</a></div></li><li><div><a href="Organizing-Build.html">ビルドの整理</a></div></li><li><div><a href="Summary.html">まとめ</a></div></li><li><div><a href="Bare-Def.html">付録: bare .sbt ビルド定義</a></div></li> </ol></li><li><div><a href="Detailed-Topics.html">各論</a></div><ol class="toc"> <li><div><a href="Plugins-and-Best-Practices.html">プラグインとベストプラクティス</a></div><ol class="toc"> <li><div><a href="Testing-sbt-plugins.html">sbt プラグインをテストする</a></div></li> </ol></li> </ol></li><li><div><a href="Howto.html">How to</a></div><ol class="toc"> <li><div><a href="Howto-Sequencing.html">逐次実行</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Def.sequential を用いて逐次タスクを定義する</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Def.taskDyn を用いて動的タスクを定義する</a></div></li><li><div><a href="Howto-After-Input-Task.html">インプットタスクの後で何かする</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn を用いた動的インプットタスクの定義</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">コマンドを用いた逐次実行</a></div></li> </ol></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+          </div>
+        </div>
+        <div class="header">
+          <link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
+<div class="container">
+    <div class="logo">
+      <a href="../../../index.html"><img src="../files/typesafe_sbt_svg.svg" alt="sbt"></a>
+    </div>
+    <div class="nav">
+      <a href="../../../documentation.html">Documentation</a>
+      <a href="../../../download.html">Download</a>
+      <a href="../../../community.html">Get Involved</a>
+      <a id="source-code" href="https://github.com/sbt/sbt"><img src="../files/github-logo-teal.png" alt="Source code"></a>
+      <a id="twitter" href="https://twitter.com/scala_sbt"><img src="../files/twitter-logo-teal.png" alt="sbt on Twitter"></a>
+    </div>
+    <script type="text/javascript" async>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-41449189-1', 'scala-sbt.org');
+    ga('send', 'pageview');
+    </script>
+    <script type="text/javascript" async>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-23127719-1', 'typesafe.com', {'allowLinker': true, 'name': 'tsTracker'});
+      ga('tsTracker.require', 'linker');
+      ga('tsTracker.linker:autoLink', ['typesafe.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org']);
+      ga('tsTracker.send', 'pageview');
+    </script>
+</div>
+        </div>
+        <div class="footer">
+          <div class="fw-wrapper navy-ltr support-strip">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="support-item">
+          <div class="support-icon">
+            <svg class="svg-icon svg-icon-chat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.5 85.2" enable-background="new 0 0 97.5 85.2"><path stroke="#fff" stroke-width="4.282" stroke-linecap="round" stroke-miterlimit="10" d="M27 29.5h-16.3c-4.7 0-8.6 3.9-8.6 8.6v25.7c0 4.7 3.9 8.6 8.6 8.6h2.7c.8 0 1.5.7 1.5 1.5v7.8c0 1.3 1.6 2 2.5 1l9.5-9.5c.5-.5 1.2-.8 2-.8h20.2c4.7 0 8.6-3.9 8.6-8.6v-7.8" fill="none"/><path fill="#fff" d="M85 0h-40c-6.9 0-12.5 5.6-12.5 12.5v33.4c0 2.2 1.8 4.1 4.1 4.1h29.9c.7 0 1.3.3 1.8.7l10 10c1.6 1.6 4.3.5 4.3-1.8v-6.5c0-1.4 1.1-2.5 2.5-2.5 6.9 0 12.5-5.6 12.5-12.5v-25c-.1-6.8-5.8-12.4-12.6-12.4z"/></svg>
+          </div>
+          <div class="support-detail">
+            <h2>コミュニティー・サポート</h2>
+            <a href="https://ja.stackoverflow.com/questions/tagged/sbt">StackOverflow</a>
+          </div>
+        </div>
+        <div class="support-item">
+          <div class="support-icon">
+            <svg id="lightbend-icon-reverse" class="svg-icon svg-icon-lightbend-reverse" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 302 262"><title>lightbend-icon</title><g id="icon"><path d="M1,195v56a10,10,0,0,0,10,10H291a10,10,0,0,0,10-10V195a557.85,557.85,0,0,1-150,20A557.85,557.85,0,0,1,1,195Z" style="fill:#fff"/><path d="M291,1H11A10,10,0,0,0,1,11V176a539.94,539.94,0,0,0,150,21,539.94,539.94,0,0,0,150-21V11A10,10,0,0,0,291,1Z" style="fill:#fff"/></g></svg>
+          </div>
+          <div class="support-detail">
+            <h2>商用サポート</h2>
+            <a href="https://www.lightbend.com/services/expert-support">Lightbend Subscription</a>
+            <a href="https://www.lightbend.com/services/training">Training</a>
+            <a href="https://www.lightbend.com/services/consulting">Consulting</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div><footer>
+  <div class="container footer">
+    <div class="row">
+      <div class="col-md-8 sbt">
+        <nav>
+          <a href="../../../index.html">
+            <img src="../files/typesafe_sbt_reverse_svg.svg" alt="sbt">
+          </a>
+          <a href="../../../documentation.html">Documentation</a>
+          <a href="../../../download.html">Download</a>
+          <a href="../../../community.html">Get Involved</a>
+        </nav>
+      </div>
+      <div class="col-md-4 text-right ts">
+        &copy; 2016 Lightbend Inc.
+        <a href="https://www.lightbend.com">
+          <img src="files/lightbend-reverse.svg" alt="Lightbend, Inc.">
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+        </div>
+        
+        <div class="highlight-outer">
+              <div class="highlight-menu">
+                <ul>
+                  <li><button id="highlight-button-twitter"><img src="../img/twitter-bird-dark-bgs.png"/></button></li>
+                </ul>
+              </div>
+            </div>
+      </body>
+    </html>

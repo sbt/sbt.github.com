@@ -1,0 +1,2219 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html manifest="pamflet.manifest">
+      <head>
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+        <title>sbt Reference Manual — Combined Pages</title>
+        <link rel="shortcut icon" href="../favicon.ico"/>
+        <link rel="stylesheet" href="../css/blueprint/screen.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/blueprint/grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="../css/blueprint/print.css" type="text/css" media="print"/> 
+        <!--[if lt IE 8]>
+          <link rel="stylesheet" href={ relativeBase + "css/blueprint/ie.css" } type="text/css" media="screen, projection"/>
+        <![endif]-->
+        <link rel="stylesheet" href="../css/pamflet.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamflet-print.css" type="text/css" media="print"/>
+        <link rel="stylesheet" href="../css/pamflet-grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-redmond.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-github.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-monokai.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamfletheight_80px_2em.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <script type="text/javascript" src="../js/jquery-1.6.2.min.js"></script>
+        <script type="text/javascript" src="../js/jquery.collapse.js"></script>
+        <script type="text/javascript" src="../js/pamflet.js"></script>
+        <script type="text/javascript">
+          Pamflet.page.language = 'ja';
+        </script>
+        <script type="text/javascript" src="../js/prettify/prettify.js"></script><script type="text/javascript" src="../js/prettify/lang-scala.js"></script><link type="text/css" rel="stylesheet" href="../css/prettify.css"/><script type="text/javascript"><!--
+        window.onload=function() { prettyPrint(); };
+      --></script>
+        <link rel="stylesheet" href="../css/custom.css" type="text/css" media="screen, projection"/>
+        
+        <script type="text/javascript">
+              Pamflet.twitter = '#sbt #scala';
+            </script>
+      </head>
+      <body class="color_scheme-github">
+        <a class="page prev nav" href="Contents+in+Depth.html">
+            <span class="space">&nbsp;</span>
+            <span class="flip arrow">&gt;</span>
+          </a>
+        <div class="container contentswrapper">
+          <div class="span-16 prepend-1 append-1 contents">
+            <div class="tocwrapper show">
+      <a class="tochead nav" style="display: none" href="#toc">❦</a>
+      <a name="toc"></a>
+      <h4 class="toctitle">Contents</h4>
+      <div class="tocbody">
+      <div><a href="#sbt+Reference+Manual">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="#%E5%A7%8B%E3%82%81%E3%82%8B+sbt">始める sbt</a></div><ol class="toc"> <li><div><a href="#sbt+%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">sbt のインストール</a></div><ol class="toc"> <li><div><a href="#Mac+%E3%81%B8%E3%81%AE+sbt+%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">Mac への sbt のインストール</a></div></li><li><div><a href="#Windows+%E3%81%B8%E3%81%AE+sbt+%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">Windows への sbt のインストール</a></div></li><li><div><a href="#Linux+%E3%81%B8%E3%81%AE+sbt+%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">Linux への sbt のインストール</a></div></li> </ol></li><li><div><a href="#Hello%2C+World">Hello, World</a></div></li><li><div><a href="#%E3%83%87%E3%82%A3%E3%83%AC%E3%82%AF%E3%83%88%E3%83%AA%E6%A7%8B%E9%80%A0">ディレクトリ構造</a></div></li><li><div><a href="#%E5%AE%9F%E8%A1%8C">実行</a></div></li><li><div><a href="#%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9">ビルド定義</a></div></li><li><div><a href="#%E3%82%BF%E3%82%B9%E3%82%AF%E3%83%BB%E3%82%B0%E3%83%A9%E3%83%95">タスク・グラフ</a></div></li><li><div><a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97">スコープ</a></div></li><li><div><a href="#%E5%80%A4%E3%81%AE%E8%BF%BD%E5%8A%A0">値の追加</a></div></li><li><div><a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E5%A7%94%E8%AD%B2+%28.value+%E3%81%AE%E7%85%A7%E4%BC%9A%29">スコープ委譲 (.value の照会)</a></div></li><li><div><a href="#%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E4%BE%9D%E5%AD%98%E6%80%A7">ライブラリ依存性</a></div></li><li><div><a href="#%E3%83%9E%E3%83%AB%E3%83%81%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%83%BB%E3%83%93%E3%83%AB%E3%83%89">マルチプロジェクト・ビルド</a></div></li><li><div><a href="#%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%81%AE%E4%BD%BF%E7%94%A8">プラグインの使用</a></div></li><li><div><a href="#%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%A8%E3%82%BF%E3%82%B9%E3%82%AF">カスタムセッティングとタスク</a></div></li><li><div><a href="#%E3%83%93%E3%83%AB%E3%83%89%E3%81%AE%E6%95%B4%E7%90%86">ビルドの整理</a></div></li><li><div><a href="#%E3%81%BE%E3%81%A8%E3%82%81">まとめ</a></div></li><li><div><a href="#%E4%BB%98%E9%8C%B2%3A+bare+.sbt+%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9">付録: bare .sbt ビルド定義</a></div></li> </ol></li><li><div><a href="#%E5%90%84%E8%AB%96">各論</a></div><ol class="toc"> <li><div><a href="#%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%81%A8%E3%83%99%E3%82%B9%E3%83%88%E3%83%97%E3%83%A9%E3%82%AF%E3%83%86%E3%82%A3%E3%82%B9">プラグインとベストプラクティス</a></div><ol class="toc"> <li><div><a href="#sbt+%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%82%92%E3%83%86%E3%82%B9%E3%83%88%E3%81%99%E3%82%8B">sbt プラグインをテストする</a></div></li> </ol></li> </ol></li><li><div><a href="#How+to">How to</a></div><ol class="toc"> <li><div><a href="#%E9%80%90%E6%AC%A1%E5%AE%9F%E8%A1%8C">逐次実行</a></div><ol class="toc"> <li><div><a href="#Def.sequential+%E3%82%92%E7%94%A8%E3%81%84%E3%81%A6%E9%80%90%E6%AC%A1%E3%82%BF%E3%82%B9%E3%82%AF%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B">Def.sequential を用いて逐次タスクを定義する</a></div></li><li><div><a href="#Def.taskDyn+%E3%82%92%E7%94%A8%E3%81%84%E3%81%A6%E5%8B%95%E7%9A%84%E3%82%BF%E3%82%B9%E3%82%AF%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B">Def.taskDyn を用いて動的タスクを定義する</a></div></li><li><div><a href="#%E3%82%A4%E3%83%B3%E3%83%97%E3%83%83%E3%83%88%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%AE%E5%BE%8C%E3%81%A7%E4%BD%95%E3%81%8B%E3%81%99%E3%82%8B">インプットタスクの後で何かする</a></div></li><li><div><a href="#Def.inputTaskDyn+%E3%82%92%E7%94%A8%E3%81%84%E3%81%9F%E5%8B%95%E7%9A%84%E3%82%A4%E3%83%B3%E3%83%97%E3%83%83%E3%83%88%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%AE%E5%AE%9A%E7%BE%A9">Def.inputTaskDyn を用いた動的インプットタスクの定義</a></div></li><li><div><a href="#%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%82%92%E7%94%A8%E3%81%84%E3%81%9F%E9%80%90%E6%AC%A1%E5%AE%9F%E8%A1%8C">コマンドを用いた逐次実行</a></div></li> </ol></li> </ol></li> </ol></div></div><h1 id="sbt+Reference+Manual">sbt Reference Manual<a href="#sbt+Reference+Manual" class="header-link"><span class="header-link-content">&nbsp;</span></a></h1><h1 id="%E5%A7%8B%E3%82%81%E3%82%8B+sbt">始める sbt<a href="#%E5%A7%8B%E3%82%81%E3%82%8B+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h1><p>sbt には、柔軟かつ強力なビルド定義（Build Definition）を支えるための独自の概念がいくつか存在している。
+その概念は決して多くはないが、sbt は他のビルドシステムとは一味違うので、ドキュメントを読まずに使おうとすると、きっと細かい点でつまづいてしまうだろう。
+</p><p>この「始める sbt」では、sbt ビルド定義を作成してメンテナンスしていく上で知っておくべき概念を説明していく。
+</p><p>このガイドを一通り読んでおくことを<em>強く推奨したい</em>。
+</p><p>もしどうしても時間がないというなら、最も重要な概念は
+<a href="Basic-Def.html">.sbt ビルド定義</a>、
+<a href="Scopes.html">スコープ</a>、と
+<a href="Task-Graph.html">タスク・グラフ</a>
+に書かれている。
+ただし、それ以外のページを読み飛ばしても大丈夫かは保証できない。
+</p><p>このガイドの読み方だが、後ろの方のページはその前のページで紹介された概念の理解を前提に書かれているので、最初から順番に読み進めていくのがベストだ。
+</p><p>sbt を試してくれることに感謝する。<em>ぜひ楽しいんでほしい！</em>
+</p><blockquote><p>誤訳の報告は<a href="https://github.com/sbt/website/issues">こちらへ</a>。<br>
+sbt0.13での変更点や新機能に興味があるなら、<a href="http://eed3si9n.com/ja/node/142">sbt 0.13.0 の変更点</a> を読むとよいだろう。
+</p></blockquote><h2 id="sbt+%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">sbt のインストール<a href="#sbt+%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>sbt プロジェクトを作るためには、以下の手順をたどる必要がある:
+</p><ul><li>sbt をインストールする。
+</li><li>簡単な <a href="Hello.html">hello world</a> プロジェクトをセットアップする。
+</li><li>ソースファイルの入ったプロジェクトディレクトリを作る。
+</li><li>ビルド定義を作る。
+</li><li><a href="Running.html">実行する</a>を読んで、sbt の実行方法を知る。
+</li><li><a href="Basic-Def.html">.sbt ビルド定義</a>を読んで、ビルド定義についてもっと詳しく知る。
+</li></ul><p>究極的には sbt のインストールはランチャー JAR とシェルスクリプトの 2 つを用意するだけだが、
+利用するプラットフォームによってはもう少し簡単なインストール方法もいくつか提供されている。
+<a href="Installing-sbt-on-Mac.html">Mac</a>、<a href="Installing-sbt-on-Windows.html">Windows</a>、もしくは
+<a href="Installing-sbt-on-Linux.html">Linux</a> の手順を参照してほしい。
+</p><h3 id="%E8%B1%86%E7%9F%A5%E8%AD%98">豆知識<a href="#%E8%B1%86%E7%9F%A5%E8%AD%98" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>sbt</code> の実行が上手くいかない場合は、<a href="../../docs/Setup-Notes.html">Setup Notes</a> のターミナルの文字エンコーディング、HTTP プロキシ、JVM のオプションに関する説明を参照してほしい。
+</p><h2 id="Mac+%E3%81%B8%E3%81%AE+sbt+%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">Mac への sbt のインストール<a href="#Mac+%E3%81%B8%E3%81%AE+sbt+%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="%E3%83%A6%E3%83%8B%E3%83%90%E3%83%BC%E3%82%B5%E3%83%AB%E3%83%91%E3%83%83%E3%82%B1%E3%83%BC%E3%82%B8%E3%81%8B%E3%82%89%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">ユニバーサルパッケージからのインストール<a href="#%E3%83%A6%E3%83%8B%E3%83%90%E3%83%BC%E3%82%B5%E3%83%AB%E3%83%91%E3%83%83%E3%82%B1%E3%83%BC%E3%82%B8%E3%81%8B%E3%82%89%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://cocl.us/sbt100rc2zip">ZIP</a> か <a href="https://cocl.us/sbt100rc2tgz">TGZ</a> をダウンロードしてきて解凍する。
+</p><h3 id="%E3%82%B5%E3%83%BC%E3%83%89%E3%83%91%E3%83%BC%E3%83%86%E3%82%A3%E3%83%91%E3%83%83%E3%82%B1%E3%83%BC%E3%82%B8%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">サードパーティパッケージを使ってのインストール<a href="#%E3%82%B5%E3%83%BC%E3%83%89%E3%83%91%E3%83%BC%E3%83%86%E3%82%A3%E3%83%91%E3%83%83%E3%82%B1%E3%83%BC%E3%82%B8%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><blockquote><p><strong>注意:</strong> サードパーティが提供するパッケージは最新版を使っているとは限らない。
+何か問題があれば、パッケージメンテナに報告してほしい。
+</p></blockquote><h4 id=""><a href="http://mxcl.github.com/homebrew/">Homebrew</a><a href="#" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="">$ brew install sbt -devel
+</code></pre><h4 id=""><a href="http://macports.org/">Macports</a><a href="#" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="">$ port install sbt
+</code></pre><h2 id="Windows+%E3%81%B8%E3%81%AE+sbt+%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">Windows への sbt のインストール<a href="#Windows+%E3%81%B8%E3%81%AE+sbt+%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="%E3%83%A6%E3%83%8B%E3%83%90%E3%83%BC%E3%82%B5%E3%83%AB%E3%83%91%E3%83%83%E3%82%B1%E3%83%BC%E3%82%B8%E3%81%8B%E3%82%89%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">ユニバーサルパッケージからのインストール<a href="#%E3%83%A6%E3%83%8B%E3%83%90%E3%83%BC%E3%82%B5%E3%83%AB%E3%83%91%E3%83%83%E3%82%B1%E3%83%BC%E3%82%B8%E3%81%8B%E3%82%89%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://cocl.us/sbt100rc2zip">ZIP</a> か <a href="https://cocl.us/sbt100rc2tgz">TGZ</a> をダウンロードしてきて解凍する。
+</p><h3 id="Windows+%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%A9">Windows インストーラ<a href="#Windows+%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://cocl.us/sbt100rc2msi">msi インストーラ</a>をダウンロードしてインストールする。
+</p><h2 id="Linux+%E3%81%B8%E3%81%AE+sbt+%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">Linux への sbt のインストール<a href="#Linux+%E3%81%B8%E3%81%AE+sbt+%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="%E3%83%A6%E3%83%8B%E3%83%90%E3%83%BC%E3%82%B5%E3%83%AB%E3%83%91%E3%83%83%E3%82%B1%E3%83%BC%E3%82%B8%E3%81%8B%E3%82%89%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">ユニバーサルパッケージからのインストール<a href="#%E3%83%A6%E3%83%8B%E3%83%90%E3%83%BC%E3%82%B5%E3%83%AB%E3%83%91%E3%83%83%E3%82%B1%E3%83%BC%E3%82%B8%E3%81%8B%E3%82%89%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://cocl.us/sbt100rc2zip">ZIP</a> か <a href="https://cocl.us/sbt100rc2tgz">TGZ</a> をダウンロードしてきて解凍する。
+</p><h3 id="Ubuntu+%E5%8F%8A%E3%81%B3%E3%81%9D%E3%81%AE%E4%BB%96%E3%81%AE+Debian+%E3%83%99%E3%83%BC%E3%82%B9%E3%81%AE+Linux+%E3%83%87%E3%82%A3%E3%82%B9%E3%83%88%E3%83%AA%E3%83%93%E3%83%A5%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3">Ubuntu 及びその他の Debian ベースの Linux ディストリビューション<a href="#Ubuntu+%E5%8F%8A%E3%81%B3%E3%81%9D%E3%81%AE%E4%BB%96%E3%81%AE+Debian+%E3%83%99%E3%83%BC%E3%82%B9%E3%81%AE+Linux+%E3%83%87%E3%82%A3%E3%82%B9%E3%83%88%E3%83%AA%E3%83%93%E3%83%A5%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://dl.bintray.com/sbt/debian/sbt-1.0.0-RC2.deb">DEB</a> は sbt による公式パッケージだ。
+</p><p>Ubuntu 及びその他の Debian ベースのディストリビューションは DEB フォーマットを用いるが、
+ローカルの DEB ファイルからソフトウェアをインストールすることは稀だ。
+これらのディストロは通常コマンドラインや GUI 上から使えるパッケージ・マネージャがあって
+(例: <code>apt-get</code>、<code>aptitude</code>、Synaptic など)、インストールはそれらから行う。
+ターミナル上から以下を実行すると <code>sbt</code> をインストールできる (superuser 権限を必要とするため、<code>sudo</code> を使っている)。
+</p><pre><code>echo &quot;deb https://dl.bintray.com/sbt/debian-experimental /&quot; | sudo tee -a /etc/apt/sources.list.d/sbt.list
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2EE0EA64E40A89B84B2DF73499E82A75642AC823
+sudo apt-get update
+sudo apt-get install sbt
+</code></pre><p>パッケージ・マネージャは設定されたリポジトリに指定されたパッケージがあるか確認しにいく。
+sbt のバイナリは Bintray にて公開されており、都合の良いことに Bintray は APT リポジトリを提供している。
+そのため、このリポジトリをパッケージ・マネージャに追加しさえすればよい。
+</p><blockquote><p><strong>注意</strong> [sbt/website#127][website127] で報告されている通り、https を使用するとセグメンテーション違反が発生する場合がある。
+</p></blockquote><p><code>sbt</code> を最初にインストールした後は、このパッケージは <code>aptitude</code> や Synaptic
+上から管理することができる (パッケージ・キャッシュの更新を忘れずに)。
+追加された APT リポジトリは「システム設定 -&gt; ソフトウェアとアップデート -&gt; 他のソフトウェア」 の一番下に表示されているはずだ:
+</p><p><img src="../files/ubuntu-sources.png" title="Ubuntu Software &amp; Updates Screenshot" alt="Ubuntu Software &amp; Updates Screenshot"/>
+</p><h3 id="Red+Hat+Enterprise+Linux+%E5%8F%8A%E3%81%B3%E3%81%9D%E3%81%AE%E4%BB%96%E3%81%AE+RPM+%E3%83%99%E3%83%BC%E3%82%B9%E3%81%AE%E3%83%87%E3%82%A3%E3%82%B9%E3%83%88%E3%83%AA%E3%83%93%E3%83%A5%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3">Red Hat Enterprise Linux 及びその他の RPM ベースのディストリビューション<a href="#Red+Hat+Enterprise+Linux+%E5%8F%8A%E3%81%B3%E3%81%9D%E3%81%AE%E4%BB%96%E3%81%AE+RPM+%E3%83%99%E3%83%BC%E3%82%B9%E3%81%AE%E3%83%87%E3%82%A3%E3%82%B9%E3%83%88%E3%83%AA%E3%83%93%E3%83%A5%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://dl.bintray.com/sbt/rpm/sbt-1.0.0-RC2.rpm">RPM</a> は sbt による公式パッケージだ。
+</p><p>Red Hat Enterprise Linux 及びその他の RPM ベースのディストリビューションは RPM フォーマットを用いる。
+ターミナル上から以下を実行すると <code>sbt</code> をインストールできる (superuser 権限を必要とするため、<code>sudo</code> を使っている)。
+</p><pre><code>curl https://bintray.com/sbt/rpm/rpm-experimental | sudo tee /etc/yum.repos.d/bintray-sbt-rpm.repo
+sudo yum install sbt
+</code></pre><p>sbt のバイナリは Bintray にて公開されており、Bintray は RPM リポジトリを提供する。
+そのため、このリポジトリをパッケージ・マネージャに追加する必要がある。
+</p><blockquote><p><strong>注意:</strong> これらのパッケージに問題があれば、
+<a href="https://github.com/sbt/sbt-launcher-package">sbt-launcher-package</a>
+プロジェクトに報告してほしい。
+</p></blockquote><h3 id="Gentoo">Gentoo<a href="#Gentoo" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>公式には sbt の ebuild は提供されていないが、
+バイナリから sbt をマージする <a href="https://github.com/whiter4bbit/overlays/tree/master/dev-java/sbt-bin">ebuild</a> が公開されているようだ。
+この ebuild を使って sbt をマージするには:
+</p><pre><code>emerge dev-java/sbt
+</code></pre><h2 id="Hello%2C+World">Hello, World<a href="#Hello%2C+World" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このページは、既に<a href="Setup.html">sbt 0.13.13 以上をインストール</a>したことを前提とする。
+</p><h3 id="sbt+new+%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89">sbt new コマンド<a href="#sbt+new+%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 0.13.13 以降を使っている場合は、sbt <code>new</code>
+コマンドを使って手早く簡単な Hello world ビルドをセットアップすることができる。
+以下をターミナルから打ち込む。
+</p><pre><code class="">$ sbt new sbt/scala-seed.g8
+....
+Minimum Scala build.
+
+name [My Something Project]: hello
+
+Template applied in ./hello
+</code></pre><p>プロジェクト名を入力するプロンプトが出てきたら <code>hello</code> と入力する。
+</p><p>これで、<code>hello</code> ディレクトリ以下に新しいプロジェクトができた。
+</p><h3 id="%E3%82%A2%E3%83%97%E3%83%AA%E3%81%AE%E5%AE%9F%E8%A1%8C">アプリの実行<a href="#%E3%82%A2%E3%83%97%E3%83%AA%E3%81%AE%E5%AE%9F%E8%A1%8C" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>次に <code>hello</code> ディレクトリ内から sbt を起動して sbt のシェルから
+<code>run</code> と入力する。Linux や OS X の場合、コマンドは以下のようになる:
+</p><pre><code class="">$ cd hello
+$ sbt
+...
+&gt; run
+...
+[info] Compiling 1 Scala source to /xxx/hello/target/scala-2.12/classes...
+[info] Running example.Hello
+hello
+</code></pre><p><a href="Running.html">後で</a>他のタスクもみていく。
+</p><h3 id="sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%AE%E7%B5%82%E4%BA%86">sbt シェルの終了<a href="#sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%AE%E7%B5%82%E4%BA%86" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt シェルを終了するには、<code>exit</code> と入力するか、Ctrl+D (Unix) か Ctrl+Z (Windows) を押す。
+</p><pre><code class="">&gt; exit
+</code></pre><h3 id="%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9">ビルド定義<a href="#%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>ビルド設定方法はプロジェクトのベースディレクトリに <code>build.sbt</code> というファイルとして配置される。
+ファイルを読んでみてもいいが、このビルドファイルに書いてあることが分からなくても心配しないでほしい。
+<a href="Basic-Def.html">ビルド定義</a>で、<code>build.sbt</code> の書き方を説明する。
+</p><h2 id="%E3%83%87%E3%82%A3%E3%83%AC%E3%82%AF%E3%83%88%E3%83%AA%E6%A7%8B%E9%80%A0">ディレクトリ構造<a href="#%E3%83%87%E3%82%A3%E3%83%AC%E3%82%AF%E3%83%88%E3%83%AA%E6%A7%8B%E9%80%A0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このページは、
+<a href="Setup.html">sbt をインストール</a>して、
+<a href="Hello.html">Hello, World</a> を読んだことを前提とする。
+</p><h3 id="%E3%83%99%E3%83%BC%E3%82%B9%E3%83%87%E3%82%A3%E3%83%AC%E3%82%AF%E3%83%88%E3%83%AA">ベースディレクトリ<a href="#%E3%83%99%E3%83%BC%E3%82%B9%E3%83%87%E3%82%A3%E3%83%AC%E3%82%AF%E3%83%88%E3%83%AA" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 用語では「ベースディレクトリ(base directory) 」はプロジェクトが入ったディレクトリを指す。
+<a href="Hello.html">Hello, World</a> での例のように、<code>hello/build.sbt</code> が入った
+<code>hello</code> プロジェクトを作った場合、ベースディレクトリは <code>hello</code> となる。
+</p><h3 id="%E3%82%BD%E3%83%BC%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%89">ソースコード<a href="#%E3%82%BD%E3%83%BC%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt はデフォルトで <a href="https://maven.apache.org/">Maven</a> と同じディレクトリ構造を使う（全てのパスはベースディレクトリからの相対パスとする）:
+</p><pre><code class="">src/
+  main/
+    resources/
+      &lt;メインの jar に含むデータファイル&gt;
+    scala/
+      &lt;メインの Scala ソースファイル&gt;
+    java/
+      &lt;メインの Java ソースファイル&gt;
+  test/
+    resources/
+      &lt;テストの jar に含むデータファイル&gt;
+    scala/
+      &lt;テストの Scala ソースファイル&gt;
+    java/
+      &lt;テストの Java ソースファイル&gt;
+</code></pre><p><code>src/</code> 内の他のディレクトリは無視される。また、隠しディレクトリも無視される。
+</p><p>ソースコードは <code>hello/app.scala</code> のようにプロジェクトのベースディレクトリに置くこともできるが、
+小さいプロジェクトはともかくとして、通常のプロジェクトでは
+<code>src/main/</code> 以下のディレクトリにソースを入れて整理するのが普通だ。
+ベースディレクトリに <code>*.scala</code> ソースコードを配置できるのは小手先だけのトリックに見えるかもしれないが、
+この機能は<a href="Organizing-Build.html">後ほど</a>重要になる。
+</p><h3 id="sbt+%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB">sbt ビルド定義ファイル<a href="#sbt+%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>ビルド定義はプロジェクトのベースディレクトリ以下の <code>build.sbt</code>
+(実は <code>*.sbt</code> ならどのファイルでもいい) にて記述する。
+</p><pre><code class="">build.sbt
+</code></pre><h3 id="%E3%83%93%E3%83%AB%E3%83%89%E3%82%B5%E3%83%9D%E3%83%BC%E3%83%88%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB">ビルドサポートファイル<a href="#%E3%83%93%E3%83%AB%E3%83%89%E3%82%B5%E3%83%9D%E3%83%BC%E3%83%88%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> の他に、<code>project</code>
+ディレクトリにはヘルパーオブジェクトや一点物のプラグインを定義した
+<code>*.scala</code> ファイルを含むことができる。
+詳しくは、<a href="Organizing-Build.html">ビルドの整理</a>を参照。
+</p><pre><code class="">build.sbt
+project/
+  Dependencies.scala
+</code></pre><p><code>project</code> 内に <code>.sbt</code> があるのを見ることがあるかもしれないが、それはプロジェクトのベースディレクトリ下の <code>.sbt</code> とはまた別物だ。
+これに関しては他に前提となる知識が必要なので<a href="Organizing-Build.html">後ほど説明する</a>。
+</p><h3 id="%E3%83%93%E3%83%AB%E3%83%89%E6%88%90%E6%9E%9C%E7%89%A9">ビルド成果物<a href="#%E3%83%93%E3%83%AB%E3%83%89%E6%88%90%E6%9E%9C%E7%89%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>生成されたファイル（コンパイルされたクラスファイル、パッケージ化された jar ファイル、managed 配下のファイル、キャッシュとドキュメンテーション）は、デフォルトでは <code>target</code> ディレクトリに出力される。
+</p><h3 id="%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3%E7%AE%A1%E7%90%86%E3%81%AE%E8%A8%AD%E5%AE%9A">バージョン管理の設定<a href="#%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3%E7%AE%A1%E7%90%86%E3%81%AE%E8%A8%AD%E5%AE%9A" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>.gitignore</code> （もしくは、他のバージョン管理システムの同様のファイル）には以下を追加しておくとよいだろう:
+</p><pre><code class="">target/
+</code></pre><p>ここでは（ディレクトリだけにマッチさせるために）語尾の <code>/</code> は意図的につけていて、一方で
+（普通の <code>target/</code> に加えて <code>project/target/</code> にもマッチさせるために）先頭の <code>/</code> は意図的に
+つけていないことに注意。
+</p><h2 id="%E5%AE%9F%E8%A1%8C">実行<a href="#%E5%AE%9F%E8%A1%8C" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このページではプロジェクトをセットアップした後の <code>sbt</code> の使い方を説明する。
+君が<a href="Setup.html">sbt をインストール</a>して、<a href="Hello.html">Hello, World</a>か他のプロジェクトを作ったことを前提とする。
+</p><h3 id="sbt+%E3%82%B7%E3%82%A7%E3%83%AB">sbt シェル<a href="#sbt+%E3%82%B7%E3%82%A7%E3%83%AB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>プロジェクトのベースディレクトリで、sbt を引数なしで実行する:
+</p><pre><code class="">$ sbt
+</code></pre><p>sbt をコマンドライン引数なしで実行すると sbt シェルが起動される。
+インタラクティブモードにはコマンドプロンプト（とタブ補完と履歴も！）がある。
+</p><p>例えば、<code>compile</code> と sbt シェルに入力する:
+</p><pre><code class="">&gt; compile
+</code></pre><p>もう一度 <code>compile</code> するには、上矢印を押して、エンターキーを押す。
+</p><p>プログラムを実行するには、<code>run</code> と入力する。
+</p><p>sbt シェルを終了するには、<code>exit</code> と入力するか、Ctrl+D (Unix) か Ctrl+Z (Windows) を押す。
+</p><h3 id="%E3%83%90%E3%83%83%E3%83%81%E3%83%A2%E3%83%BC%E3%83%89">バッチモード<a href="#%E3%83%90%E3%83%83%E3%83%81%E3%83%A2%E3%83%BC%E3%83%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt のコマンドを空白で区切られたリストとして引数に指定すると sbt をバッチモードで実行することができる。
+引数を取る sbt コマンドの場合は、コマンドと引数の両方を引用符で囲むことで一つの引数として <code>sbt</code> に渡す。
+例えば、
+</p><pre><code class="">$ sbt clean compile &quot;testOnly TestA TestB&quot;
+</code></pre><p>この例では、<code>testOnly</code> は <code>TestA</code> と <code>TestB</code> の二つの引数を取る。
+コマンドは順に実行される（この場合 <code>clean</code>、<code>compile</code>、そして <code>testOnly</code>）。
+</p><p><strong>Note</strong>: バッチモードでの実行は JVM のスピンアップと JIT を毎回行うため、<strong>ビルドかなり遅くなる。</strong>
+普段のコーディングでは sbt シェル、
+もしくは以下に説明する継続的ビルドとテストを使うことを推奨する。
+</p><h3 id="%E7%B6%99%E7%B6%9A%E7%9A%84%E3%83%93%E3%83%AB%E3%83%89%E3%81%A8%E3%83%86%E3%82%B9%E3%83%88">継続的ビルドとテスト<a href="#%E7%B6%99%E7%B6%9A%E7%9A%84%E3%83%93%E3%83%AB%E3%83%89%E3%81%A8%E3%83%86%E3%82%B9%E3%83%88" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>編集〜コンパイル〜テストのサイクルを速めるために、ソースファイルを保存する度
+sbt に自動的に再コンパイルを実行させることができる。
+</p><p>ソースファイルが変更されたことを検知してコマンドを実行するには、コマンドの先頭に <code>~</code> をつける。
+例えば、インタラクティブモードで、これを試してみよう:
+</p><pre><code class="">&gt; ~testQuick
+</code></pre><p>このファイル変更監視状態を止めるにはエンターキーを押す。
+</p><p>先頭の <code>~</code> は sbt シェルでもバッチモードでも使うことができる。
+</p><p>詳しくは、<a href="../../docs/Triggered-Execution.html">Triggered Execution</a> 参照。
+</p><h3 id="%E3%82%88%E3%81%8F%E4%BD%BF%E3%82%8F%E3%82%8C%E3%82%8B%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89">よく使われるコマンド<a href="#%E3%82%88%E3%81%8F%E4%BD%BF%E3%82%8F%E3%82%8C%E3%82%8B%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>最もよく使われる sbt コマンドを紹介する。全ての一覧は <a href="../../docs/Command-Line-Reference.html">Command Line Reference</a> を参照。
+</p><table>
+  <tr>
+    <td><tt>clean</tt></td>
+    <td>（<tt>target</tt> ディレクトリにある）全ての生成されたファイルを削除する。</td>
+  </tr>
+  <tr>
+    <td><tt>compile</tt></td>
+    <td>
+    （<tt>src/main/scala</tt> と <tt>src/main/java</tt> ディレクトリにある）
+    メインのソースをコンパイルする。</td>
+  </tr>
+  <tr>
+    <td><tt>test</tt></td>
+    <td>全てのテストをコンパイルし実行する。</td>
+  </tr>
+  <tr>
+    <td><tt>console</tt></td>
+    <td>コンパイル済のソースと依存ライブラリにクラスパスを通して、Scala インタプリタを開始する。
+  sbt に戻るには、<tt>:quit</tt> と入力するか、Ctrl+D (Unix) か Ctrl+Z (Windows) を押す。</td>
+  </tr>
+  <tr>
+    <td><nobr><tt>run &lt;argument&gt;*</tt></nobr></td>
+    <td><tt>sbt</tt> と同じ仮想マシン上で、プロジェクトのメインクラスを実行する。</td>
+  </tr>
+  <tr>
+    <td><tt>package</tt></td>
+    <td><tt>src/main/resources</tt> 内のファイルと <tt>src/main/scala</tt> と
+    <tt>src/main/java</tt>
+    からコンパイルされたクラスファイルを含む jar を作る。</td>
+  </tr>
+  <tr>
+    <td><tt>help &lt;command&gt;</tt></td>
+    <td>指定されたコマンドの詳細なヘルプを表示する。コマンドが指定されていない場合は、
+  全てのコマンドの簡単な説明を表示する。</td>
+  </tr>
+  <tr>
+    <td><tt>reload</tt></td>
+    <td>ビルド定義（<tt>build.sbt</tt>、 <tt>project/*.scala</tt>、
+    <tt>project/*.sbt</tt> ファイル）を再読み込みする。
+  ビルド定義を変更した場合に必要。</td>
+  </tr>
+</table><h3 id="%E3%82%BF%E3%83%96%E8%A3%9C%E5%AE%8C">タブ補完<a href="#%E3%82%BF%E3%83%96%E8%A3%9C%E5%AE%8C" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt シェルには、空のプロンプトの状態を含め、タブ補完がある。
+sbt の特殊な慣例として、タブを一度押すとよく使われる候補だけが表示され、
+複数回押すと、より多くの冗長な候補一覧が表示される。
+</p><h3 id="%E5%B1%A5%E6%AD%B4%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89">履歴コマンド<a href="#%E5%B1%A5%E6%AD%B4%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt シェルは、 sbt を終了して再起動した後でも履歴を覚えている。
+履歴にアクセスする最も簡単な方法は矢印キーを使うことだ。以下のコマンドも使うことができる:
+</p><table>
+  <tr>
+    <td><tt>!</tt></td>
+    <td>履歴コマンドのヘルプを表示する。</td>
+  </tr>
+  <tr>
+    <td><tt>!!</tt></td>
+    <td>直前のコマンドを再実行する。</td>
+  </tr>
+  <tr>
+    <td><tt>!:</tt></td>
+    <td>全てのコマンド履歴を表示する。</td>
+  </tr>
+  <tr>
+    <td><tt>!:n</tt></td>
+    <td>最後の <tt>n</tt> コマンドを表示する。</td>
+  </tr>
+  <tr>
+    <td><tt>!n</tt></td>
+    <td><tt>!:</tt> で表示されたインデックス <tt>n</tt> のコマンドを実行する。</td>
+  </tr>
+  <tr>
+    <td><tt>!-n</tt></td>
+    <td><tt>n</tt>個前のコマンドを実行する。</td>
+  </tr>
+  <tr>
+    <td><tt>!string</tt></td>
+    <td>'string' から始まる最近のコマンドを実行する。</td>
+  </tr>
+  <tr>
+    <td><tt>!?string</tt></td>
+    <td>'string' を含む最近のコマンドを実行する。</td>
+  </tr>
+</table><h2 id="%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9">ビルド定義<a href="#%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このページでは、多少の「理論」も含めた sbt のビルド定義 (build definition) と <code>build.sbt</code> の構文を説明する。
+sbt 0.13.13 など最近のバージョンをインストール済みで、
+<a href="Running.html">sbt の使い方</a>を分かっていて、「始める sbt」の前のページも読んだことを前提とする。
+</p><p>このページでは <code>build.sbt</code> ビルド定義を紹介する。
+</p><h3 id="sbt+%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3%E3%81%AE%E6%8C%87%E5%AE%9A">sbt バージョンの指定<a href="#sbt+%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3%E3%81%AE%E6%8C%87%E5%AE%9A" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>ビルド定義の一部としてビルドに用いる sbt のバージョンを指定する。
+これによって異なる sbt ランチャーを持つ複数の人がいても同じプロジェクトを同じようにビルドすることができる。
+そのためには、<code>project/build.properties</code>
+という名前のファイルを作成して以下のように
+sbt バージョンを指定する:
+</p><pre><code class="">sbt.version=1.0.0-RC2
+</code></pre><p>もしも指定されたバージョンがローカルマシンに無ければ、
+<code>sbt</code> ランチャーは自動的にダウンロードを行う。
+このファイルが無ければ、<code>sbt</code> ランチャーは任意のバージョンを選択する。
+これはビルドの移植性を下げるため、推奨されない。
+</p><h3 id="%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%81%A8%E3%81%AF%E4%BD%95%E3%81%8B">ビルド定義とは何か<a href="#%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%81%A8%E3%81%AF%E4%BD%95%E3%81%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><strong>ビルド定義</strong>は、<code>build.sbt</code>
+にて定義され、プロジェクト (型は <a href="../../api/sbt/Project.html">Project</a>)
+の集合によって構成される。
+プロジェクトという用語が曖昧であることがあるため、このガイドではこれらを<strong>サブプロジェクト</strong>と呼ぶことが多い。
+</p><p>例えば、カレントディレクトリにあるサブプロジェクトは <code>build.sbt</code> に以下のように定義できる：
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    name := &quot;Hello&quot;,
+    scalaVersion := &quot;2.12.2&quot;
+  )
+</code></pre><p>それぞれのサブプロジェクトは、キーと値のペアによって詳細が設定される。
+</p><p>例えば、<code>name</code> というキーがあるが、それはサブプロジェクト名という文字列の値に関連付けられる。
+キーと値のペア列は <code>.settings(...)</code> メソッド内に列挙される:
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    name := &quot;Hello&quot;,
+    scalaVersion := &quot;2.12.2&quot;
+  )
+</code></pre><h3 id="%E3%81%AF%E3%81%A9%E3%81%AE%E3%82%88%E3%81%86%E3%81%AB+settings+%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B%E3%81%8B"><code>build.sbt</code> はどのように settings を定義するか<a href="#%E3%81%AF%E3%81%A9%E3%81%AE%E3%82%88%E3%81%86%E3%81%AB+settings+%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B%E3%81%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> において定義されるサブプロジェクトは、キーと値のペア列を持つと言ったが、
+このペアは<strong>セッティング式</strong> (setting expression) と呼ばれ、<strong>build.sbt DSL</strong> にて記述される。
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    name         := &quot;hello&quot;,
+    organization := &quot;com.example&quot;,
+    scalaVersion := &quot;2.12.2&quot;,
+    version      := &quot;0.1.0-SNAPSHOT&quot;
+  )
+</code></pre><p>build.sbt DSL を詳しくみてみよう:<br>
+<img src="../files/setting-expression.png" alt="setting expression"/><br>
+<br>
+それぞれのエントリーは<strong>セッティング式</strong> (setting expression) と呼ばれる。
+中にはタスク式と呼ばれるものもある。この違いはこのページの後で説明する。
+</p><p>セッティング式は以下の 3部から構成される:
+</p><ol><li>左辺項を<strong>キー</strong> (key) という。
+</li><li><strong>演算子</strong>。この場合は <code>:=</code>。
+</li><li>右辺項は<strong>本文</strong> (body)、もしくは<strong>セッティング本文</strong>という。
+</li></ol><p>左辺値の <code>name</code>、<code>version</code>、および <code>scalaVersion</code> は<strong>キー</strong>である。
+キーは
+<a href="../api/index.html#sbt.SettingKey"><code>SettingKey[T]</code></a>、
+<a href="../api/index.html#sbt.TaskKey"><code>TaskKey[T]</code></a>、もしくは
+<a href="(../api/index.html#sbt.InputKey)"><code>InputKey[T]</code></a> のインスタンスで、
+<code>T</code> はその値の型である。キーの種類に関しては後述する。
+</p><p><code>name</code> キーは <code>SettingKey[String]</code> に型付けされているため、
+<code>name</code> の <code>:=</code> 演算子も <code>String</code> に型付けされている。
+誤った型の値を使おうとするとビルド定義はコンパイルエラーになる:
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    name := 42  // コンパイルできない
+  )
+</code></pre><p><code>build.sbt</code> 内には <code>val</code>、<code>lazy val</code>、<code>def</code> を定義することもできる。
+<code>build.sbt</code> において、トップレベルで <code>object</code> や <code>class</code> を定義することはできない。
+それらが必要なら <code>project/</code> 配下にScala ソースファイル (<code>.scala</code>) を置くべきだろう。
+</p><h3 id="%E3%82%AD%E3%83%BC">キー<a href="#%E3%82%AD%E3%83%BC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="%E7%A8%AE%E9%A1%9E">種類<a href="#%E7%A8%AE%E9%A1%9E" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>キーには三種類ある:
+</p><ul><li><code>SettingKey[T]</code>: 一度だけ値が計算されるキー（値はサブプロジェクトの読み込み時に計算され、保存される）。
+</li><li><code>TaskKey[T]</code>: 毎回再計算される<strong>タスク</strong>を呼び出す、副作用を伴う可能性のある値のキー。
+</li><li><code>InputKey[T]</code>: コマンドラインの引数を入力として受け取るタスクのキー。
+　「始める sbt」では <code>InputKey</code> を説明しないので、このガイドを終えた後で、<a href="../../docs/Input-Tasks.html">Input Tasks</a> を読んでみよう。
+</li></ul><h4 id="%E7%B5%84%E3%81%BF%E8%BE%BC%E3%81%BF%E3%81%AE%E3%82%AD%E3%83%BC">組み込みのキー<a href="#%E7%B5%84%E3%81%BF%E8%BE%BC%E3%81%BF%E3%81%AE%E3%82%AD%E3%83%BC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>組み込みのキーは <a href="../../sxr/sbt/Keys.scala.html">Keys</a> と呼ばれるオブジェクトのフィールドにすぎない。
+<code>build.sbt</code> は、自動的に <code>import sbt.Keys._</code> するため、<code>sbt.Keys.name</code> は <code>name</code> として参照することができる。
+</p><h4 id="%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0%E3%82%AD%E3%83%BC">カスタムキー<a href="#%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0%E3%82%AD%E3%83%BC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>カスタムキーは <code>settingKey</code>、 <code>taskKey</code>、 <code>inputKey</code> といった生成メソッドを用いて定義する。
+どのメソッドでもキーに関連する型パラメータを必要とする。
+キーの名前は <code>val</code> で宣言された変数の名前がそのまま用いられる。
+例として、新しく <code>hello</code> と名づけたキーを定義してみよう。
+</p><pre><code class="prettyprint lang-scala">lazy val hello = taskKey[Unit](&quot;An example task&quot;)
+</code></pre><p>実は <code>.sbt</code> ファイルには、設定を記述するのに必要な <code>val</code> や <code>def</code> を含めることもできる。
+これらの定義はファイル内のどこで書かれてもプロジェクトの設定より前に評価される。
+</p><blockquote><p><strong>注意</strong> 一般的に、初期化順問題を避けるために val の代わりに lazy val が用いられることが多い。
+</p></blockquote><h4 id="%E3%82%BF%E3%82%B9%E3%82%AF%E3%82%AD%E3%83%BC%E3%81%8B%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%82%AD%E3%83%BC%E3%81%8B">タスクキーかセッティングキーか<a href="#%E3%82%BF%E3%82%B9%E3%82%AF%E3%82%AD%E3%83%BC%E3%81%8B%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%82%AD%E3%83%BC%E3%81%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>TaskKey[T]</code> は、<em>タスク</em>を定義しているといわれる。タスクは、<code>compile</code> や <code>package</code> のような作業だ。
+タスクは <code>Unit</code> を返すかもしれないし（<code>Unit</code> は、Scala での <code>void</code> だ）、
+タスクに関連した値を返すかもしれない。例えば、<code>package</code> は作成した jar ファイルを値として返す <code>TaskKey[File]</code> だ。
+</p><p>例えばインタラクティブモードの sbt プロンプトに <code>compile</code> と入力するなど、何らかのタスクを実行する度に、
+sbt はそのタスクを一回だけ再実行する。
+</p><p>サブプロジェクトを記述する sbt のキーと値の列は、<code>name</code> のようなセッティング (setting) であれば、
+その文字列の値をキャッシュすることができるが、
+<code>compile</code> のようなタスク（task）の場合は実行可能コードを保持しておく必要がある
+（たとえその実行可能コードが最終的に文字列を返したとしても、それは毎回再実行されなければならない）。
+</p><p><em>あるキーがあるとき、それは常にタスクかただのセッティングかのどちらかを参照する。</em>
+つまり、キーの「タスク性」（毎回再実行するかどうか）はそのキーの特性であり、その値にはよらない。
+</p><h3 id="%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%A8%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AE%E5%AE%9A%E7%BE%A9">タスクとセッティングの定義<a href="#%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%A8%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AE%E5%AE%9A%E7%BE%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>:=</code> を使うことで、タスクに任意の演算を代入することができる。
+セッティングを定義すると、その値はプロジェクトがロードされた時に一度だけ演算が行われる。
+タスクを定義すると、その演算はタスクの実行毎に毎回再実行される。
+</p><p>例えば、少し前に宣言した <code>hello</code> というタスクはこのように実装できる:
+</p><pre><code class="prettyprint lang-scala">lazy val hello = taskKey[Unit](&quot;An example task&quot;)
+
+lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    hello := { println(&quot;Hello!&quot;) }
+  )
+</code></pre><p>セッティングの定義は既に何度か見ていると思うが、プロジェクト名の定義はこのようにできる:
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    name := &quot;hello&quot;
+  )
+</code></pre><h4 id="%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%A8%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AE%E5%9E%8B">タスクとセッティングの型<a href="#%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%A8%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AE%E5%9E%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>型システムの視点から考えると、タスクキー (task key) から作られた <code>Setting</code> は、セッティングキー (setting key) から作られたそれとは少し異なるものだ。
+<code>taskKey := 42</code> は <code>Setting[Task[T]]</code> の戻り値を返すが、<code>settingKey := 42</code> は <code>Setting[T]</code> の戻り値を返す。
+タスクが実行されるとタスクキーは型<code>T</code> の値を返すため、ほとんどの用途において、これによる影響は特にない。
+</p><p><code>T</code> と <code>Task[T]</code> の型の違いによる影響が一つある。
+それは、セッティングキーはキャッシュされていて、再実行されないため、タスキキーに依存できないということだ。
+このことについては、後ほどの<a href="Task-Graph.html">タスク・グラフ</a>にて詳しくみていく。
+</p><h3 id="sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%AB%E3%81%8A%E3%81%91%E3%82%8B%E3%82%AD%E3%83%BC">sbt シェルにおけるキー<a href="#sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%AB%E3%81%8A%E3%81%91%E3%82%8B%E3%82%AD%E3%83%BC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt のインタラクティブモードからタスクの名前を入力することで、どのタスクでも実行することができる。
+それが <code>compile</code> と入力することでコンパイルタスクが起動する仕組みだ。つまり、<code>compile</code> はタスクキーだ。
+</p><p>タスクキーのかわりにセッティングキーの名前を入力すると、セッティングキーの値が表示される。
+タスクキーの名前を入力すると、タスクを実行するが、その戻り値は表示されないため、
+タスクの戻り値を表示するには素の <code>&lt;タスク名&gt;</code> ではなく、<code>show &lt;タスク名&gt;</code> と入力する。
+Scala の慣例にならい、ビルド定義ファイル内ではキーはキャメルケース（<code>camelCase</code>）で命名する。
+</p><p>あるキーについてより詳しい情報を得るには、sbt インタラクティブモードで <code>inspect &lt;キー名&gt;</code> と入力する。
+<code>inspect</code> が表示する情報の中にはまだよく分からない点もあるかもしれないが、一番上にはセッティングの値の型と、セッティングの簡単な説明が表示されていることだろう。
+</p><h3 id="%E5%86%85%E3%81%AE+import+%E6%96%87"><code>build.sbt</code> 内の import 文<a href="#%E5%86%85%E3%81%AE+import+%E6%96%87" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> の一番上に import 文を書くことができ、それらは空行で分けなくてもよい。
+</p><p>デフォルトでは以下のものが自動的にインポートされる:
+</p><pre><code class="prettyprint lang-scala">import sbt._
+import Keys._
+</code></pre><p>(さらに、auto plugin があれば <code>autoImport</code> 以下の名前がインポートされる。)
+</p><h3 id="%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E3%81%B8%E3%81%AE%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%92%E5%8A%A0%E3%81%88%E3%82%8B">ライブラリへの依存性を加える<a href="#%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E3%81%B8%E3%81%AE%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%92%E5%8A%A0%E3%81%88%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>サードパーティのライブラリに依存するには二つの方法がある。
+第一は <code>lib/</code> に jar ファイルを入れてしまう方法で（アンマネージ依存性、unmanged dependency）、
+第二はマネージ依存性（managed dependency）を加えることで、<code>build.sbt</code> ではこのようになる:
+</p><pre><code class="prettyprint lang-scala">val derby = &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot;
+
+lazy val commonSettings = Seq(
+  organization := &quot;com.example&quot;,
+  version := &quot;0.1.0-SNAPSHOT&quot;,
+  scalaVersion := &quot;2.12.2&quot;
+)
+
+lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    commonSettings,
+    name := &quot;Hello&quot;,
+    libraryDependencies += derby
+  )
+</code></pre><p>これで Apache Derby ライブラリのバージョン 10.4.1.3 へのマネージ依存性を加えることができた。
+</p><p><code>libraryDependencies</code> キーは二つの複雑な点がある:
+<code>:=</code> ではなく <code>+=</code> を使うことと、<code>%</code> メソッドだ。
+後で<a href="Task-Graph.html">タスク・グラフ</a>で説明するが、<code>+=</code> はキーの古い値を上書きする代わりに新しい値を追加する。
+<code>%</code> メソッドは文字列から Ivy モジュール ID を構築するのに使われ、これは<a href="Library-Dependencies.html">ライブラリ依存性</a>で説明する。
+</p><p>ライブラリ依存性に関する詳細については、このガイドの後ろの方までとっておくことにする。
+後ほど<a href="Library-Dependencies.html">一ページ</a>を割いて丁寧に説明する。
+</p><h2 id="%E3%82%BF%E3%82%B9%E3%82%AF%E3%83%BB%E3%82%B0%E3%83%A9%E3%83%95">タスク・グラフ<a href="#%E3%82%BF%E3%82%B9%E3%82%AF%E3%83%BB%E3%82%B0%E3%83%A9%E3%83%95" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p><a href="Basic-Def.html">ビルド定義</a>に引き続き、このページでは <code>build.sbt</code> 定義をより詳しく解説する。
+</p><p><code>settings</code> をキーと値のペア群だと考えるよりも、
+より良いアナロジーは、辺を事前発生 (happens-before) 関係とするタスクの<strong>有向非巡回グラフ</strong> (DAG)
+だと考える事だ。
+これを<strong>タスク・グラフ</strong>と呼ぼう。
+</p><h3 id="%E7%94%A8%E8%AA%9E%E3%81%AB%E9%96%A2%E3%81%97%E3%81%A6">用語に関して<a href="#%E7%94%A8%E8%AA%9E%E3%81%AB%E9%96%A2%E3%81%97%E3%81%A6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>重要な用語をおさらいしておく。
+</p><ul><li>セッティング/タスク式: <code>.settings(...)</code> 内のエントリー。
+</li><li>キー: セッティング式の左辺項。<code>SettingKey[A]</code>、 <code>TaskKey[A]</code>、もしくは <code>InputKey[A]</code> となる。
+</li><li>セッティング: <code>SettingKey[A]</code> を持つセッティング式によって定義される。値はロード時に一度だけ計算される。
+</li><li>タスク: <code>TaskKey[A]</code> を持つタスク式によって定義される。値は呼び出さるたびに計算される。
+</li></ul><h3 id="%E4%BB%96%E3%81%AE%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%B8%E3%81%AE%E4%BE%9D%E5%AD%98%E6%80%A7%E3%81%AE%E5%AE%A3%E8%A8%80">他のタスクへの依存性の宣言<a href="#%E4%BB%96%E3%81%AE%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%B8%E3%81%AE%E4%BE%9D%E5%AD%98%E6%80%A7%E3%81%AE%E5%AE%A3%E8%A8%80" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> DSL では <code>.value</code> メソッドを用いて他のタスクやセッティングへの依存性を表現する。
+この <code>value</code> メソッドは特殊なもので、<code>:=</code> (もしくは後に見る <code>+=</code> や <code>++=</code>) の右辺項内でしか使うことができない。
+</p><p>最初の例として、<code>update</code> と <code>clean</code> というタスクに依存した形で
+<code>scalacOption</code> を定義したいとする。
+（<a href="../sxr/sbt/Keys.scala.html">Keys</a> より）以下の二つのキーを例に説明する。
+</p><p><strong>注意</strong>: ここで計算される <code>scalacOptions</code> の値はナンセンスなもので、説明のためだけのものだ:
+</p><pre><code class="prettyprint lang-scala">val scalacOptions = taskKey[Seq[String]](&quot;Options for the Scala compiler.&quot;)
+val update = taskKey[UpdateReport](&quot;Resolves and optionally retrieves dependencies, producing a report.&quot;)
+val clean = taskKey[Unit](&quot;Deletes files produced by the build, such as generated sources, compiled classes, and task caches.&quot;)
+</code></pre><p>以下のように <code>scalacOptions</code> を再配線できる:
+</p><pre><code class="prettyprint lang-scala">scalacOptions := {
+  val ur = update.value  // update タスクは scalacOptions よりも事前発生する
+  val x = clean.value    // clean タスクは scalacOptions よりも事前発生する
+  // ---- scalacOptions はここから始まる ----
+  ur.allConfigurations.take(3)
+}
+</code></pre><p><code>update.value</code> と <code>clean.value</code> はタスク依存性を宣言していて、
+<code>ur.allConfigurations.take(3)</code> がタスクの本文となる。
+</p><p><code>.value</code> は普通の Scala のメソッド呼び出しではない。
+<code>build.sbt</code> DSL はマクロを用いてこれらをタスクの本文から持ち上げる。
+<strong> <code>update</code> と <code>clean</code> の両タスクとも、本文内のどの行に現れようと、
+タスクエンジンが <code>scalacOption</code>
+の開始中括弧 (<code>{</code>) を評価するときには既に完了済みである。</strong>
+</p><p>具体例で説明しよう:
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    name := &quot;Hello&quot;,
+    organization := &quot;com.example&quot;,
+    scalaVersion := &quot;2.12.2&quot;,
+    version := &quot;0.1.0-SNAPSHOT&quot;,
+    scalacOptions := {
+      val out = streams.value // streams タスクは scalacOptions よりも事前発生する
+      val log = out.log
+      log.info(&quot;123&quot;)
+      val ur = update.value   // update タスクは scalacOptions よりも事前発生する
+      log.info(&quot;456&quot;)
+      ur.allConfigurations.take(3)
+    }
+  )
+</code></pre><p>次に、sbt シェル内で <code>scalacOptions</code> と打ち込む:
+</p><pre><code class="">&gt; scalacOptions
+[info] Updating {file:/xxx/}root...
+[info] Resolving jline#jline;2.14.1 ...
+[info] Done updating.
+[info] 123
+[info] 456
+[success] Total time: 0 s, completed Jan 2, 2017 10:38:24 PM
+</code></pre><p><code>val ur = ...</code> は <code>log.info(&quot;123&quot;)</code> と
+<code>log.info(&quot;456&quot;)</code> の間に挟まっているが、
+<code>update</code> タスクは両者よりも事前発生している。
+</p><p>もう一つの例:
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    name := &quot;Hello&quot;,
+    organization := &quot;com.example&quot;,
+    scalaVersion := &quot;2.12.2&quot;,
+    version := &quot;0.1.0-SNAPSHOT&quot;,
+    scalacOptions := {
+      val ur = update.value  // update task happens-before scalacOptions
+      if (false) {
+        val x = clean.value  // clean task happens-before scalacOptions
+      }
+      ur.allConfigurations.take(3)
+    }
+  )
+</code></pre><p>sbt シェル内で <code>run</code> それから <code>scalacOptions</code> と打ち込む:
+</p><pre><code class="">&gt; run
+[info] Updating {file:/xxx/}root...
+[info] Resolving jline#jline;2.14.1 ...
+[info] Done updating.
+[info] Compiling 1 Scala source to /Users/eugene/work/quick-test/task-graph/target/scala-2.12/classes...
+[info] Running example.Hello
+hello
+[success] Total time: 0 s, completed Jan 2, 2017 10:45:19 PM
+&gt; scalacOptions
+[info] Updating {file:/xxx/}root...
+[info] Resolving jline#jline;2.14.1 ...
+[info] Done updating.
+[success] Total time: 0 s, completed Jan 2, 2017 10:45:23 PM
+</code></pre><p>ここで <code>target/scala-2.12/classes/</code> を探してみてほしい。
+<code>if (false)</code> に囲まれていても <code>clean</code> タスクが実行されたため、そのディレクトリは存在しないはずだ。
+</p><p>もう一つ重要なのは、<code>update</code> と <code>clean</code> のタスクの間では順序付けの保証が無いことだ。
+<code>update</code> してから <code>clean</code> が実行されるかもしれないし、
+<code>clean</code> してから <code>update</code> が実行されるかもしれないし、
+両者が並列に実行される可能性もある。
+</p><h3 id=".value+%E5%91%BC%E3%81%B3%E5%87%BA%E3%81%97%E3%81%AE%E3%82%A4%E3%83%B3%E3%83%A9%E3%82%A4%E3%83%B3%E5%8C%96">.value 呼び出しのインライン化<a href="#.value+%E5%91%BC%E3%81%B3%E5%87%BA%E3%81%97%E3%81%AE%E3%82%A4%E3%83%B3%E3%83%A9%E3%82%A4%E3%83%B3%E5%8C%96" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>上で解説したように、<code>.value</code> は他のタスクやセッティングへの依存性を表現するための特殊なメソッドだ。
+build.sbt に慣れるまでは、<code>.value</code> の呼び出しをタスク本文の一番上にまとめておくことをお勧めする。
+</p><p>しかし、慣れてくると <code>.value</code> 呼び出しをインライン化して、
+タスクやセッティングを簡略に書きたいと思うようになるだろう。
+変数名をいちいち考えなくてもいいのも楽だ。
+</p><p>インライン化するとこう書ける:
+</p><pre><code class="prettyprint lang-scala">scalacOptions := {
+  val x = clean.value
+  update.value.allConfigurations.take(3)
+}
+</code></pre><p><code>.value</code> の呼び出しがインライン化されていようが、タスク本文内のどこに書かれていても
+タスク本文に入る前に評価は完了する。
+</p><h4 id="%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%9A%E3%82%AF%E3%83%88">タスクのインスペクト<a href="#%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%9A%E3%82%AF%E3%83%88" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>上の例では <code>scalacOptions</code> は <code>update</code> と <code>clean</code> というタスクに<strong>依存性</strong> (dependency) を持つ。
+上のタスクを <code>build.sbt</code> に書いて、sbt シェル内から <code>inspect scalacOptions</code> と打ち込むと以下のように表示される (一部抜粋):
+</p><pre><code class="">&gt; inspect scalacOptions
+[info] Task: scala.collection.Seq[java.lang.String]
+[info] Description:
+[info]  Options for the Scala compiler.
+....
+[info] Dependencies:
+[info]  *:clean
+[info]  *:update
+....
+</code></pre><p>これは sbt が、どのセッティングが他のセッティングに依存しているかをどう把握しているかを示している。
+</p><p>また、<code>inspect tree compile</code> と打ち込むと、<code>compile</code> は <code>incCompileSetup</code>
+に依存していて、それは <code>dependencyClasspath</code> などの他のキーに依存していることが分かる。
+依存性の連鎖をたどっていくと、魔法に出会う。
+</p><pre><code class="">&gt; inspect tree compile
+[info] compile:compile = Task[sbt.inc.Analysis]
+[info]   +-compile:incCompileSetup = Task[sbt.Compiler$IncSetup]
+[info]   | +-*/*:skip = Task[Boolean]
+[info]   | +-compile:compileAnalysisFilename = Task[java.lang.String]
+[info]   | | +-*/*:crossPaths = true
+[info]   | | +-{.}/*:scalaBinaryVersion = 2.12
+[info]   | |
+[info]   | +-*/*:compilerCache = Task[xsbti.compile.GlobalsCache]
+[info]   | +-*/*:definesClass = Task[scala.Function1[java.io.File, scala.Function1[java.lang.String, Boolean]]]
+[info]   | +-compile:dependencyClasspath = Task[scala.collection.Seq[sbt.Attributed[java.io.File]]]
+[info]   | | +-compile:dependencyClasspath::streams = Task[sbt.std.TaskStreams[sbt.Init$ScopedKey[_ &lt;: Any]]]
+[info]   | | | +-*/*:streamsManager = Task[sbt.std.Streams[sbt.Init$ScopedKey[_ &lt;: Any]]]
+[info]   | | |
+[info]   | | +-compile:externalDependencyClasspath = Task[scala.collection.Seq[sbt.Attributed[java.io.File]]]
+[info]   | | | +-compile:externalDependencyClasspath::streams = Task[sbt.std.TaskStreams[sbt.Init$ScopedKey[_ &lt;: Any]]]
+[info]   | | | | +-*/*:streamsManager = Task[sbt.std.Streams[sbt.Init$ScopedKey[_ &lt;: Any]]]
+[info]   | | | |
+[info]   | | | +-compile:managedClasspath = Task[scala.collection.Seq[sbt.Attributed[java.io.File]]]
+[info]   | | | | +-compile:classpathConfiguration = Task[sbt.Configuration]
+[info]   | | | | | +-compile:configuration = compile
+[info]   | | | | | +-*/*:internalConfigurationMap = &lt;function1&gt;
+[info]   | | | | | +-*:update = Task[sbt.UpdateReport]
+[info]   | | | | |
+....
+</code></pre><p>例えば <code>compile</code> と打ち込むと、sbt は自動的に <code>update</code> を実行する。
+これが「とにかくちゃんと動く」理由は、<code>compile</code> の計算に入力として必要な値が sbt に <code>update</code> の計算を先に行うことを強制しているからだ。
+</p><p>このようにして、sbt の全てのビルドの依存性は、明示的には宣言されず、自動化されている。 あるキーの値を別の計算で使うと、その計算はキーに依存することになる。
+</p><h4 id="%E4%BB%96%E3%81%AE%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AB%E4%BE%9D%E5%AD%98%E3%81%97%E3%81%9F%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%AE%E5%AE%9A%E7%BE%A9">他のセッティングに依存したタスクの定義<a href="#%E4%BB%96%E3%81%AE%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AB%E4%BE%9D%E5%AD%98%E3%81%97%E3%81%9F%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%AE%E5%AE%9A%E7%BE%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>scalacOptions</code> はタスク・キーだ。
+何らかの値に既に設定されていて、Scala 2.12 以外の場合は
+<code>&quot;-Xfatal-warnings&quot;</code> と <code>&quot;-deprecation&quot;</code> を除外したいとする。
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    name := &quot;Hello&quot;,
+    organization := &quot;com.example&quot;,
+    scalaVersion := &quot;2.12.2&quot;,
+    version := &quot;0.1.0-SNAPSHOT&quot;,
+    scalacOptions := List(&quot;-encoding&quot;, &quot;utf8&quot;, &quot;-Xfatal-warnings&quot;, &quot;-deprecation&quot;, &quot;-unchecked&quot;),
+    scalacOptions := {
+      val old = scalacOptions.value
+      scalaBinaryVersion.value match {
+        case &quot;2.12&quot; =&gt; old
+        case _      =&gt; old filterNot (Set(&quot;-Xfatal-warnings&quot;, &quot;-deprecation&quot;).apply)
+      }
+    }
+  )
+</code></pre><p>sbt シェルで試すとこうなるはずだ:
+</p><pre><code class="">&gt; show scalacOptions
+[info] * -encoding
+[info] * utf8
+[info] * -Xfatal-warnings
+[info] * -deprecation
+[info] * -unchecked
+[success] Total time: 0 s, completed Jan 2, 2017 11:44:44 PM
+&gt; ++2.11.8
+[info] Setting version to 2.11.8
+[info] Reapplying settings...
+[info] Set current project to Hello (in build file:/xxx/)
+&gt; show scalacOptions
+[info] * -encoding
+[info] * utf8
+[info] * -unchecked
+[success] Total time: 0 s, completed Jan 2, 2017 11:44:51 PM
+</code></pre><p>次に (<a href="../sxr/sbt/Keys.scala.html">Keys</a> より) 以下の二つのキーを例に説明する:
+</p><pre><code class="prettyprint lang-scala">val scalacOptions = taskKey[Seq[String]](&quot;Options for the Scala compiler.&quot;)
+val checksums = settingKey[Seq[String]](&quot;The list of checksums to generate and to verify for dependencies.&quot;)
+</code></pre><p><strong>注意</strong>: <code>scalacOptions</code> と <code>checksums</code>はお互い何の関係もない、ただ同じ値の型を持つ二つのキーで片方がタスクというだけだ。
+</p><p><code>build.sbt</code> の中で <code>scalacOptions</code> を <code>checksums</code>
+のエイリアスにすることはできるが、その逆はできない。例えば、以下の例はコンパイルが通る:
+</p><pre><code class="prettyprint lang-scala">// scalacOptions タスクは checksums セッティングの値を用いて定義される
+scalacOptions := checksums.value
+</code></pre><p>逆方向への依存、つまりタスクの値に依存したセッティングキーの値を定義することはどうしてもできない。
+なぜなら、セッティングキーの値はプロジェクトのロード時に一度だけしか計算されず、毎回再実行されるべきタスクが毎回実行されなくなってしまうからだ。
+</p><pre><code class="prettyprint lang-scala">// 悪い例: checksums セッティングは scalacOptions タスクに関連付けて定義することはできない!
+checksums := scalacOptions.value
+</code></pre><h4 id="%E4%BB%96%E3%81%AE%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AB%E4%BE%9D%E5%AD%98%E3%81%97%E3%81%9F%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AE%E5%AE%9A%E7%BE%A9">他のセッティングに依存したセッティングの定義<a href="#%E4%BB%96%E3%81%AE%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AB%E4%BE%9D%E5%AD%98%E3%81%97%E3%81%9F%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AE%E5%AE%9A%E7%BE%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>実行のタイミングという観点から見ると、セッティングはロード時に評価される特殊なタスクと考えることができる。
+</p><p>プロジェクトの名前と同じ <code>organization</code> を定義してみよう。
+</p><pre><code class="prettyprint lang-scala">// プロジェクトの name に基いて organization 名を付ける (どちらも型は SettingKey[String])
+organization := name.value
+</code></pre><p>実用的な例もみてみる。
+これは <code>scalaSource in Compile</code> というキーを <code>scalaBinaryVersion</code> が <code>&quot;2.11&quot;</code>
+の場合のみ別のディレクトリに再配線する。
+</p><pre><code class="prettyprint lang-scala">scalaSource in Compile := {
+  val old = (scalaSource in Compile).value
+  scalaBinaryVersion.value match {
+    case &quot;2.11&quot; =&gt; baseDirectory.value / &quot;src-2.11&quot; / &quot;main&quot; / &quot;scala&quot;
+    case _      =&gt; old
+  }
+}
+</code></pre><h3 id="%E3%81%9D%E3%82%82%E3%81%9D%E3%82%82+build.sbt+DSL+%E3%81%AF%E4%BD%95%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AB%E3%81%82%E3%82%8B%3F">そもそも build.sbt DSL は何のためにある?<a href="#%E3%81%9D%E3%82%82%E3%81%9D%E3%82%82+build.sbt+DSL+%E3%81%AF%E4%BD%95%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AB%E3%81%82%E3%82%8B%3F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> DSL は、セッティングやタスクの有向非巡回グラフを構築するためのドメイン特化言語だ。
+セッティング式はセッティング、タスク、そしてそれらの間の依存性をエンコードする。
+</p><p>この構造は
+<a href="https://en.wikipedia.org/wiki/Make_(software)">Make</a> (1976)、 <a href="http://ant.apache.org/">Ant</a> (2000)、 <a href="https://ruby.github.io/rake/">Rake</a> (2003)
+などにも共通する。
+</p><h4 id="Make+%E5%85%A5%E9%96%80">Make 入門<a href="#Make+%E5%85%A5%E9%96%80" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Makefile の基本的な構文は以下のようになる:
+</p><pre><code class="">target: dependencies
+[tab] system command1
+[tab] system command2
+</code></pre><p>対象 (target、デフォルトの target は <code>all</code> と呼ばれる) が与えられたとき、
+</p><ol><li>Make は対象の依存性が既にビルドされたかを調べて、ビルドされていないものをビルドする。
+</li><li>Make は順番にシステムコマンドを実行する。
+</li></ol><p><code>Makefile</code> の具体例で説明しよう:
+</p><pre><code class="">CC=g++
+CFLAGS=-Wall
+
+all: hello
+
+hello: main.o hello.o
+    $(CC) main.o hello.o -o hello
+
+%.o: %.cpp
+    $(CC) $(CFLAGS) -c $&lt; -o $@
+</code></pre><p><code>make</code> を実行すると、デフォルトで　<code>all</code> という名前の対象を選択する。
+その対象は <code>hello</code> を依存性として列挙するが、それは未だビルドされいないので、Make は次に <code>hello</code> をビルドする。
+</p><p>次に、Make は <code>hello</code> という対象の依存性がビルド済みかを調べる。
+<code>hello</code> は <code>main.o</code> と <code>hello.o</code> という 2つの対象を列挙する。
+これらの対象が最後のパターンマッチを用いたルールによってビルドされた後でやっと
+<code>main.o</code> と <code>hello.o</code> をリンクするシステムコマンドが実行される。
+</p><p><code>make</code> を実行しているだけなら、対象として何がほしいのかだけを考えればよく、
+中間成果物をビルドするための正確なタイミングやコマンドなどは Make がやってくれる。
+これを依存性指向プログラミングもしくはフローベースプログラミングだと考えることができる。
+DSL は対象の依存性を記述するが、アクションはシステムコマンドに委譲されるため、正確には
+Make はハイブリッドシステムに分類される。
+</p><h4 id="Rake">Rake<a href="#Rake" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>このハイブリッド性も実は Make の後継である Ant、Rake、sbt といったツールにも受け継がれている。
+Rakefile の基本的な構文をみてほしい:
+</p><pre><code class="prettyprint lang-ruby">task name: [:prereq1, :prereq2] do |t|
+  # actions (may reference prereq as t.name etc)
+end
+</code></pre><p>Rake でのブレークスルーは、アクションをシステムコマンドの代わりにプログラミング言語を使って記述したことだ。
+</p><h4 id="%E3%83%8F%E3%82%A4%E3%83%96%E3%83%AA%E3%83%83%E3%83%89%E3%83%BB%E3%83%95%E3%83%AD%E3%83%BC%E3%83%99%E3%83%BC%E3%82%B9%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0%E3%81%AE%E5%88%A9%E7%82%B9">ハイブリッド・フローベースプログラミングの利点<a href="#%E3%83%8F%E3%82%A4%E3%83%96%E3%83%AA%E3%83%83%E3%83%89%E3%83%BB%E3%83%95%E3%83%AD%E3%83%BC%E3%83%99%E3%83%BC%E3%82%B9%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0%E3%81%AE%E5%88%A9%E7%82%B9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>ビルドをこのように構成する動機がいくつかある。
+</p><p>第一は非重複化だ。フローベースプログラミングではあるタスクが複数のタスクから依存されていても一度だけしか実行されない。
+例えば、タスクグラフ上の複数のタスクが <code>compile in Compile</code> に依存していたとしても、実際のコンパイルは唯一一回のみ実行される。
+</p><p>第二は並列処理だ。タスクグラフを用いることでタスクエンジンは相互に非依存なタスクを並列にスケジュールすることができる。
+</p><p>第三は関心事の分離と柔軟さだ。
+タスクグラフはビルドの作者が複数のタスクを異なる方法で配線することを可能にする。
+一方、sbt やプラグインはコンパイルやライブラリ依存性の管理といった機能を再利用な形で提供できる。
+</p><h3 id="%E3%81%BE%E3%81%A8%E3%82%81">まとめ<a href="#%E3%81%BE%E3%81%A8%E3%82%81" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>ビルド定義のコアなデータ構造は、辺を事前発生 (happens-before) 関係とするタスクの DAG だ。
+<code>build.sbt</code> は、依存性指向プログラミングもしくはフローベースプログラミングを表現するための DSL で、<code>Makefile</code> や <code>Rakefile</code> に似ている。
+</p><p>フローベースプログラミングを行う動機は、非重複化、並列処理、とカスタム化の容易さだ。
+</p><h2 id="%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97">スコープ<a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このページではスコープの説明をする。前のページの
+<a href="Basic-Def.html">.sbt ビルド定義</a>、
+<a href="Task-Graph.html">タスク・グラフ</a>
+を読んで理解したことを前提とする。
+</p><h3 id="%E3%82%AD%E3%83%BC%E3%81%AB%E9%96%A2%E3%81%99%E3%82%8B%E6%9C%AC%E5%BD%93%E3%81%AE%E8%A9%B1">キーに関する本当の話<a href="#%E3%82%AD%E3%83%BC%E3%81%AB%E9%96%A2%E3%81%99%E3%82%8B%E6%9C%AC%E5%BD%93%E3%81%AE%E8%A9%B1" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="Basic-Def.html">前のページでは</a>、あたかも <code>name</code> のようなキーは単一の sbt の Map のキー・値ペアの項目に対応するかのように説明をしてきた。
+しかし、それは実際よりも物事を単純化している。
+</p><p>実のところ、全てのキーは「スコープ」と呼ばれる文脈に関連付けられた値を複数もつことができる。
+</p><p>以下に具体例で説明する:
+</p><ul><li>ビルド定義に複数のプロジェクト (サブプロジェクトとも呼ばれる) があれば、それぞれのプロジェクトにおいて同じキーが別の値を取ることができる。
+</li><li>メインのソースとテストとのソースが異なるようにコンパイルしたければ、<code>compile</code> キーは別の値をとることができる。
+</li><li>（jar パッケージの作成のオプションを表す）<code>packageOption</code> キーはクラスファイルのパッケージ（<code>packageBin</code>）とソースコードのパッケージ（<code>packageSrc</code>）で異なる値をとることができる。
+</li></ul><p>スコープによって値が異なる可能性があるため、<em>あるキーへの単一の値は存在しない</em>。
+</p><p>しかし、<strong>スコープ付きキー</strong>には単一の値が存在する。
+</p><p> <a href="Basic-Def.html">これまで見てきた</a>ように sbt がプロジェクトを記述するキーと値のマップを生成するためのセッティングキーのリストを処理していると考えるなら、
+そのキーと値の Map におけるキーとは、実は<em>スコープ付き</em>キーである。
+また、（<code>build.sbt</code> などの）ビルド定義内のセッティングもまたスコープ付きキーである。
+</p><p>スコープは、暗黙に存在していたり、デフォルトのものがあったりするが、
+もしそのデフォルトが適切でなければ <code>build.sbt</code> で必要なスコープを指定する必要があるだろう。
+</p><h3 id="%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E8%BB%B8">スコープ軸<a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E8%BB%B8" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><strong>スコープ軸</strong>（scope axis）は、<code>Option[A]</code> に似た型コンストラクタであり、
+スコープの各成分を構成する。
+</p><p>スコープ軸は三つある:
+</p><ul><li>サブプロジェクト
+</li><li>依存性コンフィギュレーション
+</li><li>タスク
+</li></ul><p><strong>軸</strong>という概念に馴染みがなければ、RGB 色空間を例に取ってみるといいかもしれない。
+</p><p><img src="../files/rgb_color_solid_cube.png" alt="color cube"/>
+</p><p>RGB 色モデルにおいて、全ての色は赤、緑、青の成分を軸とする立方体内の点として表すことができ、それぞれの成分は数値化することができる。
+同様に、sbt におけるスコープはサブプロジェクト、コンフィギュレーション、タスクの<strong>タプル</strong>により成り立つ:
+</p><pre><code class="prettyprint lang-scala">scalacOptions in (projA, Compile, console)
+</code></pre><p>より正確には、以下のようになっている:
+</p><pre><code class="prettyprint lang-scala">scalacOptions in (Select(projA: Reference),
+                  Select(Compile: ConfigKey),
+                  Select(console.key))
+</code></pre><h4 id="%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E8%BB%B8%E3%81%AB%E3%82%88%E3%82%8B%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%91">サブプロジェクト軸によるスコープ付け<a href="#%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E8%BB%B8%E3%81%AB%E3%82%88%E3%82%8B%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%91" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><a href="Multi-Project.html">一つのビルドに複数のプロジェクトを入れる</a>場合、それぞれのプロジェクトにセッティングが必要だ。
+つまり、キーはプロジェクトによりスコープ付けされる。
+</p><p>プロジェクト軸は <code>ThisBuild</code> という「ビルド全体」を表す値に設定することもでき、その場合はセッティングは単一のプロジェクトではなくビルド全体に適用される。
+ビルドレベルでのセッティングは、プロジェクトが特定のセッティングを定義しない場合のフォールバックとして使われることがよくある。
+</p><h4 id="%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%B3%E3%83%B3%E3%83%95%E3%82%A3%E3%82%AE%E3%83%A5%E3%83%AC%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E8%BB%B8%E3%81%AB%E3%82%88%E3%82%8B%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%91">依存性コンフィギュレーション軸によるスコープ付け<a href="#%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%B3%E3%83%B3%E3%83%95%E3%82%A3%E3%82%AE%E3%83%A5%E3%83%AC%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E8%BB%B8%E3%81%AB%E3%82%88%E3%82%8B%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%91" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><strong>依存性コンフィギュレーション</strong>（dependency configuration、もしく単に「コンフィギュレーション」）
+は、ライブラリ依存性のグラフを定義し、独自のクラスパス、ソース、生成パッケージなどをもつことができる。
+コンフィギュレーションの概念は、sbt が <a href="Library-Dependencies.html">マネージ依存性</a> に使っている Ivy と、<a href="https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Scope">MavenScopes</a> に由来する。
+</p><p>sbt で使われる代表的なコンフィギュレーションには以下のものがある:
+</p><ul><li><code>Compile</code> は、メインのビルド（<code>src/main/scala</code>）を定義する。
+</li><li><code>Test</code> は、テスト（<code>src/test/scala</code>）のビルド方法を定義する。
+</li><li><code>Runtime</code> は、<code>run</code> タスクのクラスパスを定義する。
+</li></ul><p>デフォルトでは、コンパイル、パッケージ化と実行に関するキーの全ては依存性コンフィグレーションにスコープ付けされているため、
+依存性コンフィギュレーションごとに異なる動作をする可能性がある。
+その最たる例が <code>compile</code>、<code>package</code> と <code>run</code> のタスクキーだが、
+（<code>sourceDirectories</code> や <code>scalacOptions</code> や <code>fullClasspath</code> など）それらのキーに<em>影響を及ぼす</em>全てのキーもコンフィグレーションにスコープ付けされている。
+</p><p>もう一つコンフィギュレーションで大切なのは、他のコンフィギュレーションを拡張できることだ。
+以下に代表的なコンフィギュレーションの拡張関係を図で示す。
+</p><p><img src="../files/sbt-configurations.png" alt="dependency configurations"/>
+</p><p><code>Test</code> と <code>IntegrationTest</code> は <code>Runtime</code> を拡張し、<code>Runtime</code> は <code>Compile</code> を拡張し、
+<code>CompileInternal</code> は <code>Compile</code>、<code>Optional</code>、<code>Provided</code> の 3つを拡張する。
+</p><h4 id="%E3%82%BF%E3%82%B9%E3%82%AF%E8%BB%B8%E3%81%AB%E3%82%88%E3%82%8B%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%91">タスク軸によるスコープ付け<a href="#%E3%82%BF%E3%82%B9%E3%82%AF%E8%BB%B8%E3%81%AB%E3%82%88%E3%82%8B%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%91" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>セッティングはタスクの動作に影響を与えることもできる。例えば、<code>packageSrc</code> は <code>packageOptions</code> セッティングの影響を受ける。
+</p><p>これをサポートするため、（<code>packageSrc</code> のような）タスクキーは、（<code>packageOption</code> のような）別のキーのスコープとなりえる。
+</p><p>パッケージを構築するさまざまなタスク（<code>packageSrc</code>、<code>packageBin</code>、<code>packageDoc</code>）は、<code>artifactName</code> や <code>packageOption</code> などのパッケージ関連のキーを共有することができる。これらのキーはそれぞれのパッケージタスクに対して独自の値を取ることができる。
+</p><h4 id="%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%90%E3%83%AB%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E6%88%90%E5%88%86">グローバルスコープ成分<a href="#%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%90%E3%83%AB%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E6%88%90%E5%88%86" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>それぞれのスコープ軸は、その軸の型のインスタンスを代入する（例えば、タスク軸にはタスクを代入する）か、
+もしくは、<code>Global</code> という特殊な値を代入することができる。これは <code>*</code> とも表記される。つまり、<code>Global</code> は <code>None</code> と同様だと考えることができる。
+</p><p><code>*</code> は全てのスコープ軸に対応する普遍的なフォールバックであるが、多くの場合直接それを使うのは sbt 本体もしくはプラグインの作者に限定されるべきだ。
+</p><p>分かりづらいことに、ビルド定義内で <code>someKey in Global</code> と書いた場合、暗黙の変換によってこれは <code>someKey in (Global, Global, Global)</code> に変換される。
+</p><h3 id="%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%81%8B%E3%82%89%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%82%92%E5%8F%82%E7%85%A7%E3%81%99%E3%82%8B">ビルド定義からスコープを参照する<a href="#%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%81%8B%E3%82%89%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%82%92%E5%8F%82%E7%85%A7%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> で裸のキーを使ってセッティングを作った場合は、(現プロジェクト, <code>Global</code> コンフィグレーション, <code>Global</code> タスク) にスコープ付けされる:
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    name := &quot;hello&quot;
+  )
+</code></pre><p>sbt を実行して、<code>inspect name</code> と入力して、キーが　<code>{file:/home/hp/checkout/hello/}default-aea33a/*:name</code> により提供されていることを確認しよう。つまり、プロジェクトは、<code>{file:/home/hp/checkout/hello/}default-aea33a</code> で、コンフィギュレーションは <code>*</code> で、タスクは表示されていない（グローバルを指す）ということだ。
+</p><p>右辺項に置かれた裸のキーも (現プロジェクト, <code>Global</code> コンフィグレーション, <code>Global</code> タスク) にスコープ付けされる:
+</p><pre><code class="prettyprint lang-scala">organization := name.value
+</code></pre><p>キーにはオーバーロードされた <code>.in</code> メソッドがあり、それによりスコープを設定できる。
+<code>.in(...)</code> への引数として、どのスコープ軸のインスタンスでも渡すことができる。
+これをやる意味は全くないけど、例として <code>Compile</code> コンフィギュレーションでスコープ付けされた <code>name</code> の設定を以下に示す:
+</p><pre><code class="prettyprint lang-scala">name in Compile := &quot;hello&quot;
+</code></pre><p>また、<code>packageBin</code> タスクでスコープ付けされた <code>name</code> の設定（これも意味なし！ただの例だよ）:
+</p><pre><code class="prettyprint lang-scala">name in packageBin := &quot;hello&quot;
+</code></pre><p>もしくは、例えば <code>Compile</code> コンフィギュレーションの <code>packageBin</code> の <code>name</code> など、複数のスコープ軸でスコープ付けする:
+</p><pre><code class="prettyprint lang-scala">name in (Compile, packageBin) := &quot;hello&quot;
+</code></pre><p>もしくは、全ての軸に対して <code>Global</code> を使う:
+</p><pre><code class="prettyprint lang-scala">// concurrentRestrictions in (Global, Global, Global) と同じ
+concurrentRestrictions in Global := Seq(
+  Tags.limitAll(1)
+)
+</code></pre><p>（<code>concurrentRestrictions in Global</code> は、<code>concurrentRestrictions in (Global, Global, Global)</code> へと暗黙の変換が行われ、全ての軸を <code>Global</code> に設定する。
+タスクとコンフィギュレーションは既にデフォルトで <code>Global</code> であるため、事実上行なっているのはプロジェクトを <code>Global</code> に指定することだ。つまり、<code>{file:/home/hp/checkout/hello/}default-aea33a/*:concurrentRestrictions</code> ではなく、<code>*/*:concurrentRestrictions</code> が定義される。）
+</p><h3 id="sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%8B%E3%82%89%E3%81%AE%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%8D%E3%82%AD%E3%83%BC%E3%81%AE%E5%8F%82%E7%85%A7%E6%96%B9%E6%B3%95">sbt シェルからのスコープ付きキーの参照方法<a href="#sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%8B%E3%82%89%E3%81%AE%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%8D%E3%82%AD%E3%83%BC%E3%81%AE%E5%8F%82%E7%85%A7%E6%96%B9%E6%B3%95" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>コマンドラインと sbt シェルにおいて、sbt はスコープ付きキーを以下のように表示する（そして、パースする）:
+</p><pre><code class="">{&lt;ビルド-uri&gt;}&lt;プロジェクト-id&gt;/コンフィギュレーション:タスクキー::キー
+</code></pre><ul><li><code>{&lt;ビルド-uri&gt;}&lt;プロジェクト-id&gt;</code> は、サブプロジェクト軸を特定する。&lt;プロジェクト-id&gt; がなければ、サブプロジェクト軸は「ビルド全体」スコープとなる。
+</li><li><code>コンフィギュレーション</code> は、コンフィギュレーション軸を特定する。
+</li><li><code>タスクキー</code> は、タスク軸を特定する。
+</li><li><code>キー</code> は、スコープ付けされるキーを特定する。
+</li></ul><p>全ての軸において、<code>*</code> を使って <code>Global</code> スコープを表すことができる。
+</p><p>スコープ付きキーの一部を省略すると、以下の手順で推論される:
+</p><ul><li>プロジェクトを省略した場合は、カレントプロジェクトが使われる。
+</li><li>コンフィグレーションを省略した場合は、キーに依存したコンフィギュレーションが自動検知される。
+</li><li>タスクを省略した場合は、<code>Global</code> タスクが使われる。
+</li></ul><p>さらに詳しくは、<a href="../../docs/Inspecting-Settings.html">Interacting with the Configuration System</a> 参照。
+</p><h3 id="%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%8D%E3%82%AD%E3%83%BC%E3%81%AE%E8%A1%A8%E8%A8%98%E4%BE%8B">スコープ付きキーの表記例<a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%8D%E3%82%AD%E3%83%BC%E3%81%AE%E8%A1%A8%E8%A8%98%E4%BE%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li><code>fullClasspath</code> はキーのみを指定し、デフォルトスコープを用いる。ここでは、カレントプロジェクト、キーに依存したコンフィギュレーション、グローバルタスクスコープとなる。
+</li><li><code>test:fullClasspath</code> はコンフィギュレーションを指定する。つまりプロジェクト軸とタスク軸はデフォルトを用いつつも <code>test</code>コンフィギュレーションにおける <code>fullClasspath</code> というキーを表す。
+</li><li><code>*:fullClasspath</code> はデフォルトコンフィギュレーションを用いずに <code>Global</code> コンフィギュレーションを用いる事を明示している。
+</li><li><code>doc::fullClasspath</code> はプロジェクト軸とコンフィギュレーション軸はデフォルトを用いつつ、 <code>doc</code> タスクスコープにおける <code>fullClasspath</code> というキーを表す。
+</li><li><code>{file:/home/hp/checkout/hello/}default-aea33a/test:fullClasspath</code> は <code>{file:/home/hp/checkout/hello/}</code> をルートディレクトリにビルドした際に含まれる <code>default-aea33a</code> というプロジェクトを指定している。さらにこのプロジェクト内の <code>test</code> コンフィギュレーションを用いる事も明示している。
+</li><li><code>{file:/home/hp/checkout/hello/}/test:fullClasspath</code> は <code>{file:/home/hp/checkout/hello/}</code> のビルド全体をプロジェクトの軸とする。
+</li><li><code>{.}/test:fullClasspath</code> は <code>{.}</code> で指定されたルートディレクトリのビルド全体をプロジェクト軸に取る。<code>{.}</code> は Scala code において <code>ThisBuild</code> と記述できる。
+</li><li><code>{file:/home/hp/checkout/hello/}/compile:doc::fullClasspath</code> は3つのスコープ軸全てを指定している。
+</li></ul><h3 id="%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%81%AE%E6%A4%9C%E6%9F%BB">スコープの検査<a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%81%AE%E6%A4%9C%E6%9F%BB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt シェルで <code>inspect</code> コマンドを使ってキーとそのスコープを把握することができる。
+例えば、<code>inspect test:full-classpath</code> と試してみよう:
+</p><pre><code class="">$ sbt
+&gt; inspect test:fullClasspath
+[info] Task: scala.collection.Seq[sbt.Attributed[java.io.File]]
+[info] Description:
+[info]  The exported classpath, consisting of build products and unmanaged and managed, internal and external dependencies.
+[info] Provided by:
+[info]  {file:/home/hp/checkout/hello/}default-aea33a/test:fullClasspath
+[info] Dependencies:
+[info]  test:exportedProducts
+[info]  test:dependencyClasspath
+[info] Reverse dependencies:
+[info]  test:runMain
+[info]  test:run
+[info]  test:testLoader
+[info]  test:console
+[info] Delegates:
+[info]  test:fullClasspath
+[info]  runtime:fullClasspath
+[info]  compile:fullClasspath
+[info]  *:fullClasspath
+[info]  {.}/test:fullClasspath
+[info]  {.}/runtime:fullClasspath
+[info]  {.}/compile:fullClasspath
+[info]  {.}/*:fullClasspath
+[info]  */test:fullClasspath
+[info]  */runtime:fullClasspath
+[info]  */compile:fullClasspath
+[info]  */*:fullClasspath
+[info] Related:
+[info]  compile:fullClasspath
+[info]  compile:fullClasspath(for doc)
+[info]  test:fullClasspath(for doc)
+[info]  runtime:fullClasspath
+</code></pre><p>一行目からこれが（<a href="Basic-Def.html">.sbt ビルド定義</a>で説明されているとおり、セッティングではなく）タスクであることが分かる。
+このタスクの戻り値は <code>scala.collection.Seq[sbt.Attributed[java.io.File]]</code> の型をとる。
+</p><p>“Provided by” は、この値を定義するスコープ付きキーを指し、この場合は、
+<code>{file:/home/hp/checkout/hello/}default-aea33a/test:fullClasspath</code>
+（<code>test</code> コンフィギュレーションと <code>{file:/home/hp/checkout/hello/}default-aea33a</code> プロジェクトにスコープ付けされた <code>fullClasspath</code> キー）。
+</p><p>“Dependencies” に関しては、<a href="Task-Graph.html">前のページ</a>で解説した。
+</p><p>“Delegates” (委譲) に関してはまた後で。
+</p><p>今度は、（<code>inspect test:full-class</code> のかわりに）<code>inspect fullClasspath</code> を試してみて、違いをみてみよう。
+コンフィグレーションが省略されたため、<code>compile</code> だと自動検知される。
+そのため、<code>inspect compile:fullClasspath</code> は <code>inspect fullClasspath</code> と同じになるはずだ。
+</p><p>次に、<code>inspect *:fullClasspath</code> も実行して違いを比べてみよう。
+<code>fullClasspath</code> はデフォルトでは、<code>Global</code> スコープには定義されていない。
+</p><p>より詳しくは、<a href="../../docs/Inspecting-Settings.html">Interacting with the Configuration System</a> 参照。
+</p><h3 id="%E3%81%84%E3%81%A4%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%82%92%E6%8C%87%E5%AE%9A%E3%81%99%E3%82%8B%E3%81%B9%E3%81%8D%E3%81%8B">いつスコープを指定するべきか<a href="#%E3%81%84%E3%81%A4%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%82%92%E6%8C%87%E5%AE%9A%E3%81%99%E3%82%8B%E3%81%B9%E3%81%8D%E3%81%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>あるキーが、通常スコープ付けされている場合は、スコープを指定してそのキーを使う必要がある。
+例えば、<code>compile</code> タスクは、デフォルトで <code>Compile</code> と <code>Test</code> コンフィギュレーションにスコープ付けされているけど、
+これらのスコープ外には存在しない。
+</p><p>そのため、<code>compile</code> キーに関連付けられた値を変更するには、<code>compile in Compile</code> か <code>compile in Test</code> のどちらかを書く必要がある。
+素の <code>compile</code> を使うと、コンフィグレーションにスコープ付けされた標準のコンパイルタスクをオーバーライドするかわりに、カレントプロジェクトにスコープ付けされた新しいコンパイルタスクを定義してしまう。
+</p><p><em>“Reference to undefined setting“</em> のようなエラーに遭遇した場合は、スコープを指定していないか、間違ったスコープを指定したことによることが多い。
+君が使っているキーは何か別のスコープの中で定義されている可能性がある。
+エラーメッセージの一部として sbt は、君が意味したであろうものを推測してくれるから、“Did you mean compile:compile?” を探そう。
+</p><p>キーの名前はキーの<em>一部</em>であると考えることもできる。
+実際の所は、全てのキーは名前と（三つの軸を持つ）スコープによって構成される。
+つまり、<code>packageOptions in (Compile, packageBin)</code> という式全体でキー名だということだ。
+単に <code>packageOptions</code> と言っただけでもキー名だけど、それは別のキーだ
+（<code>in</code> 無しのキーのスコープは暗黙で決定され、現プロジェクト、<code>Global</code> コンフィグレーション、<code>Global</code> タスクとなる）。
+</p><h3 id="%E3%83%93%E3%83%AB%E3%83%89%E3%83%AC%E3%83%99%E3%83%AB%E3%83%BB%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0">ビルドレベル・セッティング<a href="#%E3%83%93%E3%83%AB%E3%83%89%E3%83%AC%E3%83%99%E3%83%AB%E3%83%BB%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>サブプロジェクト間に共通なセッティングを一度に定義するための上級テクニックとしてセッティングを
+<code>ThisBuild</code> にスコープ付けするという方法がある。
+</p><p>もし特定のサブプロジェクトにスコープ付けされたキーが見つから無かった場合、
+sbt はフォールバックとして <code>ThisBuild</code> 内を探す。
+この仕組みを利用して、
+<code>version</code>、 <code>scalaVersion</code>、 <code>organization</code>
+といったよく使われるキーに対してビルドレベルのデフォルトのセッティングを定義することができる。
+</p><p>便宜のため、セッティング式のキーと本文の両方を <code>ThisBuild</code>
+にスコープ付けする
+<code>inThisBuild(...)</code> という関数が用意されている。
+セッティング式を渡すと、それに <code>in ThisBuild</code> を可能な所に追加したのと同じものが得られる。
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    inThisBuild(List(
+      // Same as:
+      // organization in ThisBuild := &quot;com.example&quot;
+      organization := &quot;com.example&quot;,
+      scalaVersion := &quot;2.12.2&quot;,
+      version      := &quot;0.1.0-SNAPSHOT&quot;
+    )),
+    name := &quot;Hello&quot;,
+    publish := (),
+    publishLocal := ()
+  )
+
+lazy val core = (project in file(&quot;core&quot;))
+  .settings(
+    // other settings
+  )
+
+lazy val util = (project in file(&quot;util&quot;))
+  .settings(
+    // other settings
+  )
+</code></pre><p>ただし、後で説明する<a href="Scope-Delegation.html">スコープ委譲</a>の性質上、ビルドレベル・セッティングを単純な値の代入以外に使うことは推奨しない。
+</p><h3 id="%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E5%A7%94%E8%AD%B2">スコープ委譲<a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E5%A7%94%E8%AD%B2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>スコープ付きキーは、そのスコープに関連付けられた値がなければ未定義であることもできる。
+</p><p>全てのスコープ軸に対して、sbt には他のスコープ値からなるフォールバック検索パス（fallback search path）がある。
+通常は、より特定のスコープに関連付けられた値が見つからなければ、sbt は、<code>ThisBuild</code> など、より一般的なスコープから値を見つけ出そうとする。
+</p><p>この機能により、より一般的なスコープで一度だけ値を代入して、複数のより特定なスコープがその値を継承することを可能とする。
+<a href="Scope-Delegation.html">スコープ委譲</a>に関する詳細は後ほど解説する。
+</p><h2 id="%E5%80%A4%E3%81%AE%E8%BF%BD%E5%8A%A0">値の追加<a href="#%E5%80%A4%E3%81%AE%E8%BF%BD%E5%8A%A0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="%E6%97%A2%E5%AD%98%E3%81%AE%E5%80%A4%E3%81%AB%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B%3A++%E3%81%A8">既存の値に追加する: <code>+=</code> と <code>++=</code><a href="#%E6%97%A2%E5%AD%98%E3%81%AE%E5%80%A4%E3%81%AB%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B%3A++%E3%81%A8" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>:=</code> による置換が最も単純な変換だが、キーには他のメソッドもある。
+<code>SettingKey[T]</code> の <code>T</code> が列の場合、つまりキーの値の型が列の場合は、置換のかわりに列に追加することができる。
+</p><ul><li><code>+=</code> は、列に単一要素を追加する。
+</li><li><code>++=</code> は、別の列を連結する。
+</li></ul><p>例えば、<code>sourceDirectories in Compile</code> というキーの値の型は <code>Seq[File]</code> だ。
+デフォルトで、このキーの値は <code>src/main/scala</code> を含む。
+（どうしても標準的なやり方では気が済まない君が）<code>source</code> という名前のディレクトリに入ったソースもコンパイルしたい場合、
+以下のようにして設定できる:
+</p><pre><code class="prettyprint lang-scala">sourceDirectories in Compile += new File(&quot;source&quot;)
+</code></pre><p>もしくは、sbt パッケージに入っている <code>file()</code> 関数を使って:
+</p><pre><code class="prettyprint lang-scala">sourceDirectories in Compile += file(&quot;source&quot;)
+</code></pre><p>（<code>file()</code> は、単に新しい <code>File</code> 作る）
+</p><p><code>++=</code> を使って複数のディレクトリを一度に加える事もできる:
+</p><pre><code class="prettyprint lang-scala">sourceDirectories in Compile ++= Seq(file(&quot;sources1&quot;), file(&quot;sources2&quot;))
+</code></pre><p>ここでの <code>Seq(a, b, c, ...)</code> は、列を構築する標準的な Scala の構文だ。
+</p><p>デフォルトのソースディレクトリを完全に置き換えてしまいたい場合は、当然 <code>:=</code> を使えばいい:
+</p><pre><code class="prettyprint lang-scala">sourceDirectories in Compile := Seq(file(&quot;sources1&quot;), file(&quot;sources2&quot;))
+</code></pre><h4 id="%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%8C%E6%9C%AA%E5%AE%9A%E7%BE%A9%E3%81%AE%E5%A0%B4%E5%90%88">セッティングが未定義の場合<a href="#%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%8C%E6%9C%AA%E5%AE%9A%E7%BE%A9%E3%81%AE%E5%A0%B4%E5%90%88" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>セッティングが <code>:=</code> や <code>+=</code> や <code>++=</code> を使って自分自身や他のキーへの依存が生まれるとき、その依存されるキーの値が存在しなくてならない。
+もしそれが存在しなければ sbt に怒られることになるだろう。例えば、<em>“Reference to undefined setting“</em> のようなエラーだ。
+これが起こった場合は、キーが定義されている正しい<a href="Scopes.html">スコープ</a>で使っているか確認しよう。
+</p><p>これはエラーになるが、循環した依存性を作ってしまうことも起こりうる。sbt が君がそうしてしまったことを教えてくれるだろう。
+</p><h4 id="%E4%BB%96%E3%81%AE%E3%82%AD%E3%83%BC%E3%81%AE%E5%80%A4%E3%82%92%E5%9F%BA%E3%81%AB%E3%81%97%E3%81%9F%E3%82%BF%E3%82%B9%E3%82%AF">他のキーの値を基にしたタスク<a href="#%E4%BB%96%E3%81%AE%E3%82%AD%E3%83%BC%E3%81%AE%E5%80%A4%E3%82%92%E5%9F%BA%E3%81%AB%E3%81%97%E3%81%9F%E3%82%BF%E3%82%B9%E3%82%AF" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>あるタスクの値を定義するために他のタスクの値を計算する必要があるかもしれない。
+そのような場合には、<code>:=</code> や <code>+=</code> や <code>++=</code> の引数に <code>Def.task</code> と <code>taskValue</code> を使えばよい。
+</p><p>例として、<code>sourceGenerators</code> にプロジェクトのベースディレクトリやコンパイル時のクラスパスを加える設定をみてみよう。
+</p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile += Def.task {
+  myGenerator(baseDirectory.value, (managedClasspath in Compile).value)
+}.taskValue
+</code></pre><h3 id="%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%92%E7%94%A8%E3%81%84%E3%81%9F%E8%BF%BD%E5%8A%A0%3A++%E3%81%A8">依存性を用いた追加: <code>+=</code> と <code>++=</code><a href="#%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%92%E7%94%A8%E3%81%84%E3%81%9F%E8%BF%BD%E5%8A%A0%3A++%E3%81%A8" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>他のキーを使って既存のセッティングキーやタスクキーへ値を追加するには <code>+=</code> を使えばよい。
+</p><p>例えば、プロジェクト名を使って名付けたカバレッジレポートがあって、それを <code>clean</code> が削除するファイルリストに追加するなら、このようになる:
+</p><pre><code class="prettyprint lang-scala">cleanFiles += file(&quot;coverage-report-&quot; + name.value + &quot;.txt&quot;)
+</code></pre><h2 id="%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E5%A7%94%E8%AD%B2+%28.value+%E3%81%AE%E7%85%A7%E4%BC%9A%29">スコープ委譲 (.value の照会)<a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E5%A7%94%E8%AD%B2+%28.value+%E3%81%AE%E7%85%A7%E4%BC%9A%29" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このページはスコープ委譲を説明する。前のページの
+<a href="Basic-Def.html">.sbt ビルド定義</a>、
+[スコープ][Scopes-Graph]
+を読んで理解したことを前提とする。
+</p><p>スコープ付けの説明が全て終わったので、<code>.value</code> 照会の詳細を解説できる。
+難易度は高めなので、始めてこのガイドを読む場合はこのページは飛ばしてもいい。
+</p><p><code>Global</code> という用語はスコープ成分としての <code>*</code> と、
+<code>(Global, Global, Global)</code> の短縮形の両方の意味で使われて分かりづらいので、
+このページでスコープ成分を指すときは <code>*</code> というシンボルを用いる。
+</p><p>これまでに習ったことをおさらいしておこう。
+</p><ul><li>スコープは、サブプロジェクト軸、コンフィギュレーション軸、タスク軸という 3つの軸の成分を持つタプルである。
+</li><li>全てのスコープ軸には、<code>*</code> (<code>Global</code> とも呼ばれる) 特殊なスコープ成分がある。
+</li><li><strong>サブプロジェクト軸</strong>においてのみ、<code>ThisBuild</code> (シェルでは <code>{.}</code> と表記される) 特殊なスコープ成分がある。
+</li><li><code>Test</code> コンフィギュレーションは <code>Runtime</code> を拡張し、<code>Runtime</code> は <code>Compile</code> を拡張する。
+</li><li>build.sbt に書かれたキーは、デフォルトで <code>(${current subproject}, *, *)</code> にスコープ付けされる。
+</li><li>キーは、<code>.in(...)</code> メソッドを使ってさらにスコープ付けできる。
+</li></ul><p>以下のようなビルド定義を考える:
+</p><pre><code class="prettyprint lang-scala">lazy val foo = settingKey[Int](&quot;&quot;)
+lazy val bar = settingKey[Int](&quot;&quot;)
+
+lazy val projX = (project in file(&quot;x&quot;))
+  .settings(
+    foo := {
+      (bar in Test).value + 1
+    },
+    bar in Compile := 1
+  )
+</code></pre><p><code>foo</code> のセッティング本文内において、スコープ付きキー <code>(bar in Test)</code> への依存性が宣言されている。
+しかし、<code>projX</code> において <code>bar in Test</code> が未定義であるにも関わらず、sbt
+は別のスコープ付きキーへと解決して <code>foo</code> は <code>2</code> に初期化される。
+</p><p>sbt はキーのフォールバックのための検索パスを厳密に定義し、これを<strong>スコープ委譲</strong> (scope delegation) と呼ぶ。
+この機能により、より一般的なスコープで一度だけ値を代入して、複数のより特定なスコープがその値を継承することを可能とする。
+</p><h3 id="%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E5%A7%94%E8%AD%B2%E3%81%AE%E3%83%AB%E3%83%BC%E3%83%AB">スコープ委譲のルール<a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E5%A7%94%E8%AD%B2%E3%81%AE%E3%83%AB%E3%83%BC%E3%83%AB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>スコープ委譲のルールは以下の通り:
+</p><ul><li>ルール 1: スコープ軸は以下の優先順位を持つ: サブプロジェクト軸、コンフィギュレーション軸、そしてタスク軸。
+</li><li>ルール 2: あるスコープが与えられたとき、委譲スコープは以下の順にタスク軸を置換することで検索される:
+与えられたタスクスコープ、それから <code>*</code> (<code>Global</code>、これはタスクスコープ付けを行わないもののこと)。
+</li><li>ルール 3: あるスコープが与えられたとき、委譲スコープは以下の順にコンフィギュレーション軸を置換することで検索される:
+与えられたコンフィギュレーション、その親、その親の親…、そして <code>*</code> (<code>Global</code> これはコンフィギュレーションのスコープ付けを行わないものと同じ)。
+</li><li>ルール 4: あるスコープが与えられたとき、委譲スコープは以下の順にサブプロジェクト軸を置換することで検索される:
+与えられたサブプロジェクト、<code>ThisBuild</code> そして <code>*</code> (<code>Global</code>)。
+</li><li>ルール 5: 委譲されたスコープ付きのキー及びそれが依存するセッティングとタスクは、元のコンテキストを一切引き継がずに評価される。
+</li></ul><p>それぞれのルールを以下に説明していく。
+</p><h3 id="%E3%83%AB%E3%83%BC%E3%83%AB+1%3A+%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E8%BB%B8%E3%81%AE%E5%84%AA%E5%85%88%E9%A0%86%E4%BD%8D">ルール 1: スコープ軸の優先順位<a href="#%E3%83%AB%E3%83%BC%E3%83%AB+1%3A+%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E8%BB%B8%E3%81%AE%E5%84%AA%E5%85%88%E9%A0%86%E4%BD%8D" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>ルール 1: スコープ軸は以下の優先順位を持つ: サブプロジェクト軸、コンフィギュレーション軸、そしてタスク軸。
+</li></ul><p>言い換えると、2つのスコープ候補があるとき、一方がサブプロジェクト軸により特定な値を持つとき、コンフィギュレーションやタスク軸のスコープに関わらず必ず勝つということだ。
+同様に、サブプロジェクトが同じ場合、コンフィギュレーションに特定な値を持つものがタスクのスコープ付けに関わらず勝つ。
+「より特定」とは何かは、以下のルールで定義していく。
+</p><h3 id="%E3%83%AB%E3%83%BC%E3%83%AB+2%3A+%E3%82%BF%E3%82%B9%E3%82%AF%E8%BB%B8%E3%81%AE%E5%A7%94%E8%AD%B2">ルール 2: タスク軸の委譲<a href="#%E3%83%AB%E3%83%BC%E3%83%AB+2%3A+%E3%82%BF%E3%82%B9%E3%82%AF%E8%BB%B8%E3%81%AE%E5%A7%94%E8%AD%B2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>ルール 2: あるスコープが与えられたとき、委譲スコープは以下の順にタスク軸を置換することで検索される:
+与えられたタスクスコープ、それから <code>*</code> (<code>Global</code>、これはタスクスコープ付けを行わないもののこと)。
+</li></ul><p>ここでやっとキーが与えられたとき sbt がどのようにして委譲スコープを生成するかの具体的なルールが出てきた。
+任意の <code>(xxx in yyy).value</code> が与えられたときに、どのような検索パスを取るかを示していることに注目してほしい。
+</p><p><strong>練習問題 A</strong>: 以下のビルド定義を考える:
+</p><pre><code class="prettyprint lang-scala">lazy val projA = (project in file(&quot;a&quot;))
+  .settings(
+    name := {
+      &quot;foo-&quot; + (scalaVersion in packageBin).value
+    },
+    scalaVersion := &quot;2.11.11&quot;
+  )
+</code></pre><p><code>name in projA</code> (sbt シェルだと <code>projA/name</code>) の値は何か?
+</p><ol><li><code>&quot;foo-2.11.11&quot;</code>
+</li><li><code>&quot;foo-2.12.2&quot;</code>
+</li><li>その他
+</li></ol><p>正解は <code>&quot;foo-2.11.11&quot;</code>。
+<code>.settings(...)</code> 内において、<code>scalaVersion</code> は自動的に <code>(projA, *, *)</code> にスコープ付けされるため、
+<code>scalaVersion in packageBin</code> は <code>scalaVersion in (projA, *, packageBin)</code> となる。
+そのスコープ付きキーは未定義だ。
+ルール 2に基いて、sbt はタスク軸を <code>*</code> に置換して <code>(projA, *, *)</code> になる (シェル表記だと <code>proj/scalaVersion</code>)。
+そのスコープ付きキーは <code>&quot;2.11.11&quot;</code> として定義されている。
+</p><h3 id="%E3%83%AB%E3%83%BC%E3%83%AB+3%3A+%E3%82%B3%E3%83%B3%E3%83%95%E3%82%A3%E3%82%AE%E3%83%A5%E3%83%AC%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E8%BB%B8%E3%81%AE%E6%A4%9C%E7%B4%A2%E3%83%91%E3%82%B9">ルール 3: コンフィギュレーション軸の検索パス<a href="#%E3%83%AB%E3%83%BC%E3%83%AB+3%3A+%E3%82%B3%E3%83%B3%E3%83%95%E3%82%A3%E3%82%AE%E3%83%A5%E3%83%AC%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E8%BB%B8%E3%81%AE%E6%A4%9C%E7%B4%A2%E3%83%91%E3%82%B9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>ルール 3: あるスコープが与えられたとき、委譲スコープは以下の順にコンフィギュレーション軸を置換することで検索される:
+与えられたコンフィギュレーション、その親、その親の親…、そして <code>*</code> (<code>Global</code> これはコンフィギュレーションのスコープ付けを行わないものと同じ)。
+</li></ul><p>これを説明する例は上に見た <code>projX</code> だ:
+</p><pre><code class="prettyprint lang-scala">lazy val foo = settingKey[Int](&quot;&quot;)
+lazy val bar = settingKey[Int](&quot;&quot;)
+
+lazy val projX = (project in file(&quot;x&quot;))
+  .settings(
+    foo := {
+      (bar in Test).value + 1
+    },
+    bar in Compile := 1
+  )
+</code></pre><p>フルスコープを書き出してみると <code>(projX, Test, *)</code> となる。
+また、<code>Test</code> コンフィギュレーションは <code>Runtime</code> を拡張し、<code>Runtime</code> は <code>Compile</code> を拡張することを思い出してほしい。
+</p><p><code>(bar in Test)</code> は未定義だが、ルール3 に基いて sbt
+は <code>(projX, Test, *)</code>、<code>(projX, Runtime, *)</code>、そして
+<code>(projX, Compile, *)</code> の順に <code>bar</code> をスコープ付けして検索していく。
+最後のものが見つかり、それは <code>bar in Compile</code> だ。
+</p><h3 id="%E3%83%AB%E3%83%BC%E3%83%AB+4%3A+%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E8%BB%B8%E3%81%AE%E6%A4%9C%E7%B4%A2%E3%83%91%E3%82%B9">ルール 4: サブプロジェクト軸の検索パス<a href="#%E3%83%AB%E3%83%BC%E3%83%AB+4%3A+%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E8%BB%B8%E3%81%AE%E6%A4%9C%E7%B4%A2%E3%83%91%E3%82%B9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>ルール 4: あるスコープが与えられたとき、委譲スコープは以下の順にサブプロジェクト軸を置換することで検索される:
+与えられたサブプロジェクト、<code>ThisBuild</code> そして <code>*</code> (<code>Global</code>)。
+</li></ul><p><strong>練習問題 B</strong>: 以下のビルド定義を考える:
+</p><pre><code class="prettyprint lang-scala">organization in ThisBuild := &quot;com.example&quot;
+
+lazy val projB = (project in file(&quot;b&quot;))
+  .settings(
+    name := &quot;abc-&quot; + organization.value,
+    organization := &quot;org.tempuri&quot;
+  )
+</code></pre><p><code>name in projB</code> (sbt シェルだと <code>projB/name</code>) の値は何か?
+</p><ol><li><code>&quot;abc-com.example&quot;</code>
+</li><li><code>&quot;abc-org.tempuri&quot;</code>
+</li><li>その他
+</li></ol><p>正解は <code>abc-org.tempuri</code> だ。
+ルール 4に基づき、最初の検索パスは <code>(projB, *, *)</code> にスコープ付けされた <code>organization</code> で、
+これは <code>projB</code> 内で <code>&quot;org.tempuri&quot;</code> として定義されている。
+これは、ビルドレベルのセッティングである <code>organization in ThisBuild</code> よりも高い優先順位を持つ。
+</p><h4 id="%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E8%BB%B8%E3%81%AE%E5%84%AA%E5%85%88%E9%A0%86%E4%BD%8D%E3%80%81%E5%86%8D%E3%81%B3">スコープ軸の優先順位、再び<a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E8%BB%B8%E3%81%AE%E5%84%AA%E5%85%88%E9%A0%86%E4%BD%8D%E3%80%81%E5%86%8D%E3%81%B3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><strong>練習問題 C</strong>: 以下のビルド定義を考える:
+</p><pre><code class="prettyprint lang-scala">scalaVersion in (ThisBuild, packageBin) := &quot;2.12.2&quot;
+
+lazy val projC = (project in file(&quot;c&quot;))
+  .settings(
+    name := {
+      &quot;foo-&quot; + (scalaVersion in packageBin).value
+    },
+    scalaVersion := &quot;2.11.11&quot;
+  )
+</code></pre><p><code>name in projC</code> の値は何か?
+</p><ol><li><code>&quot;foo-2.12.2&quot;</code>
+</li><li><code>&quot;foo-2.11.11&quot;</code>
+</li><li>その他
+</li></ol><p>正解は <code>foo-2.11.11</code>。
+<code>(projC, *, packageBin)</code> にスコープ付けされた <code>scalaVersion</code> は未定義だ。
+ルール 2 は <code>(projC, *, *)</code> を見つける。ルール 4 は <code>(ThisBuild, *, packageBin)</code> を見つける。
+ルール 1 の規定により、より特定なサブプロジェクト軸が勝ち、それは
+<code>(projC, *, *)</code> で <code>&quot;2.11.11&quot;</code> と定義されている。
+</p><p><strong>練習問題 D</strong>: 以下のビルド定義を考える:
+</p><pre><code class="prettyprint lang-scala">scalacOptions in ThisBuild += &quot;-Ywarn-unused-import&quot;
+
+lazy val projD = (project in file(&quot;d&quot;))
+  .settings(
+    test := {
+      println((scalacOptions in (Compile, console)).value)
+    },
+    scalacOptions in console -= &quot;-Ywarn-unused-import&quot;,
+    scalacOptions in Compile := scalacOptions.value // added by sbt
+  )
+</code></pre><p><code>projD/test</code> を実行した場合の出力は何か?
+</p><ol><li><code>List()</code>
+</li><li><code>List(-Ywarn-unused-import)</code>
+</li><li>その他
+</li></ol><p>正解は <code>List(-Ywarn-unused-import)</code>。
+ルール 2 は <code>(projD, Compile, *)</code> を見つけ、
+ルール 3 は <code>(projD, *, console)</code> を見つけ、
+ルール 4 は <code>(ThisBuild, *, *)</code> を見つける。
+<code>(projD, Compile, *)</code> はサブプロジェクト軸に <code>projD</code> を持ち、
+またコンフィギュレーション軸はタスク軸よりも高い優先順位を持つのでルール 1 は
+<code>(projD, Compile, *)</code> を選択する。
+</p><p>次に、<code>scalacOptions in Compile</code> は <code>scalacOptions.value</code> を参照するため、
+<code>(projD, *, *)</code> のための委譲を探す必要がある。
+ルール 4 は <code>(ThisBuild, *, *)</code> を見つけ、これは <code>List(-Ywarn-unused-import)</code> に解決される。
+</p><h3 id="inspect+%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%81%AF%E5%A7%94%E8%AD%B2%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%82%92%E5%88%97%E6%8C%99%E3%81%99%E3%82%8B">inspect コマンドは委譲スコープを列挙する<a href="#inspect+%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%81%AF%E5%A7%94%E8%AD%B2%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%82%92%E5%88%97%E6%8C%99%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>何が起こっているのか手早く調べたい場合は <code>inspect</code> を使えばいい。
+</p><pre><code class="">Hello&gt; inspect projD/compile:console::scalacOptions
+[info] Task: scala.collection.Seq[java.lang.String]
+[info] Description:
+[info]  Options for the Scala compiler.
+[info] Provided by:
+[info]  {file:/Users/xxxx/}projD/compile:scalacOptions
+[info] Defined at:
+[info]  /Users/xxxx/build.sbt:47
+[info] Reverse dependencies:
+[info]  projD/compile:console
+[info]  projD/*:test
+[info] Delegates:
+[info]  projD/compile:console::scalacOptions
+[info]  projD/compile:scalacOptions
+[info]  projD/*:console::scalacOptions
+[info]  projD/*:scalacOptions
+[info]  {.}/compile:console::scalacOptions
+[info]  {.}/compile:scalacOptions
+[info]  {.}/*:console::scalacOptions
+[info]  {.}/*:scalacOptions
+[info]  */compile:console::scalacOptions
+[info]  */compile:scalacOptions
+[info]  */*:console::scalacOptions
+[info]  */*:scalacOptions
+....
+</code></pre><p>“Provided by” は <code>projD/compile:console::scalacOptions</code> が
+<code>projD/compile:scalacOptions</code> によって提供されることを表示しているのに注目してほしい。
+“Delegates” 以下に<strong>全て</strong>の委譲スコープ候補が優先順に列挙されている!
+</p><ul><li>サブプロジェクト軸が <code>projD</code> にスコープ付けされているスコープが当然最初に表示されて、<code>ThisBuild</code> (<code>{.}</code>)、<code>*</code> と続いている。
+</li><li>サブプロジェクト内だと、コンフィギュレーション軸が <code>Compile</code> にスコープ付けされいるのが最初に表示されて、<code>*</code> にフォールバックしている。
+</li><li>最後に、タスク軸は与えられたタスクスコープ付けの <code>cosole::</code> が来て、次にタスクスコープ無しが来ている。
+</li></ul><h3 id=".value+%E5%8F%82%E7%85%A7+vs+%E5%8B%95%E7%9A%84%E3%83%87%E3%82%A3%E3%82%B9%E3%83%91%E3%83%83%E3%83%81">.value 参照 vs 動的ディスパッチ<a href="#.value+%E5%8F%82%E7%85%A7+vs+%E5%8B%95%E7%9A%84%E3%83%87%E3%82%A3%E3%82%B9%E3%83%91%E3%83%83%E3%83%81" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>ルール 5: 委譲されたスコープ付きのキー及びそれが依存するセッティングとタスクは、元のコンテキストを一切引き継がずに評価される。
+</li></ul><p>スコープ委譲はオブジェクト指向言語のクラス継承に似ていると思うかもしれないが、注意するべき違いがある。
+Scala のような OO言語では、<code>Shape</code> トレイトに <code>drawShape</code> というメソッドがあれば、たとえそれが
+<code>Shape</code> トレイトの他のメソッドから呼ばれているとしても子クラス側で振る舞いをオーバーライドすることができ、これは動的ディスパッチと呼ばれる。
+</p><p>一方 sbt は、スコープ委譲によってあるスコープをより一般的なスコープに委譲することができ、
+例えばプロジェクトレベルのセッティングからビルドレベルのセッティングへ委譲といったことができるが、
+ビルドレベルのセッティングはプロジェクトレベルのセッティングを参照することはできない。
+</p><p><strong>練習問題 E</strong>: 以下のビルド定義を考える:
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    inThisBuild(List(
+      organization := &quot;com.example&quot;,
+      scalaVersion := &quot;2.12.2&quot;,
+      version      := scalaVersion.value + &quot;_0.1.0&quot;
+    )),
+    name := &quot;Hello&quot;
+  )
+
+lazy val projE = (project in file(&quot;e&quot;))
+  .settings(
+    scalaVersion := &quot;2.11.11&quot;
+  )
+</code></pre><p><code>projE/version</code> の値は何か?
+</p><ol><li><code>&quot;2.12.2_0.1.0&quot;</code>
+</li><li><code>&quot;2.11.11_0.1.0&quot;</code>
+</li><li>その他
+</li></ol><p>正解は <code>&quot;2.12.2_0.1.0&quot;</code>。
+<code>projD/version</code> は <code>version in ThisBuild</code> に委譲する。
+一方 <code>version in ThisBuild</code> は <code>scalaVersion in ThisBuild</code> に依存する。
+このように振る舞うため、ビルドレベルのセッティングは単純な値の代入に限定するべきだ。
+</p><p><strong>練習問題 F</strong>: 以下のビルド定義を考える:
+</p><pre><code class="prettyprint lang-scala">scalacOptions in ThisBuild += &quot;-D0&quot;
+scalacOptions += &quot;-D1&quot;
+
+lazy val projF = (project in file(&quot;f&quot;))
+  .settings(
+    scalacOptions in compile += &quot;-D2&quot;,
+    scalacOptions in Compile += &quot;-D3&quot;,
+    scalacOptions in (Compile, compile) += &quot;-D4&quot;,
+    test := {
+      println(&quot;bippy&quot; + (scalacOptions in (Compile, compile)).value.mkString)
+    }
+  )
+</code></pre><p><code>projF/test</code> を実行した場合の出力は何か?
+</p><ol><li><code>&quot;bippy-D4&quot;</code>
+</li><li><code>&quot;bippy-D2-D4&quot;</code>
+</li><li><code>&quot;bippy-D0-D3-D4&quot;</code>
+</li><li>その他
+</li></ol><p>正解は <code>&quot;bippy-D0-D3-D4&quot;</code>。
+これは、<a href="https://gist.github.com/paulp/923154ab2d61882195cdea47483592ca">Paul Phillips</a>
+さんが考案した練習問題を元にしている。
+</p><p><code>someKey += &quot;x&quot;</code> は以下のように展開されるため、全てのルールをデモする素晴らしい問題だ。
+</p><pre><code class="prettyprint lang-scala">someKey += {
+  val old = someKey.value
+  old :+ &quot;x&quot;
+}
+</code></pre><p>このとき、古い方の <code>.value</code> を取得するときに委譲が発生して、ルール5 に基いてそれは別のスコープ付きキー扱いする必要がある。
+まずは <code>+=</code> を取り除いて、古い <code>.value</code> の委譲が何になるかをコメントで注釈する。
+</p><pre><code class="prettyprint lang-scala">scalacOptions in ThisBuild := {
+  // scalacOptions in Global &lt;- ルール 4
+  val old = (scalacOptions in ThisBuild).value
+  old :+ &quot;-D0&quot;
+}
+
+scalacOptions := {
+  // scalacOptions in ThisBuild &lt;- ルール 4
+  val old = scalacOptions.value
+  old :+ &quot;-D1&quot;
+}
+
+lazy val projF = (project in file(&quot;f&quot;))
+  .settings(
+    scalacOptions in compile := {
+      // scalacOptions in ThisBuild &lt;- ルール 2 と 4
+      val old = (scalacOptions in compile).value
+      old :+ &quot;-D2&quot;
+    },
+    scalacOptions in Compile := {
+      // scalacOptions in ThisBuild &lt;- ルール 3 と 4
+      val old = (scalacOptions in Compile).value
+      old :+ &quot;-D3&quot;
+    },
+    scalacOptions in (Compile, compile) := {
+      // scalacOptions in (projF, Compile) &lt;- ルール 1 と 2
+      val old = (scalacOptions in (Compile, compile)).value
+      old :+ &quot;-D4&quot;
+    },
+    test := {
+      println(&quot;bippy&quot; + (scalacOptions in (Compile, compile)).value.mkString)
+    }
+  )
+</code></pre><p>評価するとこうなる:
+</p><pre><code class="prettyprint lang-scala">scalacOptions in ThisBuild := {
+  Nil :+ &quot;-D0&quot;
+}
+
+scalacOptions := {
+  List(&quot;-D0&quot;) :+ &quot;-D1&quot;
+}
+
+lazy val projF = (project in file(&quot;f&quot;))
+  .settings(
+    scalacOptions in compile := List(&quot;-D0&quot;) :+ &quot;-D2&quot;,
+    scalacOptions in Compile := List(&quot;-D0&quot;) :+ &quot;-D3&quot;,
+    scalacOptions in (Compile, compile) := List(&quot;-D0&quot;, &quot;-D3&quot;) :+ &quot;-D4&quot;,
+    test := {
+      println(&quot;bippy&quot; + (scalacOptions in (Compile, compile)).value.mkString)
+    }
+  )
+</code></pre><h2 id="%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E4%BE%9D%E5%AD%98%E6%80%A7">ライブラリ依存性<a href="#%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E4%BE%9D%E5%AD%98%E6%80%A7" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このページは、このガイドのこれまでのページ、特に
+<a href="Basic-Def.html">.sbt ビルド定義</a>、<a href="Scopes.html">スコープ</a>、と
+<a href="Task-Graph.html">タスク・グラフ</a>
+を読んでいることを前提とする。
+</p><p>ライブラリ依存性は二つの方法で加えることができる:
+</p><ul><li><code>lib</code> ディレクトリに jar ファイルを入れることでできる<em>アンマネージ依存性</em>（unmanaged dependencies）
+</li><li>ビルド定義に設定され、リポジトリから自動でダウンロードされる<em>マネージ依存性</em>（managed dependencies）
+</li></ul><h3 id="%E3%82%A2%E3%83%B3%E3%83%9E%E3%83%8D%E3%83%BC%E3%82%B8%E4%BE%9D%E5%AD%98%E6%80%A7%EF%BC%88Unmanaged+Dependencies%EF%BC%89">アンマネージ依存性（Unmanaged Dependencies）<a href="#%E3%82%A2%E3%83%B3%E3%83%9E%E3%83%8D%E3%83%BC%E3%82%B8%E4%BE%9D%E5%AD%98%E6%80%A7%EF%BC%88Unmanaged+Dependencies%EF%BC%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>ほとんどの人はアンマネージ依存性ではなくマネージ依存性を使う。
+しかし、アンマネージの方が最初に始めるにあたってはより簡単かもしれない。
+</p><p>アンマネージ依存性はこんな感じのものだ: jar ファイルを <code>lib</code> 配下に置いておけばプロジェクトのクラスパスに追加される、以上！
+</p><p><a href="http://scalacheck.org">ScalaCheck</a>、<a href="http://specs2.org">Specs2</a>、<a href="http://scalatest.org">ScalaTest</a> のようなテスト用の jar ファイルも <code>lib</code> に配置できる。
+</p><p><code>lib</code> 配下の依存ライブラリは（<code>compile</code>、<code>test</code>、<code>run</code>、そして <code>console</code> の）全てのクラスパスに追加される。
+もし、どれか一つのクラスパスを変えたい場合は、例えば <code>dependencyClasspath in Compile</code> や
+<code>dependencyClasspath in Runtime</code> などを適宜調整する必要がある。
+</p><p>アンマネージ依存性を利用するのに、<code>build.sbt</code> には何も書く必要はないが、デフォルトの <code>lib</code> 以外のディレクトリを使いたい場合は <code>unmanagedBase</code> キーで変更することができる。
+</p><p><code>lib</code> のかわりに、<code>custom_lib</code> を使うならこのようになる:
+</p><pre><code class="prettyprint lang-scala">unmanagedBase := baseDirectory.value / &quot;custom_lib&quot;
+</code></pre><p><code>baseDirectory</code> はプロジェクトのベースディレクトリで、
+<a href="Task-Graph.html">タスク・グラフ</a>で説明したとおり、ここでは <code>unmanagedBase</code>
+を <code>value</code> を使って取り出した <code>baseDirectory</code> の値を用いて変更している。
+</p><p>他には、<code>unmangedJars</code> という <code>unmanagedBase</code> ディレクトリに入っている jar ファイルのリストを返すタスクがある。
+複数のディレクトリを使うとか、何か別の複雑なことを行う場合は、この <code>unmanagedJar</code> タスクを何か別のものに変える必要があるかもしれない。
+例えば <code>Compile</code> コンフィギュレーション時に <code>lib</code>ディレクトリのファイルを無視したい、など。
+</p><pre><code class="prettyprint lang-scala">unmanagedJars in Compile := Seq.empty[sbt.Attributed[java.io.File]]
+</code></pre><h3 id="%E3%83%9E%E3%83%8D%E3%83%BC%E3%82%B8%E4%BE%9D%E5%AD%98%E6%80%A7%EF%BC%88Managed+Dependencies%EF%BC%89">マネージ依存性（Managed Dependencies）<a href="#%E3%83%9E%E3%83%8D%E3%83%BC%E3%82%B8%E4%BE%9D%E5%AD%98%E6%80%A7%EF%BC%88Managed+Dependencies%EF%BC%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt は [Apache Ivy] を使ってマネージ依存性を実装しているので、既に Maven か Ivy に慣れているなら、違和感無く入り込めるだろう。
+</p><h4 id="%E3%82%AD%E3%83%BC"><code>libraryDependencies</code> キー<a href="#%E3%82%AD%E3%83%BC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>大体の場合、依存性を <code>libraryDependencies</code> セッティングに列挙するだけでうまくいくだろう。
+Maven POM ファイルや、Ivy コンフィギュレーションファイルを書くなどして、依存性を外部で設定してしまって、
+sbt にその外部コンフィギュレーションファイルを使わせるということも可能だ。
+これに関しては、[Library Management] を参照。
+</p><p>依存性の宣言は、以下のようになる。ここで、<code>groupId</code>、<code>artifactId</code>、と <code>revision</code> は文字列だ:
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += groupID % artifactID % revision
+</code></pre><p>もしくは、以下のようになる。このときの <code>configuration</code> は文字列もしくは <a href="../../sxr/sbt/Configuration.scala.html#sbt.Configuration">Configuration</a> の値だ。
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += groupID % artifactID % revision % configuration
+</code></pre><p><code>libraryDependencies</code> は [Keys] で以下のように定義されている:
+</p><pre><code class="prettyprint lang-scala">val libraryDependencies = SettingKey[Seq[ModuleID]](&quot;library-dependencies&quot;, &quot;Declares managed dependencies.&quot;)
+</code></pre><p><code>%</code> メソッドは、文字列から <code>ModuleID</code> オブジェクトを作るので、君はその <code>ModuleID</code> を <code>libraryDependencies</code> に追加するだけでいい。
+</p><p>当然ながら、sbt は（Ivy を通じて）モジュールをどこからダウンロードしてくるかを知っていなければならない。
+もしそのモジュールが sbt に初めから入っているデフォルトのリポジトリの一つに存在していれば、何もしなくてもそのままで動作する。
+例えば、Apache Derby は Maven2 の標準リポジトリ（訳注: sbt にあらかじめ入っているデフォルトリポジトリの一つ）に存在している:
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot;
+</code></pre><p>これを <code>build.sbt</code> に記述して <code>update</code> を実行すると、sbt は Derby を <code>~/.ivy2/cache/org.apache.derby/</code> にダウンロードするはずだ。
+（ちなみに、<code>update</code> は <code>compile</code> の依存性であるため、ほとんどの場合、手動で <code>update</code> と入力する必要はないだろう）
+</p><p>もちろん <code>++=</code> を使って依存ライブラリのリストを一度に追加することもできる:
+</p><pre><code class="prettyprint lang-scala">libraryDependencies ++= Seq(
+  groupID % artifactID % revision,
+  groupID % otherID % otherRevision
+)
+</code></pre><p><code>libraryDependencies</code> に対して <code>:=</code> を使う機会があるかもしれないが、おそらくそれは稀だろう。
+</p><h4 id="%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E6%AD%A3%E3%81%97%E3%81%84+Scala+%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3%E3%82%92%E5%85%A5%E6%89%8B%E3%81%99%E3%82%8B"><code>%%</code> を使って正しい Scala バージョンを入手する<a href="#%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E6%AD%A3%E3%81%97%E3%81%84+Scala+%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3%E3%82%92%E5%85%A5%E6%89%8B%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>groupID % artifactID % revision</code> のかわりに、
+<code>groupID %% artifactID % revision</code> を使うと（違いは groupID の後ろの二つ連なった <code>%%</code>）、
+sbt はプロジェクトの Scala のバイナリバージョンをアーティファクト名に追加する。
+これはただの略記法なので <code>%%</code> 無しで書くこともできる:
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-tools&quot; % &quot;scala-stm_2.11.1&quot; % &quot;0.3&quot;
+</code></pre><p>君のビルドの Scala バージョンが <code>2.11.1</code> だとすると、以下の設定は上記と等価だ（“org.scala-tools” の後ろの二つ連なった %% に注意）:
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-tools&quot; %% &quot;scala-stm&quot; % &quot;0.3&quot;
+</code></pre><p>多くの依存ライブラリは複数の Scala バイナリバージョンに対してコンパイルされており、
+ライブラリの利用者はバイナリ互換性のあるものを選択したいと思うはずである。
+</p><p>実際のところの複雑な問題として、依存ライブラリはしばしば少しくらい違った Scala バージョンでも動作するのだが、
+<code>%%</code> はこれについてそこまで賢くはない。
+もしある依存ライブラリが Scala 2.10.1 に対してビルドされているとして、
+君のプロジェクトが <code>scalaVersion := &quot;2.10.4&quot;</code> と指定している場合、
+その 2.10.1 に依存するライブラリがおそらく動作するにも関わらず <code>%%</code> を使うことはできない。
+もし <code>%%</code> が動かなくなったら、依存ライブラリが使っている実際のバージョンを確認して、
+動くだろうバージョン（それがあればの話だけど）に決め打ちすればいい。
+</p><p>詳しくは、<a href="../../docs/Cross-Build.html">Cross Build</a> を参照。
+</p><h4 id="Ivy+revision">Ivy revision<a href="#Ivy+revision" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>groupID % artifactID % revision</code> の <code>revision</code> は、単一の固定されたバージョン番号でなくてもよい。
+Ivy は指定されたバージョン指定の制限の中でモジュールの最新の revision を選ぶことができる。
+<code>&quot;1.6.1&quot;</code> のような固定 revision ではなく、<code>&quot;latest.integration&quot;</code>、<code>&quot;2.9.+&quot;</code>、や <code>&quot;[1.0,)&quot;</code> など指定できる。
+詳しくは、[Ivy revisions] を参照。
+</p><!-- TODO: Add aliases -->
+<h4 id="Resolvers">Resolvers<a href="#Resolvers" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>全てのパッケージが一つのサーバに置いてあるとは限らない。
+sbt は、デフォルトで Maven の標準リポジトリ（訳注：Maven Central Repository）を使う。
+もし依存ライブラリがデフォルトのリポジトリに存在しないなら、Ivy がそれを見つけられるよう <em>resolver</em> を追加する必要がある。
+</p><p>リポジトリを追加するには、以下のように:
+</p><pre><code class="prettyprint lang-scala">resolvers += name at location
+</code></pre><p>二つの文字列の間の特別な <code>at</code> を使う。
+</p><p>例えばこのようになる:
+</p><pre><code class="prettyprint lang-scala">resolvers += &quot;Sonatype OSS Snapshots&quot; at &quot;https://oss.sonatype.org/content/repositories/snapshots&quot;
+</code></pre><p><a href="../../sxr/sbt/Keys.scala.html">Keys</a> で定義されている <code>resolvers</code> キーは以下のようになっている:
+</p><pre><code class="prettyprint lang-scala">val resolvers = settingKey[Seq[Resolver]](&quot;The user-defined additional resolvers for automatically managed dependencies.&quot;)
+</code></pre><p><code>at</code> メソッドは、二つの文字列から <code>Resolver</code> オブジェクトを作る。
+</p><p>sbt は、リポジトリとして追加すれば、ローカル Maven リポジトリも検索することができる:
+</p><pre><code class="prettyprint lang-scala">resolvers += &quot;Local Maven Repository&quot; at &quot;file://&quot;+Path.userHome.absolutePath+&quot;/.m2/repository&quot;
+</code></pre><p>こんな便利な指定方法もある:
+</p><pre><code class="prettyprint lang-scala">resolvers += Resolver.mavenLocal
+</code></pre><p>他の種類のリポジトリの定義の詳細に関しては、[Resolvers] 参照。
+</p><h4 id="%E3%83%87%E3%83%95%E3%82%A9%E3%83%AB%E3%83%88%E3%81%AE+resolver+%E3%81%AE%E3%82%AA%E3%83%BC%E3%83%90%E3%83%BC%E3%83%A9%E3%82%A4%E3%83%89">デフォルトの resolver のオーバーライド<a href="#%E3%83%87%E3%83%95%E3%82%A9%E3%83%AB%E3%83%88%E3%81%AE+resolver+%E3%81%AE%E3%82%AA%E3%83%BC%E3%83%90%E3%83%BC%E3%83%A9%E3%82%A4%E3%83%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>resolvers</code> は、デフォルトの resolver を含まず、ビルド定義によって加えられる追加のものだけを含む。
+</p><p><code>sbt</code> は、<code>resolvers</code> をデフォルトのリポジトリと組み合わせて <code>external-resolvers</code> を形成する。　
+</p><p>そのため、デフォルトの resolver を変更したり、削除したい場合は、<code>resolvers</code> ではなく、<code>external-resolvers</code> をオーバーライドする必要がある。
+</p><h4 id="%E3%82%B3%E3%83%B3%E3%83%95%E3%82%A3%E3%82%AE%E3%83%A5%E3%83%AC%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E3%81%94%E3%81%A8%E3%81%AE%E4%BE%9D%E5%AD%98%E6%80%A7">コンフィギュレーションごとの依存性<a href="#%E3%82%B3%E3%83%B3%E3%83%95%E3%82%A3%E3%82%AE%E3%83%A5%E3%83%AC%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E3%81%94%E3%81%A8%E3%81%AE%E4%BE%9D%E5%AD%98%E6%80%A7" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>依存ライブラリをテストコード（<code>Test</code> コンフィギュレーションでコンパイルされる <code>src/test/scala</code> 内のコード）から使いたいが、
+メインのコードでは使わないということがよくある。
+</p><p>ある依存ライブラリが <code>Test</code> コンフィギュレーションのクラスパスには出てきてほしいが、<code>Compile</code> コンフィギュレーションでは要らないという場合は、以下のように <code>% &quot;test&quot;</code> と追加する:
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot; % &quot;test&quot;
+</code></pre><p><code>Test</code> コンフィグレーションの型安全なバージョンを使ってもよい:
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot; % Test
+</code></pre><p>この状態で sbt のインタラクティブモードで <code>show compile:dependency-classpath</code> と入力しても Derby は出てこないはずだ。
+だが、<code>show test:dependency-classpath</code> と入力すると、Derby の jar がリストに含まれていることを確認できるだろう。
+</p><p>普通は、<a href="http://scalacheck.org">ScalaCheck</a>、<a href="http://specs2.org">Specs2</a>、<a href="http://scalatest.org">ScalaTest</a> などのテスト関連の依存ライブラリは <code>% &quot;test&quot;</code> と共に定義される。
+</p><p>ライブラリの依存性に関しては、もうこの入門用のページで見つからない情報があれば、<a href="../../docs/Library-Management.html">このページ</a>に
+もう少し詳細やコツが書いてある。
+</p><h2 id="%E3%83%9E%E3%83%AB%E3%83%81%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%83%BB%E3%83%93%E3%83%AB%E3%83%89">マルチプロジェクト・ビルド<a href="#%E3%83%9E%E3%83%AB%E3%83%81%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%83%BB%E3%83%93%E3%83%AB%E3%83%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このページでは、一つのビルドで複数のサブプロジェクトを管理する方法を紹介する。
+このガイドのこれまでのページを読んでおいてほしい。
+特に <a href="Basic-Def.html">build.sbt</a> を理解していることが必要になる。
+</p><h3 id="%E8%A4%87%E6%95%B0%E3%81%AE%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88">複数のサブプロジェクト<a href="#%E8%A4%87%E6%95%B0%E3%81%AE%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>一つのビルドに複数の関連するサブプロジェクトを入れておくと、
+サブプロジェクト間に依存性がある場合や同時に変更されることが多い場合に便利だ。
+</p><p>ビルド内の個々のサブプロジェクトは、それぞれ独自のソースディレクトリを持ち、
+<code>package</code> を実行すると独自の jar ファイルを生成するなど、概ね通常のプロジェクトと同様に動作する。
+</p><p>個々のプロジェクトは lazy val を用いて <a href="../../api/sbt/Project.html">Project</a> 型の値を宣言することで定義される。例として、以下のようなものがプロジェクトだ:
+</p><pre><code class="prettyprint lang-scala">lazy val util = (project in file(&quot;util&quot;))
+
+lazy val core = (project in file(&quot;core&quot;))
+</code></pre><p>val で定義された名前はプロジェクトの ID 及びベースディレクトリの名前になる。
+ID は sbt シェルからプロジェクトを指定する時に用いられる。
+</p><p>ベースディレクトリ名が ID と同じ名前であるときは省略することができる。
+</p><pre><code class="prettyprint lang-scala">lazy val util = project
+
+lazy val core = project
+</code></pre><h4 id="%E5%85%B1%E9%80%9A%E3%81%AE%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0">共通のセッティング<a href="#%E5%85%B1%E9%80%9A%E3%81%AE%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>複数プロジェクトに共通なセッティングをくくり出す場合、
+<code>commonSettings</code> という名前のセッティングの Seq を作って、
+それを引数として各プロジェクトの <code>settings</code> メソッドを呼び出せばよい。
+</p><pre><code class="prettyprint lang-scala">lazy val commonSettings = Seq(
+  organization := &quot;com.example&quot;,
+  version := &quot;0.1.0&quot;,
+  scalaVersion := &quot;2.12.2&quot;
+)
+
+lazy val core = (project in file(&quot;core&quot;))
+  .settings(
+    commonSettings,
+    // other settings
+  )
+
+lazy val util = (project in file(&quot;util&quot;))
+  .settings(
+    commonSettings,
+    // other settings
+  )
+</code></pre><p>これで <code>version</code> を一箇所で変更すれば、再読み込み後に全サブプロジェクトに反映されるようになる。
+</p><h4 id="%E3%83%93%E3%83%AB%E3%83%89%E3%83%AF%E3%82%A4%E3%83%89%E3%83%BB%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0">ビルドワイド・セッティング<a href="#%E3%83%93%E3%83%AB%E3%83%89%E3%83%AF%E3%82%A4%E3%83%89%E3%83%BB%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>サブプロジェクト間に共通なセッティングを一度に定義するためのもう一つの方法として、
+<code>ThisBuild</code> にスコープ付けするという少し上級なテクニックがある。（<a href="Scopes.html">スコープ</a>参照）
+</p><h3 id="%E4%BE%9D%E5%AD%98%E9%96%A2%E4%BF%82">依存関係<a href="#%E4%BE%9D%E5%AD%98%E9%96%A2%E4%BF%82" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>一つのビルドの中の個々のプロジェクトはお互いに完全に独立した状態であってもよいが、
+普通、何らかの形で依存関係を持っているだろう。
+ここでは集約（<code>aggregate</code>）とクラスパス（<code>classpath</code>）という二種類の依存関係がある。
+</p><h4 id="%E9%9B%86%E7%B4%84">集約<a href="#%E9%9B%86%E7%B4%84" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>集約とは、集約する側のプロジェクトであるタスクを実行するとき、集約される側の複数のプロジェクトでも同じタスクを実行するという関係を意味する。例えば、
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .aggregate(util, core)
+
+lazy val util = (project in file(&quot;util&quot;))
+
+lazy val core = (project in file(&quot;core&quot;))
+</code></pre><p>上の例では、<code>root</code> プロジェクトが <code>util</code> と <code>core</code> を集約している。
+この状態で sbt を起動してコンパイルしてみよう。
+3 つのプロジェクトが全てコンパイルされることが分かると思う。
+</p><p><em>集約プロジェクト内で</em>（この場合は <code>root</code> プロジェクトで）、
+タスクごとに集約をコントロールすることができる。
+例えば、<code>update</code> タスクの集約を以下のようにして回避できる:
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .aggregate(util, core)
+  .settings(
+    aggregate in update := false
+  )
+
+[...]
+</code></pre><p><code>aggregate in update</code> は、<code>update</code> タスクにスコープ付けされた <code>aggregate</code> キーだ
+（<a href="Scopes.html">スコープ</a>参照）。
+</p><p>注意: 集約は、集約されるタスクを順不同に並列実行する。
+</p><h4 id="%E3%82%AF%E3%83%A9%E3%82%B9%E3%83%91%E3%82%B9%E4%BE%9D%E5%AD%98%E6%80%A7">クラスパス依存性<a href="#%E3%82%AF%E3%83%A9%E3%82%B9%E3%83%91%E3%82%B9%E4%BE%9D%E5%AD%98%E6%80%A7" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>あるプロジェクトが、他のプロジェクトにあるコードに依存させたい場合、
+<code>dependsOn</code> メソッドを呼び出して実現すればよい。
+</p><p>例えば、<code>core</code> に <code>util</code> のクラスパスが必要な場合は <code>core</code> の定義を次のように書く:
+</p><pre><code class="prettyprint lang-scala">lazy val core = project.dependsOn(util)
+</code></pre><p>これで <code>core</code> 内のコードから <code>util</code> の class を利用することができるようになった。
+</p><p>また、これにより <code>core</code> がコンパイルされる前に <code>util</code> の <code>update</code> と <code>compile</code> が実行されている必要があるので
+プロジェクト間でコンパイル実行が順序付けられることになる。
+</p><p>複数のプロジェクトに依存するには、<code>dependsOn(bar, baz)</code> というふうに、
+<code>dependsOn</code> に複数の引数を渡せばよい。
+</p><h5 id="%E3%82%B3%E3%83%B3%E3%83%95%E3%82%A3%E3%82%AE%E3%83%A5%E3%83%AC%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E3%81%94%E3%81%A8%E3%81%AE%E3%82%AF%E3%83%A9%E3%82%B9%E3%83%91%E3%82%B9%E4%BE%9D%E5%AD%98%E6%80%A7">コンフィギュレーションごとのクラスパス依存性<a href="#%E3%82%B3%E3%83%B3%E3%83%95%E3%82%A3%E3%82%AE%E3%83%A5%E3%83%AC%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E3%81%94%E3%81%A8%E3%81%AE%E3%82%AF%E3%83%A9%E3%82%B9%E3%83%91%E3%82%B9%E4%BE%9D%E5%AD%98%E6%80%A7" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p><code>foo dependsOn(bar)</code> は、<code>foo</code> の <code>Compile</code> コンフィギュレーションが
+<code>bar</code> の <code>Compile</code> コンフィギュレーションに依存することを意味する。
+これを明示的に書くと、<code>dependsOn(bar % &quot;compile-&gt;compile&quot;)</code> となる。
+</p><p>この <code>&quot;compile-&gt;compile&quot;</code> 内の <code>-&gt;</code> は、「依存する」という意味で、
+<code>&quot;test-&gt;compile&quot;</code> は、<code>foo</code> の <code>Test</code> コンフィギュレーションが
+<code>bar</code> の <code>Compile</code> コンフィギュレーションに依存することを意味する。
+</p><p><code>-&gt;config</code> の部分を省くと、<code>-&gt;compile</code> だと解釈されるため、
+<code>dependsOn(bar % &quot;test&quot;)</code> は、<code>foo</code> の <code>Test</code> コンフィギュレーションが
+<code>bar</code> の <code>Compile</code> コンフィギュレーションに依存することを意味する。
+</p><p>特に、<code>Test</code> が <code>Test</code> に依存することを意味する <code>&quot;test-&gt;test&quot;</code> は役に立つ宣言だ。
+これにより、例えば、<code>bar/src/test/scala</code> にテストのためのユーティリティコードを
+置いておき、それを <code>foo/src/test/scala</code> 内のコードから利用することができる。
+</p><p>複数のコンフィギュレーション依存性を宣言する場合は、セミコロンで区切る。
+例えば、<code>dependsOn(bar % &quot;test-&gt;test;compile-&gt;compile&quot;)</code> と書ける。
+</p><h3 id="%E3%83%87%E3%83%95%E3%82%A9%E3%83%AB%E3%83%88%E3%83%AB%E3%83%BC%E3%83%88%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88">デフォルトルートプロジェクト<a href="#%E3%83%87%E3%83%95%E3%82%A9%E3%83%AB%E3%83%88%E3%83%AB%E3%83%BC%E3%83%88%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>もしプロジェクトがルートディレクトリに定義されてなかったら、 sbt はビルド時に他のプロジェクトを集約するデフォルトプロジェクトを勝手に生成する。
+</p><p>プロジェクト <code>hello-foo</code> は、<code>base = file(&quot;foo&quot;)</code> と共に定義されているため、
+サブディレクトリ <code>foo</code> に置かれる。
+そのソースは、<code>foo/Foo.scala</code> のように <code>foo</code> の直下に置かれるか、
+<code>foo/src/main/scala</code> 内に置かれる。
+ビルド定義ファイルを除いては、通常の sbt <a href="Directories.html">ディレクトリ構造</a>が <code>foo</code> 以下に適用される。
+</p><p><code>foo</code> 内の全ての <code>.sbt</code> ファイル、例えば <code>foo/build.sbt</code> は、
+<code>hello-foo</code> プロジェクトにスコープ付けされた上で、ビルド全体のビルド定義に取り込まれる。
+</p><p>ルートプロジェクトが <code>hello</code> にあるとき、<code>hello/build.sbt</code>、<code>hello/foo/build.sbt</code>、
+<code>hello/bar/build.sbt</code> においてそれぞれ別々のバージョンを定義してみよう（例: <code>version := &quot;0.6&quot;</code>）。
+次に、インタラクティブプロンプトで <code>show version</code> と打ち込んでみる。
+以下のように表示されるはずだ（定義したバージョンによるが）:
+</p><pre><code class="">&gt; show version
+[info] hello-foo/*:version
+[info] 	0.7
+[info] hello-bar/*:version
+[info] 	0.9
+[info] hello/*:version
+[info] 	0.5
+</code></pre><p><code>hello-foo/*:version</code> は、<code>hello/foo/build.sbt</code> 内で定義され、
+<code>hello-bar/*:version</code> は、<code>hello/bar/build.sbt</code> 内で定義され、
+<code>hello/*:version</code> は、<code>hello/build.sbt</code> 内で定義される。
+<a href="Scopes.html">スコープ付けされたキーの構文</a>を復習しておこう。
+それぞれの <code>version</code> キーは、<code>build.sbt</code> の場所により、
+特定のプロジェクトにスコープ付けされている。
+だが、三つの <code>build.sbt</code> とも同じビルド定義の一部だ。
+</p><p><code>.scala</code> ファイルは、上に示したように、単にプロジェクトとそのベースディレクトリを列挙するだけの簡単なものにして、
+<em>それぞれのプロジェクトのセッティングは、そのプロジェクトのベースディレクトリ直下の
+<code>.sbt</code> ファイル内で宣言することができる</em>。
+<em>全てのセッティングを <code>.scala</code> ファイル内で宣言することは義務付けられいるわけではない。</em>
+</p><p>ビルド定義の全てを単一の <code>project</code> ディレクトリ内の場所にまとめるために、
+<code>.scala</code> ファイル内にセッティングも含めてしまうほうが洗練されていると思うかもしれない。
+ただし、これは好みの問題だから、好きにやっていい。
+</p><p>サブプロジェクトは、<code>project</code> サブディレクトリや、<code>project/*.scala</code> ファイルを持つことができない。
+<code>foo/project/Build.scala</code> は無視される。
+</p><h3 id="%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%AE%E5%88%87%E3%82%8A%E6%9B%BF%E3%81%88">プロジェクトの切り替え<a href="#%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%AE%E5%88%87%E3%82%8A%E6%9B%BF%E3%81%88" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt インタラクティブプロンプトから、<code>projects</code> と入力することでプロジェクトの全リストが表示され、
+<code>project &lt;プロジェクト名&gt;</code> で、カレントプロジェクトを選択できる。
+<code>compile</code> のようなタスクを実行すると、それはカレントプロジェクトに対して実行される。
+これにより、ルートプロジェクトをコンパイルせずに、サブプロジェクトのみをコンパイルすることができる。
+</p><p>また <code>subProjectID/compile</code> のように、プロジェクト ID を明示的に指定することで、そのプロジェクトのタスクを実行することもできる。
+</p><h3 id="%E5%85%B1%E9%80%9A%E3%81%AE%E3%82%B3%E3%83%BC%E3%83%89">共通のコード<a href="#%E5%85%B1%E9%80%9A%E3%81%AE%E3%82%B3%E3%83%BC%E3%83%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>.sbt</code> ファイルで定義された値は、他の <code>.sbt</code> ファイルからは見えない。 <code>.sbt</code> ファイル間でコードを共有するためには、 ベースディレクトリにある <code>project/</code> 配下に Scala ファイルを用意すればよい。
+</p><p>詳細は<a href="Organizing-Build.html">ビルドの整理</a>を参照。
+</p><h2 id="%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%81%AE%E4%BD%BF%E7%94%A8">プラグインの使用<a href="#%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%81%AE%E4%BD%BF%E7%94%A8" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このガイドのこれまでのページを読んでおいてほしい。
+特に <a href="Basic-Def.html">build.sbt</a>、
+<a href="Task-Graph.html">タスク・グラフ</a>、
+と<a href="Library-Dependencies.html">ライブラリ依存性</a>を理解していることが必要になる。
+</p><h3 id="%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%81%A8%E3%81%AF%E4%BD%95%E3%81%8B">プラグインとは何か<a href="#%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%81%A8%E3%81%AF%E4%BD%95%E3%81%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt のプラグインは、最も一般的には新しいセッティングを追加することでビルド定義を拡張するものである。
+その新しいセッティングは新しいタスクでもよい。
+例えば、テストカバレッジレポートを生成する <code>codeCoverage</code> というタスクを追加するプラグインなどが考えられる。
+</p><h3 id="%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%81%AE%E5%AE%A3%E8%A8%80">プラグインの宣言<a href="#%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%81%AE%E5%AE%A3%E8%A8%80" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>プロジェクトが <code>hello</code> ディレクトリにあり、ビルド定義に sbt-site プラグインを追加する場合、
+<code>hello/project/site.sbt</code> を新しく作成し、
+Ivy のモジュール ID を <code>addSbtPlugin</code> メソッドに渡してプラグイン依存性を定義する:
+</p><pre><code class="prettyprint lang-scala">addSbtPlugin(&quot;com.typesafe.sbt&quot; % &quot;sbt-site&quot; % &quot;0.7.0&quot;)
+</code></pre><p>sbt-assembly プラグインを追加するなら、以下のような内容で <code>hello/project/assembly.sbt</code> をつくる:
+</p><pre><code class="prettyprint lang-scala">addSbtPlugin(&quot;com.eed3si9n&quot; % &quot;sbt-assembly&quot; % &quot;0.11.2&quot;)
+</code></pre><p>全てのプラグインがデフォルトのリポジトリに存在するわけではないので、
+プラグインのドキュメントでそのプラグインが見つかるリポジトリを resolvers に追加するよう指示されていることもあるだろう。
+</p><pre><code class="prettyprint lang-scala">resolvers += Resolver.sonatypeRepo(&quot;public&quot;)
+</code></pre><p>プラグインは普通、プロジェクトでそのプラグインの機能を有効にするためのセッティング群を提供している。
+これは次のセクションで説明する。
+</p><h3 id="auto+plugin+%E3%81%AE%E6%9C%89%E5%8A%B9%E5%8C%96%E3%81%A8%E7%84%A1%E5%8A%B9%E5%8C%96">auto plugin の有効化と無効化<a href="#auto+plugin+%E3%81%AE%E6%9C%89%E5%8A%B9%E5%8C%96%E3%81%A8%E7%84%A1%E5%8A%B9%E5%8C%96" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>プラグインは、自身が持つセッティング群がビルド定義に自動的に追加されるよう宣言することができ、
+その場合、プラグインの利用者は何もしなくてもいい。
+</p><p>sbt 0.13.5 から、プラグインを自動的に追加して、そのセッティング群と依存関係がプロジェクトに設定されていることを安全に保証する <a href="../../docs/Plugins.html">auto plugin</a> という機能が追加された。
+</p><p>auto plugin の多くはデフォルトのセッティング群を自動的に追加するが、中には明示的な有効化を必要とするものもある。
+</p><p>明示的な有効化が必要な auto plugin を使っている場合は、以下を <code>build.sbt</code> に追加する必要がある:
+</p><pre><code class="prettyprint lang-scala">lazy val util = (project in file(&quot;util&quot;))
+  .enablePlugins(FooPlugin, BarPlugin)
+  .settings(
+    name := &quot;hello-util&quot;
+  )
+</code></pre><p><code>enablePlugins</code> メソッドを使えば、そのプロジェクトで使用したい auto plugin を明示的に定義できる。
+逆に <code>disablePlugins</code> メソッドを使ってプラグインを除外することもできる。
+例えば、<code>util</code> から <code>IvyPlugin</code> のセッティングを除外したいとすると、<code>build.sbt</code> を以下のように変更する:
+</p><pre><code class="prettyprint lang-scala">lazy val util = (project in file(&quot;util&quot;))
+  .enablePlugins(FooPlugin, BarPlugin)
+  .disablePlugins(plugins.IvyPlugin)
+  .settings(
+    name := &quot;hello-util&quot;
+  )
+</code></pre><p>明示的な有効化が必要か否かは、それぞれの auto plugin がドキュメントで明記しておくべきだ。
+あるプロジェクトでどんな auto plugin が有効化されているか気になったら、
+sbt コンソールから <code>plugins</code> コマンドを実行してみよう。
+</p><p>例えば、このようになる。
+</p><pre><code class="">&gt; plugins
+In file:/home/jsuereth/projects/sbt/test-ivy-issues/
+        sbt.plugins.IvyPlugin: enabled in scala-sbt-org
+        sbt.plugins.JvmPlugin: enabled in scala-sbt-org
+        sbt.plugins.CorePlugin: enabled in scala-sbt-org
+        sbt.plugins.JUnitXmlReportPlugin: enabled in scala-sbt-org
+</code></pre><p>ここでは、<code>plugins</code> の表示によって sbt のデフォルトのプラグインが全て有効化されていることが分かる。
+sbt のデフォルトセッティングは 3 つのプラグインによって提供される:
+</p><ol><li><code>CorePlugin</code>: タスクの並列実行などのコア機能。
+</li><li><code>IvyPlugin</code>: モジュールの公開や依存性の解決機能。
+</li><li><code>JvmPlugin</code>: Java/Scala プロジェクトのコンパイル/テスト/実行/パッケージ化。
+</li></ol><p>さらに <code>JUnitXmlReportPlugin</code> は実験的に junit-xml の生成機能を提供する。
+</p><p>古くからある auto plugin ではないプラグインは、<a href="Multi-Project.html">マルチプロジェクトビルド</a>内に
+異なるタイプのプロジェクトを持つことができるように、セッティング群を明示的に追加することを必要とする。
+</p><p>各プラグインのドキュメントに設定方法が明記されているかと思うが、
+一般的にはベースとなるセッティング群を追加して、必要に応じてカスタマイズするというパターンが多い。
+</p><p>例えば sbt-site プラグインの例で説明すると <code>site.sbt</code> というファイルを新しく作って
+</p><pre><code class="prettyprint lang-scala">site.settings
+</code></pre><p>を <code>site.sbt</code> に記述することで有効化できる。
+</p><p>ビルド定義がマルチプロジェクトの場合は、プロジェクトに直接追加する:
+</p><pre><code class="prettyprint lang-scala">// don't use the site plugin for the `util` project
+lazy val util = (project in file(&quot;util&quot;))
+
+// enable the site plugin for the `core` project
+lazy val core = (project in file(&quot;core&quot;))
+  .settings(site.settings)
+</code></pre><h3 id="%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%90%E3%83%AB%E3%83%BB%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3">グローバル・プラグイン<a href="#%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%90%E3%83%AB%E3%83%BB%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>プラグインを <code>~/.sbt/1.0/plugins/</code> 以下で宣言することで全てのプロジェクトに対して一括してプラグインをインストールすることができる。
+<code>~/.sbt/1.0/plugins/</code> はそのクラスパスをすべての sbt ビルド定義に対して export する sbt プロジェクトだ。
+大雑把に言えば、<code>~/.sbt/1.0/plugins/</code> 内の <code>.sbt</code> ファイルや <code>.scala</code> ファイルは、それが全てのプロジェクトの <code>project/</code> ディレクトリに入っているかのようにふるまう。
+</p><p><code>~/.sbt/1.0/plugins/build.sbt</code> を作って、そこに <code>addSbtPlugin()</code> 式を書くことで
+全プロジェクトにプラグインを追加することができる。
+しかし、これを多用するとマシン環境への依存性を増やしてしまうことになるので、この機能は注意してほどほどに使うべきだ。
+<a href="../../docs/Best-Practices.html#global-vs-local-plugins">ベスト・プラクティス</a>も参照してほしい。
+</p><h3 id="%E5%88%A9%E7%94%A8%E5%8F%AF%E8%83%BD%E3%81%AA%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3">利用可能なプラグイン<a href="#%E5%88%A9%E7%94%A8%E5%8F%AF%E8%83%BD%E3%81%AA%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="../../docs/Community-Plugins.html">プラグインのリスト</a>がある。
+</p><p>特に人気のプラグインは:
+</p><ul><li>IDE のためのプラグイン（sbt プロジェクトを好みの IDE にインポートするためのもの）
+</li><li><a href="https://github.com/earldouglas/xsbt-web-plugin">xsbt-web-plugin</a> のような Web フレームワークをサポートするプラグイン
+</li></ul><p>プラグイン開発の方法など、プラグインに関する詳細は <a href="../../docs/Plugins.html">Plugins</a> を参照。
+ベストプラクティスを知りたいなら、<a href="../../docs/Plugins-Best-Practices.html">ベスト・プラクティス</a> を見てほしい。
+</p><h2 id="%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%A8%E3%82%BF%E3%82%B9%E3%82%AF">カスタムセッティングとタスク<a href="#%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%A8%E3%82%BF%E3%82%B9%E3%82%AF" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このページでは、独自のセッティングやタスクの作成を紹介する。
+</p><p>このページを理解するには、このガイドの前のページ、
+特に <a href="Basic-Def.html">build.sbt</a> と
+<a href="Task-Graph.html">タスク・グラフ</a> を読んである必要がある。
+</p><h3 id="%E3%82%AD%E3%83%BC%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B">キーを定義する<a href="#%E3%82%AD%E3%83%BC%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="../../sxr/sbt/Keys.scala.html">Keys</a> は、キーをどのように定義するかを示すサンプル例が満載だ。
+多くのキーは、<a href="../../sxr/sbt/Defaults.scala.html">Defaults</a> で実装されている。
+</p><p>キーには 3 つの型がある。
+<code>SettingKey</code> と <code>TaskKey</code> は <a href="Basic-Def.html">.sbt ビルド定義</a>で説明した。
+<code>InputKey</code> に関しては <a href="../../docs/Input-Tasks.html">Input Tasks</a> を見てほしい。
+</p><p>以下に <a href="../../sxr/sbt/Keys.scala.html">Keys</a> からの具体例を示す:
+</p><pre><code class="prettyprint lang-scala">val scalaVersion = settingKey[String](&quot;The version of Scala used for building.&quot;)
+val clean = taskKey[Unit](&quot;Deletes files produced by the build, such as generated sources, compiled classes, and task caches.&quot;)
+</code></pre><p>キーのコンストラクタは、二つの文字列のパラメータを取る。
+キー名（<code>&quot;scala-version&quot;</code>）と解説文（<code>&quot;The version of scala used for building.&quot;</code>）だ。
+</p><p><a href="Basic-Def.html">.sbt ビルド定義</a>でみた通り、<code>SettingKey[T]</code> 内の型パラメータ <code>T</code> は、セッティングの値の型を表す。
+<code>TaskKey[T]</code> 内の <code>T</code> は、タスクの結果の型を表す。
+</p><p>また、<a href="Basic-Def.html">.sbt ビルド定義</a>でみた通り、セッティングはプロジェクトが再読み込みされるまでは固定値を持ち、
+タスクは「タスク実行」の度（sbt のインタラクティブモードかバッチモードでコマンドが入力される度）に再計算される。
+</p><p>キーは <a href="Basic-Def.html">.sbt ファイル</a>、<a href="Organizing-Build.html">.scala ファイル</a>、または <a href="Using-Plugins.html">auto plugin</a> 内で定義する事が出来る。
+有効化された auto plugin の <code>autoImport</code> オブジェクト内で定義された <code>val</code> は全て <code>.sbt</code> ファイルに自動的にインポートされる。
+</p><h3 id="%E3%82%BF%E3%82%B9%E3%82%AF%E3%82%92%E5%AE%9F%E8%A3%85%E3%81%99%E3%82%8B">タスクを実装する<a href="#%E3%82%BF%E3%82%B9%E3%82%AF%E3%82%92%E5%AE%9F%E8%A3%85%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>タスクで使えるキーを定義したら、次はそのキーをタスク定義の中で使ってみよう。
+自前のタスクを定義しようとしているかもしれないし、既存のタスクを再定義してようと考えているかもしれないが、
+いずれにせよ、やることは同じだ。<code>:=</code> を使ってタスクのキーになんらかのコードを関連付けよう:
+</p><pre><code class="prettyprint lang-scala">val sampleStringTask = taskKey[String](&quot;A sample string task.&quot;)
+val sampleIntTask = taskKey[Int](&quot;A sample int task.&quot;)
+
+lazy val commonSettings = Seq(
+  organization := &quot;com.example&quot;,
+  version := &quot;0.1.0-SNAPSHOT&quot;
+)
+
+lazy val library = (project in file(&quot;library&quot;))
+  .settings(
+    commonSettings,
+    sampleStringTask := System.getProperty(&quot;user.home&quot;),
+    sampleIntTask := {
+      val sum = 1 + 2
+      println(&quot;sum: &quot; + sum)
+      sum
+    }
+  )
+</code></pre><p>もしタスクに依存してるものがあれば、[タスク・グラフ][More-About-Settings]で説明したとおり <code>value</code> を使ってその値を参照すればよい。
+</p><p>タスクを実装する上で一番難しい点は、多くの場合 sbt 固有の問題ではない。なぜならタスクはただの Scala コードだからだ。
+難しいのはそのタスクが実行したいことの「本体」部分を書くことだ。
+</p><p>例えば HTML を整形したいとすると、今度は HTML のライブラリを利用したくなるかもしれない
+（おそらく<a href="Using-Plugins.html">ビルド定義にライブラリ依存性を追加して</a>、その HTML ライブラリに基づいたコードを書けばよいだろう）。
+</p><p>sbt には、いくつかのユーティリティライブラリや便利な関数があり、特にファイルやディレクトリの取り扱いには <a href="../api/index.html#sbt.IO$">Scaladocs-IO</a> にある API がしばしば重宝するだろう。
+</p><h3 id="%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%AE%E5%AE%9F%E8%A1%8C%E6%84%8F%E5%91%B3%E8%AB%96">タスクの実行意味論<a href="#%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%AE%E5%AE%9F%E8%A1%8C%E6%84%8F%E5%91%B3%E8%AB%96" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>カスタムタスクから <code>value</code> を使って他のタスクに依存するとき、
+タスクの実行意味論 (execution semantics) に注意する必要がある。
+ここでいう実行意味論とは、実際<em>どの時点で</em>タスクが評価されるかを決定するものとする。
+</p><p><code>sampleIntTask</code> を例に取ると、タスク本文の各行は一行ずつ正格評価 (strict evaluation) されているはずだ。
+これは逐次実行の意味論だ:
+</p><pre><code class="prettyprint lang-scala">sampleIntTask := {
+  val sum = 1 + 2        // first
+  println(&quot;sum: &quot; + sum) // second
+  sum                    // third
+}
+</code></pre><p>実際には JVM は <code>sum</code> を <code>3</code> とインライン化したりするかもしれないが、観測可能なタスクの<strong>作用</strong>は、各行ずつ逐次実行したものと同一のものとなる。
+</p><p>次に、<code>startServer</code> と <code>stopServer</code> という 2つのカスタムタスクを定義して、<code>sampleIntTask</code> を以下のように書き換えたとする:
+</p><pre><code class="prettyprint lang-scala">val startServer = taskKey[Unit](&quot;start server&quot;)
+val stopServer = taskKey[Unit](&quot;stop server&quot;)
+val sampleIntTask = taskKey[Int](&quot;A sample int task.&quot;)
+val sampleStringTask = taskKey[String](&quot;A sample string task.&quot;)
+
+lazy val commonSettings = Seq(
+  organization := &quot;com.example&quot;,
+  version := &quot;0.1.0-SNAPSHOT&quot;
+)
+
+lazy val library = (project in file(&quot;library&quot;))
+  .settings(
+    commonSettings,
+    startServer := {
+      println(&quot;starting...&quot;)
+      Thread.sleep(500)
+    },
+    stopServer := {
+      println(&quot;stopping...&quot;)
+      Thread.sleep(500)
+    },
+    sampleIntTask := {
+      startServer.value
+      val sum = 1 + 2
+      println(&quot;sum: &quot; + sum)
+      stopServer.value // THIS WON'T WORK
+      sum
+    },
+    sampleStringTask := {
+      startServer.value
+      val s = sampleIntTask.value.toString
+      println(&quot;s: &quot; + s)
+      s
+    }
+  )
+</code></pre><p><code>sampleIntTask</code> を sbt のインタラクティブ・プロンプトから実行すると以下の結果となる:
+</p><pre><code class="">&gt; sampleIntTask
+stopping...
+starting...
+sum: 3
+[success] Total time: 1 s, completed Dec 22, 2014 5:00:00 PM
+</code></pre><p>何が起こったのかを考察するために、<code>sampleIntTask</code> を視覚化してみよう:
+</p><p><img src="../files/task-dependency00.png" alt="task-dependency"/>
+</p><p>素の Scala のメソッド呼び出しと違って、タスクの <code>value</code> メソッドの呼び出しは正格評価されない。
+代わりに、<code>sampleIntTask</code> が <code>startServer</code> タスクと <code>stopServer</code> タスクに依存するということを表すマークとして機能する。
+<code>sampleIntTask</code> がユーザによって呼び出されると、sbt のタスクエンジンは以下を行う:
+</p><ul><li><code>sampleIntTask</code> を評価する<strong>前</strong>にタスク依存性を評価する。(半順序)
+</li><li>タスク依存性が独立ならば、並列に評価しようとする (並列性)
+</li><li>各タスクは一度のコマンド実行に対して 1 回のみ評価される (非重複)
+</li></ul><h4 id="%E3%82%BF%E3%82%B9%E3%82%AF%E4%BE%9D%E5%AD%98%E6%80%A7%E3%81%AE%E9%9D%9E%E9%87%8D%E8%A4%87%E5%8C%96">タスク依存性の非重複化<a href="#%E3%82%BF%E3%82%B9%E3%82%AF%E4%BE%9D%E5%AD%98%E6%80%A7%E3%81%AE%E9%9D%9E%E9%87%8D%E8%A4%87%E5%8C%96" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>非重複化を説明するために、sbt インタラクティブ・プロンプトから <code>sampleStringTask</code> を実行する。
+</p><pre><code class="">&gt; sampleStringTask
+stopping...
+starting...
+sum: 3
+s: 3
+[success] Total time: 1 s, completed Dec 22, 2014 5:30:00 PM
+</code></pre><p><code>sampleStringTask</code> は <code>startServer</code> と <code>sampleIntTask</code> の両方に依存し、
+<code>sampleIntTask</code> もまた <code>startServer</code> タスクに依存するため、<code>startServer</code> はタスク依存性として 2 度現れる。
+しかし、<code>value</code> はタスク依存性を表記するだけなので、評価は 1 回だけ行われる。
+以下は <code>sampleStringTask</code> の評価を視覚化したものだ:
+</p><p><img src="../files/task-dependency01.png" alt="task-dependency"/>
+</p><p>もしタスク依存性を非重複化しなければ、<code>test in Test</code> のタスク依存性として <code>compile in Test</code>
+が何度も現れるため、テストのソースコードを何度もコンパイルすることになる。
+</p><h4 id="%E7%B5%82%E4%BA%86%E5%87%A6%E7%90%86%E3%82%BF%E3%82%B9%E3%82%AF">終了処理タスク<a href="#%E7%B5%82%E4%BA%86%E5%87%A6%E7%90%86%E3%82%BF%E3%82%B9%E3%82%AF" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>stopServer</code> タスクはどう実装するべきだろうか?
+タスクは依存性を保持するものなので、終了処理タスクという考えはタスクの実行モデルにそぐわないものだ。
+最後の処理そのものもタスクになるべきで、そのタスクが他の中間タスクに依存すればいい。
+例えば、<code>stopServer</code> が　<code>sampleStringTask</code> に依存するべきだが、
+その時点で <code>stopServer</code> は <code>sampleStringTask</code> と呼ばれるべきだろう。
+</p><pre><code class="prettyprint lang-scala">lazy val library = (project in file(&quot;library&quot;))
+  .settings(
+    commonSettings,
+    startServer := {
+      println(&quot;starting...&quot;)
+      Thread.sleep(500)
+    },
+    sampleIntTask := {
+      startServer.value
+      val sum = 1 + 2
+      println(&quot;sum: &quot; + sum)
+      sum
+    },
+    sampleStringTask := {
+      startServer.value
+      val s = sampleIntTask.value.toString
+      println(&quot;s: &quot; + s)
+      s
+    },
+    sampleStringTask := {
+      val old = sampleStringTask.value
+      println(&quot;stopping...&quot;)
+      Thread.sleep(500)
+      old
+    }
+  )
+</code></pre><p>これが動作することを調べるために、インタラクティブ・プロンプトから <code>sampleStringTask</code> を実行してみよう:
+</p><pre><code class="">&gt; sampleStringTask
+starting...
+sum: 3
+s: 3
+stopping...
+[success] Total time: 1 s, completed Dec 22, 2014 6:00:00 PM
+</code></pre><p><img src="../files/task-dependency02.png" alt="task-dependency"/>
+</p><h4 id="%E7%B4%A0%E3%81%AE+Scala+%E3%82%92%E4%BD%BF%E3%81%8A%E3%81%86">素の Scala を使おう<a href="#%E7%B4%A0%E3%81%AE+Scala+%E3%82%92%E4%BD%BF%E3%81%8A%E3%81%86" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>何かが起こったその後に別の何かが起こることを保証するもう一つの方法は Scala を使うことだ。
+例えば <code>project/ServerUtil.scala</code> に簡単な関数を書いたとすると、タスクは以下のように書ける:
+</p><pre><code class="prettyprint lang-scala">sampleIntTask := {
+  ServerUtil.startServer
+  try {
+    val sum = 1 + 2
+    println(&quot;sum: &quot; + sum)
+  } finally {
+    ServerUtil.stopServer
+  }
+  sum
+}
+</code></pre><p>素のメソッド呼び出しは逐次実行の意味論に従うので、全ては順序どおりに実行される。
+非重複化もされなくなるので、それは気をつける必要がある。
+</p><h3 id="%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E5%8C%96%E3%81%97%E3%82%88%E3%81%86">プラグイン化しよう<a href="#%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E5%8C%96%E3%81%97%E3%82%88%E3%81%86" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>.scala</code> ファイルに大量のカスタムコードがあることに気づいたら、
+プラグインを作って複数のプロジェクト間で再利用できないか考えてみよう。
+</p><p><a href="Using-Plugins.html">以前にちょっと触れた</a>し、<a href="../../docs/Plugins.html">詳しい解説はここにある</a>が、
+プラグインを作るのはとても簡単だ。
+</p><p>このページは簡単な味見だけで、カスタムタスクに関しては <a href="../../docs/Tasks.html">Tasks</a>ページで詳細に解説されている。
+</p><h2 id="%E3%83%93%E3%83%AB%E3%83%89%E3%81%AE%E6%95%B4%E7%90%86">ビルドの整理<a href="#%E3%83%93%E3%83%AB%E3%83%89%E3%81%AE%E6%95%B4%E7%90%86" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このページではビルド構造の整理について説明する。
+</p><p>このガイドの前のページ、特に
+<a href="Basic-Def.html">build.sbt</a>、
+<a href="Task-Graph.html">タスク・グラフ</a>、
+<a href="Library-Dependencies.html">ライブラリ依存性</a>、
+そして<a href="Multi-Project.html">マルチプロジェクト・ビルド</a>を理解していることが必要になる。
+</p><h3 id="sbt+%E3%81%AF%E5%86%8D%E5%B8%B0%E7%9A%84%E3%81%A0">sbt は再帰的だ<a href="#sbt+%E3%81%AF%E5%86%8D%E5%B8%B0%E7%9A%84%E3%81%A0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> は sbt の実際の動作を隠蔽している。
+sbt のビルドは、Scala コードにより定義されている。そのコード自身もビルドされなければいけない。
+当然これも sbt でビルドされる。sbt でやるより良い方法があるだろうか？
+</p><p><code>project</code> ディレクトリは、ビルドをビルドする方法を記述した<strong>ビルドの中のビルド</strong>だ。
+これらのビルドを区別するために、一番上のビルドを<strong>プロパービルド</strong> (proper build) 、
+<code>project</code> 内のビルドを<strong>メタビルド</strong> (meta-build) と呼んだりする。
+メタビルド内のプロジェクトは、他のプロジェクトができる全てのことをこなすことができる。
+つまり、<strong>ビルド定義もまた sbt プロジェクトなのだ</strong>。
+</p><p>この入れ子構造は永遠に続く。<code>project/project</code> ディレクトリを作ることで
+ビルド定義のビルド定義プロジェクトをカスタム化することができる。
+</p><p>以下に具体例で説明する:
+</p><pre><code class="">hello/                     # ビルドのルート・プロジェクトのベースディレクトリ
+
+    Hello.scala            # ビルドのルート・プロジェクトのソースファイル
+                           # （src/main/scala に入れることもできる）
+
+    build.sbt              # build.sbt は、project/ 内のメタビルドの
+                           # ルート・プロジェクトのソースの一部となる。
+                           # つまり、プロパービルドのビルド定義
+
+    project/               # メタビルドのルート・プロジェクトのベースディレクトリ
+        Dependencies.scala # メタビルドのルート・プロジェクトのソースファイル、
+                           # つまり、ビルド定義のソースファイル。
+                           # プロパービルドのビルド定義
+
+        assembly.sbt       # これは、project/project 内のメタメタビルドの
+                           # ルート・プロジェクトのソースの一部となり、
+                           # ビルド定義のビルド定義となる
+
+        project/           # メタメタビルドのルート・プロジェクトのベースディレクトリ
+
+            MetaDeps.scala # project/project/ 内のメタメタビルドの
+                           # ルート・プロジェクトのソースファイル
+</code></pre><p><em>心配しないでほしい！</em> 普通はこういうことをする必要は全くない。
+しかし、原理を理解しておくことはきっと役立つことだろう。
+</p><p>ちなみに、<code>.scala</code> や <code>.sbt</code> の拡張子で終わっていればどんなファイル名でもよく、<code>build.sbt</code> や <code>Dependencies.scala</code> と命名するのは慣例にすぎない。
+これは複数のファイルを使うことができるということも意味する。
+</p><h3 id="%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%92%E4%B8%80%E7%AE%87%E6%89%80%E3%81%AB%E3%81%BE%E3%81%A8%E3%82%81%E3%82%8B">ライブラリ依存性を一箇所にまとめる<a href="#%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%92%E4%B8%80%E7%AE%87%E6%89%80%E3%81%AB%E3%81%BE%E3%81%A8%E3%82%81%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>project</code> 内の任意の <code>.scala</code> ファイルがビルド定義の一部となることを利用する一つの例として
+<code>project/Dependencies.scala</code> というファイルを作ってライブラリ依存性を一箇所にまとめるということができる。
+</p><pre><code class="prettyprint lang-scala">import sbt._
+
+object Dependencies {
+  // Versions
+  lazy val akkaVersion = &quot;2.3.8&quot;
+
+  // Libraries
+  val akkaActor = &quot;com.typesafe.akka&quot; %% &quot;akka-actor&quot; % akkaVersion
+  val akkaCluster = &quot;com.typesafe.akka&quot; %% &quot;akka-cluster&quot; % akkaVersion
+  val specs2core = &quot;org.specs2&quot; %% &quot;specs2-core&quot; % &quot;2.4.17&quot;
+
+  // Projects
+  val backendDeps =
+    Seq(akkaActor, specs2core % Test)
+}
+</code></pre><p>この <code>Dependencies</code> は <code>build.sbt</code> 内で利用可能となる。
+定義されている <code>val</code> が使いやすいように <code>Dependencies._</code> を import しておこう。
+</p><pre><code class="prettyprint lang-scala">import Dependencies._
+
+lazy val commonSettings = Seq(
+  version := &quot;0.1.0&quot;,
+  scalaVersion := &quot;2.12.2&quot;
+)
+
+lazy val backend = (project in file(&quot;backend&quot;))
+  .settings(
+    commonSettings,
+    libraryDependencies ++= backendDeps
+  )
+</code></pre><p>マルチプロジェクトでのビルド定義が肥大化して、サブプロジェクト間で同じ依存ライブラリを持っているかを保証したくなったとき、このようなテクニックは有効だ。
+</p><h3 id="%E3%81%84%E3%81%A4++%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E4%BD%BF%E3%81%86%E3%81%B9%E3%81%8D%E3%81%8B">いつ <code>.scala</code> ファイルを使うべきか<a href="#%E3%81%84%E3%81%A4++%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E4%BD%BF%E3%81%86%E3%81%B9%E3%81%8D%E3%81%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>.scala</code> ファイルでは、トップレベルの class や object 定義を含む Scala コードを自由に記述できる。
+</p><p>推奨される方法はマルチプロジェクトを定義する <code>build.sbt</code> ファイル内にほとんどのセッティングを定義し、
+<code>project/*.scala</code> ファイルはタスクの実装や、共有したい値やキーを定義するのに使うことだ。
+また <code>.scala</code> ファイルを使うかどうかの判断には、君や君のチームがどれくらい Scala に慣れているかということも関係するだろう。
+</p><h3 id="auto+plugin+%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B">auto plugin を定義する<a href="#auto+plugin+%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>上級ユーザ向けのビルドの整理方法として、<code>project/*.scala</code> 内に専用の auto plugin を書くという方法がある。
+連鎖プラグイン (triggered plugin) を定義することで auto plugin を全サブプロジェクトにカスタムタスクやコマンドを追加する手段として使うことができる。
+</p><h2 id="%E3%81%BE%E3%81%A8%E3%82%81">まとめ<a href="#%E3%81%BE%E3%81%A8%E3%82%81" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このページではこのガイドを総括する。
+</p><p>sbt を使うのに、理解すべき概念の数はさほど多くない。
+確かに、これらには多少の学習曲線があるが、
+sbt にはこれらの概念<em>以外</em>のことは特にないとも考えることもできる。
+sbt は、強力なコア・コンセプトだけを用いて全てを実現している。
+</p><p>この「始める sbt」シリーズをここまで読破したのであれば、知るべきことが何かはもう分かっているはずだ。
+</p><h3 id="sbt%3A+%E3%82%B3%E3%82%A2%E3%83%BB%E3%82%B3%E3%83%B3%E3%82%BB%E3%83%97%E3%83%88">sbt: コア・コンセプト<a href="#sbt%3A+%E3%82%B3%E3%82%A2%E3%83%BB%E3%82%B3%E3%83%B3%E3%82%BB%E3%83%97%E3%83%88" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Scala の基本。Scala の構文に慣れていると役立つのは言うまでもない。
+Scala の設計者自身による <a href="http://book.impress.co.jp/books/1116101021">Scalaスケーラブルプログラミング</a>
+（<a href="https://www.artima.com/shop/programming_in_scala_3ed">原著</a>）は、素晴らしい入門書だ。
+</li><li><a href="Basic-Def.html">.sbt ビルド定義</a>  
+</li><li>ビルド定義はタスクとタスク間のそ依存性の大きな DAG だ。
+</li><li><code>Setting</code> を作成するために <code>:=</code>、<code>+=</code>、<code>++=</code> のようなキーに定義されたメソッドを呼び出す。
+</li><li>各セッティングは、キーにより決定された固有の型の値を持つ。
+</li><li><p><em>タスク</em>は、特殊なセッティングで、タスクを実行するたびに、キーの値を生成する計算が再実行される。
+</p><p> 非タスクのセッティングは、ビルド定義の読み込み時に一度だけ値が計算される。
+</p></li><li><a href="Scopes.html">スコープ</a>
+</li><li>それぞれのキーは、異なるスコープごとにそれぞれ別の値を持つことができる。
+</li><li>スコープ付けは、コンフィギュレーション、プロジェクト、タスクの三つの軸を用いることができる。
+</li><li>スコープ付けによって、プロジェクト毎、タスク毎、コンフィギュレーション毎に、異なるふるまいを持たせることができる。
+</li><li>コンフィギュレーションは、メインのもの（<code>Compile</code>）や、テスト用のもの（<code>Test</code>）のようなビルドの種類だ。
+</li><li>プロジェクト軸には（個々のサブプロジェクトだけでなく）「ビルド全体」を指すスコープもある。
+</li><li>スコープはより一般的なスコープにフォールバックする、これを<em>委譲</em>（delegate）という。
+</li><li><code>build.sbt</code> にほとんどの設定を置くが、class 定義や大きめのタスク実装などは <code>.scala</code> ビルド定義を使う。
+</li><li>ビルド定義はそれ自体も project ディレクトリをルートとする sbt プロジェクトである。
+</li><li><a href="Using-Plugins.html">プラグイン</a>はビルド定義の拡張だ。
+</li><li><p>プラグインは、<code>addSbtPlugin</code> メソッドを用いて <code>project/plugins.sbt</code> に追加する。
+</p><p> （プロジェクトのベースディレクトリにある <code>build.sbt</code> ではないことに注意）
+</p></li></ul><p>上記のうち、一つでも分からないことがあれば、<a href="../../docs/Faq.html#getting-help">質問してみるか</a>、このガイドをもう一度読み返すか、sbt のインタラクティブモードで実験してみよう。
+</p><p>健闘を祈る！
+</p><h3 id="%E4%B8%8A%E7%B4%9A%E8%80%85%E3%81%B8%E3%81%AE%E6%B3%A8%E6%84%8F">上級者への注意<a href="#%E4%B8%8A%E7%B4%9A%E8%80%85%E3%81%B8%E3%81%AE%E6%B3%A8%E6%84%8F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><!-- TODO: Link to reference. The rest of this wiki consists of deeper dives and less-commonly-needed
+information. -->
+<p>sbt はオープンソースであるため、いつでも<a href="https://github.com/sbt/sbt">ソース</a>を見れることも忘れずに！
+</p><h2 id="%E4%BB%98%E9%8C%B2%3A+bare+.sbt+%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9">付録: bare .sbt ビルド定義<a href="#%E4%BB%98%E9%8C%B2%3A+bare+.sbt+%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このページでは旧式の <code>.sbt</code> ビルド定義の説明をする。
+現在の推奨は<a href="Basic-Def.html">マルチプロジェクト .sbt ビルド定義</a>だ。
+</p><h3 id="bare+.sbt+%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%81%A8%E3%81%AF%E4%BD%95%E3%81%8B">bare .sbt ビルド定義とは何か<a href="#bare+.sbt+%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%81%A8%E3%81%AF%E4%BD%95%E3%81%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>明示的に <a href="../api/sbt/Project.html">Project</a> を定義する
+<a href="Basic-Def.html">マルチプロジェクト .sbt ビルド定義</a>や <a href="Full-Def.html">.scala ビルド定義</a>と違って
+bare ビルド定義は <code>.sbt</code> ファイルの位置から暗黙にプロジェクトが定義される。
+</p><p><code>Project</code> を定義する代わりに、bare <code>.sbt</code> ビルド定義は <code>Setting[_]</code> 式のリストから構成される。
+</p><pre><code class="prettyprint lang-scala">name := &quot;hello&quot;
+
+version := &quot;1.0&quot;
+
+scalaVersion := &quot;2.12.2&quot;
+</code></pre><h3 id="%280.13.7+%E4%BB%A5%E5%89%8D%29+%E8%A8%AD%E5%AE%9A%E3%81%AF%E7%A9%BA%E7%99%BD%E8%A1%8C%E3%81%A7%E5%8C%BA%E5%88%87%E3%82%8B">(0.13.7 以前) 設定は空白行で区切る<a href="#%280.13.7+%E4%BB%A5%E5%89%8D%29+%E8%A8%AD%E5%AE%9A%E3%81%AF%E7%A9%BA%E7%99%BD%E8%A1%8C%E3%81%A7%E5%8C%BA%E5%88%87%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><strong>注意</strong>: 0.13.7 以降は空白行の区切りを必要としない。
+</p><p>こんな風に <code>build.sbt</code> を書くことはできない。
+</p><pre><code class="prettyprint lang-scala">// 空白行がない場合はコンパイルしない
+name := &quot;hello&quot;
+version := &quot;1.0&quot;
+scalaVersion := &quot;2.10.3&quot;
+</code></pre><p>sbt はどこまでで式が終わってどこからが次の式なのかを判別するために、何らかの区切りを必要とする。
+</p><h2 id="%E5%90%84%E8%AB%96">各論<a href="#%E5%90%84%E8%AB%96" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h2 id="%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%81%A8%E3%83%99%E3%82%B9%E3%83%88%E3%83%97%E3%83%A9%E3%82%AF%E3%83%86%E3%82%A3%E3%82%B9">プラグインとベストプラクティス<a href="#%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%81%A8%E3%83%99%E3%82%B9%E3%83%88%E3%83%97%E3%83%A9%E3%82%AF%E3%83%86%E3%82%A3%E3%82%B9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h2 id="sbt+%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%82%92%E3%83%86%E3%82%B9%E3%83%88%E3%81%99%E3%82%8B">sbt プラグインをテストする<a href="#sbt+%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%82%92%E3%83%86%E3%82%B9%E3%83%88%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>テストの話をしよう。一度プラグインを書いてしまうと、どうしても長期的なものになってしまう。新しい機能を加え続ける（もしくはバグを直し続ける）ためにはテストを書くのが合理的だ。
+</p><h3 id="scripted+test+framework">scripted test framework<a href="#scripted+test+framework" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt は、scripted test framework というものが付いてきて、ビルドの筋書きをスクリプトに書くことができる。これは、もともと 変更の自動検知や、部分コンパイルなどの複雑な状況下で sbt 自体をテストするために書かれたものだ:
+</p><blockquote><p>ここで、仮に B.scala を削除するが、A.scala には変更を加えないものとする。ここで、再コンパイルすると、A から参照される B が存在しないために、エラーが得られるはずだ。
+[中略 (非常に複雑なことが書いてある)]
+</p><p>scripted test framework は、sbt が以上に書かれたようなケースを的確に処理しているかを確認するために使われている。
+</p></blockquote><p>このフレームワークは scripted-plugin 経由で利用可能だ。
+このページはプラグインにどのようにして scripted-plugin を導入するかを解説する。
+</p><h3 id="%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+1%3A+snapshot">ステップ 1: snapshot<a href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+1%3A+snapshot" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>scripted-plugin はプラグインをローカルに publish するため、まずは version を <strong>-SNAPSHOT</strong> なものに設定しよう。ここで SNAPSHOT を使わないと、あなたと世界のあなた以外の人が別々のアーティファクトを観測するといった酷い不整合な状態に入り込む場合があるからだ。
+</p><h3 id="%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+2%3A+scripted-plugin">ステップ 2: scripted-plugin<a href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+2%3A+scripted-plugin" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>次に、scripted-plugin をプラグインのビルドに加える。<code>project/scripted.sbt</code>:
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += { &quot;org.scala-sbt&quot; %% &quot;scripted-plugin&quot; % sbtVersion.value }
+</code></pre><p>以下のセッティングを <code>scripted.sbt</code> に加える:
+</p><pre><code class="prettyprint lang-scala">scriptedLaunchOpts := { scriptedLaunchOpts.value ++
+  Seq(&quot;-Xmx1024M&quot;, &quot;-XX:MaxPermSize=256M&quot;, &quot;-Dplugin.version=&quot; + version.value)
+}
+scriptedBufferLog := false
+</code></pre><h3 id="%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+3%3A+src%2Fsbt-test">ステップ 3: src/sbt-test<a href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+3%3A+src%2Fsbt-test" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>src/sbt-test/&lt;テストグループ&gt;/&lt;テスト名&gt;</code> というディレクトリ構造を作る。とりあえず、<code>src/sbt-test/&lt;プラグイン名&gt;/simple</code> から始めるとする。
+</p><p>ここがポイントなんだけど、<code>simple</code> 下にビルドを作成する。プラグインを使った普通のビルド。手動でテストするために、いくつか既にあると思うけど。以下に、<code>build.sbt</code> の例を示す:
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    version := &quot;0.1&quot;,
+    scalaVersion := &quot;2.10.6&quot;,
+    assemblyJarName in assembly := &quot;foo.jar&quot;
+  )
+</code></pre><p>これが、<code>project/plugins.sbt</code>:
+</p><pre><code class="prettyprint lang-scala">sys.props.get(&quot;plugin.version&quot;) match {
+  case Some(x) =&gt; addSbtPlugin(&quot;com.eed3si9n&quot; % &quot;sbt-assembly&quot; % x)
+  case _ =&gt; sys.error(&quot;&quot;&quot;|The system property 'plugin.version' is not defined.
+                         |Specify this property using the scriptedLaunchOpts -D.&quot;&quot;&quot;.stripMargin)
+}
+</code></pre><p>これは <a href="https://github.com/JamesEarlDouglas/xsbt-web-plugin/commit/feabb2eb554940d9b28049bd0618b6a790d9e141">JamesEarlDouglas/xsbt-web-plugin@feabb2</a> から拝借してきた技で、これで scripted テストに version を渡すことができる。
+</p><p>他に、<code>src/main/scala/hello.scala</code> も用意した:
+</p><pre><code class="prettyprint lang-scala">object Main extends App {
+  println(&quot;hello&quot;)
+}
+</code></pre><h3 id="%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+4%3A+%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%97%E3%83%88%E3%82%92%E6%9B%B8%E3%81%8F">ステップ 4: スクリプトを書く<a href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+4%3A+%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%97%E3%83%88%E3%82%92%E6%9B%B8%E3%81%8F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>次に、好きな筋書きを記述したスクリプトを、テストビルドのルート下に置いた <code>test</code> というファイルに書く。
+</p><pre><code class=""># ファイルが作成されたかを確認
+&gt; assembly
+$ exists target/scala-2.10/foo.jar
+</code></pre><p>スクリプトの文法は以下の通り:
+</p><ol><li><strong><code>#</code></strong> は一行コメントを開始する
+</li><li><strong><code>&gt;</code></strong> <code>name</code> はタスクを sbt に送信する（そして結果が成功したかをテストする）
+</li><li><strong><code>$</code></strong> <code>name arg*</code> はファイルコマンドを実行する（そして結果が成功したかをテストする）
+</li><li><strong><code>-&gt;</code></strong> <code>name</code> タスクを sbt に送信するが、失敗することを期待する
+</li><li><strong><code>-$</code></strong> <code>name arg*</code> ファイルコマンドを実行するが、失敗することを期待する
+</li></ol><p>ファイルコマンドは以下のとおり:
+</p><ul><li><strong><code>touch</code></strong> <code>path+</code> は、ファイルを作成するかタイムスタンプを更新する
+</li><li><strong><code>delete</code></strong> <code>path+</code> は、ファイルを削除する
+</li><li><strong><code>exists</code></strong> <code>path+</code> は、ファイルが存在するか確認する
+</li><li><strong><code>mkdir</code></strong> <code>path+</code> は、ディレクトリを作成する
+</li><li><strong><code>absent</code></strong> <code>path+</code> は、はファイルが存在しないことを確認する
+</li><li><strong><code>newer</code></strong> <code>source target</code> は、<code>source</code> の方が新しいことを確認する
+</li><li><strong><code>must-mirror</code></strong> <code>source target</code> は、<code>source</code> が同一であることを確認する
+</li><li><strong><code>pause</code></strong> は、enter が押されるまで待つ
+</li><li><strong><code>sleep</code></strong> <code>time</code> は、スリープする
+</li><li><strong><code>exec</code></strong> <code>command args*</code> は、別のプロセスでコマンドを実行する
+</li><li><strong><code>copy-file</code></strong> <code>fromPath toPath</code> は、ファイルをコピーする
+</li><li><strong><code>copy</code></strong> <code>fromPath+ toDir</code> は、パスを相対構造を保ったまま <code>toDir</code> 下にコピーする
+</li><li><strong><code>copy-flat</code></strong> <code>fromPath+ toDir</code> は、パスをフラットに <code>toDir</code> 下にコピーする
+</li></ul><p>ということで、僕のスクリプトは、<code>assembly</code> タスクを実行して、<code>foo.jar</code> が作成されたかをチェックする。もっと複雑なテストは後ほど。
+</p><h3 id="%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+5%3A+%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%97%E3%83%88%E3%82%92%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B">ステップ 5: スクリプトを実行する<a href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+5%3A+%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%97%E3%83%88%E3%82%92%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>スクリプトを実行するためには、プラグインのプロジェクトに戻って、以下を実行する:
+</p><pre><code class="">&gt; scripted
+</code></pre><p>これはテストビルドをテンポラリディレクトリにコピーして、<code>test</code> スクリプトを実行する。もし全て順調にいけば、まず <code>publishLocal</code> の様子が表示され、以下のようなものが表示される:
+</p><pre><code class="">Running sbt-assembly / simple
+[success] Total time: 18 s, completed Sep 17, 2011 3:00:58 AM
+</code></pre><h3 id="%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+6%3A+%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0%E3%82%A2%E3%82%B5%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3">ステップ 6: カスタムアサーション<a href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+6%3A+%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0%E3%82%A2%E3%82%B5%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>ファイルコマンドは便利だけど、実際のコンテンツをテストしないため、それだけでは不十分だ。コンテンツをテストする簡単な方法は、テストビルドにカスタムのタスクを実装してしまうことだ。
+</p><p>上記の hello プロジェクトを例に取ると、生成された jar が “hello” と表示するかを確認したいとする。<code>sbt.Process</code> を用いて jar を走らせることができる。失敗を表すには、単にエラーを投げればいい。以下に <code>build.sbt</code> を示す:
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    version := &quot;0.1&quot;,
+    scalaVersion := &quot;2.10.6&quot;,
+    assemblyJarName in assembly := &quot;foo.jar&quot;,
+    TaskKey[Unit](&quot;check&quot;) := {
+      val process = sbt.Process(&quot;java&quot;, Seq(&quot;-jar&quot;, (crossTarget.value / &quot;foo.jar&quot;).toString))
+      val out = (process!!)
+      if (out.trim != &quot;bye&quot;) error(&quot;unexpected output: &quot; + out)
+      ()
+    }
+  )
+</code></pre><p>ここでは、テストが失敗するのを確認するため、わざと “bye” とマッチするかテストしている。
+</p><p>これが <code>test</code>:
+</p><pre><code class=""># ファイルが作成されたかを確認
+&gt; assembly
+$ exists target/foo.jar
+
+# hello って言うか確認
+&gt; check
+</code></pre><p><code>scripted</code> を走らせると、意図通りテストは失敗する:
+</p><pre><code class="">[info] [error] {file:/private/var/folders/Ab/AbC1EFghIj4LMNOPqrStUV+++XX/-Tmp-/sbt_cdd1b3c4/simple/}default-0314bd/*:check: unexpected output: hello
+[info] [error] Total time: 0 s, completed Sep 21, 2011 8:43:03 PM
+[error] x sbt-assembly / simple
+[error]    {line 6}  Command failed: check failed
+[error] {file:/Users/foo/work/sbt-assembly/}default-373f46/*:scripted: sbt-assembly / simple failed
+[error] Total time: 14 s, completed Sep 21, 2011 8:00:00 PM
+</code></pre><h3 id="%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+7%3A+%E3%83%86%E3%82%B9%E3%83%88%E3%82%92%E3%83%86%E3%82%B9%E3%83%88%E3%81%99%E3%82%8B">ステップ 7: テストをテストする<a href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+7%3A+%E3%83%86%E3%82%B9%E3%83%88%E3%82%92%E3%83%86%E3%82%B9%E3%83%88%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>慣れるまでは、テスト自体がちゃんと振る舞うのに少し時間がかかるかもしれない。ここで使える便利なテクニックがいくつある。
+</p><p>まず最初に試すべきなのは、ログバッファリングを切ることだ。
+</p><pre><code class="">&gt; set scriptedBufferLog := false
+</code></pre><p>これにより、例えばテンポラリディレクトリの場所などが分かるようになる:
+</p><pre><code class="">[info] [info] Set current project to default-c6500b (in build file:/private/var/folders/Ab/AbC1EFghIj4LMNOPqrStUV+++XX/-Tmp-/sbt_8d950687/simple/project/plugins/)
+...
+</code></pre><p>テスト中にテンポラリディレクトリを見たいような状況があるかもしれない。<code>test</code> スクリプトに以下の一行を加えると、scripted はエンターキーを押すまで一時停止する:
+</p><pre><code class="">$ pause
+</code></pre><p>もしうまくいかなくて、 <code>sbt/sbt-test/sbt-foo/simple</code> から直接 <code>sbt</code> を実行しようと思っているなら、それは止めたほうがいい。正しいやり方はディレクトリごと別の場所にコピーしてから走らせることだ。
+</p><h3 id="%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+8%3A+%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%91%E3%82%A4%E3%82%A2%E3%81%95%E3%82%8C%E3%82%8B">ステップ 8: インスパイアされる<a href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+8%3A+%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%91%E3%82%A4%E3%82%A2%E3%81%95%E3%82%8C%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt プロジェクト下には文字通り <a href="https://github.com/sbt/sbt/tree/0.13/sbt/src/sbt-test">100+ の scripted テストがある</a>。色々眺めてみて、インスパイアされよう。
+</p><p>例えば、以下に by-name と呼ばれるものを示す:
+</p><pre><code class="">&gt; compile
+
+# change =&gt; Int to Function0
+$ copy-file changes/A.scala A.scala
+
+# Both A.scala and B.scala need to be recompiled because the type has changed
+-&gt; compile
+</code></pre><p><a href="https://github.com/JamesEarlDouglas/xsbt-web-plugin/tree/master/src/sbt-test">xsbt-web-plugin</a> や <a href="https://github.com/sbt/sbt-assembly/tree/master/src/sbt-test/sbt-assembly">sbt-assembly</a> にも scripted テストがある。
+</p><p>これでおしまい！プラグインをテストしてみた経験などを聞かせて下さい！
+</p><h2 id="How+to">How to<a href="#How+to" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>How to 記事の一覧は<a href="Contents+in+Depth.html">目次</a>を参照してください。
+</p><h2 id="%E9%80%90%E6%AC%A1%E5%AE%9F%E8%A1%8C">逐次実行<a href="#%E9%80%90%E6%AC%A1%E5%AE%9F%E8%A1%8C" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>sbt で最もよくある質問の一つに「X をやった後で Y をするにはどうすればいいのか?」というものがある。
+</p><p>一般論としては、sbt のタスクはそのように作られていない。なぜなら、build.sbt はタスクの依存グラフ作るための DSL だからだ。これに関しては<a href="Custom-Settings.html#Execution+semantics+of+tasks">タスクの実行意味論</a>で解説してある。そのため、理想的にはタスク Y を自分で定義して、そこからタスク X に依存させるべきだ。
+</p><pre><code class="prettyprint lang-scala">taskY := {
+  val x = taskX.value
+  x + 1
+}
+</code></pre><p>これは、以下のような、副作用のあるメソッド呼び出しを続けて行っているような命令型の素の Scala と比べるとより制限されていると言える:
+</p><pre><code class="prettyprint lang-scala">def foo(): Unit = {
+  doX()
+  doY()
+}
+</code></pre><p>この依存指向なプログラミング・モデルの利点は sbt のタスク・エンジンがタスクの実行の順序を入れ替えることができることにある。実際、可能な限り sbt は依存タスクを並列に実行する。もう一つの利点は、グラフを非重複化して一回のコマンド実行に対して <code>compile in Compile</code> などのタスクは一度だけ実行することで、同じソースを何度もコンパイルすることを回避している。
+</p><p>タスク・システムがこのような設計になっているため、何かを逐次実行させるというのは一応可能ではあるけども、システムの流れに反する行為であり、簡単だとは言えない。
+</p><ul><li><a href="Howto-Sequential-Task.html">Def.sequential を用いて逐次タスクを定義する</a>
+</li><li><a href="Howto-Dynamic-Task.html">Def.taskDyn を用いて動的タスクを定義する</a>
+</li><li><a href="Howto-After-Input-Task.html">タスクの後で何かする</a>
+</li><li><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn を用いた動的インプットタスクの定義</a>
+</li><li><a href="Howto-Sequence-using-Commands.html">コマンドを用いた逐次実行</a>
+</li></ul><h3 id="Def.sequential+%E3%82%92%E7%94%A8%E3%81%84%E3%81%A6%E9%80%90%E6%AC%A1%E3%82%BF%E3%82%B9%E3%82%AF%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B">Def.sequential を用いて逐次タスクを定義する<a href="#Def.sequential+%E3%82%92%E7%94%A8%E3%81%84%E3%81%A6%E9%80%90%E6%AC%A1%E3%82%BF%E3%82%B9%E3%82%AF%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 0.13.8 で <code>Def.sequential</code> という関数が追加されて、準逐次な意味論でタスクを実行できるようになった。
+逐次タスクの説明として <code>compilecheck</code> というカスタムタスクを定義してみよう。これは、まず <code>compile in Compile</code> を実行して、その後で <a href="http://www.scalastyle.org/sbt.html">scalastyle-sbt-plugin</a> の <code>scalastyle in Compile</code> を呼び出す。
+</p><p>セットアップはこのようになる。
+</p><h4 id="project%2Fbuild.properties">project/build.properties<a href="#project%2Fbuild.properties" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="">sbt.version=1.0.0-RC2
+</code></pre><h4 id="project%2Fstyle.sbt">project/style.sbt<a href="#project%2Fstyle.sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="">addSbtPlugin(&quot;org.scalastyle&quot; %% &quot;scalastyle-sbt-plugin&quot; % &quot;0.8.0&quot;)
+</code></pre><h4 id="build.sbt">build.sbt<a href="#build.sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">lazy val compilecheck = taskKey[Unit](&quot;compile and then scalastyle&quot;)
+
+lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    compilecheck in Compile := Def.sequential(
+      compile in Compile,
+      (scalastyle in Compile).toTask(&quot;&quot;)
+    ).value
+  )
+</code></pre><p>このタスクを呼び出すには、シェルから <code>compilecheck</code> と打ち込む。もしコンパイルが失敗すると、<code>compilecheck</code> はそこで実行を中止する。
+</p><pre><code class="">root&gt; compilecheck
+[info] Compiling 1 Scala source to /Users/x/proj/target/scala-2.10/classes...
+[error] /Users/x/proj/src/main/scala/Foo.scala:3: Unmatched closing brace '}' ignored here
+[error] }
+[error] ^
+[error] one error found
+[error] (compile:compileIncremental) Compilation failed
+</code></pre><p>これで、タスクを逐次実行できた。
+</p><h3 id="Def.taskDyn+%E3%82%92%E7%94%A8%E3%81%84%E3%81%A6%E5%8B%95%E7%9A%84%E3%82%BF%E3%82%B9%E3%82%AF%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B">Def.taskDyn を用いて動的タスクを定義する<a href="#Def.taskDyn+%E3%82%92%E7%94%A8%E3%81%84%E3%81%A6%E5%8B%95%E7%9A%84%E3%82%BF%E3%82%B9%E3%82%AF%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="Howto-Sequential-Task.html">逐次タスク</a>だけで十分じゃなければ、次のステップは<a href="Tasks.html">動的タスク</a>だ。純粋な型 <code>A</code> の値を返すことを期待する <code>Def.task</code> と違って、<code>Def.taskDyn</code> は <code>sbt.Def.Initialize[sbt.Task[A]]</code> という型のタスク・エンジンが残りの計算を継続するタスクを返す。
+</p><p><code>compile in Compile</code> を実行した後で <a href="http://www.scalastyle.org/sbt.html">scalastyle-sbt-plugin</a> の <code>scalastyle in Compile</code> タスクを実行するカスタムタスク、<code>compilecheck</code> を実装してみよう。
+</p><h4 id="project%2Fbuild.properties">project/build.properties<a href="#project%2Fbuild.properties" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="">sbt.version=1.0.0-RC2
+</code></pre><h4 id="project%2Fstyle.sbt">project/style.sbt<a href="#project%2Fstyle.sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="">addSbtPlugin(&quot;org.scalastyle&quot; %% &quot;scalastyle-sbt-plugin&quot; % &quot;0.8.0&quot;)
+</code></pre><h4 id="build.sbt+v1">build.sbt v1<a href="#build.sbt+v1" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">lazy val compilecheck = taskKey[sbt.inc.Analysis](&quot;compile and then scalastyle&quot;)
+
+lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    compilecheck := (Def.taskDyn {
+      val c = (compile in Compile).value
+      Def.task {
+        val x = (scalastyle in Compile).toTask(&quot;&quot;).value
+        c
+      }
+    }).value
+  )
+</code></pre><p>これで逐次タスクと同じものができたけども、違いは最初のタスクの結果である <code>c</code> を返していることだ。
+</p><h4 id="build.sbt+v2">build.sbt v2<a href="#build.sbt+v2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>compile in Compile</code> の戻り値と同じ型を返せるようになったので、もとのキーをこの動的タスクで再配線 (rewire) できるかもしれない。
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    compile in Compile := (Def.taskDyn {
+      val c = (compile in Compile).value
+      Def.task {
+        val x = (scalastyle in Compile).toTask(&quot;&quot;).value
+        c
+      }
+    }).value
+  )
+</code></pre><p>これで、<code>compild in Compile</code> をシェルから呼び出してやりたかったことをやらせれるようになった。
+</p><h3 id="%E3%82%A4%E3%83%B3%E3%83%97%E3%83%83%E3%83%88%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%AE%E5%BE%8C%E3%81%A7%E4%BD%95%E3%81%8B%E3%81%99%E3%82%8B">インプットタスクの後で何かする<a href="#%E3%82%A4%E3%83%B3%E3%83%97%E3%83%83%E3%83%88%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%AE%E5%BE%8C%E3%81%A7%E4%BD%95%E3%81%8B%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>ここまでタスクに焦点を当ててみてきた。タスクには他にインプットタスクというものがあって、これはユーザからの入力をシェル上で受け取る。
+典型的な例としては <code>run in Compile</code> タスクがある。<code>scalastyle</code> タスクも実はインプットタスクだ。インプットタスクの詳細は <a href="Input-Tasks.html">Input Task</a> 参照。
+</p><p>ここで、<code>run in Compile</code> タスクの実行後にテスト用にブラウザを開く方法を考えてみる。
+</p><h4 id="src%2Fmain%2Fscala%2FGreeting.scala">src/main/scala/Greeting.scala<a href="#src%2Fmain%2Fscala%2FGreeting.scala" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">object Greeting extends App {
+  println(&quot;hello &quot; + args.toList)
+}
+</code></pre><h4 id="build.sbt+v1">build.sbt v1<a href="#build.sbt+v1" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">lazy val runopen = inputKey[Unit](&quot;run and then open the browser&quot;)
+
+lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    runopen := {
+      (run in Compile).evaluated
+      println(&quot;open browser!&quot;)
+    }
+  )
+</code></pre><p>ここでは、ブラウザを本当に開く代わりに副作用のある <code>println</code> で例示した。シェルからこのタスクを呼び出してみよう:
+</p><pre><code class="">&gt; runopen foo
+[info] Compiling 1 Scala source to /x/proj/...
+[info] Running Greeting foo
+hello List(foo)
+open browser!
+</code></pre><h4 id="build.sbt+v2">build.sbt v2<a href="#build.sbt+v2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>この新しいインプットタスクを <code>run in Compile</code> に再配線することで、実は <code>runopen</code> キーを外すことができる:
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    run in Compile := {
+      (run in Compile).evaluated
+      println(&quot;open browser!&quot;)
+    }
+  )
+</code></pre><h3 id="Def.inputTaskDyn+%E3%82%92%E7%94%A8%E3%81%84%E3%81%9F%E5%8B%95%E7%9A%84%E3%82%A4%E3%83%B3%E3%83%97%E3%83%83%E3%83%88%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%AE%E5%AE%9A%E7%BE%A9">Def.inputTaskDyn を用いた動的インプットタスクの定義<a href="#Def.inputTaskDyn+%E3%82%92%E7%94%A8%E3%81%84%E3%81%9F%E5%8B%95%E7%9A%84%E3%82%A4%E3%83%B3%E3%83%97%E3%83%83%E3%83%88%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%AE%E5%AE%9A%E7%BE%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>ここで、プラグインが <code>openbrowser</code> というブラウザを開くタスクを既に提供していると仮定する。それをインプットタスクの後で呼び出す方法を考察する。
+</p><h4 id="build.sbt+v1">build.sbt v1<a href="#build.sbt+v1" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">lazy val runopen = inputKey[Unit](&quot;run and then open the browser&quot;)
+lazy val openbrowser = taskKey[Unit](&quot;open the browser&quot;)
+
+lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    runopen := (Def.inputTaskDyn {
+      import sbt.complete.Parsers.spaceDelimited
+      val args = spaceDelimited(&quot;&lt;args&gt;&quot;).parsed
+      Def.taskDyn {
+        (run in Compile).toTask(&quot; &quot; + args.mkString(&quot; &quot;)).value
+        openbrowser
+      }
+    }).evaluated,
+    openbrowser := {
+      println(&quot;open browser!&quot;)
+    }
+  )
+</code></pre><h4 id="build.sbt+v2">build.sbt v2<a href="#build.sbt+v2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>この動的インプットタスクを <code>run in Compile</code> に再配線するのは複雑な作業だ。内側の <code>run in Compile</code> は既に継続タスクの中に入ってしまっているので、単純に再配線しただけだと循環参照を作ってしまうことになる。
+この循環を断ち切るためには、<code>run in Compile</code> のクローンである <code>actualRun in Compile</code> を導入する必要がある:
+</p><pre><code class="prettyprint lang-scala">lazy val actualRun = inputKey[Unit](&quot;The actual run task&quot;)
+lazy val openbrowser = taskKey[Unit](&quot;open the browser&quot;)
+
+lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    run in Compile := (Def.inputTaskDyn {
+      import sbt.complete.Parsers.spaceDelimited
+      val args = spaceDelimited(&quot;&lt;args&gt;&quot;).parsed
+      Def.taskDyn {
+        (actualRun in Compile).toTask(&quot; &quot; + args.mkString(&quot; &quot;)).value
+        openbrowser
+      }
+    }).evaluated,
+    actualRun in Compile := Defaults.runTask(
+      fullClasspath in Runtime,
+      mainClass in (Compile, run),
+      runner in (Compile, run)
+    ).evaluated,
+    openbrowser := {
+      println(&quot;open browser!&quot;)
+    }
+  )
+</code></pre><p>この <code>actualRun in Compile</code> の実装は Defaults.scala にある <code>run</code> の実装からコピペしてきた。
+</p><p>これで <code>run foo</code> をシェルから打ち込むと、<code>actualRun in Compile</code> を引数とともに評価して、その後で <code>openbrowser</code> タスクを評価するようになった。
+</p><h3 id="%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%82%92%E7%94%A8%E3%81%84%E3%81%9F%E9%80%90%E6%AC%A1%E5%AE%9F%E8%A1%8C">コマンドを用いた逐次実行<a href="#%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%82%92%E7%94%A8%E3%81%84%E3%81%9F%E9%80%90%E6%AC%A1%E5%AE%9F%E8%A1%8C" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>副作用にしか使っていなくて、人間がコマンドを打ち込んでいるのを真似したいだけならば、カスタムコマンドを作れば済むことかもしれない。これは例えば、リリース手順とかに役立つ。
+</p><p>これは sbt そのもののビルドスクリプトから抜粋だ:
+</p><pre><code class="prettyprint lang-scala">  commands += Command.command(&quot;releaseNightly&quot;) { state =&gt;
+    &quot;stampVersion&quot; ::
+      &quot;clean&quot; ::
+      &quot;compile&quot; ::
+      &quot;publish&quot; ::
+      &quot;bintrayRelease&quot; ::
+      state
+  }
+</code></pre>
+          </div>
+        </div>
+        <div class="header">
+          <link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
+<div class="container">
+    <div class="logo">
+      <a href="../../../index.html"><img src="../files/typesafe_sbt_svg.svg" alt="sbt"></a>
+    </div>
+    <div class="nav">
+      <a href="../../../documentation.html">Documentation</a>
+      <a href="../../../download.html">Download</a>
+      <a href="../../../community.html">Get Involved</a>
+      <a id="source-code" href="https://github.com/sbt/sbt"><img src="../files/github-logo-teal.png" alt="Source code"></a>
+      <a id="twitter" href="https://twitter.com/scala_sbt"><img src="../files/twitter-logo-teal.png" alt="sbt on Twitter"></a>
+    </div>
+    <script type="text/javascript" async>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-41449189-1', 'scala-sbt.org');
+    ga('send', 'pageview');
+    </script>
+    <script type="text/javascript" async>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-23127719-1', 'typesafe.com', {'allowLinker': true, 'name': 'tsTracker'});
+      ga('tsTracker.require', 'linker');
+      ga('tsTracker.linker:autoLink', ['typesafe.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org']);
+      ga('tsTracker.send', 'pageview');
+    </script>
+</div>
+        </div>
+        <div class="footer">
+          <div class="fw-wrapper navy-ltr support-strip">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="support-item">
+          <div class="support-icon">
+            <svg class="svg-icon svg-icon-chat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.5 85.2" enable-background="new 0 0 97.5 85.2"><path stroke="#fff" stroke-width="4.282" stroke-linecap="round" stroke-miterlimit="10" d="M27 29.5h-16.3c-4.7 0-8.6 3.9-8.6 8.6v25.7c0 4.7 3.9 8.6 8.6 8.6h2.7c.8 0 1.5.7 1.5 1.5v7.8c0 1.3 1.6 2 2.5 1l9.5-9.5c.5-.5 1.2-.8 2-.8h20.2c4.7 0 8.6-3.9 8.6-8.6v-7.8" fill="none"/><path fill="#fff" d="M85 0h-40c-6.9 0-12.5 5.6-12.5 12.5v33.4c0 2.2 1.8 4.1 4.1 4.1h29.9c.7 0 1.3.3 1.8.7l10 10c1.6 1.6 4.3.5 4.3-1.8v-6.5c0-1.4 1.1-2.5 2.5-2.5 6.9 0 12.5-5.6 12.5-12.5v-25c-.1-6.8-5.8-12.4-12.6-12.4z"/></svg>
+          </div>
+          <div class="support-detail">
+            <h2>コミュニティー・サポート</h2>
+            <a href="https://ja.stackoverflow.com/questions/tagged/sbt">StackOverflow</a>
+          </div>
+        </div>
+        <div class="support-item">
+          <div class="support-icon">
+            <svg id="lightbend-icon-reverse" class="svg-icon svg-icon-lightbend-reverse" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 302 262"><title>lightbend-icon</title><g id="icon"><path d="M1,195v56a10,10,0,0,0,10,10H291a10,10,0,0,0,10-10V195a557.85,557.85,0,0,1-150,20A557.85,557.85,0,0,1,1,195Z" style="fill:#fff"/><path d="M291,1H11A10,10,0,0,0,1,11V176a539.94,539.94,0,0,0,150,21,539.94,539.94,0,0,0,150-21V11A10,10,0,0,0,291,1Z" style="fill:#fff"/></g></svg>
+          </div>
+          <div class="support-detail">
+            <h2>商用サポート</h2>
+            <a href="https://www.lightbend.com/services/expert-support">Lightbend Subscription</a>
+            <a href="https://www.lightbend.com/services/training">Training</a>
+            <a href="https://www.lightbend.com/services/consulting">Consulting</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div><footer>
+  <div class="container footer">
+    <div class="row">
+      <div class="col-md-8 sbt">
+        <nav>
+          <a href="../../../index.html">
+            <img src="../files/typesafe_sbt_reverse_svg.svg" alt="sbt">
+          </a>
+          <a href="../../../documentation.html">Documentation</a>
+          <a href="../../../download.html">Download</a>
+          <a href="../../../community.html">Get Involved</a>
+        </nav>
+      </div>
+      <div class="col-md-4 text-right ts">
+        &copy; 2016 Lightbend Inc.
+        <a href="https://www.lightbend.com">
+          <img src="files/lightbend-reverse.svg" alt="Lightbend, Inc.">
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+        </div>
+        
+        <div class="highlight-outer">
+              <div class="highlight-menu">
+                <ul>
+                  <li><button id="highlight-button-twitter"><img src="../img/twitter-bird-dark-bgs.png"/></button></li>
+                </ul>
+              </div>
+            </div>
+      </body>
+    </html>
