@@ -155,7 +155,7 @@ Download [ZIP][ZIP] or [TGZ][TGZ] package, and expand it.
 #### [Homebrew](http://mxcl.github.com/homebrew/)
 
 ```
-$ brew install sbt -devel
+$ brew install sbt --devel
 ```
 
 #### [Macports](http://macports.org/)
