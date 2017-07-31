@@ -424,7 +424,12 @@ In the second example, artifacts with the organization <code>&quot;com.example&q
 </p><p><a href="https://github.com/sbt/sbt/issues/1748">#1748</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
 </p><h3 id="Sequential+tasks">Sequential tasks<a href="#Sequential+tasks" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 0.13.8 adds a new <code>Def.sequential</code> function to run tasks under semi-sequential semantics.
 Here’s an example usage:
-</p><pre><code>lazy val root = project.
+</p><pre><code>val testFile = settingKey[File](&quot;&quot;)
+val sideEffect0 = taskKey[File](&quot;&quot;)
+val sideEffect1 = taskKey[File](&quot;&quot;)
+val foo = taskKey[Unit](&quot;&quot;)
+
+lazy val root = project.
   settings(
     testFile := target.value / &quot;test.txt&quot;,
     sideEffect0 := {
