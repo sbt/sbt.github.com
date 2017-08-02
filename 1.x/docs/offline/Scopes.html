@@ -126,7 +126,7 @@ example the task axis can be filled in with a task), or the axis can be
 filled in with the special value <code>Global</code>, which is also written as <code>*</code>. So we can think of <code>Global</code> as <code>None</code>.
 </p><p><code>*</code> is a universal fallback for all scope axes,
 but its direct use should be reserved to sbt and plugin authors in most cases.
-</p><p>To the make the matter confusing, <code>someKey in Global</code> appearing in build definition implicitly converts to <code>someKey in (Global, Global, Global)</code>.
+</p><p>To make the matter confusing, <code>someKey in Global</code> appearing in build definition implicitly converts to <code>someKey in (Global, Global, Global)</code>.
 </p><h3 id="Referring+to+scopes+in+a+build+definition">Referring to scopes in a build definition<a href="#Referring+to+scopes+in+a+build+definition" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>If you create a setting in <code>build.sbt</code> with a bare key, it will be scoped
 to (current subproject, configuration <code>Global</code>, task <code>Global</code>):
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
