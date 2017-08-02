@@ -3437,6 +3437,8 @@ your plugin to the list.
     <http://www.foundweekends.org/conscript/>
 - MiMa (Migration Manager - the Scala binary compatibility validation tool):
     <https://github.com/typesafehub/migration-manager>
+- sbt-updates (Display updated versions of your project dependencies):
+    <https://github.com/rtimush/sbt-updates>
 
 #### Test plugins
 
@@ -3510,6 +3512,7 @@ your plugin to the list.
 - sbt-protobuf 0.6.1 <https://github.com/sbt/sbt-protobuf>
 - sbt-conscript 0.5.2 <https://github.com/foundweekends/conscript>
 - sbt-jmh 0.2.26 <https://github.com/ktoso/sbt-jmh>
+- sbt-updates 0.3.1: <https://github.com/rtimush/sbt-updates>
 
 ### Plugins available for sbt 1.0.0-M5
 
@@ -17804,7 +17807,7 @@ Cross building plugins
 Like we are able to cross build against multiple Scala versions, we can cross build sbt 1.0 plugins while staying on sbt 0.13. This is useful because we can port one plugin at a time.
 
 1. If the plugin depends on libraries, make sure there are Scala 2.12 artifacts for them.
-2. Use the latest sbt 0.13.15.
+2. Use the latest sbt 0.13.16.
 3. Append the following settings to your plugin project (and any other subprojects that it depends):
 
 ```scala
