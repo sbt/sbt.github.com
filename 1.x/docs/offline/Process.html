@@ -43,31 +43,31 @@
           </a>
         <div class="container contentswrapper">
           <div class="span-16 prepend-1 append-1 contents">
-            <h2 id="External+Processes">External Processes<a href="#External+Processes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Usage">Usage<a href="#Usage" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>sbt</code> includes a process library to simplify working with external
-processes. The library is available without import in build definitions
-and at the interpreter started by the <a href="Console-Project.html">consoleProject</a>
-task.
+            <h2 id="External+Processes">External Processes<a href="#External+Processes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Usage">Usage<a href="#Usage" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Scala includes a process library to simplify working with external
+processes. Use <code>import scala.sys.process._</code> to bring the implicit
+conversions into scope.
 </p><p>To run an external command, follow it with an exclamation mark <code>!</code>:
 </p><pre><code class="prettyprint lang-scala">&quot;find project -name *.jar&quot; !
-</code></pre><p>An implicit converts the <code>String</code> to <code>sbt.ProcessBuilder</code>, which defines
-the <code>!</code> method. This method runs the constructed command, waits until
-the command completes, and returns the exit code. Alternatively, the
-<code>run</code> method defined on <code>ProcessBuilder</code> runs the command and returns an
-instance of <code>sbt.Process</code>, which can be used to <code>destroy</code> the process
-before it completes. With no arguments, the <code>!</code> method sends output to
-standard output and standard error. You can pass a <code>Logger</code> to the <code>!</code>
-method to send output to the <code>Logger</code>:
+</code></pre><p>An implicit converts the <code>String</code> to <code>scala.sys.process.ProcessBuilder</code>,
+which defines the <code>!</code> method. This method runs the constructed command,
+waits until the command completes, and returns the exit code.
+Alternatively, the <code>run</code> method defined on <code>ProcessBuilder</code> runs the
+command and returns an instance of <code>scala.sys.process.Process</code>, which
+can be used to <code>destroy</code> the process before it completes. With no
+arguments, the <code>!</code> method sends output to standard output and standard
+error. You can pass a <code>Logger</code> to the <code>!</code> method to send output to the
+<code>Logger</code>:
 </p><pre><code class="prettyprint lang-scala">&quot;find project -name *.jar&quot; ! log
 </code></pre><p>Two alternative implicit conversions are from <code>scala.xml.Elem</code> or
-<code>List[String]</code> to <code>sbt.ProcessBuilder</code>. These are useful for
-constructing commands. An example of the first variant from the android
-plugin:
+<code>List[String]</code> to <code>scala.sys.process.ProcessBuilder</code>. These are useful
+for constructing commands. An example of the first variant from the
+android plugin:
 </p><pre><code class="prettyprint lang-scala">&lt;x&gt; {dxPath.absolutePath} --dex --output={classesDexPath.absolutePath} {classesMinJarPath.absolutePath}&lt;/x&gt; !
 </code></pre><p>If you need to set the working directory or modify the environment, call
-<code>sbt.Process</code> explicitly, passing the command sequence (command and
-argument list) or command string first and the working directory second.
-Any environment variables can be passed as a vararg list of key/value
-String pairs.
+<code>scala.sys.process.Process</code> explicitly, passing the command sequence
+(command and argument list) or command string first and the working
+directory second.  Any environment variables can be passed as a vararg
+list of key/value String pairs.
 </p><pre><code class="prettyprint lang-scala">Process(&quot;ls&quot; :: &quot;-l&quot; :: Nil, Path.userHome, &quot;key1&quot; -&gt; value1, &quot;key2&quot; -&gt; value2) ! log
 </code></pre><p>Operators are defined to combine commands. These operators start with
 <code>#</code> in order to keep the precedence the same and to separate them from
@@ -95,7 +95,7 @@ be a File, URL, or a command.
 </li></ul><p>There are some additional methods to get the output from a forked
 process into a <code>String</code> or the output lines as a <code>Stream[String]</code>. Here
 are some examples, but see the
-<a href="../api/sbt/ProcessBuilder.html">ProcessBuilder API</a> for details.
+<a href="https://www.scala-lang.org/api/2.12.x/scala/sys/process/ProcessBuilder.html">ProcessBuilder API</a> for details.
 </p><pre><code class="prettyprint lang-scala">val listed: String = &quot;ls&quot; !!
 val lines2: Stream[String] = &quot;ls&quot; lines_!
 </code></pre><p>Finally, there is a <code>cat</code> method to send the contents of <code>File</code>s and
