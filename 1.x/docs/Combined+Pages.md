@@ -8736,7 +8736,7 @@ influence SBT execution. Also see [sbt launcher][Sbt-Launcher].
   </tr>                
 
   <tr>
-    <td><tt>sbt.global.base`</tt></td>
+    <td><tt>sbt.global.base</tt></td>
     <td>Directory</td>
     <td><tt>~/.sbt/1.0</tt></td>
     <td>The directory containing global settings and plugins</td>
