@@ -20166,6 +20166,43 @@ myTestTask <<= Seq(
 ).dependOn
 ```
 
+How to take an action on startup
+--------------------------------
+
+A global setting `onLoad` is of type `State => State` and is executed once, after all projects are built and loaded. There is a similar hook `onUnload` for when a project is unloaded.
+
+Project unloading typically occurs as a result of a `reload` command or a `set` command. Because the `onLoad` and `onUnload` hooks are global, modifying this setting typically involves composing a new function with the previous value. The following example shows the basic structure of defining `onLoad`.
+
+Suppose you want to run a task named `dependencyUpdates` on start up. Here's what you can do:
+
+```scala
+lazy val dependencyUpdates = taskKey[Unit]("foo")
+
+// This prepends the String you would type into the shell
+lazy val startupTransition: State => State = { s: State =>
+  "dependencyUpdates" :: s
+}
+
+lazy val root = (project in file("."))
+  .settings(
+    scalaVersion in ThisBuild := "2.12.3",
+    organization in ThisBuild := "com.example",
+    name := "helloworld",
+    dependencyUpdates := { println("hi") },
+
+    // onLoad is scoped to Global because there's only one.
+    onLoad in Global := {
+      val old = (onLoad in Global).value
+      // compose the new transition on top of the existing one
+      // in case your plugins are using this hook.
+      startupTransition compose old
+    }
+  )
+```
+
+You can use this technique to switch the startup subproject too.
+
+
   [ExecutionSemantics]: Custom-Settings.html#Execution+semantics+of+tasks
 
 Sequencing
@@ -21327,25 +21364,7 @@ def augment(extra: Seq[File])(s: State): State = {
 
 #### How can I take action when the project is loaded or unloaded?
 
-The single, global setting `onLoad` is of type `State => State` (see
-[State and Actions][Build-State]) and is executed once, after all projects are
-built and loaded. There is a similar hook `onUnload` for when a project
-is unloaded. Project unloading typically occurs as a result of a
-`reload` command or a `set` command. Because the `onLoad` and `onUnload`
-hooks are global, modifying this setting typically involves composing a
-new function with the previous value. The following example shows the
-basic structure of defining `onLoad`:
-
-```scala
-// Compose our new function 'f' with the existing transformation.
-{
-  val f: State => State = ...
-  onLoad in Global := {
-    val previous = (onLoad in Global).value
-    f compose previous
-  }
-}
-```
+See [How to take an action on startup](Howto-Startup.html).
 
 #### Example of project load/unload hooks
 
