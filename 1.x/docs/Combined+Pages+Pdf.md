@@ -9585,12 +9585,12 @@ chmod u+x shout.scala
 /***         
 scalaVersion := "2.12.2"
  
-resolvers += Resolver.url("typesafe-ivy-repo", url("http://repo.typesafe.com/typesafe/releases"))(Resolver.ivyStylePatterns)
- 
-libraryDependencies += "org.scala-sbt" % "io" % "1.0.0"
+libraryDependencies += "org.scala-sbt" %% "io" % "1.0.0"
 */         
  
-import sbt._, Path._
+import sbt.io.IO
+import sbt.io.Path._
+import sbt.io.syntax._
 import java.io.File
 import java.net.{URI, URL}
 import sys.process._

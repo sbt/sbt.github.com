@@ -87,12 +87,12 @@ compile the script, and run it directly. For example, if you name it
 /***         
 scalaVersion := &quot;2.12.2&quot;
  
-resolvers += Resolver.url(&quot;typesafe-ivy-repo&quot;, url(&quot;http://repo.typesafe.com/typesafe/releases&quot;))(Resolver.ivyStylePatterns)
- 
-libraryDependencies += &quot;org.scala-sbt&quot; % &quot;io&quot; % &quot;1.0.0&quot;
+libraryDependencies += &quot;org.scala-sbt&quot; %% &quot;io&quot; % &quot;1.0.0&quot;
 */         
  
-import sbt._, Path._
+import sbt.io.IO
+import sbt.io.Path._
+import sbt.io.syntax._
 import java.io.File
 import java.net.{URI, URL}
 import sys.process._
