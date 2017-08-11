@@ -9,7 +9,7 @@ function initOldVersionWarnings($) {
     console.log("Detected SNAPSHOT sbt version...");
     showSnapshotWarning(site);
   } else {
-    for (var series in ["1.0", "0.13", "0.12", "0.7"]) {
+    for (var series in ["1.x", "1.0", "0.13", "0.12", "0.7"]) {
       if (site.v.startsWith(series)) {
         return showVersionWarning(site, series);
       }
@@ -200,3 +200,4 @@ function versionWasAcked(project, version) {
 
   return getCookie(ackVersionCookieName(project, version)) === 'true';
 }
+
