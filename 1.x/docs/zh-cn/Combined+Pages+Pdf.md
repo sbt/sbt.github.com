@@ -32,7 +32,7 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://cocl.us/sbt100rc2msi
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.0/sbt-1.0.0.msi
   [Setup-Notes]: ../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -58,8 +58,8 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
 如果你在运行 sbt 时遇到任何问题，查看 [安装建议][Setup-Notes] 中的终端编码（terminal encoding），HTTP 代理，JVM 参数。
 
 
-  [ZIP]: https://cocl.us/sbt100rc2zip
-  [TGZ]: https://cocl.us/sbt100rc2tgz
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0/sbt-1.0.0.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0/sbt-1.0.0.tgz
   [Manual-Installation]: Manual-Installation.html
 
 在 Mac 上安装 sbt
@@ -76,7 +76,7 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
 #### 通过 [Homebrew](http://mxcl.github.com/homebrew/) 安装
 
 ```
-$ brew install sbt -devel
+$ brew install sbt@1
 ```
 
 #### 通过 [Macports](http://macports.org/) 安装
@@ -86,9 +86,9 @@ $ port install sbt
 ```
 
 
-  [MSI]: https://cocl.us/sbt100rc2msi
-  [ZIP]: https://cocl.us/sbt100rc2zip
-  [TGZ]: https://cocl.us/sbt100rc2tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.0/sbt-1.0.0.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0/sbt-1.0.0.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0/sbt-1.0.0.tgz
 
 在 Windows 上安装 sbt
 -------------------------
@@ -102,10 +102,10 @@ $ port install sbt
 下载 [msi 安装包][MSI] 并安装。
 
 
-  [ZIP]: https://cocl.us/sbt100rc2zip
-  [TGZ]: https://cocl.us/sbt100rc2tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.0.0-RC2.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.0.0-RC2.deb
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0/sbt-1.0.0.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0/sbt-1.0.0.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.0.0.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.0.0.deb
 
 在 Linux 上安装 sbt
 -----------------------
@@ -121,7 +121,7 @@ $ port install sbt
 Ubuntu和其他基于Debian的发行版使用DEB格式，但通常你不从本地的DEB文件安装软件。相反，他们由程序包管理器安装，通过命令行（如`apt-get`，`aptitude`）或图形用户界面 （如Synaptic）。
 从终端运行下面的命令安装`sbt`（你需要超级用户权限，因此需要`sudo`）。
 
-    echo "deb https://dl.bintray.com/sbt/debian-experimental /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
+    echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
     sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2EE0EA64E40A89B84B2DF73499E82A75642AC823
     sudo apt-get update
     sudo apt-get install sbt
@@ -138,7 +138,7 @@ Ubuntu和其他基于Debian的发行版使用DEB格式，但通常你不从本�
 红帽企业版Linux和其他基于RPM的发行版使用RPM格式。
 从终端运行下面的命令安装`sbt`（你需要超级用户权限，因此需要`sudo`）。
 
-    curl https://bintray.com/sbt/rpm/rpm-experimental > bintray-sbt-rpm.repo
+    curl https://bintray.com/sbt/rpm/rpm > bintray-sbt-rpm.repo
     sudo mv bintray-sbt-rpm.repo /etc/yum.repos.d/
     sudo yum install sbt
 
@@ -208,7 +208,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "hello",
     version := "1.0",
-    scalaVersion := "2.12.2"
+    scalaVersion := "2.12.3"
   )
 ```
 
@@ -219,10 +219,10 @@ lazy val root = (project in file("."))
 
 ### 设置 sbt 版本
 
-你可以通过创建 `hello/project/build.properties` 文件强制指定一个版本的 sbt。在这个文件里，编写如下内容来强制使用 1.0.0-RC2：
+你可以通过创建 `hello/project/build.properties` 文件强制指定一个版本的 sbt。在这个文件里，编写如下内容来强制使用 1.0.0：
 
 ```
-sbt.version=1.0.0-RC2
+sbt.version=1.0.0
 ```
 
 sbt 在不同的 release 版本中是 99% 兼容的。但是在 `project/build.properties` 文件中设置 sbt 的版本仍然能避免一些潜在的混淆。
@@ -498,7 +498,7 @@ lazy val root = (project in file("."))
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.12.2"
+  scalaVersion := "2.12.3"
 )
 
 lazy val root = (project in file("."))
@@ -638,7 +638,7 @@ bare `.sbt` 构建定义由一个 `Setting[_]` 表达式的列表组成，而不
 ```scala
 name := "hello"
 version := "1.0"
-scalaVersion := "2.12.2"
+scalaVersion := "2.12.3"
 ```
 
 ### 添加依赖库
@@ -651,7 +651,7 @@ val derby = "org.apache.derby" % "derby" % "10.4.1.3"
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.12.2"
+  scalaVersion := "2.12.3"
 )
 
 lazy val root = (project in file("."))
@@ -1302,7 +1302,7 @@ To factor out common settings across multiple projects, create a sequence named 
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.12.2"
+  scalaVersion := "2.12.3"
 )
 
 lazy val core = (project in file("core"))
@@ -1865,7 +1865,7 @@ import Dependencies._
 
 lazy val commonSettings = Seq(
   version := "0.1.0",
-  scalaVersion := "2.12.2"
+  scalaVersion := "2.12.3"
 )
 
 lazy val backend = (project in file("backend"))

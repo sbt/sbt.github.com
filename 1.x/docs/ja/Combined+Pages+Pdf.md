@@ -40,7 +40,7 @@ sbt を試してくれることに感謝する。_ぜひ楽しいんでほしい
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://cocl.us/sbt100rc2msi
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.0/sbt-1.0.0.msi
   [Setup-Notes]: ../../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -69,8 +69,8 @@ sbt プロジェクトを作るためには、以下の手順をたどる必要�
 
 
 
-  [ZIP]: https://cocl.us/sbt100rc2zip
-  [TGZ]: https://cocl.us/sbt100rc2tgz
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0/sbt-1.0.0.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0/sbt-1.0.0.tgz
   [Manual-Installation]: Manual-Installation.html
 
 Mac への sbt のインストール
@@ -88,7 +88,7 @@ Mac への sbt のインストール
 #### [Homebrew](http://mxcl.github.com/homebrew/)
 
 ```
-$ brew install sbt -devel
+$ brew install sbt@1
 ```
 
 #### [Macports](http://macports.org/)
@@ -98,9 +98,9 @@ $ port install sbt
 ```
 
 
-  [MSI]: https://cocl.us/sbt100rc2msi
-  [ZIP]: https://cocl.us/sbt100rc2zip
-  [TGZ]: https://cocl.us/sbt100rc2tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.0/sbt-1.0.0.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0/sbt-1.0.0.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0/sbt-1.0.0.tgz
 
 Windows への sbt のインストール
 ----------------------------
@@ -114,10 +114,10 @@ Windows への sbt のインストール
 [msi インストーラ][MSI]をダウンロードしてインストールする。
 
 
-  [ZIP]: https://cocl.us/sbt100rc2zip
-  [TGZ]: https://cocl.us/sbt100rc2tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.0.0-RC2.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.0.0-RC2.deb
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.0/sbt-1.0.0.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.0/sbt-1.0.0.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.0.0.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.0.0.deb
   [Manual-Installation]: Manual-Installation.html
   [website127]: https://github.com/sbt/website/issues/12
 
@@ -138,7 +138,7 @@ Ubuntu 及びその他の Debian ベースのディストリビューション�
 (例: `apt-get`、`aptitude`、Synaptic など)、インストールはそれらから行う。
 ターミナル上から以下を実行すると `sbt` をインストールできる (superuser 権限を必要とするため、`sudo` を使っている)。
 
-    echo "deb https://dl.bintray.com/sbt/debian-experimental /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
+    echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
     sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2EE0EA64E40A89B84B2DF73499E82A75642AC823
     sudo apt-get update
     sudo apt-get install sbt
@@ -162,7 +162,7 @@ sbt のバイナリは Bintray にて公開されており、都合の良いこ�
 Red Hat Enterprise Linux 及びその他の RPM ベースのディストリビューションは RPM フォーマットを用いる。
 ターミナル上から以下を実行すると `sbt` をインストールできる (superuser 権限を必要とするため、`sudo` を使っている)。
 
-    curl https://bintray.com/sbt/rpm/rpm-experimental | sudo tee /etc/yum.repos.d/bintray-sbt-rpm.repo
+    curl https://bintray.com/sbt/rpm/rpm | sudo tee /etc/yum.repos.d/bintray-sbt-rpm.repo
     sudo yum install sbt
 
 sbt のバイナリは Bintray にて公開されており、Bintray は RPM リポジトリを提供する。
@@ -522,7 +522,7 @@ sbt 0.13.13 など最近のバージョンをインストール済みで、
 sbt バージョンを指定する:
 
 ```
-sbt.version=1.0.0-RC2
+sbt.version=1.0.0
 ```
 
 もしも指定されたバージョンがローカルマシンに無ければ、
@@ -543,7 +543,7 @@ sbt.version=1.0.0-RC2
 lazy val root = (project in file("."))
   .settings(
     name := "Hello",
-    scalaVersion := "2.12.2"
+    scalaVersion := "2.12.3"
   )
 ```
 
@@ -556,7 +556,7 @@ lazy val root = (project in file("."))
 lazy val root = (project in file("."))
   .settings(
     name := "Hello",
-    scalaVersion := "2.12.2"
+    scalaVersion := "2.12.3"
   )
 ```
 
@@ -570,7 +570,7 @@ lazy val root = (project in file("."))
   .settings(
     name         := "hello",
     organization := "com.example",
-    scalaVersion := "2.12.2",
+    scalaVersion := "2.12.3",
     version      := "0.1.0-SNAPSHOT"
   )
 ```
@@ -732,7 +732,7 @@ val derby = "org.apache.derby" % "derby" % "10.4.1.3"
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0-SNAPSHOT",
-  scalaVersion := "2.12.2"
+  scalaVersion := "2.12.3"
 )
 
 lazy val root = (project in file("."))
@@ -823,7 +823,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "Hello",
     organization := "com.example",
-    scalaVersion := "2.12.2",
+    scalaVersion := "2.12.3",
     version := "0.1.0-SNAPSHOT",
     scalacOptions := {
       val out = streams.value // streams タスクは scalacOptions よりも事前発生する
@@ -859,7 +859,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "Hello",
     organization := "com.example",
-    scalaVersion := "2.12.2",
+    scalaVersion := "2.12.3",
     version := "0.1.0-SNAPSHOT",
     scalacOptions := {
       val ur = update.value  // update task happens-before scalacOptions
@@ -985,7 +985,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "Hello",
     organization := "com.example",
-    scalaVersion := "2.12.2",
+    scalaVersion := "2.12.3",
     version := "0.1.0-SNAPSHOT",
     scalacOptions := List("-encoding", "utf8", "-Xfatal-warnings", "-deprecation", "-unchecked"),
     scalacOptions := {
@@ -1466,7 +1466,7 @@ lazy val root = (project in file("."))
       // Same as:
       // organization in ThisBuild := "com.example"
       organization := "com.example",
-      scalaVersion := "2.12.2",
+      scalaVersion := "2.12.3",
       version      := "0.1.0-SNAPSHOT"
     )),
     name := "Hello",
@@ -1669,7 +1669,7 @@ lazy val projA = (project in file("a"))
 `name in projA` (sbt シェルだと `projA/name`) の値は何か?
 
 1. `"foo-2.11.11"`
-2. `"foo-2.12.2"`
+2. `"foo-2.12.3"`
 3. その他
 
 正解は `"foo-2.11.11"`。
@@ -2256,7 +2256,7 @@ lazy val core = project
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.12.2"
+  scalaVersion := "2.12.3"
 )
 
 lazy val core = (project in file("core"))
@@ -2947,7 +2947,7 @@ import Dependencies._
 
 lazy val commonSettings = Seq(
   version := "0.1.0",
-  scalaVersion := "2.12.2"
+  scalaVersion := "2.12.3"
 )
 
 lazy val backend = (project in file("backend"))
@@ -3049,7 +3049,7 @@ name := "hello"
 
 version := "1.0"
 
-scalaVersion := "2.12.2"
+scalaVersion := "2.12.3"
 ```
 
 ### (0.13.7 以前) 設定は空白行で区切る
@@ -3350,7 +3350,7 @@ sbt 0.13.8 で `Def.sequential` という関数が追加されて、準逐次な
 #### project/build.properties
 
 ```
-sbt.version=1.0.0-RC2
+sbt.version=1.0.0
 ```
 
 #### project/style.sbt
@@ -3400,7 +3400,7 @@ root> compilecheck
 #### project/build.properties
 
 ```
-sbt.version=1.0.0-RC2
+sbt.version=1.0.0
 ```
 
 #### project/style.sbt
