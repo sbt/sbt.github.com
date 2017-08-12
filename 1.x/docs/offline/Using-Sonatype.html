@@ -194,11 +194,11 @@ passphrase.
 </p></blockquote><p>To automate the publishing approach above with the <a href="https://github.com/sbt/sbt-release">sbt-release plugin</a>, you should simply add the publishing commands as steps in the
 <code>releaseProcess</code> task:
 </p><pre><code class="">...
-ReleaseStep(action = Command.process(&quot;sonatypeOpen \&quot;your groupId\&quot; \&quot;Some staging name\&quot;&quot;, _)),
+releaseStepCommand(&quot;sonatypeOpen \&quot;your groupId\&quot; \&quot;Some staging name\&quot;&quot;),
 ...
-ReleaseStep(action = Command.process(&quot;publishSigned&quot;, _)),
+releaseStepCommand(&quot;publishSigned&quot;),
 ...
-ReleaseStep(action = Command.process(&quot;sonatypeRelease&quot;, _)),
+releaseStepCommand(&quot;sonatypeRelease&quot;),
 ...
 </code></pre><div class="bottom nav span-16">
                         <em>Next Page</em>

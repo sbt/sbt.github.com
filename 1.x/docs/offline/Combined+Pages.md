@@ -4478,11 +4478,11 @@ To automate the publishing approach above with the [sbt-release plugin]
 
 ```
 ...
-ReleaseStep(action = Command.process("sonatypeOpen \"your groupId\" \"Some staging name\"", _)),
+releaseStepCommand("sonatypeOpen \"your groupId\" \"Some staging name\""),
 ...
-ReleaseStep(action = Command.process("publishSigned", _)),
+releaseStepCommand("publishSigned"),
 ...
-ReleaseStep(action = Command.process("sonatypeRelease", _)),
+releaseStepCommand("sonatypeRelease"),
 ...
 ```
 
@@ -14685,8 +14685,6 @@ a foundation.
 Tasks
 -----
 
-<!-- TODO: Replace error with sys.error() -->
-
 Tasks and settings are introduced in the
 [getting started guide][Basic-Def], which you may wish
 to read first. This page has additional details and background and is
@@ -15264,7 +15262,7 @@ exceptions thrown during task execution.
 For example:
 
 ```scala
-intTask := error("Failed.")
+intTask := sys.error("Failed.")
 
 intTask := {
    println("Ignoring failure: " + intTask.failure.value)
@@ -15279,7 +15277,7 @@ and the constant `3` is returned.
 failing. Consider the following example:
 
 ```scala
-intTask := if(shouldSucceed) 5 else error("Failed.")
+intTask := if(shouldSucceed) 5 else sys.error("Failed.")
 
 // Return 3 if intTask fails. If intTask succeeds, this task will fail.
 aTask := intTask.failure.value - 2
@@ -15393,7 +15391,7 @@ task succeeds or fails.
 For example:
 
 ```scala
-intTask := error("Failed.")
+intTask := sys.error("Failed.")
 
 intTask := intTask.result.value match {
    case Inc(inc: Incomplete) =>
@@ -15417,7 +15415,7 @@ succeeded. The result of the task is the result of the original task.
 For example:
 
 ```scala
-intTask := error("I didn't succeed.")
+intTask := sys.error("I didn't succeed.")
 
 lazy val intTaskImpl = intTask andFinally { println("andFinally") }
 
@@ -15433,7 +15431,7 @@ important when calling andFinally on another task instead of overriding
 a task like in the previous example. For example, consider this code:
 
 ```scala
-intTask := error("I didn't succeed.")
+intTask := sys.error("I didn't succeed.")
 
 lazy val intTaskImpl = intTask andFinally { println("andFinally") }
 
@@ -15445,7 +15443,7 @@ execution. This case is similar to the following plain Scala code:
 
 ```scala
 def intTask(): Int =
-  error("I didn't succeed.")
+  sys.error("I didn't succeed.")
 
 def otherIntTask(): Int =
   try { intTask() }

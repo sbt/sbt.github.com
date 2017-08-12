@@ -2954,11 +2954,11 @@ passphrase.
 </p></blockquote><p>To automate the publishing approach above with the <a href="https://github.com/sbt/sbt-release">sbt-release plugin</a>, you should simply add the publishing commands as steps in the
 <code>releaseProcess</code> task:
 </p><pre><code class="">...
-ReleaseStep(action = Command.process(&quot;sonatypeOpen \&quot;your groupId\&quot; \&quot;Some staging name\&quot;&quot;, _)),
+releaseStepCommand(&quot;sonatypeOpen \&quot;your groupId\&quot; \&quot;Some staging name\&quot;&quot;),
 ...
-ReleaseStep(action = Command.process(&quot;publishSigned&quot;, _)),
+releaseStepCommand(&quot;publishSigned&quot;),
 ...
-ReleaseStep(action = Command.process(&quot;sonatypeRelease&quot;, _)),
+releaseStepCommand(&quot;sonatypeRelease&quot;),
 ...
 </code></pre><h2 id="Contributing+to+sbt">Contributing to sbt<a href="#Contributing+to+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Below is a running list of potential areas of contribution. This list
 may become out of date quickly, so you may want to check on the
@@ -9313,8 +9313,7 @@ topics in detail. Before reading anything in here, you will need the
 information in the
 <a href="Getting-Started.html">Getting Started Guide</a> as
 a foundation.
-</p><h2 id="Tasks">Tasks<a href="#Tasks" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><!-- TODO: Replace error with sys.error() -->
-<p>Tasks and settings are introduced in the
+</p><h2 id="Tasks">Tasks<a href="#Tasks" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Tasks and settings are introduced in the
 <a href="Basic-Def.html">getting started guide</a>, which you may wish
 to read first. This page has additional details and background and is
 intended more as a reference.
@@ -9691,7 +9690,7 @@ task succeeds, the new task fails.
 information about any tasks that caused the failure and any underlying
 exceptions thrown during task execution.
 </p><p>For example:
-</p><pre><code class="prettyprint lang-scala">intTask := error(&quot;Failed.&quot;)
+</p><pre><code class="prettyprint lang-scala">intTask := sys.error(&quot;Failed.&quot;)
 
 intTask := {
    println(&quot;Ignoring failure: &quot; + intTask.failure.value)
@@ -9701,7 +9700,7 @@ intTask := {
 and the constant <code>3</code> is returned.
 </p><p><code>failure</code> does not prevent other tasks that depend on the target from
 failing. Consider the following example:
-</p><pre><code class="prettyprint lang-scala">intTask := if(shouldSucceed) 5 else error(&quot;Failed.&quot;)
+</p><pre><code class="prettyprint lang-scala">intTask := if(shouldSucceed) 5 else sys.error(&quot;Failed.&quot;)
 
 // Return 3 if intTask fails. If intTask succeeds, this task will fail.
 aTask := intTask.failure.value - 2
@@ -9802,7 +9801,7 @@ the same structure as <code>Either[Incomplete, T]</code> for a task result of ty
 </li></ul><p>Thus, the task created by <code>result</code> executes whether or not the original
 task succeeds or fails.
 </p><p>For example:
-</p><pre><code class="prettyprint lang-scala">intTask := error(&quot;Failed.&quot;)
+</p><pre><code class="prettyprint lang-scala">intTask := sys.error(&quot;Failed.&quot;)
 
 intTask := intTask.result.value match {
    case Inc(inc: Incomplete) =&gt;
@@ -9819,7 +9818,7 @@ If it succeeds, the value is printed and returned.
 and evaluates a side effect regardless of whether the original task
 succeeded. The result of the task is the result of the original task.
 For example:
-</p><pre><code class="prettyprint lang-scala">intTask := error(&quot;I didn't succeed.&quot;)
+</p><pre><code class="prettyprint lang-scala">intTask := sys.error(&quot;I didn't succeed.&quot;)
 
 lazy val intTaskImpl = intTask andFinally { println(&quot;andFinally&quot;) }
 
@@ -9830,7 +9829,7 @@ if the task fails.
 task has to be invoked in order for the extra block to run. This is
 important when calling andFinally on another task instead of overriding
 a task like in the previous example. For example, consider this code:
-</p><pre><code class="prettyprint lang-scala">intTask := error(&quot;I didn't succeed.&quot;)
+</p><pre><code class="prettyprint lang-scala">intTask := sys.error(&quot;I didn't succeed.&quot;)
 
 lazy val intTaskImpl = intTask andFinally { println(&quot;andFinally&quot;) }
 
@@ -9838,7 +9837,7 @@ otherIntTask := intTaskImpl.value
 </code></pre><p>If <code>intTask</code> is run directly, <code>otherIntTask</code> is never involved in
 execution. This case is similar to the following plain Scala code:
 </p><pre><code class="prettyprint lang-scala">def intTask(): Int =
-  error(&quot;I didn't succeed.&quot;)
+  sys.error(&quot;I didn't succeed.&quot;)
 
 def otherIntTask(): Int =
   try { intTask() }
