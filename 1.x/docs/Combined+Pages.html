@@ -11476,16 +11476,18 @@ $ exists target/scala-2.10/foo.jar
 </p><pre><code class="">Running sbt-assembly / simple
 [success] Total time: 18 s, completed Sep 17, 2011 3:00:58 AM
 </code></pre><h3 id="step+6%3A+custom+assertion">step 6: custom assertion<a href="#step+6%3A+custom+assertion" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The file commands are great, but not nearly enough because none of them test the actual contents. An easy way to test the contents is to implement a custom task in your test build.
-</p><p>For my hello project, I’d like to check if the resulting jar prints out “hello”. I can take advantage of <code>sbt.Process</code> to run the jar. To express a failure, just throw an error. Here’s <code>build.sbt</code>:
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+</p><p>For my hello project, I’d like to check if the resulting jar prints out “hello”. I can take advantage of <code>scala.sys.process.Process</code> to run the jar. To express a failure, just throw an error. Here’s <code>build.sbt</code>:
+</p><pre><code class="prettyprint lang-scala">import scala.sys.process.Process
+
+lazy val root = (project in file(&quot;.&quot;))
   .settings(
     version := &quot;0.1&quot;,
     scalaVersion := &quot;2.10.6&quot;,
     assemblyJarName in assembly := &quot;foo.jar&quot;,
     TaskKey[Unit](&quot;check&quot;) := {
-      val process = sbt.Process(&quot;java&quot;, Seq(&quot;-jar&quot;, (crossTarget.value / &quot;foo.jar&quot;).toString))
+      val process = Process(&quot;java&quot;, Seq(&quot;-jar&quot;, (crossTarget.value / &quot;foo.jar&quot;).toString))
       val out = (process!!)
-      if (out.trim != &quot;bye&quot;) error(&quot;unexpected output: &quot; + out)
+      if (out.trim != &quot;bye&quot;) sys.error(&quot;unexpected output: &quot; + out)
       ()
     }
   )
