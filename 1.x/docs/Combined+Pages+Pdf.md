@@ -3850,6 +3850,8 @@ your plugin to the list.
 
 #### Documentation plugins
 
+- sbt-site (Site generation for sbt):
+    <https://github.com/sbt/sbt-site>
 - tut (Scala literate programming):
     <https://github.com/tpolecat/tut> <!-- 398 stars -->
 - sbt-unidoc (Create a unified API document across subprojects):
@@ -3864,6 +3866,8 @@ your plugin to the list.
 
 #### Release plugins
 
+- sbt-ghpages (publishes generated site and api):
+    <https://github.com/sbt/sbt-ghpages>
 - [sbt-native-packager](http://sbt-native-packager.readthedocs.io/en/stable/):
     <https://github.com/sbt/sbt-native-packager> <!-- 869 stars -->
 - sbt-docker (Build and push Docker images):
