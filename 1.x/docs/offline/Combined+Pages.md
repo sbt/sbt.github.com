@@ -3950,8 +3950,8 @@ your plugin to the list.
 
 #### Static code analysis plugins
 
-...
-
+- sbt-taglist (Find and log TODO, FIXMEs in source files):
+    <https://github.com/johanandren/sbt-taglist>
 
 #### Code coverage plugins
 
