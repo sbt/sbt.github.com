@@ -109,7 +109,7 @@ creación de un script para ejecutarlo.
 </p><p>Cree un script para ejecutar el jar, mediante la creación de <code>~/bin/sbt</code>
 con el siguiente contenido:
 </p><pre><code class="">#!/bin/bash
-SBT_OPTS=&quot;-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M&quot;
+SBT_OPTS=&quot;-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled
 java $SBT_OPTS -jar `dirname $0`/sbt-launch.jar &quot;$@&quot;
 </code></pre><p>Haga el script ejecutable con:
 </p><pre><code class="">$ chmod u+x ~/bin/sbt
@@ -122,12 +122,12 @@ necesario.
 </p><h4 id="Non-Cygwin">Non-Cygwin<a href="#Non-Cygwin" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Para usuarios que no utilizan Cygwin, pero que usan la terminal
 standard de Windows, cree un archivo batch <code>sbt.bat</code>:
 </p><pre><code class="">set SCRIPT_DIR=%~dp0
-java -Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M -jar &quot;%SCRIPT_DIR%sbt-launch.jar&quot; %*
+java -Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -jar &quot;%SCRIPT_DIR%sbt-launch.jar&quot; %*
 </code></pre><p>y ponga el <a href="https://repo1.maven.org/maven2/org/scala-sbt/sbt-launch/1.0.0/sbt-launch.jar">sbt-launch.jar</a> que descargó en el mismo directorio que
 archivo batch.
 </p><h4 id="Cygwin+con+la+terminal+standard+de+Windows">Cygwin con la terminal standard de Windows<a href="#Cygwin+con+la+terminal+standard+de+Windows" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Si utiliza Cygwin con la terminal standard de Windows, cree un
 script de bash <code>~/bin/sbt</code>:
-</p><pre><code class="">SBT_OPTS=&quot;-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M&quot;
+</p><pre><code class="">SBT_OPTS=&quot;-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled
 java $SBT_OPTS -jar sbt-launch.jar &quot;$@&quot;
 </code></pre><p>Reemplace <code>sbt-launch.jar</code> con la ruta hasta el <a href="https://repo1.maven.org/maven2/org/scala-sbt/sbt-launch/1.0.0/sbt-launch.jar">sbt-launch.jar</a> que
 descargó y recuerde utilizar <code>cygpath</code> si es necesario. Haga el scrip
@@ -136,7 +136,7 @@ ejecutable con:
 </code></pre><h4 id="Cygwin+con+una+terminal+Ansi">Cygwin con una terminal Ansi<a href="#Cygwin+con+una+terminal+Ansi" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Si utiliza Cygwin con una terminal Ansi (que soporte secuentas de
 escape Ansi y que sea configurable mediante <code>stty</code>), cree un script
 <code>~/bin/sbt</code>:
-</p><pre><code class="">SBT_OPTS=&quot;-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M&quot;
+</p><pre><code class="">SBT_OPTS=&quot;-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled
 stty -icanon min 1 -echo &gt; /dev/null 2&gt;&amp;1
 java -Djline.terminal=jline.UnixTerminal -Dsbt.cygwin=true $SBT_OPTS -jar sbt-launch.jar &quot;$@&quot;
 stty icanon echo &gt; /dev/null 2&gt;&amp;1

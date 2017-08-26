@@ -55,7 +55,7 @@ encoding, which might look like:
 </code></pre><h3 id="JVM+heap%2C+permgen%2C+and+stack+sizes">JVM heap, permgen, and stack sizes<a href="#JVM+heap%2C+permgen%2C+and+stack+sizes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>If you find yourself running out of permgen space or your workstation is
 low on memory, adjust the JVM configuration as you would for any
 application. For example a common set of memory-related options is:
-</p><pre><code class="">java -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256m
+</p><pre><code class="">java -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled
 </code></pre><h3 id="Boot+directory">Boot directory<a href="#Boot+directory" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>sbt-launch.jar</code> is just a bootstrap; the actual meat of sbt, and the
 Scala compiler and standard library, are downloaded to the shared
 directory <code>$HOME/.sbt/boot/</code>.

@@ -55,7 +55,7 @@
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += { &quot;org.scala-sbt&quot; %% &quot;scripted-plugin&quot; % sbtVersion.value }
 </code></pre><p>以下のセッティングを <code>scripted.sbt</code> に加える:
 </p><pre><code class="prettyprint lang-scala">scriptedLaunchOpts := { scriptedLaunchOpts.value ++
-  Seq(&quot;-Xmx1024M&quot;, &quot;-XX:MaxPermSize=256M&quot;, &quot;-Dplugin.version=&quot; + version.value)
+  Seq(&quot;-Xmx1024M&quot;, &quot;-Dplugin.version=&quot; + version.value)
 }
 scriptedBufferLog := false
 </code></pre><h3 id="%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+3%3A+src%2Fsbt-test">ステップ 3: src/sbt-test<a href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+3%3A+src%2Fsbt-test" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>src/sbt-test/&lt;テストグループ&gt;/&lt;テスト名&gt;</code> というディレクトリ構造を作る。とりあえず、<code>src/sbt-test/&lt;プラグイン名&gt;/simple</code> から始めるとする。

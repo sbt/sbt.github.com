@@ -2782,7 +2782,7 @@ encoding, which might look like:
 </code></pre><h3 id="JVM+heap%2C+permgen%2C+and+stack+sizes">JVM heap, permgen, and stack sizes<a href="#JVM+heap%2C+permgen%2C+and+stack+sizes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>If you find yourself running out of permgen space or your workstation is
 low on memory, adjust the JVM configuration as you would for any
 application. For example a common set of memory-related options is:
-</p><pre><code class="">java -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256m
+</p><pre><code class="">java -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled
 </code></pre><h3 id="Boot+directory">Boot directory<a href="#Boot+directory" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>sbt-launch.jar</code> is just a bootstrap; the actual meat of sbt, and the
 Scala compiler and standard library, are downloaded to the shared
 directory <code>$HOME/.sbt/boot/</code>.
@@ -11278,7 +11278,6 @@ Because Travis is already using the environment variable <code>JVM_OPTS</code>, 
 -Xms2048M
 -Xmx2048M
 -Xss6M
--XX:MaxPermSize=512M
 -XX:ReservedCodeCacheSize=256M
 </code></pre><p>and then write out the <code>script</code> section with <code>-jvm-opts</code> option:
 </p><pre><code class="">script:
@@ -11290,7 +11289,6 @@ java
 -Xms2048M
 -Xmx2048M
 -Xss6M
--XX:MaxPermSize=512M
 -XX:ReservedCodeCacheSize=256M
 -jar
 /home/travis/.sbt/launchers/1.0.0/sbt-launch.jar
@@ -11305,7 +11303,6 @@ java
 -Xms2048M
 -Xmx2048M
 -Xss6M
--XX:MaxPermSize=512M
 -Dfile.encoding=UTF8
 -XX:ReservedCodeCacheSize=256M
 -Xms1024M
@@ -11431,7 +11428,7 @@ notifications:
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += { &quot;org.scala-sbt&quot; %% &quot;scripted-plugin&quot; % sbtVersion.value }
 </code></pre><p>Then add the following settings to <code>scripted.sbt</code>:
 </p><pre><code class="prettyprint lang-scala">scriptedLaunchOpts := { scriptedLaunchOpts.value ++
-  Seq(&quot;-Xmx1024M&quot;, &quot;-XX:MaxPermSize=256M&quot;, &quot;-Dplugin.version=&quot; + version.value)
+  Seq(&quot;-Xmx1024M&quot;, &quot;-Dplugin.version=&quot; + version.value)
 }
 scriptedBufferLog := false
 </code></pre><h3 id="step+3%3A+src%2Fsbt-test">step 3: src/sbt-test<a href="#step+3%3A+src%2Fsbt-test" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Make dir structure <code>src/sbt-test/&lt;test-group&gt;/&lt;test-name&gt;</code>. For starters, try something like <code>src/sbt-test/&lt;your-plugin-name&gt;/simple</code>.

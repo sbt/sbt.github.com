@@ -4180,7 +4180,7 @@ low on memory, adjust the JVM configuration as you would for any
 application. For example a common set of memory-related options is:
 
 ```
-java -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256m
+java -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled
 ```
 
 ### Boot directory
@@ -17674,7 +17674,6 @@ Because Travis is already using the environment variable `JVM_OPTS`, we can inst
 -Xms2048M
 -Xmx2048M
 -Xss6M
--XX:MaxPermSize=512M
 -XX:ReservedCodeCacheSize=256M
 ```
 
@@ -17694,7 +17693,6 @@ java
 -Xms2048M
 -Xmx2048M
 -Xss6M
--XX:MaxPermSize=512M
 -XX:ReservedCodeCacheSize=256M
 -jar
 /home/travis/.sbt/launchers/1.0.0/sbt-launch.jar
@@ -17719,7 +17717,6 @@ java
 -Xms2048M
 -Xmx2048M
 -Xss6M
--XX:MaxPermSize=512M
 -Dfile.encoding=UTF8
 -XX:ReservedCodeCacheSize=256M
 -Xms1024M
@@ -17936,7 +17933,7 @@ Then add the following settings to `scripted.sbt`:
 
 ```scala
 scriptedLaunchOpts := { scriptedLaunchOpts.value ++
-  Seq("-Xmx1024M", "-XX:MaxPermSize=256M", "-Dplugin.version=" + version.value)
+  Seq("-Xmx1024M", "-Dplugin.version=" + version.value)
 }
 scriptedBufferLog := false
 ```

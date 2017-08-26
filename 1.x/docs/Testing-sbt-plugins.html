@@ -54,7 +54,7 @@
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += { &quot;org.scala-sbt&quot; %% &quot;scripted-plugin&quot; % sbtVersion.value }
 </code></pre><p>Then add the following settings to <code>scripted.sbt</code>:
 </p><pre><code class="prettyprint lang-scala">scriptedLaunchOpts := { scriptedLaunchOpts.value ++
-  Seq(&quot;-Xmx1024M&quot;, &quot;-XX:MaxPermSize=256M&quot;, &quot;-Dplugin.version=&quot; + version.value)
+  Seq(&quot;-Xmx1024M&quot;, &quot;-Dplugin.version=&quot; + version.value)
 }
 scriptedBufferLog := false
 </code></pre><h3 id="step+3%3A+src%2Fsbt-test">step 3: src/sbt-test<a href="#step+3%3A+src%2Fsbt-test" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Make dir structure <code>src/sbt-test/&lt;test-group&gt;/&lt;test-name&gt;</code>. For starters, try something like <code>src/sbt-test/&lt;your-plugin-name&gt;/simple</code>.
