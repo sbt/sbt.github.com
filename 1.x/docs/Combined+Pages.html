@@ -7855,11 +7855,6 @@ arguments, the <code>!</code> method sends output to standard output and standar
 error. You can pass a <code>Logger</code> to the <code>!</code> method to send output to the
 <code>Logger</code>:
 </p><pre><code class="prettyprint lang-scala">&quot;find project -name *.jar&quot; ! log
-</code></pre><p>Two alternative implicit conversions are from <code>scala.xml.Elem</code> or
-<code>List[String]</code> to <code>scala.sys.process.ProcessBuilder</code>. These are useful
-for constructing commands. An example of the first variant from the
-android plugin:
-</p><pre><code class="prettyprint lang-scala">&lt;x&gt; {dxPath.absolutePath} --dex --output={classesDexPath.absolutePath} {classesMinJarPath.absolutePath}&lt;/x&gt; !
 </code></pre><p>If you need to set the working directory or modify the environment, call
 <code>scala.sys.process.Process</code> explicitly, passing the command sequence
 (command and argument list) or command string first and the working
