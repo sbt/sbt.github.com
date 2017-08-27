@@ -13003,9 +13003,10 @@ object Dependencies {
   val scalatest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.0.1&quot;
 }
 </code></pre><p>These files can be used mange library dependencies in one place.
-</p><h3 id="project%2FShellPrompPlugin.scala">project/ShellPrompPlugin.scala<a href="#project%2FShellPrompPlugin.scala" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>When you want to implement custom commands or tasks, you can organize your build by defining an one-off auto plugin.
+</p><h3 id="project%2FShellPromptPlugin.scala">project/ShellPromptPlugin.scala<a href="#project%2FShellPromptPlugin.scala" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>When you want to implement custom commands or tasks, you can organize your build by defining an one-off auto plugin.
 </p><pre><code class="prettyprint lang-scala">import sbt._
 import Keys._
+import scala.sys.process._
 
 // Shell prompt which show the current project and git branch
 object ShellPromptPlugin extends AutoPlugin {
@@ -13014,12 +13015,12 @@ object ShellPromptPlugin extends AutoPlugin {
     shellPrompt := buildShellPrompt
   )
   val devnull: ProcessLogger = new ProcessLogger {
-    def info (s: =&gt; String) {}
-    def error (s: =&gt; String) { }
+    def out(s: =&gt; String) {}
+    def err(s: =&gt; String) { }
     def buffer[T] (f: =&gt; T): T = f
   }
   def currBranch =
-    (&quot;git status -sb&quot; lines_! devnull headOption)
+    (&quot;git status -sb&quot; lineStream_! devnull headOption)
       .getOrElse(&quot;-&quot;).stripPrefix(&quot;## &quot;)
   val buildShellPrompt: State =&gt; String = {
     case (state: State) =&gt;
