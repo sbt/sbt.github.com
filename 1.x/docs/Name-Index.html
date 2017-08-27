@@ -96,13 +96,6 @@ user input, producing a task to run.
 </li><li><a href="../api/sbt/Task.html">Task</a> is the type of a task. A task is an
 action that runs on demand. This is in contrast to a setting, which
 is run once at project initialization.
-</li></ul><h4 id="Process">Process<a href="#Process" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>A <a href="../api/sbt/ProcessBuilder.html">ProcessBuilder</a> is the type
-used to define a process. It provides combinators for building up
-processes from smaller processes.
-</li><li>A <a href="../api/sbt/Process.html">Process</a> represents the actual forked
-process.
-</li><li>The <a href="../api/sbt/Process$.html">Process companion object</a> provides
-methods for constructing primitive processes.
 </li></ul><h4 id="Build+Structure">Build Structure<a href="#Build+Structure" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li><a href="../api/sbt/Build.html">Build</a> is the trait implemented for a
 <a href="Full-Def.html">.scala build definition</a>, which defines project
 relationships and settings.
@@ -187,21 +180,6 @@ doesn’t match the input.
 </li><li><code>examples</code>, <code>token</code> Tab completion
 </li><li><code>!!!</code> Provides an error message to use when the original parser
 doesn’t match the input.
-</li></ul><h4 id="Processes">Processes<a href="#Processes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>These methods are used to
-<a href="Process.html">fork external processes</a>. Note that this API
-has been included in the Scala standard library for version 2.9.
-<a href="../api/sbt/ProcessBuilder.html">ProcessBuilder</a> is the builder type
-and <a href="../api/sbt/Process.html">Process</a> is the type representing the
-actual forked process. The methods to combine processes start with <code>#</code>
-so that they share the same precedence.
-</p><ul><li><code>run</code>, <code>!</code>, <code>!!</code>, <code>!&lt;</code>, <code>lines</code>, <code>lines_!</code> are different ways to
-start a process once it has been defined. The lines variants produce
-a Stream[String] to obtain the output lines.
-</li><li><code>#&lt;</code>, <code>#&lt;&lt;</code>, <code>#&gt;</code> are used to get input for a process from a source
-or send the output of a process to a sink.
-</li><li><code>#|</code> is used to pipe output from one process into the input of
-another.
-</li><li><code>#||</code>, <code>#&amp;&amp;</code>, <code>###</code> sequence processes in different ways.
 </li></ul><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>
