@@ -3919,8 +3919,24 @@ your plugin to the list.
 
 #### Web and frontend development plugins
 
-- [Play Framework](https://www.playframework.com/) <!-- 9597 stars -->
-- [Scala.js](https://www.scala-js.org/) <!-- 3053 stars -->
+- Play Framework (Reactive web framework for Java and Scala):
+    <https://www.playframework.com/> <!-- 9671 stars -->
+- Scala.js (the Scala to JavaScript compiler):
+    <https://www.scala-js.org/> <!-- 3085 stars -->
+- sbt-web (Library for building sbt plugins for the web):
+    <https://github.com/sbt/sbt-web> <!-- 314 stars -->
+- sbt-less (sbt-web plugin for LESS compilation):
+    <https://github.com/sbt/sbt-less> <!-- 34 stars -->
+- sbt-js-engine (Library for plugging node base asset compilers into sbt-web):
+    <https://github.com/sbt/sbt-js-engine> <!-- 33 stars -->
+- sbt-uglify (sbt-web plugin for uglify):
+    <https://github.com/sbt/sbt-uglify> <!-- 21 stars -->
+- sbt-digest (sbt-web plugin for digesting assets):
+    <https://github.com/sbt/sbt-digest> <!-- 17 stars -->
+- sbt-gzip (sbt-web plugin for gzipping assets):
+    <https://github.com/sbt/sbt-gzip> <!-- 15 stars -->
+- sbt-stylus (sbt-web plugin for Stylus compilation):
+    <https://github.com/sbt/sbt-stylus> <!-- 2 stars -->
 
 #### Database plugins
 
@@ -9175,7 +9191,7 @@ allowed. For example, in a `.sbt` build definition:
 crossScalaVersions := Seq("2.8.2", "2.9.2", "2.10.0")
 ```
 
-To build against all versions listed in `build.scala.versions`, prefix
+To build against all versions listed in `crossScalaVersions`, prefix
 the action to run with `+`. For example:
 
 ```
@@ -13605,19 +13621,15 @@ libraryDependencies +=
 See [ModuleID](../api/sbt/ModuleID.html) for API details.
 
 In certain cases a transitive dependency should be exluded from
-all dependencies. This can be achieved by setting up `SbtExclusionRules`
+all dependencies. This can be achieved by setting up `ExclusionRules`
 in `excludeDependencies`. 
 
 ```scala
 excludeDependencies ++= Seq(
   // commons-logging is replaced by jcl-over-slf4j
-  SbtExclusionRule("commons-logging", "commons-logging")
+  ExclusionRule("commons-logging", "commons-logging")
 )
 ```
-
-Available since sbt 0.13.9.
-
-See [SbtExclusionRule](../api/sbt/SbtExclusionRule.html) for API details.
 
 ##### Download Sources
 
