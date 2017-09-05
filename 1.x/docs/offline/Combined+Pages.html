@@ -2608,6 +2608,8 @@ your plugin to the list.
 <a href="https://github.com/sbt/sbt-bintray">https://github.com/sbt/sbt-bintray</a> <!-- 134 stars -->
 </li><li>sbt-pgp (PGP signing plugin, can generate keys too):
 <a href="https://github.com/sbt/sbt-pgp">https://github.com/sbt/sbt-pgp</a> <!-- 72 stars -->
+</li><li>sbt-deploy (generates fat jars with launch scripts and configurations, ideal for distribution):
+<a href="https://github.com/amanjpro/sbt-deploy-plugin">https://github.com/amanjpro/sbt-deploy-plugin</a>
 </li></ul><h4 id="Deployment+integration+plugins">Deployment integration plugins<a href="#Deployment+integration+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4>…
 <h4 id="Utility+and+system+plugins">Utility and system plugins<a href="#Utility+and+system+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>sbt-git (executes git commands):
 <a href="https://github.com/sbt/sbt-git">https://github.com/sbt/sbt-git</a> <!-- 223 stars -->
@@ -5968,7 +5970,7 @@ library to the dependency’s name. For example:
 <code>crossScalaVersions</code> setting. Versions of Scala 2.8.0 or later are
 allowed. For example, in a <code>.sbt</code> build definition:
 </p><pre><code class="prettyprint lang-scala">crossScalaVersions := Seq(&quot;2.8.2&quot;, &quot;2.9.2&quot;, &quot;2.10.0&quot;)
-</code></pre><p>To build against all versions listed in <code>build.scala.versions</code>, prefix
+</code></pre><p>To build against all versions listed in <code>crossScalaVersions</code>, prefix
 the action to run with <code>+</code>. For example:
 </p><pre><code class="">&gt; + package
 </code></pre><p>A typical way to use this feature is to do development on a single Scala
@@ -11069,7 +11071,7 @@ built from source and used on the classpath.
 </p><p>Edit <code>project/plugins.sbt</code>
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).dependsOn(assemblyPlugin)
 
-lazy val assemblyPlugin = uri(&quot;git://github.com/sbt/sbt-assembly&quot;)
+lazy val assemblyPlugin = RootProject(uri(&quot;git://github.com/sbt/sbt-assembly&quot;))
 </code></pre><p>If sbt is running, run <code>reload</code>.
 </p><p>Note that this approach can be useful used when developing a plugin. A
 project that uses the plugin will rebuild the plugin on <code>reload</code>. This

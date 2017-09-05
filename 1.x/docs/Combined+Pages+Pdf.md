@@ -3882,6 +3882,8 @@ your plugin to the list.
     <https://github.com/sbt/sbt-bintray> <!-- 134 stars -->
 - sbt-pgp (PGP signing plugin, can generate keys too):
     <https://github.com/sbt/sbt-pgp> <!-- 72 stars -->
+- sbt-deploy (generates fat jars with launch scripts and configurations, ideal for distribution):
+    <https://github.com/amanjpro/sbt-deploy-plugin>
 
 #### Deployment integration plugins
 
@@ -9196,7 +9198,7 @@ allowed. For example, in a `.sbt` build definition:
 crossScalaVersions := Seq("2.8.2", "2.9.2", "2.10.0")
 ```
 
-To build against all versions listed in `build.scala.versions`, prefix
+To build against all versions listed in `crossScalaVersions`, prefix
 the action to run with `+`. For example:
 
 ```
@@ -17360,7 +17362,7 @@ Edit `project/plugins.sbt`
 ```scala
 lazy val root = (project in file(".")).dependsOn(assemblyPlugin)
 
-lazy val assemblyPlugin = uri("git://github.com/sbt/sbt-assembly")
+lazy val assemblyPlugin = RootProject(uri("git://github.com/sbt/sbt-assembly"))
 ```
 
 If sbt is running, run `reload`.

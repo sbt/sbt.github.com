@@ -354,7 +354,7 @@ built from source and used on the classpath.
 </p><p>Edit <code>project/plugins.sbt</code>
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).dependsOn(assemblyPlugin)
 
-lazy val assemblyPlugin = uri(&quot;git://github.com/sbt/sbt-assembly&quot;)
+lazy val assemblyPlugin = RootProject(uri(&quot;git://github.com/sbt/sbt-assembly&quot;))
 </code></pre><p>If sbt is running, run <code>reload</code>.
 </p><p>Note that this approach can be useful used when developing a plugin. A
 project that uses the plugin will rebuild the plugin on <code>reload</code>. This
