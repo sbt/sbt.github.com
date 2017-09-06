@@ -12715,10 +12715,12 @@ import Tests._
 {
   def groupByFirst(tests: Seq[TestDefinition]) =
     tests groupBy (_.name(0)) map {
-      case (letter, tests) => new Group(letter.toString, tests, SubProcess(Seq("-Dfirst.letter"+letter)))
+      case (letter, tests) =>
+        val options = ForkOptions().withRunJVMOptions(Vector("-Dfirst.letter"+letter))
+        new Group(letter.toString, tests, SubProcess(options))
     } toSeq
 
-    testGrouping in Test <<= groupByFirst( (definedTests in Test).value )
+    testGrouping in Test := groupByFirst( (definedTests in Test).value )
 }
 ```
 
@@ -16968,9 +16970,9 @@ Specifically,
     definition for the build definition (worth to repeat it here again:
     "sbt is recursive", remember?).
 
-The build definition classpath is searched for `sbt/sbt.plugins`
+The build definition classpath is searched for `sbt/sbt.autoplugins`
 descriptor files containing the names of
-`sbt.AutoPlugin` or `sbt.Plugin` implementations.
+`sbt.AutoPlugin` implementations.
 
 The `reload plugins` command changes the current build to
 the (root) project's `project/` build definition. This allows manipulating
@@ -22140,7 +22142,7 @@ We'll discuss the details in the next page.
   [pickling]: https://github.com/scala/pickling
   [utilrepo]: https://github.com/sbt/util
   [librarymanagementrepo]: https://github.com/sbt/librarymanagement
-  [incrementalcompilerrepo]: https://github.com/sbt/incrementalcompiler
+  [zincrepo]: https://github.com/sbt/zinc
   [launcherrepo]: https://github.com/sbt/launcher
   [conscriptrepo]: https://github.com/foundweekends/conscript
   [websiterepo]: https://github.com/sbt/website
@@ -22173,7 +22175,7 @@ the concepts and terminology around the library management system are also influ
 The responsibility of the library management API is to calculate the transitive dependency graph,
 and download artifacts from the given repositories.
 
-#### IncrementalCompiler API ([sbt/incrementalcompiler][incrementalcompilerrepo])
+#### IncrementalCompiler API ([sbt/zinc][zincrepo])
 
 Incremental compilation of Scala is so fundamental
 that we now seldom think of it as a feature of sbt.

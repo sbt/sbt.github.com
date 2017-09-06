@@ -8169,10 +8169,12 @@ available with <code>testGrouping</code> key. For example in build.sbt:
 {
   def groupByFirst(tests: Seq[TestDefinition]) =
     tests groupBy (_.name(0)) map {
-      case (letter, tests) =&gt; new Group(letter.toString, tests, SubProcess(Seq(&quot;-Dfirst.letter&quot;+letter)))
+      case (letter, tests) =&gt;
+        val options = ForkOptions().withRunJVMOptions(Vector(&quot;-Dfirst.letter&quot;+letter))
+        new Group(letter.toString, tests, SubProcess(options))
     } toSeq
 
-    testGrouping in Test &lt;&lt;= groupByFirst( (definedTests in Test).value )
+    testGrouping in Test := groupByFirst( (definedTests in Test).value )
 }
 </code></pre><p>The tests in a single group are run sequentially. Control the number of
 forked JVMs allowed to run at the same time by setting the limit on
@@ -10818,9 +10820,9 @@ a normal project) and will be available to the build
 definition sources. Think of project/project/ as the build
 definition for the build definition (worth to repeat it here again:
 “sbt is recursive”, remember?).
-</li></ol><p>The build definition classpath is searched for <code>sbt/sbt.plugins</code>
+</li></ol><p>The build definition classpath is searched for <code>sbt/sbt.autoplugins</code>
 descriptor files containing the names of
-<code>sbt.AutoPlugin</code> or <code>sbt.Plugin</code> implementations.
+<code>sbt.AutoPlugin</code> implementations.
 </p><p>The <code>reload plugins</code> command changes the current build to
 the (root) project’s <code>project/</code> build definition. This allows manipulating
 the build definition project like a normal project. <code>reload return</code> changes back
@@ -13905,7 +13907,7 @@ The responsibility of the serialization API is to turn values into JSON.
 the concepts and terminology around the library management system are also influenced by Ivy.
 The responsibility of the library management API is to calculate the transitive dependency graph,
 and download artifacts from the given repositories.
-</p><h4 id="IncrementalCompiler+API+%28%29">IncrementalCompiler API (<a href="https://github.com/sbt/incrementalcompiler">sbt/incrementalcompiler</a>)<a href="#IncrementalCompiler+API+%28%29" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Incremental compilation of Scala is so fundamental
+</p><h4 id="IncrementalCompiler+API+%28%29">IncrementalCompiler API (<a href="https://github.com/sbt/zinc">sbt/zinc</a>)<a href="#IncrementalCompiler+API+%28%29" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Incremental compilation of Scala is so fundamental
 that we now seldom think of it as a feature of sbt.
 There are number of subprojects/classes involved that are actually internal details,
 and we should use this opportunity to hide them.
