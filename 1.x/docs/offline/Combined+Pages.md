@@ -12715,12 +12715,10 @@ import Tests._
 {
   def groupByFirst(tests: Seq[TestDefinition]) =
     tests groupBy (_.name(0)) map {
-      case (letter, tests) =>
-        val options = ForkOptions().withRunJVMOptions(Vector("-Dfirst.letter"+letter))
-        new Group(letter.toString, tests, SubProcess(options))
+      case (letter, tests) => new Group(letter.toString, tests, SubProcess(Seq("-Dfirst.letter"+letter)))
     } toSeq
 
-    testGrouping in Test := groupByFirst( (definedTests in Test).value )
+    testGrouping in Test <<= groupByFirst( (definedTests in Test).value )
 }
 ```
 
@@ -22142,7 +22140,7 @@ We'll discuss the details in the next page.
   [pickling]: https://github.com/scala/pickling
   [utilrepo]: https://github.com/sbt/util
   [librarymanagementrepo]: https://github.com/sbt/librarymanagement
-  [zincrepo]: https://github.com/sbt/zinc
+  [incrementalcompilerrepo]: https://github.com/sbt/incrementalcompiler
   [launcherrepo]: https://github.com/sbt/launcher
   [conscriptrepo]: https://github.com/foundweekends/conscript
   [websiterepo]: https://github.com/sbt/website
@@ -22175,7 +22173,7 @@ the concepts and terminology around the library management system are also influ
 The responsibility of the library management API is to calculate the transitive dependency graph,
 and download artifacts from the given repositories.
 
-#### IncrementalCompiler API ([sbt/zinc][zincrepo])
+#### IncrementalCompiler API ([sbt/incrementalcompiler][incrementalcompilerrepo])
 
 Incremental compilation of Scala is so fundamental
 that we now seldom think of it as a feature of sbt.

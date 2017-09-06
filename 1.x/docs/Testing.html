@@ -149,12 +149,10 @@ available with <code>testGrouping</code> key. For example in build.sbt:
 {
   def groupByFirst(tests: Seq[TestDefinition]) =
     tests groupBy (_.name(0)) map {
-      case (letter, tests) =&gt;
-        val options = ForkOptions().withRunJVMOptions(Vector(&quot;-Dfirst.letter&quot;+letter))
-        new Group(letter.toString, tests, SubProcess(options))
+      case (letter, tests) =&gt; new Group(letter.toString, tests, SubProcess(Seq(&quot;-Dfirst.letter&quot;+letter)))
     } toSeq
 
-    testGrouping in Test := groupByFirst( (definedTests in Test).value )
+    testGrouping in Test &lt;&lt;= groupByFirst( (definedTests in Test).value )
 }
 </code></pre><p>The tests in a single group are run sequentially. Control the number of
 forked JVMs allowed to run at the same time by setting the limit on
