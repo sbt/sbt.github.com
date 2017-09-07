@@ -3936,6 +3936,8 @@ your plugin to the list.
     <https://github.com/sbt/sbt-less> <!-- 34 stars -->
 - sbt-js-engine (Library for plugging node base asset compilers into sbt-web):
     <https://github.com/sbt/sbt-js-engine> <!-- 33 stars -->
+- sbt-typescript (sbt-web plugin for Typescript compilation):
+    <https://github.com/joost-de-vries/sbt-typescript> <!-- 23 stars -->
 - sbt-uglify (sbt-web plugin for uglify):
     <https://github.com/sbt/sbt-uglify> <!-- 21 stars -->
 - sbt-digest (sbt-web plugin for digesting assets):
@@ -12720,10 +12722,12 @@ import Tests._
 {
   def groupByFirst(tests: Seq[TestDefinition]) =
     tests groupBy (_.name(0)) map {
-      case (letter, tests) => new Group(letter.toString, tests, SubProcess(Seq("-Dfirst.letter"+letter)))
+      case (letter, tests) =>
+        val options = ForkOptions().withRunJVMOptions(Vector("-Dfirst.letter"+letter))
+        new Group(letter.toString, tests, SubProcess(options))
     } toSeq
 
-    testGrouping in Test <<= groupByFirst( (definedTests in Test).value )
+    testGrouping in Test := groupByFirst( (definedTests in Test).value )
 }
 ```
 
@@ -13917,11 +13921,13 @@ not used on normal classpaths. For example, your project might use a
 it in your jar by modifying `resources`. For example:
 
 ```scala
-ivyConfigurations += config("js") hide
+val JS = config("js") hide
 
-libraryDependencies += "jquery" % "jquery" % "1.3.2" % "js->default" from "https://jqueryjs.googlecode.com/files/jquery-1.3.2.min.js"
+ivyConfigurations += JS
 
-resources ++= update.value.select(configurationFilter("js"))
+libraryDependencies += "jquery" % "jquery" % "3.2.1" % "js->default" from "https://code.jquery.com/jquery-3.2.1.min.js"
+
+resources in Compile ++= update.value.select(configurationFilter("js"))
 ```
 
 The `config` method defines a new configuration with name `"js"` and
@@ -22145,7 +22151,7 @@ We'll discuss the details in the next page.
   [pickling]: https://github.com/scala/pickling
   [utilrepo]: https://github.com/sbt/util
   [librarymanagementrepo]: https://github.com/sbt/librarymanagement
-  [incrementalcompilerrepo]: https://github.com/sbt/incrementalcompiler
+  [zincrepo]: https://github.com/sbt/zinc
   [launcherrepo]: https://github.com/sbt/launcher
   [conscriptrepo]: https://github.com/foundweekends/conscript
   [websiterepo]: https://github.com/sbt/website
@@ -22178,7 +22184,7 @@ the concepts and terminology around the library management system are also influ
 The responsibility of the library management API is to calculate the transitive dependency graph,
 and download artifacts from the given repositories.
 
-#### IncrementalCompiler API ([sbt/incrementalcompiler][incrementalcompilerrepo])
+#### IncrementalCompiler API ([sbt/zinc][zincrepo])
 
 Incremental compilation of Scala is so fundamental
 that we now seldom think of it as a feature of sbt.

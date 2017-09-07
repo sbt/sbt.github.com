@@ -2647,6 +2647,8 @@ your plugin to the list.
 <a href="https://github.com/sbt/sbt-less">https://github.com/sbt/sbt-less</a> <!-- 34 stars -->
 </li><li>sbt-js-engine (Library for plugging node base asset compilers into sbt-web):
 <a href="https://github.com/sbt/sbt-js-engine">https://github.com/sbt/sbt-js-engine</a> <!-- 33 stars -->
+</li><li>sbt-typescript (sbt-web plugin for Typescript compilation):
+<a href="https://github.com/joost-de-vries/sbt-typescript">https://github.com/joost-de-vries/sbt-typescript</a> <!-- 23 stars -->
 </li><li>sbt-uglify (sbt-web plugin for uglify):
 <a href="https://github.com/sbt/sbt-uglify">https://github.com/sbt/sbt-uglify</a> <!-- 21 stars -->
 </li><li>sbt-digest (sbt-web plugin for digesting assets):
@@ -8169,10 +8171,12 @@ available with <code>testGrouping</code> key. For example in build.sbt:
 {
   def groupByFirst(tests: Seq[TestDefinition]) =
     tests groupBy (_.name(0)) map {
-      case (letter, tests) =&gt; new Group(letter.toString, tests, SubProcess(Seq(&quot;-Dfirst.letter&quot;+letter)))
+      case (letter, tests) =&gt;
+        val options = ForkOptions().withRunJVMOptions(Vector(&quot;-Dfirst.letter&quot;+letter))
+        new Group(letter.toString, tests, SubProcess(options))
     } toSeq
 
-    testGrouping in Test &lt;&lt;= groupByFirst( (definedTests in Test).value )
+    testGrouping in Test := groupByFirst( (definedTests in Test).value )
 }
 </code></pre><p>The tests in a single group are run sequentially. Control the number of
 forked JVMs allowed to run at the same time by setting the limit on
@@ -8876,11 +8880,13 @@ repositories will use the <code>&quot;compile&quot;</code> configuration.
 not used on normal classpaths. For example, your project might use a
 <code>&quot;js&quot;</code> configuration to automatically download jQuery and then include
 it in your jar by modifying <code>resources</code>. For example:
-</p><pre><code class="prettyprint lang-scala">ivyConfigurations += config(&quot;js&quot;) hide
+</p><pre><code class="prettyprint lang-scala">val JS = config(&quot;js&quot;) hide
 
-libraryDependencies += &quot;jquery&quot; % &quot;jquery&quot; % &quot;1.3.2&quot; % &quot;js-&gt;default&quot; from &quot;https://jqueryjs.googlecode.com/files/jquery-1.3.2.min.js&quot;
+ivyConfigurations += JS
 
-resources ++= update.value.select(configurationFilter(&quot;js&quot;))
+libraryDependencies += &quot;jquery&quot; % &quot;jquery&quot; % &quot;3.2.1&quot; % &quot;js-&gt;default&quot; from &quot;https://code.jquery.com/jquery-3.2.1.min.js&quot;
+
+resources in Compile ++= update.value.select(configurationFilter(&quot;js&quot;))
 </code></pre><p>The <code>config</code> method defines a new configuration with name <code>&quot;js&quot;</code> and
 makes it private to the project so that it is not used for publishing.
 See <a href="Update-Report.html">Update Report</a> for more information on selecting
@@ -13905,7 +13911,7 @@ The responsibility of the serialization API is to turn values into JSON.
 the concepts and terminology around the library management system are also influenced by Ivy.
 The responsibility of the library management API is to calculate the transitive dependency graph,
 and download artifacts from the given repositories.
-</p><h4 id="IncrementalCompiler+API+%28%29">IncrementalCompiler API (<a href="https://github.com/sbt/incrementalcompiler">sbt/incrementalcompiler</a>)<a href="#IncrementalCompiler+API+%28%29" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Incremental compilation of Scala is so fundamental
+</p><h4 id="IncrementalCompiler+API+%28%29">IncrementalCompiler API (<a href="https://github.com/sbt/zinc">sbt/zinc</a>)<a href="#IncrementalCompiler+API+%28%29" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Incremental compilation of Scala is so fundamental
 that we now seldom think of it as a feature of sbt.
 There are number of subprojects/classes involved that are actually internal details,
 and we should use this opportunity to hide them.

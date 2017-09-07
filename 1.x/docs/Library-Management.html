@@ -364,11 +364,13 @@ repositories will use the <code>&quot;compile&quot;</code> configuration.
 not used on normal classpaths. For example, your project might use a
 <code>&quot;js&quot;</code> configuration to automatically download jQuery and then include
 it in your jar by modifying <code>resources</code>. For example:
-</p><pre><code class="prettyprint lang-scala">ivyConfigurations += config(&quot;js&quot;) hide
+</p><pre><code class="prettyprint lang-scala">val JS = config(&quot;js&quot;) hide
 
-libraryDependencies += &quot;jquery&quot; % &quot;jquery&quot; % &quot;1.3.2&quot; % &quot;js-&gt;default&quot; from &quot;https://jqueryjs.googlecode.com/files/jquery-1.3.2.min.js&quot;
+ivyConfigurations += JS
 
-resources ++= update.value.select(configurationFilter(&quot;js&quot;))
+libraryDependencies += &quot;jquery&quot; % &quot;jquery&quot; % &quot;3.2.1&quot; % &quot;js-&gt;default&quot; from &quot;https://code.jquery.com/jquery-3.2.1.min.js&quot;
+
+resources in Compile ++= update.value.select(configurationFilter(&quot;js&quot;))
 </code></pre><p>The <code>config</code> method defines a new configuration with name <code>&quot;js&quot;</code> and
 makes it private to the project so that it is not used for publishing.
 See <a href="Update-Report.html">Update Report</a> for more information on selecting
