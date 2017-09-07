@@ -131,9 +131,9 @@ the command line followed by <code>shell</code>. For example,
 </code></pre><p>This runs <code>clean</code> and then <code>compile</code> before entering the interactive
 prompt. If either <code>clean</code> or <code>compile</code> fails, sbt will exit without
 going to the prompt. To enter the prompt whether or not these initial
-commands succeed, prepend <code>-shell</code>, which means to run <code>shell</code> if any
+commands succeed, prepend <code>&quot;onFailure shell&quot;</code>, which means to run <code>shell</code> if any
 command fails. For example,
-</p><pre><code class="">$ sbt -shell clean compile shell
+</p><pre><code class="">$ sbt &quot;onFailure shell&quot; clean compile shell
 </code></pre><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>
