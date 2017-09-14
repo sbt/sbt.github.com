@@ -43,18 +43,19 @@
           </a>
         <div class="container contentswrapper">
           <div class="span-16 prepend-1 append-1 contents">
-            <h2 id="Define+Custom+Tasks">Define Custom Tasks<a href="#Define+Custom+Tasks" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Define+a+Task+that+runs+tests+in+specific+sub-projects">Define a Task that runs tests in specific sub-projects<a href="#Define+a+Task+that+runs+tests+in+specific+sub-projects" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Consider a hypothetical multi-build project with 3 subprojects. The following defines a task <code>myTestTask</code> that will 
+            <h2 id="Define+Custom+Tasks">Define Custom Tasks<a href="#Define+Custom+Tasks" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Define+a+Task+that+runs+tests+in+specific+sub-projects">Define a Task that runs tests in specific sub-projects<a href="#Define+a+Task+that+runs+tests+in+specific+sub-projects" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Consider a hypothetical multi-build project with 3 subprojects. The following defines a task <code>myTestTask</code> that will
 run the <code>test</code> Task in specific subprojects  <code>core</code> and <code>tools</code> but not <code>client</code>:
-</p><p>```
-lazy val core = project.in(file(”./core”))
-</p><p>lazy val tools = project.in(file(”./tools”))
-</p><p>lazy val client = project.in(file(”./client”))
-</p><p>lazy val myTestTask = TaskKey<a href="&quot;my-test-task&quot;">Unit</a>
-</p><p>myTestTask &lt;&lt;= Seq(
+</p><pre><code class="prettyprint lang-scala">lazy val core = project.in(file(&quot;./core&quot;))
+lazy val tools = project.in(file(&quot;./tools&quot;))
+lazy val client = project.in(file(&quot;./client&quot;))
+
+lazy val myTestTask = TaskKey[Unit](&quot;my-test-task&quot;)
+
+myTestTask &lt;&lt;= Seq(
   test in (core, Test)
   test in (tools, Test)
 ).dependOn
-```</p><div class="bottom nav span-16">
+</code></pre><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>
                         <a href="Howto-Startup.html"> How to take an action on startup </a>                        
