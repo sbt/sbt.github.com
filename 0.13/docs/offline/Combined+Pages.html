@@ -12495,18 +12495,19 @@ dependencies).
 </code></pre><a name="interval"></a><h3 id="Set+the+time+interval+between+checks+for+changes+to+sources">Set the time interval between checks for changes to sources<a href="#Set+the+time+interval+between+checks+for+changes+to+sources" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>pollInterval</code> selects the interval between polling for changes in
 milliseconds. The default value is <code>500 ms</code>. To change it to <code>1 s</code>,
 </p><pre><code class="prettyprint lang-scala">pollInterval := 1000 // in ms
-</code></pre><h2 id="Define+Custom+Tasks">Define Custom Tasks<a href="#Define+Custom+Tasks" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Define+a+Task+that+runs+tests+in+specific+sub-projects">Define a Task that runs tests in specific sub-projects<a href="#Define+a+Task+that+runs+tests+in+specific+sub-projects" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Consider a hypothetical multi-build project with 3 subprojects. The following defines a task <code>myTestTask</code> that will 
+</code></pre><h2 id="Define+Custom+Tasks">Define Custom Tasks<a href="#Define+Custom+Tasks" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Define+a+Task+that+runs+tests+in+specific+sub-projects">Define a Task that runs tests in specific sub-projects<a href="#Define+a+Task+that+runs+tests+in+specific+sub-projects" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Consider a hypothetical multi-build project with 3 subprojects. The following defines a task <code>myTestTask</code> that will
 run the <code>test</code> Task in specific subprojects  <code>core</code> and <code>tools</code> but not <code>client</code>:
-</p><p>```
-lazy val core = project.in(file(”./core”))
-</p><p>lazy val tools = project.in(file(”./tools”))
-</p><p>lazy val client = project.in(file(”./client”))
-</p><p>lazy val myTestTask = TaskKey<a href="&quot;my-test-task&quot;">Unit</a>
-</p><p>myTestTask &lt;&lt;= Seq(
+</p><pre><code class="prettyprint lang-scala">lazy val core = project.in(file(&quot;./core&quot;))
+lazy val tools = project.in(file(&quot;./tools&quot;))
+lazy val client = project.in(file(&quot;./client&quot;))
+
+lazy val myTestTask = TaskKey[Unit](&quot;my-test-task&quot;)
+
+myTestTask &lt;&lt;= Seq(
   test in (core, Test)
   test in (tools, Test)
 ).dependOn
-```</p><h2 id="Sequencing">Sequencing<a href="#Sequencing" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>One of the most frequently asked questions is in the form of “how do I do X <em>and then</em> do Y in sbt”?
+</code></pre><h2 id="Sequencing">Sequencing<a href="#Sequencing" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>One of the most frequently asked questions is in the form of “how do I do X <em>and then</em> do Y in sbt”?
 </p><p>Generally speaking, that’s not how sbt tasks are set up. build.sbt is a DSL to define dependency graph of tasks. This is covered in <a href="Custom-Settings.html#Execution+semantics+of+tasks">Execution semantics of tasks</a>. So ideally, what you should do is define task Y yourself, and depend on the task X.
 </p><pre><code class="prettyprint lang-scala">taskY := {
   val x = taskX.value
