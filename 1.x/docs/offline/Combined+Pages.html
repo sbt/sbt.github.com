@@ -9985,8 +9985,9 @@ Scala and sbt version settings as well as the state. To use these
 settings, we need to wrap the Parser construction in <code>Def.setting</code> and
 get the setting values with the special <code>value</code> method:
 </p><pre><code class="prettyprint lang-scala">import complete.DefaultParsers._
+import complete.Parser
 
-val parser: Initialize[State =&gt; Parser[(String,String)]] =
+val parser: Def.Initialize[State =&gt; Parser[(String,String)]] =
 Def.setting {
   (state: State) =&gt;
     ( token(&quot;scala&quot; &lt;~ Space) ~ token(scalaVersion.value) ) |
