@@ -1,0 +1,231 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html>
+      <head>
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+        <title>sbt Reference Manual — 附录：.scala 构建定义</title>
+        <link rel="shortcut icon" href="../favicon.ico"/>
+        <link rel="stylesheet" href="../css/blueprint/screen.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/blueprint/grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="../css/blueprint/print.css" type="text/css" media="print"/> 
+        <!--[if lt IE 8]>
+          <link rel="stylesheet" href={ relativeBase + "css/blueprint/ie.css" } type="text/css" media="screen, projection"/>
+        <![endif]-->
+        <link rel="stylesheet" href="../css/pamflet.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamflet-print.css" type="text/css" media="print"/>
+        <link rel="stylesheet" href="../css/pamflet-grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-redmond.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-github.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-monokai.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamfletheight_80px_2em.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <script type="text/javascript" src="../js/jquery-1.6.2.min.js"></script>
+        <script type="text/javascript" src="../js/jquery.collapse.js"></script>
+        <script type="text/javascript" src="../js/pamflet.js"></script>
+        <script type="text/javascript">
+          Pamflet.page.language = 'zh-cn';
+        </script>
+        <script type="text/javascript" src="../js/prettify/prettify.js"></script><script type="text/javascript" src="../js/prettify/lang-scala.js"></script><link type="text/css" rel="stylesheet" href="../css/prettify.css"/><script type="text/javascript"><!--
+        window.onload=function() { prettyPrint(); };
+      --></script>
+        <link rel="stylesheet" href="../css/custom.css" type="text/css" media="screen, projection"/>
+        
+        <script type="text/javascript">
+              Pamflet.twitter = '#sbt #scala';
+            </script>
+      </head>
+      <body class="color_scheme-github">
+        <a class="page prev nav" href="Bare-Def.html">
+            <span class="space">&nbsp;</span>
+            <span class="flip arrow">&gt;</span>
+          </a><a class="page next nav" href="Contents+in+Depth.html">
+            <span class="space">&nbsp;</span>
+            <span class="arrow">&gt;</span>
+          </a>
+        <div class="container contentswrapper">
+          <div class="span-16 prepend-1 append-1 contents">
+            <h2 id="%E9%99%84%E5%BD%95%EF%BC%9A.scala+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">附录：.scala 构建定义<a href="#%E9%99%84%E5%BD%95%EF%BC%9A.scala+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>本页面描述了<code>.scala</code>构建定义的旧的风格。在以前的版本的sbt中，<code>.scala</code>是用来创建多项目构建定义的唯一方式，但sbt 0.13 添加了<a href="Basic-Def.html">多项目.sbt 生成定义</a>，这也是推荐的样式。
+</p><p>这里假设你已经阅读了之前的章节，尤其是 <a href="Basic-Def.html">.sbt 构建定义</a>和<a href="More-About-Settings.html">更多关于设置</a>。
+</p><h3 id="%E5%85%B3%E8%81%94+build.sbt+%E5%92%8C+Build.scala">关联 build.sbt 和 Build.scala<a href="#%E5%85%B3%E8%81%94+build.sbt+%E5%92%8C+Build.scala" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>为了融合<code>.sbt</code> 和 <code>.scala</code> 文件在你的构建定义中，你需要理解他们是如何关联的。
+</p><p>下面两个文件描述了这个过程。第一，如果你的项目在 hello 文件夹内，创建 <code>hello/project/Build.scala</code>：
+</p><pre><code class="prettyprint lang-scala">import sbt._
+import Keys._
+
+object HelloBuild extends Build {
+  val sampleKeyA = settingKey[String](&quot;demo key A&quot;)
+  val sampleKeyB = settingKey[String](&quot;demo key B&quot;)
+  val sampleKeyC = settingKey[String](&quot;demo key C&quot;)
+  val sampleKeyD = settingKey[String](&quot;demo key D&quot;)
+
+  override lazy val settings = super.settings ++
+    Seq(
+      sampleKeyA := &quot;A: in Build.settings in Build.scala&quot;,
+      resolvers := Seq()
+    )
+
+  lazy val root = Project(id = &quot;hello&quot;,
+    base = file(&quot;.&quot;),
+    settings = Seq(
+      sampleKeyB := &quot;B: in the root project settings in Build.scala&quot;
+    ))
+}
+</code></pre><p>现在，创建 <code>hello/build.sbt</code>：
+</p><pre><code class="prettyprint lang-scala">sampleKeyC in ThisBuild := &quot;C: in build.sbt scoped to ThisBuild&quot;
+
+sampleKeyD := &quot;D: in build.sbt&quot;
+</code></pre><p>打开 sbt 终端命令窗口。敲入 <code>inspect sampleKeyA</code>，你将会看到：
+</p><pre><code class="">[info] Setting: java.lang.String = A: in Build.settings in Build.scala
+[info] Provided by:
+[info]  {file:/home/hp/checkout/hello/}/*:sampleKeyA
+</code></pre><p>然后敲入 <code>inspect sampleKeyC</code>，你将会看到：
+</p><pre><code class="">[info] Setting: java.lang.String = C: in build.sbt scoped to ThisBuild
+[info] Provided by:
+[info]  {file:/home/hp/checkout/hello/}/*:sampleKeyC
+</code></pre><p>注意 “Provided by” 显示两个 value 具有相同作用范围。那是 <code>.sbt</code> 文件中的 <code>sampleKeyC in ThisBuild</code> 等同与放置在 <code>.scala</code> 文件 <code>Build.settings</code> 列表中的一个设置。sbt 会从两个地方抽取构建范围内的设置，来创建构建定义。
+</p><p>然后，<code>inspect sampleKeyB</code>：
+</p><pre><code class="">[info] Setting: java.lang.String = B: in the root project settings in Build.scala
+[info] Provided by:
+[info]  {file:/home/hp/checkout/hello/}hello/*:sampleKeyB
+</code></pre><p>注意 <code>sampleKeyB</code> 是被作用的这个项目：
+<code>({file:/home/hp/checkout/hello/}hello)</code> 而不是整个构建 <code>({file:/home/hp/checkout/hello/})</code>。
+</p><p>你应该已经猜测到了，<code>inspect sampleKeyD</code> 等同于 <code>sampleKeyB</code>：
+</p><pre><code class="">[info] Setting: java.lang.String = D: in build.sbt
+[info] Provided by:
+[info]  {file:/home/hp/checkout/hello/}hello/*:sampleKeyD
+</code></pre><p>sbt 从 <code>.sbt</code> 文件<em>附加</em>设置到 <code>Build.settings</code> 和 <code>Project.setting</code> 的设置，换句话说，<code>.sbt</code> 设置拥有优先权。
+尝试改变 <code>Build.scala</code>，使得它能设置健值 <code>sampleC</code> 或者 <code>sampleD</code>，他们已经在 <code>build.sbt</code> 设置过。<code>build.sbt</code> 中的设置应该能“赢”过 <code>Build.sbt</code>。
+</p><p>你也许会注意到另一要点：<code>sampleKeyC</code> 和 <code>sampleKeyD</code> 是可以在 <code>build.sbt</code> 内部获得的。这是因为 sbt 引入 <code>Build</code> 中的内容到 <code>.sbt</code> 文件中。在这种情况下，<code>import HelloBuild._</code> 是被隐含引入在 <code>build.sbt</code> 文件中。
+</p><p>总结：
+</p><ul><li>在 <code>.scala</code> 文件中，可以在 <code>Build.settings</code> 中增加设置，这些设置自动成为构建作用域。
+</li><li>在 <code>.scala</code> 文件中，可以在 <code>Project.settings</code> 中增加设置，这些设置自动成为工程作用域。
+</li><li>任何在 <code>.scala</code> 中的 <code>Build</code> 对象将会把它的内容导入到 <code>.sbt</code> 文件中。
+</li><li>在 <code>.sbt</code> 文件中的设置被 <em>追加</em> 到 <code>.scala</code> 中的设置。
+</li><li>在 <code>.sbt</code> 文件中的设置是在项目作用域里，除非你指定它在其他域。
+</li></ul><h3 id="%E4%BA%A4%E4%BA%92%E6%A8%A1%E5%BC%8F%E4%B8%AD%E7%9A%84%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E9%A1%B9%E7%9B%AE">交互模式中的构建定义项目<a href="#%E4%BA%A4%E4%BA%92%E6%A8%A1%E5%BC%8F%E4%B8%AD%E7%9A%84%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E9%A1%B9%E7%9B%AE" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>你现在可以切换到 sbt 命令行的交互模式，让在 <code>project/</code> 目录下的构建定义项目作为当前项目。可以输入 <code>reload plugins</code> 来达到目的。
+</p><pre><code class="">&gt; reload plugins
+[info] Set current project to default-a0e8e4 (in build file:/home/hp/checkout/hello/project/)
+&gt; show sources
+[info] ArrayBuffer(/home/hp/checkout/hello/project/Build.scala)
+&gt; reload return
+[info] Loading project definition from /home/hp/checkout/hello/project
+[info] Set current project to hello (in build file:/home/hp/checkout/hello/)
+&gt; show sources
+[info] ArrayBuffer(/home/hp/checkout/hello/hw.scala)
+&gt;
+</code></pre><p>如上所示，你可以用 <code>reload return</code> 离开构建定义项目，回到你平常的项目。
+</p><h3 id="%E6%8F%90%E9%86%92%EF%BC%9A%E5%AE%83%E6%80%BB%E6%98%AF%E4%B8%8D%E5%8F%AF%E5%8F%98%E7%9A%84">提醒：它总是不可变的<a href="#%E6%8F%90%E9%86%92%EF%BC%9A%E5%AE%83%E6%80%BB%E6%98%AF%E4%B8%8D%E5%8F%AF%E5%8F%98%E7%9A%84" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>认为在 <code>build.sbt</code> 的设置将被添加到 <code>Build</code> 和 <code>Project</code> 对象中的 <code>settings</code> 字段是错误的。取而代之的是，<code>Build</code> 和 <code>Project</code> 中的 <code>settings</code> 列表，以及 <code>build.sbt</code> 中的设置，被
+串连到另一个不可变的列表中，然后被 sbt 使用。该 <code>Build</code> 和 <code>Project</code> 对象是“不可变配置”形成完整构建定义的一部分。
+</p><p>事实上，也有设置的其他来源。他们被追加顺序如下：
+</p><ul><li>来自你的 <code>.scala</code> 设置文件中的 <code>Build.settings</code> 和 <code>Project.settings</code>。
+</li><li>你的用户账号全局设置；例如在 <code>~/.sbt/0.13/global.sbt</code> 中你可以定义影响你 <em>所有</em> 项目的设置。
+</li><li>插件注入的设置，参见接下来的<a href="Using-Plugins.html">使用插件</a>。
+</li><li>项目下 <code>.sbt</code> 文件中的设置。
+</li><li>构建定义项目（即 <code>project</code> 中的项目）有来自全局插件（<code>~/.sbt/0.13/plugins/</code>）的设置。<a href="Using-Plugins.html">使用插件</a>解释了更多的内容。
+</li></ul><p>后面的设置会覆盖前面的。全部的设置列表构成了完整的构建定义。
+</p><div class="bottom nav end span-16">
+                        <ul class="language-bar">
+        <li><a href="../Full-Def.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/Full-Def.html"><span class="lang-item lang-ja">日本語</span></a></li><li><a href="../zh-cn/Full-Def.html"><span class="lang-item lang-zh-cn">中文 (简体)</span></a></li>
+      </ul>
+                      </div><div class="tocwrapper show">
+      <a class="tochead nav" style="display: none" href="#toc">❦</a>
+      <a name="toc"></a>
+      <h4 class="toctitle">Contents</h4>
+      <div class="tocbody">
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">sbt 入门</a></div><ol class="toc"> <li><div><a href="Setup.html">安装 sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">在 Mac 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">在 Windows 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">在 Linux 上安装 sbt</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">目录结构</a></div></li><li><div><a href="Running.html">运行</a></div></li><li><div><a href="Basic-Def.html">.sbt 构建定义</a></div></li><li><div><a href="Scopes.html">Scope</a></div></li><li><div><a href="More-About-Settings.html">更多关于设置</a></div></li><li><div><a href="Library-Dependencies.html">库依赖</a></div></li><li><div><a href="Multi-Project.html">多项目构建</a></div></li><li><div><a href="Using-Plugins.html">使用插件</a></div></li><li><div><a href="Custom-Settings.html">自定义设置和任务</a></div></li><li><div><a href="Organizing-Build.html">组织构建</a></div></li><li><div><a href="Summary.html">总结</a></div></li><li><div><a href="Bare-Def.html">附录：Bare .sbt 构建定义</a></div></li><li><div class="current">附录：.scala 构建定义</div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+          </div>
+        </div>
+        <div class="header">
+          <link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
+<div class="container">
+    <div class="logo">
+      <a href="../../../index.html"><img src="../files/typesafe_sbt_svg.svg" alt="sbt"></a>
+    </div>
+    <div class="nav">
+      <a href="../../../documentation.html">Documentation</a>
+      <a href="../../../download.html">Download</a>
+      <a href="../../../community.html">Get Involved</a>
+      <a id="source-code" href="https://github.com/sbt/sbt"><img src="../files/github-logo-teal.png" alt="Source code"></a>
+      <a id="twitter" href="https://twitter.com/scala_sbt"><img src="../files/twitter-logo-teal.png" alt="sbt on Twitter"></a>
+    </div>
+    <script type="text/javascript" async>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-41449189-1', 'scala-sbt.org');
+    ga('send', 'pageview');
+    </script>
+    <script type="text/javascript" async>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-23127719-1', 'typesafe.com', {'allowLinker': true, 'name': 'tsTracker'});
+      ga('tsTracker.require', 'linker');
+      ga('tsTracker.linker:autoLink', ['typesafe.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org']);
+      ga('tsTracker.send', 'pageview');
+    </script>
+</div>
+        </div>
+        <div class="footer">
+          <div class="fw-wrapper navy-ltr support-strip">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="support-item">
+          <div class="support-icon">
+            <svg class="svg-icon svg-icon-chat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.5 85.2" enable-background="new 0 0 97.5 85.2"><path stroke="#fff" stroke-width="4.282" stroke-linecap="round" stroke-miterlimit="10" d="M27 29.5h-16.3c-4.7 0-8.6 3.9-8.6 8.6v25.7c0 4.7 3.9 8.6 8.6 8.6h2.7c.8 0 1.5.7 1.5 1.5v7.8c0 1.3 1.6 2 2.5 1l9.5-9.5c.5-.5 1.2-.8 2-.8h20.2c4.7 0 8.6-3.9 8.6-8.6v-7.8" fill="none"/><path fill="#fff" d="M85 0h-40c-6.9 0-12.5 5.6-12.5 12.5v33.4c0 2.2 1.8 4.1 4.1 4.1h29.9c.7 0 1.3.3 1.8.7l10 10c1.6 1.6 4.3.5 4.3-1.8v-6.5c0-1.4 1.1-2.5 2.5-2.5 6.9 0 12.5-5.6 12.5-12.5v-25c-.1-6.8-5.8-12.4-12.6-12.4z"/></svg>
+          </div>
+          <div class="support-detail">
+            <h2>Community Support</h2>
+            <a href="https://stackoverflow.com/questions/tagged/sbt">StackOverflow</a>
+          </div>
+        </div>
+        <div class="support-item">
+          <div class="support-icon">
+            <svg id="lightbend-icon-reverse" class="svg-icon svg-icon-lightbend-reverse" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 302 262"><title>lightbend-icon</title><g id="icon"><path d="M1,195v56a10,10,0,0,0,10,10H291a10,10,0,0,0,10-10V195a557.85,557.85,0,0,1-150,20A557.85,557.85,0,0,1,1,195Z" style="fill:#fff"/><path d="M291,1H11A10,10,0,0,0,1,11V176a539.94,539.94,0,0,0,150,21,539.94,539.94,0,0,0,150-21V11A10,10,0,0,0,291,1Z" style="fill:#fff"/></g></svg>
+          </div>
+          <div class="support-detail">
+            <h2>Commercial Support</h2>
+            <a href="https://www.lightbend.com/services/expert-support">Lightbend Subscription</a>
+            <a href="https://www.lightbend.com/services/training">Training</a>
+            <a href="https://www.lightbend.com/services/consulting">Consulting</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div><footer>
+  <div class="container footer">
+    <div class="row">
+      <div class="col-md-8 sbt">
+        <nav>
+          <a href="../../../index.html">
+            <img src="../files/typesafe_sbt_reverse_svg.svg" alt="sbt">
+          </a>
+          <a href="../../../documentation.html">Documentation</a>
+          <a href="../../../download.html">Download</a>
+          <a href="../../../community.html">Get Involved</a>
+        </nav>
+      </div>
+      <div class="col-md-4 text-right ts">
+        &copy; 2016-2017 Lightbend Inc.
+        <a href="https://www.lightbend.com">
+          <img src="files/lightbend-reverse.svg" alt="Lightbend, Inc.">
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+        </div>
+        
+        <div class="highlight-outer">
+              <div class="highlight-menu">
+                <ul>
+                  <li><button id="highlight-button-twitter"><img src="../img/twitter-bird-dark-bgs.png"/></button></li>
+                </ul>
+              </div>
+            </div>
+      </body>
+    </html>
