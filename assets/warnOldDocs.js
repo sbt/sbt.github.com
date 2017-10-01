@@ -81,7 +81,7 @@ function showVersionWarning(site, series) {
 
     $floatyWarning
         .append(
-            '<p><span style="font-weight: bold">This version of sbt (' + site.p + ' ' + version + ') is outdated and not supported! </span></p>' +
+            '<p><span style="font-weight: bold">This version of sbt (' + site.p + ' ' + version + ') is outdated! </span></p>' + // and not supported! </span></p>
             '<p>Please upgrade to the latest version in <a href="' + insteadSeries + '">' + instead + '</a> series as soon as possible.</p>' +
             '<p id="samePageLink"></p>');
     $.ajax({
