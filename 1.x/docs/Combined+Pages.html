@@ -7622,8 +7622,83 @@ object Usage {
       println(s)
    }
 }
-</code></pre><p>This can be then be run at the console:
-</p><p>```text
+</code></pre><p>This can be then run at the console:
+</p><pre><code class="">$ sbt
+&gt; macroSub/test:run
+scala.collection.immutable.List.apply[Int](1, 2, 3).reverse
+</code></pre><p>Actual tests can be defined and run as usual with <code>macro/test</code>.
+</p><p>The main project can use the macro in the same way that the tests do.
+For example,
+</p><p><code>core/src/main/scala/MainUsage.scala</code>:
+</p><pre><code class="prettyprint lang-scala">package demo
+
+object Usage {
+   def main(args: Array[String]) {
+      val s = Demo.desugar(List(6, 4, 5).sorted)
+      println(s)
+   }
+}
+</code></pre><pre><code class="">$ sbt
+&gt; core/run
+scala.collection.immutable.List.apply[Int](6, 4, 5).sorted[Int](math.this.Ordering.Int)
+</code></pre><h3 id="Common+Interface">Common Interface<a href="#Common+Interface" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Sometimes, the macro implementation and the macro usage should share
+some common code. In this case, declare another subproject for the
+common code and have the main project and the macro subproject depend on
+the new subproject. For example, the project definitions from above
+would look like:
+</p><pre><code class="prettyprint lang-scala">lazy val commonSettings = Seq(
+  scalaVersion := &quot;2.12.3&quot;,
+  organization := &quot;com.example&quot;
+)
+lazy val scalaReflect = Def.setting { &quot;org.scala-lang&quot; % &quot;scala-reflect&quot; % scalaVersion.value }
+
+lazy val core = (project in file(&quot;core&quot;))
+  .dependsOn(macroSub, util)
+  .settings(
+    commonSettings,
+    // other settings here
+  )
+
+lazy val macroSub = (project in file(&quot;macro&quot;))
+  .dependsOn(util)
+  .settings(
+    commonSettings,
+    libraryDependencies += scalaReflect.value
+    // other settings here
+  )
+
+lazy util = (project in file(&quot;util&quot;))
+  .settings(
+    commonSettings,
+    // other setting here
+  )
+</code></pre><p>Code in <code>util/src/main/scala/</code> is available for both the <code>macroSub</code> and
+<code>main</code> projects to use.
+</p><h3 id="Distribution">Distribution<a href="#Distribution" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To include the macro code with the core code, add the binary and source
+mappings from the macro subproject to the core project. And also
+macro subproject should be removed from core project dependency in
+publishing. For example, the <code>core</code> Project definition above would now
+look like:
+</p><pre><code class="prettyprint lang-scala">lazy val core = (project in file(&quot;core&quot;))
+  .dependsOn(macroSub % &quot;compile-internal, test-internal&quot;)
+  .settings(
+    commonSettings,
+    // include the macro classes and resources in the main jar
+    mappings in (Compile, packageBin) ++= mappings.in(macroSub, Compile, packageBin).value,
+    // include the macro sources in the main source jar
+    mappings in (Compile, packageSrc) ++= mappings.in(macroSub, Compile, packageSrc).value
+  )
+</code></pre><p>You may wish to disable publishing the macro implementation. This is
+done by overriding <code>publish</code> and <code>publishLocal</code> to do nothing:
+</p><pre><code class="prettyprint lang-scala">lazy val macroSub = (project in file(&quot;macro&quot;))
+  .settings(
+    commonSettings,
+    libraryDependencies += scalaReflect.value,
+    publish := {},
+    publishLocal := {}
+  )
+</code></pre><p>The techniques described here may also be used for the common interface
+described in the previous section.
 </p><h2 id="Paths">Paths<a href="#Paths" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>This page describes files, sequences of files, and file filters. The
 base type used is
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html">java.io.File</a>,
