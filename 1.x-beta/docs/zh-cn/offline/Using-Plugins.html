@@ -1,0 +1,214 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html manifest="pamflet.manifest">
+      <head>
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+        <title>sbt Reference Manual — 使用插件</title>
+        <link rel="shortcut icon" href="../favicon.ico"/>
+        <link rel="stylesheet" href="../css/blueprint/screen.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/blueprint/grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="../css/blueprint/print.css" type="text/css" media="print"/> 
+        <!--[if lt IE 8]>
+          <link rel="stylesheet" href={ relativeBase + "css/blueprint/ie.css" } type="text/css" media="screen, projection"/>
+        <![endif]-->
+        <link rel="stylesheet" href="../css/pamflet.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamflet-print.css" type="text/css" media="print"/>
+        <link rel="stylesheet" href="../css/pamflet-grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-redmond.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-github.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-monokai.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamfletheight_80px_2em.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <script type="text/javascript" src="../js/jquery-1.6.2.min.js"></script>
+        <script type="text/javascript" src="../js/jquery.collapse.js"></script>
+        <script type="text/javascript" src="../js/pamflet.js"></script>
+        <script type="text/javascript">
+          Pamflet.page.language = 'zh-cn';
+        </script>
+        <script type="text/javascript" src="../js/prettify/prettify.js"></script><script type="text/javascript" src="../js/prettify/lang-scala.js"></script><link type="text/css" rel="stylesheet" href="../css/prettify.css"/><script type="text/javascript"><!--
+        window.onload=function() { prettyPrint(); };
+      --></script>
+        <link rel="stylesheet" href="../css/custom.css" type="text/css" media="screen, projection"/>
+        
+        <script type="text/javascript">
+              Pamflet.twitter = '#sbt #scala';
+            </script>
+      </head>
+      <body class="color_scheme-github">
+        <a class="page prev nav" href="Multi-Project.html">
+            <span class="space">&nbsp;</span>
+            <span class="flip arrow">&gt;</span>
+          </a><a class="page next nav" href="Custom-Settings.html">
+            <span class="space">&nbsp;</span>
+            <span class="arrow">&gt;</span>
+          </a>
+        <div class="container contentswrapper">
+          <div class="span-16 prepend-1 append-1 contents">
+            <h2 id="%E4%BD%BF%E7%94%A8%E6%8F%92%E4%BB%B6">使用插件<a href="#%E4%BD%BF%E7%94%A8%E6%8F%92%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>请先阅读入门指南前面的内容，尤其需要在阅读本小节之前理解 <a href="Basic-Def.html">build.sbt</a> 和 <a href="Library-Dependencies.html">库依赖</a>。
+</p><h3 id="%E4%BB%80%E4%B9%88%E6%98%AF%E6%8F%92%E4%BB%B6">什么是插件<a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%8F%92%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>插件继承了构建定义，大多数通常是通过添加设置。新的设置可以是新的 task。例如，一个插件可以添加一个 <code>codeCoverage</code> task 来生成一个测试覆盖率报告。
+</p><h3 id="%E5%A3%B0%E6%98%8E%E4%B8%80%E4%B8%AA%E6%8F%92%E4%BB%B6">声明一个插件<a href="#%E5%A3%B0%E6%98%8E%E4%B8%80%E4%B8%AA%E6%8F%92%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>如果你的项目在 <code>hello</code> 目录下，而且你正在往构建定义中添加一个 sbt-site 插件，创建 <code>hello/project/site.sbt</code> 并且通过传递插件的 Ivy 模块 ID 声明插件依赖 给 <code>addSbtPlugin</code>：
+</p><pre><code class="prettyprint lang-scala">addSbtPlugin(&quot;com.typesafe.sbt&quot; % &quot;sbt-site&quot; % &quot;0.7.0&quot;)
+</code></pre><p>如果你添加 sbt-assembly，像下面这样创建 <code>hello/project/assembly.sbt</code> ：
+</p><pre><code class="prettyprint lang-scala">addSbtPlugin(&quot;com.eed3si9n&quot; % &quot;sbt-assembly&quot; % &quot;0.11.2&quot;)
+</code></pre><p>不是所有的插件都在同一个默认的仓库中，而且一个插件的文档会指导你添加能够找到它的仓库：
+</p><pre><code class="prettyprint lang-scala">resolvers += Resolver.sonatypeRepo(&quot;public&quot;)
+</code></pre><p>插件通常提供设置将它添加到项目并且开启插件功能。这些将在下一小节描述。
+</p><h3 id="%E5%90%AF%E7%94%A8%E5%92%8C%E7%A6%81%E7%94%A8%E8%87%AA%E5%8A%A8%E6%8F%92%E4%BB%B6">启用和禁用自动插件<a href="#%E5%90%AF%E7%94%A8%E5%92%8C%E7%A6%81%E7%94%A8%E8%87%AA%E5%8A%A8%E6%8F%92%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>一个插件能够声明它自己的设置被自动添加到构建定义中去，在这种情况下你不需要为添加它做任何事情。
+</p><p>作为 0.13.5 版本的 sbt，有一个新的特性叫<a href="../docs/Plugins.html">自动插件</a>，它能够在自动的、安全的、确保所有依赖都在项目里的前提下开启插件。很多自动插件应该能够自动开启，然而有些却需要显式开启。
+</p><p>如果你正在使用一个需要显示开启的自动插件，那么你需要添加这样的代码到你的 <code>build.sbt</code> 文件：
+</p><pre><code class="prettyprint lang-scala">lazy val util = (project in file(&quot;util&quot;))
+  .enablePlugins(FooPlugin, BarPlugin)
+  .settings(
+    name := &quot;hello-util&quot;
+  )
+</code></pre><p><code>enablePlugins</code> 方法允许项目显式定义它们需要使用的自动插件。
+</p><p>项目也可以使用 <code>disablePlugins</code> 方法排除掉一些插件。例如，如果我们希望能够从 <code>util</code> 中移除 <code>IvyPlugin</code> 插件的设置，我们将 <code>build.sbt</code> 修改如下：
+</p><pre><code class="prettyprint lang-scala">lazy val util = (project in file(&quot;util&quot;))
+  .enablePlugins(FooPlugin, BarPlugin)
+  .disablePlugins(plugins.IvyPlugin)
+  .settings(
+    name := &quot;hello-util&quot;
+  )
+</code></pre><p>自动插件会在文档中说明是否需要显示的开启。如果你对一个项目中开启了哪些插件好奇，只需要在 sbt 命令行中执行 <code>plugins</code> 命令。
+</p><p>例如：
+</p><pre><code class="">&gt; plugins
+In file:/home/jsuereth/projects/sbt/test-ivy-issues/
+        sbt.plugins.IvyPlugin: enabled in scala-sbt-org
+        sbt.plugins.JvmPlugin: enabled in scala-sbt-org
+        sbt.plugins.CorePlugin: enabled in scala-sbt-org
+        sbt.plugins.JUnitXmlReportPlugin: enabled in scala-sbt-org
+</code></pre><p>这里， <code>plugins</code> 的输出显示 sbt 默认的插件都被开启了。sbt 默认的设置通过3个插件提供：
+</p><ol><li><code>CorePlugin</code>: 提供对 task 的核心并行控制。
+</li><li><code>IvyPlugin</code>: 提供发布、解析模块的机制。
+</li><li><code>JvmPlugin</code>: 提供编译、测试、执行、打包 Java/Scala 项目的机制。
+</li></ol><p>另外，<code>JUnitXmlReportPlugin</code> 提供对生成 junit-xml 的试验性支持。
+</p><p>老的非自动的插件通常需要显示的添加设置，以致于<a href="Multi-Project.html">多项目构建</a>可以有不同的项目类型。插件的文档会指出如何配置它，但是特别是对于老的插件，这包含添加对插件必要的基本设置和自定义。
+</p><p>例如，对于 sbt-site 插件，为了在项目中开启它，需要创建包含如下内容的 <code>site.sbt</code> 文件来。
+</p><pre><code class="prettyprint lang-scala">site.settings
+</code></pre><p>如果构建定义了多个项目，往项目中直接添加如下内容替而代之：
+</p><pre><code class="prettyprint lang-scala">// 在 `util` 项目中不使用 site 插件
+lazy val util = (project in file(&quot;util&quot;))
+
+// 在`core` 项目中开启 site 插件
+lazy val core = (project in file(&quot;core&quot;))
+  .settings(site.settings)
+</code></pre><h3 id="%E5%85%A8%E5%B1%80%E6%8F%92%E4%BB%B6">全局插件<a href="#%E5%85%A8%E5%B1%80%E6%8F%92%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>可以一次给所有项目安装插件，只要在 <code>~/.sbt/1.0/plugins/</code> 中声明它们。<code>~/.sbt/1.0/plugins/</code> 是一个将自己的 classpath 导出给所有项目的 sbt 构建定义。
+概略地讲，在 <code>~/.sbt/1.0/plugins/</code> 中的任何 <code>.sbt</code> 或者 <code>.scala</code> 文件就和所有项目的 <code>project/</code> 目录下的一样。
+</p><p>为了一次给所有的项目添加插件，你可以创建 <code>~/.sbt/1.0/plugins//build.sbt</code> 并且添加 <code>addSbtPlugin()</code> 表达式。因为这样做会增加机器上的依赖，所以这个特性应该少用。
+参见<a href="../docs/Best-Practices.html#global-vs-local-plugins">最佳实践</a>。
+</p><h3 id="%E5%8F%AF%E7%94%A8%E7%9A%84%E6%8F%92%E4%BB%B6">可用的插件<a href="#%E5%8F%AF%E7%94%A8%E7%9A%84%E6%8F%92%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>这里有一个可用的<a href="../docs/Community-Plugins.html">插件列表</a>。
+</p><p>一些特别流行的插件如下：
+</p><ul><li>对 IDE 的支持（为了将 sbt 项目导入到 IDE）
+</li><li>对 web 框架的支持，例如<a href="https://github.com/earldouglas/xsbt-web-plugin">xsbt-web-plugin</a>。
+</li></ul><p>更多详细信息，包含开发插件的方法，参见<a href="../docs/Plugins.html">插件</a>。
+关于最佳实践，参见<a href="../docs/Plugins-Best-Practices.html">插件最佳实践</a>。
+</p><div class="bottom nav span-16">
+                        <em>Next Page</em>
+                        <span class="arrow">&gt;</span>
+                        <a href="Custom-Settings.html"> 自定义设置和任务 </a>                        
+                        <ul class="language-bar">
+        <li><a href="../Using-Plugins.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/Using-Plugins.html"><span class="lang-item lang-ja">日本語</span></a></li><li><a href="../zh-cn/Using-Plugins.html"><span class="lang-item lang-zh-cn">中文 (简体)</span></a></li>
+      </ul>
+                      </div><div class="tocwrapper show">
+      <a class="tochead nav" style="display: none" href="#toc">❦</a>
+      <a name="toc"></a>
+      <h4 class="toctitle">Contents</h4>
+      <div class="tocbody">
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">sbt 入门</a></div><ol class="toc"> <li><div><a href="Setup.html">安装 sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">在 Mac 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">在 Windows 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">在 Linux 上安装 sbt</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">目录结构</a></div></li><li><div><a href="Running.html">运行</a></div></li><li><div><a href="Basic-Def.html">.sbt 构建定义</a></div></li><li><div><a href="Scopes.html">Scope</a></div></li><li><div><a href="More-About-Settings.html">更多关于设置</a></div></li><li><div><a href="Library-Dependencies.html">库依赖</a></div></li><li><div><a href="Multi-Project.html">多项目构建</a></div></li><li><div class="current">使用插件</div></li><li><div><a href="Custom-Settings.html">自定义设置和任务</a></div></li><li><div><a href="Organizing-Build.html">组织构建</a></div></li><li><div><a href="Summary.html">总结</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+          </div>
+        </div>
+        <div class="header">
+          <link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
+<div class="container">
+    <div class="logo">
+      <a href="../../../index.html"><img src="../files/sbt-logo-100x56.png" alt="sbt"></a>
+    </div>
+    <div class="nav">
+      <a href="../../../documentation.html">Documentation</a>
+      <a href="../../../download.html">Download</a>
+      <a href="../../../community.html">Get Involved</a>
+      <a id="source-code" href="https://github.com/sbt/sbt"><img src="../files/github-logo-teal.png" alt="Source code"></a>
+      <a id="twitter" href="https://twitter.com/scala_sbt"><img src="../files/twitter-logo-teal.png" alt="sbt on Twitter"></a>
+    </div>
+    <script type="text/javascript" async>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-41449189-1', 'scala-sbt.org');
+    ga('send', 'pageview');
+    </script>
+    <script type="text/javascript" async>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-23127719-1', 'typesafe.com', {'allowLinker': true, 'name': 'tsTracker'});
+      ga('tsTracker.require', 'linker');
+      ga('tsTracker.linker:autoLink', ['typesafe.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org']);
+      ga('tsTracker.send', 'pageview');
+    </script>
+</div>
+        </div>
+        <div class="footer">
+          <div class="fw-wrapper navy-ltr support-strip">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="support-item">
+          <div class="support-icon">
+            <svg class="svg-icon svg-icon-chat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.5 85.2" enable-background="new 0 0 97.5 85.2"><path stroke="#fff" stroke-width="4.282" stroke-linecap="round" stroke-miterlimit="10" d="M27 29.5h-16.3c-4.7 0-8.6 3.9-8.6 8.6v25.7c0 4.7 3.9 8.6 8.6 8.6h2.7c.8 0 1.5.7 1.5 1.5v7.8c0 1.3 1.6 2 2.5 1l9.5-9.5c.5-.5 1.2-.8 2-.8h20.2c4.7 0 8.6-3.9 8.6-8.6v-7.8" fill="none"/><path fill="#fff" d="M85 0h-40c-6.9 0-12.5 5.6-12.5 12.5v33.4c0 2.2 1.8 4.1 4.1 4.1h29.9c.7 0 1.3.3 1.8.7l10 10c1.6 1.6 4.3.5 4.3-1.8v-6.5c0-1.4 1.1-2.5 2.5-2.5 6.9 0 12.5-5.6 12.5-12.5v-25c-.1-6.8-5.8-12.4-12.6-12.4z"/></svg>
+          </div>
+          <div class="support-detail">
+            <h2>Community Support</h2>
+            <a href="https://stackoverflow.com/questions/tagged/sbt">StackOverflow</a>
+          </div>
+        </div>
+        <div class="support-item">
+          <div class="support-icon">
+            <svg id="lightbend-icon-reverse" class="svg-icon svg-icon-lightbend-reverse" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 302 262"><title>lightbend-icon</title><g id="icon"><path d="M1,195v56a10,10,0,0,0,10,10H291a10,10,0,0,0,10-10V195a557.85,557.85,0,0,1-150,20A557.85,557.85,0,0,1,1,195Z" style="fill:#fff"/><path d="M291,1H11A10,10,0,0,0,1,11V176a539.94,539.94,0,0,0,150,21,539.94,539.94,0,0,0,150-21V11A10,10,0,0,0,291,1Z" style="fill:#fff"/></g></svg>
+          </div>
+          <div class="support-detail">
+            <h2>Commercial Support</h2>
+            <a href="https://www.lightbend.com/services/expert-support">Lightbend Subscription</a>
+            <a href="https://www.lightbend.com/services/training">Training</a>
+            <a href="https://www.lightbend.com/services/consulting">Consulting</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div><footer>
+  <div class="container footer">
+    <div class="row">
+      <div class="col-md-8 sbt">
+        <nav>
+          <a href="../../../index.html">
+            <img src="../files/typesafe_sbt_reverse_svg.svg" alt="sbt">
+          </a>
+          <a href="../../../documentation.html">Documentation</a>
+          <a href="../../../download.html">Download</a>
+          <a href="../../../community.html">Get Involved</a>
+        </nav>
+      </div>
+      <div class="col-md-4 text-right ts">
+        &copy; 2016-2017 Lightbend Inc.
+        <a href="https://www.lightbend.com">
+          <img src="files/lightbend-reverse.svg" alt="Lightbend, Inc.">
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+        </div>
+        
+        <div class="highlight-outer">
+              <div class="highlight-menu">
+                <ul>
+                  <li><button id="highlight-button-twitter"><img src="../img/twitter-bird-dark-bgs.png"/></button></li>
+                </ul>
+              </div>
+            </div>
+      </body>
+    </html>

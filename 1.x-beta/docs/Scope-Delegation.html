@@ -1,0 +1,466 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html>
+      <head>
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+        <title>sbt Reference Manual — Scope delegation (.value lookup)</title>
+        <link rel="shortcut icon" href="favicon.ico"/>
+        <link rel="stylesheet" href="css/blueprint/screen.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/blueprint/grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="css/blueprint/print.css" type="text/css" media="print"/> 
+        <!--[if lt IE 8]>
+          <link rel="stylesheet" href={ relativeBase + "css/blueprint/ie.css" } type="text/css" media="screen, projection"/>
+        <![endif]-->
+        <link rel="stylesheet" href="css/pamflet.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/pamflet-print.css" type="text/css" media="print"/>
+        <link rel="stylesheet" href="css/pamflet-grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="css/color_scheme-redmond.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/color_scheme-github.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/color_scheme-monokai.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/pamfletheight_80px_2em.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <script type="text/javascript" src="js/jquery-1.6.2.min.js"></script>
+        <script type="text/javascript" src="js/jquery.collapse.js"></script>
+        <script type="text/javascript" src="js/pamflet.js"></script>
+        <script type="text/javascript">
+          Pamflet.page.language = 'en';
+        </script>
+        <script type="text/javascript" src="js/prettify/prettify.js"></script><script type="text/javascript" src="js/prettify/lang-scala.js"></script><link type="text/css" rel="stylesheet" href="css/prettify.css"/><script type="text/javascript"><!--
+        window.onload=function() { prettyPrint(); };
+      --></script>
+        <link rel="stylesheet" href="css/custom.css" type="text/css" media="screen, projection"/>
+        
+        <script type="text/javascript">
+              Pamflet.twitter = '#sbt #scala';
+            </script>
+      </head>
+      <body class="color_scheme-github">
+        <a class="page prev nav" href="Appending-Values.html">
+            <span class="space">&nbsp;</span>
+            <span class="flip arrow">&gt;</span>
+          </a><a class="page next nav" href="Library-Dependencies.html">
+            <span class="space">&nbsp;</span>
+            <span class="arrow">&gt;</span>
+          </a>
+        <div class="container contentswrapper">
+          <div class="span-16 prepend-1 append-1 contents">
+            <h2 id="Scope+delegation+%28.value+lookup%29">Scope delegation (.value lookup)<a href="#Scope+delegation+%28.value+lookup%29" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>This page describes scope delegation. It assumes you’ve read and understood the
+previous pages, <a href="Basic-Def.html">build definition</a> and <a href="Scopes.html">scopes</a>.
+</p><p>Now that we’ve covered all the details of scoping, we can explain the <code>.value</code>
+lookup in detail. It’s ok to skip this section if this is your first time reading this page.
+</p><p>Because the term <code>Global</code> is used for both a scope component <code>*</code>,
+and as shorthand for the scope <code>(Global, Global, Global)</code>,
+in this page we will use the symbol <code>*</code> when we mean it as the scope component.
+</p><p>To summarize what we’ve learned so far:
+</p><ul><li>A scope is a tuple of components in three axes: the subproject axis, the configuration axis, and the task axis.
+</li><li>There’s a special scope component <code>*</code> (also called <code>Global</code>) for any of the scope axes.
+</li><li>There’s a special scope component <code>ThisBuild</code> (written as <code>{.}</code> in shell) for <strong>the subprojects axis</strong> only.
+</li><li><code>Test</code> extends <code>Runtime</code>, and <code>Runtime</code> extends <code>Compile</code> configuration.
+</li><li>A key placed in build.sbt is scoped to <code>(${current subproject}, *, *)</code> by default.
+</li><li>A key can be further scoped using <code>.in(...)</code> method.
+</li></ul><p>Now let’s suppose we have the following build definition:
+</p><pre><code class="prettyprint lang-scala">lazy val foo = settingKey[Int](&quot;&quot;)
+lazy val bar = settingKey[Int](&quot;&quot;)
+
+lazy val projX = (project in file(&quot;x&quot;))
+  .settings(
+    foo := {
+      (bar in Test).value + 1
+    },
+    bar in Compile := 1
+  )
+</code></pre><p>Inside of <code>foo</code>’s setting body a dependency on the scoped key <code>(bar in Test)</code> is declared.
+However, despite <code>bar in Test</code> being undefined in <code>projX</code>,
+sbt is still able to resolve <code>(bar in Test)</code> to another scoped key,
+resulting in <code>foo</code> initialized as <code>2</code>.
+</p><p>sbt has a well-defined fallback search path called <em>scope delegation</em>.
+This feature allows you to set a value once in a more general scope,
+allowing multiple more-specific scopes to inherit the value.
+</p><h3 id="Scope+delegation+rules">Scope delegation rules<a href="#Scope+delegation+rules" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Here are the rules for scope delegation:
+</p><ul><li>Rule 1: Scope axes have the following precedence: the subproject axis, the configuration axis, and then the task axis.
+</li><li>Rule 2: Given a scope, delegate scopes are searched by substituting the task axis in the following order:
+the given task scoping, and then <code>*</code> (<code>Global</code>), which is non-task scoped version of the scope.
+</li><li>Rule 3: Given a scope, delegate scopes are searched by substituting the configuration axis in the following order:
+the given configuration, its parents, their parents and so on, and then <code>*</code> (<code>Global</code>, same as unscoped configuration axis).
+</li><li>Rule 4: Given a scope, delegate scopes are searched by substituting the subproject axis in the following order:
+the given subproject, <code>ThisBuild</code>, and then <code>*</code> (<code>Global</code>).
+</li><li>Rule 5: A delegated scoped key and its dependent settings/tasks are evaluated without carrying the original context.
+</li></ul><p>We will look at each rule in the rest of this page.
+</p><h3 id="Rule+1%3A+Scope+axis+precedence">Rule 1: Scope axis precedence<a href="#Rule+1%3A+Scope+axis+precedence" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Rule 1: Scope axes have the following precedence: the subproject axis, the configuration axis, and then the task axis.
+</li></ul><p>In other words, given two scopes candidates, if one has more specific value on the subproject axis,
+it will always win regardless of the configuration or the task scoping.
+Similarly, if subprojects are the same, one with more specific configuration value will always win regardless
+of the task scoping. We will see more rules to define <em>more specific</em>.
+</p><h3 id="Rule+2%3A+The+task+axis+delegation">Rule 2: The task axis delegation<a href="#Rule+2%3A+The+task+axis+delegation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Rule 2: Given a scope, delegate scopes are searched by <strong>substituting</strong> the task axis in the following order:
+the given task scoping, and then <code>*</code> (<code>Global</code>), which is non-task scoped version of the scope.
+</li></ul><p>Here we have a concrete rule for how sbt will generate delegate scopes given a key.
+Remember, we are trying to show the search path given an arbitrary <code>(xxx in yyy).value</code>.
+</p><p><strong>Exercise A</strong>: Given the following build definition:
+</p><pre><code class="prettyprint lang-scala">lazy val projA = (project in file(&quot;a&quot;))
+  .settings(
+    name := {
+      &quot;foo-&quot; + (scalaVersion in packageBin).value
+    },
+    scalaVersion := &quot;2.11.11&quot;
+  )
+</code></pre><p>What is the value of <code>name in projA</code> (<code>projA/name</code> in sbt shell)?
+</p><ol><li><code>&quot;foo-2.11.11&quot;</code>
+</li><li><code>&quot;foo-2.12.3&quot;</code>
+</li><li>something else?
+</li></ol><p>The answer is <code>&quot;foo-2.11.11&quot;</code>.
+Inside of <code>.settings(...)</code>, <code>scalaVersion</code> is automatically scoped to <code>(projA, *, *)</code>,
+so <code>scalaVersion in packageBin</code> becomes <code>scalaVersion in (projA, *, packageBin)</code>.
+That particular scoped key is undefined.
+By using Rule 2, sbt will substitute the task axis to <code>*</code> as <code>(projA, *, *)</code> (or <code>proj/scalaVersion</code> in shell).
+That scoped key is defined to be <code>&quot;2.11.11&quot;</code>.
+</p><h3 id="Rule+3%3A+The+configuration+axis+search+path">Rule 3: The configuration axis search path<a href="#Rule+3%3A+The+configuration+axis+search+path" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Rule 3: Given a scope, delegate scopes are searched by substituting the configuration axis in the following order:
+the given configuration, its parents, their parents and so on, and then <code>*</code> (<code>Global</code>, same as unscoped configuration axis).
+</li></ul><p>The example for that is <code>projX</code> that we saw earlier:
+</p><pre><code class="prettyprint lang-scala">lazy val foo = settingKey[Int](&quot;&quot;)
+lazy val bar = settingKey[Int](&quot;&quot;)
+
+lazy val projX = (project in file(&quot;x&quot;))
+  .settings(
+    foo := {
+      (bar in Test).value + 1
+    },
+    bar in Compile := 1
+  )
+</code></pre><p>If we write out the full scope again, it’s <code>(projX, Test, *)</code>.
+Also recall that <code>Test</code> extends <code>Runtime</code>, and <code>Runtime</code> extends <code>Compile</code>.
+</p><p><code>(bar in Test)</code> is undefined, but due to Rule 3 sbt will look for
+<code>bar</code> scoped in <code>(projX, Test, *)</code>, <code>(projX, Runtime, *)</code>, and then
+<code>(projX, Compile, *)</code>. The last one is found, which is <code>bar in Compile</code>.
+</p><h3 id="Rule+4%3A+The+subproject+axis+search+path">Rule 4: The subproject axis search path<a href="#Rule+4%3A+The+subproject+axis+search+path" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Rule 4: Given a scope, delegate scopes are searched by substituting the subproject axis in the following order:
+the given subproject, <code>ThisBuild</code>, and then <code>*</code> (<code>Global</code>).
+</li></ul><p><strong>Exercise B</strong>: Given the following build definition:
+</p><pre><code class="prettyprint lang-scala">organization in ThisBuild := &quot;com.example&quot;
+
+lazy val projB = (project in file(&quot;b&quot;))
+  .settings(
+    name := &quot;abc-&quot; + organization.value,
+    organization := &quot;org.tempuri&quot;
+  )
+</code></pre><p>What is the value of <code>name in projB</code> (<code>projB/name</code> in shell)?
+</p><ol><li><code>&quot;abc-com.example&quot;</code>
+</li><li><code>&quot;abc-org.tempuri&quot;</code>
+</li><li>something else?
+</li></ol><p>The answer is <code>abc-org.tempuri</code>.
+So based on Rule 4, the first search path is <code>organization</code> scoped to <code>(projB, *, *)</code>,
+which is defined in <code>projB</code> as <code>&quot;org.tempuri&quot;</code>.
+This has higher precedence than the build-level setting <code>organization in ThisBuild</code>.
+</p><h4 id="Scope+axis+precedence%2C+again">Scope axis precedence, again<a href="#Scope+axis+precedence%2C+again" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><strong>Exercise C</strong>: Given the following build definition:
+</p><pre><code class="prettyprint lang-scala">scalaVersion in (ThisBuild, packageBin) := &quot;2.12.2&quot;
+
+lazy val projC = (project in file(&quot;c&quot;))
+  .settings(
+    name := {
+      &quot;foo-&quot; + (scalaVersion in packageBin).value
+    },
+    scalaVersion := &quot;2.11.11&quot;
+  )
+</code></pre><p>What is value of <code>name in projC</code>?
+</p><ol><li><code>&quot;foo-2.12.2&quot;</code>
+</li><li><code>&quot;foo-2.11.11&quot;</code>
+</li><li>something else?
+</li></ol><p>The answer is <code>foo-2.11.11</code>.
+<code>scalaVersion</code> scoped to <code>(projC, *, packageBin)</code> is undefined.
+Rule 2 finds <code>(projC, *, *)</code>. Rule 4 finds <code>(ThisBuild, *, packageBin)</code>.
+In this case Rule 1 dictates that more specific value on the subproject axis wins,
+which is <code>(projC, *, *)</code> that is defined to <code>&quot;2.11.11&quot;</code>.
+</p><p><strong>Exercise D</strong>: Given the following build definition:
+</p><pre><code class="prettyprint lang-scala">scalacOptions in ThisBuild += &quot;-Ywarn-unused-import&quot;
+
+lazy val projD = (project in file(&quot;d&quot;))
+  .settings(
+    test := {
+      println((scalacOptions in (Compile, console)).value)
+    },
+    scalacOptions in console -= &quot;-Ywarn-unused-import&quot;,
+    scalacOptions in Compile := scalacOptions.value // added by sbt
+  )
+</code></pre><p>What would you see if you ran <code>projD/test</code>?
+</p><ol><li><code>List()</code>
+</li><li><code>List(-Ywarn-unused-import)</code>
+</li><li>something else?
+</li></ol><p>The answer is <code>List(-Ywarn-unused-import)</code>.
+Rule 2 finds <code>(projD, Compile, *)</code>,
+Rule 3 finds <code>(projD, *, console)</code>,
+and Rule 4 finds <code>(ThisBuild, *, *)</code>.
+Rule 1 selects <code>(projD, Compile, *)</code>
+because it has the subproject axis <code>projD</code>, and the configuration axis has higher
+precedence over the task axis.
+</p><p>Next, <code>scalacOptions in Compile</code> refers to <code>scalacOptions.value</code>,
+we next need to find a delegate for <code>(projD, *, *)</code>.
+Rule 4 finds <code>(ThisBuild, *, *)</code> and thus it resolves to <code>List(-Ywarn-unused-import)</code>.
+</p><h3 id="Inspect+command+lists+the+delegates">Inspect command lists the delegates<a href="#Inspect+command+lists+the+delegates" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>You might want to look up quickly what is going on.
+This is where <code>inspect</code> can be used.
+</p><pre><code class="">Hello&gt; inspect projD/compile:console::scalacOptions
+[info] Task: scala.collection.Seq[java.lang.String]
+[info] Description:
+[info]  Options for the Scala compiler.
+[info] Provided by:
+[info]  {file:/Users/xxxx/}projD/compile:scalacOptions
+[info] Defined at:
+[info]  /Users/xxxx/build.sbt:47
+[info] Reverse dependencies:
+[info]  projD/compile:console
+[info]  projD/*:test
+[info] Delegates:
+[info]  projD/compile:console::scalacOptions
+[info]  projD/compile:scalacOptions
+[info]  projD/*:console::scalacOptions
+[info]  projD/*:scalacOptions
+[info]  {.}/compile:console::scalacOptions
+[info]  {.}/compile:scalacOptions
+[info]  {.}/*:console::scalacOptions
+[info]  {.}/*:scalacOptions
+[info]  */compile:console::scalacOptions
+[info]  */compile:scalacOptions
+[info]  */*:console::scalacOptions
+[info]  */*:scalacOptions
+....
+</code></pre><p>Note how “Provided by” shows that <code>projD/compile:console::scalacOptions</code>
+is provided by <code>projD/compile:scalacOptions</code>.
+Also under “Delegates”, <em>all</em> of the possible delegate candidates
+listed in the order of precedence!
+</p><ul><li>All the scopes with <code>projD</code> scoping on the subproject axis are listed first,
+then <code>ThisBuild</code> (<code>{.}</code>), and <code>*</code>.
+</li><li>Within a subproject, scopes with <code>Compile</code> scoping on the configuration axis
+are listed first, then falls back to <code>*</code>.
+</li><li>Finally, the task axis scoping lists the given task scoping <code>console::</code> and the one without.
+</li></ul><h3 id=".value+lookup+vs+dynamic+dispatch">.value lookup vs dynamic dispatch<a href="#.value+lookup+vs+dynamic+dispatch" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Rule 5: A delegated scoped key and its dependent settings/tasks are evaluated without carrying the original context.
+</li></ul><p>Note that scope delegation feels similar to class inheritance in an object-oriented language,
+but there’s a difference. In an OO language like Scala if there’s a method named
+<code>drawShape</code> on a trait <code>Shape</code>, its subclasses can override the behavior even when <code>drawShape</code> is used
+by other methods in the <code>Shape</code> trait, which is called dynamic dispatch.
+</p><p>In sbt, however, scope delegation can delegate a scope to a more general scope,
+like a project-level setting to a build-level settings,
+but that build-level setting cannot refer to the project-level setting.
+</p><p><strong>Exercise E</strong>: Given the following build definition:
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    inThisBuild(List(
+      organization := &quot;com.example&quot;,
+      scalaVersion := &quot;2.12.2&quot;,
+      version      := scalaVersion.value + &quot;_0.1.0&quot;
+    )),
+    name := &quot;Hello&quot;
+  )
+
+lazy val projE = (project in file(&quot;e&quot;))
+  .settings(
+    scalaVersion := &quot;2.11.11&quot;
+  )
+</code></pre><p>What will <code>projE/version</code> return?
+</p><ol><li><code>&quot;2.12.2_0.1.0&quot;</code>
+</li><li><code>&quot;2.11.11_0.1.0&quot;</code>
+</li><li>something else?
+</li></ol><p>The answer is <code>2.12.2_0.1.0</code>.
+<code>projD/version</code> delegates to <code>version in ThisBuild</code>,
+which depends on <code>scalaVersion in ThisBuild</code>.
+Because of this reason, build level setting should be limited mostly to simple value assignments.
+</p><p><strong>Exercise F</strong>: Given the following build definition:
+</p><pre><code class="prettyprint lang-scala">scalacOptions in ThisBuild += &quot;-D0&quot;
+scalacOptions += &quot;-D1&quot;
+
+lazy val projF = (project in file(&quot;f&quot;))
+  .settings(
+    scalacOptions in compile += &quot;-D2&quot;,
+    scalacOptions in Compile += &quot;-D3&quot;,
+    scalacOptions in (Compile, compile) += &quot;-D4&quot;,
+    test := {
+      println(&quot;bippy&quot; + (scalacOptions in (Compile, compile)).value.mkString)
+    }
+  )
+</code></pre><p>What will <code>projF/test</code> show?
+</p><ol><li><code>&quot;bippy-D4&quot;</code>
+</li><li><code>&quot;bippy-D2-D4&quot;</code>
+</li><li><code>&quot;bippy-D0-D3-D4&quot;</code>
+</li><li>something else?
+</li></ol><p>The answer is <code>&quot;bippy-D0-D3-D4&quot;</code>. This is a variation of an exercise
+originally created by <a href="https://gist.github.com/paulp/923154ab2d61882195cdea47483592ca">Paul Phillips</a>.
+</p><p>It’s a great demonstration of all the rules because <code>someKey += &quot;x&quot;</code> expands to
+</p><pre><code class="prettyprint lang-scala">someKey += {
+  val old = someKey.value
+  old :+ &quot;x&quot;
+}
+</code></pre><p>Retrieving the old value would cause delegation, and due to Rule 5,
+it will go to another scoped key.
+Let’s get rid of <code>+=</code> first, and annotate the delegates for old values:
+</p><pre><code class="prettyprint lang-scala">scalacOptions in ThisBuild := {
+  // scalacOptions in Global &lt;- Rule 4
+  val old = (scalacOptions in ThisBuild).value
+  old :+ &quot;-D0&quot;
+}
+
+scalacOptions := {
+  // scalacOptions in ThisBuild &lt;- Rule 4
+  val old = scalacOptions.value
+  old :+ &quot;-D1&quot;
+}
+
+lazy val projF = (project in file(&quot;f&quot;))
+  .settings(
+    scalacOptions in compile := {
+      // scalacOptions in ThisBuild &lt;- Rules 2 and 4
+      val old = (scalacOptions in compile).value
+      old :+ &quot;-D2&quot;
+    },
+    scalacOptions in Compile := {
+      // scalacOptions in ThisBuild &lt;- Rules 3 and 4
+      val old = (scalacOptions in Compile).value
+      old :+ &quot;-D3&quot;
+    },
+    scalacOptions in (Compile, compile) := {
+      // scalacOptions in (projF, Compile) &lt;- Rules 1 and 2
+      val old = (scalacOptions in (Compile, compile)).value
+      old :+ &quot;-D4&quot;
+    },
+    test := {
+      println(&quot;bippy&quot; + (scalacOptions in (Compile, compile)).value.mkString)
+    }
+  )
+</code></pre><p>This becomes:
+</p><pre><code class="prettyprint lang-scala">scalacOptions in ThisBuild := {
+  Nil :+ &quot;-D0&quot;
+}
+
+scalacOptions := {
+  List(&quot;-D0&quot;) :+ &quot;-D1&quot;
+}
+
+lazy val projF = (project in file(&quot;f&quot;))
+  .settings(
+    scalacOptions in compile := List(&quot;-D0&quot;) :+ &quot;-D2&quot;,
+    scalacOptions in Compile := List(&quot;-D0&quot;) :+ &quot;-D3&quot;,
+    scalacOptions in (Compile, compile) := List(&quot;-D0&quot;, &quot;-D3&quot;) :+ &quot;-D4&quot;,
+    test := {
+      println(&quot;bippy&quot; + (scalacOptions in (Compile, compile)).value.mkString)
+    }
+  )
+</code></pre><div class="bottom nav span-16">
+                        <em>Next Page</em>
+                        <span class="arrow">&gt;</span>
+                        <a href="Library-Dependencies.html"> Library dependencies </a>                        
+                        <ul class="language-bar">
+        <li><a href="Scope-Delegation.html"><span class="lang-item lang-en">English</span></a></li><li><a href="ja/Scope-Delegation.html"><span class="lang-item lang-ja">日本語</span></a></li>
+      </ul>
+                      </div><div class="tocwrapper show">
+      <a class="tochead nav" style="display: none" href="#toc">❦</a>
+      <a name="toc"></a>
+      <h4 class="toctitle">Contents</h4>
+      <div class="tocbody">
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">Getting Started with sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">Installing sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Installing sbt on Mac</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Installing sbt on Windows</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Installing sbt on Linux</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">Directory structure</a></div></li><li><div><a href="Running.html">Running</a></div></li><li><div><a href="Basic-Def.html">Build definition</a></div></li><li><div><a href="Task-Graph.html">Task graph</a></div></li><li><div><a href="Scopes.html">Scopes</a></div></li><li><div><a href="Appending-Values.html">Appending values</a></div></li><li><div class="current">Scope delegation (.value lookup)</div></li><li><div><a href="Library-Dependencies.html">Library dependencies</a></div></li><li><div><a href="Multi-Project.html">Multi-project builds</a></div></li><li><div><a href="Using-Plugins.html">Using plugins</a></div></li><li><div><a href="Custom-Settings.html">Custom settings and tasks</a></div></li><li><div><a href="Organizing-Build.html">Organizing the build</a></div></li><li><div><a href="Summary.html">Getting Started summary</a></div></li> </ol></li><li><div><a href="General-Info.html">General Information</a></div><ol class="toc"> <li><div><a href="Credits.html">Credits</a></div></li><li><div><a href="Community-Plugins.html">Community Plugins</a></div></li><li><div><a href="Repository-Roles.html">Community Repository Policy</a></div></li><li><div><a href="Bintray-For-Plugins.html">Bintray For Plugins</a></div></li><li><div><a href="Setup-Notes.html">Setup Notes</a></div></li><li><div><a href="Using-Sonatype.html">Using Sonatype</a></div></li><li><div><a href="Contibuting-to-sbt.html">Contributing to sbt</a></div></li><li><div><a href="Changes.html">Changes</a></div><ol class="toc"> <li><div><a href="Migrating-from-sbt-013x.html">Migrating from sbt 0.13.x</a></div></li><li><div><a href="sbt-1.0-Release-Notes.html">sbt 1.0.1</a></div></li><li><div><a href="sbt-0.13-Tech-Previews.html">sbt 0.13.5+ Technology Previews</a></div></li><li><div><a href="ChangeSummary_0.13.0.html">sbt 0.13.0 - 0.13.2</a></div></li><li><div><a href="ChangeSummary_0.12.0.html">sbt 0.12.4</a></div></li><li><div><a href="Older-Changes.html">Older Changes</a></div></li><li><div><a href="Migrating-from-sbt-07x.html">Migrating from 0.7 to 0.10+</a></div></li> </ol></li> </ol></li><li><div><a href="Detailed-Topics.html">Detailed Topics</a></div><ol class="toc"> <li><div><a href="Using-sbt.html">Using sbt</a></div><ol class="toc"> <li><div><a href="Command-Line-Reference.html">Command Line Reference</a></div></li><li><div><a href="Console-Project.html">Console Project</a></div></li><li><div><a href="Cross-Build.html">Cross-building</a></div></li><li><div><a href="Inspecting-Settings.html">Interacting with the Configuration System</a></div></li><li><div><a href="Triggered-Execution.html">Triggered Execution</a></div></li><li><div><a href="Scripts.html">Scripts, REPL, and Dependencies</a></div></li><li><div><a href="Understanding-Recompilation.html">Understanding Incremental Recompilation</a></div></li> </ol></li><li><div><a href="Configuration-Index.html">Configuration</a></div><ol class="toc"> <li><div><a href="Classpaths.html">Classpaths, sources, and resources</a></div></li><li><div><a href="Compiler-Plugins.html">Compiler Plugin Support</a></div></li><li><div><a href="Configuring-Scala.html">Configuring Scala</a></div></li><li><div><a href="Forking.html">Forking</a></div></li><li><div><a href="Global-Settings.html">Global Settings</a></div></li><li><div><a href="Java-Sources.html">Java Sources</a></div></li><li><div><a href="Mapping-Files.html">Mapping Files</a></div></li><li><div><a href="Local-Scala.html">Local Scala</a></div></li><li><div><a href="Macro-Projects.html">Macro Projects</a></div></li><li><div><a href="Paths.html">Paths</a></div></li><li><div><a href="Parallel-Execution.html">Parallel Execution</a></div></li><li><div><a href="Process.html">External Processes</a></div></li><li><div><a href="Running-Project-Code.html">Running Project Code</a></div></li><li><div><a href="Testing.html">Testing</a></div></li> </ol></li><li><div><a href="Dependency-Management-Index.html">Dependency Management</a></div><ol class="toc"> <li><div><a href="Artifacts.html">Artifacts</a></div></li><li><div><a href="Dependency-Management-Flow.html">Dependency Management Flow</a></div></li><li><div><a href="Library-Management.html">Library Management</a></div></li><li><div><a href="Proxy-Repositories.html">Proxy Repositories</a></div></li><li><div><a href="Publishing.html">Publishing</a></div></li><li><div><a href="Resolvers.html">Resolvers</a></div></li><li><div><a href="Update-Report.html">Update Report</a></div></li><li><div><a href="Cached-Resolution.html">Cached resolution</a></div></li> </ol></li><li><div><a href="Tasks-and-Commands.html">Tasks and Commands</a></div><ol class="toc"> <li><div><a href="Tasks.html">Tasks</a></div></li><li><div><a href="Input-Tasks.html">Input Tasks</a></div></li><li><div><a href="Commands.html">Commands</a></div></li><li><div><a href="Parsing-Input.html">Parsing and tab completion</a></div></li><li><div><a href="Build-State.html">State and actions</a></div></li><li><div><a href="Task-Inputs.html">Tasks/Settings: Motivation</a></div></li> </ol></li><li><div><a href="Plugins-and-Best-Practices.html">Plugins and Best Practices</a></div><ol class="toc"> <li><div><a href="Best-Practices.html">General Best Practices</a></div></li><li><div><a href="Plugins.html">Plugins</a></div></li><li><div><a href="Plugins-Best-Practices.html">Plugins Best Practices</a></div></li><li><div><a href="Travis-CI-with-sbt.html">Setting up Travis CI with sbt</a></div></li><li><div><a href="Testing-sbt-plugins.html">Testing sbt plugins</a></div></li><li><div><a href="sbt-new-and-Templates.html">sbt new and Templates</a></div></li><li><div><a href="Cross-Build-Plugins.html">Cross building plugins</a></div></li> </ol></li> </ol></li><li><div><a href="Howto.html">How to…</a></div><ol class="toc"> <li><div><a href="Howto-Classpaths.html">Classpaths</a></div></li><li><div><a href="Howto-Customizing-Paths.html">Customizing paths</a></div></li><li><div><a href="Howto-Generating-Files.html">Generating files</a></div></li><li><div><a href="Howto-Inspect-the-Build.html">Inspect the build</a></div></li><li><div><a href="Howto-Interactive-Mode.html">Interactive mode</a></div></li><li><div><a href="Howto-Logging.html">Configure and use logging</a></div></li><li><div><a href="Howto-Project-Metadata.html">Project metadata</a></div></li><li><div><a href="Howto-Package.html">Configure packaging</a></div></li><li><div><a href="Howto-Running-Commands.html">Running commands</a></div></li><li><div><a href="Howto-Scala.html">Configure and use Scala</a></div></li><li><div><a href="Howto-Scaladoc.html">Generate API documentation</a></div></li><li><div><a href="Howto-Triggered.html">Triggered execution</a></div></li><li><div><a href="Define+Custom+Tasks.html">Define Custom Tasks</a></div></li><li><div><a href="Howto-Startup.html">How to take an action on startup</a></div></li><li><div><a href="Howto-Sequencing.html">Sequencing</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Defining a sequential task with Def.sequential</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Defining a dynamic task with Def.taskDyn</a></div></li><li><div><a href="Howto-After-Input-Task.html">Doing something after an input task</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Defining a dynamic input task with Def.inputTaskDyn</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">How to sequence using commands</a></div></li> </ol></li><li><div><a href="Examples.html">Examples</a></div><ol class="toc"> <li><div><a href="Basic-Def-Examples.html">.sbt build examples</a></div></li><li><div><a href="Scala-Files-Example.html">.sbt build with .scala files example</a></div></li><li><div><a href="Advanced-Configurations-Example.html">Advanced configurations example</a></div></li><li><div><a href="Advanced-Command-Example.html">Advanced command example</a></div></li> </ol></li> </ol></li><li><div><a href="Faq.html">Frequently Asked Questions</a></div><ol class="toc">  </ol></li><li><div><a href="Name-Index.html">Index</a></div></li><li><div><a href="Developers-Guide.html">Developer’s Guide (Work in progress)</a></div><ol class="toc"> <li><div><a href="Modularization.html">Modularization</a></div><ol class="toc"> <li><div><a href="Module-Summary.html">Module summary</a></div></li> </ol></li><li><div><a href="Coding-Guideline.html">sbt Coding Guideline</a></div><ol class="toc">  </ol></li><li><div><a href="Datatype.html">sbt-datatype</a></div><ol class="toc">  </ol></li><li><div><a href="Compiler-Interface.html">Compiler Interface</a></div><ol class="toc"> <li><div><a href="Version-Specific-Sources.html">Fetching the most specific sources</a></div></li> </ol></li><li><div><a href="Sbt-Launcher.html">sbt Launcher</a></div><ol class="toc"> <li><div><a href="Launcher-Getting-Started.html">Getting Started with the sbt launcher</a></div></li><li><div><a href="Launcher-Architecture.html">Sbt Launcher Architecture</a></div></li><li><div><a href="Launcher-Configuration.html">sbt Launcher Configuration</a></div></li> </ol></li><li><div><a href="DevGuide-Notes.html">Notes</a></div><ol class="toc"> <li><div><a href="Core-Principles.html">Core Principles</a></div></li><li><div><a href="Settings-Core.html">Settings Core</a></div></li><li><div><a href="Setting-Initialization.html">Setting Initialization</a></div></li><li><div><a href="Build-Loaders.html">Build Loaders</a></div></li><li><div><a href="Command-Line-Applications.html">Creating Command Line Applications Using sbt</a></div></li><li><div><a href="Nightly-Builds.html">Nightly Builds</a></div></li> </ol></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+          </div>
+        </div>
+        <div class="header">
+          <link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
+<div class="container">
+    <div class="logo">
+      <a href="../../index.html"><img src="files/sbt-logo.svg" alt="sbt"></a>
+      <span class="versions"><select id="versions"></select></span>
+    </div>
+    <div class="nav">
+      <a href="../../documentation.html">Documentation</a>
+      <a href="../../download.html">Download</a>
+      <a href="../../community.html">Get Involved</a>
+      <a id="source-code" href="https://github.com/sbt/sbt"><img src="files/github-logo-teal.svg" alt="Source code" class="social"></a>
+      <a id="twitter" href="https://twitter.com/scala_sbt"><img src="files/twitter-logo-teal.svg" alt="sbt on Twitter" class="social"></a>
+    </div>
+    <script type="text/javascript" async>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-41449189-1', 'scala-sbt.org');
+    ga('send', 'pageview');
+    </script>
+    <script type="text/javascript" async>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-23127719-1', 'lightbend.com', {'allowLinker': true, 'name': 'tsTracker'});
+      ga('tsTracker.require', 'linker');
+      ga('tsTracker.linker:autoLink', ['lightbend.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org']);
+      ga('tsTracker.send', 'pageview');
+    </script>
+    <script type="text/javascript">
+$(function() {
+  var scrollDown = function() {
+    if (window.location.hash !== "") {
+      setTimeout(function() { $(window).scrollTop($(window).scrollTop() - 120); }, 100);
+    }
+  }
+  scrollDown();
+  $(window).bind('hashchange', function() {
+    scrollDown();
+  });
+});
+    </script>
+</div>
+
+        </div>
+        <div class="footer">
+          <div class="fw-wrapper navy-ltr support-strip">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="support-item">
+          <div class="support-icon">
+            <svg class="svg-icon svg-icon-chat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.5 85.2" enable-background="new 0 0 97.5 85.2"><path stroke="#fff" stroke-width="4.282" stroke-linecap="round" stroke-miterlimit="10" d="M27 29.5h-16.3c-4.7 0-8.6 3.9-8.6 8.6v25.7c0 4.7 3.9 8.6 8.6 8.6h2.7c.8 0 1.5.7 1.5 1.5v7.8c0 1.3 1.6 2 2.5 1l9.5-9.5c.5-.5 1.2-.8 2-.8h20.2c4.7 0 8.6-3.9 8.6-8.6v-7.8" fill="none"/><path fill="#fff" d="M85 0h-40c-6.9 0-12.5 5.6-12.5 12.5v33.4c0 2.2 1.8 4.1 4.1 4.1h29.9c.7 0 1.3.3 1.8.7l10 10c1.6 1.6 4.3.5 4.3-1.8v-6.5c0-1.4 1.1-2.5 2.5-2.5 6.9 0 12.5-5.6 12.5-12.5v-25c-.1-6.8-5.8-12.4-12.6-12.4z"/></svg>
+          </div>
+          <div class="support-detail">
+            <h2>Community Support</h2>
+            <a href="https://stackoverflow.com/questions/tagged/sbt">StackOverflow</a>
+          </div>
+        </div>
+        <div class="support-item">
+          <div class="support-icon">
+            <svg id="lightbend-icon-reverse" class="svg-icon svg-icon-lightbend-reverse" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 302 262"><title>lightbend-icon</title><g id="icon"><path d="M1,195v56a10,10,0,0,0,10,10H291a10,10,0,0,0,10-10V195a557.85,557.85,0,0,1-150,20A557.85,557.85,0,0,1,1,195Z" style="fill:#fff"/><path d="M291,1H11A10,10,0,0,0,1,11V176a539.94,539.94,0,0,0,150,21,539.94,539.94,0,0,0,150-21V11A10,10,0,0,0,291,1Z" style="fill:#fff"/></g></svg>
+          </div>
+          <div class="support-detail">
+            <h2>Commercial Support</h2>
+            <a href="https://www.lightbend.com/services/expert-support">Lightbend Subscription</a>
+            <a href="https://www.lightbend.com/services/training">Training</a>
+            <a href="https://www.lightbend.com/services/consulting">Consulting</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div><footer>
+  <div class="container footer">
+    <div class="row">
+      <div class="col-md-8 sbt">
+        <nav>
+          <a href="../../index.html">
+            <img src="files/sbt-logo-reverse.svg" alt="sbt">
+          </a>
+          <a href="../../documentation.html">Documentation</a>
+          <a href="../../download.html">Download</a>
+          <a href="../../community.html">Get Involved</a>
+        </nav>
+      </div>
+      <div class="col-md-4 text-right ts">
+        &copy; 2016-2017 Lightbend Inc.
+        <a href="https://www.lightbend.com">
+          <img src="files/lightbend-reverse.svg" alt="Lightbend, Inc.">
+        </a>
+      </div>
+    </div>
+  </div>
+</footer><script src="/assets/versions.js"></script><script src="/assets/set-versions.js"></script>
+        </div>
+        
+        <div class="highlight-outer">
+              <div class="highlight-menu">
+                <ul>
+                  <li><button id="highlight-button-twitter"><img src="img/twitter-bird-dark-bgs.png"/></button></li>
+                </ul>
+              </div>
+            </div>
+      </body>
+    </html>

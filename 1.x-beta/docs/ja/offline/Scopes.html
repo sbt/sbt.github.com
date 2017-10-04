@@ -1,0 +1,360 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html manifest="pamflet.manifest">
+      <head>
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+        <title>sbt Reference Manual — スコープ</title>
+        <link rel="shortcut icon" href="../favicon.ico"/>
+        <link rel="stylesheet" href="../css/blueprint/screen.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/blueprint/grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="../css/blueprint/print.css" type="text/css" media="print"/> 
+        <!--[if lt IE 8]>
+          <link rel="stylesheet" href={ relativeBase + "css/blueprint/ie.css" } type="text/css" media="screen, projection"/>
+        <![endif]-->
+        <link rel="stylesheet" href="../css/pamflet.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamflet-print.css" type="text/css" media="print"/>
+        <link rel="stylesheet" href="../css/pamflet-grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-redmond.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-github.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-monokai.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamfletheight_80px_2em.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <script type="text/javascript" src="../js/jquery-1.6.2.min.js"></script>
+        <script type="text/javascript" src="../js/jquery.collapse.js"></script>
+        <script type="text/javascript" src="../js/pamflet.js"></script>
+        <script type="text/javascript">
+          Pamflet.page.language = 'ja';
+        </script>
+        <script type="text/javascript" src="../js/prettify/prettify.js"></script><script type="text/javascript" src="../js/prettify/lang-scala.js"></script><link type="text/css" rel="stylesheet" href="../css/prettify.css"/><script type="text/javascript"><!--
+        window.onload=function() { prettyPrint(); };
+      --></script>
+        <link rel="stylesheet" href="../css/custom.css" type="text/css" media="screen, projection"/>
+        
+        <script type="text/javascript">
+              Pamflet.twitter = '#sbt #scala';
+            </script>
+      </head>
+      <body class="color_scheme-github">
+        <a class="page prev nav" href="Task-Graph.html">
+            <span class="space">&nbsp;</span>
+            <span class="flip arrow">&gt;</span>
+          </a><a class="page next nav" href="Appending-Values.html">
+            <span class="space">&nbsp;</span>
+            <span class="arrow">&gt;</span>
+          </a>
+        <div class="container contentswrapper">
+          <div class="span-16 prepend-1 append-1 contents">
+            <h2 id="%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97">スコープ<a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このページではスコープの説明をする。前のページの
+<a href="Basic-Def.html">.sbt ビルド定義</a>、
+<a href="Task-Graph.html">タスク・グラフ</a>
+を読んで理解したことを前提とする。
+</p><h3 id="%E3%82%AD%E3%83%BC%E3%81%AB%E9%96%A2%E3%81%99%E3%82%8B%E6%9C%AC%E5%BD%93%E3%81%AE%E8%A9%B1">キーに関する本当の話<a href="#%E3%82%AD%E3%83%BC%E3%81%AB%E9%96%A2%E3%81%99%E3%82%8B%E6%9C%AC%E5%BD%93%E3%81%AE%E8%A9%B1" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="Basic-Def.html">前のページでは</a>、あたかも <code>name</code> のようなキーは単一の sbt の Map のキー・値ペアの項目に対応するかのように説明をしてきた。
+しかし、それは実際よりも物事を単純化している。
+</p><p>実のところ、全てのキーは「スコープ」と呼ばれる文脈に関連付けられた値を複数もつことができる。
+</p><p>以下に具体例で説明する:
+</p><ul><li>ビルド定義に複数のプロジェクト (サブプロジェクトとも呼ばれる) があれば、それぞれのプロジェクトにおいて同じキーが別の値を取ることができる。
+</li><li>メインのソースとテストとのソースが異なるようにコンパイルしたければ、<code>compile</code> キーは別の値をとることができる。
+</li><li>（jar パッケージの作成のオプションを表す）<code>packageOption</code> キーはクラスファイルのパッケージ（<code>packageBin</code>）とソースコードのパッケージ（<code>packageSrc</code>）で異なる値をとることができる。
+</li></ul><p>スコープによって値が異なる可能性があるため、<em>あるキーへの単一の値は存在しない</em>。
+</p><p>しかし、<strong>スコープ付きキー</strong>には単一の値が存在する。
+</p><p> <a href="Basic-Def.html">これまで見てきた</a>ように sbt がプロジェクトを記述するキーと値のマップを生成するためのセッティングキーのリストを処理していると考えるなら、
+そのキーと値の Map におけるキーとは、実は<em>スコープ付き</em>キーである。
+また、（<code>build.sbt</code> などの）ビルド定義内のセッティングもまたスコープ付きキーである。
+</p><p>スコープは、暗黙に存在していたり、デフォルトのものがあったりするが、
+もしそのデフォルトが適切でなければ <code>build.sbt</code> で必要なスコープを指定する必要があるだろう。
+</p><h3 id="%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E8%BB%B8">スコープ軸<a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E8%BB%B8" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><strong>スコープ軸</strong>（scope axis）は、<code>Option[A]</code> に似た型コンストラクタであり、
+スコープの各成分を構成する。
+</p><p>スコープ軸は三つある:
+</p><ul><li>サブプロジェクト
+</li><li>依存性コンフィギュレーション
+</li><li>タスク
+</li></ul><p><strong>軸</strong>という概念に馴染みがなければ、RGB 色空間を例に取ってみるといいかもしれない。
+</p><p><img src="../files/rgb_color_solid_cube.png" alt="color cube"/>
+</p><p>RGB 色モデルにおいて、全ての色は赤、緑、青の成分を軸とする立方体内の点として表すことができ、それぞれの成分は数値化することができる。
+同様に、sbt におけるスコープはサブプロジェクト、コンフィギュレーション、タスクの<strong>タプル</strong>により成り立つ:
+</p><pre><code class="prettyprint lang-scala">scalacOptions in (projA, Compile, console)
+</code></pre><p>より正確には、以下のようになっている:
+</p><pre><code class="prettyprint lang-scala">scalacOptions in (Select(projA: Reference),
+                  Select(Compile: ConfigKey),
+                  Select(console.key))
+</code></pre><h4 id="%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E8%BB%B8%E3%81%AB%E3%82%88%E3%82%8B%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%91">サブプロジェクト軸によるスコープ付け<a href="#%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E8%BB%B8%E3%81%AB%E3%82%88%E3%82%8B%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%91" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><a href="Multi-Project.html">一つのビルドに複数のプロジェクトを入れる</a>場合、それぞれのプロジェクトにセッティングが必要だ。
+つまり、キーはプロジェクトによりスコープ付けされる。
+</p><p>プロジェクト軸は <code>ThisBuild</code> という「ビルド全体」を表す値に設定することもでき、その場合はセッティングは単一のプロジェクトではなくビルド全体に適用される。
+ビルドレベルでのセッティングは、プロジェクトが特定のセッティングを定義しない場合のフォールバックとして使われることがよくある。
+</p><h4 id="%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%B3%E3%83%B3%E3%83%95%E3%82%A3%E3%82%AE%E3%83%A5%E3%83%AC%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E8%BB%B8%E3%81%AB%E3%82%88%E3%82%8B%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%91">依存性コンフィギュレーション軸によるスコープ付け<a href="#%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%B3%E3%83%B3%E3%83%95%E3%82%A3%E3%82%AE%E3%83%A5%E3%83%AC%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E8%BB%B8%E3%81%AB%E3%82%88%E3%82%8B%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%91" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><strong>依存性コンフィギュレーション</strong>（dependency configuration、もしく単に「コンフィギュレーション」）
+は、ライブラリ依存性のグラフを定義し、独自のクラスパス、ソース、生成パッケージなどをもつことができる。
+コンフィギュレーションの概念は、sbt が <a href="Library-Dependencies.html">マネージ依存性</a> に使っている Ivy と、<a href="https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Scope">MavenScopes</a> に由来する。
+</p><p>sbt で使われる代表的なコンフィギュレーションには以下のものがある:
+</p><ul><li><code>Compile</code> は、メインのビルド（<code>src/main/scala</code>）を定義する。
+</li><li><code>Test</code> は、テスト（<code>src/test/scala</code>）のビルド方法を定義する。
+</li><li><code>Runtime</code> は、<code>run</code> タスクのクラスパスを定義する。
+</li></ul><p>デフォルトでは、コンパイル、パッケージ化と実行に関するキーの全ては依存性コンフィグレーションにスコープ付けされているため、
+依存性コンフィギュレーションごとに異なる動作をする可能性がある。
+その最たる例が <code>compile</code>、<code>package</code> と <code>run</code> のタスクキーだが、
+（<code>sourceDirectories</code> や <code>scalacOptions</code> や <code>fullClasspath</code> など）それらのキーに<em>影響を及ぼす</em>全てのキーもコンフィグレーションにスコープ付けされている。
+</p><p>もう一つコンフィギュレーションで大切なのは、他のコンフィギュレーションを拡張できることだ。
+以下に代表的なコンフィギュレーションの拡張関係を図で示す。
+</p><p><img src="../files/sbt-configurations.png" alt="dependency configurations"/>
+</p><p><code>Test</code> と <code>IntegrationTest</code> は <code>Runtime</code> を拡張し、<code>Runtime</code> は <code>Compile</code> を拡張し、
+<code>CompileInternal</code> は <code>Compile</code>、<code>Optional</code>、<code>Provided</code> の 3つを拡張する。
+</p><h4 id="%E3%82%BF%E3%82%B9%E3%82%AF%E8%BB%B8%E3%81%AB%E3%82%88%E3%82%8B%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%91">タスク軸によるスコープ付け<a href="#%E3%82%BF%E3%82%B9%E3%82%AF%E8%BB%B8%E3%81%AB%E3%82%88%E3%82%8B%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%91" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>セッティングはタスクの動作に影響を与えることもできる。例えば、<code>packageSrc</code> は <code>packageOptions</code> セッティングの影響を受ける。
+</p><p>これをサポートするため、（<code>packageSrc</code> のような）タスクキーは、（<code>packageOption</code> のような）別のキーのスコープとなりえる。
+</p><p>パッケージを構築するさまざまなタスク（<code>packageSrc</code>、<code>packageBin</code>、<code>packageDoc</code>）は、<code>artifactName</code> や <code>packageOption</code> などのパッケージ関連のキーを共有することができる。これらのキーはそれぞれのパッケージタスクに対して独自の値を取ることができる。
+</p><h4 id="%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%90%E3%83%AB%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E6%88%90%E5%88%86">グローバルスコープ成分<a href="#%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%90%E3%83%AB%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E6%88%90%E5%88%86" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>それぞれのスコープ軸は、その軸の型のインスタンスを代入する（例えば、タスク軸にはタスクを代入する）か、
+もしくは、<code>Global</code> という特殊な値を代入することができる。これは <code>*</code> とも表記される。つまり、<code>Global</code> は <code>None</code> と同様だと考えることができる。
+</p><p><code>*</code> は全てのスコープ軸に対応する普遍的なフォールバックであるが、多くの場合直接それを使うのは sbt 本体もしくはプラグインの作者に限定されるべきだ。
+</p><p>分かりづらいことに、ビルド定義内で <code>someKey in Global</code> と書いた場合、暗黙の変換によってこれは <code>someKey in (Global, Global, Global)</code> に変換される。
+</p><h3 id="%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%81%8B%E3%82%89%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%82%92%E5%8F%82%E7%85%A7%E3%81%99%E3%82%8B">ビルド定義からスコープを参照する<a href="#%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%81%8B%E3%82%89%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%82%92%E5%8F%82%E7%85%A7%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> で裸のキーを使ってセッティングを作った場合は、(現プロジェクト, <code>Global</code> コンフィグレーション, <code>Global</code> タスク) にスコープ付けされる:
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    name := &quot;hello&quot;
+  )
+</code></pre><p>sbt を実行して、<code>inspect name</code> と入力して、キーが　<code>{file:/home/hp/checkout/hello/}default-aea33a/*:name</code> により提供されていることを確認しよう。つまり、プロジェクトは、<code>{file:/home/hp/checkout/hello/}default-aea33a</code> で、コンフィギュレーションは <code>*</code> で、タスクは表示されていない（グローバルを指す）ということだ。
+</p><p>右辺項に置かれた裸のキーも (現プロジェクト, <code>Global</code> コンフィグレーション, <code>Global</code> タスク) にスコープ付けされる:
+</p><pre><code class="prettyprint lang-scala">organization := name.value
+</code></pre><p>キーにはオーバーロードされた <code>.in</code> メソッドがあり、それによりスコープを設定できる。
+<code>.in(...)</code> への引数として、どのスコープ軸のインスタンスでも渡すことができる。
+これをやる意味は全くないけど、例として <code>Compile</code> コンフィギュレーションでスコープ付けされた <code>name</code> の設定を以下に示す:
+</p><pre><code class="prettyprint lang-scala">name in Compile := &quot;hello&quot;
+</code></pre><p>また、<code>packageBin</code> タスクでスコープ付けされた <code>name</code> の設定（これも意味なし！ただの例だよ）:
+</p><pre><code class="prettyprint lang-scala">name in packageBin := &quot;hello&quot;
+</code></pre><p>もしくは、例えば <code>Compile</code> コンフィギュレーションの <code>packageBin</code> の <code>name</code> など、複数のスコープ軸でスコープ付けする:
+</p><pre><code class="prettyprint lang-scala">name in (Compile, packageBin) := &quot;hello&quot;
+</code></pre><p>もしくは、全ての軸に対して <code>Global</code> を使う:
+</p><pre><code class="prettyprint lang-scala">// concurrentRestrictions in (Global, Global, Global) と同じ
+concurrentRestrictions in Global := Seq(
+  Tags.limitAll(1)
+)
+</code></pre><p>（<code>concurrentRestrictions in Global</code> は、<code>concurrentRestrictions in (Global, Global, Global)</code> へと暗黙の変換が行われ、全ての軸を <code>Global</code> に設定する。
+タスクとコンフィギュレーションは既にデフォルトで <code>Global</code> であるため、事実上行なっているのはプロジェクトを <code>Global</code> に指定することだ。つまり、<code>{file:/home/hp/checkout/hello/}default-aea33a/*:concurrentRestrictions</code> ではなく、<code>*/*:concurrentRestrictions</code> が定義される。）
+</p><h3 id="sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%8B%E3%82%89%E3%81%AE%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%8D%E3%82%AD%E3%83%BC%E3%81%AE%E5%8F%82%E7%85%A7%E6%96%B9%E6%B3%95">sbt シェルからのスコープ付きキーの参照方法<a href="#sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%8B%E3%82%89%E3%81%AE%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%8D%E3%82%AD%E3%83%BC%E3%81%AE%E5%8F%82%E7%85%A7%E6%96%B9%E6%B3%95" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>コマンドラインと sbt シェルにおいて、sbt はスコープ付きキーを以下のように表示する（そして、パースする）:
+</p><pre><code class="">{&lt;ビルド-uri&gt;}&lt;プロジェクト-id&gt;/コンフィギュレーション:タスクキー::キー
+</code></pre><ul><li><code>{&lt;ビルド-uri&gt;}&lt;プロジェクト-id&gt;</code> は、サブプロジェクト軸を特定する。&lt;プロジェクト-id&gt; がなければ、サブプロジェクト軸は「ビルド全体」スコープとなる。
+</li><li><code>コンフィギュレーション</code> は、コンフィギュレーション軸を特定する。
+</li><li><code>タスクキー</code> は、タスク軸を特定する。
+</li><li><code>キー</code> は、スコープ付けされるキーを特定する。
+</li></ul><p>全ての軸において、<code>*</code> を使って <code>Global</code> スコープを表すことができる。
+</p><p>スコープ付きキーの一部を省略すると、以下の手順で推論される:
+</p><ul><li>プロジェクトを省略した場合は、カレントプロジェクトが使われる。
+</li><li>コンフィグレーションを省略した場合は、キーに依存したコンフィギュレーションが自動検知される。
+</li><li>タスクを省略した場合は、<code>Global</code> タスクが使われる。
+</li></ul><p>さらに詳しくは、<a href="../../docs/Inspecting-Settings.html">Interacting with the Configuration System</a> 参照。
+</p><h3 id="%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%8D%E3%82%AD%E3%83%BC%E3%81%AE%E8%A1%A8%E8%A8%98%E4%BE%8B">スコープ付きキーの表記例<a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%8D%E3%82%AD%E3%83%BC%E3%81%AE%E8%A1%A8%E8%A8%98%E4%BE%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li><code>fullClasspath</code> はキーのみを指定し、デフォルトスコープを用いる。ここでは、カレントプロジェクト、キーに依存したコンフィギュレーション、グローバルタスクスコープとなる。
+</li><li><code>test:fullClasspath</code> はコンフィギュレーションを指定する。つまりプロジェクト軸とタスク軸はデフォルトを用いつつも <code>test</code>コンフィギュレーションにおける <code>fullClasspath</code> というキーを表す。
+</li><li><code>*:fullClasspath</code> はデフォルトコンフィギュレーションを用いずに <code>Global</code> コンフィギュレーションを用いる事を明示している。
+</li><li><code>doc::fullClasspath</code> はプロジェクト軸とコンフィギュレーション軸はデフォルトを用いつつ、 <code>doc</code> タスクスコープにおける <code>fullClasspath</code> というキーを表す。
+</li><li><code>{file:/home/hp/checkout/hello/}default-aea33a/test:fullClasspath</code> は <code>{file:/home/hp/checkout/hello/}</code> をルートディレクトリにビルドした際に含まれる <code>default-aea33a</code> というプロジェクトを指定している。さらにこのプロジェクト内の <code>test</code> コンフィギュレーションを用いる事も明示している。
+</li><li><code>{file:/home/hp/checkout/hello/}/test:fullClasspath</code> は <code>{file:/home/hp/checkout/hello/}</code> のビルド全体をプロジェクトの軸とする。
+</li><li><code>{.}/test:fullClasspath</code> は <code>{.}</code> で指定されたルートディレクトリのビルド全体をプロジェクト軸に取る。<code>{.}</code> は Scala code において <code>ThisBuild</code> と記述できる。
+</li><li><code>{file:/home/hp/checkout/hello/}/compile:doc::fullClasspath</code> は3つのスコープ軸全てを指定している。
+</li></ul><h3 id="%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%81%AE%E6%A4%9C%E6%9F%BB">スコープの検査<a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%81%AE%E6%A4%9C%E6%9F%BB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt シェルで <code>inspect</code> コマンドを使ってキーとそのスコープを把握することができる。
+例えば、<code>inspect test:full-classpath</code> と試してみよう:
+</p><pre><code class="">$ sbt
+&gt; inspect test:fullClasspath
+[info] Task: scala.collection.Seq[sbt.Attributed[java.io.File]]
+[info] Description:
+[info]  The exported classpath, consisting of build products and unmanaged and managed, internal and external dependencies.
+[info] Provided by:
+[info]  {file:/home/hp/checkout/hello/}default-aea33a/test:fullClasspath
+[info] Dependencies:
+[info]  test:exportedProducts
+[info]  test:dependencyClasspath
+[info] Reverse dependencies:
+[info]  test:runMain
+[info]  test:run
+[info]  test:testLoader
+[info]  test:console
+[info] Delegates:
+[info]  test:fullClasspath
+[info]  runtime:fullClasspath
+[info]  compile:fullClasspath
+[info]  *:fullClasspath
+[info]  {.}/test:fullClasspath
+[info]  {.}/runtime:fullClasspath
+[info]  {.}/compile:fullClasspath
+[info]  {.}/*:fullClasspath
+[info]  */test:fullClasspath
+[info]  */runtime:fullClasspath
+[info]  */compile:fullClasspath
+[info]  */*:fullClasspath
+[info] Related:
+[info]  compile:fullClasspath
+[info]  compile:fullClasspath(for doc)
+[info]  test:fullClasspath(for doc)
+[info]  runtime:fullClasspath
+</code></pre><p>一行目からこれが（<a href="Basic-Def.html">.sbt ビルド定義</a>で説明されているとおり、セッティングではなく）タスクであることが分かる。
+このタスクの戻り値は <code>scala.collection.Seq[sbt.Attributed[java.io.File]]</code> の型をとる。
+</p><p>“Provided by” は、この値を定義するスコープ付きキーを指し、この場合は、
+<code>{file:/home/hp/checkout/hello/}default-aea33a/test:fullClasspath</code>
+（<code>test</code> コンフィギュレーションと <code>{file:/home/hp/checkout/hello/}default-aea33a</code> プロジェクトにスコープ付けされた <code>fullClasspath</code> キー）。
+</p><p>“Dependencies” に関しては、<a href="Task-Graph.html">前のページ</a>で解説した。
+</p><p>“Delegates” (委譲) に関してはまた後で。
+</p><p>今度は、（<code>inspect test:full-class</code> のかわりに）<code>inspect fullClasspath</code> を試してみて、違いをみてみよう。
+コンフィグレーションが省略されたため、<code>compile</code> だと自動検知される。
+そのため、<code>inspect compile:fullClasspath</code> は <code>inspect fullClasspath</code> と同じになるはずだ。
+</p><p>次に、<code>inspect *:fullClasspath</code> も実行して違いを比べてみよう。
+<code>fullClasspath</code> はデフォルトでは、<code>Global</code> スコープには定義されていない。
+</p><p>より詳しくは、<a href="../../docs/Inspecting-Settings.html">Interacting with the Configuration System</a> 参照。
+</p><h3 id="%E3%81%84%E3%81%A4%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%82%92%E6%8C%87%E5%AE%9A%E3%81%99%E3%82%8B%E3%81%B9%E3%81%8D%E3%81%8B">いつスコープを指定するべきか<a href="#%E3%81%84%E3%81%A4%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%82%92%E6%8C%87%E5%AE%9A%E3%81%99%E3%82%8B%E3%81%B9%E3%81%8D%E3%81%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>あるキーが、通常スコープ付けされている場合は、スコープを指定してそのキーを使う必要がある。
+例えば、<code>compile</code> タスクは、デフォルトで <code>Compile</code> と <code>Test</code> コンフィギュレーションにスコープ付けされているけど、
+これらのスコープ外には存在しない。
+</p><p>そのため、<code>compile</code> キーに関連付けられた値を変更するには、<code>compile in Compile</code> か <code>compile in Test</code> のどちらかを書く必要がある。
+素の <code>compile</code> を使うと、コンフィグレーションにスコープ付けされた標準のコンパイルタスクをオーバーライドするかわりに、カレントプロジェクトにスコープ付けされた新しいコンパイルタスクを定義してしまう。
+</p><p><em>“Reference to undefined setting“</em> のようなエラーに遭遇した場合は、スコープを指定していないか、間違ったスコープを指定したことによることが多い。
+君が使っているキーは何か別のスコープの中で定義されている可能性がある。
+エラーメッセージの一部として sbt は、君が意味したであろうものを推測してくれるから、“Did you mean compile:compile?” を探そう。
+</p><p>キーの名前はキーの<em>一部</em>であると考えることもできる。
+実際の所は、全てのキーは名前と（三つの軸を持つ）スコープによって構成される。
+つまり、<code>packageOptions in (Compile, packageBin)</code> という式全体でキー名だということだ。
+単に <code>packageOptions</code> と言っただけでもキー名だけど、それは別のキーだ
+（<code>in</code> 無しのキーのスコープは暗黙で決定され、現プロジェクト、<code>Global</code> コンフィグレーション、<code>Global</code> タスクとなる）。
+</p><h3 id="%E3%83%93%E3%83%AB%E3%83%89%E3%83%AC%E3%83%99%E3%83%AB%E3%83%BB%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0">ビルドレベル・セッティング<a href="#%E3%83%93%E3%83%AB%E3%83%89%E3%83%AC%E3%83%99%E3%83%AB%E3%83%BB%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>サブプロジェクト間に共通なセッティングを一度に定義するための上級テクニックとしてセッティングを
+<code>ThisBuild</code> にスコープ付けするという方法がある。
+</p><p>もし特定のサブプロジェクトにスコープ付けされたキーが見つから無かった場合、
+sbt はフォールバックとして <code>ThisBuild</code> 内を探す。
+この仕組みを利用して、
+<code>version</code>、 <code>scalaVersion</code>、 <code>organization</code>
+といったよく使われるキーに対してビルドレベルのデフォルトのセッティングを定義することができる。
+</p><p>便宜のため、セッティング式のキーと本文の両方を <code>ThisBuild</code>
+にスコープ付けする
+<code>inThisBuild(...)</code> という関数が用意されている。
+セッティング式を渡すと、それに <code>in ThisBuild</code> を可能な所に追加したのと同じものが得られる。
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    inThisBuild(List(
+      // Same as:
+      // organization in ThisBuild := &quot;com.example&quot;
+      organization := &quot;com.example&quot;,
+      scalaVersion := &quot;2.12.3&quot;,
+      version      := &quot;0.1.0-SNAPSHOT&quot;
+    )),
+    name := &quot;Hello&quot;,
+    publish := (),
+    publishLocal := ()
+  )
+
+lazy val core = (project in file(&quot;core&quot;))
+  .settings(
+    // other settings
+  )
+
+lazy val util = (project in file(&quot;util&quot;))
+  .settings(
+    // other settings
+  )
+</code></pre><p>ただし、後で説明する<a href="Scope-Delegation.html">スコープ委譲</a>の性質上、ビルドレベル・セッティングを単純な値の代入以外に使うことは推奨しない。
+</p><h3 id="%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E5%A7%94%E8%AD%B2">スコープ委譲<a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E5%A7%94%E8%AD%B2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>スコープ付きキーは、そのスコープに関連付けられた値がなければ未定義であることもできる。
+</p><p>全てのスコープ軸に対して、sbt には他のスコープ値からなるフォールバック検索パス（fallback search path）がある。
+通常は、より特定のスコープに関連付けられた値が見つからなければ、sbt は、<code>ThisBuild</code> など、より一般的なスコープから値を見つけ出そうとする。
+</p><p>この機能により、より一般的なスコープで一度だけ値を代入して、複数のより特定なスコープがその値を継承することを可能とする。
+<a href="Scope-Delegation.html">スコープ委譲</a>に関する詳細は後ほど解説する。
+</p><div class="bottom nav span-16">
+                        <em>Next Page</em>
+                        <span class="arrow">&gt;</span>
+                        <a href="Appending-Values.html"> 値の追加 </a>                        
+                        <ul class="language-bar">
+        <li><a href="../Scopes.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/Scopes.html"><span class="lang-item lang-ja">日本語</span></a></li>
+      </ul>
+                      </div><div class="tocwrapper show">
+      <a class="tochead nav" style="display: none" href="#toc">❦</a>
+      <a name="toc"></a>
+      <h4 class="toctitle">Contents</h4>
+      <div class="tocbody">
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">始める sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">sbt のインストール</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Mac への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Linux への sbt のインストール</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">ディレクトリ構造</a></div></li><li><div><a href="Running.html">実行</a></div></li><li><div><a href="Basic-Def.html">ビルド定義</a></div></li><li><div><a href="Task-Graph.html">タスク・グラフ</a></div></li><li><div class="current">スコープ</div></li><li><div><a href="Appending-Values.html">値の追加</a></div></li><li><div><a href="Scope-Delegation.html">スコープ委譲 (.value の照会)</a></div></li><li><div><a href="Library-Dependencies.html">ライブラリ依存性</a></div></li><li><div><a href="Multi-Project.html">マルチプロジェクト・ビルド</a></div></li><li><div><a href="Using-Plugins.html">プラグインの使用</a></div></li><li><div><a href="Custom-Settings.html">カスタムセッティングとタスク</a></div></li><li><div><a href="Organizing-Build.html">ビルドの整理</a></div></li><li><div><a href="Summary.html">まとめ</a></div></li><li><div><a href="Bare-Def.html">付録: bare .sbt ビルド定義</a></div></li> </ol></li><li><div><a href="General-Info.html">インフォメーション</a></div><ol class="toc"> <li><div><a href="Changes.html">変更点</a></div><ol class="toc"> <li><div><a href="sbt-1.0-Release-Notes.html">sbt 1.0.0</a></div></li> </ol></li> </ol></li><li><div><a href="Detailed-Topics.html">各論</a></div><ol class="toc"> <li><div><a href="Plugins-and-Best-Practices.html">プラグインとベストプラクティス</a></div><ol class="toc"> <li><div><a href="Testing-sbt-plugins.html">sbt プラグインをテストする</a></div></li> </ol></li> </ol></li><li><div><a href="Howto.html">How to</a></div><ol class="toc"> <li><div><a href="Howto-Sequencing.html">逐次実行</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Def.sequential を用いて逐次タスクを定義する</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Def.taskDyn を用いて動的タスクを定義する</a></div></li><li><div><a href="Howto-After-Input-Task.html">インプットタスクの後で何かする</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn を用いた動的インプットタスクの定義</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">コマンドを用いた逐次実行</a></div></li> </ol></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+          </div>
+        </div>
+        <div class="header">
+          <link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
+<div class="container">
+    <div class="logo">
+      <a href="../../../index.html"><img src="../files/sbt-logo-100x56.png" alt="sbt"></a>
+    </div>
+    <div class="nav">
+      <a href="../../../documentation.html">Documentation</a>
+      <a href="../../../download.html">Download</a>
+      <a href="../../../community.html">Get Involved</a>
+      <a id="source-code" href="https://github.com/sbt/sbt"><img src="../files/github-logo-teal.png" alt="Source code"></a>
+      <a id="twitter" href="https://twitter.com/scala_sbt"><img src="../files/twitter-logo-teal.png" alt="sbt on Twitter"></a>
+    </div>
+    <script type="text/javascript" async>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-41449189-1', 'scala-sbt.org');
+    ga('send', 'pageview');
+    </script>
+    <script type="text/javascript" async>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-23127719-1', 'typesafe.com', {'allowLinker': true, 'name': 'tsTracker'});
+      ga('tsTracker.require', 'linker');
+      ga('tsTracker.linker:autoLink', ['typesafe.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org']);
+      ga('tsTracker.send', 'pageview');
+    </script>
+</div>
+        </div>
+        <div class="footer">
+          <div class="fw-wrapper navy-ltr support-strip">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="support-item">
+          <div class="support-icon">
+            <svg class="svg-icon svg-icon-chat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.5 85.2" enable-background="new 0 0 97.5 85.2"><path stroke="#fff" stroke-width="4.282" stroke-linecap="round" stroke-miterlimit="10" d="M27 29.5h-16.3c-4.7 0-8.6 3.9-8.6 8.6v25.7c0 4.7 3.9 8.6 8.6 8.6h2.7c.8 0 1.5.7 1.5 1.5v7.8c0 1.3 1.6 2 2.5 1l9.5-9.5c.5-.5 1.2-.8 2-.8h20.2c4.7 0 8.6-3.9 8.6-8.6v-7.8" fill="none"/><path fill="#fff" d="M85 0h-40c-6.9 0-12.5 5.6-12.5 12.5v33.4c0 2.2 1.8 4.1 4.1 4.1h29.9c.7 0 1.3.3 1.8.7l10 10c1.6 1.6 4.3.5 4.3-1.8v-6.5c0-1.4 1.1-2.5 2.5-2.5 6.9 0 12.5-5.6 12.5-12.5v-25c-.1-6.8-5.8-12.4-12.6-12.4z"/></svg>
+          </div>
+          <div class="support-detail">
+            <h2>コミュニティー・サポート</h2>
+            <a href="https://ja.stackoverflow.com/questions/tagged/sbt">StackOverflow</a>
+          </div>
+        </div>
+        <div class="support-item">
+          <div class="support-icon">
+            <svg id="lightbend-icon-reverse" class="svg-icon svg-icon-lightbend-reverse" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 302 262"><title>lightbend-icon</title><g id="icon"><path d="M1,195v56a10,10,0,0,0,10,10H291a10,10,0,0,0,10-10V195a557.85,557.85,0,0,1-150,20A557.85,557.85,0,0,1,1,195Z" style="fill:#fff"/><path d="M291,1H11A10,10,0,0,0,1,11V176a539.94,539.94,0,0,0,150,21,539.94,539.94,0,0,0,150-21V11A10,10,0,0,0,291,1Z" style="fill:#fff"/></g></svg>
+          </div>
+          <div class="support-detail">
+            <h2>商用サポート</h2>
+            <a href="https://www.lightbend.com/services/expert-support">Lightbend Subscription</a>
+            <a href="https://www.lightbend.com/services/training">Training</a>
+            <a href="https://www.lightbend.com/services/consulting">Consulting</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div><footer>
+  <div class="container footer">
+    <div class="row">
+      <div class="col-md-8 sbt">
+        <nav>
+          <a href="../../../index.html">
+            <img src="../files/typesafe_sbt_reverse_svg.svg" alt="sbt">
+          </a>
+          <a href="../../../documentation.html">Documentation</a>
+          <a href="../../../download.html">Download</a>
+          <a href="../../../community.html">Get Involved</a>
+        </nav>
+      </div>
+      <div class="col-md-4 text-right ts">
+        &copy; 2016-2017 Lightbend Inc.
+        <a href="https://www.lightbend.com">
+          <img src="files/lightbend-reverse.svg" alt="Lightbend, Inc.">
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+        </div>
+        
+        <div class="highlight-outer">
+              <div class="highlight-menu">
+                <ul>
+                  <li><button id="highlight-button-twitter"><img src="../img/twitter-bird-dark-bgs.png"/></button></li>
+                </ul>
+              </div>
+            </div>
+      </body>
+    </html>

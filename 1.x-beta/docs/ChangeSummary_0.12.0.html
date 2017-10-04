@@ -1,0 +1,524 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html>
+      <head>
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+        <title>sbt Reference Manual — sbt 0.12.4</title>
+        <link rel="shortcut icon" href="favicon.ico"/>
+        <link rel="stylesheet" href="css/blueprint/screen.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/blueprint/grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="css/blueprint/print.css" type="text/css" media="print"/> 
+        <!--[if lt IE 8]>
+          <link rel="stylesheet" href={ relativeBase + "css/blueprint/ie.css" } type="text/css" media="screen, projection"/>
+        <![endif]-->
+        <link rel="stylesheet" href="css/pamflet.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/pamflet-print.css" type="text/css" media="print"/>
+        <link rel="stylesheet" href="css/pamflet-grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="css/color_scheme-redmond.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/color_scheme-github.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/color_scheme-monokai.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/pamfletheight_80px_2em.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <script type="text/javascript" src="js/jquery-1.6.2.min.js"></script>
+        <script type="text/javascript" src="js/jquery.collapse.js"></script>
+        <script type="text/javascript" src="js/pamflet.js"></script>
+        <script type="text/javascript">
+          Pamflet.page.language = 'en';
+        </script>
+        <script type="text/javascript" src="js/prettify/prettify.js"></script><script type="text/javascript" src="js/prettify/lang-scala.js"></script><link type="text/css" rel="stylesheet" href="css/prettify.css"/><script type="text/javascript"><!--
+        window.onload=function() { prettyPrint(); };
+      --></script>
+        <link rel="stylesheet" href="css/custom.css" type="text/css" media="screen, projection"/>
+        
+        <script type="text/javascript">
+              Pamflet.twitter = '#sbt #scala';
+            </script>
+      </head>
+      <body class="color_scheme-github">
+        <a class="page prev nav" href="ChangeSummary_0.13.0.html">
+            <span class="space">&nbsp;</span>
+            <span class="flip arrow">&gt;</span>
+          </a><a class="page next nav" href="Older-Changes.html">
+            <span class="space">&nbsp;</span>
+            <span class="arrow">&gt;</span>
+          </a>
+        <div class="container contentswrapper">
+          <div class="span-16 prepend-1 append-1 contents">
+            <h2 id="sbt+0.12.4">sbt 0.12.4<a href="#sbt+0.12.4" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><ul><li>Work around URI problems with encoding and resolving. (gh-725)
+</li><li>Allow -cp argument to <code>apply</code> command to be quoted. (gh-724)
+</li><li>Make <code>sbtBinaryVersion</code> use the new approach for 0.13 and later to
+support cross-building plugins.
+</li><li>Pull <code>sbtDependency</code> version from <code>sbtVersion</code> to facilitate
+cross-building plugins.
+</li><li>Proper support for stashing on-failure handlers. (gh-732)
+</li><li>Include files with zip extension in unmanaged jars. (gh-750)
+</li><li>Only add automatically detected plugins to options once. (gh-757)
+</li><li>Properly handle failure in a multi-command that includes <code>reload</code>.
+(gh-732)
+</li><li>Fix unsynchronized caching of Scala class loaders that could result
+in Scala classes being loaded in multiple class loaders.
+</li><li>Incremental compiler: remove resident compiler code (wasn’t used and
+was a compatibility liability)
+</li><li>Incremental compiler: properly track <code>abstract override</code> modifier.
+(gh-726)
+</li><li>Incremental compiler: do not normalize types in the API extraction
+phase. (gh-736)
+</li><li>Ivy cache: account for <code>localOnly</code> when cache subclass overrides
+<code>isChanging</code>
+</li><li>Ivy cache: fix corruption when developing sbt or sbt plugins.
+(gh-768)
+</li><li>Ivy cache: invalidate when artifact download fails to avoid locking
+into bad resolver. (gh-760)
+</li><li>Ivy cache: use publication date from metadata instead of original
+file’s last modified time when deleting out of date artifacts.
+(gh-764)
+</li></ul><h2 id="sbt+0.12.3">sbt 0.12.3<a href="#sbt+0.12.3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><ul><li>Allow <code>cleanKeepFiles</code> to contain directories
+</li><li>Disable Ivy debug-level logging for performance. (gh-635)
+</li><li>Invalidate artifacts not recorded in the original metadata when a
+module marked as changing changes. (gh-637, gh-641)
+</li><li>Ivy Artifact needs wildcard configuration added if no explicit ones
+are defined. (gh-439)
+</li><li>Right precedence of sbt.boot.properties lookup, handle qualifier
+correctly. (gh-651)
+</li><li>Mark the tests failed exception as having already provided feedback.
+</li><li>Handle exceptions not caught by the test framework when forking.
+(gh-653)
+</li><li>Support <code>reload plugins</code> after ignoring a failure to load a project.
+</li><li>Workaround for os deadlock detection at the process level. (gh-650)
+</li><li>Fix for dependency on class file corresponding to a package.
+(Grzegorz K., gh-620)
+</li><li>Fix incremental compilation problem with package objects inheriting
+from invalidated sources in a subpackage.
+</li><li>Use Ivy’s default name for the resolution report so that links to
+other configurations work.
+</li><li>Include jars from java.ext.dirs in incremental classpath. (gh-678)
+</li><li>Multi-line prompt text offset issue (Jibbers42, gh-625)
+</li><li>Added <code>xml:space=&quot;preserve&quot;</code> attribute to extraDependencyAttributes
+XML Block for publishing poms for plugins dependent on other plugins
+(Brendan M., gh-645)
+</li><li>Tag the actual test task and not a later task. (gh-692)
+</li><li>Make exclude-classifiers per-user instead of per-build. (gh-634)
+</li><li>Load global plugins in their own class loader and replace the base
+loader with that. (gh-272)
+</li><li>Demote the default conflict warnings to the debug level. These will
+be removed completely in 0.13. (gh-709)
+</li><li>Fix Ivy cache issues when multiple resolvers are involved. (gh-704)
+</li></ul><h2 id="sbt+0.12.2">sbt 0.12.2<a href="#sbt+0.12.2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><ul><li>Support -Yrangepos. (Lex S., gh-607)
+</li><li>Only make one call to test frameworks per test name. (gh-520)
+</li><li>Add <code>-cp</code> option to the <code>apply</code> method to make adding commands from
+an external program easier.
+</li><li>Stable representation of refinement typerefs. This fixes unnecessary
+recompilations in some cases. (Adriaan M., gh-610)
+</li><li>Disable aggregation for <code>run-main</code>. (gh-606)
+</li><li>Concurrent restrictions: Untagged should be set based on the task’s
+tags, not the tags of all tasks.
+</li><li>When preserving the last modified time of files, convert negative
+values to 0
+</li><li>Use <code>java.lang.Throwable.setStackTrace</code> when sending exceptions back
+from forked tests. (Eugene V., gh-543)
+</li><li>Don’t merge dependencies with mismatched transitive/force/changing
+values. (gh-582)
+</li><li>Filter out null parent files when deleting empty directories.
+(Eugene V., gh-589)
+</li><li>Work around File constructor not accepting URIs for UNC paths.
+(gh-564)
+</li><li>Split ForkTests react() out to workaround SI-6526 (avoids a
+stackoverflow in some forked test situations)
+</li><li>Maven-style ivy repo support in the launcher config (Eric B.,
+gh-585)
+</li><li>Compare external binaries with canonical files (nau, gh-584)
+</li><li>Call System.exit after the main thread is finished. (Eugene V.,
+gh-565)
+</li><li>Abort running tests on the first failure to communicate results back
+to the main process. (Eugene V., gh-557)
+</li><li>Don’t let the right side of the alias command fail the parse.
+(gh-572)
+</li><li>API extraction: handle any type that is annotated, not just the
+spec’d simple type. (gh-559)
+</li><li>Don’t try to look up the class file for a package. (gh-620)
+</li></ul><h2 id="sbt+0.12.1">sbt 0.12.1<a href="#sbt+0.12.1" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Dependency+management+fixes%3A">Dependency management fixes:<a href="#Dependency+management+fixes%3A" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Merge multiple dependency definitions for the same ID. Workaround
+for gh-468, gh-285, gh-419, gh-480.
+</li><li>Don’t write section of pom if scope is ‘compile’.
+</li><li>Ability to properly match on artifact type. Fixes gh-507 (Thomas).
+</li><li>Force <code>update</code> to run on changes to last modified time of artifacts
+or cached descriptor (part of fix for gh-532). It may also fix
+issues when working with multiple local projects via ‘publish-local’
+and binary dependencies.
+</li><li>Per-project resolution cache that deletes cached files before
+update. Notes:
+</li></ul><blockquote><ul><li>The resolution cache differs from the repository cache and does
+not contain dependency metadata or artifacts.
+</li><li>The resolution cache contains the generated ivy files, properties,
+and resolve reports for the project.
+</li><li>There will no longer be individual files directly in
+<code>~/.ivy2/cache/</code>
+</li><li>Resolve reports are now in target/resolution-cache/reports/,
+viewable with a browser.
+</li><li>Cache location includes extra attributes so that cross builds of a
+plugin do not overwrite each other. Fixes gh-532.
+</li></ul></blockquote><h3 id="Three+stage+incremental+compilation%3A">Three stage incremental compilation:<a href="#Three+stage+incremental+compilation%3A" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>As before, the first step recompiles sources that were edited (or
+otherwise directly invalidated).
+</li><li>The second step recompiles sources from the first step whose API has
+changed, their direct dependencies, and sources forming a cycle with
+these sources.
+</li><li>The third step recompiles transitive dependencies of sources from
+the second step whose API changed.
+</li><li>Code relying mainly on composition should see decreased compilation
+times with this approach.
+</li><li>Code with deep inheritance hierarchies and large cycles between
+sources may take longer to compile.
+</li><li><code>last compile</code> will show cycles that were processed in step 2.
+Reducing large cycles of sources shown here may decrease compile
+times.
+</li></ul><h3 id="Miscellaneous+fixes+and+improvements%3A">Miscellaneous fixes and improvements:<a href="#Miscellaneous+fixes+and+improvements%3A" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Various test forking fixes. Fixes gh-512, gh-515.
+</li><li>Proper isolation of build definition classes. Fixes gh-536, gh-511.
+</li><li><code>orbit</code> packaging should be handled like a standard jar. Fixes
+gh-499.
+</li><li>In <code>IO.copyFile</code>, limit maximum size transferred via NIO. Fixes
+gh-491.
+</li><li>Add OSX JNI library extension in <code>includeFilter</code> by default. Fixes
+gh-500. (Indrajit)
+</li><li>Translate <code>show x y</code> into <code>;show x ;show y</code> . Fixes gh-495.
+</li><li>Clean up temporary directory on exit. Fixes gh-502.
+</li><li><code>set</code> prints the scopes+keys it defines and affects.
+</li><li>Tab completion for <code>set</code> (experimental).
+</li><li>Report file name when an error occurs while opening a corrupt zip
+file in incremental compilation code. (James)
+</li><li>Defer opening logging output files until an actual write. Helps
+reduce number of open file descriptors.
+</li><li>Back all console loggers by a common console interface that merges
+(overwrites) consecutive Resolving xxxx … lines when ansi codes
+are enabled (as first done by Play).
+</li></ul><h3 id="Forward-compatible-only+change+%28not+present+in+0.12.0%29%3A">Forward-compatible-only change (not present in 0.12.0):<a href="#Forward-compatible-only+change+%28not+present+in+0.12.0%29%3A" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li><code>sourcesInBase</code> setting controls whether sources in base directory
+are included. Fixes gh-494.
+</li></ul><h2 id="sbt+0.12.0">sbt 0.12.0<a href="#sbt+0.12.0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h4 id="Features%2C+fixes%2C+changes+with+compatibility+implications">Features, fixes, changes with compatibility implications<a href="#Features%2C+fixes%2C+changes+with+compatibility+implications" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>The cross versioning convention has changed for Scala versions 2.10
+and later as well as for sbt plugins.
+</li><li>When invoked directly, ‘update’ will always perform an update
+(gh-335)
+</li><li>The sbt plugins repository is added by default for plugins and
+plugin definitions. gh-380
+</li><li>Plugin configuration directory precedence has changed (see details
+section below)
+</li><li>Source dependencies have been fixed, but the fix required changes
+(see details section below)
+</li><li>Aggregation has changed to be more flexible (see details section
+below)
+</li><li>Task axis syntax has changed from key(for task) to task::key (see
+details section below)
+</li><li>The organization for sbt has to changed to <code>org.scala-sbt</code> (was:
+org.scala-tools.sbt). This affects users of the scripted plugin in
+particular.
+</li><li><code>artifactName</code> type has changed to
+<code>(ScalaVersion, Artifact, ModuleID) =&gt; String</code>
+</li><li><code>javacOptions</code> is now a task
+</li><li><code>session save</code> overwrites settings in <code>build.sbt</code> (when
+appropriate). gh-369
+</li><li>scala-library.jar is now required to be on the classpath in order to
+compile Scala code. See the scala-library.jar section at the bottom
+of the page for details.
+</li></ul><h4 id="Features">Features<a href="#Features" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>Support for forking tests (gh-415)
+</li><li><code>test-quick</code> (see details section below)
+</li><li>Support globally overriding repositories (gh-472)
+</li><li>Added <code>print-warnings</code> task that will print unchecked and
+deprecation warnings from the previous compilation without needing
+to recompile (Scala 2.10+ only)
+</li><li>Support for loading an ivy settings file from a URL.
+</li><li><code>projects add/remove &lt;URI&gt;</code> for temporarily working with other
+builds
+</li><li>Enhanced control over parallel execution (see details section below)
+</li><li><code>inspect tree &lt;key&gt;</code> for calling <code>inspect</code> command recursively
+(gh-274)
+</li></ul><h4 id="Fixes">Fixes<a href="#Fixes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>Delete a symlink and not its contents when recursively deleting a
+directory.
+</li><li>Fix detection of ancestors for java sources
+</li><li>Fix the resolvers used for <code>update-sbt-classifiers</code> (gh-304)
+</li><li>Fix auto-imports of plugins (gh-412)
+</li><li>Argument quoting (see details section below)
+</li><li>Properly reset JLine after being stopped by Ctrl+z (unix only).
+gh-394
+</li></ul><h4 id="Improvements">Improvements<a href="#Improvements" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>The launcher can launch all released sbt versions back to 0.7.0.
+</li><li>A more refined hint to run ‘last’ is given when a stack trace is
+suppressed.
+</li><li>Use java 7 Redirect.INHERIT to inherit input stream of subprocess
+(gh-462,gh-327). This should fix issues when forking interactive
+programs. (@vigdorchik)
+</li><li>Mirror ivy ‘force’ attribute (gh-361)
+</li><li>Various improvements to <code>help</code> and <code>tasks</code> commands as well as new
+settings command (gh-315)
+</li><li>Bump jsch version to 0.1.46. (gh-403)
+</li><li>Improved help commands: <code>help</code>, <code>tasks</code>, <code>settings</code>.
+</li><li>Bump to JLine 1.0 (see details section below)
+</li><li>Global repository setting (see details section below)
+</li><li>Other fixes/improvements: gh-368, gh-377, gh-378, gh-386, gh-387,
+gh-388, gh-389
+</li></ul><h4 id="Experimental+or+In-progress">Experimental or In-progress<a href="#Experimental+or+In-progress" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>API for embedding incremental compilation. This interface is subject
+to change, but already being used in <a href="https://github.com/davidB/scala-maven-plugin/tree/feature/sbt-inc">a branch of the
+scala-maven-plugin</a>.
+</li><li>Experimental support for keeping the Scala compiler resident. Enable
+by passing -Dsbt.resident.limit=n to sbt, where n is an integer
+indicating the maximum number of compilers to keep around.
+</li><li>The <a href="Howto.html">Howto pages</a> on the
+<a href="http://www.scala-sbt.org">new site</a> are at least readable now. There
+is more content to write and more formatting improvements are
+needed, so <a href="https://github.com/sbt/sbt.github.com">pull requests are
+welcome</a>.
+</li></ul><h3 id="Details+of+major+changes+from+0.11.2+to+0.12.0">Details of major changes from 0.11.2 to 0.12.0<a href="#Details+of+major+changes+from+0.11.2+to+0.12.0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="Plugin+configuration+directory">Plugin configuration directory<a href="#Plugin+configuration+directory" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>In 0.11.0, plugin configuration moved from <code>project/plugins/</code> to just
+<code>project/</code>, with <code>project/plugins/</code> being deprecated. Only 0.11.2 had a
+deprecation message, but in all of 0.11.x, the presence of the old style
+<code>project/plugins/</code> directory took precedence over the new style. In
+0.12.0, the new style takes precedence. Support for the old style won’t
+be removed until 0.13.0.
+</p><ol><li>Ideally, a project should ensure there is never a conflict. Both
+styles are still supported; only the behavior when there is a
+conflict has changed.
+</li><li>In practice, switching from an older branch of a project to a new
+branch would often leave an empty project/plugins/ directory that
+would cause the old style to be used, despite there being no
+configuration there.
+</li><li>Therefore, the intention is that this change is strictly an
+improvement for projects transitioning to the new style and isn’t
+noticed by other projects.
+</li></ol><h4 id="Parsing+task+axis">Parsing task axis<a href="#Parsing+task+axis" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>There is an important change related to parsing the task axis for
+settings and tasks that fixes gh-202
+</p><ol><li>The syntax before 0.12 has been <code>{build}project/config:key(for task)</code>
+</li><li>The proposed (and implemented) change for 0.12 is
+<code>{build}project/config:task::key</code>
+</li><li>By moving the task axis before the key, it allows for easier
+discovery (via tab completion) of keys in plugins.
+</li><li>It is not planned to support the old syntax.
+</li></ol><h4 id="Aggregation">Aggregation<a href="#Aggregation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Aggregation has been made more flexible. This is along the direction
+that has been previously discussed on the mailing list.
+</p><ol><li>Before 0.12, a setting was parsed according to the current project
+and only the exact setting parsed was aggregated.
+</li><li>Also, tab completion did not account for aggregation.
+</li><li>This meant that if the setting/task didn’t exist on the current
+project, parsing failed even if an aggregated project contained the
+setting/task.
+</li><li>Additionally, if compile:package existed for the current project,
+<code>*:package</code> existed for an aggregated project, and the user requested
+‘package’ to run (without specifying the configuration), <code>*:package</code>
+wouldn’t be run on the aggregated project (because it isn’t the same
+as the <code>compile:package</code> key that existed on the current project).
+</li><li><p>In 0.12, both of these situations result in the aggregated settings
+being selected. For example,
+</p><ol><li>Consider a project <code>root</code> that aggregates a subproject <code>sub</code>.
+</li><li><code>root</code> defines <code>*:package</code>.
+</li><li><code>sub</code> defines <code>compile:package</code> and <code>compile:compile</code>.
+</li><li>Running <code>root/package</code> will run <code>root/*:package</code> and
+<code>sub/compile:package</code>
+</li><li>Running <code>root/compile</code> will run <code>sub/compile:compile</code>
+</li></ol></li><li>This change was made possible in part by the change to task axis
+parsing.
+</li></ol><h4 id="Parallel+Execution">Parallel Execution<a href="#Parallel+Execution" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Fine control over parallel execution is supported as described here:
+<a href="Parallel-Execution.html">Parallel Execution</a>.
+</p><ol><li>The default behavior should be the same as before, including the
+parallelExecution settings.
+</li><li>The new capabilities of the system should otherwise be considered
+experimental.
+</li><li>Therefore, <code>parallelExecution</code> won’t be deprecated at this time.
+</li></ol><h4 id="Source+dependencies">Source dependencies<a href="#Source+dependencies" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>A fix for issue gh-329 is included in 0.12.0. This fix ensures that only
+one version of a plugin is loaded across all projects. There are two
+parts to this.
+</p><ol><li>The version of a plugin is fixed by the first build to load it. In
+particular, the plugin version used in the root build (the one in
+which sbt is started in) always overrides the version used in
+dependencies.
+</li><li>Plugins from all builds are loaded in the same class loader.
+</li></ol><p>Additionally, Sanjin’s patches to add support for hg and svn URIs are
+included.
+</p><ol><li>sbt uses Subversion to retrieve URIs beginning with <code>svn</code> or
+svn+ssh. An optional fragment identifies a specific revision to
+checkout.
+</li><li>Because a URI for Mercurial doesn’t have a Mercurial-specific
+scheme, sbt requires the URI to be prefixed with hg: to identify it
+as a Mercurial repository.
+</li><li>Also, URIs that end with <code>.git</code> are now handled properly.
+</li></ol><h4 id="Cross+building">Cross building<a href="#Cross+building" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The cross version suffix is shortened to only include the major and
+minor version for Scala versions starting with the 2.10 series and for
+sbt versions starting with the 0.12 series. For example, <code>sbinary_2.10</code>
+for a normal library or <code>sbt-plugin_2.10_0.12</code> for an sbt plugin. This
+requires forward and backward binary compatibility across incremental
+releases for both Scala and sbt.
+</p><ol><li><p>This change has been a long time coming, but it requires everyone
+publishing an open source project to switch to 0.12 to publish for
+</p><ol><li>10 or adjust the cross versioned prefix in their builds
+appropriately.
+</li></ol></li><li>Obviously, using 0.12 to publish a library for 2.10 requires 0.12.0
+to be released before projects publish for 2.10.
+</li><li>There is now the concept of a binary version. This is a subset of
+the full version string that represents binary compatibility. That
+is, equal binary versions implies binary compatibility. All Scala
+versions prior to 2.10 use the full version for the binary version
+to reflect previous sbt behavior. For 2.10 and later, the binary
+version is <code>&lt;major&gt;.&lt;minor&gt;</code>.
+</li><li>The cross version behavior for published artifacts is configured by
+the crossVersion setting. It can be configured for dependencies by
+using the cross method on ModuleID or by the traditional %%
+dependency construction variant. By default, a dependency has cross
+versioning disabled when constructed with a single % and uses the
+binary Scala version when constructed with %%.
+</li><li>The artifactName function now accepts a type ScalaVersion as its
+first argument instead of a String. The full type is now
+(ScalaVersion, ModuleID, Artifact) =&gt; String. ScalaVersion contains
+both the full Scala version (such as 2.10.0) as well as the binary
+Scala version (such as 2.10).
+</li><li>The flexible version mapping added by Indrajit has been merged into
+the cross method and the %% variants accepting more than one
+argument have been deprecated. See <a href="Cross-Build.html">Cross Build</a> for
+details.
+</li></ol><h4 id="Global+repository+setting">Global repository setting<a href="#Global+repository+setting" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Define the repositories to use by putting a standalone <code>[repositories]</code>
+section (see the <a href="Sbt-Launcher.html">sbt Launcher</a> page) in
+<code>~/.sbt/repositories</code> and pass <code>-Dsbt.override.build.repos=true</code> to sbt.
+Only the repositories in that file will be used by the launcher for
+retrieving sbt and Scala and by sbt when retrieving project
+dependencies. (@jsuereth)
+</p><h4 id="test-quick">test-quick<a href="#test-quick" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>test-quick</code> (gh-393) runs the tests specified as arguments (or all
+tests if no arguments are given) that:
+</p><ol><li>have not been run yet OR
+</li><li>failed the last time they were run OR
+</li><li>had any transitive dependencies recompiled since the last successful
+run
+</li></ol><h4 id="Argument+quoting">Argument quoting<a href="#Argument+quoting" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Argument quoting (gh-396) from the intereactive mode works like Scala
+string literals.
+</p><ol><li><code>&gt; command &quot;arg with spaces,\n escapes interpreted&quot;</code>
+</li><li><code>&gt; command &quot;&quot;&quot;arg with spaces,\n escapes not interpreted&quot;&quot;&quot;</code>
+</li><li>For the first variant, note that paths on Windows use backslashes
+and need to be escaped (). Alternatively, use the second
+variant, which does not interpret escapes.
+</li><li>For using either variant in batch mode, note that a shell will
+generally require the double quotes themselves to be escaped.
+</li></ol><h3 id="scala-library.jar">scala-library.jar<a href="#scala-library.jar" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt versions prior to 0.12.0 provided the location of scala-library.jar
+to scalac even if scala-library.jar wasn’t on the classpath. This
+allowed compiling Scala code without scala-library as a dependency, for
+example, but this was a misfeature. Instead, the Scala library should be
+declared as <code>provided</code>:
+</p><pre><code class="prettyprint lang-scala">// Don't automatically add the scala-library dependency
+// in the 'compile' configuration
+autoScalaLibrary := false
+
+libraryDependencies += &quot;org.scala-lang&quot; % &quot;scala-library&quot; % &quot;2.9.2&quot; % &quot;provided&quot;
+</code></pre><div class="bottom nav span-16">
+                        <em>Next Page</em>
+                        <span class="arrow">&gt;</span>
+                        <a href="Older-Changes.html"> Older Changes </a>                        
+                        <ul class="language-bar">
+        
+      </ul>
+                      </div><div class="tocwrapper show">
+      <a class="tochead nav" style="display: none" href="#toc">❦</a>
+      <a name="toc"></a>
+      <h4 class="toctitle">Contents</h4>
+      <div class="tocbody">
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">Getting Started with sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">Installing sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Installing sbt on Mac</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Installing sbt on Windows</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Installing sbt on Linux</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">Directory structure</a></div></li><li><div><a href="Running.html">Running</a></div></li><li><div><a href="Basic-Def.html">Build definition</a></div></li><li><div><a href="Task-Graph.html">Task graph</a></div></li><li><div><a href="Scopes.html">Scopes</a></div></li><li><div><a href="Appending-Values.html">Appending values</a></div></li><li><div><a href="Scope-Delegation.html">Scope delegation (.value lookup)</a></div></li><li><div><a href="Library-Dependencies.html">Library dependencies</a></div></li><li><div><a href="Multi-Project.html">Multi-project builds</a></div></li><li><div><a href="Using-Plugins.html">Using plugins</a></div></li><li><div><a href="Custom-Settings.html">Custom settings and tasks</a></div></li><li><div><a href="Organizing-Build.html">Organizing the build</a></div></li><li><div><a href="Summary.html">Getting Started summary</a></div></li> </ol></li><li><div><a href="General-Info.html">General Information</a></div><ol class="toc"> <li><div><a href="Credits.html">Credits</a></div></li><li><div><a href="Community-Plugins.html">Community Plugins</a></div></li><li><div><a href="Repository-Roles.html">Community Repository Policy</a></div></li><li><div><a href="Bintray-For-Plugins.html">Bintray For Plugins</a></div></li><li><div><a href="Setup-Notes.html">Setup Notes</a></div></li><li><div><a href="Using-Sonatype.html">Using Sonatype</a></div></li><li><div><a href="Contibuting-to-sbt.html">Contributing to sbt</a></div></li><li><div><a href="Changes.html">Changes</a></div><ol class="toc"> <li><div><a href="Migrating-from-sbt-013x.html">Migrating from sbt 0.13.x</a></div></li><li><div><a href="sbt-1.0-Release-Notes.html">sbt 1.0.1</a></div></li><li><div><a href="sbt-0.13-Tech-Previews.html">sbt 0.13.5+ Technology Previews</a></div></li><li><div><a href="ChangeSummary_0.13.0.html">sbt 0.13.0 - 0.13.2</a></div></li><li><div class="current">sbt 0.12.4</div></li><li><div><a href="Older-Changes.html">Older Changes</a></div></li><li><div><a href="Migrating-from-sbt-07x.html">Migrating from 0.7 to 0.10+</a></div></li> </ol></li> </ol></li><li><div><a href="Detailed-Topics.html">Detailed Topics</a></div><ol class="toc"> <li><div><a href="Using-sbt.html">Using sbt</a></div><ol class="toc"> <li><div><a href="Command-Line-Reference.html">Command Line Reference</a></div></li><li><div><a href="Console-Project.html">Console Project</a></div></li><li><div><a href="Cross-Build.html">Cross-building</a></div></li><li><div><a href="Inspecting-Settings.html">Interacting with the Configuration System</a></div></li><li><div><a href="Triggered-Execution.html">Triggered Execution</a></div></li><li><div><a href="Scripts.html">Scripts, REPL, and Dependencies</a></div></li><li><div><a href="Understanding-Recompilation.html">Understanding Incremental Recompilation</a></div></li> </ol></li><li><div><a href="Configuration-Index.html">Configuration</a></div><ol class="toc"> <li><div><a href="Classpaths.html">Classpaths, sources, and resources</a></div></li><li><div><a href="Compiler-Plugins.html">Compiler Plugin Support</a></div></li><li><div><a href="Configuring-Scala.html">Configuring Scala</a></div></li><li><div><a href="Forking.html">Forking</a></div></li><li><div><a href="Global-Settings.html">Global Settings</a></div></li><li><div><a href="Java-Sources.html">Java Sources</a></div></li><li><div><a href="Mapping-Files.html">Mapping Files</a></div></li><li><div><a href="Local-Scala.html">Local Scala</a></div></li><li><div><a href="Macro-Projects.html">Macro Projects</a></div></li><li><div><a href="Paths.html">Paths</a></div></li><li><div><a href="Parallel-Execution.html">Parallel Execution</a></div></li><li><div><a href="Process.html">External Processes</a></div></li><li><div><a href="Running-Project-Code.html">Running Project Code</a></div></li><li><div><a href="Testing.html">Testing</a></div></li> </ol></li><li><div><a href="Dependency-Management-Index.html">Dependency Management</a></div><ol class="toc"> <li><div><a href="Artifacts.html">Artifacts</a></div></li><li><div><a href="Dependency-Management-Flow.html">Dependency Management Flow</a></div></li><li><div><a href="Library-Management.html">Library Management</a></div></li><li><div><a href="Proxy-Repositories.html">Proxy Repositories</a></div></li><li><div><a href="Publishing.html">Publishing</a></div></li><li><div><a href="Resolvers.html">Resolvers</a></div></li><li><div><a href="Update-Report.html">Update Report</a></div></li><li><div><a href="Cached-Resolution.html">Cached resolution</a></div></li> </ol></li><li><div><a href="Tasks-and-Commands.html">Tasks and Commands</a></div><ol class="toc"> <li><div><a href="Tasks.html">Tasks</a></div></li><li><div><a href="Input-Tasks.html">Input Tasks</a></div></li><li><div><a href="Commands.html">Commands</a></div></li><li><div><a href="Parsing-Input.html">Parsing and tab completion</a></div></li><li><div><a href="Build-State.html">State and actions</a></div></li><li><div><a href="Task-Inputs.html">Tasks/Settings: Motivation</a></div></li> </ol></li><li><div><a href="Plugins-and-Best-Practices.html">Plugins and Best Practices</a></div><ol class="toc"> <li><div><a href="Best-Practices.html">General Best Practices</a></div></li><li><div><a href="Plugins.html">Plugins</a></div></li><li><div><a href="Plugins-Best-Practices.html">Plugins Best Practices</a></div></li><li><div><a href="Travis-CI-with-sbt.html">Setting up Travis CI with sbt</a></div></li><li><div><a href="Testing-sbt-plugins.html">Testing sbt plugins</a></div></li><li><div><a href="sbt-new-and-Templates.html">sbt new and Templates</a></div></li><li><div><a href="Cross-Build-Plugins.html">Cross building plugins</a></div></li> </ol></li> </ol></li><li><div><a href="Howto.html">How to…</a></div><ol class="toc"> <li><div><a href="Howto-Classpaths.html">Classpaths</a></div></li><li><div><a href="Howto-Customizing-Paths.html">Customizing paths</a></div></li><li><div><a href="Howto-Generating-Files.html">Generating files</a></div></li><li><div><a href="Howto-Inspect-the-Build.html">Inspect the build</a></div></li><li><div><a href="Howto-Interactive-Mode.html">Interactive mode</a></div></li><li><div><a href="Howto-Logging.html">Configure and use logging</a></div></li><li><div><a href="Howto-Project-Metadata.html">Project metadata</a></div></li><li><div><a href="Howto-Package.html">Configure packaging</a></div></li><li><div><a href="Howto-Running-Commands.html">Running commands</a></div></li><li><div><a href="Howto-Scala.html">Configure and use Scala</a></div></li><li><div><a href="Howto-Scaladoc.html">Generate API documentation</a></div></li><li><div><a href="Howto-Triggered.html">Triggered execution</a></div></li><li><div><a href="Define+Custom+Tasks.html">Define Custom Tasks</a></div></li><li><div><a href="Howto-Startup.html">How to take an action on startup</a></div></li><li><div><a href="Howto-Sequencing.html">Sequencing</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Defining a sequential task with Def.sequential</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Defining a dynamic task with Def.taskDyn</a></div></li><li><div><a href="Howto-After-Input-Task.html">Doing something after an input task</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Defining a dynamic input task with Def.inputTaskDyn</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">How to sequence using commands</a></div></li> </ol></li><li><div><a href="Examples.html">Examples</a></div><ol class="toc"> <li><div><a href="Basic-Def-Examples.html">.sbt build examples</a></div></li><li><div><a href="Scala-Files-Example.html">.sbt build with .scala files example</a></div></li><li><div><a href="Advanced-Configurations-Example.html">Advanced configurations example</a></div></li><li><div><a href="Advanced-Command-Example.html">Advanced command example</a></div></li> </ol></li> </ol></li><li><div><a href="Faq.html">Frequently Asked Questions</a></div><ol class="toc">  </ol></li><li><div><a href="Name-Index.html">Index</a></div></li><li><div><a href="Developers-Guide.html">Developer’s Guide (Work in progress)</a></div><ol class="toc"> <li><div><a href="Modularization.html">Modularization</a></div><ol class="toc"> <li><div><a href="Module-Summary.html">Module summary</a></div></li> </ol></li><li><div><a href="Coding-Guideline.html">sbt Coding Guideline</a></div><ol class="toc">  </ol></li><li><div><a href="Datatype.html">sbt-datatype</a></div><ol class="toc">  </ol></li><li><div><a href="Compiler-Interface.html">Compiler Interface</a></div><ol class="toc"> <li><div><a href="Version-Specific-Sources.html">Fetching the most specific sources</a></div></li> </ol></li><li><div><a href="Sbt-Launcher.html">sbt Launcher</a></div><ol class="toc"> <li><div><a href="Launcher-Getting-Started.html">Getting Started with the sbt launcher</a></div></li><li><div><a href="Launcher-Architecture.html">Sbt Launcher Architecture</a></div></li><li><div><a href="Launcher-Configuration.html">sbt Launcher Configuration</a></div></li> </ol></li><li><div><a href="DevGuide-Notes.html">Notes</a></div><ol class="toc"> <li><div><a href="Core-Principles.html">Core Principles</a></div></li><li><div><a href="Settings-Core.html">Settings Core</a></div></li><li><div><a href="Setting-Initialization.html">Setting Initialization</a></div></li><li><div><a href="Build-Loaders.html">Build Loaders</a></div></li><li><div><a href="Command-Line-Applications.html">Creating Command Line Applications Using sbt</a></div></li><li><div><a href="Nightly-Builds.html">Nightly Builds</a></div></li> </ol></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+          </div>
+        </div>
+        <div class="header">
+          <link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
+<div class="container">
+    <div class="logo">
+      <a href="../../index.html"><img src="files/sbt-logo.svg" alt="sbt"></a>
+      <span class="versions"><select id="versions"></select></span>
+    </div>
+    <div class="nav">
+      <a href="../../documentation.html">Documentation</a>
+      <a href="../../download.html">Download</a>
+      <a href="../../community.html">Get Involved</a>
+      <a id="source-code" href="https://github.com/sbt/sbt"><img src="files/github-logo-teal.svg" alt="Source code" class="social"></a>
+      <a id="twitter" href="https://twitter.com/scala_sbt"><img src="files/twitter-logo-teal.svg" alt="sbt on Twitter" class="social"></a>
+    </div>
+    <script type="text/javascript" async>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-41449189-1', 'scala-sbt.org');
+    ga('send', 'pageview');
+    </script>
+    <script type="text/javascript" async>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-23127719-1', 'lightbend.com', {'allowLinker': true, 'name': 'tsTracker'});
+      ga('tsTracker.require', 'linker');
+      ga('tsTracker.linker:autoLink', ['lightbend.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org']);
+      ga('tsTracker.send', 'pageview');
+    </script>
+    <script type="text/javascript">
+$(function() {
+  var scrollDown = function() {
+    if (window.location.hash !== "") {
+      setTimeout(function() { $(window).scrollTop($(window).scrollTop() - 120); }, 100);
+    }
+  }
+  scrollDown();
+  $(window).bind('hashchange', function() {
+    scrollDown();
+  });
+});
+    </script>
+</div>
+
+        </div>
+        <div class="footer">
+          <div class="fw-wrapper navy-ltr support-strip">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="support-item">
+          <div class="support-icon">
+            <svg class="svg-icon svg-icon-chat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.5 85.2" enable-background="new 0 0 97.5 85.2"><path stroke="#fff" stroke-width="4.282" stroke-linecap="round" stroke-miterlimit="10" d="M27 29.5h-16.3c-4.7 0-8.6 3.9-8.6 8.6v25.7c0 4.7 3.9 8.6 8.6 8.6h2.7c.8 0 1.5.7 1.5 1.5v7.8c0 1.3 1.6 2 2.5 1l9.5-9.5c.5-.5 1.2-.8 2-.8h20.2c4.7 0 8.6-3.9 8.6-8.6v-7.8" fill="none"/><path fill="#fff" d="M85 0h-40c-6.9 0-12.5 5.6-12.5 12.5v33.4c0 2.2 1.8 4.1 4.1 4.1h29.9c.7 0 1.3.3 1.8.7l10 10c1.6 1.6 4.3.5 4.3-1.8v-6.5c0-1.4 1.1-2.5 2.5-2.5 6.9 0 12.5-5.6 12.5-12.5v-25c-.1-6.8-5.8-12.4-12.6-12.4z"/></svg>
+          </div>
+          <div class="support-detail">
+            <h2>Community Support</h2>
+            <a href="https://stackoverflow.com/questions/tagged/sbt">StackOverflow</a>
+          </div>
+        </div>
+        <div class="support-item">
+          <div class="support-icon">
+            <svg id="lightbend-icon-reverse" class="svg-icon svg-icon-lightbend-reverse" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 302 262"><title>lightbend-icon</title><g id="icon"><path d="M1,195v56a10,10,0,0,0,10,10H291a10,10,0,0,0,10-10V195a557.85,557.85,0,0,1-150,20A557.85,557.85,0,0,1,1,195Z" style="fill:#fff"/><path d="M291,1H11A10,10,0,0,0,1,11V176a539.94,539.94,0,0,0,150,21,539.94,539.94,0,0,0,150-21V11A10,10,0,0,0,291,1Z" style="fill:#fff"/></g></svg>
+          </div>
+          <div class="support-detail">
+            <h2>Commercial Support</h2>
+            <a href="https://www.lightbend.com/services/expert-support">Lightbend Subscription</a>
+            <a href="https://www.lightbend.com/services/training">Training</a>
+            <a href="https://www.lightbend.com/services/consulting">Consulting</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div><footer>
+  <div class="container footer">
+    <div class="row">
+      <div class="col-md-8 sbt">
+        <nav>
+          <a href="../../index.html">
+            <img src="files/sbt-logo-reverse.svg" alt="sbt">
+          </a>
+          <a href="../../documentation.html">Documentation</a>
+          <a href="../../download.html">Download</a>
+          <a href="../../community.html">Get Involved</a>
+        </nav>
+      </div>
+      <div class="col-md-4 text-right ts">
+        &copy; 2016-2017 Lightbend Inc.
+        <a href="https://www.lightbend.com">
+          <img src="files/lightbend-reverse.svg" alt="Lightbend, Inc.">
+        </a>
+      </div>
+    </div>
+  </div>
+</footer><script src="/assets/versions.js"></script><script src="/assets/set-versions.js"></script>
+        </div>
+        
+        <div class="highlight-outer">
+              <div class="highlight-menu">
+                <ul>
+                  <li><button id="highlight-button-twitter"><img src="img/twitter-bird-dark-bgs.png"/></button></li>
+                </ul>
+              </div>
+            </div>
+      </body>
+    </html>
