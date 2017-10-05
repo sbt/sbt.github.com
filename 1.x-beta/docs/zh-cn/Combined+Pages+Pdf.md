@@ -293,6 +293,7 @@ target/
 
 注意：这里后面需要跟一个 `/` （只匹配目录）且前面不能有 `/` （除了匹配普通的 `target/` 还匹配 `project/target/` ）。
 
+
   [Hello]: Hello.html
   [Setup]: Setup.html
   [Triggered-Execution]: ../docs/Triggered-Execution.html
@@ -1063,6 +1064,7 @@ checksums := scalacOptions.value
 ```scala
 cleanFiles += file("coverage-report-" + name.value + ".txt")
 ```
+
 
   [Basic-Def]: Basic-Def.html
   [Scopes]: Scopes.html

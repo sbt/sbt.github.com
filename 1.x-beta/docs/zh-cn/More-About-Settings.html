@@ -101,9 +101,8 @@ scalacOptions := checksums.value
 </p><pre><code class="prettyprint lang-scala">// checksums setting 不能依赖 scalacOptions task 来定义
 checksums := scalacOptions.value
 </code></pre><h3 id="%E8%BF%BD%E5%8A%A0%E4%BE%9D%E8%B5%96%EF%BC%9A+%E5%92%8C">追加依赖：<code>+=</code> 和 <code>++=</code><a href="#%E8%BF%BD%E5%8A%A0%E4%BE%9D%E8%B5%96%EF%BC%9A+%E5%92%8C" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>当追加到一个已经存在的 setting 或者 task 时可以使用另一些 key，就像它们可以通过 <code>:=</code> 赋值一样。例如，比方说你有一个以项目名称命名的覆盖率报告，而且你想在每次清除文件的时候都清除它：
-</p><p><code>`scala
-cleanFiles += file(&quot;coverage-report-&quot; + name.value + &quot;.txt&quot;)
-</code>`</p><div class="bottom nav span-16">
+</p><pre><code class="prettyprint lang-scala">cleanFiles += file(&quot;coverage-report-&quot; + name.value + &quot;.txt&quot;)
+</code></pre><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>
                         <a href="Library-Dependencies.html"> 库依赖 </a>                        
@@ -151,6 +150,7 @@ cleanFiles += file(&quot;coverage-report-&quot; + name.value + &quot;.txt&quot;)
       ga('tsTracker.send', 'pageview');
     </script>
 </div>
+
         </div>
         <div class="footer">
           <div class="fw-wrapper navy-ltr support-strip">

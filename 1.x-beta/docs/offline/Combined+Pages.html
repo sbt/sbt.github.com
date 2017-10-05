@@ -10557,7 +10557,8 @@ def selectSome(items: Seq[String]): Parser[Seq[String]] = {
 </code></pre><p> As you can see, the <code>flatMap</code> function provides the previous value.  With this info, a new
  parser is constructed for the remaining items.  The <code>map</code> combinator is also used in order
  to transform the output of the parser.
-</p><p> The parser is called recursively, until it is found the trivial case of no possible choices.</p><h2 id="State+and+actions">State and actions<a href="#State+and+actions" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p><a href="../api/sbt/State$.html">State</a> is the entry point to all
+</p><p> The parser is called recursively, until it is found the trivial case of no possible choices.
+</p><h2 id="State+and+actions">State and actions<a href="#State+and+actions" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p><a href="../api/sbt/State$.html">State</a> is the entry point to all
 available information in sbt. The key methods are:
 </p><ul><li><code>definedCommands: Seq[Command]</code> returns all registered Command
 definitions
