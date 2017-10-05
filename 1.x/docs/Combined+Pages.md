@@ -21362,7 +21362,7 @@ Frequently Asked Questions
 
 ### Project Information
 
-#### What does the name "sbt" stand for and shouldn't it be written "SBT"?
+#### What does the name "sbt" stand for, and why shouldn't it be written "SBT"?
 
 **TL;DR** the name sbt doesn't stand for anything, it's just "sbt", and it should be written that way.
 
@@ -21372,15 +21372,12 @@ Over time some have re-defined sbt to stand for "Scala Build Tool", but we belie
 given it can be used to build Java-only projects.
 
 Nowadays we just call sbt "sbt", and to reinforce that the name is no longer an [initialism][] we
-always write it in all lowercase letters.
-
-However, we are cool with [酢豚][subuta] (subuta) as a nickname.
+always write it in all lowercase letters. However, we are cool with [酢豚][subuta] (subuta) as a nickname.
 
 [@harrah]: https://github.com/harrah
 [sbt 0.3.2 announcement]: http://www.scala-lang.org/old/node/392.html
 [initialism]: https://en.oxforddictionaries.com/definition/initialism
 [subuta]: https://ja.wikipedia.org/wiki/%E9%85%A2%E8%B1%9A
-
 
 #### How do I get help?
 
@@ -21426,6 +21423,426 @@ or ansi codes are supported but you want to disable colored output. To
 completely disable ansi codes, pass `-no-colors` option:
 
 ```
+$ sbt -no-colors
+```
+
+#### How can I start a Scala interpreter (REPL) with sbt project configuration (dependencies, etc.)?
+
+In sbt's shell run `console`.
+
+### Build definitions
+
+#### What are the `:=`, `+=`, and `++=` methods?
+
+These are methods on keys used to construct a `Setting` or a `Task`. The
+Getting Started Guide covers all these methods, see
+[.sbt build definition][Basic-Def],
+[task graph][Task-Graph], and
+[appending values][Appending-Values] for
+example.
+
+#### What is the `%` method?
+
+It's used to create a `ModuleID` from strings, when specifying managed
+dependencies. Read the Getting Started Guide about
+[library dependencies][Library-Dependencies].
+
+#### What is `ModuleID`, `Project`, ...?
+
+To figure out an unknown type or method, have a look at the
+[Getting Started Guide][Getting-Started] if you have not. Also
+try the [index][Name-Index] of commonly used methods, values, and
+types, the [API Documentation](../api/) and the
+[hyperlinked sources](../sxr/).
+
+#### How do I add files to a jar package?
+
+The files included in an artifact are configured by default by a task
+`mappings` that is scoped by the relevant package task. The `mappings`
+task returns a sequence `Seq[(File,String)]` of mappings from the file
+to include to the path within the jar. See
+[mapping files][Mapping-Files] for details on creating these mappings.
+
+For example, to add generated sources to the packaged source artifact:
+
+```scala
+mappings in (Compile, packageSrc) ++= {
+  import Path.{flat, relativeTo}
+  val base = (sourceManaged in Compile).value
+  val srcs = (managedSources in Compile).value
+  srcs x (relativeTo(base) | flat)
+}
+```
+
+This takes sources from the `managedSources` task and relativizes them
+against the `managedSource` base directory, falling back to a flattened
+mapping. If a source generation task doesn't write the sources to the
+`managedSource` directory, the mapping function would have to be
+adjusted to try relativizing against additional directories or something
+more appropriate for the generator.
+
+#### How can I generate source code or resources?
+
+See [Generating Files][Howto-Generating-Files].
+
+#### How can a task avoid redoing work if the input files are unchanged?
+
+There is basic support for only doing work when input files have changed
+or when the outputs haven't been generated yet. This support is
+primitive and subject to change.
+
+The relevant methods are two overloaded methods called
+[FileFunction.cached](../api/sbt/FileFunction$.html). Each requires a
+directory in which to store cached data. Sample usage is:
+
+```scala
+// define a task that takes some inputs
+//   and generates files in an output directory
+myTask := {
+  // wraps a function taskImpl in an uptodate check
+  //   taskImpl takes the input files, the output directory,
+  //   generates the output files and returns the set of generated files
+  val cachedFun = FileFunction.cached(cacheDirectory.value / "my-task") { (in: Set[File]) =>
+    taskImpl(in, target.value) : Set[File]
+  }
+  // Applies the cached function to the inputs files
+  cachedFun(inputs.value)
+}
+```
+
+There are two additional arguments for the first parameter list that
+allow the file tracking style to be explicitly specified. By default,
+the input tracking style is `FilesInfo.lastModified`, based on a file's
+last modified time, and the output tracking style is `FilesInfo.exists`,
+based only on whether the file exists. The other available style is
+`FilesInfo.hash`, which tracks a file based on a hash of its contents.
+See the [FilesInfo API](../api/sbt/FilesInfo$.html) for details.
+
+A more advanced version of `FileFunction.cached` passes a data structure
+of type [ChangeReport](../api/sbt/ChangeReport.html) describing the
+changes to input and output files since the last evaluation. This
+version of `cached` also expects the set of files generated as output to
+be the result of the evaluated function.
+
+### Extending sbt
+
+#### How can I add a new configuration?
+
+The following example demonstrates adding a new set of compilation
+settings and tasks to a new configuration called `samples`. The sources
+for this configuration go in `src/samples/scala/`. Unspecified settings
+delegate to those defined for the `compile` configuration. For example,
+if `scalacOptions` are not overridden for `samples`, the options for the
+main sources are used.
+
+Options specific to `samples` may be declared like:
+
+```scala
+scalacOptions in Samples += "-deprecation"
+```
+
+This uses the main options as base options because of `+=`. Use `:=` to
+ignore the main options:
+
+```scala
+scalacOptions in Samples := "-deprecation" :: Nil
+```
+
+The example adds all of the usual compilation related settings and tasks
+to `samples`:
+
+```
+samples:run
+samples:runMain
+samples:compile
+samples:console
+samples:consoleQuick
+samples:scalacOptions
+samples:fullClasspath
+samples:package
+samples:packageSrc
+...
+```
+
+#### How do I add a test configuration?
+
+See the [Additional test configurations][additional-test-configurations] section of
+[Testing][Testing].
+
+#### How can I create a custom run task, in addition to `run`?
+
+This answer is extracted from a
+[mailing list discussion](https://groups.google.com/group/simple-build-tool/browse_thread/thread/4c28ee5b7e18b46a/).
+
+Read the Getting Started Guide up to
+[custom settings][Custom-Settings] for background.
+
+A basic run task is created by:
+
+```scala
+lazy val myRunTask = taskKey[Unit]("A custom run task.")
+
+// this can go either in a `build.sbt` or the settings member
+//   of a Project in a full configuration
+fullRunTask(myRunTask, Test, "foo.Foo", "arg1", "arg2")
+```
+
+If you want to be able to supply arguments on the command line, replace
+`TaskKey` with `InputKey` and `fullRunTask` with `fullRunInputTask`. The
+`Test` part can be replaced with another configuration, such as
+`Compile`, to use that configuration's classpath.
+
+This run task can be configured individually by specifying the task key
+in the scope. For example:
+
+```scala
+fork in myRunTask := true
+
+javaOptions in myRunTask += "-Xmx6144m"
+```
+
+#### How should I express a dependency on an outside tool such as proguard?
+
+Tool dependencies are used to implement a task and are not needed by
+project source code. These dependencies can be declared in their own
+configuration and classpaths. These are the steps:
+
+1.  Define a new [configuration][ivy-configurations].
+2.  Declare the tool
+    [dependencies][Library-Management] in that
+    configuration.
+3.  Define a classpath that pulls the dependencies from the
+    [Update Report][Update-Report] produced by `update`.
+4.  Use the classpath to implement the task.
+
+As an example, consider a `proguard` task. This task needs the ProGuard
+jars in order to run the tool. First, define and add the new
+configuration:
+
+```scala
+val ProguardConfig = config("proguard") hide
+
+ivyConfigurations += ProguardConfig
+```
+
+Then,
+
+```scala
+// Add proguard as a dependency in the custom configuration.
+//  This keeps it separate from project dependencies.
+libraryDependencies +=
+   "net.sf.proguard" % "proguard" % "4.4" % ProguardConfig.name
+
+// Extract the dependencies from the UpdateReport.
+managedClasspath in proguard := {
+    // these are the types of artifacts to include
+    val artifactTypes: Set[String] = (classpathTypes in proguard).value
+    Classpaths.managedJars(proguardConfig, artifactTypes, update.value)
+}
+
+// Use the dependencies in a task, typically by putting them
+//  in a ClassLoader and reflectively calling an appropriate
+//  method.
+proguard := {
+    val cp: Seq[File] = (managedClasspath in proguard).value
+  // ... do something with , which includes proguard ...
+}
+```
+
+Defining the intermediate classpath is optional, but it can be useful
+for debugging or if it needs to be used by multiple tasks. It is also
+possible to specify artifact types inline. This alternative `proguard`
+task would look like:
+
+```scala
+proguard := {
+   val artifactTypes = Set("jar")
+    val cp: Seq[File] =
+      Classpaths.managedJars(proguardConfig, artifactTypes, update.value)
+  // ... do something with , which includes proguard ...
+}
+```
+
+#### How would I change sbt's classpath dynamically?
+
+It is possible to register additional jars that will be placed on sbt's
+classpath (since version 0.10.1). Through
+[State](../api/sbt/State$.html), it is possible to obtain a
+[xsbti.ComponentProvider](../api/xsbti/ComponentProvider.html), which
+manages application components. Components are groups of files in the
+`~/.sbt/boot/` directory and, in this case, the application is sbt. In
+addition to the base classpath, components in the "extra" component are
+included on sbt's classpath.
+
+(Note: the additional components on an application's classpath are
+declared by the `components` property in the `[main]` section of the
+launcher configuration file `boot.properties`.)
+
+Because these components are added to the `~/.sbt/boot/` directory and
+`~/.sbt/boot/` may be read-only, this can fail. In this case, the user
+has generally intentionally set sbt up this way, so error recovery is
+not typically necessary (just a short error message explaining the
+situation.)
+
+#### Example of dynamic classpath augmentation
+
+The following code can be used where a `State => State` is required,
+such as in the `onLoad` setting (described below) or in a
+[command][Commands]. It adds some files to the "extra"
+component and reloads sbt if they were not already added. Note that
+reloading will drop the user's session state.
+
+```scala
+def augment(extra: Seq[File])(s: State): State = {
+    // Get the component provider
+  val cs: xsbti.ComponentProvider = s.configuration.provider.components()
+
+    // Adds the files in 'extra' to the "extra" component
+    //   under an exclusive machine-wide lock.
+    //   The returned value is 'true' if files were actually copied and 'false'
+    //   if the target files already exists (based on name only).
+  val copied: Boolean = s.locked(cs.lockFile, cs.addToComponent("extra", extra.toArray))
+
+    // If files were copied, reload so that we use the new classpath.
+  if(copied) s.reload else s
+}
+```
+
+#### How can I take action when the project is loaded or unloaded?
+
+See [How to take an action on startup](Howto-Startup.html).
+
+#### Example of project load/unload hooks
+
+The following example maintains a count of the number of times a project
+has been loaded and prints that number:
+
+```scala
+{
+  // the key for the current count
+  val key = AttributeKey[Int]("loadCount")
+  // the State transformer
+  val f = (s: State) => {
+    val previous = s get key getOrElse 0
+    println("Project load count: " + previous)
+    s.put(key, previous + 1)
+  }
+  onLoad in Global := {
+    val previous = (onLoad in Global).value
+    f compose previous
+  }
+}
+```
+
+### Errors
+
+#### On project load, "Reference to uninitialized setting"
+
+Setting initializers are executed in order. If the initialization of a
+setting depends on other settings that has not been initialized, sbt
+will stop loading.
+
+In this example, we try to append a library to `libraryDependencies`
+before it is initialized with an empty sequence.
+
+```scala
+object MyBuild extends Build {
+  val root = Project(id = "root", base = file("."),
+    settings = Seq(
+      libraryDependencies += "commons-io" % "commons-io" % "1.4" % "test"
+    )
+  ).disablePlugins(plugins.IvyModule)
+}
+```
+
+To correct this, include the IvyModule plugin settings, which includes
+`libraryDependencies := Seq()`. So, we just drop the explicit disabling.
+
+```scala
+object MyBuild extends Build {
+  val root = Project(id = "root", base = file("."),
+    settings = Seq(
+      libraryDependencies += "commons-io" % "commons-io" % "1.4" % "test"
+    )
+  )
+}
+```
+
+A more subtle variation of this error occurs when using
+[scoped settings][Scopes].
+
+```scala
+// error: Reference to uninitialized setting
+settings = Seq(
+  libraryDependencies += "commons-io" % "commons-io" % "1.2" % "test",
+  fullClasspath := fullClasspath.value.filterNot(_.data.name.contains("commons-io"))
+)
+```
+
+This setting varies between the test and compile scopes. The solution is
+use the scoped setting, both as the input to the initializer, and the
+setting that we update.
+
+```scala
+fullClasspath in Compile := (fullClasspath in Compile).value.filterNot(_.data.name.contains("commons-io"))
+```
+
+### Dependency Management
+
+#### How do I resolve a checksum error?
+
+This error occurs when the published checksum, such as a sha1 or md5
+hash, differs from the checksum computed for a downloaded artifact, such
+as a jar or pom.xml. An example of such an error is:
+
+```
+[warn]  problem while downloading module descriptor:
+https://repo1.maven.org/maven2/commons-fileupload/commons-fileupload/1.2.2/commons-fileupload-1.2.2.pom:
+invalid sha1: expected=ad3fda4adc95eb0d061341228cc94845ddb9a6fe computed=0ce5d4a03b07c8b00ab60252e5cacdc708a4e6d8 (1070ms)
+```
+
+The invalid checksum should generally be reported to the repository
+owner (as
+[was done](https://issues.sonatype.org/browse/MVNCENTRAL-46) for the
+above error). In the meantime, you can temporarily disable checking with
+the following setting:
+
+```scala
+checksums in update := Nil
+```
+
+See [library management][Library-Management] for details.
+
+#### I've added a plugin, and now my cross-compilations fail!
+
+This problem crops up frequently. Plugins are only published for the
+Scala version that sbt uses (currently, 2.9.1). You can still *use*
+plugins during cross-compilation, because sbt only looks for a 2.9.1
+version of the plugin.
+
+**... unless you specify the plugin in the wrong place!**
+
+A typical mistake is to put global plugin definitions in
+`~/.sbt/plugins.sbt`. **THIS IS WRONG.** `.sbt` files in `~/.sbt` are
+loaded for *each* build--that is, for *each* cross-compilation. So, if
+you build for Scala 2.9.0, sbt will try to find a version of the plugin
+that's compiled for 2.9.0--and it usually won't. That's because it
+doesn't *know* the dependency is a plugin.
+
+To tell sbt that the dependency is an sbt plugin, make sure you define
+your global plugins in a `.sbt` file in `~/.sbt/plugins/`. sbt knows
+that files in `~/.sbt/plugins` are only to be used by sbt itself, not as
+part of the general build definition. If you define your plugins in a
+file under *that* directory, they won't foul up your cross-compilations.
+Any file name ending in `.sbt` will do, but most people use
+`~/.sbt/plugins/build.sbt` or `~/.sbt/plugins/plugins.sbt`.
+
+### Miscellaneous
+
+#### Where can I find plugins for 1.0.2?
+
+See [Community Plugins][Community-Plugins] for a list of currently available
+plugins.
 
 
   [Running]: Running.html
