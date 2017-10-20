@@ -3868,6 +3868,8 @@ your plugin to the list.
   class diagrams from Scala source code. <!-- 54 stars -->
 - [sbt-api-mappings](https://github.com/ThoughtWorksInc/sbt-api-mappings):
   generate Scaladoc `apiMappings` for common Scala libraries. <!-- 49 stars -->
+- [literator](https://github.com/laughedelic/literator):
+  generate literate-style markdown docs from your sources. <!-- 33 stars -->
 
 #### One jar plugins
 
@@ -4107,6 +4109,10 @@ your plugin to the list.
 
 - [sbt-houserules](https://github.com/sbt/sbt-houserules): houserules settings
   for sbt modules. <!-- 12 stars -->
+
+#### Verification plugins
+
+- [sbt-stainless](https://github.com/NiceKingWei/sbt-stainless): verify Scala or Dotty code using stainless. <!-- 1 star -->
 
 
 Community Repository Policy
