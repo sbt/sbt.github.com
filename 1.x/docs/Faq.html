@@ -107,7 +107,7 @@ more appropriate for the generator.
 or when the outputs haven’t been generated yet. This support is
 primitive and subject to change.
 </p><p>The relevant methods are two overloaded methods called
-<a href="../api/sbt/FileFunction$.html">FileFunction.cached</a>. Each requires a
+<a href="../api/sbt/util/FileFunction$.html">FileFunction.cached</a>. Each requires a
 directory in which to store cached data. Sample usage is:
 </p><pre><code class="prettyprint lang-scala">// define a task that takes some inputs
 //   and generates files in an output directory
@@ -127,9 +127,9 @@ the input tracking style is <code>FilesInfo.lastModified</code>, based on a file
 last modified time, and the output tracking style is <code>FilesInfo.exists</code>,
 based only on whether the file exists. The other available style is
 <code>FilesInfo.hash</code>, which tracks a file based on a hash of its contents.
-See the <a href="../api/sbt/FilesInfo$.html">FilesInfo API</a> for details.
+See the <a href="../api/sbt/util/FilesInfo$.html">FilesInfo API</a> for details.
 </p><p>A more advanced version of <code>FileFunction.cached</code> passes a data structure
-of type <a href="../api/sbt/ChangeReport.html">ChangeReport</a> describing the
+of type <a href="../api/sbt/util/ChangeReport.html">ChangeReport</a> describing the
 changes to input and output files since the last evaluation. This
 version of <code>cached</code> also expects the set of files generated as output to
 be the result of the evaluated function.

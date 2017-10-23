@@ -87,7 +87,7 @@ sbt-inspectr was implemented using <a href="https://github.com/eed3si9n/sbt-insp
 The new mechanism features a set of user-level
 controls and dependency declarations that cleans up a lot of
 long-standing issues with plugins.
-</p><h3 id="Reuse+existing+keys">Reuse existing keys<a href="#Reuse+existing+keys" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt has a number of <a href="../api/sbt/Keys%24.html">predefined keys</a>.
+</p><h3 id="Reuse+existing+keys">Reuse existing keys<a href="#Reuse+existing+keys" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt has a number of <a href="../api/sbt/Keys$.html">predefined keys</a>.
 Where possible, reuse them in your plugin. For instance, don’t define:
 </p><pre><code class="prettyprint lang-scala">val sourceFiles = settingKey[Seq[File]](&quot;Some source files&quot;)
 </code></pre><p>Instead, simply reuse sbt’s existing <code>sources</code> key.
@@ -105,7 +105,7 @@ object ObfuscatePlugin extends sbt.AutoPlugin {
 </code></pre><p>In this approach, every <code>lazy val</code> starts with <code>obfuscate</code>. A user of the
 plugin would refer to the settings like this:
 </p><pre><code class="prettyprint lang-scala">obfuscateStylesheet := file(&quot;something.txt&quot;)
-</code></pre><h3 id="Provide+core+feature+in+a+plain+old+Scala+object">Provide core feature in a plain old Scala object<a href="#Provide+core+feature+in+a+plain+old+Scala+object" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The core feature of sbt’s <code>package</code> task, for example, is implemented in <a href="../api/#sbt.Package%24">sbt.Package</a>,
+</code></pre><h3 id="Provide+core+feature+in+a+plain+old+Scala+object">Provide core feature in a plain old Scala object<a href="#Provide+core+feature+in+a+plain+old+Scala+object" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The core feature of sbt’s <code>package</code> task, for example, is implemented in <a href="../api/sbt/Package$.html">sbt.Package</a>,
 which can be called via its <code>apply</code> method.
 This allows greater reuse of the feature from other plugins such as sbt-assembly,
 which in return implements <code>sbtassembly.Assembly</code> object to implement its core feature.

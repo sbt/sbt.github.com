@@ -102,7 +102,7 @@ object SettingsExample extends Init[Scope]
 </code></pre><h4 id="Example+Usage">Example Usage<a href="#Example+Usage" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>This part shows how to use the system we just defined. The end result is
 a <code>Settings[Scope]</code> value. This type is basically a mapping
 <code>Scope -&gt; AttributeKey[T] -&gt; Option[T]</code>. See the
-<a href="../api/sbt/Settings.html">Settings API documentation</a> for
+<a href="../api/sbt/internal/util/Settings.html">Settings API documentation</a> for
 details.
 </p><p><code>SettingsUsage.scala</code>:
 </p><pre><code class="prettyprint lang-scala">/** Usage Example **/
@@ -169,12 +169,12 @@ equal to 9 as well
 standard usage of settings in a build. This scope has four components:
 the project axis, the configuration axis, the task axis, and the extra
 axis. Each component may be 
-<a href="../api/sbt/Global$.html">Global</a> (no specific value),
+<a href="../api/sbt/Zero$.html">Zero</a> (no specific value),
 <a href="../api/sbt/This$.html">This</a>
 (current context), or
 <a href="../api/sbt/Select.html">Select</a> (containing a specific value). sbt
 resolves <code>This_</code> to either
-<a href="../api/sbt/Global$.html">Global</a> or
+<a href="../api/sbt/Zero$.html">Zero</a> or
 <a href="../api/sbt/Select.html">Select</a>
 depending on the context.
 </p><p>For example, in a project, a
@@ -182,7 +182,7 @@ depending on the context.
 <a href="../api/sbt/Select.html">Select</a> referring to the defining project. All other axes that are
 <a href="../api/sbt/This$.html">This</a> are
 translated to
-<a href="../api/sbt/Global$.html">Global</a>. Functions like <code>inConfig</code> and <code>inTask</code> transform
+<a href="../api/sbt/Zero$.html">Zero</a>. Functions like <code>inConfig</code> and <code>inTask</code> transform
 <code>This</code> into a
 <a href="../api/sbt/Select.html">Select</a> for a specific value. For example,
 <code>inConfig(Compile)(someSettings)</code> translates the configuration axis for

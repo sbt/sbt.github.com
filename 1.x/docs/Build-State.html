@@ -124,12 +124,12 @@ val nameOpt: Option[String] = name in currentRef get structure.data
 
 // get the package options for the `test:packageSrc` task or Nil if none are defined
 val pkgOpts: Seq[PackageOption] = packageOptions in (currentRef, Test, packageSrc) get structure.data getOrElse Nil
-</code></pre><p><a href="../api/sbt/Load$$BuildStructure.html">BuildStructure</a> contains
+</code></pre><p><a href="../api/sbt/internal/BuildStructure.html">BuildStructure</a> contains
 information about build and project relationships. Key members are:
 </p><pre><code class="prettyprint lang-scala">units: Map[URI, LoadedBuildUnit]
 root: URI
 </code></pre><p>A <code>URI</code> identifies a build and <code>root</code> identifies the initial build
-loaded. <a href="../api/sbt/Load$$LoadedBuildUnit.html">LoadedBuildUnit</a>
+loaded. <a href="../api/sbt/internal/LoadedBuildUnit.html">LoadedBuildUnit</a>
 provides information about a single build. The key members of
 <code>LoadedBuildUnit</code> are:
 </p><pre><code class="prettyprint lang-scala">// Defines the base directory for the build
