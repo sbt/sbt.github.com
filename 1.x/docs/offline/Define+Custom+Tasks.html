@@ -49,7 +49,7 @@ run the <code>test</code> Task in specific subprojects  <code>core</code> and <c
 lazy val tools = project.in(file(&quot;./tools&quot;))
 lazy val client = project.in(file(&quot;./client&quot;))
 
-lazy val myTestTask = TaskKey[Unit](&quot;my-test-task&quot;)
+lazy val myTestTask = taskKey[Unit](&quot;my test task&quot;)
 
 myTestTask &lt;&lt;= Seq(
   test in (core, Test)

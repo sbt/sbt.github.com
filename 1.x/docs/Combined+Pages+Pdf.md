@@ -12534,7 +12534,7 @@ execution service (`java.util.concurrent.CompletionService`). This
 intermediate queue restricts new tasks from being forwarded to the
 `j.u.c.CompletionService` according to the `sbt.ConcurrentRestrictions`
 implementation. See the
-[sbt.ConcurrentRestrictions](https://github.com/sbt/sbt/blob/v0.12.0/tasks/ConcurrentRestrictions.scala)
+[sbt.ConcurrentRestrictions](https://github.com/sbt/sbt/blob/v1.0.3/tasks/src/main/scala/sbt/ConcurrentRestrictions.scala)
 API documentation for details.
 
 
@@ -13337,7 +13337,7 @@ To modify the type of the main artifact, for example:
 ```scala
 artifact in (Compile, packageBin) := {
   val previous: Artifact = (artifact in (Compile, packageBin)).value
-  previous.copy(`type` = "bundle")
+  previous.withType("bundle")
 }
 ```
 
@@ -13448,7 +13448,7 @@ publishArtifact in (Compile, packageBin) := false
 // create an Artifact for publishing the .war file 
 artifact in (Compile, packageWar) := {
   val previous: Artifact = (artifact in (Compile, packageWar)).value
-  previous.copy(`type` = "war", extension = "war") 
+  previous.withType("war").withExtension("war")
 } 
 
 // add the .war file to what gets published 
@@ -20616,7 +20616,7 @@ lazy val core = project.in(file("./core"))
 lazy val tools = project.in(file("./tools"))
 lazy val client = project.in(file("./client"))
 
-lazy val myTestTask = TaskKey[Unit]("my-test-task")
+lazy val myTestTask = taskKey[Unit]("my test task")
 
 myTestTask <<= Seq(
   test in (core, Test)
