@@ -6995,7 +6995,7 @@ pass it to sbt:
 sbt -Dsbt.extraClasspath=diffutils-1.2.1.jar
 [info] Loading project definition from /Users/grek/tmp/sbt-013/project
 [info] Set current project to sbt-013 (in build file:/Users/grek/tmp/sbt-013/)
-&gt; set incOptions := incOptions.value.copy(apiDebug = true)
+&gt; set incOptions := incOptions.value.withApiDebug(true)
 [info] Defining *:incOptions
 [info] The new value will be used by compile:incCompileSetup, test:incCompileSetup
 [info] Reapplying settings...
@@ -8552,7 +8552,7 @@ and <code>artifactPath</code> (of type <code>SettingKey[File]</code>). They are 
 </p><p>To modify the type of the main artifact, for example:
 </p><pre><code class="prettyprint lang-scala">artifact in (Compile, packageBin) := {
   val previous: Artifact = (artifact in (Compile, packageBin)).value
-  previous.copy(`type` = &quot;bundle&quot;)
+  previous.withType(&quot;bundle&quot;)
 }
 </code></pre><p>The generated artifact name is determined by the <code>artifactName</code> setting.
 This setting is of type <code>(ScalaVersion, ModuleID, Artifact) =&gt; String</code>.
@@ -8626,7 +8626,7 @@ publishArtifact in (Compile, packageBin) := false
 // create an Artifact for publishing the .war file 
 artifact in (Compile, packageWar) := {
   val previous: Artifact = (artifact in (Compile, packageWar)).value
-  previous.copy(`type` = &quot;war&quot;, extension = &quot;war&quot;) 
+  previous.withType(&quot;war&quot;).withExtension(&quot;war&quot;)
 } 
 
 // add the .war file to what gets published 
@@ -13554,7 +13554,7 @@ myTask := {
   // wraps a function taskImpl in an uptodate check
   //   taskImpl takes the input files, the output directory,
   //   generates the output files and returns the set of generated files
-  val cachedFun = FileFunction.cached(cacheDirectory.value / &quot;my-task&quot;) { (in: Set[File]) =&gt;
+  val cachedFun = FileFunction.cached(streams.value.cacheDirectory / &quot;my-task&quot;) { (in: Set[File]) =&gt;
     taskImpl(in, target.value) : Set[File]
   }
   // Applies the cached function to the inputs files

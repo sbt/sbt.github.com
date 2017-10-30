@@ -10725,7 +10725,7 @@ curl -O https://java-diff-utils.googlecode.com/files/diffutils-1.2.1.jar
 sbt -Dsbt.extraClasspath=diffutils-1.2.1.jar
 [info] Loading project definition from /Users/grek/tmp/sbt-013/project
 [info] Set current project to sbt-013 (in build file:/Users/grek/tmp/sbt-013/)
-> set incOptions := incOptions.value.copy(apiDebug = true)
+> set incOptions := incOptions.value.withApiDebug(true)
 [info] Defining *:incOptions
 [info] The new value will be used by compile:incCompileSetup, test:incCompileSetup
 [info] Reapplying settings...
@@ -13332,7 +13332,7 @@ To modify the type of the main artifact, for example:
 ```scala
 artifact in (Compile, packageBin) := {
   val previous: Artifact = (artifact in (Compile, packageBin)).value
-  previous.copy(`type` = "bundle")
+  previous.withType("bundle")
 }
 ```
 
@@ -13443,7 +13443,7 @@ publishArtifact in (Compile, packageBin) := false
 // create an Artifact for publishing the .war file 
 artifact in (Compile, packageWar) := {
   val previous: Artifact = (artifact in (Compile, packageWar)).value
-  previous.copy(`type` = "war", extension = "war") 
+  previous.withType("war").withExtension("war")
 } 
 
 // add the .war file to what gets published 
@@ -21631,7 +21631,7 @@ myTask := {
   // wraps a function taskImpl in an uptodate check
   //   taskImpl takes the input files, the output directory,
   //   generates the output files and returns the set of generated files
-  val cachedFun = FileFunction.cached(cacheDirectory.value / "my-task") { (in: Set[File]) =>
+  val cachedFun = FileFunction.cached(streams.value.cacheDirectory / "my-task") { (in: Set[File]) =>
     taskImpl(in, target.value) : Set[File]
   }
   // Applies the cached function to the inputs files
