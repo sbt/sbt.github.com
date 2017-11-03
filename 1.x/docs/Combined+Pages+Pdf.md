@@ -74,8 +74,7 @@ Documentation for 0.7.x has been
 documentation applies to sbt 1.0.2.
 
 See also the [API Documentation](../api/index.html),
-[SXR Documentation](../sxr/index.html), and the
-[index of names and types][Name-Index].
+and the [index of names and types][Name-Index].
 
 
   [Basic-Def]: Basic-Def.html
