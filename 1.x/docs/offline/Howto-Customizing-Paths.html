@@ -132,12 +132,12 @@ match <code>excludeFilter</code>. <code>includeFilter</code> and <code>excludeFi
 <code>FileFilter</code>. For example, in addition to the default hidden files
 exclusion, the following also ignores files containing <code>impl</code> in their
 name,
-</p><pre><code class="prettyprint lang-scala">excludeFilter in unmanagedSources := HiddenFileFilter || &quot;*impl*&quot;
+</p><pre><code class="prettyprint lang-scala">excludeFilter in unmanagedResources := HiddenFileFilter || &quot;*impl*&quot;
 </code></pre><p>To have different filters for main and test libraries, configure
 <code>Compile</code> and <code>Test</code> separately:
-</p><pre><code class="prettyprint lang-scala">includeFilter in (Compile, unmanagedSources) := &quot;*.txt&quot;
+</p><pre><code class="prettyprint lang-scala">includeFilter in (Compile, unmanagedResources) := &quot;*.txt&quot;
 
-includeFilter in (Test, unmanagedSources) := &quot;*.html&quot;
+includeFilter in (Test, unmanagedResources) := &quot;*.html&quot;
 </code></pre><blockquote><p><strong>Note</strong>: By default, sbt includes all files that are not hidden.
 </p></blockquote><a name="lib-include-filter"></a><h3 id="Include+only+certain+%28unmanaged%29+libraries">Include only certain (unmanaged) libraries<a href="#Include+only+certain+%28unmanaged%29+libraries" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>When sbt traverses <code>unmanagedBase</code> for resources, it only includes
 directories and files that match <code>includeFilter</code> and do not match
