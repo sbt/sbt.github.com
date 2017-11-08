@@ -108,11 +108,11 @@ the <code>update</code> task:
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
   .aggregate(util, core)
   .settings(
-    aggregate in update := false
+    update / aggregate := false
   )
 
 [...]
-</code></pre><p><code>aggregate in update</code> is the aggregate key scoped to the <code>update</code> task. (See
+</code></pre><p><code>update / aggregate</code> is the aggregate key scoped to the <code>update</code> task. (See
 <a href="Scopes.html">scopes</a>.)
 </p><p>Note: aggregation will run the aggregated tasks in parallel and with no
 defined ordering between them.

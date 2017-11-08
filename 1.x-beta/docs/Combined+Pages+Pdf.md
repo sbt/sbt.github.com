@@ -1356,15 +1356,17 @@ Similarly, a full scope in sbt is formed by a **tuple** of a subproject,
 a configuration, and a task value:
 
 ```scala
-scalacOptions in (projA, Compile, console)
+projA / Compile / console / scalacOptions
 ```
 
-To be more precise, it actually looks like this:
+Which is the slash syntax, introduced in sbt 1.1, for:
 
 ```scala
-scalacOptions in (Select(projA: Reference),
-                  Select(Compile: ConfigKey),
-                  Select(console.key))
+scalacOptions in (
+  Select(projA: Reference),
+  Select(Compile: ConfigKey),
+  Select(console.key)
+)
 ```
 
 #### Scoping by the subproject axis
@@ -1421,21 +1423,21 @@ The various tasks that build a package (`packageSrc`, `packageBin`,
 and `packageOptions`. Those keys can have distinct values for each
 packaging task.
 
-#### Global scope component
+#### Zero scope component
 
-Each scope axis can be filled in with an instance of the axis type (for
-example the task axis can be filled in with a task), or the axis can be
-filled in with the special value `Global`, which is also written as `*`. So we can think of `Global` as `None`.
+Each scope axis can be filled in with an instance of the axis type (analogous to `Some(_)`),
+or the axis can be filled in with the special value `Zero`.
+So we can think of `Zero` as `None`.
 
-`*` is a universal fallback for all scope axes,
+`Zero` is a universal fallback for all scope axes,
 but its direct use should be reserved to sbt and plugin authors in most cases.
 
-To make the matter confusing, `someKey in Global` appearing in build definition implicitly converts to `someKey in (Global, Global, Global)`.
+`Global` is a scope that sets `Zero` to all axes: `Zero / Zero / Zero`. In other words, `Global / someKey` is a shorthand for `Zero / Zero / Zero / someKey`.
 
 ### Referring to scopes in a build definition
 
 If you create a setting in `build.sbt` with a bare key, it will be scoped
-to (current subproject, configuration `Global`, task `Global`):
+to (current subproject / configuration `Zero` / task `Zero`):
 
 ```scala
 lazy val root = (project in file("."))
@@ -1445,56 +1447,55 @@ lazy val root = (project in file("."))
 ```
 
 Run sbt and `inspect name` to see that it's provided by
-`{file:/home/hp/checkout/hello/}default-aea33a/*:name`, that is, the
-project is `{file:/home/hp/checkout/hello/}default-aea33a`, the
-configuration is `*` (means `Global`), and the task is not shown (which
-also means `Global`).
+`ProjectRef(uri("file:/private/tmp/hello/"), "root") / name`, that is, the
+project is `ProjectRef(uri("file:/Users/xxx/hello/"), "root")`, and
+neither configuration nor task scope are shown (which means `Zero`).
 
 A bare key on the right hand side is also scoped to
-(current subproject, configuration `Global`, task `Global`):
+(current subproject / configuration `Zero` / task `Zero`):
 
-```
+```scala
 organization := name.value
 ```
 
-Keys have an overloaded method called `.in` that is used to set the scope.
-The argument to `.in(...)` can be an instance of any of the scope axes. So for
-example, though there's no real reason to do this, you could set the
-`name` scoped to the `Compile` configuration:
+The types of any of the scope axes have been method enriched to have a `/` operator.
+The argument to `/` can be a key or another scope axis. So for
+example, though there's no good reason to do this, you could have an instance of the
+`name` key scoped to the `Compile` configuration:
 
 ```scala
-name in Compile := "hello"
+Compile / name := "hello"
 ```
 
 or you could set the name scoped to the `packageBin` task (pointless! just
 an example):
 
 ```scala
-name in packageBin := "hello"
+packageBin / name := "hello"
 ```
 
 or you could set the `name` with multiple scope axes, for example in the
 `packageBin` task in the `Compile` configuration:
 
 ```scala
-name in (Compile, packageBin) := "hello"
+Compile / packageBin / name := "hello"
 ```
 
-or you could use `Global` for all axes:
+or you could use `Global`:
 
 ```scala
-// same as concurrentRestrictions in (Global, Global, Global)
-concurrentRestrictions in Global := Seq(
+// same as Zero / Zero / Zero / concurrentRestrictions
+Global / concurrentRestrictions := Seq(
   Tags.limitAll(1)
 )
 ```
 
-(`concurrentRestrictions in Global` implicitly converts to
-`concurrentRestrictions in (Global, Global, Global)`, setting
-all axes to `Global` scope component; the task and configuration are already
-`Global` by default, so here the effect is to make the project `Global`,
-that is, define `*/*:concurrentRestrictions` rather than
-`{file:/home/hp/checkout/hello/}default-aea33a/*:concurrentRestrictions`)
+(`Global / concurrentRestrictions` implicitly converts to
+`Zero / Zero / Zero / concurrentRestrictions`, setting
+all axes to `Zero` scope component; the task and configuration are already
+`Zero` by default, so here the effect is to make the project `Zero`,
+that is, define `Zero / Zero / Zero / concurrentRestrictions` rather than
+`ProjectRef(uri("file:/tmp/hello/"), "root") / Zero / Zero / concurrentRestrictions`)
 
 ### Referring to scoped keys from the sbt shell
 
@@ -1502,16 +1503,15 @@ On the command line and in the sbt shell, sbt displays (and parses)
 scoped keys like this:
 
 ```
-{<build-uri>}<project-id>/config:intask::key
+ref / Config / intask / key
 ```
 
-- `{<build-uri>}<project-id>` identifies the subproject axis. The
-  `<project-id>` part will be missing if the subproject axis has "entire build" scope.
-- `config` identifies the configuration axis.
+- `ref` identifies the subproject axis. It could be `<project-id>`, `ProjectRef(uri("file:..."), "id")`, or `ThisBuild` that denotes the "entire build" scope.
+- `Config` identifies the configuration axis using the capitalized Scala identifier.
 - `intask` identifies the task axis.
 - `key` identifies the key being scoped.
 
-`*` can appear for each axis, referring to the `Global` scope.
+`Zero` can appear for each axis.
 
 If you omit part of the scoped key, it will be inferred as follows:
 
@@ -1526,26 +1526,23 @@ For more details, see [Interacting with the Configuration System][Inspecting-Set
 - `fullClasspath` specifies just a key, so the default scopes are used:
   current project, a key-dependent configuration, and global task
   scope.
-- `test:fullClasspath` specifies the configuration, so this is
-  `fullClasspath` in the `test` configuration, with defaults for the other
+- `Test / fullClasspath` specifies the configuration, so this is
+  `fullClasspath` in the `Test` configuration, with defaults for the other
   two scope axes.
-- `*:fullClasspath` specifies `Global` for the configuration, rather than
-  the default configuration.
-- `doc::fullClasspath` specifies the `fullClasspath` key scoped to the `doc`
+- `root / fullClasspath` specifies the project `root`, where the project is
+  identified with the project id.
+- `root / Zero / fullClasspath` specified the project `root`, and
+  specifies `Zero` for the configuration, rather than the default configuration.
+- `doc / fullClasspath` specifies the `fullClasspath` key scoped to the `doc`
   task, with the defaults for the project and configuration axes.
-- `{file:/home/hp/checkout/hello/}default-aea33a/test:fullClasspath`
-  specifies a project, `{file:/home/hp/checkout/hello/}default-aea33a`,
-  where the project is identified with the build
-  `{file:/home/hp/checkout/hello/}` and then a project id inside that
-  build `default-aea33a`. Also specifies configuration `test`, but leaves
-  the default task axis.
-- `{file:/home/hp/checkout/hello/}/test:fullClasspath` sets the project
-  axis to "entire build" where the build is
-  `{file:/home/hp/checkout/hello/}`.
-- `{.}/test:fullClasspath` sets the project axis to "entire build" where
-  the build is `{.}`. `{.}` can be written `ThisBuild` in Scala code.
-- `{file:/home/hp/checkout/hello/}/compile:doc::fullClasspath` sets all
-  three scope axes.
+- `ProjectRef(uri("file:/tmp/hello/"), "root") / Test / fullClasspath`
+  specifies a project `ProjectRef(uri("file:/tmp/hello/"), "root")`.
+  Also specifies configurtion Test, leaves the default task axis.
+- `ThisBuild / version` sets the subproject axis to "entire build" where
+  the build is `ThisBuild`, with the default configuration.
+- `Zero / fullClasspath` sets the subproject axis to `Zero`,
+  with the default configuration.
+- `root / Compile / doc / fullClasspath` sets all three scope axes.
 
 ### Inspecting scopes
 
@@ -1554,38 +1551,36 @@ keys and their scopes. Try `inspect test:fullClasspath`:
 
 ```
 $ sbt
-> inspect test:fullClasspath
-[info] Task: scala.collection.Seq[sbt.Attributed[java.io.File]]
+sbt:Hello> inspect Test / fullClasspath
+[info] Task: scala.collection.Seq[sbt.internal.util.Attributed[java.io.File]]
 [info] Description:
 [info]  The exported classpath, consisting of build products and unmanaged and managed, internal and external dependencies.
 [info] Provided by:
-[info]  {file:/home/hp/checkout/hello/}default-aea33a/test:fullClasspath
+[info]  ProjectRef(uri("file:/tmp/hello/"), "root") / Test / fullClasspath
+[info] Defined at:
+[info]  (sbt.Classpaths.classpaths) Defaults.scala:1639
 [info] Dependencies:
-[info]  test:exportedProducts
-[info]  test:dependencyClasspath
+[info]  Test / dependencyClasspath
+[info]  Test / exportedProducts
+[info]  Test / fullClasspath / streams
 [info] Reverse dependencies:
-[info]  test:runMain
-[info]  test:run
-[info]  test:testLoader
-[info]  test:console
+[info]  Test / testLoader
 [info] Delegates:
-[info]  test:fullClasspath
-[info]  runtime:fullClasspath
-[info]  compile:fullClasspath
-[info]  *:fullClasspath
-[info]  {.}/test:fullClasspath
-[info]  {.}/runtime:fullClasspath
-[info]  {.}/compile:fullClasspath
-[info]  {.}/*:fullClasspath
-[info]  */test:fullClasspath
-[info]  */runtime:fullClasspath
-[info]  */compile:fullClasspath
-[info]  */*:fullClasspath
+[info]  Test / fullClasspath
+[info]  Runtime / fullClasspath
+[info]  Compile / fullClasspath
+[info]  fullClasspath
+[info]  ThisBuild / Test / fullClasspath
+[info]  ThisBuild / Runtime / fullClasspath
+[info]  ThisBuild / Compile / fullClasspath
+[info]  ThisBuild / fullClasspath
+[info]  Zero / Test / fullClasspath
+[info]  Zero / Runtime / fullClasspath
+[info]  Zero / Compile / fullClasspath
+[info]  Global / fullClasspath
 [info] Related:
-[info]  compile:fullClasspath
-[info]  compile:fullClasspath(for doc)
-[info]  test:fullClasspath(for doc)
-[info]  runtime:fullClasspath
+[info]  Compile / fullClasspath
+[info]  Runtime / fullClasspath
 ```
 
 On the first line, you can see this is a task (as opposed to a setting,
@@ -1595,22 +1590,22 @@ resulting from the task will have type
 
 "Provided by" points you to the scoped key that defines the value, in
 this case
-`{file:/home/hp/checkout/hello/}default-aea33a/test:fullClasspath` (which
-is the `fullClasspath` key scoped to the `test` configuration and the
-`{file:/home/hp/checkout/hello/}default-aea33a` project).
+`ProjectRef(uri("file:/tmp/hello/"), "root") / Test / fullClasspath` (which
+is the `fullClasspath` key scoped to the `Test` configuration and the
+`ProjectRef(uri("file:/tmp/hello/"), "root")` project).
 
 "Dependencies" was discussed in detail in the [previous page][Task-Graph].
 
 We'll discuss "Delegates" later.
 
 Try `inspect fullClasspath` (as opposed to the above example,
-inspect `test:fullClasspath`) to get a sense of the difference. Because
-the configuration is omitted, it is autodetected as `compile`.
-`inspect compile:fullClasspath` should therefore look the same as
+inspect `Test / fullClasspath`) to get a sense of the difference. Because
+the configuration is omitted, it is autodetected as `Compile`.
+`inspect Compile / fullClasspath` should therefore look the same as
 `inspect fullClasspath`.
 
-Try `inspect *:fullClasspath` for another contrast. `fullClasspath` is not
-defined in the `Global` scope by default.
+Try `inspect This / Zero / fullClasspath` for another contrast. `fullClasspath` is not
+defined in the `Zero` configuration scope by default.
 
 Again, for more details, see [Interacting with the Configuration System][Inspecting-Settings].
 
@@ -1621,7 +1616,7 @@ For example, the `compile` task, by default, is scoped to `Compile` and `Test`
 configurations, and does not exist outside of those scopes.
 
 To change the value associated with the `compile` key, you need to write
-`compile in Compile` or `compile in Test`. Using plain `compile` would define
+`Compile / compile` or `Test / compile`. Using plain `compile` would define
 a new compile task scoped to the current project, rather than overriding
 the standard compile tasks which are scoped to a configuration.
 
@@ -1629,12 +1624,12 @@ If you get an error like *"Reference to undefined setting"*, often
 you've failed to specify a scope, or you've specified the wrong scope.
 The key you're using may be defined in some other scope. sbt will try to
 suggest what you meant as part of the error message; look for "Did you
-mean compile:compile?"
+mean Compile / compile?"
 
 One way to think of it is that a name is only *part* of a key. In
 reality, all keys consist of both a name, and a scope (where the scope
 has three axes). The entire expression
-`packageOptions in (Compile, packageBin)` is a key name, in other words.
+`Compile / packageBin / packageOptions` is a key name, in other words.
 Simply `packageOptions` is also a key name, but a different one (for keys
 with no in, a scope is implicitly assumed: current project, global
 config, global task).
@@ -1658,7 +1653,7 @@ lazy val root = (project in file("."))
   .settings(
     inThisBuild(List(
       // Same as:
-      // organization in ThisBuild := "com.example"
+      // ThisBuild / organization := "com.example"
       organization := "com.example",
       scalaVersion := "2.12.3",
       version      := "0.1.0-SNAPSHOT"
@@ -1711,19 +1706,19 @@ replacing it.
 - `+=` will append a single element to the sequence.
 - `++=` will concatenate another sequence.
 
-For example, the key `sourceDirectories in Compile` has a `Seq[File]` as its
+For example, the key `Compile / sourceDirectories` has a `Seq[File]` as its
 value. By default this key's value would include `src/main/scala`. If you
 wanted to also compile source code in a directory called source (since
 you just have to be nonstandard), you could add that directory:
 
 ```scala
-sourceDirectories in Compile += new File("source")
+Compile / sourceDirectories += new File("source")
 ```
 
 Or, using the `file()` function from the sbt package for convenience:
 
 ```scala
-sourceDirectories in Compile += file("source")
+Compile / sourceDirectories += file("source")
 ```
 
 (`file()` just creates a new `File`.)
@@ -1731,7 +1726,7 @@ sourceDirectories in Compile += file("source")
 You could use `++=` to add more than one directory at a time:
 
 ```scala
-sourceDirectories in Compile ++= Seq(file("sources1"), file("sources2"))
+Compile / sourceDirectories ++= Seq(file("sources1"), file("sources2"))
 ```
 
 Where `Seq(a, b, c, ...)` is standard Scala syntax to construct a
@@ -1741,7 +1736,7 @@ To replace the default source directories entirely, you use `:=` of
 course:
 
 ```scala
-sourceDirectories in Compile := Seq(file("sources1"), file("sources2"))
+Compile / sourceDirectories := Seq(file("sources1"), file("sources2"))
 ```
 
 #### When settings are undefined
@@ -1762,8 +1757,8 @@ You can compute values of some tasks or settings to define or append a value for
 As a first example, consider appending a source generator using the project base directory and compilation classpath.
 
 ```scala
-sourceGenerators in Compile += Def.task {
-  myGenerator(baseDirectory.value, (managedClasspath in Compile).value)
+Compile / sourceGenerators += Def.task {
+  myGenerator(baseDirectory.value, (Compile / managedClasspath).value)
 }.taskValue
 ```
 
@@ -1792,18 +1787,14 @@ previous pages, [build definition][Basic-Def] and [scopes][Scopes].
 Now that we've covered all the details of scoping, we can explain the `.value`
 lookup in detail. It's ok to skip this section if this is your first time reading this page.
 
-Because the term `Global` is used for both a scope component `*`,
-and as shorthand for the scope `(Global, Global, Global)`,
-in this page we will use the symbol `*` when we mean it as the scope component.
-
 To summarize what we've learned so far:
 
 - A scope is a tuple of components in three axes: the subproject axis, the configuration axis, and the task axis.
-- There's a special scope component `*` (also called `Global`) for any of the scope axes.
-- There's a special scope component `ThisBuild` (written as `{.}` in shell) for **the subprojects axis** only.
+- There's a special scope component `Zero` for any of the scope axes.
+- There's a special scope component `ThisBuild` for **the subprojects axis** only.
 - `Test` extends `Runtime`, and `Runtime` extends `Compile` configuration.
-- A key placed in build.sbt is scoped to `(${current subproject}, *, *)` by default.
-- A key can be further scoped using `.in(...)` method.
+- A key placed in build.sbt is scoped to `${current subproject} / Zero / Zero` by default.
+- A key can scoped using `/` operator.
 
 Now let's suppose we have the following build definition:
 
@@ -1814,15 +1805,15 @@ lazy val bar = settingKey[Int]("")
 lazy val projX = (project in file("x"))
   .settings(
     foo := {
-      (bar in Test).value + 1
+      (Test / bar).value + 1
     },
-    bar in Compile := 1
+    Compile / bar := 1
   )
 ```
 
-Inside of `foo`'s setting body a dependency on the scoped key `(bar in Test)` is declared.
-However, despite `bar in Test` being undefined in `projX`,
-sbt is still able to resolve `(bar in Test)` to another scoped key,
+Inside of `foo`'s setting body a dependency on the scoped key `Test / bar` is declared.
+However, despite `Test / bar` being undefined in `projX`,
+sbt is still able to resolve `Test / bar` to another scoped key,
 resulting in `foo` initialized as `2`.
 
 sbt has a well-defined fallback search path called *scope delegation*.
@@ -1835,11 +1826,11 @@ Here are the rules for scope delegation:
 
 - Rule 1: Scope axes have the following precedence: the subproject axis, the configuration axis, and then the task axis.
 - Rule 2: Given a scope, delegate scopes are searched by substituting the task axis in the following order:
-  the given task scoping, and then `*` (`Global`), which is non-task scoped version of the scope.
+  the given task scoping, and then `Zero`, which is non-task scoped version of the scope.
 - Rule 3: Given a scope, delegate scopes are searched by substituting the configuration axis in the following order:
-  the given configuration, its parents, their parents and so on, and then `*` (`Global`, same as unscoped configuration axis).
+  the given configuration, its parents, their parents and so on, and then `Zero` (same as unscoped configuration axis).
 - Rule 4: Given a scope, delegate scopes are searched by substituting the subproject axis in the following order:
-  the given subproject, `ThisBuild`, and then `*` (`Global`).
+  the given subproject, `ThisBuild`, and then `Zero`.
 - Rule 5: A delegated scoped key and its dependent settings/tasks are evaluated without carrying the original context.
 
 We will look at each rule in the rest of this page.
@@ -1848,7 +1839,7 @@ We will look at each rule in the rest of this page.
 
 - Rule 1: Scope axes have the following precedence: the subproject axis, the configuration axis, and then the task axis.
 
-In other words, given two scopes candidates, if one has more specific value on the subproject axis,
+In other words, given two scope candidates, if one has more specific value on the subproject axis,
 it will always win regardless of the configuration or the task scoping.
 Similarly, if subprojects are the same, one with more specific configuration value will always win regardless
 of the task scoping. We will see more rules to define *more specific*.
@@ -1856,10 +1847,10 @@ of the task scoping. We will see more rules to define *more specific*.
 ### Rule 2: The task axis delegation
 
 - Rule 2: Given a scope, delegate scopes are searched by **substituting** the task axis in the following order:
-  the given task scoping, and then `*` (`Global`), which is non-task scoped version of the scope.
+  the given task scoping, and then `Zero`, which is non-task scoped version of the scope.
 
 Here we have a concrete rule for how sbt will generate delegate scopes given a key.
-Remember, we are trying to show the search path given an arbitrary `(xxx in yyy).value`.
+Remember, we are trying to show the search path given an arbitrary `(xxx / yyy).value`.
 
 **Exercise A**: Given the following build definition:
 
@@ -1867,29 +1858,29 @@ Remember, we are trying to show the search path given an arbitrary `(xxx in yyy)
 lazy val projA = (project in file("a"))
   .settings(
     name := {
-      "foo-" + (scalaVersion in packageBin).value
+      "foo-" + (packageBin / scalaVersion).value
     },
     scalaVersion := "2.11.11"
   )
 ```
 
-What is the value of `name in projA` (`projA/name` in sbt shell)?
+What is the value of `projA / name`?
 
 1. `"foo-2.11.11"`
 2. `"foo-2.12.3"`
 3. something else?
 
 The answer is `"foo-2.11.11"`.
-Inside of `.settings(...)`, `scalaVersion` is automatically scoped to `(projA, *, *)`,
-so `scalaVersion in packageBin` becomes `scalaVersion in (projA, *, packageBin)`.
+Inside of `.settings(...)`, `scalaVersion` is automatically scoped to `projA / Zero / Zero`,
+so `packageBin / scalaVersion` becomes `projA / Zero / packageBin / scalaVersion`.
 That particular scoped key is undefined.
-By using Rule 2, sbt will substitute the task axis to `*` as `(projA, *, *)` (or `proj/scalaVersion` in shell).
+By using Rule 2, sbt will substitute the task axis to `Zero` as `projA / Zero / Zero` (or `projA / scalaVersion`).
 That scoped key is defined to be `"2.11.11"`.
 
 ### Rule 3: The configuration axis search path
 
 - Rule 3: Given a scope, delegate scopes are searched by substituting the configuration axis in the following order:
-  the given configuration, its parents, their parents and so on, and then `*` (`Global`, same as unscoped configuration axis).
+  the given configuration, its parents, their parents and so on, and then `Zero` (same as unscoped configuration axis).
 
 The example for that is `projX` that we saw earlier:
 
@@ -1900,28 +1891,28 @@ lazy val bar = settingKey[Int]("")
 lazy val projX = (project in file("x"))
   .settings(
     foo := {
-      (bar in Test).value + 1
+      (Test / bar).value + 1
     },
-    bar in Compile := 1
+    Compile / bar := 1
   )
 ```
 
-If we write out the full scope again, it's `(projX, Test, *)`.
+If we write out the full scope again, it's `projX / Test / Zero`.
 Also recall that `Test` extends `Runtime`, and `Runtime` extends `Compile`.
 
-`(bar in Test)` is undefined, but due to Rule 3 sbt will look for
-`bar` scoped in `(projX, Test, *)`, `(projX, Runtime, *)`, and then
-`(projX, Compile, *)`. The last one is found, which is `bar in Compile`.
+`Test / bar` is undefined, but due to Rule 3 sbt will look for
+`bar` scoped in `projX / Test / Zero`, `projX / Runtime / Zero`, and then
+`projX / Compile / Zero`. The last one is found, which is `Compile / bar`.
 
 ### Rule 4: The subproject axis search path
 
 - Rule 4: Given a scope, delegate scopes are searched by substituting the subproject axis in the following order:
-  the given subproject, `ThisBuild`, and then `*` (`Global`).
+  the given subproject, `ThisBuild`, and then `Zero`.
 
 **Exercise B**: Given the following build definition:
 
 ```scala
-organization in ThisBuild := "com.example"
+ThisBuild / organization := "com.example"
 
 lazy val projB = (project in file("b"))
   .settings(
@@ -1930,57 +1921,57 @@ lazy val projB = (project in file("b"))
   )
 ```
 
-What is the value of `name in projB` (`projB/name` in shell)?
+What is the value of `projB / name`?
 
 1. `"abc-com.example"`
 2. `"abc-org.tempuri"`
 3. something else?
 
 The answer is `abc-org.tempuri`.
-So based on Rule 4, the first search path is `organization` scoped to `(projB, *, *)`,
+So based on Rule 4, the first search path is `organization` scoped to `projB / Zero / Zero`,
 which is defined in `projB` as `"org.tempuri"`.
-This has higher precedence than the build-level setting `organization in ThisBuild`.
+This has higher precedence than the build-level setting `ThisBuild / organization`.
 
 #### Scope axis precedence, again
 
 **Exercise C**: Given the following build definition:
 
 ```scala
-scalaVersion in (ThisBuild, packageBin) := "2.12.2"
+ThisBuild / packageBin / scalaVersion := "2.12.2"
 
 lazy val projC = (project in file("c"))
   .settings(
     name := {
-      "foo-" + (scalaVersion in packageBin).value
+      "foo-" + (packageBin / scalaVersion).value
     },
     scalaVersion := "2.11.11"
   )
 ```
 
-What is value of `name in projC`?
+What is value of `projC / name`?
 
 1. `"foo-2.12.2"`
 2. `"foo-2.11.11"`
 3. something else?
 
 The answer is `foo-2.11.11`.
-`scalaVersion` scoped to `(projC, *, packageBin)` is undefined.
-Rule 2 finds `(projC, *, *)`. Rule 4 finds `(ThisBuild, *, packageBin)`.
+`scalaVersion` scoped to `projC / Zero / packageBin` is undefined.
+Rule 2 finds `projC / Zero / Zero`. Rule 4 finds `ThisBuild / Zero / packageBin`.
 In this case Rule 1 dictates that more specific value on the subproject axis wins,
-which is `(projC, *, *)` that is defined to `"2.11.11"`.
+which is `projC / Zero / Zero` that is defined to `"2.11.11"`.
 
 **Exercise D**: Given the following build definition:
 
 ```scala
-scalacOptions in ThisBuild += "-Ywarn-unused-import"
+ThisBuild / scalacOptions += "-Ywarn-unused-import"
 
 lazy val projD = (project in file("d"))
   .settings(
     test := {
-      println((scalacOptions in (Compile, console)).value)
+      println((Compile / console / scalacOptions).value)
     },
-    scalacOptions in console -= "-Ywarn-unused-import",
-    scalacOptions in Compile := scalacOptions.value // added by sbt
+    console / scalacOptions -= "-Ywarn-unused-import",
+    Compile / scalacOptions := scalacOptions.value // added by sbt
   )
 ```
 
@@ -1991,16 +1982,16 @@ What would you see if you ran `projD/test`?
 3. something else?
 
 The answer is `List(-Ywarn-unused-import)`.
-Rule 2 finds `(projD, Compile, *)`,
-Rule 3 finds `(projD, *, console)`,
-and Rule 4 finds `(ThisBuild, *, *)`.
-Rule 1 selects `(projD, Compile, *)`
+Rule 2 finds `projD / Compile / Zero`,
+Rule 3 finds `projD / Zero / console`,
+and Rule 4 finds `ThisBuild / Zero / Zero`.
+Rule 1 selects `projD / Compile / Zero`
 because it has the subproject axis `projD`, and the configuration axis has higher
 precedence over the task axis.
 
-Next, `scalacOptions in Compile` refers to `scalacOptions.value`,
-we next need to find a delegate for `(projD, *, *)`.
-Rule 4 finds `(ThisBuild, *, *)` and thus it resolves to `List(-Ywarn-unused-import)`.
+Next, `Compile / scalacOptions` refers to `scalacOptions.value`,
+we next need to find a delegate for `projD / Zero / Zero`.
+Rule 4 finds `ThisBuild / Zero / Zero` and thus it resolves to `List(-Ywarn-unused-import)`.
 
 ### Inspect command lists the delegates
 
@@ -2008,43 +1999,42 @@ You might want to look up quickly what is going on.
 This is where `inspect` can be used.
 
 ```
-Hello> inspect projD/compile:console::scalacOptions
+sbt:projd> inspect projD / Compile / console / scalacOptions
 [info] Task: scala.collection.Seq[java.lang.String]
 [info] Description:
 [info]  Options for the Scala compiler.
 [info] Provided by:
-[info]  {file:/Users/xxxx/}projD/compile:scalacOptions
+[info]  ProjectRef(uri("file:/tmp/projd/"), "projD") / Compile / scalacOptions
 [info] Defined at:
-[info]  /Users/xxxx/build.sbt:47
+[info]  /tmp/projd/build.sbt:9
 [info] Reverse dependencies:
-[info]  projD/compile:console
-[info]  projD/*:test
+[info]  projD / test
+[info]  projD / Compile / console
 [info] Delegates:
-[info]  projD/compile:console::scalacOptions
-[info]  projD/compile:scalacOptions
-[info]  projD/*:console::scalacOptions
-[info]  projD/*:scalacOptions
-[info]  {.}/compile:console::scalacOptions
-[info]  {.}/compile:scalacOptions
-[info]  {.}/*:console::scalacOptions
-[info]  {.}/*:scalacOptions
-[info]  */compile:console::scalacOptions
-[info]  */compile:scalacOptions
-[info]  */*:console::scalacOptions
-[info]  */*:scalacOptions
-....
+[info]  projD / Compile / console / scalacOptions
+[info]  projD / Compile / scalacOptions
+[info]  projD / console / scalacOptions
+[info]  projD / scalacOptions
+[info]  ThisBuild / Compile / console / scalacOptions
+[info]  ThisBuild / Compile / scalacOptions
+[info]  ThisBuild / console / scalacOptions
+[info]  ThisBuild / scalacOptions
+[info]  Zero / Compile / console / scalacOptions
+[info]  Zero / Compile / scalacOptions
+[info]  Zero / console / scalacOptions
+[info]  Global / scalacOptions
 ```
 
-Note how "Provided by" shows that `projD/compile:console::scalacOptions`
-is provided by `projD/compile:scalacOptions`.
+Note how "Provided by" shows that `projD / Compile / console / scalacOptions`
+is provided by `projD / Compile / scalacOptions`.
 Also under "Delegates", *all* of the possible delegate candidates
 listed in the order of precedence!
 
 - All the scopes with `projD` scoping on the subproject axis are listed first,
-  then `ThisBuild` (`{.}`), and `*`.
+  then `ThisBuild`, and `Zero`.
 - Within a subproject, scopes with `Compile` scoping on the configuration axis
-  are listed first, then falls back to `*`.
-- Finally, the task axis scoping lists the given task scoping `console::` and the one without.
+  are listed first, then falls back to `Zero`.
+- Finally, the task axis scoping lists the given task scoping `console /` and the one without.
 
 ### .value lookup vs dynamic dispatch
 
@@ -2078,35 +2068,35 @@ lazy val projE = (project in file("e"))
   )
 ```
 
-What will `projE/version` return?
+What will `projE / version` return?
 
 1. `"2.12.2_0.1.0"`
 2. `"2.11.11_0.1.0"`
 3. something else?
 
 The answer is `2.12.2_0.1.0`.
-`projD/version` delegates to `version in ThisBuild`,
-which depends on `scalaVersion in ThisBuild`.
+`projD / version` delegates to `ThisBuild / version`,
+which depends on `ThisBuild / scalaVersion`.
 Because of this reason, build level setting should be limited mostly to simple value assignments.
 
 **Exercise F**: Given the following build definition:
 
 ```scala
-scalacOptions in ThisBuild += "-D0"
+ThisBuild / scalacOptions += "-D0"
 scalacOptions += "-D1"
 
 lazy val projF = (project in file("f"))
   .settings(
-    scalacOptions in compile += "-D2",
-    scalacOptions in Compile += "-D3",
-    scalacOptions in (Compile, compile) += "-D4",
+    compile / scalacOptions += "-D2",
+    Compile / scalacOptions += "-D3",
+    Compile / compile / scalacOptions += "-D4",
     test := {
-      println("bippy" + (scalacOptions in (Compile, compile)).value.mkString)
+      println("bippy" + (Compile / compile / scalacOptions).value.mkString)
     }
   )
 ```
 
-What will `projF/test` show?
+What will `projF / test` show?
 
 1. `"bippy-D4"`
 2. `"bippy-D2-D4"`
@@ -2130,37 +2120,37 @@ it will go to another scoped key.
 Let's get rid of `+=` first, and annotate the delegates for old values:
 
 ```scala
-scalacOptions in ThisBuild := {
-  // scalacOptions in Global <- Rule 4
-  val old = (scalacOptions in ThisBuild).value
+ThisBuild / scalacOptions := {
+  // Global / scalacOptions <- Rule 4
+  val old = (ThisBuild / scalacOptions).value
   old :+ "-D0"
 }
 
 scalacOptions := {
-  // scalacOptions in ThisBuild <- Rule 4
+  // ThisBuild / scalacOptions <- Rule 4
   val old = scalacOptions.value
   old :+ "-D1"
 }
 
 lazy val projF = (project in file("f"))
   .settings(
-    scalacOptions in compile := {
-      // scalacOptions in ThisBuild <- Rules 2 and 4
-      val old = (scalacOptions in compile).value
+    compile / scalacOptions := {
+      // ThisBuild / scalacOptions <- Rules 2 and 4
+      val old = (compile / scalacOptions).value
       old :+ "-D2"
     },
-    scalacOptions in Compile := {
-      // scalacOptions in ThisBuild <- Rules 3 and 4
-      val old = (scalacOptions in Compile).value
+    Compile / scalacOptions := {
+      // ThisBuild / scalacOptions <- Rules 3 and 4
+      val old = (Compile / scalacOptions).value
       old :+ "-D3"
     },
-    scalacOptions in (Compile, compile) := {
-      // scalacOptions in (projF, Compile) <- Rules 1 and 2
-      val old = (scalacOptions in (Compile, compile)).value
+    Compile / compile / scalacOptions := {
+      // projF / Compile / scalacOptions <- Rules 1 and 2
+      val old = (Compile / compile / scalacOptions).value
       old :+ "-D4"
     },
     test := {
-      println("bippy" + (scalacOptions in (Compile, compile)).value.mkString)
+      println("bippy" + (Compile / compile / scalacOptions).value.mkString)
     }
   )
 ```
@@ -2168,7 +2158,7 @@ lazy val projF = (project in file("f"))
 This becomes:
 
 ```scala
-scalacOptions in ThisBuild := {
+ThisBuild / scalacOptions := {
   Nil :+ "-D0"
 }
 
@@ -2178,11 +2168,11 @@ scalacOptions := {
 
 lazy val projF = (project in file("f"))
   .settings(
-    scalacOptions in compile := List("-D0") :+ "-D2",
-    scalacOptions in Compile := List("-D0") :+ "-D3",
-    scalacOptions in (Compile, compile) := List("-D0", "-D3") :+ "-D4",
+    compile / scalacOptions := List("-D0") :+ "-D2",
+    Compile / scalacOptions := List("-D0") :+ "-D3",
+    Compile / compile / scalacOptions := List("-D0", "-D3") :+ "-D4",
     test := {
-      println("bippy" + (scalacOptions in (Compile, compile)).value.mkString)
+      println("bippy" + (Compile / compile / scalacOptions).value.mkString)
     }
   )
 ```
@@ -2248,7 +2238,7 @@ something else complex, you might need to replace the whole
 `Compile` configuration regardless of the files in `lib` directory:
 
 ```scala
-unmanagedJars in Compile := Seq.empty[sbt.Attributed[java.io.File]]
+Compile / unmanagedJars := Seq.empty[sbt.Attributed[java.io.File]]
 ```
 
 ### Managed Dependencies
@@ -2557,13 +2547,13 @@ the `update` task:
 lazy val root = (project in file("."))
   .aggregate(util, core)
   .settings(
-    aggregate in update := false
+    update / aggregate := false
   )
 
 [...]
 ```
 
-`aggregate in update` is the aggregate key scoped to the `update` task. (See
+`update / aggregate` is the aggregate key scoped to the `update` task. (See
 [scopes][Scopes].)
 
 Note: aggregation will run the aggregated tasks in parallel and with no
@@ -4755,6 +4745,59 @@ object PluginCompat {
 
 Now `subMissingOk(...)` function can be implemented in sbt version specific way.
 
+### Migrating to slash syntax
+
+In sbt 0.13 keys were scoped with 2 different syntaxes: one for sbt's shell and one for in code.
+
+* sbt 0.13 shell: `<project-id>/config:intask::key`
+* sbt 0.13 code: `key in (<project-id>, Config, intask)`
+
+Starting sbt 1.1.0, the syntax for scoping keys has been unified for both the shell and the build definitions to
+the **slash syntax** as follows:
+
+* `<project-id> / Config / intask / key`
+
+Here are some examples:
+
+```scala
+lazy val root = (project in file("."))
+  .settings(
+    name := "hello",
+    version in ThisBuild := "1.0.0-SNAPSHOT",
+    scalacOptions in Compile += "-Xlint",
+    scalacOptions in (Compile, console) --= Seq("-Ywarn-unused", "-Ywarn-unused-import"),
+    fork in Test := true
+  )
+```
+
+They are now written as:
+
+```scala
+lazy val root = (project in file("."))
+  .settings(
+    name := "hello",
+    ThisBuild / version := "1.0.0-SNAPSHOT",
+    Compile / scalacOptions += "-Xlint",
+    Compile / console / scalacOptions --= Seq("-Ywarn-unused", "-Ywarn-unused-import"),
+    Test / fork := true
+  )
+```
+
+And now the same syntax in sbt's shell:
+
+```
+sbt:hello> name
+[info] hello
+sbt:hello> ThisBuild / version
+[info] 1.0.0-SNAPSHOT
+sbt:hello> show Compile / scalacOptions
+[info] * -Xlint
+sbt:hello> show Compile / console / scalacOptions
+[info] * -Xlint
+sbt:hello> Test / fork
+[info] true
+```
+
 ### Migrating from sbt 0.12 style
 
 Before sbt 0.13 (sbt 0.9 to 0.12) it was very common to see in builds the usage of three aspects of sbt:
@@ -4866,16 +4909,16 @@ Where you previous would define things as:
 sourceGenerators in Compile <+= buildInfo
 ```
 
-for sbt 0.13.15+, you define them as:
+for sbt 1, you define them as:
 
 ```scala
-sourceGenerators in Compile += buildInfo
+Compile / sourceGenerators += buildInfo
 ```
 
 or in general,
 
 ```scala
-sourceGenerators in Compile += Def.task { List(file1, file2) }
+Compile / sourceGenerators += Def.task { List(file1, file2) }
 ```
 
 #### Migrating with `InputKey`
@@ -11316,10 +11359,8 @@ For example,
 
 ```scala
 managedScalaInstance := false
-
 scalaInstance := ...
-
-unmanagedJars in Compile += scalaInstance.value.libraryJar
+Compile / unmanagedJars += scalaInstance.value.libraryJar
 ```
 
 #### Switching to a local Scala version
@@ -11375,7 +11416,7 @@ Scala distribution. For example, to add all jars in the Scala home
 ```scala
 scalaHome := Some(file("/home/user/scala-2.10/"))
 
-unmanagedJars in Compile ++= scalaInstance.value.jars
+Compile / unmanagedJars ++= scalaInstance.value.jars
 ```
 
 To add only some jars, filter the jars from `scalaInstance` before
@@ -11416,34 +11457,31 @@ The `fork` setting controls whether forking is enabled (true) or not
 in the `test` scope to only fork `test` commands.
 
 To fork all test tasks (`test`, `testOnly`, and `testQuick`) and run
-tasks (`run`, `runMain`, `test:run`, and `test:runMain`),
+tasks (`run`, `runMain`, `Test / run`, and `Test / runMain`),
 
 ```scala
 fork := true
 ```
 
-To enable forking `run` tasks only, set `fork` to `true` in the `run`
-scope.
+To enable forking `run` tasks only, set `Comile / run / fork` to `true`.
 
 ```scala
-fork in run := true
+Compile / run / fork := true
 ```
 
-To only fork `test:run` and `test:runMain`:
+To only fork `Test / run` and `Test / runMain`:
 
 ```scala
-fork in (Test, run) := true
+Test / run / fork := true
 ```
 
-Similarly, set `fork in (Compile,run) := true` to only fork the main
-`run` tasks. `run` and `runMain` share the same configuration and cannot
-be configured separately.
+ `run` and `runMain` share the same configuration and cannot be configured separately.
 
 To enable forking all `test` tasks only, set `fork` to `true` in the
-`test` scope:
+`Test` scope:
 
 ```scala
-fork in test := true
+Test / fork := true
 ```
 
 See [Testing][Testing] for more control over how tests are assigned to JVMs and
@@ -11456,16 +11494,16 @@ or `baseDirectory in test`:
 
 ```scala
 // sets the working directory for all `run`-like tasks
-baseDirectory in run := file("/path/to/working/directory/")
+run / baseDirectory := file("/path/to/working/directory/")
 
 // sets the working directory for `run` and `runMain` only
-baseDirectory in (Compile,run) := file("/path/to/working/directory/")
+Compile / run / baseDirectory := file("/path/to/working/directory/")
 
-// sets the working directory for `test:run` and `test:runMain` only
-baseDirectory in (Test,run) := file("/path/to/working/directory/")
+// sets the working directory for `Test / run` and `Test / runMain` only
+Test / run / baseDirectory := file("/path/to/working/directory/")
 
 // sets the working directory for `test`, `testQuick`, and `testOnly`
-baseDirectory in test := file("/path/to/working/directory/")
+Test / baseDirectory := file("/path/to/working/directory/")
 ```
 
 ### Forked JVM options
@@ -11473,20 +11511,20 @@ baseDirectory in test := file("/path/to/working/directory/")
 To specify options to be provided to the forked JVM, set `javaOptions`:
 
 ```scala
-javaOptions in run += "-Xmx8G"
+run / javaOptions += "-Xmx8G"
 ```
 
 or specify the configuration to affect only the main or test `run`
 tasks:
 
 ```scala
-javaOptions in (Test,run) += "-Xmx8G"
+Test / run / javaOptions += "-Xmx8G"
 ```
 
 or only affect the `test` tasks:
 
 ```scala
-javaOptions in test += "-Xmx8G"
+Test / javaOptions += "-Xmx8G"
 ```
 
 ### Java Home
@@ -11502,7 +11540,7 @@ used to compile Java sources. You can restrict it to running only by
 setting it in the `run` scope:
 
 ```scala
-javaHome in run := Some(file("/path/to/jre/"))
+run / javaHome := Some(file("/path/to/jre/"))
 ```
 
 As with the other settings, you can specify the configuration to affect
@@ -11539,7 +11577,7 @@ the forked process. To enable this, configure the `connectInput`
 setting:
 
 ```scala
-connectInput in run := true
+run / connectInput := true
 ```
 
 ### Direct Usage
@@ -11683,10 +11721,10 @@ by configuration:
 
 ```scala
 // Java then Scala for main sources
-compileOrder in Compile := CompileOrder.JavaThenScala
+Compile / compileOrder := CompileOrder.JavaThenScala
 
 // allow circular dependencies for test sources
-compileOrder in Test := CompileOrder.Mixed
+Test / compileOrder := CompileOrder.Mixed
 ```
 
 Note that in an incremental compilation setting, it is not practical to
@@ -12146,7 +12184,7 @@ directory of the build, irrespective of the project the setting is
 defined in:
 
 ```scala
-historyPath := Some( (baseDirectory in ThisBuild).value / ".history"),
+historyPath := Some( (ThisBuild / baseDirectory).value / ".history"),
 ```
 
 ### Path Finders
@@ -12380,7 +12418,7 @@ Prior to sbt 0.12, user control over this process was restricted to:
 1.  Enabling or disabling all parallel execution
     (parallelExecution := false, for example).
 2.  Enabling or disabling mapping tests to their own tasks
-    (parallelExecution in Test := false, for example).
+    (Test / parallelExecution := false, for example).
 
 (Although never exposed as a setting, the maximum number of tasks
 running at a given time was internally configurable as well.)
@@ -12440,10 +12478,10 @@ download := downloadImpl.value
 Once tasks are tagged, the `concurrentRestrictions` setting sets
 restrictions on the tasks that may be concurrently executed based on the
 weighted tags of those tasks. This is necessarily a global set of rules,
-so it must be scoped `in Global`. For example,
+so it must be scoped `Global /`. For example,
 
 ```scala
-concurrentRestrictions in Global := Seq(
+Global / concurrentRestrictions := Seq(
   Tags.limit(Tags.CPU, 2),
   Tags.limit(Tags.Network, 10),
   Tags.limit(Tags.Test, 1),
@@ -12554,7 +12592,7 @@ tags to each child task created for each test class.
 The default rules provide the same behavior as previous versions of sbt:
 
 ```scala
-concurrentRestrictions in Global := {
+Global / concurrentRestrictions := {
   val max = Runtime.getRuntime.availableProcessors
   Tags.limitAll(if(parallelExecution.value) max else 1) :: Nil
 }
@@ -12565,7 +12603,7 @@ to separate tasks. To restrict the number of concurrently executing
 tests in all projects, use:
 
 ```scala
-concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
+Global / concurrentRestrictions += Tags.limit(Tags.Test, 1)
 ```
 
 #### Custom Tags
@@ -12582,9 +12620,9 @@ Then, use this tag as any other tag. For example:
 ```scala
 def aImpl = Def.task { ... } tag(Custom)
 
-aCustomTask := aImpl.value 
+aCustomTask := aImpl.value
 
-concurrentRestrictions in Global += 
+Global / concurrentRestrictions +=
   Tags.limit(Custom, 1)
 ```
 
@@ -12604,7 +12642,7 @@ def myCompileTask = Def.task { ... } tag(Tags.CPU, Tags.Compile)
 
 compile := myCompileTask.value
 
-compile := { 
+compile := {
   val result = compile.value
   ... do some post processing ...
 }
@@ -12966,14 +13004,14 @@ still be manually written out and run using `testOnly`.
 #### Other tasks
 
 Tasks that are available for main sources are generally available for
-test sources, but are prefixed with `test:` on the command line and are
-referenced in Scala code with `in Test`. These tasks include:
+test sources, but are prefixed with `Test /` on the command line and are
+referenced in Scala code with `Test /` as well. These tasks include:
 
--   `test:compile`
--   `test:console`
--   `test:consoleQuick`
--   `test:run`
--   `test:runMain`
+-   `Test / compile`
+-   `Test / console`
+-   `Test / consoleQuick`
+-   `Test / run`
+-   `Test / runMain`
 
 See [Running][Running] for details on these tasks.
 
@@ -12984,7 +13022,7 @@ tests for that file complete. This can be disabled by setting
 `logBuffered`:
 
 ```scala
-logBuffered in Test := false
+Test / logBuffered := false
 ```
 
 #### Test Reports
@@ -12994,7 +13032,7 @@ the build, located in the `target/test-reports` directory for a project.
 This can be disabled by disabling the `JUnitXmlReportPlugin`
 
 ```scala
-val myProject = (project in file(".")).disablePlugins(plugins.JUnitXmlReportPlugin)  
+val myProject = (project in file(".")).disablePlugins(plugins.JUnitXmlReportPlugin)
 ```
 
 ### Options
@@ -13012,13 +13050,13 @@ To specify test framework arguments as part of the build, add options
 constructed by `Tests.Argument`:
 
 ```scala
-testOptions in Test += Tests.Argument("-verbosity", "1")
+Test / testOptions += Tests.Argument("-verbosity", "1")
 ```
 
 To specify them for a specific test framework only:
 
 ```scala
-testOptions in Test += Tests.Argument(TestFrameworks.ScalaCheck, "-verbosity", "1")
+Test / testOptions += Tests.Argument(TestFrameworks.ScalaCheck, "-verbosity", "1")
 ```
 
 #### Setup and Cleanup
@@ -13037,13 +13075,10 @@ framework classes.
 Examples:
 
 ```scala
-testOptions in Test += Tests.Setup( () => println("Setup") )
-
-testOptions in Test += Tests.Cleanup( () => println("Cleanup") )
-
-testOptions in Test += Tests.Setup( loader => ... )
-
-testOptions in Test += Tests.Cleanup( loader => ... )
+Test / testOptions += Tests.Setup( () => println("Setup") )
+Test / testOptions += Tests.Cleanup( () => println("Cleanup") )
+Test / testOptions += Tests.Setup( loader => ... )
+Test / testOptions += Tests.Cleanup( loader => ... )
 ```
 
 #### Disable Parallel Execution of Tests
@@ -13053,7 +13088,7 @@ Because each test is mapped to a task, tests are also run in parallel by default
 To make tests within a given project execute serially: :
 
 ```scala
-parallelExecution in Test := false
+Test / parallelExecution := false
 ```
 
 `Test` can be replaced with `IntegrationTest` to only execute
@@ -13066,7 +13101,7 @@ If you want to only run test classes whose name ends with "Test", use
 `Tests.Filter`:
 
 ```scala
-testOptions in Test := Seq(Tests.Filter(s => s.endsWith("Test")))
+Test / testOptions := Seq(Tests.Filter(s => s.endsWith("Test")))
 ```
 
 #### Forking tests
@@ -13074,7 +13109,7 @@ testOptions in Test := Seq(Tests.Filter(s => s.endsWith("Test")))
 The setting:
 
 ```scala
-fork in Test := true
+Test / fork := true
 ```
 
 specifies that all tests will be executed in a single external JVM. See
@@ -13108,7 +13143,7 @@ In addition, forked tests can optionally be run in parallel within the
 forked JVM(s), using the following setting:
 
 ```scala
-testForkedParallel in Test := true
+Test / testForkedParallel := true
 ```
 
 <a name="additional-test-configurations"></a>
@@ -13172,7 +13207,7 @@ The standard testing tasks are available, but must be prefixed with
 `it:`. For example,
 
 ```
-> it:testOnly org.example.AnIntegrationTest
+> IntegrationTest / testOnly org.example.AnIntegrationTest
 ```
 
 Similarly the standard settings may be configured for the
@@ -13181,7 +13216,7 @@ Similarly the standard settings may be configured for the
 example, if test options are specified as:
 
 ```scala
-testOptions in Test += ...
+Test / testOptions += ...
 ```
 
 then these will be picked up by the `Test` configuration and in turn by
@@ -13190,14 +13225,14 @@ for integration tests by putting them in the `IntegrationTest`
 configuration:
 
 ```scala
-testOptions in IntegrationTest += ...
+IntegrationTest / testOptions += ...
 ```
 
 Or, use `:=` to overwrite any existing options, declaring these to be
 the definitive integration test options:
 
 ```scala
-testOptions in IntegrationTest := Seq(...)
+IntegrationTest / testOptions := Seq(...)
 ```
 
 #### Custom test configuration
@@ -13247,13 +13282,13 @@ The comments in the integration test section hold, except with
 `FunTest`:
 
 ```scala
-testOptions in FunTest += ...
+FunTest / testOptions += ...
 ```
 
 Test tasks are run by prefixing them with `fun:`
 
 ```
-> fun:test
+> FunTest / test
 ```
 
 #### Additional test configurations with shared sources
@@ -13293,18 +13328,18 @@ The key differences are:
     packaging tasks and settings.
 -   We filter the tests to be run for each configuration.
 
-To run standard unit tests, run `test` (or equivalently, `test:test`):
+To run standard unit tests, run `test` (or equivalently, `Test / test`):
 
 ```
 > test
 ```
 
-To run tests for the added configuration (here, `"fun"`), prefix it with
+To run tests for the added configuration (here, `"FunTest"`), prefix it with
 the configuration name as before:
 
 ```
-> fun:test
-> fun:testOnly org.example.AFunTest
+> FunTest / test
+> FunTest / testOnly org.example.AFunTest
 ```
 
 ##### Application to parallel execution
@@ -13758,14 +13793,14 @@ task, which ultimately provides the manual dependencies to sbt. The
 default implementation is roughly:
 
 ```scala
-unmanagedJars in Compile := (baseDirectory.value ** "*.jar").classpath
+Compile / unmanagedJars := (baseDirectory.value ** "*.jar").classpath
 ```
 
 If you want to add jars from multiple directories in addition to the
 default directory, you can do:
 
 ```scala
-unmanagedJars in Compile ++= {
+Compile / unmanagedJars ++= {
     val base = baseDirectory.value
     val baseDirectories = (base / "libA") +++ (base / "b" / "lib") +++ (base / "libC")
     val customJars = (baseDirectories ** "*.jar") +++ (base / "d" / "my.jar")
@@ -14090,15 +14125,15 @@ the *checksums* setting.
 To disable checksum checking during update:
 
 ```scala
-checksums in update := Nil
+update / checksums := Nil
 ```
 
 To disable checksum creation during artifact publishing:
 
 ```scala
-checksums in publishLocal := Nil
+publishLocal / checksums := Nil
 
-checksums in publish := Nil
+publish / checksums := Nil
 ```
 
 The default value is:
@@ -14294,7 +14329,7 @@ ivyConfigurations += JS
 
 libraryDependencies += "jquery" % "jquery" % "3.2.1" % "js->default" from "https://code.jquery.com/jquery-3.2.1.min.js"
 
-resources in Compile ++= update.value.select(configurationFilter("js"))
+Compile / resources ++= update.value.select(configurationFilter("js"))
 ```
 
 The `config` method defines a new configuration with name `"js"` and
@@ -14354,7 +14389,7 @@ classpaths. For example, to specify that the `Compile` classpath should
 use the 'default' configuration:
 
 ```scala
-classpathConfiguration in Compile := config("default")
+Compile / classpathConfiguration := config("default")
 ```
 
 ##### Maven pom (dependencies only)
@@ -14375,14 +14410,10 @@ For example, a `build.sbt` using external Ivy files might look like:
 
 ```scala
 externalIvySettings()
-
 externalIvyFile(Def.setting(baseDirectory.value / "ivyA.xml"))
-
-classpathConfiguration in Compile := Compile
-
-classpathConfiguration in Test := Test
-
-classpathConfiguration in Runtime := Runtime
+Compile / classpathConfiguration := Compile
+Test / classpathConfiguration := Test
+Runtime / classpathConfiguration := Runtime
 ```
 
 ##### Forcing a revision (Not recommended)
@@ -21610,7 +21641,7 @@ Frequently Asked Questions
 
 ### Project Information
 
-#### What does the name "sbt" stand for and shouldn't it be written "SBT"?
+#### What does the name "sbt" stand for, and why shouldn't it be written "SBT"?
 
 **TL;DR** the name sbt doesn't stand for anything, it's just "sbt", and it should be written that way.
 
@@ -21620,15 +21651,12 @@ Over time some have re-defined sbt to stand for "Scala Build Tool", but we belie
 given it can be used to build Java-only projects.
 
 Nowadays we just call sbt "sbt", and to reinforce that the name is no longer an [initialism][] we
-always write it in all lowercase letters.
-
-However, we are cool with [酢豚][subuta] (subuta) as a nickname.
+always write it in all lowercase letters. However, we are cool with [酢豚][subuta] (subuta) as a nickname.
 
 [@harrah]: https://github.com/harrah
 [sbt 0.3.2 announcement]: http://www.scala-lang.org/old/node/392.html
 [initialism]: https://en.oxforddictionaries.com/definition/initialism
 [subuta]: https://ja.wikipedia.org/wiki/%E9%85%A2%E8%B1%9A
-
 
 #### How do I get help?
 
@@ -21674,6 +21702,426 @@ or ansi codes are supported but you want to disable colored output. To
 completely disable ansi codes, pass `-no-colors` option:
 
 ```
+$ sbt -no-colors
+```
+
+#### How can I start a Scala interpreter (REPL) with sbt project configuration (dependencies, etc.)?
+
+In sbt's shell run `console`.
+
+### Build definitions
+
+#### What are the `:=`, `+=`, and `++=` methods?
+
+These are methods on keys used to construct a `Setting` or a `Task`. The
+Getting Started Guide covers all these methods, see
+[.sbt build definition][Basic-Def],
+[task graph][Task-Graph], and
+[appending values][Appending-Values] for
+example.
+
+#### What is the `%` method?
+
+It's used to create a `ModuleID` from strings, when specifying managed
+dependencies. Read the Getting Started Guide about
+[library dependencies][Library-Dependencies].
+
+#### What is `ModuleID`, `Project`, ...?
+
+To figure out an unknown type or method, have a look at the
+[Getting Started Guide][Getting-Started] if you have not. Also
+try the [index][Name-Index] of commonly used methods, values, and
+types, the [API Documentation](../api/) and the
+[hyperlinked sources](../sxr/).
+
+#### How do I add files to a jar package?
+
+The files included in an artifact are configured by default by a task
+`mappings` that is scoped by the relevant package task. The `mappings`
+task returns a sequence `Seq[(File,String)]` of mappings from the file
+to include to the path within the jar. See
+[mapping files][Mapping-Files] for details on creating these mappings.
+
+For example, to add generated sources to the packaged source artifact:
+
+```scala
+mappings in (Compile, packageSrc) ++= {
+  import Path.{flat, relativeTo}
+  val base = (sourceManaged in Compile).value
+  val srcs = (managedSources in Compile).value
+  srcs x (relativeTo(base) | flat)
+}
+```
+
+This takes sources from the `managedSources` task and relativizes them
+against the `managedSource` base directory, falling back to a flattened
+mapping. If a source generation task doesn't write the sources to the
+`managedSource` directory, the mapping function would have to be
+adjusted to try relativizing against additional directories or something
+more appropriate for the generator.
+
+#### How can I generate source code or resources?
+
+See [Generating Files][Howto-Generating-Files].
+
+#### How can a task avoid redoing work if the input files are unchanged?
+
+There is basic support for only doing work when input files have changed
+or when the outputs haven't been generated yet. This support is
+primitive and subject to change.
+
+The relevant methods are two overloaded methods called
+[FileFunction.cached](../api/sbt/FileFunction$.html). Each requires a
+directory in which to store cached data. Sample usage is:
+
+```scala
+// define a task that takes some inputs
+//   and generates files in an output directory
+myTask := {
+  // wraps a function taskImpl in an uptodate check
+  //   taskImpl takes the input files, the output directory,
+  //   generates the output files and returns the set of generated files
+  val cachedFun = FileFunction.cached(cacheDirectory.value / "my-task") { (in: Set[File]) =>
+    taskImpl(in, target.value) : Set[File]
+  }
+  // Applies the cached function to the inputs files
+  cachedFun(inputs.value)
+}
+```
+
+There are two additional arguments for the first parameter list that
+allow the file tracking style to be explicitly specified. By default,
+the input tracking style is `FilesInfo.lastModified`, based on a file's
+last modified time, and the output tracking style is `FilesInfo.exists`,
+based only on whether the file exists. The other available style is
+`FilesInfo.hash`, which tracks a file based on a hash of its contents.
+See the [FilesInfo API](../api/sbt/FilesInfo$.html) for details.
+
+A more advanced version of `FileFunction.cached` passes a data structure
+of type [ChangeReport](../api/sbt/ChangeReport.html) describing the
+changes to input and output files since the last evaluation. This
+version of `cached` also expects the set of files generated as output to
+be the result of the evaluated function.
+
+### Extending sbt
+
+#### How can I add a new configuration?
+
+The following example demonstrates adding a new set of compilation
+settings and tasks to a new configuration called `samples`. The sources
+for this configuration go in `src/samples/scala/`. Unspecified settings
+delegate to those defined for the `compile` configuration. For example,
+if `scalacOptions` are not overridden for `samples`, the options for the
+main sources are used.
+
+Options specific to `samples` may be declared like:
+
+```scala
+scalacOptions in Samples += "-deprecation"
+```
+
+This uses the main options as base options because of `+=`. Use `:=` to
+ignore the main options:
+
+```scala
+scalacOptions in Samples := "-deprecation" :: Nil
+```
+
+The example adds all of the usual compilation related settings and tasks
+to `samples`:
+
+```
+samples:run
+samples:runMain
+samples:compile
+samples:console
+samples:consoleQuick
+samples:scalacOptions
+samples:fullClasspath
+samples:package
+samples:packageSrc
+...
+```
+
+#### How do I add a test configuration?
+
+See the [Additional test configurations][additional-test-configurations] section of
+[Testing][Testing].
+
+#### How can I create a custom run task, in addition to `run`?
+
+This answer is extracted from a
+[mailing list discussion](https://groups.google.com/group/simple-build-tool/browse_thread/thread/4c28ee5b7e18b46a/).
+
+Read the Getting Started Guide up to
+[custom settings][Custom-Settings] for background.
+
+A basic run task is created by:
+
+```scala
+lazy val myRunTask = taskKey[Unit]("A custom run task.")
+
+// this can go either in a `build.sbt` or the settings member
+//   of a Project in a full configuration
+fullRunTask(myRunTask, Test, "foo.Foo", "arg1", "arg2")
+```
+
+If you want to be able to supply arguments on the command line, replace
+`TaskKey` with `InputKey` and `fullRunTask` with `fullRunInputTask`. The
+`Test` part can be replaced with another configuration, such as
+`Compile`, to use that configuration's classpath.
+
+This run task can be configured individually by specifying the task key
+in the scope. For example:
+
+```scala
+fork in myRunTask := true
+
+javaOptions in myRunTask += "-Xmx6144m"
+```
+
+#### How should I express a dependency on an outside tool such as proguard?
+
+Tool dependencies are used to implement a task and are not needed by
+project source code. These dependencies can be declared in their own
+configuration and classpaths. These are the steps:
+
+1.  Define a new [configuration][ivy-configurations].
+2.  Declare the tool
+    [dependencies][Library-Management] in that
+    configuration.
+3.  Define a classpath that pulls the dependencies from the
+    [Update Report][Update-Report] produced by `update`.
+4.  Use the classpath to implement the task.
+
+As an example, consider a `proguard` task. This task needs the ProGuard
+jars in order to run the tool. First, define and add the new
+configuration:
+
+```scala
+val ProguardConfig = config("proguard") hide
+
+ivyConfigurations += ProguardConfig
+```
+
+Then,
+
+```scala
+// Add proguard as a dependency in the custom configuration.
+//  This keeps it separate from project dependencies.
+libraryDependencies +=
+   "net.sf.proguard" % "proguard" % "4.4" % ProguardConfig.name
+
+// Extract the dependencies from the UpdateReport.
+managedClasspath in proguard := {
+    // these are the types of artifacts to include
+    val artifactTypes: Set[String] = (classpathTypes in proguard).value
+    Classpaths.managedJars(proguardConfig, artifactTypes, update.value)
+}
+
+// Use the dependencies in a task, typically by putting them
+//  in a ClassLoader and reflectively calling an appropriate
+//  method.
+proguard := {
+    val cp: Seq[File] = (managedClasspath in proguard).value
+  // ... do something with , which includes proguard ...
+}
+```
+
+Defining the intermediate classpath is optional, but it can be useful
+for debugging or if it needs to be used by multiple tasks. It is also
+possible to specify artifact types inline. This alternative `proguard`
+task would look like:
+
+```scala
+proguard := {
+   val artifactTypes = Set("jar")
+    val cp: Seq[File] =
+      Classpaths.managedJars(proguardConfig, artifactTypes, update.value)
+  // ... do something with , which includes proguard ...
+}
+```
+
+#### How would I change sbt's classpath dynamically?
+
+It is possible to register additional jars that will be placed on sbt's
+classpath (since version 0.10.1). Through
+[State](../api/sbt/State$.html), it is possible to obtain a
+[xsbti.ComponentProvider](../api/xsbti/ComponentProvider.html), which
+manages application components. Components are groups of files in the
+`~/.sbt/boot/` directory and, in this case, the application is sbt. In
+addition to the base classpath, components in the "extra" component are
+included on sbt's classpath.
+
+(Note: the additional components on an application's classpath are
+declared by the `components` property in the `[main]` section of the
+launcher configuration file `boot.properties`.)
+
+Because these components are added to the `~/.sbt/boot/` directory and
+`~/.sbt/boot/` may be read-only, this can fail. In this case, the user
+has generally intentionally set sbt up this way, so error recovery is
+not typically necessary (just a short error message explaining the
+situation.)
+
+#### Example of dynamic classpath augmentation
+
+The following code can be used where a `State => State` is required,
+such as in the `onLoad` setting (described below) or in a
+[command][Commands]. It adds some files to the "extra"
+component and reloads sbt if they were not already added. Note that
+reloading will drop the user's session state.
+
+```scala
+def augment(extra: Seq[File])(s: State): State = {
+    // Get the component provider
+  val cs: xsbti.ComponentProvider = s.configuration.provider.components()
+
+    // Adds the files in 'extra' to the "extra" component
+    //   under an exclusive machine-wide lock.
+    //   The returned value is 'true' if files were actually copied and 'false'
+    //   if the target files already exists (based on name only).
+  val copied: Boolean = s.locked(cs.lockFile, cs.addToComponent("extra", extra.toArray))
+
+    // If files were copied, reload so that we use the new classpath.
+  if(copied) s.reload else s
+}
+```
+
+#### How can I take action when the project is loaded or unloaded?
+
+See [How to take an action on startup](Howto-Startup.html).
+
+#### Example of project load/unload hooks
+
+The following example maintains a count of the number of times a project
+has been loaded and prints that number:
+
+```scala
+{
+  // the key for the current count
+  val key = AttributeKey[Int]("loadCount")
+  // the State transformer
+  val f = (s: State) => {
+    val previous = s get key getOrElse 0
+    println("Project load count: " + previous)
+    s.put(key, previous + 1)
+  }
+  onLoad in Global := {
+    val previous = (onLoad in Global).value
+    f compose previous
+  }
+}
+```
+
+### Errors
+
+#### On project load, "Reference to uninitialized setting"
+
+Setting initializers are executed in order. If the initialization of a
+setting depends on other settings that has not been initialized, sbt
+will stop loading.
+
+In this example, we try to append a library to `libraryDependencies`
+before it is initialized with an empty sequence.
+
+```scala
+object MyBuild extends Build {
+  val root = Project(id = "root", base = file("."),
+    settings = Seq(
+      libraryDependencies += "commons-io" % "commons-io" % "1.4" % "test"
+    )
+  ).disablePlugins(plugins.IvyModule)
+}
+```
+
+To correct this, include the IvyModule plugin settings, which includes
+`libraryDependencies := Seq()`. So, we just drop the explicit disabling.
+
+```scala
+object MyBuild extends Build {
+  val root = Project(id = "root", base = file("."),
+    settings = Seq(
+      libraryDependencies += "commons-io" % "commons-io" % "1.4" % "test"
+    )
+  )
+}
+```
+
+A more subtle variation of this error occurs when using
+[scoped settings][Scopes].
+
+```scala
+// error: Reference to uninitialized setting
+settings = Seq(
+  libraryDependencies += "commons-io" % "commons-io" % "1.2" % "test",
+  fullClasspath := fullClasspath.value.filterNot(_.data.name.contains("commons-io"))
+)
+```
+
+This setting varies between the test and compile scopes. The solution is
+use the scoped setting, both as the input to the initializer, and the
+setting that we update.
+
+```scala
+fullClasspath in Compile := (fullClasspath in Compile).value.filterNot(_.data.name.contains("commons-io"))
+```
+
+### Dependency Management
+
+#### How do I resolve a checksum error?
+
+This error occurs when the published checksum, such as a sha1 or md5
+hash, differs from the checksum computed for a downloaded artifact, such
+as a jar or pom.xml. An example of such an error is:
+
+```
+[warn]  problem while downloading module descriptor:
+https://repo1.maven.org/maven2/commons-fileupload/commons-fileupload/1.2.2/commons-fileupload-1.2.2.pom:
+invalid sha1: expected=ad3fda4adc95eb0d061341228cc94845ddb9a6fe computed=0ce5d4a03b07c8b00ab60252e5cacdc708a4e6d8 (1070ms)
+```
+
+The invalid checksum should generally be reported to the repository
+owner (as
+[was done](https://issues.sonatype.org/browse/MVNCENTRAL-46) for the
+above error). In the meantime, you can temporarily disable checking with
+the following setting:
+
+```scala
+checksums in update := Nil
+```
+
+See [library management][Library-Management] for details.
+
+#### I've added a plugin, and now my cross-compilations fail!
+
+This problem crops up frequently. Plugins are only published for the
+Scala version that sbt uses (currently, 2.9.1). You can still *use*
+plugins during cross-compilation, because sbt only looks for a 2.9.1
+version of the plugin.
+
+**... unless you specify the plugin in the wrong place!**
+
+A typical mistake is to put global plugin definitions in
+`~/.sbt/plugins.sbt`. **THIS IS WRONG.** `.sbt` files in `~/.sbt` are
+loaded for *each* build--that is, for *each* cross-compilation. So, if
+you build for Scala 2.9.0, sbt will try to find a version of the plugin
+that's compiled for 2.9.0--and it usually won't. That's because it
+doesn't *know* the dependency is a plugin.
+
+To tell sbt that the dependency is an sbt plugin, make sure you define
+your global plugins in a `.sbt` file in `~/.sbt/plugins/`. sbt knows
+that files in `~/.sbt/plugins` are only to be used by sbt itself, not as
+part of the general build definition. If you define your plugins in a
+file under *that* directory, they won't foul up your cross-compilations.
+Any file name ending in `.sbt` will do, but most people use
+`~/.sbt/plugins/build.sbt` or `~/.sbt/plugins/plugins.sbt`.
+
+### Miscellaneous
+
+#### Where can I find plugins for 1.0.2?
+
+See [Community Plugins][Community-Plugins] for a list of currently available
+plugins.
 
 
   [Running]: Running.html

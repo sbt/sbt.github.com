@@ -77,7 +77,7 @@ to be the “custom_lib” directory in a project’s base directory:
 </code></pre><p>This setting sets the location of the shell history to be in the base
 directory of the build, irrespective of the project the setting is
 defined in:
-</p><pre><code class="prettyprint lang-scala">historyPath := Some( (baseDirectory in ThisBuild).value / &quot;.history&quot;),
+</p><pre><code class="prettyprint lang-scala">historyPath := Some( (ThisBuild / baseDirectory).value / &quot;.history&quot;),
 </code></pre><h3 id="Path+Finders">Path Finders<a href="#Path+Finders" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A <code>PathFinder</code> computes a <code>Seq[File]</code> on demand. It is a way to build a
 sequence of files. There are several methods that augment <code>File</code> and
 <code>Seq[File]</code> to construct a <code>PathFinder</code>. Ultimately, call <code>get</code> on the

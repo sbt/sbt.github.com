@@ -49,21 +49,21 @@ value type is a sequence, you can append to the sequence rather than
 replacing it.
 </p><ul><li><code>+=</code> will append a single element to the sequence.
 </li><li><code>++=</code> will concatenate another sequence.
-</li></ul><p>For example, the key <code>sourceDirectories in Compile</code> has a <code>Seq[File]</code> as its
+</li></ul><p>For example, the key <code>Compile / sourceDirectories</code> has a <code>Seq[File]</code> as its
 value. By default this key’s value would include <code>src/main/scala</code>. If you
 wanted to also compile source code in a directory called source (since
 you just have to be nonstandard), you could add that directory:
-</p><pre><code class="prettyprint lang-scala">sourceDirectories in Compile += new File(&quot;source&quot;)
+</p><pre><code class="prettyprint lang-scala">Compile / sourceDirectories += new File(&quot;source&quot;)
 </code></pre><p>Or, using the <code>file()</code> function from the sbt package for convenience:
-</p><pre><code class="prettyprint lang-scala">sourceDirectories in Compile += file(&quot;source&quot;)
+</p><pre><code class="prettyprint lang-scala">Compile / sourceDirectories += file(&quot;source&quot;)
 </code></pre><p>(<code>file()</code> just creates a new <code>File</code>.)
 </p><p>You could use <code>++=</code> to add more than one directory at a time:
-</p><pre><code class="prettyprint lang-scala">sourceDirectories in Compile ++= Seq(file(&quot;sources1&quot;), file(&quot;sources2&quot;))
+</p><pre><code class="prettyprint lang-scala">Compile / sourceDirectories ++= Seq(file(&quot;sources1&quot;), file(&quot;sources2&quot;))
 </code></pre><p>Where <code>Seq(a, b, c, ...)</code> is standard Scala syntax to construct a
 sequence.
 </p><p>To replace the default source directories entirely, you use <code>:=</code> of
 course:
-</p><pre><code class="prettyprint lang-scala">sourceDirectories in Compile := Seq(file(&quot;sources1&quot;), file(&quot;sources2&quot;))
+</p><pre><code class="prettyprint lang-scala">Compile / sourceDirectories := Seq(file(&quot;sources1&quot;), file(&quot;sources2&quot;))
 </code></pre><h4 id="When+settings+are+undefined">When settings are undefined<a href="#When+settings+are+undefined" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Whenever a setting uses <code>:=</code>, <code>+=</code>, or <code>++=</code> to create a dependency on itself
 or another key’s value, the value it depends on must exist. If it does
 not, sbt will complain. It might say <em>“Reference to undefined setting“</em>,
@@ -73,8 +73,8 @@ for example. When this happens, be sure you’re using the key in the
 you do this.
 </p><h4 id="Tasks+based+on+other+keys%E2%80%99+values">Tasks based on other keys’ values<a href="#Tasks+based+on+other+keys%E2%80%99+values" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>You can compute values of some tasks or settings to define or append a value for another task. It’s done by using <code>Def.task</code> and <code>taskValue</code> as an argument to <code>:=</code>, <code>+=</code>, or <code>++=</code>.
 </p><p>As a first example, consider appending a source generator using the project base directory and compilation classpath.
-</p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile += Def.task {
-  myGenerator(baseDirectory.value, (managedClasspath in Compile).value)
+</p><pre><code class="prettyprint lang-scala">Compile / sourceGenerators += Def.task {
+  myGenerator(baseDirectory.value, (Compile / managedClasspath).value)
 }.taskValue
 </code></pre><h3 id="Appending+with+dependencies%3A++and">Appending with dependencies: <code>+=</code> and <code>++=</code><a href="#Appending+with+dependencies%3A++and" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Other keys can be used when appending to an existing setting or task,
 just like they can for assigning with <code>:=</code>.

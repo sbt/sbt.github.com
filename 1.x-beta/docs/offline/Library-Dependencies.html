@@ -75,7 +75,7 @@ as explained in <a href="Task-Graph.html">task graph</a>.
 something else complex, you might need to replace the whole
 <code>unmanagedJars</code> task with one that does something else, e.g. empty the list for
 <code>Compile</code> configuration regardless of the files in <code>lib</code> directory:
-</p><pre><code class="prettyprint lang-scala">unmanagedJars in Compile := Seq.empty[sbt.Attributed[java.io.File]]
+</p><pre><code class="prettyprint lang-scala">Compile / unmanagedJars := Seq.empty[sbt.Attributed[java.io.File]]
 </code></pre><h3 id="Managed+Dependencies">Managed Dependencies<a href="#Managed+Dependencies" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt uses <a href="https://ant.apache.org/ivy/">Apache Ivy</a> to implement managed
 dependencies, so if you’re familiar with Ivy or Maven, you won’t have
 much trouble.

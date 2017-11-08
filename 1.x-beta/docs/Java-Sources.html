@@ -68,10 +68,10 @@ do not depend on your Scala sources, you can do:
 </code></pre><p>To specify different orders for main and test sources, scope the setting
 by configuration:
 </p><pre><code class="prettyprint lang-scala">// Java then Scala for main sources
-compileOrder in Compile := CompileOrder.JavaThenScala
+Compile / compileOrder := CompileOrder.JavaThenScala
 
 // allow circular dependencies for test sources
-compileOrder in Test := CompileOrder.Mixed
+Test / compileOrder := CompileOrder.Mixed
 </code></pre><p>Note that in an incremental compilation setting, it is not practical to
 ensure complete isolation between Java sources and Scala sources because
 they share the same output directory. So, previously compiled classes

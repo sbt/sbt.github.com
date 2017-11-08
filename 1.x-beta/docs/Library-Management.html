@@ -69,10 +69,10 @@ setting in your project definition. For example, to use <code>custom_lib/</code>
 </code></pre><p>If you want more control and flexibility, override the <code>unmanagedJars</code>
 task, which ultimately provides the manual dependencies to sbt. The
 default implementation is roughly:
-</p><pre><code class="prettyprint lang-scala">unmanagedJars in Compile := (baseDirectory.value ** &quot;*.jar&quot;).classpath
+</p><pre><code class="prettyprint lang-scala">Compile / unmanagedJars := (baseDirectory.value ** &quot;*.jar&quot;).classpath
 </code></pre><p>If you want to add jars from multiple directories in addition to the
 default directory, you can do:
-</p><pre><code class="prettyprint lang-scala">unmanagedJars in Compile ++= {
+</p><pre><code class="prettyprint lang-scala">Compile / unmanagedJars ++= {
     val base = baseDirectory.value
     val baseDirectories = (base / &quot;libA&quot;) +++ (base / &quot;b&quot; / &quot;lib&quot;) +++ (base / &quot;libC&quot;)
     val customJars = (baseDirectories ** &quot;*.jar&quot;) +++ (base / &quot;d&quot; / &quot;my.jar&quot;)
@@ -250,11 +250,11 @@ verifies the checksums of downloaded files by default. It also publishes
 checksums of artifacts by default. The checksums to use are specified by
 the <em>checksums</em> setting.
 </p><p>To disable checksum checking during update:
-</p><pre><code class="prettyprint lang-scala">checksums in update := Nil
+</p><pre><code class="prettyprint lang-scala">update / checksums := Nil
 </code></pre><p>To disable checksum creation during artifact publishing:
-</p><pre><code class="prettyprint lang-scala">checksums in publishLocal := Nil
+</p><pre><code class="prettyprint lang-scala">publishLocal / checksums := Nil
 
-checksums in publish := Nil
+publish / checksums := Nil
 </code></pre><p>The default value is:
 </p><pre><code class="prettyprint lang-scala">checksums := Seq(&quot;sha1&quot;, &quot;md5&quot;)
 </code></pre><a name="conflict-management"></a><h5 id="Conflict+Management">Conflict Management<a href="#Conflict+Management" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p>The conflict manager decides what to do when dependency resolution
@@ -370,7 +370,7 @@ ivyConfigurations += JS
 
 libraryDependencies += &quot;jquery&quot; % &quot;jquery&quot; % &quot;3.2.1&quot; % &quot;js-&gt;default&quot; from &quot;https://code.jquery.com/jquery-3.2.1.min.js&quot;
 
-resources in Compile ++= update.value.select(configurationFilter(&quot;js&quot;))
+Compile / resources ++= update.value.select(configurationFilter(&quot;js&quot;))
 </code></pre><p>The <code>config</code> method defines a new configuration with name <code>&quot;js&quot;</code> and
 makes it private to the project so that it is not used for publishing.
 See <a href="Update-Report.html">Update Report</a> for more information on selecting
@@ -396,20 +396,16 @@ expressions.
 which configurations to use for the <code>compile</code>, <code>runtime</code>, and <code>test</code>
 classpaths. For example, to specify that the <code>Compile</code> classpath should
 use the ‘default’ configuration:
-</p><pre><code class="prettyprint lang-scala">classpathConfiguration in Compile := config(&quot;default&quot;)
+</p><pre><code class="prettyprint lang-scala">Compile / classpathConfiguration := config(&quot;default&quot;)
 </code></pre><h5 id="Maven+pom+%28dependencies+only%29">Maven pom (dependencies only)<a href="#Maven+pom+%28dependencies+only%29" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><pre><code class="prettyprint lang-scala">externalPom()
 </code></pre><p>or
 </p><pre><code class="prettyprint lang-scala">externalPom(Def.setting(baseDirectory.value / &quot;custom-name.xml&quot;))
 </code></pre><h5 id="Full+Ivy+Example">Full Ivy Example<a href="#Full+Ivy+Example" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p>For example, a <code>build.sbt</code> using external Ivy files might look like:
 </p><pre><code class="prettyprint lang-scala">externalIvySettings()
-
 externalIvyFile(Def.setting(baseDirectory.value / &quot;ivyA.xml&quot;))
-
-classpathConfiguration in Compile := Compile
-
-classpathConfiguration in Test := Test
-
-classpathConfiguration in Runtime := Runtime
+Compile / classpathConfiguration := Compile
+Test / classpathConfiguration := Test
+Runtime / classpathConfiguration := Runtime
 </code></pre><h5 id="Forcing+a+revision+%28Not+recommended%29">Forcing a revision (Not recommended)<a href="#Forcing+a+revision+%28Not+recommended%29" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p><strong>Note</strong>: Forcing can create logical inconsistencies so it’s no longer recommended.
 </p><p>To say that we prefer the version we’ve specified over the version from
 indirect dependencies, use <code>force()</code>:

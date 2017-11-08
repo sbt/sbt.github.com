@@ -113,10 +113,8 @@ and assign it to <code>scalaInstance</code>. You will also need to add the
 <code>scala-library</code> jar to the classpath to compile and run Scala sources.
 For example,
 </p><pre><code class="prettyprint lang-scala">managedScalaInstance := false
-
 scalaInstance := ...
-
-unmanagedJars in Compile += scalaInstance.value.libraryJar
+Compile / unmanagedJars += scalaInstance.value.libraryJar
 </code></pre><h4 id="Switching+to+a+local+Scala+version">Switching to a local Scala version<a href="#Switching+to+a+local+Scala+version" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>To use a locally built Scala version, configure Scala home as described
 in the following section. Scala will still be resolved as before, but
 the jars will come from the configured Scala home directory.
@@ -149,7 +147,7 @@ Scala distribution. For example, to add all jars in the Scala home
 <code>lib/</code> directory,
 </p><pre><code class="prettyprint lang-scala">scalaHome := Some(file(&quot;/home/user/scala-2.10/&quot;))
 
-unmanagedJars in Compile ++= scalaInstance.value.jars
+Compile / unmanagedJars ++= scalaInstance.value.jars
 </code></pre><p>To add only some jars, filter the jars from <code>scalaInstance</code> before
 adding them.
 </p><h3 id="sbt%E2%80%99s+Scala+version">sbt’s Scala version<a href="#sbt%E2%80%99s+Scala+version" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt needs Scala jars to run itself since it is written in Scala. sbt

@@ -76,7 +76,7 @@ class is mapped to its own task to enable executing tests in parallel.
 </p><ol><li>Enabling or disabling all parallel execution
 (parallelExecution := false, for example).
 </li><li>Enabling or disabling mapping tests to their own tasks
-(parallelExecution in Test := false, for example).
+(Test / parallelExecution := false, for example).
 </li></ol><p>(Although never exposed as a setting, the maximum number of tasks
 running at a given time was internally configurable as well.)
 </p><p>The second configuration mechanism described above only selected between
@@ -116,8 +116,8 @@ download := downloadImpl.value
 </code></pre><h4 id="Defining+Restrictions">Defining Restrictions<a href="#Defining+Restrictions" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Once tasks are tagged, the <code>concurrentRestrictions</code> setting sets
 restrictions on the tasks that may be concurrently executed based on the
 weighted tags of those tasks. This is necessarily a global set of rules,
-so it must be scoped <code>in Global</code>. For example,
-</p><pre><code class="prettyprint lang-scala">concurrentRestrictions in Global := Seq(
+so it must be scoped <code>Global /</code>. For example,
+</p><pre><code class="prettyprint lang-scala">Global / concurrentRestrictions := Seq(
   Tags.limit(Tags.CPU, 2),
   Tags.limit(Tags.Network, 10),
   Tags.limit(Tags.Test, 1),
@@ -197,23 +197,23 @@ define any tags.
 </li></ul><p>Of additional note is that the default <code>test</code> task will propagate its
 tags to each child task created for each test class.
 </p><p>The default rules provide the same behavior as previous versions of sbt:
-</p><pre><code class="prettyprint lang-scala">concurrentRestrictions in Global := {
+</p><pre><code class="prettyprint lang-scala">Global / concurrentRestrictions := {
   val max = Runtime.getRuntime.availableProcessors
   Tags.limitAll(if(parallelExecution.value) max else 1) :: Nil
 }
 </code></pre><p>As before, <code>parallelExecution in Test</code> controls whether tests are mapped
 to separate tasks. To restrict the number of concurrently executing
 tests in all projects, use:
-</p><pre><code class="prettyprint lang-scala">concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
+</p><pre><code class="prettyprint lang-scala">Global / concurrentRestrictions += Tags.limit(Tags.Test, 1)
 </code></pre><h4 id="Custom+Tags">Custom Tags<a href="#Custom+Tags" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>To define a new tag, pass a String to the <code>Tags.Tag</code> method. For
 example:
 </p><pre><code class="prettyprint lang-scala">val Custom = Tags.Tag(&quot;custom&quot;)
 </code></pre><p>Then, use this tag as any other tag. For example:
 </p><pre><code class="prettyprint lang-scala">def aImpl = Def.task { ... } tag(Custom)
 
-aCustomTask := aImpl.value 
+aCustomTask := aImpl.value
 
-concurrentRestrictions in Global += 
+Global / concurrentRestrictions +=
   Tags.limit(Custom, 1)
 </code></pre><h3 id="Future+work">Future work<a href="#Future+work" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>This is an experimental feature and there are several aspects that may
 change or require further work.
@@ -224,7 +224,7 @@ tags applied to it. Only the first computation is labeled.
 
 compile := myCompileTask.value
 
-compile := { 
+compile := {
   val result = compile.value
   ... do some post processing ...
 }
