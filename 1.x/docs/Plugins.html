@@ -180,7 +180,7 @@ object SbtLessPlugin extends AutoPlugin {
   override lazy val projectSettings = ...
 }
 </code></pre><p>The <code>requires</code> method returns a value of type <code>Plugins</code>, which is a DSL for constructing the dependency list. The requires method typically contains one of the following values:
-</p><ul><li><code>empty</code> (No plugins, this is the default)
+</p><ul><li><code>empty</code> (No plugins)
 </li><li>other auto plugins
 </li><li><code>&amp;&amp;</code> operator (for defining multiple dependencies)
 </li></ul><h4 id="Root+plugins+and+triggered+plugins">Root plugins and triggered plugins<a href="#Root+plugins+and+triggered+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Some plugins should always be explicitly enabled on projects. we call
@@ -189,7 +189,7 @@ dependency graph. An auto plugin is by default a root plugin.
 </p><p>Auto plugins also provide a way for plugins to automatically attach themselves to
 projects if their dependencies are met. We call these triggered plugins,
 and they are created by overriding the <code>trigger</code> method.
-</p><p>For example, we might want to create a triggered plugin that can append commands automatically to the build. To do this, set the <code>requires</code> method to return <code>empty</code> (this is the default), and override the <code>trigger</code> method with <code>allRequirements</code>.
+</p><p>For example, we might want to create a triggered plugin that can append commands automatically to the build. To do this, set the <code>requires</code> method to return <code>empty</code>, and override the <code>trigger</code> method with <code>allRequirements</code>.
 </p><pre><code class="prettyprint lang-scala">package sbthello
 
 import sbt._
