@@ -40,7 +40,7 @@ sbt を試してくれることに感謝する。_ぜひ楽しいんでほしい
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.3/sbt-1.0.3.msi
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.4/sbt-1.0.4.msi
   [Setup-Notes]: ../../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -69,8 +69,8 @@ sbt プロジェクトを作るためには、以下の手順をたどる必要�
 
 
 
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.3/sbt-1.0.3.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.3/sbt-1.0.3.tgz
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.4/sbt-1.0.4.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.4/sbt-1.0.4.tgz
   [Manual-Installation]: Manual-Installation.html
 
 Mac への sbt のインストール
@@ -98,9 +98,9 @@ $ port install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.3/sbt-1.0.3.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.3/sbt-1.0.3.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.3/sbt-1.0.3.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.4/sbt-1.0.4.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.4/sbt-1.0.4.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.4/sbt-1.0.4.tgz
 
 Windows への sbt のインストール
 ----------------------------
@@ -114,10 +114,10 @@ Windows への sbt のインストール
 [msi インストーラ][MSI]をダウンロードしてインストールする。
 
 
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.3/sbt-1.0.3.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.3/sbt-1.0.3.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.0.3.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.0.3.deb
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.4/sbt-1.0.4.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.4/sbt-1.0.4.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.0.4.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.0.4.deb
   [Manual-Installation]: Manual-Installation.html
   [website127]: https://github.com/sbt/website/issues/12
 
@@ -522,7 +522,7 @@ sbt 0.13.13 など最近のバージョンをインストール済みで、
 sbt バージョンを指定する:
 
 ```
-sbt.version=1.0.3
+sbt.version=1.0.4
 ```
 
 もしも指定されたバージョンがローカルマシンに無ければ、
@@ -570,7 +570,7 @@ lazy val root = (project in file("."))
   .settings(
     name         := "hello",
     organization := "com.example",
-    scalaVersion := "2.12.3",
+    scalaVersion := "2.12.4",
     version      := "0.1.0-SNAPSHOT"
   )
 ```
@@ -732,7 +732,7 @@ val derby = "org.apache.derby" % "derby" % "10.4.1.3"
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0-SNAPSHOT",
-  scalaVersion := "2.12.3"
+  scalaVersion := "2.12.4"
 )
 
 lazy val root = (project in file("."))
@@ -823,7 +823,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "Hello",
     organization := "com.example",
-    scalaVersion := "2.12.3",
+    scalaVersion := "2.12.4",
     version := "0.1.0-SNAPSHOT",
     scalacOptions := {
       val out = streams.value // streams タスクは scalacOptions よりも事前発生する
@@ -859,7 +859,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "Hello",
     organization := "com.example",
-    scalaVersion := "2.12.3",
+    scalaVersion := "2.12.4",
     version := "0.1.0-SNAPSHOT",
     scalacOptions := {
       val ur = update.value  // update task happens-before scalacOptions
@@ -985,7 +985,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "Hello",
     organization := "com.example",
-    scalaVersion := "2.12.3",
+    scalaVersion := "2.12.4",
     version := "0.1.0-SNAPSHOT",
     scalacOptions := List("-encoding", "utf8", "-Xfatal-warnings", "-deprecation", "-unchecked"),
     scalacOptions := {
@@ -1466,7 +1466,7 @@ lazy val root = (project in file("."))
       // Same as:
       // organization in ThisBuild := "com.example"
       organization := "com.example",
-      scalaVersion := "2.12.3",
+      scalaVersion := "2.12.4",
       version      := "0.1.0-SNAPSHOT"
     )),
     name := "Hello",
@@ -1669,7 +1669,7 @@ lazy val projA = (project in file("a"))
 `name in projA` (sbt シェルだと `projA/name`) の値は何か?
 
 1. `"foo-2.11.11"`
-2. `"foo-2.12.3"`
+2. `"foo-2.12.4"`
 3. その他
 
 正解は `"foo-2.11.11"`。
@@ -2256,7 +2256,7 @@ lazy val core = project
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.12.3"
+  scalaVersion := "2.12.4"
 )
 
 lazy val core = (project in file("core"))
@@ -2947,7 +2947,7 @@ import Dependencies._
 
 lazy val commonSettings = Seq(
   version := "0.1.0",
-  scalaVersion := "2.12.3"
+  scalaVersion := "2.12.4"
 )
 
 lazy val backend = (project in file("backend"))
@@ -3049,7 +3049,7 @@ name := "hello"
 
 version := "1.0"
 
-scalaVersion := "2.12.3"
+scalaVersion := "2.12.4"
 ```
 
 ### (0.13.7 以前) 設定は空白行で区切る
@@ -3673,7 +3673,7 @@ sbt 0.13.8 で `Def.sequential` という関数が追加されて、準逐次な
 #### project/build.properties
 
 ```
-sbt.version=1.0.3
+sbt.version=1.0.4
 ```
 
 #### project/style.sbt
@@ -3723,7 +3723,7 @@ root> compilecheck
 #### project/build.properties
 
 ```
-sbt.version=1.0.3
+sbt.version=1.0.4
 ```
 
 #### project/style.sbt

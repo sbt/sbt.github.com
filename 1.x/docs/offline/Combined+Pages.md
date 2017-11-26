@@ -66,7 +66,7 @@ corrections and add documentation.
 
 Documentation for 0.7.x has been
 [archived here](http://www.scala-sbt.org/0.7.7/docs/home.html). This
-documentation applies to sbt 1.0.3.
+documentation applies to sbt 1.0.4.
 
 See also the [API Documentation](../api/index.html),
 and the [index of names and types][Name-Index].
@@ -103,7 +103,7 @@ Thanks for trying out sbt and *have fun*!
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.3/sbt-1.0.3.msi
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.4/sbt-1.0.4.msi
   [Setup-Notes]: ../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -134,8 +134,8 @@ If you have any trouble running sbt, see [Setup Notes][Setup-Notes] on
 terminal encodings, HTTP proxies, and JVM options.
 
 
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.3/sbt-1.0.3.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.3/sbt-1.0.3.tgz
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.4/sbt-1.0.4.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.4/sbt-1.0.4.tgz
   [Manual-Installation]: Manual-Installation.html
 
 Installing sbt on Mac
@@ -164,9 +164,9 @@ $ port install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.3/sbt-1.0.3.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.3/sbt-1.0.3.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.3/sbt-1.0.3.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.4/sbt-1.0.4.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.4/sbt-1.0.4.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.4/sbt-1.0.4.tgz
 
 Installing sbt on Windows
 -------------------------
@@ -180,10 +180,10 @@ Download [ZIP][ZIP] or [TGZ][TGZ] package and expand it.
 Download [msi installer][MSI] and install it.
 
 
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.3/sbt-1.0.3.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.3/sbt-1.0.3.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.0.3.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.0.3.deb
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.4/sbt-1.0.4.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.4/sbt-1.0.4.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.0.4.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.0.4.deb
   [Manual-Installation]: Manual-Installation.html
   [website127]: https://github.com/sbt/website/issues/127
 
@@ -589,7 +589,7 @@ build the same projects with consistent results.
 To do this, create a file named `project/build.properties` that specifies the sbt version as follows:
 
 ```
-sbt.version=1.0.3
+sbt.version=1.0.4
 ```
 
 If the required version is not available locally,
@@ -639,7 +639,7 @@ lazy val root = (project in file("."))
   .settings(
     name         := "hello",
     organization := "com.example",
-    scalaVersion := "2.12.3",
+    scalaVersion := "2.12.4",
     version      := "0.1.0-SNAPSHOT"
   )
 ```
@@ -819,7 +819,7 @@ a list of `Setting[_]` expressions.
 ```scala
 name := "hello"
 version := "1.0"
-scalaVersion := "2.12.3"
+scalaVersion := "2.12.4"
 ```
 
 This syntax is recommended mostly for using plugins. See later section
@@ -837,7 +837,7 @@ val derby = "org.apache.derby" % "derby" % "10.4.1.3"
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0-SNAPSHOT",
-  scalaVersion := "2.12.3"
+  scalaVersion := "2.12.4"
 )
 
 lazy val root = (project in file("."))
@@ -933,7 +933,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "Hello",
     organization := "com.example",
-    scalaVersion := "2.12.3",
+    scalaVersion := "2.12.4",
     version := "0.1.0-SNAPSHOT",
     scalacOptions := {
       val out = streams.value // streams task happens-before scalacOptions
@@ -969,7 +969,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "Hello",
     organization := "com.example",
-    scalaVersion := "2.12.3",
+    scalaVersion := "2.12.4",
     version := "0.1.0-SNAPSHOT",
     scalacOptions := {
       val ur = update.value  // update task happens-before scalacOptions
@@ -1104,7 +1104,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "Hello",
     organization := "com.example",
-    scalaVersion := "2.12.3",
+    scalaVersion := "2.12.4",
     version := "0.1.0-SNAPSHOT",
     scalacOptions := List("-encoding", "utf8", "-Xfatal-warnings", "-deprecation", "-unchecked"),
     scalacOptions := {
@@ -1654,7 +1654,7 @@ lazy val root = (project in file("."))
       // Same as:
       // organization in ThisBuild := "com.example"
       organization := "com.example",
-      scalaVersion := "2.12.3",
+      scalaVersion := "2.12.4",
       version      := "0.1.0-SNAPSHOT"
     )),
     name := "Hello",
@@ -1870,7 +1870,7 @@ lazy val projA = (project in file("a"))
 What is the value of `name in projA` (`projA/name` in sbt shell)?
 
 1. `"foo-2.11.11"`
-2. `"foo-2.12.3"`
+2. `"foo-2.12.4"`
 3. something else?
 
 The answer is `"foo-2.11.11"`.
@@ -2495,7 +2495,7 @@ on each project.
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0-SNAPSHOT",
-  scalaVersion := "2.12.3"
+  scalaVersion := "2.12.4"
 )
 
 lazy val core = (project in file("core"))
@@ -3233,7 +3233,7 @@ import Dependencies._
 
 lazy val commonSettings = Seq(
   version := "0.1.0",
-  scalaVersion := "2.12.3"
+  scalaVersion := "2.12.4"
 )
 
 lazy val backend = (project in file("backend"))
@@ -4992,6 +4992,73 @@ def scalaXml = Def.setting {
 **Note**: `Build` traits is deprecated, but you can still use `project/*.scala` file to organize your build and/or define ad-hoc plugins. See [Organizing the build][Organizing-Build].
 
 
+
+### sbt 1.0.4
+
+This is a hotfix release for sbt 1.0.x series.
+
+#### Bug fixes
+
+- Fixes undercompilation of value classes when the underlying type changes. [zinc#444][zinc444] by [@smarter][@smarter]
+- Fixes `ArrayIndexOutOfBoundsException` on Ivy when running on Java 9. [ivy#27][ivy27] by [@xuwei-k][@xuwei-k]
+- Fixes Java 9 warning by upgrading to launcher 1.0.2. [ivy#26][ivy26]/[launcher#45][launcher45] by [@dwijnand][@dwijnand]
+- Fixes `-jvm-debug` on Java 9. [launcher-package197][sbt-launcher-package197] by [@mkurz][@mkurz]
+- Fixes `run` outputing debug level logs. [#3655][3655]/[#3717][3717] by [@cunei][@cunei]
+- Fixes performance regression caused by classpath hashing. [zinc#452][zinc452] by [@jvican][@jvican], [@fommil][@fommil] provided reproduction, and [@eed3si9n][@eed3si9n] fixed https://github.com/sbt/zinc/issues/457
+- Fixes performance regression of `testQuick`. [#3680][3680]/[#3720][3720] by [@OlegYch][@OlegYch]
+- Disables Ivy log4j caller location calculation for performance regression reported in [#3711][3711]. [util#132][util132] by [@leonardehrenfried][@leonardehrenfried]
+- Works around Scala compiler's `templateStats()` not being thread-safe. [#3743][3743] by [@cunei][@cunei]
+- Fixes "Attempting to overwrite" error message. [lm#174][lm174] by [@dwijnand][@dwijnand]
+- Fixes incorrect eviction warning message. [lm#179][lm179] by [@xuwei-k][@xuwei-k]
+- Registers Ivy protocol only for `http:` and `https:` to be more plugin friendly. [lm183][lm183] by [@tpunder][@tpunder]
+- Fixes script issues related to `bc` by using `expr`. [launcher-package#199][sbt-launcher-package199] by [@thatfulvioguy][@thatfulvioguy]
+
+#### Enhancement
+
+- Adds Scala 2.13.0-M2 support. [zinc#453][zinc453] by [@eed3si9n][@eed3si9n] and [@jan0sch][@jan0sch]
+
+#### Internal
+
+- Improves Zinc scripted testing. [zinc#440][zinc440] by [@jvican][@jvican]
+
+#### Contributors
+
+A huge thank you to everyone who's helped improve sbt and Zinc 1 by using them, reporting bugs, improving our documentation, porting builds, porting plugins, and submitting and reviewing pull requests.
+
+This release was brought to you by 17 contributors, according to `git shortlog -sn --no-merges v1.0.3..v1.0.4` on sbt, zinc, librarymanagement, util, io, and website: Eugene Yokota, Kenji Yoshida (xuwei-k), Jorge Vicente Cantero (jvican), Dale Wijnand, Leonard Ehrenfried, Antonio Cunei, Brett Randall, Guillaume Martres, Arnout Engelen, Fulvio Valente, Jens Grassel, Matthias Kurz, OlegYch, Philippus Baalman, Sam Halliday, Tim Underwood, Tom Most. Thank you!
+
+  [@dwijnand]: https://github.com/dwijnand
+  [@cunei]: https://github.com/cunei
+  [@eed3si9n]: https://github.com/eed3si9n
+  [@jvican]: https://github.com/jvican
+  [@OlegYch]: https://github.com/OlegYch
+  [@leonardehrenfried]: https://github.com/leonardehrenfried
+  [@xuwei-k]: https://github.com/xuwei-k
+  [@tpunder]: https://github.com/tpunder
+  [@smarter]: https://github.com/smarter
+  [@jan0sch]: https://github.com/jan0sch
+  [@mkurz]: https://github.com/mkurz
+  [@thatfulvioguy]: https://github.com/thatfulvioguy
+  [@fommil]: https://github.com/fommil
+  [3655]: https://github.com/sbt/sbt/issues/3655
+  [3717]: https://github.com/sbt/sbt/pull/3717
+  [ivy26]: https://github.com/sbt/ivy/pull/26
+  [ivy27]: https://github.com/sbt/ivy/pull/27
+  [launcher45]: https://github.com/sbt/launcher/pull/45
+  [3680]: https://github.com/sbt/sbt/issues/3680
+  [3720]: https://github.com/sbt/sbt/pull/3720
+  [3743]: https://github.com/sbt/sbt/pull/3743
+  [3711]: https://github.com/sbt/sbt/issues/3711
+  [util132]: https://github.com/sbt/util/pull/132
+  [lm174]: https://github.com/sbt/librarymanagement/pull/174
+  [lm179]: https://github.com/sbt/librarymanagement/pull/179
+  [lm183]: https://github.com/sbt/librarymanagement/pull/183
+  [zinc452]: https://github.com/sbt/zinc/pull/452
+  [zinc444]: https://github.com/sbt/zinc/pull/444
+  [zinc453]: https://github.com/sbt/zinc/pull/453
+  [zinc440]: https://github.com/sbt/zinc/pull/440
+  [sbt-launcher-package197]: https://github.com/sbt/sbt-launcher-package/pull/197
+  [sbt-launcher-package199]: https://github.com/sbt/sbt-launcher-package/pull/199
 
 ### sbt 1.0.3
 
@@ -8833,12 +8900,12 @@ Migrating from 0.7 to 0.10+
 ---------------------------
 
 The assumption here is that you are familiar with sbt 0.7 but new to sbt
-1.0.3.
+1.0.4.
 
-sbt 1.0.3's many new capabilities can be a bit overwhelming, but
-this page should help you migrate to 1.0.3 with a minimum of fuss.
+sbt 1.0.4's many new capabilities can be a bit overwhelming, but
+this page should help you migrate to 1.0.4 with a minimum of fuss.
 
-### Why move to 1.0.3?
+### Why move to 1.0.4?
 
 1.  Faster builds (because it is smarter at re-compiling only what it
     must)
@@ -8851,17 +8918,17 @@ this page should help you migrate to 1.0.3 with a minimum of fuss.
 5.  Terser output. (Yet you can ask for more details if something goes
     wrong.)
 
-#### Step 1: Read the Getting Started Guide for sbt 1.0.3
+#### Step 1: Read the Getting Started Guide for sbt 1.0.4
 
 Reading the [Getting Started Guide][Getting-Started] will
 probably save you a lot of confusion.
 
-#### Step 2: Install sbt 1.0.3
+#### Step 2: Install sbt 1.0.4
 
-Download sbt 1.0.3 as described on
+Download sbt 1.0.4 as described on
 [the setup page][Setup].
 
-You can run 1.0.3 the same way that you run 0.7.x, either simply:
+You can run 1.0.4 the same way that you run 0.7.x, either simply:
 
 ```
 $ java -jar sbt-launch.jar
@@ -8875,7 +8942,7 @@ For more details see
 
 #### Step 3: A technique for switching an existing project
 
-Here is a technique for switching an existing project to 1.0.3 while
+Here is a technique for switching an existing project to 1.0.4 while
 retaining the ability to switch back again at will. Some builds, such as
 those with subprojects, are not suited for this technique, but if you
 learn how to transition a simple project it will help you do a more
@@ -8884,10 +8951,10 @@ complex one next.
 ### Preserve `project/` for 0.7.x project
 
 Rename your `project/` directory to something like `project-old`. This
-will hide it from sbt 1.0.3 but keep it in case you want to switch
+will hide it from sbt 1.0.4 but keep it in case you want to switch
 back to 0.7.x.
 
-### Create `build.sbt` for 1.0.3
+### Create `build.sbt` for 1.0.4
 
 Create a `build.sbt` file in the root directory of your project. See
 [.sbt build definition][Basic-Def] in the Getting
@@ -8930,7 +8997,7 @@ scalaVersion := "2.9.2"
 Currently, a `project/build.properties` is still needed to explicitly
 select the sbt version. For example:
 
-### Run sbt 1.0.3
+### Run sbt 1.0.4
 
 Now launch sbt. If you're lucky it works and you're done. For help
 debugging, see below.
@@ -8939,7 +9006,7 @@ debugging, see below.
 
 If you get stuck and want to switch back, you can leave your `build.sbt`
 file alone. sbt 0.7.x will not understand or notice it. Just rename your
-1.0.3 `project` directory to something like `project10` and rename
+1.0.4 `project` directory to something like `project10` and rename
 the backup of your old project from `project-old` to `project` again.
 
 #### FAQs
@@ -9234,7 +9301,7 @@ influence SBT execution. Also see [sbt launcher][Sbt-Launcher].
   <tr>
     <td><tt>sbt.version</tt></td>
     <td>Version</td>
-    <td><tt>1.0.3</tt></td>
+    <td><tt>1.0.4</tt></td>
     <td>sbt version to use, usually taken from <tt>project/build.properties</tt>.</td>
   </tr>
 
@@ -9944,7 +10011,7 @@ mode that only requires a JRE installed.
 Install [conscript](https://github.com/foundweekends/conscript).
 
 ```
-$ cs sbt/sbt --branch 1.0.3
+$ cs sbt/sbt --branch 1.0.4
 ```
 
 This will create two scripts: `screpl` and `scalas`.
@@ -10001,9 +10068,9 @@ chmod u+x shout.scala
 #!/usr/bin/env scalas
  
 /***         
-scalaVersion := "2.12.3"
+scalaVersion := "2.12.4"
  
-libraryDependencies += "org.scala-sbt" %% "io" % "1.0.3"
+libraryDependencies += "org.scala-sbt" %% "io" % "1.0.4"
 */         
  
 import sbt.io.IO
@@ -11273,7 +11340,7 @@ sbt needs Scala jars to run itself since it is written in Scala. sbt
 uses that same version of Scala to compile the build definitions that
 you write for your project because they use sbt APIs. This version of
 Scala is fixed for a specific sbt release and cannot be changed. For sbt
-1.0.3, this version is Scala 2.12.3. Because this Scala
+1.0.4, this version is Scala 2.12.4. Because this Scala
 version is needed before sbt runs, the repositories used to retrieve
 this version are configured in the sbt
 [launcher][Sbt-Launcher].
@@ -11797,7 +11864,7 @@ following build definition. `build.sbt`:
 
 ```scala
 lazy val commonSettings = Seq(
-  scalaVersion := "2.12.3",
+  scalaVersion := "2.12.4",
   organization := "com.example"
 )
 lazy val scalaReflect = Def.setting { "org.scala-lang" % "scala-reflect" % scalaVersion.value }
@@ -11901,7 +11968,7 @@ would look like:
 
 ```scala
 lazy val commonSettings = Seq(
-  scalaVersion := "2.12.3",
+  scalaVersion := "2.12.4",
   organization := "com.example"
 )
 lazy val scalaReflect = Def.setting { "org.scala-lang" % "scala-reflect" % scalaVersion.value }
@@ -13022,7 +13089,7 @@ The following full build configuration demonstrates integration tests.
 
 ```scala
 lazy val commonSettings = Seq(
-  scalaVersion := "2.12.3",
+  scalaVersion := "2.12.4",
   organization := "com.example"
 )
 lazy val scalatest = "org.scalatest" %% "scalatest" % "3.0.1"
@@ -13092,7 +13159,7 @@ The previous example may be generalized to a custom test configuration.
 
 ```scala
 lazy val commonSettings = Seq(
-  scalaVersion := "2.12.3",
+  scalaVersion := "2.12.4",
   organization := "com.example"
 )
 lazy val scalatest = "org.scalatest" %% "scalatest" % "3.0.1"
@@ -13151,7 +13218,7 @@ However, different tests are run depending on the configuration.
 
 ```scala
 lazy val commonSettings = Seq(
-  scalaVersion := "2.12.3",
+  scalaVersion := "2.12.4",
   organization := "com.example"
 )
 lazy val scalatest = "org.scalatest" %% "scalatest" % "3.0.1"
@@ -15979,8 +16046,8 @@ Def.setting {
 This Parser definition will produce a value of type `(String,String)`.
 The input syntax defined isn't very flexible; it is just a
 demonstration. It will produce one of the following values for a
-successful parse (assuming the current Scala version is 2.12.3,
-the current sbt version is 1.0.3, and there are 3 commands left to
+successful parse (assuming the current Scala version is 2.12.4,
+the current sbt version is 1.0.4, and there are 3 commands left to
 run):
 
 Again, we were able to access the current Scala and sbt version for the
@@ -16323,7 +16390,7 @@ Here's `build.sbt`:
 import CommandExample._
 
 lazy val commonSettings = Seq(
-  scalaVersion := "2.12.3",
+  scalaVersion := "2.12.4",
 )
 
 lazy val root = (project in file("."))
@@ -17283,7 +17350,7 @@ above for per-project plugins.
 ### Creating an auto plugin
 
 A minimal sbt plugin is a Scala library that is built against the version of
-Scala that sbt runs (currently, 2.12.3) or a Java library.
+Scala that sbt runs (currently, 2.12.4) or a Java library.
 Nothing special needs to be done for this type of library.
 A more typical plugin will provide sbt tasks, commands, or settings.
 This kind of plugin may provide these settings
@@ -18018,10 +18085,10 @@ If you haven't created one already, make sure to create `project/build.propertie
 `sbt.version` number:
 
 ```yml
-sbt.version=1.0.3
+sbt.version=1.0.4
 ```
 
-Your build will now use 1.0.3.
+Your build will now use 1.0.4.
 
 ### Read the Travis manual
 
@@ -18040,7 +18107,7 @@ jdk: oraclejdk8
 
 scala:
    - 2.10.4
-   - 2.12.3
+   - 2.12.4
 ```
 
 By default Travis CI executes `sbt ++$TRAVIS_SCALA_VERSION test`.
@@ -18053,7 +18120,7 @@ jdk: oraclejdk8
 
 scala:
    - 2.10.4
-   - 2.12.3
+   - 2.12.4
 
 script:
    - sbt ++$TRAVIS_SCALA_VERSION test
@@ -18118,7 +18185,7 @@ java
 -Xss6M
 -XX:ReservedCodeCacheSize=256M
 -jar
-/home/travis/.sbt/launchers/1.0.3/sbt-launch.jar
+/home/travis/.sbt/launchers/1.0.4/sbt-launch.jar
 ```
 
 It seems to be working. One downside of setting all of the parameters is that we might be left behind when the environment updates and the default values gives us more memory in the future.
@@ -18144,7 +18211,7 @@ java
 -XX:ReservedCodeCacheSize=256M
 -Xms1024M
 -jar
-/home/travis/.sbt/launchers/1.0.3/sbt-launch.jar
+/home/travis/.sbt/launchers/1.0.4/sbt-launch.jar
 ```
 
 **Note**: This duplicates the `-Xms` flag as intended, which might not the best thing to do.
@@ -18202,7 +18269,7 @@ jdk: oraclejdk8
 
 scala:
    - 2.10.4
-   - 2.12.3
+   - 2.12.4
 
 script:
    - sbt ++$TRAVIS_SCALA_VERSION test
@@ -18709,8 +18776,8 @@ Like we are able to cross build against multiple Scala versions, we can cross bu
 
 ```scala
   .settings(
-    scalaVersion := "2.12.3",
-    sbtVersion in Global := "1.0.3",
+    scalaVersion := "2.12.4",
+    sbtVersion in Global := "1.0.4",
     scalaCompilerBridgeSource := {
       val sv = appConfiguration.value.provider.id.version
       ("org.scala-sbt" % "compiler-interface" % sv % "component").sources
@@ -20708,7 +20775,7 @@ Here's how to set it up
 #### project/build.properties
 
 ```
-sbt.version=1.0.3
+sbt.version=1.0.4
 ```
 
 #### project/style.sbt
@@ -20759,7 +20826,7 @@ Let's try implementing a custom task called `compilecheck` that runs `compile in
 #### project/build.properties
 
 ```
-sbt.version=1.0.3
+sbt.version=1.0.4
 ```
 
 #### project/style.sbt
@@ -20973,7 +21040,7 @@ lazy val commonSettings = Seq(
   organization := "org.myproject",
   version := "0.1.0",
   // set the Scala version used for the project
-  scalaVersion := "2.12.3"
+  scalaVersion := "2.12.4"
 )
 
 // define ModuleID for library dependencies
@@ -21257,7 +21324,7 @@ import Dependencies._
 lazy val buildSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.12.3"
+  scalaVersion := "2.12.4"
 )
 
 // Sub-project specific dependencies
@@ -21529,7 +21596,7 @@ always write it in all lowercase letters. However, we are cool with [酢豚][sub
 
 #### My last command didn't work but I can't see an explanation. Why?
 
-sbt 1.0.3 by default suppresses most stack traces and debugging
+sbt 1.0.4 by default suppresses most stack traces and debugging
 information. It has the nice side effect of giving you less noise on
 screen, but as a newcomer it can leave you lost for explanation. To see
 the previous output of a command at a higher verbosity, type
@@ -21973,7 +22040,7 @@ Any file name ending in `.sbt` will do, but most people use
 
 ### Miscellaneous
 
-#### Where can I find plugins for 1.0.3?
+#### Where can I find plugins for 1.0.4?
 
 See [Community Plugins][Community-Plugins] for a list of currently available
 plugins.
@@ -24708,7 +24775,7 @@ application. `hello.build.properties`:
 Nightly Builds
 --------------
 
-The latest development versions of 1.0.3 are available as nightly
+The latest development versions of 1.0.4 are available as nightly
 builds on [Typesafe Snapshots](https://repo.typesafe.com/typesafe/ivy-snapshots/).
 
 To use a nightly build, the instructions are the same for
@@ -24718,7 +24785,7 @@ To use a nightly build, the instructions are the same for
     |nightly-launcher|. They should be listed in chronological order, so
     the most recent one will be last.
 2.  The version number is the name of the subdirectory and is of the
-    form `1.0.3.x-yyyyMMdd-HHmmss`. Use this in a build.properties
+    form `1.0.4.x-yyyyMMdd-HHmmss`. Use this in a build.properties
     file.
 3.  Call your script something like `sbt-nightly` to retain access to a
     stable sbt launcher. The documentation will refer to the script as
