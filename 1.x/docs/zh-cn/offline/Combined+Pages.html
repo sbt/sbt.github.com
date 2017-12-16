@@ -532,11 +532,11 @@ sbt 自动执行了 <code>update</code>。它可以工作是因为 <code>compile
 </p><h4 id="%E5%BD%93%E8%AE%BE%E7%BD%AE%E6%9C%AA%E5%AE%9A%E4%B9%89%E6%97%B6">当设置未定义时<a href="#%E5%BD%93%E8%AE%BE%E7%BD%AE%E6%9C%AA%E5%AE%9A%E4%B9%89%E6%97%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>无论何时一个设置用 <code>:=</code>，<code>+=</code> 或者 <code>++=</code> 时依赖于自己或者另一个 key 的值，它依赖的值必须存在。如果不存在，sbt 就会抱怨。例如，它可能会说 <em>“引用了未定义的设置”</em>。
 当这发生时，确认一下你使用的 key 在 <a href="Scopes.html">scope</a> 中并且已经定义了。
 </p><p>在sbt中创建循环引用是可能的，这是错误的；如果你循环引用了，sbt 会告诉你。
-</p><h4 id="%E4%BE%9D%E8%B5%96%E4%BA%8E%E5%85%B6%E4%BB%96+key+%E7%9A%84%E5%80%BC%E7%9A%84+task">依赖于其他 key 的值的 task<a href="#%E4%BE%9D%E8%B5%96%E4%BA%8E%E5%85%B6%E4%BB%96+key+%E7%9A%84%E5%80%BC%E7%9A%84+task" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>你可以计算一些 task 或者 setting 的值来定义另一个 task 或者为另一个 task 追加值。通过使用 <code>Def.task</code> 和 <code>taskValue</code> 作为<code>:=</code>， <code>+=</code> 或者 <code>++=</code>的参数可以做到。
+</p><h4 id="%E4%BE%9D%E8%B5%96%E4%BA%8E%E5%85%B6%E4%BB%96+key+%E7%9A%84%E5%80%BC%E7%9A%84+task">依赖于其他 key 的值的 task<a href="#%E4%BE%9D%E8%B5%96%E4%BA%8E%E5%85%B6%E4%BB%96+key+%E7%9A%84%E5%80%BC%E7%9A%84+task" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>你可以计算一些 task 或者 setting 的值来定义另一个 task 或者为另一个 task 追加值。通过使用 <code>Def.task</code> 作为<code>:=</code>， <code>+=</code> 或者 <code>++=</code>的参数可以做到。
 </p><p>作为第一个例子，考虑追加一个使用项目基目录和编译 classpath 的 source generator。
 </p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile += Def.task {
   myGenerator(baseDirectory.value, (managedClasspath in Compile).value)
-}.taskValue
+}
 </code></pre><h4 id="%E5%8C%85%E5%90%AB%E4%BE%9D%E8%B5%96%E7%9A%84+task">包含依赖的 task<a href="#%E5%8C%85%E5%90%AB%E4%BE%9D%E8%B5%96%E7%9A%84+task" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>在 <a href="Basic-Def.html">.sbt 构建定义</a> 中提到过，当你通过 <code>:=</code> 或其他方法创建一个设置时，task key 创建的是 <code>Setting[Task[T]]</code> 而不是 <code>Setting[T]</code>。
 Setting 可以是 Task 的输入，但 Task 不能是 Setting 的输入。
 </p><p>以这两个 key 为例（从 <a href="../../sxr/sbt/Keys.scala.html">Keys</a> 中）：

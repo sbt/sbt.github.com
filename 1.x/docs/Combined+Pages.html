@@ -1107,11 +1107,11 @@ for example. When this happens, be sure you’re using the key in the
 <a href="Scopes.html">scope</a> that defines it.
 </p><p>It’s possible to create cycles, which is an error; sbt will tell you if
 you do this.
-</p><h4 id="Tasks+based+on+other+keys%E2%80%99+values">Tasks based on other keys’ values<a href="#Tasks+based+on+other+keys%E2%80%99+values" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>You can compute values of some tasks or settings to define or append a value for another task. It’s done by using <code>Def.task</code> and <code>taskValue</code> as an argument to <code>:=</code>, <code>+=</code>, or <code>++=</code>.
+</p><h4 id="Tasks+based+on+other+keys%E2%80%99+values">Tasks based on other keys’ values<a href="#Tasks+based+on+other+keys%E2%80%99+values" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>You can compute values of some tasks or settings to define or append a value for another task. It’s done by using <code>Def.task</code> as an argument to <code>:=</code>, <code>+=</code>, or <code>++=</code>.
 </p><p>As a first example, consider appending a source generator using the project base directory and compilation classpath.
 </p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile += Def.task {
   myGenerator(baseDirectory.value, (managedClasspath in Compile).value)
-}.taskValue
+}
 </code></pre><h3 id="Appending+with+dependencies%3A++and">Appending with dependencies: <code>+=</code> and <code>++=</code><a href="#Appending+with+dependencies%3A++and" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Other keys can be used when appending to an existing setting or task,
 just like they can for assigning with <code>:=</code>.
 </p><p>For example, say you have a coverage report named after the project, and
