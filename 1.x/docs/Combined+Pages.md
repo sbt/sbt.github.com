@@ -3732,7 +3732,7 @@ The sbt ecosystem would not be the same without so many awesome plugins. Here ar
 - [sbt-sublime](https://github.com/orrsella/sbt-sublime) by Orr Sella
 - [sbt-errors-summary](https://github.com/Duhemm/sbt-errors-summary) by Martin Duhem
 - [sbt-bintray](https://github.com/sbt/sbt-bintray) by Doug Tangren (softprops)
-- [Migration Manager](https://github.com/typesafehub/migration-manager/wiki) by Lightbend (Mirco Dotta, Seth Tisue, et al)
+- [Migration Manager](https://github.com/lightbend/migration-manager/wiki) by Lightbend (Mirco Dotta, Seth Tisue, et al)
 - [sbt-protobuf](https://github.com/sbt/sbt-protobuf) by Gerolf Seitz and Kenji Yoshida (xuwei-k)
 - [sbt-site](https://github.com/sbt/sbt-site) by Jonas Fonseca, Josh Suereth, et al
 - [sbt-doctest](https://github.com/tkawachi/sbt-doctest) by KAWACHI Takashi
@@ -3932,7 +3932,7 @@ your plugin to the list.
   <!-- 233 stars -->
 - [sbt-errors-summary](https://github.com/Duhemm/sbt-errors-summary): show a
   summary of compilation errors. <!-- 145 stars -->
-- [MiMa](https://github.com/typesafehub/migration-manager): binary
+- [MiMa](https://github.com/lightbend/migration-manager): binary
   compatibility management for Scala libraries. <!-- 134 stars -->
 - [sbt-groll](https://github.com/sbt/sbt-groll): navigate git history inside
   sbt. <!-- 100 stars -->
@@ -22393,7 +22393,7 @@ This website's source.
 
   [jsuereth2012]: http://jsuereth.com/scala/2012/04/22/scaladays.html
   [pins_trait127]: http://www.artima.com/pins1ed/traits.html#12.7
-  [mima]: https://github.com/typesafehub/migration-manager
+  [mima]: https://github.com/lightbend/migration-manager
 
 sbt Coding Guideline
 --------------------
