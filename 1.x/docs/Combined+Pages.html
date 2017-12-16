@@ -422,7 +422,7 @@ recomputed each time, potentially with side effects.
 </li><li><code>InputKey[T]</code>: a key for a task that has command line arguments as
 input. Check out <a href="../docs/Input-Tasks.html">Input Tasks</a> for more details.
 </li></ul><h4 id="Built-in+Keys">Built-in Keys<a href="#Built-in+Keys" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The built-in keys are just fields in an object called
-<a href="../sxr/sbt/Keys.scala.html">Keys</a>. A <code>build.sbt</code> implicitly has an
+<a href="../api/sbt/Keys$.html">Keys</a>. A <code>build.sbt</code> implicitly has an
 <code>import sbt.Keys._</code>, so <code>sbt.Keys.name</code> can be referred to as <code>name</code>.
 </p><h4 id="Custom+Keys">Custom Keys<a href="#Custom+Keys" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Custom keys may be defined with their respective creation methods:
 <code>settingKey</code>, <code>taskKey</code>, and <code>inputKey</code>. Each method expects the type of the
@@ -542,7 +542,7 @@ of tasks where the edges denote <strong>happens-before</strong>. Let’s call th
 another task or setting. The value method is special and may only be
 called in the argument to <code>:=</code> (or, <code>+=</code> or <code>++=</code>, which we’ll see later).
 </p><p>As a first example, consider defining the <code>scalacOption</code> that depends on
-<code>update</code> and <code>clean</code> tasks. Here are the definitions of these keys (from <a href="../sxr/sbt/Keys.scala.html">Keys</a>).
+<code>update</code> and <code>clean</code> tasks. Here are the definitions of these keys (from <a href="../api/sbt/Keys$.html">Keys</a>).
 </p><p><strong>Note</strong>: The values calculated below are nonsensical for <code>scalaOptions</code>,
 and it’s just for demonstration purpose only:
 </p><pre><code class="prettyprint lang-scala">val scalacOptions = taskKey[Seq[String]](&quot;Options for the Scala compiler.&quot;)
@@ -723,7 +723,7 @@ filter out <code>&quot;-Xfatal-warnings&quot;</code> and <code>&quot;-deprecatio
 [info] * utf8
 [info] * -unchecked
 [success] Total time: 0 s, completed Jan 2, 2017 11:44:51 PM
-</code></pre><p>Next, take these two keys (from <a href="../sxr/sbt/Keys.scala.html">Keys</a>):
+</code></pre><p>Next, take these two keys (from <a href="../api/sbt/Keys$.html">Keys</a>):
 </p><pre><code class="prettyprint lang-scala">val scalacOptions = taskKey[Seq[String]](&quot;Options for the Scala compiler.&quot;)
 val checksums = settingKey[Seq[String]](&quot;The list of checksums to generate and to verify for dependencies.&quot;)
 </code></pre><p><strong>Note</strong>: <code>scalacOptions</code> and <code>checksums</code> have nothing to do with each other.
@@ -1460,7 +1460,7 @@ that <a href="../docs/Library-Management.html#external-maven-ivy">here</a>.
 <a href="../sxr/sbt/Configuration.scala.html#sbt.Configuration">Configuration</a> val:
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += groupID % artifactID % revision % configuration
 </code></pre><p><code>libraryDependencies</code> is declared in
-<a href="../sxr/sbt/Keys.scala.html#sbt.Keys.libraryDependencies">Keys</a> like
+<a href="../api/sbt/Keys$.html#libraryDependencies:sbt.SettingKey[Seq[sbt.librarymanagement.ModuleID]]">Keys</a> like
 this:
 </p><pre><code class="prettyprint lang-scala">val libraryDependencies = settingKey[Seq[ModuleID]](&quot;Declares managed dependencies.&quot;)
 </code></pre><p>The <code>%</code> methods create <code>ModuleID</code> objects from strings, then you add those
@@ -1517,7 +1517,7 @@ repositories, you’ll have to add a <em>resolver</em> to help Ivy find it.
 </p><p>For example:
 </p><pre><code class="prettyprint lang-scala">resolvers += &quot;Sonatype OSS Snapshots&quot; at &quot;https://oss.sonatype.org/content/repositories/snapshots&quot;
 </code></pre><p>The <code>resolvers</code> key is defined in
-<a href="../sxr/sbt/Keys.scala.html#sbt.Keys.resolvers">Keys</a> like this:
+<a href="../api/sbt/Keys$.html#resolvers:sbt.SettingKey[Seq[sbt.librarymanagement.Resolver]]">Keys</a> like this:
 </p><pre><code class="prettyprint lang-scala">val resolvers = settingKey[Seq[Resolver]](&quot;The user-defined additional resolvers for automatically managed dependencies.&quot;)
 </code></pre><p>The <code>at</code> method creates a <code>Resolver</code> object from two strings.
 </p><p>sbt can search your local Maven repository if you add it as a
@@ -1793,13 +1793,13 @@ For best practices, see
 </p><p>To understand this page, be sure you’ve read earlier pages in the
 Getting Started Guide, especially <a href="Basic-Def.html">build.sbt</a> and
 <a href="Task-Graph.html">task graph</a>.
-</p><h3 id="Defining+a+key">Defining a key<a href="#Defining+a+key" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="../sxr/sbt/Keys.scala.html">Keys</a> is packed with examples
+</p><h3 id="Defining+a+key">Defining a key<a href="#Defining+a+key" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="../api/sbt/Keys$.html">Keys</a> is packed with examples
 illustrating how to define keys. Most of the keys are implemented in
 <a href="../sxr/sbt/Defaults.scala.html">Defaults</a>.
 </p><p>Keys have one of three types. <code>SettingKey</code> and <code>TaskKey</code> are described in
 <a href="Basic-Def.html">.sbt build definition</a>. Read about <code>InputKey</code> on the
 <a href="../docs/Input-Tasks.html">Input Tasks</a> page.
-</p><p>Some examples from <a href="../sxr/sbt/Keys.scala.html">Keys</a>:
+</p><p>Some examples from <a href="../api/sbt/Keys$.html">Keys</a>:
 </p><pre><code class="prettyprint lang-scala">val scalaVersion = settingKey[String](&quot;The version of Scala used for building.&quot;)
 val clean = taskKey[Unit](&quot;Deletes files produced by the build, such as generated sources, compiled classes, and task caches.&quot;)
 </code></pre><p>The key constructors have two string parameters: the name of the key

@@ -57,7 +57,7 @@ of tasks where the edges denote <strong>happens-before</strong>. Let’s call th
 another task or setting. The value method is special and may only be
 called in the argument to <code>:=</code> (or, <code>+=</code> or <code>++=</code>, which we’ll see later).
 </p><p>As a first example, consider defining the <code>scalacOption</code> that depends on
-<code>update</code> and <code>clean</code> tasks. Here are the definitions of these keys (from <a href="../sxr/sbt/Keys.scala.html">Keys</a>).
+<code>update</code> and <code>clean</code> tasks. Here are the definitions of these keys (from <a href="../api/sbt/Keys$.html">Keys</a>).
 </p><p><strong>Note</strong>: The values calculated below are nonsensical for <code>scalaOptions</code>,
 and it’s just for demonstration purpose only:
 </p><pre><code class="prettyprint lang-scala">val scalacOptions = taskKey[Seq[String]](&quot;Options for the Scala compiler.&quot;)
@@ -238,7 +238,7 @@ filter out <code>&quot;-Xfatal-warnings&quot;</code> and <code>&quot;-deprecatio
 [info] * utf8
 [info] * -unchecked
 [success] Total time: 0 s, completed Jan 2, 2017 11:44:51 PM
-</code></pre><p>Next, take these two keys (from <a href="../sxr/sbt/Keys.scala.html">Keys</a>):
+</code></pre><p>Next, take these two keys (from <a href="../api/sbt/Keys$.html">Keys</a>):
 </p><pre><code class="prettyprint lang-scala">val scalacOptions = taskKey[Seq[String]](&quot;Options for the Scala compiler.&quot;)
 val checksums = settingKey[Seq[String]](&quot;The list of checksums to generate and to verify for dependencies.&quot;)
 </code></pre><p><strong>Note</strong>: <code>scalacOptions</code> and <code>checksums</code> have nothing to do with each other.

@@ -552,7 +552,7 @@ lazy val root = (project in file("."))
 
 #### 内置的 Keys
 
-内置的 keys 实际上是对象 [Keys](../../sxr/sbt/Keys.scala.html) 的字段。`build.sbt` 会隐式包含 `import sbt.Keys._`，所以可以通过 `name` 取到 `sbt.Keys.name`。
+内置的 keys 实际上是对象 [Keys](../../api/sbt/Keys$.html) 的字段。`build.sbt` 会隐式包含 `import sbt.Keys._`，所以可以通过 `name` 取到 `sbt.Keys.name`。
 
 #### 自定义 Keys
 
@@ -1034,7 +1034,7 @@ sourceGenerators in Compile += Def.task {
 在 [.sbt 构建定义][Basic-Def] 中提到过，当你通过 `:=` 或其他方法创建一个设置时，task key 创建的是 `Setting[Task[T]]` 而不是 `Setting[T]`。
 Setting 可以是 Task 的输入，但 Task 不能是 Setting 的输入。
 
-以这两个 key 为例（从 [Keys](../../sxr/sbt/Keys.scala.html) 中）：
+以这两个 key 为例（从 [Keys](../../api/sbt/Keys$.html) 中）：
 
 ```scala
 val scalacOptions = taskKey[Seq[String]]("Options for the Scala compiler.")
@@ -1133,7 +1133,7 @@ libraryDependencies += groupID % artifactID % revision
 libraryDependencies += groupID % artifactID % revision % configuration
 ```
 
-`libraryDependencies` 在 [Keys](../../sxr/sbt/Keys.scala.html#sbt.Keys.libraryDependencies) 中像这样声明：
+`libraryDependencies` 在 [Keys](../../api/sbt/Keys$.html#libraryDependencies:sbt.SettingKey[Seq[sbt.librarymanagement.ModuleID]]) 中像这样声明：
 
 ```scala
 val libraryDependencies = settingKey[Seq[ModuleID]]("Declares managed dependencies.")
@@ -1206,7 +1206,7 @@ resolvers += name at location
 resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
 ```
 
-`resolvers` key 在 [Keys](../../sxr/sbt/Keys.scala.html#sbt.Keys.resolvers) 中像这样定义：
+`resolvers` key 在 [Keys](../../api/sbt/Keys$.html#resolvers:sbt.SettingKey[Seq[sbt.librarymanagement.Resolver]]) 中像这样定义：
 
 ```scala
 val resolvers = settingKey[Seq[Resolver]]("用户为托管依赖定义的额外的解析器。")
@@ -1571,11 +1571,11 @@ lazy val core = (project in file("core"))
 
 ### 定义一个键
 
-[这里](../../sxr/sbt/Keys.scala.html)介绍了如何定义键。大多数的默认键定义在[这里](../../sxr/sbt/Defaults.scala.html)。
+[这里](../../api/sbt/Keys$.html)介绍了如何定义键。大多数的默认键定义在[这里](../../sxr/sbt/Defaults.scala.html)。
 
 键有三种类型。`SettingKey` 和 `TaskKey` 在 [.sbt 构建定义][Basic-Def]讲解。关于 `InputKey` 的内容在[输入任务][Input-Tasks]页面。
 
-列举一些来自 [Keys](../../sxr/sbt/Keys.scala.html) 的例子：
+列举一些来自 [Keys](../../api/sbt/Keys$.html) 的例子：
 
 ```scala
 val scalaVersion = settingKey[String]("scala的版本")

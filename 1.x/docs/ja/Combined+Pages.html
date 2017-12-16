@@ -365,7 +365,7 @@ sbt バージョンを指定する:
 </li><li><code>TaskKey[T]</code>: 毎回再計算される<strong>タスク</strong>を呼び出す、副作用を伴う可能性のある値のキー。
 </li><li><code>InputKey[T]</code>: コマンドラインの引数を入力として受け取るタスクのキー。
 　「始める sbt」では <code>InputKey</code> を説明しないので、このガイドを終えた後で、<a href="../../docs/Input-Tasks.html">Input Tasks</a> を読んでみよう。
-</li></ul><h4 id="%E7%B5%84%E3%81%BF%E8%BE%BC%E3%81%BF%E3%81%AE%E3%82%AD%E3%83%BC">組み込みのキー<a href="#%E7%B5%84%E3%81%BF%E8%BE%BC%E3%81%BF%E3%81%AE%E3%82%AD%E3%83%BC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>組み込みのキーは <a href="../../sxr/sbt/Keys.scala.html">Keys</a> と呼ばれるオブジェクトのフィールドにすぎない。
+</li></ul><h4 id="%E7%B5%84%E3%81%BF%E8%BE%BC%E3%81%BF%E3%81%AE%E3%82%AD%E3%83%BC">組み込みのキー<a href="#%E7%B5%84%E3%81%BF%E8%BE%BC%E3%81%BF%E3%81%AE%E3%82%AD%E3%83%BC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>組み込みのキーは <a href="../../api/sbt/Keys$.html">Keys</a> と呼ばれるオブジェクトのフィールドにすぎない。
 <code>build.sbt</code> は、自動的に <code>import sbt.Keys._</code> するため、<code>sbt.Keys.name</code> は <code>name</code> として参照することができる。
 </p><h4 id="%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0%E3%82%AD%E3%83%BC">カスタムキー<a href="#%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0%E3%82%AD%E3%83%BC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>カスタムキーは <code>settingKey</code>、 <code>taskKey</code>、 <code>inputKey</code> といった生成メソッドを用いて定義する。
 どのメソッドでもキーに関連する型パラメータを必要とする。
@@ -458,7 +458,7 @@ lazy val root = (project in file(&quot;.&quot;))
 この <code>value</code> メソッドは特殊なもので、<code>:=</code> (もしくは後に見る <code>+=</code> や <code>++=</code>) の右辺項内でしか使うことができない。
 </p><p>最初の例として、<code>update</code> と <code>clean</code> というタスクに依存した形で
 <code>scalacOption</code> を定義したいとする。
-（<a href="../sxr/sbt/Keys.scala.html">Keys</a> より）以下の二つのキーを例に説明する。
+（<a href="../api/sbt/Keys$.html">Keys</a> より）以下の二つのキーを例に説明する。
 </p><p><strong>注意</strong>: ここで計算される <code>scalacOptions</code> の値はナンセンスなもので、説明のためだけのものだ:
 </p><pre><code class="prettyprint lang-scala">val scalacOptions = taskKey[Seq[String]](&quot;Options for the Scala compiler.&quot;)
 val update = taskKey[UpdateReport](&quot;Resolves and optionally retrieves dependencies, producing a report.&quot;)
@@ -629,7 +629,7 @@ build.sbt に慣れるまでは、<code>.value</code> の呼び出しをタス�
 [info] * utf8
 [info] * -unchecked
 [success] Total time: 0 s, completed Jan 2, 2017 11:44:51 PM
-</code></pre><p>次に (<a href="../sxr/sbt/Keys.scala.html">Keys</a> より) 以下の二つのキーを例に説明する:
+</code></pre><p>次に (<a href="../api/sbt/Keys$.html">Keys</a> より) 以下の二つのキーを例に説明する:
 </p><pre><code class="prettyprint lang-scala">val scalacOptions = taskKey[Seq[String]](&quot;Options for the Scala compiler.&quot;)
 val checksums = settingKey[Seq[String]](&quot;The list of checksums to generate and to verify for dependencies.&quot;)
 </code></pre><p><strong>注意</strong>: <code>scalacOptions</code> と <code>checksums</code>はお互い何の関係もない、ただ同じ値の型を持つ二つのキーで片方がタスクというだけだ。
@@ -1307,7 +1307,7 @@ sbt は、デフォルトで Maven の標準リポジトリ（訳注：Maven Cen
 </code></pre><p>二つの文字列の間の特別な <code>at</code> を使う。
 </p><p>例えばこのようになる:
 </p><pre><code class="prettyprint lang-scala">resolvers += &quot;Sonatype OSS Snapshots&quot; at &quot;https://oss.sonatype.org/content/repositories/snapshots&quot;
-</code></pre><p><a href="../../sxr/sbt/Keys.scala.html">Keys</a> で定義されている <code>resolvers</code> キーは以下のようになっている:
+</code></pre><p><a href="../../api/sbt/Keys$.html">Keys</a> で定義されている <code>resolvers</code> キーは以下のようになっている:
 </p><pre><code class="prettyprint lang-scala">val resolvers = settingKey[Seq[Resolver]](&quot;The user-defined additional resolvers for automatically managed dependencies.&quot;)
 </code></pre><p><code>at</code> メソッドは、二つの文字列から <code>Resolver</code> オブジェクトを作る。
 </p><p>sbt は、リポジトリとして追加すれば、ローカル Maven リポジトリも検索することができる:
@@ -1544,12 +1544,12 @@ lazy val core = (project in file(&quot;core&quot;))
 </p><p>このページを理解するには、このガイドの前のページ、
 特に <a href="Basic-Def.html">build.sbt</a> と
 <a href="Task-Graph.html">タスク・グラフ</a> を読んである必要がある。
-</p><h3 id="%E3%82%AD%E3%83%BC%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B">キーを定義する<a href="#%E3%82%AD%E3%83%BC%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="../../sxr/sbt/Keys.scala.html">Keys</a> は、キーをどのように定義するかを示すサンプル例が満載だ。
+</p><h3 id="%E3%82%AD%E3%83%BC%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B">キーを定義する<a href="#%E3%82%AD%E3%83%BC%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="../../api/sbt/Keys$.html">Keys</a> は、キーをどのように定義するかを示すサンプル例が満載だ。
 多くのキーは、<a href="../../sxr/sbt/Defaults.scala.html">Defaults</a> で実装されている。
 </p><p>キーには 3 つの型がある。
 <code>SettingKey</code> と <code>TaskKey</code> は <a href="Basic-Def.html">.sbt ビルド定義</a>で説明した。
 <code>InputKey</code> に関しては <a href="../../docs/Input-Tasks.html">Input Tasks</a> を見てほしい。
-</p><p>以下に <a href="../../sxr/sbt/Keys.scala.html">Keys</a> からの具体例を示す:
+</p><p>以下に <a href="../../api/sbt/Keys$.html">Keys</a> からの具体例を示す:
 </p><pre><code class="prettyprint lang-scala">val scalaVersion = settingKey[String](&quot;The version of Scala used for building.&quot;)
 val clean = taskKey[Unit](&quot;Deletes files produced by the build, such as generated sources, compiled classes, and task caches.&quot;)
 </code></pre><p>キーのコンストラクタは、二つの文字列のパラメータを取る。

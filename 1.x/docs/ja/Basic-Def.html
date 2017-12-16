@@ -114,7 +114,7 @@ sbt バージョンを指定する:
 </li><li><code>TaskKey[T]</code>: 毎回再計算される<strong>タスク</strong>を呼び出す、副作用を伴う可能性のある値のキー。
 </li><li><code>InputKey[T]</code>: コマンドラインの引数を入力として受け取るタスクのキー。
 　「始める sbt」では <code>InputKey</code> を説明しないので、このガイドを終えた後で、<a href="../../docs/Input-Tasks.html">Input Tasks</a> を読んでみよう。
-</li></ul><h4 id="%E7%B5%84%E3%81%BF%E8%BE%BC%E3%81%BF%E3%81%AE%E3%82%AD%E3%83%BC">組み込みのキー<a href="#%E7%B5%84%E3%81%BF%E8%BE%BC%E3%81%BF%E3%81%AE%E3%82%AD%E3%83%BC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>組み込みのキーは <a href="../../sxr/sbt/Keys.scala.html">Keys</a> と呼ばれるオブジェクトのフィールドにすぎない。
+</li></ul><h4 id="%E7%B5%84%E3%81%BF%E8%BE%BC%E3%81%BF%E3%81%AE%E3%82%AD%E3%83%BC">組み込みのキー<a href="#%E7%B5%84%E3%81%BF%E8%BE%BC%E3%81%BF%E3%81%AE%E3%82%AD%E3%83%BC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>組み込みのキーは <a href="../../api/sbt/Keys$.html">Keys</a> と呼ばれるオブジェクトのフィールドにすぎない。
 <code>build.sbt</code> は、自動的に <code>import sbt.Keys._</code> するため、<code>sbt.Keys.name</code> は <code>name</code> として参照することができる。
 </p><h4 id="%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0%E3%82%AD%E3%83%BC">カスタムキー<a href="#%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0%E3%82%AD%E3%83%BC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>カスタムキーは <code>settingKey</code>、 <code>taskKey</code>、 <code>inputKey</code> といった生成メソッドを用いて定義する。
 どのメソッドでもキーに関連する型パラメータを必要とする。

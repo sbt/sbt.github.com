@@ -101,7 +101,7 @@ key 的类别将在下面讲解。
 </p><ul><li><code>SettingKey[T]</code>：一个 key 对应一个只计算一次的 value（这个值在加载项目的时候计算，然后一直保存着）。
 </li><li><code>TaskKey[T]</code>：一个 key 对应一个称之为 <em>task</em> 的 value，每次都会重新计算，可能存在潜在的副作用。
 </li><li><code>InputKey[T]</code>：一个 key 对应一个可以接收命令行参数的 task。详细内容参见 <a href="../docs/Input-Tasks.html">Input Tasks</a>。
-</li></ul><h4 id="%E5%86%85%E7%BD%AE%E7%9A%84+Keys">内置的 Keys<a href="#%E5%86%85%E7%BD%AE%E7%9A%84+Keys" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>内置的 keys 实际上是对象 <a href="../../sxr/sbt/Keys.scala.html">Keys</a> 的字段。<code>build.sbt</code> 会隐式包含 <code>import sbt.Keys._</code>，所以可以通过 <code>name</code> 取到 <code>sbt.Keys.name</code>。
+</li></ul><h4 id="%E5%86%85%E7%BD%AE%E7%9A%84+Keys">内置的 Keys<a href="#%E5%86%85%E7%BD%AE%E7%9A%84+Keys" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>内置的 keys 实际上是对象 <a href="../../api/sbt/Keys$.html">Keys</a> 的字段。<code>build.sbt</code> 会隐式包含 <code>import sbt.Keys._</code>，所以可以通过 <code>name</code> 取到 <code>sbt.Keys.name</code>。
 </p><h4 id="%E8%87%AA%E5%AE%9A%E4%B9%89+Keys">自定义 Keys<a href="#%E8%87%AA%E5%AE%9A%E4%B9%89+Keys" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>可以通过它们各自的创建方法：<code>settingKey</code>，<code>taskKey</code> 和 <code>inputKey</code> 创建自定义 keys。每个方法都期待 key 和 value 的类型以及一段描述。
 key 的名称取自于赋给 <code>val</code> 变量的值。例如，给一个新的 task <code>hello</code> 定义一个 key，
 </p><pre><code class="prettyprint lang-scala">lazy val hello = taskKey[Unit](&quot;一个 task 示例&quot;)

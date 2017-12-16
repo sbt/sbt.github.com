@@ -701,7 +701,7 @@ There are three flavors of key:
 #### Built-in Keys
 
 The built-in keys are just fields in an object called
-[Keys](../sxr/sbt/Keys.scala.html). A `build.sbt` implicitly has an
+[Keys](../api/sbt/Keys$.html). A `build.sbt` implicitly has an
 `import sbt.Keys._`, so `sbt.Keys.name` can be referred to as `name`.
 
 #### Custom Keys
@@ -900,7 +900,7 @@ another task or setting. The value method is special and may only be
 called in the argument to `:=` (or, `+=` or `++=`, which we'll see later).
 
 As a first example, consider defining the `scalacOption` that depends on
-`update` and `clean` tasks. Here are the definitions of these keys (from [Keys](../sxr/sbt/Keys.scala.html)).
+`update` and `clean` tasks. Here are the definitions of these keys (from [Keys](../api/sbt/Keys$.html)).
 
 **Note**: The values calculated below are nonsensical for `scalaOptions`,
 and it's just for demonstration purpose only:
@@ -1143,7 +1143,7 @@ Here's how it should look on the sbt shell:
 [success] Total time: 0 s, completed Jan 2, 2017 11:44:51 PM
 ```
 
-Next, take these two keys (from [Keys](../sxr/sbt/Keys.scala.html)):
+Next, take these two keys (from [Keys](../api/sbt/Keys$.html)):
 
 ```scala
 val scalacOptions = taskKey[Seq[String]]("Options for the Scala compiler.")
@@ -2279,7 +2279,7 @@ libraryDependencies += groupID % artifactID % revision % configuration
 ```
 
 `libraryDependencies` is declared in
-[Keys](../sxr/sbt/Keys.scala.html#sbt.Keys.libraryDependencies) like
+[Keys](../api/sbt/Keys$.html#libraryDependencies:sbt.SettingKey[Seq[sbt.librarymanagement.ModuleID]]) like
 this:
 
 ```scala
@@ -2380,7 +2380,7 @@ resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repos
 ```
 
 The `resolvers` key is defined in
-[Keys](../sxr/sbt/Keys.scala.html#sbt.Keys.resolvers) like this:
+[Keys](../api/sbt/Keys$.html#resolvers:sbt.SettingKey[Seq[sbt.librarymanagement.Resolver]]) like this:
 
 ```scala
 val resolvers = settingKey[Seq[Resolver]]("The user-defined additional resolvers for automatically managed dependencies.")
@@ -2864,7 +2864,7 @@ Getting Started Guide, especially [build.sbt][Basic-Def] and
 
 ### Defining a key
 
-[Keys](../sxr/sbt/Keys.scala.html) is packed with examples
+[Keys](../api/sbt/Keys$.html) is packed with examples
 illustrating how to define keys. Most of the keys are implemented in
 [Defaults](../sxr/sbt/Defaults.scala.html).
 
@@ -2872,7 +2872,7 @@ Keys have one of three types. `SettingKey` and `TaskKey` are described in
 [.sbt build definition][Basic-Def]. Read about `InputKey` on the
 [Input Tasks][Input-Tasks] page.
 
-Some examples from [Keys](../sxr/sbt/Keys.scala.html):
+Some examples from [Keys](../api/sbt/Keys$.html):
 
 ```scala
 val scalaVersion = settingKey[String]("The version of Scala used for building.")

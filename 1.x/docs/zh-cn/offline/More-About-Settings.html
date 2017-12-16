@@ -90,7 +90,7 @@ sbt 自动执行了 <code>update</code>。它可以工作是因为 <code>compile
 }
 </code></pre><h4 id="%E5%8C%85%E5%90%AB%E4%BE%9D%E8%B5%96%E7%9A%84+task">包含依赖的 task<a href="#%E5%8C%85%E5%90%AB%E4%BE%9D%E8%B5%96%E7%9A%84+task" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>在 <a href="Basic-Def.html">.sbt 构建定义</a> 中提到过，当你通过 <code>:=</code> 或其他方法创建一个设置时，task key 创建的是 <code>Setting[Task[T]]</code> 而不是 <code>Setting[T]</code>。
 Setting 可以是 Task 的输入，但 Task 不能是 Setting 的输入。
-</p><p>以这两个 key 为例（从 <a href="../../sxr/sbt/Keys.scala.html">Keys</a> 中）：
+</p><p>以这两个 key 为例（从 <a href="../../api/sbt/Keys$.html">Keys</a> 中）：
 </p><pre><code class="prettyprint lang-scala">val scalacOptions = taskKey[Seq[String]](&quot;Options for the Scala compiler.&quot;)
 val checksums = settingKey[Seq[String]](&quot;The list of checksums to generate and to verify for dependencies.&quot;)
 </code></pre><p>（<code>scalacOptions</code> 和 <code>checksums</code> 互相没有关系，它们只是有相同值类型的两个 key，其中一个是 task。）

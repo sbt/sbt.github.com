@@ -91,7 +91,7 @@ that <a href="../docs/Library-Management.html#external-maven-ivy">here</a>.
 <a href="../sxr/sbt/Configuration.scala.html#sbt.Configuration">Configuration</a> val:
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += groupID % artifactID % revision % configuration
 </code></pre><p><code>libraryDependencies</code> is declared in
-<a href="../sxr/sbt/Keys.scala.html#sbt.Keys.libraryDependencies">Keys</a> like
+<a href="../api/sbt/Keys$.html#libraryDependencies:sbt.SettingKey[Seq[sbt.librarymanagement.ModuleID]]">Keys</a> like
 this:
 </p><pre><code class="prettyprint lang-scala">val libraryDependencies = settingKey[Seq[ModuleID]](&quot;Declares managed dependencies.&quot;)
 </code></pre><p>The <code>%</code> methods create <code>ModuleID</code> objects from strings, then you add those
@@ -148,7 +148,7 @@ repositories, you’ll have to add a <em>resolver</em> to help Ivy find it.
 </p><p>For example:
 </p><pre><code class="prettyprint lang-scala">resolvers += &quot;Sonatype OSS Snapshots&quot; at &quot;https://oss.sonatype.org/content/repositories/snapshots&quot;
 </code></pre><p>The <code>resolvers</code> key is defined in
-<a href="../sxr/sbt/Keys.scala.html#sbt.Keys.resolvers">Keys</a> like this:
+<a href="../api/sbt/Keys$.html#resolvers:sbt.SettingKey[Seq[sbt.librarymanagement.Resolver]]">Keys</a> like this:
 </p><pre><code class="prettyprint lang-scala">val resolvers = settingKey[Seq[Resolver]](&quot;The user-defined additional resolvers for automatically managed dependencies.&quot;)
 </code></pre><p>The <code>at</code> method creates a <code>Resolver</code> object from two strings.
 </p><p>sbt can search your local Maven repository if you add it as a

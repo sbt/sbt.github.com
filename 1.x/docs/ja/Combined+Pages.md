@@ -491,7 +491,7 @@ sbt シェルは、 sbt を終了して再起動した後でも履歴を覚え�
 </table>
 
 
-  [Keys]: ../../sxr/sbt/Keys.scala.html
+  [Keys]: ../../api/sbt/Keys$.html
   [Task-Graph]: Task-Graph.html
   [Bare-Def]: Bare-Def.html
   [Full-Def]: Full-Def.html
@@ -781,7 +781,7 @@ lazy val root = (project in file("."))
 
 最初の例として、`update` と `clean` というタスクに依存した形で
 `scalacOption` を定義したいとする。
-（[Keys](../sxr/sbt/Keys.scala.html) より）以下の二つのキーを例に説明する。
+（[Keys](../api/sbt/Keys$.html) より）以下の二つのキーを例に説明する。
 
 **注意**: ここで計算される `scalacOptions` の値はナンセンスなもので、説明のためだけのものだ:
 
@@ -1014,7 +1014,7 @@ sbt シェルで試すとこうなるはずだ:
 [success] Total time: 0 s, completed Jan 2, 2017 11:44:51 PM
 ```
 
-次に ([Keys](../sxr/sbt/Keys.scala.html) より) 以下の二つのキーを例に説明する:
+次に ([Keys](../api/sbt/Keys$.html) より) 以下の二つのキーを例に説明する:
 
 ```scala
 val scalacOptions = taskKey[Seq[String]]("Options for the Scala compiler.")
@@ -1972,7 +1972,7 @@ lazy val projF = (project in file("f"))
 ```
 
 
-  [Keys]: ../../sxr/sbt/Keys.scala.html
+  [Keys]: ../../api/sbt/Keys$.html
   [Apache Ivy]: https://ant.apache.org/ivy/
   [Ivy revisions]: https://ant.apache.org/ivy/history/2.3.0-rc1/ivyfile/dependency.html#revision
   [Extra attributes]: https://ant.apache.org/ivy/history/2.3.0-rc1/concept.html#extra
@@ -2581,7 +2581,7 @@ lazy val core = (project in file("core"))
   [Input-Tasks]: ../../docs/Input-Tasks.html
   [Plugins]: ../../docs/Plugins.html
   [Tasks]: ../../docs/Tasks.html
-  [Keys]: ../../sxr/sbt/Keys.scala.html
+  [Keys]: ../../api/sbt/Keys$.html
   [Defaults]: ../../sxr/sbt/Defaults.scala.html
   [Scaladocs-IO]: ../api/sbt/io/IO$.html
 

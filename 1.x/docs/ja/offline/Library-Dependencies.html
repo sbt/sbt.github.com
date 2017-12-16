@@ -121,7 +121,7 @@ sbt は、デフォルトで Maven の標準リポジトリ（訳注：Maven Cen
 </code></pre><p>二つの文字列の間の特別な <code>at</code> を使う。
 </p><p>例えばこのようになる:
 </p><pre><code class="prettyprint lang-scala">resolvers += &quot;Sonatype OSS Snapshots&quot; at &quot;https://oss.sonatype.org/content/repositories/snapshots&quot;
-</code></pre><p><a href="../../sxr/sbt/Keys.scala.html">Keys</a> で定義されている <code>resolvers</code> キーは以下のようになっている:
+</code></pre><p><a href="../../api/sbt/Keys$.html">Keys</a> で定義されている <code>resolvers</code> キーは以下のようになっている:
 </p><pre><code class="prettyprint lang-scala">val resolvers = settingKey[Seq[Resolver]](&quot;The user-defined additional resolvers for automatically managed dependencies.&quot;)
 </code></pre><p><code>at</code> メソッドは、二つの文字列から <code>Resolver</code> オブジェクトを作る。
 </p><p>sbt は、リポジトリとして追加すれば、ローカル Maven リポジトリも検索することができる:
