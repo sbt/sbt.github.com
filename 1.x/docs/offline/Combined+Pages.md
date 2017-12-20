@@ -21582,7 +21582,7 @@ always write it in all lowercase letters. However, we are cool with [酢豚][sub
 
 #### How do I get help?
 
--  See [Get Involved](http://www.scala-sbt.org/community.html#how-can-I-get-help)
+-  See [Support](http://www.scala-sbt.org/support.html#how-can-I-get-help)
 
 #### How do I report a bug?
 
