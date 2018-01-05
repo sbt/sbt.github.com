@@ -1,0 +1,601 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html>
+      <head>
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+        <title>sbt Reference Manual — Credits</title>
+        <link rel="shortcut icon" href="favicon.ico"/>
+        <link rel="stylesheet" href="css/blueprint/screen.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/blueprint/grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="css/blueprint/print.css" type="text/css" media="print"/> 
+        <!--[if lt IE 8]>
+          <link rel="stylesheet" href={ relativeBase + "css/blueprint/ie.css" } type="text/css" media="screen, projection"/>
+        <![endif]-->
+        <link rel="stylesheet" href="css/pamflet.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/pamflet-print.css" type="text/css" media="print"/>
+        <link rel="stylesheet" href="css/pamflet-grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="css/color_scheme-redmond.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/color_scheme-github.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/color_scheme-monokai.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/pamfletheight_80px_2em.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <script type="text/javascript" src="js/jquery-1.6.2.min.js"></script>
+        <script type="text/javascript" src="js/jquery.collapse.js"></script>
+        <script type="text/javascript" src="js/pamflet.js"></script>
+        <script type="text/javascript">
+          Pamflet.page.language = 'en';
+        </script>
+        <script type="text/javascript" src="js/prettify/prettify.js"></script><script type="text/javascript" src="js/prettify/lang-scala.js"></script><link type="text/css" rel="stylesheet" href="css/prettify.css"/><script type="text/javascript"><!--
+        window.onload=function() { prettyPrint(); };
+      --></script>
+        <link rel="stylesheet" href="css/custom.css" type="text/css" media="screen, projection"/>
+        
+        <script type="text/javascript">
+              Pamflet.twitter = '#sbt #scala';
+            </script>
+      </head>
+      <body class="color_scheme-github">
+        <a class="page prev nav" href="General-Info.html">
+            <span class="space">&nbsp;</span>
+            <span class="flip arrow">&gt;</span>
+          </a><a class="page next nav" href="Community-Plugins.html">
+            <span class="space">&nbsp;</span>
+            <span class="arrow">&gt;</span>
+          </a>
+        <div class="container contentswrapper">
+          <div class="span-16 prepend-1 append-1 contents">
+            <h2 id="Credits">Credits<a href="#Credits" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>sbt was originally created by Mark Harrah (<a href="https://github.com/harrah">@harrah</a>) in <a href="http://www.scala-lang.org/old/node/392.html">2008</a>. Most of the fundamental aspects of sbt, such as the Scala incremental compiler, integration with Maven and Ivy dependencies, and parallel task processing were conceived and initially implemented by Mark.
+</p><p>By 2010, when sbt 0.7 came out, many open-source Scala projects were using sbt as their build tool.
+</p><p>Mark joined Typesafe (now Lightbend) in 2011, the year the company was founded.  sbt 0.10.0 shipped that same year. Mark remained the maintainer and most active contributor until March 2014, with sbt 0.13.1 as his last release.
+</p><p>Josh Suereth (<a href="https://github.com/jsuereth">@jsuereth</a>) at Typesafe became the next maintainer of sbt.
+</p><p>In 2014, Eugene Yokota (<a href="https://github.com/eed3si9n">@eed3si9n</a>) joined Typesafe to co-lead sbt with Josh. This team carried the 0.13 series through 0.13.5 and started the trajectory to 1.0 as <a href="sbt-0.13-Tech-Previews.html">technology previews</a>. By the time of Josh’s departure in 2015, after sbt 0.13.9, they had shipped <code>AutoPlugin</code>, kept sbt 0.13 in shape, and laid groundwork for sbt server.
+</p><p>Grzegorz Kossakowski (<a href="https://github.com/gkossakowski">@gkossakowski</a>) worked on a better incremental compiler algorithm called “name hashing” during his time on the Scala team at Typesafe. Name hashing became the default incremental compiler in sbt 0.13.6 (2014). Lightbend later commissioned Grzegorz to refine name hashing using a technique called class-based name hashing, which was adopted by Zinc 1. Another notable contribution from Grzegorz was hosting a series of <a href="http://blog.japila.pl/2014/07/gkossakowski-on-warszawscala-about-how-to-patch-scalasbt/">meetups</a> with @WarszawScaLa, and (with his arm in a sling<img src="http://blog.japila.pl/2014/07/hacking-scalasbt-with-gkossakowski-on-warszawscala-meetup-in-javeo_eu/" alt="fix"/> the infamous blank-line problem.
+</p><p>In May 2015, Dale Wijnand (<a href="http://github.com/dwijnand">@dwijnand</a>) became a committer from the community after contributing features such as <code>inThisBuild</code> and <code>-=</code>.
+</p><p>From June 2015 to early 2016, Martin Duhem (<a href="https://github.com/Duhemm">@Duhemm</a>) joined Typesafe as an intern, working on sbt. During this time, Martin worked on crucial components such as making the compiler bridge configurable for Zinc, and code generation for pseudo case classes (which later became Contraband).
+</p><p>Around this time, Eugene, Martin, and Dale started the sbt 1.x codebase, splitting the code base into multiple modules: sbt/sbt, Zinc 1, sbt/librarymanagement, sbt/util, and sbt/io. The aim was to make Zinc 1, an incremental compiler usable by all build tools.
+</p><p>In August 2016, Dale joined the Tooling team at Lightbend. Dale and Eugene oversaw the releases 0.13.12 through 0.13.16, as well as the development of sbt 1.0.
+</p><p>In spring 2017, the Scala Center joined the Zinc 1 development effort. Jorge Vicente Cantero (<a href="https://github.com/jvican">@jvican</a>) has contributed a number of improvements including the fix for the “as seen from” bug that had blocked Zinc 1.
+</p><p>According to <code>git shortlog -sn --no-merges</code> on <a href="https://github.com/sbt/sbt/graphs/contributors">sbt/sbt</a>, <a href="https://github.com/sbt/zinc/graphs/contributors">sbt/zinc</a>, <a href="https://github.com/sbt/librarymanagement/graphs/contributors">sbt/librarymanagement</a>, <a href="https://github.com/sbt/util/graphs/contributors">sbt/util</a>, <a href="https://github.com/sbt/io/graphs/contributors">sbt/io</a>, <a href="https://github.com/sbt/contraband/graphs/contributors">sbt/contraband</a>, and <a href="https://github.com/sbt/website/graphs/contributors">sbt/website</a> there were 9151 non-merge commits by 318 contributors.
+</p><ul><li>Mark Harrah 3852
+</li><li>Eugene Yokota (eed3si9n)  1760
+</li><li>Dale Wijnand  524
+</li><li>Josh Suereth  357
+</li><li>Grzegorz Kossakowski  349
+</li><li>Martin Duhem  333
+</li><li>Jorge Vicente Cantero (jvican)  314
+</li><li>Eugene Vigdorchik 108
+</li><li>Kenji Yoshida (xuwei-k) 96
+</li><li>Indrajit Raychaudhuri 90
+</li><li>Dan Sanduleac 74
+</li><li>Benjy Weinberger  52
+</li><li>Max Peng  52
+</li><li>Jacek Laskowski 40
+</li><li>Jason Zaugg 40
+</li><li>Josh Soref  39
+</li><li>Krzysztof Romanowski  39
+</li><li>Pierre DAL-PRA  36
+</li><li>Andrzej Jozwik  33
+</li><li>Antonio Cunei 30
+</li><li>Aaron S. Hawley 29
+</li><li>Guillaume Martres 25
+</li><li>James Roper 24
+</li><li>Chua Chee Seng (cheeseng) 24
+</li><li>Paolo G. Giarrusso  23
+</li><li>Matej Urbas 22
+</li><li>Stu Hood  22
+</li><li>Adriaan Moors 18
+</li><li>Jean-Rémi Desjardins  16
+</li><li>Sanjin Sehic  16
+</li><li>Fedor Korotkov  14
+</li><li>Andrew Johnson  13
+</li><li>David Perez 13
+</li><li>Havoc Pennington  13
+</li><li>Liang Tang  12
+</li><li>Peter Vlugter 12
+</li><li>Taro L. Saito 10
+</li><li>Paul Phillips 9
+</li><li>Roberto Tyley 9
+</li><li>Vojin Jovanovic 9
+</li><li>William Benton  9
+</li><li>杨博 (Yang Bo)  9
+</li><li>Brian Topping 8
+</li><li>Bruno Bieth 8
+</li><li>Johannes Rudolph  8
+</li><li>KAWACHI Takashi 8
+</li><li>Ken Kaizu (krrrr38) 8
+</li><li>Artyom Olshevskiy 7
+</li><li>Eugene Platonov 7
+</li><li>Matthew Farwell 7
+</li><li>Michael Allman  7
+</li><li>David Pratt 6
+</li><li>Luca Milanesio  6
+</li><li>Nepomuk Seiler  6
+</li><li>Peiyu Wang  6
+</li><li>Simeon H.K. Fitch 6
+</li><li>Stephen Samuel  6
+</li><li>Thierry Treyer  6
+</li><li>James Earl Douglas  5
+</li><li>Jean-Remi Desjardins  5
+</li><li>Miles Sabin 5
+</li><li>Seth Tisue  5
+</li><li>qgd 5
+</li><li>Anthony Whitford  4
+</li><li>Bardur Arantsson  4
+</li><li>Ches Martin 4
+</li><li>Chris Birchall  4
+</li><li>Daniel C. Sobral  4
+</li><li>Heikki Vesalainen 4
+</li><li>Krzysztof Nirski  4
+</li><li>Lloyd Meta  4
+</li><li>Michael Schmitz 4
+</li><li>Orr Sella 4
+</li><li>Philipp Dörfler 4
+</li><li>Tim Harper  4
+</li><li>Vasya Novikov 4
+</li><li>Vincent Munier  4
+</li><li>Jürgen Keck (j-keck)  4
+</li><li>Richard Summerhayes (rasummer)  4
+</li><li>Adam Warski 3
+</li><li>Ben McCann  3
+</li><li>Enno Runne  3
+</li><li>Eric Bowman 3
+</li><li>Henrik Engstrom 3
+</li><li>Ian Forsey  3
+</li><li>James Ward  3
+</li><li>Jesse Kinkead 3
+</li><li>Justin Pihony 3
+</li><li>Kazuhiro Sera 3
+</li><li>Krzysztof Borowski  3
+</li><li>Lars Hupel  3
+</li><li>Leif Wickland 3
+</li><li>Lukas Rytz  3
+</li><li>Max Worgan  3
+</li><li>Oliver Wickham  3
+</li><li>Olli Helenius 3
+</li><li>Roman Timushev  3
+</li><li>Simon Schäfer 3
+</li><li>ZhiFeng Hu  3
+</li><li>daniel-shuy 3
+</li><li>Roland Schatz 3
+</li><li>soc 3
+</li><li>wpitula 3
+</li><li>Alex Dupre  2
+</li><li>Alexey Alekhin  2
+</li><li>Allan Erskine 2
+</li><li>Alois Cochard 2
+</li><li>Andreas Flierl  2
+</li><li>Anthony 2
+</li><li>Antoine Gourlay 2
+</li><li>Arnout Engelen  2
+</li><li>Ben Hutchison 2
+</li><li>Benjamin Darfler  2
+</li><li>Brendan W. McAdams  2
+</li><li>Brennan Saeta 2
+</li><li>Brian McKenna 2
+</li><li>Brian Smith 2
+</li><li>BrianLondon 2
+</li><li>Charles Feduke  2
+</li><li>Christian Dedie 2
+</li><li>Cody Allen  2
+</li><li>Damien Lecan  2
+</li><li>David Barri 2
+</li><li>David Harcombe  2
+</li><li>David Hotham  2
+</li><li>Derek Wickern 2
+</li><li>Eric D. Reichert  2
+</li><li>Eric J. Christeson  2
+</li><li>Evgeny Goldin 2
+</li><li>Evgeny Vereshchagin 2
+</li><li>Francois Armand (fanf42)  2
+</li><li>Fred Dubois 2
+</li><li>Heejong Lee 2
+</li><li>Henri Kerola  2
+</li><li>Hideki Ikio 2
+</li><li>Ikenna Nwaiwu 2
+</li><li>Ismael Juma 2
+</li><li>Jakob Odersky 2
+</li><li>Jan Berkel  2
+</li><li>Jan Niehusmann  2
+</li><li>Jarek Sacha 2
+</li><li>Jens Halm 2
+</li><li>Joachim Hofer 2
+</li><li>Joe Barnes  2
+</li><li>Johan Andrén  2
+</li><li>Jonas Fonseca 2
+</li><li>Josh Kalderimis 2
+</li><li>Juan Manuel Caicedo Carvajal  2
+</li><li>Justin Kaeser 2
+</li><li>Konrad Malawski 2
+</li><li>Lex Spoon 2
+</li><li>Li Haoyi  2
+</li><li>Lloyd 2
+</li><li>Lukasz Piepiora 2
+</li><li>Marcus Lönnberg 2
+</li><li>Marko Elezovic  2
+</li><li>Michael Parrott 2
+</li><li>Mikael Vallerie 2
+</li><li>Myyk Seok 2
+</li><li>Ngoc Dao  2
+</li><li>Nicolas Rémond  2
+</li><li>Oscar Vargas Torres 2
+</li><li>Paul Draper 2
+</li><li>Paulo “JCranky” Siqueira  2
+</li><li>Petro Verkhogliad 2
+</li><li>Piotr Kukielka  2
+</li><li>Robin Green 2
+</li><li>Roch Delsalle 2
+</li><li>Roman Iakovlev  2
+</li><li>Scott Royston 2
+</li><li>Simon Hafner  2
+</li><li>Sukant Hajra  2
+</li><li>Suzanne Hamilton  2
+</li><li>Tejas Mandke  2
+</li><li>Thomas Koch 2
+</li><li>Thomas Lockney  2
+</li><li>Tobias Neef 2
+</li><li>Tomasz Bartczak 2
+</li><li>Travis  2
+</li><li>Vitalii Voloshyn  2
+</li><li>Wei Chen  2
+</li><li>Wojciech Langiewicz 2
+</li><li>Xin Ren 2
+</li><li>Zava  2
+</li><li>amishak 2
+</li><li>beolnix 2
+</li><li>ddworak 2
+</li><li>drdamour  2
+</li><li>Eric K Richardson (ekrich)  2
+</li><li>fsi206914 2
+</li><li>henry 2
+</li><li>kaatzee 2
+</li><li>kalmanb 2
+</li><li>nau 2
+</li><li>qvaughan  2
+</li><li>sam 2
+</li><li>softprops 2
+</li><li>tbje  2
+</li><li>timt  2
+</li><li>Aaron D. Valade 1
+</li><li>Alexander Buchholtz 1
+</li><li>Alexandr Nikitin  1
+</li><li>Alexandre Archambault 1
+</li><li>Alexey Levan  1
+</li><li>Anatoly Fayngelerin 1
+</li><li>Andrea  1
+</li><li>Andrew D Bate 1
+</li><li>Andrew Miller 1
+</li><li>Ashley Mercer 1
+</li><li>Bruce Mitchener 1
+</li><li>Cause Cheng 1
+</li><li>Cause Chung 1
+</li><li>Christian Krause  1
+</li><li>Christophe Vidal  1
+</li><li>Claudio Bley  1
+</li><li>Daniel Peebles  1
+</li><li>Denis T 1
+</li><li>Devis Lucato  1
+</li><li>Dmitry Melnichenko  1
+</li><li>EECOLOR 1
+</li><li>Edward Samson 1
+</li><li>Erik Bakker 1
+</li><li>Erik Bruchez  1
+</li><li>Ethan 1
+</li><li>Federico Ragona 1
+</li><li>Felix Leipold 1
+</li><li>Geoffroy Couprie  1
+</li><li>Gerolf Seitz  1
+</li><li>Gilad Hoch  1
+</li><li>Gregor Heine  1
+</li><li>HairyFotr 1
+</li><li>Heiko Seeberger 1
+</li><li>Holden Karau  1
+</li><li>Hussachai Puripunpinyo  1
+</li><li>Jacques 1
+</li><li>Jakob Grunig  1
+</li><li>James Koch  1
+</li><li>Jan Polák 1
+</li><li>Jan Ziniewicz 1
+</li><li>Jisoo Park  1
+</li><li>Joonas Javanainen 1
+</li><li>Joscha Feth 1
+</li><li>Josef Vlach 1
+</li><li>Joseph Earl 1
+</li><li>João Costa  1
+</li><li>Justin Ko 1
+</li><li>Kamil Kloch 1
+</li><li>Kazuyoshi Kato  1
+</li><li>Kevin Scaldeferri 1
+</li><li>Knut Petter Meen  1
+</li><li>Krzysztof 1
+</li><li>Kunihiko Ito  1
+</li><li>LMnet 1
+</li><li>Luc Bourlier  1
+</li><li>Lucas Mogari  1
+</li><li>Lutz Huehnken 1
+</li><li>Mal Graty 1
+</li><li>Marcos Savoury  1
+</li><li>Marek Żebrowski 1
+</li><li>Markus Siemens  1
+</li><li>Martynas Mickevicius  1
+</li><li>Martynas Mickevičius  1
+</li><li>Michael Bayne 1
+</li><li>Michael Ledin 1
+</li><li>Nathan Hamblen  1
+</li><li>Nyavro  1
+</li><li>OlegYch 1
+</li><li>Olivier ROLAND  1
+</li><li>Pavel Penkov  1
+</li><li>Pedro Larroy  1
+</li><li>Peter Pan 1
+</li><li>Piotr Kukiełka  1
+</li><li>Rikard Pavelic  1
+</li><li>Robert Jacob  1
+</li><li>Rogach  1
+</li><li>Sergey Andreev  1
+</li><li>Shanbin Wang  1
+</li><li>Shane Hender  1
+</li><li>Simon Olofsson  1
+</li><li>Stefan Zeiger 1
+</li><li>Stephen Duncan Jr 1
+</li><li>Steve Gury  1
+</li><li>Sören Brunk 1
+</li><li>Thomas Grainger 1
+</li><li>Tim Sheppard  1
+</li><li>Todor Todorov 1
+</li><li>Toshiyuki Takahashi 1
+</li><li>Travis Brown  1
+</li><li>Tsubasa Irisawa 1
+</li><li>Victor Hiairrassary 1
+</li><li>Yasuo Nakanishi 1
+</li><li>Yoshitaka Fujii 1
+</li><li>adinath 1
+</li><li>albuch  1
+</li><li>cchantep  1
+</li><li>cdietze 1
+</li><li>choucri 1
+</li><li>hokada  1
+</li><li>joiskov 1
+</li><li>jozic 1
+</li><li>jyane 1
+</li><li>k.bigwheel  1
+</li><li>kavedaa 1
+</li><li>mmcbride  1
+</li><li>pishen tsai 1
+</li><li>sanjiv sahayam  1
+</li><li>saturday06  1
+</li><li>seroperson  1
+</li><li>slideon 1
+</li><li>thricejamie 1
+</li><li>todesking 1
+</li><li>totem3  1
+</li><li>upescatore  1
+</li><li>valydia 1
+</li><li>walidbenchikha  1
+</li><li>Wiesław Popielarski 1
+</li><li>Łukasz Indykiewicz  1
+</li></ul><p>For the details on individual contributions, see <a href="Changes.html">Changes</a>.
+</p><p>The following people contributed ideas, documentation, or code to sbt but are not listed above:
+</p><ul><li>Josh Cough
+</li><li>Nolan Darilek
+</li><li>Viktor Klang
+</li><li>David R. MacIver
+</li><li>Ross McDonald
+</li><li>Andrew O’Malley
+</li><li>Jorge Ortiz
+</li><li>Mikko Peltonen
+</li><li>Ray Racine
+</li><li>Stuart Roebuck
+</li><li>Harshad RJ
+</li><li>Tony Sloane
+</li><li>Francisco Treacy
+</li><li>Vesa Vilhonen
+</li></ul><p>The sbt ecosystem would not be the same without so many awesome plugins. Here are some of the plugins and their contributors:
+</p><ul><li><a href="https://playframework.com/">Play Framework</a> by Lightbend (James Roper, Peter Hausel, and many others)
+</li><li><a href="https://www.scala-js.org/">Scala.js</a> by Sébastien Doeraene, Tobias Schlatter, et al
+</li><li><a href="https://github.com/sbt/sbt-assembly">sbt-assembly</a> by Eugene Yokota (eed3si9n)
+</li><li><a href="https://github.com/coursier/coursier">coursier</a> by Alexandre Archambault
+</li><li><a href="http://sbt-native-packager.readthedocs.io/en/stable/">sbt Native Packager</a> by Nepomuk Seiler (muuki88) and Josh Suereth
+</li><li><a href="https://github.com/jrudolph/sbt-dependency-graph">sbt-dependency-graph</a> by Johannes Rudolph
+</li><li><a href="http://www.wartremover.org/">WartRemover</a> by Claire Neveu and Brian McKenna
+</li><li><a href="https://github.com/scala-android/sbt-android">sbt-android</a> by Perry (pfn)
+</li><li><a href="https://github.com/spray/sbt-revolver">sbt-revolver</a> by Johannes Rudolph and Mathias (sirthias)
+</li><li><a href="https://github.com/marcuslonnberg/sbt-docker">sbt-docker</a> by Marcus Lönnberg
+</li><li><a href="https://github.com/tpolecat/tut">tut</a> by Rob Norris (tpolecat)
+</li><li><a href="https://github.com/sbt/sbt-release">sbt-release</a> by Gerolf Seitz
+</li><li><a href="https://github.com/ktoso/sbt-jmh">sbt-jmh</a> by Konrad Malawski (ktoso)
+</li><li><a href="https://github.com/rtimush/sbt-updates">sbt-updates</a> by Roman Timushev
+</li><li><a href="https://github.com/earldouglas/xsbt-web-plugin">xsbt-web-plugin</a> by James Earl Douglas and Artyom Olshevskiy
+</li><li><a href="https://github.com/scoverage/sbt-scoverage">sbt-scoverage</a> by Stephen Samuel and Mikko Koponen
+</li><li><a href="https://github.com/sbt/sbt-web">sbt-web</a> by Lightbend (Christopher Hunt, Peter Vlugter, et al)
+</li><li><a href="https://github.com/sbt/sbt-buildinfo">sbt-buildinfo</a> by Eugene Yokota (eed3si9n)
+</li><li><a href="https://github.com/xerial/sbt-pack">sbt-pack</a> by Taro L. Saito (xerial)
+</li><li><a href="https://github.com/sbt/sbt-onejar">sbt-onejar</a> by Jason Zaugg (retronym)
+</li><li><a href="https://github.com/sbt/sbt-git">sbt-git</a> by Josh Suereth
+</li><li><a href="https://github.com/sbt/sbt-scalariform">sbt-scalariform</a> by Heiko Seeberger, Daniel Trinh, et al
+</li><li><a href="http://ensime.org/build_tools/sbt/">ensime-sbt</a> by Sam Halliday (fommil)
+</li><li><a href="https://github.com/sbt/sbt-fresh">sbt-fresh</a> by Heiko Seeberger
+</li><li><a href="https://github.com/vmunier/sbt-web-scalajs">sbt-web-scalajs</a> by Vincent Munier
+</li><li><a href="https://github.com/xerial/sbt-sonatype">sbt-sonatype</a> by Taro L. Saito (xerial)
+</li><li><a href="https://github.com/orrsella/sbt-sublime">sbt-sublime</a> by Orr Sella
+</li><li><a href="https://github.com/Duhemm/sbt-errors-summary">sbt-errors-summary</a> by Martin Duhem
+</li><li><a href="https://github.com/sbt/sbt-bintray">sbt-bintray</a> by Doug Tangren (softprops)
+</li><li><a href="https://github.com/typesafehub/migration-manager/wiki">Migration Manager</a> by Lightbend (Mirco Dotta, Seth Tisue, et al)
+</li><li><a href="https://github.com/sbt/sbt-protobuf">sbt-protobuf</a> by Gerolf Seitz and Kenji Yoshida (xuwei-k)
+</li><li><a href="https://github.com/sbt/sbt-site">sbt-site</a> by Jonas Fonseca, Josh Suereth, et al
+</li><li><a href="https://github.com/tkawachi/sbt-doctest">sbt-doctest</a> by KAWACHI Takashi
+</li><li><a href="https://github.com/roboscala/sbt-robovm">sbt-robovm</a> by Jan Polák
+</li><li><a href="https://github.com/scalastyle/scalastyle-sbt-plugin">scalastyle-sbt-plugin</a> by Matthew Farwell
+</li><li><a href="https://github.com/47deg/sbt-microsites">sbt-microsites</a> by 47 Degrees (Juan Pedro Moreno, Javier de Silóniz Sandino, et al)
+</li><li><a href="https://github.com/sbt/sbt-header">sbt-header</a> by Heiko Seeberger and Benedikt Ritter
+</li><li><a href="https://github.com/sbt/sbt-groll">sbt-groll</a> by Heiko Seeberger
+</li><li><a href="https://github.com/ceedubs/sbt-ctags">sbt-ctags</a> by Cody Allen
+</li><li><a href="https://github.com/gilt/sbt-aws-lambda">sbt-aws-lambda</a> by Gilt (Brendan St John, et al)
+</li><li><a href="https://github.com/heroku/sbt-heroku">sbt-heroku</a> by Heroku (Joe Kutner)
+</li><li><a href="https://github.com/dwijnand/sbt-dynver">sbt-dynver</a> by Dale Wijnand
+</li><li><a href="https://github.com/sbt/sbt-unidoc">sbt-unidoc</a> by Eugene Yokota and Peter Vlugter
+</li><li><a href="https://github.com/Tapad/sbt-docker-compose">sbt-docker-compose</a> by Tapad (Kurt Kopchik et al)
+</li><li><a href="https://github.com/scoverage/sbt-coveralls">sbt-coveralls</a> by Ian Forsey and Stephen Samuel
+</li><li><a href="https://github.com/gatling/gatling-sbt">gatling-sbt</a> by Pierre Dal-Pra
+</li><li><a href="https://github.com/sbt/sbt-boilerplate">sbt-boilerplate</a> by Johannes Rudolph
+</li><li><a href="https://github.com/frugalmechanic/fm-sbt-s3-resolver">fm-sbt-s3-resolver</a> by Tim Underwood
+</li><li><a href="https://github.com/dispalt/sbt-reactjs">sbt-reactjs</a> by Dan Di Spaltro
+</li><li><a href="https://github.com/sbt/sbt-scalabuff">sbt-scalabuff</a> by Aloïs Cochard
+</li><li><a href="https://github.com/sbt/sbt-pgp">sbt-pgp</a> by Josh Suereth
+</li><li><a href="https://github.com/sbt/jacoco4sbt">jacoco4sbt</a> by Joachim Hofer
+</li><li><a href="https://github.com/ohnosequences/sbt-s3-resolver">sbt-s3-resolver</a> by Alexey Alekhin (laughedelic)
+</li><li><a href="https://github.com/shivawu/sbt-maven-plugin">sbt-maven-plugin</a> by Shiva Wu
+</li><li><a href="https://github.com/gilt/sbt-newrelic">sbt-newrelic</a> by Gilt (Gary Coady et al)
+</li><li><a href="https://github.com/coursera/naptime">naptime</a> by Coursera (Brennan Saeta, Bryan Kane et al)
+</li><li><a href="https://github.com/lucidsoftware/neo-sbt-scalafmt">neo-sbt-scalafmt</a> by Lucid Software (Paul Draper et al)
+</li><li><a href="http://coursera.github.io/courier/">Courier</a> by Coursera (Joe Betz et al)
+</li><li><a href="https://github.com/jrudolph/sbt-optimizer">sbt-optimizer</a> by Johannes Rudolph
+</li><li><a href="https://github.com/sbt/sbt-appengine">sbt-appengine</a> by Eugene Yokota (eed3si9n) and Yasushi Abe
+</li><li><a href="https://github.com/sbt/sbt-ghpages">sbt/sbt-ghpages</a> by Josh Suereth
+</li><li><a href="https://github.com/pfn/kotlin-plugin">kotlin-plugin</a> by Perry (pfn)
+</li><li><a href="https://github.com/sbt/sbt-avro">sbt-avro</a> by Juan Manuel Caicedo Carvajal (cavorite), Ben McCann, et al
+</li><li><a href="https://github.com/sbt/sbt-aspectj">sbt-aspectj</a> by Lightbend (Peter Vlugter et al)
+</li><li><a href="https://github.com/scala-native/sbt-crossproject">sbt-crossproject</a> Denys Shabalin and Guillaume Massé
+</li><li><a href="https://github.com/sksamuel/sbt-scapegoat">sbt-scapegoat</a> by Stephen Samuel
+</li><li><a href="https://github.com/gilt/sbt-dependency-graph-sugar">sbt-dependency-graph-sugar</a> by Gilt (Brendan St John et al)
+</li><li><a href="https://github.com/arktekk/sbt-aether-deploy">sbt-aether-deploy</a> by Arktekk (Erlend Hamnaberg et al)
+</li><li><a href="https://github.com/saurfang/sbt-spark-submit">sbt-spark-submit</a> by Forest Fang
+</li><li><a href="https://github.com/sbt/sbt-proguard">sbt-proguard</a> by Lightbend (Peter Vlugter et al)
+</li><li><a href="https://github.com/jenkinsci/sbt-plugin">Jenkins CI sbt plugin</a> by Uzi Landsmann
+</li><li><a href="https://github.com/dscleaver/sbt-quickfix">sbt-quickfix</a> by Dave Cleaver
+</li><li><a href="https://github.com/softprops/sbt-growl-plugin">sbt-growl-plugin</a> Doug Tangren (softprops)
+</li><li><a href="https://github.com/albuch/sbt-dependency-check">sbt-dependency-check</a> by Alexander v. Buchholtz
+</li><li><a href="https://github.com/JetBrains/sbt-structure">sbt-structure</a> by JetBrains (Justin Kaeser et al)
+</li><li><a href="https://github.com/ArpNetworking/sbt-typescript">sbt-typescript</a> by Brandon Arp
+</li><li><a href="https://github.com/bytedeco/sbt-javacv">sbt-javacv</a> by Bytedeco (Lloyd Chan et al)
+</li><li><a href="https://github.com/orrsella/sbt-stats">sbt-stats</a> by Orr Sella
+</li><li><a href="https://github.com/Verizon/sbt-rig">sbt-rig</a> by Verizon (Timothy Perrett et al)
+</li><li><a href="https://github.com/unicredit/sbt-swagger-codegen">sbt-swagger-codegen</a> by UniCredit (Andrea Peruffo, Francesco MDE, et al)
+</li><li><a href="https://github.com/sbt/sbt-pom-reader">sbt-pom-reader</a> by Josh Suereth
+</li><li><a href="https://github.com/xuwei-k/sbt-class-diagram">sbt-class-diagram</a> by Kenji Yoshida (xuwei-k)
+</li></ul><p>Kudos also to people who have answered questions on <a href="https://stackoverflow.com/tags/sbt/topusers">Stack Overflow</a> (Jacek Laskowski, Lukasz Piepiora, et al) and <a href="gitter.im/sbt/sbt">sbt Gitter channel</a>, and many who have reported issues and contributed ideas on GitHub.
+</p><p>Thank you all.
+</p><div class="bottom nav span-16">
+                        <em>Next Page</em>
+                        <span class="arrow">&gt;</span>
+                        <a href="Community-Plugins.html"> Community Plugins </a>                        
+                        <ul class="language-bar">
+        
+      </ul>
+                      </div><div class="tocwrapper show">
+      <a class="tochead nav" style="display: none" href="#toc">❦</a>
+      <a name="toc"></a>
+      <h4 class="toctitle">Contents</h4>
+      <div class="tocbody">
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">Getting Started with sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">Installing sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Installing sbt on Mac</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Installing sbt on Windows</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Installing sbt on Linux</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">Directory structure</a></div></li><li><div><a href="Running.html">Running</a></div></li><li><div><a href="Basic-Def.html">Build definition</a></div></li><li><div><a href="Task-Graph.html">Task graph</a></div></li><li><div><a href="Scopes.html">Scopes</a></div></li><li><div><a href="Appending-Values.html">Appending values</a></div></li><li><div><a href="Scope-Delegation.html">Scope delegation (.value lookup)</a></div></li><li><div><a href="Library-Dependencies.html">Library dependencies</a></div></li><li><div><a href="Multi-Project.html">Multi-project builds</a></div></li><li><div><a href="Using-Plugins.html">Using plugins</a></div></li><li><div><a href="Custom-Settings.html">Custom settings and tasks</a></div></li><li><div><a href="Organizing-Build.html">Organizing the build</a></div></li><li><div><a href="Summary.html">Getting Started summary</a></div></li> </ol></li><li><div><a href="General-Info.html">General Information</a></div><ol class="toc"> <li><div class="current">Credits</div></li><li><div><a href="Community-Plugins.html">Community Plugins</a></div></li><li><div><a href="Repository-Roles.html">Community Repository Policy</a></div></li><li><div><a href="Bintray-For-Plugins.html">Bintray For Plugins</a></div></li><li><div><a href="Setup-Notes.html">Setup Notes</a></div></li><li><div><a href="Using-Sonatype.html">Using Sonatype</a></div></li><li><div><a href="Contibuting-to-sbt.html">Contributing to sbt</a></div></li><li><div><a href="Changes.html">Changes</a></div><ol class="toc"> <li><div><a href="Migrating-from-sbt-013x.html">Migrating from sbt 0.13.x</a></div></li><li><div><a href="sbt-1.0-Release-Notes.html">sbt 1.0.1</a></div></li><li><div><a href="sbt-0.13-Tech-Previews.html">sbt 0.13.5+ Technology Previews</a></div></li><li><div><a href="ChangeSummary_0.13.0.html">sbt 0.13.0 - 0.13.2</a></div></li><li><div><a href="ChangeSummary_0.12.0.html">sbt 0.12.4</a></div></li><li><div><a href="Older-Changes.html">Older Changes</a></div></li><li><div><a href="Migrating-from-sbt-07x.html">Migrating from 0.7 to 0.10+</a></div></li> </ol></li> </ol></li><li><div><a href="Detailed-Topics.html">Detailed Topics</a></div><ol class="toc"> <li><div><a href="Using-sbt.html">Using sbt</a></div><ol class="toc"> <li><div><a href="Command-Line-Reference.html">Command Line Reference</a></div></li><li><div><a href="Console-Project.html">Console Project</a></div></li><li><div><a href="Cross-Build.html">Cross-building</a></div></li><li><div><a href="Inspecting-Settings.html">Interacting with the Configuration System</a></div></li><li><div><a href="Triggered-Execution.html">Triggered Execution</a></div></li><li><div><a href="Scripts.html">Scripts, REPL, and Dependencies</a></div></li><li><div><a href="sbt-server.html">sbt Server</a></div></li><li><div><a href="Understanding-Recompilation.html">Understanding Incremental Recompilation</a></div></li> </ol></li><li><div><a href="Configuration-Index.html">Configuration</a></div><ol class="toc"> <li><div><a href="Classpaths.html">Classpaths, sources, and resources</a></div></li><li><div><a href="Compiler-Plugins.html">Compiler Plugin Support</a></div></li><li><div><a href="Configuring-Scala.html">Configuring Scala</a></div></li><li><div><a href="Forking.html">Forking</a></div></li><li><div><a href="Global-Settings.html">Global Settings</a></div></li><li><div><a href="Java-Sources.html">Java Sources</a></div></li><li><div><a href="Mapping-Files.html">Mapping Files</a></div></li><li><div><a href="Local-Scala.html">Local Scala</a></div></li><li><div><a href="Macro-Projects.html">Macro Projects</a></div></li><li><div><a href="Paths.html">Paths</a></div></li><li><div><a href="Parallel-Execution.html">Parallel Execution</a></div></li><li><div><a href="Process.html">External Processes</a></div></li><li><div><a href="Running-Project-Code.html">Running Project Code</a></div></li><li><div><a href="Testing.html">Testing</a></div></li> </ol></li><li><div><a href="Dependency-Management-Index.html">Dependency Management</a></div><ol class="toc"> <li><div><a href="Artifacts.html">Artifacts</a></div></li><li><div><a href="Dependency-Management-Flow.html">Dependency Management Flow</a></div></li><li><div><a href="Library-Management.html">Library Management</a></div></li><li><div><a href="Proxy-Repositories.html">Proxy Repositories</a></div></li><li><div><a href="Publishing.html">Publishing</a></div></li><li><div><a href="Resolvers.html">Resolvers</a></div></li><li><div><a href="Update-Report.html">Update Report</a></div></li><li><div><a href="Cached-Resolution.html">Cached resolution</a></div></li> </ol></li><li><div><a href="Tasks-and-Commands.html">Tasks and Commands</a></div><ol class="toc"> <li><div><a href="Tasks.html">Tasks</a></div></li><li><div><a href="Input-Tasks.html">Input Tasks</a></div></li><li><div><a href="Commands.html">Commands</a></div></li><li><div><a href="Parsing-Input.html">Parsing and tab completion</a></div></li><li><div><a href="Build-State.html">State and actions</a></div></li><li><div><a href="Task-Inputs.html">Tasks/Settings: Motivation</a></div></li> </ol></li><li><div><a href="Plugins-and-Best-Practices.html">Plugins and Best Practices</a></div><ol class="toc"> <li><div><a href="Best-Practices.html">General Best Practices</a></div></li><li><div><a href="Plugins.html">Plugins</a></div></li><li><div><a href="Plugins-Best-Practices.html">Plugins Best Practices</a></div></li><li><div><a href="Travis-CI-with-sbt.html">Setting up Travis CI with sbt</a></div></li><li><div><a href="Testing-sbt-plugins.html">Testing sbt plugins</a></div></li><li><div><a href="sbt-new-and-Templates.html">sbt new and Templates</a></div></li><li><div><a href="Cross-Build-Plugins.html">Cross building plugins</a></div></li> </ol></li> </ol></li><li><div><a href="Howto.html">How to…</a></div><ol class="toc"> <li><div><a href="Howto-Classpaths.html">Classpaths</a></div></li><li><div><a href="Howto-Customizing-Paths.html">Customizing paths</a></div></li><li><div><a href="Howto-Generating-Files.html">Generating files</a></div></li><li><div><a href="Howto-Inspect-the-Build.html">Inspect the build</a></div></li><li><div><a href="Howto-Interactive-Mode.html">Interactive mode</a></div></li><li><div><a href="Howto-Logging.html">Configure and use logging</a></div></li><li><div><a href="Howto-Project-Metadata.html">Project metadata</a></div></li><li><div><a href="Howto-Package.html">Configure packaging</a></div></li><li><div><a href="Howto-Running-Commands.html">Running commands</a></div></li><li><div><a href="Howto-Scala.html">Configure and use Scala</a></div></li><li><div><a href="Howto-Scaladoc.html">Generate API documentation</a></div></li><li><div><a href="Howto-Triggered.html">Triggered execution</a></div></li><li><div><a href="Define+Custom+Tasks.html">Define Custom Tasks</a></div></li><li><div><a href="Howto-Startup.html">How to take an action on startup</a></div></li><li><div><a href="Howto-Sequencing.html">Sequencing</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Defining a sequential task with Def.sequential</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Defining a dynamic task with Def.taskDyn</a></div></li><li><div><a href="Howto-After-Input-Task.html">Doing something after an input task</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Defining a dynamic input task with Def.inputTaskDyn</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">How to sequence using commands</a></div></li> </ol></li><li><div><a href="Examples.html">Examples</a></div><ol class="toc"> <li><div><a href="Basic-Def-Examples.html">.sbt build examples</a></div></li><li><div><a href="Scala-Files-Example.html">.sbt build with .scala files example</a></div></li><li><div><a href="Advanced-Configurations-Example.html">Advanced configurations example</a></div></li><li><div><a href="Advanced-Command-Example.html">Advanced command example</a></div></li> </ol></li> </ol></li><li><div><a href="Faq.html">Frequently Asked Questions</a></div><ol class="toc">  </ol></li><li><div><a href="Name-Index.html">Index</a></div></li><li><div><a href="Developers-Guide.html">Developer’s Guide (Work in progress)</a></div><ol class="toc"> <li><div><a href="Modularization.html">Modularization</a></div><ol class="toc"> <li><div><a href="Module-Summary.html">Module summary</a></div></li> </ol></li><li><div><a href="Coding-Guideline.html">sbt Coding Guideline</a></div><ol class="toc">  </ol></li><li><div><a href="Datatype.html">sbt-datatype</a></div><ol class="toc">  </ol></li><li><div><a href="Compiler-Interface.html">Compiler Interface</a></div><ol class="toc"> <li><div><a href="Version-Specific-Sources.html">Fetching the most specific sources</a></div></li> </ol></li><li><div><a href="Sbt-Launcher.html">sbt Launcher</a></div><ol class="toc"> <li><div><a href="Launcher-Getting-Started.html">Getting Started with the sbt launcher</a></div></li><li><div><a href="Launcher-Architecture.html">Sbt Launcher Architecture</a></div></li><li><div><a href="Launcher-Configuration.html">sbt Launcher Configuration</a></div></li> </ol></li><li><div><a href="DevGuide-Notes.html">Notes</a></div><ol class="toc"> <li><div><a href="Core-Principles.html">Core Principles</a></div></li><li><div><a href="Settings-Core.html">Settings Core</a></div></li><li><div><a href="Setting-Initialization.html">Setting Initialization</a></div></li><li><div><a href="Build-Loaders.html">Build Loaders</a></div></li><li><div><a href="Command-Line-Applications.html">Creating Command Line Applications Using sbt</a></div></li><li><div><a href="Nightly-Builds.html">Nightly Builds</a></div></li> </ol></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+          </div>
+        </div>
+        <div class="header">
+          <link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
+<div class="container">
+    <div class="logo">
+      <a href="../../index.html"><img src="files/sbt-logo.svg" alt="sbt"></a>
+      <span class="versions"><select id="versions"></select></span>
+    </div>
+    <div class="nav">
+      <a href="../../documentation.html">Documentation</a>
+      <a href="../../download.html">Download</a>
+      <a href="../../community.html">Get Involved</a>
+      <a id="source-code" href="https://github.com/sbt/sbt"><img src="files/github-logo-teal.svg" alt="Source code" class="social"></a>
+      <a id="twitter" href="https://twitter.com/scala_sbt"><img src="files/twitter-logo-teal.svg" alt="sbt on Twitter" class="social"></a>
+    </div>
+    <script type="text/javascript" async>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-41449189-1', 'scala-sbt.org');
+    ga('send', 'pageview');
+    </script>
+    <script type="text/javascript" async>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-23127719-1', 'lightbend.com', {'allowLinker': true, 'name': 'tsTracker'});
+      ga('tsTracker.require', 'linker');
+      ga('tsTracker.linker:autoLink', ['lightbend.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org']);
+      ga('tsTracker.send', 'pageview');
+    </script>
+    <script type="text/javascript">
+$(function() {
+  var scrollDown = function() {
+    if (window.location.hash !== "") {
+      setTimeout(function() { $(window).scrollTop($(window).scrollTop() - 120); }, 100);
+    }
+  }
+  scrollDown();
+  $(window).bind('hashchange', function() {
+    scrollDown();
+  });
+});
+    </script>
+</div>
+
+        </div>
+        <div class="footer">
+          <div class="fw-wrapper navy-ltr support-strip">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="support-item">
+          <div class="support-icon">
+            <svg class="svg-icon svg-icon-chat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.5 85.2" enable-background="new 0 0 97.5 85.2"><path stroke="#fff" stroke-width="4.282" stroke-linecap="round" stroke-miterlimit="10" d="M27 29.5h-16.3c-4.7 0-8.6 3.9-8.6 8.6v25.7c0 4.7 3.9 8.6 8.6 8.6h2.7c.8 0 1.5.7 1.5 1.5v7.8c0 1.3 1.6 2 2.5 1l9.5-9.5c.5-.5 1.2-.8 2-.8h20.2c4.7 0 8.6-3.9 8.6-8.6v-7.8" fill="none"/><path fill="#fff" d="M85 0h-40c-6.9 0-12.5 5.6-12.5 12.5v33.4c0 2.2 1.8 4.1 4.1 4.1h29.9c.7 0 1.3.3 1.8.7l10 10c1.6 1.6 4.3.5 4.3-1.8v-6.5c0-1.4 1.1-2.5 2.5-2.5 6.9 0 12.5-5.6 12.5-12.5v-25c-.1-6.8-5.8-12.4-12.6-12.4z"/></svg>
+          </div>
+          <div class="support-detail">
+            <h2>Community Support</h2>
+            <a href="https://stackoverflow.com/questions/tagged/sbt">StackOverflow</a>
+          </div>
+        </div>
+        <div class="support-item">
+          <div class="support-icon">
+            <svg id="lightbend-icon-reverse" class="svg-icon svg-icon-lightbend-reverse" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 302 262"><title>lightbend-icon</title><g id="icon"><path d="M1,195v56a10,10,0,0,0,10,10H291a10,10,0,0,0,10-10V195a557.85,557.85,0,0,1-150,20A557.85,557.85,0,0,1,1,195Z" style="fill:#fff"/><path d="M291,1H11A10,10,0,0,0,1,11V176a539.94,539.94,0,0,0,150,21,539.94,539.94,0,0,0,150-21V11A10,10,0,0,0,291,1Z" style="fill:#fff"/></g></svg>
+          </div>
+          <div class="support-detail">
+            <h2>Commercial Support</h2>
+            <a href="https://www.lightbend.com/services/expert-support">Lightbend Subscription</a>
+            <a href="https://www.lightbend.com/services/training">Training</a>
+            <a href="https://www.lightbend.com/services/consulting">Consulting</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div><footer>
+  <div class="container footer">
+    <div class="row">
+      <div class="col-md-8 sbt">
+        <nav>
+          <a href="../../index.html">
+            <img src="files/sbt-logo-reverse.svg" alt="sbt">
+          </a>
+          <a href="../../documentation.html">Documentation</a>
+          <a href="../../download.html">Download</a>
+          <a href="../../community.html">Get Involved</a>
+        </nav>
+      </div>
+      <div class="col-md-4 text-right ts">
+        &copy; 2016-2017 Lightbend Inc.
+        <a href="https://www.lightbend.com">
+          <img src="files/lightbend-reverse.svg" alt="Lightbend, Inc.">
+        </a>
+      </div>
+    </div>
+  </div>
+</footer><script src="/assets/versions.js"></script><script src="/assets/set-versions.js"></script>
+        </div>
+        
+        <div class="highlight-outer">
+              <div class="highlight-menu">
+                <ul>
+                  <li><button id="highlight-button-twitter"><img src="img/twitter-bird-dark-bgs.png"/></button></li>
+                </ul>
+              </div>
+            </div>
+      </body>
+    </html>

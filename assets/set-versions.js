@@ -6,12 +6,11 @@ $(document).ready(function() {
    var snapshotPath = 'snapshot/';
    var docsPath = "docs/";
 
+   // the selected version is in the pathname of the current url
+   var selected = document.location.pathname.split('/')[1];
+
    // get the version drop-down
    var select = $("#versions");
-   // the currently selected value is the current version
-   var selected = select.val();
-   // clear the options, which should only include the current version
-   select.html('');
 
    // populate the options with the latest list of versions
    for(var i = 0; i < versions.length; i++) {
@@ -19,7 +18,7 @@ $(document).ready(function() {
       var sel = '';
       if (v == selected) sel = 'selected ';
       var label = 'Version ' + v;
-      if (i == 0) label = 'Latest version'; 
+      if (i == 0) label = 'Latest version';
       select.append('<option ' + sel + 'value="' + v + '">' + label + '</option>');
    }
 

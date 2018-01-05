@@ -66,7 +66,7 @@
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += groupID % artifactID % revision
 </code></pre><p>或者像这样， 用字符串或者 <a href="../../sxr/sbt/Configuration.scala.html#sbt.Configuration">Configuration</a> val 当做 <code>configuration</code>：
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += groupID % artifactID % revision % configuration
-</code></pre><p><code>libraryDependencies</code> 在 <a href="../../sxr/sbt/Keys.scala.html#sbt.Keys.libraryDependencies">Keys</a> 中像这样声明：
+</code></pre><p><code>libraryDependencies</code> 在 <a href="../../api/sbt/Keys$.html#libraryDependencies:sbt.SettingKey[Seq[sbt.librarymanagement.ModuleID]]">Keys</a> 中像这样声明：
 </p><pre><code class="prettyprint lang-scala">val libraryDependencies = settingKey[Seq[ModuleID]](&quot;Declares managed dependencies.&quot;)
 </code></pre><p>方法 <code>%</code> 从字符串创建 <code>ModuleID</code> 对象，然后将 <code>ModuleID</code> 添加到 <code>libraryDependencies</code> 中。
 </p><p>当然，要让 sbt（通过 Ivy）知道从哪里下载模块。如果你的模块和 sbt 来自相同的某个默认的仓库，这样就会工作。例如，Apache Derby 在标准的 Maven2 仓库中：
@@ -96,7 +96,7 @@
 </code></pre><p>在两个字符串中间有一个特殊的 <code>at</code>。
 </p><p>例如：
 </p><pre><code class="prettyprint lang-scala">resolvers += &quot;Sonatype OSS Snapshots&quot; at &quot;https://oss.sonatype.org/content/repositories/snapshots&quot;
-</code></pre><p><code>resolvers</code> key 在 <a href="../../sxr/sbt/Keys.scala.html#sbt.Keys.resolvers">Keys</a> 中像这样定义：
+</code></pre><p><code>resolvers</code> key 在 <a href="../../api/sbt/Keys$.html#resolvers:sbt.SettingKey[Seq[sbt.librarymanagement.Resolver]]">Keys</a> 中像这样定义：
 </p><pre><code class="prettyprint lang-scala">val resolvers = settingKey[Seq[Resolver]](&quot;用户为托管依赖定义的额外的解析器。&quot;)
 </code></pre><p><code>at</code> 方法通过两个字符串创建了一个 <code>Resolver</code> 对象。
 </p><p>sbt 会搜索你的本地 Maven 仓库如果你将它添加为一个仓库：
@@ -137,7 +137,7 @@
 <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
 <div class="container">
     <div class="logo">
-      <a href="../../../index.html"><img src="../files/typesafe_sbt_svg.svg" alt="sbt"></a>
+      <a href="../../../index.html"><img src="../files/sbt-logo-100x56.png" alt="sbt"></a>
     </div>
     <div class="nav">
       <a href="../../../documentation.html">Documentation</a>
@@ -165,6 +165,7 @@
       ga('tsTracker.send', 'pageview');
     </script>
 </div>
+
         </div>
         <div class="footer">
           <div class="fw-wrapper navy-ltr support-strip">
@@ -209,7 +210,7 @@
         </nav>
       </div>
       <div class="col-md-4 text-right ts">
-        &copy; 2016 Lightbend Inc.
+        &copy; 2016-2017 Lightbend Inc.
         <a href="https://www.lightbend.com">
           <img src="files/lightbend-reverse.svg" alt="Lightbend, Inc.">
         </a>

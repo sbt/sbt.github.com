@@ -83,14 +83,14 @@ sbt 自动执行了 <code>update</code>。它可以工作是因为 <code>compile
 </p><h4 id="%E5%BD%93%E8%AE%BE%E7%BD%AE%E6%9C%AA%E5%AE%9A%E4%B9%89%E6%97%B6">当设置未定义时<a href="#%E5%BD%93%E8%AE%BE%E7%BD%AE%E6%9C%AA%E5%AE%9A%E4%B9%89%E6%97%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>无论何时一个设置用 <code>:=</code>，<code>+=</code> 或者 <code>++=</code> 时依赖于自己或者另一个 key 的值，它依赖的值必须存在。如果不存在，sbt 就会抱怨。例如，它可能会说 <em>“引用了未定义的设置”</em>。
 当这发生时，确认一下你使用的 key 在 <a href="Scopes.html">scope</a> 中并且已经定义了。
 </p><p>在sbt中创建循环引用是可能的，这是错误的；如果你循环引用了，sbt 会告诉你。
-</p><h4 id="%E4%BE%9D%E8%B5%96%E4%BA%8E%E5%85%B6%E4%BB%96+key+%E7%9A%84%E5%80%BC%E7%9A%84+task">依赖于其他 key 的值的 task<a href="#%E4%BE%9D%E8%B5%96%E4%BA%8E%E5%85%B6%E4%BB%96+key+%E7%9A%84%E5%80%BC%E7%9A%84+task" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>你可以计算一些 task 或者 setting 的值来定义另一个 task 或者为另一个 task 追加值。通过使用 <code>Def.task</code> 和 <code>taskValue</code> 作为<code>:=</code>， <code>+=</code> 或者 <code>++=</code>的参数可以做到。
+</p><h4 id="%E4%BE%9D%E8%B5%96%E4%BA%8E%E5%85%B6%E4%BB%96+key+%E7%9A%84%E5%80%BC%E7%9A%84+task">依赖于其他 key 的值的 task<a href="#%E4%BE%9D%E8%B5%96%E4%BA%8E%E5%85%B6%E4%BB%96+key+%E7%9A%84%E5%80%BC%E7%9A%84+task" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>你可以计算一些 task 或者 setting 的值来定义另一个 task 或者为另一个 task 追加值。通过使用 <code>Def.task</code> 作为<code>:=</code>， <code>+=</code> 或者 <code>++=</code>的参数可以做到。
 </p><p>作为第一个例子，考虑追加一个使用项目基目录和编译 classpath 的 source generator。
 </p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile += Def.task {
   myGenerator(baseDirectory.value, (managedClasspath in Compile).value)
-}.taskValue
+}
 </code></pre><h4 id="%E5%8C%85%E5%90%AB%E4%BE%9D%E8%B5%96%E7%9A%84+task">包含依赖的 task<a href="#%E5%8C%85%E5%90%AB%E4%BE%9D%E8%B5%96%E7%9A%84+task" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>在 <a href="Basic-Def.html">.sbt 构建定义</a> 中提到过，当你通过 <code>:=</code> 或其他方法创建一个设置时，task key 创建的是 <code>Setting[Task[T]]</code> 而不是 <code>Setting[T]</code>。
 Setting 可以是 Task 的输入，但 Task 不能是 Setting 的输入。
-</p><p>以这两个 key 为例（从 <a href="../../sxr/sbt/Keys.scala.html">Keys</a> 中）：
+</p><p>以这两个 key 为例（从 <a href="../../api/sbt/Keys$.html">Keys</a> 中）：
 </p><pre><code class="prettyprint lang-scala">val scalacOptions = taskKey[Seq[String]](&quot;Options for the Scala compiler.&quot;)
 val checksums = settingKey[Seq[String]](&quot;The list of checksums to generate and to verify for dependencies.&quot;)
 </code></pre><p>（<code>scalacOptions</code> 和 <code>checksums</code> 互相没有关系，它们只是有相同值类型的两个 key，其中一个是 task。）
@@ -101,9 +101,8 @@ scalacOptions := checksums.value
 </p><pre><code class="prettyprint lang-scala">// checksums setting 不能依赖 scalacOptions task 来定义
 checksums := scalacOptions.value
 </code></pre><h3 id="%E8%BF%BD%E5%8A%A0%E4%BE%9D%E8%B5%96%EF%BC%9A+%E5%92%8C">追加依赖：<code>+=</code> 和 <code>++=</code><a href="#%E8%BF%BD%E5%8A%A0%E4%BE%9D%E8%B5%96%EF%BC%9A+%E5%92%8C" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>当追加到一个已经存在的 setting 或者 task 时可以使用另一些 key，就像它们可以通过 <code>:=</code> 赋值一样。例如，比方说你有一个以项目名称命名的覆盖率报告，而且你想在每次清除文件的时候都清除它：
-</p><p><code>`scala
-cleanFiles += file(&quot;coverage-report-&quot; + name.value + &quot;.txt&quot;)
-</code>`</p><div class="bottom nav span-16">
+</p><pre><code class="prettyprint lang-scala">cleanFiles += file(&quot;coverage-report-&quot; + name.value + &quot;.txt&quot;)
+</code></pre><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>
                         <a href="Library-Dependencies.html"> 库依赖 </a>                        
@@ -123,7 +122,7 @@ cleanFiles += file(&quot;coverage-report-&quot; + name.value + &quot;.txt&quot;)
 <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
 <div class="container">
     <div class="logo">
-      <a href="../../../index.html"><img src="../files/typesafe_sbt_svg.svg" alt="sbt"></a>
+      <a href="../../../index.html"><img src="../files/sbt-logo-100x56.png" alt="sbt"></a>
     </div>
     <div class="nav">
       <a href="../../../documentation.html">Documentation</a>
@@ -151,6 +150,7 @@ cleanFiles += file(&quot;coverage-report-&quot; + name.value + &quot;.txt&quot;)
       ga('tsTracker.send', 'pageview');
     </script>
 </div>
+
         </div>
         <div class="footer">
           <div class="fw-wrapper navy-ltr support-strip">
@@ -195,7 +195,7 @@ cleanFiles += file(&quot;coverage-report-&quot; + name.value + &quot;.txt&quot;)
         </nav>
       </div>
       <div class="col-md-4 text-right ts">
-        &copy; 2016 Lightbend Inc.
+        &copy; 2016-2017 Lightbend Inc.
         <a href="https://www.lightbend.com">
           <img src="files/lightbend-reverse.svg" alt="Lightbend, Inc.">
         </a>

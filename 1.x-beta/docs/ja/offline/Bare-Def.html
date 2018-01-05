@@ -1,0 +1,175 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html manifest="pamflet.manifest">
+      <head>
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+        <title>sbt Reference Manual — 付録: bare .sbt ビルド定義</title>
+        <link rel="shortcut icon" href="../favicon.ico"/>
+        <link rel="stylesheet" href="../css/blueprint/screen.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/blueprint/grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="../css/blueprint/print.css" type="text/css" media="print"/> 
+        <!--[if lt IE 8]>
+          <link rel="stylesheet" href={ relativeBase + "css/blueprint/ie.css" } type="text/css" media="screen, projection"/>
+        <![endif]-->
+        <link rel="stylesheet" href="../css/pamflet.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamflet-print.css" type="text/css" media="print"/>
+        <link rel="stylesheet" href="../css/pamflet-grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-redmond.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-github.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-monokai.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamfletheight_80px_2em.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <script type="text/javascript" src="../js/jquery-1.6.2.min.js"></script>
+        <script type="text/javascript" src="../js/jquery.collapse.js"></script>
+        <script type="text/javascript" src="../js/pamflet.js"></script>
+        <script type="text/javascript">
+          Pamflet.page.language = 'ja';
+        </script>
+        <script type="text/javascript" src="../js/prettify/prettify.js"></script><script type="text/javascript" src="../js/prettify/lang-scala.js"></script><link type="text/css" rel="stylesheet" href="../css/prettify.css"/><script type="text/javascript"><!--
+        window.onload=function() { prettyPrint(); };
+      --></script>
+        <link rel="stylesheet" href="../css/custom.css" type="text/css" media="screen, projection"/>
+        
+        <script type="text/javascript">
+              Pamflet.twitter = '#sbt #scala';
+            </script>
+      </head>
+      <body class="color_scheme-github">
+        <a class="page prev nav" href="Summary.html">
+            <span class="space">&nbsp;</span>
+            <span class="flip arrow">&gt;</span>
+          </a><a class="page next nav" href="General-Info.html">
+            <span class="space">&nbsp;</span>
+            <span class="arrow">&gt;</span>
+          </a>
+        <div class="container contentswrapper">
+          <div class="span-16 prepend-1 append-1 contents">
+            <h2 id="%E4%BB%98%E9%8C%B2%3A+bare+.sbt+%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9">付録: bare .sbt ビルド定義<a href="#%E4%BB%98%E9%8C%B2%3A+bare+.sbt+%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このページでは旧式の <code>.sbt</code> ビルド定義の説明をする。
+現在の推奨は<a href="Basic-Def.html">マルチプロジェクト .sbt ビルド定義</a>だ。
+</p><h3 id="bare+.sbt+%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%81%A8%E3%81%AF%E4%BD%95%E3%81%8B">bare .sbt ビルド定義とは何か<a href="#bare+.sbt+%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%81%A8%E3%81%AF%E4%BD%95%E3%81%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>明示的に <a href="../api/sbt/Project.html">Project</a> を定義する
+<a href="Basic-Def.html">マルチプロジェクト .sbt ビルド定義</a>や <a href="Full-Def.html">.scala ビルド定義</a>と違って
+bare ビルド定義は <code>.sbt</code> ファイルの位置から暗黙にプロジェクトが定義される。
+</p><p><code>Project</code> を定義する代わりに、bare <code>.sbt</code> ビルド定義は <code>Setting[_]</code> 式のリストから構成される。
+</p><pre><code class="prettyprint lang-scala">name := &quot;hello&quot;
+
+version := &quot;1.0&quot;
+
+scalaVersion := &quot;2.12.3&quot;
+</code></pre><h3 id="%280.13.7+%E4%BB%A5%E5%89%8D%29+%E8%A8%AD%E5%AE%9A%E3%81%AF%E7%A9%BA%E7%99%BD%E8%A1%8C%E3%81%A7%E5%8C%BA%E5%88%87%E3%82%8B">(0.13.7 以前) 設定は空白行で区切る<a href="#%280.13.7+%E4%BB%A5%E5%89%8D%29+%E8%A8%AD%E5%AE%9A%E3%81%AF%E7%A9%BA%E7%99%BD%E8%A1%8C%E3%81%A7%E5%8C%BA%E5%88%87%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><strong>注意</strong>: 0.13.7 以降は空白行の区切りを必要としない。
+</p><p>こんな風に <code>build.sbt</code> を書くことはできない。
+</p><pre><code class="prettyprint lang-scala">// 空白行がない場合はコンパイルしない
+name := &quot;hello&quot;
+version := &quot;1.0&quot;
+scalaVersion := &quot;2.10.3&quot;
+</code></pre><p>sbt はどこまでで式が終わってどこからが次の式なのかを判別するために、何らかの区切りを必要とする。
+</p><div class="bottom nav span-16">
+                        <em>Next Page</em>
+                        <span class="arrow">&gt;</span>
+                        <a href="General-Info.html"> インフォメーション </a>                        
+                        <ul class="language-bar">
+        
+      </ul>
+                      </div><div class="tocwrapper show">
+      <a class="tochead nav" style="display: none" href="#toc">❦</a>
+      <a name="toc"></a>
+      <h4 class="toctitle">Contents</h4>
+      <div class="tocbody">
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">始める sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">sbt のインストール</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Mac への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Linux への sbt のインストール</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">ディレクトリ構造</a></div></li><li><div><a href="Running.html">実行</a></div></li><li><div><a href="Basic-Def.html">ビルド定義</a></div></li><li><div><a href="Task-Graph.html">タスク・グラフ</a></div></li><li><div><a href="Scopes.html">スコープ</a></div></li><li><div><a href="Appending-Values.html">値の追加</a></div></li><li><div><a href="Scope-Delegation.html">スコープ委譲 (.value の照会)</a></div></li><li><div><a href="Library-Dependencies.html">ライブラリ依存性</a></div></li><li><div><a href="Multi-Project.html">マルチプロジェクト・ビルド</a></div></li><li><div><a href="Using-Plugins.html">プラグインの使用</a></div></li><li><div><a href="Custom-Settings.html">カスタムセッティングとタスク</a></div></li><li><div><a href="Organizing-Build.html">ビルドの整理</a></div></li><li><div><a href="Summary.html">まとめ</a></div></li><li><div class="current">付録: bare .sbt ビルド定義</div></li> </ol></li><li><div><a href="General-Info.html">インフォメーション</a></div><ol class="toc"> <li><div><a href="Changes.html">変更点</a></div><ol class="toc"> <li><div><a href="sbt-1.0-Release-Notes.html">sbt 1.0.0</a></div></li> </ol></li> </ol></li><li><div><a href="Detailed-Topics.html">各論</a></div><ol class="toc"> <li><div><a href="Plugins-and-Best-Practices.html">プラグインとベストプラクティス</a></div><ol class="toc"> <li><div><a href="Testing-sbt-plugins.html">sbt プラグインをテストする</a></div></li> </ol></li> </ol></li><li><div><a href="Howto.html">How to</a></div><ol class="toc"> <li><div><a href="Howto-Sequencing.html">逐次実行</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Def.sequential を用いて逐次タスクを定義する</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Def.taskDyn を用いて動的タスクを定義する</a></div></li><li><div><a href="Howto-After-Input-Task.html">インプットタスクの後で何かする</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn を用いた動的インプットタスクの定義</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">コマンドを用いた逐次実行</a></div></li> </ol></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+          </div>
+        </div>
+        <div class="header">
+          <link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
+<div class="container">
+    <div class="logo">
+      <a href="../../../index.html"><img src="../files/sbt-logo-100x56.png" alt="sbt"></a>
+    </div>
+    <div class="nav">
+      <a href="../../../documentation.html">Documentation</a>
+      <a href="../../../download.html">Download</a>
+      <a href="../../../community.html">Get Involved</a>
+      <a id="source-code" href="https://github.com/sbt/sbt"><img src="../files/github-logo-teal.png" alt="Source code"></a>
+      <a id="twitter" href="https://twitter.com/scala_sbt"><img src="../files/twitter-logo-teal.png" alt="sbt on Twitter"></a>
+    </div>
+    <script type="text/javascript" async>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-41449189-1', 'scala-sbt.org');
+    ga('send', 'pageview');
+    </script>
+    <script type="text/javascript" async>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-23127719-1', 'typesafe.com', {'allowLinker': true, 'name': 'tsTracker'});
+      ga('tsTracker.require', 'linker');
+      ga('tsTracker.linker:autoLink', ['typesafe.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org']);
+      ga('tsTracker.send', 'pageview');
+    </script>
+</div>
+
+        </div>
+        <div class="footer">
+          <div class="fw-wrapper navy-ltr support-strip">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="support-item">
+          <div class="support-icon">
+            <svg class="svg-icon svg-icon-chat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.5 85.2" enable-background="new 0 0 97.5 85.2"><path stroke="#fff" stroke-width="4.282" stroke-linecap="round" stroke-miterlimit="10" d="M27 29.5h-16.3c-4.7 0-8.6 3.9-8.6 8.6v25.7c0 4.7 3.9 8.6 8.6 8.6h2.7c.8 0 1.5.7 1.5 1.5v7.8c0 1.3 1.6 2 2.5 1l9.5-9.5c.5-.5 1.2-.8 2-.8h20.2c4.7 0 8.6-3.9 8.6-8.6v-7.8" fill="none"/><path fill="#fff" d="M85 0h-40c-6.9 0-12.5 5.6-12.5 12.5v33.4c0 2.2 1.8 4.1 4.1 4.1h29.9c.7 0 1.3.3 1.8.7l10 10c1.6 1.6 4.3.5 4.3-1.8v-6.5c0-1.4 1.1-2.5 2.5-2.5 6.9 0 12.5-5.6 12.5-12.5v-25c-.1-6.8-5.8-12.4-12.6-12.4z"/></svg>
+          </div>
+          <div class="support-detail">
+            <h2>コミュニティー・サポート</h2>
+            <a href="https://ja.stackoverflow.com/questions/tagged/sbt">StackOverflow</a>
+          </div>
+        </div>
+        <div class="support-item">
+          <div class="support-icon">
+            <svg id="lightbend-icon-reverse" class="svg-icon svg-icon-lightbend-reverse" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 302 262"><title>lightbend-icon</title><g id="icon"><path d="M1,195v56a10,10,0,0,0,10,10H291a10,10,0,0,0,10-10V195a557.85,557.85,0,0,1-150,20A557.85,557.85,0,0,1,1,195Z" style="fill:#fff"/><path d="M291,1H11A10,10,0,0,0,1,11V176a539.94,539.94,0,0,0,150,21,539.94,539.94,0,0,0,150-21V11A10,10,0,0,0,291,1Z" style="fill:#fff"/></g></svg>
+          </div>
+          <div class="support-detail">
+            <h2>商用サポート</h2>
+            <a href="https://www.lightbend.com/services/expert-support">Lightbend Subscription</a>
+            <a href="https://www.lightbend.com/services/training">Training</a>
+            <a href="https://www.lightbend.com/services/consulting">Consulting</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div><footer>
+  <div class="container footer">
+    <div class="row">
+      <div class="col-md-8 sbt">
+        <nav>
+          <a href="../../../index.html">
+            <img src="../files/typesafe_sbt_reverse_svg.svg" alt="sbt">
+          </a>
+          <a href="../../../documentation.html">Documentation</a>
+          <a href="../../../download.html">Download</a>
+          <a href="../../../community.html">Get Involved</a>
+        </nav>
+      </div>
+      <div class="col-md-4 text-right ts">
+        &copy; 2016-2017 Lightbend Inc.
+        <a href="https://www.lightbend.com">
+          <img src="files/lightbend-reverse.svg" alt="Lightbend, Inc.">
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+        </div>
+        
+        <div class="highlight-outer">
+              <div class="highlight-menu">
+                <ul>
+                  <li><button id="highlight-button-twitter"><img src="../img/twitter-bird-dark-bgs.png"/></button></li>
+                </ul>
+              </div>
+            </div>
+      </body>
+    </html>

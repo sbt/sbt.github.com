@@ -9,7 +9,7 @@ function initOldVersionWarnings($) {
     console.log("Detected SNAPSHOT sbt version...");
     showSnapshotWarning(site);
   } else {
-    for (var series in ["1.0", "0.13", "0.12", "0.7"]) {
+    for (var series in ["1.x", "1.0", "0.13", "0.12", "0.7"]) {
       if (site.v.startsWith(series)) {
         return showVersionWarning(site, series);
       }
@@ -81,7 +81,7 @@ function showVersionWarning(site, series) {
 
     $floatyWarning
         .append(
-            '<p><span style="font-weight: bold">This version of sbt (' + site.p + ' ' + version + ') is outdated and not supported! </span></p>' +
+            '<p><span style="font-weight: bold">This version of sbt (' + site.p + ' ' + version + ') is outdated! </span></p>' + // and not supported! </span></p>
             '<p>Please upgrade to the latest version in <a href="' + insteadSeries + '">' + instead + '</a> series as soon as possible.</p>' +
             '<p id="samePageLink"></p>');
     $.ajax({
@@ -200,3 +200,4 @@ function versionWasAcked(project, version) {
 
   return getCookie(ackVersionCookieName(project, version)) === 'true';
 }
+

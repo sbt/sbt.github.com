@@ -71,7 +71,7 @@
 </p><pre><code class="prettyprint lang-scala">lazy val commonSettings = Seq(
   organization := &quot;com.example&quot;,
   version := &quot;0.1.0&quot;,
-  scalaVersion := &quot;2.12.2&quot;
+  scalaVersion := &quot;2.12.4&quot;
 )
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -101,7 +101,7 @@ key 的类别将在下面讲解。
 </p><ul><li><code>SettingKey[T]</code>：一个 key 对应一个只计算一次的 value（这个值在加载项目的时候计算，然后一直保存着）。
 </li><li><code>TaskKey[T]</code>：一个 key 对应一个称之为 <em>task</em> 的 value，每次都会重新计算，可能存在潜在的副作用。
 </li><li><code>InputKey[T]</code>：一个 key 对应一个可以接收命令行参数的 task。详细内容参见 <a href="../docs/Input-Tasks.html">Input Tasks</a>。
-</li></ul><h4 id="%E5%86%85%E7%BD%AE%E7%9A%84+Keys">内置的 Keys<a href="#%E5%86%85%E7%BD%AE%E7%9A%84+Keys" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>内置的 keys 实际上是对象 <a href="../../sxr/sbt/Keys.scala.html">Keys</a> 的字段。<code>build.sbt</code> 会隐式包含 <code>import sbt.Keys._</code>，所以可以通过 <code>name</code> 取到 <code>sbt.Keys.name</code>。
+</li></ul><h4 id="%E5%86%85%E7%BD%AE%E7%9A%84+Keys">内置的 Keys<a href="#%E5%86%85%E7%BD%AE%E7%9A%84+Keys" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>内置的 keys 实际上是对象 <a href="../../api/sbt/Keys$.html">Keys</a> 的字段。<code>build.sbt</code> 会隐式包含 <code>import sbt.Keys._</code>，所以可以通过 <code>name</code> 取到 <code>sbt.Keys.name</code>。
 </p><h4 id="%E8%87%AA%E5%AE%9A%E4%B9%89+Keys">自定义 Keys<a href="#%E8%87%AA%E5%AE%9A%E4%B9%89+Keys" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>可以通过它们各自的创建方法：<code>settingKey</code>，<code>taskKey</code> 和 <code>inputKey</code> 创建自定义 keys。每个方法都期待 key 和 value 的类型以及一段描述。
 key 的名称取自于赋给 <code>val</code> 变量的值。例如，给一个新的 task <code>hello</code> 定义一个 key，
 </p><pre><code class="prettyprint lang-scala">lazy val hello = taskKey[Unit](&quot;一个 task 示例&quot;)
@@ -141,14 +141,14 @@ import Keys._
 </p><h3 id="bare+.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">bare .sbt 构建定义<a href="#bare+.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>bare <code>.sbt</code> 构建定义由一个 <code>Setting[_]</code> 表达式的列表组成，而不是定义 <code>Project</code>。
 </p><pre><code class="prettyprint lang-scala">name := &quot;hello&quot;
 version := &quot;1.0&quot;
-scalaVersion := &quot;2.12.2&quot;
+scalaVersion := &quot;2.12.4&quot;
 </code></pre><h3 id="%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96%E5%BA%93">添加依赖库<a href="#%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96%E5%BA%93" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>有两种方式添加第三方的依赖。一种是将 jar 文件 放入 <code>lib/</code>（非托管的依赖）中，另一种是在 <code>build.sbt</code> 中添加托管的依赖，像这样：
 </p><pre><code class="prettyprint lang-scala">val derby = &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot;
 
 lazy val commonSettings = Seq(
   organization := &quot;com.example&quot;,
   version := &quot;0.1.0&quot;,
-  scalaVersion := &quot;2.12.2&quot;
+  scalaVersion := &quot;2.12.4&quot;
 )
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -181,7 +181,7 @@ lazy val root = (project in file(&quot;.&quot;))
 <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
 <div class="container">
     <div class="logo">
-      <a href="../../../index.html"><img src="../files/typesafe_sbt_svg.svg" alt="sbt"></a>
+      <a href="../../../index.html"><img src="../files/sbt-logo-100x56.png" alt="sbt"></a>
     </div>
     <div class="nav">
       <a href="../../../documentation.html">Documentation</a>
@@ -209,6 +209,7 @@ lazy val root = (project in file(&quot;.&quot;))
       ga('tsTracker.send', 'pageview');
     </script>
 </div>
+
         </div>
         <div class="footer">
           <div class="fw-wrapper navy-ltr support-strip">
@@ -253,7 +254,7 @@ lazy val root = (project in file(&quot;.&quot;))
         </nav>
       </div>
       <div class="col-md-4 text-right ts">
-        &copy; 2016 Lightbend Inc.
+        &copy; 2016-2017 Lightbend Inc.
         <a href="https://www.lightbend.com">
           <img src="files/lightbend-reverse.svg" alt="Lightbend, Inc.">
         </a>

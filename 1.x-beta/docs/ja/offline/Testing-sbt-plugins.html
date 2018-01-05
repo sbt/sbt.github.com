@@ -1,0 +1,272 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html manifest="pamflet.manifest">
+      <head>
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+        <title>sbt Reference Manual — sbt プラグインをテストする</title>
+        <link rel="shortcut icon" href="../favicon.ico"/>
+        <link rel="stylesheet" href="../css/blueprint/screen.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/blueprint/grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="../css/blueprint/print.css" type="text/css" media="print"/> 
+        <!--[if lt IE 8]>
+          <link rel="stylesheet" href={ relativeBase + "css/blueprint/ie.css" } type="text/css" media="screen, projection"/>
+        <![endif]-->
+        <link rel="stylesheet" href="../css/pamflet.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamflet-print.css" type="text/css" media="print"/>
+        <link rel="stylesheet" href="../css/pamflet-grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-redmond.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-github.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-monokai.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamfletheight_80px_2em.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <script type="text/javascript" src="../js/jquery-1.6.2.min.js"></script>
+        <script type="text/javascript" src="../js/jquery.collapse.js"></script>
+        <script type="text/javascript" src="../js/pamflet.js"></script>
+        <script type="text/javascript">
+          Pamflet.page.language = 'ja';
+        </script>
+        <script type="text/javascript" src="../js/prettify/prettify.js"></script><script type="text/javascript" src="../js/prettify/lang-scala.js"></script><link type="text/css" rel="stylesheet" href="../css/prettify.css"/><script type="text/javascript"><!--
+        window.onload=function() { prettyPrint(); };
+      --></script>
+        <link rel="stylesheet" href="../css/custom.css" type="text/css" media="screen, projection"/>
+        
+        <script type="text/javascript">
+              Pamflet.twitter = '#sbt #scala';
+            </script>
+      </head>
+      <body class="color_scheme-github">
+        <a class="page prev nav" href="Plugins-and-Best-Practices.html">
+            <span class="space">&nbsp;</span>
+            <span class="flip arrow">&gt;</span>
+          </a><a class="page next nav" href="Howto.html">
+            <span class="space">&nbsp;</span>
+            <span class="arrow">&gt;</span>
+          </a>
+        <div class="container contentswrapper">
+          <div class="span-16 prepend-1 append-1 contents">
+            <h2 id="sbt+%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%82%92%E3%83%86%E3%82%B9%E3%83%88%E3%81%99%E3%82%8B">sbt プラグインをテストする<a href="#sbt+%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%82%92%E3%83%86%E3%82%B9%E3%83%88%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>テストの話をしよう。一度プラグインを書いてしまうと、どうしても長期的なものになってしまう。新しい機能を加え続ける（もしくはバグを直し続ける）ためにはテストを書くのが合理的だ。
+</p><h3 id="scripted+test+framework">scripted test framework<a href="#scripted+test+framework" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt は、scripted test framework というものが付いてきて、ビルドの筋書きをスクリプトに書くことができる。これは、もともと 変更の自動検知や、部分コンパイルなどの複雑な状況下で sbt 自体をテストするために書かれたものだ:
+</p><blockquote><p>ここで、仮に B.scala を削除するが、A.scala には変更を加えないものとする。ここで、再コンパイルすると、A から参照される B が存在しないために、エラーが得られるはずだ。
+[中略 (非常に複雑なことが書いてある)]
+</p><p>scripted test framework は、sbt が以上に書かれたようなケースを的確に処理しているかを確認するために使われている。
+</p></blockquote><p>このフレームワークは scripted-plugin 経由で利用可能だ。
+このページはプラグインにどのようにして scripted-plugin を導入するかを解説する。
+</p><h3 id="%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+1%3A+snapshot">ステップ 1: snapshot<a href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+1%3A+snapshot" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>scripted-plugin はプラグインをローカルに publish するため、まずは version を <strong>-SNAPSHOT</strong> なものに設定しよう。ここで SNAPSHOT を使わないと、あなたと世界のあなた以外の人が別々のアーティファクトを観測するといった酷い不整合な状態に入り込む場合があるからだ。
+</p><h3 id="%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+2%3A+scripted-plugin">ステップ 2: scripted-plugin<a href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+2%3A+scripted-plugin" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>次に、scripted-plugin をプラグインのビルドに加える。<code>project/scripted.sbt</code>:
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += { &quot;org.scala-sbt&quot; %% &quot;scripted-plugin&quot; % sbtVersion.value }
+</code></pre><p>以下のセッティングを <code>scripted.sbt</code> に加える:
+</p><pre><code class="prettyprint lang-scala">scriptedLaunchOpts := { scriptedLaunchOpts.value ++
+  Seq(&quot;-Xmx1024M&quot;, &quot;-Dplugin.version=&quot; + version.value)
+}
+scriptedBufferLog := false
+</code></pre><h3 id="%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+3%3A+src%2Fsbt-test">ステップ 3: src/sbt-test<a href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+3%3A+src%2Fsbt-test" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>src/sbt-test/&lt;テストグループ&gt;/&lt;テスト名&gt;</code> というディレクトリ構造を作る。とりあえず、<code>src/sbt-test/&lt;プラグイン名&gt;/simple</code> から始めるとする。
+</p><p>ここがポイントなんだけど、<code>simple</code> 下にビルドを作成する。プラグインを使った普通のビルド。手動でテストするために、いくつか既にあると思うけど。以下に、<code>build.sbt</code> の例を示す:
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    version := &quot;0.1&quot;,
+    scalaVersion := &quot;2.10.6&quot;,
+    assemblyJarName in assembly := &quot;foo.jar&quot;
+  )
+</code></pre><p>これが、<code>project/plugins.sbt</code>:
+</p><pre><code class="prettyprint lang-scala">sys.props.get(&quot;plugin.version&quot;) match {
+  case Some(x) =&gt; addSbtPlugin(&quot;com.eed3si9n&quot; % &quot;sbt-assembly&quot; % x)
+  case _ =&gt; sys.error(&quot;&quot;&quot;|The system property 'plugin.version' is not defined.
+                         |Specify this property using the scriptedLaunchOpts -D.&quot;&quot;&quot;.stripMargin)
+}
+</code></pre><p>これは <a href="https://github.com/JamesEarlDouglas/xsbt-web-plugin/commit/feabb2eb554940d9b28049bd0618b6a790d9e141">JamesEarlDouglas/xsbt-web-plugin@feabb2</a> から拝借してきた技で、これで scripted テストに version を渡すことができる。
+</p><p>他に、<code>src/main/scala/hello.scala</code> も用意した:
+</p><pre><code class="prettyprint lang-scala">object Main extends App {
+  println(&quot;hello&quot;)
+}
+</code></pre><h3 id="%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+4%3A+%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%97%E3%83%88%E3%82%92%E6%9B%B8%E3%81%8F">ステップ 4: スクリプトを書く<a href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+4%3A+%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%97%E3%83%88%E3%82%92%E6%9B%B8%E3%81%8F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>次に、好きな筋書きを記述したスクリプトを、テストビルドのルート下に置いた <code>test</code> というファイルに書く。
+</p><pre><code class=""># ファイルが作成されたかを確認
+&gt; assembly
+$ exists target/scala-2.10/foo.jar
+</code></pre><p>スクリプトの文法は以下の通り:
+</p><ol><li><strong><code>#</code></strong> は一行コメントを開始する
+</li><li><strong><code>&gt;</code></strong> <code>name</code> はタスクを sbt に送信する（そして結果が成功したかをテストする）
+</li><li><strong><code>$</code></strong> <code>name arg*</code> はファイルコマンドを実行する（そして結果が成功したかをテストする）
+</li><li><strong><code>-&gt;</code></strong> <code>name</code> タスクを sbt に送信するが、失敗することを期待する
+</li><li><strong><code>-$</code></strong> <code>name arg*</code> ファイルコマンドを実行するが、失敗することを期待する
+</li></ol><p>ファイルコマンドは以下のとおり:
+</p><ul><li><strong><code>touch</code></strong> <code>path+</code> は、ファイルを作成するかタイムスタンプを更新する
+</li><li><strong><code>delete</code></strong> <code>path+</code> は、ファイルを削除する
+</li><li><strong><code>exists</code></strong> <code>path+</code> は、ファイルが存在するか確認する
+</li><li><strong><code>mkdir</code></strong> <code>path+</code> は、ディレクトリを作成する
+</li><li><strong><code>absent</code></strong> <code>path+</code> は、はファイルが存在しないことを確認する
+</li><li><strong><code>newer</code></strong> <code>source target</code> は、<code>source</code> の方が新しいことを確認する
+</li><li><strong><code>must-mirror</code></strong> <code>source target</code> は、<code>source</code> が同一であることを確認する
+</li><li><strong><code>pause</code></strong> は、enter が押されるまで待つ
+</li><li><strong><code>sleep</code></strong> <code>time</code> は、スリープする
+</li><li><strong><code>exec</code></strong> <code>command args*</code> は、別のプロセスでコマンドを実行する
+</li><li><strong><code>copy-file</code></strong> <code>fromPath toPath</code> は、ファイルをコピーする
+</li><li><strong><code>copy</code></strong> <code>fromPath+ toDir</code> は、パスを相対構造を保ったまま <code>toDir</code> 下にコピーする
+</li><li><strong><code>copy-flat</code></strong> <code>fromPath+ toDir</code> は、パスをフラットに <code>toDir</code> 下にコピーする
+</li></ul><p>ということで、僕のスクリプトは、<code>assembly</code> タスクを実行して、<code>foo.jar</code> が作成されたかをチェックする。もっと複雑なテストは後ほど。
+</p><h3 id="%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+5%3A+%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%97%E3%83%88%E3%82%92%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B">ステップ 5: スクリプトを実行する<a href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+5%3A+%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%97%E3%83%88%E3%82%92%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>スクリプトを実行するためには、プラグインのプロジェクトに戻って、以下を実行する:
+</p><pre><code class="">&gt; scripted
+</code></pre><p>これはテストビルドをテンポラリディレクトリにコピーして、<code>test</code> スクリプトを実行する。もし全て順調にいけば、まず <code>publishLocal</code> の様子が表示され、以下のようなものが表示される:
+</p><pre><code class="">Running sbt-assembly / simple
+[success] Total time: 18 s, completed Sep 17, 2011 3:00:58 AM
+</code></pre><h3 id="%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+6%3A+%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0%E3%82%A2%E3%82%B5%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3">ステップ 6: カスタムアサーション<a href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+6%3A+%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0%E3%82%A2%E3%82%B5%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>ファイルコマンドは便利だけど、実際のコンテンツをテストしないため、それだけでは不十分だ。コンテンツをテストする簡単な方法は、テストビルドにカスタムのタスクを実装してしまうことだ。
+</p><p>上記の hello プロジェクトを例に取ると、生成された jar が “hello” と表示するかを確認したいとする。<code>scala.sys.process.Process</code> を用いて jar を走らせることができる。失敗を表すには、単にエラーを投げればいい。以下に <code>build.sbt</code> を示す:
+</p><pre><code class="prettyprint lang-scala">import scala.sys.process.Process
+
+lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    version := &quot;0.1&quot;,
+    scalaVersion := &quot;2.10.6&quot;,
+    assemblyJarName in assembly := &quot;foo.jar&quot;,
+    TaskKey[Unit](&quot;check&quot;) := {
+      val process = Process(&quot;java&quot;, Seq(&quot;-jar&quot;, (crossTarget.value / &quot;foo.jar&quot;).toString))
+      val out = (process!!)
+      if (out.trim != &quot;bye&quot;) sys.error(&quot;unexpected output: &quot; + out)
+      ()
+    }
+  )
+</code></pre><p>ここでは、テストが失敗するのを確認するため、わざと “bye” とマッチするかテストしている。
+</p><p>これが <code>test</code>:
+</p><pre><code class=""># ファイルが作成されたかを確認
+&gt; assembly
+$ exists target/foo.jar
+
+# hello って言うか確認
+&gt; check
+</code></pre><p><code>scripted</code> を走らせると、意図通りテストは失敗する:
+</p><pre><code class="">[info] [error] {file:/private/var/folders/Ab/AbC1EFghIj4LMNOPqrStUV+++XX/-Tmp-/sbt_cdd1b3c4/simple/}default-0314bd/*:check: unexpected output: hello
+[info] [error] Total time: 0 s, completed Sep 21, 2011 8:43:03 PM
+[error] x sbt-assembly / simple
+[error]    {line 6}  Command failed: check failed
+[error] {file:/Users/foo/work/sbt-assembly/}default-373f46/*:scripted: sbt-assembly / simple failed
+[error] Total time: 14 s, completed Sep 21, 2011 8:00:00 PM
+</code></pre><h3 id="%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+7%3A+%E3%83%86%E3%82%B9%E3%83%88%E3%82%92%E3%83%86%E3%82%B9%E3%83%88%E3%81%99%E3%82%8B">ステップ 7: テストをテストする<a href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+7%3A+%E3%83%86%E3%82%B9%E3%83%88%E3%82%92%E3%83%86%E3%82%B9%E3%83%88%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>慣れるまでは、テスト自体がちゃんと振る舞うのに少し時間がかかるかもしれない。ここで使える便利なテクニックがいくつある。
+</p><p>まず最初に試すべきなのは、ログバッファリングを切ることだ。
+</p><pre><code class="">&gt; set scriptedBufferLog := false
+</code></pre><p>これにより、例えばテンポラリディレクトリの場所などが分かるようになる:
+</p><pre><code class="">[info] [info] Set current project to default-c6500b (in build file:/private/var/folders/Ab/AbC1EFghIj4LMNOPqrStUV+++XX/-Tmp-/sbt_8d950687/simple/project/plugins/)
+...
+</code></pre><p>テスト中にテンポラリディレクトリを見たいような状況があるかもしれない。<code>test</code> スクリプトに以下の一行を加えると、scripted はエンターキーを押すまで一時停止する:
+</p><pre><code class="">$ pause
+</code></pre><p>もしうまくいかなくて、 <code>sbt/sbt-test/sbt-foo/simple</code> から直接 <code>sbt</code> を実行しようと思っているなら、それは止めたほうがいい。正しいやり方はディレクトリごと別の場所にコピーしてから走らせることだ。
+</p><h3 id="%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+8%3A+%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%91%E3%82%A4%E3%82%A2%E3%81%95%E3%82%8C%E3%82%8B">ステップ 8: インスパイアされる<a href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+8%3A+%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%91%E3%82%A4%E3%82%A2%E3%81%95%E3%82%8C%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt プロジェクト下には文字通り <a href="https://github.com/sbt/sbt/tree/0.13/sbt/src/sbt-test">100+ の scripted テストがある</a>。色々眺めてみて、インスパイアされよう。
+</p><p>例えば、以下に by-name と呼ばれるものを示す:
+</p><pre><code class="">&gt; compile
+
+# change =&gt; Int to Function0
+$ copy-file changes/A.scala A.scala
+
+# Both A.scala and B.scala need to be recompiled because the type has changed
+-&gt; compile
+</code></pre><p><a href="https://github.com/JamesEarlDouglas/xsbt-web-plugin/tree/master/src/sbt-test">xsbt-web-plugin</a> や <a href="https://github.com/sbt/sbt-assembly/tree/master/src/sbt-test/sbt-assembly">sbt-assembly</a> にも scripted テストがある。
+</p><p>これでおしまい！プラグインをテストしてみた経験などを聞かせて下さい！
+</p><div class="bottom nav span-16">
+                        <em>Next Page</em>
+                        <span class="arrow">&gt;</span>
+                        <a href="Howto.html"> How to </a>                        
+                        <ul class="language-bar">
+        <li><a href="../Testing-sbt-plugins.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/Testing-sbt-plugins.html"><span class="lang-item lang-ja">日本語</span></a></li>
+      </ul>
+                      </div><div class="tocwrapper show">
+      <a class="tochead nav" style="display: none" href="#toc">❦</a>
+      <a name="toc"></a>
+      <h4 class="toctitle">Contents</h4>
+      <div class="tocbody">
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">始める sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">sbt のインストール</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Mac への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Linux への sbt のインストール</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">ディレクトリ構造</a></div></li><li><div><a href="Running.html">実行</a></div></li><li><div><a href="Basic-Def.html">ビルド定義</a></div></li><li><div><a href="Task-Graph.html">タスク・グラフ</a></div></li><li><div><a href="Scopes.html">スコープ</a></div></li><li><div><a href="Appending-Values.html">値の追加</a></div></li><li><div><a href="Scope-Delegation.html">スコープ委譲 (.value の照会)</a></div></li><li><div><a href="Library-Dependencies.html">ライブラリ依存性</a></div></li><li><div><a href="Multi-Project.html">マルチプロジェクト・ビルド</a></div></li><li><div><a href="Using-Plugins.html">プラグインの使用</a></div></li><li><div><a href="Custom-Settings.html">カスタムセッティングとタスク</a></div></li><li><div><a href="Organizing-Build.html">ビルドの整理</a></div></li><li><div><a href="Summary.html">まとめ</a></div></li><li><div><a href="Bare-Def.html">付録: bare .sbt ビルド定義</a></div></li> </ol></li><li><div><a href="General-Info.html">インフォメーション</a></div><ol class="toc"> <li><div><a href="Changes.html">変更点</a></div><ol class="toc"> <li><div><a href="sbt-1.0-Release-Notes.html">sbt 1.0.0</a></div></li> </ol></li> </ol></li><li><div><a href="Detailed-Topics.html">各論</a></div><ol class="toc"> <li><div><a href="Plugins-and-Best-Practices.html">プラグインとベストプラクティス</a></div><ol class="toc"> <li><div class="current">sbt プラグインをテストする</div></li> </ol></li> </ol></li><li><div><a href="Howto.html">How to</a></div><ol class="toc"> <li><div><a href="Howto-Sequencing.html">逐次実行</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Def.sequential を用いて逐次タスクを定義する</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Def.taskDyn を用いて動的タスクを定義する</a></div></li><li><div><a href="Howto-After-Input-Task.html">インプットタスクの後で何かする</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn を用いた動的インプットタスクの定義</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">コマンドを用いた逐次実行</a></div></li> </ol></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+          </div>
+        </div>
+        <div class="header">
+          <link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
+<div class="container">
+    <div class="logo">
+      <a href="../../../index.html"><img src="../files/sbt-logo-100x56.png" alt="sbt"></a>
+    </div>
+    <div class="nav">
+      <a href="../../../documentation.html">Documentation</a>
+      <a href="../../../download.html">Download</a>
+      <a href="../../../community.html">Get Involved</a>
+      <a id="source-code" href="https://github.com/sbt/sbt"><img src="../files/github-logo-teal.png" alt="Source code"></a>
+      <a id="twitter" href="https://twitter.com/scala_sbt"><img src="../files/twitter-logo-teal.png" alt="sbt on Twitter"></a>
+    </div>
+    <script type="text/javascript" async>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-41449189-1', 'scala-sbt.org');
+    ga('send', 'pageview');
+    </script>
+    <script type="text/javascript" async>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-23127719-1', 'typesafe.com', {'allowLinker': true, 'name': 'tsTracker'});
+      ga('tsTracker.require', 'linker');
+      ga('tsTracker.linker:autoLink', ['typesafe.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org']);
+      ga('tsTracker.send', 'pageview');
+    </script>
+</div>
+
+        </div>
+        <div class="footer">
+          <div class="fw-wrapper navy-ltr support-strip">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="support-item">
+          <div class="support-icon">
+            <svg class="svg-icon svg-icon-chat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.5 85.2" enable-background="new 0 0 97.5 85.2"><path stroke="#fff" stroke-width="4.282" stroke-linecap="round" stroke-miterlimit="10" d="M27 29.5h-16.3c-4.7 0-8.6 3.9-8.6 8.6v25.7c0 4.7 3.9 8.6 8.6 8.6h2.7c.8 0 1.5.7 1.5 1.5v7.8c0 1.3 1.6 2 2.5 1l9.5-9.5c.5-.5 1.2-.8 2-.8h20.2c4.7 0 8.6-3.9 8.6-8.6v-7.8" fill="none"/><path fill="#fff" d="M85 0h-40c-6.9 0-12.5 5.6-12.5 12.5v33.4c0 2.2 1.8 4.1 4.1 4.1h29.9c.7 0 1.3.3 1.8.7l10 10c1.6 1.6 4.3.5 4.3-1.8v-6.5c0-1.4 1.1-2.5 2.5-2.5 6.9 0 12.5-5.6 12.5-12.5v-25c-.1-6.8-5.8-12.4-12.6-12.4z"/></svg>
+          </div>
+          <div class="support-detail">
+            <h2>コミュニティー・サポート</h2>
+            <a href="https://ja.stackoverflow.com/questions/tagged/sbt">StackOverflow</a>
+          </div>
+        </div>
+        <div class="support-item">
+          <div class="support-icon">
+            <svg id="lightbend-icon-reverse" class="svg-icon svg-icon-lightbend-reverse" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 302 262"><title>lightbend-icon</title><g id="icon"><path d="M1,195v56a10,10,0,0,0,10,10H291a10,10,0,0,0,10-10V195a557.85,557.85,0,0,1-150,20A557.85,557.85,0,0,1,1,195Z" style="fill:#fff"/><path d="M291,1H11A10,10,0,0,0,1,11V176a539.94,539.94,0,0,0,150,21,539.94,539.94,0,0,0,150-21V11A10,10,0,0,0,291,1Z" style="fill:#fff"/></g></svg>
+          </div>
+          <div class="support-detail">
+            <h2>商用サポート</h2>
+            <a href="https://www.lightbend.com/services/expert-support">Lightbend Subscription</a>
+            <a href="https://www.lightbend.com/services/training">Training</a>
+            <a href="https://www.lightbend.com/services/consulting">Consulting</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div><footer>
+  <div class="container footer">
+    <div class="row">
+      <div class="col-md-8 sbt">
+        <nav>
+          <a href="../../../index.html">
+            <img src="../files/typesafe_sbt_reverse_svg.svg" alt="sbt">
+          </a>
+          <a href="../../../documentation.html">Documentation</a>
+          <a href="../../../download.html">Download</a>
+          <a href="../../../community.html">Get Involved</a>
+        </nav>
+      </div>
+      <div class="col-md-4 text-right ts">
+        &copy; 2016-2017 Lightbend Inc.
+        <a href="https://www.lightbend.com">
+          <img src="files/lightbend-reverse.svg" alt="Lightbend, Inc.">
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+        </div>
+        
+        <div class="highlight-outer">
+              <div class="highlight-menu">
+                <ul>
+                  <li><button id="highlight-button-twitter"><img src="../img/twitter-bird-dark-bgs.png"/></button></li>
+                </ul>
+              </div>
+            </div>
+      </body>
+    </html>

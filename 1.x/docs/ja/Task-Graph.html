@@ -57,7 +57,7 @@
 この <code>value</code> メソッドは特殊なもので、<code>:=</code> (もしくは後に見る <code>+=</code> や <code>++=</code>) の右辺項内でしか使うことができない。
 </p><p>最初の例として、<code>update</code> と <code>clean</code> というタスクに依存した形で
 <code>scalacOption</code> を定義したいとする。
-（<a href="../sxr/sbt/Keys.scala.html">Keys</a> より）以下の二つのキーを例に説明する。
+（<a href="../api/sbt/Keys$.html">Keys</a> より）以下の二つのキーを例に説明する。
 </p><p><strong>注意</strong>: ここで計算される <code>scalacOptions</code> の値はナンセンスなもので、説明のためだけのものだ:
 </p><pre><code class="prettyprint lang-scala">val scalacOptions = taskKey[Seq[String]](&quot;Options for the Scala compiler.&quot;)
 val update = taskKey[UpdateReport](&quot;Resolves and optionally retrieves dependencies, producing a report.&quot;)
@@ -81,7 +81,7 @@ val clean = taskKey[Unit](&quot;Deletes files produced by the build, such as gen
   .settings(
     name := &quot;Hello&quot;,
     organization := &quot;com.example&quot;,
-    scalaVersion := &quot;2.12.2&quot;,
+    scalaVersion := &quot;2.12.4&quot;,
     version := &quot;0.1.0-SNAPSHOT&quot;,
     scalacOptions := {
       val out = streams.value // streams タスクは scalacOptions よりも事前発生する
@@ -108,7 +108,7 @@ val clean = taskKey[Unit](&quot;Deletes files produced by the build, such as gen
   .settings(
     name := &quot;Hello&quot;,
     organization := &quot;com.example&quot;,
-    scalaVersion := &quot;2.12.2&quot;,
+    scalaVersion := &quot;2.12.4&quot;,
     version := &quot;0.1.0-SNAPSHOT&quot;,
     scalacOptions := {
       val ur = update.value  // update task happens-before scalacOptions
@@ -200,7 +200,7 @@ build.sbt に慣れるまでは、<code>.value</code> の呼び出しをタス�
   .settings(
     name := &quot;Hello&quot;,
     organization := &quot;com.example&quot;,
-    scalaVersion := &quot;2.12.2&quot;,
+    scalaVersion := &quot;2.12.4&quot;,
     version := &quot;0.1.0-SNAPSHOT&quot;,
     scalacOptions := List(&quot;-encoding&quot;, &quot;utf8&quot;, &quot;-Xfatal-warnings&quot;, &quot;-deprecation&quot;, &quot;-unchecked&quot;),
     scalacOptions := {
@@ -219,8 +219,8 @@ build.sbt に慣れるまでは、<code>.value</code> の呼び出しをタス�
 [info] * -deprecation
 [info] * -unchecked
 [success] Total time: 0 s, completed Jan 2, 2017 11:44:44 PM
-&gt; ++2.11.8
-[info] Setting version to 2.11.8
+&gt; ++2.11.8!
+[info] Forcing Scala version to 2.11.8 on all projects.
 [info] Reapplying settings...
 [info] Set current project to Hello (in build file:/xxx/)
 &gt; show scalacOptions
@@ -228,7 +228,7 @@ build.sbt に慣れるまでは、<code>.value</code> の呼び出しをタス�
 [info] * utf8
 [info] * -unchecked
 [success] Total time: 0 s, completed Jan 2, 2017 11:44:51 PM
-</code></pre><p>次に (<a href="../sxr/sbt/Keys.scala.html">Keys</a> より) 以下の二つのキーを例に説明する:
+</code></pre><p>次に (<a href="../api/sbt/Keys$.html">Keys</a> より) 以下の二つのキーを例に説明する:
 </p><pre><code class="prettyprint lang-scala">val scalacOptions = taskKey[Seq[String]](&quot;Options for the Scala compiler.&quot;)
 val checksums = settingKey[Seq[String]](&quot;The list of checksums to generate and to verify for dependencies.&quot;)
 </code></pre><p><strong>注意</strong>: <code>scalacOptions</code> と <code>checksums</code>はお互い何の関係もない、ただ同じ値の型を持つ二つのキーで片方がタスクというだけだ。
@@ -316,7 +316,7 @@ end
       <a name="toc"></a>
       <h4 class="toctitle">Contents</h4>
       <div class="tocbody">
-      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">始める sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">sbt のインストール</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Mac への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Linux への sbt のインストール</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">ディレクトリ構造</a></div></li><li><div><a href="Running.html">実行</a></div></li><li><div><a href="Basic-Def.html">ビルド定義</a></div></li><li><div class="current">タスク・グラフ</div></li><li><div><a href="Scopes.html">スコープ</a></div></li><li><div><a href="Appending-Values.html">値の追加</a></div></li><li><div><a href="Scope-Delegation.html">スコープ委譲 (.value の照会)</a></div></li><li><div><a href="Library-Dependencies.html">ライブラリ依存性</a></div></li><li><div><a href="Multi-Project.html">マルチプロジェクト・ビルド</a></div></li><li><div><a href="Using-Plugins.html">プラグインの使用</a></div></li><li><div><a href="Custom-Settings.html">カスタムセッティングとタスク</a></div></li><li><div><a href="Organizing-Build.html">ビルドの整理</a></div></li><li><div><a href="Summary.html">まとめ</a></div></li><li><div><a href="Bare-Def.html">付録: bare .sbt ビルド定義</a></div></li> </ol></li><li><div><a href="Detailed-Topics.html">各論</a></div><ol class="toc"> <li><div><a href="Plugins-and-Best-Practices.html">プラグインとベストプラクティス</a></div><ol class="toc"> <li><div><a href="Testing-sbt-plugins.html">sbt プラグインをテストする</a></div></li> </ol></li> </ol></li><li><div><a href="Howto.html">How to</a></div><ol class="toc"> <li><div><a href="Howto-Sequencing.html">逐次実行</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Def.sequential を用いて逐次タスクを定義する</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Def.taskDyn を用いて動的タスクを定義する</a></div></li><li><div><a href="Howto-After-Input-Task.html">インプットタスクの後で何かする</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn を用いた動的インプットタスクの定義</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">コマンドを用いた逐次実行</a></div></li> </ol></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">始める sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">sbt のインストール</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Mac への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Linux への sbt のインストール</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">ディレクトリ構造</a></div></li><li><div><a href="Running.html">実行</a></div></li><li><div><a href="Basic-Def.html">ビルド定義</a></div></li><li><div class="current">タスク・グラフ</div></li><li><div><a href="Scopes.html">スコープ</a></div></li><li><div><a href="Appending-Values.html">値の追加</a></div></li><li><div><a href="Scope-Delegation.html">スコープ委譲 (.value の照会)</a></div></li><li><div><a href="Library-Dependencies.html">ライブラリ依存性</a></div></li><li><div><a href="Multi-Project.html">マルチプロジェクト・ビルド</a></div></li><li><div><a href="Using-Plugins.html">プラグインの使用</a></div></li><li><div><a href="Custom-Settings.html">カスタムセッティングとタスク</a></div></li><li><div><a href="Organizing-Build.html">ビルドの整理</a></div></li><li><div><a href="Summary.html">まとめ</a></div></li><li><div><a href="Bare-Def.html">付録: bare .sbt ビルド定義</a></div></li> </ol></li><li><div><a href="General-Info.html">インフォメーション</a></div><ol class="toc"> <li><div><a href="Changes.html">変更点</a></div><ol class="toc"> <li><div><a href="sbt-1.0-Release-Notes.html">sbt 1.0.0</a></div></li> </ol></li> </ol></li><li><div><a href="Detailed-Topics.html">各論</a></div><ol class="toc"> <li><div><a href="Plugins-and-Best-Practices.html">プラグインとベストプラクティス</a></div><ol class="toc"> <li><div><a href="Testing-sbt-plugins.html">sbt プラグインをテストする</a></div></li> </ol></li> </ol></li><li><div><a href="Howto.html">How to</a></div><ol class="toc"> <li><div><a href="Howto-Sequencing.html">逐次実行</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Def.sequential を用いて逐次タスクを定義する</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Def.taskDyn を用いて動的タスクを定義する</a></div></li><li><div><a href="Howto-After-Input-Task.html">インプットタスクの後で何かする</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn を用いた動的インプットタスクの定義</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">コマンドを用いた逐次実行</a></div></li> </ol></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
           </div>
         </div>
         <div class="header">
@@ -324,7 +324,7 @@ end
 <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
 <div class="container">
     <div class="logo">
-      <a href="../../../index.html"><img src="../files/typesafe_sbt_svg.svg" alt="sbt"></a>
+      <a href="../../../index.html"><img src="../files/sbt-logo-100x56.png" alt="sbt"></a>
     </div>
     <div class="nav">
       <a href="../../../documentation.html">Documentation</a>
@@ -352,6 +352,7 @@ end
       ga('tsTracker.send', 'pageview');
     </script>
 </div>
+
         </div>
         <div class="footer">
           <div class="fw-wrapper navy-ltr support-strip">
@@ -396,7 +397,7 @@ end
         </nav>
       </div>
       <div class="col-md-4 text-right ts">
-        &copy; 2016 Lightbend Inc.
+        &copy; 2016-2017 Lightbend Inc.
         <a href="https://www.lightbend.com">
           <img src="files/lightbend-reverse.svg" alt="Lightbend, Inc.">
         </a>

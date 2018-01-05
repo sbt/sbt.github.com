@@ -1,0 +1,337 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html manifest="pamflet.manifest">
+      <head>
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+        <title>sbt Reference Manual — カスタムセッティングとタスク</title>
+        <link rel="shortcut icon" href="../favicon.ico"/>
+        <link rel="stylesheet" href="../css/blueprint/screen.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/blueprint/grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="../css/blueprint/print.css" type="text/css" media="print"/> 
+        <!--[if lt IE 8]>
+          <link rel="stylesheet" href={ relativeBase + "css/blueprint/ie.css" } type="text/css" media="screen, projection"/>
+        <![endif]-->
+        <link rel="stylesheet" href="../css/pamflet.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamflet-print.css" type="text/css" media="print"/>
+        <link rel="stylesheet" href="../css/pamflet-grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-redmond.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-github.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-monokai.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamfletheight_80px_2em.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <script type="text/javascript" src="../js/jquery-1.6.2.min.js"></script>
+        <script type="text/javascript" src="../js/jquery.collapse.js"></script>
+        <script type="text/javascript" src="../js/pamflet.js"></script>
+        <script type="text/javascript">
+          Pamflet.page.language = 'ja';
+        </script>
+        <script type="text/javascript" src="../js/prettify/prettify.js"></script><script type="text/javascript" src="../js/prettify/lang-scala.js"></script><link type="text/css" rel="stylesheet" href="../css/prettify.css"/><script type="text/javascript"><!--
+        window.onload=function() { prettyPrint(); };
+      --></script>
+        <link rel="stylesheet" href="../css/custom.css" type="text/css" media="screen, projection"/>
+        
+        <script type="text/javascript">
+              Pamflet.twitter = '#sbt #scala';
+            </script>
+      </head>
+      <body class="color_scheme-github">
+        <a class="page prev nav" href="Using-Plugins.html">
+            <span class="space">&nbsp;</span>
+            <span class="flip arrow">&gt;</span>
+          </a><a class="page next nav" href="Organizing-Build.html">
+            <span class="space">&nbsp;</span>
+            <span class="arrow">&gt;</span>
+          </a>
+        <div class="container contentswrapper">
+          <div class="span-16 prepend-1 append-1 contents">
+            <h2 id="%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%A8%E3%82%BF%E3%82%B9%E3%82%AF">カスタムセッティングとタスク<a href="#%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%A8%E3%82%BF%E3%82%B9%E3%82%AF" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このページでは、独自のセッティングやタスクの作成を紹介する。
+</p><p>このページを理解するには、このガイドの前のページ、
+特に <a href="Basic-Def.html">build.sbt</a> と
+<a href="Task-Graph.html">タスク・グラフ</a> を読んである必要がある。
+</p><h3 id="%E3%82%AD%E3%83%BC%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B">キーを定義する<a href="#%E3%82%AD%E3%83%BC%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="../../sxr/sbt/Keys.scala.html">Keys</a> は、キーをどのように定義するかを示すサンプル例が満載だ。
+多くのキーは、<a href="../../sxr/sbt/Defaults.scala.html">Defaults</a> で実装されている。
+</p><p>キーには 3 つの型がある。
+<code>SettingKey</code> と <code>TaskKey</code> は <a href="Basic-Def.html">.sbt ビルド定義</a>で説明した。
+<code>InputKey</code> に関しては <a href="../../docs/Input-Tasks.html">Input Tasks</a> を見てほしい。
+</p><p>以下に <a href="../../sxr/sbt/Keys.scala.html">Keys</a> からの具体例を示す:
+</p><pre><code class="prettyprint lang-scala">val scalaVersion = settingKey[String](&quot;The version of Scala used for building.&quot;)
+val clean = taskKey[Unit](&quot;Deletes files produced by the build, such as generated sources, compiled classes, and task caches.&quot;)
+</code></pre><p>キーのコンストラクタは、二つの文字列のパラメータを取る。
+キー名（<code>&quot;scala-version&quot;</code>）と解説文（<code>&quot;The version of scala used for building.&quot;</code>）だ。
+</p><p><a href="Basic-Def.html">.sbt ビルド定義</a>でみた通り、<code>SettingKey[T]</code> 内の型パラメータ <code>T</code> は、セッティングの値の型を表す。
+<code>TaskKey[T]</code> 内の <code>T</code> は、タスクの結果の型を表す。
+</p><p>また、<a href="Basic-Def.html">.sbt ビルド定義</a>でみた通り、セッティングはプロジェクトが再読み込みされるまでは固定値を持ち、
+タスクは「タスク実行」の度（sbt のインタラクティブモードかバッチモードでコマンドが入力される度）に再計算される。
+</p><p>キーは <a href="Basic-Def.html">.sbt ファイル</a>、<a href="Organizing-Build.html">.scala ファイル</a>、または <a href="Using-Plugins.html">auto plugin</a> 内で定義する事が出来る。
+有効化された auto plugin の <code>autoImport</code> オブジェクト内で定義された <code>val</code> は全て <code>.sbt</code> ファイルに自動的にインポートされる。
+</p><h3 id="%E3%82%BF%E3%82%B9%E3%82%AF%E3%82%92%E5%AE%9F%E8%A3%85%E3%81%99%E3%82%8B">タスクを実装する<a href="#%E3%82%BF%E3%82%B9%E3%82%AF%E3%82%92%E5%AE%9F%E8%A3%85%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>タスクで使えるキーを定義したら、次はそのキーをタスク定義の中で使ってみよう。
+自前のタスクを定義しようとしているかもしれないし、既存のタスクを再定義してようと考えているかもしれないが、
+いずれにせよ、やることは同じだ。<code>:=</code> を使ってタスクのキーになんらかのコードを関連付けよう:
+</p><pre><code class="prettyprint lang-scala">val sampleStringTask = taskKey[String](&quot;A sample string task.&quot;)
+val sampleIntTask = taskKey[Int](&quot;A sample int task.&quot;)
+
+lazy val commonSettings = Seq(
+  organization := &quot;com.example&quot;,
+  version := &quot;0.1.0-SNAPSHOT&quot;
+)
+
+lazy val library = (project in file(&quot;library&quot;))
+  .settings(
+    commonSettings,
+    sampleStringTask := System.getProperty(&quot;user.home&quot;),
+    sampleIntTask := {
+      val sum = 1 + 2
+      println(&quot;sum: &quot; + sum)
+      sum
+    }
+  )
+</code></pre><p>もしタスクに依存してるものがあれば、[タスク・グラフ][More-About-Settings]で説明したとおり <code>value</code> を使ってその値を参照すればよい。
+</p><p>タスクを実装する上で一番難しい点は、多くの場合 sbt 固有の問題ではない。なぜならタスクはただの Scala コードだからだ。
+難しいのはそのタスクが実行したいことの「本体」部分を書くことだ。
+</p><p>例えば HTML を整形したいとすると、今度は HTML のライブラリを利用したくなるかもしれない
+（おそらく<a href="Using-Plugins.html">ビルド定義にライブラリ依存性を追加して</a>、その HTML ライブラリに基づいたコードを書けばよいだろう）。
+</p><p>sbt には、いくつかのユーティリティライブラリや便利な関数があり、特にファイルやディレクトリの取り扱いには <a href="../api/index.html#sbt.IO$">Scaladocs-IO</a> にある API がしばしば重宝するだろう。
+</p><h3 id="%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%AE%E5%AE%9F%E8%A1%8C%E6%84%8F%E5%91%B3%E8%AB%96">タスクの実行意味論<a href="#%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%AE%E5%AE%9F%E8%A1%8C%E6%84%8F%E5%91%B3%E8%AB%96" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>カスタムタスクから <code>value</code> を使って他のタスクに依存するとき、
+タスクの実行意味論 (execution semantics) に注意する必要がある。
+ここでいう実行意味論とは、実際<em>どの時点で</em>タスクが評価されるかを決定するものとする。
+</p><p><code>sampleIntTask</code> を例に取ると、タスク本文の各行は一行ずつ正格評価 (strict evaluation) されているはずだ。
+これは逐次実行の意味論だ:
+</p><pre><code class="prettyprint lang-scala">sampleIntTask := {
+  val sum = 1 + 2        // first
+  println(&quot;sum: &quot; + sum) // second
+  sum                    // third
+}
+</code></pre><p>実際には JVM は <code>sum</code> を <code>3</code> とインライン化したりするかもしれないが、観測可能なタスクの<strong>作用</strong>は、各行ずつ逐次実行したものと同一のものとなる。
+</p><p>次に、<code>startServer</code> と <code>stopServer</code> という 2つのカスタムタスクを定義して、<code>sampleIntTask</code> を以下のように書き換えたとする:
+</p><pre><code class="prettyprint lang-scala">val startServer = taskKey[Unit](&quot;start server&quot;)
+val stopServer = taskKey[Unit](&quot;stop server&quot;)
+val sampleIntTask = taskKey[Int](&quot;A sample int task.&quot;)
+val sampleStringTask = taskKey[String](&quot;A sample string task.&quot;)
+
+lazy val commonSettings = Seq(
+  organization := &quot;com.example&quot;,
+  version := &quot;0.1.0-SNAPSHOT&quot;
+)
+
+lazy val library = (project in file(&quot;library&quot;))
+  .settings(
+    commonSettings,
+    startServer := {
+      println(&quot;starting...&quot;)
+      Thread.sleep(500)
+    },
+    stopServer := {
+      println(&quot;stopping...&quot;)
+      Thread.sleep(500)
+    },
+    sampleIntTask := {
+      startServer.value
+      val sum = 1 + 2
+      println(&quot;sum: &quot; + sum)
+      stopServer.value // THIS WON'T WORK
+      sum
+    },
+    sampleStringTask := {
+      startServer.value
+      val s = sampleIntTask.value.toString
+      println(&quot;s: &quot; + s)
+      s
+    }
+  )
+</code></pre><p><code>sampleIntTask</code> を sbt のインタラクティブ・プロンプトから実行すると以下の結果となる:
+</p><pre><code class="">&gt; sampleIntTask
+stopping...
+starting...
+sum: 3
+[success] Total time: 1 s, completed Dec 22, 2014 5:00:00 PM
+</code></pre><p>何が起こったのかを考察するために、<code>sampleIntTask</code> を視覚化してみよう:
+</p><p><img src="../files/task-dependency00.png" alt="task-dependency"/>
+</p><p>素の Scala のメソッド呼び出しと違って、タスクの <code>value</code> メソッドの呼び出しは正格評価されない。
+代わりに、<code>sampleIntTask</code> が <code>startServer</code> タスクと <code>stopServer</code> タスクに依存するということを表すマークとして機能する。
+<code>sampleIntTask</code> がユーザによって呼び出されると、sbt のタスクエンジンは以下を行う:
+</p><ul><li><code>sampleIntTask</code> を評価する<strong>前</strong>にタスク依存性を評価する。(半順序)
+</li><li>タスク依存性が独立ならば、並列に評価しようとする (並列性)
+</li><li>各タスクは一度のコマンド実行に対して 1 回のみ評価される (非重複)
+</li></ul><h4 id="%E3%82%BF%E3%82%B9%E3%82%AF%E4%BE%9D%E5%AD%98%E6%80%A7%E3%81%AE%E9%9D%9E%E9%87%8D%E8%A4%87%E5%8C%96">タスク依存性の非重複化<a href="#%E3%82%BF%E3%82%B9%E3%82%AF%E4%BE%9D%E5%AD%98%E6%80%A7%E3%81%AE%E9%9D%9E%E9%87%8D%E8%A4%87%E5%8C%96" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>非重複化を説明するために、sbt インタラクティブ・プロンプトから <code>sampleStringTask</code> を実行する。
+</p><pre><code class="">&gt; sampleStringTask
+stopping...
+starting...
+sum: 3
+s: 3
+[success] Total time: 1 s, completed Dec 22, 2014 5:30:00 PM
+</code></pre><p><code>sampleStringTask</code> は <code>startServer</code> と <code>sampleIntTask</code> の両方に依存し、
+<code>sampleIntTask</code> もまた <code>startServer</code> タスクに依存するため、<code>startServer</code> はタスク依存性として 2 度現れる。
+しかし、<code>value</code> はタスク依存性を表記するだけなので、評価は 1 回だけ行われる。
+以下は <code>sampleStringTask</code> の評価を視覚化したものだ:
+</p><p><img src="../files/task-dependency01.png" alt="task-dependency"/>
+</p><p>もしタスク依存性を非重複化しなければ、<code>test in Test</code> のタスク依存性として <code>compile in Test</code>
+が何度も現れるため、テストのソースコードを何度もコンパイルすることになる。
+</p><h4 id="%E7%B5%82%E4%BA%86%E5%87%A6%E7%90%86%E3%82%BF%E3%82%B9%E3%82%AF">終了処理タスク<a href="#%E7%B5%82%E4%BA%86%E5%87%A6%E7%90%86%E3%82%BF%E3%82%B9%E3%82%AF" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>stopServer</code> タスクはどう実装するべきだろうか?
+タスクは依存性を保持するものなので、終了処理タスクという考えはタスクの実行モデルにそぐわないものだ。
+最後の処理そのものもタスクになるべきで、そのタスクが他の中間タスクに依存すればいい。
+例えば、<code>stopServer</code> が　<code>sampleStringTask</code> に依存するべきだが、
+その時点で <code>stopServer</code> は <code>sampleStringTask</code> と呼ばれるべきだろう。
+</p><pre><code class="prettyprint lang-scala">lazy val library = (project in file(&quot;library&quot;))
+  .settings(
+    commonSettings,
+    startServer := {
+      println(&quot;starting...&quot;)
+      Thread.sleep(500)
+    },
+    sampleIntTask := {
+      startServer.value
+      val sum = 1 + 2
+      println(&quot;sum: &quot; + sum)
+      sum
+    },
+    sampleStringTask := {
+      startServer.value
+      val s = sampleIntTask.value.toString
+      println(&quot;s: &quot; + s)
+      s
+    },
+    sampleStringTask := {
+      val old = sampleStringTask.value
+      println(&quot;stopping...&quot;)
+      Thread.sleep(500)
+      old
+    }
+  )
+</code></pre><p>これが動作することを調べるために、インタラクティブ・プロンプトから <code>sampleStringTask</code> を実行してみよう:
+</p><pre><code class="">&gt; sampleStringTask
+starting...
+sum: 3
+s: 3
+stopping...
+[success] Total time: 1 s, completed Dec 22, 2014 6:00:00 PM
+</code></pre><p><img src="../files/task-dependency02.png" alt="task-dependency"/>
+</p><h4 id="%E7%B4%A0%E3%81%AE+Scala+%E3%82%92%E4%BD%BF%E3%81%8A%E3%81%86">素の Scala を使おう<a href="#%E7%B4%A0%E3%81%AE+Scala+%E3%82%92%E4%BD%BF%E3%81%8A%E3%81%86" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>何かが起こったその後に別の何かが起こることを保証するもう一つの方法は Scala を使うことだ。
+例えば <code>project/ServerUtil.scala</code> に簡単な関数を書いたとすると、タスクは以下のように書ける:
+</p><pre><code class="prettyprint lang-scala">sampleIntTask := {
+  ServerUtil.startServer
+  try {
+    val sum = 1 + 2
+    println(&quot;sum: &quot; + sum)
+  } finally {
+    ServerUtil.stopServer
+  }
+  sum
+}
+</code></pre><p>素のメソッド呼び出しは逐次実行の意味論に従うので、全ては順序どおりに実行される。
+非重複化もされなくなるので、それは気をつける必要がある。
+</p><h3 id="%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E5%8C%96%E3%81%97%E3%82%88%E3%81%86">プラグイン化しよう<a href="#%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E5%8C%96%E3%81%97%E3%82%88%E3%81%86" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>.scala</code> ファイルに大量のカスタムコードがあることに気づいたら、
+プラグインを作って複数のプロジェクト間で再利用できないか考えてみよう。
+</p><p><a href="Using-Plugins.html">以前にちょっと触れた</a>し、<a href="../../docs/Plugins.html">詳しい解説はここにある</a>が、
+プラグインを作るのはとても簡単だ。
+</p><p>このページは簡単な味見だけで、カスタムタスクに関しては <a href="../../docs/Tasks.html">Tasks</a>ページで詳細に解説されている。
+</p><div class="bottom nav span-16">
+                        <em>Next Page</em>
+                        <span class="arrow">&gt;</span>
+                        <a href="Organizing-Build.html"> ビルドの整理 </a>                        
+                        <ul class="language-bar">
+        <li><a href="../Custom-Settings.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/Custom-Settings.html"><span class="lang-item lang-ja">日本語</span></a></li><li><a href="../zh-cn/Custom-Settings.html"><span class="lang-item lang-zh-cn">中文 (简体)</span></a></li>
+      </ul>
+                      </div><div class="tocwrapper show">
+      <a class="tochead nav" style="display: none" href="#toc">❦</a>
+      <a name="toc"></a>
+      <h4 class="toctitle">Contents</h4>
+      <div class="tocbody">
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">始める sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">sbt のインストール</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Mac への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Linux への sbt のインストール</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">ディレクトリ構造</a></div></li><li><div><a href="Running.html">実行</a></div></li><li><div><a href="Basic-Def.html">ビルド定義</a></div></li><li><div><a href="Task-Graph.html">タスク・グラフ</a></div></li><li><div><a href="Scopes.html">スコープ</a></div></li><li><div><a href="Appending-Values.html">値の追加</a></div></li><li><div><a href="Scope-Delegation.html">スコープ委譲 (.value の照会)</a></div></li><li><div><a href="Library-Dependencies.html">ライブラリ依存性</a></div></li><li><div><a href="Multi-Project.html">マルチプロジェクト・ビルド</a></div></li><li><div><a href="Using-Plugins.html">プラグインの使用</a></div></li><li><div class="current">カスタムセッティングとタスク</div></li><li><div><a href="Organizing-Build.html">ビルドの整理</a></div></li><li><div><a href="Summary.html">まとめ</a></div></li><li><div><a href="Bare-Def.html">付録: bare .sbt ビルド定義</a></div></li> </ol></li><li><div><a href="General-Info.html">インフォメーション</a></div><ol class="toc"> <li><div><a href="Changes.html">変更点</a></div><ol class="toc"> <li><div><a href="sbt-1.0-Release-Notes.html">sbt 1.0.0</a></div></li> </ol></li> </ol></li><li><div><a href="Detailed-Topics.html">各論</a></div><ol class="toc"> <li><div><a href="Plugins-and-Best-Practices.html">プラグインとベストプラクティス</a></div><ol class="toc"> <li><div><a href="Testing-sbt-plugins.html">sbt プラグインをテストする</a></div></li> </ol></li> </ol></li><li><div><a href="Howto.html">How to</a></div><ol class="toc"> <li><div><a href="Howto-Sequencing.html">逐次実行</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Def.sequential を用いて逐次タスクを定義する</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Def.taskDyn を用いて動的タスクを定義する</a></div></li><li><div><a href="Howto-After-Input-Task.html">インプットタスクの後で何かする</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn を用いた動的インプットタスクの定義</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">コマンドを用いた逐次実行</a></div></li> </ol></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+          </div>
+        </div>
+        <div class="header">
+          <link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
+<div class="container">
+    <div class="logo">
+      <a href="../../../index.html"><img src="../files/sbt-logo-100x56.png" alt="sbt"></a>
+    </div>
+    <div class="nav">
+      <a href="../../../documentation.html">Documentation</a>
+      <a href="../../../download.html">Download</a>
+      <a href="../../../community.html">Get Involved</a>
+      <a id="source-code" href="https://github.com/sbt/sbt"><img src="../files/github-logo-teal.png" alt="Source code"></a>
+      <a id="twitter" href="https://twitter.com/scala_sbt"><img src="../files/twitter-logo-teal.png" alt="sbt on Twitter"></a>
+    </div>
+    <script type="text/javascript" async>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-41449189-1', 'scala-sbt.org');
+    ga('send', 'pageview');
+    </script>
+    <script type="text/javascript" async>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-23127719-1', 'typesafe.com', {'allowLinker': true, 'name': 'tsTracker'});
+      ga('tsTracker.require', 'linker');
+      ga('tsTracker.linker:autoLink', ['typesafe.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org']);
+      ga('tsTracker.send', 'pageview');
+    </script>
+</div>
+
+        </div>
+        <div class="footer">
+          <div class="fw-wrapper navy-ltr support-strip">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="support-item">
+          <div class="support-icon">
+            <svg class="svg-icon svg-icon-chat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.5 85.2" enable-background="new 0 0 97.5 85.2"><path stroke="#fff" stroke-width="4.282" stroke-linecap="round" stroke-miterlimit="10" d="M27 29.5h-16.3c-4.7 0-8.6 3.9-8.6 8.6v25.7c0 4.7 3.9 8.6 8.6 8.6h2.7c.8 0 1.5.7 1.5 1.5v7.8c0 1.3 1.6 2 2.5 1l9.5-9.5c.5-.5 1.2-.8 2-.8h20.2c4.7 0 8.6-3.9 8.6-8.6v-7.8" fill="none"/><path fill="#fff" d="M85 0h-40c-6.9 0-12.5 5.6-12.5 12.5v33.4c0 2.2 1.8 4.1 4.1 4.1h29.9c.7 0 1.3.3 1.8.7l10 10c1.6 1.6 4.3.5 4.3-1.8v-6.5c0-1.4 1.1-2.5 2.5-2.5 6.9 0 12.5-5.6 12.5-12.5v-25c-.1-6.8-5.8-12.4-12.6-12.4z"/></svg>
+          </div>
+          <div class="support-detail">
+            <h2>コミュニティー・サポート</h2>
+            <a href="https://ja.stackoverflow.com/questions/tagged/sbt">StackOverflow</a>
+          </div>
+        </div>
+        <div class="support-item">
+          <div class="support-icon">
+            <svg id="lightbend-icon-reverse" class="svg-icon svg-icon-lightbend-reverse" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 302 262"><title>lightbend-icon</title><g id="icon"><path d="M1,195v56a10,10,0,0,0,10,10H291a10,10,0,0,0,10-10V195a557.85,557.85,0,0,1-150,20A557.85,557.85,0,0,1,1,195Z" style="fill:#fff"/><path d="M291,1H11A10,10,0,0,0,1,11V176a539.94,539.94,0,0,0,150,21,539.94,539.94,0,0,0,150-21V11A10,10,0,0,0,291,1Z" style="fill:#fff"/></g></svg>
+          </div>
+          <div class="support-detail">
+            <h2>商用サポート</h2>
+            <a href="https://www.lightbend.com/services/expert-support">Lightbend Subscription</a>
+            <a href="https://www.lightbend.com/services/training">Training</a>
+            <a href="https://www.lightbend.com/services/consulting">Consulting</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div><footer>
+  <div class="container footer">
+    <div class="row">
+      <div class="col-md-8 sbt">
+        <nav>
+          <a href="../../../index.html">
+            <img src="../files/typesafe_sbt_reverse_svg.svg" alt="sbt">
+          </a>
+          <a href="../../../documentation.html">Documentation</a>
+          <a href="../../../download.html">Download</a>
+          <a href="../../../community.html">Get Involved</a>
+        </nav>
+      </div>
+      <div class="col-md-4 text-right ts">
+        &copy; 2016-2017 Lightbend Inc.
+        <a href="https://www.lightbend.com">
+          <img src="files/lightbend-reverse.svg" alt="Lightbend, Inc.">
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+        </div>
+        
+        <div class="highlight-outer">
+              <div class="highlight-menu">
+                <ul>
+                  <li><button id="highlight-button-twitter"><img src="../img/twitter-bird-dark-bgs.png"/></button></li>
+                </ul>
+              </div>
+            </div>
+      </body>
+    </html>

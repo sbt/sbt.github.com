@@ -52,7 +52,7 @@ sbt 0.13.13 など最近のバージョンをインストール済みで、
 そのためには、<code>project/build.properties</code>
 という名前のファイルを作成して以下のように
 sbt バージョンを指定する:
-</p><pre><code class="">sbt.version=0.13.15
+</p><pre><code class="">sbt.version=0.13.16
 </code></pre><p>もしも指定されたバージョンがローカルマシンに無ければ、
 <code>sbt</code> ランチャーは自動的にダウンロードを行う。
 このファイルが無ければ、<code>sbt</code> ランチャーは任意のバージョンを選択する。
@@ -65,7 +65,7 @@ sbt バージョンを指定する:
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
   .settings(
     name := &quot;Hello&quot;,
-    scalaVersion := &quot;2.12.1&quot;
+    scalaVersion := &quot;2.12.2&quot;
   )
 </code></pre><p>それぞれのサブプロジェクトは、キーと値のペアによって詳細が設定される。
 </p><p>例えば、<code>name</code> というキーがあるが、それはサブプロジェクト名という文字列の値に関連付けられる。
@@ -73,7 +73,7 @@ sbt バージョンを指定する:
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
   .settings(
     name := &quot;Hello&quot;,
-    scalaVersion := &quot;2.12.1&quot;
+    scalaVersion := &quot;2.12.2&quot;
   )
 </code></pre><h3 id="%E3%81%AF%E3%81%A9%E3%81%AE%E3%82%88%E3%81%86%E3%81%AB+settings+%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B%E3%81%8B"><code>build.sbt</code> はどのように settings を定義するか<a href="#%E3%81%AF%E3%81%A9%E3%81%AE%E3%82%88%E3%81%86%E3%81%AB+settings+%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B%E3%81%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> において定義されるサブプロジェクトは、キーと値のペア列を持つと言ったが、
 このペアは<strong>セッティング式</strong> (setting expression) と呼ばれ、<strong>build.sbt DSL</strong> にて記述される。
@@ -81,7 +81,7 @@ sbt バージョンを指定する:
   .settings(
     name         := &quot;hello&quot;,
     organization := &quot;com.example&quot;,
-    scalaVersion := &quot;2.12.1&quot;,
+    scalaVersion := &quot;2.12.2&quot;,
     version      := &quot;0.1.0-SNAPSHOT&quot;
   )
 </code></pre><p>build.sbt DSL を詳しくみてみよう:<br>
@@ -180,7 +180,7 @@ import Keys._
 lazy val commonSettings = Seq(
   organization := &quot;com.example&quot;,
   version := &quot;0.1.0-SNAPSHOT&quot;,
-  scalaVersion := &quot;2.12.1&quot;
+  scalaVersion := &quot;2.12.2&quot;
 )
 
 lazy val root = (project in file(&quot;.&quot;))

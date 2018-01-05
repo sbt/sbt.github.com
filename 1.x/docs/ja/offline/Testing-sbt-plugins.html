@@ -55,7 +55,7 @@
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += { &quot;org.scala-sbt&quot; %% &quot;scripted-plugin&quot; % sbtVersion.value }
 </code></pre><p>以下のセッティングを <code>scripted.sbt</code> に加える:
 </p><pre><code class="prettyprint lang-scala">scriptedLaunchOpts := { scriptedLaunchOpts.value ++
-  Seq(&quot;-Xmx1024M&quot;, &quot;-XX:MaxPermSize=256M&quot;, &quot;-Dplugin.version=&quot; + version.value)
+  Seq(&quot;-Xmx1024M&quot;, &quot;-Dplugin.version=&quot; + version.value)
 }
 scriptedBufferLog := false
 </code></pre><h3 id="%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+3%3A+src%2Fsbt-test">ステップ 3: src/sbt-test<a href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+3%3A+src%2Fsbt-test" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>src/sbt-test/&lt;テストグループ&gt;/&lt;テスト名&gt;</code> というディレクトリ構造を作る。とりあえず、<code>src/sbt-test/&lt;プラグイン名&gt;/simple</code> から始めるとする。
@@ -108,16 +108,18 @@ $ exists target/scala-2.10/foo.jar
 </p><pre><code class="">Running sbt-assembly / simple
 [success] Total time: 18 s, completed Sep 17, 2011 3:00:58 AM
 </code></pre><h3 id="%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+6%3A+%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0%E3%82%A2%E3%82%B5%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3">ステップ 6: カスタムアサーション<a href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+6%3A+%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0%E3%82%A2%E3%82%B5%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>ファイルコマンドは便利だけど、実際のコンテンツをテストしないため、それだけでは不十分だ。コンテンツをテストする簡単な方法は、テストビルドにカスタムのタスクを実装してしまうことだ。
-</p><p>上記の hello プロジェクトを例に取ると、生成された jar が “hello” と表示するかを確認したいとする。<code>sbt.Process</code> を用いて jar を走らせることができる。失敗を表すには、単にエラーを投げればいい。以下に <code>build.sbt</code> を示す:
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+</p><p>上記の hello プロジェクトを例に取ると、生成された jar が “hello” と表示するかを確認したいとする。<code>scala.sys.process.Process</code> を用いて jar を走らせることができる。失敗を表すには、単にエラーを投げればいい。以下に <code>build.sbt</code> を示す:
+</p><pre><code class="prettyprint lang-scala">import scala.sys.process.Process
+
+lazy val root = (project in file(&quot;.&quot;))
   .settings(
     version := &quot;0.1&quot;,
     scalaVersion := &quot;2.10.6&quot;,
     assemblyJarName in assembly := &quot;foo.jar&quot;,
     TaskKey[Unit](&quot;check&quot;) := {
-      val process = sbt.Process(&quot;java&quot;, Seq(&quot;-jar&quot;, (crossTarget.value / &quot;foo.jar&quot;).toString))
+      val process = Process(&quot;java&quot;, Seq(&quot;-jar&quot;, (crossTarget.value / &quot;foo.jar&quot;).toString))
       val out = (process!!)
-      if (out.trim != &quot;bye&quot;) error(&quot;unexpected output: &quot; + out)
+      if (out.trim != &quot;bye&quot;) sys.error(&quot;unexpected output: &quot; + out)
       ()
     }
   )
@@ -145,7 +147,7 @@ $ exists target/foo.jar
 </code></pre><p>テスト中にテンポラリディレクトリを見たいような状況があるかもしれない。<code>test</code> スクリプトに以下の一行を加えると、scripted はエンターキーを押すまで一時停止する:
 </p><pre><code class="">$ pause
 </code></pre><p>もしうまくいかなくて、 <code>sbt/sbt-test/sbt-foo/simple</code> から直接 <code>sbt</code> を実行しようと思っているなら、それは止めたほうがいい。正しいやり方はディレクトリごと別の場所にコピーしてから走らせることだ。
-</p><h3 id="%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+8%3A+%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%91%E3%82%A4%E3%82%A2%E3%81%95%E3%82%8C%E3%82%8B">ステップ 8: インスパイアされる<a href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+8%3A+%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%91%E3%82%A4%E3%82%A2%E3%81%95%E3%82%8C%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt プロジェクト下には文字通り <a href="https://github.com/sbt/sbt/tree/0.13/sbt/src/sbt-test">100+ の scripted テストがある</a>。色々眺めてみて、インスパイアされよう。
+</p><h3 id="%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+8%3A+%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%91%E3%82%A4%E3%82%A2%E3%81%95%E3%82%8C%E3%82%8B">ステップ 8: インスパイアされる<a href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+8%3A+%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%91%E3%82%A4%E3%82%A2%E3%81%95%E3%82%8C%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt プロジェクト下には文字通り <a href="https://github.com/sbt/sbt/tree/1.x/sbt/src/sbt-test">100+ の scripted テストがある</a>。色々眺めてみて、インスパイアされよう。
 </p><p>例えば、以下に by-name と呼ばれるものを示す:
 </p><pre><code class="">&gt; compile
 
@@ -168,7 +170,7 @@ $ copy-file changes/A.scala A.scala
       <a name="toc"></a>
       <h4 class="toctitle">Contents</h4>
       <div class="tocbody">
-      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">始める sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">sbt のインストール</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Mac への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Linux への sbt のインストール</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">ディレクトリ構造</a></div></li><li><div><a href="Running.html">実行</a></div></li><li><div><a href="Basic-Def.html">ビルド定義</a></div></li><li><div><a href="Task-Graph.html">タスク・グラフ</a></div></li><li><div><a href="Scopes.html">スコープ</a></div></li><li><div><a href="Appending-Values.html">値の追加</a></div></li><li><div><a href="Scope-Delegation.html">スコープ委譲 (.value の照会)</a></div></li><li><div><a href="Library-Dependencies.html">ライブラリ依存性</a></div></li><li><div><a href="Multi-Project.html">マルチプロジェクト・ビルド</a></div></li><li><div><a href="Using-Plugins.html">プラグインの使用</a></div></li><li><div><a href="Custom-Settings.html">カスタムセッティングとタスク</a></div></li><li><div><a href="Organizing-Build.html">ビルドの整理</a></div></li><li><div><a href="Summary.html">まとめ</a></div></li><li><div><a href="Bare-Def.html">付録: bare .sbt ビルド定義</a></div></li> </ol></li><li><div><a href="Detailed-Topics.html">各論</a></div><ol class="toc"> <li><div><a href="Plugins-and-Best-Practices.html">プラグインとベストプラクティス</a></div><ol class="toc"> <li><div class="current">sbt プラグインをテストする</div></li> </ol></li> </ol></li><li><div><a href="Howto.html">How to</a></div><ol class="toc"> <li><div><a href="Howto-Sequencing.html">逐次実行</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Def.sequential を用いて逐次タスクを定義する</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Def.taskDyn を用いて動的タスクを定義する</a></div></li><li><div><a href="Howto-After-Input-Task.html">インプットタスクの後で何かする</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn を用いた動的インプットタスクの定義</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">コマンドを用いた逐次実行</a></div></li> </ol></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">始める sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">sbt のインストール</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Mac への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Linux への sbt のインストール</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">ディレクトリ構造</a></div></li><li><div><a href="Running.html">実行</a></div></li><li><div><a href="Basic-Def.html">ビルド定義</a></div></li><li><div><a href="Task-Graph.html">タスク・グラフ</a></div></li><li><div><a href="Scopes.html">スコープ</a></div></li><li><div><a href="Appending-Values.html">値の追加</a></div></li><li><div><a href="Scope-Delegation.html">スコープ委譲 (.value の照会)</a></div></li><li><div><a href="Library-Dependencies.html">ライブラリ依存性</a></div></li><li><div><a href="Multi-Project.html">マルチプロジェクト・ビルド</a></div></li><li><div><a href="Using-Plugins.html">プラグインの使用</a></div></li><li><div><a href="Custom-Settings.html">カスタムセッティングとタスク</a></div></li><li><div><a href="Organizing-Build.html">ビルドの整理</a></div></li><li><div><a href="Summary.html">まとめ</a></div></li><li><div><a href="Bare-Def.html">付録: bare .sbt ビルド定義</a></div></li> </ol></li><li><div><a href="General-Info.html">インフォメーション</a></div><ol class="toc"> <li><div><a href="Changes.html">変更点</a></div><ol class="toc"> <li><div><a href="sbt-1.0-Release-Notes.html">sbt 1.0.0</a></div></li> </ol></li> </ol></li><li><div><a href="Detailed-Topics.html">各論</a></div><ol class="toc"> <li><div><a href="Plugins-and-Best-Practices.html">プラグインとベストプラクティス</a></div><ol class="toc"> <li><div class="current">sbt プラグインをテストする</div></li> </ol></li> </ol></li><li><div><a href="Howto.html">How to</a></div><ol class="toc"> <li><div><a href="Howto-Sequencing.html">逐次実行</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Def.sequential を用いて逐次タスクを定義する</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Def.taskDyn を用いて動的タスクを定義する</a></div></li><li><div><a href="Howto-After-Input-Task.html">インプットタスクの後で何かする</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn を用いた動的インプットタスクの定義</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">コマンドを用いた逐次実行</a></div></li> </ol></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
           </div>
         </div>
         <div class="header">
@@ -176,7 +178,7 @@ $ copy-file changes/A.scala A.scala
 <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
 <div class="container">
     <div class="logo">
-      <a href="../../../index.html"><img src="../files/typesafe_sbt_svg.svg" alt="sbt"></a>
+      <a href="../../../index.html"><img src="../files/sbt-logo-100x56.png" alt="sbt"></a>
     </div>
     <div class="nav">
       <a href="../../../documentation.html">Documentation</a>
@@ -204,6 +206,7 @@ $ copy-file changes/A.scala A.scala
       ga('tsTracker.send', 'pageview');
     </script>
 </div>
+
         </div>
         <div class="footer">
           <div class="fw-wrapper navy-ltr support-strip">
@@ -248,7 +251,7 @@ $ copy-file changes/A.scala A.scala
         </nav>
       </div>
       <div class="col-md-4 text-right ts">
-        &copy; 2016 Lightbend Inc.
+        &copy; 2016-2017 Lightbend Inc.
         <a href="https://www.lightbend.com">
           <img src="files/lightbend-reverse.svg" alt="Lightbend, Inc.">
         </a>

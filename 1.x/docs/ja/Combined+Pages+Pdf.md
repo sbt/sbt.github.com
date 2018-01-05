@@ -40,7 +40,7 @@ sbt を試してくれることに感謝する。_ぜひ楽しいんでほしい
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://cocl.us/sbt100rc2msi
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.4/sbt-1.0.4.msi
   [Setup-Notes]: ../../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -69,8 +69,8 @@ sbt プロジェクトを作るためには、以下の手順をたどる必要�
 
 
 
-  [ZIP]: https://cocl.us/sbt100rc2zip
-  [TGZ]: https://cocl.us/sbt100rc2tgz
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.4/sbt-1.0.4.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.4/sbt-1.0.4.tgz
   [Manual-Installation]: Manual-Installation.html
 
 Mac への sbt のインストール
@@ -88,7 +88,7 @@ Mac への sbt のインストール
 #### [Homebrew](http://mxcl.github.com/homebrew/)
 
 ```
-$ brew install sbt -devel
+$ brew install sbt@1
 ```
 
 #### [Macports](http://macports.org/)
@@ -98,9 +98,9 @@ $ port install sbt
 ```
 
 
-  [MSI]: https://cocl.us/sbt100rc2msi
-  [ZIP]: https://cocl.us/sbt100rc2zip
-  [TGZ]: https://cocl.us/sbt100rc2tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.4/sbt-1.0.4.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.4/sbt-1.0.4.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.4/sbt-1.0.4.tgz
 
 Windows への sbt のインストール
 ----------------------------
@@ -114,10 +114,10 @@ Windows への sbt のインストール
 [msi インストーラ][MSI]をダウンロードしてインストールする。
 
 
-  [ZIP]: https://cocl.us/sbt100rc2zip
-  [TGZ]: https://cocl.us/sbt100rc2tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.0.0-RC2.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.0.0-RC2.deb
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.4/sbt-1.0.4.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.4/sbt-1.0.4.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.0.4.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.0.4.deb
   [Manual-Installation]: Manual-Installation.html
   [website127]: https://github.com/sbt/website/issues/12
 
@@ -138,7 +138,7 @@ Ubuntu 及びその他の Debian ベースのディストリビューション�
 (例: `apt-get`、`aptitude`、Synaptic など)、インストールはそれらから行う。
 ターミナル上から以下を実行すると `sbt` をインストールできる (superuser 権限を必要とするため、`sudo` を使っている)。
 
-    echo "deb https://dl.bintray.com/sbt/debian-experimental /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
+    echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
     sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2EE0EA64E40A89B84B2DF73499E82A75642AC823
     sudo apt-get update
     sudo apt-get install sbt
@@ -162,7 +162,7 @@ sbt のバイナリは Bintray にて公開されており、都合の良いこ�
 Red Hat Enterprise Linux 及びその他の RPM ベースのディストリビューションは RPM フォーマットを用いる。
 ターミナル上から以下を実行すると `sbt` をインストールできる (superuser 権限を必要とするため、`sudo` を使っている)。
 
-    curl https://bintray.com/sbt/rpm/rpm-experimental | sudo tee /etc/yum.repos.d/bintray-sbt-rpm.repo
+    curl https://bintray.com/sbt/rpm/rpm | sudo tee /etc/yum.repos.d/bintray-sbt-rpm.repo
     sudo yum install sbt
 
 sbt のバイナリは Bintray にて公開されており、Bintray は RPM リポジトリを提供する。
@@ -496,7 +496,7 @@ sbt シェルは、 sbt を終了して再起動した後でも履歴を覚え�
 </table>
 
 
-  [Keys]: ../../sxr/sbt/Keys.scala.html
+  [Keys]: ../../api/sbt/Keys$.html
   [Task-Graph]: Task-Graph.html
   [Bare-Def]: Bare-Def.html
   [Full-Def]: Full-Def.html
@@ -522,7 +522,7 @@ sbt 0.13.13 など最近のバージョンをインストール済みで、
 sbt バージョンを指定する:
 
 ```
-sbt.version=1.0.0-RC2
+sbt.version=1.0.4
 ```
 
 もしも指定されたバージョンがローカルマシンに無ければ、
@@ -543,7 +543,7 @@ sbt.version=1.0.0-RC2
 lazy val root = (project in file("."))
   .settings(
     name := "Hello",
-    scalaVersion := "2.12.2"
+    scalaVersion := "2.12.3"
   )
 ```
 
@@ -556,7 +556,7 @@ lazy val root = (project in file("."))
 lazy val root = (project in file("."))
   .settings(
     name := "Hello",
-    scalaVersion := "2.12.2"
+    scalaVersion := "2.12.3"
   )
 ```
 
@@ -570,7 +570,7 @@ lazy val root = (project in file("."))
   .settings(
     name         := "hello",
     organization := "com.example",
-    scalaVersion := "2.12.2",
+    scalaVersion := "2.12.4",
     version      := "0.1.0-SNAPSHOT"
   )
 ```
@@ -589,9 +589,9 @@ build.sbt DSL を詳しくみてみよう:<br>
 
 左辺値の `name`、`version`、および `scalaVersion` は**キー**である。
 キーは
-[`SettingKey[T]`](../api/index.html#sbt.SettingKey)、
-[`TaskKey[T]`](../api/index.html#sbt.TaskKey)、もしくは
-[`InputKey[T]`]((../api/index.html#sbt.InputKey)) のインスタンスで、
+[`SettingKey[T]`](../api/sbt/SettingKey.html)、
+[`TaskKey[T]`](../api/sbt/TaskKey.html)、もしくは
+[`InputKey[T]`]((../api/sbt/InputKey.html)) のインスタンスで、
 `T` はその値の型である。キーの種類に関しては後述する。
 
 `name` キーは `SettingKey[String]` に型付けされているため、
@@ -732,7 +732,7 @@ val derby = "org.apache.derby" % "derby" % "10.4.1.3"
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0-SNAPSHOT",
-  scalaVersion := "2.12.2"
+  scalaVersion := "2.12.4"
 )
 
 lazy val root = (project in file("."))
@@ -786,7 +786,7 @@ lazy val root = (project in file("."))
 
 最初の例として、`update` と `clean` というタスクに依存した形で
 `scalacOption` を定義したいとする。
-（[Keys](../sxr/sbt/Keys.scala.html) より）以下の二つのキーを例に説明する。
+（[Keys](../api/sbt/Keys$.html) より）以下の二つのキーを例に説明する。
 
 **注意**: ここで計算される `scalacOptions` の値はナンセンスなもので、説明のためだけのものだ:
 
@@ -823,7 +823,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "Hello",
     organization := "com.example",
-    scalaVersion := "2.12.2",
+    scalaVersion := "2.12.4",
     version := "0.1.0-SNAPSHOT",
     scalacOptions := {
       val out = streams.value // streams タスクは scalacOptions よりも事前発生する
@@ -859,7 +859,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "Hello",
     organization := "com.example",
-    scalaVersion := "2.12.2",
+    scalaVersion := "2.12.4",
     version := "0.1.0-SNAPSHOT",
     scalacOptions := {
       val ur = update.value  // update task happens-before scalacOptions
@@ -985,7 +985,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "Hello",
     organization := "com.example",
-    scalaVersion := "2.12.2",
+    scalaVersion := "2.12.4",
     version := "0.1.0-SNAPSHOT",
     scalacOptions := List("-encoding", "utf8", "-Xfatal-warnings", "-deprecation", "-unchecked"),
     scalacOptions := {
@@ -1008,8 +1008,8 @@ sbt シェルで試すとこうなるはずだ:
 [info] * -deprecation
 [info] * -unchecked
 [success] Total time: 0 s, completed Jan 2, 2017 11:44:44 PM
-> ++2.11.8
-[info] Setting version to 2.11.8
+> ++2.11.8!
+[info] Forcing Scala version to 2.11.8 on all projects.
 [info] Reapplying settings...
 [info] Set current project to Hello (in build file:/xxx/)
 > show scalacOptions
@@ -1019,7 +1019,7 @@ sbt シェルで試すとこうなるはずだ:
 [success] Total time: 0 s, completed Jan 2, 2017 11:44:51 PM
 ```
 
-次に ([Keys](../sxr/sbt/Keys.scala.html) より) 以下の二つのキーを例に説明する:
+次に ([Keys](../api/sbt/Keys$.html) より) 以下の二つのキーを例に説明する:
 
 ```scala
 val scalacOptions = taskKey[Seq[String]]("Options for the Scala compiler.")
@@ -1466,7 +1466,7 @@ lazy val root = (project in file("."))
       // Same as:
       // organization in ThisBuild := "com.example"
       organization := "com.example",
-      scalaVersion := "2.12.2",
+      scalaVersion := "2.12.4",
       version      := "0.1.0-SNAPSHOT"
     )),
     name := "Hello",
@@ -1553,14 +1553,14 @@ sourceDirectories in Compile := Seq(file("sources1"), file("sources2"))
 #### 他のキーの値を基にしたタスク
 
 あるタスクの値を定義するために他のタスクの値を計算する必要があるかもしれない。
-そのような場合には、`:=` や `+=` や `++=` の引数に `Def.task` と `taskValue` を使えばよい。
+そのような場合には、`:=` や `+=` や `++=` の引数に `Def.task` を使えばよい。
 
 例として、`sourceGenerators` にプロジェクトのベースディレクトリやコンパイル時のクラスパスを加える設定をみてみよう。
 
 ```scala
 sourceGenerators in Compile += Def.task {
   myGenerator(baseDirectory.value, (managedClasspath in Compile).value)
-}.taskValue
+}
 ```
 
 ### 依存性を用いた追加: `+=` と `++=`
@@ -1669,7 +1669,7 @@ lazy val projA = (project in file("a"))
 `name in projA` (sbt シェルだと `projA/name`) の値は何か?
 
 1. `"foo-2.11.11"`
-2. `"foo-2.12.2"`
+2. `"foo-2.12.4"`
 3. その他
 
 正解は `"foo-2.11.11"`。
@@ -1977,7 +1977,7 @@ lazy val projF = (project in file("f"))
 ```
 
 
-  [Keys]: ../../sxr/sbt/Keys.scala.html
+  [Keys]: ../../api/sbt/Keys$.html
   [Apache Ivy]: https://ant.apache.org/ivy/
   [Ivy revisions]: https://ant.apache.org/ivy/history/2.3.0-rc1/ivyfile/dependency.html#revision
   [Extra attributes]: https://ant.apache.org/ivy/history/2.3.0-rc1/concept.html#extra
@@ -2065,7 +2065,7 @@ libraryDependencies += groupID % artifactID % revision % configuration
 `libraryDependencies` は [Keys] で以下のように定義されている:
 
 ```scala
-val libraryDependencies = SettingKey[Seq[ModuleID]]("library-dependencies", "Declares managed dependencies.")
+val libraryDependencies = settingKey[Seq[ModuleID]]("Declares managed dependencies.")
 ```
 
 `%` メソッドは、文字列から `ModuleID` オブジェクトを作るので、君はその `ModuleID` を `libraryDependencies` に追加するだけでいい。
@@ -2256,7 +2256,7 @@ lazy val core = project
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.12.2"
+  scalaVersion := "2.12.4"
 )
 
 lazy val core = (project in file("core"))
@@ -2586,9 +2586,9 @@ lazy val core = (project in file("core"))
   [Input-Tasks]: ../../docs/Input-Tasks.html
   [Plugins]: ../../docs/Plugins.html
   [Tasks]: ../../docs/Tasks.html
-  [Keys]: ../../sxr/sbt/Keys.scala.html
+  [Keys]: ../../api/sbt/Keys$.html
   [Defaults]: ../../sxr/sbt/Defaults.scala.html
-  [Scaladocs-IO]: ../api/index.html#sbt.IO$
+  [Scaladocs-IO]: ../api/sbt/io/IO$.html
 
 カスタムセッティングとタスク
 ------------------------
@@ -2947,7 +2947,7 @@ import Dependencies._
 
 lazy val commonSettings = Seq(
   version := "0.1.0",
-  scalaVersion := "2.12.2"
+  scalaVersion := "2.12.4"
 )
 
 lazy val backend = (project in file("backend"))
@@ -3049,7 +3049,7 @@ name := "hello"
 
 version := "1.0"
 
-scalaVersion := "2.12.2"
+scalaVersion := "2.12.4"
 ```
 
 ### (0.13.7 以前) 設定は空白行で区切る
@@ -3068,6 +3068,327 @@ scalaVersion := "2.10.3"
 sbt はどこまでで式が終わってどこからが次の式なのかを判別するために、何らかの区切りを必要とする。
 
 
+インフォメーション
+---------------
+
+一般的な情報。
+
+
+変更点
+------
+
+sbt のリリースごとの変更点など。
+
+
+### sbt 1.0.0
+
+#### 互換性に影響のある新機能、バグ修正、その他の変更点
+
+移植に関しては [Migrating from sbt 0.13.x][Migrating-from-sbt-013x] も参照。
+
+- sbt 1.0 は、ビルド定義とプラグインに **Scala 2.12 ** を使う。そのため、JDK 8 以上を必要とする。
+- case class の多くは Contraband を用いて生成された疑似 case class に置き換えられた。`.copy(foo = xxx)` は `withFoo(xxx)` に書き換える必要がある。例えば、`UpdateConfiguration`、 `RetrieveConfiguration`、 `PublishConfiguration` などはビルダーパターンを使うようにリファクタリングした。
+- Zinc 1 は、Scala 2.9 及びそれ以前のバージョンのサポートを打ち切る。Scala 2.10 は 2.10.2 以降、Scala 2.11 は 2.11.2 以降を使う必要がある。(最新のパッチ版を使うことを推奨する)
+- `config("xyz")` は、`val Xyz = config("xyz")` のように **頭文字が大文字**の `val` に直接代入する必要がある。これは左辺項の識別子を捕捉して後でシェルから使えるようにするためだ。
+- `publishTo` と `otherResolvers` は SettingKey から TaskKey へと変更した。[#2059][2059]/[#2662][2662] by [@dwijnand][@dwijnand]
+- `Path.relativizeFile(baseFile, file)` は `IO.relativizeFile(baseFile, file)` へと名前が変わった。
+- `PathFinder` の `.***` メソッドは `.allPaths` メソッドへと名前が変わった。
+- `PathFinder.x_!(mapper)` は `PathFinder` の `def pair` に変更された。
+- `sbt.Path` の多くのメソッド (`relativeTo`、`rebase`、 `flat` など) は以前は `sbt` のパッケージオブジェクト経由でデフォルトの名前空間に入っていたが、それが無くなったので `sbt.io.Path` を使ってアクセスしてほしい。
+- sbt 1.0 は、スコープ成分としての `Global` を `Zero` と名前を変えて、`GlobalScope` と区別するようにした。 [@eed3si9n][@eed3si9n]
+- 今まで `update.value.configuration(...)` のような所でコンフィギュレーションを参照するのに文字列が使われいたのを、`ConfigRef` を使うように変更した。
+- `sourceArtifactTypes` と `docArtifactTypes` を `Set[String]` から `Seq[String]` セッティングへと変更した。
+- early command 機能を `--<command>` という構文から `early(<command>)` へと変更した。
+- sbt 0.12 スタイルのハイフン区切りされたキー名を撤廃した (例えば `publish-local` から `publishLocal` に移行する)。
+- ログのオプションとして、`"early(error)"` などの代わりに `-error`、 `-warn`、 `-info`、 `-debug` オプションを追加した。
+- `sbt.Process` と `sbt.ProcessExtra` は撤廃した。`scala.sys.process` に移行する。
+- name hashing が常に有効となったため、`incOptions.value.withNameHashing(...)` はオプションは無くなる。
+- `TestResult.Value` は `TestResult` に名前を変更する。
+- Scripted プラグインはクロスバージョンされるため、使う場合は `%%` を使う必要がある。
+
+**以前より廃止勧告が出ていて、今回撤廃されたもの**:
+
+- sbt 0.12 スタイルの `Build` trait は sbt 0.13.12 に廃止勧告となり、この度削除した。[build.sbt へと移行](Migrating-from-sbt-013x.html#Migrating+from+the+Build+trait)する必要がある。Auto plugin と `Build` trait は相性が悪く、またこの機能は既に普及しているマルチプロジェクト build.sbt によって置き換えられた。
+- sbt 0.12 スタイルの `Project(...)` コンストラクタは、2つのパラメータを受け取るものだけに制限する。これは、`settings` パラメータは Auto plugin と相性が悪いからだ。代わりに、`project` を使ってほしい。
+- sbt 0.12 スタイルのキー依存演算子 `<<=`, `<+=`, `<++=` は撤廃した。[:=、 +=、および ++= 演算子へと移行](Migrating-from-sbt-013x.html#Migrating+simple+expressions)してほしい。古い演算子は多くのユーザにとって混乱の元となっており、長らく 0.13 のドキュメンテーションからは削除され、sbt 0.13.13 以降正式に撤廃勧告が出ていた。
+- Auto plugin ではない `sbt.Plugin` を撤廃した。`AutoPlugin` へと移行してほしい。Auto plugin の方が設定が簡単で、プラグイン間の協調が可能だからだ。
+- `Project` より `settingsSet` メソッドおよび `add/setSbtFiles` を削除する。
+- 廃止勧告が出ていた `InputTask` `apply` メソッドと `inputTask` DSL メソッドを撤廃する。`Def.inputTask` と `Def.spaceDelimited().parsed` へと移行してほしい。
+- 廃止勧告が出ていた `ProjectReference` への暗黙の変換を撤廃する。`RootProject(<uri>)`、`RootProject(<file>)`、もしくは `LocalProject(<string>)` へと移行してほしい。
+- 廃止勧告が出ていた `seq(...)` DSL メソッドを撤廃する。`Seq(...)` を使うか、そのまま setting を渡すようにしてほしい。
+- 廃止勧告が出ていた `File`/`Seq[File]` セッティングの暗黙の変換を撤廃する。`.value` と `Def.setting` へと移行してほしい。
+- 廃止勧告が出ていた `SubProcess` の `apply` オーバーロードを撤廃する。`SubProcess(ForkOptions(runJVMOptions = ..))` へと移行する。
+- `toError(opt: Option[String]): Unit` を廃止する (`opt foreach sys.error` と同様)。`ScalaRun#run` と併用する場合、`scalaRun.run(...).failed foreach (sys error _.getMessage)` というように書き換える。
+
+### 新機能
+
+- 新しいインクリメンタル・コンパイラ Zinc 1。 (詳細は以下の項目)
+- インタラクティブ・シェルにネットワーク API が追加された。(詳細は以下の項目)
+- Library management API とアーティファクトの並列ダウンロード。(詳細は以下の項目)
+- イベント・ロギング。(詳細は以下の項目)
+- Scala Center がコントリビュートした `build.sbt` の静的バリデーション。(詳細は以下の項目)
+- sbt-cross-building のプラグインのクロスビルド用の `^` と `^^` コマンドの移植。on projects that adopts Scalafmt
+
+### 改善点
+
+- Scala Center は、Java フレンドリーな Zinc API をコントリビュートした。これは、他のビルドツールからも Scala を取り扱えるように Zinc の API を改善したものだ。 [zinc#304][zinc304] by [@jvican][@jvican]
+- Scala Center は、Zinc 内部の保存用のバイナリフォーマットをコントリビュートした。on projects that adopts Scalafmt
+- `scalas` を使ったときの、スタートアップのログレベルを `-error` まで落とした。 [#840][840] by [@eed3si9n][@eed3si9n]
+- クロスビルドのサポートを sbt-doge に置き換えた。これによって、複数のプロジェクトを異なる Scala バージョンの組み合わせでクロスビルドする必要があるビルドを正しく扱うことができるようになった。`++` の振る舞いが変更され、Scala バージョンのサポートを予め列挙するサブプロジェクトのみが変更されるようになった。しかし、`!` を追加することで全てのプロジェクトを変更することもできる。どのプロジェクトが変更されたのかの詳細な情報を表示するための、`-v` オプションも追加された。[#2613][2613] by [@jroper][@jroper]
+- CI 環境が検知された場合は、`ivyLoggingLevel` を `UpdateLogging.Quiet` に落とすようにした。 [@eed3si9n][@eed3si9n]
+- `build.sbt` (`*.sbt`) ファイル名をログに表示するようにした。 [#1911][1911] by [@valydia][@valydia]
+- 現在のプロジェクトに対して、`build.sbt` ファイルから `aggregate` を呼べるようにした。 By [@xuwei-k][@xuwei-k]
+- `inspect tree` などで表示される ASCII グラフの最大幅を決める `asciiGraphWidth` という新しいグローバルセッティングを追加した。デフォルトでは、40文字。By [@RomanIakovlev][@RomanIakovlev].
+- [スコープ](www.scala-sbt.org/0.13/docs/Scopes.html)のドキュメンテーションを刷新して、[スコープ委譲](www.scala-sbt.org/0.13/docs/Scope-Delegation.html)のページを追加した。 [@eed3si9n][@eed3si9n]
+- クロスバージョンを使ったライブラリの排除ができるようになった。 [#1518][1518]/[lm#88][lm88] by [@jvican][@jvican]
+- Ivy ベースのライブラリ管理に新しいオフラインモードを追加した。 [lm#92][lm92] by [@jvican][@jvican]
+- 依存性ロッキングに関連するいくつかの機能が追加された。(詳細は以下の項目)
+- Eviction 警告の表示の改善。(詳細は以下の項目)
+- main class 検知の改善。 [zinc#287][zinc287] by [@smarter][@smarter]
+- より速いスタートアップのために、`autoImport` の検知に Java リフレクションを使うようにした。 [#3115][3115] by [@jvican][@jvican]
+- より速いスタートアップのために、パーシングに同じコンパイラ Global のインスタンスを再利用するようにした。 [#3115][3115] by [@jvican][@jvican]
+- sbt 0.13 との互換性維持のために、sbt-core-next から `InteractionService` を追加した。 [#3182][3182] by [@eed3si9n][@eed3si9n]
+- `PollingWatchService` と Java NIO を抽象化する新しい `WatchService` を追加した。 [io#47][io47] by [@Duhemm][@Duhemm] on behalf of The Scala Center.
+- `IO.copyFile` と `IO.copyDirectory` に `sbt.io.CopyOptions()` を受け取るバリエーションを追加した。(詳細は以下の項目)
+- `Path.directory` と `Path.contentOf` を sbt-native-packager から寄付してもらった。 [io#38][io38] by [@muuki88][@muuki88]
+- Zinc のデバッグに使われる ApiDiff 機能を Dotty の Scala 実装のものから借りてきた。 [zinc#346][zinc346] by [@Krever][@Krever]
+- Zinc 内部で ExtractAPI が perRunCaches を使うようにした。 [zinc#347][zinc347] by [@gheine][@gheine]
+
+#### 内部
+
+- ソースコードのフォーマットに Scalafmt を採用して、neo-sbt-scalafmt を用いる。
+- Scala Center が Scripted test フレームワークがバッチ・モード実行できる再設計をコントリビュートした。これによって Scripted は同じ sbt インスタンスを再利用して sbt テストを実行でき、CI ビルド時間を 50% ダウンさせた。 [#3151][3151] by [@jvican][@jvican]
+- sbt 1.0.0 は sbt 1.0.0-RC3 を用いてビルドされた。 [#3184][3184] by [@dwijnand][@dwijnand]
+
+### 大きな変更の詳細点
+
+### Zinc 1: クラスベースの name hashing
+
+(Lightbend の委託で) Grzegorz Kossakowski が Zinc 1 にもたらした大きな改善として、クラスベースの name hashing がある。これは、大規模な Scala プロジェクトにおいて差分コンパイルが高速化することが見込まれる。
+
+Zinc 1 の name hashing は、コード間の依存性をファイルではなく、クラスのレベルで追跡する。GitHub issue [sbt/sbt#1104](https://github.com/sbt/sbt/issues/1104) に有名なプロジェクトの既存のクラスにメソッドを追加した場合の比較データがある:
+
+```
+ScalaTest   AndHaveWord class:          Before 49s, After 4s (12x)
+Specs2      OptionResultMatcher class:  Before 48s, After 1s (48x)
+scala/scala Platform class:             Before 59s, After 15s (3.9x)
+scala/scala MatchCodeGen class:         Before 48s, After 17s (2.8x)
+```
+
+これは、クラスがどのようにまとめられているかといった様々な要素に依存するが、3x ~ 40x の向上が見られるのが分かる。高速化の理由は、クラスをソースファイルという「くくり」から分けたことで少ない数のソースファイルをコンパイルしているからだ。scala/scala の Platform クラスにメソッドを追加した例だと、sbt 0.13 の name hashing は 72 のソースをコンパイルしていたのに対し、新しい Zinc は 6 のソースをコンパイルしている。
+
+#### Zinc API の変更
+
+- `xsbti.compile` パッケージ以下の `IncOptions` などの Java クラスはコンストラクタを隠蔽する。ファクトリーメソッドである `xsbti.compile.Foo.of(...)` に移行する。
+- `ivyScala: IvyScala` キーは `scalaModuleInfo: ScalaModuleInfo` に名前が変わる。
+- `xsbti.Reporter#log(...)` は `xsbti.Problem` をパラメータとして受け取るようになった。`log(problem.position, problem.message, problem.severity)` と呼び出すことで以前の `log(...)` に委譲できる。
+- `xsbi.Maybe`、`xsbti.F0`、`sxbti.F1` は対応する Java 8 クラスである `java.util.Optional`、`java.util.Supplier`、および `java.util.Function` に変更する。
+- 使われていなかった "resident" オプションを撤廃する。 [zinc#345][zinc345] by [@lukeindykiewicz][@lukeindykiewicz]
+
+#### sbt サーバ: ツーリング統合のための JSON API
+
+sbt 1.0 はサーバ機能を含み、IDE や他のツールは JSON API を用いてビルドのセッティングをクエリしたり、コマンドを呼び出すことができる。sbt 0.13 においてインタラクティブ・シェルが `shell` コマンドによって実装されていたのと同様に、「サーバ」も `shell` コマンドによって実装されていて、人間とネットワークの両方の入力を受け取るようになっている。ユーザ視点で見ると、サーバが加わったことによる影響はほとんど無いはずだ。
+
+2016年3月に「サーバ」機能が最小限になるように[リブート](http://eed3si9n.com/ja/sbt-server-reboot)が行われた。JetBrain社で IntelliJ の sbt インターフェイスを担当する @jastice とコラボして機能のリストを絞っていった。sbt 1.0 の段階では当初欲しかった機能の全ては入っていないが、長期的に IDE と sbt エコシステムの連携が向上する布石になることを目指している。例えば、IDE 側から compile タスクを命令して、コンパイラ警告を JSON イベントして受け取るといったことができる:
+
+```
+{"type":"xsbti.Problem","message":{"category":"","severity":"Warn","message":"a pure expression does nothing in statement position; you may be omitting necessary parentheses","position":{"line":2,"lineContent":"  1","offset":29,"pointer":2,"pointerSpace":"  ","sourcePath":"/tmp/hello/Hello.scala","sourceFile":"file:/tmp/hello/Hello.scala"}},"level":"warn"}
+```
+
+関連して追加された機能として、テスト中にバックグラウンドで web サーバなどを実行するのに使える `bgRun` タスクがある。
+
+#### イベント・ロギング
+
+sbt 1.0 は、Log4J 2 と sjson-new を用いて実装したイベント・ロギングを導入する。
+普通の String ベースのログの他に、logger に対して case clase や Contraband によって生成された疑似 case class を渡すことができる:
+
+    def registerStringCodec[A: ShowLines: TypeTag]: Unit = ...
+    final def debugEvent[A: JsonFormat: TypeTag](event: => A): Unit = logEvent(Level.Debug, event)
+    final def infoEvent[A: JsonFormat: TypeTag](event: => A): Unit = logEvent(Level.Info, event)
+    final def warnEvent[A: JsonFormat: TypeTag](event: => A): Unit = logEvent(Level.Warn, event)
+    final def errorEvent[A: JsonFormat: TypeTag](event: => A): Unit = logEvent(Level.Error, event)
+
+`[success]` メッセージといった様々なイベントは、内部でイベント・ロギングを用いて送信されている。
+この機構をサーバと併用することで、プラグインやコンパイラから JSON イベントを発行することができる。
+
+また、Log4J 2 を内部に採用したことで SLF4J のバインディングを提供するようになった。
+
+#### build.sbt の静的バリデーション
+
+sbt 1.0 は、タスク内において if 式の本文や匿名関数内からの `.value` の呼び出しを禁止する。`@sbtUnchecked` アノテーションを使ってこのチェックを無効化できる。
+
+他に、静的バリデーションは、タスクの本文内から `.value` を呼び忘れるのも予防する。
+
+[#3216][3216] and [#3225][3225] by [@jvican][@jvican]
+
+#### Eviction 警告の表示
+
+sbt 1.0 は eviction 警告の表示を改善する。
+
+ビフォー:
+
+    [warn] There may be incompatibilities among your library dependencies.
+    [warn] Here are some of the libraries that were evicted:
+    [warn]  * com.google.code.findbugs:jsr305:2.0.1 -> 3.0.0
+    [warn] Run 'evicted' to see detailed eviction warnings
+
+アフター:
+
+    [warn] Found version conflict(s) in library dependencies; some are suspected to be binary incompatible:
+    [warn]
+    [warn]      * com.typesafe.akka:akka-actor_2.12:2.5.0 is selected over 2.4.17
+    [warn]          +- de.heikoseeberger:akka-log4j_2.12:1.4.0            (depends on 2.5.0)
+    [warn]          +- com.typesafe.akka:akka-parsing_2.12:10.0.6         (depends on 2.4.17)
+    [warn]          +- com.typesafe.akka:akka-stream_2.12:2.4.17 ()       (depends on 2.4.17)
+    [warn]
+    [warn] Run 'evicted' to see detailed eviction warnings
+
+[#3202][3202] by [@eed3si9n][@eed3si9n]
+
+#### sbt-cross-building
+
+[@jrudolph][@jrudolph] の sbt-cross-building はプラグイン作者のためのプラグインだ。
+`^` (クロス) コマンドと `^^` (sbtVersion スイッチ) コマンドを追加して、これは `+` を `++` を sbt のメジャーバージョン間の切り替えに対応させたものだと考えることができる。
+プラグインを sbt 1.0 に対応させるのに便利なので、sbt 0.13.16 においてこれらのコマンドを sbt 本体にマージした。
+
+シェルから `sbtVersion in pluginCrossBuild` をスイッチするには以下を実行する:
+
+```
+^^ 1.0.0
+```
+
+これで sbt 1.0.0 (とその Scala バージョンである 2.12) を使うようになる。
+
+sbt バージョンに特定のコードを含む必要があれば、`src/main/scala-sbt-0.13`、`src/main/scala-sbt-1.0` などバイナリ sbt バージョンを末尾に追加したディレクトリを作る。
+
+複数の sbt バージョンをまたいでコマンドを実行するには、まず:
+
+```scala
+crossSbtVersions := Vector("0.13.16", "1.0.0")
+```
+
+と設定して、以下を実行する:
+
+```
+^ compile
+```
+
+[#3133][3133] by [@eed3si9n][@eed3si9n] (forward ported from 0.13.16-M1)
+
+#### CopyOptions
+
+sbt IO 1.0 は `IO.copyFile` と `IO.copyDirectory` のバリエーションとして `sbt.io.CopyOptions()` を受け取るものを追加する。
+`CopyOptions()` は疑似 case class の一例で、ビルダーパターンに似ている。
+
+```scala
+import sbt.io.{ IO, CopyOptions }
+
+IO.copyDirectory(source, target)
+
+// The above is same as the following
+IO.copyDirectory(source, target, CopyOptions()
+  .withOverwrite(false)
+  .withPreserveLastModified(true)
+  .withPreserveExecutable(true))
+```
+
+[io#53][io53] by [@dwijnand][@dwijnand]
+
+#### Library management API とアーティファクトの並列ダウンロード
+
+sbt 1.0 は Lightbend社の Eugene Yokota ([@eed3si9n][@eed3si9n]) と Scala Center の Martin Duhem ([@Duhemm][@Duhemm]) 共著で書かれた Library management API を追加する。
+この API は Apache Ivy および cached resolution や Coursier といったその他の代替依存性解決エンジンを抽象化することを目指している。
+
+Ivy エンジンのためのアーティファクトの並列ダウンロードは Scala Center の Jorge ([@jvican][@jvican]) によってコントリビュートされた。
+また、これは Gigahorse OkHttp を Network API として導入し、内部で Square OkHttp をアーティファクトのダウンロードにも用いる。
+
+[lm#124][lm124] by [@eed3si9n][@eed3si9n]/[@Duhemm][@Duhemm],
+[lm#90][lm90] by [@jvican][@jvican]/[@jsuereth][@jsuereth]
+and [lm#104][lm104] by [@eed3si9n][@eed3si9n].
+
+#### Zinc の内部構造保存のためのバイナリ形式
+
+Zinc の内部構造の保存方法として Google Protocol Buffer を用いたバイナリ形式が Scala Center の Jorge ([@jvican][@jvican]) によってコントリビュートされた。この新形式は主に 3つの利点がある:
+
+1. フォーマットレベルでの後方および前方互換性の向上。
+2. ファイルへのシリアライズ・デシリアライズの高速化 (1.5 ~ 2x)。
+3. ファイルのマシン非依存性の向上。
+
+[zinc#351][zinc351] by [@jvican][@jvican]
+
+#### ライブラリ依存性のロッキング
+
+ライブラリ依存性のロッキング機能はまだ実装途中だが、Scala Center の Jorge ([@jvican][@jvican]) は関連する機能を追加して、最終的にロッキングが可能となる予定だ。
+
+- Ivy ベースのライブラリ管理に frozen モードを追加して、解決が全て intransitive であることを保証できるようにした。 [lm#100][lm100]
+- ライブラリごとにリゾルバを指定できるようにした。 [lm#97][lm97]
+- Ivy にチェックサムをスキップするように指示する "managed checksums" を追加した。 [lm#111][lm111]
+
+#### コントリビュータの皆さん
+
+感謝しなければいけない人が多すぎでここにおさまらなった。[Credits][Credits] を参照してほしい。
+
+  [Credits]: ../Credits.html
+  [Migrating-from-sbt-013x]: ../Migrating-from-sbt-013x.html
+  [@eed3si9n]: https://github.com/eed3si9n
+  [@dwijnand]: http://github.com/dwijnand
+  [@jvican]: https://github.com/jvican
+  [@Duhemm]: https://github.com/Duhemm
+  [@jsuereth]: https://github.com/jsuereth
+  [@gkossakowski]: https://github.com/gkossakowski
+  [sbt-1-0-roadmap]: http://developer.lightbend.com/blog/2017-04-18-sbt-1-0-roadmap-and-beta1/
+  [@eed3si9n]: https://github.com/eed3si9n
+  [@jroper]: https://github.com/jroper
+  [@valydia]: https://github.com/valydia
+  [@RomanIakovlev]: https://github.com/RomanIakovlev
+  [@smarter]: https://github.com/smarter
+  [@jrudolph]: https://github.com/jrudolph
+  [@muuki88]: https://github.com/muuki88
+  [@Rogach]: https://github.com/Rogach
+  [@Krever]: https://github.com/Krever
+  [@lukeindykiewicz]: https://github.com/lukeindykiewicz
+  [@gheine]: https://github.com/gheine
+  [840]: https://github.com/sbt/sbt/issues/840
+  [2613]: https://github.com/sbt/sbt/pull/2613
+  [1911]: https://github.com/sbt/sbt/issues/1911
+  [2059]: https://github.com/sbt/sbt/issues/2059
+  [2662]: https://github.com/sbt/sbt/pull/2662
+  [3133]: https://github.com/sbt/sbt/pull/3133
+  [util80]: https://github.com/sbt/util/pull/80
+  [3198]: https://github.com/sbt/sbt/issues/3198
+  [lm88]: https://github.com/sbt/librarymanagement/pull/88
+  [1518]: https://github.com/sbt/sbt/issues/1518
+  [lm90]: https://github.com/sbt/librarymanagement/pull/90
+  [lm92]: https://github.com/sbt/librarymanagement/pull/92
+  [lm98]: https://github.com/sbt/librarymanagement/pull/98
+  [lm100]: https://github.com/sbt/librarymanagement/pull/100
+  [lm111]: https://github.com/sbt/librarymanagement/pull/111
+  [lm104]: https://github.com/sbt/librarymanagement/pull/104
+  [lm97]: https://github.com/sbt/librarymanagement/pull/97
+  [lm124]: https://github.com/sbt/librarymanagement/pull/124
+  [3202]: https://github.com/sbt/sbt/pull/3202
+  [zinc295]: https://github.com/sbt/zinc/pull/295
+  [zinc287]: https://github.com/sbt/zinc/pull/287
+  [zinc288]: https://github.com/sbt/zinc/pull/288
+  [zinc304]: https://github.com/sbt/zinc/pull/304
+  [zinc346]: https://github.com/sbt/zinc/pull/346
+  [zinc345]: https://github.com/sbt/zinc/pull/345
+  [zinc347]: https://github.com/sbt/zinc/pull/347
+  [zinc351]: https://github.com/sbt/zinc/pull/351
+  [3115]: https://github.com/sbt/sbt/pull/3115
+  [3182]: https://github.com/sbt/sbt/pull/3182
+  [3151]: https://github.com/sbt/sbt/pull/3151
+  [3184]: https://github.com/sbt/sbt/pull/3184
+  [3216]: https://github.com/sbt/sbt/pull/3216
+  [3218]: https://github.com/sbt/sbt/pull/3218
+  [3225]: https://github.com/sbt/sbt/pull/3225
+  [3233]: https://github.com/sbt/sbt/pull/3233
+  [io47]: https://github.com/sbt/io/pull/47
+  [io53]: https://github.com/sbt/io/pull/53
+  [io38]: https://github.com/sbt/io/pull/38
+  [util81]: https://github.com/sbt/util/pull/81
+
+
 各論
 ----
 
@@ -3079,7 +3400,7 @@ sbt はどこまでで式が終わってどこからが次の式なのかを判�
 --------------------------
 
 
-  [sbtScriptedTests]: https://github.com/sbt/sbt/tree/0.13/sbt/src/sbt-test
+  [sbtScriptedTests]: https://github.com/sbt/sbt/tree/1.x/sbt/src/sbt-test
   [xsbt-web-plugin]: https://github.com/JamesEarlDouglas/xsbt-web-plugin/tree/master/src/sbt-test
   [sbt-assembly]: https://github.com/sbt/sbt-assembly/tree/master/src/sbt-test/sbt-assembly
   [feabb2]: https://github.com/JamesEarlDouglas/xsbt-web-plugin/commit/feabb2eb554940d9b28049bd0618b6a790d9e141
@@ -3117,7 +3438,7 @@ libraryDependencies += { "org.scala-sbt" %% "scripted-plugin" % sbtVersion.value
 
 ```scala
 scriptedLaunchOpts := { scriptedLaunchOpts.value ++
-  Seq("-Xmx1024M", "-XX:MaxPermSize=256M", "-Dplugin.version=" + version.value)
+  Seq("-Xmx1024M", "-Dplugin.version=" + version.value)
 }
 scriptedBufferLog := false
 ```
@@ -3211,18 +3532,20 @@ Running sbt-assembly / simple
 
 ファイルコマンドは便利だけど、実際のコンテンツをテストしないため、それだけでは不十分だ。コンテンツをテストする簡単な方法は、テストビルドにカスタムのタスクを実装してしまうことだ。
 
-上記の hello プロジェクトを例に取ると、生成された jar が "hello" と表示するかを確認したいとする。`sbt.Process` を用いて jar を走らせることができる。失敗を表すには、単にエラーを投げればいい。以下に `build.sbt` を示す:
+上記の hello プロジェクトを例に取ると、生成された jar が "hello" と表示するかを確認したいとする。`scala.sys.process.Process` を用いて jar を走らせることができる。失敗を表すには、単にエラーを投げればいい。以下に `build.sbt` を示す:
 
 ```scala
+import scala.sys.process.Process
+
 lazy val root = (project in file("."))
   .settings(
     version := "0.1",
     scalaVersion := "2.10.6",
     assemblyJarName in assembly := "foo.jar",
     TaskKey[Unit]("check") := {
-      val process = sbt.Process("java", Seq("-jar", (crossTarget.value / "foo.jar").toString))
+      val process = Process("java", Seq("-jar", (crossTarget.value / "foo.jar").toString))
       val out = (process!!)
-      if (out.trim != "bye") error("unexpected output: " + out)
+      if (out.trim != "bye") sys.error("unexpected output: " + out)
       ()
     }
   )
@@ -3350,13 +3673,13 @@ sbt 0.13.8 で `Def.sequential` という関数が追加されて、準逐次な
 #### project/build.properties
 
 ```
-sbt.version=1.0.0-RC2
+sbt.version=1.0.4
 ```
 
 #### project/style.sbt
 
 ```
-addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.8.0")
+addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0")
 ```
 
 #### build.sbt
@@ -3400,13 +3723,13 @@ root> compilecheck
 #### project/build.properties
 
 ```
-sbt.version=1.0.0-RC2
+sbt.version=1.0.4
 ```
 
 #### project/style.sbt
 
 ```
-addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.8.0")
+addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0")
 ```
 
 #### build.sbt v1
