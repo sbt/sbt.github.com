@@ -40,7 +40,7 @@ Gracias por utilizar sbt *¡Diviértase!*
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.4/sbt-1.0.4.msi
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.1.0/sbt-1.1.0.msi
   [Setup-Notes]: ../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -72,8 +72,8 @@ Si tiene algún problema ejecutando sbt, vea
 HTTP proxies, y opciones de la JVM.
 
 
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.4/sbt-1.0.4.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.4/sbt-1.0.4.tgz
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.1.0/sbt-1.1.0.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.1.0/sbt-1.1.0.tgz
   [Manual-Installation]: Manual-Installation.html
  
 <!-- TODO: Translate to Spanish -->
@@ -100,9 +100,9 @@ $ port install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.4/sbt-1.0.4.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.4/sbt-1.0.4.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.4/sbt-1.0.4.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.1.0/sbt-1.1.0.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.1.0/sbt-1.1.0.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.1.0/sbt-1.1.0.tgz
 
 Installing sbt on Windows
 -------------------------
@@ -120,10 +120,10 @@ Download [ZIP][ZIP] or [TGZ][TGZ] package and expand it.
 See instruction to install manually.
 
 
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.4/sbt-1.0.4.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.4/sbt-1.0.4.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.0.4.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.0.4.deb
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.1.0/sbt-1.1.0.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.1.0/sbt-1.1.0.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.1.0.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.1.0.deb
   [Manual-Installation]: Manual-Installation.html
 
 <!-- TODO: Translate to Spanish -->
@@ -166,7 +166,7 @@ siguiente:
 See instruction to install manually.
 
 
-  [sbt-launch.jar]: https://repo1.maven.org/maven2/org/scala-sbt/sbt-launch/1.0.4/sbt-launch.jar
+  [sbt-launch.jar]: https://repo1.maven.org/maven2/org/scala-sbt/sbt-launch/1.1.0/sbt-launch.jar
 
 Installing sbt manually
 -----------------------
@@ -341,10 +341,10 @@ Usted puede forzar una versión partivular de sbt al crear un archivo
 `hello/project/build.properties`. En este archivo, escriba:
 
 ```
-sbt.version=1.0.4
+sbt.version=1.1.0
 ```
 
-para forzar el uso de sbt 1.0.4. sbt es 99% compatible (con respecto
+para forzar el uso de sbt 1.1.0. sbt es 99% compatible (con respecto
 al código fuente) de una *release* a otra. Sin embargo, configurar la versión
 de sbt en `project/build.properties`
 evita cualquier confusión potencial.
