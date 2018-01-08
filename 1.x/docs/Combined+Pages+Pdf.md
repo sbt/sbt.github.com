@@ -169,7 +169,7 @@ $ port install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.1.0/sbt-1.1.0.msi
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.1.0/sbt-1.1.0.1.msi
   [ZIP]: https://github.com/sbt/sbt/releases/download/v1.1.0/sbt-1.1.0.zip
   [TGZ]: https://github.com/sbt/sbt/releases/download/v1.1.0/sbt-1.1.0.tgz
 
