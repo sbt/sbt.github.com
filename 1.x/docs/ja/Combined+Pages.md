@@ -46,10 +46,9 @@ sbt のインストール
 
 sbt プロジェクトを作るためには、以下の手順をたどる必要がある:
 
+ - JDK をインストールする。(Oracle JDK 8 もしくは OpenJDK 8 を推奨)
  - sbt をインストールする。
  - 簡単な [hello world][Hello] プロジェクトをセットアップする。
-   - ソースファイルの入ったプロジェクトディレクトリを作る。
-   - ビルド定義を作る。
  - [実行する][Running]を読んで、sbt の実行方法を知る。
  - [.sbt ビルド定義][Basic-Def]を読んで、ビルド定義についてもっと詳しく知る。
 
@@ -67,9 +66,14 @@ sbt プロジェクトを作るためには、以下の手順をたどる必要�
   [ZIP]: https://github.com/sbt/sbt/releases/download/v1.1.0/sbt-1.1.0.zip
   [TGZ]: https://github.com/sbt/sbt/releases/download/v1.1.0/sbt-1.1.0.tgz
   [Manual-Installation]: Manual-Installation.html
+  [oraclejdk8]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 
 Mac への sbt のインストール
 -------------------------
+
+### Install JDK
+
+Follow the link to install [Java SE Development Kit 8][oraclejdk8].
 
 ### ユニバーサルパッケージからのインストール
 
@@ -96,9 +100,14 @@ $ port install sbt
   [MSI]: https://github.com/sbt/sbt/releases/download/v1.1.0/sbt-1.1.0.1.msi
   [ZIP]: https://github.com/sbt/sbt/releases/download/v1.1.0/sbt-1.1.0.zip
   [TGZ]: https://github.com/sbt/sbt/releases/download/v1.1.0/sbt-1.1.0.tgz
+  [oraclejdk8]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 
 Windows への sbt のインストール
 ----------------------------
+
+### Install JDK
+
+Follow the link to install [Java SE Development Kit 8][oraclejdk8].
 
 ### ユニバーサルパッケージからのインストール
 
@@ -118,6 +127,14 @@ Windows への sbt のインストール
 
 Linux への sbt のインストール
 --------------------------
+
+### JDK のインストール
+
+まず JDK をインストールする必要がある。Oracle JDK 8 もしくは OpenJDK 8 を推奨する。パッケージ名はディストリビューションによって異なる。
+
+例えば、Ubuntu xenial (16.04LTS) には [openjdk-8-jdk](https://packages.ubuntu.com/hu/xenial/openjdk-8-jdk) がある。
+
+Redhat 系は [java-1.8.0-openjdk-devel](https://apps.fedoraproject.org/packages/java-1.8.0-openjdk-devel) と呼んでいる。
 
 ### ユニバーサルパッケージからのインストール
 
