@@ -71,10 +71,10 @@ on published artifacts.
 </p><blockquote><p><em>Note:</em> Sonatype advises that responding to a <strong>New Project ticket</strong> might 
 take up to two business days, but in my case it was a few minutes.
 </p></blockquote><h3 id="SBT+setup">SBT setup<a href="#SBT+setup" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To address Sonatype’s <a href="http://central.sonatype.org/pages/requirements.html">requirements</a> for publishing to the central repository and to simplify the publishing process, you can
-use two community plugins. The <a href="http://scala-sbt.org/sbt-pgp/">sbt-pgp plugin</a> can sign the files with GPG/PGP
+use two community plugins. The <a href="https://www.scala-sbt.org/sbt-pgp/">sbt-pgp plugin</a> can sign the files with GPG/PGP
 and <a href="https://github.com/xerial/sbt-sonatype">sbt-sonatype</a> can publish to a Sonatype repository. 
 </p><h4 id="First+-+PGP+Signatures">First - PGP Signatures<a href="#First+-+PGP+Signatures" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>With the PGP key you want to use, you can sign the artifacts 
-you want to publish to the Sonatype repository with the <a href="http://scala-sbt.org/sbt-pgp/">sbt-pgp plugin</a>. Follow 
+you want to publish to the Sonatype repository with the <a href="https://www.scala-sbt.org/sbt-pgp/">sbt-pgp plugin</a>. Follow 
 the instructions for the plugin and you’ll have PGP signed artifacts in no 
 time.
 </p><p>In short, add the following line to your <code>~/.sbt/1.0/plugins/gpg.sbt</code> file to 
@@ -96,7 +96,7 @@ remove the displayed files:
 [info] /home/username/.sbt/.gnupg/pubring.gpg
 </code></pre><p>If your PGP key has not yet been distributed to the keyserver pool, e.g., 
 you’ve just generated it, you’ll need to publish it. You can do so using the 
-<a href="http://scala-sbt.org/sbt-pgp/">sbt-pgp</a> plugin:
+<a href="https://www.scala-sbt.org/sbt-pgp/">sbt-pgp</a> plugin:
 </p><pre><code class="">pgp-cmd send-key keyname hkp://pool.sks-keyservers.net
 </code></pre><p>Where <code>keyname</code> is the name or email address used when creating the key or 
 hexadecimal identifier for the key.

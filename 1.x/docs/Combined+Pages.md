@@ -65,7 +65,7 @@ on [GitHub](https://github.com/sbt/website/). Feel free to make
 corrections and add documentation.
 
 Documentation for 0.7.x has been
-[archived here](http://www.scala-sbt.org/0.7.7/docs/home.html). This
+[archived here](https://www.scala-sbt.org/0.7.7/docs/home.html). This
 documentation applies to sbt 1.1.0.
 
 See also the [API Documentation](../api/index.html),
@@ -3823,7 +3823,7 @@ and its access. The goal of the sbt organization is to organize sbt
 software into one central location.
 
 A side benefit to using the sbt organization for projects is that you
-can use gh-pages to host websites under the http://scala-sbt.org domain.
+can use gh-pages to host websites under the https://www.scala-sbt.org domain.
 
 ### Community Ivy Repository
 
@@ -4088,7 +4088,7 @@ your plugin to the list.
 - [sbt-protoc](https://github.com/thesamet/sbt-protoc): protobuf code generator
   using protoc. <!-- 35 stars -->
 - [sbt-contraband](https://github.com/sbt/contraband)
-  ([docs](http://www.scala-sbt.org/contraband)): generate pseudo-case classes
+  ([docs](https://www.scala-sbt.org/contraband)): generate pseudo-case classes
   from GraphQL schemas. <!-- 34 stars -->
 - [sbt-antlr4](https://github.com/ihji/sbt-antlr4): run ANTLR v4 from sbt.
   <!-- 22 stars -->
@@ -4397,7 +4397,7 @@ configure HTTPS or FTP.
   [sonatype-coordinates]: http://central.sonatype.org/pages/choosing-your-coordinates.html
   [sonatype-nexus]: https://oss.sonatype.org/#welcome
   [sonatype-pgp]: http://central.sonatype.org/pages/working-with-pgp-signatures.html
-  [sbt-pgp]: http://scala-sbt.org/sbt-pgp/
+  [sbt-pgp]: https://www.scala-sbt.org/sbt-pgp/
   [sbt-sonatype]: https://github.com/xerial/sbt-sonatype
   [sbt-release]: https://github.com/sbt/sbt-release
   [gnupg]: https://www.gnupg.org/
@@ -5966,7 +5966,7 @@ since the resolution happens off of a local-preloaded repository.
 
 No changes should be necessary to your project definition and all plugins published for sbt 0.13.{x|x<14} should still work.
 
-See [Migrating from sbt 0.12.x](http://www.scala-sbt.org/0.13/docs/Migrating-from-sbt-012x.html) for details on the old operator deprecation.
+See [Migrating from sbt 0.12.x](https://www.scala-sbt.org/0.13/docs/Migrating-from-sbt-012x.html) for details on the old operator deprecation.
 
 Special thanks to the contributors for making this release a success. According to `git shortlog -sn --no-merges v0.13.13..0.13.15`, compared to 0.13.13, there were 64 (non-merge) commits, by eleven contributors: Eugene Yokota, Dale Wijnand, Guillaume Martres, Jason Zaugg, Lars Hupel, Petro Verkhogliad, Eric Richardson, Claudio Bley, Haochi Chen, Paul Draper, Ashley Mercer. Thank you!
 
@@ -6138,7 +6138,7 @@ This becomes:
 
     run := docsRunSetting.evaluated
 
-See [Migrating from sbt 0.12.x](http://www.scala-sbt.org/0.13/docs/Migrating-from-sbt-012x.html) for more details.
+See [Migrating from sbt 0.12.x](https://www.scala-sbt.org/0.13/docs/Migrating-from-sbt-012x.html) for more details.
 
 [#2716][2716]/[#2763][2763]/[#2764][2764] by [@eed3si9n][@eed3si9n] and [@dwijnand][@dwijnand]
 
@@ -6620,7 +6620,7 @@ sbt 0.13.9 fixes this by relaxing the Maven compatiblity check, so it will read 
   [@j-keck]: https://github.com/j-keck
   [@xuwei-k]: https://github.com/xuwei-k
   [SI-9027]: https://github.com/scala/bug/issues/9027
-  [Custom-Settings0]: http://www.scala-sbt.org/0.13/tutorial/Custom-Settings.html
+  [Custom-Settings0]: https://www.scala-sbt.org/0.13/tutorial/Custom-Settings.html
   [321]: https://github.com/sbt/sbt/issues/321
   [647]: https://github.com/sbt/sbt/issues/647
   [679]: https://github.com/sbt/sbt/issues/679
@@ -7871,7 +7871,7 @@ The [Configuring Scala](Configuring-Scala.html) page provides full details.
     by passing -Dsbt.resident.limit=n to sbt, where n is an integer
     indicating the maximum number of compilers to keep around.
 -   The [Howto pages](Howto.html) on the
-    [new site](http://www.scala-sbt.org) are at least readable now. There
+    [new site](https://www.scala-sbt.org) are at least readable now. There
     is more content to write and more formatting improvements are
     needed, so [pull requests are
     welcome](https://github.com/sbt/sbt.github.com).
@@ -20608,7 +20608,7 @@ organizationHomepage := Some(url("http://example.org"))
 ### Set the project's homepage and other metadata
 
 ```scala
-homepage := Some(url("http://scala-sbt.org"))
+homepage := Some(url("https://www.scala-sbt.org"))
 
 startYear := Some(2008)
 
@@ -22067,15 +22067,15 @@ always write it in all lowercase letters. However, we are cool with [酢豚][sub
 
 #### How do I get help?
 
--  See [Support](http://www.scala-sbt.org/support.html#how-can-I-get-help)
+-  See [Support](https://www.scala-sbt.org/support.html#how-can-I-get-help)
 
 #### How do I report a bug?
 
--  See [Get Involved](http://www.scala-sbt.org/community.html#how-can-I-help)
+-  See [Get Involved](https://www.scala-sbt.org/community.html#how-can-I-help)
 
 #### How can I help?
 
--  See [Get Involved](http://www.scala-sbt.org/community.html#how-can-I-help)
+-  See [Get Involved](https://www.scala-sbt.org/community.html#how-can-I-help)
 
 ### Usage
 
@@ -22721,7 +22721,7 @@ used for
     doesn't match the input.
 
 
-  [HowCanIHelp]: http://www.scala-sbt.org/community.html#how-can-I-help
+  [HowCanIHelp]: https://www.scala-sbt.org/community.html#how-can-I-help
 
 Developer's Guide (Work in progress)
 ------------------------------------

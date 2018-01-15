@@ -139,7 +139,7 @@ sbt artifacts so the installation of sbt will not require access to the Internet
 since the resolution happens off of a local-preloaded repository.
 </p><p><a href="https://github.com/sbt/sbt/pull/2993">#2993</a>/<a href="https://github.com/sbt/sbt-launcher-package/pull/145">#145</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
 </p><h3 id="Notes">Notes<a href="#Notes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>No changes should be necessary to your project definition and all plugins published for sbt 0.13.{x|x&lt;14} should still work.
-</p><p>See <a href="http://www.scala-sbt.org/0.13/docs/Migrating-from-sbt-012x.html">Migrating from sbt 0.12.x</a> for details on the old operator deprecation.
+</p><p>See <a href="https://www.scala-sbt.org/0.13/docs/Migrating-from-sbt-012x.html">Migrating from sbt 0.12.x</a> for details on the old operator deprecation.
 </p><p>Special thanks to the contributors for making this release a success. According to <code>git shortlog -sn --no-merges v0.13.13..0.13.15</code>, compared to 0.13.13, there were 64 (non-merge) commits, by eleven contributors: Eugene Yokota, Dale Wijnand, Guillaume Martres, Jason Zaugg, Lars Hupel, Petro Verkhogliad, Eric Richardson, Claudio Bley, Haochi Chen, Paul Draper, Ashley Mercer. Thank you!
 </p><h2 id="sbt+0.13.14">sbt 0.13.14<a href="#sbt+0.13.14" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>sbt 0.13.14 did not happen due a bug that was found after the artifact was published.
 </p><h2 id="sbt+0.13.13">sbt 0.13.13<a href="#sbt+0.13.13" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Fixes+with+compatibility+implications">Fixes with compatibility implications<a href="#Fixes+with+compatibility+implications" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Deprecates the old sbt 0.12 DSL, to be removed in sbt 1.0. See below for more details.
@@ -226,7 +226,7 @@ and will be removed in sbt 1.0.
 </p><pre><code>run &lt;&lt;= docsRunSetting
 </code></pre><p>This becomes:
 </p><pre><code>run := docsRunSetting.evaluated
-</code></pre><p>See <a href="http://www.scala-sbt.org/0.13/docs/Migrating-from-sbt-012x.html">Migrating from sbt 0.12.x</a> for more details.
+</code></pre><p>See <a href="https://www.scala-sbt.org/0.13/docs/Migrating-from-sbt-012x.html">Migrating from sbt 0.12.x</a> for more details.
 </p><p><a href="https://github.com/sbt/sbt/pull/2716">#2716</a>/<a href="https://github.com/sbt/sbt/issues/2763">#2763</a>/<a href="https://github.com/sbt/sbt/pull/2764">#2764</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a> and <a href="https://github.com/dwijnand">@dwijnand</a>
 </p><h2 id="sbt+0.13.12">sbt 0.13.12<a href="#sbt+0.13.12" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Fixes+with+compatibility+implications">Fixes with compatibility implications<a href="#Fixes+with+compatibility+implications" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>By default the Scala toolchain artifacts are now transitively resolved using the provided <code>scalaVersion</code> and
 <code>scalaOrganization</code>. Previously a user specified <code>scalaOrganization</code> would not have affected transitive
@@ -492,7 +492,7 @@ lazy val root = project.
     foo := Def.sequential(compile in Compile, sideEffect0, sideEffect1, test in Test).value
   )
 </code></pre><p>Normally sbt’s task engine will reorder tasks based on the dependencies among the tasks,
-and run as many tasks in parallel (See <a href="http://www.scala-sbt.org/0.13/tutorial/Custom-Settings.html">Custom settings and tasks</a> for more details on this).
+and run as many tasks in parallel (See <a href="https://www.scala-sbt.org/0.13/tutorial/Custom-Settings.html">Custom settings and tasks</a> for more details on this).
 <code>Def.sequential</code> instead tries to run the tasks in the specified order.
 However, the task engine will still deduplicate tasks. For instance, when <code>foo</code> is executed, it will only compile once,
 even though <code>test in Test</code> depends on compile. <a href="https://github.com/sbt/sbt/pull/1817">#1817</a>/<a href="https://github.com/sbt/sbt/issues/1001">#1001</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
