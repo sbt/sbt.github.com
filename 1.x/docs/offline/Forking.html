@@ -57,11 +57,11 @@ in the <code>test</code> scope to only fork <code>test</code> commands.
 </p><p>To fork all test tasks (<code>test</code>, <code>testOnly</code>, and <code>testQuick</code>) and run
 tasks (<code>run</code>, <code>runMain</code>, <code>Test / run</code>, and <code>Test / runMain</code>),
 </p><pre><code class="prettyprint lang-scala">fork := true
-</code></pre><p>To enable forking <code>run</code> tasks only, set <code>Comile / run / fork</code> to <code>true</code>.
+</code></pre><p>To only fork <code>Compile / run</code> and <code>Compile / runMain</code>:
 </p><pre><code class="prettyprint lang-scala">Compile / run / fork := true
 </code></pre><p>To only fork <code>Test / run</code> and <code>Test / runMain</code>:
 </p><pre><code class="prettyprint lang-scala">Test / run / fork := true
-</code></pre><p> <code>run</code> and <code>runMain</code> share the same configuration and cannot be configured separately.
+</code></pre><p><em>Note:</em> <code>run</code> and <code>runMain</code> share the same configuration and cannot be configured separately.
 </p><p>To enable forking all <code>test</code> tasks only, set <code>fork</code> to <code>true</code> in the
 <code>Test</code> scope:
 </p><pre><code class="prettyprint lang-scala">Test / fork := true
