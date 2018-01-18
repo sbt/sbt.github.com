@@ -10524,8 +10524,8 @@ we:
 and modify parsers.
 </li><li>Define the initial arguments passed to the second <code>run</code>, but allow
 further input on the command line.
-</li></ul><blockquote><p><strong>Note</strong>: the current implementation of <code>:=</code> doesn’t actually support
-applying input derived from settings yet.
+</li></ul><blockquote><p><strong>Note</strong>: if the input derives from settings you need to use, for
+example, <code>Def.taskDyn { ... }.value</code>
 </p></blockquote><pre><code class="prettyprint lang-scala">lazy val run2 = inputKey[Unit](&quot;Runs the main class twice: &quot; +
    &quot;once with the project name and version as arguments&quot;
    &quot;and once with command line arguments preceded by hard coded values.&quot;)
