@@ -1478,9 +1478,9 @@ once:
 as well.
 </p><h4 id="Getting+the+right+Scala+version+with">Getting the right Scala version with <code>%%</code><a href="#Getting+the+right+Scala+version+with" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>If you use <code>groupID %% artifactID % revision</code> rather than
 <code>groupID % artifactID % revision</code> (the difference is the double <code>%%</code> after
-the <code>groupID</code>), sbt will add your project’s Scala version to the artifact
+the <code>groupID</code>), sbt will add your project’s binary Scala version to the artifact
 name. This is just a shortcut. You could write this without the <code>%%</code>:
-</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-tools&quot; % &quot;scala-stm_2.11.1&quot; % &quot;0.3&quot;
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-tools&quot; % &quot;scala-stm_2.11&quot; % &quot;0.3&quot;
 </code></pre><p>Assuming the <code>scalaVersion</code> for your build is <code>2.11.1</code>, the following is
 identical (note the double <code>%%</code> after <code>&quot;org.scala-tools&quot;</code>):
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-tools&quot; %% &quot;scala-stm&quot; % &quot;0.3&quot;
