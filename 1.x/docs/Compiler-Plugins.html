@@ -60,18 +60,26 @@ scalacOptions :=
     scalacOptions.value :+ (&quot;-Psxr:base-directory:&quot; + (scalaSource in Compile).value.getAbsolutePath)
 </code></pre><p>You can still specify compiler plugins manually. For example:
 </p><pre><code class="prettyprint lang-scala">scalacOptions += &quot;-Xplugin:&lt;path-to-sxr&gt;/sxr-0.3.0.jar&quot;
-</code></pre><h3 id="Continuations+Plugin+Example">Continuations Plugin Example<a href="#Continuations+Plugin+Example" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Support for continuations in Scala 2.8 is implemented as a compiler
+</code></pre><h3 id="Continuations+Plugin+Example">Continuations Plugin Example<a href="#Continuations+Plugin+Example" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Support for continuations in Scala 2.12 is implemented as a compiler
 plugin. You can use the compiler plugin support for this, as shown here.
-</p><pre><code class="prettyprint lang-scala">autoCompilerPlugins := true
+</p><pre><code class="prettyprint lang-scala">val continuationsVersion = &quot;1.0.3&quot;
 
-addCompilerPlugin(&quot;org.scala-lang.plugins&quot; % &quot;continuations&quot; % &quot;2.8.1&quot;)
+autoCompilerPlugins := true
+
+addCompilerPlugin(&quot;org.scala-lang.plugins&quot; % &quot;scala-continuations-plugin_2.12.2&quot; % continuationsVersion)
+
+libraryDependencies += &quot;org.scala-lang.plugins&quot; %% &quot;scala-continuations-library&quot; % continuationsVersion
 
 scalacOptions += &quot;-P:continuations:enable&quot;
 </code></pre><h3 id="Version-specific+Compiler+Plugin+Example">Version-specific Compiler Plugin Example<a href="#Version-specific+Compiler+Plugin+Example" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Adding a version-specific compiler plugin can be done as follows:
-</p><pre><code class="prettyprint lang-scala">autoCompilerPlugins := true
+</p><pre><code class="prettyprint lang-scala">val continuationsVersion = &quot;1.0.3&quot;
+
+autoCompilerPlugins := true
 
 libraryDependencies +=
-    compilerPlugin(&quot;org.scala-lang.plugins&quot; % &quot;continuations&quot; % scalaVersion.value)
+    compilerPlugin(&quot;org.scala-lang.plugins&quot; % (&quot;scala-continuations-plugin_&quot; + scalaVersion.value) % continuationsVersion)
+
+libraryDependencies += &quot;org.scala-lang.plugins&quot; %% &quot;scala-continuations-library&quot; % continuationsVersion
 
 scalacOptions += &quot;-P:continuations:enable&quot;
 </code></pre><div class="bottom nav span-16">

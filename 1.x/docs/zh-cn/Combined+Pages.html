@@ -589,7 +589,7 @@ checksums := scalacOptions.value
 </code></pre><p>在很少情况下，你也会需要在 <code>libraryDependencies</code> 上用 <code>:=</code> 方法。
 </p><h4 id="%E9%80%9A%E8%BF%87++%E6%96%B9%E6%B3%95%E8%8E%B7%E5%8F%96%E6%AD%A3%E7%A1%AE%E7%9A%84+Scala+%E7%89%88%E6%9C%AC">通过 <code>%%</code> 方法获取正确的 Scala 版本<a href="#%E9%80%9A%E8%BF%87++%E6%96%B9%E6%B3%95%E8%8E%B7%E5%8F%96%E6%AD%A3%E7%A1%AE%E7%9A%84+Scala+%E7%89%88%E6%9C%AC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>如果你用是 <code>groupID %% artifactID % revision</code> 而不是 <code>groupID % artifactID % revision</code>（区别在于 <code>groupID</code> 后面是 <code>%%</code>），sbt 会在 工件名称中加上项目的 Scala 版本号。
 这只是一种快捷方法。你可以这样写不用 <code>%%</code>：
-</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-tools&quot; % &quot;scala-stm_2.11.1&quot; % &quot;0.3&quot;
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-tools&quot; % &quot;scala-stm_2.11&quot; % &quot;0.3&quot;
 </code></pre><p>假设这个构建的 <code>scalaVersion</code> 是 <code>2.11.1</code>，下面这种方式是等效的（注意 <code>&quot;org.scala-tools&quot;</code> 后面是 <code>%%</code>）：
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-tools&quot; %% &quot;scala-stm&quot; % &quot;0.3&quot;
 </code></pre><p>这个想法是很多依赖都会被编译给多个 Scala 版本，而你想确保和项目匹配的jar是二进制兼容的。
