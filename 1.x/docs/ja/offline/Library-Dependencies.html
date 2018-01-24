@@ -100,13 +100,6 @@ sbt はプロジェクトの Scala のバイナリバージョンをアーティ
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-tools&quot; %% &quot;scala-stm&quot; % &quot;0.3&quot;
 </code></pre><p>多くの依存ライブラリは複数の Scala バイナリバージョンに対してコンパイルされており、
 ライブラリの利用者はバイナリ互換性のあるものを選択したいと思うはずである。
-</p><p>実際のところの複雑な問題として、依存ライブラリはしばしば少しくらい違った Scala バージョンでも動作するのだが、
-<code>%%</code> はこれについてそこまで賢くはない。
-もしある依存ライブラリが Scala 2.10.1 に対してビルドされているとして、
-君のプロジェクトが <code>scalaVersion := &quot;2.10.4&quot;</code> と指定している場合、
-その 2.10.1 に依存するライブラリがおそらく動作するにも関わらず <code>%%</code> を使うことはできない。
-もし <code>%%</code> が動かなくなったら、依存ライブラリが使っている実際のバージョンを確認して、
-動くだろうバージョン（それがあればの話だけど）に決め打ちすればいい。
 </p><p>詳しくは、<a href="../../docs/Cross-Build.html">Cross Build</a> を参照。
 </p><h4 id="Ivy+revision">Ivy revision<a href="#Ivy+revision" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>groupID % artifactID % revision</code> の <code>revision</code> は、単一の固定されたバージョン番号でなくてもよい。
 Ivy は指定されたバージョン指定の制限の中でモジュールの最新の revision を選ぶことができる。

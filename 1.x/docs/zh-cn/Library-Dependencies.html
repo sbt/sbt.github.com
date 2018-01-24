@@ -85,8 +85,6 @@
 </code></pre><p>假设这个构建的 <code>scalaVersion</code> 是 <code>2.11.1</code>，下面这种方式是等效的（注意 <code>&quot;org.scala-tools&quot;</code> 后面是 <code>%%</code>）：
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-tools&quot; %% &quot;scala-stm&quot; % &quot;0.3&quot;
 </code></pre><p>这个想法是很多依赖都会被编译给多个 Scala 版本，而你想确保和项目匹配的jar是二进制兼容的。
-</p><p>实践中的复杂度在于通常一个依赖会和稍微不同的 Scala 版本一起工作；但是 <code>%%</code> 就没有那么智能了。所以如果一个依赖要求版本为 <code>2.10.1</code>，但是你使用的 <code>scalaVersion := &quot;2.10.4&quot;</code>，
-你无法使用 <code>%%</code> 方法即使 <code>2.10.1</code> 的版本很可能也可以工作。如果 <code>%%</code> 无法达到目的，只需要去检查那个依赖是基于哪个 Scala 版本构建的，然后硬编码你认为可以工作的版本号（假设已经有一个）。
 </p><p>参见 <a href="../docs/Cross-Build.html">交叉构建</a> 获取更多信息。
 </p><h4 id="Ivy+%E4%BF%AE%E6%AD%A3">Ivy 修正<a href="#Ivy+%E4%BF%AE%E6%AD%A3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>groupID % artifactID % revision</code> 中的 <code>revision</code> 不需要是一个固定的版本号。Ivy 能够根据你指定的约束选择一个模块的最新版本。你指定 <code>&quot;latest.integration&quot;</code>，<code>&quot;2.9.+&quot;</code> 或者 <code>&quot;[1.0,)&quot;</code>，而不是
 一个固定的版本号，像 <code>&quot;1.6.1&quot;</code>。参看 <a href="http://ant.apache.org/ivy/history/2.3.0/ivyfile/dependency.html#revision">Ivy 修订</a> 文档获取详细内容。

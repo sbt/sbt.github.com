@@ -123,13 +123,6 @@ identical (note the double <code>%%</code> after <code>&quot;org.scala-tools&quo
 </code></pre><p>The idea is that many dependencies are compiled for multiple Scala
 versions, and you’d like to get the one that matches your project
 to ensure binary compatibility.
-</p><p>The complexity in practice is that often a dependency will work with a
-slightly different Scala version; but <code>%%</code> is not smart about that. So if
-the dependency is available for <code>2.10.1</code> but you’re using
-<code>scalaVersion := &quot;2.10.4&quot;</code>, you won’t be able to use <code>%%</code> even though the
-<code>2.10.1</code> dependency likely works. If <code>%%</code> stops working, just go see which
-versions the dependency is really built for, and hardcode the one you
-think will work (assuming there is one).
 </p><p>See <a href="../docs/Cross-Build.html">Cross Building</a> for some more detail on this.
 </p><h4 id="Ivy+revisions">Ivy revisions<a href="#Ivy+revisions" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The <code>revision</code> in <code>groupID % artifactID % revision</code> does not have to be a
 single fixed version. Ivy can select the latest revision of a module
