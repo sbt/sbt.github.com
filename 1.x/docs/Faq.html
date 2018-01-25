@@ -279,22 +279,12 @@ setting depends on other settings that has not been initialized, sbt
 will stop loading.
 </p><p>In this example, we try to append a library to <code>libraryDependencies</code>
 before it is initialized with an empty sequence.
-</p><pre><code class="prettyprint lang-scala">object MyBuild extends Build {
-  val root = Project(id = &quot;root&quot;, base = file(&quot;.&quot;),
-    settings = Seq(
-      libraryDependencies += &quot;commons-io&quot; % &quot;commons-io&quot; % &quot;1.4&quot; % &quot;test&quot;
-    )
-  ).disablePlugins(plugins.IvyModule)
-}
-</code></pre><p>To correct this, include the IvyModule plugin settings, which includes
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;commons-io&quot; % &quot;commons-io&quot; % &quot;1.4&quot; % &quot;test&quot;
+
+disablePlugins(plugins.IvyPlugin)
+</code></pre><p>To correct this, include the IvyPlugin plugin settings, which includes
 <code>libraryDependencies := Seq()</code>. So, we just drop the explicit disabling.
-</p><pre><code class="prettyprint lang-scala">object MyBuild extends Build {
-  val root = Project(id = &quot;root&quot;, base = file(&quot;.&quot;),
-    settings = Seq(
-      libraryDependencies += &quot;commons-io&quot; % &quot;commons-io&quot; % &quot;1.4&quot; % &quot;test&quot;
-    )
-  )
-}
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;commons-io&quot; % &quot;commons-io&quot; % &quot;1.4&quot; % &quot;test&quot;
 </code></pre><p>A more subtle variation of this error occurs when using
 <a href="Scopes.html">scoped settings</a>.
 </p><pre><code class="prettyprint lang-scala">// error: Reference to uninitialized setting
