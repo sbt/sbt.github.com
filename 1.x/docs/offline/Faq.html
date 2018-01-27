@@ -94,7 +94,7 @@ to include to the path within the jar. See
   import Path.{flat, relativeTo}
   val base = (sourceManaged in Compile).value
   val srcs = (managedSources in Compile).value
-  srcs x (relativeTo(base) | flat)
+  srcs pair (relativeTo(base) | flat)
 }
 </code></pre><p>This takes sources from the <code>managedSources</code> task and relativizes them
 against the <code>managedSource</code> base directory, falling back to a flattened

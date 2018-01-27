@@ -21955,7 +21955,7 @@ mappings in (Compile, packageSrc) ++= {
   import Path.{flat, relativeTo}
   val base = (sourceManaged in Compile).value
   val srcs = (managedSources in Compile).value
-  srcs x (relativeTo(base) | flat)
+  srcs pair (relativeTo(base) | flat)
 }
 ```
 
