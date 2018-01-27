@@ -3118,7 +3118,7 @@ opportunities.
 </li><li>Inter-project source dependencies
 </li><li>Binary dependencies (jars + class files)
 </li><li>data structure representing the
-<a href="https://github.com/sbt/sbt/tree/0.13/interface">API</a> of the
+<a href="https://github.com/sbt/zinc/tree/v1.1.0/internal/compiler-interface">API</a> of the
 source code There is some code already for generating dot
 files that isn’t hooked up, but graphing dependencies and
 inheritance relationships is a general area of work.
@@ -7728,8 +7728,10 @@ approach, create a local plugin <code>~/.sbt/1.0/plugins/ShellPrompt.scala</code
 </p><pre><code class="prettyprint lang-scala">import sbt._
 import Keys._
 
-object ShellPrompt extends Plugin {
-  override def settings = Seq(
+object ShellPrompt extends AutoPlugin {
+  override def trigger = allRequirements
+
+  override def projectSettings = Seq(
     shellPrompt := { state =&gt;
       &quot;sbt (%s)&gt; &quot;.format(Project.extract(state).currentProject.id) }
   )
@@ -13923,8 +13925,8 @@ the following setting:
 </p><pre><code class="prettyprint lang-scala">checksums in update := Nil
 </code></pre><p>See <a href="Library-Management.html">library management</a> for details.
 </p><h4 id="I%E2%80%99ve+added+a+plugin%2C+and+now+my+cross-compilations+fail%21">I’ve added a plugin, and now my cross-compilations fail!<a href="#I%E2%80%99ve+added+a+plugin%2C+and+now+my+cross-compilations+fail%21" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>This problem crops up frequently. Plugins are only published for the
-Scala version that sbt uses (currently, 2.9.1). You can still <em>use</em>
-plugins during cross-compilation, because sbt only looks for a 2.9.1
+Scala version that sbt uses (currently, 2.12). You can still <em>use</em>
+plugins during cross-compilation, because sbt only looks for a 2.12
 version of the plugin.
 </p><p><strong>… unless you specify the plugin in the wrong place!</strong>
 </p><p>A typical mistake is to put global plugin definitions in
@@ -14210,7 +14212,7 @@ This introduces non-determinism to the code.
 </p><h4 id="Avoid+functions+and+tuples+in+the+signature%2C+if+Java+interoperability+is+needed">Avoid functions and tuples in the signature, if Java interoperability is needed<a href="#Avoid+functions+and+tuples+in+the+signature%2C+if+Java+interoperability+is+needed" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Instead of functions and tuples, turn them into a trait.
 This applies where interoperability is a concern, like implementing
 incremental compilation.
-</p><h3 id="Style+matters">Style matters<a href="#Style+matters" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="Use+scalariform">Use scalariform<a href="#Use+scalariform" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>sbt-houserules comes with scalariform for formatting source code consistently.
+</p><h3 id="Style+matters">Style matters<a href="#Style+matters" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="Use+scalafmt">Use scalafmt<a href="#Use+scalafmt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>sbt-houserules comes with scalafmt for formatting source code consistently.
 </p><h4 id="Avoid+procedure+syntax">Avoid procedure syntax<a href="#Avoid+procedure+syntax" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Declare an explicit <code>Unit</code> return.
 </p><h4 id="Define+instances+of+typeclasses+in+their+companion+objects%2C+when+possible">Define instances of typeclasses in their companion objects, when possible<a href="#Define+instances+of+typeclasses+in+their+companion+objects%2C+when+possible" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>This style is encouraged:
 </p><pre><code class="prettyprint lang-scala">final class FooID {}
@@ -14651,7 +14653,7 @@ Request          := {   &quot;name&quot;: ID,
 Scala compiler.
 </p><p>It is used to get information from the Scala compiler, and must therefore
 be compiled against the Scala version in use for the configured projects.
-</p><p>The code for this project can be found in the directory <a href="https://github.com/sbt/sbt/tree/0.13/compile/interface">compile/interface</a>.
+</p><p>The code for this project can be found in the directory <a href="https://github.com/sbt/zinc/tree/v1.1.0/internal/compiler-bridge">internal/compiler-bridge</a>.
 </p><h2 id="Fetching+the+most+specific+sources">Fetching the most specific sources<a href="#Fetching+the+most+specific+sources" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Because the compiler interface is recompiled against each Scala version
 in use in your project, its source must stay compatible with all the Scala
 versions that sbt supports (from Scala 2.8 to the latest version of Scala).

@@ -4671,7 +4671,7 @@ may become out of date quickly, so you may want to check on the
         -   Inter-project source dependencies
         -   Binary dependencies (jars + class files)
         -   data structure representing the
-            [API](https://github.com/sbt/sbt/tree/0.13/interface) of the
+            [API](https://github.com/sbt/zinc/tree/v1.1.0/internal/compiler-interface) of the
             source code There is some code already for generating dot
             files that isn't hooked up, but graphing dependencies and
             inheritance relationships is a general area of work.
@@ -12065,8 +12065,10 @@ approach, create a local plugin `~/.sbt/1.0/plugins/ShellPrompt.scala`:
 import sbt._
 import Keys._
 
-object ShellPrompt extends Plugin {
-  override def settings = Seq(
+object ShellPrompt extends AutoPlugin {
+  override def trigger = allRequirements
+
+  override def projectSettings = Seq(
     shellPrompt := { state =>
       "sbt (%s)> ".format(Project.extract(state).currentProject.id) }
   )
@@ -22296,8 +22298,8 @@ See [library management][Library-Management] for details.
 #### I've added a plugin, and now my cross-compilations fail!
 
 This problem crops up frequently. Plugins are only published for the
-Scala version that sbt uses (currently, 2.9.1). You can still *use*
-plugins during cross-compilation, because sbt only looks for a 2.9.1
+Scala version that sbt uses (currently, 2.12). You can still *use*
+plugins during cross-compilation, because sbt only looks for a 2.12
 version of the plugin.
 
 **... unless you specify the plugin in the wrong place!**
@@ -22823,9 +22825,9 @@ incremental compilation.
 
 ### Style matters
 
-#### Use scalariform
+#### Use scalafmt
 
-sbt-houserules comes with scalariform for formatting source code consistently.
+sbt-houserules comes with scalafmt for formatting source code consistently.
 
 #### Avoid procedure syntax
 
@@ -23440,7 +23442,7 @@ Scala compiler.
 It is used to get information from the Scala compiler, and must therefore
 be compiled against the Scala version in use for the configured projects.
 
-The code for this project can be found in the directory [compile/interface](https://github.com/sbt/sbt/tree/0.13/compile/interface).
+The code for this project can be found in the directory [internal/compiler-bridge](https://github.com/sbt/zinc/tree/v1.1.0/internal/compiler-bridge).
 
 
 Fetching the most specific sources

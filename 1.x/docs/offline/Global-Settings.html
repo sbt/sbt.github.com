@@ -68,8 +68,10 @@ approach, create a local plugin <code>~/.sbt/1.0/plugins/ShellPrompt.scala</code
 </p><pre><code class="prettyprint lang-scala">import sbt._
 import Keys._
 
-object ShellPrompt extends Plugin {
-  override def settings = Seq(
+object ShellPrompt extends AutoPlugin {
+  override def trigger = allRequirements
+
+  override def projectSettings = Seq(
     shellPrompt := { state =&gt;
       &quot;sbt (%s)&gt; &quot;.format(Project.extract(state).currentProject.id) }
   )
