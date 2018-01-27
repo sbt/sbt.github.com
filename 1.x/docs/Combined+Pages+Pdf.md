@@ -12409,7 +12409,7 @@ object Demo {
 package demo
 
 object Usage {
-   def main(args: Array[String]) {
+   def main(args: Array[String]): Unit = {
       val s = Demo.desugar(List(1, 2, 3).reverse)
       println(s)
    }
@@ -12435,7 +12435,7 @@ For example,
 package demo
 
 object Usage {
-   def main(args: Array[String]) {
+   def main(args: Array[String]): Unit = {
       val s = Demo.desugar(List(6, 4, 5).sorted)
       println(s)
    }
@@ -21583,8 +21583,8 @@ object ShellPromptPlugin extends AutoPlugin {
     shellPrompt := buildShellPrompt
   )
   val devnull: ProcessLogger = new ProcessLogger {
-    def out(s: => String) {}
-    def err(s: => String) { }
+    def out(s: => String): Unit = {}
+    def err(s: => String): Unit = {}
     def buffer[T] (f: => T): T = f
   }
   def currBranch =
