@@ -2844,13 +2844,11 @@ bintray, create a generic repository called <code>sbt-plugins</code>.
 </li><li>Tags:   sbt
 </li></ul><p>Once this is done, you can begin to configure your sbt-plugins to
 publish to bintray.
-</p><h3 id="Add+the+bintray-sbt+plugin+to+your+build.">Add the bintray-sbt plugin to your build.<a href="#Add+the+bintray-sbt+plugin+to+your+build." class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>First, add the bintray-sbt to your plugin build.
+</p><h3 id="Add+the+sbt-bintray+plugin+to+your+build.">Add the sbt-bintray plugin to your build.<a href="#Add+the+sbt-bintray+plugin+to+your+build." class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>First, add the sbt-bintray to your plugin build.
 </p><p>First, create a <code>project/bintray.sbt</code> file
-</p><pre><code class="prettyprint lang-scala">addSbtPlugin(&quot;me.lessis&quot; % &quot;bintray-sbt&quot; % &quot;0.3.0&quot;)
+</p><pre><code class="prettyprint lang-scala">addSbtPlugin(&quot;org.foundweekends&quot; % &quot;sbt-bintray&quot; % &quot;0.5.2&quot;)
 </code></pre><p>Next, a make sure your <code>build.sbt</code> file has the following settings
-</p><pre><code class="prettyprint lang-scala">import bintray.Keys._
-
-lazy val commonSettings = Seq(
+</p><pre><code class="prettyprint lang-scala">lazy val commonSettings = Seq(
   version in ThisBuild := &quot;&lt;YOUR PLUGIN VERSION HERE&gt;&quot;,
   organization in ThisBuild := &quot;&lt;INSERT YOUR ORG HERE&gt;&quot;
 )
@@ -2861,7 +2859,7 @@ lazy val root = (project in file(&quot;.&quot;))
     sbtPlugin := true,
     name := &quot;&lt;YOUR PLUGIN HERE&gt;&quot;,
     description := &quot;&lt;YOUR DESCRIPTION HERE&gt;&quot;,
-    // This is an example.  bintray-sbt requires licenses to be specified 
+    // This is an example.  sbt-bintray requires licenses to be specified 
     // (using a canonical name).
     licenses += (&quot;Apache-2.0&quot;, url(&quot;https://www.apache.org/licenses/LICENSE-2.0.html&quot;)),
     publishMavenStyle := false,
@@ -2880,7 +2878,7 @@ they are, you can find them on <a href="https://bintray.com">Bintray</a>.
 </li><li>Click on your username
 </li><li>Click on edit profile
 </li><li>Click on API Key
-</li></ol><p>This will get you your password. The bintray-sbt plugin will save your
+</li></ol><p>This will get you your password. The sbt-bintray plugin will save your
 API key for future use.
 </p><ul><li>NOTE: We have to do this before we can link our package to the sbt
 org.*
@@ -2955,8 +2953,8 @@ configure HTTPS or FTP.
 </p><h3 id="Sonatype+setup">Sonatype setup<a href="#Sonatype+setup" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The reference process for configuring and publishing to Sonatype is 
 described in their <a href="http://central.sonatype.org/pages/ossrh-guide.html">OSSRH Guide</a>.
 In short, you need two publicly available URLs: 
-</p><ul><li>the website of the project e.g. https://github.com/sonatype/nexus-oss
-</li><li>the project’s source code e.g. https://github.com/sonatype/nexus-oss.git
+</p><ul><li>the website of the project e.g. https://github.com/sonatype/nexus-public
+</li><li>the project’s source code e.g. https://github.com/sonatype/nexus-public.git
 </li></ul><p>The <a href="http://central.sonatype.org/pages/ossrh-guide.html">OSSRH Guide</a> walks you through the required 
 process of setting up the account with Sonatype. It’s as simple as 
 <a href="https://issues.sonatype.org/secure/Signup!default.jspa">creating a Sonatype's JIRA account</a> and then a 
@@ -7409,7 +7407,7 @@ of main source generators (<code>sourceGenerators in Compile</code>).
 mySourceGenerator in Compile :=
   generate( (sourceManaged in Compile).value / &quot;some_directory&quot;)
 
-sourceGenerators in Compile += (mySourceGenerator in Compile).task
+sourceGenerators in Compile += (mySourceGenerator in Compile)
 </code></pre><p>The <code>task</code> method is used to refer to the actual task instead of the
 result of the task.
 </p><p>For resources, there are similar keys <code>resourceGenerators</code> and

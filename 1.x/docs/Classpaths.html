@@ -84,7 +84,7 @@ of main source generators (<code>sourceGenerators in Compile</code>).
 mySourceGenerator in Compile :=
   generate( (sourceManaged in Compile).value / &quot;some_directory&quot;)
 
-sourceGenerators in Compile += (mySourceGenerator in Compile).task
+sourceGenerators in Compile += (mySourceGenerator in Compile)
 </code></pre><p>The <code>task</code> method is used to refer to the actual task instead of the
 result of the task.
 </p><p>For resources, there are similar keys <code>resourceGenerators</code> and
