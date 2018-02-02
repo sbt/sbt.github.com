@@ -14434,7 +14434,7 @@ libraryDependencies +=
 
 See [ModuleID](../api/sbt/librarymanagement/ModuleID.html) for API details.
 
-In certain cases a transitive dependency should be exluded from
+In certain cases a transitive dependency should be excluded from
 all dependencies. This can be achieved by setting up `ExclusionRules`
 in `excludeDependencies`. 
 
