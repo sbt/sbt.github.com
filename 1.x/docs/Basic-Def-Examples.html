@@ -46,7 +46,9 @@
             <h2 id=".sbt+build+examples">.sbt build examples<a href="#.sbt+build+examples" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p><strong>Note</strong>: As of sbt 0.13.7 blank lines are no longer used to delimit <code>build.sbt</code> files. The following example requires sbt 0.13.7+.
 </p><p>Listed here are some examples of settings (each setting is independent).
 See <a href="Basic-Def.html">.sbt build definition</a> for details.
-</p><pre><code class="prettyprint lang-scala">// factor out common settings into a sequence
+</p><pre><code class="prettyprint lang-scala">import scala.concurrent.duration._
+
+// factor out common settings into a sequence
 lazy val commonSettings = Seq(
   organization := &quot;org.myproject&quot;,
   version := &quot;0.1.0&quot;,
@@ -85,7 +87,7 @@ lazy val root = (project in file(&quot;.&quot;))
     maxErrors := 20,
 
     // increase the time between polling for file changes when using continuous execution
-    pollInterval := 1000,
+    pollInterval := 1.second,
 
     // append several options to the list of options passed to the Java compiler
     javacOptions ++= Seq(&quot;-source&quot;, &quot;1.5&quot;, &quot;-target&quot;, &quot;1.5&quot;),

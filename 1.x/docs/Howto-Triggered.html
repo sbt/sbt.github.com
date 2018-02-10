@@ -72,7 +72,9 @@ dependencies).
 </p><pre><code class="prettyprint lang-scala">watchSources += baseDirectory.value / &quot;demo&quot; / &quot;examples.txt&quot;
 </code></pre><a name="interval"></a><h3 id="Set+the+time+interval+between+checks+for+changes+to+sources">Set the time interval between checks for changes to sources<a href="#Set+the+time+interval+between+checks+for+changes+to+sources" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>pollInterval</code> selects the interval between polling for changes in
 milliseconds. The default value is <code>500 ms</code>. To change it to <code>1 s</code>,
-</p><pre><code class="prettyprint lang-scala">pollInterval := 1000 // in ms
+</p><pre><code class="prettyprint lang-scala">import scala.concurrent.duration._
+
+pollInterval := 1.second
 </code></pre><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>

@@ -20911,7 +20911,9 @@ watchSources += baseDirectory.value / "demo" / "examples.txt"
 milliseconds. The default value is `500 ms`. To change it to `1 s`,
 
 ```scala
-pollInterval := 1000 // in ms
+import scala.concurrent.duration._
+
+pollInterval := 1.second
 ```
 
 Define Custom Tasks
@@ -21279,6 +21281,8 @@ Listed here are some examples of settings (each setting is independent).
 See [.sbt build definition][Basic-Def] for details.
 
 ```scala
+import scala.concurrent.duration._
+
 // factor out common settings into a sequence
 lazy val commonSettings = Seq(
   organization := "org.myproject",
@@ -21318,7 +21322,7 @@ lazy val root = (project in file("."))
     maxErrors := 20,
 
     // increase the time between polling for file changes when using continuous execution
-    pollInterval := 1000,
+    pollInterval := 1.second,
 
     // append several options to the list of options passed to the Java compiler
     javacOptions ++= Seq("-source", "1.5", "-target", "1.5"),

@@ -12986,7 +12986,9 @@ dependencies).
 </p><pre><code class="prettyprint lang-scala">watchSources += baseDirectory.value / &quot;demo&quot; / &quot;examples.txt&quot;
 </code></pre><a name="interval"></a><h3 id="Set+the+time+interval+between+checks+for+changes+to+sources">Set the time interval between checks for changes to sources<a href="#Set+the+time+interval+between+checks+for+changes+to+sources" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>pollInterval</code> selects the interval between polling for changes in
 milliseconds. The default value is <code>500 ms</code>. To change it to <code>1 s</code>,
-</p><pre><code class="prettyprint lang-scala">pollInterval := 1000 // in ms
+</p><pre><code class="prettyprint lang-scala">import scala.concurrent.duration._
+
+pollInterval := 1.second
 </code></pre><h2 id="Define+Custom+Tasks">Define Custom Tasks<a href="#Define+Custom+Tasks" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Define+a+Task+that+runs+tests+in+specific+sub-projects">Define a Task that runs tests in specific sub-projects<a href="#Define+a+Task+that+runs+tests+in+specific+sub-projects" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Consider a hypothetical multi-build project with 3 subprojects. The following defines a task <code>myTestTask</code> that will
 run the <code>test</code> Task in specific subprojects  <code>core</code> and <code>tools</code> but not <code>client</code>:
 </p><pre><code class="prettyprint lang-scala">lazy val core = project.in(file(&quot;./core&quot;))
@@ -13187,7 +13189,9 @@ understanding the examples.
 </p><h2 id=".sbt+build+examples">.sbt build examples<a href="#.sbt+build+examples" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p><strong>Note</strong>: As of sbt 0.13.7 blank lines are no longer used to delimit <code>build.sbt</code> files. The following example requires sbt 0.13.7+.
 </p><p>Listed here are some examples of settings (each setting is independent).
 See <a href="Basic-Def.html">.sbt build definition</a> for details.
-</p><pre><code class="prettyprint lang-scala">// factor out common settings into a sequence
+</p><pre><code class="prettyprint lang-scala">import scala.concurrent.duration._
+
+// factor out common settings into a sequence
 lazy val commonSettings = Seq(
   organization := &quot;org.myproject&quot;,
   version := &quot;0.1.0&quot;,
@@ -13226,7 +13230,7 @@ lazy val root = (project in file(&quot;.&quot;))
     maxErrors := 20,
 
     // increase the time between polling for file changes when using continuous execution
-    pollInterval := 1000,
+    pollInterval := 1.second,
 
     // append several options to the list of options passed to the Java compiler
     javacOptions ++= Seq(&quot;-source&quot;, &quot;1.5&quot;, &quot;-target&quot;, &quot;1.5&quot;),
