@@ -47,41 +47,41 @@
 an sbt build definition. For command names, see
 <a href="Running.html">Running</a>. For available plugins, see
 <a href="Communitiy-Plugins.html">the plugins list</a>.
-</p><h3 id="Values+and+Types">Values and Types<a href="#Values+and+Types" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="Dependency+Management">Dependency Management<a href="#Dependency+Management" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li><a href="../api/sbt/ModuleID.html">ModuleID</a> is the type of a dependency
+</p><h3 id="Values+and+Types">Values and Types<a href="#Values+and+Types" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="Dependency+Management">Dependency Management<a href="#Dependency+Management" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li><a href="../api/sbt/librarymanagement/ModuleID.html">ModuleID</a> is the type of a dependency
 definition. See
 <a href="Library-Management.html">Library Management</a>.
-</li><li><a href="../api/sbt/Artifact.html">Artifact</a> represents a single artifact
+</li><li><a href="../api/sbt/librarymanagement/Artifact.html">Artifact</a> represents a single artifact
 (such as a jar or a pom) to be built and published. See
 <a href="Library-Management.html">Library Management</a> and <a href="Artifacts.html">Artifacts</a>.
-</li><li>A <a href="../api/sbt/Resolver.html">Resolver</a> can resolve and retrieve
+</li><li>A <a href="../api/sbt/librarymanagement/Resolver.html">Resolver</a> can resolve and retrieve
 dependencies. Many types of Resolvers can publish dependencies as
 well. A repository is a closely linked idea that typically refers to
 the actual location of the dependencies. However, sbt is not very
 consistent with this terminology and repository and resolver are
 occasionally used interchangeably.
-</li><li>A <a href="../api/sbt/ModuleConfiguration.html">ModuleConfiguration</a> defines
+</li><li>A <a href="../api/sbt/librarymanagement/ModuleConfiguration.html">ModuleConfiguration</a> defines
 a specific resolver to use for a group of dependencies.
-</li><li>A <a href="../api/sbt/Configuration.html">Configuration</a> is a useful Ivy
+</li><li>A <a href="../api/sbt/librarymanagement/Configuration.html">Configuration</a> is a useful Ivy
 construct for grouping dependencies. See ivy-configurations. It is
 also used for <a href="Scopes.html">scoping settings</a>.
 </li><li><code>Compile</code>, <code>Test</code>, <code>Runtime</code>, <code>Provided</code>, and <code>Optional</code> are
 predefined <a href="Library-Management.html#ivy-configurations">configurations</a>.
-</li></ul><h4 id="Settings+and+Tasks">Settings and Tasks<a href="#Settings+and+Tasks" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>A <a href="../api/sbt/Init$Setting.html">Setting</a> describes how to
+</li></ul><h4 id="Settings+and+Tasks">Settings and Tasks<a href="#Settings+and+Tasks" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>A <a href="../api/sbt/internal/util/Init$Setting.html">Setting</a> describes how to
 initialize a specific setting in the build. It can use the values of
 other settings or the previous value of the setting being
 initialized.
-</li><li>A <a href="../api/sbt/Init$SettingsDefinition.html">SettingsDefinition</a>
+</li><li>A <a href="../api/sbt/internal/util/Init$SettingsDefinition.html">SettingsDefinition</a>
 is the actual type of an expression in a build.sbt. This allows
-either a single <a href="../api/sbt/Init$Setting.html">Setting</a> or a
+either a single <a href="../api/sbt/internal/util/Init$Setting.html">Setting</a> or a
 sequence of settings
-(<a href="../api/sbt/Init$SettingList.html">SettingList</a>) to be defined at
+(<a href="../api/sbt/internal/util/Init$SettingList.html">SettingList</a>) to be defined at
 once. The types in a <a href="Full-Def.html">.scala build definition</a> always use just a
-plain <a href="../api/sbt/Init$Setting.html">Setting</a>.
-</li><li><a href="../api/sbt/Init$Initialize.html">Initialize</a> describes how to
+plain <a href="../api/sbt/internal/util/Init$Setting.html">Setting</a>.
+</li><li><a href="../api/sbt/internal/util/Init$Initialize.html">Initialize</a> describes how to
 initialize a setting using other settings, but isn’t bound to a
 particular setting yet. Combined with an initialization method and a
 setting to initialize, it produces a full
-<a href="../api/sbt/Init$Setting.html">Setting</a>.
+<a href="../api/sbt/internal/util/Init$Setting.html">Setting</a>.
 </li><li><a href="../api/sbt/TaskKey.html">TaskKey</a>,
 <a href="../api/sbt/SettingKey.html">SettingKey</a>, and
 <a href="../api/sbt/InputKey.html">InputKey</a> are keys that represent a task
@@ -109,7 +109,7 @@ build. It is mainly used by <a href="Commands.html">Commands</a> and sometimes
 </li></ul><h3 id="Methods">Methods<a href="#Methods" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="Settings+and+Tasks">Settings and Tasks<a href="#Settings+and+Tasks" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>See the <a href="Basic-Def.html">Getting Started Guide</a> for
 details.
 </p><ul><li><code>:=</code>, <code>+=</code>, <code>++=</code> These construct a
-<a href="../api/sbt/Init$Setting.html">Setting</a>, which is the fundamental
+<a href="../api/sbt/internal/util/Init$Setting.html">Setting</a>, which is the fundamental
 type in the <a href="Basic-Def.html">settings</a> system.
 </li><li><code>value</code> This uses the value of another setting or task in the
 definition of a new setting or task. This method is special (it is a
@@ -121,8 +121,8 @@ details.
 </li><li><code>in</code> specifies the <a href="../api/sbt/Scope.html">Scope</a> or part of the
 <a href="../api/sbt/Scope.html">Scope</a> of a setting being referenced. See
 <a href="Scopes.html">scopes</a>.
-</li></ul><h4 id="File+and+IO">File and IO<a href="#File+and+IO" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>See <a href="../api/sbt/RichFile.html">RichFile</a>,
-<a href="../api/sbt/PathFinder.html">PathFinder</a>, and
+</li></ul><h4 id="File+and+IO">File and IO<a href="#File+and+IO" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>See <a href="../api/sbt/io/RichFile.html">RichFile</a>,
+<a href="../api/sbt/io/PathFinder.html">PathFinder</a>, and
 <a href="Paths.html">Paths</a> for the full documentation.
 </p><ul><li><code>/</code> When called on a single File, this is <code>new File(x,y)</code>. For
 Seq[File], this is applied for each member of the sequence..
@@ -130,31 +130,31 @@ Seq[File], this is applied for each member of the sequence..
 (<code>**</code>) of a File or Seq[File] that match a filter.
 </li><li><code>|</code>, <code>||</code>, <code>&amp;&amp;</code>, <code>&amp;</code>, <code>-</code>, and <code>--</code> are methods for combining
 filters, which are often used for selecting Files. See
-<a href="../api/sbt/NameFilter.html">NameFilter</a> and
-<a href="../api/sbt/FileFilter.html">FileFilter</a>. Note that methods with
+<a href="../api/sbt/io/NameFilter.html">NameFilter</a> and
+<a href="../api/sbt/io/FileFilter.html">FileFilter</a>. Note that methods with
 these names also exist for other types, such as collections (like
-Seq) and <a href="../api/sbt/complete/Parser.html">Parser</a> (see
+Seq) and <a href="../api/sbt/internal/util/complete/Parser.html">Parser</a> (see
 <a href="Parsing-Input.html">Parsing Input</a>).
 </li><li><code>pair</code> Used to construct mappings from a <code>File</code> to another <code>File</code> or
 to a String. See <a href="Mapping-Files.html">Mapping Files</a>.
-</li><li><code>get</code> forces a <a href="../api/sbt/PathFinder.html">PathFinder</a> (a
+</li><li><code>get</code> forces a <a href="../api/sbt/io/PathFinder.html">PathFinder</a> (a
 call-by-name data structure) to a strict <code>Seq[File]</code> representation.
 This is a common name in Scala, used by types like Option.
 </li></ul><h4 id="Dependency+Management">Dependency Management<a href="#Dependency+Management" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>See <a href="Library-Management.html">Library Management</a> for full documentation.
-</p><ul><li><code>%</code> This is used to build up a <a href="../api/sbt/ModuleID.html">ModuleID</a>.
+</p><ul><li><code>%</code> This is used to build up a <a href="../api/sbt/librarymanagement/ModuleID.html">ModuleID</a>.
 </li><li><code>%%</code> This is similar to <code>%</code> except that it identifies a dependency
 that has been <a href="Cross-Build.html">cross built</a>.
 </li><li><code>from</code> Used to specify the fallback URL for a dependency
 </li><li><code>classifier</code> Used to specify the classifier for a dependency.
 </li><li><code>at</code> Used to define a Maven-style resolver.
-</li><li><code>intransitive</code> Marks a <a href="../api/sbt/ModuleID.html">dependency</a> or
-<a href="../api/sbt/Configuration.html">Configuration</a> as being
+</li><li><code>intransitive</code> Marks a <a href="../api/sbt/librarymanagement/ModuleID.html">dependency</a> or
+<a href="../api/sbt/librarymanagement/Configuration.html">Configuration</a> as being
 intransitive.
-</li><li><code>hide</code> Marks a <a href="../api/sbt/Configuration.html">Configuration</a> as
+</li><li><code>hide</code> Marks a <a href="../api/sbt/librarymanagement/Configuration.html">Configuration</a> as
 internal and not to be included in the published metadata.
 </li></ul><h4 id="Parsing">Parsing<a href="#Parsing" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>These methods are used to build up
-<a href="../api/sbt/complete/Parser.html">Parser</a>s from smaller
-<a href="../api/sbt/complete/Parser.html">Parser</a>s. They closely follow the
+<a href="../api/sbt/internal/util/complete/Parser.html">Parser</a>s from smaller
+<a href="../api/sbt/internal/util/complete/Parser.html">Parser</a>s. They closely follow the
 names of the standard library’s parser combinators. See
 <a href="Parsing-Input.html">Parsing Input</a> for the full documentation. These are
 used for
