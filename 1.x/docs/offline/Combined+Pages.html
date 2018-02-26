@@ -13010,10 +13010,10 @@ lazy val client = project.in(file(&quot;./client&quot;))
 
 lazy val myTestTask = taskKey[Unit](&quot;my test task&quot;)
 
-myTestTask &lt;&lt;= Seq(
-  test in (core, Test)
-  test in (tools, Test)
-).dependOn
+myTestTask := {
+  (test in (core, Test)).value
+  (test in (tools, Test)).value
+}
 </code></pre><h2 id="How+to+take+an+action+on+startup">How to take an action on startup<a href="#How+to+take+an+action+on+startup" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>A global setting <code>onLoad</code> is of type <code>State =&gt; State</code> and is executed once, after all projects are built and loaded. There is a similar hook <code>onUnload</code> for when a project is unloaded.
 </p><p>Project unloading typically occurs as a result of a <code>reload</code> command or a <code>set</code> command. Because the <code>onLoad</code> and <code>onUnload</code> hooks are global, modifying this setting typically involves composing a new function with the previous value. The following example shows the basic structure of defining <code>onLoad</code>.
 </p><p>Suppose you want to run a task named <code>dependencyUpdates</code> on start up. Here’s what you can do:

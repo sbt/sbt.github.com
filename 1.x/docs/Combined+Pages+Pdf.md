@@ -20981,10 +20981,10 @@ lazy val client = project.in(file("./client"))
 
 lazy val myTestTask = taskKey[Unit]("my test task")
 
-myTestTask <<= Seq(
-  test in (core, Test)
-  test in (tools, Test)
-).dependOn
+myTestTask := {
+  (test in (core, Test)).value
+  (test in (tools, Test)).value
+}
 ```
 
 

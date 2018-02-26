@@ -51,10 +51,10 @@ lazy val client = project.in(file(&quot;./client&quot;))
 
 lazy val myTestTask = taskKey[Unit](&quot;my test task&quot;)
 
-myTestTask &lt;&lt;= Seq(
-  test in (core, Test)
-  test in (tools, Test)
-).dependOn
+myTestTask := {
+  (test in (core, Test)).value
+  (test in (tools, Test)).value
+}
 </code></pre><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>
