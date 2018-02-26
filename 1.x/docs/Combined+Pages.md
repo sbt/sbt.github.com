@@ -4500,7 +4500,7 @@ example: hkp://keyserver.ubuntu.com). A list of servers can be found at
 
 The credentials for your Sonatype OSSRH account need to be stored
 somewhere safe (*e.g. NOT in the repository*). Common convention is a 
-`~/.sbt/1.0/sonatype.sbt` file (e.g. `) with the following:
+`~/.sbt/1.0/sonatype.sbt` file, with the following:
 
 ```scala
 credentials += Credentials("Sonatype Nexus Repository Manager",
