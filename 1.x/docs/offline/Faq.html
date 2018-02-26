@@ -219,7 +219,7 @@ possible to specify artifact types inline. This alternative <code>proguard</code
 task would look like:
 </p><pre><code class="prettyprint lang-scala">proguard := {
    val artifactTypes = Set(&quot;jar&quot;)
-    val cp: Seq[File] =
+    val cp =
       Classpaths.managedJars(proguardConfig, artifactTypes, update.value)
   // ... do something with , which includes proguard ...
 }

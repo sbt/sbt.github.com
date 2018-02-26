@@ -105,7 +105,7 @@ example, to get the jars and zips of dependencies in the <code>Compile</code>
 configuration, :
 </p><pre><code class="prettyprint lang-scala">example := {
    val artifactTypes = Set(&quot;jar&quot;, &quot;zip&quot;)
-   val files: Seq[File] =
+   val files =
       Classpaths.managedJars(Compile, artifactTypes, update.value)
    ...
 }

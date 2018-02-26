@@ -19398,7 +19398,7 @@ configuration, :
 ```scala
 example := {
    val artifactTypes = Set("jar", "zip")
-   val files: Seq[File] =
+   val files =
       Classpaths.managedJars(Compile, artifactTypes, update.value)
    ...
 }
@@ -22151,7 +22151,7 @@ task would look like:
 ```scala
 proguard := {
    val artifactTypes = Set("jar")
-    val cp: Seq[File] =
+    val cp =
       Classpaths.managedJars(proguardConfig, artifactTypes, update.value)
   // ... do something with , which includes proguard ...
 }
