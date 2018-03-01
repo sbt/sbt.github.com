@@ -1619,21 +1619,21 @@ ordering between the projects when compiling them; <code>util</code> must be upd
 and compiled before core can be compiled.
 </p><p>To depend on multiple projects, use multiple arguments to <code>dependsOn</code>,
 like <code>dependsOn(bar, baz)</code>.
-</p><h5 id="Per-configuration+classpath+dependencies">Per-configuration classpath dependencies<a href="#Per-configuration+classpath+dependencies" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p><code>foo dependsOn(bar)</code> means that the <code>compile</code> configuration in <code>foo</code> depends
-on the <code>compile</code> configuration in <code>bar</code>. You could write this explicitly as
-<code>dependsOn(bar % &quot;compile-&gt;compile&quot;)</code>.
+</p><h5 id="Per-configuration+classpath+dependencies">Per-configuration classpath dependencies<a href="#Per-configuration+classpath+dependencies" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p><code>core dependsOn(util)</code> means that the <code>compile</code> configuration in <code>core</code> depends
+on the <code>compile</code> configuration in <code>util</code>. You could write this explicitly as
+<code>dependsOn(util % &quot;compile-&gt;compile&quot;)</code>.
 </p><p>The <code>-&gt;</code> in <code>&quot;compile-&gt;compile&quot;</code> means “depends on” so <code>&quot;test-&gt;compile&quot;</code>
-means the <code>test</code> configuration in <code>foo</code> would depend on the <code>compile</code>
-configuration in <code>bar</code>.
+means the <code>test</code> configuration in <code>core</code> would depend on the <code>compile</code>
+configuration in <code>util</code>.
 </p><p>Omitting the <code>-&gt;config</code> part implies <code>-&gt;compile</code>, so
-<code>dependsOn(bar % &quot;test&quot;)</code> means that the <code>test</code> configuration in <code>foo</code> depends
-on the <code>Compile</code> configuration in <code>bar</code>.
+<code>dependsOn(util % &quot;test&quot;)</code> means that the <code>test</code> configuration in <code>core</code> depends
+on the <code>Compile</code> configuration in <code>util</code>.
 </p><p>A useful declaration is <code>&quot;test-&gt;test&quot;</code> which means <code>test</code> depends on <code>test</code>.
-This allows you to put utility code for testing in <code>bar/src/test/scala</code>
-and then use that code in <code>foo/src/test/scala</code>, for example.
+This allows you to put utility code for testing in <code>util/src/test/scala</code>
+and then use that code in <code>core/src/test/scala</code>, for example.
 </p><p>You can have multiple configurations for a dependency, separated by
 semicolons. For example,
-<code>dependsOn(bar % &quot;test-&gt;test;compile-&gt;compile&quot;)</code>.
+<code>dependsOn(util % &quot;test-&gt;test;compile-&gt;compile&quot;)</code>.
 </p><h3 id="Default+root+project">Default root project<a href="#Default+root+project" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>If a project is not defined for the root directory in the build, sbt
 creates a default one that aggregates all other projects in the build.
 </p><p>Because project <code>hello-foo</code> is defined with <code>base = file(&quot;foo&quot;)</code>, it will be
