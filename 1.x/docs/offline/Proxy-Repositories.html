@@ -86,7 +86,40 @@ be able to resolve sbt plugins.
 proxy for all standard maven repositories, including maven central.
 </p><p>This repositories file is all that’s required to use a proxy repository.  These repositories will get included first in any sbt build, however you can add some additional configuration to force the use of the proxy repository instead of other configurations.
 </p><h3 id="Using+credentials+for+the+proxy+repository">Using credentials for the proxy repository<a href="#Using+credentials+for+the+proxy+repository" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>In case you need to define credentials to connect to your proxy repository, define en environment variable <code>SBT_CREDENTIALS</code> that points to the file containing your credentials:
-</p><p>  export SBT_CREDENTIALS=“</p><div class="bottom nav span-16">
+</p><p>  export SBT_CREDENTIALS=”$HOME/.ivy2/.credentials”
+</p><p>with file contents
+</p><p>  realm=My Nexus Repository Manager
+  host=my.artifact.repo.net
+  user=admin
+  password=admin123
+</p><h4 id="Launcher+Script">Launcher Script<a href="#Launcher+Script" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The sbt launcher supports two configuration options that allow the usage
+of proxy repositories. The first is the <code>sbt.override.build.repos</code>
+setting and the second is the <code>sbt.repository.config</code> setting.
+</p><h4 id=""><code>sbt.override.build.repos</code><a href="#" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>This setting is used to specify that all sbt project added resolvers
+should be ignored in favor of those configured in the <code>repositories</code>
+configuration. Using this with a properly configured
+<code>~/.sbt/repositories</code> file leads to only your proxy repository used for
+builds.
+</p><p>It is specified like so:
+</p><pre><code class="">-Dsbt.override.build.repos=true
+</code></pre><p>The value defaults to false and must be explicitly enabled.
+</p><h4 id=""><code>sbt.repository.config</code><a href="#" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>If you are unable to create a <code>~/.sbt/repositories</code> file, due to user
+permission errors or for convenience of developers, you can modify the
+sbt start script directly with the following:
+</p><pre><code class="">-Dsbt.repository.config=&lt;path-to-your-repo-file&gt;
+</code></pre><p>This is only necessary if users do not already have their own default
+repository file.
+</p><h3 id="Proxying+Ivy+Repositories">Proxying Ivy Repositories<a href="#Proxying+Ivy+Repositories" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The most common mistake made when setting up a proxy repository for sbt
+is the attempting to <em>merge</em> both <em>maven</em> and <em>ivy</em> repositories into
+the <em>same</em> proxy repository. While some repository managers will allow
+this, it’s not recommended to do so.
+</p><p>Even if your company does not use ivy, sbt uses a custom layout to
+handle binary compatibility constraints of its own plugins. To ensure
+that these are resolved correctly, simple set up two virtual/proxy
+repositories, one for maven and one for ivy.
+</p><p>Here’s an example setup:
+</p><p><img src="files/proxy-ivy-mvn-setup.png" alt="image"/>
+</p><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>
                         <a href="Publishing.html"> Publishing </a>                        
