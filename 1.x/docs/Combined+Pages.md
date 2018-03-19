@@ -10597,6 +10597,114 @@ If the server is running in named pipe mode, no token is needed, and the `initia
 On Unix, using netcat, sending the initialize message in domain socket/named pipe mode will look something like this:
 
 ```
+$ nc -U /Users/foo/.sbt/1.0/server/0845deda85cb41abcdef/sock
+Content-Length: 99^M
+^M
+{ "jsonrpc": "2.0", "id": 1, "method": "initialize", "params": { "initializationOptions": { } } }^M
+```
+
+Connections to the server when it's running in named pipe mode are exclusive to the first process that connects to the socket or pipe.
+
+After sbt receives the request, it will send an [`initialized` event][lsp_initialized].
+
+### `textDocument/publishDiagnostics` event
+
+The compiler warnings and errors are sent to the client using the `textDocument/publishDiagnostics` event.
+
+- method: `textDocument/publishDiagnostics`
+- params: [`PublishDiagnosticsParams`][lsp_publishdiagnosticsparams]
+
+Here's an example output (with JSON-RPC headers omitted):
+
+```
+{
+  "jsonrpc": "2.0",
+  "method": "textDocument/publishDiagnostics",
+  "params": {
+    "uri": "file:/Users/xxx/work/hellotest/Hello.scala",
+    "diagnostics": [
+      {
+        "range": {
+          "start": {
+            "line": 2,
+            "character": 0
+          },
+          "end": {
+            "line": 2,
+            "character": 1
+          }
+        },
+        "severity": 1,
+        "source": "sbt",
+        "message": "')' expected but '}' found."
+      }
+    ]
+  }
+}
+```
+
+### `textDocument/didSave` event
+
+As of sbt 1.1.0, sbt will execute the `compile` task upon receiving a `textDocument/didSave` notification.
+This behavior is subject to change.
+
+### `sbt/exec` request
+
+A `sbt/exec` request emulates the user typing into the shell.
+
+- method: `sbt/exec`
+- params:
+
+```
+type SbtExecParams {
+  commandLine: String!
+}
+```
+
+On telnet it would look as follows:
+
+```
+Content-Length: 91
+
+{ "jsonrpc": "2.0", "id": 2, "method": "sbt/exec", "params": { "commandLine": "clean" } }
+```
+
+Note that there might be other commands running on the build, so in that case the request will be queued up.
+
+### `sbt/setting` request
+
+A `sbt/setting` request can be used to query settings.
+
+- method: `sbt/setting`
+- params:
+
+```
+type SettingQuery {
+  setting: String!
+}
+```
+
+On telnet it would look as follows:
+
+```
+Content-Length: 102
+
+{ "jsonrpc": "2.0", "id": 3, "method": "sbt/setting", "params": { "setting": "root/scalaVersion" } }
+Content-Length: 87
+Content-Type: application/vscode-jsonrpc; charset=utf-8
+
+{"jsonrpc":"2.0","id":"3","result":{"value":"2.12.2","contentType":"java.lang.String"}}
+```
+
+Unlike the command execution, this will respond immediately.
+
+  [lsp]: https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md
+  [jsonrpc]: http://www.jsonrpc.org/specification
+  [vscode-sbt-scala]: https://marketplace.visualstudio.com/items?itemName=lightbend.vscode-sbt-scala
+  [lsp_initialize]: https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#initialize
+  [lsp_initialized]: https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#initialized
+  [lsp_publishdiagnosticsparams]: https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#publishdiagnostics-notification
+
 
   [466]: https://github.com/sbt/sbt/issues/466
   [288]: https://github.com/sbt/sbt/issues/288
