@@ -6672,8 +6672,8 @@ You might at first imagine server to be something that runs on remote servers, a
 in addition to accepting input from the terminal, server also to accepts input from the network.
 This allows multiple clients to connect to a <em>single session</em> of sbt.
 The primary use case we have in mind for the client is tooling integration such as editors and IDEs.
-As a proof of concept, we created a Visual Studio Code extension called <a href="https://marketplace.visualstudio.com/items?itemName=lightbend.vscode-sbt-scala">Scala (sbt)</a>.
-</p><h3 id="Language+Server+Protocol+3.0">Language Server Protocol 3.0<a href="#Language+Server+Protocol+3.0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The wire protocol we use is <a href="https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md">Language Server Protocol 3.0</a> (LSP), which in turn is based on <a href="http://www.jsonrpc.org/specification">JSON-RPC</a>.
+As a proof of concept, we created a Visual Studio Code extension called [Scala (sbt)][vscode-sbt-scala].
+</p><h3 id="Language+Server+Protocol+3.0">Language Server Protocol 3.0<a href="#Language+Server+Protocol+3.0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The wire protocol we use is [Language Server Protocol 3.0][lsp] (LSP), which in turn is based on [JSON-RPC][jsonrpc].
 </p><p>The base protocol consists of a header and a content part (comparable to HTTP). The header and content part are separated by a <code>\r\n</code>.
 </p><p>Currently the following header fields are supported:
 </p><ul><li><code>Content-Length</code>: The length of the content part in bytes. If you don’t provide this header, we’ll read until the end of the line.
@@ -6726,26 +6726,31 @@ Content-Length: ...\r\n
     ...
   }
 }
-</code></pre><h3 id="Server+discovery+and+authentication">Server discovery and authentication<a href="#Server+discovery+and+authentication" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To discover a running server and to prevent unauthorized access to the sbt server, we use a <em>port file</em> and a <em>token file</em>.
-</p><p>By default, sbt server will be running when a sbt shell session is active. When the server is up, it will create two files called the <em>port file</em> and the <em>token file</em>. The port file is located at <code>./project/target/active.json</code> relative to a build and contains something like:
+</code></pre><h3 id="Server+modes">Server modes<a href="#Server+modes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Sbt server can run in two modes, which differ in wire protocol and initialization. The default mode since sbt 1.1.x is <em>domain socket mode</em>, which uses either Unix domain sockets (on Unix) or named pipes (on Windows) for data transfer between server and client. In addition, there is a <em>TCP mode</em>, which uses TCP for data transfer.
+</p><p>The mode which sbt server starts in is goverened by the key <code>serverConnectionType</code>, which can be set to <code>ConnectionType.Local</code> for domain socket/named pipe mode, or to <code>ConnectionType.Tcp</code> for TCP mode.
+</p><h3 id="Server+discovery+and+authentication">Server discovery and authentication<a href="#Server+discovery+and+authentication" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To discover a running server, we use a <em>port file</em>.
+</p><p>By default, sbt server will be running when a sbt shell session is active. When the server is up, it will create a file called the port file. The port file is located at <code>./project/target/active.json</code>. The port file will look different depending on whether the server is running in TCP mode or domain socket/named pipe mode. They will look something like this:
+</p><p>In domain socket/named pipe mode, on Unix:
+</p><pre><code class="prettyprint lang-json">{&quot;uri&quot;:&quot;local:///Users/someone/.sbt/1.0/server/0845deda85cb41abdb9f/sock&quot;}
+</code></pre><p>where the <code>uri</code> key will contain a string starting with <code>local://</code> followed by the socket address sbt server is listening on.
+</p><p>In domain socket/named pipe mode, on Windows, it will look something like
+</p><pre><code class="prettyprint lang-json">{&quot;uri&quot;:&quot;local:sbt-server-0845deda85cb41abdb9f&quot;}
+</code></pre><p>where the <code>uri</code> key will contain a string starting with <code>local:</code> followed by the name of the named pipe. In this example, the path of the named pipe will be <code>\.\pipe\sbt-server-0845deda85cb41abdb9f</code>.
+</p><p>In TCP mode it will look something like the following:
 </p><pre><code class="prettyprint lang-json">{
   &quot;uri&quot;:&quot;tcp://127.0.0.1:5010&quot;,
   &quot;tokenfilePath&quot;:&quot;/Users/xxx/.sbt/1.0/server/0845deda85cb41abdb9f/token.json&quot;,
   &quot;tokenfileUri&quot;:&quot;file:/Users/xxx/.sbt/1.0/server/0845deda85cb41abdb9f/token.json&quot;
 }
-</code></pre><p>This gives us three pieces of information:
-</p><ol><li>That the server is (likely) running.
-</li><li>That the server is running on port 5010.
-</li><li>The location of the token file.
-</li></ol><p>The location of the token file uses a SHA-1 hash of the build path, so it will not change between the runs.
-The token file should contain JSON like the following:
+</code></pre><p>In this case, the <code>uri</code> key will hold a TCP uri with the address the server is listening on. In this mode, the port file will contain two additional keys, <code>tokenfilePath</code> and <code>tokenfileUri</code>. These point to the location of a <em>token file</em>.
+</p><p>The location of the token file will not change between runs. It’s contents will look something like this:
 </p><pre><code class="prettyprint lang-json">{
   &quot;uri&quot;:&quot;tcp://127.0.0.1:5010&quot;,
   &quot;token&quot;:&quot;12345678901234567890123456789012345678&quot;
 }
 </code></pre><p>The <code>uri</code> field is the same, and the <code>token</code> field contains a 128-bits non-negative integer.
-</p><h3 id="Initialize+request">Initialize request<a href="#Initialize+request" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To initiate communication with sbt server, the client (such as a tool like VS Code) must first send an <a href="https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#initialize">`initialize` request</a>. This means that the client must send a request with method set to “initialize” and the <code>InitializeParams</code> datatype as the <code>params</code> field.
-</p><p>To authenticate yourself, you must pass in the token in <code>initializationOptions</code> as follows:
+</p><h3 id="Initialize+request">Initialize request<a href="#Initialize+request" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To initiate communication with sbt server, the client (such as a tool like VS Code) must first send an [<code>initialize</code> request][lsp_initialize]. This means that the client must send a request with method set to “initialize” and the <code>InitializeParams</code> datatype as the <code>params</code> field.
+</p><p>If the server is running in TCP mode, to authenticate yourself, you must pass in the token in <code>initializationOptions</code> as follows:
 </p><pre><code class="">type InitializationOptionsParams {
   token: String!
 }
@@ -6755,64 +6760,9 @@ Content-Type: application/vscode-jsonrpc; charset=utf-8
 Content-Length: 149
 
 { &quot;jsonrpc&quot;: &quot;2.0&quot;, &quot;id&quot;: 1, &quot;method&quot;: &quot;initialize&quot;, &quot;params&quot;: { &quot;initializationOptions&quot;: { &quot;token&quot;: &quot;84046191245433876643612047032303751629&quot; } } }
-</code></pre><p>After sbt receives the request, it will send an <a href="https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#initialized">`initialized` event</a>.
-</p><h3 id="event"><code>textDocument/publishDiagnostics</code> event<a href="#event" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The compiler warnings and errors are sent to the client using the <code>textDocument/publishDiagnostics</code> event.
-</p><ul><li>method: <code>textDocument/publishDiagnostics</code>
-</li><li>params: <a href="https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#publishdiagnostics-notification">`PublishDiagnosticsParams`</a>
-</li></ul><p>Here’s an example output (with JSON-RPC headers omitted):
-</p><pre><code class="">{
-  &quot;jsonrpc&quot;: &quot;2.0&quot;,
-  &quot;method&quot;: &quot;textDocument/publishDiagnostics&quot;,
-  &quot;params&quot;: {
-    &quot;uri&quot;: &quot;file:/Users/xxx/work/hellotest/Hello.scala&quot;,
-    &quot;diagnostics&quot;: [
-      {
-        &quot;range&quot;: {
-          &quot;start&quot;: {
-            &quot;line&quot;: 2,
-            &quot;character&quot;: 0
-          },
-          &quot;end&quot;: {
-            &quot;line&quot;: 2,
-            &quot;character&quot;: 1
-          }
-        },
-        &quot;severity&quot;: 1,
-        &quot;source&quot;: &quot;sbt&quot;,
-        &quot;message&quot;: &quot;')' expected but '}' found.&quot;
-      }
-    ]
-  }
-}
-</code></pre><h3 id="event"><code>textDocument/didSave</code> event<a href="#event" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>As of sbt 1.1.0, sbt will execute the <code>compile</code> task upon receiving a <code>textDocument/didSave</code> notification.
-This behavior is subject to change.
-</p><h3 id="request"><code>sbt/exec</code> request<a href="#request" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A <code>sbt/exec</code> request emulates the user typing into the shell.
-</p><ul><li>method: <code>sbt/exec</code>
-</li><li>params:
-</li></ul><pre><code class="">type SbtExecParams {
-  commandLine: String!
-}
-</code></pre><p>On telnet it would look as follows:
-</p><pre><code class="">Content-Length: 91
-
-{ &quot;jsonrpc&quot;: &quot;2.0&quot;, &quot;id&quot;: 2, &quot;method&quot;: &quot;sbt/exec&quot;, &quot;params&quot;: { &quot;commandLine&quot;: &quot;clean&quot; } }
-</code></pre><p>Note that there might be other commands running on the build, so in that case the request will be queued up.
-</p><h3 id="request"><code>sbt/setting</code> request<a href="#request" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A <code>sbt/setting</code> request can be used to query settings.
-</p><ul><li>method: <code>sbt/setting</code>
-</li><li>params:
-</li></ul><pre><code class="">type SettingQuery {
-  setting: String!
-}
-</code></pre><p>On telnet it would look as follows:
-</p><pre><code class="">Content-Length: 102
-
-{ &quot;jsonrpc&quot;: &quot;2.0&quot;, &quot;id&quot;: 3, &quot;method&quot;: &quot;sbt/setting&quot;, &quot;params&quot;: { &quot;setting&quot;: &quot;root/scalaVersion&quot; } }
-Content-Length: 87
-Content-Type: application/vscode-jsonrpc; charset=utf-8
-
-{&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;id&quot;:&quot;3&quot;,&quot;result&quot;:{&quot;value&quot;:&quot;2.12.2&quot;,&quot;contentType&quot;:&quot;java.lang.String&quot;}}
-</code></pre><p>Unlike the command execution, this will respond immediately.
-</p><h2 id="Understanding+Incremental+Recompilation">Understanding Incremental Recompilation<a href="#Understanding+Incremental+Recompilation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Compiling Scala code with scalac is slow, but sbt often makes it faster.
+</code></pre><p>If the server is running in named pipe mode, no token is needed, and the <code>initializationOptions</code> should be the empty object <code>{}</code>.
+</p><p>On Unix, using netcat, sending the initialize message in domain socket/named pipe mode will look something like this:
+</p><p>```</p><h2 id="Understanding+Incremental+Recompilation">Understanding Incremental Recompilation<a href="#Understanding+Incremental+Recompilation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Compiling Scala code with scalac is slow, but sbt often makes it faster.
 By understanding how, you can even understand how to make compilation even
 faster. Modifying source files with many dependencies might require
 recompiling only those source files

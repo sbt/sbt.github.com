@@ -10519,11 +10519,35 @@ Content-Length: ...\r\n
 }
 ```
 
+### Server modes
+
+Sbt server can run in two modes, which differ in wire protocol and initialization. The default mode since sbt 1.1.x is *domain socket mode*, which uses either Unix domain sockets (on Unix) or named pipes (on Windows) for data transfer between server and client. In addition, there is a *TCP mode*, which uses TCP for data transfer.
+
+The mode which sbt server starts in is goverened by the key `serverConnectionType`, which can be set to `ConnectionType.Local` for domain socket/named pipe mode, or to `ConnectionType.Tcp` for TCP mode.
+
 ### Server discovery and authentication
 
-To discover a running server and to prevent unauthorized access to the sbt server, we use a *port file* and a *token file*.
+To discover a running server, we use a *port file*.
 
-By default, sbt server will be running when a sbt shell session is active. When the server is up, it will create two files called the *port file* and the *token file*. The port file is located at `./project/target/active.json` relative to a build and contains something like:
+By default, sbt server will be running when a sbt shell session is active. When the server is up, it will create a file called the port file. The port file is located at `./project/target/active.json`. The port file will look different depending on whether the server is running in TCP mode or domain socket/named pipe mode. They will look something like this:
+
+In domain socket/named pipe mode, on Unix:
+
+```json
+{"uri":"local:///Users/someone/.sbt/1.0/server/0845deda85cb41abdb9f/sock"}
+```
+
+where the `uri` key will contain a string starting with `local://` followed by the socket address sbt server is listening on.
+
+In domain socket/named pipe mode, on Windows, it will look something like
+
+```json
+{"uri":"local:sbt-server-0845deda85cb41abdb9f"}
+```
+
+where the `uri` key will contain a string starting with `local:` followed by the name of the named pipe. In this example, the path of the named pipe will be `\.\pipe\sbt-server-0845deda85cb41abdb9f`.
+
+In TCP mode it will look something like the following:
 
 ```json
 {
@@ -10533,14 +10557,9 @@ By default, sbt server will be running when a sbt shell session is active. When 
 }
 ```
 
-This gives us three pieces of information:
+In this case, the `uri` key will hold a TCP uri with the address the server is listening on. In this mode, the port file will contain two additional keys, `tokenfilePath` and `tokenfileUri`. These point to the location of a *token file*.
 
-1. That the server is (likely) running.
-2. That the server is running on port 5010.
-3. The location of the token file.
-
-The location of the token file uses a SHA-1 hash of the build path, so it will not change between the runs.
-The token file should contain JSON like the following:
+The location of the token file will not change between runs. It's contents will look something like this:
 
 ```json
 {
@@ -10555,7 +10574,7 @@ The `uri` field is the same, and the `token` field contains a 128-bits non-negat
 
 To initiate communication with sbt server, the client (such as a tool like VS Code) must first send an [`initialize` request][lsp_initialize]. This means that the client must send a request with method set to "initialize" and the `InitializeParams` datatype as the `params` field.
 
-To authenticate yourself, you must pass in the token in `initializationOptions` as follows:
+If the server is running in TCP mode, to authenticate yourself, you must pass in the token in `initializationOptions` as follows:
 
 ```
 type InitializationOptionsParams {
@@ -10573,106 +10592,11 @@ Content-Length: 149
 { "jsonrpc": "2.0", "id": 1, "method": "initialize", "params": { "initializationOptions": { "token": "84046191245433876643612047032303751629" } } }
 ```
 
-After sbt receives the request, it will send an [`initialized` event][lsp_initialized].
+If the server is running in named pipe mode, no token is needed, and the `initializationOptions` should be the empty object `{}`.
 
-### `textDocument/publishDiagnostics` event
-
-The compiler warnings and errors are sent to the client using the `textDocument/publishDiagnostics` event.
-
-- method: `textDocument/publishDiagnostics`
-- params: [`PublishDiagnosticsParams`][lsp_publishdiagnosticsparams]
-
-Here's an example output (with JSON-RPC headers omitted):
+On Unix, using netcat, sending the initialize message in domain socket/named pipe mode will look something like this:
 
 ```
-{
-  "jsonrpc": "2.0",
-  "method": "textDocument/publishDiagnostics",
-  "params": {
-    "uri": "file:/Users/xxx/work/hellotest/Hello.scala",
-    "diagnostics": [
-      {
-        "range": {
-          "start": {
-            "line": 2,
-            "character": 0
-          },
-          "end": {
-            "line": 2,
-            "character": 1
-          }
-        },
-        "severity": 1,
-        "source": "sbt",
-        "message": "')' expected but '}' found."
-      }
-    ]
-  }
-}
-```
-
-### `textDocument/didSave` event
-
-As of sbt 1.1.0, sbt will execute the `compile` task upon receiving a `textDocument/didSave` notification.
-This behavior is subject to change.
-
-### `sbt/exec` request
-
-A `sbt/exec` request emulates the user typing into the shell.
-
-- method: `sbt/exec`
-- params:
-
-```
-type SbtExecParams {
-  commandLine: String!
-}
-```
-
-On telnet it would look as follows:
-
-```
-Content-Length: 91
-
-{ "jsonrpc": "2.0", "id": 2, "method": "sbt/exec", "params": { "commandLine": "clean" } }
-```
-
-Note that there might be other commands running on the build, so in that case the request will be queued up.
-
-### `sbt/setting` request
-
-A `sbt/setting` request can be used to query settings.
-
-- method: `sbt/setting`
-- params:
-
-```
-type SettingQuery {
-  setting: String!
-}
-```
-
-On telnet it would look as follows:
-
-```
-Content-Length: 102
-
-{ "jsonrpc": "2.0", "id": 3, "method": "sbt/setting", "params": { "setting": "root/scalaVersion" } }
-Content-Length: 87
-Content-Type: application/vscode-jsonrpc; charset=utf-8
-
-{"jsonrpc":"2.0","id":"3","result":{"value":"2.12.2","contentType":"java.lang.String"}}
-```
-
-Unlike the command execution, this will respond immediately.
-
-  [lsp]: https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md
-  [jsonrpc]: http://www.jsonrpc.org/specification
-  [vscode-sbt-scala]: https://marketplace.visualstudio.com/items?itemName=lightbend.vscode-sbt-scala
-  [lsp_initialize]: https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#initialize
-  [lsp_initialized]: https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#initialized
-  [lsp_publishdiagnosticsparams]: https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#publishdiagnostics-notification
-
 
   [466]: https://github.com/sbt/sbt/issues/466
   [288]: https://github.com/sbt/sbt/issues/288
