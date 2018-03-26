@@ -9485,6 +9485,10 @@ that these are resolved correctly, simple set up two virtual/proxy
 repositories, one for maven and one for ivy.
 </p><p>Here’s an example setup:
 </p><p><img src="files/proxy-ivy-mvn-setup.png" alt="image"/>
+</p><p><strong>NOTE</strong>: If using Nexus as the proxy repository, then it is very important that you set the layout policy to
+“permissive” for the proxy mapping that you create to the upstream repository
+http://repo.scala-sbt.org/scalasbt/sbt-plugin-releases. If you do not, Nexus will stop short of proxying the
+original request to this url and issue a HTTP 404 in its place and the dependency will not resolve.
 </p><h2 id="Publishing">Publishing<a href="#Publishing" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>This page describes how to publish your project. Publishing consists of
 uploading a descriptor, such as an Ivy file or Maven POM, and artifacts,
 such as a jar or war, to a repository so that other projects can specify
