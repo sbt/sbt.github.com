@@ -9454,11 +9454,11 @@ proxy for all standard maven repositories, including maven central.
 </p><h3 id="Using+credentials+for+the+proxy+repository">Using credentials for the proxy repository<a href="#Using+credentials+for+the+proxy+repository" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>In case you need to define credentials to connect to your proxy repository, define en environment variable <code>SBT_CREDENTIALS</code> that points to the file containing your credentials:
 </p><p>  export SBT_CREDENTIALS=”$HOME/.ivy2/.credentials”
 </p><p>with file contents
-</p><p>  realm=My Nexus Repository Manager
+</p><pre><code class="">  realm=My Nexus Repository Manager
   host=my.artifact.repo.net
   user=admin
   password=admin123
-</p><h4 id="Launcher+Script">Launcher Script<a href="#Launcher+Script" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The sbt launcher supports two configuration options that allow the usage
+</code></pre><h4 id="Launcher+Script">Launcher Script<a href="#Launcher+Script" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The sbt launcher supports two configuration options that allow the usage
 of proxy repositories. The first is the <code>sbt.override.build.repos</code>
 setting and the second is the <code>sbt.repository.config</code> setting.
 </p><h4 id=""><code>sbt.override.build.repos</code><a href="#" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>This setting is used to specify that all sbt project added resolvers
