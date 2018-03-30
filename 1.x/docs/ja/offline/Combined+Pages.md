@@ -35,7 +35,7 @@ sbt を試してくれることに感謝する。_ぜひ楽しいんでほしい
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.1.1/sbt-1.1.1.msi
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.1.2/sbt-1.1.2.msi
   [Setup-Notes]: ../../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -63,8 +63,8 @@ sbt プロジェクトを作るためには、以下の手順をたどる必要�
 
 
 
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.1.1/sbt-1.1.1.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.1.1/sbt-1.1.1.tgz
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.1.2/sbt-1.1.2.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.1.2/sbt-1.1.2.tgz
   [Manual-Installation]: Manual-Installation.html
   [oraclejdk8]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 
@@ -97,9 +97,9 @@ $ port install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.1.1/sbt-1.1.1.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.1.1/sbt-1.1.1.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.1.1/sbt-1.1.1.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.1.2/sbt-1.1.2.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.1.2/sbt-1.1.2.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.1.2/sbt-1.1.2.tgz
   [oraclejdk8]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 
 Windows への sbt のインストール
@@ -118,10 +118,10 @@ Follow the link to install [Java SE Development Kit 8][oraclejdk8].
 [msi インストーラ][MSI]をダウンロードしてインストールする。
 
 
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.1.1/sbt-1.1.1.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.1.1/sbt-1.1.1.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.1.1.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.1.1.deb
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.1.2/sbt-1.1.2.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.1.2/sbt-1.1.2.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.1.2.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.1.2.deb
   [Manual-Installation]: Manual-Installation.html
   [website127]: https://github.com/sbt/website/issues/12
 
@@ -534,7 +534,7 @@ sbt 0.13.13 など最近のバージョンをインストール済みで、
 sbt バージョンを指定する:
 
 ```
-sbt.version=1.1.1
+sbt.version=1.1.2
 ```
 
 もしも指定されたバージョンがローカルマシンに無ければ、
@@ -3677,7 +3677,7 @@ sbt 0.13.8 で `Def.sequential` という関数が追加されて、準逐次な
 #### project/build.properties
 
 ```
-sbt.version=1.1.1
+sbt.version=1.1.2
 ```
 
 #### project/style.sbt
@@ -3727,7 +3727,7 @@ root> compilecheck
 #### project/build.properties
 
 ```
-sbt.version=1.1.1
+sbt.version=1.1.2
 ```
 
 #### project/style.sbt

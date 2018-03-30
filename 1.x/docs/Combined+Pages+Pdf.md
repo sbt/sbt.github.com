@@ -71,7 +71,7 @@ corrections and add documentation.
 
 Documentation for 0.7.x has been
 [archived here](https://www.scala-sbt.org/0.7.7/docs/home.html). This
-documentation applies to sbt 1.1.1.
+documentation applies to sbt 1.1.2.
 
 See also the [API Documentation](../api/index.html),
 and the [index of names and types][Name-Index].
@@ -108,7 +108,7 @@ Thanks for trying out sbt and *have fun*!
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.1.1/sbt-1.1.1.msi
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.1.2/sbt-1.1.2.msi
   [Setup-Notes]: ../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -138,8 +138,8 @@ If you have any trouble running sbt, see [Setup Notes][Setup-Notes] on
 terminal encodings, HTTP proxies, and JVM options.
 
 
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.1.1/sbt-1.1.1.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.1.1/sbt-1.1.1.tgz
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.1.2/sbt-1.1.2.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.1.2/sbt-1.1.2.tgz
   [Manual-Installation]: Manual-Installation.html
   [oraclejdk8]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 
@@ -173,9 +173,9 @@ $ port install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.1.1/sbt-1.1.1.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.1.1/sbt-1.1.1.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.1.1/sbt-1.1.1.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.1.2/sbt-1.1.2.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.1.2/sbt-1.1.2.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.1.2/sbt-1.1.2.tgz
   [oraclejdk8]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 
 Installing sbt on Windows
@@ -194,10 +194,10 @@ Download [ZIP][ZIP] or [TGZ][TGZ] package and expand it.
 Download [msi installer][MSI] and install it.
 
 
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.1.1/sbt-1.1.1.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.1.1/sbt-1.1.1.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.1.1.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.1.1.deb
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.1.2/sbt-1.1.2.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.1.2/sbt-1.1.2.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.1.2.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.1.2.deb
   [Manual-Installation]: Manual-Installation.html
   [website127]: https://github.com/sbt/website/issues/127
 
@@ -611,7 +611,7 @@ build the same projects with consistent results.
 To do this, create a file named `project/build.properties` that specifies the sbt version as follows:
 
 ```
-sbt.version=1.1.1
+sbt.version=1.1.2
 ```
 
 If the required version is not available locally,
@@ -5054,6 +5054,94 @@ def scalaXml = Def.setting {
 
 
 
+## sbt 1.1.2
+
+### Bug fixes
+
+- Fixes triggered execution's resource leak by caching the watch service. [#3999][3999] by [@eatkins][@eatkins]
+- Fixes classloader inheriting the dependencies of Scala compiler during `run` [zinc#505][zinc505] by [@eed3si9n][@eed3si9n]
+- Fixes forked test concurrency issue. [#4030][4030] by [@eatkins][@eatkins]
+- Fixes `new` command leaving behind target directory [#4033][4033] by [@eed3si9n][@eed3si9n]
+- Fixes handling on null Content-Type. [lm214][lm214] by [@staale][@staale]
+- Fixes null handling of `managedChecksums` in `ivySettings` file. [lm#218][lm218] by [@IanGabes][@IanGabes]
+- Adds `sbt.boot.lock` as a JVM property to opt-out of locking. [#3927][3927] by [@dwijnand][@dwijnand]
+- Provides `SBT_GLOBAL_SERVER_DIR` env var as a workaround to long socket file path on UNIX. [#3932][3932] by [@dwijnand][@dwijnand]
+- Fixes forked runs reporting noisy "Stream closed" exception. [#3970][3970] by [@retronym][@retronym]
+- Fixes test compilation not getting included in VS Code save trigger. [#4022][4022] by [@tmiyamon][@tmiyamon]
+- Fixes sbt server responding with string id when number id passed. [#4025][4025] by [@tiqwab][@tiqwab]
+- Fixes `getDecoder` in Analysis format [zinc#502][zinc502] by [@jilen][@jilen]
+- Fixes equal / hashCode inconsistencies around Array. [zinc#513][zinc513] by [@eed3si9n][@eed3si9n]
+- Whitelists `java9-rt-ext-output` in rt export process [lp#211][lp211] by [@eatkins][@eatkins]
+- Fixes JDK version detection for Java 10 friendliness. [lp#219][lp219] by [@eed3si9n][@eed3si9n] and [@2m][@2m]
+- Fixes quoting in Windows bat file. [lp#220][lp220] by [@ForNeVeR][@ForNeVeR]
+- Fixes `-error` not suppressing startup logs. [#4036][4036] by [@eed3si9n][@eed3si9n]
+
+### Improvements
+
+- Performance optimization around logging. [util#152][util152] by [@retronym][@retronym]
+- Performance fix by caching the hashCode of `Configuration`. [lm#213][lm213] by [@retronym][@retronym]
+- Returns error code `-33000L` on sbt server when a command fails. [#3991][3991] by [@dwijnand][@dwijnand]
+- Allows wildcards in organization and artifact. [#215][lm215] by [@dhs3000][@dhs3000]
+- Updates to latest Jsch to support stronger key exchange algorithms. [lm#217][lm217] by [@ryandbair][@ryandbair]
+- Fixes preloading of compiler bridge. [lp#222][lp222] by [@analytically][@analytically]
+
+### Internal
+
+- Updates [contribution guide][CONTRIBUTING]. [#3960][3960]/[#4019][4019] by [@eed3si9n][@eed3si9n] and [@itohiro73][@itohiro73]
+- Deletes `buildinfo.BuildInfo` from sbt main that was intended for testing. [3967][3967] by [@dwijnand][@dwijnand] and [@xuwei-k][@xuwei-k]
+- Various improvements around Zinc benchmark by [@retronym][@retronym]
+
+### Contributors
+
+sbt 1.1.2 was brought to you by 23 contributors, according to `git shortlog -sn --no-merges v1.1.1...v1.1.2` on sbt, zinc, librarymanagement, util, io, launcher-packege, and website: Dale Wijnand, Eugene Yokota, Jason Zaugg, Kenji Yoshida (xuwei-k), Ethan Atkins, Martijn Hoekstra, Martynas Mickevičius, Dennis Hörsch, Hosam Aly, Antonio Cunei, Friedrich von Never, Hiroshi Ito, Ian Gabes, Jilen Zhang, Mathias Bogaert, Naohisa Murakami (tiqwab), Philippus Baalman, Ryan Bair, Seth Tisue, Ståle Undheim, Takuya Miyamoto (tmiyamon), Yasuhiro Tatsuno. Thank you!
+
+  [@eed3si9n]: https://github.com/eed3si9n
+  [@dwijnand]: http://github.com/dwijnand
+  [@cunei]: https://github.com/cunei
+  [@jvican]: https://github.com/jvican
+  [@Duhemm]: https://github.com/Duhemm
+  [@xuwei-k]: https://github.com/xuwei-k
+  [@retronym]: https://github.com/retronym
+  [@eatkins]: https://github.com/eatkins
+  [@itohiro73]: https://github.com/itohiro73
+  [@tmiyamon]: https://github.com/tmiyamon
+  [@tiqwab]: https://github.com/tiqwab
+  [@staale]: https://github.com/staale
+  [@ryandbair]: https://github.com/ryandbair
+  [@dhs3000]: https://github.com/dhs3000
+  [@IanGabes]: https://github.com/IanGabes
+  [@jilen]: https://github.com/jilen
+  [@2m]: https://github.com/2m
+  [@ForNeVeR]: https://github.com/ForNeVeR
+  [@analytically]: https://github.com/analytically
+  [3927]: https://github.com/sbt/sbt/pull/3927
+  [3932]: https://github.com/sbt/sbt/pull/3932
+  [3960]: https://github.com/sbt/sbt/pull/3960
+  [3967]: https://github.com/sbt/sbt/pull/3967
+  [3970]: https://github.com/sbt/sbt/pull/3970
+  [3999]: https://github.com/sbt/sbt/pull/3999
+  [3991]: https://github.com/sbt/sbt/pull/3991
+  [4019]: https://github.com/sbt/sbt/pull/4019
+  [4022]: https://github.com/sbt/sbt/pull/4022
+  [4025]: https://github.com/sbt/sbt/pull/4025
+  [4030]: https://github.com/sbt/sbt/pull/4030
+  [4033]: https://github.com/sbt/sbt/pull/4033
+  [4036]: https://github.com/sbt/sbt/pull/4036
+  [util152]: https://github.com/sbt/util/pull/152
+  [lm213]: https://github.com/sbt/librarymanagement/pull/213
+  [lm214]: https://github.com/sbt/librarymanagement/pull/214
+  [lm215]: https://github.com/sbt/librarymanagement/pull/215
+  [lm217]: https://github.com/sbt/librarymanagement/pull/217
+  [lm218]: https://github.com/sbt/librarymanagement/pull/218
+  [zinc502]: https://github.com/sbt/zinc/pull/502
+  [zinc505]: https://github.com/sbt/zinc/pull/505
+  [zinc513]: https://github.com/sbt/zinc/pull/513
+  [lp211]: https://github.com/sbt/sbt-launcher-package/pull/211
+  [lp219]: https://github.com/sbt/sbt-launcher-package/pull/219
+  [lp220]: https://github.com/sbt/sbt-launcher-package/pull/220
+  [lp222]: https://github.com/sbt/sbt-launcher-package/pull/222
+  [CONTRIBUTING]: https://github.com/sbt/sbt/blob/1.x/CONTRIBUTING.md
+
 ## sbt 1.1.1
 
 ### Bug fixes
@@ -9204,12 +9292,12 @@ Migrating from 0.7 to 0.10+
 ---------------------------
 
 The assumption here is that you are familiar with sbt 0.7 but new to sbt
-1.1.1.
+1.1.2.
 
-sbt 1.1.1's many new capabilities can be a bit overwhelming, but
-this page should help you migrate to 1.1.1 with a minimum of fuss.
+sbt 1.1.2's many new capabilities can be a bit overwhelming, but
+this page should help you migrate to 1.1.2 with a minimum of fuss.
 
-### Why move to 1.1.1?
+### Why move to 1.1.2?
 
 1.  Faster builds (because it is smarter at re-compiling only what it
     must)
@@ -9222,17 +9310,17 @@ this page should help you migrate to 1.1.1 with a minimum of fuss.
 5.  Terser output. (Yet you can ask for more details if something goes
     wrong.)
 
-#### Step 1: Read the Getting Started Guide for sbt 1.1.1
+#### Step 1: Read the Getting Started Guide for sbt 1.1.2
 
 Reading the [Getting Started Guide][Getting-Started] will
 probably save you a lot of confusion.
 
-#### Step 2: Install sbt 1.1.1
+#### Step 2: Install sbt 1.1.2
 
-Download sbt 1.1.1 as described on
+Download sbt 1.1.2 as described on
 [the setup page][Setup].
 
-You can run 1.1.1 the same way that you run 0.7.x, either simply:
+You can run 1.1.2 the same way that you run 0.7.x, either simply:
 
 ```
 $ java -jar sbt-launch.jar
@@ -9246,7 +9334,7 @@ For more details see
 
 #### Step 3: A technique for switching an existing project
 
-Here is a technique for switching an existing project to 1.1.1 while
+Here is a technique for switching an existing project to 1.1.2 while
 retaining the ability to switch back again at will. Some builds, such as
 those with subprojects, are not suited for this technique, but if you
 learn how to transition a simple project it will help you do a more
@@ -9255,10 +9343,10 @@ complex one next.
 ### Preserve `project/` for 0.7.x project
 
 Rename your `project/` directory to something like `project-old`. This
-will hide it from sbt 1.1.1 but keep it in case you want to switch
+will hide it from sbt 1.1.2 but keep it in case you want to switch
 back to 0.7.x.
 
-### Create `build.sbt` for 1.1.1
+### Create `build.sbt` for 1.1.2
 
 Create a `build.sbt` file in the root directory of your project. See
 [.sbt build definition][Basic-Def] in the Getting
@@ -9301,7 +9389,7 @@ scalaVersion := "2.9.2"
 Currently, a `project/build.properties` is still needed to explicitly
 select the sbt version. For example:
 
-### Run sbt 1.1.1
+### Run sbt 1.1.2
 
 Now launch sbt. If you're lucky it works and you're done. For help
 debugging, see below.
@@ -9310,7 +9398,7 @@ debugging, see below.
 
 If you get stuck and want to switch back, you can leave your `build.sbt`
 file alone. sbt 0.7.x will not understand or notice it. Just rename your
-1.1.1 `project` directory to something like `project10` and rename
+1.1.2 `project` directory to something like `project10` and rename
 the backup of your old project from `project-old` to `project` again.
 
 #### FAQs
@@ -9605,7 +9693,7 @@ influence SBT execution. Also see [sbt launcher][Sbt-Launcher].
   <tr>
     <td><tt>sbt.version</tt></td>
     <td>Version</td>
-    <td><tt>1.1.1</tt></td>
+    <td><tt>1.1.2</tt></td>
     <td>sbt version to use, usually taken from <tt>project/build.properties</tt>.</td>
   </tr>
 
@@ -10308,7 +10396,7 @@ mode that only requires a JRE installed.
 Install [conscript](https://github.com/foundweekends/conscript).
 
 ```
-$ cs sbt/sbt --branch 1.1.1
+$ cs sbt/sbt --branch 1.1.2
 ```
 
 This will create two scripts: `screpl` and `scalas`.
@@ -10367,7 +10455,7 @@ chmod u+x shout.scala
 /***         
 scalaVersion := "2.12.4"
  
-libraryDependencies += "org.scala-sbt" %% "io" % "1.1.1"
+libraryDependencies += "org.scala-sbt" %% "io" % "1.1.2"
 */         
  
 import sbt.io.IO
@@ -11918,7 +12006,7 @@ sbt needs Scala jars to run itself since it is written in Scala. sbt
 uses that same version of Scala to compile the build definitions that
 you write for your project because they use sbt APIs. This version of
 Scala is fixed for a specific sbt release and cannot be changed. For sbt
-1.1.1, this version is Scala 2.12.4. Because this Scala
+1.1.2, this version is Scala 2.12.4. Because this Scala
 version is needed before sbt runs, the repositories used to retrieve
 this version are configured in the sbt
 [launcher][Sbt-Launcher].
@@ -16637,7 +16725,7 @@ This Parser definition will produce a value of type `(String,String)`.
 The input syntax defined isn't very flexible; it is just a
 demonstration. It will produce one of the following values for a
 successful parse (assuming the current Scala version is 2.12.4,
-the current sbt version is 1.1.1, and there are 3 commands left to
+the current sbt version is 1.1.2, and there are 3 commands left to
 run):
 
 Again, we were able to access the current Scala and sbt version for the
@@ -18675,10 +18763,10 @@ If you haven't created one already, make sure to create `project/build.propertie
 `sbt.version` number:
 
 ```yml
-sbt.version=1.1.1
+sbt.version=1.1.2
 ```
 
-Your build will now use 1.1.1.
+Your build will now use 1.1.2.
 
 ### Read the Travis manual
 
@@ -18775,7 +18863,7 @@ java
 -Xss6M
 -XX:ReservedCodeCacheSize=256M
 -jar
-/home/travis/.sbt/launchers/1.1.1/sbt-launch.jar
+/home/travis/.sbt/launchers/1.1.2/sbt-launch.jar
 ```
 
 It seems to be working. One downside of setting all of the parameters is that we might be left behind when the environment updates and the default values gives us more memory in the future.
@@ -18801,7 +18889,7 @@ java
 -XX:ReservedCodeCacheSize=256M
 -Xms1024M
 -jar
-/home/travis/.sbt/launchers/1.1.1/sbt-launch.jar
+/home/travis/.sbt/launchers/1.1.2/sbt-launch.jar
 ```
 
 **Note**: This duplicates the `-Xms` flag as intended, which might not the best thing to do.
@@ -19368,7 +19456,7 @@ Like we are able to cross build against multiple Scala versions, we can cross bu
 ```scala
   .settings(
     scalaVersion := "2.12.4",
-    sbtVersion in Global := "1.1.1",
+    sbtVersion in Global := "1.1.2",
     scalaCompilerBridgeSource := {
       val sv = appConfiguration.value.provider.id.version
       ("org.scala-sbt" % "compiler-interface" % sv % "component").sources
@@ -21369,7 +21457,7 @@ Here's how to set it up
 #### project/build.properties
 
 ```
-sbt.version=1.1.1
+sbt.version=1.1.2
 ```
 
 #### project/style.sbt
@@ -21420,7 +21508,7 @@ Let's try implementing a custom task called `compilecheck` that runs `compile in
 #### project/build.properties
 
 ```
-sbt.version=1.1.1
+sbt.version=1.1.2
 ```
 
 #### project/style.sbt
@@ -22192,7 +22280,7 @@ always write it in all lowercase letters. However, we are cool with [酢豚][sub
 
 #### My last command didn't work but I can't see an explanation. Why?
 
-sbt 1.1.1 by default suppresses most stack traces and debugging
+sbt 1.1.2 by default suppresses most stack traces and debugging
 information. It has the nice side effect of giving you less noise on
 screen, but as a newcomer it can leave you lost for explanation. To see
 the previous output of a command at a higher verbosity, type
@@ -22626,7 +22714,7 @@ Any file name ending in `.sbt` will do, but most people use
 
 ### Miscellaneous
 
-#### Where can I find plugins for 1.1.1?
+#### Where can I find plugins for 1.1.2?
 
 See [Community Plugins][Community-Plugins] for a list of currently available
 plugins.
@@ -25358,7 +25446,7 @@ application. `hello.build.properties`:
 Nightly Builds
 --------------
 
-The latest development versions of 1.1.1 are available as nightly
+The latest development versions of 1.1.2 are available as nightly
 builds on [Typesafe Snapshots](https://repo.typesafe.com/typesafe/ivy-snapshots/).
 
 To use a nightly build, the instructions are the same for
@@ -25368,7 +25456,7 @@ To use a nightly build, the instructions are the same for
 nightly-launcher|. They should be listed in chronological order, so
     the most recent one will be last.
 2.  The version number is the name of the subdirectory and is of the
-    form `1.1.1.x-yyyyMMdd-HHmmss`. Use this in a build.properties
+    form `1.1.2.x-yyyyMMdd-HHmmss`. Use this in a build.properties
     file.
 3.  Call your script something like `sbt-nightly` to retain access to a
     stable sbt launcher. The documentation will refer to the script as
