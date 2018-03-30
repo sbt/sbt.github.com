@@ -68,10 +68,10 @@ val clean = taskKey[Unit](&quot;Deletes files produced by the build, such as gen
   val ur = update.value  // update task happens-before scalacOptions
   val x = clean.value    // clean task happens-before scalacOptions
   // ---- scalacOptions begins here ----
-  ur.allConfigurations.take(3)
+  ur.allConfigurations.take(3).map(_.toString)
 }
 </code></pre><p><code>update.value</code> and <code>clean.value</code> declare task dependencies,
-whereas <code>ur.allConfigurations.take(3)</code> is the body of the task.
+whereas <code>ur.allConfigurations.take(3).map(_.toString)</code> is the body of the task.
 </p><p><code>.value</code> is not a normal Scala method call. <code>build.sbt</code> DSL
 uses a macro to lift these outside of the task body.
 <strong>Both <code>update</code> and <code>clean</code> tasks are completed
@@ -90,7 +90,7 @@ regardless of which line it appears in the body.</strong>
       log.info(&quot;123&quot;)
       val ur = update.value   // update task happens-before scalacOptions
       log.info(&quot;456&quot;)
-      ur.allConfigurations.take(3)
+      ur.allConfigurations.take(3).map(_.toString)
     }
   )
 </code></pre><p>Next, from sbt shell type <code>scalacOptions</code>:
@@ -116,7 +116,7 @@ either of them.
       if (false) {
         val x = clean.value  // clean task happens-before scalacOptions
       }
-      ur.allConfigurations.take(3)
+      ur.allConfigurations.take(3).map(_.toString)
     }
   )
 </code></pre><p>Next, from sbt shell type <code>run</code> then <code>scalacOptions</code>:
@@ -150,7 +150,7 @@ come up with variable names.
 </p><p>We’ve inlined a few examples:
 </p><pre><code class="prettyprint lang-scala">scalacOptions := {
   val x = clean.value
-  update.value.allConfigurations.take(3)
+  update.value.allConfigurations.take(3).map(_.toString)
 }
 </code></pre><p>Note whether <code>.value</code> calls are inlined, or placed anywhere in the task body,
 they are still evaluated before entering the task body.
