@@ -15332,6 +15332,10 @@ unless the version number matches a
 [changing pattern](https://ant.apache.org/ivy/history/2.3.0/concept.html#change),
 and `SNAPSHOT` is one such pattern.
 
+### Skipping Publishing
+
+To avoid publishing a project, add `skip in publish := true` to its settings. `false` is the default value. Common use case is to prevent publishing of the root project.
+
 
 Resolvers
 ---------
