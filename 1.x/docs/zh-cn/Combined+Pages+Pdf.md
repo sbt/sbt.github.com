@@ -32,7 +32,7 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.1.4/sbt-1.1.4.msi
+  [MSI]: https://piccolo.link/sbt-1.1.4.msi
   [Setup-Notes]: ../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -58,8 +58,8 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
 如果你在运行 sbt 时遇到任何问题，查看 [安装建议][Setup-Notes] 中的终端编码（terminal encoding），HTTP 代理，JVM 参数。
 
 
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.1.4/sbt-1.1.4.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.1.4/sbt-1.1.4.tgz
+  [ZIP]: https://piccolo.link/sbt-1.1.4.zip
+  [TGZ]: https://piccolo.link/sbt-1.1.4.tgz
   [Manual-Installation]: Manual-Installation.html
 
 在 Mac 上安装 sbt
@@ -86,9 +86,9 @@ $ port install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.1.4/sbt-1.1.4.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.1.4/sbt-1.1.4.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.1.4/sbt-1.1.4.tgz
+  [MSI]: https://piccolo.link/sbt-1.1.4.msi
+  [ZIP]: https://piccolo.link/sbt-1.1.4.zip
+  [TGZ]: https://piccolo.link/sbt-1.1.4.tgz
 
 在 Windows 上安装 sbt
 -------------------------
@@ -102,8 +102,8 @@ $ port install sbt
 下载 [msi 安装包][MSI] 并安装。
 
 
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.1.4/sbt-1.1.4.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.1.4/sbt-1.1.4.tgz
+  [ZIP]: https://piccolo.link/sbt-1.1.4.zip
+  [TGZ]: https://piccolo.link/sbt-1.1.4.tgz
   [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.1.4.rpm
   [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.1.4.deb
 
