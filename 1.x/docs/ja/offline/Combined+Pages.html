@@ -336,7 +336,7 @@ sbt バージョンを指定する:
   .settings(
     name         := &quot;hello&quot;,
     organization := &quot;com.example&quot;,
-    scalaVersion := &quot;2.12.4&quot;,
+    scalaVersion := &quot;2.12.6&quot;,
     version      := &quot;0.1.0-SNAPSHOT&quot;
   )
 </code></pre><p>build.sbt DSL を詳しくみてみよう:<br>
@@ -432,7 +432,7 @@ import Keys._
 lazy val commonSettings = Seq(
   organization := &quot;com.example&quot;,
   version := &quot;0.1.0-SNAPSHOT&quot;,
-  scalaVersion := &quot;2.12.4&quot;
+  scalaVersion := &quot;2.12.6&quot;
 )
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -486,7 +486,7 @@ val clean = taskKey[Unit](&quot;Deletes files produced by the build, such as gen
   .settings(
     name := &quot;Hello&quot;,
     organization := &quot;com.example&quot;,
-    scalaVersion := &quot;2.12.4&quot;,
+    scalaVersion := &quot;2.12.6&quot;,
     version := &quot;0.1.0-SNAPSHOT&quot;,
     scalacOptions := {
       val out = streams.value // streams タスクは scalacOptions よりも事前発生する
@@ -513,7 +513,7 @@ val clean = taskKey[Unit](&quot;Deletes files produced by the build, such as gen
   .settings(
     name := &quot;Hello&quot;,
     organization := &quot;com.example&quot;,
-    scalaVersion := &quot;2.12.4&quot;,
+    scalaVersion := &quot;2.12.6&quot;,
     version := &quot;0.1.0-SNAPSHOT&quot;,
     scalacOptions := {
       val ur = update.value  // update task happens-before scalacOptions
@@ -605,7 +605,7 @@ build.sbt に慣れるまでは、<code>.value</code> の呼び出しをタス�
   .settings(
     name := &quot;Hello&quot;,
     organization := &quot;com.example&quot;,
-    scalaVersion := &quot;2.12.4&quot;,
+    scalaVersion := &quot;2.12.6&quot;,
     version := &quot;0.1.0-SNAPSHOT&quot;,
     scalacOptions := List(&quot;-encoding&quot;, &quot;utf8&quot;, &quot;-Xfatal-warnings&quot;, &quot;-deprecation&quot;, &quot;-unchecked&quot;),
     scalacOptions := {
@@ -890,7 +890,7 @@ sbt はフォールバックとして <code>ThisBuild</code> 内を探す。
       // Same as:
       // organization in ThisBuild := &quot;com.example&quot;
       organization := &quot;com.example&quot;,
-      scalaVersion := &quot;2.12.4&quot;,
+      scalaVersion := &quot;2.12.6&quot;,
       version      := &quot;0.1.0-SNAPSHOT&quot;
     )),
     name := &quot;Hello&quot;,
@@ -1003,7 +1003,7 @@ lazy val projX = (project in file(&quot;x&quot;))
   )
 </code></pre><p><code>name in projA</code> (sbt シェルだと <code>projA/name</code>) の値は何か?
 </p><ol><li><code>&quot;foo-2.11.11&quot;</code>
-</li><li><code>&quot;foo-2.12.4&quot;</code>
+</li><li><code>&quot;foo-2.12.6&quot;</code>
 </li><li>その他
 </li></ol><p>正解は <code>&quot;foo-2.11.11&quot;</code>。
 <code>.settings(...)</code> 内において、<code>scalaVersion</code> は自動的に <code>(projA, *, *)</code> にスコープ付けされるため、
@@ -1349,7 +1349,7 @@ lazy val core = project
 </p><pre><code class="prettyprint lang-scala">lazy val commonSettings = Seq(
   organization := &quot;com.example&quot;,
   version := &quot;0.1.0&quot;,
-  scalaVersion := &quot;2.12.4&quot;
+  scalaVersion := &quot;2.12.6&quot;
 )
 
 lazy val core = (project in file(&quot;core&quot;))
@@ -1783,7 +1783,7 @@ object Dependencies {
 
 lazy val commonSettings = Seq(
   version := &quot;0.1.0&quot;,
-  scalaVersion := &quot;2.12.4&quot;
+  scalaVersion := &quot;2.12.6&quot;
 )
 
 lazy val backend = (project in file(&quot;backend&quot;))
@@ -1840,7 +1840,7 @@ bare ビルド定義は <code>.sbt</code> ファイルの位置から暗黙に�
 
 version := &quot;1.0&quot;
 
-scalaVersion := &quot;2.12.4&quot;
+scalaVersion := &quot;2.12.6&quot;
 </code></pre><h3 id="%280.13.7+%E4%BB%A5%E5%89%8D%29+%E8%A8%AD%E5%AE%9A%E3%81%AF%E7%A9%BA%E7%99%BD%E8%A1%8C%E3%81%A7%E5%8C%BA%E5%88%87%E3%82%8B">(0.13.7 以前) 設定は空白行で区切る<a href="#%280.13.7+%E4%BB%A5%E5%89%8D%29+%E8%A8%AD%E5%AE%9A%E3%81%AF%E7%A9%BA%E7%99%BD%E8%A1%8C%E3%81%A7%E5%8C%BA%E5%88%87%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><strong>注意</strong>: 0.13.7 以降は空白行の区切りを必要としない。
 </p><p>こんな風に <code>build.sbt</code> を書くことはできない。
 </p><pre><code class="prettyprint lang-scala">// 空白行がない場合はコンパイルしない

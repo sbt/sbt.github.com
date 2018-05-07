@@ -203,7 +203,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "hello",
     version := "1.0",
-    scalaVersion := "2.12.4"
+    scalaVersion := "2.12.6"
   )
 ```
 
@@ -494,7 +494,7 @@ lazy val root = (project in file("."))
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.12.4"
+  scalaVersion := "2.12.6"
 )
 
 lazy val root = (project in file("."))
@@ -634,7 +634,7 @@ bare `.sbt` 构建定义由一个 `Setting[_]` 表达式的列表组成，而不
 ```scala
 name := "hello"
 version := "1.0"
-scalaVersion := "2.12.4"
+scalaVersion := "2.12.6"
 ```
 
 ### 添加依赖库
@@ -647,7 +647,7 @@ val derby = "org.apache.derby" % "derby" % "10.4.1.3"
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.12.4"
+  scalaVersion := "2.12.6"
 )
 
 lazy val root = (project in file("."))
@@ -1296,7 +1296,7 @@ To factor out common settings across multiple projects, create a sequence named 
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.12.4"
+  scalaVersion := "2.12.6"
 )
 
 lazy val core = (project in file("core"))
@@ -1859,7 +1859,7 @@ import Dependencies._
 
 lazy val commonSettings = Seq(
   version := "0.1.0",
-  scalaVersion := "2.12.4"
+  scalaVersion := "2.12.6"
 )
 
 lazy val backend = (project in file("backend"))

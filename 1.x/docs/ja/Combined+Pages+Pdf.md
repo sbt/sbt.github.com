@@ -587,7 +587,7 @@ lazy val root = (project in file("."))
   .settings(
     name         := "hello",
     organization := "com.example",
-    scalaVersion := "2.12.4",
+    scalaVersion := "2.12.6",
     version      := "0.1.0-SNAPSHOT"
   )
 ```
@@ -749,7 +749,7 @@ val derby = "org.apache.derby" % "derby" % "10.4.1.3"
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0-SNAPSHOT",
-  scalaVersion := "2.12.4"
+  scalaVersion := "2.12.6"
 )
 
 lazy val root = (project in file("."))
@@ -840,7 +840,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "Hello",
     organization := "com.example",
-    scalaVersion := "2.12.4",
+    scalaVersion := "2.12.6",
     version := "0.1.0-SNAPSHOT",
     scalacOptions := {
       val out = streams.value // streams タスクは scalacOptions よりも事前発生する
@@ -876,7 +876,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "Hello",
     organization := "com.example",
-    scalaVersion := "2.12.4",
+    scalaVersion := "2.12.6",
     version := "0.1.0-SNAPSHOT",
     scalacOptions := {
       val ur = update.value  // update task happens-before scalacOptions
@@ -1002,7 +1002,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "Hello",
     organization := "com.example",
-    scalaVersion := "2.12.4",
+    scalaVersion := "2.12.6",
     version := "0.1.0-SNAPSHOT",
     scalacOptions := List("-encoding", "utf8", "-Xfatal-warnings", "-deprecation", "-unchecked"),
     scalacOptions := {
@@ -1483,7 +1483,7 @@ lazy val root = (project in file("."))
       // Same as:
       // organization in ThisBuild := "com.example"
       organization := "com.example",
-      scalaVersion := "2.12.4",
+      scalaVersion := "2.12.6",
       version      := "0.1.0-SNAPSHOT"
     )),
     name := "Hello",
@@ -1686,7 +1686,7 @@ lazy val projA = (project in file("a"))
 `name in projA` (sbt シェルだと `projA/name`) の値は何か?
 
 1. `"foo-2.11.11"`
-2. `"foo-2.12.4"`
+2. `"foo-2.12.6"`
 3. その他
 
 正解は `"foo-2.11.11"`。
@@ -2265,7 +2265,7 @@ lazy val core = project
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.12.4"
+  scalaVersion := "2.12.6"
 )
 
 lazy val core = (project in file("core"))
@@ -2956,7 +2956,7 @@ import Dependencies._
 
 lazy val commonSettings = Seq(
   version := "0.1.0",
-  scalaVersion := "2.12.4"
+  scalaVersion := "2.12.6"
 )
 
 lazy val backend = (project in file("backend"))
@@ -3058,7 +3058,7 @@ name := "hello"
 
 version := "1.0"
 
-scalaVersion := "2.12.4"
+scalaVersion := "2.12.6"
 ```
 
 ### (0.13.7 以前) 設定は空白行で区切る
