@@ -763,12 +763,13 @@ object Weather {
 
   def parse(rawJson: String): Future[String] = {
     val js = Json.parse(rawJson)
-    (js \ "text").headOption match {
+    (js \\ "text").headOption match {
       case Some(JsString(x)) => Future.successful(x.toLowerCase)
       case _                 => Future.failed(sys.error(rawJson))
     }
   }
 }
+
 ```
 
 Next, change `src/main/scala/example/Hello.scala` as follows:
@@ -26141,6 +26142,13 @@ version of sbt is being used to build a project by running `about`.
 
 To reduce problems, it is recommended to not use a launcher jar for one
 nightly version to launch a different nightly version of sbt.
+
+--
+out: Archive.html
+--
+
+Archived pages
+--------------
 
 
   [Basic-Def]: Basic-Def.html

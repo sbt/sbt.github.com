@@ -1,0 +1,598 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html manifest="pamflet.manifest">
+      <head>
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+        <title>sbt Reference Manual — 例題でみる sbt</title>
+        <link rel="shortcut icon" href="../favicon.ico"/>
+        <link rel="stylesheet" href="../css/blueprint/screen.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/blueprint/grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="../css/blueprint/print.css" type="text/css" media="print"/> 
+        <!--[if lt IE 8]>
+          <link rel="stylesheet" href={ relativeBase + "css/blueprint/ie.css" } type="text/css" media="screen, projection"/>
+        <![endif]-->
+        <link rel="stylesheet" href="../css/pamflet.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamflet-print.css" type="text/css" media="print"/>
+        <link rel="stylesheet" href="../css/pamflet-grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-redmond.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-github.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-monokai.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamfletheight_80px_2em.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <script type="text/javascript" src="../js/jquery-1.6.2.min.js"></script>
+        <script type="text/javascript" src="../js/jquery.collapse.js"></script>
+        <script type="text/javascript" src="../js/pamflet.js"></script>
+        <script type="text/javascript">
+          Pamflet.page.language = 'ja';
+        </script>
+        <script type="text/javascript" src="../js/prettify/prettify.js"></script><script type="text/javascript" src="../js/prettify/lang-scala.js"></script><link type="text/css" rel="stylesheet" href="../css/prettify.css"/><script type="text/javascript"><!--
+        window.onload=function() { prettyPrint(); };
+      --></script>
+        <link rel="stylesheet" href="../css/custom.css" type="text/css" media="screen, projection"/>
+        
+        <script type="text/javascript">
+              Pamflet.twitter = '#sbt #scala';
+            </script>
+      </head>
+      <body class="color_scheme-github">
+        <a class="page prev nav" href="Installing-sbt-on-Linux.html">
+            <span class="space">&nbsp;</span>
+            <span class="flip arrow">&gt;</span>
+          </a><a class="page next nav" href="Directories.html">
+            <span class="space">&nbsp;</span>
+            <span class="arrow">&gt;</span>
+          </a>
+        <div class="container contentswrapper">
+          <div class="span-16 prepend-1 append-1 contents">
+            <h2 id="%E4%BE%8B%E9%A1%8C%E3%81%A7%E3%81%BF%E3%82%8B+sbt">例題でみる sbt<a href="#%E4%BE%8B%E9%A1%8C%E3%81%A7%E3%81%BF%E3%82%8B+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このページは、
+<a href="Setup.html">sbt 1 をインストール</a>したことを前提とする。
+</p><p>sbt の内部がどうなっているかや理由みたいなことを解説する代わりに、例題を次々と見ていこう。
+</p><h3 id="%E6%9C%80%E5%B0%8F+sbt+%E3%83%93%E3%83%AB%E3%83%89%E3%82%92%E4%BD%9C%E3%82%8B">最小 sbt ビルドを作る<a href="#%E6%9C%80%E5%B0%8F+sbt+%E3%83%93%E3%83%AB%E3%83%89%E3%82%92%E4%BD%9C%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">$ mkdir foo-build
+$ cd foo-build
+$ touch build.sbt
+</code></pre><h3 id="sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%82%92%E8%B5%B7%E3%81%A1%E4%B8%8A%E3%81%92%E3%82%8B">sbt シェルを起ち上げる<a href="#sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%82%92%E8%B5%B7%E3%81%A1%E4%B8%8A%E3%81%92%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">$ sbt
+[info] Updated file /tmp/foo-build/project/build.properties: set sbt.version to 1.1.4
+[info] Loading project definition from /private/tmp/foo-build/project
+[info] Loading settings from build.sbt ...
+[info] Set current project to foo-build (in build file:/private/tmp/foo-build/)
+[info] sbt server started at local:///Users/eed3si9n/.sbt/1.0/server/abc4fb6c89985a00fd95/sock
+sbt:foo-build&gt;
+</code></pre><h3 id="sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%82%92%E7%B5%82%E4%BA%86%E3%81%95%E3%81%9B%E3%82%8B">sbt シェルを終了させる<a href="#sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%82%92%E7%B5%82%E4%BA%86%E3%81%95%E3%81%9B%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt シェルを終了させるには、<code>exit</code> と入力するか、Ctrl+D (Unix) か Ctrl+Z (Windows) を押す。
+</p><pre><code class="">sbt:foo-build&gt; exit
+</code></pre><h3 id="%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E3%82%B3%E3%83%B3%E3%83%91%E3%82%A4%E3%83%AB%E3%81%99%E3%82%8B">プロジェクトをコンパイルする<a href="#%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E3%82%B3%E3%83%B3%E3%83%91%E3%82%A4%E3%83%AB%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>表記の慣例として <code>sbt:...&gt;</code> や <code>&gt;</code> というプロンプトは、sbt シェルに入っていることを意味することにする。
+</p><pre><code class="">$ sbt
+sbt:foo-build&gt; compile
+</code></pre><h3 id="%E3%82%B3%E3%83%BC%E3%83%89%E5%A4%89%E6%9B%B4%E6%99%82%E3%81%AB%E5%86%8D%E3%82%B3%E3%83%B3%E3%83%91%E3%82%A4%E3%83%AB%E3%81%99%E3%82%8B">コード変更時に再コンパイルする<a href="#%E3%82%B3%E3%83%BC%E3%83%89%E5%A4%89%E6%9B%B4%E6%99%82%E3%81%AB%E5%86%8D%E3%82%B3%E3%83%B3%E3%83%91%E3%82%A4%E3%83%AB%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>compile</code> コマンド (やその他のコマンド) を <code>~</code> で始めると、プロジェクト内のソース・ファイルが変更されるたびにそのコマンドが自動的に再実行される。
+</p><pre><code class="">sbt:foo-build&gt; ~compile
+[success] Total time: 0 s, completed May 6, 2018 3:52:08 PM
+1. Waiting for source changes... (press enter to interrupt)
+</code></pre><h3 id="%E3%82%BD%E3%83%BC%E3%82%B9%E3%83%BB%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E6%9B%B8%E3%81%8F">ソース・ファイルを書く<a href="#%E3%82%BD%E3%83%BC%E3%82%B9%E3%83%BB%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E6%9B%B8%E3%81%8F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>上記のコマンドは走らせたままにする。別のシェルかファイルマネージャーからプロジェクトのディレクトリへ行って、<code>src/main/scala/example</code> というディレクトリを作る。次に好きなエディタを使って <code>example</code> ディレクトリ内に以下をファイルを作成する:
+</p><pre><code class="prettyprint lang-scala">package example
+
+object Hello extends App {
+  println(&quot;Hello&quot;)
+}
+</code></pre><p>この新しいファイルは実行中のコマンドが自動的に検知したはずだ:
+</p><pre><code class="">[info] Compiling 1 Scala source to /private/tmp/foo-build/target/scala-2.12/classes ...
+[info] Done compiling.
+[success] Total time: 2 s, completed May 6, 2018 3:53:42 PM
+2. Waiting for source changes... (press enter to interrupt)
+</code></pre><p><code>~compile</code> を抜けるには <code>Enter</code> を押す。
+</p><h3 id="%E4%BB%A5%E5%89%8D%E3%81%AE%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%82%92%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B">以前のコマンドを実行する<a href="#%E4%BB%A5%E5%89%8D%E3%81%AE%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%82%92%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt シェル内で上矢印キーを 2回押して、上で実行した <code>compile</code> コマンドを探す。
+</p><pre><code class="">sbt:foo-build&gt; compile
+</code></pre><h3 id="%E3%83%98%E3%83%AB%E3%83%97%E3%82%92%E8%AA%AD%E3%82%80">ヘルプを読む<a href="#%E3%83%98%E3%83%AB%E3%83%97%E3%82%92%E8%AA%AD%E3%82%80" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>help</code> コマンドを使って、基礎コマンドの一覧を表示する。
+</p><pre><code class="">sbt:foo-build&gt; help
+
+  about                                          Displays basic information about sbt and the build.
+  tasks                                          Lists the tasks defined for the current project.
+  settings                                       Lists the settings defined for the current project.
+  reload                                         (Re)loads the current project or changes to plugins project or returns from it.
+  new                                            Creates a new sbt build.
+  projects                                       Lists the names of available projects or temporarily adds/removes extra builds to the session.
+  project                                        Displays the current project or changes to the provided `project`.
+
+....
+</code></pre><p>特定のタスクの説明を表示させる:
+</p><pre><code class="">sbt:foo-build&gt; help run
+Runs a main class, passing along arguments provided on the command line.
+</code></pre><h3 id="%E3%82%A2%E3%83%97%E3%83%AA%E3%82%92%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B">アプリを実行する<a href="#%E3%82%A2%E3%83%97%E3%83%AA%E3%82%92%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:foo-build&gt; run
+[info] Packaging /private/tmp/foo-build/target/scala-2.12/foo-build_2.12-0.1.0-SNAPSHOT.jar ...
+[info] Done packaging.
+[info] Running example.Hello
+Hello
+[success] Total time: 1 s, completed May 6, 2018 4:10:44 PM
+</code></pre><h3 id="sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%8B%E3%82%89+ThisBuild+%2F+scalaVersion+%E3%82%92%E3%82%BB%E3%83%83%E3%83%88%E3%81%99%E3%82%8B">sbt シェルから ThisBuild / scalaVersion をセットする<a href="#sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%8B%E3%82%89+ThisBuild+%2F+scalaVersion+%E3%82%92%E3%82%BB%E3%83%83%E3%83%88%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:foo-build&gt; set ThisBuild / scalaVersion := &quot;2.12.6&quot;
+[info] Defining ThisBuild / scalaVersion
+</code></pre><p><code>scalaVersion</code> セッティングを確認する:
+</p><pre><code class="">sbt:foo-build&gt; scalaVersion
+[info] 2.12.6
+</code></pre><h3 id="%E3%82%BB%E3%83%83%E3%82%B7%E3%83%A7%E3%83%B3%E3%82%92+build.sbt+%E3%81%B8%E3%81%A8%E4%BF%9D%E5%AD%98%E3%81%99%E3%82%8B">セッションを build.sbt へと保存する<a href="#%E3%82%BB%E3%83%83%E3%82%B7%E3%83%A7%E3%83%B3%E3%82%92+build.sbt+%E3%81%B8%E3%81%A8%E4%BF%9D%E5%AD%98%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>アドホックに設定したセッティングは <code>session save</code> で保存できる。
+</p><pre><code class="">sbt:foo-build&gt; session save
+[info] Reapplying settings...
+</code></pre><p><code>build.sbt</code> ファイルは以下のようになったはずだ:
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.6&quot;
+</code></pre><h3 id="%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%AB%E5%90%8D%E5%89%8D%E3%82%92%E4%BB%98%E3%81%91%E3%82%8B">プロジェクトに名前を付ける<a href="#%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%AB%E5%90%8D%E5%89%8D%E3%82%92%E4%BB%98%E3%81%91%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>エディタを使って、<code>build.sbt</code> を以下のように変更する:
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.6&quot;
+ThisBuild / organization := &quot;com.example&quot;
+
+lazy val hello = (project in file(&quot;.&quot;))
+  .settings(
+    name := &quot;Hello&quot;
+  )
+</code></pre><h3 id="%E3%83%93%E3%83%AB%E3%83%89%E3%81%AE%E5%86%8D%E8%AA%AD%E3%81%BF%E8%BE%BC%E3%81%BF">ビルドの再読み込み<a href="#%E3%83%93%E3%83%AB%E3%83%89%E3%81%AE%E5%86%8D%E8%AA%AD%E3%81%BF%E8%BE%BC%E3%81%BF" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>reload</code> コマンドを使ってビルドを再読み込みする。このコマンドは <code>build.sbt</code> を読み直して、そこに書かれたセッティングを再適用する。
+</p><pre><code class="">sbt:foo-build&gt; reload
+[info] Loading project definition from /private/tmp/foo-build/project
+[info] Loading settings from build.sbt ...
+[info] Set current project to Hello (in build file:/private/tmp/foo-build/)
+sbt:Hello&gt;
+</code></pre><p>プロンプトが <code>sbt:Hello&gt;</code> に変わったことに注目してほしい。
+</p><h3 id="libraryDependencies+%E3%81%AB+ScalaTest+%E3%82%92%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B">libraryDependencies に ScalaTest を追加する<a href="#libraryDependencies+%E3%81%AB+ScalaTest+%E3%82%92%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>エディタを使って、<code>build.sbt</code> を以下のように変更する:
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.6&quot;
+ThisBuild / organization := &quot;com.example&quot;
+
+lazy val hello = (project in file(&quot;.&quot;))
+  .settings(
+    name := &quot;Hello&quot;,
+    libraryDependencies += &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.0.5&quot; % Test,
+  )
+</code></pre><p><code>reload</code> コマンドを使って、<code>build.sbt</code> の変更を反映させる。
+</p><pre><code class="">sbt:Hello&gt; reload
+</code></pre><h3 id="%E3%83%86%E3%82%B9%E3%83%88%E3%82%92%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B">テストを実行する<a href="#%E3%83%86%E3%82%B9%E3%83%88%E3%82%92%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:Hello&gt; test
+</code></pre><h3 id="%E5%B7%AE%E5%88%86%E3%83%86%E3%82%B9%E3%83%88%E3%82%92%E7%B6%99%E7%B6%9A%E7%9A%84%E3%81%AB%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B">差分テストを継続的に実行する<a href="#%E5%B7%AE%E5%88%86%E3%83%86%E3%82%B9%E3%83%88%E3%82%92%E7%B6%99%E7%B6%9A%E7%9A%84%E3%81%AB%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:Hello&gt; ~testQuick
+</code></pre><h3 id="%E3%83%86%E3%82%B9%E3%83%88%E3%82%92%E6%9B%B8%E3%81%8F">テストを書く<a href="#%E3%83%86%E3%82%B9%E3%83%88%E3%82%92%E6%9B%B8%E3%81%8F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>上のコマンドを走らせたままで、エディタから <code>src/test/scala/HelloSpec.scala</code> という名前のファイルを作成する:
+</p><pre><code class="prettyprint lang-scala">import org.scalatest._
+
+class HelloSpec extends FunSuite with DiagrammedAssertions {
+  test(&quot;Hello should start with H&quot;) {
+    assert(&quot;hello&quot;.startsWith(&quot;H&quot;))
+  }
+}
+</code></pre><p><code>~testQuick</code> が検知したはずだ:
+</p><pre><code class="">2. Waiting for source changes... (press enter to interrupt)
+[info] Compiling 1 Scala source to /private/tmp/foo-build/target/scala-2.12/test-classes ...
+[info] Done compiling.
+[info] HelloSpec:
+[info] - Hello should start with H *** FAILED ***
+[info]   assert(&quot;hello&quot;.startsWith(&quot;H&quot;))
+[info]          |       |          |
+[info]          &quot;hello&quot; false      &quot;H&quot; (HelloSpec.scala:5)
+[info] Run completed in 135 milliseconds.
+[info] Total number of tests run: 1
+[info] Suites: completed 1, aborted 0
+[info] Tests: succeeded 0, failed 1, canceled 0, ignored 0, pending 0
+[info] *** 1 TEST FAILED ***
+[error] Failed tests:
+[error]   HelloSpec
+[error] (Test / testQuick) sbt.TestsFailedException: Tests unsuccessful
+</code></pre><h3 id="%E3%83%86%E3%82%B9%E3%83%88%E3%81%8C%E9%80%9A%E3%82%8B%E3%82%88%E3%81%86%E3%81%AB%E3%81%99%E3%82%8B">テストが通るようにする<a href="#%E3%83%86%E3%82%B9%E3%83%88%E3%81%8C%E9%80%9A%E3%82%8B%E3%82%88%E3%81%86%E3%81%AB%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>エディタを使って <code>src/test/scala/HelloSpec.scala</code> を以下のように変更する:
+</p><pre><code class="prettyprint lang-scala">import org.scalatest._
+
+class HelloSpec extends FunSuite with DiagrammedAssertions {
+  test(&quot;Hello should start with H&quot;) {
+    // Hello, as opposed to hello
+    assert(&quot;Hello&quot;.startsWith(&quot;H&quot;))
+  }
+}
+</code></pre><p>テストが通過したことを確認して、<code>Enter</code> を押して継続的テストを抜ける。
+</p><h3 id="%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%92%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B">ライブラリ依存性を追加する<a href="#%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%92%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>エディタを使って <code>build.sbt</code> を以下のように変更する:
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.6&quot;
+ThisBuild / organization := &quot;com.example&quot;
+
+lazy val hello = (project in file(&quot;.&quot;))
+  .settings(
+    name := &quot;Hello&quot;,
+    libraryDependencies += &quot;com.eed3si9n&quot; %% &quot;gigahorse-okhttp&quot; % &quot;0.3.1&quot;,
+    libraryDependencies += &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.0.5&quot; % Test,
+  )
+</code></pre><h3 id="Scala+REPL+%E3%82%92%E4%BD%BF%E3%81%86">Scala REPL を使う<a href="#Scala+REPL+%E3%82%92%E4%BD%BF%E3%81%86" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>New York の現在の天気を調べてみる:
+</p><pre><code class="prettyprint lang-scala">sbt:Hello&gt; console
+[info] Starting scala interpreter...
+Welcome to Scala 2.12.6 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0_171).
+Type in expressions for evaluation. Or try :help.
+
+scala&gt; :paste
+// Entering paste mode (ctrl-D to finish)
+
+import gigahorse._, support.okhttp.Gigahorse
+import scala.concurrent._, duration._
+Gigahorse.withHttp(Gigahorse.config) { http =&gt;
+  val r = Gigahorse.url(&quot;https://query.yahooapis.com/v1/public/yql&quot;).get.
+    addQueryString(
+      &quot;q&quot; -&gt; &quot;&quot;&quot;select item.condition
+                from weather.forecast where woeid in (select woeid from geo.places(1) where text='New York, NY')
+                and u='c'&quot;&quot;&quot;,
+      &quot;format&quot; -&gt; &quot;json&quot;
+    )
+  val f = http.run(r, Gigahorse.asString)
+  Await.result(f, 10.seconds)
+}
+
+// Ctrl+D を押してペーストモードを抜ける
+
+// Exiting paste mode, now interpreting.
+
+import gigahorse._
+import support.okhttp.Gigahorse
+import scala.concurrent._
+import duration._
+res0: String = {&quot;query&quot;:{&quot;count&quot;:1,&quot;created&quot;:&quot;2018-05-06T22:49:55Z&quot;,&quot;lang&quot;:&quot;en-US&quot;,
+&quot;results&quot;:{&quot;channel&quot;:{&quot;item&quot;:{&quot;condition&quot;:{&quot;code&quot;:&quot;26&quot;,&quot;date&quot;:&quot;Sun, 06 May 2018 06:00 PM EDT&quot;,
+&quot;temp&quot;:&quot;16&quot;,&quot;text&quot;:&quot;Cloudy&quot;}}}}}}
+
+scala&gt; :q // これで REPL を抜ける
+</code></pre><h3 id="%E3%82%B5%E3%83%97%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B">サププロジェクトを作成する<a href="#%E3%82%B5%E3%83%97%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> を以下のように変更する:
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.6&quot;
+ThisBuild / organization := &quot;com.example&quot;
+
+lazy val hello = (project in file(&quot;.&quot;))
+  .settings(
+    name := &quot;Hello&quot;,
+    libraryDependencies += &quot;com.eed3si9n&quot; %% &quot;gigahorse-okhttp&quot; % &quot;0.3.1&quot;,
+    libraryDependencies += &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.0.5&quot; % Test,
+  )
+
+lazy val helloCore = (project in file(&quot;core&quot;))
+  .settings(
+    name := &quot;Hello Core&quot;,
+  )
+</code></pre><p><code>reload</code> コマンドを使って <code>build.sbt</code> の変更を反映させる。
+</p><h3 id="%E5%85%A8%E3%81%A6%E3%81%AE%E3%82%B5%E3%83%97%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E5%88%97%E6%8C%99%E3%81%99%E3%82%8B">全てのサププロジェクトを列挙する<a href="#%E5%85%A8%E3%81%A6%E3%81%AE%E3%82%B5%E3%83%97%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E5%88%97%E6%8C%99%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:Hello&gt; projects
+[info] In file:/private/tmp/foo-build/
+[info]   * hello
+[info]     helloCore
+</code></pre><h3 id="%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E3%82%B3%E3%83%B3%E3%83%91%E3%82%A4%E3%83%AB%E3%81%99%E3%82%8B">サブプロジェクトをコンパイルする<a href="#%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E3%82%B3%E3%83%B3%E3%83%91%E3%82%A4%E3%83%AB%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:Hello&gt; helloCore/compile
+</code></pre><h3 id="%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%AB+ScalaTest+%E3%82%92%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B">サブプロジェクトに ScalaTest を追加する<a href="#%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%AB+ScalaTest+%E3%82%92%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> を以下のように変更する:
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.6&quot;
+ThisBuild / organization := &quot;com.example&quot;
+
+val scalaTest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.0.5&quot;
+
+lazy val hello = (project in file(&quot;.&quot;))
+  .settings(
+    name := &quot;Hello&quot;,
+    libraryDependencies += &quot;com.eed3si9n&quot; %% &quot;gigahorse-okhttp&quot; % &quot;0.3.1&quot;,
+    libraryDependencies += scalaTest % Test,
+  )
+
+lazy val helloCore = (project in file(&quot;core&quot;))
+  .settings(
+    name := &quot;Hello Core&quot;,
+    libraryDependencies += scalaTest % Test,
+  )
+</code></pre><h3 id="%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%82%92%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%82%AD%E3%83%A3%E3%82%B9%E3%83%88%E3%81%99%E3%82%8B">コマンドをブロードキャストする<a href="#%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%82%92%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%82%AD%E3%83%A3%E3%82%B9%E3%83%88%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>hello</code> に送ったコマンドを <code>helloCore</code> にもブロードキャストするために集約を設定する:
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.6&quot;
+ThisBuild / organization := &quot;com.example&quot;
+
+val scalaTest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.0.5&quot;
+
+lazy val hello = (project in file(&quot;.&quot;))
+  .aggregate(helloCore)
+  .settings(
+    name := &quot;Hello&quot;,
+    libraryDependencies += &quot;com.eed3si9n&quot; %% &quot;gigahorse-okhttp&quot; % &quot;0.3.1&quot;,
+    libraryDependencies += scalaTest % Test,
+  )
+
+lazy val helloCore = (project in file(&quot;core&quot;))
+  .settings(
+    name := &quot;Hello Core&quot;,
+    libraryDependencies += scalaTest % Test,
+  )
+</code></pre><p><code>reload</code> 後、<code>~testQuick</code> は両方のサブプロジェクトに作用する:
+</p><pre><code class="prettyprint lang-scala">sbt:Hello&gt; ~testQuick
+</code></pre><p><code>Enter</code> を押して継続的テストを抜ける。
+</p><h3 id="hello+%E3%81%8C+helloCore+%E3%81%AB%E4%BE%9D%E5%AD%98%E3%81%99%E3%82%8B%E3%82%88%E3%81%86%E3%81%AB%E3%81%99%E3%82%8B">hello が helloCore に依存するようにする<a href="#hello+%E3%81%8C+helloCore+%E3%81%AB%E4%BE%9D%E5%AD%98%E3%81%99%E3%82%8B%E3%82%88%E3%81%86%E3%81%AB%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>サブプロジェクト間の依存関係を定義するには <code>.dependsOn(...)</code> を使う。ついでに、Gigahorse への依存性も <code>helloCore</code> に移そう。
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.6&quot;
+ThisBuild / organization := &quot;com.example&quot;
+
+val scalaTest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.0.5&quot;
+
+lazy val hello = (project in file(&quot;.&quot;))
+  .aggregate(helloCore)
+  .dependsOn(helloCore)
+  .settings(
+    name := &quot;Hello&quot;,
+    libraryDependencies += scalaTest % Test,
+  )
+
+lazy val helloCore = (project in file(&quot;core&quot;))
+  .settings(
+    name := &quot;Hello Core&quot;,
+    libraryDependencies += &quot;com.eed3si9n&quot; %% &quot;gigahorse-okhttp&quot; % &quot;0.3.1&quot;,
+    libraryDependencies += scalaTest % Test,
+  )
+</code></pre><h3 id="Play+JSON+%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6+JSON+%E3%82%92%E3%83%91%E3%83%BC%E3%82%B9%E3%81%99%E3%82%8B">Play JSON を使って JSON をパースする<a href="#Play+JSON+%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6+JSON+%E3%82%92%E3%83%91%E3%83%BC%E3%82%B9%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>helloCore</code> に Play JSON を追加しよう。
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.6&quot;
+ThisBuild / organization := &quot;com.example&quot;
+
+val scalaTest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.0.5&quot;
+val gigahorse = &quot;com.eed3si9n&quot; %% &quot;gigahorse-okhttp&quot; % &quot;0.3.1&quot;
+val playJson  = &quot;com.typesafe.play&quot; %% &quot;play-json&quot; % &quot;2.6.9&quot;
+
+lazy val hello = (project in file(&quot;.&quot;))
+  .aggregate(helloCore)
+  .dependsOn(helloCore)
+  .settings(
+    name := &quot;Hello&quot;,
+    libraryDependencies += scalaTest % Test,
+  )
+
+lazy val helloCore = (project in file(&quot;core&quot;))
+  .settings(
+    name := &quot;Hello Core&quot;,
+    libraryDependencies ++= Seq(gigahorse, playJson),
+    libraryDependencies += scalaTest % Test,
+  )
+</code></pre><p><code>reload</code> 後、<code>core/src/main/scala/example/core/Weather.scala</code> を追加する:
+</p><pre><code class="prettyprint lang-scala">package example.core
+
+import gigahorse._, support.okhttp.Gigahorse
+import scala.concurrent._
+import play.api.libs.json._
+
+object Weather {
+  lazy val http = Gigahorse.http(Gigahorse.config)
+  def weather: Future[String] = {
+    val r = Gigahorse.url(&quot;https://query.yahooapis.com/v1/public/yql&quot;).get.
+      addQueryString(
+        &quot;q&quot; -&gt; &quot;&quot;&quot;select item.condition
+                 |from weather.forecast where woeid in (select woeid from geo.places(1) where text='New York, NY')
+                 |and u='c'&quot;&quot;&quot;.stripMargin,
+        &quot;format&quot; -&gt; &quot;json&quot;
+      )
+
+    import ExecutionContext.Implicits._
+    for {
+      f &lt;- http.run(r, Gigahorse.asString)
+      x &lt;- parse(f)
+    } yield x
+  }
+
+  def parse(rawJson: String): Future[String] = {
+    val js = Json.parse(rawJson)
+    (js \\ &quot;text&quot;).headOption match {
+      case Some(JsString(x)) =&gt; Future.successful(x.toLowerCase)
+      case _                 =&gt; Future.failed(sys.error(rawJson))
+    }
+  }
+}
+
+</code></pre><p>次に <code>src/main/scala/example/Hello.scala</code> を以下のように変更する:
+</p><pre><code class="prettyprint lang-scala">package example
+
+import scala.concurrent._, duration._
+import core.Weather
+
+object Hello extends App {
+  val w = Await.result(Weather.weather, 10.seconds)
+  println(s&quot;Hello! The weather in New York is $w.&quot;)
+  Weather.http.close()
+}
+</code></pre><p>アプリを走らせてみて、うまくいったか確認する:
+</p><pre><code class="">sbt:Hello&gt; run
+[info] Compiling 1 Scala source to /private/tmp/foo-build/core/target/scala-2.12/classes ...
+[info] Done compiling.
+[info] Compiling 1 Scala source to /private/tmp/foo-build/target/scala-2.12/classes ...
+[info] Packaging /private/tmp/foo-build/core/target/scala-2.12/hello-core_2.12-0.1.0-SNAPSHOT.jar ...
+[info] Done packaging.
+[info] Done compiling.
+[info] Packaging /private/tmp/foo-build/target/scala-2.12/hello_2.12-0.1.0-SNAPSHOT.jar ...
+[info] Done packaging.
+[info] Running example.Hello
+Hello! The weather in New York is mostly cloudy.
+</code></pre><h3 id="sbt-native-packger+%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%82%92%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B">sbt-native-packger プラグインを追加する<a href="#sbt-native-packger+%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%82%92%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>エディタを使って <code>project/plugins.sbt</code> を追加する:
+</p><pre><code class="prettyprint lang-scala">addSbtPlugin(&quot;com.typesafe.sbt&quot; % &quot;sbt-native-packager&quot; % &quot;1.3.4&quot;)
+</code></pre><p>次に <code>build.sbt</code> を以下のように変更して <code>JavaAppPackaging</code> を追加する:
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.6&quot;
+ThisBuild / organization := &quot;com.example&quot;
+
+val scalaTest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.0.5&quot;
+val gigahorse = &quot;com.eed3si9n&quot; %% &quot;gigahorse-okhttp&quot; % &quot;0.3.1&quot;
+val playJson  = &quot;com.typesafe.play&quot; %% &quot;play-json&quot; % &quot;2.6.9&quot;
+
+lazy val hello = (project in file(&quot;.&quot;))
+  .aggregate(helloCore)
+  .dependsOn(helloCore)
+  .enablePlugins(JavaAppPackaging)
+  .settings(
+    name := &quot;Hello&quot;,
+    libraryDependencies += scalaTest % Test,
+  )
+
+lazy val helloCore = (project in file(&quot;core&quot;))
+  .settings(
+    name := &quot;Hello Core&quot;,
+    libraryDependencies ++= Seq(gigahorse, playJson),
+    libraryDependencies += scalaTest % Test,
+  )
+</code></pre><h3 id="%E9%85%8D%E5%B8%83%E7%94%A8%E3%81%AE+.zip+%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E4%BD%9C%E3%82%8B">配布用の .zip ファイルを作る<a href="#%E9%85%8D%E5%B8%83%E7%94%A8%E3%81%AE+.zip+%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E4%BD%9C%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:Hello&gt; dist
+[info] Wrote /private/tmp/foo-build/target/scala-2.12/hello_2.12-0.1.0-SNAPSHOT.pom
+[info] Wrote /private/tmp/foo-build/core/target/scala-2.12/hello-core_2.12-0.1.0-SNAPSHOT.pom
+[info] Your package is ready in /private/tmp/foo-build/target/universal/hello-0.1.0-SNAPSHOT.zip
+</code></pre><p>パッケージ化されたアプリの実行は以下のように行う:
+</p><pre><code class="">$ /tmp/someother
+$ cd /tmp/someother
+$ unzip -o -d /tmp/someother /tmp/foo-build/target/universal/hello-0.1.0-SNAPSHOT.zip
+$ ./hello-0.1.0-SNAPSHOT/bin/hello
+Hello! The weather in New York is mostly cloudy.
+</code></pre><h3 id="%E3%82%A2%E3%83%97%E3%83%AA%E3%82%92+Docker%E5%8C%96%E3%81%95%E3%81%9B%E3%82%8B">アプリを Docker化させる<a href="#%E3%82%A2%E3%83%97%E3%83%AA%E3%82%92+Docker%E5%8C%96%E3%81%95%E3%81%9B%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:Hello&gt; Docker/publishLocal
+....
+[info] Successfully built b6ce1b6ab2c0
+[info] Successfully tagged hello:0.1.0-SNAPSHOT
+[info] Built image hello:0.1.0-SNAPSHOT
+</code></pre><p>Docker化されたアプリは以下のように実行する:
+</p><pre><code class="">$ docker run hello:0.1.0-SNAPSHOT
+Hello! The weather in New York is mostly cloudy
+</code></pre><h3 id="version+%E3%82%92%E8%A8%AD%E5%AE%9A%E3%81%99%E3%82%8B">version を設定する<a href="#version+%E3%82%92%E8%A8%AD%E5%AE%9A%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> を以下のように変更する:
+</p><pre><code class="prettyprint lang-scala">ThisBuild / version      := &quot;0.1.0&quot;
+ThisBuild / scalaVersion := &quot;2.12.6&quot;
+ThisBuild / organization := &quot;com.example&quot;
+
+val scalaTest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.0.5&quot;
+val gigahorse = &quot;com.eed3si9n&quot; %% &quot;gigahorse-okhttp&quot; % &quot;0.3.1&quot;
+val playJson  = &quot;com.typesafe.play&quot; %% &quot;play-json&quot; % &quot;2.6.9&quot;
+
+lazy val hello = (project in file(&quot;.&quot;))
+  .aggregate(helloCore)
+  .dependsOn(helloCore)
+  .enablePlugins(JavaAppPackaging)
+  .settings(
+    name := &quot;Hello&quot;,
+    libraryDependencies += scalaTest % Test,
+  )
+
+lazy val helloCore = (project in file(&quot;core&quot;))
+  .settings(
+    name := &quot;Hello Core&quot;,
+    libraryDependencies ++= Seq(gigahorse, playJson),
+    libraryDependencies += scalaTest % Test,
+  )
+</code></pre><h3 id="Switch+scalaVersion+temporarily">Switch scalaVersion temporarily<a href="#Switch+scalaVersion+temporarily" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:Hello&gt; ++2.11.12!
+[info] Forcing Scala version to 2.11.12 on all projects.
+[info] Reapplying settings...
+[info] Set current project to Hello (in build file:/private/tmp/foo-build/)
+</code></pre><p><code>scalaVersion</code> セッティングを確認する:
+</p><pre><code class="">sbt:Hello&gt; scalaVersion
+[info] helloCore / scalaVersion
+[info]  2.11.12
+[info] scalaVersion
+[info]  2.11.12 scalaVersion
+[info] 2.12.6
+</code></pre><p>このセッティングは <code>reload</code> 後には無くなる。
+</p><h3 id="dist+%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%9A%E3%82%AF%E3%83%88">dist タスクのインスペクト<a href="#dist+%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%9A%E3%82%AF%E3%83%88" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>dist</code> タスクのことをもっと調べるために、<code>help</code> と <code>inspect</code> を実行してみる。
+</p><pre><code class="prettyprint lang-scala">sbt:Hello&gt; help dist
+Creates the distribution packages.
+sbt:Hello&gt; inspect dist
+</code></pre><p>依存タスクに対して <code>inspect</code> を再帰的に呼び出すには <code>inspect tree</code> を使う。
+</p><pre><code class="prettyprint lang-scala">sbt:Hello&gt; inspect tree dist
+[info] dist = Task[java.io.File]
+[info]   +-Universal / dist = Task[java.io.File]
+....
+</code></pre><h3 id="%E3%83%90%E3%83%83%E3%83%81%E3%83%A2%E3%83%BC%E3%83%89">バッチモード<a href="#%E3%83%90%E3%83%83%E3%83%81%E3%83%A2%E3%83%BC%E3%83%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt のコマンドをターミナルから直接渡して sbt をバッチモードで実行することができる。
+</p><pre><code class="">$ sbt clean &quot;testOnly HelloSpec&quot;
+</code></pre><p><strong>Note</strong>: バッチモードでの実行は JVM のスピンアップと JIT を毎回行うため、<strong>ビルドかなり遅くなる。</strong>
+普段のコーディングでは sbt シェル、
+もしくは <code>~testQuick</code> のような継続的テストを使うことを推奨する。
+</p><h3 id="sbt+new+%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89">sbt new コマンド<a href="#sbt+new+%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt <code>new</code> コマンドを使って手早く簡単な Hello world ビルドをセットアップすることができる。
+</p><pre><code class="">$ sbt new sbt/scala-seed.g8
+....
+A minimal Scala project.
+
+name [My Something Project]: hello
+
+Template applied in ./hello
+</code></pre><p>プロジェクト名を入力するプロンプトが出てきたら <code>hello</code> と入力する。
+</p><p>これで、<code>hello</code> ディレクトリ以下に新しいプロジェクトができた。
+</p><h3 id="%E3%82%AF%E3%83%AC%E3%82%B8%E3%83%83%E3%83%88">クレジット<a href="#%E3%82%AF%E3%83%AC%E3%82%B8%E3%83%83%E3%83%88" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>本ページは William “Scala William” Narmontas さん作の <a href="https://www.scalawilliam.com/essential-sbt/">Essential sbt</a> というチュートリアルに基づいて書かれた。
+</p><div class="bottom nav span-16">
+                        <em>Next Page</em>
+                        <span class="arrow">&gt;</span>
+                        <a href="Directories.html"> ディレクトリ構造 </a>                        
+                        <ul class="language-bar">
+        
+      </ul>
+                      </div><div class="tocwrapper show">
+      <a class="tochead nav" style="display: none" href="#toc">❦</a>
+      <a name="toc"></a>
+      <h4 class="toctitle">Contents</h4>
+      <div class="tocbody">
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">始める sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">sbt のインストール</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Mac への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Linux への sbt のインストール</a></div></li> </ol></li><li><div class="current">例題でみる sbt</div></li><li><div><a href="Directories.html">ディレクトリ構造</a></div></li><li><div><a href="Running.html">実行</a></div></li><li><div><a href="Basic-Def.html">ビルド定義</a></div></li><li><div><a href="Task-Graph.html">タスク・グラフ</a></div></li><li><div><a href="Scopes.html">スコープ</a></div></li><li><div><a href="Appending-Values.html">値の追加</a></div></li><li><div><a href="Scope-Delegation.html">スコープ委譲 (.value の照会)</a></div></li><li><div><a href="Library-Dependencies.html">ライブラリ依存性</a></div></li><li><div><a href="Multi-Project.html">マルチプロジェクト・ビルド</a></div></li><li><div><a href="Using-Plugins.html">プラグインの使用</a></div></li><li><div><a href="Custom-Settings.html">カスタムセッティングとタスク</a></div></li><li><div><a href="Organizing-Build.html">ビルドの整理</a></div></li><li><div><a href="Summary.html">まとめ</a></div></li><li><div><a href="Bare-Def.html">付録: bare .sbt ビルド定義</a></div></li> </ol></li><li><div><a href="General-Info.html">インフォメーション</a></div><ol class="toc"> <li><div><a href="Changes.html">変更点</a></div><ol class="toc"> <li><div><a href="sbt-1.0-Release-Notes.html">sbt 1.0.0</a></div></li> </ol></li> </ol></li><li><div><a href="Detailed-Topics.html">各論</a></div><ol class="toc"> <li><div><a href="Plugins-and-Best-Practices.html">プラグインとベストプラクティス</a></div><ol class="toc"> <li><div><a href="Testing-sbt-plugins.html">sbt プラグインをテストする</a></div></li> </ol></li> </ol></li><li><div><a href="Howto.html">How to</a></div><ol class="toc"> <li><div><a href="Howto-Sequencing.html">逐次実行</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Def.sequential を用いて逐次タスクを定義する</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Def.taskDyn を用いて動的タスクを定義する</a></div></li><li><div><a href="Howto-After-Input-Task.html">インプットタスクの後で何かする</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn を用いた動的インプットタスクの定義</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">コマンドを用いた逐次実行</a></div></li> </ol></li> </ol></li><li><div><a href="Archived+pages.html">Archived pages</a></div><ol class="toc"> <li><div><a href="Hello.html">Hello, World</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+          </div>
+        </div>
+        <div class="header">
+          <link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
+<div class="container">
+    <div class="logo">
+      <a href="../../../index.html"><img src="../files/sbt-logo-100x56.png" alt="sbt"></a>
+    </div>
+    <div class="nav" id="topbar">
+      <a href="../../../documentation.html">Documentation</a>
+      <a href="../../../download.html">Download</a>
+      <a href="../../../support.html">Support</a>
+      <a href="../../../community.html">Get Involved</a>
+      <a id="source-code" href="https://github.com/sbt/sbt"><img src="../files/github-logo-teal.svg" alt="Source code" class="social"></a>
+      <a id="twitter" href="https://twitter.com/scala_sbt"><img src="../files/twitter-logo-teal.svg" alt="sbt on Twitter" class="social"></a>
+      <a id="edit-on-github" href="https://github.com/sbt/website/edit/1.x/src/reference/00-Getting-Started/02-scala-by-example.md"><img src="../files/octicon-pencil.svg" alt="Edit on GitHub"></a>
+    </div>
+    <script type="text/javascript" async>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-41449189-1', 'scala-sbt.org');
+    ga('send', 'pageview');
+    </script>
+    <script type="text/javascript" async>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-23127719-1', 'lightbend.com', {'allowLinker': true, 'name': 'tsTracker'});
+      ga('tsTracker.require', 'linker');
+      ga('tsTracker.linker:autoLink', ['lightbend.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org']);
+      ga('tsTracker.send', 'pageview');
+    </script>
+</div>
+
+        </div>
+        <div class="footer">
+          <div class="fw-wrapper navy-ltr support-strip">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="support-item">
+          <div class="support-icon">
+            <svg class="svg-icon svg-icon-chat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.5 85.2" enable-background="new 0 0 97.5 85.2"><path stroke="#fff" stroke-width="4.282" stroke-linecap="round" stroke-miterlimit="10" d="M27 29.5h-16.3c-4.7 0-8.6 3.9-8.6 8.6v25.7c0 4.7 3.9 8.6 8.6 8.6h2.7c.8 0 1.5.7 1.5 1.5v7.8c0 1.3 1.6 2 2.5 1l9.5-9.5c.5-.5 1.2-.8 2-.8h20.2c4.7 0 8.6-3.9 8.6-8.6v-7.8" fill="none"/><path fill="#fff" d="M85 0h-40c-6.9 0-12.5 5.6-12.5 12.5v33.4c0 2.2 1.8 4.1 4.1 4.1h29.9c.7 0 1.3.3 1.8.7l10 10c1.6 1.6 4.3.5 4.3-1.8v-6.5c0-1.4 1.1-2.5 2.5-2.5 6.9 0 12.5-5.6 12.5-12.5v-25c-.1-6.8-5.8-12.4-12.6-12.4z"/></svg>
+          </div>
+          <div class="support-detail">
+            <h2>コミュニティー・サポート</h2>
+            <a href="https://ja.stackoverflow.com/questions/tagged/sbt">StackOverflow</a>
+          </div>
+        </div>
+        <div class="support-item">
+          <div class="support-icon">
+            <svg id="lightbend-icon-reverse" class="svg-icon svg-icon-lightbend-reverse" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 302 262"><title>lightbend-icon</title><g id="icon"><path d="M1,195v56a10,10,0,0,0,10,10H291a10,10,0,0,0,10-10V195a557.85,557.85,0,0,1-150,20A557.85,557.85,0,0,1,1,195Z" style="fill:#fff"/><path d="M291,1H11A10,10,0,0,0,1,11V176a539.94,539.94,0,0,0,150,21,539.94,539.94,0,0,0,150-21V11A10,10,0,0,0,291,1Z" style="fill:#fff"/></g></svg>
+          </div>
+          <div class="support-detail">
+            <h2>商用サポート</h2>
+            <a href="https://www.lightbend.com/services/expert-support">Lightbend Subscription</a>
+            <a href="https://www.lightbend.com/services/training">Training</a>
+            <a href="https://www.lightbend.com/services/consulting">Consulting</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><footer>
+  <div class="container footer">
+    <div class="row">
+      <div class="col-md-8 sbt">
+        <nav>
+          <a href="../../../index.html">
+            <img src="../files/sbt-logo-reverse.svg" alt="sbt">
+          </a>
+          <a href="../../../documentation.html">Documentation</a>
+          <a href="../../../download.html">Download</a>
+          <a href="../../../community.html">Get Involved</a>
+        </nav>
+      </div>
+      <div class="col-md-4 text-right ts">
+        &copy; 2016-2017 Lightbend Inc.
+        <a href="https://www.lightbend.com">
+          <img src="files/lightbend-reverse.svg" alt="Lightbend, Inc.">
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+        </div>
+        
+        <div class="highlight-outer">
+              <div class="highlight-menu">
+                <ul>
+                  <li><button id="highlight-button-twitter"><img src="../img/twitter-bird-dark-bgs.png"/></button></li>
+                </ul>
+              </div>
+            </div>
+      </body>
+    </html>
