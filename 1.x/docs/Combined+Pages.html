@@ -157,9 +157,9 @@ $ cd foo-build
 $ touch build.sbt
 </code></pre><h3 id="Start+sbt+shell">Start sbt shell<a href="#Start+sbt+shell" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">$ sbt
 [info] Updated file /tmp/foo-build/project/build.properties: set sbt.version to 1.1.4
-[info] Loading project definition from /private/tmp/foo-build/project
+[info] Loading project definition from /tmp/foo-build/project
 [info] Loading settings from build.sbt ...
-[info] Set current project to foo-build (in build file:/private/tmp/foo-build/)
+[info] Set current project to foo-build (in build file:/tmp/foo-build/)
 [info] sbt server started at local:///Users/eed3si9n/.sbt/1.0/server/abc4fb6c89985a00fd95/sock
 sbt:foo-build&gt;
 </code></pre><h3 id="Exit+sbt+shell">Exit sbt shell<a href="#Exit+sbt+shell" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To leave sbt shell, type <code>exit</code> or use Ctrl+D (Unix) or Ctrl+Z (Windows).
@@ -181,7 +181,7 @@ object Hello extends App {
   println(&quot;Hello&quot;)
 }
 </code></pre><p>This new file should be picked up by the running command:
-</p><pre><code class="">[info] Compiling 1 Scala source to /private/tmp/foo-build/target/scala-2.12/classes ...
+</p><pre><code class="">[info] Compiling 1 Scala source to /tmp/foo-build/target/scala-2.12/classes ...
 [info] Done compiling.
 [success] Total time: 2 s, completed May 6, 2018 3:53:42 PM
 2. Waiting for source changes... (press enter to interrupt)
@@ -192,20 +192,20 @@ executed at the beginning.
 </code></pre><h3 id="Getting+help">Getting help<a href="#Getting+help" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Use the <code>help</code> command to get basic help about the available commands.
 </p><pre><code class="">sbt:foo-build&gt; help
 
-  about                                          Displays basic information about sbt and the build.
-  tasks                                          Lists the tasks defined for the current project.
-  settings                                       Lists the settings defined for the current project.
-  reload                                         (Re)loads the current project or changes to plugins project or returns from it.
-  new                                            Creates a new sbt build.
-  projects                                       Lists the names of available projects or temporarily adds/removes extra builds to the session.
-  project                                        Displays the current project or changes to the provided `project`.
+  about      Displays basic information about sbt and the build.
+  tasks      Lists the tasks defined for the current project.
+  settings   Lists the settings defined for the current project.
+  reload     (Re)loads the current project or changes to plugins project or returns from it.
+  new        Creates a new sbt build.
+  projects   Lists the names of available projects or temporarily adds/removes extra builds to the session.
+  project    Displays the current project or changes to the provided `project`.
 
 ....
 </code></pre><p>Display the description of a specific task:
 </p><pre><code class="">sbt:foo-build&gt; help run
 Runs a main class, passing along arguments provided on the command line.
 </code></pre><h3 id="Run+your+app">Run your app<a href="#Run+your+app" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:foo-build&gt; run
-[info] Packaging /private/tmp/foo-build/target/scala-2.12/foo-build_2.12-0.1.0-SNAPSHOT.jar ...
+[info] Packaging /tmp/foo-build/target/scala-2.12/foo-build_2.12-0.1.0-SNAPSHOT.jar ...
 [info] Done packaging.
 [info] Running example.Hello
 Hello
@@ -232,9 +232,9 @@ lazy val hello = (project in file(&quot;.&quot;))
 </code></pre><h3 id="Reload+the+build">Reload the build<a href="#Reload+the+build" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Use the <code>reload</code> command to reload the build. The command causes the
 <code>build.sbt</code> file to be re-read, and its settings applied.
 </p><pre><code class="">sbt:foo-build&gt; reload
-[info] Loading project definition from /private/tmp/foo-build/project
+[info] Loading project definition from /tmp/foo-build/project
 [info] Loading settings from build.sbt ...
-[info] Set current project to Hello (in build file:/private/tmp/foo-build/)
+[info] Set current project to Hello (in build file:/tmp/foo-build/)
 sbt:Hello&gt;
 </code></pre><p>Note that the prompt has now changed to <code>sbt:Hello&gt;</code>.
 </p><h3 id="Add+ScalaTest+to+libraryDependencies">Add ScalaTest to libraryDependencies<a href="#Add+ScalaTest+to+libraryDependencies" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Using an editor, change <code>build.sbt</code> as follows:
@@ -261,7 +261,7 @@ class HelloSpec extends FunSuite with DiagrammedAssertions {
 }
 </code></pre><p><code>~testQuick</code> should pick up the change:
 </p><pre><code class="">2. Waiting for source changes... (press enter to interrupt)
-[info] Compiling 1 Scala source to /private/tmp/foo-build/target/scala-2.12/test-classes ...
+[info] Compiling 1 Scala source to /tmp/foo-build/target/scala-2.12/test-classes ...
 [info] Done compiling.
 [info] HelloSpec:
 [info] - Hello should start with H *** FAILED ***
@@ -349,7 +349,7 @@ lazy val helloCore = (project in file(&quot;core&quot;))
   )
 </code></pre><p>Use the <code>reload</code> command to reflect the change in <code>build.sbt</code>.
 </p><h3 id="List+all+subprojects">List all subprojects<a href="#List+all+subprojects" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:Hello&gt; projects
-[info] In file:/private/tmp/foo-build/
+[info] In file:/tmp/foo-build/
 [info]   * hello
 [info]     helloCore
 </code></pre><h3 id="Compile+the+subproject">Compile the subproject<a href="#Compile+the+subproject" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:Hello&gt; helloCore/compile
@@ -482,13 +482,13 @@ object Hello extends App {
 }
 </code></pre><p>Let’s run the app to see if it worked:
 </p><pre><code class="">sbt:Hello&gt; run
-[info] Compiling 1 Scala source to /private/tmp/foo-build/core/target/scala-2.12/classes ...
+[info] Compiling 1 Scala source to /tmp/foo-build/core/target/scala-2.12/classes ...
 [info] Done compiling.
-[info] Compiling 1 Scala source to /private/tmp/foo-build/target/scala-2.12/classes ...
-[info] Packaging /private/tmp/foo-build/core/target/scala-2.12/hello-core_2.12-0.1.0-SNAPSHOT.jar ...
+[info] Compiling 1 Scala source to /tmp/foo-build/target/scala-2.12/classes ...
+[info] Packaging /tmp/foo-build/core/target/scala-2.12/hello-core_2.12-0.1.0-SNAPSHOT.jar ...
 [info] Done packaging.
 [info] Done compiling.
-[info] Packaging /private/tmp/foo-build/target/scala-2.12/hello_2.12-0.1.0-SNAPSHOT.jar ...
+[info] Packaging /tmp/foo-build/target/scala-2.12/hello_2.12-0.1.0-SNAPSHOT.jar ...
 [info] Done packaging.
 [info] Running example.Hello
 Hello! The weather in New York is mostly cloudy.
@@ -518,9 +518,9 @@ lazy val helloCore = (project in file(&quot;core&quot;))
     libraryDependencies += scalaTest % Test,
   )
 </code></pre><h3 id="Create+a+.zip+distribution">Create a .zip distribution<a href="#Create+a+.zip+distribution" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:Hello&gt; dist
-[info] Wrote /private/tmp/foo-build/target/scala-2.12/hello_2.12-0.1.0-SNAPSHOT.pom
-[info] Wrote /private/tmp/foo-build/core/target/scala-2.12/hello-core_2.12-0.1.0-SNAPSHOT.pom
-[info] Your package is ready in /private/tmp/foo-build/target/universal/hello-0.1.0-SNAPSHOT.zip
+[info] Wrote /tmp/foo-build/target/scala-2.12/hello_2.12-0.1.0-SNAPSHOT.pom
+[info] Wrote /tmp/foo-build/core/target/scala-2.12/hello-core_2.12-0.1.0-SNAPSHOT.pom
+[info] Your package is ready in /tmp/foo-build/target/universal/hello-0.1.0-SNAPSHOT.zip
 </code></pre><p>Here’s how you can run the packaged app:
 </p><pre><code class="">$ /tmp/someother
 $ cd /tmp/someother
@@ -562,7 +562,7 @@ lazy val helloCore = (project in file(&quot;core&quot;))
 </code></pre><h3 id="Switch+scalaVersion+temporarily">Switch scalaVersion temporarily<a href="#Switch+scalaVersion+temporarily" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:Hello&gt; ++2.11.12!
 [info] Forcing Scala version to 2.11.12 on all projects.
 [info] Reapplying settings...
-[info] Set current project to Hello (in build file:/private/tmp/foo-build/)
+[info] Set current project to Hello (in build file:/tmp/foo-build/)
 </code></pre><p>Check the <code>scalaVersion</code> setting:
 </p><pre><code class="">sbt:Hello&gt; scalaVersion
 [info] helloCore / scalaVersion
