@@ -114,7 +114,7 @@ task and the value of a setting. For example:
 [info]  Resolves and optionally retrieves dependencies, producing a report.
 ...
 </code></pre><pre><code class="">&gt; inspect scalaVersion
-[info] Setting: java.lang.String = 2.12.4
+[info] Setting: java.lang.String = 2.12.6
 [info] Description:
 [info]  The version of Scala used for building.
 ...
@@ -147,11 +147,11 @@ line for the current project. For example,
 </code></pre><p><code>session list-all</code> displays the settings added for all projects. For
 details, see <code>help session</code>.
 </p><a name="about"></a><h3 id="Show+basic+information+about+sbt+and+the+current+build">Show basic information about sbt and the current build<a href="#Show+basic+information+about+sbt+and+the+current+build" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">&gt; about
-[info] This is sbt 1.1.0
+[info] This is sbt 1.1.5
 [info] The current project is {file:~/code/sbt.github.com/}default
-[info] The current project is built against Scala 2.12.4
+[info] The current project is built against Scala 2.12.6
 [info] Available Plugins: sbt.plugins.IvyPlugin, sbt.plugins.JvmPlugin, sbt.plugins.CorePlugin, sbt.plugins.JUnitXmlReportPlugin, sbt.plugins.Giter8TemplatePlugin
-[info] sbt, sbt plugins, and build definitions are using Scala 2.12.4
+[info] sbt, sbt plugins, and build definitions are using Scala 2.12.6
 </code></pre><a name="value"></a><h3 id="Show+the+value+of+a+setting">Show the value of a setting<a href="#Show+the+value+of+a+setting" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The <code>inspect</code> command shows the value of a setting as part of its
 output, but the <code>show</code> command is dedicated to this job. It shows the
 output of the setting provided as an argument. For example,
@@ -164,7 +164,7 @@ output of the setting provided as an argument. For example,
 [info]  Resolve time: 122 ms, Download time: 5 ms, Download size: 0 bytes
 [info]  compile:
 [info]      org.scala-lang:scala-library:
-[info]              - 2.12.4
+[info]              - 2.12.6
 [info] ...
 </code></pre><p>The <code>show</code> command will execute the task provided as an argument and
 then print the result. Note that this is different from the behavior of
@@ -173,11 +173,11 @@ execute a task and thus can only display its type and not its generated
 value.
 </p><pre><code class="">&gt; show compile:dependencyClasspath
 ...
-[info] ArrayBuffer(Attributed(/Users/foo/.sbt/boot/scala-2.12.4/lib/scala-library.jar))
+[info] ArrayBuffer(Attributed(/Users/foo/.sbt/boot/scala-2.12.6/lib/scala-library.jar))
 </code></pre><a name="classpath"></a><h3 id="Show+the+classpath+used+for+compilation+or+testing">Show the classpath used for compilation or testing<a href="#Show+the+classpath+used+for+compilation+or+testing" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>For the test classpath,
 </p><pre><code class="">&gt; show test:dependencyClasspath
 ...
-[info] List(Attributed(/Users/foo/code/sbt.github.com/target/scala-2.12/classes), Attributed(~/.sbt/boot/scala-2.12.4/lib/scala-library.jar), Attributed(/Users/foo/.ivy2/cache/junit/junit/jars/junit-4.8.2.jar))
+[info] List(Attributed(/Users/foo/code/sbt.github.com/target/scala-2.12/classes), Attributed(~/.sbt/boot/scala-2.12.6/lib/scala-library.jar), Attributed(/Users/foo/.ivy2/cache/junit/junit/jars/junit-4.8.2.jar))
 ...
 </code></pre><a name="applications"></a><h3 id="Show+the+main+classes+detected+in+a+project">Show the main classes detected in a project<a href="#Show+the+main+classes+detected+in+a+project" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt detects the classes with public, static main methods for use by the
 <code>run</code> method and to tab-complete the <code>runMain</code> method. The

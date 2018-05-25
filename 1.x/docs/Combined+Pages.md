@@ -1296,7 +1296,7 @@ the subproject located in the current directory like this:
 lazy val root = (project in file("."))
   .settings(
     name := "Hello",
-    scalaVersion := "2.12.3"
+    scalaVersion := "2.12.6"
   )
 ```
 
@@ -1310,7 +1310,7 @@ The key-value pairs are listed under the `.settings(...)` method as follows:
 lazy val root = (project in file("."))
   .settings(
     name := "Hello",
-    scalaVersion := "2.12.3"
+    scalaVersion := "2.12.6"
   )
 ```
 
@@ -10599,7 +10599,7 @@ Scala. See [Publishing][Publishing] for more details on publishing your project.
 
 In order to make this process as quick as possible, different output and
 managed dependency directories are used for different versions of Scala.
-For example, when building against Scala 2.12.4,
+For example, when building against Scala 2.12.6,
 
 -   `./target/` becomes `./target/scala_2.12/`
 -   `./lib_managed/` becomes `./lib_managed/scala_2.12/`
@@ -11121,7 +11121,7 @@ chmod u+x shout.scala
 #!/usr/bin/env scalas
  
 /***         
-scalaVersion := "2.12.4"
+scalaVersion := "2.12.6"
  
 libraryDependencies += "org.scala-sbt" %% "io" % "1.1.5"
 */         
@@ -12674,7 +12674,7 @@ sbt needs Scala jars to run itself since it is written in Scala. sbt
 uses that same version of Scala to compile the build definitions that
 you write for your project because they use sbt APIs. This version of
 Scala is fixed for a specific sbt release and cannot be changed. For sbt
-1.1.5, this version is Scala 2.12.4. Because this Scala
+1.1.5, this version is Scala 2.12.6. Because this Scala
 version is needed before sbt runs, the repositories used to retrieve
 this version are configured in the sbt
 [launcher][Sbt-Launcher].
@@ -17396,7 +17396,7 @@ Def.setting {
 This Parser definition will produce a value of type `(String,String)`.
 The input syntax defined isn't very flexible; it is just a
 demonstration. It will produce one of the following values for a
-successful parse (assuming the current Scala version is 2.12.4,
+successful parse (assuming the current Scala version is 2.12.6,
 the current sbt version is 1.1.5, and there are 3 commands left to
 run):
 
@@ -18700,7 +18700,7 @@ above for per-project plugins.
 ### Creating an auto plugin
 
 A minimal sbt plugin is a Scala library that is built against the version of
-Scala that sbt runs (currently, 2.12.4) or a Java library.
+Scala that sbt runs (currently, 2.12.6) or a Java library.
 Nothing special needs to be done for this type of library.
 A more typical plugin will provide sbt tasks, commands, or settings.
 This kind of plugin may provide these settings
@@ -20127,7 +20127,7 @@ Like we are able to cross build against multiple Scala versions, we can cross bu
 
 ```scala
   .settings(
-    scalaVersion := "2.12.4",
+    scalaVersion := "2.12.6",
     sbtVersion in Global := "1.1.5",
     scalaCompilerBridgeSource := {
       val sv = appConfiguration.value.provider.id.version
@@ -20779,7 +20779,7 @@ task and the value of a setting. For example:
 
 ```
 > inspect scalaVersion
-[info] Setting: java.lang.String = 2.12.4
+[info] Setting: java.lang.String = 2.12.6
 [info] Description:
 [info]  The version of Scala used for building.
 ...
@@ -20850,11 +20850,11 @@ details, see `help session`.
 
 ```
 > about
-[info] This is sbt 1.1.0
+[info] This is sbt 1.1.5
 [info] The current project is {file:~/code/sbt.github.com/}default
-[info] The current project is built against Scala 2.12.4
+[info] The current project is built against Scala 2.12.6
 [info] Available Plugins: sbt.plugins.IvyPlugin, sbt.plugins.JvmPlugin, sbt.plugins.CorePlugin, sbt.plugins.JUnitXmlReportPlugin, sbt.plugins.Giter8TemplatePlugin
-[info] sbt, sbt plugins, and build definitions are using Scala 2.12.4
+[info] sbt, sbt plugins, and build definitions are using Scala 2.12.6
 ```
 
 <a name="value"></a>
@@ -20883,7 +20883,7 @@ The `show` command also works for tasks, described next.
 [info]  Resolve time: 122 ms, Download time: 5 ms, Download size: 0 bytes
 [info]  compile:
 [info]      org.scala-lang:scala-library:
-[info]              - 2.12.4
+[info]              - 2.12.6
 [info] ...
 ```
 
@@ -20896,7 +20896,7 @@ value.
 ```
 > show compile:dependencyClasspath
 ...
-[info] ArrayBuffer(Attributed(/Users/foo/.sbt/boot/scala-2.12.4/lib/scala-library.jar))
+[info] ArrayBuffer(Attributed(/Users/foo/.sbt/boot/scala-2.12.6/lib/scala-library.jar))
 ```
 
 <a name="classpath"></a>
@@ -20908,7 +20908,7 @@ For the test classpath,
 ```
 > show test:dependencyClasspath
 ...
-[info] List(Attributed(/Users/foo/code/sbt.github.com/target/scala-2.12/classes), Attributed(~/.sbt/boot/scala-2.12.4/lib/scala-library.jar), Attributed(/Users/foo/.ivy2/cache/junit/junit/jars/junit-4.8.2.jar))
+[info] List(Attributed(/Users/foo/code/sbt.github.com/target/scala-2.12/classes), Attributed(~/.sbt/boot/scala-2.12.6/lib/scala-library.jar), Attributed(/Users/foo/.ivy2/cache/junit/junit/jars/junit-4.8.2.jar))
 ...
 ```
 
@@ -22065,7 +22065,7 @@ lazy val startupTransition: State => State = { s: State =>
 
 lazy val root = (project in file("."))
   .settings(
-    scalaVersion in ThisBuild := "2.12.3",
+    scalaVersion in ThisBuild := "2.12.6",
     organization in ThisBuild := "com.example",
     name := "helloworld",
     dependencyUpdates := { println("hi") },

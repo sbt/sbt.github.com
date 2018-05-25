@@ -790,7 +790,7 @@ the subproject located in the current directory like this:
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
   .settings(
     name := &quot;Hello&quot;,
-    scalaVersion := &quot;2.12.3&quot;
+    scalaVersion := &quot;2.12.6&quot;
   )
 </code></pre><p>Each subproject is configured by key-value pairs.
 </p><p>For example, one key is <code>name</code> and it maps to a string value, the name of
@@ -799,7 +799,7 @@ The key-value pairs are listed under the <code>.settings(...)</code> method as f
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
   .settings(
     name := &quot;Hello&quot;,
-    scalaVersion := &quot;2.12.3&quot;
+    scalaVersion := &quot;2.12.6&quot;
   )
 </code></pre><h3 id="How+build.sbt+defines+settings">How build.sbt defines settings<a href="#How+build.sbt+defines+settings" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> defines subprojects, which holds a sequence of key-value pairs
 called <em>setting expressions</em> using <em>build.sbt DSL</em>.
@@ -6755,7 +6755,7 @@ project. That is, by doing:
 Scala. See <a href="Publishing.html">Publishing</a> for more details on publishing your project.
 </p><p>In order to make this process as quick as possible, different output and
 managed dependency directories are used for different versions of Scala.
-For example, when building against Scala 2.12.4,
+For example, when building against Scala 2.12.6,
 </p><ul><li><code>./target/</code> becomes <code>./target/scala_2.12/</code>
 </li><li><code>./lib_managed/</code> becomes <code>./lib_managed/scala_2.12/</code>
 </li></ul><p>Packaged jars, wars, and other artifacts have <code>_&lt;scala-version&gt;</code>
@@ -7074,7 +7074,7 @@ compile the script, and run it directly. For example, if you name it
 <pre><code class="prettyprint lang-scala">#!/usr/bin/env scalas
  
 /***         
-scalaVersion := &quot;2.12.4&quot;
+scalaVersion := &quot;2.12.6&quot;
  
 libraryDependencies += &quot;org.scala-sbt&quot; %% &quot;io&quot; % &quot;1.1.5&quot;
 */         
@@ -8085,7 +8085,7 @@ adding them.
 uses that same version of Scala to compile the build definitions that
 you write for your project because they use sbt APIs. This version of
 Scala is fixed for a specific sbt release and cannot be changed. For sbt
-1.1.5, this version is Scala 2.12.4. Because this Scala
+1.1.5, this version is Scala 2.12.6. Because this Scala
 version is needed before sbt runs, the repositories used to retrieve
 this version are configured in the sbt
 <a href="Sbt-Launcher.html">launcher</a>.
@@ -10929,7 +10929,7 @@ Def.setting {
 </code></pre><p>This Parser definition will produce a value of type <code>(String,String)</code>.
 The input syntax defined isn’t very flexible; it is just a
 demonstration. It will produce one of the following values for a
-successful parse (assuming the current Scala version is 2.12.4,
+successful parse (assuming the current Scala version is 2.12.6,
 the current sbt version is 1.1.5, and there are 3 commands left to
 run):
 </p><p>Again, we were able to access the current Scala and sbt version for the
@@ -11788,7 +11788,7 @@ definition project. It is a normal sbt project whose classpath is
 available to all sbt project definitions for that user as described
 above for per-project plugins.
 </p><h3 id="Creating+an+auto+plugin">Creating an auto plugin<a href="#Creating+an+auto+plugin" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A minimal sbt plugin is a Scala library that is built against the version of
-Scala that sbt runs (currently, 2.12.4) or a Java library.
+Scala that sbt runs (currently, 2.12.6) or a Java library.
 Nothing special needs to be done for this type of library.
 A more typical plugin will provide sbt tasks, commands, or settings.
 This kind of plugin may provide these settings
@@ -12648,7 +12648,7 @@ object Giter8TemplatePlugin extends AutoPlugin {
 </li><li>Use the latest sbt 0.13.16.
 </li><li>Append the following settings to your plugin project (and any other subprojects that it depends):
 </li></ol><pre><code class="prettyprint lang-scala">  .settings(
-    scalaVersion := &quot;2.12.4&quot;,
+    scalaVersion := &quot;2.12.6&quot;,
     sbtVersion in Global := &quot;1.1.5&quot;,
     scalaCompilerBridgeSource := {
       val sv = appConfiguration.value.provider.id.version
@@ -12997,7 +12997,7 @@ task and the value of a setting. For example:
 [info]  Resolves and optionally retrieves dependencies, producing a report.
 ...
 </code></pre><pre><code class="">&gt; inspect scalaVersion
-[info] Setting: java.lang.String = 2.12.4
+[info] Setting: java.lang.String = 2.12.6
 [info] Description:
 [info]  The version of Scala used for building.
 ...
@@ -13030,11 +13030,11 @@ line for the current project. For example,
 </code></pre><p><code>session list-all</code> displays the settings added for all projects. For
 details, see <code>help session</code>.
 </p><a name="about"></a><h3 id="Show+basic+information+about+sbt+and+the+current+build">Show basic information about sbt and the current build<a href="#Show+basic+information+about+sbt+and+the+current+build" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">&gt; about
-[info] This is sbt 1.1.0
+[info] This is sbt 1.1.5
 [info] The current project is {file:~/code/sbt.github.com/}default
-[info] The current project is built against Scala 2.12.4
+[info] The current project is built against Scala 2.12.6
 [info] Available Plugins: sbt.plugins.IvyPlugin, sbt.plugins.JvmPlugin, sbt.plugins.CorePlugin, sbt.plugins.JUnitXmlReportPlugin, sbt.plugins.Giter8TemplatePlugin
-[info] sbt, sbt plugins, and build definitions are using Scala 2.12.4
+[info] sbt, sbt plugins, and build definitions are using Scala 2.12.6
 </code></pre><a name="value"></a><h3 id="Show+the+value+of+a+setting">Show the value of a setting<a href="#Show+the+value+of+a+setting" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The <code>inspect</code> command shows the value of a setting as part of its
 output, but the <code>show</code> command is dedicated to this job. It shows the
 output of the setting provided as an argument. For example,
@@ -13047,7 +13047,7 @@ output of the setting provided as an argument. For example,
 [info]  Resolve time: 122 ms, Download time: 5 ms, Download size: 0 bytes
 [info]  compile:
 [info]      org.scala-lang:scala-library:
-[info]              - 2.12.4
+[info]              - 2.12.6
 [info] ...
 </code></pre><p>The <code>show</code> command will execute the task provided as an argument and
 then print the result. Note that this is different from the behavior of
@@ -13056,11 +13056,11 @@ execute a task and thus can only display its type and not its generated
 value.
 </p><pre><code class="">&gt; show compile:dependencyClasspath
 ...
-[info] ArrayBuffer(Attributed(/Users/foo/.sbt/boot/scala-2.12.4/lib/scala-library.jar))
+[info] ArrayBuffer(Attributed(/Users/foo/.sbt/boot/scala-2.12.6/lib/scala-library.jar))
 </code></pre><a name="classpath"></a><h3 id="Show+the+classpath+used+for+compilation+or+testing">Show the classpath used for compilation or testing<a href="#Show+the+classpath+used+for+compilation+or+testing" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>For the test classpath,
 </p><pre><code class="">&gt; show test:dependencyClasspath
 ...
-[info] List(Attributed(/Users/foo/code/sbt.github.com/target/scala-2.12/classes), Attributed(~/.sbt/boot/scala-2.12.4/lib/scala-library.jar), Attributed(/Users/foo/.ivy2/cache/junit/junit/jars/junit-4.8.2.jar))
+[info] List(Attributed(/Users/foo/code/sbt.github.com/target/scala-2.12/classes), Attributed(~/.sbt/boot/scala-2.12.6/lib/scala-library.jar), Attributed(/Users/foo/.ivy2/cache/junit/junit/jars/junit-4.8.2.jar))
 ...
 </code></pre><a name="applications"></a><h3 id="Show+the+main+classes+detected+in+a+project">Show the main classes detected in a project<a href="#Show+the+main+classes+detected+in+a+project" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt detects the classes with public, static main methods for use by the
 <code>run</code> method and to tab-complete the <code>runMain</code> method. The
@@ -13631,7 +13631,7 @@ lazy val startupTransition: State =&gt; State = { s: State =&gt;
 
 lazy val root = (project in file(&quot;.&quot;))
   .settings(
-    scalaVersion in ThisBuild := &quot;2.12.3&quot;,
+    scalaVersion in ThisBuild := &quot;2.12.6&quot;,
     organization in ThisBuild := &quot;com.example&quot;,
     name := &quot;helloworld&quot;,
     dependencyUpdates := { println(&quot;hi&quot;) },
