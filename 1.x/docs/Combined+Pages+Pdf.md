@@ -5727,9 +5727,11 @@ def scalaXml = Def.setting {
 
 
 
-## sbt 1.1.2
+## sbt 1.1.x releases
 
-### Bug fixes
+### sbt 1.1.2
+
+#### Bug fixes
 
 - Fixes triggered execution's resource leak by caching the watch service. [#3999][3999] by [@eatkins][@eatkins]
 - Fixes classloader inheriting the dependencies of Scala compiler during `run` [zinc#505][zinc505] by [@eed3si9n][@eed3si9n]
@@ -5749,7 +5751,7 @@ def scalaXml = Def.setting {
 - Fixes quoting in Windows bat file. [lp#220][lp220] by [@ForNeVeR][@ForNeVeR]
 - Fixes `-error` not suppressing startup logs. [#4036][4036] by [@eed3si9n][@eed3si9n]
 
-### Improvements
+#### Improvements
 
 - Performance optimization around logging. [util#152][util152] by [@retronym][@retronym]
 - Performance fix by caching the hashCode of `Configuration`. [lm#213][lm213] by [@retronym][@retronym]
@@ -5758,13 +5760,13 @@ def scalaXml = Def.setting {
 - Updates to latest Jsch to support stronger key exchange algorithms. [lm#217][lm217] by [@ryandbair][@ryandbair]
 - Fixes preloading of compiler bridge. [lp#222][lp222] by [@analytically][@analytically]
 
-### Internal
+#### Internal
 
 - Updates [contribution guide][CONTRIBUTING]. [#3960][3960]/[#4019][4019] by [@eed3si9n][@eed3si9n] and [@itohiro73][@itohiro73]
 - Deletes `buildinfo.BuildInfo` from sbt main that was intended for testing. [3967][3967] by [@dwijnand][@dwijnand] and [@xuwei-k][@xuwei-k]
 - Various improvements around Zinc benchmark by [@retronym][@retronym]
 
-### Contributors
+#### Contributors
 
 sbt 1.1.2 was brought to you by 23 contributors, according to `git shortlog -sn --no-merges v1.1.1...v1.1.2` on sbt, zinc, librarymanagement, util, io, launcher-packege, and website: Dale Wijnand, Eugene Yokota, Jason Zaugg, Kenji Yoshida (xuwei-k), Ethan Atkins, Martijn Hoekstra, Martynas Mickevičius, Dennis Hörsch, Hosam Aly, Antonio Cunei, Friedrich von Never, Hiroshi Ito, Ian Gabes, Jilen Zhang, Mathias Bogaert, Naohisa Murakami (tiqwab), Philippus Baalman, Ryan Bair, Seth Tisue, Ståle Undheim, Takuya Miyamoto (tmiyamon), Yasuhiro Tatsuno. Thank you!
 
@@ -5815,9 +5817,11 @@ sbt 1.1.2 was brought to you by 23 contributors, according to `git shortlog -sn 
   [lp222]: https://github.com/sbt/sbt-launcher-package/pull/222
   [CONTRIBUTING]: https://github.com/sbt/sbt/blob/1.x/CONTRIBUTING.md
 
-## sbt 1.1.1
+----
 
-### Bug fixes
+### sbt 1.1.1
+
+#### Bug fixes
 
 - Fixes "Modified names for (class) is empty" error. [zinc#292][zinc292] / [zinc#484][zinc484] by [@jvican][@jvican] (Scala Center)
 - Fixes tab completion in `console` while running in batch mode as `sbt console`. [#3841][3841]/[#3876][3876] by [@eed3si9n][@eed3si9n]
@@ -5826,21 +5830,21 @@ sbt 1.1.2 was brought to you by 23 contributors, according to `git shortlog -sn 
 - Adds file timestamps native support for FreeBSD. [#3894][3894] / [io#124][io124] by [@cunei][@cunei]
 - Fixes JDK 10 version string parsing. [sbt/sbt-launcher-package#209][launcher209] by [@2m][@2m]
 
-### Improvements
+#### Improvements
 
 - Deprecates `Extracted#append` in favour of `appendWithSession` or `appendWithoutSession`.  [#3865][3865] by [@dwijnand][@dwijnand]
 - Adds a new global `Boolean` setting called `autoStartServer`. See below.
 - Upgrades Scala versions used for sbt cross building `^^`. [#3923][3923] by [@dwijnand][@dwijnand]
 - Many documentation maintenance changes by [@xuwei-k][@xuwei-k].
 
-### autoStartServer setting
+#### autoStartServer setting
 
 sbt 1.1.1 adds a new global `Boolean` setting called `autoStartServer`, which is set to `true` by default.
 When set to `true`, sbt shell will automatically start sbt server. Otherwise, it will not start the server until `startSever` command is issued. This could be used to opt out of server for security reasons.
 
 [#3922][3922] by [@swaldman][@swaldman]
 
-### Contributors
+#### Contributors
 
 sbt 1.1.1 was brought to you by 16 contributors, according to `git shortlog -sn --no-merges v1.1.0 ..v1.1.0` on sbt, zinc, librarymanagement, util, io, and website: Kenji Yoshida (xuwei-k), Eugene Yokota, Dale Wijnand, Antonio Cunei, Steve Waldman, Arnout Engelen, Deokhwan Kim, OlegYch, Robert Walker, Jorge Vicente Cantero (jvican), Claudio Bley, Eric Peters, Lena Brüder, Seiya Mizuno, Seth Tisue, j-keck. Thank you!
 
@@ -5867,20 +5871,22 @@ sbt 1.1.1 was brought to you by 16 contributors, according to `git shortlog -sn 
   [3922]: https://github.com/sbt/sbt/pull/3922
   [launcher209]: https://github.com/sbt/sbt-launcher-package/pull/209
 
-## sbt 1.1.0
+----
+
+### sbt 1.1.0
 
 This is a feature release for sbt 1.0.x series.
 
-### Features, fixes, changes with compatibility implications
+#### Features, fixes, changes with compatibility implications
 
 - sbt server feature is reworked in sbt 1.1.0. See below.
 - Changes `version` setting default to `0.1.0-SNAPSHOT` for compatibility with Semantic Versioning. [#3577][3577] by [@laughedelic][@laughedelic]
 
-### Features
+#### Features
 
 - Unifies sbt shell and build.sbt syntax. See below.
 
-### Fixes
+#### Fixes
 
 - Fixes `ClasspathFilter` that was causing `Class.forName` to not work in `run`. [zinc#473](https://github.com/sbt/zinc/pull/473) / [#3736](https://github.com/sbt/sbt/issues/3736) / [#3733](https://github.com/sbt/sbt/issues/3733) / [#3647](https://github.com/sbt/sbt/issues/3647) / [#3608](https://github.com/sbt/sbt/issues/3608) by [@ravwojdyla][@ravwojdyla]
 - Fixes Java compilation causing `NullPointerException` by making PositionImpl thread-safe. [zinc#465](https://github.com/sbt/zinc/pull/465) by [@eed3si9n][@eed3si9n]
@@ -5901,7 +5907,7 @@ This is a feature release for sbt 1.0.x series.
 - Fixes the encoding of Unix-like file path to use `file:///`. [#3805](https://github.com/sbt/sbt/pull/3805) by [@eed3si9n][@eed3si9n]
 - Fixes Log4J2 initialization error during startup. [#3814](https://github.com/sbt/sbt/pull/3814) by [@dwijnand][@dwijnand]
 
-### Improvements
+#### Improvements
 
 - Filters scripted tests based on optional `project/build.properties`. See below.
 - Adds `Project#withId` to change a project's id. [#3601][3601] by [@dwijnand][@dwijnand]
@@ -5914,7 +5920,7 @@ This is a feature release for sbt 1.0.x series.
 - Uses kind-projector in the code. [#3650][3650] by [@dwijnand][@dwijnand]
 - Make `displayOnly` etc methods strict in `Completions`. [#3763][3763] by [@xuwei-k][@xuwei-k]
 
-### Unified slash syntax for sbt shell and build.sbt
+#### Unified slash syntax for sbt shell and build.sbt
 
 This adds unified slash syntax for both sbt shell and the build.sbt DSL.
 Instead of the current `<project-id>/config:intask::key`, this adds
@@ -5947,7 +5953,7 @@ The inspect command now outputs something that can be copy-pasted:
 
 [#1812][1812]/[#3434][3434]/[#3617][3617]/[#3620][3620] by [@eed3si9n][@eed3si9n] and [@dwijnand][@dwijnand]
 
-### sbt server
+#### sbt server
 
 sbt server feature was reworked to use Language Server Protocol 3.0 (LSP) as the wire protocol, a protocol created by Microsoft for Visual Studio Code.
 
@@ -5985,7 +5991,7 @@ Content-Type: application/vscode-jsonrpc; charset=utf-8
 
 [#3524][3524]/[#3556][3556] by [@eed3si9n][@eed3si9n]
 
-### VS Code extension
+#### VS Code extension
 
 The primary use case we have in mind for the sbt server is tooling integration such as editors and IDEs. As a proof of concept, we created a Visual Studio Code extension called [Scala (sbt)][vscode-sbt-scala].
 
@@ -5996,13 +6002,13 @@ Currently this extension is able to:
 - Display log messages. [#3740][3740] by [@laughedelic][@laughedelic]
 - Jump to class definitions. [#3660][3660] by [@wpopielarski][@wpopielarski]
 
-### Filtering scripted tests using `project/build.properties`
+#### Filtering scripted tests using `project/build.properties`
 
 For all scripted tests in which `project/build.properties` exist, the value of the `sbt.version` property is read. If its binary version is different from `sbtBinaryVersion in pluginCrossBuild` the test will be skipped and a message indicating this will be logged.
 
 This allows you to define scripted tests that track the minimum supported sbt versions, e.g. 0.13.9 and 1.0.0-RC2. [#3564][3564]/[#3566][3566] by [@jonas][@jonas]
 
-### Contributors
+#### Contributors
 
 sbt 1.1.0 was brought to you by 33 contributors, according to `git shortlog -sn --no-merges v1.0.4..v1.1.0` on sbt, zinc, librarymanagement, util, io, and website: Eugene Yokota, Dale Wijnand, Antonio Cunei, Kenji Yoshida (xuwei-k), Alexey Alekhin, Simon Schäfer, Jorge Vicente Cantero (jvican), Miklos Martin, Jeffrey Olchovy, Jonas Fonseca, Andrey Artemov, Arnout Engelen, Dominik Winter, Krzysztof Romanowski, Roman Iakovlev, Wiesław Popielarski, Age Mooij, Allan Timothy Leong, Ivan Poliakov, Jason Zaugg, Jilen Zhang, Long Jinwei, Martin Duhem, Michael Stringer, Michael Wizner, Nud Teeraworamongkol, OlegYch, PanAeon, Philippus Baalman, Pierre Dal-Pra, Rafal Wojdyla, Saniya Tech, Tom Walford, and many others who contributed ideas. Thank you!
 
@@ -6058,11 +6064,14 @@ sbt 1.1.0 was brought to you by 33 contributors, according to `git shortlog -sn 
   [zinc411]: https://github.com/sbt/zinc/pull/411
   [zinc449]: https://github.com/sbt/zinc/pull/449
 
-## sbt 1.0.4
+
+## sbt 1.0.x releases
+
+### sbt 1.0.4
 
 This is a hotfix release for sbt 1.0.x series.
 
-### Bug fixes
+#### Bug fixes
 
 - Fixes undercompilation of value classes when the underlying type changes. [zinc#444][zinc444] by [@smarter][@smarter]
 - Fixes `ArrayIndexOutOfBoundsException` on Ivy when running on Java 9. [ivy#27][ivy27] by [@xuwei-k][@xuwei-k]
@@ -6078,15 +6087,15 @@ This is a hotfix release for sbt 1.0.x series.
 - Registers Ivy protocol only for `http:` and `https:` to be more plugin friendly. [lm183][lm183] by [@tpunder][@tpunder]
 - Fixes script issues related to `bc` by using `expr`. [launcher-package#199][sbt-launcher-package199] by [@thatfulvioguy][@thatfulvioguy]
 
-### Enhancement
+#### Enhancement
 
 - Adds Scala 2.13.0-M2 support. [zinc#453][zinc453] by [@eed3si9n][@eed3si9n] and [@jan0sch][@jan0sch]
 
-### Internal
+#### Internal
 
 - Improves Zinc scripted testing. [zinc#440][zinc440] by [@jvican][@jvican]
 
-### Contributors
+#### Contributors
 
 A huge thank you to everyone who's helped improve sbt and Zinc 1 by using them, reporting bugs, improving our documentation, porting builds, porting plugins, and submitting and reviewing pull requests.
 
@@ -6125,11 +6134,13 @@ This release was brought to you by 17 contributors, according to `git shortlog -
   [sbt-launcher-package197]: https://github.com/sbt/sbt-launcher-package/pull/197
   [sbt-launcher-package199]: https://github.com/sbt/sbt-launcher-package/pull/199
 
-## sbt 1.0.3
+----
+
+### sbt 1.0.3
 
 This is a hotfix release for sbt 1.0.x series.
 
-### Bug fixes
+#### Bug fixes
 
 - Fixes `~` recompiling in loop (when a source generator or sbt-buildinfo is present). [#3501][3501]/[#3634][3634] by [@dwijnand][@dwijnand]
 - Fixes undercompilation on inheritance on same source. [zinc#424][zinc424] by [@eed3si9n][@eed3si9n]
@@ -6141,11 +6152,11 @@ This is a hotfix release for sbt 1.0.x series.
 - Fixes "destination file exist" error message by including the file name. [lm171][lm171] by [@leonardehrenfried][@leonardehrenfried]
 - Fixes JDK 9 warning "Illegal reflective access" in library management module and Ivy. [lm173][lm173] by [@dwijnand][@dwijnand]
 
-### Improvements
+#### Improvements
 
 - Adds `sbt.watch.mode` system property to allow switching back to old polling behaviour for watch. See below for more details.
 
-### Alternative watch mode
+#### Alternative watch mode
 
 sbt 1.0.0 introduced a new mechanism for watching for source changes based on the NIO `WatchService` in Java 1.7. On
 some platforms (namely macOS) this has led to long delays before changes are picked up. An alternative `WatchService`
@@ -6162,7 +6173,7 @@ options.
 
 [#3597][3597] by [@stringbean][@stringbean]
 
-### Contributors
+#### Contributors
 
 A huge thank you to everyone who's helped improve sbt and Zinc 1 by using them, reporting bugs, improving our documentation, porting builds, porting plugins, and submitting and reviewing pull requests.
 
@@ -6189,11 +6200,13 @@ This release was brought to you by 15 contributors, according to `git shortlog -
   [zinc431]: https://github.com/sbt/zinc/pull/431
   [zinc446]: https://github.com/sbt/zinc/pull/446
 
-## sbt 1.0.2
+----
+
+### sbt 1.0.2
 
 This is a hotfix release for sbt 1.0.x series.
 
-### Bug fixes
+#### Bug fixes
 
 - Fixes terminal echo issue. [#3507][3507] by [@kczulko][@kczulko]
 - Fixes `deliver` task, and adds `makeIvyXml` as a more sensibly named task. [#3487][3487] by [@cunei][@cunei]
@@ -6206,11 +6219,11 @@ This is a hotfix release for sbt 1.0.x series.
 - Adds JVM flag `sbt.gigahorse` to enable/disable the internal use of Gigahorse to workaround NPE in `JavaNetAuthenticator` when used in conjunction with `repositories` override. [lm#167][lm167] by [@cunei][@cunei]
 - Adds JVM flag `sbt.server.autostart` to enable/disable the automatic starting of sbt server with the sbt shell. This also adds new `startServer` command to manually start the server. by [@eed3si9n][@eed3si9n]
 
-### Internal
+#### Internal
 
 - Fixes unused import warnings. [#3533][3533] by [@razvan-panda][@razvan-panda]
 
-### Contributors
+#### Contributors
 
 A huge thank you to everyone who's helped improve sbt and Zinc 1 by using them, reporting bugs, improving our documentation, porting plugins, and submitting and reviewing pull requests.
 
@@ -6235,11 +6248,13 @@ This release was brought to you by 19 contributors, according to `git shortlog -
   [zinc386]: https://github.com/sbt/zinc/pull/386
   [lm167]: https://github.com/sbt/librarymanagement/pull/167
 
-## sbt 1.0.1
+----
+
+### sbt 1.0.1
 
 This is a hotfix release for sbt 1.0.x series.
 
-### Bug fixes
+#### Bug fixes
 
 - Fixes command support for cross building `+` command. The `+` added to sbt 1.0 traveres over the subprojects, respecting `crossScalaVersions`; however, it no longer accepted commands as arguments. This brings back the support for it. [#3446][3446] by [@jroper][@jroper]
 - Fixes `addSbtPlugin` to use the correct version of sbt during cross building. [#3442][3442] by [@dwijnand][@dwijnand]
@@ -6249,7 +6264,7 @@ This is a hotfix release for sbt 1.0.x series.
 - Adds an attempt to workaround intermittent `NullPointerException` arround logging. [util#121][util121] by [@eed3si9n][@eed3si9n]
 - Reverts a bad forward porting. [#3481][3481] by [@eed3si9n][@eed3si9n]
 
-### WatchSource
+#### WatchSource
 
 The watch source feature went through a major change from sbt 0.13 to sbt 1.0 using NIO; however, it did not have clear migration path, so we are rectifying that in sbt 1.0.1.
 
@@ -6283,9 +6298,11 @@ If you have a list of files:
   [@Duhemm]: https://github.com/Duhemm
   [@jroper]: https://github.com/jroper
 
-## sbt 1.0.0
+----
 
-### Features, fixes, changes with compatibility implications
+### sbt 1.0.0
+
+#### Features, fixes, changes with compatibility implications
 
 See [Migrating from sbt 0.13.x][Migrating-from-sbt-013x] also.
 
@@ -6327,12 +6344,12 @@ See [Migrating from sbt 0.13.x][Migrating-from-sbt-013x] also.
 - Drops `toError(opt: Option[String]): Unit` (equivalent to `opt foreach sys.error`); if used to wrap
     `ScalaRun#run` then the replacement is `scalaRun.run(...).failed foreach (sys error _.getMessage)`
 
-### Features
+#### Features
 
 - New incremental compiler called Zinc 1. Details below.
 - The interactive shell is adds network API. Details below.
 
-### Fixes
+#### Fixes
 
 - Fixes test content log not showing up. [#3198][3198]/[util#80][util80] by [@eed3si9n][@eed3si9n]
 - Fixes confusing log about "Unable to parse". [lm#98][lm98] by [@jvican][@jvican]
@@ -6342,7 +6359,7 @@ See [Migrating from sbt 0.13.x][Migrating-from-sbt-013x] also.
 - Fixes task caching of `update` task. [#3233][3233] by [@eed3si9n][@eed3si9n]
 - Fixes ncurses-JLine issue by updating to JLine 2.14.4. [util#81][util81] by [@Rogach][@Rogach]
 
-### Improvements
+#### Improvements
 
 - Scala Center contributed a Java-friendly Zinc API. This was a overhaul of the Zinc internal API for a good Scala integration with other build tools. [zinc#304][zinc304] by [@jvican][@jvican]
 - Scala Center contributed a binary format for Zinc's internal storage. See below
@@ -6370,15 +6387,15 @@ See [Migrating from sbt 0.13.x][Migrating-from-sbt-013x] also.
 - ApiDiff feature used to debug Zinc uses Scala implementation borrowed from Dotty. [zinc#346][zinc346] by [@Krever][@Krever]
 - In Zinc internal, make ExtractAPI use perRunCaches. [zinc#347][zinc347] by [@gheine][@gheine]
 
-### Internals
+#### Internals
 
 - Adopted Scalafmt for formatting the source code using neo-scalafmt.
 - Scala Center contributed a redesign of the scripted test framework that has batch mode execution. Scripted now reuses the same sbt instance to run sbt tests, which reduces the CI build times by 50% [#3151][3151] by [@jvican][@jvican]
 - sbt 1.0.0-M6 is built using sbt 1.0.0-M5. [#3184][3184] by [@dwijnand][@dwijnand]
 
-### Details of major changes
+#### Details of major changes
 
-### Zinc 1: Class-based name hashing
+#### Zinc 1: Class-based name hashing
 
 A major improvement brought into Zinc 1.0 by Grzegorz Kossakowski (commissioned by Lightbend) is class-based name hashing, which will speed up the incremental compilation of Scala in large projects.
 
@@ -6393,7 +6410,7 @@ scala/scala MatchCodeGen class:         Before 48s, After 17s (2.8x)
 
 This depends on some factors such as how your classes are organized, but you can see 3x ~ 40x improvements. The reason for the speedup is because it compiles fewer source files than before by untangling the classes from source files. In the example adding a method to scala/scala's Platform class, sbt 0.13's name hashing used to compile 72 sources, but the new Zinc compiles 6 sources.
 
-#### Zinc API changes
+##### Zinc API changes
 
 - Java classes under the `xsbti.compile` package such as `IncOptions` hides the constructor. Use the factory method `xsbti.compile.Foo.of(...)`.
 - Renames `ivyScala: IvyScala` key to `scalaModuleInfo: ScalaModuleInfo`.
@@ -6401,7 +6418,7 @@ This depends on some factors such as how your classes are organized, but you can
 - `xsbi.Maybe`, `xsbti.F0`, and `sxbti.F1` are changed to corresponding Java 8 classes `java.util.Optional`, `java.util.Supplier` and `java.util.Function`.
 - Removes unused "resident" option. [zinc#345][zinc345] by [@lukeindykiewicz][@lukeindykiewicz]
 
-#### sbt server: JSON API for tooling integration
+##### sbt server: JSON API for tooling integration
 
 sbt 1.0 includes server feature, which allows IDEs and other tools to query the build for settings, and invoke commands via a JSON API. Similar to the way that the interactive shell in sbt 0.13 is implemented with `shell` command, "server" is also just `shell` command that listens to both human input and network input. As a user, there should be minimal impact because of the server.
 
@@ -6413,7 +6430,7 @@ In March 2016, we [rebooted](http://eed3si9n.com/sbt-server-reboot) the "server"
 
 Another related feature that was added is the `bgRun` task which, for example, enables a server process to be run in the background while you run tests against it.
 
-#### Static validation of build.sbt
+##### Static validation of build.sbt
 
 sbt 1.0 prohibits `.value` calls inside the bodies of if expressions and anonymous functions in a task, `@sbtUnchecked` annotation can be used to override the check.
 
@@ -6421,7 +6438,7 @@ The static validation also catches if you forget to call `.value` in a body of a
 
 [#3216][3216] and [#3225][3225] by [@jvican][@jvican]
 
-#### Eviction warning presentation
+##### Eviction warning presentation
 
 sbt 1.0 improves the eviction warning presetation.
 
@@ -6445,7 +6462,7 @@ After:
 
 [#3202][3202] by [@eed3si9n][@eed3si9n]
 
-#### sbt-cross-building
+##### sbt-cross-building
 
 [@jrudolph][@jrudolph]'s sbt-cross-building is a plugin author's plugin.
 It adds cross command `^` and sbtVersion switch command `^^`, similar to `+` and `++`,
@@ -6477,7 +6494,7 @@ Then, run:
 
 [#3133][3133] by [@eed3si9n][@eed3si9n] (forward ported from 0.13.16-M1)
 
-#### CopyOptions
+##### CopyOptions
 
 sbt IO 1.0 add variant of `IO.copyFile` and `IO.copyDirectory` that accept `sbt.io.CopyOptions()`.
 `CopyOptions()` is an example of pseudo case class similar to the builder pattern.
@@ -6496,7 +6513,7 @@ IO.copyDirectory(source, target, CopyOptions()
 
 [io#53][io53] by [@dwijnand][@dwijnand]
 
-#### Library management API and parallel artifact download
+##### Library management API and parallel artifact download
 
 sbt 1.0 adds Library management API co-authored by Eugene Yokota ([@eed3si9n][@eed3si9n]) from Lightbend and Martin Duhem ([@Duhemm][@Duhemm]) from Scala Center.
 This API aims to abstract Apache Ivy as well as alternative dependency resolution engines Ivy, cached resolution, and Coursier.
@@ -6508,7 +6525,7 @@ It also introduces Gigahorse OkHttp as the Network API, and it uses Square OkHtt
 [lm#90][lm90] by [@jvican][@jvican]/[@jsuereth][@jsuereth]
 and [lm#104][lm104] by [@eed3si9n][@eed3si9n].
 
-#### Binary format for Zinc's internal storage
+##### Binary format for Zinc's internal storage
 
 Jorge ([@jvican][@jvican]) from Scala Center contributed a binary format for Zinc's internal storage using Google Procol Buffer.
 The new format provides us with three main advantages:
@@ -6519,7 +6536,7 @@ The new format provides us with three main advantages:
 
 [zinc#351][zinc351] by [@jvican][@jvican]
 
-#### Dependency locking
+##### Dependency locking
 
 Dependency locking feature is still in progress, but Jorge ([@jvican][@jvican]) from Scala Center has added a number of related features
 that would should work together to allow dependency locking.
@@ -6528,7 +6545,7 @@ that would should work together to allow dependency locking.
 - Adds support to specify a resolver for dependencies. [lm#97][lm97]
 - Adds "managed checksums", which tells Ivy to skip the checksum process. [lm#111][lm111]
 
-### Contributors
+#### Contributors
 
 Too many people to thank here. See [Credits][Credits]
 
@@ -15855,9 +15872,9 @@ repository. To use publishing, you need to specify the repository to
 publish to and the credentials to use. Once these are set up, you can
 run `publish`.
 
-The `publishLocal` action is used to publish your project to a local Ivy
-repository. You can then use this project from other projects on the
-same machine.
+The `publishLocal` action is used to publish your project to your Ivy local
+file respository, which is usually located at `~/.ivy2/local/`. You can
+then use this project from other projects on the same machine.
 
 ### Define the repository
 
