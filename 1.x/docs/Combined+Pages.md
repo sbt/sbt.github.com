@@ -4510,7 +4510,7 @@ your plugin to the list.
   formatting using Scalariform. <!-- 218 stars -->
 - [neo-sbt-scalafmt](https://github.com/lucidsoftware/neo-sbt-scalafmt): code
   formatting using Scalafmt. <!-- 80 stars -->
-- [sbt-java-formatter](https://github.com/typesafehub/sbt-java-formatter):
+- [sbt-java-formatter](https://github.com/sbt/sbt-java-formatter):
   code formatting for Java sources. <!-- 8 stars -->
 
 #### Documentation plugins
@@ -4644,7 +4644,7 @@ your plugin to the list.
 
 #### IDE integration plugins
 
-- [sbteclipse](https://github.com/typesafehub/sbteclipse): Eclipse project
+- [sbteclipse](https://github.com/sbt/sbteclipse): Eclipse project
   definition generator. <!-- 672 stars -->
 - [sbt-sublime](https://github.com/orrsella/sbt-sublime): Sublime Text project
   generator. <!-- 145 stars -->
@@ -12895,7 +12895,7 @@ shellPrompt := { state =>
 You can also configure plugins globally added in `~/.sbt/1.0/plugins/build.sbt`
 (see next paragraph) in that file, but you need to use fully qualified
 names for their properties. For example, for sbt-eclipse property `withSource`
-documented in https://github.com/typesafehub/sbteclipse/wiki/Using-sbteclipse,
+documented in https://github.com/sbt/sbteclipse/wiki/Using-sbteclipse,
 you need to use:
 
 ```scala
@@ -15867,9 +15867,9 @@ repository. To use publishing, you need to specify the repository to
 publish to and the credentials to use. Once these are set up, you can
 run `publish`.
 
-The `publishLocal` action is used to publish your project to a local Ivy
-repository. You can then use this project from other projects on the
-same machine.
+The `publishLocal` action is used to publish your project to your Ivy local
+file respository, which is usually located at `~/.ivy2/local/`. You can
+then use this project from other projects on the same machine.
 
 ### Define the repository
 
