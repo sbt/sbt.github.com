@@ -97,7 +97,7 @@ object Canon extends Plugin {
   // This is the fundamental transformation.
   // Here we map all declared ScalaCheck dependencies to be version 1.8
   def mapSingle(module: ModuleID): ModuleID =
-    if(module.name == &quot;scalacheck&quot;) module.copy(revision = &quot;1.8&quot;) 
+    if(module.name == &quot;scalacheck&quot;) module.withRevision(revision = &quot;1.8&quot;) 
     else module
 }
 </code></pre><div class="bottom nav span-16">
