@@ -127,11 +127,11 @@ object WhateverPlugin extends sbt.AutoPlugin {
   object autoImport {
     // BAD sample
     lazy val Whatever = config(&quot;whatever&quot;) extend(Compile)
-    lazy val dude = settingKey[String](&quot;A plugin specific key&quot;)
+    lazy val specificKey = settingKey[String](&quot;A plugin specific key&quot;)
   }
   import autoImport._
   override lazy val projectSettings = Seq(
-    dude in Whatever := &quot;your opinion man&quot; // DON'T DO THIS
+    specificKey in Whatever := &quot;another opinion&quot; // DON'T DO THIS
   )
 }
 </code></pre><h4 id="When+to+define+your+own+configuration">When to define your own configuration<a href="#When+to+define+your+own+configuration" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>If your plugin introduces either a new set of source code or
