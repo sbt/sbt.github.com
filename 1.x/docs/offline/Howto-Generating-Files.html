@@ -73,8 +73,9 @@ console:
 </p><pre><code class="">&gt; run
 [info] Running Test
 Hi
-</code></pre><p>Change <code>Compile</code> to <code>Test</code> to make it a test source. For efficiency, you
-would only want to generate sources when necessary and not every run.
+</code></pre><p>Change <code>Compile</code> to <code>Test</code> to make it a test source.
+</p><p><strong>NOTE:</strong> For the efficiency of the build, <code>sourceGenerators</code> should avoid regenerating source files upon each call,
+and cache based on the input values using <code>sbt.Tracked.{ inputChanged, outputChanged }</code> etc instead.
 </p><p>By default, generated sources are not included in the packaged source
 artifact. To do so, add them as you would other mappings. See
 <a href="Howto-Package.html#modify-package-contents">Adding files to a package</a>. A source
@@ -109,14 +110,15 @@ See <a href="Howto-Package.html#modify-package-contents">Adding files to a packa
   IO.write(file, contents)
   Seq(file)
 }.taskValue
-</code></pre><p>Change <code>Compile</code> to <code>Test</code> to make it a test resource. Normally, you
-would only want to generate resources when necessary and not every run.
+</code></pre><p>Change <code>Compile</code> to <code>Test</code> to make it a test resource.
+</p><p><strong>NOTE:</strong> For the efficiency of the build, <code>resourceGenerators</code> should avoid regenerating resource files upon each call,
+and cache based on the input values using <code>sbt.Tracked.{ inputChanged, outputChanged }</code> etc instead.
 </p><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>
                         <a href="Howto-Inspect-the-Build.html"> Inspect the build </a>                        
                         <ul class="language-bar">
-        
+        <li><a href="Howto-Generating-Files.html"><span class="lang-item lang-en">English</span></a></li><li><a href="ja/Howto-Generating-Files.html"><span class="lang-item lang-ja">日本語</span></a></li>
       </ul>
                       </div><div class="tocwrapper show">
       <a class="tochead nav" style="display: none" href="#toc">❦</a>
