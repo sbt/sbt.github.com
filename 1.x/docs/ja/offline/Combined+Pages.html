@@ -138,7 +138,7 @@ sbt:foo-build&gt; compile
 </p><pre><code class="">sbt:foo-build&gt; ~compile
 [success] Total time: 0 s, completed May 6, 2018 3:52:08 PM
 1. Waiting for source changes... (press enter to interrupt)
-</code></pre><h3 id="%E3%82%BD%E3%83%BC%E3%82%B9%E3%83%BB%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E6%9B%B8%E3%81%8F">ソース・ファイルを書く<a href="#%E3%82%BD%E3%83%BC%E3%82%B9%E3%83%BB%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E6%9B%B8%E3%81%8F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>上記のコマンドは走らせたままにする。別のシェルかファイルマネージャーからプロジェクトのディレクトリへ行って、<code>src/main/scala/example</code> というディレクトリを作る。次に好きなエディタを使って <code>example</code> ディレクトリ内に以下をファイルを作成する:
+</code></pre><h3 id="%E3%82%BD%E3%83%BC%E3%82%B9%E3%83%BB%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E6%9B%B8%E3%81%8F">ソース・ファイルを書く<a href="#%E3%82%BD%E3%83%BC%E3%82%B9%E3%83%BB%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E6%9B%B8%E3%81%8F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>上記のコマンドは走らせたままにする。別のシェルかファイルマネージャーからプロジェクトのディレクトリへ行って、<code>src/main/scala/example</code> というディレクトリを作る。次に好きなエディタを使って <code>example</code> ディレクトリ内に以下のファイルを作成する:
 </p><pre><code class="prettyprint lang-scala">package example
 
 object Hello extends App {
@@ -762,9 +762,9 @@ sbt バージョンを指定する:
 </li><li>右辺項は<strong>本文</strong> (body)、もしくは<strong>セッティング本文</strong>という。
 </li></ol><p>左辺値の <code>name</code>、<code>version</code>、および <code>scalaVersion</code> は<strong>キー</strong>である。
 キーは
-<a href="../api/sbt/SettingKey.html"><code>SettingKey[T]</code></a>、
-<a href="../api/sbt/TaskKey.html"><code>TaskKey[T]</code></a>、もしくは
-<a href="(../api/sbt/InputKey.html)"><code>InputKey[T]</code></a> のインスタンスで、
+<a href="../../api/sbt/SettingKey.html"><code>SettingKey[T]</code></a>、
+<a href="../../api/sbt/TaskKey.html"><code>TaskKey[T]</code></a>、もしくは
+<a href="../../api/sbt/InputKey.html"><code>InputKey[T]</code></a> のインスタンスで、
 <code>T</code> はその値の型である。キーの種類に関しては後述する。
 </p><p><code>name</code> キーは <code>SettingKey[String]</code> に型付けされているため、
 <code>name</code> の <code>:=</code> 演算子も <code>String</code> に型付けされている。
@@ -874,7 +874,7 @@ lazy val root = (project in file(&quot;.&quot;))
 この <code>value</code> メソッドは特殊なもので、<code>:=</code> (もしくは後に見る <code>+=</code> や <code>++=</code>) の右辺項内でしか使うことができない。
 </p><p>最初の例として、<code>update</code> と <code>clean</code> というタスクに依存した形で
 <code>scalacOption</code> を定義したいとする。
-（<a href="../api/sbt/Keys$.html">Keys</a> より）以下の二つのキーを例に説明する。
+（<a href="../../api/sbt/Keys$.html">Keys</a> より）以下の二つのキーを例に説明する。
 </p><p><strong>注意</strong>: ここで計算される <code>scalacOptions</code> の値はナンセンスなもので、説明のためだけのものだ:
 </p><pre><code class="prettyprint lang-scala">val scalacOptions = taskKey[Seq[String]](&quot;Options for the Scala compiler.&quot;)
 val update = taskKey[UpdateReport](&quot;Resolves and optionally retrieves dependencies, producing a report.&quot;)
@@ -1045,7 +1045,7 @@ build.sbt に慣れるまでは、<code>.value</code> の呼び出しをタス�
 [info] * utf8
 [info] * -unchecked
 [success] Total time: 0 s, completed Jan 2, 2017 11:44:51 PM
-</code></pre><p>次に (<a href="../api/sbt/Keys$.html">Keys</a> より) 以下の二つのキーを例に説明する:
+</code></pre><p>次に (<a href="../../api/sbt/Keys$.html">Keys</a> より) 以下の二つのキーを例に説明する:
 </p><pre><code class="prettyprint lang-scala">val scalacOptions = taskKey[Seq[String]](&quot;Options for the Scala compiler.&quot;)
 val checksums = settingKey[Seq[String]](&quot;The list of checksums to generate and to verify for dependencies.&quot;)
 </code></pre><p><strong>注意</strong>: <code>scalacOptions</code> と <code>checksums</code>はお互い何の関係もない、ただ同じ値の型を持つ二つのキーで片方がタスクというだけだ。
@@ -1357,7 +1357,7 @@ lazy val util = (project in file(&quot;util&quot;))
 </p><pre><code class="prettyprint lang-scala">cleanFiles += file(&quot;coverage-report-&quot; + name.value + &quot;.txt&quot;)
 </code></pre><h2 id="%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E5%A7%94%E8%AD%B2+%28.value+%E3%81%AE%E7%85%A7%E4%BC%9A%29">スコープ委譲 (.value の照会)<a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E5%A7%94%E8%AD%B2+%28.value+%E3%81%AE%E7%85%A7%E4%BC%9A%29" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このページはスコープ委譲を説明する。前のページの
 <a href="Basic-Def.html">.sbt ビルド定義</a>、
-[スコープ][Scopes-Graph]
+<a href="Scopes.html">スコープ</a>
 を読んで理解したことを前提とする。
 </p><p>スコープ付けの説明が全て終わったので、<code>.value</code> 照会の詳細を解説できる。
 難易度は高めなので、始めてこのガイドを読む場合はこのページは飛ばしてもいい。
@@ -1995,7 +1995,7 @@ lazy val library = (project in file(&quot;library&quot;))
 難しいのはそのタスクが実行したいことの「本体」部分を書くことだ。
 </p><p>例えば HTML を整形したいとすると、今度は HTML のライブラリを利用したくなるかもしれない
 （おそらく<a href="Using-Plugins.html">ビルド定義にライブラリ依存性を追加して</a>、その HTML ライブラリに基づいたコードを書けばよいだろう）。
-</p><p>sbt には、いくつかのユーティリティライブラリや便利な関数があり、特にファイルやディレクトリの取り扱いには <a href="../api/sbt/io/IO$.html">Scaladocs-IO</a> にある API がしばしば重宝するだろう。
+</p><p>sbt には、いくつかのユーティリティライブラリや便利な関数があり、特にファイルやディレクトリの取り扱いには <a href="../../api/sbt/io/IO$.html">Scaladocs-IO</a> にある API がしばしば重宝するだろう。
 </p><h3 id="%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%AE%E5%AE%9F%E8%A1%8C%E6%84%8F%E5%91%B3%E8%AB%96">タスクの実行意味論<a href="#%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%AE%E5%AE%9F%E8%A1%8C%E6%84%8F%E5%91%B3%E8%AB%96" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>カスタムタスクから <code>value</code> を使って他のタスクに依存するとき、
 タスクの実行意味論 (execution semantics) に注意する必要がある。
 ここでいう実行意味論とは、実際<em>どの時点で</em>タスクが評価されるかを決定するものとする。
@@ -2244,7 +2244,7 @@ information. -->
 <p>sbt はオープンソースであるため、いつでも<a href="https://github.com/sbt/sbt">ソース</a>を見れることも忘れずに！
 </p><h2 id="%E4%BB%98%E9%8C%B2%3A+bare+.sbt+%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9">付録: bare .sbt ビルド定義<a href="#%E4%BB%98%E9%8C%B2%3A+bare+.sbt+%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このページでは旧式の <code>.sbt</code> ビルド定義の説明をする。
 現在の推奨は<a href="Basic-Def.html">マルチプロジェクト .sbt ビルド定義</a>だ。
-</p><h3 id="bare+.sbt+%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%81%A8%E3%81%AF%E4%BD%95%E3%81%8B">bare .sbt ビルド定義とは何か<a href="#bare+.sbt+%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%81%A8%E3%81%AF%E4%BD%95%E3%81%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>明示的に <a href="../api/sbt/Project.html">Project</a> を定義する
+</p><h3 id="bare+.sbt+%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%81%A8%E3%81%AF%E4%BD%95%E3%81%8B">bare .sbt ビルド定義とは何か<a href="#bare+.sbt+%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%81%A8%E3%81%AF%E4%BD%95%E3%81%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>明示的に <a href="../../api/sbt/Project.html">Project</a> を定義する
 <a href="Basic-Def.html">マルチプロジェクト .sbt ビルド定義</a>や <a href="Full-Def.html">.scala ビルド定義</a>と違って
 bare ビルド定義は <code>.sbt</code> ファイルの位置から暗黙にプロジェクトが定義される。
 </p><p><code>Project</code> を定義する代わりに、bare <code>.sbt</code> ビルド定義は <code>Setting[_]</code> 式のリストから構成される。

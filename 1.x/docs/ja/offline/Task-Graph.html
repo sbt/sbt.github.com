@@ -57,7 +57,7 @@
 この <code>value</code> メソッドは特殊なもので、<code>:=</code> (もしくは後に見る <code>+=</code> や <code>++=</code>) の右辺項内でしか使うことができない。
 </p><p>最初の例として、<code>update</code> と <code>clean</code> というタスクに依存した形で
 <code>scalacOption</code> を定義したいとする。
-（<a href="../api/sbt/Keys$.html">Keys</a> より）以下の二つのキーを例に説明する。
+（<a href="../../api/sbt/Keys$.html">Keys</a> より）以下の二つのキーを例に説明する。
 </p><p><strong>注意</strong>: ここで計算される <code>scalacOptions</code> の値はナンセンスなもので、説明のためだけのものだ:
 </p><pre><code class="prettyprint lang-scala">val scalacOptions = taskKey[Seq[String]](&quot;Options for the Scala compiler.&quot;)
 val update = taskKey[UpdateReport](&quot;Resolves and optionally retrieves dependencies, producing a report.&quot;)
@@ -228,7 +228,7 @@ build.sbt に慣れるまでは、<code>.value</code> の呼び出しをタス�
 [info] * utf8
 [info] * -unchecked
 [success] Total time: 0 s, completed Jan 2, 2017 11:44:51 PM
-</code></pre><p>次に (<a href="../api/sbt/Keys$.html">Keys</a> より) 以下の二つのキーを例に説明する:
+</code></pre><p>次に (<a href="../../api/sbt/Keys$.html">Keys</a> より) 以下の二つのキーを例に説明する:
 </p><pre><code class="prettyprint lang-scala">val scalacOptions = taskKey[Seq[String]](&quot;Options for the Scala compiler.&quot;)
 val checksums = settingKey[Seq[String]](&quot;The list of checksums to generate and to verify for dependencies.&quot;)
 </code></pre><p><strong>注意</strong>: <code>scalacOptions</code> と <code>checksums</code>はお互い何の関係もない、ただ同じ値の型を持つ二つのキーで片方がタスクというだけだ。

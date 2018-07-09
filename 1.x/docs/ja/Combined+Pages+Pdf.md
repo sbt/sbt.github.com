@@ -263,7 +263,7 @@ sbt:foo-build> ~compile
 
 ### ソース・ファイルを書く
 
-上記のコマンドは走らせたままにする。別のシェルかファイルマネージャーからプロジェクトのディレクトリへ行って、`src/main/scala/example` というディレクトリを作る。次に好きなエディタを使って `example` ディレクトリ内に以下をファイルを作成する:
+上記のコマンドは走らせたままにする。別のシェルかファイルマネージャーからプロジェクトのディレクトリへ行って、`src/main/scala/example` というディレクトリを作る。次に好きなエディタを使って `example` ディレクトリ内に以下のファイルを作成する:
 
 ```scala
 package example
@@ -1269,9 +1269,9 @@ build.sbt DSL を詳しくみてみよう:<br>
 
 左辺値の `name`、`version`、および `scalaVersion` は**キー**である。
 キーは
-[`SettingKey[T]`](../api/sbt/SettingKey.html)、
-[`TaskKey[T]`](../api/sbt/TaskKey.html)、もしくは
-[`InputKey[T]`]((../api/sbt/InputKey.html)) のインスタンスで、
+[`SettingKey[T]`](../../api/sbt/SettingKey.html)、
+[`TaskKey[T]`](../../api/sbt/TaskKey.html)、もしくは
+[`InputKey[T]`](../../api/sbt/InputKey.html) のインスタンスで、
 `T` はその値の型である。キーの種類に関しては後述する。
 
 `name` キーは `SettingKey[String]` に型付けされているため、
@@ -1466,7 +1466,7 @@ lazy val root = (project in file("."))
 
 最初の例として、`update` と `clean` というタスクに依存した形で
 `scalacOption` を定義したいとする。
-（[Keys](../api/sbt/Keys$.html) より）以下の二つのキーを例に説明する。
+（[Keys](../../api/sbt/Keys$.html) より）以下の二つのキーを例に説明する。
 
 **注意**: ここで計算される `scalacOptions` の値はナンセンスなもので、説明のためだけのものだ:
 
@@ -1699,7 +1699,7 @@ sbt シェルで試すとこうなるはずだ:
 [success] Total time: 0 s, completed Jan 2, 2017 11:44:51 PM
 ```
 
-次に ([Keys](../api/sbt/Keys$.html) より) 以下の二つのキーを例に説明する:
+次に ([Keys](../../api/sbt/Keys$.html) より) 以下の二つのキーを例に説明する:
 
 ```scala
 val scalacOptions = taskKey[Seq[String]]("Options for the Scala compiler.")
@@ -2262,7 +2262,7 @@ cleanFiles += file("coverage-report-" + name.value + ".txt")
 
 このページはスコープ委譲を説明する。前のページの
 [.sbt ビルド定義][Basic-Def]、
-[スコープ][Scopes-Graph]
+[スコープ][Scopes]
 を読んで理解したことを前提とする。
 
 スコープ付けの説明が全て終わったので、`.value` 照会の詳細を解説できる。
@@ -3260,7 +3260,7 @@ lazy val core = (project in file("core"))
   [Tasks]: ../../docs/Tasks.html
   [Keys]: ../../api/sbt/Keys$.html
   [Defaults]: ../../sxr/sbt/Defaults.scala.html
-  [Scaladocs-IO]: ../api/sbt/io/IO$.html
+  [Scaladocs-IO]: ../../api/sbt/io/IO$.html
 
 カスタムセッティングとタスク
 ------------------------
@@ -3710,7 +3710,7 @@ sbt はオープンソースであるため、いつでも[ソース](https://gi
 
 ### bare .sbt ビルド定義とは何か
 
-明示的に [Project](../api/sbt/Project.html) を定義する
+明示的に [Project](../../api/sbt/Project.html) を定義する
 [マルチプロジェクト .sbt ビルド定義][Basic-Def]や [.scala ビルド定義][Full-Def]と違って
 bare ビルド定義は `.sbt` ファイルの位置から暗黙にプロジェクトが定義される。
 
