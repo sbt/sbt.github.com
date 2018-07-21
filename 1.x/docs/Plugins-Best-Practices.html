@@ -60,32 +60,32 @@ this case, use a plugin-specific prefix.
 
 import sbt._, Keys._
 
-object AssemblyPlugin extends sbt.AutoPlugin {
+object AssemblyPlugin extends AutoPlugin {
   object autoImport {
-    lazy val assembly                  = taskKey[File](&quot;Builds a deployable fat jar.&quot;)
-    lazy val assembleArtifact          = settingKey[Boolean](&quot;Enables (true) or disables (false) assembling an artifact.&quot;)
-    lazy val assemblyOption            = taskKey[AssemblyOption](&quot;Configuration for making a deployable fat jar.&quot;)
-    lazy val assembledMappings         = taskKey[Seq[MappingSet]](&quot;Keeps track of jar origins for each source.&quot;)
+    val assembly                  = taskKey[File](&quot;Builds a deployable fat jar.&quot;)
+    val assembleArtifact          = settingKey[Boolean](&quot;Enables (true) or disables (false) assembling an artifact.&quot;)
+    val assemblyOption            = taskKey[AssemblyOption](&quot;Configuration for making a deployable fat jar.&quot;)
+    val assembledMappings         = taskKey[Seq[MappingSet]](&quot;Keeps track of jar origins for each source.&quot;)
 
-    lazy val assemblyPackageScala      = taskKey[File](&quot;Produces the scala artifact.&quot;)
-    lazy val assemblyJarName           = taskKey[String](&quot;name of the fat jar&quot;)
-    lazy val assemblyMergeStrategy     = settingKey[String =&gt; MergeStrategy](&quot;mapping from archive member path to merge strategy&quot;)
+    val assemblyPackageScala      = taskKey[File](&quot;Produces the scala artifact.&quot;)
+    val assemblyJarName           = taskKey[String](&quot;name of the fat jar&quot;)
+    val assemblyMergeStrategy     = settingKey[String =&gt; MergeStrategy](&quot;mapping from archive member path to merge strategy&quot;)
   }
 
   import autoImport._
 
   ....
 }
-</code></pre><p>In this approach, every <code>lazy val</code> starts with <code>assembly</code>. A user of the
+</code></pre><p>In this approach, every <code>val</code> starts with <code>assembly</code>. A user of the
 plugin would refer to the settings like this in <code>build.sbt</code>:
 </p><pre><code class="prettyprint lang-scala">assembly / assemblyJarName := &quot;something.jar&quot;
 </code></pre><p>Inside sbt shell, the user can refer to the setting in the same way:
 </p><pre><code class="">sbt:helloworld&gt; show assembly/assemblyJarName
 [info] helloworld-assembly-0.1.0-SNAPSHOT.jar
 </code></pre><p>Avoid sbt 0.12 style key names where the key’s Scala identifier and shell uses kebab-casing:
-</p><ul><li>BAD: <code>lazy val jarName = SettingKey[String](&quot;assembly-jar-name&quot;)</code>
-</li><li>BAD: <code>lazy val jarName = SettingKey[String](&quot;jar-name&quot;)</code>
-</li><li>GOOD: <code>lazy val assemblyJarName = taskKey[String](&quot;name of the fat jar&quot;)</code>
+</p><ul><li>BAD: <code>val jarName = SettingKey[String](&quot;assembly-jar-name&quot;)</code>
+</li><li>BAD: <code>val jarName = SettingKey[String](&quot;jar-name&quot;)</code>
+</li><li>GOOD: <code>val assemblyJarName = taskKey[String](&quot;name of the fat jar&quot;)</code>
 </li></ul><p>Because there’s a single namespace for keys both in <code>build.sbt</code> and in sbt shell,
 if different plugins use generic sounding key names like <code>jarName</code> and <code>excludedFiles</code> they will cause name conflict.
 </p><h3 id="Artifact+naming+convention">Artifact naming convention<a href="#Artifact+naming+convention" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Use the <code>sbt-$projectname</code> scheme to name your library and artifact.
@@ -235,9 +235,9 @@ lazy val app = (project in file(&quot;app&quot;))
   .settings(inConfig(Test)(ObfuscatePlugin.baseObfuscateSettings))
 </code></pre><h3 id="Scoping+advices">Scoping advices<a href="#Scoping+advices" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>In general, if a plugin provides keys (settings and tasks) with the widest scoping,
 and refer to them with the narrowest scoping, it will give the maximum flexibility to the build users.
-</p><h4 id="Provide+default+values+in">Provide default values in <code>globalSettings</code><a href="#Provide+default+values+in" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>If your settings or task do not transitively depend on a project-level settings
-(such as <code>baseDirectory</code>, <code>compile</code>, etc), provide default values in <code>globalSettings</code>.
-</p><p>For example, in sbt’s Defaults keys related to publishing such as <code>licenses</code>, <code>developers</code>,
+</p><h4 id="Provide+default+values+in">Provide default values in <code>globalSettings</code><a href="#Provide+default+values+in" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>If the default value of your settings or task does not transitively depend on a project-level settings
+(such as <code>baseDirectory</code>, <code>compile</code>, etc), define it in <code>globalSettings</code>.
+</p><p>For example, in <code>sbt.Defaults</code> keys related to publishing such as <code>licenses</code>, <code>developers</code>,
 and <code>scmInfo</code> are all defined at the <code>Global</code> scope, typically to empty values like <code>Nil</code> and <code>None</code>.
 </p><pre><code class="prettyprint lang-scala">package sbtobfuscate
 
