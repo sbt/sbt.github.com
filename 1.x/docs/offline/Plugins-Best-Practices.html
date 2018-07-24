@@ -278,8 +278,9 @@ but is used as <code>(obfuscate / obfuscateOption)</code> in the <code>projectSe
 This lets the user either set <code>obfuscate / obfuscateOption</code> at a particular subproject level,
 or scoped to <code>ThisBuild</code> affecting all subprojects:
 </p><pre><code class="prettyprint lang-scala">ThisBuild / obfuscate / obfuscateOption := ObfuscateOption().withX(true)
-</code></pre><p>This requires in-depth knowledge to know that RHS are all contained in
-global scope (pure values and other global settings), but it’s a useful technique.
+</code></pre><p>Giving keys default values in global scope requires knowing that every key (if any)
+used to define that key must <em>also</em> be defined in global scope, otherwise it will
+fail at load time.
 </p><h4 id="Using+a+%E2%80%9Cmain%E2%80%9D+task+scope+for+settings">Using a “main” task scope for settings<a href="#Using+a+%E2%80%9Cmain%E2%80%9D+task+scope+for+settings" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Sometimes you want to define some settings for a particular “main” task
 in your plugin. In this instance, you can scope your settings using the
 task itself. See the <code>baseObfuscateSettings</code>:
