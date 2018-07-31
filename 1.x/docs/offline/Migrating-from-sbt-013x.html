@@ -232,7 +232,13 @@ def scalaXml = Def.setting {
 </li><li>Change <code>Project(...)</code> to <code>(project in file(&quot;x&quot;))</code> style, and call its <code>settings(...)</code> method to pass in the settings. This is so the auto plugins can reorder their setting sequence based on the plugin dependencies. <code>name</code> setting should be set to keep the old names.
 </li><li>Remove <code>Defaults.defaultSettings</code> out of <code>shared</code> since these settings are already set by the built-in auto plugins, also remove <code>xyz.XyzPlugin.projectSettings</code> out of <code>shared</code> and call <code>enablePlugins(XyzPlugin)</code> instead.
 </li></ol><p><strong>Note</strong>: <code>Build</code> traits is deprecated, but you can still use <code>project/*.scala</code> file to organize your build and/or define ad-hoc plugins. See <a href="Organizing-Build.html">Organizing the build</a>.
-</p><div class="bottom nav span-16">
+</p><h3 id="Migrating+from+Resolver.withDefaultResolvers">Migrating from Resolver.withDefaultResolvers<a href="#Migrating+from+Resolver.withDefaultResolvers" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>In 0.13.x, you use other repositories instead of the Maven Central repository:
+</p><pre><code class="prettyprint lang-scala">externalResolvers := Resolver.withDefaultResolvers(resolvers.value, mavenCentral = false)
+</code></pre><p>After 1.x, <code>withDefaultResolvers</code> was renamed to <code>combineDefaultResolvers</code>. In the meantime, one of the parameters, <code>userResolvers</code>, was changed to <code>Vector</code> instead of <code>Seq</code>.
+</p><ul><li><p>You can use <code>toVector</code> to help migration.
+</p><pre><code class="prettyprint lang-scala">externalResolvers := Resolver.combineDefaultResolvers(resolvers.value.toVector, mavenCentral = false)
+</code></pre></li><li>You can use <code>Vector</code> directly too.
+</li></ul><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>
                         <a href="sbt-1.1-Release-Notes.html"> sbt 1.1.x releases </a>                        

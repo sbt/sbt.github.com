@@ -3793,7 +3793,13 @@ def scalaXml = Def.setting {
 </li><li>Change <code>Project(...)</code> to <code>(project in file(&quot;x&quot;))</code> style, and call its <code>settings(...)</code> method to pass in the settings. This is so the auto plugins can reorder their setting sequence based on the plugin dependencies. <code>name</code> setting should be set to keep the old names.
 </li><li>Remove <code>Defaults.defaultSettings</code> out of <code>shared</code> since these settings are already set by the built-in auto plugins, also remove <code>xyz.XyzPlugin.projectSettings</code> out of <code>shared</code> and call <code>enablePlugins(XyzPlugin)</code> instead.
 </li></ol><p><strong>Note</strong>: <code>Build</code> traits is deprecated, but you can still use <code>project/*.scala</code> file to organize your build and/or define ad-hoc plugins. See <a href="Organizing-Build.html">Organizing the build</a>.
-</p><h2 id="sbt+1.1.x+releases">sbt 1.1.x releases<a href="#sbt+1.1.x+releases" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="sbt+1.1.2">sbt 1.1.2<a href="#sbt+1.1.2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="Bug+fixes">Bug fixes<a href="#Bug+fixes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>Fixes triggered execution’s resource leak by caching the watch service. <a href="https://github.com/sbt/sbt/pull/3999">#3999</a> by <a href="https://github.com/eatkins">@eatkins</a>
+</p><h3 id="Migrating+from+Resolver.withDefaultResolvers">Migrating from Resolver.withDefaultResolvers<a href="#Migrating+from+Resolver.withDefaultResolvers" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>In 0.13.x, you use other repositories instead of the Maven Central repository:
+</p><pre><code class="prettyprint lang-scala">externalResolvers := Resolver.withDefaultResolvers(resolvers.value, mavenCentral = false)
+</code></pre><p>After 1.x, <code>withDefaultResolvers</code> was renamed to <code>combineDefaultResolvers</code>. In the meantime, one of the parameters, <code>userResolvers</code>, was changed to <code>Vector</code> instead of <code>Seq</code>.
+</p><ul><li><p>You can use <code>toVector</code> to help migration.
+</p><pre><code class="prettyprint lang-scala">externalResolvers := Resolver.combineDefaultResolvers(resolvers.value.toVector, mavenCentral = false)
+</code></pre></li><li>You can use <code>Vector</code> directly too.
+</li></ul><h2 id="sbt+1.1.x+releases">sbt 1.1.x releases<a href="#sbt+1.1.x+releases" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="sbt+1.1.2">sbt 1.1.2<a href="#sbt+1.1.2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="Bug+fixes">Bug fixes<a href="#Bug+fixes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>Fixes triggered execution’s resource leak by caching the watch service. <a href="https://github.com/sbt/sbt/pull/3999">#3999</a> by <a href="https://github.com/eatkins">@eatkins</a>
 </li><li>Fixes classloader inheriting the dependencies of Scala compiler during <code>run</code> <a href="https://github.com/sbt/zinc/pull/505">zinc#505</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
 </li><li>Fixes forked test concurrency issue. <a href="https://github.com/sbt/sbt/pull/4030">#4030</a> by <a href="https://github.com/eatkins">@eatkins</a>
 </li><li>Fixes <code>new</code> command leaving behind target directory <a href="https://github.com/sbt/sbt/pull/4033">#4033</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
@@ -9584,7 +9590,7 @@ specify repositories in addition to the usual defaults, configure
 the default repositories,
 </p><pre><code class="prettyprint lang-scala">resolvers += &quot;Sonatype OSS Snapshots&quot; at &quot;https://oss.sonatype.org/content/repositories/snapshots&quot;
 </code></pre><p>To use the local repository, but not the Maven Central repository:
-</p><pre><code class="prettyprint lang-scala">externalResolvers := Resolver.withDefaultResolvers(resolvers.value, mavenCentral = false)
+</p><pre><code class="prettyprint lang-scala">externalResolvers := Resolver.combineDefaultResolvers(resolvers.value, mavenCentral = false)
 </code></pre><h5 id="Override+all+resolvers+for+all+builds">Override all resolvers for all builds<a href="#Override+all+resolvers+for+all+builds" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p>The repositories used to retrieve sbt, Scala, plugins, and application
 dependencies can be configured globally and declared to override the
 resolvers configured in a build or plugin definition. There are two
