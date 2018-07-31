@@ -140,7 +140,45 @@ and then use that code in <code>core/src/test/scala</code>, for example.
 </p><p>You can have multiple configurations for a dependency, separated by
 semicolons. For example,
 <code>dependsOn(util % &quot;test-&gt;test;compile-&gt;compile&quot;)</code>.
-</p><h3 id="Default+root+project">Default root project<a href="#Default+root+project" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>If a project is not defined for the root directory in the build, sbt
+</p><h3 id="Inter-project+dependencies">Inter-project dependencies<a href="#Inter-project+dependencies" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>On extremely large projects with many files and many subprojects, sbt
+can perform less optimally at watching files have changed during
+interactively and using a lot of disk and system I/O.
+</p><p>sbt has <code>trackInternalDependencies</code> and <code>exportToInternal</code>
+settings. These can be used to control whether to trigger compilation
+of a dependent subprojects when you call <code>compile</code>. Both keys will
+take one of three values: <code>TrackLevel.NoTracking</code>,
+<code>TrackLevel.TrackIfMissing</code>, and <code>TrackLevel.TrackAlways</code>. By default
+they are both set to <code>TrackLevel.TrackAlways</code>.
+</p><p>When <code>trackInternalDependencies</code> is set to
+<code>TrackLevel.TrackIfMissing</code>, sbt will no longer try to compile
+internal (inter-project) dependencies automatically, unless there are
+no <code>*.class</code> files (or JAR file when <code>exportJars</code> is <code>true</code>) in the
+output directory.
+</p><p>When the setting is set to <code>TrackLevel.NoTracking</code>, the compilation of
+internal dependencies will be skipped. Note that the classpath will
+still be appended, and dependency graph will still show them as
+dependencies. The motivation is to save the I/O overhead of checking
+for the changes on a build with many subprojects during
+development. Here’s how to set all subprojects to <code>TrackIfMissing</code>.
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
+  aggregate(....).
+  settings(
+    inThisBuild(Seq(
+      trackInternalDependencies := TrackLevel.TrackIfMissing,
+      exportJars := true
+    ))
+  )
+</code></pre><p>The <code>exportToInternal</code> setting allows the dependee subprojects to opt
+out of the internal tracking, which might be useful if you want to
+track most subprojects except for a few. The intersection of the
+<code>trackInternalDependencies</code> and <code>exportToInternal</code> settings will be
+used to determine the actual track level. Here’s an example to opt-out
+one project:
+</p><pre><code class="prettyprint lang-scala">lazy val dontTrackMe = (project in file(&quot;dontTrackMe&quot;)).
+  settings(
+    exportToInternal := TrackLevel.NoTracking
+  )
+</code></pre><h3 id="Default+root+project">Default root project<a href="#Default+root+project" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>If a project is not defined for the root directory in the build, sbt
 creates a default one that aggregates all other projects in the build.
 </p><p>Because project <code>hello-foo</code> is defined with <code>base = file(&quot;foo&quot;)</code>, it will be
 contained in the subdirectory foo. Its sources could be directly under

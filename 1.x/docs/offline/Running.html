@@ -68,6 +68,13 @@ will be run in sequence (<code>clean</code>, <code>compile</code>, then <code>te
 so <strong>your build will run much slower</strong>.
 For day-to-day coding, we recommend using the sbt shell
 or Continuous build and test feature described below.
+</p><p>Beginning in sbt 0.13.16, using batch mode in sbt will issue an
+informational startup message,
+</p><pre><code class="">$ sbt clean compile
+[info] Executing in batch mode. For better performance use sbt's shell
+...
+</code></pre><p>It will only be triggered for <code>sbt compile</code>, and it can also be
+supressed with <code>suppressSbtShellNotification := true</code>.
 </p><h3 id="Continuous+build+and+test">Continuous build and test<a href="#Continuous+build+and+test" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To speed up your edit-compile-test cycle, you can ask sbt to
 automatically recompile or run tests whenever you save a source file.
 </p><p>Make a command run when one or more source files change by prefixing the

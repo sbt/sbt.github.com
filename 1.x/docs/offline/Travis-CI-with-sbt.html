@@ -197,6 +197,15 @@ Here are some cautionary words from the documentation:
 </p><blockquote><p>Our builds have a global timeout and a timeout that’s based on the output. If no output is received from a build for 10 minutes, it’s assumed to have stalled for unknown reasons and is subsequently killed.
 </p></blockquote><p>There’s a function called <code>travis_wait</code> that can extend this to 20 minutes.
 </p><h3 id="More+things">More things<a href="#More+things" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>There are more thing you can do, such as <a href="http://docs.travis-ci.com/user/database-setup/">set up databases</a>, <a href="http://docs.travis-ci.com/user/installing-dependencies/">installing Ubuntu packages</a>, and <a href="http://docs.travis-ci.com/user/deployment/">deploy continuously</a>.
+</p><p>Travis offers the ability to run tests in parallel, and also imposes
+time limits on builds.  If you have an especially long-running suite
+of scripted tests for your plugin, you can run a subset of scripted
+tests in a directory, for example:
+</p><pre><code class="">    - TEST_COMMAND=&quot;scripted tests/*1of3&quot;
+    - TEST_COMMAND=&quot;scripted tests/*2of3&quot;
+    - TEST_COMMAND=&quot;scripted tests/*3of3&quot;
+</code></pre><p>Will create three chunks and run each of the chunks separately for the
+directory <code>tests</code>.
 </p><h3 id="Sample+setting">Sample setting<a href="#Sample+setting" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Here’s a sample that puts them all together. Remember, most of the sections are optional.
 </p><pre><code class="prettyprint lang-yml"># Use container-based infrastructure
 sudo: false

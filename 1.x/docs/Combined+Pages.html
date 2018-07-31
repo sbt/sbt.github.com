@@ -678,6 +678,13 @@ will be run in sequence (<code>clean</code>, <code>compile</code>, then <code>te
 so <strong>your build will run much slower</strong>.
 For day-to-day coding, we recommend using the sbt shell
 or Continuous build and test feature described below.
+</p><p>Beginning in sbt 0.13.16, using batch mode in sbt will issue an
+informational startup message,
+</p><pre><code class="">$ sbt clean compile
+[info] Executing in batch mode. For better performance use sbt's shell
+...
+</code></pre><p>It will only be triggered for <code>sbt compile</code>, and it can also be
+supressed with <code>suppressSbtShellNotification := true</code>.
 </p><h3 id="Continuous+build+and+test">Continuous build and test<a href="#Continuous+build+and+test" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To speed up your edit-compile-test cycle, you can ask sbt to
 automatically recompile or run tests whenever you save a source file.
 </p><p>Make a command run when one or more source files change by prefixing the
@@ -1920,7 +1927,19 @@ according to constraints you specify. Instead of a fixed revision like
 revisions</a>
 documentation for details.
 </p><!-- TODO: Add aliases -->
-<h4 id="Resolvers">Resolvers<a href="#Resolvers" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Not all packages live on the same server; sbt uses the standard Maven2
+<p>Occasionally a Maven “version range” is used to specify a dependency
+(transitive or otherwise), such as <code>[1.3.0,)</code>.  If a specific version
+of the dependency is declared in the build, and it satisfies the
+range, then sbt will use the specified version.  Otherwise, Ivy could
+go out to the Internet to find the latest version.  This would result
+to a surprising behavior where the effective version keeps changing
+over time, even though there’s a specified version of the library that
+satisfies the range condition.
+</p><p>Maven version ranges will be replaced with its lower bound if the
+build so that when a satisfactory version is found in the dependency
+graph it will be used.  You can disable this behavior using the JVM
+flag <code>-Dsbt.modversionrange=false</code>.
+</p><h4 id="Resolvers">Resolvers<a href="#Resolvers" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Not all packages live on the same server; sbt uses the standard Maven2
 repository by default. If your dependency isn’t on one of the default
 repositories, you’ll have to add a <em>resolver</em> to help Ivy find it.
 </p><p>To add an additional repository, use
@@ -2058,7 +2077,45 @@ and then use that code in <code>core/src/test/scala</code>, for example.
 </p><p>You can have multiple configurations for a dependency, separated by
 semicolons. For example,
 <code>dependsOn(util % &quot;test-&gt;test;compile-&gt;compile&quot;)</code>.
-</p><h3 id="Default+root+project">Default root project<a href="#Default+root+project" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>If a project is not defined for the root directory in the build, sbt
+</p><h3 id="Inter-project+dependencies">Inter-project dependencies<a href="#Inter-project+dependencies" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>On extremely large projects with many files and many subprojects, sbt
+can perform less optimally at watching files have changed during
+interactively and using a lot of disk and system I/O.
+</p><p>sbt has <code>trackInternalDependencies</code> and <code>exportToInternal</code>
+settings. These can be used to control whether to trigger compilation
+of a dependent subprojects when you call <code>compile</code>. Both keys will
+take one of three values: <code>TrackLevel.NoTracking</code>,
+<code>TrackLevel.TrackIfMissing</code>, and <code>TrackLevel.TrackAlways</code>. By default
+they are both set to <code>TrackLevel.TrackAlways</code>.
+</p><p>When <code>trackInternalDependencies</code> is set to
+<code>TrackLevel.TrackIfMissing</code>, sbt will no longer try to compile
+internal (inter-project) dependencies automatically, unless there are
+no <code>*.class</code> files (or JAR file when <code>exportJars</code> is <code>true</code>) in the
+output directory.
+</p><p>When the setting is set to <code>TrackLevel.NoTracking</code>, the compilation of
+internal dependencies will be skipped. Note that the classpath will
+still be appended, and dependency graph will still show them as
+dependencies. The motivation is to save the I/O overhead of checking
+for the changes on a build with many subprojects during
+development. Here’s how to set all subprojects to <code>TrackIfMissing</code>.
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
+  aggregate(....).
+  settings(
+    inThisBuild(Seq(
+      trackInternalDependencies := TrackLevel.TrackIfMissing,
+      exportJars := true
+    ))
+  )
+</code></pre><p>The <code>exportToInternal</code> setting allows the dependee subprojects to opt
+out of the internal tracking, which might be useful if you want to
+track most subprojects except for a few. The intersection of the
+<code>trackInternalDependencies</code> and <code>exportToInternal</code> settings will be
+used to determine the actual track level. Here’s an example to opt-out
+one project:
+</p><pre><code class="prettyprint lang-scala">lazy val dontTrackMe = (project in file(&quot;dontTrackMe&quot;)).
+  settings(
+    exportToInternal := TrackLevel.NoTracking
+  )
+</code></pre><h3 id="Default+root+project">Default root project<a href="#Default+root+project" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>If a project is not defined for the root directory in the build, sbt
 creates a default one that aggregates all other projects in the build.
 </p><p>Because project <code>hello-foo</code> is defined with <code>base = file(&quot;foo&quot;)</code>, it will be
 contained in the subdirectory foo. Its sources could be directly under
@@ -5590,6 +5647,34 @@ simplified example and in a real-world extension of the above code.
 val a: Seq[Writer] =
   new BufferedWriter(new FileWriter(&quot;bar.input&quot;)) +:
   A.openFiles(List(new File(&quot;foo.input&quot;)))
+</code></pre><h3 id="Bytecode+Enhancers">Bytecode Enhancers<a href="#Bytecode+Enhancers" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt added an extension point whereby users can effectively manipulate
+Java bytecode (<code>.class</code> files) <em>before</em> the incremental compiler
+attempts to cache the classfile hashes.  This allows libraries like
+Ebean to function with sbt without corrupting the compiler cache and
+rerunning compile every few seconds.
+</p><p>This splits the compile task into several subTasks:
+</p><ol><li><code>previousCompile</code>: This task returns the previously persisted
+<code>Analysis</code> object for this project.
+</li><li><code>compileIncremental</code>: This is the core logic of compiling
+Scala/Java files together.  This task actually does the work of
+compiling a project incrementally, including ensuring a minimum
+number of source files are compiled.  After this method, all
+.class files that would be generated by scalac + javac will be
+available.
+</li><li><code>manipulateByteCode</code>: This is a stub task which takes the
+<code>compileIncremental</code> result and returns it.  Plugins which need to
+manipulate bytecode are expected to override this task with their
+own implementation, ensuring to call the previous behavior.
+</li><li><code>compile</code>: This task depends on <code>manipulateBytecode</code> and then
+persists the <code>Analysis</code> object containing all incremental compiler
+information.
+</li></ol><p>Here’s an example of how to hook the new <code>manipulateBytecode</code> key in
+your own plugin:
+</p><pre><code class="prettyprint lang-scala">    manipulateBytecode in Compile := {
+      val previous = (manipulateBytecode in Compile).value
+      // Note: This must return a new Compiler.CompileResult with our changes.
+      doManipulateBytecode(previous)
+    }
 </code></pre><h3 id="Further+references">Further references<a href="#Further+references" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The incremental compilation logic is implemented in
 <a href="https://github.com/sbt/sbt/blob/0.13/compile/inc/src/main/scala/inc/Incremental.scala">https://github.com/sbt/sbt/blob/0.13/compile/inc/src/main/scala/inc/Incremental.scala</a>.
 Some discussion on the incremental recompilation policies is available
@@ -8066,6 +8151,26 @@ arguments combined with <code>&amp;&amp;</code>.
 </p><h4 id="SNAPSHOT+and+dynamic+dependencies">SNAPSHOT and dynamic dependencies<a href="#SNAPSHOT+and+dynamic+dependencies" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>When a minigraph contains either a SNAPSHOT or dynamic dependency, the graph is considered dynamic, and it will be invalidated after a single task execution.
 Therefore, if you have any SNAPSHOT in your graph, your exeperience may degrade.
 (This could be improved in the future)
+</p><p>A setting key called <code>updateOptions</code> customizes the details of
+managed dependency resolution with the <code>update</code> task. One of its flags is
+called <code>lastestSnapshots</code>, which controls the behavior of the chained
+resolver. Up until 0.13.6, sbt was picking the first <code>-SNAPSHOT</code>
+revision it found along the chain.  When <code>latestSnapshots</code> is enabled
+(default: <code>true</code>), it will look into all resolvers on the chain, and
+compare them using the publish date.
+</p><p>The tradeoff is probably a longer resolution time if you have many
+remote repositories on the build or you live away from the severs. So
+here’s how to disable it:
+</p><pre><code class="prettyprint lang-scala">    updateOptions := updateOptions.value.withLatestSnapshots(false)
+</code></pre><h3 id="Consolidated+resolution">Consolidated resolution<a href="#Consolidated+resolution" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>updateOptions</code> can also be used to enable consolidated resolution for <code>update</code> task.
+</p><pre><code class="prettyprint lang-scala">updateOptions := updateOptions.value.withConsolidatedResolution(true)
+</code></pre><p>This feature is specifically targeted to address Ivy resolution being
+slow for multi-module projects. Consolidated resolution aims to fix
+this issue by artificially constructing an Ivy dependency graph for
+the unique managed dependencies. If two subprojects introduce
+identical external dependencies, both subprojects should consolidate
+to the same graph, and therefore resolve immediately for the second
+<code>update</code>.
 </p><a name="motivation"></a><h3 id="Motivation">Motivation<a href="#Motivation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt internally uses Apache Ivy to resolve library dependencies. While sbt has benefited from not having to reinvent its own dependency resolution engine all these years, we are increasingly seeing scalability challenges especially for projects with both multiple subprojects and large dependency graph. There are several factors involved in sbt’s resolution scalability:
 </p><ul><li>Number of transitive nodes (libraries) in the graph
 </li><li>Exclusion and override rules
@@ -10213,6 +10318,15 @@ Here are some cautionary words from the documentation:
 </p><blockquote><p>Our builds have a global timeout and a timeout that’s based on the output. If no output is received from a build for 10 minutes, it’s assumed to have stalled for unknown reasons and is subsequently killed.
 </p></blockquote><p>There’s a function called <code>travis_wait</code> that can extend this to 20 minutes.
 </p><h3 id="More+things">More things<a href="#More+things" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>There are more thing you can do, such as <a href="http://docs.travis-ci.com/user/database-setup/">set up databases</a>, <a href="http://docs.travis-ci.com/user/installing-dependencies/">installing Ubuntu packages</a>, and <a href="http://docs.travis-ci.com/user/deployment/">deploy continuously</a>.
+</p><p>Travis offers the ability to run tests in parallel, and also imposes
+time limits on builds.  If you have an especially long-running suite
+of scripted tests for your plugin, you can run a subset of scripted
+tests in a directory, for example:
+</p><pre><code class="">    - TEST_COMMAND=&quot;scripted tests/*1of3&quot;
+    - TEST_COMMAND=&quot;scripted tests/*2of3&quot;
+    - TEST_COMMAND=&quot;scripted tests/*3of3&quot;
+</code></pre><p>Will create three chunks and run each of the chunks separately for the
+directory <code>tests</code>.
 </p><h3 id="Sample+setting">Sample setting<a href="#Sample+setting" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Here’s a sample that puts them all together. Remember, most of the sections are optional.
 </p><pre><code class="prettyprint lang-yml"># Use container-based infrastructure
 sudo: false

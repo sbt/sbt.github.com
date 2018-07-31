@@ -63,6 +63,26 @@
 </p><h4 id="SNAPSHOT+and+dynamic+dependencies">SNAPSHOT and dynamic dependencies<a href="#SNAPSHOT+and+dynamic+dependencies" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>When a minigraph contains either a SNAPSHOT or dynamic dependency, the graph is considered dynamic, and it will be invalidated after a single task execution.
 Therefore, if you have any SNAPSHOT in your graph, your exeperience may degrade.
 (This could be improved in the future)
+</p><p>A setting key called <code>updateOptions</code> customizes the details of
+managed dependency resolution with the <code>update</code> task. One of its flags is
+called <code>lastestSnapshots</code>, which controls the behavior of the chained
+resolver. Up until 0.13.6, sbt was picking the first <code>-SNAPSHOT</code>
+revision it found along the chain.  When <code>latestSnapshots</code> is enabled
+(default: <code>true</code>), it will look into all resolvers on the chain, and
+compare them using the publish date.
+</p><p>The tradeoff is probably a longer resolution time if you have many
+remote repositories on the build or you live away from the severs. So
+here’s how to disable it:
+</p><pre><code class="prettyprint lang-scala">    updateOptions := updateOptions.value.withLatestSnapshots(false)
+</code></pre><h3 id="Consolidated+resolution">Consolidated resolution<a href="#Consolidated+resolution" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>updateOptions</code> can also be used to enable consolidated resolution for <code>update</code> task.
+</p><pre><code class="prettyprint lang-scala">updateOptions := updateOptions.value.withConsolidatedResolution(true)
+</code></pre><p>This feature is specifically targeted to address Ivy resolution being
+slow for multi-module projects. Consolidated resolution aims to fix
+this issue by artificially constructing an Ivy dependency graph for
+the unique managed dependencies. If two subprojects introduce
+identical external dependencies, both subprojects should consolidate
+to the same graph, and therefore resolve immediately for the second
+<code>update</code>.
 </p><a name="motivation"></a><h3 id="Motivation">Motivation<a href="#Motivation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt internally uses Apache Ivy to resolve library dependencies. While sbt has benefited from not having to reinvent its own dependency resolution engine all these years, we are increasingly seeing scalability challenges especially for projects with both multiple subprojects and large dependency graph. There are several factors involved in sbt’s resolution scalability:
 </p><ul><li>Number of transitive nodes (libraries) in the graph
 </li><li>Exclusion and override rules
