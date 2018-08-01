@@ -10055,8 +10055,8 @@ but several methods are augmented through implicits:
 
 sbt 0.10+ uses
 [java.io.File](https://docs.oracle.com/javase/8/docs/api/java/io/File.html)
-to represent a file instead of the custom `sbt.Path` class that was in
-sbt 0.7 and earlier. sbt defines the alias `File` for `java.io.File` so
+to represent a file
+and defines the type alias `File` for `java.io.File` so
 that an extra import is not necessary. The `file` method is an alias for
 the single-argument `File` constructor to simplify constructing a new
 file from a String:
@@ -19359,8 +19359,7 @@ lazy val root = (project in file("."))
     artifactClassifier in packageDoc := Some("doc"),
 
     // Copy all managed dependencies to <build-root>/lib_managed/
-    //   This is essentially a project-local cache and is different
-    //   from the lib_managed/ in sbt 0.7.x.  There is only one
+    //   This is essentially a project-local cache.  There is only one
     //   lib_managed/ in the build root (not per-project).
     retrieveManaged := true,
 
