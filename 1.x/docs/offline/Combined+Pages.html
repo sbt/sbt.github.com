@@ -5687,7 +5687,7 @@ a foundation.
 </p><h2 id="Classpaths%2C+sources%2C+and+resources">Classpaths, sources, and resources<a href="#Classpaths%2C+sources%2C+and+resources" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>This page discusses how sbt builds up classpaths for different actions,
 like <code>compile</code>, <code>run</code>, and <code>test</code> and how to override or augment these
 classpaths.
-</p><h3 id="Basics">Basics<a href="#Basics" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>In sbt 0.10 and later, classpaths now include the Scala library and
+</p><h3 id="Basics">Basics<a href="#Basics" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>In sbt, the classpath includes the Scala library and
 (when declared as a dependency) the Scala compiler. Classpath-related
 settings and tasks typically provide a value of type <code>Classpath</code>. This
 is an alias for <code>Seq[Attributed[File]]</code>.
@@ -6361,7 +6361,7 @@ but several methods are augmented through implicits:
 and Seq[File]
 </li><li><a href="../api/sbt/io/Path$.html">Path</a> and <a href="../api/sbt/io/IO$.html">IO</a>
 provide general methods related to files and I/O.
-</li></ul><h3 id="Constructing+a+File">Constructing a File<a href="#Constructing+a+File" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 0.10+ uses
+</li></ul><h3 id="Constructing+a+File">Constructing a File<a href="#Constructing+a+File" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt uses
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html">java.io.File</a>
 to represent a file
 and defines the type alias <code>File</code> for <code>java.io.File</code> so
@@ -9330,7 +9330,7 @@ defined: Map[String, ResolvedProject]
 information as the <code>Project</code> used in a <code>project/Build.scala</code> except that
 <a href="../api/sbt/ProjectReference.html">ProjectReferences</a> are resolved
 to <code>ProjectRef</code>s.
-</p><h3 id="Classpaths">Classpaths<a href="#Classpaths" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Classpaths in sbt 0.10+ are of type <code>Seq[Attributed[File]]</code>. This allows
+</p><h3 id="Classpaths">Classpaths<a href="#Classpaths" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Classpaths in sbt are of type <code>Seq[Attributed[File]]</code>. This allows
 tagging arbitrary information to classpath entries. sbt currently uses
 this to associate an <code>Analysis</code> with an entry. This is how it manages
 the information needed for multi-project incremental recompilation. It
@@ -12363,7 +12363,7 @@ task would look like:
   // ... do something with , which includes proguard ...
 }
 </code></pre><h4 id="How+would+I+change+sbt%E2%80%99s+classpath+dynamically%3F">How would I change sbt’s classpath dynamically?<a href="#How+would+I+change+sbt%E2%80%99s+classpath+dynamically%3F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>It is possible to register additional jars that will be placed on sbt’s
-classpath (since version 0.10.1). Through
+classpath. Through
 <a href="../api/sbt/State$.html">State</a>, it is possible to obtain a
 <a href="../api/xsbti/ComponentProvider.html">xsbti.ComponentProvider</a>, which
 manages application components. Components are groups of files in the

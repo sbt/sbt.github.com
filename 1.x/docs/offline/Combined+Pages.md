@@ -8955,7 +8955,7 @@ classpaths.
 
 ### Basics
 
-In sbt 0.10 and later, classpaths now include the Scala library and
+In sbt, the classpath includes the Scala library and
 (when declared as a dependency) the Scala compiler. Classpath-related
 settings and tasks typically provide a value of type `Classpath`. This
 is an alias for `Seq[Attributed[File]]`.
@@ -10053,7 +10053,7 @@ but several methods are augmented through implicits:
 
 ### Constructing a File
 
-sbt 0.10+ uses
+sbt uses
 [java.io.File](https://docs.oracle.com/javase/8/docs/api/java/io/File.html)
 to represent a file
 and defines the type alias `File` for `java.io.File` so
@@ -14890,7 +14890,7 @@ to `ProjectRef`s.
 
 ### Classpaths
 
-Classpaths in sbt 0.10+ are of type `Seq[Attributed[File]]`. This allows
+Classpaths in sbt are of type `Seq[Attributed[File]]`. This allows
 tagging arbitrary information to classpath entries. sbt currently uses
 this to associate an `Analysis` with an entry. This is how it manages
 the information needed for multi-project incremental recompilation. It
@@ -20026,7 +20026,7 @@ proguard := {
 #### How would I change sbt's classpath dynamically?
 
 It is possible to register additional jars that will be placed on sbt's
-classpath (since version 0.10.1). Through
+classpath. Through
 [State](../api/sbt/State$.html), it is possible to obtain a
 [xsbti.ComponentProvider](../api/xsbti/ComponentProvider.html), which
 manages application components. Components are groups of files in the
