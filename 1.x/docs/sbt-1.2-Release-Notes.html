@@ -1,0 +1,375 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html>
+      <head>
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+        <title>sbt Reference Manual — sbt 1.2.x releases</title>
+        <link rel="shortcut icon" href="favicon.ico"/>
+        <link rel="stylesheet" href="css/blueprint/screen.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/blueprint/grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="css/blueprint/print.css" type="text/css" media="print"/> 
+        <!--[if lt IE 8]>
+          <link rel="stylesheet" href={ relativeBase + "css/blueprint/ie.css" } type="text/css" media="screen, projection"/>
+        <![endif]-->
+        <link rel="stylesheet" href="css/pamflet.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/pamflet-print.css" type="text/css" media="print"/>
+        <link rel="stylesheet" href="css/pamflet-grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="css/color_scheme-redmond.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/color_scheme-github.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/color_scheme-monokai.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/pamfletheight_80px_2em.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <script type="text/javascript" src="js/jquery-1.6.2.min.js"></script>
+        <script type="text/javascript" src="js/jquery.collapse.js"></script>
+        <script type="text/javascript" src="js/pamflet.js"></script>
+        <script type="text/javascript">
+          Pamflet.page.language = 'en';
+        </script>
+        <script type="text/javascript" src="js/prettify/prettify.js"></script><script type="text/javascript" src="js/prettify/lang-scala.js"></script><link type="text/css" rel="stylesheet" href="css/prettify.css"/><script type="text/javascript"><!--
+        window.onload=function() { prettyPrint(); };
+      --></script>
+        <link rel="stylesheet" href="css/custom.css" type="text/css" media="screen, projection"/>
+        
+        <script type="text/javascript">
+              Pamflet.twitter = '#sbt #scala';
+            </script>
+      </head>
+      <body class="color_scheme-github">
+        <a class="page prev nav" href="Migrating-from-sbt-013x.html">
+            <span class="space">&nbsp;</span>
+            <span class="flip arrow">&gt;</span>
+          </a><a class="page next nav" href="sbt-1.1-Release-Notes.html">
+            <span class="space">&nbsp;</span>
+            <span class="arrow">&gt;</span>
+          </a>
+        <div class="container contentswrapper">
+          <div class="span-16 prepend-1 append-1 contents">
+            <h2 id="sbt+1.2.x+releases">sbt 1.2.x releases<a href="#sbt+1.2.x+releases" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="sbt+1.2.1">sbt 1.2.1<a href="#sbt+1.2.1" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="Forward+bincompat+breakage">Forward bincompat breakage<a href="#Forward+bincompat+breakage" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>If you are writing a plugin, please use 1.2.1+, and avoid 1.2.0.
+</p><p>We unintentionally broke forward binary compatibility in 1.2.0.
+If someone publishes an sbt plugin using sbt 1.2.0, it cannot be used from sbt 1.0.x or 1.1.x.
+sbt 1.2.1 reverts the change, so the forward compatibility is restored.
+Unfortunately, this means we won’t be able to use varargs in <code>inThisBuild(...)</code> etc again.
+</p><p>Note that we might eventually break forward compatibility, like we did in 0.13.5 for <code>AutoPlugin</code>,
+but only when the tradeoff is worth it.
+</p><h4 id="The+project+Foo+references+an+unknown+configuration+%E2%80%9Cbar%E2%80%9C">The project Foo references an unknown configuration “bar“<a href="#The+project+Foo+references+an+unknown+configuration+%E2%80%9Cbar%E2%80%9C" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Second regression fix is for the wall of warnings you might have seen in 1.2.0 that looks as follows:
+</p><pre><code class="">[warn] The project ProjectRef(uri(&quot;file:/Users/xxx/work/akka/&quot;), &quot;akka-actor-typed&quot;) references an unknown configuration &quot;multi-jvm&quot; and was guessed to be &quot;Multi-jvm&quot;.
+[warn] This configuration should be explicitly added to the project.
+[warn] The project ProjectRef(uri(&quot;file:/Users/xxx/work/akka/&quot;), &quot;akka-actor-typed-tests&quot;) references an unknown configuration &quot;multi-jvm&quot; and was guessed to be &quot;Multi-jvm&quot;.
+[warn] This configuration should be explicitly added to the project.
+</code></pre><p>The original issue was that unified slash syntax doesn’t pick the configuration names
+when the configuration is not part of the subproject. Since this warning is immaterial,
+we are removing them in this patch release.
+</p><p>One thing the plugin authors can start doing is declaring the custom configuration
+as hidden, and adding them into the subprojects as follows:
+</p><pre><code class="prettyprint lang-scala">import sbt._
+import sbt.Keys._
+
+object ParadoxPlugin extends AutoPlugin {
+  val ParadoxTheme = config(&quot;paradox-theme&quot;).hide
+  override def projectConfigurations: Seq[Configuration] = Seq(ParadoxTheme)
+
+  ....
+}
+</code></pre><p>We are also looking into improving unified slash syntax parser to make it more robust.
+</p><h4 id="Other+bug+fixes">Other bug fixes<a href="#Other+bug+fixes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>Updates <code>IO.relativize</code> for JDK 9. <a href="https://github.com/sbt/io/pull/175">io#175</a> by <a href="https://github.com/eatkins">@eatkins</a>
+</li><li>Fixes logic for adding external class file manager. <a href="https://github.com/sbt/zinc/pull/562">zinc#562</a> by <a href="https://github.com/allanrenucci">@allanrenucci</a>
+</li></ul><h4 id="Contributors">Contributors<a href="#Contributors" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>A huge thank you to everyone who’s helped improve sbt and Zinc 1 by using them, reporting bugs, improving our documentation, porting builds, porting plugins, and submitting and reviewing pull requests.
+</p><p>sbt 1.2.1 was brought to you by 4 contributors, according to <code>git shortlog -sn --no-merges v1.2.1...v1.2.0</code> on sbt, zinc, librarymanagement, util, io, launcher-packege, and website: Eugene Yokota, Aaron S. Hawley, Ethan Atkins, and Allan Renucci. Thanks! Also special thanks to Ches Martin and Yoshida-san for reporting these issues.
+</p><hr/><h3 id="sbt+1.2.0">sbt 1.2.0<a href="#sbt+1.2.0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><strong>Warning</strong>: We found forward compatibility breakage in 1.2.0, so we recommend everyone to upgrade to <a href="https://github.com/sbt/sbt/releases/tag/v1.2.1">sbt 1.2.1</a> or later.
+</p><p>The headline features of sbt 1.2 are cross JDK forking, composite project, and experimental thin clients. But, there are lots of other bug fixes and enhancements that we’ve been accumulating for six months since sbt 1.1.
+</p><h4 id="SbtPlugin+for+plugin+development">SbtPlugin for plugin development<a href="#SbtPlugin+for+plugin+development" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>SbtPlugin</code> is a plugin to declare a project for sbt plugins. This automatically brings in scripted tests, and sets <code>sbtPlugin := true</code>.
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .enablePlugins(SbtPlugin)
+</code></pre><p><strong>Compatibility note</strong>: <code>ScriptedPlugin</code> is no longer a triggered plugin.
+</p><p><a href="https://github.com/sbt/sbt/pull/3875">#3875</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</p><h4 id="Cross+JDK+forking">Cross JDK forking<a href="#Cross+JDK+forking" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>For forked <code>run</code> and <code>test</code>, <code>java++</code> can now switch Java Home.
+</p><pre><code class="">sbt:helloworld&gt; run
+[info] Running (fork) Hello
+[info] 1.8.0_171
+sbt:helloworld&gt; java++ 10!
+[info] Reapplying settings...
+sbt:helloworld&gt; run
+[info] Running (fork) Hello
+[info] 10.0.1
+</code></pre><p>sbt will try to detect Java homes into <code>discoveredJavaHomes</code> setting, supporting <a href="https://github.com/shyiko/jabba">shyiko/jabba</a>. This can be augmented by <code>Global / javaHomes</code>:
+</p><pre><code class="">Global / javaHomes += &quot;6&quot; -&gt; file(&quot;/something/java-6&quot;)
+</code></pre><p>This feature is intended for testing your library in an older JVM to check compatibility.
+</p><p><a href="https://github.com/sbt/sbt/pull/4139">#4139</a> by <a href="https://github.com/2m">@2m</a>, <a href="https://github.com/cunei">@cunei</a>, and <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</p><h4 id="scalaVersion-filtered+aggregation">scalaVersion-filtered aggregation<a href="#scalaVersion-filtered+aggregation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>In 2015 James Roper <a href="https://github.com/sbt/sbt-doge/pull/4">contributed</a> scalaVersion-filtered aggregation to sbt-doge. This feature is brought back into sbt 1.2 by Rui Gonçalves (<a href="https://github.com/ruippeixotog">@ruippeixotog</a>) in <a href="https://github.com/sbt/sbt/issues/3698">#3698</a>/<a href="https://github.com/sbt/sbt/pull/3995">#3995</a>!
+</p><p>This extends switch command <code>++</code> to take an optional <code>&lt;command&gt;</code>:
+</p><pre><code class="">&gt; ++2.12.6 compile
+</code></pre><p>This will aggregate only the subproject where <code>++2.12.6</code> is valid, which is useful when you have a build where some subprojects are 2.11 only etc.
+</p><h4 id="Composite+project">Composite project<a href="#Composite+project" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>sbt 1.2.0 introduces “composite project” trait, which allows plugin authors to generate subprojects, for example for cross building.
+</p><pre><code class="">trait CompositeProject {
+  def componentProjects: Seq[Project]
+}
+</code></pre><p>This was contributed by <a href="https://github.com/BennyHill">@BennyHill</a> as <a href="https://github.com/sbt/sbt/pull/4056">#4056</a>.
+</p><h4 id="Project+matrix">Project matrix<a href="#Project+matrix" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><strong>Experimental</strong>. As a reference implementation of the <code>CompositeProject</code> I implemented a new DSL called <code>projectMatrix</code> introduced by <a href="https://github.com/sbt/sbt-projectmatrix">sbt-projectmatrix</a> plugin.
+</p><pre><code class="prettyprint lang-scala">lazy val core = (projectMatrix in file(&quot;core&quot;))
+  .scalaVersions(&quot;2.12.6&quot;, &quot;2.11.12&quot;)
+  .settings(
+    name := &quot;core&quot;
+  )
+  .jvmPlatform()
+
+lazy val app = (projectMatrix in file(&quot;app&quot;))
+  .dependsOn(core)
+  .scalaVersions(&quot;2.12.6&quot;)
+  .settings(
+    name := &quot;app&quot;
+  )
+  .jvmPlatform()
+</code></pre><p>The aim of the plugin is to support a generic notion of cross building (Scala version, platform, etc) expressed using subprojects. In the above <code>projectMarix</code> will produce three subprojects: <code>coreJVM2_12</code>, <code>coreJVM2_11</code>, and <code>appJVM2_12</code>.
+</p><h4 id="Semantic+Version+selector+API">Semantic Version selector API<a href="#Semantic+Version+selector+API" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>sbt 1.2.0 introduces Semantic Version selector on <code>VersionNumber()</code> datatype supporting basic match, comparison (<code>&lt;=</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&gt;</code>), combination (<code>&gt;1.0.0 &lt;2.0.0</code>, <code>||</code>), ranges (<code>A.B.C - D.E.F</code>), and wildcard (<code>2.12.x</code>).
+</p><pre><code class="prettyprint lang-scala">scala&gt; import sbt.librarymanagement.{ VersionNumber, SemanticSelector }
+import sbt.librarymanagement.{VersionNumber, SemanticSelector}
+
+scala&gt; VersionNumber(&quot;2.12.5&quot;).matchesSemVer(SemanticSelector(&quot;&gt;=2.12&quot;))
+res1: Boolean = true
+
+scala&gt; VersionNumber(&quot;2.12.5&quot;).matchesSemVer(SemanticSelector(&quot;&lt;2.12&quot;))
+res2: Boolean = false
+
+scala&gt; VersionNumber(&quot;2.13.0-M4&quot;).matchesSemVer(SemanticSelector(&quot;2.13&quot;))
+res3: Boolean = false
+
+scala&gt; VersionNumber(&quot;2.12.5&quot;).matchesSemVer(SemanticSelector(&quot;2.12.1 - 2.12.6&quot;))
+res4: Boolean = true
+
+scala&gt; VersionNumber(&quot;2.12.5&quot;).matchesSemVer(SemanticSelector(&quot;2.12.x&quot;))
+res5: Boolean = true
+
+scala&gt; VersionNumber(&quot;2.12.5&quot;).matchesSemVer(SemanticSelector(&quot;2.11.x || 2.12.x&quot;))
+res6: Boolean = true
+</code></pre><p><strong>Note</strong>: This has no effect on library management at the moment.
+</p><p>This was contributed by Rikito Taniguchi (<a href="https://github.com/tanishiking">@tanishiking</a>) as <a href="https://github.com/sbt/librarymanagement/pull/239">lm#239</a>.
+</p><h4 id="addPluginSbtFile+command">addPluginSbtFile command<a href="#addPluginSbtFile+command" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>There’s been a request from IntelliJ to safely inject a plugin to a build. sbt 1.2.0 adds <code>-addPluginSbtFile</code> command to do so.
+</p><pre><code class="">$ cat /tmp/extra.sbt
+addSbtPlugin(&quot;com.eed3si9n&quot; % &quot;sbt-assembly&quot; % &quot;0.14.7&quot;)
+
+$ sbt -addPluginSbtFile=/tmp/extra.sbt
+...
+sbt:helloworld&gt; plugins
+In file:/xxxx/hellotest/
+  ...
+  sbtassembly.AssemblyPlugin: enabled in root
+</code></pre><p>Implmented by <a href="https://github.com/eed3si9n">@eed3si9n</a> as <a href="https://github.com/sbt/sbt/pull/4211">#4211</a>.
+</p><h4 id="Extensible+sbt+server">Extensible sbt server<a href="#Extensible+sbt+server" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><strong>Experimental</strong>. sbt server can now be extended via the plugin.
+</p><pre><code class="prettyprint lang-scala">    Global / serverHandlers += ServerHandler({ callback =&gt;
+      import callback._
+      import sjsonnew.BasicJsonProtocol._
+      import sbt.internal.protocol.JsonRpcRequestMessage
+      ServerIntent(
+        {
+          case r: JsonRpcRequestMessage if r.method == &quot;lunar/helo&quot; =&gt;
+            jsonRpcNotify(&quot;lunar/oleh&quot;, &quot;&quot;)
+            ()
+        },
+        PartialFunction.empty
+      )
+</code></pre><p>This feature is still experimental and the API may change in the future.
+</p><p><a href="https://github.com/sbt/sbt/pull/3975">#3975</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</p><h4 id="Thin+client%28s%29">Thin client(s)<a href="#Thin+client%28s%29" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><strong>Experimental</strong>. sbt 1.2.0 adds a new mode called <code>-client</code>. When sbt is started with -client command, it no longer to loads the build, and instead tries to connect to an instance of sbt server over JSON-RPC. When the server is not running (portfile is not found), it will fork a new instance of sbt entirely in a new JVM.
+</p><p>This lets you invoke <code>sbt</code> from the terminal shell or from an editor.
+</p><pre><code class="">$ time sbt -client clean
+[info] entering *experimental* thin client - BEEP WHIRR
+[info] server was not detected. starting an instance
+[info] waiting for the server...
+[info] waiting for the server...
+[info] waiting for the server...
+[info] waiting for the server...
+[info] server found
+&gt; clean
+[success] completed
+sbt -client clean  9.23s user 2.33s system 22% cpu 50.558 total
+
+# server stays
+$ ps | rg java
+21860 ttys015    1:22.43 java -Xms2048M -Xmx2048M -Xss2M -jar /usr/local/Cellar/sbt/1.1.6/libexec/bin/sbt-launch.jar
+22014 ttys015    0:00.00 rg java
+
+$ time sbt -client clean
+[info] entering *experimental* thin client - BEEP WHIRR
+&gt; clean
+[info] Updating ...
+[info] Done updating.
+[success] completed
+sbt -client clean  3.39s user 1.75s system 104% cpu 4.898 total
+</code></pre><p>To end the server, call <code>sbt -client shutdown</code>. <a href="https://github.com/sbt/sbt/pull/4227">#4227</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</p><p>In addition, there are also an alternative thin clients <a href="https://github.com/cb372/sbt-client">cb372/sbt-client</a> and <a href="https://github.com/dwijnand/sbtl">dwijnand/sbtl</a> implemented using Rust.
+</p><h4 id="Changes+with+compatibility+implication">Changes with compatibility implication<a href="#Changes+with+compatibility+implication" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>Removes deprecated commands <code>-</code>, <code>--</code>, and <code>---</code>. Use <code>onFailure</code>, <code>sbtClearOnFailure</code>, and <code>resumeFromFailure</code> instead. <a href="https://github.com/sbt/sbt/pull/4124">#4124</a>
+</li><li>Makes <code>++</code> fail when it doesn’t affect any subprojects <a href="https://github.com/sbt/sbt/pull/4269">#4269</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li></ul><h4 id="Other+bug+fixes+and+improvements">Other bug fixes and improvements<a href="#Other+bug+fixes+and+improvements" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>Fixes output caching bug. <a href="https://github.com/sbt/util/pull/169">util#169</a> by <a href="https://github.com/bpholt">@bpholt</a>
+</li><li>Fixes “destination file exists” error message. <a href="https://github.com/sbt/librarymanagement/pull/255">lm#255</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li><li>Reintroduces <code>Command.process(String, State): State</code>. <a href="https://github.com/sbt/sbt/pull/4023">#4023</a> by <a href="http://github.com/dwijnand">@dwijnand</a>
+</li><li>Fixes <code>active.json</code> not getting removed on JVM shutdown. <a href="https://github.com/sbt/sbt/pull/4194">#4194</a> by <a href="https://github.com/veera8337">@veera83372</a>
+</li><li>Fixes file permission error (”<code>CreateFile()</code> failed”) while reading the timestamp on Windows. <a href="https://github.com/sbt/io/pull/134">io#134</a> by <a href="https://github.com/cunei">@cunei</a>
+</li><li>Fixes the linter that detects missing <code>.value</code>. <a href="https://github.com/sbt/sbt/pull/4090">#4090</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li><li>Fixes <code>StringIndexOutOfBoundsException</code> in <code>removeEscapeSequences</code>. <a href="https://github.com/sbt/util/pull/139">util#139</a> by <a href="http://github.com/dwijnand">@dwijnand</a>
+</li><li>Fixes OkHttp’s <code>JavaNetAuthenticator</code> with a null check. <a href="https://github.com/sbt/librarymanagement/pull/177">lm#177</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li><li>Fixes Sonatype timeout issue by extending the default timeout to 1h. <a href="https://github.com/sbt/librarymanagement/pull/246">lm#246</a> by <a href="https://github.com/peterneyens">@peterneyens</a>
+</li><li>Fixes thread thrashing error during the parallel download. <a href="https://github.com/sbt/librarymanagement/pull/249">lm249</a> by <a href="https://github.com/OlegYch">@OlegYch</a>
+</li><li>Fixes JavaDoc warnings logged as errors. <a href="https://github.com/sbt/zinc/pull/506">zinc#506</a> by <a href="https://github.com/kaygorodov">@kaygorodov</a>
+</li><li>Fixes class dependency not picking up <code>classOf[A]</code>. <a href="https://github.com/sbt/zinc/pull/510">zinc#510</a> by <a href="https://github.com/natansil">@natansil</a>
+</li><li>Fixes class dependency including non-existing objects. <a href="https://github.com/sbt/zinc/pull/422">zinc422</a> by <a href="https://github.com/romanowski">@romanowski</a>
+</li><li>Fixes link to the documentation of deprecated 0.10/0.12 DSL syntax. <a href="https://github.com/sbt/sbt/pull/3901">#3901</a> by [@colindean]
+</li><li>Fixes the documentation of <code>skip</code> key. <a href="https://github.com/sbt/sbt/pull/3926">#3926</a> by <a href="https://github.com/dkim">@dkim</a>
+</li><li>Fixes race condition in non-forked parallel tests. <a href="https://github.com/sbt/sbt/pull/3985">#3985</a> by <a href="https://github.com/retronym">@retronym</a>
+</li><li>Fixes Ctrl-C handing in forked tests when <code>Global / cancelable</code> is set to <code>true</code>. <a href="https://github.com/sbt/sbt/pull/4226">#4226</a> by <a href="https://github.com/driquelme">@driquelme</a>
+</li><li>Fixes the stacktrace of <code>run</code>. <a href="https://github.com/sbt/sbt/pull/4232">#4232</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li><li>Bumps the version of Giter8 used by <code>sbt new</code> to 0.11.0, fixing various issues <a href="https://github.com/sbt/sbt/pull/4263">#4263</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li><li>Improves Javac error parsing. <a href="https://github.com/sbt/zinc/pull/557">zinc#557</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li><li>Displays only the eviction warning summary by default, and make it configurable using <code>ThisBuild / evictionWarningOptions</code>. <a href="https://github.com/sbt/librarymanagement/pull/211">lm211</a> and <a href="https://github.com/sbt/sbt/pull/3947">#3947</a> by <a href="https://github.com/exoego">@exoego</a>
+</li><li>Allow varargs in <code>inThisBuild(...)</code>, <code>inConfig(C)(...)</code>, <code>inTask(t)(...)</code>, <code>inScope(scope)(...)</code>. <a href="https://github.com/sbt/sbt/pull/4106">#4106</a> by <a href="http://github.com/dwijnand">@dwijnand</a> 
+</li><li>Adds <code>fgRun</code> and <code>fgRunMain</code> tasks that behaves like sbt 0.13’s <code>run</code>. <a href="https://github.com/sbt/sbt/pull/4216">#4216</a> by <a href="https://github.com/agaro1121">@agaro1121</a>
+</li><li>Supports <code>test.script</code> and <code>pending.script</code> as the scripted file name. <a href="https://github.com/sbt/sbt/pull/4220">#4220</a> by <a href="https://github.com/regadas">@regadas</a>
+</li><li>Supports aliases in <code>inspect</code> command. <a href="https://github.com/sbt/sbt/pull/4221">#4221</a> by <a href="https://github.com/gpoirier">@gpoirier</a>
+</li><li>Adds the current project’s id to <code>~</code>’s watching message. <a href="https://github.com/sbt/sbt/issues/2038">#2038</a> / <a href="https://github.com/sbt/sbt/pull/3813">#3813</a> by <a href="http://github.com/dwijnand">@dwijnand</a>
+</li><li>Changes <code>PathFinder#get</code> to <code>get()</code>. <a href="https://github.com/sbt/io/pull/104">io#104</a> by <a href="http://github.com/dwijnand">@dwijnand</a>
+</li><li>Improves the error message when access is denied. <a href="https://github.com/sbt/librarymanagement/pull/203">lm#203</a> by <a href="https://github.com/stephennancekivell">@stephennancekivell</a>
+</li><li>Improve the warning message “Choosing local” to something more actionable. <a href="https://github.com/sbt/librarymanagement/pull/248">lm#248</a> by <a href="https://github.com/khvatov">@khvatov</a>
+</li><li>Adds an option to ignore scalac options change. <a href="https://github.com/sbt/zinc/pull/548">zinc#548</a> by <a href="https://github.com/lukaszwawrzyk">@lukaszwawrzyk</a>
+</li><li>Enable parallel execution of scripted in the plugin. <a href="https://github.com/sbt/sbt/pull/3891">#3891</a> by <a href="https://github.com/jvican">@jvican</a>
+</li><li>Adds factory methods for Configuration axis scope filters <code>inConfigurationsByKeys</code> and <code>inConfigurationsByRefs</code>. <a href="https://github.com/sbt/sbt/pull/3994">#3994</a>
+</li><li>Adds <code>lastGrep</code>, <code>loadFailed</code>, etc commands to replace the kebab-cased commands. <a href="https://github.com/sbt/sbt/pull/4080">#4080</a> by <a href="https://github.com/naferx">@naferx</a>, <a href="https://github.com/sbt/sbt/pull/4159">#4159</a> by <a href="https://github.com/Asamsig">@Asamsig</a>, and <a href="https://github.com/sbt/sbt/pull/4169">#4169</a> by <a href="https://github.com/tiqwab">@tiqwab</a>
+</li><li>Adds timestamp field to JUnitXML report. <a href="https://github.com/sbt/sbt/pull/4154">4154</a> by <a href="https://github.com/timcharper">@timcharper</a>
+</li><li>“Loading settings” log messages now show subproject name. <a href="https://github.com/sbt/sbt/pull/4164">#4164</a> by <a href="https://github.com/alodavi">@alodavi</a>
+</li><li><code>about</code> command sorts and indents plugins list. <a href="https://github.com/sbt/sbt/pull/4187">#4187</a> by <a href="https://github.com/mcanlas">@mcanlas</a>
+</li><li><code>-Dsbt.offline</code> sets <code>offline</code> setting. <a href="https://github.com/sbt/sbt/pull/4198">#4198</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li><li>Selects most recent JDK during cross JDK forking (see below for details) <a href="https://github.com/sbt/sbt/pull/4245">#4245</a> by <a href="https://github.com/raboof">@raboof</a>
+</li></ul><h4 id="Internal">Internal<a href="#Internal" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>Removes some compiler warnings. <a href="https://github.com/sbt/sbt/pull/3807">#3087</a> by <a href="http://github.com/dwijnand">@dwijnand</a>
+</li><li>Lots of other refactorings by <a href="http://github.com/dwijnand">@dwijnand</a>
+</li><li>Removes some compiler warnings in Zinc. <a href="https://github.com/sbt/zinc/pull/493">zinc#493</a> by <a href="https://github.com/exoego">@exoego</a>
+</li><li>Perf: Prevents creation of useless <code>URI</code> copies in <code>IO.directoryURI</code>. <a href="https://github.com/sbt/io/pull/132">io#132</a> by <a href="https://github.com/jrudolph">@jrudolph</a>
+</li><li>Perf: Avoids reflect universe initialization in <code>initStringCodecs</code>. <a href="https://github.com/sbt/util/pull/153">util#153</a> by <a href="https://github.com/jrudolph">@jrudolph</a>
+</li><li>Perf: Speeds up <code>Parsers.validID</code>. <a href="https://github.com/sbt/sbt/pull/3952">#3952</a> by <a href="https://github.com/jrudolph">@jrudolph</a>
+</li><li>Perf: Optimizes scope delegation by hand rolling <code>for</code> comprehension. <a href="https://github.com/sbt/sbt/pull/4003">#4003</a> by <a href="https://github.com/jrudolph">@jrudolph</a> and <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li><li>Use <code>val</code> instead of <code>var</code> in an internal code. <a href="https://github.com/sbt/sbt/pull/4253">#4253</a> by <a href="https://github.com/xuwei-k">@xuwei-k</a>
+</li></ul><h4 id="Contributors">Contributors<a href="#Contributors" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Thanks again to everyone who’s helped improve sbt and Zinc 1.
+</p><p>sbt 1.2.0 was brought to you by 60 contributors. Dale Wijnand, Eugene Yokota, Kenji Yoshida (xuwei-k), Yasuhiro Tatsuno (exoego), Łukasz Wawrzyk, Jorge Vicente Cantero (jvican), Alistair Johnson, Antonio Cunei, Jason Zaugg, Rikito Taniguchi (tanishiking), Seiya Mizuno, Tim Harper, Aloisia Davì (alodavi), Arnout Engelen, Ethan Atkins, Johannes Rudolph, Krzysztof Romanowski, Allan Renucci, Brian P. Holt, Filipe Regadas, Hiroshi Ito, Martijn Hoekstra, OlegYch, Seth Tisue, natans, Aaron S. Hawley, Alex Khvatov, Alexander Samsig, Andreas Jim-Hartmann, Andrei Pozolotin, Andrey Kaygorodov, Anthony Garo, Christopher Hunt, Colin Dean, Daniel Riquelme, Deokhwan Kim, Gerard Maas, Guillaume Poirier, Heikki Vesalainen, Jason Pickens, Jonas Fonseca, Julien Jerphanion, Justin Pihony, Kazufumi Nishida, Kyle Goodale, Maksym Fedorov, Mark Canlas, Martynas Mickevičius, Michael Pollmeier, Mike Skells, Nafer Sanabria, Naohisa Murakami (tiqwab), PanAeon, Peter Neyens, Rui Gonçalves, Sean Sullivan, Stephen Nancekivell, Veera Venky, blakkan, ortigali. Thank you!
+</p><div class="bottom nav span-16">
+                        <em>Next Page</em>
+                        <span class="arrow">&gt;</span>
+                        <a href="sbt-1.1-Release-Notes.html"> sbt 1.1.x releases </a>                        
+                        <ul class="language-bar">
+        
+      </ul>
+                      </div><div class="tocwrapper show">
+      <a class="tochead nav" style="display: none" href="#toc">❦</a>
+      <a name="toc"></a>
+      <h4 class="toctitle">Contents</h4>
+      <div class="tocbody">
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">Getting Started with sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">Installing sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Installing sbt on Mac</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Installing sbt on Windows</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Installing sbt on Linux</a></div></li> </ol></li><li><div><a href="sbt-by-example.html">sbt by example</a></div></li><li><div><a href="Directories.html">Directory structure</a></div></li><li><div><a href="Running.html">Running</a></div></li><li><div><a href="Basic-Def.html">Build definition</a></div></li><li><div><a href="Multi-Project.html">Multi-project builds</a></div></li><li><div><a href="Task-Graph.html">Task graph</a></div></li><li><div><a href="Scopes.html">Scopes</a></div></li><li><div><a href="Appending-Values.html">Appending values</a></div></li><li><div><a href="Scope-Delegation.html">Scope delegation (.value lookup)</a></div></li><li><div><a href="Library-Dependencies.html">Library dependencies</a></div></li><li><div><a href="Using-Plugins.html">Using plugins</a></div></li><li><div><a href="Custom-Settings.html">Custom settings and tasks</a></div></li><li><div><a href="Organizing-Build.html">Organizing the build</a></div></li><li><div><a href="Summary.html">Getting Started summary</a></div></li> </ol></li><li><div><a href="General-Info.html">General Information</a></div><ol class="toc"> <li><div><a href="Credits.html">Credits</a></div></li><li><div><a href="Community-Plugins.html">Community Plugins</a></div></li><li><div><a href="Repository-Roles.html">Community Repository Policy</a></div></li><li><div><a href="Bintray-For-Plugins.html">Bintray For Plugins</a></div></li><li><div><a href="Setup-Notes.html">Setup Notes</a></div></li><li><div><a href="Using-Sonatype.html">Using Sonatype</a></div></li><li><div><a href="Contibuting-to-sbt.html">Contributing to sbt</a></div></li><li><div><a href="Changes.html">Changes</a></div><ol class="toc"> <li><div><a href="Migrating-from-sbt-013x.html">Migrating from sbt 0.13.x</a></div></li><li><div class="current">sbt 1.2.x releases</div></li><li><div><a href="sbt-1.1-Release-Notes.html">sbt 1.1.x releases</a></div></li><li><div><a href="sbt-1.0-Release-Notes.html">sbt 1.0.x releases</a></div></li> </ol></li> </ol></li><li><div><a href="Detailed-Topics.html">Detailed Topics</a></div><ol class="toc"> <li><div><a href="Using-sbt.html">Using sbt</a></div><ol class="toc"> <li><div><a href="Command-Line-Reference.html">Command Line Reference</a></div></li><li><div><a href="Console-Project.html">Console Project</a></div></li><li><div><a href="Cross-Build.html">Cross-building</a></div></li><li><div><a href="Inspecting-Settings.html">Interacting with the Configuration System</a></div></li><li><div><a href="Triggered-Execution.html">Triggered Execution</a></div></li><li><div><a href="Scripts.html">Scripts, REPL, and Dependencies</a></div></li><li><div><a href="sbt-server.html">sbt Server</a></div></li><li><div><a href="Understanding-Recompilation.html">Understanding Incremental Recompilation</a></div></li> </ol></li><li><div><a href="Configuration-Index.html">Configuration</a></div><ol class="toc"> <li><div><a href="Classpaths.html">Classpaths, sources, and resources</a></div></li><li><div><a href="Compiler-Plugins.html">Compiler Plugin Support</a></div></li><li><div><a href="Configuring-Scala.html">Configuring Scala</a></div></li><li><div><a href="Forking.html">Forking</a></div></li><li><div><a href="Global-Settings.html">Global Settings</a></div></li><li><div><a href="Java-Sources.html">Java Sources</a></div></li><li><div><a href="Mapping-Files.html">Mapping Files</a></div></li><li><div><a href="Local-Scala.html">Local Scala</a></div></li><li><div><a href="Macro-Projects.html">Macro Projects</a></div></li><li><div><a href="Paths.html">Paths</a></div></li><li><div><a href="Parallel-Execution.html">Parallel Execution</a></div></li><li><div><a href="Process.html">External Processes</a></div></li><li><div><a href="Running-Project-Code.html">Running Project Code</a></div></li><li><div><a href="Testing.html">Testing</a></div></li> </ol></li><li><div><a href="Dependency-Management-Index.html">Dependency Management</a></div><ol class="toc"> <li><div><a href="Artifacts.html">Artifacts</a></div></li><li><div><a href="Dependency-Management-Flow.html">Dependency Management Flow</a></div></li><li><div><a href="Library-Management.html">Library Management</a></div></li><li><div><a href="Proxy-Repositories.html">Proxy Repositories</a></div></li><li><div><a href="Publishing.html">Publishing</a></div></li><li><div><a href="Resolvers.html">Resolvers</a></div></li><li><div><a href="Update-Report.html">Update Report</a></div></li><li><div><a href="Cached-Resolution.html">Cached resolution</a></div></li> </ol></li><li><div><a href="Tasks-and-Commands.html">Tasks and Commands</a></div><ol class="toc"> <li><div><a href="Tasks.html">Tasks</a></div></li><li><div><a href="Input-Tasks.html">Input Tasks</a></div></li><li><div><a href="Commands.html">Commands</a></div></li><li><div><a href="Parsing-Input.html">Parsing and tab completion</a></div></li><li><div><a href="Build-State.html">State and actions</a></div></li><li><div><a href="Task-Inputs.html">Tasks/Settings: Motivation</a></div></li> </ol></li><li><div><a href="Plugins-and-Best-Practices.html">Plugins and Best Practices</a></div><ol class="toc"> <li><div><a href="Best-Practices.html">General Best Practices</a></div></li><li><div><a href="Plugins.html">Plugins</a></div></li><li><div><a href="Plugins-Best-Practices.html">Plugins Best Practices</a></div></li><li><div><a href="Travis-CI-with-sbt.html">Setting up Travis CI with sbt</a></div></li><li><div><a href="Testing-sbt-plugins.html">Testing sbt plugins</a></div></li><li><div><a href="sbt-new-and-Templates.html">sbt new and Templates</a></div></li><li><div><a href="Cross-Build-Plugins.html">Cross building plugins</a></div></li> </ol></li> </ol></li><li><div><a href="Howto.html">How to…</a></div><ol class="toc"> <li><div><a href="Howto-Classpaths.html">Classpaths</a></div></li><li><div><a href="Howto-Customizing-Paths.html">Customizing paths</a></div></li><li><div><a href="Howto-Generating-Files.html">Generating files</a></div></li><li><div><a href="Howto-Inspect-the-Build.html">Inspect the build</a></div></li><li><div><a href="Howto-Interactive-Mode.html">Interactive mode</a></div></li><li><div><a href="Howto-Logging.html">Configure and use logging</a></div></li><li><div><a href="Howto-Project-Metadata.html">Project metadata</a></div></li><li><div><a href="Howto-Package.html">Configure packaging</a></div></li><li><div><a href="Howto-Running-Commands.html">Running commands</a></div></li><li><div><a href="Howto-Scala.html">Configure and use Scala</a></div></li><li><div><a href="Howto-Scaladoc.html">Generate API documentation</a></div></li><li><div><a href="Howto-Triggered.html">Triggered execution</a></div></li><li><div><a href="Define+Custom+Tasks.html">Define Custom Tasks</a></div></li><li><div><a href="Howto-Startup.html">How to take an action on startup</a></div></li><li><div><a href="Howto-Sequencing.html">Sequencing</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Defining a sequential task with Def.sequential</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Defining a dynamic task with Def.taskDyn</a></div></li><li><div><a href="Howto-After-Input-Task.html">Doing something after an input task</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Defining a dynamic input task with Def.inputTaskDyn</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">How to sequence using commands</a></div></li> </ol></li><li><div><a href="Examples.html">Examples</a></div><ol class="toc"> <li><div><a href="Basic-Def-Examples.html">.sbt build examples</a></div></li><li><div><a href="Scala-Files-Example.html">.sbt build with .scala files example</a></div></li><li><div><a href="Advanced-Configurations-Example.html">Advanced configurations example</a></div></li><li><div><a href="Advanced-Command-Example.html">Advanced command example</a></div></li> </ol></li> </ol></li><li><div><a href="Faq.html">Frequently Asked Questions</a></div><ol class="toc">  </ol></li><li><div><a href="Name-Index.html">Index</a></div></li><li><div><a href="Developers-Guide.html">Developer’s Guide (Work in progress)</a></div><ol class="toc"> <li><div><a href="Modularization.html">Modularization</a></div><ol class="toc"> <li><div><a href="Module-Summary.html">Module summary</a></div></li> </ol></li><li><div><a href="Coding-Guideline.html">sbt Coding Guideline</a></div><ol class="toc">  </ol></li><li><div><a href="Datatype.html">sbt-datatype</a></div><ol class="toc">  </ol></li><li><div><a href="Compiler-Interface.html">Compiler Interface</a></div><ol class="toc"> <li><div><a href="Version-Specific-Sources.html">Fetching the most specific sources</a></div></li> </ol></li><li><div><a href="Sbt-Launcher.html">sbt Launcher</a></div><ol class="toc"> <li><div><a href="Launcher-Getting-Started.html">Getting Started with the sbt launcher</a></div></li><li><div><a href="Launcher-Architecture.html">Sbt Launcher Architecture</a></div></li><li><div><a href="Launcher-Configuration.html">sbt Launcher Configuration</a></div></li> </ol></li><li><div><a href="DevGuide-Notes.html">Notes</a></div><ol class="toc"> <li><div><a href="Core-Principles.html">Core Principles</a></div></li><li><div><a href="Settings-Core.html">Settings Core</a></div></li><li><div><a href="Setting-Initialization.html">Setting Initialization</a></div></li><li><div><a href="Build-Loaders.html">Build Loaders</a></div></li><li><div><a href="Command-Line-Applications.html">Creating Command Line Applications Using sbt</a></div></li><li><div><a href="Nightly-Builds.html">Nightly Builds</a></div></li> </ol></li> </ol></li><li><div><a href="Archived+pages.html">Archived pages</a></div><ol class="toc"> <li><div><a href="Hello.html">Hello, World</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+          </div>
+        </div>
+        <div class="header">
+          <link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
+<div class="container">
+    <div class="logo">
+      <a href="../../index.html"><img src="files/sbt-logo.svg" alt="sbt"></a>
+      <span class="versions"><select id="versions"></select></span>
+    </div>
+    <div class="nav" id="topbar">
+      <a href="../../documentation.html">Documentation</a>
+      <a href="../../download.html">Download</a>
+      <a href="../../support.html">Support</a>
+      <a href="../../community.html">Get Involved</a>
+      <a id="source-code" href="https://github.com/sbt/sbt"><img src="files/github-logo-teal.svg" alt="Source code" class="social"></a>
+      <a id="twitter" href="https://twitter.com/scala_sbt"><img src="files/twitter-logo-teal.svg" alt="sbt on Twitter" class="social"></a>
+      <a id="edit-on-github" href="https://github.com/sbt/website/edit/1.x/src/reference/01-General-Info/90-Changes/20-sbt-1.2-Release-Notes.md"><img src="files/octicon-pencil.svg" alt="Edit on GitHub"></a>
+    </div>
+    <script type="text/javascript" async>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-41449189-1', 'scala-sbt.org');
+    ga('send', 'pageview');
+    </script>
+    <script type="text/javascript" async>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-23127719-1', 'lightbend.com', {'allowLinker': true, 'name': 'tsTracker'});
+      ga('tsTracker.require', 'linker');
+      ga('tsTracker.linker:autoLink', ['lightbend.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org']);
+      ga('tsTracker.send', 'pageview');
+    </script>
+    <script type="text/javascript">
+$(function() {
+  var scrollDown = function() {
+    if (window.location.hash !== "") {
+      setTimeout(function() { $(window).scrollTop($(window).scrollTop() - 120); }, 100);
+    }
+  }
+  scrollDown();
+  $(window).bind('hashchange', function() {
+    scrollDown();
+  });
+});
+    </script>
+</div>
+
+        </div>
+        <div class="footer">
+          <div class="fw-wrapper navy-ltr support-strip">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="support-item">
+          <div class="support-icon">
+            <svg class="svg-icon svg-icon-chat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.5 85.2" enable-background="new 0 0 97.5 85.2"><path stroke="#fff" stroke-width="4.282" stroke-linecap="round" stroke-miterlimit="10" d="M27 29.5h-16.3c-4.7 0-8.6 3.9-8.6 8.6v25.7c0 4.7 3.9 8.6 8.6 8.6h2.7c.8 0 1.5.7 1.5 1.5v7.8c0 1.3 1.6 2 2.5 1l9.5-9.5c.5-.5 1.2-.8 2-.8h20.2c4.7 0 8.6-3.9 8.6-8.6v-7.8" fill="none"/><path fill="#fff" d="M85 0h-40c-6.9 0-12.5 5.6-12.5 12.5v33.4c0 2.2 1.8 4.1 4.1 4.1h29.9c.7 0 1.3.3 1.8.7l10 10c1.6 1.6 4.3.5 4.3-1.8v-6.5c0-1.4 1.1-2.5 2.5-2.5 6.9 0 12.5-5.6 12.5-12.5v-25c-.1-6.8-5.8-12.4-12.6-12.4z"/></svg>
+          </div>
+          <div class="support-detail">
+            <h2>Community Support</h2>
+            <a href="https://stackoverflow.com/questions/tagged/sbt">StackOverflow</a>
+          </div>
+        </div>
+        <div class="support-item">
+          <div class="support-icon">
+            <svg id="lightbend-icon-reverse" class="svg-icon svg-icon-lightbend-reverse" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 302 262"><title>lightbend-icon</title><g id="icon"><path d="M1,195v56a10,10,0,0,0,10,10H291a10,10,0,0,0,10-10V195a557.85,557.85,0,0,1-150,20A557.85,557.85,0,0,1,1,195Z" style="fill:#fff"/><path d="M291,1H11A10,10,0,0,0,1,11V176a539.94,539.94,0,0,0,150,21,539.94,539.94,0,0,0,150-21V11A10,10,0,0,0,291,1Z" style="fill:#fff"/></g></svg>
+          </div>
+          <div class="support-detail">
+            <h2>Commercial Support</h2>
+            <a href="https://www.lightbend.com/services/expert-support">Lightbend Subscription</a>
+            <a href="https://www.lightbend.com/services/training">Training</a>
+            <a href="https://www.lightbend.com/services/consulting">Consulting</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><footer>
+  <div class="container footer">
+    <div class="row">
+      <div class="col-md-8 sbt">
+        <nav>
+          <a href="../../index.html">
+            <img src="files/sbt-logo-reverse.svg" alt="sbt">
+          </a>
+          <a href="../../documentation.html">Documentation</a>
+          <a href="../../download.html">Download</a>
+          <a href="../../community.html">Get Involved</a>
+        </nav>
+      </div>
+      <div class="col-md-4 text-right ts">
+        &copy; 2016-2017 Lightbend Inc.
+        <a href="https://www.lightbend.com">
+          <img src="files/lightbend-reverse.svg" alt="Lightbend, Inc.">
+        </a>
+      </div>
+    </div>
+  </div>
+</footer><script src="/assets/versions.js"></script><script src="/assets/set-versions.js"></script>
+        </div>
+        
+        <div class="highlight-outer">
+              <div class="highlight-menu">
+                <ul>
+                  <li><button id="highlight-button-twitter"><img src="img/twitter-bird-dark-bgs.png"/></button></li>
+                </ul>
+              </div>
+            </div>
+      </body>
+    </html>

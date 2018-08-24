@@ -214,22 +214,14 @@ sbt はフォールバックとして <code>ThisBuild</code> 内を探す。
 この仕組みを利用して、
 <code>version</code>、 <code>scalaVersion</code>、 <code>organization</code>
 といったよく使われるキーに対してビルドレベルのデフォルトのセッティングを定義することができる。
-</p><p>便宜のため、セッティング式のキーと本文の両方を <code>ThisBuild</code>
-にスコープ付けする
-<code>inThisBuild(...)</code> という関数が用意されている。
-セッティング式を渡すと、それに <code>in ThisBuild</code> を可能な所に追加したのと同じものが得られる。
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+</p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;,
+ThisBuild / scalaVersion := &quot;2.12.6&quot;,
+ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
+
+lazy val root = (project in file(&quot;.&quot;))
   .settings(
-    inThisBuild(List(
-      // Same as:
-      // organization in ThisBuild := &quot;com.example&quot;
-      organization := &quot;com.example&quot;,
-      scalaVersion := &quot;2.12.6&quot;,
-      version      := &quot;0.1.0-SNAPSHOT&quot;
-    )),
     name := &quot;Hello&quot;,
-    publish := (),
-    publishLocal := ()
+    publish / skip := true
   )
 
 lazy val core = (project in file(&quot;core&quot;))
@@ -241,7 +233,12 @@ lazy val util = (project in file(&quot;util&quot;))
   .settings(
     // other settings
   )
-</code></pre><p>ただし、後で説明する<a href="Scope-Delegation.html">スコープ委譲</a>の性質上、ビルドレベル・セッティングを単純な値の代入以外に使うことは推奨しない。
+</code></pre><p>便宜のため、セッティング式のキーと本文の両方を <code>ThisBuild</code>
+にスコープ付けする
+<code>inThisBuild(...)</code> という関数が用意されている。
+セッティング式を渡すと、それに <code>ThisBuild /</code> を可能な所に追加したのと同じものが得られる。
+</p><p>ただし、後で説明する<a href="Scope-Delegation.html">スコープ委譲</a>の性質上、ビルドレベル・セッティングは
+純粋な値または <code>Global</code> か <code>ThisBuild</code> にスコープ付けされたセッティングのみを代入するべきだ。
 </p><h3 id="%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E5%A7%94%E8%AD%B2">スコープ委譲<a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E5%A7%94%E8%AD%B2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>スコープ付きキーは、そのスコープに関連付けられた値がなければ未定義であることもできる。
 </p><p>全てのスコープ軸に対して、sbt には他のスコープ値からなるフォールバック検索パス（fallback search path）がある。
 通常は、より特定のスコープに関連付けられた値が見つからなければ、sbt は、<code>ThisBuild</code> など、より一般的なスコープから値を見つけ出そうとする。
@@ -259,7 +256,7 @@ lazy val util = (project in file(&quot;util&quot;))
       <a name="toc"></a>
       <h4 class="toctitle">Contents</h4>
       <div class="tocbody">
-      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">始める sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">sbt のインストール</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Mac への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Linux への sbt のインストール</a></div></li> </ol></li><li><div><a href="sbt-by-example.html">例題でみる sbt</a></div></li><li><div><a href="Directories.html">ディレクトリ構造</a></div></li><li><div><a href="Running.html">実行</a></div></li><li><div><a href="Basic-Def.html">ビルド定義</a></div></li><li><div><a href="Task-Graph.html">タスク・グラフ</a></div></li><li><div class="current">スコープ</div></li><li><div><a href="Appending-Values.html">値の追加</a></div></li><li><div><a href="Scope-Delegation.html">スコープ委譲 (.value の照会)</a></div></li><li><div><a href="Library-Dependencies.html">ライブラリ依存性</a></div></li><li><div><a href="Multi-Project.html">マルチプロジェクト・ビルド</a></div></li><li><div><a href="Using-Plugins.html">プラグインの使用</a></div></li><li><div><a href="Custom-Settings.html">カスタムセッティングとタスク</a></div></li><li><div><a href="Organizing-Build.html">ビルドの整理</a></div></li><li><div><a href="Summary.html">まとめ</a></div></li><li><div><a href="Bare-Def.html">付録: bare .sbt ビルド定義</a></div></li> </ol></li><li><div><a href="General-Info.html">インフォメーション</a></div><ol class="toc"> <li><div><a href="Changes.html">変更点</a></div><ol class="toc"> <li><div><a href="sbt-1.0-Release-Notes.html">sbt 1.0.0</a></div></li> </ol></li> </ol></li><li><div><a href="Detailed-Topics.html">各論</a></div><ol class="toc"> <li><div><a href="Plugins-and-Best-Practices.html">プラグインとベストプラクティス</a></div><ol class="toc"> <li><div><a href="Best-Practices.html">一般的なベストプラクティス</a></div></li><li><div><a href="Testing-sbt-plugins.html">sbt プラグインをテストする</a></div></li> </ol></li> </ol></li><li><div><a href="Howto.html">How to</a></div><ol class="toc"> <li><div><a href="Howto-Generating-Files.html">ソースファイル/リソースファイルの生成</a></div></li><li><div><a href="Howto-Sequencing.html">逐次実行</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Def.sequential を用いて逐次タスクを定義する</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Def.taskDyn を用いて動的タスクを定義する</a></div></li><li><div><a href="Howto-After-Input-Task.html">インプットタスクの後で何かする</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn を用いた動的インプットタスクの定義</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">コマンドを用いた逐次実行</a></div></li> </ol></li> </ol></li><li><div><a href="Archived+pages.html">Archived pages</a></div><ol class="toc"> <li><div><a href="Hello.html">Hello, World</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">始める sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">sbt のインストール</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Mac への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Linux への sbt のインストール</a></div></li> </ol></li><li><div><a href="sbt-by-example.html">例題でみる sbt</a></div></li><li><div><a href="Directories.html">ディレクトリ構造</a></div></li><li><div><a href="Running.html">実行</a></div></li><li><div><a href="Basic-Def.html">ビルド定義</a></div></li><li><div><a href="Multi-Project.html">マルチプロジェクト・ビルド</a></div></li><li><div><a href="Task-Graph.html">タスク・グラフ</a></div></li><li><div class="current">スコープ</div></li><li><div><a href="Appending-Values.html">値の追加</a></div></li><li><div><a href="Scope-Delegation.html">スコープ委譲 (.value の照会)</a></div></li><li><div><a href="Library-Dependencies.html">ライブラリ依存性</a></div></li><li><div><a href="Using-Plugins.html">プラグインの使用</a></div></li><li><div><a href="Custom-Settings.html">カスタムセッティングとタスク</a></div></li><li><div><a href="Organizing-Build.html">ビルドの整理</a></div></li><li><div><a href="Summary.html">まとめ</a></div></li><li><div><a href="Bare-Def.html">付録: bare .sbt ビルド定義</a></div></li> </ol></li><li><div><a href="General-Info.html">インフォメーション</a></div><ol class="toc"> <li><div><a href="Changes.html">変更点</a></div><ol class="toc"> <li><div><a href="sbt-1.0-Release-Notes.html">sbt 1.0.0</a></div></li> </ol></li> </ol></li><li><div><a href="Detailed-Topics.html">各論</a></div><ol class="toc"> <li><div><a href="Plugins-and-Best-Practices.html">プラグインとベストプラクティス</a></div><ol class="toc"> <li><div><a href="Best-Practices.html">一般的なベストプラクティス</a></div></li><li><div><a href="Testing-sbt-plugins.html">sbt プラグインをテストする</a></div></li> </ol></li> </ol></li><li><div><a href="Howto.html">How to</a></div><ol class="toc"> <li><div><a href="Howto-Generating-Files.html">ソースファイル/リソースファイルの生成</a></div></li><li><div><a href="Howto-Sequencing.html">逐次実行</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Def.sequential を用いて逐次タスクを定義する</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Def.taskDyn を用いて動的タスクを定義する</a></div></li><li><div><a href="Howto-After-Input-Task.html">インプットタスクの後で何かする</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn を用いた動的インプットタスクの定義</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">コマンドを用いた逐次実行</a></div></li> </ol></li> </ol></li><li><div><a href="Archived+pages.html">Archived pages</a></div><ol class="toc"> <li><div><a href="Hello.html">Hello, World</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
           </div>
         </div>
         <div class="header">

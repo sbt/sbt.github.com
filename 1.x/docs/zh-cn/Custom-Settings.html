@@ -59,14 +59,12 @@ val clean = taskKey[Unit](&quot;删除构建产生的文件，包括生成的 so
 </p><pre><code class="prettyprint lang-scala">val sampleStringTask = taskKey[String](&quot;A sample string task.&quot;)
 val sampleIntTask = taskKey[Int](&quot;A sample int task.&quot;)
 
-lazy val commonSettings = Seq(
-  organization := &quot;com.example&quot;,
-  version := &quot;0.1.0-SNAPSHOT&quot;
-)
+ThisBuild / organization := &quot;com.example&quot;
+ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
+ThisBuild / scalaVersion := &quot;2.12.6&quot;
 
 lazy val library = (project in file(&quot;library&quot;))
   .settings(
-    commonSettings,
     sampleStringTask := System.getProperty(&quot;user.home&quot;),
     sampleIntTask := {
       val sum = 1 + 2
@@ -91,14 +89,12 @@ val stopServer = taskKey[Unit](&quot;stop server&quot;)
 val sampleIntTask = taskKey[Int](&quot;A sample int task.&quot;)
 val sampleStringTask = taskKey[String](&quot;A sample string task.&quot;)
 
-lazy val commonSettings = Seq(
-  organization := &quot;com.example&quot;,
-  version := &quot;0.1.0-SNAPSHOT&quot;
-)
+ThisBuild / organization := &quot;com.example&quot;
+ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
+ThisBuild / scalaVersion := &quot;2.12.6&quot;
 
 lazy val library = (project in file(&quot;library&quot;))
   .settings(
-    commonSettings,
     startServer := {
       println(&quot;starting...&quot;)
       Thread.sleep(500)
@@ -146,7 +142,6 @@ s: 3
 </p><h4 id="%E6%B8%85%E7%90%86%E4%BB%BB%E5%8A%A1">清理任务<a href="#%E6%B8%85%E7%90%86%E4%BB%BB%E5%8A%A1" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>应该如何实现<code>stopServer</code>任务？清理任务的概念并不适合任务的执行模型，因为任务关心的是依赖项跟踪。最后一次操作应成为依赖其他中间任务的任务。例如<code>stopServer</code>应依赖于<code>sampleStringTask</code>，在其中<code>stopServer</code>应该是 <code>sampleStringTask</code>。
 </p><pre><code class="prettyprint lang-scala">lazy val library = (project in file(&quot;library&quot;))
   .settings(
-    commonSettings,
     startServer := {
       println(&quot;starting...&quot;)
       Thread.sleep(500)

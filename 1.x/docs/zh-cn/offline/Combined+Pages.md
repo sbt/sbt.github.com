@@ -491,15 +491,12 @@ lazy val root = (project in file("."))
 下面是一个例子：
 
 ```scala
-lazy val commonSettings = Seq(
-  organization := "com.example",
-  version := "0.1.0",
-  scalaVersion := "2.12.6"
-)
+ThisBuild / organization := "com.example"
+ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
   .settings(
-    commonSettings,
     name := "hello"
   )
 ```
@@ -644,15 +641,12 @@ scalaVersion := "2.12.6"
 ```scala
 val derby = "org.apache.derby" % "derby" % "10.4.1.3"
 
-lazy val commonSettings = Seq(
-  organization := "com.example",
-  version := "0.1.0",
-  scalaVersion := "2.12.6"
-)
+ThisBuild / organization := "com.example"
+ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
   .settings(
-    commonSettings,
     name := "hello",
     libraryDependencies += derby
   )
@@ -1590,14 +1584,12 @@ val clean = taskKey[Unit]("删除构建产生的文件，包括生成的 source 
 val sampleStringTask = taskKey[String]("A sample string task.")
 val sampleIntTask = taskKey[Int]("A sample int task.")
 
-lazy val commonSettings = Seq(
-  organization := "com.example",
-  version := "0.1.0-SNAPSHOT"
-)
+ThisBuild / organization := "com.example"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
+ThisBuild / scalaVersion := "2.12.6"
 
 lazy val library = (project in file("library"))
   .settings(
-    commonSettings,
     sampleStringTask := System.getProperty("user.home"),
     sampleIntTask := {
       val sum = 1 + 2
@@ -1637,14 +1629,12 @@ val stopServer = taskKey[Unit]("stop server")
 val sampleIntTask = taskKey[Int]("A sample int task.")
 val sampleStringTask = taskKey[String]("A sample string task.")
 
-lazy val commonSettings = Seq(
-  organization := "com.example",
-  version := "0.1.0-SNAPSHOT"
-)
+ThisBuild / organization := "com.example"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
+ThisBuild / scalaVersion := "2.12.6"
 
 lazy val library = (project in file("library"))
   .settings(
-    commonSettings,
     startServer := {
       println("starting...")
       Thread.sleep(500)
@@ -1715,7 +1705,6 @@ s: 3
 ```scala
 lazy val library = (project in file("library"))
   .settings(
-    commonSettings,
     startServer := {
       println("starting...")
       Thread.sleep(500)
@@ -1857,14 +1846,13 @@ object Dependencies {
 ```scala
 import Dependencies._
 
-lazy val commonSettings = Seq(
-  version := "0.1.0",
-  scalaVersion := "2.12.6"
-)
+ThisBuild / organization := "com.example"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
+ThisBuild / scalaVersion := "2.12.6"
 
 lazy val backend = (project in file("backend"))
   .settings(
-    commonSettings,
+    name := "backend",
     libraryDependencies ++= backendDeps
   )
 ```

@@ -85,14 +85,13 @@ object Dependencies {
 </code></pre><p><code>Dependencies</code>对象将在<code>build.sbt</code>中可用。如果要让使用<code>val</code>的代码更加简单，可以引入<code>Dependencies._</code>。
 </p><pre><code class="prettyprint lang-scala">import Dependencies._
 
-lazy val commonSettings = Seq(
-  version := &quot;0.1.0&quot;,
-  scalaVersion := &quot;2.12.6&quot;
-)
+ThisBuild / organization := &quot;com.example&quot;
+ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
+ThisBuild / scalaVersion := &quot;2.12.6&quot;
 
 lazy val backend = (project in file(&quot;backend&quot;))
   .settings(
-    commonSettings,
+    name := &quot;backend&quot;,
     libraryDependencies ++= backendDeps
   )
 </code></pre><p>当你的多工程构建变得很大，并且想要确保子项目有一致的依赖关系时，这种技术很有用。

@@ -989,7 +989,7 @@ This will create a new project under a directory named `hello`.
 This page is based on the [Essential sbt][essential-sbt] tutorial written by William "Scala William" Narmontas.
 
 
-  [Hello]: Hello.html
+  [ByExample]: sbt-by-example.html
   [Setup]: Setup.html
   [Organizing-Build]: Organizing-Build.html
 
@@ -997,14 +997,14 @@ Directory structure
 -------------------
 
 This page assumes you've [installed sbt][Setup] and seen the
-[Hello, World][Hello] example.
+[sbt by example][ByExample].
 
 ### Base directory
 
 In sbt's terminology, the "base directory" is the directory containing
 the project. So if you created a project `hello` containing
-`hello/build.sbt` as in the [Hello, World][Hello]
-example, `hello` is your base directory.
+`/tmp/foo-build/build.sbt` as in the [sbt by example][ByExample],
+`/tmp/foo-build` is your base directory.
 
 ### Source code
 
@@ -1083,7 +1083,7 @@ and it deliberately has no leading `/` (to match `project/target/` in
 addition to plain `target/`).
 
 
-  [Hello]: Hello.html
+  [ByExample]: sbt-by-example.html
   [Setup]: Setup.html
   [Triggered-Execution]: ../docs/Triggered-Execution.html
   [Command-Line-Reference]: ../docs/Command-Line-Reference.html
@@ -1092,8 +1092,8 @@ Running
 -------
 
 This page describes how to use sbt once you have set up your project. It
-assumes you've [installed sbt][Setup] and created a
-[Hello, World][Hello] or other project.
+assumes you've [installed sbt][Setup] and went through
+[sbt by example][ByExample].
 
 ### sbt shell
 
@@ -1340,12 +1340,13 @@ lazy val root = (project in file("."))
 called *setting expressions* using *build.sbt DSL*.
 
 ```scala
+ThisBuild / organization := "com.example"
+ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
+
 lazy val root = (project in file("."))
   .settings(
-    name         := "hello",
-    organization := "com.example",
-    scalaVersion := "2.12.6",
-    version      := "0.1.0-SNAPSHOT"
+    name := "hello"
   )
 ```
 
@@ -1518,17 +1519,16 @@ import Keys._
 
 ### Bare .sbt build definition
 
-Instead of defining `Project`s, bare `.sbt` build definition consists of
-a list of `Setting[_]` expressions.
+The settings can be written directly into the `build.sbt` file instead of
+putting them inside a `.settings(...)` call. We call this the "bare style."
 
 ```scala
-name := "hello"
-version := "1.0"
-scalaVersion := "2.12.6"
+ThisBuild / version := "1.0"
+ThisBuild / scalaVersion := "2.12.6"
 ```
 
-This syntax is recommended mostly for using plugins. See later section
-about the plugins.
+This syntax is recommended for `ThisBuild` scoped settings and adding plugins.
+See later section about the scoping and the plugins.
 
 ### Adding library dependencies
 
@@ -1539,15 +1539,12 @@ managed dependencies, which will look like this in `build.sbt`:
 ```scala
 val derby = "org.apache.derby" % "derby" % "10.4.1.3"
 
-lazy val commonSettings = Seq(
-  organization := "com.example",
-  version := "0.1.0-SNAPSHOT",
-  scalaVersion := "2.12.6"
-)
+ThisBuild / organization := "com.example"
+ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
   .settings(
-    commonSettings,
     name := "Hello",
     libraryDependencies += derby
   )
@@ -1566,6 +1563,302 @@ method is used to construct an Ivy module ID from strings, explained in
 We'll skip over the details of library dependencies until later in the
 Getting Started Guide. There's a
 [whole page][Library-Dependencies] covering it later on.
+
+
+  [Basic-Def]: Basic-Def.html
+  [Scopes]: Scopes.html
+  [Directories]: Directories.html
+  [Organizing-Build]: Organizing-Build.html
+
+Multi-project builds
+--------------------
+
+This page introduces multiple subprojects in a single build.
+
+Please read the earlier pages in the Getting Started Guide first, in
+particular you need to understand [build.sbt][Basic-Def] before reading
+this page.
+
+### Multiple subprojects
+
+It can be useful to keep multiple related subprojects in a single build,
+especially if they depend on one another and you tend to modify them
+together.
+
+Each subproject in a build has its own source directories, generates
+its own jar file when you run package, and in general works like any
+other project.
+
+A project is defined by declaring a lazy val of type
+[Project](../api/sbt/Project.html). For example, :
+
+```scala
+lazy val util = (project in file("util"))
+
+lazy val core = (project in file("core"))
+```
+
+The name of the val is used as the subproject's ID, which
+is used to refer to the subproject at the sbt shell.
+
+Optionally the base directory may be omitted if it's the same as the name of the val.
+
+```scala
+lazy val util = project
+
+lazy val core = project
+```
+
+#### Build-wide settings
+
+To factor out common settings across multiple projects,
+define the settings scoped to `ThisBuild`.
+The limitation is that the right-hand side needs to a pure value
+or settings scoped to `Global` or `ThisBuild`,
+and there are no defeault settings scoped to subprojects. (See [Scopes][Scopes])
+
+```scala
+ThisBuild / organization := "com.example"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
+ThisBuild / scalaVersion := "2.12.6"
+
+lazy val core = (project in file("core"))
+  .settings(
+    // other settings
+  )
+
+lazy val util = (project in file("util"))
+  .settings(
+    // other settings
+  )
+```
+
+Now we can bump up `version` in one place, and it will be reflected
+across subprojects when you reload the build.
+
+#### Common settings
+
+Another way to factor out common settings across multiple projects is to
+create a sequence named `commonSettings` and call `settings` method
+on each project.
+
+```scala
+lazy val commonSettings = Seq(
+  target := { baseDirectory.value / "target2" }
+)
+
+lazy val core = (project in file("core"))
+  .settings(
+    commonSettings,
+    // other settings
+  )
+
+lazy val util = (project in file("util"))
+  .settings(
+    commonSettings,
+    // other settings
+  )
+```
+
+### Dependencies
+
+Projects in the build can be completely independent of one another, but
+usually they will be related to one another by some kind of dependency.
+There are two types of dependencies: aggregate and classpath.
+
+#### Aggregation
+
+Aggregation means that running a task on the aggregate project will also
+run it on the aggregated projects. For example,
+
+```scala
+lazy val root = (project in file("."))
+  .aggregate(util, core)
+
+lazy val util = (project in file("util"))
+
+lazy val core = (project in file("core"))
+```
+
+In the above example, the root project aggregates `util` and `core`. Start
+up sbt with two subprojects as in the example, and try compile. You
+should see that all three projects are compiled.
+
+*In the project doing the aggregating*, the root project in this case,
+you can control aggregation per-task. For example, to avoid aggregating
+the `update` task:
+
+```scala
+lazy val root = (project in file("."))
+  .aggregate(util, core)
+  .settings(
+    update / aggregate := false
+  )
+
+[...]
+```
+
+`update / aggregate` is the aggregate key scoped to the `update` task. (See
+[scopes][Scopes].)
+
+Note: aggregation will run the aggregated tasks in parallel and with no
+defined ordering between them.
+
+#### Classpath dependencies
+
+A project may depend on code in another project. This is done by adding
+a `dependsOn` method call. For example, if core needed util on its
+classpath, you would define core as:
+
+```scala
+lazy val core = project.dependsOn(util)
+```
+
+Now code in `core` can use classes from `util`. This also creates an
+ordering between the projects when compiling them; `util` must be updated
+and compiled before core can be compiled.
+
+To depend on multiple projects, use multiple arguments to `dependsOn`,
+like `dependsOn(bar, baz)`.
+
+##### Per-configuration classpath dependencies
+
+`core dependsOn(util)` means that the `compile` configuration in `core` depends
+on the `compile` configuration in `util`. You could write this explicitly as
+`dependsOn(util % "compile->compile")`.
+
+The `->` in `"compile->compile"` means "depends on" so `"test->compile"`
+means the `test` configuration in `core` would depend on the `compile`
+configuration in `util`.
+
+Omitting the `->config` part implies `->compile`, so
+`dependsOn(util % "test")` means that the `test` configuration in `core` depends
+on the `Compile` configuration in `util`.
+
+A useful declaration is `"test->test"` which means `test` depends on `test`.
+This allows you to put utility code for testing in `util/src/test/scala`
+and then use that code in `core/src/test/scala`, for example.
+
+You can have multiple configurations for a dependency, separated by
+semicolons. For example,
+`dependsOn(util % "test->test;compile->compile")`.
+
+### Inter-project dependencies
+
+On extremely large projects with many files and many subprojects, sbt
+can perform less optimally at watching files have changed during
+interactively and using a lot of disk and system I/O.
+
+sbt has `trackInternalDependencies` and `exportToInternal`
+settings. These can be used to control whether to trigger compilation
+of a dependent subprojects when you call `compile`. Both keys will
+take one of three values: `TrackLevel.NoTracking`,
+`TrackLevel.TrackIfMissing`, and `TrackLevel.TrackAlways`. By default
+they are both set to `TrackLevel.TrackAlways`.
+
+When `trackInternalDependencies` is set to
+`TrackLevel.TrackIfMissing`, sbt will no longer try to compile
+internal (inter-project) dependencies automatically, unless there are
+no `*.class` files (or JAR file when `exportJars` is `true`) in the
+output directory.
+
+When the setting is set to `TrackLevel.NoTracking`, the compilation of
+internal dependencies will be skipped. Note that the classpath will
+still be appended, and dependency graph will still show them as
+dependencies. The motivation is to save the I/O overhead of checking
+for the changes on a build with many subprojects during
+development. Here's how to set all subprojects to `TrackIfMissing`.
+
+```scala
+lazy val root = (project in file(".")).
+  aggregate(....).
+  settings(
+    inThisBuild(Seq(
+      trackInternalDependencies := TrackLevel.TrackIfMissing,
+      exportJars := true
+    ))
+  )
+```
+
+The `exportToInternal` setting allows the dependee subprojects to opt
+out of the internal tracking, which might be useful if you want to
+track most subprojects except for a few. The intersection of the
+`trackInternalDependencies` and `exportToInternal` settings will be
+used to determine the actual track level. Here's an example to opt-out
+one project:
+
+```scala
+lazy val dontTrackMe = (project in file("dontTrackMe")).
+  settings(
+    exportToInternal := TrackLevel.NoTracking
+  )
+```
+
+### Default root project
+
+If a project is not defined for the root directory in the build, sbt
+creates a default one that aggregates all other projects in the build.
+
+Because project `hello-foo` is defined with `base = file("foo")`, it will be
+contained in the subdirectory foo. Its sources could be directly under
+`foo`, like `foo/Foo.scala`, or in `foo/src/main/scala`. The usual sbt
+[directory structure][Directories] applies underneath `foo` with the
+exception of build definition files.
+
+Any `.sbt` files in `foo`, say `foo/build.sbt`, will be merged with the build
+definition for the entire build, but scoped to the `hello-foo` project.
+
+If your whole project is in hello, try defining a different version
+(`version := "0.6"`) in `hello/build.sbt`, `hello/foo/build.sbt`, and
+`hello/bar/build.sbt`. Now `show version` at the sbt interactive prompt. You
+should get something like this (with whatever versions you defined):
+
+```
+> show version
+[info] hello-foo/*:version
+[info]  0.7
+[info] hello-bar/*:version
+[info]  0.9
+[info] hello/*:version
+[info]  0.5
+```
+
+`hello-foo/*:version` was defined in `hello/foo/build.sbt`,
+`hello-bar/*:version` was defined in `hello/bar/build.sbt`, and
+`hello/*:version` was defined in `hello/build.sbt`. Remember the
+[syntax for scoped keys][Scopes]. Each `version` key is scoped to a
+project, based on the location of the `build.sbt`. But all three `build.sbt`
+are part of the same build definition.
+
+*Each project's settings can go in `.sbt` files in the base directory of
+that project*, while the `.scala` file can be as simple as the one shown
+above, listing the projects and base directories. *There is no need to
+put settings in the `.scala` file.*
+
+You may find it cleaner to put everything including settings in `.scala`
+files in order to keep all build definition under a single project
+directory, however. It's up to you.
+
+You cannot have a project subdirectory or `project/*.scala` files in the
+sub-projects. `foo/project/Build.scala` would be ignored.
+
+### Navigating projects interactively
+
+At the sbt interactive prompt, type `projects` to list your projects and
+`project <projectname>` to select a current project. When you run a task
+like `compile`, it runs on the current project. So you don't necessarily
+have to compile the root project, you could compile only a subproject.
+
+You can run a task in another project by explicitly specifying the
+project ID, such as `subProjectID/compile`.
+
+### Common code
+
+The definitions in `.sbt` files are not visible in other `.sbt` files. In
+order to share code between `.sbt` files, define one or more Scala files
+in the `project/` directory of the build root.
+
+See [organizing the build][Organizing-Build] for details.
 
 
   [Basic-Def]: Basic-Def.html
@@ -1634,12 +1927,13 @@ regardless of which line it appears in the body.**
 See the following example:
 
 ```scala
+ThisBuild / organization := "com.example"
+ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
+
 lazy val root = (project in file("."))
   .settings(
     name := "Hello",
-    organization := "com.example",
-    scalaVersion := "2.12.6",
-    version := "0.1.0-SNAPSHOT",
     scalacOptions := {
       val out = streams.value // streams task happens-before scalacOptions
       val log = out.log
@@ -1670,12 +1964,13 @@ either of them.
 Here's another example:
 
 ```scala
+ThisBuild / organization := "com.example"
+ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
+
 lazy val root = (project in file("."))
   .settings(
     name := "Hello",
-    organization := "com.example",
-    scalaVersion := "2.12.6",
-    version := "0.1.0-SNAPSHOT",
     scalacOptions := {
       val ur = update.value  // update task happens-before scalacOptions
       if (false) {
@@ -2343,23 +2638,15 @@ sbt will look for it in `ThisBuild` as a fallback.
 Using the mechanism, we can define a build-level default setting for
 frequently used keys such as `version`, `scalaVersion`, and `organization`.
 
-For convenience, there is `inThisBuild(...)` function that will
-scope both the key and the body of the setting expression to `ThisBuild`.
-Putting setting expressions in there would be equivalent to appending `in ThisBuild` where possible.
-
 ```scala
+ThisBuild / organization := "com.example",
+ThisBuild / scalaVersion := "2.12.6",
+ThisBuild / version      := "0.1.0-SNAPSHOT"
+
 lazy val root = (project in file("."))
   .settings(
-    inThisBuild(List(
-      // Same as:
-      // ThisBuild / organization := "com.example"
-      organization := "com.example",
-      scalaVersion := "2.12.6",
-      version      := "0.1.0-SNAPSHOT"
-    )),
     name := "Hello",
-    publish := (),
-    publishLocal := ()
+    publish / skip := true
   )
 
 lazy val core = (project in file("core"))
@@ -2373,8 +2660,12 @@ lazy val util = (project in file("util"))
   )
 ```
 
+For convenience, there is `inThisBuild(...)` function that will
+scope both the key and the body of the setting expression to `ThisBuild`.
+Putting setting expressions in there would be equivalent to prepending `ThisBuild /` where possible.
+
 Due to the nature of [scope delegation][Scope-Delegation] that we will cover later,
-we do not recommend using build-level settings beyond simple value assignments.
+build-level settings should be set only to a pure value or settings from either `Global` or `ThisBuild` scoping.
 
 ### Scope delegation
 
@@ -3143,285 +3434,6 @@ dependencies on [this page][Library-Management].
 
 
   [Basic-Def]: Basic-Def.html
-  [Scopes]: Scopes.html
-  [Directories]: Directories.html
-  [Organizing-Build]: Organizing-Build.html
-
-Multi-project builds
---------------------
-
-This page introduces multiple subprojects in a single build.
-
-Please read the earlier pages in the Getting Started Guide first, in
-particular you need to understand [build.sbt][Basic-Def] before reading
-this page.
-
-### Multiple subprojects
-
-It can be useful to keep multiple related subprojects in a single build,
-especially if they depend on one another and you tend to modify them
-together.
-
-Each subproject in a build has its own source directories, generates
-its own jar file when you run package, and in general works like any
-other project.
-
-A project is defined by declaring a lazy val of type
-[Project](../api/sbt/Project.html). For example, :
-
-```scala
-lazy val util = (project in file("util"))
-
-lazy val core = (project in file("core"))
-```
-
-The name of the val is used as the subproject's ID, which
-is used to refer to the subproject at the sbt shell.
-
-Optionally the base directory may be omitted if it's the same as the name of the val.
-
-```scala
-lazy val util = project
-
-lazy val core = project
-```
-
-#### Common settings
-
-To factor out common settings across multiple projects,
-create a sequence named `commonSettings` and call `settings` method
-on each project.
-
-```scala
-lazy val commonSettings = Seq(
-  organization := "com.example",
-  version := "0.1.0-SNAPSHOT",
-  scalaVersion := "2.12.6"
-)
-
-lazy val core = (project in file("core"))
-  .settings(
-    commonSettings,
-    // other settings
-  )
-
-lazy val util = (project in file("util"))
-  .settings(
-    commonSettings,
-    // other settings
-  )
-```
-
-Now we can bump up `version` in one place, and it will be reflected
-across subprojects when you reload the build.
-
-#### Build-wide settings
-
-Another a bit advanced technique for factoring out common settings
-across subprojects is to define the settings scoped to `ThisBuild`. (See [Scopes][Scopes])
-
-### Dependencies
-
-Projects in the build can be completely independent of one another, but
-usually they will be related to one another by some kind of dependency.
-There are two types of dependencies: aggregate and classpath.
-
-#### Aggregation
-
-Aggregation means that running a task on the aggregate project will also
-run it on the aggregated projects. For example,
-
-```scala
-lazy val root = (project in file("."))
-  .aggregate(util, core)
-
-lazy val util = (project in file("util"))
-
-lazy val core = (project in file("core"))
-```
-
-In the above example, the root project aggregates `util` and `core`. Start
-up sbt with two subprojects as in the example, and try compile. You
-should see that all three projects are compiled.
-
-*In the project doing the aggregating*, the root project in this case,
-you can control aggregation per-task. For example, to avoid aggregating
-the `update` task:
-
-```scala
-lazy val root = (project in file("."))
-  .aggregate(util, core)
-  .settings(
-    update / aggregate := false
-  )
-
-[...]
-```
-
-`update / aggregate` is the aggregate key scoped to the `update` task. (See
-[scopes][Scopes].)
-
-Note: aggregation will run the aggregated tasks in parallel and with no
-defined ordering between them.
-
-#### Classpath dependencies
-
-A project may depend on code in another project. This is done by adding
-a `dependsOn` method call. For example, if core needed util on its
-classpath, you would define core as:
-
-```scala
-lazy val core = project.dependsOn(util)
-```
-
-Now code in `core` can use classes from `util`. This also creates an
-ordering between the projects when compiling them; `util` must be updated
-and compiled before core can be compiled.
-
-To depend on multiple projects, use multiple arguments to `dependsOn`,
-like `dependsOn(bar, baz)`.
-
-##### Per-configuration classpath dependencies
-
-`core dependsOn(util)` means that the `compile` configuration in `core` depends
-on the `compile` configuration in `util`. You could write this explicitly as
-`dependsOn(util % "compile->compile")`.
-
-The `->` in `"compile->compile"` means "depends on" so `"test->compile"`
-means the `test` configuration in `core` would depend on the `compile`
-configuration in `util`.
-
-Omitting the `->config` part implies `->compile`, so
-`dependsOn(util % "test")` means that the `test` configuration in `core` depends
-on the `Compile` configuration in `util`.
-
-A useful declaration is `"test->test"` which means `test` depends on `test`.
-This allows you to put utility code for testing in `util/src/test/scala`
-and then use that code in `core/src/test/scala`, for example.
-
-You can have multiple configurations for a dependency, separated by
-semicolons. For example,
-`dependsOn(util % "test->test;compile->compile")`.
-
-### Inter-project dependencies
-
-On extremely large projects with many files and many subprojects, sbt
-can perform less optimally at watching files have changed during
-interactively and using a lot of disk and system I/O.
-
-sbt has `trackInternalDependencies` and `exportToInternal`
-settings. These can be used to control whether to trigger compilation
-of a dependent subprojects when you call `compile`. Both keys will
-take one of three values: `TrackLevel.NoTracking`,
-`TrackLevel.TrackIfMissing`, and `TrackLevel.TrackAlways`. By default
-they are both set to `TrackLevel.TrackAlways`.
-
-When `trackInternalDependencies` is set to
-`TrackLevel.TrackIfMissing`, sbt will no longer try to compile
-internal (inter-project) dependencies automatically, unless there are
-no `*.class` files (or JAR file when `exportJars` is `true`) in the
-output directory.
-
-When the setting is set to `TrackLevel.NoTracking`, the compilation of
-internal dependencies will be skipped. Note that the classpath will
-still be appended, and dependency graph will still show them as
-dependencies. The motivation is to save the I/O overhead of checking
-for the changes on a build with many subprojects during
-development. Here's how to set all subprojects to `TrackIfMissing`.
-
-```scala
-lazy val root = (project in file(".")).
-  aggregate(....).
-  settings(
-    inThisBuild(Seq(
-      trackInternalDependencies := TrackLevel.TrackIfMissing,
-      exportJars := true
-    ))
-  )
-```
-
-The `exportToInternal` setting allows the dependee subprojects to opt
-out of the internal tracking, which might be useful if you want to
-track most subprojects except for a few. The intersection of the
-`trackInternalDependencies` and `exportToInternal` settings will be
-used to determine the actual track level. Here's an example to opt-out
-one project:
-
-```scala
-lazy val dontTrackMe = (project in file("dontTrackMe")).
-  settings(
-    exportToInternal := TrackLevel.NoTracking
-  )
-```
-
-### Default root project
-
-If a project is not defined for the root directory in the build, sbt
-creates a default one that aggregates all other projects in the build.
-
-Because project `hello-foo` is defined with `base = file("foo")`, it will be
-contained in the subdirectory foo. Its sources could be directly under
-`foo`, like `foo/Foo.scala`, or in `foo/src/main/scala`. The usual sbt
-[directory structure][Directories] applies underneath `foo` with the
-exception of build definition files.
-
-Any `.sbt` files in `foo`, say `foo/build.sbt`, will be merged with the build
-definition for the entire build, but scoped to the `hello-foo` project.
-
-If your whole project is in hello, try defining a different version
-(`version := "0.6"`) in `hello/build.sbt`, `hello/foo/build.sbt`, and
-`hello/bar/build.sbt`. Now `show version` at the sbt interactive prompt. You
-should get something like this (with whatever versions you defined):
-
-```
-> show version
-[info] hello-foo/*:version
-[info]  0.7
-[info] hello-bar/*:version
-[info]  0.9
-[info] hello/*:version
-[info]  0.5
-```
-
-`hello-foo/*:version` was defined in `hello/foo/build.sbt`,
-`hello-bar/*:version` was defined in `hello/bar/build.sbt`, and
-`hello/*:version` was defined in `hello/build.sbt`. Remember the
-[syntax for scoped keys][Scopes]. Each `version` key is scoped to a
-project, based on the location of the `build.sbt`. But all three `build.sbt`
-are part of the same build definition.
-
-*Each project's settings can go in `.sbt` files in the base directory of
-that project*, while the `.scala` file can be as simple as the one shown
-above, listing the projects and base directories. *There is no need to
-put settings in the `.scala` file.*
-
-You may find it cleaner to put everything including settings in `.scala`
-files in order to keep all build definition under a single project
-directory, however. It's up to you.
-
-You cannot have a project subdirectory or `project/*.scala` files in the
-sub-projects. `foo/project/Build.scala` would be ignored.
-
-### Navigating projects interactively
-
-At the sbt interactive prompt, type `projects` to list your projects and
-`project <projectname>` to select a current project. When you run a task
-like `compile`, it runs on the current project. So you don't necessarily
-have to compile the root project, you could compile only a subproject.
-
-You can run a task in another project by explicitly specifying the
-project ID, such as `subProjectID/compile`.
-
-### Common code
-
-The definitions in `.sbt` files are not visible in other `.sbt` files. In
-order to share code between `.sbt` files, define one or more Scala files
-in the `project/` directory of the build root.
-
-See [organizing the build][Organizing-Build] for details.
-
-
-  [Basic-Def]: Basic-Def.html
   [Library-Dependencies]: Library-Dependencies.html
   [Multi-Project]: Multi-Project.html
   [global-vs-local-plugins]: ../docs/Best-Practices.html#global-vs-local-plugins
@@ -3654,14 +3666,12 @@ to associate some code with the task key:
 val sampleStringTask = taskKey[String]("A sample string task.")
 val sampleIntTask = taskKey[Int]("A sample int task.")
 
-lazy val commonSettings = Seq(
-  organization := "com.example",
-  version := "0.1.0-SNAPSHOT"
-)
+ThisBuild / organization := "com.example"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
+ThisBuild / scalaVersion := "2.12.6"
 
 lazy val library = (project in file("library"))
   .settings(
-    commonSettings,
     sampleStringTask := System.getProperty("user.home"),
     sampleIntTask := {
       val sum = 1 + 2
@@ -3715,14 +3725,12 @@ val stopServer = taskKey[Unit]("stop server")
 val sampleIntTask = taskKey[Int]("A sample int task.")
 val sampleStringTask = taskKey[String]("A sample string task.")
 
-lazy val commonSettings = Seq(
-  organization := "com.example",
-  version := "0.1.0-SNAPSHOT"
-)
+ThisBuild / organization := "com.example"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
+ThisBuild / scalaVersion := "2.12.6"
 
 lazy val library = (project in file("library"))
   .settings(
-    commonSettings,
     startServer := {
       println("starting...")
       Thread.sleep(500)
@@ -3808,7 +3816,6 @@ at which point `stopServer` should be the `sampleStringTask`.
 ```scala
 lazy val library = (project in file("library"))
   .settings(
-    commonSettings,
     startServer := {
       println("starting...")
       Thread.sleep(500)
@@ -3983,14 +3990,13 @@ To use the `val`s under it easier, import `Dependencies._`.
 ```scala
 import Dependencies._
 
-lazy val commonSettings = Seq(
-  version := "0.1.0",
-  scalaVersion := "2.12.6"
-)
+ThisBuild / organization := "com.example"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
+ThisBuild / scalaVersion := "2.12.6"
 
 lazy val backend = (project in file("backend"))
   .settings(
-    commonSettings,
+    name := "backend",
     libraryDependencies ++= backendDeps
   )
 ```
@@ -4975,20 +4981,18 @@ addSbtPlugin("org.foundweekends" % "sbt-bintray" % "0.5.2")
 Next, a make sure your `build.sbt` file has the following settings
 
 ```scala
-lazy val commonSettings = Seq(
-  version in ThisBuild := "<YOUR PLUGIN VERSION HERE>",
-  organization in ThisBuild := "<INSERT YOUR ORG HERE>"
-)
+ThisBuild / version := "<YOUR PLUGIN VERSION HERE>"
+ThisBuild / organization := "<INSERT YOUR ORG HERE>"
+ThisBuild / description := "<YOUR DESCRIPTION HERE>"
+
+// This is an example.  sbt-bintray requires licenses to be specified
+// (using a canonical name).
+ThisBuild / licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html"))
 
 lazy val root = (project in file("."))
   .settings(
-    commonSettings,
     sbtPlugin := true,
     name := "<YOUR PLUGIN HERE>",
-    description := "<YOUR DESCRIPTION HERE>",
-    // This is an example.  sbt-bintray requires licenses to be specified 
-    // (using a canonical name).
-    licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html")),
     publishMavenStyle := false,
     bintrayRepository := "sbt-plugins",
     bintrayOrganization in bintray := None
@@ -5151,7 +5155,7 @@ configure HTTPS or FTP.
   [sonatype-requirements]: http://central.sonatype.org/pages/requirements.html
   [sonatype-coordinates]: http://central.sonatype.org/pages/choosing-your-coordinates.html
   [sonatype-nexus]: https://oss.sonatype.org/#welcome
-  [sonatype-pgp]: http://central.sonatype.org/pages/working-with-pgp-signatures.html
+  [sonatype-pgp]: https://central.sonatype.org/pages/working-with-pgp-signatures.html
   [sbt-pgp]: https://www.scala-sbt.org/sbt-pgp/
   [sbt-sonatype]: https://github.com/xerial/sbt-sonatype
   [sbt-release]: https://github.com/sbt/sbt-release
@@ -5197,14 +5201,54 @@ on published artifacts.
 > *Note:* Sonatype advises that responding to a **New Project ticket** might 
 take up to two business days, but in my case it was a few minutes.
 
-### SBT setup
+### sbt setup
 
 To address Sonatype's [requirements]
 [sonatype-requirements] for publishing to the central repository and to simplify the publishing process, you can
-use two community plugins. The [sbt-pgp plugin][sbt-pgp] can sign the files with GPG/PGP
-and [sbt-sonatype][sbt-sonatype] can publish to a Sonatype repository. 
+use two community plugins. The [sbt-pgp plugin][sbt-pgp] can sign the files with GPG/PGP.
+(Optionally [sbt-sonatype][sbt-sonatype] can publish to a Sonatype repository nicer.)
 
-#### First - PGP Signatures
+#### step 1: PGP Signatures
+
+Follow [Working with PGP Signatures][sonatype-pgp].
+
+First, you should [install GnuGP](https://www.gnupg.org/download/), and verify the version:
+
+```
+$ gpg --version
+gpg (GnuPG/MacGPG2) 2.2.8
+libgcrypt 1.8.3
+Copyright (C) 2018 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
+```
+
+Next generate a key:
+
+```
+$ gpg --gen-key
+```
+
+List the keys:
+
+```
+$ gpg --list-keys
+
+/home/foo/.gnupg/pubring.gpg
+------------------------------
+
+pub   rsa4096 2018-08-22 [SC]
+      1234517530FB96F147C6A146A326F592D39AAAAA
+uid           [ultimate] your name <you@example.com>
+sub   rsa4096 2018-08-22 [E]
+```
+
+Distribute the key:
+
+```
+$ gpg --keyserver hkp://pool.sks-keyservers.net --send-keys 1234517530FB96F147C6A146A326F592D39AAAAA
+```
+
+#### step 2: sbt-pgp
 
 With the PGP key you want to use, you can sign the artifacts 
 you want to publish to the Sonatype repository with the [sbt-pgp plugin][sbt-pgp]. Follow 
@@ -5218,97 +5262,52 @@ enable it globally for SBT projects:
 addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.1.1")
 ```
 
-> *Note:* The plugin is a jvm-only solution to generate PGP keys and sign 
-artifacts. It can also work with the GPG command line tool.
+> *Note:* The plugin is a solution to sign artifacts. It works with the GPG command line tool.
 
-If you don't have the PGP keys to sign your code with, one of the ways to 
-achieve that is to install the [GNU Privacy Guard][gnupg] and:
-
-* use it to generate the keypair you will use to sign your library,
-* publish your certificate to enable remote verification of the signatures,
 * make sure that the `gpg` command is in PATH available to the sbt,
-* add `useGpg := true` to your `build.sbt` to make the plugin `gpg`-aware 
+* add `useGpg := true` to your `build.sbt` to make the plugin `gpg`-aware
 
-#### PGP Tips'n'tricks 
-
-If the command to generate your key fails, execute the following commands and 
-remove the displayed files:
-
-```
-> show */*:pgpSecretRing
-[info] /home/username/.sbt/.gnupg/secring.gpg
-> show */*:pgpPublicRing
-[info] /home/username/.sbt/.gnupg/pubring.gpg
-```
-
-If your PGP key has not yet been distributed to the keyserver pool, e.g., 
-you've just generated it, you'll need to publish it. You can do so using the 
-[sbt-pgp][sbt-pgp] plugin:
-
-```
-pgp-cmd send-key keyname hkp://pool.sks-keyservers.net
-```
-
-Where `keyname` is the name or email address used when creating the key or 
-hexadecimal identifier for the key.
-
-If you see no output from sbt-pgp then the key name specified was not
-found.
-
-If it fails to run the `SendKey` command you can try another server (for 
-example: hkp://keyserver.ubuntu.com). A list of servers can be found at 
-[the status page](https://sks-keyservers.net/status/) of sks-keyservers.net.
-
-### Second - Configure Sonatype integration 
+#### step 3: Credentials
 
 The credentials for your Sonatype OSSRH account need to be stored
 somewhere safe (*e.g. NOT in the repository*). Common convention is a 
 `~/.sbt/1.0/sonatype.sbt` file, with the following:
 
 ```scala
-credentials += Credentials("Sonatype Nexus Repository Manager",
-                           "oss.sonatype.org",
-                           "<your username>",
-                           "<your password>")
+credentials += Credentials(Path.userHome / ".sbt" / "sonatype_credential")
+```
+
+Next create a file `~/.sbt/sonatype_credential`:
+
+```
+realm=Sonatype Nexus Repository Manager
+host=oss.sonatype.org
+user=<your username>
+password=<your password>
 ```
 
 > *Note:* The first two strings must be `"Sonatype Nexus Repository Manager"`
 and `"oss.sonatype.org"` for Ivy to use the credentials.
 
-Now, we want to control what's available in the `pom.xml` file. This
-file describes our project in the maven repository and is used by
-indexing services for search and discover. This means it's important
-that `pom.xml` should have all information we wish to advertise as well
-as required info!
-
-First, let's make sure no repositories show up in the POM file. To
-publish on maven-central, all *required* artifacts must also be hosted
-on maven central. However, sometimes we have optional dependencies for
-special features. If that's the case, let's remove the repositories for
-optional dependencies in our artifact:
-
-```scala
-pomIncludeRepository := { _ => false }
-```
+#### step 4: Configure build.sbt
 
 To publish to a maven repository, you'll need to configure a few
 settings so that the correct metadata is generated.
-Specifically, the build should provide data for `organization`, `url`,
-`license`, `scm.url`, `scm.connection` and `developer` keys. For example:
+
+Add these settings at the end of `build.sbt` or a separate `publish.sbt`:
 
 ```scala
-licenses := Seq("BSD-style" -> url("http://www.opensource.org/licenses/bsd-license.php"))
+ThisBuild / organization := "com.example.project2"
+ThisBuild / organizationName := "example"
+ThisBuild / organizationHomepage := Some(url("http://example.com/"))
 
-homepage := Some(url("http://example.com"))
-
-scmInfo := Some(
+ThisBuild / scmInfo := Some(
   ScmInfo(
     url("https://github.com/your-account/your-project"),
     "scm:git@github.com:your-account/your-project.git"
   )
 )
-
-developers := List(
+ThisBuild / developers := List(
   Developer(
     id    = "Your identifier",
     name  = "Your Name",
@@ -5316,40 +5315,42 @@ developers := List(
     url   = url("http://your.url")
   )
 )
-```
 
-#### Maven configuration tips'n'tricks
+ThisBuild / description := "Some descripiton about your project."
+ThisBuild / licenses := List("Apache 2" -> new URL("http://www.apache.org/licenses/LICENSE-2.0.txt"))
+ThisBuild / homepage := Some(url("https://github.com/example/project"))
+
+// Remove all additional repository other than Maven Central from POM
+ThisBuild / pomIncludeRepository := { _ => false }
+ThisBuild / publishTo := {
+  val nexus = "https://oss.sonatype.org/"
+  if (isSnapshot.value) Some("snapshots" at nexus + "content/repositories/snapshots")
+  else Some("releases" at nexus + "service/local/staging/deploy/maven2")
+}
+ThisBuild / publishMavenStyle := true
+```
 
 The full format of a `pom.xml` (an end product of the project configuration 
 used by Maven) file is [outlined here](https://maven.apache.org/pom.html).
 You can add more data to it with the `pomExtra` option in `build.sbt`.
 
+#### step 5: Publishing
 
-To ensure the POMs are generated and pushed:
+From sbt shell run:
 
-```scala
-publishMavenStyle := true
+```
+> publishSigned
 ```
 
-Setting repositories to publish to:
+Check the published artifacts in the [Nexus Repository Manager][sonatype-nexus]
+(same login as Sonatype's Jira account).
 
-```scala
-publishTo := {
-  val nexus = "https://oss.sonatype.org/"
-  if (isSnapshot.value)
-    Some("snapshots" at nexus + "content/repositories/snapshots")
-  else
-    Some("releases"  at nexus + "service/local/staging/deploy/maven2")
-}
-```
+Close the staging repository and promote the release to central, by hitting
+"Close" button, then "Release" button.
 
-Not publishing the test artifacts (this is the default):
+### Optional steps
 
-```scala
-publishArtifact in Test := false
-```
-
-### Third - Publish to the staging repository
+#### sbt-sonatype
 
 > *Note:* sbt-sonatype is a third-party plugin meaning it is not covered by Lightbend subscription.
 
@@ -5379,7 +5380,7 @@ After publishing you have to follow the
 > *Note:* the sbt-sonatype plugin can also be used to publish to other non-sonatype 
 repositories
 
-#### Publishing tips'n'tricks
+#### Publishing tips
 
 Use staged releases to test across large projects of independent releases 
 before pushing the full project.
@@ -5391,7 +5392,7 @@ range (e.g. Umlauts). If you are absolutely sure that you typed the
 right phrase and the error doesn't disappear, try changing the
 passphrase.
 
-### Fourth - Integrate with the release process
+#### Integrate with the release process
 
 > *Note:* sbt-release is a third-party plugin meaning it is not covered by Lightbend subscription.
 
@@ -5515,6 +5516,18 @@ Suppose you have `m: ModuleID`, and you're currently calling `m.copy(revision = 
 
 ```scala
 m.withRevision("1.0.1")
+```
+
+### SbtPlugin
+
+sbt 0.13, sbt 1.0, and sbt 1.1 required `sbtPlugin` setting and scripted plugin to develop an sbt plugin.
+sbt 1.2.1 combined both into `SbtPlugin` plugin.
+
+Remove scripted-plugin from `project/plugins.sbt`, and just use:
+
+```scala
+lazy val root = (project in file("."))
+  .enablePlugins(SbtPlugin)
 ```
 
 ### sbt version specific source directory
@@ -5825,7 +5838,664 @@ After 1.x, `withDefaultResolvers` was renamed to `combineDefaultResolvers`. In t
 * You can use `Vector` directly too.
 
 
+## sbt 1.2.x releases
+
+### sbt 1.2.1
+
+#### Forward bincompat breakage
+
+If you are writing a plugin, please use 1.2.1+, and avoid 1.2.0.
+
+We unintentionally broke forward binary compatibility in 1.2.0.
+If someone publishes an sbt plugin using sbt 1.2.0, it cannot be used from sbt 1.0.x or 1.1.x.
+sbt 1.2.1 reverts the change, so the forward compatibility is restored.
+Unfortunately, this means we won't be able to use varargs in `inThisBuild(...)` etc again.
+
+Note that we might eventually break forward compatibility, like we did in 0.13.5 for `AutoPlugin`,
+but only when the tradeoff is worth it.
+
+#### The project Foo references an unknown configuration "bar"
+
+Second regression fix is for the wall of warnings you might have seen in 1.2.0 that looks as follows:
+
+```
+[warn] The project ProjectRef(uri("file:/Users/xxx/work/akka/"), "akka-actor-typed") references an unknown configuration "multi-jvm" and was guessed to be "Multi-jvm".
+[warn] This configuration should be explicitly added to the project.
+[warn] The project ProjectRef(uri("file:/Users/xxx/work/akka/"), "akka-actor-typed-tests") references an unknown configuration "multi-jvm" and was guessed to be "Multi-jvm".
+[warn] This configuration should be explicitly added to the project.
+```
+
+The original issue was that unified slash syntax doesn't pick the configuration names
+when the configuration is not part of the subproject. Since this warning is immaterial,
+we are removing them in this patch release.
+
+One thing the plugin authors can start doing is declaring the custom configuration
+as hidden, and adding them into the subprojects as follows:
+
+```scala
+import sbt._
+import sbt.Keys._
+
+object ParadoxPlugin extends AutoPlugin {
+  val ParadoxTheme = config("paradox-theme").hide
+  override def projectConfigurations: Seq[Configuration] = Seq(ParadoxTheme)
+
+  ....
+}
+```
+
+We are also looking into improving unified slash syntax parser to make it more robust.
+
+#### Other bug fixes
+
+- Updates `IO.relativize` for JDK 9. [io#175][io175] by [@eatkins][@eatkins]
+- Fixes logic for adding external class file manager. [zinc#562][zinc562] by [@allanrenucci][@allanrenucci]
+
+#### Contributors
+
+A huge thank you to everyone who's helped improve sbt and Zinc 1 by using them, reporting bugs, improving our documentation, porting builds, porting plugins, and submitting and reviewing pull requests.
+
+sbt 1.2.1 was brought to you by 4 contributors, according to `git shortlog -sn --no-merges v1.2.1...v1.2.0` on sbt, zinc, librarymanagement, util, io, launcher-packege, and website: Eugene Yokota, Aaron S. Hawley, Ethan Atkins, and Allan Renucci. Thanks! Also special thanks to Ches Martin and Yoshida-san for reporting these issues.
+
+  [io175]: https://github.com/sbt/io/pull/175
+  [zinc562]: https://github.com/sbt/zinc/pull/562
+  [@eed3si9n]: https://github.com/eed3si9n
+  [@dwijnand]: http://github.com/dwijnand
+  [@cunei]: https://github.com/cunei
+  [@eatkins]: https://github.com/eatkins
+  [@allanrenucci]: https://github.com/allanrenucci
+
+
+----
+
+### sbt 1.2.0
+
+**Warning**: We found forward compatibility breakage in 1.2.0, so we recommend everyone to upgrade to [sbt 1.2.1](https://github.com/sbt/sbt/releases/tag/v1.2.1) or later.
+
+The headline features of sbt 1.2 are cross JDK forking, composite project, and experimental thin clients. But, there are lots of other bug fixes and enhancements that we've been accumulating for six months since sbt 1.1.
+
+#### SbtPlugin for plugin development
+
+`SbtPlugin` is a plugin to declare a project for sbt plugins. This automatically brings in scripted tests, and sets `sbtPlugin := true`.
+
+```scala
+lazy val root = (project in file("."))
+  .enablePlugins(SbtPlugin)
+```
+
+**Compatibility note**: `ScriptedPlugin` is no longer a triggered plugin.
+
+[#3875][3875] by [@eed3si9n][@eed3si9n]
+
+#### Cross JDK forking
+
+For forked `run` and `test`, `java++` can now switch Java Home.
+
+```
+sbt:helloworld> run
+[info] Running (fork) Hello
+[info] 1.8.0_171
+sbt:helloworld> java++ 10!
+[info] Reapplying settings...
+sbt:helloworld> run
+[info] Running (fork) Hello
+[info] 10.0.1
+```
+
+sbt will try to detect Java homes into `discoveredJavaHomes` setting, supporting [shyiko/jabba](https://github.com/shyiko/jabba). This can be augmented by `Global / javaHomes`:
+
+```
+Global / javaHomes += "6" -> file("/something/java-6")
+```
+
+This feature is intended for testing your library in an older JVM to check compatibility.
+
+[#4139][4139] by [@2m][@2m], [@cunei][@cunei], and [@eed3si9n][@eed3si9n]
+
+#### scalaVersion-filtered aggregation
+
+In 2015 James Roper [contributed](https://github.com/sbt/sbt-doge/pull/4) scalaVersion-filtered aggregation to sbt-doge. This feature is brought back into sbt 1.2 by Rui Gonçalves ([@ruippeixotog][@ruippeixotog]) in [#3698][3698]/[#3995][3995]!
+
+This extends switch command `++` to take an optional `<command>`:
+
+```
+> ++2.12.6 compile
+```
+
+This will aggregate only the subproject where `++2.12.6` is valid, which is useful when you have a build where some subprojects are 2.11 only etc.
+
+#### Composite project
+
+sbt 1.2.0 introduces "composite project" trait, which allows plugin authors to generate subprojects, for example for cross building.
+
+```
+trait CompositeProject {
+  def componentProjects: Seq[Project]
+}
+```
+
+This was contributed by [@BennyHill][@BennyHill] as [#4056][4056].
+
+#### Project matrix
+
+**Experimental**. As a reference implementation of the `CompositeProject` I implemented a new DSL called `projectMatrix` introduced by [sbt-projectmatrix][projectmatrix] plugin.
+
+```scala
+lazy val core = (projectMatrix in file("core"))
+  .scalaVersions("2.12.6", "2.11.12")
+  .settings(
+    name := "core"
+  )
+  .jvmPlatform()
+
+lazy val app = (projectMatrix in file("app"))
+  .dependsOn(core)
+  .scalaVersions("2.12.6")
+  .settings(
+    name := "app"
+  )
+  .jvmPlatform()
+```
+
+The aim of the plugin is to support a generic notion of cross building (Scala version, platform, etc) expressed using subprojects. In the above `projectMarix` will produce three subprojects: `coreJVM2_12`, `coreJVM2_11`, and `appJVM2_12`.
+
+#### Semantic Version selector API
+
+sbt 1.2.0 introduces Semantic Version selector on `VersionNumber()` datatype supporting basic match, comparison (`<=`, `<`, `>=`, `>`), combination (`>1.0.0 <2.0.0`, `||`), ranges (`A.B.C - D.E.F`), and wildcard (`2.12.x`).
+
+```scala
+scala> import sbt.librarymanagement.{ VersionNumber, SemanticSelector }
+import sbt.librarymanagement.{VersionNumber, SemanticSelector}
+
+scala> VersionNumber("2.12.5").matchesSemVer(SemanticSelector(">=2.12"))
+res1: Boolean = true
+
+scala> VersionNumber("2.12.5").matchesSemVer(SemanticSelector("<2.12"))
+res2: Boolean = false
+
+scala> VersionNumber("2.13.0-M4").matchesSemVer(SemanticSelector("2.13"))
+res3: Boolean = false
+
+scala> VersionNumber("2.12.5").matchesSemVer(SemanticSelector("2.12.1 - 2.12.6"))
+res4: Boolean = true
+
+scala> VersionNumber("2.12.5").matchesSemVer(SemanticSelector("2.12.x"))
+res5: Boolean = true
+
+scala> VersionNumber("2.12.5").matchesSemVer(SemanticSelector("2.11.x || 2.12.x"))
+res6: Boolean = true
+```
+
+**Note**: This has no effect on library management at the moment.
+
+This was contributed by Rikito Taniguchi ([@tanishiking][@tanishiking]) as [lm#239][lm239].
+
+
+#### addPluginSbtFile command
+
+There's been a request from IntelliJ to safely inject a plugin to a build. sbt 1.2.0 adds `-addPluginSbtFile` command to do so.
+
+```
+$ cat /tmp/extra.sbt
+addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.7")
+
+$ sbt -addPluginSbtFile=/tmp/extra.sbt
+...
+sbt:helloworld> plugins
+In file:/xxxx/hellotest/
+  ...
+  sbtassembly.AssemblyPlugin: enabled in root
+```
+
+Implmented by [@eed3si9n][@eed3si9n] as [#4211][4211].
+
+#### Extensible sbt server
+
+**Experimental**. sbt server can now be extended via the plugin.
+
+```scala
+    Global / serverHandlers += ServerHandler({ callback =>
+      import callback._
+      import sjsonnew.BasicJsonProtocol._
+      import sbt.internal.protocol.JsonRpcRequestMessage
+      ServerIntent(
+        {
+          case r: JsonRpcRequestMessage if r.method == "lunar/helo" =>
+            jsonRpcNotify("lunar/oleh", "")
+            ()
+        },
+        PartialFunction.empty
+      )
+```
+
+This feature is still experimental and the API may change in the future.
+
+[#3975][3975] by [@eed3si9n][@eed3si9n]
+
+#### Thin client(s)
+
+**Experimental**. sbt 1.2.0 adds a new mode called `-client`. When sbt is started with -client command, it no longer to loads the build, and instead tries to connect to an instance of sbt server over JSON-RPC. When the server is not running (portfile is not found), it will fork a new instance of sbt entirely in a new JVM.
+
+This lets you invoke `sbt` from the terminal shell or from an editor.
+
+```
+$ time sbt -client clean
+[info] entering *experimental* thin client - BEEP WHIRR
+[info] server was not detected. starting an instance
+[info] waiting for the server...
+[info] waiting for the server...
+[info] waiting for the server...
+[info] waiting for the server...
+[info] server found
+> clean
+[success] completed
+sbt -client clean  9.23s user 2.33s system 22% cpu 50.558 total
+
+# server stays
+$ ps | rg java
+21860 ttys015    1:22.43 java -Xms2048M -Xmx2048M -Xss2M -jar /usr/local/Cellar/sbt/1.1.6/libexec/bin/sbt-launch.jar
+22014 ttys015    0:00.00 rg java
+
+$ time sbt -client clean
+[info] entering *experimental* thin client - BEEP WHIRR
+> clean
+[info] Updating ...
+[info] Done updating.
+[success] completed
+sbt -client clean  3.39s user 1.75s system 104% cpu 4.898 total
+```
+
+To end the server, call `sbt -client shutdown`. [#4227][4227] by [@eed3si9n][@eed3si9n]
+
+In addition, there are also an alternative thin clients [cb372/sbt-client](https://github.com/cb372/sbt-client) and [dwijnand/sbtl](https://github.com/dwijnand/sbtl) implemented using Rust.
+
+#### Changes with compatibility implication
+
+- Removes deprecated commands `-`, `--`, and `---`. Use `onFailure`, `sbtClearOnFailure`, and `resumeFromFailure` instead. [#4124][4124]
+- Makes `++` fail when it doesn't affect any subprojects [#4269][4269] by [@eed3si9n][@eed3si9n]
+
+#### Other bug fixes and improvements
+
+- Fixes output caching bug. [util#169][util169] by [@bpholt][@bpholt]
+- Fixes "destination file exists" error message. [lm#255][lm255] by [@eed3si9n][@eed3si9n]
+- Reintroduces `Command.process(String, State): State`. [#4023][4023] by [@dwijnand][@dwijnand]
+- Fixes `active.json` not getting removed on JVM shutdown. [#4194][4194] by [@veera83372][@veera83372]
+- Fixes file permission error ("`CreateFile()` failed") while reading the timestamp on Windows. [io#134][io134] by [@cunei][@cunei]
+- Fixes the linter that detects missing `.value`. [#4090][4090] by [@eed3si9n][@eed3si9n]
+- Fixes `StringIndexOutOfBoundsException` in `removeEscapeSequences`. [util#139][util139] by [@dwijnand][@dwijnand]
+- Fixes OkHttp's `JavaNetAuthenticator` with a null check. [lm#177][lm177] by [@eed3si9n][@eed3si9n]
+- Fixes Sonatype timeout issue by extending the default timeout to 1h. [lm#246][lm246] by [@peterneyens][@peterneyens]
+- Fixes thread thrashing error during the parallel download. [lm249][lm249] by [@OlegYch][@OlegYch]
+- Fixes JavaDoc warnings logged as errors. [zinc#506][zinc506] by [@kaygorodov][@kaygorodov]
+- Fixes class dependency not picking up `classOf[A]`. [zinc#510][zinc510] by [@natansil][@natansil]
+- Fixes class dependency including non-existing objects. [zinc422][zinc422] by [@romanowski][@romanowski]
+- Fixes link to the documentation of deprecated 0.10/0.12 DSL syntax. [#3901][3901] by [@colindean]
+- Fixes the documentation of `skip` key. [#3926][3926] by [@dkim][@dkim]
+- Fixes race condition in non-forked parallel tests. [#3985][3985] by [@retronym][@retronym]
+- Fixes Ctrl-C handing in forked tests when `Global / cancelable` is set to `true`. [#4226][4226] by [@driquelme][@driquelme]
+- Fixes the stacktrace of `run`. [#4232][4232] by [@eed3si9n][@eed3si9n]
+- Bumps the version of Giter8 used by `sbt new` to 0.11.0, fixing various issues [#4263][4263] by [@eed3si9n][@eed3si9n]
+- Improves Javac error parsing. [zinc#557][zinc557] by [@eed3si9n][@eed3si9n]
+
+- Displays only the eviction warning summary by default, and make it configurable using `ThisBuild / evictionWarningOptions`. [lm211][lm211] and [#3947][3947] by [@exoego][@exoego]
+- Allow varargs in `inThisBuild(...)`, `inConfig(C)(...)`, `inTask(t)(...)`, `inScope(scope)(...)`. [#4106][4106] by [@dwijnand][@dwijnand] 
+- Adds `fgRun` and `fgRunMain` tasks that behaves like sbt 0.13's `run`. [#4216][4216] by [@agaro1121][@agaro1121]
+- Supports `test.script` and `pending.script` as the scripted file name. [#4220][4220] by [@regadas][@regadas]
+- Supports aliases in `inspect` command. [#4221][4221] by [@gpoirier][@gpoirier]
+- Adds the current project's id to `~`'s watching message. [#2038][2038] / [#3813][3813] by [@dwijnand][@dwijnand]
+- Changes `PathFinder#get` to `get()`. [io#104][io104] by [@dwijnand][@dwijnand]
+- Improves the error message when access is denied. [lm#203][lm203] by [@stephennancekivell][@stephennancekivell]
+- Improve the warning message "Choosing local" to something more actionable. [lm#248][lm248] by [@khvatov][@khvatov]
+- Adds an option to ignore scalac options change. [zinc#548][zinc548] by [@lukaszwawrzyk][@lukaszwawrzyk]
+- Enable parallel execution of scripted in the plugin. [#3891][3891] by [@jvican][@jvican]
+- Adds factory methods for Configuration axis scope filters `inConfigurationsByKeys` and `inConfigurationsByRefs`. [#3994][3994]
+- Adds `lastGrep`, `loadFailed`, etc commands to replace the kebab-cased commands. [#4080][4080] by [@naferx][@naferx], [#4159][4159] by [@Asamsig][@Asamsig], and [#4169][4169] by [@tiqwab][@tiqwab]
+- Adds timestamp field to JUnitXML report. [4154][4154] by [@timcharper][@timcharper]
+- "Loading settings" log messages now show subproject name. [#4164][4164] by [@alodavi][@alodavi]
+- `about` command sorts and indents plugins list. [#4187][4187] by [@mcanlas][@mcanlas]
+- `-Dsbt.offline` sets `offline` setting. [#4198][4198] by [@eed3si9n][@eed3si9n]
+- Selects most recent JDK during cross JDK forking (see below for details) [#4245][4245] by [@raboof][@raboof]
+
+#### Internal
+
+- Removes some compiler warnings. [#3087][3087] by [@dwijnand][@dwijnand]
+- Lots of other refactorings by [@dwijnand][@dwijnand]
+- Removes some compiler warnings in Zinc. [zinc#493][zinc493] by [@exoego][@exoego]
+- Perf: Prevents creation of useless `URI` copies in `IO.directoryURI`. [io#132][io132] by [@jrudolph][@jrudolph]
+- Perf: Avoids reflect universe initialization in `initStringCodecs`. [util#153][util153] by [@jrudolph][@jrudolph]
+- Perf: Speeds up `Parsers.validID`. [#3952][3952] by [@jrudolph][@jrudolph]
+- Perf: Optimizes scope delegation by hand rolling `for` comprehension. [#4003][4003] by [@jrudolph][@jrudolph] and [@eed3si9n][@eed3si9n]
+- Use `val` instead of `var` in an internal code. [#4253][4253] by [@xuwei-k][@xuwei-k]
+
+#### Contributors
+
+Thanks again to everyone who’s helped improve sbt and Zinc 1.
+
+sbt 1.2.0 was brought to you by 60 contributors. Dale Wijnand, Eugene Yokota, Kenji Yoshida (xuwei-k), Yasuhiro Tatsuno (exoego), Łukasz Wawrzyk, Jorge Vicente Cantero (jvican), Alistair Johnson, Antonio Cunei, Jason Zaugg, Rikito Taniguchi (tanishiking), Seiya Mizuno, Tim Harper, Aloisia Davì (alodavi), Arnout Engelen, Ethan Atkins, Johannes Rudolph, Krzysztof Romanowski, Allan Renucci, Brian P. Holt, Filipe Regadas, Hiroshi Ito, Martijn Hoekstra, OlegYch, Seth Tisue, natans, Aaron S. Hawley, Alex Khvatov, Alexander Samsig, Andreas Jim-Hartmann, Andrei Pozolotin, Andrey Kaygorodov, Anthony Garo, Christopher Hunt, Colin Dean, Daniel Riquelme, Deokhwan Kim, Gerard Maas, Guillaume Poirier, Heikki Vesalainen, Jason Pickens, Jonas Fonseca, Julien Jerphanion, Justin Pihony, Kazufumi Nishida, Kyle Goodale, Maksym Fedorov, Mark Canlas, Martynas Mickevičius, Michael Pollmeier, Mike Skells, Nafer Sanabria, Naohisa Murakami (tiqwab), PanAeon, Peter Neyens, Rui Gonçalves, Sean Sullivan, Stephen Nancekivell, Veera Venky, blakkan, ortigali. Thank you!
+
+  [help-wanted]: https://github.com/sbt/sbt/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22
+  [good-first-issue]: https://github.com/sbt/sbt/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22
+  [projectmatrix]: https://github.com/sbt/sbt-projectmatrix
+  [3087]: https://github.com/sbt/sbt/pull/3807
+  [3875]: https://github.com/sbt/sbt/pull/3875
+  [4139]: https://github.com/sbt/sbt/pull/4139
+  [3975]: https://github.com/sbt/sbt/pull/3975
+  [4056]: https://github.com/sbt/sbt/pull/4056
+  [4211]: https://github.com/sbt/sbt/pull/4211
+  [2038]: https://github.com/sbt/sbt/issues/2038
+  [3813]: https://github.com/sbt/sbt/pull/3813
+  [3891]: https://github.com/sbt/sbt/pull/3891
+  [3901]: https://github.com/sbt/sbt/pull/3901
+  [3926]: https://github.com/sbt/sbt/pull/3926
+  [3952]: https://github.com/sbt/sbt/pull/3952
+  [3985]: https://github.com/sbt/sbt/pull/3985
+  [3947]: https://github.com/sbt/sbt/pull/3947
+  [3994]: https://github.com/sbt/sbt/pull/3994
+  [3995]: https://github.com/sbt/sbt/pull/3995
+  [3698]: https://github.com/sbt/sbt/issues/3698
+  [4023]: https://github.com/sbt/sbt/pull/4023
+  [4194]: https://github.com/sbt/sbt/pull/4194
+  [4080]: https://github.com/sbt/sbt/pull/4080
+  [4106]: https://github.com/sbt/sbt/pull/4106
+  [4124]: https://github.com/sbt/sbt/pull/4124
+  [4090]: https://github.com/sbt/sbt/pull/4090
+  [4154]: https://github.com/sbt/sbt/pull/4154
+  [4159]: https://github.com/sbt/sbt/pull/4159
+  [4169]: https://github.com/sbt/sbt/pull/4169
+  [4164]: https://github.com/sbt/sbt/pull/4164
+  [4187]: https://github.com/sbt/sbt/pull/4187
+  [4198]: https://github.com/sbt/sbt/pull/4198
+  [4216]: https://github.com/sbt/sbt/pull/4216
+  [4220]: https://github.com/sbt/sbt/pull/4220
+  [4221]: https://github.com/sbt/sbt/pull/4221
+  [4226]: https://github.com/sbt/sbt/pull/4226
+  [4232]: https://github.com/sbt/sbt/pull/4232
+  [4227]: https://github.com/sbt/sbt/pull/4227
+  [4003]: https://github.com/sbt/sbt/pull/4003
+  [4218]: https://github.com/sbt/sbt/pull/4218
+  [4245]: https://github.com/sbt/sbt/pull/4245
+  [4246]: https://github.com/sbt/sbt/pull/4246
+  [4253]: https://github.com/sbt/sbt/pull/4253
+  [4258]: https://github.com/sbt/sbt/pull/4258
+  [4263]: https://github.com/sbt/sbt/pull/4263
+  [4264]: https://github.com/sbt/sbt/pull/4264
+  [4269]: https://github.com/sbt/sbt/pull/4269
+  [4270]: https://github.com/sbt/sbt/pull/4270
+  [io104]: https://github.com/sbt/io/pull/104
+  [io132]: https://github.com/sbt/io/pull/132
+  [io134]: https://github.com/sbt/io/pull/134
+  [util139]: https://github.com/sbt/util/pull/139
+  [util153]: https://github.com/sbt/util/pull/153
+  [util169]: https://github.com/sbt/util/pull/169
+  [lm177]: https://github.com/sbt/librarymanagement/pull/177
+  [lm203]: https://github.com/sbt/librarymanagement/pull/203
+  [lm211]: https://github.com/sbt/librarymanagement/pull/211
+  [lm239]: https://github.com/sbt/librarymanagement/pull/239
+  [lm246]: https://github.com/sbt/librarymanagement/pull/246
+  [lm248]: https://github.com/sbt/librarymanagement/pull/248
+  [lm249]: https://github.com/sbt/librarymanagement/pull/249
+  [lm255]: https://github.com/sbt/librarymanagement/pull/255
+  [zinc493]: https://github.com/sbt/zinc/pull/493
+  [zinc506]: https://github.com/sbt/zinc/pull/506
+  [zinc510]: https://github.com/sbt/zinc/pull/510
+  [zinc422]: https://github.com/sbt/zinc/pull/422
+  [zinc548]: https://github.com/sbt/zinc/pull/548
+  [zinc557]: https://github.com/sbt/zinc/pull/557
+  [@eed3si9n]: https://github.com/eed3si9n
+  [@dwijnand]: http://github.com/dwijnand
+  [@cunei]: https://github.com/cunei
+  [@jvican]: https://github.com/jvican
+  [@Duhemm]: https://github.com/Duhemm
+  [@jrudolph]: https://github.com/jrudolph
+  [@2m]: https://github.com/2m
+  [@retronym]: https://github.com/retronym
+  [@xuwei-k]: https://github.com/xuwei-k
+  [@BennyHill]: https://github.com/BennyHill
+  [@stephennancekivell]: https://github.com/stephennancekivell
+  [@exoego]: https://github.com/exoego
+  [@tanishiking]: https://github.com/tanishiking
+  [@peterneyens]: https://github.com/peterneyens
+  [@khvatov]: https://github.com/khvatov
+  [@OlegYch]: https://github.com/OlegYch
+  [@kaygorodov]: https://github.com/kaygorodov
+  [@natansil]: https://github.com/natansil
+  [@romanowski]: https://github.com/romanowski
+  [@lukaszwawrzyk]: https://github.com/lukaszwawrzyk
+  [@colindean]: https://github.com/colindean
+  [@dkim]: https://github.com/dkim
+  [@fmlrt]: https://github.com/fmlrt
+  [@ruippeixotog]: https://github.com/ruippeixotog
+  [@veera83372]: https://github.com/veera8337
+  [@naferx]: https://github.com/naferx
+  [@timcharper]: https://github.com/timcharper
+  [@Asamsig]: https://github.com/Asamsig
+  [@tiqwab]: https://github.com/tiqwab
+  [@alodavi]: https://github.com/alodavi
+  [@mcanlas]: https://github.com/mcanlas
+  [@agaro1121]: https://github.com/agaro1121
+  [@regadas]: https://github.com/regadas
+  [@gpoirier]: https://github.com/gpoirier
+  [@driquelme]: https://github.com/driquelme
+  [@raboof]: https://github.com/raboof
+  [@bpholt]: https://github.com/bpholt
+
+
+
 ## sbt 1.1.x releases
+
+### sbt 1.1.6
+
+#### Bug fixes
+
+- Fixes file watching for Unix/Linux. [io#150][io150] by [@eatkins][@eatkins]
+- Fixes packageBin not creating file when deleted. sbt/sbt#4161 by [@dadarakt][]
+- Fixes help -v rendering of multi-line descriptions. [#4160][4160] by [@ninjalama][@ninjalama]
+- Fixes --error etc to set log level. [#4162][4162] by [@holdenk][@holdenk]
+- Handles managedSources writing into unmanaged source directories. [#4099][4099] by [@eatkins][@eatkins]
+- Fixes handling of overflows in EventMonitor. [io#155][io155] by [@eatkins][@eatkins]
+- Recovers "Resolving..." log under `UpdateLogging.Full`. [lm#240][lm240] by [@hodga][@hodga]
+- Fixes `-Dconfig.resource=/path/to/configFile` conflicting with Gigahorse. [lm#241][lm241] by [@tanishiking][@tanishiking] 
+- Removes use of deprecated ModifiedTime methods. [io#154][io154] by [@dwestheide][@dwestheide]
+- Fixes tests on Windows. [io#153][io153] by [@OlegYch][@OlegYch]
+
+#### Contributors
+
+A huge thank you to everyone who's helped improve sbt and Zinc 1 by using them, reporting bugs, improving our documentation, porting builds, porting plugins, and submitting and reviewing pull requests.
+
+sbt 1.1.6 was brought to you by 15 contributors, according to `git shortlog -sn --no-merges v1.1.5...v1.1.6` on sbt, zinc, librarymanagement, util, io, launcher-package, and website: Ethan Atkins, Eugene Yokota, Dale Wijnand, Aaron S. Hawley, OlegYch, Richard Summerhayes, Jannis (dadarakt), Rikito Taniguchi (tanishiking), Øyvind Høisæther, Daniel Westheide, Harrison Houghton, Holden Karau, Håkon Wold, Jason Zaugg, and tekay.
+
+  [@eed3si9n]: https://github.com/eed3si9n
+  [@dwijnand]: http://github.com/dwijnand
+  [@cunei]: https://github.com/cunei
+  [@jvican]: https://github.com/jvican
+  [@Duhemm]: https://github.com/Duhemm
+  [@xuwei-k]: https://github.com/xuwei-k
+  [@retronym]: https://github.com/retronym
+  [@eatkins]: https://github.com/eatkins
+  [@dadarakt]: https://github.com/dadarakt
+  [@ninjalama]: https://github.com/ninjalama
+  [@holdenk]: https://github.com/holdenk
+  [@hodga]: https://github.com/hodga
+  [@tanishiking]: https://github.com/tanishiking
+  [@dwestheide]: https://github.com/dwestheide
+  [@OlegYch]: https://github.com/OlegYch
+   
+  [io150]: https://github.com/sbt/io/pull/150
+  [io153]: https://github.com/sbt/io/pull/153
+  [io154]: https://github.com/sbt/io/pull/154
+  [io155]: https://github.com/sbt/io/pull/155
+  [lm240]: https://github.com/sbt/librarymanagement/pull/240
+  [lm241]: https://github.com/sbt/librarymanagement/pull/241
+  [4099]: https://github.com/sbt/sbt/pull/4099
+  [4159]: https://github.com/sbt/sbt/pull/4159
+  [4160]: https://github.com/sbt/sbt/pull/4160
+  [4161]: https://github.com/sbt/sbt/pull/4161
+  [4162]: https://github.com/sbt/sbt/pull/4162
+  [4163]: https://github.com/sbt/sbt/pull/4163
+  [4164]: https://github.com/sbt/sbt/pull/4164
+
+----
+
+### sbt 1.1.5
+
+#### Bug fixes
+
+- Fixes the latency between file modification events and triggered execution. [io#142][io142] and [sbt#4096][4096] by [@eatkins][@eatkins]
+- Fixes NPE that could arise from WatchEvent [io#140][io140] by [@oneill][@oneill]
+- Fixes deleted files not triggering `~`. [sbt#4098][4098] by [@eatkins][@eatkins]
+- Fixes MacOSXWatchService to meet the WatchService API. [io#142][io142] by [@eatkins][@eatkins]
+- Avoids printing `RejectedExectionExeption` stack trace after cancellation. [sbt#4058][4058] by [@retronym][@retronym]
+- Fixes Java version checking on Windows. [lp#227][lp227] / [lp#228][lp228] by [@jessicah][@jessicah] and [@spangaer][@spangaer]
+- Fixes unexpected responses from sbt server. [sbt#4093][4093] by [@laughedelic][@laughedelic]
+- Re-fix console and JLine bug. [sbt#4123][4123] by [@eed3si9n][@eed3si9n]
+- Fixes grammar for contributors guide. [sbt#4133][4133] by [@som-snytt][@som-snytt]
+
+#### Improvements
+
+- Performance optimization for Zinc. [zinc#492][zinc492] by [@retronym][@retronym]
+- Adds support for detecting Dotty compiler plugins. [zinc#529][zinc529] by [@liufengyun][@liufengyun]
+- Bumps Scala to 2.12.6. [sbt#4129][4129] by [@SethTisue][@SethTisue]
+- Updates to JLine 2.14.6. [sbt#4087][4087] by [@hvesalai][@hvesalai]
+- Start sbt in VS Code terminal window. See below.
+
+#### Watcher improvements
+
+Continuing from sbt 1.1.4, Ethan Atkins contributed fixes and improvements for triggered execution `~` watcher. sbt 1.1.5 should fix the latency between file modification events and the command execution.
+
+#### VS Code extension update
+
+We released a new sbt VS Code extension that starts sbt session in the embedded terminal window. This was contributed by Robert Walker ([@WalkingOlof][@WalkingOlof]) in [sbt#4130][4130].
+
+#### sbt by example
+
+We added [sbt by example][by-example] to the sbt documentation.
+This is a single-page guide that takes you from zero to building an app on Docker, inspired by, and largely based on William Narmontas ([@ScalaWilliam][@ScalaWilliam])'s [Essential sbt][essential-sbt].
+
+#### Contributors
+
+A huge thank you to everyone who's helped improve sbt and Zinc 1 by using them, reporting bugs, improving our documentation, porting builds, porting plugins, and submitting and reviewing pull requests.
+
+sbt 1.1.5 was brought to you by 21 constributors, according to `git shortlog -sn --no-merges v1.1.4...v1.1.5` on sbt, zinc, librarymanagement, util, io, launcher-packege, and website: Eugene Yokota, Ethan Atkins, Jason Zaugg, Liu Fengyun, Antonio Cunei, Dale Wijnand, Roberto Bonvallet, Alexey Alekhin, Daniel Parks, Heikki Vesalainen, Jean-Luc Deprez, Jessica Hamilton, Kenji Yoshida (xuwei-k), Nikita Gazarov, OlegYch, Richard Summerhayes, Robert Walker, Seth Tisue, Som Snytt, oneill, and 杨博 (Yang Bo)
+
+
+  [@eed3si9n]: https://github.com/eed3si9n
+  [@dwijnand]: http://github.com/dwijnand
+  [@cunei]: https://github.com/cunei
+  [@jvican]: https://github.com/jvican
+  [@Duhemm]: https://github.com/Duhemm
+  [@xuwei-k]: https://github.com/xuwei-k
+  [@retronym]: https://github.com/retronym
+  [@eatkins]: https://github.com/eatkins
+  [@oneill]: https://github.com/oneill
+  [@jessicah]: https://github.com/jessicah
+  [@spangaer]: https://github.com/spangaer
+  [@laughedelic]: https://github.com/laughedelic
+  [@som-snytt]: https://github.com/som-snytt
+  [@liufengyun]: https://github.com/liufengyun
+  [@SethTisue]: https://github.com/SethTisue
+  [@hvesalai]: https://github.com/hvesalai
+  [@olofwalker]: https://github.com/olofwalker
+  [@ScalaWilliam]: https://twitter.com/ScalaWilliam
+  [@WalkingOlof]: https://twitter.com/WalkingOlof
+  [io140]: https://github.com/sbt/io/pull/140
+  [io142]: https://github.com/sbt/io/pull/142
+  [4058]: https://github.com/sbt/sbt/pull/4058
+  [4087]: https://github.com/sbt/sbt/pull/4087
+  [4093]: https://github.com/sbt/sbt/pull/4093
+  [4096]: https://github.com/sbt/sbt/pull/4096
+  [4098]: https://github.com/sbt/sbt/pull/4098
+  [4123]: https://github.com/sbt/sbt/pull/4123
+  [4129]: https://github.com/sbt/sbt/pull/4129
+  [4130]: https://github.com/sbt/sbt/pull/4130
+  [4133]: https://github.com/sbt/sbt/pull/4133
+  [lp227]: https://github.com/sbt/sbt-launcher-package/pull/227
+  [lp228]: https://github.com/sbt/sbt-launcher-package/pull/228
+  [zinc492]: https://github.com/sbt/zinc/pull/492
+  [zinc529]: https://github.com/sbt/zinc/pull/529
+  [by-example]: https://www.scala-sbt.org/1.x/docs/sbt-by-example.html
+  [essential-sbt]: https://www.scalawilliam.com/essential-sbt/
+
+----
+
+### sbt 1.1.4
+
+#### Bug fixes
+
+- Fixes triggered execution on macOS. See below for details.
+- Fixes running `console` twice messing up JLine. [#3482][3482]/[#4054][4054] by [@eed3si9n][@eed3si9n]
+- Fixes `updateSbtClassifiers`. [#4070][4070]/[#3432][3432] by [@steinybot][@steinybot]
+- Fixes Java error message handling. [zinc#524][zinc524]/[zinc#525][zinc525] by [@retronym][@retronym] and [@dwijnand][@dwijnand]
+- Fixes the error message linking to the migration guide. [#4063][4063] by [@dwijnand][@dwijnand]
+- Fixes batch script so sbt runs on JDK 10 on Windows. [lp#225][lp225] by [@eed3si9n][@eed3si9n]
+- Fixes bash script so `sbt -debug` changes log level to debug. [lp#226][lp226] by [@eed3si9n][@eed3si9n]
+
+#### Improvements
+
+- Exposes `sbt.io.JavaMilli`. [io#139][io139] by [@dwijnand][@dwijnand]
+- Adds `-Dsbt.launcher.cp.prepend` JVM flag that is used for monkey patching sbt. [launcher#50][launcher50] by [@fommil][@fommil]
+
+#### Triggered execution on macOS
+
+sbt has long had issues with triggered execution on macOS. Ethan Atkins has contributed a fix for this problem by merging MacOSXWatchService from his [CloseWatch][closewatch]. Thanks, Ethan!
+
+Credit also goes to Greg Methvin and Takari's directory-watcher. [#3860][3860]/[#4071][4071]/[io#138][io138] by [@eatkins][@eatkins]
+
+#### Running sbt with standby
+
+One of the tricky things you come across while profiling is figuring out the process ID,
+while wanting to profile the beginning of the application.
+
+For this purpose, we've added `sbt.launcher.standby` JVM flag. Starting sbt 1.1.4, you can run:
+
+```
+$ sbt -J-Dsbt.launcher.standby=20s exit
+```
+
+This will count down for 20s before doing anything else. [launcher#51][launcher51] by [@eed3si9n][@eed3si9n]
+
+#### Loading performance improvement
+
+Using Flame graph (if you haven't yet, check out [Profiling JVM applications](../2018-04-09-profiling-JVM-applications/) post), Jason Zaugg identified hashing code of the build file to be one of the hot paths during sbt startup. Flame graph supports `Ctrl+F` to filter on method names; and when I ran it, it showed 4.5% of the time was spent in `Eval#evalCommon` method.
+
+Instead of creating an intermediate `Array[Byte]` and passing it to `MessageDigest` at the end, Jason suggested that we pass the arrays to `MessageDigest#update` in a more procedural style. After confirming that it worked, we've next identified file timestamp code to be the next bottle neck using Flame graph, so that was switched to using NIO. After both changes, `Eval#evalCommon`'s footprint reduced to 2.3%.
+
+This means that your build loads slightly faster on sbt 1.1.4 (about 0.54s faster on akka/akka, for example). [#4067][4067] by [@eed3si9n][@eed3si9n]
+
+### Contributors
+
+A huge thank you to everyone who's helped improve sbt and Zinc 1 by using them, reporting bugs, improving our documentation, porting builds, porting plugins, and submitting and reviewing pull requests.
+
+sbt 1.1.4 was brought to you by 11 contributors, according to `git shortlog -sn --no-merges v1.1.2...v1.1.4` on sbt, zinc, librarymanagement, util, io, launcher-packege, and website: Eugene Yokota, Dale Wijnand, 杨博 (Yang Bo), Ethan Atkins, Sam Halliday, Aaron S. Hawley, Gabriele Petronella, Jason Steenstra-Pickens, Jason Zaugg, Julien Jean Paul Sirocchi, and aumann.
+
+  [@eed3si9n]: https://github.com/eed3si9n
+  [@dwijnand]: http://github.com/dwijnand
+  [@cunei]: https://github.com/cunei
+  [@jvican]: https://github.com/jvican
+  [@Duhemm]: https://github.com/Duhemm
+  [@xuwei-k]: https://github.com/xuwei-k
+  [@retronym]: https://github.com/retronym
+  [@eatkins]: https://github.com/eatkins
+  [@steinybot]: https://github.com/steinybot
+  [@fommil]: https://github.com/fommil
+  [closewatch]: https://github.com/swoval/swoval/tree/master/plugin
+  [io138]: https://github.com/sbt/io/pull/138
+  [io139]: https://github.com/sbt/io/pull/139
+  [3860]: https://github.com/sbt/sbt/issues/3860
+  [4071]: https://github.com/sbt/sbt/pull/4071
+  [zinc524]: https://github.com/sbt/zinc/pull/524
+  [zinc525]: https://github.com/sbt/zinc/pull/525
+  [4054]: https://github.com/sbt/sbt/pull/4054
+  [3482]: https://github.com/sbt/sbt/issues/3482
+  [4063]: https://github.com/sbt/sbt/pull/4063
+  [4067]: https://github.com/sbt/sbt/pull/4067
+  [4070]: https://github.com/sbt/sbt/pull/4070
+  [3432]: https://github.com/sbt/sbt/issues/3432
+  [launcher50]: https://github.com/sbt/launcher/pull/50
+  [launcher51]: https://github.com/sbt/launcher/pull/51
+  [lp225]: https://github.com/sbt/sbt-launcher-package/pull/225
+  [lp226]: https://github.com/sbt/sbt-launcher-package/pull/226
+
+----
 
 ### sbt 1.1.2
 
@@ -11089,16 +11759,15 @@ per project.
 The following full build configuration demonstrates integration tests.
 
 ```scala
-lazy val commonSettings = Seq(
-  scalaVersion := "2.12.6",
-  organization := "com.example"
-)
 lazy val scalatest = "org.scalatest" %% "scalatest" % "3.0.5"
+
+ThisBuild / organization := "com.example"
+ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
   .configs(IntegrationTest)
   .settings(
-    commonSettings,
     Defaults.itSettings,
     libraryDependencies += scalatest % "it,test"
     // other settings here
@@ -11159,17 +11828,16 @@ IntegrationTest / testOptions := Seq(...)
 The previous example may be generalized to a custom test configuration.
 
 ```scala
-lazy val commonSettings = Seq(
-  scalaVersion := "2.12.6",
-  organization := "com.example"
-)
 lazy val scalatest = "org.scalatest" %% "scalatest" % "3.0.5"
 lazy val FunTest = config("fun") extend(Test)
+
+ThisBuild / organization := "com.example"
+ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
   .configs(FunTest)
   .settings(
-    commonSettings,
     inConfig(FunTest)(Defaults.testSettings),
     libraryDependencies += scalatest % FunTest
     // other settings here
@@ -11218,12 +11886,12 @@ compiled together using the same classpath and are packaged together.
 However, different tests are run depending on the configuration.
 
 ```scala
-lazy val commonSettings = Seq(
-  scalaVersion := "2.12.6",
-  organization := "com.example"
-)
 lazy val scalatest = "org.scalatest" %% "scalatest" % "3.0.5"
 lazy val FunTest = config("fun") extend(Test)
+
+ThisBuild / organization := "com.example"
+ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 def itFilter(name: String): Boolean = name endsWith "ITest"
 def unitFilter(name: String): Boolean = (name endsWith "Test") && !itFilter(name)
@@ -11231,7 +11899,6 @@ def unitFilter(name: String): Boolean = (name endsWith "Test") && !itFilter(name
 lazy val root = (project in file("."))
   .configs(FunTest)
   .settings(
-    commonSettings,
     inConfig(FunTest)(Defaults.testTasks),
     libraryDependencies += scalatest % FunTest,
     testOptions in Test := Seq(Tests.Filter(unitFilter)),
@@ -12576,7 +13243,7 @@ credentials += Credentials("Some Nexus Repository Manager", "my.artifact.repo.ne
 The second and better way is to load them from a file, for example:
 
 ```scala
-credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
+credentials += Credentials(Path.userHome / ".sbt" / ".credentials")
 ```
 
 The credentials file is a properties file with keys `realm`, `host`,
@@ -14442,13 +15109,12 @@ Here's `build.sbt`:
 ```scala
 import CommandExample._
 
-lazy val commonSettings = Seq(
-  scalaVersion := "2.12.6",
-)
+ThisBuild / organization := "com.example"
+ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
   .settings(
-    commonSettings,
     commands ++= Seq(hello, helloAll, failIfTrue, changeColor, printState)
   )
 ```
@@ -15410,10 +16076,14 @@ This kind of plugin may provide these settings
 automatically or make them available for the user to explicitly
 integrate.
 
-To make an auto plugin, create a project and configure `sbtPlugin` to `true`.
+To make an auto plugin, create a project and enable `SbtPlugin`.
 
 ```scala
-sbtPlugin := true
+lazy val root = (project in file("."))
+  .enablePlugins(SbtPlugin)
+  .settings(
+    name := "sbt-something"
+  )
 ```
 
 Then, write the plugin code and publish your project to a repository.
@@ -16564,22 +17234,33 @@ The framework is made available via scripted-plugin. The rest of this page expla
 
 Before you start, set your version to a **-SNAPSHOT** one because scripted-plugin will publish your plugin locally. If you don't use SNAPSHOT, you could get into a horrible inconsistent state of you and the rest of the world seeing different artifacts.
 
-### step 2: scripted-plugin
+### step 2: SbtPlugin
 
-Add scripted-plugin to your plugin build. `project/scripted.sbt`:
+Enable `SbtPlugin` in `build.sbt`:
 
 ```scala
-libraryDependencies += { "org.scala-sbt" %% "scripted-plugin" % sbtVersion.value }
+lazy val root = (project in file("."))
+  .enablePlugins(SbtPlugin)
+  .settings(
+    name := "sbt-something"
+  )
 ```
 
 Then add the following settings to `build.sbt`:
 
 ```scala
-scriptedLaunchOpts := { scriptedLaunchOpts.value ++
-  Seq("-Xmx1024M", "-Dplugin.version=" + version.value)
-}
-scriptedBufferLog := false
+lazy val root = (project in file("."))
+  .enablePlugins(SbtPlugin)
+  .settings(
+    name := "sbt-something",
+    scriptedLaunchOpts := { scriptedLaunchOpts.value ++
+      Seq("-Xmx1024M", "-Dplugin.version=" + version.value)
+    },
+    scriptedBufferLog := false
+  )
 ```
+
+**Note**: You must use sbt 1.2.1 and above to use `SbtPlugin`.
 
 ### step 3: src/sbt-test
 
@@ -19198,13 +19879,11 @@ See [.sbt build definition][Basic-Def] for details.
 ```scala
 import scala.concurrent.duration._
 
-// factor out common settings into a sequence
-lazy val commonSettings = Seq(
-  organization := "org.myproject",
-  version := "0.1.0",
-  // set the Scala version used for the project
-  scalaVersion := "2.12.6"
-)
+// factor out common settings
+ThisBuild / organization := "org.myproject"
+ThisBuild / scalaVersion := "2.12.6"
+// set the Scala version used for the project
+ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 // define ModuleID for library dependencies
 lazy val scalacheck = "org.scalacheck" %% "scalacheck" % "1.13.4"
@@ -19216,8 +19895,6 @@ lazy val osmlib = ("net.sf.travelingsales" % "osmlib" % osmlibVersion from
 
 lazy val root = (project in file("."))
   .settings(
-    commonSettings,
-
     // set the name of the project
     name := "My Project",
 
@@ -19583,17 +20260,14 @@ lazy val CustomCompile = config("compile") extend(Saxon, Common, Scalate)
 
 /********** Projects ************/
 
-// factor out common settings into a sequence
-lazy val commonSettings = Seq(
-  organization := "com.example",
-  version := "0.1.0",
-  scalaVersion := "2.10.4"
-)
+// factor out common settings
+ThisBuild / organization := "com.example"
+ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 // An example project that only uses the Scalate utilities.
 lazy val a = (project in file("a"))
   .dependsOn(utils % "compile->scalate")
-  .settings(commonSettings)
 
 // An example project that uses the Scalate and Saxon utilities.
 // For the configurations defined here, this is equivalent to doing dependsOn(utils),
@@ -19601,13 +20275,10 @@ lazy val a = (project in file("a"))
 //  dependencies.
 lazy val b = (project in file("b"))
   .dependsOn(utils % "compile->scalate,saxon")
-  .settings(commonSettings)
 
 // Defines the utilities project
 lazy val utils = (project in file("utils"))
   .settings(
-    commonSettings,
-
     inConfig(Common)(Defaults.configSettings),  // Add the src/common/scala/ compilation configuration.
     addArtifact(artifact in (Common, packageBin), packageBin in Common), // Publish the common artifact
 

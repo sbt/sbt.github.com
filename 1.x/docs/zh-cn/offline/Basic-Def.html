@@ -68,15 +68,12 @@
 </p><p>总结：一个构建定义是一个<code>Project</code>，拥有一个类型为 <code>Setting[T]</code> 的列表，<code>Setting[T]</code> 是会影响到 sbt 保存键值对的 map 的一种转换，<code>T</code> 是每一个 value 的类型。
 </p><h3 id="%E5%A6%82%E4%BD%95%E5%9C%A8+build.sbt+%E4%B8%AD%E5%AE%9A%E4%B9%89%E8%AE%BE%E7%BD%AE">如何在 build.sbt 中定义设置<a href="#%E5%A6%82%E4%BD%95%E5%9C%A8+build.sbt+%E4%B8%AD%E5%AE%9A%E4%B9%89%E8%AE%BE%E7%BD%AE" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> 定义了一个 <code>Project</code>，它持有一个名为<code>settings</code>的scala表达式列表。
 </p><p>下面是一个例子：
-</p><pre><code class="prettyprint lang-scala">lazy val commonSettings = Seq(
-  organization := &quot;com.example&quot;,
-  version := &quot;0.1.0&quot;,
-  scalaVersion := &quot;2.12.6&quot;
-)
+</p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;
+ThisBuild / scalaVersion := &quot;2.12.6&quot;
+ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
   .settings(
-    commonSettings,
     name := &quot;hello&quot;
   )
 </code></pre><p>每一项 <code>Setting</code> 都定义为一个 Scala 表达式。在 <code>settings</code> 中的表达式是相互独立的，而且它们仅仅是表达式，不是完整的 Scala 语句。
@@ -145,15 +142,12 @@ scalaVersion := &quot;2.12.6&quot;
 </code></pre><h3 id="%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96%E5%BA%93">添加依赖库<a href="#%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96%E5%BA%93" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>有两种方式添加第三方的依赖。一种是将 jar 文件 放入 <code>lib/</code>（非托管的依赖）中，另一种是在 <code>build.sbt</code> 中添加托管的依赖，像这样：
 </p><pre><code class="prettyprint lang-scala">val derby = &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot;
 
-lazy val commonSettings = Seq(
-  organization := &quot;com.example&quot;,
-  version := &quot;0.1.0&quot;,
-  scalaVersion := &quot;2.12.6&quot;
-)
+ThisBuild / organization := &quot;com.example&quot;
+ThisBuild / scalaVersion := &quot;2.12.6&quot;
+ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
   .settings(
-    commonSettings,
     name := &quot;hello&quot;,
     libraryDependencies += derby
   )
