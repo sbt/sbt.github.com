@@ -1001,7 +1001,7 @@ This page is based on the [Essential sbt][essential-sbt] tutorial written by Wil
 Directory structure
 -------------------
 
-This page assumes you've [installed sbt][Setup] and seen the
+This page assumes you've [installed sbt][Setup] and seen
 [sbt by example][ByExample].
 
 ### Base directory
