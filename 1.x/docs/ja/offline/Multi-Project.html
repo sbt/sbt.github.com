@@ -34,10 +34,10 @@
             </script>
       </head>
       <body class="color_scheme-github">
-        <a class="page prev nav" href="Basic-Def.html">
+        <a class="page prev nav" href="Library-Dependencies.html">
             <span class="space">&nbsp;</span>
             <span class="flip arrow">&gt;</span>
-          </a><a class="page next nav" href="Task-Graph.html">
+          </a><a class="page next nav" href="Using-Plugins.html">
             <span class="space">&nbsp;</span>
             <span class="arrow">&gt;</span>
           </a>
@@ -60,31 +60,13 @@ ID は sbt シェルからプロジェクトを指定する時に用いられる
 </p><pre><code class="prettyprint lang-scala">lazy val util = project
 
 lazy val core = project
-</code></pre><h4 id="%E3%83%93%E3%83%AB%E3%83%89%E3%83%AF%E3%82%A4%E3%83%89%E3%83%BB%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0">ビルドワイド・セッティング<a href="#%E3%83%93%E3%83%AB%E3%83%89%E3%83%AF%E3%82%A4%E3%83%89%E3%83%BB%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>複数プロジェクトに共通なセッティングをくくり出す場合、
-セッティングを <code>ThisBuild</code> にスコープ付けする。
-ただし、右辺値には純粋な値か <code>Global</code> もしくは <code>ThisBuild</code>
-にスコープ付けされたセッティングしか置くことができない、
-またサブプロジェクトにスコープ付けされたセッティングがデフォルトで存在しない必要があるというという制約がある。
-（<a href="Scopes.html">スコープ</a>参照）
-</p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
-ThisBuild / scalaVersion := &quot;2.12.6&quot;
-
-lazy val core = (project in file(&quot;core&quot;))
-  .settings(
-    // other settings
-  )
-
-lazy val util = (project in file(&quot;util&quot;))
-  .settings(
-    // other settings
-  )
-</code></pre><p>これで <code>version</code> を一箇所で変更すれば、再読み込み後に全サブプロジェクトに反映されるようになる。
-</p><h4 id="%E5%85%B1%E9%80%9A%E3%81%AE%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0">共通のセッティング<a href="#%E5%85%B1%E9%80%9A%E3%81%AE%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>複数プロジェクトに共通なセッティングをくくり出す場合、
+</code></pre><h4 id="%E5%85%B1%E9%80%9A%E3%81%AE%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0">共通のセッティング<a href="#%E5%85%B1%E9%80%9A%E3%81%AE%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>複数プロジェクトに共通なセッティングをくくり出す場合、
 <code>commonSettings</code> という名前のセッティングの Seq を作って、
 それを引数として各プロジェクトの <code>settings</code> メソッドを呼び出せばよい。
 </p><pre><code class="prettyprint lang-scala">lazy val commonSettings = Seq(
-  target := { baseDirectory.value / &quot;target2&quot; }
+  organization := &quot;com.example&quot;,
+  version := &quot;0.1.0&quot;,
+  scalaVersion := &quot;2.12.7&quot;
 )
 
 lazy val core = (project in file(&quot;core&quot;))
@@ -98,7 +80,10 @@ lazy val util = (project in file(&quot;util&quot;))
     commonSettings,
     // other settings
   )
-</code></pre><h3 id="%E4%BE%9D%E5%AD%98%E9%96%A2%E4%BF%82">依存関係<a href="#%E4%BE%9D%E5%AD%98%E9%96%A2%E4%BF%82" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>一つのビルドの中の個々のプロジェクトはお互いに完全に独立した状態であってもよいが、
+</code></pre><p>これで <code>version</code> を一箇所で変更すれば、再読み込み後に全サブプロジェクトに反映されるようになる。
+</p><h4 id="%E3%83%93%E3%83%AB%E3%83%89%E3%83%AF%E3%82%A4%E3%83%89%E3%83%BB%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0">ビルドワイド・セッティング<a href="#%E3%83%93%E3%83%AB%E3%83%89%E3%83%AF%E3%82%A4%E3%83%89%E3%83%BB%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>サブプロジェクト間に共通なセッティングを一度に定義するためのもう一つの方法として、
+<code>ThisBuild</code> にスコープ付けするという少し上級なテクニックがある。（<a href="Scopes.html">スコープ</a>参照）
+</p><h3 id="%E4%BE%9D%E5%AD%98%E9%96%A2%E4%BF%82">依存関係<a href="#%E4%BE%9D%E5%AD%98%E9%96%A2%E4%BF%82" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>一つのビルドの中の個々のプロジェクトはお互いに完全に独立した状態であってもよいが、
 普通、何らかの形で依存関係を持っているだろう。
 ここでは集約（<code>aggregate</code>）とクラスパス（<code>classpath</code>）という二種類の依存関係がある。
 </p><h4 id="%E9%9B%86%E7%B4%84">集約<a href="#%E9%9B%86%E7%B4%84" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>集約とは、集約する側のプロジェクトであるタスクを実行するとき、集約される側の複数のプロジェクトでも同じタスクを実行するという関係を意味する。例えば、
@@ -192,16 +177,16 @@ lazy val core = (project in file(&quot;core&quot;))
 </p><div class="bottom nav span-16">
                         <em>Next Page</em>
                         <span class="arrow">&gt;</span>
-                        <a href="Task-Graph.html"> タスク・グラフ </a>                        
+                        <a href="Using-Plugins.html"> プラグインの使用 </a>                        
                         <ul class="language-bar">
-        <li><a href="../Multi-Project.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/Multi-Project.html"><span class="lang-item lang-ja">日本語</span></a></li>
+        <li><a href="../Multi-Project.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/Multi-Project.html"><span class="lang-item lang-ja">日本語</span></a></li><li><a href="../zh-cn/Multi-Project.html"><span class="lang-item lang-zh-cn">中文 (简体)</span></a></li>
       </ul>
                       </div><div class="tocwrapper show">
       <a class="tochead nav" style="display: none" href="#toc">❦</a>
       <a name="toc"></a>
       <h4 class="toctitle">Contents</h4>
       <div class="tocbody">
-      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">始める sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">sbt のインストール</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Mac への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Linux への sbt のインストール</a></div></li> </ol></li><li><div><a href="sbt-by-example.html">例題でみる sbt</a></div></li><li><div><a href="Directories.html">ディレクトリ構造</a></div></li><li><div><a href="Running.html">実行</a></div></li><li><div><a href="Basic-Def.html">ビルド定義</a></div></li><li><div class="current">マルチプロジェクト・ビルド</div></li><li><div><a href="Task-Graph.html">タスク・グラフ</a></div></li><li><div><a href="Scopes.html">スコープ</a></div></li><li><div><a href="Appending-Values.html">値の追加</a></div></li><li><div><a href="Scope-Delegation.html">スコープ委譲 (.value の照会)</a></div></li><li><div><a href="Library-Dependencies.html">ライブラリ依存性</a></div></li><li><div><a href="Using-Plugins.html">プラグインの使用</a></div></li><li><div><a href="Custom-Settings.html">カスタムセッティングとタスク</a></div></li><li><div><a href="Organizing-Build.html">ビルドの整理</a></div></li><li><div><a href="Summary.html">まとめ</a></div></li><li><div><a href="Bare-Def.html">付録: bare .sbt ビルド定義</a></div></li> </ol></li><li><div><a href="General-Info.html">インフォメーション</a></div><ol class="toc"> <li><div><a href="Changes.html">変更点</a></div><ol class="toc"> <li><div><a href="sbt-1.0-Release-Notes.html">sbt 1.0.0</a></div></li> </ol></li> </ol></li><li><div><a href="Detailed-Topics.html">各論</a></div><ol class="toc"> <li><div><a href="Plugins-and-Best-Practices.html">プラグインとベストプラクティス</a></div><ol class="toc"> <li><div><a href="Best-Practices.html">一般的なベストプラクティス</a></div></li><li><div><a href="Testing-sbt-plugins.html">sbt プラグインをテストする</a></div></li> </ol></li> </ol></li><li><div><a href="Howto.html">How to</a></div><ol class="toc"> <li><div><a href="Howto-Generating-Files.html">ソースファイル/リソースファイルの生成</a></div></li><li><div><a href="Howto-Sequencing.html">逐次実行</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Def.sequential を用いて逐次タスクを定義する</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Def.taskDyn を用いて動的タスクを定義する</a></div></li><li><div><a href="Howto-After-Input-Task.html">インプットタスクの後で何かする</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn を用いた動的インプットタスクの定義</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">コマンドを用いた逐次実行</a></div></li> </ol></li> </ol></li><li><div><a href="Archived+pages.html">Archived pages</a></div><ol class="toc"> <li><div><a href="Hello.html">Hello, World</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">始める sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">sbt のインストール</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Mac への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Linux への sbt のインストール</a></div></li> </ol></li><li><div><a href="sbt-by-example.html">例題でみる sbt</a></div></li><li><div><a href="sbt-by-example.html">例題でみる sbt</a></div></li><li><div><a href="Directories.html">ディレクトリ構造</a></div></li><li><div><a href="Running.html">実行</a></div></li><li><div><a href="Basic-Def.html">ビルド定義</a></div></li><li><div><a href="Multi-Project.html">マルチプロジェクト・ビルド</a></div></li><li><div><a href="Task-Graph.html">タスク・グラフ</a></div></li><li><div><a href="Scopes.html">スコープ</a></div></li><li><div><a href="Appending-Values.html">値の追加</a></div></li><li><div><a href="Scope-Delegation.html">スコープ委譲 (.value の照会)</a></div></li><li><div><a href="Library-Dependencies.html">ライブラリ依存性</a></div></li><li><div class="current">マルチプロジェクト・ビルド</div></li><li><div><a href="Using-Plugins.html">プラグインの使用</a></div></li><li><div><a href="Custom-Settings.html">カスタムセッティングとタスク</a></div></li><li><div><a href="Organizing-Build.html">ビルドの整理</a></div></li><li><div><a href="Summary.html">まとめ</a></div></li><li><div><a href="Bare-Def.html">付録: bare .sbt ビルド定義</a></div></li> </ol></li><li><div><a href="General-Info.html">インフォメーション</a></div><ol class="toc"> <li><div><a href="Changes.html">変更点</a></div><ol class="toc"> <li><div><a href="sbt-1.0-Release-Notes.html">sbt 1.0.0</a></div></li> </ol></li> </ol></li><li><div><a href="Detailed-Topics.html">各論</a></div><ol class="toc"> <li><div><a href="Plugins-and-Best-Practices.html">プラグインとベストプラクティス</a></div><ol class="toc"> <li><div><a href="Best-Practices.html">一般的なベストプラクティス</a></div></li><li><div><a href="Testing-sbt-plugins.html">sbt プラグインをテストする</a></div></li> </ol></li> </ol></li><li><div><a href="Howto.html">How to</a></div><ol class="toc"> <li><div><a href="Howto-Generating-Files.html">ソースファイル/リソースファイルの生成</a></div></li><li><div><a href="Howto-Sequencing.html">逐次実行</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Def.sequential を用いて逐次タスクを定義する</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Def.taskDyn を用いて動的タスクを定義する</a></div></li><li><div><a href="Howto-After-Input-Task.html">インプットタスクの後で何かする</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn を用いた動的インプットタスクの定義</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">コマンドを用いた逐次実行</a></div></li> </ol></li> </ol></li><li><div><a href="Archived+pages.html">Archived pages</a></div><ol class="toc"> <li><div><a href="Hello.html">Hello, World</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
           </div>
         </div>
         <div class="header">
@@ -218,7 +203,7 @@ lazy val core = (project in file(&quot;core&quot;))
       <a href="../../../community.html">Get Involved</a>
       <a id="source-code" href="https://github.com/sbt/sbt"><img src="../files/github-logo-teal.svg" alt="Source code" class="social"></a>
       <a id="twitter" href="https://twitter.com/scala_sbt"><img src="../files/twitter-logo-teal.svg" alt="sbt on Twitter" class="social"></a>
-      <a id="edit-on-github" href="https://github.com/sbt/website/edit/develop/src/reference/00-Getting-Started/05B-Multi-Project.md"><img src="../files/octicon-pencil.svg" alt="Edit on GitHub"></a>
+      <a id="edit-on-github" href="https://github.com/sbt/website/edit/develop/src/reference/00-Getting-Started/09-Multi-Project.md"><img src="../files/octicon-pencil.svg" alt="Edit on GitHub"></a>
     </div>
     <script type="text/javascript" async>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

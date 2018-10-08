@@ -66,7 +66,7 @@ corrections and add documentation.
 
 Documentation for 0.13.x has been
 [archived here](https://www.scala-sbt.org/0.13/docs/index.html). This
-documentation applies to sbt 1.2.3.
+documentation applies to sbt 1.2.4.
 
 See also the [API Documentation](../api/index.html),
 and the [index of names and types][Name-Index].
@@ -103,7 +103,7 @@ Thanks for trying out sbt and *have fun*!
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://piccolo.link/sbt-1.2.3.msi
+  [MSI]: https://piccolo.link/sbt-1.2.4.msi
   [Setup-Notes]: ../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -133,8 +133,8 @@ If you have any trouble running sbt, see [Setup Notes][Setup-Notes] on
 terminal encodings, HTTP proxies, and JVM options.
 
 
-  [ZIP]: https://piccolo.link/sbt-1.2.3.zip
-  [TGZ]: https://piccolo.link/sbt-1.2.3.tgz
+  [ZIP]: https://piccolo.link/sbt-1.2.4.zip
+  [TGZ]: https://piccolo.link/sbt-1.2.4.tgz
   [Manual-Installation]: Manual-Installation.html
   [oraclejdk8]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 
@@ -168,9 +168,9 @@ $ port install sbt
 ```
 
 
-  [MSI]: https://piccolo.link/sbt-1.2.3.msi
-  [ZIP]: https://piccolo.link/sbt-1.2.3.zip
-  [TGZ]: https://piccolo.link/sbt-1.2.3.tgz
+  [MSI]: https://piccolo.link/sbt-1.2.4.msi
+  [ZIP]: https://piccolo.link/sbt-1.2.4.zip
+  [TGZ]: https://piccolo.link/sbt-1.2.4.tgz
   [oraclejdk8]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 
 Installing sbt on Windows
@@ -189,10 +189,10 @@ Download [ZIP][ZIP] or [TGZ][TGZ] package and expand it.
 Download [msi installer][MSI] and install it.
 
 
-  [ZIP]: https://piccolo.link/sbt-1.2.3.zip
-  [TGZ]: https://piccolo.link/sbt-1.2.3.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.2.3.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.2.3.deb
+  [ZIP]: https://piccolo.link/sbt-1.2.4.zip
+  [TGZ]: https://piccolo.link/sbt-1.2.4.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.2.4.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.2.4.deb
   [Manual-Installation]: Manual-Installation.html
   [website127]: https://github.com/sbt/website/issues/127
   [cert-bug]: https://bugs.launchpad.net/ubuntu/+source/ca-certificates-java/+bug/1739631
@@ -393,7 +393,7 @@ Hello
 ### Set ThisBuild / scalaVersion from sbt shell
 
 ```
-sbt:foo-build> set ThisBuild / scalaVersion := "2.12.6"
+sbt:foo-build> set ThisBuild / scalaVersion := "2.12.7"
 [info] Defining ThisBuild / scalaVersion
 ```
 
@@ -401,7 +401,7 @@ Check the `scalaVersion` setting:
 
 ```
 sbt:foo-build> scalaVersion
-[info] 2.12.6
+[info] 2.12.7
 ```
 
 ### Save the session to build.sbt
@@ -416,7 +416,7 @@ sbt:foo-build> session save
 `build.sbt` file should now contain:
 
 ```scala
-ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / scalaVersion := "2.12.7"
 
 ```
 
@@ -425,7 +425,7 @@ ThisBuild / scalaVersion := "2.12.6"
 Using an editor, change `build.sbt` as follows:
 
 ```scala
-ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / scalaVersion := "2.12.7"
 ThisBuild / organization := "com.example"
 
 lazy val hello = (project in file("."))
@@ -454,7 +454,7 @@ Note that the prompt has now changed to `sbt:Hello>`.
 Using an editor, change `build.sbt` as follows:
 
 ```scala
-ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / scalaVersion := "2.12.7"
 ThisBuild / organization := "com.example"
 
 lazy val hello = (project in file("."))
@@ -540,7 +540,7 @@ Confirm that the test passes, then press `Enter` to exit the continuous test.
 Using an editor, change `build.sbt` as follows:
 
 ```scala
-ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / scalaVersion := "2.12.7"
 ThisBuild / organization := "com.example"
 
 lazy val hello = (project in file("."))
@@ -558,7 +558,7 @@ We can find out the current weather in New York.
 ```scala
 sbt:Hello> console
 [info] Starting scala interpreter...
-Welcome to Scala 2.12.6 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0_171).
+Welcome to Scala 2.12.7 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0_171).
 Type in expressions for evaluation. Or try :help.
 
 scala> :paste
@@ -598,7 +598,7 @@ scala> :q // to quit
 Change `build.sbt` as follows:
 
 ```scala
-ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / scalaVersion := "2.12.7"
 ThisBuild / organization := "com.example"
 
 lazy val hello = (project in file("."))
@@ -636,7 +636,7 @@ sbt:Hello> helloCore/compile
 Change `build.sbt` as follows:
 
 ```scala
-ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / scalaVersion := "2.12.7"
 ThisBuild / organization := "com.example"
 
 val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5"
@@ -660,7 +660,7 @@ lazy val helloCore = (project in file("core"))
 Set aggregate so that the command sent to `hello` is broadcast to `helloCore` too:
 
 ```scala
-ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / scalaVersion := "2.12.7"
 ThisBuild / organization := "com.example"
 
 val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5"
@@ -693,7 +693,7 @@ Press `Enter` to exit the continuous test.
 Use `.dependsOn(...)` to a add dependency on other subprojects. Also let's move the Gigahorse dependency to `helloCore`.
 
 ```scala
-ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / scalaVersion := "2.12.7"
 ThisBuild / organization := "com.example"
 
 val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5"
@@ -719,7 +719,7 @@ lazy val helloCore = (project in file("core"))
 Let's add Play JSON to `helloCore`.
 
 ```scala
-ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / scalaVersion := "2.12.7"
 ThisBuild / organization := "com.example"
 
 val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5"
@@ -822,7 +822,7 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.3.4")
 Next change `build.sbt` as follows to add `JavaAppPackaging`:
 
 ```scala
-ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / scalaVersion := "2.12.7"
 ThisBuild / organization := "com.example"
 
 val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5"
@@ -888,7 +888,7 @@ Change `build.sbt` as follows:
 
 ```scala
 ThisBuild / version      := "0.1.0"
-ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / scalaVersion := "2.12.7"
 ThisBuild / organization := "com.example"
 
 val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5"
@@ -929,7 +929,7 @@ sbt:Hello> scalaVersion
 [info]  2.11.12
 [info] scalaVersion
 [info]  2.11.12 scalaVersion
-[info] 2.12.6
+[info] 2.12.7
 ```
 
 This setting will go away after `reload`.
@@ -1279,7 +1279,7 @@ Build definition
 
 This page describes sbt build definitions, including some "theory" and
 the syntax of `build.sbt`.
-It assumes you have installed a recent version of sbt, such as sbt 1.2.3,
+It assumes you have installed a recent version of sbt, such as sbt 1.2.4,
 know how to [use sbt][Running],
 and have read the previous pages in the Getting Started Guide.
 
@@ -1294,7 +1294,7 @@ build the same projects with consistent results.
 To do this, create a file named `project/build.properties` that specifies the sbt version as follows:
 
 ```
-sbt.version=1.2.3
+sbt.version=1.2.4
 ```
 
 If the required version is not available locally,
@@ -1316,7 +1316,7 @@ the subproject located in the current directory like this:
 lazy val root = (project in file("."))
   .settings(
     name := "Hello",
-    scalaVersion := "2.12.6"
+    scalaVersion := "2.12.7"
   )
 ```
 
@@ -1330,7 +1330,7 @@ The key-value pairs are listed under the `.settings(...)` method as follows:
 lazy val root = (project in file("."))
   .settings(
     name := "Hello",
-    scalaVersion := "2.12.6"
+    scalaVersion := "2.12.7"
   )
 ```
 
@@ -1341,7 +1341,7 @@ called *setting expressions* using *build.sbt DSL*.
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / scalaVersion := "2.12.7"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -1524,7 +1524,7 @@ putting them inside a `.settings(...)` call. We call this the "bare style."
 
 ```scala
 ThisBuild / version := "1.0"
-ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / scalaVersion := "2.12.7"
 ```
 
 This syntax is recommended for `ThisBuild` scoped settings and adding plugins.
@@ -1540,7 +1540,7 @@ managed dependencies, which will look like this in `build.sbt`:
 val derby = "org.apache.derby" % "derby" % "10.4.1.3"
 
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / scalaVersion := "2.12.7"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -1620,7 +1620,7 @@ and there are no defeault settings scoped to subprojects. (See [Scopes][Scopes])
 ```scala
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / scalaVersion := "2.12.7"
 
 lazy val core = (project in file("core"))
   .settings(
@@ -1928,7 +1928,7 @@ See the following example:
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / scalaVersion := "2.12.7"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -1965,7 +1965,7 @@ Here's another example:
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / scalaVersion := "2.12.7"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -2104,7 +2104,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "Hello",
     organization := "com.example",
-    scalaVersion := "2.12.6",
+    scalaVersion := "2.12.7",
     version := "0.1.0-SNAPSHOT",
     scalacOptions := List("-encoding", "utf8", "-Xfatal-warnings", "-deprecation", "-unchecked"),
     scalacOptions := {
@@ -2640,7 +2640,7 @@ frequently used keys such as `version`, `scalaVersion`, and `organization`.
 
 ```scala
 ThisBuild / organization := "com.example",
-ThisBuild / scalaVersion := "2.12.6",
+ThisBuild / scalaVersion := "2.12.7",
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -2857,7 +2857,7 @@ lazy val projA = (project in file("a"))
 What is the value of `projA / name`?
 
 1. `"foo-2.11.11"`
-2. `"foo-2.12.6"`
+2. `"foo-2.12.7"`
 3. something else?
 
 The answer is `"foo-2.11.11"`.
@@ -3434,6 +3434,234 @@ dependencies on [this page][Library-Management].
 
 
   [Basic-Def]: Basic-Def.html
+  [Scopes]: Scopes.html
+  [Directories]: Directories.html
+  [Organizing-Build]: Organizing-Build.html
+
+Multi-project builds
+--------------------
+
+This page introduces multiple subprojects in a single build.
+
+Please read the earlier pages in the Getting Started Guide first, in
+particular you need to understand [build.sbt][Basic-Def] before reading
+this page.
+
+### Multiple subprojects
+
+It can be useful to keep multiple related subprojects in a single build,
+especially if they depend on one another and you tend to modify them
+together.
+
+Each subproject in a build has its own source directories, generates
+its own jar file when you run package, and in general works like any
+other project.
+
+A project is defined by declaring a lazy val of type
+[Project](../api/sbt/Project.html). For example, :
+
+```scala
+lazy val util = (project in file("util"))
+
+lazy val core = (project in file("core"))
+```
+
+The name of the val is used as the subproject's ID, which
+is used to refer to the subproject at the sbt shell.
+
+Optionally the base directory may be omitted if it's the same as the name of the val.
+
+```scala
+lazy val util = project
+
+lazy val core = project
+```
+
+#### Common settings
+
+To factor out common settings across multiple projects,
+create a sequence named `commonSettings` and call `settings` method
+on each project.
+
+```scala
+lazy val commonSettings = Seq(
+  organization := "com.example",
+  version := "0.1.0-SNAPSHOT",
+  scalaVersion := "2.12.7"
+)
+
+lazy val core = (project in file("core"))
+  .settings(
+    commonSettings,
+    // other settings
+  )
+
+lazy val util = (project in file("util"))
+  .settings(
+    commonSettings,
+    // other settings
+  )
+```
+
+Now we can bump up `version` in one place, and it will be reflected
+across subprojects when you reload the build.
+
+#### Build-wide settings
+
+Another a bit advanced technique for factoring out common settings
+across subprojects is to define the settings scoped to `ThisBuild`. (See [Scopes][Scopes])
+
+### Dependencies
+
+Projects in the build can be completely independent of one another, but
+usually they will be related to one another by some kind of dependency.
+There are two types of dependencies: aggregate and classpath.
+
+#### Aggregation
+
+Aggregation means that running a task on the aggregate project will also
+run it on the aggregated projects. For example,
+
+```scala
+lazy val root = (project in file("."))
+  .aggregate(util, core)
+
+lazy val util = (project in file("util"))
+
+lazy val core = (project in file("core"))
+```
+
+In the above example, the root project aggregates `util` and `core`. Start
+up sbt with two subprojects as in the example, and try compile. You
+should see that all three projects are compiled.
+
+*In the project doing the aggregating*, the root project in this case,
+you can control aggregation per-task. For example, to avoid aggregating
+the `update` task:
+
+```scala
+lazy val root = (project in file("."))
+  .aggregate(util, core)
+  .settings(
+    update / aggregate := false
+  )
+
+[...]
+```
+
+`update / aggregate` is the aggregate key scoped to the `update` task. (See
+[scopes][Scopes].)
+
+Note: aggregation will run the aggregated tasks in parallel and with no
+defined ordering between them.
+
+#### Classpath dependencies
+
+A project may depend on code in another project. This is done by adding
+a `dependsOn` method call. For example, if core needed util on its
+classpath, you would define core as:
+
+```scala
+lazy val core = project.dependsOn(util)
+```
+
+Now code in `core` can use classes from `util`. This also creates an
+ordering between the projects when compiling them; `util` must be updated
+and compiled before core can be compiled.
+
+To depend on multiple projects, use multiple arguments to `dependsOn`,
+like `dependsOn(bar, baz)`.
+
+##### Per-configuration classpath dependencies
+
+`core dependsOn(util)` means that the `compile` configuration in `core` depends
+on the `compile` configuration in `util`. You could write this explicitly as
+`dependsOn(util % "compile->compile")`.
+
+The `->` in `"compile->compile"` means "depends on" so `"test->compile"`
+means the `test` configuration in `core` would depend on the `compile`
+configuration in `util`.
+
+Omitting the `->config` part implies `->compile`, so
+`dependsOn(util % "test")` means that the `test` configuration in `core` depends
+on the `Compile` configuration in `util`.
+
+A useful declaration is `"test->test"` which means `test` depends on `test`.
+This allows you to put utility code for testing in `util/src/test/scala`
+and then use that code in `core/src/test/scala`, for example.
+
+You can have multiple configurations for a dependency, separated by
+semicolons. For example,
+`dependsOn(util % "test->test;compile->compile")`.
+
+### Default root project
+
+If a project is not defined for the root directory in the build, sbt
+creates a default one that aggregates all other projects in the build.
+
+Because project `hello-foo` is defined with `base = file("foo")`, it will be
+contained in the subdirectory foo. Its sources could be directly under
+`foo`, like `foo/Foo.scala`, or in `foo/src/main/scala`. The usual sbt
+[directory structure][Directories] applies underneath `foo` with the
+exception of build definition files.
+
+Any `.sbt` files in `foo`, say `foo/build.sbt`, will be merged with the build
+definition for the entire build, but scoped to the `hello-foo` project.
+
+If your whole project is in hello, try defining a different version
+(`version := "0.6"`) in `hello/build.sbt`, `hello/foo/build.sbt`, and
+`hello/bar/build.sbt`. Now `show version` at the sbt interactive prompt. You
+should get something like this (with whatever versions you defined):
+
+```
+> show version
+[info] hello-foo/*:version
+[info]  0.7
+[info] hello-bar/*:version
+[info]  0.9
+[info] hello/*:version
+[info]  0.5
+```
+
+`hello-foo/*:version` was defined in `hello/foo/build.sbt`,
+`hello-bar/*:version` was defined in `hello/bar/build.sbt`, and
+`hello/*:version` was defined in `hello/build.sbt`. Remember the
+[syntax for scoped keys][Scopes]. Each `version` key is scoped to a
+project, based on the location of the `build.sbt`. But all three `build.sbt`
+are part of the same build definition.
+
+*Each project's settings can go in `.sbt` files in the base directory of
+that project*, while the `.scala` file can be as simple as the one shown
+above, listing the projects and base directories. *There is no need to
+put settings in the `.scala` file.*
+
+You may find it cleaner to put everything including settings in `.scala`
+files in order to keep all build definition under a single project
+directory, however. It's up to you.
+
+You cannot have a project subdirectory or `project/*.scala` files in the
+sub-projects. `foo/project/Build.scala` would be ignored.
+
+### Navigating projects interactively
+
+At the sbt interactive prompt, type `projects` to list your projects and
+`project <projectname>` to select a current project. When you run a task
+like `compile`, it runs on the current project. So you don't necessarily
+have to compile the root project, you could compile only a subproject.
+
+You can run a task in another project by explicitly specifying the
+project ID, such as `subProjectID/compile`.
+
+### Common code
+
+The definitions in `.sbt` files are not visible in other `.sbt` files. In
+order to share code between `.sbt` files, define one or more Scala files
+in the `project/` directory of the build root.
+
+See [organizing the build][Organizing-Build] for details.
+
+
+  [Basic-Def]: Basic-Def.html
   [Library-Dependencies]: Library-Dependencies.html
   [Multi-Project]: Multi-Project.html
   [global-vs-local-plugins]: ../docs/Best-Practices.html#global-vs-local-plugins
@@ -3582,7 +3810,7 @@ classpath is exported to all sbt build definition projects. Roughly
 speaking, any `.sbt` or `.scala` files in `~/.sbt/1.0/plugins/` behave as if
 they were in the `project/` directory for all projects.
 
-You can create `~/.sbt/1.0/plugins//build.sbt` and put `addSbtPlugin()`
+You can create `~/.sbt/1.0/plugins/build.sbt` and put `addSbtPlugin()`
 expressions in there to add plugins to all your projects at once.
 Because doing so would increase the dependency on the machine environment, 
 this feature should be used sparingly. See
@@ -3668,7 +3896,7 @@ val sampleIntTask = taskKey[Int]("A sample int task.")
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / scalaVersion := "2.12.7"
 
 lazy val library = (project in file("library"))
   .settings(
@@ -3727,7 +3955,7 @@ val sampleStringTask = taskKey[String]("A sample string task.")
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / scalaVersion := "2.12.7"
 
 lazy val library = (project in file("library"))
   .settings(
@@ -3992,7 +4220,7 @@ import Dependencies._
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / scalaVersion := "2.12.7"
 
 lazy val backend = (project in file("backend"))
   .settings(
@@ -5962,10 +6190,10 @@ In 2015 James Roper [contributed](https://github.com/sbt/sbt-doge/pull/4) scalaV
 This extends switch command `++` to take an optional `<command>`:
 
 ```
-> ++2.12.6 compile
+> ++2.12.7 compile
 ```
 
-This will aggregate only the subproject where `++2.12.6` is valid, which is useful when you have a build where some subprojects are 2.11 only etc.
+This will aggregate only the subproject where `++2.12.7` is valid, which is useful when you have a build where some subprojects are 2.11 only etc.
 
 #### Composite project
 
@@ -5985,7 +6213,7 @@ This was contributed by [@BennyHill][@BennyHill] as [#4056][4056].
 
 ```scala
 lazy val core = (projectMatrix in file("core"))
-  .scalaVersions("2.12.6", "2.11.12")
+  .scalaVersions("2.12.7", "2.11.12")
   .settings(
     name := "core"
   )
@@ -5993,7 +6221,7 @@ lazy val core = (projectMatrix in file("core"))
 
 lazy val app = (projectMatrix in file("app"))
   .dependsOn(core)
-  .scalaVersions("2.12.6")
+  .scalaVersions("2.12.7")
   .settings(
     name := "app"
   )
@@ -6019,7 +6247,7 @@ res2: Boolean = false
 scala> VersionNumber("2.13.0-M4").matchesSemVer(SemanticSelector("2.13"))
 res3: Boolean = false
 
-scala> VersionNumber("2.12.5").matchesSemVer(SemanticSelector("2.12.1 - 2.12.6"))
+scala> VersionNumber("2.12.5").matchesSemVer(SemanticSelector("2.12.1 - 2.12.7"))
 res4: Boolean = true
 
 scala> VersionNumber("2.12.5").matchesSemVer(SemanticSelector("2.12.x"))
@@ -7381,6 +7609,4665 @@ Too many people to thank here. See [Credits][Credits]
   [util81]: https://github.com/sbt/util/pull/81
 
 
+  [Organizing-Build]: Organizing-Build.html
+
+Migrating from sbt 0.13.x
+-------------------------
+
+### Migrating case class `.copy(...)`
+
+Many of the case classes are replaced with pseudo case classes generated using Contraband. Migrate `.copy(foo = xxx)` to `withFoo(xxx)`.
+Suppose you have `m: ModuleID`, and you're currently calling `m.copy(revision = "1.0.1")`. Here how you can migrate it:
+
+```scala
+m.withRevision("1.0.1")
+```
+
+### sbt version specific source directory
+
+If you are cross building an sbt plugin, one escape hatch we have is sbt version specific source directory `src/main/scala-sbt-0.13` and `src/main/scala-sbt-1.0`. In there you can define an object named `PluginCompat` as follows:
+
+```scala
+package sbtfoo
+
+import sbt._
+import Keys._
+
+object PluginCompat {
+  type UpdateConfiguration = sbt.librarymanagement.UpdateConfiguration
+
+  def subMissingOk(c: UpdateConfiguration, ok: Boolean): UpdateConfiguration =
+    c.withMissingOk(ok)
+}
+```
+
+Now `subMissingOk(...)` function can be implemented in sbt version specific way.
+
+### Migrating to slash syntax
+
+In sbt 0.13 keys were scoped with 2 different syntaxes: one for sbt's shell and one for in code.
+
+* sbt 0.13 shell: `<project-id>/config:intask::key`
+* sbt 0.13 code: `key in (<project-id>, Config, intask)`
+
+Starting sbt 1.1.0, the syntax for scoping keys has been unified for both the shell and the build definitions to
+the **slash syntax** as follows:
+
+* `<project-id> / Config / intask / key`
+
+Here are some examples:
+
+```scala
+lazy val root = (project in file("."))
+  .settings(
+    name := "hello",
+    version in ThisBuild := "1.0.0-SNAPSHOT",
+    scalacOptions in Compile += "-Xlint",
+    scalacOptions in (Compile, console) --= Seq("-Ywarn-unused", "-Ywarn-unused-import"),
+    fork in Test := true
+  )
+```
+
+They are now written as:
+
+```scala
+lazy val root = (project in file("."))
+  .settings(
+    name := "hello",
+    ThisBuild / version := "1.0.0-SNAPSHOT",
+    Compile / scalacOptions += "-Xlint",
+    Compile / console / scalacOptions --= Seq("-Ywarn-unused", "-Ywarn-unused-import"),
+    Test / fork := true
+  )
+```
+
+And now the same syntax in sbt's shell:
+
+```
+sbt:hello> name
+[info] hello
+sbt:hello> ThisBuild / version
+[info] 1.0.0-SNAPSHOT
+sbt:hello> show Compile / scalacOptions
+[info] * -Xlint
+sbt:hello> show Compile / console / scalacOptions
+[info] * -Xlint
+sbt:hello> Test / fork
+[info] true
+```
+
+### Migrating from sbt 0.12 style
+
+Before sbt 0.13 (sbt 0.9 to 0.12) it was very common to see in builds the usage of three aspects of sbt:
+
+* the key dependency operators: `<<=`, `<+=`, `<++=`
+* the tuple enrichments (apply and map) for TaskKey's and SettingKey's (eg. `(foo, bar) map { (f, b) => ... }`)
+* the use of `Build` trait in `project/Build.scala`
+
+The release of sbt 0.13 (which was over 3 years ago!) introduced the `.value` DSL which allowed for much
+easier to read and write code, effectively making the first two aspects redundant and they were removed from the official
+documentation.
+
+Similarly, sbt 0.13's introduction of multi-project `build.sbt` made the `Build` trait redundant.
+In addition, the auto plugin feature that's now standard in sbt 0.13 enabled automatic sorting of plugin settings
+and auto import feature, but it made `Build.scala` more difficult to maintain.
+
+As they are removed in sbt 1.0.0, and here we'll help guide you to how to migrate your code.
+
+#### Migrating sbt 0.12 style operators
+
+With simple expressions such as:
+
+```scala
+a <<= aTaskDef
+b <+= bTaskDef
+c <++= cTaskDefs
+```
+
+it is sufficient to replace them with the equivalent:
+
+```scala
+a := aTaskDef.value
+b += bTaskDef.value
+c ++= cTaskDefs.value
+```
+
+#### Migrating from the tuple enrichments
+
+As mentioned above, there are two tuple enrichments `.apply` and `.map`. The difference used to be for whether
+you're defining a setting for a `SettingKey` or a `TaskKey`, you use `.apply` for the former and `.map` for the
+latter:
+
+```scala
+val sett1 = settingKey[String]("SettingKey 1")
+val sett2 = settingKey[String]("SettingKey 2")
+val sett3 = settingKey[String]("SettingKey 3")
+
+val task1 = taskKey[String]("TaskKey 1")
+val task2 = taskKey[String]("TaskKey 2")
+val task3 = taskKey[String]("TaskKey 3")
+val task4 = taskKey[String]("TaskKey 4")
+
+sett1 := "s1"
+sett2 := "s2"
+sett3 <<= (sett1, sett2)(_ + _)
+
+task1 := { println("t1"); "t1" }
+task2 := { println("t2"); "t2" }
+task3 <<= (task1, task2) map { (t1, t2) => println(t1 + t2); t1 + t2 }
+task4 <<= (sett1, sett2) map { (s1, s2) => println(s1 + s2); s1 + s2 }
+```
+
+(Remember you can define tasks in terms of settings, but not the other way round)
+
+With the `.value` DSL you don't have to know or remember if your key is a `SettingKey` or a `TaskKey`:
+
+```scala
+sett1 := "s1"
+sett2 := "s2"
+sett3 := sett1.value + sett2.value
+
+task1 := { println("t1"); "t1" }
+task2 := { println("t2"); "t2" }
+task3 := { println(task1.value + task2.value); task1.value + task2.value }
+task4 := { println(sett1.value + sett2.value); sett1.value + sett2.value }
+```
+
+#### Migrating when using `.dependsOn`, `.triggeredBy` or `.runBefore`
+
+When instead calling `.dependsOn`, instead of:
+
+```scala
+a <<= a dependsOn b
+```
+
+define it as:
+
+```scala
+a := (a dependsOn b).value
+```
+
+**Note**: You'll need to use the `<<=` operator with `.triggeredBy` and `.runBefore` in sbt 0.13.13 and
+earlier due to issue [#1444](https://github.com/sbt/sbt/issues/1444).
+
+#### Migrating when you need to set `Task`s
+
+For keys such as `sourceGenerators` and `resourceGenerators` which use sbt's Task type:
+
+```scala
+val sourceGenerators =
+  settingKey[Seq[Task[Seq[File]]]]("List of tasks that generate sources")
+val resourceGenerators =
+  settingKey[Seq[Task[Seq[File]]]]("List of tasks that generate resources")
+```
+
+Where you previous would define things as:
+
+```scala
+sourceGenerators in Compile <+= buildInfo
+```
+
+for sbt 1, you define them as:
+
+```scala
+Compile / sourceGenerators += buildInfo
+```
+
+or in general,
+
+```scala
+Compile / sourceGenerators += Def.task { List(file1, file2) }
+```
+
+#### Migrating with `InputKey`
+
+When using `InputKey` instead of:
+
+```scala
+run <<= docsRunSetting
+```
+
+when migrating you mustn't use `.value` but `.evaluated`:
+
+```scala
+run := docsRunSetting.evaluated
+```
+
+### Migrating from the Build trait
+
+With `Build` trait based build such as:
+
+```scala
+import sbt._
+import Keys._
+import xyz.XyzPlugin.autoImport._
+
+object HelloBuild extends Build {
+  val shared = Defaults.defaultSettings ++ xyz.XyzPlugin.projectSettings ++ Seq(
+    organization := "com.example",
+    version      := "0.1.0",
+    scalaVersion := "2.12.1")
+
+  lazy val hello =
+    Project("Hello", file("."),
+      settings = shared ++ Seq(
+        xyzSkipWrite := true)
+    ).aggregate(core)
+
+  lazy val core =
+    Project("hello-core", file("core"),
+      settings = shared ++ Seq(
+        description := "Core interfaces",
+        libraryDependencies ++= scalaXml.value)
+    )
+
+  def scalaXml = Def.setting {
+    scalaBinaryVersion.value match {
+      case "2.10" => Nil
+      case _      => ("org.scala-lang.modules" %% "scala-xml" % "1.0.6") :: Nil
+    }
+  }
+}
+```
+
+You can migrate to `build.sbt`:
+
+```scala
+val shared = Seq(
+  organization := "com.example",
+  version      := "0.1.0",
+  scalaVersion := "2.12.1"
+)
+
+lazy val helloRoot = (project in file("."))
+  .aggregate(core)
+  .enablePlugins(XyzPlugin)
+  .settings(
+    shared,
+    name := "Hello",
+    xyzSkipWrite := true
+  )
+
+lazy val core = (project in file("core"))
+  .enablePlugins(XyzPlugin)
+  .settings(
+    shared,
+    name := "hello-core",
+    description := "Core interfaces",
+    libraryDependencies ++= scalaXml.value
+  )
+
+def scalaXml = Def.setting {
+  scalaBinaryVersion.value match {
+    case "2.10" => Nil
+    case _      => ("org.scala-lang.modules" %% "scala-xml" % "1.0.6") :: Nil
+  }
+}
+```
+
+1. Rename `project/Build.scala` to `build.sbt`.
+2. Remove import statements `import sbt._`, `import Keys._`, and any auto imports.
+3. Move all of the inner definitions (like `shared`, `helloRoot`, etc) out of the `object HelloBuild`, and remove `HelloBuild`.
+4. Change `Project(...)` to `(project in file("x"))` style, and call its `settings(...)` method to pass in the settings. This is so the auto plugins can reorder their setting sequence based on the plugin dependencies. `name` setting should be set to keep the old names.
+5. Remove `Defaults.defaultSettings` out of `shared` since these settings are already set by the built-in auto plugins, also remove `xyz.XyzPlugin.projectSettings` out of `shared` and call `enablePlugins(XyzPlugin)` instead.
+
+**Note**: `Build` traits is deprecated, but you can still use `project/*.scala` file to organize your build and/or define ad-hoc plugins. See [Organizing the build][Organizing-Build].
+
+
+
+## sbt 1.1.2
+
+### Bug fixes
+
+- Fixes triggered execution's resource leak by caching the watch service. [#3999][3999] by [@eatkins][@eatkins]
+- Fixes classloader inheriting the dependencies of Scala compiler during `run` [zinc#505][zinc505] by [@eed3si9n][@eed3si9n]
+- Fixes forked test concurrency issue. [#4030][4030] by [@eatkins][@eatkins]
+- Fixes `new` command leaving behind target directory [#4033][4033] by [@eed3si9n][@eed3si9n]
+- Fixes handling on null Content-Type. [lm214][lm214] by [@staale][@staale]
+- Fixes null handling of `managedChecksums` in `ivySettings` file. [lm#218][lm218] by [@IanGabes][@IanGabes]
+- Adds `sbt.boot.lock` as a JVM property to opt-out of locking. [#3927][3927] by [@dwijnand][@dwijnand]
+- Provides `SBT_GLOBAL_SERVER_DIR` env var as a workaround to long socket file path on UNIX. [#3932][3932] by [@dwijnand][@dwijnand]
+- Fixes forked runs reporting noisy "Stream closed" exception. [#3970][3970] by [@retronym][@retronym]
+- Fixes test compilation not getting included in VS Code save trigger. [#4022][4022] by [@tmiyamon][@tmiyamon]
+- Fixes sbt server responding with string id when number id passed. [#4025][4025] by [@tiqwab][@tiqwab]
+- Fixes `getDecoder` in Analysis format [zinc#502][zinc502] by [@jilen][@jilen]
+- Fixes equal / hashCode inconsistencies around Array. [zinc#513][zinc513] by [@eed3si9n][@eed3si9n]
+- Whitelists `java9-rt-ext-output` in rt export process [lp#211][lp211] by [@eatkins][@eatkins]
+- Fixes JDK version detection for Java 10 friendliness. [lp#219][lp219] by [@eed3si9n][@eed3si9n] and [@2m][@2m]
+- Fixes quoting in Windows bat file. [lp#220][lp220] by [@ForNeVeR][@ForNeVeR]
+- Fixes `-error` not suppressing startup logs. [#4036][4036] by [@eed3si9n][@eed3si9n]
+
+### Improvements
+
+- Performance optimization around logging. [util#152][util152] by [@retronym][@retronym]
+- Performance fix by caching the hashCode of `Configuration`. [lm#213][lm213] by [@retronym][@retronym]
+- Returns error code `-33000L` on sbt server when a command fails. [#3991][3991] by [@dwijnand][@dwijnand]
+- Allows wildcards in organization and artifact. [#215][lm215] by [@dhs3000][@dhs3000]
+- Updates to latest Jsch to support stronger key exchange algorithms. [lm#217][lm217] by [@ryandbair][@ryandbair]
+- Fixes preloading of compiler bridge. [lp#222][lp222] by [@analytically][@analytically]
+
+### Internal
+
+- Updates [contribution guide][CONTRIBUTING]. [#3960][3960]/[#4019][4019] by [@eed3si9n][@eed3si9n] and [@itohiro73][@itohiro73]
+- Deletes `buildinfo.BuildInfo` from sbt main that was intended for testing. [3967][3967] by [@dwijnand][@dwijnand] and [@xuwei-k][@xuwei-k]
+- Various improvements around Zinc benchmark by [@retronym][@retronym]
+
+### Contributors
+
+sbt 1.1.2 was brought to you by 23 contributors, according to `git shortlog -sn --no-merges v1.1.1...v1.1.2` on sbt, zinc, librarymanagement, util, io, launcher-packege, and website: Dale Wijnand, Eugene Yokota, Jason Zaugg, Kenji Yoshida (xuwei-k), Ethan Atkins, Martijn Hoekstra, Martynas Mickevičius, Dennis Hörsch, Hosam Aly, Antonio Cunei, Friedrich von Never, Hiroshi Ito, Ian Gabes, Jilen Zhang, Mathias Bogaert, Naohisa Murakami (tiqwab), Philippus Baalman, Ryan Bair, Seth Tisue, Ståle Undheim, Takuya Miyamoto (tmiyamon), Yasuhiro Tatsuno. Thank you!
+
+  [@eed3si9n]: https://github.com/eed3si9n
+  [@dwijnand]: http://github.com/dwijnand
+  [@cunei]: https://github.com/cunei
+  [@jvican]: https://github.com/jvican
+  [@Duhemm]: https://github.com/Duhemm
+  [@xuwei-k]: https://github.com/xuwei-k
+  [@retronym]: https://github.com/retronym
+  [@eatkins]: https://github.com/eatkins
+  [@itohiro73]: https://github.com/itohiro73
+  [@tmiyamon]: https://github.com/tmiyamon
+  [@tiqwab]: https://github.com/tiqwab
+  [@staale]: https://github.com/staale
+  [@ryandbair]: https://github.com/ryandbair
+  [@dhs3000]: https://github.com/dhs3000
+  [@IanGabes]: https://github.com/IanGabes
+  [@jilen]: https://github.com/jilen
+  [@2m]: https://github.com/2m
+  [@ForNeVeR]: https://github.com/ForNeVeR
+  [@analytically]: https://github.com/analytically
+  [3927]: https://github.com/sbt/sbt/pull/3927
+  [3932]: https://github.com/sbt/sbt/pull/3932
+  [3960]: https://github.com/sbt/sbt/pull/3960
+  [3967]: https://github.com/sbt/sbt/pull/3967
+  [3970]: https://github.com/sbt/sbt/pull/3970
+  [3999]: https://github.com/sbt/sbt/pull/3999
+  [3991]: https://github.com/sbt/sbt/pull/3991
+  [4019]: https://github.com/sbt/sbt/pull/4019
+  [4022]: https://github.com/sbt/sbt/pull/4022
+  [4025]: https://github.com/sbt/sbt/pull/4025
+  [4030]: https://github.com/sbt/sbt/pull/4030
+  [4033]: https://github.com/sbt/sbt/pull/4033
+  [4036]: https://github.com/sbt/sbt/pull/4036
+  [util152]: https://github.com/sbt/util/pull/152
+  [lm213]: https://github.com/sbt/librarymanagement/pull/213
+  [lm214]: https://github.com/sbt/librarymanagement/pull/214
+  [lm215]: https://github.com/sbt/librarymanagement/pull/215
+  [lm217]: https://github.com/sbt/librarymanagement/pull/217
+  [lm218]: https://github.com/sbt/librarymanagement/pull/218
+  [zinc502]: https://github.com/sbt/zinc/pull/502
+  [zinc505]: https://github.com/sbt/zinc/pull/505
+  [zinc513]: https://github.com/sbt/zinc/pull/513
+  [lp211]: https://github.com/sbt/sbt-launcher-package/pull/211
+  [lp219]: https://github.com/sbt/sbt-launcher-package/pull/219
+  [lp220]: https://github.com/sbt/sbt-launcher-package/pull/220
+  [lp222]: https://github.com/sbt/sbt-launcher-package/pull/222
+  [CONTRIBUTING]: https://github.com/sbt/sbt/blob/1.x/CONTRIBUTING.md
+
+## sbt 1.1.1
+
+### Bug fixes
+
+- Fixes "Modified names for (class) is empty" error. [zinc#292][zinc292] / [zinc#484][zinc484] by [@jvican][@jvican] (Scala Center)
+- Fixes tab completion in `console` while running in batch mode as `sbt console`. [#3841][3841]/[#3876][3876] by [@eed3si9n][@eed3si9n]
+- Fixes file timestamp retrieval of missing files on Windows. [#3871][3871] / [io#120][io120] by [@cunei][@cunei]
+- Aligns the errors thrown by file timestamp implementations. Fixes [#3894][3894] / [io#121][io121] by [@j-keck][@j-keck]
+- Adds file timestamps native support for FreeBSD. [#3894][3894] / [io#124][io124] by [@cunei][@cunei]
+- Fixes JDK 10 version string parsing. [sbt/sbt-launcher-package#209][launcher209] by [@2m][@2m]
+
+### Improvements
+
+- Deprecates `Extracted#append` in favour of `appendWithSession` or `appendWithoutSession`.  [#3865][3865] by [@dwijnand][@dwijnand]
+- Adds a new global `Boolean` setting called `autoStartServer`. See below.
+- Upgrades Scala versions used for sbt cross building `^^`. [#3923][3923] by [@dwijnand][@dwijnand]
+- Many documentation maintenance changes by [@xuwei-k][@xuwei-k].
+
+### autoStartServer setting
+
+sbt 1.1.1 adds a new global `Boolean` setting called `autoStartServer`, which is set to `true` by default.
+When set to `true`, sbt shell will automatically start sbt server. Otherwise, it will not start the server until `startSever` command is issued. This could be used to opt out of server for security reasons.
+
+[#3922][3922] by [@swaldman][@swaldman]
+
+### Contributors
+
+sbt 1.1.1 was brought to you by 16 contributors, according to `git shortlog -sn --no-merges v1.1.0 ..v1.1.0` on sbt, zinc, librarymanagement, util, io, and website: Kenji Yoshida (xuwei-k), Eugene Yokota, Dale Wijnand, Antonio Cunei, Steve Waldman, Arnout Engelen, Deokhwan Kim, OlegYch, Robert Walker, Jorge Vicente Cantero (jvican), Claudio Bley, Eric Peters, Lena Brüder, Seiya Mizuno, Seth Tisue, j-keck. Thank you!
+
+  [@eed3si9n]: https://github.com/eed3si9n
+  [@dwijnand]: http://github.com/dwijnand
+  [@cunei]: https://github.com/cunei
+  [@jvican]: https://github.com/jvican
+  [@Duhemm]: https://github.com/Duhemm
+  [@j-keck]: https://github.com/j-keck
+  [@swaldman]: https://github.com/swaldman
+  [@xuwei-k]: https://github.com/xuwei-k
+  [@2m]: https://github.com/2m
+  [3871]: https://github.com/sbt/sbt/issues/3871
+  [io120]: https://github.com/sbt/io/pull/120
+  [3894]: https://github.com/sbt/sbt/issues/3894
+  [io121]: https://github.com/sbt/io/pull/121
+  [io124]: https://github.com/sbt/io/pull/124
+  [zinc292]: https://github.com/sbt/zinc/issues/292
+  [zinc484]: https://github.com/sbt/zinc/pull/484
+  [3865]: https://github.com/sbt/sbt/pull/3865
+  [3841]: https://github.com/sbt/sbt/issues/3841
+  [3876]: https://github.com/sbt/sbt/pull/3876
+  [3923]: https://github.com/sbt/sbt/pull/3923
+  [3922]: https://github.com/sbt/sbt/pull/3922
+  [launcher209]: https://github.com/sbt/sbt-launcher-package/pull/209
+
+## sbt 1.1.0
+
+This is a feature release for sbt 1.0.x series.
+
+### Features, fixes, changes with compatibility implications
+
+- sbt server feature is reworked in sbt 1.1.0. See below.
+- Changes `version` setting default to `0.1.0-SNAPSHOT` for compatibility with Semantic Versioning. [#3577][3577] by [@laughedelic][@laughedelic]
+
+### Features
+
+- Unifies sbt shell and build.sbt syntax. See below.
+
+### Fixes
+
+- Fixes `ClasspathFilter` that was causing `Class.forName` to not work in `run`. [zinc#473](https://github.com/sbt/zinc/pull/473) / [#3736](https://github.com/sbt/sbt/issues/3736) / [#3733](https://github.com/sbt/sbt/issues/3733) / [#3647](https://github.com/sbt/sbt/issues/3647) / [#3608](https://github.com/sbt/sbt/issues/3608) by [@ravwojdyla][@ravwojdyla]
+- Fixes Java compilation causing `NullPointerException` by making PositionImpl thread-safe. [zinc#465](https://github.com/sbt/zinc/pull/465) by [@eed3si9n][@eed3si9n]
+- Fixes `PollingWatchService` by preventing concurrent modification of `keysWithEvents` map. [io#90](https://github.com/sbt/io/pull/90) by [@mechkg][@mechkg], which fixes `~` related issues [#3687](https://github.com/sbt/sbt/issues/3687), [#3695](https://github.com/sbt/sbt/issues/3695), and [#3775](https://github.com/sbt/sbt/issues/3775).
+- Provides workaround for `File#lastModified()` losing millisecond-precision by using native code when possible. [io#92](https://github.com/sbt/io/pull/92)/[io#106](https://github.com/sbt/io/pull/106) by [@cunei][@cunei]
+- Fixes `IO.relativize` not working with relative path. [io#108](https://github.com/sbt/io/pull/108) by [@dwijnand][@dwijnand]
+- Fixes warning message when multiple instances are detected. [#3828](https://github.com/sbt/sbt/pull/3828) by [@eed3si9n][@eed3si9n]
+- Fixes over-compilation bug with Java 9. [zinc#450][zinc450] by [@retronym][@retronym]
+- Fixes handling of deeply nested Java classes. [zinc#423][zinc423] by [@romanowski][@romanowski]
+- Fixes JavaDoc not printing all errors. [zinc#415][zinc415] by [@raboof][@raboof]
+- Preserves JAR order in `ScalaInstance.otherJars`. [zinc#411][zinc411] by [@dwijnand][@dwijnand]
+- Fixes used name when it contains NL. [zinc#449][zinc449] by [@jilen][@jilen]
+- Fixes handling of `ThisProject`. [#3609][3609] by [@dwijnand][@dwijnand]
+- Escapes imports from sbt files, so if user creates a backquoted definition then task evalution will not fail. [#3635][3635] by [@panaeon][@panaeon]
+- Removes reference to version 0.14.0 from a warning message. [#3693][3693] by [@saniyatech][@saniyatech]
+- Fixes screpl throwing "Not a valid key: console-quick". [#3762][3762] by [@xuwei-k][@xuwei-k]
+- Restores Scala 2.13.0-M1 support. #461 by [@dwijnand][@dwijnand]
+- Fixes the encoding of Unix-like file path to use `file:///`. [#3805](https://github.com/sbt/sbt/pull/3805) by [@eed3si9n][@eed3si9n]
+- Fixes Log4J2 initialization error during startup. [#3814](https://github.com/sbt/sbt/pull/3814) by [@dwijnand][@dwijnand]
+
+### Improvements
+
+- Filters scripted tests based on optional `project/build.properties`. See below.
+- Adds `Project#withId` to change a project's id. [#3601][3601] by [@dwijnand][@dwijnand]
+- Adds `reboot dev` command, which deletes the current artifact from the boot directory. This is useful when working with development versions of sbt. [#3659][3659] by [@eed3si9n][@eed3si9n]
+- Adds a check for a change in sbt version before `reload`. [#1055][1055]/[#3673][3673] by [@RomanIakovlev][@RomanIakovlev]
+- Adds a new setting `insideCI`, which indicates that sbt is likely running in an Continuous Integration environment. [#3672][3672] by [@RomanIakovlev][@RomanIakovlev]
+- Adds `nameOption` to `Command` trait. [#3671][3671] by [@miklos-martin][@miklos-martin]
+- Adds POSIX persmission operations in IO, such as `IO.chmod(..)`. [io#76][io76] by [@eed3si9n][@eed3si9n]
+- Treat sbt 1 modules using Semantic Versioning in the eviction warning. [lm#188][lm188] by [@eed3si9n][@eed3si9n]
+- Uses kind-projector in the code. [#3650][3650] by [@dwijnand][@dwijnand]
+- Make `displayOnly` etc methods strict in `Completions`. [#3763][3763] by [@xuwei-k][@xuwei-k]
+
+### Unified slash syntax for sbt shell and build.sbt
+
+This adds unified slash syntax for both sbt shell and the build.sbt DSL.
+Instead of the current `<project-id>/config:intask::key`, this adds
+`<project-id>/<config-ident>/intask/key` where `<config-ident>` is the Scala identifier
+notation for the configurations like `Compile` and `Test`. (The old shell syntax will continue to function)
+
+These examples work both from the shell and in build.sbt.
+
+    Global / cancelable
+    ThisBuild / scalaVersion
+    Test / test
+    root / Compile / compile / scalacOptions
+    ProjectRef(uri("file:/xxx/helloworld/"),"root")/Compile/scalacOptions
+    Zero / Zero / name
+
+The inspect command now outputs something that can be copy-pasted:
+
+    > inspect compile
+    [info] Task: sbt.inc.Analysis
+    [info] Description:
+    [info]  Compiles sources.
+    [info] Provided by:
+    [info]  ProjectRef(uri("file:/xxx/helloworld/"),"root")/Compile/compile
+    [info] Defined at:
+    [info]  (sbt.Defaults) Defaults.scala:326
+    [info] Dependencies:
+    [info]  Compile/manipulateBytecode
+    [info]  Compile/incCompileSetup
+    ....
+
+[#1812][1812]/[#3434][3434]/[#3617][3617]/[#3620][3620] by [@eed3si9n][@eed3si9n] and [@dwijnand][@dwijnand]
+
+### sbt server
+
+sbt server feature was reworked to use Language Server Protocol 3.0 (LSP) as the wire protocol, a protocol created by Microsoft for Visual Studio Code.
+
+To discover a running server, sbt 1.1.0 creates a port file at `./project/target/active.json` relative to a build:
+
+```
+{"uri":"local:///Users/foo/.sbt/1.0/server/0845deda85cb41abcdef/sock"}
+```
+
+`local:` indicates a UNIX domain socket. Here's how we can say hello to the server using `nc`. (`^M` can be sent `Ctrl-V` then `Return`):
+
+```
+$ nc -U /Users/foo/.sbt/1.0/server/0845deda85cb41abcdef/sock
+Content-Length: 99^M
+^M
+{ "jsonrpc": "2.0", "id": 1, "method": "initialize", "params": { "initializationOptions": { } } }^M
+```
+
+sbt server adds network access to sbt's shell command so, in addition to accepting input from the terminal, server also to accepts input from the network. Here's how we can call `compile`:
+
+```
+Content-Length: 93^M
+^M
+{ "jsonrpc": "2.0", "id": 2, "method": "sbt/exec", "params": { "commandLine": "compile" } }^M
+```
+
+The running sbt session should now queue `compile`, and return back with compiler warnings and errors, if any:
+
+```
+Content-Length: 296
+Content-Type: application/vscode-jsonrpc; charset=utf-8
+
+{"jsonrpc":"2.0","method":"textDocument/publishDiagnostics","params":{"uri":"file:/Users/foo/work/hellotest/Hello.scala","diagnostics":[{"range":{"start":{"line":2,"character":26},"end":{"line":2,"character":27}},"severity":1,"source":"sbt","message":"object X is not a member of package foo"}]}}
+```
+
+[#3524][3524]/[#3556][3556] by [@eed3si9n][@eed3si9n]
+
+### VS Code extension
+
+The primary use case we have in mind for the sbt server is tooling integration such as editors and IDEs. As a proof of concept, we created a Visual Studio Code extension called [Scala (sbt)][vscode-sbt-scala].
+
+Currently this extension is able to:
+
+- Run `compile` at the root project when `*.scala` files are saved. [#3524][3524] by [@eed3si9n][@eed3si9n]
+- Display compiler errors.
+- Display log messages. [#3740][3740] by [@laughedelic][@laughedelic]
+- Jump to class definitions. [#3660][3660] by [@wpopielarski][@wpopielarski]
+
+### Filtering scripted tests using `project/build.properties`
+
+For all scripted tests in which `project/build.properties` exist, the value of the `sbt.version` property is read. If its binary version is different from `sbtBinaryVersion in pluginCrossBuild` the test will be skipped and a message indicating this will be logged.
+
+This allows you to define scripted tests that track the minimum supported sbt versions, e.g. 0.13.9 and 1.0.0-RC2. [#3564][3564]/[#3566][3566] by [@jonas][@jonas]
+
+### Contributors
+
+sbt 1.1.0 was brought to you by 33 contributors, according to `git shortlog -sn --no-merges v1.0.4..v1.1.0` on sbt, zinc, librarymanagement, util, io, and website: Eugene Yokota, Dale Wijnand, Antonio Cunei, Kenji Yoshida (xuwei-k), Alexey Alekhin, Simon Schäfer, Jorge Vicente Cantero (jvican), Miklos Martin, Jeffrey Olchovy, Jonas Fonseca, Andrey Artemov, Arnout Engelen, Dominik Winter, Krzysztof Romanowski, Roman Iakovlev, Wiesław Popielarski, Age Mooij, Allan Timothy Leong, Ivan Poliakov, Jason Zaugg, Jilen Zhang, Long Jinwei, Martin Duhem, Michael Stringer, Michael Wizner, Nud Teeraworamongkol, OlegYch, PanAeon, Philippus Baalman, Pierre Dal-Pra, Rafal Wojdyla, Saniya Tech, Tom Walford, and many others who contributed ideas. Thank you!
+
+  [@eed3si9n]: https://github.com/eed3si9n
+  [@dwijnand]: http://github.com/dwijnand
+  [@cunei]: https://github.com/cunei
+  [@jvican]: https://github.com/jvican
+  [@Duhemm]: https://github.com/Duhemm
+  [@jonas]: https://github.com/jonas
+  [@laughedelic]: https://github.com/laughedelic
+  [@panaeon]: https://github.com/panaeon
+  [@RomanIakovlev]: https://github.com/RomanIakovlev
+  [@miklos-martin]: https://github.com/miklos-martin
+  [@saniyatech]: https://github.com/saniyatech
+  [@xuwei-k]: https://github.com/xuwei-k
+  [@wpopielarski]: https://github.com/wpopielarski
+  [@retronym]: https://github.com/retronym
+  [@romanowski]: https://github.com/romanowski
+  [@raboof]: https://github.com/raboof
+  [@jilen]: https://github.com/jilen
+  [@mechkg]: https://github.com/mechkg
+  [@ravwojdyla]: https://github.com/ravwojdyla
+  [vscode-sbt-scala]: https://marketplace.visualstudio.com/items?itemName=lightbend.vscode-sbt-scala
+  [1812]: https://github.com/sbt/sbt/issues/1812
+  [3524]: https://github.com/sbt/sbt/pull/3524
+  [3556]: https://github.com/sbt/sbt/pull/3556
+  [3564]: https://github.com/sbt/sbt/issues/3564
+  [3566]: https://github.com/sbt/sbt/pull/3566
+  [3577]: https://github.com/sbt/sbt/pull/3577
+  [3434]: https://github.com/sbt/sbt/pull/3434
+  [3601]: https://github.com/sbt/sbt/pull/3601
+  [3609]: https://github.com/sbt/sbt/pull/3609
+  [3617]: https://github.com/sbt/sbt/pull/3617
+  [3620]: https://github.com/sbt/sbt/pull/3620
+  [3464]: https://github.com/sbt/sbt/issues/3464
+  [3635]: https://github.com/sbt/sbt/pull/3635
+  [3659]: https://github.com/sbt/sbt/pull/3659
+  [3650]: https://github.com/sbt/sbt/pull/3650
+  [3673]: https://github.com/sbt/sbt/pull/3673
+  [1055]: https://github.com/sbt/sbt/issues/1055
+  [3672]: https://github.com/sbt/sbt/pull/3672
+  [3671]: https://github.com/sbt/sbt/pull/3671
+  [3693]: https://github.com/sbt/sbt/issues/3693
+  [3763]: https://github.com/sbt/sbt/pull/3763
+  [3762]: https://github.com/sbt/sbt/pull/3762
+  [3740]: https://github.com/sbt/sbt/pull/3740
+  [3660]: https://github.com/sbt/sbt/pull/3660
+  [io76]: https://github.com/sbt/io/pull/76
+  [lm188]: https://github.com/sbt/librarymanagement/pull/188
+  [zinc450]: https://github.com/sbt/zinc/pull/450
+  [zinc423]: https://github.com/sbt/zinc/pull/423
+  [zinc415]: https://github.com/sbt/zinc/issues/415
+  [zinc411]: https://github.com/sbt/zinc/pull/411
+  [zinc449]: https://github.com/sbt/zinc/pull/449
+
+## sbt 1.0.4
+
+This is a hotfix release for sbt 1.0.x series.
+
+### Bug fixes
+
+- Fixes undercompilation of value classes when the underlying type changes. [zinc#444][zinc444] by [@smarter][@smarter]
+- Fixes `ArrayIndexOutOfBoundsException` on Ivy when running on Java 9. [ivy#27][ivy27] by [@xuwei-k][@xuwei-k]
+- Fixes Java 9 warning by upgrading to launcher 1.0.2. [ivy#26][ivy26]/[launcher#45][launcher45] by [@dwijnand][@dwijnand]
+- Fixes `-jvm-debug` on Java 9. [launcher-package197][sbt-launcher-package197] by [@mkurz][@mkurz]
+- Fixes `run` outputing debug level logs. [#3655][3655]/[#3717][3717] by [@cunei][@cunei]
+- Fixes performance regression caused by classpath hashing. [zinc#452][zinc452] by [@jvican][@jvican], [@fommil][@fommil] provided reproduction, and [@eed3si9n][@eed3si9n] fixed https://github.com/sbt/zinc/issues/457
+- Fixes performance regression of `testQuick`. [#3680][3680]/[#3720][3720] by [@OlegYch][@OlegYch]
+- Disables Ivy log4j caller location calculation for performance regression reported in [#3711][3711]. [util#132][util132] by [@leonardehrenfried][@leonardehrenfried]
+- Works around Scala compiler's `templateStats()` not being thread-safe. [#3743][3743] by [@cunei][@cunei]
+- Fixes "Attempting to overwrite" error message. [lm#174][lm174] by [@dwijnand][@dwijnand]
+- Fixes incorrect eviction warning message. [lm#179][lm179] by [@xuwei-k][@xuwei-k]
+- Registers Ivy protocol only for `http:` and `https:` to be more plugin friendly. [lm183][lm183] by [@tpunder][@tpunder]
+- Fixes script issues related to `bc` by using `expr`. [launcher-package#199][sbt-launcher-package199] by [@thatfulvioguy][@thatfulvioguy]
+
+### Enhancement
+
+- Adds Scala 2.13.0-M2 support. [zinc#453][zinc453] by [@eed3si9n][@eed3si9n] and [@jan0sch][@jan0sch]
+
+### Internal
+
+- Improves Zinc scripted testing. [zinc#440][zinc440] by [@jvican][@jvican]
+
+### Contributors
+
+A huge thank you to everyone who's helped improve sbt and Zinc 1 by using them, reporting bugs, improving our documentation, porting builds, porting plugins, and submitting and reviewing pull requests.
+
+This release was brought to you by 17 contributors, according to `git shortlog -sn --no-merges v1.0.3..v1.0.4` on sbt, zinc, librarymanagement, util, io, and website: Eugene Yokota, Kenji Yoshida (xuwei-k), Jorge Vicente Cantero (jvican), Dale Wijnand, Leonard Ehrenfried, Antonio Cunei, Brett Randall, Guillaume Martres, Arnout Engelen, Fulvio Valente, Jens Grassel, Matthias Kurz, OlegYch, Philippus Baalman, Sam Halliday, Tim Underwood, Tom Most. Thank you!
+
+  [@dwijnand]: https://github.com/dwijnand
+  [@cunei]: https://github.com/cunei
+  [@eed3si9n]: https://github.com/eed3si9n
+  [@jvican]: https://github.com/jvican
+  [@OlegYch]: https://github.com/OlegYch
+  [@leonardehrenfried]: https://github.com/leonardehrenfried
+  [@xuwei-k]: https://github.com/xuwei-k
+  [@tpunder]: https://github.com/tpunder
+  [@smarter]: https://github.com/smarter
+  [@jan0sch]: https://github.com/jan0sch
+  [@mkurz]: https://github.com/mkurz
+  [@thatfulvioguy]: https://github.com/thatfulvioguy
+  [@fommil]: https://github.com/fommil
+  [3655]: https://github.com/sbt/sbt/issues/3655
+  [3717]: https://github.com/sbt/sbt/pull/3717
+  [ivy26]: https://github.com/sbt/ivy/pull/26
+  [ivy27]: https://github.com/sbt/ivy/pull/27
+  [launcher45]: https://github.com/sbt/launcher/pull/45
+  [3680]: https://github.com/sbt/sbt/issues/3680
+  [3720]: https://github.com/sbt/sbt/pull/3720
+  [3743]: https://github.com/sbt/sbt/pull/3743
+  [3711]: https://github.com/sbt/sbt/issues/3711
+  [util132]: https://github.com/sbt/util/pull/132
+  [lm174]: https://github.com/sbt/librarymanagement/pull/174
+  [lm179]: https://github.com/sbt/librarymanagement/pull/179
+  [lm183]: https://github.com/sbt/librarymanagement/pull/183
+  [zinc452]: https://github.com/sbt/zinc/pull/452
+  [zinc444]: https://github.com/sbt/zinc/pull/444
+  [zinc453]: https://github.com/sbt/zinc/pull/453
+  [zinc440]: https://github.com/sbt/zinc/pull/440
+  [sbt-launcher-package197]: https://github.com/sbt/sbt-launcher-package/pull/197
+  [sbt-launcher-package199]: https://github.com/sbt/sbt-launcher-package/pull/199
+
+## sbt 1.0.3
+
+This is a hotfix release for sbt 1.0.x series.
+
+### Bug fixes
+
+- Fixes `~` recompiling in loop (when a source generator or sbt-buildinfo is present). [#3501][3501]/[#3634][3634] by [@dwijnand][@dwijnand]
+- Fixes undercompilation on inheritance on same source. [zinc#424][zinc424] by [@eed3si9n][@eed3si9n]
+- Fixes the compilation of package-protected objects. [zinc#431][zinc431] by [@jvican][@jvican]
+- Workaround for Java returning `null` for `getGenericParameterTypes`. [zinc#446][zinc446] by [@jvican][@jvican]
+- Fixes test detection regression. sbt 1.0.3 filters out nested objects/classes from the list, restoring compatibility with 0.13. [#3669][3669] by [@cunei][@cunei]
+- Uses Scala 2.12.4 for the build definition. This includes fix for runtime reflection of empty package members under Java 9. [#3587][3587] by [@eed3si9n][@eed3si9n]
+- Fixes extra `/` in Ivy style patterns. [lm#170][lm170] by [@laughedelic][@laughedelic]
+- Fixes "destination file exist" error message by including the file name. [lm171][lm171] by [@leonardehrenfried][@leonardehrenfried]
+- Fixes JDK 9 warning "Illegal reflective access" in library management module and Ivy. [lm173][lm173] by [@dwijnand][@dwijnand]
+
+### Improvements
+
+- Adds `sbt.watch.mode` system property to allow switching back to old polling behaviour for watch. See below for more details.
+
+### Alternative watch mode
+
+sbt 1.0.0 introduced a new mechanism for watching for source changes based on the NIO `WatchService` in Java 1.7. On
+some platforms (namely macOS) this has led to long delays before changes are picked up. An alternative `WatchService`
+for these platforms is planned for sbt 1.1.0 ([#3527][3527]), in the meantime an option to select which watch service
+has been added.
+
+The new `sbt.watch.mode` JVM flag has been added with the following supported values:
+
+- `polling`: (default for macOS) poll the filesystem for changes (mechanism used in sbt 0.13).
+- `nio` (default for other platforms): use the NIO based `WatchService`.
+
+If you are experiencing long delays on a non-macOS machine then try adding `-Dsbt.watch.mode=polling` to your sbt
+options.
+
+[#3597][3597] by [@stringbean][@stringbean]
+
+### Contributors
+
+A huge thank you to everyone who's helped improve sbt and Zinc 1 by using them, reporting bugs, improving our documentation, porting builds, porting plugins, and submitting and reviewing pull requests.
+
+This release was brought to you by 15 contributors, according to `git shortlog -sn --no-merges v1.0.2..v1.0.3` on sbt, zinc, librarymanagement, util, io, and website: Eugene Yokota, Dale Wijnand, Michael Stringer, Jorge Vicente Cantero (jvican), Alexey Alekhin, Antonio Cunei, Andrey Artemov, Jeffrey Olchovy, Kenji Yoshida (xuwei-k), Dominik Winter, Long Jinwei, Arnout Engelen, Justin Kaeser, Leonard Ehrenfried, Sakib Hadžiavdić. Thank you!
+
+  [@dwijnand]: https://github.com/dwijnand
+  [@cunei]: https://github.com/cunei
+  [@eed3si9n]: https://github.com/eed3si9n
+  [@jvican]: https://github.com/jvican
+  [@stringbean]: https://github.com/stringbean
+  [@laughedelic]: https://github.com/laughedelic
+  [@leonardehrenfried]: https://github.com/leonardehrenfried
+  [3669]: https://github.com/sbt/sbt/pull/3669
+  [3583]: https://github.com/sbt/sbt/issues/3583
+  [3587]: https://github.com/sbt/sbt/issues/3587
+  [3527]: https://github.com/sbt/sbt/issues/3527
+  [3597]: https://github.com/sbt/sbt/pull/3597
+  [3501]: https://github.com/sbt/sbt/issues/3501
+  [3634]: https://github.com/sbt/sbt/pull/3634
+  [lm170]: https://github.com/sbt/librarymanagement/pull/170
+  [lm171]: https://github.com/sbt/librarymanagement/pull/171
+  [lm173]: https://github.com/sbt/librarymanagement/pull/173
+  [zinc424]: https://github.com/sbt/zinc/pull/424
+  [zinc431]: https://github.com/sbt/zinc/pull/431
+  [zinc446]: https://github.com/sbt/zinc/pull/446
+
+## sbt 1.0.2
+
+This is a hotfix release for sbt 1.0.x series.
+
+### Bug fixes
+
+- Fixes terminal echo issue. [#3507][3507] by [@kczulko][@kczulko]
+- Fixes `deliver` task, and adds `makeIvyXml` as a more sensibly named task. [#3487][3487] by [@cunei][@cunei]
+- Replaces the deprecated use of `OkUrlFactory`, and fixes connection leaks. [lm#164][lm164] by [@dpratt][@dpratt]
+- Refixes false positive in DSL checker for setting keys. [#3513][3513] by [@dwijnand][@dwijnand]
+- Fixes `run` and `bgRun` not picking up changes to directories in the classpath. [#3517][3517] by [@dwijnand][@dwijnand]
+- Fixes `++` so it won't change the value of `crossScalaVersion`. [#3495][3495]/[#3526][3526] by [@dwijnand][@dwijnand]
+- Fixes sbt server missing some messages. [#3523][3523] by [@guillaumebort][@guillaumebort]
+- Refixes `consoleProject`. [zinc#386][zinc386] by [@dwijnand][@dwijnand]
+- Adds JVM flag `sbt.gigahorse` to enable/disable the internal use of Gigahorse to workaround NPE in `JavaNetAuthenticator` when used in conjunction with `repositories` override. [lm#167][lm167] by [@cunei][@cunei]
+- Adds JVM flag `sbt.server.autostart` to enable/disable the automatic starting of sbt server with the sbt shell. This also adds new `startServer` command to manually start the server. by [@eed3si9n][@eed3si9n]
+
+### Internal
+
+- Fixes unused import warnings. [#3533][3533] by [@razvan-panda][@razvan-panda]
+
+### Contributors
+
+A huge thank you to everyone who's helped improve sbt and Zinc 1 by using them, reporting bugs, improving our documentation, porting plugins, and submitting and reviewing pull requests.
+
+This release was brought to you by 19 contributors, according to `git shortlog -sn --no-merges v1.0.1..v1.0.2` on sbt, zinc, librarymanagement, and website: Dale Wijnand, Eugene Yokota, Kenji Yoshida (xuwei-k), Antonio Cunei, David Pratt, Karol Cz (kczulko), Amanj Sherwany, Emanuele Blanco, Eric Peters, Guillaume Bort, James Roper, Joost de Vries, Marko Elezovic, Martynas Mickevičius, Michael Stringer, Răzvan Flavius Panda, Peter Vlugter, Philippus Baalman, and Wiesław Popielarski. Thank you!
+
+  [@dwijnand]: https://github.com/dwijnand
+  [@cunei]: https://github.com/cunei
+  [@eed3si9n]: https://github.com/eed3si9n
+  [@dpratt]: https://github.com/dpratt
+  [@kczulko]: https://github.com/kczulko
+  [@razvan-panda]: https://github.com/razvan-panda
+  [@guillaumebort]: https://github.com/guillaumebort
+  [3487]: https://github.com/sbt/sbt/pull/3487
+  [lm164]: https://github.com/sbt/librarymanagement/pull/164
+  [3495]: https://github.com/sbt/sbt/issues/3495
+  [3526]: https://github.com/sbt/sbt/pull/3526
+  [3513]: https://github.com/sbt/sbt/pull/3513
+  [3517]: https://github.com/sbt/sbt/pull/3517
+  [3507]: https://github.com/sbt/sbt/pull/3507
+  [3533]: https://github.com/sbt/sbt/pull/3533
+  [3523]: https://github.com/sbt/sbt/pull/3523
+  [zinc386]: https://github.com/sbt/zinc/pull/386
+  [lm167]: https://github.com/sbt/librarymanagement/pull/167
+
+## sbt 1.0.1
+
+This is a hotfix release for sbt 1.0.x series.
+
+### Bug fixes
+
+- Fixes command support for cross building `+` command. The `+` added to sbt 1.0 traveres over the subprojects, respecting `crossScalaVersions`; however, it no longer accepted commands as arguments. This brings back the support for it. [#3446][3446] by [@jroper][@jroper]
+- Fixes `addSbtPlugin` to use the correct version of sbt during cross building. [#3442][3442] by [@dwijnand][@dwijnand]
+- Fixes `run in Compile` task not including `Runtime` configuration, by reimplementing `run` in terms of `bgRun`. [#3477][3477] by [@eed3si9n][@eed3si9n]
+- Shows `actual` as a potential option of `inspect` [#3335][3335] by [@Duhemm][@Duhemm]
+- Includes base directory to watched sources. [#3439][3439] by [@Duhemm][@Duhemm]
+- Adds an attempt to workaround intermittent `NullPointerException` arround logging. [util#121][util121] by [@eed3si9n][@eed3si9n]
+- Reverts a bad forward porting. [#3481][3481] by [@eed3si9n][@eed3si9n]
+
+### WatchSource
+
+The watch source feature went through a major change from sbt 0.13 to sbt 1.0 using NIO; however, it did not have clear migration path, so we are rectifying that in sbt 1.0.1.
+
+First, `sbt.WatchSource` is a new alias for `sbt.internal.io.Source`. Hopefully this is easy enough to remember because the key is named `watchSources`. Next, `def apply(base: File)` and `def apply(base: File, includeFilter: FileFilter, excludeFilter: FileFilter)` constructors were added to the companion object of `sbt.WatchSource`.
+
+For backward compatiblity, sbt 1.0.1 adds `+=` support (`Append` instance) from `File` to `Seq[WatchSource]`.
+
+So, if you have a directory you want to watch:
+
+    watchSources += WatchSource(sourceDirectory.value)
+
+If you have a list of files:
+
+    watchSources ++= (sourceDirectory.value ** "*.scala").get
+
+[#3438][3438] by [@Duhemm][@Duhemm]; [#3478][3478] and [io#74][io74] by [@eed3si9n][@eed3si9n]
+
+  [3335]: https://github.com/sbt/sbt/pull/3335
+  [3438]: https://github.com/sbt/sbt/pull/3438
+  [3478]: https://github.com/sbt/sbt/pull/3478
+  [3439]: https://github.com/sbt/sbt/pull/3439
+  [io74]: https://github.com/sbt/io/pull/74
+  [3442]: https://github.com/sbt/sbt/pull/3442
+  [3446]: https://github.com/sbt/sbt/pull/3446
+  [3477]: https://github.com/sbt/sbt/pull/3477
+  [3481]: https://github.com/sbt/sbt/pull/3481
+  [util121]: https://github.com/sbt/util/pull/121
+  [@eed3si9n]: https://github.com/eed3si9n
+  [@dwijnand]: http://github.com/dwijnand
+  [@jvican]: https://github.com/jvican
+  [@Duhemm]: https://github.com/Duhemm
+  [@jroper]: https://github.com/jroper
+
+## sbt 1.0.0
+
+### Features, fixes, changes with compatibility implications
+
+See [Migrating from sbt 0.13.x][Migrating-from-sbt-013x] also.
+
+- sbt 1.0 uses **Scala 2.12** for build definitions and plugins. This also requires JDK 8.
+- Many of the case classes are replaced with pseudo case classes generated using Contraband. Migrate `.copy(foo = xxx)` to `withFoo(xxx)`.
+  For example, `UpdateConfiguration`, `RetrieveConfiguration`, `PublishConfiguration` are refactored to use builder pattern.
+- Zinc 1 drops support for Scala 2.9 and earlier. Scala 2.10 must use 2.10.2 and above. Scala 2.11 must use 2.11.2 and above. (latest patch releases are recommended)
+- `config("xyz")` must be directly assigned to a *capitalized* `val`, like `val Xyz = config("xyz")`. This captures the lhs identifier into the configuration so we can use it from the shell later.
+- Changes `publishTo` and `otherResolvers` from SettingKeys to TaskKeys. [#2059][2059]/[#2662][2662] by [@dwijnand][@dwijnand]
+- `Path.relativizeFile(baseFile, file)` is renamed to `IO.relativizeFile(baseFile, file)`.
+- `PathFinder`'s `.***` method is renamed to `.allPaths` method.
+- `PathFinder.x_!(mapper)` is moved to `def pair` on `PathFinder`.
+- A number of the methods on `sbt.Path` (such as `relativeTo` and `rebase` and `flat`) are now no longer in the
+    default namespace by virtue of being mixed into the sbt package object. Use `sbt.io.Path` to access them
+    again.
+- sbt 1.0 renames `Global` as scope component to `Zero` to disambiguate from `GlobalScope`. [@eed3si9n][@eed3si9n]
+- sbt 1.0 uses `ConfigRef` in places where `String` was used to reference configuration, such as `update.value.configuration(...)`. Pass in `Configuration`, which implicitly converts to `ConfigRef`.
+- Changes `sourceArtifactTypes` and `docArtifactTypes` from `Set[String]` to `Seq[String]` settings.
+- Renames early command feature from `--<command>` to `early(<command>)`.
+- Drops sbt 0.12 style hyphen-separated key names (use `publishLocal` instead of `publish-local`).
+- Log options `-error`, `-warn`, `-info`, `-debug` are added as shorthand for `"early(error)"` etc.
+- `sbt.Process` and `sbt.ProcessExtra` are dropped. Use `scala.sys.process` instead.
+- `incOptions.value.withNameHashing(...)` option is removed because name hashing is always on.
+- `TestResult.Value` is now called `TestResult`.
+- The scripted plugin is cross-versioned now, so you must use `%%` when depending on it.
+
+**Dropped dreprecations**:
+
+- sbt 0.12 style `Build` trait that was deprecated in sbt 0.13.12, is removed. Please [migrate to build.sbt](Migrating-from-sbt-013x.html#Migrating+from+the+Build+trait). Auto plugins and `Build` trait do not work well together, and its feature is now largely subsumed by multi-project build.sbt.
+- sbt 0.12 style `Project(...)` constructor is restricted down to two parameters. This is because `settings` parameter does not work well with Auto Plugins. Use `project` instead.
+- sbt 0.12 style key dependency operators `<<=`, `<+=`, `<++=` are removed. Please [migrate to :=, +=, and ++=](Migrating-from-sbt-013x.html#Migrating+simple+expressions). These operators have been sources of confusion for many users, and have long been removed from 0.13 docs, and have been formally deprecated since sbt 0.13.13.
+- Non-auto `sbt.Plugin` trait is dropped. Please migrate to AutoPlugin. Auto plugins are easier to configure, and work better with each other.
+- Removes the `settingsSets` method from `Project` (along with `add/setSbtFiles`).
+- Drops deprecated `InputTask` `apply` method and `inputTask` DSL method. Use `Def.inputTask` and `Def.spaceDelimited().parsed`.
+- Drops deprecated `ProjectReference` implicit lifts. Use `RootProject(<uri>)`, `RootProject(<file>)` or `LocalProject(<string>)`.
+- Drops deprecated `seq(..)` DSL method. Use `Seq` or pass in the settings without wrapping.
+- Drops deprecated `File`/`Seq[File]` setting enrichments. Use `.value` and `Def.setting`.
+- Drops deprecated `SubProcess` `apply` overload. Use `SubProcess(ForkOptions(runJVMOptions = ..))`.
+- Drops `toError(opt: Option[String]): Unit` (equivalent to `opt foreach sys.error`); if used to wrap
+    `ScalaRun#run` then the replacement is `scalaRun.run(...).failed foreach (sys error _.getMessage)`
+
+### Features
+
+- New incremental compiler called Zinc 1. Details below.
+- The interactive shell is adds network API. Details below.
+
+### Fixes
+
+- Fixes test content log not showing up. [#3198][3198]/[util#80][util80] by [@eed3si9n][@eed3si9n]
+- Fixes confusing log about "Unable to parse". [lm#98][lm98] by [@jvican][@jvican]
+- Fixes `console` task. [zinc#295][zinc295] by [@dwijnand][@dwijnand]
+- Fixes spurious recompilations when unrelated constructor changes. [zinc#288][zinc288] by [@smarter][@smarter]
+- Fixes restligeist macro for old operators. [#3218][3218] by [@eed3si9n][@eed3si9n]
+- Fixes task caching of `update` task. [#3233][3233] by [@eed3si9n][@eed3si9n]
+- Fixes ncurses-JLine issue by updating to JLine 2.14.4. [util#81][util81] by [@Rogach][@Rogach]
+
+### Improvements
+
+- Scala Center contributed a Java-friendly Zinc API. This was a overhaul of the Zinc internal API for a good Scala integration with other build tools. [zinc#304][zinc304] by [@jvican][@jvican]
+- Scala Center contributed a binary format for Zinc's internal storage. See below
+- Scala Center contributed static validation of `build.sbt`. See below
+- Library management API and parallel artifact download. See below.
+- The startup log level is dropped to `-error` in script mode using `scalas`. [#840][840] by [@eed3si9n][@eed3si9n]
+- Replace cross building support with sbt-doge. This allows builds with projects that have multiple different combinations of cross scala versions to be cross built correctly.  The behaviour of ++ is changed so that it only updates the Scala version of projects that support that Scala version, but the Scala version can be post fixed with ! to force it to change for all projects. A -v argument has been added that prints verbose information about which projects are having their settings changed along with their cross scala versions. [#2613][2613] by [@jroper][@jroper]
+- `ivyLoggingLevel` is dropped to `UpdateLogging.Quiet` when CI environment is detected. [@eed3si9n][@eed3si9n]
+- Add logging of the name of the different `build.sbt` (matching `*.sbt`) files used. [#1911][1911] by [@valydia][@valydia]
+- Add the ability to call [`aggregate`](Multi-Project.html#Aggregation) for the current project inside a build sbt file. By [@xuwei-k][@xuwei-k]
+- Add new global setting `asciiGraphWidth` that controls the maximum width of the ASCII graphs printed by commands like `inspect tree`. Default value corresponds to the previously hardcoded value of 40 characters. By [@RomanIakovlev][@RomanIakovlev].
+- Revamped documentation for [Scopes](www.scala-sbt.org/0.13/docs/Scopes.html), and added [Scope Delegation](www.scala-sbt.org/0.13/docs/Scope-Delegation.html). [@eed3si9n][@eed3si9n]
+- Ports sbt-cross-building's `^` and `^^` commands for plugin cross building. See below.
+- Adds support for cross-versioned exclusions. [#1518][1518]/[lm#88][lm88] by [@jvican][@jvican]
+- Adds new offline mode to the Ivy-based library management. [lm#92][lm92] by [@jvican][@jvican]
+- A number of features related to dependency locking. See below.
+- Improved eviction warning presentation. See below.
+- A better main class detection. [zinc#287][zinc287] by [@smarter][@smarter]
+- For faster startup, sbt will use Java refection to discover `autoImport` . [#3115][3115] by [@jvican][@jvican]
+- For faster startup, reuse the same global instance for parsing. [#3115][3115] by [@jvican][@jvican]
+- Adds `InteractionService` from sbt-core-next to keep compatibility with sbt 0.13. [#3182][3182] by [@eed3si9n][@eed3si9n]
+- Adds new `WatchService` that abstracts `PollingWatchService` and Java NIO. [io#47][io47] by [@Duhemm][@Duhemm] on behalf of The Scala Center.
+- Adds variants of `IO.copyFile` and `IO.copyDirectory` that accept `sbt.io.CopyOptions()`. See below for details.
+- `Path.directory` and `Path.contentOf` are donated from sbt-native-packager [io#38][io38] by [@muuki88][@muuki88]
+- ApiDiff feature used to debug Zinc uses Scala implementation borrowed from Dotty. [zinc#346][zinc346] by [@Krever][@Krever]
+- In Zinc internal, make ExtractAPI use perRunCaches. [zinc#347][zinc347] by [@gheine][@gheine]
+
+### Internals
+
+- Adopted Scalafmt for formatting the source code using neo-scalafmt.
+- Scala Center contributed a redesign of the scripted test framework that has batch mode execution. Scripted now reuses the same sbt instance to run sbt tests, which reduces the CI build times by 50% [#3151][3151] by [@jvican][@jvican]
+- sbt 1.0.0-M6 is built using sbt 1.0.0-M5. [#3184][3184] by [@dwijnand][@dwijnand]
+
+### Details of major changes
+
+### Zinc 1: Class-based name hashing
+
+A major improvement brought into Zinc 1.0 by Grzegorz Kossakowski (commissioned by Lightbend) is class-based name hashing, which will speed up the incremental compilation of Scala in large projects.
+
+Zinc 1.0's name hashing tracks your code dependendencies at the class level, instead of at the source file level. The GitHub issue [sbt/sbt#1104](https://github.com/sbt/sbt/issues/1104) lists some comparisons of adding a method to an existing class in some projects:
+
+```
+ScalaTest   AndHaveWord class:          Before 49s, After 4s (12x)
+Specs2      OptionResultMatcher class:  Before 48s, After 1s (48x)
+scala/scala Platform class:             Before 59s, After 15s (3.9x)
+scala/scala MatchCodeGen class:         Before 48s, After 17s (2.8x)
+```
+
+This depends on some factors such as how your classes are organized, but you can see 3x ~ 40x improvements. The reason for the speedup is because it compiles fewer source files than before by untangling the classes from source files. In the example adding a method to scala/scala's Platform class, sbt 0.13's name hashing used to compile 72 sources, but the new Zinc compiles 6 sources.
+
+#### Zinc API changes
+
+- Java classes under the `xsbti.compile` package such as `IncOptions` hides the constructor. Use the factory method `xsbti.compile.Foo.of(...)`.
+- Renames `ivyScala: IvyScala` key to `scalaModuleInfo: ScalaModuleInfo`.
+- `xsbti.Reporter#log(...)` takes `xsbti.Problem` as the parameter. Call `log(problem.position, problem.message, problem.severity)` to delegate to the older `log(...)`.
+- `xsbi.Maybe`, `xsbti.F0`, and `sxbti.F1` are changed to corresponding Java 8 classes `java.util.Optional`, `java.util.Supplier` and `java.util.Function`.
+- Removes unused "resident" option. [zinc#345][zinc345] by [@lukeindykiewicz][@lukeindykiewicz]
+
+#### sbt server: JSON API for tooling integration
+
+sbt 1.0 includes server feature, which allows IDEs and other tools to query the build for settings, and invoke commands via a JSON API. Similar to the way that the interactive shell in sbt 0.13 is implemented with `shell` command, "server" is also just `shell` command that listens to both human input and network input. As a user, there should be minimal impact because of the server.
+
+In March 2016, we [rebooted](http://eed3si9n.com/sbt-server-reboot) the "server" feature to make it as small as possible. We worked in collaboration with JetBrains' @jastice who works on IntelliJ's sbt interface to narrow down the feature list. sbt 1.0 will not have all the things we originally wanted, but in the long term, we hope to see better integration between IDE and sbt ecosystem using this system. For example, IDEs will be able to issue the compile task and retrieve compiler warning as JSON events:
+
+```
+{"type":"xsbti.Problem","message":{"category":"","severity":"Warn","message":"a pure expression does nothing in statement position; you may be omitting necessary parentheses","position":{"line":2,"lineContent":"  1","offset":29,"pointer":2,"pointerSpace":"  ","sourcePath":"/tmp/hello/Hello.scala","sourceFile":"file:/tmp/hello/Hello.scala"}},"level":"warn"}
+```
+
+Another related feature that was added is the `bgRun` task which, for example, enables a server process to be run in the background while you run tests against it.
+
+#### Static validation of build.sbt
+
+sbt 1.0 prohibits `.value` calls inside the bodies of if expressions and anonymous functions in a task, `@sbtUnchecked` annotation can be used to override the check.
+
+The static validation also catches if you forget to call `.value` in a body of a task.
+
+[#3216][3216] and [#3225][3225] by [@jvican][@jvican]
+
+#### Eviction warning presentation
+
+sbt 1.0 improves the eviction warning presetation.
+
+Before:
+
+    [warn] There may be incompatibilities among your library dependencies.
+    [warn] Here are some of the libraries that were evicted:
+    [warn]  * com.google.code.findbugs:jsr305:2.0.1 -> 3.0.0
+    [warn] Run 'evicted' to see detailed eviction warnings
+
+After:
+
+    [warn] Found version conflict(s) in library dependencies; some are suspected to be binary incompatible:
+    [warn]
+    [warn]      * com.typesafe.akka:akka-actor_2.12:2.5.0 is selected over 2.4.17
+    [warn]          +- de.heikoseeberger:akka-log4j_2.12:1.4.0            (depends on 2.5.0)
+    [warn]          +- com.typesafe.akka:akka-parsing_2.12:10.0.6         (depends on 2.4.17)
+    [warn]          +- com.typesafe.akka:akka-stream_2.12:2.4.17 ()       (depends on 2.4.17)
+    [warn]
+    [warn] Run 'evicted' to see detailed eviction warnings
+
+[#3202][3202] by [@eed3si9n][@eed3si9n]
+
+#### sbt-cross-building
+
+[@jrudolph][@jrudolph]'s sbt-cross-building is a plugin author's plugin.
+It adds cross command `^` and sbtVersion switch command `^^`, similar to `+` and `++`,
+but for switching between multiple sbt versions across major versions.
+sbt 0.13.16 merges these commands into sbt because the feature it provides is useful as we migrate plugins to sbt 1.0.
+
+To switch the `sbtVersion in pluginCrossBuild` from the shell use:
+
+```
+^^ 1.0.0-M5
+```
+
+Your plugin will now build with sbt 1.0.0-M5 (and its Scala version 2.12.2).
+
+If you need to make changes specific to a sbt version, you can now include them into `src/main/scala-sbt-0.13`,
+and `src/main/scala-sbt-1.0.0-M5`, where the binary sbt version number is used as postfix.
+
+To run a command across multiple sbt versions, set:
+
+```scala
+crossSbtVersions := Vector("0.13.15", "1.0.0-M5")
+```
+
+Then, run:
+
+```
+^ compile
+```
+
+[#3133][3133] by [@eed3si9n][@eed3si9n] (forward ported from 0.13.16-M1)
+
+#### CopyOptions
+
+sbt IO 1.0 add variant of `IO.copyFile` and `IO.copyDirectory` that accept `sbt.io.CopyOptions()`.
+`CopyOptions()` is an example of pseudo case class similar to the builder pattern.
+
+```scala
+import sbt.io.{ IO, CopyOptions }
+
+IO.copyDirectory(source, target)
+
+// The above is same as the following
+IO.copyDirectory(source, target, CopyOptions()
+  .withOverwrite(false)
+  .withPreserveLastModified(true)
+  .withPreserveExecutable(true))
+```
+
+[io#53][io53] by [@dwijnand][@dwijnand]
+
+#### Library management API and parallel artifact download
+
+sbt 1.0 adds Library management API co-authored by Eugene Yokota ([@eed3si9n][@eed3si9n]) from Lightbend and Martin Duhem ([@Duhemm][@Duhemm]) from Scala Center.
+This API aims to abstract Apache Ivy as well as alternative dependency resolution engines Ivy, cached resolution, and Coursier.
+
+Parallel artifact download for Ivy engine was contributed by Jorge ([@jvican][@jvican]) from Scala Center.
+It also introduces Gigahorse OkHttp as the Network API, and it uses Square OkHttp for artifact download as well.
+
+[lm#124][lm124] by [@eed3si9n][@eed3si9n]/[@Duhemm][@Duhemm],
+[lm#90][lm90] by [@jvican][@jvican]/[@jsuereth][@jsuereth]
+and [lm#104][lm104] by [@eed3si9n][@eed3si9n].
+
+#### Binary format for Zinc's internal storage
+
+Jorge ([@jvican][@jvican]) from Scala Center contributed a binary format for Zinc's internal storage using Google Procol Buffer.
+The new format provides us with three main advantages:
+
+1. Backwards and forwards binary compatibility at the analysis format level.
+2. Faster (1.5 ~ 2x) serialization/deserialization of the analysis file.
+3. Provides a better way to make the analysis file machine-independent.
+
+[zinc#351][zinc351] by [@jvican][@jvican]
+
+#### Dependency locking
+
+Dependency locking feature is still in progress, but Jorge ([@jvican][@jvican]) from Scala Center has added a number of related features
+that would should work together to allow dependency locking.
+
+- Frozen mode to the Ivy-based library management, which makes sure that the resolution is always intransitive. [lm#100][lm100]
+- Adds support to specify a resolver for dependencies. [lm#97][lm97]
+- Adds "managed checksums", which tells Ivy to skip the checksum process. [lm#111][lm111]
+
+### Contributors
+
+Too many people to thank here. See [Credits][Credits]
+
+  [Credits]: Credits.html
+  [Migrating-from-sbt-013x]: Migrating-from-sbt-013x.html
+  [@eed3si9n]: https://github.com/eed3si9n
+  [@Duhemm]: https://github.com/Duhemm
+  [@dwijnand]: http://github.com/dwijnand
+  [@gheine]: https://github.com/gheine
+  [@gkossakowski]: https://github.com/gkossakowski
+  [@jroper]: https://github.com/jroper
+  [@jrudolph]: https://github.com/jrudolph
+  [@jsuereth]: https://github.com/jsuereth
+  [@jvican]: https://github.com/jvican
+  [@Krever]: https://github.com/Krever
+  [@lukeindykiewicz]: https://github.com/lukeindykiewicz
+  [@muuki88]: https://github.com/muuki88
+  [@Rogach]: https://github.com/Rogach
+  [@RomanIakovlev]: https://github.com/RomanIakovlev
+  [@smarter]: https://github.com/smarter
+  [@valydia]: https://github.com/valydia
+  [@xuwei-k]: https://github.com/xuwei-k
+  [sbt-1-0-roadmap]: http://developer.lightbend.com/blog/2017-04-18-sbt-1-0-roadmap-and-beta1/
+  [840]: https://github.com/sbt/sbt/issues/840
+  [2613]: https://github.com/sbt/sbt/pull/2613
+  [1911]: https://github.com/sbt/sbt/issues/1911
+  [2059]: https://github.com/sbt/sbt/issues/2059
+  [2662]: https://github.com/sbt/sbt/pull/2662
+  [3133]: https://github.com/sbt/sbt/pull/3133
+  [util80]: https://github.com/sbt/util/pull/80
+  [3198]: https://github.com/sbt/sbt/issues/3198
+  [lm88]: https://github.com/sbt/librarymanagement/pull/88
+  [1518]: https://github.com/sbt/sbt/issues/1518
+  [lm90]: https://github.com/sbt/librarymanagement/pull/90
+  [lm92]: https://github.com/sbt/librarymanagement/pull/92
+  [lm98]: https://github.com/sbt/librarymanagement/pull/98
+  [lm100]: https://github.com/sbt/librarymanagement/pull/100
+  [lm111]: https://github.com/sbt/librarymanagement/pull/111
+  [lm104]: https://github.com/sbt/librarymanagement/pull/104
+  [lm97]: https://github.com/sbt/librarymanagement/pull/97
+  [lm124]: https://github.com/sbt/librarymanagement/pull/124
+  [3202]: https://github.com/sbt/sbt/pull/3202
+  [zinc295]: https://github.com/sbt/zinc/pull/295
+  [zinc287]: https://github.com/sbt/zinc/pull/287
+  [zinc288]: https://github.com/sbt/zinc/pull/288
+  [zinc304]: https://github.com/sbt/zinc/pull/304
+  [zinc346]: https://github.com/sbt/zinc/pull/346
+  [zinc345]: https://github.com/sbt/zinc/pull/345
+  [zinc347]: https://github.com/sbt/zinc/pull/347
+  [zinc351]: https://github.com/sbt/zinc/pull/351
+  [3115]: https://github.com/sbt/sbt/pull/3115
+  [3182]: https://github.com/sbt/sbt/pull/3182
+  [3151]: https://github.com/sbt/sbt/pull/3151
+  [3184]: https://github.com/sbt/sbt/pull/3184
+  [3216]: https://github.com/sbt/sbt/pull/3216
+  [3218]: https://github.com/sbt/sbt/pull/3218
+  [3225]: https://github.com/sbt/sbt/pull/3225
+  [3233]: https://github.com/sbt/sbt/pull/3233
+  [io47]: https://github.com/sbt/io/pull/47
+  [io53]: https://github.com/sbt/io/pull/53
+  [io38]: https://github.com/sbt/io/pull/38
+  [util81]: https://github.com/sbt/util/pull/81
+
+
+## sbt 0.13.5+ Technology Previews
+
+sbt 0.13.5+ releases of sbt are technology previews of what's to come to sbt 1.0 with enhancements like [auto plugins][Auto-Plugins-Post], launcher enhacements for sbt server, defined in the sbt-remote-control project, and other necessary API changes.
+
+These releases maintain binary compatibility with plugins that are published against sbt 0.13.0, but add new features in preparation for sbt 1.0. The tech previews allow us to test new ideas like auto plugins and performance improvements on dependency resolution; the build users can try new features without losing the existing plugin resources; and plugin authors can gradually migrate to the new plugin system before sbt 1.0 arrives.
+
+## sbt 0.13.16
+
+### Fixes with compatibility implications
+
+- Removes the "hit \[ENTER\] to switch to interactive mode" feature. Run `sbt xxx shell` to stay in shell after `xxx`. [#3091][3091]/[#3153][3153] by [@dwijnand][@dwijnand]
+
+### Improvements
+
+- Improves the new startup messages. See below.
+- Ports sbt-cross-building's `^` and `^^` commands for plugin cross building. See below.
+- Adds `Zero` scope component for sbt 1.0 compatibility. [#3179][3179] by [@eed3si9n][@eed3si9n]
+- Backports `withXXX` methods for `ModuleID` and `Artifact` for sbt 1.0 compatibility. [#3215][3215] by [@eed3si9n][@eed3si9n]
+
+### Bug fixes
+
+- Fixes the new startup messages. See below.
+- Fixes forward compatibility of Scripted plugin with sbt 1.0.0-RC2. [#3329][3329] by [@dwijnand][@dwijnand]
+- Fixes ScalaTest nested suite test names being reported as "(It is not a test)". [#3154][3154] by [@jameskoch][@jameskoch]
+- Fixes default `scalaBinaryVersion` for Dotty. [#3152][3152] by [@smarter][@smater]
+- Updates JLine dependency to 2.14.4 to work around ncurses change causing `NumberFormatException`. [#3265][3265] by [@Rogach][@Rogach]
+
+### sbt-cross-building
+
+[@jrudolph][@jrudolph]'s sbt-cross-building is a plugin author's plugin.
+It adds cross command `^` and sbtVersion switch command `^^`, similar to `+` and `++`,
+but for switching between multiple sbt versions across major versions.
+sbt 0.13.16 merges these commands into sbt because the feature it provides is useful as we migrate plugins to sbt 1.0.
+
+To switch the `sbtVersion in pluginCrossBuild` from the shell use:
+
+```
+^^ 1.0.0-RC2
+```
+
+Your plugin will now build with sbt 1.0.0-RC2 (and its Scala version 2.12.2).
+
+If you need to make changes specific to a sbt version, you can now include them into `src/main/scala-sbt-0.13`,
+and `src/main/scala-sbt-1.0`, where the binary sbt version number is used as postfix.
+
+To run a command across multiple sbt versions, set:
+
+```scala
+crossSbtVersions := Vector("0.13.15", "1.0.0-RC2")
+```
+
+Then, run:
+
+```
+^ compile
+```
+
+[#3133][3133] by [@eed3si9n][@eed3si9n]
+
+#### Eviction warning presentation
+
+sbt 0.13.16 improves the eviction warning presetation.
+
+Before:
+
+    [warn] There may be incompatibilities among your library dependencies.
+    [warn] Here are some of the libraries that were evicted:
+    [warn]  * com.google.code.findbugs:jsr305:2.0.1 -> 3.0.0
+    [warn] Run 'evicted' to see detailed eviction warnings
+
+After:
+
+    [warn] Found version conflict(s) in library dependencies; some are suspected to be binary incompatible:
+    [warn]
+    [warn]      * com.typesafe.akka:akka-actor_2.12:2.5.0 is selected over 2.4.17
+    [warn]          +- de.heikoseeberger:akka-log4j_2.12:1.4.0            (depends on 2.5.0)
+    [warn]          +- com.typesafe.akka:akka-parsing_2.12:10.0.6         (depends on 2.4.17)
+    [warn]          +- com.typesafe.akka:akka-stream_2.12:2.4.17 ()       (depends on 2.4.17)
+    [warn]
+    [warn] Run 'evicted' to see detailed eviction warnings
+
+[#3202][3202] by [@eed3si9n][@eed3si9n]
+
+### Improvements and bug fixes to the startup messages
+
+sbt writes out the `sbt.version` in `project/build.properties` if it is missing.
+sbt 0.13.16 fixes the logging when it happens by using the logger.
+
+We encourage the use of the sbt shell by running `sbt`, instead of running `sbt compile` from the terminal repreatedly.
+The sbt shell keeps the JVM warm, and there is a significant performance improvement gained for your compilation.
+The startup message that we added in sbt 0.13.15 was a bit too aggressive, so we are toning it down in 0.13.16.
+It will only be triggered for `sbt compile`, and it can also be supressed with `suppressSbtShellNotification := true`.
+
+[#3091][3091]/[#3097][3097]/[#3147][3147] by [@dwijnand][@dwijnand]
+
+  [3091]: https://github.com/sbt/sbt/issues/3091
+  [3097]: https://github.com/sbt/sbt/issues/3097
+  [3147]: https://github.com/sbt/sbt/pull/3147
+  [3133]: https://github.com/sbt/sbt/pull/3133
+  [3153]: https://github.com/sbt/sbt/pull/3153
+  [3152]: https://github.com/sbt/sbt/pull/3152
+  [3179]: https://github.com/sbt/sbt/pull/3179
+  [3202]: https://github.com/sbt/sbt/pull/3202
+  [3215]: https://github.com/sbt/sbt/pull/3215
+  [3265]: https://github.com/sbt/sbt/pull/3265
+  [3329]: https://github.com/sbt/sbt/pull/3329
+  [@jrudolph]: https://github.com/jrudolph
+  [@eed3si9n]: https://github.com/eed3si9n
+  [@dwijnand]: https://github.com/dwijnand
+  [@jameskoch]: https://github.com/jameskoch
+  [@smarter]: https://github.com/smarter
+  [@Rogach]: https://github.com/Rogach
+
+## sbt 0.13.15
+
+### Fixes with compatibility implications
+
+- sbt 0.13.15 removes the Maven version range when possible. See below.
+
+### Improvements
+
+- Adds preliminary compatibility with JDK 9. Using this requires 0.13.15+ launcher. [#2951][2951]/[143][143] by [@retronym][@retronym]
+- Adds "local-preloaded" repository for offline installation. See below.
+- Notifies and enables users to stay in sbt's shell on the warm JVM by hitting `[ENTER]` while sbt is running. [#2987][2987]/[#2996][2996] by [@dwijnand][@dwijnand]
+- Adds an `Append` instance to support `sourceGenerators += Def.task { ... }`, instead of needing `.taskValue`. [#2943][2943] by [@eed3si9n][@eed3si9n]
+- Writes out the sbt.version in `project/build.properties` if it is missing. [#754][754]/[#3025][3025] by [@dwijnand][@dwijnand]
+- XML generated by JUnitXmlTestsListener now correctly flags ignored, skipped and pending tests. [#2198][2198]/[#2854][2854] by [@ashleymercer][@ashleymercer]
+- When sbt detects that the project is compiled with dotty, it now automatically
+  sets `scalaCompilerBridgeSource` correctly, this reduces the boilerplate needed
+  to make a dotty project. Note that dotty support in sbt is still considered
+  experimental and not officially supported, see [dotty.epfl.ch][dotty] for
+  more information. [#2902][2902] by [@smarter][@smarter]
+- Updates sbt new's reference implementation to Giter8 0.7.2.
+- ScriptedPlugin: Add the ability to paginate scripted tests.
+  It is now possible to run a subset of scripted tests in a directory at once,
+  for example:
+  ```
+  scripted source-dependencies/*1of3
+  ```
+  Will create three pages and run page 1. This is especially useful when running
+  scripted tests on a CI, to benefit from the available parallelism. [3013][3013] by [@smarter][@smarter]
+
+### Bug fixes
+
+- Fixes .triggeredBy/.storeAs/etc not working when using `:=` and `.value` macros. [#1444][1444]/[#2908][2908] by [@dwijnand][@dwijnand]
+- Fixes Ctrl-C not working on Windows by bumping up JLine. [#1855][1855] by [@eed3si9n][@eed3si9n]
+- Fixes regressions in sbt 0.13.11 - 0.13.13 that processed build-level keys incorrectly. [#2851][2851]/[#2460][2460] by [@eed3si9n][@eed3si9n]
+- Fixes a regression in sbt 0.13.12 that was misfiring Scala version enforcement when configuration does not extend `Compile`. [#2827][2827]/[#2786][2786] by [@eed3si9n][@eed3si9n]
+- Fixes Scala binary version checking misfiring on configurations that do not extend `Compile`. [#2828][2828]/[#1466][1466] by [@eed3si9n][@eed3si9n]
+- Fixes script mode ignoring quotation. [#2551][2551] by [@ekrich][@ekrich]
+- Fixes IllegalStateException that Ivy gets into sometimes. [#2827][2827]/[#2015][2015] by [@eed3si9n][@eed3si9n]
+- Fixes null sourceFile causing NPE. [#2766][2766] by [@avdv][@avdv]
+- Fixes version parsing in validation. [#3011][3011] by [@eed3si9n][@eed3si9n]
+- Fixes `Package.makeJar` deleting directory recursively. [#3014][3014] by [@larsrh][@larsrh]
+
+### Maven version range improvement
+
+Previously, when the dependency resolver (Ivy) encountered a Maven version range such as `[1.3.0,)`
+it would go out to the Internet to find the latest version.
+This would result to a surprising behavior where the eventual version keeps changing over time
+*even when there's a version of the library that satisfies the range condition*.
+
+Starting sbt 0.13.15, some Maven version ranges would be replaced with its lower bound
+so that when a satisfactory version is found in the dependency graph it will be used.
+You can disable this behavior using the JVM flag `-Dsbt.modversionrange=false`.
+
+[#2954][2954] by [@eed3si9n][@eed3si9n]
+
+### Offline installation
+
+sbt 0.13.15 adds two new repositories called "local-preloaded-ivy"
+and "local-preloaded" that point to `~/.sbt/preloaded/`.
+The purpose for the repositories is to preload them with
+sbt artifacts so the installation of sbt will not require access to the Internet.
+
+This also improves the startup time of sbt when you first run it
+since the resolution happens off of a local-preloaded repository.
+
+[#2993][2993]/[#145][145] by [@eed3si9n][@eed3si9n]
+
+### Notes
+
+No changes should be necessary to your project definition and all plugins published for sbt 0.13.{x|x<14} should still work.
+
+See [Migrating from sbt 0.12.x](https://www.scala-sbt.org/0.13/docs/Migrating-from-sbt-012x.html) for details on the old operator deprecation.
+
+Special thanks to the contributors for making this release a success. According to `git shortlog -sn --no-merges v0.13.13..0.13.15`, compared to 0.13.13, there were 64 (non-merge) commits, by eleven contributors: Eugene Yokota, Dale Wijnand, Guillaume Martres, Jason Zaugg, Lars Hupel, Petro Verkhogliad, Eric Richardson, Claudio Bley, Haochi Chen, Paul Draper, Ashley Mercer. Thank you!
+
+  [143]: https://github.com/sbt/sbt-launcher-package/pull/143
+  [145]: https://github.com/sbt/sbt-launcher-package/pull/145
+  [754]: https://github.com/sbt/sbt/issues/754
+  [2766]: https://github.com/sbt/sbt/issues/2766
+  [1855]: https://github.com/sbt/sbt/issues/1855
+  [1466]: https://github.com/sbt/sbt/issues/1466
+  [2786]: https://github.com/sbt/sbt/issues/2786
+  [2827]: https://github.com/sbt/sbt/pull/2827
+  [2828]: https://github.com/sbt/sbt/pull/2828
+  [2551]: https://github.com/sbt/sbt/issues/2551
+  [2987]: https://github.com/sbt/sbt/issues/2987
+  [2996]: https://github.com/sbt/sbt/pull/2996
+  [2851]: https://github.com/sbt/sbt/issues/2851
+  [2460]: https://github.com/sbt/sbt/issues/2460
+  [2951]: https://github.com/sbt/sbt/pull/2951
+  [2954]: https://github.com/sbt/sbt/issues/2954
+  [2015]: https://github.com/sbt/sbt/issues/2015
+  [2827]: https://github.com/sbt/sbt/pull/2827
+  [2198]: https://github.com/sbt/sbt/issues/2198
+  [2854]: https://github.com/sbt/sbt/pull/2854
+  [1444]: https://github.com/sbt/sbt/issues/1444
+  [2908]: https://github.com/sbt/sbt/pull/2908
+  [2902]: https://github.com/sbt/sbt/pull/2902
+  [2993]: https://github.com/sbt/sbt/pull/2993
+  [2943]: https://github.com/sbt/sbt/pull/2943
+  [3011]: https://github.com/sbt/sbt/issues/3011
+  [3025]: https://github.com/sbt/sbt/issues/3025
+  [3013]: https://github.com/sbt/sbt/pull/3013
+  [3014]: https://github.com/sbt/sbt/pull/3014
+  [@eed3si9n]: https://github.com/eed3si9n
+  [@dwijnand]: https://github.com/dwijnand
+  [@Duhemm]: https://github.com/Duhemm
+  [@avdv]: https://github.com/avdv
+  [@ekrich]: https://github.com/ekrich
+  [@retronym]: https://github.com/retronym
+  [@ashleymercer]: https://github.com/ashleymercer
+  [dotty]: http://dotty.epfl.ch/
+  [@smarter]: https://github.com/smarter
+  [@larsrh]: https://github.com/larsrh
+
+## sbt 0.13.14
+
+sbt 0.13.14 did not happen due a bug that was found after the artifact was published.
+
+## sbt 0.13.13
+
+### Fixes with compatibility implications
+
+- Deprecates the old sbt 0.12 DSL, to be removed in sbt 1.0. See below for more details.
+- The `.value` method is deprecated for input tasks. Calling `.value` on an input key returns an `InputTask[A]`,
+  which is completely unintuitive and often results in a bug. In most cases `.evaluated` should be called,
+  which returns `A` by evaluating the task.
+  Just in case `InputTask[A]` is needed, `.inputTaskValue` method is now provided. [#2709][2709] by [@eed3si9n][@eed3si9n]
+- sbt 0.13.13 renames the early command `--<command>` that was added in 0.13.1 to `early(<command>)`. This fixes the regression [#1041][1041]. For backward compatibility `--error`, `--warn`, `--info`, and `--debug` will continue to function during the 0.13 series, but it is strongly encouraged to migrate to the single hyphen options: `-error`, `-warn`, `-info`, and `-debug`. [#2742][2742] by [@eed3si9n][@eed3si9n]
+- Improve `show` when key returns a `Seq` by showing the elements one per line. Disable with `-Dsbt.disable.show.seq=true`. [#2755][2755] by [@eed3si9n][@eed3si9n]
+- Recycles classloaders to be anti-hostile to JIT. Disable with `-Dsbt.disable.interface.classloader.cache=true`. [#2754][2754] by [@retronym][@retronym]
+
+### Improvements
+
+- Adds `new` command and `templateResolverInfos`. See below for more details.
+- Auto plugins can add synthetic subprojects. See below for more details.
+- Supports wildcard exclusions in POMs [#1431][1431]/[sbt/ivy#22][sbt-ivy-22]/[#2731][2731] by [@jtgrabowski][@jtgrabowski]
+- Adds the ability to call `aggregateProjects(..)` for the current project inside a build sbt file. [#2682][2682] by [@xuwei-k][@xuwei-k]
+- Adds `.jvmopts` support to the launcher script. [sbt/sbt-launcher-package#111][111] by [@fommil][@fommil]
+- Adds `.java-version` support to the Windows launcher script. [sbt/sbt-launcher-package#111][111] by [@fommil][@fommil]
+- The startup log level is dropped to `-error` in script mode using `scalas`. [#840][840]/[#2746][2746] by [@eed3si9n][@eed3si9n]
+- Adds `CrossVersion.patch` which sits in between `CrossVersion.binary` and `CrossVersion.full` in that it strips off any
+  trailing `-bin-...` suffix which is used to distinguish variant but binary compatible Scala toolchain builds. Most things
+  which are currently `CrossVersion.full` (eg. Scala compiler plugins, esp. macro-paradise) would be more appropriately
+  depended on as `CrossVersion.patch` from this release on.
+
+### Bug fixes
+
+- Fixes a regression in sbt 0.13.12 that wrongly reports build-level keys to be ambiguous. [#2707][2707]/[#2708][2708] by [@Duhemm][@Duhemm]
+- Fixes a regression in sbt 0.13.12 that was misfiring Scala version enforcement when an alternative `scalaOrganization` is set. [#2703][2703] by [@milessabin][@milessabin]
+- Fixes `Tags.ForkedTestGroup`. [#2677][2677]/[#2681][2681] by [@pauldraper][@pauldraper]
+- Fixes forked tests being reported as successful when the test harness fails. [#2442][2442]/[#2722][2722]/[#2730][2730] by [@eed3si9n][@eed3si9n]/[@dwijnand][@dwijnand]
+- Fixes incorrect installation path on Windows. [sbt/sbt-launcher-package#110][110] by [@dwijnand][@dwijnand]
+
+### new command and templateResolverInfos
+
+sbt 0.13.13 adds a `new` command, which helps create new build definitions.
+The `new` command is extensible via a mechanism called the template resolver.
+A template resolver pattern matches on the passed in arguments after `new`,
+and if it's a match it will apply the template.
+
+As a reference implementation, template resolver for [Giter8][g8] is provided. For instance:
+
+    sbt new eed3si9n/hello.g8
+
+will run [eed3si9n/hello.g8][] using Giter8.
+
+[#2705][2705] by [@eed3si9n][@eed3si9n]
+
+### Synthetic subprojects
+
+sbt 0.13.13 adds support for `AutoPlugin`s to define subprojects programmatically,
+by overriding the `extraProjects` method:
+
+    import sbt._, Keys._
+
+    object ExtraProjectsPlugin extends AutoPlugin {
+      override def extraProjects: Seq[Project] =
+        List("foo", "bar", "baz") map generateProject
+
+      def generateProject(id: String): Project =
+        Project(id, file(id))
+          .settings(
+            name := id
+          )
+    }
+
+In addition, subprojects may be derived from an existing subproject
+by overriding `derivedProjects`:
+
+    import sbt._, Keys._
+
+    object DerivedProjectsPlugin extends AutoPlugin {
+      // Enable this plugin by default
+      override def requires: Plugins = sbt.plugins.CorePlugin
+      override def trigger = allRequirements
+
+      override def derivedProjects(proj: ProjectDefinition[_]): Seq[Project] =
+        // Make sure to exclude project extras to avoid recursive generation
+        if (proj.projectOrigin != ProjectOrigin.DerivedProject) {
+          val id = proj.id + "1"
+          Seq(
+            Project(id, file(id))
+              .enablePlugins(DatabasePlugin)
+          )
+        }
+        else Nil
+    }
+
+[#2532][2532]/[#2717][2717]/[#2738][2738] by [@eed3si9n][@eed3si9n]
+
+### Deprecate old sbt 0.12 DSL
+
+The no-longer-documented operators `<<=`, `<+=`, and `<++=` and tuple enrichments are deprecated,
+and will be removed in sbt 1.0.
+
+Generally,
+
+    task3 <<= (task1, task2) map { (t1, t2) => println(t1 + t2); t1 + t2 }
+
+should migrate to
+
+    task3 := {
+      println(task1.value + task2.value)
+      task1.value + task2.value
+    }
+
+Except for source generators, which requires task values:
+
+    sourceGenerators in Compile <+= buildInfo
+
+This becomes:
+
+    sourceGenerators in Compile += buildInfo.taskValue
+
+Another exception is input task:
+
+    run <<= docsRunSetting
+
+This becomes:
+
+    run := docsRunSetting.evaluated
+
+See [Migrating from sbt 0.12.x](https://www.scala-sbt.org/0.13/docs/Migrating-from-sbt-012x.html) for more details.
+
+[#2716][2716]/[#2763][2763]/[#2764][2764] by [@eed3si9n][@eed3si9n] and [@dwijnand][@dwijnand]
+
+  [g8]: http://www.foundweekends.org/giter8/
+  [eed3si9n/hello.g8]: https://github.com/eed3si9n/hello.g8
+
+  [840]: https://github.com/sbt/sbt/issues/840
+  [1041]: https://github.com/sbt/sbt/issues/1041
+  [1431]: https://github.com/sbt/sbt/issues/1431
+  [2442]: https://github.com/sbt/sbt/issues/2442
+  [2532]: https://github.com/sbt/sbt/issues/2532
+  [2677]: https://github.com/sbt/sbt/issues/2677
+  [2681]: https://github.com/sbt/sbt/pull/2681
+  [2705]: https://github.com/sbt/sbt/pull/2705
+  [2682]: https://github.com/sbt/sbt/pull/2682
+  [2703]: https://github.com/sbt/sbt/pull/2703
+  [2707]: https://github.com/sbt/sbt/issues/2707
+  [2708]: https://github.com/sbt/sbt/issues/2708
+  [2709]: https://github.com/sbt/sbt/pull/2709
+  [2716]: https://github.com/sbt/sbt/pull/2716
+  [2717]: https://github.com/sbt/sbt/pull/2717
+  [2722]: https://github.com/sbt/sbt/issues/2722
+  [2730]: https://github.com/sbt/sbt/pull/2730
+  [2731]: https://github.com/sbt/sbt/pull/2731
+  [2738]: https://github.com/sbt/sbt/issues/2738
+  [2742]: https://github.com/sbt/sbt/pull/2742
+  [2746]: https://github.com/sbt/sbt/pull/2746
+  [2754]: https://github.com/sbt/sbt/pull/2754
+  [2755]: https://github.com/sbt/sbt/pull/2755
+  [2763]: https://github.com/sbt/sbt/issues/2763
+  [2764]: https://github.com/sbt/sbt/pull/2764
+  [110]: https://github.com/sbt/sbt-launcher-package/pull/110
+  [111]: https://github.com/sbt/sbt-launcher-package/pull/111
+  [sbt-ivy-22]: https://github.com/sbt/ivy/pull/22
+
+  [@eed3si9n]: https://github.com/eed3si9n
+  [@dwijnand]: https://github.com/dwijnand
+  [@Duhemm]: https://github.com/Duhemm
+  [@xuwei-k]: https://github.com/xuwei-k
+  [@jtgrabowski]: https://github.com/jtgrabowski
+  [@fommil]: https://github.com/fommil
+  [@milessabin]: https://github.com/milessabin
+  [@pauldraper]: https://github.com/pauldraper
+  [@retronym]: https://github.com/retronym
+
+## sbt 0.13.12
+
+  [2637]: https://github.com/sbt/sbt/pull/2637
+  [2286]: https://github.com/sbt/sbt/issues/2286
+  [2634]: https://github.com/sbt/sbt/pull/2634
+  [2530]: https://github.com/sbt/sbt/pull/2530
+  [2460]: https://github.com/sbt/sbt/issues/2460
+  [2469]: https://github.com/sbt/sbt/pull/2469
+  [2432]: https://github.com/sbt/sbt/pull/2432
+  [2326]: https://github.com/sbt/sbt/issues/2326
+  [2438]: https://github.com/sbt/sbt/pull/2438
+  [2431]: https://github.com/sbt/sbt/issues/2431
+  [2500]: https://github.com/sbt/sbt/pull/2500
+  [2435]: https://github.com/sbt/sbt/issues/2435
+  [2513]: https://github.com/sbt/sbt/pull/2513
+  [2560]: https://github.com/sbt/sbt/issues/2560
+  [2563]: https://github.com/sbt/sbt/pull/2563
+  [2519]: https://github.com/sbt/sbt/issues/2519
+  [2569]: https://github.com/sbt/sbt/pull/2569
+  [2497]: https://github.com/sbt/sbt/issues/2497
+  [2557]: https://github.com/sbt/sbt/pull/2557
+  [2603]: https://github.com/sbt/sbt/pull/2603
+  [2630]: https://github.com/sbt/sbt/pull/2630
+  [2653]: https://github.com/sbt/sbt/pull/2653
+  [2642]: https://github.com/sbt/sbt/pull/2642
+  [2002]: https://github.com/sbt/sbt/issues/2002
+  [1500]: https://github.com/sbt/sbt/issues/1500
+  [2537]: https://github.com/sbt/sbt/issues/2537
+  [2659]: https://github.com/sbt/sbt/pull/2659
+
+### Fixes with compatibility implications
+
+- By default the Scala toolchain artifacts are now transitively resolved using the provided `scalaVersion` and
+  `scalaOrganization`. Previously a user specified `scalaOrganization` would not have affected transitive
+  dependencies on, eg. `scala-reflect`. An Ivy-level mechanism is used for this purpose, and as a consequence
+  the overriding happens early in the resolution process which might improve resolution times, and as a side
+  benefit fixes [#2286][2286]. The old behavior can be restored by adding
+  `ivyScala := { ivyScala.value map {_.copy(overrideScalaVersion = sbtPlugin.value)} }`
+  to your build. [#2286][2286]/[#2634][2634] by [@milessabin][milessabin]
+- The Build trait is deprecated in favor of the `.sbt` format [#2530][2530] by [@dwijnand][@dwijnand]
+
+### Improvements
+
+- When `RecompileOnMacroDef` is enabled, sbt will now print out a info level log indicating that some sources are being recompiled because it's used from a source that contains a macro definition. Can be disabled with `incOptions := incOptions.value.withLogRecompileOnMacro(false)` [#2637][2637]/[#2659][2659] by [@eed3si9n][@eed3si9n]/[@dwijnand][@dwijnand]
+- Adds Windows script support and native file extensions on Unix platforms. [#2603][2603] by [@ekrich][@ekrich]
+- Improves loading time of large builds. [#2630][2630] by [@eed3si9n][@eed3si9n]
+- Adds the ability to call `dependsOn` for the current project inside a `.sbt` file. [#2653][2653] by [@anatolydwnld][@anatolydwnld]
+
+### Bug fixes
+
+- Fixes a 0.13.11 regression: dependency resolution hitting Maven Central even with repository overrides. [#2519][2519]/[#2569][2569] by [@eed3si9n][@eed3si9n]
+- Fixes a 0.13.11 regression in incremental compiler: `IndexOutOfBoundsException` in ExtractAPI [#2497][2497]/[#2557][2557] by [@smarter][@smarter]
+- Fixes merged dependency descriptors dropping configuration specification. [#2002][2002]/[#1500][1500] by [@eed3si9n][@eed3si9n]
+- Fixes merged dependency descriptors creating non-existing artifacts. [#2431][2431]/[#2500][2500] by [@Duhemm][@Duhemm]
+- Fixes incremental compilation misses when macro expansion references another source. [#2560][2560]/[#2563][2563] by [@eed3si9n][@eed3si9n]
+- Fixes incremental compilation of package objects transitively in name hashing. [#2432][2432]/[#2326][2326] by [@gkossakowski][@gkossakowski]
+- Fixes incremental compilation relying on filename of package objects. [#2438][2438] by [@Duhemm][@Duhemm]
+- Provides a workaround flag `incOptions := incOptions.value.withIncludeSynthToNameHashing(true)` for name hashing not including synthetic methods. This will not be enabled by default in sbt 0.13. It can also enabled by passing `sbt.inc.include_synth=true` to JVM. [#2537][2537] by [@eed3si9n][@eed3si9n]
+- Fixes tab completion for tasks defined in AutoPlugin's buildSettings [#2460][2460]/[#2469][2469] by [@Duhemm][@Duhemm]
+- Fixes configuration merging during cached resolution. [#2435][2435]/[#2513][2513] by [@Duhemm][@Duhemm]
+
+## sbt 0.13.11
+
+  [Dotty]: https://github.com/lampepfl/dotty
+  [JLine2]: https://github.com/jline/jline2
+
+  [14]: https://github.com/sbt/ivy/pull/14
+  [17]: https://github.com/sbt/ivy/pull/17
+  [18]: https://github.com/sbt/ivy/pull/18
+
+  [1171]: https://github.com/sbt/sbt/issues/1171
+  [1514]: https://github.com/sbt/sbt/issues/1514
+  [1616]: https://github.com/sbt/sbt/issues/1616
+  [1681]: https://github.com/sbt/sbt/issues/1681
+  [1750]: https://github.com/sbt/sbt/issues/1750
+  [1827]: https://github.com/sbt/sbt/issues/1827
+  [1933]: https://github.com/sbt/sbt/issues/1933
+  [1967]: https://github.com/sbt/sbt/issues/1967
+  [1968]: https://github.com/sbt/sbt/issues/1968
+  [2041]: https://github.com/sbt/sbt/issues/2041
+  [2071]: https://github.com/sbt/sbt/issues/2071
+  [2085]: https://github.com/sbt/sbt/pull/2085
+  [2087]: https://github.com/sbt/sbt/issues/2087
+  [2091]: https://github.com/sbt/sbt/pull/2091
+  [2092]: https://github.com/sbt/sbt/pull/2092
+  [2094]: https://github.com/sbt/sbt/pull/2094
+  [2095]: https://github.com/sbt/sbt/pull/2095
+  [2103]: https://github.com/sbt/sbt/pull/2103
+  [2106]: https://github.com/sbt/sbt/pull/2106
+  [2107]: https://github.com/sbt/sbt/issues/2107
+  [2108]: https://github.com/sbt/sbt/pull/2108
+  [2109]: https://github.com/sbt/sbt/issues/2109
+  [2112]: https://github.com/sbt/sbt/pull/2112
+  [2114]: https://github.com/sbt/sbt/pull/2114
+  [2117]: https://github.com/sbt/sbt/pull/2117
+  [2118]: https://github.com/sbt/sbt/issues/2118
+  [2120]: https://github.com/sbt/sbt/issues/2120
+  [2127]: https://github.com/sbt/sbt/pull/2127
+  [2137]: https://github.com/sbt/sbt/pull/2137
+  [2139]: https://github.com/sbt/sbt/pull/2139
+  [2142]: https://github.com/sbt/sbt/pull/2142
+  [2151]: https://github.com/sbt/sbt/pull/2151
+  [2155]: https://github.com/sbt/sbt/issues/2155
+  [2158]: https://github.com/sbt/sbt/pull/2158
+  [2160]: https://github.com/sbt/sbt/pull/2160
+  [2163]: https://github.com/sbt/sbt/pull/2163
+  [2172]: https://github.com/sbt/sbt/pull/2172
+  [2173]: https://github.com/sbt/sbt/pull/2173
+  [2186]: https://github.com/sbt/sbt/pull/2186
+  [2192]: https://github.com/sbt/sbt/pull/2192
+  [2197]: https://github.com/sbt/sbt/pull/2197
+  [2201]: https://github.com/sbt/sbt/pull/2201
+  [2214]: https://github.com/sbt/sbt/pull/2214
+  [2217]: https://github.com/sbt/sbt/issues/2217
+  [2228]: https://github.com/sbt/sbt/issues/2228
+  [2256]: https://github.com/sbt/sbt/issues/2256
+  [2258]: https://github.com/sbt/sbt/pull/2258
+  [2261]: https://github.com/sbt/sbt/pull/2261
+  [2264]: https://github.com/sbt/sbt/issues/2264
+  [2266]: https://github.com/sbt/sbt/issues/2266
+  [2271]: https://github.com/sbt/sbt/pull/2271
+  [2272]: https://github.com/sbt/sbt/pull/2272
+  [2285]: https://github.com/sbt/sbt/pull/2285
+  [2302]: https://github.com/sbt/sbt/issues/2302
+  [2303]: https://github.com/sbt/sbt/pull/2303
+  [2311]: https://github.com/sbt/sbt/pull/2311
+  [2313]: https://github.com/sbt/sbt/pull/2313
+  [2322]: https://github.com/sbt/sbt/pull/2322
+  [2324]: https://github.com/sbt/sbt/issues/2324
+  [2325]: https://github.com/sbt/sbt/pull/2325
+  [2336]: https://github.com/sbt/sbt/issues/2336
+  [2343]: https://github.com/sbt/sbt/pull/2343
+  [2344]: https://github.com/sbt/sbt/pull/2344
+  [2354]: https://github.com/sbt/sbt/pull/2354
+  [2399]: https://github.com/sbt/sbt/pull/2399
+  [2453]: https://github.com/sbt/sbt/pull/2453
+  [2467]: https://github.com/sbt/sbt/pull/2467
+  [101]: https://github.com/sbt/sbt-launcher-package/pull/101
+  [105]: https://github.com/sbt/sbt-launcher-package/pull/105
+
+### Fixes with compatibility implications
+
+- JCenter is now opt-in. A new setting `useJCenter` can be set to `true` to re-include it, as the first external resolver to find library dependencies. [#2217][2217]/[#2467][2467] by [@eed3si9n][@eed3si9n]
+- Adds `withInterProjectFirst` to the update option, which is enabled by default. When set to `true`, `inter-project` resolver will be prioritized above all resolvers and Ivy cache. [#1827][1827] by [@eed3si9n][@eed3si9n]
+- Fixes update option's `withLatestSnapshots` so it handles modules without an artifact. This flag will be enabled by default.
+  [#1514][1514]/[#1616][1616]/[#2313][2313] by [@eed3si9n][@eed3si9n]
+- No longer passes `-J<flag>` options to the local Java compiler. [#1968][1968]/[#2272][2272] by [@Duhemm][@Duhemm]
+- Fixes auto imports for auto plugins in global configuration files. Because this is *not* source compatible with 0.13.x, the fix is enabled only when `sbt.global.autoimport` flag is `true`. [#2120][2120]/[#2399][2399] by [@timcharper][@timcharper]
+
+### Improvements
+
+- Adds configurable compiler bridge. See below.
+- Adds initial support for [Dotty][Dotty]. See below
+- Adds settings for granular inter-project dependency tracking. See below.
+- Scala version used by the build is updated to 2.10.6. [#2311][2311] by [@eed3si9n][@eed3si9n]
+- If `publishMavenStyle` is `true`, `update` task warns when it sees intransitive dependencies, which do not translate to Maven. [#2127][2127] by [@jsuereth][@jsuereth]
+- Adds `Def.settings`, which facilitates mixing settings with seq of settings. See below.
+- sbt Serialization is updated to 0.1.2. [#2117][2117] by [@dwijnand][@dwijnand]
+- Hides the stack trace on compilation error in build definition. [#2071][2071]/[#2091][2091] by [@Duhemm][@Duhemm]
+- Makes the dummy `Logger.Null` public. [#2094][2094] by [@pdalpra][@pdalpra]
+- Uses diagnostic classes to get lines contents in local Java compiler. [#2108][2108]/[#2201][2201] by [@fkorotkov][@fkorotkov]
+- Adds logging of javaOptions. [#2087][2087]/[#2103][2103] by [@pdalpra][@pdalpra]
+- Warns when javaOptions are defined but fork is set to false. [#2041][2041]/[#2103][2103] by [@pdalpra][@pdalpra]
+- Adds an `Append.Sequence` instance for `List` to allow `+=`/`++=` on `developers` setting. [#2107][2107]/[#2114][2114] by [@pdalpra][@pdalpra]
+- Drops `sealed` from the typeclasses in `Append`. [#2322][2322] by [@dwijnand][@dwijnand]
+- Fixes compilation warnings in sbt's codebase, and other clean ups. [#2112][2112]/[#2137][2137]/[#2139][2139]/[#2142][2142] by [@pdalpra][@pdalpra]
+- Adds `localIfFile` to `MavenRepository`, to force artifacts to be copied to the cache. [#2172][2172] by [@dwijnand][@dwijnand]
+- Adds `Resolver.bintrayIvyRepo(owner, repo)`. [#2285][2285] by [@dwijnand][@dwijnand]
+- Non-static annotation changes are no longer tracked by the incremental compiler. [#2343][2343] by [@romanowski][@romanowski]
+- Reduces the memory usage of API info extraction in the incremental compiler. [#2343][2343] by [@adriaanm][@adriaanm]
+- Memory-related options can now be overridden individually via the `-J` options. [sbt/sbt-launcher-package#105][105]
+
+### Bug fixes
+
+- Fixes the false positive of inconsistent duplicate warnings. [#1933][1933]/[#2258][2258] by
+  [@Duhemm][@Duhemm]
+- Fixes task scheduling performance on large builds by skipping checks in `sbt.Execute`. [#2302][2302]/[#2303][2303] by [@jrudolph][@jrudolph]
+- Fixes changes in value classes by registering signatures of method before and after erasure. [#1171][1171]/[#2261][2261] by [@Duhemm][@Duhemm]
+- Updated Ivy to merge IVY-1526 fix. [sbt/ivy#14][14]/[#2118][2118] by [@jsuereth][@jsuereth]
+- Fixes `updateClassifiers` downloading updated snapshot sources and docs.
+  [#1750][1750]/[sbt/ivy#17][17]/[#2163][2163]/[sbt/ivy#18][18]/[#2186][2186] by [@dwijnand][@dwijnand]
+- Fixes `updateClassifiers` on Ivy modules without `default` configuration.
+  [#2264][2264] by [@eed3si9n][@eed3si9n]/[@Duhemm][@Duhemm]
+- Updated [JLine][JLine2] to version 2.13. [#1681][1681]/[#2173][2173]
+- Changing the value of a constant (final-static-primitive) field will now
+  correctly trigger incremental compilation for downstream classes. This is to
+  account for the fact that Java compilers may inline constant fields in
+  downstream classes. [#1967][1967]/[#2085][2085] by [@stuhood][@stuhood]
+- Fixes classfile location detection. [#2214][2214] by [@stuhood][@stuhood]
+- Fixes a few typos in keys descriptions. [#2092][2092] by [@pdalpra][@pdalpra]
+- Avoids the use of `ListBuffer#readOnly`. [#2095][2095] by [@adriaanm][@adriaanm]
+- Expands transitive dependency exclusions when using sbt-maven-resolver-plugin [#2109][2109] by [@jsuereth][@jsuereth]
+- Fixes incremental compilation of traits by including private members into the API hash. [#2155][2155]/[#2160][2160] by
+  [@Duhemm][@Duhemm]
+- Fixes name hashing by removing class private members from the hash. [#2324][2324]/[#2325][2325] by [@gkossakowski][@gkossakowski]
+- Fixes name hashing error messages. [#2158][2158] by [@stuhood][@stuhood]
+- Adds more robustness to `tasks` and `settings` command. [#2192][2192] by [@DavidPerezIngeniero][@DavidPerezIngeniero]
+- Fixes Java compilation inconsistencies between sbt and `javac` by always failing if the local Java compiler reported errors. [#2228][2228]/[#2271][2271] by [@Duhemm][@Duhemm]
+- Fixes `JavaErrorParser` to parse non-compile-errors [#2256][2256]/[#2272][2272] by [@Duhemm][@Duhemm]
+- Fixes launcher configuration to add `sbt-ivy-snapshots` repository to resolve nightly builds. [@eed3si9n][@eed3si9n]
+- Fixes performance issues during tree traversal in the incremental compiler. [#2343][2343] by [@adriaanm][@adriaanm]
+- Fixes the tracking of self types and F-bounded existential types in the incremental compiler. [#2343][2343] by [@adriaanm][@adriaanm]
+- Avoid CCE when scalac internally uses `compileLate`. [#2453][2453] by [@retronym][@retronym]
+- Fixes the memory-related options overriding `SBT_OPTS`. [sbt/sbt-launcher-package#101][101] by [@eed3si9n][@eed3si9n]
+
+### Configurable Scala compiler bridge
+
+sbt 0.13.11 adds `scalaCompilerBridgeSource` setting to specify the compiler brigde source. This allows different implementation of the bridge for Scala versions, and also allows future versions of Scala compiler implementation to diverge. The source module will be retrieved using library management configured by `bootIvyConfiguration` task.
+
+[#2106][2106]/[#2197][2197]/[#2336][2336] by [@Duhemm][@Duhemm]
+
+### Dotty awareness
+
+sbt 0.13.11 will assume that Dotty is used when `scalaVersion` starts with `0.`.
+The built-in compiler bridge in sbt does not support Dotty,
+but a separate compiler bridge is being developed at [smarter/dotty-bridge](https://github.com/smarter/dotty-bridge) and
+an example project that uses it is available at [smarter/dotty-example-project](https://github.com/smarter/dotty-example-project).
+
+[#2344][2344] by [@smarter][@smarter]
+
+### Inter-project dependency tracking
+
+sbt 0.13.11 adds `trackInternalDependencies` and `exportToInternal` settings. These can be used to control whether to trigger compilation of a dependent subprojects when you call `compile`. Both keys will take one of three values: `TrackLevel.NoTracking`, `TrackLevel.TrackIfMissing`, and `TrackLevel.TrackAlways`. By default they are both set to `TrackLevel.TrackAlways`.
+
+When `trackInternalDependencies` is set to `TrackLevel.TrackIfMissing`, sbt will no longer try to compile internal (inter-project) dependencies automatically, unless there are no `*.class` files (or JAR file when `exportJars` is `true`) in the output directory. When the setting is set to `TrackLevel.NoTracking`, the compilation of internal dependencies will be skipped. Note that the classpath will still be appended, and dependency graph will still show them as dependencies. The motivation is to save the I/O overhead of checking for the changes on a build with many subprojects during development. Here's how to set all subprojects to `TrackIfMissing`.
+
+    lazy val root = (project in file(".")).
+      aggregate(....).
+      settings(
+        inThisBuild(Seq(
+          trackInternalDependencies := TrackLevel.TrackIfMissing,
+          exportJars := true
+        ))
+      )
+
+The `exportToInternal` setting allows the dependee subprojects to opt out of the internal tracking, which might be useful if you want to track most subprojects except for a few. The intersection of the `trackInternalDependencies` and `exportToInternal` settings will be used to determine the actual track level. Here's an example to opt-out one project:
+
+    lazy val dontTrackMe = (project in file("dontTrackMe")).
+      settings(
+        exportToInternal := TrackLevel.NoTracking
+      )
+
+[#2266][2266]/[#2354][2354] by [@eed3si9n][@eed3si9n]
+
+### Def.settings
+
+Using `Def.settings` it is now possible to nicely define settings as such:
+
+    val modelSettings = Def.settings(
+      sharedSettings,
+      libraryDependencies += foo
+    )
+
+[#2151][2151] by [@dwijnand][@dwijnand]
+
+## sbt 0.13.10
+
+sbt 0.13.10 did not happen due a bug that was found after the artifact was published.
+
+## sbt 0.13.9
+
+  [@cunei]: https://github.com/cunei
+  [@eed3si9n]: https://github.com/eed3si9n
+  [@gkossakowski]: https://github.com/gkossakowski
+  [@jsuereth]: https://github.com/jsuereth
+  [@dwijnand]: http://github.com/dwijnand
+  [@ajsquared]: https://github.com/ajsquared
+  [@jroper]: https://github.com/jroper
+  [@kamilkloch]: https://github.com/kamilkloch
+  [@DavidPerezIngeniero]: https://github.com/DavidPerezIngeniero
+  [@PanAeon]: https://github.com/PanAeon
+  [@asflierl]: http://github.com/asflierl
+  [@matthewfarwell]: http://github.com/matthewfarwell
+  [SI9027]: https://github.com/scala/bug/issues/9027
+  [1950]: https://github.com/sbt/sbt/pull/1950
+  [1987]: https://github.com/sbt/sbt/pull/1987
+  [1970]: https://github.com/sbt/sbt/pull/1970
+  [1960]: https://github.com/sbt/sbt/pull/1960
+  [1562]: https://github.com/sbt/sbt/issues/1562
+  [1900]: https://github.com/sbt/sbt/issues/1900
+  [1940]: https://github.com/sbt/sbt/pull/1940
+  [1922]: https://github.com/sbt/sbt/pull/1922
+  [1721]: https://github.com/sbt/sbt/issues/1721
+  [2014]: https://github.com/sbt/sbt/issues/2014
+  [2030]: https://github.com/sbt/sbt/pull/2030
+  [1998]: https://github.com/sbt/sbt/issues/1998
+  [2000]: https://github.com/sbt/sbt/pull/2000
+  [1828]: https://github.com/sbt/sbt/issues/1828
+  [1992]: https://github.com/sbt/sbt/pull/1992
+  [1961]: https://github.com/sbt/sbt/issues/1961
+  [1223]: https://github.com/sbt/sbt/issues/1223
+  [1773]: https://github.com/sbt/sbt/pull/1773
+  [2028]: https://github.com/sbt/sbt/issues/2028
+  [1651]: https://github.com/sbt/sbt/issues/1651
+  [1990]: https://github.com/sbt/sbt/pull/1990
+  [1847]: https://github.com/sbt/sbt/issues/1847
+  [1989]: https://github.com/sbt/sbt/pull/1989
+  [1856]: https://github.com/sbt/sbt/issues/1856
+  [1877]: https://github.com/sbt/sbt/issues/1877
+  [2035]: https://github.com/sbt/sbt/pull/2035
+  [2001]: https://github.com/sbt/sbt/issues/2001
+  [2027]: https://github.com/sbt/sbt/pull/2027
+  [1666]: https://github.com/sbt/sbt/issues/1666
+  [2068]: https://github.com/sbt/sbt/pull/2068
+  [2005]: https://github.com/sbt/sbt/issues/2005
+  [2075]: https://github.com/sbt/sbt/pull/2075
+  [1973]: https://github.com/sbt/sbt/issues/1973
+  [2006]: https://github.com/sbt/sbt/pull/2006
+  [2008]: https://github.com/sbt/sbt/issues/2008
+  [2009]: https://github.com/sbt/sbt/pull/2009
+  [2046]: https://github.com/sbt/sbt/issues/2046
+  [2097]: https://github.com/sbt/sbt/pull/2097
+
+### Fixes with compatibility implications
+
+- Starting 0.13.9, `crossScalaVersions` default value is fixed back to the older 0.12.x behavior. See below for details.
+- Starting 0.13.9, the generated POM files no longer include dependencies on source or javadoc jars obtained via `withSources()` or `withJavadoc()`. See below for details.
+- Scala version is bumped to 2.10.5. This brings in the fix for [SI-9027][SI9027]: XML node sequence literal bug. [#1666][1666]/[#2068][2068] by [@eed3si9n][@eed3si9n]
+
+### Improvements
+
+- Adds `retrieveManaged` related improvements. See below for details.
+- Adds `-=` and `--=` for settings and tasks, which are the opposites of `+=` and `++=`. [#1922][1922] by [@dwijnand][@dwijnand]
+- Adds `inThisBuild`, similar to `inConfig`, to allow specifying multiple settings in `ThisBuild` scope. [#1847][1847]/[#1989][1989] by [@dwijnand][@dwijnand]
+- Adds a nicer toString to SimpleCommand to make it more human-friendly. [#1998][1998]/[#2000][2000] by [@dwijnand][@dwijnand]
+- Adds `forceUpdatePeriod` key, that takes values of `Option[FiniteDuration]`.  If set, a full `update` will occur after that amount of time without needing to explicitly run the `update` task. By [@ajsquared][@ajsquared]
+- Updates `ForkError.getMessage()` to include exception's original name. [#2028][2028] by [@kamilkloch][@kamilkloch]
+- Adds help message for `inspect actual`. [#1651][1651]/[#1990][1990] by [@dwijnand][@dwijnand]
+- Supports excluding tests in `testOnly`/`testQuick` with `-`, for example `-MySpec`.
+  [#1970][1970] by [@matthewfarwell][@matthewfarwell]
+- Adds more diagnostic info for underfined settings.
+  [#2008][2008]/[#2009][2009] by [@DavidPerezIngeniero][@DavidPerezIngeniero]
+- Adds an `Extracted.runInputTask` helper to assist with imperatively executing input tasks. [#2006][2006] by [@jroper][@jroper]
+- Renames `distinct` method on `PathFinder` to `distinctName`. [#1973][1973] by [@eed3si9n][@eed3si9n]
+- Adds `distinctPath` method on `PathFinder`. [#1973][1973] by [@eed3si9n][@eed3si9n]
+
+### Bug fixes
+
+- Fixes memory/performance issue with cached resolution. See below.
+- Correct incremental compile debug message for invalidated products [#1961][1961] by [@jroper][@jroper]
+- Enables forced GC by default. See below.
+- Fixes Maven compatibility to read `maven-metadata.xml`. See below.
+- Captures errors on `help` command. [#1900][1900]/[#1940][1940] by [@DavidPerezIngeniero][@DavidPerezIngeniero]
+- Prevents history command(s) from going into an infinite loop [#1562][1562] by [@PanAeon][@PanAeon]
+- Honors overwrite flag when publishing locally. [#1960][1960] by [@asflierl][@asflierl]
+- Fixes a certain class of pom corruption that can occur in the presence of parent-poms. [#1856][1856] by [@jsuereth][@jsuereth]
+- Adds dependency-level exclusions in the POM for project-level exclusions. [#1877][1877]/[#2035][2035] by [@dwijnand][@dwijnand]
+
+### `crossScalaVersions` default value
+
+As of this fix `crossScalaVersions` returns to the behaviour present in `0.12.4` whereby it defaults to what
+`scalaVersion` is set to, for example if `scalaVersion` is set to `"2.11.6"`, `crossScalaVersions` now defaults
+to `Seq("2.11.6")`.
+
+Therefore when upgrading from any version between `0.13.0` and `0.13.8` be aware of this new default if
+your build setup depended on it.
+
+[#1828][1828]/[#1992][1992] by [@dwijnand][@dwijnand]
+
+### POM files no longer include certain source and javadoc jars
+
+When declaring library dependencies using the withSources() or withJavadoc() options, sbt was also including
+in the pom file, as dependencies, the source or javadoc jars using the default Maven scope. Such dependencies
+might be erroneously processed as they were regular jars by automated tools
+
+[#2001][2001]/[#2027][2027] by [@cunei][@cunei]
+
+### `retrieveManaged` related improvements
+
+sbt 0.13.9 adds `retrieveManagedSync` key that, when set to `true`, enables synchronizing retrieved to the current build by removed unneeded files.
+
+It also adds `configurationsToRetrieve` key, that takes values of `Option[Set[Configuration]]`. If set, when `retrieveManaged` is true only artifacts in the specified configurations will be retrieved to the current build. 
+
+[#1950][1950]/[#1987][1987] by [@ajsquared][@ajsquared]
+
+### Cached resolution fixes
+
+On a larger dependency graph, the JSON file growing to be 100MB+
+with 97% of taken up by *caller* information.
+To make the matter worse, these large JSON files were never cleaned up.
+
+sbt 0.13.9 filters out artificial or duplicate callers,
+which fixes `OutOfMemoryException` seen on some builds.
+This generally shrinks the size of JSON, so it should make the IO operations faster.
+Dynamic graphs will be rotated with directories named after `yyyy-mm-dd`,
+and stale JSON files will be cleaned up after few days.
+
+sbt 0.13.9 also fixes a correctness issue that was found in the earlier releases.
+Under some circumstances, libraries that shouldn't have been evicted was being evicted.
+This occured when library `A1` depended on `B2`, but a newer `A2` dropped the dependency,
+and `A2` and `B1` are also is in the graph. This is fixed by sorting the graph prior to eviction.
+
+[#2030][2030]/[#1721][1721]/[#2014][2014]/[#2046][2046]/[#2097][2097] by [@eed3si9n][@eed3si9n]
+
+### Force GC
+
+[@cunei][@cunei] in [#1223][1223] discovered that sbt leaks PermGen
+when it creates classloaders to call Scala Compilers.
+sbt 0.13.9 will call GC on a set interval (default: 60s).
+It will also call GC right before cross building.
+This behavior can diabled using by setting false to `forcegc`
+setting or `sbt.task.forcegc` flag.
+
+[#1773][1773] by [@eed3si9n][@eed3si9n]
+
+### Maven compatibility fix
+
+To resolve dynamic versions such as `SNAPSHOT` and version ranges, the dependency resolution engine
+queries for the list of available versions.
+For Maven repositories, it was supposed read `maven-metadata.xml` first, but
+because sbt customizes the repository layout for cross building, it has been falling back
+to screen scraping of the Apache directory listing.
+This problem surfaced as:
+
+- Version range not working for artifacts hosted on Bintray. [#2005][2005]
+- Potentially other `SNAPSHOT` related issues.
+
+sbt 0.13.9 fixes this by relaxing the Maven compatiblity check, so it will read `maven-metadata.xml`. [#2075][2075] by [@eed3si9n][@eed3si9n]
+
+## sbt 0.13.8
+
+  [@cunei]: https://github.com/cunei
+  [@eed3si9n]: https://github.com/eed3si9n
+  [@gkossakowski]: https://github.com/gkossakowski
+  [@jsuereth]: https://github.com/jsuereth
+
+  [@aerskine]: https://github.com/aerskine
+  [@ajozwik]: https://github.com/ajozwik
+  [@dwickern]: https://github.com/dwickern
+  [@dwijnand]: http://github.com/dwijnand
+  [@Duhemm]: https://github.com/Duhemm
+  [@kretes]: https://github.com/kretes
+  [@indrajitr]: https://github.com/indrajitr
+  [@j-keck]: https://github.com/j-keck
+  [@xuwei-k]: https://github.com/xuwei-k
+  [SI-9027]: https://github.com/scala/bug/issues/9027
+  [Custom-Settings0]: https://www.scala-sbt.org/0.13/tutorial/Custom-Settings.html
+  [321]: https://github.com/sbt/sbt/issues/321
+  [647]: https://github.com/sbt/sbt/issues/647
+  [679]: https://github.com/sbt/sbt/issues/679
+  [875]: https://github.com/sbt/sbt/issues/875
+  [1001]: https://github.com/sbt/sbt/issues/1001
+  [1180]: https://github.com/sbt/sbt/issues/1180
+  [1322]: https://github.com/sbt/sbt/issues/1322
+  [1340]: https://github.com/sbt/sbt/pull/1340
+  [1542]: https://github.com/sbt/sbt/issues/1542
+  [1615]: https://github.com/sbt/sbt/issues/1615
+  [1616]: https://github.com/sbt/sbt/issues/1616
+  [1634]: https://github.com/sbt/sbt/pull/1634
+  [1655]: https://github.com/sbt/sbt/issues/1655
+  [1676]: https://github.com/sbt/sbt/issues/1676
+  [1702]: https://github.com/sbt/sbt/pull/1702
+  [1711]: https://github.com/sbt/sbt/issues/1711
+  [1714]: https://github.com/sbt/sbt/issues/1714
+  [1738]: https://github.com/sbt/sbt/issues/1738
+  [1741]: https://github.com/sbt/sbt/pull/1741
+  [1746]: https://github.com/sbt/sbt/pull/1746
+  [1748]: https://github.com/sbt/sbt/issues/1748
+  [1752]: https://github.com/sbt/sbt/pull/1752
+  [1754]: https://github.com/sbt/sbt/pull/1754
+  [1760]: https://github.com/sbt/sbt/pull/1760
+  [1765]: https://github.com/sbt/sbt/pull/1765
+  [1766]: https://github.com/sbt/sbt/pull/1766
+  [1771]: https://github.com/sbt/sbt/pull/1771
+  [1787]: https://github.com/sbt/sbt/pull/1787
+  [1793]: https://github.com/sbt/sbt/pull/1793
+  [1799]: https://github.com/sbt/sbt/pull/1799
+  [1817]: https://github.com/sbt/sbt/pull/1817
+  [1818]: https://github.com/sbt/sbt/pull/1818
+  [1869]: https://github.com/sbt/sbt/issues/1869
+  [1871]: https://github.com/sbt/sbt/pull/1871
+  [1885]: https://github.com/sbt/sbt/issues/1885
+  [1881]: https://github.com/sbt/sbt/issues/1881
+  [1899]: https://github.com/sbt/sbt/pull/1899
+  [1902]: https://github.com/sbt/sbt/pull/1902
+  [1921]: https://github.com/sbt/sbt/issues/1921
+
+### Changes with compatibility implications
+
+- Disable publishing on implicitly created root project by not enabling `IvyPlugin` by default (`-Dsbt.root.ivyplugin=true` will revert this behavior). [#1871][1871]/[#1869][1869] by [@dwijnand][@dwijnand]
+- Rolls back XML parsing workaround. See below.
+- Enables cross-version support for Scala sources. See below.
+
+### Improvements
+
+- Adds Maven resolver plugin. See below.
+- Adds project-level dependency exclusions. See below.
+- Adds sequential tasks. See below.
+- Discovered main classes will be sorted. [#1180][1180] by [@kretes][@kretes]
+- Implemented a new mechanism of forking javac, whereby errors are captured.  Also more likely to run in-process. [#1702][1702] by [@jsuereth][@jsuereth]
+- `evicted` will display all evictions (including the ones not suspected of binary incompatibility). [#1615][1615] by [@eed3si9n][@eed3si9n]
+- Better abstration to track new kinds of dependencies for incremental compiler. [#1340][1340] by [@Duhemm][@Duhemm]
+- Source dependency uses `--depth 1` for git clone. [#1787][1787] by [@xuwei-k][@xuwei-k]
+- Facilitate nicer ways of declaring project settings. See below. [#1902][1902] by [@dwijnand][@dwijnand]
+
+### Fixes
+
+- Javac warnings are treated as warnings.  [#1702][1702]/[#875][875] by [@jsuereth][@jsuereth]
+- `compilerReporter` is fed to javac during incremental compilation. [#1542][1542] by [@jsuereth][@jsuereth]
+- Ignores hidden build files from the build. [#1746][1746] by [@j-keck][@j-keck]
+- Fixes build.sbt parsing of multiple import. [#1741][1741] by [@ajozwik][@ajozwik]
+- Fixes ANSI escape code for overwriting lines on Windows. [#1771][1771] by [@dwickern][@dwickern]
+- Adds null check in incremental compiler's type tree extraction. [#1754][1754]/[#1655][1655] by [@Duhemm][@Duhemm]
+- sbt doesn't honor Maven's uniqueVersions (use sbt-maven-resolver to fix). [#1322][1322]  by [@jsuereth][@jsuereth]
+- sbt doesn't see new SNAPSHOT dependency versions in local maven repos (use withLatestSnapshots + sbt-maven-resolver to fix) [#321][321] by [@jsuereth][@jsuereth]
+- Property in pom's version field results to wrong dependency resolution (use sbt-maven-resolver to fix). [#647][647] by [@jsuereth][@jsuereth]
+- Maven local resolver with parent POM (use sbt-maven-resolver). [#1616][1616] by [@jsuereth][@jsuereth]
+- Fixes eviction warning being too noisy. [#1615][1615] by [@eed3si9n][@eed3si9n]
+- Issues warning if multiple dependencies to a same library is found with different version. [#1634][1634] by [@eed3si9n][@eed3si9n]
+- Removes "No main class detected" warning. [#1766][1766] by [@eed3si9n][@eed3si9n]
+- Fixes sporadic ConcurrentModificationException from JUnitXmlTestsListener. [#1881][1881] by [@aerskine][@aerskine]
+- Fixes handling of ANSI CSI codes. [#1885][1885] by [@jsuereth][@jsuereth]
+- Exempt org.scala-lang:scala-actors-migration and org.scala-lang:scala-pickling from scala binary version checks. [#1818][1818]/[#1899][1899] by [@dwijnand][@dwijnand]
+- Fixes cached resolution handling of internal depdendencies. [#1711][1711] by [@eed3si9n][@eed3si9n]
+- Fixes cached resolution being too verbose. [#1752][1752] by [@eed3si9n][@eed3si9n]
+- Fixes cached resolution not evicting modules transitively. [#1760][1760] by [@eed3si9n][@eed3si9n]
+
+### Rolling back XML parsing workaround
+
+sbt 0.13.7 implemented natural whitespace handling by switching `build.sbt` parsing to use Scala compiler, instead of blank line delimiting. We realized that some build definitions no longer parsed due to the difference in XML handling.
+
+    val a = <x/><y/>
+    val b = 0
+
+At the time, we thought adding parentheses around XML nodes could work around this behavior. However, the workaround has caused [more issues][1738], and since then we have realized that this is a compiler issue [SI-9027][SI-9027], so we have decided to roll back our workaround. In the meantime, if you have consecutive XML elements in your build.sbt, enclose them in `<xml:group>` tag, or parentheses.
+
+    val a = <xml:group><x/><y/></xml:group>
+    val b = 0
+
+[#1765][1765] by [@ajozwik][@ajozwik]
+
+### Cross-version support for Scala sources
+
+When `crossPaths` setting is set to `true` (it is `true` by default), sbt 0.13.8 will include
+`src/main/scala-<scalaBinaryVersion>/` to the `Compile` compilation in addition to
+`src/main/scala`. For example, it will include `src/main/scala-2.11/` for Scala 2.11.5, and
+`src/main/scala-2.9.3` for Scala 2.9.3. [#1799][1799] by [@indrajitr][@indrajitr]
+
+### Maven resolver plugin
+
+sbt 0.13.8 adds an extension point in the dependency resolution to customize Maven resolvers.
+This allows us to write sbt-maven-resolver auto plugin, which internally uses Eclipse Aether
+to resolve Maven dependencies instead of Apache Ivy.
+
+To enable this plugin, add the following to `project/maven.sbt` (or `project/plugin.sbt` the file name doesn't matter):
+
+    addMavenResolverPlugin
+
+This will create a new `~/.ivy2/maven-cache` directory, which contains the Aether cache of files.
+You may notice some file will be re-downloaded for the new cache layout.
+Additionally, sbt will now be able to fully construct
+`maven-metadata.xml` files when publishing to remote repositories or when publishing to the local `~/.m2/repository`.
+This should help erase many of the deficiencies encountered when using Maven and sbt together.
+
+**Notes and known limitations**:
+
+- sbt-maven-resolver requires sbt 0.13.8 and above.
+- The current implementation does not support Ivy-style dynamic revisions, such as "2.10.+" or "latest.snapshot".  This
+  is a fixable situation, but the version range query and Ivy -> Maven version range translation code has not been migrated.
+- The current implementation does not support Maven-style range revisions if found on transitive dependencies. [#1921][1921]
+
+[#1793][1793] by [@jsuereth][@jsuereth]
+
+### Project-level dependency exclusions
+
+sbt 0.13.8 adds **experimental** project-level dependency exclusions:
+
+    excludeDependencies += "org.apache.logging.log4j"
+    excludeDependencies += "com.example" %% "foo"
+
+In the first example, all artifacts from the organization `"org.apache.logging.log4j"` are excluded from the managed dependency.
+In the second example, artifacts with the organization `"com.example"` and the name `"foo"` cross versioned to the current `scalaVersion` are excluded.
+
+**Note**: This feature currently does not translate to `pom.xml`!
+
+[#1748][1748] by [@eed3si9n][@eed3si9n]
+
+### Sequential tasks
+
+sbt 0.13.8 adds a new `Def.sequential` function to run tasks under semi-sequential semantics.
+Here's an example usage:
+
+    val testFile = settingKey[File]("")
+    val sideEffect0 = taskKey[File]("")
+    val sideEffect1 = taskKey[File]("")
+    val foo = taskKey[Unit]("")
+
+    lazy val root = project.
+      settings(
+        testFile := target.value / "test.txt",
+        sideEffect0 := {
+          val t = testFile.value
+          IO.append(t, "0")
+          t
+        },
+        sideEffect1 := {
+          val t = testFile.value
+          IO.append(t, "1")
+          t
+        },
+        foo := Def.sequential(compile in Compile, sideEffect0, sideEffect1, test in Test).value
+      )
+
+Normally sbt's task engine will reorder tasks based on the dependencies among the tasks,
+and run as many tasks in parallel (See [Custom settings and tasks][Custom-Settings0] for more details on this).
+`Def.sequential` instead tries to run the tasks in the specified order.
+However, the task engine will still deduplicate tasks. For instance, when `foo` is executed, it will only compile once,
+even though `test in Test` depends on compile. [#1817][1817]/[#1001][1001] by [@eed3si9n][@eed3si9n]
+
+### Nicer ways of declaring project settings
+
+Now a `Seq[Setting[_]]` can be passed to `Project.settings` without the needs for "varargs expansion", ie. `: _*`
+
+Instead of:
+
+    lazy val foo = project settings (sharedSettings: _*)
+
+It is now possible to do:
+
+    lazy val foo = project settings sharedSettings
+
+Also, `Seq[Setting[_]]` can be declared at the same level as individual settings in `Project.settings`, for instance:
+
+    lazy val foo = project settings (
+      sharedSettings,
+      version := "1.0",
+      someMoreSettings
+    )
+
+[#1902][1902] by [@dwijnand][@dwijnand]
+
+### Bytecode Enhancers
+
+sbt 0.13.8 adds an extension point whereby users can effectively manipulate java bytecode (.class files) *before* the
+incremental compiler attempts to cache the classfile hashes.  This allows libraries like ebean to function with sbt
+without corrupting the compiler cache and rerunning compile every few seconds.
+
+This splits the compile task into several subTasks:
+
+1. `previousCompile`:  This task returns the previously persisted `Analysis` object for this project.
+2. `compileIncremental`: This is the core logic of compiling Scala/Java files together.   This task actually does the
+    work of compiling a project incrementally, including ensuring a minimum number of source files are compiled.
+    After this method, all .class files that would be generated by scalac + javac will be available.
+3. `manipulateByteCode`: This is a stub task which takes the `compileIncremental` result and returns it.
+    Plugins which need to manipulate bytecode are expected to override this task with their own implementation, ensuring
+    to call the previous behavior.
+4. `compile`:  This task depends on `manipulateBytecode` and then persists the `Analysis` object containing all
+    incremental compiler information.
+
+Here's an example of how to hook the new `manipulateBytecode` key in your own plugin:
+
+    manipulateBytecode in Compile := {
+      val previous = (manipulateBytecode in Compile).value
+      doManipulateBytecode(previous)  // Note: This must return a new Compiler.CompileResult with our changes.
+    }
+
+See [#1714][1714] for the full details of the implementation.
+
+## sbt 0.13.7
+
+  [Cached-Resolution]: Cached-Resolution.html
+  [@cunei]: https://github.com/cunei
+  [@eed3si9n]: https://github.com/eed3si9n
+  [@gkossakowski]: https://github.com/gkossakowski
+  [@jsuereth]: https://github.com/jsuereth
+  [@ajozwik]: https://github.com/ajozwik
+  [@copumpkin]: https://github.com/copumpkin
+  [@Duhemm]: https://github.com/Duhemm
+  [@jedesah]: https://github.com/jedesah
+  [@rkrzewski]: https://github.com/rkrzewski
+  [@tmandke]: https://github.com/tmandke
+  [@topping]: https://github.com/topping
+  [@WarsawScala]: https://github.com/WarsawScala
+  [@kretes]: https://github.com/kretes
+  [1237]: https://github.com/sbt/sbt/issues/1237
+  [1430]: https://github.com/sbt/sbt/issues/1430
+  [1544]: https://github.com/sbt/sbt/issues/1544
+  [1563]: https://github.com/sbt/sbt/pull/1563
+  [1572]: https://github.com/sbt/sbt/pull/1572
+  [1573]: https://github.com/sbt/sbt/pull/1573
+  [1579]: https://github.com/sbt/sbt/pull/1579
+  [1584]: https://github.com/sbt/sbt/pull/1584
+  [1586]: https://github.com/sbt/sbt/pull/1586
+  [1589]: https://github.com/sbt/sbt/issues/1589
+  [1590]: https://github.com/sbt/sbt/pull/1590
+  [1591]: https://github.com/sbt/sbt/pull/1591
+  [1598]: https://github.com/sbt/sbt/issues/1598
+  [1600]: https://github.com/sbt/sbt/pull/1600
+  [1601]: https://github.com/sbt/sbt/pull/1601
+  [1602]: https://github.com/sbt/sbt/pull/1602
+  [1606]: https://github.com/sbt/sbt/issues/1606
+  [1607]: https://github.com/sbt/sbt/pull/1607
+  [1611]: Https://github.com/sbt/sbt/issues/1611
+  [1618]: https://github.com/sbt/sbt/pull/1618
+  [1621]: https://github.com/sbt/sbt/pull/1621
+  [1631]: https://github.com/sbt/sbt/pull/1631
+  [1642]: https://github.com/sbt/sbt/pull/1642
+  [1683]: https://github.com/sbt/sbt/pull/1683
+  [1648]: https://github.com/sbt/sbt/pull/1648
+
+### Fixes with compatibility implications
+
+- Maven artifact dependencies will limit their transitive dependencies to `Compile` rather than *every configuration* if no `master` configuration is found. [#1586][1586] by [@jsuereth][@jsuereth]
+- The new natural whitspace handling parser is unable to cope with certain classes of Scala syntax. In particular, top-level pattern matches, or multi-value defintions are no longer supported.
+
+Here are examples:
+
+```scala
+val x, y = project // BAD
+val x = project    // 
+val y = project    //  GOOD
+```
+
+### Improvements
+
+- Natural whitespace handling. See below. [#1606][1606] by [@rkrzewski][@rkrzewski], [@ajozwik][@ajozwik], and others at [@WarsawScala][@WarsawScala]
+- Adds support for publishing to a custom Maven local repository. See below. [#1589][1589]/[#1600][1600] by [@topping][@topping]
+- Adds circular dependency check. See below. [#1601][1601] by [@eed3si9n][@eed3si9n]
+- Adds cached resolution (minigraph caching). See below. [#1631][1631] by [@eed3si9n][@eed3si9n]
+- Allows the "-bin" Scala version suffix to specify a bincompat version. [#1573][1573] by [@cunei][@cunei]
+- Adds support for publishing to file repositories specified in `~/.sbt/repositories`. [#1579][1579] by [@copumpkin][@copumpkin]
+- Adds support for publishing to a Maven repository with `file` URLs. [#1618][1618] by [@jsuereth][@jsuereth]
+- Don't hardcode existing relations in `TextAnalysisFormat`. [#1572][1572] by [@Duhemm][@Duhemm]
+- Adds `developers` key. [#1590][1590] by [@jedesah][@jedesah]
+- Will warn when none or multiple main classes detected. [#1648][1648] by [@kretes][@kretes]
+
+### Bug fixes
+
+- Fixes issues with specifying `scalaHome`/`scalaInstance` and running tests. [#1584][1584] by [@jsuereth][@jsuereth]
+- Fixes StackOverflow error in dependencies extraction with macro and name hashing. [#1563][1563]/[#1642][1642]/[#1237][1237]/[#1544][1544] by [@Duhemm][@Duhemm]
+- Fixes `set every`. [#1591][1591]/[#1430][1430] by [@cunei][@cunei]
+- Ivy no longer silently flops to `HttpClient` resolver when httpclient is on the classpath. [#1602][1602] by [@jsuereth][@jsuereth]
+- Backports Ivy fix to not throw exceptions when modules are evicted.  [#1607][1607]/[#1598][1598] by [@jsuereth][@jsuereth]
+- When resolving from a Maven repository, and unable to read `maven-metadata.xml` file (common given the divergence in
+  Maven 3 and Ivy 2), we attempt to use `LastModified` timestamp in lieu of "published" timestamp.  
+  [#1611][1611]/[#1618][1618] by [@jsuereth][@jsuereth]
+- Fixes NullPointerException when using `ChainResolver` and Maven repositories. [#1611][1611]/[#1618][1618] by [@jsuereth][@jsuereth]
+- Fixes `Resolver`'s `url` method dropping `descriptorOptional` and `skipConsistencyCheck`. [#1621][1621] by [@tmandke][@tmandke]
+- Revert `useLatestSnapshot` on `updateOptions` to default to `false`.  Reverts chain resolver to previous behavior.  [#1683][1683] by [@jsuereth][@jsuereth]
+
+### Natural whitespace handling
+
+Starting sbt 0.13.7, build.sbt will be parsed using a customized Scala parser. This eliminates the requirement to use blank line as the delimiter between each settings, and also allows blank lines to be inserted at arbitrary position within a block.
+
+This feature can be disabled, if necessary, via the -Dsbt.parser.simple=true flag.
+
+This feature was contributed by [Andrzej Jozwik (@ajozwik)](https://github.com/ajozwik), [Rafał Krzewski (@rkrzewski)][@rkrzewski] and others at [@WarsawScala][@WarsawScala] inspired by Typesafe's [@gkossakowski][@gkossakowski] organizing multiple [meetups](http://blog.japila.pl/2014/07/gkossakowski-on-warszawscala-about-how-to-patch-scalasbt/) and [hackathons](http://blog.japila.pl/2014/07/hacking-scalasbt-with-gkossakowski-on-warszawscala-meetup-in-javeo_eu/) on how to patch sbt with the focus on this blank line issue. Dziękujemy! [#1606][1606]
+
+### Custom Maven local repository location
+
+Maven local repository is now resolved from the first of:
+
+- `<localRepository/>` element in `~/.m2/settings.xml`
+- `<localRepository/>` element in `$M2_HOME/conf/settings.xml`, or
+- the default of `~/.m2/repository` if neither of those configuration elements exist
+
+If more Maven settings are required to be recovered, the proper thing to do is merge the two possible `settings.xml` files, then query against the element path of the merge. This code avoids the merge by checking sequentially.
+
+[#1589][1589]/[#1600][1600] by [@topping][@topping]
+
+### Circular dependency
+
+By default circular dependencies are warned, but they do not halt the dependency resolution. Using the following setting, circular dependencies can be treated as an error.
+
+    updateOptions := updateOptions.value.withCircularDependencyLevel(CircularDependencyLevel.Error)
+
+[#1601][1601] by [@eed3si9n][@eed3si9n]
+
+### Cached resolution (minigraph caching)
+
+sbt 0.13.7 adds a new **experimental** update option called *cached resolution*, which replaces consolidated resolution:
+
+    updateOptions := updateOptions.value.withCachedResolution(true)
+
+Unlike consolidated resolution, which only consolidated subprojects with identical dependency graph, cached resolution create an artificial graph for each direct dependency (minigraph) for all subprojects, resolves them independently, saves them into json file, and stiches the minigraphs together.
+
+Once the minigraphs are resolved and saved as files, dependency resolution turns into a matter of loading json file from the second run onwards, which should complete in a matter of seconds even for large projects. Also, because the files are saved under a global `~/.sbt/0.13/dependency` (or what's specified by `sbt.dependency.base` flag), the resolution result is shared across all builds.
+
+Breaking graphs into minigraphs allows partial resolution results to be shared, which scales better for subprojects with similar but slightly different dependencies, and also for making small changes to the dependencies graph over time. See [documentation on cached resolution][Cached-Resolution] for more details.
+
+[#1631][1631] by [@eed3si9n][@eed3si9n]
+
+## sbt 0.13.6
+
+  [413]: https://github.com/sbt/sbt/issues/413
+  [528]: https://github.com/sbt/sbt/issues/528
+  [670]: https://github.com/sbt/sbt/issues/670
+  [856]: https://github.com/sbt/sbt/issues/856
+  [1036]: https://github.com/sbt/sbt/pull/1036
+  [1059]: https://github.com/sbt/sbt/issues/1059
+  [1181]: https://github.com/sbt/sbt/issues/1181
+  [1194]: https://github.com/sbt/sbt/issues/1194
+  [1200]: https://github.com/sbt/sbt/issues/1200
+  [1213]: https://github.com/sbt/sbt/issues/1213
+  [1275]: https://github.com/sbt/sbt/issues/1275
+  [1312]: https://github.com/sbt/sbt/pull/1312
+  [1313]: https://github.com/sbt/sbt/pull/1313
+  [1315]: https://github.com/sbt/sbt/issues/1315
+  [1330]: https://github.com/sbt/sbt/pull/1330
+  [1346]: https://github.com/sbt/sbt/pull/1346
+  [1347]: https://github.com/sbt/sbt/issues/1347
+  [1352]: https://github.com/sbt/sbt/pull/1352
+  [1358]: https://github.com/sbt/sbt/pull/1358
+  [1366]: https://github.com/sbt/sbt/issues/1366
+  [1367]: https://github.com/sbt/sbt/pull/1367
+  [1378]: https://github.com/sbt/sbt/pull/1378
+  [1383]: https://github.com/sbt/sbt/pull/1383
+  [1384]: https://github.com/sbt/sbt/issues/1384
+  [1400]: https://github.com/sbt/sbt/pull/1400
+  [1401]: https://github.com/sbt/sbt/pull/1401
+  [1405]: https://github.com/sbt/sbt/pull/1405
+  [1409]: https://github.com/sbt/sbt/pull/1409
+  [1416]: https://github.com/sbt/sbt/issues/1416
+  [1419]: https://github.com/sbt/sbt/pull/1419
+  [1422]: https://github.com/sbt/sbt/issues/1422
+  [1423]: https://github.com/sbt/sbt/pull/1423
+  [1426]: https://github.com/sbt/sbt/pull/1426
+  [1433]: https://github.com/sbt/sbt/pull/1433
+  [1439]: https://github.com/sbt/sbt/issues/1439
+  [1447]: https://github.com/sbt/sbt/pull/1447
+  [1450]: https://github.com/sbt/sbt/pull/1450
+  [1451]: https://github.com/sbt/sbt/pull/1451
+  [1454]: https://github.com/sbt/sbt/pull/1454
+  [1456]: https://github.com/sbt/sbt/pull/1456
+  [1467]: https://github.com/sbt/sbt/pull/1467
+  [1476]: https://github.com/sbt/sbt/pull/1476
+  [1477]: https://github.com/sbt/sbt/pull/1477
+  [1484]: https://github.com/sbt/sbt/issues/1484
+  [1486]: https://github.com/sbt/sbt/pull/1486
+  [1487]: https://github.com/sbt/sbt/pull/1487
+  [1488]: https://github.com/sbt/sbt/pull/1488
+  [1489]: https://github.com/sbt/sbt/pull/1489
+  [1494]: https://github.com/sbt/sbt/pull/1494
+  [1516]: https://github.com/sbt/sbt/pull/1516
+  [1465]: https://github.com/sbt/sbt/issues/1465
+  [1514]: https://github.com/sbt/sbt/issues/1514
+  [1524]: https://github.com/sbt/sbt/issues/1524
+  [1530]: https://github.com/sbt/sbt/issues/1530
+  [1536]: https://github.com/sbt/sbt/pull/1536
+  [1541]: https://github.com/sbt/sbt/issues/1541
+  [1546]: https://github.com/sbt/sbt/pull/1546
+
+  [@benmccann]: https://github.com/benmccann
+  [@dansanduleac]: https://github.com/dansanduleac
+  [@2m]: https://github.com/2m
+  [@pvlugter]: https://github.com/pvlugter
+  [@eed3si9n]: https://github.com/eed3si9n
+  [@evgeny-goldin]: https://github.com/evgeny-goldin
+  [@gkossakowski]: https://github.com/gkossakowski
+  [@jsuereth]: https://github.com/jsuereth
+  [@benjyw]: https://github.com/benjyw
+  [@xuwei-k]: https://github.com/xuwei-k
+  [@jroper]: https://github.com/jroper
+  [@lpiepiora]: https://github.com/lpiepiora
+  [@vn971]: https://github.com/vn971
+  [@dpratt]: https://github.com/dpratt
+  [@henrikengstrom]: https://github.com/henrikengstrom
+  [@puffnfresh]: https://github.com/puffnfresh
+  [@rtyley]: https://github.com/rtyley
+
+### Fixes with compatibility implications
+
+- Maven Central Repository, Java.net Maven 2 Repository, Typesafe Repository, and sbt Plugin repository now defaults to HTTPS. (See below)
+- `ThisProject` used to resolve to the root project in a build even when it's place in `subproj/build.sbt`. sbt 0.13.6 fixes it to resolve to the sub project. [#1194][1194]/[#1358][1358] by [@dansanduleac][@dansanduleac]
+- Global plugins classpath used to be injected into every build. This will no longer be the case. [#1347][1347]/[#1352][1352] by [@dansanduleac][@dansanduleac]
+- Fixes `newer` command in scripted. [#1419][1419] by [@jroper][@jroper]
+- Name hashing is enabled by default. `inc.Analysis.empty` also defaults to the one compatible with name hashing. [#1546][1546] by [@gkossakowski][@gkossakowski]
+
+### Improvements
+
+- Derived settings can replace previously-defined but non-default settings. [#1036][1036] by [@dansanduleac][@dansanduleac]
+- Sorts setting key names in the inspect tree view. [#1313][1313] by [@2m][@2m]
+- Uses separate update caches when cross compiling scala. [#1330][1330] by [@pvlugter][@pvlugter]
+- Ensures sequences in analysis files are read in order. [#1346][1346] by [@benjyw][@benjyw]
+- Enables tab completion for scripted task. [#1383][1383] by [@xuwei-k][@xuwei-k]
+- Allows project reference to to a branch of a local git repository. [#1409][1409] by [@vn971][@vn971]
+- Triggered Execution is now aware of rename or move of files. [#1401][1401] by [@xuwei-k][@xuwei-k]
+- No longer updates classifiers of `projectDependencies`. [#1366][1366]/[#1367][1367] by [@dansanduleac][@dansanduleac]
+- Selects the first test fingerprint for a test name for forked tests. [#1450][1450] by [@pvlugter][@pvlugter]
+- Allows default auto plugins to be disabled. [#1451][1451] by [@jsuereth][@jsuereth]
+- Allows keys defined inside `build.sbt` to be used from sbt shell. [#1059][1059]/[#1456][1456]
+- Updates internal Ivy instance to cache the results of dependency exclusion rules. [#1476][1476] by [@eed3si9n][@eed3si9n]
+- Adds `Resolver.jcenterRepo` and `Resolver.bintrayRepo(owner, repo)` to add Bintray easier. [#1405][1405] by [@evgeny-goldin][@evgeny-goldin]
+- AutoPlugins with no requirements enabled by allRequirements can now be disable dby the user. [#1516][1516] by [@jsuereth][@jsuereth]
+
+### Bug fixes
+
+- Allows auto-generated projects to have overridden organization. [#1315][1315]/[#1378][1378] by [@jsuereth][@jsuereth]
+- Fixes auto plugins declared without package object. [#1423][1423] by [@lpiepiora][@lpiepiora]
+- Fixes `plugin` command. [#1416][1416]/[#1426][1426] by [@lpiepiora][@lpiepiora]
+- Adds `scala-jar` to the list of jar artifacts recognized by CustomPomParser. [#1400][1400] by [@dpratt][@dpratt]
+- Fixes cross versioning to recognize version number with mutiple -tags. [#1433][1433] by [@henrikengstrom][@henrikengstrom]
+- Works around "Not a simple type" breaking `-Xfatal-warnings`. [#1477][1477] by [@puffnfresh][@puffnfresh]
+- Fixes sLog usage in tandem with the `set` comamnd [#1486][1486] [@jsuereth][@jsuereth]
+- Test suites with whitespace will have prettier filenames [#1487][1487] [@jsuereth][@jsuereth]
+- sbt no longer crashes when run in root directory [#1488][1488] by [@jsuereth][@jsuereth]
+- set no longer removes any `++` scala version setting.  [#856][856]/[#1489][1489] by [@jsuereth][@jsuereth]
+- Fixes `Scope.parseScopedKey`. [#1384][1384] by [@eed3si9n][@eed3si9n]
+- Fixes `build.sbt` errors causing `ArrayIndexOutOfBoundsException` due to invalid source in position. [#1181][1181] by [@eed3si9n][@eed3si9n]
+- Fixes `http.proxyPassword` showing up in launcher's update.log. [#670][670] by [@eed3si9n][@eed3si9n]
+- Fixes config-classes leak in loading build files. [#1524][1524] by [@jsuereth][@jsuereth]
+- Fixes name-conflicts in hashed settings class files. [#1465][1465] by [@jsuereth][@jsuereth]
+- Fixes the pom conversion of dynamic revisions like `1.1+`. [#1275][1275] by [@eed3si9n][@eed3si9n]
+- Fixes `NullPointerError` in tab completion by `FileExamples`. [#1530][1530] by [@eed3si9n][@eed3si9n]
+- Fixes metabuild downloading unused Scala 2.10.2. [#1439][1439] by [@eed3si9n][@eed3si9n]
+
+### HTTPS related changes
+
+Thanks to Sonatype, HTTPS access to Maven Central Repository is available to public. This is now enabled by default, but if HTTP is required for some reason the following system properties can be used:
+
+    -Dsbt.repository.secure=false
+
+Java.net Maven 2 repository, Typesafe repository, and sbt Plugin repository also defaults to HTTPS.
+
+[#1494][1494] by [@rtyley][@rtyley], [#1536][1536] by [@benmccann][@benmccann], and [#1541][1541] by [@eed3si9n][@eed3si9n].
+
+### enablePlugins/disablePlugins
+
+sbt 0.13.6 now allows `enablePlugins` and `disablePlugins` to be written directly in `build.sbt`. [#1213][1213]/[#1312][1312] by [@jsuereth][@jsuereth]
+
+### Unresolved dependencies error
+
+sbt 0.13.6 will try to reconstruct dependencies tree when it fails to resolve a managed dependency.
+This is an approximation, but it should help you figure out where the problematic dependency is coming from. When possible sbt will display the source position next to the modules:
+
+    [warn]  ::::::::::::::::::::::::::::::::::::::::::::::
+    [warn]  ::          UNRESOLVED DEPENDENCIES         ::
+    [warn]  ::::::::::::::::::::::::::::::::::::::::::::::
+    [warn]  :: foundrylogic.vpp#vpp;2.2.1: not found
+    [warn]  ::::::::::::::::::::::::::::::::::::::::::::::
+    [warn] 
+    [warn]  Note: Unresolved dependencies path:
+    [warn]      foundrylogic.vpp:vpp:2.2.1
+    [warn]        +- org.apache.cayenne:cayenne-tools:3.0.2
+    [warn]        +- org.apache.cayenne.plugins:maven-cayenne-plugin:3.0.2 (/foo/some-test/build.sbt#L28)
+    [warn]        +- d:d_2.10:0.1-SNAPSHOT
+
+[#528][528]/[#1422][1422]/[#1447][1447] by [@eed3si9n][@eed3si9n]
+
+### Eviction warnings
+
+sbt 0.13.6 displays eviction warnings when it resolves your project's managed dependencies via `update` task.
+Currently the eviction warnings are categorized into three layers: `scalaVersion` eviction, direct evictions, and transitive evictions.
+By default eviction warning on `update` task will display only `scalaVersion` evictin and direct evictions.
+
+`scalaVersion` eviction warns you when `scalaVersion` is no longer effecitive. This happens when one of your dependency depends on a newer release of scala-library than your `scalaVersion`.
+Direct evctions are evictions related to your direct dependencies. Warnings are displayed only when API incompatibility is suspected. For Java libraries, Semantic Versioning is used for guessing, and for Scala libraries Second Segment versioning (second segment bump makes API incompatible) is used.
+
+To display all eviction warnings with caller information, run `evicted` task.
+
+    [warn] There may be incompatibilities among your library dependencies.
+    [warn] Here are some of the libraries that were evicted:
+    [warn]     * com.typesafe.akka:akka-actor_2.10:2.1.4 -> 2.3.4 (caller: com.typesafe.akka:akka-remote_2.10:2.3.4,
+    org.w3:banana-sesame_2.10:0.4, org.w3:banana-rdf_2.10:0.4)
+
+[#1200][1200]/[#1467][1467] by [@eed3si9n][@eed3si9n]
+
+### Latest SNAPSHOTs
+
+sbt 0.13.6 adds a new setting key called `updateOptions` for customizing the details of managed dependency resolution with `update` task. One of its flags is called `lastestSnapshots`, which controls the behavior of the chained resolver. Up until 0.13.6, sbt was picking the first `-SNAPSHOT` revision it found along the chain. When `latestSnapshots` is enabled (default: `true`), it will look into all resolvers on the chain, and compare them using the publish date.
+
+The tradeoff is probably a longer resolution time if you have many remote repositories on the build or you live away from the severs. So here's how to disable it:
+
+    updateOptions := updateOptions.value.withLatestSnapshots(false)
+
+[#1514][1514] by [@eed3si9n][@eed3si9n]
+
+### Consolidated resolution
+
+`updateOptions` can also be used to enable consolidated resolution for `update` task.
+
+    updateOptions := updateOptions.value.withConsolidatedResolution(true)
+
+This feature is specifically targeted to address [Ivy resolution is beging slow for multi-module projects #413][413]. Consolidated resolution aims to fix this issue by artificially constructing an Ivy dependency graph for the unique managed dependencies. If two subprojects introduce identical external dependencies, both subprojects should consolidate to the same graph, and therefore resolve immediately for the second `update`. [#1454][1454] by [@eed3si9n][@eed3si9n]
+
+## sbt 0.13.5
+
+  [Auto-Plugins-Post]: https://typesafe.com/blog/preview-of-upcoming-sbt-10-features-read-about-the-new-plugins
+
+sbt 0.13.5 is a technology preview of what's to come to sbt 1.0 with enhancements like [auto plugins][Auto-Plugins-Post] and the necessary APIs changes and launcher for "sbt as a server.", defined in the sbt-remote-control project.
+
+- The Scala version for sbt and sbt plugins is now 2.10.4. This is a compatible version bump.
+- Added a new setting testResultLogger to allow customisation of logging of test results. (#1225)
+- When test is run and there are no tests available, omit logging output. Especially useful for aggregate modules. test-only et al unaffected. (#1185)
+- sbt now uses minor-patch version of ivy 2.3 (org.scala-sbt.ivy:ivy:2.3.0-sbt-<git sha>)
+- `sbt.Plugin` deprecated in favor of `sbt.AutoPlugin`
+- name-hashing incremental compiler now supports scala macros.
+- `testResultLogger` is now configured.
+- sbt-server hooks for task cancellation.
+- Add `JUnitXmlReportPlugin` which generates junit-xml-reports for all tests.
+- Optionally enable forced garbage collection after tasks (`-Dsbt.task.forcegc=true`).
+
+  [@eed3si9n]: https://github.com/eed3si9n
+  [@jsuereth]: https://github.com/jsuereth
+  [@dwijnand]: http://github.com/dwijnand
+  [@Duhemm]: http://github.com/Duhemm
+  [@gkossakowski]: https://github.com/gkossakowski
+  [@adriaanm]: https://github.com/adriaanm
+  [@jrudolph]: https://github.com/jrudolph
+  [@stuhood]: https://github.com/stuhood
+  [@pdalpra]: https://github.com/pdalpra
+  [@fkorotkov]: http://github.com/fkorotkov
+  [@hgiddens]: https://github.com/hgiddens
+  [@DavidPerezIngeniero]: https://github.com/DavidPerezIngeniero
+  [@romanowski]: https://github.com/romanowski
+  [@timcharper]: https://github.com/timcharper
+  [@smarter]: https://github.com/smarter
+  [@retronym]: https://github.com/retronym
+  [milessabin]: https://github.com/milessabin
+  [@ekrich]: https://github.com/ekrich
+  [@smarter]: https://github.com/smarter
+  [@anatolydwnld]: https://github.com/anatolydwnld
+
+
+  [multiple-scopes]: Tasks.html#multiple-scopes
+  [conflict-management]: Library-Management.html#conflict-management
+  [Setup]: Setup.html
+  [Input-Tasks]: Input-Tasks.html
+
+sbt 0.13.0 - 0.13.2
+-------------------
+
+### sbt 0.13.2
+
+- Adding new name-hashing feature to incremental compiler. Alters how scala dependencies are tracked, reducing number of recompiles necessary.
+- Added the ability to launch servers via the sbt-launcher.
+- Added `.previous` feature on tasks which can load the previous value.
+- Added `all` command which can run more than tasks in parallel.
+- Exposed the 'overwrite' flags from ivy. Added warning if overwriting a release version.
+- Improve the error message when credentials are not found in Ivy.
+- Improve task macros to handle more scala constructs.
+- Fix `last` and `export` tasks to read from the correct stream.
+- Fix issue where ivy's `.+` dependency ranges were not correctly translated to maven.
+- Override security manager to ignore file permissions (performance issue)
+- 2.11 compatibility fixes
+- Launcher can now handle ivy's `.+` revisions.
+- `SessionSettings` now correctly overwrite existing settings.
+- Adding a simple `Logic` system for inclusionary/dependency logic of plugins.
+- Improve build hooks for `LoggerReporter` and `TaskProgress`.
+- Serialize incremental compiler analysis into text-file format.
+- Issue a warning when generating Paths and separate already exists in the path.
+- Migrate to Ivy 2.3.0-final.
+- Docs: Use bintray as default repository host
+- Docs: improved docs on test groups.
+- Docs: updated documentation on the Launcher.
+- Docs: started architecture document.
+
+### sbt 0.13.1
+
+- The Scala version for sbt and sbt plugins is now 2.10.3. This is a compatible version bump.
+- New method `toTask` on `Initialize[InputTask[T]]` to apply the full input and get a plain task out.
+- Improved performance of inspect tree
+- Work around various issues with Maven local repositories, including resolving -SNAPSHOTs from them. (#321)
+- Better representation of no cross-version suffix in suffix conflict error message: now shows `<none>` instead of just `_`
+- `TrapExit` support for multiple, concurrent managed applications. Now enabled by default for all `run`-like tasks. (#831)
+- Add minimal support for class file formats 51.0, 52.0 in incremental compiler. (#842)
+- Allow main class to be non-public. (#883)
+- Convert `-classpath` to `CLASSPATH` when forking on Windows and length exceeds a heuristic maximum. (#755)
+- `scalacOptions` for `.scala` build definitions are now also used for `.sbt` files
+- `error`, `warn`, `info`, `debug` commands to set log level and `--error`, ... to set the level before the project is loaded. (#806)
+- `sLog` settings that provides a `Logger` for use by settings. (#806)
+- Early commands: any command prefixed with `--` gets moved before other commands on startup and doesn't force sbt into batch mode.
+- Deprecate internal `-`, `--`, and `---` commands in favor of `onFailure`, `sbtClearOnFailure`, and `resumeFromFailure`.
+- `makePom` no longer generates `<type>` elements for standard classifiers. (#728)
+- Fix many instances of the Turkish i bug.
+- Read https+ftp proxy environment variables into system properties where Java will use them. (#886)
+- The `Process` methods that are redirection-like no longer discard the exit code of the input. This addresses an inconsistency with `Fork`, where using the `CustomOutput OutputStrategy` makes the exit code always zero.
+- Recover from failed `reload` command in the scripted sbt handler.
+- Parse external `pom.xml` with `CustomPomParser` to handle multiple definitions. (#758)
+- Improve key collision error message (#877)
+- Display the source position of an undefined setting.
+- Respect the `-nowarn` option when compiling Scala sources.
+- Improve forked test debugging by listing tests run by sbt in debug output. (#868)
+- Fix scaladoc cache to track changes to `-doc-root-content` (#837)
+- Incremental compiler: Internal refactoring in preparation for name-hashing (#936)
+- Incremental compiler: improved cache loading/saving speed by internal file names (#931)
+- Docs: many contributed miscellaneous fixes and additions
+- Docs: link to page source now at the bottom of the page
+- Docs: sitemap now automatically generated
+- Docs: custom `:key:` role enables links from a key name in the docs to the val in `sxr/sbt/Keys.scala`
+- Docs: restore sxr support and fix links to sxr'd sources. (#863)
+
+### sbt 0.13.0
+
+#### Features, fixes, changes with compatibility implications
+
+-   Moved to Scala 2.10 for sbt and build definitions.
+-   Support for plugin configuration in `project/plugins/` has been
+    removed. It was deprecated since 0.11.2.
+-   Dropped support for tab completing the right side of a setting for
+    the `set` command. The new task macros make this tab completion
+    obsolete.
+-   The convention for keys is now camelCase only. Details below.
+-   Fixed the default classifier for tests to be `tests` for proper
+    Maven compatibility.
+-   The global settings and plugins directories are now versioned.
+    Global settings go in `~/.sbt/0.13/` and global plugins in
+    `~/.sbt/0.13/plugins/` by default. Explicit overrides, such as via
+    the `sbt.global.base` system property, are still respected. (gh-735)
+-   sbt no longer canonicalizes files passed to scalac. (gh-723)
+-   sbt now enforces that each project must have a unique `target`
+    directory.
+-   sbt no longer overrides the Scala version in dependencies. This
+    allows independent configurations to depend on different Scala
+    versions and treats Scala dependencies other than scala-library as
+    normal dependencies. However, it can result in resolved versions
+    other than `scalaVersion` for those other Scala libraries.
+-   JLine is now configured differently for Cygwin. See
+    [Installing sbt][Setup].
+-   Jline and Ansi codes work better on Windows now. CI servers might
+    have to explicitly disable Ansi codes via `-Dsbt.log.format=false`.
+-   JLine now tries to respect `~/.inputrc`.
+-   Forked tests and runs now use the project's base directory as the
+    current working directory.
+-   `compileInputs` is now defined in `(Compile,compile)` instead of
+    just `Compile`
+-   The result of running tests is now
+    [Tests.Output](../api/sbt/Tests$$Output.html).
+
+#### Features
+
+-   Use the repositories in boot.properties as the default project
+    resolvers. Add `bootOnly` to a repository in boot.properties to
+    specify that it should not be used by projects by default. (Josh S.,
+    gh-608)
+-   Support vals and defs in .sbt files. Details below.
+-   Support defining Projects in .sbt files: vals of type Project are
+    added to the Build. Details below.
+-   New syntax for settings, tasks, and input tasks. Details below.
+-   Automatically link to external API scaladocs of dependencies by
+    setting `autoAPIMappings := true`. This requires at least Scala
+    2.10.1 and for dependencies to define `apiURL` for their scaladoc
+    location. Mappings may be manually added to the `apiMappings` task
+    as well.
+-   Support setting Scala home directory temporary using the switch
+    command: `++ scala-version=/path/to/scala/home`. The scala-version
+    part is optional, but is used as the version for any managed
+    dependencies.
+-   Add `publishM2` task for publishing to `~/.m2/repository`. (gh-485)
+-   Use a default root project aggregating all projects if no root is
+    defined. (gh-697)
+-   New API for getting tasks and settings from multiple projects and
+    configurations. See the new section
+    [getting values from multiple scopes][multiple-scopes].
+-   Enhanced test interface for better support of test framework
+    features. (Details pending.)
+-   `export` command
+
+    > -   For tasks, prints the contents of the 'export' stream. By
+    >     convention, this should be the equivalent command line(s)
+    >     representation. compile, doc, and console show the approximate
+    >     command lines for their execution. Classpath tasks print the
+    >     classpath string suitable for passing as an option.
+    > -   For settings, directly prints the value of a setting instead
+    >     of going through the logger
+
+#### Fixes
+
+-   sbt no longer tries to warn on dependency conflicts. Configure a
+    [conflict manager][conflict-management] instead. (gh-709)
+-   Run test Cleanup and Setup when forking. The test ClassLoader is not
+    available because it is in another jvm.
+
+#### Improvements
+
+-   Run the API extraction phase after the compiler's `pickler` phase
+    instead of `typer` to allow compiler plugins after `typer`. (Adriaan
+    M., gh-609)
+-   Record defining source position of settings. `inspect` shows the
+    definition location of all settings contributing to a defined value.
+-   Allow the root project to be specified explicitly in
+    `Build.rootProject`.
+-   Tasks that need a directory for storing cache information can now
+    use the `cacheDirectory` method on `streams`. This supersedes the
+    `cacheDirectory` setting.
+-   The environment variables used when forking `run` and `test` may be
+    set via `envVars`, which is a `Task[Map[String,String]]`. (gh-665)
+-   Restore class files after an unsuccessful compilation. This is
+    useful when an error occurs in a later incremental step that
+    requires a fix in the originally changed files.
+-   Better auto-generated IDs for default projects. (gh-554)
+-   Fork run directly with 'java' to avoid additional class loader from
+    'scala' command. (gh-702)
+-   Make autoCompilerPlugins support compiler plugins defined in a
+    internal dependency (only if `exportJars := true` due to scalac
+    limitations)
+-   Track ancestors of non-private templates and use this information to
+    require fewer, smaller intermediate incremental compilation steps.
+-   `autoCompilerPlugins` now supports compiler plugins defined in a
+    internal dependency. The plugin project must define
+    `exportJars := true`. Depend on the plugin with
+    `...dependsOn(... % Configurations.CompilerPlugin)`.
+-   Add utilities for debugging API representation extracted by the
+    incremental compiler. (Grzegorz K., gh-677, gh-793)
+-   `consoleProject` unifies the syntax for getting the value of a
+    setting and executing a task. See
+    [Console Project](Console-Project.html).
+
+#### Other
+
+-   The source layout for the sbt project itself follows the package
+    name to accommodate to Eclipse users. (Grzegorz K., gh-613)
+
+### Details of major changes
+
+#### camelCase Key names
+
+The convention for key names is now camelCase only instead of camelCase
+for Scala identifiers and hyphenated, lower-case on the command line.
+camelCase is accepted for existing hyphenated key names and the
+hyphenated form will still be accepted on the command line for those
+existing tasks and settings declared with hyphenated names. Only
+camelCase will be shown for tab completion, however.
+
+#### New key definition methods
+
+There are new methods that help avoid duplicating key names by declaring
+keys as:
+
+```scala
+val myTask = taskKey[Int]("A (required) description of myTask.")
+```
+
+The name will be picked up from the val identifier by the implementation
+of the taskKey macro so there is no reflection needed or runtime
+overhead. Note that a description is mandatory and the method `taskKey`
+begins with a lowercase `t`. Similar methods exist for keys for settings
+and input tasks: `settingKey` and `inputKey`.
+
+#### New task/setting syntax
+
+First, the old syntax is still supported with the intention of allowing
+conversion to the new syntax at your leisure. There may be some
+incompatibilities and some may be unavoidable, but please report any
+issues you have with an existing build.
+
+The new syntax is implemented by making `:=`, `+=`, and `++=` macros and
+making these the only required assignment methods. To refer to the value
+of other settings or tasks, use the `value` method on settings and
+tasks. This method is a stub that is removed at compile time by the
+macro, which will translate the implementation of the task/setting to
+the old syntax.
+
+For example, the following declares a dependency on `scala-reflect`
+using the value of the `scalaVersion` setting:
+
+```scala
+libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value
+```
+
+The `value` method is only allowed within a call to `:=`, `+=`, or
+`++=`. To construct a setting or task outside of these methods, use
+`Def.task` or `Def.setting`. For example,
+
+```scala
+val reflectDep = Def.setting { "org.scala-lang" % "scala-reflect" % scalaVersion.value }
+
+libraryDependencies += reflectDep.value   
+```
+
+A similar method `parsed` is defined on `Parser[T]`,
+`Initialize[Parser[T]]` (a setting that provides a parser), and
+`Initialize[State => Parser[T]]` (a setting that uses the current
+`State` to provide a `Parser[T]`. This method can be used when defining
+an input task to get the result of user input.
+
+```scala
+myInputTask := {
+     // Define the parser, which is the standard space-delimited arguments parser.
+   val args = Def.spaceDelimited("<args>").parsed
+     // Demonstrates using a setting value and a task result:
+   println("Project name: " + name.value)
+   println("Classpath: " + (fullClasspath in Compile).value.map(_.file))
+   println("Arguments:")
+   for(arg <- args) println("  " + arg)
+}
+```
+
+For details, see [Input Tasks][Input-Tasks].
+
+To expect a task to fail and get the failing exception, use the
+`failure` method instead of `value`. This provides an `Incomplete`
+value, which wraps the exception. To get the result of a task whether or
+not it succeeds, use `result`, which provides a `Result[T]`.
+
+Dynamic settings and tasks (`flatMap`) have been cleaned up. Use the
+`Def.taskDyn` and `Def.settingDyn` methods to define them (better name
+suggestions welcome). These methods expect the result to be a task and
+setting, respectively.
+
+#### .sbt format enhancements
+
+vals and defs are now allowed in .sbt files. They must follow the same
+rules as settings concerning blank lines, although multiple definitions
+may be grouped together. For example,
+
+```scala
+val n = "widgets"
+val o = "org.example"
+
+name := n
+
+organization := o
+```
+
+All definitions are compiled before settings, but it will probably be
+best practice to put definitions together. Currently, the visibility of
+definitions is restricted to the .sbt file it is defined in. They are
+not visible in `consoleProject` or the `set` command at this time,
+either. Use Scala files in `project/` for visibility in all .sbt files.
+
+vals of type `Project` are added to the `Build` so that multi-project
+builds can be defined entirely in .sbt files now. For example,
+
+```scala
+lazy val a = Project("a", file("a")).dependsOn(b)
+
+lazy val b = Project("b", file("sub")).settings(
+   version := "1.0"
+)
+```
+
+Currently, it only makes sense to defines these in the root project's
+.sbt files.
+
+A shorthand for defining Projects is provided by a new macro called
+`project`. This requires the constructed Project to be directly assigned
+to a `val`. The name of this val is used for the project ID and base
+directory. The base directory can be changed with the `in` method. The
+previous example can also be written as:
+
+```scala
+lazy val a = project.dependsOn(b)
+
+lazy val b = project in file("sub") settings(
+  version := "1.0"
+)
+```
+
+This macro is also available for use in Scala files.
+
+#### Control over automatically added settings
+
+sbt loads settings from a few places in addition to the settings
+explicitly defined by the `Project.settings` field. These include
+plugins, global settings, and .sbt files. The new `Project.autoSettings`
+method configures these sources: whether to include them for the project
+and in what order.
+
+`Project.autoSettings` accepts a sequence of values of type
+`AddSettings`. Instances of `AddSettings` are constructed from methods
+in the `AddSettings` companion object. The configurable settings are
+per-user settings (from `~/.sbt`, for example), settings from .sbt files,
+and plugin settings (project-level only). The order in which these
+instances are provided to `autoSettings` determines the order in which
+they are appended to the settings explicitly provided in
+`Project.settings`.
+
+For .sbt files, `AddSettings.defaultSbtFiles` adds the settings from all
+.sbt files in the project's base directory as usual. The alternative
+method `AddSettings.sbtFiles` accepts a sequence of `Files` that will be
+loaded according to the standard .sbt format. Relative files are
+resolved against the project's base directory.
+
+Plugin settings may be included on a per-Plugin basis by using the
+`AddSettings.plugins` method and passing a `Plugin => Boolean`. The
+settings controlled here are only the automatic per-project settings.
+Per-build and global settings will always be included. Settings that
+plugins require to be manually added still need to be added manually.
+
+For example,
+
+```scala
+import AddSettings._
+
+lazy val root = Project("root", file(".")) autoSettings(
+   userSettings, allPlugins, sbtFiles(file("explicit/a.txt"))
+)
+
+lazy val sub = Project("sub", file("Sub")) autoSettings(
+   defaultSbtFiles, plugins(includePlugin)
+)
+
+def includePlugin(p: Plugin): Boolean =
+   p.getClass.getName.startsWith("org.example.")
+```
+
+#### Resolving Scala dependencies
+
+Scala dependencies (like scala-library and scala-compiler) are now
+resolved via the normal `update` task. This means:
+
+> 1.  Scala jars won't be copied to the boot directory, except for those
+>     needed to run sbt.
+> 2.  Scala SNAPSHOTs behave like normal SNAPSHOTs. In particular,
+>     running update will properly re-resolve the dynamic revision.
+> 3.  Scala jars are resolved using the same repositories and
+>     configuration as other dependencies.
+> 4.  Scala dependencies are not resolved via update when scalaHome is
+>     set, but are instead obtained from the configured directory.
+> 5.  The Scala version for sbt will still be resolved via the
+>     repositories configured for the launcher.
+
+sbt still needs access to the compiler and its dependencies in order to
+run `compile`, `console`, and other Scala-based tasks. So, the Scala
+compiler jar and dependencies (like scala-reflect.jar and
+scala-library.jar) are defined and resolved in the `scala-tool`
+configuration (unless `scalaHome` is defined). By default, this
+configuration and the dependencies in it are automatically added by sbt.
+This occurs even when dependencies are configured in a `pom.xml` or
+`ivy.xml` and so it means that the version of Scala defined for your
+project must be resolvable by the resolvers configured for your project.
+
+If you need to manually configure where sbt gets the Scala compiler and
+library used for compilation, the REPL, and other Scala tasks, do one of
+the following:
+
+> 1.  Set scalaHome to use the existing Scala jars in a specific
+>     directory. If autoScalaLibrary is true, the library jar found here
+>     will be added to the (unmanaged) classpath.
+> 2.  Set managedScalaInstance := false and explicitly define
+>     scalaInstance, which is of type ScalaInstance. This defines the
+>     compiler, library, and other jars comprising Scala. If
+>     autoScalaLibrary is true, the library jar from the defined
+>     ScalaInstance will be added to the (unmanaged) classpath.
+
+The [Configuring Scala](Configuring-Scala.html) page provides full details.
+
+
+  [Cross-Build]: Cross-Build.html
+  [Parallel-Execution]: Parallel-Execution.html
+  [Sbt-Launcher]: Sbt-Launcher.html
+
+## sbt 0.12.4
+
+-   Work around URI problems with encoding and resolving. (gh-725)
+-   Allow -cp argument to `apply` command to be quoted. (gh-724)
+-   Make `sbtBinaryVersion` use the new approach for 0.13 and later to
+    support cross-building plugins.
+-   Pull `sbtDependency` version from `sbtVersion` to facilitate
+    cross-building plugins.
+-   Proper support for stashing on-failure handlers. (gh-732)
+-   Include files with zip extension in unmanaged jars. (gh-750)
+-   Only add automatically detected plugins to options once. (gh-757)
+-   Properly handle failure in a multi-command that includes `reload`.
+    (gh-732)
+-   Fix unsynchronized caching of Scala class loaders that could result
+    in Scala classes being loaded in multiple class loaders.
+-   Incremental compiler: remove resident compiler code (wasn't used and
+    was a compatibility liability)
+-   Incremental compiler: properly track `abstract override` modifier.
+    (gh-726)
+-   Incremental compiler: do not normalize types in the API extraction
+    phase. (gh-736)
+-   Ivy cache: account for `localOnly` when cache subclass overrides
+    `isChanging`
+-   Ivy cache: fix corruption when developing sbt or sbt plugins.
+    (gh-768)
+-   Ivy cache: invalidate when artifact download fails to avoid locking
+    into bad resolver. (gh-760)
+-   Ivy cache: use publication date from metadata instead of original
+    file's last modified time when deleting out of date artifacts.
+    (gh-764)
+
+## sbt 0.12.3
+
+-   Allow `cleanKeepFiles` to contain directories
+-   Disable Ivy debug-level logging for performance. (gh-635)
+-   Invalidate artifacts not recorded in the original metadata when a
+    module marked as changing changes. (gh-637, gh-641)
+-   Ivy Artifact needs wildcard configuration added if no explicit ones
+    are defined. (gh-439)
+-   Right precedence of sbt.boot.properties lookup, handle qualifier
+    correctly. (gh-651)
+-   Mark the tests failed exception as having already provided feedback.
+-   Handle exceptions not caught by the test framework when forking.
+    (gh-653)
+-   Support `reload plugins` after ignoring a failure to load a project.
+-   Workaround for os deadlock detection at the process level. (gh-650)
+-   Fix for dependency on class file corresponding to a package.
+    (Grzegorz K., gh-620)
+-   Fix incremental compilation problem with package objects inheriting
+    from invalidated sources in a subpackage.
+-   Use Ivy's default name for the resolution report so that links to
+    other configurations work.
+-   Include jars from java.ext.dirs in incremental classpath. (gh-678)
+-   Multi-line prompt text offset issue (Jibbers42, gh-625)
+-   Added `xml:space="preserve"` attribute to extraDependencyAttributes
+    XML Block for publishing poms for plugins dependent on other plugins
+    (Brendan M., gh-645)
+-   Tag the actual test task and not a later task. (gh-692)
+-   Make exclude-classifiers per-user instead of per-build. (gh-634)
+-   Load global plugins in their own class loader and replace the base
+    loader with that. (gh-272)
+-   Demote the default conflict warnings to the debug level. These will
+    be removed completely in 0.13. (gh-709)
+-   Fix Ivy cache issues when multiple resolvers are involved. (gh-704)
+
+## sbt 0.12.2
+
+-   Support -Yrangepos. (Lex S., gh-607)
+-   Only make one call to test frameworks per test name. (gh-520)
+-   Add `-cp` option to the `apply` method to make adding commands from
+    an external program easier.
+-   Stable representation of refinement typerefs. This fixes unnecessary
+    recompilations in some cases. (Adriaan M., gh-610)
+-   Disable aggregation for `run-main`. (gh-606)
+-   Concurrent restrictions: Untagged should be set based on the task's
+    tags, not the tags of all tasks.
+-   When preserving the last modified time of files, convert negative
+    values to 0
+-   Use `java.lang.Throwable.setStackTrace` when sending exceptions back
+    from forked tests. (Eugene V., gh-543)
+-   Don't merge dependencies with mismatched transitive/force/changing
+    values. (gh-582)
+-   Filter out null parent files when deleting empty directories.
+    (Eugene V., gh-589)
+-   Work around File constructor not accepting URIs for UNC paths.
+    (gh-564)
+-   Split ForkTests react() out to workaround SI-6526 (avoids a
+    stackoverflow in some forked test situations)
+-   Maven-style ivy repo support in the launcher config (Eric B.,
+    gh-585)
+-   Compare external binaries with canonical files (nau, gh-584)
+-   Call System.exit after the main thread is finished. (Eugene V.,
+    gh-565)
+-   Abort running tests on the first failure to communicate results back
+    to the main process. (Eugene V., gh-557)
+-   Don't let the right side of the alias command fail the parse.
+    (gh-572)
+-   API extraction: handle any type that is annotated, not just the
+    spec'd simple type. (gh-559)
+-   Don't try to look up the class file for a package. (gh-620)
+
+## sbt 0.12.1
+
+### Dependency management fixes:
+
+-   Merge multiple dependency definitions for the same ID. Workaround
+    for gh-468, gh-285, gh-419, gh-480.
+-   Don't write section of pom if scope is 'compile'.
+-   Ability to properly match on artifact type. Fixes gh-507 (Thomas).
+-   Force `update` to run on changes to last modified time of artifacts
+    or cached descriptor (part of fix for gh-532). It may also fix
+    issues when working with multiple local projects via 'publish-local'
+    and binary dependencies.
+-   Per-project resolution cache that deletes cached files before
+    update. Notes:
+
+> -   The resolution cache differs from the repository cache and does
+>     not contain dependency metadata or artifacts.
+> -   The resolution cache contains the generated ivy files, properties,
+>     and resolve reports for the project.
+> -   There will no longer be individual files directly in
+>     `~/.ivy2/cache/`
+> -   Resolve reports are now in target/resolution-cache/reports/,
+>     viewable with a browser.
+> -   Cache location includes extra attributes so that cross builds of a
+>     plugin do not overwrite each other. Fixes gh-532.
+
+### Three stage incremental compilation:
+
+-   As before, the first step recompiles sources that were edited (or
+    otherwise directly invalidated).
+-   The second step recompiles sources from the first step whose API has
+    changed, their direct dependencies, and sources forming a cycle with
+    these sources.
+-   The third step recompiles transitive dependencies of sources from
+    the second step whose API changed.
+-   Code relying mainly on composition should see decreased compilation
+    times with this approach.
+-   Code with deep inheritance hierarchies and large cycles between
+    sources may take longer to compile.
+-   `last compile` will show cycles that were processed in step 2.
+    Reducing large cycles of sources shown here may decrease compile
+    times.
+
+### Miscellaneous fixes and improvements:
+
+-   Various test forking fixes. Fixes gh-512, gh-515.
+-   Proper isolation of build definition classes. Fixes gh-536, gh-511.
+-   `orbit` packaging should be handled like a standard jar. Fixes
+    gh-499.
+-   In `IO.copyFile`, limit maximum size transferred via NIO. Fixes
+    gh-491.
+-   Add OSX JNI library extension in `includeFilter` by default. Fixes
+    gh-500. (Indrajit)
+-   Translate `show x y` into `;show x ;show y` . Fixes gh-495.
+-   Clean up temporary directory on exit. Fixes gh-502.
+-   `set` prints the scopes+keys it defines and affects.
+-   Tab completion for `set` (experimental).
+-   Report file name when an error occurs while opening a corrupt zip
+    file in incremental compilation code. (James)
+-   Defer opening logging output files until an actual write. Helps
+    reduce number of open file descriptors.
+-   Back all console loggers by a common console interface that merges
+    (overwrites) consecutive Resolving xxxx ... lines when ansi codes
+    are enabled (as first done by Play).
+
+### Forward-compatible-only change (not present in 0.12.0):
+
+-   `sourcesInBase` setting controls whether sources in base directory
+    are included. Fixes gh-494.
+
+## sbt 0.12.0
+
+#### Features, fixes, changes with compatibility implications
+
+-   The cross versioning convention has changed for Scala versions 2.10
+    and later as well as for sbt plugins.
+-   When invoked directly, 'update' will always perform an update
+    (gh-335)
+-   The sbt plugins repository is added by default for plugins and
+    plugin definitions. gh-380
+-   Plugin configuration directory precedence has changed (see details
+    section below)
+-   Source dependencies have been fixed, but the fix required changes
+    (see details section below)
+-   Aggregation has changed to be more flexible (see details section
+    below)
+-   Task axis syntax has changed from key(for task) to task::key (see
+    details section below)
+-   The organization for sbt has to changed to `org.scala-sbt` (was:
+    org.scala-tools.sbt). This affects users of the scripted plugin in
+    particular.
+-   `artifactName` type has changed to
+    `(ScalaVersion, Artifact, ModuleID) => String`
+-   `javacOptions` is now a task
+-   `session save` overwrites settings in `build.sbt` (when
+    appropriate). gh-369
+-   scala-library.jar is now required to be on the classpath in order to
+    compile Scala code. See the scala-library.jar section at the bottom
+    of the page for details.
+
+#### Features
+
+-   Support for forking tests (gh-415)
+-   `test-quick` (see details section below)
+-   Support globally overriding repositories (gh-472)
+-   Added `print-warnings` task that will print unchecked and
+    deprecation warnings from the previous compilation without needing
+    to recompile (Scala 2.10+ only)
+-   Support for loading an ivy settings file from a URL.
+-   `projects add/remove <URI>` for temporarily working with other
+    builds
+-   Enhanced control over parallel execution (see details section below)
+-   `inspect tree <key>` for calling `inspect` command recursively
+    (gh-274)
+
+#### Fixes
+
+-   Delete a symlink and not its contents when recursively deleting a
+    directory.
+-   Fix detection of ancestors for java sources
+-   Fix the resolvers used for `update-sbt-classifiers` (gh-304)
+-   Fix auto-imports of plugins (gh-412)
+-   Argument quoting (see details section below)
+-   Properly reset JLine after being stopped by Ctrl+z (unix only).
+    gh-394
+
+#### Improvements
+
+-   The launcher can launch all released sbt versions back to 0.7.0.
+-   A more refined hint to run 'last' is given when a stack trace is
+    suppressed.
+-   Use java 7 Redirect.INHERIT to inherit input stream of subprocess
+    (gh-462,gh-327). This should fix issues when forking interactive
+    programs. (@vigdorchik)
+-   Mirror ivy 'force' attribute (gh-361)
+-   Various improvements to `help` and `tasks` commands as well as new
+    settings command (gh-315)
+-   Bump jsch version to 0.1.46. (gh-403)
+-   Improved help commands: `help`, `tasks`, `settings`.
+-   Bump to JLine 1.0 (see details section below)
+-   Global repository setting (see details section below)
+-   Other fixes/improvements: gh-368, gh-377, gh-378, gh-386, gh-387,
+    gh-388, gh-389
+
+#### Experimental or In-progress
+
+-   API for embedding incremental compilation. This interface is subject
+    to change, but already being used in [a branch of the
+    scala-maven-plugin](https://github.com/davidB/scala-maven-plugin/tree/feature/sbt-inc).
+-   Experimental support for keeping the Scala compiler resident. Enable
+    by passing -Dsbt.resident.limit=n to sbt, where n is an integer
+    indicating the maximum number of compilers to keep around.
+-   The [Howto pages](Howto.html) on the
+    [new site](https://www.scala-sbt.org) are at least readable now. There
+    is more content to write and more formatting improvements are
+    needed, so [pull requests are
+    welcome](https://github.com/sbt/sbt.github.com).
+
+### Details of major changes from 0.11.2 to 0.12.0
+
+#### Plugin configuration directory
+
+In 0.11.0, plugin configuration moved from `project/plugins/` to just
+`project/`, with `project/plugins/` being deprecated. Only 0.11.2 had a
+deprecation message, but in all of 0.11.x, the presence of the old style
+`project/plugins/` directory took precedence over the new style. In
+0.12.0, the new style takes precedence. Support for the old style won't
+be removed until 0.13.0.
+
+1.  Ideally, a project should ensure there is never a conflict. Both
+    styles are still supported; only the behavior when there is a
+    conflict has changed.
+2.  In practice, switching from an older branch of a project to a new
+    branch would often leave an empty project/plugins/ directory that
+    would cause the old style to be used, despite there being no
+    configuration there.
+3.  Therefore, the intention is that this change is strictly an
+    improvement for projects transitioning to the new style and isn't
+    noticed by other projects.
+
+#### Parsing task axis
+
+There is an important change related to parsing the task axis for
+settings and tasks that fixes gh-202
+
+1.  The syntax before 0.12 has been `{build}project/config:key(for task)`
+2.  The proposed (and implemented) change for 0.12 is
+    `{build}project/config:task::key`
+3.  By moving the task axis before the key, it allows for easier
+    discovery (via tab completion) of keys in plugins.
+4.  It is not planned to support the old syntax.
+
+#### Aggregation
+
+Aggregation has been made more flexible. This is along the direction
+that has been previously discussed on the mailing list.
+
+1.  Before 0.12, a setting was parsed according to the current project
+    and only the exact setting parsed was aggregated.
+2.  Also, tab completion did not account for aggregation.
+3.  This meant that if the setting/task didn't exist on the current
+    project, parsing failed even if an aggregated project contained the
+    setting/task.
+4.  Additionally, if compile:package existed for the current project,
+    `*:package` existed for an aggregated project, and the user requested
+    'package' to run (without specifying the configuration), `*:package`
+    wouldn't be run on the aggregated project (because it isn't the same
+    as the `compile:package` key that existed on the current project).
+5.  In 0.12, both of these situations result in the aggregated settings
+    being selected. For example,
+    1.  Consider a project `root` that aggregates a subproject `sub`.
+    2.  `root` defines `*:package`.
+    3.  `sub` defines `compile:package` and `compile:compile`.
+    4.  Running `root/package` will run `root/*:package` and
+        `sub/compile:package`
+    5.  Running `root/compile` will run `sub/compile:compile`
+6.  This change was made possible in part by the change to task axis
+    parsing.
+
+#### Parallel Execution
+
+Fine control over parallel execution is supported as described here:
+[Parallel Execution][Parallel-Execution].
+
+1.  The default behavior should be the same as before, including the
+    parallelExecution settings.
+2.  The new capabilities of the system should otherwise be considered
+    experimental.
+3.  Therefore, `parallelExecution` won't be deprecated at this time.
+
+#### Source dependencies
+
+A fix for issue gh-329 is included in 0.12.0. This fix ensures that only
+one version of a plugin is loaded across all projects. There are two
+parts to this.
+
+1.  The version of a plugin is fixed by the first build to load it. In
+    particular, the plugin version used in the root build (the one in
+    which sbt is started in) always overrides the version used in
+    dependencies.
+2.  Plugins from all builds are loaded in the same class loader.
+
+Additionally, Sanjin's patches to add support for hg and svn URIs are
+included.
+
+1.  sbt uses Subversion to retrieve URIs beginning with `svn` or
+    svn+ssh. An optional fragment identifies a specific revision to
+    checkout.
+2.  Because a URI for Mercurial doesn't have a Mercurial-specific
+    scheme, sbt requires the URI to be prefixed with hg: to identify it
+    as a Mercurial repository.
+3.  Also, URIs that end with `.git` are now handled properly.
+
+#### Cross building
+
+The cross version suffix is shortened to only include the major and
+minor version for Scala versions starting with the 2.10 series and for
+sbt versions starting with the 0.12 series. For example, `sbinary_2.10`
+for a normal library or `sbt-plugin_2.10_0.12` for an sbt plugin. This
+requires forward and backward binary compatibility across incremental
+releases for both Scala and sbt.
+
+1.  This change has been a long time coming, but it requires everyone
+    publishing an open source project to switch to 0.12 to publish for
+    2.10 or adjust the cross versioned prefix in their builds
+    appropriately.
+2.  Obviously, using 0.12 to publish a library for 2.10 requires 0.12.0
+    to be released before projects publish for 2.10.
+3.  There is now the concept of a binary version. This is a subset of
+    the full version string that represents binary compatibility. That
+    is, equal binary versions implies binary compatibility. All Scala
+    versions prior to 2.10 use the full version for the binary version
+    to reflect previous sbt behavior. For 2.10 and later, the binary
+    version is `<major>.<minor>`.
+4.  The cross version behavior for published artifacts is configured by
+    the crossVersion setting. It can be configured for dependencies by
+    using the cross method on ModuleID or by the traditional %%
+    dependency construction variant. By default, a dependency has cross
+    versioning disabled when constructed with a single % and uses the
+    binary Scala version when constructed with %%.
+5.  The artifactName function now accepts a type ScalaVersion as its
+    first argument instead of a String. The full type is now
+    (ScalaVersion, ModuleID, Artifact) => String. ScalaVersion contains
+    both the full Scala version (such as 2.10.0) as well as the binary
+    Scala version (such as 2.10).
+6.  The flexible version mapping added by Indrajit has been merged into
+    the cross method and the %% variants accepting more than one
+    argument have been deprecated. See [Cross Build][Cross-Build] for
+    details.
+
+#### Global repository setting
+
+Define the repositories to use by putting a standalone `[repositories]`
+section (see the [sbt Launcher][Sbt-Launcher] page) in
+`~/.sbt/repositories` and pass `-Dsbt.override.build.repos=true` to sbt.
+Only the repositories in that file will be used by the launcher for
+retrieving sbt and Scala and by sbt when retrieving project
+dependencies. (@jsuereth)
+
+#### test-quick
+
+`test-quick` (gh-393) runs the tests specified as arguments (or all
+tests if no arguments are given) that:
+
+1.  have not been run yet OR
+2.  failed the last time they were run OR
+3.  had any transitive dependencies recompiled since the last successful
+    run
+
+#### Argument quoting
+
+Argument quoting (gh-396) from the intereactive mode works like Scala
+string literals.
+
+1.  `> command "arg with spaces,\n escapes interpreted"`
+2.  `> command """arg with spaces,\n escapes not interpreted"""`
+3.  For the first variant, note that paths on Windows use backslashes
+    and need to be escaped (\\). Alternatively, use the second
+    variant, which does not interpret escapes.
+4.  For using either variant in batch mode, note that a shell will
+    generally require the double quotes themselves to be escaped.
+
+### scala-library.jar
+
+sbt versions prior to 0.12.0 provided the location of scala-library.jar
+to scalac even if scala-library.jar wasn't on the classpath. This
+allowed compiling Scala code without scala-library as a dependency, for
+example, but this was a misfeature. Instead, the Scala library should be
+declared as `provided`:
+
+```scala
+// Don't automatically add the scala-library dependency
+// in the 'compile' configuration
+autoScalaLibrary := false
+
+libraryDependencies += "org.scala-lang" % "scala-library" % "2.9.2" % "provided"
+```
+
+
+  [Basic-Def]: Basic-Def.html
+  [Full-Def]: Full-Def.html
+  [Tasks]: Tasks.html
+  [Artifacts]: Artifacts.html
+  [Resolvers]: Resolvers.html
+  [Commands]: Commands.html
+  [Plugins]: Plugins.html
+  [Basic-Def-Examples]: Basic-Def-Examples.html
+  [Compiler-Plugins]: Compiler-Plugins.html
+  [Running-Project-Code]: Running-Project-Code.html
+  [ChangeSummary_0.12.0]: ChangeSummary_0.12.0.html
+
+Older Changes
+-------------
+
+### 0.11.3 to 0.12.0
+
+The changes for 0.12.0 are listed on a separate page. See
+[sbt 0.12.0 changes][ChangeSummary_0.12.0].
+
+### 0.11.2 to 0.11.3
+
+Dropping scala-tools.org:
+
+-   The sbt group ID is changed to `org.scala-sbt` (from
+    org.scala-tools.sbt). This means you must use a 0.11.3 launcher to
+    launch 0.11.3.
+-   The convenience objects `ScalaToolsReleases` and ScalaToolsSnapshots
+    now point to https://oss.sonatype.org/content/repositories/releases
+    and .../snapshots
+-   The launcher no longer includes `scala-tools.org` repositories by
+    default and instead uses the Sonatype OSS snapshots repository for
+    Scala snapshots.
+-   The `scala-tools.org` releases repository is no longer included as
+    an application repository by default. The Sonatype OSS repository is
+    *not* included by default in its place.
+
+Other fixes:
+
+-   Compiler interface works with 2.10
+-   `maxErrors` setting is no longer ignored
+-   Correct test count. gh-372 (Eugene)
+-   Fix file descriptor leak in process library (Daniel)
+-   Buffer url input stream returned by Using. gh-437
+-   Jsch version bumped to 0.1.46. gh-403
+-   JUnit test detection handles ancestors properly (Indrajit)
+-   Avoid unnecessarily re-resolving plugins. gh-368
+-   Substitute variables in explicit version strings and custom
+    repository definitions in launcher configuration
+-   Support setting sbt.version from system property, which overrides
+    setting in a properties file. gh-354
+-   Minor improvements to command/key suggestions
+
+### 0.11.1 to 0.11.2
+
+Notable behavior change:
+
+-   The local Maven repository has been removed from the launcher's list
+    of default repositories, which is used for obtaining sbt and Scala
+    dependencies. This is motivated by the high probability that
+    including this repository was causing the various problems some
+    users have with the launcher not finding some dependencies (gh-217).
+
+Fixes:
+
+-   gh-257 Fix invalid classifiers in pom generation (Indrajit)
+-   gh-255 Fix scripted plugin descriptor (Artyom)
+-   Fix forking git on windows (Stefan, Josh)
+-   gh-261 Fix whitespace handling for semicolon-separated commands
+-   gh-263 Fix handling of dependencies with an explicit URL
+-   gh-272 Show deprecation message for `project/plugins/`
+
+### 0.11.0 to 0.11.1
+
+Breaking change:
+
+-   The scripted plugin is now in the `sbt` package so that it can be
+    used from a named package
+
+Notable behavior change:
+
+-   By default, there is more logging during update: one line per
+    dependency resolved and two lines per dependency downloaded. This is
+    to address the appearance that sbt hangs on larger 'update's.
+
+Fixes and improvements:
+
+-   Show help for a key with `help <key>`
+-   gh-21 Reduced memory and time overhead of incremental recompilation
+    with signature hash based approach.
+-   Rotate global log so that only output since last prompt is displayed
+    for last
+-   gh-169 Add support for exclusions with excludeAll and exclude
+    methods on ModuleID. (Indrajit)
+-   gh-235 Checksums configurable for launcher
+-   gh-246 Invalidate `update` when `update` is invalidated for an
+    internal project dependency
+-   gh-138 Include plugin sources and docs in `update-sbt-classifiers`
+-   gh-219 Add cleanupCommands setting to specify commands to run before
+    interpreter exits
+-   gh-46 Fix regression in caching missing classifiers for
+    `update-classifiers` and `update-sbt-classifiers`.
+-   gh-228 Set `connectInput` to true to connect standard input to
+    forked run
+-   gh-229 Limited task execution interruption using ctrl+c
+-   gh-220 Properly record source dependencies from separate compilation
+    runs in the same step.
+-   gh-214 Better default behavior for classpathConfiguration for
+    external Ivy files
+-   gh-212 Fix transitive plugin dependencies.
+-   gh-222 Generate section in make-pom. (Jan)
+-   Build resolvers, loaders, and transformers.
+-   Allow project dependencies to be modified by a setting
+    (buildDependencies) but with the restriction that new builds cannot
+    be introduced.
+-   gh-174, gh-196, gh-201, gh-204, gh-207, gh-208, gh-226, gh-224,
+    gh-253
+
+### 0.10.1 to 0.11.0
+
+Major Improvements:
+
+-   Move to 2.9.1 for project definitions and plugins
+-   Drop support for 2.7
+-   Settings overhaul, mainly to make API documentation more usable
+-   Support using native libraries in `run` and `test` (but not console,
+    for example)
+-   Automatic plugin cross-versioning. Use
+
+        addSbtPlugin("group" % "name" % "version")
+
+    in project/plugins.sbt instead of `libraryDependencies += ...` See
+    [Plugins][Plugins] for details
+
+Fixes and Improvements:
+
+-   Display all undefined settings at once, instead of only the first
+    one
+-   Deprecate separate `classpathFilter`, `defaultExcludes`, and
+    sourceFilter keys in favor of includeFilter and excludeFilter
+    explicitly scoped by unmanagedSources, unmanagedResources, or
+    unmanagedJars as appropriate (Indrajit)
+-   Default to using shared boot directory in `~/.sbt/boot/`
+-   Can put contents of `project/plugins/` directly in `project/`
+    instead. Will likely deprecate plugins/ directory
+-   Key display is context sensitive. For example, in a single project,
+    the build and project axes will not be displayed
+-   gh-114, gh-118, gh-121, gh-132, gh-135, gh-157: Various settings and
+    error message improvements
+-   gh-115: Support configuring checksums separately for `publish` and
+    `update`
+-   gh-118: Add `about` command
+-   gh-118, gh-131: Improve `last` command. Aggregate `last <task>` and
+    display all recent output for `last`
+-   gh-120: Support read-only external file projects (Fred)
+-   gh-128: Add `skip` setting to override recompilation change
+    detection
+-   gh-139: Improvements to pom generation (Indrajit)
+-   gh-140, gh-145: Add standard manifest attributes to binary and
+    source jars (Indrajit)
+-   Allow sources used for `doc` generation to be different from sources
+    for `compile`
+-   gh-156: Made `package` an alias for `package-bin`
+-   gh-162: handling of optional dependencies in pom generation
+
+### 0.10.0 to 0.10.1
+
+Some of the more visible changes:
+
+-   Support "provided" as a valid configuration for inter-project
+    dependencies gh-53
+-   Try out some better error messages for build.sbt in a few common
+    situations gh-58
+-   Drop "Incomplete tasks ..." line from error messages. gh-32
+-   Better handling of javac logging. gc-74
+-   Warn when reload discards session settings
+-   Cache failing classifiers, making 'update-classifiers' a practical
+    replacement for withSources()
+-   Global settings may be provided in `~/.sbt/build.sbt` gh-52
+-   No need to define `"sbtPlugin := true"` in `project/plugins/` or
+    `~/.sbt/plugins/`
+-   Provide statistics and list of evicted modules in UpdateReport
+-   Scope use of 'transitive-classifiers' by 'update-sbt-classifiers'
+    and 'update-classifiers' for separate configuration.
+-   Default project ID includes a hash of base directory to avoid
+    collisions in simple cases.
+-   'extra-loggers' setting to make it easier to add loggers
+-   Associate ModuleID, Artifact and Configuration with a classpath
+    entry (moduleID, artifact, and configuration keys). gh-41
+-   Put httpclient on Ivy's classpath, which seems to speed up 'update'.
+
+### 0.7.7 to 0.10.0
+
+**Major redesign, only prominent changes listed.**
+
+-   Project definitions in Scala 2.8.1
+-   New configuration system: See [.sbt build example][Basic-Def-Examples],
+    [.scala build defnition][Full-Def] and [.sbt build definition][Basic-Def].
+-   New task engine: [Tasks][Tasks]
+-   New multiple project support: [.scala build defnition][Full-Def]
+-   More aggressive incremental recompilation for both Java and Scala
+    sources
+-   Merged plugins and processors into improved plugins system:
+    [Plugins][Plugins]
+-   [Web application](https://github.com/earldouglas/xsbt-web-plugin)
+    and webstart support moved to plugins instead of core features
+-   Fixed all of the issues in (Google Code) issue #44
+-   Managed dependencies automatically updated when configuration
+    changes
+-   `update-sbt-classifiers` and `update-classifiers` tasks for
+    retrieving sources and/or javadocs for dependencies, transitively
+-   Improved [artifact handling and configuration][Attifacts]
+-   Tab completion parser combinators for commands and input tasks:
+    [Commands][Commands]
+-   No project creation prompts anymore
+-   Moved to GitHub: <https://github.com/harrah/xsbt>
+
+### 0.7.5 to 0.7.7
+
+-   Workaround for Scala issue
+    [#4426](http://lampsvn.epfl.ch/trac/scala/ticket/4426)
+-   Fix issue 156
+
+### 0.7.4 to 0.7.5
+
+-   Joonas's update to work with Jetty 7.1 logging API changes.
+-   Updated to work with Jetty 7.2 WebAppClassLoader binary
+    incompatibility (issue 129).
+-   Provide application and boot classpaths to tests and 'run'ning code
+    according to <https://gist.github.com/404272>
+-   Fix `provided` configuration. It is no longer included on the
+    classpath of dependent projects.
+-   Scala 2.8.1 is the default version used when starting a new project.
+-   Updated to
+    [Ivy 2.2.0](https://ant.apache.org/ivy/history/2.2.0/release-notes.html).
+-   Trond's patches that allow configuring
+    [jetty-env.xml](http://github.com/sbt/sbt/commit/5e41a47f50e6) and
+    [webdefault.xml](http://github.com/sbt/sbt/commit/030e2ee91bac0)
+-   Doug's [patch](http://github.com/sbt/sbt/commit/aa75ecf7055db) to
+    make 'projects' command show an asterisk next to current project
+-   Fixed issue 122
+-   Implemented issue 118
+-   Patch from Viktor and Ross for issue 123
+-   (RC1) Patch from Jorge for issue 100
+-   (RC1) Fix `<packaging>` type
+
+### 0.7.3 to 0.7.4
+
+-   prefix continuous compilation with run number for better feedback
+    when logging level is 'warn'
+-   Added `pomIncludeRepository(repo: MavenRepository): Boolean` that
+    can be overridden to exclude local repositories by default
+-   Added `pomPostProcess(pom: Node): Node` to make advanced
+    manipulation of the default pom easier (pomExtra already covers
+    basic cases)
+-   Added `reset` command to reset JLine terminal. This needs to be run
+    after suspending and then resuming sbt.
+-   Installer plugin is now a proper subproject of sbt.
+-   Plugins can now only be Scala sources. BND should be usable in a
+    plugin now.
+-   More accurate detection of invalid test names. Invalid test names
+    now generate an error and prevent the test action from running
+    instead of just logging a warning.
+-   Fix issue with using 2.8.0.RC1 compiler in tests.
+-   Precompile compiler interface against 2.8.0.RC2
+-   Add `consoleOptions` for specifying options to the console. It
+    defaults to compileOptions.
+-   Properly support sftp/ssh repositories using key-based
+    authentication. See the updated section of the
+    [Resolvers][Resolvers] page.
+-   `def ivyUpdateLogging = UpdateLogging.DownloadOnly | Full | Quiet`.
+    Default is DownloadOnly. Full will log metadata resolution and
+    provide a final summary.
+-   `offline` property for disabling checking for newer dynamic
+    revisions (like -SNAPSHOT). This allows working offline with remote
+    snapshots. Not honored for plugins yet.
+-   History commands: `!!, !?string, !-n, !n, !string, !:n, !:` Run ! to
+    see help.
+-   New section in launcher configuration `[ivy]` with a single label
+    cache-directory. Specify this to change the cache location used by
+    the launcher.
+-   New label `classifiers` under `[app]` to specify classifiers of
+    additional artifacts to retrieve for the application.
+-   Honor `-Xfatal-warnings` option added to compiler in 2.8.0.RC2.
+-   Make `scaladocTask` a `fileTask` so that it runs only when
+    index.html is older than some input source.
+-   Made it easier to create default `test-*` tasks with different
+    options
+-   Sort input source files for consistency, addressing scalac's issues
+    with source file ordering.
+-   Derive Java source file from name of class file when no SourceFile
+    attribute is present in the class file. Improves tracking when
+    -g:none option is used.
+-   Fix `FileUtilities.unzip` to be tail-recursive again.
+
+### 0.7.2 to 0.7.3
+
+-   Fixed issue with scala.library.jar not being on javac's classpath
+-   Fixed buffered logging for parallel execution
+-   Fixed `test-*` tab completion being permanently set on first
+    completion
+-   Works with Scala 2.8 trunk again.
+-   Launcher: Maven local repository excluded when the Scala version is
+    a snapshot. This should fix issues with out of date Scala snapshots.
+-   The compiler interface is precompiled against common Scala versions
+    (for this release, 2.7.7 and 2.8.0.Beta1).
+-   Added `PathFinder.distinct`
+-   Running multiple commands at once at the interactive prompt is now
+    supported. Prefix each command with ';'.
+-   Run and return the output of a process as a String with `!!` or as a
+    (blocking) Stream[String] with lines.
+-   Java tests + Annotation detection
+-   Test frameworks can now specify annotation fingerprints. Specify the
+    names of annotations and sbt discovers classes with the annotations
+    on it or one of its methods. Use version 0.5 of the test-interface.
+-   Detect subclasses and annotations in Java sources (really, their
+    class files)
+-   Discovered is new root of hierarchy representing discovered
+    subclasses + annotations. TestDefinition no longer fulfills this
+    role.
+-   `TestDefinition` is modified to be name+`Fingerprint` and represents
+    a runnable test. It need not be Discovered, but could be file-based
+    in the future, for example.
+-   Replaced testDefinitionClassNames method with `fingerprints` in
+    CompileConfiguration.
+-   Added foundAnnotation to `AnalysisCallback`
+-   Added `Runner2`, `Fingerprint`, `AnnotationFingerprint`, and
+    SubclassFingerprint to the test-interface. Existing test frameworks
+    should still work. Implement Runner2 to use fingerprints other than
+    SubclassFingerprint.
+
+### 0.7.1 to 0.7.2
+
+-   `Process.apply` no longer uses `CommandParser`. This should fix
+    issues with the android-plugin.
+-   Added `sbt.impl.Arguments` for parsing a command like a normal
+    action (for Processors)
+-   Arguments are passed to `javac` using an argument file (`@`)
+-   Added `webappUnmanaged: PathFinder` method to DefaultWebProject.
+    Paths selected by this PathFinder will not be pruned by
+    prepare-webapp and will not be packaged by package. For example, to
+    exclude the GAE datastore directory:
+
+    ```scala
+    override def webappUnmanaged =     (temporaryWarPath / "WEB-INF" / "appengine-generated" ***)
+    ```
+-   Added some String generation methods to `PathFinder`: `toString` for
+    debugging and absString and relativeString for joining the absolute
+    (relative) paths by the platform separator.
+-   Made tab completors lazier to reduce startup time.
+-   Fixed `console-project` for custom subprojects
+-   `Processor` split into `Processor`/`BasicProcessor`. Processor
+    provides high level of integration with command processing.
+    BasicProcessor operates on a Project but does not affect command
+    processing.
+-   Can now use `Launcher` externally, including launching `sbt` outside
+    of the official jar. This means a Project can now be created from
+    tests.
+-   Works with Scala 2.8 trunk
+-   Fixed logging level behavior on subprojects.
+-   All sbt code is now at <https://github.com/harrah/xsbt> in one
+    project.
+
+### 0.7.0 to 0.7.1
+
+-   Fixed Jetty 7 support to work with JRebel
+-   Fixed make-pom to generate valid dependencies section
+
+### 0.5.6 to 0.7.0
+
+-   Unifed batch and interactive commands. All commands that can be
+    executed at interactive prompt can be run from the command line. To
+    run commands and then enter interactive prompt, make the last
+    command 'shell'.
+-   Properly track certain types of synthetic classes, such as for
+    comprehension with >30 clauses, during compilation.
+-   Jetty 7 support
+-   Allow launcher in the project root directory or the `lib` directory.
+    The jar name must have the form 'sbt-launch.jar' in order to be
+    excluded from the classpath.
+-   Stack trace detail can be controlled with `'on'`, `'off'`, 'nosbt',
+    or an integer level. 'nosbt' means to show stack frames up to the
+    first sbt method. An integer level denotes the number of frames to
+    show for each cause. This feature is courtesy of Tony Sloane.
+-   New action 'test-run' method that is analogous to 'run', but for
+    test classes.
+-   New action 'clean-plugins' task that clears built plugins (useful
+    for plugin development).
+-   Can provide commands from a file with new command: `<filename`
+-   Can provide commands over loopback interface with new command: `<port`
+-   Scala version handling has been completely redone.
+-   The version of Scala used to run sbt (currently 2.7.7) is decoupled
+    from the version used to build the project.
+-   Changing between Scala versions on the fly is done with the command:
+    `++<version>`
+-   Cross-building is quicker. The project definition does not need to
+    be recompiled against each version in the cross-build anymore.
+-   Scala versions are specified in a space-delimited list in the
+    build.scala.versions property.
+-   Dependency management:
+-   `make-pom` task now uses custom pom generation code instead of Ivy's
+    pom writer.
+-   Basic support for writing out Maven-style repositories to the pom
+-   Override the 'pomExtra' method to provide XML (`scala.xml.NodeSeq`)
+    to insert directly into the generated pom.
+-   Complete control over repositories is now possible by overriding
+    ivyRepositories.
+-   The interface to Ivy can be used directly.
+-   Test framework support is now done through a uniform test interface.
+    Implications:
+-   New versions of specs, ScalaCheck, and ScalaTest are supported as
+    soon as they are released.
+-   Support is better, since the test framework authors provide the
+    implementation.
+-   Arguments can be passed to the test framework. For example: {{{ >
+    test-only your.test -- -a -b -c }}}
+-   Can provide custom task start and end delimiters by defining the
+    system properties sbt.start.delimiter and sbt.end.delimiter.
+-   Revamped launcher that can launch Scala applications, not just sbt
+-   Provide a configuration file to the launcher and it can download the
+    application and its dependencies from a repository and run it.
+-   sbt's configuration can be customized. For example,
+-   The `sbt` version to use in projects can be fixed, instead of read
+    from project/build.properties.
+-   The default values used to create a new project can be changed.
+-   The repositories used to fetch `sbt` and its dependencies, including
+    Scala, can be configured.
+-   The location `sbt` is retrieved to is configurable. For example,
+    /home/user/.ivy2/sbt/ could be used instead of project/boot/.
+
+### 0.5.5 to 0.5.6
+
+-   Support specs specifications defined as classes
+-   Fix specs support for 1.6
+-   Support ScalaTest 1.0
+-   Support ScalaCheck 1.6
+-   Remove remaining uses of structural types
+
+### 0.5.4 to 0.5.5
+
+-   Fixed problem with classifier support and the corresponding test
+-   No longer need `"->default"` in configurations (automatically
+    mapped).
+-   Can specify a specific nightly of Scala 2.8 to use (for example:
+    `2.8.0-20090910.003346-+`)
+-   Experimental support for searching for project
+    (`-Dsbt.boot.search=none | only | root-first | nearest`)
+-   Fix issue where last path component of local repository was dropped
+    if it did not exist.
+-   Added support for configuring repositories on a per-module basis.
+-   Unified batch-style and interactive-style commands. All commands
+    that were previously interactive-only should be available
+    batch-style. 'reboot' does not pick up changes to 'scala.version'
+    properly, however.
+
+### 0.5.2 to 0.5.4
+
+-   Many logging related changes and fixes. Added `FilterLogger` and
+    cleaned up interaction between Logger, scripted testing, and the
+    builder projects. This included removing the recordingDepth hack
+    from Logger. Logger buffering is now enabled/disabled per thread.
+-   Fix `compileOptions` being fixed after the first compile
+-   Minor fixes to output directory checking
+-   Added `defaultLoggingLevel` method for setting the initial level of
+    a project's Logger
+-   Cleaned up internal approach to adding extra default configurations
+    like plugin
+-   Added `syncPathsTask` for synchronizing paths to a target directory
+-   Allow multiple instances of Jetty (new `jettyRunTasks` can be
+    defined with different ports)
+-   `jettyRunTask` accepts configuration in a single configuration
+    wrapper object instead of many parameters
+-   Fix web application class loading (issue #35) by using
+    jettyClasspath=testClasspath---jettyRunClasspath for loading Jetty.
+    A better way would be to have a jetty configuration and have
+    jettyClasspath=managedClasspath('jetty'), but this maintains
+    compatibility.
+-   Copy resources to `target/resources` and `target/test-resources`
+    using copyResources and copyTestResources tasks. Properly include
+    all resources in web applications and classpaths (issue #36).
+    mainResources and testResources are now the definitive methods for
+    getting resources.
+-   Updated for 2.8 (`sbt` now compiles against September 11, 2009
+    nightly build of Scala)
+-   Fixed issue with position of `^` in compile errors
+-   Changed order of repositories (local, shared, Maven Central, user,
+    Scala Tools)
+-   Added Maven Central to resolvers used to find Scala library/compiler
+    in launcher
+-   Fixed problem that prevented detecting user-specified subclasses
+-   Fixed exit code returned when exception thrown in main thread for
+    TrapExit
+-   Added `javap` task to `DefaultProject`. It has tab completion on
+    compiled project classes and the run classpath is passed to javap so
+    that library classes are available. Examples: :
+
+        > javap your.Clazz
+        > javap -c scala.List
+
+-   Added `exec` task. Mixin `Exec` to project definition to use. This
+    forks the command following exec. Examples: :
+
+        > exec echo Hi
+        > exec find src/main/scala -iname *.scala -exec wc -l {} ;
+
+-   Added `sh` task for users with a unix-style shell available (runs
+    `/bin/sh -c <arguments>`). Mixin Exec to project definition to use.
+    Example: :
+
+    ```
+    > sh find src/main/scala -iname *.scala | xargs cat | wc -l
+    ```
+
+-   Proper dependency graph actions (previously was an unsupported
+    prototype): graph-src and graph-pkg for source dependency graph and
+    quasi-package dependency graph (based on source directories and
+    source dependencies)
+-   Improved Ivy-related code to not load unnecessary default settings
+-   Fixed issue #39 (sources were not relative in src package)
+-   Implemented issue #38 (`InstallProject` with 'install' task)
+-   Vesa's patch for configuring the output of forked Scala/Java and
+    processes
+-   Don't buffer logging of forked `run` by default
+-   Check `Project.terminateWatch` to determine if triggered execution
+    should stop for a given keypress.
+-   Terminate triggered execution only on 'enter' by default
+    (previously, any keypress stopped it)
+-   Fixed issue #41 (parent project should not declare jar artifact)
+-   Fixed issue #42 (search parent directories for `ivysettings.xml`)
+-   Added support for extra attributes with Ivy. Use
+    extra(key -> value) on ModuleIDs and Artifacts. To define for a
+    project's ID: :
+
+    ```scala
+    override def projectID = super.projectID extra(key -> value)
+    ```
+
+    To specify in a dependency: :
+
+    ```scala
+    val dep = normalID extra(key -> value)
+    ```
+
+### 0.5.1 to 0.5.2
+
+-   Fixed problem where dependencies of `sbt` plugins were not on the
+    compile classpath
+-   Added `execTask` that runs an `sbt.ProcessBuilder` when invoked
+-   Added implicit conversion from `scala.xml.Elem` to
+    sbt.ProcessBuilder that takes the element's text content, trims it,
+    and splits it around whitespace to obtain the command.
+-   Processes can now redirect standard input (see run with Boolean
+    argument or `!<` operator on ProcessBuilder), off by default
+-   Made scripted framework a plugin and scripted tests now go in
+    src/sbt-test by default
+-   Can define and use an sbt test framework extension in a project
+-   Fixed `run` action swallowing exceptions
+-   Fixed tab completion for method tasks for multi-project builds
+-   Check that tasks in `compoundTask` do not reference static tasks
+-   Make `toString` of `Path`s in subprojects relative to root project
+    directory
+-   `crossScalaVersions` is now inherited from parent if not specified
+-   Added `scala-library.jar` to the `javac` classpath
+-   Project dependencies are added to published `ivy.xml`
+-   Added dependency tracking for Java sources using classfile parsing
+    (with the usual limitations)
+-   Added `Process.cat` that will send contents of `URL`s and Files to
+    standard output. Alternatively, cat can be used on a single URL or
+    File. Example: :
+
+    ```scala
+    import java.net.URL
+    import java.io.File
+    val spde = new URL("http://technically.us/spde/About")
+    val dispatch = new URL("http://databinder.net/dispatch/About")
+    val build = new File("project/build.properties")
+    cat(spde, dispatch, build) #| "grep -i scala" !
+    ```
+    
+### 0.4.6 to 0.5/0.5.1
+
+-   Fixed `ScalaTest` framework dropping stack traces
+-   Publish only public configurations by default
+-   Loader now adds `.m2/repository` for downloading Scala jars
+-   Can now fork the compiler and runner and the runner can use a
+    different working directory.
+-   Maximum compiler errors shown is now configurable
+-   Fixed rebuilding and republishing released versions of `sbt` against
+    new Scala versions (attempt #2)
+-   Fixed snapshot reversion handling (Ivy needs changing pattern set on
+    cache, apparently)
+-   Fixed handling of default configuration when useMavenConfiguration
+    is true
+-   Cleanup on Environment, Analysis, Conditional, `MapUtilities`, and
+    more...
+-   Tests for Environment, source dependencies, library dependency
+    management, and more...
+-   Dependency management and multiple Scala versions
+-   Experimental plugin for producing project bootstrapper in a
+    self-extracting jar
+-   Added ability to directly specify `URL` to use for dependency with
+    the from(url: URL) method defined on ModuleID
+-   Fixed issue #30
+-   Support cross-building with `+` when running batch actions
+-   Additional flattening for project definitions: sources can go either
+    in project/build/src (recursively) or project/build (flat)
+-   Fixed manual `reboot` not changing the version of Scala when it is
+    manually set
+-   Fixed tab completion for cross-building
+-   Fixed a class loading issue with web applications
+
+### 0.4.5 to 0.4.6
+
+-   Publishing to ssh/sftp/filesystem repository supported
+-   Exception traces are printed by default
+-   Fixed warning message about no `Class-Path` attribute from showing
+    up for run
+-   Fixed `package-project` operation
+-   Fixed `Path.fromFile`
+-   Fixed issue with external process output being lost when sent to a
+    BufferedLogger with parallelExecution enabled.
+-   Preserve history across `clean`
+-   Fixed issue with making relative path in jar with wrong separator
+-   Added cross-build functionality (prefix action with `+`).
+-   Added methods `scalaLibraryJar` and `scalaCompilerJar` to
+    FileUtilities
+-   Include project dependencies for `deliver`/`publish`
+-   Add Scala dependencies for `make-pom`/`deliver`/`publish`, which
+    requires these to depend on package
+-   Properly add compiler jar to run/test classpaths when main sources
+    depend on it
+-   `TestFramework` root `ClassLoader` filters compiler classes used by
+    sbt, which is required for projects using the compiler.
+-   Better access to dependencies:
+-   `mainDependencies` and `testDependencies` provide an analysis of the
+    dependencies of your code as determined during compilation
+-   `scalaJars` is deprecated, use `mainDependencies.scalaJars` instead
+    (provides a PathFinder, which is generally more useful)
+-   Added `jettyPort` method to `DefaultWebProject`.
+-   Fixed `package-project` to exclude `project/boot` and
+    project/build/target
+-   Support specs 1.5.0 for Scala 2.7.4 version.
+-   Parallelization at the subtask level
+-   Parallel test execution at the suite/specification level.
+
+### 0.4.3 to 0.4.5
+
+-   Sorted out repository situation in loader
+-   Added support for `http_proxy` environment variable
+-   Added `download` method from Nathan to `FileUtilities` to retrieve
+    the contents of a URL.
+-   Added special support for compiler plugins, see
+    [compiler plugins support][Compiler-Plugins] page.
+-   `reload` command in scripted tests will now properly handle
+    success/failure
+-   Very basic support for Java sources: Java sources under
+    src/main/java and src/test/java will be compiled.
+-   `parallelExecution` defaults to value in parent project if there is
+    one.
+-   Added 'console-project' that enters the Scala interpreter with the
+    current Project bound to the variable project.
+-   The default Ivy cache manager is now configured with useOrigin=true
+    so that it doesn't cache artifacts from the local filesystem.
+-   For users building from trunk, if a project specifies a version of
+    sbt that ends in -SNAPSHOT, the loader will update sbt every time it
+    starts up. The trunk version of sbt will always end in -SNAPSHOT
+    now.
+-   Added automatic detection of classes with main methods for use when
+    mainClass is not explicitly specified in the project definition. If
+    exactly one main class is detected, it is used for run and package.
+    If multiple main classes are detected, the user is prompted for
+    which one to use for run. For package, no Main-Class attribute is
+    automatically added and a warning is printed.
+-   Updated build to cross-compile against Scala 2.7.4.
+-   Fixed `proguard` task in `sbt`'s project definition
+-   Added `manifestClassPath` method that accepts the value for the
+    Class-Path attribute
+-   Added `PackageOption` called `ManifestAttributes` that accepts
+    (java.util.jar.Attributes.Name, String) or (String, String) pairs
+    and adds them to the main manifest attributes
+-   Fixed some situations where characters would not be echoed at
+    prompts other than main prompt.
+-   Fixed issue #20 (use `http_proxy` environment variable)
+-   Implemented issue #21 (native process wrapper)
+-   Fixed issue #22 (rebuilding and republishing released versions of
+    sbt against new Scala versions, specifically Scala 2.7.4)
+-   Implemented issue #23 (inherit inline repositories declared in
+    parent project)
+
+### 0.4 to 0.4.3
+
+-   Direct dependencies on Scala libraries are checked for version
+    equality with scala.version
+-   Transitive dependencies on `scala-library` and `scala-compiler` are
+    filtered
+-   They are fixed by `scala.version` and provided on the classpath by
+    sbt
+-   To access them, use the `scalaJars` method,
+    classOf[ScalaObject].getProtectionDomain.getCodeSource, or
+    mainCompileConditional.analysis.allExternals
+-   The configurations checked/filtered as described above are
+    configurable. Nonstandard configurations are not checked by default.
+-   Version of `sbt` and Scala printed on startup
+-   Launcher asks if you want to try a different version if `sbt` or
+    Scala could not be retrieved.
+-   After changing `scala.version` or `sbt.version` with `set`, note is
+    printed that reboot is required.
+-   Moved managed dependency actions to `BasicManagedProject` (update is
+    now available on ParentProject)
+-   Cleaned up `sbt`'s build so that you just need to do `update` and
+    full-build to build from source. The trunk version of sbt will be
+    available for use from the loader.
+-   The loader is now a subproject.
+-   For development, you'll still want the usual actions (such as
+    package) for the main builder and proguard to build the loader.
+-   Fixed analysis plugin improperly including traits/abstract classes
+    in subclass search
+-   `ScalaProject`s already had everything required to be parent
+    projects: flipped the switch to enable it
+-   Proper method task support in scripted tests (`package` group tests
+    rightly pass again)
+-   Improved tests in loader that check that all necessary libraries
+    were downloaded properly
+
+### 0.3.7 to 0.4
+
+-   Fixed issue with `build.properties` being unnecessarily updated in
+    sub-projects when loading.
+-   Added method to compute the SHA-1 hash of a `String`
+-   Added pack200 methods
+-   Added initial process interface
+-   Added initial webstart support
+-   Added gzip methods
+-   Added `sleep` and `newer` commands to scripted testing.
+-   Scripted tests now test the version of `sbt` being built instead of
+    the version doing the building.
+-   `testResources` is put on the test classpath instead of
+    testResourcesPath
+-   Added `jetty-restart`, which does `jetty-stop` and then jetty-run
+-   Added automatic reloading of default web application
+-   Changed packaging behaviors (still likely to change)
+-   Inline configurations now allowed (can be used with configurations
+    in inline XML)
+-   Split out some code related to managed dependencies from
+    BasicScalaProject to new class BasicManagedProject
+-   Can specify that maven-like configurations should be automatically
+    declared
+-   Fixed problem with nested modules being detected as tests
+-   `testResources`, `integrationTestResources`, and mainResources
+    should now be added to appropriate classpaths
+-   Added project organization as a property that defaults to inheriting
+    from the parent project.
+-   Project creation now prompts for the organization.
+-   Added method tasks, which are top-level actions with parameters.
+-   Made `help`, `actions`, and `methods` commands available to
+    batch-style invocation.
+-   Applied Mikko's two fixes for webstart and fixed problem with
+    pack200+sign. Also, fixed nonstandard behavior when gzip enabled.
+-   Added `control` method to `Logger` for action lifecycle logging
+-   Made standard logging level convenience methods final
+-   Made `BufferedLogger` have a per-actor buffer instead of a global
+    buffer
+-   Added a `SynchronizedLogger` and a `MultiLogger` (intended to be
+    used with the yet unwritten FileLogger)
+-   Changed method of atomic logging to be a method `logAll` accepting
+    List[LogEvent] instead of doSynchronized
+-   Improved action lifecycle logging
+-   Parallel logging now provides immediate feedback about starting an
+    action
+-   General cleanup, including removing unused classes and methods and
+    reducing dependencies between classes
+-   `run` is now a method task that accepts options to pass to the main
+    method (runOptions has been removed, runTask is no longer
+    interactive, and run no longer starts a console if mainClass is
+    undefined)
+-   Major task execution changes:
+-   Tasks automatically have implicit dependencies on tasks with the
+    same name in dependent projects
+-   Implicit dependencies on interactive tasks are ignored, explicit
+    dependencies produce an error
+-   Interactive tasks must be executed directly on the project on which
+    they are defined
+-   Method tasks accept input arguments (`Array[String]`) and
+    dynamically create the task to run
+-   Tasks can depend on tasks in other projects
+-   Tasks are run in parallel breadth-first style
+-   Added `test-only` method task, which restricts the tests to run to
+    only those passed as arguments.
+-   Added `test-failed` method task, which restricts the tests to run.
+    First, only tests passed as arguments are run. If no tests are
+    passed, no filtering is done. Then, only tests that failed the
+    previous run are run.
+-   Added `test-quick` method task, which restricts the tests to run.
+    First, only tests passed as arguments are run. If no tests are
+    passed, no filtering is done. Then, only tests that failed the
+    previous run or had a dependency change are run.
+-   Added launcher that allows declaring version of sbt/scala to build
+    project with.
+-   Added tab completion with `~`
+-   Added basic tab completion for method tasks, including `test-*`
+-   Changed default pack options to be the default options of
+    Pack200.Packer
+-   Fixed `~` behavior when action doesn't exist
+
+### 0.3.6 to 0.3.7
+
+-   Improved classpath methods
+-   Refactored various features into separate project traits
+-   `ParentProject` can now specify dependencies
+-   Support for `optional` scope
+-   More API documentation
+-   Test resource paths provided on classpath for testing
+-   Added some missing read methods in `FileUtilities`
+-   Added scripted test framework
+-   Change detection using hashes of files
+-   Fixed problem with manifests not being generated (bug #14)
+-   Fixed issue with scala-tools repository not being included by
+    default (again)
+-   Added option to set ivy cache location (mainly for testing)
+-   trace is no longer a logging level but a flag enabling/disabling
+    stack traces
+-   Project.loadProject and related methods now accept a Logger to use
+-   Made hidden files and files that start with `'.'` excluded by
+    default (`'.*'` is required because Subversion seems to not mark `.svn`
+    directories hidden on Windows)
+-   Implemented exit codes
+-   Added continuous compilation command `cc`
+
+### 0.3.5 to 0.3.6
+
+-   Fixed bug #12.
+-   Compiled with 2.7.2.
+
+### 0.3.2 to 0.3.5
+
+-   Fixed bug #11.
+-   Fixed problem with dependencies where source jars would be used
+    instead of binary jars.
+-   Fixed scala-tools not being used by default for inline
+    configurations.
+-   Small dependency management error message correction
+-   Slight refactoring for specifying whether scala-tools releases gets
+    added to configured resolvers
+-   Separated repository/dependency overriding so that repositories can
+    be specified inline for use with ivy.xml or pom.xml files
+-   Added ability to specify Ivy XML configuration in Scala.
+-   Added `clean-cache` action for deleting Ivy's cache
+-   Some initial work towards accessing a resource directory from tests
+-   Initial tests for `Path`
+-   Some additional `FileUtilities` methods, some `FileUtilities` method
+    adjustments and some initial tests for FileUtilities
+-   A basic framework for testing `ReflectUtilities`, not run by default
+    because of run time
+-   Minor cleanup to `Path` and added non-empty check to path components
+-   Catch additional exceptions in `TestFramework`
+-   Added `copyTask` task creation method.
+-   Added `jetty-run` action and added ability to package war files.
+-   Added `jetty-stop` action.
+-   Added `console-quick` action that is the same as `console` but
+    doesn't compile sources first.
+-   Moved some custom `ClassLoader`s to `ClasspathUtilities` and
+    improved a check.
+-   Added ability to specify hooks to call before `sbt` shuts down.
+-   Added `zip`, `unzip` methods to `FileUtilities`
+-   Added `append` equivalents to `write*` methods in FileUtilites
+-   Added first draft of integration testing
+-   Added batch command `compile-stats`
+-   Added methods to create tasks that have basic conditional execution
+    based on declared sources/products of the task
+-   Added `newerThan` and `olderThan` methods to `Path`
+-   Added `reload` action to reread the project definition without
+    losing the performance benefits of an already running jvm
+-   Added `help` action to tab completion
+-   Added handling of (effectively empty) scala source files that create
+    no class files: they are always interpreted as modified.
+-   Added prompt to retry project loading if compilation fails
+-   `package` action now uses `fileTask` so that it only executes if
+    files are out of date
+-   fixed `ScalaTest` framework wrapper so that it fails the `test`
+    action if tests fail
+-   Inline dependencies can now specify configurations
+
+### 0.3.1 to 0.3.2
+
+-   Compiled jar with Java 1.5.
+
+### 0.3 to 0.3.1
+
+-   Fixed bugs #8, #9, and #10.
+
+### 0.2.3 to 0.3
+
+-   Version change only for first release.
+
+### 0.2.2 to 0.2.3
+
+-   Added tests for `Dag`, `NameFilter`, `Version`
+-   Fixed handling of trailing `*`s in `GlobFilter` and added some
+    error-checking for control characters, which Pattern doesn't seem to
+    like
+-   Fixed `Analysis.allProducts` implementation
+-   It previously returned the sources instead of the generated classes
+-   Will only affect the count of classes (it should be correct now) and
+    the debugging of missed classes (erroneously listed classes as
+    missed)
+-   Made some implied preconditions on `BasicVersion` and OpaqueVersion
+    explicit
+-   Made increment version behavior in `ScalaProject` easier to overload
+-   Added `Seq[..Option]` alternative to `...Option*` for tasks
+-   Documentation generation fixed to use latest value of version
+-   Fixed `BasicVersion.incrementMicro`
+-   Fixed test class loading so that `sbt` can test the version of sbt
+    being developed (previously, the classes from the executing version
+    of sbt were tested)
+
+### 0.2.1 to 0.2.2
+
+-   Package name is now a call-by-name parameter for the package action
+-   Fixed release action calling compile multiple times
+
+###  0.2.0 to 0.2.1
+
+-   Added some action descriptions
+-   jar name now comes from normalized name (lowercased and spaces to
+    dashes)
+-   Some cleanups related to creating filters
+-   Path should only 'get' itself if the underlying file exists to be
+    consistent with other PathFinders
+-   Added `---` operator for `PathFinder` that excludes paths from the
+    PathFinder argument
+-   Removed `***` operator on `PathFinder`
+-   `**` operator on `PathFinder` matches all descendents or self that
+    match the NameFilter argument
+-   The above should fix bug `#6`
+-   Added version increment and release actions.
+-   Can now build sbt with sbt. Build scripts `build` and `clean` will
+    still exist.
+
+### 0.1.9 to 0.2.0
+
+-   Implemented typed properties and access to system properties
+-   Renamed `metadata` directory to `project`
+-   Information previously in `info` file now obtained by properties:
+-   `info.name --> name`
+-   `info.currentVersion --> version`
+-   Concrete `Project` subclasses should have a constructor that accepts
+    a single argument of type ProjectInfo (argument
+    dependencies: Iterable[Project] has been merged into ProjectInfo)
+
+### 0.1.8 to 0.1.9
+
+-   Better default implementation of `allSources`.
+-   Generate warning if two jars on classpath have the same name.
+-   Upgraded to specs 1.4.0
+-   Upgraded to `ScalaCheck` 1.5
+-   Changed some update options to be final vals instead of objects.
+-   Added some more API documentation.
+-   Removed release action.
+-   Split compilation into separate main and test compilations.
+-   A failure in a `ScalaTest` run now fails the test action.
+-   Implemented reporters for `compile/scaladoc`, `ScalaTest`,
+    ScalaCheck, and specs that delegate to the appropriate sbt.Logger.
+
+### 0.1.7 to 0.1.8
+
+-   Improved configuring of tests to exclude.
+-   Simplified version handling.
+-   Task `&&` operator properly handles dependencies of tasks it
+    combines.
+-   Changed method of inline library dependency declarations to be
+    simpler.
+-   Better handling of errors in parallel execution.
+
+### 0.1.6 to 0.1.7
+
+-   Added graph action to generate dot files (for graphiz) from
+    dependency information (work in progress).
+-   Options are now passed to tasks as varargs.
+-   Redesigned `Path` properly, including `PathFinder` returning a
+    Set[Path] now instead of Iterable[Path].
+-   Moved paths out of `ScalaProject` and into `BasicProjectPaths` to
+    keep path definitions separate from task definitions.
+-   Added initial support for managing third-party libraries through the
+    update task, which must be explicitly called (it is not a dependency
+    of compile or any other task). This is experimental, undocumented,
+    and known to be incomplete.
+-   Parallel execution implementation at the project level, disabled by
+    default. To enable, add:
+    scala  override def parallelExecution = true to your project
+    definition. In order for logging to make sense, all project logging
+    is buffered until the project is finished executing. Still to be
+    done is some sort of notification of project execution (which ones
+    are currently executing, how many remain)
+-   `run` and `console` are now specified as "interactive" actions,
+    which means they are only executed on the project in which they are
+    defined when called directly, and not on all dependencies. Their
+    dependencies are still run on dependent projects.
+-   Generalized conditional tasks a bit. Of note is that analysis is no
+    longer required to be in metadata/analysis, but is now in
+    target/analysis by default.
+-   Message now displayed when project definition is recompiled on
+    startup
+-   Project no longer inherits from Logger, but now has a log member.
+-   Dependencies passed to `project` are checked for null (may help with
+    errors related to initialization/circular dependencies)
+-   Task dependencies are checked for null
+-   Projects in a multi-project configuration are checked to ensure that
+    output paths are different (check can be disabled)
+-   Made `update` task globally synchronized because Ivy is not
+    thread-safe.
+-   Generalized test framework, directly invoking frameworks now (used
+    reflection before).
+-   Moved license files to licenses/
+-   Added support for `specs` and some support for `ScalaTest` (the test
+    action doesn't fail if ScalaTest tests fail).
+-   Added `specs`, `ScalaCheck`, `ScalaTest` jars to lib/
+-   These are now required for compilation, but are optional at runtime.
+-   Added the appropriate licenses and notices.
+-   Options for `update` action are now taken from updateOptions member.
+-   Fixed `SbtManager` inline dependency manager to work properly.
+-   Improved Ivy configuration handling (not compiled with test
+    dependencies yet though).
+-   Added case class implementation of `SbtManager` called
+    SimpleManager.
+-   Project definitions not specifying dependencies can now use just a
+    single argument constructor.
+
+### 0.1.5 to 0.1.6
+
+-   `run` and `console` handle `System.exit` and multiple threads in
+    user code under certain circumstances (see
+    [running project code][Running-Project-Code]).
+
+### 0.1.4 to 0.1.5
+
+-   Generalized interface with plugin (see Analysis Callback)
+-   Split out task implementations and paths from `Project` to
+    ScalaProject
+-   Subproject support (changed required project constructor signature:
+    see sbt/DefaultProject.scala)
+-   Can specify dependencies between projects
+-   Execute tasks across multiple projects
+-   Classpath of all dependencies included when compiling
+-   Proper inter-project source dependency handling
+-   Can change to a project in an interactive session to work only on
+    that project (and its dependencies)
+-   External dependency handling
+-   Tracks non-source dependencies (compiled classes and jars)
+-   Requires each class to be provided by exactly one classpath element
+    (This means you cannot have two versions of the same class on the
+    classpath, e.g. from two versions of a library)
+-   Changes in a project propagate the right source recompilations in
+    dependent projects
+-   Consequences:
+-   Recompilation when changing java/scala version
+-   Recompilation when upgrading libraries (again, as indicated in the
+    second point, situations where you have library-1.0.jar and
+    library-2.0.jar on the classpath at the same time are not handled
+    predictably. Replacing library-1.0.jar with library-2.0.jar should
+    work as expected.)
+-   Changing sbt version will recompile project definitions
+
+### 0.1.3 to 0.1.4
+
+-   Autodetection of Project definitions.
+-   Simple tab completion/history in an interactive session with JLine
+-   Added descriptions for most actions
+
+### 0.1.2 to 0.1.3
+
+-   Dependency management between tasks and auto-discovery tasks.
+-   Should work on Windows.
+
+### 0.1.1 to 0.1.2
+
+-   Should compile/build on Java 1.5
+-   Fixed run action implementation to include scala library on
+    classpath
+-   Made project configuration easier
+
+### 0.1 to 0.1.1
+
+-   Fixed handling of source files without a package
+-   Added easy project setup
+
+
+
+  [Getting-Started]: Getting-Started.html
+  [Setup]: ../tutorial/Setup.html
+  [Basic-Def]: ../tutorial/Basic-Def.html
+  [Basic-Def-Examples]: Basic-Def-Examples.html
+  [Faq]: Faq.html
+
+Migrating from 0.7 to 0.10+
+---------------------------
+
+The assumption here is that you are familiar with sbt 0.7 but new to sbt
+1.2.4.
+
+sbt 1.2.4's many new capabilities can be a bit overwhelming, but
+this page should help you migrate to 1.2.4 with a minimum of fuss.
+
+### Why move to 1.2.4?
+
+1.  Faster builds (because it is smarter at re-compiling only what it
+    must)
+2.  Easier configuration. For simple projects a single `build.sbt` file
+    in your root directory is easier to create than
+    project/build/MyProject.scala was.
+3.  No more `lib_managed` directory, reducing disk usage and avoiding
+    backup and version control hassles.
+4.  `update` is now much faster and it's invoked automatically by sbt.
+5.  Terser output. (Yet you can ask for more details if something goes
+    wrong.)
+
+#### Step 1: Read the Getting Started Guide for sbt 1.2.4
+
+Reading the [Getting Started Guide][Getting-Started] will
+probably save you a lot of confusion.
+
+#### Step 2: Install sbt 1.2.4
+
+Download sbt 1.2.4 as described on
+[the setup page][Setup].
+
+You can run 1.2.4 the same way that you run 0.7.x, either simply:
+
+```
+$ java -jar sbt-launch.jar
+```
+
+Or (as most users do) with a shell script, as described on
+[the setup page][Setup].
+
+For more details see
+[the setup page][Setup].
+
+#### Step 3: A technique for switching an existing project
+
+Here is a technique for switching an existing project to 1.2.4 while
+retaining the ability to switch back again at will. Some builds, such as
+those with subprojects, are not suited for this technique, but if you
+learn how to transition a simple project it will help you do a more
+complex one next.
+
+### Preserve `project/` for 0.7.x project
+
+Rename your `project/` directory to something like `project-old`. This
+will hide it from sbt 1.2.4 but keep it in case you want to switch
+back to 0.7.x.
+
+### Create `build.sbt` for 1.2.4
+
+Create a `build.sbt` file in the root directory of your project. See
+[.sbt build definition][Basic-Def] in the Getting
+Started Guide, and for [simple examples][Basic-Def-Examples].
+If you have a simple project
+then converting your existing project file to this format is largely a
+matter of re-writing your dependencies and maven archive declarations in
+a modified yet familiar syntax.
+
+This `build.sbt` file combines aspects of the old
+`project/build/ProjectName.scala` and `build.properties` files. It looks
+like a property file, yet contains Scala code in a special format.
+
+A `build.properties` file like:
+
+```
+#Project properties
+#Fri Jan 07 15:34:00 GMT 2011
+project.organization=org.myproject
+project.name=My Project
+sbt.version=0.7.7
+project.version=1.0
+def.scala.version=2.7.7
+build.scala.versions=2.8.1
+project.initialize=false
+```
+
+Now becomes part of your `build.sbt` file with lines like:
+
+```scala
+name := "My Project"
+
+version := "1.0"
+
+organization := "org.myproject"
+
+scalaVersion := "2.9.2"
+```
+
+Currently, a `project/build.properties` is still needed to explicitly
+select the sbt version. For example:
+
+### Run sbt 1.2.4
+
+Now launch sbt. If you're lucky it works and you're done. For help
+debugging, see below.
+
+### Switching back to sbt 0.7.x
+
+If you get stuck and want to switch back, you can leave your `build.sbt`
+file alone. sbt 0.7.x will not understand or notice it. Just rename your
+1.2.4 `project` directory to something like `project10` and rename
+the backup of your old project from `project-old` to `project` again.
+
+#### FAQs
+
+There's a section in the [FAQ][Faq] about migration from 0.7 that
+covers several other important points.
+
+
   [Getting-Started]: Getting-Started.html
   [Howto]: Howto.html
   [Developers-Guide]: Developers-Guide.html
@@ -7667,7 +12554,7 @@ influence SBT execution. Also see [sbt launcher][Sbt-Launcher].
   <tr>
     <td><tt>sbt.version</tt></td>
     <td>Version</td>
-    <td><tt>1.2.3</tt></td>
+    <td><tt>1.2.4</tt></td>
     <td>sbt version to use, usually taken from <tt>project/build.properties</tt>.</td>
   </tr>
 
@@ -7905,7 +12792,7 @@ Scala. See [Publishing][Publishing] for more details on publishing your project.
 
 In order to make this process as quick as possible, different output and
 managed dependency directories are used for different versions of Scala.
-For example, when building against Scala 2.12.6,
+For example, when building against Scala 2.12.7,
 
 -   `./target/` becomes `./target/scala_2.12/`
 -   `./lib_managed/` becomes `./lib_managed/scala_2.12/`
@@ -8370,7 +13257,7 @@ mode that only requires a JRE installed.
 Install [conscript](https://github.com/foundweekends/conscript).
 
 ```
-$ cs sbt/sbt --branch 1.2.3
+$ cs sbt/sbt --branch 1.2.4
 ```
 
 This will create two scripts: `screpl` and `scalas`.
@@ -8427,9 +13314,9 @@ chmod u+x shout.scala
 #!/usr/bin/env scalas
  
 /***         
-scalaVersion := "2.12.6"
+scalaVersion := "2.12.7"
  
-libraryDependencies += "org.scala-sbt" %% "io" % "1.2.3"
+libraryDependencies += "org.scala-sbt" %% "io" % "1.2.4"
 */         
  
 import sbt.io.IO
@@ -10020,7 +14907,7 @@ sbt needs Scala jars to run itself since it is written in Scala. sbt
 uses that same version of Scala to compile the build definitions that
 you write for your project because they use sbt APIs. This version of
 Scala is fixed for a specific sbt release and cannot be changed. For sbt
-1.2.3, this version is Scala 2.12.6. Because this Scala
+1.2.4, this version is Scala 2.12.7. Because this Scala
 version is needed before sbt runs, the repositories used to retrieve
 this version are configured in the sbt
 [launcher][Sbt-Launcher].
@@ -10541,7 +15428,7 @@ following build definition. `build.sbt`:
 
 ```scala
 lazy val commonSettings = Seq(
-  scalaVersion := "2.12.6",
+  scalaVersion := "2.12.7",
   organization := "com.example"
 )
 lazy val scalaReflect = Def.setting { "org.scala-lang" % "scala-reflect" % scalaVersion.value }
@@ -10645,7 +15532,7 @@ would look like:
 
 ```scala
 lazy val commonSettings = Seq(
-  scalaVersion := "2.12.6",
+  scalaVersion := "2.12.7",
   organization := "com.example"
 )
 lazy val scalaReflect = Def.setting { "org.scala-lang" % "scala-reflect" % scalaVersion.value }
@@ -11765,7 +16652,7 @@ The following full build configuration demonstrates integration tests.
 lazy val scalatest = "org.scalatest" %% "scalatest" % "3.0.5"
 
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / scalaVersion := "2.12.7"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -11835,7 +16722,7 @@ lazy val scalatest = "org.scalatest" %% "scalatest" % "3.0.5"
 lazy val FunTest = config("fun") extend(Test)
 
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / scalaVersion := "2.12.7"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -11893,7 +16780,7 @@ lazy val scalatest = "org.scalatest" %% "scalatest" % "3.0.5"
 lazy val FunTest = config("fun") extend(Test)
 
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / scalaVersion := "2.12.7"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 def itFilter(name: String): Boolean = name endsWith "ITest"
@@ -14778,8 +19665,8 @@ Def.setting {
 This Parser definition will produce a value of type `(String,String)`.
 The input syntax defined isn't very flexible; it is just a
 demonstration. It will produce one of the following values for a
-successful parse (assuming the current Scala version is 2.12.6,
-the current sbt version is 1.2.3, and there are 3 commands left to
+successful parse (assuming the current Scala version is 2.12.7,
+the current sbt version is 1.2.4, and there are 3 commands left to
 run):
 
 Again, we were able to access the current Scala and sbt version for the
@@ -15122,7 +20009,7 @@ Here's `build.sbt`:
 import CommandExample._
 
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / scalaVersion := "2.12.7"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -16081,7 +20968,7 @@ above for per-project plugins.
 ### Creating an auto plugin
 
 A minimal sbt plugin is a Scala library that is built against the version of
-Scala that sbt runs (currently, 2.12.6) or a Java library.
+Scala that sbt runs (currently, 2.12.7) or a Java library.
 Nothing special needs to be done for this type of library.
 A more typical plugin will provide sbt tasks, commands, or settings.
 This kind of plugin may provide these settings
@@ -16906,10 +21793,10 @@ If you haven't created one already, make sure to create `project/build.propertie
 `sbt.version` number:
 
 ```yml
-sbt.version=1.2.3
+sbt.version=1.2.4
 ```
 
-Your build will now use 1.2.3.
+Your build will now use 1.2.4.
 
 ### Read the Travis manual
 
@@ -16928,7 +21815,7 @@ jdk: oraclejdk8
 
 scala:
    - 2.10.4
-   - 2.12.6
+   - 2.12.7
 ```
 
 By default Travis CI executes `sbt ++$TRAVIS_SCALA_VERSION test`.
@@ -16941,7 +21828,7 @@ jdk: oraclejdk8
 
 scala:
    - 2.10.4
-   - 2.12.6
+   - 2.12.7
 
 script:
    - sbt ++$TRAVIS_SCALA_VERSION test
@@ -17006,7 +21893,7 @@ java
 -Xss6M
 -XX:ReservedCodeCacheSize=256M
 -jar
-/home/travis/.sbt/launchers/1.2.3/sbt-launch.jar
+/home/travis/.sbt/launchers/1.2.4/sbt-launch.jar
 ```
 
 It seems to be working. One downside of setting all of the parameters is that we might be left behind when the environment updates and the default values gives us more memory in the future.
@@ -17032,7 +21919,7 @@ java
 -XX:ReservedCodeCacheSize=256M
 -Xms1024M
 -jar
-/home/travis/.sbt/launchers/1.2.3/sbt-launch.jar
+/home/travis/.sbt/launchers/1.2.4/sbt-launch.jar
 ```
 
 **Note**: This duplicates the `-Xms` flag as intended, which might not the best thing to do.
@@ -17090,7 +21977,7 @@ jdk: oraclejdk8
 
 scala:
    - 2.10.4
-   - 2.12.6
+   - 2.12.7
 
 script:
    - sbt ++$TRAVIS_SCALA_VERSION test
@@ -17623,8 +22510,8 @@ Like we are able to cross build against multiple Scala versions, we can cross bu
 
 ```scala
   .settings(
-    scalaVersion := "2.12.6",
-    sbtVersion in Global := "1.2.3",
+    scalaVersion := "2.12.7",
+    sbtVersion in Global := "1.2.4",
     scalaCompilerBridgeSource := {
       val sv = appConfiguration.value.provider.id.version
       ("org.scala-sbt" % "compiler-interface" % sv % "component").sources
@@ -19629,7 +24516,7 @@ Here's how to set it up
 #### project/build.properties
 
 ```
-sbt.version=1.2.3
+sbt.version=1.2.4
 ```
 
 #### project/style.sbt
@@ -19680,7 +24567,7 @@ Let's try implementing a custom task called `compilecheck` that runs `compile in
 #### project/build.properties
 
 ```
-sbt.version=1.2.3
+sbt.version=1.2.4
 ```
 
 #### project/style.sbt
@@ -19893,7 +24780,7 @@ import scala.concurrent.duration._
 
 // factor out common settings
 ThisBuild / organization := "org.myproject"
-ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / scalaVersion := "2.12.7"
 // set the Scala version used for the project
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
@@ -20175,7 +25062,7 @@ import Dependencies._
 lazy val buildSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.12.6"
+  scalaVersion := "2.12.7"
 )
 
 // Sub-project specific dependencies
@@ -20274,7 +25161,7 @@ lazy val CustomCompile = config("compile") extend(Saxon, Common, Scalate)
 
 // factor out common settings
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.6"
+ThisBuild / scalaVersion := "2.12.7"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 // An example project that only uses the Scalate utilities.
@@ -20440,7 +25327,7 @@ always write it in all lowercase letters. However, we are cool with [酢豚][sub
 
 #### My last command didn't work but I can't see an explanation. Why?
 
-sbt 1.2.3 by default suppresses most stack traces and debugging
+sbt 1.2.4 by default suppresses most stack traces and debugging
 information. It has the nice side effect of giving you less noise on
 screen, but as a newcomer it can leave you lost for explanation. To see
 the previous output of a command at a higher verbosity, type
@@ -20874,7 +25761,7 @@ Any file name ending in `.sbt` will do, but most people use
 
 ### Miscellaneous
 
-#### Where can I find plugins for 1.2.3?
+#### Where can I find plugins for 1.2.4?
 
 See [Community Plugins][Community-Plugins] for a list of currently available
 plugins.
@@ -23616,7 +28503,7 @@ application. `hello.build.properties`:
 Nightly Builds
 --------------
 
-The latest development versions of 1.2.3 are available as nightly
+The latest development versions of 1.2.4 are available as nightly
 builds on [Typesafe Snapshots](https://repo.typesafe.com/typesafe/ivy-snapshots/).
 
 To use a nightly build, the instructions are the same for
@@ -23626,7 +28513,7 @@ To use a nightly build, the instructions are the same for
     |nightly-launcher|. They should be listed in chronological order, so
     the most recent one will be last.
 2.  The version number is the name of the subdirectory and is of the
-    form `1.2.3.x-yyyyMMdd-HHmmss`. Use this in a build.properties
+    form `1.2.4.x-yyyyMMdd-HHmmss`. Use this in a build.properties
     file.
 3.  Call your script something like `sbt-nightly` to retain access to a
     stable sbt launcher. The documentation will refer to the script as
