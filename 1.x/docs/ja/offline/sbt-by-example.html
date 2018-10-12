@@ -34,7 +34,7 @@
             </script>
       </head>
       <body class="color_scheme-github">
-        <a class="page prev nav" href="sbt-by-example.html">
+        <a class="page prev nav" href="Installing-sbt-on-Linux.html">
             <span class="space">&nbsp;</span>
             <span class="flip arrow">&gt;</span>
           </a><a class="page next nav" href="Directories.html">
@@ -65,7 +65,7 @@ sbt:foo-build&gt; compile
 </p><pre><code class="">sbt:foo-build&gt; ~compile
 [success] Total time: 0 s, completed May 6, 2018 3:52:08 PM
 1. Waiting for source changes... (press enter to interrupt)
-</code></pre><h3 id="%E3%82%BD%E3%83%BC%E3%82%B9%E3%83%BB%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E6%9B%B8%E3%81%8F">ソース・ファイルを書く<a href="#%E3%82%BD%E3%83%BC%E3%82%B9%E3%83%BB%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E6%9B%B8%E3%81%8F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>上記のコマンドは走らせたままにする。別のシェルかファイルマネージャーからプロジェクトのディレクトリへ行って、<code>src/main/scala/example</code> というディレクトリを作る。次に好きなエディタを使って <code>example</code> ディレクトリ内に以下をファイルを作成する:
+</code></pre><h3 id="%E3%82%BD%E3%83%BC%E3%82%B9%E3%83%BB%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E6%9B%B8%E3%81%8F">ソース・ファイルを書く<a href="#%E3%82%BD%E3%83%BC%E3%82%B9%E3%83%BB%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E6%9B%B8%E3%81%8F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>上記のコマンドは走らせたままにする。別のシェルかファイルマネージャーからプロジェクトのディレクトリへ行って、<code>src/main/scala/example</code> というディレクトリを作る。次に好きなエディタを使って <code>example</code> ディレクトリ内に以下のファイルを作成する:
 </p><pre><code class="prettyprint lang-scala">package example
 
 object Hello extends App {
@@ -100,18 +100,18 @@ Runs a main class, passing along arguments provided on the command line.
 [info] Running example.Hello
 Hello
 [success] Total time: 1 s, completed May 6, 2018 4:10:44 PM
-</code></pre><h3 id="sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%8B%E3%82%89+ThisBuild+%2F+scalaVersion+%E3%82%92%E3%82%BB%E3%83%83%E3%83%88%E3%81%99%E3%82%8B">sbt シェルから ThisBuild / scalaVersion をセットする<a href="#sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%8B%E3%82%89+ThisBuild+%2F+scalaVersion+%E3%82%92%E3%82%BB%E3%83%83%E3%83%88%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:foo-build&gt; set ThisBuild / scalaVersion := &quot;2.12.6&quot;
+</code></pre><h3 id="sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%8B%E3%82%89+ThisBuild+%2F+scalaVersion+%E3%82%92%E3%82%BB%E3%83%83%E3%83%88%E3%81%99%E3%82%8B">sbt シェルから ThisBuild / scalaVersion をセットする<a href="#sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%8B%E3%82%89+ThisBuild+%2F+scalaVersion+%E3%82%92%E3%82%BB%E3%83%83%E3%83%88%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:foo-build&gt; set ThisBuild / scalaVersion := &quot;2.12.7&quot;
 [info] Defining ThisBuild / scalaVersion
 </code></pre><p><code>scalaVersion</code> セッティングを確認する:
 </p><pre><code class="">sbt:foo-build&gt; scalaVersion
-[info] 2.12.6
+[info] 2.12.7
 </code></pre><h3 id="%E3%82%BB%E3%83%83%E3%82%B7%E3%83%A7%E3%83%B3%E3%82%92+build.sbt+%E3%81%B8%E3%81%A8%E4%BF%9D%E5%AD%98%E3%81%99%E3%82%8B">セッションを build.sbt へと保存する<a href="#%E3%82%BB%E3%83%83%E3%82%B7%E3%83%A7%E3%83%B3%E3%82%92+build.sbt+%E3%81%B8%E3%81%A8%E4%BF%9D%E5%AD%98%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>アドホックに設定したセッティングは <code>session save</code> で保存できる。
 </p><pre><code class="">sbt:foo-build&gt; session save
 [info] Reapplying settings...
 </code></pre><p><code>build.sbt</code> ファイルは以下のようになったはずだ:
-</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.6&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.7&quot;
 </code></pre><h3 id="%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%AB%E5%90%8D%E5%89%8D%E3%82%92%E4%BB%98%E3%81%91%E3%82%8B">プロジェクトに名前を付ける<a href="#%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%AB%E5%90%8D%E5%89%8D%E3%82%92%E4%BB%98%E3%81%91%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>エディタを使って、<code>build.sbt</code> を以下のように変更する:
-</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.6&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.7&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
 lazy val hello = (project in file(&quot;.&quot;))
@@ -126,7 +126,7 @@ lazy val hello = (project in file(&quot;.&quot;))
 sbt:Hello&gt;
 </code></pre><p>プロンプトが <code>sbt:Hello&gt;</code> に変わったことに注目してほしい。
 </p><h3 id="libraryDependencies+%E3%81%AB+ScalaTest+%E3%82%92%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B">libraryDependencies に ScalaTest を追加する<a href="#libraryDependencies+%E3%81%AB+ScalaTest+%E3%82%92%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>エディタを使って、<code>build.sbt</code> を以下のように変更する:
-</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.6&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.7&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
 lazy val hello = (project in file(&quot;.&quot;))
@@ -174,7 +174,7 @@ class HelloSpec extends FunSuite with DiagrammedAssertions {
 }
 </code></pre><p>テストが通過したことを確認して、<code>Enter</code> を押して継続的テストを抜ける。
 </p><h3 id="%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%92%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B">ライブラリ依存性を追加する<a href="#%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%92%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>エディタを使って <code>build.sbt</code> を以下のように変更する:
-</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.6&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.7&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
 lazy val hello = (project in file(&quot;.&quot;))
@@ -186,7 +186,7 @@ lazy val hello = (project in file(&quot;.&quot;))
 </code></pre><h3 id="Scala+REPL+%E3%82%92%E4%BD%BF%E3%81%86">Scala REPL を使う<a href="#Scala+REPL+%E3%82%92%E4%BD%BF%E3%81%86" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>New York の現在の天気を調べてみる:
 </p><pre><code class="prettyprint lang-scala">sbt:Hello&gt; console
 [info] Starting scala interpreter...
-Welcome to Scala 2.12.6 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0_171).
+Welcome to Scala 2.12.7 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0_171).
 Type in expressions for evaluation. Or try :help.
 
 scala&gt; :paste
@@ -220,7 +220,7 @@ res0: String = {&quot;query&quot;:{&quot;count&quot;:1,&quot;created&quot;:&quot
 
 scala&gt; :q // これで REPL を抜ける
 </code></pre><h3 id="%E3%82%B5%E3%83%97%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B">サププロジェクトを作成する<a href="#%E3%82%B5%E3%83%97%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> を以下のように変更する:
-</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.6&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.7&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
 lazy val hello = (project in file(&quot;.&quot;))
@@ -241,7 +241,7 @@ lazy val helloCore = (project in file(&quot;core&quot;))
 [info]     helloCore
 </code></pre><h3 id="%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E3%82%B3%E3%83%B3%E3%83%91%E3%82%A4%E3%83%AB%E3%81%99%E3%82%8B">サブプロジェクトをコンパイルする<a href="#%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E3%82%B3%E3%83%B3%E3%83%91%E3%82%A4%E3%83%AB%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:Hello&gt; helloCore/compile
 </code></pre><h3 id="%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%AB+ScalaTest+%E3%82%92%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B">サブプロジェクトに ScalaTest を追加する<a href="#%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%AB+ScalaTest+%E3%82%92%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> を以下のように変更する:
-</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.6&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.7&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
 val scalaTest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.0.5&quot;
@@ -259,7 +259,7 @@ lazy val helloCore = (project in file(&quot;core&quot;))
     libraryDependencies += scalaTest % Test,
   )
 </code></pre><h3 id="%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%82%92%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%82%AD%E3%83%A3%E3%82%B9%E3%83%88%E3%81%99%E3%82%8B">コマンドをブロードキャストする<a href="#%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%82%92%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%82%AD%E3%83%A3%E3%82%B9%E3%83%88%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>hello</code> に送ったコマンドを <code>helloCore</code> にもブロードキャストするために集約を設定する:
-</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.6&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.7&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
 val scalaTest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.0.5&quot;
@@ -281,7 +281,7 @@ lazy val helloCore = (project in file(&quot;core&quot;))
 </p><pre><code class="prettyprint lang-scala">sbt:Hello&gt; ~testQuick
 </code></pre><p><code>Enter</code> を押して継続的テストを抜ける。
 </p><h3 id="hello+%E3%81%8C+helloCore+%E3%81%AB%E4%BE%9D%E5%AD%98%E3%81%99%E3%82%8B%E3%82%88%E3%81%86%E3%81%AB%E3%81%99%E3%82%8B">hello が helloCore に依存するようにする<a href="#hello+%E3%81%8C+helloCore+%E3%81%AB%E4%BE%9D%E5%AD%98%E3%81%99%E3%82%8B%E3%82%88%E3%81%86%E3%81%AB%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>サブプロジェクト間の依存関係を定義するには <code>.dependsOn(...)</code> を使う。ついでに、Gigahorse への依存性も <code>helloCore</code> に移そう。
-</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.6&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.7&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
 val scalaTest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.0.5&quot;
@@ -301,7 +301,7 @@ lazy val helloCore = (project in file(&quot;core&quot;))
     libraryDependencies += scalaTest % Test,
   )
 </code></pre><h3 id="Play+JSON+%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6+JSON+%E3%82%92%E3%83%91%E3%83%BC%E3%82%B9%E3%81%99%E3%82%8B">Play JSON を使って JSON をパースする<a href="#Play+JSON+%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6+JSON+%E3%82%92%E3%83%91%E3%83%BC%E3%82%B9%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>helloCore</code> に Play JSON を追加しよう。
-</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.6&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.7&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
 val scalaTest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.0.5&quot;
@@ -382,7 +382,7 @@ Hello! The weather in New York is mostly cloudy.
 </code></pre><h3 id="sbt-native-packger+%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%82%92%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B">sbt-native-packger プラグインを追加する<a href="#sbt-native-packger+%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%82%92%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>エディタを使って <code>project/plugins.sbt</code> を追加する:
 </p><pre><code class="prettyprint lang-scala">addSbtPlugin(&quot;com.typesafe.sbt&quot; % &quot;sbt-native-packager&quot; % &quot;1.3.4&quot;)
 </code></pre><p>次に <code>build.sbt</code> を以下のように変更して <code>JavaAppPackaging</code> を追加する:
-</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.6&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.7&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
 val scalaTest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.0.5&quot;
@@ -424,7 +424,7 @@ Hello! The weather in New York is mostly cloudy.
 Hello! The weather in New York is mostly cloudy
 </code></pre><h3 id="version+%E3%82%92%E8%A8%AD%E5%AE%9A%E3%81%99%E3%82%8B">version を設定する<a href="#version+%E3%82%92%E8%A8%AD%E5%AE%9A%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> を以下のように変更する:
 </p><pre><code class="prettyprint lang-scala">ThisBuild / version      := &quot;0.1.0&quot;
-ThisBuild / scalaVersion := &quot;2.12.6&quot;
+ThisBuild / scalaVersion := &quot;2.12.7&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
 val scalaTest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.0.5&quot;
@@ -456,7 +456,7 @@ lazy val helloCore = (project in file(&quot;core&quot;))
 [info]  2.11.12
 [info] scalaVersion
 [info]  2.11.12 scalaVersion
-[info] 2.12.6
+[info] 2.12.7
 </code></pre><p>このセッティングは <code>reload</code> 後には無くなる。
 </p><h3 id="dist+%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%9A%E3%82%AF%E3%83%88">dist タスクのインスペクト<a href="#dist+%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%9A%E3%82%AF%E3%83%88" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>dist</code> タスクのことをもっと調べるために、<code>help</code> と <code>inspect</code> を実行してみる。
 </p><pre><code class="prettyprint lang-scala">sbt:Hello&gt; help dist
@@ -488,14 +488,14 @@ Template applied in ./hello
                         <span class="arrow">&gt;</span>
                         <a href="Directories.html"> ディレクトリ構造 </a>                        
                         <ul class="language-bar">
-        
+        <li><a href="../sbt-by-example.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/sbt-by-example.html"><span class="lang-item lang-ja">日本語</span></a></li>
       </ul>
                       </div><div class="tocwrapper show">
       <a class="tochead nav" style="display: none" href="#toc">❦</a>
       <a name="toc"></a>
       <h4 class="toctitle">Contents</h4>
       <div class="tocbody">
-      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">始める sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">sbt のインストール</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Mac への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Linux への sbt のインストール</a></div></li> </ol></li><li><div><a href="sbt-by-example.html">例題でみる sbt</a></div></li><li><div class="current">例題でみる sbt</div></li><li><div><a href="Directories.html">ディレクトリ構造</a></div></li><li><div><a href="Running.html">実行</a></div></li><li><div><a href="Basic-Def.html">ビルド定義</a></div></li><li><div><a href="Multi-Project.html">マルチプロジェクト・ビルド</a></div></li><li><div><a href="Task-Graph.html">タスク・グラフ</a></div></li><li><div><a href="Scopes.html">スコープ</a></div></li><li><div><a href="Appending-Values.html">値の追加</a></div></li><li><div><a href="Scope-Delegation.html">スコープ委譲 (.value の照会)</a></div></li><li><div><a href="Library-Dependencies.html">ライブラリ依存性</a></div></li><li><div><a href="Multi-Project.html">マルチプロジェクト・ビルド</a></div></li><li><div><a href="Using-Plugins.html">プラグインの使用</a></div></li><li><div><a href="Custom-Settings.html">カスタムセッティングとタスク</a></div></li><li><div><a href="Organizing-Build.html">ビルドの整理</a></div></li><li><div><a href="Summary.html">まとめ</a></div></li><li><div><a href="Bare-Def.html">付録: bare .sbt ビルド定義</a></div></li> </ol></li><li><div><a href="General-Info.html">インフォメーション</a></div><ol class="toc"> <li><div><a href="Changes.html">変更点</a></div><ol class="toc"> <li><div><a href="sbt-1.0-Release-Notes.html">sbt 1.0.0</a></div></li> </ol></li> </ol></li><li><div><a href="Detailed-Topics.html">各論</a></div><ol class="toc"> <li><div><a href="Plugins-and-Best-Practices.html">プラグインとベストプラクティス</a></div><ol class="toc"> <li><div><a href="Best-Practices.html">一般的なベストプラクティス</a></div></li><li><div><a href="Testing-sbt-plugins.html">sbt プラグインをテストする</a></div></li> </ol></li> </ol></li><li><div><a href="Howto.html">How to</a></div><ol class="toc"> <li><div><a href="Howto-Generating-Files.html">ソースファイル/リソースファイルの生成</a></div></li><li><div><a href="Howto-Sequencing.html">逐次実行</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Def.sequential を用いて逐次タスクを定義する</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Def.taskDyn を用いて動的タスクを定義する</a></div></li><li><div><a href="Howto-After-Input-Task.html">インプットタスクの後で何かする</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn を用いた動的インプットタスクの定義</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">コマンドを用いた逐次実行</a></div></li> </ol></li> </ol></li><li><div><a href="Archived+pages.html">Archived pages</a></div><ol class="toc"> <li><div><a href="Hello.html">Hello, World</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
+      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">始める sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">sbt のインストール</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Mac への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Linux への sbt のインストール</a></div></li> </ol></li><li><div class="current">例題でみる sbt</div></li><li><div><a href="Directories.html">ディレクトリ構造</a></div></li><li><div><a href="Running.html">実行</a></div></li><li><div><a href="Basic-Def.html">ビルド定義</a></div></li><li><div><a href="Multi-Project.html">マルチプロジェクト・ビルド</a></div></li><li><div><a href="Task-Graph.html">タスク・グラフ</a></div></li><li><div><a href="Scopes.html">スコープ</a></div></li><li><div><a href="Appending-Values.html">値の追加</a></div></li><li><div><a href="Scope-Delegation.html">スコープ委譲 (.value の照会)</a></div></li><li><div><a href="Library-Dependencies.html">ライブラリ依存性</a></div></li><li><div><a href="Using-Plugins.html">プラグインの使用</a></div></li><li><div><a href="Custom-Settings.html">カスタムセッティングとタスク</a></div></li><li><div><a href="Organizing-Build.html">ビルドの整理</a></div></li><li><div><a href="Summary.html">まとめ</a></div></li><li><div><a href="Bare-Def.html">付録: bare .sbt ビルド定義</a></div></li> </ol></li><li><div><a href="General-Info.html">インフォメーション</a></div><ol class="toc"> <li><div><a href="Changes.html">変更点</a></div><ol class="toc"> <li><div><a href="sbt-1.0-Release-Notes.html">sbt 1.0.0</a></div></li> </ol></li> </ol></li><li><div><a href="Detailed-Topics.html">各論</a></div><ol class="toc"> <li><div><a href="Plugins-and-Best-Practices.html">プラグインとベストプラクティス</a></div><ol class="toc"> <li><div><a href="Best-Practices.html">一般的なベストプラクティス</a></div></li><li><div><a href="Testing-sbt-plugins.html">sbt プラグインをテストする</a></div></li> </ol></li> </ol></li><li><div><a href="Howto.html">How to</a></div><ol class="toc"> <li><div><a href="Howto-Generating-Files.html">ソースファイル/リソースファイルの生成</a></div></li><li><div><a href="Howto-Sequencing.html">逐次実行</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Def.sequential を用いて逐次タスクを定義する</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Def.taskDyn を用いて動的タスクを定義する</a></div></li><li><div><a href="Howto-After-Input-Task.html">インプットタスクの後で何かする</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn を用いた動的インプットタスクの定義</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">コマンドを用いた逐次実行</a></div></li> </ol></li> </ol></li><li><div><a href="Archived+pages.html">Archived pages</a></div><ol class="toc"> <li><div><a href="Hello.html">Hello, World</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
           </div>
         </div>
         <div class="header">
@@ -512,7 +512,7 @@ Template applied in ./hello
       <a href="../../../community.html">Get Involved</a>
       <a id="source-code" href="https://github.com/sbt/sbt"><img src="../files/github-logo-teal.svg" alt="Source code" class="social"></a>
       <a id="twitter" href="https://twitter.com/scala_sbt"><img src="../files/twitter-logo-teal.svg" alt="sbt on Twitter" class="social"></a>
-      <a id="edit-on-github" href="https://github.com/sbt/website/edit/develop/src/reference/00-Getting-Started/02-scala-by-example.md"><img src="../files/octicon-pencil.svg" alt="Edit on GitHub"></a>
+      <a id="edit-on-github" href="https://github.com/sbt/website/edit/develop/src/reference/00-Getting-Started/02-sbt-by-example.md"><img src="../files/octicon-pencil.svg" alt="Edit on GitHub"></a>
     </div>
     <script type="text/javascript" async>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
