@@ -112,7 +112,7 @@ object Dependencies {
     Seq(akkaActor, specs2core % Test)
 }
 </code></pre><p>The <code>Dependencies</code> object will be available in <code>build.sbt</code>.
-To use the <code>val</code>s under it easier, import <code>Dependencies._</code>.
+To make it easier to use the <code>val</code>s defined in it, import <code>Dependencies._</code> in your build.sbt file.
 </p><pre><code class="prettyprint lang-scala">import Dependencies._
 
 ThisBuild / organization := &quot;com.example&quot;
@@ -125,7 +125,7 @@ lazy val backend = (project in file(&quot;backend&quot;))
     libraryDependencies ++= backendDeps
   )
 </code></pre><p>This technique is useful when you have a multi-project build that’s getting
-large, and you want to make sure that subprojects to have consistent dependencies.
+large, and you want to ensure that subprojects have consistent dependencies.
 </p><h3 id="When+to+use++files">When to use <code>.scala</code> files<a href="#When+to+use++files" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>In <code>.scala</code> files, you can write any Scala code, including top-level
 classes and objects.
 </p><p>The recommended approach is to define most settings in
