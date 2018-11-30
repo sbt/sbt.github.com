@@ -40,7 +40,7 @@ sbt を試してくれることに感謝する。_ぜひ楽しいんでほしい
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://piccolo.link/sbt-1.2.6.msi
+  [MSI]: https://piccolo.link/sbt-1.2.7.msi
   [Setup-Notes]: ../../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -68,8 +68,8 @@ sbt プロジェクトを作るためには、以下の手順をたどる必要�
 
 
 
-  [ZIP]: https://piccolo.link/sbt-1.2.6.zip
-  [TGZ]: https://piccolo.link/sbt-1.2.6.tgz
+  [ZIP]: https://piccolo.link/sbt-1.2.7.zip
+  [TGZ]: https://piccolo.link/sbt-1.2.7.tgz
   [Manual-Installation]: Manual-Installation.html
   [oraclejdk8]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 
@@ -102,9 +102,9 @@ $ port install sbt
 ```
 
 
-  [MSI]: https://piccolo.link/sbt-1.2.6.msi
-  [ZIP]: https://piccolo.link/sbt-1.2.6.zip
-  [TGZ]: https://piccolo.link/sbt-1.2.6.tgz
+  [MSI]: https://piccolo.link/sbt-1.2.7.msi
+  [ZIP]: https://piccolo.link/sbt-1.2.7.zip
+  [TGZ]: https://piccolo.link/sbt-1.2.7.tgz
   [oraclejdk8]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 
 Windows への sbt のインストール
@@ -123,10 +123,10 @@ Follow the link to install [Java SE Development Kit 8][oraclejdk8].
 [msi インストーラ][MSI]をダウンロードしてインストールする。
 
 
-  [ZIP]: https://piccolo.link/sbt-1.2.6.zip
-  [TGZ]: https://piccolo.link/sbt-1.2.6.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.2.6.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.2.6.deb
+  [ZIP]: https://piccolo.link/sbt-1.2.7.zip
+  [TGZ]: https://piccolo.link/sbt-1.2.7.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.2.7.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.2.7.deb
   [Manual-Installation]: Manual-Installation.html
   [website127]: https://github.com/sbt/website/issues/12
   [cert-bug]: https://bugs.launchpad.net/ubuntu/+source/ca-certificates-java/+bug/1739631
@@ -1203,7 +1203,7 @@ sbt 0.13.13 など最近のバージョンをインストール済みで、
 sbt バージョンを指定する:
 
 ```
-sbt.version=1.2.6
+sbt.version=1.2.7
 ```
 
 もしも指定されたバージョンがローカルマシンに無ければ、
@@ -4642,7 +4642,7 @@ sbt 0.13.8 で `Def.sequential` という関数が追加されて、準逐次な
 #### project/build.properties
 
 ```
-sbt.version=1.2.6
+sbt.version=1.2.7
 ```
 
 #### project/style.sbt
@@ -4692,7 +4692,7 @@ root> compilecheck
 #### project/build.properties
 
 ```
-sbt.version=1.2.6
+sbt.version=1.2.7
 ```
 
 #### project/style.sbt
