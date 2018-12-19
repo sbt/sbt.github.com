@@ -17133,6 +17133,7 @@ Finally, the following a few lines of cleanup script are added:
 ```yml
 before_cache:
   # Cleanup the cached directories to avoid unnecessary cache updates
+  - rm -fv $HOME/.ivy2/.sbt.ivy.lock
   - find $HOME/.ivy2/cache -name "ivydata-*.properties" -print -delete
   - find $HOME/.sbt        -name "*.lock"               -print -delete
 ```
@@ -17274,6 +17275,7 @@ before_cache:
   # Tricks to avoid unnecessary cache updates
   - find $HOME/.sbt -name "*.lock" | xargs rm
   - find $HOME/.ivy2 -name "ivydata-*.properties" | xargs rm
+  - rm -f $HOME/.ivy2/.sbt.ivy.lock
 
 # Email specific recipient all the time
 notifications:

@@ -10569,6 +10569,7 @@ cache:
 </code></pre><p>Finally, the following a few lines of cleanup script are added:
 </p><pre><code class="prettyprint lang-yml">before_cache:
   # Cleanup the cached directories to avoid unnecessary cache updates
+  - rm -fv $HOME/.ivy2/.sbt.ivy.lock
   - find $HOME/.ivy2/cache -name &quot;ivydata-*.properties&quot; -print -delete
   - find $HOME/.sbt        -name &quot;*.lock&quot;               -print -delete
 </code></pre><p>With the above changes combined Travis CI will tar up the cached directories and uploads them to Amazon S3.
@@ -10661,6 +10662,7 @@ before_cache:
   # Tricks to avoid unnecessary cache updates
   - find $HOME/.sbt -name &quot;*.lock&quot; | xargs rm
   - find $HOME/.ivy2 -name &quot;ivydata-*.properties&quot; | xargs rm
+  - rm -f $HOME/.ivy2/.sbt.ivy.lock
 
 # Email specific recipient all the time
 notifications:
