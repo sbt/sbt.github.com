@@ -1341,7 +1341,7 @@ called *setting expressions* using *build.sbt DSL*.
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.12.8"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -1524,7 +1524,7 @@ putting them inside a `.settings(...)` call. We call this the "bare style."
 
 ```scala
 ThisBuild / version := "1.0"
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.12.8"
 ```
 
 This syntax is recommended for `ThisBuild` scoped settings and adding plugins.
@@ -1540,7 +1540,7 @@ managed dependencies, which will look like this in `build.sbt`:
 val derby = "org.apache.derby" % "derby" % "10.4.1.3"
 
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.12.8"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -1620,7 +1620,7 @@ and there are no default settings scoped to subprojects. (See [Scopes][Scopes])
 ```scala
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.12.8"
 
 lazy val core = (project in file("core"))
   .settings(
@@ -1928,7 +1928,7 @@ See the following example:
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.12.8"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -1965,7 +1965,7 @@ Here's another example:
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.12.8"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -2104,7 +2104,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "Hello",
     organization := "com.example",
-    scalaVersion := "2.12.7",
+    scalaVersion := "2.12.8",
     version := "0.1.0-SNAPSHOT",
     scalacOptions := List("-encoding", "utf8", "-Xfatal-warnings", "-deprecation", "-unchecked"),
     scalacOptions := {
@@ -2640,7 +2640,7 @@ frequently used keys such as `version`, `scalaVersion`, and `organization`.
 
 ```scala
 ThisBuild / organization := "com.example",
-ThisBuild / scalaVersion := "2.12.7",
+ThisBuild / scalaVersion := "2.12.8",
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -2857,7 +2857,7 @@ lazy val projA = (project in file("a"))
 What is the value of `projA / name`?
 
 1. `"foo-2.11.11"`
-2. `"foo-2.12.7"`
+2. `"foo-2.12.8"`
 3. something else?
 
 The answer is `"foo-2.11.11"`.
@@ -3668,7 +3668,7 @@ val sampleIntTask = taskKey[Int]("A sample int task.")
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.12.8"
 
 lazy val library = (project in file("library"))
   .settings(
@@ -3727,7 +3727,7 @@ val sampleStringTask = taskKey[String]("A sample string task.")
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.12.8"
 
 lazy val library = (project in file("library"))
   .settings(
@@ -3992,7 +3992,7 @@ import Dependencies._
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.12.8"
 
 lazy val backend = (project in file("backend"))
   .settings(
@@ -7833,7 +7833,7 @@ maintaining source compatibility. This page describes how to use `sbt`
 to build and publish your project against multiple versions of Scala and
 how to use libraries that have done the same.
 
-### Publishing Conventions
+### Publishing conventions
 
 The underlying mechanism used to indicate which version of Scala a
 library was compiled against is to append `_<scala-version>` to the
@@ -7845,7 +7845,7 @@ allows interoperability with users of Maven, Ant and other build tools.
 The rest of this page describes how `sbt` handles this for you as part
 of cross-building.
 
-### Using Cross-Built Libraries
+### Using cross-built libraries
 
 To use a library built against multiple versions of Scala, double the
 first `%` in an inline dependency to be `%%`. This tells `sbt` that it
@@ -7861,47 +7861,157 @@ A nearly equivalent, manual alternative for a fixed version of Scala is:
 libraryDependencies += "net.databinder.dispatch" % "dispatch-core_2.12" % "0.13.3"
 ```
 
-### Cross-Building a Project
+### Cross building a project
 
 Define the versions of Scala to build against in the
 `crossScalaVersions` setting. Versions of Scala 2.10.2 or later are
 allowed. For example, in a `.sbt` build definition:
 
 ```scala
-crossScalaVersions := Seq("2.11.11", "2.12.2")
+lazy val scala212 = "2.12.8"
+lazy val scala211 = "2.11.12"
+lazy val supportedScalaVersions = List(scala212, scala211)
+
+ThisBuild / organization := "com.example"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
+ThisBuild / scalaVersion := scala212
+
+lazy val root = (project in file("."))
+  .aggregate(util, core)
+  .settings(
+    // crossScalaVersions must be set to Nil on the aggregating project
+    crossScalaVersions := Nil,
+    publish / skip := true
+  )
+
+lazy val core = (project in file("core"))
+  .settings(
+    crossScalaVersions := supportedScalaVersions,
+    // other settings
+  )
+
+lazy val util = (project in file("util"))
+  .settings(
+    crossScalaVersions := supportedScalaVersions,
+    // other settings
+  )
 ```
+
+**Note**: `crossScalaVersions` must be set to `Nil` on the root project to avoid double publishing.
 
 To build against all versions listed in `crossScalaVersions`, prefix
 the action to run with `+`. For example:
 
 ```
-> + package
+> + test
 ```
 
 A typical way to use this feature is to do development on a single Scala
 version (no `+` prefix) and then cross-build (using `+`) occasionally
 and when releasing.
 
-You can use `++ <version>` to temporarily switch the Scala version currently
-being used to build.
+#### Cross building with a Java project
+
+A special care must be taken when cross building involves pure Java project.
+Let's say in the following example, `network` is a Java project, and `core` is
+a Scala project that depends on `network`.
+
+```scala
+lazy val scala212 = "2.12.8"
+lazy val scala211 = "2.11.12"
+lazy val supportedScalaVersions = List(scala212, scala211)
+
+ThisBuild / organization := "com.example"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
+ThisBuild / scalaVersion := scala212
+
+lazy val root = (project in file("."))
+  .aggregate(network, core)
+  .settings(
+    // crossScalaVersions must be set to Nil on the aggregating project
+    crossScalaVersions := Nil,
+    publish / skip := false
+  )
+
+// example Java project
+lazy val network = (project in file("network"))
+  .settings(
+    // set to exactly one Scala version
+    crossScalaVersions := List(scala212),
+    crossPaths := false,
+    autoScalaLibrary := false,
+    // other settings
+  )
+
+lazy val core = (project in file("core"))
+  .dependsOn(network)
+  .settings(
+    crossScalaVersions := supportedScalaVersions,
+    // other settings
+  )
+```
+
+1. `crossScalaVersions` must be set to `Nil` on the aggregating projects such as the root.
+2. Java subprojects should have exactly one Scala version in `crossScalaVersions` to avoid double publishing, typically `scala212`.
+3. Scala subprojects can have multiple Scala versions in `crossScalaVersions`, but must avoid aggregating Java subprojects.
+
+#### Switching Scala version
+
+You can use `++ <version> [command]` to temporarily switch the Scala version currently
+being used to build the subprojects given that `<version>` is listed in their `crossScalaVersions`.
+
 For example:
 
 ```
-> ++ 2.12.2
-[info] Setting version to 2.12.2
-> ++ 2.11.11
-[info] Setting version to 2.11.11
+> ++ 2.12.8
+[info] Setting version to 2.12.8
+> ++ 2.11.12
+[info] Setting version to 2.11.12
 > compile
 ```
+
 `<version>` should be either a version for Scala published to a repository or
 the path to a Scala home directory, as in `++ /path/to/scala/home`.
 See [Command Line Reference][Command-Line-Reference] for details.
+
+When a `[command]` is passed in to `++`, it will execute the command
+on the subprojects that supports the given `<version>`.
+
+For example:
+
+```
+> ++ 2.11.12 -v test
+[info] Setting Scala version to 2.11.12 on 1 projects.
+[info] Switching Scala version on:
+[info]     core (2.12.8, 2.11.12)
+[info] Excluding projects:
+[info]   * root ()
+[info]     network (2.12.8)
+[info] Reapplying settings...
+[info] Set current project to core (in build file:/Users/xxx/hello/)
+```
+
+Sometimes you might want to force the Scala version switch regardless of the `crossScalaVersions` values.
+You can use `++ <version>!` with exclamation mark for that.
+
+For example:
+
+```
+> ++ 2.13.0-M5! -v
+[info] Forcing Scala version to 2.13.0-M5 on all projects.
+[info] Switching Scala version on:
+[info]   * root ()
+[info]     core (2.12.8, 2.11.12)
+[info]     network (2.12.8)
+```
+
+#### Cross publishing
 
 The ultimate purpose of `+` is to cross-publish your
 project. That is, by doing:
 
 ```
-> + publish
+> + publishSigned
 ```
 
 you make your project available to users for different versions of
@@ -10601,7 +10711,7 @@ following build definition. `build.sbt`:
 
 ```scala
 lazy val commonSettings = Seq(
-  scalaVersion := "2.12.7",
+  scalaVersion := "2.12.8",
   organization := "com.example"
 )
 lazy val scalaReflect = Def.setting { "org.scala-lang" % "scala-reflect" % scalaVersion.value }
@@ -10705,7 +10815,7 @@ would look like:
 
 ```scala
 lazy val commonSettings = Seq(
-  scalaVersion := "2.12.7",
+  scalaVersion := "2.12.8",
   organization := "com.example"
 )
 lazy val scalaReflect = Def.setting { "org.scala-lang" % "scala-reflect" % scalaVersion.value }
@@ -11825,7 +11935,7 @@ The following full build configuration demonstrates integration tests.
 lazy val scalatest = "org.scalatest" %% "scalatest" % "3.0.5"
 
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.12.8"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -11895,7 +12005,7 @@ lazy val scalatest = "org.scalatest" %% "scalatest" % "3.0.5"
 lazy val FunTest = config("fun") extend(Test)
 
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.12.8"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -11953,7 +12063,7 @@ lazy val scalatest = "org.scalatest" %% "scalatest" % "3.0.5"
 lazy val FunTest = config("fun") extend(Test)
 
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.12.8"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 def itFilter(name: String): Boolean = name endsWith "ITest"
@@ -15182,7 +15292,7 @@ Here's `build.sbt`:
 import CommandExample._
 
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.12.8"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -16988,7 +17098,7 @@ jdk: oraclejdk8
 
 scala:
    - 2.10.4
-   - 2.12.7
+   - 2.12.8
 ```
 
 By default Travis CI executes `sbt ++$TRAVIS_SCALA_VERSION test`.
@@ -17001,7 +17111,7 @@ jdk: oraclejdk8
 
 scala:
    - 2.10.4
-   - 2.12.7
+   - 2.12.8
 
 script:
    - sbt ++$TRAVIS_SCALA_VERSION test
@@ -17151,7 +17261,7 @@ jdk: oraclejdk8
 
 scala:
    - 2.10.4
-   - 2.12.7
+   - 2.12.8
 
 script:
    - sbt ++$TRAVIS_SCALA_VERSION test
@@ -19954,7 +20064,7 @@ import scala.concurrent.duration._
 
 // factor out common settings
 ThisBuild / organization := "org.myproject"
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.12.8"
 // set the Scala version used for the project
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
@@ -20236,7 +20346,7 @@ import Dependencies._
 lazy val buildSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.12.7"
+  scalaVersion := "2.12.8"
 )
 
 // Sub-project specific dependencies
@@ -20335,7 +20445,7 @@ lazy val CustomCompile = config("compile") extend(Saxon, Common, Scalate)
 
 // factor out common settings
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.12.8"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 // An example project that only uses the Scalate utilities.
