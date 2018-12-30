@@ -35,7 +35,7 @@ sbt を試してくれることに感謝する。_ぜひ楽しいんでほしい
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://piccolo.link/sbt-1.2.7.msi
+  [MSI]: https://piccolo.link/sbt-1.2.8.msi
   [Setup-Notes]: ../../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -63,8 +63,8 @@ sbt プロジェクトを作るためには、以下の手順をたどる必要�
 
 
 
-  [ZIP]: https://piccolo.link/sbt-1.2.7.zip
-  [TGZ]: https://piccolo.link/sbt-1.2.7.tgz
+  [ZIP]: https://piccolo.link/sbt-1.2.8.zip
+  [TGZ]: https://piccolo.link/sbt-1.2.8.tgz
   [Manual-Installation]: Manual-Installation.html
   [oraclejdk8]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 
@@ -97,9 +97,9 @@ $ port install sbt
 ```
 
 
-  [MSI]: https://piccolo.link/sbt-1.2.7.msi
-  [ZIP]: https://piccolo.link/sbt-1.2.7.zip
-  [TGZ]: https://piccolo.link/sbt-1.2.7.tgz
+  [MSI]: https://piccolo.link/sbt-1.2.8.msi
+  [ZIP]: https://piccolo.link/sbt-1.2.8.zip
+  [TGZ]: https://piccolo.link/sbt-1.2.8.tgz
   [oraclejdk8]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 
 Windows への sbt のインストール
@@ -118,10 +118,10 @@ Follow the link to install [Java SE Development Kit 8][oraclejdk8].
 [msi インストーラ][MSI]をダウンロードしてインストールする。
 
 
-  [ZIP]: https://piccolo.link/sbt-1.2.7.zip
-  [TGZ]: https://piccolo.link/sbt-1.2.7.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.2.7.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.2.7.deb
+  [ZIP]: https://piccolo.link/sbt-1.2.8.zip
+  [TGZ]: https://piccolo.link/sbt-1.2.8.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.2.8.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.2.8.deb
   [Manual-Installation]: Manual-Installation.html
   [website127]: https://github.com/sbt/website/issues/12
   [cert-bug]: https://bugs.launchpad.net/ubuntu/+source/ca-certificates-java/+bug/1739631
@@ -1198,7 +1198,7 @@ sbt 0.13.13 など最近のバージョンをインストール済みで、
 sbt バージョンを指定する:
 
 ```
-sbt.version=1.2.7
+sbt.version=1.2.8
 ```
 
 もしも指定されたバージョンがローカルマシンに無ければ、
@@ -4234,9 +4234,9 @@ lazy val parser: Parser[Int] =
 
 
   [sbtScriptedTests]: https://github.com/sbt/sbt/tree/1.x/sbt/src/sbt-test
-  [xsbt-web-plugin]: https://github.com/JamesEarlDouglas/xsbt-web-plugin/tree/master/src/sbt-test
+  [xsbt-web-plugin]: https://github.com/earldouglas/xsbt-web-plugin/tree/master/src/sbt-test
   [sbt-assembly]: https://github.com/sbt/sbt-assembly/tree/master/src/sbt-test/sbt-assembly
-  [feabb2]: https://github.com/JamesEarlDouglas/xsbt-web-plugin/commit/feabb2eb554940d9b28049bd0618b6a790d9e141
+  [feabb2]: https://github.com/earldouglas/xsbt-web-plugin/commit/feabb2eb554940d9b28049bd0618b6a790d9e141
 
 sbt プラグインをテストする
 -----------------------
@@ -4312,7 +4312,7 @@ sys.props.get("plugin.version") match {
 }
 ```
 
-これは [JamesEarlDouglas/xsbt-web-plugin@feabb2][feabb2] から拝借してきた技で、これで scripted テストに version を渡すことができる。
+これは [earldouglas/xsbt-web-plugin@feabb2][feabb2] から拝借してきた技で、これで scripted テストに version を渡すことができる。
 
 他に、`src/main/scala/hello.scala` も用意した:
 
@@ -4637,7 +4637,7 @@ sbt 0.13.8 で `Def.sequential` という関数が追加されて、準逐次な
 #### project/build.properties
 
 ```
-sbt.version=1.2.7
+sbt.version=1.2.8
 ```
 
 #### project/style.sbt
@@ -4687,7 +4687,7 @@ root> compilecheck
 #### project/build.properties
 
 ```
-sbt.version=1.2.7
+sbt.version=1.2.8
 ```
 
 #### project/style.sbt
