@@ -4842,6 +4842,40 @@ the action to run with <code>+</code>. For example:
 </code></pre><p>A typical way to use this feature is to do development on a single Scala
 version (no <code>+</code> prefix) and then cross-build (using <code>+</code>) occasionally
 and when releasing.
+</p><h4 id="Note+about+sbt-release">Note about sbt-release<a href="#Note+about+sbt-release" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>sbt-release implemented cross building support by copy-pasting sbt 0.13’s <code>+</code> implementation,
+so at least as of sbt-release 1.0.10, it does not work correctly with sbt 1.x’s cross building,
+which was prototyped originally as sbt-doge.
+</p><p>To cross publish using sbt-release with sbt 1.x, use the following workaround:
+</p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;
+ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
+ThisBuild / scalaVersion := scala212
+
+import ReleaseTransformations._
+lazy val root = (project in file(&quot;.&quot;))
+  .aggregate(util, core)
+  .settings(
+    // crossScalaVersions must be set to Nil on the aggregating project
+    crossScalaVersions := Nil,
+    publish / skip := true,
+
+    // don't use sbt-release's cross facility
+    releaseCrossBuild := false,
+    releaseProcess := Seq[ReleaseStep](
+      checkSnapshotDependencies,
+      inquireVersions,
+      runClean,
+      releaseStepCommandAndRemaining(&quot;+test&quot;),
+      setReleaseVersion,
+      commitReleaseVersion,
+      tagRelease,
+      releaseStepCommandAndRemaining(&quot;+publishSigned&quot;),
+      setNextVersion,
+      commitNextVersion,
+      pushChanges
+    )
+  )
+</code></pre><p>This will then use the real cross (<code>+</code>) implementation for testing and publishing.
+Credit for this technique goes to James Roper at <a href="https://github.com/playframework/playframework/pull/4520">playframework#4520</a> and later inventing <code>releaseStepCommandAndRemaining</code>.
 </p><h4 id="Cross+building+with+a+Java+project">Cross building with a Java project<a href="#Cross+building+with+a+Java+project" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>A special care must be taken when cross building involves pure Java project.
 Let’s say in the following example, <code>network</code> is a Java project, and <code>core</code> is
 a Scala project that depends on <code>network</code>.
