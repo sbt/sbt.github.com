@@ -5,12 +5,7 @@
         <meta content="width=device-width, initial-scale=1" name="viewport"/>
         <title>sbt Reference Manual — Combined Pages</title>
         <link rel="shortcut icon" href="../favicon.ico"/>
-        <link rel="stylesheet" href="../css/blueprint/screen.css" type="text/css" media="screen, projection"/>
-        <link rel="stylesheet" href="../css/blueprint/grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
-        <link rel="stylesheet" href="../css/blueprint/print.css" type="text/css" media="print"/> 
-        <!--[if lt IE 8]>
-          <link rel="stylesheet" href={ relativeBase + "css/blueprint/ie.css" } type="text/css" media="screen, projection"/>
-        <![endif]-->
+        <link rel="stylesheet" href="../css/bootstrap.min.css" type="text/css"/>
         <link rel="stylesheet" href="../css/pamflet.css" type="text/css" media="screen, projection"/>
         <link rel="stylesheet" href="../css/pamflet-print.css" type="text/css" media="print"/>
         <link rel="stylesheet" href="../css/pamflet-grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
@@ -18,8 +13,8 @@
         <link rel="stylesheet" href="../css/color_scheme-github.css" type="text/css" media="screen, projection"/>
         <link rel="stylesheet" href="../css/color_scheme-monokai.css" type="text/css" media="screen, projection"/>
         <link rel="stylesheet" href="../css/pamfletheight_80px_2em.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
-        <script type="text/javascript" src="../js/jquery-1.6.2.min.js"></script>
-        <script type="text/javascript" src="../js/jquery.collapse.js"></script>
+        <script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
+        <script type="text/javascript" src="../js/bootstrap.bundle.min.js"></script>
         <script type="text/javascript" src="../js/pamflet.js"></script>
         <script type="text/javascript">
           Pamflet.page.language = 'zh-cn';
@@ -34,18 +29,16 @@
             </script>
       </head>
       <body class="color_scheme-github">
-        <a class="page prev nav" href="Contents+in+Depth.html">
-            <span class="space">&nbsp;</span>
-            <span class="flip arrow">&gt;</span>
-          </a>
-        <div class="container contentswrapper">
-          <div class="span-16 prepend-1 append-1 contents">
-            <div class="tocwrapper show">
-      <a class="tochead nav" style="display: none" href="#toc">❦</a>
-      <a name="toc"></a>
-      <h4 class="toctitle">Contents</h4>
-      <div class="tocbody">
-      <div><a href="#sbt+Reference+Manual">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="#sbt+%E5%85%A5%E9%97%A8">sbt 入门</a></div><ol class="toc"> <li><div><a href="#%E5%AE%89%E8%A3%85+sbt">安装 sbt</a></div><ol class="toc"> <li><div><a href="#%E5%9C%A8+Mac+%E4%B8%8A%E5%AE%89%E8%A3%85+sbt">在 Mac 上安装 sbt</a></div></li><li><div><a href="#%E5%9C%A8+Windows+%E4%B8%8A%E5%AE%89%E8%A3%85+sbt">在 Windows 上安装 sbt</a></div></li><li><div><a href="#%E5%9C%A8+Linux+%E4%B8%8A%E5%AE%89%E8%A3%85+sbt">在 Linux 上安装 sbt</a></div></li> </ol></li><li><div><a href="#Hello%2C+World">Hello, World</a></div></li><li><div><a href="#%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84">目录结构</a></div></li><li><div><a href="#%E8%BF%90%E8%A1%8C">运行</a></div></li><li><div><a href="#.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">.sbt 构建定义</a></div></li><li><div><a href="#Scope">Scope</a></div></li><li><div><a href="#%E6%9B%B4%E5%A4%9A%E5%85%B3%E4%BA%8E%E8%AE%BE%E7%BD%AE">更多关于设置</a></div></li><li><div><a href="#%E5%BA%93%E4%BE%9D%E8%B5%96">库依赖</a></div></li><li><div><a href="#%E5%A4%9A%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA">多项目构建</a></div></li><li><div><a href="#%E4%BD%BF%E7%94%A8%E6%8F%92%E4%BB%B6">使用插件</a></div></li><li><div><a href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E8%AE%BE%E7%BD%AE%E5%92%8C%E4%BB%BB%E5%8A%A1">自定义设置和任务</a></div></li><li><div><a href="#%E7%BB%84%E7%BB%87%E6%9E%84%E5%BB%BA">组织构建</a></div></li><li><div><a href="#%E6%80%BB%E7%BB%93">总结</a></div></li> </ol></li> </ol></div></div><h1 id="sbt+Reference+Manual">sbt Reference Manual<a href="#sbt+Reference+Manual" class="header-link"><span class="header-link-content">&nbsp;</span></a></h1><h1 id="sbt+%E5%85%A5%E9%97%A8">sbt 入门<a href="#sbt+%E5%85%A5%E9%97%A8" class="header-link"><span class="header-link-content">&nbsp;</span></a></h1><p>sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。其实没有太多的概念，但是 sbt 并不完全像其他的构建体系，而且如果你没有看过文档的话，你偶尔 <em>将会</em> 遇到一些细节问题。
+        <div class="container-fluid contentswrapper h-100">
+          <div class="row minh-100">
+          <div class="col-md-4 col-xl-3 leftcolumn">&nbsp;</div><div class="col-md-8 col-xs-9">
+                  <div class="rightcolmn contents">
+                    <div class="tocwrapper">
+        
+        <div class="tocbody show" id="toc">
+        <h4 class="toctitle">Contents</h4>
+        <div><a href="#sbt+Reference+Manual">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="#sbt+%E5%85%A5%E9%97%A8">sbt 入门</a></div><ol class="toc"> <li><div><a href="#%E5%AE%89%E8%A3%85+sbt">安装 sbt</a></div><ol class="toc"> <li><div><a href="#%E5%9C%A8+Mac+%E4%B8%8A%E5%AE%89%E8%A3%85+sbt">在 Mac 上安装 sbt</a></div></li><li><div><a href="#%E5%9C%A8+Windows+%E4%B8%8A%E5%AE%89%E8%A3%85+sbt">在 Windows 上安装 sbt</a></div></li><li><div><a href="#%E5%9C%A8+Linux+%E4%B8%8A%E5%AE%89%E8%A3%85+sbt">在 Linux 上安装 sbt</a></div></li> </ol></li><li><div><a href="#Hello%2C+World">Hello, World</a></div></li><li><div><a href="#%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84">目录结构</a></div></li><li><div><a href="#%E8%BF%90%E8%A1%8C">运行</a></div></li><li><div><a href="#.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">.sbt 构建定义</a></div></li><li><div><a href="#Scope">Scope</a></div></li><li><div><a href="#%E6%9B%B4%E5%A4%9A%E5%85%B3%E4%BA%8E%E8%AE%BE%E7%BD%AE">更多关于设置</a></div></li><li><div><a href="#%E5%BA%93%E4%BE%9D%E8%B5%96">库依赖</a></div></li><li><div><a href="#%E5%A4%9A%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA">多项目构建</a></div></li><li><div><a href="#%E4%BD%BF%E7%94%A8%E6%8F%92%E4%BB%B6">使用插件</a></div></li><li><div><a href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E8%AE%BE%E7%BD%AE%E5%92%8C%E4%BB%BB%E5%8A%A1">自定义设置和任务</a></div></li><li><div><a href="#%E7%BB%84%E7%BB%87%E6%9E%84%E5%BB%BA">组织构建</a></div></li><li><div><a href="#%E6%80%BB%E7%BB%93">总结</a></div></li> </ol></li> </ol></div>
+      </div><h1 id="sbt+Reference+Manual">sbt Reference Manual<a href="#sbt+Reference+Manual" class="header-link"><span class="header-link-content">&nbsp;</span></a></h1><h1 id="sbt+%E5%85%A5%E9%97%A8">sbt 入门<a href="#sbt+%E5%85%A5%E9%97%A8" class="header-link"><span class="header-link-content">&nbsp;</span></a></h1><p>sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。其实没有太多的概念，但是 sbt 并不完全像其他的构建体系，而且如果你没有看过文档的话，你偶尔 <em>将会</em> 遇到一些细节问题。
 </p><p>这篇入门指南覆盖了一些你在创建和维护一个 sbt 构建定义时需要知道的概念。
 </p><p><em>强烈建议</em>看完该入门指南！
 </p><p>如果你非常急切，你可以直接进入以下几小节了解最重要的概念背景 <a href="Basic-Def.html">.sbt 构建定义</a>，<a href="Scopes.html">scopes</a>，<a href="More-About-Settings.html">更多关于设置</a>。
@@ -982,7 +975,9 @@ lazy val backend = (project in file(&quot;backend&quot;))
 </p><p>祝你好运！
 </p><h3 id="%E9%99%84%E5%BD%95">附录<a href="#%E9%99%84%E5%BD%95" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>因为 sbt 是一个开源项目，别忘记签出项目<a href="https://github.com/sbt/sbt">源代码</a>！
 </p>
-          </div>
+                  </div>
+                </div>
+          </div> <!-- row -->
         </div>
         <div class="header">
           <link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>

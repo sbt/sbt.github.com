@@ -5,12 +5,7 @@
         <meta content="width=device-width, initial-scale=1" name="viewport"/>
         <title>sbt Reference Manual — Combined Pages</title>
         <link rel="shortcut icon" href="../favicon.ico"/>
-        <link rel="stylesheet" href="../css/blueprint/screen.css" type="text/css" media="screen, projection"/>
-        <link rel="stylesheet" href="../css/blueprint/grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
-        <link rel="stylesheet" href="../css/blueprint/print.css" type="text/css" media="print"/> 
-        <!--[if lt IE 8]>
-          <link rel="stylesheet" href={ relativeBase + "css/blueprint/ie.css" } type="text/css" media="screen, projection"/>
-        <![endif]-->
+        <link rel="stylesheet" href="../css/bootstrap.min.css" type="text/css"/>
         <link rel="stylesheet" href="../css/pamflet.css" type="text/css" media="screen, projection"/>
         <link rel="stylesheet" href="../css/pamflet-print.css" type="text/css" media="print"/>
         <link rel="stylesheet" href="../css/pamflet-grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
@@ -18,8 +13,8 @@
         <link rel="stylesheet" href="../css/color_scheme-github.css" type="text/css" media="screen, projection"/>
         <link rel="stylesheet" href="../css/color_scheme-monokai.css" type="text/css" media="screen, projection"/>
         <link rel="stylesheet" href="../css/pamfletheight_80px_2em.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
-        <script type="text/javascript" src="../js/jquery-1.6.2.min.js"></script>
-        <script type="text/javascript" src="../js/jquery.collapse.js"></script>
+        <script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
+        <script type="text/javascript" src="../js/bootstrap.bundle.min.js"></script>
         <script type="text/javascript" src="../js/pamflet.js"></script>
         <script type="text/javascript">
           Pamflet.page.language = 'es';
@@ -34,18 +29,16 @@
             </script>
       </head>
       <body class="color_scheme-github">
-        <a class="page prev nav" href="Contents+in+Depth.html">
-            <span class="space">&nbsp;</span>
-            <span class="flip arrow">&gt;</span>
-          </a>
-        <div class="container contentswrapper">
-          <div class="span-16 prepend-1 append-1 contents">
-            <div class="tocwrapper show">
-      <a class="tochead nav" style="display: none" href="#toc">❦</a>
-      <a name="toc"></a>
-      <h4 class="toctitle">Contents</h4>
-      <div class="tocbody">
-      <div><a href="#sbt+Reference+Manual">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="#Gu%C3%ADa+de+Inicio+de+sbt">Guía de Inicio de sbt</a></div><ol class="toc"> <li><div><a href="#Instalando+sbt">Instalando sbt</a></div><ol class="toc"> <li><div><a href="#Installing+sbt+on+Mac">Installing sbt on Mac</a></div></li><li><div><a href="#Installing+sbt+on+Windows">Installing sbt on Windows</a></div></li><li><div><a href="#Installing+sbt+on+Linux">Installing sbt on Linux</a></div></li><li><div><a href="#Installing+sbt+manually">Installing sbt manually</a></div></li> </ol></li><li><div><a href="#Hello%2C+World">Hello, World</a></div></li><li><div><a href="#Estructura+de+directorios">Estructura de directorios</a></div></li><li><div><a href="#Ejecuci%C3%B3n">Ejecución</a></div></li><li><div><a href="#build+definition"> build definition</a></div></li><li><div><a href="#Scopes">Scopes</a></div></li> </ol></li> </ol></div></div><h1 id="sbt+Reference+Manual">sbt Reference Manual<a href="#sbt+Reference+Manual" class="header-link"><span class="header-link-content">&nbsp;</span></a></h1><h1 id="Gu%C3%ADa+de+Inicio+de+sbt">Guía de Inicio de sbt<a href="#Gu%C3%ADa+de+Inicio+de+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h1><p>sbt usa un número pequeño de conceptos para soportar <em>build definitions</em>
+        <div class="container-fluid contentswrapper h-100">
+          <div class="row minh-100">
+          <div class="col-md-4 col-xl-3 leftcolumn">&nbsp;</div><div class="col-md-8 col-xs-9">
+                  <div class="rightcolmn contents">
+                    <div class="tocwrapper">
+        
+        <div class="tocbody show" id="toc">
+        <h4 class="toctitle">Contents</h4>
+        <div><a href="#sbt+Reference+Manual">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="#Gu%C3%ADa+de+Inicio+de+sbt">Guía de Inicio de sbt</a></div><ol class="toc"> <li><div><a href="#Instalando+sbt">Instalando sbt</a></div><ol class="toc"> <li><div><a href="#Installing+sbt+on+Mac">Installing sbt on Mac</a></div></li><li><div><a href="#Installing+sbt+on+Windows">Installing sbt on Windows</a></div></li><li><div><a href="#Installing+sbt+on+Linux">Installing sbt on Linux</a></div></li><li><div><a href="#Installing+sbt+manually">Installing sbt manually</a></div></li> </ol></li><li><div><a href="#Hello%2C+World">Hello, World</a></div></li><li><div><a href="#Estructura+de+directorios">Estructura de directorios</a></div></li><li><div><a href="#Ejecuci%C3%B3n">Ejecución</a></div></li><li><div><a href="#build+definition"> build definition</a></div></li><li><div><a href="#Scopes">Scopes</a></div></li> </ol></li> </ol></div>
+      </div><h1 id="sbt+Reference+Manual">sbt Reference Manual<a href="#sbt+Reference+Manual" class="header-link"><span class="header-link-content">&nbsp;</span></a></h1><h1 id="Gu%C3%ADa+de+Inicio+de+sbt">Guía de Inicio de sbt<a href="#Gu%C3%ADa+de+Inicio+de+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h1><p>sbt usa un número pequeño de conceptos para soportar <em>build definitions</em>
 (definiciones de construcción de software) flexibles y poderosas. No hay
 tantos conceptos, pero sbt no es exactamente como cualquier otro sistema
 de construcción de sofware y hay detalles con los que <em>usted tropezará</em>
@@ -833,7 +826,9 @@ Simply <code>packageOptions</code> is also a key name, but a different one (for 
 with no in, a scope is implicitly assumed: current project, global
 config, global task).
 </p>
-          </div>
+                  </div>
+                </div>
+          </div> <!-- row -->
         </div>
         <div class="header">
           <link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
