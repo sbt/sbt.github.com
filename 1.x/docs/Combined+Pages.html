@@ -291,10 +291,12 @@ ThisBuild / organization := &quot;com.example&quot;
 lazy val hello = (project in file(&quot;.&quot;))
   .settings(
     name := &quot;Hello&quot;,
+    libraryDependencies += &quot;com.typesafe.play&quot; %% &quot;play-json&quot; % &quot;2.6.9&quot;,
     libraryDependencies += &quot;com.eed3si9n&quot; %% &quot;gigahorse-okhttp&quot; % &quot;0.3.1&quot;,
     libraryDependencies += &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.0.5&quot; % Test,
   )
-</code></pre><h3 id="Use+Scala+REPL">Use Scala REPL<a href="#Use+Scala+REPL" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>We can find out the current weather in New York.
+</code></pre><p>Use the <code>reload</code> command to reflect the change in <code>build.sbt</code>.
+</p><h3 id="Use+Scala+REPL">Use Scala REPL<a href="#Use+Scala+REPL" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>We can find out the current weather in New York.
 </p><pre><code class="prettyprint lang-scala">sbt:Hello&gt; console
 [info] Starting scala interpreter...
 Welcome to Scala 2.12.7 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0_171).
@@ -303,18 +305,21 @@ Type in expressions for evaluation. Or try :help.
 scala&gt; :paste
 // Entering paste mode (ctrl-D to finish)
 
-import gigahorse._, support.okhttp.Gigahorse
 import scala.concurrent._, duration._
+import gigahorse._, support.okhttp.Gigahorse
+import play.api.libs.json._
+
 Gigahorse.withHttp(Gigahorse.config) { http =&gt;
-  val r = Gigahorse.url(&quot;https://query.yahooapis.com/v1/public/yql&quot;).get.
-    addQueryString(
-      &quot;q&quot; -&gt; &quot;&quot;&quot;select item.condition
-                from weather.forecast where woeid in (select woeid from geo.places(1) where text='New York, NY')
-                and u='c'&quot;&quot;&quot;,
-      &quot;format&quot; -&gt; &quot;json&quot;
-    )
-  val f = http.run(r, Gigahorse.asString)
-  Await.result(f, 10.seconds)
+  val baseUrl = &quot;https://www.metaweather.com/api/location&quot;
+  val rLoc = Gigahorse.url(baseUrl + &quot;/search/&quot;).get.
+    addQueryString(&quot;query&quot; -&gt; &quot;New York&quot;)
+  val fLoc = http.run(rLoc, Gigahorse.asString)
+  val loc = Await.result(fLoc, 10.seconds)
+  val woeid = (Json.parse(loc) \ 0 \ &quot;woeid&quot;).get
+  val rWeather = Gigahorse.url(baseUrl + s&quot;/$woeid/&quot;).get
+  val fWeather = http.run(rWeather, Gigahorse.asString)
+  val weather = Await.result(fWeather, 10.seconds)
+  ({Json.parse(_: String)} andThen Json.prettyPrint)(weather)
 }
 
 // press Ctrl+D
@@ -437,36 +442,29 @@ lazy val helloCore = (project in file(&quot;core&quot;))
 </p><pre><code class="prettyprint lang-scala">package example.core
 
 import gigahorse._, support.okhttp.Gigahorse
-import scala.concurrent._
+import scala.concurrent._, duration._
 import play.api.libs.json._
 
 object Weather {
   lazy val http = Gigahorse.http(Gigahorse.config)
+
   def weather: Future[String] = {
-    val r = Gigahorse.url(&quot;https://query.yahooapis.com/v1/public/yql&quot;).get.
-      addQueryString(
-        &quot;q&quot; -&gt; &quot;&quot;&quot;select item.condition
-                 |from weather.forecast where woeid in (select woeid from geo.places(1) where text='New York, NY')
-                 |and u='c'&quot;&quot;&quot;.stripMargin,
-        &quot;format&quot; -&gt; &quot;json&quot;
-      )
-
-    import ExecutionContext.Implicits._
+    val baseUrl = &quot;https://www.metaweather.com/api/location&quot;
+    val locUrl = baseUrl + &quot;/search/&quot;
+    val weatherUrl = baseUrl + &quot;/%s/&quot;
+    val rLoc = Gigahorse.url(locUrl).get.
+      addQueryString(&quot;query&quot; -&gt; &quot;New York&quot;)
+    import ExecutionContext.Implicits.global
     for {
-      f &lt;- http.run(r, Gigahorse.asString)
-      x &lt;- parse(f)
-    } yield x
+      loc &lt;- http.run(rLoc, parse)
+      woeid = (loc \ 0  \ &quot;woeid&quot;).get
+      rWeather = Gigahorse.url(weatherUrl format woeid).get
+      weather &lt;- http.run(rWeather, parse)
+    } yield (weather \\ &quot;weather_state_name&quot;)(0).as[String].toLowerCase
   }
 
-  def parse(rawJson: String): Future[String] = {
-    val js = Json.parse(rawJson)
-    (js \\ &quot;text&quot;).headOption match {
-      case Some(JsString(x)) =&gt; Future.successful(x.toLowerCase)
-      case _                 =&gt; Future.failed(sys.error(rawJson))
-    }
-  }
+  private def parse = Gigahorse.asString andThen Json.parse
 }
-
 </code></pre><p>Next, change <code>src/main/scala/example/Hello.scala</code> as follows:
 </p><pre><code class="prettyprint lang-scala">package example
 
