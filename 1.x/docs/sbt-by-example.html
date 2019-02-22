@@ -220,13 +220,33 @@ Gigahorse.withHttp(Gigahorse.config) { http =&gt;
 
 // Exiting paste mode, now interpreting.
 
-import gigahorse._
-import support.okhttp.Gigahorse
 import scala.concurrent._
 import duration._
-res0: String = {&quot;query&quot;:{&quot;count&quot;:1,&quot;created&quot;:&quot;2018-05-06T22:49:55Z&quot;,&quot;lang&quot;:&quot;en-US&quot;,
-&quot;results&quot;:{&quot;channel&quot;:{&quot;item&quot;:{&quot;condition&quot;:{&quot;code&quot;:&quot;26&quot;,&quot;date&quot;:&quot;Sun, 06 May 2018 06:00 PM EDT&quot;,
-&quot;temp&quot;:&quot;16&quot;,&quot;text&quot;:&quot;Cloudy&quot;}}}}}}
+import gigahorse._
+import support.okhttp.Gigahorse
+import play.api.libs.json._
+res0: String =
+{
+  &quot;consolidated_weather&quot; : [ {
+    &quot;id&quot; : 6446939314847744,
+    &quot;weather_state_name&quot; : &quot;Light Rain&quot;,
+    &quot;weather_state_abbr&quot; : &quot;lr&quot;,
+    &quot;wind_direction_compass&quot; : &quot;WNW&quot;,
+    &quot;created&quot; : &quot;2019-02-21T04:39:47.747805Z&quot;,
+    &quot;applicable_date&quot; : &quot;2019-02-21&quot;,
+    &quot;min_temp&quot; : 0.48000000000000004,
+    &quot;max_temp&quot; : 7.84,
+    &quot;the_temp&quot; : 2.1700000000000004,
+    &quot;wind_speed&quot; : 5.996333145703094,
+    &quot;wind_direction&quot; : 293.12257757287307,
+    &quot;air_pressure&quot; : 1033.115,
+    &quot;humidity&quot; : 77,
+    &quot;visibility&quot; : 14.890539250775472,
+    &quot;predictability&quot; : 75
+  }, {
+    &quot;id&quot; : 5806299509948416,
+    &quot;weather_state_name&quot; : &quot;Heavy Cloud&quot;,
+...
 
 scala&gt; :q // to quit
 </code></pre><h3 id="Make+a+subproject">Make a subproject<a href="#Make+a+subproject" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Change <code>build.sbt</code> as follows:

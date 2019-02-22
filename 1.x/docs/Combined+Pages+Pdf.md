@@ -593,13 +593,33 @@ Gigahorse.withHttp(Gigahorse.config) { http =>
 
 // Exiting paste mode, now interpreting.
 
-import gigahorse._
-import support.okhttp.Gigahorse
 import scala.concurrent._
 import duration._
-res0: String = {"query":{"count":1,"created":"2018-05-06T22:49:55Z","lang":"en-US",
-"results":{"channel":{"item":{"condition":{"code":"26","date":"Sun, 06 May 2018 06:00 PM EDT",
-"temp":"16","text":"Cloudy"}}}}}}
+import gigahorse._
+import support.okhttp.Gigahorse
+import play.api.libs.json._
+res0: String =
+{
+  "consolidated_weather" : [ {
+    "id" : 6446939314847744,
+    "weather_state_name" : "Light Rain",
+    "weather_state_abbr" : "lr",
+    "wind_direction_compass" : "WNW",
+    "created" : "2019-02-21T04:39:47.747805Z",
+    "applicable_date" : "2019-02-21",
+    "min_temp" : 0.48000000000000004,
+    "max_temp" : 7.84,
+    "the_temp" : 2.1700000000000004,
+    "wind_speed" : 5.996333145703094,
+    "wind_direction" : 293.12257757287307,
+    "air_pressure" : 1033.115,
+    "humidity" : 77,
+    "visibility" : 14.890539250775472,
+    "predictability" : 75
+  }, {
+    "id" : 5806299509948416,
+    "weather_state_name" : "Heavy Cloud",
+...
 
 scala> :q // to quit
 ```
