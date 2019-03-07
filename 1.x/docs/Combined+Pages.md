@@ -865,9 +865,11 @@ lazy val helloCore = (project in file("core"))
   )
 ```
 
-### Create a .zip distribution
+### Reload and create a .zip distribution
 
 ```
+sbt:Hello> reload
+...
 sbt:Hello> dist
 [info] Wrote /tmp/foo-build/target/scala-2.12/hello_2.12-0.1.0-SNAPSHOT.pom
 [info] Wrote /tmp/foo-build/core/target/scala-2.12/hello-core_2.12-0.1.0-SNAPSHOT.pom
