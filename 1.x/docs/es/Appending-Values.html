@@ -1,9 +1,9 @@
 <!DOCTYPE html SYSTEM "about:legacy-compat">
-<html manifest="pamflet.manifest">
+<html>
       <head>
         <meta charset="utf-8"/>
         <meta content="width=device-width, initial-scale=1" name="viewport"/>
-        <title>sbt Reference Manual — Guía de Inicio de sbt</title>
+        <title>Manual de referencia de sbt — Añadir valores</title>
         <link rel="shortcut icon" href="../favicon.ico"/>
         <link rel="stylesheet" href="../css/bootstrap.min.css" type="text/css"/>
         <link rel="stylesheet" href="../css/pamflet.css" type="text/css" media="screen, projection"/>
@@ -37,37 +37,65 @@
         
         <div class="tocbody show" id="toc">
         
-        <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div class="current">Guía de Inicio de sbt</div><ol class="toc"> <li><div><a href="Setup.html">Instalando sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Installing sbt on Mac</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Installing sbt on Windows</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Installing sbt on Linux</a></div></li><li><div><a href="Manual-Installation.html">Installing sbt manually</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">Estructura de directorios</a></div></li><li><div><a href="Running.html">Ejecución</a></div></li><li><div><a href="Basic-Def.html"> build definition</a></div></li><li><div><a href="Scopes.html">Scopes</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div>
+        <div><a href="index.html">Manual de referencia de sbt</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">Guía de inicio de sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">Instalar sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Instalar sbt on Mac</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Instalar sbt en Windows</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Installing sbt on Linux</a></div></li> </ol></li><li><div><a href="sbt-by-example.html">sbt mediante ejemplos</a></div></li><li><div><a href="Directories.html">Estructura de directorios</a></div></li><li><div><a href="Running.html">Ejecución</a></div></li><li><div><a href="Basic-Def.html">Definiciones de construcción</a></div></li><li><div><a href="Multi-Project.html">Construcciones multiproyecto</a></div></li><li><div><a href="Task-Graph.html">Grafos de tareas</a></div></li><li><div><a href="Scopes.html">Ámbitos</a></div></li><li><div class="current">Añadir valores</div></li><li><div><a href="Scope-Delegation.html">Delegación de ámbito (resolución de .value)</a></div></li><li><div><a href="Library-Dependencies.html">Dependencias de bibliotecas</a></div></li><li><div><a href="Using-Plugins.html">Usar plugins</a></div></li><li><div><a href="Custom-Settings.html">Entradas y tareas personalizadas</a></div></li><li><div><a href="Organizing-Build.html">Organizar la construcción</a></div></li><li><div><a href="Summary.html">Guía de inicio - resumen</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div>
       </div>
       </div>
                 </div><div class="col-md-8 col-xs-9">
                   <div class="rightcolumn contents">
-                  <h1 id="Gu%C3%ADa+de+Inicio+de+sbt">Guía de Inicio de sbt<a href="#Gu%C3%ADa+de+Inicio+de+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h1><p>sbt usa un número pequeño de conceptos para soportar <em>build definitions</em>
-(definiciones de construcción de software) flexibles y poderosas. No hay
-tantos conceptos, pero sbt no es exactamente como cualquier otro sistema
-de construcción de sofware y hay detalles con los que <em>usted tropezará</em>
-si no ha leído la documentación.
-</p><p>La Guía de inicio cubre los conceptos que usted necesita para crear y
-mantnere una <em>build definition</em>.
-</p><p>¡Es <em>altamente recomendable</em> leer la Guía de inicio!
-</p><p>Si usted tiene mucha prisa, los conceptos más importantes pueden
-encontrarse en <a href="Basic-Def.html">sbt build definition</a>, <a href="Scopes.html">scopes</a>, y
-<a href="More-About-Settings.html">más sobre settings</a>. Pero no prometemos que sea
-una buena idea dejar de leer las otras páginas de la guía.
-</p><p>Es mejor leer en orden, ya que las páginas posteriores de la Guía de
-inicio utilizan conceptos introducidos con anterioridad.
-</p><p>Gracias por utilizar sbt <em>¡Diviértase!</em>
-</p><div class="bottom nav">
+                  <h2 id="A%C3%B1adir+valores">Añadir valores<a href="#A%C3%B1adir+valores" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="A%C3%B1adir+a+valores+existentes%3A++y">Añadir a valores existentes: <code>+=</code> y <code>++=</code><a href="#A%C3%B1adir+a+valores+existentes%3A++y" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>La asignación <code>:=</code> es la transformación más simple, pero las claves tienen
+también otros métodos. Si <code>T</code> en <code>SettingKey[T]</code> es una secuencia, es decir,
+si el tipo del valor de una clave es una secuencia, podrás añadir elementos a la
+secuencia en lugar de reemplazarla.
+</p><ul><li><code>+=</code> añadirá un único elemento a la secuencia
+</li><li><code>++=</code> concatenará otra secuencia
+</li></ul><p>Por ejemplo, la clave <code>Compile / sourceDirectories</code> tiene un <code>Seq[File]</code> por
+valor. De forma predeterminada el valor de esta clave incluye <code>src/main/scala</code>.
+Si quieres que además se compile el código fuente de un directorio llamado
+source (en el caso de que por ejemplo no utilices una estructura de directorios
+estándar) podrás añadir dicho directorio:
+</p><pre><code class="prettyprint lang-scala">Compile / sourceDirectories += new File(&quot;source&quot;)
+</code></pre><p>O convenientemente puedes utilizar la función <code>file()</code> del paquete sbt.
+</p><pre><code class="prettyprint lang-scala">Compile / sourceDirectories += file(&quot;source&quot;)
+</code></pre><p>(<code>file()</code> crea un nueva instancia de <code>File</code>)
+</p><p>Puedes usar <code>++=</code> para añadir más de un directorio a la vez:
+</p><pre><code class="prettyprint lang-scala">Compile / sourceDirectories ++= Seq(file(&quot;sources1&quot;), file(&quot;sources2&quot;))
+</code></pre><p>Donde <code>Seq(a, b, c, ...)</code> es la sintaxis estándar de Scala para construir una
+secuencia.
+</p><p>Por supuesto, para reemplazar totalmente los directorios de código fuente
+predeterminados puedes seguir utilizando <code>:=</code>:
+</p><pre><code class="prettyprint lang-scala">Compile / sourceDirectories := Seq(file(&quot;sources1&quot;), file(&quot;sources2&quot;))
+</code></pre><h4 id="Cu%C3%A1ndo+no+est%C3%A1+definida+una+configuraci%C3%B3n">Cuándo no está definida una configuración<a href="#Cu%C3%A1ndo+no+est%C3%A1+definida+una+configuraci%C3%B3n" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Cuando una entrada utiliza <code>:=</code>, <code>+=</code> o <code>++=</code> para crear una dependencia sobre
+sí misma o sobre el valor de otra clave, el valor sobre el que depende debe
+existir. De lo contrario sbt se quejará. Puede que por ejemplo diga
+<em>“Reference to undefined setting“</em>. Cuando esto suceda asegúrate de que estás
+utilizando la clave en el <a href="Scopes.html">ámbito</a> donde está definida.
+</p><p>Es posible crear referencias circulares, lo cual es un error. sbt te lo dirá
+si lo haces.
+</p><h4 id="Tareas+basadas+en+valores+de+otras+claves">Tareas basadas en valores de otras claves<a href="#Tareas+basadas+en+valores+de+otras+claves" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Puedes calcular el valor de algunas tareas o entradas definiendo o añadiendo
+el valor de otra tarea. Esto se hace utilizando <code>Def.task</code> como argumento de
+<code>:=</code>, <code>+=</code>, or <code>++=</code>.
+</p><p>Como ejemplo, considera añadir un generador de código fuente utilizando
+el directorio base del proyecto y el classpath de compilación.
+</p><pre><code class="prettyprint lang-scala">Compile / sourceGenerators += Def.task {
+  myGenerator(baseDirectory.value, (Compile / managedClasspath).value)
+}
+</code></pre><h3 id="A%C3%B1adir+con+dependencia%3A++y">Añadir con dependencia: <code>+=</code> y <code>++=</code><a href="#A%C3%B1adir+con+dependencia%3A++y" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Otras claves pueden ser utilizadas cuando se añade a una entrada o tarea
+existente, al igual que se hacía para asignar con <code>:=</code>.
+</p><p>Por ejemplo, digamos que tienes un informe de cobertura de código cuyo nombre
+se basa en el nombre del proyecto y que quieres añadirlo a la lista de ficheros
+que se borran cuando se invoca <code>clean</code>:
+</p><pre><code class="prettyprint lang-scala">cleanFiles += file(&quot;coverage-report-&quot; + name.value + &quot;.txt&quot;)
+</code></pre><div class="bottom nav">
                 <div class="row">
                   <div class="col-md-auto">
-                    <a href="Setup.html">
+                    <a href="Scope-Delegation.html">
                       <div class="arrowitem">
                         <span class="arrow">&gt;</span>
                       </div>
 
                       <div class="arrowitem">
                         <em>Next page</em><br/>
-                        Instalando sbt
+                        Delegación de ámbito (resolución de .value)
                       </div>
 
                     </a>
@@ -76,7 +104,7 @@ inicio utilizan conceptos introducidos con anterioridad.
                 <div class="row w-100">
         <div class="col-md-auto ml-auto">
           <ul class="language-bar">
-            <li><a href="../index.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/index.html"><span class="lang-item lang-ja">日本語</span></a></li><li><a href="../zh-cn/index.html"><span class="lang-item lang-zh-cn">中文 (简体)</span></a></li><li><a href="../es/index.html"><span class="lang-item lang-es">Español</span></a></li>
+            <li><a href="../Appending-Values.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/Appending-Values.html"><span class="lang-item lang-ja">日本語</span></a></li><li><a href="../es/Appending-Values.html"><span class="lang-item lang-es">Español</span></a></li>
           </ul>
         </div>
       </div>
@@ -104,7 +132,7 @@ inicio utilizan conceptos introducidos con anterioridad.
         <a href="../../../community.html">Get Involved</a>
         <a id="source-code" href="https://github.com/sbt/sbt"><img src="../files/github-logo-teal.svg" alt="Source code" class="social"></a>
         <a id="twitter" href="https://twitter.com/scala_sbt"><img src="../files/twitter-logo-teal.svg" alt="sbt on Twitter" class="social"></a>
-        <a id="edit-on-github" href="https://github.com/sbt/website/edit/develop/src/reference/00.md"><img src="../files/octicon-pencil.svg" alt="Edit on GitHub"></a>
+        <a id="edit-on-github" href="https://github.com/sbt/website/edit/develop/src/reference/00-Getting-Started/07B-Appending-Values.md"><img src="../files/octicon-pencil.svg" alt="Edit on GitHub"></a>
       </div>
     </div>
   </div>

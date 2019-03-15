@@ -1,0 +1,235 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html manifest="pamflet.manifest">
+      <head>
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+        <title>Manual de referencia de sbt — Usar plugins</title>
+        <link rel="shortcut icon" href="../favicon.ico"/>
+        <link rel="stylesheet" href="../css/bootstrap.min.css" type="text/css"/>
+        <link rel="stylesheet" href="../css/pamflet.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamflet-print.css" type="text/css" media="print"/>
+        <link rel="stylesheet" href="../css/pamflet-grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-redmond.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-github.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-monokai.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamfletheight_80px_2em.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
+        <script type="text/javascript" src="../js/bootstrap.bundle.min.js"></script>
+        <script type="text/javascript" src="../js/pamflet.js"></script>
+        <script type="text/javascript">
+          Pamflet.page.language = 'es';
+        </script>
+        <script type="text/javascript" src="../js/prettify/prettify.js"></script><script type="text/javascript" src="../js/prettify/lang-scala.js"></script><link type="text/css" rel="stylesheet" href="../css/prettify.css"/><script type="text/javascript"><!--
+        window.onload=function() { prettyPrint(); };
+      --></script>
+        <link rel="stylesheet" href="../css/custom.css" type="text/css" media="screen, projection"/>
+        
+        <script type="text/javascript">
+              Pamflet.twitter = '#sbt #scala';
+            </script>
+      </head>
+      <body class="color_scheme-github">
+        <div class="container-fluid contentswrapper h-100">
+          <div class="row minh-100">
+          <div class="col-md-4 col-xl-3 toccolumn leftcolumn">
+                  <div class="lefttocwrapper">
+      <div class="tocwrapper">
+        
+        <div class="tocbody show" id="toc">
+        
+        <div><a href="index.html">Manual de referencia de sbt</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">Guía de inicio de sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">Instalar sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Instalar sbt on Mac</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Instalar sbt en Windows</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Installing sbt on Linux</a></div></li> </ol></li><li><div><a href="sbt-by-example.html">sbt mediante ejemplos</a></div></li><li><div><a href="Directories.html">Estructura de directorios</a></div></li><li><div><a href="Running.html">Ejecución</a></div></li><li><div><a href="Basic-Def.html">Definiciones de construcción</a></div></li><li><div><a href="Multi-Project.html">Construcciones multiproyecto</a></div></li><li><div><a href="Task-Graph.html">Grafos de tareas</a></div></li><li><div><a href="Scopes.html">Ámbitos</a></div></li><li><div><a href="Appending-Values.html">Añadir valores</a></div></li><li><div><a href="Scope-Delegation.html">Delegación de ámbito (resolución de .value)</a></div></li><li><div><a href="Library-Dependencies.html">Dependencias de bibliotecas</a></div></li><li><div class="current">Usar plugins</div></li><li><div><a href="Custom-Settings.html">Entradas y tareas personalizadas</a></div></li><li><div><a href="Organizing-Build.html">Organizar la construcción</a></div></li><li><div><a href="Summary.html">Guía de inicio - resumen</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div>
+      </div>
+      </div>
+                </div><div class="col-md-8 col-xs-9">
+                  <div class="rightcolumn contents">
+                  <h2 id="Usar+plugins">Usar plugins<a href="#Usar+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Por favor, lee primero las páginas anteriores de la Guía de inicio, en particular <a href="Basic-Def.html">Definiciones de construcción</a>, <a href="Task-Graph.html">Grafos de tareas</a> y 
+<a href="Library-Dependencies.html">Dependencias de bibliotecas</a> antes de leer esta página.
+</p><h3 id="%C2%BFQu%C3%A9+es+un+plugin%3F">¿Qué es un plugin?<a href="#%C2%BFQu%C3%A9+es+un+plugin%3F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Un plugin extiende la definición de construcción, usualmente añadiendo nueva configuración. La nueva configuración puede incluir nuevas tareas. Por ejemplo, un plugin puede añadir una tarea <code>codeCoverage</code> para generar un informe de cobertura de código de test.
+</p><h3 id="Declarar+un+plugin">Declarar un plugin<a href="#Declarar+un+plugin" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Si tu proyecto está en un directorio llamado <code>hello</code> y quieres añadir el plugin <code>sbt-site</code> a la definición de construcción, crea el fichero <code>hello/project/site.sbt</code> y declara la dependencia del plugin pasando el módulo Ivy del plugin a <code>addSbtPlugin</code>:
+</p><pre><code class="prettyprint lang-scala">addSbtPlugin(&quot;com.typesafe.sbt&quot; % &quot;sbt-site&quot; % &quot;0.7.0&quot;)
+</code></pre><p>Si quieres añadir <code>sbt-assembly</code>, crea <code>hello/project/assembly.sbt</code> con el siguiente contenido:
+</p><pre><code class="prettyprint lang-scala">addSbtPlugin(&quot;com.eed3si9n&quot; % &quot;sbt-assembly&quot; % &quot;0.11.2&quot;)
+</code></pre><p>No todos los plugins están ubicados en uno de los repositorios predeterminados. La documentación del plugin te puede instar a que añadas el repositorio donde se encuentra:
+</p><pre><code class="prettyprint lang-scala">resolvers += Resolver.sonatypeRepo(&quot;public&quot;)
+</code></pre><p>Por lo general los plugins proporcionan configuraciones que son añadidas a la del proyecto para habilitar la funcionalidad del plugin. Esto es explicado en la siguiente sección:
+</p><h3 id="Habilitando+e+inhabilitando+autoplugins">Habilitando e inhabilitando autoplugins<a href="#Habilitando+e+inhabilitando+autoplugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Un plugin puede declarar que su configuración debería de ser automáticamente añadida a la definición de construcción, en cuyo caso no tienes que hacer nada para añadirla.
+</p><p>A partir de sbt 0.13.5 se introdujo la nueva característica <a href="../docs/Plugins.html">autoplugins</a> la cual permite asegurar que la configuración de un plugin está disponible en el proyecto de forma automática y de un modo seguro. Muchos autoplugins deberían contar con su configuración predeterminada automáticamente, sin embargo esto requiere la activación explícita.
+</p><p>Si estás utilizando un autoplugin que requiere activación explícita entonces tendrás que añadir lo siguiente en tu <code>build.sbt</code>:
+</p><pre><code class="prettyprint lang-scala">lazy val util = (project in file(&quot;util&quot;))
+  .enablePlugins(FooPlugin, BarPlugin)
+  .settings(
+    name := &quot;hello-util&quot;
+  )
+</code></pre><p>El método <code>enablePlugins</code> permite a los proyectos definir explícitamente qué autoplugins quieren utilizar.
+</p><p>Los proyectos también pueden excluir plugins con el método <code>disablePlugins</code>. Por ejemplo, si queremos eliminar la configuración de <code>IvyPlugin</code> en <code>util</code> tendríamos que modificar nuestro <code>build.sbt</code> de la siguiente manera:
+</p><pre><code class="prettyprint lang-scala">lazy val util = (project in file(&quot;util&quot;))
+  .enablePlugins(FooPlugin, BarPlugin)
+  .disablePlugins(plugins.IvyPlugin)
+  .settings(
+    name := &quot;hello-util&quot;
+  )
+</code></pre><p>Los autoplugins deberían documentar si necesitan o no ser explícitamente habilitados. Si sientes curiosidad por saber qué autoplugins están habilitados para un proyecto, puedes ejecutar el comando <code>plugins</code> en la consola de sbt.
+</p><p>Por ejemplo:
+</p><pre><code class="">&gt; plugins
+In file:/home/jsuereth/projects/sbt/test-ivy-issues/
+        sbt.plugins.IvyPlugin: enabled in scala-sbt-org
+        sbt.plugins.JvmPlugin: enabled in scala-sbt-org
+        sbt.plugins.CorePlugin: enabled in scala-sbt-org
+        sbt.plugins.JUnitXmlReportPlugin: enabled in scala-sbt-org
+</code></pre><p>Aquí, la salida de <code>plugins</code> nos está mostrando que los plugins predeterminados de sbt están todos habilitados. La configuración predeterminada de sbt es proporcionada via tres plugins:
+</p><ol><li><code>CorePlugin</code>: Proporciona los controles de paralelismo de tareas del núcleo.
+</li><li><code>IvyPlugin</code>: Proporciona los mecanismos para publicar/resolver módulos.
+</li><li><code>JvmPlugin</code>: Proporciona los mecanismos para compilar/testear/ejecutar/empaquetar proyectos de Java/Scala.
+</li></ol><p>Adicionalmente, <code>JUnitXmlReportPlugin</code> proporciona soporte experimental para generar junit-xml.
+</p><p>Algunos plugins no automáticos antiguos a menudo necesitan que su configuración sea añadida explícitamente, por lo que las <a href="Multi-Project.html">construcciones multiproyecto</a> pueden tener diferentes tipos de proyectos.
+La documentación del plugin indicará cómo configurarlo, pero típicamente para plugins antiguos esto implica añadir la configuración base del plugin y modificarla según sea necesario.
+</p><p>Por ejemplo, para el plugin <code>sbt-site</code>, necesitarías crear un fichero <code>site.sbt</code> con el siguiente contenido para habilitarlo para ese proyecto:
+</p><pre><code class="prettyprint lang-scala">site.settings
+</code></pre><p>Si la construcción define múltiples proyectos, entonces añádelo directamente al proyecto:
+</p><pre><code class="prettyprint lang-scala">// inhabilitar el plugin site para el proyecto ´util´
+lazy val util = (project in file(&quot;util&quot;))
+
+// habilitar el plugin site para el proyecto `core`
+lazy val core = (project in file(&quot;core&quot;))
+  .settings(site.settings)
+</code></pre><h3 id="Plugins+globales">Plugins globales<a href="#Plugins+globales" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Los plugins pueden ser instalados para todos tus proyectos a la vez
+declarándolos en <code>~/.sbt/1.0/plugins/</code>. <code>~/.sbt/1.0/plugins/</code> es un proyecto sbt cuyo classpath es exportado a todos los proyectos de la definición de construcción. Más o menos, cualquier fichero <code>.sbt</code> y <code>.scala</code> en <code>~/.sbt/1.0/plugins/</code> se comporta como si estuviera en el directorio <code>project/</code> de cada uno de los proyectos.
+</p><p>Puedes crear <code>~/.sbt/1.0/plugins/build.sbt</code> y poner expresiones <code>addSbtPlugin()</code> ahí para añadir plugins a todos tus proyectos a la vez.
+Debido a que hacer eso incrementaría la dependencia a nivel local, esta característica debería ser utilizada con moderación. Para más información ver <a href="../docs/Best-Practices.html#global-vs-local-plugins">Buenas prácticas</a>.
+</p><h3 id="Plugins+disponibles">Plugins disponibles<a href="#Plugins+disponibles" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Existe <a href="../docs/Community-Plugins.html">una lista de plugins disponibles</a>.
+</p><p>Algunos plugins especialmente famosos son:
+</p><ul><li>aquellos para los IDEs (para importar un proyecto sbt en tu IDE)
+</li><li>aquellos que soportan frameworks web, tales como <a href="https://github.com/earldouglas/xsbt-web-plugin">xsbt-web-plugin</a>
+</li></ul><p>Para más información, incluyendo cómo desarrollar plugins, ver <a href="../docs/Plugins.html">Plugins</a>.
+Para saber más acerca de las mejores prácticas ver <a href="../docs/Plugins-Best-Practices.html">Plugins - Mejores prácticas</a>.
+</p><div class="bottom nav">
+                <div class="row">
+                  <div class="col-md-auto">
+                    <a href="Custom-Settings.html">
+                      <div class="arrowitem">
+                        <span class="arrow">&gt;</span>
+                      </div>
+
+                      <div class="arrowitem">
+                        <em>Next page</em><br/>
+                        Entradas y tareas personalizadas
+                      </div>
+
+                    </a>
+                  </div>
+                </div>
+                <div class="row w-100">
+        <div class="col-md-auto ml-auto">
+          <ul class="language-bar">
+            <li><a href="../Using-Plugins.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/Using-Plugins.html"><span class="lang-item lang-ja">日本語</span></a></li><li><a href="../zh-cn/Using-Plugins.html"><span class="lang-item lang-zh-cn">中文 (简体)</span></a></li><li><a href="../es/Using-Plugins.html"><span class="lang-item lang-es">Español</span></a></li>
+          </ul>
+        </div>
+      </div>
+              </div>
+                  </div>
+                </div>
+          </div> <!-- row -->
+        </div>
+        <div class="header">
+          <link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
+<div class="container-fluid top nav">
+  <div class="row w-100">
+    <div class="col-md-4">
+      <div class="logo">
+        <a href="../../../index.html"><img src="../files/sbt-logo.svg" alt="sbt"></a>
+        <span class="versions"><select id="versions"></select></span>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="nav" id="topbar">
+        <a href="../../../documentation.html">Documentation</a>
+        <a href="../../../download.html">Download</a>
+        <a href="../../../support.html">Support</a>
+        <a href="../../../community.html">Get Involved</a>
+        <a id="source-code" href="https://github.com/sbt/sbt"><img src="../files/github-logo-teal.svg" alt="Source code" class="social"></a>
+        <a id="twitter" href="https://twitter.com/scala_sbt"><img src="../files/twitter-logo-teal.svg" alt="sbt on Twitter" class="social"></a>
+        <a id="edit-on-github" href="https://github.com/sbt/website/edit/develop/src/reference/00-Getting-Started/10-Using-Plugins.md"><img src="../files/octicon-pencil.svg" alt="Edit on GitHub"></a>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" async>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41449189-1', 'scala-sbt.org');
+ga('send', 'pageview');
+</script>
+<script type="text/javascript" async>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-23127719-1', 'lightbend.com', {'allowLinker': true, 'name': 'tsTracker'});
+  ga('tsTracker.require', 'linker');
+  ga('tsTracker.linker:autoLink', ['lightbend.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org']);
+  ga('tsTracker.send', 'pageview');
+</script>
+<script type="text/javascript">
+$(function() {
+var scrollDown = function() {
+if (window.location.hash !== "") {
+  setTimeout(function() { $(window).scrollTop($(window).scrollTop() - 120); }, 100);
+}
+}
+scrollDown();
+$(window).bind('hashchange', function() {
+scrollDown();
+});
+});
+</script>
+
+        </div>
+        <div class="footer">
+          <footer>
+  <div class="container-fluid footer">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="support-item">
+          <div class="support-icon">
+            <svg class="svg-icon svg-icon-chat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.5 85.2" enable-background="new 0 0 97.5 85.2"><path stroke="#fff" stroke-width="4.282" stroke-linecap="round" stroke-miterlimit="10" d="M27 29.5h-16.3c-4.7 0-8.6 3.9-8.6 8.6v25.7c0 4.7 3.9 8.6 8.6 8.6h2.7c.8 0 1.5.7 1.5 1.5v7.8c0 1.3 1.6 2 2.5 1l9.5-9.5c.5-.5 1.2-.8 2-.8h20.2c4.7 0 8.6-3.9 8.6-8.6v-7.8" fill="none"/><path fill="#fff" d="M85 0h-40c-6.9 0-12.5 5.6-12.5 12.5v33.4c0 2.2 1.8 4.1 4.1 4.1h29.9c.7 0 1.3.3 1.8.7l10 10c1.6 1.6 4.3.5 4.3-1.8v-6.5c0-1.4 1.1-2.5 2.5-2.5 6.9 0 12.5-5.6 12.5-12.5v-25c-.1-6.8-5.8-12.4-12.6-12.4z"/></svg>
+          </div>
+          <div class="support-detail">
+            <h2>Community Support</h2>
+            <a href="https://stackoverflow.com/questions/tagged/sbt">StackOverflow</a>
+          </div>
+        </div>
+        <div class="support-item">
+          <div class="support-icon">
+            <svg id="lightbend-icon-reverse" class="svg-icon svg-icon-lightbend-reverse" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 302 262"><title>lightbend-icon</title><g id="icon"><path d="M1,195v56a10,10,0,0,0,10,10H291a10,10,0,0,0,10-10V195a557.85,557.85,0,0,1-150,20A557.85,557.85,0,0,1,1,195Z" style="fill:#fff"/><path d="M291,1H11A10,10,0,0,0,1,11V176a539.94,539.94,0,0,0,150,21,539.94,539.94,0,0,0,150-21V11A10,10,0,0,0,291,1Z" style="fill:#fff"/></g></svg>
+          </div>
+          <div class="support-detail">
+            <h2>Commercial Support</h2>
+            <a href="https://www.lightbend.com/services/expert-support">Lightbend Subscription</a>
+            <a href="https://www.lightbend.com/services/training">Training</a>
+            <a href="https://www.lightbend.com/services/consulting">Consulting</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 text-right ts">
+        &copy; 2016-2019 Lightbend Inc.
+        <a href="https://www.lightbend.com">
+          <img src="../files/lightbend-reverse.svg" alt="Lightbend, Inc.">
+        </a>
+      </div>
+    </div>
+  </div>
+</footer><script src="/assets/versions.js"></script><script src="/assets/set-versions.js"></script>
+        </div>
+        
+        <div class="highlight-outer">
+              <div class="highlight-menu">
+                <ul>
+                  <li><button id="highlight-button-twitter"><img src="../img/twitter-bird-dark-bgs.png"/></button></li>
+                </ul>
+              </div>
+            </div>
+      </body>
+    </html>

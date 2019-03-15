@@ -1,0 +1,371 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html>
+      <head>
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+        <title>Manual de referencia de sbt — Construcciones multiproyecto</title>
+        <link rel="shortcut icon" href="../favicon.ico"/>
+        <link rel="stylesheet" href="../css/bootstrap.min.css" type="text/css"/>
+        <link rel="stylesheet" href="../css/pamflet.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamflet-print.css" type="text/css" media="print"/>
+        <link rel="stylesheet" href="../css/pamflet-grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-redmond.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-github.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-monokai.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamfletheight_80px_2em.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
+        <script type="text/javascript" src="../js/bootstrap.bundle.min.js"></script>
+        <script type="text/javascript" src="../js/pamflet.js"></script>
+        <script type="text/javascript">
+          Pamflet.page.language = 'es';
+        </script>
+        <script type="text/javascript" src="../js/prettify/prettify.js"></script><script type="text/javascript" src="../js/prettify/lang-scala.js"></script><link type="text/css" rel="stylesheet" href="../css/prettify.css"/><script type="text/javascript"><!--
+        window.onload=function() { prettyPrint(); };
+      --></script>
+        <link rel="stylesheet" href="../css/custom.css" type="text/css" media="screen, projection"/>
+        
+        <script type="text/javascript">
+              Pamflet.twitter = '#sbt #scala';
+            </script>
+      </head>
+      <body class="color_scheme-github">
+        <div class="container-fluid contentswrapper h-100">
+          <div class="row minh-100">
+          <div class="col-md-4 col-xl-3 toccolumn leftcolumn">
+                  <div class="lefttocwrapper">
+      <div class="tocwrapper">
+        
+        <div class="tocbody show" id="toc">
+        
+        <div><a href="index.html">Manual de referencia de sbt</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">Guía de inicio de sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">Instalar sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Instalar sbt on Mac</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Instalar sbt en Windows</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Installing sbt on Linux</a></div></li> </ol></li><li><div><a href="sbt-by-example.html">sbt mediante ejemplos</a></div></li><li><div><a href="Directories.html">Estructura de directorios</a></div></li><li><div><a href="Running.html">Ejecución</a></div></li><li><div><a href="Basic-Def.html">Definiciones de construcción</a></div></li><li><div class="current">Construcciones multiproyecto</div></li><li><div><a href="Task-Graph.html">Grafos de tareas</a></div></li><li><div><a href="Scopes.html">Ámbitos</a></div></li><li><div><a href="Appending-Values.html">Añadir valores</a></div></li><li><div><a href="Scope-Delegation.html">Delegación de ámbito (resolución de .value)</a></div></li><li><div><a href="Library-Dependencies.html">Dependencias de bibliotecas</a></div></li><li><div><a href="Using-Plugins.html">Usar plugins</a></div></li><li><div><a href="Custom-Settings.html">Entradas y tareas personalizadas</a></div></li><li><div><a href="Organizing-Build.html">Organizar la construcción</a></div></li><li><div><a href="Summary.html">Guía de inicio - resumen</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div>
+      </div>
+      </div>
+                </div><div class="col-md-8 col-xs-9">
+                  <div class="rightcolumn contents">
+                  <h2 id="Construcciones+multiproyecto">Construcciones multiproyecto<a href="#Construcciones+multiproyecto" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Esta página introduce múltiples subproyectos en una única construcción.
+</p><p>Por favor, lee primero las páginas anteriores de la Guía de inicio, en
+particular necesitarás entender el fichero <a href="Basic-Def.html">build.sbt</a> antes de leer
+esta página.
+</p><h3 id="M%C3%BAltiples+subproyectos">Múltiples subproyectos<a href="#M%C3%BAltiples+subproyectos" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Puede ser útil mantener múltiples subproyectos relacionados en una única
+construcción, especialmente si unos dependen de otros y sueles modificarlos
+todos a la vez.
+</p><p>Cada subproyecto en una construcción tiene sus propios directorios de código
+fuente, genera su propio fichero jar cuando ejecutas <code>package</code> y en general
+funcionan como cualquier otro proyecto.
+</p><p>Un proyecto se define declarando un <code>lazy val</code> de tipo
+<a href="../../api/sbt/Project.html">Project</a>. Por ejemplo:
+</p><pre><code class="prettyprint lang-scala">lazy val util = (project in file(&quot;util&quot;))
+
+lazy val core = (project in file(&quot;core&quot;))
+</code></pre><p>El nombre del <code>val</code> es usado como ID de subproyecto, el cual es usado para
+referirse al subproyecto en el shell de sbt.
+</p><p>Opcionalmente,  el directorio base puede ser omitido si es el mismo que el
+nombre del val.
+</p><pre><code class="prettyprint lang-scala">lazy val util = project
+
+lazy val core = project
+</code></pre><h4 id="Configuraci%C3%B3n+com%C3%BAn+de+construcci%C3%B3n">Configuración común de construcción<a href="#Configuraci%C3%B3n+com%C3%BAn+de+construcci%C3%B3n" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Para extraer configuración común a lo largo de múltiples proyectos puedes
+definir la configuración en el ámbito de <code>ThisBuild</code>.
+Para ello la parte derecha tiene que ser un valor puro o una configuración en el
+ámbito de <code>Global</code> o <code>ThisBuild</code> y no puede haber configuraciones
+predeterminadas en el ámbito de subproyectos. (Ver <a href="Scopes.html">Ámbitos</a>)
+</p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;
+ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
+ThisBuild / scalaVersion := &quot;2.12.8&quot;
+
+lazy val core = (project in file(&quot;core&quot;))
+  .settings(
+    // otras configuraciones
+  )
+
+lazy val util = (project in file(&quot;util&quot;))
+  .settings(
+    // otras configuraciones
+  )
+</code></pre><p>Ahora podemos incrementar <code>version</code> en un único lugar y se verá reflejado a lo
+largo de los subproyectos cuando recargues la construcción.
+</p><h4 id="Configuraci%C3%B3n+com%C3%BAn">Configuración común<a href="#Configuraci%C3%B3n+com%C3%BAn" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Otra forma de extraer configuración común a lo largo de múltiples proyectos es
+crear una secuencia llamada <code>commonSettings</code> y llamar al método <code>settings</code> en
+cada proyecto.
+</p><pre><code class="prettyprint lang-scala">lazy val commonSettings = Seq(
+  target := { baseDirectory.value / &quot;target2&quot; }
+)
+
+lazy val core = (project in file(&quot;core&quot;))
+  .settings(
+    commonSettings,
+    // otras configuraciones
+  )
+
+lazy val util = (project in file(&quot;util&quot;))
+  .settings(
+    commonSettings,
+    // otras configuraciones
+  )
+</code></pre><h3 id="Dependencias">Dependencias<a href="#Dependencias" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Los proyectos en la construcción pueden ser completamente independientes uno
+de otro, pero por lo general estarán relacionados mediante algún tipo de
+dependencia. Hay dos tipos de dependencias: agregadas y de classpath.
+</p><h4 id="Agregaci%C3%B3n">Agregación<a href="#Agregaci%C3%B3n" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Una agregación implica que al ejecutar una tarea en el proyecto que agrega también
+será ejecutada en los proyectos agregados. Por ejemplo:
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .aggregate(util, core)
+
+lazy val util = (project in file(&quot;util&quot;))
+
+lazy val core = (project in file(&quot;core&quot;))
+</code></pre><p>En el ejemplo de arriba, el proyecto raíz agrega <code>util</code> y <code>core</code>. Si ejecutas sbt
+con dos subproyectos como los del ejemplo e intentas compilar podrás ver cómo
+los tres proyectos son compilados.
+</p><p><em>En el proyecto que hace la agregación</em>, el proyecto raíz en este caso, puedes
+controlar la agregación a nivel de tarea. Por ejemplo, para evitar agregar la
+tarea <code>update</code>:
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .aggregate(util, core)
+  .settings(
+    update / aggregate := false
+  )
+
+[...]
+</code></pre><p><code>update / aggregate</code> es la clave agregada en el ámbito de la tarea <code>update</code>
+(ver <a href="Scopes.html">Ámbitos</a>).
+</p><p>Nota: La agregación ejecutará las tareas agregadas en paralelo y sin orden
+predeterminado entre ellas.
+</p><h4 id="Dependencias+de+classpath">Dependencias de classpath<a href="#Dependencias+de+classpath" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Un proyecto puede depender del código de otro proyecto. Esto se hace añadiendo
+una llamada al método <code>dependsOn</code>. Por ejemplo, si <code>core</code> necesita <code>util</code> en su
+classpath deberías de definir <code>core</code> así:
+</p><pre><code class="prettyprint lang-scala">lazy val core = project.dependsOn(util)
+</code></pre><p>A partir de ahora el código de <code>core</code> puede utilizar las clases de <code>util</code>. Esto
+crea además un orden entre proyectos a la hora de compilarlos. <code>util</code> deberá ser
+actualizado y compilado antes de que <code>core</code> pueda ser compilado.
+</p><p>Para depender de múltiples proyectos puedes utilizar múltiples argumentos en
+<code>dependsOn</code>, como <code>dependsOn(bar, baz)</code>.
+</p><h5 id="Dependencias+de+classpath+por+configuraci%C3%B3n">Dependencias de classpath por configuración<a href="#Dependencias+de+classpath+por+configuraci%C3%B3n" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p><code>core dependsOn(util)</code> implica que la configuración de <code>compile</code> en <code>core</code>
+dependerá de la configuración de <code>compile</code> en <code>util</code>. Esto se puede escribir
+de forma más explícita como <code>dependsOn(util % &quot;compile-&gt;compile&quot;)</code>.
+</p><p>La <code>-&gt;</code> en <code>&quot;compile-&gt;compile&quot;</code> significa “depende de”, por lo que
+<code>&quot;test-&gt;compile&quot;</code> significa que la configuración de <code>test</code> en <code>core</code> depende
+de la configuración de <code>compile</code> en <code>util</code>.
+</p><p>Omitir la parte de <code>-&gt;config</code> implica <code>-&gt;compile</code>, por lo que
+<code>dependsOn(util % &quot;test&quot;)</code> significa que la configuración de <code>test</code> en <code>core</code>
+depende de la configuración de <code>Compile</code> en <code>util</code>.
+</p><p>Una declaración útil es <code>&quot;test-&gt;test&quot;</code> que significa que <code>test</code> depende de <code>test</code>.
+Esto permite poner código auxiliar para testear en <code>util/src/test/scala</code> y luego
+usar dicho código en <code>core/src/test/scala</code>, por ejemplo.
+</p><p>Puedes declarar múltiples configuraciones para una dependencia, separadas por
+punto y coma. Por ejemplo, <code>dependsOn(util % &quot;test-&gt;test;compile-&gt;compile&quot;)</code>.
+</p><h3 id="Dependencias+inter-proyecto">Dependencias inter-proyecto<a href="#Dependencias+inter-proyecto" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>En proyectos extremadamente grandes con muchos ficheros y muchos subproyectos,
+el rendimiento de sbt puede ser menos óptimo al tener que observar qué ficheros
+han cambiado en una sesión interactiva por tener que realizar muchas operaciones de E/S.
+</p><p>sbt posee las entradas <code>trackingInternalDependencies</code> y <code>exportToInternal</code>.
+Éstas pueden ser utilizadas para controlar si la compilación de subproyectos
+dependientes ha de ser lanzada automáticamente o no cuando se llama a <code>compile</code>.
+Ambas claves pueden tomar uno de estos tres valores: <code>TrackLevel.NoTracking</code>,
+<code>TrackLevel.TrackIfMissing</code> y <code>TrackLevel.TrackAlways</code>. De forma predeterminada
+ambas son establecidas a <code>TrackLevel.TrackAlways</code>.
+</p><p>Cuando <code>trackInternalDependencies</code> es establecido a <code>TrackLevel.TrackIfMissing</code>,
+sbt no volverá a intentar compilar dependencias internas (inter-proyecto)
+automáticamente, a menos que no haya ficheros <code>*.class</code> (o un fichero JAR
+cuando <code>exportJars</code> sea <code>true</code>) en el directorio de salida.
+</p><p>Cuando la entrada es establecida a <code>TrackLevel.NoTracking</code> la compilación de
+dependencias internas es omitida. Fíjate en que el classpath aún sigue siendo anexado
+y que el grafo de dependencias aún sigue mostrándolas como dependencias.
+La razón es ahorrar el sobrecoste de E/S para observar cambios en una
+construcción con muchos subproyectos durante el desarrollo. A continuación se
+muestra cómo establecer todos los subproyectos a <code>TrackIfMissing</code>.
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
+  aggregate(....).
+  settings(
+    inThisBuild(Seq(
+      trackInternalDependencies := TrackLevel.TrackIfMissing,
+      exportJars := true
+    ))
+  )
+</code></pre><p>La entrada <code>exportToInternal</code> permite al proyecto del cual se depende optar si
+puede ser vigilado internamente o no, lo cual puede resultar útil si lo que se
+quiere es hacer seguimiento de la mayoría de los subproyectos excepto unos
+cuantos. La intersección de las entradas <code>trackInternalDependencies</code> y
+<code>exportToInternal</code> será usada para determinar el nivel de seguimiento real.
+A continuación se muestra un ejemplo de un proyecto optando de ser seguido o no:
+</p><pre><code class="prettyprint lang-scala">lazy val dontTrackMe = (project in file(&quot;dontTrackMe&quot;)).
+  settings(
+    exportToInternal := TrackLevel.NoTracking
+  )
+</code></pre><h3 id="Proyecto+ra%C3%ADz+predeterminado">Proyecto raíz predeterminado<a href="#Proyecto+ra%C3%ADz+predeterminado" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Si un proyecto no está definido para el directorio raíz en la construcción, sbt
+creará uno de forma predeterminada que agrega a los otros proyectos de la
+construcción.
+</p><p>Debido a que el proyecto <code>hello-foo</code> ha sido definido con <code>base = file(&quot;foo&quot;)</code>,
+él estará contenido en el subdirectorio <code>foo</code>. Sus fuentes pueden estar tanto en
+<code>foo</code>, como <code>foo/Foo.scala</code> o en <code>foo/src/main/scala</code>. La
+<a href="Directories.html">estructura de directorios</a> habitual se aplica a <code>foo</code> a excepción
+de los ficheros de definición de construcción.
+</p><p>Cualquier fichero <code>.sbt</code> en <code>foo</code>, por ejemplo <code>foo/build.sbt</code>, será mezclado
+con la definición de construcción para la construcción principal, pero con
+ámbito del proyecto <code>hello-foo</code>.
+</p><p>Si todo tu proyecto está en <code>hello</code>, intenta definir una versión diferente
+(<code>version := &quot;0.6&quot;</code>) en <code>hello/build.sbt</code>, <code>hello/foo/build.sbt</code>, y
+<code>hello/bar/build.sbt</code>. Ahora <code>show version</code> en el prompt interactivo de sbt
+debería de tener este aspecto (respetando las versiones que hayas definido):
+</p><pre><code class="">&gt; show version
+[info] hello-foo/*:version
+[info]  0.7
+[info] hello-bar/*:version
+[info]  0.9
+[info] hello/*:version
+[info]  0.5
+</code></pre><p><code>hello-foo/*:version</code> está definido en <code>hello/foo/build.sbt</code>,
+<code>hello-bar/*:version</code> está definido en <code>hello/bar/build.sbt</code> y
+<code>hello/*:version</code> está definido en <code>hello/build.sbt</code>. Recuerda la
+<a href="Scopes.html">sintaxis para claves con ámbito</a>. Cada clave <code>version</code> está en el
+ámbito de un proyecto, basado en la ubicación de <code>build.sbt</code>. Pero los tres
+<code>build.sbt</code> forman parte de la misma definición de construcción.
+</p><p>La configuración de cada proyecto puede ir en ficheros <code>.sbt</code> en el directorio
+base de dicho proyecto<em>, mientras que los ficheros <code>.scala</code> pueden ser tan
+simples como el mostrado anteriormente, listando los proyectos y los directorios
+base. </em>No hay necesidad de poner ninguna configuración en ficheros <code>.scala</code>.*
+</p><p>Puede que quede más claro ponerlo todo, incluyendo la configuración, en ficheros
+<code>.scala</code> para dejar la definición de construcción bajo un único directorio de
+proyecto. Sin embargo, tú decides.
+</p><p>No puedes tener un subdirectorio de proyecto o ficheros <code>project/*.scala</code> en los
+subproyectos. <code>foo/project/Build.scala</code> sería ignorado.
+</p><h3 id="Navegando+por+los+proyectos+interactivamente">Navegando por los proyectos interactivamente<a href="#Navegando+por+los+proyectos+interactivamente" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>En el prompt interactivo de sbt, escribe <code>proyectos</code> para listar tus proyectos y
+<code>project &lt;projectname&gt;</code> para seleccionar el proyecto actual. Al ejecutar una
+tarea como <code>compile</code> ésta se ejecutará sobre el proyecto actual. Por eso no hay
+por qué compilar el proyecto raíz necesariamente, es posible compilar solamente
+un subproyecto.
+</p><p>Puedes ejecutar una tarea en otro proyecto especificando explícitamente el ID de
+proyecto, como en <code>subproyecto/compile</code>.
+</p><h3 id="C%C3%B3digo+com%C3%BAn">Código común<a href="#C%C3%B3digo+com%C3%BAn" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Las definiciones en los ficheros <code>.sbt</code> no son visibles en otros ficheros
+<code>.sbt</code>. Para poder compartir código entre ficheros <code>.sbt</code> hay que definir uno o
+más ficheros de Scala en el directorio <code>project/</code> en la construcción raíz.
+</p><p>Para más información ver <a href="Organizing-Build.html">Organizando la construcción</a>.
+</p><div class="bottom nav">
+                <div class="row">
+                  <div class="col-md-auto">
+                    <a href="Task-Graph.html">
+                      <div class="arrowitem">
+                        <span class="arrow">&gt;</span>
+                      </div>
+
+                      <div class="arrowitem">
+                        <em>Next page</em><br/>
+                        Grafos de tareas
+                      </div>
+
+                    </a>
+                  </div>
+                </div>
+                <div class="row w-100">
+        <div class="col-md-auto ml-auto">
+          <ul class="language-bar">
+            <li><a href="../Multi-Project.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/Multi-Project.html"><span class="lang-item lang-ja">日本語</span></a></li><li><a href="../es/Multi-Project.html"><span class="lang-item lang-es">Español</span></a></li>
+          </ul>
+        </div>
+      </div>
+              </div>
+                  </div>
+                </div>
+          </div> <!-- row -->
+        </div>
+        <div class="header">
+          <link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
+<div class="container-fluid top nav">
+  <div class="row w-100">
+    <div class="col-md-4">
+      <div class="logo">
+        <a href="../../../index.html"><img src="../files/sbt-logo.svg" alt="sbt"></a>
+        <span class="versions"><select id="versions"></select></span>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="nav" id="topbar">
+        <a href="../../../documentation.html">Documentation</a>
+        <a href="../../../download.html">Download</a>
+        <a href="../../../support.html">Support</a>
+        <a href="../../../community.html">Get Involved</a>
+        <a id="source-code" href="https://github.com/sbt/sbt"><img src="../files/github-logo-teal.svg" alt="Source code" class="social"></a>
+        <a id="twitter" href="https://twitter.com/scala_sbt"><img src="../files/twitter-logo-teal.svg" alt="sbt on Twitter" class="social"></a>
+        <a id="edit-on-github" href="https://github.com/sbt/website/edit/develop/src/reference/00-Getting-Started/05B-Multi-Project.md"><img src="../files/octicon-pencil.svg" alt="Edit on GitHub"></a>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" async>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41449189-1', 'scala-sbt.org');
+ga('send', 'pageview');
+</script>
+<script type="text/javascript" async>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-23127719-1', 'lightbend.com', {'allowLinker': true, 'name': 'tsTracker'});
+  ga('tsTracker.require', 'linker');
+  ga('tsTracker.linker:autoLink', ['lightbend.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org']);
+  ga('tsTracker.send', 'pageview');
+</script>
+<script type="text/javascript">
+$(function() {
+var scrollDown = function() {
+if (window.location.hash !== "") {
+  setTimeout(function() { $(window).scrollTop($(window).scrollTop() - 120); }, 100);
+}
+}
+scrollDown();
+$(window).bind('hashchange', function() {
+scrollDown();
+});
+});
+</script>
+
+        </div>
+        <div class="footer">
+          <footer>
+  <div class="container-fluid footer">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="support-item">
+          <div class="support-icon">
+            <svg class="svg-icon svg-icon-chat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.5 85.2" enable-background="new 0 0 97.5 85.2"><path stroke="#fff" stroke-width="4.282" stroke-linecap="round" stroke-miterlimit="10" d="M27 29.5h-16.3c-4.7 0-8.6 3.9-8.6 8.6v25.7c0 4.7 3.9 8.6 8.6 8.6h2.7c.8 0 1.5.7 1.5 1.5v7.8c0 1.3 1.6 2 2.5 1l9.5-9.5c.5-.5 1.2-.8 2-.8h20.2c4.7 0 8.6-3.9 8.6-8.6v-7.8" fill="none"/><path fill="#fff" d="M85 0h-40c-6.9 0-12.5 5.6-12.5 12.5v33.4c0 2.2 1.8 4.1 4.1 4.1h29.9c.7 0 1.3.3 1.8.7l10 10c1.6 1.6 4.3.5 4.3-1.8v-6.5c0-1.4 1.1-2.5 2.5-2.5 6.9 0 12.5-5.6 12.5-12.5v-25c-.1-6.8-5.8-12.4-12.6-12.4z"/></svg>
+          </div>
+          <div class="support-detail">
+            <h2>Community Support</h2>
+            <a href="https://stackoverflow.com/questions/tagged/sbt">StackOverflow</a>
+          </div>
+        </div>
+        <div class="support-item">
+          <div class="support-icon">
+            <svg id="lightbend-icon-reverse" class="svg-icon svg-icon-lightbend-reverse" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 302 262"><title>lightbend-icon</title><g id="icon"><path d="M1,195v56a10,10,0,0,0,10,10H291a10,10,0,0,0,10-10V195a557.85,557.85,0,0,1-150,20A557.85,557.85,0,0,1,1,195Z" style="fill:#fff"/><path d="M291,1H11A10,10,0,0,0,1,11V176a539.94,539.94,0,0,0,150,21,539.94,539.94,0,0,0,150-21V11A10,10,0,0,0,291,1Z" style="fill:#fff"/></g></svg>
+          </div>
+          <div class="support-detail">
+            <h2>Commercial Support</h2>
+            <a href="https://www.lightbend.com/services/expert-support">Lightbend Subscription</a>
+            <a href="https://www.lightbend.com/services/training">Training</a>
+            <a href="https://www.lightbend.com/services/consulting">Consulting</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 text-right ts">
+        &copy; 2016-2019 Lightbend Inc.
+        <a href="https://www.lightbend.com">
+          <img src="../files/lightbend-reverse.svg" alt="Lightbend, Inc.">
+        </a>
+      </div>
+    </div>
+  </div>
+</footer><script src="/assets/versions.js"></script><script src="/assets/set-versions.js"></script>
+        </div>
+        
+        <div class="highlight-outer">
+              <div class="highlight-menu">
+                <ul>
+                  <li><button id="highlight-button-twitter"><img src="../img/twitter-bird-dark-bgs.png"/></button></li>
+                </ul>
+              </div>
+            </div>
+      </body>
+    </html>

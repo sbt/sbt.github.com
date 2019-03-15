@@ -3,7 +3,7 @@
       <head>
         <meta charset="utf-8"/>
         <meta content="width=device-width, initial-scale=1" name="viewport"/>
-        <title>sbt Reference Manual — Estructura de directorios</title>
+        <title>Manual de referencia de sbt — Estructura de directorios</title>
         <link rel="shortcut icon" href="../favicon.ico"/>
         <link rel="stylesheet" href="../css/bootstrap.min.css" type="text/css"/>
         <link rel="stylesheet" href="../css/pamflet.css" type="text/css" media="screen, projection"/>
@@ -37,64 +37,67 @@
         
         <div class="tocbody show" id="toc">
         
-        <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Gettnig-Started.html">Guía de Inicio de sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">Instalando sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Installing sbt on Mac</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Installing sbt on Windows</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Installing sbt on Linux</a></div></li><li><div><a href="Manual-Installation.html">Installing sbt manually</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div class="current">Estructura de directorios</div></li><li><div><a href="Running.html">Ejecución</a></div></li><li><div><a href="Basic-Def.html"> build definition</a></div></li><li><div><a href="Scopes.html">Scopes</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div>
+        <div><a href="index.html">Manual de referencia de sbt</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">Guía de inicio de sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">Instalar sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Instalar sbt on Mac</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Instalar sbt en Windows</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Installing sbt on Linux</a></div></li> </ol></li><li><div><a href="sbt-by-example.html">sbt mediante ejemplos</a></div></li><li><div class="current">Estructura de directorios</div></li><li><div><a href="Running.html">Ejecución</a></div></li><li><div><a href="Basic-Def.html">Definiciones de construcción</a></div></li><li><div><a href="Multi-Project.html">Construcciones multiproyecto</a></div></li><li><div><a href="Task-Graph.html">Grafos de tareas</a></div></li><li><div><a href="Scopes.html">Ámbitos</a></div></li><li><div><a href="Appending-Values.html">Añadir valores</a></div></li><li><div><a href="Scope-Delegation.html">Delegación de ámbito (resolución de .value)</a></div></li><li><div><a href="Library-Dependencies.html">Dependencias de bibliotecas</a></div></li><li><div><a href="Using-Plugins.html">Usar plugins</a></div></li><li><div><a href="Custom-Settings.html">Entradas y tareas personalizadas</a></div></li><li><div><a href="Organizing-Build.html">Organizar la construcción</a></div></li><li><div><a href="Summary.html">Guía de inicio - resumen</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div>
       </div>
       </div>
                 </div><div class="col-md-8 col-xs-9">
                   <div class="rightcolumn contents">
-                  <h2 id="Estructura+de+directorios">Estructura de directorios<a href="#Estructura+de+directorios" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Esta página asume que usted ha <a href="Setup.html">instalado sbt</a> y ha visto el
-ejemplo <a href="Hello.html">Hello, World</a>.
-</p><h3 id="Directorio+base">Directorio base<a href="#Directorio+base" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>En la terminología de sbt, el “directorio base” es el directorio que
-contiene al proyecto. De modo que si usted creó el proyecto <code>hello</code> que
-contiene <code>hello/build.sbt</code> y <code>hello/hw.scala</code> como se indicó en el
-ejemplo <a href="Hello.html">Hello, World</a>, <code>hello</code> es su directorio base.
-</p><h3 id="C%C3%B3digo+fuente">Código fuente<a href="#C%C3%B3digo+fuente" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>El código fu8ente puede ponerse en el directorio base del proyecto como
-en el caso de <code>hello/hw.scala</code>. Sin embargo, la mayoría de las personas
-no hacen esto para proyectos reales; se traduce en mucho desorden.
-</p><p>sbt utiliza la misma estructura de directorios que
-<a href="https://maven.apache.org/">Maven</a> para el código fuente por default
-(todos las rutas son relativas al directorio base):
+                  <h2 id="Estructura+de+directorios">Estructura de directorios<a href="#Estructura+de+directorios" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Esta página supone que has <a href="Setup.html">instalado sbt</a> y leído
+<a href="sbt-by-example.html">sbt mediante ejemplos</a>.
+</p><h3 id="Directorio+base">Directorio base<a href="#Directorio+base" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>En la terminología de sbt, el “directorio base” es el directorio que contiene
+el proyecto. Así pues, si has creado un proyecto <code>hello</code> que contiene
+<code>/tmp/foo-build/build.sbt</code> tal y como se muestra en <a href="sbt-by-example.html">sbt mediante ejemplos</a>,
+el directorio base será <code>/tmp/foo-build</code>.
+</p><h3 id="C%C3%B3digo+fuente.">Código fuente.<a href="#C%C3%B3digo+fuente." class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt emplea de forma predeterminada la misma estructura de directorios utilizado
+por <a href="https://maven.apache.org/">Maven</a> para ficheros fuente
+(todas las rutas son relativas al directorio base):
 </p><pre><code class="">src/
   main/
     resources/
-       &lt;archivos que se incluyen en el jar principal van aquí&gt;
+       &lt;ficheros del jar principal aquí&gt;
     scala/
-       &lt;código fuente de Scala de main&gt;
+       &lt;fuentes principales de Scala&gt;
     java/
-       &lt;código fuente de Java de main&gt;
+       &lt;fuentes principales de Java&gt;
   test/
     resources
-       &lt;archivos que se incluyen en el jar de test van aquí&gt;
+       &lt;ficheros del jar de test aquí&gt;
     scala/
-       &lt;código fuente de Scala para test&gt;
+       &lt;fuentes de test de Scala&gt;
     java/
-       &lt;código fuente de Java para test&gt;
-</code></pre><p>Otros directorios en <code>src/</code> serán ignorados. Adicionalmente, todos los
-directorios ocultos serán ignorados.
-</p><h3 id="Archivos+de+definici%C3%B3n+de+la+construcci%C3%B3n+de+sbt+%28sbt+build+definition+files%29">Archivos de definición de la construcción de sbt (sbt build definition files)<a href="#Archivos+de+definici%C3%B3n+de+la+construcci%C3%B3n+de+sbt+%28sbt+build+definition+files%29" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Ya ha visto <code>build.sbt</code> en el directorio base del proyecto. Otros
-archivos sbt aparecen en el subdirectorio <code>project</code>.
-</p><p>El subdirectorio <code>project</code> puede contener archivos <code>.scala</code>, que se
-combinan con los archivos <code>.sbt</code> para formar la definición completa de
-la construcción.
-</p><p>Vea <a href="Full-Def.html">.scala build definition</a> para más información.
+       &lt;fuentes de test de Java&gt;
+</code></pre><p>Cualquier otro directorio en <code>src/</code> es ignorado.
+También son ignorados todos los directorios ocultos.
+</p><p>El código fuente puede estar situado en el directorio base del proyecto como
+<code>hello/app.scala</code>, lo cual puede estar bien para proyectos pequeños,
+aunque para proyectos normales la gente suele estructurar los proyectos en el
+directorio <code>src/main/</code> para tener las cosas ordenadas.
+</p><p>El hecho de que se permita código fuente del tipo <code>*.scala</code> en el directorio
+base puede parecer algo raro, pero veremos que este hecho es relevante
+<a href="Organizing-Build.html">más adelante</a>.
+</p><h3 id="Ficheros+de+definici%C3%B3n+de+construcci%C3%B3n">Ficheros de definición de construcción<a href="#Ficheros+de+definici%C3%B3n+de+construcci%C3%B3n" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>La definición de construcción es descrita en <code>build.sbt</code>
+(en realidad cualquier fichero llamado <code>*.sbt</code>)
+en el directorio base del proyecto.
+</p><pre><code class="">build.sbt
+</code></pre><h3 id="Ficheros+auxiliares">Ficheros auxiliares<a href="#Ficheros+auxiliares" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Además de <code>build.sbt</code>, el directorio <code>project</code> puede contener ficheros <code>.scala</code>
+que definen objetos auxiliares y plugins puntuales.
+</p><p>Para más información mira <a href="Organizing-Build.html">Organizar la construcción</a>.
 </p><pre><code class="">build.sbt
 project/
-  Build.scala
-</code></pre><p>Tal vez pueda ver archivos <code>.sbt</code> dentro de <code>project/</code> pero no son
-equivalentes a archivos <code>.sbt</code> en el directorio base del proyecto. La
-explicación de esto <a href="Full-Def.html">viene después</a>, dado que necesitará algo
-de antecedentes primero.
-</p><h3 id="Productos+de+la+construcci%C3%B3n">Productos de la construcción<a href="#Productos+de+la+construcci%C3%B3n" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Los archivos generados (clases compiladas, paquetes en jars, archivos
-gestionados (<em>managed files</em>), caches, y documentación) será escrita al
-directorio <code>target</code> por default.
-</p><h3 id="Configurando+el+sistema+de+control+de+versiones">Configurando el sistema de control de versiones<a href="#Configurando+el+sistema+de+control+de+versiones" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Su archivo <code>.gitignore</code> (o el equivalente para otro sistema de control
-de versiones) debe contener:
+  Dependencies.scala
+</code></pre><p>Puede que veas ficheros <code>.sbt</code> dentro de <code>project/</code>
+pero no son equivalentes a los ficheros <code>.sbt</code> del directorio base del proyecto.
+La explicación a esto vendrá <a href="Organizing-Build.html">más adelante</a>,
+ya que primero necesitarás conocer algunos conceptos.
+</p><h3 id="Construir+productos">Construir productos<a href="#Construir+productos" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Los ficheros generados (clases compiladas, jars empaquetados,
+ficheros gestionados, caches y documentación) son escritos en el directorio
+<code>target</code> de forma predeterminada.
+</p><h3 id="Configurar+el+control+de+versiones">Configurar el control de versiones<a href="#Configurar+el+control+de+versiones" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Tu <code>.gitignore</code> (o el equivalente para otros sistemas de control de versiones)
+debería de contener:
 </p><pre><code class="">target/
-</code></pre><p>Note que el texto anterior tiene una <code>/</code> de forma deliberada (para que
-únicamente los directorios sean seleccionados) y de manera deliberada no
-tiene una <code>/</code> al inicio (para que el directorio <code>project/target/</code>
-también sea seleccionado, además de simplemente el directorio
-<code>target/</code>).
+</code></pre><p>Fíjate en que deliberadamente acaba con <code>/</code>
+(para coincidir sólo con directorios) y que deliberadamente no empieza con <code>/</code>
+(para coincidir con <code>project/target/</code> además del <code>target/</code> en la raíz).
 </p><div class="bottom nav">
                 <div class="row">
                   <div class="col-md-auto">
