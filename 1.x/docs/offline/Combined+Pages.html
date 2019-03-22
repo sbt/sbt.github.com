@@ -10690,30 +10690,21 @@ java
 -jar
 /home/travis/.sbt/launchers/1.2.8/sbt-launch.jar
 </code></pre><p><strong>Note</strong>: This duplicates the <code>-Xms</code> flag as intended, which might not the best thing to do.
-</p><h3 id="Caching">Caching<a href="#Caching" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>In late 2014, thanks to Travis CI members sending pull requests on GitHub, we learned that Ivy cache can be shared across the Travis builds.
-The public availability of <a href="http://docs.travis-ci.com/user/caching/">caching</a> is part of the benefit for trying the new <a href="http://docs.travis-ci.com/user/workers/container-based-infrastructure/">container-based infrastructure</a>.
-</p><blockquote><p>Jobs running on container-based infrastructure:
-</p><ol><li>start up faster
-</li><li>allow the use of caches for public repositories
-</li><li>disallow the use of <code>sudo</code>, setuid and setgid executables
-</li></ol></blockquote><p>To opt into the container-based infrastructure, put the following in <code>.travis.yml</code>:
-</p><pre><code class="prettyprint lang-yml"># Use container-based infrastructure
-sudo: false
-</code></pre><p>Next, we can put <code>cache</code> section as follows:
-</p><pre><code class="prettyprint lang-yml"># These directories are cached to S3 at the end of the build
+</p><h3 id="Caching">Caching<a href="#Caching" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>You can speed up your <code>sbt</code> builds on Travis CI by using their <a href="http://docs.travis-ci.com/user/caching/">caching</a> feature.
+</p><p>Here’s a sample <code>cache:</code> configuration that you can use:
+</p><pre><code class="prettyprint lang-yml"># These directories are cached to a cloud storage provider &quot;close&quot; to the infrastructure the builds run on.
 cache:
   directories:
     - $HOME/.ivy2/cache
     - $HOME/.sbt
-</code></pre><p>Finally, the following a few lines of cleanup script are added:
+</code></pre><p>You’ll also need the following snippet to avoid unnecessary cache updates:
 </p><pre><code class="prettyprint lang-yml">before_cache:
   # Cleanup the cached directories to avoid unnecessary cache updates
   - rm -fv $HOME/.ivy2/.sbt.ivy.lock
   - find $HOME/.ivy2/cache -name &quot;ivydata-*.properties&quot; -print -delete
   - find $HOME/.sbt        -name &quot;*.lock&quot;               -print -delete
-</code></pre><p>With the above changes combined Travis CI will tar up the cached directories and uploads them to Amazon S3.
-Overall, the use of the new infrastructure and caching seems to shave off a few minutes of build time per job.
-</p><p><strong>Note</strong>: The Travis documentation states caching features are still experimental.
+</code></pre><p>With the above changes combined Travis CI will tar up the cached directories and uploads them to a cloud storage provider.
+Overall, the use of caching should shave off a few minutes of build time per job.
 </p><h3 id="Build+matrix">Build matrix<a href="#Build+matrix" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>We’ve already seen the example of Scala cross building.
 </p><pre><code class="prettyprint lang-yml">language: scala
 
