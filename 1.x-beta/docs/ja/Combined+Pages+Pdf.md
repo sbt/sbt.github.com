@@ -40,7 +40,7 @@ sbt を試してくれることに感謝する。_ぜひ楽しいんでほしい
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.2/sbt-1.0.2.msi
+  [MSI]: https://piccolo.link/sbt-1.2.8.msi
   [Setup-Notes]: ../../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -51,10 +51,9 @@ sbt のインストール
 
 sbt プロジェクトを作るためには、以下の手順をたどる必要がある:
 
+ - JDK をインストールする。(Oracle JDK 8 もしくは OpenJDK 8 を推奨)
  - sbt をインストールする。
  - 簡単な [hello world][Hello] プロジェクトをセットアップする。
-   - ソースファイルの入ったプロジェクトディレクトリを作る。
-   - ビルド定義を作る。
  - [実行する][Running]を読んで、sbt の実行方法を知る。
  - [.sbt ビルド定義][Basic-Def]を読んで、ビルド定義についてもっと詳しく知る。
 
@@ -69,12 +68,17 @@ sbt プロジェクトを作るためには、以下の手順をたどる必要�
 
 
 
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.2/sbt-1.0.2.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.2/sbt-1.0.2.tgz
+  [ZIP]: https://piccolo.link/sbt-1.2.8.zip
+  [TGZ]: https://piccolo.link/sbt-1.2.8.tgz
   [Manual-Installation]: Manual-Installation.html
+  [oraclejdk8]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 
 Mac への sbt のインストール
 -------------------------
+
+### Install JDK
+
+Follow the link to install [Java SE Development Kit 8][oraclejdk8].
 
 ### ユニバーサルパッケージからのインストール
 
@@ -98,12 +102,17 @@ $ port install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.2/sbt-1.0.2.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.2/sbt-1.0.2.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.2/sbt-1.0.2.tgz
+  [MSI]: https://piccolo.link/sbt-1.2.8.msi
+  [ZIP]: https://piccolo.link/sbt-1.2.8.zip
+  [TGZ]: https://piccolo.link/sbt-1.2.8.tgz
+  [oraclejdk8]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 
 Windows への sbt のインストール
 ----------------------------
+
+### Install JDK
+
+Follow the link to install [Java SE Development Kit 8][oraclejdk8].
 
 ### ユニバーサルパッケージからのインストール
 
@@ -114,15 +123,24 @@ Windows への sbt のインストール
 [msi インストーラ][MSI]をダウンロードしてインストールする。
 
 
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.2/sbt-1.0.2.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.2/sbt-1.0.2.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.0.2.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.0.2.deb
+  [ZIP]: https://piccolo.link/sbt-1.2.8.zip
+  [TGZ]: https://piccolo.link/sbt-1.2.8.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.2.8.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.2.8.deb
   [Manual-Installation]: Manual-Installation.html
   [website127]: https://github.com/sbt/website/issues/12
+  [cert-bug]: https://bugs.launchpad.net/ubuntu/+source/ca-certificates-java/+bug/1739631
 
 Linux への sbt のインストール
 --------------------------
+
+### JDK のインストール
+
+まず JDK をインストールする必要がある。Oracle JDK 8 もしくは OpenJDK 8 を推奨する。パッケージ名はディストリビューションによって異なる。
+
+例えば、Ubuntu xenial (16.04LTS) には [openjdk-8-jdk](https://packages.ubuntu.com/hu/xenial/openjdk-8-jdk) がある。
+
+Redhat 系は [java-1.8.0-openjdk-devel](https://apps.fedoraproject.org/packages/java-1.8.0-openjdk-devel) と呼んでいる。
 
 ### ユニバーサルパッケージからのインストール
 
@@ -155,6 +173,8 @@ sbt のバイナリは Bintray にて公開されており、都合の良いこ�
 
 ![Ubuntu Software & Updates Screenshot](../files/ubuntu-sources.png "Ubuntu Software & Updates Screenshot")
 
+**注意**: Ubuntu で  `Server access Error: java.lang.RuntimeException: Unexpected error: java.security.InvalidAlgorithmParameterException: the trustAnchors parameter must be non-empty url=https://repo1.maven.org/maven2/org/scala-sbt/sbt/1.1.0/sbt-1.1.0.pom` という SSL エラーが多く報告されている。[cert-bug][cert-bug] などによると、これは OpenJDK 9 が `/etc/ssl/certs/java/cacerts` に PKCS12 フォーマットを採用したことに起因するらしい。<https://stackoverflow.com/a/50103533/3827> によるとこの問題は Ubuntu Cosmic (18.10) で修正されているが、Ubuntu Bionic LTS (18.04) はリリース待ちらしい。回避策も Stackoverflow を参照。
+
 ### Red Hat Enterprise Linux 及びその他の RPM ベースのディストリビューション
 
 [RPM][RPM] は sbt による公式パッケージだ。
@@ -184,22 +204,711 @@ sbt のバイナリは Bintray にて公開されており、Bintray は RPM リ
   [Basic-Def]: Basic-Def.html
   [Setup]: Setup.html
   [Running]: Running.html
+  [Essential-sbt]: https://www.scalawilliam.com/essential-sbt/
 
-Hello, World
-------------
+例題でみる sbt
+-------------
 
-このページは、既に[sbt 0.13.13 以上をインストール][Setup]したことを前提とする。
+このページは、
+[sbt 1 をインストール][Setup]したことを前提とする。
+
+sbt の内部がどうなっているかや理由みたいなことを解説する代わりに、例題を次々と見ていこう。
+
+### 最小 sbt ビルドを作る
+
+```
+$ mkdir foo-build
+$ cd foo-build
+$ touch build.sbt
+```
+
+### sbt シェルを起ち上げる
+
+```
+$ sbt
+[info] Updated file /tmp/foo-build/project/build.properties: set sbt.version to 1.1.4
+[info] Loading project definition from /private/tmp/foo-build/project
+[info] Loading settings from build.sbt ...
+[info] Set current project to foo-build (in build file:/private/tmp/foo-build/)
+[info] sbt server started at local:///Users/eed3si9n/.sbt/1.0/server/abc4fb6c89985a00fd95/sock
+sbt:foo-build>
+```
+
+### sbt シェルを終了させる
+
+sbt シェルを終了させるには、`exit` と入力するか、Ctrl+D (Unix) か Ctrl+Z (Windows) を押す。
+
+```
+sbt:foo-build> exit
+```
+
+### プロジェクトをコンパイルする
+
+表記の慣例として `sbt:...>` や `>` というプロンプトは、sbt シェルに入っていることを意味することにする。
+
+```
+$ sbt
+sbt:foo-build> compile
+```
+
+### コード変更時に再コンパイルする
+
+`compile` コマンド (やその他のコマンド) を `~` で始めると、プロジェクト内のソース・ファイルが変更されるたびにそのコマンドが自動的に再実行される。
+
+```
+sbt:foo-build> ~compile
+[success] Total time: 0 s, completed May 6, 2018 3:52:08 PM
+1. Waiting for source changes... (press enter to interrupt)
+```
+
+### ソース・ファイルを書く
+
+上記のコマンドは走らせたままにする。別のシェルかファイルマネージャーからプロジェクトのディレクトリへ行って、`src/main/scala/example` というディレクトリを作る。次に好きなエディタを使って `example` ディレクトリ内に以下のファイルを作成する:
+
+```scala
+package example
+
+object Hello extends App {
+  println("Hello")
+}
+```
+
+この新しいファイルは実行中のコマンドが自動的に検知したはずだ:
+
+```
+[info] Compiling 1 Scala source to /private/tmp/foo-build/target/scala-2.12/classes ...
+[info] Done compiling.
+[success] Total time: 2 s, completed May 6, 2018 3:53:42 PM
+2. Waiting for source changes... (press enter to interrupt)
+```
+
+`~compile` を抜けるには `Enter` を押す。
+
+### 以前のコマンドを実行する
+
+sbt シェル内で上矢印キーを 2回押して、上で実行した `compile` コマンドを探す。
+
+```
+sbt:foo-build> compile
+```
+
+### ヘルプを読む
+
+`help` コマンドを使って、基礎コマンドの一覧を表示する。
+
+```
+sbt:foo-build> help
+
+  about                                          Displays basic information about sbt and the build.
+  tasks                                          Lists the tasks defined for the current project.
+  settings                                       Lists the settings defined for the current project.
+  reload                                         (Re)loads the current project or changes to plugins project or returns from it.
+  new                                            Creates a new sbt build.
+  projects                                       Lists the names of available projects or temporarily adds/removes extra builds to the session.
+  project                                        Displays the current project or changes to the provided `project`.
+
+....
+```
+
+特定のタスクの説明を表示させる:
+
+```
+sbt:foo-build> help run
+Runs a main class, passing along arguments provided on the command line.
+```
+
+### アプリを実行する
+
+```
+sbt:foo-build> run
+[info] Packaging /private/tmp/foo-build/target/scala-2.12/foo-build_2.12-0.1.0-SNAPSHOT.jar ...
+[info] Done packaging.
+[info] Running example.Hello
+Hello
+[success] Total time: 1 s, completed May 6, 2018 4:10:44 PM
+```
+
+### sbt シェルから ThisBuild / scalaVersion をセットする
+
+```
+sbt:foo-build> set ThisBuild / scalaVersion := "2.12.7"
+[info] Defining ThisBuild / scalaVersion
+```
+
+`scalaVersion` セッティングを確認する:
+
+```
+sbt:foo-build> scalaVersion
+[info] 2.12.7
+```
+
+### セッションを build.sbt へと保存する
+
+アドホックに設定したセッティングは `session save` で保存できる。
+
+```
+sbt:foo-build> session save
+[info] Reapplying settings...
+```
+
+`build.sbt` ファイルは以下のようになったはずだ:
+
+```scala
+ThisBuild / scalaVersion := "2.12.7"
+```
+
+### プロジェクトに名前を付ける
+
+エディタを使って、`build.sbt` を以下のように変更する:
+
+```scala
+ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / organization := "com.example"
+
+lazy val hello = (project in file("."))
+  .settings(
+    name := "Hello"
+  )
+```
+
+### ビルドの再読み込み
+
+`reload` コマンドを使ってビルドを再読み込みする。このコマンドは `build.sbt` を読み直して、そこに書かれたセッティングを再適用する。
+
+```
+sbt:foo-build> reload
+[info] Loading project definition from /private/tmp/foo-build/project
+[info] Loading settings from build.sbt ...
+[info] Set current project to Hello (in build file:/private/tmp/foo-build/)
+sbt:Hello>
+```
+
+プロンプトが `sbt:Hello>` に変わったことに注目してほしい。
+
+### libraryDependencies に ScalaTest を追加する
+
+エディタを使って、`build.sbt` を以下のように変更する:
+
+```scala
+ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / organization := "com.example"
+
+lazy val hello = (project in file("."))
+  .settings(
+    name := "Hello",
+    libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % Test,
+  )
+```
+
+`reload` コマンドを使って、`build.sbt` の変更を反映させる。
+
+```
+sbt:Hello> reload
+```
+
+### テストを実行する
+
+```
+sbt:Hello> test
+```
+
+### 差分テストを継続的に実行する
+
+```
+sbt:Hello> ~testQuick
+```
+
+### テストを書く
+
+上のコマンドを走らせたままで、エディタから `src/test/scala/HelloSpec.scala` という名前のファイルを作成する:
+
+```scala
+import org.scalatest._
+
+class HelloSpec extends FunSuite with DiagrammedAssertions {
+  test("Hello should start with H") {
+    assert("hello".startsWith("H"))
+  }
+}
+```
+
+`~testQuick` が検知したはずだ:
+
+```
+2. Waiting for source changes... (press enter to interrupt)
+[info] Compiling 1 Scala source to /private/tmp/foo-build/target/scala-2.12/test-classes ...
+[info] Done compiling.
+[info] HelloSpec:
+[info] - Hello should start with H *** FAILED ***
+[info]   assert("hello".startsWith("H"))
+[info]          |       |          |
+[info]          "hello" false      "H" (HelloSpec.scala:5)
+[info] Run completed in 135 milliseconds.
+[info] Total number of tests run: 1
+[info] Suites: completed 1, aborted 0
+[info] Tests: succeeded 0, failed 1, canceled 0, ignored 0, pending 0
+[info] *** 1 TEST FAILED ***
+[error] Failed tests:
+[error]   HelloSpec
+[error] (Test / testQuick) sbt.TestsFailedException: Tests unsuccessful
+```
+
+### テストが通るようにする
+
+エディタを使って `src/test/scala/HelloSpec.scala` を以下のように変更する:
+
+```scala
+import org.scalatest._
+
+class HelloSpec extends FunSuite with DiagrammedAssertions {
+  test("Hello should start with H") {
+    // Hello, as opposed to hello
+    assert("Hello".startsWith("H"))
+  }
+}
+```
+
+テストが通過したことを確認して、`Enter` を押して継続的テストを抜ける。
+
+### ライブラリ依存性を追加する
+
+エディタを使って `build.sbt` を以下のように変更する:
+
+```scala
+ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / organization := "com.example"
+
+lazy val hello = (project in file("."))
+  .settings(
+    name := "Hello",
+    libraryDependencies += "com.typesafe.play" %% "play-json" % "2.6.9",
+    libraryDependencies += "com.eed3si9n" %% "gigahorse-okhttp" % "0.3.1",
+    libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % Test,
+  )
+```
+
+### Scala REPL を使う
+
+New York の現在の天気を調べてみる:
+
+```scala
+sbt:Hello> console
+[info] Starting scala interpreter...
+Welcome to Scala 2.12.7 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0_171).
+Type in expressions for evaluation. Or try :help.
+
+scala> :paste
+// Entering paste mode (ctrl-D to finish)
+
+import gigahorse._, support.okhttp.Gigahorse
+import scala.concurrent._, duration._
+Gigahorse.withHttp(Gigahorse.config) { http =>
+  val r = Gigahorse.url("https://query.yahooapis.com/v1/public/yql").get.
+    addQueryString(
+      "q" -> """select item.condition
+                from weather.forecast where woeid in (select woeid from geo.places(1) where text='New York, NY')
+                and u='c'""",
+      "format" -> "json"
+    )
+  val f = http.run(r, Gigahorse.asString)
+  Await.result(f, 10.seconds)
+}
+
+// Ctrl+D を押してペーストモードを抜ける
+
+// Exiting paste mode, now interpreting.
+
+import gigahorse._
+import support.okhttp.Gigahorse
+import scala.concurrent._
+import duration._
+res0: String = {"query":{"count":1,"created":"2018-05-06T22:49:55Z","lang":"en-US",
+"results":{"channel":{"item":{"condition":{"code":"26","date":"Sun, 06 May 2018 06:00 PM EDT",
+"temp":"16","text":"Cloudy"}}}}}}
+
+scala> :q // これで REPL を抜ける
+```
+
+### サププロジェクトを作成する
+
+`build.sbt` を以下のように変更する:
+
+```scala
+ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / organization := "com.example"
+
+lazy val hello = (project in file("."))
+  .settings(
+    name := "Hello",
+    libraryDependencies += "com.eed3si9n" %% "gigahorse-okhttp" % "0.3.1",
+    libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % Test,
+  )
+
+lazy val helloCore = (project in file("core"))
+  .settings(
+    name := "Hello Core",
+  )
+```
+
+`reload` コマンドを使って `build.sbt` の変更を反映させる。
+
+### 全てのサププロジェクトを列挙する
+
+```
+sbt:Hello> projects
+[info] In file:/private/tmp/foo-build/
+[info]   * hello
+[info]     helloCore
+```
+
+### サブプロジェクトをコンパイルする
+
+```
+sbt:Hello> helloCore/compile
+```
+
+### サブプロジェクトに ScalaTest を追加する
+
+`build.sbt` を以下のように変更する:
+
+```scala
+ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / organization := "com.example"
+
+val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5"
+
+lazy val hello = (project in file("."))
+  .settings(
+    name := "Hello",
+    libraryDependencies += "com.eed3si9n" %% "gigahorse-okhttp" % "0.3.1",
+    libraryDependencies += scalaTest % Test,
+  )
+
+lazy val helloCore = (project in file("core"))
+  .settings(
+    name := "Hello Core",
+    libraryDependencies += scalaTest % Test,
+  )
+```
+
+### コマンドをブロードキャストする
+
+`hello` に送ったコマンドを `helloCore` にもブロードキャストするために集約を設定する:
+
+```scala
+ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / organization := "com.example"
+
+val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5"
+
+lazy val hello = (project in file("."))
+  .aggregate(helloCore)
+  .settings(
+    name := "Hello",
+    libraryDependencies += "com.eed3si9n" %% "gigahorse-okhttp" % "0.3.1",
+    libraryDependencies += scalaTest % Test,
+  )
+
+lazy val helloCore = (project in file("core"))
+  .settings(
+    name := "Hello Core",
+    libraryDependencies += scalaTest % Test,
+  )
+```
+
+`reload` 後、`~testQuick` は両方のサブプロジェクトに作用する:
+
+```scala
+sbt:Hello> ~testQuick
+```
+
+`Enter` を押して継続的テストを抜ける。
+
+### hello が helloCore に依存するようにする
+
+サブプロジェクト間の依存関係を定義するには `.dependsOn(...)` を使う。ついでに、Gigahorse への依存性も `helloCore` に移そう。
+
+```scala
+ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / organization := "com.example"
+
+val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5"
+
+lazy val hello = (project in file("."))
+  .aggregate(helloCore)
+  .dependsOn(helloCore)
+  .settings(
+    name := "Hello",
+    libraryDependencies += scalaTest % Test,
+  )
+
+lazy val helloCore = (project in file("core"))
+  .settings(
+    name := "Hello Core",
+    libraryDependencies += "com.eed3si9n" %% "gigahorse-okhttp" % "0.3.1",
+    libraryDependencies += scalaTest % Test,
+  )
+```
+
+### Play JSON を使って JSON をパースする
+
+`helloCore` に Play JSON を追加しよう。
+
+```scala
+ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / organization := "com.example"
+
+val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5"
+val gigahorse = "com.eed3si9n" %% "gigahorse-okhttp" % "0.3.1"
+val playJson  = "com.typesafe.play" %% "play-json" % "2.6.9"
+
+lazy val hello = (project in file("."))
+  .aggregate(helloCore)
+  .dependsOn(helloCore)
+  .settings(
+    name := "Hello",
+    libraryDependencies += scalaTest % Test,
+  )
+
+lazy val helloCore = (project in file("core"))
+  .settings(
+    name := "Hello Core",
+    libraryDependencies ++= Seq(gigahorse, playJson),
+    libraryDependencies += scalaTest % Test,
+  )
+```
+
+`reload` 後、`core/src/main/scala/example/core/Weather.scala` を追加する:
+
+```scala
+package example.core
+
+import gigahorse._, support.okhttp.Gigahorse
+import scala.concurrent._
+import play.api.libs.json._
+
+object Weather {
+  lazy val http = Gigahorse.http(Gigahorse.config)
+  def weather: Future[String] = {
+    val r = Gigahorse.url("https://query.yahooapis.com/v1/public/yql").get.
+      addQueryString(
+        "q" -> """select item.condition
+from weather.forecast where woeid in (select woeid from geo.places(1) where text='New York, NY')
+and u='c'""".stripMargin,
+        "format" -> "json"
+      )
+
+    import ExecutionContext.Implicits._
+    for {
+      f <- http.run(r, Gigahorse.asString)
+      x <- parse(f)
+    } yield x
+  }
+
+  def parse(rawJson: String): Future[String] = {
+    val js = Json.parse(rawJson)
+    (js \\ "text").headOption match {
+      case Some(JsString(x)) => Future.successful(x.toLowerCase)
+      case _                 => Future.failed(sys.error(rawJson))
+    }
+  }
+}
+
+```
+
+次に `src/main/scala/example/Hello.scala` を以下のように変更する:
+
+```scala
+package example
+
+import scala.concurrent._, duration._
+import core.Weather
+
+object Hello extends App {
+  val w = Await.result(Weather.weather, 10.seconds)
+  println(s"Hello! The weather in New York is $w.")
+  Weather.http.close()
+}
+```
+
+アプリを走らせてみて、うまくいったか確認する:
+
+```
+sbt:Hello> run
+[info] Compiling 1 Scala source to /private/tmp/foo-build/core/target/scala-2.12/classes ...
+[info] Done compiling.
+[info] Compiling 1 Scala source to /private/tmp/foo-build/target/scala-2.12/classes ...
+[info] Packaging /private/tmp/foo-build/core/target/scala-2.12/hello-core_2.12-0.1.0-SNAPSHOT.jar ...
+[info] Done packaging.
+[info] Done compiling.
+[info] Packaging /private/tmp/foo-build/target/scala-2.12/hello_2.12-0.1.0-SNAPSHOT.jar ...
+[info] Done packaging.
+[info] Running example.Hello
+Hello! The weather in New York is mostly cloudy.
+```
+
+### sbt-native-packger プラグインを追加する
+
+エディタを使って `project/plugins.sbt` を追加する:
+
+```scala
+addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.3.4")
+```
+
+次に `build.sbt` を以下のように変更して `JavaAppPackaging` を追加する:
+
+```scala
+ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / organization := "com.example"
+
+val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5"
+val gigahorse = "com.eed3si9n" %% "gigahorse-okhttp" % "0.3.1"
+val playJson  = "com.typesafe.play" %% "play-json" % "2.6.9"
+
+lazy val hello = (project in file("."))
+  .aggregate(helloCore)
+  .dependsOn(helloCore)
+  .enablePlugins(JavaAppPackaging)
+  .settings(
+    name := "Hello",
+    libraryDependencies += scalaTest % Test,
+  )
+
+lazy val helloCore = (project in file("core"))
+  .settings(
+    name := "Hello Core",
+    libraryDependencies ++= Seq(gigahorse, playJson),
+    libraryDependencies += scalaTest % Test,
+  )
+```
+
+### 配布用の .zip ファイルを作る
+
+```
+sbt:Hello> dist
+[info] Wrote /private/tmp/foo-build/target/scala-2.12/hello_2.12-0.1.0-SNAPSHOT.pom
+[info] Wrote /private/tmp/foo-build/core/target/scala-2.12/hello-core_2.12-0.1.0-SNAPSHOT.pom
+[info] Your package is ready in /private/tmp/foo-build/target/universal/hello-0.1.0-SNAPSHOT.zip
+```
+
+パッケージ化されたアプリの実行は以下のように行う:
+
+```
+$ /tmp/someother
+$ cd /tmp/someother
+$ unzip -o -d /tmp/someother /tmp/foo-build/target/universal/hello-0.1.0-SNAPSHOT.zip
+$ ./hello-0.1.0-SNAPSHOT/bin/hello
+Hello! The weather in New York is mostly cloudy.
+```
+
+### アプリを Docker化させる
+
+```
+sbt:Hello> Docker/publishLocal
+....
+[info] Successfully built b6ce1b6ab2c0
+[info] Successfully tagged hello:0.1.0-SNAPSHOT
+[info] Built image hello:0.1.0-SNAPSHOT
+```
+
+Docker化されたアプリは以下のように実行する:
+
+```
+$ docker run hello:0.1.0-SNAPSHOT
+Hello! The weather in New York is mostly cloudy
+```
+
+### version を設定する
+
+`build.sbt` を以下のように変更する:
+
+```scala
+ThisBuild / version      := "0.1.0"
+ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / organization := "com.example"
+
+val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5"
+val gigahorse = "com.eed3si9n" %% "gigahorse-okhttp" % "0.3.1"
+val playJson  = "com.typesafe.play" %% "play-json" % "2.6.9"
+
+lazy val hello = (project in file("."))
+  .aggregate(helloCore)
+  .dependsOn(helloCore)
+  .enablePlugins(JavaAppPackaging)
+  .settings(
+    name := "Hello",
+    libraryDependencies += scalaTest % Test,
+  )
+
+lazy val helloCore = (project in file("core"))
+  .settings(
+    name := "Hello Core",
+    libraryDependencies ++= Seq(gigahorse, playJson),
+    libraryDependencies += scalaTest % Test,
+  )
+```
+
+### Switch scalaVersion temporarily
+
+```
+sbt:Hello> ++2.11.12!
+[info] Forcing Scala version to 2.11.12 on all projects.
+[info] Reapplying settings...
+[info] Set current project to Hello (in build file:/private/tmp/foo-build/)
+```
+
+`scalaVersion` セッティングを確認する:
+
+```
+sbt:Hello> scalaVersion
+[info] helloCore / scalaVersion
+[info]  2.11.12
+[info] scalaVersion
+[info]  2.11.12 scalaVersion
+[info] 2.12.7
+```
+
+このセッティングは `reload` 後には無くなる。
+
+### dist タスクのインスペクト
+
+`dist` タスクのことをもっと調べるために、`help` と `inspect` を実行してみる。
+
+```scala
+sbt:Hello> help dist
+Creates the distribution packages.
+sbt:Hello> inspect dist
+```
+
+依存タスクに対して `inspect` を再帰的に呼び出すには `inspect tree` を使う。
+
+```scala
+sbt:Hello> inspect tree dist
+[info] dist = Task[java.io.File]
+[info]   +-Universal / dist = Task[java.io.File]
+....
+```
+
+### バッチモード
+
+sbt のコマンドをターミナルから直接渡して sbt をバッチモードで実行することができる。
+
+```
+$ sbt clean "testOnly HelloSpec"
+```
+
+**Note**: バッチモードでの実行は JVM のスピンアップと JIT を毎回行うため、**ビルドかなり遅くなる。**
+普段のコーディングでは sbt シェル、
+もしくは `~testQuick` のような継続的テストを使うことを推奨する。
 
 ### sbt new コマンド
 
-sbt 0.13.13 以降を使っている場合は、sbt `new`
-コマンドを使って手早く簡単な Hello world ビルドをセットアップすることができる。
-以下をターミナルから打ち込む。
+sbt `new` コマンドを使って手早く簡単な Hello world ビルドをセットアップすることができる。
 
 ```
 $ sbt new sbt/scala-seed.g8
 ....
-Minimum Scala build.
+A minimal Scala project.
 
 name [My Something Project]: hello
 
@@ -210,40 +919,12 @@ Template applied in ./hello
 
 これで、`hello` ディレクトリ以下に新しいプロジェクトができた。
 
-### アプリの実行
+### クレジット
 
-次に `hello` ディレクトリ内から sbt を起動して sbt のシェルから
-`run` と入力する。Linux や OS X の場合、コマンドは以下のようになる:
-
-```
-$ cd hello
-$ sbt
-...
-> run
-...
-[info] Compiling 1 Scala source to /xxx/hello/target/scala-2.12/classes...
-[info] Running example.Hello
-hello
-```
-
-[後で][Running]他のタスクもみていく。
-
-### sbt シェルの終了
-
-sbt シェルを終了するには、`exit` と入力するか、Ctrl+D (Unix) か Ctrl+Z (Windows) を押す。
-
-```
-> exit
-```
-
-### ビルド定義
-
-ビルド設定方法はプロジェクトのベースディレクトリに `build.sbt` というファイルとして配置される。
-ファイルを読んでみてもいいが、このビルドファイルに書いてあることが分からなくても心配しないでほしい。
-[ビルド定義][Basic-Def]で、`build.sbt` の書き方を説明する。
+本ページは William "Scala William" Narmontas さん作の [Essential sbt][essential-sbt] というチュートリアルに基づいて書かれた。
 
 
-  [Hello]: Hello.html
+  [ByExample]: sbt-by-example.html
   [Setup]: Setup.html
   [Organizing-Build]: Organizing-Build.html
   [Maven]: https://maven.apache.org/
@@ -253,13 +934,13 @@ sbt シェルを終了するには、`exit` と入力するか、Ctrl+D (Unix) �
 
 このページは、
 [sbt をインストール][Setup]して、
-[Hello, World][Hello] を読んだことを前提とする。
+[例題でみる sbt][ByExample] を読んだことを前提とする。
 
 ### ベースディレクトリ
 
 sbt 用語では「ベースディレクトリ(base directory) 」はプロジェクトが入ったディレクトリを指す。
-[Hello, World][Hello] での例のように、`hello/build.sbt` が入った
-`hello` プロジェクトを作った場合、ベースディレクトリは `hello` となる。
+[例題でみる sbt][ByExample] での例のように、`/tmp/foo-build/build.sbt` が入った
+`hello` プロジェクトを作った場合、ベースディレクトリは `/tmp/foo-build` となる。
 
 ### ソースコード
 
@@ -333,7 +1014,7 @@ target/
 つけていないことに注意。
 
 
-  [Hello]: Hello.html
+  [ByExample]: sbt-by-example.html
   [Setup]: Setup.html
   [Triggered-Execution]: ../../docs/Triggered-Execution.html
   [Command-Line-Reference]: ../../docs/Command-Line-Reference.html
@@ -342,7 +1023,8 @@ target/
 ----
 
 このページではプロジェクトをセットアップした後の `sbt` の使い方を説明する。
-君が[sbt をインストール][Setup]して、[Hello, World][Hello]か他のプロジェクトを作ったことを前提とする。
+君が[sbt をインストール][Setup]して、
+[例題でみる sbt][ByExample]を実行したことを前提とする。
 
 ### sbt シェル
 
@@ -496,7 +1178,7 @@ sbt シェルは、 sbt を終了して再起動した後でも履歴を覚え�
 </table>
 
 
-  [Keys]: ../../sxr/sbt/Keys.scala.html
+  [Keys]: ../../api/sbt/Keys$.html
   [Task-Graph]: Task-Graph.html
   [Bare-Def]: Bare-Def.html
   [Full-Def]: Full-Def.html
@@ -522,7 +1204,7 @@ sbt 0.13.13 など最近のバージョンをインストール済みで、
 sbt バージョンを指定する:
 
 ```
-sbt.version=1.0.2
+sbt.version=1.2.8
 ```
 
 もしも指定されたバージョンがローカルマシンに無ければ、
@@ -543,7 +1225,7 @@ sbt.version=1.0.2
 lazy val root = (project in file("."))
   .settings(
     name := "Hello",
-    scalaVersion := "2.12.3"
+    scalaVersion := "2.12.7"
   )
 ```
 
@@ -556,7 +1238,7 @@ lazy val root = (project in file("."))
 lazy val root = (project in file("."))
   .settings(
     name := "Hello",
-    scalaVersion := "2.12.3"
+    scalaVersion := "2.12.7"
   )
 ```
 
@@ -566,12 +1248,13 @@ lazy val root = (project in file("."))
 このペアは**セッティング式** (setting expression) と呼ばれ、**build.sbt DSL** にて記述される。
 
 ```scala
+ThisBuild / organization := "com.example"
+ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
+
 lazy val root = (project in file("."))
   .settings(
-    name         := "hello",
-    organization := "com.example",
-    scalaVersion := "2.12.3",
-    version      := "0.1.0-SNAPSHOT"
+    name := "hello"
   )
 ```
 
@@ -589,9 +1272,9 @@ build.sbt DSL を詳しくみてみよう:<br>
 
 左辺値の `name`、`version`、および `scalaVersion` は**キー**である。
 キーは
-[`SettingKey[T]`](../api/index.html#sbt.SettingKey)、
-[`TaskKey[T]`](../api/index.html#sbt.TaskKey)、もしくは
-[`InputKey[T]`]((../api/index.html#sbt.InputKey)) のインスタンスで、
+[`SettingKey[T]`](../../api/sbt/SettingKey.html)、
+[`TaskKey[T]`](../../api/sbt/TaskKey.html)、もしくは
+[`InputKey[T]`](../../api/sbt/InputKey.html) のインスタンスで、
 `T` はその値の型である。キーの種類に関しては後述する。
 
 `name` キーは `SettingKey[String]` に型付けされているため、
@@ -720,6 +1403,19 @@ import Keys._
 
 (さらに、auto plugin があれば `autoImport` 以下の名前がインポートされる。)
 
+### Bare .sbt ビルド定義
+
+セッティングは、`.settings(...)` の呼び出しの中だけではなく `build.sbt` に直書きすることができ、
+これは 「bare style」と呼ばれる。
+
+```scala
+ThisBuild / version := "1.0"
+ThisBuild / scalaVersion := "2.12.8"
+```
+
+この構文は `ThisBuild` にスコープ付けされたセッティングを書いたり、プラグインを追加するのに向いている。
+スコープやプラグインに関してはまた後ほど。
+
 ### ライブラリへの依存性を加える
 
 サードパーティのライブラリに依存するには二つの方法がある。
@@ -729,15 +1425,12 @@ import Keys._
 ```scala
 val derby = "org.apache.derby" % "derby" % "10.4.1.3"
 
-lazy val commonSettings = Seq(
-  organization := "com.example",
-  version := "0.1.0-SNAPSHOT",
-  scalaVersion := "2.12.3"
-)
+ThisBuild / organization := "com.example"
+ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
   .settings(
-    commonSettings,
     name := "Hello",
     libraryDependencies += derby
   )
@@ -752,6 +1445,243 @@ lazy val root = (project in file("."))
 
 ライブラリ依存性に関する詳細については、このガイドの後ろの方までとっておくことにする。
 後ほど[一ページ][Library-Dependencies]を割いて丁寧に説明する。
+
+
+  [Basic-Def]: Basic-Def.html
+  [Scopes]: Scopes.html
+  [Directories]: Directories.html
+  [Organizing-Build]: Organizing-Build.html
+
+マルチプロジェクト・ビルド
+----------------------
+
+このページでは、一つのビルドで複数のサブプロジェクトを管理する方法を紹介する。
+このガイドのこれまでのページを読んでおいてほしい。
+特に [build.sbt][Basic-Def] を理解していることが必要になる。
+
+### 複数のサブプロジェクト
+
+一つのビルドに複数の関連するサブプロジェクトを入れておくと、
+サブプロジェクト間に依存性がある場合や同時に変更されることが多い場合に便利だ。
+
+ビルド内の個々のサブプロジェクトは、それぞれ独自のソースディレクトリを持ち、
+`package` を実行すると独自の jar ファイルを生成するなど、概ね通常のプロジェクトと同様に動作する。
+
+個々のプロジェクトは lazy val を用いて [Project](../../api/sbt/Project.html) 型の値を宣言することで定義される。例として、以下のようなものがプロジェクトだ:
+
+```scala
+lazy val util = (project in file("util"))
+
+lazy val core = (project in file("core"))
+```
+
+val で定義された名前はプロジェクトの ID 及びベースディレクトリの名前になる。
+ID は sbt シェルからプロジェクトを指定する時に用いられる。
+
+ベースディレクトリ名が ID と同じ名前であるときは省略することができる。
+
+```scala
+lazy val util = project
+
+lazy val core = project
+```
+
+#### ビルドワイド・セッティング
+
+複数プロジェクトに共通なセッティングをくくり出す場合、
+セッティングを `ThisBuild` にスコープ付けする。
+ただし、右辺値には純粋な値か `Global` もしくは `ThisBuild`
+にスコープ付けされたセッティングしか置くことができない、
+またサブプロジェクトにスコープ付けされたセッティングがデフォルトで存在しない必要があるというという制約がある。
+（[スコープ][Scopes]参照）
+
+```scala
+ThisBuild / organization := "com.example"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
+ThisBuild / scalaVersion := "2.12.8"
+
+lazy val core = (project in file("core"))
+  .settings(
+    // other settings
+  )
+
+lazy val util = (project in file("util"))
+  .settings(
+    // other settings
+  )
+```
+
+これで `version` を一箇所で変更すれば、再読み込み後に全サブプロジェクトに反映されるようになる。
+
+#### 共通のセッティング
+
+複数プロジェクトに共通なセッティングをくくり出す場合、
+`commonSettings` という名前のセッティングの Seq を作って、
+それを引数として各プロジェクトの `settings` メソッドを呼び出せばよい。
+
+```scala
+lazy val commonSettings = Seq(
+  target := { baseDirectory.value / "target2" }
+)
+
+lazy val core = (project in file("core"))
+  .settings(
+    commonSettings,
+    // other settings
+  )
+
+lazy val util = (project in file("util"))
+  .settings(
+    commonSettings,
+    // other settings
+  )
+```
+
+
+### 依存関係
+
+一つのビルドの中の個々のプロジェクトはお互いに完全に独立した状態であってもよいが、
+普通、何らかの形で依存関係を持っているだろう。
+ここでは集約（`aggregate`）とクラスパス（`classpath`）という二種類の依存関係がある。
+
+#### 集約
+
+集約とは、集約する側のプロジェクトであるタスクを実行するとき、集約される側の複数のプロジェクトでも同じタスクを実行するという関係を意味する。例えば、
+
+```scala
+lazy val root = (project in file("."))
+  .aggregate(util, core)
+
+lazy val util = (project in file("util"))
+
+lazy val core = (project in file("core"))
+```
+
+上の例では、`root` プロジェクトが `util` と `core` を集約している。
+この状態で sbt を起動してコンパイルしてみよう。
+3 つのプロジェクトが全てコンパイルされることが分かると思う。
+
+_集約プロジェクト内で_（この場合は `root` プロジェクトで）、
+タスクごとに集約をコントロールすることができる。
+例えば、`update` タスクの集約を以下のようにして回避できる:
+
+```scala
+lazy val root = (project in file("."))
+  .aggregate(util, core)
+  .settings(
+    aggregate in update := false
+  )
+
+[...]
+```
+
+`aggregate in update` は、`update` タスクにスコープ付けされた `aggregate` キーだ
+（[スコープ][Scopes]参照）。
+
+注意: 集約は、集約されるタスクを順不同に並列実行する。
+
+#### クラスパス依存性
+
+あるプロジェクトが、他のプロジェクトにあるコードに依存させたい場合、
+`dependsOn` メソッドを呼び出して実現すればよい。
+
+例えば、`core` に `util` のクラスパスが必要な場合は `core` の定義を次のように書く:
+
+```scala
+lazy val core = project.dependsOn(util)
+```
+
+これで `core` 内のコードから `util` の class を利用することができるようになった。
+
+また、これにより `core` がコンパイルされる前に `util` の `update` と `compile` が実行されている必要があるので
+プロジェクト間でコンパイル実行が順序付けられることになる。
+
+複数のプロジェクトに依存するには、`dependsOn(bar, baz)` というふうに、
+`dependsOn` に複数の引数を渡せばよい。
+
+##### コンフィギュレーションごとのクラスパス依存性
+
+`foo dependsOn(bar)` は、`foo` の `Compile` コンフィギュレーションが
+`bar` の `Compile` コンフィギュレーションに依存することを意味する。
+これを明示的に書くと、`dependsOn(bar % "compile->compile")` となる。
+
+この `"compile->compile"` 内の `->` は、「依存する」という意味で、
+`"test->compile"` は、`foo` の `Test` コンフィギュレーションが
+`bar` の `Compile` コンフィギュレーションに依存することを意味する。
+
+`->config` の部分を省くと、`->compile` だと解釈されるため、
+`dependsOn(bar % "test")` は、`foo` の `Test` コンフィギュレーションが
+`bar` の `Compile` コンフィギュレーションに依存することを意味する。
+
+特に、`Test` が `Test` に依存することを意味する `"test->test"` は役に立つ宣言だ。
+これにより、例えば、`bar/src/test/scala` にテストのためのユーティリティコードを
+置いておき、それを `foo/src/test/scala` 内のコードから利用することができる。
+
+複数のコンフィギュレーション依存性を宣言する場合は、セミコロンで区切る。
+例えば、`dependsOn(bar % "test->test;compile->compile")` と書ける。
+
+### デフォルトルートプロジェクト
+
+もしプロジェクトがルートディレクトリに定義されてなかったら、 sbt はビルド時に他のプロジェクトを集約するデフォルトプロジェクトを勝手に生成する。
+
+プロジェクト `hello-foo` は、`base = file("foo")` と共に定義されているため、
+サブディレクトリ `foo` に置かれる。
+そのソースは、`foo/Foo.scala` のように `foo` の直下に置かれるか、
+`foo/src/main/scala` 内に置かれる。
+ビルド定義ファイルを除いては、通常の sbt [ディレクトリ構造][Directories]が `foo` 以下に適用される。
+
+`foo` 内の全ての `.sbt` ファイル、例えば `foo/build.sbt` は、
+`hello-foo` プロジェクトにスコープ付けされた上で、ビルド全体のビルド定義に取り込まれる。
+
+ルートプロジェクトが `hello` にあるとき、`hello/build.sbt`、`hello/foo/build.sbt`、
+`hello/bar/build.sbt` においてそれぞれ別々のバージョンを定義してみよう（例: `version := "0.6"`）。
+次に、インタラクティブプロンプトで `show version` と打ち込んでみる。
+以下のように表示されるはずだ（定義したバージョンによるが）:
+
+```
+> show version
+[info] hello-foo/*:version
+[info] 	0.7
+[info] hello-bar/*:version
+[info] 	0.9
+[info] hello/*:version
+[info] 	0.5
+```
+
+`hello-foo/*:version` は、`hello/foo/build.sbt` 内で定義され、
+`hello-bar/*:version` は、`hello/bar/build.sbt` 内で定義され、
+`hello/*:version` は、`hello/build.sbt` 内で定義される。
+[スコープ付けされたキーの構文][Scopes]を復習しておこう。
+それぞれの `version` キーは、`build.sbt` の場所により、
+特定のプロジェクトにスコープ付けされている。
+だが、三つの `build.sbt` とも同じビルド定義の一部だ。
+
+`.scala` ファイルは、上に示したように、単にプロジェクトとそのベースディレクトリを列挙するだけの簡単なものにして、
+_それぞれのプロジェクトのセッティングは、そのプロジェクトのベースディレクトリ直下の
+`.sbt` ファイル内で宣言することができる_。
+_全てのセッティングを `.scala` ファイル内で宣言することは義務付けられいるわけではない。_
+
+ビルド定義の全てを単一の `project` ディレクトリ内の場所にまとめるために、
+`.scala` ファイル内にセッティングも含めてしまうほうが洗練されていると思うかもしれない。
+ただし、これは好みの問題だから、好きにやっていい。
+
+サブプロジェクトは、`project` サブディレクトリや、`project/*.scala` ファイルを持つことができない。
+`foo/project/Build.scala` は無視される。
+
+### プロジェクトの切り替え
+
+sbt インタラクティブプロンプトから、`projects` と入力することでプロジェクトの全リストが表示され、
+`project <プロジェクト名>` で、カレントプロジェクトを選択できる。
+`compile` のようなタスクを実行すると、それはカレントプロジェクトに対して実行される。
+これにより、ルートプロジェクトをコンパイルせずに、サブプロジェクトのみをコンパイルすることができる。
+
+また `subProjectID/compile` のように、プロジェクト ID を明示的に指定することで、そのプロジェクトのタスクを実行することもできる。
+
+### 共通のコード
+
+`.sbt` ファイルで定義された値は、他の `.sbt` ファイルからは見えない。 `.sbt` ファイル間でコードを共有するためには、 ベースディレクトリにある `project/` 配下に Scala ファイルを用意すればよい。
+
+詳細は[ビルドの整理][Organizing-Build]を参照。
 
 
   [Basic-Def]: Basic-Def.html
@@ -786,7 +1716,7 @@ lazy val root = (project in file("."))
 
 最初の例として、`update` と `clean` というタスクに依存した形で
 `scalacOption` を定義したいとする。
-（[Keys](../sxr/sbt/Keys.scala.html) より）以下の二つのキーを例に説明する。
+（[Keys](../../api/sbt/Keys$.html) より）以下の二つのキーを例に説明する。
 
 **注意**: ここで計算される `scalacOptions` の値はナンセンスなもので、説明のためだけのものだ:
 
@@ -819,12 +1749,13 @@ scalacOptions := {
 具体例で説明しよう:
 
 ```scala
+ThisBuild / organization := "com.example"
+ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
+
 lazy val root = (project in file("."))
   .settings(
     name := "Hello",
-    organization := "com.example",
-    scalaVersion := "2.12.3",
-    version := "0.1.0-SNAPSHOT",
     scalacOptions := {
       val out = streams.value // streams タスクは scalacOptions よりも事前発生する
       val log = out.log
@@ -855,12 +1786,13 @@ lazy val root = (project in file("."))
 もう一つの例:
 
 ```scala
+ThisBuild / organization := "com.example"
+ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
+
 lazy val root = (project in file("."))
   .settings(
     name := "Hello",
-    organization := "com.example",
-    scalaVersion := "2.12.3",
-    version := "0.1.0-SNAPSHOT",
     scalacOptions := {
       val ur = update.value  // update task happens-before scalacOptions
       if (false) {
@@ -985,7 +1917,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "Hello",
     organization := "com.example",
-    scalaVersion := "2.12.3",
+    scalaVersion := "2.12.8",
     version := "0.1.0-SNAPSHOT",
     scalacOptions := List("-encoding", "utf8", "-Xfatal-warnings", "-deprecation", "-unchecked"),
     scalacOptions := {
@@ -1008,8 +1940,8 @@ sbt シェルで試すとこうなるはずだ:
 [info] * -deprecation
 [info] * -unchecked
 [success] Total time: 0 s, completed Jan 2, 2017 11:44:44 PM
-> ++2.11.8
-[info] Setting version to 2.11.8
+> ++2.11.8!
+[info] Forcing Scala version to 2.11.8 on all projects.
 [info] Reapplying settings...
 [info] Set current project to Hello (in build file:/xxx/)
 > show scalacOptions
@@ -1019,7 +1951,7 @@ sbt シェルで試すとこうなるはずだ:
 [success] Total time: 0 s, completed Jan 2, 2017 11:44:51 PM
 ```
 
-次に ([Keys](../sxr/sbt/Keys.scala.html) より) 以下の二つのキーを例に説明する:
+次に ([Keys](../../api/sbt/Keys$.html) より) 以下の二つのキーを例に説明する:
 
 ```scala
 val scalacOptions = taskKey[Seq[String]]("Options for the Scala compiler.")
@@ -1454,24 +2386,15 @@ sbt はフォールバックとして `ThisBuild` 内を探す。
 `version`、 `scalaVersion`、 `organization`
 といったよく使われるキーに対してビルドレベルのデフォルトのセッティングを定義することができる。
 
-便宜のため、セッティング式のキーと本文の両方を `ThisBuild`
-にスコープ付けする
-`inThisBuild(...)` という関数が用意されている。
-セッティング式を渡すと、それに `in ThisBuild` を可能な所に追加したのと同じものが得られる。
-
 ```scala
+ThisBuild / organization := "com.example",
+ThisBuild / scalaVersion := "2.12.8",
+ThisBuild / version      := "0.1.0-SNAPSHOT"
+
 lazy val root = (project in file("."))
   .settings(
-    inThisBuild(List(
-      // Same as:
-      // organization in ThisBuild := "com.example"
-      organization := "com.example",
-      scalaVersion := "2.12.3",
-      version      := "0.1.0-SNAPSHOT"
-    )),
     name := "Hello",
-    publish := (),
-    publishLocal := ()
+    publish / skip := true
   )
 
 lazy val core = (project in file("core"))
@@ -1485,7 +2408,13 @@ lazy val util = (project in file("util"))
   )
 ```
 
-ただし、後で説明する[スコープ委譲][Scope-Delegation]の性質上、ビルドレベル・セッティングを単純な値の代入以外に使うことは推奨しない。
+便宜のため、セッティング式のキーと本文の両方を `ThisBuild`
+にスコープ付けする
+`inThisBuild(...)` という関数が用意されている。
+セッティング式を渡すと、それに `ThisBuild /` を可能な所に追加したのと同じものが得られる。
+
+ただし、後で説明する[スコープ委譲][Scope-Delegation]の性質上、ビルドレベル・セッティングは
+純粋な値または `Global` か `ThisBuild` にスコープ付けされたセッティングのみを代入するべきだ。
 
 ### スコープ委譲
 
@@ -1553,14 +2482,14 @@ sourceDirectories in Compile := Seq(file("sources1"), file("sources2"))
 #### 他のキーの値を基にしたタスク
 
 あるタスクの値を定義するために他のタスクの値を計算する必要があるかもしれない。
-そのような場合には、`:=` や `+=` や `++=` の引数に `Def.task` と `taskValue` を使えばよい。
+そのような場合には、`:=` や `+=` や `++=` の引数に `Def.task` を使えばよい。
 
 例として、`sourceGenerators` にプロジェクトのベースディレクトリやコンパイル時のクラスパスを加える設定をみてみよう。
 
 ```scala
 sourceGenerators in Compile += Def.task {
   myGenerator(baseDirectory.value, (managedClasspath in Compile).value)
-}.taskValue
+}
 ```
 
 ### 依存性を用いた追加: `+=` と `++=`
@@ -1582,7 +2511,7 @@ cleanFiles += file("coverage-report-" + name.value + ".txt")
 
 このページはスコープ委譲を説明する。前のページの
 [.sbt ビルド定義][Basic-Def]、
-[スコープ][Scopes-Graph]
+[スコープ][Scopes]
 を読んで理解したことを前提とする。
 
 スコープ付けの説明が全て終わったので、`.value` 照会の詳細を解説できる。
@@ -1669,7 +2598,7 @@ lazy val projA = (project in file("a"))
 `name in projA` (sbt シェルだと `projA/name`) の値は何か?
 
 1. `"foo-2.11.11"`
-2. `"foo-2.12.3"`
+2. `"foo-2.12.8"`
 3. その他
 
 正解は `"foo-2.11.11"`。
@@ -1977,7 +2906,7 @@ lazy val projF = (project in file("f"))
 ```
 
 
-  [Keys]: ../../sxr/sbt/Keys.scala.html
+  [Keys]: ../../api/sbt/Keys$.html
   [Apache Ivy]: https://ant.apache.org/ivy/
   [Ivy revisions]: https://ant.apache.org/ivy/history/2.3.0-rc1/ivyfile/dependency.html#revision
   [Extra attributes]: https://ant.apache.org/ivy/history/2.3.0-rc1/concept.html#extra
@@ -2065,7 +2994,7 @@ libraryDependencies += groupID % artifactID % revision % configuration
 `libraryDependencies` は [Keys] で以下のように定義されている:
 
 ```scala
-val libraryDependencies = SettingKey[Seq[ModuleID]]("library-dependencies", "Declares managed dependencies.")
+val libraryDependencies = settingKey[Seq[ModuleID]]("Declares managed dependencies.")
 ```
 
 `%` メソッドは、文字列から `ModuleID` オブジェクトを作るので、君はその `ModuleID` を `libraryDependencies` に追加するだけでいい。
@@ -2100,7 +3029,7 @@ sbt はプロジェクトの Scala のバイナリバージョンをアーティ
 これはただの略記法なので `%%` 無しで書くこともできる:
 
 ```scala
-libraryDependencies += "org.scala-tools" % "scala-stm_2.11.1" % "0.3"
+libraryDependencies += "org.scala-tools" % "scala-stm_2.11" % "0.3"
 ```
 
 君のビルドの Scala バージョンが `2.11.1` だとすると、以下の設定は上記と等価だ（"org.scala-tools" の後ろの二つ連なった %% に注意）:
@@ -2111,14 +3040,6 @@ libraryDependencies += "org.scala-tools" %% "scala-stm" % "0.3"
 
 多くの依存ライブラリは複数の Scala バイナリバージョンに対してコンパイルされており、
 ライブラリの利用者はバイナリ互換性のあるものを選択したいと思うはずである。
-
-実際のところの複雑な問題として、依存ライブラリはしばしば少しくらい違った Scala バージョンでも動作するのだが、
-`%%` はこれについてそこまで賢くはない。
-もしある依存ライブラリが Scala 2.10.1 に対してビルドされているとして、
-君のプロジェクトが `scalaVersion := "2.10.4"` と指定している場合、
-その 2.10.1 に依存するライブラリがおそらく動作するにも関わらず `%%` を使うことはできない。
-もし `%%` が動かなくなったら、依存ライブラリが使っている実際のバージョンを確認して、
-動くだろうバージョン（それがあればの話だけど）に決め打ちすればいい。
 
 詳しくは、[Cross Build][Cross-Build] を参照。
 
@@ -2205,224 +3126,6 @@ libraryDependencies += "org.apache.derby" % "derby" % "10.4.1.3" % Test
 
 ライブラリの依存性に関しては、もうこの入門用のページで見つからない情報があれば、[このページ][Library-Management]に
 もう少し詳細やコツが書いてある。
-
-
-  [Basic-Def]: Basic-Def.html
-  [Scopes]: Scopes.html
-  [Directories]: Directories.html
-  [Organizing-Build]: Organizing-Build.html
-
-マルチプロジェクト・ビルド
-----------------------
-
-このページでは、一つのビルドで複数のサブプロジェクトを管理する方法を紹介する。
-このガイドのこれまでのページを読んでおいてほしい。
-特に [build.sbt][Basic-Def] を理解していることが必要になる。
-
-### 複数のサブプロジェクト
-
-一つのビルドに複数の関連するサブプロジェクトを入れておくと、
-サブプロジェクト間に依存性がある場合や同時に変更されることが多い場合に便利だ。
-
-ビルド内の個々のサブプロジェクトは、それぞれ独自のソースディレクトリを持ち、
-`package` を実行すると独自の jar ファイルを生成するなど、概ね通常のプロジェクトと同様に動作する。
-
-個々のプロジェクトは lazy val を用いて [Project](../../api/sbt/Project.html) 型の値を宣言することで定義される。例として、以下のようなものがプロジェクトだ:
-
-```scala
-lazy val util = (project in file("util"))
-
-lazy val core = (project in file("core"))
-```
-
-val で定義された名前はプロジェクトの ID 及びベースディレクトリの名前になる。
-ID は sbt シェルからプロジェクトを指定する時に用いられる。
-
-ベースディレクトリ名が ID と同じ名前であるときは省略することができる。
-
-```scala
-lazy val util = project
-
-lazy val core = project
-```
-
-#### 共通のセッティング
-
-複数プロジェクトに共通なセッティングをくくり出す場合、
-`commonSettings` という名前のセッティングの Seq を作って、
-それを引数として各プロジェクトの `settings` メソッドを呼び出せばよい。
-
-```scala
-lazy val commonSettings = Seq(
-  organization := "com.example",
-  version := "0.1.0",
-  scalaVersion := "2.12.3"
-)
-
-lazy val core = (project in file("core"))
-  .settings(
-    commonSettings,
-    // other settings
-  )
-
-lazy val util = (project in file("util"))
-  .settings(
-    commonSettings,
-    // other settings
-  )
-```
-
-これで `version` を一箇所で変更すれば、再読み込み後に全サブプロジェクトに反映されるようになる。
-
-#### ビルドワイド・セッティング
-
-サブプロジェクト間に共通なセッティングを一度に定義するためのもう一つの方法として、
-`ThisBuild` にスコープ付けするという少し上級なテクニックがある。（[スコープ][Scopes]参照）
-
-### 依存関係
-
-一つのビルドの中の個々のプロジェクトはお互いに完全に独立した状態であってもよいが、
-普通、何らかの形で依存関係を持っているだろう。
-ここでは集約（`aggregate`）とクラスパス（`classpath`）という二種類の依存関係がある。
-
-#### 集約
-
-集約とは、集約する側のプロジェクトであるタスクを実行するとき、集約される側の複数のプロジェクトでも同じタスクを実行するという関係を意味する。例えば、
-
-```scala
-lazy val root = (project in file("."))
-  .aggregate(util, core)
-
-lazy val util = (project in file("util"))
-
-lazy val core = (project in file("core"))
-```
-
-上の例では、`root` プロジェクトが `util` と `core` を集約している。
-この状態で sbt を起動してコンパイルしてみよう。
-3 つのプロジェクトが全てコンパイルされることが分かると思う。
-
-_集約プロジェクト内で_（この場合は `root` プロジェクトで）、
-タスクごとに集約をコントロールすることができる。
-例えば、`update` タスクの集約を以下のようにして回避できる:
-
-```scala
-lazy val root = (project in file("."))
-  .aggregate(util, core)
-  .settings(
-    aggregate in update := false
-  )
-
-[...]
-```
-
-`aggregate in update` は、`update` タスクにスコープ付けされた `aggregate` キーだ
-（[スコープ][Scopes]参照）。
-
-注意: 集約は、集約されるタスクを順不同に並列実行する。
-
-#### クラスパス依存性
-
-あるプロジェクトが、他のプロジェクトにあるコードに依存させたい場合、
-`dependsOn` メソッドを呼び出して実現すればよい。
-
-例えば、`core` に `util` のクラスパスが必要な場合は `core` の定義を次のように書く:
-
-```scala
-lazy val core = project.dependsOn(util)
-```
-
-これで `core` 内のコードから `util` の class を利用することができるようになった。
-
-また、これにより `core` がコンパイルされる前に `util` の `update` と `compile` が実行されている必要があるので
-プロジェクト間でコンパイル実行が順序付けられることになる。
-
-複数のプロジェクトに依存するには、`dependsOn(bar, baz)` というふうに、
-`dependsOn` に複数の引数を渡せばよい。
-
-##### コンフィギュレーションごとのクラスパス依存性
-
-`foo dependsOn(bar)` は、`foo` の `Compile` コンフィギュレーションが
-`bar` の `Compile` コンフィギュレーションに依存することを意味する。
-これを明示的に書くと、`dependsOn(bar % "compile->compile")` となる。
-
-この `"compile->compile"` 内の `->` は、「依存する」という意味で、
-`"test->compile"` は、`foo` の `Test` コンフィギュレーションが
-`bar` の `Compile` コンフィギュレーションに依存することを意味する。
-
-`->config` の部分を省くと、`->compile` だと解釈されるため、
-`dependsOn(bar % "test")` は、`foo` の `Test` コンフィギュレーションが
-`bar` の `Compile` コンフィギュレーションに依存することを意味する。
-
-特に、`Test` が `Test` に依存することを意味する `"test->test"` は役に立つ宣言だ。
-これにより、例えば、`bar/src/test/scala` にテストのためのユーティリティコードを
-置いておき、それを `foo/src/test/scala` 内のコードから利用することができる。
-
-複数のコンフィギュレーション依存性を宣言する場合は、セミコロンで区切る。
-例えば、`dependsOn(bar % "test->test;compile->compile")` と書ける。
-
-### デフォルトルートプロジェクト
-
-もしプロジェクトがルートディレクトリに定義されてなかったら、 sbt はビルド時に他のプロジェクトを集約するデフォルトプロジェクトを勝手に生成する。
-
-プロジェクト `hello-foo` は、`base = file("foo")` と共に定義されているため、
-サブディレクトリ `foo` に置かれる。
-そのソースは、`foo/Foo.scala` のように `foo` の直下に置かれるか、
-`foo/src/main/scala` 内に置かれる。
-ビルド定義ファイルを除いては、通常の sbt [ディレクトリ構造][Directories]が `foo` 以下に適用される。
-
-`foo` 内の全ての `.sbt` ファイル、例えば `foo/build.sbt` は、
-`hello-foo` プロジェクトにスコープ付けされた上で、ビルド全体のビルド定義に取り込まれる。
-
-ルートプロジェクトが `hello` にあるとき、`hello/build.sbt`、`hello/foo/build.sbt`、
-`hello/bar/build.sbt` においてそれぞれ別々のバージョンを定義してみよう（例: `version := "0.6"`）。
-次に、インタラクティブプロンプトで `show version` と打ち込んでみる。
-以下のように表示されるはずだ（定義したバージョンによるが）:
-
-```
-> show version
-[info] hello-foo/*:version
-[info] 	0.7
-[info] hello-bar/*:version
-[info] 	0.9
-[info] hello/*:version
-[info] 	0.5
-```
-
-`hello-foo/*:version` は、`hello/foo/build.sbt` 内で定義され、
-`hello-bar/*:version` は、`hello/bar/build.sbt` 内で定義され、
-`hello/*:version` は、`hello/build.sbt` 内で定義される。
-[スコープ付けされたキーの構文][Scopes]を復習しておこう。
-それぞれの `version` キーは、`build.sbt` の場所により、
-特定のプロジェクトにスコープ付けされている。
-だが、三つの `build.sbt` とも同じビルド定義の一部だ。
-
-`.scala` ファイルは、上に示したように、単にプロジェクトとそのベースディレクトリを列挙するだけの簡単なものにして、
-_それぞれのプロジェクトのセッティングは、そのプロジェクトのベースディレクトリ直下の
-`.sbt` ファイル内で宣言することができる_。
-_全てのセッティングを `.scala` ファイル内で宣言することは義務付けられいるわけではない。_
-
-ビルド定義の全てを単一の `project` ディレクトリ内の場所にまとめるために、
-`.scala` ファイル内にセッティングも含めてしまうほうが洗練されていると思うかもしれない。
-ただし、これは好みの問題だから、好きにやっていい。
-
-サブプロジェクトは、`project` サブディレクトリや、`project/*.scala` ファイルを持つことができない。
-`foo/project/Build.scala` は無視される。
-
-### プロジェクトの切り替え
-
-sbt インタラクティブプロンプトから、`projects` と入力することでプロジェクトの全リストが表示され、
-`project <プロジェクト名>` で、カレントプロジェクトを選択できる。
-`compile` のようなタスクを実行すると、それはカレントプロジェクトに対して実行される。
-これにより、ルートプロジェクトをコンパイルせずに、サブプロジェクトのみをコンパイルすることができる。
-
-また `subProjectID/compile` のように、プロジェクト ID を明示的に指定することで、そのプロジェクトのタスクを実行することもできる。
-
-### 共通のコード
-
-`.sbt` ファイルで定義された値は、他の `.sbt` ファイルからは見えない。 `.sbt` ファイル間でコードを共有するためには、 ベースディレクトリにある `project/` 配下に Scala ファイルを用意すればよい。
-
-詳細は[ビルドの整理][Organizing-Build]を参照。
 
 
   [Basic-Def]: Basic-Def.html
@@ -2586,9 +3289,9 @@ lazy val core = (project in file("core"))
   [Input-Tasks]: ../../docs/Input-Tasks.html
   [Plugins]: ../../docs/Plugins.html
   [Tasks]: ../../docs/Tasks.html
-  [Keys]: ../../sxr/sbt/Keys.scala.html
+  [Keys]: ../../api/sbt/Keys$.html
   [Defaults]: ../../sxr/sbt/Defaults.scala.html
-  [Scaladocs-IO]: ../api/index.html#sbt.IO$
+  [Scaladocs-IO]: ../../api/sbt/io/IO$.html
 
 カスタムセッティングとタスク
 ------------------------
@@ -2637,14 +3340,12 @@ val clean = taskKey[Unit]("Deletes files produced by the build, such as generate
 val sampleStringTask = taskKey[String]("A sample string task.")
 val sampleIntTask = taskKey[Int]("A sample int task.")
 
-lazy val commonSettings = Seq(
-  organization := "com.example",
-  version := "0.1.0-SNAPSHOT"
-)
+ThisBuild / organization := "com.example"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
+ThisBuild / scalaVersion := "2.12.8"
 
 lazy val library = (project in file("library"))
   .settings(
-    commonSettings,
     sampleStringTask := System.getProperty("user.home"),
     sampleIntTask := {
       val sum = 1 + 2
@@ -2691,14 +3392,12 @@ val stopServer = taskKey[Unit]("stop server")
 val sampleIntTask = taskKey[Int]("A sample int task.")
 val sampleStringTask = taskKey[String]("A sample string task.")
 
-lazy val commonSettings = Seq(
-  organization := "com.example",
-  version := "0.1.0-SNAPSHOT"
-)
+ThisBuild / organization := "com.example"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
+ThisBuild / scalaVersion := "2.12.8"
 
 lazy val library = (project in file("library"))
   .settings(
-    commonSettings,
     startServer := {
       println("starting...")
       Thread.sleep(500)
@@ -2779,7 +3478,6 @@ s: 3
 ```scala
 lazy val library = (project in file("library"))
   .settings(
-    commonSettings,
     startServer := {
       println("starting...")
       Thread.sleep(500)
@@ -2945,14 +3643,13 @@ object Dependencies {
 ```scala
 import Dependencies._
 
-lazy val commonSettings = Seq(
-  version := "0.1.0",
-  scalaVersion := "2.12.3"
-)
+ThisBuild / organization := "com.example"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
+ThisBuild / scalaVersion := "2.12.8"
 
 lazy val backend = (project in file("backend"))
   .settings(
-    commonSettings,
+    name := "backend",
     libraryDependencies ++= backendDeps
   )
 ```
@@ -3038,7 +3735,7 @@ sbt はオープンソースであるため、いつでも[ソース](https://gi
 
 ### bare .sbt ビルド定義とは何か
 
-明示的に [Project](../api/sbt/Project.html) を定義する
+明示的に [Project](../../api/sbt/Project.html) を定義する
 [マルチプロジェクト .sbt ビルド定義][Basic-Def]や [.scala ビルド定義][Full-Def]と違って
 bare ビルド定義は `.sbt` ファイルの位置から暗黙にプロジェクトが定義される。
 
@@ -3049,7 +3746,7 @@ name := "hello"
 
 version := "1.0"
 
-scalaVersion := "2.12.3"
+scalaVersion := "2.12.8"
 ```
 
 ### (0.13.7 以前) 設定は空白行で区切る
@@ -3096,7 +3793,7 @@ sbt のリリースごとの変更点など。
 - `PathFinder.x_!(mapper)` は `PathFinder` の `def pair` に変更された。
 - `sbt.Path` の多くのメソッド (`relativeTo`、`rebase`、 `flat` など) は以前は `sbt` のパッケージオブジェクト経由でデフォルトの名前空間に入っていたが、それが無くなったので `sbt.io.Path` を使ってアクセスしてほしい。
 - sbt 1.0 は、スコープ成分としての `Global` を `Zero` と名前を変えて、`GlobalScope` と区別するようにした。 [@eed3si9n][@eed3si9n]
-- 今まで `update.value.configuration(...)` のような所でコンフィギュレーションを参照するのに文字列が使われいたのを、`ConfigRef` を使うように変更した。
+- 今まで `update.value.configuration(...)` のような所でコンフィギュレーションを参照するのに文字列が使われていたのを、`ConfigRef` を使うように変更した。
 - `sourceArtifactTypes` と `docArtifactTypes` を `Set[String]` から `Seq[String]` セッティングへと変更した。
 - early command 機能を `--<command>` という構文から `early(<command>)` へと変更した。
 - sbt 0.12 スタイルのハイフン区切りされたキー名を撤廃した (例えば `publish-local` から `publishLocal` に移行する)。
@@ -3399,11 +4096,153 @@ Zinc の内部構造の保存方法として Google Protocol Buffer を用いた
 プラグインとベストプラクティス
 --------------------------
 
+このパートでは，sbtの各トピックを詳細に扱う。
+これを読む前に、基礎知識として[始める sbt](Getting-Started)を読む必要があるだろう。
 
-  [sbtScriptedTests]: https://github.com/sbt/sbt/tree/0.13/sbt/src/sbt-test
-  [xsbt-web-plugin]: https://github.com/JamesEarlDouglas/xsbt-web-plugin/tree/master/src/sbt-test
+
+  [Howto-Generating-Files]: Howto-Generating-Files.html
+
+一般的なベストプラクティス
+----------------------
+
+このページでは、 sbt を利用するに当たってのベストプラクティスについて説明する。
+
+### `project/` と `~/.sbt/` の使い分け
+
+プロジェクトをビルドするために必要なものは、 `project/` に配置するべきだ。
+例えばwebプラグインのようなものがこれに相当する。
+`~/.sbt/` には、ビルドで使用するローカル環境のカスタマイズやコマンドなど、プロジェクトのビルドに必須ではないものを配置する。
+例えば IDE のプラグインなどがこれに相当する。
+
+### ローカル環境の設定
+
+ユーザ独自の設定を行うには2つの方法がある。
+そのようなユーザ独自の設定の一例として、 resolvers のリストのはじめにローカルのMavenリポジトリを追加することが挙げられる。
+
+```scala
+resolvers := {
+  val localMaven = "Local Maven Repository" at "file://"+Path.userHome.absolutePath+"/.m2/repository"
+  localMaven +: resolvers.value
+}
+```
+
+1.  ユーザ独自の設定を, `~/.sbt/1.0/global.sbt` などのグローバルな `.sbt` ファイルに記述する方法。
+    ここに記述した設定は、全てのプロジェクトに適用される。
+2.  ユーザ独自の設定を `<project>/local.sbt` のようなプロジェクト内の `.sbt` ファイルに記述し、バージョンコントロールから除外しておく方法。
+    sbt は複数の .sbt ファイルの設定を結合するので、バージョンコントロール下に通常の `<project>/build.sbt` ファイルも持つことができる。
+
+### .sbtrc
+
+sbt 起動時に実行するコマンドは `.sbtrc` ファイルの各行に記述する。
+これらのコマンドはプロジェクトがロードする前に実行されるため、エイリアスの定義などに便利だ。
+sbt は、まず `$HOME/.sbtrc` 内のコマンドを実行し(ファイルが存在する場合のみ)、次に `<project>/.sbtrc` を実行する(ファイルが存在する場合のみ)。
+
+### 生成されるファイル
+
+生成されるファイルは `target` で設定された出力ディレクトリのサブディレクトリに書き出す。
+このようにしておくことで、生成ファイルが一箇所に整理され、ビルド後のクリーンアップが容易になる。
+クロスビルドを効率的にするために、 Scala のバージョンごとに生成されるファイルは `crossTarget` の下に書き出す。
+
+ソースとリソースの生成については、[ソースファイル/リソースファイルの生成][Howto-Generating-Files]を参照して欲しい。
+
+### ハードコードしない
+
+出力ディレクトリの `target/` などの定数をハードコードするべきではない。
+これはプラグインを書く際に特に重要だ。
+ユーザはこれを `build/` に変更するかもしれないし、プラグインもそれを尊重すべきだ。
+代わりに次のような設定を使うとよい。
+
+```scala
+myDirectory := target.value / "sub-directory"
+```
+
+### ファイルの変更をしない
+
+ビルドは通常たくさんのファイル操作で成り立っている。
+これをミュータブルな状態を作らないように設計されたタスクシステムでうまく扱うにはどのようにすればよいだろうか。
+推奨される方法の1つは、ファイルへの書き込みを1つのタスクから、かつ1度のみにすることだ。このアプローチは sbt の既定のタスクでも採用している。
+
+1つのビルド成果物へは、ただ1度、1つのタスクからのみ書きこみをされるべきだ。
+そのタスクでは生成された File オブジェクトを返し、そのファイルを利用する他のタスクは、このタスクをmapする。
+このようにすることで、ファイルの参照を取得すると同時にファイルを生成するタスクが先に実行されることを保証できる。
+
+もちろんこれでもユーザや他のプロセスがファイルを変更することを防ぐことはできないが、
+タスクレベルではファイルの内容をイミュータブルに扱うので、ビルドのコントロール下にあるI/Oをより予測可能なものにできる。
+
+例は次の通りだ。
+
+```scala
+lazy val makeFile = taskKey[File]("Creates a file with some content.")
+
+// ファイルを作成するタスクの定義
+//  内容を書き込んでその File オブジェクトを返す
+makeFile := {
+    val f: File = file("/tmp/data.txt")
+    IO.write(f, "Some content")
+    f
+}
+
+// makeFile の帰り値は生成された File オブジェクトだ。
+//  そのため、 useFile タスクは makeFile タスクを map することで、
+//  ファイルへの参照を得るのと同時に、 makeFile タスクへの依存性を宣言できる。
+useFile :=
+    doSomething( makeFile.value )
+```
+
+このような書き方がいつもできるとは限らないが、例外ではなく慣例とすべきだ。
+
+### 絶対パスを利用する
+
+絶対的な File オブジェクトのみを利用すべきだ。
+次のように、絶対パスを指定するか、
+
+```scala
+file("/home/user/A.scala")
+```
+
+絶対的な File オブジェクトを起点として別の File オブジェクトを構築する。
+
+```scala
+base / "A.scala"
+```
+
+これは前述のハードコーディングしないというベストプラクティスにも関連する。
+なぜなら適切な方法は、 `baseDirectory` の設定を参照することだからだ。
+次の例では、 myPath に `<base>/licenses/` ディレクトリを設定している。
+
+```scala
+myPath := baseDirectory.value / "licenses"
+```
+
+Java や Scala では相対的な File オブジェクトは現在のワーキングディレクトリからの相対パスを表す。
+種々の理由から、このワーキングディレクトリは、常にビルドのルートディレクトリに一致するとは限らない。
+
+このルールの唯一の例外は、プロジェクトのベースディレクトリを利用している場合だ。
+この場合、sbt は利便性のため、相対的な File オブジェクトをビルドのルートディレクトリからの相対パスとして解決する。
+
+### パーサコンビネータ
+
+1.  タブ補完の境界を明確に区切るため、全ての場所で `token` を利用すること。
+2.  token のオーバーラップやネストをしないこと。そのようにした場合の挙動は未定義であり、将来的にエラーを引き起こす可能性が高い。
+3.  再帰処理には `flatMap` を利用すること。 sbt のコンビネータは生成クラス数の上限に厳格だ。そのため flatMap を使って次のように記述するとよい。
+
+```scala
+lazy val parser: Parser[Int] =
+  token(IntBasic) flatMap { i =>
+    if(i <= 0)
+      success(i)
+    else
+      token(Space ~> parser)
+  }
+```
+
+> 上記の例では、負数を末尾にもつ空白区切りの整数列をパースし、最後の負数を返すパーサを定義している。
+
+
+  [sbtScriptedTests]: https://github.com/sbt/sbt/tree/1.x/sbt/src/sbt-test
+  [xsbt-web-plugin]: https://github.com/earldouglas/xsbt-web-plugin/tree/master/src/sbt-test
   [sbt-assembly]: https://github.com/sbt/sbt-assembly/tree/master/src/sbt-test/sbt-assembly
-  [feabb2]: https://github.com/JamesEarlDouglas/xsbt-web-plugin/commit/feabb2eb554940d9b28049bd0618b6a790d9e141
+  [feabb2]: https://github.com/earldouglas/xsbt-web-plugin/commit/feabb2eb554940d9b28049bd0618b6a790d9e141
 
 sbt プラグインをテストする
 -----------------------
@@ -3426,22 +4265,33 @@ sbt は、scripted test framework というものが付いてきて、ビルド�
 
 scripted-plugin はプラグインをローカルに publish するため、まずは version を **-SNAPSHOT** なものに設定しよう。ここで SNAPSHOT を使わないと、あなたと世界のあなた以外の人が別々のアーティファクトを観測するといった酷い不整合な状態に入り込む場合があるからだ。
 
-### ステップ 2: scripted-plugin
+### ステップ 2: SbtPlugin
 
-次に、scripted-plugin をプラグインのビルドに加える。`project/scripted.sbt`:
-
-```scala
-libraryDependencies += { "org.scala-sbt" %% "scripted-plugin" % sbtVersion.value }
-```
-
-以下のセッティングを `scripted.sbt` に加える:
+`build.sbt` で `SbtPlugin` を enable する。
 
 ```scala
-scriptedLaunchOpts := { scriptedLaunchOpts.value ++
-  Seq("-Xmx1024M", "-Dplugin.version=" + version.value)
-}
-scriptedBufferLog := false
+lazy val root = (project in file("."))
+  .enablePlugins(SbtPlugin)
+  .settings(
+    name := "sbt-something"
+  )
 ```
+
+以下のセッティングを `build.sbt` に加える:
+
+```scala
+lazy val root = (project in file("."))
+  .enablePlugins(SbtPlugin)
+  .settings(
+    name := "sbt-something",
+    scriptedLaunchOpts := { scriptedLaunchOpts.value ++
+      Seq("-Xmx1024M", "-Dplugin.version=" + version.value)
+    },
+    scriptedBufferLog := false
+  )
+```
+
+**注意**: `SbtPlugin` は sbt 1.2.1 以上を必要とする。
 
 ### ステップ 3: src/sbt-test
 
@@ -3468,7 +4318,7 @@ Specify this property using the scriptedLaunchOpts -D.""".stripMargin)
 }
 ```
 
-これは [JamesEarlDouglas/xsbt-web-plugin@feabb2][feabb2] から拝借してきた技で、これで scripted テストに version を渡すことができる。
+これは [earldouglas/xsbt-web-plugin@feabb2][feabb2] から拝借してきた技で、これで scripted テストに version を渡すことができる。
 
 他に、`src/main/scala/hello.scala` も用意した:
 
@@ -3627,6 +4477,126 @@ How to
 How to 記事の一覧は[目次](Contents+in+Depth.html)を参照してください。
 
 
+  [modify-package-contents]: Howto-Package.html#modify-package-contents
+
+ソースファイル/リソースファイルの生成
+----------------
+
+sbt にはソースコードやリソースの生成を行うタスクを登録する標準的なフックが用意されている。
+
+<a name="sources"></a>
+
+### ソースコードの生成
+
+ソースコードを生成するタスクでは、ソースコードを `sourceManaged` のサブディレクトリに生成し、
+生成した File オブジェクトを返すように実装するのがよいだろう。
+タスクの実装の核となる、ソースを生成する関数のシグネチャは次のようになる。
+
+```scala
+def makeSomeSources(base: File): Seq[File]
+```
+
+ソースを生成するタスクは `sourceGenerators` キーに追加する。
+ここでは、実行結果の値ではなくタスク自体を追加するため、通常の `value` ではなく、 `taskValue`を使う。
+`sourceGenerators` には生成するソースが main か test かに応じて、それぞれ `Compile`、 `Test`のスコープ付けをしておく。
+大まかな定義は次のようになる。
+
+```scala
+sourceGenerators in Compile += <task of type Seq[File]>.taskValue
+```
+
+これは、 `def makeSomeSources(base: File): Seq[File]` を用いて次のように書ける。
+
+```scala
+sourceGenerators in Compile += Def.task {
+  makeSomeSources((sourceManaged in Compile).value / "demo")
+}.taskValue
+```
+
+より具体的な例を示そう。
+次の例では、 source generator は、実行するとコンソールに `"Hi"` と表示する `Test.scala` というアプリケーションオブジェクトを生成する。
+
+```scala
+sourceGenerators in Compile += Def.task {
+  val file = (sourceManaged in Compile).value / "demo" / "Test.scala"
+  IO.write(file, """object Test extends App { println("Hi") }""")
+  Seq(file)
+}.taskValue
+```
+
+これを `run` タスクで実行すると、次のように `"Hi"` と表示されるだろう。
+
+```
+> run
+[info] Running Test
+Hi
+```
+
+テスト用のソースコードを生成したい場合は、上記の `Compile` の部分を `Test` に変更する。
+
+**注意:** 
+ビルドを効率化するために、 `sourceGenerators` では、呼び出しの度にソースの生成を行うのではなく、
+`sbt.Tracked.{ inputChanged, outputChanged }` などを用いて、必ず入力値に基づいたキャッシングを行うべきである。
+
+デフォルトでは、生成したソースコードはビルド成果物のパッケージには含まれない。
+追加するには、別途 mappings への追加が必要になる。
+この詳細は、[Adding files to a package][modify-package-contents]を参照して欲しい。
+source generator は Java のソースも Scala のソースも1つの Seq で一緒に返すが、
+後続の処理は拡張子を元にそれらを区別できる。
+
+<a name="resources"></a>
+
+### リソースの生成
+
+リソースを生成するタスクは、リソースを `resourceManaged` のサブディレクトリに生成し、
+生成した File オブジェクトを返すように実装するのがよいだろう。
+ソースの生成の場合と同様に、タスクの実装の核となる、リソースを生成する関数のシグネチャは次のようになる。
+
+```scala
+def makeSomeResources(base: File): Seq[File]
+```
+
+リソースを生成するタスクは `resourceGenerators` キーに追加する。
+ここでも、実行結果の値ではなくタスク自体を追加するため、通常の `value` ではなく、 `taskValue`を使う。
+`resourceGenerators` にも、生成するリソースが main か test かに応じて、それぞれ `Compile`、 `Test`のスコープ付けをしておく。
+大まかな定義は次のようになる。
+
+```scala
+resourceGenerators in Compile += <task of type Seq[File]>.taskValue
+```
+
+これは、 `def makeSomeResources(base: File): Seq[File]` を用いて次のように書ける。
+
+```scala
+resourceGenerators in Compile += Def.task {
+  makeSomeResources((resourceManaged in Compile).value / "demo")
+}.taskValue
+```
+
+上記の例を、`run` タスク、または `package`タスク (`compile`タスクでないことに注意) で実行すると、
+`resourceManaged` が示す `"target/scala-*/resource_managed"` の中に `demo` というファイルが生成される。
+デフォルトでは、生成したリソースはビルド成果物のパッケージには含まれない。
+追加するには、別途 mappings への追加が必要になる。
+こちらについても、詳細は [Adding files to a package][modify-package-contents] を参照して欲しい。
+
+次の例では、アプリケーション名とバージョンが書かれた `myapp.properties`というプロパティファイルが生成される。
+
+```scala
+resourceGenerators in Compile += Def.task {
+  val file = (resourceManaged in Compile).value / "demo" / "myapp.properties"
+  val contents = "name=%s\nversion=%s".format(name.value,version.value)
+  IO.write(file, contents)
+  Seq(file)
+}.taskValue
+```
+
+テスト用のリソースとして扱いたい場合は `Compile` を `Test` に変更する。
+
+**注意:**
+ビルドを効率化するために、 `resourceGenerators` では、呼び出しの度にリソースの生成を行うのではなく、
+`sbt.Tracked.{ inputChanged, outputChanged }` などを用いて、必ず入力値に基づいたキャッシングを行うべきである。
+
+
   [ExecutionSemantics]: Custom-Settings.html#Execution+semantics+of+tasks
 
 逐次実行
@@ -3673,7 +4643,7 @@ sbt 0.13.8 で `Def.sequential` という関数が追加されて、準逐次な
 #### project/build.properties
 
 ```
-sbt.version=1.0.2
+sbt.version=1.2.8
 ```
 
 #### project/style.sbt
@@ -3723,7 +4693,7 @@ root> compilecheck
 #### project/build.properties
 
 ```
-sbt.version=1.0.2
+sbt.version=1.2.8
 ```
 
 #### project/style.sbt
@@ -3904,3 +4874,72 @@ lazy val root = (project in file("."))
       state
   }
 ```
+
+--
+out: Archive.html
+--
+
+Archived pages
+--------------
+
+
+  [Basic-Def]: Basic-Def.html
+  [Setup]: Setup.html
+  [Running]: Running.html
+
+Hello, World
+------------
+
+このページは、既に[sbt 0.13.13 以上をインストール][Setup]したことを前提とする。
+
+### sbt new コマンド
+
+sbt 0.13.13 以降を使っている場合は、sbt `new`
+コマンドを使って手早く簡単な Hello world ビルドをセットアップすることができる。
+以下をターミナルから打ち込む。
+
+```
+$ sbt new sbt/scala-seed.g8
+....
+Minimum Scala build.
+
+name [My Something Project]: hello
+
+Template applied in ./hello
+```
+
+プロジェクト名を入力するプロンプトが出てきたら `hello` と入力する。
+
+これで、`hello` ディレクトリ以下に新しいプロジェクトができた。
+
+### アプリの実行
+
+次に `hello` ディレクトリ内から sbt を起動して sbt のシェルから
+`run` と入力する。Linux や OS X の場合、コマンドは以下のようになる:
+
+```
+$ cd hello
+$ sbt
+...
+> run
+...
+[info] Compiling 1 Scala source to /xxx/hello/target/scala-2.12/classes...
+[info] Running example.Hello
+hello
+```
+
+[後で][Running]他のタスクもみていく。
+
+### sbt シェルの終了
+
+sbt シェルを終了するには、`exit` と入力するか、Ctrl+D (Unix) か Ctrl+Z (Windows) を押す。
+
+```
+> exit
+```
+
+### ビルド定義
+
+ビルド設定方法はプロジェクトのベースディレクトリに `build.sbt` というファイルとして配置される。
+ファイルを読んでみてもいいが、このビルドファイルに書いてあることが分からなくても心配しないでほしい。
+[ビルド定義][Basic-Def]で、`build.sbt` の書き方を説明する。

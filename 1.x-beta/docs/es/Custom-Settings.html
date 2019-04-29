@@ -1,0 +1,387 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html>
+      <head>
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+        <title>Manual de referencia de sbt — Entradas y tareas personalizadas</title>
+        <link rel="shortcut icon" href="../favicon.ico"/>
+        <link rel="stylesheet" href="../css/bootstrap.min.css" type="text/css"/>
+        <link rel="stylesheet" href="../css/pamflet.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamflet-print.css" type="text/css" media="print"/>
+        <link rel="stylesheet" href="../css/pamflet-grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-redmond.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-github.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-monokai.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamfletheight_80px_2em.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
+        <script type="text/javascript" src="../js/bootstrap.bundle.min.js"></script>
+        <script type="text/javascript" src="../js/pamflet.js"></script>
+        <script type="text/javascript">
+          Pamflet.page.language = 'es';
+        </script>
+        <script type="text/javascript" src="../js/prettify/prettify.js"></script><script type="text/javascript" src="../js/prettify/lang-scala.js"></script><link type="text/css" rel="stylesheet" href="../css/prettify.css"/><script type="text/javascript"><!--
+        window.onload=function() { prettyPrint(); };
+      --></script>
+        <link rel="stylesheet" href="../css/custom.css" type="text/css" media="screen, projection"/>
+        
+        <script type="text/javascript">
+              Pamflet.twitter = '#sbt #scala';
+            </script>
+      </head>
+      <body class="color_scheme-github">
+        <div class="container-fluid contentswrapper h-100">
+          <div class="row minh-100">
+          <div class="col-md-4 col-xl-3 toccolumn leftcolumn">
+                  <div class="lefttocwrapper">
+      <div class="tocwrapper">
+        
+        <div class="tocbody show" id="toc">
+        
+        <div><a href="index.html">Manual de referencia de sbt</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">Guía de inicio de sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">Instalar sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Instalar sbt on Mac</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Instalar sbt en Windows</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Installing sbt on Linux</a></div></li> </ol></li><li><div><a href="sbt-by-example.html">sbt mediante ejemplos</a></div></li><li><div><a href="Directories.html">Estructura de directorios</a></div></li><li><div><a href="Running.html">Ejecución</a></div></li><li><div><a href="Basic-Def.html">Definiciones de construcción</a></div></li><li><div><a href="Multi-Project.html">Construcciones multiproyecto</a></div></li><li><div><a href="Task-Graph.html">Grafos de tareas</a></div></li><li><div><a href="Scopes.html">Ámbitos</a></div></li><li><div><a href="Appending-Values.html">Añadir valores</a></div></li><li><div><a href="Scope-Delegation.html">Delegación de ámbito (resolución de .value)</a></div></li><li><div><a href="Library-Dependencies.html">Dependencias de bibliotecas</a></div></li><li><div><a href="Using-Plugins.html">Usar plugins</a></div></li><li><div class="current">Entradas y tareas personalizadas</div></li><li><div><a href="Organizing-Build.html">Organizar la construcción</a></div></li><li><div><a href="Summary.html">Guía de inicio - resumen</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div>
+      </div>
+      </div>
+                </div><div class="col-md-8 col-xs-9">
+                  <div class="rightcolumn contents">
+                  <h2 id="Entradas+y+tareas+personalizadas">Entradas y tareas personalizadas<a href="#Entradas+y+tareas+personalizadas" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Esta página sirve de introducción para crear entradas y tareas personalizadas.
+</p><p>Para entender esta página, asegúrate de que has leído las páginas anteriores de
+la Guía de inicio, en particular <a href="Basic-Def.html">Definiciones de construcción</a> y
+<a href="Task-Graph.html">Grafos de tareas</a>.
+</p><h3 id="Definir+una+clave">Definir una clave<a href="#Definir+una+clave" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="../../api/sbt/Keys$.html">Keys</a> está lleno de ejemplos que ilustran cómo definir
+claves. La mayoría de las claves están implementadas en
+<a href="../../sxr/sbt/Defaults.scala.html">Defaults</a>.
+</p><p>Una clave tiene uno de tres posibles tipos: <code>SettingKey</code> y <code>TaskKey</code> son
+descritos en <a href="Basic-Def.html">Definiciones de construcción</a>. Para saber más acerca de
+<code>InputKey</code> puedes ver la página <a href="../docs/Input-Tasks.html">Tareas con entrada</a>.
+</p><p>Algunos ejemplos de <a href="../../api/sbt/Keys$.html">Keys</a>:
+</p><pre><code class="prettyprint lang-scala">val scalaVersion = settingKey[String](&quot;The version of Scala used for building.&quot;)
+val clean = taskKey[Unit](&quot;Deletes files produced by the build, such as generated sources, compiled classes, and task caches.&quot;)
+</code></pre><p>Los constructores de claves toman como parámetros dos cadenas de caracteres: el
+nombre de la clave (<code>&quot;scalaVersion&quot;</code>) y una descripción
+(<code>&quot;The version of Scala used for building.&quot;</code>).
+</p><p>Como recordarás, en <a href="Basic-Def.html">Definición de construcción</a> se explica que el
+tipo del parámetro <code>T</code> en <code>SettingsKey[T]</code> indica el tipo del valor que tiene la
+entrada. <code>T</code> en <code>TaskKey[T]</code> indica el tipo del resultado de la tarea. También
+recordarás que una entrada tiene un valor fijo único hasta la siguiente recarga
+del proyecto, mientras que una tarea es recalculada para cada
+“ejecución de la tarea” (cada vez que alguien escribe un comando en el prompt
+interactivo de sbt o utiliza el modo por lotes).
+</p><p>Las claves pueden estar definidas en un <a href="Basic-Def.html">fichero .sbt</a>, un
+<a href="Organizing-Build.html">fichero .scala</a> o un <a href="Using-Plugins.html">autoplugin</a>.
+Cualesquiera <code>val</code> encontrados bajo el objeto <code>autoImport</code> de un autoplugin
+habilitado será importado automáticamente en tus ficheros <code>.sbt</code>.
+</p><h3 id="Implementar+una+tarea">Implementar una tarea<a href="#Implementar+una+tarea" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Una vez que hayas definido una clave para tu tarea necesitarás completarla con
+una definición de tarea. Puedes tanto definir tu propia tarea como redefinir
+una ya existente. Para cualquiera de los dos casos hay que utilizar <code>:=</code> para
+asociar cierto código con la clave tarea.
+</p><pre><code class="prettyprint lang-scala">val sampleStringTask = taskKey[String](&quot;A sample string task.&quot;)
+val sampleIntTask = taskKey[Int](&quot;A sample int task.&quot;)
+
+ThisBuild / organization := &quot;com.example&quot;
+ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
+ThisBuild / scalaVersion := &quot;2.12.8&quot;
+
+lazy val library = (project in file(&quot;library&quot;))
+  .settings(
+    sampleStringTask := System.getProperty(&quot;user.home&quot;),
+    sampleIntTask := {
+      val sum = 1 + 2
+      println(&quot;sum: &quot; + sum)
+      sum
+    }
+  )
+</code></pre><p>Si la tarea tiene dependencias deberías referenciar su valor utilizando <code>value</code>
+tal cual se explicó en <a href="Task-Graph.html">Grafos de tareas</a>.
+</p><p>La parte más difícil sobre cómo implementar las tareas normalmente no tiene nada que ver
+con sbt, ya que las tareas son simplemente código de Scala. La parte difícil
+sería escribir el “cuerpo” de tu tarea para que haga aquello que estás
+intentando hacer. Por ejemplo, puede que estés intentando formatear un texto en
+HTML para lo cual puede que requieras la utilización de una biblioteca de HTML
+(puede que necesites
+<a href="Using-Plugins.html">añadir una dependencia de biblioteca a tu definición de construcción</a>
+y escribir código basado en dicha biblioteca).
+</p><p>sbt tiene algunas bibliotecas útiles y funciones convenientes, en particular
+puedes utilizar la APIs de <a href="../../api/sbt/io/IO$.html">IO</a> para manipular ficheros
+y directorios.
+</p><h3 id="Sem%C3%A1ntica+de+ejecuci%C3%B3n+de+las+tareas">Semántica de ejecución de las tareas<a href="#Sem%C3%A1ntica+de+ejecuci%C3%B3n+de+las+tareas" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Cuando una tarea personalizada utiliza <code>value</code> para depender de otras tareas, algo importante a tener en cuenta es la semántica de ejecución de las tareas.
+Por semántica de ejecución nos referimos a <em>cuándo</em> exactamente estas tareas son
+evaluadas.
+</p><p>Si tomamos por ejemplo <code>sampleIntTask</code>, cada línea del cuerpo de la tarea
+debería de ser evaluada estrictamente una tras otra.
+Eso es semántica secuencial:
+</p><pre><code class="prettyprint lang-scala">sampleIntTask := {
+  val sum = 1 + 2        // primera
+  println(&quot;sum: &quot; + sum) // segunda
+  sum                    // tercera
+}
+</code></pre><p>En realidad, la JVM puede ejecutar <code>sum</code> en línea y hacer que valga 3, pero el
+<em>efecto</em> observable de la tarea permanecerá intacto como si cada línea fuese
+ejecutada una tras otra.
+</p><p>Supongamos ahora que definimos dos o más tareas personalizadas <code>startServer</code> y
+<code>stopServer</code>, y modificamos <code>sampleIntTask</code> como sigue:
+</p><pre><code class="prettyprint lang-scala">val startServer = taskKey[Unit](&quot;start server&quot;)
+val stopServer = taskKey[Unit](&quot;stop server&quot;)
+val sampleIntTask = taskKey[Int](&quot;A sample int task.&quot;)
+val sampleStringTask = taskKey[String](&quot;A sample string task.&quot;)
+
+ThisBuild / organization := &quot;com.example&quot;
+ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
+ThisBuild / scalaVersion := &quot;2.12.8&quot;
+
+lazy val library = (project in file(&quot;library&quot;))
+  .settings(
+    startServer := {
+      println(&quot;starting...&quot;)
+      Thread.sleep(500)
+    },
+    stopServer := {
+      println(&quot;stopping...&quot;)
+      Thread.sleep(500)
+    },
+    sampleIntTask := {
+      startServer.value
+      val sum = 1 + 2
+      println(&quot;sum: &quot; + sum)
+      stopServer.value // THIS WON'T WORK
+      sum
+    },
+    sampleStringTask := {
+      startServer.value
+      val s = sampleIntTask.value.toString
+      println(&quot;s: &quot; + s)
+      s
+    }
+  )
+</code></pre><p>Al ejecutar <code>sampleIntTask</code> desde el prompt interactivo de sbt el resultado
+será el siguiente:
+</p><pre><code class="">&gt; sampleIntTask
+stopping...
+starting...
+sum: 3
+[success] Total time: 1 s, completed Dec 22, 2014 5:00:00 PM
+</code></pre><p>Para revisar qué ha sucedido vamos a mirar la notación gráfica de
+<code>sampleIntTask</code>:
+</p><p><img src="../files/task-dependency00.png" alt="task-dependency"/>
+</p><p>A diferencia de las llamadas a métodos normales de Scala, el hecho de llamar al método
+<code>value</code> en tareas no hará que sea evaluado estrictamente. En su lugar,
+simplemente servirá para declarar que <code>sampleIntTask</code> depende de
+las tareas <code>startServer</code> y <code>stopServer</code>.
+Cuando <code>sampleIntTask</code> es invocado, el motor de tareas de sbt hará lo siguiente:
+</p><ul><li>evaluará las dependencias de las tareas <em>antes</em> de evaluar <code>sampleIntTask</code>
+(orden parcial)
+</li><li>intentará evaluar las dependencias de las tareas en paralelo si son
+independientes (paralelización)
+</li><li>cada dependencia de la tarea será evaluada una única vez por cada ejecución
+del comando (deduplicación)
+</li></ul><h4 id="Deduplicaci%C3%B3n+de+dependencias+de+tareas">Deduplicación de dependencias de tareas<a href="#Deduplicaci%C3%B3n+de+dependencias+de+tareas" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Para demostrar el último punto, podemos ejecutar <code>sampleStringTask</code> desde el
+prompt interactivo de sbt.
+</p><pre><code class="">&gt; sampleStringTask
+stopping...
+starting...
+sum: 3
+s: 3
+[success] Total time: 1 s, completed Dec 22, 2014 5:30:00 PM
+</code></pre><p>Debido a que <code>sampleStringTask</code> depende tanto de <code>startServer</code> como de
+<code>sampleIntTask</code>, y <code>sampleIntTask</code> depende a su vez de <code>startServer</code>, ésta
+aparece dos veces listada como dependencia.
+Si fuese una llamada normal a un método de Scala, ésta sería evaluada dos
+veces, pero debido a que <code>value</code> se usa simplemente para indicar la
+dependencia de otra tarea, ésta es evaluada sólo una vez. A continuación se
+muestra una notación gráfica de la evaluación de <code>sampleStringTask</code>:
+</p><p><img src="../files/task-dependency01.png" alt="task-dependency"/>
+</p><p>Si no hubiésemos deduplicado las dependencias de tareas habríamos acabado
+compilando el código fuente de los tests muchas veces cuando la tarea <code>test</code>
+hubiese sido invocada, ya que <code>compile in Test</code> aparece muchas veces como
+dependencia de <code>test in Test</code>.
+</p><h4 id="Tarea+de+limpieza">Tarea de limpieza<a href="#Tarea+de+limpieza" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Entonces ¿cómo se podría implementar la tarea <code>stopServer</code>?
+La noción de tarea de limpieza no encaja en el modelo de ejecución de tareas
+debido a que las tareas tratan de seguir dependencias.
+La última operación debería ser la tarea que depende de otras tareas
+intermedias. Por ejemplo <code>stopServer</code> debería depender de <code>sampleStringTask</code> por
+lo que <code>stopServer</code> debería de ser <code>sampleStringTask</code>.
+</p><pre><code class="prettyprint lang-scala">lazy val library = (project in file(&quot;library&quot;))
+  .settings(
+    startServer := {
+      println(&quot;starting...&quot;)
+      Thread.sleep(500)
+    },
+    sampleIntTask := {
+      startServer.value
+      val sum = 1 + 2
+      println(&quot;sum: &quot; + sum)
+      sum
+    },
+    sampleStringTask := {
+      startServer.value
+      val s = sampleIntTask.value.toString
+      println(&quot;s: &quot; + s)
+      s
+    },
+    sampleStringTask := {
+      val old = sampleStringTask.value
+      println(&quot;stopping...&quot;)
+      Thread.sleep(500)
+      old
+    }
+  )
+</code></pre><p>Para demostrar que esto funciona ejecutemos <code>sampleStringTask</code> desde el prompt
+interactivo:
+</p><pre><code class="">&gt; sampleStringTask
+starting...
+sum: 3
+s: 3
+stopping...
+[success] Total time: 1 s, completed Dec 22, 2014 6:00:00 PM
+</code></pre><p><img src="../files/task-dependency02.png" alt="task-dependency"/>
+</p><h4 id="Usar+Scala">Usar Scala<a href="#Usar+Scala" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Otra forma de asegurarse de que algo sucede después de algo es usando Scala.
+Si se implementa una función simple en <code>project/ServerUtil.scala</code> por ejemplo
+se podrá escribir:
+</p><pre><code class="prettyprint lang-scala">sampleIntTask := {
+  ServerUtil.startServer
+  try {
+    val sum = 1 + 2
+    println(&quot;sum: &quot; + sum)
+  } finally {
+    ServerUtil.stopServer
+  }
+  sum
+}
+</code></pre><p>Ya que las llamadas a métodos normales siguen la semántica secuencial todo
+sucede en orden.
+No hay deduplicación, por lo que ya no hay que preocuparse por eso.
+</p><h3 id="Conversi%C3%B3n+en+plugins">Conversión en plugins<a href="#Conversi%C3%B3n+en+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Si te has encontrado con un montón de código personalizado podrías considerar
+moverlo a un plugin para reutilizarlo a lo largo de múltiples construcciones.
+Es muy fácil crear un plugin, como se <a href="Using-Plugins.html">mostró antes</a>
+y <a href="../docs/Plugins.html">explicó con más detalle aquí</a>.
+</p><p>Esta página ha sido solo un aperitivo. Hay mucho mucho más sobre tareas
+personalizadas en la página de <a href="../docs/Tasks.html">Tareas</a>.
+</p><div class="bottom nav">
+                <div class="row">
+                  <div class="col-md-auto">
+                    <a href="Organizing-Build.html">
+                      <div class="arrowitem">
+                        <span class="arrow">&gt;</span>
+                      </div>
+
+                      <div class="arrowitem">
+                        <em>Next page</em><br/>
+                        Organizar la construcción
+                      </div>
+
+                    </a>
+                  </div>
+                </div>
+                <div class="row w-100">
+        <div class="col-md-auto ml-auto">
+          <ul class="language-bar">
+            <li><a href="../Custom-Settings.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/Custom-Settings.html"><span class="lang-item lang-ja">日本語</span></a></li><li><a href="../zh-cn/Custom-Settings.html"><span class="lang-item lang-zh-cn">中文 (简体)</span></a></li><li><a href="../es/Custom-Settings.html"><span class="lang-item lang-es">Español</span></a></li>
+          </ul>
+        </div>
+      </div>
+              </div>
+                  </div>
+                </div>
+          </div> <!-- row -->
+        </div>
+        <div class="header">
+          <link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
+<div class="container-fluid top nav">
+  <div class="row w-100">
+    <div class="col-md-4">
+      <div class="logo">
+        <a href="../../../index.html"><img src="../files/sbt-logo.svg" alt="sbt"></a>
+        <span class="versions"><select id="versions"></select></span>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="nav" id="topbar">
+        <a href="../../../documentation.html">Documentation</a>
+        <a href="../../../download.html">Download</a>
+        <a href="../../../support.html">Support</a>
+        <a href="../../../community.html">Get Involved</a>
+        <a id="source-code" href="https://github.com/sbt/sbt"><img src="../files/github-logo-teal.svg" alt="Source code" class="social"></a>
+        <a id="twitter" href="https://twitter.com/scala_sbt"><img src="../files/twitter-logo-teal.svg" alt="sbt on Twitter" class="social"></a>
+        <a id="edit-on-github" href="https://github.com/sbt/website/edit/develop/src/reference/00-Getting-Started/11-Custom-Settings.md"><img src="../files/octicon-pencil.svg" alt="Edit on GitHub"></a>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" async>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41449189-1', 'scala-sbt.org');
+ga('send', 'pageview');
+</script>
+<script type="text/javascript" async>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-23127719-1', 'lightbend.com', {'allowLinker': true, 'name': 'tsTracker'});
+  ga('tsTracker.require', 'linker');
+  ga('tsTracker.linker:autoLink', ['lightbend.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org']);
+  ga('tsTracker.send', 'pageview');
+</script>
+<script type="text/javascript">
+$(function() {
+var scrollDown = function() {
+if (window.location.hash !== "") {
+  setTimeout(function() { $(window).scrollTop($(window).scrollTop() - 120); }, 100);
+}
+}
+scrollDown();
+$(window).bind('hashchange', function() {
+scrollDown();
+});
+});
+</script>
+
+        </div>
+        <div class="footer">
+          <footer>
+  <div class="container-fluid footer">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="support-item">
+          <div class="support-icon">
+            <svg class="svg-icon svg-icon-chat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.5 85.2" enable-background="new 0 0 97.5 85.2"><path stroke="#fff" stroke-width="4.282" stroke-linecap="round" stroke-miterlimit="10" d="M27 29.5h-16.3c-4.7 0-8.6 3.9-8.6 8.6v25.7c0 4.7 3.9 8.6 8.6 8.6h2.7c.8 0 1.5.7 1.5 1.5v7.8c0 1.3 1.6 2 2.5 1l9.5-9.5c.5-.5 1.2-.8 2-.8h20.2c4.7 0 8.6-3.9 8.6-8.6v-7.8" fill="none"/><path fill="#fff" d="M85 0h-40c-6.9 0-12.5 5.6-12.5 12.5v33.4c0 2.2 1.8 4.1 4.1 4.1h29.9c.7 0 1.3.3 1.8.7l10 10c1.6 1.6 4.3.5 4.3-1.8v-6.5c0-1.4 1.1-2.5 2.5-2.5 6.9 0 12.5-5.6 12.5-12.5v-25c-.1-6.8-5.8-12.4-12.6-12.4z"/></svg>
+          </div>
+          <div class="support-detail">
+            <h2>Community Support</h2>
+            <a href="https://stackoverflow.com/questions/tagged/sbt">StackOverflow</a>
+          </div>
+        </div>
+        <div class="support-item">
+          <div class="support-icon">
+            <svg id="lightbend-icon-reverse" class="svg-icon svg-icon-lightbend-reverse" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 302 262"><title>lightbend-icon</title><g id="icon"><path d="M1,195v56a10,10,0,0,0,10,10H291a10,10,0,0,0,10-10V195a557.85,557.85,0,0,1-150,20A557.85,557.85,0,0,1,1,195Z" style="fill:#fff"/><path d="M291,1H11A10,10,0,0,0,1,11V176a539.94,539.94,0,0,0,150,21,539.94,539.94,0,0,0,150-21V11A10,10,0,0,0,291,1Z" style="fill:#fff"/></g></svg>
+          </div>
+          <div class="support-detail">
+            <h2>Commercial Support</h2>
+            <a href="https://www.lightbend.com/services/expert-support">Lightbend Subscription</a>
+            <a href="https://www.lightbend.com/services/training">Training</a>
+            <a href="https://www.lightbend.com/services/consulting">Consulting</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 text-right ts">
+        &copy; 2016-2019 Lightbend Inc.
+        <a href="https://www.lightbend.com">
+          <img src="../files/lightbend-reverse.svg" alt="Lightbend, Inc.">
+        </a>
+      </div>
+    </div>
+  </div>
+</footer><script src="/assets/versions.js"></script><script src="/assets/set-versions.js"></script>
+        </div>
+        
+        <div class="highlight-outer">
+              <div class="highlight-menu">
+                <ul>
+                  <li><button id="highlight-button-twitter"><img src="../img/twitter-bird-dark-bgs.png"/></button></li>
+                </ul>
+              </div>
+            </div>
+      </body>
+    </html>

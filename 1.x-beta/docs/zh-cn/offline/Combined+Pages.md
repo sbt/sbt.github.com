@@ -27,7 +27,7 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.2/sbt-1.0.2.msi
+  [MSI]: https://piccolo.link/sbt-1.2.8.msi
   [Setup-Notes]: ../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -53,8 +53,8 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
 如果你在运行 sbt 时遇到任何问题，查看 [安装建议][Setup-Notes] 中的终端编码（terminal encoding），HTTP 代理，JVM 参数。
 
 
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.2/sbt-1.0.2.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.2/sbt-1.0.2.tgz
+  [ZIP]: https://piccolo.link/sbt-1.2.8.zip
+  [TGZ]: https://piccolo.link/sbt-1.2.8.tgz
   [Manual-Installation]: Manual-Installation.html
 
 在 Mac 上安装 sbt
@@ -81,9 +81,9 @@ $ port install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.0.2/sbt-1.0.2.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.2/sbt-1.0.2.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.2/sbt-1.0.2.tgz
+  [MSI]: https://piccolo.link/sbt-1.2.8.msi
+  [ZIP]: https://piccolo.link/sbt-1.2.8.zip
+  [TGZ]: https://piccolo.link/sbt-1.2.8.tgz
 
 在 Windows 上安装 sbt
 -------------------------
@@ -97,10 +97,10 @@ $ port install sbt
 下载 [msi 安装包][MSI] 并安装。
 
 
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.0.2/sbt-1.0.2.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.0.2/sbt-1.0.2.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.0.2.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.0.2.deb
+  [ZIP]: https://piccolo.link/sbt-1.2.8.zip
+  [TGZ]: https://piccolo.link/sbt-1.2.8.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.2.8.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.2.8.deb
 
 在 Linux 上安装 sbt
 -----------------------
@@ -203,7 +203,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "hello",
     version := "1.0",
-    scalaVersion := "2.12.3"
+    scalaVersion := "2.12.8"
   )
 ```
 
@@ -214,10 +214,10 @@ lazy val root = (project in file("."))
 
 ### 设置 sbt 版本
 
-你可以通过创建 `hello/project/build.properties` 文件强制指定一个版本的 sbt。在这个文件里，编写如下内容来强制使用 1.0.2：
+你可以通过创建 `hello/project/build.properties` 文件强制指定一个版本的 sbt。在这个文件里，编写如下内容来强制使用 1.2.8：
 
 ```
-sbt.version=1.0.2
+sbt.version=1.2.8
 ```
 
 sbt 在不同的 release 版本中是 99% 兼容的。但是在 `project/build.properties` 文件中设置 sbt 的版本仍然能避免一些潜在的混淆。
@@ -491,15 +491,12 @@ lazy val root = (project in file("."))
 下面是一个例子：
 
 ```scala
-lazy val commonSettings = Seq(
-  organization := "com.example",
-  version := "0.1.0",
-  scalaVersion := "2.12.3"
-)
+ThisBuild / organization := "com.example"
+ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
   .settings(
-    commonSettings,
     name := "hello"
   )
 ```
@@ -547,7 +544,7 @@ lazy val root = (project in file("."))
 
 #### 内置的 Keys
 
-内置的 keys 实际上是对象 [Keys](../../sxr/sbt/Keys.scala.html) 的字段。`build.sbt` 会隐式包含 `import sbt.Keys._`，所以可以通过 `name` 取到 `sbt.Keys.name`。
+内置的 keys 实际上是对象 [Keys](../../api/sbt/Keys$.html) 的字段。`build.sbt` 会隐式包含 `import sbt.Keys._`，所以可以通过 `name` 取到 `sbt.Keys.name`。
 
 #### 自定义 Keys
 
@@ -634,7 +631,7 @@ bare `.sbt` 构建定义由一个 `Setting[_]` 表达式的列表组成，而不
 ```scala
 name := "hello"
 version := "1.0"
-scalaVersion := "2.12.3"
+scalaVersion := "2.12.8"
 ```
 
 ### 添加依赖库
@@ -644,15 +641,12 @@ scalaVersion := "2.12.3"
 ```scala
 val derby = "org.apache.derby" % "derby" % "10.4.1.3"
 
-lazy val commonSettings = Seq(
-  organization := "com.example",
-  version := "0.1.0",
-  scalaVersion := "2.12.3"
-)
+ThisBuild / organization := "com.example"
+ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
   .settings(
-    commonSettings,
     name := "hello",
     libraryDependencies += derby
   )
@@ -1014,14 +1008,14 @@ sbt 自动执行了 `update`。它可以工作是因为 `compile` 计算需要�
 
 #### 依赖于其他 key 的值的 task
   
-你可以计算一些 task 或者 setting 的值来定义另一个 task 或者为另一个 task 追加值。通过使用 `Def.task` 和 `taskValue` 作为`:=`， `+=` 或者 `++=`的参数可以做到。
+你可以计算一些 task 或者 setting 的值来定义另一个 task 或者为另一个 task 追加值。通过使用 `Def.task` 作为`:=`， `+=` 或者 `++=`的参数可以做到。
 
 作为第一个例子，考虑追加一个使用项目基目录和编译 classpath 的 source generator。
 
 ```scala
 sourceGenerators in Compile += Def.task {
   myGenerator(baseDirectory.value, (managedClasspath in Compile).value)
-}.taskValue
+}
 ```
 
 #### 包含依赖的 task
@@ -1029,7 +1023,7 @@ sourceGenerators in Compile += Def.task {
 在 [.sbt 构建定义][Basic-Def] 中提到过，当你通过 `:=` 或其他方法创建一个设置时，task key 创建的是 `Setting[Task[T]]` 而不是 `Setting[T]`。
 Setting 可以是 Task 的输入，但 Task 不能是 Setting 的输入。
 
-以这两个 key 为例（从 [Keys](../../sxr/sbt/Keys.scala.html) 中）：
+以这两个 key 为例（从 [Keys](../../api/sbt/Keys$.html) 中）：
 
 ```scala
 val scalacOptions = taskKey[Seq[String]]("Options for the Scala compiler.")
@@ -1128,7 +1122,7 @@ libraryDependencies += groupID % artifactID % revision
 libraryDependencies += groupID % artifactID % revision % configuration
 ```
 
-`libraryDependencies` 在 [Keys](../../sxr/sbt/Keys.scala.html#sbt.Keys.libraryDependencies) 中像这样声明：
+`libraryDependencies` 在 [Keys](../../api/sbt/Keys$.html#libraryDependencies:sbt.SettingKey[Seq[sbt.librarymanagement.ModuleID]]) 中像这样声明：
 
 ```scala
 val libraryDependencies = settingKey[Seq[ModuleID]]("Declares managed dependencies.")
@@ -1162,7 +1156,7 @@ libraryDependencies ++= Seq(
 这只是一种快捷方法。你可以这样写不用 `%%`：
 
 ```scala
-libraryDependencies += "org.scala-tools" % "scala-stm_2.11.1" % "0.3"
+libraryDependencies += "org.scala-tools" % "scala-stm_2.11" % "0.3"
 ```
 
 假设这个构建的 `scalaVersion` 是 `2.11.1`，下面这种方式是等效的（注意 `"org.scala-tools"` 后面是 `%%`）：
@@ -1172,9 +1166,6 @@ libraryDependencies += "org.scala-tools" %% "scala-stm" % "0.3"
 ```
 
 这个想法是很多依赖都会被编译给多个 Scala 版本，而你想确保和项目匹配的jar是二进制兼容的。
-
-实践中的复杂度在于通常一个依赖会和稍微不同的 Scala 版本一起工作；但是 `%%` 就没有那么智能了。所以如果一个依赖要求版本为 `2.10.1`，但是你使用的 `scalaVersion := "2.10.4"`，
-你无法使用 `%%` 方法即使 `2.10.1` 的版本很可能也可以工作。如果 `%%` 无法达到目的，只需要去检查那个依赖是基于哪个 Scala 版本构建的，然后硬编码你认为可以工作的版本号（假设已经有一个）。
 
 参见 [交叉构建][Cross-Build] 获取更多信息。
 
@@ -1201,7 +1192,7 @@ resolvers += name at location
 resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
 ```
 
-`resolvers` key 在 [Keys](../../sxr/sbt/Keys.scala.html#sbt.Keys.resolvers) 中像这样定义：
+`resolvers` key 在 [Keys](../../api/sbt/Keys$.html#resolvers:sbt.SettingKey[Seq[sbt.librarymanagement.Resolver]]) 中像这样定义：
 
 ```scala
 val resolvers = settingKey[Seq[Resolver]]("用户为托管依赖定义的额外的解析器。")
@@ -1299,7 +1290,7 @@ To factor out common settings across multiple projects, create a sequence named 
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.12.3"
+  scalaVersion := "2.12.8"
 )
 
 lazy val core = (project in file("core"))
@@ -1566,11 +1557,11 @@ lazy val core = (project in file("core"))
 
 ### 定义一个键
 
-[这里](../../sxr/sbt/Keys.scala.html)介绍了如何定义键。大多数的默认键定义在[这里](../../sxr/sbt/Defaults.scala.html)。
+[这里](../../api/sbt/Keys$.html)介绍了如何定义键。大多数的默认键定义在[这里](../../sxr/sbt/Defaults.scala.html)。
 
 键有三种类型。`SettingKey` 和 `TaskKey` 在 [.sbt 构建定义][Basic-Def]讲解。关于 `InputKey` 的内容在[输入任务][Input-Tasks]页面。
 
-列举一些来自 [Keys](../../sxr/sbt/Keys.scala.html) 的例子：
+列举一些来自 [Keys](../../api/sbt/Keys$.html) 的例子：
 
 ```scala
 val scalaVersion = settingKey[String]("scala的版本")
@@ -1593,14 +1584,12 @@ val clean = taskKey[Unit]("删除构建产生的文件，包括生成的 source 
 val sampleStringTask = taskKey[String]("A sample string task.")
 val sampleIntTask = taskKey[Int]("A sample int task.")
 
-lazy val commonSettings = Seq(
-  organization := "com.example",
-  version := "0.1.0-SNAPSHOT"
-)
+ThisBuild / organization := "com.example"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
+ThisBuild / scalaVersion := "2.12.8"
 
 lazy val library = (project in file("library"))
   .settings(
-    commonSettings,
     sampleStringTask := System.getProperty("user.home"),
     sampleIntTask := {
       val sum = 1 + 2
@@ -1614,7 +1603,7 @@ lazy val library = (project in file("library"))
 
 有关任务实现最困难的部分往往不是 sbt 专用；任务只是 Scala 代码。困难的部分可能是写你的任务体，即做什么，或者说你正在试图做的。例如，你要格式化 HTML，在这种情况下，你可能需要使用一个 HTML 库（也许你将[为构建定义添加一个库的依赖][Using-Plugins]来编写基于 HTML 库代码）。
 
-sbt 具有一些实用工具库和方便的函数，特别是可以经常使用 API 中的 [IO](../../api/index.html#sbt.IO$) 来操作文件和目录。
+sbt 具有一些实用工具库和方便的函数，特别是可以经常使用 API 中的 [IO](../../api/sbt/io/IO$.html) 来操作文件和目录。
 
 ### 任务的执行语义
 
@@ -1640,14 +1629,12 @@ val stopServer = taskKey[Unit]("stop server")
 val sampleIntTask = taskKey[Int]("A sample int task.")
 val sampleStringTask = taskKey[String]("A sample string task.")
 
-lazy val commonSettings = Seq(
-  organization := "com.example",
-  version := "0.1.0-SNAPSHOT"
-)
+ThisBuild / organization := "com.example"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
+ThisBuild / scalaVersion := "2.12.8"
 
 lazy val library = (project in file("library"))
   .settings(
-    commonSettings,
     startServer := {
       println("starting...")
       Thread.sleep(500)
@@ -1718,7 +1705,6 @@ s: 3
 ```scala
 lazy val library = (project in file("library"))
   .settings(
-    commonSettings,
     startServer := {
       println("starting...")
       Thread.sleep(500)
@@ -1860,14 +1846,13 @@ object Dependencies {
 ```scala
 import Dependencies._
 
-lazy val commonSettings = Seq(
-  version := "0.1.0",
-  scalaVersion := "2.12.3"
-)
+ThisBuild / organization := "com.example"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
+ThisBuild / scalaVersion := "2.12.8"
 
 lazy val backend = (project in file("backend"))
   .settings(
-    commonSettings,
+    name := "backend",
     libraryDependencies ++= backendDeps
   )
 ```

@@ -5,12 +5,7 @@
         <meta content="width=device-width, initial-scale=1" name="viewport"/>
         <title>sbt Reference Manual — Linux への sbt のインストール</title>
         <link rel="shortcut icon" href="../favicon.ico"/>
-        <link rel="stylesheet" href="../css/blueprint/screen.css" type="text/css" media="screen, projection"/>
-        <link rel="stylesheet" href="../css/blueprint/grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
-        <link rel="stylesheet" href="../css/blueprint/print.css" type="text/css" media="print"/> 
-        <!--[if lt IE 8]>
-          <link rel="stylesheet" href={ relativeBase + "css/blueprint/ie.css" } type="text/css" media="screen, projection"/>
-        <![endif]-->
+        <link rel="stylesheet" href="../css/bootstrap.min.css" type="text/css"/>
         <link rel="stylesheet" href="../css/pamflet.css" type="text/css" media="screen, projection"/>
         <link rel="stylesheet" href="../css/pamflet-print.css" type="text/css" media="print"/>
         <link rel="stylesheet" href="../css/pamflet-grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
@@ -18,8 +13,8 @@
         <link rel="stylesheet" href="../css/color_scheme-github.css" type="text/css" media="screen, projection"/>
         <link rel="stylesheet" href="../css/color_scheme-monokai.css" type="text/css" media="screen, projection"/>
         <link rel="stylesheet" href="../css/pamfletheight_80px_2em.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
-        <script type="text/javascript" src="../js/jquery-1.6.2.min.js"></script>
-        <script type="text/javascript" src="../js/jquery.collapse.js"></script>
+        <script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
+        <script type="text/javascript" src="../js/bootstrap.bundle.min.js"></script>
         <script type="text/javascript" src="../js/pamflet.js"></script>
         <script type="text/javascript">
           Pamflet.page.language = 'ja';
@@ -34,17 +29,24 @@
             </script>
       </head>
       <body class="color_scheme-github">
-        <a class="page prev nav" href="Installing-sbt-on-Windows.html">
-            <span class="space">&nbsp;</span>
-            <span class="flip arrow">&gt;</span>
-          </a><a class="page next nav" href="Hello.html">
-            <span class="space">&nbsp;</span>
-            <span class="arrow">&gt;</span>
-          </a>
-        <div class="container contentswrapper">
-          <div class="span-16 prepend-1 append-1 contents">
-            <h2 id="Linux+%E3%81%B8%E3%81%AE+sbt+%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">Linux への sbt のインストール<a href="#Linux+%E3%81%B8%E3%81%AE+sbt+%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="%E3%83%A6%E3%83%8B%E3%83%90%E3%83%BC%E3%82%B5%E3%83%AB%E3%83%91%E3%83%83%E3%82%B1%E3%83%BC%E3%82%B8%E3%81%8B%E3%82%89%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">ユニバーサルパッケージからのインストール<a href="#%E3%83%A6%E3%83%8B%E3%83%90%E3%83%BC%E3%82%B5%E3%83%AB%E3%83%91%E3%83%83%E3%82%B1%E3%83%BC%E3%82%B8%E3%81%8B%E3%82%89%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://github.com/sbt/sbt/releases/download/v1.0.2/sbt-1.0.2.zip">ZIP</a> か <a href="https://github.com/sbt/sbt/releases/download/v1.0.2/sbt-1.0.2.tgz">TGZ</a> をダウンロードしてきて解凍する。
-</p><h3 id="Ubuntu+%E5%8F%8A%E3%81%B3%E3%81%9D%E3%81%AE%E4%BB%96%E3%81%AE+Debian+%E3%83%99%E3%83%BC%E3%82%B9%E3%81%AE+Linux+%E3%83%87%E3%82%A3%E3%82%B9%E3%83%88%E3%83%AA%E3%83%93%E3%83%A5%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3">Ubuntu 及びその他の Debian ベースの Linux ディストリビューション<a href="#Ubuntu+%E5%8F%8A%E3%81%B3%E3%81%9D%E3%81%AE%E4%BB%96%E3%81%AE+Debian+%E3%83%99%E3%83%BC%E3%82%B9%E3%81%AE+Linux+%E3%83%87%E3%82%A3%E3%82%B9%E3%83%88%E3%83%AA%E3%83%93%E3%83%A5%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://dl.bintray.com/sbt/debian/sbt-1.0.2.deb">DEB</a> は sbt による公式パッケージだ。
+        <div class="container-fluid contentswrapper h-100">
+          <div class="row minh-100">
+          <div class="col-md-4 col-xl-3 toccolumn leftcolumn">
+                  <div class="lefttocwrapper">
+      <div class="tocwrapper">
+        
+        <div class="tocbody show" id="toc">
+        
+        <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">始める sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">sbt のインストール</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Mac への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows への sbt のインストール</a></div></li><li><div class="current">Linux への sbt のインストール</div></li> </ol></li><li><div><a href="sbt-by-example.html">例題でみる sbt</a></div></li><li><div><a href="Directories.html">ディレクトリ構造</a></div></li><li><div><a href="Running.html">実行</a></div></li><li><div><a href="Basic-Def.html">ビルド定義</a></div></li><li><div><a href="Multi-Project.html">マルチプロジェクト・ビルド</a></div></li><li><div><a href="Task-Graph.html">タスク・グラフ</a></div></li><li><div><a href="Scopes.html">スコープ</a></div></li><li><div><a href="Appending-Values.html">値の追加</a></div></li><li><div><a href="Scope-Delegation.html">スコープ委譲 (.value の照会)</a></div></li><li><div><a href="Library-Dependencies.html">ライブラリ依存性</a></div></li><li><div><a href="Using-Plugins.html">プラグインの使用</a></div></li><li><div><a href="Custom-Settings.html">カスタムセッティングとタスク</a></div></li><li><div><a href="Organizing-Build.html">ビルドの整理</a></div></li><li><div><a href="Summary.html">まとめ</a></div></li><li><div><a href="Bare-Def.html">付録: bare .sbt ビルド定義</a></div></li> </ol></li><li><div><a href="General-Info.html">インフォメーション</a></div><ol class="toc"> <li><div><a href="Changes.html">変更点</a></div><ol class="toc"> <li><div><a href="sbt-1.0-Release-Notes.html">sbt 1.0.0</a></div></li> </ol></li> </ol></li><li><div><a href="Detailed-Topics.html">各論</a></div><ol class="toc"> <li><div><a href="Plugins-and-Best-Practices.html">プラグインとベストプラクティス</a></div><ol class="toc"> <li><div><a href="Best-Practices.html">一般的なベストプラクティス</a></div></li><li><div><a href="Testing-sbt-plugins.html">sbt プラグインをテストする</a></div></li> </ol></li> </ol></li><li><div><a href="Howto.html">How to</a></div><ol class="toc"> <li><div><a href="Howto-Generating-Files.html">ソースファイル/リソースファイルの生成</a></div></li><li><div><a href="Howto-Sequencing.html">逐次実行</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Def.sequential を用いて逐次タスクを定義する</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Def.taskDyn を用いて動的タスクを定義する</a></div></li><li><div><a href="Howto-After-Input-Task.html">インプットタスクの後で何かする</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn を用いた動的インプットタスクの定義</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">コマンドを用いた逐次実行</a></div></li> </ol></li> </ol></li><li><div><a href="Archived+pages.html">Archived pages</a></div><ol class="toc"> <li><div><a href="Hello.html">Hello, World</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div>
+      </div>
+      </div>
+                </div><div class="col-md-8 col-xs-9">
+                  <div class="rightcolumn contents">
+                  <h2 id="Linux+%E3%81%B8%E3%81%AE+sbt+%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">Linux への sbt のインストール<a href="#Linux+%E3%81%B8%E3%81%AE+sbt+%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="JDK+%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">JDK のインストール<a href="#JDK+%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>まず JDK をインストールする必要がある。Oracle JDK 8 もしくは OpenJDK 8 を推奨する。パッケージ名はディストリビューションによって異なる。
+</p><p>例えば、Ubuntu xenial (16.04LTS) には <a href="https://packages.ubuntu.com/hu/xenial/openjdk-8-jdk">openjdk-8-jdk</a> がある。
+</p><p>Redhat 系は <a href="https://apps.fedoraproject.org/packages/java-1.8.0-openjdk-devel">java-1.8.0-openjdk-devel</a> と呼んでいる。
+</p><h3 id="%E3%83%A6%E3%83%8B%E3%83%90%E3%83%BC%E3%82%B5%E3%83%AB%E3%83%91%E3%83%83%E3%82%B1%E3%83%BC%E3%82%B8%E3%81%8B%E3%82%89%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">ユニバーサルパッケージからのインストール<a href="#%E3%83%A6%E3%83%8B%E3%83%90%E3%83%BC%E3%82%B5%E3%83%AB%E3%83%91%E3%83%83%E3%82%B1%E3%83%BC%E3%82%B8%E3%81%8B%E3%82%89%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://piccolo.link/sbt-1.2.8.zip">ZIP</a> か <a href="https://piccolo.link/sbt-1.2.8.tgz">TGZ</a> をダウンロードしてきて解凍する。
+</p><h3 id="Ubuntu+%E5%8F%8A%E3%81%B3%E3%81%9D%E3%81%AE%E4%BB%96%E3%81%AE+Debian+%E3%83%99%E3%83%BC%E3%82%B9%E3%81%AE+Linux+%E3%83%87%E3%82%A3%E3%82%B9%E3%83%88%E3%83%AA%E3%83%93%E3%83%A5%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3">Ubuntu 及びその他の Debian ベースの Linux ディストリビューション<a href="#Ubuntu+%E5%8F%8A%E3%81%B3%E3%81%9D%E3%81%AE%E4%BB%96%E3%81%AE+Debian+%E3%83%99%E3%83%BC%E3%82%B9%E3%81%AE+Linux+%E3%83%87%E3%82%A3%E3%82%B9%E3%83%88%E3%83%AA%E3%83%93%E3%83%A5%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://dl.bintray.com/sbt/debian/sbt-1.2.8.deb">DEB</a> は sbt による公式パッケージだ。
 </p><p>Ubuntu 及びその他の Debian ベースのディストリビューションは DEB フォーマットを用いるが、
 ローカルの DEB ファイルからソフトウェアをインストールすることは稀だ。
 これらのディストロは通常コマンドラインや GUI 上から使えるパッケージ・マネージャがあって
@@ -62,7 +64,8 @@ sbt のバイナリは Bintray にて公開されており、都合の良いこ�
 上から管理することができる (パッケージ・キャッシュの更新を忘れずに)。
 追加された APT リポジトリは「システム設定 -&gt; ソフトウェアとアップデート -&gt; 他のソフトウェア」 の一番下に表示されているはずだ:
 </p><p><img src="../files/ubuntu-sources.png" title="Ubuntu Software &amp; Updates Screenshot" alt="Ubuntu Software &amp; Updates Screenshot"/>
-</p><h3 id="Red+Hat+Enterprise+Linux+%E5%8F%8A%E3%81%B3%E3%81%9D%E3%81%AE%E4%BB%96%E3%81%AE+RPM+%E3%83%99%E3%83%BC%E3%82%B9%E3%81%AE%E3%83%87%E3%82%A3%E3%82%B9%E3%83%88%E3%83%AA%E3%83%93%E3%83%A5%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3">Red Hat Enterprise Linux 及びその他の RPM ベースのディストリビューション<a href="#Red+Hat+Enterprise+Linux+%E5%8F%8A%E3%81%B3%E3%81%9D%E3%81%AE%E4%BB%96%E3%81%AE+RPM+%E3%83%99%E3%83%BC%E3%82%B9%E3%81%AE%E3%83%87%E3%82%A3%E3%82%B9%E3%83%88%E3%83%AA%E3%83%93%E3%83%A5%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://dl.bintray.com/sbt/rpm/sbt-1.0.2.rpm">RPM</a> は sbt による公式パッケージだ。
+</p><p><strong>注意</strong>: Ubuntu で  <code>Server access Error: java.lang.RuntimeException: Unexpected error: java.security.InvalidAlgorithmParameterException: the trustAnchors parameter must be non-empty url=https://repo1.maven.org/maven2/org/scala-sbt/sbt/1.1.0/sbt-1.1.0.pom</code> という SSL エラーが多く報告されている。<a href="https://bugs.launchpad.net/ubuntu/+source/ca-certificates-java/+bug/1739631">cert-bug</a> などによると、これは OpenJDK 9 が <code>/etc/ssl/certs/java/cacerts</code> に PKCS12 フォーマットを採用したことに起因するらしい。<a href="https://stackoverflow.com/a/50103533/3827">https://stackoverflow.com/a/50103533/3827</a> によるとこの問題は Ubuntu Cosmic (18.10) で修正されているが、Ubuntu Bionic LTS (18.04) はリリース待ちらしい。回避策も Stackoverflow を参照。
+</p><h3 id="Red+Hat+Enterprise+Linux+%E5%8F%8A%E3%81%B3%E3%81%9D%E3%81%AE%E4%BB%96%E3%81%AE+RPM+%E3%83%99%E3%83%BC%E3%82%B9%E3%81%AE%E3%83%87%E3%82%A3%E3%82%B9%E3%83%88%E3%83%AA%E3%83%93%E3%83%A5%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3">Red Hat Enterprise Linux 及びその他の RPM ベースのディストリビューション<a href="#Red+Hat+Enterprise+Linux+%E5%8F%8A%E3%81%B3%E3%81%9D%E3%81%AE%E4%BB%96%E3%81%AE+RPM+%E3%83%99%E3%83%BC%E3%82%B9%E3%81%AE%E3%83%87%E3%82%A3%E3%82%B9%E3%83%88%E3%83%AA%E3%83%93%E3%83%A5%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://dl.bintray.com/sbt/rpm/sbt-1.2.8.rpm">RPM</a> は sbt による公式パッケージだ。
 </p><p>Red Hat Enterprise Linux 及びその他の RPM ベースのディストリビューションは RPM フォーマットを用いる。
 ターミナル上から以下を実行すると <code>sbt</code> をインストールできる (superuser 権限を必要とするため、<code>sudo</code> を使っている)。
 </p><pre><code>curl https://bintray.com/sbt/rpm/rpm | sudo tee /etc/yum.repos.d/bintray-sbt-rpm.repo
@@ -76,68 +79,103 @@ sudo yum install sbt
 バイナリから sbt をマージする <a href="https://github.com/whiter4bbit/overlays/tree/master/dev-java/sbt-bin">ebuild</a> が公開されているようだ。
 この ebuild を使って sbt をマージするには:
 </p><pre><code>emerge dev-java/sbt
-</code></pre><div class="bottom nav span-16">
-                        <em>Next Page</em>
+</code></pre><div class="bottom nav">
+                <div class="row">
+                  <div class="col-md-auto">
+                    <a href="sbt-by-example.html">
+                      <div class="arrowitem">
                         <span class="arrow">&gt;</span>
-                        <a href="Hello.html"> Hello, World </a>                        
-                        <ul class="language-bar">
-        <li><a href="../Installing-sbt-on-Linux.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/Installing-sbt-on-Linux.html"><span class="lang-item lang-ja">日本語</span></a></li><li><a href="../zh-cn/Installing-sbt-on-Linux.html"><span class="lang-item lang-zh-cn">中文 (简体)</span></a></li><li><a href="../es/Installing-sbt-on-Linux.html"><span class="lang-item lang-es">Español</span></a></li>
-      </ul>
-                      </div><div class="tocwrapper show">
-      <a class="tochead nav" style="display: none" href="#toc">❦</a>
-      <a name="toc"></a>
-      <h4 class="toctitle">Contents</h4>
-      <div class="tocbody">
-      <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">始める sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">sbt のインストール</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Mac への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows への sbt のインストール</a></div></li><li><div class="current">Linux への sbt のインストール</div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">ディレクトリ構造</a></div></li><li><div><a href="Running.html">実行</a></div></li><li><div><a href="Basic-Def.html">ビルド定義</a></div></li><li><div><a href="Task-Graph.html">タスク・グラフ</a></div></li><li><div><a href="Scopes.html">スコープ</a></div></li><li><div><a href="Appending-Values.html">値の追加</a></div></li><li><div><a href="Scope-Delegation.html">スコープ委譲 (.value の照会)</a></div></li><li><div><a href="Library-Dependencies.html">ライブラリ依存性</a></div></li><li><div><a href="Multi-Project.html">マルチプロジェクト・ビルド</a></div></li><li><div><a href="Using-Plugins.html">プラグインの使用</a></div></li><li><div><a href="Custom-Settings.html">カスタムセッティングとタスク</a></div></li><li><div><a href="Organizing-Build.html">ビルドの整理</a></div></li><li><div><a href="Summary.html">まとめ</a></div></li><li><div><a href="Bare-Def.html">付録: bare .sbt ビルド定義</a></div></li> </ol></li><li><div><a href="General-Info.html">インフォメーション</a></div><ol class="toc"> <li><div><a href="Changes.html">変更点</a></div><ol class="toc"> <li><div><a href="sbt-1.0-Release-Notes.html">sbt 1.0.0</a></div></li> </ol></li> </ol></li><li><div><a href="Detailed-Topics.html">各論</a></div><ol class="toc"> <li><div><a href="Plugins-and-Best-Practices.html">プラグインとベストプラクティス</a></div><ol class="toc"> <li><div><a href="Testing-sbt-plugins.html">sbt プラグインをテストする</a></div></li> </ol></li> </ol></li><li><div><a href="Howto.html">How to</a></div><ol class="toc"> <li><div><a href="Howto-Sequencing.html">逐次実行</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Def.sequential を用いて逐次タスクを定義する</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Def.taskDyn を用いて動的タスクを定義する</a></div></li><li><div><a href="Howto-After-Input-Task.html">インプットタスクの後で何かする</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn を用いた動的インプットタスクの定義</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">コマンドを用いた逐次実行</a></div></li> </ol></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div></div>
-          </div>
+                      </div>
+
+                      <div class="arrowitem">
+                        <em>Next page</em><br/>
+                        例題でみる sbt
+                      </div>
+
+                    </a>
+                  </div>
+                </div>
+                <div class="row w-100">
+        <div class="col-md-auto ml-auto">
+          <ul class="language-bar">
+            <li><a href="../Installing-sbt-on-Linux.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/Installing-sbt-on-Linux.html"><span class="lang-item lang-ja">日本語</span></a></li><li><a href="../zh-cn/Installing-sbt-on-Linux.html"><span class="lang-item lang-zh-cn">中文 (简体)</span></a></li><li><a href="../es/Installing-sbt-on-Linux.html"><span class="lang-item lang-es">Español</span></a></li>
+          </ul>
+        </div>
+      </div>
+              </div>
+                  </div>
+                </div>
+          </div> <!-- row -->
         </div>
         <div class="header">
           <link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
 <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
-<div class="container">
-    <div class="logo">
-      <a href="../../../index.html"><img src="../files/sbt-logo-100x56.png" alt="sbt"></a>
+<div class="container-fluid top nav">
+  <div class="row w-100">
+    <div class="col-md-4">
+      <div class="logo">
+        <a href="../../../index.html"><img src="../files/sbt-logo.svg" alt="sbt"></a>
+        <span class="versions"><select id="versions"></select></span>
+      </div>
     </div>
-    <div class="nav">
-      <a href="../../../documentation.html">Documentation</a>
-      <a href="../../../download.html">Download</a>
-      <a href="../../../community.html">Get Involved</a>
-      <a id="source-code" href="https://github.com/sbt/sbt"><img src="../files/github-logo-teal.png" alt="Source code"></a>
-      <a id="twitter" href="https://twitter.com/scala_sbt"><img src="../files/twitter-logo-teal.png" alt="sbt on Twitter"></a>
+    <div class="col-md-8">
+      <div class="nav" id="topbar">
+        <a href="../../../documentation.html">Documentation</a>
+        <a href="../../../download.html">Download</a>
+        <a href="../../../support.html">Support</a>
+        <a href="../../../community.html">Get Involved</a>
+        <a id="source-code" href="https://github.com/sbt/sbt"><img src="../files/github-logo-teal.svg" alt="Source code" class="social"></a>
+        <a id="twitter" href="https://twitter.com/scala_sbt"><img src="../files/twitter-logo-teal.svg" alt="sbt on Twitter" class="social"></a>
+        <a id="edit-on-github" href="https://github.com/sbt/website/edit/develop/src/reference/00-Getting-Started/01-Setup/c.md"><img src="../files/octicon-pencil.svg" alt="Edit on GitHub"></a>
+      </div>
     </div>
-    <script type="text/javascript" async>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-    ga('create', 'UA-41449189-1', 'scala-sbt.org');
-    ga('send', 'pageview');
-    </script>
-    <script type="text/javascript" async>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-      ga('create', 'UA-23127719-1', 'typesafe.com', {'allowLinker': true, 'name': 'tsTracker'});
-      ga('tsTracker.require', 'linker');
-      ga('tsTracker.linker:autoLink', ['typesafe.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org']);
-      ga('tsTracker.send', 'pageview');
-    </script>
+  </div>
 </div>
+<script type="text/javascript" async>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41449189-1', 'scala-sbt.org');
+ga('send', 'pageview');
+</script>
+<script type="text/javascript" async>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-23127719-1', 'lightbend.com', {'allowLinker': true, 'name': 'tsTracker'});
+  ga('tsTracker.require', 'linker');
+  ga('tsTracker.linker:autoLink', ['lightbend.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org']);
+  ga('tsTracker.send', 'pageview');
+</script>
+<script type="text/javascript">
+$(function() {
+var scrollDown = function() {
+if (window.location.hash !== "") {
+  setTimeout(function() { $(window).scrollTop($(window).scrollTop() - 120); }, 100);
+}
+}
+scrollDown();
+$(window).bind('hashchange', function() {
+scrollDown();
+});
+});
+</script>
 
         </div>
         <div class="footer">
-          <div class="fw-wrapper navy-ltr support-strip">
-  <div class="container">
+          <footer>
+  <div class="container-fluid footer">
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-8">
         <div class="support-item">
           <div class="support-icon">
             <svg class="svg-icon svg-icon-chat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.5 85.2" enable-background="new 0 0 97.5 85.2"><path stroke="#fff" stroke-width="4.282" stroke-linecap="round" stroke-miterlimit="10" d="M27 29.5h-16.3c-4.7 0-8.6 3.9-8.6 8.6v25.7c0 4.7 3.9 8.6 8.6 8.6h2.7c.8 0 1.5.7 1.5 1.5v7.8c0 1.3 1.6 2 2.5 1l9.5-9.5c.5-.5 1.2-.8 2-.8h20.2c4.7 0 8.6-3.9 8.6-8.6v-7.8" fill="none"/><path fill="#fff" d="M85 0h-40c-6.9 0-12.5 5.6-12.5 12.5v33.4c0 2.2 1.8 4.1 4.1 4.1h29.9c.7 0 1.3.3 1.8.7l10 10c1.6 1.6 4.3.5 4.3-1.8v-6.5c0-1.4 1.1-2.5 2.5-2.5 6.9 0 12.5-5.6 12.5-12.5v-25c-.1-6.8-5.8-12.4-12.6-12.4z"/></svg>
           </div>
           <div class="support-detail">
             <h2>コミュニティー・サポート</h2>
-            <a href="https://ja.stackoverflow.com/questions/tagged/sbt">StackOverflow</a>
+            <a href="https://stackoverflow.com/questions/tagged/sbt">StackOverflow</a>
           </div>
         </div>
         <div class="support-item">
@@ -151,32 +189,16 @@ sudo yum install sbt
             <a href="https://www.lightbend.com/services/consulting">Consulting</a>
           </div>
         </div>
-
-      </div>
-    </div>
-  </div>
-</div><footer>
-  <div class="container footer">
-    <div class="row">
-      <div class="col-md-8 sbt">
-        <nav>
-          <a href="../../../index.html">
-            <img src="../files/typesafe_sbt_reverse_svg.svg" alt="sbt">
-          </a>
-          <a href="../../../documentation.html">Documentation</a>
-          <a href="../../../download.html">Download</a>
-          <a href="../../../community.html">Get Involved</a>
-        </nav>
       </div>
       <div class="col-md-4 text-right ts">
-        &copy; 2016-2017 Lightbend Inc.
+        &copy; 2016-2019 Lightbend Inc.
         <a href="https://www.lightbend.com">
-          <img src="files/lightbend-reverse.svg" alt="Lightbend, Inc.">
+          <img src="../files/lightbend-reverse.svg" alt="Lightbend, Inc.">
         </a>
       </div>
     </div>
   </div>
-</footer>
+</footer><script src="/assets/versions.js"></script><script src="/assets/set-versions.js"></script>
         </div>
         
         <div class="highlight-outer">
