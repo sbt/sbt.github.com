@@ -7,7 +7,7 @@ Deploying to sonatype is easy!  Just follow these simple steps:
 
 ## First - PGP Signatures ##
 
-You'll need to PGP sign your artifacts for the Sonatype repository.  Don't worry, there's a [plugin for that](http://scala-sbt.org/xsbt-gpg-plugin).  Follow the instructions for the plugin and you'll have PGP signed artifacts in no time.
+You'll need to PGP sign your artifacts for the Sonatype repository.  Don't worry, there's a [plugin for that](https://www.scala-sbt.org/sbt-pgp/).  Follow the instructions for the plugin and you'll have PGP signed artifacts in no time.
 
 *Note: The plugin is a jvm-only solution to generate PGP keys and sign artifacts.  It can work with the GPG command line tool, but the command line is not needed.*
 
