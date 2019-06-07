@@ -42,36 +42,96 @@
       </div>
                 </div><div class="col-md-8 col-xs-9">
                   <div class="rightcolumn contents">
-                  <h2 id="Triggered+Execution">Triggered Execution<a href="#Triggered+Execution" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>You can make a command run when certain files change by prefixing the
-command with <code>~</code>. Monitoring is terminated when <code>enter</code> is pressed. This
-triggered execution is configured by the <code>watch</code> setting, but typically
-the basic settings <code>watchSources</code> and <code>pollInterval</code> are modified.
-</p><ul><li><code>watchSources</code> defines the files for a single project that are
-monitored for changes. By default, a project watches resources and
-Scala and Java sources.
-</li><li><code>watchTransitiveSources</code> then combines the <code>watchSources</code> for the
-current project and all execution and classpath dependencies (see
-<a href="Full-Def.html">.scala build definition</a> for details on
-interProject dependencies).
-</li><li><code>pollInterval</code> selects the interval between polling for changes in
-milliseconds. The default value is 500 ms.
-</li></ul><p>Some example usages are described below.
-</p><h3 id="Compile">Compile<a href="#Compile" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The original use-case was continuous compilation:
-</p><pre><code class="">&gt; ~ test:compile
+                  <h2 id="Triggered+Execution">Triggered Execution<a href="#Triggered+Execution" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>sbt provides the ability to monitor the input files for a particular task
+and repeat the task when changes to those files occur.
+</p><p>Some example usages are described below:
+</p><h3 id="Compile">Compile<a href="#Compile" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The original use-case was continuous compilation. The following commands
+will make sbt watch for source changes in the Test and Compile (default)
+configurations respectively and re-run the compile command.
+</p><pre><code class="">&gt; ~ Test / compile
 
 &gt; ~ compile
-</code></pre><h3 id="Testing">Testing<a href="#Testing" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>You can use the triggered execution feature to run any command or task.
-One use is for test driven development, as suggested by Erick on the
-mailing list.
-</p><p>The following will poll for changes to your source code (main or test)
-and run <code>testOnly</code> for the specified test.
-</p><pre><code class="">&gt; ~ testOnly example.TestA
+</code></pre><p>Note that because <code>Test / compile</code> depends on <code>Compile / compile</code>,
+source changes in the main source directory will trigger recompilation
+of the test sources.
+</p><h3 id="Testing">Testing<a href="#Testing" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>One of the common use cases for triggered execution is developing in a
+test driven development (TDD) style. The following command will monitor
+changes to both the main and test source sources for the build and
+re-run only the tests that reference classes that have been re-compiled
+since the last test run.
+</p><pre><code class="">&gt; ~ testQuick
+</code></pre><p>It is also possible to re-run only a particular test if its dependencies
+have changed.
+</p><pre><code class="">&gt; ~ testQuick foo.BarTest
+</code></pre><p>It is possible to always re-run a test when source changes are
+detected regardless of whether the test depends on any of the updated
+source files.
+</p><pre><code class="">&gt; ~ testOnly foo.BarTest
+</code></pre><p>To run all of the tests in the project when any sources change, use
+</p><pre><code class="">&gt; ~test
 </code></pre><h3 id="Running+Multiple+Commands">Running Multiple Commands<a href="#Running+Multiple+Commands" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Occasionally, you may need to trigger the execution of multiple
 commands. You can use semicolons to separate the commands to be
 triggered.
-</p><p>The following will poll for source changes and run <code>clean</code> and <code>test</code>.
-</p><pre><code class="">&gt; ~ ;clean ;test
-</code></pre><div class="bottom nav">
+</p><p>The following will monitor for source file changes and run <code>clean</code> and <code>test</code>.
+</p><pre><code class="">&gt; ~ clean; test
+</code></pre><h3 id="Build+sources">Build sources<a href="#Build+sources" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>If the build is configured to automatically reload when build source changes
+are made by setting <code>Global / onChangedBuildSource := ReloadOnSourceChanges</code>,
+then sbt will monitor the build sources (i.e. <code>*.sbt</code> and <code>*.{java,scala}</code>
+files in the <code>project</code> directory. When build source changes are detected,
+the build will be reloaded and sbt will re-enter triggered execution mode
+when the reload completes.
+</p><h3 id="Configuration">Configuration<a href="#Configuration" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The behavior of triggered execution can be configured via a number of settings.
+</p><ul><li><code>watchTriggers: Seq[Glob]</code> adds search queries for files that should task
+trigger evaluation but that the task does not directly depend on. For
+example, if the project build.sbt file contains <code>foo / watchTriggers +=
+baseDirectory.value.toGlob / &quot;*.txt&quot;</code>, then any modifications to files
+ending with the <code>txt</code> extension will cause the <code>foo</code> command to trigger
+when in triggered execution mode.
+</li><li><code>watchTriggeredMessage: (Int, Path, Seq[String]) =&gt; Option[String]</code>
+sets the message that is displayed when a file modification triggers a
+new build. Its input parameters are the current watch iteration count,
+the file that triggered the build and the command(s) that are going to
+be run. By default, it prints a message indicating what file triggered
+the build and what commands its going to run. No message is printed when
+the function returns <code>None</code>.
+</li><li><code>watchBeforeCommand: () =&gt; Unit</code> provides a callback to run before
+evaluating the task.  It can be used to clear the console screen by
+adding <code>ThisBuild / watchBeforeCommand := Watch.clearScreen</code> to the
+project build.sbt file. By default it is no-op.
+</li><li><code>watchLogLevel</code> sets the logging level of the file monitoring system.
+This can be useful if the triggered execution is not being evaluated
+when source files or modified or if is unexpectedly triggering due to
+modifications to files that should not be monitored.
+</li><li><code>watchInputParser: Parser[Watch.Action]</code> changes how the monitor
+handles input events. For example, setting <code>watchInputParser := 'l' ^^^
+Watch.Reload | '\n' ^^^ new Watch.Run(&quot;shell&quot;)</code> will make it so that
+typing the ‘l’ key will reload the build and typing a newline will
+return to the shell. By default, ‘r’ re-runs the watched tasks, ‘x’
+exits sbt and a newline returns to the shell. See [Parsing and tab
+completion][Parsing-Input] for more details on parsers. Should generally
+used in conjunction with <code>watchStartMessage</code>
+</li><li><code>watchStartMessage: (Int, ProjectRef, Seq[String]) =&gt; Option[String]</code>
+sets the banner that is printed while the watch process is waiting for
+file or input events. The inputs are the iteration count, the current
+project and the commands to run. The default message includes
+instructions for terminating the watch or manually triggering a rebuild.
+This banner is only displayed if <code>watchOnIteration</code> logs the result of
+<code>watchStartMessage</code>.
+</li><li><code>watchOnIteration: (Int, ProjectRef, Seq[String]) =&gt; Watch.Action</code> a
+function that is evaluated before waiting for source or input events. It
+can be used to terminate the watch early if, for example, a certain
+number of iterations have been reached. By default, it just logs the
+result of <code>watchStartMessage</code>.
+</li><li><code>watchForceTriggerOnAnyChange: Boolean</code> configures whether or not the
+contents of a source file must change in order to trigger a build. False
+by default.
+</li><li><code>watchPersistFilestamps: Boolean</code> toggles whether or not sbt will
+persist the file hashes computed for source files across multiple task
+evaluation runs. This can improve performance for projects with many
+source files. Because the file hashes are cached, it is possible for the
+evaluated task to read an invalid hash if many source files are being
+concurrently modified. The default value is false.  is false.
+</li></ul><div class="bottom nav">
                 <div class="row">
                   <div class="col-md-auto">
                     <a href="Scripts.html">
