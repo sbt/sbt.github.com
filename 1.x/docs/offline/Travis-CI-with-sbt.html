@@ -85,7 +85,7 @@ script:
 For example, from the following output we learn that it is using <code>JVM_OPTS</code> environment variable to pass in the JVM options.
 </p><pre><code class="">$ export JVM_OPTS=@/etc/sbt/jvmopts
 $ export SBT_OPTS=@/etc/sbt/sbtopts
-</code></pre><h3 id="Custom+JVM+options">Custom JVM options<a href="#Custom+JVM+options" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The default <a href="https://github.com/travis-ci/travis-cookbooks/blob/master/ci_environment/sbt-extras/templates/default/sbtopts.erb">sbt</a> and <a href="https://github.com/travis-ci/travis-cookbooks/blob/master/ci_environment/sbt-extras/templates/default/jvmopts.erb">JVM</a> options are set by Travis CI people,
+</code></pre><h3 id="Custom+JVM+options">Custom JVM options<a href="#Custom+JVM+options" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The default <a href="https://github.com/travis-ci/travis-cookbooks/blob/master/cookbooks/travis_sbt_extras/templates/default/sbtopts.erb">sbt</a> and <a href="https://github.com/travis-ci/travis-cookbooks/blob/master/cookbooks/travis_sbt_extras/templates/default/jvmopts.erb">JVM</a> options are set by Travis CI people,
 and it should work for most cases.
 If you do decide to customize it, read what they currently use as the defaults first.
 Because Travis is already using the environment variable <code>JVM_OPTS</code>, we can instead create a file <code>travis/jvmopts</code>:
