@@ -170,7 +170,7 @@ re-executed whenever one of the source files within the project is modified. For
 </p><pre><code class="">sbt:foo-build&gt; ~compile
 [success] Total time: 0 s, completed May 6, 2018 3:52:08 PM
 1. Waiting for source changes... (press enter to interrupt)
-</code></pre><h3 id="Create+a+source+file">Create a source file<a href="#Create+a+source+file" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Leave the previous command running. From a different shell or in your file manager create in the project
+</code></pre><h3 id="Create+a+source+file">Create a source file<a href="#Create+a+source+file" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Leave the previous command running. From a different shell or in your file manager create in the foo-build
 directory the following nested directories: <code>src/main/scala/example</code>. Then, create <code>Hello.scala</code>
 in the <code>example</code> directory using your favorite editor as follows:
 </p><pre><code class="prettyprint lang-scala">package example
@@ -3428,6 +3428,11 @@ button:
 </p><img src="files/bintray-org-member-link-dialog.png" style="width: 100%; height: 100%">
 <p>Click on the <code>sbt/sbt-plugin-releases</code> repository and you’re done! Any
 future releases will be included in the sbt-plugin repository.
+</p><h3 id="Publishing+your+plugin+to+a+private+repository">Publishing your plugin to a private repository<a href="#Publishing+your+plugin+to+a+private+repository" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>If you choose not provide your plugin to the community and instead publish it to a private repository using the process described above, you will need to add an appropriate resolver to the project that utilizes this plugin so that the project is able to find the plugin. In your build settings under <code>project/plugins.sbt</code> add the following:
+</p><pre><code class="prettyprint lang-scala">resolvers += Resolver.bintrayIvyRepo(&quot;YOUR ORG&quot;, &quot;sbt-plugins&quot;),
+
+addSbtPlugin(&quot;YOUR ORG&quot; % &quot;YOUR PLUGIN&quot; % &quot;YOUR PLUGIN VERSION&quot;)
+</code></pre><p>When publishing sbt plugins, Lightbend recommends using the default, Ivy-style repository formatting. This is automatically handled for you when referencing plugins from the community repository, but for private repositories, you need to explicitly add it using <code>Resolver.bintrayIvyRepo</code>…
 </p><h3 id="Summary">Summary<a href="#Summary" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>After setting up the repository, all new releases will automatically be
 included the sbt-plugin-releases repository, available for all users.
 When you create a new plugin, after the initial release you’ll have to
