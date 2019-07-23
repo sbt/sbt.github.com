@@ -45,20 +45,19 @@
                   <h2 id="Triggered+Execution">Triggered Execution<a href="#Triggered+Execution" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>sbt provides the ability to monitor the input files for a particular task
 and repeat the task when changes to those files occur.
 </p><p>Some example usages are described below:
-</p><h3 id="Compile">Compile<a href="#Compile" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The original use-case was continuous compilation. The following commands
-will make sbt watch for source changes in the Test and Compile (default)
-configurations respectively and re-run the compile command.
+</p><h3 id="Compile">Compile<a href="#Compile" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A common use-case is continuous compilation. The following commands will make
+sbt watch for source changes in the Test and Compile (default) configurations
+respectively and re-run the compile command.
 </p><pre><code class="">&gt; ~ Test / compile
 
 &gt; ~ compile
 </code></pre><p>Note that because <code>Test / compile</code> depends on <code>Compile / compile</code>,
 source changes in the main source directory will trigger recompilation
 of the test sources.
-</p><h3 id="Testing">Testing<a href="#Testing" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>One of the common use cases for triggered execution is developing in a
-test driven development (TDD) style. The following command will monitor
-changes to both the main and test source sources for the build and
-re-run only the tests that reference classes that have been re-compiled
-since the last test run.
+</p><h3 id="Testing">Testing<a href="#Testing" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Triggered execution is often used when developing in a test driven development
+(TDD) style. The following command will monitor changes to both the main and
+test source sources for the build and re-run only the tests that reference
+classes that have been re-compiled since the last test run.
 </p><pre><code class="">&gt; ~ testQuick
 </code></pre><p>It is also possible to re-run only a particular test if its dependencies
 have changed.
@@ -69,15 +68,14 @@ source files.
 </p><pre><code class="">&gt; ~ testOnly foo.BarTest
 </code></pre><p>To run all of the tests in the project when any sources change, use
 </p><pre><code class="">&gt; ~test
-</code></pre><h3 id="Running+Multiple+Commands">Running Multiple Commands<a href="#Running+Multiple+Commands" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Occasionally, you may need to trigger the execution of multiple
-commands. You can use semicolons to separate the commands to be
-triggered.
-</p><p>The following will monitor for source file changes and run <code>clean</code> and <code>test</code>.
+</code></pre><h3 id="Running+Multiple+Commands">Running Multiple Commands<a href="#Running+Multiple+Commands" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt supports watching multiple, semicolon separated, commands. For example, the
+following command will monitor for source file changes and run <code>clean</code> and
+<code>test</code>:
 </p><pre><code class="">&gt; ~ clean; test
 </code></pre><h3 id="Build+sources">Build sources<a href="#Build+sources" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>If the build is configured to automatically reload when build source changes
 are made by setting <code>Global / onChangedBuildSource := ReloadOnSourceChanges</code>,
 then sbt will monitor the build sources (i.e. <code>*.sbt</code> and <code>*.{java,scala}</code>
-files in the <code>project</code> directory. When build source changes are detected,
+files in the <code>project</code> directory). When build source changes are detected,
 the build will be reloaded and sbt will re-enter triggered execution mode
 when the reload completes.
 </p><h3 id="Configuration">Configuration<a href="#Configuration" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The behavior of triggered execution can be configured via a number of settings.
@@ -94,6 +92,13 @@ the file that triggered the build and the command(s) that are going to
 be run. By default, it prints a message indicating what file triggered
 the build and what commands its going to run. No message is printed when
 the function returns <code>None</code>.
+</li><li><code>watchInputOptions: Seq[Watch.InputOption]</code> allows the build to
+override the default watch options. For example, to add the ability to
+reload the build by typing the ‘l’ key, add
+<code>ThisBuild / watchInputOptions += Watch.InputOption('l', &quot;reload&quot;,
+Watch.Reload)</code> to the <code>build.sbt</code> file. When using the default
+<code>watchStartMessage</code>, this will also add the option to the list displayed
+by the ’?’ option.
 </li><li><code>watchBeforeCommand: () =&gt; Unit</code> provides a callback to run before
 evaluating the task.  It can be used to clear the console screen by
 adding <code>ThisBuild / watchBeforeCommand := Watch.clearScreen</code> to the
@@ -104,33 +109,35 @@ when source files or modified or if is unexpectedly triggering due to
 modifications to files that should not be monitored.
 </li><li><code>watchInputParser: Parser[Watch.Action]</code> changes how the monitor
 handles input events. For example, setting <code>watchInputParser := 'l' ^^^
-Watch.Reload | '\n' ^^^ new Watch.Run(&quot;shell&quot;)</code> will make it so that
+Watch.Reload | '\r' ^^^ new Watch.Run(&quot;&quot;)</code> will make it so that
 typing the ‘l’ key will reload the build and typing a newline will
-return to the shell. By default, ‘r’ re-runs the watched tasks, ‘x’
-exits sbt and a newline returns to the shell. See [Parsing and tab
-completion][Parsing-Input] for more details on parsers. Should generally
-used in conjunction with <code>watchStartMessage</code>
+return to the shell. By default this is automatically derived from the
+<code>watchInputOptions</code>.
 </li><li><code>watchStartMessage: (Int, ProjectRef, Seq[String]) =&gt; Option[String]</code>
 sets the banner that is printed while the watch process is waiting for
 file or input events. The inputs are the iteration count, the current
 project and the commands to run. The default message includes
-instructions for terminating the watch or manually triggering a rebuild.
-This banner is only displayed if <code>watchOnIteration</code> logs the result of
-<code>watchStartMessage</code>.
+instructions for terminating the watch or displaying all available
+options. This banner is only displayed if <code>watchOnIteration</code> logs the
+result of <code>watchStartMessage</code>.
 </li><li><code>watchOnIteration: (Int, ProjectRef, Seq[String]) =&gt; Watch.Action</code> a
 function that is evaluated before waiting for source or input events. It
 can be used to terminate the watch early if, for example, a certain
 number of iterations have been reached. By default, it just logs the
 result of <code>watchStartMessage</code>.
 </li><li><code>watchForceTriggerOnAnyChange: Boolean</code> configures whether or not the
-contents of a source file must change in order to trigger a build. False
-by default.
+contents of a source file must change in order to trigger a build. The default
+value is false.
 </li><li><code>watchPersistFilestamps: Boolean</code> toggles whether or not sbt will
 persist the file hashes computed for source files across multiple task
 evaluation runs. This can improve performance for projects with many
 source files. Because the file hashes are cached, it is possible for the
 evaluated task to read an invalid hash if many source files are being
-concurrently modified. The default value is false.  is false.
+concurrently modified. The default value is false.
+</li><li><code>watchAntiEntropy: FiniteDuration</code> controls the time that must elapse
+before a build is re-triggered by the same file that previously
+triggered the build. This is intended to prevent spurious builds that
+can occur when a file is modified in short bursts. The default value is 500ms.
 </li></ul><div class="bottom nav">
                 <div class="row">
                   <div class="col-md-auto">
