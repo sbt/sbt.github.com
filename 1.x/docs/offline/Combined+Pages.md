@@ -4631,6 +4631,7 @@ your plugin to the list.
   code formatting for Java sources. <!-- 8 stars -->
 - [sbt-source-format](https://github.com/swoval/sbt-source-format):
   code formatting for Java and clang (c/c++/objc) sources. <!-- 1 stars -->
+- [safety-plugin](https://github.com/leobenkel/safety_plugin): Enforce the use of style rules across your company
 
 #### Documentation plugins
 
@@ -4814,6 +4815,7 @@ your plugin to the list.
   class and resources conflicting in your project's classpath. <!-- 13 stars -->
 - [sbt-google-cloud-storage](https://github.com/lightbend/sbt-google-cloud-storage): resolver and publisher for Google Cloud Storage.
 - [sbt-trace](https://github.com/delprks/sbt-trace): find traces of the client or library usage in other projects. <!-- 3 stars -->
+- [safety-plugin](https://github.com/leobenkel/safety_plugin): Enforce the use of specified versions of dependencies across your company
 
 #### Web and frontend development plugins
 
@@ -14096,7 +14098,7 @@ Therefore, if you have any SNAPSHOT in your graph, your experience may degrade.
 
 A setting key called `updateOptions` customizes the details of
 managed dependency resolution with the `update` task. One of its flags is
-called `lastestSnapshots`, which controls the behavior of the chained
+called `latestSnapshots`, which controls the behavior of the chained
 resolver. Up until 0.13.6, sbt was picking the first `-SNAPSHOT`
 revision it found along the chain.  When `latestSnapshots` is enabled
 (default: `true`), it will look into all resolvers on the chain, and
@@ -14109,22 +14111,6 @@ here's how to disable it:
 ```scala
     updateOptions := updateOptions.value.withLatestSnapshots(false)
 ```
-
-### Consolidated resolution
-
-`updateOptions` can also be used to enable consolidated resolution for `update` task.
-
-```scala
-updateOptions := updateOptions.value.withConsolidatedResolution(true)
-```
-
-This feature is specifically designed to address Ivy resolution being
-slow for multi-module projects. Consolidated resolution aims to fix
-this issue by artificially constructing an Ivy dependency graph for
-the unique managed dependencies. If two subprojects introduce
-identical external dependencies, both subprojects should consolidate
-to the same graph, and therefore resolve immediately for the second
-`update`.
 
 <a name="motivation"></a>
 
@@ -17184,7 +17170,7 @@ Setting up your build for Travis CI is mostly about setting up `.travis.yml`.
 ```yml
 language: scala
 
-jdk: oraclejdk8
+jdk: openjdk8
 
 scala:
    - 2.10.4
@@ -17197,7 +17183,7 @@ Let's specify that explicitly:
 ```yml
 language: scala
 
-jdk: oraclejdk8
+jdk: openjdk8
 
 scala:
    - 2.10.4
@@ -17219,7 +17205,7 @@ For sbt plugins, there is no need for cross building on Scala, so the following 
 ```yml
 language: scala
 
-jdk: oraclejdk8
+jdk: openjdk8
 
 script:
    - sbt scripted
@@ -17331,7 +17317,7 @@ We've already seen the example of Scala cross building.
 ```yml
 language: scala
 
-jdk: oraclejdk8
+jdk: openjdk8
 
 scala:
    - 2.10.4
@@ -17433,15 +17419,13 @@ sudo: false
 
 language: scala
 
-jdk: oraclejdk8
+jdk: openjdk8
 
 # These directories are cached to S3 at the end of the build
 cache:
   directories:
     - $HOME/.ivy2/cache
     - $HOME/.sbt/boot/
-
-jdk: oraclejdk8
 
 env:
   # This splits the build into two parts

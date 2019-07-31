@@ -3076,6 +3076,7 @@ formatting using Scalafmt. <!-- 80 stars -->
 code formatting for Java sources. <!-- 8 stars -->
 </li><li><a href="https://github.com/swoval/sbt-source-format">sbt-source-format</a>:
 code formatting for Java and clang (c/c++/objc) sources. <!-- 1 stars -->
+</li><li><a href="https://github.com/leobenkel/safety_plugin">safety-plugin</a>: Enforce the use of style rules across your company
 </li></ul><h4 id="Documentation+plugins">Documentation plugins<a href="#Documentation+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li><a href="https://github.com/tpolecat/tut">tut</a>: documentation and tutorial generator.
 <!-- 409  stars -->
 </li><li><a href="https://github.com/planet42/Laika">Laika</a>: Transform Markdown or reStructuredText
@@ -3234,6 +3235,7 @@ reports of licenses used by dependencies. <!-- 25 stars -->
 class and resources conflicting in your project’s classpath. <!-- 13 stars -->
 </li><li><a href="https://github.com/lightbend/sbt-google-cloud-storage">sbt-google-cloud-storage</a>: resolver and publisher for Google Cloud Storage.
 </li><li><a href="https://github.com/delprks/sbt-trace">sbt-trace</a>: find traces of the client or library usage in other projects. <!-- 3 stars -->
+</li><li><a href="https://github.com/leobenkel/safety_plugin">safety-plugin</a>: Enforce the use of specified versions of dependencies across your company
 </li></ul><h4 id="Web+and+frontend+development+plugins">Web and frontend development plugins<a href="#Web+and+frontend+development+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li><a href="https://www.playframework.com">Play Framework</a>: reactive web framework for
 Scala and Java. <!-- 9727 stars -->
 </li><li><a href="https://www.scala-js.org">Scala.js</a>: Scala to JavaScript compiler.
@@ -8604,7 +8606,7 @@ Therefore, if you have any SNAPSHOT in your graph, your experience may degrade.
 (This could be improved in the future)
 </p><p>A setting key called <code>updateOptions</code> customizes the details of
 managed dependency resolution with the <code>update</code> task. One of its flags is
-called <code>lastestSnapshots</code>, which controls the behavior of the chained
+called <code>latestSnapshots</code>, which controls the behavior of the chained
 resolver. Up until 0.13.6, sbt was picking the first <code>-SNAPSHOT</code>
 revision it found along the chain.  When <code>latestSnapshots</code> is enabled
 (default: <code>true</code>), it will look into all resolvers on the chain, and
@@ -8613,16 +8615,7 @@ compare them using the publish date.
 remote repositories on the build or you live away from the severs. So
 here’s how to disable it:
 </p><pre><code class="prettyprint lang-scala">    updateOptions := updateOptions.value.withLatestSnapshots(false)
-</code></pre><h3 id="Consolidated+resolution">Consolidated resolution<a href="#Consolidated+resolution" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>updateOptions</code> can also be used to enable consolidated resolution for <code>update</code> task.
-</p><pre><code class="prettyprint lang-scala">updateOptions := updateOptions.value.withConsolidatedResolution(true)
-</code></pre><p>This feature is specifically designed to address Ivy resolution being
-slow for multi-module projects. Consolidated resolution aims to fix
-this issue by artificially constructing an Ivy dependency graph for
-the unique managed dependencies. If two subprojects introduce
-identical external dependencies, both subprojects should consolidate
-to the same graph, and therefore resolve immediately for the second
-<code>update</code>.
-</p><a name="motivation"></a><h3 id="Motivation">Motivation<a href="#Motivation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt internally uses Apache Ivy to resolve library dependencies. While sbt has benefited from not having to reinvent its own dependency resolution engine all these years, we are increasingly seeing scalability challenges especially for projects with both multiple subprojects and large dependency graph. There are several factors involved in sbt’s resolution scalability:
+</code></pre><a name="motivation"></a><h3 id="Motivation">Motivation<a href="#Motivation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt internally uses Apache Ivy to resolve library dependencies. While sbt has benefited from not having to reinvent its own dependency resolution engine all these years, we are increasingly seeing scalability challenges especially for projects with both multiple subprojects and large dependency graph. There are several factors involved in sbt’s resolution scalability:
 </p><ul><li>Number of transitive nodes (libraries) in the graph
 </li><li>Exclusion and override rules
 </li><li>Number of subprojects
@@ -10630,7 +10623,7 @@ Use this guide as an inspiration, but consult the official source for more detai
 <a href="http://docs.travis-ci.com/user/languages/scala/">Scala</a> page says the basic file can look like:
 </p><pre><code class="prettyprint lang-yml">language: scala
 
-jdk: oraclejdk8
+jdk: openjdk8
 
 scala:
    - 2.10.4
@@ -10639,7 +10632,7 @@ scala:
 Let’s specify that explicitly:
 </p><pre><code class="prettyprint lang-yml">language: scala
 
-jdk: oraclejdk8
+jdk: openjdk8
 
 scala:
    - 2.10.4
@@ -10653,7 +10646,7 @@ This becomes relevant when you want to override JVM options, which we’ll see l
 </p><h3 id="Plugin+build+setup">Plugin build setup<a href="#Plugin+build+setup" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>For sbt plugins, there is no need for cross building on Scala, so the following is all you need:
 </p><pre><code class="prettyprint lang-yml">language: scala
 
-jdk: oraclejdk8
+jdk: openjdk8
 
 script:
    - sbt scripted
@@ -10718,7 +10711,7 @@ Overall, the use of caching should shave off a few minutes of build time per job
 </p><h3 id="Build+matrix">Build matrix<a href="#Build+matrix" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>We’ve already seen the example of Scala cross building.
 </p><pre><code class="prettyprint lang-yml">language: scala
 
-jdk: oraclejdk8
+jdk: openjdk8
 
 scala:
    - 2.10.4
@@ -10779,15 +10772,13 @@ sudo: false
 
 language: scala
 
-jdk: oraclejdk8
+jdk: openjdk8
 
 # These directories are cached to S3 at the end of the build
 cache:
   directories:
     - $HOME/.ivy2/cache
     - $HOME/.sbt/boot/
-
-jdk: oraclejdk8
 
 env:
   # This splits the build into two parts

@@ -54,7 +54,7 @@ Use this guide as an inspiration, but consult the official source for more detai
 <a href="http://docs.travis-ci.com/user/languages/scala/">Scala</a> page says the basic file can look like:
 </p><pre><code class="prettyprint lang-yml">language: scala
 
-jdk: oraclejdk8
+jdk: openjdk8
 
 scala:
    - 2.10.4
@@ -63,7 +63,7 @@ scala:
 Let’s specify that explicitly:
 </p><pre><code class="prettyprint lang-yml">language: scala
 
-jdk: oraclejdk8
+jdk: openjdk8
 
 scala:
    - 2.10.4
@@ -77,7 +77,7 @@ This becomes relevant when you want to override JVM options, which we’ll see l
 </p><h3 id="Plugin+build+setup">Plugin build setup<a href="#Plugin+build+setup" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>For sbt plugins, there is no need for cross building on Scala, so the following is all you need:
 </p><pre><code class="prettyprint lang-yml">language: scala
 
-jdk: oraclejdk8
+jdk: openjdk8
 
 script:
    - sbt scripted
@@ -142,7 +142,7 @@ Overall, the use of caching should shave off a few minutes of build time per job
 </p><h3 id="Build+matrix">Build matrix<a href="#Build+matrix" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>We’ve already seen the example of Scala cross building.
 </p><pre><code class="prettyprint lang-yml">language: scala
 
-jdk: oraclejdk8
+jdk: openjdk8
 
 scala:
    - 2.10.4
@@ -203,15 +203,13 @@ sudo: false
 
 language: scala
 
-jdk: oraclejdk8
+jdk: openjdk8
 
 # These directories are cached to S3 at the end of the build
 cache:
   directories:
     - $HOME/.ivy2/cache
     - $HOME/.sbt/boot/
-
-jdk: oraclejdk8
 
 env:
   # This splits the build into two parts
