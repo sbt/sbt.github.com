@@ -313,13 +313,13 @@ datatype definition:
 will still run.
 </p><h3 id="JSON+codec+generation">JSON codec generation<a href="#JSON+codec+generation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Adding <code>JsonCodecPlugin</code> to the subproject will generate sjson-new JSON codes for
 the datatypes.
-</p><p>lazy val root = (project in file(”.”))
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
   .enablePlugins(DatatypePlugin, JsonCodecPlugin)
   .settings(
-    scalaVersion := “2.11.8”,
-    libraryDependencies += “com.eed3si9n” %% “sjson-new-scalajson” % “0.4.1”
+    scalaVersion := &quot;2.11.8&quot;,
+    libraryDependencies += &quot;com.eed3si9n&quot; %% &quot;sjson-new-scalajson&quot; % &quot;0.4.1&quot;
   )
-</p><p><code>codecNamespace</code> can be used to specify the package name for the codecs.
+</code></pre><p><code>codecNamespace</code> can be used to specify the package name for the codecs.
 </p><pre><code class="prettyprint lang-json">{
   &quot;codecNamespace&quot;: &quot;com.example.codec&quot;,
   &quot;fullCodec&quot;: &quot;CustomJsonProtocol&quot;,
