@@ -43,28 +43,19 @@
                 </div><div class="col-md-8 col-xs-9">
                   <div class="rightcolumn contents">
                   <h2 id="Nightly+Builds">Nightly Builds<a href="#Nightly+Builds" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>The latest development versions of 1.2.8 are available as nightly
-builds on <a href="https://repo.typesafe.com/typesafe/ivy-snapshots/">Typesafe Snapshots</a>.
-</p><p>To use a nightly build, the instructions are the same for
-<a href="Manual-Installation.html">normal manual setup</a> except:
-</p><ol><li>Download the launcher jar from one of the subdirectories of
-|nightly-launcher|. They should be listed in chronological order, so
-the most recent one will be last.
-</li><li>The version number is the name of the subdirectory and is of the
-form <code>1.2.8.x-yyyyMMdd-HHmmss</code>. Use this in a build.properties
-file.
-</li><li>Call your script something like <code>sbt-nightly</code> to retain access to a
-stable sbt launcher. The documentation will refer to the script as
-sbt, however.
-</li></ol><p>Related to the third point, remember that an <code>sbt.version</code> setting in
-<code>&lt;build-base&gt;/project/build.properties</code> determines the version of sbt to
-use in a project. If it is not present, the default version associated
-with the launcher is used. This means that you must set
-<code>sbt.version=yyyyMMdd-HHmmss</code> in an existing
-<code>&lt;build-base&gt;/project/build.properties</code>. You can verify the right
-version of sbt is being used to build a project by running <code>about</code>.
-</p><p>To reduce problems, it is recommended to not use a launcher jar for one
-nightly version to launch a different nightly version of sbt.
-</p><div class="bottom nav">
+builds on sbt-maven-snapshots (<a href="https://repo.scala-sbt.org/scalasbt/maven-snapshots">https://repo.scala-sbt.org/scalasbt/maven-snapshots</a>) repo.
+</p><p>Note that currently following the URL would lead you to Bintray,
+but <a href="https://repo.scala-sbt.org/scalasbt/maven-snapshots/org/scala-sbt/sbt/">/org/scala-sbt/sbt/</a> would actually point to a Jenkins server.
+</p><p>To use a nightly build:
+</p><ol><li>Find out a version from <a href="https://repo.scala-sbt.org/scalasbt/maven-snapshots/org/scala-sbt/sbt/">/org/scala-sbt/sbt/</a>.
+</li><li>Put the version, for example <code>sbt.version=1.3.0-bin-20190813T192012</code> in <code>project/build.properties</code>.
+</li></ol><p>sbt launcher will resolve the sbt core artifacts based on the specification.
+</p><p>Unless you’re debugging the <code>sbt</code> script or the launcher JAR, you should be able to use any recent stable version of sbt installation as the launcher following the <a href="Setup.html">Setup</a> instructions first.
+</p><p>If you’re overriding the repositories via <code>~/.sbt/repositories</code>, make sure that there’s a following entry:
+</p><pre><code class="">[repositories]
+  ...
+  sbt-maven-snapshots: https://repo.scala-sbt.org/scalasbt/maven-snapshots/, bootOnly
+</code></pre><div class="bottom nav">
                 <div class="row">
                   <div class="col-md-auto">
                     <a href="Archived+pages.html">
