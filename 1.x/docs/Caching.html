@@ -1,0 +1,685 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html>
+      <head>
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+        <title>sbt Reference Manual — Caching</title>
+        <link rel="shortcut icon" href="favicon.ico"/>
+        <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css"/>
+        <link rel="stylesheet" href="css/pamflet.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/pamflet-print.css" type="text/css" media="print"/>
+        <link rel="stylesheet" href="css/pamflet-grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="css/color_scheme-redmond.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/color_scheme-github.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/color_scheme-monokai.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/pamfletheight_80px_2em.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+        <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
+        <script type="text/javascript" src="js/pamflet.js"></script>
+        <script type="text/javascript">
+          Pamflet.page.language = 'en';
+        </script>
+        <script type="text/javascript" src="js/prettify/prettify.js"></script><script type="text/javascript" src="js/prettify/lang-scala.js"></script><link type="text/css" rel="stylesheet" href="css/prettify.css"/><script type="text/javascript"><!--
+        window.onload=function() { prettyPrint(); };
+      --></script>
+        <link rel="stylesheet" href="css/custom.css" type="text/css" media="screen, projection"/>
+        
+        <script type="text/javascript">
+              Pamflet.twitter = '#sbt #scala';
+            </script>
+      </head>
+      <body class="color_scheme-github">
+        <div class="container-fluid contentswrapper h-100">
+          <div class="row minh-100">
+          <div class="col-md-4 col-xl-3 toccolumn leftcolumn">
+                  <div class="lefttocwrapper">
+      <div class="tocwrapper">
+        
+        <div class="tocbody show" id="toc">
+        
+        <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">Getting Started with sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">Installing sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Installing sbt on Mac</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Installing sbt on Windows</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Installing sbt on Linux</a></div></li> </ol></li><li><div><a href="sbt-by-example.html">sbt by example</a></div></li><li><div><a href="Directories.html">Directory structure</a></div></li><li><div><a href="Running.html">Running</a></div></li><li><div><a href="Basic-Def.html">Build definition</a></div></li><li><div><a href="Multi-Project.html">Multi-project builds</a></div></li><li><div><a href="Task-Graph.html">Task graph</a></div></li><li><div><a href="Scopes.html">Scopes</a></div></li><li><div><a href="Appending-Values.html">Appending values</a></div></li><li><div><a href="Scope-Delegation.html">Scope delegation (.value lookup)</a></div></li><li><div><a href="Library-Dependencies.html">Library dependencies</a></div></li><li><div><a href="Using-Plugins.html">Using plugins</a></div></li><li><div><a href="Custom-Settings.html">Custom settings and tasks</a></div></li><li><div><a href="Organizing-Build.html">Organizing the build</a></div></li><li><div><a href="Summary.html">Getting Started summary</a></div></li> </ol></li><li><div><a href="General-Info.html">General Information</a></div><ol class="toc"> <li><div><a href="Credits.html">Credits</a></div></li><li><div><a href="Community-Plugins.html">Community Plugins</a></div></li><li><div><a href="Repository-Roles.html">Community Repository Policy</a></div></li><li><div><a href="Bintray-For-Plugins.html">Bintray For Plugins</a></div></li><li><div><a href="Setup-Notes.html">Setup Notes</a></div></li><li><div><a href="Using-Sonatype.html">Using Sonatype</a></div></li><li><div><a href="Contibuting-to-sbt.html">Contributing to sbt</a></div></li><li><div><a href="Changes.html">Changes</a></div><ol class="toc"> <li><div><a href="Migrating-from-sbt-013x.html">Migrating from sbt 0.13.x</a></div></li><li><div><a href="sbt-1.2-Release-Notes.html">sbt 1.2.x releases</a></div></li><li><div><a href="sbt-1.1-Release-Notes.html">sbt 1.1.x releases</a></div></li><li><div><a href="sbt-1.0-Release-Notes.html">sbt 1.0.x releases</a></div></li> </ol></li> </ol></li><li><div><a href="Detailed-Topics.html">Detailed Topics</a></div><ol class="toc"> <li><div><a href="Using-sbt.html">Using sbt</a></div><ol class="toc"> <li><div><a href="Command-Line-Reference.html">Command Line Reference</a></div></li><li><div><a href="Console-Project.html">Console Project</a></div></li><li><div><a href="Cross-Build.html">Cross-building</a></div></li><li><div><a href="Inspecting-Settings.html">Interacting with the Configuration System</a></div></li><li><div><a href="Triggered-Execution.html">Triggered Execution</a></div></li><li><div><a href="Scripts.html">Scripts, REPL, and Dependencies</a></div></li><li><div><a href="sbt-server.html">sbt Server</a></div></li><li><div><a href="Understanding-Recompilation.html">Understanding Incremental Recompilation</a></div></li> </ol></li><li><div><a href="Configuration-Index.html">Configuration</a></div><ol class="toc"> <li><div><a href="Classpaths.html">Classpaths, sources, and resources</a></div></li><li><div><a href="Compiler-Plugins.html">Compiler Plugin Support</a></div></li><li><div><a href="Configuring-Scala.html">Configuring Scala</a></div></li><li><div><a href="Forking.html">Forking</a></div></li><li><div><a href="Global-Settings.html">Global Settings</a></div></li><li><div><a href="Java-Sources.html">Java Sources</a></div></li><li><div><a href="Mapping-Files.html">Mapping Files</a></div></li><li><div><a href="Local-Scala.html">Local Scala</a></div></li><li><div><a href="Macro-Projects.html">Macro Projects</a></div></li><li><div><a href="Paths.html">Paths</a></div></li><li><div><a href="Parallel-Execution.html">Parallel Execution</a></div></li><li><div><a href="Process.html">External Processes</a></div></li><li><div><a href="Running-Project-Code.html">Running Project Code</a></div></li><li><div><a href="Testing.html">Testing</a></div></li> </ol></li><li><div><a href="Dependency-Management-Index.html">Dependency Management</a></div><ol class="toc"> <li><div><a href="Artifacts.html">Artifacts</a></div></li><li><div><a href="Dependency-Management-Flow.html">Dependency Management Flow</a></div></li><li><div><a href="Library-Management.html">Library Management</a></div></li><li><div><a href="Proxy-Repositories.html">Proxy Repositories</a></div></li><li><div><a href="Publishing.html">Publishing</a></div></li><li><div><a href="Resolvers.html">Resolvers</a></div></li><li><div><a href="Update-Report.html">Update Report</a></div></li><li><div><a href="Cached-Resolution.html">Cached Resolution</a></div></li> </ol></li><li><div><a href="Tasks-and-Commands.html">Tasks and Commands</a></div><ol class="toc"> <li><div><a href="Tasks.html">Tasks</a></div></li><li><div class="current">Caching</div></li><li><div><a href="Input-Tasks.html">Input Tasks</a></div></li><li><div><a href="Commands.html">Commands</a></div></li><li><div><a href="Parsing-Input.html">Parsing and tab completion</a></div></li><li><div><a href="Build-State.html">State and actions</a></div></li><li><div><a href="Task-Inputs.html">Tasks/Settings: Motivation</a></div></li> </ol></li><li><div><a href="Plugins-and-Best-Practices.html">Plugins and Best Practices</a></div><ol class="toc"> <li><div><a href="Best-Practices.html">General Best Practices</a></div></li><li><div><a href="Plugins.html">Plugins</a></div></li><li><div><a href="Plugins-Best-Practices.html">Plugins Best Practices</a></div></li><li><div><a href="Travis-CI-with-sbt.html">Setting up Travis CI with sbt</a></div></li><li><div><a href="Testing-sbt-plugins.html">Testing sbt plugins</a></div></li><li><div><a href="sbt-new-and-Templates.html">sbt new and Templates</a></div></li><li><div><a href="Cross-Build-Plugins.html">Cross building plugins</a></div></li> </ol></li> </ol></li><li><div><a href="Howto.html">How to…</a></div><ol class="toc"> <li><div><a href="Howto-Classpaths.html">Classpaths</a></div></li><li><div><a href="Howto-Customizing-Paths.html">Customizing paths</a></div></li><li><div><a href="Howto-Generating-Files.html">Generating files</a></div></li><li><div><a href="Howto-Inspect-the-Build.html">Inspect the build</a></div></li><li><div><a href="Howto-Interactive-Mode.html">Interactive mode</a></div></li><li><div><a href="Howto-Logging.html">Configure and use logging</a></div></li><li><div><a href="Howto-Project-Metadata.html">Project metadata</a></div></li><li><div><a href="Howto-Package.html">Configure packaging</a></div></li><li><div><a href="Howto-Running-Commands.html">Running commands</a></div></li><li><div><a href="Howto-Scala.html">Configure and use Scala</a></div></li><li><div><a href="Howto-Scaladoc.html">Generate API documentation</a></div></li><li><div><a href="Howto-Triggered.html">Triggered execution</a></div></li><li><div><a href="Define+Custom+Tasks.html">Define Custom Tasks</a></div></li><li><div><a href="Howto-Startup.html">How to take an action on startup</a></div></li><li><div><a href="Howto-Sequencing.html">Sequencing</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Defining a sequential task with Def.sequential</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Defining a dynamic task with Def.taskDyn</a></div></li><li><div><a href="Howto-After-Input-Task.html">Doing something after an input task</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Defining a dynamic input task with Def.inputTaskDyn</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">How to sequence using commands</a></div></li> </ol></li><li><div><a href="Examples.html">Examples</a></div><ol class="toc"> <li><div><a href="Basic-Def-Examples.html">.sbt build examples</a></div></li><li><div><a href="Scala-Files-Example.html">.sbt build with .scala files example</a></div></li><li><div><a href="Advanced-Configurations-Example.html">Advanced configurations example</a></div></li><li><div><a href="Advanced-Command-Example.html">Advanced command example</a></div></li> </ol></li> </ol></li><li><div><a href="Faq.html">Frequently Asked Questions</a></div><ol class="toc">  </ol></li><li><div><a href="Name-Index.html">Index</a></div></li><li><div><a href="Developers-Guide.html">Developer’s Guide (Work in progress)</a></div><ol class="toc"> <li><div><a href="Modularization.html">Modularization</a></div><ol class="toc"> <li><div><a href="Module-Summary.html">Module summary</a></div></li> </ol></li><li><div><a href="Coding-Guideline.html">sbt Coding Guideline</a></div><ol class="toc">  </ol></li><li><div><a href="Datatype.html">sbt-datatype</a></div><ol class="toc">  </ol></li><li><div><a href="Compiler-Interface.html">Compiler Interface</a></div><ol class="toc"> <li><div><a href="Version-Specific-Sources.html">Fetching the most specific sources</a></div></li> </ol></li><li><div><a href="Sbt-Launcher.html">sbt Launcher</a></div><ol class="toc"> <li><div><a href="Launcher-Getting-Started.html">Getting Started with the sbt launcher</a></div></li><li><div><a href="Launcher-Architecture.html">Sbt Launcher Architecture</a></div></li><li><div><a href="Launcher-Configuration.html">sbt Launcher Configuration</a></div></li> </ol></li><li><div><a href="DevGuide-Notes.html">Notes</a></div><ol class="toc"> <li><div><a href="Core-Principles.html">Core Principles</a></div></li><li><div><a href="Settings-Core.html">Settings Core</a></div></li><li><div><a href="Setting-Initialization.html">Setting Initialization</a></div></li><li><div><a href="Build-Loaders.html">Build Loaders</a></div></li><li><div><a href="Command-Line-Applications.html">Creating Command Line Applications Using sbt</a></div></li><li><div><a href="Nightly-Builds.html">Nightly Builds</a></div></li> </ol></li> </ol></li><li><div><a href="Archived+pages.html">Archived pages</a></div><ol class="toc"> <li><div><a href="Hello.html">Hello, World</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div>
+      </div>
+      </div>
+                </div><div class="col-md-8 col-xs-9">
+                  <div class="rightcolumn contents">
+                  <h2 id="Caching">Caching<a href="#Caching" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Tasks and settings are introduced in the
+<a href="Basic-Def.html">getting started guide</a>, and explained in more detail in [Tasks][Tasks].
+You may wish to read them first.
+</p><p>When you define a custom task, you might want to cache the value to avoid unnecessary work.
+</p><h3 id="Cache.cached">Cache.cached<a href="#Cache.cached" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>sbt.util.Cache</code> provides a basic caching facility:
+</p><pre><code class="prettyprint lang-scala">package sbt.util
+
+/**
+ * A simple cache with keys of type `I` and values of type `O`
+ */
+trait Cache[I, O] {
+
+  /**
+   * Queries the cache backed with store `store` for key `key`.
+   */
+  def apply(store: CacheStore)(key: I): CacheResult[O]
+}
+</code></pre><p>We can derive the instances of <code>Cache[I, O]</code> from <code>sjsonnew.JsonFormat</code> instances for both <code>I</code> and <code>O</code> by importing <code>sbt.util.CacheImplicits._</code> (This also brings in <code>BasicJsonProtocol</code>).
+</p><p>To use the cache, we can create a <em>cached</em> function by calling <code>Cache.cached</code> with a <code>CacheStore</code> (or a file) and a function that does the actual work. Normally, the cache store would be created as <code>streams.value.cacheStoreFactory / &quot;something&quot;</code>. In the following REPL example, I will create a cache store from a temp file.
+</p><pre><code class="prettyprint lang-scala">scala&gt; import sbt._, sbt.util.CacheImplicits._
+import sbt._
+import sbt.util.CacheImplicits._
+
+scala&gt; def doWork(i: Int): List[String] = {
+         println(&quot;working...&quot;)
+         Thread.sleep(1000)
+         List.fill(i)(&quot;foo&quot;)
+       }
+doWork: (i: Int)List[String]
+
+// use streams.value.cacheStoreFactory.make(&quot;something&quot;) for real tasks
+scala&gt; val store = sbt.util.CacheStore(file(&quot;/tmp/something&quot;))
+store: sbt.util.CacheStore = sbt.util.FileBasedStore@5a4a6716
+
+scala&gt; val cachedWork: Int =&gt; List[String] = Cache.cached(store)(doWork)
+cachedWork: Int =&gt; List[String] = sbt.util.Cache$$$Lambda$5577/1548870528@3bb59fba
+
+scala&gt; cachedWork(1)
+working...
+res0: List[String] = List(foo)
+
+scala&gt; cachedWork(1)
+res1: List[String] = List(foo)
+
+scala&gt; cachedWork(3)
+working...
+res2: List[String] = List(foo, foo, foo)
+
+scala&gt; cachedWork(1)
+working...
+res3: List[String] = List(foo)
+</code></pre><p>As you can see, <code>cachedWork(1)</code> is cached when it is called consecutively.
+</p><h3 id="Previous+value">Previous value<a href="#Previous+value" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>TaskKey</code> has a method called <code>previous</code> that returns <code>Option[A]</code>, which can be used a lightweight tracker.
+Suppose we would want to create a task where it initially returns <code>&quot;hi&quot;</code>, and append <code>&quot;!&quot;</code> for subsequent calls, you can define a <code>TaskKey[String]</code> called <code>hi</code>, and retrive its previous value, which would be typed <code>Option[String]</code>. The previous value would be <code>None</code> the first time, and <code>Some(x)</code> for the subsequent calls.
+</p><pre><code class="prettyprint lang-scala">lazy val hi = taskKey[String](&quot;say hi again&quot;)
+hi := {
+  import sbt.util.CacheImplicits._
+  val prev = hi.previous
+  prev match {
+    case None    =&gt; &quot;hi&quot;
+    case Some(x) =&gt; x + &quot;!&quot;
+  }
+}
+</code></pre><p>We can test this by running <code>show hi</code> from the sbt shell:
+</p><pre><code class="">sbt:hello&gt; show hi
+[info] hi
+[success] Total time: 0 s, completed Aug 16, 2019 12:24:32 AM
+sbt:hello&gt; show hi
+[info] hi!
+[success] Total time: 0 s, completed Aug 16, 2019 12:24:33 AM
+sbt:hello&gt; show hi
+[info] hi!!
+[success] Total time: 0 s, completed Aug 16, 2019 12:24:34 AM
+sbt:hello&gt; show hi
+[info] hi!!!
+[success] Total time: 0 s, completed Aug 16, 2019 12:24:35 AM
+</code></pre><p>For each call <code>hi.previous</code> contains the previous result from evaluating <code>hi</code>.
+</p><h3 id="Tracked.lastOutput">Tracked.lastOutput<a href="#Tracked.lastOutput" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>sbt.util.Tracked</code> provides a facility for partial caching that can be mixed and matched with other trackers.
+</p><p>Similar to the previous value associated with task keys, <code>sbt.util.Tracked.lastOutput</code> creates a tracker for the last calculated value. <code>Tracked.lastOutput</code> offers more flexibility in terms of where to store the value. (This allows the value to be shared across multiple tasks).
+</p><p>Suppose we would initially take an <code>Int</code> as the input, and turn it into a <code>String</code>, but for subsequent invocation we’d append <code>&quot;!&quot;</code>:
+</p><pre><code class="prettyprint lang-scala">scala&gt; import sbt._, sbt.util.CacheImplicits._
+import sbt._
+import sbt.util.CacheImplicits._
+
+// use streams.value.cacheStoreFactory.make(&quot;last&quot;) for real tasks
+scala&gt; val store = sbt.util.CacheStore(file(&quot;/tmp/last&quot;))
+store: sbt.util.CacheStore = sbt.util.FileBasedStore@5a4a6716
+
+scala&gt; val badCachedWork = Tracked.lastOutput[Int, String](store) {
+         case (in, None)       =&gt; in.toString
+         case (in, Some(read)) =&gt; read + &quot;!&quot;
+       }
+badCachedWork: Int =&gt; String = sbt.util.Tracked$$$Lambda$6326/638923124@68c6ff60
+
+scala&gt; badCachedWork(1)
+res1: String = 1
+
+scala&gt; badCachedWork(1)
+res2: String = 1!
+
+scala&gt; badCachedWork(2)
+res3: String = 1!!
+
+scala&gt; badCachedWork(2)
+res4: String = 1!!!
+</code></pre><p><strong>Note</strong>: <code>Tracked.lastOutput</code> does not invalidate the cache when the input changes.
+</p><p>See the <code>Tracked.inputChanged</code> section below to make this work.
+</p><h3 id="Tracked.inputChanged">Tracked.inputChanged<a href="#Tracked.inputChanged" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To track the changes of input parameters, use <code>Tracked.inputChanged</code>.
+</p><pre><code class="prettyprint lang-scala">scala&gt; import sbt._, sbt.util.CacheImplicits._
+import sbt._
+import sbt.util.CacheImplicits._
+
+// use streams.value.cacheStoreFactory.make(&quot;input&quot;) for real tasks
+scala&gt; val store = sbt.util.CacheStore(file(&quot;/tmp/input&quot;))
+store: sbt.util.CacheStore = sbt.util.FileBasedStore@5a4a6716
+
+scala&gt; val tracker = Tracked.inputChanged[Int, String](store) { case (changed, in) =&gt;
+         if (changed) {
+           println(&quot;input changed&quot;)
+         }
+         in.toString
+       }
+tracker: Int =&gt; String = sbt.util.Tracked$$$Lambda$6357/1296627950@6e6837e4
+
+scala&gt; tracker(1)
+input changed
+res6: String = 1
+
+scala&gt; tracker(1)
+res7: String = 1
+
+scala&gt; tracker(2)
+input changed
+res8: String = 2
+
+scala&gt; tracker(2)
+res9: String = 2
+
+scala&gt; tracker(1)
+input changed
+res10: String = 1
+</code></pre><p>Now, we can nest <code>Tracked.inputChanged</code> and <code>Tracked.lastOutput</code> to regain the cache invalidation.
+</p><pre><code class="prettyprint lang-scala">// use streams.value.cacheStoreFactory
+scala&gt; val cacheFactory = sbt.util.CacheStoreFactory(file(&quot;/tmp/cache&quot;))
+cacheFactory: sbt.util.CacheStoreFactory = sbt.util.DirectoryStoreFactory@3a3d3778
+
+scala&gt; def doWork(i: Int): String = {
+         println(&quot;working...&quot;)
+         Thread.sleep(1000)
+         i.toString
+       }
+doWork: (i: Int)String
+
+scala&gt; val cachedWork2 = Tracked.inputChanged[Int, String](cacheFactory.make(&quot;input&quot;)) { case (changed: Boolean, in: Int) =&gt;
+         val tracker = Tracked.lastOutput[Int, String](cacheFactory.make(&quot;last&quot;)) {
+           case (in, None)       =&gt; doWork(in)
+           case (in, Some(read)) =&gt;
+             if (changed) doWork(in)
+             else read
+         }
+         tracker(in)
+       }
+cachedWork2: Int =&gt; String = sbt.util.Tracked$$$Lambda$6548/972308467@1c9788cc
+
+scala&gt; cachedWork2(1)
+working...
+res0: String = 1
+
+scala&gt; cachedWork2(1)
+res1: String = 1
+</code></pre><p>One benefit of combining trackers and/or previous value is that we can control the invalidation timing. For example, we can create a cache that works only twice.
+</p><pre><code class="prettyprint lang-scala">lazy val hi = taskKey[String](&quot;say hi&quot;)
+lazy val hiCount = taskKey[(String, Int)](&quot;track number of the times hi was called&quot;)
+
+hi := hiCount.value._1
+hiCount := {
+  import sbt.util.CacheImplicits._
+  val prev = hiCount.previous
+  val s = streams.value
+  def doWork(x: String): String = {
+    s.log.info(&quot;working...&quot;)
+    Thread.sleep(1000)
+    x + &quot;!&quot;
+  }
+  val cachedWork = Tracked.inputChanged[String, (String, Int)](s.cacheStoreFactory.make(&quot;input&quot;)) { case (changed: Boolean, in: String) =&gt;
+    prev match {
+      case None            =&gt; (doWork(in), 0)
+      case Some((last, n)) =&gt;
+        if (changed || n &gt; 1) (doWork(in), 0)
+        else (last, n + 1)
+    }
+  }
+  cachedWork(&quot;hi&quot;)
+}
+</code></pre><p>This uses <code>hiCount</code> task’s previous value to track the number of times it got called, and invalidates the cache when <code>n &gt; 1</code>.
+</p><pre><code class="prettyprint lang-scala">sbt:hello&gt; hi
+[info] working...
+[success] Total time: 1 s, completed Aug 17, 2019 10:36:34 AM
+sbt:hello&gt; hi
+[success] Total time: 0 s, completed Aug 17, 2019 10:36:35 AM
+sbt:hello&gt; hi
+[success] Total time: 0 s, completed Aug 17, 2019 10:36:38 AM
+sbt:hello&gt; hi
+[info] working...
+[success] Total time: 1 s, completed Aug 17, 2019 10:36:40 AM
+</code></pre><h3 id="Tracking+file+attributes">Tracking file attributes<a href="#Tracking+file+attributes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Files often come up as caching targets, but <code>java.io.File</code> just carries the file name, so it’s not very useful on its own for the purpose of caching. For caching, sbt provides a facility called <code>sbt.util.FileInfo</code> to extract useful file attributes.
+</p><ul><li><code>FileInfo.exists</code> tracks if the file exists
+</li><li><code>FileInfo.lastModified</code> track the last modified timestamp
+</li><li><code>FileInfo.hash</code> tracks the SHA-1 content hash
+</li><li><code>FileInfo.full</code> tracks both the last modified and the content hash
+</li></ul><pre><code class="prettyprint lang-scala">scala&gt; FileInfo.exists(file(&quot;/tmp/cache/last&quot;))
+res23: sbt.util.PlainFileInfo = PlainFile(/tmp/cache/last,true)
+
+scala&gt; FileInfo.lastModified(file(&quot;/tmp/cache/last&quot;))
+res24: sbt.util.ModifiedFileInfo = FileModified(/tmp/cache/last,1565855326328)
+
+scala&gt; FileInfo.hash(file(&quot;/tmp/cache/last&quot;))
+res25: sbt.util.HashFileInfo = FileHash(/tmp/cache/last,List(-89, -11, 75, 97, 65, -109, -74, -126, -124, 43, 37, -16, 9, -92, -70, -100, -82, 95, 93, -112))
+
+scala&gt; FileInfo.full(file(&quot;/tmp/cache/last&quot;))
+res26: sbt.util.HashModifiedFileInfo = FileHashModified(/tmp/cache/last,List(-89, -11, 75, 97, 65, -109, -74, -126, -124, 43, 37, -16, 9, -92, -70, -100, -82, 95, 93, -112),1565855326328)
+</code></pre><p>There is also <code>sbt.util.FilesInfo</code> that accepts a <code>Set</code> of <code>File</code>s (though this doesn’t always work due to complicated abstract type that it uses).
+</p><pre><code class="prettyprint lang-scala">scala&gt; FilesInfo.exists(Set(file(&quot;/tmp/cache/last&quot;), file(&quot;/tmp/cache/nonexistent&quot;)))
+res31: sbt.util.FilesInfo[_1.F] forSome { val _1: sbt.util.FileInfo.Style } = FilesInfo(Set(PlainFile(/tmp/cache/last,true), PlainFile(/tmp/cache/nonexistent,false)))
+</code></pre><p>The following example implements a cached task that counts the number of lines in <code>README.md</code>.
+</p><pre><code class="prettyprint lang-scala">lazy val count = taskKey[Int](&quot;&quot;)
+
+count := {
+  import sbt.util.CacheImplicits._
+  val prev = count.previous
+  val s = streams.value
+  val toCount = baseDirectory.value / &quot;README.md&quot;
+  def doCount(source: File): Int = {
+    s.log.info(&quot;working...&quot;)
+    IO.readLines(source).size
+  }
+  val cachedCount = Tracked.inputChanged[ModifiedFileInfo, Int](s.cacheStoreFactory.make(&quot;input&quot;)) {
+    (changed: Boolean, in: ModifiedFileInfo) =&gt;
+      prev match {
+        case None       =&gt; doCount(in.file)
+        case Some(last) =&gt;
+          if (changed) doCount(in.file)
+          else last
+      }
+  }
+  cachedCount(FileInfo.lastModified(toCount))
+}
+</code></pre><p>We can try this by running <code>show count</code> from the sbt shell:
+</p><pre><code class="prettyprint lang-scala">sbt:hello&gt; show count
+[info] working...
+[info] 2
+[success] Total time: 0 s, completed Aug 16, 2019 9:58:38 PM
+sbt:hello&gt; show count
+[info] 2
+[success] Total time: 0 s, completed Aug 16, 2019 9:58:39 PM
+
+// change something in README.md
+sbt:hello&gt; show count
+[info] working...
+[info] 3
+[success] Total time: 0 s, completed Aug 16, 2019 9:58:44 PM
+</code></pre><p>This works out-of-box thanks to <code>sbt.util.FileInfo</code> implementing <code>JsonFormat</code> to persist itself.
+</p><h3 id="Tracked.outputChanged">Tracked.outputChanged<a href="#Tracked.outputChanged" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The tracking works by stamping the files (collecting file attributes), storing the stamps in a cache, and comparing them later. Sometimes, it’s important to pay attention to the timing of when stamping happens. Suppose that we want to format TypeScript files, and use SHA-1 hash to detect changes. Stamping the files <em>before</em> running the formatter would cause the cache to be invalidated in subsequent calls to the task. This is because the formatter itself may modify the TypeScript files.
+</p><p>Use <code>Tracked.outputChanged</code> stamps <em>after</em> your work is done to prevent this.
+</p><pre><code class="prettyprint lang-scala">lazy val compileTypeScript = taskKey[Unit](&quot;compiles *.ts files&quot;)
+lazy val formatTypeScript = taskKey[Seq[File]](&quot;format *.ts files&quot;)
+
+compileTypeScript / sources := (baseDirectory.value / &quot;src&quot;).globRecursive(&quot;*.ts&quot;).get
+formatTypeScript := {
+  import sbt.util.CacheImplicits._
+  val s = streams.value
+  val files = (compileTypeScript / sources).value
+
+  def doFormat(source: File): File = {
+    s.log.info(s&quot;formatting $source&quot;)
+    val lines = IO.readLines(source)
+    IO.writeLines(source, lines ++ List(&quot;// something&quot;))
+    source
+  }
+  val tracker = Tracked.outputChanged(s.cacheStoreFactory.make(&quot;output&quot;)) {
+     (outChanged: Boolean, outputs: Seq[HashFileInfo]) =&gt;
+       if (outChanged) outputs map { info =&gt; doFormat(info.file) }
+       else outputs map { _.file }
+  }
+  tracker(() =&gt; files.map(FileInfo.hash(_)))
+}
+</code></pre><p>Type <code>formatTypeScript</code> from the sbt shell to see how it works:
+</p><pre><code class="prettyprint lang-scala">sbt:hello&gt; formatTypeScript
+[info] formatting /Users/eed3si9n/work/hellotest/src/util.ts
+[info] formatting /Users/eed3si9n/work/hellotest/src/hello.ts
+[success] Total time: 0 s, completed Aug 17, 2019 10:07:30 AM
+sbt:hello&gt; formatTypeScript
+[success] Total time: 0 s, completed Aug 17, 2019 10:07:32 AM
+</code></pre><p>One potential drawback of this implementation is that we only have <code>true/false</code> information about the fact that any of the files have changed.
+This could result in a reformatting of <em>all</em> of the files anytime one file gets changed.
+</p><pre><code class="prettyprint lang-scala">// make change to one file
+sbt:hello&gt; formatTypeScript
+[info] formatting /Users/eed3si9n/work/hellotest/src/util.ts
+[info] formatting /Users/eed3si9n/work/hellotest/src/hello.ts
+[success] Total time: 0 s, completed Aug 17, 2019 10:13:47 AM
+</code></pre><p>See the <code>Tracked.diffOuputs</code> in the below to prevent this all-or-nothing behavior.
+</p><p>Another potential use for <code>Tracked.outputChanged</code> is using it with <code>FileInfo.exists(_)</code> to track if the output file still exists.
+This is usually not necessary if you output something under <code>target</code> directory where caches are also stored.
+</p><h3 id="Tracked.diffInputs">Tracked.diffInputs<a href="#Tracked.diffInputs" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The <code>Tracked.inputChanged</code> tracker only gives <code>Boolean</code> value, so when the cache is invalidated we need to redo all the work. Use <code>Tracked.diffInputs</code> to track the differences.
+</p><p><code>Tracked.diffInputs</code> reports a datatype called <code>sbt.util.ChangeReport</code>:
+</p><pre><code class="prettyprint lang-scala">/** The result of comparing some current set of objects against a previous set of objects.*/
+trait ChangeReport[T] {
+
+  /** The set of all of the objects in the current set.*/
+  def checked: Set[T]
+
+  /** All of the objects that are in the same state in the current and reference sets.*/
+  def unmodified: Set[T]
+
+  /**
+   * All checked objects that are not in the same state as the reference.  This includes objects that are in both
+   * sets but have changed and files that are only in one set.
+   */
+  def modified: Set[T] // all changes, including added
+
+  /** All objects that are only in the current set.*/
+  def added: Set[T]
+
+  /** All objects only in the previous set*/
+  def removed: Set[T]
+  def +++(other: ChangeReport[T]): ChangeReport[T] = new CompoundChangeReport(this, other)
+
+  ....
+}
+</code></pre><p>Let’s see how the report works by printing it out.
+</p><pre><code class="prettyprint lang-scala">lazy val compileTypeScript = taskKey[Unit](&quot;compiles *.ts files&quot;)
+
+compileTypeScript / sources := (baseDirectory.value / &quot;src&quot;).globRecursive(&quot;*.ts&quot;).get
+compileTypeScript := {
+  val s = streams.value
+  val files = (compileTypeScript / sources).value
+  Tracked.diffInputs(s.cacheStoreFactory.make(&quot;input_diff&quot;), FileInfo.lastModified)(files.toSet) {
+    (inDiff: ChangeReport[File]) =&gt;
+    s.log.info(inDiff.toString)
+  }
+}
+</code></pre><p>Here’s how it looks when you rename a file for example:
+</p><pre><code class="prettyprint lang-scala">sbt:hello&gt; compileTypeScript
+[info] Change report:
+[info]  Checked: /Users/eed3si9n/work/hellotest/src/util.ts, /Users/eed3si9n/work/hellotest/src/hello.ts
+[info]  Modified: /Users/eed3si9n/work/hellotest/src/util.ts, /Users/eed3si9n/work/hellotest/src/hello.ts
+[info]  Unmodified:
+[info]  Added: /Users/eed3si9n/work/hellotest/src/util.ts, /Users/eed3si9n/work/hellotest/src/hello.ts
+[info]  Removed:
+[success] Total time: 0 s, completed Aug 17, 2019 10:42:50 AM
+sbt:hello&gt; compileTypeScript
+[info] Change report:
+[info]  Checked: /Users/eed3si9n/work/hellotest/src/util.ts, /Users/eed3si9n/work/hellotest/src/bye.ts
+[info]  Modified: /Users/eed3si9n/work/hellotest/src/hello.ts, /Users/eed3si9n/work/hellotest/src/bye.ts
+[info]  Unmodified: /Users/eed3si9n/work/hellotest/src/util.ts
+[info]  Added: /Users/eed3si9n/work/hellotest/src/bye.ts
+[info]  Removed: /Users/eed3si9n/work/hellotest/src/hello.ts
+[success] Total time: 0 s, completed Aug 17, 2019 10:43:37 AM
+</code></pre><p>If we had a mapping between <code>*.ts</code> files and <code>*.js</code> files, then we should be able to make the compilation more incremental. For incremental compilation of Scala, Zinc tracks both the relationship between the <code>*.scala</code> and <code>*.class</code> files as well as the relationship among <code>*.scala</code>. We could make something like that for TypeScript. Save the following as <code>project/TypeScript.scala</code>:
+</p><pre><code class="prettyprint lang-scala">import sbt._
+import sjsonnew.{ :*:, LList, LNil}
+import sbt.util.CacheImplicits._
+
+/**
+ * products - products keep the mapping between source *.ts files and *.js files that are generated.
+ * references - references keep the mapping between *.ts files referencing other *.ts files.
+ */
+case class TypeScriptAnalysis(products: List[(File, File)], references: List[(File, File)]) {
+  def ++(that: TypeScriptAnalysis): TypeScriptAnalysis =
+    TypeScriptAnalysis(products ++ that.products, references ++ that.references)
+}
+object TypeScriptAnalysis {
+  implicit val analysisIso = LList.iso(
+    { a: TypeScriptAnalysis =&gt; (&quot;products&quot;, a.products) :*: (&quot;references&quot;, a.references) :*: LNil },
+    { in: List[(File, File)] :*: List[(File, File)] :*: LNil =&gt; TypeScriptAnalysis(in._1, in._2) })
+}
+</code></pre><p>In the <code>build.sbt</code>:
+</p><pre><code class="prettyprint lang-scala">lazy val compileTypeScript = taskKey[TypeScriptAnalysis](&quot;compiles *.ts files&quot;)
+
+compileTypeScript / sources := (baseDirectory.value / &quot;src&quot;).globRecursive(&quot;*.ts&quot;).get
+compileTypeScript / target := target.value / &quot;js&quot;
+compileTypeScript := {
+  import sbt.util.CacheImplicits._
+  val prev0 = compileTypeScript.previous
+  val prev = prev0.getOrElse(TypeScriptAnalysis(Nil, Nil))
+  val s = streams.value
+  val files = (compileTypeScript / sources).value
+
+  def doCompile(source: File): TypeScriptAnalysis = {
+    println(&quot;working...&quot;)
+    val out = (compileTypeScript / target).value / source.getName.replaceAll(&quot;&quot;&quot;\.ts$&quot;&quot;&quot;, &quot;.js&quot;)
+    IO.touch(out)
+    // add a fake reference from any file to util.ts
+    val references: List[(File, File)] =
+      if (source.getName != &quot;util.ts&quot;) List(source -&gt; (baseDirectory.value / &quot;src&quot; / &quot;util.ts&quot;))
+      else Nil
+    TypeScriptAnalysis(List(source -&gt; out), references)
+  }
+  Tracked.diffInputs(s.cacheStoreFactory.make(&quot;input_diff&quot;), FileInfo.lastModified)(files.toSet) {
+    (inDiff: ChangeReport[File]) =&gt;
+    val products = scala.collection.mutable.ListBuffer(prev.products: _*)
+    val references = scala.collection.mutable.ListBuffer(prev.references: _*)
+    val initial = inDiff.modified &amp; inDiff.checked
+    val reverseRefs = initial.flatMap(x =&gt; Set(x) ++ references.collect({ case (k, `x`) =&gt; k }).toSet )
+    products --= products.filter({ case (k, v) =&gt; reverseRefs(k) || inDiff.removed(k) })
+    references --= references.filter({ case (k, v) =&gt; reverseRefs(k) || inDiff.removed(k) })
+    reverseRefs foreach { x =&gt;
+      val temp = doCompile(x)
+      products ++= temp.products
+      references ++= temp.references
+    }
+    TypeScriptAnalysis(products.toList, references.toList)
+  }
+}
+</code></pre><p>The above is a fake compilation that just creates <code>.js</code> files under <code>target/js</code>.
+</p><pre><code class="prettyprint lang-scala">sbt:hello&gt; compileTypeScript
+working...
+working...
+[success] Total time: 0 s, completed Aug 16, 2019 10:22:58 PM
+sbt:hello&gt; compileTypeScript
+[success] Total time: 0 s, completed Aug 16, 2019 10:23:03 PM
+</code></pre><p>Since we added a reference from <code>hello.ts</code> to <code>util.ts</code>, if we modified <code>src/util.ts</code>, it should trigger the compilation of <code>src/util.ts</code> as well as <code>src/hello.ts</code>.
+</p><pre><code class="prettyprint lang-scala">sbt:hello&gt; show compileTypeScript
+working...
+working...
+[info] TypeScriptAnalysis(List((/Users/eed3si9n/work/hellotest/src/util.ts,/Users/eed3si9n/work/hellotest/target/js/util.ts), (/Users/eed3si9n/work/hellotest/src/hello.ts,/Users/eed3si9n/work/hellotest/target/js/hello.ts)),List((/Users/eed3si9n/work/hellotest/src/hello.ts,/Users/eed3si9n/work/hellotest/src/util.ts)))
+</code></pre><p>It works.
+</p><h3 id="Tracked.diffOutputs">Tracked.diffOutputs<a href="#Tracked.diffOutputs" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>Tracked.diffOutputs</code> is a finer version of <code>Tracked.outputChanged</code> that stamps after the work is done, and also able to report the set of modified files.
+</p><p>This can be used to format only the changed TypeScript files.
+</p><pre><code class="prettyprint lang-scala">lazy val formatTypeScript = taskKey[Seq[File]](&quot;format *.ts files&quot;)
+
+compileTypeScript / sources := (baseDirectory.value / &quot;src&quot;).globRecursive(&quot;*.ts&quot;).get
+formatTypeScript := {
+  val s = streams.value
+  val files = (compileTypeScript / sources).value
+  def doFormat(source: File): File = {
+    s.log.info(s&quot;formatting $source&quot;)
+    val lines = IO.readLines(source)
+    IO.writeLines(source, lines ++ List(&quot;// something&quot;))
+    source
+  }
+  Tracked.diffOutputs(s.cacheStoreFactory.make(&quot;output_diff&quot;), FileInfo.hash)(files.toSet) {
+    (outDiff: ChangeReport[File]) =&gt;
+    val initial = outDiff.modified &amp; outDiff.checked
+    initial.toList map doFormat
+  }
+}
+</code></pre><p>Here’s how <code>formatTypeScript</code> looks like in the shell:
+</p><pre><code class="prettyprint lang-scala">sbt:hello&gt; formatTypeScript
+[info] formatting /Users/eed3si9n/work/hellotest/src/util.ts
+[info] formatting /Users/eed3si9n/work/hellotest/src/hello.ts
+[success] Total time: 0 s, completed Aug 17, 2019 9:28:56 AM
+sbt:hello&gt; formatTypeScript
+[success] Total time: 0 s, completed Aug 17, 2019 9:28:58 AM
+</code></pre><h3 id="Case+study%3A+sbt-scalafmt">Case study: sbt-scalafmt<a href="#Case+study%3A+sbt-scalafmt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt-scalafmt implements <code>scalafmt</code> and <code>scalafmtCheck</code> tasks that cooperate with each other.
+For example, if <code>scalafmt</code> ran successfully, and no changes have been made to the sources, it will skip <code>scalafmtCheck</code>’s checking.
+</p><p>Here’s a snippet of how that may be implemented:
+</p><pre><code class="prettyprint lang-scala">private def cachedCheckSources(
+  cacheStoreFactory: CacheStoreFactory,
+  sources: Seq[File],
+  config: Path,
+  log: Logger,
+  writer: PrintWriter
+): ScalafmtAnalysis = {
+  trackSourcesAndConfig(cacheStoreFactory, sources, config) {
+    (outDiff, configChanged, prev) =&gt;
+      log.debug(outDiff.toString)
+      val updatedOrAdded = outDiff.modified &amp; outDiff.checked
+      val filesToCheck =
+        if (configChanged) sources
+        else updatedOrAdded.toList
+      val failed = prev.failed filter { _.exists }
+      val files = (filesToCheck ++ failed.toSet).toSeq
+      val result = checkSources(files, config, log, writer)
+      // cachedCheckSources moved the outDiff cursor forward,
+      // save filesToCheck so scalafmt can later run formatting
+      prev.copy(
+        failed = result.failed,
+        pending = (prev.pending ++ filesToCheck).distinct
+      )
+  }
+}
+
+private def trackSourcesAndConfig(
+  cacheStoreFactory: CacheStoreFactory,
+  sources: Seq[File],
+  config: Path
+)(
+    f: (ChangeReport[File], Boolean, ScalafmtAnalysis) =&gt; ScalafmtAnalysis
+): ScalafmtAnalysis = {
+  val prevTracker = Tracked.lastOutput[Unit, ScalafmtAnalysis](cacheStoreFactory.make(&quot;last&quot;)) {
+    (_, prev0) =&gt;
+    val prev = prev0.getOrElse(ScalafmtAnalysis(Nil, Nil))
+    val tracker = Tracked.inputChanged[HashFileInfo, ScalafmtAnalysis](cacheStoreFactory.make(&quot;config&quot;)) {
+      case (configChanged, configHash) =&gt;
+        Tracked.diffOutputs(cacheStoreFactory.make(&quot;output-diff&quot;), FileInfo.lastModified)(sources.toSet) {
+          (outDiff: ChangeReport[File]) =&gt;
+          f(outDiff, configChanged, prev)
+        }
+    }
+    tracker(FileInfo.hash(config.toFile))
+  }
+  prevTracker(())
+}
+</code></pre><p>In the above, <code>trackSourcesAndConfig</code> is a triple-nested tracker that tracks configuration file, source last modified stamps, and the previous value shared between two tasks. To share the previous value across two different tasks, we are using <code>Tracked.lastOutput</code> instead of the <code>.previous</code> method associated with the keys.
+</p><h3 id="Summary">Summary<a href="#Summary" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Depending on the level of control you need, sbt offers a flexible set of utilities to cache and track values and files.
+</p><ul><li><code>.previous</code> and <code>Cache.cached</code> are the basic cache to get started.
+</li><li>To invalidate some result based on a change to its input parameters, use <code>Tracked.inputChanged</code>.
+</li><li>File attributes can be tracked as values by using <code>FileInfo.exists</code>, <code>FileInfo.lastModified</code>, and <code>FileInfo.hash</code>.
+</li><li><code>Tracked</code> offers trackers that are often nested to track input invalidation, output invalidation, and diffing.
+</li></ul><div class="bottom nav">
+                <div class="row">
+                  <div class="col-md-auto">
+                    <a href="Input-Tasks.html">
+                      <div class="arrowitem">
+                        <span class="arrow">&gt;</span>
+                      </div>
+
+                      <div class="arrowitem">
+                        <em>Next page</em><br/>
+                        Input Tasks
+                      </div>
+
+                    </a>
+                  </div>
+                </div>
+                <div class="row w-100">
+        <div class="col-md-auto ml-auto">
+          <ul class="language-bar">
+            
+          </ul>
+        </div>
+      </div>
+              </div>
+                  </div>
+                </div>
+          </div> <!-- row -->
+        </div>
+        <div class="header">
+          <link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
+<div class="container-fluid top nav">
+  <div class="row w-100">
+    <div class="col-md-4">
+      <div class="logo">
+        <a href="../../index.html"><img src="files/sbt-logo.svg" alt="sbt"></a>
+        <span class="versions"><select id="versions"></select></span>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="nav" id="topbar">
+        <a href="../../documentation.html">Documentation</a>
+        <a href="../../download.html">Download</a>
+        <a href="../../support.html">Support</a>
+        <a href="../../community.html">Get Involved</a>
+        <a id="source-code" href="https://github.com/sbt/sbt"><img src="files/github-logo-teal.svg" alt="Source code" class="social"></a>
+        <a id="twitter" href="https://twitter.com/scala_sbt"><img src="files/twitter-logo-teal.svg" alt="sbt on Twitter" class="social"></a>
+        <a id="edit-on-github" href="https://github.com/sbt/website/edit/develop/src/reference/02-DetailTopics/04-Tasks-and-Commands/01a-Caching.md"><img src="files/octicon-pencil.svg" alt="Edit on GitHub"></a>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" async>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41449189-1', 'scala-sbt.org');
+ga('send', 'pageview');
+</script>
+<script type="text/javascript" async>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-23127719-1', 'lightbend.com', {'allowLinker': true, 'name': 'tsTracker'});
+  ga('tsTracker.require', 'linker');
+  ga('tsTracker.linker:autoLink', ['lightbend.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org']);
+  ga('tsTracker.send', 'pageview');
+</script>
+<script type="text/javascript">
+$(function() {
+var scrollDown = function() {
+if (window.location.hash !== "") {
+  setTimeout(function() { $(window).scrollTop($(window).scrollTop() - 120); }, 100);
+}
+}
+scrollDown();
+$(window).bind('hashchange', function() {
+scrollDown();
+});
+});
+</script>
+
+        </div>
+        <div class="footer">
+          <footer>
+  <div class="container-fluid footer">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="support-item">
+          <div class="support-icon">
+            <svg class="svg-icon svg-icon-chat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.5 85.2" enable-background="new 0 0 97.5 85.2"><path stroke="#fff" stroke-width="4.282" stroke-linecap="round" stroke-miterlimit="10" d="M27 29.5h-16.3c-4.7 0-8.6 3.9-8.6 8.6v25.7c0 4.7 3.9 8.6 8.6 8.6h2.7c.8 0 1.5.7 1.5 1.5v7.8c0 1.3 1.6 2 2.5 1l9.5-9.5c.5-.5 1.2-.8 2-.8h20.2c4.7 0 8.6-3.9 8.6-8.6v-7.8" fill="none"/><path fill="#fff" d="M85 0h-40c-6.9 0-12.5 5.6-12.5 12.5v33.4c0 2.2 1.8 4.1 4.1 4.1h29.9c.7 0 1.3.3 1.8.7l10 10c1.6 1.6 4.3.5 4.3-1.8v-6.5c0-1.4 1.1-2.5 2.5-2.5 6.9 0 12.5-5.6 12.5-12.5v-25c-.1-6.8-5.8-12.4-12.6-12.4z"/></svg>
+          </div>
+          <div class="support-detail">
+            <h2>Community Support</h2>
+            <a href="https://stackoverflow.com/questions/tagged/sbt">StackOverflow</a>
+          </div>
+        </div>
+        <div class="support-item">
+          <div class="support-icon">
+            <svg id="lightbend-icon-reverse" class="svg-icon svg-icon-lightbend-reverse" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 302 262"><title>lightbend-icon</title><g id="icon"><path d="M1,195v56a10,10,0,0,0,10,10H291a10,10,0,0,0,10-10V195a557.85,557.85,0,0,1-150,20A557.85,557.85,0,0,1,1,195Z" style="fill:#fff"/><path d="M291,1H11A10,10,0,0,0,1,11V176a539.94,539.94,0,0,0,150,21,539.94,539.94,0,0,0,150-21V11A10,10,0,0,0,291,1Z" style="fill:#fff"/></g></svg>
+          </div>
+          <div class="support-detail">
+            <h2>Commercial Support</h2>
+            <a href="https://www.lightbend.com/services/expert-support">Lightbend Subscription</a>
+            <a href="https://www.lightbend.com/services/training">Training</a>
+            <a href="https://www.lightbend.com/services/consulting">Consulting</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 text-right ts">
+        &copy; 2016-2019 Lightbend Inc.
+        <a href="https://www.lightbend.com">
+          <img src="files/lightbend-reverse.svg" alt="Lightbend, Inc.">
+        </a>
+      </div>
+    </div>
+  </div>
+</footer><script src="/assets/versions.js"></script><script src="/assets/set-versions.js"></script>
+        </div>
+        
+        <div class="highlight-outer">
+              <div class="highlight-menu">
+                <ul>
+                  <li><button id="highlight-button-twitter"><img src="img/twitter-bird-dark-bgs.png"/></button></li>
+                </ul>
+              </div>
+            </div>
+      </body>
+    </html>
