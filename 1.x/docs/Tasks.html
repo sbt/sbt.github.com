@@ -181,7 +181,9 @@ intTask :=  {
 </code></pre><a name="multiple-scopes"></a><h3 id="Getting+values+from+multiple+scopes">Getting values from multiple scopes<a href="#Getting+values+from+multiple+scopes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="Introduction">Introduction<a href="#Introduction" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The general form of an expression that gets values from multiple scopes
 is:
 </p><pre><code class="prettyprint lang-scala">&lt;setting-or-task&gt;.all(&lt;scope-filter&gt;).value
-</code></pre><p>The <code>all</code> method is implicitly added to tasks and settings. It accepts a
+</code></pre><p><strong>NOTE!</strong> Make sure to assign the <code>ScopeFilter</code> as a <code>val</code>!  This is an
+implementation detail requirement of the <code>.all</code> macro.
+</p><p>The <code>all</code> method is implicitly added to tasks and settings. It accepts a
 <code>ScopeFilter</code> that will select the <code>Scopes</code>. The result has type
 <code>Seq[T]</code>, where <code>T</code> is the key’s underlying type.
 </p><h4 id="Example">Example<a href="#Example" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>A common scenario is getting the sources for all subprojects for
