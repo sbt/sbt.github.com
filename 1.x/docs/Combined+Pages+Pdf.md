@@ -8720,6 +8720,22 @@ files in the `project` directory). When build source changes are detected,
 the build will be reloaded and sbt will re-enter triggered execution mode
 when the reload completes.
 
+### Clearing the screen
+
+sbt can clear the console screen before it evaluates the task or after it
+triggers an event. To configure sbt to clear the screen after an event is
+triggered add
+
+```
+ThisBuild / watchTriggeredMessage := Watch.clearScreenOnTrigger
+```
+to the build settings. To clear the screen before running the task, add
+
+```
+ThisBuild  / watchBeforeCommand := Watch.clearScreen
+```
+to the build settings.
+
 ### Configuration
 
 The behavior of triggered execution can be configured via a number of settings.
@@ -8737,7 +8753,10 @@ new build. Its input parameters are the current watch iteration count,
 the file that triggered the build and the command(s) that are going to
 be run. By default, it prints a message indicating what file triggered
 the build and what commands its going to run. No message is printed when
-the function returns `None`.
+the function returns `None`. To clear the screen before printing the
+message, just add `Watch.clearScreen()` inside of the task definition.
+This will ensure that the screen is cleared and that the message, if
+any is defined, will be printed after the screen clearing.
 
 - `watchInputOptions: Seq[Watch.InputOption]` allows the build to
 override the default watch options. For example, to add the ability to
@@ -21073,83 +21092,6 @@ apiURL := Some(url("https://example.org/api/"))
 
 This information will get included in a property of the published
 `pom.xml`, where it can be automatically consumed by sbt.
-
-
-  [Full-Def]: Full-Def.html
-
-Triggered execution
--------------------
-
-<a name="basic"></a>
-
-### Run a command when sources change
-
-You can make a command run when certain files change by prefixing the
-command with `~`. Monitoring is terminated when `enter` is pressed. This
-triggered execution is configured by the `watch` setting, but typically
-the basic settings `watchSources` and `pollInterval` are modified as
-described in later sections.
-
-The original use-case for triggered execution was continuous
-compilation:
-
-```
-> ~ test:compile
-
-> ~ compile
-```
-
-You can use the triggered execution feature to run any command or task,
-however. The following will poll for changes to your source code (main
-or test) and run `testOnly` for the specified test.
-
-```
-> ~ testOnly example.TestA
-```
-
-<a name="multi"></a>
-
-### Run multiple commands when sources change
-
-The command passed to `~` may be any command string, so multiple
-commands may be run by separating them with a semicolon. For example,
-
-```
-> ~ ;a ;b
-```
-
-This runs `a` and then `b` when sources change.
-
-<a name="sources"></a>
-
-### Configure the sources that are checked for changes
-
--   `watchSources` defines the files for a single project that are
-    monitored for changes. By default, a project watches resources and
-    Scala and Java sources.
--   `watchTransitiveSources` then combines the `watchSources` for the
-    current project and all execution and classpath dependencies (see
-    [.scala build definition][Full-Def] for details on inter-project
-    dependencies).
-
-To add the file `demo/example.txt` to the files to watch,
-
-```scala
-watchSources += baseDirectory.value / "demo" / "examples.txt"
-```
-
-<a name="interval"></a>
-
-### Set the time interval between checks for changes to sources
-
-`pollInterval` selects the interval between polling for changes in
-milliseconds. The default value is `500 ms`. To change it to `1 s`,
-
-```scala
-import scala.concurrent.duration._
-
-pollInterval := 1.second
-```
 
 Define Custom Tasks
 -------------------
