@@ -2405,7 +2405,7 @@ project-specific setting. We will discuss more on build-level settings later in 
 A *dependency configuration* (or "configuration" for short) defines
 a graph of library dependencies, potentially with its own
 classpath, sources, generated packages, etc. The dependency configuration concept
-comes from Ivy, which sbt uses for
+comes from Ivy, which sbt used to use for
 managed dependencies [Library Dependencies][Library-Dependencies], and from
 [MavenScopes](https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Scope).
 
@@ -3259,8 +3259,8 @@ Compile / unmanagedJars := Seq.empty[sbt.Attributed[java.io.File]]
 
 ### Managed Dependencies
 
-sbt uses [Apache Ivy](https://ant.apache.org/ivy/) to implement managed
-dependencies, so if you're familiar with Ivy or Maven, you won't have
+sbt uses [Coursier](https://get-coursier.io/) to implement managed
+dependencies, so if you're familiar with Coursier, Apache Ivy or Maven, you won't have
 much trouble.
 
 #### The `libraryDependencies` key
@@ -3296,7 +3296,7 @@ val libraryDependencies = settingKey[Seq[ModuleID]]("Declares managed dependenci
 The `%` methods create `ModuleID` objects from strings, then you add those
 `ModuleID` to `libraryDependencies`.
 
-Of course, sbt (via Ivy) has to know where to download the module. If
+Of course, sbt (via Coursier) has to know where to download the module. If
 your module is in one of the default repositories sbt comes with, this
 will just work. For example, Apache Derby is in the standard Maven2
 repository:
@@ -3306,7 +3306,7 @@ libraryDependencies += "org.apache.derby" % "derby" % "10.4.1.3"
 ```
 
 If you type that in `build.sbt` and then `update`, sbt should download Derby
-to `~/.ivy2/cache/org.apache.derby/`. (By the way, `update` is a dependency
+to [the Coursier cache](https://get-coursier.io/docs/cache). (By the way, `update` is a dependency
 of `compile` so there's no need to manually type `update` most of the time.)
 
 Of course, you can also use `++=` to add a list of dependencies all at
@@ -3324,9 +3324,9 @@ as well.
 
 #### Getting the right Scala version with `%%`
 
-If you use `groupID %% artifactID % revision` rather than
-`groupID % artifactID % revision` (the difference is the double `%%` after
-the `groupID`), sbt will add your project's binary Scala version to the artifact
+If you use `organization %% moduleName % version` rather than
+`organization % moduleName % version` (the difference is the double `%%` after
+the `organization`), sbt will add your project's binary Scala version to the artifact
 name. This is just a shortcut. You could write this without the `%%`:
 
 ```scala
@@ -3348,7 +3348,7 @@ See [Cross Building][Cross-Build] for some more detail on this.
 
 #### Ivy revisions
 
-The `revision` in `groupID % artifactID % revision` does not have to be a
+The `version` in `organization % moduleName % version` does not have to be a
 single fixed version. Ivy can select the latest revision of a module
 according to constraints you specify. Instead of a fixed revision like
 `"1.6.1"`, you specify `"latest.integration"`, `"2.9.+"`, or `"[1.0,)"`. See the
@@ -3361,7 +3361,7 @@ documentation for details.
 Occasionally a Maven "version range" is used to specify a dependency
 (transitive or otherwise), such as `[1.3.0,)`.  If a specific version
 of the dependency is declared in the build, and it satisfies the
-range, then sbt will use the specified version.  Otherwise, Ivy could
+range, then sbt will use the specified version.  Otherwise, Coursier could
 go out to the Internet to find the latest version.  This would result
 to a surprising behavior where the effective version keeps changing
 over time, even though there's a specified version of the library that
@@ -5351,7 +5351,7 @@ password=<your password>
 ```
 
 > *Note:* The first two strings must be `"Sonatype Nexus Repository Manager"`
-and `"oss.sonatype.org"` for Ivy to use the credentials.
+and `"oss.sonatype.org"` for Coursier to use the credentials.
 
 #### step 4: Configure build.sbt
 
@@ -5900,6 +5900,357 @@ After 1.x, `withDefaultResolvers` was renamed to `combineDefaultResolvers`. In t
     externalResolvers := Resolver.combineDefaultResolvers(resolvers.value.toVector, mavenCentral = false)
     ```
 * You can use `Vector` directly too.
+
+
+## sbt 1.3.x releases
+
+### sbt 1.3.0
+
+This is the third feature release of sbt 1.x, a binary compatible release focusing on new features. sbt 1.x is released under **Semantic Versioning**, and the plugins are expected to work throughout the 1.x series.
+
+The headline features of sbt 1.3 are out-of-box [Coursier](https://get-coursier.io/) library management, ClassLoader layering, IO improvements, and super shell. Combined together we hope these features will improve the user experience of running your builds.
+
+#### Changes with compatibility implication
+
+- Library management with Coursier. See below for details.
+- Super shell. See below for details.
+- Multi command no longer requires leading semicolon. clean;Test/compile; would work. #4456 by @eatkins
+- Deprecates HTTP resolvers, but allow localhost or resolvers marked `.withAllowInsecureProtocol(true)` #4997
+- Deprecates `CrossVersion.Disabled`. Please use `CrossVersion.disabled` instead sbt/librarymanagement#316
+- ClassLoader management: To prevent resource leaks, sbt 1.3.0 closes the ephemeral ClassLoaders used by the `run` and `test` tasks after those tasks complete. This may cause downstream crashes if the task uses ShutdownHooks or if any threads created by the tasks continue running after the task completes. To disable this behavior, either set `Compile / run / fork := true` or run sbt with `-Dsbt.classloader.close=false`.
+
+#### Library management with Coursier
+
+sbt 1.3.0 adopts [Coursier](https://get-coursier.io/) for the library management. Coursier is a dependency resolver like Ivy, rewritten in Scala by Alexandre Archambault ([@alexarchambault][@alexarchambault]), aiming to be a faster alternative.
+
+**Note**: Under some situations, Coursier may not resolve the same way as Ivy (for example remote `-SNAPSHOT`s are cached for 24 hours). If you wish to go back to Apache Ivy for library management, put the following in your `build.sbt`:
+
+```scala
+ThisBuild / useCoursier := false
+```
+
+Many people were involved in the effort of bringing Coursier to sbt. Early in 2018 Leonard Ehrenfried ([@leonardehrenfried][@leonardehrenfried]) started the Coursier-backed LM API implementation as [lm#190][lm190]. During the fall, it was further improved by Andrea Peruffo ([@andreaTP][@andreaTP]), and `lm-coursier` eventually became part of coursier/sbt-coursier repository maintained by Alex. This spring, Eugene ([@eed3si9n][@eed3si9n]) revisited this again to make a few more changes so we can swap out the LM engine in [#4614][4614] with the help from Alex.
+
+#### Turbo mode with ClassLoader layering
+
+sbt 1.3.0 adds "turbo" mode that enables experimental or advanced features that might require some debugging by the build user when it doesn't work.
+
+```scala
+ThisBuild / turbo := true
+```
+
+Initially we are putting the layered ClassLoader (`ClassLoaderLayeringStrategy.AllLibraryJars`) behind this flag.
+
+sbt has always created two-layer ClassLoaders when evaluating the `run` and `test` tasks. The top layer of the ClassLoader contains the scala library jars so that the classes in the scala package may be reused across multiple task evaluations. The second layer loads the rest of the project classpath including the library dependencies and project class files. sbt 1.3.0 introduces **experimental** `classLoaderLayeringStrategy` feature that furthers this concept.
+
+```scala
+Compile / classLoaderLayeringStrategy := ClassLoaderLayeringStrategy.Flat
+// default
+Compile / classLoaderLayeringStrategy := ClassLoaderLayeringStrategy.ScalaLibrary
+// enabled with turbo
+Compile / classLoaderLayeringStrategy := ClassLoaderLayeringStrategy.AllLibraryJars
+
+Test / classLoaderLayeringStrategy := ClassLoaderLayeringStrategy.Flat
+// default
+Test / classLoaderLayeringStrategy := ClassLoaderLayeringStrategy.ScalaLibrary
+// enabled with turbo
+Test / classLoaderLayeringStrategy := ClassLoaderLayeringStrategy.AllLibraryJars
+```
+
+- `ClassLoaderLayeringStrategy.Flat` includes all classes and JARs except for the Java runtime. The behavior of tasks using this strategy should be similar to forking without the overhead of starting a new jvm.
+- `ClassLoaderLayeringStrategy.ScalaLibrary` creates a two-layer ClassLoader where Scala standard library is kept warm, similar to sbt 1.2.x
+- `ClassLoaderLayeringStrategy.AllLibraryJars` creates a three-layer ClassLoader where library dependencies, in addition to Scala standard libraries are kept warm
+
+`ClassLoaderLayeringStrategy.AllLibraryJars` should benefit the response time of run and test tasks. By caching the library jar classloader, the startup latency of the run and test tasks can be reduced significantly when they are run multiple times within the same session. GC pressure is also reduced because libraries jars will not be reloaded every time the task is evaluated.
+
+**Note**: ClassLoaderLayeringStrategy.AllLibraryJars reuses the singleton object between the tests, which requires libraries to clean after itself.
+
+`ClassLoaderLayeringStrategy.Flat` on the other hand will benefit certain applications that do not work well with layered ClassLoaders. One such example is Java serialization + serialization proxy pattern used by Scala collections.
+
+ClassLoader layering was contributed by Ethan Atkins (@eatkins) as #4476
+
+
+#### IO improvements
+
+In addition to classloader layering, sbt 1.3.0 incorporates numerous performance enhancements including:
+
+- faster recursive directory listing -- sbt internally uses a native library,
+[swoval](https://github.com/swoval/swoval/blob/master/files/README.md), that
+provides a jni interface to native os apis that allow for faster recursive
+directory listing than the implementations in the java standard library.
+- reduced latency of file change detection in continuous builds. In most cases
+file events will trigger task evaluation within 10ms.
+
+As of this writing sbt 1.3.0's edit-compile-test loop for 5000 source files is faster than that edit-compile-test with three source files using sbt 0.13, Gradle, and other build tools we tested (see [build
+performance](https://github.com/eatkins/scala-build-watch-performance) for
+details). These changes were contributed by Ethan Atkins (@eatkins).
+
+
+#### Glob
+
+sbt 1.3.0 introduces a new type, `Glob,` that describes a path search query. For example, all of the scala sources in the project directory can be described by `Glob(baseDirectory.value, RecursiveGlob / "*.scala")` or `baseDirectory.value.toGlob / ** / "*.scala",` where `**` is an alias for `RecursiveGlob`. Glob expands on [PathFinders](https://www.scala-sbt.org/1.x/docs/Paths.html#Path+Finders) but they can be composed with no io overhead. Globs can be retrieved using a `FileTreeView`. For example, one can write:
+
+```scala
+val scalaSources = baseDirectory.value.toGlob / ** / "*.scala"
+val javaSources = baseDirectory.value.toGlob / ** / "*.java"
+val allSources = fileTreeView.value.list(Seq(scalaSources, javaSources))
+```
+
+and the `FileTreeView` will only traverse the base directory once. Globs and FileTreeView were added by Ethan Atkins ([@eatkins][@eatkins]) in [io#178](https://github.com/sbt/io/pull/178),[io#216](https://github.com/sbt/io/pull/216),[io#226](https://github.com/sbt/io/pull/226)
+
+#### Watch improvements
+
+sbt 1.3.0 introduces a new file monitoring implementation. It uses enhanced apis for tracking file change events using os events. It adds a new parser that extracts the specific task(s) for which it will monitor source files and rerun when it detects changes. Only source dependencies of the running tasks are monitored. For example, when running `~compile`, changes to test source files will not trigger a new build. Between file events, there are also now options to return to the shell, rerun the previous command(s) or exit sbt. These changes were implemented by Ethan Atkins ([@eatkins][@eatkins]) in [io#178](https://github.com/sbt/io/pull/178),[#216](https://github.com/sbt/io/pull/216),[#226](https://github.com/sbt/io/pull/226),[#4512](https://github.com/sbt/sbt/pull/4512),[#4627](https://github.com/sbt/sbt/pull/4627).
+
+#### Build definition source watch
+
+sbt 1.3.0 automatically watches the build definition sources and displays a warning
+if you execute a task without reloading. This can be configured to reload automatically as follows:
+
+```scala
+Global / onChangedBuildSource := ReloadOnSourceChanges
+```
+
+This feature was contributed by Ethan Atkins ([@eatkins][@eatkins]) in [#4664][4664]
+
+#### Custom incremental tasks
+
+sbt 1.3.0 provides support to implement custom incremental tasks based on files.
+Given a custom task that returns `java.nio.file.Path`, `Seq[java.nio.file.Path]`, `File`, or `Seq[File]`,
+you can define a few helper tasks to make it more incremental.
+
+```scala
+import java.nio.file._
+import scala.sys.process._
+val gccCompile = taskKey[Seq[Path]]("compile C code using gcc")
+val gccHeaders = taskKey[Seq[Path]]("header files")
+val gccInclude = settingKey[Path]("include directory")
+val gccLink = taskKey[Path]("link C code using gcc")
+
+gccCompile / sourceDirectory := sourceDirectory.value
+gccCompile / fileInputs += (gccCompile / sourceDirectory).value.toGlob / ** / "*.c"
+gccInclude := (gccCompile / sourceDirectory).value.toPath / "include"
+gccHeaders / fileInputs += gccInclude.value.toGlob / "*.h"
+gccCompile / target := baseDirectory.value / "out"
+
+gccCompile := {
+  val objectDir = Files.createDirectories((gccCompile / target).value.toPath / "objects")
+  def objectFile(path: Path): Path =
+    target.value.toPath / path.getFileName.toString.replaceAll(".c$", ".o")
+  Files.createDirectories(target.value.toPath)
+  val headerChanges = gccHeaders.inputFileChanges.hasChanges
+  val changes = gccCompile.inputFileChanges
+  changes.deleted.foreach(sf => Files.deleteIfExists(objectFile(sf)))
+  val sourceFileChanges = changes.created ++ changes.modified
+  val needRecompile = (sourceFileChanges ++ (if (headerChanges) changes.unmodified else Nil)).toSet
+
+  val logger = streams.value.log
+  gccCompile.inputFiles.map { sf =>
+    val of = objectFile(sf)
+    if (!Files.exists(of) || needRecompile(sf)) {
+      logger.info(s"Compiling $sf")
+      s"gcc -I${gccInclude.value} -c $sf -o $of".!!
+    }
+    of
+  }
+}
+```
+
+Given this setup, `gccCompile.inputFiles` will return a sequence of all of the input `c` source files, `gccCompile.inputFileChanges` returns a data structure containing the created, deleted, modified and unmodified files since the last run of `gccCompile` while `gccHeaders.changedInputFiles` returns the headers that have changed since the last run of `gccCompile`. Taken together, these tasks can be used to incrementally only rebuild the source files that need to be rebuilt given the file system changes since the last time gccCompile completed.
+
+In another task such as `gccLink`, the result of `gccCompile` can be tracked as well using `gccCompile.outputFileChanges`.
+
+```scala
+gccLink := {
+  val library = (gccCompile / target).value.toPath / "libmylib.dylib"
+  val objectFiles = gccCompile.outputFiles
+  val logger = streams.value.log
+  if (!Files.exists(library) || gccCompile.outputFileChanges.hasChanges) {
+    logger.info(s"Rebuilding $library")
+    s"gcc -dynamiclib -o $library ${objectFiles mkString " "}".!!
+  }
+  library
+}
+```
+
+The inputs of a task will automatically be monitored by the ~ command which has a new parser that is context aware. A custom clean task is also implemented for any task that generates file outputs. The clean tasks are aggregated across the project and config scopes. For example, Test / clean will clean all of the files generated by tasks in the Test config declared in the Test config but not the files generated in the Compile config.
+
+This feature was contributed by Ethan Atkins (@eatkins) in #4627.
+
+#### Super shell
+
+When running in an ANSI-compatible terminal, sbt 1.3.0 will display the currently running tasks. This gives the developer the idea of what tasks are being processed in parallel, and where the build is spending its time. In homage to Gradle's "Rich Console" and Buck's "Super Console", we call ours "Super shell."
+
+To opt-out put the following in the build:
+
+```scala
+ThisBuild / useSuperShell := false
+```
+
+or run sbt with `--supershell=false` (or `-Dsbt.supershell=false`). This feature was added by Eugene Yokota ([@eed3si9n][@eed3si9n]) as [#4396][4396]/[util#196][util196].
+
+#### Tracing
+
+To view the task breakdown visually, run sbt with `--traces` (or `-Dsbt.traces=true`). This will generate `build.traces` file, which is viewable using Chrome Tracing `chrome://tracing/`. This feature was contributed by Jason Zaugg ([@retronym][@retronym]).
+
+To output the task timings on screen, run sbt with `--timings` (or `-Dsbt.task.timings=true -Dsbt.task.timings.on.shutdown=true`).
+
+#### SemanticDB support
+
+sbt 1.3.0 makes it easier to generate [SemanticDB][SemanticDB]. To enable the generation of SemanticDB build-wide:
+
+```
+ThisBuild / semanticdbEnabled := true
+ThisBuild / semanticdbVersion := "4.1.9"
+ThisBuild / semanticdbIncludeInJar := false
+```
+
+This was added by [@eed3si9n][@eed3si9n] as [#4410][4410].
+
+#### print command
+
+sbt 1.3.0 adds a new `print` command, similar to `show` but prints directly to standard out.
+
+```
+# sbt -no-colors --error  "print akka-cluster/scalaVersion"
+2.12.8
+```
+
+This was contributed by David Knapp ([@Falmarri][@Falmarri]) as [#4341][4341]
+
+#### Appending Function1
+
+`Function1` can be appened using `+=`.
+
+```
+Global / onLoad += { s =>
+  doSomething()
+  s
+}
+```
+
+This was contributed by Dale Wijnand ([@dwijnand][@dwijnand]) as [#4521][4521].
+
+#### JDK 11 support
+
+sbt 1.3.0 is first release of sbt that's been testing on JDK11 extensively.
+All integration tests on Travis CI are on AdoptOpenJDK's JDK 11, which were updated by [@eed3si9n][@eed3si9n] as [#4389][4389]/[zinc#639][zinc639]/[zinc640].
+
+- Fixes warnings on JDK 9+ by upgrading to protobuf 3.7.0 [zinc#644][zinc644] by [@smarter][@smarter]
+- Fixes spurious rebuilds caused by invalidation of `rt.jar` on JDK 11 [#4679][4679] by [@eatkins][@eatkins]
+
+#### Other bug fixes and improvements
+
+- Fixes cross building with a single-letter alias [#4355][4355] / [#1074][1074] by [@eed3si9n][@eed3si9n]
+- Removes old warning about global directory [#4356][4356] / [#1054][1054] by [@eed3si9n][@eed3si9n]
+- Improves JDK discovery for cross-JDK forking [#4313][4313] / [#4462][4462] by [@raboof][@raboof]
+- Expands `~` in `-Dsbt.global.base` property to user home. [#4367][4367] by [@kai-chi][@kai-chi]
+- Adds `def sequential[A](tasks: Seq[Initialize[Task[A]]]): Initialize[Task[A]]`. [#4369][4369] by [@3tty0n][@3tty0n]
+- Fixes sbt server to send error event on command failure. [#4378][4378] by [@andreaTP][@andreaTP]
+- Implements cancellation of request by LSP client. [#4384][4384] by [@andreaTP][@andreaTP]
+- Implements `"sbt/completion"` command in sbt to server to complete sbt commands. [#4397][4397] by [@andreaTP][@andreaTP]
+- Fixes errors order reported by sbt server. [#4497][4497] by [@tdroxler][@tdroxler]
+- Fixes cached resolution. [#4424][4424] by [@eed3si9n][@eed3si9n]
+- The sbt task definition linter warns rather than errors by default.
+The linter can be disabled entirely by putting `import sbt.dsl.LinterLevel.Ignore` in scope. [#4485][4485] by [@eatkins][@eatkins]
+- Full GC is only automatically triggered when sbt has been idle for at least a
+minute and is only run at most once between shell commands. This improves shell
+responsiveness. [#4544][4544] by [@eatkins][@eatkins]
+- Avoids NPE in JDK12. [#4549][4549] by [@retronym][@retronym]
+- Fixes the eviction warning summary [lm#288][lm288] by [@bigwheel][@bigwheel]
+- Fixes Zinc's flag to skip the persistence of API info. [zinc#399][zinc399] by [@romanowski][@romanowski]
+- Fixes Zinc not detecting synthetic top level member changes. [#4316][4316]/[zinc#572][zinc572] by [@jvican][@jvican]
+- Zinc to notify callback of generated non-local classes before the compiler's middle and backend phases. [zinc#582][zinc582] by [@jvican][@jvican]
+- Removes a use of regex in Zinc for performance. [zinc#583][zinc583] by [@retronym][@retronym]
+- Fixes incremental compilation involving default arguments. [zinc#591][zinc591] by [@jvican][@jvican]
+- Adds Analysis callback of Zinc thread-safe. [zinc#626][zinc626] by [@dotta][@dotta]
+- Fixes a non-zero exit Javadoc not failing the task. [zinc#625][zinc625] by [@raboof][@raboof]
+
+#### Participation
+
+First, I'd like to introduce Ethan Atkins, a core community member of sbt project, and author of Close Watch that uses native code to provide watch service on macOS. Normally I don't publicize the number of commits, but here's the top 10 for sbt 1.3.0:
+
+```
+541 Ethan Atkins
+369 Eugene Yokota (eed3si9n)
+42  Jorge Vicente Cantero (jvican)
+35  Łukasz Wawrzyk
+34  Dale Wijnand
+24  Andrea Peruffo
+16​​  Kenji Yoshida (xuwei-k)
+13  Guillaume Martres
+7   Arnout Engelen
+7   Jason Zaugg
+```
+
+As a community member, Ethan has contributed various IO related improvements to make sbt more responsive in his own time. sbt 1.3.0 reflects many of his ideas.
+
+The last feature release of sbt 1 was [sbt 1.2.0](https://www.lightbend.com/blog/scala-sbt-120-patchnotes) in July, 2018. Since then, we've released eight patch releases under sbt 1.2.x for bug fixes, but most of the feature enhancements were merged to `develop` branch. Over the course of these months, 45 contributors contributors participated in sbt 1.3.0 and Zinc: Ethan Atkins, Eugene Yokota (eed3si9n), Jorge Vicente Cantero (jvican), Łukasz Wawrzyk, Dale Wijnand, Andrea Peruffo, Kenji Yoshida (xuwei-k), Guillaume Martres, Arnout Engelen, Jason Zaugg, Krzysztof Romanowski, Antonio Cunei, Mirco Dotta, OlegYch, Alex Dupre, Nepomuk Seiler, 0lejk4, Alexandre Archambault, Eric Peters, Kazuhiro Sera, Philippus, Som Snytt, Syed Akber Jafri, Thomas Droxler, Veera Venky, bigwheel, Akhtyam Sakaev, Alexey Vakhrenev, Eugene Platonov, Helena Edelson, Ignasi Marimon-Clos, Julien Sirocchi, Justin Kaeser, Kajetan Maliszewski, Leonard Ehrenfried, Mikołaj Jakubowski, Nafer Sanabria, Stefan Wachter, Yasuhiro Tatsuno, Yusuke Izawa, falmarri, ilya, kai-chi, tanishiking, Ólafur Páll Geirsson. Thank you!
+
+Thanks to everyone who's helped improve sbt and Zinc 1 by using RCs and reporting bugs, improving our documentation, porting builds, porting plugins, and submitting and reviewing pull requests. For anyone interested in helping sbt, there are many avenues for you to help, depending on your interest. If you're interested, [Contributing](https://github.com/sbt/sbt/blob/develop/CONTRIBUTING.md), [sbt-contrib](https://gitter.im/sbt/sbt-contrib), ["help wanted"](https://github.com/sbt/sbt/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22), ["good first issue"](https://github.com/sbt/sbt/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) are good starting points.
+
+  [89]: https://github.com/sbt/sbt/issues/89
+  [1074]: https://github.com/sbt/sbt/issues/1074
+  [1054]: https://github.com/sbt/sbt/issues/1054
+  [4355]: https://github.com/sbt/sbt/pull/4355
+  [4356]: https://github.com/sbt/sbt/pull/4356
+  [4341]: https://github.com/sbt/sbt/pull/4341
+  [4313]: https://github.com/sbt/sbt/pull/4313
+  [4367]: https://github.com/sbt/sbt/pull/4367
+  [4369]: https://github.com/sbt/sbt/pull/4369
+  [4378]: https://github.com/sbt/sbt/pull/4378
+  [4384]: https://github.com/sbt/sbt/pull/4384
+  [4389]: https://github.com/sbt/sbt/pull/4389
+  [4396]: https://github.com/sbt/sbt/pull/4396
+  [4397]: https://github.com/sbt/sbt/pull/4397
+  [4410]: https://github.com/sbt/sbt/pull/4410
+  [4424]: https://github.com/sbt/sbt/pull/4424
+  [4443]: https://github.com/sbt/sbt/pull/4443
+  [4456]: https://github.com/sbt/sbt/pull/4456
+  [4462]: https://github.com/sbt/sbt/pull/4462
+  [4476]: https://github.com/sbt/sbt/pull/4476
+  [4485]: https://github.com/sbt/sbt/pull/4485
+  [4497]: https://github.com/sbt/sbt/pull/4497
+  [4521]: https://github.com/sbt/sbt/pull/4521
+  [4614]: https://github.com/sbt/sbt/pull/4614
+  [4544]: https://github.com/sbt/sbt/pull/4544
+  [4549]: https://github.com/sbt/sbt/pull/4549
+  [4316]: https://github.com/sbt/sbt/issues/4316
+  [4664]: https://github.com/sbt/sbt/pull/4664
+  [4679]: https://github.com/sbt/sbt/pull/4679
+  [util196]: https://github.com/sbt/util/pull/196
+  [lm190]: https://github.com/sbt/librarymanagement/pull/190
+  [lm288]: https://github.com/sbt/librarymanagement/pull/288
+  [zinc399]: https://github.com/sbt/zinc/pull/399
+  [zinc572]: https://github.com/sbt/zinc/pull/572
+  [zinc582]: https://github.com/sbt/zinc/pull/582
+  [zinc583]: https://github.com/sbt/zinc/pull/583
+  [zinc591]: https://github.com/sbt/zinc/pull/591
+  [zinc626]: https://github.com/sbt/zinc/pull/626
+  [zinc625]: https://github.com/sbt/zinc/pull/625
+  [zinc644]: https://github.com/sbt/zinc/pull/644
+  [zinc639]: https://github.com/sbt/zinc/pull/639
+  [zinc640]: https://github.com/sbt/zinc/pull/640
+  [zinc655]: https://github.com/sbt/zinc/pull/655
+  [@eed3si9n]: https://github.com/eed3si9n
+  [@eatkins]: https://github.com/eatkins
+  [@dwijnand]: http://github.com/dwijnand
+  [@cunei]: https://github.com/cunei
+  [@Falmarri]: https://github.com/Falmarri
+  [@raboof]: https://github.com/raboof
+  [@retronym]: https://github.com/retronym
+  [@kai-chi]: https://github.com/kai-chi
+  [@3tty0n]: https://github.com/3tty0n
+  [@andreaTP]: https://github.com/andreaTP
+  [@tdroxler]: https://github.com/tdroxler
+  [@leonardehrenfried]: https://github.com/leonardehrenfried
+  [@alexarchambault]: https://github.com/alexarchambault
+  [@bigwheel]: https://github.com/bigwheel
+  [@romanowski]: https://github.com/romanowski
+  [@jvican]: https://github.com/jvican
+  [@dotta]: https://github.com/dotta
+  [@smarter]: https://github.com/smarter
+  [SemanticDB]: https://scalameta.org/docs/semanticdb/guide.html
 
 
 ## sbt 1.2.x releases
@@ -13367,10 +13718,7 @@ the more advanced topics such as checksums and external Ivy files.
 There are two ways for you to manage libraries with sbt: manually or
 automatically. These two ways can be mixed as well. This page discusses
 the two approaches. All configurations shown here are settings that go
-either directly in a
-[.sbt file][Basic-Def] or are
-appended to the `settings` of a Project in a
-[.scala file][Full-Def].
+directly in a [.sbt file][Basic-Def].
 
 ### Manual Dependency Management
 
@@ -13415,18 +13763,16 @@ See [Paths][Paths] for more information on building up paths.
 
 This method of dependency management involves specifying the direct
 dependencies of your project and letting sbt handle retrieving and
-updating your dependencies. sbt supports three ways of specifying these
-dependencies:
+updating your dependencies.
 
--   Declarations in your project definition
--   Maven POM files (dependency definitions only: no repositories)
--   Ivy configuration and settings files
+sbt 1.3.0+ uses [Coursier](https://get-coursier.io/) to implement dependency management.
+Until sbt 1.3.0, sbt has used Apache Ivy for ten years. Coursier does a good job
+of keeping the compatibility, but some of the feature might be specific to Apache Ivy.
+In those cases, you can use the following setting to switch back to Ivy:
 
-sbt uses [Apache Ivy](https://ant.apache.org/ivy/) to implement
-dependency management in all three cases. The default is to use inline
-declarations, but external configuration can be explicitly selected. The
-following sections describe how to use each method of automatic
-dependency management.
+```scala
+ThisBuild / useCoursier := false
+```
 
 #### Inline Declarations
 
@@ -13947,76 +14293,6 @@ shortened to:
 libraryDependencies += "org.scalatest" %% "scalatest" % "2.1.3" % "test"
 ```
 
-#### External Maven or Ivy
-
-For this method, create the configuration files as you would for Maven
-(`pom.xml`) or Ivy (`ivy.xml` and optionally `ivysettings.xml`).
-External configuration is selected by using one of the following
-expressions.
-
-##### Ivy settings (resolver configuration)
-
-```scala
-externalIvySettings()
-```
-
-or
-
-```scala
-externalIvySettings(baseDirectory.value / "custom-settings-name.xml")
-```
-
-or
-
-```scala
-externalIvySettingsURL(url("your_url_here"))
-```
-
-##### Ivy file (dependency configuration)
-
-```scala
-externalIvyFile()
-```
-
-or
-
-```scala
-externalIvyFile(Def.setting(baseDirectory.value / "custom-name.xml"))
-```
-
-Because Ivy files specify their own configurations, sbt needs to know
-which configurations to use for the `compile`, `runtime`, and `test`
-classpaths. For example, to specify that the `Compile` classpath should
-use the 'default' configuration:
-
-```scala
-Compile / classpathConfiguration := config("default")
-```
-
-##### Maven pom (dependencies only)
-
-```scala
-externalPom()
-```
-
-or
-
-```scala
-externalPom(Def.setting(baseDirectory.value / "custom-name.xml"))
-```
-
-##### Full Ivy Example
-
-For example, a `build.sbt` using external Ivy files might look like:
-
-```scala
-externalIvySettings()
-externalIvyFile(Def.setting(baseDirectory.value / "ivyA.xml"))
-Compile / classpathConfiguration := Compile
-Test / classpathConfiguration := Test
-Runtime / classpathConfiguration := Runtime
-```
-
 ##### Forcing a revision (Not recommended)
 
 **Note**: Forcing can create logical inconsistencies so it's no longer recommended.
@@ -14036,7 +14312,7 @@ published pom.xml.
 
 ##### Known limitations
 
-Maven support is dependent on Ivy's support for Maven POMs. Known issues
+Maven support is dependent on Coursier or Ivy's support for Maven POMs. Known issues
 with this support:
 
 -   Specifying `relativePath` in the `parent` section of a POM will
@@ -14369,19 +14645,19 @@ To avoid publishing a project, add `skip in publish := true` to its settings. `f
 Resolvers
 ---------
 
-### Maven
+### Maven resolvers
 
 Resolvers for Maven2 repositories are added as follows:
 
 ```scala
-resolvers += 
+resolvers +=
   "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
 ```
 
 This is the most common kind of user-defined resolvers. The rest of this
 page describes how to define other types of repositories.
 
-### Predefined
+### Predefined resolvers
 
 A few predefined repositories are available and are listed below
 
@@ -14416,7 +14692,7 @@ in one place:
 Resolver.sonatypeRepo("releases")  // Or "snapshots"
 ```
 
-### Custom
+### Custom resolvers
 
 sbt provides an interface to the repository types available in Ivy:
 file, URL, SSH, and SFTP. A key feature of repositories in Ivy is using
@@ -18705,18 +18981,19 @@ You can speed up your `sbt` builds on Travis CI by using their [caching][Travis-
 Here's a sample `cache:` configuration that you can use:
 
 ```yml
-# These directories are cached to a cloud storage provider "close" to the infrastructure the builds run on.
 cache:
   directories:
+    - $HOME/.cache/coursier
     - $HOME/.ivy2/cache
     - $HOME/.sbt
 ```
+
+**Note**: Coursier uses different [cache location](https://get-coursier.io/docs/cache) depending on the OS, so the above needs to be changed accordingly for macOS or Windows images.
 
 You'll also need the following snippet to avoid unnecessary cache updates:
 
 ```yml
 before_cache:
-  # Cleanup the cached directories to avoid unnecessary cache updates
   - rm -fv $HOME/.ivy2/.sbt.ivy.lock
   - find $HOME/.ivy2/cache -name "ivydata-*.properties" -print -delete
   - find $HOME/.sbt        -name "*.lock"               -print -delete
@@ -18829,18 +19106,9 @@ directory `tests`.
 Here's a sample that puts them all together. Remember, most of the sections are optional.
 
 ```yml
-# Use container-based infrastructure
-sudo: false
-
 language: scala
 
 jdk: openjdk8
-
-# These directories are cached to S3 at the end of the build
-cache:
-  directories:
-    - $HOME/.ivy2/cache
-    - $HOME/.sbt/boot/
 
 env:
   # This splits the build into two parts
@@ -18857,12 +19125,11 @@ before_cache:
   - find $HOME/.ivy2 -name "ivydata-*.properties" | xargs rm
   - rm -f $HOME/.ivy2/.sbt.ivy.lock
 
-# Email specific recipient all the time
-notifications:
-  email:
-    recipients:
-      secure: "Some/BASE64/STUFF="
-    on_success: always # default: change
+cache:
+  directories:
+    - $HOME/.cache/coursier
+    - $HOME/.ivy2/cache
+    - $HOME/.sbt/boot/
 ```
 
 
