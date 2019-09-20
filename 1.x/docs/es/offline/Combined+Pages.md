@@ -36,7 +36,7 @@ Gracias por probar sbt y... ¡*divértete*!
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://piccolo.link/sbt-1.3.0.msi
+  [MSI]: https://piccolo.link/sbt-1.3.1.msi
   [Setup-Notes]: ../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -47,7 +47,7 @@ Instalar sbt
 
 Para crear un proyecto sbt necesitarás realizar los siguientes pasos:
 
--   Instalar JDK (recomendamos Oracle JDK 8 u OpenJDK 8).
+-   Instalar JDK (recomendamos AdoptOpenJDK JDK 8 u AdoptOpenJDK JDK 11).
 -   Instalar sbt.
 -   Configurar un proyecto [hola mundo][Hello] simple
 -   Continuar con [Ejecución][Running] para aprender cómo ejecutar sbt.
@@ -57,7 +57,7 @@ Para crear un proyecto sbt necesitarás realizar los siguientes pasos:
 En última instancia, la instalación de sbt se reduce a un lanzador JAR y un
 script de shell, pero dependiendo de tu plataforma, proporcionamos varias formas
 de hacer el proceso menos tedioso. Echa un vistazo a los pasos de instalación para
-[Mac][Mac], [Windows][Windows], o [Linux][Linux].
+[macOS][Mac], [Windows][Windows], o [Linux][Linux].
 
 ### Consejos y notas
 
@@ -66,17 +66,24 @@ Si has tenido algún problema ejecutando sbt, revisa las
 proxies HTTP y opciones de la JVM.
 
 
-  [ZIP]: https://piccolo.link/sbt-1.3.0.zip
-  [TGZ]: https://piccolo.link/sbt-1.3.0.tgz
+  [ZIP]: https://piccolo.link/sbt-1.3.1.zip
+  [TGZ]: https://piccolo.link/sbt-1.3.1.tgz
   [Manual-Installation]: Manual-Installation.html
-  [oraclejdk8]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+  [AdoptOpenJDK]: https://adoptopenjdk.net/
 
-Instalar sbt on Mac
--------------------
+Instalar sbt on macOS
+---------------------
 
 ### Instalar JDK
 
-Sigue el link para instalar [Java SE Development Kit 8][oraclejdk8].
+Sigue el link para instalar [JDK 8 u 11][AdoptOpenJDK].
+
+Or use [SDKMAN!](https://sdkman.io/):
+
+```
+$ sdk list java
+$ sdk install java 11.0.4.hs-adpt
+```
 
 ### Instalar desde un paquete universal
 
@@ -88,30 +95,30 @@ Descarga el paquete [ZIP][ZIP] o [TGZ][TGZ] y descomprímelo.
 > Por favor, asegúrate de reportar cualquier problema con dichos paquetes a sus 
 > respectivos mantenedores.
 
-#### [Homebrew](http://mxcl.github.com/homebrew/)
+#### [Homebrew](https://brew.sh/)
 
 ```
-$ brew install sbt@1
+$ brew install sbt
 ```
 
-#### [Macports](http://macports.org/)
+#### [SDKMAN!](https://sdkman.io/)
 
 ```
-$ port install sbt
+$ sdk install sbt
 ```
 
 
-  [MSI]: https://piccolo.link/sbt-1.3.0.msi
-  [ZIP]: https://piccolo.link/sbt-1.3.0.zip
-  [TGZ]: https://piccolo.link/sbt-1.3.0.tgz
-  [oraclejdk8]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+  [MSI]: https://piccolo.link/sbt-1.3.1.msi
+  [ZIP]: https://piccolo.link/sbt-1.3.1.zip
+  [TGZ]: https://piccolo.link/sbt-1.3.1.tgz
+  [AdoptOpenJDK]: https://adoptopenjdk.net/
 
 Instalar sbt en Windows
 -----------------------
 
 ### Instalar JDK
 
-Sigue el link para instalar [Java SE Development Kit 8][oraclejdk8].
+Sigue el link para instalar [JDK 8 u 11][AdoptOpenJDK].
 
 ### Instalar desde un paquete universal
 
@@ -121,11 +128,23 @@ Descarga el paquete [ZIP][ZIP] o [TGZ][TGZ] y descomprímelo.
 
 Descarga el [instalador msi][MSI] e instálalo.
 
+### Instalar desde un paquete de terceros
 
-  [ZIP]: https://piccolo.link/sbt-1.3.0.zip
-  [TGZ]: https://piccolo.link/sbt-1.3.0.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.3.0.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.3.0.deb
+> **Nota:** Puede que algunos paquetes de terceros no proporcionen la última versión.
+> Por favor, asegúrate de reportar cualquier problema con dichos paquetes a sus
+> respectivos mantenedores.
+
+#### [Scoop](https://scoop.sh/)
+
+```
+$ scoop install sbt
+```
+
+
+  [ZIP]: https://piccolo.link/sbt-1.3.1.zip
+  [TGZ]: https://piccolo.link/sbt-1.3.1.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.3.1.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.3.1.deb
   [Manual-Installation]: Manual-Installation.html
   [website127]: https://github.com/sbt/website/issues/127
   [cert-bug]: https://bugs.launchpad.net/ubuntu/+source/ca-certificates-java/+bug/1739631
@@ -139,7 +158,7 @@ Descarga el paquete [ZIP][ZIP] o [TGZ][TGZ] y descomprímelo.
 
 ### Instalar JDK
 
-Primero desberás de instalar JDK. Recomendamos Oracle JDK 8 u OpenJDK 8.
+Primero desberás de instalar JDK. Recomendamos AdoptOpenJDK JDK 8 u AdoptOpenJDK JDK 11.
 Los detalles sobre el nombre de los paquetes cambian de una distribución a otra.
 
 Por ejemplo, Ubuntu xenial (16.04LTS) usa
@@ -1276,7 +1295,7 @@ Definiciones de construcción
 
 Esta página describe las definiciones de construcción (build definitions), 
 incluyendo algo de "teoría" y la sintaxis de `build.sbt`. Se supone que has 
-instalado una versión reciente de sbt, como sbt 1.3.0, que sabes cómo 
+instalado una versión reciente de sbt, como sbt 1.3.1, que sabes cómo 
 [usar sbt][Running] y que has leído las páginas anteriores de la Guía de inicio.
 
 Esta página explica la definición de construcción de `build.sbt`.
@@ -1292,7 +1311,7 @@ crea un fichero llamado `project/build.properties` en el que se especifica la
 versión de sbt como sigue:
 
 ```
-sbt.version=1.3.0
+sbt.version=1.3.1
 ```
 
 Si la versión requerida no está disponible localmente, el lanzador `sbt` se la 
@@ -1339,7 +1358,7 @@ utilizando un *DSL de build.sbt*
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -1529,7 +1548,7 @@ el "estilo plano".
 
 ```scala
 ThisBuild / version := "1.0"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 ```
 
 Esta sintaxis es la recomendada para configuraciones con ámbito `ThisBuild` plugins añadidos.
@@ -1545,7 +1564,7 @@ gestionadas, que en `build.sbt` tienen este aspecto:
 val derby = "org.apache.derby" % "derby" % "10.4.1.3"
 
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -1625,7 +1644,7 @@ predeterminadas en el ámbito de subproyectos. (Ver [Ámbitos][Scopes])
 ```scala
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 
 lazy val core = (project in file("core"))
   .settings(
@@ -1940,7 +1959,7 @@ Mira el siguiente ejemplo:
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -1977,7 +1996,7 @@ Aquí hay otro ejemplo:
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -2116,7 +2135,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "Hello",
     organization := "com.example",
-    scalaVersion := "2.12.8",
+    scalaVersion := "2.12.10",
     version := "0.1.0-SNAPSHOT",
     scalacOptions := List("-encoding", "utf8", "-Xfatal-warnings", "-deprecation", "-unchecked"),
     scalacOptions := {
@@ -2699,7 +2718,7 @@ construcción para claves usadas con frecuencia tales como `version`,
 
 ```scala
 ThisBuild / organization := "com.example",
-ThisBuild / scalaVersion := "2.12.8",
+ThisBuild / scalaVersion := "2.12.10",
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -2946,7 +2965,7 @@ lazy val projA = (project in file("a"))
 ¿Cuál es el valor de `projA / name`?
 
 1. `"foo-2.11.11"`
-2. `"foo-2.12.8"`
+2. `"foo-2.12.10"`
 3. ¿otra cosa?
 
 La respuesta es `"foo-2.11.11"`.
@@ -3735,7 +3754,7 @@ val sampleIntTask = taskKey[Int]("A sample int task.")
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 
 lazy val library = (project in file("library"))
   .settings(
@@ -3797,7 +3816,7 @@ val sampleStringTask = taskKey[String]("A sample string task.")
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 
 lazy val library = (project in file("library"))
   .settings(
@@ -4078,7 +4097,7 @@ import Dependencies._
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 
 lazy val backend = (project in file("backend"))
   .settings(

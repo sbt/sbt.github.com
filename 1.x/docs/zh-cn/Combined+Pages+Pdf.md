@@ -32,7 +32,7 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://piccolo.link/sbt-1.3.0.msi
+  [MSI]: https://piccolo.link/sbt-1.3.1.msi
   [Setup-Notes]: ../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -51,18 +51,18 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
 -   然后前往 [.sbt 构建定义][Basic-Def] 学习更多关于构建的定义。
 
 
-最后，安装步骤就简化为一个 Jar 文件和一个 Shell 脚本，但是取决于你的平台，我们提供了好几种方式来使得步骤不是那么单调。 [Mac][Mac]，[Windows][Windows]，或[Linux][Linux] 提供了相应的安装步骤。
+最后，安装步骤就简化为一个 Jar 文件和一个 Shell 脚本，但是取决于你的平台，我们提供了好几种方式来使得步骤不是那么单调。 [macOS][Mac]，[Windows][Windows]，或[Linux][Linux] 提供了相应的安装步骤。
 
 ### 提示和技巧
 
 如果你在运行 sbt 时遇到任何问题，查看 [安装建议][Setup-Notes] 中的终端编码（terminal encoding），HTTP 代理，JVM 参数。
 
 
-  [ZIP]: https://piccolo.link/sbt-1.3.0.zip
-  [TGZ]: https://piccolo.link/sbt-1.3.0.tgz
+  [ZIP]: https://piccolo.link/sbt-1.3.1.zip
+  [TGZ]: https://piccolo.link/sbt-1.3.1.tgz
   [Manual-Installation]: Manual-Installation.html
 
-在 Mac 上安装 sbt
+在 macOS 上安装 sbt
 ---------------------
 
 ### 通过通用的包安装
@@ -73,22 +73,22 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
 
 > **注意：** 第三方的包可能没有提供最新的版本，请记得将任何问题反馈给这些包相关的维护者。
 
-#### 通过 [Homebrew](http://mxcl.github.com/homebrew/) 安装
+#### 通过 [Homebrew](https://brew.sh/) 安装
 
 ```
-$ brew install sbt@1
+$ brew install sbt
 ```
 
-#### 通过 [Macports](http://macports.org/) 安装
+#### 通过 [SDKMAN!](https://sdkman.io/) 安装
 
 ```
-$ port install sbt
+$ sdk install sbt
 ```
 
 
-  [MSI]: https://piccolo.link/sbt-1.3.0.msi
-  [ZIP]: https://piccolo.link/sbt-1.3.0.zip
-  [TGZ]: https://piccolo.link/sbt-1.3.0.tgz
+  [MSI]: https://piccolo.link/sbt-1.3.1.msi
+  [ZIP]: https://piccolo.link/sbt-1.3.1.zip
+  [TGZ]: https://piccolo.link/sbt-1.3.1.tgz
 
 在 Windows 上安装 sbt
 -------------------------
@@ -101,11 +101,21 @@ $ port install sbt
 
 下载 [msi 安装包][MSI] 并安装。
 
+### 通过第三方的包安装
 
-  [ZIP]: https://piccolo.link/sbt-1.3.0.zip
-  [TGZ]: https://piccolo.link/sbt-1.3.0.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.3.0.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.3.0.deb
+> **注意：** 第三方的包可能没有提供最新的版本，请记得将任何问题反馈给这些包相关的维护者。
+
+#### 通过 [Scoop](https://scoop.sh/) 安装
+
+```
+$ scoop install sbt
+```
+
+
+  [ZIP]: https://piccolo.link/sbt-1.3.1.zip
+  [TGZ]: https://piccolo.link/sbt-1.3.1.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.3.1.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.3.1.deb
 
 在 Linux 上安装 sbt
 -----------------------
@@ -208,7 +218,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "hello",
     version := "1.0",
-    scalaVersion := "2.12.8"
+    scalaVersion := "2.12.10"
   )
 ```
 
@@ -219,10 +229,10 @@ lazy val root = (project in file("."))
 
 ### 设置 sbt 版本
 
-你可以通过创建 `hello/project/build.properties` 文件强制指定一个版本的 sbt。在这个文件里，编写如下内容来强制使用 1.3.0：
+你可以通过创建 `hello/project/build.properties` 文件强制指定一个版本的 sbt。在这个文件里，编写如下内容来强制使用 1.3.1：
 
 ```
-sbt.version=1.3.0
+sbt.version=1.3.1
 ```
 
 sbt 在不同的 release 版本中是 99% 兼容的。但是在 `project/build.properties` 文件中设置 sbt 的版本仍然能避免一些潜在的混淆。
@@ -497,7 +507,7 @@ lazy val root = (project in file("."))
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -636,7 +646,7 @@ bare `.sbt` 构建定义由一个 `Setting[_]` 表达式的列表组成，而不
 ```scala
 name := "hello"
 version := "1.0"
-scalaVersion := "2.12.8"
+scalaVersion := "2.12.10"
 ```
 
 ### 添加依赖库
@@ -647,7 +657,7 @@ scalaVersion := "2.12.8"
 val derby = "org.apache.derby" % "derby" % "10.4.1.3"
 
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -1295,7 +1305,7 @@ To factor out common settings across multiple projects, create a sequence named 
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.12.8"
+  scalaVersion := "2.12.10"
 )
 
 lazy val core = (project in file("core"))
@@ -1591,7 +1601,7 @@ val sampleIntTask = taskKey[Int]("A sample int task.")
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 
 lazy val library = (project in file("library"))
   .settings(
@@ -1636,7 +1646,7 @@ val sampleStringTask = taskKey[String]("A sample string task.")
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 
 lazy val library = (project in file("library"))
   .settings(
@@ -1853,7 +1863,7 @@ import Dependencies._
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 
 lazy val backend = (project in file("backend"))
   .settings(

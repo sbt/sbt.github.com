@@ -40,7 +40,7 @@ sbt を試してくれることに感謝する。_ぜひ楽しいんでほしい
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://piccolo.link/sbt-1.3.0.msi
+  [MSI]: https://piccolo.link/sbt-1.3.1.msi
   [Setup-Notes]: ../../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -51,7 +51,7 @@ sbt のインストール
 
 sbt プロジェクトを作るためには、以下の手順をたどる必要がある:
 
- - JDK をインストールする。(Oracle JDK 8 もしくは OpenJDK 8 を推奨)
+ - JDK をインストールする。(AdoptOpenJDK JDK 8 もしくは AdoptOpenJDK JDK 11 を推奨)
  - sbt をインストールする。
  - 簡単な [hello world][Hello] プロジェクトをセットアップする。
  - [実行する][Running]を読んで、sbt の実行方法を知る。
@@ -59,7 +59,7 @@ sbt プロジェクトを作るためには、以下の手順をたどる必要�
 
 究極的には sbt のインストールはランチャー JAR とシェルスクリプトの 2 つを用意するだけだが、
 利用するプラットフォームによってはもう少し簡単なインストール方法もいくつか提供されている。
-[Mac][Mac]、[Windows][Windows]、もしくは
+[macOS][Mac]、[Windows][Windows]、もしくは
 [Linux][Linux] の手順を参照してほしい。
 
 ### 豆知識
@@ -68,17 +68,24 @@ sbt プロジェクトを作るためには、以下の手順をたどる必要�
 
 
 
-  [ZIP]: https://piccolo.link/sbt-1.3.0.zip
-  [TGZ]: https://piccolo.link/sbt-1.3.0.tgz
+  [ZIP]: https://piccolo.link/sbt-1.3.1.zip
+  [TGZ]: https://piccolo.link/sbt-1.3.1.tgz
   [Manual-Installation]: Manual-Installation.html
-  [oraclejdk8]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+  [AdoptOpenJDK]: https://adoptopenjdk.net/
 
-Mac への sbt のインストール
--------------------------
+macOS への sbt のインストール
+--------------------------
 
-### Install JDK
+### JDK のインストール
 
-Follow the link to install [Java SE Development Kit 8][oraclejdk8].
+リンクをたどって [JDK 8 もしくは JDK 11][AdoptOpenJDK] をインストールする。
+
+もしくは [SDKMAN!](https://sdkman.io/) を使う:
+
+```
+$ sdk list java
+$ sdk install java 11.0.4.hs-adpt
+```
 
 ### ユニバーサルパッケージからのインストール
 
@@ -89,30 +96,30 @@ Follow the link to install [Java SE Development Kit 8][oraclejdk8].
 > **注意:** サードパーティが提供するパッケージは最新版を使っているとは限らない。
 > 何か問題があれば、パッケージメンテナに報告してほしい。
 
-#### [Homebrew](http://mxcl.github.com/homebrew/)
+#### [Homebrew](https://brew.sh/)
 
 ```
-$ brew install sbt@1
+$ brew install sbt
 ```
 
-#### [Macports](http://macports.org/)
+#### [SDKMAN!](https://sdkman.io/)
 
 ```
-$ port install sbt
+$ sdk install sbt
 ```
 
 
-  [MSI]: https://piccolo.link/sbt-1.3.0.msi
-  [ZIP]: https://piccolo.link/sbt-1.3.0.zip
-  [TGZ]: https://piccolo.link/sbt-1.3.0.tgz
-  [oraclejdk8]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+  [MSI]: https://piccolo.link/sbt-1.3.1.msi
+  [ZIP]: https://piccolo.link/sbt-1.3.1.zip
+  [TGZ]: https://piccolo.link/sbt-1.3.1.tgz
+  [AdoptOpenJDK]: https://adoptopenjdk.net/
 
 Windows への sbt のインストール
 ----------------------------
 
-### Install JDK
+### JDK のインストール
 
-Follow the link to install [Java SE Development Kit 8][oraclejdk8].
+リンクをたどって [JDK 8 もしくは JDK 11][AdoptOpenJDK] をインストールする。
 
 ### ユニバーサルパッケージからのインストール
 
@@ -122,11 +129,22 @@ Follow the link to install [Java SE Development Kit 8][oraclejdk8].
 
 [msi インストーラ][MSI]をダウンロードしてインストールする。
 
+### サードパーティパッケージを使ってのインストール
 
-  [ZIP]: https://piccolo.link/sbt-1.3.0.zip
-  [TGZ]: https://piccolo.link/sbt-1.3.0.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.3.0.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.3.0.deb
+> **注意:** サードパーティが提供するパッケージは最新版を使っているとは限らない。
+> 何か問題があれば、パッケージメンテナに報告してほしい。
+
+#### [Scoop](https://scoop.sh/)
+
+```
+$ scoop install sbt
+```
+
+
+  [ZIP]: https://piccolo.link/sbt-1.3.1.zip
+  [TGZ]: https://piccolo.link/sbt-1.3.1.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.3.1.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.3.1.deb
   [Manual-Installation]: Manual-Installation.html
   [website127]: https://github.com/sbt/website/issues/12
   [cert-bug]: https://bugs.launchpad.net/ubuntu/+source/ca-certificates-java/+bug/1739631
@@ -136,7 +154,7 @@ Linux への sbt のインストール
 
 ### JDK のインストール
 
-まず JDK をインストールする必要がある。Oracle JDK 8 もしくは OpenJDK 8 を推奨する。パッケージ名はディストリビューションによって異なる。
+まず JDK をインストールする必要がある。AdoptOpenJDK JDK 8 もしくは AdoptOpenJDK JDK 11 を推奨する。パッケージ名はディストリビューションによって異なる。
 
 例えば、Ubuntu xenial (16.04LTS) には [openjdk-8-jdk](https://packages.ubuntu.com/hu/xenial/openjdk-8-jdk) がある。
 
@@ -1204,7 +1222,7 @@ sbt 0.13.13 など最近のバージョンをインストール済みで、
 sbt バージョンを指定する:
 
 ```
-sbt.version=1.3.0
+sbt.version=1.3.1
 ```
 
 もしも指定されたバージョンがローカルマシンに無ければ、
@@ -1249,7 +1267,7 @@ lazy val root = (project in file("."))
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -1410,7 +1428,7 @@ import Keys._
 
 ```scala
 ThisBuild / version := "1.0"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 ```
 
 この構文は `ThisBuild` にスコープ付けされたセッティングを書いたり、プラグインを追加するのに向いている。
@@ -1426,7 +1444,7 @@ ThisBuild / scalaVersion := "2.12.8"
 val derby = "org.apache.derby" % "derby" % "10.4.1.3"
 
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -1498,7 +1516,7 @@ lazy val core = project
 ```scala
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 
 lazy val core = (project in file("core"))
   .settings(
@@ -1750,7 +1768,7 @@ scalacOptions := {
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -1787,7 +1805,7 @@ lazy val root = (project in file("."))
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -1917,7 +1935,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "Hello",
     organization := "com.example",
-    scalaVersion := "2.12.8",
+    scalaVersion := "2.12.10",
     version := "0.1.0-SNAPSHOT",
     scalacOptions := List("-encoding", "utf8", "-Xfatal-warnings", "-deprecation", "-unchecked"),
     scalacOptions := {
@@ -2388,7 +2406,7 @@ sbt はフォールバックとして `ThisBuild` 内を探す。
 
 ```scala
 ThisBuild / organization := "com.example",
-ThisBuild / scalaVersion := "2.12.8",
+ThisBuild / scalaVersion := "2.12.10",
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -2598,7 +2616,7 @@ lazy val projA = (project in file("a"))
 `name in projA` (sbt シェルだと `projA/name`) の値は何か?
 
 1. `"foo-2.11.11"`
-2. `"foo-2.12.8"`
+2. `"foo-2.12.10"`
 3. その他
 
 正解は `"foo-2.11.11"`。
@@ -3342,7 +3360,7 @@ val sampleIntTask = taskKey[Int]("A sample int task.")
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 
 lazy val library = (project in file("library"))
   .settings(
@@ -3394,7 +3412,7 @@ val sampleStringTask = taskKey[String]("A sample string task.")
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 
 lazy val library = (project in file("library"))
   .settings(
@@ -3645,7 +3663,7 @@ import Dependencies._
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 
 lazy val backend = (project in file("backend"))
   .settings(
@@ -3746,7 +3764,7 @@ name := "hello"
 
 version := "1.0"
 
-scalaVersion := "2.12.8"
+scalaVersion := "2.12.10"
 ```
 
 ### (0.13.7 以前) 設定は空白行で区切る
@@ -4643,7 +4661,7 @@ sbt 0.13.8 で `Def.sequential` という関数が追加されて、準逐次な
 #### project/build.properties
 
 ```
-sbt.version=1.3.0
+sbt.version=1.3.1
 ```
 
 #### project/style.sbt
@@ -4693,7 +4711,7 @@ root> compilecheck
 #### project/build.properties
 
 ```
-sbt.version=1.3.0
+sbt.version=1.3.1
 ```
 
 #### project/style.sbt

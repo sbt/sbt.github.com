@@ -66,7 +66,7 @@ corrections and add documentation.
 
 Documentation for 0.13.x has been
 [archived here](https://www.scala-sbt.org/0.13/docs/index.html). This
-documentation applies to sbt 1.3.0.
+documentation applies to sbt 1.3.1.
 
 See also the [API Documentation](../api/index.html),
 and the [index of names and types][Name-Index].
@@ -103,7 +103,7 @@ Thanks for trying out sbt and *have fun*!
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://piccolo.link/sbt-1.3.0.msi
+  [MSI]: https://piccolo.link/sbt-1.3.1.msi
   [Setup-Notes]: ../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -114,7 +114,7 @@ Installing sbt
 
 To create an sbt project, you'll need to take these steps:
 
--   Install JDK (We recommend Oracle JDK 8 or OpenJDK 8).
+-   Install JDK (We recommend AdoptOpenJDK JDK 8 or AdoptOpenJDK JDK 11).
 -   Install sbt.
 -   Setup a simple [hello world][Hello] project
 -   Move on to [running][Running] to learn how to run sbt.
@@ -124,7 +124,7 @@ To create an sbt project, you'll need to take these steps:
 Ultimately, the installation of sbt boils down to a launcher JAR
 and a shell script, but depending on your platform, we provide
 several ways to make the process less tedious.  Head over to the
-installation steps for [Mac][Mac], [Windows][Windows], or
+installation steps for [macOS][Mac], [Windows][Windows], or
 [Linux][Linux].
 
 ### Tips and Notes
@@ -133,17 +133,24 @@ If you have any trouble running sbt, see [Setup Notes][Setup-Notes] on
 terminal encodings, HTTP proxies, and JVM options.
 
 
-  [ZIP]: https://piccolo.link/sbt-1.3.0.zip
-  [TGZ]: https://piccolo.link/sbt-1.3.0.tgz
+  [ZIP]: https://piccolo.link/sbt-1.3.1.zip
+  [TGZ]: https://piccolo.link/sbt-1.3.1.tgz
   [Manual-Installation]: Manual-Installation.html
-  [oraclejdk8]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+  [AdoptOpenJDK]: https://adoptopenjdk.net/
 
-Installing sbt on Mac
----------------------
+Installing sbt on macOS
+-----------------------
 
 ### Install JDK
 
-Follow the link to install [Java SE Development Kit 8][oraclejdk8].
+Follow the link to install [JDK 8 or 11][AdoptOpenJDK].
+
+Or use [SDKMAN!](https://sdkman.io/):
+
+```
+$ sdk list java
+$ sdk install java 11.0.4.hs-adpt
+```
 
 ### Installing from a universal package
 
@@ -155,30 +162,30 @@ Download [ZIP][ZIP] or [TGZ][TGZ] package, and expand it.
 > sure to report any issues with these packages to the relevant
 > maintainers.
 
-#### [Homebrew](http://mxcl.github.com/homebrew/)
+#### [Homebrew](https://brew.sh/)
 
 ```
-$ brew install sbt@1
+$ brew install sbt
 ```
 
-#### [Macports](http://macports.org/)
+#### [SDKMAN!](https://sdkman.io/)
 
 ```
-$ port install sbt
+$ sdk install sbt
 ```
 
 
-  [MSI]: https://piccolo.link/sbt-1.3.0.msi
-  [ZIP]: https://piccolo.link/sbt-1.3.0.zip
-  [TGZ]: https://piccolo.link/sbt-1.3.0.tgz
-  [oraclejdk8]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+  [MSI]: https://piccolo.link/sbt-1.3.1.msi
+  [ZIP]: https://piccolo.link/sbt-1.3.1.zip
+  [TGZ]: https://piccolo.link/sbt-1.3.1.tgz
+  [AdoptOpenJDK]: https://adoptopenjdk.net/
 
 Installing sbt on Windows
 -------------------------
 
 ### Install JDK
 
-Follow the link to install [Java SE Development Kit 8][oraclejdk8].
+Follow the link to install [JDK 8 or 11][AdoptOpenJDK].
 
 ### Installing from a universal package
 
@@ -188,11 +195,23 @@ Download [ZIP][ZIP] or [TGZ][TGZ] package and expand it.
 
 Download [msi installer][MSI] and install it.
 
+### Installing from a third-party package
 
-  [ZIP]: https://piccolo.link/sbt-1.3.0.zip
-  [TGZ]: https://piccolo.link/sbt-1.3.0.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.3.0.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.3.0.deb
+> **Note:** Third-party packages may not provide the latest version. Please make
+> sure to report any issues with these packages to the relevant
+> maintainers.
+
+#### [Scoop](https://scoop.sh/)
+
+```
+$ scoop install sbt
+```
+
+
+  [ZIP]: https://piccolo.link/sbt-1.3.1.zip
+  [TGZ]: https://piccolo.link/sbt-1.3.1.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.3.1.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.3.1.deb
   [Manual-Installation]: Manual-Installation.html
   [website127]: https://github.com/sbt/website/issues/127
   [cert-bug]: https://bugs.launchpad.net/ubuntu/+source/ca-certificates-java/+bug/1739631
@@ -206,7 +225,7 @@ Download [ZIP][ZIP] or [TGZ][TGZ] package and expand it.
 
 ### Install JDK
 
-You must first install a JDK. We recommend Oracle JDK 8 or OpenJDK 8. The details around the package names differ from one distribution to another.
+You must first install a JDK. We recommend AdoptOpenJDK JDK 8 or JDK 11. The details around the package names differ from one distribution to another.
 
 For example, Ubuntu xenial (16.04LTS) has [openjdk-8-jdk](https://packages.ubuntu.com/hu/xenial/openjdk-8-jdk).
 
@@ -1300,7 +1319,7 @@ Build definition
 
 This page describes sbt build definitions, including some "theory" and
 the syntax of `build.sbt`.
-It assumes you have installed a recent version of sbt, such as sbt 1.3.0,
+It assumes you have installed a recent version of sbt, such as sbt 1.3.1,
 know how to [use sbt][Running],
 and have read the previous pages in the Getting Started Guide.
 
@@ -1315,7 +1334,7 @@ build the same projects with consistent results.
 To do this, create a file named `project/build.properties` that specifies the sbt version as follows:
 
 ```
-sbt.version=1.3.0
+sbt.version=1.3.1
 ```
 
 If the required version is not available locally,
@@ -1362,7 +1381,7 @@ called *setting expressions* using *build.sbt DSL*.
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -1545,7 +1564,7 @@ putting them inside a `.settings(...)` call. We call this the "bare style."
 
 ```scala
 ThisBuild / version := "1.0"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 ```
 
 This syntax is recommended for `ThisBuild` scoped settings and adding plugins.
@@ -1561,7 +1580,7 @@ managed dependencies, which will look like this in `build.sbt`:
 val derby = "org.apache.derby" % "derby" % "10.4.1.3"
 
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -1641,7 +1660,7 @@ and there are no default settings scoped to subprojects. (See [Scopes][Scopes])
 ```scala
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 
 lazy val core = (project in file("core"))
   .settings(
@@ -1949,7 +1968,7 @@ See the following example:
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -1986,7 +2005,7 @@ Here's another example:
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -2125,7 +2144,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "Hello",
     organization := "com.example",
-    scalaVersion := "2.12.8",
+    scalaVersion := "2.12.10",
     version := "0.1.0-SNAPSHOT",
     scalacOptions := List("-encoding", "utf8", "-Xfatal-warnings", "-deprecation", "-unchecked"),
     scalacOptions := {
@@ -2661,7 +2680,7 @@ frequently used keys such as `version`, `scalaVersion`, and `organization`.
 
 ```scala
 ThisBuild / organization := "com.example",
-ThisBuild / scalaVersion := "2.12.8",
+ThisBuild / scalaVersion := "2.12.10",
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -2878,7 +2897,7 @@ lazy val projA = (project in file("a"))
 What is the value of `projA / name`?
 
 1. `"foo-2.11.11"`
-2. `"foo-2.12.8"`
+2. `"foo-2.12.10"`
 3. something else?
 
 The answer is `"foo-2.11.11"`.
@@ -3689,7 +3708,7 @@ val sampleIntTask = taskKey[Int]("A sample int task.")
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 
 lazy val library = (project in file("library"))
   .settings(
@@ -3748,7 +3767,7 @@ val sampleStringTask = taskKey[String]("A sample string task.")
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 
 lazy val library = (project in file("library"))
   .settings(
@@ -4013,7 +4032,7 @@ import Dependencies._
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 
 lazy val backend = (project in file("backend"))
   .settings(
@@ -8250,7 +8269,7 @@ influence SBT execution. Also see [sbt launcher][Sbt-Launcher].
   <tr>
     <td><tt>sbt.version</tt></td>
     <td>Version</td>
-    <td><tt>1.3.0</tt></td>
+    <td><tt>1.3.1</tt></td>
     <td>sbt version to use, usually taken from <tt>project/build.properties</tt>.</td>
   </tr>
 
@@ -8421,7 +8440,7 @@ Define the versions of Scala to build against in the
 allowed. For example, in a `.sbt` build definition:
 
 ```scala
-lazy val scala212 = "2.12.8"
+lazy val scala212 = "2.12.10"
 lazy val scala211 = "2.11.12"
 lazy val supportedScalaVersions = List(scala212, scala211)
 
@@ -8512,7 +8531,7 @@ Let's say in the following example, `network` is a Java project, and `core` is
 a Scala project that depends on `network`.
 
 ```scala
-lazy val scala212 = "2.12.8"
+lazy val scala212 = "2.12.10"
 lazy val scala211 = "2.11.12"
 lazy val supportedScalaVersions = List(scala212, scala211)
 
@@ -8558,8 +8577,8 @@ being used to build the subprojects given that `<version>` is listed in their `c
 For example:
 
 ```
-> ++ 2.12.8
-[info] Setting version to 2.12.8
+> ++ 2.12.10
+[info] Setting version to 2.12.10
 > ++ 2.11.12
 [info] Setting version to 2.11.12
 > compile
@@ -8578,10 +8597,10 @@ For example:
 > ++ 2.11.12 -v test
 [info] Setting Scala version to 2.11.12 on 1 projects.
 [info] Switching Scala version on:
-[info]     core (2.12.8, 2.11.12)
+[info]     core (2.12.10, 2.11.12)
 [info] Excluding projects:
 [info]   * root ()
-[info]     network (2.12.8)
+[info]     network (2.12.10)
 [info] Reapplying settings...
 [info] Set current project to core (in build file:/Users/xxx/hello/)
 ```
@@ -8596,8 +8615,8 @@ For example:
 [info] Forcing Scala version to 2.13.0-M5 on all projects.
 [info] Switching Scala version on:
 [info]   * root ()
-[info]     core (2.12.8, 2.11.12)
-[info]     network (2.12.8)
+[info]     core (2.12.10, 2.11.12)
+[info]     network (2.12.10)
 ```
 
 #### Cross publishing
@@ -9191,7 +9210,7 @@ mode that only requires a JRE installed.
 Install [conscript](https://github.com/foundweekends/conscript).
 
 ```
-$ cs sbt/sbt --branch 1.3.0
+$ cs sbt/sbt --branch 1.3.1
 ```
 
 This will create two scripts: `screpl` and `scalas`.
@@ -9248,9 +9267,9 @@ chmod u+x shout.scala
 #!/usr/bin/env scalas
  
 /***         
-scalaVersion := "2.12.7"
+scalaVersion := "2.12.10"
  
-libraryDependencies += "org.scala-sbt" %% "io" % "1.3.0"
+libraryDependencies += "org.scala-sbt" %% "io" % "1.3.1"
 */         
  
 import sbt.io.IO
@@ -10897,7 +10916,7 @@ sbt needs Scala jars to run itself since it is written in Scala. sbt
 uses that same version of Scala to compile the build definitions that
 you write for your project because they use sbt APIs. This version of
 Scala is fixed for a specific sbt release and cannot be changed. For sbt
-1.3.0, this version is Scala 2.12.7. Because this Scala
+1.3.1, this version is Scala 2.12.10. Because this Scala
 version is needed before sbt runs, the repositories used to retrieve
 this version are configured in the sbt
 [launcher][Sbt-Launcher].
@@ -11418,7 +11437,7 @@ following build definition. `build.sbt`:
 
 ```scala
 lazy val commonSettings = Seq(
-  scalaVersion := "2.12.8",
+  scalaVersion := "2.12.10",
   organization := "com.example"
 )
 lazy val scalaReflect = Def.setting { "org.scala-lang" % "scala-reflect" % scalaVersion.value }
@@ -11522,7 +11541,7 @@ would look like:
 
 ```scala
 lazy val commonSettings = Seq(
-  scalaVersion := "2.12.8",
+  scalaVersion := "2.12.10",
   organization := "com.example"
 )
 lazy val scalaReflect = Def.setting { "org.scala-lang" % "scala-reflect" % scalaVersion.value }
@@ -12643,7 +12662,7 @@ The following full build configuration demonstrates integration tests.
 lazy val scalatest = "org.scalatest" %% "scalatest" % "3.0.5"
 
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -12713,7 +12732,7 @@ lazy val scalatest = "org.scalatest" %% "scalatest" % "3.0.5"
 lazy val FunTest = config("fun") extend(Test)
 
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -12771,7 +12790,7 @@ lazy val scalatest = "org.scalatest" %% "scalatest" % "3.0.5"
 lazy val FunTest = config("fun") extend(Test)
 
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 def itFilter(name: String): Boolean = name endsWith "ITest"
@@ -13054,7 +13073,7 @@ parents, e.g. `/foo/bar/a/b/c.txt` would be accepted but not `/foo/bar/a/b` or
 ### Regular expressions
 
 The `Glob` apis use glob syntax (see
-[PathMatcher](https://docs.oracle.com/javase/8/docs/api/java/nio/file/FileSystem.html#getPathMatcher-java.lang.String-)
+[PathMatcher](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/file/FileSystem.html#getPathMatcher(java.lang.String))
 for details). [Regular
 expressions](https://www.scala-lang.org/api/2.12.8/scala/util/matching/Regex.html)
 can be used instead:
@@ -16710,8 +16729,8 @@ Def.setting {
 This Parser definition will produce a value of type `(String,String)`.
 The input syntax defined isn't very flexible; it is just a
 demonstration. It will produce one of the following values for a
-successful parse (assuming the current Scala version is 2.12.7,
-the current sbt version is 1.3.0, and there are 3 commands left to
+successful parse (assuming the current Scala version is 2.12.10,
+the current sbt version is 1.3.1, and there are 3 commands left to
 run):
 
 Again, we were able to access the current Scala and sbt version for the
@@ -17054,7 +17073,7 @@ Here's `build.sbt`:
 import CommandExample._
 
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -18013,7 +18032,7 @@ above for per-project plugins.
 ### Creating an auto plugin
 
 A minimal sbt plugin is a Scala library that is built against the version of
-Scala that sbt runs (currently, 2.12.7) or a Java library.
+Scala that sbt runs (currently, 2.12.10) or a Java library.
 Nothing special needs to be done for this type of library.
 A more typical plugin will provide sbt tasks, commands, or settings.
 This kind of plugin may provide these settings
@@ -18838,10 +18857,10 @@ If you haven't created one already, make sure to create `project/build.propertie
 `sbt.version` number:
 
 ```yml
-sbt.version=1.3.0
+sbt.version=1.3.1
 ```
 
-Your build will now use 1.3.0.
+Your build will now use 1.3.1.
 
 ### Read the Travis manual
 
@@ -18860,7 +18879,7 @@ jdk: openjdk8
 
 scala:
    - 2.10.4
-   - 2.12.8
+   - 2.12.10
 ```
 
 By default Travis CI executes `sbt ++$TRAVIS_SCALA_VERSION test`.
@@ -18873,7 +18892,7 @@ jdk: openjdk8
 
 scala:
    - 2.10.4
-   - 2.12.8
+   - 2.12.10
 
 script:
    - sbt ++$TRAVIS_SCALA_VERSION test
@@ -18938,7 +18957,7 @@ java
 -Xss6M
 -XX:ReservedCodeCacheSize=256M
 -jar
-/home/travis/.sbt/launchers/1.3.0/sbt-launch.jar
+/home/travis/.sbt/launchers/1.3.1/sbt-launch.jar
 ```
 
 It seems to be working. One downside of setting all of the parameters is that we might be left behind when the environment updates and the default values gives us more memory in the future.
@@ -18964,7 +18983,7 @@ java
 -XX:ReservedCodeCacheSize=256M
 -Xms1024M
 -jar
-/home/travis/.sbt/launchers/1.3.0/sbt-launch.jar
+/home/travis/.sbt/launchers/1.3.1/sbt-launch.jar
 ```
 
 **Note**: This duplicates the `-Xms` flag as intended, which might not the best thing to do.
@@ -19008,7 +19027,7 @@ jdk: openjdk8
 
 scala:
    - 2.10.4
-   - 2.12.8
+   - 2.12.10
 
 script:
    - sbt ++$TRAVIS_SCALA_VERSION test
@@ -19529,8 +19548,8 @@ Like we are able to cross build against multiple Scala versions, we can cross bu
 
 ```scala
   .settings(
-    scalaVersion := "2.12.7",
-    sbtVersion in Global := "1.3.0",
+    scalaVersion := "2.12.10",
+    sbtVersion in Global := "1.3.1",
     scalaCompilerBridgeSource := {
       val sv = appConfiguration.value.provider.id.version
       ("org.scala-sbt" % "compiler-interface" % sv % "component").sources
@@ -21772,7 +21791,7 @@ Here's how to set it up
 #### project/build.properties
 
 ```
-sbt.version=1.3.0
+sbt.version=1.3.1
 ```
 
 #### project/style.sbt
@@ -21823,7 +21842,7 @@ Let's try implementing a custom task called `compilecheck` that runs `compile in
 #### project/build.properties
 
 ```
-sbt.version=1.3.0
+sbt.version=1.3.1
 ```
 
 #### project/style.sbt
@@ -22036,7 +22055,7 @@ import scala.concurrent.duration._
 
 // factor out common settings
 ThisBuild / organization := "org.myproject"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 // set the Scala version used for the project
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
@@ -22318,7 +22337,7 @@ import Dependencies._
 lazy val buildSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.12.8"
+  scalaVersion := "2.12.10"
 )
 
 // Sub-project specific dependencies
@@ -22417,7 +22436,7 @@ lazy val CustomCompile = config("compile") extend(Saxon, Common, Scalate)
 
 // factor out common settings
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.10"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 // An example project that only uses the Scalate utilities.
@@ -22583,7 +22602,7 @@ always write it in all lowercase letters. However, we are cool with [酢豚][sub
 
 #### My last command didn't work but I can't see an explanation. Why?
 
-sbt 1.3.0 by default suppresses most stack traces and debugging
+sbt 1.3.1 by default suppresses most stack traces and debugging
 information. It has the nice side effect of giving you less noise on
 screen, but as a newcomer it can leave you lost for explanation. To see
 the previous output of a command at a higher verbosity, type
@@ -23017,7 +23036,7 @@ Any file name ending in `.sbt` will do, but most people use
 
 ### Miscellaneous
 
-#### Where can I find plugins for 1.3.0?
+#### Where can I find plugins for 1.3.1?
 
 See [Community Plugins][Community-Plugins] for a list of currently available
 plugins.
@@ -25761,7 +25780,7 @@ application. `hello.build.properties`:
 Nightly Builds
 --------------
 
-The latest development versions of 1.3.0 are available as nightly
+The latest development versions of 1.3.1 are available as nightly
 builds on sbt-maven-snapshots (<https://repo.scala-sbt.org/scalasbt/maven-snapshots>) repo.
 
 Note that currently following the URL would lead you to Bintray,
