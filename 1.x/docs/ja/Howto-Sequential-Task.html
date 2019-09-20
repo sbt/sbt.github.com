@@ -45,7 +45,7 @@
                   <h3 id="Def.sequential+%E3%82%92%E7%94%A8%E3%81%84%E3%81%A6%E9%80%90%E6%AC%A1%E3%82%BF%E3%82%B9%E3%82%AF%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B">Def.sequential を用いて逐次タスクを定義する<a href="#Def.sequential+%E3%82%92%E7%94%A8%E3%81%84%E3%81%A6%E9%80%90%E6%AC%A1%E3%82%BF%E3%82%B9%E3%82%AF%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 0.13.8 で <code>Def.sequential</code> という関数が追加されて、準逐次な意味論でタスクを実行できるようになった。
 逐次タスクの説明として <code>compilecheck</code> というカスタムタスクを定義してみよう。これは、まず <code>compile in Compile</code> を実行して、その後で <a href="http://www.scalastyle.org/sbt.html">scalastyle-sbt-plugin</a> の <code>scalastyle in Compile</code> を呼び出す。
 </p><p>セットアップはこのようになる。
-</p><h4 id="project%2Fbuild.properties">project/build.properties<a href="#project%2Fbuild.properties" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="">sbt.version=1.3.1
+</p><h4 id="project%2Fbuild.properties">project/build.properties<a href="#project%2Fbuild.properties" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="">sbt.version=1.3.2
 </code></pre><h4 id="project%2Fstyle.sbt">project/style.sbt<a href="#project%2Fstyle.sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="">addSbtPlugin(&quot;org.scalastyle&quot; %% &quot;scalastyle-sbt-plugin&quot; % &quot;1.0.0&quot;)
 </code></pre><h4 id="build.sbt">build.sbt<a href="#build.sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">lazy val compilecheck = taskKey[Unit](&quot;compile and then scalastyle&quot;)
 
