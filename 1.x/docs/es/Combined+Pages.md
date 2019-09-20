@@ -3672,9 +3672,9 @@ lazy val core = (project in file("core"))
 ### Plugins globales
 
 Los plugins pueden ser instalados para todos tus proyectos a la vez
-declarándolos en `~/.sbt/1.0/plugins/`. `~/.sbt/1.0/plugins/` es un proyecto sbt cuyo classpath es exportado a todos los proyectos de la definición de construcción. Más o menos, cualquier fichero `.sbt` y `.scala` en `~/.sbt/1.0/plugins/` se comporta como si estuviera en el directorio `project/` de cada uno de los proyectos.
+declarándolos en `$HOME/.sbt/1.0/plugins/`. `$HOME/.sbt/1.0/plugins/` es un proyecto sbt cuyo classpath es exportado a todos los proyectos de la definición de construcción. Más o menos, cualquier fichero `.sbt` y `.scala` en `$HOME/.sbt/1.0/plugins/` se comporta como si estuviera en el directorio `project/` de cada uno de los proyectos.
 
-Puedes crear `~/.sbt/1.0/plugins/build.sbt` y poner expresiones `addSbtPlugin()` ahí para añadir plugins a todos tus proyectos a la vez.
+Puedes crear `$HOME/.sbt/1.0/plugins/build.sbt` y poner expresiones `addSbtPlugin()` ahí para añadir plugins a todos tus proyectos a la vez.
 Debido a que hacer eso incrementaría la dependencia a nivel local, esta característica debería ser utilizada con moderación. Para más información ver [Buenas prácticas][global-vs-local-plugins].
 
 ### Plugins disponibles

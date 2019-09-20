@@ -1531,10 +1531,10 @@ lazy val core = (project in file("core"))
 
 ### 全局插件
 
-可以一次给所有项目安装插件，只要在 `~/.sbt/1.0/plugins/` 中声明它们。`~/.sbt/1.0/plugins/` 是一个将自己的 classpath 导出给所有项目的 sbt 构建定义。
-概略地讲，在 `~/.sbt/1.0/plugins/` 中的任何 `.sbt` 或者 `.scala` 文件就和所有项目的 `project/` 目录下的一样。
+可以一次给所有项目安装插件，只要在 `$HOME/.sbt/1.0/plugins/` 中声明它们。`$HOME/.sbt/1.0/plugins/` 是一个将自己的 classpath 导出给所有项目的 sbt 构建定义。
+概略地讲，在 `$HOME/.sbt/1.0/plugins/` 中的任何 `.sbt` 或者 `.scala` 文件就和所有项目的 `project/` 目录下的一样。
 
-为了一次给所有的项目添加插件，你可以创建 `~/.sbt/1.0/plugins//build.sbt` 并且添加 `addSbtPlugin()` 表达式。因为这样做会增加机器上的依赖，所以这个特性应该少用。
+为了一次给所有的项目添加插件，你可以创建 `$HOME/.sbt/1.0/plugins//build.sbt` 并且添加 `addSbtPlugin()` 表达式。因为这样做会增加机器上的依赖，所以这个特性应该少用。
 参见[最佳实践][global-vs-local-plugins]。
 
 ### 可用的插件

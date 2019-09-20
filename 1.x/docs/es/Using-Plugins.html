@@ -93,8 +93,8 @@ lazy val util = (project in file(&quot;util&quot;))
 lazy val core = (project in file(&quot;core&quot;))
   .settings(site.settings)
 </code></pre><h3 id="Plugins+globales">Plugins globales<a href="#Plugins+globales" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Los plugins pueden ser instalados para todos tus proyectos a la vez
-declarándolos en <code>~/.sbt/1.0/plugins/</code>. <code>~/.sbt/1.0/plugins/</code> es un proyecto sbt cuyo classpath es exportado a todos los proyectos de la definición de construcción. Más o menos, cualquier fichero <code>.sbt</code> y <code>.scala</code> en <code>~/.sbt/1.0/plugins/</code> se comporta como si estuviera en el directorio <code>project/</code> de cada uno de los proyectos.
-</p><p>Puedes crear <code>~/.sbt/1.0/plugins/build.sbt</code> y poner expresiones <code>addSbtPlugin()</code> ahí para añadir plugins a todos tus proyectos a la vez.
+declarándolos en <code>$HOME/.sbt/1.0/plugins/</code>. <code>$HOME/.sbt/1.0/plugins/</code> es un proyecto sbt cuyo classpath es exportado a todos los proyectos de la definición de construcción. Más o menos, cualquier fichero <code>.sbt</code> y <code>.scala</code> en <code>$HOME/.sbt/1.0/plugins/</code> se comporta como si estuviera en el directorio <code>project/</code> de cada uno de los proyectos.
+</p><p>Puedes crear <code>$HOME/.sbt/1.0/plugins/build.sbt</code> y poner expresiones <code>addSbtPlugin()</code> ahí para añadir plugins a todos tus proyectos a la vez.
 Debido a que hacer eso incrementaría la dependencia a nivel local, esta característica debería ser utilizada con moderación. Para más información ver <a href="../docs/Best-Practices.html#global-vs-local-plugins">Buenas prácticas</a>.
 </p><h3 id="Plugins+disponibles">Plugins disponibles<a href="#Plugins+disponibles" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Existe <a href="../docs/Community-Plugins.html">una lista de plugins disponibles</a>.
 </p><p>Algunos plugins especialmente famosos son:

@@ -87,20 +87,8 @@ shellPrompt in ThisBuild := { state =&gt; Project.extract(state).currentRef.proj
 
 // set the prompt (for the current project) to include the username
 shellPrompt := { state =&gt; System.getProperty(&quot;user.name&quot;) + &quot;&gt; &quot; }
-</code></pre><a name="history"></a><h3 id="Use+history">Use history<a href="#Use+history" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Interactive mode remembers history even if you exit sbt and restart it.
-The simplest way to access history is to press the up arrow key to cycle
-through previously entered commands. Use <code>Ctrl+r</code> to incrementally
-search history backwards. The following commands are supported:
-</p><ul><li><code>!</code> Show history command help.
-</li><li><code>!!</code> Execute the previous command again.
-</li><li><code>!:</code> Show all previous commands.
-</li><li><code>!:n</code> Show the last n commands.
-</li><li><code>!n</code> Execute the command with index <code>n</code>, as shown by the <code>!:</code>
-command.
-</li><li><code>!-n</code> Execute the nth command before this one.
-</li><li><code>!string</code> Execute the most recent command starting with ‘string’
-</li><li><code>!?string</code> Execute the most recent command containing ‘string’
-</li></ul><a name="history_file"></a><h3 id="Change+the+location+of+the+interactive+history+file">Change the location of the interactive history file<a href="#Change+the+location+of+the+interactive+history+file" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>By default, interactive history is stored in the <code>target/</code> directory for
+</code></pre><a name="history"></a><h3 id="Use+history">Use history<a href="#Use+history" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>See <a href="Running.html#history">sbt shell history</a>.
+</p><a name="history_file"></a><h3 id="Change+the+location+of+the+interactive+history+file">Change the location of the interactive history file<a href="#Change+the+location+of+the+interactive+history+file" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>By default, interactive history is stored in the <code>target/</code> directory for
 the current project (but is not removed by a <code>clean</code>). History is thus
 separate for each subproject. The location can be changed with the
 <code>historyPath</code> setting, which has type <code>Option[File]</code>. For example,

@@ -53,7 +53,7 @@
   val localMaven = &quot;Local Maven Repository&quot; at &quot;file://&quot;+Path.userHome.absolutePath+&quot;/.m2/repository&quot;
   localMaven +: resolvers.value
 }
-</code></pre><ol><li>ユーザ独自の設定を, <code>~/.sbt/1.0/global.sbt</code> などのグローバルな <code>.sbt</code> ファイルに記述する方法。
+</code></pre><ol><li>ユーザ独自の設定を, <code>$HOME/.sbt/1.0/global.sbt</code> などのグローバルな <code>.sbt</code> ファイルに記述する方法。
 ここに記述した設定は、全てのプロジェクトに適用される。
 </li><li>ユーザ独自の設定を <code>&lt;project&gt;/local.sbt</code> のようなプロジェクト内の <code>.sbt</code> ファイルに記述し、バージョンコントロールから除外しておく方法。
 sbt は複数の .sbt ファイルの設定を結合するので、バージョンコントロール下に通常の <code>&lt;project&gt;/build.sbt</code> ファイルも持つことができる。

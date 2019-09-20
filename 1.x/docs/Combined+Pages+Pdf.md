@@ -1270,11 +1270,29 @@ special sbt convention is that pressing tab once may show only a subset
 of most likely completions, while pressing it more times shows more
 verbose choices.
 
-### History Commands
+<a name="history"></a>
 
-sbt shell remembers history, even if you exit sbt and restart it.
-The simplest way to access history is with the up arrow key. The
-following commands are also supported:
+### sbt shell history
+
+sbt shell remembers history even if you exit sbt and restart it.
+The easiest way to access history is to press the up arrow key to cycle
+through previously entered commands.
+
+**Note**: `Ctrl-R` incrementally _searches_ the history backwards.
+
+Through JLine's integration with the terminal environment,
+you can customize sbt shell by changing `$HOME/.inputrc` file.
+For example, the following settings in `$HOME/.inputrc` will allow up- and down-arrow to perform
+prefix-based search of the history.
+
+```
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+"\e[C": forward-char
+"\e[D": backward-char
+```
+
+sbt shell also supports the following commands:
 
 <table>
   <tr>
@@ -3622,12 +3640,12 @@ lazy val core = (project in file("core"))
 ### Global plugins
 
 Plugins can be installed for all your projects at once by declaring them
-in `~/.sbt/1.0/plugins/`. `~/.sbt/1.0/plugins/` is an sbt project whose
+in `$HOME/.sbt/1.0/plugins/`. `$HOME/.sbt/1.0/plugins/` is an sbt project whose
 classpath is exported to all sbt build definition projects. Roughly
-speaking, any `.sbt` or `.scala` files in `~/.sbt/1.0/plugins/` behave as if
+speaking, any `.sbt` or `.scala` files in `$HOME/.sbt/1.0/plugins/` behave as if
 they were in the `project/` directory for all projects.
 
-You can create `~/.sbt/1.0/plugins/build.sbt` and put `addSbtPlugin()`
+You can create `$HOME/.sbt/1.0/plugins/build.sbt` and put `addSbtPlugin()`
 expressions in there to add plugins to all your projects at once.
 Because doing so would increase the dependency on the machine environment, 
 this feature should be used sparingly. See
@@ -5354,7 +5372,7 @@ addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.1.1")
 
 The credentials for your Sonatype OSSRH account need to be stored
 somewhere safe (*e.g. NOT in the repository*). Common convention is a 
-`~/.sbt/1.0/sonatype.sbt` file, with the following:
+`$HOME/.sbt/1.0/sonatype.sbt` file, with the following:
 
 ```scala
 credentials += Credentials(Path.userHome / ".sbt" / "sonatype_credential")
@@ -8117,7 +8135,7 @@ influence SBT execution. Also see [sbt launcher][Sbt-Launcher].
   <tr>
     <td><tt>sbt.global.base</tt></td>
     <td>Directory</td>
-    <td><tt>~/.sbt/1.0</tt></td>
+    <td><tt>$HOME/.sbt/1.0</tt></td>
     <td>The directory containing global settings and plugins.</td>
   </tr>
 
@@ -11109,12 +11127,12 @@ Global Settings
 ### Basic global configuration file
 
 Settings that should be applied to all projects can go in
-`~/.sbt/1.0/global.sbt` (or any file in `~/.sbt/1.0` with a `.sbt`
-extension). Plugins that are defined globally in `~/.sbt/1.0/plugins/`
+`$HOME/.sbt/1.0/global.sbt` (or any file in `$HOME/.sbt/1.0` with a `.sbt`
+extension). Plugins that are defined globally in `$HOME/.sbt/1.0/plugins/`
 are available to these settings. For example, to change the default
 `shellPrompt` for your projects:
 
-`~/.sbt/1.0/global.sbt`
+`$HOME/.sbt/1.0/global.sbt`
 
 ```scala
 shellPrompt := { state =>
@@ -11122,7 +11140,7 @@ shellPrompt := { state =>
 }
 ```
 
-You can also configure plugins globally added in `~/.sbt/1.0/plugins/build.sbt`
+You can also configure plugins globally added in `$HOME/.sbt/1.0/plugins/build.sbt`
 (see next paragraph) in that file, but you need to use fully qualified
 names for their properties. For example, for sbt-eclipse property `withSource`
 documented in https://github.com/sbt/sbteclipse/wiki/Using-sbteclipse,
@@ -11135,10 +11153,10 @@ com.typesafe.sbteclipse.core.EclipsePlugin.EclipseKeys.withSource := true
 
 ### Global Settings using a Global Plugin
 
-The `~/.sbt/1.0/plugins/` directory is a global plugin project. This
+The `$HOME/.sbt/1.0/plugins/` directory is a global plugin project. This
 can be used to provide global commands, plugins, or other code.
 
-To add a plugin globally, create `~/.sbt/1.0/plugins/build.sbt` containing
+To add a plugin globally, create `$HOME/.sbt/1.0/plugins/build.sbt` containing
 the dependency definitions. For example:
 
 ```scala
@@ -11146,7 +11164,7 @@ addSbtPlugin("org.example" % "plugin" % "1.0")
 ```
 
 To change the default `shellPrompt` for every project using this
-approach, create a local plugin `~/.sbt/1.0/plugins/ShellPrompt.scala`:
+approach, create a local plugin `$HOME/.sbt/1.0/plugins/ShellPrompt.scala`:
 
 ```scala
 import sbt._
@@ -11162,11 +11180,11 @@ object ShellPrompt extends AutoPlugin {
 }
 ```
 
-The `~/.sbt/1.0/plugins/` directory is a full project that is
+The `$HOME/.sbt/1.0/plugins/` directory is a full project that is
 included as an external dependency of every plugin project. In practice,
 settings and code defined here effectively work as if they were defined
 in a project's `project/` directory. This means that
-`~/.sbt/1.0/plugins/` can be used to try out ideas for plugins such as
+`$HOME/.sbt/1.0/plugins/` can be used to try out ideas for plugins such as
 shown in the `shellPrompt` example.
 
 
@@ -13691,7 +13709,7 @@ the main project. For example:
 ### Notes
 
 1.  Configure offline behavior for all projects on a machine by putting
-    `offline := true` in `~/.sbt/1.0/global.sbt`. A command that does this for
+    `offline := true` in `$HOME/.sbt/1.0/global.sbt`. A command that does this for
     the user would make a nice pull request. Perhaps the setting of
     offline should go into the output of about or should it be a warning
     in the output of update or both?
@@ -15107,9 +15125,9 @@ This graph-like structure, which was adopted from Apache Ivy, allows us to defin
 
 The Cached Resolution feature is akin to incremental compilation, which only recompiles the sources that have been changed since the last `compile`. Unlike the Scala compiler, Ivy does not have the concept of separate compilation, so that needed to be implemented.
 
-Instead of resolving the full dependency graph, the Cached Resolution feature creates  minigraphs -- one for each direct dependency appearing in all related subprojects. These minigraphs are resolved using Ivy's resolution engine, and the result is stored locally under `~/.sbt/1.0/dependency/` (or what's specified by `sbt.dependency.base` flag) shared across all builds. After all minigraphs are resolved, they are stitched together by applying the conflict resolution algorithm (typically picking the latest version).
+Instead of resolving the full dependency graph, the Cached Resolution feature creates  minigraphs -- one for each direct dependency appearing in all related subprojects. These minigraphs are resolved using Ivy's resolution engine, and the result is stored locally under `$HOME/.sbt/1.0/dependency/` (or what's specified by `sbt.dependency.base` flag) shared across all builds. After all minigraphs are resolved, they are stitched together by applying the conflict resolution algorithm (typically picking the latest version).
 
-When you add a new library to your project, Cached Resolution feature will check for the minigraph files under `~/.sbt/1.0/dependency/` and load the previously resolved nodes, which incurs negligible I/O overhead, and only resolve the newly added library. The intended performance improvement is that the second and third subprojects can take advantage of the resolved minigraphs from the first one and avoid duplicated work. The following figure illustrates projects A, B, and C, all hitting the same set of json files.
+When you add a new library to your project, Cached Resolution feature will check for the minigraph files under `$HOME/.sbt/1.0/dependency/` and load the previously resolved nodes, which incurs negligible I/O overhead, and only resolve the newly added library. The intended performance improvement is that the second and third subprojects can take advantage of the resolved minigraphs from the first one and avoid duplicated work. The following figure illustrates projects A, B, and C, all hitting the same set of json files.
 
 <br>
 ![fig1](files/cached-resolution.png)
@@ -17768,7 +17786,7 @@ resolvers := {
 ```
 
 1.  Put settings specific to a user in a global `.sbt` file, such as
-    `~/.sbt/1.0/global.sbt`. These settings will be applied to all projects.
+    `$HOME/.sbt/1.0/global.sbt`. These settings will be applied to all projects.
 2.  Put settings in a `.sbt` file in a project that isn't checked into
     version control, such as `<project>/local.sbt`. sbt combines the
     settings from multiple .sbt files, so you can still have the
@@ -18029,7 +18047,7 @@ It is a convenience for plugin consumers and because of the automatic nature, it
 
 #### Global plugins
 
-The `~/.sbt/1.0/plugins/` directory is treated as a global plugin
+The `$HOME/.sbt/1.0/plugins/` directory is treated as a global plugin
 definition project. It is a normal sbt project whose classpath is
 available to all sbt project definitions for that user as described
 above for per-project plugins.
@@ -18281,7 +18299,7 @@ obfuscateLiterals in obfuscate := true
 #### Global plugins example
 
 The simplest global plugin definition is declaring a library or plugin
-in `~/.sbt/1.0/plugins/build.sbt`:
+in `$HOME/.sbt/1.0/plugins/build.sbt`:
 
 ```scala
 libraryDependencies += "org.example" %% "example-plugin" % "0.1"
@@ -18292,15 +18310,15 @@ user.
 
 In addition:
 
-- Jars may be placed directly in `~/.sbt/1.0/plugins/lib/`
+- Jars may be placed directly in `$HOME/.sbt/1.0/plugins/lib/`
    and will be available to every build definition for the current user.
 - Dependencies on plugins built from source may be declared in
-   `~/.sbt/1.0/plugins/project/Build.scala` as described at
+   `$HOME/.sbt/1.0/plugins/project/Build.scala` as described at
    [.scala build definition][Full-Def].
 - A Plugin may be directly defined in Scala
-   source files in `~/.sbt/1.0/plugins/`, such as
-   `~/.sbt/1.0/plugins/MyPlugin.scala`.
-   `~/.sbt/1.0/plugins//build.sbt`
+   source files in `$HOME/.sbt/1.0/plugins/`, such as
+   `$HOME/.sbt/1.0/plugins/MyPlugin.scala`.
+   `$HOME/.sbt/1.0/plugins//build.sbt`
    should contain `sbtPlugin := true`. This can be used for quicker
    turnaround when developing a plugin initially:
    
@@ -18312,7 +18330,7 @@ In addition:
        overhead of `publishLocal` and `clean`ing the plugins directory of the
        project using the plugin.
 
-These are all consequences of `~/.sbt/1.0/plugins/` being a standard
+These are all consequences of `$HOME/.sbt/1.0/plugins/` being a standard
 project whose classpath is added to every sbt project's build
 definition.
 
@@ -20379,6 +20397,7 @@ names detected in this way. For example,
 
 
   [Build-State]: Build-State.html
+  [ShellHistory]: Running.html#history
 
 Interactive mode
 ----------------
@@ -20474,20 +20493,7 @@ shellPrompt := { state => System.getProperty("user.name") + "> " }
 
 ### Use history
 
-Interactive mode remembers history even if you exit sbt and restart it.
-The simplest way to access history is to press the up arrow key to cycle
-through previously entered commands. Use `Ctrl+r` to incrementally
-search history backwards. The following commands are supported:
-
--   `!` Show history command help.
--   `!!` Execute the previous command again.
--   `!:` Show all previous commands.
--   `!:n` Show the last n commands.
--   `!n` Execute the command with index `n`, as shown by the `!:`
-    command.
--   `!-n` Execute the nth command before this one.
--   `!string` Execute the most recent command starting with 'string'
--   `!?string` Execute the most recent command containing 'string'
+See [sbt shell history][ShellHistory].
 
 <a name="history_file"></a>
 

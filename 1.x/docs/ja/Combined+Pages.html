@@ -676,8 +676,17 @@ sbt に自動的に再コンパイルを実行させることができる。
 </table><h3 id="%E3%82%BF%E3%83%96%E8%A3%9C%E5%AE%8C">タブ補完<a href="#%E3%82%BF%E3%83%96%E8%A3%9C%E5%AE%8C" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt シェルには、空のプロンプトの状態を含め、タブ補完がある。
 sbt の特殊な慣例として、タブを一度押すとよく使われる候補だけが表示され、
 複数回押すと、より多くの冗長な候補一覧が表示される。
-</p><h3 id="%E5%B1%A5%E6%AD%B4%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89">履歴コマンド<a href="#%E5%B1%A5%E6%AD%B4%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt シェルは、 sbt を終了して再起動した後でも履歴を覚えている。
-履歴にアクセスする最も簡単な方法は矢印キーを使うことだ。以下のコマンドも使うことができる:
+</p><h3 id="sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E5%B1%A5%E6%AD%B4">sbt シェル履歴<a href="#sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E5%B1%A5%E6%AD%B4" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt シェルは、 sbt を終了して再起動した後でも履歴を覚えている。
+履歴にアクセスする最も簡単な方法は矢印キーを使うことだ。
+</p><p><strong>注意</strong>: <code>Ctrl-R</code> を使って履歴を逆方向にインクリメンタル検索できる。
+</p><p>JLine のターミナル環境との統合によって <code>$HOME/.inputrc</code> ファイルを変更することで
+sbt シェルをカスタマイズすることが可能だ。
+例えば、以下の設定を <code>$HOME/.inputrc</code> に書くことで上矢印キーと下矢印キーが履歴の前方一致検索をするようになる。
+</p><pre><code class="">&quot;\e[A&quot;: history-search-backward
+&quot;\e[B&quot;: history-search-forward
+&quot;\e[C&quot;: forward-char
+&quot;\e[D&quot;: backward-char
+</code></pre><p>sbt シェルはその他にも以下のコマンドをサポートする:
 </p><table>
   <tr>
     <td><tt>!</tt></td>
@@ -1955,10 +1964,10 @@ lazy val util = (project in file(&quot;util&quot;))
 // enable the site plugin for the `core` project
 lazy val core = (project in file(&quot;core&quot;))
   .settings(site.settings)
-</code></pre><h3 id="%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%90%E3%83%AB%E3%83%BB%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3">グローバル・プラグイン<a href="#%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%90%E3%83%AB%E3%83%BB%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>プラグインを <code>~/.sbt/1.0/plugins/</code> 以下で宣言することで全てのプロジェクトに対して一括してプラグインをインストールすることができる。
-<code>~/.sbt/1.0/plugins/</code> はそのクラスパスをすべての sbt ビルド定義に対して export する sbt プロジェクトだ。
-大雑把に言えば、<code>~/.sbt/1.0/plugins/</code> 内の <code>.sbt</code> ファイルや <code>.scala</code> ファイルは、それが全てのプロジェクトの <code>project/</code> ディレクトリに入っているかのようにふるまう。
-</p><p><code>~/.sbt/1.0/plugins/build.sbt</code> を作って、そこに <code>addSbtPlugin()</code> 式を書くことで
+</code></pre><h3 id="%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%90%E3%83%AB%E3%83%BB%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3">グローバル・プラグイン<a href="#%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%90%E3%83%AB%E3%83%BB%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>プラグインを <code>$HOME/.sbt/1.0/plugins/</code> 以下で宣言することで全てのプロジェクトに対して一括してプラグインをインストールすることができる。
+<code>$HOME/.sbt/1.0/plugins/</code> はそのクラスパスをすべての sbt ビルド定義に対して export する sbt プロジェクトだ。
+大雑把に言えば、<code>$HOME/.sbt/1.0/plugins/</code> 内の <code>.sbt</code> ファイルや <code>.scala</code> ファイルは、それが全てのプロジェクトの <code>project/</code> ディレクトリに入っているかのようにふるまう。
+</p><p><code>$HOME/.sbt/1.0/plugins/build.sbt</code> を作って、そこに <code>addSbtPlugin()</code> 式を書くことで
 全プロジェクトにプラグインを追加することができる。
 しかし、これを多用するとマシン環境への依存性を増やしてしまうことになるので、この機能は注意してほどほどに使うべきだ。
 <a href="../../docs/Best-Practices.html#global-vs-local-plugins">ベスト・プラクティス</a>も参照してほしい。
@@ -2437,7 +2446,7 @@ and <a href="https://github.com/sbt/librarymanagement/pull/104">lm#104</a> by <a
   val localMaven = &quot;Local Maven Repository&quot; at &quot;file://&quot;+Path.userHome.absolutePath+&quot;/.m2/repository&quot;
   localMaven +: resolvers.value
 }
-</code></pre><ol><li>ユーザ独自の設定を, <code>~/.sbt/1.0/global.sbt</code> などのグローバルな <code>.sbt</code> ファイルに記述する方法。
+</code></pre><ol><li>ユーザ独自の設定を, <code>$HOME/.sbt/1.0/global.sbt</code> などのグローバルな <code>.sbt</code> ファイルに記述する方法。
 ここに記述した設定は、全てのプロジェクトに適用される。
 </li><li>ユーザ独自の設定を <code>&lt;project&gt;/local.sbt</code> のようなプロジェクト内の <code>.sbt</code> ファイルに記述し、バージョンコントロールから除外しておく方法。
 sbt は複数の .sbt ファイルの設定を結合するので、バージョンコントロール下に通常の <code>&lt;project&gt;/build.sbt</code> ファイルも持つことができる。

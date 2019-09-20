@@ -90,9 +90,9 @@ lazy val util = (project in file(&quot;util&quot;))
 // 在`core` 项目中开启 site 插件
 lazy val core = (project in file(&quot;core&quot;))
   .settings(site.settings)
-</code></pre><h3 id="%E5%85%A8%E5%B1%80%E6%8F%92%E4%BB%B6">全局插件<a href="#%E5%85%A8%E5%B1%80%E6%8F%92%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>可以一次给所有项目安装插件，只要在 <code>~/.sbt/1.0/plugins/</code> 中声明它们。<code>~/.sbt/1.0/plugins/</code> 是一个将自己的 classpath 导出给所有项目的 sbt 构建定义。
-概略地讲，在 <code>~/.sbt/1.0/plugins/</code> 中的任何 <code>.sbt</code> 或者 <code>.scala</code> 文件就和所有项目的 <code>project/</code> 目录下的一样。
-</p><p>为了一次给所有的项目添加插件，你可以创建 <code>~/.sbt/1.0/plugins//build.sbt</code> 并且添加 <code>addSbtPlugin()</code> 表达式。因为这样做会增加机器上的依赖，所以这个特性应该少用。
+</code></pre><h3 id="%E5%85%A8%E5%B1%80%E6%8F%92%E4%BB%B6">全局插件<a href="#%E5%85%A8%E5%B1%80%E6%8F%92%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>可以一次给所有项目安装插件，只要在 <code>$HOME/.sbt/1.0/plugins/</code> 中声明它们。<code>$HOME/.sbt/1.0/plugins/</code> 是一个将自己的 classpath 导出给所有项目的 sbt 构建定义。
+概略地讲，在 <code>$HOME/.sbt/1.0/plugins/</code> 中的任何 <code>.sbt</code> 或者 <code>.scala</code> 文件就和所有项目的 <code>project/</code> 目录下的一样。
+</p><p>为了一次给所有的项目添加插件，你可以创建 <code>$HOME/.sbt/1.0/plugins//build.sbt</code> 并且添加 <code>addSbtPlugin()</code> 表达式。因为这样做会增加机器上的依赖，所以这个特性应该少用。
 参见<a href="../docs/Best-Practices.html#global-vs-local-plugins">最佳实践</a>。
 </p><h3 id="%E5%8F%AF%E7%94%A8%E7%9A%84%E6%8F%92%E4%BB%B6">可用的插件<a href="#%E5%8F%AF%E7%94%A8%E7%9A%84%E6%8F%92%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>这里有一个可用的<a href="../docs/Community-Plugins.html">插件列表</a>。
 </p><p>一些特别流行的插件如下：

@@ -43,27 +43,27 @@
                 </div><div class="col-md-8 col-xs-9">
                   <div class="rightcolumn contents">
                   <h2 id="Global+Settings">Global Settings<a href="#Global+Settings" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Basic+global+configuration+file">Basic global configuration file<a href="#Basic+global+configuration+file" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Settings that should be applied to all projects can go in
-<code>~/.sbt/1.0/global.sbt</code> (or any file in <code>~/.sbt/1.0</code> with a <code>.sbt</code>
-extension). Plugins that are defined globally in <code>~/.sbt/1.0/plugins/</code>
+<code>$HOME/.sbt/1.0/global.sbt</code> (or any file in <code>$HOME/.sbt/1.0</code> with a <code>.sbt</code>
+extension). Plugins that are defined globally in <code>$HOME/.sbt/1.0/plugins/</code>
 are available to these settings. For example, to change the default
 <code>shellPrompt</code> for your projects:
-</p><p><code>~/.sbt/1.0/global.sbt</code>
+</p><p><code>$HOME/.sbt/1.0/global.sbt</code>
 </p><pre><code class="prettyprint lang-scala">shellPrompt := { state =&gt;
   &quot;sbt (%s)&gt; &quot;.format(Project.extract(state).currentProject.id)
 }
-</code></pre><p>You can also configure plugins globally added in <code>~/.sbt/1.0/plugins/build.sbt</code>
+</code></pre><p>You can also configure plugins globally added in <code>$HOME/.sbt/1.0/plugins/build.sbt</code>
 (see next paragraph) in that file, but you need to use fully qualified
 names for their properties. For example, for sbt-eclipse property <code>withSource</code>
 documented in https://github.com/sbt/sbteclipse/wiki/Using-sbteclipse,
 you need to use:
 </p><pre><code class="prettyprint lang-scala">com.typesafe.sbteclipse.core.EclipsePlugin.EclipseKeys.withSource := true
-</code></pre><h3 id="Global+Settings+using+a+Global+Plugin">Global Settings using a Global Plugin<a href="#Global+Settings+using+a+Global+Plugin" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The <code>~/.sbt/1.0/plugins/</code> directory is a global plugin project. This
+</code></pre><h3 id="Global+Settings+using+a+Global+Plugin">Global Settings using a Global Plugin<a href="#Global+Settings+using+a+Global+Plugin" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The <code>$HOME/.sbt/1.0/plugins/</code> directory is a global plugin project. This
 can be used to provide global commands, plugins, or other code.
-</p><p>To add a plugin globally, create <code>~/.sbt/1.0/plugins/build.sbt</code> containing
+</p><p>To add a plugin globally, create <code>$HOME/.sbt/1.0/plugins/build.sbt</code> containing
 the dependency definitions. For example:
 </p><pre><code class="prettyprint lang-scala">addSbtPlugin(&quot;org.example&quot; % &quot;plugin&quot; % &quot;1.0&quot;)
 </code></pre><p>To change the default <code>shellPrompt</code> for every project using this
-approach, create a local plugin <code>~/.sbt/1.0/plugins/ShellPrompt.scala</code>:
+approach, create a local plugin <code>$HOME/.sbt/1.0/plugins/ShellPrompt.scala</code>:
 </p><pre><code class="prettyprint lang-scala">import sbt._
 import Keys._
 
@@ -75,11 +75,11 @@ object ShellPrompt extends AutoPlugin {
       &quot;sbt (%s)&gt; &quot;.format(Project.extract(state).currentProject.id) }
   )
 }
-</code></pre><p>The <code>~/.sbt/1.0/plugins/</code> directory is a full project that is
+</code></pre><p>The <code>$HOME/.sbt/1.0/plugins/</code> directory is a full project that is
 included as an external dependency of every plugin project. In practice,
 settings and code defined here effectively work as if they were defined
 in a project’s <code>project/</code> directory. This means that
-<code>~/.sbt/1.0/plugins/</code> can be used to try out ideas for plugins such as
+<code>$HOME/.sbt/1.0/plugins/</code> can be used to try out ideas for plugins such as
 shown in the <code>shellPrompt</code> example.
 </p><div class="bottom nav">
                 <div class="row">

@@ -122,11 +122,11 @@ lazy val util = (project in file(&quot;util&quot;))
 lazy val core = (project in file(&quot;core&quot;))
   .settings(site.settings)
 </code></pre><h3 id="Global+plugins">Global plugins<a href="#Global+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Plugins can be installed for all your projects at once by declaring them
-in <code>~/.sbt/1.0/plugins/</code>. <code>~/.sbt/1.0/plugins/</code> is an sbt project whose
+in <code>$HOME/.sbt/1.0/plugins/</code>. <code>$HOME/.sbt/1.0/plugins/</code> is an sbt project whose
 classpath is exported to all sbt build definition projects. Roughly
-speaking, any <code>.sbt</code> or <code>.scala</code> files in <code>~/.sbt/1.0/plugins/</code> behave as if
+speaking, any <code>.sbt</code> or <code>.scala</code> files in <code>$HOME/.sbt/1.0/plugins/</code> behave as if
 they were in the <code>project/</code> directory for all projects.
-</p><p>You can create <code>~/.sbt/1.0/plugins/build.sbt</code> and put <code>addSbtPlugin()</code>
+</p><p>You can create <code>$HOME/.sbt/1.0/plugins/build.sbt</code> and put <code>addSbtPlugin()</code>
 expressions in there to add plugins to all your projects at once.
 Because doing so would increase the dependency on the machine environment, 
 this feature should be used sparingly. See

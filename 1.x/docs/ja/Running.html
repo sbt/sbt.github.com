@@ -116,8 +116,17 @@ sbt に自動的に再コンパイルを実行させることができる。
 </table><h3 id="%E3%82%BF%E3%83%96%E8%A3%9C%E5%AE%8C">タブ補完<a href="#%E3%82%BF%E3%83%96%E8%A3%9C%E5%AE%8C" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt シェルには、空のプロンプトの状態を含め、タブ補完がある。
 sbt の特殊な慣例として、タブを一度押すとよく使われる候補だけが表示され、
 複数回押すと、より多くの冗長な候補一覧が表示される。
-</p><h3 id="%E5%B1%A5%E6%AD%B4%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89">履歴コマンド<a href="#%E5%B1%A5%E6%AD%B4%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt シェルは、 sbt を終了して再起動した後でも履歴を覚えている。
-履歴にアクセスする最も簡単な方法は矢印キーを使うことだ。以下のコマンドも使うことができる:
+</p><h3 id="sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E5%B1%A5%E6%AD%B4">sbt シェル履歴<a href="#sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E5%B1%A5%E6%AD%B4" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt シェルは、 sbt を終了して再起動した後でも履歴を覚えている。
+履歴にアクセスする最も簡単な方法は矢印キーを使うことだ。
+</p><p><strong>注意</strong>: <code>Ctrl-R</code> を使って履歴を逆方向にインクリメンタル検索できる。
+</p><p>JLine のターミナル環境との統合によって <code>$HOME/.inputrc</code> ファイルを変更することで
+sbt シェルをカスタマイズすることが可能だ。
+例えば、以下の設定を <code>$HOME/.inputrc</code> に書くことで上矢印キーと下矢印キーが履歴の前方一致検索をするようになる。
+</p><pre><code class="">&quot;\e[A&quot;: history-search-backward
+&quot;\e[B&quot;: history-search-forward
+&quot;\e[C&quot;: forward-char
+&quot;\e[D&quot;: backward-char
+</code></pre><p>sbt シェルはその他にも以下のコマンドをサポートする:
 </p><table>
   <tr>
     <td><tt>!</tt></td>
