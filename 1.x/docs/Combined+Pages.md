@@ -1059,6 +1059,8 @@ src/
        <files to include in main jar here>
     scala/
        <main Scala sources>
+    scala-2.12/
+       <main Scala 2.12 specific sources>
     java/
        <main Java sources>
   test/
@@ -1066,6 +1068,8 @@ src/
        <files to include in test jar here>
     scala/
        <test Scala sources>
+    scala-2.12/
+       <test Scala 2.12 specific sources>
     java/
        <test Java sources>
 ```
@@ -8423,16 +8427,20 @@ maintaining source compatibility. This page describes how to use `sbt`
 to build and publish your project against multiple versions of Scala and
 how to use libraries that have done the same.
 
+For cross building sbt plugins see also [Cross building plugins][Cross-Build-Plugins].
+
 ### Publishing conventions
 
 The underlying mechanism used to indicate which version of Scala a
-library was compiled against is to append `_<scala-version>` to the
-library's name. For Scala 2.10.0 and later, the binary version is used.
-For example, `dispatch-core_2.10` when compiled against
-2.10.0, 2.10.1 or any 2.10.x version. This fairly simple approach
+library was compiled against is to append `_<scala-binary-version>` to the
+library's name. For example, the artifact name `dispatch-core_2.12` is used
+when compiled against Scala 2.12.0, 2.12.1 or any 2.12.x version. This fairly simple approach
 allows interoperability with users of Maven, Ant and other build tools.
 
-The rest of this page describes how `sbt` handles this for you as part
+For pre-prelease versions of Scala such as 2.13.0-RC1 and for versions prior to 2.10.x,
+full version is used as the suffix.
+
+The rest of this page describes how sbt handles this for you as part
 of cross-building.
 
 ### Using cross-built libraries
@@ -8500,47 +8508,19 @@ A typical way to use this feature is to do development on a single Scala
 version (no `+` prefix) and then cross-build (using `+`) occasionally
 and when releasing.
 
-#### Note about sbt-release
+<a name="crossPaths"></a>
+#### Scala-version specific source directory
 
-sbt-release implemented cross building support by copy-pasting sbt 0.13's `+` implementation,
-so at least as of sbt-release 1.0.10, it does not work correctly with sbt 1.x's cross building,
-which was prototyped originally as sbt-doge.
+In addition to `src/main/scala/` directory, `src/main/scala-<scala binary version>/`
+directory is included as a source directory.
+For, example if the current subproject's `scalaVersion` is 2.12.10, then
+`src/main/scala-2.12` is included as a Scala-version specific source.
 
-To cross publish using sbt-release with sbt 1.x, use the following workaround:
+By `crossPaths` setting to `false` you can opt out of both Scala-version source directory
+and the `_<scala-binary-version>` publishing convention. This might be useful for non-Scala projects.
 
-```scala
-ThisBuild / organization := "com.example"
-ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := scala212
-
-import ReleaseTransformations._
-lazy val root = (project in file("."))
-  .aggregate(util, core)
-  .settings(
-    // crossScalaVersions must be set to Nil on the aggregating project
-    crossScalaVersions := Nil,
-    publish / skip := true,
-
-    // don't use sbt-release's cross facility
-    releaseCrossBuild := false,
-    releaseProcess := Seq[ReleaseStep](
-      checkSnapshotDependencies,
-      inquireVersions,
-      runClean,
-      releaseStepCommandAndRemaining("+test"),
-      setReleaseVersion,
-      commitReleaseVersion,
-      tagRelease,
-      releaseStepCommandAndRemaining("+publishSigned"),
-      setNextVersion,
-      commitNextVersion,
-      pushChanges
-    )
-  )
-```
-
-This will then use the real cross (`+`) implementation for testing and publishing.
-Credit for this technique goes to James Roper at [playframework#4520][playframework4520] and later inventing `releaseStepCommandAndRemaining`.
+Similarly, the build products such as `*.class` files are written into
+`crossTarget` directory, which by default is `target/scala-<scala binary version>`.
 
 #### Cross building with a Java project
 
@@ -8584,8 +8564,9 @@ lazy val core = (project in file("core"))
 ```
 
 1. `crossScalaVersions` must be set to `Nil` on the aggregating projects such as the root.
-2. Java subprojects should have exactly one Scala version in `crossScalaVersions` to avoid double publishing, typically `scala212`.
-3. Scala subprojects can have multiple Scala versions in `crossScalaVersions`, but must avoid aggregating Java subprojects.
+2. Java subprojects should set `crossPaths` to false, which turns off the `_<scala-binary-version>` publishing convention and the Scala-version specific source directory.
+3. Java subprojects should have exactly one Scala version in `crossScalaVersions` to avoid double publishing, typically `scala212`.
+4. Scala subprojects can have multiple Scala versions in `crossScalaVersions`, but must avoid aggregating Java subprojects.
 
 #### Switching Scala version
 
@@ -8661,30 +8642,47 @@ appended to the normal artifact ID as mentioned in the Publishing
 Conventions section above.
 
 This means that the outputs of each build against each version of Scala
-are independent of the others. `sbt` will resolve your dependencies for
+are independent of the others. sbt will resolve your dependencies for
 each version separately. This way, for example, you get the version of
 Dispatch compiled against 2.11 for your 2.11.x build, the version
-compiled against 2.12 for your 2.12.x builds, and so on. You can have
-fine-grained control over the behavior for different Scala versions
+compiled against 2.12 for your 2.12.x builds, and so on.
+
+#### Overriding the publishing convention
+
+`crossVersion` setting can override the publishing convention:
+
+- `CrossVersion.disabled` (no suffix)
+- `CrossVersion.binary` (`_<scala-binary-version>`)
+- `CrossVersion.full` (`_<scala-version>`)
+
+The default is either `CrossVersion.binary` or `CrossVersion.diabled`
+depending on the value of `crossPaths`.
+
+Because (unlike Scala library) Scala compiler is not forward compatible among
+the patch releases, compiler plugins should use `CrossVersion.full`.
+
+#### More about using cross-built libraries
+
+You can have fine-grained control over the behavior for different Scala versions
 by using the `cross` method on `ModuleID` These are equivalent:
 
 ```scala
 "a" % "b" % "1.0"
-"a" % "b" % "1.0" cross CrossVersion.Disabled
+("a" % "b" % "1.0").cross(CrossVersion.disabled)
 ```
 
 These are equivalent:
 
 ```scala
 "a" %% "b" % "1.0"
-"a" % "b" % "1.0" cross CrossVersion.binary
+("a" % "b" % "1.0").cross(CrossVersion.binary)
 ```
 
 This overrides the defaults to always use the full Scala version instead
 of the binary Scala version:
 
 ```scala
-"a" % "b" % "1.0" cross CrossVersion.full
+("a" % "b" % "1.0").cross(CrossVersion.full)
 ```
 
 `CrossVersion.patch` sits between `CrossVersion.binary` and `CrossVersion.full`
@@ -8692,14 +8690,14 @@ in that it strips off any trailing `-bin-...` suffix which is used to
 distinguish varaint but binary compatible Scala toolchain builds.
 
 ```scala
-"a" % "b" % "1.0" cross CrossVersion.patch
+("a" % "b" % "1.0").cross(CrossVersion.patch)
 ```
 
 This uses a custom function to determine the Scala version to use based
 on the binary Scala version:
 
 ```scala
-"a" % "b" % "1.0" cross CrossVersion.binaryMapped {
+("a" % "b" % "1.0") cross CrossVersion.binaryMapped {
   case "2.9.1" => "2.9.0" // remember that pre-2.10, binary=full
   case "2.10" => "2.10.0" // useful if a%b was released with the old style
   case x => x
@@ -8710,7 +8708,7 @@ This uses a custom function to determine the Scala version to use based
 on the full Scala version:
 
 ```scala
-"a" % "b" % "1.0" cross CrossVersion.fullMapped {
+("a" % "b" % "1.0") cross CrossVersion.fullMapped {
   case "2.9.1" => "2.9.0"
   case x => x
 }
@@ -8719,6 +8717,48 @@ on the full Scala version:
 A custom function is mainly used when cross-building and a dependency
 isn't available for all Scala versions or it uses a different convention
 than the default.
+
+#### Note about sbt-release
+
+sbt-release implemented cross building support by copy-pasting sbt 0.13's `+` implementation,
+so at least as of sbt-release 1.0.10, it does not work correctly with sbt 1.x's cross building,
+which was prototyped originally as sbt-doge.
+
+To cross publish using sbt-release with sbt 1.x, use the following workaround:
+
+```scala
+ThisBuild / organization := "com.example"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
+ThisBuild / scalaVersion := scala212
+
+import ReleaseTransformations._
+lazy val root = (project in file("."))
+  .aggregate(util, core)
+  .settings(
+    // crossScalaVersions must be set to Nil on the aggregating project
+    crossScalaVersions := Nil,
+    publish / skip := true,
+
+    // don't use sbt-release's cross facility
+    releaseCrossBuild := false,
+    releaseProcess := Seq[ReleaseStep](
+      checkSnapshotDependencies,
+      inquireVersions,
+      runClean,
+      releaseStepCommandAndRemaining("+test"),
+      setReleaseVersion,
+      commitReleaseVersion,
+      tagRelease,
+      releaseStepCommandAndRemaining("+publishSigned"),
+      setNextVersion,
+      commitNextVersion,
+      pushChanges
+    )
+  )
+```
+
+This will then use the real cross (`+`) implementation for testing and publishing.
+Credit for this technique goes to James Roper at [playframework#4520][playframework4520] and later inventing `releaseStepCommandAndRemaining`.
 
 
   [Basic-Def]: Basic-Def.html
@@ -17916,6 +17956,7 @@ lazy val parser: Parser[Int] =
   [Plugins-Best-Practices]: Plugins-Best-Practices.html
   [Use-Settings-And-Tasks]: Plugins-Best-Practices.html#Use+settings+and+tasks.+Avoid+commands.
   [Commands]: Commands.html
+  [Cross-Build-Plugins]: Cross-Build-Plugins.html
 
 Plugins
 -------
@@ -18445,6 +18486,8 @@ libraryDependencies ++=
 If you're a plugin writer, please consult the [Plugins Best Practices][Plugins-Best-Practices]
 page; it contains a set of guidelines to help you ensure that your
 plugin is consistent and plays well with other plugins.
+
+For cross building sbt plugins see also [Cross building plugins][Cross-Build-Plugins].
 
 
   [Using-Plugins]: Using-Plugins.html
@@ -19558,25 +19601,54 @@ This indirecton allows template resolvers to have a classpath independent from t
 Cross building plugins
 ----------------------
 
-Like we are able to cross build against multiple Scala versions, we can cross build sbt 1.0 plugins while staying on sbt 0.13. This is useful because we can port one plugin at a time.
-
-1. If the plugin depends on libraries, make sure there are Scala 2.12 artifacts for them.
-2. Use the latest sbt 0.13.16.
-3. Append the following settings to your plugin project (and any other subprojects that it depends):
+Like we are able to cross build against multiple Scala versions, we can cross build sbt 0.13 plugins while staying on sbt 1.x.
 
 ```scala
+crossSbtVersions := Vector("1.2.8", "0.13.18")
+```
+
+If you need to make changes specific to a sbt version, you can now include them into `src/main/scala-sbt-0.13`
+and `src/main/scala-sbt-1.0`. To switch between the sbt versions use
+
+```
+^^ 0.13.18
+
+[info] Setting `sbtVersion in pluginCrossBuild` to 0.13.18
+[info] Set current project to sbt-something (in build file:/xxx/sbt-something/)
+```
+
+or `^compile` to coss compile.
+
+
+### Mixing libraries and sbt plugins in a build
+
+When you want to mix both libraries and sbt plugins into a multi-project build,
+it's more convenient to drive the sbt version based on the Scala version.
+
+You can do that as follows:
+
+```scala
+ThisBuild / crossScalaVersions := Seq("2.10.7", "2.12.10")
+
+lazy val core = (project in file("core"))
+
+lazy val plugin = (project in file("sbt-something"))
+  .enablePlugins(SbtPlugin)
+  .dependsOn(core)
   .settings(
-    scalaVersion := "2.12.10",
-    sbtVersion in Global := "1.3.2",
-    scalaCompilerBridgeSource := {
-      val sv = appConfiguration.value.provider.id.version
-      ("org.scala-sbt" % "compiler-interface" % sv % "component").sources
+    // change the sbt version based on Scala version
+    pluginCrossBuild / sbtVersion := {
+      scalaBinaryVersion.value match {
+        case "2.10" => "0.13.18"
+        case "2.12" => "1.2.8"
+      }
     }
   )
 ```
 
-Hopefully the last step will be simplified using @jrudolph's sbt-cross-building in the future.
-If you run into problems upgrading a plugin, please report to [GitHub issue](https://github.com/sbt/sbt/issues).
+This is a technique discovered by [@jroper](https://github.com/jroper) in [sbt-pgp#115](https://github.com/sbt/sbt-pgp/pull/115). It works because sbt 0.13 and 1.x series use different Scala binary versions.
+
+Using the setting, you can now use Scala cross building commands such as `+compile` and `+publish`.
 
 
 How to...
