@@ -78,9 +78,15 @@ $ sdk install java 11.0.4.hs-adpt
 </p><h3 id="%E3%82%B5%E3%83%BC%E3%83%89%E3%83%91%E3%83%BC%E3%83%86%E3%82%A3%E3%83%91%E3%83%83%E3%82%B1%E3%83%BC%E3%82%B8%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">サードパーティパッケージを使ってのインストール<a href="#%E3%82%B5%E3%83%BC%E3%83%89%E3%83%91%E3%83%BC%E3%83%86%E3%82%A3%E3%83%91%E3%83%83%E3%82%B1%E3%83%BC%E3%82%B8%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><blockquote><p><strong>注意:</strong> サードパーティが提供するパッケージは最新版を使っているとは限らない。
 何か問題があれば、パッケージメンテナに報告してほしい。
 </p></blockquote><h4 id=""><a href="https://scoop.sh/">Scoop</a><a href="#" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="">$ scoop install sbt
-</code></pre><h2 id="Linux+%E3%81%B8%E3%81%AE+sbt+%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">Linux への sbt のインストール<a href="#Linux+%E3%81%B8%E3%81%AE+sbt+%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="JDK+%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">JDK のインストール<a href="#JDK+%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>まず JDK をインストールする必要がある。AdoptOpenJDK JDK 8 もしくは AdoptOpenJDK JDK 11 を推奨する。パッケージ名はディストリビューションによって異なる。
-</p><p>例えば、Ubuntu xenial (16.04LTS) には <a href="https://packages.ubuntu.com/hu/xenial/openjdk-8-jdk">openjdk-8-jdk</a> がある。
-</p><p>Redhat 系は <a href="https://apps.fedoraproject.org/packages/java-1.8.0-openjdk-devel">java-1.8.0-openjdk-devel</a> と呼んでいる。
+</code></pre><h2 id="Linux+%E3%81%B8%E3%81%AE+sbt+%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">Linux への sbt のインストール<a href="#Linux+%E3%81%B8%E3%81%AE+sbt+%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="SDKMAN+%E3%81%8B%E3%82%89%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">SDKMAN からのインストール<a href="#SDKMAN+%E3%81%8B%E3%82%89%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>JDK と sbt をするのに、<a href="https://sdkman.io/">SDKMAN</a> の導入を検討してほしい。
+</p><pre><code class="">$ sdk list java
+$ sdk install java 11.0.4.hs-adpt
+$ sdk install sbt
+</code></pre><p>この方法は 2つの利点がある。
+1. <a href="https://mail.openjdk.java.net/pipermail/jdk8u-dev/2019-May/009330.html">「闇鍋 OpenJDK ビルド」</a>と揶揄されているディストロ管理の JDK ではなく、AdoptOpenJDK が出している公式のパッケージをインストールできる。
+2. sbt の全ての JAR ファイルを含んだ <code>tgz</code> パッケージをインストールできる (DEB と RPM版は帯域の節約のために JAR ファイルが含まれていない)。
+</p><h3 id="JDK+%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">JDK のインストール<a href="#JDK+%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>まず JDK をインストールする必要がある。AdoptOpenJDK JDK 8 もしくは AdoptOpenJDK JDK 11 を推奨する。
+</p><p>パッケージ名はディストリビューションによって異なる。例えば、Ubuntu xenial (16.04LTS) には <a href="https://packages.ubuntu.com/hu/xenial/openjdk-8-jdk">openjdk-8-jdk</a> がある。Redhat 系は <a href="https://apps.fedoraproject.org/packages/java-1.8.0-openjdk-devel">java-1.8.0-openjdk-devel</a> と呼んでいる。
 </p><h3 id="%E3%83%A6%E3%83%8B%E3%83%90%E3%83%BC%E3%82%B5%E3%83%AB%E3%83%91%E3%83%83%E3%82%B1%E3%83%BC%E3%82%B8%E3%81%8B%E3%82%89%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">ユニバーサルパッケージからのインストール<a href="#%E3%83%A6%E3%83%8B%E3%83%90%E3%83%BC%E3%82%B5%E3%83%AB%E3%83%91%E3%83%83%E3%82%B1%E3%83%BC%E3%82%B8%E3%81%8B%E3%82%89%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://piccolo.link/sbt-1.3.2.zip">ZIP</a> か <a href="https://piccolo.link/sbt-1.3.2.tgz">TGZ</a> をダウンロードしてきて解凍する。
 </p><h3 id="Ubuntu+%E5%8F%8A%E3%81%B3%E3%81%9D%E3%81%AE%E4%BB%96%E3%81%AE+Debian+%E3%83%99%E3%83%BC%E3%82%B9%E3%81%AE+Linux+%E3%83%87%E3%82%A3%E3%82%B9%E3%83%88%E3%83%AA%E3%83%93%E3%83%A5%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3">Ubuntu 及びその他の Debian ベースの Linux ディストリビューション<a href="#Ubuntu+%E5%8F%8A%E3%81%B3%E3%81%9D%E3%81%AE%E4%BB%96%E3%81%AE+Debian+%E3%83%99%E3%83%BC%E3%82%B9%E3%81%AE+Linux+%E3%83%87%E3%82%A3%E3%82%B9%E3%83%88%E3%83%AA%E3%83%93%E3%83%A5%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://dl.bintray.com/sbt/debian/sbt-1.3.2.deb">DEB</a> は sbt による公式パッケージだ。
 </p><p>Ubuntu 及びその他の Debian ベースのディストリビューションは DEB フォーマットを用いるが、
@@ -89,14 +95,13 @@ $ sdk install java 11.0.4.hs-adpt
 (例: <code>apt-get</code>、<code>aptitude</code>、Synaptic など)、インストールはそれらから行う。
 ターミナル上から以下を実行すると <code>sbt</code> をインストールできる (superuser 権限を必要とするため、<code>sudo</code> を使っている)。
 </p><pre><code>echo &quot;deb https://dl.bintray.com/sbt/debian /&quot; | sudo tee -a /etc/apt/sources.list.d/sbt.list
-sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2EE0EA64E40A89B84B2DF73499E82A75642AC823
+curl -sL &quot;https://keyserver.ubuntu.com/pks/lookup?op=get&amp;search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823&quot; | sudo apt-key add
 sudo apt-get update
 sudo apt-get install sbt
 </code></pre><p>パッケージ・マネージャは設定されたリポジトリに指定されたパッケージがあるか確認しにいく。
 sbt のバイナリは Bintray にて公開されており、都合の良いことに Bintray は APT リポジトリを提供している。
 そのため、このリポジトリをパッケージ・マネージャに追加しさえすればよい。
-</p><blockquote><p><strong>注意</strong> [sbt/website#127][website127] で報告されている通り、https を使用するとセグメンテーション違反が発生する場合がある。
-</p></blockquote><p><code>sbt</code> を最初にインストールした後は、このパッケージは <code>aptitude</code> や Synaptic
+</p><p><code>sbt</code> を最初にインストールした後は、このパッケージは <code>aptitude</code> や Synaptic
 上から管理することができる (パッケージ・キャッシュの更新を忘れずに)。
 追加された APT リポジトリは「システム設定 -&gt; ソフトウェアとアップデート -&gt; 他のソフトウェア」 の一番下に表示されているはずだ:
 </p><p><img src="../files/ubuntu-sources.png" title="Ubuntu Software &amp; Updates Screenshot" alt="Ubuntu Software &amp; Updates Screenshot"/>

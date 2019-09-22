@@ -42,13 +42,20 @@
       </div>
                 </div><div class="col-md-8 col-xs-9">
                   <div class="rightcolumn contents">
-                  <h2 id="Installing+sbt+on+Linux">Installing sbt on Linux<a href="#Installing+sbt+on+Linux" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Instalar+desde+un+paquete+universal">Instalar desde un paquete universal<a href="#Instalar+desde+un+paquete+universal" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Descarga el paquete <a href="https://piccolo.link/sbt-1.3.2.zip">ZIP</a> o <a href="https://piccolo.link/sbt-1.3.2.tgz">TGZ</a> y descomprímelo.
+                  <h2 id="Installing+sbt+on+Linux">Installing sbt on Linux<a href="#Installing+sbt+on+Linux" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Installing+from+SDKMAN">Installing from SDKMAN<a href="#Installing+from+SDKMAN" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To install both JDK and sbt, consider using <a href="https://sdkman.io/">SDKMAN</a>.
+</p><pre><code class="">$ sdk list java
+$ sdk install java 11.0.4.hs-adpt
+$ sdk install sbt
+</code></pre><p>This has two advantages.
+1. It will install the official packaging by AdoptOpenJDK, as opposed to the <a href="https://mail.openjdk.java.net/pipermail/jdk8u-dev/2019-May/009330.html">“mystery meat OpenJDK builds“</a>.
+2. It will install <code>tgz</code> packaging of sbt that contains all JAR files. (DEB and RPM packages do not to save bandwidth)
 </p><h3 id="Instalar+JDK">Instalar JDK<a href="#Instalar+JDK" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Primero desberás de instalar JDK. Recomendamos AdoptOpenJDK JDK 8 u AdoptOpenJDK JDK 11.
-Los detalles sobre el nombre de los paquetes cambian de una distribución a otra.
-</p><p>Por ejemplo, Ubuntu xenial (16.04LTS) usa
+</p><p>Los detalles sobre el nombre de los paquetes cambian de una distribución a otra.
+Por ejemplo, Ubuntu xenial (16.04LTS) usa
 <a href="https://packages.ubuntu.com/hu/xenial/openjdk-8-jdk">openjdk-8-jdk</a>.
-</p><p>La familia Redhat lo llama
+La familia Redhat lo llama
 <a href="https://apps.fedoraproject.org/packages/java-1.8.0-openjdk-devel">java-1.8.0-openjdk-devel</a>.
+</p><h3 id="Instalar+desde+un+paquete+universal">Instalar desde un paquete universal<a href="#Instalar+desde+un+paquete+universal" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Descarga el paquete <a href="https://piccolo.link/sbt-1.3.2.zip">ZIP</a> o <a href="https://piccolo.link/sbt-1.3.2.tgz">TGZ</a> y descomprímelo.
 </p><h3 id="Ubuntu+y+otras+distribuciones+basadas+en+Debian">Ubuntu y otras distribuciones basadas en Debian<a href="#Ubuntu+y+otras+distribuciones+basadas+en+Debian" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Los paquetes <a href="https://dl.bintray.com/sbt/debian/sbt-1.3.2.deb">DEB</a> son oficialmente soportados por sbt.
 </p><p>Ubuntu y otras distribuciones basadas en Debian usan el formato DEB, pero por lo
 general no necesitas instalar software desde un fichero DEB local.
@@ -58,7 +65,7 @@ comandos (p.e. <code>apt-get</code>, <code>aptitude</code>) o con una interfaz g
 Ejecuta lo siguiente desde el terminal para instalar <code>sbt</code>
 (necesitarás tener privilegios de administrador para hacerlo, de ahí el <code>sudo</code>).
 </p><pre><code>echo &quot;deb https://dl.bintray.com/sbt/debian /&quot; | sudo tee -a /etc/apt/sources.list.d/sbt.list
-sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2EE0EA64E40A89B84B2DF73499E82A75642AC823
+curl -sL &quot;https://keyserver.ubuntu.com/pks/lookup?op=get&amp;search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823&quot; | sudo apt-key add
 sudo apt-get update
 sudo apt-get install sbt
 </code></pre><p>Los gestores de paquetes utilizan los repositorios para buscar los paquetes que
