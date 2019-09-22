@@ -213,7 +213,7 @@ underlying <code>SettingKey[Task[T]]</code> (and they both wrap an underlying
 </p><p>For example, <code>a := 3</code> for a SettingKey <em>a</em> will very roughly translate
 to <code>setting(a, value(3))</code>. For a TaskKey <em>a</em>, it will roughly translate
 to <code>setting(a, value( task { 3 } ) )</code>. See
-<a href="../sxr/sbt/Structure.scala">main/Structure.scala</a> for details.
+<a href="https://github.com/sbt/sbt/blob/develop/main-settings/src/main/scala/sbt/Structure.scala">main/Structure.scala</a> for details.
 </p><h4 id="Settings+definitions">Settings definitions<a href="#Settings+definitions" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>sbt also provides a way to define these settings in a file (<code>build.sbt</code>
 and <code>Build.scala</code>). This is done for <code>build.sbt</code> using basic parsing and
 then passing the resulting chunks of code to <code>compile/Eval.scala</code>. For

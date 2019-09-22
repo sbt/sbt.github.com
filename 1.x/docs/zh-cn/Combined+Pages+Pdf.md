@@ -1149,7 +1149,7 @@ sbt 使用 [Apache Ivy](http://ant.apache.org/ivy/) 来实现托管依赖，所�
 libraryDependencies += groupID % artifactID % revision
 ```
 
-或者像这样， 用字符串或者 [Configuration](../../sxr/sbt/Configuration.scala.html#sbt.Configuration) val 当做 `configuration`：
+或者像这样， 用字符串或者 `Configuration` val (`Test`) 当做 `configuration`：
 
 ```scala
 libraryDependencies += groupID % artifactID % revision % configuration
@@ -1590,7 +1590,7 @@ lazy val core = (project in file("core"))
 
 ### 定义一个键
 
-[这里](../../api/sbt/Keys$.html)介绍了如何定义键。大多数的默认键定义在[这里](../../sxr/sbt/Defaults.scala.html)。
+[这里](../../api/sbt/Keys$.html)介绍了如何定义键。大多数的默认键定义在[这里](https://github.com/sbt/sbt/blob/develop/main/src/main/scala/sbt/Defaults.scala)。
 
 键有三种类型。`SettingKey` 和 `TaskKey` 在 [.sbt 构建定义][Basic-Def]讲解。关于 `InputKey` 的内容在[输入任务][Input-Tasks]页面。
 

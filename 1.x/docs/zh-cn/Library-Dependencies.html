@@ -63,7 +63,7 @@
 你可以从<a href="../docs/Library-Management.html#external-maven-ivy">这里</a>获取更详细的内容。
 </p><p>可以像这样定义一个依赖，其中 <code>groupId</code>， <code>artifactId</code> 和 <code>revision</code> 都是字符串：
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += groupID % artifactID % revision
-</code></pre><p>或者像这样， 用字符串或者 <a href="../../sxr/sbt/Configuration.scala.html#sbt.Configuration">Configuration</a> val 当做 <code>configuration</code>：
+</code></pre><p>或者像这样， 用字符串或者 <code>Configuration</code> val (<code>Test</code>) 当做 <code>configuration</code>：
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += groupID % artifactID % revision % configuration
 </code></pre><p><code>libraryDependencies</code> 在 <a href="../../api/sbt/Keys$.html#libraryDependencies:sbt.SettingKey[Seq[sbt.librarymanagement.ModuleID]]">Keys</a> 中像这样声明：
 </p><pre><code class="prettyprint lang-scala">val libraryDependencies = settingKey[Seq[ModuleID]](&quot;Declares managed dependencies.&quot;)

@@ -1844,7 +1844,7 @@ sbt にその外部コンフィギュレーションファイルを使わせる�
 これに関しては、[Library Management] を参照。
 </p><p>依存性の宣言は、以下のようになる。ここで、<code>groupId</code>、<code>artifactId</code>、と <code>revision</code> は文字列だ:
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += groupID % artifactID % revision
-</code></pre><p>もしくは、以下のようになる。このときの <code>configuration</code> は文字列もしくは <a href="../../sxr/sbt/Configuration.scala.html#sbt.Configuration">Configuration</a> の値だ。
+</code></pre><p>もしくは、以下のようになる。このときの <code>configuration</code> は文字列もしくは <code>Configuration</code> の値だ (<code>Test</code> など)。
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += groupID % artifactID % revision % configuration
 </code></pre><p><code>libraryDependencies</code> は [Keys] で以下のように定義されている:
 </p><pre><code class="prettyprint lang-scala">val libraryDependencies = settingKey[Seq[ModuleID]](&quot;Declares managed dependencies.&quot;)
@@ -1991,7 +1991,7 @@ lazy val core = (project in file(&quot;core&quot;))
 特に <a href="Basic-Def.html">build.sbt</a> と
 <a href="Task-Graph.html">タスク・グラフ</a> を読んである必要がある。
 </p><h3 id="%E3%82%AD%E3%83%BC%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B">キーを定義する<a href="#%E3%82%AD%E3%83%BC%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="../../api/sbt/Keys$.html">Keys</a> は、キーをどのように定義するかを示すサンプル例が満載だ。
-多くのキーは、<a href="../../sxr/sbt/Defaults.scala.html">Defaults</a> で実装されている。
+多くのキーは、<a href="https://github.com/sbt/sbt/blob/develop/main/src/main/scala/sbt/Defaults.scala">Defaults</a> で実装されている。
 </p><p>キーには 3 つの型がある。
 <code>SettingKey</code> と <code>TaskKey</code> は <a href="Basic-Def.html">.sbt ビルド定義</a>で説明した。
 <code>InputKey</code> に関しては <a href="../../docs/Input-Tasks.html">Input Tasks</a> を見てほしい。

@@ -2112,8 +2112,7 @@ that <a href="../docs/Library-Management.html#External+Maven+or+Ivy">here</a>.
 </p><p>Declaring a dependency looks like this, where <code>groupId</code>, <code>artifactId</code>, and
 <code>revision</code> are strings:
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += groupID % artifactID % revision
-</code></pre><p>or like this, where <code>configuration</code> can be a string or
-<a href="../sxr/sbt/Configuration.scala.html#sbt.Configuration">Configuration</a> val:
+</code></pre><p>or like this, where <code>configuration</code> can be a string or a <code>Configuration</code> value (such as <code>Test</code>):
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += groupID % artifactID % revision % configuration
 </code></pre><p><code>libraryDependencies</code> is declared in
 <a href="../api/sbt/Keys$.html#libraryDependencies:sbt.SettingKey[Seq[sbt.librarymanagement.ModuleID]]">Keys</a> like
@@ -2314,7 +2313,7 @@ Getting Started Guide, especially <a href="Basic-Def.html">build.sbt</a> and
 <a href="Task-Graph.html">task graph</a>.
 </p><h3 id="Defining+a+key">Defining a key<a href="#Defining+a+key" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="../api/sbt/Keys$.html">Keys</a> is packed with examples
 illustrating how to define keys. Most of the keys are implemented in
-<a href="../sxr/sbt/Defaults.scala.html">Defaults</a>.
+<a href="https://github.com/sbt/sbt/blob/develop/main/src/main/scala/sbt/Defaults.scala">Defaults</a>.
 </p><p>Keys have one of three types. <code>SettingKey</code> and <code>TaskKey</code> are described in
 <a href="Basic-Def.html">.sbt build definition</a>. Read about <code>InputKey</code> on the
 <a href="../docs/Input-Tasks.html">Input Tasks</a> page.
@@ -5786,9 +5785,7 @@ or a resolver to use when retrieving dependencies.
 </code></pre><h5 id="Example%3A">Example:<a href="#Example%3A" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p>To add the Sonatype snapshots repository and add Scalaz 7.0-SNAPSHOT to
 REPL classpath:
 </p><pre><code class="">$ screpl &quot;sonatype-releases at https://oss.sonatype.org/content/repositories/snapshots/&quot; &quot;org.scalaz%%scalaz-core%7.0-SNAPSHOT&quot;
-</code></pre><p>This syntax was a quick hack. Feel free to improve it. The relevant
-class is <a href="../sxr/sbt/IvyConsole.scala.html">IvyConsole</a>.
-</p><h2 id="sbt+Server">sbt Server<a href="#sbt+Server" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>sbt server is a feature that is newly introduced in sbt 1.x, and it’s still a work in progress.
+</code></pre><h2 id="sbt+Server">sbt Server<a href="#sbt+Server" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>sbt server is a feature that is newly introduced in sbt 1.x, and it’s still a work in progress.
 You might at first imagine server to be something that runs on remote servers, and does great things, but for now sbt server is not that.
 </p><p>Actually, sbt server just adds network access to sbt’s shell command so,
 in addition to accepting input from the terminal, server also to accepts input from the network.
@@ -10625,7 +10622,7 @@ simply <code>Parser[T]</code> is that often the current <code>State</code> is us
 the parser. For example, the currently loaded projects (provided by
 <code>State</code>) determine valid completions for the <code>project</code> command. Examples
 for the general and specific cases are shown in the following sections.
-</p><p>See <a href="../sxr/sbt/Command.scala.html">Command.scala</a> for the source
+</p><p>See <a href="https://github.com/sbt/sbt/blob/develop/main-command/src/main/scala/sbt/Command.scala">Command.scala</a> for the source
 API details for constructing commands.
 </p><h4 id="General+commands">General commands<a href="#General+commands" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>General command construction looks like:
 </p><pre><code class="prettyprint lang-scala">val action: (State, T) =&gt; State = ...
@@ -10947,7 +10944,7 @@ define settings in <code>.sbt</code> files, for example.
 <a href="../api/sbt/Scope.html">Scope</a> selects the scope the key is
 obtained for. There are convenience overloads of <code>in</code> that can be used
 to specify only the required scope axes. See
-<a href="../sxr/sbt/Structure.scala.html">Structure.scala</a> for where <code>in</code>
+<a href="https://github.com/sbt/sbt/blob/develop/main-settings/src/main/scala/sbt/Structure.scala">Structure.scala</a> for where <code>in</code>
 and other parts of the settings interface are defined. Some examples:
 </p><pre><code class="prettyprint lang-scala">import Keys._
 val extracted: Extracted
@@ -14048,8 +14045,7 @@ dependencies. Read the Getting Started Guide about
 </p><h4 id="What+is+%2C+%2C+%E2%80%A6%3F">What is <code>ModuleID</code>, <code>Project</code>, …?<a href="#What+is+%2C+%2C+%E2%80%A6%3F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>To figure out an unknown type or method, have a look at the
 <a href="Getting-Started.html">Getting Started Guide</a> if you have not. Also
 try the <a href="Name-Index.html">index</a> of commonly used methods, values, and
-types, the <a href="../api/">API Documentation</a> and the
-<a href="../sxr/">hyperlinked sources</a>.
+types, and the <a href="../api/">API Documentation</a>.
 </p><h4 id="How+do+I+add+files+to+a+jar+package%3F">How do I add files to a jar package?<a href="#How+do+I+add+files+to+a+jar+package%3F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The files included in an artifact are configured by default by a task
 <code>mappings</code> that is scoped by the relevant package task. The <code>mappings</code>
 task returns a sequence <code>Seq[(File,String)]</code> of mappings from the file
@@ -15755,7 +15751,7 @@ underlying <code>SettingKey[Task[T]]</code> (and they both wrap an underlying
 </p><p>For example, <code>a := 3</code> for a SettingKey <em>a</em> will very roughly translate
 to <code>setting(a, value(3))</code>. For a TaskKey <em>a</em>, it will roughly translate
 to <code>setting(a, value( task { 3 } ) )</code>. See
-<a href="../sxr/sbt/Structure.scala">main/Structure.scala</a> for details.
+<a href="https://github.com/sbt/sbt/blob/develop/main-settings/src/main/scala/sbt/Structure.scala">main/Structure.scala</a> for details.
 </p><h4 id="Settings+definitions">Settings definitions<a href="#Settings+definitions" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>sbt also provides a way to define these settings in a file (<code>build.sbt</code>
 and <code>Build.scala</code>). This is done for <code>build.sbt</code> using basic parsing and
 then passing the resulting chunks of code to <code>compile/Eval.scala</code>. For
@@ -15773,7 +15769,7 @@ value for a particular build key. sbt converts all registered
 <code>Setting[_]</code> objects into a giant linear sequence and <em>compiles</em> them
 into a task graph. This task graph is then used to execute your build.
 </p><p>All of sbt’s loading semantics are contained within the
-<a href="../sxr/sbt/Load.scala.html">Load.scala</a> file. It is approximately
+<a href="https://github.com/sbt/sbt/blob/develop/main/src/main/scala/sbt/internal/Load.scala">Load.scala</a> file. It is approximately
 the following:
 </p><p><img src="files/settings-initialization-load-ordering.png" alt="image"/>
 </p><p>The blue circles represent actions happening when sbt loads a project.

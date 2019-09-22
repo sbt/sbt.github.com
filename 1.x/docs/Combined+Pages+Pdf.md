@@ -3333,8 +3333,7 @@ Declaring a dependency looks like this, where `groupId`, `artifactId`, and
 libraryDependencies += groupID % artifactID % revision
 ```
 
-or like this, where `configuration` can be a string or
-[Configuration](../sxr/sbt/Configuration.scala.html#sbt.Configuration) val:
+or like this, where `configuration` can be a string or a `Configuration` value (such as `Test`):
 
 ```scala
 libraryDependencies += groupID % artifactID % revision % configuration
@@ -3706,7 +3705,7 @@ Getting Started Guide, especially [build.sbt][Basic-Def] and
 
 [Keys](../api/sbt/Keys$.html) is packed with examples
 illustrating how to define keys. Most of the keys are implemented in
-[Defaults](../sxr/sbt/Defaults.scala.html).
+[Defaults](https://github.com/sbt/sbt/blob/develop/main/src/main/scala/sbt/Defaults.scala).
 
 Keys have one of three types. `SettingKey` and `TaskKey` are described in
 [.sbt build definition][Basic-Def]. Read about `InputKey` on the
@@ -9410,9 +9409,6 @@ REPL classpath:
 ```
 $ screpl "sonatype-releases at https://oss.sonatype.org/content/repositories/snapshots/" "org.scalaz%%scalaz-core%7.0-SNAPSHOT"
 ```
-
-This syntax was a quick hack. Feel free to improve it. The relevant
-class is [IvyConsole](../sxr/sbt/IvyConsole.scala.html).
 
 
 sbt Server
@@ -17087,7 +17083,7 @@ the parser. For example, the currently loaded projects (provided by
 `State`) determine valid completions for the `project` command. Examples
 for the general and specific cases are shown in the following sections.
 
-See [Command.scala](../sxr/sbt/Command.scala.html) for the source
+See [Command.scala](https://github.com/sbt/sbt/blob/develop/main-command/src/main/scala/sbt/Command.scala) for the source
 API details for constructing commands.
 
 #### General commands
@@ -17555,7 +17551,7 @@ define settings in `.sbt` files, for example.
 [Scope](../api/sbt/Scope.html) selects the scope the key is
 obtained for. There are convenience overloads of `in` that can be used
 to specify only the required scope axes. See
-[Structure.scala](../sxr/sbt/Structure.scala.html) for where `in`
+[Structure.scala](https://github.com/sbt/sbt/blob/develop/main-settings/src/main/scala/sbt/Structure.scala) for where `in`
 and other parts of the settings interface are defined. Some examples:
 
 ```scala
@@ -22756,8 +22752,7 @@ dependencies. Read the Getting Started Guide about
 To figure out an unknown type or method, have a look at the
 [Getting Started Guide][Getting-Started] if you have not. Also
 try the [index][Name-Index] of commonly used methods, values, and
-types, the [API Documentation](../api/) and the
-[hyperlinked sources](../sxr/).
+types, and the [API Documentation](../api/).
 
 #### How do I add files to a jar package?
 
@@ -25292,7 +25287,7 @@ underlying `SettingKey[Task[T]]` (and they both wrap an underlying
 For example, `a := 3` for a SettingKey *a* will very roughly translate
 to `setting(a, value(3))`. For a TaskKey *a*, it will roughly translate
 to `setting(a, value( task { 3 } ) )`. See
-[main/Structure.scala](../sxr/sbt/Structure.scala) for details.
+[main/Structure.scala](https://github.com/sbt/sbt/blob/develop/main-settings/src/main/scala/sbt/Structure.scala) for details.
 
 #### Settings definitions
 
@@ -25320,7 +25315,7 @@ value for a particular build key. sbt converts all registered
 into a task graph. This task graph is then used to execute your build.
 
 All of sbt's loading semantics are contained within the
-[Load.scala](../sxr/sbt/Load.scala.html) file. It is approximately
+[Load.scala](https://github.com/sbt/sbt/blob/develop/main/src/main/scala/sbt/internal/Load.scala) file. It is approximately
 the following:
 
 ![image](files/settings-initialization-load-ordering.png)

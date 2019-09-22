@@ -3027,7 +3027,7 @@ sbt にその外部コンフィギュレーションファイルを使わせる�
 libraryDependencies += groupID % artifactID % revision
 ```
 
-もしくは、以下のようになる。このときの `configuration` は文字列もしくは [Configuration](../../sxr/sbt/Configuration.scala.html#sbt.Configuration) の値だ。
+もしくは、以下のようになる。このときの `configuration` は文字列もしくは `Configuration` の値だ (`Test` など)。
 
 ```scala
 libraryDependencies += groupID % artifactID % revision % configuration
@@ -3332,7 +3332,7 @@ lazy val core = (project in file("core"))
   [Plugins]: ../../docs/Plugins.html
   [Tasks]: ../../docs/Tasks.html
   [Keys]: ../../api/sbt/Keys$.html
-  [Defaults]: ../../sxr/sbt/Defaults.scala.html
+  [Defaults]: https://github.com/sbt/sbt/blob/develop/main/src/main/scala/sbt/Defaults.scala
   [Scaladocs-IO]: ../../api/sbt/io/IO$.html
 
 カスタムセッティングとタスク
