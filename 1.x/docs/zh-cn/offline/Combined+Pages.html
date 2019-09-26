@@ -685,7 +685,12 @@ lazy val core = project
 </p><h3 id="%E9%BB%98%E8%AE%A4%E7%9A%84+root+%E9%A1%B9%E7%9B%AE">默认的 root 项目<a href="#%E9%BB%98%E8%AE%A4%E7%9A%84+root+%E9%A1%B9%E7%9B%AE" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>如果在构建中根目录没有定义项目，sbt 会在构建中创建一个默认的项目并将其他项目也聚合起来。
 </p><p>因为 <code>hello-foo</code> 项目定义了 <code>base = file(&quot;foo&quot;)</code>，它将会被包含在 foo 子目录中。
 它的源文件可以直接放在 <code>foo</code> 下，像 <code>foo/Foo.scala</code>，或者在 <code>foo/src/main/scala</code> 中。通常 sbt 的 <a href="Directories.html">目录结构</a> 应用在 <code>foo</code> 目录下除了构建定义文件。
-</p><p><code>foo</code> 中的任何 <code>.sbt</code> 文件，比如说 <code>foo/build.sbt</code>，将会和整个构建合并，但是在 <code>hello-foo</code> 项目的 scope 中。
+</p><h3 id="%E4%BA%A4%E4%BA%92%E5%BC%8F%E5%BC%95%E5%AF%BC%E9%A1%B9%E7%9B%AE">交互式引导项目<a href="#%E4%BA%A4%E4%BA%92%E5%BC%8F%E5%BC%95%E5%AF%BC%E9%A1%B9%E7%9B%AE" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在 sbt 的命令行中，输入 <code>projects</code> 列出你的项目，执行 <code>project &lt;projectname&gt;</code> 可以选择当前项目。当你执行 task 像 <code>compile</code>，它会在当前项目上执行。
+所以你没有必要去编译 root 项目，你可以只编译子项目。
+</p><p>你可以通过显示的指定项目 ID 在另一个项目上执行一个 task，例如 <code>subProjectID/compile</code>。
+</p><h3 id="%E9%80%9A%E7%94%A8%E4%BB%A3%E7%A0%81">通用代码<a href="#%E9%80%9A%E7%94%A8%E4%BB%A3%E7%A0%81" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在一个 <code>.sbt</code> 文件中的定义对于其他的 <code>.sbt</code> 文件不可见。为了在不同的 <code>.sbt</code> 文件中共享代码，在构建根目录下的 <code>project/</code> 目录下定义一个或多个 Scala 文件。
+</p><p>参见 <a href="Organizing-Build.html">组织构建</a> 获取详细内容。
+</p><h3 id="Appendix%3A+Subproject+build+definition+files">Appendix: Subproject build definition files<a href="#Appendix%3A+Subproject+build+definition+files" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>foo</code> 中的任何 <code>.sbt</code> 文件，比如说 <code>foo/build.sbt</code>，将会和整个构建合并，但是在 <code>hello-foo</code> 项目的 scope 中。
 </p><p>如果你的的整个项目都在 hello 中，尝试在 <code>hello/build.sbt</code>，<code>hello/bar/build.sbt</code> 和 <code>hello/foo/build.sbt</code> 中定义一个不同的版本（<code>version := &quot;0.6&quot;</code>）。
 现在在 sbt 的命令行中执行 <code>show version</code>。你应该得到这样的信息（随着你定义的任何版本）：
 </p><pre><code class="">&gt; show version
@@ -697,14 +702,12 @@ lazy val core = project
 [info]  0.5
 </code></pre><p><code>hello-foo/*:version</code> 定义在 <code>hello/foo/build.sbt</code> 中，<code>hello-bar/*:version</code> 定义在 <code>hello/bar/build.sbt</code> 中，<code>hello/*:version</code> 定义在 <code>hello/build.sbt</code> 中。
 记住 <a href="Scopes.html">scoped keys 的语法</a>。每个 <code>version</code> key 在对应的项目的 scope 中，基于 <code>build.sbt</code> 文件的位置。但是所有的三个 <code>build.sbt</code> 文件都只是整个构建定义的一部分。
-</p><p><em>每个项目的设置都可以放该项目基目录下的 <code>.sbt</code> 文件中</em>，然而 <code>.scala</code> 文件可以和上面展示的一样简单，列出项目和基目录。<em>没必要将设置放到 <code>.scala</code> 文件中。</em>
-</p><p>然而，为了将所有构建定义都放在一个项目目录下，你会发现将所有的设置都放在 <code>.scala</code> 中会干净很多。由你做主。
-</p><p>在子项目中，你不能有项目的子目录或者 <code>project/*.scala</code> 文件。<code>foo/project/Build.scala</code> 将会被忽略。
-</p><h3 id="%E4%BA%A4%E4%BA%92%E5%BC%8F%E5%BC%95%E5%AF%BC%E9%A1%B9%E7%9B%AE">交互式引导项目<a href="#%E4%BA%A4%E4%BA%92%E5%BC%8F%E5%BC%95%E5%AF%BC%E9%A1%B9%E7%9B%AE" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在 sbt 的命令行中，输入 <code>projects</code> 列出你的项目，执行 <code>project &lt;projectname&gt;</code> 可以选择当前项目。当你执行 task 像 <code>compile</code>，它会在当前项目上执行。
-所以你没有必要去编译 root 项目，你可以只编译子项目。
-</p><p>你可以通过显示的指定项目 ID 在另一个项目上执行一个 task，例如 <code>subProjectID/compile</code>。
-</p><h3 id="%E9%80%9A%E7%94%A8%E4%BB%A3%E7%A0%81">通用代码<a href="#%E9%80%9A%E7%94%A8%E4%BB%A3%E7%A0%81" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在一个 <code>.sbt</code> 文件中的定义对于其他的 <code>.sbt</code> 文件不可见。为了在不同的 <code>.sbt</code> 文件中共享代码，在构建根目录下的 <code>project/</code> 目录下定义一个或多个 Scala 文件。
-</p><p>参见 <a href="Organizing-Build.html">组织构建</a> 获取详细内容。
+</p><p>Style choices:
+</p><ul><li>Each subproject’s settings can go into <code>*.sbt</code> files in the base directory of that project,
+while the root <code>build.sbt</code> declares only minimum project declarations in the form of <code>lazy val foo = (project in file(&quot;foo&quot;))</code> without the settings.
+</li><li>We recommend putting all project declarations and settings in the root <code>build.sbt</code> file
+in order to keep all build definition under a single file. However, it up to you.
+</li></ul><p>在子项目中，你不能有项目的子目录或者 <code>project/*.scala</code> 文件。<code>foo/project/Build.scala</code> 将会被忽略。
 </p><h2 id="%E4%BD%BF%E7%94%A8%E6%8F%92%E4%BB%B6">使用插件<a href="#%E4%BD%BF%E7%94%A8%E6%8F%92%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>请先阅读入门指南前面的内容，尤其需要在阅读本小节之前理解 <a href="Basic-Def.html">build.sbt</a> 和 <a href="Library-Dependencies.html">库依赖</a>。
 </p><h3 id="%E4%BB%80%E4%B9%88%E6%98%AF%E6%8F%92%E4%BB%B6">什么是插件<a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%8F%92%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>插件继承了构建定义，大多数通常是通过添加设置。新的设置可以是新的 task。例如，一个插件可以添加一个 <code>codeCoverage</code> task 来生成一个测试覆盖率报告。
 </p><h3 id="%E5%A3%B0%E6%98%8E%E4%B8%80%E4%B8%AA%E6%8F%92%E4%BB%B6">声明一个插件<a href="#%E5%A3%B0%E6%98%8E%E4%B8%80%E4%B8%AA%E6%8F%92%E4%BB%B6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>如果你的项目在 <code>hello</code> 目录下，而且你正在往构建定义中添加一个 sbt-site 插件，创建 <code>hello/project/site.sbt</code> 并且通过传递插件的 Ivy 模块 ID 声明插件依赖 给 <code>addSbtPlugin</code>：

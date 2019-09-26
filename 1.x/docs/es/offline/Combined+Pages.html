@@ -1151,7 +1151,18 @@ construcción.
 <code>foo</code>, como <code>foo/Foo.scala</code> o en <code>foo/src/main/scala</code>. La
 <a href="Directories.html">estructura de directorios</a> habitual se aplica a <code>foo</code> a excepción
 de los ficheros de definición de construcción.
-</p><p>Cualquier fichero <code>.sbt</code> en <code>foo</code>, por ejemplo <code>foo/build.sbt</code>, será mezclado
+</p><h3 id="Navegando+por+los+proyectos+interactivamente">Navegando por los proyectos interactivamente<a href="#Navegando+por+los+proyectos+interactivamente" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>En el prompt interactivo de sbt, escribe <code>proyectos</code> para listar tus proyectos y
+<code>project &lt;projectname&gt;</code> para seleccionar el proyecto actual. Al ejecutar una
+tarea como <code>compile</code> ésta se ejecutará sobre el proyecto actual. Por eso no hay
+por qué compilar el proyecto raíz necesariamente, es posible compilar solamente
+un subproyecto.
+</p><p>Puedes ejecutar una tarea en otro proyecto especificando explícitamente el ID de
+proyecto, como en <code>subproyecto/compile</code>.
+</p><h3 id="C%C3%B3digo+com%C3%BAn">Código común<a href="#C%C3%B3digo+com%C3%BAn" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Las definiciones en los ficheros <code>.sbt</code> no son visibles en otros ficheros
+<code>.sbt</code>. Para poder compartir código entre ficheros <code>.sbt</code> hay que definir uno o
+más ficheros de Scala en el directorio <code>project/</code> en la construcción raíz.
+</p><p>Para más información ver <a href="Organizing-Build.html">Organizando la construcción</a>.
+</p><h3 id="Appendix%3A+Subproject+build+definition+files">Appendix: Subproject build definition files<a href="#Appendix%3A+Subproject+build+definition+files" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Cualquier fichero <code>.sbt</code> en <code>foo</code>, por ejemplo <code>foo/build.sbt</code>, será mezclado
 con la definición de construcción para la construcción principal, pero con
 ámbito del proyecto <code>hello-foo</code>.
 </p><p>Si todo tu proyecto está en <code>hello</code>, intenta definir una versión diferente
@@ -1171,26 +1182,13 @@ debería de tener este aspecto (respetando las versiones que hayas definido):
 <a href="Scopes.html">sintaxis para claves con ámbito</a>. Cada clave <code>version</code> está en el
 ámbito de un proyecto, basado en la ubicación de <code>build.sbt</code>. Pero los tres
 <code>build.sbt</code> forman parte de la misma definición de construcción.
-</p><p>La configuración de cada proyecto puede ir en ficheros <code>.sbt</code> en el directorio
-base de dicho proyecto<em>, mientras que los ficheros <code>.scala</code> pueden ser tan
-simples como el mostrado anteriormente, listando los proyectos y los directorios
-base. </em>No hay necesidad de poner ninguna configuración en ficheros <code>.scala</code>.*
-</p><p>Puede que quede más claro ponerlo todo, incluyendo la configuración, en ficheros
-<code>.scala</code> para dejar la definición de construcción bajo un único directorio de
-proyecto. Sin embargo, tú decides.
-</p><p>No puedes tener un subdirectorio de proyecto o ficheros <code>project/*.scala</code> en los
+</p><p>Style choices:
+</p><ul><li>Each subproject’s settings can go into <code>*.sbt</code> files in the base directory of that project,
+while the root <code>build.sbt</code> declares only minimum project declarations in the form of <code>lazy val foo = (project in file(&quot;foo&quot;))</code> without the settings.
+</li><li>We recommend putting all project declarations and settings in the root <code>build.sbt</code> file
+in order to keep all build definition under a single file. However, it up to you.
+</li></ul><p>No puedes tener un subdirectorio de proyecto o ficheros <code>project/*.scala</code> en los
 subproyectos. <code>foo/project/Build.scala</code> sería ignorado.
-</p><h3 id="Navegando+por+los+proyectos+interactivamente">Navegando por los proyectos interactivamente<a href="#Navegando+por+los+proyectos+interactivamente" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>En el prompt interactivo de sbt, escribe <code>proyectos</code> para listar tus proyectos y
-<code>project &lt;projectname&gt;</code> para seleccionar el proyecto actual. Al ejecutar una
-tarea como <code>compile</code> ésta se ejecutará sobre el proyecto actual. Por eso no hay
-por qué compilar el proyecto raíz necesariamente, es posible compilar solamente
-un subproyecto.
-</p><p>Puedes ejecutar una tarea en otro proyecto especificando explícitamente el ID de
-proyecto, como en <code>subproyecto/compile</code>.
-</p><h3 id="C%C3%B3digo+com%C3%BAn">Código común<a href="#C%C3%B3digo+com%C3%BAn" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Las definiciones en los ficheros <code>.sbt</code> no son visibles en otros ficheros
-<code>.sbt</code>. Para poder compartir código entre ficheros <code>.sbt</code> hay que definir uno o
-más ficheros de Scala en el directorio <code>project/</code> en la construcción raíz.
-</p><p>Para más información ver <a href="Organizing-Build.html">Organizando la construcción</a>.
 </p><h2 id="Grafos+de+tareas">Grafos de tareas<a href="#Grafos+de+tareas" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Continuando con la <a href="Basic-Def.html">definición de construcción</a>, esta página explica
 la definición de <code>build.sbt</code> con más detalle.
 </p><p>En lugar de pensar en la configuración como pares clave-valor una analogía más

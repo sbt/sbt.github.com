@@ -987,41 +987,42 @@ lazy val core = (project in file(&quot;core&quot;))
 置いておき、それを <code>foo/src/test/scala</code> 内のコードから利用することができる。
 </p><p>複数のコンフィギュレーション依存性を宣言する場合は、セミコロンで区切る。
 例えば、<code>dependsOn(bar % &quot;test-&gt;test;compile-&gt;compile&quot;)</code> と書ける。
-</p><h3 id="%E3%83%87%E3%83%95%E3%82%A9%E3%83%AB%E3%83%88%E3%83%AB%E3%83%BC%E3%83%88%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88">デフォルトルートプロジェクト<a href="#%E3%83%87%E3%83%95%E3%82%A9%E3%83%AB%E3%83%88%E3%83%AB%E3%83%BC%E3%83%88%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>もしプロジェクトがルートディレクトリに定義されてなかったら、 sbt はビルド時に他のプロジェクトを集約するデフォルトプロジェクトを勝手に生成する。
+</p><h3 id="%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E9%96%93%E3%81%AE%E4%BE%9D%E5%AD%98%E6%80%A7">サブプロジェクト間の依存性<a href="#%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E9%96%93%E3%81%AE%E4%BE%9D%E5%AD%98%E6%80%A7" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>多くのファイルとサブプロジェクトを持った巨大なビルドでは
+sbt は全てのファイルを監視したり、大量に発生するディスクやシステム I/O
+によって高性能とは言えない反応になるかもしれない。
+</p><p>一つの対策として sbt は <code>compile</code> を呼び出した時に依存するサブプロジェクトのコンパイルを
+行うかどうかを制御する <code>trackInternalDependencies</code> と <code>exportToInternal</code>
+というセッティングがある。両者とも
+<code>TrackLevel.NoTracking</code>、<code>TrackLevel.TrackIfMissing</code>、<code>TrackLevel.TrackAlways</code>
+という 3つの値を取ることができる。デフォルトは両方とも <code>TrackLevel.TrackAlways</code> だ。
+</p><p><code>trackInternalDependencies</code> が <code>TrackLevel.TrackIfMissing</code>
+に設定されると、sbt は <code>*.class</code> ファイル
+(<code>exportJars</code> が <code>true</code> の場合は JAR ファイル)
+が一切無い場合を除き自動的に内部 (サブプロジェクト) 依存性をコンパイルすることを止める。
+</p><p><code>TrackLevel.NoTracking</code> に設定すると内部依存性のコンパイルは無視される。
+ただし、クラスパスは通常どおり追加されるため、依存性グラフは依存性だと表示する。
+この動機は開発時に大量のサブプロジェクトの変更の確認に伴う I/O
+オーバーヘッドを回避することにある。全てのサブプロジェクトを <code>TrackIfMissing</code>
+に設定する方法を以下に示す。
+</p><pre><code class="prettyprint lang-scala">ThisBuild / trackInternalDependencies := TrackLevel.TrackIfMissing
+ThisBuild / exportJars := true
+
+lazy val root = (project in file(&quot;.&quot;))
+  .aggregate(....)
+</code></pre><p><code>exportToInternal</code> セッティングは依存された側から内部トラッキングをオプトアウトすることを可能にして、
+これを使うことでほとんどのサブプロジェクトは追跡したいが、一部を抜きたいという時に使える。
+<code>trackInternalDependencies</code> と <code>exportToInternal</code> の交叉が実際の追跡レベルを決定する。
+以下が 1つのサブプロジェクトをオプトアウトさせる例だ:
+</p><pre><code class="prettyprint lang-scala">lazy val dontTrackMe = (project in file(&quot;dontTrackMe&quot;))
+  .settings(
+    exportToInternal := TrackLevel.NoTracking
+  )
+</code></pre><h3 id="%E3%83%87%E3%83%95%E3%82%A9%E3%83%AB%E3%83%88%E3%83%AB%E3%83%BC%E3%83%88%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88">デフォルトルートプロジェクト<a href="#%E3%83%87%E3%83%95%E3%82%A9%E3%83%AB%E3%83%88%E3%83%AB%E3%83%BC%E3%83%88%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>もしプロジェクトがルートディレクトリに定義されてなかったら、 sbt はビルド時に他のプロジェクトを集約するデフォルトプロジェクトを勝手に生成する。
 </p><p>プロジェクト <code>hello-foo</code> は、<code>base = file(&quot;foo&quot;)</code> と共に定義されているため、
 サブディレクトリ <code>foo</code> に置かれる。
 そのソースは、<code>foo/Foo.scala</code> のように <code>foo</code> の直下に置かれるか、
 <code>foo/src/main/scala</code> 内に置かれる。
 ビルド定義ファイルを除いては、通常の sbt <a href="Directories.html">ディレクトリ構造</a>が <code>foo</code> 以下に適用される。
-</p><p><code>foo</code> 内の全ての <code>.sbt</code> ファイル、例えば <code>foo/build.sbt</code> は、
-<code>hello-foo</code> プロジェクトにスコープ付けされた上で、ビルド全体のビルド定義に取り込まれる。
-</p><p>ルートプロジェクトが <code>hello</code> にあるとき、<code>hello/build.sbt</code>、<code>hello/foo/build.sbt</code>、
-<code>hello/bar/build.sbt</code> においてそれぞれ別々のバージョンを定義してみよう（例: <code>version := &quot;0.6&quot;</code>）。
-次に、インタラクティブプロンプトで <code>show version</code> と打ち込んでみる。
-以下のように表示されるはずだ（定義したバージョンによるが）:
-</p><pre><code class="">&gt; show version
-[info] hello-foo/*:version
-[info] 	0.7
-[info] hello-bar/*:version
-[info] 	0.9
-[info] hello/*:version
-[info] 	0.5
-</code></pre><p><code>hello-foo/*:version</code> は、<code>hello/foo/build.sbt</code> 内で定義され、
-<code>hello-bar/*:version</code> は、<code>hello/bar/build.sbt</code> 内で定義され、
-<code>hello/*:version</code> は、<code>hello/build.sbt</code> 内で定義される。
-<a href="Scopes.html">スコープ付けされたキーの構文</a>を復習しておこう。
-それぞれの <code>version</code> キーは、<code>build.sbt</code> の場所により、
-特定のプロジェクトにスコープ付けされている。
-だが、三つの <code>build.sbt</code> とも同じビルド定義の一部だ。
-</p><p><code>.scala</code> ファイルは、上に示したように、単にプロジェクトとそのベースディレクトリを列挙するだけの簡単なものにして、
-<em>それぞれのプロジェクトのセッティングは、そのプロジェクトのベースディレクトリ直下の
-<code>.sbt</code> ファイル内で宣言することができる</em>。
-<em>全てのセッティングを <code>.scala</code> ファイル内で宣言することは義務付けられいるわけではない。</em>
-</p><p>ビルド定義の全てを単一の <code>project</code> ディレクトリ内の場所にまとめるために、
-<code>.scala</code> ファイル内にセッティングも含めてしまうほうが洗練されていると思うかもしれない。
-ただし、これは好みの問題だから、好きにやっていい。
-</p><p>サブプロジェクトは、<code>project</code> サブディレクトリや、<code>project/*.scala</code> ファイルを持つことができない。
-<code>foo/project/Build.scala</code> は無視される。
 </p><h3 id="%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%AE%E5%88%87%E3%82%8A%E6%9B%BF%E3%81%88">プロジェクトの切り替え<a href="#%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%AE%E5%88%87%E3%82%8A%E6%9B%BF%E3%81%88" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt インタラクティブプロンプトから、<code>projects</code> と入力することでプロジェクトの全リストが表示され、
 <code>project &lt;プロジェクト名&gt;</code> で、カレントプロジェクトを選択できる。
 <code>compile</code> のようなタスクを実行すると、それはカレントプロジェクトに対して実行される。
@@ -1029,6 +1030,31 @@ lazy val core = (project in file(&quot;core&quot;))
 </p><p>また <code>subProjectID/compile</code> のように、プロジェクト ID を明示的に指定することで、そのプロジェクトのタスクを実行することもできる。
 </p><h3 id="%E5%85%B1%E9%80%9A%E3%81%AE%E3%82%B3%E3%83%BC%E3%83%89">共通のコード<a href="#%E5%85%B1%E9%80%9A%E3%81%AE%E3%82%B3%E3%83%BC%E3%83%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>.sbt</code> ファイルで定義された値は、他の <code>.sbt</code> ファイルからは見えない。 <code>.sbt</code> ファイル間でコードを共有するためには、 ベースディレクトリにある <code>project/</code> 配下に Scala ファイルを用意すればよい。
 </p><p>詳細は<a href="Organizing-Build.html">ビルドの整理</a>を参照。
+</p><h3 id="%E8%A3%9C%E8%B6%B3%3A+%E3%82%B5%E3%83%97%E3%83%96%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB">補足: サプブロジェクトビルド定義ファイル<a href="#%E8%A3%9C%E8%B6%B3%3A+%E3%82%B5%E3%83%97%E3%83%96%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>foo</code> 内の全ての <code>.sbt</code> ファイル、例えば <code>foo/build.sbt</code> は、
+<code>hello-foo</code> プロジェクトにスコープ付けされた上で、ビルド全体のビルド定義に取り込まれる。
+</p><p>ルートプロジェクトが <code>hello</code> にあるとき、<code>hello/build.sbt</code>、<code>hello/foo/build.sbt</code>、
+<code>hello/bar/build.sbt</code> においてそれぞれ別々のバージョンを定義してみよう（例: <code>version := &quot;0.6&quot;</code>）。
+次に、インタラクティブプロンプトで <code>show version</code> と打ち込んでみる。
+以下のように表示されるはずだ（定義したバージョンによるが）:
+</p><pre><code class="">&gt; show version
+[info] hello-foo/*:version
+[info]  0.7
+[info] hello-bar/*:version
+[info]  0.9
+[info] hello/*:version
+[info]  0.5
+</code></pre><p><code>hello-foo/*:version</code> は、<code>hello/foo/build.sbt</code> 内で定義され、
+<code>hello-bar/*:version</code> は、<code>hello/bar/build.sbt</code> 内で定義され、
+<code>hello/*:version</code> は、<code>hello/build.sbt</code> 内で定義される。
+<a href="Scopes.html">スコープ付けされたキーの構文</a>を復習しておこう。
+それぞれの <code>version</code> キーは、<code>build.sbt</code> の場所により、
+特定のプロジェクトにスコープ付けされている。
+だが、三つの <code>build.sbt</code> とも同じビルド定義の一部だ。
+</p><p>スタイルの選択:
+</p><ul><li>各サブプロジェクトのセッティングはそのベースディレクトリ直下の <code>*.sbt</code> ファイル内で宣言することができる。その場合、<code>build.sbt</code> は <code>lazy val foo = (project in file(&quot;foo&quot;))</code> といった形で最小の project 宣言のみを行いセッティングは書かない。
+</li><li>全てのプロジェクト宣言とセッティングをルートの <code>build.sbt</code> に書けば全てのビルド定義を 1つのファイルにまとめることができるので、その方法を推奨する。ただし、これは好みの問題だから、好きにやっていい。
+</li></ul><p><strong>注意</strong>: サブプロジェクトは、<code>project</code> サブディレクトリや、<code>project/*.scala</code> ファイルを持つことができない。
+<code>foo/project/Build.scala</code> は無視される。
 </p><h2 id="%E3%82%BF%E3%82%B9%E3%82%AF%E3%83%BB%E3%82%B0%E3%83%A9%E3%83%95">タスク・グラフ<a href="#%E3%82%BF%E3%82%B9%E3%82%AF%E3%83%BB%E3%82%B0%E3%83%A9%E3%83%95" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p><a href="Basic-Def.html">ビルド定義</a>に引き続き、このページでは <code>build.sbt</code> 定義をより詳しく解説する。
 </p><p><code>settings</code> をキーと値のペア群だと考えるよりも、
 より良いアナロジーは、辺を事前発生 (happens-before) 関係とするタスクの<strong>有向非巡回グラフ</strong> (DAG)

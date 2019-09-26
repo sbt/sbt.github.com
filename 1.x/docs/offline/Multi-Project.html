@@ -173,22 +173,19 @@ still be appended, and dependency graph will still show them as
 dependencies. The motivation is to save the I/O overhead of checking
 for the changes on a build with many subprojects during
 development. Here’s how to set all subprojects to <code>TrackIfMissing</code>.
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;)).
-  aggregate(....).
-  settings(
-    inThisBuild(Seq(
-      trackInternalDependencies := TrackLevel.TrackIfMissing,
-      exportJars := true
-    ))
-  )
+</p><pre><code class="prettyprint lang-scala">ThisBuild / trackInternalDependencies := TrackLevel.TrackIfMissing
+ThisBuild / exportJars := true
+
+lazy val root = (project in file(&quot;.&quot;))
+  .aggregate(....)
 </code></pre><p>The <code>exportToInternal</code> setting allows the dependee subprojects to opt
 out of the internal tracking, which might be useful if you want to
 track most subprojects except for a few. The intersection of the
 <code>trackInternalDependencies</code> and <code>exportToInternal</code> settings will be
 used to determine the actual track level. Here’s an example to opt-out
 one project:
-</p><pre><code class="prettyprint lang-scala">lazy val dontTrackMe = (project in file(&quot;dontTrackMe&quot;)).
-  settings(
+</p><pre><code class="prettyprint lang-scala">lazy val dontTrackMe = (project in file(&quot;dontTrackMe&quot;))
+  .settings(
     exportToInternal := TrackLevel.NoTracking
   )
 </code></pre><h3 id="Default+root+project">Default root project<a href="#Default+root+project" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>If a project is not defined for the root directory in the build, sbt
@@ -198,7 +195,17 @@ contained in the subdirectory foo. Its sources could be directly under
 <code>foo</code>, like <code>foo/Foo.scala</code>, or in <code>foo/src/main/scala</code>. The usual sbt
 <a href="Directories.html">directory structure</a> applies underneath <code>foo</code> with the
 exception of build definition files.
-</p><p>Any <code>.sbt</code> files in <code>foo</code>, say <code>foo/build.sbt</code>, will be merged with the build
+</p><h3 id="Navigating+projects+interactively">Navigating projects interactively<a href="#Navigating+projects+interactively" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>At the sbt interactive prompt, type <code>projects</code> to list your projects and
+<code>project &lt;projectname&gt;</code> to select a current project. When you run a task
+like <code>compile</code>, it runs on the current project. So you don’t necessarily
+have to compile the root project, you could compile only a subproject.
+</p><p>You can run a task in another project by explicitly specifying the
+project ID, such as <code>subProjectID/compile</code>.
+</p><h3 id="Common+code">Common code<a href="#Common+code" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The definitions in <code>.sbt</code> files are not visible in other <code>.sbt</code> files. In
+order to share code between <code>.sbt</code> files, define one or more Scala files
+in the <code>project/</code> directory of the build root.
+</p><p>See <a href="Organizing-Build.html">organizing the build</a> for details.
+</p><h3 id="Appendix%3A+Subproject+build+definition+files">Appendix: Subproject build definition files<a href="#Appendix%3A+Subproject+build+definition+files" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Any <code>.sbt</code> files in <code>foo</code>, say <code>foo/build.sbt</code>, will be merged with the build
 definition for the entire build, but scoped to the <code>hello-foo</code> project.
 </p><p>If your whole project is in hello, try defining a different version
 (<code>version := &quot;0.6&quot;</code>) in <code>hello/build.sbt</code>, <code>hello/foo/build.sbt</code>, and
@@ -217,25 +224,13 @@ should get something like this (with whatever versions you defined):
 <a href="Scopes.html">syntax for scoped keys</a>. Each <code>version</code> key is scoped to a
 project, based on the location of the <code>build.sbt</code>. But all three <code>build.sbt</code>
 are part of the same build definition.
-</p><ul><li>Each project’s settings can go in <code>.sbt</code> files in the base directory of
-that project<em>, while the <code>.scala</code> file can be as simple as the one shown
-above, listing the projects and base directories. </em>There is no need to
-put settings in the <code>.scala</code> file.*
-</li></ul><p>You may find it cleaner to put everything including settings in <code>.scala</code>
-files in order to keep all build definition under a single project
-directory, however. It’s up to you.
-</p><p>You cannot have a project subdirectory or <code>project/*.scala</code> files in the
+</p><p>Style choices:
+</p><ul><li>Each subproject’s settings can go into <code>*.sbt</code> files in the base directory of that project,
+while the root <code>build.sbt</code> declares only minimum project declarations in the form of <code>lazy val foo = (project in file(&quot;foo&quot;))</code> without the settings.
+</li><li>We recommend putting all project declarations and settings in the root <code>build.sbt</code> file
+in order to keep all build definition under a single file. However, it up to you.
+</li></ul><p><strong>Note</strong>: You cannot have a project subdirectory or <code>project/*.scala</code> files in the
 sub-projects. <code>foo/project/Build.scala</code> would be ignored.
-</p><h3 id="Navigating+projects+interactively">Navigating projects interactively<a href="#Navigating+projects+interactively" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>At the sbt interactive prompt, type <code>projects</code> to list your projects and
-<code>project &lt;projectname&gt;</code> to select a current project. When you run a task
-like <code>compile</code>, it runs on the current project. So you don’t necessarily
-have to compile the root project, you could compile only a subproject.
-</p><p>You can run a task in another project by explicitly specifying the
-project ID, such as <code>subProjectID/compile</code>.
-</p><h3 id="Common+code">Common code<a href="#Common+code" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The definitions in <code>.sbt</code> files are not visible in other <code>.sbt</code> files. In
-order to share code between <code>.sbt</code> files, define one or more Scala files
-in the <code>project/</code> directory of the build root.
-</p><p>See <a href="Organizing-Build.html">organizing the build</a> for details.
 </p><div class="bottom nav">
                 <div class="row">
                   <div class="col-md-auto">
