@@ -8925,15 +8925,18 @@ repository. To use publishing, you need to specify the repository to
 publish to and the credentials to use. Once these are set up, you can
 run <code>publish</code>.
 </p><p>The <code>publishLocal</code> action is used to publish your project to your Ivy local
-file repository, which is usually located at <code>~/.ivy2/local/</code>. You can
+file repository, which is usually located at <code>$HOME/.ivy2/local/</code>. You can
 then use this project from other projects on the same machine.
+</p><h3 id="Skip+publishing">Skip publishing<a href="#Skip+publishing" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To avoid publishing a project, add the following setting to the subprojects that you want to skip:
+</p><pre><code class="prettyprint lang-scala">publish / skip := true
+</code></pre><p>Common use case is to prevent publishing of the root project.
 </p><h3 id="Define+the+repository">Define the repository<a href="#Define+the+repository" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To specify the repository, assign a repository to <code>publishTo</code> and
 optionally set the publishing style. For example, to upload to Nexus:
 </p><pre><code class="prettyprint lang-scala">publishTo := Some(&quot;Sonatype Snapshots Nexus&quot; at &quot;https://oss.sonatype.org/content/repositories/snapshots&quot;)
-</code></pre><p>To publish to a local repository:
-</p><pre><code class="prettyprint lang-scala">publishTo := Some(Resolver.file(&quot;file&quot;,  new File( &quot;path/to/my/maven-repo/releases&quot; )) )
-</code></pre><p>Publishing to the users local maven repository:
-</p><pre><code class="prettyprint lang-scala">publishTo := Some(Resolver.file(&quot;file&quot;,  new File(Path.userHome.absolutePath+&quot;/.m2/repository&quot;)))
+</code></pre><p>To publish to a local maven repository:
+</p><pre><code class="prettyprint lang-scala">publishTo := Some(MavenCache(&quot;local-maven&quot;, file(&quot;path/to/maven-repo/releases&quot;)))
+</code></pre><p>To publish to a local Ivy repository:
+</p><pre><code class="prettyprint lang-scala">publishTo := Some(Resolver.file(&quot;local-ivy&quot;, file(&quot;path/to/ivy-repo/releases&quot;)))
 </code></pre><p>If you’re using Maven repositories you will also have to select the
 right repository depending on your artifacts: SNAPSHOT versions go to
 the /snapshot repository while other versions go to the /releases
@@ -8942,14 +8945,33 @@ repository. Doing this selection can be done by using the value of the
 </p><pre><code class="prettyprint lang-scala">publishTo := {
   val nexus = &quot;https://my.artifact.repo.net/&quot;
   if (isSnapshot.value)
-    Some(&quot;snapshots&quot; at nexus + &quot;content/repositories/snapshots&quot;) 
+    Some(&quot;snapshots&quot; at nexus + &quot;content/repositories/snapshots&quot;)
   else
     Some(&quot;releases&quot;  at nexus + &quot;service/local/staging/deploy/maven2&quot;)
 }
-</code></pre><h3 id="Credentials">Credentials<a href="#Credentials" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>There are two ways to specify credentials for such a repository. The
-first is to specify them inline:
-</p><pre><code class="prettyprint lang-scala">credentials += Credentials(&quot;Some Nexus Repository Manager&quot;, &quot;my.artifact.repo.net&quot;, &quot;admin&quot;, &quot;admin123&quot;)
-</code></pre><p>The second and better way is to load them from a file, for example:
+</code></pre><h3 id="Publishing+locally">Publishing locally<a href="#Publishing+locally" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The <code>publishLocal</code> task will publish to the “local” Ivy repository.
+By default, this is at <code>$HOME/.ivy2/local/</code>. Other builds on the
+same machine can then list the project as a dependency. For example, if
+the project you are publishing has configuration parameters like:
+</p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;org.me&quot;
+ThisBuild / version      := &quot;0.1-SNAPSHOT&quot;
+
+name := &quot;My Project&quot;
+</code></pre><p>Then another build on the same machine can depend on it:
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.me&quot; %% &quot;my-project&quot; % &quot;0.1-SNAPSHOT&quot;
+</code></pre><p>The version number you select must end with <code>SNAPSHOT</code>, or you must
+change the version number each time you publish to indicate that it’s
+a changing artifact.
+</p><p><strong>Note</strong>: SNAPSHOT dependencies should be avoided beyond local testing since
+it makes dependency resolution slower and the build non-repeatable.
+</p><p>Similar to <code>publishLocal</code>, <code>publishM2</code> task will publish the user’s Maven local repository.
+This is at the location specified by <code>$HOME/.m2/settings.xml</code> or at
+<code>$HOME/.m2/repository/</code> by default.
+Another build would require <code>Resolver.mavenLocal</code> to resolve out of it:
+</p><pre><code class="prettyprint lang-scala">resolvers += Resolver.mavenLocal
+</code></pre><p>See <a href="Resolvers.html">Resolvers</a> for more details.
+</p><h3 id="Credentials">Credentials<a href="#Credentials" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>There are two ways to specify credentials for such a repository.
+</p><p>The first and better way is to load them from a file, for example:
 </p><pre><code class="prettyprint lang-scala">credentials += Credentials(Path.userHome / &quot;.sbt&quot; / &quot;.credentials&quot;)
 </code></pre><p>The credentials file is a properties file with keys <code>realm</code>, <code>host</code>,
 <code>user</code>, and <code>password</code>. For example:
@@ -8957,6 +8979,8 @@ first is to specify them inline:
 host=my.artifact.repo.net
 user=admin
 password=admin123
+</code></pre><p>The second way is to specify them inline:
+</p><pre><code class="prettyprint lang-scala">credentials += Credentials(&quot;Some Nexus Repository Manager&quot;, &quot;my.artifact.repo.net&quot;, &quot;admin&quot;, &quot;admin123&quot;)
 </code></pre><h3 id="Cross-publishing">Cross-publishing<a href="#Cross-publishing" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To support multiple incompatible Scala versions, enable cross building
 and do <code>+ publish</code> (see <a href="Cross-Build.html">Cross Build</a>). See [Resolvers] for other
 supported repository types.
@@ -8969,52 +8993,31 @@ action and published to the repository instead of an Ivy file. This POM
 file may be altered by changing a few settings. Set <code>pomExtra</code> to
 provide XML (<code>scala.xml.NodeSeq</code>) to insert directly into the generated
 pom. For example:
-</p><pre><code class="prettyprint lang-scala">pomExtra :=
-  &lt;licenses&gt;
-    &lt;license&gt;
-      &lt;name&gt;Apache 2&lt;/name&gt;
-      &lt;url&gt;https://www.apache.org/licenses/LICENSE-2.0.txt&lt;/url&gt;
-      &lt;distribution&gt;repo&lt;/distribution&gt;
-    &lt;/license&gt;
-&lt;/licenses&gt;
-</code></pre><p><code>makePom</code> adds to the POM any Maven-style repositories you have
-declared. You can filter these by modifying <code>pomRepositoryFilter</code>, which
-by default excludes local repositories. To instead only include local
-repositories:
-</p><pre><code class="prettyprint lang-scala">pomIncludeRepository := { (repo: MavenRepository) =&gt; 
-  repo.root.startsWith(&quot;file:&quot;)
-}
+</p><pre><code class="prettyprint lang-scala">pomExtra := &lt;something&gt;&lt;/something&gt;
 </code></pre><p>There is also a <code>pomPostProcess</code> setting that can be used to manipulate
 the final XML before it is written. It’s type is <code>Node =&gt; Node</code>.
 </p><pre><code class="prettyprint lang-scala">pomPostProcess := { (node: Node) =&gt;
   ...
 }
-</code></pre><h3 id="Publishing+Locally">Publishing Locally<a href="#Publishing+Locally" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The <code>publishLocal</code> command will publish to the local Ivy repository. By
-default, this is in <code>${user.home}/.ivy2/local</code>. Other projects on the
-same machine can then list the project as a dependency. For example, if
-the SBT project you are publishing has configuration parameters like:
-</p><pre><code class="prettyprint lang-scala">name := &quot;My Project&quot;
-
-organization := &quot;org.me&quot;
-
-version := &quot;0.1-SNAPSHOT&quot;
-</code></pre><p>Then another project can depend on it:
-</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.me&quot; %% &quot;my-project&quot; % &quot;0.1-SNAPSHOT&quot;
-</code></pre><p>The version number you select must end with <code>SNAPSHOT</code>, or you must
-change the version number each time you publish. Ivy maintains a cache,
-and it stores even local projects in that cache. If Ivy already has a
-version cached, it will not check the local repository for updates,
-unless the version number matches a
-<a href="https://ant.apache.org/ivy/history/2.3.0/concept.html#change">changing pattern</a>,
-and <code>SNAPSHOT</code> is one such pattern.
-</p><h3 id="Skipping+Publishing">Skipping Publishing<a href="#Skipping+Publishing" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To avoid publishing a project, add <code>skip in publish := true</code> to its settings. <code>false</code> is the default value. Common use case is to prevent publishing of the root project.
-</p><h2 id="Resolvers">Resolvers<a href="#Resolvers" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Maven+resolvers">Maven resolvers<a href="#Maven+resolvers" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Resolvers for Maven2 repositories are added as follows:
+</code></pre><p><code>makePom</code> adds to the POM any Maven-style repositories you have
+declared. You can filter these by modifying <code>pomRepositoryFilter</code>, which
+by default excludes local repositories. To instead only include local
+repositories:
+</p><pre><code class="prettyprint lang-scala">pomIncludeRepository := { (repo: MavenRepository) =&gt;
+  repo.root.startsWith(&quot;file:&quot;)
+}
+</code></pre><h2 id="Resolvers">Resolvers<a href="#Resolvers" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Maven+resolvers">Maven resolvers<a href="#Maven+resolvers" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Resolvers for Maven repositories are added as follows:
 </p><pre><code class="prettyprint lang-scala">resolvers +=
   &quot;Sonatype OSS Snapshots&quot; at &quot;https://oss.sonatype.org/content/repositories/snapshots&quot;
 </code></pre><p>This is the most common kind of user-defined resolvers. The rest of this
 page describes how to define other types of repositories.
-</p><h3 id="Predefined+resolvers">Predefined resolvers<a href="#Predefined+resolvers" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A few predefined repositories are available and are listed below
-</p><ul><li><code>DefaultMavenRepository</code> This is the main Maven repository at
+</p><h3 id="Local+Maven+resolvers">Local Maven resolvers<a href="#Local+Maven+resolvers" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Following adds a resolver to the Maven local repository:
+</p><pre><code class="prettyprint lang-scala">resolvers += Resolver.mavenLocal
+</code></pre><p>To add a resolver for a custom location:
+</p><pre><code class="prettyprint lang-scala">resolvers += MavenCache(&quot;local-maven&quot;, file(&quot;path/to/maven-repo/releases&quot;))
+</code></pre><h3 id="Predefined+resolvers">Predefined resolvers<a href="#Predefined+resolvers" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A few predefined repositories are available and are listed below
+</p><ul><li><code>Resolver.mavenLocal</code> This is the local Maven repository.
+</li><li><code>DefaultMavenRepository</code> This is the main Maven repository at
 <a href="https://repo1.maven.org/maven2/">https://repo1.maven.org/maven2/</a> and is included by default
 </li><li><code>JavaNet1Repository</code> This is the Maven 1 repository at
 <a href="http://download.java.net/maven/1/">http://download.java.net/maven/1/</a>

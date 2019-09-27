@@ -42,13 +42,18 @@
       </div>
                 </div><div class="col-md-8 col-xs-9">
                   <div class="rightcolumn contents">
-                  <h2 id="Resolvers">Resolvers<a href="#Resolvers" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Maven+resolvers">Maven resolvers<a href="#Maven+resolvers" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Resolvers for Maven2 repositories are added as follows:
+                  <h2 id="Resolvers">Resolvers<a href="#Resolvers" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Maven+resolvers">Maven resolvers<a href="#Maven+resolvers" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Resolvers for Maven repositories are added as follows:
 </p><pre><code class="prettyprint lang-scala">resolvers +=
   &quot;Sonatype OSS Snapshots&quot; at &quot;https://oss.sonatype.org/content/repositories/snapshots&quot;
 </code></pre><p>This is the most common kind of user-defined resolvers. The rest of this
 page describes how to define other types of repositories.
-</p><h3 id="Predefined+resolvers">Predefined resolvers<a href="#Predefined+resolvers" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A few predefined repositories are available and are listed below
-</p><ul><li><code>DefaultMavenRepository</code> This is the main Maven repository at
+</p><h3 id="Local+Maven+resolvers">Local Maven resolvers<a href="#Local+Maven+resolvers" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Following adds a resolver to the Maven local repository:
+</p><pre><code class="prettyprint lang-scala">resolvers += Resolver.mavenLocal
+</code></pre><p>To add a resolver for a custom location:
+</p><pre><code class="prettyprint lang-scala">resolvers += MavenCache(&quot;local-maven&quot;, file(&quot;path/to/maven-repo/releases&quot;))
+</code></pre><h3 id="Predefined+resolvers">Predefined resolvers<a href="#Predefined+resolvers" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A few predefined repositories are available and are listed below
+</p><ul><li><code>Resolver.mavenLocal</code> This is the local Maven repository.
+</li><li><code>DefaultMavenRepository</code> This is the main Maven repository at
 <a href="https://repo1.maven.org/maven2/">https://repo1.maven.org/maven2/</a> and is included by default
 </li><li><code>JavaNet1Repository</code> This is the Maven 1 repository at
 <a href="http://download.java.net/maven/1/">http://download.java.net/maven/1/</a>

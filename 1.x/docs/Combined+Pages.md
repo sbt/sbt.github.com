@@ -14573,8 +14573,18 @@ publish to and the credentials to use. Once these are set up, you can
 run `publish`.
 
 The `publishLocal` action is used to publish your project to your Ivy local
-file repository, which is usually located at `~/.ivy2/local/`. You can
+file repository, which is usually located at `$HOME/.ivy2/local/`. You can
 then use this project from other projects on the same machine.
+
+### Skip publishing
+
+To avoid publishing a project, add the following setting to the subprojects that you want to skip:
+
+```scala
+publish / skip := true
+```
+
+Common use case is to prevent publishing of the root project.
 
 ### Define the repository
 
@@ -14585,16 +14595,16 @@ optionally set the publishing style. For example, to upload to Nexus:
 publishTo := Some("Sonatype Snapshots Nexus" at "https://oss.sonatype.org/content/repositories/snapshots")
 ```
 
-To publish to a local repository:
+To publish to a local maven repository:
 
 ```scala
-publishTo := Some(Resolver.file("file",  new File( "path/to/my/maven-repo/releases" )) )
+publishTo := Some(MavenCache("local-maven", file("path/to/maven-repo/releases")))
 ```
 
-Publishing to the users local maven repository:
+To publish to a local Ivy repository:
 
 ```scala
-publishTo := Some(Resolver.file("file",  new File(Path.userHome.absolutePath+"/.m2/repository")))
+publishTo := Some(Resolver.file("local-ivy", file("path/to/ivy-repo/releases")))
 ```
 
 If you're using Maven repositories you will also have to select the
@@ -14607,22 +14617,55 @@ repository. Doing this selection can be done by using the value of the
 publishTo := {
   val nexus = "https://my.artifact.repo.net/"
   if (isSnapshot.value)
-    Some("snapshots" at nexus + "content/repositories/snapshots") 
+    Some("snapshots" at nexus + "content/repositories/snapshots")
   else
     Some("releases"  at nexus + "service/local/staging/deploy/maven2")
 }
 ```
 
-### Credentials
+### Publishing locally
 
-There are two ways to specify credentials for such a repository. The
-first is to specify them inline:
+The `publishLocal` task will publish to the "local" Ivy repository.
+By default, this is at `$HOME/.ivy2/local/`. Other builds on the
+same machine can then list the project as a dependency. For example, if
+the project you are publishing has configuration parameters like:
 
 ```scala
-credentials += Credentials("Some Nexus Repository Manager", "my.artifact.repo.net", "admin", "admin123")
+ThisBuild / organization := "org.me"
+ThisBuild / version      := "0.1-SNAPSHOT"
+
+name := "My Project"
 ```
 
-The second and better way is to load them from a file, for example:
+Then another build on the same machine can depend on it:
+
+```scala
+libraryDependencies += "org.me" %% "my-project" % "0.1-SNAPSHOT"
+```
+
+The version number you select must end with `SNAPSHOT`, or you must
+change the version number each time you publish to indicate that it's
+a changing artifact.
+
+**Note**: SNAPSHOT dependencies should be avoided beyond local testing since
+it makes dependency resolution slower and the build non-repeatable.
+
+Similar to `publishLocal`, `publishM2` task will publish the user's Maven local repository.
+This is at the location specified by `$HOME/.m2/settings.xml` or at
+`$HOME/.m2/repository/` by default.
+Another build would require `Resolver.mavenLocal` to resolve out of it:
+
+```scala
+resolvers += Resolver.mavenLocal
+```
+
+See [Resolvers][Resolvers] for more details.
+
+### Credentials
+
+There are two ways to specify credentials for such a repository.
+
+The first and better way is to load them from a file, for example:
 
 ```scala
 credentials += Credentials(Path.userHome / ".sbt" / ".credentials")
@@ -14636,6 +14679,12 @@ realm=My Nexus Repository Manager
 host=my.artifact.repo.net
 user=admin
 password=admin123
+```
+
+The second way is to specify them inline:
+
+```scala
+credentials += Credentials("Some Nexus Repository Manager", "my.artifact.repo.net", "admin", "admin123")
 ```
 
 ### Cross-publishing
@@ -14660,25 +14709,7 @@ provide XML (`scala.xml.NodeSeq`) to insert directly into the generated
 pom. For example:
 
 ```scala
-pomExtra :=
-  <licenses>
-    <license>
-      <name>Apache 2</name>
-      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-      <distribution>repo</distribution>
-    </license>
-</licenses>
-```
-
-`makePom` adds to the POM any Maven-style repositories you have
-declared. You can filter these by modifying `pomRepositoryFilter`, which
-by default excludes local repositories. To instead only include local
-repositories:
-
-```scala
-pomIncludeRepository := { (repo: MavenRepository) => 
-  repo.root.startsWith("file:")
-}
+pomExtra := <something></something>
 ```
 
 There is also a `pomPostProcess` setting that can be used to manipulate
@@ -14690,38 +14721,16 @@ pomPostProcess := { (node: Node) =>
 }
 ```
 
-### Publishing Locally
-
-The `publishLocal` command will publish to the local Ivy repository. By
-default, this is in `${user.home}/.ivy2/local`. Other projects on the
-same machine can then list the project as a dependency. For example, if
-the SBT project you are publishing has configuration parameters like:
+`makePom` adds to the POM any Maven-style repositories you have
+declared. You can filter these by modifying `pomRepositoryFilter`, which
+by default excludes local repositories. To instead only include local
+repositories:
 
 ```scala
-name := "My Project"
-
-organization := "org.me"
-
-version := "0.1-SNAPSHOT"
+pomIncludeRepository := { (repo: MavenRepository) =>
+  repo.root.startsWith("file:")
+}
 ```
-
-Then another project can depend on it:
-
-```scala
-libraryDependencies += "org.me" %% "my-project" % "0.1-SNAPSHOT"
-```
-
-The version number you select must end with `SNAPSHOT`, or you must
-change the version number each time you publish. Ivy maintains a cache,
-and it stores even local projects in that cache. If Ivy already has a
-version cached, it will not check the local repository for updates,
-unless the version number matches a
-[changing pattern](https://ant.apache.org/ivy/history/2.3.0/concept.html#change),
-and `SNAPSHOT` is one such pattern.
-
-### Skipping Publishing
-
-To avoid publishing a project, add `skip in publish := true` to its settings. `false` is the default value. Common use case is to prevent publishing of the root project.
 
 
 Resolvers
@@ -14729,7 +14738,7 @@ Resolvers
 
 ### Maven resolvers
 
-Resolvers for Maven2 repositories are added as follows:
+Resolvers for Maven repositories are added as follows:
 
 ```scala
 resolvers +=
@@ -14739,10 +14748,25 @@ resolvers +=
 This is the most common kind of user-defined resolvers. The rest of this
 page describes how to define other types of repositories.
 
+### Local Maven resolvers
+
+Following adds a resolver to the Maven local repository:
+
+```scala
+resolvers += Resolver.mavenLocal
+```
+
+To add a resolver for a custom location:
+
+```scala
+resolvers += MavenCache("local-maven", file("path/to/maven-repo/releases"))
+```
+
 ### Predefined resolvers
 
 A few predefined repositories are available and are listed below
 
+-   `Resolver.mavenLocal` This is the local Maven repository.
 -   `DefaultMavenRepository` This is the main Maven repository at
     <https://repo1.maven.org/maven2/> and is included by default
 -   `JavaNet1Repository` This is the Maven 1 repository at
