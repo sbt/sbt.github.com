@@ -80,6 +80,8 @@ there is an extension method defined for <code>Task[_]</code> that translates
 simple implementation of <code>buildObjects</code>:
 </p><pre><code class="prettyprint lang-scala">import scala.sys.process._
 import java.nio.file.{ Files, Path }
+import sbt.nio._
+import sbt.nio.Keys._
 
 val buildObjects = taskKey[Seq[Path]](&quot;Compiles c files into object files.&quot;)
 buildObjects / fileInputs += baseDirectory.value.toGlob / &quot;src&quot; / &quot;*.c&quot;
@@ -109,6 +111,8 @@ since the last time the task successfully completed. Using the
 <code>inputFileChanges</code>, we can make the build above incremental:
 </p><pre><code class="prettyprint lang-scala">import scala.sys.process._
 import java.nio.file.{ Files, Path }
+import sbt.nio._
+import sbt.nio.Keys._
 
 val buildObjects = taskKey[Seq[Path]](&quot;Generate object files from c sources&quot;)
 buildObjects / fileInputs += baseDirectory.value.toGlob / &quot;src&quot; / &quot;*.c&quot;
