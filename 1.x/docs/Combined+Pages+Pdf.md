@@ -20917,9 +20917,13 @@ logBuffered := false
 ### Add a custom logger
 
 
-The setting `extraLoggers` can be used to add custom loggers. A custom
-logger should implement [AbstractLogger]. `extraLoggers` is a function
-`ScopedKey[_] => Seq[AbstractLogger]`. This means that it can provide
+The setting `extraLoggers` can be used to add custom loggers. Internally, sbt
+makes use of the [log4j2 library](https://logging.apache.org/log4j/2.x/), so a custom
+logger should implement [`org.apache.logging.log4j.core.Appender`](https://logging.apache.org/log4j/2.x/log4j-core/apidocs/org/apache/logging/log4j/core/Appender.html),
+usually by extending [`AbstractAppender`](https://logging.apache.org/log4j/2.x/log4j-core/apidocs/org/apache/logging/log4j/core/appender/AbstractAppender.html).
+
+`extraLoggers` is a function
+`ScopedKey[_] => Seq[Appender]`. This means that it can provide
 different logging based on the task that requests the logger.
 
 ```scala
@@ -20935,38 +20939,25 @@ Here, we take the current function `currentFunction` for the setting and
 provide a new function. The new function prepends our custom logger to
 the ones provided by the old function.
 
-<a name="log"></a>
+An `Appender` in log4j2 appends a [`LogEvent`](https://logging.apache.org/log4j/2.x/log4j-core/apidocs/org/apache/logging/log4j/core/LogEvent.html),
+whose core internally is a [`Message`](https://logging.apache.org/log4j/2.x/log4j-api/apidocs/org/apache/logging/log4j/message/Message.html). There can
+be many types of Message, but sbt generates events containing instances of [`ObjectMessage`](https://logging.apache.org/log4j/2.x/log4j-api/apidocs/org/apache/logging/log4j/message/ObjectMessage.html),
+containing a payload that can be retrieved by calling [`getParameter()`](https://logging.apache.org/log4j/2.x/log4j-api/apidocs/org/apache/logging/log4j/message/ObjectMessage.html#getParameter--).
 
-### Log messages in a task
+The payload emitted by sbt logging is an instance of [`StringEvent`](https://github.com/sbt/util/blob/develop/internal/util-logging/src/main/contraband-scala/sbt/internal/util/StringEvent.scala),
+which contains `String` fields including `message` and `level`.
 
-The special task `streams` provides per-task logging and I/O via a
-[Streams](../api/sbt/std/Streams.html) instance. To log, a task uses
-the `log` member from the `streams` task. Calling `log` provides
-a [Logger](../api/sbt/util/Logger.html).
-
-:
-
-```scala
-myTask := {
-  val log = streams.value.log
-  log.warn("A warning.")
-}
-```
-
-### Log messages in a setting
-
-Since settings cannot reference tasks, the special task `streams`
-cannot be used to provide logging during setting initialization.
-The recommended way is to use `sLog`. Calling `sLog.value` provides
-a [Logger](../api/sbt/util/Logger.html).
+Putting all that together, here's a (completely useless!) example of an extra logger that logs messages from tasks in reverse to the console:
 
 ```scala
-mySetting := {
-  val log = sLog.value
-  log.warn("A warning.")
-}
-```
+extraLoggers := {
+  import org.apache.logging.log4j.core.LogEvent;
+  import org.apache.logging.log4j.core.appender.AbstractAppender
+  import org.apache.logging.log4j.message.{Message,ObjectMessage}
 
+  import sbt.internal.util.StringEvent
+
+  def loggerNameForKey( key : sbt.Def.ScopedKey[_] ) = s"""reverse.
 
 Project metadata
 ----------------
