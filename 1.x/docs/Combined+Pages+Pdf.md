@@ -1030,7 +1030,7 @@ or a continuous test like `~testQuick`.
 You can use the sbt `new` command to quickly setup a simple "Hello world" build.
 
 ```
-$ sbt new sbt/scala-seed.g8
+$ sbt new scala/scala-seed.g8
 ....
 A minimal Scala project.
 
@@ -14431,13 +14431,13 @@ increased speed across a team.
 
 ![image](files/proxy-cloud-setup.png)
 
-There are many good proxy repository solutions out there, with the big
-four being (in alphabetical order):
+There are many good proxy repository solutions out there:
 
--   [Archiva](http://archiva.apache.org/)
--   [Artifactory](http://www.jfrog.com/home/v_artifactory_opensource_overview)
+-   [JFrog Artifactory Open Source](https://jfrog.com/open-source/)
+-   [JFrog Artifactory Pro](https://jfrog.com/artifactory/)
+-   [Sonatype Nexus Repository Manager](http://www.sonatype.org/nexus/)
+-   [Apache Archiva](http://archiva.apache.org/)
 -   [CloudRepo](https://www.cloudrepo.io)
--   [Nexus](http://www.sonatype.org/nexus/)
 
 Once you have a proxy repository installed and configured, then it's
 time to configure sbt for your needs. Read the note at the bottom about
