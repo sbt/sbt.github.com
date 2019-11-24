@@ -270,31 +270,55 @@ Type in expressions for evaluation. Or try :help.
 scala&gt; :paste
 // Entering paste mode (ctrl-D to finish)
 
-import gigahorse._, support.okhttp.Gigahorse
 import scala.concurrent._, duration._
+import gigahorse._, support.okhttp.Gigahorse
+import play.api.libs.json._
+
 Gigahorse.withHttp(Gigahorse.config) { http =&gt;
-  val r = Gigahorse.url(&quot;https://query.yahooapis.com/v1/public/yql&quot;).get.
-    addQueryString(
-      &quot;q&quot; -&gt; &quot;&quot;&quot;select item.condition
-                from weather.forecast where woeid in (select woeid from geo.places(1) where text='New York, NY')
-                and u='c'&quot;&quot;&quot;,
-      &quot;format&quot; -&gt; &quot;json&quot;
-    )
-  val f = http.run(r, Gigahorse.asString)
-  Await.result(f, 10.seconds)
+  val baseUrl = &quot;https://www.metaweather.com/api/location&quot;
+  val rLoc = Gigahorse.url(baseUrl + &quot;/search/&quot;).get.
+    addQueryString(&quot;query&quot; -&gt; &quot;New York&quot;)
+  val fLoc = http.run(rLoc, Gigahorse.asString)
+  val loc = Await.result(fLoc, 10.seconds)
+  val woeid = (Json.parse(loc) \ 0 \ &quot;woeid&quot;).get
+  val rWeather = Gigahorse.url(baseUrl + s&quot;/$woeid/&quot;).get
+  val fWeather = http.run(rWeather, Gigahorse.asString)
+  val weather = Await.result(fWeather, 10.seconds)
+  ({Json.parse(_: String)} andThen Json.prettyPrint)(weather)
 }
 
 // Ctrl+D を押してペーストモードを抜ける
 
 // Exiting paste mode, now interpreting.
 
-import gigahorse._
-import support.okhttp.Gigahorse
 import scala.concurrent._
 import duration._
-res0: String = {&quot;query&quot;:{&quot;count&quot;:1,&quot;created&quot;:&quot;2018-05-06T22:49:55Z&quot;,&quot;lang&quot;:&quot;en-US&quot;,
-&quot;results&quot;:{&quot;channel&quot;:{&quot;item&quot;:{&quot;condition&quot;:{&quot;code&quot;:&quot;26&quot;,&quot;date&quot;:&quot;Sun, 06 May 2018 06:00 PM EDT&quot;,
-&quot;temp&quot;:&quot;16&quot;,&quot;text&quot;:&quot;Cloudy&quot;}}}}}}
+import gigahorse._
+import support.okhttp.Gigahorse
+import play.api.libs.json._
+res0: String =
+{
+  &quot;consolidated_weather&quot; : [ {
+    &quot;id&quot; : 5325278131781632,
+    &quot;weather_state_name&quot; : &quot;Light Rain&quot;,
+    &quot;weather_state_abbr&quot; : &quot;lr&quot;,
+    &quot;wind_direction_compass&quot; : &quot;W&quot;,
+    &quot;created&quot; : &quot;2019-11-23T09:16:43.892336Z&quot;,
+    &quot;applicable_date&quot; : &quot;2019-11-23&quot;,
+    &quot;min_temp&quot; : 0.36,
+    &quot;max_temp&quot; : 8.375,
+    &quot;the_temp&quot; : 3.98,
+    &quot;wind_speed&quot; : 4.813710565158143,
+    &quot;wind_direction&quot; : 266.48254020294627,
+    &quot;air_pressure&quot; : 1017,
+    &quot;humidity&quot; : 58,
+    &quot;visibility&quot; : 15.37583015191283,
+    &quot;predictability&quot; : 75
+  }, {
+    &quot;id&quot; : 6428406054912000,
+    &quot;weather_state_name&quot; : &quot;Heavy Rain&quot;,
+    &quot;weather_state_abbr&quot; : &quot;hr&quot;,
+  ...
 
 scala&gt; :q // これで REPL を抜ける
 </code></pre><h3 id="%E3%82%B5%E3%83%97%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B">サププロジェクトを作成する<a href="#%E3%82%B5%E3%83%97%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> を以下のように変更する:
@@ -404,36 +428,29 @@ lazy val helloCore = (project in file(&quot;core&quot;))
 </p><pre><code class="prettyprint lang-scala">package example.core
 
 import gigahorse._, support.okhttp.Gigahorse
-import scala.concurrent._
+import scala.concurrent._, duration._
 import play.api.libs.json._
 
 object Weather {
   lazy val http = Gigahorse.http(Gigahorse.config)
+
   def weather: Future[String] = {
-    val r = Gigahorse.url(&quot;https://query.yahooapis.com/v1/public/yql&quot;).get.
-      addQueryString(
-        &quot;q&quot; -&gt; &quot;&quot;&quot;select item.condition
-                 |from weather.forecast where woeid in (select woeid from geo.places(1) where text='New York, NY')
-                 |and u='c'&quot;&quot;&quot;.stripMargin,
-        &quot;format&quot; -&gt; &quot;json&quot;
-      )
-
-    import ExecutionContext.Implicits._
+    val baseUrl = &quot;https://www.metaweather.com/api/location&quot;
+    val locUrl = baseUrl + &quot;/search/&quot;
+    val weatherUrl = baseUrl + &quot;/%s/&quot;
+    val rLoc = Gigahorse.url(locUrl).get.
+      addQueryString(&quot;query&quot; -&gt; &quot;New York&quot;)
+    import ExecutionContext.Implicits.global
     for {
-      f &lt;- http.run(r, Gigahorse.asString)
-      x &lt;- parse(f)
-    } yield x
+      loc &lt;- http.run(rLoc, parse)
+      woeid = (loc \ 0  \ &quot;woeid&quot;).get
+      rWeather = Gigahorse.url(weatherUrl format woeid).get
+      weather &lt;- http.run(rWeather, parse)
+    } yield (weather \ &quot;weather_state_name&quot;)(0).as[String].toLowerCase
   }
 
-  def parse(rawJson: String): Future[String] = {
-    val js = Json.parse(rawJson)
-    (js \\ &quot;text&quot;).headOption match {
-      case Some(JsString(x)) =&gt; Future.successful(x.toLowerCase)
-      case _                 =&gt; Future.failed(sys.error(rawJson))
-    }
-  }
+  private def parse = Gigahorse.asString andThen Json.parse
 }
-
 </code></pre><p>次に <code>src/main/scala/example/Hello.scala</code> を以下のように変更する:
 </p><pre><code class="prettyprint lang-scala">package example
 
