@@ -185,7 +185,21 @@ val taskKey: Task[Seq[Attributed[File]]] =
 </code></pre><h3 id="Using+State+in+a+task">Using State in a task<a href="#Using+State+in+a+task" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To access the current State from a task, use the <code>state</code> task as an
 input. For example,
 </p><pre><code class="prettyprint lang-scala">myTask := ... state.value ...
-</code></pre><div class="bottom nav">
+</code></pre><h3 id="Updating+State+in+a+task">Updating State in a task<a href="#Updating+State+in+a+task" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>It is also possible to update the sbt state in a task. To do this, the
+task must return type <code>StateTransform</code>. The state will be transformed upon
+completion of task evaluation. The <code>StateTransform</code> is constructed with
+a function from <code>State =&gt; State</code> that accepts the previous value of the <code>State</code>
+and generates a new state. For example:
+</p><pre><code class="prettyprint lang-scala">import complete.DefaultParsers._
+val counter = AttributeKey[Int](&quot;counter&quot;)
+val setCounter = inputKey[StateTransform](&quot;Set the value of the counter attribute&quot;)
+setCounter := {
+  val count = (Space ~&gt; IntBasic).parsed
+  StateTransform(_.put(counter, count))
+}
+</code></pre><p>creates the input task <code>setCounter</code> that sets the counter attribute to some
+value.
+</p><div class="bottom nav">
                 <div class="row">
                   <div class="col-md-auto">
                     <a href="Task-Inputs.html">

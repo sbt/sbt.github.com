@@ -17697,6 +17697,27 @@ input. For example,
 myTask := ... state.value ...
 ```
 
+### Updating State in a task
+
+It is also possible to update the sbt state in a task. To do this, the
+task must return type `StateTransform`. The state will be transformed upon
+completion of task evaluation. The `StateTransform` is constructed with
+a function from `State => State` that accepts the previous value of the `State`
+and generates a new state. For example:
+
+```scala
+import complete.DefaultParsers._
+val counter = AttributeKey[Int]("counter")
+val setCounter = inputKey[StateTransform]("Set the value of the counter attribute")
+setCounter := {
+  val count = (Space ~> IntBasic).parsed
+  StateTransform(_.put(counter, count))
+}
+```
+
+creates the input task `setCounter` that sets the counter attribute to some
+value.
+
 
   [Task-Graph]: Task-Graph.html
   [Tasks]: Tasks.html
