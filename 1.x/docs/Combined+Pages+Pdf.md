@@ -20988,7 +20988,86 @@ extraLoggers := {
 
   import sbt.internal.util.StringEvent
 
-  def loggerNameForKey( key : sbt.Def.ScopedKey[_] ) = s"""reverse.
+  def loggerNameForKey( key : sbt.Def.ScopedKey[_] ) = s"""reverse.${key.scope.task.toOption.getOrElse("<unknown>")}"""
+
+  class ReverseConsoleAppender( key : ScopedKey[_] ) extends AbstractAppender (
+    loggerNameForKey( key ), // name : String
+    null,                    // filter : org.apache.logging.log4j.core.Filter
+    null,                    // layout : org.apache.logging.log4j.core.Layout[ _ <: Serializable]
+    false                    // ignoreExceptions : Boolean
+  ) {
+
+    this.start() // the log4j2 Appender must be started, or it will fail with an Exception
+
+    override def append( event : LogEvent ) : Unit = {
+      val output = {
+        def forUnexpected( message : Message ) = s"[${this.getName()}] Unexpected: ${message.getFormattedMessage()}"
+        event.getMessage() match {
+	   case om : ObjectMessage => { // what we expect
+	     om.getParameter() match {
+	       case se : StringEvent => s"[${this.getName()} - ${se.level}] ${se.message.reverse}"
+	       case other            => forUnexpected( om )
+	     }
+	   }
+	   case unexpected : Message => forUnexpected( unexpected )
+	}
+      }
+      System.out.synchronized { // sbt adopts a convention of acquiring System.out's monitor printing to the console
+         println( output )
+      }
+    }
+  }
+
+  val currentFunction = extraLoggers.value
+  (key: ScopedKey[_]) => {
+     new ReverseConsoleAppender(key) +: currentFunction(key)
+  }
+}
+```
+
+Now, if we execute a task that logs messages, we should see our logger invoked:
+
+```
+sbt:sbt-logging-example> update
+[info] Updating ...
+[reverse.update - info] ... gnitadpU
+[info] Done updating.
+[reverse.update - info] .gnitadpu enoD
+[success] Total time: 0 s, completed Oct 16, 2019 5:22:22 AM
+```
+
+<a name="log"></a>
+
+### Log messages in a task
+
+The special task `streams` provides per-task logging and I/O via a
+[Streams](../api/sbt/std/Streams.html) instance. To log, a task uses
+the `log` member from the `streams` task. Calling `log` provides
+a [Logger](../api/sbt/util/Logger.html).
+
+:
+
+```scala
+myTask := {
+  val log = streams.value.log
+  log.warn("A warning.")
+}
+```
+
+### Log messages in a setting
+
+Since settings cannot reference tasks, the special task `streams`
+cannot be used to provide logging during setting initialization.
+The recommended way is to use `sLog`. Calling `sLog.value` provides
+a [Logger](../api/sbt/util/Logger.html).
+
+```scala
+mySetting := {
+  val log = sLog.value
+  log.warn("A warning.")
+}
+```
+
 
 Project metadata
 ----------------
