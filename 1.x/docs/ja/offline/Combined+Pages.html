@@ -1276,10 +1276,10 @@ checksums := scalacOptions.value
 </p><pre><code class="prettyprint lang-scala">// プロジェクトの name に基いて organization 名を付ける (どちらも型は SettingKey[String])
 organization := name.value
 </code></pre><p>実用的な例もみてみる。
-これは <code>scalaSource in Compile</code> というキーを <code>scalaBinaryVersion</code> が <code>&quot;2.11&quot;</code>
+これは <code>Compile / scalaSource</code> というキーを <code>scalaBinaryVersion</code> が <code>&quot;2.11&quot;</code>
 の場合のみ別のディレクトリに再配線する。
-</p><pre><code class="prettyprint lang-scala">scalaSource in Compile := {
-  val old = (scalaSource in Compile).value
+</p><pre><code class="prettyprint lang-scala">Compile / scalaSource := {
+  val old = (Compile / scalaSource).value
   scalaBinaryVersion.value match {
     case &quot;2.11&quot; =&gt; baseDirectory.value / &quot;src-2.11&quot; / &quot;main&quot; / &quot;scala&quot;
     case _      =&gt; old
@@ -1327,7 +1327,7 @@ end
 </code></pre><p>Rake でのブレークスルーは、アクションをシステムコマンドの代わりにプログラミング言語を使って記述したことだ。
 </p><h4 id="%E3%83%8F%E3%82%A4%E3%83%96%E3%83%AA%E3%83%83%E3%83%89%E3%83%BB%E3%83%95%E3%83%AD%E3%83%BC%E3%83%99%E3%83%BC%E3%82%B9%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0%E3%81%AE%E5%88%A9%E7%82%B9">ハイブリッド・フローベースプログラミングの利点<a href="#%E3%83%8F%E3%82%A4%E3%83%96%E3%83%AA%E3%83%83%E3%83%89%E3%83%BB%E3%83%95%E3%83%AD%E3%83%BC%E3%83%99%E3%83%BC%E3%82%B9%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0%E3%81%AE%E5%88%A9%E7%82%B9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>ビルドをこのように構成する動機がいくつかある。
 </p><p>第一は非重複化だ。フローベースプログラミングではあるタスクが複数のタスクから依存されていても一度だけしか実行されない。
-例えば、タスクグラフ上の複数のタスクが <code>compile in Compile</code> に依存していたとしても、実際のコンパイルは唯一一回のみ実行される。
+例えば、タスクグラフ上の複数のタスクが <code>Compile / compile</code> に依存していたとしても、実際のコンパイルは唯一一回のみ実行される。
 </p><p>第二は並列処理だ。タスクグラフを用いることでタスクエンジンは相互に非依存なタスクを並列にスケジュールすることができる。
 </p><p>第三は関心事の分離と柔軟さだ。
 タスクグラフはビルドの作者が複数のタスクを異なる方法で配線することを可能にする。
@@ -1363,11 +1363,13 @@ end
 </p><p><img src="../files/rgb_color_solid_cube.png" alt="color cube"/>
 </p><p>RGB 色モデルにおいて、全ての色は赤、緑、青の成分を軸とする立方体内の点として表すことができ、それぞれの成分は数値化することができる。
 同様に、sbt におけるスコープはサブプロジェクト、コンフィギュレーション、タスクの<strong>タプル</strong>により成り立つ:
-</p><pre><code class="prettyprint lang-scala">scalacOptions in (projA, Compile, console)
-</code></pre><p>より正確には、以下のようになっている:
-</p><pre><code class="prettyprint lang-scala">scalacOptions in (Select(projA: Reference),
-                  Select(Compile: ConfigKey),
-                  Select(console.key))
+</p><pre><code class="prettyprint lang-scala">projA / Compile / console / scalacOptions
+</code></pre><p>これは以下のスコープ付きキーを sbt 1.1 で導入されたスラッシュ構文で書いたものだ:
+</p><pre><code class="prettyprint lang-scala">scalacOptions in (
+  Select(projA: Reference),
+  Select(Compile: ConfigKey),
+  Select(console.key)
+)
 </code></pre><h4 id="%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E8%BB%B8%E3%81%AB%E3%82%88%E3%82%8B%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%91">サブプロジェクト軸によるスコープ付け<a href="#%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E8%BB%B8%E3%81%AB%E3%82%88%E3%82%8B%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%91" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><a href="Multi-Project.html">一つのビルドに複数のプロジェクトを入れる</a>場合、それぞれのプロジェクトにセッティングが必要だ。
 つまり、キーはプロジェクトによりスコープ付けされる。
 </p><p>プロジェクト軸は <code>ThisBuild</code> という「ビルド全体」を表す値に設定することもでき、その場合はセッティングは単一のプロジェクトではなくビルド全体に適用される。
@@ -1391,114 +1393,115 @@ end
 </p><h4 id="%E3%82%BF%E3%82%B9%E3%82%AF%E8%BB%B8%E3%81%AB%E3%82%88%E3%82%8B%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%91">タスク軸によるスコープ付け<a href="#%E3%82%BF%E3%82%B9%E3%82%AF%E8%BB%B8%E3%81%AB%E3%82%88%E3%82%8B%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%91" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>セッティングはタスクの動作に影響を与えることもできる。例えば、<code>packageSrc</code> は <code>packageOptions</code> セッティングの影響を受ける。
 </p><p>これをサポートするため、（<code>packageSrc</code> のような）タスクキーは、（<code>packageOption</code> のような）別のキーのスコープとなりえる。
 </p><p>パッケージを構築するさまざまなタスク（<code>packageSrc</code>、<code>packageBin</code>、<code>packageDoc</code>）は、<code>artifactName</code> や <code>packageOption</code> などのパッケージ関連のキーを共有することができる。これらのキーはそれぞれのパッケージタスクに対して独自の値を取ることができる。
-</p><h4 id="%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%90%E3%83%AB%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E6%88%90%E5%88%86">グローバルスコープ成分<a href="#%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%90%E3%83%AB%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E6%88%90%E5%88%86" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>それぞれのスコープ軸は、その軸の型のインスタンスを代入する（例えば、タスク軸にはタスクを代入する）か、
-もしくは、<code>Global</code> という特殊な値を代入することができる。これは <code>*</code> とも表記される。つまり、<code>Global</code> は <code>None</code> と同様だと考えることができる。
-</p><p><code>*</code> は全てのスコープ軸に対応する普遍的なフォールバックであるが、多くの場合直接それを使うのは sbt 本体もしくはプラグインの作者に限定されるべきだ。
-</p><p>分かりづらいことに、ビルド定義内で <code>someKey in Global</code> と書いた場合、暗黙の変換によってこれは <code>someKey in (Global, Global, Global)</code> に変換される。
-</p><h3 id="%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%81%8B%E3%82%89%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%82%92%E5%8F%82%E7%85%A7%E3%81%99%E3%82%8B">ビルド定義からスコープを参照する<a href="#%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%81%8B%E3%82%89%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%82%92%E5%8F%82%E7%85%A7%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> で裸のキーを使ってセッティングを作った場合は、(現プロジェクト, <code>Global</code> コンフィグレーション, <code>Global</code> タスク) にスコープ付けされる:
+</p><h4 id="Zero+%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E6%88%90%E5%88%86">Zero スコープ成分<a href="#Zero+%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E6%88%90%E5%88%86" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>各スコープ軸は、<code>Some(_)</code> のようにその軸の型のインスタンスを持つか、<code>Zero</code> という特殊な値を持つことができる。
+つまり、<code>Zero</code> は <code>None</code> と同様だと考えることができる。
+</p><p><code>Zero</code> は全てのスコープ軸に対応する普遍的なフォールバックであるが、多くの場合直接それを使うのは sbt 本体もしくはプラグインの作者に限定されるべきだ。
+</p><p><code>Global</code> は、全ての軸を <code>Zero</code> とするスコープ、<code>Zero / Zero / Zero</code> だ。そのため、<code>Global / someKey</code> は <code>Zero / Zero / Zero / someKey</code> を略記したものだと考えることができる。
+</p><h3 id="%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%81%8B%E3%82%89%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%82%92%E5%8F%82%E7%85%A7%E3%81%99%E3%82%8B">ビルド定義からスコープを参照する<a href="#%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%81%8B%E3%82%89%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%82%92%E5%8F%82%E7%85%A7%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> で裸のキーを使ってセッティングを作った場合は、(現プロジェクト / コンフィグレーション <code>Zero</code> / タスク <code>Zero</code>) にスコープ付けされる:
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
   .settings(
     name := &quot;hello&quot;
   )
-</code></pre><p>sbt を実行して、<code>inspect name</code> と入力して、キーが　<code>{file:/home/hp/checkout/hello/}default-aea33a/*:name</code> により提供されていることを確認しよう。つまり、プロジェクトは、<code>{file:/home/hp/checkout/hello/}default-aea33a</code> で、コンフィギュレーションは <code>*</code> で、タスクは表示されていない（グローバルを指す）ということだ。
-</p><p>右辺項に置かれた裸のキーも (現プロジェクト, <code>Global</code> コンフィグレーション, <code>Global</code> タスク) にスコープ付けされる:
+</code></pre><p>sbt を実行して、<code>inspect name</code> と入力して、キーが
+<code>ProjectRef(uri(&quot;file:/private/tmp/hello/&quot;), &quot;root&quot;) / name</code> により提供されていることを確認しよう。つまり、プロジェクトは、
+<code>ProjectRef(uri(&quot;file:/private/tmp/hello/&quot;), &quot;root&quot;)</code> で、コンフィギュレーション軸もタスク軸も表示されない (これは <code>Zero</code> を意味する)。
+</p><p>右辺項に置かれた裸のキーも (現プロジェクト / コンフィグレーション <code>Zero</code> / タスク <code>Zero</code>) にスコープ付けされる:
 </p><pre><code class="prettyprint lang-scala">organization := name.value
-</code></pre><p>キーにはオーバーロードされた <code>.in</code> メソッドがあり、それによりスコープを設定できる。
-<code>.in(...)</code> への引数として、どのスコープ軸のインスタンスでも渡すことができる。
+</code></pre><p>全てのスコープ軸の型には <code>/</code> 演算子が導入されている。
+<code>/</code> は引数としてキーもしくは別のスコープ軸を受け取ることができる。
 これをやる意味は全くないけど、例として <code>Compile</code> コンフィギュレーションでスコープ付けされた <code>name</code> の設定を以下に示す:
-</p><pre><code class="prettyprint lang-scala">name in Compile := &quot;hello&quot;
+</p><pre><code class="prettyprint lang-scala">Compile / name := &quot;hello&quot;
 </code></pre><p>また、<code>packageBin</code> タスクでスコープ付けされた <code>name</code> の設定（これも意味なし！ただの例だよ）:
-</p><pre><code class="prettyprint lang-scala">name in packageBin := &quot;hello&quot;
+</p><pre><code class="prettyprint lang-scala">packageBin / name := &quot;hello&quot;
 </code></pre><p>もしくは、例えば <code>Compile</code> コンフィギュレーションの <code>packageBin</code> の <code>name</code> など、複数のスコープ軸でスコープ付けする:
-</p><pre><code class="prettyprint lang-scala">name in (Compile, packageBin) := &quot;hello&quot;
+</p><pre><code class="prettyprint lang-scala">Compile / packageBin / name := &quot;hello&quot;
 </code></pre><p>もしくは、全ての軸に対して <code>Global</code> を使う:
-</p><pre><code class="prettyprint lang-scala">// concurrentRestrictions in (Global, Global, Global) と同じ
-concurrentRestrictions in Global := Seq(
+</p><pre><code class="prettyprint lang-scala">// same as Zero / Zero / Zero / concurrentRestrictions
+Global / concurrentRestrictions := Seq(
   Tags.limitAll(1)
 )
-</code></pre><p>（<code>concurrentRestrictions in Global</code> は、<code>concurrentRestrictions in (Global, Global, Global)</code> へと暗黙の変換が行われ、全ての軸を <code>Global</code> に設定する。
-タスクとコンフィギュレーションは既にデフォルトで <code>Global</code> であるため、事実上行なっているのはプロジェクトを <code>Global</code> に指定することだ。つまり、<code>{file:/home/hp/checkout/hello/}default-aea33a/*:concurrentRestrictions</code> ではなく、<code>*/*:concurrentRestrictions</code> が定義される。）
+</code></pre><p>（<code>Global / concurrentRestrictions</code> は、<code>Zero / Zero / Zero / concurrentRestrictions</code> へと暗黙の変換が行われ、全ての軸を <code>Zero</code> に設定する。
+タスクとコンフィギュレーションは既にデフォルトで <code>Zero</code> であるため、事実上行なっているのはプロジェクトを <code>Zero</code> に指定することだ。つまり、<code>ProjectRef(uri(&quot;file:/tmp/hello/&quot;), &quot;root&quot;) / Zero / Zero / concurrentRestrictions</code> ではなく、<code>Zero / Zero / Zero / concurrentRestrictions</code> が定義される。）
 </p><h3 id="sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%8B%E3%82%89%E3%81%AE%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%8D%E3%82%AD%E3%83%BC%E3%81%AE%E5%8F%82%E7%85%A7%E6%96%B9%E6%B3%95">sbt シェルからのスコープ付きキーの参照方法<a href="#sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%8B%E3%82%89%E3%81%AE%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%8D%E3%82%AD%E3%83%BC%E3%81%AE%E5%8F%82%E7%85%A7%E6%96%B9%E6%B3%95" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>コマンドラインと sbt シェルにおいて、sbt はスコープ付きキーを以下のように表示する（そして、パースする）:
-</p><pre><code class="">{&lt;ビルド-uri&gt;}&lt;プロジェクト-id&gt;/コンフィギュレーション:タスクキー::キー
-</code></pre><ul><li><code>{&lt;ビルド-uri&gt;}&lt;プロジェクト-id&gt;</code> は、サブプロジェクト軸を特定する。&lt;プロジェクト-id&gt; がなければ、サブプロジェクト軸は「ビルド全体」スコープとなる。
-</li><li><code>コンフィギュレーション</code> は、コンフィギュレーション軸を特定する。
-</li><li><code>タスクキー</code> は、タスク軸を特定する。
+</p><pre><code class="">ref / Config / intask / キー
+</code></pre><ul><li><code>ref</code> は、サブプロジェクト軸を特定する。これは <code>&lt;プロジェクト-id&gt;</code>、<code>ProjectRef(uri(&quot;file:...&quot;), &quot;id&quot;)</code>、もしくは「ビルド全体」を意味する <code>ThisBuild</code> という値を取ることができる。
+</li><li><code>Config</code> は、コンフィギュレーション軸を特定し、大文字から始まる Scala 識別子を使う。
+</li><li><code>intask</code> は、タスク軸を特定する。
 </li><li><code>キー</code> は、スコープ付けされるキーを特定する。
-</li></ul><p>全ての軸において、<code>*</code> を使って <code>Global</code> スコープを表すことができる。
+</li></ul><p>全ての軸において、<code>Zero</code> を使うことができる。
 </p><p>スコープ付きキーの一部を省略すると、以下の手順で推論される:
 </p><ul><li>プロジェクトを省略した場合は、カレントプロジェクトが使われる。
-</li><li>コンフィグレーションを省略した場合は、キーに依存したコンフィギュレーションが自動検知される。
-</li><li>タスクを省略した場合は、<code>Global</code> タスクが使われる。
+</li><li><code>Config</code> もしくは <code>intask</code> を省略した場合は、キーに依存したコンフィギュレーションが自動検知される。
 </li></ul><p>さらに詳しくは、<a href="../../docs/Inspecting-Settings.html">Interacting with the Configuration System</a> 参照。
-</p><h3 id="%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%8D%E3%82%AD%E3%83%BC%E3%81%AE%E8%A1%A8%E8%A8%98%E4%BE%8B">スコープ付きキーの表記例<a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%8D%E3%82%AD%E3%83%BC%E3%81%AE%E8%A1%A8%E8%A8%98%E4%BE%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li><code>fullClasspath</code> はキーのみを指定し、デフォルトスコープを用いる。ここでは、カレントプロジェクト、キーに依存したコンフィギュレーション、グローバルタスクスコープとなる。
-</li><li><code>test:fullClasspath</code> はコンフィギュレーションを指定する。つまりプロジェクト軸とタスク軸はデフォルトを用いつつも <code>test</code>コンフィギュレーションにおける <code>fullClasspath</code> というキーを表す。
-</li><li><code>*:fullClasspath</code> はデフォルトコンフィギュレーションを用いずに <code>Global</code> コンフィギュレーションを用いる事を明示している。
-</li><li><code>doc::fullClasspath</code> はプロジェクト軸とコンフィギュレーション軸はデフォルトを用いつつ、 <code>doc</code> タスクスコープにおける <code>fullClasspath</code> というキーを表す。
-</li><li><code>{file:/home/hp/checkout/hello/}default-aea33a/test:fullClasspath</code> は <code>{file:/home/hp/checkout/hello/}</code> をルートディレクトリにビルドした際に含まれる <code>default-aea33a</code> というプロジェクトを指定している。さらにこのプロジェクト内の <code>test</code> コンフィギュレーションを用いる事も明示している。
-</li><li><code>{file:/home/hp/checkout/hello/}/test:fullClasspath</code> は <code>{file:/home/hp/checkout/hello/}</code> のビルド全体をプロジェクトの軸とする。
-</li><li><code>{.}/test:fullClasspath</code> は <code>{.}</code> で指定されたルートディレクトリのビルド全体をプロジェクト軸に取る。<code>{.}</code> は Scala code において <code>ThisBuild</code> と記述できる。
-</li><li><code>{file:/home/hp/checkout/hello/}/compile:doc::fullClasspath</code> は3つのスコープ軸全てを指定している。
+</p><h3 id="sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%A7%E3%81%AE%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%8D%E3%82%AD%E3%83%BC%E3%81%AE%E8%A1%A8%E8%A8%98%E4%BE%8B">sbt シェルでのスコープ付きキーの表記例<a href="#sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%A7%E3%81%AE%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%8D%E3%82%AD%E3%83%BC%E3%81%AE%E8%A1%A8%E8%A8%98%E4%BE%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li><code>fullClasspath</code> はキーのみを指定し、デフォルトスコープを用いる。ここでは、カレントプロジェクト、キーに依存したコンフィギュレーション、<code>Zero</code> タスクスコープとなる。
+</li><li><code>Test / fullClasspath</code> はコンフィギュレーションを指定する。つまりプロジェクト軸とタスク軸はデフォルトを用いつつも <code>Test</code>コンフィギュレーションにおける <code>fullClasspath</code> というキーを表す。
+</li><li><code>root / fullClasspath</code> は <code>root</code> というプロジェクトid によって特定されるプロジェクトをプロジェクト軸に指定する。
+</li><li><code>root / Zero / fullClasspath</code> は <code>root</code> プロジェクトと、デフォルトのコンフィギュレーションの代わりに <code>Zero</code> をコンフィギュレーション軸に指定する。
+</li><li><code>doc / fullClasspath</code> は <code>fullClasspath</code> キーを <code>doc</code> タスク、プロジェクト軸とコンフィギュレーション軸はデフォルト値へと指定する。
+</li><li><code>ProjectRef(uri(&quot;file:/tmp/hello/&quot;), &quot;root&quot;) / Test / fullClasspath</code>
+はプロジェクト <code>ProjectRef(uri(&quot;file:/tmp/hello/&quot;), &quot;root&quot;)</code>、Test コンフィギュレーション、デフォルトのタスク軸を指定する。
+</li><li><code>ThisBuild / version</code> はプロジェクト軸をこの「ビルド全体」である <code>ThisBuild</code>、デフォルトのコンフィギュレーション軸へと指定する。
+</li><li><code>Zero / fullClasspath</code> はプロジェクト軸を <code>Zero</code>、コンフィギュレーション軸をデフォルト値へと指定する。
+</li><li><code>root / Compile / doc / fullClasspath</code> は 3つ全てのスコープ軸を指定する。
 </li></ul><h3 id="%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%81%AE%E6%A4%9C%E6%9F%BB">スコープの検査<a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%81%AE%E6%A4%9C%E6%9F%BB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt シェルで <code>inspect</code> コマンドを使ってキーとそのスコープを把握することができる。
-例えば、<code>inspect test:full-classpath</code> と試してみよう:
+例えば、<code>inspect Test/fullClasspath</code> と試してみよう:
 </p><pre><code class="">$ sbt
-&gt; inspect test:fullClasspath
-[info] Task: scala.collection.Seq[sbt.Attributed[java.io.File]]
+sbt:Hello&gt; inspect Test / fullClasspath
+[info] Task: scala.collection.Seq[sbt.internal.util.Attributed[java.io.File]]
 [info] Description:
 [info]  The exported classpath, consisting of build products and unmanaged and managed, internal and external dependencies.
 [info] Provided by:
-[info]  {file:/home/hp/checkout/hello/}default-aea33a/test:fullClasspath
+[info]  ProjectRef(uri(&quot;file:/tmp/hello/&quot;), &quot;root&quot;) / Test / fullClasspath
+[info] Defined at:
+[info]  (sbt.Classpaths.classpaths) Defaults.scala:1639
 [info] Dependencies:
-[info]  test:exportedProducts
-[info]  test:dependencyClasspath
+[info]  Test / dependencyClasspath
+[info]  Test / exportedProducts
+[info]  Test / fullClasspath / streams
 [info] Reverse dependencies:
-[info]  test:runMain
-[info]  test:run
-[info]  test:testLoader
-[info]  test:console
+[info]  Test / testLoader
 [info] Delegates:
-[info]  test:fullClasspath
-[info]  runtime:fullClasspath
-[info]  compile:fullClasspath
-[info]  *:fullClasspath
-[info]  {.}/test:fullClasspath
-[info]  {.}/runtime:fullClasspath
-[info]  {.}/compile:fullClasspath
-[info]  {.}/*:fullClasspath
-[info]  */test:fullClasspath
-[info]  */runtime:fullClasspath
-[info]  */compile:fullClasspath
-[info]  */*:fullClasspath
+[info]  Test / fullClasspath
+[info]  Runtime / fullClasspath
+[info]  Compile / fullClasspath
+[info]  fullClasspath
+[info]  ThisBuild / Test / fullClasspath
+[info]  ThisBuild / Runtime / fullClasspath
+[info]  ThisBuild / Compile / fullClasspath
+[info]  ThisBuild / fullClasspath
+[info]  Zero / Test / fullClasspath
+[info]  Zero / Runtime / fullClasspath
+[info]  Zero / Compile / fullClasspath
+[info]  Global / fullClasspath
 [info] Related:
-[info]  compile:fullClasspath
-[info]  compile:fullClasspath(for doc)
-[info]  test:fullClasspath(for doc)
-[info]  runtime:fullClasspath
+[info]  Compile / fullClasspath
+[info]  Runtime / fullClasspath
 </code></pre><p>一行目からこれが（<a href="Basic-Def.html">.sbt ビルド定義</a>で説明されているとおり、セッティングではなく）タスクであることが分かる。
 このタスクの戻り値は <code>scala.collection.Seq[sbt.Attributed[java.io.File]]</code> の型をとる。
 </p><p>“Provided by” は、この値を定義するスコープ付きキーを指し、この場合は、
-<code>{file:/home/hp/checkout/hello/}default-aea33a/test:fullClasspath</code>
-（<code>test</code> コンフィギュレーションと <code>{file:/home/hp/checkout/hello/}default-aea33a</code> プロジェクトにスコープ付けされた <code>fullClasspath</code> キー）。
+<code>ProjectRef(uri(&quot;file:/tmp/hello/&quot;), &quot;root&quot;) / Test / fullClasspath</code>
+（<code>Test</code> コンフィギュレーションと <code>ProjectRef(uri(&quot;file:/tmp/hello/&quot;), &quot;root&quot;)</code> プロジェクトにスコープ付けされた <code>fullClasspath</code> キー）。
 </p><p>“Dependencies” に関しては、<a href="Task-Graph.html">前のページ</a>で解説した。
 </p><p>“Delegates” (委譲) に関してはまた後で。
-</p><p>今度は、（<code>inspect test:full-class</code> のかわりに）<code>inspect fullClasspath</code> を試してみて、違いをみてみよう。
-コンフィグレーションが省略されたため、<code>compile</code> だと自動検知される。
-そのため、<code>inspect compile:fullClasspath</code> は <code>inspect fullClasspath</code> と同じになるはずだ。
-</p><p>次に、<code>inspect *:fullClasspath</code> も実行して違いを比べてみよう。
-<code>fullClasspath</code> はデフォルトでは、<code>Global</code> スコープには定義されていない。
+</p><p>今度は、（<code>inspect Test/fullClasspath</code> のかわりに）<code>inspect fullClasspath</code> を試してみて、違いをみてみよう。
+コンフィグレーションが省略されたため、<code>Compile</code> だと自動検知される。
+そのため、<code>inspect Compile/fullClasspath</code> は <code>inspect fullClasspath</code> と同じになるはずだ。
+</p><p>次に、<code>inspect ThisBuild / Zero / fullClasspath</code> も実行して違いを比べてみよう。
+<code>fullClasspath</code> はデフォルトでは、<code>Zero</code> スコープには定義されていない。
 </p><p>より詳しくは、<a href="../../docs/Inspecting-Settings.html">Interacting with the Configuration System</a> 参照。
 </p><h3 id="%E3%81%84%E3%81%A4%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%82%92%E6%8C%87%E5%AE%9A%E3%81%99%E3%82%8B%E3%81%B9%E3%81%8D%E3%81%8B">いつスコープを指定するべきか<a href="#%E3%81%84%E3%81%A4%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%82%92%E6%8C%87%E5%AE%9A%E3%81%99%E3%82%8B%E3%81%B9%E3%81%8D%E3%81%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>あるキーが、通常スコープ付けされている場合は、スコープを指定してそのキーを使う必要がある。
 例えば、<code>compile</code> タスクは、デフォルトで <code>Compile</code> と <code>Test</code> コンフィギュレーションにスコープ付けされているけど、
 これらのスコープ外には存在しない。
-</p><p>そのため、<code>compile</code> キーに関連付けられた値を変更するには、<code>compile in Compile</code> か <code>compile in Test</code> のどちらかを書く必要がある。
+</p><p>そのため、<code>compile</code> キーに関連付けられた値を変更するには、<code>Compile / compile</code> か <code>Test / compile</code> のどちらかを書く必要がある。
 素の <code>compile</code> を使うと、コンフィグレーションにスコープ付けされた標準のコンパイルタスクをオーバーライドするかわりに、カレントプロジェクトにスコープ付けされた新しいコンパイルタスクを定義してしまう。
 </p><p><em>“Reference to undefined setting“</em> のようなエラーに遭遇した場合は、スコープを指定していないか、間違ったスコープを指定したことによることが多い。
 君が使っているキーは何か別のスコープの中で定義されている可能性がある。
-エラーメッセージの一部として sbt は、君が意味したであろうものを推測してくれるから、“Did you mean compile:compile?” を探そう。
-</p><p>キーの名前はキーの<em>一部</em>であると考えることもできる。
+エラーメッセージの一部として sbt は、意味したであろうものを推測してくれるから、“Did you mean Compile / compile?” を探そう。
+</p><p>キーの名前はキーの<strong>一部</strong>でしかないと考えることもできる。
 実際の所は、全てのキーは名前と（三つの軸を持つ）スコープによって構成される。
-つまり、<code>packageOptions in (Compile, packageBin)</code> という式全体でキー名だということだ。
+つまり、<code>Compile / packageBin / packageOptions</code> という式全体でキー名だということだ。
 単に <code>packageOptions</code> と言っただけでもキー名だけど、それは別のキーだ
-（<code>in</code> 無しのキーのスコープは暗黙で決定され、現プロジェクト、<code>Global</code> コンフィグレーション、<code>Global</code> タスクとなる）。
+（スラッシュ無しのキーのスコープは暗黙で決定され、現プロジェクト、<code>Zero</code> コンフィグレーション、<code>Zero</code> タスクとなる）。
 </p><h3 id="%E3%83%93%E3%83%AB%E3%83%89%E3%83%AC%E3%83%99%E3%83%AB%E3%83%BB%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0">ビルドレベル・セッティング<a href="#%E3%83%93%E3%83%AB%E3%83%89%E3%83%AC%E3%83%99%E3%83%AB%E3%83%BB%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>サブプロジェクト間に共通なセッティングを一度に定義するための上級テクニックとしてセッティングを
 <code>ThisBuild</code> にスコープ付けするという方法がある。
 </p><p>もし特定のサブプロジェクトにスコープ付けされたキーが見つから無かった場合、
@@ -1540,19 +1543,19 @@ lazy val util = (project in file(&quot;util&quot;))
 <code>SettingKey[T]</code> の <code>T</code> が列の場合、つまりキーの値の型が列の場合は、置換のかわりに列に追加することができる。
 </p><ul><li><code>+=</code> は、列に単一要素を追加する。
 </li><li><code>++=</code> は、別の列を連結する。
-</li></ul><p>例えば、<code>sourceDirectories in Compile</code> というキーの値の型は <code>Seq[File]</code> だ。
+</li></ul><p>例えば、<code>Compile / sourceDirectories</code> というキーの値の型は <code>Seq[File]</code> だ。
 デフォルトで、このキーの値は <code>src/main/scala</code> を含む。
 （どうしても標準的なやり方では気が済まない君が）<code>source</code> という名前のディレクトリに入ったソースもコンパイルしたい場合、
 以下のようにして設定できる:
-</p><pre><code class="prettyprint lang-scala">sourceDirectories in Compile += new File(&quot;source&quot;)
+</p><pre><code class="prettyprint lang-scala">Compile / sourceDirectories += new File(&quot;source&quot;)
 </code></pre><p>もしくは、sbt パッケージに入っている <code>file()</code> 関数を使って:
-</p><pre><code class="prettyprint lang-scala">sourceDirectories in Compile += file(&quot;source&quot;)
+</p><pre><code class="prettyprint lang-scala">Compile / sourceDirectories += file(&quot;source&quot;)
 </code></pre><p>（<code>file()</code> は、単に新しい <code>File</code> 作る）
 </p><p><code>++=</code> を使って複数のディレクトリを一度に加える事もできる:
-</p><pre><code class="prettyprint lang-scala">sourceDirectories in Compile ++= Seq(file(&quot;sources1&quot;), file(&quot;sources2&quot;))
+</p><pre><code class="prettyprint lang-scala">Compile / sourceDirectories ++= Seq(file(&quot;sources1&quot;), file(&quot;sources2&quot;))
 </code></pre><p>ここでの <code>Seq(a, b, c, ...)</code> は、列を構築する標準的な Scala の構文だ。
 </p><p>デフォルトのソースディレクトリを完全に置き換えてしまいたい場合は、当然 <code>:=</code> を使えばいい:
-</p><pre><code class="prettyprint lang-scala">sourceDirectories in Compile := Seq(file(&quot;sources1&quot;), file(&quot;sources2&quot;))
+</p><pre><code class="prettyprint lang-scala">Compile / sourceDirectories := Seq(file(&quot;sources1&quot;), file(&quot;sources2&quot;))
 </code></pre><h4 id="%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%8C%E6%9C%AA%E5%AE%9A%E7%BE%A9%E3%81%AE%E5%A0%B4%E5%90%88">セッティングが未定義の場合<a href="#%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%8C%E6%9C%AA%E5%AE%9A%E7%BE%A9%E3%81%AE%E5%A0%B4%E5%90%88" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>セッティングが <code>:=</code> や <code>+=</code> や <code>++=</code> を使って自分自身や他のキーへの依存が生まれるとき、その依存されるキーの値が存在しなくてならない。
 もしそれが存在しなければ sbt に怒られることになるだろう。例えば、<em>“Reference to undefined setting“</em> のようなエラーだ。
 これが起こった場合は、キーが定義されている正しい<a href="Scopes.html">スコープ</a>で使っているか確認しよう。
@@ -1560,8 +1563,8 @@ lazy val util = (project in file(&quot;util&quot;))
 </p><h4 id="%E4%BB%96%E3%81%AE%E3%82%AD%E3%83%BC%E3%81%AE%E5%80%A4%E3%82%92%E5%9F%BA%E3%81%AB%E3%81%97%E3%81%9F%E3%82%BF%E3%82%B9%E3%82%AF">他のキーの値を基にしたタスク<a href="#%E4%BB%96%E3%81%AE%E3%82%AD%E3%83%BC%E3%81%AE%E5%80%A4%E3%82%92%E5%9F%BA%E3%81%AB%E3%81%97%E3%81%9F%E3%82%BF%E3%82%B9%E3%82%AF" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>あるタスクの値を定義するために他のタスクの値を計算する必要があるかもしれない。
 そのような場合には、<code>:=</code> や <code>+=</code> や <code>++=</code> の引数に <code>Def.task</code> を使えばよい。
 </p><p>例として、<code>sourceGenerators</code> にプロジェクトのベースディレクトリやコンパイル時のクラスパスを加える設定をみてみよう。
-</p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile += Def.task {
-  myGenerator(baseDirectory.value, (managedClasspath in Compile).value)
+</p><pre><code class="prettyprint lang-scala">Compile / sourceGenerators += Def.task {
+  myGenerator(baseDirectory.value, (Compile / managedClasspath).value)
 }
 </code></pre><h3 id="%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%92%E7%94%A8%E3%81%84%E3%81%9F%E8%BF%BD%E5%8A%A0%3A++%E3%81%A8">依存性を用いた追加: <code>+=</code> と <code>++=</code><a href="#%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%92%E7%94%A8%E3%81%84%E3%81%9F%E8%BF%BD%E5%8A%A0%3A++%E3%81%A8" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>他のキーを使って既存のセッティングキーやタスクキーへ値を追加するには <code>+=</code> を使えばよい。
 </p><p>例えば、プロジェクト名を使って名付けたカバレッジレポートがあって、それを <code>clean</code> が削除するファイルリストに追加するなら、このようになる:
@@ -1572,16 +1575,13 @@ lazy val util = (project in file(&quot;util&quot;))
 を読んで理解したことを前提とする。
 </p><p>スコープ付けの説明が全て終わったので、<code>.value</code> 照会の詳細を解説できる。
 難易度は高めなので、始めてこのガイドを読む場合はこのページは飛ばしてもいい。
-</p><p><code>Global</code> という用語はスコープ成分としての <code>*</code> と、
-<code>(Global, Global, Global)</code> の短縮形の両方の意味で使われて分かりづらいので、
-このページでスコープ成分を指すときは <code>*</code> というシンボルを用いる。
 </p><p>これまでに習ったことをおさらいしておこう。
 </p><ul><li>スコープは、サブプロジェクト軸、コンフィギュレーション軸、タスク軸という 3つの軸の成分を持つタプルである。
-</li><li>全てのスコープ軸には、<code>*</code> (<code>Global</code> とも呼ばれる) 特殊なスコープ成分がある。
-</li><li><strong>サブプロジェクト軸</strong>においてのみ、<code>ThisBuild</code> (シェルでは <code>{.}</code> と表記される) 特殊なスコープ成分がある。
+</li><li>全てのスコープ軸には、<code>Zero</code> 特殊なスコープ成分がある。
+</li><li><strong>サブプロジェクト軸</strong>においてのみ、<code>ThisBuild</code> 特殊なスコープ成分がある。
 </li><li><code>Test</code> コンフィギュレーションは <code>Runtime</code> を拡張し、<code>Runtime</code> は <code>Compile</code> を拡張する。
-</li><li>build.sbt に書かれたキーは、デフォルトで <code>(${current subproject}, *, *)</code> にスコープ付けされる。
-</li><li>キーは、<code>.in(...)</code> メソッドを使ってさらにスコープ付けできる。
+</li><li>build.sbt に書かれたキーは、デフォルトで <code>${current subproject} / Zero / Zero</code> にスコープ付けされる。
+</li><li>キーは、<code>/</code> 演算子を使ってさらにスコープ付けできる。
 </li></ul><p>以下のようなビルド定義を考える:
 </p><pre><code class="prettyprint lang-scala">lazy val foo = settingKey[Int](&quot;&quot;)
 lazy val bar = settingKey[Int](&quot;&quot;)
@@ -1589,23 +1589,23 @@ lazy val bar = settingKey[Int](&quot;&quot;)
 lazy val projX = (project in file(&quot;x&quot;))
   .settings(
     foo := {
-      (bar in Test).value + 1
+      (Test / bar).value + 1
     },
-    bar in Compile := 1
+    Compile / bar := 1
   )
-</code></pre><p><code>foo</code> のセッティング本文内において、スコープ付きキー <code>(bar in Test)</code> への依存性が宣言されている。
-しかし、<code>projX</code> において <code>bar in Test</code> が未定義であるにも関わらず、sbt
+</code></pre><p><code>foo</code> のセッティング本文内において、スコープ付きキー <code>Test / bar</code> への依存性が宣言されている。
+しかし、<code>projX</code> において <code>Test / bar</code> が未定義であるにも関わらず、sbt
 は別のスコープ付きキーへと解決して <code>foo</code> は <code>2</code> に初期化される。
 </p><p>sbt はキーのフォールバックのための検索パスを厳密に定義し、これを<strong>スコープ委譲</strong> (scope delegation) と呼ぶ。
 この機能により、より一般的なスコープで一度だけ値を代入して、複数のより特定なスコープがその値を継承することを可能とする。
 </p><h3 id="%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E5%A7%94%E8%AD%B2%E3%81%AE%E3%83%AB%E3%83%BC%E3%83%AB">スコープ委譲のルール<a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E5%A7%94%E8%AD%B2%E3%81%AE%E3%83%AB%E3%83%BC%E3%83%AB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>スコープ委譲のルールは以下の通り:
 </p><ul><li>ルール 1: スコープ軸は以下の優先順位を持つ: サブプロジェクト軸、コンフィギュレーション軸、そしてタスク軸。
 </li><li>ルール 2: あるスコープが与えられたとき、委譲スコープは以下の順にタスク軸を置換することで検索される:
-与えられたタスクスコープ、それから <code>*</code> (<code>Global</code>、これはタスクスコープ付けを行わないもののこと)。
+与えられたタスクスコープ、それから <code>Zero</code> (これはタスクスコープ付けを行わないもののこと)。
 </li><li>ルール 3: あるスコープが与えられたとき、委譲スコープは以下の順にコンフィギュレーション軸を置換することで検索される:
-与えられたコンフィギュレーション、その親、その親の親…、そして <code>*</code> (<code>Global</code> これはコンフィギュレーションのスコープ付けを行わないものと同じ)。
+与えられたコンフィギュレーション、その親、その親の親…、そして <code>Zero</code> ( これはコンフィギュレーションのスコープ付けを行わないものと同じ)。
 </li><li>ルール 4: あるスコープが与えられたとき、委譲スコープは以下の順にサブプロジェクト軸を置換することで検索される:
-与えられたサブプロジェクト、<code>ThisBuild</code> そして <code>*</code> (<code>Global</code>)。
+与えられたサブプロジェクト、<code>ThisBuild</code> そして <code>Zero</code>。
 </li><li>ルール 5: 委譲されたスコープ付きのキー及びそれが依存するセッティングとタスクは、元のコンテキストを一切引き継がずに評価される。
 </li></ul><p>それぞれのルールを以下に説明していく。
 </p><h3 id="%E3%83%AB%E3%83%BC%E3%83%AB+1%3A+%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E8%BB%B8%E3%81%AE%E5%84%AA%E5%85%88%E9%A0%86%E4%BD%8D">ルール 1: スコープ軸の優先順位<a href="#%E3%83%AB%E3%83%BC%E3%83%AB+1%3A+%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E8%BB%B8%E3%81%AE%E5%84%AA%E5%85%88%E9%A0%86%E4%BD%8D" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>ルール 1: スコープ軸は以下の優先順位を持つ: サブプロジェクト軸、コンフィギュレーション軸、そしてタスク軸。
@@ -1613,14 +1613,14 @@ lazy val projX = (project in file(&quot;x&quot;))
 同様に、サブプロジェクトが同じ場合、コンフィギュレーションに特定な値を持つものがタスクのスコープ付けに関わらず勝つ。
 「より特定」とは何かは、以下のルールで定義していく。
 </p><h3 id="%E3%83%AB%E3%83%BC%E3%83%AB+2%3A+%E3%82%BF%E3%82%B9%E3%82%AF%E8%BB%B8%E3%81%AE%E5%A7%94%E8%AD%B2">ルール 2: タスク軸の委譲<a href="#%E3%83%AB%E3%83%BC%E3%83%AB+2%3A+%E3%82%BF%E3%82%B9%E3%82%AF%E8%BB%B8%E3%81%AE%E5%A7%94%E8%AD%B2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>ルール 2: あるスコープが与えられたとき、委譲スコープは以下の順にタスク軸を置換することで検索される:
-与えられたタスクスコープ、それから <code>*</code> (<code>Global</code>、これはタスクスコープ付けを行わないもののこと)。
+与えられたタスクスコープ、それから <code>Zero</code> (これはタスクスコープ付けを行わないもののこと)。
 </li></ul><p>ここでやっとキーが与えられたとき sbt がどのようにして委譲スコープを生成するかの具体的なルールが出てきた。
-任意の <code>(xxx in yyy).value</code> が与えられたときに、どのような検索パスを取るかを示していることに注目してほしい。
+任意の <code>(xxx / yyy).value</code> が与えられたときに、どのような検索パスを取るかを示していることに注目してほしい。
 </p><p><strong>練習問題 A</strong>: 以下のビルド定義を考える:
 </p><pre><code class="prettyprint lang-scala">lazy val projA = (project in file(&quot;a&quot;))
   .settings(
     name := {
-      &quot;foo-&quot; + (scalaVersion in packageBin).value
+      &quot;foo-&quot; + (packageBin / scalaVersion).value
     },
     scalaVersion := &quot;2.11.11&quot;
   )
@@ -1629,13 +1629,13 @@ lazy val projX = (project in file(&quot;x&quot;))
 </li><li><code>&quot;foo-2.12.10&quot;</code>
 </li><li>その他
 </li></ol><p>正解は <code>&quot;foo-2.11.11&quot;</code>。
-<code>.settings(...)</code> 内において、<code>scalaVersion</code> は自動的に <code>(projA, *, *)</code> にスコープ付けされるため、
-<code>scalaVersion in packageBin</code> は <code>scalaVersion in (projA, *, packageBin)</code> となる。
+<code>.settings(...)</code> 内において、<code>scalaVersion</code> は自動的に <code>projA / Zero / Zero</code> にスコープ付けされるため、
+<code>packageBin / scalaVersion</code> は <code>projA / Zero / packageBin / scalaVersion</code> となる。
 そのスコープ付きキーは未定義だ。
-ルール 2に基いて、sbt はタスク軸を <code>*</code> に置換して <code>(projA, *, *)</code> になる (シェル表記だと <code>proj/scalaVersion</code>)。
+ルール 2に基いて、sbt はタスク軸を <code>Zero</code> に置換して <code>projA / Zero / Zero</code> になる (<code>projA / scalaVersion</code>)。
 そのスコープ付きキーは <code>&quot;2.11.11&quot;</code> として定義されている。
 </p><h3 id="%E3%83%AB%E3%83%BC%E3%83%AB+3%3A+%E3%82%B3%E3%83%B3%E3%83%95%E3%82%A3%E3%82%AE%E3%83%A5%E3%83%AC%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E8%BB%B8%E3%81%AE%E6%A4%9C%E7%B4%A2%E3%83%91%E3%82%B9">ルール 3: コンフィギュレーション軸の検索パス<a href="#%E3%83%AB%E3%83%BC%E3%83%AB+3%3A+%E3%82%B3%E3%83%B3%E3%83%95%E3%82%A3%E3%82%AE%E3%83%A5%E3%83%AC%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E8%BB%B8%E3%81%AE%E6%A4%9C%E7%B4%A2%E3%83%91%E3%82%B9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>ルール 3: あるスコープが与えられたとき、委譲スコープは以下の順にコンフィギュレーション軸を置換することで検索される:
-与えられたコンフィギュレーション、その親、その親の親…、そして <code>*</code> (<code>Global</code> これはコンフィギュレーションのスコープ付けを行わないものと同じ)。
+与えられたコンフィギュレーション、その親、その親の親…、そして <code>Zero</code> ( これはコンフィギュレーションのスコープ付けを行わないものと同じ)。
 </li></ul><p>これを説明する例は上に見た <code>projX</code> だ:
 </p><pre><code class="prettyprint lang-scala">lazy val foo = settingKey[Int](&quot;&quot;)
 lazy val bar = settingKey[Int](&quot;&quot;)
@@ -1643,18 +1643,18 @@ lazy val bar = settingKey[Int](&quot;&quot;)
 lazy val projX = (project in file(&quot;x&quot;))
   .settings(
     foo := {
-      (bar in Test).value + 1
+      (Test / bar).value + 1
     },
-    bar in Compile := 1
+    Compile / bar := 1
   )
-</code></pre><p>フルスコープを書き出してみると <code>(projX, Test, *)</code> となる。
+</code></pre><p>フルスコープを書き出してみると <code>projX / Test / Zero</code> となる。
 また、<code>Test</code> コンフィギュレーションは <code>Runtime</code> を拡張し、<code>Runtime</code> は <code>Compile</code> を拡張することを思い出してほしい。
-</p><p><code>(bar in Test)</code> は未定義だが、ルール3 に基いて sbt
-は <code>(projX, Test, *)</code>、<code>(projX, Runtime, *)</code>、そして
-<code>(projX, Compile, *)</code> の順に <code>bar</code> をスコープ付けして検索していく。
-最後のものが見つかり、それは <code>bar in Compile</code> だ。
+</p><p><code>Test / bar</code> は未定義だが、ルール3 に基いて sbt
+は <code>projX / Test / Zero</code>、<code>projX / Runtime / Zero</code>、そして
+<code>projX / Compile / Zero</code> の順に <code>bar</code> をスコープ付けして検索していく。
+最後のものが見つかり、それは <code>Compile / bar</code> だ。
 </p><h3 id="%E3%83%AB%E3%83%BC%E3%83%AB+4%3A+%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E8%BB%B8%E3%81%AE%E6%A4%9C%E7%B4%A2%E3%83%91%E3%82%B9">ルール 4: サブプロジェクト軸の検索パス<a href="#%E3%83%AB%E3%83%BC%E3%83%AB+4%3A+%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E8%BB%B8%E3%81%AE%E6%A4%9C%E7%B4%A2%E3%83%91%E3%82%B9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>ルール 4: あるスコープが与えられたとき、委譲スコープは以下の順にサブプロジェクト軸を置換することで検索される:
-与えられたサブプロジェクト、<code>ThisBuild</code> そして <code>*</code> (<code>Global</code>)。
+与えられたサブプロジェクト、<code>ThisBuild</code> そして <code>Zero</code>。
 </li></ul><p><strong>練習問題 B</strong>: 以下のビルド定義を考える:
 </p><pre><code class="prettyprint lang-scala">organization in ThisBuild := &quot;com.example&quot;
 
@@ -1668,85 +1668,85 @@ lazy val projB = (project in file(&quot;b&quot;))
 </li><li><code>&quot;abc-org.tempuri&quot;</code>
 </li><li>その他
 </li></ol><p>正解は <code>abc-org.tempuri</code> だ。
-ルール 4に基づき、最初の検索パスは <code>(projB, *, *)</code> にスコープ付けされた <code>organization</code> で、
+ルール 4に基づき、最初の検索パスは <code>projB / Zero / Zero</code> にスコープ付けされた <code>organization</code> で、
 これは <code>projB</code> 内で <code>&quot;org.tempuri&quot;</code> として定義されている。
-これは、ビルドレベルのセッティングである <code>organization in ThisBuild</code> よりも高い優先順位を持つ。
+これは、ビルドレベルのセッティングである <code>ThisBuild / organization</code> よりも高い優先順位を持つ。
 </p><h4 id="%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E8%BB%B8%E3%81%AE%E5%84%AA%E5%85%88%E9%A0%86%E4%BD%8D%E3%80%81%E5%86%8D%E3%81%B3">スコープ軸の優先順位、再び<a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E8%BB%B8%E3%81%AE%E5%84%AA%E5%85%88%E9%A0%86%E4%BD%8D%E3%80%81%E5%86%8D%E3%81%B3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><strong>練習問題 C</strong>: 以下のビルド定義を考える:
-</p><pre><code class="prettyprint lang-scala">scalaVersion in (ThisBuild, packageBin) := &quot;2.12.2&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / packageBin / scalaVersion := &quot;2.12.2&quot;
 
 lazy val projC = (project in file(&quot;c&quot;))
   .settings(
     name := {
-      &quot;foo-&quot; + (scalaVersion in packageBin).value
+      &quot;foo-&quot; + (packageBin / scalaVersion).value
     },
     scalaVersion := &quot;2.11.11&quot;
   )
-</code></pre><p><code>name in projC</code> の値は何か?
+</code></pre><p><code>projC / name</code> の値は何か?
 </p><ol><li><code>&quot;foo-2.12.2&quot;</code>
 </li><li><code>&quot;foo-2.11.11&quot;</code>
 </li><li>その他
 </li></ol><p>正解は <code>foo-2.11.11</code>。
-<code>(projC, *, packageBin)</code> にスコープ付けされた <code>scalaVersion</code> は未定義だ。
-ルール 2 は <code>(projC, *, *)</code> を見つける。ルール 4 は <code>(ThisBuild, *, packageBin)</code> を見つける。
+<code>projC / Zero / packageBin</code> にスコープ付けされた <code>scalaVersion</code> は未定義だ。
+ルール 2 は <code>projC / Zero / Zero</code> を見つける。ルール 4 は <code>ThisBuild / Zero / packageBin</code> を見つける。
 ルール 1 の規定により、より特定なサブプロジェクト軸が勝ち、それは
-<code>(projC, *, *)</code> で <code>&quot;2.11.11&quot;</code> と定義されている。
+<code>projC / Zero / Zero</code> で <code>&quot;2.11.11&quot;</code> と定義されている。
 </p><p><strong>練習問題 D</strong>: 以下のビルド定義を考える:
-</p><pre><code class="prettyprint lang-scala">scalacOptions in ThisBuild += &quot;-Ywarn-unused-import&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalacOptions += &quot;-Ywarn-unused-import&quot;
 
 lazy val projD = (project in file(&quot;d&quot;))
   .settings(
     test := {
-      println((scalacOptions in (Compile, console)).value)
+      println((Compile / console / scalacOptions).value)
     },
-    scalacOptions in console -= &quot;-Ywarn-unused-import&quot;,
-    scalacOptions in Compile := scalacOptions.value // added by sbt
+    console / scalacOptions -= &quot;-Ywarn-unused-import&quot;,
+    Compile / scalacOptions := scalacOptions.value // added by sbt
   )
 </code></pre><p><code>projD/test</code> を実行した場合の出力は何か?
 </p><ol><li><code>List()</code>
 </li><li><code>List(-Ywarn-unused-import)</code>
 </li><li>その他
 </li></ol><p>正解は <code>List(-Ywarn-unused-import)</code>。
-ルール 2 は <code>(projD, Compile, *)</code> を見つけ、
-ルール 3 は <code>(projD, *, console)</code> を見つけ、
-ルール 4 は <code>(ThisBuild, *, *)</code> を見つける。
-<code>(projD, Compile, *)</code> はサブプロジェクト軸に <code>projD</code> を持ち、
+ルール 2 は <code>projD / Compile / Zero</code> を見つけ、
+ルール 3 は <code>projD / Zero / console</code> を見つけ、
+ルール 4 は <code>ThisBuild / Zero / Zero</code> を見つける。
+<code>projD / Compile / Zero</code> はサブプロジェクト軸に <code>projD</code> を持ち、
 またコンフィギュレーション軸はタスク軸よりも高い優先順位を持つのでルール 1 は
-<code>(projD, Compile, *)</code> を選択する。
-</p><p>次に、<code>scalacOptions in Compile</code> は <code>scalacOptions.value</code> を参照するため、
-<code>(projD, *, *)</code> のための委譲を探す必要がある。
-ルール 4 は <code>(ThisBuild, *, *)</code> を見つけ、これは <code>List(-Ywarn-unused-import)</code> に解決される。
+<code>projD / Compile / Zero</code> を選択する。
+</p><p>次に、<code>Compile / scalacOptions</code> は <code>scalacOptions.value</code> を参照するため、
+<code>projD / Zero / Zero</code> のための委譲を探す必要がある。
+ルール 4 は <code>ThisBuild / Zero / Zero</code> を見つけ、これは <code>List(-Ywarn-unused-import)</code> に解決される。
 </p><h3 id="inspect+%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%81%AF%E5%A7%94%E8%AD%B2%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%82%92%E5%88%97%E6%8C%99%E3%81%99%E3%82%8B">inspect コマンドは委譲スコープを列挙する<a href="#inspect+%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%81%AF%E5%A7%94%E8%AD%B2%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%82%92%E5%88%97%E6%8C%99%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>何が起こっているのか手早く調べたい場合は <code>inspect</code> を使えばいい。
-</p><pre><code class="">Hello&gt; inspect projD/compile:console::scalacOptions
+</p><pre><code class="">sbt:projd&gt; inspect projD / Compile / console / scalacOptions
 [info] Task: scala.collection.Seq[java.lang.String]
 [info] Description:
 [info]  Options for the Scala compiler.
 [info] Provided by:
-[info]  {file:/Users/xxxx/}projD/compile:scalacOptions
+[info]  ProjectRef(uri(&quot;file:/tmp/projd/&quot;), &quot;projD&quot;) / Compile / scalacOptions
 [info] Defined at:
-[info]  /Users/xxxx/build.sbt:47
+[info]  /tmp/projd/build.sbt:9
 [info] Reverse dependencies:
-[info]  projD/compile:console
-[info]  projD/*:test
+[info]  projD / test
+[info]  projD / Compile / console
 [info] Delegates:
-[info]  projD/compile:console::scalacOptions
-[info]  projD/compile:scalacOptions
-[info]  projD/*:console::scalacOptions
-[info]  projD/*:scalacOptions
-[info]  {.}/compile:console::scalacOptions
-[info]  {.}/compile:scalacOptions
-[info]  {.}/*:console::scalacOptions
-[info]  {.}/*:scalacOptions
-[info]  */compile:console::scalacOptions
-[info]  */compile:scalacOptions
-[info]  */*:console::scalacOptions
-[info]  */*:scalacOptions
+[info]  projD / Compile / console / scalacOptions
+[info]  projD / Compile / scalacOptions
+[info]  projD / console / scalacOptions
+[info]  projD / scalacOptions
+[info]  ThisBuild / Compile / console / scalacOptions
+[info]  ThisBuild / Compile / scalacOptions
+[info]  ThisBuild / console / scalacOptions
+[info]  ThisBuild / scalacOptions
+[info]  Zero / Compile / console / scalacOptions
+[info]  Zero / Compile / scalacOptions
+[info]  Zero / console / scalacOptions
+[info]  Global / scalacOptions
 ....
-</code></pre><p>“Provided by” は <code>projD/compile:console::scalacOptions</code> が
-<code>projD/compile:scalacOptions</code> によって提供されることを表示しているのに注目してほしい。
+</code></pre><p>“Provided by” は <code>projD / Compile / console / scalacOptions</code> が
+<code>projD / Compile / scalacOptions</code> によって提供されることを表示しているのに注目してほしい。
 “Delegates” 以下に<strong>全て</strong>の委譲スコープ候補が優先順に列挙されている!
-</p><ul><li>サブプロジェクト軸が <code>projD</code> にスコープ付けされているスコープが当然最初に表示されて、<code>ThisBuild</code> (<code>{.}</code>)、<code>*</code> と続いている。
-</li><li>サブプロジェクト内だと、コンフィギュレーション軸が <code>Compile</code> にスコープ付けされいるのが最初に表示されて、<code>*</code> にフォールバックしている。
-</li><li>最後に、タスク軸は与えられたタスクスコープ付けの <code>cosole::</code> が来て、次にタスクスコープ無しが来ている。
+</p><ul><li>サブプロジェクト軸が <code>projD</code> にスコープ付けされているスコープが当然最初に表示されて、<code>ThisBuild</code>、<code>Zero</code> と続いている。
+</li><li>サブプロジェクト内だと、コンフィギュレーション軸が <code>Compile</code> にスコープ付けされいるのが最初に表示されて、<code>Zero</code> にフォールバックしている。
+</li><li>最後に、タスク軸は与えられたタスクスコープ付けの <code>cosole /</code> が来て、次にタスクスコープ無しが来ている。
 </li></ul><h3 id=".value+%E5%8F%82%E7%85%A7+vs+%E5%8B%95%E7%9A%84%E3%83%87%E3%82%A3%E3%82%B9%E3%83%91%E3%83%83%E3%83%81">.value 参照 vs 動的ディスパッチ<a href="#.value+%E5%8F%82%E7%85%A7+vs+%E5%8B%95%E7%9A%84%E3%83%87%E3%82%A3%E3%82%B9%E3%83%91%E3%83%83%E3%83%81" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>ルール 5: 委譲されたスコープ付きのキー及びそれが依存するセッティングとタスクは、元のコンテキストを一切引き継がずに評価される。
 </li></ul><p>スコープ委譲はオブジェクト指向言語のクラス継承に似ていると思うかもしれないが、注意するべき違いがある。
 Scala のような OO言語では、<code>Shape</code> トレイトに <code>drawShape</code> というメソッドがあれば、たとえそれが
@@ -1769,25 +1769,25 @@ lazy val projE = (project in file(&quot;e&quot;))
   .settings(
     scalaVersion := &quot;2.11.11&quot;
   )
-</code></pre><p><code>projE/version</code> の値は何か?
+</code></pre><p><code>projE / version</code> の値は何か?
 </p><ol><li><code>&quot;2.12.2_0.1.0&quot;</code>
 </li><li><code>&quot;2.11.11_0.1.0&quot;</code>
 </li><li>その他
 </li></ol><p>正解は <code>&quot;2.12.2_0.1.0&quot;</code>。
-<code>projE/version</code> は <code>version in ThisBuild</code> に委譲する。
-一方 <code>version in ThisBuild</code> は <code>scalaVersion in ThisBuild</code> に依存する。
+<code>projE / version</code> は <code>ThisBuild / version</code> に委譲する。
+一方 <code>ThisBuild / version</code> は <code>ThisBuild / scalaVersion</code> に依存する。
 このように振る舞うため、ビルドレベルのセッティングは単純な値の代入に限定するべきだ。
 </p><p><strong>練習問題 F</strong>: 以下のビルド定義を考える:
-</p><pre><code class="prettyprint lang-scala">scalacOptions in ThisBuild += &quot;-D0&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalacOptions += &quot;-D0&quot;
 scalacOptions += &quot;-D1&quot;
 
 lazy val projF = (project in file(&quot;f&quot;))
   .settings(
-    scalacOptions in compile += &quot;-D2&quot;,
-    scalacOptions in Compile += &quot;-D3&quot;,
-    scalacOptions in (Compile, compile) += &quot;-D4&quot;,
+    compile / scalacOptions += &quot;-D2&quot;,
+    Compile / scalacOptions += &quot;-D3&quot;,
+    Compile / compile / scalacOptions += &quot;-D4&quot;,
     test := {
-      println(&quot;bippy&quot; + (scalacOptions in (Compile, compile)).value.mkString)
+      println(&quot;bippy&quot; + (Compile / compile / scalacOptions).value.mkString)
     }
   )
 </code></pre><p><code>projF/test</code> を実行した場合の出力は何か?
@@ -1805,41 +1805,41 @@ lazy val projF = (project in file(&quot;f&quot;))
 }
 </code></pre><p>このとき、古い方の <code>.value</code> を取得するときに委譲が発生して、ルール5 に基いてそれは別のスコープ付きキー扱いする必要がある。
 まずは <code>+=</code> を取り除いて、古い <code>.value</code> の委譲が何になるかをコメントで注釈する。
-</p><pre><code class="prettyprint lang-scala">scalacOptions in ThisBuild := {
-  // scalacOptions in Global &lt;- ルール 4
-  val old = (scalacOptions in ThisBuild).value
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalacOptions := {
+  // Global / scalacOptions &lt;- Rule 4
+  val old = (ThisBuild / scalacOptions).value
   old :+ &quot;-D0&quot;
 }
 
 scalacOptions := {
-  // scalacOptions in ThisBuild &lt;- ルール 4
+  // ThisBuild / scalacOptions &lt;- Rule 4
   val old = scalacOptions.value
   old :+ &quot;-D1&quot;
 }
 
 lazy val projF = (project in file(&quot;f&quot;))
   .settings(
-    scalacOptions in compile := {
-      // scalacOptions in ThisBuild &lt;- ルール 2 と 4
-      val old = (scalacOptions in compile).value
+    compile / scalacOptions := {
+      // ThisBuild / scalacOptions &lt;- Rules 2 and 4
+      val old = (compile / scalacOptions).value
       old :+ &quot;-D2&quot;
     },
-    scalacOptions in Compile := {
-      // scalacOptions in ThisBuild &lt;- ルール 3 と 4
-      val old = (scalacOptions in Compile).value
+    Compile / scalacOptions := {
+      // ThisBuild / scalacOptions &lt;- Rules 3 and 4
+      val old = (Compile / scalacOptions).value
       old :+ &quot;-D3&quot;
     },
-    scalacOptions in (Compile, compile) := {
-      // scalacOptions in (projF, Compile) &lt;- ルール 1 と 2
-      val old = (scalacOptions in (Compile, compile)).value
+    Compile / compile / scalacOptions := {
+      // projF / Compile / scalacOptions &lt;- Rules 1 and 2
+      val old = (Compile / compile / scalacOptions).value
       old :+ &quot;-D4&quot;
     },
     test := {
-      println(&quot;bippy&quot; + (scalacOptions in (Compile, compile)).value.mkString)
+      println(&quot;bippy&quot; + (Compile / compile / scalacOptions).value.mkString)
     }
   )
 </code></pre><p>評価するとこうなる:
-</p><pre><code class="prettyprint lang-scala">scalacOptions in ThisBuild := {
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalacOptions := {
   Nil :+ &quot;-D0&quot;
 }
 
@@ -1849,11 +1849,11 @@ scalacOptions := {
 
 lazy val projF = (project in file(&quot;f&quot;))
   .settings(
-    scalacOptions in compile := List(&quot;-D0&quot;) :+ &quot;-D2&quot;,
-    scalacOptions in Compile := List(&quot;-D0&quot;) :+ &quot;-D3&quot;,
-    scalacOptions in (Compile, compile) := List(&quot;-D0&quot;, &quot;-D3&quot;) :+ &quot;-D4&quot;,
+    compile / scalacOptions := List(&quot;-D0&quot;) :+ &quot;-D2&quot;,
+    Compile / scalacOptions := List(&quot;-D0&quot;) :+ &quot;-D3&quot;,
+    Compile / compile / scalacOptions := List(&quot;-D0&quot;, &quot;-D3&quot;) :+ &quot;-D4&quot;,
     test := {
-      println(&quot;bippy&quot; + (scalacOptions in (Compile, compile)).value.mkString)
+      println(&quot;bippy&quot; + (Compile / compile / scalacOptions).value.mkString)
     }
   )
 </code></pre><h2 id="%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E4%BE%9D%E5%AD%98%E6%80%A7">ライブラリ依存性<a href="#%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E4%BE%9D%E5%AD%98%E6%80%A7" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>このページは、このガイドのこれまでのページ、特に
@@ -1868,8 +1868,8 @@ lazy val projF = (project in file(&quot;f&quot;))
 </p><p>アンマネージ依存性はこんな感じのものだ: jar ファイルを <code>lib</code> 配下に置いておけばプロジェクトのクラスパスに追加される、以上！
 </p><p><a href="http://scalacheck.org">ScalaCheck</a>、<a href="http://specs2.org">Specs2</a>、<a href="http://scalatest.org">ScalaTest</a> のようなテスト用の jar ファイルも <code>lib</code> に配置できる。
 </p><p><code>lib</code> 配下の依存ライブラリは（<code>compile</code>、<code>test</code>、<code>run</code>、そして <code>console</code> の）全てのクラスパスに追加される。
-もし、どれか一つのクラスパスを変えたい場合は、例えば <code>dependencyClasspath in Compile</code> や
-<code>dependencyClasspath in Runtime</code> などを適宜調整する必要がある。
+もし、どれか一つのクラスパスを変えたい場合は、例えば <code>Compile / dependencyClasspath</code> や
+<code>Runtime / dependencyClasspath</code> などを適宜調整する必要がある。
 </p><p>アンマネージ依存性を利用するのに、<code>build.sbt</code> には何も書く必要はないが、デフォルトの <code>lib</code> 以外のディレクトリを使いたい場合は <code>unmanagedBase</code> キーで変更することができる。
 </p><p><code>lib</code> のかわりに、<code>custom_lib</code> を使うならこのようになる:
 </p><pre><code class="prettyprint lang-scala">unmanagedBase := baseDirectory.value / &quot;custom_lib&quot;
@@ -1879,7 +1879,7 @@ lazy val projF = (project in file(&quot;f&quot;))
 </p><p>他には、<code>unmangedJars</code> という <code>unmanagedBase</code> ディレクトリに入っている jar ファイルのリストを返すタスクがある。
 複数のディレクトリを使うとか、何か別の複雑なことを行う場合は、この <code>unmanagedJar</code> タスクを何か別のものに変える必要があるかもしれない。
 例えば <code>Compile</code> コンフィギュレーション時に <code>lib</code>ディレクトリのファイルを無視したい、など。
-</p><pre><code class="prettyprint lang-scala">unmanagedJars in Compile := Seq.empty[sbt.Attributed[java.io.File]]
+</p><pre><code class="prettyprint lang-scala">Compile / unmanagedJars := Seq.empty[sbt.Attributed[java.io.File]]
 </code></pre><h3 id="%E3%83%9E%E3%83%8D%E3%83%BC%E3%82%B8%E4%BE%9D%E5%AD%98%E6%80%A7%EF%BC%88Managed+Dependencies%EF%BC%89">マネージ依存性（Managed Dependencies）<a href="#%E3%83%9E%E3%83%8D%E3%83%BC%E3%82%B8%E4%BE%9D%E5%AD%98%E6%80%A7%EF%BC%88Managed+Dependencies%EF%BC%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt は [Apache Ivy] を使ってマネージ依存性を実装しているので、既に Maven か Ivy に慣れているなら、違和感無く入り込めるだろう。
 </p><h4 id="%E3%82%AD%E3%83%BC"><code>libraryDependencies</code> キー<a href="#%E3%82%AD%E3%83%BC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>大体の場合、依存性を <code>libraryDependencies</code> セッティングに列挙するだけでうまくいくだろう。
 Maven POM ファイルや、Ivy コンフィギュレーションファイルを書くなどして、依存性を外部で設定してしまって、
@@ -2145,7 +2145,7 @@ s: 3
 しかし、<code>value</code> はタスク依存性を表記するだけなので、評価は 1 回だけ行われる。
 以下は <code>sampleStringTask</code> の評価を視覚化したものだ:
 </p><p><img src="../files/task-dependency01.png" alt="task-dependency"/>
-</p><p>もしタスク依存性を非重複化しなければ、<code>test in Test</code> のタスク依存性として <code>compile in Test</code>
+</p><p>もしタスク依存性を非重複化しなければ、<code>Test / test</code> のタスク依存性として <code>Test / compile</code>
 が何度も現れるため、テストのソースコードを何度もコンパイルすることになる。
 </p><h4 id="%E7%B5%82%E4%BA%86%E5%87%A6%E7%90%86%E3%82%BF%E3%82%B9%E3%82%AF">終了処理タスク<a href="#%E7%B5%82%E4%BA%86%E5%87%A6%E7%90%86%E3%82%BF%E3%82%B9%E3%82%AF" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>stopServer</code> タスクはどう実装するべきだろうか?
 タスクは依存性を保持するものなので、終了処理タスクという考えはタスクの実行モデルにそぐわないものだ。
@@ -2698,15 +2698,15 @@ $ copy-file changes/A.scala A.scala
 ここでは、実行結果の値ではなくタスク自体を追加するため、通常の <code>value</code> ではなく、 <code>taskValue</code>を使う。
 <code>sourceGenerators</code> には生成するソースが main か test かに応じて、それぞれ <code>Compile</code>、 <code>Test</code>のスコープ付けをしておく。
 大まかな定義は次のようになる。
-</p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile += &lt;task of type Seq[File]&gt;.taskValue
+</p><pre><code class="prettyprint lang-scala">Compile / sourceGenerators += &lt;task of type Seq[File]&gt;.taskValue
 </code></pre><p>これは、 <code>def makeSomeSources(base: File): Seq[File]</code> を用いて次のように書ける。
-</p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile += Def.task {
-  makeSomeSources((sourceManaged in Compile).value / &quot;demo&quot;)
+</p><pre><code class="prettyprint lang-scala">Compile / sourceGenerators += Def.task {
+  makeSomeSources((Compile / sourceManaged).value / &quot;demo&quot;)
 }.taskValue
 </code></pre><p>より具体的な例を示そう。
 次の例では、 source generator は、実行するとコンソールに <code>&quot;Hi&quot;</code> と表示する <code>Test.scala</code> というアプリケーションオブジェクトを生成する。
-</p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile += Def.task {
-  val file = (sourceManaged in Compile).value / &quot;demo&quot; / &quot;Test.scala&quot;
+</p><pre><code class="prettyprint lang-scala">Compile / sourceGenerators += Def.task {
+  val file = (Compile / sourceManaged).value / &quot;demo&quot; / &quot;Test.scala&quot;
   IO.write(file, &quot;&quot;&quot;object Test extends App { println(&quot;Hi&quot;) }&quot;&quot;&quot;)
   Seq(file)
 }.taskValue
@@ -2731,10 +2731,10 @@ source generator は Java のソースも Scala のソースも1つの Seq で�
 ここでも、実行結果の値ではなくタスク自体を追加するため、通常の <code>value</code> ではなく、 <code>taskValue</code>を使う。
 <code>resourceGenerators</code> にも、生成するリソースが main か test かに応じて、それぞれ <code>Compile</code>、 <code>Test</code>のスコープ付けをしておく。
 大まかな定義は次のようになる。
-</p><pre><code class="prettyprint lang-scala">resourceGenerators in Compile += &lt;task of type Seq[File]&gt;.taskValue
+</p><pre><code class="prettyprint lang-scala">Compile / resourceGenerators += &lt;task of type Seq[File]&gt;.taskValue
 </code></pre><p>これは、 <code>def makeSomeResources(base: File): Seq[File]</code> を用いて次のように書ける。
-</p><pre><code class="prettyprint lang-scala">resourceGenerators in Compile += Def.task {
-  makeSomeResources((resourceManaged in Compile).value / &quot;demo&quot;)
+</p><pre><code class="prettyprint lang-scala">Compile / resourceGenerators += Def.task {
+  makeSomeResources((Compile / resourceManaged).value / &quot;demo&quot;)
 }.taskValue
 </code></pre><p>上記の例を、<code>run</code> タスク、または <code>package</code>タスク (<code>compile</code>タスクでないことに注意) で実行すると、
 <code>resourceManaged</code> が示す <code>&quot;target/scala-*/resource_managed&quot;</code> の中に <code>demo</code> というファイルが生成される。
@@ -2742,8 +2742,8 @@ source generator は Java のソースも Scala のソースも1つの Seq で�
 追加するには、別途 mappings への追加が必要になる。
 こちらについても、詳細は <a href="Howto-Package.html#modify-package-contents">Adding files to a package</a> を参照して欲しい。
 </p><p>次の例では、アプリケーション名とバージョンが書かれた <code>myapp.properties</code>というプロパティファイルが生成される。
-</p><pre><code class="prettyprint lang-scala">resourceGenerators in Compile += Def.task {
-  val file = (resourceManaged in Compile).value / &quot;demo&quot; / &quot;myapp.properties&quot;
+</p><pre><code class="prettyprint lang-scala">Compile / resourceGenerators += Def.task {
+  val file = (Compile / resourceManaged).value / &quot;demo&quot; / &quot;myapp.properties&quot;
   val contents = &quot;name=%s\nversion=%s&quot;.format(name.value,version.value)
   IO.write(file, contents)
   Seq(file)
@@ -2763,7 +2763,7 @@ source generator は Java のソースも Scala のソースも1つの Seq で�
   doX()
   doY()
 }
-</code></pre><p>この依存指向なプログラミング・モデルの利点は sbt のタスク・エンジンがタスクの実行の順序を入れ替えることができることにある。実際、可能な限り sbt は依存タスクを並列に実行する。もう一つの利点は、グラフを非重複化して一回のコマンド実行に対して <code>compile in Compile</code> などのタスクは一度だけ実行することで、同じソースを何度もコンパイルすることを回避している。
+</code></pre><p>この依存指向なプログラミング・モデルの利点は sbt のタスク・エンジンがタスクの実行の順序を入れ替えることができることにある。実際、可能な限り sbt は依存タスクを並列に実行する。もう一つの利点は、グラフを非重複化して一回のコマンド実行に対して <code>Compile / compile</code> などのタスクは一度だけ実行することで、同じソースを何度もコンパイルすることを回避している。
 </p><p>タスク・システムがこのような設計になっているため、何かを逐次実行させるというのは一応可能ではあるけども、システムの流れに反する行為であり、簡単だとは言えない。
 </p><ul><li><a href="Howto-Sequential-Task.html">Def.sequential を用いて逐次タスクを定義する</a>
 </li><li><a href="Howto-Dynamic-Task.html">Def.taskDyn を用いて動的タスクを定義する</a>
@@ -2771,7 +2771,7 @@ source generator は Java のソースも Scala のソースも1つの Seq で�
 </li><li><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn を用いた動的インプットタスクの定義</a>
 </li><li><a href="Howto-Sequence-using-Commands.html">コマンドを用いた逐次実行</a>
 </li></ul><h3 id="Def.sequential+%E3%82%92%E7%94%A8%E3%81%84%E3%81%A6%E9%80%90%E6%AC%A1%E3%82%BF%E3%82%B9%E3%82%AF%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B">Def.sequential を用いて逐次タスクを定義する<a href="#Def.sequential+%E3%82%92%E7%94%A8%E3%81%84%E3%81%A6%E9%80%90%E6%AC%A1%E3%82%BF%E3%82%B9%E3%82%AF%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 0.13.8 で <code>Def.sequential</code> という関数が追加されて、準逐次な意味論でタスクを実行できるようになった。
-逐次タスクの説明として <code>compilecheck</code> というカスタムタスクを定義してみよう。これは、まず <code>compile in Compile</code> を実行して、その後で <a href="http://www.scalastyle.org/sbt.html">scalastyle-sbt-plugin</a> の <code>scalastyle in Compile</code> を呼び出す。
+逐次タスクの説明として <code>compilecheck</code> というカスタムタスクを定義してみよう。これは、まず <code>Compile / compile</code> を実行して、その後で <a href="http://www.scalastyle.org/sbt.html">scalastyle-sbt-plugin</a> の <code>Compile / scalastyle</code> を呼び出す。
 </p><p>セットアップはこのようになる。
 </p><h4 id="project%2Fbuild.properties">project/build.properties<a href="#project%2Fbuild.properties" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="">sbt.version=1.3.4
 </code></pre><h4 id="project%2Fstyle.sbt">project/style.sbt<a href="#project%2Fstyle.sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="">addSbtPlugin(&quot;org.scalastyle&quot; %% &quot;scalastyle-sbt-plugin&quot; % &quot;1.0.0&quot;)
@@ -2779,9 +2779,9 @@ source generator は Java のソースも Scala のソースも1つの Seq で�
 
 lazy val root = (project in file(&quot;.&quot;))
   .settings(
-    compilecheck in Compile := Def.sequential(
-      compile in Compile,
-      (scalastyle in Compile).toTask(&quot;&quot;)
+    Compile / compilecheck := Def.sequential(
+      Compile / compile,
+      (Compile / scalastyle).toTask(&quot;&quot;)
     ).value
   )
 </code></pre><p>このタスクを呼び出すには、シェルから <code>compilecheck</code> と打ち込む。もしコンパイルが失敗すると、<code>compilecheck</code> はそこで実行を中止する。
@@ -2794,7 +2794,7 @@ lazy val root = (project in file(&quot;.&quot;))
 [error] (compile:compileIncremental) Compilation failed
 </code></pre><p>これで、タスクを逐次実行できた。
 </p><h3 id="Def.taskDyn+%E3%82%92%E7%94%A8%E3%81%84%E3%81%A6%E5%8B%95%E7%9A%84%E3%82%BF%E3%82%B9%E3%82%AF%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B">Def.taskDyn を用いて動的タスクを定義する<a href="#Def.taskDyn+%E3%82%92%E7%94%A8%E3%81%84%E3%81%A6%E5%8B%95%E7%9A%84%E3%82%BF%E3%82%B9%E3%82%AF%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="Howto-Sequential-Task.html">逐次タスク</a>だけで十分じゃなければ、次のステップは<a href="Tasks.html">動的タスク</a>だ。純粋な型 <code>A</code> の値を返すことを期待する <code>Def.task</code> と違って、<code>Def.taskDyn</code> は <code>sbt.Def.Initialize[sbt.Task[A]]</code> という型のタスク・エンジンが残りの計算を継続するタスクを返す。
-</p><p><code>compile in Compile</code> を実行した後で <a href="http://www.scalastyle.org/sbt.html">scalastyle-sbt-plugin</a> の <code>scalastyle in Compile</code> タスクを実行するカスタムタスク、<code>compilecheck</code> を実装してみよう。
+</p><p><code>Compile / compile</code> を実行した後で <a href="http://www.scalastyle.org/sbt.html">scalastyle-sbt-plugin</a> の <code>scalastyle in Compile</code> タスクを実行するカスタムタスク、<code>compilecheck</code> を実装してみよう。
 </p><h4 id="project%2Fbuild.properties">project/build.properties<a href="#project%2Fbuild.properties" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="">sbt.version=1.3.4
 </code></pre><h4 id="project%2Fstyle.sbt">project/style.sbt<a href="#project%2Fstyle.sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="">addSbtPlugin(&quot;org.scalastyle&quot; %% &quot;scalastyle-sbt-plugin&quot; % &quot;1.0.0&quot;)
 </code></pre><h4 id="build.sbt+v1">build.sbt v1<a href="#build.sbt+v1" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">lazy val compilecheck = taskKey[sbt.inc.Analysis](&quot;compile and then scalastyle&quot;)
@@ -2802,29 +2802,29 @@ lazy val root = (project in file(&quot;.&quot;))
 lazy val root = (project in file(&quot;.&quot;))
   .settings(
     compilecheck := (Def.taskDyn {
-      val c = (compile in Compile).value
+      val c = (Compile / compile).value
       Def.task {
-        val x = (scalastyle in Compile).toTask(&quot;&quot;).value
+        val x = (Compile / scalastyle).toTask(&quot;&quot;).value
         c
       }
     }).value
   )
 </code></pre><p>これで逐次タスクと同じものができたけども、違いは最初のタスクの結果である <code>c</code> を返していることだ。
-</p><h4 id="build.sbt+v2">build.sbt v2<a href="#build.sbt+v2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>compile in Compile</code> の戻り値と同じ型を返せるようになったので、もとのキーをこの動的タスクで再配線 (rewire) できるかもしれない。
+</p><h4 id="build.sbt+v2">build.sbt v2<a href="#build.sbt+v2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>Compile / compile</code> の戻り値と同じ型を返せるようになったので、もとのキーをこの動的タスクで再配線 (rewire) できるかもしれない。
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
   .settings(
-    compile in Compile := (Def.taskDyn {
-      val c = (compile in Compile).value
+    Compile / compile := (Def.taskDyn {
+      val c = (Compile / compile).value
       Def.task {
-        val x = (scalastyle in Compile).toTask(&quot;&quot;).value
+        val x = (Compile / scalastyle).toTask(&quot;&quot;).value
         c
       }
     }).value
   )
-</code></pre><p>これで、<code>compild in Compile</code> をシェルから呼び出してやりたかったことをやらせれるようになった。
+</code></pre><p>これで、<code>Compile / compile</code> をシェルから呼び出してやりたかったことをやらせれるようになった。
 </p><h3 id="%E3%82%A4%E3%83%B3%E3%83%97%E3%83%83%E3%83%88%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%AE%E5%BE%8C%E3%81%A7%E4%BD%95%E3%81%8B%E3%81%99%E3%82%8B">インプットタスクの後で何かする<a href="#%E3%82%A4%E3%83%B3%E3%83%97%E3%83%83%E3%83%88%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%AE%E5%BE%8C%E3%81%A7%E4%BD%95%E3%81%8B%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>ここまでタスクに焦点を当ててみてきた。タスクには他にインプットタスクというものがあって、これはユーザからの入力をシェル上で受け取る。
-典型的な例としては <code>run in Compile</code> タスクがある。<code>scalastyle</code> タスクも実はインプットタスクだ。インプットタスクの詳細は <a href="Input-Tasks.html">Input Task</a> 参照。
-</p><p>ここで、<code>run in Compile</code> タスクの実行後にテスト用にブラウザを開く方法を考えてみる。
+典型的な例としては <code>Compile / run</code> タスクがある。<code>scalastyle</code> タスクも実はインプットタスクだ。インプットタスクの詳細は <a href="Input-Tasks.html">Input Task</a> 参照。
+</p><p>ここで、<code>Compile / run</code> タスクの実行後にテスト用にブラウザを開く方法を考えてみる。
 </p><h4 id="src%2Fmain%2Fscala%2FGreeting.scala">src/main/scala/Greeting.scala<a href="#src%2Fmain%2Fscala%2FGreeting.scala" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">object Greeting extends App {
   println(&quot;hello &quot; + args.toList)
 }
@@ -2833,7 +2833,7 @@ lazy val root = (project in file(&quot;.&quot;))
 lazy val root = (project in file(&quot;.&quot;))
   .settings(
     runopen := {
-      (run in Compile).evaluated
+      (Compile / run).evaluated
       println(&quot;open browser!&quot;)
     }
   )
@@ -2843,7 +2843,7 @@ lazy val root = (project in file(&quot;.&quot;))
 [info] Running Greeting foo
 hello List(foo)
 open browser!
-</code></pre><h4 id="build.sbt+v2">build.sbt v2<a href="#build.sbt+v2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>この新しいインプットタスクを <code>run in Compile</code> に再配線することで、実は <code>runopen</code> キーを外すことができる:
+</code></pre><h4 id="build.sbt+v2">build.sbt v2<a href="#build.sbt+v2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>この新しいインプットタスクを <code>Compile / run</code> に再配線することで、実は <code>runopen</code> キーを外すことができる:
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
   .settings(
     run in Compile := {
@@ -2861,7 +2861,7 @@ lazy val root = (project in file(&quot;.&quot;))
       import sbt.complete.Parsers.spaceDelimited
       val args = spaceDelimited(&quot;&lt;args&gt;&quot;).parsed
       Def.taskDyn {
-        (run in Compile).toTask(&quot; &quot; + args.mkString(&quot; &quot;)).value
+        (Compile / run).toTask(&quot; &quot; + args.mkString(&quot; &quot;)).value
         openbrowser
       }
     }).evaluated,
@@ -2869,32 +2869,32 @@ lazy val root = (project in file(&quot;.&quot;))
       println(&quot;open browser!&quot;)
     }
   )
-</code></pre><h4 id="build.sbt+v2">build.sbt v2<a href="#build.sbt+v2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>この動的インプットタスクを <code>run in Compile</code> に再配線するのは複雑な作業だ。内側の <code>run in Compile</code> は既に継続タスクの中に入ってしまっているので、単純に再配線しただけだと循環参照を作ってしまうことになる。
-この循環を断ち切るためには、<code>run in Compile</code> のクローンである <code>actualRun in Compile</code> を導入する必要がある:
+</code></pre><h4 id="build.sbt+v2">build.sbt v2<a href="#build.sbt+v2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>この動的インプットタスクを <code>Compile / run</code> に再配線するのは複雑な作業だ。内側の <code>Compile / run</code> は既に継続タスクの中に入ってしまっているので、単純に再配線しただけだと循環参照を作ってしまうことになる。
+この循環を断ち切るためには、<code>Compile / run</code> のクローンである <code>Compile / actualRun</code> を導入する必要がある:
 </p><pre><code class="prettyprint lang-scala">lazy val actualRun = inputKey[Unit](&quot;The actual run task&quot;)
 lazy val openbrowser = taskKey[Unit](&quot;open the browser&quot;)
 
 lazy val root = (project in file(&quot;.&quot;))
   .settings(
-    run in Compile := (Def.inputTaskDyn {
+    Compile / run := (Def.inputTaskDyn {
       import sbt.complete.Parsers.spaceDelimited
       val args = spaceDelimited(&quot;&lt;args&gt;&quot;).parsed
       Def.taskDyn {
-        (actualRun in Compile).toTask(&quot; &quot; + args.mkString(&quot; &quot;)).value
+        (Compile / actualRun).toTask(&quot; &quot; + args.mkString(&quot; &quot;)).value
         openbrowser
       }
     }).evaluated,
-    actualRun in Compile := Defaults.runTask(
-      fullClasspath in Runtime,
-      mainClass in (Compile, run),
-      runner in (Compile, run)
+    Comile / actualRun := Defaults.runTask(
+      Runtime / fullClasspath,
+      Compile / run / mainClass,
+      Compile / run / runner
     ).evaluated,
     openbrowser := {
       println(&quot;open browser!&quot;)
     }
   )
-</code></pre><p>この <code>actualRun in Compile</code> の実装は Defaults.scala にある <code>run</code> の実装からコピペしてきた。
-</p><p>これで <code>run foo</code> をシェルから打ち込むと、<code>actualRun in Compile</code> を引数とともに評価して、その後で <code>openbrowser</code> タスクを評価するようになった。
+</code></pre><p>この <code>Compile / actualRun</code> の実装は Defaults.scala にある <code>run</code> の実装からコピペしてきた。
+</p><p>これで <code>run foo</code> をシェルから打ち込むと、<code>Compile / actualRun</code> を引数とともに評価して、その後で <code>openbrowser</code> タスクを評価するようになった。
 </p><h3 id="%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%82%92%E7%94%A8%E3%81%84%E3%81%9F%E9%80%90%E6%AC%A1%E5%AE%9F%E8%A1%8C">コマンドを用いた逐次実行<a href="#%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%82%92%E7%94%A8%E3%81%84%E3%81%9F%E9%80%90%E6%AC%A1%E5%AE%9F%E8%A1%8C" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>副作用にしか使っていなくて、人間がコマンドを打ち込んでいるのを真似したいだけならば、カスタムコマンドを作れば済むことかもしれない。これは例えば、リリース手順とかに役立つ。
 </p><p>これは sbt そのもののビルドスクリプトから抜粋だ:
 </p><pre><code class="prettyprint lang-scala">  commands += Command.command(&quot;releaseNightly&quot;) { state =&gt;

@@ -125,7 +125,7 @@ there are separate <code>compile</code> tasks for the <code>compile</code> and <
 The scope of a task is defined the same as for a setting. In the
 following example, <code>test:sampleTask</code> uses the result of
 <code>compile:intTask</code>.
-</p><pre><code class="prettyprint lang-scala">sampleTask in Test := (intTask in Compile).value * 3
+</p><pre><code class="prettyprint lang-scala">Test / sampleTask := (Compile / intTask).value * 3
 </code></pre><h5 id="On+precedence">On precedence<a href="#On+precedence" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p>As a reminder, infix method precedence is by the name of the method and
 postfix methods have lower precedence than infix methods.
 </p><ol><li>Assignment methods have the lowest precedence. These are methods
@@ -137,7 +137,7 @@ start with <code>=</code>.
 according to the specific character it starts with. See the Scala
 specification for details.)
 </li></ol></li></ol><p>Therefore, the previous example is equivalent to the following:
-</p><pre><code class="prettyprint lang-scala">(sampleTask in Test).:=( (intTask in Compile).value * 3 )
+</p><pre><code class="prettyprint lang-scala">(Test / sampleTask).:=( (Compile / intTask).value * 3 )
 </code></pre><p>Additionally, the braces in the following are necessary:
 </p><pre><code class="prettyprint lang-scala">helloTask := { &quot;echo Hello&quot; ! }
 </code></pre><p>Without them, Scala interprets the line as
@@ -394,14 +394,14 @@ result. In the example above, there would be a circular dependency if
 the code passed to taskDyn referenced myTask.
 </p></blockquote><h3 id="Using+Def.sequential">Using Def.sequential<a href="#Using+Def.sequential" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 0.13.8 added <code>Def.sequential</code> function to run tasks under semi-sequential semantics.
 This is similar to the dynamic task, but easier to define.
-To demonstrate the sequential task, let’s create a custom task called <code>compilecheck</code> that runs <code>compile in Compile</code> and then <code>scalastyle in Compile</code> task added by <a href="http://www.scalastyle.org/sbt.html">scalastyle-sbt-plugin</a>.
+To demonstrate the sequential task, let’s create a custom task called <code>compilecheck</code> that runs <code>Compile / compile</code> and then <code>Compile / scalastyle</code> task added by <a href="http://www.scalastyle.org/sbt.html">scalastyle-sbt-plugin</a>.
 </p><pre><code class="prettyprint lang-scala">lazy val compilecheck = taskKey[Unit](&quot;compile and then scalastyle&quot;)
 
 lazy val root = (project in file(&quot;.&quot;))
   .settings(
-    compilecheck in Compile := Def.sequential(
-      compile in Compile,
-      (scalastyle in Compile).toTask(&quot;&quot;)
+    Compile / compilecheck := Def.sequential(
+      Compile / compile,
+      (Compile / scalastyle).toTask(&quot;&quot;)
     ).value
   )
 </code></pre><p>To call this task type in <code>compilecheck</code> from the shell. If the compilation fails, <code>compilecheck</code> would stop the execution.

@@ -50,12 +50,12 @@ nor linking to Javadoc.)
 <code>:=</code> to definitively set the options without appending to the options
 for <code>compile</code>. Scope to <code>Compile</code> for main sources or to <code>Test</code> for test
 sources. For example,
-</p><pre><code class="prettyprint lang-scala">scalacOptions in (Compile,doc) := Seq(&quot;-groups&quot;, &quot;-implicits&quot;)
+</p><pre><code class="prettyprint lang-scala">Compile / doc / scalacOptions := Seq(&quot;-groups&quot;, &quot;-implicits&quot;)
 </code></pre><a name="additional-doc-options"></a><h3 id="Add+options+for+scaladoc+to+the+compilation+options">Add options for scaladoc to the compilation options<a href="#Add+options+for+scaladoc+to+the+compilation+options" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Scope <code>scalacOptions</code> to the <code>doc</code> task to configure <code>scaladoc</code>. Use
 <code>+=</code> or <code>++=</code> to append options to the base options. To append a single
 option, use <code>+=</code>. To append a <code>Seq[String]</code>, use <code>++=</code>. Scope to
 <code>Compile</code> for main sources or to <code>Test</code> for test sources. For example,
-</p><pre><code class="prettyprint lang-scala">scalacOptions in (Compile,doc) ++= Seq(&quot;-groups&quot;, &quot;-implicits&quot;)
+</p><pre><code class="prettyprint lang-scala">Compile / doc / scalacOptions ++= Seq(&quot;-groups&quot;, &quot;-implicits&quot;)
 </code></pre><a name="definitive-javadoc-options"></a><h3 id="Set+the+options+used+for+generating+javadoc+independently+of+compilation">Set the options used for generating javadoc independently of compilation<a href="#Set+the+options+used+for+generating+javadoc+independently+of+compilation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Scope <code>javacOptions</code> to the <code>doc</code> task to configure <code>javadoc</code>. Use <code>:=</code>
 to definitively set the options without appending to the options for
 <code>compile</code>. Scope to <code>Compile</code> for main sources or to <code>Test</code> for test
@@ -64,7 +64,7 @@ sources.
 or <code>++=</code> to append options to the base options. To append a single
 option, use <code>+=</code>. To append a <code>Seq[String]</code>, use <code>++=</code>. Scope to
 <code>Compile</code> for main sources or to <code>Test</code> for test sources. For example,
-</p><pre><code class="prettyprint lang-scala">javacOptions in (Compile,doc) ++= Seq(&quot;-notimestamp&quot;, &quot;-linksource&quot;)
+</p><pre><code class="prettyprint lang-scala">Compile / doc / javacOptions ++= Seq(&quot;-notimestamp&quot;, &quot;-linksource&quot;)
 </code></pre><a name="auto-link"></a><h3 id="Enable+automatic+linking+to+the+external+Scaladoc+of+managed+dependencies">Enable automatic linking to the external Scaladoc of managed dependencies<a href="#Enable+automatic+linking+to+the+external+Scaladoc+of+managed+dependencies" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Set <code>autoAPIMappings := true</code> for sbt to tell <code>scaladoc</code> where it can
 find the API documentation for managed dependencies. This requires that
 dependencies have this information in its metadata and you are using

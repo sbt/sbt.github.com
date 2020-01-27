@@ -119,10 +119,10 @@ val extracted: Extracted
 import extracted._
 
 // get name of current project
-val nameOpt: Option[String] = name in currentRef get structure.data
+val nameOpt: Option[String] = (currentRef / name).get(structure.data)
 
 // get the package options for the `test:packageSrc` task or Nil if none are defined
-val pkgOpts: Seq[PackageOption] = packageOptions in (currentRef, Test, packageSrc) get structure.data getOrElse Nil
+val pkgOpts: Seq[PackageOption] = (currentRef / Test / packageSrc / packageOptions).get(structure.data).getOrElse(Nil)
 </code></pre><p><a href="../api/sbt/internal/BuildStructure.html">BuildStructure</a> contains
 information about build and project relationships. Key members are:
 </p><pre><code class="prettyprint lang-scala">units: Map[URI, LoadedBuildUnit]
@@ -163,7 +163,7 @@ signature:
     // This selects the main 'compile' task for the current project.
     //   The value produced by 'compile' is of type inc.Analysis,
     //   which contains information about the compiled code.
-    val taskKey = Keys.compile in Compile
+    val taskKey = Compile / Keys.compile
 
     // Evaluate the task
     // None if the key is not defined
@@ -181,7 +181,7 @@ signature:
 </code></pre><p>For getting the test classpath of a specific project, use this key:
 </p><pre><code class="prettyprint lang-scala">val projectRef: ProjectRef = ...
 val taskKey: Task[Seq[Attributed[File]]] =
-  Keys.fullClasspath in (projectRef, Test)
+  (projectRef / Test / Keys.fullClasspath)
 </code></pre><h3 id="Using+State+in+a+task">Using State in a task<a href="#Using+State+in+a+task" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To access the current State from a task, use the <code>state</code> task as an
 input. For example,
 </p><pre><code class="prettyprint lang-scala">myTask := ... state.value ...

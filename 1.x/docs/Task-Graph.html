@@ -260,10 +260,10 @@ as a special tasks that evaluate during loading time.
 </p><pre><code class="prettyprint lang-scala">// name our organization after our project (both are SettingKey[String])
 organization := name.value
 </code></pre><p>Here’s a realistic example.
-This rewires <code>scalaSource in Compile</code> key to a different directory
+This rewires <code>Compile / scalaSource</code> key to a different directory
 only when <code>scalaBinaryVersion</code> is <code>&quot;2.11&quot;</code>.
-</p><pre><code class="prettyprint lang-scala">scalaSource in Compile := {
-  val old = (scalaSource in Compile).value
+</p><pre><code class="prettyprint lang-scala">Compile / scalaSource := {
+  val old = (Compile / scalaSource).value
   scalaBinaryVersion.value match {
     case &quot;2.11&quot; =&gt; baseDirectory.value / &quot;src-2.11&quot; / &quot;main&quot; / &quot;scala&quot;
     case _      =&gt; old
@@ -309,7 +309,7 @@ end
 describe the actions instead of the system commands.
 </p><h4 id="Benefits+of+hybrid+flow-based+programming">Benefits of hybrid flow-based programming<a href="#Benefits+of+hybrid+flow-based+programming" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>There are several motivation to organizing the build this way.
 </p><p>First is de-duplication. With flow-based programming, a task is executed only once even when it is depended by multiple tasks.
-For example, even when multiple tasks along the task graph depend on <code>compile in Compile</code>,
+For example, even when multiple tasks along the task graph depend on <code>Compile / compile</code>,
 the compilation will be executed exactly once.
 </p><p>Second is parallel processing. Using the task graph, the task engine can
 schedule mutually non-dependent tasks in parallel.

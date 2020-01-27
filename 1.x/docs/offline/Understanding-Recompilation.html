@@ -625,8 +625,8 @@ persists the <code>Analysis</code> object containing all incremental compiler
 information.
 </li></ol><p>Here’s an example of how to hook the new <code>manipulateBytecode</code> key in
 your own plugin:
-</p><pre><code class="prettyprint lang-scala">    manipulateBytecode in Compile := {
-      val previous = (manipulateBytecode in Compile).value
+</p><pre><code class="prettyprint lang-scala">    Compile / manipulateBytecode := {
+      val previous = (Compile / manipulateBytecode).value
       // Note: This must return a new Compiler.CompileResult with our changes.
       doManipulateBytecode(previous)
     }

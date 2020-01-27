@@ -1408,10 +1408,10 @@ as a special tasks that evaluate during loading time.
 </p><pre><code class="prettyprint lang-scala">// name our organization after our project (both are SettingKey[String])
 organization := name.value
 </code></pre><p>Here’s a realistic example.
-This rewires <code>scalaSource in Compile</code> key to a different directory
+This rewires <code>Compile / scalaSource</code> key to a different directory
 only when <code>scalaBinaryVersion</code> is <code>&quot;2.11&quot;</code>.
-</p><pre><code class="prettyprint lang-scala">scalaSource in Compile := {
-  val old = (scalaSource in Compile).value
+</p><pre><code class="prettyprint lang-scala">Compile / scalaSource := {
+  val old = (Compile / scalaSource).value
   scalaBinaryVersion.value match {
     case &quot;2.11&quot; =&gt; baseDirectory.value / &quot;src-2.11&quot; / &quot;main&quot; / &quot;scala&quot;
     case _      =&gt; old
@@ -1457,7 +1457,7 @@ end
 describe the actions instead of the system commands.
 </p><h4 id="Benefits+of+hybrid+flow-based+programming">Benefits of hybrid flow-based programming<a href="#Benefits+of+hybrid+flow-based+programming" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>There are several motivation to organizing the build this way.
 </p><p>First is de-duplication. With flow-based programming, a task is executed only once even when it is depended by multiple tasks.
-For example, even when multiple tasks along the task graph depend on <code>compile in Compile</code>,
+For example, even when multiple tasks along the task graph depend on <code>Compile / compile</code>,
 the compilation will be executed exactly once.
 </p><p>Second is parallel processing. Using the task graph, the task engine can
 schedule mutually non-dependent tasks in parallel.
@@ -1509,7 +1509,7 @@ correspond to red, green, and blue components encoded by a number.
 Similarly, a full scope in sbt is formed by a <strong>tuple</strong> of a subproject,
 a configuration, and a task value:
 </p><pre><code class="prettyprint lang-scala">projA / Compile / console / scalacOptions
-</code></pre><p>Which is the slash syntax, introduced in sbt 1.1, for:
+</code></pre><p>This is the slash syntax, introduced in sbt 1.1, for:
 </p><pre><code class="prettyprint lang-scala">scalacOptions in (
   Select(projA: Reference),
   Select(Compile: ConfigKey),
@@ -1605,7 +1605,7 @@ scoped keys like this:
 </li><li>a key-dependent configuration will be auto-detected if you omit the
 configuration or task.
 </li></ul><p>For more details, see <a href="../docs/Inspecting-Settings.html">Interacting with the Configuration System</a>.
-</p><h3 id="Examples+of+scoped+key+notation">Examples of scoped key notation<a href="#Examples+of+scoped+key+notation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li><code>fullClasspath</code> specifies just a key, so the default scopes are used:
+</p><h3 id="Examples+of+scoped+key+notation+in+the+sbt+shell">Examples of scoped key notation in the sbt shell<a href="#Examples+of+scoped+key+notation+in+the+sbt+shell" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li><code>fullClasspath</code> specifies just a key, so the default scopes are used:
 current project, a key-dependent configuration, and <code>Zero</code> task
 scope.
 </li><li><code>Test / fullClasspath</code> specifies the configuration, so this is
@@ -1626,7 +1626,7 @@ the build is <code>ThisBuild</code>, with the default configuration.
 with the default configuration.
 </li><li><code>root / Compile / doc / fullClasspath</code> sets all three scope axes.
 </li></ul><h3 id="Inspecting+scopes">Inspecting scopes<a href="#Inspecting+scopes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>In sbt shell, you can use the <code>inspect</code> command to understand
-keys and their scopes. Try <code>inspect test:fullClasspath</code>:
+keys and their scopes. Try <code>inspect Test/fullClasspath</code>:
 </p><pre><code class="">$ sbt
 sbt:Hello&gt; inspect Test / fullClasspath
 [info] Task: scala.collection.Seq[sbt.internal.util.Attributed[java.io.File]]
@@ -1694,7 +1694,7 @@ reality, all keys consist of both a name, and a scope (where the scope
 has three axes). The entire expression
 <code>Compile / packageBin / packageOptions</code> is a key name, in other words.
 Simply <code>packageOptions</code> is also a key name, but a different one (for keys
-with no in, a scope is implicitly assumed: current project, <code>Zero</code>
+with no slashes, a scope is implicitly assumed: current project, <code>Zero</code>
 config, <code>Zero</code> task).
 </p><h3 id="Build-level+settings">Build-level settings<a href="#Build-level+settings" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>An advanced technique for factoring out common settings
 across subprojects is to define the settings scoped to <code>ThisBuild</code>.
@@ -2080,8 +2080,8 @@ placed on the project classpath. Not much else to it!
 <a href="http://www.scalatest.org/">ScalaTest</a> in <code>lib</code> as well.
 </p><p>Dependencies in <code>lib</code> go on all the classpaths (for <code>compile</code>, <code>test</code>, <code>run</code>,
 and <code>console</code>). If you wanted to change the classpath for just one of
-those, you would adjust <code>dependencyClasspath in Compile</code> or
-<code>dependencyClasspath in Runtime</code> for example.
+those, you would adjust <code>Compile / dependencyClasspath</code> or
+<code>Runtime / dependencyClasspath</code> for example.
 </p><p>There’s nothing to add to <code>build.sbt</code> to use unmanaged dependencies,
 though you could change the <code>unmanagedBase</code> key if you’d like to use a
 different directory rather than <code>lib</code>.
@@ -3701,9 +3701,9 @@ handling. Among other things, the efficiency could be improved.
 Currently, you set it like any other setting:
 </li></ol><pre><code class="">set logLevel := Level.Warn
 </code></pre><blockquote><p>or
-:   set logLevel in Test := Level.Warn
+:   set Test / logLevel := Level.Warn
 </p><p>You could make commands that wrap this, like:
-</p></blockquote><pre><code class="">warn test:run
+</p></blockquote><pre><code class="">warn Test/run
 </code></pre><p>Also, trace is currently an integer, but should really be an abstract
 data type.
 </p><ol><li>Each sbt version has more aggressive incremental compilation and
@@ -5147,19 +5147,19 @@ the same way that the Scala interpreter is normally used to explore
 writing code. Note that this gives you raw access to your build. Think
 about what you pass to <code>IO.delete</code>, for example.
 </p><h3 id="Accessing+settings">Accessing settings<a href="#Accessing+settings" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To get a particular setting, use the form:
-</p><pre><code class="prettyprint lang-scala">&gt; val value = (&lt;key&gt; in &lt;scope&gt;).eval
-</code></pre><h4 id="Examples">Examples<a href="#Examples" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">&gt; IO.delete( (classesDirectory in Compile).eval )
+</p><pre><code class="prettyprint lang-scala">&gt; val value = (&lt;scope&gt; / &lt;key&gt;).eval
+</code></pre><h4 id="Examples">Examples<a href="#Examples" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">&gt; IO.delete( (Compile / classesDirectory).eval )
 </code></pre><p>Show current compile options:
-</p><pre><code class="prettyprint lang-scala">&gt; (scalacOptions in Compile).eval foreach println
+</p><pre><code class="prettyprint lang-scala">&gt; (Compile / scalacOptions).eval foreach println
 </code></pre><p>Show additionally configured repositories.
 </p><pre><code class="prettyprint lang-scala">&gt; resolvers.eval foreach println
 </code></pre><h3 id="Evaluating+tasks">Evaluating tasks<a href="#Evaluating+tasks" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To evaluate a task (and its dependencies), use the same form:
-</p><pre><code class="prettyprint lang-scala">&gt; val value = (&lt;key&gt; in &lt;scope&gt;).eval
+</p><pre><code class="prettyprint lang-scala">&gt; val value = (&lt;scope&gt; / &lt;key&gt;).eval
 </code></pre><h4 id="Examples">Examples<a href="#Examples" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Show all repositories, including defaults.
 </p><pre><code class="prettyprint lang-scala">&gt; fullResolvers.eval foreach println
 </code></pre><p>Show the classpaths used for compilation and testing:
-</p><pre><code class="prettyprint lang-scala">&gt; (fullClasspath in Compile).eval.files foreach println
-&gt; (fullClasspath in Test).eval.files foreach println
+</p><pre><code class="prettyprint lang-scala">&gt; (Compile / fullClasspath).eval.files foreach println
+&gt; (Test / fullClasspath).eval.files foreach println
 </code></pre><h3 id="State">State<a href="#State" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The current <a href="Build-State.html">build State</a> is available as
 <code>currentState</code>. The contents of <code>currentState</code> are imported by default
 and can be used without qualification.
@@ -5498,19 +5498,19 @@ is explained in more detail in the following sections.
 </p><pre><code class="">&gt; inspect console
 ...
 [info] Dependencies:
-[info]  compile:console::fullClasspath
-[info]  compile:console::scalacOptions
-[info]  compile:console::initialCommands
-[info]  compile:console::cleanupCommands
-[info]  compile:console::compilers
-[info]  compile:console::taskTemporary-directory
-[info]  compile:console::scalaInstance
-[info]  compile:console::streams
+[info]  Compile / console / initialCommands
+[info]  Compile / console / streams
+[info]  Compile / console / compilers
+[info]  Compile / console / cleanupCommands
+[info]  Compile / console / taskTemporaryDirectory
+[info]  Compile / console / scalaInstance
+[info]  Compile / console / scalacOptions
+[info]  Compile / console / fullClasspath
 
 ...
 </code></pre><p>This shows the inputs to the <code>console</code> task. We can see that it gets its
-classpath and options from <code>fullClasspath</code> and
-<code>scalacOptions(for console)</code>. The information provided by the <code>inspect</code>
+classpath and options from <code>Compile / console / fullClasspath</code> and
+<code>Compile / console / scalacOptions</code>. The information provided by the <code>inspect</code>
 command can thus assist in finding the right setting to change. The
 convention for keys, like <code>console</code> and <code>fullClasspath</code>, is that the
 Scala identifier is camel case, while the String representation is
@@ -5518,15 +5518,15 @@ lowercase and separated by dashes. The Scala identifier for a
 configuration is uppercase to distinguish it from tasks like <code>compile</code>
 and <code>test</code>. For example, we can infer from the previous example how to
 add code to be run when the Scala interpreter starts up:
-</p><pre><code class="">&gt; set initialCommands in Compile in console := &quot;import mypackage._&quot;
+</p><pre><code class="">&gt; set Compile / console / initialCommands := &quot;import mypackage._&quot;
 &gt; console
 ...
 import mypackage._
 ...
 </code></pre><p><code>inspect</code> showed that <code>console</code> used the setting
-<code>compile:console::initialCommands</code>. Translating the <code>initialCommands</code>
+<code>Compile / console / initialCommands</code>. Translating the <code>initialCommands</code>
 string to the Scala identifier gives us <code>initialCommands</code>. <code>compile</code>
-indicates that this is for the main sources. <code>console::</code> indicates that
+indicates that this is for the main sources. <code>console /</code> indicates that
 the setting is specific to <code>console</code>. Because of this, we can set the
 initial commands on the <code>console</code> task without affecting the
 <code>consoleQuick</code> task, for example.
@@ -5540,19 +5540,19 @@ Dependencies,
 </p><pre><code class="">&gt; inspect actual console
 ...
 [info] Dependencies:
-[info]  compile:scalacOptions
-[info]  compile:fullClasspath
-[info]  *:scalaInstance
-[info]  */*:initialCommands
-[info]  */*:cleanupCommands
-[info]  */*:taskTemporaryDirectory
-[info]  *:console::compilers
-[info]  compile:console::streams
+[info]  Compile / console / streams
+[info]  Global / taskTemporaryDirectory
+[info]  scalaInstance
+[info]  Compile / scalacOptions
+[info]  Global / initialCommands
+[info]  Global / cleanupCommands
+[info]  Compile / fullClasspath
+[info]  console / compilers
 ...
 </code></pre><p>For <code>initialCommands</code>, we see that it comes from the global scope
-(<code>*/*:</code>). Combining this with the relevant output from
+(<code>Global</code>). Combining this with the relevant output from
 <code>inspect console</code>:
-</p><pre><code class="">compile:console::initialCommands
+</p><pre><code class="">Compile / console / initialCommands
 </code></pre><p>we know that we can set <code>initialCommands</code> as generally as the global
 scope, as specific as the current project’s <code>console</code> task scope, or
 anything in between. This means that we can, for example, set
@@ -5565,22 +5565,22 @@ looking at the reverse dependencies output of <code>inspect actual</code>:
 </p><pre><code class="">&gt; inspect actual initialCommands
 ...
 [info] Reverse dependencies:
-[info]  test:console
-[info]  compile:consoleQuick
-[info]  compile:console
-[info]  test:consoleQuick
-[info]  *:consoleProject
+[info]  Compile / console
+[info]  Test / console
+[info]  consoleProject
+[info]  Test / consoleQuick
+[info]  Compile / consoleQuick
 ...
 </code></pre><p>We now know that by setting <code>initialCommands</code> on the whole project, we
 affect all console tasks in all configurations in that project. If we
 didn’t want the initial commands to apply for <code>consoleProject</code>, which
 doesn’t have our project’s classpath available, we could use the more
 specific task axis:
-</p><pre><code class="">&gt; set initialCommands in console := &quot;import mypackage._&quot;
-&gt; set initialCommands in consoleQuick := &quot;import mypackage._&quot;`
+</p><pre><code class="">&gt; set console / initialCommands := &quot;import mypackage._&quot;
+&gt; set consoleQuick / initialCommands := &quot;import mypackage._&quot;`
 </code></pre><p>or configuration axis:
-</p><pre><code class="">&gt; set initialCommands in Compile := &quot;import mypackage._&quot;
-&gt; set initialCommands in Test := &quot;import mypackage._&quot;
+</p><pre><code class="">&gt; set Compile/　initialCommands := &quot;import mypackage._&quot;
+&gt; set Test / initialCommands := &quot;import mypackage._&quot;
 </code></pre><p>The next part describes the Delegates section, which shows the chain of
 delegation for scopes.
 </p><h4 id="Delegates">Delegates<a href="#Delegates" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>A setting has a key and a scope. A request for a key in a scope A may be
@@ -5590,18 +5590,18 @@ section of the <code>inspect</code> command. The Delegates section shows the ord
 in which scopes are searched when a value is not defined for the
 requested key.
 </p><p>As an example, consider the initial commands for <code>console</code> again:
-</p><pre><code class="">&gt; inspect console::initialCommands
+</p><pre><code class="">&gt; inspect console/initialCommands
 ...
 [info] Delegates:
-[info]  *:console::initialCommands
-[info]  *:initialCommands
-[info]  {.}/*:console::initialCommands
-[info]  {.}/*:initialCommands
-[info]  */*:console::initialCommands
-[info]  */*:initialCommands
+[info]  console / initialCommands
+[info]  initialCommands
+[info]  ThisBuild / console / initialCommands
+[info]  ThisBuild / initialCommands
+[info]  Zero / console / initialCommands
+[info]  Global / initialCommands
 ...
 </code></pre><p>This means that if there is no value specifically for
-<code>*:console::initialCommands</code>, the scopes listed under Delegates will be
+<code>console/initialCommands</code>, the scopes listed under Delegates will be
 searched in order until a defined value is found.
 </p><h2 id="Triggered+Execution">Triggered Execution<a href="#Triggered+Execution" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>sbt provides the ability to monitor the input files for a particular task
 and repeat the task when changes to those files occur.
@@ -6571,8 +6571,8 @@ persists the <code>Analysis</code> object containing all incremental compiler
 information.
 </li></ol><p>Here’s an example of how to hook the new <code>manipulateBytecode</code> key in
 your own plugin:
-</p><pre><code class="prettyprint lang-scala">    manipulateBytecode in Compile := {
-      val previous = (manipulateBytecode in Compile).value
+</p><pre><code class="prettyprint lang-scala">    Compile / manipulateBytecode := {
+      val previous = (Compile / manipulateBytecode).value
       // Note: This must return a new Compiler.CompileResult with our changes.
       doManipulateBytecode(previous)
     }
@@ -6615,18 +6615,18 @@ to the build. Managed files are under the control of the build. These
 include generated sources and resources as well as resolved and
 retrieved dependencies and compiled classes.
 </p><p>Tasks that produce managed files should be inserted as follows:
-</p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile +=
-    generate( (sourceManaged in Compile).value / &quot;some_directory&quot;)
+</p><pre><code class="prettyprint lang-scala">Compile / sourceGenerators +=
+    generate( (Comile / sourceManaged).value / &quot;some_directory&quot;)
 </code></pre><p>In this example, <code>generate</code> is some function of type <code>File =&gt; Seq[File]</code>
 that actually does the work. So, we are appending a new task to the list
-of main source generators (<code>sourceGenerators in Compile</code>).
+of main source generators (<code>Compile / sourceGenerators</code>).
 </p><p>To insert a named task, which is the better approach for plugins:
 </p><pre><code class="prettyprint lang-scala">val mySourceGenerator = taskKey[Seq[File]](...)
 
-mySourceGenerator in Compile :=
-  generate( (sourceManaged in Compile).value / &quot;some_directory&quot;)
+Compile / mySourceGenerator :=
+  generate( (Compile / sourceManaged).value / &quot;some_directory&quot;)
 
-sourceGenerators in Compile += (mySourceGenerator in Compile)
+Compile / sourceGenerators += (Compile / mySourceGenerator)
 </code></pre><p>The <code>task</code> method is used to refer to the actual task instead of the
 result of the task.
 </p><p>For resources, there are similar keys <code>resourceGenerators</code> and
@@ -6634,7 +6634,7 @@ result of the task.
 </p><h5 id="Excluding+source+files+by+name">Excluding source files by name<a href="#Excluding+source+files+by+name" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p>The project base directory is by default a source directory in addition
 to <code>src/main/scala</code>. You can exclude source files by name
 (<code>butler.scala</code> in the example below) like:
-</p><pre><code class="prettyprint lang-scala">excludeFilter in unmanagedSources := &quot;butler.scala&quot; 
+</p><pre><code class="prettyprint lang-scala">unmanagedSources / excludeFilter := &quot;butler.scala&quot;
 </code></pre><p>Read more on
 <a href="https://groups.google.com/group/simple-build-tool/browse_thread/thread/cd5332a164405568?hl=en">How to exclude .scala source file in project folder - Google Groups</a>
 </p><h4 id="External+vs+internal">External vs internal<a href="#External+vs+internal" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Classpaths are also divided into internal and external dependencies. The
@@ -6673,7 +6673,7 @@ more details.
 xxx.properties from classpath at run time. You put xxx.properties inside
 directory “config”. When you run “sbt run”, you want the directory to be
 in classpath.
-</p><pre><code class="prettyprint lang-scala">unmanagedClasspath in Runtime += baseDirectory.value / &quot;config&quot;
+</p><pre><code class="prettyprint lang-scala">Runtime / unmanagedClasspath += baseDirectory.value / &quot;config&quot;
 </code></pre><h2 id="Compiler+Plugin+Support">Compiler Plugin Support<a href="#Compiler+Plugin+Support" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>There is some special support for using compiler plugins. You can set
 <code>autoCompilerPlugins</code> to <code>true</code> to enable this functionality.
 </p><pre><code class="prettyprint lang-scala">autoCompilerPlugins := true
@@ -6688,7 +6688,7 @@ responsible for configuring the plugins as necessary. For example, Scala
 X-Ray requires the extra option:
 </p><pre><code class="prettyprint lang-scala">// declare the main Scala source directory as the base directory
 scalacOptions :=
-    scalacOptions.value :+ (&quot;-Psxr:base-directory:&quot; + (scalaSource in Compile).value.getAbsolutePath)
+    scalacOptions.value :+ (&quot;-Psxr:base-directory:&quot; + (Compile / scalaSource).value.getAbsolutePath)
 </code></pre><p>You can still specify compiler plugins manually. For example:
 </p><pre><code class="prettyprint lang-scala">scalacOptions += &quot;-Xplugin:&lt;path-to-sxr&gt;/sxr-0.3.0.jar&quot;
 </code></pre><h3 id="Continuations+Plugin+Example">Continuations Plugin Example<a href="#Continuations+Plugin+Example" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Support for continuations in Scala 2.12 is implemented as a compiler
@@ -6852,8 +6852,8 @@ tasks (<code>run</code>, <code>runMain</code>, <code>Test / run</code>, and <cod
 </p><pre><code class="prettyprint lang-scala">Test / fork := true
 </code></pre><p>See <a href="Testing.html">Testing</a> for more control over how tests are assigned to JVMs and
 what options to pass to each group.
-</p><h3 id="Change+working+directory">Change working directory<a href="#Change+working+directory" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To change the working directory when forked, set <code>baseDirectory in run</code>
-or <code>baseDirectory in test</code>:
+</p><h3 id="Change+working+directory">Change working directory<a href="#Change+working+directory" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To change the working directory when forked, set <code>Compile / run / baseDirectory</code>
+or <code>Test / baseDirectory</code>:
 </p><pre><code class="prettyprint lang-scala">// sets the working directory for all `run`-like tasks
 run / baseDirectory := file(&quot;/path/to/working/directory/&quot;)
 
@@ -7012,10 +7012,10 @@ list of unmanaged source directories. For Java-only projects, the
 unnecessary Scala directories can be ignored by modifying
 <code>unmanagedSourceDirectories</code>:
 </p><pre><code class="prettyprint lang-scala">// Include only src/main/java in the compile configuration
-unmanagedSourceDirectories in Compile := (javaSource in Compile).value :: Nil
+Compile / unmanagedSourceDirectories := (Compile / javaSource).value :: Nil
 
 // Include only src/test/java in the test configuration
-unmanagedSourceDirectories in Test := (javaSource in Test).value :: Nil
+Test / unmanagedSourceDirectories := (Test / javaSource).value :: Nil
 </code></pre><p>However, there should not be any harm in leaving the Scala directories
 if they are empty.
 </p><h2 id="Mapping+Files">Mapping Files<a href="#Mapping+Files" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Tasks like <code>package</code>, <code>packageSrc</code>, and <code>packageDoc</code> accept mappings of
@@ -7238,9 +7238,9 @@ look like:
   .settings(
     commonSettings,
     // include the macro classes and resources in the main jar
-    mappings in (Compile, packageBin) ++= mappings.in(macroSub, Compile, packageBin).value,
+    Compile / packageBin / mappings ++= (macroSub / Compile / packageBin / mappings).value,
     // include the macro sources in the main source jar
-    mappings in (Compile, packageSrc) ++= mappings.in(macroSub, Compile, packageSrc).value
+    Compile / packageSrc / mappings ++= (macroSub / Compile / packageSrc / mappings).value
   )
 </code></pre><p>You may wish to disable publishing the macro implementation. This is
 done by overriding <code>publish</code> and <code>publishLocal</code> to do nothing:
@@ -7536,7 +7536,7 @@ tags to each child task created for each test class.
   val max = Runtime.getRuntime.availableProcessors
   Tags.limitAll(if(parallelExecution.value) max else 1) :: Nil
 }
-</code></pre><p>As before, <code>parallelExecution in Test</code> controls whether tests are mapped
+</code></pre><p>As before, <code>Test / parallelExecution</code> controls whether tests are mapped
 to separate tasks. To restrict the number of concurrently executing
 tests in all projects, use:
 </p><pre><code class="prettyprint lang-scala">Global / concurrentRestrictions += Tags.limit(Tags.Test, 1)
@@ -7838,7 +7838,7 @@ available with <code>testGrouping</code> key. For example in build.sbt:
         new Group(letter.toString, tests, SubProcess(options))
     } toSeq
 
-    testGrouping in Test := groupByFirst( (definedTests in Test).value )
+    Test / testGrouping := groupByFirst( (Test / definedTests).value )
 }
 </code></pre><p>The tests in a single group are run sequentially. Control the number of
 forked JVMs allowed to run at the same time by setting the limit on
@@ -7955,8 +7955,8 @@ lazy val root = (project in file(&quot;.&quot;))
   .settings(
     inConfig(FunTest)(Defaults.testTasks),
     libraryDependencies += scalatest % FunTest,
-    testOptions in Test := Seq(Tests.Filter(unitFilter)),
-    testOptions in FunTest := Seq(Tests.Filter(itFilter))
+    Test / testOptions := Seq(Tests.Filter(unitFilter)),
+    FunTest / testOptions := Seq(Tests.Filter(itFilter))
     // other settings here
   )
 </code></pre><p>The key differences are:
@@ -8295,34 +8295,43 @@ containing the main sources and resources, and a jar containing the API
 documentation. You can add artifacts for the test classes, sources, or
 API or you can disable some of the main artifacts.
 </p><p>To add all test artifacts:
-</p><pre><code class="prettyprint lang-scala">publishArtifact in Test := true
+</p><pre><code class="prettyprint lang-scala">lazy val app = (project in file(&quot;app&quot;))
+  .settings(
+    Test / publishArtifact := true,
+  )
 </code></pre><p>To add them individually:
-</p><pre><code class="prettyprint lang-scala">// enable publishing the jar produced by `test:package`
-publishArtifact in (Test, packageBin) := true
+</p><pre><code class="prettyprint lang-scala">lazy val app = (project in file(&quot;app&quot;))
+  .settings(
+    // enable publishing the jar produced by `Test/package`
+    Test / packageBin / publishArtifact := true,
 
-// enable publishing the test API jar
-publishArtifact in (Test, packageDoc) := true
+    // enable publishing the test API jar
+    Test / packageDoc / publishArtifact := true,
 
-// enable publishing the test sources jar
-publishArtifact in (Test, packageSrc) := true
+    // enable publishing the test sources jar
+    Test / packageSrc / publishArtifact := true,
+  )
 </code></pre><p>To disable main artifacts individually:
-</p><pre><code class="prettyprint lang-scala">// disable publishing the main jar produced by `package`
-publishArtifact in (Compile, packageBin) := false
+</p><pre><code class="prettyprint lang-scala">lazy val app = (project in file(&quot;app&quot;))
+  .settings(
+    // disable publishing the main jar produced by `package`
+    Compile / packageBin / publishArtifact := false,
 
-// disable publishing the main API jar
-publishArtifact in (Compile, packageDoc) := false
+    // disable publishing the main API jar
+    Compile / packageDoc / publishArtifact := false,
 
-// disable publishing the main sources jar
-publishArtifact in (Compile, packageSrc) := false
+    // disable publishing the main sources jar
+    Compile / packageSrc / publishArtifact := false,
+  )
 </code></pre><h3 id="Modifying+default+artifacts">Modifying default artifacts<a href="#Modifying+default+artifacts" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Each built-in artifact has several configurable settings in addition to
 <code>publishArtifact</code>. The basic ones are <code>artifact</code> (of type
-<code>SettingKey[Artifact]</code>), <code>mappings</code> (of type <code>TaskKey[(File,String)]</code>),
-and <code>artifactPath</code> (of type <code>SettingKey[File]</code>). They are scoped by
-<code>(&lt;config&gt;, &lt;task&gt;)</code> as indicated in the previous section.
+<code>SettingKey[Artifact]</code>), <code>mappings</code> (of type <code>TaskKey[(File, String)]</code>),
+and <code>artifactPath</code> (of type <code>SettingKey[File]</code>).
+They are scoped by <code>(Config / &lt;task&gt;)</code> as indicated in the previous section.
 </p><p>To modify the type of the main artifact, for example:
-</p><pre><code class="prettyprint lang-scala">artifact in (Compile, packageBin) := {
-  val previous: Artifact = (artifact in (Compile, packageBin)).value
-  previous.withType(&quot;bundle&quot;)
+</p><pre><code class="prettyprint lang-scala">Compile / packageBin / artifact := {
+  val prev: Artifact = (Compile / packageBin / artifact).value
+  prev.withType(&quot;bundle&quot;)
 }
 </code></pre><p>The generated artifact name is determined by the <code>artifactName</code> setting.
 This setting is of type <code>(ScalaVersion, ModuleID, Artifact) =&gt; String</code>.
@@ -8349,7 +8358,7 @@ guaranteed to be up-to-date.
 </p><pre><code class="prettyprint lang-scala">val myTask = taskKey[Unit](&quot;My task.&quot;)
 
 myTask :=  {
-  val (art, file) = packagedArtifact.in(Compile, packageBin).value
+  val (art, file) = (Compile / packageBin / packagedArtifact).value
   println(&quot;Artifact definition: &quot; + art)
   println(&quot;Packaged file: &quot; + file.getAbsolutePath)
 }
@@ -8380,40 +8389,43 @@ myImageTask := {
   artifact
 }
 
-addArtifact( Artifact(&quot;myproject&quot;, &quot;image&quot;, &quot;jpg&quot;), myImageTask )
+addArtifact(Artifact(&quot;myproject&quot;, &quot;image&quot;, &quot;jpg&quot;), myImageTask)
 </code></pre><p><code>addArtifact</code> returns a sequence of settings (wrapped in a
 <a href="../api/sbt/internal/util/Init$SettingsDefinition.html">SettingsDefinition</a>). In a
 full build configuration, usage looks like:
-</p><pre><code class="prettyprint lang-scala">...
-lazy val proj = Project(...)
-  .settings( addArtifact(...).settings )
-...
+</p><pre><code class="prettyprint lang-scala">lazy val app = (project in file(&quot;app&quot;))
+  .settings(
+    addArtifact(...)
+  )
 </code></pre><h3 id="Publishing+.war+files">Publishing .war files<a href="#Publishing+.war+files" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A common use case for web applications is to publish the <code>.war</code> file
 instead of the <code>.jar</code> file.
-</p><pre><code class="prettyprint lang-scala">// disable .jar publishing 
-publishArtifact in (Compile, packageBin) := false 
+</p><pre><code class="prettyprint lang-scala">lazy val app = (project in file(&quot;app&quot;))
+  .settings(
+    // disable .jar publishing
+    Compile / packageBin / publishArtifact := false,
 
-// create an Artifact for publishing the .war file 
-artifact in (Compile, packageWar) := {
-  val previous: Artifact = (artifact in (Compile, packageWar)).value
-  previous.withType(&quot;war&quot;).withExtension(&quot;war&quot;)
-} 
+    // create an Artifact for publishing the .war file
+    Compile / packageWar / artifact := {
+      val prev: Artifact = (Compile / packageWar / artifact).value
+      prev.withType(&quot;war&quot;).withExtension(&quot;war&quot;)
+    },
 
-// add the .war file to what gets published 
-addArtifact(artifact in (Compile, packageWar), packageWar) 
+    // add the .war file to what gets published
+    addArtifact(Compile / packageWar / artifact, packageWar),
+  )
 </code></pre><h3 id="Using+dependencies+with+artifacts">Using dependencies with artifacts<a href="#Using+dependencies+with+artifacts" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To specify the artifacts to use from a dependency that has custom or
 multiple artifacts, use the <code>artifacts</code> method on your dependencies. For
 example:
-</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org&quot; % &quot;name&quot; % &quot;rev&quot; artifacts(Artifact(&quot;name&quot;, &quot;type&quot;, &quot;ext&quot;))
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += (&quot;org&quot; % &quot;name&quot; % &quot;rev&quot;).artifacts(Artifact(&quot;name&quot;, &quot;type&quot;, &quot;ext&quot;))
 </code></pre><p>The <code>from</code> and <code>classifer</code> methods (described on the
 <a href="Library-Management.html">Library Management</a> page) are actually convenience
 methods that translate to <code>artifacts</code>:
-</p><pre><code class="prettyprint lang-scala">def from(url: String) = artifacts( Artifact(name, new URL(url)) )
-def classifier(c: String) = artifacts( Artifact(name, c) )
+</p><pre><code class="prettyprint lang-scala">def from(url: String) = artifacts(Artifact(name, new URL(url)))
+def classifier(c: String) = artifacts(Artifact(name, c))
 </code></pre><p>That is, the following two dependency declarations are equivalent:
-</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.testng&quot; % &quot;testng&quot; % &quot;5.7&quot; classifier &quot;jdk15&quot;
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += (&quot;org.testng&quot; % &quot;testng&quot; % &quot;5.7&quot;).classifier(&quot;jdk15&quot;)
 
-libraryDependencies += &quot;org.testng&quot; % &quot;testng&quot; % &quot;5.7&quot; artifacts(Artifact(&quot;testng&quot;, &quot;jdk15&quot;) )
+libraryDependencies += (&quot;org.testng&quot; % &quot;testng&quot; % &quot;5.7&quot;).artifacts(Artifact(&quot;testng&quot;, &quot;jdk15&quot;))
 </code></pre><h2 id="Dependency+Management+Flow">Dependency Management Flow<a href="#Dependency+Management+Flow" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>sbt 0.12.1 addresses several issues with dependency management. These fixes
 were made possible by specific, reproducible examples, such as a
 situation where the resolution cache got out of date (gh-532). A brief
@@ -9415,7 +9427,7 @@ there are separate <code>compile</code> tasks for the <code>compile</code> and <
 The scope of a task is defined the same as for a setting. In the
 following example, <code>test:sampleTask</code> uses the result of
 <code>compile:intTask</code>.
-</p><pre><code class="prettyprint lang-scala">sampleTask in Test := (intTask in Compile).value * 3
+</p><pre><code class="prettyprint lang-scala">Test / sampleTask := (Compile / intTask).value * 3
 </code></pre><h5 id="On+precedence">On precedence<a href="#On+precedence" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p>As a reminder, infix method precedence is by the name of the method and
 postfix methods have lower precedence than infix methods.
 </p><ol><li>Assignment methods have the lowest precedence. These are methods
@@ -9427,7 +9439,7 @@ start with <code>=</code>.
 according to the specific character it starts with. See the Scala
 specification for details.)
 </li></ol></li></ol><p>Therefore, the previous example is equivalent to the following:
-</p><pre><code class="prettyprint lang-scala">(sampleTask in Test).:=( (intTask in Compile).value * 3 )
+</p><pre><code class="prettyprint lang-scala">(Test / sampleTask).:=( (Compile / intTask).value * 3 )
 </code></pre><p>Additionally, the braces in the following are necessary:
 </p><pre><code class="prettyprint lang-scala">helloTask := { &quot;echo Hello&quot; ! }
 </code></pre><p>Without them, Scala interprets the line as
@@ -9684,14 +9696,14 @@ result. In the example above, there would be a circular dependency if
 the code passed to taskDyn referenced myTask.
 </p></blockquote><h3 id="Using+Def.sequential">Using Def.sequential<a href="#Using+Def.sequential" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 0.13.8 added <code>Def.sequential</code> function to run tasks under semi-sequential semantics.
 This is similar to the dynamic task, but easier to define.
-To demonstrate the sequential task, let’s create a custom task called <code>compilecheck</code> that runs <code>compile in Compile</code> and then <code>scalastyle in Compile</code> task added by <a href="http://www.scalastyle.org/sbt.html">scalastyle-sbt-plugin</a>.
+To demonstrate the sequential task, let’s create a custom task called <code>compilecheck</code> that runs <code>Compile / compile</code> and then <code>Compile / scalastyle</code> task added by <a href="http://www.scalastyle.org/sbt.html">scalastyle-sbt-plugin</a>.
 </p><pre><code class="prettyprint lang-scala">lazy val compilecheck = taskKey[Unit](&quot;compile and then scalastyle&quot;)
 
 lazy val root = (project in file(&quot;.&quot;))
   .settings(
-    compilecheck in Compile := Def.sequential(
-      compile in Compile,
-      (scalastyle in Compile).toTask(&quot;&quot;)
+    Compile / compilecheck := Def.sequential(
+      Compile / compile,
+      (Compile / scalastyle).toTask(&quot;&quot;)
     ).value
   )
 </code></pre><p>To call this task type in <code>compilecheck</code> from the shell. If the compilation fails, <code>compilecheck</code> would stop the execution.
@@ -10495,9 +10507,9 @@ the first <code>run</code> and the ones after are passed to the second.
 val separator: Parser[String] = &quot;--&quot;
 
 run2 := {
-   val one = (run in Compile).evaluated
+   val one = (Compile / run).evaluated
    val sep = separator.parsed
-   val two = (run in Compile).evaluated
+   val two = (Compile / run).evaluated
 }
 </code></pre><p>For a main class Demo that echoes its arguments, this looks like:
 </p><pre><code class="">$ sbt
@@ -10541,8 +10553,8 @@ lazy val firstInput: Initialize[String] =
 lazy val secondInput: String = &quot; red blue&quot;
 
 run2 := {
-   val one = (run in Compile).fullInput(firstInput.value).evaluated
-   val two = (run in Compile).partialInput(secondInput).evaluated
+   val one = (Compile / run).fullInput(firstInput.value).evaluated
+   val two = (Compile / run).partialInput(secondInput).evaluated
 }
 </code></pre><p>For a main class Demo that echoes its arguments, this looks like:
 </p><pre><code class="">$ sbt
@@ -10563,7 +10575,7 @@ tasks or run directly without providing any input:
 </p><pre><code class="prettyprint lang-scala">lazy val runFixed = taskKey[Unit](&quot;A task that hard codes the values to `run`&quot;)
 
 runFixed := {
-   val _ = (run in Compile).toTask(&quot; blue green&quot;).value
+   val _ = (Compile / run).toTask(&quot; blue green&quot;).value
    println(&quot;Done!&quot;)
 }
 </code></pre><p>For a main class Demo that echoes its arguments, running <code>runFixed</code>
@@ -10582,8 +10594,8 @@ different input applied. For example:
 fork in run := true
 
 runFixed2 := {
-   val x = (run in Compile).toTask(&quot; blue green&quot;).value
-   val y = (run in Compile).toTask(&quot; red orange&quot;).value
+   val x = (Compile / run).toTask(&quot; blue green&quot;).value
+   val y = (Compile / run).toTask(&quot; red orange&quot;).value
    println(&quot;Done!&quot;)
 }
 </code></pre><p>The different <code>toTask</code> calls define different tasks that each run the
@@ -10964,10 +10976,10 @@ val extracted: Extracted
 import extracted._
 
 // get name of current project
-val nameOpt: Option[String] = name in currentRef get structure.data
+val nameOpt: Option[String] = (currentRef / name).get(structure.data)
 
 // get the package options for the `test:packageSrc` task or Nil if none are defined
-val pkgOpts: Seq[PackageOption] = packageOptions in (currentRef, Test, packageSrc) get structure.data getOrElse Nil
+val pkgOpts: Seq[PackageOption] = (currentRef / Test / packageSrc / packageOptions).get(structure.data).getOrElse(Nil)
 </code></pre><p><a href="../api/sbt/internal/BuildStructure.html">BuildStructure</a> contains
 information about build and project relationships. Key members are:
 </p><pre><code class="prettyprint lang-scala">units: Map[URI, LoadedBuildUnit]
@@ -11008,7 +11020,7 @@ signature:
     // This selects the main 'compile' task for the current project.
     //   The value produced by 'compile' is of type inc.Analysis,
     //   which contains information about the compiled code.
-    val taskKey = Keys.compile in Compile
+    val taskKey = Compile / Keys.compile
 
     // Evaluate the task
     // None if the key is not defined
@@ -11026,7 +11038,7 @@ signature:
 </code></pre><p>For getting the test classpath of a specific project, use this key:
 </p><pre><code class="prettyprint lang-scala">val projectRef: ProjectRef = ...
 val taskKey: Task[Seq[Attributed[File]]] =
-  Keys.fullClasspath in (projectRef, Test)
+  (projectRef / Test / Keys.fullClasspath)
 </code></pre><h3 id="Using+State+in+a+task">Using State in a task<a href="#Using+State+in+a+task" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To access the current State from a task, use the <code>state</code> task as an
 input. For example,
 </p><pre><code class="prettyprint lang-scala">myTask := ... state.value ...
@@ -11112,9 +11124,9 @@ tasks and including their outputs in a zip file. As good practice, we
 then return the File for this zip so that other tasks can map on the zip
 task.
 </p><pre><code class="prettyprint lang-scala">zip := {
-    val bin: File = (packageBin in Compile).value
-    val src: File = (packageSrc in Compile).value
-    val doc: File = (packageDoc in Compile).value
+    val bin: File = (Compile / packageBin).value
+    val src: File = (Compile / packageSrc).value
+    val doc: File = (Compile / packageDoc).value
     val out: File = zipPath.value
     val inputs: Seq[(File,String)] = Seq(bin, src, doc) x Path.flat
     IO.zip(inputs, out)
@@ -11690,9 +11702,9 @@ can point to <code>src/fuzz/scala</code> so it is distinct from other Scala sour
 Thus, these three definitions use
 the same <em>key</em>, but they represent distinct <em>values</em>. So, in a user’s
 <code>build.sbt</code>, we might see:
-</p><pre><code class="prettyprint lang-scala">scalaSource in Fuzz := baseDirectory.value / &quot;source&quot; / &quot;fuzz&quot; / &quot;scala&quot;
+</p><pre><code class="prettyprint lang-scala">Fuzz / scalaSource := baseDirectory.value / &quot;source&quot; / &quot;fuzz&quot; / &quot;scala&quot;
 
-scalaSource in Compile := baseDirectory.value / &quot;source&quot; / &quot;main&quot; / &quot;scala&quot;
+Compile / scalaSource := baseDirectory.value / &quot;source&quot; / &quot;main&quot; / &quot;scala&quot;
 </code></pre><p>In the fuzzing plugin, this is achieved with an <code>inConfig</code> definition:
 </p><pre><code class="prettyprint lang-scala">package sbtfuzz
 
@@ -12278,7 +12290,7 @@ which means that each entry carries additional metadata. The <code>files</code>
 method provides just the raw <code>Seq[File]</code> for the classpath. For example,
 to use the files for the compilation classpath in another task, :
 </p><pre><code class="prettyprint lang-scala">example := {
-  val cp: Seq[File] = (dependencyClasspath in Compile).value.files
+  val cp: Seq[File] = (Compile / dependencyClasspath).value.files
   ...
 }
 </code></pre><blockquote><p><strong>Note</strong>: This classpath does not include the class directory, which may be
@@ -12304,7 +12316,7 @@ each entry carries additional metadata. The <code>files</code> method provides j
 the raw <code>Seq[File]</code> for the classpath. For example, to use the files for
 the test classpath in another task, :
 </p><pre><code class="prettyprint lang-scala">example := {
-  val cp: Seq[File] = (fullClasspath in Test).value.files
+  val cp: Seq[File] = (Test / fullClasspath).value.files
   ...
 }
 </code></pre><a name="export-jars"></a><h3 id="Use+packaged+jars+on+classpaths+instead+of+class+directories">Use packaged jars on classpaths instead of class directories<a href="#Use+packaged+jars+on+classpaths+instead+of+class+directories" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>By default, <code>fullClasspath</code> includes a directory containing class files
@@ -12361,9 +12373,9 @@ library directories and what files get included from them.
 <code>src/main/scala</code>. For test Scala sources, it is <code>src/test/scala</code>. To
 change this, modify <code>scalaSource</code> in the <code>Compile</code> (for main sources) or
 <code>Test</code> (for test sources). For example,
-</p><pre><code class="prettyprint lang-scala">scalaSource in Compile := baseDirectory.value / &quot;src&quot;
+</p><pre><code class="prettyprint lang-scala">Compile / scalaSource := baseDirectory.value / &quot;src&quot;
 
-scalaSource in Test := baseDirectory.value / &quot;test-src&quot;
+Test / scalaSource := baseDirectory.value / &quot;test-src&quot;
 </code></pre><blockquote><p><strong>Note</strong>: The Scala source directory can be the same as the Java source
 directory.
 </p></blockquote><a name="java-source-directory"></a><h3 id="Change+the+default+Java+source+directory">Change the default Java source directory<a href="#Change+the+default+Java+source+directory" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The directory that contains the main Java sources is by default
@@ -12371,9 +12383,9 @@ directory.
 this, modify <code>javaSource</code> in the <code>Compile</code> (for main sources) or <code>Test</code>
 (for test sources).
 </p><p>For example,
-</p><pre><code class="prettyprint lang-scala">javaSource in Compile := baseDirectory.value / &quot;src&quot;
+</p><pre><code class="prettyprint lang-scala">Compile / javaSource := baseDirectory.value / &quot;src&quot;
 
-javaSource in Test := baseDirectory.value / &quot;test-src&quot;
+Test / javaSource := baseDirectory.value / &quot;test-src&quot;
 </code></pre><blockquote><p><strong>Note</strong>: The Scala source directory can be the same as the Java source
 directory.
 </p></blockquote><a name="resource-directory"></a><h3 id="Change+the+default+resource+directory">Change the default resource directory<a href="#Change+the+default+resource+directory" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The directory that contains the main resources is by default
@@ -12381,9 +12393,9 @@ directory.
 change this, modify <code>resourceDirectory</code> in either the <code>Compile</code> or
 <code>Test</code> configuration.
 </p><p>For example,
-</p><pre><code class="prettyprint lang-scala">resourceDirectory in Compile := baseDirectory.value / &quot;resources&quot;
+</p><pre><code class="prettyprint lang-scala">Compile / resourceDirectory := baseDirectory.value / &quot;resources&quot;
 
-resourceDirectory in Test := baseDirectory.value / &quot;test-resources&quot;
+Test / resourceDirectory := baseDirectory.value / &quot;test-resources&quot;
 </code></pre><a name="unmanaged-base-directory"></a><h3 id="Change+the+default+%28unmanaged%29+library+directory">Change the default (unmanaged) library directory<a href="#Change+the+default+%28unmanaged%29+library+directory" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The directory that contains the unmanaged libraries is by default
 <code>lib/</code>. To change this, modify <code>unmanagedBase</code>. This setting can be
 changed at the project level or in the <code>Compile</code>, <code>Runtime</code>, or <code>Test</code>
@@ -12396,7 +12408,7 @@ directory for all configurations. For example, the following declares
 directory containing libraries for that configuration, overriding the
 default. For example, the following declares <code>lib/main/</code> to contain jars
 only for <code>Compile</code> and not for running or testing:
-</p><pre><code class="prettyprint lang-scala">unmanagedBase in Compile := baseDirectory.value / &quot;lib&quot; / &quot;main&quot;
+</p><pre><code class="prettyprint lang-scala">Compile / unmanagedBase := baseDirectory.value / &quot;lib&quot; / &quot;main&quot;
 </code></pre><a name="disable-base-sources"></a><h3 id="Disable+using+the+project%E2%80%99s+base+directory+as+a+source+directory">Disable using the project’s base directory as a source directory<a href="#Disable+using+the+project%E2%80%99s+base+directory+as+a+source+directory" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>By default, sbt includes <code>.scala</code> files from the project’s base
 directory as main source files. To disable this, configure
 <code>sourcesInBase</code>:
@@ -12406,7 +12418,7 @@ default consists of <code>scalaSource</code> and <code>javaSource</code>. Add a 
 <code>unmanagedSourceDirectories</code> in the appropriate configuration to add a
 source directory. For example, to add <code>extra-src</code> to be an additional
 directory containing main sources,
-</p><pre><code class="prettyprint lang-scala">unmanagedSourceDirectories in Compile += baseDirectory.value / &quot;extra-src&quot;
+</p><pre><code class="prettyprint lang-scala">Compile / unmanagedSourceDirectories += baseDirectory.value / &quot;extra-src&quot;
 </code></pre><blockquote><p><strong>Note</strong>: This directory should only contain unmanaged sources, which are
 sources that are manually created and managed. See
 [Generating Files][Howto-Generating-Files] for working with automatically generated sources.
@@ -12415,7 +12427,7 @@ default consists of <code>resourceDirectory</code>. Add a directory to
 <code>unmanagedResourceDirectories</code> in the appropriate configuration to add
 another resource directory. For example, to add <code>extra-resources</code> to be
 an additional directory containing main resources,
-</p><pre><code class="prettyprint lang-scala">unmanagedResourceDirectories in Compile += baseDirectory.value / &quot;extra-resources&quot;
+</p><pre><code class="prettyprint lang-scala">Compile / unmanagedResourceDirectories += baseDirectory.value / &quot;extra-resources&quot;
 </code></pre><blockquote><p><strong>Note</strong>: This directory should only contain unmanaged resources, which are
 resources that are manually created and managed. See
 [Generating Files][Howto-Generating-Files] for working with automatically generated
@@ -12428,12 +12440,11 @@ match <code>excludeFilter</code>. <code>includeFilter</code> and <code>excludeFi
 <code>FileFilter</code>. For example, in addition to the default hidden files
 exclusion, the following also ignores files containing <code>impl</code> in their
 name,
-</p><pre><code class="prettyprint lang-scala">excludeFilter in unmanagedSources := HiddenFileFilter || &quot;*impl*&quot;
+</p><pre><code class="prettyprint lang-scala">unmanagedSources / excludeFilter := HiddenFileFilter || &quot;*impl*&quot;
 </code></pre><p>To have different filters for main and test libraries, configure
 <code>Compile</code> and <code>Test</code> separately:
-</p><pre><code class="prettyprint lang-scala">includeFilter in (Compile, unmanagedSources) := &quot;*.scala&quot; || &quot;*.java&quot;
-
-includeFilter in (Test, unmanagedSources) := HiddenFileFilter || &quot;*impl*&quot;
+</p><pre><code class="prettyprint lang-scala">Compile / unmanagedSources / includeFilter := &quot;*.scala&quot; || &quot;*.java&quot;
+Test / unmanagedSources / includeFilter := HiddenFileFilter || &quot;*impl*&quot;
 </code></pre><blockquote><p><strong>Note</strong>: By default, sbt includes <code>.scala</code> and <code>.java</code> sources, excluding hidden
 files.
 </p></blockquote><a name="resource-include-filter"></a><h3 id="Include%2Fexclude+files+in+the+resource+directory">Include/exclude files in the resource directory<a href="#Include%2Fexclude+files+in+the+resource+directory" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>When sbt traverses <code>unmanagedResourceDirectories</code> for resources, it only
@@ -12444,12 +12455,11 @@ match <code>excludeFilter</code>. <code>includeFilter</code> and <code>excludeFi
 <code>FileFilter</code>. For example, in addition to the default hidden files
 exclusion, the following also ignores files containing <code>impl</code> in their
 name,
-</p><pre><code class="prettyprint lang-scala">excludeFilter in unmanagedResources := HiddenFileFilter || &quot;*impl*&quot;
+</p><pre><code class="prettyprint lang-scala">unmanagedResources / excludeFilter := HiddenFileFilter || &quot;*impl*&quot;
 </code></pre><p>To have different filters for main and test libraries, configure
 <code>Compile</code> and <code>Test</code> separately:
-</p><pre><code class="prettyprint lang-scala">includeFilter in (Compile, unmanagedResources) := &quot;*.txt&quot;
-
-includeFilter in (Test, unmanagedResources) := &quot;*.html&quot;
+</p><pre><code class="prettyprint lang-scala">Compile / unmanagedResources / includeFilter := &quot;*.txt&quot;
+Test / unmanagedResources / includeFilter := &quot;*.html&quot;
 </code></pre><blockquote><p><strong>Note</strong>: By default, sbt includes all files that are not hidden.
 </p></blockquote><a name="lib-include-filter"></a><h3 id="Include+only+certain+%28unmanaged%29+libraries">Include only certain (unmanaged) libraries<a href="#Include+only+certain+%28unmanaged%29+libraries" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>When sbt traverses <code>unmanagedBase</code> for resources, it only includes
 directories and files that match <code>includeFilter</code> and do not match
@@ -12458,12 +12468,11 @@ directories and files that match <code>includeFilter</code> and do not match
 <a href="Paths.html#file-filter">provides some useful combinators</a> for constructing a
 <code>FileFilter</code>. For example, in addition to the default hidden files
 exclusion, the following also ignores zips,
-</p><pre><code class="prettyprint lang-scala">excludeFilter in unmanagedJars := HiddenFileFilter || &quot;*.zip&quot;
+</p><pre><code class="prettyprint lang-scala">unmanagedJars / excludeFilter := HiddenFileFilter || &quot;*.zip&quot;
 </code></pre><p>To have different filters for main and test libraries, configure
 <code>Compile</code> and <code>Test</code> separately:
-</p><pre><code class="prettyprint lang-scala">includeFilter in (Compile, unmanagedJars) := &quot;*.jar&quot;
-
-includeFilter in (Test, unmanagedJars) := &quot;*.jar&quot; || &quot;*.zip&quot;
+</p><pre><code class="prettyprint lang-scala">Compile / unmanagedJars / includeFilter := &quot;*.jar&quot;
+Test / unmanagedJars / includeFilter := &quot;*.jar&quot; || &quot;*.zip&quot;
 </code></pre><blockquote><p><strong>Note</strong>: By default, sbt includes jars, zips, and native dynamic libraries,
 excluding hidden files.
 </p></blockquote><h2 id="Generating+files">Generating files<a href="#Generating+files" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>sbt provides standard hooks for adding source and resource generation
@@ -12478,17 +12487,17 @@ to add the task, and not the value after its execution, we use
 <code>taskValue</code> instead of the usual <code>value</code>. <code>sourceGenerators</code> should be
 scoped according to whether the generated files are main (<code>Compile</code>) or
 test (<code>Test</code>) sources. This basic structure looks like:
-</p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile += &lt;task of type Seq[File]&gt;.taskValue
+</p><pre><code class="prettyprint lang-scala">Compile / sourceGenerators += &lt;task of type Seq[File]&gt;.taskValue
 </code></pre><p>For example, assuming a method
 <code>def makeSomeSources(base: File): Seq[File]</code>,
-</p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile += Def.task {
-  makeSomeSources((sourceManaged in Compile).value / &quot;demo&quot;)
+</p><pre><code class="prettyprint lang-scala">Compile / sourceGenerators += Def.task {
+  makeSomeSources((Compile / sourceManaged).value / &quot;demo&quot;)
 }.taskValue
 </code></pre><p>As a specific example, the following source generator generates
 <code>Test.scala</code> application object that once executed, prints <code>&quot;Hi&quot;</code> to the
 console:
-</p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile += Def.task {
-  val file = (sourceManaged in Compile).value / &quot;demo&quot; / &quot;Test.scala&quot;
+</p><pre><code class="prettyprint lang-scala">Compile / sourceGenerators += Def.task {
+  val file = (Compile / sourceManaged).value / &quot;demo&quot; / &quot;Test.scala&quot;
   IO.write(file, &quot;&quot;&quot;object Test extends App { println(&quot;Hi&quot;) }&quot;&quot;&quot;)
   Seq(file)
 }.taskValue
@@ -12518,11 +12527,11 @@ want to add the task, and not the value after its execution, we use
 <code>taskValue</code> instead of the usual <code>value</code>. It should be scoped according
 to whether the generated files are main (<code>Compile</code>) or test (<code>Test</code>)
 resources. This basic structure looks like:
-</p><pre><code class="prettyprint lang-scala">resourceGenerators in Compile += &lt;task of type Seq[File]&gt;.taskValue
+</p><pre><code class="prettyprint lang-scala">Compile / resourceGenerators += &lt;task of type Seq[File]&gt;.taskValue
 </code></pre><p>For example, assuming a method
 <code>def makeSomeResources(base: File): Seq[File]</code>,
-</p><pre><code class="prettyprint lang-scala">resourceGenerators in Compile += Def.task {
-  makeSomeResources((resourceManaged in Compile).value / &quot;demo&quot;)
+</p><pre><code class="prettyprint lang-scala">Compile / resourceGenerators += Def.task {
+  makeSomeResources((Compile / resourceManaged).value / &quot;demo&quot;)
 }.taskValue
 </code></pre><p>Executing <code>run</code> (or <code>package</code>, not <code>compile</code>) will add a file <code>demo</code> to
 <code>resourceManaged</code>, which is <code>target/scala-*/resource_managed&quot;</code>. By default,
@@ -12531,8 +12540,8 @@ add them as you would other mappings.
 See <a href="Howto-Package.html#modify-package-contents">Adding files to a package</a>.
 </p><p>As a specific example, the following generates a properties file
 <code>myapp.properties</code> containing the application name and version:
-</p><pre><code class="prettyprint lang-scala">resourceGenerators in Compile += Def.task {
-  val file = (resourceManaged in Compile).value / &quot;demo&quot; / &quot;myapp.properties&quot;
+</p><pre><code class="prettyprint lang-scala">Compile / resourceGenerators += Def.task {
+  val file = (Compile / resourceManaged).value / &quot;demo&quot; / &quot;myapp.properties&quot;
   val contents = &quot;name=%s\nversion=%s&quot;.format(name.value,version.value)
   IO.write(file, contents)
   Seq(file)
@@ -12879,7 +12888,7 @@ logging level may be configured globally, as described in the previous
 section, or it may be applied to a specific project, configuration, or
 task. For example, to change the logging level for compilation to only
 show warnings and errors:
-</p><pre><code class="prettyprint lang-scala">&gt; set logLevel in compile := Level.Warn
+</p><pre><code class="prettyprint lang-scala">&gt; set Compile / compile / logLevel := Level.Warn
 </code></pre><p>To enable debug logging for all tasks in the current project,
 </p><pre><code class="prettyprint lang-scala">&gt; set logLevel := Level.Warn
 </code></pre><p>A common scenario is that after running a task, you notice that you need
@@ -12907,9 +12916,9 @@ first sbt frame:
 </code></pre><p>The <code>every</code> part means to override the setting in all scopes. To change
 the trace printing behavior for a single project, configuration, or
 task, scope <code>traceLevel</code> appropriately:
-</p><pre><code class="prettyprint lang-scala">&gt; set traceLevel in Test := 5
-&gt; set traceLevel in update := 0
-&gt; set traceLevel in ThisProject := -1
+</p><pre><code class="prettyprint lang-scala">&gt; set Test / traceLevel := 5
+&gt; set update / traceLevel := 0
+&gt; set ThisProject / traceLevel := -1
 </code></pre><a name="nobuffer"></a><h3 id="Print+the+output+of+tests+immediately+instead+of+buffering">Print the output of tests immediately instead of buffering<a href="#Print+the+output+of+tests+immediately+instead+of+buffering" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>By default, sbt buffers the logging output of a test until the whole
 class finishes. This is so that output does not get mixed up when
 executing in parallel. To disable buffering, set the <code>logBuffered</code>
@@ -13046,17 +13055,17 @@ that map an attribute of type <code>java.util.jar.Attributes.Name</code> to a
 String value and other that maps attribute names (type String) to the
 String value.
 </p><p>For example,
-</p><pre><code class="prettyprint lang-scala">packageOptions in (Compile, packageBin) += 
-  Package.ManifestAttributes( java.util.jar.Attributes.Name.SEALED -&gt; &quot;true&quot; )
+</p><pre><code class="prettyprint lang-scala">Compile / packageBin / packageOptions +=
+  Package.ManifestAttributes(java.util.jar.Attributes.Name.SEALED -&gt; &quot;true&quot;)
 </code></pre><p>Other attributes may be added with <code>Package.JarManifest</code>.
-</p><pre><code class="prettyprint lang-scala">packageOptions in (Compile, packageBin) +=  {
+</p><pre><code class="prettyprint lang-scala">Compile / packageBin / packageOptions +=  {
   import java.util.jar.{Attributes, Manifest}
   val manifest = new Manifest
   manifest.getAttributes(&quot;foo/bar/&quot;).put(Attributes.Name.SEALED, &quot;false&quot;)
   Package.JarManifest( manifest )
 }
 </code></pre><p>Or, to read the manifest from a file:
-</p><pre><code class="prettyprint lang-scala">packageOptions in (Compile, packageBin) +=  {
+</p><pre><code class="prettyprint lang-scala">Compile / packageBin / packageOptions +=  {
   val file = new java.io.File(&quot;META-INF/MANIFEST.MF&quot;)
   val manifest = Using.fileInputStream(file)( in =&gt; new java.util.jar.Manifest(in) )
   Package.JarManifest( manifest )
@@ -13069,12 +13078,12 @@ a file to include in the package to the path in the package. See
 <a href="Mapping-Files.html">Mapping Files</a> for convenience functions for
 generating these mappings. For example, to add the file <code>in/example.txt</code>
 to the main binary jar with the path “out/example.txt”,
-</p><pre><code class="prettyprint lang-scala">mappings in (Compile, packageBin) += {
+</p><pre><code class="prettyprint lang-scala">Compile / packageBin / mappings += {
   (baseDirectory.value / &quot;in&quot; / &quot;example.txt&quot;) -&gt; &quot;out/example.txt&quot;
 }
 </code></pre><p>Note that <code>mappings</code> is scoped by the configuration and the specific
 package task. For example, the mappings for the test source package are
-defined by the <code>mappings in (Test, packageSrc)</code> task.
+defined by the <code>Test / packageSrc / mappings</code> task.
 </p><h2 id="Running+commands">Running commands<a href="#Running+commands" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><a name="batch"></a><h3 id="Pass+arguments+to+a+command+or+task+in+batch+mode">Pass arguments to a command or task in batch mode<a href="#Pass+arguments+to+a+command+or+task+in+batch+mode" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt interprets each command line argument provided to it as a command
 together with the command’s arguments. Therefore, to run a command that
 takes arguments in batch mode, quote the command using double quotes,
@@ -13199,12 +13208,12 @@ nor linking to Javadoc.)
 <code>:=</code> to definitively set the options without appending to the options
 for <code>compile</code>. Scope to <code>Compile</code> for main sources or to <code>Test</code> for test
 sources. For example,
-</p><pre><code class="prettyprint lang-scala">scalacOptions in (Compile,doc) := Seq(&quot;-groups&quot;, &quot;-implicits&quot;)
+</p><pre><code class="prettyprint lang-scala">Compile / doc / scalacOptions := Seq(&quot;-groups&quot;, &quot;-implicits&quot;)
 </code></pre><a name="additional-doc-options"></a><h3 id="Add+options+for+scaladoc+to+the+compilation+options">Add options for scaladoc to the compilation options<a href="#Add+options+for+scaladoc+to+the+compilation+options" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Scope <code>scalacOptions</code> to the <code>doc</code> task to configure <code>scaladoc</code>. Use
 <code>+=</code> or <code>++=</code> to append options to the base options. To append a single
 option, use <code>+=</code>. To append a <code>Seq[String]</code>, use <code>++=</code>. Scope to
 <code>Compile</code> for main sources or to <code>Test</code> for test sources. For example,
-</p><pre><code class="prettyprint lang-scala">scalacOptions in (Compile,doc) ++= Seq(&quot;-groups&quot;, &quot;-implicits&quot;)
+</p><pre><code class="prettyprint lang-scala">Compile / doc / scalacOptions ++= Seq(&quot;-groups&quot;, &quot;-implicits&quot;)
 </code></pre><a name="definitive-javadoc-options"></a><h3 id="Set+the+options+used+for+generating+javadoc+independently+of+compilation">Set the options used for generating javadoc independently of compilation<a href="#Set+the+options+used+for+generating+javadoc+independently+of+compilation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Scope <code>javacOptions</code> to the <code>doc</code> task to configure <code>javadoc</code>. Use <code>:=</code>
 to definitively set the options without appending to the options for
 <code>compile</code>. Scope to <code>Compile</code> for main sources or to <code>Test</code> for test
@@ -13213,7 +13222,7 @@ sources.
 or <code>++=</code> to append options to the base options. To append a single
 option, use <code>+=</code>. To append a <code>Seq[String]</code>, use <code>++=</code>. Scope to
 <code>Compile</code> for main sources or to <code>Test</code> for test sources. For example,
-</p><pre><code class="prettyprint lang-scala">javacOptions in (Compile,doc) ++= Seq(&quot;-notimestamp&quot;, &quot;-linksource&quot;)
+</p><pre><code class="prettyprint lang-scala">Compile / doc / javacOptions ++= Seq(&quot;-notimestamp&quot;, &quot;-linksource&quot;)
 </code></pre><a name="auto-link"></a><h3 id="Enable+automatic+linking+to+the+external+Scaladoc+of+managed+dependencies">Enable automatic linking to the external Scaladoc of managed dependencies<a href="#Enable+automatic+linking+to+the+external+Scaladoc+of+managed+dependencies" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Set <code>autoAPIMappings := true</code> for sbt to tell <code>scaladoc</code> where it can
 find the API documentation for managed dependencies. This requires that
 dependencies have this information in its metadata and you are using
@@ -13246,8 +13255,8 @@ lazy val client = project.in(file(&quot;./client&quot;))
 lazy val myTestTask = taskKey[Unit](&quot;my test task&quot;)
 
 myTestTask := {
-  (test in (core, Test)).value
-  (test in (tools, Test)).value
+  (core / Test / test).value
+  (tools / Test / test).value
 }
 </code></pre><h2 id="How+to+take+an+action+on+startup">How to take an action on startup<a href="#How+to+take+an+action+on+startup" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>A global setting <code>onLoad</code> is of type <code>State =&gt; State</code> and is executed once, after all projects are built and loaded. There is a similar hook <code>onUnload</code> for when a project is unloaded.
 </p><p>Project unloading typically occurs as a result of a <code>reload</code> command or a <code>set</code> command. Because the <code>onLoad</code> and <code>onUnload</code> hooks are global, modifying this setting typically involves composing a new function with the previous value. The following example shows the basic structure of defining <code>onLoad</code>.
@@ -13511,7 +13520,7 @@ processed.
   doX()
   doY()
 }
-</code></pre><p>The benefit of the dependency-oriented programming model is that sbt’s task engine is able to reorder the task execution. When possible we run dependent tasks in parallel. Another benefit is that we can deduplicate the graph, and make sure that the task evaluation, such as <code>compile in Compile</code>, is called once per command execution, as opposed to compiling the same source many times.
+</code></pre><p>The benefit of the dependency-oriented programming model is that sbt’s task engine is able to reorder the task execution. When possible we run dependent tasks in parallel. Another benefit is that we can deduplicate the graph, and make sure that the task evaluation, such as <code>Compile / compile</code>, is called once per command execution, as opposed to compiling the same source many times.
 </p><p>Because task system is generally set up this way, running something sequentially is possible, but you will be fighting the system a bit, and it’s not always going to be easy.
 </p><ul><li><a href="Howto-Sequential-Task.html">Defining a sequential task with Def.sequential</a>
 </li><li><a href="Howto-Dynamic-Task.html">Defining a dynamic task with Def.taskDyn</a>
@@ -13519,7 +13528,7 @@ processed.
 </li><li><a href="Howto-Dynamic-Input-Task.html">Defining a dynamic input task with Def.inputTaskDyn</a>
 </li><li><a href="Howto-Sequence-using-Commands.html">How to sequence using commands</a>
 </li></ul><h3 id="Defining+a+sequential+task+with+Def.sequential">Defining a sequential task with Def.sequential<a href="#Defining+a+sequential+task+with+Def.sequential" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 0.13.8 added <code>Def.sequential</code> function to run tasks under semi-sequential semantics.
-To demonstrate the sequential task, let’s create a custom task called <code>compilecheck</code> that runs <code>compile in Compile</code> and then <code>scalastyle in Compile</code> task added by <a href="http://www.scalastyle.org/sbt.html">scalastyle-sbt-plugin</a>.
+To demonstrate the sequential task, let’s create a custom task called <code>compilecheck</code> that runs <code>Compile / compile</code> and then <code>Compile / scalastyle</code> task added by <a href="http://www.scalastyle.org/sbt.html">scalastyle-sbt-plugin</a>.
 </p><p>Here’s how to set it up
 </p><h4 id="project%2Fbuild.properties">project/build.properties<a href="#project%2Fbuild.properties" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="">sbt.version=1.3.4
 </code></pre><h4 id="project%2Fstyle.sbt">project/style.sbt<a href="#project%2Fstyle.sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="">addSbtPlugin(&quot;org.scalastyle&quot; %% &quot;scalastyle-sbt-plugin&quot; % &quot;1.0.0&quot;)
@@ -13527,9 +13536,9 @@ To demonstrate the sequential task, let’s create a custom task called <code>co
 
 lazy val root = (project in file(&quot;.&quot;))
   .settings(
-    compilecheck in Compile := Def.sequential(
-      compile in Compile,
-      (scalastyle in Compile).toTask(&quot;&quot;)
+    Compile / compilecheck := Def.sequential(
+      Compile / compile,
+      (Compile / scalastyle).toTask(&quot;&quot;)
     ).value
   )
 </code></pre><p>To call this task type in <code>compilecheck</code> from the shell. If the compilation fails, <code>compilecheck</code> would stop the execution.
@@ -13542,7 +13551,7 @@ lazy val root = (project in file(&quot;.&quot;))
 [error] (compile:compileIncremental) Compilation failed
 </code></pre><p>Looks like we were able to sequence these tasks.
 </p><h3 id="Defining+a+dynamic+task+with+Def.taskDyn">Defining a dynamic task with Def.taskDyn<a href="#Defining+a+dynamic+task+with+Def.taskDyn" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>If <a href="Howto-Sequential-Task.html">sequential task</a> is not enough, another step up is <a href="Tasks.html">the dynamic task</a>. Unlike <code>Def.task</code> which expects you to return pure value <code>A</code>, with a <code>Def.taskDyn</code> you return a task <code>sbt.Def.Initialize[sbt.Task[A]]</code> which the task engine can continue the rest of the computation with.
-</p><p>Let’s try implementing a custom task called <code>compilecheck</code> that runs <code>compile in Compile</code> and then <code>scalastyle in Compile</code> task added by <a href="http://www.scalastyle.org/sbt.html">scalastyle-sbt-plugin</a>.
+</p><p>Let’s try implementing a custom task called <code>compilecheck</code> that runs <code>Compile / compile</code> and then <code>Compile / scalastyle</code> task added by <a href="http://www.scalastyle.org/sbt.html">scalastyle-sbt-plugin</a>.
 </p><h4 id="project%2Fbuild.properties">project/build.properties<a href="#project%2Fbuild.properties" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="">sbt.version=1.3.4
 </code></pre><h4 id="project%2Fstyle.sbt">project/style.sbt<a href="#project%2Fstyle.sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="">addSbtPlugin(&quot;org.scalastyle&quot; %% &quot;scalastyle-sbt-plugin&quot; % &quot;1.0.0&quot;)
 </code></pre><h4 id="build.sbt+v1">build.sbt v1<a href="#build.sbt+v1" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">lazy val compilecheck = taskKey[sbt.inc.Analysis](&quot;compile and then scalastyle&quot;)
@@ -13550,29 +13559,29 @@ lazy val root = (project in file(&quot;.&quot;))
 lazy val root = (project in file(&quot;.&quot;))
   .settings(
     compilecheck := (Def.taskDyn {
-      val c = (compile in Compile).value
+      val c = (Compile / compile).value
       Def.task {
-        val x = (scalastyle in Compile).toTask(&quot;&quot;).value
+        val x = (Compile / scalastyle).toTask(&quot;&quot;).value
         c
       }
     }).value
   )
 </code></pre><p>Now we have the same thing as the sequential task, except we can now return the result <code>c</code> from the first task.
-</p><h4 id="build.sbt+v2">build.sbt v2<a href="#build.sbt+v2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>If we can return the same return type as <code>compile in Compile</code>, might actually rewire the key to our dynamic task.
+</p><h4 id="build.sbt+v2">build.sbt v2<a href="#build.sbt+v2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>If we can return the same return type as <code>Compile / compile</code>, might actually rewire the key to our dynamic task.
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
   .settings(
-    compile in Compile := (Def.taskDyn {
-      val c = (compile in Compile).value
+    Compile / compile := (Def.taskDyn {
+      val c = (Compile / compile).value
       Def.task {
-        val x = (scalastyle in Compile).toTask(&quot;&quot;).value
+        val x = (Compile / scalastyle).toTask(&quot;&quot;).value
         c
       }
     }).value
   )
-</code></pre><p>Now we can actually call <code>compile in Compile</code> from the shell and make it do what we want it to do.
+</code></pre><p>Now we can actually call <code>Compile / compile</code> from the shell and make it do what we want it to do.
 </p><h3 id="Doing+something+after+an+input+task">Doing something after an input task<a href="#Doing+something+after+an+input+task" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Thus far we’ve mostly looked at tasks. There’s another kind of tasks called input tasks that accepts user input from the shell.
-A typical example for this is the <code>run in Compile</code> task. The <code>scalastyle</code> task is actually an input task too. See <a href="Input-Tasks.html">input task</a> for the details of the input tasks.
-</p><p>Now suppose we want to call <code>run in Compile</code> task and then open the browser for testing purposes.
+A typical example for this is the <code>Compile / run</code> task. The <code>scalastyle</code> task is actually an input task too. See <a href="Input-Tasks.html">input task</a> for the details of the input tasks.
+</p><p>Now suppose we want to call <code>Compile / run</code> task and then open the browser for testing purposes.
 </p><h4 id="src%2Fmain%2Fscala%2FGreeting.scala">src/main/scala/Greeting.scala<a href="#src%2Fmain%2Fscala%2FGreeting.scala" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">object Greeting extends App {
   println(&quot;hello &quot; + args.toList)
 }
@@ -13581,7 +13590,7 @@ A typical example for this is the <code>run in Compile</code> task. The <code>sc
 lazy val root = (project in file(&quot;.&quot;))
   .settings(
     runopen := {
-      (run in Compile).evaluated
+      (Compile / run).evaluated
       println(&quot;open browser!&quot;)
     }
   )
@@ -13591,11 +13600,11 @@ lazy val root = (project in file(&quot;.&quot;))
 [info] Running Greeting foo
 hello List(foo)
 open browser!
-</code></pre><h4 id="build.sbt+v2">build.sbt v2<a href="#build.sbt+v2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>We can actually remove <code>runopen</code> key, by rewriting the new input task to <code>run in Compile</code>:
+</code></pre><h4 id="build.sbt+v2">build.sbt v2<a href="#build.sbt+v2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>We can actually remove <code>runopen</code> key, by rewriting the new input task to <code>Compile / run</code>:
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
   .settings(
-    run in Compile := {
-      (run in Compile).evaluated
+    Compile / run := {
+      (Compile / run).evaluated
       println(&quot;open browser!&quot;)
     }
   )
@@ -13609,7 +13618,7 @@ lazy val root = (project in file(&quot;.&quot;))
       import sbt.complete.Parsers.spaceDelimited
       val args = spaceDelimited(&quot;&lt;args&gt;&quot;).parsed
       Def.taskDyn {
-        (run in Compile).toTask(&quot; &quot; + args.mkString(&quot; &quot;)).value
+        (Compile / run).toTask(&quot; &quot; + args.mkString(&quot; &quot;)).value
         openbrowser
       }
     }).evaluated,
@@ -13617,33 +13626,33 @@ lazy val root = (project in file(&quot;.&quot;))
       println(&quot;open browser!&quot;)
     }
   )
-</code></pre><h4 id="build.sbt+v2">build.sbt v2<a href="#build.sbt+v2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Trying to rewire <code>run in Compile</code> is going to be complicated. Since the reference to the inner <code>run in Compile</code> is already inside the continuation task, simply rewiring <code>runopen</code> to <code>run in Compile</code> will create a cyclic reference.
-To break the cycle, we will introduce a clone of <code>run in Compile</code> called <code>actualRun in Compile</code>:
+</code></pre><h4 id="build.sbt+v2">build.sbt v2<a href="#build.sbt+v2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Trying to rewire <code>Compile / run</code> is going to be complicated. Since the reference to the inner <code>Compile / run</code> is already inside the continuation task, simply rewiring <code>runopen</code> to <code>Compile / run</code> will create a cyclic reference.
+To break the cycle, we will introduce a clone of <code>Compile / run</code> called <code>Compile / actualRun</code>:
 </p><pre><code class="prettyprint lang-scala">lazy val actualRun = inputKey[Unit](&quot;The actual run task&quot;)
 lazy val openbrowser = taskKey[Unit](&quot;open the browser&quot;)
 
 lazy val root = (project in file(&quot;.&quot;))
   .settings(
-    run in Compile := (Def.inputTaskDyn {
+    Compile / run := (Def.inputTaskDyn {
       import sbt.complete.Parsers.spaceDelimited
       val args = spaceDelimited(&quot;&lt;args&gt;&quot;).parsed
       Def.taskDyn {
-        (actualRun in Compile).toTask(&quot; &quot; + args.mkString(&quot; &quot;)).value
+        (Compile / actualRun).toTask(&quot; &quot; + args.mkString(&quot; &quot;)).value
         openbrowser
       }
     }).evaluated,
-    actualRun in Compile := Defaults.runTask(
-      fullClasspath in Runtime,
-      mainClass in (Compile, run),
-      runner in (Compile, run)
+    Comile / actualRun := Defaults.runTask(
+      Runtime / fullClasspath,
+      Compile / run / mainClass,
+      Compile / run / runner
     ).evaluated,
     openbrowser := {
       println(&quot;open browser!&quot;)
     }
   )
 </code></pre><p>* Note that some tasks (ie. <code>testOnly</code>) will fail with trailing spaces, so a right trim (<code>.replaceAll(&quot;\s+$&quot;, &quot;&quot;)</code>) of the string built for <code>toTask</code> might be needed to handle empty <code>args</code>.\
-</p><p>The <code>actualRun in Compile</code>’s implementation was copy-pasted from <code>run</code> task’s implementation in Defaults.scala.
-</p><p>Now we can call <code>run foo</code> from the shell and it will evaluate <code>actualRun in Compile</code> with the passed in argument, and then evaluate the <code>openbrowser</code> task.
+</p><p>The <code>Compile / actualRun</code>’s implementation was copy-pasted from <code>run</code> task’s implementation in Defaults.scala.
+</p><p>Now we can call <code>run foo</code> from the shell and it will evaluate <code>Compile / actualRun</code> with the passed in argument, and then evaluate the <code>openbrowser</code> task.
 </p><h3 id="How+to+sequence+using+commands">How to sequence using commands<a href="#How+to+sequence+using+commands" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>If all you care about is the side effects, and you really just want to emulate humans typing in one command after another, a custom command might be just want you need. This comes in handy for release procedures.
 </p><p>Here’s from the build script of sbt itself:
 </p><pre><code class="prettyprint lang-scala">  commands += Command.command(&quot;releaseNightly&quot;) { state =&gt;
@@ -13670,6 +13679,9 @@ ThisBuild / scalaVersion := &quot;2.12.10&quot;
 // set the Scala version used for the project
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
+// set the prompt (for this build) to include the project id.
+ThisBuild / shellPrompt := { state =&gt; Project.extract(state).currentRef.project + &quot;&gt; &quot; }
+
 // define ModuleID for library dependencies
 lazy val scalacheck = &quot;org.scalacheck&quot; %% &quot;scalacheck&quot; % &quot;1.13.4&quot;
 
@@ -13684,10 +13696,10 @@ lazy val root = (project in file(&quot;.&quot;))
     name := &quot;My Project&quot;,
 
     // set the main Scala source directory to be &lt;base&gt;/src
-    scalaSource in Compile := baseDirectory.value / &quot;src&quot;,
+    Compile / scalaSource := baseDirectory.value / &quot;src&quot;,
 
     // set the Scala test source directory to be &lt;base&gt;/test
-    scalaSource in Test := baseDirectory.value / &quot;test&quot;,
+    Test / scalaSource := baseDirectory.value / &quot;test&quot;,
 
     // add a test dependency on ScalaCheck
     libraryDependencies += scalacheck % Test,
@@ -13716,16 +13728,16 @@ lazy val root = (project in file(&quot;.&quot;))
       |}&quot;&quot;&quot;.stripMargin,
 
     // set the initial commands when entering 'console' or 'consoleQuick', but not 'consoleProject'
-    initialCommands in console := &quot;import myproject._&quot;,
+    console / initialCommands := &quot;import myproject._&quot;,
 
     // set the main class for packaging the main jar
     // 'run' will still auto-detect and prompt
     // change Compile to Test to set it for the test jar
-    mainClass in (Compile, packageBin) := Some(&quot;myproject.MyMain&quot;),
+    Comile / packageBin / mainClass := Some(&quot;myproject.MyMain&quot;),
 
     // set the main class for the main 'run' task
     // change Compile to Test to set it for 'test:run'
-    mainClass in (Compile, run) := Some(&quot;myproject.MyMain&quot;),
+    Compile / run / mainClass := Some(&quot;myproject.MyMain&quot;),
 
     // add &lt;base&gt;/input to the files that '~' triggers on
     watchSources += baseDirectory.value / &quot;input&quot;,
@@ -13745,9 +13757,6 @@ lazy val root = (project in file(&quot;.&quot;))
     // disable updating dynamic revisions (including -SNAPSHOT versions)
     offline := true,
 
-    // set the prompt (for this build) to include the project id.
-    shellPrompt in ThisBuild := { state =&gt; Project.extract(state).currentRef.project + &quot;&gt; &quot; },
-
     // set the prompt (for the current project) to include the username
     shellPrompt := { state =&gt; System.getProperty(&quot;user.name&quot;) + &quot;&gt; &quot; },
 
@@ -13766,11 +13775,11 @@ lazy val root = (project in file(&quot;.&quot;))
     // disable using the Scala version in output paths and artifacts
     crossPaths := false,
 
-    // fork a new JVM for 'run' and 'test:run'
+    // fork a new JVM for 'run' and 'Test/run'
     fork := true,
 
-    // fork a new JVM for 'test:run', but not 'run'
-    fork in Test := true,
+    // fork a new JVM for 'Test/run', but not 'run'
+    Test / fork := true,
 
     // add a JVM option to use when forking a JVM for 'run'
     javaOptions += &quot;-Xmx2G&quot;,
@@ -13780,7 +13789,7 @@ lazy val root = (project in file(&quot;.&quot;))
 
     // Execute tests in the current project serially
     //   Tests from other projects may still run concurrently.
-    parallelExecution in Test := false,
+    Test / parallelExecution := false,
 
     // set the location of the JDK to use for compiling Java code.
     // if 'fork' is true, this is used for 'run' as well
@@ -13790,11 +13799,11 @@ lazy val root = (project in file(&quot;.&quot;))
     scalaHome := Some(file(&quot;/home/user/scala/trunk/&quot;)),
 
     // don't aggregate clean (See FullConfiguration for aggregation details)
-    aggregate in clean := false,
+    clean / aggregate := false,
 
     // only show warnings and errors on the screen for compilations.
     //  this applies to both test:compile and compile and is Info by default
-    logLevel in compile := Level.Warn,
+    compile / logLevel := Level.Warn,
 
     // only show warnings and errors on the screen for all tasks (the default is Info)
     //  individual tasks can then be more verbose using the previous setting
@@ -13811,16 +13820,16 @@ lazy val root = (project in file(&quot;.&quot;))
     traceLevel := 0,
 
     // add SWT to the unmanaged classpath
-    unmanagedJars in Compile += Attributed.blank(file(&quot;/usr/share/java/swt.jar&quot;)),
+    Compile / unmanagedJars += Attributed.blank(file(&quot;/usr/share/java/swt.jar&quot;)),
 
     // publish test jar, sources, and docs
-    publishArtifact in Test := true,
+    Test / publishArtifact := true,
 
     // disable publishing of main docs
-    publishArtifact in (Compile, packageDoc) := false,
+    Compile / packageDoc / publishArtifact := false,
 
     // change the classifier for the docs artifact
-    artifactClassifier in packageDoc := Some(&quot;doc&quot;),
+    packageDoc / artifactClassifier := Some(&quot;doc&quot;),
 
     // Copy all managed dependencies to &lt;build-root&gt;/lib_managed/
     //   This is essentially a project-local cache.  There is only one
@@ -13990,18 +13999,14 @@ functionality of ‘utils’ will need these dependencies as well. However,
 project <code>a</code> only needs the utilities related to Scalate, so it doesn’t
 need Saxon. By depending only on the <code>scalate</code> configuration of <code>utils</code>,
 it only gets the Scalate-related dependencies.
-</p><pre><code class="prettyprint lang-scala">/********* Configurations *******/
-
-// Custom configurations
-lazy val Common = config(&quot;common&quot;) describedAs(&quot;Dependencies required in all configurations.&quot;)
-lazy val Scalate = config(&quot;scalate&quot;) extend(Common) describedAs(&quot;Dependencies for using Scalate utilities.&quot;)
-lazy val Saxon = config(&quot;saxon&quot;) extend(Common) describedAs(&quot;Dependencies for using Saxon utilities.&quot;)
+</p><pre><code class="prettyprint lang-scala">// Custom configurations
+lazy val Common = config(&quot;common&quot;).describedAs(&quot;Dependencies required in all configurations.&quot;)
+lazy val Scalate = config(&quot;scalate&quot;).extend(Common).describedAs(&quot;Dependencies for using Scalate utilities.&quot;)
+lazy val Saxon = config(&quot;saxon&quot;).extend(Common).describedAs(&quot;Dependencies for using Saxon utilities.&quot;)
 
 // Define a customized compile configuration that includes
-//   dependencies defined in our other custom configurations
-lazy val CustomCompile = config(&quot;compile&quot;) extend(Saxon, Common, Scalate)
-
-/********** Projects ************/
+// dependencies defined in our other custom configurations
+lazy val CustomCompile = config(&quot;compile&quot;).extend(Saxon, Common, Scalate)
 
 // factor out common settings
 ThisBuild / organization := &quot;com.example&quot;
@@ -14023,17 +14028,20 @@ lazy val b = (project in file(&quot;b&quot;))
 lazy val utils = (project in file(&quot;utils&quot;))
   .settings(
     inConfig(Common)(Defaults.configSettings),  // Add the src/common/scala/ compilation configuration.
-    addArtifact(artifact in (Common, packageBin), packageBin in Common), // Publish the common artifact
+    addArtifact(Common / packageBin / artifact, Common / packageBin), // Publish the common artifact
 
-      // We want our Common sources to have access to all of the dependencies on the classpaths
-      //   for compile and test, but when depended on, it should only require dependencies in 'common'
-    classpathConfiguration in Common := CustomCompile,
-      // Modify the default Ivy configurations.
-      //   'overrideConfigs' ensures that Compile is replaced by CustomCompile
+    // We want our Common sources to have access to all of the dependencies on the classpaths
+    //   for compile and test, but when depended on, it should only require dependencies in 'common'
+    Common / classpathConfiguration := CustomCompile,
+
+    // Modify the default Ivy configurations.
+    // 'overrideConfigs' ensures that Compile is replaced by CustomCompile
     ivyConfigurations := overrideConfigs(Scalate, Saxon, Common, CustomCompile)(ivyConfigurations.value),
-      // Put all dependencies without an explicit configuration into Common (optional)
+
+    // Put all dependencies without an explicit configuration into Common (optional)
     defaultConfiguration := Some(Common),
-      // Declare dependencies in the appropriate configurations
+
+    // Declare dependencies in the appropriate configurations
     libraryDependencies ++= Seq(
        &quot;org.fusesource.scalate&quot; % &quot;scalate-core&quot; % &quot;1.5.0&quot; % Scalate,
        &quot;org.squeryl&quot; %% &quot;squeryl&quot; % &quot;0.9.5-6&quot; % Scalate,
@@ -14142,10 +14150,10 @@ task returns a sequence <code>Seq[(File,String)]</code> of mappings from the fil
 to include to the path within the jar. See
 <a href="Mapping-Files.html">mapping files</a> for details on creating these mappings.
 </p><p>For example, to add generated sources to the packaged source artifact:
-</p><pre><code class="prettyprint lang-scala">mappings in (Compile, packageSrc) ++= {
+</p><pre><code class="prettyprint lang-scala">Compile / packageSrc / mappings ++= {
   import Path.{flat, relativeTo}
-  val base = (sourceManaged in Compile).value
-  val srcs = (managedSources in Compile).value
+  val base = (Compile / sourceManaged).value
+  val srcs = (Compile / managedSources).value
   srcs pair (relativeTo(base) | flat)
 }
 </code></pre><p>This takes sources from the <code>managedSources</code> task and relativizes them
@@ -14347,7 +14355,7 @@ settings = Seq(
 </code></pre><p>This setting varies between the test and compile scopes. The solution is
 use the scoped setting, both as the input to the initializer, and the
 setting that we update.
-</p><pre><code class="prettyprint lang-scala">fullClasspath in Compile := (fullClasspath in Compile).value.filterNot(_.data.name.contains(&quot;commons-io&quot;))
+</p><pre><code class="prettyprint lang-scala">Compile / fullClasspath := (Compile / fullClasspath).value.filterNot(_.data.name.contains(&quot;commons-io&quot;))
 </code></pre><h3 id="Dependency+Management">Dependency Management<a href="#Dependency+Management" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="How+do+I+resolve+a+checksum+error%3F">How do I resolve a checksum error?<a href="#How+do+I+resolve+a+checksum+error%3F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>This error occurs when the published checksum, such as a sha1 or md5
 hash, differs from the checksum computed for a downloaded artifact, such
 as a jar or pom.xml. An example of such an error is:
@@ -15037,10 +15045,10 @@ will automatically use Java’s primitive types if they are available.
 in your build definition:
 </p><pre><code class="prettyprint lang-scala">datatypeSource in generateDatatypes := file(&quot;some/location&quot;)
 </code></pre><p>The plugin exposes other settings for Scala code generation:
-</p><ol><li><code>datatypeScalaFileNames in (Compile, generateDatatypes)</code>
+</p><ol><li><code>Compile / generateDatatypes / datatypeScalaFileNames</code>
 This setting accepts a function <code>Definition =&gt; File</code> which will determine
 the filename for every generated Scala definition.
-</li><li><code>datatypeScalaSealInterfaces in (Compile, generateDatatypes)</code>
+</li><li><code>Compile / generateDatatypes / datatypeScalaSealInterfaces</code>
 This setting accepts a boolean value, and will determine whether interfaces
 should be <code>seal</code>ed or not.
 </li></ol><h3 id="Syntax+summary">Syntax summary<a href="#Syntax+summary" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">Schema           := {   &quot;types&quot;: [ Definition* ]

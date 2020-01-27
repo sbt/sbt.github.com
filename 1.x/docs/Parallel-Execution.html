@@ -200,7 +200,7 @@ tags to each child task created for each test class.
   val max = Runtime.getRuntime.availableProcessors
   Tags.limitAll(if(parallelExecution.value) max else 1) :: Nil
 }
-</code></pre><p>As before, <code>parallelExecution in Test</code> controls whether tests are mapped
+</code></pre><p>As before, <code>Test / parallelExecution</code> controls whether tests are mapped
 to separate tasks. To restrict the number of concurrently executing
 tests in all projects, use:
 </p><pre><code class="prettyprint lang-scala">Global / concurrentRestrictions += Tags.limit(Tags.Test, 1)

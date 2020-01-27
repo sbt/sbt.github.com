@@ -1419,10 +1419,10 @@ nombre del proyecto.
 // (ambos son SettingKey[String])
 organization := name.value
 </code></pre><p>A continuación se muestra un ejemplo más realista.
-Esto cambia el valor de la clave <code>scalaSource in Compile</code> a un directorio
+Esto cambia el valor de la clave <code>Compile / scalaSource</code> a un directorio
 diferente sólo cuando <code>scalaBinaryVersion</code> es <code>&quot;2.11&quot;</code>.
-</p><pre><code class="prettyprint lang-scala">scalaSource in Compile := {
-  val old = (scalaSource in Compile).value
+</p><pre><code class="prettyprint lang-scala">Compile / scalaSource := {
+  val old = (Compile / scalaSource).value
   scalaBinaryVersion.value match {
     case &quot;2.11&quot; =&gt; baseDirectory.value / &quot;src-2.11&quot; / &quot;main&quot; / &quot;scala&quot;
     case _      =&gt; old
@@ -2179,8 +2179,8 @@ añadidas en el classpath del proyecto. Y no hay más.
 <a href="http://specs2.org">Specs2</a> y 
 <a href="http://www.scalatest.org/">ScalaTest</a> en <code>lib</code>.
 </p><p>Las dependencias en <code>lib</code> aparecen en todos los classpaths (para <code>compile</code>,
-<code>test</code>, <code>run</code> y <code>console</code>). Si quieres cambiar el classpath para una sola de esas tareas deberías de ajustar <code>dependencyClasspath in Compile</code> o
-<code>dependencyClasspath in Runtime</code>, por ejemplo.
+<code>test</code>, <code>run</code> y <code>console</code>). Si quieres cambiar el classpath para una sola de esas tareas deberías de ajustar <code>Compile / dependencyClasspath</code> o
+<code>Runtime / dependencyClasspath</code>, por ejemplo.
 </p><p>No hay que añadir nada en <code>build.sbt</code> para empezar a utilizar dependencias no
 gestionadas, aunque puedes cambiar la clave <code>unmanagedBase</code> si quisieras
 utilizar un directorio diferente a <code>lib</code>.
@@ -2516,8 +2516,8 @@ muestra una notación gráfica de la evaluación de <code>sampleStringTask</code
 </p><p><img src="../files/task-dependency01.png" alt="task-dependency"/>
 </p><p>Si no hubiésemos deduplicado las dependencias de tareas habríamos acabado
 compilando el código fuente de los tests muchas veces cuando la tarea <code>test</code>
-hubiese sido invocada, ya que <code>compile in Test</code> aparece muchas veces como
-dependencia de <code>test in Test</code>.
+hubiese sido invocada, ya que <code>Test / compile</code> aparece muchas veces como
+dependencia de <code>Test / test</code>.
 </p><h4 id="Tarea+de+limpieza">Tarea de limpieza<a href="#Tarea+de+limpieza" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Entonces ¿cómo se podría implementar la tarea <code>stopServer</code>?
 La noción de tarea de limpieza no encaja en el modelo de ejecución de tareas
 debido a que las tareas tratan de seguir dependencias.

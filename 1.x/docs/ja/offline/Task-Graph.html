@@ -246,10 +246,10 @@ checksums := scalacOptions.value
 </p><pre><code class="prettyprint lang-scala">// プロジェクトの name に基いて organization 名を付ける (どちらも型は SettingKey[String])
 organization := name.value
 </code></pre><p>実用的な例もみてみる。
-これは <code>scalaSource in Compile</code> というキーを <code>scalaBinaryVersion</code> が <code>&quot;2.11&quot;</code>
+これは <code>Compile / scalaSource</code> というキーを <code>scalaBinaryVersion</code> が <code>&quot;2.11&quot;</code>
 の場合のみ別のディレクトリに再配線する。
-</p><pre><code class="prettyprint lang-scala">scalaSource in Compile := {
-  val old = (scalaSource in Compile).value
+</p><pre><code class="prettyprint lang-scala">Compile / scalaSource := {
+  val old = (Compile / scalaSource).value
   scalaBinaryVersion.value match {
     case &quot;2.11&quot; =&gt; baseDirectory.value / &quot;src-2.11&quot; / &quot;main&quot; / &quot;scala&quot;
     case _      =&gt; old
@@ -297,7 +297,7 @@ end
 </code></pre><p>Rake でのブレークスルーは、アクションをシステムコマンドの代わりにプログラミング言語を使って記述したことだ。
 </p><h4 id="%E3%83%8F%E3%82%A4%E3%83%96%E3%83%AA%E3%83%83%E3%83%89%E3%83%BB%E3%83%95%E3%83%AD%E3%83%BC%E3%83%99%E3%83%BC%E3%82%B9%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0%E3%81%AE%E5%88%A9%E7%82%B9">ハイブリッド・フローベースプログラミングの利点<a href="#%E3%83%8F%E3%82%A4%E3%83%96%E3%83%AA%E3%83%83%E3%83%89%E3%83%BB%E3%83%95%E3%83%AD%E3%83%BC%E3%83%99%E3%83%BC%E3%82%B9%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0%E3%81%AE%E5%88%A9%E7%82%B9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>ビルドをこのように構成する動機がいくつかある。
 </p><p>第一は非重複化だ。フローベースプログラミングではあるタスクが複数のタスクから依存されていても一度だけしか実行されない。
-例えば、タスクグラフ上の複数のタスクが <code>compile in Compile</code> に依存していたとしても、実際のコンパイルは唯一一回のみ実行される。
+例えば、タスクグラフ上の複数のタスクが <code>Compile / compile</code> に依存していたとしても、実際のコンパイルは唯一一回のみ実行される。
 </p><p>第二は並列処理だ。タスクグラフを用いることでタスクエンジンは相互に非依存なタスクを並列にスケジュールすることができる。
 </p><p>第三は関心事の分離と柔軟さだ。
 タスクグラフはビルドの作者が複数のタスクを異なる方法で配線することを可能にする。

@@ -82,9 +82,9 @@ handling. Among other things, the efficiency could be improved.
 Currently, you set it like any other setting:
 </li></ol><pre><code class="">set logLevel := Level.Warn
 </code></pre><blockquote><p>or
-:   set logLevel in Test := Level.Warn
+:   set Test / logLevel := Level.Warn
 </p><p>You could make commands that wrap this, like:
-</p></blockquote><pre><code class="">warn test:run
+</p></blockquote><pre><code class="">warn Test/run
 </code></pre><p>Also, trace is currently an integer, but should really be an abstract
 data type.
 </p><ol><li>Each sbt version has more aggressive incremental compilation and

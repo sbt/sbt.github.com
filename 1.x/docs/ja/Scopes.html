@@ -70,11 +70,13 @@
 </p><p><img src="../files/rgb_color_solid_cube.png" alt="color cube"/>
 </p><p>RGB 色モデルにおいて、全ての色は赤、緑、青の成分を軸とする立方体内の点として表すことができ、それぞれの成分は数値化することができる。
 同様に、sbt におけるスコープはサブプロジェクト、コンフィギュレーション、タスクの<strong>タプル</strong>により成り立つ:
-</p><pre><code class="prettyprint lang-scala">scalacOptions in (projA, Compile, console)
-</code></pre><p>より正確には、以下のようになっている:
-</p><pre><code class="prettyprint lang-scala">scalacOptions in (Select(projA: Reference),
-                  Select(Compile: ConfigKey),
-                  Select(console.key))
+</p><pre><code class="prettyprint lang-scala">projA / Compile / console / scalacOptions
+</code></pre><p>これは以下のスコープ付きキーを sbt 1.1 で導入されたスラッシュ構文で書いたものだ:
+</p><pre><code class="prettyprint lang-scala">scalacOptions in (
+  Select(projA: Reference),
+  Select(Compile: ConfigKey),
+  Select(console.key)
+)
 </code></pre><h4 id="%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E8%BB%B8%E3%81%AB%E3%82%88%E3%82%8B%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%91">サブプロジェクト軸によるスコープ付け<a href="#%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E8%BB%B8%E3%81%AB%E3%82%88%E3%82%8B%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%91" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><a href="Multi-Project.html">一つのビルドに複数のプロジェクトを入れる</a>場合、それぞれのプロジェクトにセッティングが必要だ。
 つまり、キーはプロジェクトによりスコープ付けされる。
 </p><p>プロジェクト軸は <code>ThisBuild</code> という「ビルド全体」を表す値に設定することもでき、その場合はセッティングは単一のプロジェクトではなくビルド全体に適用される。
@@ -98,114 +100,115 @@
 </p><h4 id="%E3%82%BF%E3%82%B9%E3%82%AF%E8%BB%B8%E3%81%AB%E3%82%88%E3%82%8B%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%91">タスク軸によるスコープ付け<a href="#%E3%82%BF%E3%82%B9%E3%82%AF%E8%BB%B8%E3%81%AB%E3%82%88%E3%82%8B%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%91" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>セッティングはタスクの動作に影響を与えることもできる。例えば、<code>packageSrc</code> は <code>packageOptions</code> セッティングの影響を受ける。
 </p><p>これをサポートするため、（<code>packageSrc</code> のような）タスクキーは、（<code>packageOption</code> のような）別のキーのスコープとなりえる。
 </p><p>パッケージを構築するさまざまなタスク（<code>packageSrc</code>、<code>packageBin</code>、<code>packageDoc</code>）は、<code>artifactName</code> や <code>packageOption</code> などのパッケージ関連のキーを共有することができる。これらのキーはそれぞれのパッケージタスクに対して独自の値を取ることができる。
-</p><h4 id="%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%90%E3%83%AB%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E6%88%90%E5%88%86">グローバルスコープ成分<a href="#%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%90%E3%83%AB%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E6%88%90%E5%88%86" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>それぞれのスコープ軸は、その軸の型のインスタンスを代入する（例えば、タスク軸にはタスクを代入する）か、
-もしくは、<code>Global</code> という特殊な値を代入することができる。これは <code>*</code> とも表記される。つまり、<code>Global</code> は <code>None</code> と同様だと考えることができる。
-</p><p><code>*</code> は全てのスコープ軸に対応する普遍的なフォールバックであるが、多くの場合直接それを使うのは sbt 本体もしくはプラグインの作者に限定されるべきだ。
-</p><p>分かりづらいことに、ビルド定義内で <code>someKey in Global</code> と書いた場合、暗黙の変換によってこれは <code>someKey in (Global, Global, Global)</code> に変換される。
-</p><h3 id="%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%81%8B%E3%82%89%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%82%92%E5%8F%82%E7%85%A7%E3%81%99%E3%82%8B">ビルド定義からスコープを参照する<a href="#%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%81%8B%E3%82%89%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%82%92%E5%8F%82%E7%85%A7%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> で裸のキーを使ってセッティングを作った場合は、(現プロジェクト, <code>Global</code> コンフィグレーション, <code>Global</code> タスク) にスコープ付けされる:
+</p><h4 id="Zero+%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E6%88%90%E5%88%86">Zero スコープ成分<a href="#Zero+%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E6%88%90%E5%88%86" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>各スコープ軸は、<code>Some(_)</code> のようにその軸の型のインスタンスを持つか、<code>Zero</code> という特殊な値を持つことができる。
+つまり、<code>Zero</code> は <code>None</code> と同様だと考えることができる。
+</p><p><code>Zero</code> は全てのスコープ軸に対応する普遍的なフォールバックであるが、多くの場合直接それを使うのは sbt 本体もしくはプラグインの作者に限定されるべきだ。
+</p><p><code>Global</code> は、全ての軸を <code>Zero</code> とするスコープ、<code>Zero / Zero / Zero</code> だ。そのため、<code>Global / someKey</code> は <code>Zero / Zero / Zero / someKey</code> を略記したものだと考えることができる。
+</p><h3 id="%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%81%8B%E3%82%89%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%82%92%E5%8F%82%E7%85%A7%E3%81%99%E3%82%8B">ビルド定義からスコープを参照する<a href="#%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9%E3%81%8B%E3%82%89%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%82%92%E5%8F%82%E7%85%A7%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> で裸のキーを使ってセッティングを作った場合は、(現プロジェクト / コンフィグレーション <code>Zero</code> / タスク <code>Zero</code>) にスコープ付けされる:
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
   .settings(
     name := &quot;hello&quot;
   )
-</code></pre><p>sbt を実行して、<code>inspect name</code> と入力して、キーが　<code>{file:/home/hp/checkout/hello/}default-aea33a/*:name</code> により提供されていることを確認しよう。つまり、プロジェクトは、<code>{file:/home/hp/checkout/hello/}default-aea33a</code> で、コンフィギュレーションは <code>*</code> で、タスクは表示されていない（グローバルを指す）ということだ。
-</p><p>右辺項に置かれた裸のキーも (現プロジェクト, <code>Global</code> コンフィグレーション, <code>Global</code> タスク) にスコープ付けされる:
+</code></pre><p>sbt を実行して、<code>inspect name</code> と入力して、キーが
+<code>ProjectRef(uri(&quot;file:/private/tmp/hello/&quot;), &quot;root&quot;) / name</code> により提供されていることを確認しよう。つまり、プロジェクトは、
+<code>ProjectRef(uri(&quot;file:/private/tmp/hello/&quot;), &quot;root&quot;)</code> で、コンフィギュレーション軸もタスク軸も表示されない (これは <code>Zero</code> を意味する)。
+</p><p>右辺項に置かれた裸のキーも (現プロジェクト / コンフィグレーション <code>Zero</code> / タスク <code>Zero</code>) にスコープ付けされる:
 </p><pre><code class="prettyprint lang-scala">organization := name.value
-</code></pre><p>キーにはオーバーロードされた <code>.in</code> メソッドがあり、それによりスコープを設定できる。
-<code>.in(...)</code> への引数として、どのスコープ軸のインスタンスでも渡すことができる。
+</code></pre><p>全てのスコープ軸の型には <code>/</code> 演算子が導入されている。
+<code>/</code> は引数としてキーもしくは別のスコープ軸を受け取ることができる。
 これをやる意味は全くないけど、例として <code>Compile</code> コンフィギュレーションでスコープ付けされた <code>name</code> の設定を以下に示す:
-</p><pre><code class="prettyprint lang-scala">name in Compile := &quot;hello&quot;
+</p><pre><code class="prettyprint lang-scala">Compile / name := &quot;hello&quot;
 </code></pre><p>また、<code>packageBin</code> タスクでスコープ付けされた <code>name</code> の設定（これも意味なし！ただの例だよ）:
-</p><pre><code class="prettyprint lang-scala">name in packageBin := &quot;hello&quot;
+</p><pre><code class="prettyprint lang-scala">packageBin / name := &quot;hello&quot;
 </code></pre><p>もしくは、例えば <code>Compile</code> コンフィギュレーションの <code>packageBin</code> の <code>name</code> など、複数のスコープ軸でスコープ付けする:
-</p><pre><code class="prettyprint lang-scala">name in (Compile, packageBin) := &quot;hello&quot;
+</p><pre><code class="prettyprint lang-scala">Compile / packageBin / name := &quot;hello&quot;
 </code></pre><p>もしくは、全ての軸に対して <code>Global</code> を使う:
-</p><pre><code class="prettyprint lang-scala">// concurrentRestrictions in (Global, Global, Global) と同じ
-concurrentRestrictions in Global := Seq(
+</p><pre><code class="prettyprint lang-scala">// same as Zero / Zero / Zero / concurrentRestrictions
+Global / concurrentRestrictions := Seq(
   Tags.limitAll(1)
 )
-</code></pre><p>（<code>concurrentRestrictions in Global</code> は、<code>concurrentRestrictions in (Global, Global, Global)</code> へと暗黙の変換が行われ、全ての軸を <code>Global</code> に設定する。
-タスクとコンフィギュレーションは既にデフォルトで <code>Global</code> であるため、事実上行なっているのはプロジェクトを <code>Global</code> に指定することだ。つまり、<code>{file:/home/hp/checkout/hello/}default-aea33a/*:concurrentRestrictions</code> ではなく、<code>*/*:concurrentRestrictions</code> が定義される。）
+</code></pre><p>（<code>Global / concurrentRestrictions</code> は、<code>Zero / Zero / Zero / concurrentRestrictions</code> へと暗黙の変換が行われ、全ての軸を <code>Zero</code> に設定する。
+タスクとコンフィギュレーションは既にデフォルトで <code>Zero</code> であるため、事実上行なっているのはプロジェクトを <code>Zero</code> に指定することだ。つまり、<code>ProjectRef(uri(&quot;file:/tmp/hello/&quot;), &quot;root&quot;) / Zero / Zero / concurrentRestrictions</code> ではなく、<code>Zero / Zero / Zero / concurrentRestrictions</code> が定義される。）
 </p><h3 id="sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%8B%E3%82%89%E3%81%AE%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%8D%E3%82%AD%E3%83%BC%E3%81%AE%E5%8F%82%E7%85%A7%E6%96%B9%E6%B3%95">sbt シェルからのスコープ付きキーの参照方法<a href="#sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%8B%E3%82%89%E3%81%AE%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%8D%E3%82%AD%E3%83%BC%E3%81%AE%E5%8F%82%E7%85%A7%E6%96%B9%E6%B3%95" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>コマンドラインと sbt シェルにおいて、sbt はスコープ付きキーを以下のように表示する（そして、パースする）:
-</p><pre><code class="">{&lt;ビルド-uri&gt;}&lt;プロジェクト-id&gt;/コンフィギュレーション:タスクキー::キー
-</code></pre><ul><li><code>{&lt;ビルド-uri&gt;}&lt;プロジェクト-id&gt;</code> は、サブプロジェクト軸を特定する。&lt;プロジェクト-id&gt; がなければ、サブプロジェクト軸は「ビルド全体」スコープとなる。
-</li><li><code>コンフィギュレーション</code> は、コンフィギュレーション軸を特定する。
-</li><li><code>タスクキー</code> は、タスク軸を特定する。
+</p><pre><code class="">ref / Config / intask / キー
+</code></pre><ul><li><code>ref</code> は、サブプロジェクト軸を特定する。これは <code>&lt;プロジェクト-id&gt;</code>、<code>ProjectRef(uri(&quot;file:...&quot;), &quot;id&quot;)</code>、もしくは「ビルド全体」を意味する <code>ThisBuild</code> という値を取ることができる。
+</li><li><code>Config</code> は、コンフィギュレーション軸を特定し、大文字から始まる Scala 識別子を使う。
+</li><li><code>intask</code> は、タスク軸を特定する。
 </li><li><code>キー</code> は、スコープ付けされるキーを特定する。
-</li></ul><p>全ての軸において、<code>*</code> を使って <code>Global</code> スコープを表すことができる。
+</li></ul><p>全ての軸において、<code>Zero</code> を使うことができる。
 </p><p>スコープ付きキーの一部を省略すると、以下の手順で推論される:
 </p><ul><li>プロジェクトを省略した場合は、カレントプロジェクトが使われる。
-</li><li>コンフィグレーションを省略した場合は、キーに依存したコンフィギュレーションが自動検知される。
-</li><li>タスクを省略した場合は、<code>Global</code> タスクが使われる。
+</li><li><code>Config</code> もしくは <code>intask</code> を省略した場合は、キーに依存したコンフィギュレーションが自動検知される。
 </li></ul><p>さらに詳しくは、<a href="../../docs/Inspecting-Settings.html">Interacting with the Configuration System</a> 参照。
-</p><h3 id="%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%8D%E3%82%AD%E3%83%BC%E3%81%AE%E8%A1%A8%E8%A8%98%E4%BE%8B">スコープ付きキーの表記例<a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%8D%E3%82%AD%E3%83%BC%E3%81%AE%E8%A1%A8%E8%A8%98%E4%BE%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li><code>fullClasspath</code> はキーのみを指定し、デフォルトスコープを用いる。ここでは、カレントプロジェクト、キーに依存したコンフィギュレーション、グローバルタスクスコープとなる。
-</li><li><code>test:fullClasspath</code> はコンフィギュレーションを指定する。つまりプロジェクト軸とタスク軸はデフォルトを用いつつも <code>test</code>コンフィギュレーションにおける <code>fullClasspath</code> というキーを表す。
-</li><li><code>*:fullClasspath</code> はデフォルトコンフィギュレーションを用いずに <code>Global</code> コンフィギュレーションを用いる事を明示している。
-</li><li><code>doc::fullClasspath</code> はプロジェクト軸とコンフィギュレーション軸はデフォルトを用いつつ、 <code>doc</code> タスクスコープにおける <code>fullClasspath</code> というキーを表す。
-</li><li><code>{file:/home/hp/checkout/hello/}default-aea33a/test:fullClasspath</code> は <code>{file:/home/hp/checkout/hello/}</code> をルートディレクトリにビルドした際に含まれる <code>default-aea33a</code> というプロジェクトを指定している。さらにこのプロジェクト内の <code>test</code> コンフィギュレーションを用いる事も明示している。
-</li><li><code>{file:/home/hp/checkout/hello/}/test:fullClasspath</code> は <code>{file:/home/hp/checkout/hello/}</code> のビルド全体をプロジェクトの軸とする。
-</li><li><code>{.}/test:fullClasspath</code> は <code>{.}</code> で指定されたルートディレクトリのビルド全体をプロジェクト軸に取る。<code>{.}</code> は Scala code において <code>ThisBuild</code> と記述できる。
-</li><li><code>{file:/home/hp/checkout/hello/}/compile:doc::fullClasspath</code> は3つのスコープ軸全てを指定している。
+</p><h3 id="sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%A7%E3%81%AE%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%8D%E3%82%AD%E3%83%BC%E3%81%AE%E8%A1%A8%E8%A8%98%E4%BE%8B">sbt シェルでのスコープ付きキーの表記例<a href="#sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%A7%E3%81%AE%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E4%BB%98%E3%81%8D%E3%82%AD%E3%83%BC%E3%81%AE%E8%A1%A8%E8%A8%98%E4%BE%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li><code>fullClasspath</code> はキーのみを指定し、デフォルトスコープを用いる。ここでは、カレントプロジェクト、キーに依存したコンフィギュレーション、<code>Zero</code> タスクスコープとなる。
+</li><li><code>Test / fullClasspath</code> はコンフィギュレーションを指定する。つまりプロジェクト軸とタスク軸はデフォルトを用いつつも <code>Test</code>コンフィギュレーションにおける <code>fullClasspath</code> というキーを表す。
+</li><li><code>root / fullClasspath</code> は <code>root</code> というプロジェクトid によって特定されるプロジェクトをプロジェクト軸に指定する。
+</li><li><code>root / Zero / fullClasspath</code> は <code>root</code> プロジェクトと、デフォルトのコンフィギュレーションの代わりに <code>Zero</code> をコンフィギュレーション軸に指定する。
+</li><li><code>doc / fullClasspath</code> は <code>fullClasspath</code> キーを <code>doc</code> タスク、プロジェクト軸とコンフィギュレーション軸はデフォルト値へと指定する。
+</li><li><code>ProjectRef(uri(&quot;file:/tmp/hello/&quot;), &quot;root&quot;) / Test / fullClasspath</code>
+はプロジェクト <code>ProjectRef(uri(&quot;file:/tmp/hello/&quot;), &quot;root&quot;)</code>、Test コンフィギュレーション、デフォルトのタスク軸を指定する。
+</li><li><code>ThisBuild / version</code> はプロジェクト軸をこの「ビルド全体」である <code>ThisBuild</code>、デフォルトのコンフィギュレーション軸へと指定する。
+</li><li><code>Zero / fullClasspath</code> はプロジェクト軸を <code>Zero</code>、コンフィギュレーション軸をデフォルト値へと指定する。
+</li><li><code>root / Compile / doc / fullClasspath</code> は 3つ全てのスコープ軸を指定する。
 </li></ul><h3 id="%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%81%AE%E6%A4%9C%E6%9F%BB">スコープの検査<a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%81%AE%E6%A4%9C%E6%9F%BB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt シェルで <code>inspect</code> コマンドを使ってキーとそのスコープを把握することができる。
-例えば、<code>inspect test:full-classpath</code> と試してみよう:
+例えば、<code>inspect Test/fullClasspath</code> と試してみよう:
 </p><pre><code class="">$ sbt
-&gt; inspect test:fullClasspath
-[info] Task: scala.collection.Seq[sbt.Attributed[java.io.File]]
+sbt:Hello&gt; inspect Test / fullClasspath
+[info] Task: scala.collection.Seq[sbt.internal.util.Attributed[java.io.File]]
 [info] Description:
 [info]  The exported classpath, consisting of build products and unmanaged and managed, internal and external dependencies.
 [info] Provided by:
-[info]  {file:/home/hp/checkout/hello/}default-aea33a/test:fullClasspath
+[info]  ProjectRef(uri(&quot;file:/tmp/hello/&quot;), &quot;root&quot;) / Test / fullClasspath
+[info] Defined at:
+[info]  (sbt.Classpaths.classpaths) Defaults.scala:1639
 [info] Dependencies:
-[info]  test:exportedProducts
-[info]  test:dependencyClasspath
+[info]  Test / dependencyClasspath
+[info]  Test / exportedProducts
+[info]  Test / fullClasspath / streams
 [info] Reverse dependencies:
-[info]  test:runMain
-[info]  test:run
-[info]  test:testLoader
-[info]  test:console
+[info]  Test / testLoader
 [info] Delegates:
-[info]  test:fullClasspath
-[info]  runtime:fullClasspath
-[info]  compile:fullClasspath
-[info]  *:fullClasspath
-[info]  {.}/test:fullClasspath
-[info]  {.}/runtime:fullClasspath
-[info]  {.}/compile:fullClasspath
-[info]  {.}/*:fullClasspath
-[info]  */test:fullClasspath
-[info]  */runtime:fullClasspath
-[info]  */compile:fullClasspath
-[info]  */*:fullClasspath
+[info]  Test / fullClasspath
+[info]  Runtime / fullClasspath
+[info]  Compile / fullClasspath
+[info]  fullClasspath
+[info]  ThisBuild / Test / fullClasspath
+[info]  ThisBuild / Runtime / fullClasspath
+[info]  ThisBuild / Compile / fullClasspath
+[info]  ThisBuild / fullClasspath
+[info]  Zero / Test / fullClasspath
+[info]  Zero / Runtime / fullClasspath
+[info]  Zero / Compile / fullClasspath
+[info]  Global / fullClasspath
 [info] Related:
-[info]  compile:fullClasspath
-[info]  compile:fullClasspath(for doc)
-[info]  test:fullClasspath(for doc)
-[info]  runtime:fullClasspath
+[info]  Compile / fullClasspath
+[info]  Runtime / fullClasspath
 </code></pre><p>一行目からこれが（<a href="Basic-Def.html">.sbt ビルド定義</a>で説明されているとおり、セッティングではなく）タスクであることが分かる。
 このタスクの戻り値は <code>scala.collection.Seq[sbt.Attributed[java.io.File]]</code> の型をとる。
 </p><p>“Provided by” は、この値を定義するスコープ付きキーを指し、この場合は、
-<code>{file:/home/hp/checkout/hello/}default-aea33a/test:fullClasspath</code>
-（<code>test</code> コンフィギュレーションと <code>{file:/home/hp/checkout/hello/}default-aea33a</code> プロジェクトにスコープ付けされた <code>fullClasspath</code> キー）。
+<code>ProjectRef(uri(&quot;file:/tmp/hello/&quot;), &quot;root&quot;) / Test / fullClasspath</code>
+（<code>Test</code> コンフィギュレーションと <code>ProjectRef(uri(&quot;file:/tmp/hello/&quot;), &quot;root&quot;)</code> プロジェクトにスコープ付けされた <code>fullClasspath</code> キー）。
 </p><p>“Dependencies” に関しては、<a href="Task-Graph.html">前のページ</a>で解説した。
 </p><p>“Delegates” (委譲) に関してはまた後で。
-</p><p>今度は、（<code>inspect test:full-class</code> のかわりに）<code>inspect fullClasspath</code> を試してみて、違いをみてみよう。
-コンフィグレーションが省略されたため、<code>compile</code> だと自動検知される。
-そのため、<code>inspect compile:fullClasspath</code> は <code>inspect fullClasspath</code> と同じになるはずだ。
-</p><p>次に、<code>inspect *:fullClasspath</code> も実行して違いを比べてみよう。
-<code>fullClasspath</code> はデフォルトでは、<code>Global</code> スコープには定義されていない。
+</p><p>今度は、（<code>inspect Test/fullClasspath</code> のかわりに）<code>inspect fullClasspath</code> を試してみて、違いをみてみよう。
+コンフィグレーションが省略されたため、<code>Compile</code> だと自動検知される。
+そのため、<code>inspect Compile/fullClasspath</code> は <code>inspect fullClasspath</code> と同じになるはずだ。
+</p><p>次に、<code>inspect ThisBuild / Zero / fullClasspath</code> も実行して違いを比べてみよう。
+<code>fullClasspath</code> はデフォルトでは、<code>Zero</code> スコープには定義されていない。
 </p><p>より詳しくは、<a href="../../docs/Inspecting-Settings.html">Interacting with the Configuration System</a> 参照。
 </p><h3 id="%E3%81%84%E3%81%A4%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%82%92%E6%8C%87%E5%AE%9A%E3%81%99%E3%82%8B%E3%81%B9%E3%81%8D%E3%81%8B">いつスコープを指定するべきか<a href="#%E3%81%84%E3%81%A4%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%82%92%E6%8C%87%E5%AE%9A%E3%81%99%E3%82%8B%E3%81%B9%E3%81%8D%E3%81%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>あるキーが、通常スコープ付けされている場合は、スコープを指定してそのキーを使う必要がある。
 例えば、<code>compile</code> タスクは、デフォルトで <code>Compile</code> と <code>Test</code> コンフィギュレーションにスコープ付けされているけど、
 これらのスコープ外には存在しない。
-</p><p>そのため、<code>compile</code> キーに関連付けられた値を変更するには、<code>compile in Compile</code> か <code>compile in Test</code> のどちらかを書く必要がある。
+</p><p>そのため、<code>compile</code> キーに関連付けられた値を変更するには、<code>Compile / compile</code> か <code>Test / compile</code> のどちらかを書く必要がある。
 素の <code>compile</code> を使うと、コンフィグレーションにスコープ付けされた標準のコンパイルタスクをオーバーライドするかわりに、カレントプロジェクトにスコープ付けされた新しいコンパイルタスクを定義してしまう。
 </p><p><em>“Reference to undefined setting“</em> のようなエラーに遭遇した場合は、スコープを指定していないか、間違ったスコープを指定したことによることが多い。
 君が使っているキーは何か別のスコープの中で定義されている可能性がある。
-エラーメッセージの一部として sbt は、君が意味したであろうものを推測してくれるから、“Did you mean compile:compile?” を探そう。
-</p><p>キーの名前はキーの<em>一部</em>であると考えることもできる。
+エラーメッセージの一部として sbt は、意味したであろうものを推測してくれるから、“Did you mean Compile / compile?” を探そう。
+</p><p>キーの名前はキーの<strong>一部</strong>でしかないと考えることもできる。
 実際の所は、全てのキーは名前と（三つの軸を持つ）スコープによって構成される。
-つまり、<code>packageOptions in (Compile, packageBin)</code> という式全体でキー名だということだ。
+つまり、<code>Compile / packageBin / packageOptions</code> という式全体でキー名だということだ。
 単に <code>packageOptions</code> と言っただけでもキー名だけど、それは別のキーだ
-（<code>in</code> 無しのキーのスコープは暗黙で決定され、現プロジェクト、<code>Global</code> コンフィグレーション、<code>Global</code> タスクとなる）。
+（スラッシュ無しのキーのスコープは暗黙で決定され、現プロジェクト、<code>Zero</code> コンフィグレーション、<code>Zero</code> タスクとなる）。
 </p><h3 id="%E3%83%93%E3%83%AB%E3%83%89%E3%83%AC%E3%83%99%E3%83%AB%E3%83%BB%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0">ビルドレベル・セッティング<a href="#%E3%83%93%E3%83%AB%E3%83%89%E3%83%AC%E3%83%99%E3%83%AB%E3%83%BB%E3%82%BB%E3%83%83%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>サブプロジェクト間に共通なセッティングを一度に定義するための上級テクニックとしてセッティングを
 <code>ThisBuild</code> にスコープ付けするという方法がある。
 </p><p>もし特定のサブプロジェクトにスコープ付けされたキーが見つから無かった場合、

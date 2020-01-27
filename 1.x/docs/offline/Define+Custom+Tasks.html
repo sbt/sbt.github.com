@@ -51,8 +51,8 @@ lazy val client = project.in(file(&quot;./client&quot;))
 lazy val myTestTask = taskKey[Unit](&quot;my test task&quot;)
 
 myTestTask := {
-  (test in (core, Test)).value
-  (test in (tools, Test)).value
+  (core / Test / test).value
+  (tools / Test / test).value
 }
 </code></pre><div class="bottom nav">
                 <div class="row">

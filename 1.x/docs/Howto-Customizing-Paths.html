@@ -48,9 +48,9 @@ library directories and what files get included from them.
 <code>src/main/scala</code>. For test Scala sources, it is <code>src/test/scala</code>. To
 change this, modify <code>scalaSource</code> in the <code>Compile</code> (for main sources) or
 <code>Test</code> (for test sources). For example,
-</p><pre><code class="prettyprint lang-scala">scalaSource in Compile := baseDirectory.value / &quot;src&quot;
+</p><pre><code class="prettyprint lang-scala">Compile / scalaSource := baseDirectory.value / &quot;src&quot;
 
-scalaSource in Test := baseDirectory.value / &quot;test-src&quot;
+Test / scalaSource := baseDirectory.value / &quot;test-src&quot;
 </code></pre><blockquote><p><strong>Note</strong>: The Scala source directory can be the same as the Java source
 directory.
 </p></blockquote><a name="java-source-directory"></a><h3 id="Change+the+default+Java+source+directory">Change the default Java source directory<a href="#Change+the+default+Java+source+directory" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The directory that contains the main Java sources is by default
@@ -58,9 +58,9 @@ directory.
 this, modify <code>javaSource</code> in the <code>Compile</code> (for main sources) or <code>Test</code>
 (for test sources).
 </p><p>For example,
-</p><pre><code class="prettyprint lang-scala">javaSource in Compile := baseDirectory.value / &quot;src&quot;
+</p><pre><code class="prettyprint lang-scala">Compile / javaSource := baseDirectory.value / &quot;src&quot;
 
-javaSource in Test := baseDirectory.value / &quot;test-src&quot;
+Test / javaSource := baseDirectory.value / &quot;test-src&quot;
 </code></pre><blockquote><p><strong>Note</strong>: The Scala source directory can be the same as the Java source
 directory.
 </p></blockquote><a name="resource-directory"></a><h3 id="Change+the+default+resource+directory">Change the default resource directory<a href="#Change+the+default+resource+directory" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The directory that contains the main resources is by default
@@ -68,9 +68,9 @@ directory.
 change this, modify <code>resourceDirectory</code> in either the <code>Compile</code> or
 <code>Test</code> configuration.
 </p><p>For example,
-</p><pre><code class="prettyprint lang-scala">resourceDirectory in Compile := baseDirectory.value / &quot;resources&quot;
+</p><pre><code class="prettyprint lang-scala">Compile / resourceDirectory := baseDirectory.value / &quot;resources&quot;
 
-resourceDirectory in Test := baseDirectory.value / &quot;test-resources&quot;
+Test / resourceDirectory := baseDirectory.value / &quot;test-resources&quot;
 </code></pre><a name="unmanaged-base-directory"></a><h3 id="Change+the+default+%28unmanaged%29+library+directory">Change the default (unmanaged) library directory<a href="#Change+the+default+%28unmanaged%29+library+directory" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The directory that contains the unmanaged libraries is by default
 <code>lib/</code>. To change this, modify <code>unmanagedBase</code>. This setting can be
 changed at the project level or in the <code>Compile</code>, <code>Runtime</code>, or <code>Test</code>
@@ -83,7 +83,7 @@ directory for all configurations. For example, the following declares
 directory containing libraries for that configuration, overriding the
 default. For example, the following declares <code>lib/main/</code> to contain jars
 only for <code>Compile</code> and not for running or testing:
-</p><pre><code class="prettyprint lang-scala">unmanagedBase in Compile := baseDirectory.value / &quot;lib&quot; / &quot;main&quot;
+</p><pre><code class="prettyprint lang-scala">Compile / unmanagedBase := baseDirectory.value / &quot;lib&quot; / &quot;main&quot;
 </code></pre><a name="disable-base-sources"></a><h3 id="Disable+using+the+project%E2%80%99s+base+directory+as+a+source+directory">Disable using the project’s base directory as a source directory<a href="#Disable+using+the+project%E2%80%99s+base+directory+as+a+source+directory" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>By default, sbt includes <code>.scala</code> files from the project’s base
 directory as main source files. To disable this, configure
 <code>sourcesInBase</code>:
@@ -93,7 +93,7 @@ default consists of <code>scalaSource</code> and <code>javaSource</code>. Add a 
 <code>unmanagedSourceDirectories</code> in the appropriate configuration to add a
 source directory. For example, to add <code>extra-src</code> to be an additional
 directory containing main sources,
-</p><pre><code class="prettyprint lang-scala">unmanagedSourceDirectories in Compile += baseDirectory.value / &quot;extra-src&quot;
+</p><pre><code class="prettyprint lang-scala">Compile / unmanagedSourceDirectories += baseDirectory.value / &quot;extra-src&quot;
 </code></pre><blockquote><p><strong>Note</strong>: This directory should only contain unmanaged sources, which are
 sources that are manually created and managed. See
 [Generating Files][Howto-Generating-Files] for working with automatically generated sources.
@@ -102,7 +102,7 @@ default consists of <code>resourceDirectory</code>. Add a directory to
 <code>unmanagedResourceDirectories</code> in the appropriate configuration to add
 another resource directory. For example, to add <code>extra-resources</code> to be
 an additional directory containing main resources,
-</p><pre><code class="prettyprint lang-scala">unmanagedResourceDirectories in Compile += baseDirectory.value / &quot;extra-resources&quot;
+</p><pre><code class="prettyprint lang-scala">Compile / unmanagedResourceDirectories += baseDirectory.value / &quot;extra-resources&quot;
 </code></pre><blockquote><p><strong>Note</strong>: This directory should only contain unmanaged resources, which are
 resources that are manually created and managed. See
 [Generating Files][Howto-Generating-Files] for working with automatically generated
@@ -115,12 +115,11 @@ match <code>excludeFilter</code>. <code>includeFilter</code> and <code>excludeFi
 <code>FileFilter</code>. For example, in addition to the default hidden files
 exclusion, the following also ignores files containing <code>impl</code> in their
 name,
-</p><pre><code class="prettyprint lang-scala">excludeFilter in unmanagedSources := HiddenFileFilter || &quot;*impl*&quot;
+</p><pre><code class="prettyprint lang-scala">unmanagedSources / excludeFilter := HiddenFileFilter || &quot;*impl*&quot;
 </code></pre><p>To have different filters for main and test libraries, configure
 <code>Compile</code> and <code>Test</code> separately:
-</p><pre><code class="prettyprint lang-scala">includeFilter in (Compile, unmanagedSources) := &quot;*.scala&quot; || &quot;*.java&quot;
-
-includeFilter in (Test, unmanagedSources) := HiddenFileFilter || &quot;*impl*&quot;
+</p><pre><code class="prettyprint lang-scala">Compile / unmanagedSources / includeFilter := &quot;*.scala&quot; || &quot;*.java&quot;
+Test / unmanagedSources / includeFilter := HiddenFileFilter || &quot;*impl*&quot;
 </code></pre><blockquote><p><strong>Note</strong>: By default, sbt includes <code>.scala</code> and <code>.java</code> sources, excluding hidden
 files.
 </p></blockquote><a name="resource-include-filter"></a><h3 id="Include%2Fexclude+files+in+the+resource+directory">Include/exclude files in the resource directory<a href="#Include%2Fexclude+files+in+the+resource+directory" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>When sbt traverses <code>unmanagedResourceDirectories</code> for resources, it only
@@ -131,12 +130,11 @@ match <code>excludeFilter</code>. <code>includeFilter</code> and <code>excludeFi
 <code>FileFilter</code>. For example, in addition to the default hidden files
 exclusion, the following also ignores files containing <code>impl</code> in their
 name,
-</p><pre><code class="prettyprint lang-scala">excludeFilter in unmanagedResources := HiddenFileFilter || &quot;*impl*&quot;
+</p><pre><code class="prettyprint lang-scala">unmanagedResources / excludeFilter := HiddenFileFilter || &quot;*impl*&quot;
 </code></pre><p>To have different filters for main and test libraries, configure
 <code>Compile</code> and <code>Test</code> separately:
-</p><pre><code class="prettyprint lang-scala">includeFilter in (Compile, unmanagedResources) := &quot;*.txt&quot;
-
-includeFilter in (Test, unmanagedResources) := &quot;*.html&quot;
+</p><pre><code class="prettyprint lang-scala">Compile / unmanagedResources / includeFilter := &quot;*.txt&quot;
+Test / unmanagedResources / includeFilter := &quot;*.html&quot;
 </code></pre><blockquote><p><strong>Note</strong>: By default, sbt includes all files that are not hidden.
 </p></blockquote><a name="lib-include-filter"></a><h3 id="Include+only+certain+%28unmanaged%29+libraries">Include only certain (unmanaged) libraries<a href="#Include+only+certain+%28unmanaged%29+libraries" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>When sbt traverses <code>unmanagedBase</code> for resources, it only includes
 directories and files that match <code>includeFilter</code> and do not match
@@ -145,12 +143,11 @@ directories and files that match <code>includeFilter</code> and do not match
 <a href="Paths.html#file-filter">provides some useful combinators</a> for constructing a
 <code>FileFilter</code>. For example, in addition to the default hidden files
 exclusion, the following also ignores zips,
-</p><pre><code class="prettyprint lang-scala">excludeFilter in unmanagedJars := HiddenFileFilter || &quot;*.zip&quot;
+</p><pre><code class="prettyprint lang-scala">unmanagedJars / excludeFilter := HiddenFileFilter || &quot;*.zip&quot;
 </code></pre><p>To have different filters for main and test libraries, configure
 <code>Compile</code> and <code>Test</code> separately:
-</p><pre><code class="prettyprint lang-scala">includeFilter in (Compile, unmanagedJars) := &quot;*.jar&quot;
-
-includeFilter in (Test, unmanagedJars) := &quot;*.jar&quot; || &quot;*.zip&quot;
+</p><pre><code class="prettyprint lang-scala">Compile / unmanagedJars / includeFilter := &quot;*.jar&quot;
+Test / unmanagedJars / includeFilter := &quot;*.jar&quot; || &quot;*.zip&quot;
 </code></pre><blockquote><p><strong>Note</strong>: By default, sbt includes jars, zips, and native dynamic libraries,
 excluding hidden files.
 </p></blockquote><div class="bottom nav">

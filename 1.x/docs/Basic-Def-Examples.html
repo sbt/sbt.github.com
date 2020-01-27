@@ -53,6 +53,9 @@ ThisBuild / scalaVersion := &quot;2.12.10&quot;
 // set the Scala version used for the project
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
+// set the prompt (for this build) to include the project id.
+ThisBuild / shellPrompt := { state =&gt; Project.extract(state).currentRef.project + &quot;&gt; &quot; }
+
 // define ModuleID for library dependencies
 lazy val scalacheck = &quot;org.scalacheck&quot; %% &quot;scalacheck&quot; % &quot;1.13.4&quot;
 
@@ -67,10 +70,10 @@ lazy val root = (project in file(&quot;.&quot;))
     name := &quot;My Project&quot;,
 
     // set the main Scala source directory to be &lt;base&gt;/src
-    scalaSource in Compile := baseDirectory.value / &quot;src&quot;,
+    Compile / scalaSource := baseDirectory.value / &quot;src&quot;,
 
     // set the Scala test source directory to be &lt;base&gt;/test
-    scalaSource in Test := baseDirectory.value / &quot;test&quot;,
+    Test / scalaSource := baseDirectory.value / &quot;test&quot;,
 
     // add a test dependency on ScalaCheck
     libraryDependencies += scalacheck % Test,
@@ -99,16 +102,16 @@ lazy val root = (project in file(&quot;.&quot;))
       |}&quot;&quot;&quot;.stripMargin,
 
     // set the initial commands when entering 'console' or 'consoleQuick', but not 'consoleProject'
-    initialCommands in console := &quot;import myproject._&quot;,
+    console / initialCommands := &quot;import myproject._&quot;,
 
     // set the main class for packaging the main jar
     // 'run' will still auto-detect and prompt
     // change Compile to Test to set it for the test jar
-    mainClass in (Compile, packageBin) := Some(&quot;myproject.MyMain&quot;),
+    Comile / packageBin / mainClass := Some(&quot;myproject.MyMain&quot;),
 
     // set the main class for the main 'run' task
     // change Compile to Test to set it for 'test:run'
-    mainClass in (Compile, run) := Some(&quot;myproject.MyMain&quot;),
+    Compile / run / mainClass := Some(&quot;myproject.MyMain&quot;),
 
     // add &lt;base&gt;/input to the files that '~' triggers on
     watchSources += baseDirectory.value / &quot;input&quot;,
@@ -128,9 +131,6 @@ lazy val root = (project in file(&quot;.&quot;))
     // disable updating dynamic revisions (including -SNAPSHOT versions)
     offline := true,
 
-    // set the prompt (for this build) to include the project id.
-    shellPrompt in ThisBuild := { state =&gt; Project.extract(state).currentRef.project + &quot;&gt; &quot; },
-
     // set the prompt (for the current project) to include the username
     shellPrompt := { state =&gt; System.getProperty(&quot;user.name&quot;) + &quot;&gt; &quot; },
 
@@ -149,11 +149,11 @@ lazy val root = (project in file(&quot;.&quot;))
     // disable using the Scala version in output paths and artifacts
     crossPaths := false,
 
-    // fork a new JVM for 'run' and 'test:run'
+    // fork a new JVM for 'run' and 'Test/run'
     fork := true,
 
-    // fork a new JVM for 'test:run', but not 'run'
-    fork in Test := true,
+    // fork a new JVM for 'Test/run', but not 'run'
+    Test / fork := true,
 
     // add a JVM option to use when forking a JVM for 'run'
     javaOptions += &quot;-Xmx2G&quot;,
@@ -163,7 +163,7 @@ lazy val root = (project in file(&quot;.&quot;))
 
     // Execute tests in the current project serially
     //   Tests from other projects may still run concurrently.
-    parallelExecution in Test := false,
+    Test / parallelExecution := false,
 
     // set the location of the JDK to use for compiling Java code.
     // if 'fork' is true, this is used for 'run' as well
@@ -173,11 +173,11 @@ lazy val root = (project in file(&quot;.&quot;))
     scalaHome := Some(file(&quot;/home/user/scala/trunk/&quot;)),
 
     // don't aggregate clean (See FullConfiguration for aggregation details)
-    aggregate in clean := false,
+    clean / aggregate := false,
 
     // only show warnings and errors on the screen for compilations.
     //  this applies to both test:compile and compile and is Info by default
-    logLevel in compile := Level.Warn,
+    compile / logLevel := Level.Warn,
 
     // only show warnings and errors on the screen for all tasks (the default is Info)
     //  individual tasks can then be more verbose using the previous setting
@@ -194,16 +194,16 @@ lazy val root = (project in file(&quot;.&quot;))
     traceLevel := 0,
 
     // add SWT to the unmanaged classpath
-    unmanagedJars in Compile += Attributed.blank(file(&quot;/usr/share/java/swt.jar&quot;)),
+    Compile / unmanagedJars += Attributed.blank(file(&quot;/usr/share/java/swt.jar&quot;)),
 
     // publish test jar, sources, and docs
-    publishArtifact in Test := true,
+    Test / publishArtifact := true,
 
     // disable publishing of main docs
-    publishArtifact in (Compile, packageDoc) := false,
+    Compile / packageDoc / publishArtifact := false,
 
     // change the classifier for the docs artifact
-    artifactClassifier in packageDoc := Some(&quot;doc&quot;),
+    packageDoc / artifactClassifier := Some(&quot;doc&quot;),
 
     // Copy all managed dependencies to &lt;build-root&gt;/lib_managed/
     //   This is essentially a project-local cache.  There is only one

@@ -54,8 +54,8 @@
 </p><p>アンマネージ依存性はこんな感じのものだ: jar ファイルを <code>lib</code> 配下に置いておけばプロジェクトのクラスパスに追加される、以上！
 </p><p><a href="http://scalacheck.org">ScalaCheck</a>、<a href="http://specs2.org">Specs2</a>、<a href="http://scalatest.org">ScalaTest</a> のようなテスト用の jar ファイルも <code>lib</code> に配置できる。
 </p><p><code>lib</code> 配下の依存ライブラリは（<code>compile</code>、<code>test</code>、<code>run</code>、そして <code>console</code> の）全てのクラスパスに追加される。
-もし、どれか一つのクラスパスを変えたい場合は、例えば <code>dependencyClasspath in Compile</code> や
-<code>dependencyClasspath in Runtime</code> などを適宜調整する必要がある。
+もし、どれか一つのクラスパスを変えたい場合は、例えば <code>Compile / dependencyClasspath</code> や
+<code>Runtime / dependencyClasspath</code> などを適宜調整する必要がある。
 </p><p>アンマネージ依存性を利用するのに、<code>build.sbt</code> には何も書く必要はないが、デフォルトの <code>lib</code> 以外のディレクトリを使いたい場合は <code>unmanagedBase</code> キーで変更することができる。
 </p><p><code>lib</code> のかわりに、<code>custom_lib</code> を使うならこのようになる:
 </p><pre><code class="prettyprint lang-scala">unmanagedBase := baseDirectory.value / &quot;custom_lib&quot;
@@ -65,7 +65,7 @@
 </p><p>他には、<code>unmangedJars</code> という <code>unmanagedBase</code> ディレクトリに入っている jar ファイルのリストを返すタスクがある。
 複数のディレクトリを使うとか、何か別の複雑なことを行う場合は、この <code>unmanagedJar</code> タスクを何か別のものに変える必要があるかもしれない。
 例えば <code>Compile</code> コンフィギュレーション時に <code>lib</code>ディレクトリのファイルを無視したい、など。
-</p><pre><code class="prettyprint lang-scala">unmanagedJars in Compile := Seq.empty[sbt.Attributed[java.io.File]]
+</p><pre><code class="prettyprint lang-scala">Compile / unmanagedJars := Seq.empty[sbt.Attributed[java.io.File]]
 </code></pre><h3 id="%E3%83%9E%E3%83%8D%E3%83%BC%E3%82%B8%E4%BE%9D%E5%AD%98%E6%80%A7%EF%BC%88Managed+Dependencies%EF%BC%89">マネージ依存性（Managed Dependencies）<a href="#%E3%83%9E%E3%83%8D%E3%83%BC%E3%82%B8%E4%BE%9D%E5%AD%98%E6%80%A7%EF%BC%88Managed+Dependencies%EF%BC%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt は [Apache Ivy] を使ってマネージ依存性を実装しているので、既に Maven か Ivy に慣れているなら、違和感無く入り込めるだろう。
 </p><h4 id="%E3%82%AD%E3%83%BC"><code>libraryDependencies</code> キー<a href="#%E3%82%AD%E3%83%BC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>大体の場合、依存性を <code>libraryDependencies</code> セッティングに列挙するだけでうまくいくだろう。
 Maven POM ファイルや、Ivy コンフィギュレーションファイルを書くなどして、依存性を外部で設定してしまって、

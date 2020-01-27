@@ -88,10 +88,10 @@ task returns a sequence <code>Seq[(File,String)]</code> of mappings from the fil
 to include to the path within the jar. See
 <a href="Mapping-Files.html">mapping files</a> for details on creating these mappings.
 </p><p>For example, to add generated sources to the packaged source artifact:
-</p><pre><code class="prettyprint lang-scala">mappings in (Compile, packageSrc) ++= {
+</p><pre><code class="prettyprint lang-scala">Compile / packageSrc / mappings ++= {
   import Path.{flat, relativeTo}
-  val base = (sourceManaged in Compile).value
-  val srcs = (managedSources in Compile).value
+  val base = (Compile / sourceManaged).value
+  val srcs = (Compile / managedSources).value
   srcs pair (relativeTo(base) | flat)
 }
 </code></pre><p>This takes sources from the <code>managedSources</code> task and relativizes them
@@ -293,7 +293,7 @@ settings = Seq(
 </code></pre><p>This setting varies between the test and compile scopes. The solution is
 use the scoped setting, both as the input to the initializer, and the
 setting that we update.
-</p><pre><code class="prettyprint lang-scala">fullClasspath in Compile := (fullClasspath in Compile).value.filterNot(_.data.name.contains(&quot;commons-io&quot;))
+</p><pre><code class="prettyprint lang-scala">Compile / fullClasspath := (Compile / fullClasspath).value.filterNot(_.data.name.contains(&quot;commons-io&quot;))
 </code></pre><h3 id="Dependency+Management">Dependency Management<a href="#Dependency+Management" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="How+do+I+resolve+a+checksum+error%3F">How do I resolve a checksum error?<a href="#How+do+I+resolve+a+checksum+error%3F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>This error occurs when the published checksum, such as a sha1 or md5
 hash, differs from the checksum computed for a downloaded artifact, such
 as a jar or pom.xml. An example of such an error is:

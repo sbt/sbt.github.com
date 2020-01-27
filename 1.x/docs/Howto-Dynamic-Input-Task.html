@@ -52,7 +52,7 @@ lazy val root = (project in file(&quot;.&quot;))
       import sbt.complete.Parsers.spaceDelimited
       val args = spaceDelimited(&quot;&lt;args&gt;&quot;).parsed
       Def.taskDyn {
-        (run in Compile).toTask(&quot; &quot; + args.mkString(&quot; &quot;)).value
+        (Compile / run).toTask(&quot; &quot; + args.mkString(&quot; &quot;)).value
         openbrowser
       }
     }).evaluated,
@@ -60,33 +60,33 @@ lazy val root = (project in file(&quot;.&quot;))
       println(&quot;open browser!&quot;)
     }
   )
-</code></pre><h4 id="build.sbt+v2">build.sbt v2<a href="#build.sbt+v2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Trying to rewire <code>run in Compile</code> is going to be complicated. Since the reference to the inner <code>run in Compile</code> is already inside the continuation task, simply rewiring <code>runopen</code> to <code>run in Compile</code> will create a cyclic reference.
-To break the cycle, we will introduce a clone of <code>run in Compile</code> called <code>actualRun in Compile</code>:
+</code></pre><h4 id="build.sbt+v2">build.sbt v2<a href="#build.sbt+v2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Trying to rewire <code>Compile / run</code> is going to be complicated. Since the reference to the inner <code>Compile / run</code> is already inside the continuation task, simply rewiring <code>runopen</code> to <code>Compile / run</code> will create a cyclic reference.
+To break the cycle, we will introduce a clone of <code>Compile / run</code> called <code>Compile / actualRun</code>:
 </p><pre><code class="prettyprint lang-scala">lazy val actualRun = inputKey[Unit](&quot;The actual run task&quot;)
 lazy val openbrowser = taskKey[Unit](&quot;open the browser&quot;)
 
 lazy val root = (project in file(&quot;.&quot;))
   .settings(
-    run in Compile := (Def.inputTaskDyn {
+    Compile / run := (Def.inputTaskDyn {
       import sbt.complete.Parsers.spaceDelimited
       val args = spaceDelimited(&quot;&lt;args&gt;&quot;).parsed
       Def.taskDyn {
-        (actualRun in Compile).toTask(&quot; &quot; + args.mkString(&quot; &quot;)).value
+        (Compile / actualRun).toTask(&quot; &quot; + args.mkString(&quot; &quot;)).value
         openbrowser
       }
     }).evaluated,
-    actualRun in Compile := Defaults.runTask(
-      fullClasspath in Runtime,
-      mainClass in (Compile, run),
-      runner in (Compile, run)
+    Comile / actualRun := Defaults.runTask(
+      Runtime / fullClasspath,
+      Compile / run / mainClass,
+      Compile / run / runner
     ).evaluated,
     openbrowser := {
       println(&quot;open browser!&quot;)
     }
   )
 </code></pre><p>* Note that some tasks (ie. <code>testOnly</code>) will fail with trailing spaces, so a right trim (<code>.replaceAll(&quot;\s+$&quot;, &quot;&quot;)</code>) of the string built for <code>toTask</code> might be needed to handle empty <code>args</code>.\
-</p><p>The <code>actualRun in Compile</code>’s implementation was copy-pasted from <code>run</code> task’s implementation in Defaults.scala.
-</p><p>Now we can call <code>run foo</code> from the shell and it will evaluate <code>actualRun in Compile</code> with the passed in argument, and then evaluate the <code>openbrowser</code> task.
+</p><p>The <code>Compile / actualRun</code>’s implementation was copy-pasted from <code>run</code> task’s implementation in Defaults.scala.
+</p><p>Now we can call <code>run foo</code> from the shell and it will evaluate <code>Compile / actualRun</code> with the passed in argument, and then evaluate the <code>openbrowser</code> task.
 </p><div class="bottom nav">
                 <div class="row">
                   <div class="col-md-auto">

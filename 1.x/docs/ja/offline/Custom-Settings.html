@@ -158,7 +158,7 @@ s: 3
 しかし、<code>value</code> はタスク依存性を表記するだけなので、評価は 1 回だけ行われる。
 以下は <code>sampleStringTask</code> の評価を視覚化したものだ:
 </p><p><img src="../files/task-dependency01.png" alt="task-dependency"/>
-</p><p>もしタスク依存性を非重複化しなければ、<code>test in Test</code> のタスク依存性として <code>compile in Test</code>
+</p><p>もしタスク依存性を非重複化しなければ、<code>Test / test</code> のタスク依存性として <code>Test / compile</code>
 が何度も現れるため、テストのソースコードを何度もコンパイルすることになる。
 </p><h4 id="%E7%B5%82%E4%BA%86%E5%87%A6%E7%90%86%E3%82%BF%E3%82%B9%E3%82%AF">終了処理タスク<a href="#%E7%B5%82%E4%BA%86%E5%87%A6%E7%90%86%E3%82%BF%E3%82%B9%E3%82%AF" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>stopServer</code> タスクはどう実装するべきだろうか?
 タスクは依存性を保持するものなので、終了処理タスクという考えはタスクの実行モデルにそぐわないものだ。

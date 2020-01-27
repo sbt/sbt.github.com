@@ -2089,12 +2089,12 @@ organization := name.value
 ```
 
 実用的な例もみてみる。
-これは `scalaSource in Compile` というキーを `scalaBinaryVersion` が `"2.11"`
+これは `Compile / scalaSource` というキーを `scalaBinaryVersion` が `"2.11"`
 の場合のみ別のディレクトリに再配線する。
 
 ```scala
-scalaSource in Compile := {
-  val old = (scalaSource in Compile).value
+Compile / scalaSource := {
+  val old = (Compile / scalaSource).value
   scalaBinaryVersion.value match {
     case "2.11" => baseDirectory.value / "src-2.11" / "main" / "scala"
     case _      => old
@@ -2173,7 +2173,7 @@ Rake でのブレークスルーは、アクションをシステムコマンド
 ビルドをこのように構成する動機がいくつかある。
 
 第一は非重複化だ。フローベースプログラミングではあるタスクが複数のタスクから依存されていても一度だけしか実行されない。
-例えば、タスクグラフ上の複数のタスクが `compile in Compile` に依存していたとしても、実際のコンパイルは唯一一回のみ実行される。
+例えば、タスクグラフ上の複数のタスクが `Compile / compile` に依存していたとしても、実際のコンパイルは唯一一回のみ実行される。
 
 第二は並列処理だ。タスクグラフを用いることでタスクエンジンは相互に非依存なタスクを並列にスケジュールすることができる。
 
@@ -2248,15 +2248,17 @@ RGB 色モデルにおいて、全ての色は赤、緑、青の成分を軸と�
 同様に、sbt におけるスコープはサブプロジェクト、コンフィギュレーション、タスクの**タプル**により成り立つ:
 
 ```scala
-scalacOptions in (projA, Compile, console)
+projA / Compile / console / scalacOptions
 ```
 
-より正確には、以下のようになっている:
+これは以下のスコープ付きキーを sbt 1.1 で導入されたスラッシュ構文で書いたものだ:
 
 ```scala
-scalacOptions in (Select(projA: Reference),
-                  Select(Compile: ConfigKey),
-                  Select(console.key))
+scalacOptions in (
+  Select(projA: Reference),
+  Select(Compile: ConfigKey),
+  Select(console.key)
+)
 ```
 
 #### サブプロジェクト軸によるスコープ付け
@@ -2300,18 +2302,18 @@ sbt で使われる代表的なコンフィギュレーションには以下の�
 
 パッケージを構築するさまざまなタスク（`packageSrc`、`packageBin`、`packageDoc`）は、`artifactName` や `packageOption` などのパッケージ関連のキーを共有することができる。これらのキーはそれぞれのパッケージタスクに対して独自の値を取ることができる。
 
-#### グローバルスコープ成分
+#### Zero スコープ成分
 
-それぞれのスコープ軸は、その軸の型のインスタンスを代入する（例えば、タスク軸にはタスクを代入する）か、
-もしくは、`Global` という特殊な値を代入することができる。これは `*` とも表記される。つまり、`Global` は `None` と同様だと考えることができる。
+各スコープ軸は、`Some(_)` のようにその軸の型のインスタンスを持つか、`Zero` という特殊な値を持つことができる。
+つまり、`Zero` は `None` と同様だと考えることができる。
 
-`*` は全てのスコープ軸に対応する普遍的なフォールバックであるが、多くの場合直接それを使うのは sbt 本体もしくはプラグインの作者に限定されるべきだ。
+`Zero` は全てのスコープ軸に対応する普遍的なフォールバックであるが、多くの場合直接それを使うのは sbt 本体もしくはプラグインの作者に限定されるべきだ。
 
-分かりづらいことに、ビルド定義内で `someKey in Global` と書いた場合、暗黙の変換によってこれは `someKey in (Global, Global, Global)` に変換される。
+`Global` は、全ての軸を `Zero` とするスコープ、`Zero / Zero / Zero` だ。そのため、`Global / someKey` は `Zero / Zero / Zero / someKey` を略記したものだと考えることができる。
 
 ### ビルド定義からスコープを参照する
 
-`build.sbt` で裸のキーを使ってセッティングを作った場合は、(現プロジェクト, `Global` コンフィグレーション, `Global` タスク) にスコープ付けされる:
+`build.sbt` で裸のキーを使ってセッティングを作った場合は、(現プロジェクト / コンフィグレーション `Zero` / タスク `Zero`) にスコープ付けされる:
 
 ```scala
 lazy val root = (project in file("."))
@@ -2320,139 +2322,139 @@ lazy val root = (project in file("."))
   )
 ```
 
-sbt を実行して、`inspect name` と入力して、キーが　`{file:/home/hp/checkout/hello/}default-aea33a/*:name` により提供されていることを確認しよう。つまり、プロジェクトは、`{file:/home/hp/checkout/hello/}default-aea33a` で、コンフィギュレーションは `*` で、タスクは表示されていない（グローバルを指す）ということだ。
+sbt を実行して、`inspect name` と入力して、キーが
+`ProjectRef(uri("file:/private/tmp/hello/"), "root") / name` により提供されていることを確認しよう。つまり、プロジェクトは、
+`ProjectRef(uri("file:/private/tmp/hello/"), "root")` で、コンフィギュレーション軸もタスク軸も表示されない (これは `Zero` を意味する)。
 
-右辺項に置かれた裸のキーも (現プロジェクト, `Global` コンフィグレーション, `Global` タスク) にスコープ付けされる:
+右辺項に置かれた裸のキーも (現プロジェクト / コンフィグレーション `Zero` / タスク `Zero`) にスコープ付けされる:
 
 ```scala
 organization := name.value
 ```
 
-
-キーにはオーバーロードされた `.in` メソッドがあり、それによりスコープを設定できる。
-`.in(...)` への引数として、どのスコープ軸のインスタンスでも渡すことができる。
+全てのスコープ軸の型には `/` 演算子が導入されている。
+`/` は引数としてキーもしくは別のスコープ軸を受け取ることができる。
 これをやる意味は全くないけど、例として `Compile` コンフィギュレーションでスコープ付けされた `name` の設定を以下に示す:
 
 ```scala
-name in Compile := "hello"
+Compile / name := "hello"
 ```
 
 また、`packageBin` タスクでスコープ付けされた `name` の設定（これも意味なし！ただの例だよ）:
 
 ```scala
-name in packageBin := "hello"
+packageBin / name := "hello"
 ```
 
 もしくは、例えば `Compile` コンフィギュレーションの `packageBin` の `name` など、複数のスコープ軸でスコープ付けする:
 
 ```scala
-name in (Compile, packageBin) := "hello"
+Compile / packageBin / name := "hello"
 ```
 
 もしくは、全ての軸に対して `Global` を使う:
 
 ```scala
-// concurrentRestrictions in (Global, Global, Global) と同じ
-concurrentRestrictions in Global := Seq(
+// same as Zero / Zero / Zero / concurrentRestrictions
+Global / concurrentRestrictions := Seq(
   Tags.limitAll(1)
 )
 ```
 
-（`concurrentRestrictions in Global` は、`concurrentRestrictions in (Global, Global, Global)` へと暗黙の変換が行われ、全ての軸を `Global` に設定する。
-タスクとコンフィギュレーションは既にデフォルトで `Global` であるため、事実上行なっているのはプロジェクトを `Global` に指定することだ。つまり、`{file:/home/hp/checkout/hello/}default-aea33a/*:concurrentRestrictions` ではなく、`*/*:concurrentRestrictions` が定義される。）
+（`Global / concurrentRestrictions` は、`Zero / Zero / Zero / concurrentRestrictions` へと暗黙の変換が行われ、全ての軸を `Zero` に設定する。
+タスクとコンフィギュレーションは既にデフォルトで `Zero` であるため、事実上行なっているのはプロジェクトを `Zero` に指定することだ。つまり、`ProjectRef(uri("file:/tmp/hello/"), "root") / Zero / Zero / concurrentRestrictions` ではなく、`Zero / Zero / Zero / concurrentRestrictions` が定義される。）
 
 ### sbt シェルからのスコープ付きキーの参照方法
 
 コマンドラインと sbt シェルにおいて、sbt はスコープ付きキーを以下のように表示する（そして、パースする）:
 
 ```
-{<ビルド-uri>}<プロジェクト-id>/コンフィギュレーション:タスクキー::キー
+ref / Config / intask / キー
 ```
 
- - `{<ビルド-uri>}<プロジェクト-id>` は、サブプロジェクト軸を特定する。<プロジェクト-id> がなければ、サブプロジェクト軸は「ビルド全体」スコープとなる。
- - `コンフィギュレーション` は、コンフィギュレーション軸を特定する。
- - `タスクキー` は、タスク軸を特定する。
+ - `ref` は、サブプロジェクト軸を特定する。これは `<プロジェクト-id>`、`ProjectRef(uri("file:..."), "id")`、もしくは「ビルド全体」を意味する `ThisBuild` という値を取ることができる。
+ - `Config` は、コンフィギュレーション軸を特定し、大文字から始まる Scala 識別子を使う。
+ - `intask` は、タスク軸を特定する。
  - `キー` は、スコープ付けされるキーを特定する。
 
-全ての軸において、`*` を使って `Global` スコープを表すことができる。
+全ての軸において、`Zero` を使うことができる。
 
 スコープ付きキーの一部を省略すると、以下の手順で推論される:
 
  - プロジェクトを省略した場合は、カレントプロジェクトが使われる。
- - コンフィグレーションを省略した場合は、キーに依存したコンフィギュレーションが自動検知される。
- - タスクを省略した場合は、`Global` タスクが使われる。
+ - `Config` もしくは `intask` を省略した場合は、キーに依存したコンフィギュレーションが自動検知される。
 
 さらに詳しくは、[Interacting with the Configuration System][Inspecting-Settings] 参照。
 
-### スコープ付きキーの表記例
+### sbt シェルでのスコープ付きキーの表記例
 
-- `fullClasspath` はキーのみを指定し、デフォルトスコープを用いる。ここでは、カレントプロジェクト、キーに依存したコンフィギュレーション、グローバルタスクスコープとなる。
-- `test:fullClasspath` はコンフィギュレーションを指定する。つまりプロジェクト軸とタスク軸はデフォルトを用いつつも `test`コンフィギュレーションにおける `fullClasspath` というキーを表す。
-- `*:fullClasspath` はデフォルトコンフィギュレーションを用いずに `Global` コンフィギュレーションを用いる事を明示している。
-- `doc::fullClasspath` はプロジェクト軸とコンフィギュレーション軸はデフォルトを用いつつ、 `doc` タスクスコープにおける `fullClasspath` というキーを表す。
-- `{file:/home/hp/checkout/hello/}default-aea33a/test:fullClasspath` は `{file:/home/hp/checkout/hello/}` をルートディレクトリにビルドした際に含まれる `default-aea33a` というプロジェクトを指定している。さらにこのプロジェクト内の `test` コンフィギュレーションを用いる事も明示している。
-- `{file:/home/hp/checkout/hello/}/test:fullClasspath` は `{file:/home/hp/checkout/hello/}` のビルド全体をプロジェクトの軸とする。
-- `{.}/test:fullClasspath` は `{.}` で指定されたルートディレクトリのビルド全体をプロジェクト軸に取る。`{.}` は Scala code において `ThisBuild` と記述できる。
-- `{file:/home/hp/checkout/hello/}/compile:doc::fullClasspath` は3つのスコープ軸全てを指定している。
+- `fullClasspath` はキーのみを指定し、デフォルトスコープを用いる。ここでは、カレントプロジェクト、キーに依存したコンフィギュレーション、`Zero` タスクスコープとなる。
+- `Test / fullClasspath` はコンフィギュレーションを指定する。つまりプロジェクト軸とタスク軸はデフォルトを用いつつも `Test`コンフィギュレーションにおける `fullClasspath` というキーを表す。
+- `root / fullClasspath` は `root` というプロジェクトid によって特定されるプロジェクトをプロジェクト軸に指定する。
+- `root / Zero / fullClasspath` は `root` プロジェクトと、デフォルトのコンフィギュレーションの代わりに `Zero` をコンフィギュレーション軸に指定する。
+- `doc / fullClasspath` は `fullClasspath` キーを `doc` タスク、プロジェクト軸とコンフィギュレーション軸はデフォルト値へと指定する。
+- `ProjectRef(uri("file:/tmp/hello/"), "root") / Test / fullClasspath`
+  はプロジェクト `ProjectRef(uri("file:/tmp/hello/"), "root")`、Test コンフィギュレーション、デフォルトのタスク軸を指定する。
+- `ThisBuild / version` はプロジェクト軸をこの「ビルド全体」である `ThisBuild`、デフォルトのコンフィギュレーション軸へと指定する。
+- `Zero / fullClasspath` はプロジェクト軸を `Zero`、コンフィギュレーション軸をデフォルト値へと指定する。
+- `root / Compile / doc / fullClasspath` は 3つ全てのスコープ軸を指定する。
 
 ### スコープの検査
 
 sbt シェルで `inspect` コマンドを使ってキーとそのスコープを把握することができる。
-例えば、`inspect test:full-classpath` と試してみよう:
+例えば、`inspect Test/fullClasspath` と試してみよう:
 
 ```
 $ sbt
-> inspect test:fullClasspath
-[info] Task: scala.collection.Seq[sbt.Attributed[java.io.File]]
+sbt:Hello> inspect Test / fullClasspath
+[info] Task: scala.collection.Seq[sbt.internal.util.Attributed[java.io.File]]
 [info] Description:
 [info]  The exported classpath, consisting of build products and unmanaged and managed, internal and external dependencies.
 [info] Provided by:
-[info]  {file:/home/hp/checkout/hello/}default-aea33a/test:fullClasspath
+[info]  ProjectRef(uri("file:/tmp/hello/"), "root") / Test / fullClasspath
+[info] Defined at:
+[info]  (sbt.Classpaths.classpaths) Defaults.scala:1639
 [info] Dependencies:
-[info]  test:exportedProducts
-[info]  test:dependencyClasspath
+[info]  Test / dependencyClasspath
+[info]  Test / exportedProducts
+[info]  Test / fullClasspath / streams
 [info] Reverse dependencies:
-[info]  test:runMain
-[info]  test:run
-[info]  test:testLoader
-[info]  test:console
+[info]  Test / testLoader
 [info] Delegates:
-[info]  test:fullClasspath
-[info]  runtime:fullClasspath
-[info]  compile:fullClasspath
-[info]  *:fullClasspath
-[info]  {.}/test:fullClasspath
-[info]  {.}/runtime:fullClasspath
-[info]  {.}/compile:fullClasspath
-[info]  {.}/*:fullClasspath
-[info]  */test:fullClasspath
-[info]  */runtime:fullClasspath
-[info]  */compile:fullClasspath
-[info]  */*:fullClasspath
+[info]  Test / fullClasspath
+[info]  Runtime / fullClasspath
+[info]  Compile / fullClasspath
+[info]  fullClasspath
+[info]  ThisBuild / Test / fullClasspath
+[info]  ThisBuild / Runtime / fullClasspath
+[info]  ThisBuild / Compile / fullClasspath
+[info]  ThisBuild / fullClasspath
+[info]  Zero / Test / fullClasspath
+[info]  Zero / Runtime / fullClasspath
+[info]  Zero / Compile / fullClasspath
+[info]  Global / fullClasspath
 [info] Related:
-[info]  compile:fullClasspath
-[info]  compile:fullClasspath(for doc)
-[info]  test:fullClasspath(for doc)
-[info]  runtime:fullClasspath
+[info]  Compile / fullClasspath
+[info]  Runtime / fullClasspath
 ```
 
 一行目からこれが（[.sbt ビルド定義][Basic-Def]で説明されているとおり、セッティングではなく）タスクであることが分かる。
 このタスクの戻り値は `scala.collection.Seq[sbt.Attributed[java.io.File]]` の型をとる。
 
 "Provided by" は、この値を定義するスコープ付きキーを指し、この場合は、
-`{file:/home/hp/checkout/hello/}default-aea33a/test:fullClasspath`
-（`test` コンフィギュレーションと `{file:/home/hp/checkout/hello/}default-aea33a` プロジェクトにスコープ付けされた `fullClasspath` キー）。
+`ProjectRef(uri("file:/tmp/hello/"), "root") / Test / fullClasspath`
+（`Test` コンフィギュレーションと `ProjectRef(uri("file:/tmp/hello/"), "root")` プロジェクトにスコープ付けされた `fullClasspath` キー）。
 
 "Dependencies" に関しては、[前のページ][Task-Graph]で解説した。
 
 "Delegates" (委譲) に関してはまた後で。
 
-今度は、（`inspect test:full-class` のかわりに）`inspect fullClasspath` を試してみて、違いをみてみよう。
-コンフィグレーションが省略されたため、`compile` だと自動検知される。
-そのため、`inspect compile:fullClasspath` は `inspect fullClasspath` と同じになるはずだ。
+今度は、（`inspect Test/fullClasspath` のかわりに）`inspect fullClasspath` を試してみて、違いをみてみよう。
+コンフィグレーションが省略されたため、`Compile` だと自動検知される。
+そのため、`inspect Compile/fullClasspath` は `inspect fullClasspath` と同じになるはずだ。
 
-次に、`inspect *:fullClasspath` も実行して違いを比べてみよう。
-`fullClasspath` はデフォルトでは、`Global` スコープには定義されていない。
+次に、`inspect ThisBuild / Zero / fullClasspath` も実行して違いを比べてみよう。
+`fullClasspath` はデフォルトでは、`Zero` スコープには定義されていない。
 
 より詳しくは、[Interacting with the Configuration System][Inspecting-Settings] 参照。
 
@@ -2462,18 +2464,18 @@ $ sbt
 例えば、`compile` タスクは、デフォルトで `Compile` と `Test` コンフィギュレーションにスコープ付けされているけど、
 これらのスコープ外には存在しない。
 
-そのため、`compile` キーに関連付けられた値を変更するには、`compile in Compile` か `compile in Test` のどちらかを書く必要がある。
+そのため、`compile` キーに関連付けられた値を変更するには、`Compile / compile` か `Test / compile` のどちらかを書く必要がある。
 素の `compile` を使うと、コンフィグレーションにスコープ付けされた標準のコンパイルタスクをオーバーライドするかわりに、カレントプロジェクトにスコープ付けされた新しいコンパイルタスクを定義してしまう。
 
 _"Reference to undefined setting"_ のようなエラーに遭遇した場合は、スコープを指定していないか、間違ったスコープを指定したことによることが多い。
 君が使っているキーは何か別のスコープの中で定義されている可能性がある。
-エラーメッセージの一部として sbt は、君が意味したであろうものを推測してくれるから、"Did you mean compile:compile?" を探そう。
+エラーメッセージの一部として sbt は、意味したであろうものを推測してくれるから、"Did you mean Compile / compile?" を探そう。
 
-キーの名前はキーの_一部_であると考えることもできる。
+キーの名前はキーの**一部**でしかないと考えることもできる。
 実際の所は、全てのキーは名前と（三つの軸を持つ）スコープによって構成される。
-つまり、`packageOptions in (Compile, packageBin)` という式全体でキー名だということだ。
+つまり、`Compile / packageBin / packageOptions` という式全体でキー名だということだ。
 単に `packageOptions` と言っただけでもキー名だけど、それは別のキーだ
-（`in` 無しのキーのスコープは暗黙で決定され、現プロジェクト、`Global` コンフィグレーション、`Global` タスクとなる）。
+（スラッシュ無しのキーのスコープは暗黙で決定され、現プロジェクト、`Zero` コンフィグレーション、`Zero` タスクとなる）。
 
 ### ビルドレベル・セッティング
 
@@ -2540,19 +2542,19 @@ lazy val util = (project in file("util"))
  - `+=` は、列に単一要素を追加する。
  - `++=` は、別の列を連結する。
 
-例えば、`sourceDirectories in Compile` というキーの値の型は `Seq[File]` だ。
+例えば、`Compile / sourceDirectories` というキーの値の型は `Seq[File]` だ。
 デフォルトで、このキーの値は `src/main/scala` を含む。
 （どうしても標準的なやり方では気が済まない君が）`source` という名前のディレクトリに入ったソースもコンパイルしたい場合、
 以下のようにして設定できる:
 
 ```scala
-sourceDirectories in Compile += new File("source")
+Compile / sourceDirectories += new File("source")
 ```
 
 もしくは、sbt パッケージに入っている `file()` 関数を使って:
 
 ```scala
-sourceDirectories in Compile += file("source")
+Compile / sourceDirectories += file("source")
 ```
 
 （`file()` は、単に新しい `File` 作る）
@@ -2560,7 +2562,7 @@ sourceDirectories in Compile += file("source")
 `++=` を使って複数のディレクトリを一度に加える事もできる:
 
 ```scala
-sourceDirectories in Compile ++= Seq(file("sources1"), file("sources2"))
+Compile / sourceDirectories ++= Seq(file("sources1"), file("sources2"))
 ```
 
 ここでの `Seq(a, b, c, ...)` は、列を構築する標準的な Scala の構文だ。
@@ -2568,7 +2570,7 @@ sourceDirectories in Compile ++= Seq(file("sources1"), file("sources2"))
 デフォルトのソースディレクトリを完全に置き換えてしまいたい場合は、当然 `:=` を使えばいい:
 
 ```scala
-sourceDirectories in Compile := Seq(file("sources1"), file("sources2"))
+Compile / sourceDirectories := Seq(file("sources1"), file("sources2"))
 ```
 
 #### セッティングが未定義の場合
@@ -2587,8 +2589,8 @@ sourceDirectories in Compile := Seq(file("sources1"), file("sources2"))
 例として、`sourceGenerators` にプロジェクトのベースディレクトリやコンパイル時のクラスパスを加える設定をみてみよう。
 
 ```scala
-sourceGenerators in Compile += Def.task {
-  myGenerator(baseDirectory.value, (managedClasspath in Compile).value)
+Compile / sourceGenerators += Def.task {
+  myGenerator(baseDirectory.value, (Compile / managedClasspath).value)
 }
 ```
 
@@ -2617,18 +2619,14 @@ cleanFiles += file("coverage-report-" + name.value + ".txt")
 スコープ付けの説明が全て終わったので、`.value` 照会の詳細を解説できる。
 難易度は高めなので、始めてこのガイドを読む場合はこのページは飛ばしてもいい。
 
-`Global` という用語はスコープ成分としての `*` と、
-`(Global, Global, Global)` の短縮形の両方の意味で使われて分かりづらいので、
-このページでスコープ成分を指すときは `*` というシンボルを用いる。
-
 これまでに習ったことをおさらいしておこう。
 
 - スコープは、サブプロジェクト軸、コンフィギュレーション軸、タスク軸という 3つの軸の成分を持つタプルである。
-- 全てのスコープ軸には、`*` (`Global` とも呼ばれる) 特殊なスコープ成分がある。
-- **サブプロジェクト軸**においてのみ、`ThisBuild` (シェルでは `{.}` と表記される) 特殊なスコープ成分がある。
+- 全てのスコープ軸には、`Zero` 特殊なスコープ成分がある。
+- **サブプロジェクト軸**においてのみ、`ThisBuild` 特殊なスコープ成分がある。
 - `Test` コンフィギュレーションは `Runtime` を拡張し、`Runtime` は `Compile` を拡張する。
-- build.sbt に書かれたキーは、デフォルトで `(${current subproject}, *, *)` にスコープ付けされる。
-- キーは、`.in(...)` メソッドを使ってさらにスコープ付けできる。
+- build.sbt に書かれたキーは、デフォルトで `${current subproject} / Zero / Zero` にスコープ付けされる。
+- キーは、`/` 演算子を使ってさらにスコープ付けできる。
 
 以下のようなビルド定義を考える:
 
@@ -2639,14 +2637,14 @@ lazy val bar = settingKey[Int]("")
 lazy val projX = (project in file("x"))
   .settings(
     foo := {
-      (bar in Test).value + 1
+      (Test / bar).value + 1
     },
-    bar in Compile := 1
+    Compile / bar := 1
   )
 ```
 
-`foo` のセッティング本文内において、スコープ付きキー `(bar in Test)` への依存性が宣言されている。
-しかし、`projX` において `bar in Test` が未定義であるにも関わらず、sbt
+`foo` のセッティング本文内において、スコープ付きキー `Test / bar` への依存性が宣言されている。
+しかし、`projX` において `Test / bar` が未定義であるにも関わらず、sbt
 は別のスコープ付きキーへと解決して `foo` は `2` に初期化される。
 
 sbt はキーのフォールバックのための検索パスを厳密に定義し、これを**スコープ委譲** (scope delegation) と呼ぶ。
@@ -2658,11 +2656,11 @@ sbt はキーのフォールバックのための検索パスを厳密に定義�
 
 - ルール 1: スコープ軸は以下の優先順位を持つ: サブプロジェクト軸、コンフィギュレーション軸、そしてタスク軸。
 - ルール 2: あるスコープが与えられたとき、委譲スコープは以下の順にタスク軸を置換することで検索される:
-  与えられたタスクスコープ、それから `*` (`Global`、これはタスクスコープ付けを行わないもののこと)。
+  与えられたタスクスコープ、それから `Zero` (これはタスクスコープ付けを行わないもののこと)。
 - ルール 3: あるスコープが与えられたとき、委譲スコープは以下の順にコンフィギュレーション軸を置換することで検索される:
-  与えられたコンフィギュレーション、その親、その親の親...、そして `*` (`Global` これはコンフィギュレーションのスコープ付けを行わないものと同じ)。
+  与えられたコンフィギュレーション、その親、その親の親...、そして `Zero` ( これはコンフィギュレーションのスコープ付けを行わないものと同じ)。
 - ルール 4: あるスコープが与えられたとき、委譲スコープは以下の順にサブプロジェクト軸を置換することで検索される:
-  与えられたサブプロジェクト、`ThisBuild` そして `*` (`Global`)。
+  与えられたサブプロジェクト、`ThisBuild` そして `Zero`。
 - ルール 5: 委譲されたスコープ付きのキー及びそれが依存するセッティングとタスクは、元のコンテキストを一切引き継がずに評価される。
 
 それぞれのルールを以下に説明していく。
@@ -2678,10 +2676,10 @@ sbt はキーのフォールバックのための検索パスを厳密に定義�
 ### ルール 2: タスク軸の委譲
 
 - ルール 2: あるスコープが与えられたとき、委譲スコープは以下の順にタスク軸を置換することで検索される:
-  与えられたタスクスコープ、それから `*` (`Global`、これはタスクスコープ付けを行わないもののこと)。
+  与えられたタスクスコープ、それから `Zero` (これはタスクスコープ付けを行わないもののこと)。
 
 ここでやっとキーが与えられたとき sbt がどのようにして委譲スコープを生成するかの具体的なルールが出てきた。
-任意の `(xxx in yyy).value` が与えられたときに、どのような検索パスを取るかを示していることに注目してほしい。
+任意の `(xxx / yyy).value` が与えられたときに、どのような検索パスを取るかを示していることに注目してほしい。
 
 **練習問題 A**: 以下のビルド定義を考える:
 
@@ -2689,7 +2687,7 @@ sbt はキーのフォールバックのための検索パスを厳密に定義�
 lazy val projA = (project in file("a"))
   .settings(
     name := {
-      "foo-" + (scalaVersion in packageBin).value
+      "foo-" + (packageBin / scalaVersion).value
     },
     scalaVersion := "2.11.11"
   )
@@ -2702,16 +2700,16 @@ lazy val projA = (project in file("a"))
 3. その他
 
 正解は `"foo-2.11.11"`。
-`.settings(...)` 内において、`scalaVersion` は自動的に `(projA, *, *)` にスコープ付けされるため、
-`scalaVersion in packageBin` は `scalaVersion in (projA, *, packageBin)` となる。
+`.settings(...)` 内において、`scalaVersion` は自動的に `projA / Zero / Zero` にスコープ付けされるため、
+`packageBin / scalaVersion` は `projA / Zero / packageBin / scalaVersion` となる。
 そのスコープ付きキーは未定義だ。
-ルール 2に基いて、sbt はタスク軸を `*` に置換して `(projA, *, *)` になる (シェル表記だと `proj/scalaVersion`)。
+ルール 2に基いて、sbt はタスク軸を `Zero` に置換して `projA / Zero / Zero` になる (`projA / scalaVersion`)。
 そのスコープ付きキーは `"2.11.11"` として定義されている。
 
 ### ルール 3: コンフィギュレーション軸の検索パス
 
 - ルール 3: あるスコープが与えられたとき、委譲スコープは以下の順にコンフィギュレーション軸を置換することで検索される:
-  与えられたコンフィギュレーション、その親、その親の親...、そして `*` (`Global` これはコンフィギュレーションのスコープ付けを行わないものと同じ)。
+  与えられたコンフィギュレーション、その親、その親の親...、そして `Zero` ( これはコンフィギュレーションのスコープ付けを行わないものと同じ)。
 
 これを説明する例は上に見た `projX` だ:
 
@@ -2722,24 +2720,24 @@ lazy val bar = settingKey[Int]("")
 lazy val projX = (project in file("x"))
   .settings(
     foo := {
-      (bar in Test).value + 1
+      (Test / bar).value + 1
     },
-    bar in Compile := 1
+    Compile / bar := 1
   )
 ```
 
-フルスコープを書き出してみると `(projX, Test, *)` となる。
+フルスコープを書き出してみると `projX / Test / Zero` となる。
 また、`Test` コンフィギュレーションは `Runtime` を拡張し、`Runtime` は `Compile` を拡張することを思い出してほしい。
 
-`(bar in Test)` は未定義だが、ルール3 に基いて sbt
-は `(projX, Test, *)`、`(projX, Runtime, *)`、そして
-`(projX, Compile, *)` の順に `bar` をスコープ付けして検索していく。
-最後のものが見つかり、それは `bar in Compile` だ。
+`Test / bar` は未定義だが、ルール3 に基いて sbt
+は `projX / Test / Zero`、`projX / Runtime / Zero`、そして
+`projX / Compile / Zero` の順に `bar` をスコープ付けして検索していく。
+最後のものが見つかり、それは `Compile / bar` だ。
 
 ### ルール 4: サブプロジェクト軸の検索パス
 
 - ルール 4: あるスコープが与えられたとき、委譲スコープは以下の順にサブプロジェクト軸を置換することで検索される:
-  与えられたサブプロジェクト、`ThisBuild` そして `*` (`Global`)。
+  与えられたサブプロジェクト、`ThisBuild` そして `Zero`。
 
 **練習問題 B**: 以下のビルド定義を考える:
 
@@ -2760,50 +2758,50 @@ lazy val projB = (project in file("b"))
 3. その他
 
 正解は `abc-org.tempuri` だ。
-ルール 4に基づき、最初の検索パスは `(projB, *, *)` にスコープ付けされた `organization` で、
+ルール 4に基づき、最初の検索パスは `projB / Zero / Zero` にスコープ付けされた `organization` で、
 これは `projB` 内で `"org.tempuri"` として定義されている。
-これは、ビルドレベルのセッティングである `organization in ThisBuild` よりも高い優先順位を持つ。
+これは、ビルドレベルのセッティングである `ThisBuild / organization` よりも高い優先順位を持つ。
 
 #### スコープ軸の優先順位、再び
 
 **練習問題 C**: 以下のビルド定義を考える:
 
 ```scala
-scalaVersion in (ThisBuild, packageBin) := "2.12.2"
+ThisBuild / packageBin / scalaVersion := "2.12.2"
 
 lazy val projC = (project in file("c"))
   .settings(
     name := {
-      "foo-" + (scalaVersion in packageBin).value
+      "foo-" + (packageBin / scalaVersion).value
     },
     scalaVersion := "2.11.11"
   )
 ```
 
-`name in projC` の値は何か?
+`projC / name` の値は何か?
 
 1. `"foo-2.12.2"`
 2. `"foo-2.11.11"`
 3. その他
 
 正解は `foo-2.11.11`。
-`(projC, *, packageBin)` にスコープ付けされた `scalaVersion` は未定義だ。
-ルール 2 は `(projC, *, *)` を見つける。ルール 4 は `(ThisBuild, *, packageBin)` を見つける。
+`projC / Zero / packageBin` にスコープ付けされた `scalaVersion` は未定義だ。
+ルール 2 は `projC / Zero / Zero` を見つける。ルール 4 は `ThisBuild / Zero / packageBin` を見つける。
 ルール 1 の規定により、より特定なサブプロジェクト軸が勝ち、それは
-`(projC, *, *)` で `"2.11.11"` と定義されている。
+`projC / Zero / Zero` で `"2.11.11"` と定義されている。
 
 **練習問題 D**: 以下のビルド定義を考える:
 
 ```scala
-scalacOptions in ThisBuild += "-Ywarn-unused-import"
+ThisBuild / scalacOptions += "-Ywarn-unused-import"
 
 lazy val projD = (project in file("d"))
   .settings(
     test := {
-      println((scalacOptions in (Compile, console)).value)
+      println((Compile / console / scalacOptions).value)
     },
-    scalacOptions in console -= "-Ywarn-unused-import",
-    scalacOptions in Compile := scalacOptions.value // added by sbt
+    console / scalacOptions -= "-Ywarn-unused-import",
+    Compile / scalacOptions := scalacOptions.value // added by sbt
   )
 ```
 
@@ -2814,56 +2812,56 @@ lazy val projD = (project in file("d"))
 3. その他
 
 正解は `List(-Ywarn-unused-import)`。
-ルール 2 は `(projD, Compile, *)` を見つけ、
-ルール 3 は `(projD, *, console)` を見つけ、
-ルール 4 は `(ThisBuild, *, *)` を見つける。
-`(projD, Compile, *)` はサブプロジェクト軸に `projD` を持ち、
+ルール 2 は `projD / Compile / Zero` を見つけ、
+ルール 3 は `projD / Zero / console` を見つけ、
+ルール 4 は `ThisBuild / Zero / Zero` を見つける。
+`projD / Compile / Zero` はサブプロジェクト軸に `projD` を持ち、
 またコンフィギュレーション軸はタスク軸よりも高い優先順位を持つのでルール 1 は
-`(projD, Compile, *)` を選択する。
+`projD / Compile / Zero` を選択する。
 
-次に、`scalacOptions in Compile` は `scalacOptions.value` を参照するため、
-`(projD, *, *)` のための委譲を探す必要がある。
-ルール 4 は `(ThisBuild, *, *)` を見つけ、これは `List(-Ywarn-unused-import)` に解決される。
+次に、`Compile / scalacOptions` は `scalacOptions.value` を参照するため、
+`projD / Zero / Zero` のための委譲を探す必要がある。
+ルール 4 は `ThisBuild / Zero / Zero` を見つけ、これは `List(-Ywarn-unused-import)` に解決される。
 
 ### inspect コマンドは委譲スコープを列挙する
 
 何が起こっているのか手早く調べたい場合は `inspect` を使えばいい。
 
 ```
-Hello> inspect projD/compile:console::scalacOptions
+sbt:projd> inspect projD / Compile / console / scalacOptions
 [info] Task: scala.collection.Seq[java.lang.String]
 [info] Description:
 [info]  Options for the Scala compiler.
 [info] Provided by:
-[info]  {file:/Users/xxxx/}projD/compile:scalacOptions
+[info]  ProjectRef(uri("file:/tmp/projd/"), "projD") / Compile / scalacOptions
 [info] Defined at:
-[info]  /Users/xxxx/build.sbt:47
+[info]  /tmp/projd/build.sbt:9
 [info] Reverse dependencies:
-[info]  projD/compile:console
-[info]  projD/*:test
+[info]  projD / test
+[info]  projD / Compile / console
 [info] Delegates:
-[info]  projD/compile:console::scalacOptions
-[info]  projD/compile:scalacOptions
-[info]  projD/*:console::scalacOptions
-[info]  projD/*:scalacOptions
-[info]  {.}/compile:console::scalacOptions
-[info]  {.}/compile:scalacOptions
-[info]  {.}/*:console::scalacOptions
-[info]  {.}/*:scalacOptions
-[info]  */compile:console::scalacOptions
-[info]  */compile:scalacOptions
-[info]  */*:console::scalacOptions
-[info]  */*:scalacOptions
+[info]  projD / Compile / console / scalacOptions
+[info]  projD / Compile / scalacOptions
+[info]  projD / console / scalacOptions
+[info]  projD / scalacOptions
+[info]  ThisBuild / Compile / console / scalacOptions
+[info]  ThisBuild / Compile / scalacOptions
+[info]  ThisBuild / console / scalacOptions
+[info]  ThisBuild / scalacOptions
+[info]  Zero / Compile / console / scalacOptions
+[info]  Zero / Compile / scalacOptions
+[info]  Zero / console / scalacOptions
+[info]  Global / scalacOptions
 ....
 ```
 
-"Provided by" は `projD/compile:console::scalacOptions` が
-`projD/compile:scalacOptions` によって提供されることを表示しているのに注目してほしい。
+"Provided by" は `projD / Compile / console / scalacOptions` が
+`projD / Compile / scalacOptions` によって提供されることを表示しているのに注目してほしい。
 "Delegates" 以下に**全て**の委譲スコープ候補が優先順に列挙されている!
 
-- サブプロジェクト軸が `projD` にスコープ付けされているスコープが当然最初に表示されて、`ThisBuild` (`{.}`)、`*` と続いている。
-- サブプロジェクト内だと、コンフィギュレーション軸が `Compile` にスコープ付けされいるのが最初に表示されて、`*` にフォールバックしている。
-- 最後に、タスク軸は与えられたタスクスコープ付けの `cosole::` が来て、次にタスクスコープ無しが来ている。
+- サブプロジェクト軸が `projD` にスコープ付けされているスコープが当然最初に表示されて、`ThisBuild`、`Zero` と続いている。
+- サブプロジェクト内だと、コンフィギュレーション軸が `Compile` にスコープ付けされいるのが最初に表示されて、`Zero` にフォールバックしている。
+- 最後に、タスク軸は与えられたタスクスコープ付けの `cosole /` が来て、次にタスクスコープ無しが来ている。
 
 ### .value 参照 vs 動的ディスパッチ
 
@@ -2896,30 +2894,30 @@ lazy val projE = (project in file("e"))
   )
 ```
 
-`projE/version` の値は何か?
+`projE / version` の値は何か?
 
 1. `"2.12.2_0.1.0"`
 2. `"2.11.11_0.1.0"`
 3. その他
 
 正解は `"2.12.2_0.1.0"`。
-`projE/version` は `version in ThisBuild` に委譲する。
-一方 `version in ThisBuild` は `scalaVersion in ThisBuild` に依存する。
+`projE / version` は `ThisBuild / version` に委譲する。
+一方 `ThisBuild / version` は `ThisBuild / scalaVersion` に依存する。
 このように振る舞うため、ビルドレベルのセッティングは単純な値の代入に限定するべきだ。
 
 **練習問題 F**: 以下のビルド定義を考える:
 
 ```scala
-scalacOptions in ThisBuild += "-D0"
+ThisBuild / scalacOptions += "-D0"
 scalacOptions += "-D1"
 
 lazy val projF = (project in file("f"))
   .settings(
-    scalacOptions in compile += "-D2",
-    scalacOptions in Compile += "-D3",
-    scalacOptions in (Compile, compile) += "-D4",
+    compile / scalacOptions += "-D2",
+    Compile / scalacOptions += "-D3",
+    Compile / compile / scalacOptions += "-D4",
     test := {
-      println("bippy" + (scalacOptions in (Compile, compile)).value.mkString)
+      println("bippy" + (Compile / compile / scalacOptions).value.mkString)
     }
   )
 ```
@@ -2948,37 +2946,37 @@ someKey += {
 まずは `+=` を取り除いて、古い `.value` の委譲が何になるかをコメントで注釈する。
 
 ```scala
-scalacOptions in ThisBuild := {
-  // scalacOptions in Global <- ルール 4
-  val old = (scalacOptions in ThisBuild).value
+ThisBuild / scalacOptions := {
+  // Global / scalacOptions <- Rule 4
+  val old = (ThisBuild / scalacOptions).value
   old :+ "-D0"
 }
 
 scalacOptions := {
-  // scalacOptions in ThisBuild <- ルール 4
+  // ThisBuild / scalacOptions <- Rule 4
   val old = scalacOptions.value
   old :+ "-D1"
 }
 
 lazy val projF = (project in file("f"))
   .settings(
-    scalacOptions in compile := {
-      // scalacOptions in ThisBuild <- ルール 2 と 4
-      val old = (scalacOptions in compile).value
+    compile / scalacOptions := {
+      // ThisBuild / scalacOptions <- Rules 2 and 4
+      val old = (compile / scalacOptions).value
       old :+ "-D2"
     },
-    scalacOptions in Compile := {
-      // scalacOptions in ThisBuild <- ルール 3 と 4
-      val old = (scalacOptions in Compile).value
+    Compile / scalacOptions := {
+      // ThisBuild / scalacOptions <- Rules 3 and 4
+      val old = (Compile / scalacOptions).value
       old :+ "-D3"
     },
-    scalacOptions in (Compile, compile) := {
-      // scalacOptions in (projF, Compile) <- ルール 1 と 2
-      val old = (scalacOptions in (Compile, compile)).value
+    Compile / compile / scalacOptions := {
+      // projF / Compile / scalacOptions <- Rules 1 and 2
+      val old = (Compile / compile / scalacOptions).value
       old :+ "-D4"
     },
     test := {
-      println("bippy" + (scalacOptions in (Compile, compile)).value.mkString)
+      println("bippy" + (Compile / compile / scalacOptions).value.mkString)
     }
   )
 ```
@@ -2986,7 +2984,7 @@ lazy val projF = (project in file("f"))
 評価するとこうなる:
 
 ```scala
-scalacOptions in ThisBuild := {
+ThisBuild / scalacOptions := {
   Nil :+ "-D0"
 }
 
@@ -2996,11 +2994,11 @@ scalacOptions := {
 
 lazy val projF = (project in file("f"))
   .settings(
-    scalacOptions in compile := List("-D0") :+ "-D2",
-    scalacOptions in Compile := List("-D0") :+ "-D3",
-    scalacOptions in (Compile, compile) := List("-D0", "-D3") :+ "-D4",
+    compile / scalacOptions := List("-D0") :+ "-D2",
+    Compile / scalacOptions := List("-D0") :+ "-D3",
+    Compile / compile / scalacOptions := List("-D0", "-D3") :+ "-D4",
     test := {
-      println("bippy" + (scalacOptions in (Compile, compile)).value.mkString)
+      println("bippy" + (Compile / compile / scalacOptions).value.mkString)
     }
   )
 ```
@@ -3045,8 +3043,8 @@ lazy val projF = (project in file("f"))
 [ScalaCheck][ScalaCheck]、[Specs2][Specs2]、[ScalaTest][ScalaTest] のようなテスト用の jar ファイルも `lib` に配置できる。
 
 `lib` 配下の依存ライブラリは（`compile`、`test`、`run`、そして `console` の）全てのクラスパスに追加される。
-もし、どれか一つのクラスパスを変えたい場合は、例えば `dependencyClasspath in Compile` や
-`dependencyClasspath in Runtime` などを適宜調整する必要がある。
+もし、どれか一つのクラスパスを変えたい場合は、例えば `Compile / dependencyClasspath` や
+`Runtime / dependencyClasspath` などを適宜調整する必要がある。
 
 アンマネージ依存性を利用するのに、`build.sbt` には何も書く必要はないが、デフォルトの `lib` 以外のディレクトリを使いたい場合は `unmanagedBase` キーで変更することができる。
 
@@ -3065,7 +3063,7 @@ unmanagedBase := baseDirectory.value / "custom_lib"
 例えば `Compile` コンフィギュレーション時に `lib`ディレクトリのファイルを無視したい、など。
 
 ```scala
-unmanagedJars in Compile := Seq.empty[sbt.Attributed[java.io.File]]
+Compile / unmanagedJars := Seq.empty[sbt.Attributed[java.io.File]]
 ```
 
 ### マネージ依存性（Managed Dependencies）
@@ -3564,7 +3562,7 @@ s: 3
 
 ![task-dependency](../files/task-dependency01.png)
 
-もしタスク依存性を非重複化しなければ、`test in Test` のタスク依存性として `compile in Test`
+もしタスク依存性を非重複化しなければ、`Test / test` のタスク依存性として `Test / compile`
 が何度も現れるため、テストのソースコードを何度もコンパイルすることになる。
 
 #### 終了処理タスク
@@ -4602,14 +4600,14 @@ def makeSomeSources(base: File): Seq[File]
 大まかな定義は次のようになる。
 
 ```scala
-sourceGenerators in Compile += <task of type Seq[File]>.taskValue
+Compile / sourceGenerators += <task of type Seq[File]>.taskValue
 ```
 
 これは、 `def makeSomeSources(base: File): Seq[File]` を用いて次のように書ける。
 
 ```scala
-sourceGenerators in Compile += Def.task {
-  makeSomeSources((sourceManaged in Compile).value / "demo")
+Compile / sourceGenerators += Def.task {
+  makeSomeSources((Compile / sourceManaged).value / "demo")
 }.taskValue
 ```
 
@@ -4617,8 +4615,8 @@ sourceGenerators in Compile += Def.task {
 次の例では、 source generator は、実行するとコンソールに `"Hi"` と表示する `Test.scala` というアプリケーションオブジェクトを生成する。
 
 ```scala
-sourceGenerators in Compile += Def.task {
-  val file = (sourceManaged in Compile).value / "demo" / "Test.scala"
+Compile / sourceGenerators += Def.task {
+  val file = (Compile / sourceManaged).value / "demo" / "Test.scala"
   IO.write(file, """object Test extends App { println("Hi") }""")
   Seq(file)
 }.taskValue
@@ -4662,14 +4660,14 @@ def makeSomeResources(base: File): Seq[File]
 大まかな定義は次のようになる。
 
 ```scala
-resourceGenerators in Compile += <task of type Seq[File]>.taskValue
+Compile / resourceGenerators += <task of type Seq[File]>.taskValue
 ```
 
 これは、 `def makeSomeResources(base: File): Seq[File]` を用いて次のように書ける。
 
 ```scala
-resourceGenerators in Compile += Def.task {
-  makeSomeResources((resourceManaged in Compile).value / "demo")
+Compile / resourceGenerators += Def.task {
+  makeSomeResources((Compile / resourceManaged).value / "demo")
 }.taskValue
 ```
 
@@ -4682,8 +4680,8 @@ resourceGenerators in Compile += Def.task {
 次の例では、アプリケーション名とバージョンが書かれた `myapp.properties`というプロパティファイルが生成される。
 
 ```scala
-resourceGenerators in Compile += Def.task {
-  val file = (resourceManaged in Compile).value / "demo" / "myapp.properties"
+Compile / resourceGenerators += Def.task {
+  val file = (Compile / resourceManaged).value / "demo" / "myapp.properties"
   val contents = "name=%s\nversion=%s".format(name.value,version.value)
   IO.write(file, contents)
   Seq(file)
@@ -4722,7 +4720,7 @@ def foo(): Unit = {
 }
 ```
 
-この依存指向なプログラミング・モデルの利点は sbt のタスク・エンジンがタスクの実行の順序を入れ替えることができることにある。実際、可能な限り sbt は依存タスクを並列に実行する。もう一つの利点は、グラフを非重複化して一回のコマンド実行に対して `compile in Compile` などのタスクは一度だけ実行することで、同じソースを何度もコンパイルすることを回避している。
+この依存指向なプログラミング・モデルの利点は sbt のタスク・エンジンがタスクの実行の順序を入れ替えることができることにある。実際、可能な限り sbt は依存タスクを並列に実行する。もう一つの利点は、グラフを非重複化して一回のコマンド実行に対して `Compile / compile` などのタスクは一度だけ実行することで、同じソースを何度もコンパイルすることを回避している。
 
 タスク・システムがこのような設計になっているため、何かを逐次実行させるというのは一応可能ではあるけども、システムの流れに反する行為であり、簡単だとは言えない。
 
@@ -4736,7 +4734,7 @@ def foo(): Unit = {
 ### Def.sequential を用いて逐次タスクを定義する
 
 sbt 0.13.8 で `Def.sequential` という関数が追加されて、準逐次な意味論でタスクを実行できるようになった。
-逐次タスクの説明として `compilecheck` というカスタムタスクを定義してみよう。これは、まず `compile in Compile` を実行して、その後で [scalastyle-sbt-plugin](http://www.scalastyle.org/sbt.html) の `scalastyle in Compile` を呼び出す。
+逐次タスクの説明として `compilecheck` というカスタムタスクを定義してみよう。これは、まず `Compile / compile` を実行して、その後で [scalastyle-sbt-plugin](http://www.scalastyle.org/sbt.html) の `Compile / scalastyle` を呼び出す。
 
 セットアップはこのようになる。
 
@@ -4759,9 +4757,9 @@ lazy val compilecheck = taskKey[Unit]("compile and then scalastyle")
 
 lazy val root = (project in file("."))
   .settings(
-    compilecheck in Compile := Def.sequential(
-      compile in Compile,
-      (scalastyle in Compile).toTask("")
+    Compile / compilecheck := Def.sequential(
+      Compile / compile,
+      (Compile / scalastyle).toTask("")
     ).value
   )
 ```
@@ -4788,7 +4786,7 @@ root> compilecheck
 
 [逐次タスク][Howto-Sequential-Task]だけで十分じゃなければ、次のステップは[動的タスク][Tasks]だ。純粋な型 `A` の値を返すことを期待する `Def.task` と違って、`Def.taskDyn` は `sbt.Def.Initialize[sbt.Task[A]]` という型のタスク・エンジンが残りの計算を継続するタスクを返す。
 
-`compile in Compile` を実行した後で [scalastyle-sbt-plugin](http://www.scalastyle.org/sbt.html) の `scalastyle in Compile` タスクを実行するカスタムタスク、`compilecheck` を実装してみよう。
+`Compile / compile` を実行した後で [scalastyle-sbt-plugin](http://www.scalastyle.org/sbt.html) の `scalastyle in Compile` タスクを実行するカスタムタスク、`compilecheck` を実装してみよう。
 
 #### project/build.properties
 
@@ -4810,9 +4808,9 @@ lazy val compilecheck = taskKey[sbt.inc.Analysis]("compile and then scalastyle")
 lazy val root = (project in file("."))
   .settings(
     compilecheck := (Def.taskDyn {
-      val c = (compile in Compile).value
+      val c = (Compile / compile).value
       Def.task {
-        val x = (scalastyle in Compile).toTask("").value
+        val x = (Compile / scalastyle).toTask("").value
         c
       }
     }).value
@@ -4823,22 +4821,22 @@ lazy val root = (project in file("."))
 
 #### build.sbt v2
 
-`compile in Compile` の戻り値と同じ型を返せるようになったので、もとのキーをこの動的タスクで再配線 (rewire) できるかもしれない。
+`Compile / compile` の戻り値と同じ型を返せるようになったので、もとのキーをこの動的タスクで再配線 (rewire) できるかもしれない。
 
 ```scala
 lazy val root = (project in file("."))
   .settings(
-    compile in Compile := (Def.taskDyn {
-      val c = (compile in Compile).value
+    Compile / compile := (Def.taskDyn {
+      val c = (Compile / compile).value
       Def.task {
-        val x = (scalastyle in Compile).toTask("").value
+        val x = (Compile / scalastyle).toTask("").value
         c
       }
     }).value
   )
 ```
 
-これで、`compild in Compile` をシェルから呼び出してやりたかったことをやらせれるようになった。
+これで、`Compile / compile` をシェルから呼び出してやりたかったことをやらせれるようになった。
 
 
   [Input-Tasks]: Input-Tasks.html
@@ -4846,9 +4844,9 @@ lazy val root = (project in file("."))
 ### インプットタスクの後で何かする
 
 ここまでタスクに焦点を当ててみてきた。タスクには他にインプットタスクというものがあって、これはユーザからの入力をシェル上で受け取る。
-典型的な例としては `run in Compile` タスクがある。`scalastyle` タスクも実はインプットタスクだ。インプットタスクの詳細は [Input Task][Input-Tasks] 参照。
+典型的な例としては `Compile / run` タスクがある。`scalastyle` タスクも実はインプットタスクだ。インプットタスクの詳細は [Input Task][Input-Tasks] 参照。
 
-ここで、`run in Compile` タスクの実行後にテスト用にブラウザを開く方法を考えてみる。
+ここで、`Compile / run` タスクの実行後にテスト用にブラウザを開く方法を考えてみる。
 
 #### src/main/scala/Greeting.scala
 
@@ -4866,7 +4864,7 @@ lazy val runopen = inputKey[Unit]("run and then open the browser")
 lazy val root = (project in file("."))
   .settings(
     runopen := {
-      (run in Compile).evaluated
+      (Compile / run).evaluated
       println("open browser!")
     }
   )
@@ -4884,7 +4882,7 @@ open browser!
 
 #### build.sbt v2
 
-この新しいインプットタスクを `run in Compile` に再配線することで、実は `runopen` キーを外すことができる:
+この新しいインプットタスクを `Compile / run` に再配線することで、実は `runopen` キーを外すことができる:
 
 ```scala
 lazy val root = (project in file("."))
@@ -4913,7 +4911,7 @@ lazy val root = (project in file("."))
       import sbt.complete.Parsers.spaceDelimited
       val args = spaceDelimited("<args>").parsed
       Def.taskDyn {
-        (run in Compile).toTask(" " + args.mkString(" ")).value
+        (Compile / run).toTask(" " + args.mkString(" ")).value
         openbrowser
       }
     }).evaluated,
@@ -4925,8 +4923,8 @@ lazy val root = (project in file("."))
 
 #### build.sbt v2
 
-この動的インプットタスクを `run in Compile` に再配線するのは複雑な作業だ。内側の `run in Compile` は既に継続タスクの中に入ってしまっているので、単純に再配線しただけだと循環参照を作ってしまうことになる。
-この循環を断ち切るためには、`run in Compile` のクローンである `actualRun in Compile` を導入する必要がある:
+この動的インプットタスクを `Compile / run` に再配線するのは複雑な作業だ。内側の `Compile / run` は既に継続タスクの中に入ってしまっているので、単純に再配線しただけだと循環参照を作ってしまうことになる。
+この循環を断ち切るためには、`Compile / run` のクローンである `Compile / actualRun` を導入する必要がある:
 
 ```scala
 lazy val actualRun = inputKey[Unit]("The actual run task")
@@ -4934,18 +4932,18 @@ lazy val openbrowser = taskKey[Unit]("open the browser")
 
 lazy val root = (project in file("."))
   .settings(
-    run in Compile := (Def.inputTaskDyn {
+    Compile / run := (Def.inputTaskDyn {
       import sbt.complete.Parsers.spaceDelimited
       val args = spaceDelimited("<args>").parsed
       Def.taskDyn {
-        (actualRun in Compile).toTask(" " + args.mkString(" ")).value
+        (Compile / actualRun).toTask(" " + args.mkString(" ")).value
         openbrowser
       }
     }).evaluated,
-    actualRun in Compile := Defaults.runTask(
-      fullClasspath in Runtime,
-      mainClass in (Compile, run),
-      runner in (Compile, run)
+    Comile / actualRun := Defaults.runTask(
+      Runtime / fullClasspath,
+      Compile / run / mainClass,
+      Compile / run / runner
     ).evaluated,
     openbrowser := {
       println("open browser!")
@@ -4953,9 +4951,9 @@ lazy val root = (project in file("."))
   )
 ```
 
-この `actualRun in Compile` の実装は Defaults.scala にある `run` の実装からコピペしてきた。
+この `Compile / actualRun` の実装は Defaults.scala にある `run` の実装からコピペしてきた。
 
-これで `run foo` をシェルから打ち込むと、`actualRun in Compile` を引数とともに評価して、その後で `openbrowser` タスクを評価するようになった。
+これで `run foo` をシェルから打ち込むと、`Compile / actualRun` を引数とともに評価して、その後で `openbrowser` タスクを評価するようになった。
 
 
 ### コマンドを用いた逐次実行

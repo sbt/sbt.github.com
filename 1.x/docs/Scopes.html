@@ -80,7 +80,7 @@ correspond to red, green, and blue components encoded by a number.
 Similarly, a full scope in sbt is formed by a <strong>tuple</strong> of a subproject,
 a configuration, and a task value:
 </p><pre><code class="prettyprint lang-scala">projA / Compile / console / scalacOptions
-</code></pre><p>Which is the slash syntax, introduced in sbt 1.1, for:
+</code></pre><p>This is the slash syntax, introduced in sbt 1.1, for:
 </p><pre><code class="prettyprint lang-scala">scalacOptions in (
   Select(projA: Reference),
   Select(Compile: ConfigKey),
@@ -176,7 +176,7 @@ scoped keys like this:
 </li><li>a key-dependent configuration will be auto-detected if you omit the
 configuration or task.
 </li></ul><p>For more details, see <a href="../docs/Inspecting-Settings.html">Interacting with the Configuration System</a>.
-</p><h3 id="Examples+of+scoped+key+notation">Examples of scoped key notation<a href="#Examples+of+scoped+key+notation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li><code>fullClasspath</code> specifies just a key, so the default scopes are used:
+</p><h3 id="Examples+of+scoped+key+notation+in+the+sbt+shell">Examples of scoped key notation in the sbt shell<a href="#Examples+of+scoped+key+notation+in+the+sbt+shell" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li><code>fullClasspath</code> specifies just a key, so the default scopes are used:
 current project, a key-dependent configuration, and <code>Zero</code> task
 scope.
 </li><li><code>Test / fullClasspath</code> specifies the configuration, so this is
@@ -197,7 +197,7 @@ the build is <code>ThisBuild</code>, with the default configuration.
 with the default configuration.
 </li><li><code>root / Compile / doc / fullClasspath</code> sets all three scope axes.
 </li></ul><h3 id="Inspecting+scopes">Inspecting scopes<a href="#Inspecting+scopes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>In sbt shell, you can use the <code>inspect</code> command to understand
-keys and their scopes. Try <code>inspect test:fullClasspath</code>:
+keys and their scopes. Try <code>inspect Test/fullClasspath</code>:
 </p><pre><code class="">$ sbt
 sbt:Hello&gt; inspect Test / fullClasspath
 [info] Task: scala.collection.Seq[sbt.internal.util.Attributed[java.io.File]]
@@ -265,7 +265,7 @@ reality, all keys consist of both a name, and a scope (where the scope
 has three axes). The entire expression
 <code>Compile / packageBin / packageOptions</code> is a key name, in other words.
 Simply <code>packageOptions</code> is also a key name, but a different one (for keys
-with no in, a scope is implicitly assumed: current project, <code>Zero</code>
+with no slashes, a scope is implicitly assumed: current project, <code>Zero</code>
 config, <code>Zero</code> task).
 </p><h3 id="Build-level+settings">Build-level settings<a href="#Build-level+settings" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>An advanced technique for factoring out common settings
 across subprojects is to define the settings scoped to <code>ThisBuild</code>.

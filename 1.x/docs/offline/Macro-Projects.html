@@ -169,9 +169,9 @@ look like:
   .settings(
     commonSettings,
     // include the macro classes and resources in the main jar
-    mappings in (Compile, packageBin) ++= mappings.in(macroSub, Compile, packageBin).value,
+    Compile / packageBin / mappings ++= (macroSub / Compile / packageBin / mappings).value,
     // include the macro sources in the main source jar
-    mappings in (Compile, packageSrc) ++= mappings.in(macroSub, Compile, packageSrc).value
+    Compile / packageSrc / mappings ++= (macroSub / Compile / packageSrc / mappings).value
   )
 </code></pre><p>You may wish to disable publishing the macro implementation. This is
 done by overriding <code>publish</code> and <code>publishLocal</code> to do nothing:

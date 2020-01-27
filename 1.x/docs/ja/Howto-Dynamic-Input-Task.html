@@ -52,7 +52,7 @@ lazy val root = (project in file(&quot;.&quot;))
       import sbt.complete.Parsers.spaceDelimited
       val args = spaceDelimited(&quot;&lt;args&gt;&quot;).parsed
       Def.taskDyn {
-        (run in Compile).toTask(&quot; &quot; + args.mkString(&quot; &quot;)).value
+        (Compile / run).toTask(&quot; &quot; + args.mkString(&quot; &quot;)).value
         openbrowser
       }
     }).evaluated,
@@ -60,32 +60,32 @@ lazy val root = (project in file(&quot;.&quot;))
       println(&quot;open browser!&quot;)
     }
   )
-</code></pre><h4 id="build.sbt+v2">build.sbt v2<a href="#build.sbt+v2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>この動的インプットタスクを <code>run in Compile</code> に再配線するのは複雑な作業だ。内側の <code>run in Compile</code> は既に継続タスクの中に入ってしまっているので、単純に再配線しただけだと循環参照を作ってしまうことになる。
-この循環を断ち切るためには、<code>run in Compile</code> のクローンである <code>actualRun in Compile</code> を導入する必要がある:
+</code></pre><h4 id="build.sbt+v2">build.sbt v2<a href="#build.sbt+v2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>この動的インプットタスクを <code>Compile / run</code> に再配線するのは複雑な作業だ。内側の <code>Compile / run</code> は既に継続タスクの中に入ってしまっているので、単純に再配線しただけだと循環参照を作ってしまうことになる。
+この循環を断ち切るためには、<code>Compile / run</code> のクローンである <code>Compile / actualRun</code> を導入する必要がある:
 </p><pre><code class="prettyprint lang-scala">lazy val actualRun = inputKey[Unit](&quot;The actual run task&quot;)
 lazy val openbrowser = taskKey[Unit](&quot;open the browser&quot;)
 
 lazy val root = (project in file(&quot;.&quot;))
   .settings(
-    run in Compile := (Def.inputTaskDyn {
+    Compile / run := (Def.inputTaskDyn {
       import sbt.complete.Parsers.spaceDelimited
       val args = spaceDelimited(&quot;&lt;args&gt;&quot;).parsed
       Def.taskDyn {
-        (actualRun in Compile).toTask(&quot; &quot; + args.mkString(&quot; &quot;)).value
+        (Compile / actualRun).toTask(&quot; &quot; + args.mkString(&quot; &quot;)).value
         openbrowser
       }
     }).evaluated,
-    actualRun in Compile := Defaults.runTask(
-      fullClasspath in Runtime,
-      mainClass in (Compile, run),
-      runner in (Compile, run)
+    Comile / actualRun := Defaults.runTask(
+      Runtime / fullClasspath,
+      Compile / run / mainClass,
+      Compile / run / runner
     ).evaluated,
     openbrowser := {
       println(&quot;open browser!&quot;)
     }
   )
-</code></pre><p>この <code>actualRun in Compile</code> の実装は Defaults.scala にある <code>run</code> の実装からコピペしてきた。
-</p><p>これで <code>run foo</code> をシェルから打ち込むと、<code>actualRun in Compile</code> を引数とともに評価して、その後で <code>openbrowser</code> タスクを評価するようになった。
+</code></pre><p>この <code>Compile / actualRun</code> の実装は Defaults.scala にある <code>run</code> の実装からコピペしてきた。
+</p><p>これで <code>run foo</code> をシェルから打ち込むと、<code>Compile / actualRun</code> を引数とともに評価して、その後で <code>openbrowser</code> タスクを評価するようになった。
 </p><div class="bottom nav">
                 <div class="row">
                   <div class="col-md-auto">

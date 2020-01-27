@@ -56,7 +56,7 @@ responsible for configuring the plugins as necessary. For example, Scala
 X-Ray requires the extra option:
 </p><pre><code class="prettyprint lang-scala">// declare the main Scala source directory as the base directory
 scalacOptions :=
-    scalacOptions.value :+ (&quot;-Psxr:base-directory:&quot; + (scalaSource in Compile).value.getAbsolutePath)
+    scalacOptions.value :+ (&quot;-Psxr:base-directory:&quot; + (Compile / scalaSource).value.getAbsolutePath)
 </code></pre><p>You can still specify compiler plugins manually. For example:
 </p><pre><code class="prettyprint lang-scala">scalacOptions += &quot;-Xplugin:&lt;path-to-sxr&gt;/sxr-0.3.0.jar&quot;
 </code></pre><h3 id="Continuations+Plugin+Example">Continuations Plugin Example<a href="#Continuations+Plugin+Example" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Support for continuations in Scala 2.12 is implemented as a compiler

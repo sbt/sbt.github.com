@@ -160,9 +160,9 @@ can point to <code>src/fuzz/scala</code> so it is distinct from other Scala sour
 Thus, these three definitions use
 the same <em>key</em>, but they represent distinct <em>values</em>. So, in a user’s
 <code>build.sbt</code>, we might see:
-</p><pre><code class="prettyprint lang-scala">scalaSource in Fuzz := baseDirectory.value / &quot;source&quot; / &quot;fuzz&quot; / &quot;scala&quot;
+</p><pre><code class="prettyprint lang-scala">Fuzz / scalaSource := baseDirectory.value / &quot;source&quot; / &quot;fuzz&quot; / &quot;scala&quot;
 
-scalaSource in Compile := baseDirectory.value / &quot;source&quot; / &quot;main&quot; / &quot;scala&quot;
+Compile / scalaSource := baseDirectory.value / &quot;source&quot; / &quot;main&quot; / &quot;scala&quot;
 </code></pre><p>In the fuzzing plugin, this is achieved with an <code>inConfig</code> definition:
 </p><pre><code class="prettyprint lang-scala">package sbtfuzz
 

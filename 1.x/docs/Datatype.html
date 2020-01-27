@@ -402,10 +402,10 @@ will automatically use Java’s primitive types if they are available.
 in your build definition:
 </p><pre><code class="prettyprint lang-scala">datatypeSource in generateDatatypes := file(&quot;some/location&quot;)
 </code></pre><p>The plugin exposes other settings for Scala code generation:
-</p><ol><li><code>datatypeScalaFileNames in (Compile, generateDatatypes)</code>
+</p><ol><li><code>Compile / generateDatatypes / datatypeScalaFileNames</code>
 This setting accepts a function <code>Definition =&gt; File</code> which will determine
 the filename for every generated Scala definition.
-</li><li><code>datatypeScalaSealInterfaces in (Compile, generateDatatypes)</code>
+</li><li><code>Compile / generateDatatypes / datatypeScalaSealInterfaces</code>
 This setting accepts a boolean value, and will determine whether interfaces
 should be <code>seal</code>ed or not.
 </li></ol><h3 id="Syntax+summary">Syntax summary<a href="#Syntax+summary" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">Schema           := {   &quot;types&quot;: [ Definition* ]

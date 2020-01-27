@@ -43,8 +43,8 @@
                 </div><div class="col-md-8 col-xs-9">
                   <div class="rightcolumn contents">
                   <h3 id="%E3%82%A4%E3%83%B3%E3%83%97%E3%83%83%E3%83%88%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%AE%E5%BE%8C%E3%81%A7%E4%BD%95%E3%81%8B%E3%81%99%E3%82%8B">インプットタスクの後で何かする<a href="#%E3%82%A4%E3%83%B3%E3%83%97%E3%83%83%E3%83%88%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%AE%E5%BE%8C%E3%81%A7%E4%BD%95%E3%81%8B%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>ここまでタスクに焦点を当ててみてきた。タスクには他にインプットタスクというものがあって、これはユーザからの入力をシェル上で受け取る。
-典型的な例としては <code>run in Compile</code> タスクがある。<code>scalastyle</code> タスクも実はインプットタスクだ。インプットタスクの詳細は <a href="Input-Tasks.html">Input Task</a> 参照。
-</p><p>ここで、<code>run in Compile</code> タスクの実行後にテスト用にブラウザを開く方法を考えてみる。
+典型的な例としては <code>Compile / run</code> タスクがある。<code>scalastyle</code> タスクも実はインプットタスクだ。インプットタスクの詳細は <a href="Input-Tasks.html">Input Task</a> 参照。
+</p><p>ここで、<code>Compile / run</code> タスクの実行後にテスト用にブラウザを開く方法を考えてみる。
 </p><h4 id="src%2Fmain%2Fscala%2FGreeting.scala">src/main/scala/Greeting.scala<a href="#src%2Fmain%2Fscala%2FGreeting.scala" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">object Greeting extends App {
   println(&quot;hello &quot; + args.toList)
 }
@@ -53,7 +53,7 @@
 lazy val root = (project in file(&quot;.&quot;))
   .settings(
     runopen := {
-      (run in Compile).evaluated
+      (Compile / run).evaluated
       println(&quot;open browser!&quot;)
     }
   )
@@ -63,7 +63,7 @@ lazy val root = (project in file(&quot;.&quot;))
 [info] Running Greeting foo
 hello List(foo)
 open browser!
-</code></pre><h4 id="build.sbt+v2">build.sbt v2<a href="#build.sbt+v2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>この新しいインプットタスクを <code>run in Compile</code> に再配線することで、実は <code>runopen</code> キーを外すことができる:
+</code></pre><h4 id="build.sbt+v2">build.sbt v2<a href="#build.sbt+v2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>この新しいインプットタスクを <code>Compile / run</code> に再配線することで、実は <code>runopen</code> キーを外すことができる:
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
   .settings(
     run in Compile := {

@@ -51,15 +51,15 @@
 ここでは、実行結果の値ではなくタスク自体を追加するため、通常の <code>value</code> ではなく、 <code>taskValue</code>を使う。
 <code>sourceGenerators</code> には生成するソースが main か test かに応じて、それぞれ <code>Compile</code>、 <code>Test</code>のスコープ付けをしておく。
 大まかな定義は次のようになる。
-</p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile += &lt;task of type Seq[File]&gt;.taskValue
+</p><pre><code class="prettyprint lang-scala">Compile / sourceGenerators += &lt;task of type Seq[File]&gt;.taskValue
 </code></pre><p>これは、 <code>def makeSomeSources(base: File): Seq[File]</code> を用いて次のように書ける。
-</p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile += Def.task {
-  makeSomeSources((sourceManaged in Compile).value / &quot;demo&quot;)
+</p><pre><code class="prettyprint lang-scala">Compile / sourceGenerators += Def.task {
+  makeSomeSources((Compile / sourceManaged).value / &quot;demo&quot;)
 }.taskValue
 </code></pre><p>より具体的な例を示そう。
 次の例では、 source generator は、実行するとコンソールに <code>&quot;Hi&quot;</code> と表示する <code>Test.scala</code> というアプリケーションオブジェクトを生成する。
-</p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile += Def.task {
-  val file = (sourceManaged in Compile).value / &quot;demo&quot; / &quot;Test.scala&quot;
+</p><pre><code class="prettyprint lang-scala">Compile / sourceGenerators += Def.task {
+  val file = (Compile / sourceManaged).value / &quot;demo&quot; / &quot;Test.scala&quot;
   IO.write(file, &quot;&quot;&quot;object Test extends App { println(&quot;Hi&quot;) }&quot;&quot;&quot;)
   Seq(file)
 }.taskValue
@@ -84,10 +84,10 @@ source generator は Java のソースも Scala のソースも1つの Seq で�
 ここでも、実行結果の値ではなくタスク自体を追加するため、通常の <code>value</code> ではなく、 <code>taskValue</code>を使う。
 <code>resourceGenerators</code> にも、生成するリソースが main か test かに応じて、それぞれ <code>Compile</code>、 <code>Test</code>のスコープ付けをしておく。
 大まかな定義は次のようになる。
-</p><pre><code class="prettyprint lang-scala">resourceGenerators in Compile += &lt;task of type Seq[File]&gt;.taskValue
+</p><pre><code class="prettyprint lang-scala">Compile / resourceGenerators += &lt;task of type Seq[File]&gt;.taskValue
 </code></pre><p>これは、 <code>def makeSomeResources(base: File): Seq[File]</code> を用いて次のように書ける。
-</p><pre><code class="prettyprint lang-scala">resourceGenerators in Compile += Def.task {
-  makeSomeResources((resourceManaged in Compile).value / &quot;demo&quot;)
+</p><pre><code class="prettyprint lang-scala">Compile / resourceGenerators += Def.task {
+  makeSomeResources((Compile / resourceManaged).value / &quot;demo&quot;)
 }.taskValue
 </code></pre><p>上記の例を、<code>run</code> タスク、または <code>package</code>タスク (<code>compile</code>タスクでないことに注意) で実行すると、
 <code>resourceManaged</code> が示す <code>&quot;target/scala-*/resource_managed&quot;</code> の中に <code>demo</code> というファイルが生成される。
@@ -95,8 +95,8 @@ source generator は Java のソースも Scala のソースも1つの Seq で�
 追加するには、別途 mappings への追加が必要になる。
 こちらについても、詳細は <a href="Howto-Package.html#modify-package-contents">Adding files to a package</a> を参照して欲しい。
 </p><p>次の例では、アプリケーション名とバージョンが書かれた <code>myapp.properties</code>というプロパティファイルが生成される。
-</p><pre><code class="prettyprint lang-scala">resourceGenerators in Compile += Def.task {
-  val file = (resourceManaged in Compile).value / &quot;demo&quot; / &quot;myapp.properties&quot;
+</p><pre><code class="prettyprint lang-scala">Compile / resourceGenerators += Def.task {
+  val file = (Compile / resourceManaged).value / &quot;demo&quot; / &quot;myapp.properties&quot;
   val contents = &quot;name=%s\nversion=%s&quot;.format(name.value,version.value)
   IO.write(file, contents)
   Seq(file)

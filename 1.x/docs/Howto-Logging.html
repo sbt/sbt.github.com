@@ -152,7 +152,7 @@ logging level may be configured globally, as described in the previous
 section, or it may be applied to a specific project, configuration, or
 task. For example, to change the logging level for compilation to only
 show warnings and errors:
-</p><pre><code class="prettyprint lang-scala">&gt; set logLevel in compile := Level.Warn
+</p><pre><code class="prettyprint lang-scala">&gt; set Compile / compile / logLevel := Level.Warn
 </code></pre><p>To enable debug logging for all tasks in the current project,
 </p><pre><code class="prettyprint lang-scala">&gt; set logLevel := Level.Warn
 </code></pre><p>A common scenario is that after running a task, you notice that you need
@@ -180,9 +180,9 @@ first sbt frame:
 </code></pre><p>The <code>every</code> part means to override the setting in all scopes. To change
 the trace printing behavior for a single project, configuration, or
 task, scope <code>traceLevel</code> appropriately:
-</p><pre><code class="prettyprint lang-scala">&gt; set traceLevel in Test := 5
-&gt; set traceLevel in update := 0
-&gt; set traceLevel in ThisProject := -1
+</p><pre><code class="prettyprint lang-scala">&gt; set Test / traceLevel := 5
+&gt; set update / traceLevel := 0
+&gt; set ThisProject / traceLevel := -1
 </code></pre><a name="nobuffer"></a><h3 id="Print+the+output+of+tests+immediately+instead+of+buffering">Print the output of tests immediately instead of buffering<a href="#Print+the+output+of+tests+immediately+instead+of+buffering" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>By default, sbt buffers the logging output of a test until the whole
 class finishes. This is so that output does not get mixed up when
 executing in parallel. To disable buffering, set the <code>logBuffered</code>

@@ -48,16 +48,13 @@
 を読んで理解したことを前提とする。
 </p><p>スコープ付けの説明が全て終わったので、<code>.value</code> 照会の詳細を解説できる。
 難易度は高めなので、始めてこのガイドを読む場合はこのページは飛ばしてもいい。
-</p><p><code>Global</code> という用語はスコープ成分としての <code>*</code> と、
-<code>(Global, Global, Global)</code> の短縮形の両方の意味で使われて分かりづらいので、
-このページでスコープ成分を指すときは <code>*</code> というシンボルを用いる。
 </p><p>これまでに習ったことをおさらいしておこう。
 </p><ul><li>スコープは、サブプロジェクト軸、コンフィギュレーション軸、タスク軸という 3つの軸の成分を持つタプルである。
-</li><li>全てのスコープ軸には、<code>*</code> (<code>Global</code> とも呼ばれる) 特殊なスコープ成分がある。
-</li><li><strong>サブプロジェクト軸</strong>においてのみ、<code>ThisBuild</code> (シェルでは <code>{.}</code> と表記される) 特殊なスコープ成分がある。
+</li><li>全てのスコープ軸には、<code>Zero</code> 特殊なスコープ成分がある。
+</li><li><strong>サブプロジェクト軸</strong>においてのみ、<code>ThisBuild</code> 特殊なスコープ成分がある。
 </li><li><code>Test</code> コンフィギュレーションは <code>Runtime</code> を拡張し、<code>Runtime</code> は <code>Compile</code> を拡張する。
-</li><li>build.sbt に書かれたキーは、デフォルトで <code>(${current subproject}, *, *)</code> にスコープ付けされる。
-</li><li>キーは、<code>.in(...)</code> メソッドを使ってさらにスコープ付けできる。
+</li><li>build.sbt に書かれたキーは、デフォルトで <code>${current subproject} / Zero / Zero</code> にスコープ付けされる。
+</li><li>キーは、<code>/</code> 演算子を使ってさらにスコープ付けできる。
 </li></ul><p>以下のようなビルド定義を考える:
 </p><pre><code class="prettyprint lang-scala">lazy val foo = settingKey[Int](&quot;&quot;)
 lazy val bar = settingKey[Int](&quot;&quot;)
@@ -65,23 +62,23 @@ lazy val bar = settingKey[Int](&quot;&quot;)
 lazy val projX = (project in file(&quot;x&quot;))
   .settings(
     foo := {
-      (bar in Test).value + 1
+      (Test / bar).value + 1
     },
-    bar in Compile := 1
+    Compile / bar := 1
   )
-</code></pre><p><code>foo</code> のセッティング本文内において、スコープ付きキー <code>(bar in Test)</code> への依存性が宣言されている。
-しかし、<code>projX</code> において <code>bar in Test</code> が未定義であるにも関わらず、sbt
+</code></pre><p><code>foo</code> のセッティング本文内において、スコープ付きキー <code>Test / bar</code> への依存性が宣言されている。
+しかし、<code>projX</code> において <code>Test / bar</code> が未定義であるにも関わらず、sbt
 は別のスコープ付きキーへと解決して <code>foo</code> は <code>2</code> に初期化される。
 </p><p>sbt はキーのフォールバックのための検索パスを厳密に定義し、これを<strong>スコープ委譲</strong> (scope delegation) と呼ぶ。
 この機能により、より一般的なスコープで一度だけ値を代入して、複数のより特定なスコープがその値を継承することを可能とする。
 </p><h3 id="%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E5%A7%94%E8%AD%B2%E3%81%AE%E3%83%AB%E3%83%BC%E3%83%AB">スコープ委譲のルール<a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E5%A7%94%E8%AD%B2%E3%81%AE%E3%83%AB%E3%83%BC%E3%83%AB" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>スコープ委譲のルールは以下の通り:
 </p><ul><li>ルール 1: スコープ軸は以下の優先順位を持つ: サブプロジェクト軸、コンフィギュレーション軸、そしてタスク軸。
 </li><li>ルール 2: あるスコープが与えられたとき、委譲スコープは以下の順にタスク軸を置換することで検索される:
-与えられたタスクスコープ、それから <code>*</code> (<code>Global</code>、これはタスクスコープ付けを行わないもののこと)。
+与えられたタスクスコープ、それから <code>Zero</code> (これはタスクスコープ付けを行わないもののこと)。
 </li><li>ルール 3: あるスコープが与えられたとき、委譲スコープは以下の順にコンフィギュレーション軸を置換することで検索される:
-与えられたコンフィギュレーション、その親、その親の親…、そして <code>*</code> (<code>Global</code> これはコンフィギュレーションのスコープ付けを行わないものと同じ)。
+与えられたコンフィギュレーション、その親、その親の親…、そして <code>Zero</code> ( これはコンフィギュレーションのスコープ付けを行わないものと同じ)。
 </li><li>ルール 4: あるスコープが与えられたとき、委譲スコープは以下の順にサブプロジェクト軸を置換することで検索される:
-与えられたサブプロジェクト、<code>ThisBuild</code> そして <code>*</code> (<code>Global</code>)。
+与えられたサブプロジェクト、<code>ThisBuild</code> そして <code>Zero</code>。
 </li><li>ルール 5: 委譲されたスコープ付きのキー及びそれが依存するセッティングとタスクは、元のコンテキストを一切引き継がずに評価される。
 </li></ul><p>それぞれのルールを以下に説明していく。
 </p><h3 id="%E3%83%AB%E3%83%BC%E3%83%AB+1%3A+%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E8%BB%B8%E3%81%AE%E5%84%AA%E5%85%88%E9%A0%86%E4%BD%8D">ルール 1: スコープ軸の優先順位<a href="#%E3%83%AB%E3%83%BC%E3%83%AB+1%3A+%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E8%BB%B8%E3%81%AE%E5%84%AA%E5%85%88%E9%A0%86%E4%BD%8D" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>ルール 1: スコープ軸は以下の優先順位を持つ: サブプロジェクト軸、コンフィギュレーション軸、そしてタスク軸。
@@ -89,14 +86,14 @@ lazy val projX = (project in file(&quot;x&quot;))
 同様に、サブプロジェクトが同じ場合、コンフィギュレーションに特定な値を持つものがタスクのスコープ付けに関わらず勝つ。
 「より特定」とは何かは、以下のルールで定義していく。
 </p><h3 id="%E3%83%AB%E3%83%BC%E3%83%AB+2%3A+%E3%82%BF%E3%82%B9%E3%82%AF%E8%BB%B8%E3%81%AE%E5%A7%94%E8%AD%B2">ルール 2: タスク軸の委譲<a href="#%E3%83%AB%E3%83%BC%E3%83%AB+2%3A+%E3%82%BF%E3%82%B9%E3%82%AF%E8%BB%B8%E3%81%AE%E5%A7%94%E8%AD%B2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>ルール 2: あるスコープが与えられたとき、委譲スコープは以下の順にタスク軸を置換することで検索される:
-与えられたタスクスコープ、それから <code>*</code> (<code>Global</code>、これはタスクスコープ付けを行わないもののこと)。
+与えられたタスクスコープ、それから <code>Zero</code> (これはタスクスコープ付けを行わないもののこと)。
 </li></ul><p>ここでやっとキーが与えられたとき sbt がどのようにして委譲スコープを生成するかの具体的なルールが出てきた。
-任意の <code>(xxx in yyy).value</code> が与えられたときに、どのような検索パスを取るかを示していることに注目してほしい。
+任意の <code>(xxx / yyy).value</code> が与えられたときに、どのような検索パスを取るかを示していることに注目してほしい。
 </p><p><strong>練習問題 A</strong>: 以下のビルド定義を考える:
 </p><pre><code class="prettyprint lang-scala">lazy val projA = (project in file(&quot;a&quot;))
   .settings(
     name := {
-      &quot;foo-&quot; + (scalaVersion in packageBin).value
+      &quot;foo-&quot; + (packageBin / scalaVersion).value
     },
     scalaVersion := &quot;2.11.11&quot;
   )
@@ -105,13 +102,13 @@ lazy val projX = (project in file(&quot;x&quot;))
 </li><li><code>&quot;foo-2.12.10&quot;</code>
 </li><li>その他
 </li></ol><p>正解は <code>&quot;foo-2.11.11&quot;</code>。
-<code>.settings(...)</code> 内において、<code>scalaVersion</code> は自動的に <code>(projA, *, *)</code> にスコープ付けされるため、
-<code>scalaVersion in packageBin</code> は <code>scalaVersion in (projA, *, packageBin)</code> となる。
+<code>.settings(...)</code> 内において、<code>scalaVersion</code> は自動的に <code>projA / Zero / Zero</code> にスコープ付けされるため、
+<code>packageBin / scalaVersion</code> は <code>projA / Zero / packageBin / scalaVersion</code> となる。
 そのスコープ付きキーは未定義だ。
-ルール 2に基いて、sbt はタスク軸を <code>*</code> に置換して <code>(projA, *, *)</code> になる (シェル表記だと <code>proj/scalaVersion</code>)。
+ルール 2に基いて、sbt はタスク軸を <code>Zero</code> に置換して <code>projA / Zero / Zero</code> になる (<code>projA / scalaVersion</code>)。
 そのスコープ付きキーは <code>&quot;2.11.11&quot;</code> として定義されている。
 </p><h3 id="%E3%83%AB%E3%83%BC%E3%83%AB+3%3A+%E3%82%B3%E3%83%B3%E3%83%95%E3%82%A3%E3%82%AE%E3%83%A5%E3%83%AC%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E8%BB%B8%E3%81%AE%E6%A4%9C%E7%B4%A2%E3%83%91%E3%82%B9">ルール 3: コンフィギュレーション軸の検索パス<a href="#%E3%83%AB%E3%83%BC%E3%83%AB+3%3A+%E3%82%B3%E3%83%B3%E3%83%95%E3%82%A3%E3%82%AE%E3%83%A5%E3%83%AC%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E8%BB%B8%E3%81%AE%E6%A4%9C%E7%B4%A2%E3%83%91%E3%82%B9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>ルール 3: あるスコープが与えられたとき、委譲スコープは以下の順にコンフィギュレーション軸を置換することで検索される:
-与えられたコンフィギュレーション、その親、その親の親…、そして <code>*</code> (<code>Global</code> これはコンフィギュレーションのスコープ付けを行わないものと同じ)。
+与えられたコンフィギュレーション、その親、その親の親…、そして <code>Zero</code> ( これはコンフィギュレーションのスコープ付けを行わないものと同じ)。
 </li></ul><p>これを説明する例は上に見た <code>projX</code> だ:
 </p><pre><code class="prettyprint lang-scala">lazy val foo = settingKey[Int](&quot;&quot;)
 lazy val bar = settingKey[Int](&quot;&quot;)
@@ -119,18 +116,18 @@ lazy val bar = settingKey[Int](&quot;&quot;)
 lazy val projX = (project in file(&quot;x&quot;))
   .settings(
     foo := {
-      (bar in Test).value + 1
+      (Test / bar).value + 1
     },
-    bar in Compile := 1
+    Compile / bar := 1
   )
-</code></pre><p>フルスコープを書き出してみると <code>(projX, Test, *)</code> となる。
+</code></pre><p>フルスコープを書き出してみると <code>projX / Test / Zero</code> となる。
 また、<code>Test</code> コンフィギュレーションは <code>Runtime</code> を拡張し、<code>Runtime</code> は <code>Compile</code> を拡張することを思い出してほしい。
-</p><p><code>(bar in Test)</code> は未定義だが、ルール3 に基いて sbt
-は <code>(projX, Test, *)</code>、<code>(projX, Runtime, *)</code>、そして
-<code>(projX, Compile, *)</code> の順に <code>bar</code> をスコープ付けして検索していく。
-最後のものが見つかり、それは <code>bar in Compile</code> だ。
+</p><p><code>Test / bar</code> は未定義だが、ルール3 に基いて sbt
+は <code>projX / Test / Zero</code>、<code>projX / Runtime / Zero</code>、そして
+<code>projX / Compile / Zero</code> の順に <code>bar</code> をスコープ付けして検索していく。
+最後のものが見つかり、それは <code>Compile / bar</code> だ。
 </p><h3 id="%E3%83%AB%E3%83%BC%E3%83%AB+4%3A+%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E8%BB%B8%E3%81%AE%E6%A4%9C%E7%B4%A2%E3%83%91%E3%82%B9">ルール 4: サブプロジェクト軸の検索パス<a href="#%E3%83%AB%E3%83%BC%E3%83%AB+4%3A+%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E8%BB%B8%E3%81%AE%E6%A4%9C%E7%B4%A2%E3%83%91%E3%82%B9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>ルール 4: あるスコープが与えられたとき、委譲スコープは以下の順にサブプロジェクト軸を置換することで検索される:
-与えられたサブプロジェクト、<code>ThisBuild</code> そして <code>*</code> (<code>Global</code>)。
+与えられたサブプロジェクト、<code>ThisBuild</code> そして <code>Zero</code>。
 </li></ul><p><strong>練習問題 B</strong>: 以下のビルド定義を考える:
 </p><pre><code class="prettyprint lang-scala">organization in ThisBuild := &quot;com.example&quot;
 
@@ -144,85 +141,85 @@ lazy val projB = (project in file(&quot;b&quot;))
 </li><li><code>&quot;abc-org.tempuri&quot;</code>
 </li><li>その他
 </li></ol><p>正解は <code>abc-org.tempuri</code> だ。
-ルール 4に基づき、最初の検索パスは <code>(projB, *, *)</code> にスコープ付けされた <code>organization</code> で、
+ルール 4に基づき、最初の検索パスは <code>projB / Zero / Zero</code> にスコープ付けされた <code>organization</code> で、
 これは <code>projB</code> 内で <code>&quot;org.tempuri&quot;</code> として定義されている。
-これは、ビルドレベルのセッティングである <code>organization in ThisBuild</code> よりも高い優先順位を持つ。
+これは、ビルドレベルのセッティングである <code>ThisBuild / organization</code> よりも高い優先順位を持つ。
 </p><h4 id="%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E8%BB%B8%E3%81%AE%E5%84%AA%E5%85%88%E9%A0%86%E4%BD%8D%E3%80%81%E5%86%8D%E3%81%B3">スコープ軸の優先順位、再び<a href="#%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E8%BB%B8%E3%81%AE%E5%84%AA%E5%85%88%E9%A0%86%E4%BD%8D%E3%80%81%E5%86%8D%E3%81%B3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><strong>練習問題 C</strong>: 以下のビルド定義を考える:
-</p><pre><code class="prettyprint lang-scala">scalaVersion in (ThisBuild, packageBin) := &quot;2.12.2&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / packageBin / scalaVersion := &quot;2.12.2&quot;
 
 lazy val projC = (project in file(&quot;c&quot;))
   .settings(
     name := {
-      &quot;foo-&quot; + (scalaVersion in packageBin).value
+      &quot;foo-&quot; + (packageBin / scalaVersion).value
     },
     scalaVersion := &quot;2.11.11&quot;
   )
-</code></pre><p><code>name in projC</code> の値は何か?
+</code></pre><p><code>projC / name</code> の値は何か?
 </p><ol><li><code>&quot;foo-2.12.2&quot;</code>
 </li><li><code>&quot;foo-2.11.11&quot;</code>
 </li><li>その他
 </li></ol><p>正解は <code>foo-2.11.11</code>。
-<code>(projC, *, packageBin)</code> にスコープ付けされた <code>scalaVersion</code> は未定義だ。
-ルール 2 は <code>(projC, *, *)</code> を見つける。ルール 4 は <code>(ThisBuild, *, packageBin)</code> を見つける。
+<code>projC / Zero / packageBin</code> にスコープ付けされた <code>scalaVersion</code> は未定義だ。
+ルール 2 は <code>projC / Zero / Zero</code> を見つける。ルール 4 は <code>ThisBuild / Zero / packageBin</code> を見つける。
 ルール 1 の規定により、より特定なサブプロジェクト軸が勝ち、それは
-<code>(projC, *, *)</code> で <code>&quot;2.11.11&quot;</code> と定義されている。
+<code>projC / Zero / Zero</code> で <code>&quot;2.11.11&quot;</code> と定義されている。
 </p><p><strong>練習問題 D</strong>: 以下のビルド定義を考える:
-</p><pre><code class="prettyprint lang-scala">scalacOptions in ThisBuild += &quot;-Ywarn-unused-import&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalacOptions += &quot;-Ywarn-unused-import&quot;
 
 lazy val projD = (project in file(&quot;d&quot;))
   .settings(
     test := {
-      println((scalacOptions in (Compile, console)).value)
+      println((Compile / console / scalacOptions).value)
     },
-    scalacOptions in console -= &quot;-Ywarn-unused-import&quot;,
-    scalacOptions in Compile := scalacOptions.value // added by sbt
+    console / scalacOptions -= &quot;-Ywarn-unused-import&quot;,
+    Compile / scalacOptions := scalacOptions.value // added by sbt
   )
 </code></pre><p><code>projD/test</code> を実行した場合の出力は何か?
 </p><ol><li><code>List()</code>
 </li><li><code>List(-Ywarn-unused-import)</code>
 </li><li>その他
 </li></ol><p>正解は <code>List(-Ywarn-unused-import)</code>。
-ルール 2 は <code>(projD, Compile, *)</code> を見つけ、
-ルール 3 は <code>(projD, *, console)</code> を見つけ、
-ルール 4 は <code>(ThisBuild, *, *)</code> を見つける。
-<code>(projD, Compile, *)</code> はサブプロジェクト軸に <code>projD</code> を持ち、
+ルール 2 は <code>projD / Compile / Zero</code> を見つけ、
+ルール 3 は <code>projD / Zero / console</code> を見つけ、
+ルール 4 は <code>ThisBuild / Zero / Zero</code> を見つける。
+<code>projD / Compile / Zero</code> はサブプロジェクト軸に <code>projD</code> を持ち、
 またコンフィギュレーション軸はタスク軸よりも高い優先順位を持つのでルール 1 は
-<code>(projD, Compile, *)</code> を選択する。
-</p><p>次に、<code>scalacOptions in Compile</code> は <code>scalacOptions.value</code> を参照するため、
-<code>(projD, *, *)</code> のための委譲を探す必要がある。
-ルール 4 は <code>(ThisBuild, *, *)</code> を見つけ、これは <code>List(-Ywarn-unused-import)</code> に解決される。
+<code>projD / Compile / Zero</code> を選択する。
+</p><p>次に、<code>Compile / scalacOptions</code> は <code>scalacOptions.value</code> を参照するため、
+<code>projD / Zero / Zero</code> のための委譲を探す必要がある。
+ルール 4 は <code>ThisBuild / Zero / Zero</code> を見つけ、これは <code>List(-Ywarn-unused-import)</code> に解決される。
 </p><h3 id="inspect+%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%81%AF%E5%A7%94%E8%AD%B2%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%82%92%E5%88%97%E6%8C%99%E3%81%99%E3%82%8B">inspect コマンドは委譲スコープを列挙する<a href="#inspect+%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%81%AF%E5%A7%94%E8%AD%B2%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%82%92%E5%88%97%E6%8C%99%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>何が起こっているのか手早く調べたい場合は <code>inspect</code> を使えばいい。
-</p><pre><code class="">Hello&gt; inspect projD/compile:console::scalacOptions
+</p><pre><code class="">sbt:projd&gt; inspect projD / Compile / console / scalacOptions
 [info] Task: scala.collection.Seq[java.lang.String]
 [info] Description:
 [info]  Options for the Scala compiler.
 [info] Provided by:
-[info]  {file:/Users/xxxx/}projD/compile:scalacOptions
+[info]  ProjectRef(uri(&quot;file:/tmp/projd/&quot;), &quot;projD&quot;) / Compile / scalacOptions
 [info] Defined at:
-[info]  /Users/xxxx/build.sbt:47
+[info]  /tmp/projd/build.sbt:9
 [info] Reverse dependencies:
-[info]  projD/compile:console
-[info]  projD/*:test
+[info]  projD / test
+[info]  projD / Compile / console
 [info] Delegates:
-[info]  projD/compile:console::scalacOptions
-[info]  projD/compile:scalacOptions
-[info]  projD/*:console::scalacOptions
-[info]  projD/*:scalacOptions
-[info]  {.}/compile:console::scalacOptions
-[info]  {.}/compile:scalacOptions
-[info]  {.}/*:console::scalacOptions
-[info]  {.}/*:scalacOptions
-[info]  */compile:console::scalacOptions
-[info]  */compile:scalacOptions
-[info]  */*:console::scalacOptions
-[info]  */*:scalacOptions
+[info]  projD / Compile / console / scalacOptions
+[info]  projD / Compile / scalacOptions
+[info]  projD / console / scalacOptions
+[info]  projD / scalacOptions
+[info]  ThisBuild / Compile / console / scalacOptions
+[info]  ThisBuild / Compile / scalacOptions
+[info]  ThisBuild / console / scalacOptions
+[info]  ThisBuild / scalacOptions
+[info]  Zero / Compile / console / scalacOptions
+[info]  Zero / Compile / scalacOptions
+[info]  Zero / console / scalacOptions
+[info]  Global / scalacOptions
 ....
-</code></pre><p>“Provided by” は <code>projD/compile:console::scalacOptions</code> が
-<code>projD/compile:scalacOptions</code> によって提供されることを表示しているのに注目してほしい。
+</code></pre><p>“Provided by” は <code>projD / Compile / console / scalacOptions</code> が
+<code>projD / Compile / scalacOptions</code> によって提供されることを表示しているのに注目してほしい。
 “Delegates” 以下に<strong>全て</strong>の委譲スコープ候補が優先順に列挙されている!
-</p><ul><li>サブプロジェクト軸が <code>projD</code> にスコープ付けされているスコープが当然最初に表示されて、<code>ThisBuild</code> (<code>{.}</code>)、<code>*</code> と続いている。
-</li><li>サブプロジェクト内だと、コンフィギュレーション軸が <code>Compile</code> にスコープ付けされいるのが最初に表示されて、<code>*</code> にフォールバックしている。
-</li><li>最後に、タスク軸は与えられたタスクスコープ付けの <code>cosole::</code> が来て、次にタスクスコープ無しが来ている。
+</p><ul><li>サブプロジェクト軸が <code>projD</code> にスコープ付けされているスコープが当然最初に表示されて、<code>ThisBuild</code>、<code>Zero</code> と続いている。
+</li><li>サブプロジェクト内だと、コンフィギュレーション軸が <code>Compile</code> にスコープ付けされいるのが最初に表示されて、<code>Zero</code> にフォールバックしている。
+</li><li>最後に、タスク軸は与えられたタスクスコープ付けの <code>cosole /</code> が来て、次にタスクスコープ無しが来ている。
 </li></ul><h3 id=".value+%E5%8F%82%E7%85%A7+vs+%E5%8B%95%E7%9A%84%E3%83%87%E3%82%A3%E3%82%B9%E3%83%91%E3%83%83%E3%83%81">.value 参照 vs 動的ディスパッチ<a href="#.value+%E5%8F%82%E7%85%A7+vs+%E5%8B%95%E7%9A%84%E3%83%87%E3%82%A3%E3%82%B9%E3%83%91%E3%83%83%E3%83%81" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>ルール 5: 委譲されたスコープ付きのキー及びそれが依存するセッティングとタスクは、元のコンテキストを一切引き継がずに評価される。
 </li></ul><p>スコープ委譲はオブジェクト指向言語のクラス継承に似ていると思うかもしれないが、注意するべき違いがある。
 Scala のような OO言語では、<code>Shape</code> トレイトに <code>drawShape</code> というメソッドがあれば、たとえそれが
@@ -245,25 +242,25 @@ lazy val projE = (project in file(&quot;e&quot;))
   .settings(
     scalaVersion := &quot;2.11.11&quot;
   )
-</code></pre><p><code>projE/version</code> の値は何か?
+</code></pre><p><code>projE / version</code> の値は何か?
 </p><ol><li><code>&quot;2.12.2_0.1.0&quot;</code>
 </li><li><code>&quot;2.11.11_0.1.0&quot;</code>
 </li><li>その他
 </li></ol><p>正解は <code>&quot;2.12.2_0.1.0&quot;</code>。
-<code>projE/version</code> は <code>version in ThisBuild</code> に委譲する。
-一方 <code>version in ThisBuild</code> は <code>scalaVersion in ThisBuild</code> に依存する。
+<code>projE / version</code> は <code>ThisBuild / version</code> に委譲する。
+一方 <code>ThisBuild / version</code> は <code>ThisBuild / scalaVersion</code> に依存する。
 このように振る舞うため、ビルドレベルのセッティングは単純な値の代入に限定するべきだ。
 </p><p><strong>練習問題 F</strong>: 以下のビルド定義を考える:
-</p><pre><code class="prettyprint lang-scala">scalacOptions in ThisBuild += &quot;-D0&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalacOptions += &quot;-D0&quot;
 scalacOptions += &quot;-D1&quot;
 
 lazy val projF = (project in file(&quot;f&quot;))
   .settings(
-    scalacOptions in compile += &quot;-D2&quot;,
-    scalacOptions in Compile += &quot;-D3&quot;,
-    scalacOptions in (Compile, compile) += &quot;-D4&quot;,
+    compile / scalacOptions += &quot;-D2&quot;,
+    Compile / scalacOptions += &quot;-D3&quot;,
+    Compile / compile / scalacOptions += &quot;-D4&quot;,
     test := {
-      println(&quot;bippy&quot; + (scalacOptions in (Compile, compile)).value.mkString)
+      println(&quot;bippy&quot; + (Compile / compile / scalacOptions).value.mkString)
     }
   )
 </code></pre><p><code>projF/test</code> を実行した場合の出力は何か?
@@ -281,41 +278,41 @@ lazy val projF = (project in file(&quot;f&quot;))
 }
 </code></pre><p>このとき、古い方の <code>.value</code> を取得するときに委譲が発生して、ルール5 に基いてそれは別のスコープ付きキー扱いする必要がある。
 まずは <code>+=</code> を取り除いて、古い <code>.value</code> の委譲が何になるかをコメントで注釈する。
-</p><pre><code class="prettyprint lang-scala">scalacOptions in ThisBuild := {
-  // scalacOptions in Global &lt;- ルール 4
-  val old = (scalacOptions in ThisBuild).value
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalacOptions := {
+  // Global / scalacOptions &lt;- Rule 4
+  val old = (ThisBuild / scalacOptions).value
   old :+ &quot;-D0&quot;
 }
 
 scalacOptions := {
-  // scalacOptions in ThisBuild &lt;- ルール 4
+  // ThisBuild / scalacOptions &lt;- Rule 4
   val old = scalacOptions.value
   old :+ &quot;-D1&quot;
 }
 
 lazy val projF = (project in file(&quot;f&quot;))
   .settings(
-    scalacOptions in compile := {
-      // scalacOptions in ThisBuild &lt;- ルール 2 と 4
-      val old = (scalacOptions in compile).value
+    compile / scalacOptions := {
+      // ThisBuild / scalacOptions &lt;- Rules 2 and 4
+      val old = (compile / scalacOptions).value
       old :+ &quot;-D2&quot;
     },
-    scalacOptions in Compile := {
-      // scalacOptions in ThisBuild &lt;- ルール 3 と 4
-      val old = (scalacOptions in Compile).value
+    Compile / scalacOptions := {
+      // ThisBuild / scalacOptions &lt;- Rules 3 and 4
+      val old = (Compile / scalacOptions).value
       old :+ &quot;-D3&quot;
     },
-    scalacOptions in (Compile, compile) := {
-      // scalacOptions in (projF, Compile) &lt;- ルール 1 と 2
-      val old = (scalacOptions in (Compile, compile)).value
+    Compile / compile / scalacOptions := {
+      // projF / Compile / scalacOptions &lt;- Rules 1 and 2
+      val old = (Compile / compile / scalacOptions).value
       old :+ &quot;-D4&quot;
     },
     test := {
-      println(&quot;bippy&quot; + (scalacOptions in (Compile, compile)).value.mkString)
+      println(&quot;bippy&quot; + (Compile / compile / scalacOptions).value.mkString)
     }
   )
 </code></pre><p>評価するとこうなる:
-</p><pre><code class="prettyprint lang-scala">scalacOptions in ThisBuild := {
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalacOptions := {
   Nil :+ &quot;-D0&quot;
 }
 
@@ -325,11 +322,11 @@ scalacOptions := {
 
 lazy val projF = (project in file(&quot;f&quot;))
   .settings(
-    scalacOptions in compile := List(&quot;-D0&quot;) :+ &quot;-D2&quot;,
-    scalacOptions in Compile := List(&quot;-D0&quot;) :+ &quot;-D3&quot;,
-    scalacOptions in (Compile, compile) := List(&quot;-D0&quot;, &quot;-D3&quot;) :+ &quot;-D4&quot;,
+    compile / scalacOptions := List(&quot;-D0&quot;) :+ &quot;-D2&quot;,
+    Compile / scalacOptions := List(&quot;-D0&quot;) :+ &quot;-D3&quot;,
+    Compile / compile / scalacOptions := List(&quot;-D0&quot;, &quot;-D3&quot;) :+ &quot;-D4&quot;,
     test := {
-      println(&quot;bippy&quot; + (scalacOptions in (Compile, compile)).value.mkString)
+      println(&quot;bippy&quot; + (Compile / compile / scalacOptions).value.mkString)
     }
   )
 </code></pre><div class="bottom nav">

@@ -54,7 +54,7 @@ which means that each entry carries additional metadata. The <code>files</code>
 method provides just the raw <code>Seq[File]</code> for the classpath. For example,
 to use the files for the compilation classpath in another task, :
 </p><pre><code class="prettyprint lang-scala">example := {
-  val cp: Seq[File] = (dependencyClasspath in Compile).value.files
+  val cp: Seq[File] = (Compile / dependencyClasspath).value.files
   ...
 }
 </code></pre><blockquote><p><strong>Note</strong>: This classpath does not include the class directory, which may be
@@ -80,7 +80,7 @@ each entry carries additional metadata. The <code>files</code> method provides j
 the raw <code>Seq[File]</code> for the classpath. For example, to use the files for
 the test classpath in another task, :
 </p><pre><code class="prettyprint lang-scala">example := {
-  val cp: Seq[File] = (fullClasspath in Test).value.files
+  val cp: Seq[File] = (Test / fullClasspath).value.files
   ...
 }
 </code></pre><a name="export-jars"></a><h3 id="Use+packaged+jars+on+classpaths+instead+of+class+directories">Use packaged jars on classpaths instead of class directories<a href="#Use+packaged+jars+on+classpaths+instead+of+class+directories" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>By default, <code>fullClasspath</code> includes a directory containing class files

@@ -272,10 +272,10 @@ nombre del proyecto.
 // (ambos son SettingKey[String])
 organization := name.value
 </code></pre><p>A continuación se muestra un ejemplo más realista.
-Esto cambia el valor de la clave <code>scalaSource in Compile</code> a un directorio
+Esto cambia el valor de la clave <code>Compile / scalaSource</code> a un directorio
 diferente sólo cuando <code>scalaBinaryVersion</code> es <code>&quot;2.11&quot;</code>.
-</p><pre><code class="prettyprint lang-scala">scalaSource in Compile := {
-  val old = (scalaSource in Compile).value
+</p><pre><code class="prettyprint lang-scala">Compile / scalaSource := {
+  val old = (Compile / scalaSource).value
   scalaBinaryVersion.value match {
     case &quot;2.11&quot; =&gt; baseDirectory.value / &quot;src-2.11&quot; / &quot;main&quot; / &quot;scala&quot;
     case _      =&gt; old

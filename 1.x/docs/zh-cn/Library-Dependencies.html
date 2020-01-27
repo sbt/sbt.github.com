@@ -50,14 +50,14 @@
 </p><p>非托管依赖像这样工作：将 jar 文件放在 <code>lib</code> 文件夹下，然后它们将会被添加到项目的 classpath 中。没有更多的事情了！
 </p><p>你也可以将测试依赖的 jar 文件放在 <code>lib</code> 目录下，比如 <a href="http://scalacheck.org/">ScalaCheck</a>，<a href="http://specs2.org">Specs2</a>，<a href="http://www.scalatest.org/">ScalaTest</a>。
 </p><p><code>lib</code> 目录下的所有依赖都会在 classpaths（对 <code>compile</code>， <code>test</code>， <code>run</code> 和 <code>console</code> 都成立）。如果你想对其中的一个改变 classpath，
-你需要做适当调整，例如 <code>dependencyClasspath in Compile</code> 或者 <code>dependencyClasspath in Runtime</code>。
+你需要做适当调整，例如 <code>Compile / dependencyClasspath</code> 或者 <code>Runtime / dependencyClasspath</code>。
 </p><p>如果用非托管依赖的话，不用往 <code>build.sbt</code> 文件中添加任何内容，不过你可以改变 <code>unmanagedBase</code> key，如果你想用一个不同的目录而非 <code>lib</code>。
 </p><p>用 <code>custom_lib</code> 替代 <code>lib</code>：
 </p><pre><code class="prettyprint lang-scala">unmanagedBase := baseDirectory.value / &quot;custom_lib&quot;
 </code></pre><p><code>baseDirectory</code> 是项目的根目录，所以在这里你依据 <code>baseDirectory</code> 的值改变了 <code>unmanagedBase</code>，通过在 <a href="More-About-Settings.html">更多关于设置</a> 中介绍的一个特殊的 <code>value</code> 方法。
 </p><p>同时也有一个列举 <code>unmanagedBase</code> 目录下所有 jar 文件的 task 叫 <code>unmanagedJars</code>。如果你想用多个目录或者做一些更加复杂的事情，你可能需要用一个可以做其他事情的 task 替换整个 <code>unmanagedJars</code> task，
 例如清空 <code>Compile</code> configuration 的列表，不考虑 <code>lib</code> 目录下的文件：
-</p><pre><code class="prettyprint lang-scala">unmanagedJars in Compile := Seq.empty[sbt.Attributed[java.io.File]]
+</p><pre><code class="prettyprint lang-scala">Compile / unmanagedJars := Seq.empty[sbt.Attributed[java.io.File]]
 </code></pre><h3 id="%E6%89%98%E7%AE%A1%E4%BE%9D%E8%B5%96">托管依赖<a href="#%E6%89%98%E7%AE%A1%E4%BE%9D%E8%B5%96" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 使用 <a href="http://ant.apache.org/ivy/">Apache Ivy</a> 来实现托管依赖，所以如果你对 Ivy 或者 Maven 比较熟悉的话，你不会有太多的麻烦。
 </p><h4 id="Key"><code>libraryDependencies</code> Key<a href="#Key" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>大多数时候，你可以很简单的在 <code>libraryDependencies</code> 设置项中列出你的依赖。也可以通过 Maven POM 文件或者 Ivy 配置文件来配置依赖，而且可以通过 sbt 来调用这些外部的配置文件。
 你可以从<a href="../docs/Library-Management.html#external-maven-ivy">这里</a>获取更详细的内容。

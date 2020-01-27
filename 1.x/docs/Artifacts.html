@@ -47,34 +47,43 @@ containing the main sources and resources, and a jar containing the API
 documentation. You can add artifacts for the test classes, sources, or
 API or you can disable some of the main artifacts.
 </p><p>To add all test artifacts:
-</p><pre><code class="prettyprint lang-scala">publishArtifact in Test := true
+</p><pre><code class="prettyprint lang-scala">lazy val app = (project in file(&quot;app&quot;))
+  .settings(
+    Test / publishArtifact := true,
+  )
 </code></pre><p>To add them individually:
-</p><pre><code class="prettyprint lang-scala">// enable publishing the jar produced by `test:package`
-publishArtifact in (Test, packageBin) := true
+</p><pre><code class="prettyprint lang-scala">lazy val app = (project in file(&quot;app&quot;))
+  .settings(
+    // enable publishing the jar produced by `Test/package`
+    Test / packageBin / publishArtifact := true,
 
-// enable publishing the test API jar
-publishArtifact in (Test, packageDoc) := true
+    // enable publishing the test API jar
+    Test / packageDoc / publishArtifact := true,
 
-// enable publishing the test sources jar
-publishArtifact in (Test, packageSrc) := true
+    // enable publishing the test sources jar
+    Test / packageSrc / publishArtifact := true,
+  )
 </code></pre><p>To disable main artifacts individually:
-</p><pre><code class="prettyprint lang-scala">// disable publishing the main jar produced by `package`
-publishArtifact in (Compile, packageBin) := false
+</p><pre><code class="prettyprint lang-scala">lazy val app = (project in file(&quot;app&quot;))
+  .settings(
+    // disable publishing the main jar produced by `package`
+    Compile / packageBin / publishArtifact := false,
 
-// disable publishing the main API jar
-publishArtifact in (Compile, packageDoc) := false
+    // disable publishing the main API jar
+    Compile / packageDoc / publishArtifact := false,
 
-// disable publishing the main sources jar
-publishArtifact in (Compile, packageSrc) := false
+    // disable publishing the main sources jar
+    Compile / packageSrc / publishArtifact := false,
+  )
 </code></pre><h3 id="Modifying+default+artifacts">Modifying default artifacts<a href="#Modifying+default+artifacts" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Each built-in artifact has several configurable settings in addition to
 <code>publishArtifact</code>. The basic ones are <code>artifact</code> (of type
-<code>SettingKey[Artifact]</code>), <code>mappings</code> (of type <code>TaskKey[(File,String)]</code>),
-and <code>artifactPath</code> (of type <code>SettingKey[File]</code>). They are scoped by
-<code>(&lt;config&gt;, &lt;task&gt;)</code> as indicated in the previous section.
+<code>SettingKey[Artifact]</code>), <code>mappings</code> (of type <code>TaskKey[(File, String)]</code>),
+and <code>artifactPath</code> (of type <code>SettingKey[File]</code>).
+They are scoped by <code>(Config / &lt;task&gt;)</code> as indicated in the previous section.
 </p><p>To modify the type of the main artifact, for example:
-</p><pre><code class="prettyprint lang-scala">artifact in (Compile, packageBin) := {
-  val previous: Artifact = (artifact in (Compile, packageBin)).value
-  previous.withType(&quot;bundle&quot;)
+</p><pre><code class="prettyprint lang-scala">Compile / packageBin / artifact := {
+  val prev: Artifact = (Compile / packageBin / artifact).value
+  prev.withType(&quot;bundle&quot;)
 }
 </code></pre><p>The generated artifact name is determined by the <code>artifactName</code> setting.
 This setting is of type <code>(ScalaVersion, ModuleID, Artifact) =&gt; String</code>.
@@ -101,7 +110,7 @@ guaranteed to be up-to-date.
 </p><pre><code class="prettyprint lang-scala">val myTask = taskKey[Unit](&quot;My task.&quot;)
 
 myTask :=  {
-  val (art, file) = packagedArtifact.in(Compile, packageBin).value
+  val (art, file) = (Compile / packageBin / packagedArtifact).value
   println(&quot;Artifact definition: &quot; + art)
   println(&quot;Packaged file: &quot; + file.getAbsolutePath)
 }
@@ -132,40 +141,43 @@ myImageTask := {
   artifact
 }
 
-addArtifact( Artifact(&quot;myproject&quot;, &quot;image&quot;, &quot;jpg&quot;), myImageTask )
+addArtifact(Artifact(&quot;myproject&quot;, &quot;image&quot;, &quot;jpg&quot;), myImageTask)
 </code></pre><p><code>addArtifact</code> returns a sequence of settings (wrapped in a
 <a href="../api/sbt/internal/util/Init$SettingsDefinition.html">SettingsDefinition</a>). In a
 full build configuration, usage looks like:
-</p><pre><code class="prettyprint lang-scala">...
-lazy val proj = Project(...)
-  .settings( addArtifact(...).settings )
-...
+</p><pre><code class="prettyprint lang-scala">lazy val app = (project in file(&quot;app&quot;))
+  .settings(
+    addArtifact(...)
+  )
 </code></pre><h3 id="Publishing+.war+files">Publishing .war files<a href="#Publishing+.war+files" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A common use case for web applications is to publish the <code>.war</code> file
 instead of the <code>.jar</code> file.
-</p><pre><code class="prettyprint lang-scala">// disable .jar publishing 
-publishArtifact in (Compile, packageBin) := false 
+</p><pre><code class="prettyprint lang-scala">lazy val app = (project in file(&quot;app&quot;))
+  .settings(
+    // disable .jar publishing
+    Compile / packageBin / publishArtifact := false,
 
-// create an Artifact for publishing the .war file 
-artifact in (Compile, packageWar) := {
-  val previous: Artifact = (artifact in (Compile, packageWar)).value
-  previous.withType(&quot;war&quot;).withExtension(&quot;war&quot;)
-} 
+    // create an Artifact for publishing the .war file
+    Compile / packageWar / artifact := {
+      val prev: Artifact = (Compile / packageWar / artifact).value
+      prev.withType(&quot;war&quot;).withExtension(&quot;war&quot;)
+    },
 
-// add the .war file to what gets published 
-addArtifact(artifact in (Compile, packageWar), packageWar) 
+    // add the .war file to what gets published
+    addArtifact(Compile / packageWar / artifact, packageWar),
+  )
 </code></pre><h3 id="Using+dependencies+with+artifacts">Using dependencies with artifacts<a href="#Using+dependencies+with+artifacts" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To specify the artifacts to use from a dependency that has custom or
 multiple artifacts, use the <code>artifacts</code> method on your dependencies. For
 example:
-</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org&quot; % &quot;name&quot; % &quot;rev&quot; artifacts(Artifact(&quot;name&quot;, &quot;type&quot;, &quot;ext&quot;))
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += (&quot;org&quot; % &quot;name&quot; % &quot;rev&quot;).artifacts(Artifact(&quot;name&quot;, &quot;type&quot;, &quot;ext&quot;))
 </code></pre><p>The <code>from</code> and <code>classifer</code> methods (described on the
 <a href="Library-Management.html">Library Management</a> page) are actually convenience
 methods that translate to <code>artifacts</code>:
-</p><pre><code class="prettyprint lang-scala">def from(url: String) = artifacts( Artifact(name, new URL(url)) )
-def classifier(c: String) = artifacts( Artifact(name, c) )
+</p><pre><code class="prettyprint lang-scala">def from(url: String) = artifacts(Artifact(name, new URL(url)))
+def classifier(c: String) = artifacts(Artifact(name, c))
 </code></pre><p>That is, the following two dependency declarations are equivalent:
-</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.testng&quot; % &quot;testng&quot; % &quot;5.7&quot; classifier &quot;jdk15&quot;
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += (&quot;org.testng&quot; % &quot;testng&quot; % &quot;5.7&quot;).classifier(&quot;jdk15&quot;)
 
-libraryDependencies += &quot;org.testng&quot; % &quot;testng&quot; % &quot;5.7&quot; artifacts(Artifact(&quot;testng&quot;, &quot;jdk15&quot;) )
+libraryDependencies += (&quot;org.testng&quot; % &quot;testng&quot; % &quot;5.7&quot;).artifacts(Artifact(&quot;testng&quot;, &quot;jdk15&quot;))
 </code></pre><div class="bottom nav">
                 <div class="row">
                   <div class="col-md-auto">

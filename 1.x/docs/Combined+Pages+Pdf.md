@@ -2257,12 +2257,12 @@ organization := name.value
 ```
 
 Here's a realistic example.
-This rewires `scalaSource in Compile` key to a different directory
+This rewires `Compile / scalaSource` key to a different directory
 only when `scalaBinaryVersion` is `"2.11"`.
 
 ```scala
-scalaSource in Compile := {
-  val old = (scalaSource in Compile).value
+Compile / scalaSource := {
+  val old = (Compile / scalaSource).value
   scalaBinaryVersion.value match {
     case "2.11" => baseDirectory.value / "src-2.11" / "main" / "scala"
     case _      => old
@@ -2339,7 +2339,7 @@ describe the actions instead of the system commands.
 There are several motivation to organizing the build this way.
 
 First is de-duplication. With flow-based programming, a task is executed only once even when it is depended by multiple tasks.
-For example, even when multiple tasks along the task graph depend on `compile in Compile`,
+For example, even when multiple tasks along the task graph depend on `Compile / compile`,
 the compilation will be executed exactly once.
 
 Second is parallel processing. Using the task graph, the task engine can
@@ -2431,7 +2431,7 @@ a configuration, and a task value:
 projA / Compile / console / scalacOptions
 ```
 
-Which is the slash syntax, introduced in sbt 1.1, for:
+This is the slash syntax, introduced in sbt 1.1, for:
 
 ```scala
 scalacOptions in (
@@ -2593,7 +2593,7 @@ If you omit part of the scoped key, it will be inferred as follows:
 
 For more details, see [Interacting with the Configuration System][Inspecting-Settings].
 
-### Examples of scoped key notation
+### Examples of scoped key notation in the sbt shell
 
 - `fullClasspath` specifies just a key, so the default scopes are used:
   current project, a key-dependent configuration, and `Zero` task
@@ -2619,7 +2619,7 @@ For more details, see [Interacting with the Configuration System][Inspecting-Set
 ### Inspecting scopes
 
 In sbt shell, you can use the `inspect` command to understand
-keys and their scopes. Try `inspect test:fullClasspath`:
+keys and their scopes. Try `inspect Test/fullClasspath`:
 
 ```
 $ sbt
@@ -2703,7 +2703,7 @@ reality, all keys consist of both a name, and a scope (where the scope
 has three axes). The entire expression
 `Compile / packageBin / packageOptions` is a key name, in other words.
 Simply `packageOptions` is also a key name, but a different one (for keys
-with no in, a scope is implicitly assumed: current project, `Zero`
+with no slashes, a scope is implicitly assumed: current project, `Zero`
 config, `Zero` task).
 
 ### Build-level settings
@@ -3282,8 +3282,8 @@ You can place test jars such as
 
 Dependencies in `lib` go on all the classpaths (for `compile`, `test`, `run`,
 and `console`). If you wanted to change the classpath for just one of
-those, you would adjust `dependencyClasspath in Compile` or
-`dependencyClasspath in Runtime` for example.
+those, you would adjust `Compile / dependencyClasspath` or
+`Runtime / dependencyClasspath` for example.
 
 There's nothing to add to `build.sbt` to use unmanaged dependencies,
 though you could change the `unmanagedBase` key if you'd like to use a
@@ -5584,12 +5584,12 @@ set logLevel := Level.Warn
 ```
 
 > or
-> :   set logLevel in Test := Level.Warn
+> :   set Test / logLevel := Level.Warn
 >
 You could make commands that wrap this, like:
 
 ```
-warn test:run
+warn Test/run
 ```
 
 Also, trace is currently an integer, but should really be an abstract
@@ -8374,19 +8374,19 @@ about what you pass to `IO.delete`, for example.
 To get a particular setting, use the form:
 
 ```scala
-> val value = (<key> in <scope>).eval
+> val value = (<scope> / <key>).eval
 ```
 
 #### Examples
 
 ```scala
-> IO.delete( (classesDirectory in Compile).eval )
+> IO.delete( (Compile / classesDirectory).eval )
 ```
 
 Show current compile options:
 
 ```scala
-> (scalacOptions in Compile).eval foreach println
+> (Compile / scalacOptions).eval foreach println
 ```
 
 Show additionally configured repositories.
@@ -8400,7 +8400,7 @@ Show additionally configured repositories.
 To evaluate a task (and its dependencies), use the same form:
 
 ```scala
-> val value = (<key> in <scope>).eval
+> val value = (<scope> / <key>).eval
 ```
 
 #### Examples
@@ -8414,8 +8414,8 @@ Show all repositories, including defaults.
 Show the classpaths used for compilation and testing:
 
 ```scala
-> (fullClasspath in Compile).eval.files foreach println
-> (fullClasspath in Test).eval.files foreach println
+> (Compile / fullClasspath).eval.files foreach println
+> (Test / fullClasspath).eval.files foreach println
 ```
 
 ### State
@@ -8951,21 +8951,21 @@ As an example, we'll look at `console`:
 > inspect console
 ...
 [info] Dependencies:
-[info]  compile:console::fullClasspath
-[info]  compile:console::scalacOptions
-[info]  compile:console::initialCommands
-[info]  compile:console::cleanupCommands
-[info]  compile:console::compilers
-[info]  compile:console::taskTemporary-directory
-[info]  compile:console::scalaInstance
-[info]  compile:console::streams
+[info]  Compile / console / initialCommands
+[info]  Compile / console / streams
+[info]  Compile / console / compilers
+[info]  Compile / console / cleanupCommands
+[info]  Compile / console / taskTemporaryDirectory
+[info]  Compile / console / scalaInstance
+[info]  Compile / console / scalacOptions
+[info]  Compile / console / fullClasspath
 
 ...
 ```
 
 This shows the inputs to the `console` task. We can see that it gets its
-classpath and options from `fullClasspath` and
-`scalacOptions(for console)`. The information provided by the `inspect`
+classpath and options from `Compile / console / fullClasspath` and
+`Compile / console / scalacOptions`. The information provided by the `inspect`
 command can thus assist in finding the right setting to change. The
 convention for keys, like `console` and `fullClasspath`, is that the
 Scala identifier is camel case, while the String representation is
@@ -8975,7 +8975,7 @@ and `test`. For example, we can infer from the previous example how to
 add code to be run when the Scala interpreter starts up:
 
 ```
-> set initialCommands in Compile in console := "import mypackage._"
+> set Compile / console / initialCommands := "import mypackage._"
 > console
 ...
 import mypackage._
@@ -8983,9 +8983,9 @@ import mypackage._
 ```
 
 `inspect` showed that `console` used the setting
-`compile:console::initialCommands`. Translating the `initialCommands`
+`Compile / console / initialCommands`. Translating the `initialCommands`
 string to the Scala identifier gives us `initialCommands`. `compile`
-indicates that this is for the main sources. `console::` indicates that
+indicates that this is for the main sources. `console /` indicates that
 the setting is specific to `console`. Because of this, we can set the
 initial commands on the `console` task without affecting the
 `consoleQuick` task, for example.
@@ -9004,23 +9004,23 @@ Dependencies,
 > inspect actual console
 ...
 [info] Dependencies:
-[info]  compile:scalacOptions
-[info]  compile:fullClasspath
-[info]  *:scalaInstance
-[info]  */*:initialCommands
-[info]  */*:cleanupCommands
-[info]  */*:taskTemporaryDirectory
-[info]  *:console::compilers
-[info]  compile:console::streams
+[info]  Compile / console / streams
+[info]  Global / taskTemporaryDirectory
+[info]  scalaInstance
+[info]  Compile / scalacOptions
+[info]  Global / initialCommands
+[info]  Global / cleanupCommands
+[info]  Compile / fullClasspath
+[info]  console / compilers
 ...
 ```
 
 For `initialCommands`, we see that it comes from the global scope
-(`*/*:`). Combining this with the relevant output from
+(`Global`). Combining this with the relevant output from
 `inspect console`:
 
 ```
-compile:console::initialCommands
+Compile / console / initialCommands
 ```
 
 we know that we can set `initialCommands` as generally as the global
@@ -9041,11 +9041,11 @@ looking at the reverse dependencies output of `inspect actual`:
 > inspect actual initialCommands
 ...
 [info] Reverse dependencies:
-[info]  test:console
-[info]  compile:consoleQuick
-[info]  compile:console
-[info]  test:consoleQuick
-[info]  *:consoleProject
+[info]  Compile / console
+[info]  Test / console
+[info]  consoleProject
+[info]  Test / consoleQuick
+[info]  Compile / consoleQuick
 ...
 ```
 
@@ -9056,15 +9056,15 @@ doesn't have our project's classpath available, we could use the more
 specific task axis:
 
 ```
-> set initialCommands in console := "import mypackage._"
-> set initialCommands in consoleQuick := "import mypackage._"`
+> set console / initialCommands := "import mypackage._"
+> set consoleQuick / initialCommands := "import mypackage._"`
 ```
 
 or configuration axis:
 
 ```
-> set initialCommands in Compile := "import mypackage._"
-> set initialCommands in Test := "import mypackage._"
+> set Compile/　initialCommands := "import mypackage._"
+> set Test / initialCommands := "import mypackage._"
 ```
 
 The next part describes the Delegates section, which shows the chain of
@@ -9082,20 +9082,20 @@ requested key.
 As an example, consider the initial commands for `console` again:
 
 ```
-> inspect console::initialCommands
+> inspect console/initialCommands
 ...
 [info] Delegates:
-[info]  *:console::initialCommands
-[info]  *:initialCommands
-[info]  {.}/*:console::initialCommands
-[info]  {.}/*:initialCommands
-[info]  */*:console::initialCommands
-[info]  */*:initialCommands
+[info]  console / initialCommands
+[info]  initialCommands
+[info]  ThisBuild / console / initialCommands
+[info]  ThisBuild / initialCommands
+[info]  Zero / console / initialCommands
+[info]  Global / initialCommands
 ...
 ```
 
 This means that if there is no value specifically for
-`*:console::initialCommands`, the scopes listed under Delegates will be
+`console/initialCommands`, the scopes listed under Delegates will be
 searched in order until a defined value is found.
 
 
@@ -10572,8 +10572,8 @@ Here's an example of how to hook the new `manipulateBytecode` key in
 your own plugin:
 
 ```scala
-    manipulateBytecode in Compile := {
-      val previous = (manipulateBytecode in Compile).value
+    Compile / manipulateBytecode := {
+      val previous = (Compile / manipulateBytecode).value
       // Note: This must return a new Compiler.CompileResult with our changes.
       doManipulateBytecode(previous)
     }
@@ -10651,23 +10651,23 @@ retrieved dependencies and compiled classes.
 Tasks that produce managed files should be inserted as follows:
 
 ```scala
-sourceGenerators in Compile +=
-    generate( (sourceManaged in Compile).value / "some_directory")
+Compile / sourceGenerators +=
+    generate( (Comile / sourceManaged).value / "some_directory")
 ```
 
 In this example, `generate` is some function of type `File => Seq[File]`
 that actually does the work. So, we are appending a new task to the list
-of main source generators (`sourceGenerators in Compile`).
+of main source generators (`Compile / sourceGenerators`).
 
 To insert a named task, which is the better approach for plugins:
 
 ```scala
 val mySourceGenerator = taskKey[Seq[File]](...)
 
-mySourceGenerator in Compile :=
-  generate( (sourceManaged in Compile).value / "some_directory")
+Compile / mySourceGenerator :=
+  generate( (Compile / sourceManaged).value / "some_directory")
 
-sourceGenerators in Compile += (mySourceGenerator in Compile)
+Compile / sourceGenerators += (Compile / mySourceGenerator)
 ```
 
 The `task` method is used to refer to the actual task instead of the
@@ -10683,7 +10683,7 @@ to `src/main/scala`. You can exclude source files by name
 (`butler.scala` in the example below) like:
 
 ```scala
-excludeFilter in unmanagedSources := "butler.scala" 
+unmanagedSources / excludeFilter := "butler.scala"
 ```
 
 Read more on
@@ -10743,7 +10743,7 @@ directory "config". When you run "sbt run", you want the directory to be
 in classpath.
 
 ```scala
-unmanagedClasspath in Runtime += baseDirectory.value / "config"
+Runtime / unmanagedClasspath += baseDirectory.value / "config"
 ```
 
 
@@ -10774,7 +10774,7 @@ X-Ray requires the extra option:
 ```scala
 // declare the main Scala source directory as the base directory
 scalacOptions :=
-    scalacOptions.value :+ ("-Psxr:base-directory:" + (scalaSource in Compile).value.getAbsolutePath)
+    scalacOptions.value :+ ("-Psxr:base-directory:" + (Compile / scalaSource).value.getAbsolutePath)
 ```
 
 You can still specify compiler plugins manually. For example:
@@ -11061,8 +11061,8 @@ what options to pass to each group.
 
 ### Change working directory
 
-To change the working directory when forked, set `baseDirectory in run`
-or `baseDirectory in test`:
+To change the working directory when forked, set `Compile / run / baseDirectory`
+or `Test / baseDirectory`:
 
 ```scala
 // sets the working directory for all `run`-like tasks
@@ -11335,10 +11335,10 @@ unnecessary Scala directories can be ignored by modifying
 
 ```scala
 // Include only src/main/java in the compile configuration
-unmanagedSourceDirectories in Compile := (javaSource in Compile).value :: Nil
+Compile / unmanagedSourceDirectories := (Compile / javaSource).value :: Nil
 
 // Include only src/test/java in the test configuration
-unmanagedSourceDirectories in Test := (javaSource in Test).value :: Nil
+Test / unmanagedSourceDirectories := (Test / javaSource).value :: Nil
 ```
 
 However, there should not be any harm in leaving the Scala directories
@@ -11669,9 +11669,9 @@ lazy val core = (project in file("core"))
   .settings(
     commonSettings,
     // include the macro classes and resources in the main jar
-    mappings in (Compile, packageBin) ++= mappings.in(macroSub, Compile, packageBin).value,
+    Compile / packageBin / mappings ++= (macroSub / Compile / packageBin / mappings).value,
     // include the macro sources in the main source jar
-    mappings in (Compile, packageSrc) ++= mappings.in(macroSub, Compile, packageSrc).value
+    Compile / packageSrc / mappings ++= (macroSub / Compile / packageSrc / mappings).value
   )
 ```
 
@@ -12171,7 +12171,7 @@ Global / concurrentRestrictions := {
 }
 ```
 
-As before, `parallelExecution in Test` controls whether tests are mapped
+As before, `Test / parallelExecution` controls whether tests are mapped
 to separate tasks. To restrict the number of concurrently executing
 tests in all projects, use:
 
@@ -12702,7 +12702,7 @@ import Tests._
         new Group(letter.toString, tests, SubProcess(options))
     } toSeq
 
-    testGrouping in Test := groupByFirst( (definedTests in Test).value )
+    Test / testGrouping := groupByFirst( (Test / definedTests).value )
 }
 ```
 
@@ -12885,8 +12885,8 @@ lazy val root = (project in file("."))
   .settings(
     inConfig(FunTest)(Defaults.testTasks),
     libraryDependencies += scalatest % FunTest,
-    testOptions in Test := Seq(Tests.Filter(unitFilter)),
-    testOptions in FunTest := Seq(Tests.Filter(itFilter))
+    Test / testOptions := Seq(Tests.Filter(unitFilter)),
+    FunTest / testOptions := Seq(Tests.Filter(itFilter))
     // other settings here
   )
 ```
@@ -13494,49 +13494,58 @@ API or you can disable some of the main artifacts.
 To add all test artifacts:
 
 ```scala
-publishArtifact in Test := true
+lazy val app = (project in file("app"))
+  .settings(
+    Test / publishArtifact := true,
+  )
 ```
 
 To add them individually:
 
 ```scala
-// enable publishing the jar produced by `test:package`
-publishArtifact in (Test, packageBin) := true
+lazy val app = (project in file("app"))
+  .settings(
+    // enable publishing the jar produced by `Test/package`
+    Test / packageBin / publishArtifact := true,
 
-// enable publishing the test API jar
-publishArtifact in (Test, packageDoc) := true
+    // enable publishing the test API jar
+    Test / packageDoc / publishArtifact := true,
 
-// enable publishing the test sources jar
-publishArtifact in (Test, packageSrc) := true
+    // enable publishing the test sources jar
+    Test / packageSrc / publishArtifact := true,
+  )
 ```
 
 To disable main artifacts individually:
 
 ```scala
-// disable publishing the main jar produced by `package`
-publishArtifact in (Compile, packageBin) := false
+lazy val app = (project in file("app"))
+  .settings(
+    // disable publishing the main jar produced by `package`
+    Compile / packageBin / publishArtifact := false,
 
-// disable publishing the main API jar
-publishArtifact in (Compile, packageDoc) := false
+    // disable publishing the main API jar
+    Compile / packageDoc / publishArtifact := false,
 
-// disable publishing the main sources jar
-publishArtifact in (Compile, packageSrc) := false
+    // disable publishing the main sources jar
+    Compile / packageSrc / publishArtifact := false,
+  )
 ```
 
 ### Modifying default artifacts
 
 Each built-in artifact has several configurable settings in addition to
 `publishArtifact`. The basic ones are `artifact` (of type
-`SettingKey[Artifact]`), `mappings` (of type `TaskKey[(File,String)]`),
-and `artifactPath` (of type `SettingKey[File]`). They are scoped by
-`(<config>, <task>)` as indicated in the previous section.
+`SettingKey[Artifact]`), `mappings` (of type `TaskKey[(File, String)]`),
+and `artifactPath` (of type `SettingKey[File]`).
+They are scoped by `(Config / <task>)` as indicated in the previous section.
 
 To modify the type of the main artifact, for example:
 
 ```scala
-artifact in (Compile, packageBin) := {
-  val previous: Artifact = (artifact in (Compile, packageBin)).value
-  previous.withType("bundle")
+Compile / packageBin / artifact := {
+  val prev: Artifact = (Compile / packageBin / artifact).value
+  prev.withType("bundle")
 }
 ```
 
@@ -13574,7 +13583,7 @@ For example:
 val myTask = taskKey[Unit]("My task.")
 
 myTask :=  {
-  val (art, file) = packagedArtifact.in(Compile, packageBin).value
+  val (art, file) = (Compile / packageBin / packagedArtifact).value
   println("Artifact definition: " + art)
   println("Packaged file: " + file.getAbsolutePath)
 }
@@ -13621,7 +13630,7 @@ myImageTask := {
   artifact
 }
 
-addArtifact( Artifact("myproject", "image", "jpg"), myImageTask )
+addArtifact(Artifact("myproject", "image", "jpg"), myImageTask)
 ```
 
 `addArtifact` returns a sequence of settings (wrapped in a
@@ -13629,10 +13638,10 @@ addArtifact( Artifact("myproject", "image", "jpg"), myImageTask )
 full build configuration, usage looks like:
 
 ```scala
-...
-lazy val proj = Project(...)
-  .settings( addArtifact(...).settings )
-...
+lazy val app = (project in file("app"))
+  .settings(
+    addArtifact(...)
+  )
 ```
 
 ### Publishing .war files
@@ -13641,18 +13650,21 @@ A common use case for web applications is to publish the `.war` file
 instead of the `.jar` file.
 
 ```scala
-// disable .jar publishing 
-publishArtifact in (Compile, packageBin) := false 
+lazy val app = (project in file("app"))
+  .settings(
+    // disable .jar publishing
+    Compile / packageBin / publishArtifact := false,
 
-// create an Artifact for publishing the .war file 
-artifact in (Compile, packageWar) := {
-  val previous: Artifact = (artifact in (Compile, packageWar)).value
-  previous.withType("war").withExtension("war")
-} 
+    // create an Artifact for publishing the .war file
+    Compile / packageWar / artifact := {
+      val prev: Artifact = (Compile / packageWar / artifact).value
+      prev.withType("war").withExtension("war")
+    },
 
-// add the .war file to what gets published 
-addArtifact(artifact in (Compile, packageWar), packageWar) 
-``` 
+    // add the .war file to what gets published
+    addArtifact(Compile / packageWar / artifact, packageWar),
+  )
+```
 
 ### Using dependencies with artifacts
 
@@ -13661,7 +13673,7 @@ multiple artifacts, use the `artifacts` method on your dependencies. For
 example:
 
 ```scala
-libraryDependencies += "org" % "name" % "rev" artifacts(Artifact("name", "type", "ext"))
+libraryDependencies += ("org" % "name" % "rev").artifacts(Artifact("name", "type", "ext"))
 ```
 
 The `from` and `classifer` methods (described on the
@@ -13669,16 +13681,16 @@ The `from` and `classifer` methods (described on the
 methods that translate to `artifacts`:
 
 ```scala
-def from(url: String) = artifacts( Artifact(name, new URL(url)) )
-def classifier(c: String) = artifacts( Artifact(name, c) )
+def from(url: String) = artifacts(Artifact(name, new URL(url)))
+def classifier(c: String) = artifacts(Artifact(name, c))
 ```
 
 That is, the following two dependency declarations are equivalent:
 
 ```scala
-libraryDependencies += "org.testng" % "testng" % "5.7" classifier "jdk15"
+libraryDependencies += ("org.testng" % "testng" % "5.7").classifier("jdk15")
 
-libraryDependencies += "org.testng" % "testng" % "5.7" artifacts(Artifact("testng", "jdk15") )
+libraryDependencies += ("org.testng" % "testng" % "5.7").artifacts(Artifact("testng", "jdk15"))
 ```
 
 
@@ -15445,7 +15457,7 @@ following example, `test:sampleTask` uses the result of
 `compile:intTask`.
 
 ```scala
-sampleTask in Test := (intTask in Compile).value * 3
+Test / sampleTask := (Compile / intTask).value * 3
 ```
 
 ##### On precedence
@@ -15466,7 +15478,7 @@ Therefore, the previous example is equivalent to the following:
 
 
 ```scala
-(sampleTask in Test).:=( (intTask in Compile).value * 3 )
+(Test / sampleTask).:=( (Compile / intTask).value * 3 )
 ```
 
 Additionally, the braces in the following are necessary:
@@ -15842,16 +15854,16 @@ on `intTask` is only introduced in non-dev mode.
 
 sbt 0.13.8 added `Def.sequential` function to run tasks under semi-sequential semantics.
 This is similar to the dynamic task, but easier to define.
-To demonstrate the sequential task, let's create a custom task called `compilecheck` that runs `compile in Compile` and then `scalastyle in Compile` task added by [scalastyle-sbt-plugin](http://www.scalastyle.org/sbt.html).
+To demonstrate the sequential task, let's create a custom task called `compilecheck` that runs `Compile / compile` and then `Compile / scalastyle` task added by [scalastyle-sbt-plugin](http://www.scalastyle.org/sbt.html).
 
 ```scala
 lazy val compilecheck = taskKey[Unit]("compile and then scalastyle")
 
 lazy val root = (project in file("."))
   .settings(
-    compilecheck in Compile := Def.sequential(
-      compile in Compile,
-      (scalastyle in Compile).toTask("")
+    Compile / compilecheck := Def.sequential(
+      Compile / compile,
+      (Compile / scalastyle).toTask("")
     ).value
   )
 ```
@@ -16918,9 +16930,9 @@ val run2 = inputKey[Unit](
 val separator: Parser[String] = "--"
 
 run2 := {
-   val one = (run in Compile).evaluated
+   val one = (Compile / run).evaluated
    val sep = separator.parsed
-   val two = (run in Compile).evaluated
+   val two = (Compile / run).evaluated
 }
 ```
 
@@ -16979,8 +16991,8 @@ lazy val firstInput: Initialize[String] =
 lazy val secondInput: String = " red blue"
 
 run2 := {
-   val one = (run in Compile).fullInput(firstInput.value).evaluated
-   val two = (run in Compile).partialInput(secondInput).evaluated
+   val one = (Compile / run).fullInput(firstInput.value).evaluated
+   val two = (Compile / run).partialInput(secondInput).evaluated
 }
 ```
 
@@ -17011,7 +17023,7 @@ tasks or run directly without providing any input:
 lazy val runFixed = taskKey[Unit]("A task that hard codes the values to `run`")
 
 runFixed := {
-   val _ = (run in Compile).toTask(" blue green").value
+   val _ = (Compile / run).toTask(" blue green").value
    println("Done!")
 }
 ```
@@ -17038,8 +17050,8 @@ lazy val runFixed2 = taskKey[Unit]("A task that hard codes the values to `run`")
 fork in run := true
 
 runFixed2 := {
-   val x = (run in Compile).toTask(" blue green").value
-   val y = (run in Compile).toTask(" red orange").value
+   val x = (Compile / run).toTask(" blue green").value
+   val y = (Compile / run).toTask(" red orange").value
    println("Done!")
 }
 ```
@@ -17596,10 +17608,10 @@ val extracted: Extracted
 import extracted._
 
 // get name of current project
-val nameOpt: Option[String] = name in currentRef get structure.data
+val nameOpt: Option[String] = (currentRef / name).get(structure.data)
 
 // get the package options for the `test:packageSrc` task or Nil if none are defined
-val pkgOpts: Seq[PackageOption] = packageOptions in (currentRef, Test, packageSrc) get structure.data getOrElse Nil
+val pkgOpts: Seq[PackageOption] = (currentRef / Test / packageSrc / packageOptions).get(structure.data).getOrElse(Nil)
 ```
 
 [BuildStructure](../api/sbt/internal/BuildStructure.html) contains
@@ -17665,7 +17677,7 @@ val eval: State => State = (state: State) => {
     // This selects the main 'compile' task for the current project.
     //   The value produced by 'compile' is of type inc.Analysis,
     //   which contains information about the compiled code.
-    val taskKey = Keys.compile in Compile
+    val taskKey = Compile / Keys.compile
 
     // Evaluate the task
     // None if the key is not defined
@@ -17687,7 +17699,7 @@ For getting the test classpath of a specific project, use this key:
 ```scala
 val projectRef: ProjectRef = ...
 val taskKey: Task[Seq[Attributed[File]]] =
-  Keys.fullClasspath in (projectRef, Test)
+  (projectRef / Test / Keys.fullClasspath)
 ```
 
 ### Using State in a task
@@ -17831,9 +17843,9 @@ task.
 
 ```scala
 zip := {
-    val bin: File = (packageBin in Compile).value
-    val src: File = (packageSrc in Compile).value
-    val doc: File = (packageDoc in Compile).value
+    val bin: File = (Compile / packageBin).value
+    val src: File = (Compile / packageSrc).value
+    val doc: File = (Compile / packageDoc).value
     val out: File = zipPath.value
     val inputs: Seq[(File,String)] = Seq(bin, src, doc) x Path.flat
     IO.zip(inputs, out)
@@ -18758,9 +18770,9 @@ the same *key*, but they represent distinct *values*. So, in a user's
 `build.sbt`, we might see:
 
 ```scala
-scalaSource in Fuzz := baseDirectory.value / "source" / "fuzz" / "scala"
+Fuzz / scalaSource := baseDirectory.value / "source" / "fuzz" / "scala"
 
-scalaSource in Compile := baseDirectory.value / "source" / "main" / "scala"
+Compile / scalaSource := baseDirectory.value / "source" / "main" / "scala"
 ```
 
 In the fuzzing plugin, this is achieved with an `inConfig` definition:
@@ -19760,7 +19772,7 @@ to use the files for the compilation classpath in another task, :
 
 ```scala
 example := {
-  val cp: Seq[File] = (dependencyClasspath in Compile).value.files
+  val cp: Seq[File] = (Compile / dependencyClasspath).value.files
   ...
 }
 ```
@@ -19805,7 +19817,7 @@ the test classpath in another task, :
 
 ```scala
 example := {
-  val cp: Seq[File] = (fullClasspath in Test).value.files
+  val cp: Seq[File] = (Test / fullClasspath).value.files
   ...
 }
 ```
@@ -19913,9 +19925,9 @@ change this, modify `scalaSource` in the `Compile` (for main sources) or
 `Test` (for test sources). For example,
 
 ```scala
-scalaSource in Compile := baseDirectory.value / "src"
+Compile / scalaSource := baseDirectory.value / "src"
 
-scalaSource in Test := baseDirectory.value / "test-src"
+Test / scalaSource := baseDirectory.value / "test-src"
 ```
 
 > **Note**: The Scala source directory can be the same as the Java source
@@ -19933,9 +19945,9 @@ this, modify `javaSource` in the `Compile` (for main sources) or `Test`
 For example,
 
 ```scala
-javaSource in Compile := baseDirectory.value / "src"
+Compile / javaSource := baseDirectory.value / "src"
 
-javaSource in Test := baseDirectory.value / "test-src"
+Test / javaSource := baseDirectory.value / "test-src"
 ```
 
 > **Note**: The Scala source directory can be the same as the Java source
@@ -19953,9 +19965,9 @@ change this, modify `resourceDirectory` in either the `Compile` or
 For example,
 
 ```scala
-resourceDirectory in Compile := baseDirectory.value / "resources"
+Compile / resourceDirectory := baseDirectory.value / "resources"
 
-resourceDirectory in Test := baseDirectory.value / "test-resources"
+Test / resourceDirectory := baseDirectory.value / "test-resources"
 ```
 
 <a name="unmanaged-base-directory"></a>
@@ -19981,7 +19993,7 @@ default. For example, the following declares `lib/main/` to contain jars
 only for `Compile` and not for running or testing:
 
 ```scala
-unmanagedBase in Compile := baseDirectory.value / "lib" / "main"
+Compile / unmanagedBase := baseDirectory.value / "lib" / "main"
 ```
 
 <a name="disable-base-sources"></a>
@@ -20007,7 +20019,7 @@ source directory. For example, to add `extra-src` to be an additional
 directory containing main sources,
 
 ```scala
-unmanagedSourceDirectories in Compile += baseDirectory.value / "extra-src"
+Compile / unmanagedSourceDirectories += baseDirectory.value / "extra-src"
 ```
 
 > **Note**: This directory should only contain unmanaged sources, which are
@@ -20025,7 +20037,7 @@ another resource directory. For example, to add `extra-resources` to be
 an additional directory containing main resources,
 
 ```scala
-unmanagedResourceDirectories in Compile += baseDirectory.value / "extra-resources"
+Compile / unmanagedResourceDirectories += baseDirectory.value / "extra-resources"
 ```
 
 > **Note**: This directory should only contain unmanaged resources, which are
@@ -20047,16 +20059,15 @@ exclusion, the following also ignores files containing `impl` in their
 name,
 
 ```scala
-excludeFilter in unmanagedSources := HiddenFileFilter || "*impl*"
+unmanagedSources / excludeFilter := HiddenFileFilter || "*impl*"
 ```
 
 To have different filters for main and test libraries, configure
 `Compile` and `Test` separately:
 
 ```scala
-includeFilter in (Compile, unmanagedSources) := "*.scala" || "*.java"
-
-includeFilter in (Test, unmanagedSources) := HiddenFileFilter || "*impl*"
+Compile / unmanagedSources / includeFilter := "*.scala" || "*.java"
+Test / unmanagedSources / includeFilter := HiddenFileFilter || "*impl*"
 ```
 
 > **Note**: By default, sbt includes `.scala` and `.java` sources, excluding hidden
@@ -20076,16 +20087,15 @@ exclusion, the following also ignores files containing `impl` in their
 name,
 
 ```scala
-excludeFilter in unmanagedResources := HiddenFileFilter || "*impl*"
+unmanagedResources / excludeFilter := HiddenFileFilter || "*impl*"
 ```
 
 To have different filters for main and test libraries, configure
 `Compile` and `Test` separately:
 
 ```scala
-includeFilter in (Compile, unmanagedResources) := "*.txt"
-
-includeFilter in (Test, unmanagedResources) := "*.html"
+Compile / unmanagedResources / includeFilter := "*.txt"
+Test / unmanagedResources / includeFilter := "*.html"
 ```
 
 > **Note**: By default, sbt includes all files that are not hidden.
@@ -20103,16 +20113,15 @@ directories and files that match `includeFilter` and do not match
 exclusion, the following also ignores zips,
 
 ```scala
-excludeFilter in unmanagedJars := HiddenFileFilter || "*.zip"
+unmanagedJars / excludeFilter := HiddenFileFilter || "*.zip"
 ```
 
 To have different filters for main and test libraries, configure
 `Compile` and `Test` separately:
 
 ```scala
-includeFilter in (Compile, unmanagedJars) := "*.jar"
-
-includeFilter in (Test, unmanagedJars) := "*.jar" || "*.zip"
+Compile / unmanagedJars / includeFilter := "*.jar"
+Test / unmanagedJars / includeFilter := "*.jar" || "*.zip"
 ```
 
 > **Note**: By default, sbt includes jars, zips, and native dynamic libraries,
@@ -20148,15 +20157,15 @@ scoped according to whether the generated files are main (`Compile`) or
 test (`Test`) sources. This basic structure looks like:
 
 ```scala
-sourceGenerators in Compile += <task of type Seq[File]>.taskValue
+Compile / sourceGenerators += <task of type Seq[File]>.taskValue
 ```
 
 For example, assuming a method
 `def makeSomeSources(base: File): Seq[File]`,
 
 ```scala
-sourceGenerators in Compile += Def.task {
-  makeSomeSources((sourceManaged in Compile).value / "demo")
+Compile / sourceGenerators += Def.task {
+  makeSomeSources((Compile / sourceManaged).value / "demo")
 }.taskValue
 ```
 
@@ -20165,8 +20174,8 @@ As a specific example, the following source generator generates
 console:
 
 ```scala
-sourceGenerators in Compile += Def.task {
-  val file = (sourceManaged in Compile).value / "demo" / "Test.scala"
+Compile / sourceGenerators += Def.task {
+  val file = (Compile / sourceManaged).value / "demo" / "Test.scala"
   IO.write(file, """object Test extends App { println("Hi") }""")
   Seq(file)
 }.taskValue
@@ -20215,15 +20224,15 @@ to whether the generated files are main (`Compile`) or test (`Test`)
 resources. This basic structure looks like:
 
 ```scala
-resourceGenerators in Compile += <task of type Seq[File]>.taskValue
+Compile / resourceGenerators += <task of type Seq[File]>.taskValue
 ```
 
 For example, assuming a method
 `def makeSomeResources(base: File): Seq[File]`,
 
 ```scala
-resourceGenerators in Compile += Def.task {
-  makeSomeResources((resourceManaged in Compile).value / "demo")
+Compile / resourceGenerators += Def.task {
+  makeSomeResources((Compile / resourceManaged).value / "demo")
 }.taskValue
 ```
 
@@ -20237,8 +20246,8 @@ As a specific example, the following generates a properties file
 `myapp.properties` containing the application name and version:
 
 ```scala
-resourceGenerators in Compile += Def.task {
-  val file = (resourceManaged in Compile).value / "demo" / "myapp.properties"
+Compile / resourceGenerators += Def.task {
+  val file = (Compile / resourceManaged).value / "demo" / "myapp.properties"
   val contents = "name=%s\nversion=%s".format(name.value,version.value)
   IO.write(file, contents)
   Seq(file)
@@ -20879,7 +20888,7 @@ task. For example, to change the logging level for compilation to only
 show warnings and errors:
 
 ```scala
-> set logLevel in compile := Level.Warn
+> set Compile / compile / logLevel := Level.Warn
 ```
 
 To enable debug logging for all tasks in the current project,
@@ -20926,9 +20935,9 @@ the trace printing behavior for a single project, configuration, or
 task, scope `traceLevel` appropriately:
 
 ```scala
-> set traceLevel in Test := 5
-> set traceLevel in update := 0
-> set traceLevel in ThisProject := -1
+> set Test / traceLevel := 5
+> set update / traceLevel := 0
+> set ThisProject / traceLevel := -1
 ```
 
 <a name="nobuffer"></a>
@@ -21173,14 +21182,14 @@ String value.
 For example,
 
 ```scala
-packageOptions in (Compile, packageBin) += 
-  Package.ManifestAttributes( java.util.jar.Attributes.Name.SEALED -> "true" )
+Compile / packageBin / packageOptions +=
+  Package.ManifestAttributes(java.util.jar.Attributes.Name.SEALED -> "true")
 ```
 
 Other attributes may be added with `Package.JarManifest`.
 
 ```scala
-packageOptions in (Compile, packageBin) +=  {
+Compile / packageBin / packageOptions +=  {
   import java.util.jar.{Attributes, Manifest}
   val manifest = new Manifest
   manifest.getAttributes("foo/bar/").put(Attributes.Name.SEALED, "false")
@@ -21191,7 +21200,7 @@ packageOptions in (Compile, packageBin) +=  {
 Or, to read the manifest from a file:
 
 ```scala
-packageOptions in (Compile, packageBin) +=  {
+Compile / packageBin / packageOptions +=  {
   val file = new java.io.File("META-INF/MANIFEST.MF")
   val manifest = Using.fileInputStream(file)( in => new java.util.jar.Manifest(in) )
   Package.JarManifest( manifest )
@@ -21217,14 +21226,14 @@ generating these mappings. For example, to add the file `in/example.txt`
 to the main binary jar with the path "out/example.txt",
 
 ```scala
-mappings in (Compile, packageBin) += {
+Compile / packageBin / mappings += {
   (baseDirectory.value / "in" / "example.txt") -> "out/example.txt"
 }
 ```
 
 Note that `mappings` is scoped by the configuration and the specific
 package task. For example, the mappings for the test source package are
-defined by the `mappings in (Test, packageSrc)` task.
+defined by the `Test / packageSrc / mappings` task.
 
 
 Running commands
@@ -21512,7 +21521,7 @@ for `compile`. Scope to `Compile` for main sources or to `Test` for test
 sources. For example,
 
 ```scala
-scalacOptions in (Compile,doc) := Seq("-groups", "-implicits")
+Compile / doc / scalacOptions := Seq("-groups", "-implicits")
 ```
 
 <a name="additional-doc-options"></a>
@@ -21525,7 +21534,7 @@ option, use `+=`. To append a `Seq[String]`, use `++=`. Scope to
 `Compile` for main sources or to `Test` for test sources. For example,
 
 ```scala
-scalacOptions in (Compile,doc) ++= Seq("-groups", "-implicits")
+Compile / doc / scalacOptions ++= Seq("-groups", "-implicits")
 ```
 
 <a name="definitive-javadoc-options"></a>
@@ -21548,7 +21557,7 @@ option, use `+=`. To append a `Seq[String]`, use `++=`. Scope to
 `Compile` for main sources or to `Test` for test sources. For example,
 
 ```scala
-javacOptions in (Compile,doc) ++= Seq("-notimestamp", "-linksource")
+Compile / doc / javacOptions ++= Seq("-notimestamp", "-linksource")
 ```
 
 <a name="auto-link"></a>
@@ -21612,8 +21621,8 @@ lazy val client = project.in(file("./client"))
 lazy val myTestTask = taskKey[Unit]("my test task")
 
 myTestTask := {
-  (test in (core, Test)).value
-  (test in (tools, Test)).value
+  (core / Test / test).value
+  (tools / Test / test).value
 }
 ```
 
@@ -21993,7 +22002,7 @@ def foo(): Unit = {
 }
 ```
 
-The benefit of the dependency-oriented programming model is that sbt's task engine is able to reorder the task execution. When possible we run dependent tasks in parallel. Another benefit is that we can deduplicate the graph, and make sure that the task evaluation, such as `compile in Compile`, is called once per command execution, as opposed to compiling the same source many times.
+The benefit of the dependency-oriented programming model is that sbt's task engine is able to reorder the task execution. When possible we run dependent tasks in parallel. Another benefit is that we can deduplicate the graph, and make sure that the task evaluation, such as `Compile / compile`, is called once per command execution, as opposed to compiling the same source many times.
 
 Because task system is generally set up this way, running something sequentially is possible, but you will be fighting the system a bit, and it's not always going to be easy.
 
@@ -22007,7 +22016,7 @@ Because task system is generally set up this way, running something sequentially
 ### Defining a sequential task with Def.sequential
 
 sbt 0.13.8 added `Def.sequential` function to run tasks under semi-sequential semantics.
-To demonstrate the sequential task, let's create a custom task called `compilecheck` that runs `compile in Compile` and then `scalastyle in Compile` task added by [scalastyle-sbt-plugin](http://www.scalastyle.org/sbt.html).
+To demonstrate the sequential task, let's create a custom task called `compilecheck` that runs `Compile / compile` and then `Compile / scalastyle` task added by [scalastyle-sbt-plugin](http://www.scalastyle.org/sbt.html).
 
 Here's how to set it up
 
@@ -22030,9 +22039,9 @@ lazy val compilecheck = taskKey[Unit]("compile and then scalastyle")
 
 lazy val root = (project in file("."))
   .settings(
-    compilecheck in Compile := Def.sequential(
-      compile in Compile,
-      (scalastyle in Compile).toTask("")
+    Compile / compilecheck := Def.sequential(
+      Compile / compile,
+      (Compile / scalastyle).toTask("")
     ).value
   )
 ```
@@ -22059,7 +22068,7 @@ Looks like we were able to sequence these tasks.
 
 If [sequential task][Howto-Sequential-Task] is not enough, another step up is [the dynamic task][Tasks]. Unlike `Def.task` which expects you to return pure value `A`, with a `Def.taskDyn` you return a task `sbt.Def.Initialize[sbt.Task[A]]` which the task engine can continue the rest of the computation with.
 
-Let's try implementing a custom task called `compilecheck` that runs `compile in Compile` and then `scalastyle in Compile` task added by [scalastyle-sbt-plugin](http://www.scalastyle.org/sbt.html).
+Let's try implementing a custom task called `compilecheck` that runs `Compile / compile` and then `Compile / scalastyle` task added by [scalastyle-sbt-plugin](http://www.scalastyle.org/sbt.html).
 
 
 #### project/build.properties
@@ -22082,9 +22091,9 @@ lazy val compilecheck = taskKey[sbt.inc.Analysis]("compile and then scalastyle")
 lazy val root = (project in file("."))
   .settings(
     compilecheck := (Def.taskDyn {
-      val c = (compile in Compile).value
+      val c = (Compile / compile).value
       Def.task {
-        val x = (scalastyle in Compile).toTask("").value
+        val x = (Compile / scalastyle).toTask("").value
         c
       }
     }).value
@@ -22095,22 +22104,22 @@ Now we have the same thing as the sequential task, except we can now return the 
 
 #### build.sbt v2
 
-If we can return the same return type as `compile in Compile`, might actually rewire the key to our dynamic task.
+If we can return the same return type as `Compile / compile`, might actually rewire the key to our dynamic task.
 
 ```scala
 lazy val root = (project in file("."))
   .settings(
-    compile in Compile := (Def.taskDyn {
-      val c = (compile in Compile).value
+    Compile / compile := (Def.taskDyn {
+      val c = (Compile / compile).value
       Def.task {
-        val x = (scalastyle in Compile).toTask("").value
+        val x = (Compile / scalastyle).toTask("").value
         c
       }
     }).value
   )
 ```
 
-Now we can actually call `compile in Compile` from the shell and make it do what we want it to do.
+Now we can actually call `Compile / compile` from the shell and make it do what we want it to do.
 
 
   [Input-Tasks]: Input-Tasks.html
@@ -22118,9 +22127,9 @@ Now we can actually call `compile in Compile` from the shell and make it do what
 ### Doing something after an input task
 
 Thus far we've mostly looked at tasks. There's another kind of tasks called input tasks that accepts user input from the shell.
-A typical example for this is the `run in Compile` task. The `scalastyle` task is actually an input task too. See [input task][Input-Tasks] for the details of the input tasks.
+A typical example for this is the `Compile / run` task. The `scalastyle` task is actually an input task too. See [input task][Input-Tasks] for the details of the input tasks.
 
-Now suppose we want to call `run in Compile` task and then open the browser for testing purposes.
+Now suppose we want to call `Compile / run` task and then open the browser for testing purposes.
 
 #### src/main/scala/Greeting.scala
 
@@ -22138,7 +22147,7 @@ lazy val runopen = inputKey[Unit]("run and then open the browser")
 lazy val root = (project in file("."))
   .settings(
     runopen := {
-      (run in Compile).evaluated
+      (Compile / run).evaluated
       println("open browser!")
     }
   )
@@ -22156,13 +22165,13 @@ open browser!
 
 #### build.sbt v2
 
-We can actually remove `runopen` key, by rewriting the new input task to `run in Compile`:
+We can actually remove `runopen` key, by rewriting the new input task to `Compile / run`:
 
 ```scala
 lazy val root = (project in file("."))
   .settings(
-    run in Compile := {
-      (run in Compile).evaluated
+    Compile / run := {
+      (Compile / run).evaluated
       println("open browser!")
     }
   )
@@ -22185,7 +22194,7 @@ lazy val root = (project in file("."))
       import sbt.complete.Parsers.spaceDelimited
       val args = spaceDelimited("<args>").parsed
       Def.taskDyn {
-        (run in Compile).toTask(" " + args.mkString(" ")).value
+        (Compile / run).toTask(" " + args.mkString(" ")).value
         openbrowser
       }
     }).evaluated,
@@ -22197,8 +22206,8 @@ lazy val root = (project in file("."))
 
 #### build.sbt v2
 
-Trying to rewire `run in Compile` is going to be complicated. Since the reference to the inner `run in Compile` is already inside the continuation task, simply rewiring `runopen` to `run in Compile` will create a cyclic reference.
-To break the cycle, we will introduce a clone of `run in Compile` called `actualRun in Compile`:
+Trying to rewire `Compile / run` is going to be complicated. Since the reference to the inner `Compile / run` is already inside the continuation task, simply rewiring `runopen` to `Compile / run` will create a cyclic reference.
+To break the cycle, we will introduce a clone of `Compile / run` called `Compile / actualRun`:
 
 ```scala
 lazy val actualRun = inputKey[Unit]("The actual run task")
@@ -22206,18 +22215,18 @@ lazy val openbrowser = taskKey[Unit]("open the browser")
 
 lazy val root = (project in file("."))
   .settings(
-    run in Compile := (Def.inputTaskDyn {
+    Compile / run := (Def.inputTaskDyn {
       import sbt.complete.Parsers.spaceDelimited
       val args = spaceDelimited("<args>").parsed
       Def.taskDyn {
-        (actualRun in Compile).toTask(" " + args.mkString(" ")).value
+        (Compile / actualRun).toTask(" " + args.mkString(" ")).value
         openbrowser
       }
     }).evaluated,
-    actualRun in Compile := Defaults.runTask(
-      fullClasspath in Runtime,
-      mainClass in (Compile, run),
-      runner in (Compile, run)
+    Comile / actualRun := Defaults.runTask(
+      Runtime / fullClasspath,
+      Compile / run / mainClass,
+      Compile / run / runner
     ).evaluated,
     openbrowser := {
       println("open browser!")
@@ -22227,9 +22236,9 @@ lazy val root = (project in file("."))
 
 \* Note that some tasks (ie. `testOnly`) will fail with trailing spaces, so a right trim (`.replaceAll("\s+$", "")`) of the string built for `toTask` might be needed to handle empty `args`.\
 
-The `actualRun in Compile`'s implementation was copy-pasted from `run` task's implementation in Defaults.scala.
+The `Compile / actualRun`'s implementation was copy-pasted from `run` task's implementation in Defaults.scala.
 
-Now we can call `run foo` from the shell and it will evaluate `actualRun in Compile` with the passed in argument, and then evaluate the `openbrowser` task.
+Now we can call `run foo` from the shell and it will evaluate `Compile / actualRun` with the passed in argument, and then evaluate the `openbrowser` task.
 
 
 ### How to sequence using commands
@@ -22282,6 +22291,9 @@ ThisBuild / scalaVersion := "2.12.10"
 // set the Scala version used for the project
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
+// set the prompt (for this build) to include the project id.
+ThisBuild / shellPrompt := { state => Project.extract(state).currentRef.project + "> " }
+
 // define ModuleID for library dependencies
 lazy val scalacheck = "org.scalacheck" %% "scalacheck" % "1.13.4"
 
@@ -22296,10 +22308,10 @@ lazy val root = (project in file("."))
     name := "My Project",
 
     // set the main Scala source directory to be <base>/src
-    scalaSource in Compile := baseDirectory.value / "src",
+    Compile / scalaSource := baseDirectory.value / "src",
 
     // set the Scala test source directory to be <base>/test
-    scalaSource in Test := baseDirectory.value / "test",
+    Test / scalaSource := baseDirectory.value / "test",
 
     // add a test dependency on ScalaCheck
     libraryDependencies += scalacheck % Test,
@@ -22328,16 +22340,16 @@ def time[T](f: => T): T = {
 }""".stripMargin,
 
     // set the initial commands when entering 'console' or 'consoleQuick', but not 'consoleProject'
-    initialCommands in console := "import myproject._",
+    console / initialCommands := "import myproject._",
 
     // set the main class for packaging the main jar
     // 'run' will still auto-detect and prompt
     // change Compile to Test to set it for the test jar
-    mainClass in (Compile, packageBin) := Some("myproject.MyMain"),
+    Comile / packageBin / mainClass := Some("myproject.MyMain"),
 
     // set the main class for the main 'run' task
     // change Compile to Test to set it for 'test:run'
-    mainClass in (Compile, run) := Some("myproject.MyMain"),
+    Compile / run / mainClass := Some("myproject.MyMain"),
 
     // add <base>/input to the files that '~' triggers on
     watchSources += baseDirectory.value / "input",
@@ -22357,9 +22369,6 @@ def time[T](f: => T): T = {
     // disable updating dynamic revisions (including -SNAPSHOT versions)
     offline := true,
 
-    // set the prompt (for this build) to include the project id.
-    shellPrompt in ThisBuild := { state => Project.extract(state).currentRef.project + "> " },
-
     // set the prompt (for the current project) to include the username
     shellPrompt := { state => System.getProperty("user.name") + "> " },
 
@@ -22378,11 +22387,11 @@ def time[T](f: => T): T = {
     // disable using the Scala version in output paths and artifacts
     crossPaths := false,
 
-    // fork a new JVM for 'run' and 'test:run'
+    // fork a new JVM for 'run' and 'Test/run'
     fork := true,
 
-    // fork a new JVM for 'test:run', but not 'run'
-    fork in Test := true,
+    // fork a new JVM for 'Test/run', but not 'run'
+    Test / fork := true,
 
     // add a JVM option to use when forking a JVM for 'run'
     javaOptions += "-Xmx2G",
@@ -22392,7 +22401,7 @@ def time[T](f: => T): T = {
 
     // Execute tests in the current project serially
     //   Tests from other projects may still run concurrently.
-    parallelExecution in Test := false,
+    Test / parallelExecution := false,
 
     // set the location of the JDK to use for compiling Java code.
     // if 'fork' is true, this is used for 'run' as well
@@ -22402,11 +22411,11 @@ def time[T](f: => T): T = {
     scalaHome := Some(file("/home/user/scala/trunk/")),
 
     // don't aggregate clean (See FullConfiguration for aggregation details)
-    aggregate in clean := false,
+    clean / aggregate := false,
 
     // only show warnings and errors on the screen for compilations.
     //  this applies to both test:compile and compile and is Info by default
-    logLevel in compile := Level.Warn,
+    compile / logLevel := Level.Warn,
 
     // only show warnings and errors on the screen for all tasks (the default is Info)
     //  individual tasks can then be more verbose using the previous setting
@@ -22423,16 +22432,16 @@ def time[T](f: => T): T = {
     traceLevel := 0,
 
     // add SWT to the unmanaged classpath
-    unmanagedJars in Compile += Attributed.blank(file("/usr/share/java/swt.jar")),
+    Compile / unmanagedJars += Attributed.blank(file("/usr/share/java/swt.jar")),
 
     // publish test jar, sources, and docs
-    publishArtifact in Test := true,
+    Test / publishArtifact := true,
 
     // disable publishing of main docs
-    publishArtifact in (Compile, packageDoc) := false,
+    Compile / packageDoc / publishArtifact := false,
 
     // change the classifier for the docs artifact
-    artifactClassifier in packageDoc := Some("doc"),
+    packageDoc / artifactClassifier := Some("doc"),
 
     // Copy all managed dependencies to <build-root>/lib_managed/
     //   This is essentially a project-local cache.  There is only one
@@ -22644,18 +22653,14 @@ need Saxon. By depending only on the `scalate` configuration of `utils`,
 it only gets the Scalate-related dependencies.
 
 ```scala
-/********* Configurations *******/
-
 // Custom configurations
-lazy val Common = config("common") describedAs("Dependencies required in all configurations.")
-lazy val Scalate = config("scalate") extend(Common) describedAs("Dependencies for using Scalate utilities.")
-lazy val Saxon = config("saxon") extend(Common) describedAs("Dependencies for using Saxon utilities.")
+lazy val Common = config("common").describedAs("Dependencies required in all configurations.")
+lazy val Scalate = config("scalate").extend(Common).describedAs("Dependencies for using Scalate utilities.")
+lazy val Saxon = config("saxon").extend(Common).describedAs("Dependencies for using Saxon utilities.")
 
 // Define a customized compile configuration that includes
-//   dependencies defined in our other custom configurations
-lazy val CustomCompile = config("compile") extend(Saxon, Common, Scalate)
-
-/********** Projects ************/
+// dependencies defined in our other custom configurations
+lazy val CustomCompile = config("compile").extend(Saxon, Common, Scalate)
 
 // factor out common settings
 ThisBuild / organization := "com.example"
@@ -22677,17 +22682,20 @@ lazy val b = (project in file("b"))
 lazy val utils = (project in file("utils"))
   .settings(
     inConfig(Common)(Defaults.configSettings),  // Add the src/common/scala/ compilation configuration.
-    addArtifact(artifact in (Common, packageBin), packageBin in Common), // Publish the common artifact
+    addArtifact(Common / packageBin / artifact, Common / packageBin), // Publish the common artifact
 
-      // We want our Common sources to have access to all of the dependencies on the classpaths
-      //   for compile and test, but when depended on, it should only require dependencies in 'common'
-    classpathConfiguration in Common := CustomCompile,
-      // Modify the default Ivy configurations.
-      //   'overrideConfigs' ensures that Compile is replaced by CustomCompile
+    // We want our Common sources to have access to all of the dependencies on the classpaths
+    //   for compile and test, but when depended on, it should only require dependencies in 'common'
+    Common / classpathConfiguration := CustomCompile,
+
+    // Modify the default Ivy configurations.
+    // 'overrideConfigs' ensures that Compile is replaced by CustomCompile
     ivyConfigurations := overrideConfigs(Scalate, Saxon, Common, CustomCompile)(ivyConfigurations.value),
-      // Put all dependencies without an explicit configuration into Common (optional)
+
+    // Put all dependencies without an explicit configuration into Common (optional)
     defaultConfiguration := Some(Common),
-      // Declare dependencies in the appropriate configurations
+
+    // Declare dependencies in the appropriate configurations
     libraryDependencies ++= Seq(
        "org.fusesource.scalate" % "scalate-core" % "1.5.0" % Scalate,
        "org.squeryl" %% "squeryl" % "0.9.5-6" % Scalate,
@@ -22895,10 +22903,10 @@ to include to the path within the jar. See
 For example, to add generated sources to the packaged source artifact:
 
 ```scala
-mappings in (Compile, packageSrc) ++= {
+Compile / packageSrc / mappings ++= {
   import Path.{flat, relativeTo}
-  val base = (sourceManaged in Compile).value
-  val srcs = (managedSources in Compile).value
+  val base = (Compile / sourceManaged).value
+  val srcs = (Compile / managedSources).value
   srcs pair (relativeTo(base) | flat)
 }
 ```
@@ -23203,7 +23211,7 @@ use the scoped setting, both as the input to the initializer, and the
 setting that we update.
 
 ```scala
-fullClasspath in Compile := (fullClasspath in Compile).value.filterNot(_.data.name.contains("commons-io"))
+Compile / fullClasspath := (Compile / fullClasspath).value.filterNot(_.data.name.contains("commons-io"))
 ```
 
 ### Dependency Management
@@ -24321,10 +24329,10 @@ datatypeSource in generateDatatypes := file("some/location")
 
 The plugin exposes other settings for Scala code generation:
 
- 1. `datatypeScalaFileNames in (Compile, generateDatatypes)`
+ 1. `Compile / generateDatatypes / datatypeScalaFileNames`
     This setting accepts a function `Definition => File` which will determine
     the filename for every generated Scala definition.
- 1. `datatypeScalaSealInterfaces in (Compile, generateDatatypes)`
+ 1. `Compile / generateDatatypes / datatypeScalaSealInterfaces`
     This setting accepts a boolean value, and will determine whether interfaces
     should be `seal`ed or not.
 

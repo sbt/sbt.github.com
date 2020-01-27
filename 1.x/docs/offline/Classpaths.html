@@ -72,18 +72,18 @@ to the build. Managed files are under the control of the build. These
 include generated sources and resources as well as resolved and
 retrieved dependencies and compiled classes.
 </p><p>Tasks that produce managed files should be inserted as follows:
-</p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile +=
-    generate( (sourceManaged in Compile).value / &quot;some_directory&quot;)
+</p><pre><code class="prettyprint lang-scala">Compile / sourceGenerators +=
+    generate( (Comile / sourceManaged).value / &quot;some_directory&quot;)
 </code></pre><p>In this example, <code>generate</code> is some function of type <code>File =&gt; Seq[File]</code>
 that actually does the work. So, we are appending a new task to the list
-of main source generators (<code>sourceGenerators in Compile</code>).
+of main source generators (<code>Compile / sourceGenerators</code>).
 </p><p>To insert a named task, which is the better approach for plugins:
 </p><pre><code class="prettyprint lang-scala">val mySourceGenerator = taskKey[Seq[File]](...)
 
-mySourceGenerator in Compile :=
-  generate( (sourceManaged in Compile).value / &quot;some_directory&quot;)
+Compile / mySourceGenerator :=
+  generate( (Compile / sourceManaged).value / &quot;some_directory&quot;)
 
-sourceGenerators in Compile += (mySourceGenerator in Compile)
+Compile / sourceGenerators += (Compile / mySourceGenerator)
 </code></pre><p>The <code>task</code> method is used to refer to the actual task instead of the
 result of the task.
 </p><p>For resources, there are similar keys <code>resourceGenerators</code> and
@@ -91,7 +91,7 @@ result of the task.
 </p><h5 id="Excluding+source+files+by+name">Excluding source files by name<a href="#Excluding+source+files+by+name" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p>The project base directory is by default a source directory in addition
 to <code>src/main/scala</code>. You can exclude source files by name
 (<code>butler.scala</code> in the example below) like:
-</p><pre><code class="prettyprint lang-scala">excludeFilter in unmanagedSources := &quot;butler.scala&quot; 
+</p><pre><code class="prettyprint lang-scala">unmanagedSources / excludeFilter := &quot;butler.scala&quot;
 </code></pre><p>Read more on
 <a href="https://groups.google.com/group/simple-build-tool/browse_thread/thread/cd5332a164405568?hl=en">How to exclude .scala source file in project folder - Google Groups</a>
 </p><h4 id="External+vs+internal">External vs internal<a href="#External+vs+internal" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Classpaths are also divided into internal and external dependencies. The
@@ -130,7 +130,7 @@ more details.
 xxx.properties from classpath at run time. You put xxx.properties inside
 directory “config”. When you run “sbt run”, you want the directory to be
 in classpath.
-</p><pre><code class="prettyprint lang-scala">unmanagedClasspath in Runtime += baseDirectory.value / &quot;config&quot;
+</p><pre><code class="prettyprint lang-scala">Runtime / unmanagedClasspath += baseDirectory.value / &quot;config&quot;
 </code></pre><div class="bottom nav">
                 <div class="row">
                   <div class="col-md-auto">

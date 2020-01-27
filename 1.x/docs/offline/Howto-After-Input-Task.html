@@ -43,8 +43,8 @@
                 </div><div class="col-md-8 col-xs-9">
                   <div class="rightcolumn contents">
                   <h3 id="Doing+something+after+an+input+task">Doing something after an input task<a href="#Doing+something+after+an+input+task" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Thus far we’ve mostly looked at tasks. There’s another kind of tasks called input tasks that accepts user input from the shell.
-A typical example for this is the <code>run in Compile</code> task. The <code>scalastyle</code> task is actually an input task too. See <a href="Input-Tasks.html">input task</a> for the details of the input tasks.
-</p><p>Now suppose we want to call <code>run in Compile</code> task and then open the browser for testing purposes.
+A typical example for this is the <code>Compile / run</code> task. The <code>scalastyle</code> task is actually an input task too. See <a href="Input-Tasks.html">input task</a> for the details of the input tasks.
+</p><p>Now suppose we want to call <code>Compile / run</code> task and then open the browser for testing purposes.
 </p><h4 id="src%2Fmain%2Fscala%2FGreeting.scala">src/main/scala/Greeting.scala<a href="#src%2Fmain%2Fscala%2FGreeting.scala" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">object Greeting extends App {
   println(&quot;hello &quot; + args.toList)
 }
@@ -53,7 +53,7 @@ A typical example for this is the <code>run in Compile</code> task. The <code>sc
 lazy val root = (project in file(&quot;.&quot;))
   .settings(
     runopen := {
-      (run in Compile).evaluated
+      (Compile / run).evaluated
       println(&quot;open browser!&quot;)
     }
   )
@@ -63,11 +63,11 @@ lazy val root = (project in file(&quot;.&quot;))
 [info] Running Greeting foo
 hello List(foo)
 open browser!
-</code></pre><h4 id="build.sbt+v2">build.sbt v2<a href="#build.sbt+v2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>We can actually remove <code>runopen</code> key, by rewriting the new input task to <code>run in Compile</code>:
+</code></pre><h4 id="build.sbt+v2">build.sbt v2<a href="#build.sbt+v2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>We can actually remove <code>runopen</code> key, by rewriting the new input task to <code>Compile / run</code>:
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
   .settings(
-    run in Compile := {
-      (run in Compile).evaluated
+    Compile / run := {
+      (Compile / run).evaluated
       println(&quot;open browser!&quot;)
     }
   )

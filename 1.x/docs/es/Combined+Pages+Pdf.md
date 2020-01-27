@@ -2238,12 +2238,12 @@ organization := name.value
 ```
 
 A continuación se muestra un ejemplo más realista.
-Esto cambia el valor de la clave `scalaSource in Compile` a un directorio
+Esto cambia el valor de la clave `Compile / scalaSource` a un directorio
 diferente sólo cuando `scalaBinaryVersion` es `"2.11"`.
 
 ```scala
-scalaSource in Compile := {
-  val old = (scalaSource in Compile).value
+Compile / scalaSource := {
+  val old = (Compile / scalaSource).value
   scalaBinaryVersion.value match {
     case "2.11" => baseDirectory.value / "src-2.11" / "main" / "scala"
     case _      => old
@@ -3351,8 +3351,8 @@ También puedes copiar jars para tests como
 [ScalaTest](http://www.scalatest.org/) en `lib`.
 
 Las dependencias en `lib` aparecen en todos los classpaths (para `compile`,
-`test`, `run` y `console`). Si quieres cambiar el classpath para una sola de esas tareas deberías de ajustar `dependencyClasspath in Compile` o
-`dependencyClasspath in Runtime`, por ejemplo.
+`test`, `run` y `console`). Si quieres cambiar el classpath para una sola de esas tareas deberías de ajustar `Compile / dependencyClasspath` o
+`Runtime / dependencyClasspath`, por ejemplo.
 
 No hay que añadir nada en `build.sbt` para empezar a utilizar dependencias no
 gestionadas, aunque puedes cambiar la clave `unmanagedBase` si quisieras
@@ -3921,8 +3921,8 @@ muestra una notación gráfica de la evaluación de `sampleStringTask`:
 
 Si no hubiésemos deduplicado las dependencias de tareas habríamos acabado
 compilando el código fuente de los tests muchas veces cuando la tarea `test`
-hubiese sido invocada, ya que `compile in Test` aparece muchas veces como
-dependencia de `test in Test`.
+hubiese sido invocada, ya que `Test / compile` aparece muchas veces como
+dependencia de `Test / test`.
 
 #### Tarea de limpieza
 

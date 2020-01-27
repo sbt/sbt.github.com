@@ -56,18 +56,14 @@ functionality of ‘utils’ will need these dependencies as well. However,
 project <code>a</code> only needs the utilities related to Scalate, so it doesn’t
 need Saxon. By depending only on the <code>scalate</code> configuration of <code>utils</code>,
 it only gets the Scalate-related dependencies.
-</p><pre><code class="prettyprint lang-scala">/********* Configurations *******/
-
-// Custom configurations
-lazy val Common = config(&quot;common&quot;) describedAs(&quot;Dependencies required in all configurations.&quot;)
-lazy val Scalate = config(&quot;scalate&quot;) extend(Common) describedAs(&quot;Dependencies for using Scalate utilities.&quot;)
-lazy val Saxon = config(&quot;saxon&quot;) extend(Common) describedAs(&quot;Dependencies for using Saxon utilities.&quot;)
+</p><pre><code class="prettyprint lang-scala">// Custom configurations
+lazy val Common = config(&quot;common&quot;).describedAs(&quot;Dependencies required in all configurations.&quot;)
+lazy val Scalate = config(&quot;scalate&quot;).extend(Common).describedAs(&quot;Dependencies for using Scalate utilities.&quot;)
+lazy val Saxon = config(&quot;saxon&quot;).extend(Common).describedAs(&quot;Dependencies for using Saxon utilities.&quot;)
 
 // Define a customized compile configuration that includes
-//   dependencies defined in our other custom configurations
-lazy val CustomCompile = config(&quot;compile&quot;) extend(Saxon, Common, Scalate)
-
-/********** Projects ************/
+// dependencies defined in our other custom configurations
+lazy val CustomCompile = config(&quot;compile&quot;).extend(Saxon, Common, Scalate)
 
 // factor out common settings
 ThisBuild / organization := &quot;com.example&quot;
@@ -89,17 +85,20 @@ lazy val b = (project in file(&quot;b&quot;))
 lazy val utils = (project in file(&quot;utils&quot;))
   .settings(
     inConfig(Common)(Defaults.configSettings),  // Add the src/common/scala/ compilation configuration.
-    addArtifact(artifact in (Common, packageBin), packageBin in Common), // Publish the common artifact
+    addArtifact(Common / packageBin / artifact, Common / packageBin), // Publish the common artifact
 
-      // We want our Common sources to have access to all of the dependencies on the classpaths
-      //   for compile and test, but when depended on, it should only require dependencies in 'common'
-    classpathConfiguration in Common := CustomCompile,
-      // Modify the default Ivy configurations.
-      //   'overrideConfigs' ensures that Compile is replaced by CustomCompile
+    // We want our Common sources to have access to all of the dependencies on the classpaths
+    //   for compile and test, but when depended on, it should only require dependencies in 'common'
+    Common / classpathConfiguration := CustomCompile,
+
+    // Modify the default Ivy configurations.
+    // 'overrideConfigs' ensures that Compile is replaced by CustomCompile
     ivyConfigurations := overrideConfigs(Scalate, Saxon, Common, CustomCompile)(ivyConfigurations.value),
-      // Put all dependencies without an explicit configuration into Common (optional)
+
+    // Put all dependencies without an explicit configuration into Common (optional)
     defaultConfiguration := Some(Common),
-      // Declare dependencies in the appropriate configurations
+
+    // Declare dependencies in the appropriate configurations
     libraryDependencies ++= Seq(
        &quot;org.fusesource.scalate&quot; % &quot;scalate-core&quot; % &quot;1.5.0&quot; % Scalate,
        &quot;org.squeryl&quot; %% &quot;squeryl&quot; % &quot;0.9.5-6&quot; % Scalate,

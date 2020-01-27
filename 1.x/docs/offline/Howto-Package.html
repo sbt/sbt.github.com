@@ -58,17 +58,17 @@ that map an attribute of type <code>java.util.jar.Attributes.Name</code> to a
 String value and other that maps attribute names (type String) to the
 String value.
 </p><p>For example,
-</p><pre><code class="prettyprint lang-scala">packageOptions in (Compile, packageBin) += 
-  Package.ManifestAttributes( java.util.jar.Attributes.Name.SEALED -&gt; &quot;true&quot; )
+</p><pre><code class="prettyprint lang-scala">Compile / packageBin / packageOptions +=
+  Package.ManifestAttributes(java.util.jar.Attributes.Name.SEALED -&gt; &quot;true&quot;)
 </code></pre><p>Other attributes may be added with <code>Package.JarManifest</code>.
-</p><pre><code class="prettyprint lang-scala">packageOptions in (Compile, packageBin) +=  {
+</p><pre><code class="prettyprint lang-scala">Compile / packageBin / packageOptions +=  {
   import java.util.jar.{Attributes, Manifest}
   val manifest = new Manifest
   manifest.getAttributes(&quot;foo/bar/&quot;).put(Attributes.Name.SEALED, &quot;false&quot;)
   Package.JarManifest( manifest )
 }
 </code></pre><p>Or, to read the manifest from a file:
-</p><pre><code class="prettyprint lang-scala">packageOptions in (Compile, packageBin) +=  {
+</p><pre><code class="prettyprint lang-scala">Compile / packageBin / packageOptions +=  {
   val file = new java.io.File(&quot;META-INF/MANIFEST.MF&quot;)
   val manifest = Using.fileInputStream(file)( in =&gt; new java.util.jar.Manifest(in) )
   Package.JarManifest( manifest )
@@ -81,12 +81,12 @@ a file to include in the package to the path in the package. See
 <a href="Mapping-Files.html">Mapping Files</a> for convenience functions for
 generating these mappings. For example, to add the file <code>in/example.txt</code>
 to the main binary jar with the path “out/example.txt”,
-</p><pre><code class="prettyprint lang-scala">mappings in (Compile, packageBin) += {
+</p><pre><code class="prettyprint lang-scala">Compile / packageBin / mappings += {
   (baseDirectory.value / &quot;in&quot; / &quot;example.txt&quot;) -&gt; &quot;out/example.txt&quot;
 }
 </code></pre><p>Note that <code>mappings</code> is scoped by the configuration and the specific
 package task. For example, the mappings for the test source package are
-defined by the <code>mappings in (Test, packageSrc)</code> task.
+defined by the <code>Test / packageSrc / mappings</code> task.
 </p><div class="bottom nav">
                 <div class="row">
                   <div class="col-md-auto">

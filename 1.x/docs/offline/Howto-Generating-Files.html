@@ -54,17 +54,17 @@ to add the task, and not the value after its execution, we use
 <code>taskValue</code> instead of the usual <code>value</code>. <code>sourceGenerators</code> should be
 scoped according to whether the generated files are main (<code>Compile</code>) or
 test (<code>Test</code>) sources. This basic structure looks like:
-</p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile += &lt;task of type Seq[File]&gt;.taskValue
+</p><pre><code class="prettyprint lang-scala">Compile / sourceGenerators += &lt;task of type Seq[File]&gt;.taskValue
 </code></pre><p>For example, assuming a method
 <code>def makeSomeSources(base: File): Seq[File]</code>,
-</p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile += Def.task {
-  makeSomeSources((sourceManaged in Compile).value / &quot;demo&quot;)
+</p><pre><code class="prettyprint lang-scala">Compile / sourceGenerators += Def.task {
+  makeSomeSources((Compile / sourceManaged).value / &quot;demo&quot;)
 }.taskValue
 </code></pre><p>As a specific example, the following source generator generates
 <code>Test.scala</code> application object that once executed, prints <code>&quot;Hi&quot;</code> to the
 console:
-</p><pre><code class="prettyprint lang-scala">sourceGenerators in Compile += Def.task {
-  val file = (sourceManaged in Compile).value / &quot;demo&quot; / &quot;Test.scala&quot;
+</p><pre><code class="prettyprint lang-scala">Compile / sourceGenerators += Def.task {
+  val file = (Compile / sourceManaged).value / &quot;demo&quot; / &quot;Test.scala&quot;
   IO.write(file, &quot;&quot;&quot;object Test extends App { println(&quot;Hi&quot;) }&quot;&quot;&quot;)
   Seq(file)
 }.taskValue
@@ -94,11 +94,11 @@ want to add the task, and not the value after its execution, we use
 <code>taskValue</code> instead of the usual <code>value</code>. It should be scoped according
 to whether the generated files are main (<code>Compile</code>) or test (<code>Test</code>)
 resources. This basic structure looks like:
-</p><pre><code class="prettyprint lang-scala">resourceGenerators in Compile += &lt;task of type Seq[File]&gt;.taskValue
+</p><pre><code class="prettyprint lang-scala">Compile / resourceGenerators += &lt;task of type Seq[File]&gt;.taskValue
 </code></pre><p>For example, assuming a method
 <code>def makeSomeResources(base: File): Seq[File]</code>,
-</p><pre><code class="prettyprint lang-scala">resourceGenerators in Compile += Def.task {
-  makeSomeResources((resourceManaged in Compile).value / &quot;demo&quot;)
+</p><pre><code class="prettyprint lang-scala">Compile / resourceGenerators += Def.task {
+  makeSomeResources((Compile / resourceManaged).value / &quot;demo&quot;)
 }.taskValue
 </code></pre><p>Executing <code>run</code> (or <code>package</code>, not <code>compile</code>) will add a file <code>demo</code> to
 <code>resourceManaged</code>, which is <code>target/scala-*/resource_managed&quot;</code>. By default,
@@ -107,8 +107,8 @@ add them as you would other mappings.
 See <a href="Howto-Package.html#modify-package-contents">Adding files to a package</a>.
 </p><p>As a specific example, the following generates a properties file
 <code>myapp.properties</code> containing the application name and version:
-</p><pre><code class="prettyprint lang-scala">resourceGenerators in Compile += Def.task {
-  val file = (resourceManaged in Compile).value / &quot;demo&quot; / &quot;myapp.properties&quot;
+</p><pre><code class="prettyprint lang-scala">Compile / resourceGenerators += Def.task {
+  val file = (Compile / resourceManaged).value / &quot;demo&quot; / &quot;myapp.properties&quot;
   val contents = &quot;name=%s\nversion=%s&quot;.format(name.value,version.value)
   IO.write(file, contents)
   Seq(file)
