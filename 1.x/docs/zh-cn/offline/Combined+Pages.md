@@ -689,6 +689,392 @@ key `libraryDependencies` 包含两个方面的复杂性：`+=` 方法而不是 
 
 
   [Basic-Def]: Basic-Def.html
+  [Scopes]: Scopes.html
+  [Make]: https://en.wikipedia.org/wiki/Make_(software)
+  [Ant]: http://ant.apache.org/
+  [Rake]: https://ruby.github.io/rake/
+
+任务图
+-----
+
+> This page was translated mostly with Google Translate. Please send a pull request to improve it.
+
+继[.sbt 构建定义][Basic-Def]，
+此页面更详细地解释了 `build.sbt` 定义。
+
+与其将 `settings` 视为键值对，
+不如将其更好地比喻为将任务表示为边 happens-before 的任务的有向无环图（DAG）。
+我们将此称为**任务图** (task graph)。
+
+### 术语
+
+在深入探讨之前，让我们先回顾一下关键术语。
+
+- setting/task 式: `.settings(...)` 条目。
+- key: setting 式的左侧。 它可以是 `SettingKey[A]`，`TaskKey[A]` 或 `InputKey[A]`。
+- setting: 由带有 `SettingKey[A]` 的 setting 式定义。 该值在加载期间仅计算一次。
+- task: 由带有 `TaskKey[A]` 的 task 式定义。 每次调用时都会计算该值。
+
+### 声明对其他任务的依赖
+
+在 `build.sbt` DSL中，我们使用 `.value` method 来表示对另一个任务或 setting 的依赖性。
+value method 是特殊的，只能在 `:=` 的参数中调用（或 `+=` 或 `++=` 我们将在后面介绍）。
+
+作为第一个示例，请考虑定义依赖于 `update` 和 `clean` 任务的 `scalacOption`。
+这些是这些 key 的定义（来自 [Keys](../../api/sbt/Keys$.html)）。
+
+**注意**：下面计算的值对于 `scalaOptions` 是毫无 `scalaOptions`，仅用于演示目的：
+
+```scala
+val scalacOptions = taskKey[Seq[String]]("Options for the Scala compiler.")
+val update = taskKey[UpdateReport]("Resolves and optionally retrieves dependencies, producing a report.")
+val clean = taskKey[Unit]("Deletes files produced by the build, such as generated sources, compiled classes, and task caches.")
+```
+
+这是我们如何重新连接 `scalacOptions`:
+
+```scala
+scalacOptions := {
+  val ur = update.value  // update task happens-before scalacOptions
+  val x = clean.value    // clean task happens-before scalacOptions
+  // ---- scalacOptions begins here ----
+  ur.allConfigurations.take(3)
+}
+```
+
+`update.value` 和 `clean.value` 声明了任务依赖性，
+而 `ur.allConfigurations.take(3)` 是任务的主体。
+
+`.value` 不是正常的 Scala method 调用。
+`build.sbt` DSL 使用宏将它们提升到任务主体之外。
+**在任务引擎评估 `scalacOptions` 的打开 `{`，无论它出现在主体中的哪一行， `update` 和 `clean` 任务都已完成**。
+
+请参见以下示例：
+
+```scala
+ThisBuild / organization := "com.example"
+ThisBuild / scalaVersion := "2.12.10"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
+
+lazy val root = (project in file("."))
+  .settings(
+    name := "Hello",
+    scalacOptions := {
+      val out = streams.value // streams task happens-before scalacOptions
+      val log = out.log
+      log.info("123")
+      val ur = update.value   // update task happens-before scalacOptions
+      log.info("456")
+      ur.allConfigurations.take(3)
+    }
+  )
+```
+
+接下来，在 sbt shell 中键入 `scalacOptions`:
+
+```
+> scalacOptions
+[info] Updating {file:/xxx/}root...
+[info] Resolving jline#jline;2.14.1 ...
+[info] Done updating.
+[info] 123
+[info] 456
+[success] Total time: 0 s, completed Jan 2, 2017 10:38:24 PM
+```
+
+即使 `val ur = ...` 出现在 `log.info("123")` 和 `log.info("456")`，`update` 任务的评估还是要先于它们进行。
+
+这是另一个例子：
+
+```scala
+ThisBuild / organization := "com.example"
+ThisBuild / scalaVersion := "2.12.10"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
+
+lazy val root = (project in file("."))
+  .settings(
+    name := "Hello",
+    scalacOptions := {
+      val ur = update.value  // update task happens-before scalacOptions
+      if (false) {
+        val x = clean.value  // clean task happens-before scalacOptions
+      }
+      ur.allConfigurations.take(3)
+    }
+  )
+```
+
+接下来，在 sbt shell 中键入 `run`，然后键入 `scalacOptions`。
+
+```
+> run
+[info] Updating {file:/xxx/}root...
+[info] Resolving jline#jline;2.14.1 ...
+[info] Done updating.
+[info] Compiling 1 Scala source to /Users/eugene/work/quick-test/task-graph/target/scala-2.12/classes...
+[info] Running example.Hello
+hello
+[success] Total time: 0 s, completed Jan 2, 2017 10:45:19 PM
+> scalacOptions
+[info] Updating {file:/xxx/}root...
+[info] Resolving jline#jline;2.14.1 ...
+[info] Done updating.
+[success] Total time: 0 s, completed Jan 2, 2017 10:45:23 PM
+```
+
+现在，如果您检查 `target/scala-2.12/classes/`，它将不存在，因为即使它在 `if (false)` 内， `clean` 任务也已运行。
+
+需要注意的另一件事是，不能保证 `update` 和 `clean` 任务的顺序。
+他们可能同时运行 `update` 然后 `clean`，`clean` 然后 `update` 或同时运行。
+
+### 内联 .value 调用
+
+如上所述，`.value` 是一种特殊的 method，用于表达对其他任务和 setting 的依赖性。
+在您熟悉 `build.sbt` 之前，我们建议您将所有 `.value` 调用放在任务正文的顶部。
+
+但是，当您变得更加舒适时，您可能希望内联 `.value` 调用，因为它可以使 task/setting 更简洁，并且不必提供变量名。
+
+我们内联了一些示例：
+
+```scala
+scalacOptions := {
+  val x = clean.value
+  update.value.allConfigurations.take(3)
+}
+```
+
+请注意，`.value` 调用是内联的还是放在任务正文中的任何位置，在进入任务正文之前仍会对它们进行评估。
+
+#### 检查任务
+
+在上面的示例中，`scalacOptions` 对 `update` 和 `clean` 任务具有**依赖性**。
+如果将以上内容放置在 `build.sbt` 并运行 sbt shell，则键入 `inspect scalacOptions`，您应该看到（部分）：
+
+```
+> inspect scalacOptions
+[info] Task: scala.collection.Seq[java.lang.String]
+[info] Description:
+[info]  Options for the Scala compiler.
+....
+[info] Dependencies:
+[info]  *:clean
+[info]  *:update
+....
+```
+
+这就是 sbt 如何知道哪些任务取决于哪些其他任务的方式。
+
+例如，如果您 `inspect tree compile` 您将看到它依赖于另一个 key `incCompileSetup`，而后者又依赖于其他 key，如 `dependencyClasspath`。 继续遵循依赖性链，魔术就会发生。
+
+```
+> inspect tree compile
+[info] compile:compile = Task[sbt.inc.Analysis]
+[info]   +-compile:incCompileSetup = Task[sbt.Compiler$IncSetup]
+[info]   | +-*/*:skip = Task[Boolean]
+[info]   | +-compile:compileAnalysisFilename = Task[java.lang.String]
+[info]   | | +-*/*:crossPaths = true
+[info]   | | +-{.}/*:scalaBinaryVersion = 2.12
+[info]   | |
+[info]   | +-*/*:compilerCache = Task[xsbti.compile.GlobalsCache]
+[info]   | +-*/*:definesClass = Task[scala.Function1[java.io.File, scala.Function1[java.lang.String, Boolean]]]
+[info]   | +-compile:dependencyClasspath = Task[scala.collection.Seq[sbt.Attributed[java.io.File]]]
+[info]   | | +-compile:dependencyClasspath::streams = Task[sbt.std.TaskStreams[sbt.Init$ScopedKey[_ <: Any]]]
+[info]   | | | +-*/*:streamsManager = Task[sbt.std.Streams[sbt.Init$ScopedKey[_ <: Any]]]
+[info]   | | |
+[info]   | | +-compile:externalDependencyClasspath = Task[scala.collection.Seq[sbt.Attributed[java.io.File]]]
+[info]   | | | +-compile:externalDependencyClasspath::streams = Task[sbt.std.TaskStreams[sbt.Init$ScopedKey[_ <: Any]]]
+[info]   | | | | +-*/*:streamsManager = Task[sbt.std.Streams[sbt.Init$ScopedKey[_ <: Any]]]
+[info]   | | | |
+[info]   | | | +-compile:managedClasspath = Task[scala.collection.Seq[sbt.Attributed[java.io.File]]]
+[info]   | | | | +-compile:classpathConfiguration = Task[sbt.Configuration]
+[info]   | | | | | +-compile:configuration = compile
+[info]   | | | | | +-*/*:internalConfigurationMap = <function1>
+[info]   | | | | | +-*:update = Task[sbt.UpdateReport]
+[info]   | | | | |
+....
+```
+
+例如，当您键入 `compile` sbt 时，它会自动执行 `update`。
+它之所以行之有效，是因为作为 `compile` 计算的输入所需的值需要 sbt 首先进行 `update` 计算。
+
+这样，sbt 中的所有构建依赖项都是**自动的**，而不是显式声明的。
+如果在另一个计算中使用 key 的值，则该计算取决于该 key。
+
+#### 定义依赖于其他 setting 的任务
+
+`scalacOptions` 是 task key。
+假设已经将其设置为某些值，但是您想为非 2.12 过滤掉 `"-Xfatal-warnings"` 和 `"-deprecation"`。
+
+```scala
+lazy val root = (project in file("."))
+  .settings(
+    name := "Hello",
+    organization := "com.example",
+    scalaVersion := "2.12.10",
+    version := "0.1.0-SNAPSHOT",
+    scalacOptions := List("-encoding", "utf8", "-Xfatal-warnings", "-deprecation", "-unchecked"),
+    scalacOptions := {
+      val old = scalacOptions.value
+      scalaBinaryVersion.value match {
+        case "2.12" => old
+        case _      => old filterNot (Set("-Xfatal-warnings", "-deprecation").apply)
+      }
+    }
+  )
+```
+
+这是它在 sbt shell 上的外观：
+
+```
+> show scalacOptions
+[info] * -encoding
+[info] * utf8
+[info] * -Xfatal-warnings
+[info] * -deprecation
+[info] * -unchecked
+[success] Total time: 0 s, completed Jan 2, 2017 11:44:44 PM
+> ++2.11.8!
+[info] Forcing Scala version to 2.11.8 on all projects.
+[info] Reapplying settings...
+[info] Set current project to Hello (in build file:/xxx/)
+> show scalacOptions
+[info] * -encoding
+[info] * utf8
+[info] * -unchecked
+[success] Total time: 0 s, completed Jan 2, 2017 11:44:51 PM
+```
+
+接下来，使用这两个 key (来自 [Keys](../../api/sbt/Keys$.html)):
+
+```scala
+val scalacOptions = taskKey[Seq[String]]("Options for the Scala compiler.")
+val checksums = settingKey[Seq[String]]("The list of checksums to generate and to verify for dependencies.")
+```
+
+**注意**： `scalacOptions` 和 `checksums` 彼此无关。 它们只是两个具有相同值类型的键，其中一个是一项任务。
+
+可以编译一个将 `build.sbt` 别名为 `checksums` `scalacOptions`，但不能以其他方式编译。 例如，这是允许的：
+
+```scala
+// The scalacOptions task may be defined in terms of the checksums setting
+scalacOptions := checksums.value
+```
+
+没有**其他**方向可以走。 也就是说，setting key 不能依赖于 task key。
+这是因为 setting key 仅在 subproject 加载时计算一次，因此该任务不会每次都重新运行，并且任务希望每次都重新运行。
+
+```scala
+// Bad example: The checksums setting cannot be defined in terms of the scalacOptions task!
+checksums := scalacOptions.value
+```
+
+#### 定义取决于其他 setting 的 setting
+
+在执行时间方面，我们可以将 setting 视为在加载期间评估的特殊任务。
+
+考虑将 subproject 组织定义为与项目名称相同。
+
+```scala
+// name our organization after our project (both are SettingKey[String])
+organization := name.value
+```
+
+Here's a realistic example.
+This rewires `scalaSource in Compile` key to a different directory
+only when `scalaBinaryVersion` is `"2.11"`.
+
+```scala
+scalaSource in Compile := {
+  val old = (scalaSource in Compile).value
+  scalaBinaryVersion.value match {
+    case "2.11" => baseDirectory.value / "src-2.11" / "main" / "scala"
+    case _      => old
+  }
+}
+```
+
+### build.sbt DSL 的意义是什么？
+
+build.sbt DSL 是一种领域特定语言，用于构建设置和任务的 DAG。 setting 式对 setting，任务及其之间的依赖关系进行编码。
+
+这种结构在 [Make][Make] (1976)，[Ant][Ant] (2000)，和 [Rake][Rake] (2003) 中很常见。
+
+#### Make 简介
+
+基本的 Makefile 语法如下所示：
+
+```
+target: dependencies
+[tab] system command1
+[tab] system command2
+```
+
+给定一个目标（默认目标名为 `all`），
+
+1. Make 检查目标的依赖项是否已构建，并构建尚未构建的任何依赖项。
+2. Make 按顺序运行系统命令。
+
+让我们看一下 `Makefile`：
+
+```
+CC=g++
+CFLAGS=-Wall
+
+all: hello
+
+hello: main.o hello.o
+    $(CC) main.o hello.o -o hello
+
+%.o: %.cpp
+    $(CC) $(CFLAGS) -c $< -o $@
+```
+
+运行 `make`，默认情况下它将选择名为 `all` 的目标。
+目标将 `hello` 作为其依赖项列出，但尚未建立，因此 Make 将建立 `hello` 。
+
+接下来，Make 检查是否已经建立了 `hello` 目标的依赖关系。
+`hello` 列出了两个目标： `main.o` 和 `hello.o`。
+一旦使用最后一个模式匹配规则创建了这些目标，
+只有执行系统命令，才能将 `main.o` 和 `hello.o` 链接到 `hello`。
+
+如果您只是运行 `make`，则可以专注于作为目标的目标，
+并且 `Make` 会确定构建中间产品所需的确切时间和命令。
+我们可以将其视为面向依赖的编程或基于 flow-based 编程。
+`Make` 实际上被认为是混合系统，因为虽然 DSL 描述了任务相关性，但操作被委派给系统命令。
+
+#### Rake
+
+对于 Make 后继者（例如Ant，Rake 和 sbt），这种混合状态仍在继续。
+看一下 Rakefile 的基本语法：
+
+```ruby
+task name: [:prereq1, :prereq2] do |t|
+  # actions (may reference prereq as t.name etc)
+end
+```
+
+Rake 的突破之处在于它使用一种编程语言来描述操作而不是系统命令。
+
+#### 基于混合 flow-based 编程的好处
+
+以这种方式组织构建有多种动机。
+
+首先是重复数据删除。 使用基于 flow-based 编程，即使一个任务由多个任务依赖，它也只能执行一次。
+例如，即使沿着任务图的多个任务依赖 `Compile / compile` 也将只执行一次。
+
+第二是并行处理。 使用任务图，任务引擎可以并行调度互不相关的任务。
+
+第三是关注点和灵活性的分离。 任务图使构建用户可以以不同的方式将任务连接在一起，而 sbt 和插件可以提供各种功能（例如，编译和库依赖管理）作为可重复使用的功能。
+
+### 摘要
+
+构建定义的核心数据结构是任务的DAG，其中边缘表示 happens-before 关系。
+`build.sbt` 是一种 DSL，旨在表达面向依赖的程序或基于 flow-based 程序，类似于 `Makefile` 和 `Rakefile`。
+
+基于 flow-based 编程的主要动机是重复数据删除，并行处理和可定制性。
+
+
+  [Basic-Def]: Basic-Def.html
   [More-About-Settings]: More-About-Settings.html
   [Library-Dependencies]: Library-Dependencies.html
   [Multi-Project]: Multi-Project.html
@@ -933,19 +1319,8 @@ config，global task）。
   [Basic-Def]: Basic-Def.html
   [Scopes]: Scopes.html
 
-更多关于设置
----------------------
-
-这一小节将介绍除了用基本的 `:=` 方法创建设置，还有其他的方法可以创建。假设你已经阅读了 [.sbt 构建定义][Basic-Def] 和 [scope][Scopes]。
-
-### 回顾：设置
-
-还记得在 [.sbt 构建定义][Basic-Def] 中，一个构建定义创建了一个 `Setting` 列表，然后这些 `Setting` 被用来对 sbt 的构建描述做转换（它是一个保存键值对的 map）。一个 Setting 就是将 sbt 之前的 map 作为输入并且输出一个新的 map 的转换。
-这个新的 map 就是 sbt 的新状态。
-
-不同 setting 通过不同的方式对该 map 进行转换。之前在 [.sbt 构建定义][Basic-Def] 中，你已经阅读了 `:=` 方法相关的内容。
-
-通过 `:=` 创建的 `Setting` 会往转换之后新的 map 中放入一个固定的常量。例如，如果你通过 `name := "hello"` 对 map 做一次转换，新的 map 中 key `name` 就保存着一个字符串 `"hello"`。
+追加值
+-----
 
 ### 追加值： `+=` 和 `++=`
 
@@ -957,13 +1332,13 @@ config，global task）。
 例如，一个 key `sourceDirectories in Compile` 的值是 `Seq[File]`。默认情况下该 key 的值会包含 `src/main/scala`。如果你也想编译叫做 source 的目录下的源代码（因为你不得不成为非标准的），你可以添加该目录：
 
 ```scala
-sourceDirectories in Compile += new File("source")
+Compile / sourceDirectories += new File("source")
 ```
 
 或者，遵循约定使用 sbt 包中的 `file()` 函数：
 
 ```scala
-sourceDirectories in Compile += file("source")
+Compile / sourceDirectories += file("source")
 ```
 
 （`file()` 只是创建了一个新的`File`。）
@@ -971,7 +1346,7 @@ sourceDirectories in Compile += file("source")
 你可以用 `++=` 一次添加多个目录：
 
 ```scala
-sourceDirectories in Compile ++= Seq(file("sources1"), file("sources2"))
+Compile / sourceDirectories ++= Seq(file("sources1"), file("sources2"))
 ```
 
 `Seq(a, b, c, ...)` 是 Scala 用来构建列表的标准语法。
@@ -979,53 +1354,8 @@ sourceDirectories in Compile ++= Seq(file("sources1"), file("sources2"))
 要完全替换默认的 source 目录，当然可以使用 `:=` 方法：
 
 ```scala
-sourceDirectories in Compile := Seq(file("sources1"), file("sources2"))
+Compile / sourceDirectories := Seq(file("sources1"), file("sources2"))
 ```
-
-### 依赖于其他 key 的值计算值
-
-引用另一个 task 或者 setting 的值只需要调用它们各自的 value 方法。该 value 方法比较特殊而且只能在 `:=`，`+=` 或者 `++=` 方法的参数上调用。
-
-作为第一个例子，考虑定义一个名称和 project 一样的 organization。
-
-```scala
-// name our organization after our project (both are SettingKey[String])
-organization := name.value
-```
-
-或者，设置的和项目目录名称一样：
-
-```scala
-// name is a Key[String], baseDirectory is a Key[File]
-// name the project after the directory it's inside
-name := baseDirectory.value.getName
-```
-
-这个转换中采用 `java.io.File` 里面的标准方法 `getName` 取得了 `baseDirectory` 的值。
-
-采用多个输入是类似的。例如，
-
-```scala
-name := "project " + name.value + " from " + organization.value + " version " + version.value
-```
-
-通过将 name 之前的值和 organization 以及 version 的值拼接起来，组成 name 的新值。
-
-#### 包含依赖的设置
-
-在 `name := baseDirectory.value.getName` 设置中，`name` 会 *依赖于* `baseDirectory`。如果你将上面的代码写入 `build.sbt` 中，并且启动 sbt 的交互模式，然后输入 `inspect name`，你应该看到（部分地）：
-
-```
-[info] Dependencies:
-[info]  *:baseDirectory
-```
-
-这就是 sbt 知道一个 setting 如何依赖于另一个 setting。还记得一些 setting 描述了 task，所以这种方式也创建了 task 之间的依赖关系。
-
-例如，如果你执行 `inspect compile` 你会看到它依赖了另一个 key `compileInputs`，而且如果你执行 `inspect compileInputs` 它还会依赖于其他的 key。一直追溯依赖链会有魔法发生。例如当你输入 `compile` 时，
-sbt 自动执行了 `update`。它可以工作是因为 `compile` 计算需要的输入的值需要 sbt 先执行 `update` 计算。
-
-这样，sbt 中所有的构建依赖都是 *自动的* 而不是显示声明的。如果你在另一个计算中用到了该 key 的值，那么那个计算就会依赖该 key。它就是可以工作！
 
 #### 当设置未定义时
 
@@ -1035,43 +1365,15 @@ sbt 自动执行了 `update`。它可以工作是因为 `compile` 计算需要�
 在sbt中创建循环引用是可能的，这是错误的；如果你循环引用了，sbt 会告诉你。
 
 #### 依赖于其他 key 的值的 task
-  
+
 你可以计算一些 task 或者 setting 的值来定义另一个 task 或者为另一个 task 追加值。通过使用 `Def.task` 作为`:=`， `+=` 或者 `++=`的参数可以做到。
 
 作为第一个例子，考虑追加一个使用项目基目录和编译 classpath 的 source generator。
 
 ```scala
-sourceGenerators in Compile += Def.task {
+Compile / sourceGenerators += Def.task {
   myGenerator(baseDirectory.value, (managedClasspath in Compile).value)
 }
-```
-
-#### 包含依赖的 task
-
-在 [.sbt 构建定义][Basic-Def] 中提到过，当你通过 `:=` 或其他方法创建一个设置时，task key 创建的是 `Setting[Task[T]]` 而不是 `Setting[T]`。
-Setting 可以是 Task 的输入，但 Task 不能是 Setting 的输入。
-
-以这两个 key 为例（从 [Keys](../../api/sbt/Keys$.html) 中）：
-
-```scala
-val scalacOptions = taskKey[Seq[String]]("Options for the Scala compiler.")
-val checksums = settingKey[Seq[String]]("The list of checksums to generate and to verify for dependencies.")
-```
-
-（`scalacOptions` 和 `checksums` 互相没有关系，它们只是有相同值类型的两个 key，其中一个是 task。）
-
-可以编译 `build.sbt` 将 `scalacOptions` 映射到 `checksums`，但是反过来不可以。例如，这样是允许的：
-
-```scala
-// scalacOptions task 会依赖 checksums setting 来定义
-scalacOptions := checksums.value
-```
-
-反向的操作是 *不可能* 的。也就是说，一个 setting 的 key 不能依赖于一个 task 的 key。是因为一个 setting 的 key 只会在项目加载的时候计算一次，所以 task 不会每次都重新执行，而 task 期待每次都重新计算。
-
-```scala
-// checksums setting 不能依赖 scalacOptions task 来定义
-checksums := scalacOptions.value
 ```
 
 ### 追加依赖：`+=` 和 `++=`
@@ -1080,6 +1382,386 @@ checksums := scalacOptions.value
 
 ```scala
 cleanFiles += file("coverage-report-" + name.value + ".txt")
+```
+
+
+  [Basic-Def]: Basic-Def.html
+  [Scopes]: Scopes.html
+
+Scope 委托 (.value 查找)
+--------------------------------
+
+> This page was translated mostly with Google Translate. Please send a pull request to improve it.
+
+此页面描述 scope 委托。 假定您已经阅读并理解了先前的页面
+[.sbt 构建定义][Basic-Def] 和 [scopes][Scopes]。
+
+既然我们已经涵盖了 scope 界定的所有细节，我们就可以详细解释 `.value` 查找。 如果您是第一次阅读此页面，则可以跳过本节。
+
+总结到目前为止我们已经学到的东西：
+
+- scope 是三个轴上的组件的元组: subproject 轴、configuration 轴、task 轴。
+- 任何 scope 轴都有一个特殊的 scope 组件 `Zero`。
+- 在 subproject 轴上有一个特殊的 scope 组件 `ThisBuild`。
+- `Test` 扩展了 `Runtime`，而 `Runtime` 扩展了 `Compile` configuration。
+- 默认情况下，放置在 build.sbt 中的 key 的 scope 为 `${current subproject} / Zero / Zero`。
+- 可以使用 `/` 运算符确定 key 的 scope。
+
+现在，假设我们具有以下构建定义:
+
+```scala
+lazy val foo = settingKey[Int]("")
+lazy val bar = settingKey[Int]("")
+
+lazy val projX = (project in file("x"))
+  .settings(
+    foo := {
+      (Test / bar).value + 1
+    },
+    Compile / bar := 1
+  )
+```
+
+在 `foo` 的 setting 主体内部，声明了对 scoped key `Test / bar` 的依赖。
+但是，尽管在 `projX `中未定义 `Test / bar`，sbt 仍然能够将 `Test / bar`
+解析为另一个 scoped key，导致 `foo` 初始化为 `2`。
+
+sbt 具有定义明确的后备搜索路径，称为 **scope 委托**。
+此功能使您可以在更广泛的 scope 内设置一次值，从而允许多个更特定的 scope 继承该值。
+
+### scope 委托规则
+
+以下是 scope 委托的规则：
+
+- 规则1： scope 轴具有以下优先级：subproject 轴，configuration 轴，然后是 task 轴。
+- 规则2：在给定 scope 的情况下，可以通过按以下顺序替换 task 轴来搜索委托 scope： 给定的 task scope，然后是 `Zero` （这是 scope 的非 task scope 版本）。
+- 规则3：在给定 scope 的情况下，可以通过按以下顺序替换 configuration 轴来搜索委托 scope： 给定 configuration，其父项，其父项等等，然后 `Zero`（与无作用域的 configuration 轴相同）。
+- 规则4：给定一个 scope ，通过按以下顺序替换 subproject 轴来搜索委托 scope： 给定的 subproject，`ThisBuild`，然后为 `Zero`。
+- 规则5：在不携带原始上下文的情况下，评估委托 scoped key 及其相关的 settings/tasks。
+
+我们将在本页面的其余部分中查看每个规则。
+
+### 规则1: scope 轴优先级
+
+- 规则1： scope 轴具有以下优先级：subproject 轴，configuration 轴，然后是 task 轴。
+
+换句话说，给定两个作用域候选者，如果一个在 subproject 轴上具有更特定的值，则无论 configuration 或 task scope 如何，它将始终获胜。
+同样，如果 subproject 相同，则无论 task scope 如何，具有更具体 configuration 值的子项目将始终获胜。
+我们将看到更多定义**更具体的**规则。
+
+### 规则2: task 轴委托
+
+- 规则2：在给定 scope 的情况下，可以通过按以下顺序**替换** task 轴来搜索委托 scope： 给定的 task scope，然后是 `Zero` （这是 scope 的非 task scope 版本）。
+
+对于给定 key，sbt 将如何生成委托 scope，这里有一个具体规则。 记住，我们试图显示给定任意 `(xxx / yyy).value` 的搜索路径。
+
+**练习题 A**: 给出以下构建定义：
+
+```scala
+lazy val projA = (project in file("a"))
+  .settings(
+    name := {
+      "foo-" + (packageBin / scalaVersion).value
+    },
+    scalaVersion := "2.11.11"
+  )
+```
+
+`projA / name` 的值是什么?
+
+1. `"foo-2.11.11"`
+2. `"foo-2.12.10"`
+3. 还有什么吗
+
+答案是 `"foo-2.11.11"`。
+在 `.settings(...)` 内部，`scalaVersion` 的 scope 将自动设置为 `projA / Zero / Zero`，
+因此 `packageBin / scalaVersion` 变为 `projA / Zero / packageBin / scalaVersion`。
+该特定 scoped key 是未定义的。
+通过使用规则2，sbt 将把 task 轴替换 `Zero` 作为 `projA / Zero / Zero` （或 `projA / scalaVersion`）。该 scoped key 定义为 `"2.11.11"`。
+
+### 规则3：configuration 轴搜索路径
+
+- 规则3：在给定 scope 的情况下，可以通过按以下顺序替换 configuration 轴来搜索委托 scope： 给定 configuration，其父项，其父项等等，然后 `Zero`（与无作用域的 configuration 轴相同）。
+
+我们前面看到的例子是 `projX`：
+
+```scala
+lazy val foo = settingKey[Int]("")
+lazy val bar = settingKey[Int]("")
+
+lazy val projX = (project in file("x"))
+  .settings(
+    foo := {
+      (Test / bar).value + 1
+    },
+    Compile / bar := 1
+  )
+```
+
+如果我们再次写出完整 scope，`projX / Test / Zero` 。
+还记得 `Test` 扩展了 `Runtime` ，`Runtime` 扩展了 `Compile` 。
+
+`Test / bar` 是未定义的，但是由于规则3，sbt 将查找 scope 为 `projX / Test / Zero`，
+`projX / Runtime / Zero`，然后 `projX / Compile / Zero`。
+找到最后一个，即 `Compile / bar`。
+
+### 规则4：subproject 轴搜索路径
+
+- 规则4：给定一个 scope ，通过按以下顺序替换 subproject 轴来搜索委托 scope： 给定的 subproject，`ThisBuild`，然后为 `Zero`。
+
+**练习题 B**: 给出以下构建定义：
+
+```scala
+ThisBuild / organization := "com.example"
+
+lazy val projB = (project in file("b"))
+  .settings(
+    name := "abc-" + organization.value,
+    organization := "org.tempuri"
+  )
+```
+
+`projB / name` 的值是什么？
+
+1. `"abc-com.example"`
+2. `"abc-org.tempuri"`
+3. 还有什么吗
+
+答案是 `abc-org.tempuri`。
+因此，根据规则4，第一个搜索路径是具有 `projB / Zero / Zero` scope 的 `organization`，在 `projB` 中定义为 `"org.tempuri"`。
+它的优先级高于构建级别 setting `ThisBuild / organization`。
+
+#### scope 轴优先级再次
+
+**练习题 C**: 给出以下构建定义：
+
+```scala
+ThisBuild / packageBin / scalaVersion := "2.12.2"
+
+lazy val projC = (project in file("c"))
+  .settings(
+    name := {
+      "foo-" + (packageBin / scalaVersion).value
+    },
+    scalaVersion := "2.11.11"
+  )
+```
+
+`projC / name` 值是什么？
+
+1. `"foo-2.12.2"`
+2. `"foo-2.11.11"`
+3. 还有什么吗
+
+答案是 `foo-2.11.11`。
+scope 为 `projC / Zero / packageBin` 的 `scalaVersion` 未定义。
+
+
+`scalaVersion` scoped to `projC / Zero / packageBin` is undefined.
+规则2找到 `projC / Zero / Zero`。 规则4找到 `ThisBuild / Zero / packageBin`。
+在这种情况下，规则1决定在 subproject 轴上赢得更具体的价值，这是定义为 `"2.11.11"` 的 `projC / Zero / Zero`。
+
+**练习题 D**: 给出以下构建定义：
+
+```scala
+ThisBuild / scalacOptions += "-Ywarn-unused-import"
+
+lazy val projD = (project in file("d"))
+  .settings(
+    test := {
+      println((Compile / console / scalacOptions).value)
+    },
+    console / scalacOptions -= "-Ywarn-unused-import",
+    Compile / scalacOptions := scalacOptions.value // added by sbt
+  )
+```
+
+如果您进行了 `projD/test` 您会看到什么？
+
+1. `List()`
+2. `List(-Ywarn-unused-import)`
+3. 还有什么吗
+
+答案是 `List(-Ywarn-unused-import)`。
+规则2找到 `projD / Compile / Zero`，
+规则3找到 `projD / Zero / console`，
+规则4找到 `ThisBuild / Zero / Zero`。
+规则1选择 `projD / Compile / Zero` 因为它具有 subproject 轴 `projD`，并且 configuration 轴的优先级高于 task 轴。
+
+接下来， `Compile / scalacOptions` 引用 `scalacOptions.value`，我们接下来需要找到 `projD / Zero / Zero` 的委托。 规则4找到 `ThisBuild / Zero / Zero`，然后解析为 `List(-Ywarn-unused-import)`。
+
+### inspect 命令列出委托
+
+您可能需要快速查找正在发生的事情。
+这是可以使用 `inspect` 地方。
+
+```
+sbt:projd> inspect projD / Compile / console / scalacOptions
+[info] Task: scala.collection.Seq[java.lang.String]
+[info] Description:
+[info]  Options for the Scala compiler.
+[info] Provided by:
+[info]  ProjectRef(uri("file:/tmp/projd/"), "projD") / Compile / scalacOptions
+[info] Defined at:
+[info]  /tmp/projd/build.sbt:9
+[info] Reverse dependencies:
+[info]  projD / test
+[info]  projD / Compile / console
+[info] Delegates:
+[info]  projD / Compile / console / scalacOptions
+[info]  projD / Compile / scalacOptions
+[info]  projD / console / scalacOptions
+[info]  projD / scalacOptions
+[info]  ThisBuild / Compile / console / scalacOptions
+[info]  ThisBuild / Compile / scalacOptions
+[info]  ThisBuild / console / scalacOptions
+[info]  ThisBuild / scalacOptions
+[info]  Zero / Compile / console / scalacOptions
+[info]  Zero / Compile / scalacOptions
+[info]  Zero / console / scalacOptions
+[info]  Global / scalacOptions
+```
+
+请注意，"Provided by" 如何显示 `projD / Compile / console / scalacOptions` 提供了 `projD / Compile / scalacOptions`。
+同样在 "Delegates" (委托)，按优先顺序列出了**所有**可能的委托候选人！
+
+- 首先列出在 subproject 轴上具有 `projD` scope 的所有 scope，然后列出 `ThisBuild` 和 `Zero`。
+- 在 subproject 中，首先列出在 configuration 轴上具有 `Compile` scope 的 scope，然后退回到 `Zero`。
+- 首先列出在 task 轴上具有 task scope `console /` 的所有 scope，然后列出没有 task scope `console /` 的所有 scope。
+
+### .value 查找与动态调度
+
+- 规则5：在不携带原始上下文的情况下，评估委托 scoped key 及其相关的 settings/tasks。
+
+请注意，scope 委托感觉类似于面向对象语言中的类继承，但是有区别。
+在像 Scala 这样的 OO语言中，如果在 trait `Shape` 上有一个名为 `drawShape` 的 method，则即使 `Shape` trait 中的其他 method 使用了 `drawShape`，其子类也可以覆盖行为，这称为动态调度。
+
+但是，在 sbt 中，scope 委托可以将 scope 委托给更通用的 scope，例如将 project-level 的 setting 委托给 build-level setting，但是该 build-level setting 不能引用 project-level setting。
+
+**练习题 E**: 给出以下构建定义：
+
+```scala
+lazy val root = (project in file("."))
+  .settings(
+    inThisBuild(List(
+      organization := "com.example",
+      scalaVersion := "2.12.2",
+      version      := scalaVersion.value + "_0.1.0"
+    )),
+    name := "Hello"
+  )
+
+lazy val projE = (project in file("e"))
+  .settings(
+    scalaVersion := "2.11.11"
+  )
+```
+
+`projE / version` 返回什么？
+
+1. `"2.12.2_0.1.0"`
+2. `"2.11.11_0.1.0"`
+3. 还有什么吗
+
+答案是 `2.12.2_0.1.0`。
+`projE / version` 委托 `ThisBuild / version`，
+它取决于 `ThisBuild / scalaVersion`。
+因此，build-level setting 应主要限于简单的值分配。
+
+**练习题 F**: 给出以下构建定义：
+
+```scala
+ThisBuild / scalacOptions += "-D0"
+scalacOptions += "-D1"
+
+lazy val projF = (project in file("f"))
+  .settings(
+    compile / scalacOptions += "-D2",
+    Compile / scalacOptions += "-D3",
+    Compile / compile / scalacOptions += "-D4",
+    test := {
+      println("bippy" + (Compile / compile / scalacOptions).value.mkString)
+    }
+  )
+```
+
+`projF / test` 显示什么？
+
+1. `"bippy-D4"`
+2. `"bippy-D2-D4"`
+3. `"bippy-D0-D3-D4"`
+4. 还有什么吗
+
+答案是 `"bippy-D0-D3-D4"`。
+这是 [Paul Phillips](https://gist.github.com/paulp/923154ab2d61882195cdea47483592ca) 最初创建的练习的变体。
+这是所有规则的很好展示，因为 `someKey += "x"` 扩展为
+
+```scala
+someKey := {
+  val old = someKey.value
+  old :+ "x"
+}
+```
+
+检索旧值将导致委托，并且由于规则5，它将转到另一个 scoped key。
+让我们先摆脱 `+=`，然后为旧值注释委托：
+
+```scala
+ThisBuild / scalacOptions := {
+  // Global / scalacOptions <- Rule 4
+  val old = (ThisBuild / scalacOptions).value
+  old :+ "-D0"
+}
+
+scalacOptions := {
+  // ThisBuild / scalacOptions <- Rule 4
+  val old = scalacOptions.value
+  old :+ "-D1"
+}
+
+lazy val projF = (project in file("f"))
+  .settings(
+    compile / scalacOptions := {
+      // ThisBuild / scalacOptions <- Rules 2 and 4
+      val old = (compile / scalacOptions).value
+      old :+ "-D2"
+    },
+    Compile / scalacOptions := {
+      // ThisBuild / scalacOptions <- Rules 3 and 4
+      val old = (Compile / scalacOptions).value
+      old :+ "-D3"
+    },
+    Compile / compile / scalacOptions := {
+      // projF / Compile / scalacOptions <- Rules 1 and 2
+      val old = (Compile / compile / scalacOptions).value
+      old :+ "-D4"
+    },
+    test := {
+      println("bippy" + (Compile / compile / scalacOptions).value.mkString)
+    }
+  )
+```
+
+变成：
+
+```scala
+ThisBuild / scalacOptions := {
+  Nil :+ "-D0"
+}
+
+scalacOptions := {
+  List("-D0") :+ "-D1"
+}
+
+lazy val projF = (project in file("f"))
+  .settings(
+    compile / scalacOptions := List("-D0") :+ "-D2",
+    Compile / scalacOptions := List("-D0") :+ "-D3",
+    Compile / compile / scalacOptions := List("-D0", "-D3") :+ "-D4",
+    test := {
+      println("bippy" + (Compile / compile / scalacOptions).value.mkString)
+    }
+  )
 ```
 
 

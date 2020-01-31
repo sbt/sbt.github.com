@@ -1,0 +1,441 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html manifest="pamflet.manifest">
+      <head>
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+        <title>sbt Reference Manual — Scope 委托 (.value 查找)</title>
+        <link rel="shortcut icon" href="../favicon.ico"/>
+        <link rel="stylesheet" href="../css/bootstrap.min.css" type="text/css"/>
+        <link rel="stylesheet" href="../css/pamflet.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamflet-print.css" type="text/css" media="print"/>
+        <link rel="stylesheet" href="../css/pamflet-grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-redmond.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-github.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-monokai.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamfletheight_80px_2em.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
+        <script type="text/javascript" src="../js/bootstrap.bundle.min.js"></script>
+        <script type="text/javascript" src="../js/pamflet.js"></script>
+        <script type="text/javascript">
+          Pamflet.page.language = 'zh-cn';
+        </script>
+        <script type="text/javascript" src="../js/prettify/prettify.js"></script><script type="text/javascript" src="../js/prettify/lang-scala.js"></script><link type="text/css" rel="stylesheet" href="../css/prettify.css"/><script type="text/javascript"><!--
+        window.onload=function() { prettyPrint(); };
+      --></script>
+        <link rel="stylesheet" href="../css/custom.css" type="text/css" media="screen, projection"/>
+        
+        <script type="text/javascript">
+              Pamflet.twitter = '#sbt #scala';
+            </script>
+      </head>
+      <body class="color_scheme-github">
+        <div class="container-fluid contentswrapper h-100">
+          <div class="row minh-100">
+          <div class="col-md-4 col-xl-3 toccolumn leftcolumn">
+                  <div class="lefttocwrapper">
+      <div class="tocwrapper">
+        
+        <div class="tocbody show" id="toc">
+        
+        <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">sbt 入门</a></div><ol class="toc"> <li><div><a href="Setup.html">安装 sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">在 macOS 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">在 Windows 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">在 Linux 上安装 sbt</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">目录结构</a></div></li><li><div><a href="Running.html">运行</a></div></li><li><div><a href="Basic-Def.html">.sbt 构建定义</a></div></li><li><div><a href="Task-Graph.html">任务图</a></div></li><li><div><a href="Scopes.html">Scope</a></div></li><li><div><a href="Appending-Values.html">追加值</a></div></li><li><div class="current">Scope 委托 (.value 查找)</div></li><li><div><a href="Library-Dependencies.html">库依赖</a></div></li><li><div><a href="Multi-Project.html">多项目构建</a></div></li><li><div><a href="Using-Plugins.html">使用插件</a></div></li><li><div><a href="Custom-Settings.html">自定义设置和任务</a></div></li><li><div><a href="Organizing-Build.html">组织构建</a></div></li><li><div><a href="Summary.html">总结</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div>
+      </div>
+      </div>
+                </div><div class="col-md-8 col-xs-9">
+                  <div class="rightcolumn contents">
+                  <h2 id="Scope+%E5%A7%94%E6%89%98+%28.value+%E6%9F%A5%E6%89%BE%29">Scope 委托 (.value 查找)<a href="#Scope+%E5%A7%94%E6%89%98+%28.value+%E6%9F%A5%E6%89%BE%29" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><blockquote><p>This page was translated mostly with Google Translate. Please send a pull request to improve it.
+</p></blockquote><p>此页面描述 scope 委托。 假定您已经阅读并理解了先前的页面
+<a href="Basic-Def.html">.sbt 构建定义</a> 和 <a href="Scopes.html">scopes</a>。
+</p><p>既然我们已经涵盖了 scope 界定的所有细节，我们就可以详细解释 <code>.value</code> 查找。 如果您是第一次阅读此页面，则可以跳过本节。
+</p><p>总结到目前为止我们已经学到的东西：
+</p><ul><li>scope 是三个轴上的组件的元组: subproject 轴、configuration 轴、task 轴。
+</li><li>任何 scope 轴都有一个特殊的 scope 组件 <code>Zero</code>。
+</li><li>在 subproject 轴上有一个特殊的 scope 组件 <code>ThisBuild</code>。
+</li><li><code>Test</code> 扩展了 <code>Runtime</code>，而 <code>Runtime</code> 扩展了 <code>Compile</code> configuration。
+</li><li>默认情况下，放置在 build.sbt 中的 key 的 scope 为 <code>${current subproject} / Zero / Zero</code>。
+</li><li>可以使用 <code>/</code> 运算符确定 key 的 scope。
+</li></ul><p>现在，假设我们具有以下构建定义:
+</p><pre><code class="prettyprint lang-scala">lazy val foo = settingKey[Int](&quot;&quot;)
+lazy val bar = settingKey[Int](&quot;&quot;)
+
+lazy val projX = (project in file(&quot;x&quot;))
+  .settings(
+    foo := {
+      (Test / bar).value + 1
+    },
+    Compile / bar := 1
+  )
+</code></pre><p>在 <code>foo</code> 的 setting 主体内部，声明了对 scoped key <code>Test / bar</code> 的依赖。
+但是，尽管在 <code>projX </code>中未定义 <code>Test / bar</code>，sbt 仍然能够将 <code>Test / bar</code>
+解析为另一个 scoped key，导致 <code>foo</code> 初始化为 <code>2</code>。
+</p><p>sbt 具有定义明确的后备搜索路径，称为 <strong>scope 委托</strong>。
+此功能使您可以在更广泛的 scope 内设置一次值，从而允许多个更特定的 scope 继承该值。
+</p><h3 id="scope+%E5%A7%94%E6%89%98%E8%A7%84%E5%88%99">scope 委托规则<a href="#scope+%E5%A7%94%E6%89%98%E8%A7%84%E5%88%99" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>以下是 scope 委托的规则：
+</p><ul><li>规则1： scope 轴具有以下优先级：subproject 轴，configuration 轴，然后是 task 轴。
+</li><li>规则2：在给定 scope 的情况下，可以通过按以下顺序替换 task 轴来搜索委托 scope： 给定的 task scope，然后是 <code>Zero</code> （这是 scope 的非 task scope 版本）。
+</li><li>规则3：在给定 scope 的情况下，可以通过按以下顺序替换 configuration 轴来搜索委托 scope： 给定 configuration，其父项，其父项等等，然后 <code>Zero</code>（与无作用域的 configuration 轴相同）。
+</li><li>规则4：给定一个 scope ，通过按以下顺序替换 subproject 轴来搜索委托 scope： 给定的 subproject，<code>ThisBuild</code>，然后为 <code>Zero</code>。
+</li><li>规则5：在不携带原始上下文的情况下，评估委托 scoped key 及其相关的 settings/tasks。
+</li></ul><p>我们将在本页面的其余部分中查看每个规则。
+</p><h3 id="%E8%A7%84%E5%88%991%3A+scope+%E8%BD%B4%E4%BC%98%E5%85%88%E7%BA%A7">规则1: scope 轴优先级<a href="#%E8%A7%84%E5%88%991%3A+scope+%E8%BD%B4%E4%BC%98%E5%85%88%E7%BA%A7" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>规则1： scope 轴具有以下优先级：subproject 轴，configuration 轴，然后是 task 轴。
+</li></ul><p>换句话说，给定两个作用域候选者，如果一个在 subproject 轴上具有更特定的值，则无论 configuration 或 task scope 如何，它将始终获胜。
+同样，如果 subproject 相同，则无论 task scope 如何，具有更具体 configuration 值的子项目将始终获胜。
+我们将看到更多定义<strong>更具体的</strong>规则。
+</p><h3 id="%E8%A7%84%E5%88%992%3A+task+%E8%BD%B4%E5%A7%94%E6%89%98">规则2: task 轴委托<a href="#%E8%A7%84%E5%88%992%3A+task+%E8%BD%B4%E5%A7%94%E6%89%98" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>规则2：在给定 scope 的情况下，可以通过按以下顺序<strong>替换</strong> task 轴来搜索委托 scope： 给定的 task scope，然后是 <code>Zero</code> （这是 scope 的非 task scope 版本）。
+</li></ul><p>对于给定 key，sbt 将如何生成委托 scope，这里有一个具体规则。 记住，我们试图显示给定任意 <code>(xxx / yyy).value</code> 的搜索路径。
+</p><p><strong>练习题 A</strong>: 给出以下构建定义：
+</p><pre><code class="prettyprint lang-scala">lazy val projA = (project in file(&quot;a&quot;))
+  .settings(
+    name := {
+      &quot;foo-&quot; + (packageBin / scalaVersion).value
+    },
+    scalaVersion := &quot;2.11.11&quot;
+  )
+</code></pre><p><code>projA / name</code> 的值是什么?
+</p><ol><li><code>&quot;foo-2.11.11&quot;</code>
+</li><li><code>&quot;foo-2.12.10&quot;</code>
+</li><li>还有什么吗
+</li></ol><p>答案是 <code>&quot;foo-2.11.11&quot;</code>。
+在 <code>.settings(...)</code> 内部，<code>scalaVersion</code> 的 scope 将自动设置为 <code>projA / Zero / Zero</code>，
+因此 <code>packageBin / scalaVersion</code> 变为 <code>projA / Zero / packageBin / scalaVersion</code>。
+该特定 scoped key 是未定义的。
+通过使用规则2，sbt 将把 task 轴替换 <code>Zero</code> 作为 <code>projA / Zero / Zero</code> （或 <code>projA / scalaVersion</code>）。该 scoped key 定义为 <code>&quot;2.11.11&quot;</code>。
+</p><h3 id="%E8%A7%84%E5%88%993%EF%BC%9Aconfiguration+%E8%BD%B4%E6%90%9C%E7%B4%A2%E8%B7%AF%E5%BE%84">规则3：configuration 轴搜索路径<a href="#%E8%A7%84%E5%88%993%EF%BC%9Aconfiguration+%E8%BD%B4%E6%90%9C%E7%B4%A2%E8%B7%AF%E5%BE%84" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>规则3：在给定 scope 的情况下，可以通过按以下顺序替换 configuration 轴来搜索委托 scope： 给定 configuration，其父项，其父项等等，然后 <code>Zero</code>（与无作用域的 configuration 轴相同）。
+</li></ul><p>我们前面看到的例子是 <code>projX</code>：
+</p><pre><code class="prettyprint lang-scala">lazy val foo = settingKey[Int](&quot;&quot;)
+lazy val bar = settingKey[Int](&quot;&quot;)
+
+lazy val projX = (project in file(&quot;x&quot;))
+  .settings(
+    foo := {
+      (Test / bar).value + 1
+    },
+    Compile / bar := 1
+  )
+</code></pre><p>如果我们再次写出完整 scope，<code>projX / Test / Zero</code> 。
+还记得 <code>Test</code> 扩展了 <code>Runtime</code> ，<code>Runtime</code> 扩展了 <code>Compile</code> 。
+</p><p><code>Test / bar</code> 是未定义的，但是由于规则3，sbt 将查找 scope 为 <code>projX / Test / Zero</code>，
+<code>projX / Runtime / Zero</code>，然后 <code>projX / Compile / Zero</code>。
+找到最后一个，即 <code>Compile / bar</code>。
+</p><h3 id="%E8%A7%84%E5%88%994%EF%BC%9Asubproject+%E8%BD%B4%E6%90%9C%E7%B4%A2%E8%B7%AF%E5%BE%84">规则4：subproject 轴搜索路径<a href="#%E8%A7%84%E5%88%994%EF%BC%9Asubproject+%E8%BD%B4%E6%90%9C%E7%B4%A2%E8%B7%AF%E5%BE%84" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>规则4：给定一个 scope ，通过按以下顺序替换 subproject 轴来搜索委托 scope： 给定的 subproject，<code>ThisBuild</code>，然后为 <code>Zero</code>。
+</li></ul><p><strong>练习题 B</strong>: 给出以下构建定义：
+</p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;
+
+lazy val projB = (project in file(&quot;b&quot;))
+  .settings(
+    name := &quot;abc-&quot; + organization.value,
+    organization := &quot;org.tempuri&quot;
+  )
+</code></pre><p><code>projB / name</code> 的值是什么？
+</p><ol><li><code>&quot;abc-com.example&quot;</code>
+</li><li><code>&quot;abc-org.tempuri&quot;</code>
+</li><li>还有什么吗
+</li></ol><p>答案是 <code>abc-org.tempuri</code>。
+因此，根据规则4，第一个搜索路径是具有 <code>projB / Zero / Zero</code> scope 的 <code>organization</code>，在 <code>projB</code> 中定义为 <code>&quot;org.tempuri&quot;</code>。
+它的优先级高于构建级别 setting <code>ThisBuild / organization</code>。
+</p><h4 id="scope+%E8%BD%B4%E4%BC%98%E5%85%88%E7%BA%A7%E5%86%8D%E6%AC%A1">scope 轴优先级再次<a href="#scope+%E8%BD%B4%E4%BC%98%E5%85%88%E7%BA%A7%E5%86%8D%E6%AC%A1" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><strong>练习题 C</strong>: 给出以下构建定义：
+</p><pre><code class="prettyprint lang-scala">ThisBuild / packageBin / scalaVersion := &quot;2.12.2&quot;
+
+lazy val projC = (project in file(&quot;c&quot;))
+  .settings(
+    name := {
+      &quot;foo-&quot; + (packageBin / scalaVersion).value
+    },
+    scalaVersion := &quot;2.11.11&quot;
+  )
+</code></pre><p><code>projC / name</code> 值是什么？
+</p><ol><li><code>&quot;foo-2.12.2&quot;</code>
+</li><li><code>&quot;foo-2.11.11&quot;</code>
+</li><li>还有什么吗
+</li></ol><p>答案是 <code>foo-2.11.11</code>。
+scope 为 <code>projC / Zero / packageBin</code> 的 <code>scalaVersion</code> 未定义。
+</p><p><code>scalaVersion</code> scoped to <code>projC / Zero / packageBin</code> is undefined.
+规则2找到 <code>projC / Zero / Zero</code>。 规则4找到 <code>ThisBuild / Zero / packageBin</code>。
+在这种情况下，规则1决定在 subproject 轴上赢得更具体的价值，这是定义为 <code>&quot;2.11.11&quot;</code> 的 <code>projC / Zero / Zero</code>。
+</p><p><strong>练习题 D</strong>: 给出以下构建定义：
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalacOptions += &quot;-Ywarn-unused-import&quot;
+
+lazy val projD = (project in file(&quot;d&quot;))
+  .settings(
+    test := {
+      println((Compile / console / scalacOptions).value)
+    },
+    console / scalacOptions -= &quot;-Ywarn-unused-import&quot;,
+    Compile / scalacOptions := scalacOptions.value // added by sbt
+  )
+</code></pre><p>如果您进行了 <code>projD/test</code> 您会看到什么？
+</p><ol><li><code>List()</code>
+</li><li><code>List(-Ywarn-unused-import)</code>
+</li><li>还有什么吗
+</li></ol><p>答案是 <code>List(-Ywarn-unused-import)</code>。
+规则2找到 <code>projD / Compile / Zero</code>，
+规则3找到 <code>projD / Zero / console</code>，
+规则4找到 <code>ThisBuild / Zero / Zero</code>。
+规则1选择 <code>projD / Compile / Zero</code> 因为它具有 subproject 轴 <code>projD</code>，并且 configuration 轴的优先级高于 task 轴。
+</p><p>接下来， <code>Compile / scalacOptions</code> 引用 <code>scalacOptions.value</code>，我们接下来需要找到 <code>projD / Zero / Zero</code> 的委托。 规则4找到 <code>ThisBuild / Zero / Zero</code>，然后解析为 <code>List(-Ywarn-unused-import)</code>。
+</p><h3 id="inspect+%E5%91%BD%E4%BB%A4%E5%88%97%E5%87%BA%E5%A7%94%E6%89%98">inspect 命令列出委托<a href="#inspect+%E5%91%BD%E4%BB%A4%E5%88%97%E5%87%BA%E5%A7%94%E6%89%98" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>您可能需要快速查找正在发生的事情。
+这是可以使用 <code>inspect</code> 地方。
+</p><pre><code class="">sbt:projd&gt; inspect projD / Compile / console / scalacOptions
+[info] Task: scala.collection.Seq[java.lang.String]
+[info] Description:
+[info]  Options for the Scala compiler.
+[info] Provided by:
+[info]  ProjectRef(uri(&quot;file:/tmp/projd/&quot;), &quot;projD&quot;) / Compile / scalacOptions
+[info] Defined at:
+[info]  /tmp/projd/build.sbt:9
+[info] Reverse dependencies:
+[info]  projD / test
+[info]  projD / Compile / console
+[info] Delegates:
+[info]  projD / Compile / console / scalacOptions
+[info]  projD / Compile / scalacOptions
+[info]  projD / console / scalacOptions
+[info]  projD / scalacOptions
+[info]  ThisBuild / Compile / console / scalacOptions
+[info]  ThisBuild / Compile / scalacOptions
+[info]  ThisBuild / console / scalacOptions
+[info]  ThisBuild / scalacOptions
+[info]  Zero / Compile / console / scalacOptions
+[info]  Zero / Compile / scalacOptions
+[info]  Zero / console / scalacOptions
+[info]  Global / scalacOptions
+</code></pre><p>请注意，“Provided by” 如何显示 <code>projD / Compile / console / scalacOptions</code> 提供了 <code>projD / Compile / scalacOptions</code>。
+同样在 “Delegates” (委托)，按优先顺序列出了<strong>所有</strong>可能的委托候选人！
+</p><ul><li>首先列出在 subproject 轴上具有 <code>projD</code> scope 的所有 scope，然后列出 <code>ThisBuild</code> 和 <code>Zero</code>。
+</li><li>在 subproject 中，首先列出在 configuration 轴上具有 <code>Compile</code> scope 的 scope，然后退回到 <code>Zero</code>。
+</li><li>首先列出在 task 轴上具有 task scope <code>console /</code> 的所有 scope，然后列出没有 task scope <code>console /</code> 的所有 scope。
+</li></ul><h3 id=".value+%E6%9F%A5%E6%89%BE%E4%B8%8E%E5%8A%A8%E6%80%81%E8%B0%83%E5%BA%A6">.value 查找与动态调度<a href="#.value+%E6%9F%A5%E6%89%BE%E4%B8%8E%E5%8A%A8%E6%80%81%E8%B0%83%E5%BA%A6" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>规则5：在不携带原始上下文的情况下，评估委托 scoped key 及其相关的 settings/tasks。
+</li></ul><p>请注意，scope 委托感觉类似于面向对象语言中的类继承，但是有区别。
+在像 Scala 这样的 OO语言中，如果在 trait <code>Shape</code> 上有一个名为 <code>drawShape</code> 的 method，则即使 <code>Shape</code> trait 中的其他 method 使用了 <code>drawShape</code>，其子类也可以覆盖行为，这称为动态调度。
+</p><p>但是，在 sbt 中，scope 委托可以将 scope 委托给更通用的 scope，例如将 project-level 的 setting 委托给 build-level setting，但是该 build-level setting 不能引用 project-level setting。
+</p><p><strong>练习题 E</strong>: 给出以下构建定义：
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    inThisBuild(List(
+      organization := &quot;com.example&quot;,
+      scalaVersion := &quot;2.12.2&quot;,
+      version      := scalaVersion.value + &quot;_0.1.0&quot;
+    )),
+    name := &quot;Hello&quot;
+  )
+
+lazy val projE = (project in file(&quot;e&quot;))
+  .settings(
+    scalaVersion := &quot;2.11.11&quot;
+  )
+</code></pre><p><code>projE / version</code> 返回什么？
+</p><ol><li><code>&quot;2.12.2_0.1.0&quot;</code>
+</li><li><code>&quot;2.11.11_0.1.0&quot;</code>
+</li><li>还有什么吗
+</li></ol><p>答案是 <code>2.12.2_0.1.0</code>。
+<code>projE / version</code> 委托 <code>ThisBuild / version</code>，
+它取决于 <code>ThisBuild / scalaVersion</code>。
+因此，build-level setting 应主要限于简单的值分配。
+</p><p><strong>练习题 F</strong>: 给出以下构建定义：
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalacOptions += &quot;-D0&quot;
+scalacOptions += &quot;-D1&quot;
+
+lazy val projF = (project in file(&quot;f&quot;))
+  .settings(
+    compile / scalacOptions += &quot;-D2&quot;,
+    Compile / scalacOptions += &quot;-D3&quot;,
+    Compile / compile / scalacOptions += &quot;-D4&quot;,
+    test := {
+      println(&quot;bippy&quot; + (Compile / compile / scalacOptions).value.mkString)
+    }
+  )
+</code></pre><p><code>projF / test</code> 显示什么？
+</p><ol><li><code>&quot;bippy-D4&quot;</code>
+</li><li><code>&quot;bippy-D2-D4&quot;</code>
+</li><li><code>&quot;bippy-D0-D3-D4&quot;</code>
+</li><li>还有什么吗
+</li></ol><p>答案是 <code>&quot;bippy-D0-D3-D4&quot;</code>。
+这是 <a href="https://gist.github.com/paulp/923154ab2d61882195cdea47483592ca">Paul Phillips</a> 最初创建的练习的变体。
+这是所有规则的很好展示，因为 <code>someKey += &quot;x&quot;</code> 扩展为
+</p><pre><code class="prettyprint lang-scala">someKey := {
+  val old = someKey.value
+  old :+ &quot;x&quot;
+}
+</code></pre><p>检索旧值将导致委托，并且由于规则5，它将转到另一个 scoped key。
+让我们先摆脱 <code>+=</code>，然后为旧值注释委托：
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalacOptions := {
+  // Global / scalacOptions &lt;- Rule 4
+  val old = (ThisBuild / scalacOptions).value
+  old :+ &quot;-D0&quot;
+}
+
+scalacOptions := {
+  // ThisBuild / scalacOptions &lt;- Rule 4
+  val old = scalacOptions.value
+  old :+ &quot;-D1&quot;
+}
+
+lazy val projF = (project in file(&quot;f&quot;))
+  .settings(
+    compile / scalacOptions := {
+      // ThisBuild / scalacOptions &lt;- Rules 2 and 4
+      val old = (compile / scalacOptions).value
+      old :+ &quot;-D2&quot;
+    },
+    Compile / scalacOptions := {
+      // ThisBuild / scalacOptions &lt;- Rules 3 and 4
+      val old = (Compile / scalacOptions).value
+      old :+ &quot;-D3&quot;
+    },
+    Compile / compile / scalacOptions := {
+      // projF / Compile / scalacOptions &lt;- Rules 1 and 2
+      val old = (Compile / compile / scalacOptions).value
+      old :+ &quot;-D4&quot;
+    },
+    test := {
+      println(&quot;bippy&quot; + (Compile / compile / scalacOptions).value.mkString)
+    }
+  )
+</code></pre><p>变成：
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalacOptions := {
+  Nil :+ &quot;-D0&quot;
+}
+
+scalacOptions := {
+  List(&quot;-D0&quot;) :+ &quot;-D1&quot;
+}
+
+lazy val projF = (project in file(&quot;f&quot;))
+  .settings(
+    compile / scalacOptions := List(&quot;-D0&quot;) :+ &quot;-D2&quot;,
+    Compile / scalacOptions := List(&quot;-D0&quot;) :+ &quot;-D3&quot;,
+    Compile / compile / scalacOptions := List(&quot;-D0&quot;, &quot;-D3&quot;) :+ &quot;-D4&quot;,
+    test := {
+      println(&quot;bippy&quot; + (Compile / compile / scalacOptions).value.mkString)
+    }
+  )
+</code></pre><div class="bottom nav">
+                <div class="row">
+                  <div class="col-md-auto">
+                    <a href="Library-Dependencies.html">
+                      <div class="arrowitem">
+                        <span class="arrow">&gt;</span>
+                      </div>
+
+                      <div class="arrowitem">
+                        <em>Next page</em><br/>
+                        库依赖
+                      </div>
+
+                    </a>
+                  </div>
+                </div>
+                <div class="row w-100">
+        <div class="col-md-auto ml-auto">
+          <ul class="language-bar">
+            <li><a href="../Scope-Delegation.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/Scope-Delegation.html"><span class="lang-item lang-ja">日本語</span></a></li><li><a href="../zh-cn/Scope-Delegation.html"><span class="lang-item lang-zh-cn">中文 (简体)</span></a></li><li><a href="../es/Scope-Delegation.html"><span class="lang-item lang-es">Español</span></a></li>
+          </ul>
+        </div>
+      </div>
+              </div>
+                  </div>
+                </div>
+          </div> <!-- row -->
+        </div>
+        <div class="header">
+          <link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
+<div class="container-fluid top nav">
+  <div class="row w-100">
+    <div class="col-md-4">
+      <div class="logo">
+        <a href="../../../index.html"><img src="../files/sbt-logo.svg" alt="sbt"></a>
+        <span class="versions"><select id="versions"></select></span>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="nav" id="topbar">
+        <a href="../../../learn.html">Learn</a>
+        <a href="../../../download.html">Download</a>
+        <a href="../../../support.html">Support</a>
+        <a href="../../../community.html">Get Involved</a>
+        <a id="source-code" href="https://github.com/sbt/sbt"><img src="../files/github-logo-teal.svg" alt="Source code" class="social"></a>
+        <a id="twitter" href="https://twitter.com/scala_sbt"><img src="../files/twitter-logo-teal.svg" alt="sbt on Twitter" class="social"></a>
+        <a id="edit-on-github" href="https://github.com/sbt/website/edit/develop/src/reference/00-Getting-Started/07C-Scope-Delegation.md"><img src="../files/octicon-pencil.svg" alt="Edit on GitHub"></a>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" async>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41449189-1', 'scala-sbt.org');
+ga('send', 'pageview');
+</script>
+<script type="text/javascript" async>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-23127719-1', 'lightbend.com', {'allowLinker': true, 'name': 'tsTracker'});
+  ga('tsTracker.require', 'linker');
+  ga('tsTracker.linker:autoLink', ['lightbend.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org']);
+  ga('tsTracker.send', 'pageview');
+</script>
+<script type="text/javascript">
+$(function() {
+var scrollDown = function() {
+if (window.location.hash !== "") {
+  setTimeout(function() { $(window).scrollTop($(window).scrollTop() - 120); }, 100);
+}
+}
+scrollDown();
+$(window).bind('hashchange', function() {
+scrollDown();
+});
+});
+</script>
+
+        </div>
+        <div class="footer">
+          <footer>
+  <div class="container-fluid footer">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="support-item">
+          <div class="support-icon">
+            <svg class="svg-icon svg-icon-chat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.5 85.2" enable-background="new 0 0 97.5 85.2"><path stroke="#fff" stroke-width="4.282" stroke-linecap="round" stroke-miterlimit="10" d="M27 29.5h-16.3c-4.7 0-8.6 3.9-8.6 8.6v25.7c0 4.7 3.9 8.6 8.6 8.6h2.7c.8 0 1.5.7 1.5 1.5v7.8c0 1.3 1.6 2 2.5 1l9.5-9.5c.5-.5 1.2-.8 2-.8h20.2c4.7 0 8.6-3.9 8.6-8.6v-7.8" fill="none"/><path fill="#fff" d="M85 0h-40c-6.9 0-12.5 5.6-12.5 12.5v33.4c0 2.2 1.8 4.1 4.1 4.1h29.9c.7 0 1.3.3 1.8.7l10 10c1.6 1.6 4.3.5 4.3-1.8v-6.5c0-1.4 1.1-2.5 2.5-2.5 6.9 0 12.5-5.6 12.5-12.5v-25c-.1-6.8-5.8-12.4-12.6-12.4z"/></svg>
+          </div>
+          <div class="support-detail">
+            <h2>Community Support</h2>
+            <a href="https://stackoverflow.com/questions/tagged/sbt">StackOverflow</a>
+          </div>
+        </div>
+        <div class="support-item">
+          <div class="support-icon">
+            <svg id="lightbend-icon-reverse" class="svg-icon svg-icon-lightbend-reverse" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 302 262"><title>lightbend-icon</title><g id="icon"><path d="M1,195v56a10,10,0,0,0,10,10H291a10,10,0,0,0,10-10V195a557.85,557.85,0,0,1-150,20A557.85,557.85,0,0,1,1,195Z" style="fill:#fff"/><path d="M291,1H11A10,10,0,0,0,1,11V176a539.94,539.94,0,0,0,150,21,539.94,539.94,0,0,0,150-21V11A10,10,0,0,0,291,1Z" style="fill:#fff"/></g></svg>
+          </div>
+          <div class="support-detail">
+            <h2>Commercial Support</h2>
+            <a href="https://www.lightbend.com/services/expert-support">Lightbend Subscription</a>
+            <a href="https://www.lightbend.com/services/training">Training</a>
+            <a href="https://www.lightbend.com/services/consulting">Consulting</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 text-right ts">
+        &copy; 2016-2019 Lightbend Inc.
+        <a href="https://www.lightbend.com">
+          <img src="../files/lightbend-reverse.svg" alt="Lightbend, Inc.">
+        </a>
+      </div>
+    </div>
+  </div>
+</footer><script src="/assets/versions.js"></script><script src="/assets/set-versions.js"></script>
+        </div>
+        
+        <div class="highlight-outer">
+              <div class="highlight-menu">
+                <ul>
+                  <li><button id="highlight-button-twitter"><img src="../img/twitter-bird-dark-bgs.png"/></button></li>
+                </ul>
+              </div>
+            </div>
+      </body>
+    </html>

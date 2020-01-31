@@ -1,0 +1,419 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html>
+      <head>
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+        <title>sbt Reference Manual — 任务图</title>
+        <link rel="shortcut icon" href="../favicon.ico"/>
+        <link rel="stylesheet" href="../css/bootstrap.min.css" type="text/css"/>
+        <link rel="stylesheet" href="../css/pamflet.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamflet-print.css" type="text/css" media="print"/>
+        <link rel="stylesheet" href="../css/pamflet-grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-redmond.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-github.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-monokai.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamfletheight_80px_2em.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
+        <script type="text/javascript" src="../js/bootstrap.bundle.min.js"></script>
+        <script type="text/javascript" src="../js/pamflet.js"></script>
+        <script type="text/javascript">
+          Pamflet.page.language = 'zh-cn';
+        </script>
+        <script type="text/javascript" src="../js/prettify/prettify.js"></script><script type="text/javascript" src="../js/prettify/lang-scala.js"></script><link type="text/css" rel="stylesheet" href="../css/prettify.css"/><script type="text/javascript"><!--
+        window.onload=function() { prettyPrint(); };
+      --></script>
+        <link rel="stylesheet" href="../css/custom.css" type="text/css" media="screen, projection"/>
+        
+        <script type="text/javascript">
+              Pamflet.twitter = '#sbt #scala';
+            </script>
+      </head>
+      <body class="color_scheme-github">
+        <div class="container-fluid contentswrapper h-100">
+          <div class="row minh-100">
+          <div class="col-md-4 col-xl-3 toccolumn leftcolumn">
+                  <div class="lefttocwrapper">
+      <div class="tocwrapper">
+        
+        <div class="tocbody show" id="toc">
+        
+        <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">sbt 入门</a></div><ol class="toc"> <li><div><a href="Setup.html">安装 sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">在 macOS 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">在 Windows 上安装 sbt</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">在 Linux 上安装 sbt</a></div></li> </ol></li><li><div><a href="Hello.html">Hello, World</a></div></li><li><div><a href="Directories.html">目录结构</a></div></li><li><div><a href="Running.html">运行</a></div></li><li><div><a href="Basic-Def.html">.sbt 构建定义</a></div></li><li><div class="current">任务图</div></li><li><div><a href="Scopes.html">Scope</a></div></li><li><div><a href="Appending-Values.html">追加值</a></div></li><li><div><a href="Scope-Delegation.html">Scope 委托 (.value 查找)</a></div></li><li><div><a href="Library-Dependencies.html">库依赖</a></div></li><li><div><a href="Multi-Project.html">多项目构建</a></div></li><li><div><a href="Using-Plugins.html">使用插件</a></div></li><li><div><a href="Custom-Settings.html">自定义设置和任务</a></div></li><li><div><a href="Organizing-Build.html">组织构建</a></div></li><li><div><a href="Summary.html">总结</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div>
+      </div>
+      </div>
+                </div><div class="col-md-8 col-xs-9">
+                  <div class="rightcolumn contents">
+                  <h2 id="%E4%BB%BB%E5%8A%A1%E5%9B%BE">任务图<a href="#%E4%BB%BB%E5%8A%A1%E5%9B%BE" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><blockquote><p>This page was translated mostly with Google Translate. Please send a pull request to improve it.
+</p></blockquote><p>继<a href="Basic-Def.html">.sbt 构建定义</a>，
+此页面更详细地解释了 <code>build.sbt</code> 定义。
+</p><p>与其将 <code>settings</code> 视为键值对，
+不如将其更好地比喻为将任务表示为边 happens-before 的任务的有向无环图（DAG）。
+我们将此称为<strong>任务图</strong> (task graph)。
+</p><h3 id="%E6%9C%AF%E8%AF%AD">术语<a href="#%E6%9C%AF%E8%AF%AD" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在深入探讨之前，让我们先回顾一下关键术语。
+</p><ul><li>setting/task 式: <code>.settings(...)</code> 条目。
+</li><li>key: setting 式的左侧。 它可以是 <code>SettingKey[A]</code>，<code>TaskKey[A]</code> 或 <code>InputKey[A]</code>。
+</li><li>setting: 由带有 <code>SettingKey[A]</code> 的 setting 式定义。 该值在加载期间仅计算一次。
+</li><li>task: 由带有 <code>TaskKey[A]</code> 的 task 式定义。 每次调用时都会计算该值。
+</li></ul><h3 id="%E5%A3%B0%E6%98%8E%E5%AF%B9%E5%85%B6%E4%BB%96%E4%BB%BB%E5%8A%A1%E7%9A%84%E4%BE%9D%E8%B5%96">声明对其他任务的依赖<a href="#%E5%A3%B0%E6%98%8E%E5%AF%B9%E5%85%B6%E4%BB%96%E4%BB%BB%E5%8A%A1%E7%9A%84%E4%BE%9D%E8%B5%96" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在 <code>build.sbt</code> DSL中，我们使用 <code>.value</code> method 来表示对另一个任务或 setting 的依赖性。
+value method 是特殊的，只能在 <code>:=</code> 的参数中调用（或 <code>+=</code> 或 <code>++=</code> 我们将在后面介绍）。
+</p><p>作为第一个示例，请考虑定义依赖于 <code>update</code> 和 <code>clean</code> 任务的 <code>scalacOption</code>。
+这些是这些 key 的定义（来自 <a href="../../api/sbt/Keys$.html">Keys</a>）。
+</p><p><strong>注意</strong>：下面计算的值对于 <code>scalaOptions</code> 是毫无 <code>scalaOptions</code>，仅用于演示目的：
+</p><pre><code class="prettyprint lang-scala">val scalacOptions = taskKey[Seq[String]](&quot;Options for the Scala compiler.&quot;)
+val update = taskKey[UpdateReport](&quot;Resolves and optionally retrieves dependencies, producing a report.&quot;)
+val clean = taskKey[Unit](&quot;Deletes files produced by the build, such as generated sources, compiled classes, and task caches.&quot;)
+</code></pre><p>这是我们如何重新连接 <code>scalacOptions</code>:
+</p><pre><code class="prettyprint lang-scala">scalacOptions := {
+  val ur = update.value  // update task happens-before scalacOptions
+  val x = clean.value    // clean task happens-before scalacOptions
+  // ---- scalacOptions begins here ----
+  ur.allConfigurations.take(3)
+}
+</code></pre><p><code>update.value</code> 和 <code>clean.value</code> 声明了任务依赖性，
+而 <code>ur.allConfigurations.take(3)</code> 是任务的主体。
+</p><p><code>.value</code> 不是正常的 Scala method 调用。
+<code>build.sbt</code> DSL 使用宏将它们提升到任务主体之外。
+<strong>在任务引擎评估 <code>scalacOptions</code> 的打开 <code>{</code>，无论它出现在主体中的哪一行， <code>update</code> 和 <code>clean</code> 任务都已完成</strong>。
+</p><p>请参见以下示例：
+</p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;
+ThisBuild / scalaVersion := &quot;2.12.10&quot;
+ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
+
+lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    name := &quot;Hello&quot;,
+    scalacOptions := {
+      val out = streams.value // streams task happens-before scalacOptions
+      val log = out.log
+      log.info(&quot;123&quot;)
+      val ur = update.value   // update task happens-before scalacOptions
+      log.info(&quot;456&quot;)
+      ur.allConfigurations.take(3)
+    }
+  )
+</code></pre><p>接下来，在 sbt shell 中键入 <code>scalacOptions</code>:
+</p><pre><code class="">&gt; scalacOptions
+[info] Updating {file:/xxx/}root...
+[info] Resolving jline#jline;2.14.1 ...
+[info] Done updating.
+[info] 123
+[info] 456
+[success] Total time: 0 s, completed Jan 2, 2017 10:38:24 PM
+</code></pre><p>即使 <code>val ur = ...</code> 出现在 <code>log.info(&quot;123&quot;)</code> 和 <code>log.info(&quot;456&quot;)</code>，<code>update</code> 任务的评估还是要先于它们进行。
+</p><p>这是另一个例子：
+</p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;
+ThisBuild / scalaVersion := &quot;2.12.10&quot;
+ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
+
+lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    name := &quot;Hello&quot;,
+    scalacOptions := {
+      val ur = update.value  // update task happens-before scalacOptions
+      if (false) {
+        val x = clean.value  // clean task happens-before scalacOptions
+      }
+      ur.allConfigurations.take(3)
+    }
+  )
+</code></pre><p>接下来，在 sbt shell 中键入 <code>run</code>，然后键入 <code>scalacOptions</code>。
+</p><pre><code class="">&gt; run
+[info] Updating {file:/xxx/}root...
+[info] Resolving jline#jline;2.14.1 ...
+[info] Done updating.
+[info] Compiling 1 Scala source to /Users/eugene/work/quick-test/task-graph/target/scala-2.12/classes...
+[info] Running example.Hello
+hello
+[success] Total time: 0 s, completed Jan 2, 2017 10:45:19 PM
+&gt; scalacOptions
+[info] Updating {file:/xxx/}root...
+[info] Resolving jline#jline;2.14.1 ...
+[info] Done updating.
+[success] Total time: 0 s, completed Jan 2, 2017 10:45:23 PM
+</code></pre><p>现在，如果您检查 <code>target/scala-2.12/classes/</code>，它将不存在，因为即使它在 <code>if (false)</code> 内， <code>clean</code> 任务也已运行。
+</p><p>需要注意的另一件事是，不能保证 <code>update</code> 和 <code>clean</code> 任务的顺序。
+他们可能同时运行 <code>update</code> 然后 <code>clean</code>，<code>clean</code> 然后 <code>update</code> 或同时运行。
+</p><h3 id="%E5%86%85%E8%81%94+.value+%E8%B0%83%E7%94%A8">内联 .value 调用<a href="#%E5%86%85%E8%81%94+.value+%E8%B0%83%E7%94%A8" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>如上所述，<code>.value</code> 是一种特殊的 method，用于表达对其他任务和 setting 的依赖性。
+在您熟悉 <code>build.sbt</code> 之前，我们建议您将所有 <code>.value</code> 调用放在任务正文的顶部。
+</p><p>但是，当您变得更加舒适时，您可能希望内联 <code>.value</code> 调用，因为它可以使 task/setting 更简洁，并且不必提供变量名。
+</p><p>我们内联了一些示例：
+</p><pre><code class="prettyprint lang-scala">scalacOptions := {
+  val x = clean.value
+  update.value.allConfigurations.take(3)
+}
+</code></pre><p>请注意，<code>.value</code> 调用是内联的还是放在任务正文中的任何位置，在进入任务正文之前仍会对它们进行评估。
+</p><h4 id="%E6%A3%80%E6%9F%A5%E4%BB%BB%E5%8A%A1">检查任务<a href="#%E6%A3%80%E6%9F%A5%E4%BB%BB%E5%8A%A1" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>在上面的示例中，<code>scalacOptions</code> 对 <code>update</code> 和 <code>clean</code> 任务具有<strong>依赖性</strong>。
+如果将以上内容放置在 <code>build.sbt</code> 并运行 sbt shell，则键入 <code>inspect scalacOptions</code>，您应该看到（部分）：
+</p><pre><code class="">&gt; inspect scalacOptions
+[info] Task: scala.collection.Seq[java.lang.String]
+[info] Description:
+[info]  Options for the Scala compiler.
+....
+[info] Dependencies:
+[info]  *:clean
+[info]  *:update
+....
+</code></pre><p>这就是 sbt 如何知道哪些任务取决于哪些其他任务的方式。
+</p><p>例如，如果您 <code>inspect tree compile</code> 您将看到它依赖于另一个 key <code>incCompileSetup</code>，而后者又依赖于其他 key，如 <code>dependencyClasspath</code>。 继续遵循依赖性链，魔术就会发生。
+</p><pre><code class="">&gt; inspect tree compile
+[info] compile:compile = Task[sbt.inc.Analysis]
+[info]   +-compile:incCompileSetup = Task[sbt.Compiler$IncSetup]
+[info]   | +-*/*:skip = Task[Boolean]
+[info]   | +-compile:compileAnalysisFilename = Task[java.lang.String]
+[info]   | | +-*/*:crossPaths = true
+[info]   | | +-{.}/*:scalaBinaryVersion = 2.12
+[info]   | |
+[info]   | +-*/*:compilerCache = Task[xsbti.compile.GlobalsCache]
+[info]   | +-*/*:definesClass = Task[scala.Function1[java.io.File, scala.Function1[java.lang.String, Boolean]]]
+[info]   | +-compile:dependencyClasspath = Task[scala.collection.Seq[sbt.Attributed[java.io.File]]]
+[info]   | | +-compile:dependencyClasspath::streams = Task[sbt.std.TaskStreams[sbt.Init$ScopedKey[_ &lt;: Any]]]
+[info]   | | | +-*/*:streamsManager = Task[sbt.std.Streams[sbt.Init$ScopedKey[_ &lt;: Any]]]
+[info]   | | |
+[info]   | | +-compile:externalDependencyClasspath = Task[scala.collection.Seq[sbt.Attributed[java.io.File]]]
+[info]   | | | +-compile:externalDependencyClasspath::streams = Task[sbt.std.TaskStreams[sbt.Init$ScopedKey[_ &lt;: Any]]]
+[info]   | | | | +-*/*:streamsManager = Task[sbt.std.Streams[sbt.Init$ScopedKey[_ &lt;: Any]]]
+[info]   | | | |
+[info]   | | | +-compile:managedClasspath = Task[scala.collection.Seq[sbt.Attributed[java.io.File]]]
+[info]   | | | | +-compile:classpathConfiguration = Task[sbt.Configuration]
+[info]   | | | | | +-compile:configuration = compile
+[info]   | | | | | +-*/*:internalConfigurationMap = &lt;function1&gt;
+[info]   | | | | | +-*:update = Task[sbt.UpdateReport]
+[info]   | | | | |
+....
+</code></pre><p>例如，当您键入 <code>compile</code> sbt 时，它会自动执行 <code>update</code>。
+它之所以行之有效，是因为作为 <code>compile</code> 计算的输入所需的值需要 sbt 首先进行 <code>update</code> 计算。
+</p><p>这样，sbt 中的所有构建依赖项都是<strong>自动的</strong>，而不是显式声明的。
+如果在另一个计算中使用 key 的值，则该计算取决于该 key。
+</p><h4 id="%E5%AE%9A%E4%B9%89%E4%BE%9D%E8%B5%96%E4%BA%8E%E5%85%B6%E4%BB%96+setting+%E7%9A%84%E4%BB%BB%E5%8A%A1">定义依赖于其他 setting 的任务<a href="#%E5%AE%9A%E4%B9%89%E4%BE%9D%E8%B5%96%E4%BA%8E%E5%85%B6%E4%BB%96+setting+%E7%9A%84%E4%BB%BB%E5%8A%A1" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>scalacOptions</code> 是 task key。
+假设已经将其设置为某些值，但是您想为非 2.12 过滤掉 <code>&quot;-Xfatal-warnings&quot;</code> 和 <code>&quot;-deprecation&quot;</code>。
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .settings(
+    name := &quot;Hello&quot;,
+    organization := &quot;com.example&quot;,
+    scalaVersion := &quot;2.12.10&quot;,
+    version := &quot;0.1.0-SNAPSHOT&quot;,
+    scalacOptions := List(&quot;-encoding&quot;, &quot;utf8&quot;, &quot;-Xfatal-warnings&quot;, &quot;-deprecation&quot;, &quot;-unchecked&quot;),
+    scalacOptions := {
+      val old = scalacOptions.value
+      scalaBinaryVersion.value match {
+        case &quot;2.12&quot; =&gt; old
+        case _      =&gt; old filterNot (Set(&quot;-Xfatal-warnings&quot;, &quot;-deprecation&quot;).apply)
+      }
+    }
+  )
+</code></pre><p>这是它在 sbt shell 上的外观：
+</p><pre><code class="">&gt; show scalacOptions
+[info] * -encoding
+[info] * utf8
+[info] * -Xfatal-warnings
+[info] * -deprecation
+[info] * -unchecked
+[success] Total time: 0 s, completed Jan 2, 2017 11:44:44 PM
+&gt; ++2.11.8!
+[info] Forcing Scala version to 2.11.8 on all projects.
+[info] Reapplying settings...
+[info] Set current project to Hello (in build file:/xxx/)
+&gt; show scalacOptions
+[info] * -encoding
+[info] * utf8
+[info] * -unchecked
+[success] Total time: 0 s, completed Jan 2, 2017 11:44:51 PM
+</code></pre><p>接下来，使用这两个 key (来自 <a href="../../api/sbt/Keys$.html">Keys</a>):
+</p><pre><code class="prettyprint lang-scala">val scalacOptions = taskKey[Seq[String]](&quot;Options for the Scala compiler.&quot;)
+val checksums = settingKey[Seq[String]](&quot;The list of checksums to generate and to verify for dependencies.&quot;)
+</code></pre><p><strong>注意</strong>： <code>scalacOptions</code> 和 <code>checksums</code> 彼此无关。 它们只是两个具有相同值类型的键，其中一个是一项任务。
+</p><p>可以编译一个将 <code>build.sbt</code> 别名为 <code>checksums</code> <code>scalacOptions</code>，但不能以其他方式编译。 例如，这是允许的：
+</p><pre><code class="prettyprint lang-scala">// The scalacOptions task may be defined in terms of the checksums setting
+scalacOptions := checksums.value
+</code></pre><p>没有<strong>其他</strong>方向可以走。 也就是说，setting key 不能依赖于 task key。
+这是因为 setting key 仅在 subproject 加载时计算一次，因此该任务不会每次都重新运行，并且任务希望每次都重新运行。
+</p><pre><code class="prettyprint lang-scala">// Bad example: The checksums setting cannot be defined in terms of the scalacOptions task!
+checksums := scalacOptions.value
+</code></pre><h4 id="%E5%AE%9A%E4%B9%89%E5%8F%96%E5%86%B3%E4%BA%8E%E5%85%B6%E4%BB%96+setting+%E7%9A%84+setting">定义取决于其他 setting 的 setting<a href="#%E5%AE%9A%E4%B9%89%E5%8F%96%E5%86%B3%E4%BA%8E%E5%85%B6%E4%BB%96+setting+%E7%9A%84+setting" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>在执行时间方面，我们可以将 setting 视为在加载期间评估的特殊任务。
+</p><p>考虑将 subproject 组织定义为与项目名称相同。
+</p><pre><code class="prettyprint lang-scala">// name our organization after our project (both are SettingKey[String])
+organization := name.value
+</code></pre><p>Here’s a realistic example.
+This rewires <code>scalaSource in Compile</code> key to a different directory
+only when <code>scalaBinaryVersion</code> is <code>&quot;2.11&quot;</code>.
+</p><pre><code class="prettyprint lang-scala">scalaSource in Compile := {
+  val old = (scalaSource in Compile).value
+  scalaBinaryVersion.value match {
+    case &quot;2.11&quot; =&gt; baseDirectory.value / &quot;src-2.11&quot; / &quot;main&quot; / &quot;scala&quot;
+    case _      =&gt; old
+  }
+}
+</code></pre><h3 id="build.sbt+DSL+%E7%9A%84%E6%84%8F%E4%B9%89%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F">build.sbt DSL 的意义是什么？<a href="#build.sbt+DSL+%E7%9A%84%E6%84%8F%E4%B9%89%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>build.sbt DSL 是一种领域特定语言，用于构建设置和任务的 DAG。 setting 式对 setting，任务及其之间的依赖关系进行编码。
+</p><p>这种结构在 <a href="https://en.wikipedia.org/wiki/Make_(software)">Make</a> (1976)，<a href="http://ant.apache.org/">Ant</a> (2000)，和 <a href="https://ruby.github.io/rake/">Rake</a> (2003) 中很常见。
+</p><h4 id="Make+%E7%AE%80%E4%BB%8B">Make 简介<a href="#Make+%E7%AE%80%E4%BB%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>基本的 Makefile 语法如下所示：
+</p><pre><code class="">target: dependencies
+[tab] system command1
+[tab] system command2
+</code></pre><p>给定一个目标（默认目标名为 <code>all</code>），
+</p><ol><li>Make 检查目标的依赖项是否已构建，并构建尚未构建的任何依赖项。
+</li><li>Make 按顺序运行系统命令。
+</li></ol><p>让我们看一下 <code>Makefile</code>：
+</p><pre><code class="">CC=g++
+CFLAGS=-Wall
+
+all: hello
+
+hello: main.o hello.o
+    $(CC) main.o hello.o -o hello
+
+%.o: %.cpp
+    $(CC) $(CFLAGS) -c $&lt; -o $@
+</code></pre><p>运行 <code>make</code>，默认情况下它将选择名为 <code>all</code> 的目标。
+目标将 <code>hello</code> 作为其依赖项列出，但尚未建立，因此 Make 将建立 <code>hello</code> 。
+</p><p>接下来，Make 检查是否已经建立了 <code>hello</code> 目标的依赖关系。
+<code>hello</code> 列出了两个目标： <code>main.o</code> 和 <code>hello.o</code>。
+一旦使用最后一个模式匹配规则创建了这些目标，
+只有执行系统命令，才能将 <code>main.o</code> 和 <code>hello.o</code> 链接到 <code>hello</code>。
+</p><p>如果您只是运行 <code>make</code>，则可以专注于作为目标的目标，
+并且 <code>Make</code> 会确定构建中间产品所需的确切时间和命令。
+我们可以将其视为面向依赖的编程或基于 flow-based 编程。
+<code>Make</code> 实际上被认为是混合系统，因为虽然 DSL 描述了任务相关性，但操作被委派给系统命令。
+</p><h4 id="Rake">Rake<a href="#Rake" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>对于 Make 后继者（例如Ant，Rake 和 sbt），这种混合状态仍在继续。
+看一下 Rakefile 的基本语法：
+</p><pre><code class="prettyprint lang-ruby">task name: [:prereq1, :prereq2] do |t|
+  # actions (may reference prereq as t.name etc)
+end
+</code></pre><p>Rake 的突破之处在于它使用一种编程语言来描述操作而不是系统命令。
+</p><h4 id="%E5%9F%BA%E4%BA%8E%E6%B7%B7%E5%90%88+flow-based+%E7%BC%96%E7%A8%8B%E7%9A%84%E5%A5%BD%E5%A4%84">基于混合 flow-based 编程的好处<a href="#%E5%9F%BA%E4%BA%8E%E6%B7%B7%E5%90%88+flow-based+%E7%BC%96%E7%A8%8B%E7%9A%84%E5%A5%BD%E5%A4%84" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>以这种方式组织构建有多种动机。
+</p><p>首先是重复数据删除。 使用基于 flow-based 编程，即使一个任务由多个任务依赖，它也只能执行一次。
+例如，即使沿着任务图的多个任务依赖 <code>Compile / compile</code> 也将只执行一次。
+</p><p>第二是并行处理。 使用任务图，任务引擎可以并行调度互不相关的任务。
+</p><p>第三是关注点和灵活性的分离。 任务图使构建用户可以以不同的方式将任务连接在一起，而 sbt 和插件可以提供各种功能（例如，编译和库依赖管理）作为可重复使用的功能。
+</p><h3 id="%E6%91%98%E8%A6%81">摘要<a href="#%E6%91%98%E8%A6%81" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>构建定义的核心数据结构是任务的DAG，其中边缘表示 happens-before 关系。
+<code>build.sbt</code> 是一种 DSL，旨在表达面向依赖的程序或基于 flow-based 程序，类似于 <code>Makefile</code> 和 <code>Rakefile</code>。
+</p><p>基于 flow-based 编程的主要动机是重复数据删除，并行处理和可定制性。
+</p><div class="bottom nav">
+                <div class="row">
+                  <div class="col-md-auto">
+                    <a href="Scopes.html">
+                      <div class="arrowitem">
+                        <span class="arrow">&gt;</span>
+                      </div>
+
+                      <div class="arrowitem">
+                        <em>Next page</em><br/>
+                        Scope
+                      </div>
+
+                    </a>
+                  </div>
+                </div>
+                <div class="row w-100">
+        <div class="col-md-auto ml-auto">
+          <ul class="language-bar">
+            <li><a href="../Task-Graph.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/Task-Graph.html"><span class="lang-item lang-ja">日本語</span></a></li><li><a href="../zh-cn/Task-Graph.html"><span class="lang-item lang-zh-cn">中文 (简体)</span></a></li><li><a href="../es/Task-Graph.html"><span class="lang-item lang-es">Español</span></a></li>
+          </ul>
+        </div>
+      </div>
+              </div>
+                  </div>
+                </div>
+          </div> <!-- row -->
+        </div>
+        <div class="header">
+          <link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
+<div class="container-fluid top nav">
+  <div class="row w-100">
+    <div class="col-md-4">
+      <div class="logo">
+        <a href="../../../index.html"><img src="../files/sbt-logo.svg" alt="sbt"></a>
+        <span class="versions"><select id="versions"></select></span>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="nav" id="topbar">
+        <a href="../../../learn.html">Learn</a>
+        <a href="../../../download.html">Download</a>
+        <a href="../../../support.html">Support</a>
+        <a href="../../../community.html">Get Involved</a>
+        <a id="source-code" href="https://github.com/sbt/sbt"><img src="../files/github-logo-teal.svg" alt="Source code" class="social"></a>
+        <a id="twitter" href="https://twitter.com/scala_sbt"><img src="../files/twitter-logo-teal.svg" alt="sbt on Twitter" class="social"></a>
+        <a id="edit-on-github" href="https://github.com/sbt/website/edit/develop/src/reference/00-Getting-Started/06-Task-Graph.md"><img src="../files/octicon-pencil.svg" alt="Edit on GitHub"></a>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" async>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41449189-1', 'scala-sbt.org');
+ga('send', 'pageview');
+</script>
+<script type="text/javascript" async>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-23127719-1', 'lightbend.com', {'allowLinker': true, 'name': 'tsTracker'});
+  ga('tsTracker.require', 'linker');
+  ga('tsTracker.linker:autoLink', ['lightbend.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org']);
+  ga('tsTracker.send', 'pageview');
+</script>
+<script type="text/javascript">
+$(function() {
+var scrollDown = function() {
+if (window.location.hash !== "") {
+  setTimeout(function() { $(window).scrollTop($(window).scrollTop() - 120); }, 100);
+}
+}
+scrollDown();
+$(window).bind('hashchange', function() {
+scrollDown();
+});
+});
+</script>
+
+        </div>
+        <div class="footer">
+          <footer>
+  <div class="container-fluid footer">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="support-item">
+          <div class="support-icon">
+            <svg class="svg-icon svg-icon-chat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.5 85.2" enable-background="new 0 0 97.5 85.2"><path stroke="#fff" stroke-width="4.282" stroke-linecap="round" stroke-miterlimit="10" d="M27 29.5h-16.3c-4.7 0-8.6 3.9-8.6 8.6v25.7c0 4.7 3.9 8.6 8.6 8.6h2.7c.8 0 1.5.7 1.5 1.5v7.8c0 1.3 1.6 2 2.5 1l9.5-9.5c.5-.5 1.2-.8 2-.8h20.2c4.7 0 8.6-3.9 8.6-8.6v-7.8" fill="none"/><path fill="#fff" d="M85 0h-40c-6.9 0-12.5 5.6-12.5 12.5v33.4c0 2.2 1.8 4.1 4.1 4.1h29.9c.7 0 1.3.3 1.8.7l10 10c1.6 1.6 4.3.5 4.3-1.8v-6.5c0-1.4 1.1-2.5 2.5-2.5 6.9 0 12.5-5.6 12.5-12.5v-25c-.1-6.8-5.8-12.4-12.6-12.4z"/></svg>
+          </div>
+          <div class="support-detail">
+            <h2>Community Support</h2>
+            <a href="https://stackoverflow.com/questions/tagged/sbt">StackOverflow</a>
+          </div>
+        </div>
+        <div class="support-item">
+          <div class="support-icon">
+            <svg id="lightbend-icon-reverse" class="svg-icon svg-icon-lightbend-reverse" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 302 262"><title>lightbend-icon</title><g id="icon"><path d="M1,195v56a10,10,0,0,0,10,10H291a10,10,0,0,0,10-10V195a557.85,557.85,0,0,1-150,20A557.85,557.85,0,0,1,1,195Z" style="fill:#fff"/><path d="M291,1H11A10,10,0,0,0,1,11V176a539.94,539.94,0,0,0,150,21,539.94,539.94,0,0,0,150-21V11A10,10,0,0,0,291,1Z" style="fill:#fff"/></g></svg>
+          </div>
+          <div class="support-detail">
+            <h2>Commercial Support</h2>
+            <a href="https://www.lightbend.com/services/expert-support">Lightbend Subscription</a>
+            <a href="https://www.lightbend.com/services/training">Training</a>
+            <a href="https://www.lightbend.com/services/consulting">Consulting</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 text-right ts">
+        &copy; 2016-2019 Lightbend Inc.
+        <a href="https://www.lightbend.com">
+          <img src="../files/lightbend-reverse.svg" alt="Lightbend, Inc.">
+        </a>
+      </div>
+    </div>
+  </div>
+</footer><script src="/assets/versions.js"></script><script src="/assets/set-versions.js"></script>
+        </div>
+        
+        <div class="highlight-outer">
+              <div class="highlight-menu">
+                <ul>
+                  <li><button id="highlight-button-twitter"><img src="../img/twitter-bird-dark-bgs.png"/></button></li>
+                </ul>
+              </div>
+            </div>
+      </body>
+    </html>
