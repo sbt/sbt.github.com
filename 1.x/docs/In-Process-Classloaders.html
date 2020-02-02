@@ -78,7 +78,52 @@ example, to use the <code>AllLibraryJars</code> strategy in the <code>Test</code
 </p><pre><code class="">Test / classLoaderLayeringStrategy := ClassLoaderLayeringStrategy.AllLibraryJars
 </code></pre><p>to the <code>build.sbt</code> file. Assuming no other changes to the <code>build.sbt</code> file, The
 <code>run</code> task will still use <code>ScalaLibrary</code> strategy.
-</p><div class="bottom nav">
+</p><h3 id="Troubleshooting">Troubleshooting<a href="#Troubleshooting" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Java reflection may cause issues when used with layered classloaders because it
+is possible that the class method that loads another class via reflection may
+not have access to that class to be loaded. This is particularly likely if the
+class is loaded using <code>Class.forName</code> or
+<code>Thread.currentThread.getContextClassLoader.loadClass</code>. Consider the following
+example:
+</p><pre><code class="prettyprint lang-scala">package example
+
+import scala.concurrent.{ Await, Future }
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration.Duration
+
+object ReflectionExample {
+  def main(args: Array[String]): Unit = Await.result(Future {
+      val cl = Thread.currentThread.getContextClassLoader
+      println(cl.loadClass(&quot;example.Foo&quot;))
+  }, Duration.Inf)
+}
+class Foo
+</code></pre><p>If one runs <code>ReflectionExample</code> with <code>sbt run</code> using the sbt default <code>ScalaLibrary</code>
+strategy, it will fail with a <code>ClassNotFoundException</code> because the context
+classloader of the thread that backs the future is the scala library classloader
+which is not able to load project classes. To work around this limitation
+without changing the layering strategy to <code>Flat</code>, one can do the following:
+</p><ol><li>Use <code>Class.forName</code> instead of <code>ClassLoader.loadClass</code>. The jvm implicitly
+uses the loader of the calling class for loading classes using <code>Class.forName</code>.
+In this case, <code>ReflectionExample</code> is the calling class and it will be in the
+same classloader as <code>Foo</code> since they are both part of the project classpath.
+</li><li>Provide a classloader for loading. In the example above, this can be done by
+replacing <code>val cl = Thread.currentThread.getContextClassLoader</code> with <code>val cl =
+getClass.getClassLoader</code>.
+</li></ol><p>For case (2), if the name lookup is performed by a library, then a
+<code>ClassLoader</code> parameter could be added to the library method that does the
+lookup. For example,
+</p><pre><code class="prettyprint lang-scala">object Library {
+  def lookup(name: String): Class[_] =
+    Thread.currentThread.getContextClassLoader.loadClass(name)
+}
+</code></pre><p>could be rewritten to
+</p><pre><code class="prettyprint lang-scala">object Library {
+  def lookup(name: String): Class[_] =
+    lookup(name, Thread.currentThread.getContextClassLoader)
+  def lookup(name: String, loader: ClassLoader): Class[_] =
+    loader.loadClass(name)
+}
+</code></pre><div class="bottom nav">
                 <div class="row">
                   <div class="col-md-auto">
                     <a href="Globs.html">
