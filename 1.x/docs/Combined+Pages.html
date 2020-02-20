@@ -6616,7 +6616,7 @@ include generated sources and resources as well as resolved and
 retrieved dependencies and compiled classes.
 </p><p>Tasks that produce managed files should be inserted as follows:
 </p><pre><code class="prettyprint lang-scala">Compile / sourceGenerators +=
-    generate( (Comile / sourceManaged).value / &quot;some_directory&quot;)
+    generate( (Compile / sourceManaged).value / &quot;some_directory&quot;)
 </code></pre><p>In this example, <code>generate</code> is some function of type <code>File =&gt; Seq[File]</code>
 that actually does the work. So, we are appending a new task to the list
 of main source generators (<code>Compile / sourceGenerators</code>).
