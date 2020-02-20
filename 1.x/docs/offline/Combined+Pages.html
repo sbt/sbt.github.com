@@ -1113,8 +1113,8 @@ and then use that code in <code>core/src/test/scala</code>, for example.
 semicolons. For example,
 <code>dependsOn(util % &quot;test-&gt;test;compile-&gt;compile&quot;)</code>.
 </p><h3 id="Inter-project+dependencies">Inter-project dependencies<a href="#Inter-project+dependencies" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>On extremely large projects with many files and many subprojects, sbt
-can perform less optimally at watching files have changed during
-interactively and using a lot of disk and system I/O.
+can perform less optimally at continuously watching files that have
+changed and use a lot of disk and system I/O.
 </p><p>sbt has <code>trackInternalDependencies</code> and <code>exportToInternal</code>
 settings. These can be used to control whether to trigger compilation
 of a dependent subprojects when you call <code>compile</code>. Both keys will
