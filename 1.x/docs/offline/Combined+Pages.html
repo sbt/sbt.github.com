@@ -9090,8 +9090,8 @@ page describes how to define other types of repositories.
 </p><ul><li><code>Resolver.mavenLocal</code> This is the local Maven repository.
 </li><li><code>DefaultMavenRepository</code> This is the main Maven repository at
 <a href="https://repo1.maven.org/maven2/">https://repo1.maven.org/maven2/</a> and is included by default
-</li><li><code>JavaNet1Repository</code> This is the Maven 1 repository at
-<a href="http://download.java.net/maven/1/">http://download.java.net/maven/1/</a>
+</li><li><code>JavaNet2Repository</code> This is the java.net Maven2 Repository at
+<a href="https://maven.java.net/content/repositories/public/">https://maven.java.net/content/repositories/public/</a>
 </li><li><code>Resolver.sonatypeRepo(&quot;public&quot;)</code> (or “snapshots”, “staging”, “releases”) This is Sonatype OSS Maven Repository at
 <a href="https://oss.sonatype.org/content/repositories/public">https://oss.sonatype.org/content/repositories/public</a>
 </li><li><code>Resolver.typesafeRepo(&quot;releases&quot;)</code> (or “snapshots”) This is Typesafe Repository at
@@ -9106,7 +9106,7 @@ page describes how to define other types of repositories.
 <a href="https://jcenter.bintray.com/">https://jcenter.bintray.com/</a>
 </li></ul><p>For example, to use the <code>java.net</code> repository, use the following setting
 in your build definition:
-</p><pre><code class="prettyprint lang-scala">resolvers += JavaNet1Repository
+</p><pre><code class="prettyprint lang-scala">resolvers += JavaNet2Repository
 </code></pre><p>Predefined repositories will go under Resolver going forward so they are
 in one place:
 </p><pre><code class="prettyprint lang-scala">Resolver.sonatypeRepo(&quot;releases&quot;)  // Or &quot;snapshots&quot;
