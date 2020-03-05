@@ -16918,6 +16918,10 @@ successful parse (assuming the current Scala version is 2.12.10,
 the current sbt version is 1.3.4, and there are 3 commands left to
 run):
 
+* (scala,2.12.10)
+* (sbt,1.3.4)
+* (commands,3)
+
 Again, we were able to access the current Scala and sbt version for the
 project because they are settings. Tasks cannot be used to define the
 parser.
