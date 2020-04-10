@@ -5004,6 +5004,7 @@ generate dependency lockfiles and check for changes at build time.
 
 - [sbt-frege](https://github.com/earldouglas/sbt-frege): build Frege
   code with sbt. <!-- 47 stars -->
+- [sbt-cc](https://github.com/tnakamot/sbt-cc): compile C and C++ source files with sbt.
 
 
 Community Repository Policy
