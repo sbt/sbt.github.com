@@ -430,7 +430,7 @@ lazy val helloCore = (project in file(&quot;core&quot;))
 </code></pre><p>After <code>reload</code>, <code>~testQuick</code> now runs on both subprojects:
 </p><pre><code class="prettyprint lang-scala">sbt:Hello&gt; ~testQuick
 </code></pre><p>Press <code>Enter</code> to exit the continuous test.
-</p><h3 id="Make+hello+depend+on+helloCore">Make hello depend on helloCore<a href="#Make+hello+depend+on+helloCore" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Use <code>.dependsOn(...)</code> to a add dependency on other subprojects. Also let’s move the Gigahorse dependency to <code>helloCore</code>.
+</p><h3 id="Make+hello+depend+on+helloCore">Make hello depend on helloCore<a href="#Make+hello+depend+on+helloCore" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Use <code>.dependsOn(...)</code> to add a dependency on other subprojects. Also let’s move the Gigahorse dependency to <code>helloCore</code>.
 </p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.7&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
@@ -11465,7 +11465,7 @@ object SbtLessPlugin extends AutoPlugin {
   override def requires = SbtJsTaskPlugin
   override lazy val projectSettings = ...
 }
-</code></pre><p>As it turns out, <code>PlayScala</code> plugin (in case you didn’t know, the Play framework is an sbt plugin) lists <code>SbtJsTaskPlugin</code> as one of it required plugins. So, if we define a <code>build.sbt</code> with:
+</code></pre><p>As it turns out, <code>PlayScala</code> plugin (in case you didn’t know, the Play framework is an sbt plugin) lists <code>SbtJsTaskPlugin</code> as one of its required plugins. So, if we define a <code>build.sbt</code> with:
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
   .enablePlugins(PlayScala)
 </code></pre><p>then the setting sequence from <code>SbtLessPlugin</code> will be automatically appended somewhere after the settings from <code>PlayScala</code>.
@@ -11608,7 +11608,7 @@ built from source and used on the classpath.
 
 lazy val assemblyPlugin = RootProject(uri(&quot;git://github.com/sbt/sbt-assembly&quot;))
 </code></pre><p>If sbt is running, run <code>reload</code>.
-</p><p>Note that this approach can be useful used when developing a plugin. A
+</p><p>Note that this approach can be useful when developing a plugin. A
 project that uses the plugin will rebuild the plugin on <code>reload</code>. This
 saves the intermediate steps of <code>publishLocal</code> and <code>update</code>. It can also
 be used to work with the development version of a plugin from its

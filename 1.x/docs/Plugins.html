@@ -216,7 +216,7 @@ object SbtLessPlugin extends AutoPlugin {
   override def requires = SbtJsTaskPlugin
   override lazy val projectSettings = ...
 }
-</code></pre><p>As it turns out, <code>PlayScala</code> plugin (in case you didn’t know, the Play framework is an sbt plugin) lists <code>SbtJsTaskPlugin</code> as one of it required plugins. So, if we define a <code>build.sbt</code> with:
+</code></pre><p>As it turns out, <code>PlayScala</code> plugin (in case you didn’t know, the Play framework is an sbt plugin) lists <code>SbtJsTaskPlugin</code> as one of its required plugins. So, if we define a <code>build.sbt</code> with:
 </p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
   .enablePlugins(PlayScala)
 </code></pre><p>then the setting sequence from <code>SbtLessPlugin</code> will be automatically appended somewhere after the settings from <code>PlayScala</code>.
@@ -359,7 +359,7 @@ built from source and used on the classpath.
 
 lazy val assemblyPlugin = RootProject(uri(&quot;git://github.com/sbt/sbt-assembly&quot;))
 </code></pre><p>If sbt is running, run <code>reload</code>.
-</p><p>Note that this approach can be useful used when developing a plugin. A
+</p><p>Note that this approach can be useful when developing a plugin. A
 project that uses the plugin will rebuild the plugin on <code>reload</code>. This
 saves the intermediate steps of <code>publishLocal</code> and <code>update</code>. It can also
 be used to work with the development version of a plugin from its
