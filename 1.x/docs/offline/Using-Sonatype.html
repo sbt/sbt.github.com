@@ -99,11 +99,10 @@ the instructions for the plugin and you’ll have PGP signed artifacts in no
 time.
 </p><p>In short, add the following line to your <code>~/.sbt/1.0/plugins/gpg.sbt</code> file to 
 enable it globally for SBT projects:
-</p><pre><code class="">addSbtPlugin(&quot;com.jsuereth&quot; % &quot;sbt-pgp&quot; % &quot;1.1.1&quot;)
+</p><pre><code class="">addSbtPlugin(&quot;com.jsuereth&quot; % &quot;sbt-pgp&quot; % &quot;2.0.1&quot;)
 </code></pre><blockquote><p><em>Note:</em> The plugin is a solution to sign artifacts. It works with the GPG command line tool.
-</p></blockquote><ul><li>make sure that the <code>gpg</code> command is in PATH available to the sbt,
-</li><li>add <code>useGpg := true</code> to your <code>build.sbt</code> to make the plugin <code>gpg</code>-aware
-</li></ul><h4 id="step+3%3A+Credentials">step 3: Credentials<a href="#step+3%3A+Credentials" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The credentials for your Sonatype OSSRH account need to be stored
+</p></blockquote><p>Make sure that the <code>gpg</code> command is in PATH available to the sbt.
+</p><h4 id="step+3%3A+Credentials">step 3: Credentials<a href="#step+3%3A+Credentials" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The credentials for your Sonatype OSSRH account need to be stored
 somewhere safe (<em>e.g. NOT in the repository</em>). Common convention is a 
 <code>$HOME/.sbt/1.0/sonatype.sbt</code> file, with the following:
 </p><pre><code class="prettyprint lang-scala">credentials += Credentials(Path.userHome / &quot;.sbt&quot; / &quot;sonatype_credentials&quot;)
