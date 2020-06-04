@@ -207,6 +207,12 @@ Download [msi installer][MSI] and install it.
 $ scoop install sbt
 ```
 
+#### [Chocolatey](https://chocolatey.org)
+
+```
+$ choco install sbt
+```
+
 
   [ZIP]: https://piccolo.link/sbt-1.3.4.zip
   [TGZ]: https://piccolo.link/sbt-1.3.4.tgz
