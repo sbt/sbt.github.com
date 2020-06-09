@@ -15516,7 +15516,7 @@ repositories:
 </li><li><code>maven-central</code> - The Maven Central repository <code>repo.maven.org</code>.
 </li></ul><p>Besides built in repositories, other repositories can be configured
 using the following syntax:
-</p><blockquote><p>name: url(, pattern)(,descriptorOptional)(,skipConsistencyCheck)
+</p><blockquote><p>name: url(, pattern)(,bootOnly)(,descriptorOptional)(,skipConsistencyCheck)(,allowInsecureProtocol)
 </p></blockquote><p>The <code>name</code> property is an identifier which Ivy uses to cache modules
 resolved from this location. The <code>name</code> should be unique across all
 repositories.
@@ -15524,8 +15524,10 @@ repositories.
 </p><p>The <code>pattern</code> property is an optional specification of <em>how</em> Ivy should
 look for modules. By default, the launcher assumes repositories are in
 the maven style format.
+</p><p>The <code>bootOnly</code> string is used to tell Ivy to only use this repository during startup. i.e. To find sbt’s own JARs and the JARs of any plugins. Repositories with the <code>bootOnly</code> string will not be used for build-time dependency resolution.
 </p><p>The <code>skipConsistencyCheck</code> string is used to tell Ivy not to validate
 checksums and signatures of files it resolves.
+</p><p>The <code>allowInsecureProtocol</code> string tells SBT not to output a warning about this repository being <code>http://</code>. Please think carefully before using HTTP repositories as they can present a significant <a href="https://github.com/sbt/sbt/issues/4905">security risk</a>.
 </p><h4 id="4.+The+Boot+section">4. The Boot section<a href="#4.+The+Boot+section" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The <code>[boot]</code> section is used to configure where the sbt launcher will
 store its cache and configuration information. It consists of the
 following properties:
