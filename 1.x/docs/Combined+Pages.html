@@ -9050,12 +9050,18 @@ Another build would require <code>Resolver.mavenLocal</code> to resolve out of i
 </p><pre><code class="prettyprint lang-scala">credentials += Credentials(Path.userHome / &quot;.sbt&quot; / &quot;.credentials&quot;)
 </code></pre><p>The credentials file is a properties file with keys <code>realm</code>, <code>host</code>,
 <code>user</code>, and <code>password</code>. For example:
-</p><pre><code class="">realm=My Nexus Repository Manager
+</p><pre><code class="">realm=Sonatype Nexus Repository Manager
 host=my.artifact.repo.net
 user=admin
 password=admin123
 </code></pre><p>The second way is to specify them inline:
-</p><pre><code class="prettyprint lang-scala">credentials += Credentials(&quot;Some Nexus Repository Manager&quot;, &quot;my.artifact.repo.net&quot;, &quot;admin&quot;, &quot;admin123&quot;)
+</p><pre><code class="prettyprint lang-scala">credentials += Credentials(&quot;Sonatype Nexus Repository Manager&quot;, &quot;my.artifact.repo.net&quot;, &quot;admin&quot;, &quot;admin123&quot;)
+</code></pre><p><strong>NOTE</strong>: Credentials matching is done using both: <code>realm</code> and <code>host</code> keys.
+The <code>realm</code> key is the HTTP WWW-Authenticate header’s realm directive, which is
+part of the response of HTTP servers for <a href="https://en.wikipedia.org/wiki/Basic_access_authentication#Server_side">HTTP Basic Authentication</a>.
+For a given repository, this can be found by reading all the headers received.
+For example:
+</p><pre><code class="prettyprint lang-bash">curl -D - my.artifact.repo.net
 </code></pre><h3 id="Cross-publishing">Cross-publishing<a href="#Cross-publishing" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To support multiple incompatible Scala versions, enable cross building
 and do <code>+ publish</code> (see <a href="Cross-Build.html">Cross Build</a>). See [Resolvers] for other
 supported repository types.
