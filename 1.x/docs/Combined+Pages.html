@@ -716,7 +716,7 @@ informational startup message,
 [info] Executing in batch mode. For better performance use sbt's shell
 ...
 </code></pre><p>It will only be triggered for <code>sbt compile</code>, and it can also be
-supressed with <code>suppressSbtShellNotification := true</code>.
+suppressed with <code>suppressSbtShellNotification := true</code>.
 </p><h3 id="Continuous+build+and+test">Continuous build and test<a href="#Continuous+build+and+test" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To speed up your edit-compile-test cycle, you can ask sbt to
 automatically recompile or run tests whenever you save a source file.
 </p><p>Make a command run when one or more source files change by prefixing the
@@ -727,7 +727,11 @@ command with <code>~</code>. For example, in sbt shell try:
 </p><p>See <a href="../docs/Triggered-Execution.html">Triggered Execution</a> for more details.
 </p><h3 id="Common+commands">Common commands<a href="#Common+commands" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Here are some of the most common sbt commands. For a more complete list,
 see <a href="../docs/Command-Line-Reference.html">Command Line Reference</a>.
-</p><table>
+</p><table class="table table-striped">
+  <tr>
+    <th>Command</th>
+    <th>Description</th>
+  </tr>
   <tr>
     <td><tt>clean</tt></td>
     <td>Deletes all generated files (in the <tt>target</tt> directory).</td>
@@ -786,7 +790,11 @@ prefix-based search of the history.
 &quot;\e[C&quot;: forward-char
 &quot;\e[D&quot;: backward-char
 </code></pre><p>sbt shell also supports the following commands:
-</p><table>
+</p><table class="table table-striped">
+  <tr>
+    <th>Command</th>
+    <th>Description</th>
+  </tr>
   <tr>
     <td><tt>!</tt></td>
     <td>Show history command help.</td>
@@ -3168,7 +3176,7 @@ deployable fat JARs. <!-- 1 star -->
 </li><li><a href="https://chiselapp.com/user/twenstar/repository/sbt-release-fossil">sbt-release-fossil</a>:
 enhances <a href="https://github.com/sbt/sbt-release">sbt-release</a> to support <a href="https://fossil-scm.org">Fossil</a> repositories
 </li><li><a href="https://github.com/sbt/sbt-autoversion">sbt-autoversion</a>: automatically set your
-next version bump based on patterns of your commit messase since last release. <!-- 2 stars -->
+next version bump based on patterns of your commit message since last release. <!-- 2 stars -->
 </li><li><a href="https://github.com/saint1991/sbt-gcs">sbt-gcs</a>: manage objects on Google Cloud Storage. <!-- 1 star -->
 </li><li><a href="https://github.com/kotobotov/sbt-sourcebundler">sbt-sourcebundler</a>: merge all source code into one scala file. <!-- 1 star -->
 </li><li><a href="https://github.com/vaslabs/sbt-kubeyml">sbt-kubeyml</a>: Create a typesafe kubernetes Deployment based on your project settings
@@ -3727,7 +3735,7 @@ find the cause.
 from git, there’s a directory called Dormant with some content that
 needs going through.
 </li><li>the main page mentions external project references (e.g.
-to a git repo) but doesn’t have anything to link to that explains
+to a git repository) but doesn’t have anything to link to that explains
 how to use those.
 </li><li>API docs are much needed.
 </li><li>Find useful answers or types/methods/values in the other docs, and
@@ -4058,7 +4066,7 @@ ThisBuild / semanticdbIncludeInJar := false
 </p><pre><code class=""># sbt -no-colors --error  &quot;print akka-cluster/scalaVersion&quot;
 2.12.8
 </code></pre><p>This was contributed by David Knapp (<a href="https://github.com/Falmarri">@Falmarri</a>) as <a href="https://github.com/sbt/sbt/pull/4341">#4341</a>
-</p><h4 id="Appending+Function1">Appending Function1<a href="#Appending+Function1" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>Function1</code> can be appened using <code>+=</code>.
+</p><h4 id="Appending+Function1">Appending Function1<a href="#Appending+Function1" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>Function1</code> can be appended using <code>+=</code>.
 </p><pre><code class="">Global / onLoad += { s =&gt;
   doSomething()
   s
@@ -4136,7 +4144,7 @@ object ParadoxPlugin extends AutoPlugin {
 </p><h4 id="Other+bug+fixes">Other bug fixes<a href="#Other+bug+fixes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>Updates <code>IO.relativize</code> for JDK 9. <a href="https://github.com/sbt/io/pull/175">io#175</a> by <a href="https://github.com/eatkins">@eatkins</a>
 </li><li>Fixes logic for adding external class file manager. <a href="https://github.com/sbt/zinc/pull/562">zinc#562</a> by <a href="https://github.com/allanrenucci">@allanrenucci</a>
 </li></ul><h4 id="Contributors">Contributors<a href="#Contributors" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>A huge thank you to everyone who’s helped improve sbt and Zinc 1 by using them, reporting bugs, improving our documentation, porting builds, porting plugins, and submitting and reviewing pull requests.
-</p><p>sbt 1.2.1 was brought to you by 4 contributors, according to <code>git shortlog -sn --no-merges v1.2.1...v1.2.0</code> on sbt, zinc, librarymanagement, util, io, launcher-packege, and website: Eugene Yokota, Aaron S. Hawley, Ethan Atkins, and Allan Renucci. Thanks! Also special thanks to Ches Martin and Yoshida-san for reporting these issues.
+</p><p>sbt 1.2.1 was brought to you by 4 contributors, according to <code>git shortlog -sn --no-merges v1.2.1...v1.2.0</code> on sbt, zinc, librarymanagement, util, io, launcher-package, and website: Eugene Yokota, Aaron S. Hawley, Ethan Atkins, and Allan Renucci. Thanks! Also special thanks to Ches Martin and Yoshida-san for reporting these issues.
 </p><hr/><h3 id="sbt+1.2.0">sbt 1.2.0<a href="#sbt+1.2.0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><strong>Warning</strong>: We found forward compatibility breakage in 1.2.0, so we recommend everyone to upgrade to <a href="https://github.com/sbt/sbt/releases/tag/v1.2.1">sbt 1.2.1</a> or later.
 </p><p>The headline features of sbt 1.2 are cross JDK forking, composite project, and experimental thin clients. But, there are lots of other bug fixes and enhancements that we’ve been accumulating for six months since sbt 1.1.
 </p><h4 id="SbtPlugin+for+plugin+development">SbtPlugin for plugin development<a href="#SbtPlugin+for+plugin+development" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>SbtPlugin</code> is a plugin to declare a project for sbt plugins. This automatically brings in scripted tests, and sets <code>sbtPlugin := true</code>.
@@ -4340,7 +4348,7 @@ sbt -client clean  3.39s user 1.75s system 104% cpu 4.898 total
 </p><h4 id="sbt+by+example">sbt by example<a href="#sbt+by+example" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>We added <a href="https://www.scala-sbt.org/1.x/docs/sbt-by-example.html">sbt by example</a> to the sbt documentation.
 This is a single-page guide that takes you from zero to building an app on Docker, inspired by, and largely based on William Narmontas (<a href="https://twitter.com/ScalaWilliam">@ScalaWilliam</a>)’s <a href="https://www.scalawilliam.com/essential-sbt/">Essential sbt</a>.
 </p><h4 id="Contributors">Contributors<a href="#Contributors" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>A huge thank you to everyone who’s helped improve sbt and Zinc 1 by using them, reporting bugs, improving our documentation, porting builds, porting plugins, and submitting and reviewing pull requests.
-</p><p>sbt 1.1.5 was brought to you by 21 constributors, according to <code>git shortlog -sn --no-merges v1.1.4...v1.1.5</code> on sbt, zinc, librarymanagement, util, io, launcher-packege, and website: Eugene Yokota, Ethan Atkins, Jason Zaugg, Liu Fengyun, Antonio Cunei, Dale Wijnand, Roberto Bonvallet, Alexey Alekhin, Daniel Parks, Heikki Vesalainen, Jean-Luc Deprez, Jessica Hamilton, Kenji Yoshida (xuwei-k), Nikita Gazarov, OlegYch, Richard Summerhayes, Robert Walker, Seth Tisue, Som Snytt, oneill, and 杨博 (Yang Bo)
+</p><p>sbt 1.1.5 was brought to you by 21 contributors, according to <code>git shortlog -sn --no-merges v1.1.4...v1.1.5</code> on sbt, zinc, librarymanagement, util, io, launcher-package, and website: Eugene Yokota, Ethan Atkins, Jason Zaugg, Liu Fengyun, Antonio Cunei, Dale Wijnand, Roberto Bonvallet, Alexey Alekhin, Daniel Parks, Heikki Vesalainen, Jean-Luc Deprez, Jessica Hamilton, Kenji Yoshida (xuwei-k), Nikita Gazarov, OlegYch, Richard Summerhayes, Robert Walker, Seth Tisue, Som Snytt, oneill, and 杨博 (Yang Bo)
 </p><hr/><h3 id="sbt+1.1.4">sbt 1.1.4<a href="#sbt+1.1.4" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="Bug+fixes">Bug fixes<a href="#Bug+fixes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>Fixes triggered execution on macOS. See below for details.
 </li><li>Fixes running <code>console</code> twice messing up JLine. <a href="https://github.com/sbt/sbt/issues/3482">#3482</a>/<a href="https://github.com/sbt/sbt/pull/4054">#4054</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
 </li><li>Fixes <code>updateSbtClassifiers</code>. <a href="https://github.com/sbt/sbt/pull/4070">#4070</a>/<a href="https://github.com/sbt/sbt/issues/3432">#3432</a> by <a href="https://github.com/steinybot">@steinybot</a>
@@ -4361,7 +4369,7 @@ while wanting to profile the beginning of the application.
 </p><p>Instead of creating an intermediate <code>Array[Byte]</code> and passing it to <code>MessageDigest</code> at the end, Jason suggested that we pass the arrays to <code>MessageDigest#update</code> in a more procedural style. After confirming that it worked, we’ve next identified file timestamp code to be the next bottle neck using Flame graph, so that was switched to using NIO. After both changes, <code>Eval#evalCommon</code>’s footprint reduced to 2.3%.
 </p><p>This means that your build loads slightly faster on sbt 1.1.4 (about 0.54s faster on akka/akka, for example). <a href="https://github.com/sbt/sbt/pull/4067">#4067</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
 </p><h3 id="Contributors">Contributors<a href="#Contributors" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A huge thank you to everyone who’s helped improve sbt and Zinc 1 by using them, reporting bugs, improving our documentation, porting builds, porting plugins, and submitting and reviewing pull requests.
-</p><p>sbt 1.1.4 was brought to you by 11 contributors, according to <code>git shortlog -sn --no-merges v1.1.2...v1.1.4</code> on sbt, zinc, librarymanagement, util, io, launcher-packege, and website: Eugene Yokota, Dale Wijnand, 杨博 (Yang Bo), Ethan Atkins, Sam Halliday, Aaron S. Hawley, Gabriele Petronella, Jason Steenstra-Pickens, Jason Zaugg, Julien Jean Paul Sirocchi, and aumann.
+</p><p>sbt 1.1.4 was brought to you by 11 contributors, according to <code>git shortlog -sn --no-merges v1.1.2...v1.1.4</code> on sbt, zinc, librarymanagement, util, io, launcher-package, and website: Eugene Yokota, Dale Wijnand, 杨博 (Yang Bo), Ethan Atkins, Sam Halliday, Aaron S. Hawley, Gabriele Petronella, Jason Steenstra-Pickens, Jason Zaugg, Julien Jean Paul Sirocchi, and aumann.
 </p><hr/><h3 id="sbt+1.1.2">sbt 1.1.2<a href="#sbt+1.1.2" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="Bug+fixes">Bug fixes<a href="#Bug+fixes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>Fixes triggered execution’s resource leak by caching the watch service. <a href="https://github.com/sbt/sbt/pull/3999">#3999</a> by <a href="https://github.com/eatkins">@eatkins</a>
 </li><li>Fixes classloader inheriting the dependencies of Scala compiler during <code>run</code> <a href="https://github.com/sbt/zinc/pull/505">zinc#505</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
 </li><li>Fixes forked test concurrency issue. <a href="https://github.com/sbt/sbt/pull/4030">#4030</a> by <a href="https://github.com/eatkins">@eatkins</a>
@@ -4388,7 +4396,7 @@ while wanting to profile the beginning of the application.
 </li></ul><h4 id="Internal">Internal<a href="#Internal" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>Updates <a href="https://github.com/sbt/sbt/blob/1.x/CONTRIBUTING.md">contribution guide</a>. <a href="https://github.com/sbt/sbt/pull/3960">#3960</a>/<a href="https://github.com/sbt/sbt/pull/4019">#4019</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a> and <a href="https://github.com/itohiro73">@itohiro73</a>
 </li><li>Deletes <code>buildinfo.BuildInfo</code> from sbt main that was intended for testing. <a href="https://github.com/sbt/sbt/pull/3967">3967</a> by <a href="http://github.com/dwijnand">@dwijnand</a> and <a href="https://github.com/xuwei-k">@xuwei-k</a>
 </li><li>Various improvements around Zinc benchmark by <a href="https://github.com/retronym">@retronym</a>
-</li></ul><h4 id="Contributors">Contributors<a href="#Contributors" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>sbt 1.1.2 was brought to you by 23 contributors, according to <code>git shortlog -sn --no-merges v1.1.1...v1.1.2</code> on sbt, zinc, librarymanagement, util, io, launcher-packege, and website: Dale Wijnand, Eugene Yokota, Jason Zaugg, Kenji Yoshida (xuwei-k), Ethan Atkins, Martijn Hoekstra, Martynas Mickevičius, Dennis Hörsch, Hosam Aly, Antonio Cunei, Friedrich von Never, Hiroshi Ito, Ian Gabes, Jilen Zhang, Mathias Bogaert, Naohisa Murakami (tiqwab), Philippus Baalman, Ryan Bair, Seth Tisue, Ståle Undheim, Takuya Miyamoto (tmiyamon), Yasuhiro Tatsuno. Thank you!
+</li></ul><h4 id="Contributors">Contributors<a href="#Contributors" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>sbt 1.1.2 was brought to you by 23 contributors, according to <code>git shortlog -sn --no-merges v1.1.1...v1.1.2</code> on sbt, zinc, librarymanagement, util, io, launcher-package, and website: Dale Wijnand, Eugene Yokota, Jason Zaugg, Kenji Yoshida (xuwei-k), Ethan Atkins, Martijn Hoekstra, Martynas Mickevičius, Dennis Hörsch, Hosam Aly, Antonio Cunei, Friedrich von Never, Hiroshi Ito, Ian Gabes, Jilen Zhang, Mathias Bogaert, Naohisa Murakami (tiqwab), Philippus Baalman, Ryan Bair, Seth Tisue, Ståle Undheim, Takuya Miyamoto (tmiyamon), Yasuhiro Tatsuno. Thank you!
 </p><hr/><h3 id="sbt+1.1.1">sbt 1.1.1<a href="#sbt+1.1.1" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="Bug+fixes">Bug fixes<a href="#Bug+fixes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>Fixes “Modified names for (class) is empty” error. <a href="https://github.com/sbt/zinc/issues/292">zinc#292</a> / <a href="https://github.com/sbt/zinc/pull/484">zinc#484</a> by <a href="https://github.com/jvican">@jvican</a> (Scala Center)
 </li><li>Fixes tab completion in <code>console</code> while running in batch mode as <code>sbt console</code>. <a href="https://github.com/sbt/sbt/issues/3841">#3841</a>/<a href="https://github.com/sbt/sbt/pull/3876">#3876</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
 </li><li>Fixes file timestamp retrieval of missing files on Windows. <a href="https://github.com/sbt/sbt/issues/3871">#3871</a> / <a href="https://github.com/sbt/io/pull/120">io#120</a> by <a href="https://github.com/cunei">@cunei</a>
@@ -4419,7 +4427,7 @@ When set to <code>true</code>, sbt shell will automatically start sbt server. Ot
 </li><li>Preserves JAR order in <code>ScalaInstance.otherJars</code>. <a href="https://github.com/sbt/zinc/pull/411">zinc#411</a> by <a href="http://github.com/dwijnand">@dwijnand</a>
 </li><li>Fixes used name when it contains NL. <a href="https://github.com/sbt/zinc/pull/449">zinc#449</a> by <a href="https://github.com/jilen">@jilen</a>
 </li><li>Fixes handling of <code>ThisProject</code>. <a href="https://github.com/sbt/sbt/pull/3609">#3609</a> by <a href="http://github.com/dwijnand">@dwijnand</a>
-</li><li>Escapes imports from sbt files, so if user creates a backquoted definition then task evalution will not fail. <a href="https://github.com/sbt/sbt/pull/3635">#3635</a> by <a href="https://github.com/panaeon">@panaeon</a>
+</li><li>Escapes imports from sbt files, so if user creates a backquoted definition then task evaluation will not fail. <a href="https://github.com/sbt/sbt/pull/3635">#3635</a> by <a href="https://github.com/panaeon">@panaeon</a>
 </li><li>Removes reference to version 0.14.0 from a warning message. <a href="https://github.com/sbt/sbt/issues/3693">#3693</a> by <a href="https://github.com/saniyatech">@saniyatech</a>
 </li><li>Fixes screpl throwing “Not a valid key: console-quick”. <a href="https://github.com/sbt/sbt/pull/3762">#3762</a> by <a href="https://github.com/xuwei-k">@xuwei-k</a>
 </li><li>Restores Scala 2.13.0-M1 support. #461 by <a href="http://github.com/dwijnand">@dwijnand</a>
@@ -4431,7 +4439,7 @@ When set to <code>true</code>, sbt shell will automatically start sbt server. Ot
 </li><li>Adds a check for a change in sbt version before <code>reload</code>. <a href="https://github.com/sbt/sbt/issues/1055">#1055</a>/<a href="https://github.com/sbt/sbt/pull/3673">#3673</a> by <a href="https://github.com/RomanIakovlev">@RomanIakovlev</a>
 </li><li>Adds a new setting <code>insideCI</code>, which indicates that sbt is likely running in an Continuous Integration environment. <a href="https://github.com/sbt/sbt/pull/3672">#3672</a> by <a href="https://github.com/RomanIakovlev">@RomanIakovlev</a>
 </li><li>Adds <code>nameOption</code> to <code>Command</code> trait. <a href="https://github.com/sbt/sbt/pull/3671">#3671</a> by <a href="https://github.com/miklos-martin">@miklos-martin</a>
-</li><li>Adds POSIX persmission operations in IO, such as <code>IO.chmod(..)</code>. <a href="https://github.com/sbt/io/pull/76">io#76</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li><li>Adds POSIX permission operations in IO, such as <code>IO.chmod(..)</code>. <a href="https://github.com/sbt/io/pull/76">io#76</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
 </li><li>Treat sbt 1 modules using Semantic Versioning in the eviction warning. <a href="https://github.com/sbt/librarymanagement/pull/188">lm#188</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
 </li><li>Uses kind-projector in the code. <a href="https://github.com/sbt/sbt/pull/3650">#3650</a> by <a href="http://github.com/dwijnand">@dwijnand</a>
 </li><li>Make <code>displayOnly</code> etc methods strict in <code>Completions</code>. <a href="https://github.com/sbt/sbt/pull/3763">#3763</a> by <a href="https://github.com/xuwei-k">@xuwei-k</a>
@@ -4492,7 +4500,7 @@ Content-Type: application/vscode-jsonrpc; charset=utf-8
 </li><li>Fixes <code>ArrayIndexOutOfBoundsException</code> on Ivy when running on Java 9. <a href="https://github.com/sbt/ivy/pull/27">ivy#27</a> by <a href="https://github.com/xuwei-k">@xuwei-k</a>
 </li><li>Fixes Java 9 warning by upgrading to launcher 1.0.2. <a href="https://github.com/sbt/ivy/pull/26">ivy#26</a>/<a href="https://github.com/sbt/launcher/pull/45">launcher#45</a> by <a href="https://github.com/dwijnand">@dwijnand</a>
 </li><li>Fixes <code>-jvm-debug</code> on Java 9. <a href="https://github.com/sbt/sbt-launcher-package/pull/197">launcher-package197</a> by <a href="https://github.com/mkurz">@mkurz</a>
-</li><li>Fixes <code>run</code> outputing debug level logs. <a href="https://github.com/sbt/sbt/issues/3655">#3655</a>/<a href="https://github.com/sbt/sbt/pull/3717">#3717</a> by <a href="https://github.com/cunei">@cunei</a>
+</li><li>Fixes <code>run</code> outputting debug level logs. <a href="https://github.com/sbt/sbt/issues/3655">#3655</a>/<a href="https://github.com/sbt/sbt/pull/3717">#3717</a> by <a href="https://github.com/cunei">@cunei</a>
 </li><li>Fixes performance regression caused by classpath hashing. <a href="https://github.com/sbt/zinc/pull/452">zinc#452</a> by <a href="https://github.com/jvican">@jvican</a>, <a href="https://github.com/fommil">@fommil</a> provided reproduction, and <a href="https://github.com/eed3si9n">@eed3si9n</a> fixed https://github.com/sbt/zinc/issues/457
 </li><li>Fixes performance regression of <code>testQuick</code>. <a href="https://github.com/sbt/sbt/issues/3680">#3680</a>/<a href="https://github.com/sbt/sbt/pull/3720">#3720</a> by <a href="https://github.com/OlegYch">@OlegYch</a>
 </li><li>Disables Ivy log4j caller location calculation for performance regression reported in <a href="https://github.com/sbt/sbt/issues/3711">#3711</a>. <a href="https://github.com/sbt/util/pull/132">util#132</a> by <a href="https://github.com/leonardehrenfried">@leonardehrenfried</a>
@@ -4877,7 +4885,7 @@ chain, and related settings. See
 </li></ul><h3 id="Command+Line+Options">Command Line Options<a href="#Command+Line+Options" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>System properties can be provided either as JVM options, or as SBT
 arguments, in both cases as <code>-Dprop=value</code>. The following properties
 influence SBT execution. Also see <a href="Sbt-Launcher.html">sbt launcher</a>.
-</p><table>
+</p><table class="table table-striped">
   <tr>
     <th>Property</th>
     <th>Values</th>
@@ -5867,7 +5875,7 @@ Content-Length: ...\r\n
   }
 }
 </code></pre><h3 id="Server+modes">Server modes<a href="#Server+modes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Sbt server can run in two modes, which differ in wire protocol and initialization. The default mode since sbt 1.1.x is <em>domain socket mode</em>, which uses either Unix domain sockets (on Unix) or named pipes (on Windows) for data transfer between server and client. In addition, there is a <em>TCP mode</em>, which uses TCP for data transfer.
-</p><p>The mode which sbt server starts in is goverened by the key <code>serverConnectionType</code>, which can be set to <code>ConnectionType.Local</code> for domain socket/named pipe mode, or to <code>ConnectionType.Tcp</code> for TCP mode.
+</p><p>The mode which sbt server starts in is governed by the key <code>serverConnectionType</code>, which can be set to <code>ConnectionType.Local</code> for domain socket/named pipe mode, or to <code>ConnectionType.Tcp</code> for TCP mode.
 </p><h3 id="Server+discovery+and+authentication">Server discovery and authentication<a href="#Server+discovery+and+authentication" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To discover a running server, we use a <em>port file</em>.
 </p><p>By default, sbt server will be running when a sbt shell session is active. When the server is up, it will create a file called the port file. The port file is located at <code>./project/target/active.json</code>. The port file will look different depending on whether the server is running in TCP mode or domain socket/named pipe mode. They will look something like this:
 </p><p>In domain socket/named pipe mode, on Unix:
@@ -5981,7 +5989,7 @@ Content-Length: 79
 Content-Type: application/vscode-jsonrpc; charset=utf-8
 
 {&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;id&quot;:15,&quot;result&quot;:{&quot;items&quot;:[&quot;testOnly org.sbt.ExampleSpec&quot;]}}
-</code></pre><p>This will respond immediatly based on the last available state of sbt.
+</code></pre><p>This will respond immediately based on the last available state of sbt.
 </p><h3 id=""><code>sbt/cancelRequest</code><a href="#" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><strong>(sbt 1.3.0+)</strong>
 </p><p>A <code>sbt/cancelRequest</code> request can be used to terminate the execution of an on-going task.
 </p><ul><li>method: <code>sbt/cancelRequest</code>
@@ -8279,7 +8287,7 @@ required.
 </p><pre><code class="prettyprint lang-scala"> val regularScalaFiles = RegularFileFilter &amp;&amp; &quot;**/*.scala&quot;
 // won't compile because it gets interpreted as
 // (RegularFileFilter: sbt.io.FileFilter).&amp;&amp;((&quot;**/*.scala&quot;): sbt.io.NameFilter)
-</code></pre><p>In these siutations, use <code>toNio</code>:
+</code></pre><p>In these situations, use <code>toNio</code>:
 </p><pre><code class="prettyprint lang-scala"> val regularScalaFiles = RegularFileFilter.toNio &amp;&amp; &quot;**/*.scala&quot;
 </code></pre><p>It is important to note that semantics of <code>Glob</code> are different from
 <code>NameFilter</code>. When using the <code>sbt.io.FileFilter</code>, in order to filter files
@@ -9137,7 +9145,7 @@ documentation for the repository type and the API documentation for the
 factory and repository class. The SSH and SFTP repositories are
 configured identically except for the name of the factory. Use
 <code>Resolver.ssh</code> for SSH and <code>Resolver.sftp</code> for SFTP.
-</p><table>
+</p><table class="table table-striped">
   <tr>
     <th>Type</th>
     <th>Factory</th>
@@ -9611,7 +9619,7 @@ of the <code>util</code> project:
 <code>Initialize[T]</code>) and tasks (values of type <code>Initialize[Task[T]]</code>). It
 returns a setting or task that provides a <code>Seq[T]</code>, as shown in this
 table:
-</p><table>
+</p><table class="table table-striped">
   <tr>
     <th>Target</th>
     <th>Result</th>
@@ -9631,7 +9639,7 @@ construct tasks and settings.
 </p><h5 id="Missing+values">Missing values<a href="#Missing+values" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p>Some scopes might not define a setting or task. The <code>?</code> and <code>??</code> methods
 can help in this case. They are both defined on settings and tasks and
 indicate what to do when a key is undefined.
-</p><table>
+</p><table class="table table-striped">
   <tr>
     <td><tt>?</tt></td>
     <td><tt>On a setting or task with underlying type T, this accepts no
@@ -9807,7 +9815,7 @@ bTask := intTask.value + 1
 cTask := aTask.value + bTask.value
 </code></pre><p>The following table lists the results of each task depending on the
 initially invoked task:
-</p><table>
+</p><table class="table table-striped">
   <thead>
     <tr>
       <th>invoked task</th>
@@ -9995,7 +10003,7 @@ working...
 res3: List[String] = List(foo)
 </code></pre><p>As you can see, <code>cachedWork(1)</code> is cached when it is called consecutively.
 </p><h3 id="Previous+value">Previous value<a href="#Previous+value" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>TaskKey</code> has a method called <code>previous</code> that returns <code>Option[A]</code>, which can be used a lightweight tracker.
-Suppose we would want to create a task where it initially returns <code>&quot;hi&quot;</code>, and append <code>&quot;!&quot;</code> for subsequent calls, you can define a <code>TaskKey[String]</code> called <code>hi</code>, and retrive its previous value, which would be typed <code>Option[String]</code>. The previous value would be <code>None</code> the first time, and <code>Some(x)</code> for the subsequent calls.
+Suppose we would want to create a task where it initially returns <code>&quot;hi&quot;</code>, and append <code>&quot;!&quot;</code> for subsequent calls, you can define a <code>TaskKey[String]</code> called <code>hi</code>, and retrieve its previous value, which would be typed <code>Option[String]</code>. The previous value would be <code>None</code> the first time, and <code>Some(x)</code> for the subsequent calls.
 </p><pre><code class="prettyprint lang-scala">lazy val hi = taskKey[String](&quot;say hi again&quot;)
 hi := {
   import sbt.util.CacheImplicits._
@@ -11710,7 +11718,7 @@ it more intuitive to explore the capabilities of your plugin within the sbt shel
 your plugin if it’s defined in default (no-name) package.
 </p><h3 id="Get+your+plugins+known">Get your plugins known<a href="#Get+your+plugins+known" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Make sure people can find your plugin. Here are some of the recommended steps:
 </p><ol><li>Mention <a href="https://twitter.com/scala_sbt">@scala_sbt</a> in your announcement, and we will RT it.
-</li><li>Send a pull req to <a href="https://github.com/sbt/website">sbt/website</a> and add your plugin on <a href="Community-Plugins.html">the plugins list</a>.
+</li><li>Send a pull request to <a href="https://github.com/sbt/website">sbt/website</a> and add your plugin on <a href="Community-Plugins.html">the plugins list</a>.
 </li></ol><h3 id="Reuse+existing+keys">Reuse existing keys<a href="#Reuse+existing+keys" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt has a number of <a href="../api/sbt/Keys$.html">predefined keys</a>.
 Where possible, reuse them in your plugin. For instance, don’t define:
 </p><pre><code class="prettyprint lang-scala">val sourceFiles = settingKey[Seq[File]](&quot;Some source files&quot;)
@@ -11734,7 +11742,7 @@ which can be called via its <code>apply</code> method.
 This allows greater reuse of the feature from other plugins such as sbt-assembly,
 which in return implements <code>sbtassembly.Assembly</code> object to implement its core feature.
 </p><p>Follow their lead, and provide core feature in a plain old Scala object.
-</p><h3 id="Configuration+advices">Configuration advices<a href="#Configuration+advices" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>If your plugin introduces either a new set of source code or
+</p><h3 id="Configuration+advice">Configuration advice<a href="#Configuration+advice" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>If your plugin introduces either a new set of source code or
 its own library dependencies, only then you want your own configuration.
 </p><h4 id="You+probably+won%E2%80%99t+need+your+own+configuration">You probably won’t need your own configuration<a href="#You+probably+won%E2%80%99t+need+your+own+configuration" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Configurations should <em>not</em> be used to namespace keys for a plugin. 
 If you’re merely adding tasks and settings, don’t define your own
@@ -11840,7 +11848,7 @@ settings may be reused:
 
 lazy val app = (project in file(&quot;app&quot;))
   .settings(inConfig(Test)(ObfuscatePlugin.baseObfuscateSettings))
-</code></pre><h3 id="Scoping+advices">Scoping advices<a href="#Scoping+advices" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>In general, if a plugin provides keys (settings and tasks) with the widest scoping,
+</code></pre><h3 id="Scoping+advice">Scoping advice<a href="#Scoping+advice" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>In general, if a plugin provides keys (settings and tasks) with the widest scoping,
 and refer to them with the narrowest scoping, it will give the maximum flexibility to the build users.
 </p><h4 id="Provide+default+values+in">Provide default values in <code>globalSettings</code><a href="#Provide+default+values+in" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>If the default value of your settings or task does not transitively depend on a project-level settings
 (such as <code>baseDirectory</code>, <code>compile</code>, etc), define it in <code>globalSettings</code>.
@@ -12321,7 +12329,7 @@ and <code>src/main/scala-sbt-1.0</code>. To switch between the sbt versions use
 
 [info] Setting `sbtVersion in pluginCrossBuild` to 0.13.18
 [info] Set current project to sbt-something (in build file:/xxx/sbt-something/)
-</code></pre><p>or <code>^compile</code> to coss compile.
+</code></pre><p>or <code>^compile</code> to cross compile.
 </p><h3 id="Mixing+libraries+and+sbt+plugins+in+a+build">Mixing libraries and sbt plugins in a build<a href="#Mixing+libraries+and+sbt+plugins+in+a+build" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>When you want to mix both libraries and sbt plugins into a multi-project build,
 it’s more convenient to drive the sbt version based on the Scala version.
 </p><p>You can do that as follows:
@@ -12847,7 +12855,7 @@ command fails. For example,
 </code></pre><h2 id="Configure+and+use+logging">Configure and use logging<a href="#Configure+and+use+logging" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><a name="last"></a><h3 id="View+the+logging+output+of+the+previously+executed+command">View the logging output of the previously executed command<a href="#View+the+logging+output+of+the+previously+executed+command" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>When a command is run, more detailed logging output is sent to a file
 than to the screen (by default). This output can be recalled for the
 command just executed by running <code>last</code>.
-</p><p>For example, the output of <code>run</code> when the sources are uptodate is:
+</p><p>For example, the output of <code>run</code> when the sources are up to date is:
 </p><pre><code class="">&gt; run
 [info] Running A
 Hi!
@@ -14238,7 +14246,7 @@ directory in which to store cached data. Sample usage is:
 </p><pre><code class="prettyprint lang-scala">// define a task that takes some inputs
 //   and generates files in an output directory
 myTask := {
-  // wraps a function taskImpl in an uptodate check
+  // wraps a function taskImpl in an up to date check
   //   taskImpl takes the input files, the output directory,
   //   generates the output files and returns the set of generated files
   val cachedFun = FileFunction.cached(streams.value.cacheDirectory / &quot;my-task&quot;) { (in: Set[File]) =&gt;
@@ -14669,7 +14677,7 @@ We will cross-build against Scala 2.10.
 </p><h4 id="Clean+up+old+deprecation">Clean up old deprecation<a href="#Clean+up+old+deprecation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Before 1.0 is release, we should clean up deprecations.
 </p><h4 id="Aim+for+zero+warnings+%28except+deprecation%29">Aim for zero warnings (except deprecation)<a href="#Aim+for+zero+warnings+%28except+deprecation%29" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>On Scala 2.12 we should aim for zero warnings.
 One exception may be deprecation if it’s required for cross-building.
-</p><h3 id="Documentation">Documentation<a href="#Documentation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><blockquote><p>It is often useful to start with the Scaladoc before fleshing out a trait/class implementation by forcing you to consider the need for its existance.
+</p><h3 id="Documentation">Documentation<a href="#Documentation" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><blockquote><p>It is often useful to start with the Scaladoc before fleshing out a trait/class implementation by forcing you to consider the need for its existence.
 </p></blockquote><p>All newly introduced <strong>public</strong> traits and classes and, to a lesser extent, functions and methods, should have Scaladoc. A significant amount of existing sbt code lacks documentation and we need to repair this situation over time. If you see an opportunity to add some documentation, or improve existing documentation then this will also help.
 </p><p>Package level documentation is a great place to describe how various components interact, so please consider adding/enhancing that where possible.
 </p><p>For more information on good Scaladoc style, please refer to the <a href="https://docs.scala-lang.org/style/scaladoc.html">Scaladoc Style Guide</a>

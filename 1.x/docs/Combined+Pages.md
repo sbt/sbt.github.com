@@ -1213,7 +1213,7 @@ $ sbt clean compile
 ```
 
 It will only be triggered for `sbt compile`, and it can also be
-supressed with `suppressSbtShellNotification := true`.
+suppressed with `suppressSbtShellNotification := true`.
 
 ### Continuous build and test
 
@@ -1238,7 +1238,11 @@ See [Triggered Execution][Triggered-Execution] for more details.
 Here are some of the most common sbt commands. For a more complete list,
 see [Command Line Reference][Command-Line-Reference].
 
-<table>
+<table class="table table-striped">
+  <tr>
+    <th>Command</th>
+    <th>Description</th>
+  </tr>
   <tr>
     <td><tt>clean</tt></td>
     <td>Deletes all generated files (in the <tt>target</tt> directory).</td>
@@ -1313,7 +1317,11 @@ prefix-based search of the history.
 
 sbt shell also supports the following commands:
 
-<table>
+<table class="table table-striped">
+  <tr>
+    <th>Command</th>
+    <th>Description</th>
+  </tr>
   <tr>
     <td><tt>!</tt></td>
     <td>Show history command help.</td>
@@ -4766,7 +4774,7 @@ your plugin to the list.
 - [sbt-release-fossil](https://chiselapp.com/user/twenstar/repository/sbt-release-fossil):
   enhances [sbt-release](https://github.com/sbt/sbt-release) to support [Fossil](https://fossil-scm.org) repositories
 - [sbt-autoversion](https://github.com/sbt/sbt-autoversion): automatically set your
-  next version bump based on patterns of your commit messase since last release. <!-- 2 stars -->
+  next version bump based on patterns of your commit message since last release. <!-- 2 stars -->
 - [sbt-gcs](https://github.com/saint1991/sbt-gcs): manage objects on Google Cloud Storage. <!-- 1 star -->
 - [sbt-sourcebundler](https://github.com/kotobotov/sbt-sourcebundler): merge all source code into one scala file. <!-- 1 star -->
 - [sbt-kubeyml](https://github.com/vaslabs/sbt-kubeyml): Create a typesafe kubernetes Deployment based on your project settings
@@ -5619,7 +5627,7 @@ find the cause.
     from git, there's a directory called Dormant with some content that
     needs going through.
 2.  the main page mentions external project references (e.g.
-    to a git repo) but doesn't have anything to link to that explains
+    to a git repository) but doesn't have anything to link to that explains
     how to use those.
 3.  API docs are much needed.
 4.  Find useful answers or types/methods/values in the other docs, and
@@ -6189,7 +6197,7 @@ This was contributed by David Knapp ([@Falmarri][@Falmarri]) as [#4341][4341]
 
 #### Appending Function1
 
-`Function1` can be appened using `+=`.
+`Function1` can be appended using `+=`.
 
 ```
 Global / onLoad += { s =>
@@ -6379,7 +6387,7 @@ We are also looking into improving unified slash syntax parser to make it more r
 
 A huge thank you to everyone who's helped improve sbt and Zinc 1 by using them, reporting bugs, improving our documentation, porting builds, porting plugins, and submitting and reviewing pull requests.
 
-sbt 1.2.1 was brought to you by 4 contributors, according to `git shortlog -sn --no-merges v1.2.1...v1.2.0` on sbt, zinc, librarymanagement, util, io, launcher-packege, and website: Eugene Yokota, Aaron S. Hawley, Ethan Atkins, and Allan Renucci. Thanks! Also special thanks to Ches Martin and Yoshida-san for reporting these issues.
+sbt 1.2.1 was brought to you by 4 contributors, according to `git shortlog -sn --no-merges v1.2.1...v1.2.0` on sbt, zinc, librarymanagement, util, io, launcher-package, and website: Eugene Yokota, Aaron S. Hawley, Ethan Atkins, and Allan Renucci. Thanks! Also special thanks to Ches Martin and Yoshida-san for reporting these issues.
 
   [io175]: https://github.com/sbt/io/pull/175
   [zinc562]: https://github.com/sbt/zinc/pull/562
@@ -6859,7 +6867,7 @@ This is a single-page guide that takes you from zero to building an app on Docke
 
 A huge thank you to everyone who's helped improve sbt and Zinc 1 by using them, reporting bugs, improving our documentation, porting builds, porting plugins, and submitting and reviewing pull requests.
 
-sbt 1.1.5 was brought to you by 21 constributors, according to `git shortlog -sn --no-merges v1.1.4...v1.1.5` on sbt, zinc, librarymanagement, util, io, launcher-packege, and website: Eugene Yokota, Ethan Atkins, Jason Zaugg, Liu Fengyun, Antonio Cunei, Dale Wijnand, Roberto Bonvallet, Alexey Alekhin, Daniel Parks, Heikki Vesalainen, Jean-Luc Deprez, Jessica Hamilton, Kenji Yoshida (xuwei-k), Nikita Gazarov, OlegYch, Richard Summerhayes, Robert Walker, Seth Tisue, Som Snytt, oneill, and 杨博 (Yang Bo)
+sbt 1.1.5 was brought to you by 21 contributors, according to `git shortlog -sn --no-merges v1.1.4...v1.1.5` on sbt, zinc, librarymanagement, util, io, launcher-package, and website: Eugene Yokota, Ethan Atkins, Jason Zaugg, Liu Fengyun, Antonio Cunei, Dale Wijnand, Roberto Bonvallet, Alexey Alekhin, Daniel Parks, Heikki Vesalainen, Jean-Luc Deprez, Jessica Hamilton, Kenji Yoshida (xuwei-k), Nikita Gazarov, OlegYch, Richard Summerhayes, Robert Walker, Seth Tisue, Som Snytt, oneill, and 杨博 (Yang Bo)
 
 
   [@eed3si9n]: https://github.com/eed3si9n
@@ -6949,7 +6957,7 @@ This means that your build loads slightly faster on sbt 1.1.4 (about 0.54s faste
 
 A huge thank you to everyone who's helped improve sbt and Zinc 1 by using them, reporting bugs, improving our documentation, porting builds, porting plugins, and submitting and reviewing pull requests.
 
-sbt 1.1.4 was brought to you by 11 contributors, according to `git shortlog -sn --no-merges v1.1.2...v1.1.4` on sbt, zinc, librarymanagement, util, io, launcher-packege, and website: Eugene Yokota, Dale Wijnand, 杨博 (Yang Bo), Ethan Atkins, Sam Halliday, Aaron S. Hawley, Gabriele Petronella, Jason Steenstra-Pickens, Jason Zaugg, Julien Jean Paul Sirocchi, and aumann.
+sbt 1.1.4 was brought to you by 11 contributors, according to `git shortlog -sn --no-merges v1.1.2...v1.1.4` on sbt, zinc, librarymanagement, util, io, launcher-package, and website: Eugene Yokota, Dale Wijnand, 杨博 (Yang Bo), Ethan Atkins, Sam Halliday, Aaron S. Hawley, Gabriele Petronella, Jason Steenstra-Pickens, Jason Zaugg, Julien Jean Paul Sirocchi, and aumann.
 
   [@eed3si9n]: https://github.com/eed3si9n
   [@dwijnand]: http://github.com/dwijnand
@@ -7020,7 +7028,7 @@ sbt 1.1.4 was brought to you by 11 contributors, according to `git shortlog -sn 
 
 #### Contributors
 
-sbt 1.1.2 was brought to you by 23 contributors, according to `git shortlog -sn --no-merges v1.1.1...v1.1.2` on sbt, zinc, librarymanagement, util, io, launcher-packege, and website: Dale Wijnand, Eugene Yokota, Jason Zaugg, Kenji Yoshida (xuwei-k), Ethan Atkins, Martijn Hoekstra, Martynas Mickevičius, Dennis Hörsch, Hosam Aly, Antonio Cunei, Friedrich von Never, Hiroshi Ito, Ian Gabes, Jilen Zhang, Mathias Bogaert, Naohisa Murakami (tiqwab), Philippus Baalman, Ryan Bair, Seth Tisue, Ståle Undheim, Takuya Miyamoto (tmiyamon), Yasuhiro Tatsuno. Thank you!
+sbt 1.1.2 was brought to you by 23 contributors, according to `git shortlog -sn --no-merges v1.1.1...v1.1.2` on sbt, zinc, librarymanagement, util, io, launcher-package, and website: Dale Wijnand, Eugene Yokota, Jason Zaugg, Kenji Yoshida (xuwei-k), Ethan Atkins, Martijn Hoekstra, Martynas Mickevičius, Dennis Hörsch, Hosam Aly, Antonio Cunei, Friedrich von Never, Hiroshi Ito, Ian Gabes, Jilen Zhang, Mathias Bogaert, Naohisa Murakami (tiqwab), Philippus Baalman, Ryan Bair, Seth Tisue, Ståle Undheim, Takuya Miyamoto (tmiyamon), Yasuhiro Tatsuno. Thank you!
 
   [@eed3si9n]: https://github.com/eed3si9n
   [@dwijnand]: http://github.com/dwijnand
@@ -7152,7 +7160,7 @@ This is a feature release for sbt 1.0.x series.
 - Preserves JAR order in `ScalaInstance.otherJars`. [zinc#411][zinc411] by [@dwijnand][@dwijnand]
 - Fixes used name when it contains NL. [zinc#449][zinc449] by [@jilen][@jilen]
 - Fixes handling of `ThisProject`. [#3609][3609] by [@dwijnand][@dwijnand]
-- Escapes imports from sbt files, so if user creates a backquoted definition then task evalution will not fail. [#3635][3635] by [@panaeon][@panaeon]
+- Escapes imports from sbt files, so if user creates a backquoted definition then task evaluation will not fail. [#3635][3635] by [@panaeon][@panaeon]
 - Removes reference to version 0.14.0 from a warning message. [#3693][3693] by [@saniyatech][@saniyatech]
 - Fixes screpl throwing "Not a valid key: console-quick". [#3762][3762] by [@xuwei-k][@xuwei-k]
 - Restores Scala 2.13.0-M1 support. #461 by [@dwijnand][@dwijnand]
@@ -7167,7 +7175,7 @@ This is a feature release for sbt 1.0.x series.
 - Adds a check for a change in sbt version before `reload`. [#1055][1055]/[#3673][3673] by [@RomanIakovlev][@RomanIakovlev]
 - Adds a new setting `insideCI`, which indicates that sbt is likely running in an Continuous Integration environment. [#3672][3672] by [@RomanIakovlev][@RomanIakovlev]
 - Adds `nameOption` to `Command` trait. [#3671][3671] by [@miklos-martin][@miklos-martin]
-- Adds POSIX persmission operations in IO, such as `IO.chmod(..)`. [io#76][io76] by [@eed3si9n][@eed3si9n]
+- Adds POSIX permission operations in IO, such as `IO.chmod(..)`. [io#76][io76] by [@eed3si9n][@eed3si9n]
 - Treat sbt 1 modules using Semantic Versioning in the eviction warning. [lm#188][lm188] by [@eed3si9n][@eed3si9n]
 - Uses kind-projector in the code. [#3650][3650] by [@dwijnand][@dwijnand]
 - Make `displayOnly` etc methods strict in `Completions`. [#3763][3763] by [@xuwei-k][@xuwei-k]
@@ -7329,7 +7337,7 @@ This is a hotfix release for sbt 1.0.x series.
 - Fixes `ArrayIndexOutOfBoundsException` on Ivy when running on Java 9. [ivy#27][ivy27] by [@xuwei-k][@xuwei-k]
 - Fixes Java 9 warning by upgrading to launcher 1.0.2. [ivy#26][ivy26]/[launcher#45][launcher45] by [@dwijnand][@dwijnand]
 - Fixes `-jvm-debug` on Java 9. [launcher-package197][sbt-launcher-package197] by [@mkurz][@mkurz]
-- Fixes `run` outputing debug level logs. [#3655][3655]/[#3717][3717] by [@cunei][@cunei]
+- Fixes `run` outputting debug level logs. [#3655][3655]/[#3717][3717] by [@cunei][@cunei]
 - Fixes performance regression caused by classpath hashing. [zinc#452][zinc452] by [@jvican][@jvican], [@fommil][@fommil] provided reproduction, and [@eed3si9n][@eed3si9n] fixed https://github.com/sbt/zinc/issues/457
 - Fixes performance regression of `testQuick`. [#3680][3680]/[#3720][3720] by [@OlegYch][@OlegYch]
 - Disables Ivy log4j caller location calculation for performance regression reported in [#3711][3711]. [util#132][util132] by [@leonardehrenfried][@leonardehrenfried]
@@ -8081,7 +8089,7 @@ System properties can be provided either as JVM options, or as SBT
 arguments, in both cases as `-Dprop=value`. The following properties
 influence SBT execution. Also see [sbt launcher][Sbt-Launcher].
 
-<table>
+<table class="table table-striped">
   <tr>
     <th>Property</th>
     <th>Values</th>
@@ -9526,7 +9534,7 @@ Content-Length: ...\r\n
 
 Sbt server can run in two modes, which differ in wire protocol and initialization. The default mode since sbt 1.1.x is *domain socket mode*, which uses either Unix domain sockets (on Unix) or named pipes (on Windows) for data transfer between server and client. In addition, there is a *TCP mode*, which uses TCP for data transfer.
 
-The mode which sbt server starts in is goverened by the key `serverConnectionType`, which can be set to `ConnectionType.Local` for domain socket/named pipe mode, or to `ConnectionType.Tcp` for TCP mode.
+The mode which sbt server starts in is governed by the key `serverConnectionType`, which can be set to `ConnectionType.Local` for domain socket/named pipe mode, or to `ConnectionType.Tcp` for TCP mode.
 
 ### Server discovery and authentication
 
@@ -9727,7 +9735,7 @@ Content-Type: application/vscode-jsonrpc; charset=utf-8
 {"jsonrpc":"2.0","id":15,"result":{"items":["testOnly org.sbt.ExampleSpec"]}}
 ```
 
-This will respond immediatly based on the last available state of sbt.
+This will respond immediately based on the last available state of sbt.
 
 ### `sbt/cancelRequest`
 
@@ -13430,7 +13438,7 @@ required.
 // (RegularFileFilter: sbt.io.FileFilter).&&(("**/*.scala"): sbt.io.NameFilter)
 ```
 
-In these siutations, use `toNio`:
+In these situations, use `toNio`:
 
 ```scala
  val regularScalaFiles = RegularFileFilter.toNio && "**/*.scala"
@@ -14926,7 +14934,7 @@ factory and repository class. The SSH and SFTP repositories are
 configured identically except for the name of the factory. Use
 `Resolver.ssh` for SSH and `Resolver.sftp` for SFTP.
 
-<table>
+<table class="table table-striped">
   <tr>
     <th>Type</th>
     <th>Factory</th>
@@ -15739,7 +15747,7 @@ The `all` method applies to both settings (values of type
 returns a setting or task that provides a `Seq[T]`, as shown in this
 table:
 
-<table>
+<table class="table table-striped">
   <tr>
     <th>Target</th>
     <th>Result</th>
@@ -15765,7 +15773,7 @@ Some scopes might not define a setting or task. The `?` and `??` methods
 can help in this case. They are both defined on settings and tasks and
 indicate what to do when a key is undefined.
 
-<table>
+<table class="table table-striped">
   <tr>
     <td><tt>?</tt></td>
     <td><tt>On a setting or task with underlying type T, this accepts no
@@ -16010,7 +16018,7 @@ cTask := aTask.value + bTask.value
 The following table lists the results of each task depending on the
 initially invoked task:
 
-<table>
+<table class="table table-striped">
   <thead>
     <tr>
       <th>invoked task</th>
@@ -16250,7 +16258,7 @@ As you can see, `cachedWork(1)` is cached when it is called consecutively.
 ### Previous value
 
 `TaskKey` has a method called `previous` that returns `Option[A]`, which can be used a lightweight tracker.
-Suppose we would want to create a task where it initially returns `"hi"`, and append `"!"` for subsequent calls, you can define a `TaskKey[String]` called `hi`, and retrive its previous value, which would be typed `Option[String]`. The previous value would be `None` the first time, and `Some(x)` for the subsequent calls.
+Suppose we would want to create a task where it initially returns `"hi"`, and append `"!"` for subsequent calls, you can define a `TaskKey[String]` called `hi`, and retrieve its previous value, which would be typed `Option[String]`. The previous value would be `None` the first time, and `Some(x)` for the subsequent calls.
 
 ```scala
 lazy val hi = taskKey[String]("say hi again")
@@ -18771,7 +18779,7 @@ your plugin if it's defined in default (no-name) package.
 Make sure people can find your plugin. Here are some of the recommended steps:
 
 1. Mention [@scala_sbt](https://twitter.com/scala_sbt) in your announcement, and we will RT it.
-2. Send a pull req to [sbt/website](https://github.com/sbt/website) and add your plugin on [the plugins list][Community-Plugins].
+2. Send a pull request to [sbt/website](https://github.com/sbt/website) and add your plugin on [the plugins list][Community-Plugins].
 
 ### Reuse existing keys
 
@@ -18811,7 +18819,7 @@ which in return implements `sbtassembly.Assembly` object to implement its core f
 
 Follow their lead, and provide core feature in a plain old Scala object.
 
-### Configuration advices
+### Configuration advice
 
 If your plugin introduces either a new set of source code or
 its own library dependencies, only then you want your own configuration.
@@ -18954,7 +18962,7 @@ lazy val app = (project in file("app"))
   .settings(inConfig(Test)(ObfuscatePlugin.baseObfuscateSettings))
 ```
 
-### Scoping advices
+### Scoping advice
 
 In general, if a plugin provides keys (settings and tasks) with the widest scoping,
 and refer to them with the narrowest scoping, it will give the maximum flexibility to the build users.
@@ -19788,8 +19796,7 @@ and `src/main/scala-sbt-1.0`. To switch between the sbt versions use
 [info] Set current project to sbt-something (in build file:/xxx/sbt-something/)
 ```
 
-or `^compile` to coss compile.
-
+or `^compile` to cross compile.
 
 ### Mixing libraries and sbt plugins in a build
 
@@ -20813,7 +20820,7 @@ When a command is run, more detailed logging output is sent to a file
 than to the screen (by default). This output can be recalled for the
 command just executed by running `last`.
 
-For example, the output of `run` when the sources are uptodate is:
+For example, the output of `run` when the sources are up to date is:
 
 ```
 > run
@@ -23024,7 +23031,7 @@ directory in which to store cached data. Sample usage is:
 // define a task that takes some inputs
 //   and generates files in an output directory
 myTask := {
-  // wraps a function taskImpl in an uptodate check
+  // wraps a function taskImpl in an up to date check
   //   taskImpl takes the input files, the output directory,
   //   generates the output files and returns the set of generated files
   val cachedFun = FileFunction.cached(streams.value.cacheDirectory / "my-task") { (in: Set[File]) =>
@@ -23727,7 +23734,7 @@ One exception may be deprecation if it's required for cross-building.
 
 ### Documentation
 
-> It is often useful to start with the Scaladoc before fleshing out a trait/class implementation by forcing you to consider the need for its existance.
+> It is often useful to start with the Scaladoc before fleshing out a trait/class implementation by forcing you to consider the need for its existence.
 
 All newly introduced **public** traits and classes and, to a lesser extent, functions and methods, should have Scaladoc. A significant amount of existing sbt code lacks documentation and we need to repair this situation over time. If you see an opportunity to add some documentation, or improve existing documentation then this will also help.
 
