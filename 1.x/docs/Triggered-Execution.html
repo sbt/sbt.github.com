@@ -79,10 +79,90 @@ files in the <code>project</code> directory). When build source changes are dete
 the build will be reloaded and sbt will re-enter triggered execution mode
 when the reload completes.
 </p><p>The following snippet can be added as a <a href="../api/sbt/Global-Settings.html">global setting</a> to <code>~/.sbt/1.0/config.sbt</code> to enable <code>ReloadOnSourceChanges</code> for all sbt 1.3+ builds without breaking earlier versions:
-```
-Def.settings {
+</p><pre><code class="">Def.settings {
   try {
-    val value = Class.forName(“sbt.nio.Keys”).getDeclaredField(“MODULE</p><div class="bottom nav">
+    val value = Class.forName(&quot;sbt.nio.Keys$ReloadOnSourceChanges$&quot;).getDeclaredField(&quot;MODULE$&quot;).get(null)
+    val clazz = Class.forName(&quot;sbt.nio.Keys$WatchBuildSourceOption&quot;)
+    val manifest = new scala.reflect.Manifest[AnyRef]{ def runtimeClass = clazz }
+    Seq(
+      SettingKey[AnyRef](&quot;onChangedBuildSource&quot;)(manifest, sbt.util.NoJsonWriter()) in Global := value
+    )
+  } catch {
+    case e: Throwable =&gt;
+      Nil
+  }
+}
+</code></pre><h3 id="Clearing+the+screen">Clearing the screen<a href="#Clearing+the+screen" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt can clear the console screen before it evaluates the task or after it
+triggers an event. To configure sbt to clear the screen after an event is
+triggered add
+</p><pre><code class="">ThisBuild / watchTriggeredMessage := Watch.clearScreenOnTrigger
+</code></pre><p>to the build settings. To clear the screen before running the task, add
+</p><pre><code class="">ThisBuild  / watchBeforeCommand := Watch.clearScreen
+</code></pre><p>to the build settings.
+</p><h3 id="Configuration">Configuration<a href="#Configuration" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The behavior of triggered execution can be configured via a number of settings.
+</p><ul><li><code>watchTriggers: Seq[Glob]</code> adds search queries for files that should task
+trigger evaluation but that the task does not directly depend on. For
+example, if the project build.sbt file contains <code>foo / watchTriggers +=
+baseDirectory.value.toGlob / &quot;*.txt&quot;</code>, then any modifications to files
+ending with the <code>txt</code> extension will cause the <code>foo</code> command to trigger
+when in triggered execution mode.
+</li><li><code>watchTriggeredMessage: (Int, Path, Seq[String]) =&gt; Option[String]</code>
+sets the message that is displayed when a file modification triggers a
+new build. Its input parameters are the current watch iteration count,
+the file that triggered the build and the command(s) that are going to
+be run. By default, it prints a message indicating what file triggered
+the build and what commands its going to run. No message is printed when
+the function returns <code>None</code>. To clear the screen before printing the
+message, just add <code>Watch.clearScreen()</code> inside of the task definition.
+This will ensure that the screen is cleared and that the message, if
+any is defined, will be printed after the screen clearing.
+</li><li><code>watchInputOptions: Seq[Watch.InputOption]</code> allows the build to
+override the default watch options. For example, to add the ability to
+reload the build by typing the ‘l’ key, add
+<code>ThisBuild / watchInputOptions += Watch.InputOption('l', &quot;reload&quot;,
+Watch.Reload)</code> to the <code>build.sbt</code> file. When using the default
+<code>watchStartMessage</code>, this will also add the option to the list displayed
+by the ’?’ option.
+</li><li><code>watchBeforeCommand: () =&gt; Unit</code> provides a callback to run before
+evaluating the task.  It can be used to clear the console screen by
+adding <code>ThisBuild / watchBeforeCommand := Watch.clearScreen</code> to the
+project build.sbt file. By default it is no-op.
+</li><li><code>watchLogLevel</code> sets the logging level of the file monitoring system.
+This can be useful if the triggered execution is not being evaluated
+when source files or modified or if is unexpectedly triggering due to
+modifications to files that should not be monitored.
+</li><li><code>watchInputParser: Parser[Watch.Action]</code> changes how the monitor
+handles input events. For example, setting <code>watchInputParser := 'l' ^^^
+Watch.Reload | '\r' ^^^ new Watch.Run(&quot;&quot;)</code> will make it so that
+typing the ‘l’ key will reload the build and typing a newline will
+return to the shell. By default this is automatically derived from the
+<code>watchInputOptions</code>.
+</li><li><code>watchStartMessage: (Int, ProjectRef, Seq[String]) =&gt; Option[String]</code>
+sets the banner that is printed while the watch process is waiting for
+file or input events. The inputs are the iteration count, the current
+project and the commands to run. The default message includes
+instructions for terminating the watch or displaying all available
+options. This banner is only displayed if <code>watchOnIteration</code> logs the
+result of <code>watchStartMessage</code>.
+</li><li><code>watchOnIteration: (Int, ProjectRef, Seq[String]) =&gt; Watch.Action</code> a
+function that is evaluated before waiting for source or input events. It
+can be used to terminate the watch early if, for example, a certain
+number of iterations have been reached. By default, it just logs the
+result of <code>watchStartMessage</code>.
+</li><li><code>watchForceTriggerOnAnyChange: Boolean</code> configures whether or not the
+contents of a source file must change in order to trigger a build. The default
+value is false.
+</li><li><code>watchPersistFilestamps: Boolean</code> toggles whether or not sbt will
+persist the file hashes computed for source files across multiple task
+evaluation runs. This can improve performance for projects with many
+source files. Because the file hashes are cached, it is possible for the
+evaluated task to read an invalid hash if many source files are being
+concurrently modified. The default value is false.
+</li><li><code>watchAntiEntropy: FiniteDuration</code> controls the time that must elapse
+before a build is re-triggered by the same file that previously
+triggered the build. This is intended to prevent spurious builds that
+can occur when a file is modified in short bursts. The default value is 500ms.
+</li></ul><div class="bottom nav">
                 <div class="row">
                   <div class="col-md-auto">
                     <a href="Scripts.html">
