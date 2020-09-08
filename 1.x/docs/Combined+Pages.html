@@ -5214,7 +5214,9 @@ library to the dependency’s name. For example:
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;net.databinder.dispatch&quot; %% &quot;dispatch-core&quot; % &quot;0.13.3&quot;
 </code></pre><p>A nearly equivalent, manual alternative for a fixed version of Scala is:
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;net.databinder.dispatch&quot; % &quot;dispatch-core_2.12&quot; % &quot;0.13.3&quot;
-</code></pre><h3 id="Cross+building+a+project">Cross building a project<a href="#Cross+building+a+project" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Define the versions of Scala to build against in the
+</code></pre><h3 id="Cross+building+a+project+using+sbt-projectmatrix">Cross building a project using sbt-projectmatrix<a href="#Cross+building+a+project+using+sbt-projectmatrix" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Consider using <a href="https://github.com/sbt/sbt-projectmatrix">sbt-projectmatrix</a> that
+is capable of cross building across Scala versions and different platforms in parallel.
+</p><h3 id="Cross+building+a+project+statefully">Cross building a project statefully<a href="#Cross+building+a+project+statefully" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Define the versions of Scala to build against in the
 <code>crossScalaVersions</code> setting. Versions of Scala 2.10.2 or later are
 allowed. For example, in a <code>.sbt</code> build definition:
 </p><pre><code class="prettyprint lang-scala">lazy val scala212 = &quot;2.12.10&quot;
@@ -5251,7 +5253,29 @@ the action to run with <code>+</code>. For example:
 </code></pre><p>A typical way to use this feature is to do development on a single Scala
 version (no <code>+</code> prefix) and then cross-build (using <code>+</code>) occasionally
 and when releasing.
-</p><a name="crossPaths"></a><h4 id="Scala-version+specific+source+directory">Scala-version specific source directory<a href="#Scala-version+specific+source+directory" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>In addition to <code>src/main/scala/</code> directory, <code>src/main/scala-&lt;scala binary version&gt;/</code>
+</p><h3 id="Change+settings+depending+on+the+Scala+version">Change settings depending on the Scala version<a href="#Change+settings+depending+on+the+Scala+version" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Here’s how we can change some settings depending on the Scala version.
+<code>CrossVersion.partialVersion(scalaVersion.value)</code> returns <code>Option[(Int, Int)]</code> containing
+the first two segments of the Scala version.
+</p><p>This can be useful for instance if you include a dependency that requires the macro paradise
+compiler plugin for Scala 2.12 and the <code>-Ymacro-annotations</code> compiler option for Scala 2.13.
+</p><pre><code class="prettyprint lang-scala">lazy val core = (project in file(&quot;core&quot;))
+  .settings(
+    crossScalaVersions := supportedScalaVersions,
+    libraryDependencies ++= {
+      CrossVersion.partialVersion(scalaVersion.value) match {
+        case Some((2, n)) if n &lt;= 12 =&gt;
+          List(compilerPlugin(&quot;org.scalamacros&quot; % &quot;paradise&quot; % &quot;2.1.1&quot; cross CrossVersion.full))
+        case _                       =&gt; Nil
+      }
+    },
+    Compile / scalacOptions ++= {
+      CrossVersion.partialVersion(scalaVersion.value) match {
+        case Some((2, n)) if n &lt;= 12 =&gt; Nil
+        case _                       =&gt; List(&quot;-Ymacro-annotations&quot;)
+      }
+    },
+  )
+</code></pre><a name="crossPaths"></a><h4 id="Scala-version+specific+source+directory">Scala-version specific source directory<a href="#Scala-version+specific+source+directory" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>In addition to <code>src/main/scala/</code> directory, <code>src/main/scala-&lt;scala binary version&gt;/</code>
 directory is included as a source directory.
 For, example if the current subproject’s <code>scalaVersion</code> is 2.12.10, then
 <code>src/main/scala-2.12</code> is included as a Scala-version specific source.
