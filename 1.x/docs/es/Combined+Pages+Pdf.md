@@ -41,7 +41,6 @@ Gracias por probar sbt y... ¡*divértete*!
   [Basic-Def]: Basic-Def.html
   [Hello]: Hello.html
   [Running]: Running.html
-  [MSI]: https://piccolo.link/sbt-1.3.4.msi
   [Setup-Notes]: ../docs/Setup-Notes.html
   [Mac]: Installing-sbt-on-Mac.html
   [Windows]: Installing-sbt-on-Windows.html
@@ -71,8 +70,9 @@ Si has tenido algún problema ejecutando sbt, revisa las
 proxies HTTP y opciones de la JVM.
 
 
-  [ZIP]: https://piccolo.link/sbt-1.3.4.zip
-  [TGZ]: https://piccolo.link/sbt-1.3.4.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.3.4/sbt-1.3.4.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.3.4/sbt-1.3.4.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.3.4/sbt-1.3.4.tgz
   [Manual-Installation]: Manual-Installation.html
   [AdoptOpenJDK]: https://adoptopenjdk.net/
 
@@ -113,9 +113,9 @@ $ sdk install sbt
 ```
 
 
-  [MSI]: https://piccolo.link/sbt-1.3.4.msi
-  [ZIP]: https://piccolo.link/sbt-1.3.4.zip
-  [TGZ]: https://piccolo.link/sbt-1.3.4.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.3.4/sbt-1.3.4.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.3.4/sbt-1.3.4.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.3.4/sbt-1.3.4.tgz
   [AdoptOpenJDK]: https://adoptopenjdk.net/
 
 Instalar sbt en Windows
@@ -146,8 +146,9 @@ $ scoop install sbt
 ```
 
 
-  [ZIP]: https://piccolo.link/sbt-1.3.4.zip
-  [TGZ]: https://piccolo.link/sbt-1.3.4.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.3.4/sbt-1.3.4.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.3.4/sbt-1.3.4.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.3.4/sbt-1.3.4.tgz
   [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.3.4.rpm
   [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.3.4.deb
   [Manual-Installation]: Manual-Installation.html
