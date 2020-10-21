@@ -4204,7 +4204,9 @@ Around this time, Eugene, Martin, and Dale started the sbt 1.x codebase, splitti
 
 In August 2016, Dale joined the Tooling team at Lightbend. Dale and Eugene oversaw the releases 0.13.12 through 0.13.16, as well as the development of sbt 1.0.
 
-In spring 2017, the Scala Center joined the Zinc 1 development effort. Jorge Vicente Cantero ([@jvican][@jvican]) has contributed a number of improvements including the fix for the "as seen from" bug that had blocked Zinc 1.
+In spring 2017, the Scala Center participated in the Zinc 1 development effort. Jorge Vicente Cantero ([@jvican][@jvican]) has contributed a number of improvements including the fix for the "as seen from" bug that had blocked Zinc 1.
+
+From spring 2018, Ethan Atkins joined the sbt project as a community member, and quickly became the leading contributor to the project. Initially his contribution was implementing Close Watch that uses native code to provide watch service on macOS. He's worked on various performance related improvements since then including layered ClassLoader, logging rewrite, and native thin client that uses GraalVM native image.
 
 According to `git shortlog -sn --no-merges` on [sbt/sbt](https://github.com/sbt/sbt/graphs/contributors), [sbt/zinc](https://github.com/sbt/zinc/graphs/contributors), [sbt/librarymanagement](https://github.com/sbt/librarymanagement/graphs/contributors), [sbt/util](https://github.com/sbt/util/graphs/contributors), [sbt/io](https://github.com/sbt/io/graphs/contributors), [sbt/contraband](https://github.com/sbt/contraband/graphs/contributors), and [sbt/website](https://github.com/sbt/website/graphs/contributors) there were 9151 non-merge commits by 318 contributors.
 
@@ -5983,6 +5985,104 @@ After 1.x, `withDefaultResolvers` was renamed to `combineDefaultResolvers`. In t
 * You can use `Vector` directly too.
 
 
+## sbt 1.4.x releases
+
+### sbt 1.4.1
+
+- Fixes `sbt new` not echoing back the characters [#5954][5954] by [@eatkins][@eatkins]
+- Fixes compiler error reporting in Zinc [zinc#931][zinc931] by [@adpi2][@adpi2]
+- Fixes `dependencyBrowseTree` etc [#5967][5967] by [@naderghanbari][@naderghanbari]
+- Fixes Scala 2.13-3.0 sandwich support for Scala.JS [#5984][5984] by [@xuwei-k][@xuwei-k]
+- Work around `classes` directory causing "classes does not exist" error  [zinc#934][zinc934] by [@eed3si9n][@eed3si9n]
+- Adds logging to `ClassfileManager` output [#5990][5990] by [@smarter][@smarter]
+- Fixes `Ctrl-C` and `Ctrl-D` handling [#5947][5947]/[#5975][5975] by [@eatkins][@eatkins]
+- Fixes `-Dsbt.color=true` not working in some situation [#5960][5960] by [@eatkins][@eatkins]
+- Fixes `FileAlreadyExistsException` when `project/target` is a symbolic link [#5972][5972] by [@eatkins][@eatkins]
+- Fixes ANSI control character appearing in piped output [#5966][5966] by [@eatkins][@eatkins]
+- Fixes line reading issue with jEdit [#5946][5946] by [@eatkins][@eatkins]
+- Fixes sbt hanging on invalid `build.sbt` and `--batch` [#5945][5945] by [@eatkins][@eatkins]
+- Fixes `.inputrc` file support [#5973][5973] by [@xuwei-k][@xuwei-k]
+- Fixes BSP warning diagnostics disappearing on recompilation [#5950][5950] by [@adpi2][@adpi2]
+- Fixes BSP support for custom configurations [#5930][5930] by [@adpi2][@adpi2]
+- Fixes custom reporter causing `MatchError` [#5948][5948] by [@adpi2][@adpi2]
+- Fixes `shellPrompt` and `release*` keys warning on build linting [#5983][5983]/[#5991][5991] by [@xirc][@xirc] and [@eed3si9n][@eed3si9n]
+- Fixes `<task>.value` macro causing spurious "a pure expression does nothing" warning [#5981][5981] by [@eed3si9n][@eed3si9n]
+- Preserves SemanticDB files in remote cache [#5961][5961] by [@xuwei-k][@xuwei-k]
+- Adds AdoptOpenJDK support for JDK cross building [#5964][5964] by [@rdesgroppes][@rdesgroppes]
+- Improves `plugins` command output by grouping by subproject [#5932][5932] by [@aaabramov][@aaabramov]
+
+  [5930]: https://github.com/sbt/sbt/pull/5930
+  [5946]: https://github.com/sbt/sbt/pull/5946
+  [5945]: https://github.com/sbt/sbt/pull/5945
+  [5947]: https://github.com/sbt/sbt/pull/5947
+  [5961]: https://github.com/sbt/sbt/pull/5961
+  [5960]: https://github.com/sbt/sbt/pull/5960
+  [5966]: https://github.com/sbt/sbt/pull/5966
+  [5954]: https://github.com/sbt/sbt/pull/5954
+  [5948]: https://github.com/sbt/sbt/pull/5948
+  [5964]: https://github.com/sbt/sbt/pull/5964
+  [5967]: https://github.com/sbt/sbt/pull/5967
+  [5950]: https://github.com/sbt/sbt/issues/5950
+  [5932]: https://github.com/sbt/sbt/pull/5932
+  [5972]: https://github.com/sbt/sbt/pull/5972
+  [5973]: https://github.com/sbt/sbt/pull/5973
+  [5975]: https://github.com/sbt/sbt/pull/5975
+  [5984]: https://github.com/sbt/sbt/pull/5984
+  [5983]: https://github.com/sbt/sbt/pull/5983
+  [5981]: https://github.com/sbt/sbt/pull/5981
+  [5991]: https://github.com/sbt/sbt/pull/5991
+  [5990]: https://github.com/sbt/sbt/pull/5990
+  [zinc931]: https://github.com/sbt/zinc/pull/931
+  [zinc934]: https://github.com/sbt/zinc/pull/934
+  [@adpi2]: https://github.com/adpi2
+  [@eed3si9n]: https://github.com/eed3si9n
+  [@eatkins]: https://github.com/eatkins
+  [@xuwei-k]: https://github.com/xuwei-k
+  [@rdesgroppes]: https://github.com/rdesgroppes
+  [@naderghanbari]: https://github.com/naderghanbari
+  [@aaabramov]: https://github.com/aaabramov
+  [@xirc]: https://github.com/xirc
+  [@smarter]: https://github.com/smarter
+
+### sbt 1.4.0
+
+The headline features of sbt 1.4.0 are:
+
+- build server protocol (BSP) support
+- sbtn: a native thin client for sbt
+- build caching
+- `ThisBuild / versionScheme` to take the guessing out of eviction warning
+
+### Build server protocol (BSP) support
+
+sbt 1.4.0 adds build server protocol (BSP) support, contributed by [Scala Center](https://contributors.scala-lang.org/t/build-server-protocol-in-sbt/4234). Main implementation was done by Adrien Piquerez ([@adpi2](https://twitter.com/adrienpi2)) based on [@eed3si9n](https://twitter.com/eed3si9n)'s prototype.
+
+When sbt 1.4.0 starts, it will create a file named `.bsp/sbt.json` containing a machine-readable instruction on how to run `sbt -bsp`, which is a command line program that uses standard input and output to communicate to sbt server using build server protocol.
+
+#### How to import to IntelliJ using BSP
+
+1. Start sbt in a terminal
+2. Open IntelliJ IDEA 2020.1.2 or later
+3. Select "Open or import", and select "BSP Project"
+
+#### How to import to VS Code + Metals
+
+1. Delete existing `.bsp`, `.metals`, `.bloop` directories if any
+2. Open VS Code in the working directory
+3. Ignore the prompt to import the project
+4. Start `sbt -Dsbt.semanticdb=true` in the Terminal tab. Wait till it displays "sbt server started"
+5. Navigate to Metals view, and select "Restart build server"
+6. Type `compile` into the sbt session to generate SemanticDB files
+
+[#5538][5538]/[#5443][5443] by [@adpi2][@adpi2]
+
+### Native thin client
+
+sbt 1.4.0 adds an official native thin client called `sbtn` that supports all tasks. If you're using the official sbt launcher 1.4.0 and not the knockoff kind you can use `--client` option to run the native thin client:
+
+```
+
+
 ## sbt 1.3.x releases
 
 ### sbt 1.3.0
@@ -6267,8 +6367,6 @@ First, I'd like to introduce Ethan Atkins, a core community member of sbt projec
 As a community member, Ethan has contributed various IO related improvements to make sbt more responsive in his own time. sbt 1.3.0 reflects many of his ideas.
 
 The last feature release of sbt 1 was [sbt 1.2.0](https://www.lightbend.com/blog/scala-sbt-120-patchnotes) in July, 2018. Since then, we've released eight patch releases under sbt 1.2.x for bug fixes, but most of the feature enhancements were merged to `develop` branch. Over the course of these months, 45 contributors contributors participated in sbt 1.3.0 and Zinc: Ethan Atkins, Eugene Yokota (eed3si9n), Jorge Vicente Cantero (jvican), Łukasz Wawrzyk, Dale Wijnand, Andrea Peruffo, Kenji Yoshida (xuwei-k), Guillaume Martres, Arnout Engelen, Jason Zaugg, Krzysztof Romanowski, Antonio Cunei, Mirco Dotta, OlegYch, Alex Dupre, Nepomuk Seiler, 0lejk4, Alexandre Archambault, Eric Peters, Kazuhiro Sera, Philippus, Som Snytt, Syed Akber Jafri, Thomas Droxler, Veera Venky, bigwheel, Akhtyam Sakaev, Alexey Vakhrenev, Eugene Platonov, Helena Edelson, Ignasi Marimon-Clos, Julien Sirocchi, Justin Kaeser, Kajetan Maliszewski, Leonard Ehrenfried, Mikołaj Jakubowski, Nafer Sanabria, Stefan Wachter, Yasuhiro Tatsuno, Yusuke Izawa, falmarri, ilya, kai-chi, tanishiking, Ólafur Páll Geirsson. Thank you!
-
-Thanks to everyone who's helped improve sbt and Zinc 1 by using RCs and reporting bugs, improving our documentation, porting builds, porting plugins, and submitting and reviewing pull requests. For anyone interested in helping sbt, there are many avenues for you to help, depending on your interest. If you're interested, [Contributing](https://github.com/sbt/sbt/blob/develop/CONTRIBUTING.md), [sbt-contrib](https://gitter.im/sbt/sbt-contrib), ["help wanted"](https://github.com/sbt/sbt/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22), ["good first issue"](https://github.com/sbt/sbt/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) are good starting points.
 
   [89]: https://github.com/sbt/sbt/issues/89
   [1074]: https://github.com/sbt/sbt/issues/1074
