@@ -138,7 +138,16 @@ repositories:
 </p><pre><code class="prettyprint lang-scala">pomIncludeRepository := { (repo: MavenRepository) =&gt;
   repo.root.startsWith(&quot;file:&quot;)
 }
-</code></pre><div class="bottom nav">
+</code></pre><h3 id="Version+scheme">Version scheme<a href="#Version+scheme" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 1.4.0 adds a new setting called <code>ThisBuild / versionScheme</code> to track version scheme of the build:
+</p><pre><code class="">ThisBuild / versionScheme := Some(&quot;early-semver&quot;)
+</code></pre><p>The supported values are <code>&quot;early-semver&quot;</code>, <code>&quot;pvp&quot;</code>, <code>&quot;semver-spec&quot;</code>, and <code>&quot;strict&quot;</code>. sbt will include this information into <code>pom.xml</code> and <code>ivy.xml</code> as a property.
+</p><table>
+<tr><th>versionScheme</th><th>description</th></tr>
+<tr><td><nobr><code>Some("early-semver")</code></nobr></td><td>Early Semantic Versioning that would keep binary compatibility across patch updates within 0.Y.z (for instance 0.13.0 and 0.13.2). Once it goes 1.0.0, it follows the regular Semantic Versioning where 1.1.0 is bincompat with 1.0.0.</td></tr>
+<tr><td><nobr><code>Some("semver-spec")</code></nobr></td><td><a href="https://semver.org/">Semantic Versioning</a> where all 0.y.z are treated as initial development (no bincompat guarantees)</td></tr>
+<tr><td><code>Some("pvp")</code></td><td><a href="https://pvp.haskell.org/">Haskell Package Versioning Policy</a> where X.Y are treated as major version</td></tr>
+<tr><td><code>Some("strict")</code></td><td>Requires exact match of version</td></tr>
+</table><div class="bottom nav">
                 <div class="row">
                   <div class="col-md-auto">
                     <a href="Resolvers.html">

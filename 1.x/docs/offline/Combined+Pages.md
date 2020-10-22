@@ -6081,6 +6081,214 @@ When sbt 1.4.0 starts, it will create a file named `.bsp/sbt.json` containing a 
 sbt 1.4.0 adds an official native thin client called `sbtn` that supports all tasks. If you're using the official sbt launcher 1.4.0 and not the knockoff kind you can use `--client` option to run the native thin client:
 
 ```
+$ sbt --client compile
+$ sbt --client shutdown
+```
+
+The native thin client will run sbt (server) as a daemon, which avoids the JVM spinup and loading time for the second call onwards. This could an option if you would like to use sbt from the system shell such as Zsh and Fish.
+
+Remember to call `sbt --client shutdown` when you're done! If you want to enable this via an environment variable you can set `SBT_NATIVE_CLIENT` to `true`.
+`sbtn` binary files are also available from https://github.com/sbt/sbtn-dist/releases/tag/v1.4.0
+
+[#5620][5620] by [@eatkins][@eatkins]
+
+### ThisBuild / versionScheme
+
+sbt 1.4.0 adds a new setting called `ThisBuild / versionScheme` to track version scheme of the build:
+
+```
+ThisBuild / versionScheme := Some("early-semver")
+```
+
+The supported values are `"early-semver"`, `"pvp"`, and `"semver-spec"`. sbt will include this information into `pom.xml` and `ivy.xml` as a property. In addition, sbt 1.4.0 will use the information to take the guessing out of eviction warning when this information is available. [#5724][5724] by [@eed3si9n][@eed3si9n]
+
+### VirtualFile + RemoteCache
+
+sbt 1.4.0 / Zinc 1.4.0 virtualizes the file paths tracked during incremental compilation. The benefit for this that the state of incremental compilation can shared across _different_ machines, as long as `ThisBuild / rootPaths` are enumerated beforehand.
+
+To demonstrate this, we've also added **experimental** [cached compilation](http://eed3si9n.com/cached-compilation-for-sbt) feature to sbt. All you need is the following setting:
+
+```
+ThisBuild / pushRemoteCacheTo := Some(MavenCache("local-cache", file("/tmp/remote-cache")))
+```
+
+Then from machine 1, call `pushRemoteCache`. This will publish the `*.class` and Zinc Analysis artifacts to the location. Next, from machine 2, call `pullRemoteCache`.
+
+[zinc#712][zinc712]/[#5417][5417] by [@eed3si9n][@eed3si9n]
+
+### Build linting
+
+On start up, sbt 1.4.0 checks for unused settings/tasks. Because most settings are on the intermediary to other settings/tasks, they are included into the linting by default. The notable exceptions are settings used exclusively by a command. To opt-out, you can either append it to `Global / excludeLintKeys` or set the rank to invisible.
+
+[#5153][5153] by [@eed3si9n][@eed3si9n]
+
+### Conditional task
+
+sbt 1.4.0 adds support for conditional task (or Selective task), which is a new kind of task automatically created when `Def.task { ... }` consists of an `if`-expression:
+
+```
+bar := {
+  if (number.value < 0) negAction.value
+  else if (number.value == 0) zeroAction.value
+  else posAction.value
+}
+```
+
+Unlike the regular (Applicative) task composition, conditional tasks delays the evaluation of then-clause and else-clause as naturally expected of an `if`-expression. This is already possible with `Def.taskDyn { ... }`, but unlike dynamic tasks, conditional task works with `inspect` command. See [Selective functor for sbt](http://eed3si9n.com/selective-functor-in-sbt) for more details. [#5558][5558] by [@eed3si9n][@eed3si9n]
+
+### Incremental build pipelining
+
+sbt 1.4.0 adds experimental incremental build pipelining. To enable build pipelining for the build:
+
+```
+ThisBuild / usePipelining := true
+```
+
+To opt-out of creating an early output for some of the subprojects:
+
+```
+exportPipelining := false
+```
+
+[#5703][5703] by [@eed3si9n][@eed3si9n]
+
+### sbt-dependency-graph is in-sourced
+
+sbt 1.4.0 brings in Johannes Rudolph's sbt-dependency-graph plugin into the code base.
+Since it injects many tasks per subprojects, the plugin is split into two parts:
+- `MiniDependencyTreePlugin` that is enabled by default, bringing in `dependencyTree` task to `Compile` and `Test` configurations
+- Full strength `DependencyTreePlugin` that is enabled by putting the following to `project/plugins.sbt`:
+
+```
+addDependencyTreePlugin
+```
+
+### Fixes with compatibility implications
+
+- Replaces Apache Log4j with our own logger by default to avoid Appender leakage. Use `ThisBuild / useLog4J := true` to use Log4j. [#5731][5731] by [@eatkins][@eatkins]
+- Makes JAR file creation repeatable by sorting entry by name and dropping timestamps [#5344][5344]/[io#279][io279] by [@raboof][@raboof]
+- Loads bare settings in the alphabetic order of the build files [#2697][2697]/[#5447][5447] by [@eed3si9n][@eed3si9n]
+- Loads `val`s from top-to-bottom within a build file [#2232][2232]/[#5448][5448] by [@eed3si9n][@eed3si9n]
+- HTTP resolvers require explicit opt-in using `.withAllowInsecureProtocol(true)` [#5593][5593] by [@eed3si9n][@eed3si9n]
+- Ctrl-C during triggered execution `~` returns to the shell instead of shutting down sbt [#5804][5804] by [@eatkins][@eatkins]
+
+### Other updates
+
+- Updates shell to use JLine 3 for better tab completion [#5671][5671] by [@eatkins][@eatkins]
+- Adds support for Scala 2.13-3.0 sandwich [#5767][5767] by [@eed3si9n][@eed3si9n]
+- Throws an error if you run sbt from `/` without `-Dsbt.rootdir=true` [#5112][5112] by [@eed3si9n][@eed3si9n]
+- Upates `StateTransform` to accept `State => State` [#5260][5260] by [@eatkins][@eatkins]
+- Fixes various issues around background run [#5259][5259] by [@eatkins][@eatkins]
+- Turns off supershell when `TERM` is set to "dumb" [#5278][5278] by [@hvesalai][@hvesalai]
+- Avoids using system temporary directories for logging [#5289][5289] by [@eatkins][@eatkins]
+- Adds library endpoint for `sbt.ForkMain` [#5315][5315] by [@olafurpg][@olafurpg]
+- Avoids using last modified time of directories to invalidate `doc` [#5362][5362] by [@eatkins][@eatkins]
+- Fixes the default artifact of packageSrc for custom configuration [#5403][5403] by [@eed3si9n][@eed3si9n]
+- Fixes task cancellation handling [#5446][5446]/[zinc#742][zinc742] by [@azolotko][@azolotko]
+- Adds `toTaskable` method injection to `Initialize[A]` for tuple syntax [#5439][5439] by [@dwijnand][@dwijnand]
+- Fixes the error message for an undefined setting [#5469][5469] by [@nigredo-tori][@nigredo-tori]
+- Updates `semanticdbVersion` to 4.3.7 [#5481][5481] by [@anilkumarmyla][@anilkumarmyla]
+- Adds `Tracked.outputChangedW` and `Tracked.inputChangedW` which requires typeclass evidence of `JsonWriter[A]` instead of `JsonFormat[A]` [#5513][5513] by [@bjaglin][@bjaglin]
+- Fixes various supershell interferences [#5319][5319] by [@eatkins][@eatkins]
+- Adds [extension methods](https://github.com/sbt/sbt/blob/develop/main/src/main/scala/sbt/UpperStateOps.scala) to `State` to faciliate sbt server communication [#5207][5207] by [@eed3si9n][@eed3si9n]
+- Adds support for weighed tags for `testGrouping` [#5527][5527] by [@frosforever][@frosforever]
+- Updates to sjson-new, which shades Jawn 1.0.0 [#5595][5595] by [@eed3si9n][@eed3si9n]
+- Fixes NullPointerError when credential realm is `null` [#5526][5526] by [@3rwww1][@3rwww1]
+- Adds `Def.promise` for long-running tasks to communicate to another task [#5552][5552] by [@eed3si9n][@eed3si9n]
+- Uses Java's timestamp on JDK 10+ as opposed to using native call [io#274][io274] by [@slandelle][@slandelle]
+- Adds retry with backoff during publish (`-Dsbt.repository.publish.attempts` set to 3) [lm#340][lm340] by [@izharahmd][@izharahmd]
+- Improves failure message for PUT [lm#309][lm309] by [@swaldman][@swaldman]
+- Adds provenance to AnalyzedClass [zinc#786][zinc786] by [@dwijnand][@dwijnand] + [@mspnf][@mspnf]
+- Makes hashing childrenOfSealedClass stable [zinc#788][zinc788] by [@dwijnand][@dwijnand]
+- Fixes performance regressions around build source monitoring [#5530][5530] by [@eatkins][@eatkins]
+- Fixes performance regressions around super shell [#5531][5531] by [@eatkins][@eatkins]
+- Various performance improvements in Zinc [zinc#756][zinc756]/[zinc#763][zinc763] by [@retronym][@retronym]
+- Adds a monitor to warn about excessive GC [#5812][5812] by [@eatkins][@eatkins]
+- Fixes forked tests running tests twice when they match multiple fingerprints [#5800][5800] by [@Duhemm][@Duhemm]
+
+### Participation
+
+sbt 1.4.0 was brought to you by 34 contributors. Ethan Atkins, Eugene Yokota (eed3si9n), Johannes Rudolph, Dale Wijnand, Adrien Piquerez, Jason Zaugg, Arnout Engelen, Josh Soref, Guillaume Martres, Maksim Ochenashko, Anil Kumar Myla, Brice Jaglin, Claudio Bley, João Ferreira, Steve Waldman, frosforever, Alex Zolotko, Heikki Vesalainen, Ismael Juma, Stephane Landelle, Jannik Theiß, izharahmd, lloydmeta, Alexandre Archambault, Eric Peters, Erwan Queffelec, Kenji Yoshida (xuwei-k), Martin Duhem, Olafur Pall Geirsson, Renato Cavalcanti, Vincent PERICART, nigredo-tori. Thanks!
+
+  [5112]: https://github.com/sbt/sbt/pull/5112
+  [5153]: https://github.com/sbt/sbt/pull/5153
+  [5260]: https://github.com/sbt/sbt/pull/5260
+  [5259]: https://github.com/sbt/sbt/pull/5259
+  [5278]: https://github.com/sbt/sbt/pull/5278
+  [5289]: https://github.com/sbt/sbt/pull/5289
+  [5315]: https://github.com/sbt/sbt/pull/5315
+  [5344]: https://github.com/sbt/sbt/pull/5344
+  [5362]: https://github.com/sbt/sbt/pull/5362
+  [5403]: https://github.com/sbt/sbt/pull/5403
+  [5207]: https://github.com/sbt/sbt/pull/5207
+  [5446]: https://github.com/sbt/sbt/pull/5446
+  [5447]: https://github.com/sbt/sbt/pull/5447
+  [2697]: https://github.com/sbt/sbt/issues/2697
+  [5448]: https://github.com/sbt/sbt/pull/5448
+  [2232]: https://github.com/sbt/sbt/issues/2232
+  [5439]: https://github.com/sbt/sbt/pull/5439
+  [5469]: https://github.com/sbt/sbt/pull/5469
+  [5481]: https://github.com/sbt/sbt/pull/5481
+  [5513]: https://github.com/sbt/sbt/pull/5513
+  [5417]: https://github.com/sbt/sbt/pull/5417
+  [5319]: https://github.com/sbt/sbt/pull/5319
+  [5527]: https://github.com/sbt/sbt/pull/5527
+  [5530]: https://github.com/sbt/sbt/pull/5530
+  [5531]: https://github.com/sbt/sbt/pull/5531
+  [5538]: https://github.com/sbt/sbt/pull/5538
+  [5443]: https://github.com/sbt/sbt/pull/5443
+  [5593]: https://github.com/sbt/sbt/pull/5593
+  [5595]: https://github.com/sbt/sbt/pull/5595
+  [5526]: https://github.com/sbt/sbt/pull/5526
+  [5552]: https://github.com/sbt/sbt/pull/5552
+  [5558]: https://github.com/sbt/sbt/pull/5558
+  [5724]: https://github.com/sbt/sbt/pull/5724
+  [5620]: https://github.com/sbt/sbt/pull/5620
+  [5671]: https://github.com/sbt/sbt/pull/5671
+  [5703]: https://github.com/sbt/sbt/pull/5703
+  [5622]: https://github.com/sbt/sbt/pull/5622
+  [5767]: https://github.com/sbt/sbt/pull/5767
+  [5812]: https://github.com/sbt/sbt/pull/5812
+  [5800]: https://github.com/sbt/sbt/pull/5800
+  [5804]: https://github.com/sbt/sbt/pull/5804
+  [5782]: https://github.com/sbt/sbt/pull/5782
+  [5788]: https://github.com/sbt/sbt/pull/5788
+  [5731]: https://github.com/sbt/sbt/pull/5731
+  [5839]: https://github.com/sbt/sbt/pull/5839
+  [5865]: https://github.com/sbt/sbt/pull/5865
+  [5878]: https://github.com/sbt/sbt/pull/5878
+  [io274]: https://github.com/sbt/io/pull/274
+  [io279]: https://github.com/sbt/io/pull/279
+  [lm309]: https://github.com/sbt/librarymanagement/pull/309
+  [lm340]: https://github.com/sbt/librarymanagement/pull/340
+  [zinc712]: https://github.com/sbt/zinc/pull/712
+  [zinc742]: https://github.com/sbt/zinc/pull/742
+  [zinc756]: https://github.com/sbt/zinc/pull/756
+  [zinc763]: https://github.com/sbt/zinc/pull/763
+  [zinc786]: https://github.com/sbt/zinc/pull/786
+  [zinc788]: https://github.com/sbt/zinc/pull/788
+  [@eed3si9n]: https://github.com/eed3si9n
+  [@eatkins]: https://github.com/eatkins
+  [@dwijnand]: https://github.com/dwijnand
+  [@hvesalai]: https://github.com/hvesalai
+  [@olafurpg]: https://github.com/olafurpg
+  [@raboof]: https://github.com/raboof
+  [@azolotko]: https://github.com/azolotko
+  [@nigredo-tori]: https://github.com/nigredo-tori
+  [@anilkumarmyla]: https://github.com/anilkumarmyla
+  [@bjaglin]: https://github.com/bjaglin
+  [@frosforever]: https://github.com/frosforever
+  [@adpi2]: https://github.com/adpi2
+  [@3rwww1]: https://github.com/3rwww1
+  [@slandelle]: https://github.com/slandelle
+  [@swaldman]: https://github.com/swaldman
+  [@retronym]: https://github.com/retronym
+  [@mspnf]: https://github.com/mspnf
+  [@iRevive]: https://github.com/iRevive
+  [@Duhemm]: https://github.com/Duhemm
+  [@jtjeferreira]: https://github.com/jtjeferreira
+  [@izharahmd]: https://github.com/izharahmd
+
 
 
 ## sbt 1.3.x releases
@@ -15012,6 +15220,24 @@ pomIncludeRepository := { (repo: MavenRepository) =>
   repo.root.startsWith("file:")
 }
 ```
+
+### Version scheme
+
+sbt 1.4.0 adds a new setting called `ThisBuild / versionScheme` to track version scheme of the build:
+
+```
+ThisBuild / versionScheme := Some("early-semver")
+```
+
+The supported values are `"early-semver"`, `"pvp"`, `"semver-spec"`, and `"strict"`. sbt will include this information into `pom.xml` and `ivy.xml` as a property.
+
+<table>
+<tr><th>versionScheme</th><th>description</th></tr>
+<tr><td><nobr><code>Some("early-semver")</code></nobr></td><td>Early Semantic Versioning that would keep binary compatibility across patch updates within 0.Y.z (for instance 0.13.0 and 0.13.2). Once it goes 1.0.0, it follows the regular Semantic Versioning where 1.1.0 is bincompat with 1.0.0.</td></tr>
+<tr><td><nobr><code>Some("semver-spec")</code></nobr></td><td><a href="https://semver.org/">Semantic Versioning</a> where all 0.y.z are treated as initial development (no bincompat guarantees)</td></tr>
+<tr><td><code>Some("pvp")</code></td><td><a href="https://pvp.haskell.org/">Haskell Package Versioning Policy</a> where X.Y are treated as major version</td></tr>
+<tr><td><code>Some("strict")</code></td><td>Requires exact match of version</td></tr>
+</table>
 
 
 Resolvers
