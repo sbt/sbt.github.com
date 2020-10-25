@@ -3535,6 +3535,13 @@ if applicable, username and password. For example, for HTTP:
 </p><pre><code class="">java -Dhttp.proxyHost=myproxy -Dhttp.proxyPort=8080 -Dhttp.proxyUser=username -Dhttp.proxyPassword=mypassword
 </code></pre><p>Replace <code>http</code> with <code>https</code> or <code>ftp</code> in the above command line to
 configure HTTPS or FTP.
+</p><h3 id="Path+encoding">Path encoding<a href="#Path+encoding" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>If you have files on your system that have non-ascii characters in them on a
+posix system, e.g. Linux or macOS, it may be necessary to set the <code>LC_CTYPE</code>
+environment variable. If this environment variable is not set to a UTF-8
+compatible locale, e.g. <code>LC_TYPE=en_US.UTF-8</code>, then sbt may crash with a
+<code>java.nio.file.InvalidPathException</code>. To see a list of available locales, run
+<code>locale -a</code>. For more information about locales, see
+<a href="https://docs.oracle.com/cd/E19455-01/806-0169/6j9hsml3j/index.html">International Language Environments Guide</a>.
 </p><h2 id="Using+Sonatype">Using Sonatype<a href="#Using+Sonatype" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Deploying to sonatype is easy! Just follow these simple steps:
 </p><h3 id="Sonatype+setup">Sonatype setup<a href="#Sonatype+setup" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The reference process for configuring and publishing to Sonatype is 
 described in their <a href="http://central.sonatype.org/pages/ossrh-guide.html">OSSRH Guide</a>.
