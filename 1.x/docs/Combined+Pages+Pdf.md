@@ -19618,18 +19618,12 @@ Here are sample caching steps that you can use:
 ```yml
     - name: Coursier cache
       uses: coursier/cache-action@v5
-    - name: Cache sbt
-      uses: actions/cache@v1
-      with:
-        path: $HOME/.sbt
-        key: ${{ runner.os }}-sbt-cache-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
     - name: Build and test
       run: |
         sbt -v +test
         rm -rf "$HOME/.ivy2/local" || true
         find $HOME/Library/Caches/Coursier/v1        -name "ivydata-*.properties" -delete || true
         find $HOME/.ivy2/cache                       -name "ivydata-*.properties" -delete || true
-        find $HOME/.ivy2/cache                       -name "*-LM-SNAPSHOT*"       -delete || true
         find $HOME/.cache/coursier/v1                -name "ivydata-*.properties" -delete || true
         find $HOME/.sbt                              -name "*.lock"               -delete || true
 ```
@@ -19731,7 +19725,7 @@ jobs:
       shell: bash
 ```
 
-### Sample setting
+### Sample .github/worflows/ci.yml setting
 
 Here's a sample that puts them all together. Remember, most of the sections are optional.
 
@@ -19772,11 +19766,6 @@ jobs:
         java-version: "adopt@1.${{ matrix.java }}"
     - name: Coursier cache
       uses: coursier/cache-action@v5
-    - name: Cache sbt
-      uses: actions/cache@v1
-      with:
-        path: $HOME/.sbt
-        key: ${{ runner.os }}-sbt-cache-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
     - name: Build and test
       run: |
         case ${{ matrix.jobtype }} in
@@ -19796,7 +19785,6 @@ jobs:
         rm -rf "$HOME/.ivy2/local" || true
         find $HOME/Library/Caches/Coursier/v1        -name "ivydata-*.properties" -delete || true
         find $HOME/.ivy2/cache                       -name "ivydata-*.properties" -delete || true
-        find $HOME/.ivy2/cache                       -name "*-LM-SNAPSHOT*"       -delete || true
         find $HOME/.cache/coursier/v1                -name "ivydata-*.properties" -delete || true
         find $HOME/.sbt                              -name "*.lock"               -delete || true
       shell: bash

@@ -114,18 +114,12 @@ java
 </p><p>Here are sample caching steps that you can use:
 </p><pre><code class="prettyprint lang-yml">    - name: Coursier cache
       uses: coursier/cache-action@v5
-    - name: Cache sbt
-      uses: actions/cache@v1
-      with:
-        path: $HOME/.sbt
-        key: ${{ runner.os }}-sbt-cache-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
     - name: Build and test
       run: |
         sbt -v +test
         rm -rf &quot;$HOME/.ivy2/local&quot; || true
         find $HOME/Library/Caches/Coursier/v1        -name &quot;ivydata-*.properties&quot; -delete || true
         find $HOME/.ivy2/cache                       -name &quot;ivydata-*.properties&quot; -delete || true
-        find $HOME/.ivy2/cache                       -name &quot;*-LM-SNAPSHOT*&quot;       -delete || true
         find $HOME/.cache/coursier/v1                -name &quot;ivydata-*.properties&quot; -delete || true
         find $HOME/.sbt                              -name &quot;*.lock&quot;               -delete || true
 </code></pre><p>With the above changes combined GitHub Actions will tar up the cached directories and uploads them to a cloud storage provider.
@@ -209,7 +203,7 @@ jobs:
             exit 1
         esac
       shell: bash
-</code></pre><h3 id="Sample+setting">Sample setting<a href="#Sample+setting" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Here’s a sample that puts them all together. Remember, most of the sections are optional.
+</code></pre><h3 id="Sample+.github%2Fworflows%2Fci.yml+setting">Sample .github/worflows/ci.yml setting<a href="#Sample+.github%2Fworflows%2Fci.yml+setting" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Here’s a sample that puts them all together. Remember, most of the sections are optional.
 </p><pre><code class="prettyprint lang-yml">name: CI
 on:
   pull_request:
@@ -246,11 +240,6 @@ jobs:
         java-version: &quot;adopt@1.${{ matrix.java }}&quot;
     - name: Coursier cache
       uses: coursier/cache-action@v5
-    - name: Cache sbt
-      uses: actions/cache@v1
-      with:
-        path: $HOME/.sbt
-        key: ${{ runner.os }}-sbt-cache-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
     - name: Build and test
       run: |
         case ${{ matrix.jobtype }} in
@@ -270,7 +259,6 @@ jobs:
         rm -rf &quot;$HOME/.ivy2/local&quot; || true
         find $HOME/Library/Caches/Coursier/v1        -name &quot;ivydata-*.properties&quot; -delete || true
         find $HOME/.ivy2/cache                       -name &quot;ivydata-*.properties&quot; -delete || true
-        find $HOME/.ivy2/cache                       -name &quot;*-LM-SNAPSHOT*&quot;       -delete || true
         find $HOME/.cache/coursier/v1                -name &quot;ivydata-*.properties&quot; -delete || true
         find $HOME/.sbt                              -name &quot;*.lock&quot;               -delete || true
       shell: bash
