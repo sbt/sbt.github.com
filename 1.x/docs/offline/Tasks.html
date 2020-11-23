@@ -195,9 +195,10 @@ like:
 
 lazy val util = project
 
+val filter = ScopeFilter( inProjects(core, util), inConfigurations(Compile) )
+
 lazy val root = project.settings(
    sources := {
-      val filter = ScopeFilter( inProjects(core, util), inConfigurations(Compile) )
       // each sources definition is of type Seq[File],
       //   giving us a Seq[Seq[File]] that we then flatten to Seq[File]
       val allSources: Seq[Seq[File]] = sources.all(filter).value
@@ -283,10 +284,11 @@ indicate what to do when a key is undefined.
   </tr>
 </table><p>The following contrived example sets the maximum errors to be the
 maximum of all aggregates of the current project.
-</p><pre><code class="prettyprint lang-scala">maxErrors := {
-   // select the transitive aggregates for this project, but not the project itself
-   val filter: ScopeFilter =
-      ScopeFilter( inAggregates(ThisProject, includeRoot=false) )
+</p><pre><code class="prettyprint lang-scala">// select the transitive aggregates for this project, but not the project itself
+val filter: ScopeFilter =
+   ScopeFilter( inAggregates(ThisProject, includeRoot=false) )
+
+maxErrors := {
    // get the configured maximum errors in each selected scope,
    // using 0 if not defined in a scope
    val allVersions: Seq[Int] =
@@ -534,13 +536,15 @@ task succeeds or fails.
 </p><p>For example:
 </p><pre><code class="prettyprint lang-scala">intTask := sys.error(&quot;Failed.&quot;)
 
-intTask := intTask.result.value match {
-   case Inc(inc: Incomplete) =&gt;
-      println(&quot;Ignoring failure: &quot; + inc)
-      3
-   case Value(v) =&gt;
-      println(&quot;Using successful result: &quot; + v)
-      v
+intTask := {
+   intTask.result.value match {
+      case Inc(inc: Incomplete) =&gt;
+         println(&quot;Ignoring failure: &quot; + inc)
+         3
+      case Value(v) =&gt;
+         println(&quot;Using successful result: &quot; + v)
+         v
+   }
 }
 </code></pre><p>This overrides the original <code>intTask</code> definition so that if the original
 task fails, the exception is printed and the constant <code>3</code> is returned.
