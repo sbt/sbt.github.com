@@ -49,7 +49,7 @@
 </p><h4 id="Remote+caching+via+Maven+repository">Remote caching via Maven repository<a href="#Remote+caching+via+Maven+repository" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>As of sbt 1.4.0, we’re reusing the Maven publishing and resolution mechanism to exchange the cached build outputs. This is likely to easy to get started using existing infrastructure such as Bintray.
 </p><p>In the future, we might consider simpler cache server like plain HTTP server that uses <code>PUT</code> and <code>GET</code>. This would require someone to host an HTTP server somewhere, but provisioning them might become simpler.
 </p><h4 id="ThisBuild+%2F+rootPaths">ThisBuild / rootPaths<a href="#ThisBuild+%2F+rootPaths" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>To abstract machine-specific paths such as your working directory and Coursier cache directory, sbt keeps a map of root paths in <code>ThisBuild / rootPaths</code>. If your build adds special paths for your source or output directory, add them to <code>ThisBuild / rootPaths</code>.
-</p><h4 id="remoteCacheId">remoteCacheId<a href="#remoteCacheId" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>As of sbt 1.4.0, <code>remoteCacheId</code> uses Git commit id. A better implementation might be to use the sum of content hash for all inputs to avoid unnecessary network IO.
+</p><h4 id="remoteCacheId">remoteCacheId<a href="#remoteCacheId" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>As of sbt 1.4.2, <code>remoteCacheId</code> uses hash of content hashes for input sources.
 </p><div class="bottom nav">
                 <div class="row">
                   <div class="col-md-auto">
