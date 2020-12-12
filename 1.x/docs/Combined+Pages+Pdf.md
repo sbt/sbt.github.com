@@ -137,8 +137,8 @@ If you have any trouble running sbt, see [Setup Notes][Setup-Notes] on
 terminal encodings, HTTP proxies, and JVM options.
 
 
-  [ZIP]: https://github.com/sbt/sbt/releases/download/sbt-1.4.4.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/sbt-1.4.4.tgz
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.4.4/sbt-1.4.4.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.4.4/sbt-1.4.4.tgz
   [Manual-Installation]: Manual-Installation.html
   [AdoptOpenJDK]: https://adoptopenjdk.net/
 
