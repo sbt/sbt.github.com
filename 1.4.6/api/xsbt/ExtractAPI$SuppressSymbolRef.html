@@ -1,0 +1,913 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+          <title></title>
+          <meta name="description" content="" />
+          <meta name="keywords" content="" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      
+      <link href="../lib/index.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../lib/jquery.min.js"></script>
+      <script type="text/javascript" src="../lib/jquery.panzoom.min.js"></script>
+      <script type="text/javascript" src="../lib/jquery.mousewheel.min.js"></script>
+      <script type="text/javascript" src="../lib/index.js"></script>
+      <script type="text/javascript" src="../index.js"></script>
+      <script type="text/javascript" src="../lib/scheduler.js"></script>
+      <script type="text/javascript" src="../lib/template.js"></script>
+      
+      <script type="text/javascript">
+        /* this variable can be used by the JS to determine the path to the root document */
+        var toRoot = '../';
+      </script>
+    
+        </head>
+        <body>
+      <div id="search">
+        <span id="doc-title"><span id="doc-version"></span></span>
+        <span class="close-results"><span class="left">&lt;</span> Back</span>
+        <div id="textfilter">
+          <span class="input">
+            <input autocapitalize="none" placeholder="Search" id="index-input" type="text" accesskey="/" />
+            <i class="clear material-icons"></i>
+            <i id="search-icon" class="material-icons"></i>
+          </span>
+        </div>
+    </div>
+      <div id="search-results">
+        <div id="search-progress">
+          <div id="progress-fill"></div>
+        </div>
+        <div id="results-content">
+          <div id="entity-results"></div>
+          <div id="member-results"></div>
+        </div>
+      </div>
+      <div id="content-scroll-container" style="-webkit-overflow-scrolling: touch;">
+        <div id="content-container" style="-webkit-overflow-scrolling: touch;">
+          <div id="subpackage-spacer">
+            <div id="packages">
+              <h1>Packages</h1>
+              <ul>
+                <li name="_root_.root" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="_root_"></a><a id="root:_root_"></a>
+      <span class="permalink">
+      <a href="../index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../index.html"><span class="name">root</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="_root_.xsbt" visbl="pub" class="indented1 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="xsbt"></a><a id="xsbt:xsbt"></a>
+      <span class="permalink">
+      <a href="../xsbt/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="index.html"><span class="name">xsbt</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="xsbt.ExtractAPI" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ExtractAPI[GlobalType&lt;:scala.tools.nsc.Global]extendsCompatwithClassNamewithGlobalHelpers"></a><a id="ExtractAPI[GlobalType&lt;:Global]:ExtractAPI[GlobalType]"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="Extracts full (including private members) API representation out of Symbols and Types." href="ExtractAPI.html"><span class="name">ExtractAPI</span></a><span class="tparams">[<span name="GlobalType">GlobalType &lt;: <span class="extype" name="scala.tools.nsc.Global">Global</span></span>]</span><span class="result"> extends <a href="Compat.html" class="extype" name="xsbt.Compat">Compat</a> with <a href="ClassName.html" class="extype" name="xsbt.ClassName">ClassName</a> with <a href="GlobalHelpers.html" class="extype" name="xsbt.GlobalHelpers">GlobalHelpers</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Extracts full (including private members) API representation out of Symbols and Types.</p><div class="fullcomment"><div class="comment cmt"><p>Extracts full (including private members) API representation out of Symbols and Types.</p><p>API for each class is extracted separately. Inner classes are represented as an empty (without members)
+member of the outer class and as a separate class with full API representation. For example:</p><p>class A {
+  class B {
+    def foo: Int = 123
+  }
+}</p><p>Is represented as:</p><p>// className = A
+class A {
+  class B
+}
+// className = A.B
+class A.B {
+  def foo: Int
+}</p><p>Each compilation unit should be processed by a fresh instance of this class.</p><p>NOTE: This class extract *full* API representation. In most of other places in the incremental compiler,
+only non-private (accessible from other compilation units) members are relevant. Other parts of the
+incremental compiler filter out private definitions before processing API structures. Check SameAPI for
+an example.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="xsbt">xsbt</a></dd></dl></div>
+    </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="GlobalHelpers$Feedback$.html" title="Define common error messages for error reporting and assertions."></a>
+                        <a href="GlobalHelpers$Feedback$.html" title="Define common error messages for error reporting and assertions.">Feedback</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="GlobalHelpers$MacroExpansionOf$.html" title=""></a>
+                        <a href="GlobalHelpers$MacroExpansionOf$.html" title="">MacroExpansionOf</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="" title="Replace all types that directly refer to the forbidden symbol by NoType."></a>
+                        <a href="" title="Replace all types that directly refer to the forbidden symbol by NoType.">SuppressSymbolRef</a>
+                      </li>
+              </ul>
+            </div>
+          </div>
+          <div id="content">
+            <body class="class type">
+      <div id="definition">
+        <div class="big-circle class">c</div>
+        <p id="owner"><a href="index.html" class="extype" name="xsbt">xsbt</a>.<a href="ExtractAPI.html" class="extype" name="xsbt.ExtractAPI">ExtractAPI</a></p>
+        <h1>SuppressSymbolRef<span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span></h1>
+        <h3><span class="morelinks"></span></h3>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">SuppressSymbolRef</span><span class="result"> extends <span class="extype" name="scala.reflect.internal.tpe.TypeMaps.TypeMap">GlobalType.TypeMap</span></span>
+      </span>
+      </h4>
+
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Replace all types that directly refer to the <code>forbidden</code> symbol by <code>NoType</code>.
+(a specialized version of substThisAndSym)
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/sbt/sbt/tree/002bde7ee0569de68b544baa25a852bcf448dc95/Users/eed3si9n/work/sbt-modules/zinc/internal/compiler-bridge/src/main/scala/xsbt/ExtractAPI.scala" target="_blank">ExtractAPI.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">
+            Linear Supertypes
+          </span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.reflect.internal.tpe.TypeMaps.TypeMap">GlobalType.TypeMap</span>, (<span class="extype" name="scala.reflect.internal.Types.Type">GlobalType.Type</span>) ⇒ <span class="extype" name="scala.reflect.internal.Types.Type">GlobalType.Type</span>, <a href="../scala/index.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div class="toggle"></div>
+        <div id="memberfilter">
+          <i class="material-icons arrow"></i>
+          <span class="input">
+            <input id="mbrsel-input" placeholder="Filter all members" type="text" accesskey="/" />
+          </span>
+          <i class="clear material-icons"></i>
+        </div>
+        <div id="filterby">
+          <div id="order">
+            <span class="filtertype">Ordering</span>
+            <ol>
+              
+              <li class="alpha in"><span>Alphabetic</span></li>
+              <li class="inherit out"><span>By Inheritance</span></li>
+            </ol>
+          </div>
+          <div class="ancestors">
+                  <span class="filtertype">Inherited<br />
+                  </span>
+                  <ol id="linearization">
+                    <li class="in" name="xsbt.ExtractAPI.SuppressSymbolRef"><span>SuppressSymbolRef</span></li><li class="in" name="scala.reflect.internal.tpe.TypeMaps.TypeMap"><span>TypeMap</span></li><li class="in" name="scala.Function1"><span>Function1</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  </ol>
+                </div><div class="ancestors">
+              <span class="filtertype"></span>
+              <ol>
+                <li class="hideall out"><span>Hide All</span></li>
+                <li class="showall in"><span>Show All</span></li>
+              </ol>
+            </div>
+          <div id="visbl">
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+            </div>
+        </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        <div id="constructors" class="members">
+              <h3>Instance Constructors</h3>
+              <ol><li name="xsbt.ExtractAPI.SuppressSymbolRef#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(forbidden:ExtractAPI.this.global.Symbol):ExtractAPI.this.SuppressSymbolRef"></a><a id="&lt;init&gt;:SuppressSymbolRef"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#&lt;init&gt;(forbidden:ExtractAPI.this.global.Symbol):ExtractAPI.this.SuppressSymbolRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name">SuppressSymbolRef</span><span class="params">(<span name="forbidden">forbidden: <span class="extype" name="scala.reflect.internal.Symbols.Symbol">GlobalType.Symbol</span></span>)</span>
+      </span>
+      
+      
+    </li></ol>
+            </div>
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="scala.reflect.internal.tpe.TypeMaps.TypeMap.TypeMapTransformer" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="TypeMapTransformerextendsTypeMaps.this.Transformer"></a><a id="TypeMapTransformer:TypeMapTransformer"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#TypeMapTransformerextendsTypeMaps.this.Transformer" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">TypeMapTransformer</span><span class="result"> extends <span class="extype" name="scala.reflect.api.Trees.Transformer">scala.reflect.internal.SymbolTable.Transformer</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TypeMap</dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        <div class="values members">
+              <h3>Value Members</h3>
+              <ol>
+                <li name="scala.AnyRef#!=" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a><a id="!=(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#!=(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html###():Int" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#==(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Function1#andThen" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="andThen[A](g:R=&gt;A):T1=&gt;A"></a><a id="andThen[A]((GlobalType.Type)⇒A):(GlobalType.Type)⇒A"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#andThen[A](g:R=&gt;A):T1=&gt;A" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">andThen</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="g">g: (<span class="extype" name="scala.reflect.internal.Types.Type">GlobalType.Type</span>) ⇒ <span class="extype" name="scala.Function1.andThen.A">A</span></span>)</span><span class="result">: (<span class="extype" name="scala.reflect.internal.Types.Type">GlobalType.Type</span>) ⇒ <span class="extype" name="scala.Function1.andThen.A">A</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1</dd><dt>Annotations</dt><dd>
+                <span class="name">@unspecialized</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="xsbt.ExtractAPI.SuppressSymbolRef#apply" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply(tp:ExtractAPI.this.global.Type):ExtractAPI.this.global.Type"></a><a id="apply(GlobalType.Type):GlobalType.Type"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#apply(tp:ExtractAPI.this.global.Type):ExtractAPI.this.global.Type" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="params">(<span name="tp">tp: <span class="extype" name="scala.reflect.internal.Types.Type">GlobalType.Type</span></span>)</span><span class="result">: <span class="extype" name="scala.reflect.internal.Types.Type">GlobalType.Type</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="xsbt.ExtractAPI.SuppressSymbolRef">SuppressSymbolRef</a> → TypeMap → Function1</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#asInstanceOf[T0]:T0" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a><a id="clone():AnyRef"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#clone():Object" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="../scala/index.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+                <span class="name">@native</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.Function1#compose" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="compose[A](g:A=&gt;T1):A=&gt;R"></a><a id="compose[A]((A)⇒GlobalType.Type):(A)⇒GlobalType.Type"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#compose[A](g:A=&gt;T1):A=&gt;R" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">compose</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="g">g: (<span class="extype" name="scala.Function1.compose.A">A</span>) ⇒ <span class="extype" name="scala.reflect.internal.Types.Type">GlobalType.Type</span></span>)</span><span class="result">: (<span class="extype" name="scala.Function1.compose.A">A</span>) ⇒ <span class="extype" name="scala.reflect.internal.Types.Type">GlobalType.Type</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1</dd><dt>Annotations</dt><dd>
+                <span class="name">@unspecialized</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#eq(x$1:AnyRef):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="../scala/index.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#equals(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.reflect.internal.tpe.TypeMaps.TypeMap#flipped" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="flipped[T](body:=&gt;T):T"></a><a id="flipped[T](⇒T):T"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#flipped[T](body:=&gt;T):T" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">flipped</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="body">body: ⇒ <span class="extype" name="scala.reflect.internal.tpe.TypeMaps.TypeMap.flipped.T">T</span></span>)</span><span class="result">: <span class="extype" name="scala.reflect.internal.tpe.TypeMaps.TypeMap.flipped.T">T</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TypeMap</dd><dt>Annotations</dt><dd>
+                <span class="name">@inline</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#getClass():Class[_]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#hashCode():Int" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#isInstanceOf[T0]:Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.reflect.internal.tpe.TypeMaps.TypeMap#mapOver" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="mapOver(tree:TypeMaps.this.Tree,giveup:()=&gt;Nothing):TypeMaps.this.Tree"></a><a id="mapOver(GlobalType.Tree,()⇒Nothing):GlobalType.Tree"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#mapOver(tree:TypeMaps.this.Tree,giveup:()=&gt;Nothing):TypeMaps.this.Tree" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">mapOver</span><span class="params">(<span name="tree">tree: <span class="extype" name="scala.reflect.internal.Trees.Tree">GlobalType.Tree</span></span>, <span name="giveup">giveup: () ⇒ <span class="extype" name="scala.Nothing">Nothing</span></span>)</span><span class="result">: <span class="extype" name="scala.reflect.internal.Trees.Tree">GlobalType.Tree</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TypeMap</dd></dl></div>
+    </li><li name="scala.reflect.internal.tpe.TypeMaps.TypeMap#mapOver" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="mapOver(tree:TypeMaps.this.Tree):TypeMaps.this.Tree"></a><a id="mapOver(GlobalType.Tree):GlobalType.Tree"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#mapOver(tree:TypeMaps.this.Tree):TypeMaps.this.Tree" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">mapOver</span><span class="params">(<span name="tree">tree: <span class="extype" name="scala.reflect.internal.Trees.Tree">GlobalType.Tree</span></span>)</span><span class="result">: <span class="extype" name="scala.reflect.internal.Trees.Tree">GlobalType.Tree</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TypeMap</dd></dl></div>
+    </li><li name="scala.reflect.internal.tpe.TypeMaps.TypeMap#mapOver" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="mapOver(annot:TypeMaps.this.AnnotationInfo):TypeMaps.this.AnnotationInfo"></a><a id="mapOver(GlobalType.AnnotationInfo):GlobalType.AnnotationInfo"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#mapOver(annot:TypeMaps.this.AnnotationInfo):TypeMaps.this.AnnotationInfo" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">mapOver</span><span class="params">(<span name="annot">annot: <span class="extype" name="scala.reflect.internal.AnnotationInfos.AnnotationInfo">GlobalType.AnnotationInfo</span></span>)</span><span class="result">: <span class="extype" name="scala.reflect.internal.AnnotationInfos.AnnotationInfo">GlobalType.AnnotationInfo</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TypeMap</dd></dl></div>
+    </li><li name="scala.reflect.internal.tpe.TypeMaps.TypeMap#mapOver" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="mapOver(origSyms:List[TypeMaps.this.Symbol]):List[TypeMaps.this.Symbol]"></a><a id="mapOver(List[GlobalType.Symbol]):List[GlobalType.Symbol]"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#mapOver(origSyms:List[TypeMaps.this.Symbol]):List[TypeMaps.this.Symbol]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">mapOver</span><span class="params">(<span name="origSyms">origSyms: <a href="../scala/index.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="scala.reflect.internal.Symbols.Symbol">GlobalType.Symbol</span>]</span>)</span><span class="result">: <a href="../scala/index.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="scala.reflect.internal.Symbols.Symbol">GlobalType.Symbol</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TypeMap</dd></dl></div>
+    </li><li name="scala.reflect.internal.tpe.TypeMaps.TypeMap#mapOver" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="mapOver(scope:TypeMaps.this.Scope):TypeMaps.this.Scope"></a><a id="mapOver(GlobalType.Scope):GlobalType.Scope"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#mapOver(scope:TypeMaps.this.Scope):TypeMaps.this.Scope" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">mapOver</span><span class="params">(<span name="scope">scope: <span class="extype" name="scala.reflect.internal.Scopes.Scope">GlobalType.Scope</span></span>)</span><span class="result">: <span class="extype" name="scala.reflect.internal.Scopes.Scope">GlobalType.Scope</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TypeMap</dd></dl></div>
+    </li><li name="scala.reflect.internal.tpe.TypeMaps.TypeMap#mapOver" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="mapOver(tp:TypeMaps.this.Type):TypeMaps.this.Type"></a><a id="mapOver(GlobalType.Type):GlobalType.Type"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#mapOver(tp:TypeMaps.this.Type):TypeMaps.this.Type" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">mapOver</span><span class="params">(<span name="tp">tp: <span class="extype" name="scala.reflect.internal.Types.Type">GlobalType.Type</span></span>)</span><span class="result">: <span class="extype" name="scala.reflect.internal.Types.Type">GlobalType.Type</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TypeMap</dd></dl></div>
+    </li><li name="scala.reflect.internal.tpe.TypeMaps.TypeMap#mapOverAnnotArgs" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="mapOverAnnotArgs(args:List[TypeMaps.this.Tree]):List[TypeMaps.this.Tree]"></a><a id="mapOverAnnotArgs(List[GlobalType.Tree]):List[GlobalType.Tree]"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#mapOverAnnotArgs(args:List[TypeMaps.this.Tree]):List[TypeMaps.this.Tree]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">mapOverAnnotArgs</span><span class="params">(<span name="args">args: <a href="../scala/index.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="scala.reflect.internal.Trees.Tree">GlobalType.Tree</span>]</span>)</span><span class="result">: <a href="../scala/index.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="scala.reflect.internal.Trees.Tree">GlobalType.Tree</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TypeMap</dd></dl></div>
+    </li><li name="scala.reflect.internal.tpe.TypeMaps.TypeMap#mapOverAnnotations" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="mapOverAnnotations(annots:List[TypeMaps.this.AnnotationInfo]):List[TypeMaps.this.AnnotationInfo]"></a><a id="mapOverAnnotations(List[GlobalType.AnnotationInfo]):List[GlobalType.AnnotationInfo]"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#mapOverAnnotations(annots:List[TypeMaps.this.AnnotationInfo]):List[TypeMaps.this.AnnotationInfo]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">mapOverAnnotations</span><span class="params">(<span name="annots">annots: <a href="../scala/index.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="scala.reflect.internal.AnnotationInfos.AnnotationInfo">GlobalType.AnnotationInfo</span>]</span>)</span><span class="result">: <a href="../scala/index.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="scala.reflect.internal.AnnotationInfos.AnnotationInfo">GlobalType.AnnotationInfo</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TypeMap</dd></dl></div>
+    </li><li name="scala.reflect.internal.tpe.TypeMaps.TypeMap#mapOverArgs" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="mapOverArgs(args:List[TypeMaps.this.Type],tparams:List[TypeMaps.this.Symbol]):List[TypeMaps.this.Type]"></a><a id="mapOverArgs(List[GlobalType.Type],List[GlobalType.Symbol]):List[GlobalType.Type]"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#mapOverArgs(args:List[TypeMaps.this.Type],tparams:List[TypeMaps.this.Symbol]):List[TypeMaps.this.Type]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">mapOverArgs</span><span class="params">(<span name="args">args: <a href="../scala/index.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="scala.reflect.internal.Types.Type">GlobalType.Type</span>]</span>, <span name="tparams">tparams: <a href="../scala/index.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="scala.reflect.internal.Symbols.Symbol">GlobalType.Symbol</span>]</span>)</span><span class="result">: <a href="../scala/index.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="scala.reflect.internal.Types.Type">GlobalType.Type</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>TypeMap</dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#ne(x$1:AnyRef):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="../scala/index.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#notify():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#notifyAll():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.Function1#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#toString():String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1 → AnyRef → Any</dd></dl></div>
+    </li><li name="scala.reflect.internal.tpe.TypeMaps.TypeMap#variance" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="variance:scala.reflect.internal.Variance"></a><a id="variance:Variance"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#variance:scala.reflect.internal.Variance" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">variance</span><span class="result">: <span class="extype" name="scala.reflect.internal.Variance">Variance</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TypeMap</dd></dl></div>
+    </li><li name="scala.reflect.internal.tpe.TypeMaps.TypeMap#variance_=" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="variance_=(x:scala.reflect.internal.Variance):Unit"></a><a id="variance_=(Variance):Unit"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#variance_=(x:scala.reflect.internal.Variance):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: variance_$eq" class="name">variance_=</span><span class="params">(<span name="x">x: <span class="extype" name="scala.reflect.internal.Variance">Variance</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TypeMap</dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a><a id="wait(Long):Unit"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#wait(x$1:Long):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+                <span class="name">@native</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.reflect.internal.tpe.TypeMaps.TypeMap#withVariance" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="withVariance[T](v:scala.reflect.internal.Variance)(body:=&gt;T):T"></a><a id="withVariance[T](Variance)(⇒T):T"></a>
+      <span class="permalink">
+      <a href="../xsbt/ExtractAPI$SuppressSymbolRef.html#withVariance[T](v:scala.reflect.internal.Variance)(body:=&gt;T):T" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">withVariance</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="v">v: <span class="extype" name="scala.reflect.internal.Variance">Variance</span></span>)</span><span class="params">(<span name="body">body: ⇒ <span class="extype" name="scala.reflect.internal.tpe.TypeMaps.TypeMap.withVariance.T">T</span></span>)</span><span class="result">: <span class="extype" name="scala.reflect.internal.tpe.TypeMaps.TypeMap.withVariance.T">T</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TypeMap</dd><dt>Annotations</dt><dd>
+                <span class="name">@inline</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li>
+              </ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.reflect.internal.tpe.TypeMaps.TypeMap">
+              <h3>Inherited from <span class="extype" name="scala.reflect.internal.tpe.TypeMaps.TypeMap">GlobalType.TypeMap</span></h3>
+            </div><div class="parent" name="scala.Function1">
+              <h3>Inherited from (<span class="extype" name="scala.reflect.internal.Types.Type">GlobalType.Type</span>) ⇒ <span class="extype" name="scala.reflect.internal.Types.Type">GlobalType.Type</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <a href="../scala/index.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+    </body>
+          </div>
+        </div>
+      </div>
+    </body>
+      </html>
