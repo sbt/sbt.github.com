@@ -5983,8 +5983,19 @@ You might at first imagine server to be something that runs on remote servers, a
 in addition to accepting input from the terminal, server also to accepts input from the network.
 This allows multiple clients to connect to a <em>single session</em> of sbt.
 The primary use case we have in mind for the client is tooling integration such as editors and IDEs.
-As a proof of concept, we created a Visual Studio Code extension called <a href="https://marketplace.visualstudio.com/items?itemName=lightbend.vscode-sbt-scala">Scala (sbt)</a>.
-</p><h3 id="Language+Server+Protocol+3.0">Language Server Protocol 3.0<a href="#Language+Server+Protocol+3.0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The wire protocol we use is <a href="https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md">Language Server Protocol 3.0</a> (LSP), which in turn is based on <a href="http://www.jsonrpc.org/specification">JSON-RPC</a>.
+</p><h3 id="Metals+integration">Metals integration<a href="#Metals+integration" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>As of sbt 1.4.x, sbt server implements <a href="https://build-server-protocol.github.io/">Build Server Protocol</a> used by Metals.
+Here is how to use sbt server as Metals backend.
+</p><ol><li>Delete existing <code>.bsp</code>, <code>.metals</code>, <code>.bloop</code> directories if any
+</li><li>Open VS Code in the working directory
+</li><li>Ignore the prompt to import the project
+</li><li>Start <code>sbt</code> in the View &gt; Terminal tab. Wait till it displays “sbt server started”
+</li><li><code>clean</code>, and <code>Test/compile</code> to generate SemanticDB for sources
+</li><li>From command palette (Cmd-Shift-P in VS Code) issue “Metals: Switch Build Server”, and select “sbt”
+</li><li>Navigate to Metals view, and select “Connect to build server”
+</li><li>Once Metals finishes indexing, it should be able to perform code completion etc
+</li></ol><img src="files/metals-switch-build-server.png" style="margin-bottom: 1em">
+<img src="files/metals-completion.png" style="width: 100%; height: 100%; margin-bottom: 1em">
+<h3 id="Language+Server+Protocol+3.0">Language Server Protocol 3.0<a href="#Language+Server+Protocol+3.0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The wire protocol we use is <a href="https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md">Language Server Protocol 3.0</a> (LSP), which in turn is based on <a href="http://www.jsonrpc.org/specification">JSON-RPC</a>.
 </p><p>The base protocol consists of a header and a content part (comparable to HTTP). The header and content part are separated by a <code>\r\n</code>.
 </p><p>Currently the following header fields are supported:
 </p><ul><li><code>Content-Length</code>: The length of the content part in bytes. If you don’t provide this header, we’ll read until the end of the line.
