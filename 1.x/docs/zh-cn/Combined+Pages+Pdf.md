@@ -57,9 +57,9 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
 如果你在运行 sbt 时遇到任何问题，查看 [安装建议][Setup-Notes] 中的终端编码（terminal encoding），HTTP 代理，JVM 参数。
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.4.5/sbt-1.4.5.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.4.5/sbt-1.4.5.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.4.5/sbt-1.4.5.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.4.6/sbt-1.4.6.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.4.6/sbt-1.4.6.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.4.6/sbt-1.4.6.tgz
   [Manual-Installation]: Manual-Installation.html
 
 在 macOS 上安装 sbt
@@ -86,9 +86,9 @@ $ sdk install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.4.5/sbt-1.4.5.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.4.5/sbt-1.4.5.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.4.5/sbt-1.4.5.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.4.6/sbt-1.4.6.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.4.6/sbt-1.4.6.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.4.6/sbt-1.4.6.tgz
 
 在 Windows 上安装 sbt
 -------------------------
@@ -112,11 +112,11 @@ $ scoop install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.4.5/sbt-1.4.5.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.4.5/sbt-1.4.5.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.4.5/sbt-1.4.5.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.4.5.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.4.5.deb
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.4.6/sbt-1.4.6.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.4.6/sbt-1.4.6.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.4.6/sbt-1.4.6.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.4.6.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.4.6.deb
 
 在 Linux 上安装 sbt
 -----------------------
@@ -233,7 +233,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "hello",
     version := "1.0",
-    scalaVersion := "2.12.10"
+    scalaVersion := "2.12.13"
   )
 ```
 
@@ -244,10 +244,10 @@ lazy val root = (project in file("."))
 
 ### 设置 sbt 版本
 
-你可以通过创建 `hello/project/build.properties` 文件强制指定一个版本的 sbt。在这个文件里，编写如下内容来强制使用 1.4.5：
+你可以通过创建 `hello/project/build.properties` 文件强制指定一个版本的 sbt。在这个文件里，编写如下内容来强制使用 1.4.6：
 
 ```
-sbt.version=1.4.5
+sbt.version=1.4.6
 ```
 
 sbt 在不同的 release 版本中是 99% 兼容的。但是在 `project/build.properties` 文件中设置 sbt 的版本仍然能避免一些潜在的混淆。
@@ -526,7 +526,7 @@ lazy val root = (project in file("."))
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.10"
+ThisBuild / scalaVersion := "2.12.13"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -665,7 +665,7 @@ bare `.sbt` 构建定义由一个 `Setting[_]` 表达式的列表组成，而不
 ```scala
 name := "hello"
 version := "1.0"
-scalaVersion := "2.12.10"
+scalaVersion := "2.12.13"
 ```
 
 ### 添加依赖库
@@ -676,7 +676,7 @@ scalaVersion := "2.12.10"
 val derby = "org.apache.derby" % "derby" % "10.4.1.3"
 
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.10"
+ThisBuild / scalaVersion := "2.12.13"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -759,7 +759,7 @@ scalacOptions := {
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.10"
+ThisBuild / scalaVersion := "2.12.13"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -794,7 +794,7 @@ lazy val root = (project in file("."))
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.10"
+ThisBuild / scalaVersion := "2.12.13"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -916,7 +916,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "Hello",
     organization := "com.example",
-    scalaVersion := "2.12.10",
+    scalaVersion := "2.12.13",
     version := "0.1.0-SNAPSHOT",
     scalacOptions := List("-encoding", "utf8", "-Xfatal-warnings", "-deprecation", "-unchecked"),
     scalacOptions := {
@@ -1476,7 +1476,7 @@ lazy val projA = (project in file("a"))
 `projA / name` 的值是什么?
 
 1. `"foo-2.11.11"`
-2. `"foo-2.12.10"`
+2. `"foo-2.12.13"`
 3. 还有什么吗
 
 答案是 `"foo-2.11.11"`。
@@ -2006,7 +2006,7 @@ To factor out common settings across multiple projects, create a sequence named 
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.12.10"
+  scalaVersion := "2.12.13"
 )
 
 lazy val core = (project in file("core"))
@@ -2307,7 +2307,7 @@ val sampleIntTask = taskKey[Int]("A sample int task.")
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.10"
+ThisBuild / scalaVersion := "2.12.13"
 
 lazy val library = (project in file("library"))
   .settings(
@@ -2352,7 +2352,7 @@ val sampleStringTask = taskKey[String]("A sample string task.")
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.10"
+ThisBuild / scalaVersion := "2.12.13"
 
 lazy val library = (project in file("library"))
   .settings(
@@ -2569,7 +2569,7 @@ import Dependencies._
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.10"
+ThisBuild / scalaVersion := "2.12.13"
 
 lazy val backend = (project in file("backend"))
   .settings(

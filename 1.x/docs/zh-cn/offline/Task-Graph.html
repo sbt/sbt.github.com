@@ -75,7 +75,7 @@ val clean = taskKey[Unit](&quot;Deletes files produced by the build, such as gen
 <strong>在任务引擎评估 <code>scalacOptions</code> 的打开 <code>{</code>，无论它出现在主体中的哪一行， <code>update</code> 和 <code>clean</code> 任务都已完成</strong>。
 </p><p>请参见以下示例：
 </p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.10&quot;
+ThisBuild / scalaVersion := &quot;2.12.13&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -101,7 +101,7 @@ lazy val root = (project in file(&quot;.&quot;))
 </code></pre><p>即使 <code>val ur = ...</code> 出现在 <code>log.info(&quot;123&quot;)</code> 和 <code>log.info(&quot;456&quot;)</code>，<code>update</code> 任务的评估还是要先于它们进行。
 </p><p>这是另一个例子：
 </p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.10&quot;
+ThisBuild / scalaVersion := &quot;2.12.13&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -189,7 +189,7 @@ hello
   .settings(
     name := &quot;Hello&quot;,
     organization := &quot;com.example&quot;,
-    scalaVersion := &quot;2.12.10&quot;,
+    scalaVersion := &quot;2.12.13&quot;,
     version := &quot;0.1.0-SNAPSHOT&quot;,
     scalacOptions := List(&quot;-encoding&quot;, &quot;utf8&quot;, &quot;-Xfatal-warnings&quot;, &quot;-deprecation&quot;, &quot;-unchecked&quot;),
     scalacOptions := {
