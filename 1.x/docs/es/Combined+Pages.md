@@ -1907,7 +1907,7 @@ subproyectos. `foo/project/Build.scala` sería ignorado.
   [Basic-Def]: Basic-Def.html
   [Scopes]: Scopes.html
   [Make]: https://en.wikipedia.org/wiki/Make_(software)
-  [Ant]: http://ant.apache.org/
+  [Ant]: https://ant.apache.org/
   [Rake]: https://ruby.github.io/rake/
 
 Grafos de tareas
@@ -3342,9 +3342,9 @@ Las dependencias no gestionadas funcionan así: copia jars en `lib` y serán
 añadidas en el classpath del proyecto. Y no hay más.
 
 También puedes copiar jars para tests como
-[ScalaCheck](http://scalacheck.org/),
+[ScalaCheck](https://scalacheck.org/),
 [Specs2](http://specs2.org) y 
-[ScalaTest](http://www.scalatest.org/) en `lib`.
+[ScalaTest](https://www.scalatest.org/) en `lib`.
 
 Las dependencias en `lib` aparecen en todos los classpaths (para `compile`,
 `test`, `run` y `console`). Si quieres cambiar el classpath para una sola de esas tareas deberías de ajustar `Compile / dependencyClasspath` o
@@ -3571,9 +3571,9 @@ de sbt no deberías ver listado el jar de Derby. Pero si escribes
 `show test:dependencyClasspath` sí que deberías de verlo.
 
 Habitualmente, las dependencias relacionadas con tests tales como 
-[ScalaCheck](http://scalacheck.org/),
+[ScalaCheck](https://scalacheck.org/),
 [Specs2](http://specs2.org) y 
-[ScalaTest](http://www.scalatest.org/) debería de ir definidas con `% "test"`.
+[ScalaTest](https://www.scalatest.org/) debería de ir definidas con `% "test"`.
 
 Existen más detalles, consejos y trucos relacionados con las dependencias de
 bibliotecas en [esta página][Library-Management].

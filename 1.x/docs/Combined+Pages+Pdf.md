@@ -1964,7 +1964,7 @@ sub-projects. `foo/project/Build.scala` would be ignored.
   [Basic-Def]: Basic-Def.html
   [Scopes]: Scopes.html
   [Make]: https://en.wikipedia.org/wiki/Make_(software)
-  [Ant]: http://ant.apache.org/
+  [Ant]: https://ant.apache.org/
   [Rake]: https://ruby.github.io/rake/
 
 Task graph
@@ -3298,9 +3298,9 @@ Unmanaged dependencies work like this: add jars to `lib` and they will be
 placed on the project classpath. Not much else to it!
 
 You can place test jars such as
-[ScalaCheck](http://scalacheck.org/),
+[ScalaCheck](https://scalacheck.org/),
 [Specs2](http://specs2.org), and
-[ScalaTest](http://www.scalatest.org/) in `lib` as well.
+[ScalaTest](https://www.scalatest.org/) in `lib` as well.
 
 Dependencies in `lib` go on all the classpaths (for `compile`, `test`, `run`,
 and `console`). If you wanted to change the classpath for just one of
@@ -3524,9 +3524,9 @@ prompt, you should not see the derby jar. But if you type
 `show test:dependencyClasspath`, you should see the derby jar in the list.
 
 Typically, test-related dependencies such as
-[ScalaCheck](http://scalacheck.org/),
+[ScalaCheck](https://scalacheck.org/),
 [Specs2](http://specs2.org), and
-[ScalaTest](http://www.scalatest.org/) would be defined with `% "test"`.
+[ScalaTest](https://www.scalatest.org/) would be defined with `% "test"`.
 
 There are more details and tips-and-tricks related to library
 dependencies on [this page][Library-Management].
@@ -5097,7 +5097,7 @@ Thank you all.
   [@harrah]: https://github.com/harrah
   [@jsuereth]: https://github.com/jsuereth
   [@eed3si9n]: https://github.com/eed3si9n
-  [@dwijnand]: http://github.com/dwijnand
+  [@dwijnand]: https://github.com/dwijnand
   [@gkossakowski]: https://github.com/gkossakowski
   [@Duhemm]: https://github.com/Duhemm
   [@jvican]: https://github.com/jvican
@@ -7094,7 +7094,7 @@ The last feature release of sbt 1 was [sbt 1.2.0](https://www.lightbend.com/blog
   [zinc655]: https://github.com/sbt/zinc/pull/655
   [@eed3si9n]: https://github.com/eed3si9n
   [@eatkins]: https://github.com/eatkins
-  [@dwijnand]: http://github.com/dwijnand
+  [@dwijnand]: https://github.com/dwijnand
   [@cunei]: https://github.com/cunei
   [@Falmarri]: https://github.com/Falmarri
   [@raboof]: https://github.com/raboof
@@ -7175,7 +7175,7 @@ sbt 1.2.1 was brought to you by 4 contributors, according to `git shortlog -sn -
   [io175]: https://github.com/sbt/io/pull/175
   [zinc562]: https://github.com/sbt/zinc/pull/562
   [@eed3si9n]: https://github.com/eed3si9n
-  [@dwijnand]: http://github.com/dwijnand
+  [@dwijnand]: https://github.com/dwijnand
   [@cunei]: https://github.com/cunei
   [@eatkins]: https://github.com/eatkins
   [@allanrenucci]: https://github.com/allanrenucci
@@ -7517,7 +7517,7 @@ sbt 1.2.0 was brought to you by 60 contributors. Dale Wijnand, Eugene Yokota, Ke
   [zinc548]: https://github.com/sbt/zinc/pull/548
   [zinc557]: https://github.com/sbt/zinc/pull/557
   [@eed3si9n]: https://github.com/eed3si9n
-  [@dwijnand]: http://github.com/dwijnand
+  [@dwijnand]: https://github.com/dwijnand
   [@cunei]: https://github.com/cunei
   [@jvican]: https://github.com/jvican
   [@Duhemm]: https://github.com/Duhemm
@@ -7580,7 +7580,7 @@ A huge thank you to everyone who's helped improve sbt and Zinc 1 by using them, 
 sbt 1.1.6 was brought to you by 15 contributors, according to `git shortlog -sn --no-merges v1.1.5...v1.1.6` on sbt, zinc, librarymanagement, util, io, launcher-package, and website: Ethan Atkins, Eugene Yokota, Dale Wijnand, Aaron S. Hawley, OlegYch, Richard Summerhayes, Jannis (dadarakt), Rikito Taniguchi (tanishiking), Øyvind Høisæther, Daniel Westheide, Harrison Houghton, Holden Karau, Håkon Wold, Jason Zaugg, and tekay.
 
   [@eed3si9n]: https://github.com/eed3si9n
-  [@dwijnand]: http://github.com/dwijnand
+  [@dwijnand]: https://github.com/dwijnand
   [@cunei]: https://github.com/cunei
   [@jvican]: https://github.com/jvican
   [@Duhemm]: https://github.com/Duhemm
@@ -7654,7 +7654,7 @@ sbt 1.1.5 was brought to you by 21 contributors, according to `git shortlog -sn 
 
 
   [@eed3si9n]: https://github.com/eed3si9n
-  [@dwijnand]: http://github.com/dwijnand
+  [@dwijnand]: https://github.com/dwijnand
   [@cunei]: https://github.com/cunei
   [@jvican]: https://github.com/jvican
   [@Duhemm]: https://github.com/Duhemm
@@ -7743,7 +7743,7 @@ A huge thank you to everyone who's helped improve sbt and Zinc 1 by using them, 
 sbt 1.1.4 was brought to you by 11 contributors, according to `git shortlog -sn --no-merges v1.1.2...v1.1.4` on sbt, zinc, librarymanagement, util, io, launcher-package, and website: Eugene Yokota, Dale Wijnand, 杨博 (Yang Bo), Ethan Atkins, Sam Halliday, Aaron S. Hawley, Gabriele Petronella, Jason Steenstra-Pickens, Jason Zaugg, Julien Jean Paul Sirocchi, and aumann.
 
   [@eed3si9n]: https://github.com/eed3si9n
-  [@dwijnand]: http://github.com/dwijnand
+  [@dwijnand]: https://github.com/dwijnand
   [@cunei]: https://github.com/cunei
   [@jvican]: https://github.com/jvican
   [@Duhemm]: https://github.com/Duhemm
@@ -7814,7 +7814,7 @@ sbt 1.1.4 was brought to you by 11 contributors, according to `git shortlog -sn 
 sbt 1.1.2 was brought to you by 23 contributors, according to `git shortlog -sn --no-merges v1.1.1...v1.1.2` on sbt, zinc, librarymanagement, util, io, launcher-package, and website: Dale Wijnand, Eugene Yokota, Jason Zaugg, Kenji Yoshida (xuwei-k), Ethan Atkins, Martijn Hoekstra, Martynas Mickevičius, Dennis Hörsch, Hosam Aly, Antonio Cunei, Friedrich von Never, Hiroshi Ito, Ian Gabes, Jilen Zhang, Mathias Bogaert, Naohisa Murakami (tiqwab), Philippus Baalman, Ryan Bair, Seth Tisue, Ståle Undheim, Takuya Miyamoto (tmiyamon), Yasuhiro Tatsuno. Thank you!
 
   [@eed3si9n]: https://github.com/eed3si9n
-  [@dwijnand]: http://github.com/dwijnand
+  [@dwijnand]: https://github.com/dwijnand
   [@cunei]: https://github.com/cunei
   [@jvican]: https://github.com/jvican
   [@Duhemm]: https://github.com/Duhemm
@@ -7892,7 +7892,7 @@ When set to `true`, sbt shell will automatically start sbt server. Otherwise, it
 sbt 1.1.1 was brought to you by 16 contributors, according to `git shortlog -sn --no-merges v1.1.0 ..v1.1.0` on sbt, zinc, librarymanagement, util, io, and website: Kenji Yoshida (xuwei-k), Eugene Yokota, Dale Wijnand, Antonio Cunei, Steve Waldman, Arnout Engelen, Deokhwan Kim, OlegYch, Robert Walker, Jorge Vicente Cantero (jvican), Claudio Bley, Eric Peters, Lena Brüder, Seiya Mizuno, Seth Tisue, j-keck. Thank you!
 
   [@eed3si9n]: https://github.com/eed3si9n
-  [@dwijnand]: http://github.com/dwijnand
+  [@dwijnand]: https://github.com/dwijnand
   [@cunei]: https://github.com/cunei
   [@jvican]: https://github.com/jvican
   [@Duhemm]: https://github.com/Duhemm
@@ -8056,7 +8056,7 @@ This allows you to define scripted tests that track the minimum supported sbt ve
 sbt 1.1.0 was brought to you by 33 contributors, according to `git shortlog -sn --no-merges v1.0.4..v1.1.0` on sbt, zinc, librarymanagement, util, io, and website: Eugene Yokota, Dale Wijnand, Antonio Cunei, Kenji Yoshida (xuwei-k), Alexey Alekhin, Simon Schäfer, Jorge Vicente Cantero (jvican), Miklos Martin, Jeffrey Olchovy, Jonas Fonseca, Andrey Artemov, Arnout Engelen, Dominik Winter, Krzysztof Romanowski, Roman Iakovlev, Wiesław Popielarski, Age Mooij, Allan Timothy Leong, Ivan Poliakov, Jason Zaugg, Jilen Zhang, Long Jinwei, Martin Duhem, Michael Stringer, Michael Wizner, Nud Teeraworamongkol, OlegYch, PanAeon, Philippus Baalman, Pierre Dal-Pra, Rafal Wojdyla, Saniya Tech, Tom Walford, and many others who contributed ideas. Thank you!
 
   [@eed3si9n]: https://github.com/eed3si9n
-  [@dwijnand]: http://github.com/dwijnand
+  [@dwijnand]: https://github.com/dwijnand
   [@cunei]: https://github.com/cunei
   [@jvican]: https://github.com/jvican
   [@Duhemm]: https://github.com/Duhemm
@@ -8336,7 +8336,7 @@ If you have a list of files:
   [3481]: https://github.com/sbt/sbt/pull/3481
   [util121]: https://github.com/sbt/util/pull/121
   [@eed3si9n]: https://github.com/eed3si9n
-  [@dwijnand]: http://github.com/dwijnand
+  [@dwijnand]: https://github.com/dwijnand
   [@jvican]: https://github.com/jvican
   [@Duhemm]: https://github.com/Duhemm
   [@jroper]: https://github.com/jroper
@@ -8596,7 +8596,7 @@ Too many people to thank here. See [Credits][Credits]
   [Migrating-from-sbt-013x]: Migrating-from-sbt-013x.html
   [@eed3si9n]: https://github.com/eed3si9n
   [@Duhemm]: https://github.com/Duhemm
-  [@dwijnand]: http://github.com/dwijnand
+  [@dwijnand]: https://github.com/dwijnand
   [@gheine]: https://github.com/gheine
   [@gkossakowski]: https://github.com/gkossakowski
   [@jroper]: https://github.com/jroper
@@ -8611,7 +8611,7 @@ Too many people to thank here. See [Credits][Credits]
   [@smarter]: https://github.com/smarter
   [@valydia]: https://github.com/valydia
   [@xuwei-k]: https://github.com/xuwei-k
-  [sbt-1-0-roadmap]: http://developer.lightbend.com/blog/2017-04-18-sbt-1-0-roadmap-and-beta1/
+  [sbt-1-0-roadmap]: https://developer.lightbend.com/blog/2017-04-18-sbt-1-0-roadmap-and-beta1/
   [840]: https://github.com/sbt/sbt/issues/840
   [2613]: https://github.com/sbt/sbt/pull/2613
   [1911]: https://github.com/sbt/sbt/issues/1911
@@ -13399,8 +13399,8 @@ The resources may be accessed from tests by using the `getResource`
 methods of `java.lang.Class` or `java.lang.ClassLoader`.
 
 The main Scala testing frameworks (
-[ScalaCheck](http://scalacheck.org/),
-[ScalaTest](http://scalatest.org/), and
+[ScalaCheck](https://scalacheck.org/),
+[ScalaTest](https://scalatest.org/), and
 [specs2](http://specs2.org/)) provide an implementation of the
 common test interface and only need to be added to the classpath to work
 with sbt. For example, ScalaCheck may be used by declaring it as a
@@ -25892,7 +25892,7 @@ The default configuration file for sbt as an application looks like:
 
 [repositories]
   local
-  typesafe-ivy-releases: http://repo.typesafe.com/typesafe/ivy-releases/, [organization]/[module]/[revision]/[type]s/[artifact](-[classifier]).[ext], bootOnly
+  typesafe-ivy-releases: https://repo.typesafe.com/typesafe/ivy-releases/, [organization]/[module]/[revision]/[type]s/[artifact](-[classifier]).[ext], bootOnly
   maven-central
   sonatype-snapshots: https://oss.sonatype.org/content/repositories/snapshots
 
@@ -26695,7 +26695,7 @@ application. `hello.build.properties`:
 [repositories]
   local
   maven-central
-  typesafe-ivy-releases: http://repo.typesafe.com/typesafe/ivy-releases/, [organization]/[module]/[revision]/[type]s/[artifact](-[classifier]).[ext]
+  typesafe-ivy-releases: https://repo.typesafe.com/typesafe/ivy-releases/, [organization]/[module]/[revision]/[type]s/[artifact](-[classifier]).[ext]
 ```
 
 --

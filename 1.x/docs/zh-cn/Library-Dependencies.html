@@ -48,7 +48,7 @@
 </li><li><em>托管依赖</em> 配置在构建定义中，并且会自动从仓库（repository）中下载
 </li></ul><h3 id="%E9%9D%9E%E6%89%98%E7%AE%A1%E4%BE%9D%E8%B5%96">非托管依赖<a href="#%E9%9D%9E%E6%89%98%E7%AE%A1%E4%BE%9D%E8%B5%96" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>大多数人会用托管依赖而不是非托管依赖。但是非托管依赖在起步阶段会简单很多。
 </p><p>非托管依赖像这样工作：将 jar 文件放在 <code>lib</code> 文件夹下，然后它们将会被添加到项目的 classpath 中。没有更多的事情了！
-</p><p>你也可以将测试依赖的 jar 文件放在 <code>lib</code> 目录下，比如 <a href="http://scalacheck.org/">ScalaCheck</a>，<a href="http://specs2.org">Specs2</a>，<a href="http://www.scalatest.org/">ScalaTest</a>。
+</p><p>你也可以将测试依赖的 jar 文件放在 <code>lib</code> 目录下，比如 <a href="https://scalacheck.org/">ScalaCheck</a>，<a href="http://specs2.org">Specs2</a>，<a href="https://www.scalatest.org/">ScalaTest</a>。
 </p><p><code>lib</code> 目录下的所有依赖都会在 classpaths（对 <code>compile</code>， <code>test</code>， <code>run</code> 和 <code>console</code> 都成立）。如果你想对其中的一个改变 classpath，
 你需要做适当调整，例如 <code>Compile / dependencyClasspath</code> 或者 <code>Runtime / dependencyClasspath</code>。
 </p><p>如果用非托管依赖的话，不用往 <code>build.sbt</code> 文件中添加任何内容，不过你可以改变 <code>unmanagedBase</code> key，如果你想用一个不同的目录而非 <code>lib</code>。
@@ -58,7 +58,7 @@
 </p><p>同时也有一个列举 <code>unmanagedBase</code> 目录下所有 jar 文件的 task 叫 <code>unmanagedJars</code>。如果你想用多个目录或者做一些更加复杂的事情，你可能需要用一个可以做其他事情的 task 替换整个 <code>unmanagedJars</code> task，
 例如清空 <code>Compile</code> configuration 的列表，不考虑 <code>lib</code> 目录下的文件：
 </p><pre><code class="prettyprint lang-scala">Compile / unmanagedJars := Seq.empty[sbt.Attributed[java.io.File]]
-</code></pre><h3 id="%E6%89%98%E7%AE%A1%E4%BE%9D%E8%B5%96">托管依赖<a href="#%E6%89%98%E7%AE%A1%E4%BE%9D%E8%B5%96" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 使用 <a href="http://ant.apache.org/ivy/">Apache Ivy</a> 来实现托管依赖，所以如果你对 Ivy 或者 Maven 比较熟悉的话，你不会有太多的麻烦。
+</code></pre><h3 id="%E6%89%98%E7%AE%A1%E4%BE%9D%E8%B5%96">托管依赖<a href="#%E6%89%98%E7%AE%A1%E4%BE%9D%E8%B5%96" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 使用 <a href="https://ant.apache.org/ivy/">Apache Ivy</a> 来实现托管依赖，所以如果你对 Ivy 或者 Maven 比较熟悉的话，你不会有太多的麻烦。
 </p><h4 id="Key"><code>libraryDependencies</code> Key<a href="#Key" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>大多数时候，你可以很简单的在 <code>libraryDependencies</code> 设置项中列出你的依赖。也可以通过 Maven POM 文件或者 Ivy 配置文件来配置依赖，而且可以通过 sbt 来调用这些外部的配置文件。
 你可以从<a href="../docs/Library-Management.html#external-maven-ivy">这里</a>获取更详细的内容。
 </p><p>可以像这样定义一个依赖，其中 <code>groupId</code>， <code>artifactId</code> 和 <code>revision</code> 都是字符串：
@@ -86,7 +86,7 @@
 </code></pre><p>这个想法是很多依赖都会被编译给多个 Scala 版本，而你想确保和项目匹配的jar是二进制兼容的。
 </p><p>参见 <a href="../docs/Cross-Build.html">交叉构建</a> 获取更多信息。
 </p><h4 id="Ivy+%E4%BF%AE%E6%AD%A3">Ivy 修正<a href="#Ivy+%E4%BF%AE%E6%AD%A3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>groupID % artifactID % revision</code> 中的 <code>revision</code> 不需要是一个固定的版本号。Ivy 能够根据你指定的约束选择一个模块的最新版本。你指定 <code>&quot;latest.integration&quot;</code>，<code>&quot;2.9.+&quot;</code> 或者 <code>&quot;[1.0,)&quot;</code>，而不是
-一个固定的版本号，像 <code>&quot;1.6.1&quot;</code>。参看 <a href="http://ant.apache.org/ivy/history/2.3.0/ivyfile/dependency.html#revision">Ivy 修订</a> 文档获取详细内容。
+一个固定的版本号，像 <code>&quot;1.6.1&quot;</code>。参看 <a href="https://ant.apache.org/ivy/history/2.3.0/ivyfile/dependency.html#revision">Ivy 修订</a> 文档获取详细内容。
 </p><h4 id="%E8%A7%A3%E6%9E%90%E5%99%A8">解析器<a href="#%E8%A7%A3%E6%9E%90%E5%99%A8" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>不是所有的依赖包都放在同一台服务器上，sbt 默认使用标准的 Maven2 仓库。如果你的依赖不在默认的仓库中，你需要添加 <em>resolver</em> 来帮助 Ivy 找到它。
 </p><p>通过以下形式添加额外的仓库：
 </p><pre><code class="prettyprint lang-scala">resolvers += name at location
@@ -111,8 +111,8 @@
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot; % Test
 </code></pre><p>现在，如果你在 sbt 的命令提示行里输入 <code>show compile:dependencyClasspath</code>，你不应该看到 derby jar。但是如果你输入 <code>show test:dependencyClasspath</code>，
 你应该在列表中看到 derby jar。
-</p><p>通常，测试相关的依赖，如 <a href="http://scalacheck.org/">ScalaCheck</a>，
-<a href="http://specs2.org">Specs2</a> 和 <a href="http://www.scalatest.org/">ScalaTest</a> 将会被定义为 <code>% &quot;test&quot;</code>。
+</p><p>通常，测试相关的依赖，如 <a href="https://scalacheck.org/">ScalaCheck</a>，
+<a href="http://specs2.org">Specs2</a> 和 <a href="https://www.scalatest.org/">ScalaTest</a> 将会被定义为 <code>% &quot;test&quot;</code>。
 </p><p>库依赖更详细的内容和技巧在<a href="../docs/Library-Management.html">这里</a>。
 </p><div class="bottom nav">
                 <div class="row">

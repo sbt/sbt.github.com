@@ -1793,7 +1793,7 @@ sbt インタラクティブプロンプトから、`projects` と入力する�
   [Basic-Def]: Basic-Def.html
   [Scopes]: Scopes.html
   [Make]: https://en.wikipedia.org/wiki/Make_(software)
-  [Ant]: http://ant.apache.org/
+  [Ant]: https://ant.apache.org/
   [Rake]: https://ruby.github.io/rake/
 
 タスク・グラフ
@@ -3015,9 +3015,9 @@ lazy val projF = (project in file("f"))
   [Ivy revisions]: https://ant.apache.org/ivy/history/2.3.0-rc1/ivyfile/dependency.html#revision
   [Extra attributes]: https://ant.apache.org/ivy/history/2.3.0-rc1/concept.html#extra
   [through Ivy]: https://ant.apache.org/ivy/history/latest-milestone/concept.html#checksum
-  [ScalaCheck]: http://scalacheck.org
+  [ScalaCheck]: https://scalacheck.org
   [Specs2]: http://specs2.org
-  [ScalaTest]: http://scalatest.org
+  [ScalaTest]: https://scalatest.org
   [Basic-Def]: Basic-Def.html
   [Scopes]: Scopes.html
   [Task-Graph]: Task-Graph.html
@@ -4132,12 +4132,12 @@ Zinc の内部構造の保存方法として Google Protocol Buffer を用いた
   [Credits]: ../Credits.html
   [Migrating-from-sbt-013x]: ../Migrating-from-sbt-013x.html
   [@eed3si9n]: https://github.com/eed3si9n
-  [@dwijnand]: http://github.com/dwijnand
+  [@dwijnand]: https://github.com/dwijnand
   [@jvican]: https://github.com/jvican
   [@Duhemm]: https://github.com/Duhemm
   [@jsuereth]: https://github.com/jsuereth
   [@gkossakowski]: https://github.com/gkossakowski
-  [sbt-1-0-roadmap]: http://developer.lightbend.com/blog/2017-04-18-sbt-1-0-roadmap-and-beta1/
+  [sbt-1-0-roadmap]: https://developer.lightbend.com/blog/2017-04-18-sbt-1-0-roadmap-and-beta1/
   [@eed3si9n]: https://github.com/eed3si9n
   [@jroper]: https://github.com/jroper
   [@valydia]: https://github.com/valydia

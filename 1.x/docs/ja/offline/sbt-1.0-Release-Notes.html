@@ -47,7 +47,7 @@
 </li><li>case class の多くは Contraband を用いて生成された疑似 case class に置き換えられた。<code>.copy(foo = xxx)</code> は <code>withFoo(xxx)</code> に書き換える必要がある。例えば、<code>UpdateConfiguration</code>、 <code>RetrieveConfiguration</code>、 <code>PublishConfiguration</code> などはビルダーパターンを使うようにリファクタリングした。
 </li><li>Zinc 1 は、Scala 2.9 及びそれ以前のバージョンのサポートを打ち切る。Scala 2.10 は 2.10.2 以降、Scala 2.11 は 2.11.2 以降を使う必要がある。(最新のパッチ版を使うことを推奨する)
 </li><li><code>config(&quot;xyz&quot;)</code> は、<code>val Xyz = config(&quot;xyz&quot;)</code> のように <strong>頭文字が大文字</strong>の <code>val</code> に直接代入する必要がある。これは左辺項の識別子を捕捉して後でシェルから使えるようにするためだ。
-</li><li><code>publishTo</code> と <code>otherResolvers</code> は SettingKey から TaskKey へと変更した。<a href="https://github.com/sbt/sbt/issues/2059">#2059</a>/<a href="https://github.com/sbt/sbt/pull/2662">#2662</a> by <a href="http://github.com/dwijnand">@dwijnand</a>
+</li><li><code>publishTo</code> と <code>otherResolvers</code> は SettingKey から TaskKey へと変更した。<a href="https://github.com/sbt/sbt/issues/2059">#2059</a>/<a href="https://github.com/sbt/sbt/pull/2662">#2662</a> by <a href="https://github.com/dwijnand">@dwijnand</a>
 </li><li><code>Path.relativizeFile(baseFile, file)</code> は <code>IO.relativizeFile(baseFile, file)</code> へと名前が変わった。
 </li><li><code>PathFinder</code> の <code>.***</code> メソッドは <code>.allPaths</code> メソッドへと名前が変わった。
 </li><li><code>PathFinder.x_!(mapper)</code> は <code>PathFinder</code> の <code>def pair</code> に変更された。
@@ -104,7 +104,7 @@
 </li><li>Zinc 内部で ExtractAPI が perRunCaches を使うようにした。 <a href="https://github.com/sbt/zinc/pull/347">zinc#347</a> by <a href="https://github.com/gheine">@gheine</a>
 </li></ul><h4 id="%E5%86%85%E9%83%A8">内部<a href="#%E5%86%85%E9%83%A8" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>ソースコードのフォーマットに Scalafmt を採用して、neo-sbt-scalafmt を用いる。
 </li><li>Scala Center が Scripted test フレームワークがバッチ・モード実行できる再設計をコントリビュートした。これによって Scripted は同じ sbt インスタンスを再利用して sbt テストを実行でき、CI ビルド時間を 50% ダウンさせた。 <a href="https://github.com/sbt/sbt/pull/3151">#3151</a> by <a href="https://github.com/jvican">@jvican</a>
-</li><li>sbt 1.0.0 は sbt 1.0.0-RC3 を用いてビルドされた。 <a href="https://github.com/sbt/sbt/pull/3184">#3184</a> by <a href="http://github.com/dwijnand">@dwijnand</a>
+</li><li>sbt 1.0.0 は sbt 1.0.0-RC3 を用いてビルドされた。 <a href="https://github.com/sbt/sbt/pull/3184">#3184</a> by <a href="https://github.com/dwijnand">@dwijnand</a>
 </li></ul><h3 id="%E5%A4%A7%E3%81%8D%E3%81%AA%E5%A4%89%E6%9B%B4%E3%81%AE%E8%A9%B3%E7%B4%B0%E7%82%B9">大きな変更の詳細点<a href="#%E5%A4%A7%E3%81%8D%E3%81%AA%E5%A4%89%E6%9B%B4%E3%81%AE%E8%A9%B3%E7%B4%B0%E7%82%B9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h3 id="Zinc+1%3A+%E3%82%AF%E3%83%A9%E3%82%B9%E3%83%99%E3%83%BC%E3%82%B9%E3%81%AE+name+hashing">Zinc 1: クラスベースの name hashing<a href="#Zinc+1%3A+%E3%82%AF%E3%83%A9%E3%82%B9%E3%83%99%E3%83%BC%E3%82%B9%E3%81%AE+name+hashing" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>(Lightbend の委託で) Grzegorz Kossakowski が Zinc 1 にもたらした大きな改善として、クラスベースの name hashing がある。これは、大規模な Scala プロジェクトにおいて差分コンパイルが高速化することが見込まれる。
 </p><p>Zinc 1 の name hashing は、コード間の依存性をファイルではなく、クラスのレベルで追跡する。GitHub issue <a href="https://github.com/sbt/sbt/issues/1104">sbt/sbt#1104</a> に有名なプロジェクトの既存のクラスにメソッドを追加した場合の比較データがある:
 </p><pre><code class="">ScalaTest   AndHaveWord class:          Before 49s, After 4s (12x)
@@ -173,7 +173,7 @@ IO.copyDirectory(source, target, CopyOptions()
   .withOverwrite(false)
   .withPreserveLastModified(true)
   .withPreserveExecutable(true))
-</code></pre><p><a href="https://github.com/sbt/io/pull/53">io#53</a> by <a href="http://github.com/dwijnand">@dwijnand</a>
+</code></pre><p><a href="https://github.com/sbt/io/pull/53">io#53</a> by <a href="https://github.com/dwijnand">@dwijnand</a>
 </p><h4 id="Library+management+API+%E3%81%A8%E3%82%A2%E3%83%BC%E3%83%86%E3%82%A3%E3%83%95%E3%82%A1%E3%82%AF%E3%83%88%E3%81%AE%E4%B8%A6%E5%88%97%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89">Library management API とアーティファクトの並列ダウンロード<a href="#Library+management+API+%E3%81%A8%E3%82%A2%E3%83%BC%E3%83%86%E3%82%A3%E3%83%95%E3%82%A1%E3%82%AF%E3%83%88%E3%81%AE%E4%B8%A6%E5%88%97%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>sbt 1.0 は Lightbend社の Eugene Yokota (<a href="https://github.com/eed3si9n">@eed3si9n</a>) と Scala Center の Martin Duhem (<a href="https://github.com/Duhemm">@Duhemm</a>) 共著で書かれた Library management API を追加する。
 この API は Apache Ivy および cached resolution や Coursier といったその他の代替依存性解決エンジンを抽象化することを目指している。
 </p><p>Ivy エンジンのためのアーティファクトの並列ダウンロードは Scala Center の Jorge (<a href="https://github.com/jvican">@jvican</a>) によってコントリビュートされた。

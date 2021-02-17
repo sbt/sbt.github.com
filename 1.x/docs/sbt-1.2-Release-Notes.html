@@ -199,11 +199,11 @@ sbt -client clean  3.39s user 1.75s system 104% cpu 4.898 total
 </li><li>Makes <code>++</code> fail when it doesn’t affect any subprojects <a href="https://github.com/sbt/sbt/pull/4269">#4269</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
 </li></ul><h4 id="Other+bug+fixes+and+improvements">Other bug fixes and improvements<a href="#Other+bug+fixes+and+improvements" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>Fixes output caching bug. <a href="https://github.com/sbt/util/pull/169">util#169</a> by <a href="https://github.com/bpholt">@bpholt</a>
 </li><li>Fixes “destination file exists” error message. <a href="https://github.com/sbt/librarymanagement/pull/255">lm#255</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
-</li><li>Reintroduces <code>Command.process(String, State): State</code>. <a href="https://github.com/sbt/sbt/pull/4023">#4023</a> by <a href="http://github.com/dwijnand">@dwijnand</a>
+</li><li>Reintroduces <code>Command.process(String, State): State</code>. <a href="https://github.com/sbt/sbt/pull/4023">#4023</a> by <a href="https://github.com/dwijnand">@dwijnand</a>
 </li><li>Fixes <code>active.json</code> not getting removed on JVM shutdown. <a href="https://github.com/sbt/sbt/pull/4194">#4194</a> by <a href="https://github.com/veera8337">@veera83372</a>
 </li><li>Fixes file permission error (”<code>CreateFile()</code> failed”) while reading the timestamp on Windows. <a href="https://github.com/sbt/io/pull/134">io#134</a> by <a href="https://github.com/cunei">@cunei</a>
 </li><li>Fixes the linter that detects missing <code>.value</code>. <a href="https://github.com/sbt/sbt/pull/4090">#4090</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
-</li><li>Fixes <code>StringIndexOutOfBoundsException</code> in <code>removeEscapeSequences</code>. <a href="https://github.com/sbt/util/pull/139">util#139</a> by <a href="http://github.com/dwijnand">@dwijnand</a>
+</li><li>Fixes <code>StringIndexOutOfBoundsException</code> in <code>removeEscapeSequences</code>. <a href="https://github.com/sbt/util/pull/139">util#139</a> by <a href="https://github.com/dwijnand">@dwijnand</a>
 </li><li>Fixes OkHttp’s <code>JavaNetAuthenticator</code> with a null check. <a href="https://github.com/sbt/librarymanagement/pull/177">lm#177</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
 </li><li>Fixes Sonatype timeout issue by extending the default timeout to 1h. <a href="https://github.com/sbt/librarymanagement/pull/246">lm#246</a> by <a href="https://github.com/peterneyens">@peterneyens</a>
 </li><li>Fixes thread thrashing error during the parallel download. <a href="https://github.com/sbt/librarymanagement/pull/249">lm249</a> by <a href="https://github.com/OlegYch">@OlegYch</a>
@@ -218,12 +218,12 @@ sbt -client clean  3.39s user 1.75s system 104% cpu 4.898 total
 </li><li>Bumps the version of Giter8 used by <code>sbt new</code> to 0.11.0, fixing various issues <a href="https://github.com/sbt/sbt/pull/4263">#4263</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
 </li><li>Improves Javac error parsing. <a href="https://github.com/sbt/zinc/pull/557">zinc#557</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
 </li><li>Displays only the eviction warning summary by default, and make it configurable using <code>ThisBuild / evictionWarningOptions</code>. <a href="https://github.com/sbt/librarymanagement/pull/211">lm211</a> and <a href="https://github.com/sbt/sbt/pull/3947">#3947</a> by <a href="https://github.com/exoego">@exoego</a>
-</li><li>Allow varargs in <code>inThisBuild(...)</code>, <code>inConfig(C)(...)</code>, <code>inTask(t)(...)</code>, <code>inScope(scope)(...)</code>. <a href="https://github.com/sbt/sbt/pull/4106">#4106</a> by <a href="http://github.com/dwijnand">@dwijnand</a> 
+</li><li>Allow varargs in <code>inThisBuild(...)</code>, <code>inConfig(C)(...)</code>, <code>inTask(t)(...)</code>, <code>inScope(scope)(...)</code>. <a href="https://github.com/sbt/sbt/pull/4106">#4106</a> by <a href="https://github.com/dwijnand">@dwijnand</a> 
 </li><li>Adds <code>fgRun</code> and <code>fgRunMain</code> tasks that behaves like sbt 0.13’s <code>run</code>. <a href="https://github.com/sbt/sbt/pull/4216">#4216</a> by <a href="https://github.com/agaro1121">@agaro1121</a>
 </li><li>Supports <code>test.script</code> and <code>pending.script</code> as the scripted file name. <a href="https://github.com/sbt/sbt/pull/4220">#4220</a> by <a href="https://github.com/regadas">@regadas</a>
 </li><li>Supports aliases in <code>inspect</code> command. <a href="https://github.com/sbt/sbt/pull/4221">#4221</a> by <a href="https://github.com/gpoirier">@gpoirier</a>
-</li><li>Adds the current project’s id to <code>~</code>’s watching message. <a href="https://github.com/sbt/sbt/issues/2038">#2038</a> / <a href="https://github.com/sbt/sbt/pull/3813">#3813</a> by <a href="http://github.com/dwijnand">@dwijnand</a>
-</li><li>Changes <code>PathFinder#get</code> to <code>get()</code>. <a href="https://github.com/sbt/io/pull/104">io#104</a> by <a href="http://github.com/dwijnand">@dwijnand</a>
+</li><li>Adds the current project’s id to <code>~</code>’s watching message. <a href="https://github.com/sbt/sbt/issues/2038">#2038</a> / <a href="https://github.com/sbt/sbt/pull/3813">#3813</a> by <a href="https://github.com/dwijnand">@dwijnand</a>
+</li><li>Changes <code>PathFinder#get</code> to <code>get()</code>. <a href="https://github.com/sbt/io/pull/104">io#104</a> by <a href="https://github.com/dwijnand">@dwijnand</a>
 </li><li>Improves the error message when access is denied. <a href="https://github.com/sbt/librarymanagement/pull/203">lm#203</a> by <a href="https://github.com/stephennancekivell">@stephennancekivell</a>
 </li><li>Improve the warning message “Choosing local” to something more actionable. <a href="https://github.com/sbt/librarymanagement/pull/248">lm#248</a> by <a href="https://github.com/khvatov">@khvatov</a>
 </li><li>Adds an option to ignore scalac options change. <a href="https://github.com/sbt/zinc/pull/548">zinc#548</a> by <a href="https://github.com/lukaszwawrzyk">@lukaszwawrzyk</a>
@@ -235,8 +235,8 @@ sbt -client clean  3.39s user 1.75s system 104% cpu 4.898 total
 </li><li><code>about</code> command sorts and indents plugins list. <a href="https://github.com/sbt/sbt/pull/4187">#4187</a> by <a href="https://github.com/mcanlas">@mcanlas</a>
 </li><li><code>-Dsbt.offline</code> sets <code>offline</code> setting. <a href="https://github.com/sbt/sbt/pull/4198">#4198</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
 </li><li>Selects most recent JDK during cross JDK forking (see below for details) <a href="https://github.com/sbt/sbt/pull/4245">#4245</a> by <a href="https://github.com/raboof">@raboof</a>
-</li></ul><h4 id="Internal">Internal<a href="#Internal" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>Removes some compiler warnings. <a href="https://github.com/sbt/sbt/pull/3807">#3087</a> by <a href="http://github.com/dwijnand">@dwijnand</a>
-</li><li>Lots of other refactorings by <a href="http://github.com/dwijnand">@dwijnand</a>
+</li></ul><h4 id="Internal">Internal<a href="#Internal" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>Removes some compiler warnings. <a href="https://github.com/sbt/sbt/pull/3807">#3087</a> by <a href="https://github.com/dwijnand">@dwijnand</a>
+</li><li>Lots of other refactorings by <a href="https://github.com/dwijnand">@dwijnand</a>
 </li><li>Removes some compiler warnings in Zinc. <a href="https://github.com/sbt/zinc/pull/493">zinc#493</a> by <a href="https://github.com/exoego">@exoego</a>
 </li><li>Perf: Prevents creation of useless <code>URI</code> copies in <code>IO.directoryURI</code>. <a href="https://github.com/sbt/io/pull/132">io#132</a> by <a href="https://github.com/jrudolph">@jrudolph</a>
 </li><li>Perf: Avoids reflect universe initialization in <code>initStringCodecs</code>. <a href="https://github.com/sbt/util/pull/153">util#153</a> by <a href="https://github.com/jrudolph">@jrudolph</a>
