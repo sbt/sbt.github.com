@@ -13662,10 +13662,16 @@ The standard source hierarchy is used:
     test classpath
 
 The standard testing tasks are available, but must be prefixed with
-`it:`. For example,
+`IntegrationTest/`. For example to run all integration tests:
 
 ```
-> IntegrationTest / testOnly org.example.AnIntegrationTest
+> IntegrationTest/test
+```
+
+Or to run a specific test:
+
+```
+> IntegrationTest/testOnly org.example.AnIntegrationTest
 ```
 
 Similarly the standard settings may be configured for the
