@@ -3816,7 +3816,7 @@ on published artifacts.
 </p><blockquote><p><em>Note:</em> Sonatype advises that responding to a <strong>New Project ticket</strong> might 
 take up to two business days, but in my case it was a few minutes.
 </p></blockquote><h3 id="sbt+setup">sbt setup<a href="#sbt+setup" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To address Sonatype’s <a href="http://central.sonatype.org/pages/requirements.html">requirements</a> for publishing to the central repository and to simplify the publishing process, you can
-use two community plugins. The <a href="https://www.scala-sbt.org/sbt-pgp/">sbt-pgp plugin</a> can sign the files with GPG/PGP.
+use two community plugins. The <a href="https://github.com/sbt/sbt-pgp#sbt-pgp">sbt-pgp plugin</a> can sign the files with GPG/PGP.
 (Optionally <a href="https://github.com/xerial/sbt-sonatype">sbt-sonatype</a> can publish to a Sonatype repository nicer.)
 </p><h4 id="step+1%3A+PGP+Signatures">step 1: PGP Signatures<a href="#step+1%3A+PGP+Signatures" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Follow <a href="https://central.sonatype.org/pages/working-with-pgp-signatures.html">Working with PGP Signatures</a>.
 </p><p>First, you should <a href="https://www.gnupg.org/download/">install GnuPG</a>, and verify the version:
@@ -3840,7 +3840,7 @@ sub   rsa4096 2018-08-22 [E]
 </code></pre><p>Distribute the key:
 </p><pre><code class="">$ gpg --keyserver hkp://pool.sks-keyservers.net --send-keys 1234517530FB96F147C6A146A326F592D39AAAAA
 </code></pre><h4 id="step+2%3A+sbt-pgp">step 2: sbt-pgp<a href="#step+2%3A+sbt-pgp" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>With the PGP key you want to use, you can sign the artifacts 
-you want to publish to the Sonatype repository with the <a href="https://www.scala-sbt.org/sbt-pgp/">sbt-pgp plugin</a>. Follow 
+you want to publish to the Sonatype repository with the <a href="https://github.com/sbt/sbt-pgp#sbt-pgp">sbt-pgp plugin</a>. Follow 
 the instructions for the plugin and you’ll have PGP signed artifacts in no 
 time.
 </p><p>In short, add the following line to your <code>~/.sbt/1.0/plugins/gpg.sbt</code> file to 

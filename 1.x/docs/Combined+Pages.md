@@ -5772,7 +5772,7 @@ compatible locale, e.g. `LC_TYPE=en_US.UTF-8`, then sbt may crash with a
   [sonatype-coordinates]: http://central.sonatype.org/pages/choosing-your-coordinates.html
   [sonatype-nexus]: https://oss.sonatype.org/#welcome
   [sonatype-pgp]: https://central.sonatype.org/pages/working-with-pgp-signatures.html
-  [sbt-pgp]: https://www.scala-sbt.org/sbt-pgp/
+  [sbt-pgp]: https://github.com/sbt/sbt-pgp#sbt-pgp
   [sbt-sonatype]: https://github.com/xerial/sbt-sonatype
   [sbt-release]: https://github.com/sbt/sbt-release
   [gnupg]: https://www.gnupg.org/
