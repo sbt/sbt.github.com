@@ -3845,7 +3845,7 @@ the instructions for the plugin and you’ll have PGP signed artifacts in no
 time.
 </p><p>In short, add the following line to your <code>~/.sbt/1.0/plugins/gpg.sbt</code> file to 
 enable it globally for SBT projects:
-</p><pre><code class="">addSbtPlugin(&quot;com.jsuereth&quot; % &quot;sbt-pgp&quot; % &quot;2.0.1&quot;)
+</p><pre><code class="">addSbtPlugin(&quot;com.github.sbt&quot; % &quot;sbt-pgp&quot; % &quot;2.1.2&quot;)
 </code></pre><blockquote><p><em>Note:</em> The plugin is a solution to sign artifacts. It works with the GPG command line tool.
 </p></blockquote><p>Make sure that the <code>gpg</code> command is in PATH available to the sbt.
 </p><h4 id="step+3%3A+Credentials">step 3: Credentials<a href="#step+3%3A+Credentials" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The credentials for your Sonatype OSSRH account need to be stored
@@ -3905,7 +3905,7 @@ You can add more data to it with the <code>pomExtra</code> option in <code>build
 </p><h3 id="Optional+steps">Optional steps<a href="#Optional+steps" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="sbt-sonatype">sbt-sonatype<a href="#sbt-sonatype" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><blockquote><p><em>Note:</em> sbt-sonatype is a third-party plugin meaning it is not covered by Lightbend subscription.
 </p></blockquote><p>To simplify the usage of the Sonatype’s Nexus, add the following line to 
 <code>project/plugins.sbt</code> to import the <a href="https://github.com/xerial/sbt-sonatype">sbt-sonatype plugin</a> to your project:
-</p><pre><code class="">addSbtPlugin(&quot;org.xerial.sbt&quot; % &quot;sbt-sonatype&quot; % &quot;2.0&quot;)
+</p><pre><code class="">addSbtPlugin(&quot;org.xerial.sbt&quot; % &quot;sbt-sonatype&quot; % &quot;3.9.5&quot;)
 </code></pre><p>This plugin will facilitate the publishing process, but in short, these are 
 the main steps for publishing the libraries to the repository:
 </p><ol><li>Create a new staging repository: 
