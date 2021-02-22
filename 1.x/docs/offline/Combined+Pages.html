@@ -4025,26 +4025,28 @@ object PluginCompat {
     c.withMissingOk(ok)
 }
 </code></pre><p>Now <code>subMissingOk(...)</code> function can be implemented in sbt version specific way.
-</p><h3 id="Migrating+to+slash+syntax">Migrating to slash syntax<a href="#Migrating+to+slash+syntax" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>In sbt 0.13 keys were scoped with 2 different syntaxes: one for sbt’s shell and one for in code.
+</p><a name="slash"></a><h3 id="Migrating+to+slash+syntax">Migrating to slash syntax<a href="#Migrating+to+slash+syntax" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>In sbt 0.13 keys were scoped with 2 different syntaxes: one for sbt’s shell and one for in code.
 </p><ul><li>sbt 0.13 shell: <code>&lt;project-id&gt;/config:intask::key</code>
 </li><li>sbt 0.13 code: <code>key in (&lt;project-id&gt;, Config, intask)</code>
 </li></ul><p>Starting sbt 1.1.0, the syntax for scoping keys has been unified for both the shell and the build definitions to
 the <strong>slash syntax</strong> as follows:
 </p><ul><li><code>&lt;project-id&gt; / Config / intask / key</code>
 </li></ul><p>Here are some examples:
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+</p><pre><code class="prettyprint lang-scala">version in ThisBuild := &quot;1.0.0-SNAPSHOT&quot;
+
+lazy val root = (project in file(&quot;.&quot;))
   .settings(
     name := &quot;hello&quot;,
-    version in ThisBuild := &quot;1.0.0-SNAPSHOT&quot;,
     scalacOptions in Compile += &quot;-Xlint&quot;,
     scalacOptions in (Compile, console) --= Seq(&quot;-Ywarn-unused&quot;, &quot;-Ywarn-unused-import&quot;),
     fork in Test := true
   )
 </code></pre><p>They are now written as:
-</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+</p><pre><code class="prettyprint lang-scala">ThisBuild / version := &quot;1.0.0-SNAPSHOT&quot;
+
+lazy val root = (project in file(&quot;.&quot;))
   .settings(
     name := &quot;hello&quot;,
-    ThisBuild / version := &quot;1.0.0-SNAPSHOT&quot;,
     Compile / scalacOptions += &quot;-Xlint&quot;,
     Compile / console / scalacOptions --= Seq(&quot;-Ywarn-unused&quot;, &quot;-Ywarn-unused-import&quot;),
     Test / fork := true
@@ -4060,6 +4062,10 @@ sbt:hello&gt; show Compile / console / scalacOptions
 [info] * -Xlint
 sbt:hello&gt; Test / fork
 [info] true
+</code></pre><p>There’s a <a href="https://eed3si9n.com/syntactic-scalafix-rule-for-unified-slash-syntax">syntactic Scalafix rule for unified slash syntax</a>
+to semi-automatically rewrite existing sbt 0.13 syntax to the slash syntax. Currently it requires the use of scalafix CLI
+and it’s not very precise (because it’s a syntactic rule that only looks at the shape of the code) but it gets most of the job done.
+</p><pre><code class="">$ scalafix --rules=https://gist.githubusercontent.com/eed3si9n/57e83f5330592d968ce49f0d5030d4d5/raw/7f576f16a90e432baa49911c9a66204c354947bb/Sbt0_13BuildSyntax.scala *.sbt project/*.scala
 </code></pre><h3 id="Migrating+from+sbt+0.12+style">Migrating from sbt 0.12 style<a href="#Migrating+from+sbt+0.12+style" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Before sbt 0.13 (sbt 0.9 to 0.12) it was very common to see in builds the usage of three aspects of sbt:
 </p><ul><li>the key dependency operators: <code>&lt;&lt;=</code>, <code>&lt;+=</code>, <code>&lt;++=</code>
 </li><li>the tuple enrichments (apply and map) for TaskKey’s and SettingKey’s (eg. <code>(foo, bar) map { (f, b) =&gt; ... }</code>)
