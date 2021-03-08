@@ -65,9 +65,9 @@ Si has tenido algún problema ejecutando sbt, revisa las
 proxies HTTP y opciones de la JVM.
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.4.7/sbt-1.4.7.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.4.7/sbt-1.4.7.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.4.7/sbt-1.4.7.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.4.8/sbt-1.4.8.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.4.8/sbt-1.4.8.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.4.8/sbt-1.4.8.tgz
   [Manual-Installation]: Manual-Installation.html
   [AdoptOpenJDK]: https://adoptopenjdk.net/
 
@@ -108,9 +108,9 @@ $ sdk install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.4.7/sbt-1.4.7.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.4.7/sbt-1.4.7.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.4.7/sbt-1.4.7.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.4.8/sbt-1.4.8.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.4.8/sbt-1.4.8.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.4.8/sbt-1.4.8.tgz
   [AdoptOpenJDK]: https://adoptopenjdk.net/
 
 Instalar sbt en Windows
@@ -141,11 +141,11 @@ $ scoop install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.4.7/sbt-1.4.7.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.4.7/sbt-1.4.7.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.4.7/sbt-1.4.7.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.4.7.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.4.7.deb
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.4.8/sbt-1.4.8.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.4.8/sbt-1.4.8.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.4.8/sbt-1.4.8.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.4.8.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.4.8.deb
   [Manual-Installation]: Manual-Installation.html
   [website127]: https://github.com/sbt/website/issues/127
   [cert-bug]: https://bugs.launchpad.net/ubuntu/+source/ca-certificates-java/+bug/1739631
@@ -158,8 +158,7 @@ Installing sbt on Linux
 To install both JDK and sbt, consider using [SDKMAN](https://sdkman.io/).
 
 ```
-$ sdk list java
-$ sdk install java 11.0.4.hs-adpt
+$ sdk install java $(sdk list java | grep -o "8\.[0-9]*\.[0-9]*\.hs-adpt" | head -1)
 $ sdk install sbt
 ```
 
@@ -183,7 +182,7 @@ Descarga el paquete [ZIP][ZIP] o [TGZ][TGZ] y descomprímelo.
 
 ### Ubuntu y otras distribuciones basadas en Debian
 
-Los paquetes [DEB][DEB] son oficialmente soportados por sbt.
+Los paquetes [DEB][DEB] son oficialmente soportados por sbt. (sbt 1.4.8 and onwards do not have DEB packaging yet due to Bintray going away)
 
 Ubuntu y otras distribuciones basadas en Debian usan el formato DEB, pero por lo
 general no necesitas instalar software desde un fichero DEB local.
@@ -223,7 +222,7 @@ release. Mira las respuesta para encontrar soluciones.
 
 ### Red Hat Enterprise Linux y otras distribuciones basadas en RPM
 
-Los paquetes [RPM][RPM] son oficialmente soportados por sbt.
+Los paquetes [RPM][RPM] son oficialmente soportados por sbt. (sbt 1.4.8 and onwards do not have DEB packaging yet due to Bintray going away)
 
 Red Hat Enterprise Linux y otras distribuciones basadas en RPM utilizan el
 formato RPM. Ejecuta lo siguiente desde el terminal para instalar `sbt`
@@ -1313,7 +1312,7 @@ Definiciones de construcción
 
 Esta página describe las definiciones de construcción (build definitions), 
 incluyendo algo de "teoría" y la sintaxis de `build.sbt`. Se supone que has 
-instalado una versión reciente de sbt, como sbt 1.4.7, que sabes cómo 
+instalado una versión reciente de sbt, como sbt 1.4.8, que sabes cómo 
 [usar sbt][Running] y que has leído las páginas anteriores de la Guía de inicio.
 
 Esta página explica la definición de construcción de `build.sbt`.
@@ -1329,7 +1328,7 @@ crea un fichero llamado `project/build.properties` en el que se especifica la
 versión de sbt como sigue:
 
 ```
-sbt.version=1.4.7
+sbt.version=1.4.8
 ```
 
 Si la versión requerida no está disponible localmente, el lanzador `sbt` se la 

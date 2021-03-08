@@ -67,9 +67,9 @@ sbt プロジェクトを作るためには、以下の手順をたどる必要�
 
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.4.7/sbt-1.4.7.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.4.7/sbt-1.4.7.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.4.7/sbt-1.4.7.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.4.8/sbt-1.4.8.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.4.8/sbt-1.4.8.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.4.8/sbt-1.4.8.tgz
   [Manual-Installation]: Manual-Installation.html
   [AdoptOpenJDK]: https://adoptopenjdk.net/
 
@@ -83,8 +83,13 @@ macOS への sbt のインストール
 もしくは [SDKMAN!](https://sdkman.io/) を使う:
 
 ```
-$ sdk list java
-$ sdk install java 11.0.4.hs-adpt
+$ sdk install java $(sdk list java | grep -o "8\.[0-9]*\.[0-9]*\.hs-adpt" | head -1)
+```
+
+#### [SDKMAN!](https://sdkman.io/)
+
+```
+$ sdk install sbt
 ```
 
 ### ユニバーサルパッケージからのインストール
@@ -102,16 +107,10 @@ $ sdk install java 11.0.4.hs-adpt
 $ brew install sbt
 ```
 
-#### [SDKMAN!](https://sdkman.io/)
 
-```
-$ sdk install sbt
-```
-
-
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.4.7/sbt-1.4.7.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.4.7/sbt-1.4.7.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.4.7/sbt-1.4.7.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.4.8/sbt-1.4.8.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.4.8/sbt-1.4.8.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.4.8/sbt-1.4.8.tgz
   [AdoptOpenJDK]: https://adoptopenjdk.net/
 
 Windows への sbt のインストール
@@ -141,11 +140,11 @@ $ scoop install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.4.7/sbt-1.4.7.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.4.7/sbt-1.4.7.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.4.7/sbt-1.4.7.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.4.7.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.4.7.deb
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.4.8/sbt-1.4.8.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.4.8/sbt-1.4.8.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.4.8/sbt-1.4.8.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.4.8.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.4.8.deb
   [Manual-Installation]: Manual-Installation.html
   [website127]: https://github.com/sbt/website/issues/12
   [cert-bug]: https://bugs.launchpad.net/ubuntu/+source/ca-certificates-java/+bug/1739631
@@ -158,8 +157,7 @@ Linux への sbt のインストール
 JDK と sbt をするのに、[SDKMAN](https://sdkman.io/) の導入を検討してほしい。
 
 ```
-$ sdk list java
-$ sdk install java 11.0.4.hs-adpt
+$ sdk install java $(sdk list java | grep -o "8\.[0-9]*\.[0-9]*\.hs-adpt" | head -1)
 $ sdk install sbt
 ```
 
@@ -179,7 +177,7 @@ $ sdk install sbt
 
 ### Ubuntu 及びその他の Debian ベースの Linux ディストリビューション
 
-[DEB][DEB] は sbt による公式パッケージだ。
+[DEB][DEB] は sbt による公式パッケージだ。 (sbt 1.4.8 and onwards do not have DEB packaging yet due to Bintray going away)
 
 Ubuntu 及びその他の Debian ベースのディストリビューションは DEB フォーマットを用いるが、
 ローカルの DEB ファイルからソフトウェアをインストールすることは稀だ。
@@ -206,7 +204,7 @@ sbt のバイナリは Bintray にて公開されており、都合の良いこ�
 
 ### Red Hat Enterprise Linux 及びその他の RPM ベースのディストリビューション
 
-[RPM][RPM] は sbt による公式パッケージだ。
+[RPM][RPM] は sbt による公式パッケージだ。 (sbt 1.4.8 and onwards do not have DEB packaging yet due to Bintray going away)
 
 Red Hat Enterprise Linux 及びその他の RPM ベースのディストリビューションは RPM フォーマットを用いる。
 ターミナル上から以下を実行すると `sbt` をインストールできる (superuser 権限を必要とするため、`sudo` を使っている)。
@@ -1269,7 +1267,7 @@ sbt 0.13.13 など最近のバージョンをインストール済みで、
 sbt バージョンを指定する:
 
 ```
-sbt.version=1.4.7
+sbt.version=1.4.8
 ```
 
 もしも指定されたバージョンがローカルマシンに無ければ、
@@ -4747,7 +4745,7 @@ sbt 0.13.8 で `Def.sequential` という関数が追加されて、準逐次な
 #### project/build.properties
 
 ```
-sbt.version=1.4.7
+sbt.version=1.4.8
 ```
 
 #### project/style.sbt
@@ -4797,7 +4795,7 @@ root> compilecheck
 #### project/build.properties
 
 ```
-sbt.version=1.4.7
+sbt.version=1.4.8
 ```
 
 #### project/style.sbt
