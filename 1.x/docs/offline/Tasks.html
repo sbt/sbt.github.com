@@ -363,6 +363,14 @@ traceLevel in myTask := 5
 <code>persistLogLevel</code> and <code>persistTraceLevel</code> settings. The <code>last</code> command
 displays what was logged according to these levels. The levels do not
 affect already logged information.
+</p><h3 id="Conditional+task">Conditional task<a href="#Conditional+task" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>(Requires sbt 1.4.0+)
+</p><p>When <code>Def.task { ... }</code> consists of an <code>if</code>-expression at the top-level, a conditional task (or Selective task) is automatically created:
+</p><pre><code class="prettyprint lang-scala">bar := {
+  if (number.value &lt; 0) negAction.value
+  else if (number.value == 0) zeroAction.value
+  else posAction.value
+}
+</code></pre><p>Unlike the regular (Applicative) task composition, conditional tasks delays the evaluation of then-clause and else-clause as naturally expected of an <code>if</code>-expression. This is already possible with <code>Def.taskDyn { ... }</code>, but unlike dynamic tasks, conditional task works with <code>inspect</code> command.
 </p><h3 id="Dynamic+Computations+with">Dynamic Computations with <code>Def.taskDyn</code><a href="#Dynamic+Computations+with" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>It can be useful to use the result of a task to determine the next tasks
 to evaluate. This is done using <code>Def.taskDyn</code>. The result of <code>taskDyn</code>
 is called a dynamic task because it introduces dependencies at runtime.
