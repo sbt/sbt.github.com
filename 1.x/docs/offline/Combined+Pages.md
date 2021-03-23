@@ -9534,6 +9534,29 @@ depending on the value of `crossPaths`.
 Because (unlike Scala library) Scala compiler is not forward compatible among
 the patch releases, compiler plugins should use `CrossVersion.full`.
 
+#### Scala 3 specific cross-versions 
+
+In a Scala 3 project you can use Scala 2.13 libraries:
+
+```scala
+("a" % "b" % "1.0") cross CrossVersion.for3Use2_13
+```
+
+This is equivalent to using `%%` except it resolves the `_2.13` variant 
+of the library  when `scalaVersion` is 3.x.y.
+
+Conversely we have `CrossVersion.for2_13Use3` to use the `_3` variant of the
+library when `scalaVersion` is 2.13.x:
+
+```scala
+("a" % "b" % "1.0") cross CrossVersion.for2_13Use3
+```
+
+**Warning for library authors:** It is generally not safe to publish
+a Scala 3 library that depends on a Scala 2.13 library or vice-versa.
+The reason is to prevent your end users from having two versions `x_2.13`
+and `x_3` of the same x library in their classpath.
+
 #### More about using cross-built libraries
 
 You can have fine-grained control over the behavior for different Scala versions
@@ -9566,30 +9589,30 @@ distinguish variant but binary compatible Scala toolchain builds.
 ("a" % "b" % "1.0").cross(CrossVersion.patch)
 ```
 
-This uses a custom function to determine the Scala version to use based
-on the binary Scala version:
+`CrossVersion.constant` fixes a constant value:
 
 ```scala
-("a" % "b" % "1.0") cross CrossVersion.binaryMapped {
-  case "2.9.1" => "2.9.0" // remember that pre-2.10, binary=full
-  case "2.10" => "2.10.0" // useful if a%b was released with the old style
-  case x => x
-}
+("a" % "b" % "1.0") cross CrossVersion.constant("2.9.1")
 ```
 
-This uses a custom function to determine the Scala version to use based
-on the full Scala version:
+It is equivalent to:
 
 ```scala
-("a" % "b" % "1.0") cross CrossVersion.fullMapped {
-  case "2.9.1" => "2.9.0"
-  case x => x
-}
+"a" % "b_2.9.1" % "1.0"
 ```
 
-A custom function is mainly used when cross-building and a dependency
+A constant cross version is mainly used when cross-building and a dependency
 isn't available for all Scala versions or it uses a different convention
 than the default.
+
+```scala
+("a" % "b" % "1.0") cross CrossVersion.constant {
+  scalaVersion.value match {
+    case "2.9.1" => "2.9.0"
+    case x => x
+  }
+}
+```
 
 #### Note about sbt-release
 
@@ -14686,16 +14709,20 @@ libraryDependencies += ("org.testng" % "testng" % "5.7").artifacts(Artifact("tes
 ```
 
 
+  [Library-Dependencies]: Library-Dependencies.html
+  [TTL]: https://get-coursier.io/docs/ttl
+
 Dependency Management Flow
 --------------------------
 
-sbt 0.12.1 addresses several issues with dependency management. These fixes
-were made possible by specific, reproducible examples, such as a
-situation where the resolution cache got out of date (gh-532). A brief
-summary of the current work flow with dependency management in sbt
-follows.
+There's a
+[getting started page][Library-Dependencies] about
+library management, which you may want to read first.
 
-### Background
+This page explains the relationship between the `compile` task
+and libray dependency management.
+
+#### Background
 
 `update` resolves dependencies according to the settings in a build
 file, such as `libraryDependencies` and `resolvers`. Other tasks use the
@@ -14706,91 +14733,41 @@ the `update` task needs to run. However, resolving dependencies on every
 `compile` would be unnecessarily slow and so `update` must be particular
 about when it actually performs a resolution.
 
-### Caching and Configuration
+In addition, sbt 1.x introduced the notion of Library Management API (LM API),
+which abstracted the notion of library management.
+As of sbt 1.3.0, there are two implementations for the LM API:
+one based on Coursier, and the other based on Apache Ivy.
 
-1.  Normally, if no dependency management configuration has changed
-    since the last successful resolution and the retrieved files are
-    still present, sbt does not ask Ivy to perform resolution.
-2.  Changing the configuration, such as adding or removing dependencies
+#### Caching and Configuration
+
+1.  If no library dependency settings have changed since
+    the last successful resolution and the retrieved files are
+    still present, sbt does not ask dependency resolver (like Coursier)
+    to perform resolution.
+2.  Changing the settings, such as adding or removing dependencies
     or changing the version or other attributes of a dependency, will
-    automatically cause resolution to be performed. Updates to locally
-    published dependencies should be detected in sbt 0.12.1 and later
-    and will force an update. Dependent tasks like compile and run will
-    get updated classpaths.
+    automatically cause resolution to be performed.
 3.  Directly running the `update` task (as opposed to a task that
     depends on it) will force resolution to run, whether or not
-    configuration changed. This should be done in order to refresh
-    remote SNAPSHOT dependencies.
-4.  When `offline := true`, remote SNAPSHOTs will not be updated by a
-    resolution, even an explicitly requested update. This should
-    effectively support working without a connection to remote
-    repositories. Reproducible examples demonstrating otherwise are
-    appreciated. Obviously, update must have successfully run before
-    going offline.
-5.  Overriding all of the above, `skip in update := true` will tell sbt
+    configuration changed.
+4.  Clearing the task cache by running `clean` will also cause
+    resolution to be performed.
+5.  Overriding all of the above, `update / skip := true` will tell sbt
     to never perform resolution. Note that this can cause dependent
-    tasks to fail. For example, compilation may fail if jars have been
-    deleted from the cache (and so needed classes are missing) or a
-    dependency has been added (but will not be resolved because skip is
-    true). Also, update itself will immediately fail if resolution has
-    not been allowed to run since the last clean.
+    tasks to fail.
 
-### General troubleshooting steps
+#### Notes on SNAPSHOTs
 
-1.  Run `update` explicitly. This will typically fix problems with out
-    of date SNAPSHOTs or locally published artifacts.
-2.  If a file cannot be found, look at the output of update to see where
-    Ivy is looking for the file. This may help diagnose an incorrectly
-    defined dependency or a dependency that is actually not present in a
-    repository.
-3.  `last update` contains more information about the most recent
-    resolution and download. The amount of debugging output from Ivy is
-    high, so you may want to use last-grep (run help last-grep for usage).
-4.  Run `clean` and then `update`. If this works, it could indicate a
-    bug in sbt, but the problem would need to be reproduced in order to
-    diagnose and fix it.
-5.  Before deleting all of the Ivy cache, first try deleting files in
-    `~/.ivy2/cache` related to problematic dependencies. For example, if
-    there are problems with dependency `"org.example" % "demo" % "1.0"`,
-    delete `~/.ivy2/cache/org.example/demo/1.0/` and retry update. This
-    avoids needing to redownload all dependencies.
-6.  Normal sbt usage should not require deleting files from
-    `~/.ivy2/cache`, especially if the first four steps have been
-    followed. If deleting the cache fixes a dependency management issue,
-    please try to reproduce the issue and submit a test case.
+Repeatability of the build is paramount, especially when you share
+the build with someone else.
+`SNAPSHOT` versions are convenient way of locally testing something,
+but its use should be limited only to the local machine
+because it introduces mutability to the build, which makes it brittle,
+and the dependency resolution slower as the publish date must be
+checked over the network even when the artifacts are locally cached.
 
-### Plugins
-
-These troubleshooting steps can be run for plugins by changing to the
-build definition project, running the commands, and then returning to
-the main project. For example:
-
-```
-> reload plugins
-> update
-> reload return
-```
-
-### Notes
-
-1.  Configure offline behavior for all projects on a machine by putting
-    `offline := true` in `$HOME/.sbt/1.0/global.sbt`. A command that does this for
-    the user would make a nice pull request. Perhaps the setting of
-    offline should go into the output of about or should it be a warning
-    in the output of update or both?
-2.  The cache improvements in 0.12.1 address issues in the change
-    detection for update so that it will correctly re-resolve
-    automatically in more situations. A problem with an out of date
-    cache can usually be attributed to a bug in that change detection if
-    explicitly running update fixes the problem.
-3.  A common solution to dependency management problems in sbt has been
-    to remove `~/.ivy2/cache`. Before doing this with 0.12.1, be sure to
-    follow the steps in the troubleshooting section first. In
-    particular, verify that a clean and an explicit update do not solve
-    the issue.
-4.  There is no need to mark SNAPSHOT dependencies as `changing()`
-    because sbt configures Ivy to know this already.
-
+By default, `SNAPSHOT` artifacts in Coursier are given [24h time-to-live][TTL] (TTL) to avoid network IO. If you need to force re-resolution of `SNAPSHOTS`,
+run sbt with `COURSIER_TTL` environment variable set to `0s`.
 
 
   [Setup]: Setup.html

@@ -5749,6 +5749,17 @@ compiled against 2.12 for your 2.12.x builds, and so on.
 depending on the value of <code>crossPaths</code>.
 </p><p>Because (unlike Scala library) Scala compiler is not forward compatible among
 the patch releases, compiler plugins should use <code>CrossVersion.full</code>.
+</p><h4 id="Scala+3+specific+cross-versions">Scala 3 specific cross-versions<a href="#Scala+3+specific+cross-versions" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>In a Scala 3 project you can use Scala 2.13 libraries:
+</p><pre><code class="prettyprint lang-scala">(&quot;a&quot; % &quot;b&quot; % &quot;1.0&quot;) cross CrossVersion.for3Use2_13
+</code></pre><p>This is equivalent to using <code>%%</code> except it resolves the <code>_2.13</code> variant 
+of the library  when <code>scalaVersion</code> is 3.x.y.
+</p><p>Conversely we have <code>CrossVersion.for2_13Use3</code> to use the <code>_3</code> variant of the
+library when <code>scalaVersion</code> is 2.13.x:
+</p><pre><code class="prettyprint lang-scala">(&quot;a&quot; % &quot;b&quot; % &quot;1.0&quot;) cross CrossVersion.for2_13Use3
+</code></pre><p><strong>Warning for library authors:</strong> It is generally not safe to publish
+a Scala 3 library that depends on a Scala 2.13 library or vice-versa.
+The reason is to prevent your end users from having two versions <code>x_2.13</code>
+and <code>x_3</code> of the same x library in their classpath.
 </p><h4 id="More+about+using+cross-built+libraries">More about using cross-built libraries<a href="#More+about+using+cross-built+libraries" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>You can have fine-grained control over the behavior for different Scala versions
 by using the <code>cross</code> method on <code>ModuleID</code> These are equivalent:
 </p><pre><code class="prettyprint lang-scala">&quot;a&quot; % &quot;b&quot; % &quot;1.0&quot;
@@ -5763,23 +5774,20 @@ of the binary Scala version:
 in that it strips off any trailing <code>-bin-...</code> suffix which is used to
 distinguish variant but binary compatible Scala toolchain builds.
 </p><pre><code class="prettyprint lang-scala">(&quot;a&quot; % &quot;b&quot; % &quot;1.0&quot;).cross(CrossVersion.patch)
-</code></pre><p>This uses a custom function to determine the Scala version to use based
-on the binary Scala version:
-</p><pre><code class="prettyprint lang-scala">(&quot;a&quot; % &quot;b&quot; % &quot;1.0&quot;) cross CrossVersion.binaryMapped {
-  case &quot;2.9.1&quot; =&gt; &quot;2.9.0&quot; // remember that pre-2.10, binary=full
-  case &quot;2.10&quot; =&gt; &quot;2.10.0&quot; // useful if a%b was released with the old style
-  case x =&gt; x
-}
-</code></pre><p>This uses a custom function to determine the Scala version to use based
-on the full Scala version:
-</p><pre><code class="prettyprint lang-scala">(&quot;a&quot; % &quot;b&quot; % &quot;1.0&quot;) cross CrossVersion.fullMapped {
-  case &quot;2.9.1&quot; =&gt; &quot;2.9.0&quot;
-  case x =&gt; x
-}
-</code></pre><p>A custom function is mainly used when cross-building and a dependency
+</code></pre><p><code>CrossVersion.constant</code> fixes a constant value:
+</p><pre><code class="prettyprint lang-scala">(&quot;a&quot; % &quot;b&quot; % &quot;1.0&quot;) cross CrossVersion.constant(&quot;2.9.1&quot;)
+</code></pre><p>It is equivalent to:
+</p><pre><code class="prettyprint lang-scala">&quot;a&quot; % &quot;b_2.9.1&quot; % &quot;1.0&quot;
+</code></pre><p>A constant cross version is mainly used when cross-building and a dependency
 isn’t available for all Scala versions or it uses a different convention
 than the default.
-</p><h4 id="Note+about+sbt-release">Note about sbt-release<a href="#Note+about+sbt-release" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>sbt-release implemented cross building support by copy-pasting sbt 0.13’s <code>+</code> implementation,
+</p><pre><code class="prettyprint lang-scala">(&quot;a&quot; % &quot;b&quot; % &quot;1.0&quot;) cross CrossVersion.constant {
+  scalaVersion.value match {
+    case &quot;2.9.1&quot; =&gt; &quot;2.9.0&quot;
+    case x =&gt; x
+  }
+}
+</code></pre><h4 id="Note+about+sbt-release">Note about sbt-release<a href="#Note+about+sbt-release" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>sbt-release implemented cross building support by copy-pasting sbt 0.13’s <code>+</code> implementation,
 so at least as of sbt-release 1.0.10, it does not work correctly with sbt 1.x’s cross building,
 which was prototyped originally as sbt-doge.
 </p><p>To cross publish using sbt-release with sbt 1.x, use the following workaround:
@@ -8929,12 +8937,12 @@ def classifier(c: String) = artifacts(Artifact(name, c))
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += (&quot;org.testng&quot; % &quot;testng&quot; % &quot;5.7&quot;).classifier(&quot;jdk15&quot;)
 
 libraryDependencies += (&quot;org.testng&quot; % &quot;testng&quot; % &quot;5.7&quot;).artifacts(Artifact(&quot;testng&quot;, &quot;jdk15&quot;))
-</code></pre><h2 id="Dependency+Management+Flow">Dependency Management Flow<a href="#Dependency+Management+Flow" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>sbt 0.12.1 addresses several issues with dependency management. These fixes
-were made possible by specific, reproducible examples, such as a
-situation where the resolution cache got out of date (gh-532). A brief
-summary of the current work flow with dependency management in sbt
-follows.
-</p><h3 id="Background">Background<a href="#Background" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>update</code> resolves dependencies according to the settings in a build
+</code></pre><h2 id="Dependency+Management+Flow">Dependency Management Flow<a href="#Dependency+Management+Flow" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>There’s a
+<a href="Library-Dependencies.html">getting started page</a> about
+library management, which you may want to read first.
+</p><p>This page explains the relationship between the <code>compile</code> task
+and libray dependency management.
+</p><h4 id="Background">Background<a href="#Background" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>update</code> resolves dependencies according to the settings in a build
 file, such as <code>libraryDependencies</code> and <code>resolvers</code>. Other tasks use the
 output of <code>update</code> (an <code>UpdateReport</code>) to form various classpaths. Tasks
 that in turn use these classpaths, such as <code>compile</code> or <code>run</code>, thus
@@ -8942,77 +8950,35 @@ indirectly depend on <code>update</code>. This means that before <code>compile</
 the <code>update</code> task needs to run. However, resolving dependencies on every
 <code>compile</code> would be unnecessarily slow and so <code>update</code> must be particular
 about when it actually performs a resolution.
-</p><h3 id="Caching+and+Configuration">Caching and Configuration<a href="#Caching+and+Configuration" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ol><li>Normally, if no dependency management configuration has changed
-since the last successful resolution and the retrieved files are
-still present, sbt does not ask Ivy to perform resolution.
-</li><li>Changing the configuration, such as adding or removing dependencies
+</p><p>In addition, sbt 1.x introduced the notion of Library Management API (LM API),
+which abstracted the notion of library management.
+As of sbt 1.3.0, there are two implementations for the LM API:
+one based on Coursier, and the other based on Apache Ivy.
+</p><h4 id="Caching+and+Configuration">Caching and Configuration<a href="#Caching+and+Configuration" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ol><li>If no library dependency settings have changed since
+the last successful resolution and the retrieved files are
+still present, sbt does not ask dependency resolver (like Coursier)
+to perform resolution.
+</li><li>Changing the settings, such as adding or removing dependencies
 or changing the version or other attributes of a dependency, will
-automatically cause resolution to be performed. Updates to locally
-published dependencies should be detected in sbt 0.12.1 and later
-and will force an update. Dependent tasks like compile and run will
-get updated classpaths.
+automatically cause resolution to be performed.
 </li><li>Directly running the <code>update</code> task (as opposed to a task that
 depends on it) will force resolution to run, whether or not
-configuration changed. This should be done in order to refresh
-remote SNAPSHOT dependencies.
-</li><li>When <code>offline := true</code>, remote SNAPSHOTs will not be updated by a
-resolution, even an explicitly requested update. This should
-effectively support working without a connection to remote
-repositories. Reproducible examples demonstrating otherwise are
-appreciated. Obviously, update must have successfully run before
-going offline.
-</li><li>Overriding all of the above, <code>skip in update := true</code> will tell sbt
+configuration changed.
+</li><li>Clearing the task cache by running <code>clean</code> will also cause
+resolution to be performed.
+</li><li>Overriding all of the above, <code>update / skip := true</code> will tell sbt
 to never perform resolution. Note that this can cause dependent
-tasks to fail. For example, compilation may fail if jars have been
-deleted from the cache (and so needed classes are missing) or a
-dependency has been added (but will not be resolved because skip is
-true). Also, update itself will immediately fail if resolution has
-not been allowed to run since the last clean.
-</li></ol><h3 id="General+troubleshooting+steps">General troubleshooting steps<a href="#General+troubleshooting+steps" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ol><li>Run <code>update</code> explicitly. This will typically fix problems with out
-of date SNAPSHOTs or locally published artifacts.
-</li><li>If a file cannot be found, look at the output of update to see where
-Ivy is looking for the file. This may help diagnose an incorrectly
-defined dependency or a dependency that is actually not present in a
-repository.
-</li><li><code>last update</code> contains more information about the most recent
-resolution and download. The amount of debugging output from Ivy is
-high, so you may want to use last-grep (run help last-grep for usage).
-</li><li>Run <code>clean</code> and then <code>update</code>. If this works, it could indicate a
-bug in sbt, but the problem would need to be reproduced in order to
-diagnose and fix it.
-</li><li>Before deleting all of the Ivy cache, first try deleting files in
-<code>~/.ivy2/cache</code> related to problematic dependencies. For example, if
-there are problems with dependency <code>&quot;org.example&quot; % &quot;demo&quot; % &quot;1.0&quot;</code>,
-delete <code>~/.ivy2/cache/org.example/demo/1.0/</code> and retry update. This
-avoids needing to redownload all dependencies.
-</li><li>Normal sbt usage should not require deleting files from
-<code>~/.ivy2/cache</code>, especially if the first four steps have been
-followed. If deleting the cache fixes a dependency management issue,
-please try to reproduce the issue and submit a test case.
-</li></ol><h3 id="Plugins">Plugins<a href="#Plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>These troubleshooting steps can be run for plugins by changing to the
-build definition project, running the commands, and then returning to
-the main project. For example:
-</p><pre><code class="">&gt; reload plugins
-&gt; update
-&gt; reload return
-</code></pre><h3 id="Notes">Notes<a href="#Notes" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ol><li>Configure offline behavior for all projects on a machine by putting
-<code>offline := true</code> in <code>$HOME/.sbt/1.0/global.sbt</code>. A command that does this for
-the user would make a nice pull request. Perhaps the setting of
-offline should go into the output of about or should it be a warning
-in the output of update or both?
-</li><li>The cache improvements in 0.12.1 address issues in the change
-detection for update so that it will correctly re-resolve
-automatically in more situations. A problem with an out of date
-cache can usually be attributed to a bug in that change detection if
-explicitly running update fixes the problem.
-</li><li>A common solution to dependency management problems in sbt has been
-to remove <code>~/.ivy2/cache</code>. Before doing this with 0.12.1, be sure to
-follow the steps in the troubleshooting section first. In
-particular, verify that a clean and an explicit update do not solve
-the issue.
-</li><li>There is no need to mark SNAPSHOT dependencies as <code>changing()</code>
-because sbt configures Ivy to know this already.
-</li></ol><h2 id="Library+Management">Library Management<a href="#Library+Management" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>There’s now a
+tasks to fail.
+</li></ol><h4 id="Notes+on+SNAPSHOTs">Notes on SNAPSHOTs<a href="#Notes+on+SNAPSHOTs" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Repeatability of the build is paramount, especially when you share
+the build with someone else.
+<code>SNAPSHOT</code> versions are convenient way of locally testing something,
+but its use should be limited only to the local machine
+because it introduces mutability to the build, which makes it brittle,
+and the dependency resolution slower as the publish date must be
+checked over the network even when the artifacts are locally cached.
+</p><p>By default, <code>SNAPSHOT</code> artifacts in Coursier are given <a href="https://get-coursier.io/docs/ttl">24h time-to-live</a> (TTL) to avoid network IO. If you need to force re-resolution of <code>SNAPSHOTS</code>,
+run sbt with <code>COURSIER_TTL</code> environment variable set to <code>0s</code>.
+</p><h2 id="Library+Management">Library Management<a href="#Library+Management" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>There’s now a
 <a href="Library-Dependencies.html">getting started page</a> about
 library management, which you may want to read first.
 </p><p><em>Documentation Maintenance Note:</em> it would be nice to remove the overlap
