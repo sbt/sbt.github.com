@@ -423,7 +423,7 @@ ThisBuild / organization := "com.example"
 lazy val hello = (project in file("."))
   .settings(
     name := "Hello",
-    libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % Test,
+    libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.7" % Test,
   )
 ```
 
@@ -450,9 +450,9 @@ sbt:Hello> ~testQuick
 上のコマンドを走らせたままで、エディタから `src/test/scala/HelloSpec.scala` という名前のファイルを作成する:
 
 ```scala
-import org.scalatest._
+import org.scalatest.funsuite._
 
-class HelloSpec extends FunSuite with DiagrammedAssertions {
+class HelloSpec extends AnyFunSuite {
   test("Hello should start with H") {
     assert("hello".startsWith("H"))
   }
@@ -485,9 +485,9 @@ class HelloSpec extends FunSuite with DiagrammedAssertions {
 エディタを使って `src/test/scala/HelloSpec.scala` を以下のように変更する:
 
 ```scala
-import org.scalatest._
+import org.scalatest.funsuite._
 
-class HelloSpec extends FunSuite with DiagrammedAssertions {
+class HelloSpec extends AnyFunSuite {
   test("Hello should start with H") {
     // Hello, as opposed to hello
     assert("Hello".startsWith("H"))
@@ -592,7 +592,7 @@ lazy val hello = (project in file("."))
   .settings(
     name := "Hello",
     libraryDependencies += "com.eed3si9n" %% "gigahorse-okhttp" % "0.3.1",
-    libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % Test,
+    libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.7" % Test,
   )
 
 lazy val helloCore = (project in file("core"))
@@ -626,7 +626,7 @@ sbt:Hello> helloCore/compile
 ThisBuild / scalaVersion := "2.12.7"
 ThisBuild / organization := "com.example"
 
-val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5"
+val scalaTest = "org.scalatest" %% "scalatest" % "3.2.7"
 
 lazy val hello = (project in file("."))
   .settings(
@@ -650,7 +650,7 @@ lazy val helloCore = (project in file("core"))
 ThisBuild / scalaVersion := "2.12.7"
 ThisBuild / organization := "com.example"
 
-val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5"
+val scalaTest = "org.scalatest" %% "scalatest" % "3.2.7"
 
 lazy val hello = (project in file("."))
   .aggregate(helloCore)
@@ -683,7 +683,7 @@ sbt:Hello> ~testQuick
 ThisBuild / scalaVersion := "2.12.7"
 ThisBuild / organization := "com.example"
 
-val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5"
+val scalaTest = "org.scalatest" %% "scalatest" % "3.2.7"
 
 lazy val hello = (project in file("."))
   .aggregate(helloCore)
@@ -709,7 +709,7 @@ lazy val helloCore = (project in file("core"))
 ThisBuild / scalaVersion := "2.12.7"
 ThisBuild / organization := "com.example"
 
-val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5"
+val scalaTest = "org.scalatest" %% "scalatest" % "3.2.7"
 val gigahorse = "com.eed3si9n" %% "gigahorse-okhttp" % "0.3.1"
 val playJson  = "com.typesafe.play" %% "play-json" % "2.6.9"
 
@@ -805,7 +805,7 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.3.4")
 ThisBuild / scalaVersion := "2.12.7"
 ThisBuild / organization := "com.example"
 
-val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5"
+val scalaTest = "org.scalatest" %% "scalatest" % "3.2.7"
 val gigahorse = "com.eed3si9n" %% "gigahorse-okhttp" % "0.3.1"
 val playJson  = "com.typesafe.play" %% "play-json" % "2.6.9"
 
@@ -871,7 +871,7 @@ ThisBuild / version      := "0.1.0"
 ThisBuild / scalaVersion := "2.12.7"
 ThisBuild / organization := "com.example"
 
-val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5"
+val scalaTest = "org.scalatest" %% "scalatest" % "3.2.7"
 val gigahorse = "com.eed3si9n" %% "gigahorse-okhttp" % "0.3.1"
 val playJson  = "com.typesafe.play" %% "play-json" % "2.6.9"
 

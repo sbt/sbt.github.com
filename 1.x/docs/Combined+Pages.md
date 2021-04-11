@@ -499,7 +499,7 @@ ThisBuild / organization := "com.example"
 lazy val hello = (project in file("."))
   .settings(
     name := "Hello",
-    libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % Test,
+    libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.7" % Test,
   )
 ```
 
@@ -527,9 +527,9 @@ Leaving the previous command running, create a file named `src/test/scala/HelloS
 using an editor:
 
 ```scala
-import org.scalatest._
+import org.scalatest.funsuite._
 
-class HelloSpec extends FunSuite with DiagrammedAssertions {
+class HelloSpec extends AnyFunSuite {
   test("Hello should start with H") {
     assert("hello".startsWith("H"))
   }
@@ -562,9 +562,9 @@ class HelloSpec extends FunSuite with DiagrammedAssertions {
 Using an editor, change `src/test/scala/HelloSpec.scala` to:
 
 ```scala
-import org.scalatest._
+import org.scalatest.funsuite._
 
-class HelloSpec extends FunSuite with DiagrammedAssertions {
+class HelloSpec extends AnyFunSuite {
   test("Hello should start with H") {
     // Hello, as opposed to hello
     assert("Hello".startsWith("H"))
@@ -670,7 +670,7 @@ lazy val hello = (project in file("."))
   .settings(
     name := "Hello",
     libraryDependencies += "com.eed3si9n" %% "gigahorse-okhttp" % "0.3.1",
-    libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % Test,
+    libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.7" % Test,
   )
 
 lazy val helloCore = (project in file("core"))
@@ -704,7 +704,7 @@ Change `build.sbt` as follows:
 ThisBuild / scalaVersion := "2.12.7"
 ThisBuild / organization := "com.example"
 
-val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5"
+val scalaTest = "org.scalatest" %% "scalatest" % "3.2.7"
 
 lazy val hello = (project in file("."))
   .settings(
@@ -728,7 +728,7 @@ Set aggregate so that the command sent to `hello` is broadcast to `helloCore` to
 ThisBuild / scalaVersion := "2.12.7"
 ThisBuild / organization := "com.example"
 
-val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5"
+val scalaTest = "org.scalatest" %% "scalatest" % "3.2.7"
 
 lazy val hello = (project in file("."))
   .aggregate(helloCore)
@@ -761,7 +761,7 @@ Use `.dependsOn(...)` to add a dependency on other subprojects. Also let's move 
 ThisBuild / scalaVersion := "2.12.7"
 ThisBuild / organization := "com.example"
 
-val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5"
+val scalaTest = "org.scalatest" %% "scalatest" % "3.2.7"
 
 lazy val hello = (project in file("."))
   .aggregate(helloCore)
@@ -787,7 +787,7 @@ Let's add Play JSON to `helloCore`.
 ThisBuild / scalaVersion := "2.12.7"
 ThisBuild / organization := "com.example"
 
-val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5"
+val scalaTest = "org.scalatest" %% "scalatest" % "3.2.7"
 val gigahorse = "com.eed3si9n" %% "gigahorse-okhttp" % "0.3.1"
 val playJson  = "com.typesafe.play" %% "play-json" % "2.6.9"
 
@@ -883,7 +883,7 @@ Next change `build.sbt` as follows to add `JavaAppPackaging`:
 ThisBuild / scalaVersion := "2.12.7"
 ThisBuild / organization := "com.example"
 
-val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5"
+val scalaTest = "org.scalatest" %% "scalatest" % "3.2.7"
 val gigahorse = "com.eed3si9n" %% "gigahorse-okhttp" % "0.3.1"
 val playJson  = "com.typesafe.play" %% "play-json" % "2.6.9"
 
@@ -951,7 +951,7 @@ ThisBuild / version      := "0.1.0"
 ThisBuild / scalaVersion := "2.12.7"
 ThisBuild / organization := "com.example"
 
-val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5"
+val scalaTest = "org.scalatest" %% "scalatest" % "3.2.7"
 val gigahorse = "com.eed3si9n" %% "gigahorse-okhttp" % "0.3.1"
 val playJson  = "com.typesafe.play" %% "play-json" % "2.6.9"
 

@@ -136,7 +136,7 @@ ThisBuild / organization := &quot;com.example&quot;
 lazy val hello = (project in file(&quot;.&quot;))
   .settings(
     name := &quot;Hello&quot;,
-    libraryDependencies += &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.0.5&quot; % Test,
+    libraryDependencies += &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.2.7&quot; % Test,
   )
 </code></pre><p>Use the <code>reload</code> command to reflect the change in <code>build.sbt</code>.
 </p><pre><code class="">sbt:Hello&gt; reload
@@ -144,9 +144,9 @@ lazy val hello = (project in file(&quot;.&quot;))
 </code></pre><h3 id="Run+incremental+tests+continuously">Run incremental tests continuously<a href="#Run+incremental+tests+continuously" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:Hello&gt; ~testQuick
 </code></pre><h3 id="Write+a+test">Write a test<a href="#Write+a+test" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Leaving the previous command running, create a file named <code>src/test/scala/HelloSpec.scala</code>
 using an editor:
-</p><pre><code class="prettyprint lang-scala">import org.scalatest._
+</p><pre><code class="prettyprint lang-scala">import org.scalatest.funsuite._
 
-class HelloSpec extends FunSuite with DiagrammedAssertions {
+class HelloSpec extends AnyFunSuite {
   test(&quot;Hello should start with H&quot;) {
     assert(&quot;hello&quot;.startsWith(&quot;H&quot;))
   }
@@ -169,9 +169,9 @@ class HelloSpec extends FunSuite with DiagrammedAssertions {
 [error]   HelloSpec
 [error] (Test / testQuick) sbt.TestsFailedException: Tests unsuccessful
 </code></pre><h3 id="Make+the+test+pass">Make the test pass<a href="#Make+the+test+pass" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Using an editor, change <code>src/test/scala/HelloSpec.scala</code> to:
-</p><pre><code class="prettyprint lang-scala">import org.scalatest._
+</p><pre><code class="prettyprint lang-scala">import org.scalatest.funsuite._
 
-class HelloSpec extends FunSuite with DiagrammedAssertions {
+class HelloSpec extends AnyFunSuite {
   test(&quot;Hello should start with H&quot;) {
     // Hello, as opposed to hello
     assert(&quot;Hello&quot;.startsWith(&quot;H&quot;))
@@ -257,7 +257,7 @@ lazy val hello = (project in file(&quot;.&quot;))
   .settings(
     name := &quot;Hello&quot;,
     libraryDependencies += &quot;com.eed3si9n&quot; %% &quot;gigahorse-okhttp&quot; % &quot;0.3.1&quot;,
-    libraryDependencies += &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.0.5&quot; % Test,
+    libraryDependencies += &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.2.7&quot; % Test,
   )
 
 lazy val helloCore = (project in file(&quot;core&quot;))
@@ -274,7 +274,7 @@ lazy val helloCore = (project in file(&quot;core&quot;))
 </p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.7&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
-val scalaTest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.0.5&quot;
+val scalaTest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.2.7&quot;
 
 lazy val hello = (project in file(&quot;.&quot;))
   .settings(
@@ -292,7 +292,7 @@ lazy val helloCore = (project in file(&quot;core&quot;))
 </p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.7&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
-val scalaTest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.0.5&quot;
+val scalaTest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.2.7&quot;
 
 lazy val hello = (project in file(&quot;.&quot;))
   .aggregate(helloCore)
@@ -314,7 +314,7 @@ lazy val helloCore = (project in file(&quot;core&quot;))
 </p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.7&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
-val scalaTest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.0.5&quot;
+val scalaTest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.2.7&quot;
 
 lazy val hello = (project in file(&quot;.&quot;))
   .aggregate(helloCore)
@@ -334,7 +334,7 @@ lazy val helloCore = (project in file(&quot;core&quot;))
 </p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.7&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
-val scalaTest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.0.5&quot;
+val scalaTest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.2.7&quot;
 val gigahorse = &quot;com.eed3si9n&quot; %% &quot;gigahorse-okhttp&quot; % &quot;0.3.1&quot;
 val playJson  = &quot;com.typesafe.play&quot; %% &quot;play-json&quot; % &quot;2.6.9&quot;
 
@@ -408,7 +408,7 @@ Hello! The weather in New York is mostly cloudy.
 </p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.12.7&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
-val scalaTest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.0.5&quot;
+val scalaTest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.2.7&quot;
 val gigahorse = &quot;com.eed3si9n&quot; %% &quot;gigahorse-okhttp&quot; % &quot;0.3.1&quot;
 val playJson  = &quot;com.typesafe.play&quot; %% &quot;play-json&quot; % &quot;2.6.9&quot;
 
@@ -452,7 +452,7 @@ Hello! The weather in New York is mostly cloudy
 ThisBuild / scalaVersion := &quot;2.12.7&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
-val scalaTest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.0.5&quot;
+val scalaTest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.2.7&quot;
 val gigahorse = &quot;com.eed3si9n&quot; %% &quot;gigahorse-okhttp&quot; % &quot;0.3.1&quot;
 val playJson  = &quot;com.typesafe.play&quot; %% &quot;play-json&quot; % &quot;2.6.9&quot;
 
