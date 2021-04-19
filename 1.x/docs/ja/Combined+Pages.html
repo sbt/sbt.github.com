@@ -92,13 +92,12 @@ $ sdk install sbt
 これらのディストロは通常コマンドラインや GUI 上から使えるパッケージ・マネージャがあって
 (例: <code>apt-get</code>、<code>aptitude</code>、Synaptic など)、インストールはそれらから行う。
 ターミナル上から以下を実行すると <code>sbt</code> をインストールできる (superuser 権限を必要とするため、<code>sudo</code> を使っている)。
-</p><pre><code>echo &quot;deb https://dl.bintray.com/sbt/debian /&quot; | sudo tee -a /etc/apt/sources.list.d/sbt.list
+</p><pre><code>echo &quot;deb https://repo.scala-sbt.org/scalasbt/debian /&quot; | sudo tee -a /etc/apt/sources.list.d/sbt.list
 curl -sL &quot;https://keyserver.ubuntu.com/pks/lookup?op=get&amp;search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823&quot; | sudo apt-key add
 sudo apt-get update
 sudo apt-get install sbt
 </code></pre><p>パッケージ・マネージャは設定されたリポジトリに指定されたパッケージがあるか確認しにいく。
-sbt のバイナリは Bintray にて公開されており、都合の良いことに Bintray は APT リポジトリを提供している。
-そのため、このリポジトリをパッケージ・マネージャに追加しさえすればよい。
+このリポジトリをパッケージ・マネージャに追加しさえすればよい。
 </p><p><code>sbt</code> を最初にインストールした後は、このパッケージは <code>aptitude</code> や Synaptic
 上から管理することができる (パッケージ・キャッシュの更新を忘れずに)。
 追加された APT リポジトリは「システム設定 -&gt; ソフトウェアとアップデート -&gt; 他のソフトウェア」 の一番下に表示されているはずだ:
@@ -107,11 +106,18 @@ sbt のバイナリは Bintray にて公開されており、都合の良いこ�
 </p><h3 id="Red+Hat+Enterprise+Linux+%E5%8F%8A%E3%81%B3%E3%81%9D%E3%81%AE%E4%BB%96%E3%81%AE+RPM+%E3%83%99%E3%83%BC%E3%82%B9%E3%81%AE%E3%83%87%E3%82%A3%E3%82%B9%E3%83%88%E3%83%AA%E3%83%93%E3%83%A5%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3">Red Hat Enterprise Linux 及びその他の RPM ベースのディストリビューション<a href="#Red+Hat+Enterprise+Linux+%E5%8F%8A%E3%81%B3%E3%81%9D%E3%81%AE%E4%BB%96%E3%81%AE+RPM+%E3%83%99%E3%83%BC%E3%82%B9%E3%81%AE%E3%83%87%E3%82%A3%E3%82%B9%E3%83%88%E3%83%AA%E3%83%93%E3%83%A5%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://dl.bintray.com/sbt/rpm/sbt-1.5.0.rpm">RPM</a> は sbt による公式パッケージだ。 (sbt 1.4.8 and onwards do not have DEB packaging yet due to Bintray going away)
 </p><p>Red Hat Enterprise Linux 及びその他の RPM ベースのディストリビューションは RPM フォーマットを用いる。
 ターミナル上から以下を実行すると <code>sbt</code> をインストールできる (superuser 権限を必要とするため、<code>sudo</code> を使っている)。
-</p><pre><code>curl https://bintray.com/sbt/rpm/rpm | sudo tee /etc/yum.repos.d/bintray-sbt-rpm.repo
+</p><pre><code># remove old Bintray repo file
+sudo rm -f /etc/yum.repos.d/bintray-rpm.repo
+curl -L https://www.scala-sbt.org/sbt-rpm.repo &gt; sbt-rpm.repo
+sudo mv sbt-rpm.repo /etc/yum.repos.d/
 sudo yum install sbt
-</code></pre><p>sbt のバイナリは Bintray にて公開されており、Bintray は RPM リポジトリを提供する。
-そのため、このリポジトリをパッケージ・マネージャに追加する必要がある。
-</p><blockquote><p><strong>注意:</strong> これらのパッケージに問題があれば、
+</code></pre><p>On Fedora (31 and above), use <code>bintray-sbt-rpm.repo</code>
+</p><pre><code># remove old Bintray repo file
+sudo rm -f /etc/yum.repos.d/bintray-rpm.repo
+curl -L https://www.scala-sbt.org/sbt-rpm.repo &gt; sbt-rpm.repo
+sudo mv sbt-rpm.repo /etc/yum.repos.d/
+sudo dnf install sbt
+</code></pre><blockquote><p><strong>注意:</strong> これらのパッケージに問題があれば、
 <a href="https://github.com/sbt/sbt">sbt</a>
 プロジェクトに報告してほしい。
 </p></blockquote><h3 id="Gentoo">Gentoo<a href="#Gentoo" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>公式には sbt の ebuild は提供されていないが、

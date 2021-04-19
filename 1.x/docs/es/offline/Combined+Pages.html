@@ -106,13 +106,12 @@ comandos (p.e. <code>apt-get</code>, <code>aptitude</code>) o con una interfaz g
 (p.e. Synaptic).
 Ejecuta lo siguiente desde el terminal para instalar <code>sbt</code>
 (necesitarás tener privilegios de administrador para hacerlo, de ahí el <code>sudo</code>).
-</p><pre><code>echo &quot;deb https://dl.bintray.com/sbt/debian /&quot; | sudo tee -a /etc/apt/sources.list.d/sbt.list
+</p><pre><code>echo &quot;deb https://repo.scala-sbt.org/scalasbt/debian /&quot; | sudo tee -a /etc/apt/sources.list.d/sbt.list
 curl -sL &quot;https://keyserver.ubuntu.com/pks/lookup?op=get&amp;search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823&quot; | sudo apt-key add
 sudo apt-get update
 sudo apt-get install sbt
 </code></pre><p>Los gestores de paquetes utilizan los repositorios para buscar los paquetes que
-se desean instalar. Los binarios de sbt son publicados en Bintray y
-convenientemente Bintray proporciona un repositorio APT.
+se desean instalar.
 Sólo tienes que añadir el repositorio en aquellos ficheros utilizados por tu
 gestor de paquetes.
 </p><p>Una vez <code>sbt</code> haya sido instalado podrás gestionar el paquete en <code>aptitude</code> o
@@ -133,17 +132,17 @@ release. Mira las respuesta para encontrar soluciones.
 </p><p>Red Hat Enterprise Linux y otras distribuciones basadas en RPM utilizan el
 formato RPM. Ejecuta lo siguiente desde el terminal para instalar <code>sbt</code>
 (necesitarás tener privilegios de administrador para hacerlo, de ahí el <code>sudo</code>).
-</p><pre><code>curl https://bintray.com/sbt/rpm/rpm | sudo tee /etc/yum.repos.d/bintray-sbt-rpm.repo
+</p><pre><code># remove old Bintray repo file
+sudo rm -f /etc/yum.repos.d/bintray-rpm.repo
+curl -L https://www.scala-sbt.org/sbt-rpm.repo &gt; sbt-rpm.repo
+sudo mv sbt-rpm.repo /etc/yum.repos.d/
 sudo yum install sbt
-</code></pre><p>Los binarios de sbt son publicados en Bintray y convenientemente Bintray
-proporciona un repositorio RPM. Sólo tienes que añadir el repositorio en
-aquellos ficheros utilizados por tu gestor de paquetes.
-</p><p>En Fedora, <code>sbt 0.13.1</code> está <a href="https://fedora.pkgs.org/28/fedora-i386/sbt-0.13.1-9.fc28.1.noarch.rpm.html">disponible desde repos oficiales</a>.
-Si quieres instalar <code>sbt 1.1.6</code> o superior tendrás que desinstalar <code>sbt 0.13</code>
-(si es que está instaladoo) e indicar que quieres instalar las nuevas versiones
-de <code>sbt</code> (p.e. <code>sbt 1.1.6</code> o superior) utilizando <code>bintray-sbt-rpm.repo</code>.
-</p><pre><code>sudo dnf remove sbt # desinstalar sbt si sbt 0.13 estaba instalado (puede que no sea necesario)
-sudo dnf --enablerepo=bintray--sbt-rpm install sbt
+</code></pre><p>On Fedora (31 and above), use <code>sbt-rpm.repo</code>:
+</p><pre><code># remove old Bintray repo file
+sudo rm -f /etc/yum.repos.d/bintray-rpm.repo
+curl -L https://www.scala-sbt.org/sbt-rpm.repo &gt; sbt-rpm.repo
+sudo mv sbt-rpm.repo /etc/yum.repos.d/
+sudo dnf install sbt
 </code></pre><blockquote><p><strong>Nota:</strong> Por favor, reporta cualquier problema con estos paquetes al proyecto
 <a href="https://github.com/sbt/sbt">sbt</a>
 </p></blockquote><h3 id="Gentoo">Gentoo<a href="#Gentoo" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>El árbol oficial contiene ebuilds para sbt. Para instalar la última versión

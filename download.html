@@ -91,15 +91,17 @@ function OptanonWrapper() {
 <pre><code>&gt; scoop install sbt
 </code></pre></div><div class="arc_linux">
 <p><div class="distro_debian">  <h2>Linux (deb)</h2></p>
-<pre><code>echo &quot;deb https://dl.bintray.com/sbt/debian /&quot; | sudo tee -a /etc/apt/sources.list.d/sbt.list
+<pre><code>echo &quot;deb https://repo.scala-sbt.org/scalasbt/debian /&quot; | sudo tee -a /etc/apt/sources.list.d/sbt.list
 curl -sL &quot;https://keyserver.ubuntu.com/pks/lookup?op=get&amp;search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823&quot; | sudo apt-key add
 sudo apt-get update
 sudo apt-get install sbt
 </code></pre>
 <p></div></p>
 <p><div class="distro_redhat">  <h2>Linux (rpm)</h2></p>
-<pre><code>curl https://bintray.com/sbt/rpm/rpm &gt; bintray-sbt-rpm.repo
-sudo mv bintray-sbt-rpm.repo /etc/yum.repos.d/
+<pre><code># remove old Bintray repo file
+sudo rm -f /etc/yum.repos.d/bintray-rpm.repo
+curl -L https://www.scala-sbt.org/sbt-rpm.repo &gt; sbt-rpm.repo
+sudo mv sbt-rpm.repo /etc/yum.repos.d/
 sudo yum install sbt
 </code></pre>
 <p></div></p></div>

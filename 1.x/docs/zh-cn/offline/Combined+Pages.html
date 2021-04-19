@@ -75,7 +75,7 @@ $ sdk install sbt
 </p><h3 id="Ubuntu%E5%92%8C%E5%85%B6%E4%BB%96%E5%9F%BA%E4%BA%8EDebian%E7%9A%84%E5%8F%91%E8%A1%8C%E7%89%88">Ubuntu和其他基于Debian的发行版<a href="#Ubuntu%E5%92%8C%E5%85%B6%E4%BB%96%E5%9F%BA%E4%BA%8EDebian%E7%9A%84%E5%8F%91%E8%A1%8C%E7%89%88" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://dl.bintray.com/sbt/debian/sbt-1.5.0.deb">DEB</a> 安装包由sbt官方支持。 (sbt 1.4.8 and onwards do not have DEB packaging yet due to Bintray going away)
 </p><p>Ubuntu和其他基于Debian的发行版使用DEB格式，但通常你不从本地的DEB文件安装软件。相反，他们由程序包管理器安装，通过命令行（如<code>apt-get</code>，<code>aptitude</code>）或图形用户界面 （如Synaptic）。
 从终端运行下面的命令安装<code>sbt</code>（你需要超级用户权限，因此需要<code>sudo</code>）。
-</p><pre><code>echo &quot;deb https://dl.bintray.com/sbt/debian /&quot; | sudo tee -a /etc/apt/sources.list.d/sbt.list
+</p><pre><code>echo &quot;deb https://repo.scala-sbt.org/scalasbt/debian /&quot; | sudo tee -a /etc/apt/sources.list.d/sbt.list
 curl -sL &quot;https://keyserver.ubuntu.com/pks/lookup?op=get&amp;search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823&quot; | sudo apt-key add
 sudo apt-get update
 sudo apt-get install sbt
@@ -85,11 +85,18 @@ sudo apt-get install sbt
 </p><h3 id="%E7%BA%A2%E5%B8%BD%E4%BC%81%E4%B8%9A%E7%89%88Linux%E5%92%8C%E5%85%B6%E4%BB%96%E5%9F%BA%E4%BA%8ERPM%E7%9A%84%E5%8F%91%E8%A1%8C%E7%89%88">红帽企业版Linux和其他基于RPM的发行版<a href="#%E7%BA%A2%E5%B8%BD%E4%BC%81%E4%B8%9A%E7%89%88Linux%E5%92%8C%E5%85%B6%E4%BB%96%E5%9F%BA%E4%BA%8ERPM%E7%9A%84%E5%8F%91%E8%A1%8C%E7%89%88" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://dl.bintray.com/sbt/rpm/sbt-1.5.0.rpm">RPM</a> 安装包由sbt官方支持。 (sbt 1.4.8 and onwards do not have DEB packaging yet due to Bintray going away)
 </p><p>红帽企业版Linux和其他基于RPM的发行版使用RPM格式。
 从终端运行下面的命令安装<code>sbt</code>（你需要超级用户权限，因此需要<code>sudo</code>）。
-</p><pre><code>curl https://bintray.com/sbt/rpm/rpm &gt; bintray-sbt-rpm.repo
-sudo mv bintray-sbt-rpm.repo /etc/yum.repos.d/
+</p><pre><code># remove old Bintray repo file
+sudo rm -f /etc/yum.repos.d/bintray-rpm.repo
+curl -L https://www.scala-sbt.org/sbt-rpm.repo &gt; sbt-rpm.repo
+sudo mv sbt-rpm.repo /etc/yum.repos.d/
 sudo yum install sbt
-</code></pre><p>sbt 二进制文件发布到 Bintray，而Bintray 方便地提供了RPM资源库。你只需要将存储库添加到你的软件包管理器将检查的地方。
-</p><blockquote><p><strong>注意：</strong> 请将任何和这两个包相关的问题反馈到 <a href="https://github.com/sbt/sbt-launcher-package">sbt-launcher-package</a> 项目。
+</code></pre><p>On Fedora (31 and above), use <code>sbt-rpm.repo</code>:
+</p><pre><code># remove old Bintray repo file
+sudo rm -f /etc/yum.repos.d/bintray-rpm.repo
+curl -L https://www.scala-sbt.org/sbt-rpm.repo &gt; sbt-rpm.repo
+sudo mv sbt-rpm.repo /etc/yum.repos.d/
+sudo dnf install sbt
+</code></pre><blockquote><p><strong>注意：</strong> 请将任何和这两个包相关的问题反馈到 <a href="https://github.com/sbt/sbt-launcher-package">sbt-launcher-package</a> 项目。
 </p></blockquote><h3 id="Gentoo">Gentoo<a href="#Gentoo" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在 sbt 官方的树中没有提供 ebuild。 但是有从二进制合并 sbt 的 <a href="https://github.com/whiter4bbit/overlays/tree/master/dev-java/sbt-bin">ebuilds</a>。
 可以通过以下方式从这些 ebuilds 中合并 sbt：
 </p><pre><code>emerge dev-java/sbt
