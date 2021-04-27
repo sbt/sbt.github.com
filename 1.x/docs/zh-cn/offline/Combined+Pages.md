@@ -52,9 +52,9 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
 如果你在运行 sbt 时遇到任何问题，查看 [安装建议][Setup-Notes] 中的终端编码（terminal encoding），HTTP 代理，JVM 参数。
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.0/sbt-1.5.0.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.0/sbt-1.5.0.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.0/sbt-1.5.0.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.tgz
   [Manual-Installation]: Manual-Installation.html
 
 在 macOS 上安装 sbt
@@ -91,9 +91,9 @@ $ brew install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.0/sbt-1.5.0.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.0/sbt-1.5.0.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.0/sbt-1.5.0.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.tgz
 
 在 Windows 上安装 sbt
 -------------------------
@@ -117,11 +117,11 @@ $ scoop install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.0/sbt-1.5.0.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.0/sbt-1.5.0.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.0/sbt-1.5.0.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.5.0.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.5.0.deb
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.5.1.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.5.1.deb
 
 在 Linux 上安装 sbt
 -----------------------
@@ -150,7 +150,8 @@ This has two advantages.
 Ubuntu和其他基于Debian的发行版使用DEB格式，但通常你不从本地的DEB文件安装软件。相反，他们由程序包管理器安装，通过命令行（如`apt-get`，`aptitude`）或图形用户界面 （如Synaptic）。
 从终端运行下面的命令安装`sbt`（你需要超级用户权限，因此需要`sudo`）。
 
-    echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
+    echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | sudo tee /etc/apt/sources.list.d/sbt.list
+    echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | sudo tee /etc/apt/sources.list.d/sbt_old.list
     curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | sudo apt-key add
     sudo apt-get update
     sudo apt-get install sbt
@@ -256,10 +257,10 @@ lazy val root = (project in file("."))
 
 ### 设置 sbt 版本
 
-你可以通过创建 `hello/project/build.properties` 文件强制指定一个版本的 sbt。在这个文件里，编写如下内容来强制使用 1.5.0：
+你可以通过创建 `hello/project/build.properties` 文件强制指定一个版本的 sbt。在这个文件里，编写如下内容来强制使用 1.5.1：
 
 ```
-sbt.version=1.5.0
+sbt.version=1.5.1
 ```
 
 sbt 在不同的 release 版本中是 99% 兼容的。但是在 `project/build.properties` 文件中设置 sbt 的版本仍然能避免一些潜在的混淆。

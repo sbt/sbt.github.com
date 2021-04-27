@@ -67,9 +67,9 @@ sbt プロジェクトを作るためには、以下の手順をたどる必要�
 
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.0/sbt-1.5.0.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.0/sbt-1.5.0.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.0/sbt-1.5.0.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.tgz
   [Manual-Installation]: Manual-Installation.html
   [AdoptOpenJDK]: https://adoptopenjdk.net/
 
@@ -108,9 +108,9 @@ $ brew install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.0/sbt-1.5.0.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.0/sbt-1.5.0.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.0/sbt-1.5.0.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.tgz
   [AdoptOpenJDK]: https://adoptopenjdk.net/
 
 Windows への sbt のインストール
@@ -140,11 +140,11 @@ $ scoop install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.0/sbt-1.5.0.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.0/sbt-1.5.0.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.0/sbt-1.5.0.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.5.0.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.5.0.deb
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.5.1.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.5.1.deb
   [Manual-Installation]: Manual-Installation.html
   [website127]: https://github.com/sbt/website/issues/12
   [cert-bug]: https://bugs.launchpad.net/ubuntu/+source/ca-certificates-java/+bug/1739631
@@ -185,7 +185,8 @@ Ubuntu 及びその他の Debian ベースのディストリビューション�
 (例: `apt-get`、`aptitude`、Synaptic など)、インストールはそれらから行う。
 ターミナル上から以下を実行すると `sbt` をインストールできる (superuser 権限を必要とするため、`sudo` を使っている)。
 
-    echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
+    echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | sudo tee /etc/apt/sources.list.d/sbt.list
+    echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | sudo tee /etc/apt/sources.list.d/sbt_old.list
     curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | sudo apt-key add
     sudo apt-get update
     sudo apt-get install sbt
@@ -1274,7 +1275,7 @@ sbt 0.13.13 など最近のバージョンをインストール済みで、
 sbt バージョンを指定する:
 
 ```
-sbt.version=1.5.0
+sbt.version=1.5.1
 ```
 
 もしも指定されたバージョンがローカルマシンに無ければ、
@@ -4752,7 +4753,7 @@ sbt 0.13.8 で `Def.sequential` という関数が追加されて、準逐次な
 #### project/build.properties
 
 ```
-sbt.version=1.5.0
+sbt.version=1.5.1
 ```
 
 #### project/style.sbt
@@ -4802,7 +4803,7 @@ root> compilecheck
 #### project/build.properties
 
 ```
-sbt.version=1.5.0
+sbt.version=1.5.1
 ```
 
 #### project/style.sbt

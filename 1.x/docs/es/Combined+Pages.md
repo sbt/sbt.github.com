@@ -65,9 +65,9 @@ Si has tenido algún problema ejecutando sbt, revisa las
 proxies HTTP y opciones de la JVM.
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.0/sbt-1.5.0.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.0/sbt-1.5.0.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.0/sbt-1.5.0.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.tgz
   [Manual-Installation]: Manual-Installation.html
   [AdoptOpenJDK]: https://adoptopenjdk.net/
 
@@ -108,9 +108,9 @@ $ sdk install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.0/sbt-1.5.0.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.0/sbt-1.5.0.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.0/sbt-1.5.0.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.tgz
   [AdoptOpenJDK]: https://adoptopenjdk.net/
 
 Instalar sbt en Windows
@@ -141,11 +141,11 @@ $ scoop install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.0/sbt-1.5.0.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.0/sbt-1.5.0.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.0/sbt-1.5.0.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.5.0.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.5.0.deb
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.5.1.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.5.1.deb
   [Manual-Installation]: Manual-Installation.html
   [website127]: https://github.com/sbt/website/issues/127
   [cert-bug]: https://bugs.launchpad.net/ubuntu/+source/ca-certificates-java/+bug/1739631
@@ -192,7 +192,8 @@ comandos (p.e. `apt-get`, `aptitude`) o con una interfaz gráfica de usuario
 Ejecuta lo siguiente desde el terminal para instalar `sbt`
 (necesitarás tener privilegios de administrador para hacerlo, de ahí el `sudo`).
 
-    echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
+    echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | sudo tee /etc/apt/sources.list.d/sbt.list
+    echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | sudo tee /etc/apt/sources.list.d/sbt_old.list
     curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | sudo apt-key add
     sudo apt-get update
     sudo apt-get install sbt
@@ -1310,7 +1311,7 @@ Definiciones de construcción
 
 Esta página describe las definiciones de construcción (build definitions), 
 incluyendo algo de "teoría" y la sintaxis de `build.sbt`. Se supone que has 
-instalado una versión reciente de sbt, como sbt 1.5.0, que sabes cómo 
+instalado una versión reciente de sbt, como sbt 1.5.1, que sabes cómo 
 [usar sbt][Running] y que has leído las páginas anteriores de la Guía de inicio.
 
 Esta página explica la definición de construcción de `build.sbt`.
@@ -1326,7 +1327,7 @@ crea un fichero llamado `project/build.properties` en el que se especifica la
 versión de sbt como sigue:
 
 ```
-sbt.version=1.5.0
+sbt.version=1.5.1
 ```
 
 Si la versión requerida no está disponible localmente, el lanzador `sbt` se la 
