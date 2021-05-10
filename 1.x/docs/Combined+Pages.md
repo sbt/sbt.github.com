@@ -68,7 +68,7 @@ corrections and add documentation.
 
 Documentation for 0.13.x has been
 [archived here](https://www.scala-sbt.org/0.13/docs/index.html). This
-documentation applies to sbt 1.5.1.
+documentation applies to sbt 1.5.2.
 
 See also the [API Documentation][Apidoc],
 and the [index of names and types][Name-Index].
@@ -134,8 +134,8 @@ If you have any trouble running sbt, see [Setup Notes][Setup-Notes] on
 terminal encodings, HTTP proxies, and JVM options.
 
 
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.tgz
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.2/sbt-1.5.2.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.2/sbt-1.5.2.tgz
   [Manual-Installation]: Manual-Installation.html
   [AdoptOpenJDK]: https://adoptopenjdk.net/
 
@@ -175,9 +175,9 @@ $ brew install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.2/sbt-1.5.2.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.2/sbt-1.5.2.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.2/sbt-1.5.2.tgz
   [AdoptOpenJDK]: https://adoptopenjdk.net/
 
 Installing sbt on Windows
@@ -214,11 +214,11 @@ $ choco install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.5.1.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.5.1.deb
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.2/sbt-1.5.2.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.2/sbt-1.5.2.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.2/sbt-1.5.2.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.5.2.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.5.2.deb
   [Manual-Installation]: Manual-Installation.html
   [website127]: https://github.com/sbt/website/issues/127
   [cert-bug]: https://bugs.launchpad.net/ubuntu/+source/ca-certificates-java/+bug/1739631
@@ -1374,7 +1374,7 @@ Build definition
 
 This page describes sbt build definitions, including some "theory" and
 the syntax of `build.sbt`.
-It assumes you have installed a recent version of sbt, such as sbt 1.5.1,
+It assumes you have installed a recent version of sbt, such as sbt 1.5.2,
 know how to [use sbt][Running],
 and have read the previous pages in the Getting Started Guide.
 
@@ -1389,7 +1389,7 @@ build the same projects with consistent results.
 To do this, create a file named `project/build.properties` that specifies the sbt version as follows:
 
 ```
-sbt.version=1.5.1
+sbt.version=1.5.2
 ```
 
 If the required version is not available locally,
@@ -4250,7 +4250,7 @@ always write it in all lowercase letters. However, we are cool with [酢豚][sub
 
 #### My last command didn't work but I can't see an explanation. Why?
 
-sbt 1.5.1 by default suppresses most stack traces and debugging
+sbt 1.5.2 by default suppresses most stack traces and debugging
 information. It has the nice side effect of giving you less noise on
 screen, but as a newcomer it can leave you lost for explanation. To see
 the previous output of a command at a higher verbosity, type
@@ -4623,7 +4623,7 @@ Any file name ending in `.sbt` will do, but most people use
 
 ### Miscellaneous
 
-#### Where can I find plugins for 1.5.1?
+#### Where can I find plugins for 1.5.2?
 
 See [Community Plugins][Community-Plugins] for a list of currently available
 plugins.
@@ -9136,7 +9136,7 @@ influence SBT execution. Also see [sbt launcher][Sbt-Launcher].
   <tr>
     <td><tt>sbt.version</tt></td>
     <td>Version</td>
-    <td><tt>1.5.1</tt></td>
+    <td><tt>1.5.2</tt></td>
     <td>sbt version to use, usually taken from <tt>project/build.properties</tt>.</td>
   </tr>
 
@@ -10188,7 +10188,7 @@ mode that only requires a JRE installed.
 Install [conscript](https://github.com/foundweekends/conscript).
 
 ```
-$ cs sbt/sbt --branch 1.5.1
+$ cs sbt/sbt --branch 1.5.2
 ```
 
 This will create two scripts: `screpl` and `scalas`.
@@ -10247,7 +10247,7 @@ chmod u+x shout.scala
 /***         
 scalaVersion := "2.12.13"
  
-libraryDependencies += "org.scala-sbt" %% "io" % "1.5.1"
+libraryDependencies += "org.scala-sbt" %% "io" % "1.5.2"
 */         
  
 import sbt.io.IO
@@ -11916,7 +11916,7 @@ sbt needs Scala jars to run itself since it is written in Scala. sbt
 uses that same version of Scala to compile the build definitions that
 you write for your project because they use sbt APIs. This version of
 Scala is fixed for a specific sbt release and cannot be changed. For sbt
-1.5.1, this version is Scala 2.12.13. Because this Scala
+1.5.2, this version is Scala 2.12.13. Because this Scala
 version is needed before sbt runs, the repositories used to retrieve
 this version are configured in the sbt
 [launcher][Sbt-Launcher].
@@ -17924,11 +17924,11 @@ This Parser definition will produce a value of type `(String,String)`.
 The input syntax defined isn't very flexible; it is just a
 demonstration. It will produce one of the following values for a
 successful parse (assuming the current Scala version is 2.12.13,
-the current sbt version is 1.5.1, and there are 3 commands left to
+the current sbt version is 1.5.2, and there are 3 commands left to
 run):
 
 * (scala,2.12.13)
-* (sbt,1.5.1)
+* (sbt,1.5.2)
 * (commands,3)
 
 Again, we were able to access the current Scala and sbt version for the
@@ -20084,10 +20084,10 @@ If you haven't created one already, make sure to create `project/build.propertie
 `sbt.version` number:
 
 ```yml
-sbt.version=1.5.1
+sbt.version=1.5.2
 ```
 
-Your build will now use 1.5.1.
+Your build will now use 1.5.2.
 
 ### Read the GitHub Actions manual
 
@@ -20390,10 +20390,10 @@ If you haven't created one already, make sure to create `project/build.propertie
 `sbt.version` number:
 
 ```yml
-sbt.version=1.5.1
+sbt.version=1.5.2
 ```
 
-Your build will now use 1.5.1.
+Your build will now use 1.5.2.
 
 ### Read the Travis manual
 
@@ -20490,7 +20490,7 @@ java
 -Xss6M
 -XX:ReservedCodeCacheSize=256M
 -jar
-/home/travis/.sbt/launchers/1.5.1/sbt-launch.jar
+/home/travis/.sbt/launchers/1.5.2/sbt-launch.jar
 ```
 
 It seems to be working. One downside of setting all of the parameters is that we might be left behind when the environment updates and the default values gives us more memory in the future.
@@ -20516,7 +20516,7 @@ java
 -XX:ReservedCodeCacheSize=256M
 -Xms1024M
 -jar
-/home/travis/.sbt/launchers/1.5.1/sbt-launch.jar
+/home/travis/.sbt/launchers/1.5.2/sbt-launch.jar
 ```
 
 **Note**: This duplicates the `-Xms` flag as intended, which might not the best thing to do.
@@ -23452,7 +23452,7 @@ Here's how to set it up
 #### project/build.properties
 
 ```
-sbt.version=1.5.1
+sbt.version=1.5.2
 ```
 
 #### project/style.sbt
@@ -23503,7 +23503,7 @@ Let's try implementing a custom task called `compilecheck` that runs `Compile / 
 #### project/build.properties
 
 ```
-sbt.version=1.5.1
+sbt.version=1.5.2
 ```
 
 #### project/style.sbt

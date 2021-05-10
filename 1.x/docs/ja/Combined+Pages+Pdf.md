@@ -67,9 +67,9 @@ sbt プロジェクトを作るためには、以下の手順をたどる必要�
 
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.2/sbt-1.5.2.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.2/sbt-1.5.2.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.2/sbt-1.5.2.tgz
   [Manual-Installation]: Manual-Installation.html
   [AdoptOpenJDK]: https://adoptopenjdk.net/
 
@@ -108,9 +108,9 @@ $ brew install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.2/sbt-1.5.2.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.2/sbt-1.5.2.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.2/sbt-1.5.2.tgz
   [AdoptOpenJDK]: https://adoptopenjdk.net/
 
 Windows への sbt のインストール
@@ -140,11 +140,11 @@ $ scoop install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.1/sbt-1.5.1.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.5.1.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.5.1.deb
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.2/sbt-1.5.2.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.2/sbt-1.5.2.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.2/sbt-1.5.2.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.5.2.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.5.2.deb
   [Manual-Installation]: Manual-Installation.html
   [website127]: https://github.com/sbt/website/issues/12
   [cert-bug]: https://bugs.launchpad.net/ubuntu/+source/ca-certificates-java/+bug/1739631
@@ -1275,7 +1275,7 @@ sbt 0.13.13 など最近のバージョンをインストール済みで、
 sbt バージョンを指定する:
 
 ```
-sbt.version=1.5.1
+sbt.version=1.5.2
 ```
 
 もしも指定されたバージョンがローカルマシンに無ければ、
@@ -4753,7 +4753,7 @@ sbt 0.13.8 で `Def.sequential` という関数が追加されて、準逐次な
 #### project/build.properties
 
 ```
-sbt.version=1.5.1
+sbt.version=1.5.2
 ```
 
 #### project/style.sbt
@@ -4803,7 +4803,7 @@ root> compilecheck
 #### project/build.properties
 
 ```
-sbt.version=1.5.1
+sbt.version=1.5.2
 ```
 
 #### project/style.sbt
