@@ -437,7 +437,7 @@ Hello
 ### Set ThisBuild / scalaVersion from sbt shell
 
 ```
-sbt:foo-build> set ThisBuild / scalaVersion := "2.12.7"
+sbt:foo-build> set ThisBuild / scalaVersion := "2.13.6"
 [info] Defining ThisBuild / scalaVersion
 ```
 
@@ -445,7 +445,7 @@ Check the `scalaVersion` setting:
 
 ```
 sbt:foo-build> scalaVersion
-[info] 2.12.7
+[info] 2.13.6
 ```
 
 ### Save the session to build.sbt
@@ -460,7 +460,7 @@ sbt:foo-build> session save
 `build.sbt` file should now contain:
 
 ```scala
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.13.6"
 
 ```
 
@@ -469,7 +469,7 @@ ThisBuild / scalaVersion := "2.12.7"
 Using an editor, change `build.sbt` as follows:
 
 ```scala
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.13.6"
 ThisBuild / organization := "com.example"
 
 lazy val hello = (project in file("."))
@@ -498,7 +498,7 @@ Note that the prompt has now changed to `sbt:Hello>`.
 Using an editor, change `build.sbt` as follows:
 
 ```scala
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.13.6"
 ThisBuild / organization := "com.example"
 
 lazy val hello = (project in file("."))
@@ -584,15 +584,15 @@ Confirm that the test passes, then press `Enter` to exit the continuous test.
 Using an editor, change `build.sbt` as follows:
 
 ```scala
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.13.6"
 ThisBuild / organization := "com.example"
 
 lazy val hello = (project in file("."))
   .settings(
     name := "Hello",
-    libraryDependencies += "com.typesafe.play" %% "play-json" % "2.6.9",
-    libraryDependencies += "com.eed3si9n" %% "gigahorse-okhttp" % "0.3.1",
-    libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % Test,
+    libraryDependencies += "com.typesafe.play" %% "play-json" % "2.9.2",
+    libraryDependencies += "com.eed3si9n" %% "gigahorse-okhttp" % "0.5.0",
+    libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.7" % Test,
   )
 ```
 
@@ -668,13 +668,13 @@ scala> :q // to quit
 Change `build.sbt` as follows:
 
 ```scala
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.13.6"
 ThisBuild / organization := "com.example"
 
 lazy val hello = (project in file("."))
   .settings(
     name := "Hello",
-    libraryDependencies += "com.eed3si9n" %% "gigahorse-okhttp" % "0.3.1",
+    libraryDependencies += "com.eed3si9n" %% "gigahorse-okhttp" % "0.5.0",
     libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.7" % Test,
   )
 
@@ -706,7 +706,7 @@ sbt:Hello> helloCore/compile
 Change `build.sbt` as follows:
 
 ```scala
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.13.6"
 ThisBuild / organization := "com.example"
 
 val scalaTest = "org.scalatest" %% "scalatest" % "3.2.7"
@@ -714,7 +714,7 @@ val scalaTest = "org.scalatest" %% "scalatest" % "3.2.7"
 lazy val hello = (project in file("."))
   .settings(
     name := "Hello",
-    libraryDependencies += "com.eed3si9n" %% "gigahorse-okhttp" % "0.3.1",
+    libraryDependencies += "com.eed3si9n" %% "gigahorse-okhttp" % "0.5.0",
     libraryDependencies += scalaTest % Test,
   )
 
@@ -730,7 +730,7 @@ lazy val helloCore = (project in file("core"))
 Set aggregate so that the command sent to `hello` is broadcast to `helloCore` too:
 
 ```scala
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.13.6"
 ThisBuild / organization := "com.example"
 
 val scalaTest = "org.scalatest" %% "scalatest" % "3.2.7"
@@ -739,7 +739,7 @@ lazy val hello = (project in file("."))
   .aggregate(helloCore)
   .settings(
     name := "Hello",
-    libraryDependencies += "com.eed3si9n" %% "gigahorse-okhttp" % "0.3.1",
+    libraryDependencies += "com.eed3si9n" %% "gigahorse-okhttp" % "0.5.0",
     libraryDependencies += scalaTest % Test,
   )
 
@@ -763,7 +763,7 @@ Press `Enter` to exit the continuous test.
 Use `.dependsOn(...)` to add a dependency on other subprojects. Also let's move the Gigahorse dependency to `helloCore`.
 
 ```scala
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.13.6"
 ThisBuild / organization := "com.example"
 
 val scalaTest = "org.scalatest" %% "scalatest" % "3.2.7"
@@ -779,7 +779,7 @@ lazy val hello = (project in file("."))
 lazy val helloCore = (project in file("core"))
   .settings(
     name := "Hello Core",
-    libraryDependencies += "com.eed3si9n" %% "gigahorse-okhttp" % "0.3.1",
+    libraryDependencies += "com.eed3si9n" %% "gigahorse-okhttp" % "0.5.0",
     libraryDependencies += scalaTest % Test,
   )
 ```
@@ -789,12 +789,12 @@ lazy val helloCore = (project in file("core"))
 Let's add Play JSON to `helloCore`.
 
 ```scala
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.13.6"
 ThisBuild / organization := "com.example"
 
 val scalaTest = "org.scalatest" %% "scalatest" % "3.2.7"
-val gigahorse = "com.eed3si9n" %% "gigahorse-okhttp" % "0.3.1"
-val playJson  = "com.typesafe.play" %% "play-json" % "2.6.9"
+val gigahorse = "com.eed3si9n" %% "gigahorse-okhttp" % "0.5.0"
+val playJson  = "com.typesafe.play" %% "play-json" % "2.9.2"
 
 lazy val hello = (project in file("."))
   .aggregate(helloCore)
@@ -885,12 +885,12 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.3.4")
 Next change `build.sbt` as follows to add `JavaAppPackaging`:
 
 ```scala
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.13.6"
 ThisBuild / organization := "com.example"
 
 val scalaTest = "org.scalatest" %% "scalatest" % "3.2.7"
-val gigahorse = "com.eed3si9n" %% "gigahorse-okhttp" % "0.3.1"
-val playJson  = "com.typesafe.play" %% "play-json" % "2.6.9"
+val gigahorse = "com.eed3si9n" %% "gigahorse-okhttp" % "0.5.0"
+val playJson  = "com.typesafe.play" %% "play-json" % "2.9.2"
 
 lazy val hello = (project in file("."))
   .aggregate(helloCore)
@@ -953,12 +953,12 @@ Change `build.sbt` as follows:
 
 ```scala
 ThisBuild / version      := "0.1.0"
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.13.6"
 ThisBuild / organization := "com.example"
 
 val scalaTest = "org.scalatest" %% "scalatest" % "3.2.7"
-val gigahorse = "com.eed3si9n" %% "gigahorse-okhttp" % "0.3.1"
-val playJson  = "com.typesafe.play" %% "play-json" % "2.6.9"
+val gigahorse = "com.eed3si9n" %% "gigahorse-okhttp" % "0.5.0"
+val playJson  = "com.typesafe.play" %% "play-json" % "2.9.2"
 
 lazy val hello = (project in file("."))
   .aggregate(helloCore)
@@ -980,8 +980,8 @@ lazy val helloCore = (project in file("core"))
 ### Switch scalaVersion temporarily
 
 ```
-sbt:Hello> ++2.11.12!
-[info] Forcing Scala version to 2.11.12 on all projects.
+sbt:Hello> ++2.12.14!
+[info] Forcing Scala version to 2.12.14 on all projects.
 [info] Reapplying settings...
 [info] Set current project to Hello (in build file:/tmp/foo-build/)
 ```
@@ -991,10 +991,9 @@ Check the `scalaVersion` setting:
 ```
 sbt:Hello> scalaVersion
 [info] helloCore / scalaVersion
-[info]  2.11.12
+[info]  2.12.14
 [info] scalaVersion
-[info]  2.11.12 scalaVersion
-[info] 2.12.7
+[info]  2.12.14
 ```
 
 This setting will go away after `reload`.

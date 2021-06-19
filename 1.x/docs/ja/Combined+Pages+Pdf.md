@@ -366,7 +366,7 @@ Hello
 ### sbt シェルから ThisBuild / scalaVersion をセットする
 
 ```
-sbt:foo-build> set ThisBuild / scalaVersion := "2.12.7"
+sbt:foo-build> set ThisBuild / scalaVersion := "2.13.6"
 [info] Defining ThisBuild / scalaVersion
 ```
 
@@ -374,7 +374,7 @@ sbt:foo-build> set ThisBuild / scalaVersion := "2.12.7"
 
 ```
 sbt:foo-build> scalaVersion
-[info] 2.12.7
+[info] 2.13.6
 ```
 
 ### セッションを build.sbt へと保存する
@@ -389,7 +389,7 @@ sbt:foo-build> session save
 `build.sbt` ファイルは以下のようになったはずだ:
 
 ```scala
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.13.6"
 ```
 
 ### プロジェクトに名前を付ける
@@ -397,7 +397,7 @@ ThisBuild / scalaVersion := "2.12.7"
 エディタを使って、`build.sbt` を以下のように変更する:
 
 ```scala
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.13.6"
 ThisBuild / organization := "com.example"
 
 lazy val hello = (project in file("."))
@@ -425,7 +425,7 @@ sbt:Hello>
 エディタを使って、`build.sbt` を以下のように変更する:
 
 ```scala
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.13.6"
 ThisBuild / organization := "com.example"
 
 lazy val hello = (project in file("."))
@@ -510,15 +510,15 @@ class HelloSpec extends AnyFunSuite {
 エディタを使って `build.sbt` を以下のように変更する:
 
 ```scala
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.13.6"
 ThisBuild / organization := "com.example"
 
 lazy val hello = (project in file("."))
   .settings(
     name := "Hello",
-    libraryDependencies += "com.typesafe.play" %% "play-json" % "2.6.9",
-    libraryDependencies += "com.eed3si9n" %% "gigahorse-okhttp" % "0.3.1",
-    libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % Test,
+    libraryDependencies += "com.typesafe.play" %% "play-json" % "2.9.2",
+    libraryDependencies += "com.eed3si9n" %% "gigahorse-okhttp" % "0.5.0",
+    libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.7" % Test,
   )
 ```
 
@@ -593,13 +593,13 @@ scala> :q // これで REPL を抜ける
 `build.sbt` を以下のように変更する:
 
 ```scala
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.13.6"
 ThisBuild / organization := "com.example"
 
 lazy val hello = (project in file("."))
   .settings(
     name := "Hello",
-    libraryDependencies += "com.eed3si9n" %% "gigahorse-okhttp" % "0.3.1",
+    libraryDependencies += "com.eed3si9n" %% "gigahorse-okhttp" % "0.5.0",
     libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.7" % Test,
   )
 
@@ -631,7 +631,7 @@ sbt:Hello> helloCore/compile
 `build.sbt` を以下のように変更する:
 
 ```scala
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.13.6"
 ThisBuild / organization := "com.example"
 
 val scalaTest = "org.scalatest" %% "scalatest" % "3.2.7"
@@ -639,7 +639,7 @@ val scalaTest = "org.scalatest" %% "scalatest" % "3.2.7"
 lazy val hello = (project in file("."))
   .settings(
     name := "Hello",
-    libraryDependencies += "com.eed3si9n" %% "gigahorse-okhttp" % "0.3.1",
+    libraryDependencies += "com.eed3si9n" %% "gigahorse-okhttp" % "0.5.0",
     libraryDependencies += scalaTest % Test,
   )
 
@@ -655,7 +655,7 @@ lazy val helloCore = (project in file("core"))
 `hello` に送ったコマンドを `helloCore` にもブロードキャストするために集約を設定する:
 
 ```scala
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.13.6"
 ThisBuild / organization := "com.example"
 
 val scalaTest = "org.scalatest" %% "scalatest" % "3.2.7"
@@ -664,7 +664,7 @@ lazy val hello = (project in file("."))
   .aggregate(helloCore)
   .settings(
     name := "Hello",
-    libraryDependencies += "com.eed3si9n" %% "gigahorse-okhttp" % "0.3.1",
+    libraryDependencies += "com.eed3si9n" %% "gigahorse-okhttp" % "0.5.0",
     libraryDependencies += scalaTest % Test,
   )
 
@@ -688,7 +688,7 @@ sbt:Hello> ~testQuick
 サブプロジェクト間の依存関係を定義するには `.dependsOn(...)` を使う。ついでに、Gigahorse への依存性も `helloCore` に移そう。
 
 ```scala
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.13.6"
 ThisBuild / organization := "com.example"
 
 val scalaTest = "org.scalatest" %% "scalatest" % "3.2.7"
@@ -704,7 +704,7 @@ lazy val hello = (project in file("."))
 lazy val helloCore = (project in file("core"))
   .settings(
     name := "Hello Core",
-    libraryDependencies += "com.eed3si9n" %% "gigahorse-okhttp" % "0.3.1",
+    libraryDependencies += "com.eed3si9n" %% "gigahorse-okhttp" % "0.5.0",
     libraryDependencies += scalaTest % Test,
   )
 ```
@@ -714,12 +714,12 @@ lazy val helloCore = (project in file("core"))
 `helloCore` に Play JSON を追加しよう。
 
 ```scala
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.13.6"
 ThisBuild / organization := "com.example"
 
 val scalaTest = "org.scalatest" %% "scalatest" % "3.2.7"
-val gigahorse = "com.eed3si9n" %% "gigahorse-okhttp" % "0.3.1"
-val playJson  = "com.typesafe.play" %% "play-json" % "2.6.9"
+val gigahorse = "com.eed3si9n" %% "gigahorse-okhttp" % "0.5.0"
+val playJson  = "com.typesafe.play" %% "play-json" % "2.9.2"
 
 lazy val hello = (project in file("."))
   .aggregate(helloCore)
@@ -758,10 +758,10 @@ object Weather {
     import ExecutionContext.Implicits.global
     for {
       loc <- http.run(rLoc, parse)
-      woeid = (loc \ 0  \ "woeid").get
+      woeid = (loc \ 0 \ "woeid").get
       rWeather = Gigahorse.url(weatherUrl format woeid).get
       weather <- http.run(rWeather, parse)
-    } yield (weather \ "weather_state_name")(0).as[String].toLowerCase
+    } yield (weather \\ "weather_state_name")(0).as[String].toLowerCase
   }
 
   private def parse = Gigahorse.asString andThen Json.parse
@@ -810,12 +810,12 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.3.4")
 次に `build.sbt` を以下のように変更して `JavaAppPackaging` を追加する:
 
 ```scala
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.13.6"
 ThisBuild / organization := "com.example"
 
 val scalaTest = "org.scalatest" %% "scalatest" % "3.2.7"
-val gigahorse = "com.eed3si9n" %% "gigahorse-okhttp" % "0.3.1"
-val playJson  = "com.typesafe.play" %% "play-json" % "2.6.9"
+val gigahorse = "com.eed3si9n" %% "gigahorse-okhttp" % "0.5.0"
+val playJson  = "com.typesafe.play" %% "play-json" % "2.9.2"
 
 lazy val hello = (project in file("."))
   .aggregate(helloCore)
@@ -876,12 +876,12 @@ Hello! The weather in New York is mostly cloudy
 
 ```scala
 ThisBuild / version      := "0.1.0"
-ThisBuild / scalaVersion := "2.12.7"
+ThisBuild / scalaVersion := "2.13.6"
 ThisBuild / organization := "com.example"
 
 val scalaTest = "org.scalatest" %% "scalatest" % "3.2.7"
-val gigahorse = "com.eed3si9n" %% "gigahorse-okhttp" % "0.3.1"
-val playJson  = "com.typesafe.play" %% "play-json" % "2.6.9"
+val gigahorse = "com.eed3si9n" %% "gigahorse-okhttp" % "0.5.0"
+val playJson  = "com.typesafe.play" %% "play-json" % "2.9.2"
 
 lazy val hello = (project in file("."))
   .aggregate(helloCore)
@@ -903,8 +903,8 @@ lazy val helloCore = (project in file("core"))
 ### Switch scalaVersion temporarily
 
 ```
-sbt:Hello> ++2.11.12!
-[info] Forcing Scala version to 2.11.12 on all projects.
+sbt:Hello> ++2.12.14!
+[info] Forcing Scala version to 2.12.14 on all projects.
 [info] Reapplying settings...
 [info] Set current project to Hello (in build file:/private/tmp/foo-build/)
 ```
@@ -914,10 +914,9 @@ sbt:Hello> ++2.11.12!
 ```
 sbt:Hello> scalaVersion
 [info] helloCore / scalaVersion
-[info]  2.11.12
+[info]  2.12.14
 [info] scalaVersion
-[info]  2.11.12 scalaVersion
-[info] 2.12.7
+[info]  2.12.14
 ```
 
 このセッティングは `reload` 後には無くなる。
