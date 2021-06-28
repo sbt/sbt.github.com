@@ -62,9 +62,9 @@ sbt プロジェクトを作るためには、以下の手順をたどる必要�
 
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.3/sbt-1.5.3.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.3/sbt-1.5.3.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.3/sbt-1.5.3.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.4/sbt-1.5.4.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.4/sbt-1.5.4.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.4/sbt-1.5.4.tgz
   [Manual-Installation]: Manual-Installation.html
   [AdoptOpenJDK]: https://adoptopenjdk.net/
 
@@ -103,9 +103,9 @@ $ brew install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.3/sbt-1.5.3.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.3/sbt-1.5.3.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.3/sbt-1.5.3.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.4/sbt-1.5.4.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.4/sbt-1.5.4.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.4/sbt-1.5.4.tgz
   [AdoptOpenJDK]: https://adoptopenjdk.net/
 
 Windows への sbt のインストール
@@ -135,11 +135,11 @@ $ scoop install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.3/sbt-1.5.3.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.3/sbt-1.5.3.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.3/sbt-1.5.3.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.5.3.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.5.3.deb
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.4/sbt-1.5.4.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.4/sbt-1.5.4.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.4/sbt-1.5.4.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.5.4.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.5.4.deb
   [Manual-Installation]: Manual-Installation.html
   [website127]: https://github.com/sbt/website/issues/12
   [cert-bug]: https://bugs.launchpad.net/ubuntu/+source/ca-certificates-java/+bug/1739631
@@ -1269,7 +1269,7 @@ sbt 0.13.13 など最近のバージョンをインストール済みで、
 sbt バージョンを指定する:
 
 ```
-sbt.version=1.5.3
+sbt.version=1.5.4
 ```
 
 もしも指定されたバージョンがローカルマシンに無ければ、
@@ -1314,7 +1314,7 @@ lazy val root = (project in file("."))
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.13"
+ThisBuild / scalaVersion := "2.12.14"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -1475,7 +1475,7 @@ import Keys._
 
 ```scala
 ThisBuild / version := "1.0"
-ThisBuild / scalaVersion := "2.12.13"
+ThisBuild / scalaVersion := "2.12.14"
 ```
 
 この構文は `ThisBuild` にスコープ付けされたセッティングを書いたり、プラグインを追加するのに向いている。
@@ -1491,7 +1491,7 @@ ThisBuild / scalaVersion := "2.12.13"
 val derby = "org.apache.derby" % "derby" % "10.4.1.3"
 
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.13"
+ThisBuild / scalaVersion := "2.12.14"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -1563,7 +1563,7 @@ lazy val core = project
 ```scala
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.13"
+ThisBuild / scalaVersion := "2.12.14"
 
 lazy val core = (project in file("core"))
   .settings(
@@ -1856,7 +1856,7 @@ scalacOptions := {
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.13"
+ThisBuild / scalaVersion := "2.12.14"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -1893,7 +1893,7 @@ lazy val root = (project in file("."))
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.13"
+ThisBuild / scalaVersion := "2.12.14"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -2023,7 +2023,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "Hello",
     organization := "com.example",
-    scalaVersion := "2.12.13",
+    scalaVersion := "2.12.14",
     version := "0.1.0-SNAPSHOT",
     scalacOptions := List("-encoding", "utf8", "-Xfatal-warnings", "-deprecation", "-unchecked"),
     scalacOptions := {
@@ -2496,7 +2496,7 @@ sbt はフォールバックとして `ThisBuild` 内を探す。
 
 ```scala
 ThisBuild / organization := "com.example",
-ThisBuild / scalaVersion := "2.12.13",
+ThisBuild / scalaVersion := "2.12.14",
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -2702,7 +2702,7 @@ lazy val projA = (project in file("a"))
 `name in projA` (sbt シェルだと `projA/name`) の値は何か?
 
 1. `"foo-2.11.11"`
-2. `"foo-2.12.13"`
+2. `"foo-2.12.14"`
 3. その他
 
 正解は `"foo-2.11.11"`。
@@ -3446,7 +3446,7 @@ val sampleIntTask = taskKey[Int]("A sample int task.")
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.13"
+ThisBuild / scalaVersion := "2.12.14"
 
 lazy val library = (project in file("library"))
   .settings(
@@ -3498,7 +3498,7 @@ val sampleStringTask = taskKey[String]("A sample string task.")
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.13"
+ThisBuild / scalaVersion := "2.12.14"
 
 lazy val library = (project in file("library"))
   .settings(
@@ -3749,7 +3749,7 @@ import Dependencies._
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.13"
+ThisBuild / scalaVersion := "2.12.14"
 
 lazy val backend = (project in file("backend"))
   .settings(
@@ -3850,7 +3850,7 @@ name := "hello"
 
 version := "1.0"
 
-scalaVersion := "2.12.13"
+scalaVersion := "2.12.14"
 ```
 
 ### (0.13.7 以前) 設定は空白行で区切る
@@ -4747,7 +4747,7 @@ sbt 0.13.8 で `Def.sequential` という関数が追加されて、準逐次な
 #### project/build.properties
 
 ```
-sbt.version=1.5.3
+sbt.version=1.5.4
 ```
 
 #### project/style.sbt
@@ -4797,7 +4797,7 @@ root> compilecheck
 #### project/build.properties
 
 ```
-sbt.version=1.5.3
+sbt.version=1.5.4
 ```
 
 #### project/style.sbt
