@@ -6573,7 +6573,7 @@ $ sbt --client compile
 $ sbt --client shutdown
 ```
 
-The native thin client will run sbt (server) as a daemon, which avoids the JVM spinup and loading time for the second call onwards. This could an option if you would like to use sbt from the system shell such as Zsh and Fish.
+The native thin client will run sbt (server) as a daemon, which avoids the JVM spinup and loading time for the second call onwards. This could be an option if you would like to use sbt from the system shell such as Zsh and Fish.
 
 Remember to call `sbt --client shutdown` when you're done! If you want to enable this via an environment variable you can set `SBT_NATIVE_CLIENT` to `true`.
 `sbtn` binary files are also available from https://github.com/sbt/sbtn-dist/releases/tag/v1.4.0
