@@ -243,7 +243,7 @@ res0: String =
   ...
 
 scala&gt; :q // これで REPL を抜ける
-</code></pre><h3 id="%E3%82%B5%E3%83%97%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B">サププロジェクトを作成する<a href="#%E3%82%B5%E3%83%97%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> を以下のように変更する:
+</code></pre><h3 id="%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B">サブプロジェクトを作成する<a href="#%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> を以下のように変更する:
 </p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.6&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
@@ -259,7 +259,7 @@ lazy val helloCore = (project in file(&quot;core&quot;))
     name := &quot;Hello Core&quot;,
   )
 </code></pre><p><code>reload</code> コマンドを使って <code>build.sbt</code> の変更を反映させる。
-</p><h3 id="%E5%85%A8%E3%81%A6%E3%81%AE%E3%82%B5%E3%83%97%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E5%88%97%E6%8C%99%E3%81%99%E3%82%8B">全てのサププロジェクトを列挙する<a href="#%E5%85%A8%E3%81%A6%E3%81%AE%E3%82%B5%E3%83%97%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E5%88%97%E6%8C%99%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:Hello&gt; projects
+</p><h3 id="%E5%85%A8%E3%81%A6%E3%81%AE%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E5%88%97%E6%8C%99%E3%81%99%E3%82%8B">全てのサブプロジェクトを列挙する<a href="#%E5%85%A8%E3%81%A6%E3%81%AE%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E5%88%97%E6%8C%99%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:Hello&gt; projects
 [info] In file:/private/tmp/foo-build/
 [info]   * hello
 [info]     helloCore
