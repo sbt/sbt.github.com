@@ -50,7 +50,7 @@ If you haven’t created one already, make sure to create <code>project/build.pr
 </code></pre><p>Your build will now use 1.5.5.
 </p><h3 id="Read+the+GitHub+Actions+manual">Read the GitHub Actions manual<a href="#Read+the+GitHub+Actions+manual" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A treasure trove of Github Actions tricks can be found in the Github Actions <a href="https://docs.github.com/en/free-pro-team@latest/actions">official documentation</a>, including the <a href="https://docs.github.com/en/free-pro-team@latest/actions/reference">Reference</a>.
 Use this guide as an inspiration, but consult the official source for more details.
-</p><h3 id="Basic+setup">Basic setup<a href="#Basic+setup" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Setting up your build for GitHub Actions is mostly about setting up <code>.github/workflows/ci.yml</code>. Here’s what a minimal CI workflow could look like using Olaf’s <a href="https://github.com/olafurpg/setup-scala">setup-scala</a>:
+</p><h3 id="Basic+setup">Basic setup<a href="#Basic+setup" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Setting up your build for GitHub Actions is mostly about setting up <code>.github/workflows/ci.yml</code>. Here’s what a minimal CI workflow could look like using <a href="https://github.com/actions/setup-java">setup-java</a>:
 </p><pre><code class="prettyprint lang-yml">name: CI
 on:
   pull_request:
@@ -60,23 +60,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v1
-    - name: Setup Scala
-      uses: olafurpg/setup-scala@v10
+      uses: actions/checkout@v2
+    - name: Setup JDK
+      uses: actions/setup-java@v2
       with:
-        java-version: &quot;adopt@1.8&quot;
+        distribution: temurin
+        java-version: 8
     - name: Build and Test
-      run: sbt -v -Dfile.encoding=UTF-8 +test
-</code></pre><h3 id="Custom+JVM+options">Custom JVM options<a href="#Custom+JVM+options" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The default JVM options are provided by the unofficial sbt-extras script adopted by <a href="https://github.com/olafurpg/setup-scala">setup-scala</a>, and it should work for most cases. If you do decide to customize it, use <code>-v</code> option to let the script output the current options first:
-</p><pre><code class="">Detected Java version: 8
-# Executing command line:
+      run: sbt -v +test
+</code></pre><h3 id="Custom+JVM+options">Custom JVM options<a href="#Custom+JVM+options" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The default JVM options are provided by the official sbt runner adopted by <a href="https://github.com/actions/setup-java">setup-java</a>, and it should work for most cases. If you do decide to customize it, use <code>-v</code> option to let the script output the current options first:
+</p><pre><code class=""># Executing command line:
 java
--Xms512m
--Xss2m
--XX:MaxInlineLevel=18
--Dfile.encoding=UTF8
+-Dfile.encoding=UTF-8
+-Xms1024m
+-Xmx1024m
+-Xss4M
+-XX:ReservedCodeCacheSize=128m
 -jar
-/home/runner/.sbt/launchers/1.4.0-RC2/sbt-launch.jar
+/usr/share/sbt/bin/sbt-launch.jar
 </code></pre><p>We can define <code>JAVA_OPTS</code> and <code>JVM_OPTS</code> environment variables to override this.
 </p><pre><code class="prettyprint lang-yml">name: CI
 on:
@@ -91,32 +92,35 @@ jobs:
       JVM_OPTS:  -Xms2048M -Xmx2048M -Xss6M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
     steps:
     - name: Checkout
-      uses: actions/checkout@v1
-    - name: Setup Scala
-      uses: olafurpg/setup-scala@v10
+      uses: actions/checkout@v2
+    - name: Setup JDK
+      uses: actions/setup-java@v2
       with:
-        java-version: &quot;adopt@1.8&quot;
+        distribution: temurin
+        java-version: 8
     - name: Build and Test
       run: sbt -v +test
 </code></pre><p>Again, let’s check the log to see if the flags are taking effect:
-</p><pre><code class="">Using jvm options defined in $JVM_OPTS variable
-# Executing command line:
+</p><pre><code class=""># Executing command line:
+[process_args] java_version = '8'
 java
 -Xms2048M
 -Xmx2048M
 -Xss6M
 -XX:ReservedCodeCacheSize=256M
--Dfile.encoding=UTF8
+-Dfile.encoding=UTF-8
 -jar
-/home/runner/.sbt/launchers/1.4.0-RC2/sbt-launch.jar
+/usr/share/sbt/bin/sbt-launch.jar
 +test
 </code></pre><h3 id="Caching">Caching<a href="#Caching" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>You can speed up your <code>sbt</code> builds on GitHub Actions by caching various artifacts in-between the jobs.
 </p><p>Here are sample caching steps that you can use:
 </p><pre><code class="prettyprint lang-yml">    - name: Coursier cache
-      uses: coursier/cache-action@v5
+      uses: coursier/cache-action@v6
     - name: Build and test
+      run: sbt -v +test
+    - name: Cleanup before cache
+      shell: bash
       run: |
-        sbt -v +test
         rm -rf &quot;$HOME/.ivy2/local&quot; || true
         find $HOME/Library/Caches/Coursier/v1        -name &quot;ivydata-*.properties&quot; -delete || true
         find $HOME/.ivy2/cache                       -name &quot;ivydata-*.properties&quot; -delete || true
@@ -142,20 +146,21 @@ jobs:
           - os: ubuntu-latest
             java: 8
           - os: ubuntu-latest
-            java: 11
+            java: 17
           - os: windows-latest
-            java: 11
+            java: 17
     runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout
-      uses: actions/checkout@v1
-    - name: Setup
-      uses: olafurpg/setup-scala@v10
+      uses: actions/checkout@v2
+    - name: Setup JDK
+      uses: actions/setup-java@v2
       with:
-        java-version: &quot;adopt@1.${{ matrix.java }}&quot;
+        distribution: temurin
+        java-version: ${{ matrix.java }}
     - name: Build and test
-      run: sbt -v -Dfile.encoding=UTF8 +test
       shell: bash
+      run: sbt -v +test
 </code></pre><p>Note that there’s nothing magical about the <code>os</code> or <code>java</code> keys in the build matrix.
 </p><blockquote><p>The keys you define become properties in the <code>matrix</code> context and you can reference the property in other areas of your workflow file.
 </p></blockquote><p>You can create an arbitrary key to iterate over! We can use this and create a key named <code>jobtype</code> to split the work too.
@@ -170,39 +175,38 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            java: 11
+            java: 17
             jobtype: 1
           - os: ubuntu-latest
-            java: 11
+            java: 17
             jobtype: 2
           - os: ubuntu-latest
-            java: 11
+            java: 17
             jobtype: 3
     runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout
-      uses: actions/checkout@v1
-    - name: Setup
-      uses: olafurpg/setup-scala@v10
+      uses: actions/checkout@v2
+    - name: Setup JDK
+      uses: actions/setup-java@v2
       with:
-        java-version: &quot;adopt@1.${{ matrix.java }}&quot;
-    - name: Build and test
-      run: |
-        case ${{ matrix.jobtype }} in
-          1)
-            sbt -v &quot;mimaReportBinaryIssues; scalafmtCheckAll; +test;&quot;
-            ;;
-          2)
-            sbt -v &quot;scripted actions/*&quot;
-            ;;
-          3)
-            sbt -v &quot;dependency-management/*&quot;
-            ;;
-          *)
-            echo unknown jobtype
-            exit 1
-        esac
+        distribution: temurin
+        java-version: ${{ matrix.java }}
+    - name: Build and test (1)
+      if: ${{ matrix.jobtype == 1 }}
       shell: bash
+      run: |
+        sbt -v &quot;mimaReportBinaryIssues; scalafmtCheckAll; +test;&quot;
+    - name: Build and test (2)
+      if: ${{ matrix.jobtype == 2 }}
+      shell: bash
+      run: |
+        sbt -v &quot;scripted actions/*&quot;
+    - name: Build and test (3)
+      if: ${{ matrix.jobtype == 3 }}
+      shell: bash
+      run: |
+        sbt -v &quot;dependency-management/*&quot;
 </code></pre><h3 id="Sample+.github%2Fworkflows%2Fci.yml+setting">Sample .github/workflows/ci.yml setting<a href="#Sample+.github%2Fworkflows%2Fci.yml+setting" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Here’s a sample that puts them all together. Remember, most of the sections are optional.
 </p><pre><code class="prettyprint lang-yml">name: CI
 on:
@@ -215,16 +219,16 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            java: 11
+            java: 17
             jobtype: 1
           - os: ubuntu-latest
-            java: 11
+            java: 17
             jobtype: 2
           - os: windows-latest
-            java: 11
+            java: 17
             jobtype: 2
           - os: ubuntu-latest
-            java: 11
+            java: 17
             jobtype: 3
     runs-on: ${{ matrix.os }}
     env:
@@ -233,35 +237,37 @@ jobs:
       JVM_OPTS:  -Xms2048M -Xmx2048M -Xss6M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
     steps:
     - name: Checkout
-      uses: actions/checkout@v1
-    - name: Setup
-      uses: olafurpg/setup-scala@v10
+      uses: actions/checkout@v2
+    - name: Setup JDK
+      uses: actions/setup-java@v2
       with:
-        java-version: &quot;adopt@1.${{ matrix.java }}&quot;
+        distribution: temurin
+        java-version: ${{ matrix.java }}
     - name: Coursier cache
-      uses: coursier/cache-action@v5
-    - name: Build and test
+      uses: coursier/cache-action@v6
+    - name: Build and test (1)
+      if: ${{ matrix.jobtype == 1 }}
+      shell: bash
       run: |
-        case ${{ matrix.jobtype }} in
-          1)
-            sbt -v &quot;mimaReportBinaryIssues; scalafmtCheckAll; +test;&quot;
-            ;;
-          2)
-            sbt -v &quot;scripted actions/*&quot;
-            ;;
-          3)
-            sbt -v &quot;dependency-management/*&quot;
-            ;;
-          *)
-            echo unknown jobtype
-            exit 1
-        esac
+        sbt -v &quot;mimaReportBinaryIssues; scalafmtCheckAll; +test;&quot;
+    - name: Build and test (2)
+      if: ${{ matrix.jobtype == 2 }}
+      shell: bash
+      run: |
+        sbt -v &quot;scripted actions/*&quot;
+    - name: Build and test (3)
+      if: ${{ matrix.jobtype == 3 }}
+      shell: bash
+      run: |
+        sbt -v &quot;dependency-management/*&quot;
+    - name: Cleanup before cache
+      shell: bash
+      run: |
         rm -rf &quot;$HOME/.ivy2/local&quot; || true
         find $HOME/Library/Caches/Coursier/v1        -name &quot;ivydata-*.properties&quot; -delete || true
         find $HOME/.ivy2/cache                       -name &quot;ivydata-*.properties&quot; -delete || true
         find $HOME/.cache/coursier/v1                -name &quot;ivydata-*.properties&quot; -delete || true
         find $HOME/.sbt                              -name &quot;*.lock&quot;               -delete || true
-      shell: bash
 </code></pre><h3 id="sbt-github-actions">sbt-github-actions<a href="#sbt-github-actions" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>There’s also <a href="https://github.com/djspiewak/sbt-github-actions">sbt-github-actions</a>, an sbt plugin by Daniel Spiewak that can generate the workflow files, and keep the settings in <code>build.sbt</code> file.
 </p><div class="bottom nav">
                 <div class="row">
