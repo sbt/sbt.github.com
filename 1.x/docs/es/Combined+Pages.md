@@ -65,9 +65,9 @@ Si has tenido algún problema ejecutando sbt, revisa las
 proxies HTTP y opciones de la JVM.
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.6/sbt-1.5.6.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.6/sbt-1.5.6.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.6/sbt-1.5.6.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.tgz
   [Manual-Installation]: Manual-Installation.html
   [AdoptOpenJDK]: https://adoptopenjdk.net/
 
@@ -108,9 +108,9 @@ $ sdk install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.6/sbt-1.5.6.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.6/sbt-1.5.6.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.6/sbt-1.5.6.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.tgz
   [AdoptOpenJDK]: https://adoptopenjdk.net/
 
 Instalar sbt en Windows
@@ -141,11 +141,11 @@ $ scoop install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.6/sbt-1.5.6.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.6/sbt-1.5.6.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.6/sbt-1.5.6.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.5.6.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.5.6.deb
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.5.7.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.5.7.deb
   [Manual-Installation]: Manual-Installation.html
   [website127]: https://github.com/sbt/website/issues/127
   [cert-bug]: https://bugs.launchpad.net/ubuntu/+source/ca-certificates-java/+bug/1739631
@@ -1310,7 +1310,7 @@ Definiciones de construcción
 
 Esta página describe las definiciones de construcción (build definitions), 
 incluyendo algo de "teoría" y la sintaxis de `build.sbt`. Se supone que has 
-instalado una versión reciente de sbt, como sbt 1.5.6, que sabes cómo 
+instalado una versión reciente de sbt, como sbt 1.5.7, que sabes cómo 
 [usar sbt][Running] y que has leído las páginas anteriores de la Guía de inicio.
 
 Esta página explica la definición de construcción de `build.sbt`.
@@ -1326,7 +1326,7 @@ crea un fichero llamado `project/build.properties` en el que se especifica la
 versión de sbt como sigue:
 
 ```
-sbt.version=1.5.6
+sbt.version=1.5.7
 ```
 
 Si la versión requerida no está disponible localmente, el lanzador `sbt` se la 
