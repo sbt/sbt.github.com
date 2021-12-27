@@ -65,9 +65,9 @@ Si has tenido algún problema ejecutando sbt, revisa las
 proxies HTTP y opciones de la JVM.
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.6.0/sbt-1.6.0.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.6.0/sbt-1.6.0.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.6.0/sbt-1.6.0.tgz
   [Manual-Installation]: Manual-Installation.html
   [AdoptOpenJDK]: https://adoptopenjdk.net/
 
@@ -108,9 +108,9 @@ $ sdk install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.6.0/sbt-1.6.0.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.6.0/sbt-1.6.0.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.6.0/sbt-1.6.0.tgz
   [AdoptOpenJDK]: https://adoptopenjdk.net/
 
 Instalar sbt en Windows
@@ -141,11 +141,11 @@ $ scoop install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.5.7.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.5.7.deb
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.6.0/sbt-1.6.0.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.6.0/sbt-1.6.0.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.6.0/sbt-1.6.0.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.6.0.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.6.0.deb
   [Manual-Installation]: Manual-Installation.html
   [website127]: https://github.com/sbt/website/issues/127
   [cert-bug]: https://bugs.launchpad.net/ubuntu/+source/ca-certificates-java/+bug/1739631
@@ -1310,7 +1310,7 @@ Definiciones de construcción
 
 Esta página describe las definiciones de construcción (build definitions), 
 incluyendo algo de "teoría" y la sintaxis de `build.sbt`. Se supone que has 
-instalado una versión reciente de sbt, como sbt 1.5.7, que sabes cómo 
+instalado una versión reciente de sbt, como sbt 1.6.0, que sabes cómo 
 [usar sbt][Running] y que has leído las páginas anteriores de la Guía de inicio.
 
 Esta página explica la definición de construcción de `build.sbt`.
@@ -1326,7 +1326,7 @@ crea un fichero llamado `project/build.properties` en el que se especifica la
 versión de sbt como sigue:
 
 ```
-sbt.version=1.5.7
+sbt.version=1.6.0
 ```
 
 Si la versión requerida no está disponible localmente, el lanzador `sbt` se la 
@@ -1373,7 +1373,7 @@ utilizando un *DSL de build.sbt*
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.15"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -1563,7 +1563,7 @@ el "estilo plano".
 
 ```scala
 ThisBuild / version := "1.0"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.15"
 ```
 
 Esta sintaxis es la recomendada para configuraciones con ámbito `ThisBuild` plugins añadidos.
@@ -1579,7 +1579,7 @@ gestionadas, que en `build.sbt` tienen este aspecto:
 val derby = "org.apache.derby" % "derby" % "10.4.1.3"
 
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.15"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -1659,7 +1659,7 @@ predeterminadas en el ámbito de subproyectos. (Ver [Ámbitos][Scopes])
 ```scala
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.15"
 
 lazy val core = (project in file("core"))
   .settings(
@@ -1974,7 +1974,7 @@ Mira el siguiente ejemplo:
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.15"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -2011,7 +2011,7 @@ Aquí hay otro ejemplo:
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.15"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -2150,7 +2150,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "Hello",
     organization := "com.example",
-    scalaVersion := "2.12.14",
+    scalaVersion := "2.12.15",
     version := "0.1.0-SNAPSHOT",
     scalacOptions := List("-encoding", "utf8", "-Xfatal-warnings", "-deprecation", "-unchecked"),
     scalacOptions := {
@@ -2733,7 +2733,7 @@ construcción para claves usadas con frecuencia tales como `version`,
 
 ```scala
 ThisBuild / organization := "com.example",
-ThisBuild / scalaVersion := "2.12.14",
+ThisBuild / scalaVersion := "2.12.15",
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -2980,7 +2980,7 @@ lazy val projA = (project in file("a"))
 ¿Cuál es el valor de `projA / name`?
 
 1. `"foo-2.11.11"`
-2. `"foo-2.12.14"`
+2. `"foo-2.12.15"`
 3. ¿otra cosa?
 
 La respuesta es `"foo-2.11.11"`.
@@ -3769,7 +3769,7 @@ val sampleIntTask = taskKey[Int]("A sample int task.")
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.15"
 
 lazy val library = (project in file("library"))
   .settings(
@@ -3831,7 +3831,7 @@ val sampleStringTask = taskKey[String]("A sample string task.")
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.15"
 
 lazy val library = (project in file("library"))
   .settings(
@@ -4112,7 +4112,7 @@ import Dependencies._
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.15"
 
 lazy val backend = (project in file("backend"))
   .settings(
