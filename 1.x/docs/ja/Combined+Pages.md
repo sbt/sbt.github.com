@@ -298,8 +298,10 @@ sbt:foo-build> ~compile
 ```scala
 package example
 
-object Hello extends App {
-  println("Hello")
+object Hello {
+  def main(args: Array[String]): Unit = {
+    println("Hello")
+  }
 }
 ```
 
@@ -771,10 +773,12 @@ package example
 import scala.concurrent._, duration._
 import core.Weather
 
-object Hello extends App {
-  val w = Await.result(Weather.weather, 10.seconds)
-  println(s"Hello! The weather in New York is $w.")
-  Weather.http.close()
+object Hello {
+  def main(args: Array[String]): Unit = {
+    val w = Await.result(Weather.weather, 10.seconds)
+    println(s"Hello! The weather in New York is $w.")
+    Weather.http.close()
+  }
 }
 ```
 
@@ -4427,8 +4431,10 @@ sys.props.get("plugin.version") match {
 他に、`src/main/scala/hello.scala` も用意した:
 
 ```scala
-object Main extends App {
-  println("hello")
+object Main {
+  def main(args: Array[String]): Unit = {
+    println("hello")
+  }
 }
 ```
 
@@ -4857,8 +4863,10 @@ lazy val root = (project in file("."))
 #### src/main/scala/Greeting.scala
 
 ```scala
-object Greeting extends App {
-  println("hello " + args.toList)
+object Greeting {
+  def main(args: Array[String]): Unit = {
+    println("hello " + args.toList)
+  }
 }
 ```
 

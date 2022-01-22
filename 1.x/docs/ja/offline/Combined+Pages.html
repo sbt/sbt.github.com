@@ -150,8 +150,10 @@ sbt:foo-build&gt; compile
 </code></pre><h3 id="%E3%82%BD%E3%83%BC%E3%82%B9%E3%83%BB%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E6%9B%B8%E3%81%8F">ソース・ファイルを書く<a href="#%E3%82%BD%E3%83%BC%E3%82%B9%E3%83%BB%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E6%9B%B8%E3%81%8F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>上記のコマンドは走らせたままにする。別のシェルかファイルマネージャーからプロジェクトのディレクトリへ行って、<code>src/main/scala/example</code> というディレクトリを作る。次に好きなエディタを使って <code>example</code> ディレクトリ内に以下のファイルを作成する:
 </p><pre><code class="prettyprint lang-scala">package example
 
-object Hello extends App {
-  println(&quot;Hello&quot;)
+object Hello {
+  def main(args: Array[String]): Unit = {
+    println(&quot;Hello&quot;)
+  }
 }
 </code></pre><p>この新しいファイルは実行中のコマンドが自動的に検知したはずだ:
 </p><pre><code class="">[info] Compiling 1 Scala source to /private/tmp/foo-build/target/scala-2.12/classes ...
@@ -462,10 +464,12 @@ object Weather {
 import scala.concurrent._, duration._
 import core.Weather
 
-object Hello extends App {
-  val w = Await.result(Weather.weather, 10.seconds)
-  println(s&quot;Hello! The weather in New York is $w.&quot;)
-  Weather.http.close()
+object Hello {
+  def main(args: Array[String]): Unit = {
+    val w = Await.result(Weather.weather, 10.seconds)
+    println(s&quot;Hello! The weather in New York is $w.&quot;)
+    Weather.http.close()
+  }
 }
 </code></pre><p>アプリを走らせてみて、うまくいったか確認する:
 </p><pre><code class="">sbt:Hello&gt; run
@@ -2608,8 +2612,10 @@ useFile :=
 }
 </code></pre><p>これは <a href="https://github.com/earldouglas/xsbt-web-plugin/commit/feabb2eb554940d9b28049bd0618b6a790d9e141">earldouglas/xsbt-web-plugin@feabb2</a> から拝借してきた技で、これで scripted テストに version を渡すことができる。
 </p><p>他に、<code>src/main/scala/hello.scala</code> も用意した:
-</p><pre><code class="prettyprint lang-scala">object Main extends App {
-  println(&quot;hello&quot;)
+</p><pre><code class="prettyprint lang-scala">object Main {
+  def main(args: Array[String]): Unit = {
+    println(&quot;hello&quot;)
+  }
 }
 </code></pre><h3 id="%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+4%3A+%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%97%E3%83%88%E3%82%92%E6%9B%B8%E3%81%8F">ステップ 4: スクリプトを書く<a href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%97+4%3A+%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%97%E3%83%88%E3%82%92%E6%9B%B8%E3%81%8F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>次に、好きな筋書きを記述したスクリプトを、テストビルドのルート下に置いた <code>test</code> というファイルに書く。
 </p><pre><code class=""># ファイルが作成されたかを確認
@@ -2829,8 +2835,10 @@ lazy val root = (project in file(&quot;.&quot;))
 </p><h3 id="%E3%82%A4%E3%83%B3%E3%83%97%E3%83%83%E3%83%88%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%AE%E5%BE%8C%E3%81%A7%E4%BD%95%E3%81%8B%E3%81%99%E3%82%8B">インプットタスクの後で何かする<a href="#%E3%82%A4%E3%83%B3%E3%83%97%E3%83%83%E3%83%88%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%AE%E5%BE%8C%E3%81%A7%E4%BD%95%E3%81%8B%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>ここまでタスクに焦点を当ててみてきた。タスクには他にインプットタスクというものがあって、これはユーザからの入力をシェル上で受け取る。
 典型的な例としては <code>Compile / run</code> タスクがある。<code>scalastyle</code> タスクも実はインプットタスクだ。インプットタスクの詳細は <a href="Input-Tasks.html">Input Task</a> 参照。
 </p><p>ここで、<code>Compile / run</code> タスクの実行後にテスト用にブラウザを開く方法を考えてみる。
-</p><h4 id="src%2Fmain%2Fscala%2FGreeting.scala">src/main/scala/Greeting.scala<a href="#src%2Fmain%2Fscala%2FGreeting.scala" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">object Greeting extends App {
-  println(&quot;hello &quot; + args.toList)
+</p><h4 id="src%2Fmain%2Fscala%2FGreeting.scala">src/main/scala/Greeting.scala<a href="#src%2Fmain%2Fscala%2FGreeting.scala" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">object Greeting {
+  def main(args: Array[String]): Unit = {
+    println(&quot;hello &quot; + args.toList)
+  }
 }
 </code></pre><h4 id="build.sbt+v1">build.sbt v1<a href="#build.sbt+v1" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">lazy val runopen = inputKey[Unit](&quot;run and then open the browser&quot;)
 

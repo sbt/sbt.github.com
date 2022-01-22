@@ -67,8 +67,10 @@ sbt:foo-build&gt; compile
 </code></pre><h3 id="%E3%82%BD%E3%83%BC%E3%82%B9%E3%83%BB%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E6%9B%B8%E3%81%8F">ソース・ファイルを書く<a href="#%E3%82%BD%E3%83%BC%E3%82%B9%E3%83%BB%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E6%9B%B8%E3%81%8F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>上記のコマンドは走らせたままにする。別のシェルかファイルマネージャーからプロジェクトのディレクトリへ行って、<code>src/main/scala/example</code> というディレクトリを作る。次に好きなエディタを使って <code>example</code> ディレクトリ内に以下のファイルを作成する:
 </p><pre><code class="prettyprint lang-scala">package example
 
-object Hello extends App {
-  println(&quot;Hello&quot;)
+object Hello {
+  def main(args: Array[String]): Unit = {
+    println(&quot;Hello&quot;)
+  }
 }
 </code></pre><p>この新しいファイルは実行中のコマンドが自動的に検知したはずだ:
 </p><pre><code class="">[info] Compiling 1 Scala source to /private/tmp/foo-build/target/scala-2.12/classes ...
@@ -379,10 +381,12 @@ object Weather {
 import scala.concurrent._, duration._
 import core.Weather
 
-object Hello extends App {
-  val w = Await.result(Weather.weather, 10.seconds)
-  println(s&quot;Hello! The weather in New York is $w.&quot;)
-  Weather.http.close()
+object Hello {
+  def main(args: Array[String]): Unit = {
+    val w = Await.result(Weather.weather, 10.seconds)
+    println(s&quot;Hello! The weather in New York is $w.&quot;)
+    Weather.http.close()
+  }
 }
 </code></pre><p>アプリを走らせてみて、うまくいったか確認する:
 </p><pre><code class="">sbt:Hello&gt; run

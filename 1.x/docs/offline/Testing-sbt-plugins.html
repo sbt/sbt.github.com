@@ -82,8 +82,10 @@
 }
 </code></pre><p>This a trick I picked up from <a href="https://github.com/earldouglas/xsbt-web-plugin/commit/feabb2eb554940d9b28049bd0618b6a790d9e141">earldouglas/xsbt-web-plugin@feabb2</a>, which allows us to pass version number into the test.
 </p><p>I also have <code>src/main/scala/hello.scala</code>:
-</p><pre><code class="prettyprint lang-scala">object Main extends App {
-  println(&quot;hello&quot;)
+</p><pre><code class="prettyprint lang-scala">object Main {
+  def main(args: Array[String]): Unit = {
+    println(&quot;hello&quot;)
+  }
 }
 </code></pre><h3 id="step+4%3A+write+a+script">step 4: write a script<a href="#step+4%3A+write+a+script" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Now, write a script to describe your scenario in a file called <code>test</code> located at the root dir of your test project.
 </p><pre><code class=""># check if the file gets created

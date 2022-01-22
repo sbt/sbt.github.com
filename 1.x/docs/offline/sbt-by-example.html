@@ -69,8 +69,10 @@ directory the following nested directories: <code>src/main/scala/example</code>.
 in the <code>example</code> directory using your favorite editor as follows:
 </p><pre><code class="prettyprint lang-scala">package example
 
-object Hello extends App {
-  println(&quot;Hello&quot;)
+object Hello {
+  def main(args: Array[String]): Unit = {
+    println(&quot;Hello&quot;)
+  }
 }
 </code></pre><p>This new file should be picked up by the running command:
 </p><pre><code class="">[info] Compiling 1 Scala source to /tmp/foo-build/target/scala-2.12/classes ...
@@ -385,10 +387,12 @@ object Weather {
 import scala.concurrent._, duration._
 import core.Weather
 
-object Hello extends App {
-  val w = Await.result(Weather.weather, 10.seconds)
-  println(s&quot;Hello! The weather in New York is $w.&quot;)
-  Weather.http.close()
+object Hello {
+  def main(args: Array[String]): Unit = {
+    val w = Await.result(Weather.weather, 10.seconds)
+    println(s&quot;Hello! The weather in New York is $w.&quot;)
+    Weather.http.close()
+  }
 }
 </code></pre><p>Let’s run the app to see if it worked:
 </p><pre><code class="">sbt:Hello&gt; run

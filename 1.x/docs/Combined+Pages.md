@@ -376,8 +376,10 @@ in the `example` directory using your favorite editor as follows:
 ```scala
 package example
 
-object Hello extends App {
-  println("Hello")
+object Hello {
+  def main(args: Array[String]): Unit = {
+    println("Hello")
+  }
 }
 ```
 
@@ -854,10 +856,12 @@ package example
 import scala.concurrent._, duration._
 import core.Weather
 
-object Hello extends App {
-  val w = Await.result(Weather.weather, 10.seconds)
-  println(s"Hello! The weather in New York is $w.")
-  Weather.http.close()
+object Hello {
+  def main(args: Array[String]): Unit = {
+    val w = Await.result(Weather.weather, 10.seconds)
+    println(s"Hello! The weather in New York is $w.")
+    Weather.http.close()
+  }
 }
 ```
 
@@ -20566,8 +20570,10 @@ This a trick I picked up from [earldouglas/xsbt-web-plugin@feabb2][feabb2], whic
 I also have `src/main/scala/hello.scala`:
 
 ```scala
-object Main extends App {
-  println("hello")
+object Main {
+  def main(args: Array[String]): Unit = {
+    println("hello")
+  }
 }
 ```
 
@@ -23367,8 +23373,10 @@ Now suppose we want to call `Compile / run` task and then open the browser for t
 #### src/main/scala/Greeting.scala
 
 ```scala
-object Greeting extends App {
-  println("hello " + args.toList)
+object Greeting {
+  def main(args: Array[String]): Unit = {
+    println("hello " + args.toList)
+  }
 }
 ```
 

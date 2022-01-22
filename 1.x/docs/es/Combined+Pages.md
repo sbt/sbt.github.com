@@ -328,8 +328,10 @@ utilizando tu editor de texto favorito con este contenido:
 ```scala
 package example
 
-object Hello extends App {
-  println("Hello")
+object Hello {
+  def main(args: Array[String]): Unit = {
+    println("Hello")
+  }
 }
 ```
 
@@ -807,10 +809,12 @@ package example
 import scala.concurrent._, duration._
 import core.Weather
 
-object Hello extends App {
-  val w = Await.result(Weather.weather, 10.seconds)
-  println(s"Hello! The weather in New York is $w.")
-  Weather.http.close()
+object Hello {
+  def main(args: Array[String]): Unit = {
+    val w = Await.result(Weather.weather, 10.seconds)
+    println(s"Hello! The weather in New York is $w.")
+    Weather.http.close()
+  }
 }
 ```
 

@@ -193,8 +193,10 @@ directory the following nested directories: <code>src/main/scala/example</code>.
 in the <code>example</code> directory using your favorite editor as follows:
 </p><pre><code class="prettyprint lang-scala">package example
 
-object Hello extends App {
-  println(&quot;Hello&quot;)
+object Hello {
+  def main(args: Array[String]): Unit = {
+    println(&quot;Hello&quot;)
+  }
 }
 </code></pre><p>This new file should be picked up by the running command:
 </p><pre><code class="">[info] Compiling 1 Scala source to /tmp/foo-build/target/scala-2.12/classes ...
@@ -509,10 +511,12 @@ object Weather {
 import scala.concurrent._, duration._
 import core.Weather
 
-object Hello extends App {
-  val w = Await.result(Weather.weather, 10.seconds)
-  println(s&quot;Hello! The weather in New York is $w.&quot;)
-  Weather.http.close()
+object Hello {
+  def main(args: Array[String]): Unit = {
+    val w = Await.result(Weather.weather, 10.seconds)
+    println(s&quot;Hello! The weather in New York is $w.&quot;)
+    Weather.http.close()
+  }
 }
 </code></pre><p>Let’s run the app to see if it worked:
 </p><pre><code class="">sbt:Hello&gt; run
@@ -12752,8 +12756,10 @@ cache:
 }
 </code></pre><p>This a trick I picked up from <a href="https://github.com/earldouglas/xsbt-web-plugin/commit/feabb2eb554940d9b28049bd0618b6a790d9e141">earldouglas/xsbt-web-plugin@feabb2</a>, which allows us to pass version number into the test.
 </p><p>I also have <code>src/main/scala/hello.scala</code>:
-</p><pre><code class="prettyprint lang-scala">object Main extends App {
-  println(&quot;hello&quot;)
+</p><pre><code class="prettyprint lang-scala">object Main {
+  def main(args: Array[String]): Unit = {
+    println(&quot;hello&quot;)
+  }
 }
 </code></pre><h3 id="step+4%3A+write+a+script">step 4: write a script<a href="#step+4%3A+write+a+script" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Now, write a script to describe your scenario in a file called <code>test</code> located at the root dir of your test project.
 </p><pre><code class=""># check if the file gets created
@@ -14296,8 +14302,10 @@ lazy val root = (project in file(&quot;.&quot;))
 </p><h3 id="Doing+something+after+an+input+task">Doing something after an input task<a href="#Doing+something+after+an+input+task" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Thus far we’ve mostly looked at tasks. There’s another kind of tasks called input tasks that accepts user input from the shell.
 A typical example for this is the <code>Compile / run</code> task. The <code>scalastyle</code> task is actually an input task too. See <a href="Input-Tasks.html">input task</a> for the details of the input tasks.
 </p><p>Now suppose we want to call <code>Compile / run</code> task and then open the browser for testing purposes.
-</p><h4 id="src%2Fmain%2Fscala%2FGreeting.scala">src/main/scala/Greeting.scala<a href="#src%2Fmain%2Fscala%2FGreeting.scala" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">object Greeting extends App {
-  println(&quot;hello &quot; + args.toList)
+</p><h4 id="src%2Fmain%2Fscala%2FGreeting.scala">src/main/scala/Greeting.scala<a href="#src%2Fmain%2Fscala%2FGreeting.scala" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">object Greeting {
+  def main(args: Array[String]): Unit = {
+    println(&quot;hello &quot; + args.toList)
+  }
 }
 </code></pre><h4 id="build.sbt+v1">build.sbt v1<a href="#build.sbt+v1" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">lazy val runopen = inputKey[Unit](&quot;run and then open the browser&quot;)
 

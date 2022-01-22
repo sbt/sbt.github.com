@@ -45,8 +45,10 @@
                   <h3 id="Doing+something+after+an+input+task">Doing something after an input task<a href="#Doing+something+after+an+input+task" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Thus far we’ve mostly looked at tasks. There’s another kind of tasks called input tasks that accepts user input from the shell.
 A typical example for this is the <code>Compile / run</code> task. The <code>scalastyle</code> task is actually an input task too. See <a href="Input-Tasks.html">input task</a> for the details of the input tasks.
 </p><p>Now suppose we want to call <code>Compile / run</code> task and then open the browser for testing purposes.
-</p><h4 id="src%2Fmain%2Fscala%2FGreeting.scala">src/main/scala/Greeting.scala<a href="#src%2Fmain%2Fscala%2FGreeting.scala" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">object Greeting extends App {
-  println(&quot;hello &quot; + args.toList)
+</p><h4 id="src%2Fmain%2Fscala%2FGreeting.scala">src/main/scala/Greeting.scala<a href="#src%2Fmain%2Fscala%2FGreeting.scala" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">object Greeting {
+  def main(args: Array[String]): Unit = {
+    println(&quot;hello &quot; + args.toList)
+  }
 }
 </code></pre><h4 id="build.sbt+v1">build.sbt v1<a href="#build.sbt+v1" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">lazy val runopen = inputKey[Unit](&quot;run and then open the browser&quot;)
 
