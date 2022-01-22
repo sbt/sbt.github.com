@@ -8095,7 +8095,7 @@ only be one application that uses AWT at a time, however.
 methods of <code>java.lang.Class</code> or <code>java.lang.ClassLoader</code>.
 </p><p>The main Scala testing frameworks (
 <a href="https://scalacheck.org/">ScalaCheck</a>,
-<a href="https://scalatest.org/">ScalaTest</a>, and
+<a href="https://www.scalatest.org/">ScalaTest</a>, and
 <a href="http://specs2.org/">specs2</a>) provide an implementation of the
 common test interface and only need to be added to the classpath to work
 with sbt. For example, ScalaCheck may be used by declaring it as a
@@ -11328,7 +11328,7 @@ different items.
   token(Space ~&gt; StringBasic.examples(FixedSetExamples(items)))
 
 def selectSome(items: Seq[String]): Parser[Seq[String]] = {
-   select1(items).flatMap { v ⇒
+   select1(items).flatMap { v =&gt;
    val remaining = items filter { _ != v }
    if (remaining.size == 0)
      success(v :: Nil)

@@ -3026,7 +3026,7 @@ lazy val projF = (project in file("f"))
   [through Ivy]: https://ant.apache.org/ivy/history/latest-milestone/concept.html#checksum
   [ScalaCheck]: https://scalacheck.org
   [Specs2]: http://specs2.org
-  [ScalaTest]: https://scalatest.org
+  [ScalaTest]: https://www.scalatest.org
   [Basic-Def]: Basic-Def.html
   [Scopes]: Scopes.html
   [Task-Graph]: Task-Graph.html

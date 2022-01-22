@@ -174,7 +174,7 @@ different items.
   token(Space ~&gt; StringBasic.examples(FixedSetExamples(items)))
 
 def selectSome(items: Seq[String]): Parser[Seq[String]] = {
-   select1(items).flatMap { v ⇒
+   select1(items).flatMap { v =&gt;
    val remaining = items filter { _ != v }
    if (remaining.size == 0)
      success(v :: Nil)
