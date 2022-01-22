@@ -66,14 +66,14 @@ sbt プロジェクトを作るためには、以下の手順をたどる必要�
   [ZIP]: https://github.com/sbt/sbt/releases/download/v1.6.1/sbt-1.6.1.zip
   [TGZ]: https://github.com/sbt/sbt/releases/download/v1.6.1/sbt-1.6.1.tgz
   [Manual-Installation]: Manual-Installation.html
-  [AdoptOpenJDK]: https://adoptopenjdk.net/
+  [AdoptiumOpenJDK]: https://adoptium.net
 
 macOS への sbt のインストール
 --------------------------
 
 ### JDK のインストール
 
-リンクをたどって [JDK 8 もしくは JDK 11][AdoptOpenJDK] をインストールする。
+リンクをたどって [JDK 8 もしくは JDK 11][AdoptiumOpenJDK] をインストールする。
 
 もしくは [SDKMAN!](https://sdkman.io/) を使う:
 
@@ -106,14 +106,14 @@ $ brew install sbt
   [MSI]: https://github.com/sbt/sbt/releases/download/v1.6.1/sbt-1.6.1.msi
   [ZIP]: https://github.com/sbt/sbt/releases/download/v1.6.1/sbt-1.6.1.zip
   [TGZ]: https://github.com/sbt/sbt/releases/download/v1.6.1/sbt-1.6.1.tgz
-  [AdoptOpenJDK]: https://adoptopenjdk.net/
+  [AdoptiumOpenJDK]: https://adoptium.net
 
 Windows への sbt のインストール
 ----------------------------
 
 ### JDK のインストール
 
-リンクをたどって [JDK 8 もしくは JDK 11][AdoptOpenJDK] をインストールする。
+リンクをたどって [JDK 8 もしくは JDK 11][AdoptiumOpenJDK] をインストールする。
 
 ### ユニバーサルパッケージからのインストール
 

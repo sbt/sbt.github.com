@@ -74,14 +74,14 @@ proxies HTTP y opciones de la JVM.
   [ZIP]: https://github.com/sbt/sbt/releases/download/v1.6.1/sbt-1.6.1.zip
   [TGZ]: https://github.com/sbt/sbt/releases/download/v1.6.1/sbt-1.6.1.tgz
   [Manual-Installation]: Manual-Installation.html
-  [AdoptOpenJDK]: https://adoptopenjdk.net/
+  [AdoptiumOpenJDK]: https://adoptium.net
 
 Instalar sbt on macOS
 ---------------------
 
 ### Instalar JDK
 
-Sigue el link para instalar [JDK 8 u 11][AdoptOpenJDK].
+Sigue el link para instalar [JDK 8 u 11][AdoptiumOpenJDK].
 
 Or use [SDKMAN!](https://sdkman.io/):
 
@@ -116,14 +116,14 @@ $ sdk install sbt
   [MSI]: https://github.com/sbt/sbt/releases/download/v1.6.1/sbt-1.6.1.msi
   [ZIP]: https://github.com/sbt/sbt/releases/download/v1.6.1/sbt-1.6.1.zip
   [TGZ]: https://github.com/sbt/sbt/releases/download/v1.6.1/sbt-1.6.1.tgz
-  [AdoptOpenJDK]: https://adoptopenjdk.net/
+  [AdoptiumOpenJDK]: https://adoptium.net
 
 Instalar sbt en Windows
 -----------------------
 
 ### Instalar JDK
 
-Sigue el link para instalar [JDK 8 u 11][AdoptOpenJDK].
+Sigue el link para instalar [JDK 8 u 11][AdoptiumOpenJDK].
 
 ### Instalar desde un paquete universal
 
