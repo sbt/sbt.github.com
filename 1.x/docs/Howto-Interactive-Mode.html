@@ -83,7 +83,7 @@ for sbt and thus provides access to all build information for use in the
 prompt string.
 </p><p>Examples:
 </p><pre><code class="prettyprint lang-scala">// set the prompt (for this build) to include the project id.
-shellPrompt in ThisBuild := { state =&gt; Project.extract(state).currentRef.project + &quot;&gt; &quot; }
+ThisBuild / shellPrompt := { state =&gt; Project.extract(state).currentRef.project + &quot;&gt; &quot; }
 
 // set the prompt (for the current project) to include the username
 shellPrompt := { state =&gt; System.getProperty(&quot;user.name&quot;) + &quot;&gt; &quot; }

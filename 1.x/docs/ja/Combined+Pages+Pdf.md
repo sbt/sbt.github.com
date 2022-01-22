@@ -2753,7 +2753,7 @@ lazy val projX = (project in file("x"))
 **練習問題 B**: 以下のビルド定義を考える:
 
 ```scala
-organization in ThisBuild := "com.example"
+ThisBuild / organization := "com.example"
 
 lazy val projB = (project in file("b"))
   .settings(
@@ -4797,7 +4797,7 @@ root> compilecheck
 
 [逐次タスク][Howto-Sequential-Task]だけで十分じゃなければ、次のステップは[動的タスク][Tasks]だ。純粋な型 `A` の値を返すことを期待する `Def.task` と違って、`Def.taskDyn` は `sbt.Def.Initialize[sbt.Task[A]]` という型のタスク・エンジンが残りの計算を継続するタスクを返す。
 
-`Compile / compile` を実行した後で [scalastyle-sbt-plugin](http://www.scalastyle.org/sbt.html) の `scalastyle in Compile` タスクを実行するカスタムタスク、`compilecheck` を実装してみよう。
+`Compile / compile` を実行した後で [scalastyle-sbt-plugin](http://www.scalastyle.org/sbt.html) の `Compile / scalastyle` タスクを実行するカスタムタスク、`compilecheck` を実装してみよう。
 
 #### project/build.properties
 
@@ -4898,8 +4898,8 @@ open browser!
 ```scala
 lazy val root = (project in file("."))
   .settings(
-    run in Compile := {
-      (run in Compile).evaluated
+    Compile / run := {
+      (Compile / run).evaluated
       println("open browser!")
     }
   )

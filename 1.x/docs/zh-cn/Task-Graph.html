@@ -233,10 +233,10 @@ checksums := scalacOptions.value
 </p><pre><code class="prettyprint lang-scala">// name our organization after our project (both are SettingKey[String])
 organization := name.value
 </code></pre><p>Here’s a realistic example.
-This rewires <code>scalaSource in Compile</code> key to a different directory
+This rewires <code>Compile / scalaSource</code> key to a different directory
 only when <code>scalaBinaryVersion</code> is <code>&quot;2.11&quot;</code>.
-</p><pre><code class="prettyprint lang-scala">scalaSource in Compile := {
-  val old = (scalaSource in Compile).value
+</p><pre><code class="prettyprint lang-scala">Compile / scalaSource := {
+  val old = (Compile / scalaSource).value
   scalaBinaryVersion.value match {
     case &quot;2.11&quot; =&gt; baseDirectory.value / &quot;src-2.11&quot; / &quot;main&quot; / &quot;scala&quot;
     case _      =&gt; old

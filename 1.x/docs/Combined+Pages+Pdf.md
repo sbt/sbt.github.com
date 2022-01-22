@@ -3906,7 +3906,7 @@ The following is a graphical notation of `sampleStringTask`'s evaluation:
 
 If we did not deduplicate the task dependencies, we will end up
 compiling test source code many times when `test` task is invoked
-since `compile in Test` appears many times as a task dependency of `test in Test`.
+since `Test / compile` appears many times as a task dependency of `Test / test`.
 
 #### Cleanup task
 
@@ -9920,7 +9920,7 @@ Def.settings {
     val clazz = Class.forName("sbt.nio.Keys$WatchBuildSourceOption")
     val manifest = new scala.reflect.Manifest[AnyRef]{ def runtimeClass = clazz }
     Seq(
-      SettingKey[AnyRef]("onChangedBuildSource")(manifest, sbt.util.NoJsonWriter()) in Global := value
+      Global / SettingKey[AnyRef]("onChangedBuildSource")(manifest, sbt.util.NoJsonWriter()) := value
     )
   } catch {
     case e: Throwable =>
@@ -19860,7 +19860,7 @@ object MyPlugin extends AutoPlugin {
   override def trigger = allRequirements
 
   override val globalSettings: Seq[Def.Setting[_]] = Seq(
-    onLoad in Global := (onLoad in Global).value andThen { state =>
+    Global / onLoad := (Global / onLoad).value andThen { state =>
       ... return new state ...
     }
   )
@@ -21827,7 +21827,7 @@ Examples:
 
 ```scala
 // set the prompt (for this build) to include the project id.
-shellPrompt in ThisBuild := { state => Project.extract(state).currentRef.project + "> " }
+ThisBuild / shellPrompt := { state => Project.extract(state).currentRef.project + "> " }
 
 // set the prompt (for the current project) to include the username
 shellPrompt := { state => System.getProperty("user.name") + "> " }
@@ -22843,14 +22843,14 @@ lazy val startupTransition: State => State = { s: State =>
 
 lazy val root = (project in file("."))
   .settings(
-    scalaVersion in ThisBuild := "2.12.6",
-    organization in ThisBuild := "com.example",
+    ThisBuild / scalaVersion := "2.12.6",
+    ThisBuild / organization := "com.example",
     name := "helloworld",
     dependencyUpdates := { println("hi") },
 
     // onLoad is scoped to Global because there's only one.
-    onLoad in Global := {
-      val old = (onLoad in Global).value
+    Global / onLoad := {
+      val old = (Global / onLoad).value
       // compose the new transition on top of the existing one
       // in case your plugins are using this hook.
       startupTransition compose old

@@ -179,7 +179,7 @@ The following is a graphical notation of <code>sampleStringTask</code>’s evalu
 </p><p><img src="files/task-dependency01.png" alt="task-dependency"/>
 </p><p>If we did not deduplicate the task dependencies, we will end up
 compiling test source code many times when <code>test</code> task is invoked
-since <code>compile in Test</code> appears many times as a task dependency of <code>test in Test</code>.
+since <code>Test / compile</code> appears many times as a task dependency of <code>Test / test</code>.
 </p><h4 id="Cleanup+task">Cleanup task<a href="#Cleanup+task" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>How should one implement <code>stopServer</code> task?
 The notion of cleanup task does not fit into the execution model of tasks because
 tasks are about tracking dependencies.

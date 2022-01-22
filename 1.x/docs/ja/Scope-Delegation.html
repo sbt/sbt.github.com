@@ -129,7 +129,7 @@ lazy val projX = (project in file(&quot;x&quot;))
 </p><h3 id="%E3%83%AB%E3%83%BC%E3%83%AB+4%3A+%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E8%BB%B8%E3%81%AE%E6%A4%9C%E7%B4%A2%E3%83%91%E3%82%B9">ルール 4: サブプロジェクト軸の検索パス<a href="#%E3%83%AB%E3%83%BC%E3%83%AB+4%3A+%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E8%BB%B8%E3%81%AE%E6%A4%9C%E7%B4%A2%E3%83%91%E3%82%B9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>ルール 4: あるスコープが与えられたとき、委譲スコープは以下の順にサブプロジェクト軸を置換することで検索される:
 与えられたサブプロジェクト、<code>ThisBuild</code> そして <code>Zero</code>。
 </li></ul><p><strong>練習問題 B</strong>: 以下のビルド定義を考える:
-</p><pre><code class="prettyprint lang-scala">organization in ThisBuild := &quot;com.example&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;
 
 lazy val projB = (project in file(&quot;b&quot;))
   .settings(
