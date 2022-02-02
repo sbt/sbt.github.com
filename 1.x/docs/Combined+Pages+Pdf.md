@@ -18,7 +18,6 @@ Preface
   [Parallel-Execution]: Parallel-Execution.html
   [Discussions]: https://github.com/sbt/sbt/discussions
   [Faq]: Faq.html
-  [Support]: https://www.scala-sbt.org/support.html
   [Apidoc]: https://www.scala-sbt.org/1.x/api/sbt/index.html
 
 
@@ -4247,7 +4246,7 @@ always write it in all lowercase letters. However, we are cool with [酢豚][sub
 
 #### How do I get help?
 
--  See [Support](https://www.scala-sbt.org/support.html#how-can-I-get-help)
+-  See [How can I get help?](https://www.scala-sbt.org/community.html#how-can-I-get-help)
 
 #### How do I report a bug?
 
