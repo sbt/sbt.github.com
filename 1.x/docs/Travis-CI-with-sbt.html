@@ -46,8 +46,8 @@
 </p><h3 id="Set">Set <code>project/build.properties</code><a href="#Set" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Continuous integration is a great way of checking that your code works outside of your machine.
 If you haven’t created one already, make sure to create <code>project/build.properties</code> and explicitly set the
 <code>sbt.version</code> number:
-</p><pre><code class="prettyprint lang-yml">sbt.version=1.6.1
-</code></pre><p>Your build will now use 1.6.1.
+</p><pre><code class="prettyprint lang-yml">sbt.version=1.6.2
+</code></pre><p>Your build will now use 1.6.2.
 </p><h3 id="Read+the+Travis+manual">Read the Travis manual<a href="#Read+the+Travis+manual" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A treasure trove of Travis tricks can be found in the Travis’s <a href="http://docs.travis-ci.com/">official documentation</a>.
 Use this guide as an inspiration, but consult the official source for more details.
 </p><h3 id="Basic+setup">Basic setup<a href="#Basic+setup" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Setting up your build for Travis CI is mostly about setting up <code>.travis.yml</code>.
@@ -106,7 +106,7 @@ java
 -Xss6M
 -XX:ReservedCodeCacheSize=256M
 -jar
-/home/travis/.sbt/launchers/1.6.1/sbt-launch.jar
+/home/travis/.sbt/launchers/1.6.2/sbt-launch.jar
 </code></pre><p>It seems to be working. One downside of setting all of the parameters is that we might be left behind when the environment updates and the default values gives us more memory in the future.
 </p><p>Here’s how we can add just a few JVM options:
 </p><pre><code class="">script:
@@ -122,7 +122,7 @@ java
 -XX:ReservedCodeCacheSize=256M
 -Xms1024M
 -jar
-/home/travis/.sbt/launchers/1.6.1/sbt-launch.jar
+/home/travis/.sbt/launchers/1.6.2/sbt-launch.jar
 </code></pre><p><strong>Note</strong>: This duplicates the <code>-Xms</code> flag as intended, which might not the best thing to do.
 </p><h3 id="Caching">Caching<a href="#Caching" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>You can speed up your <code>sbt</code> builds on Travis CI by using their <a href="http://docs.travis-ci.com/user/caching/">caching</a> feature.
 </p><p>Here’s a sample <code>cache:</code> configuration that you can use:
