@@ -19,6 +19,7 @@ Preface
   [Discussions]: https://github.com/sbt/sbt/discussions
   [Faq]: Faq.html
   [Apidoc]: https://www.scala-sbt.org/1.x/api/sbt/index.html
+  [Get-Help]: https://www.scala-sbt.org/community.html#how-can-I-get-help
 
 
 sbt is a build tool for Scala, Java, and
@@ -39,9 +40,9 @@ All documentation may be found via the table of contents included on the left of
 
 See also [Frequently asked question][Faq].
 
-See [Support][Support] on where you can get help about sbt.
+See [How can I get help?][Get-Help] for where you can get help about sbt.
 For discussing sbt development, use [Discussions][Discussions].
-To stay up to date about the news related to sbt, follow us [@scala_sbt](https://twitter.com/scala_sbt).
+To stay up to date about the news related to sbt, follow us [@scala\_sbt](https://twitter.com/scala_sbt).
 
 ### Features of sbt
 
@@ -4133,7 +4134,7 @@ way to inject custom tasks and commands across all subprojects.
   [Basic-Def]: Basic-Def.html
   [Scopes]: Scopes.html
   [Using-Plugins]: Using-Plugins.html
-  [getting-help]: ../docs/faq.html#getting-help
+  [getting-help]:  https://www.scala-sbt.org/community.html#how-can-I-get-help
 
 Getting Started summary
 -----------------------
