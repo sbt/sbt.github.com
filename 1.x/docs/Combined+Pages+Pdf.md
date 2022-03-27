@@ -12271,7 +12271,7 @@ implementation. As an example macro, we'll use `desugar` from
 package demo
 
 import language.experimental.macros
-import scala.reflect.macros.Context
+import scala.reflect.macros.blackbox.Context
 
 object Demo {
 
