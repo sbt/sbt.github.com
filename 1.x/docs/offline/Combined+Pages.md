@@ -115,7 +115,7 @@ Installing sbt
 
 To create an sbt project, you'll need to take these steps:
 
--   Install JDK (We recommend AdoptOpenJDK JDK 8 or AdoptOpenJDK JDK 11).
+-   Install JDK (We recommend Eclipse Adoptium Temurin JDK 8, 11, or 17).
 -   Install sbt.
 -   Setup a simple [hello world][Hello] project
 -   Move on to [running][Running] to learn how to run sbt.
@@ -142,19 +142,18 @@ terminal encodings, HTTP proxies, and JVM options.
 Installing sbt on macOS
 -----------------------
 
+### Install sbt with **cs setup**
+
+Follow [Install](https://www.scala-lang.org/download/) page, and install Scala using Coursier. This should install the latest stable version of `sbt`.
+
 ### Install JDK
 
-Follow the link to install [JDK 8 or 11][AdoptiumOpenJDK].
-
-Or use [SDKMAN!](https://sdkman.io/):
-
-```
-$ sdk install java $(sdk list java | grep -o "8\.[0-9]*\.[0-9]*\.hs-adpt" | head -1)
-```
+Follow the link to install [JDK 8 or 11][AdoptiumOpenJDK], or use [SDKMAN!](https://sdkman.io/).
 
 #### [SDKMAN!](https://sdkman.io/)
 
-```
+```scala
+$ sdk install java $(sdk list java | grep -o "\b8\.[0-9]*\.[0-9]*\-tem" | head -1)
 $ sdk install sbt
 ```
 
@@ -182,6 +181,10 @@ $ brew install sbt
 
 Installing sbt on Windows
 -------------------------
+
+### Install sbt with **cs setup**
+
+Follow [Install](https://www.scala-lang.org/download/) page, and install Scala using Coursier. This should install the latest stable version of `sbt`.
 
 ### Install JDK
 
@@ -222,28 +225,34 @@ $ choco install sbt
   [Manual-Installation]: Manual-Installation.html
   [website127]: https://github.com/sbt/website/issues/127
   [cert-bug]: https://bugs.launchpad.net/ubuntu/+source/ca-certificates-java/+bug/1739631
+  [openjdk-devel]: https://pkgs.org/download/java-1.8.0-openjdk-devel
 
 Installing sbt on Linux
 -----------------------
+
+### Install sbt with **cs setup**
+
+Follow [Install](https://www.scala-lang.org/download/) page, and install Scala using Coursier. This should install the latest stable version of `sbt`.
 
 ### Installing from SDKMAN
 
 To install both JDK and sbt, consider using [SDKMAN](https://sdkman.io/).
 
-```
-$ sdk install java $(sdk list java | grep -o "8\.[0-9]*\.[0-9]*\.hs-adpt" | head -1)
+```scala
+$ sdk install java $(sdk list java | grep -o "\b8\.[0-9]*\.[0-9]*\-tem" | head -1)
 $ sdk install sbt
 ```
 
-This has two advantages.
-1. It will install the official packaging by AdoptOpenJDK, as opposed to the ["mystery meat OpenJDK builds"](https://mail.openjdk.java.net/pipermail/jdk8u-dev/2019-May/009330.html).
-2. It will install `tgz` packaging of sbt that contains all JAR files. (DEB and RPM packages do not to save bandwidth)
+Using Coursier or SDKMAN has two advantages.
+
+1. They will install the official packaging by Eclipse Adoptium, as opposed to the ["mystery meat OpenJDK builds"](https://mail.openjdk.java.net/pipermail/jdk8u-dev/2019-May/009330.html).
+2. They will install `tgz` packaging of sbt that contains all JAR files. (DEB and RPM packages do not to save bandwidth)
 
 ### Install JDK
 
-You must first install a JDK. We recommend **AdoptOpenJDK JDK 8** or **JDK 11**.
+You must first install a JDK. We recommend **Eclipse Adoptium Temurin JDK 8**, **JDK 11**, or **JDK 17**.
 
-The details around the package names differ from one distribution to another. For example, Ubuntu xenial (16.04LTS) has [openjdk-8-jdk](https://packages.ubuntu.com/hu/xenial/openjdk-8-jdk). Redhat family calls it [java-1.8.0-openjdk-devel](https://apps.fedoraproject.org/packages/java-1.8.0-openjdk-devel).
+The details around the package names differ from one distribution to another. For example, Ubuntu xenial (16.04LTS) has [openjdk-8-jdk](https://packages.ubuntu.com/hu/xenial/openjdk-8-jdk). Redhat family calls it [java-1.8.0-openjdk-devel][openjdk-devel].
 
 ### Installing from a universal package
 

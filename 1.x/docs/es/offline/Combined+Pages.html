@@ -55,7 +55,7 @@ buena idea.
 basan en conceptos explicados antes.
 </p><p>Gracias por probar sbt y… ¡<em>divértete</em>!
 </p><h2 id="Instalar+sbt">Instalar sbt<a href="#Instalar+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Para crear un proyecto sbt necesitarás realizar los siguientes pasos:
-</p><ul><li>Instalar JDK (recomendamos AdoptOpenJDK JDK 8 u AdoptOpenJDK JDK 11).
+</p><ul><li>Instalar JDK (recomendamos Eclipse Adoptium Temurin JDK 8, 11, u 17).
 </li><li>Instalar sbt.
 </li><li>Configurar un proyecto <a href="Hello.html">hola mundo</a> simple
 </li><li>Continuar con <a href="Running.html">Ejecución</a> para aprender cómo ejecutar sbt.
@@ -68,35 +68,37 @@ de hacer el proceso menos tedioso. Echa un vistazo a los pasos de instalación p
 </p><h3 id="Consejos+y+notas">Consejos y notas<a href="#Consejos+y+notas" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Si has tenido algún problema ejecutando sbt, revisa las
 <a href="../docs/Setup-Notes.html">Notas sobre configuración</a> sobre codificaciones en el terminal,
 proxies HTTP y opciones de la JVM.
-</p><h2 id="Instalar+sbt+on+macOS">Instalar sbt on macOS<a href="#Instalar+sbt+on+macOS" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Instalar+JDK">Instalar JDK<a href="#Instalar+JDK" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Sigue el link para instalar <a href="https://adoptium.net">JDK 8 u 11</a>.
-</p><p>Or use <a href="https://sdkman.io/">SDKMAN!</a>:
-</p><pre><code class="">$ sdk list java
-$ sdk install java 11.0.4.hs-adpt
+</p><h2 id="Instalar+sbt+on+macOS">Instalar sbt on macOS<a href="#Instalar+sbt+on+macOS" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Install+sbt+with">Install sbt with <strong>cs setup</strong><a href="#Install+sbt+with" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Follow <a href="https://www.scala-lang.org/download/">Install</a> page, and install Scala using Coursier. This should install the latest stable version of <code>sbt</code>.
+</p><h3 id="Instalar+JDK">Instalar JDK<a href="#Instalar+JDK" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Sigue el link para instalar <a href="https://adoptium.net">JDK 8 u 11</a>.
+</p><p>Or use SDKMAN.
+</p><h4 id=""><a href="https://sdkman.io/">SDKMAN!</a><a href="#" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">$ sdk install java $(sdk list java | grep -o &quot;\b8\.[0-9]*\.[0-9]*\-tem&quot; | head -1)
+$ sdk install sbt
 </code></pre><h3 id="Instalar+desde+un+paquete+universal">Instalar desde un paquete universal<a href="#Instalar+desde+un+paquete+universal" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Descarga el paquete <a href="https://github.com/sbt/sbt/releases/download/v1.6.2/sbt-1.6.2.zip">ZIP</a> o <a href="https://github.com/sbt/sbt/releases/download/v1.6.2/sbt-1.6.2.tgz">TGZ</a> y descomprímelo.
 </p><h3 id="Instalar+desde+un+paquete+de+terceros">Instalar desde un paquete de terceros<a href="#Instalar+desde+un+paquete+de+terceros" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><blockquote><p><strong>Nota:</strong> Puede que algunos paquetes de terceros no proporcionen la última versión.
 Por favor, asegúrate de reportar cualquier problema con dichos paquetes a sus 
 respectivos mantenedores.
 </p></blockquote><h4 id=""><a href="https://brew.sh/">Homebrew</a><a href="#" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="">$ brew install sbt
-</code></pre><h4 id=""><a href="https://sdkman.io/">SDKMAN!</a><a href="#" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="">$ sdk install sbt
-</code></pre><h2 id="Instalar+sbt+en+Windows">Instalar sbt en Windows<a href="#Instalar+sbt+en+Windows" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Instalar+JDK">Instalar JDK<a href="#Instalar+JDK" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Sigue el link para instalar <a href="https://adoptium.net">JDK 8 u 11</a>.
+</code></pre><h2 id="Instalar+sbt+en+Windows">Instalar sbt en Windows<a href="#Instalar+sbt+en+Windows" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Install+sbt+with">Install sbt with <strong>cs setup</strong><a href="#Install+sbt+with" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Follow <a href="https://www.scala-lang.org/download/">Install</a> page, and install Scala using Coursier. This should install the latest stable version of <code>sbt</code>.
+</p><h3 id="Instalar+JDK">Instalar JDK<a href="#Instalar+JDK" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Sigue el link para instalar <a href="https://adoptium.net">JDK 8 u 11</a>.
 </p><h3 id="Instalar+desde+un+paquete+universal">Instalar desde un paquete universal<a href="#Instalar+desde+un+paquete+universal" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Descarga el paquete <a href="https://github.com/sbt/sbt/releases/download/v1.6.2/sbt-1.6.2.zip">ZIP</a> o <a href="https://github.com/sbt/sbt/releases/download/v1.6.2/sbt-1.6.2.tgz">TGZ</a> y descomprímelo.
 </p><h3 id="Instalador+Windows">Instalador Windows<a href="#Instalador+Windows" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Descarga el <a href="https://github.com/sbt/sbt/releases/download/v1.6.2/sbt-1.6.2.msi">instalador msi</a> e instálalo.
 </p><h3 id="Instalar+desde+un+paquete+de+terceros">Instalar desde un paquete de terceros<a href="#Instalar+desde+un+paquete+de+terceros" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><blockquote><p><strong>Nota:</strong> Puede que algunos paquetes de terceros no proporcionen la última versión.
 Por favor, asegúrate de reportar cualquier problema con dichos paquetes a sus
 respectivos mantenedores.
 </p></blockquote><h4 id=""><a href="https://scoop.sh/">Scoop</a><a href="#" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="">$ scoop install sbt
-</code></pre><h2 id="Installing+sbt+on+Linux">Installing sbt on Linux<a href="#Installing+sbt+on+Linux" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Installing+from+SDKMAN">Installing from SDKMAN<a href="#Installing+from+SDKMAN" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To install both JDK and sbt, consider using <a href="https://sdkman.io/">SDKMAN</a>.
-</p><pre><code class="">$ sdk install java $(sdk list java | grep -o &quot;8\.[0-9]*\.[0-9]*\.hs-adpt&quot; | head -1)
+</code></pre><h2 id="Installing+sbt+on+Linux">Installing sbt on Linux<a href="#Installing+sbt+on+Linux" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Install+sbt+with">Install sbt with <strong>cs setup</strong><a href="#Install+sbt+with" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Follow <a href="https://www.scala-lang.org/download/">Install</a> page, and install Scala using Coursier. This should install the latest stable version of <code>sbt</code>.
+</p><h3 id="Installing+from+SDKMAN">Installing from SDKMAN<a href="#Installing+from+SDKMAN" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To install both JDK and sbt, consider using <a href="https://sdkman.io/">SDKMAN</a>.
+</p><pre><code class="prettyprint lang-scala">$ sdk install java $(sdk list java | grep -o &quot;\b8\.[0-9]*\.[0-9]*\-tem&quot; | head -1)
 $ sdk install sbt
-</code></pre><p>This has two advantages.
-1. It will install the official packaging by AdoptOpenJDK, as opposed to the <a href="https://mail.openjdk.java.net/pipermail/jdk8u-dev/2019-May/009330.html">“mystery meat OpenJDK builds“</a>.
-2. It will install <code>tgz</code> packaging of sbt that contains all JAR files. (DEB and RPM packages do not to save bandwidth)
-</p><h3 id="Instalar+JDK">Instalar JDK<a href="#Instalar+JDK" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Primero desberás de instalar JDK. Recomendamos AdoptOpenJDK JDK 8 u AdoptOpenJDK JDK 11.
+</code></pre><p>Using Coursier or SDKMAN has two advantages.
+</p><ol><li>They will install the official packaging by Eclipse Adoptium, as opposed to the <a href="https://mail.openjdk.java.net/pipermail/jdk8u-dev/2019-May/009330.html">“mystery meat OpenJDK builds“</a>.
+</li><li>They will install <code>tgz</code> packaging of sbt that contains all JAR files. (DEB and RPM packages do not to save bandwidth)
+</li></ol><h3 id="Instalar+JDK">Instalar JDK<a href="#Instalar+JDK" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Primero desberás de instalar JDK. Recomendamos <strong>Eclipse Adoptium Temurin JDK 8</strong>, <strong>JDK 11</strong>, u <strong>JDK 17</strong>.
 </p><p>Los detalles sobre el nombre de los paquetes cambian de una distribución a otra.
 Por ejemplo, Ubuntu xenial (16.04LTS) usa
 <a href="https://packages.ubuntu.com/hu/xenial/openjdk-8-jdk">openjdk-8-jdk</a>.
 La familia Redhat lo llama
-<a href="https://apps.fedoraproject.org/packages/java-1.8.0-openjdk-devel">java-1.8.0-openjdk-devel</a>.
+<a href="https://pkgs.org/download/java-1.8.0-openjdk-devel">java-1.8.0-openjdk-devel</a>.
 </p><h3 id="Instalar+desde+un+paquete+universal">Instalar desde un paquete universal<a href="#Instalar+desde+un+paquete+universal" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Descarga el paquete <a href="https://github.com/sbt/sbt/releases/download/v1.6.2/sbt-1.6.2.zip">ZIP</a> o <a href="https://github.com/sbt/sbt/releases/download/v1.6.2/sbt-1.6.2.tgz">TGZ</a> y descomprímelo.
 </p><h3 id="Ubuntu+y+otras+distribuciones+basadas+en+Debian">Ubuntu y otras distribuciones basadas en Debian<a href="#Ubuntu+y+otras+distribuciones+basadas+en+Debian" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Los paquetes <a href="https://dl.bintray.com/sbt/debian/sbt-1.6.2.deb">DEB</a> son oficialmente soportados por sbt.
 </p><p>Ubuntu y otras distribuciones basadas en Debian usan el formato DEB, pero por lo

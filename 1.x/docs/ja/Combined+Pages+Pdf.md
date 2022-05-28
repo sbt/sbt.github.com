@@ -50,7 +50,7 @@ sbt のインストール
 
 sbt プロジェクトを作るためには、以下の手順をたどる必要がある:
 
- - JDK をインストールする。(AdoptOpenJDK JDK 8 もしくは AdoptOpenJDK JDK 11 を推奨)
+ - JDK をインストールする。(Eclipse Adoptium Temurin JDK 8、11 もしくは 17 を推奨)
  - sbt をインストールする。
  - 簡単な [hello world][Hello] プロジェクトをセットアップする。
  - [実行する][Running]を読んで、sbt の実行方法を知る。
@@ -76,19 +76,19 @@ sbt プロジェクトを作るためには、以下の手順をたどる必要�
 macOS への sbt のインストール
 --------------------------
 
+### **cs setup** を用いた sbt のインストール
+
+[Install](https://www.scala-lang.org/download/) に従い Coursier を用いて Scala をインストールする。これは最新の安定版の `sbt` を含む。
+
 ### JDK のインストール
 
-リンクをたどって [JDK 8 もしくは JDK 11][AdoptiumOpenJDK] をインストールする。
-
-もしくは [SDKMAN!](https://sdkman.io/) を使う:
-
-```
-$ sdk install java $(sdk list java | grep -o "8\.[0-9]*\.[0-9]*\.hs-adpt" | head -1)
-```
+リンクをたどって [JDK 8 もしくは JDK 11][AdoptiumOpenJDK] をインストールする、
+もしくは [SDKMAN!](https://sdkman.io/) を使う。
 
 #### [SDKMAN!](https://sdkman.io/)
 
-```
+```scala
+$ sdk install java $(sdk list java | grep -o "\b8\.[0-9]*\.[0-9]*\-tem" | head -1)
 $ sdk install sbt
 ```
 
@@ -115,6 +115,10 @@ $ brew install sbt
 
 Windows への sbt のインストール
 ----------------------------
+
+### **cs setup** を用いた sbt のインストール
+
+[Install](https://www.scala-lang.org/download/) に従い Coursier を用いて Scala をインストールする。これは最新の安定版の `sbt` を含む。
 
 ### JDK のインストール
 
@@ -148,28 +152,34 @@ $ scoop install sbt
   [Manual-Installation]: Manual-Installation.html
   [website127]: https://github.com/sbt/website/issues/12
   [cert-bug]: https://bugs.launchpad.net/ubuntu/+source/ca-certificates-java/+bug/1739631
+  [openjdk-devel]: https://pkgs.org/download/java-1.8.0-openjdk-devel
 
 Linux への sbt のインストール
 --------------------------
+
+### **cs setup** を用いた sbt のインストール
+
+[Install](https://www.scala-lang.org/download/) に従い Coursier を用いて Scala をインストールする。これは最新の安定版の `sbt` を含む。
 
 ### SDKMAN からのインストール
 
 JDK と sbt をするのに、[SDKMAN](https://sdkman.io/) の導入を検討してほしい。
 
-```
-$ sdk install java $(sdk list java | grep -o "8\.[0-9]*\.[0-9]*\.hs-adpt" | head -1)
+```scala
+$ sdk install java $(sdk list java | grep -o "\b8\.[0-9]*\.[0-9]*\-tem" | head -1)
 $ sdk install sbt
 ```
 
-この方法は 2つの利点がある。
-1. [「闇鍋 OpenJDK ビルド」](https://mail.openjdk.java.net/pipermail/jdk8u-dev/2019-May/009330.html)と揶揄されているディストロ管理の JDK ではなく、AdoptOpenJDK が出している公式のパッケージをインストールできる。
+Coursier もしくは SDKMAN を使うことには 2つの利点がある。
+
+1. [「闇鍋 OpenJDK ビルド」](https://mail.openjdk.java.net/pipermail/jdk8u-dev/2019-May/009330.html)と揶揄されているディストロ管理の JDK ではなく、Eclipse Adoptium が出している公式のパッケージをインストールできる。
 2. sbt の全ての JAR ファイルを含んだ `tgz` パッケージをインストールできる (DEB と RPM版は帯域の節約のために JAR ファイルが含まれていない)。
 
 ### JDK のインストール
 
-まず JDK をインストールする必要がある。AdoptOpenJDK JDK 8 もしくは AdoptOpenJDK JDK 11 を推奨する。
+まず JDK をインストールする必要がある。**Eclipse Adoptium Temurin JDK 8**、**JDK 11**、もしくは **JDK 17** を推奨する。
 
-パッケージ名はディストリビューションによって異なる。例えば、Ubuntu xenial (16.04LTS) には [openjdk-8-jdk](https://packages.ubuntu.com/hu/xenial/openjdk-8-jdk) がある。Redhat 系は [java-1.8.0-openjdk-devel](https://apps.fedoraproject.org/packages/java-1.8.0-openjdk-devel) と呼んでいる。
+パッケージ名はディストリビューションによって異なる。例えば、Ubuntu xenial (16.04LTS) には [openjdk-8-jdk](https://packages.ubuntu.com/hu/xenial/openjdk-8-jdk) がある。Redhat 系は [java-1.8.0-openjdk-devel][openjdk-devel] と呼んでいる。
 
 ### ユニバーサルパッケージからのインストール
 

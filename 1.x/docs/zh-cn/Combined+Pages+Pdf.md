@@ -42,6 +42,7 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
 
 创建一个 sbt 工程，你需要经过以下几步：
 
+-   安装 JDK (建议使用 Eclipse Adoptium Temurin JDK 8, 11, 或 17)。
 -   安装 sbt 并且创建脚本来运行它。
 -   建立一个简单的 [hello world][Hello] 工程
     -   创建一个工程目录并且将源文件放在其中。
@@ -65,19 +66,18 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
 在 macOS 上安装 sbt
 ---------------------
 
+### Install sbt with **cs setup**
+
+Follow [Install](https://www.scala-lang.org/download/) page, and install Scala using Coursier. This should install the latest stable version of `sbt`.
+
 ### Install JDK
 
-Follow the link to install [JDK 8 or 11][AdoptOpenJDK].
-
-Or use [SDKMAN!](https://sdkman.io/):
-
-```
-$ sdk install java $(sdk list java | grep -o "8\.[0-9]*\.[0-9]*\.hs-adpt" | head -1)
-```
+Follow the link to install [JDK 8 or 11][AdoptOpenJDK], or use SDKMAN!
 
 #### 通过 [SDKMAN!](https://sdkman.io/) 安装
 
-```
+```scala
+$ sdk install java $(sdk list java | grep -o "\b8\.[0-9]*\.[0-9]*\-tem" | head -1)
 $ sdk install sbt
 ```
 
@@ -103,6 +103,10 @@ $ brew install sbt
 在 Windows 上安装 sbt
 -------------------------
 
+### Install sbt with **cs setup**
+
+Follow [Install](https://www.scala-lang.org/download/) page, and install Scala using Coursier. This should install the latest stable version of `sbt`.
+
 ### 通过通用的安装包安装
 
 下载 [ZIP][ZIP] 或者 [TGZ][TGZ] 包并解压。
@@ -127,22 +131,37 @@ $ scoop install sbt
   [TGZ]: https://github.com/sbt/sbt/releases/download/v1.6.2/sbt-1.6.2.tgz
   [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.6.2.rpm
   [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.6.2.deb
+  [Manual-Installation]: Manual-Installation.html
+  [website127]: https://github.com/sbt/website/issues/12
+  [cert-bug]: https://bugs.launchpad.net/ubuntu/+source/ca-certificates-java/+bug/1739631
+  [openjdk-devel]: https://pkgs.org/download/java-1.8.0-openjdk-devel
 
 在 Linux 上安装 sbt
 -----------------------
+
+### Install sbt with **cs setup**
+
+Follow [Install](https://www.scala-lang.org/download/) page, and install Scala using Coursier. This should install the latest stable version of `sbt`.
 
 ### Installing from SDKMAN
 
 To install both JDK and sbt, consider using [SDKMAN](https://sdkman.io/).
 
-```
-$ sdk install java $(sdk list java | grep -o "8\.[0-9]*\.[0-9]*\.hs-adpt" | head -1)
+```scala
+$ sdk install java $(sdk list java | grep -o "\b8\.[0-9]*\.[0-9]*\-tem" | head -1)
 $ sdk install sbt
 ```
 
-This has two advantages.
-1. It will install the official packaging by AdoptOpenJDK, as opposed to the ["mystery meat OpenJDK builds"](https://mail.openjdk.java.net/pipermail/jdk8u-dev/2019-May/009330.html).
-2. It will install `tgz` packaging of sbt that contains all JAR files. (DEB and RPM packages do not to save bandwidth)
+Using Coursier or SDKMAN has two advantages.
+
+1. They will install the official packaging by Eclipse Adoptium, as opposed to the ["mystery meat OpenJDK builds"](https://mail.openjdk.java.net/pipermail/jdk8u-dev/2019-May/009330.html).
+2. They will install `tgz` packaging of sbt that contains all JAR files. (DEB and RPM packages do not to save bandwidth)
+
+### Install JDK
+
+You must first install a JDK. We recommend **Eclipse Adoptium Temurin JDK 8**, **JDK 11**, or **JDK 17**.
+
+The details around the package names differ from one distribution to another. For example, Ubuntu xenial (16.04LTS) has [openjdk-8-jdk](https://packages.ubuntu.com/hu/xenial/openjdk-8-jdk). Redhat family calls it [java-1.8.0-openjdk-devel][openjdk-devel].
 
 ### 通过通用的安装包安装
 

@@ -46,7 +46,7 @@ Instalar sbt
 
 Para crear un proyecto sbt necesitarás realizar los siguientes pasos:
 
--   Instalar JDK (recomendamos AdoptOpenJDK JDK 8 u AdoptOpenJDK JDK 11).
+-   Instalar JDK (recomendamos Eclipse Adoptium Temurin JDK 8, 11, u 17).
 -   Instalar sbt.
 -   Configurar un proyecto [hola mundo][Hello] simple
 -   Continuar con [Ejecución][Running] para aprender cómo ejecutar sbt.
@@ -74,15 +74,21 @@ proxies HTTP y opciones de la JVM.
 Instalar sbt on macOS
 ---------------------
 
+### Install sbt with **cs setup**
+
+Follow [Install](https://www.scala-lang.org/download/) page, and install Scala using Coursier. This should install the latest stable version of `sbt`.
+
 ### Instalar JDK
 
 Sigue el link para instalar [JDK 8 u 11][AdoptiumOpenJDK].
 
-Or use [SDKMAN!](https://sdkman.io/):
+Or use SDKMAN.
 
-```
-$ sdk list java
-$ sdk install java 11.0.4.hs-adpt
+#### [SDKMAN!](https://sdkman.io/)
+
+```scala
+$ sdk install java $(sdk list java | grep -o "\b8\.[0-9]*\.[0-9]*\-tem" | head -1)
+$ sdk install sbt
 ```
 
 ### Instalar desde un paquete universal
@@ -101,12 +107,6 @@ Descarga el paquete [ZIP][ZIP] o [TGZ][TGZ] y descomprímelo.
 $ brew install sbt
 ```
 
-#### [SDKMAN!](https://sdkman.io/)
-
-```
-$ sdk install sbt
-```
-
 
   [MSI]: https://github.com/sbt/sbt/releases/download/v1.6.2/sbt-1.6.2.msi
   [ZIP]: https://github.com/sbt/sbt/releases/download/v1.6.2/sbt-1.6.2.zip
@@ -115,6 +115,10 @@ $ sdk install sbt
 
 Instalar sbt en Windows
 -----------------------
+
+### Install sbt with **cs setup**
+
+Follow [Install](https://www.scala-lang.org/download/) page, and install Scala using Coursier. This should install the latest stable version of `sbt`.
 
 ### Instalar JDK
 
@@ -149,32 +153,38 @@ $ scoop install sbt
   [Manual-Installation]: Manual-Installation.html
   [website127]: https://github.com/sbt/website/issues/127
   [cert-bug]: https://bugs.launchpad.net/ubuntu/+source/ca-certificates-java/+bug/1739631
+  [openjdk-devel]: https://pkgs.org/download/java-1.8.0-openjdk-devel
 
 Installing sbt on Linux
 -----------------------
+
+### Install sbt with **cs setup**
+
+Follow [Install](https://www.scala-lang.org/download/) page, and install Scala using Coursier. This should install the latest stable version of `sbt`.
 
 ### Installing from SDKMAN
 
 To install both JDK and sbt, consider using [SDKMAN](https://sdkman.io/).
 
-```
-$ sdk install java $(sdk list java | grep -o "8\.[0-9]*\.[0-9]*\.hs-adpt" | head -1)
+```scala
+$ sdk install java $(sdk list java | grep -o "\b8\.[0-9]*\.[0-9]*\-tem" | head -1)
 $ sdk install sbt
 ```
 
-This has two advantages.
-1. It will install the official packaging by AdoptOpenJDK, as opposed to the ["mystery meat OpenJDK builds"](https://mail.openjdk.java.net/pipermail/jdk8u-dev/2019-May/009330.html).
-2. It will install `tgz` packaging of sbt that contains all JAR files. (DEB and RPM packages do not to save bandwidth)
+Using Coursier or SDKMAN has two advantages.
+
+1. They will install the official packaging by Eclipse Adoptium, as opposed to the ["mystery meat OpenJDK builds"](https://mail.openjdk.java.net/pipermail/jdk8u-dev/2019-May/009330.html).
+2. They will install `tgz` packaging of sbt that contains all JAR files. (DEB and RPM packages do not to save bandwidth)
 
 ### Instalar JDK
 
-Primero desberás de instalar JDK. Recomendamos AdoptOpenJDK JDK 8 u AdoptOpenJDK JDK 11.
+Primero desberás de instalar JDK. Recomendamos **Eclipse Adoptium Temurin JDK 8**, **JDK 11**, u **JDK 17**.
 
 Los detalles sobre el nombre de los paquetes cambian de una distribución a otra.
 Por ejemplo, Ubuntu xenial (16.04LTS) usa
 [openjdk-8-jdk](https://packages.ubuntu.com/hu/xenial/openjdk-8-jdk).
 La familia Redhat lo llama
-[java-1.8.0-openjdk-devel](https://apps.fedoraproject.org/packages/java-1.8.0-openjdk-devel).
+[java-1.8.0-openjdk-devel][openjdk-devel].
 
 ### Instalar desde un paquete universal
 
