@@ -130,8 +130,8 @@ sbt は、デフォルトで Maven の標準リポジトリ（訳注：Maven Cen
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot; % &quot;test&quot;
 </code></pre><p><code>Test</code> コンフィグレーションの型安全なバージョンを使ってもよい:
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot; % Test
-</code></pre><p>この状態で sbt のインタラクティブモードで <code>show compile:dependency-classpath</code> と入力しても Derby は出てこないはずだ。
-だが、<code>show test:dependency-classpath</code> と入力すると、Derby の jar がリストに含まれていることを確認できるだろう。
+</code></pre><p>この状態で sbt のインタラクティブモードで <code>show Compile/dependencyClasspath</code> と入力しても Derby は出てこないはずだ。
+だが、<code>show Test/dependencyClasspath</code> と入力すると、Derby の jar がリストに含まれていることを確認できるだろう。
 </p><p>普通は、<a href="https://scalacheck.org">ScalaCheck</a>、<a href="http://specs2.org">Specs2</a>、<a href="https://www.scalatest.org">ScalaTest</a> などのテスト関連の依存ライブラリは <code>% &quot;test&quot;</code> と共に定義される。
 </p><p>ライブラリの依存性に関しては、もうこの入門用のページで見つからない情報があれば、<a href="../../docs/Library-Management.html">このページ</a>に
 もう少し詳細やコツが書いてある。

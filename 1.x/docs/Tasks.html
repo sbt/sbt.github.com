@@ -123,8 +123,8 @@ adds one to the value produced by <code>intTask</code> and returns the result.
 </code></pre><h5 id="Task+Scope">Task Scope<a href="#Task+Scope" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p>As with settings, tasks can be defined in a specific scope. For example,
 there are separate <code>compile</code> tasks for the <code>compile</code> and <code>test</code> scopes.
 The scope of a task is defined the same as for a setting. In the
-following example, <code>test:sampleTask</code> uses the result of
-<code>compile:intTask</code>.
+following example, <code>Test/sampleTask</code> uses the result of
+<code>Compile/intTask</code>.
 </p><pre><code class="prettyprint lang-scala">Test / sampleTask := (Compile / intTask).value * 3
 </code></pre><h5 id="On+precedence">On precedence<a href="#On+precedence" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p>As a reminder, infix method precedence is by the name of the method and
 postfix methods have lower precedence than infix methods.

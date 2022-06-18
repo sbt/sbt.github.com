@@ -72,7 +72,7 @@ commonly used settings. See <code>help settings</code> for details.
 </p><a name="listsettings"></a><h3 id="List+available+settings">List available settings<a href="#List+available+settings" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The <code>inspect</code> command displays several pieces of information about a
 given setting or task, including the dependencies of a task/setting as
 well as the tasks/settings that depend on the it. For example,
-</p><pre><code class="">&gt; inspect test:compile
+</p><pre><code class="">&gt; inspect Test/compile
 ...
 [info] Dependencies:
 [info]  Test / manipulateBytecode
@@ -174,7 +174,7 @@ value.
 ...
 [info] ArrayBuffer(Attributed(/Users/foo/.sbt/boot/scala-2.12.6/lib/scala-library.jar))
 </code></pre><a name="classpath"></a><h3 id="Show+the+classpath+used+for+compilation+or+testing">Show the classpath used for compilation or testing<a href="#Show+the+classpath+used+for+compilation+or+testing" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>For the test classpath,
-</p><pre><code class="">&gt; show test:dependencyClasspath
+</p><pre><code class="">&gt; show Test/dependencyClasspath
 ...
 [info] List(Attributed(/Users/foo/code/sbt.github.com/target/scala-2.12/classes), Attributed(~/.sbt/boot/scala-2.12.6/lib/scala-library.jar), Attributed(/Users/foo/.ivy2/cache/junit/junit/jars/junit-4.8.2.jar))
 ...
@@ -189,7 +189,7 @@ main classes discovered in the main sources:
 </code></pre><a name="tests"></a><h3 id="Show+the+test+classes+detected+in+a+project">Show the test classes detected in a project<a href="#Show+the+test+classes+detected+in+a+project" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt detects tests according to fingerprints provided by test frameworks.
 The <code>definedTestNames</code> task provides as its result the list of test
 names detected in this way. For example,
-</p><pre><code class="">&gt; show test:definedTestNames
+</p><pre><code class="">&gt; show Test/definedTestNames
 ... &lt; runs test:compile if out of date &gt; ...
 [info] List(org.example.TestA, org.example.TestB)
 </code></pre><div class="bottom nav">

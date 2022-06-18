@@ -3537,9 +3537,9 @@ You may also use the type-safe version of `Test` configuration as follows:
 libraryDependencies += "org.apache.derby" % "derby" % "10.4.1.3" % Test
 ```
 
-Now, if you type `show compile:dependencyClasspath` at the sbt interactive
+Now, if you type `show Compile/dependencyClasspath` at the sbt interactive
 prompt, you should not see the derby jar. But if you type
-`show test:dependencyClasspath`, you should see the derby jar in the list.
+`show Test/dependencyClasspath`, you should see the derby jar in the list.
 
 Typically, test-related dependencies such as
 [ScalaCheck](https://scalacheck.org/),
@@ -8623,22 +8623,22 @@ detail.
 ### Configuration-level tasks
 
 Configuration-level tasks are tasks associated with a configuration. For
-example, `compile`, which is equivalent to `compile:compile`, compiles
-the main source code (the `compile` configuration). `test:compile`
+example, `compile`, which is equivalent to `Compile/compile`, compiles
+the main source code (the `compile` configuration). `Test/compile`
 compiles the test source code (test `test` configuration). Most tasks
 for the `compile` configuration have an equivalent in the `test`
-configuration that can be run using a `test:` prefix.
+configuration that can be run using a `Test/` prefix.
 
 -   `compile` Compiles the main sources (in the `src/main/scala`
-    directory). `test:compile` compiles test sources (in the
+    directory). `Test/compile` compiles test sources (in the
     src/test/scala/ directory).
 -   `console` Starts the Scala interpreter with a classpath including
     the compiled sources, all jars in the lib directory, and managed
     libraries. To return to sbt, type :quit, Ctrl+D (Unix), or Ctrl+Z
-    (Windows). Similarly, test:console starts the interpreter with the
+    (Windows). Similarly, Test/console starts the interpreter with the
     test classes and classpath.
 -   `consoleQuick` Starts the Scala interpreter with the project's
-    compile-time dependencies on the classpath. test:consoleQuick uses
+    compile-time dependencies on the classpath. Test/consoleQuick uses
     the test dependencies. This task differs from console in that it
     does not force compilation of the current project's sources.
 -   `consoleProject` Enters an interactive session with sbt and the
@@ -8647,32 +8647,32 @@ configuration that can be run using a `test:` prefix.
     imported. See the [consoleProject documentation][Console-Project]
     for more information.
 -   `doc` Generates API documentation for Scala source files in
-    `src/main/scala` using scaladoc. `test:doc` generates API documentation
+    `src/main/scala` using scaladoc. `Test/doc` generates API documentation
     for source files in `src/test/scala`.
 -   `package` Creates a jar file containing the files in
     `src/main/resources` and the classes compiled from `src/main/scala`.
-    `test:package` creates a jar containing the files in
+    `Test/package` creates a jar containing the files in
     `src/test/resources` and the class compiled from `src/test/scala`.
 -   `packageDoc` Creates a jar file containing API documentation
-    generated from Scala source files in src/main/scala. test:packageDoc
+    generated from Scala source files in src/main/scala. Test/packageDoc
     creates a jar containing API documentation for test sources files in
     src/test/scala.
 -   `packageSrc`: Creates a jar file containing all main source files
     and resources. The packaged paths are relative to src/main/scala and
-    src/main/resources. Similarly, test:packageSrc operates on test
+    src/main/resources. Similarly, Test/packageSrc operates on test
     source files and resources.
 -   `run <argument>*` Runs the main class for the project in the same
     virtual machine as sbt. The main class is passed the arguments
     provided. Please see
     [Running Project Code][Running-Project-Code] for details on the use of
     System.exit and multithreading (including GUIs) in code run by this
-    action. `test:run` runs a main class in the test code.
+    action. `Test/run` runs a main class in the test code.
 -   `runMain <main-class> <argument>*` Runs the specified main class for
     the project in the same virtual machine as sbt. The main class is
     passed the arguments provided. Please see
     [Running Project Code][Running-Project-Code] for
     details on the use of System.exit and multithreading (including
-    GUIs) in code run by this action. `test:runMain` runs the specified
+    GUIs) in code run by this action. `Test/runMain` runs the specified
     main class in the test code.
 -   `test` Runs all tests detected during test compilation. See [Testing][Testing]
     for details.
@@ -9584,23 +9584,23 @@ in the build in `/home/user/sample/`:
 
 ```
 > compile
-> compile:compile
+> Compile/compile
 > root/compile
-> root/compile:compile
-> {file:/home/user/sample/}root/compile:compile
+> root/Compile/compile
+> {file:/home/user/sample/}root/Compile/compile
 ```
 
-As another example, `run` by itself refers to `compile:run` because
+As another example, `run` by itself refers to `Compile/run` because
 there is no global `run` task and the first configuration searched,
 `compile`, defines a `run`. Therefore, to reference the `run` task for
 the `Test` configuration, the configuration axis must be specified like
-`test:run`. Some other examples that require the explicit `test:` axis:
+`Test/run`. Some other examples that require the explicit `Test/` axis:
 
 ```
-> test:consoleQuick
-> test:console
-> test:doc
-> test:package
+> Test/consoleQuick
+> Test/console
+> Test/doc
+> Test/package
 ```
 
 #### Task-specific Settings
@@ -9679,8 +9679,8 @@ of a key. For example,
 [info]  test:compile
 ```
 
-This shows that in addition to the requested `compile:compile` task,
-there is also a `test:compile` task.
+This shows that in addition to the requested `Compile/compile` task,
+there is also a `Test/compile` task.
 
 #### Dependencies
 
@@ -12315,7 +12315,7 @@ This can be then run at the console:
 
 ```
 $ sbt
-> macroSub/test:run
+> macroSub/Test/run
 scala.collection.immutable.List.apply[Int](1, 2, 3).reverse
 ```
 
@@ -13304,7 +13304,7 @@ one of the following conditions are run:
 ##### Tab completion
 
 Tab completion is provided for test names based on the results of the
-last `test:compile`. This means that a new sources aren't available for
+last `Test/compile`. This means that a new sources aren't available for
 tab completion until they are compiled and deleted sources won't be
 removed from tab completion until a recompile. A new test source can
 still be manually written out and run using `testOnly`.
@@ -16286,8 +16286,8 @@ stringTask := "Sample: " + sampleTask.value + ", int: " + intTask.value
 As with settings, tasks can be defined in a specific scope. For example,
 there are separate `compile` tasks for the `compile` and `test` scopes.
 The scope of a task is defined the same as for a setting. In the
-following example, `test:sampleTask` uses the result of
-`compile:intTask`.
+following example, `Test/sampleTask` uses the result of
+`Compile/intTask`.
 
 ```scala
 Test / sampleTask := (Compile / intTask).value * 3
@@ -18516,7 +18516,7 @@ import extracted._
 // get name of current project
 val nameOpt: Option[String] = (currentRef / name).get(structure.data)
 
-// get the package options for the `test:packageSrc` task or Nil if none are defined
+// get the package options for the `Test/packageSrc` task or Nil if none are defined
 val pkgOpts: Seq[PackageOption] = (currentRef / Test / packageSrc / packageOptions).get(structure.data).getOrElse(Nil)
 ```
 
@@ -21543,7 +21543,7 @@ given setting or task, including the dependencies of a task/setting as
 well as the tasks/settings that depend on the it. For example,
 
 ```
-> inspect test:compile
+> inspect Test/compile
 ...
 [info] Dependencies:
 [info]  Test / manipulateBytecode
@@ -21731,7 +21731,7 @@ value.
 For the test classpath,
 
 ```
-> show test:dependencyClasspath
+> show Test/dependencyClasspath
 ...
 [info] List(Attributed(/Users/foo/code/sbt.github.com/target/scala-2.12/classes), Attributed(~/.sbt/boot/scala-2.12.6/lib/scala-library.jar), Attributed(/Users/foo/.ivy2/cache/junit/junit/jars/junit-4.8.2.jar))
 ...
@@ -21762,7 +21762,7 @@ The `definedTestNames` task provides as its result the list of test
 names detected in this way. For example,
 
 ```
-> show test:definedTestNames
+> show Test/definedTestNames
 ... < runs test:compile if out of date > ...
 [info] List(org.example.TestA, org.example.TestB)
 ```
@@ -22127,7 +22127,7 @@ more information than was shown by default. A `logLevel` based solution
 typically requires changing the logging level and running a task again.
 However, there are two cases where this is unnecessary. First, warnings
 from a previous compilation may be displayed using `printWarnings` for
-the main sources or `test:printWarnings` for test sources. Second,
+the main sources or `Test/printWarnings` for test sources. Second,
 output from the previous execution is available either for a single task
 or for in its entirety. See the section on
 [printWarnings](#printwarnings) and the sections on
@@ -22612,7 +22612,7 @@ The `consoleQuick` action retrieves dependencies and puts them on the
 classpath of the Scala REPL. The project's sources are not compiled, but
 sources of any source dependencies are compiled. To enter the REPL with
 test dependencies on the classpath but without compiling test sources,
-run `test:consoleQuick`. This will force compilation of main sources.
+run `Test/consoleQuick`. This will force compilation of main sources.
 
 <a name="console"></a>
 
@@ -22621,7 +22621,7 @@ run `test:consoleQuick`. This will force compilation of main sources.
 The `console` action retrieves dependencies and compiles sources and
 puts them on the classpath of the Scala REPL. To enter the REPL with
 test dependencies and compiled test sources on the classpath, run
-`test:console`.
+`Test/console`.
 
 <a name="consoleProject"></a>
 
@@ -23759,7 +23759,7 @@ def time[T](f: => T): T = {
     Comile / packageBin / mainClass := Some("myproject.MyMain"),
 
     // set the main class for the main 'run' task
-    // change Compile to Test to set it for 'test:run'
+    // change Compile to Test to set it for 'Test/run'
     Compile / run / mainClass := Some("myproject.MyMain"),
 
     // add <base>/input to the files that '~' triggers on
@@ -23825,7 +23825,7 @@ def time[T](f: => T): T = {
     clean / aggregate := false,
 
     // only show warnings and errors on the screen for compilations.
-    //  this applies to both test:compile and compile and is Info by default
+    //  this applies to both Test/compile and compile and is Info by default
     compile / logLevel := Level.Warn,
 
     // only show warnings and errors on the screen for all tasks (the default is Info)

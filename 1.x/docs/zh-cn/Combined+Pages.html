@@ -670,7 +670,7 @@ end
 </li><li>如果省略 configuration 或者 task，会自动检测 key 所有依赖的 configuration。
 </li></ul><p>更多详细内容，请参见 <a href="../docs/Inspecting-Settings.html">与 Configuration 系统交互</a>。
 </p><h3 id="%E4%BD%BF%E7%94%A8+scoped+key+%E6%A0%87%E8%AF%86%E7%9A%84%E4%BE%8B%E5%AD%90">使用 scoped key 标识的例子<a href="#%E4%BD%BF%E7%94%A8+scoped+key+%E6%A0%87%E8%AF%86%E7%9A%84%E4%BE%8B%E5%AD%90" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li><code>fullClasspath</code> 仅仅指定了一个 key，所以会使用默认的 scope：当前的 project，key 所依赖的 configuration 和全局 task 的 scope。
-</li><li><code>test:fullClasspath</code> 指定为 configuration，所以这个 <code>fullClasspath</code> 就在 <code>test</code> configuration scope 下，其他两个 scope 轴均为默认值。
+</li><li><code>Test/fullClasspath</code> 指定为 configuration，所以这个 <code>fullClasspath</code> 就在 <code>test</code> configuration scope 下，其他两个 scope 轴均为默认值。
 </li><li><code>*:fullClasspath</code> 将 configuration 指定为 <code>Global</code>，而不是默认的 configuration。
 </li><li><code>doc::fullClasspath</code> 将 key <code>fullClasspath</code> 局限在 <code>doc</code> task 下，project 轴和 configuration 轴还是默认的。
 </li><li><code>{file:/home/hp/checkout/hello/}default-aea33a/test:fullClasspath</code> 指定了一个 project，在 <code>{file:/home/hp/checkout/hello/}default-aea33a</code> 中，<code>{file:/home/hp/checkout/hello/}</code> 标识 project，
@@ -678,9 +678,9 @@ end
 </li><li><code>{file:/home/hp/checkout/hello/}/test:fullClasspath</code> 将构建为 <code>{file:/home/hp/checkout/hello/}</code> 的 project 轴设置为全局构建。
 </li><li><code>{.}/test:fullClasspath</code> 将构建为 <code>{.}</code> 的 project 轴设置为全局构建。<code>{.}</code> 可以在 Scala 代码中写成 <code>ThisBuild</code>。
 </li><li><code>{file:/home/hp/checkout/hello/}/compile:doc::fullClasspath</code> 设置了全部的三个 scope 轴。
-</li></ul><h3 id="%E5%AE%A1%E6%9F%A5+scope">审查 scope<a href="#%E5%AE%A1%E6%9F%A5+scope" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在 sbt 的交互模式下，你可以使用 inspect 命令来理解 key 和它对应的 scope。尝试 <code>inspect test:fullClasspath</code>，
+</li></ul><h3 id="%E5%AE%A1%E6%9F%A5+scope">审查 scope<a href="#%E5%AE%A1%E6%9F%A5+scope" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在 sbt 的交互模式下，你可以使用 inspect 命令来理解 key 和它对应的 scope。尝试 <code>inspect Test/fullClasspath</code>，
 </p><pre><code class="">$ sbt
-&gt; inspect test:fullClasspath
+&gt; inspect Test/fullClasspath
 [info] Task: scala.collection.Seq[sbt.Attributed[java.io.File]]
 [info] Description:
 [info]  The exported classpath, consisting of build products and unmanaged and managed, internal and external dependencies.
@@ -716,13 +716,13 @@ end
 </p><p>“Provided by” 表明定义该值的 scoped key，在这个例子中是 <code>{file:/home/hp/checkout/hello/}default-aea33a/test:fullClasspath</code>（<code>fullClasspath</code> 在 <code>test</code> configuration 中且在 <code>{file:/home/hp/checkout/hello/}default-aea33a</code> project 下）。
 </p><p>“Dependencies” 可能没有意义；请继续阅读 <a href="More-About-Settings.html">下一节</a>。
 </p><p>你也可以看到一些代理；如果没有定义，sbt 会通过以下途径查找：
-</p><ul><li>其他两个 configuration（<code>runtime:fullClasspath</code> 和 <code>compile:fullClasspath</code>）。在这些 scoped key中，project 没有指定的话就意味着是 “当前 project” 而且 task 没有指定的话就意味着是 <code>Global</code>。
+</p><ul><li>其他两个 configuration（<code>Runtime/fullClasspath</code> 和 <code>Compile/fullClasspath</code>）。在这些 scoped key中，project 没有指定的话就意味着是 “当前 project” 而且 task 没有指定的话就意味着是 <code>Global</code>。
 </li><li>当 project 没有指定 “当前 project” 并且 task 没有指定为 <code>Global</code> 时，configuration 会被设置成 <code>Global</code>（<code>*:fullClasspath</code>）。
 </li><li>当全局构建中没有指定特定的 project 时，project 会被设置成 <code>{.}</code> 或者 <code>ThisBuild</code>。
 </li><li>将 project 轴设置成 <code>Global</code>（<code>*/test:fullClasspath</code>）（记住，不指定 project 表示用当前的 current，所以这里查找 <code>Global</code> 是一个新的方式；例如：<code>*</code> 和 “显示没有 project” 对于 project 轴是不一样的；例如：<code>*/test:fullClasspath</code> 和 <code>test:fullClasspath</code> 不是一回事）。
 </li><li>project 轴和 configuration 轴都会被设置成 <code>Global</code>（<code>*/*:fullClasspath</code>）（还记得我们已经说过不指定 task 表示用 <code>Global</code>，所以 <code>*/*:fullClasspath</code> 表示三个轴都用 <code>Global</code>）。
 </li></ul><p>尝试用 <code>inspect fullClasspath</code>（和上面例子中的 inspect <code>test:fullClasspath</code> 相对）来查看它们的不同。因为 configuration 被省略了，sbt 自动检测并设置为 <code>compile</code>。
-因此 <code>inspect compile:fullClasspath</code> 得到的结果看起来应该和 <code>inspect fullClasspath</code> 得到的结果一样。
+因此 <code>inspect Compile/fullClasspath</code> 得到的结果看起来应该和 <code>inspect fullClasspath</code> 得到的结果一样。
 </p><p>尝试用 <code>inspect *:fullClasspath</code> 作为对比。默认情况下，<code>fullClasspath</code> 没有定义在 <code>Global</code> configuration 中。
 </p><p>更多详细的内容请参见 <a href="../docs/Inspecting-Settings.html">与 Configuration 系统交互</a>。
 </p><h3 id="%E5%9C%A8%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E4%B8%AD%E6%B6%89%E5%8F%8A+scope">在构建定义中涉及 scope<a href="#%E5%9C%A8%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E4%B8%AD%E6%B6%89%E5%8F%8A+scope" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>如果你创建的 <code>build.sbt</code> 中有一个bare key，它的作用于将是当前的 project 下，configuration 和 task 均为 <code>Global</code>：
@@ -747,7 +747,7 @@ configuration 是 <code>*</code>（表示全局），task 没有显示出来（�
 </code></pre><p>毫无理由使用这种丑陋的语法，但是它阐明这实际上是方法。
 </p><h3 id="%E6%8C%87%E5%AE%9A+scope+%E7%9A%84%E6%97%B6%E6%9C%BA">指定 scope 的时机<a href="#%E6%8C%87%E5%AE%9A+scope+%E7%9A%84%E6%97%B6%E6%9C%BA" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>如果一个 key 通常的作用域有问题，你需要指定 scope。例如，<code>compile</code> task 默认是在 <code>Compile</code> 和 <code>Test</code> configuration 的 scope 中，而且在这些 scope 之外它并不存在。
 </p><p>为了改变 key <code>compile</code> 的值，你需要写成 <code>Compile / compile</code> 或者 <code>Test / compile</code>。用普通的 <code>compile</code> 会在当前 project 的 scope 中定义一个新的 task，而不是覆盖 configuration 的 scope 标准的 <code>compile</code> task。
-</p><p>如果你遇到像 <em>“引用未定义的设置”</em> 这样的错误，通常是你指定 scope 失败了，或者你指定了一个错误的 scope。你使用的 key 可能定义在其他的 scope 中。sbt 会尝试在错误消息里面提示你的想法是什么；如 “你是指 compile:compile？”
+</p><p>如果你遇到像 <em>“引用未定义的设置”</em> 这样的错误，通常是你指定 scope 失败了，或者你指定了一个错误的 scope。你使用的 key 可能定义在其他的 scope 中。sbt 会尝试在错误消息里面提示你的想法是什么；如 “你是指 Compile/compile？”
 </p><p>一种方式是你可以这样认为，name 只是 key 的 <em>一部分</em>。实际上，所有的 key 都有 name 和 scope 组成（scope 有三个轴）。换句话说，<code>packageOptions in (Compile, packageBin)</code> 是表示 key name 的完整的表达式。
 其简写 <code>packageOptions</code> 也是一个 key name，但是是不同的（对于没有 in 方法的 key，会隐式的假设一个 scope：当前的 project，global
 config，global task）。
@@ -1107,7 +1107,7 @@ lazy val projF = (project in file(&quot;f&quot;))
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot; % &quot;test&quot;
 </code></pre><p>也可能也会像这样使用类型安全的 <code>Test</code> configuration：
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot; % Test
-</code></pre><p>现在，如果你在 sbt 的命令提示行里输入 <code>show compile:dependencyClasspath</code>，你不应该看到 derby jar。但是如果你输入 <code>show test:dependencyClasspath</code>，
+</code></pre><p>现在，如果你在 sbt 的命令提示行里输入 <code>show Compile/dependencyClasspath</code>，你不应该看到 derby jar。但是如果你输入 <code>show Test/dependencyClasspath</code>，
 你应该在列表中看到 derby jar。
 </p><p>通常，测试相关的依赖，如 <a href="https://scalacheck.org/">ScalaCheck</a>，
 <a href="http://specs2.org">Specs2</a> 和 <a href="https://www.scalatest.org/">ScalaTest</a> 将会被定义为 <code>% &quot;test&quot;</code>。

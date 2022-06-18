@@ -67,21 +67,21 @@ defined by the publishTo setting, described in Publishing.
 </li><li><code>update</code> Resolves and retrieves external dependencies as described
 in <a href="Library-Dependencies.html">library dependencies</a>.
 </li></ul><h3 id="Configuration-level+tasks">Configuration-level tasks<a href="#Configuration-level+tasks" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Configuration-level tasks are tasks associated with a configuration. For
-example, <code>compile</code>, which is equivalent to <code>compile:compile</code>, compiles
-the main source code (the <code>compile</code> configuration). <code>test:compile</code>
+example, <code>compile</code>, which is equivalent to <code>Compile/compile</code>, compiles
+the main source code (the <code>compile</code> configuration). <code>Test/compile</code>
 compiles the test source code (test <code>test</code> configuration). Most tasks
 for the <code>compile</code> configuration have an equivalent in the <code>test</code>
-configuration that can be run using a <code>test:</code> prefix.
+configuration that can be run using a <code>Test/</code> prefix.
 </p><ul><li><code>compile</code> Compiles the main sources (in the <code>src/main/scala</code>
-directory). <code>test:compile</code> compiles test sources (in the
+directory). <code>Test/compile</code> compiles test sources (in the
 src/test/scala/ directory).
 </li><li><code>console</code> Starts the Scala interpreter with a classpath including
 the compiled sources, all jars in the lib directory, and managed
 libraries. To return to sbt, type :quit, Ctrl+D (Unix), or Ctrl+Z
-(Windows). Similarly, test:console starts the interpreter with the
+(Windows). Similarly, Test/console starts the interpreter with the
 test classes and classpath.
 </li><li><code>consoleQuick</code> Starts the Scala interpreter with the project’s
-compile-time dependencies on the classpath. test:consoleQuick uses
+compile-time dependencies on the classpath. Test/consoleQuick uses
 the test dependencies. This task differs from console in that it
 does not force compilation of the current project’s sources.
 </li><li><code>consoleProject</code> Enters an interactive session with sbt and the
@@ -90,32 +90,32 @@ values are bound to variables and common packages and values are
 imported. See the <a href="Console-Project.html">consoleProject documentation</a>
 for more information.
 </li><li><code>doc</code> Generates API documentation for Scala source files in
-<code>src/main/scala</code> using scaladoc. <code>test:doc</code> generates API documentation
+<code>src/main/scala</code> using scaladoc. <code>Test/doc</code> generates API documentation
 for source files in <code>src/test/scala</code>.
 </li><li><code>package</code> Creates a jar file containing the files in
 <code>src/main/resources</code> and the classes compiled from <code>src/main/scala</code>.
-<code>test:package</code> creates a jar containing the files in
+<code>Test/package</code> creates a jar containing the files in
 <code>src/test/resources</code> and the class compiled from <code>src/test/scala</code>.
 </li><li><code>packageDoc</code> Creates a jar file containing API documentation
-generated from Scala source files in src/main/scala. test:packageDoc
+generated from Scala source files in src/main/scala. Test/packageDoc
 creates a jar containing API documentation for test sources files in
 src/test/scala.
 </li><li><code>packageSrc</code>: Creates a jar file containing all main source files
 and resources. The packaged paths are relative to src/main/scala and
-src/main/resources. Similarly, test:packageSrc operates on test
+src/main/resources. Similarly, Test/packageSrc operates on test
 source files and resources.
 </li><li><code>run &lt;argument&gt;*</code> Runs the main class for the project in the same
 virtual machine as sbt. The main class is passed the arguments
 provided. Please see
 <a href="Running-Project-Code.html">Running Project Code</a> for details on the use of
 System.exit and multithreading (including GUIs) in code run by this
-action. <code>test:run</code> runs a main class in the test code.
+action. <code>Test/run</code> runs a main class in the test code.
 </li><li><code>runMain &lt;main-class&gt; &lt;argument&gt;*</code> Runs the specified main class for
 the project in the same virtual machine as sbt. The main class is
 passed the arguments provided. Please see
 <a href="Running-Project-Code.html">Running Project Code</a> for
 details on the use of System.exit and multithreading (including
-GUIs) in code run by this action. <code>test:runMain</code> runs the specified
+GUIs) in code run by this action. <code>Test/runMain</code> runs the specified
 main class in the test code.
 </li><li><code>test</code> Runs all tests detected during test compilation. See <a href="Testing.html">Testing</a>
 for details.

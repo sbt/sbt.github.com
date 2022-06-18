@@ -2216,9 +2216,9 @@ configuration and not the <code>Compile</code> configuration, add <code>% &quot;
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot; % &quot;test&quot;
 </code></pre><p>You may also use the type-safe version of <code>Test</code> configuration as follows:
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot; % Test
-</code></pre><p>Now, if you type <code>show compile:dependencyClasspath</code> at the sbt interactive
+</code></pre><p>Now, if you type <code>show Compile/dependencyClasspath</code> at the sbt interactive
 prompt, you should not see the derby jar. But if you type
-<code>show test:dependencyClasspath</code>, you should see the derby jar in the list.
+<code>show Test/dependencyClasspath</code>, you should see the derby jar in the list.
 </p><p>Typically, test-related dependencies such as
 <a href="https://scalacheck.org/">ScalaCheck</a>,
 <a href="http://specs2.org">Specs2</a>, and
@@ -5061,21 +5061,21 @@ defined by the publishTo setting, described in Publishing.
 </li><li><code>update</code> Resolves and retrieves external dependencies as described
 in <a href="Library-Dependencies.html">library dependencies</a>.
 </li></ul><h3 id="Configuration-level+tasks">Configuration-level tasks<a href="#Configuration-level+tasks" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Configuration-level tasks are tasks associated with a configuration. For
-example, <code>compile</code>, which is equivalent to <code>compile:compile</code>, compiles
-the main source code (the <code>compile</code> configuration). <code>test:compile</code>
+example, <code>compile</code>, which is equivalent to <code>Compile/compile</code>, compiles
+the main source code (the <code>compile</code> configuration). <code>Test/compile</code>
 compiles the test source code (test <code>test</code> configuration). Most tasks
 for the <code>compile</code> configuration have an equivalent in the <code>test</code>
-configuration that can be run using a <code>test:</code> prefix.
+configuration that can be run using a <code>Test/</code> prefix.
 </p><ul><li><code>compile</code> Compiles the main sources (in the <code>src/main/scala</code>
-directory). <code>test:compile</code> compiles test sources (in the
+directory). <code>Test/compile</code> compiles test sources (in the
 src/test/scala/ directory).
 </li><li><code>console</code> Starts the Scala interpreter with a classpath including
 the compiled sources, all jars in the lib directory, and managed
 libraries. To return to sbt, type :quit, Ctrl+D (Unix), or Ctrl+Z
-(Windows). Similarly, test:console starts the interpreter with the
+(Windows). Similarly, Test/console starts the interpreter with the
 test classes and classpath.
 </li><li><code>consoleQuick</code> Starts the Scala interpreter with the project’s
-compile-time dependencies on the classpath. test:consoleQuick uses
+compile-time dependencies on the classpath. Test/consoleQuick uses
 the test dependencies. This task differs from console in that it
 does not force compilation of the current project’s sources.
 </li><li><code>consoleProject</code> Enters an interactive session with sbt and the
@@ -5084,32 +5084,32 @@ values are bound to variables and common packages and values are
 imported. See the <a href="Console-Project.html">consoleProject documentation</a>
 for more information.
 </li><li><code>doc</code> Generates API documentation for Scala source files in
-<code>src/main/scala</code> using scaladoc. <code>test:doc</code> generates API documentation
+<code>src/main/scala</code> using scaladoc. <code>Test/doc</code> generates API documentation
 for source files in <code>src/test/scala</code>.
 </li><li><code>package</code> Creates a jar file containing the files in
 <code>src/main/resources</code> and the classes compiled from <code>src/main/scala</code>.
-<code>test:package</code> creates a jar containing the files in
+<code>Test/package</code> creates a jar containing the files in
 <code>src/test/resources</code> and the class compiled from <code>src/test/scala</code>.
 </li><li><code>packageDoc</code> Creates a jar file containing API documentation
-generated from Scala source files in src/main/scala. test:packageDoc
+generated from Scala source files in src/main/scala. Test/packageDoc
 creates a jar containing API documentation for test sources files in
 src/test/scala.
 </li><li><code>packageSrc</code>: Creates a jar file containing all main source files
 and resources. The packaged paths are relative to src/main/scala and
-src/main/resources. Similarly, test:packageSrc operates on test
+src/main/resources. Similarly, Test/packageSrc operates on test
 source files and resources.
 </li><li><code>run &lt;argument&gt;*</code> Runs the main class for the project in the same
 virtual machine as sbt. The main class is passed the arguments
 provided. Please see
 <a href="Running-Project-Code.html">Running Project Code</a> for details on the use of
 System.exit and multithreading (including GUIs) in code run by this
-action. <code>test:run</code> runs a main class in the test code.
+action. <code>Test/run</code> runs a main class in the test code.
 </li><li><code>runMain &lt;main-class&gt; &lt;argument&gt;*</code> Runs the specified main class for
 the project in the same virtual machine as sbt. The main class is
 passed the arguments provided. Please see
 <a href="Running-Project-Code.html">Running Project Code</a> for
 details on the use of System.exit and multithreading (including
-GUIs) in code run by this action. <code>test:runMain</code> runs the specified
+GUIs) in code run by this action. <code>Test/runMain</code> runs the specified
 main class in the test code.
 </li><li><code>test</code> Runs all tests detected during test compilation. See <a href="Testing.html">Testing</a>
 for details.
@@ -5777,19 +5777,19 @@ By default, this ordering is <code>compile, test, ...</code>
 </p><p>For example, the following are equivalent when run in a project <code>root</code>
 in the build in <code>/home/user/sample/</code>:
 </p><pre><code class="">&gt; compile
-&gt; compile:compile
+&gt; Compile/compile
 &gt; root/compile
-&gt; root/compile:compile
-&gt; {file:/home/user/sample/}root/compile:compile
-</code></pre><p>As another example, <code>run</code> by itself refers to <code>compile:run</code> because
+&gt; root/Compile/compile
+&gt; {file:/home/user/sample/}root/Compile/compile
+</code></pre><p>As another example, <code>run</code> by itself refers to <code>Compile/run</code> because
 there is no global <code>run</code> task and the first configuration searched,
 <code>compile</code>, defines a <code>run</code>. Therefore, to reference the <code>run</code> task for
 the <code>Test</code> configuration, the configuration axis must be specified like
-<code>test:run</code>. Some other examples that require the explicit <code>test:</code> axis:
-</p><pre><code class="">&gt; test:consoleQuick
-&gt; test:console
-&gt; test:doc
-&gt; test:package
+<code>Test/run</code>. Some other examples that require the explicit <code>Test/</code> axis:
+</p><pre><code class="">&gt; Test/consoleQuick
+&gt; Test/console
+&gt; Test/doc
+&gt; Test/package
 </code></pre><h4 id="Task-specific+Settings">Task-specific Settings<a href="#Task-specific+Settings" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Some settings are defined per-task. This is used when there are several
 related tasks, such as <code>package</code>, <code>packageSrc</code>, and <code>packageDoc</code>, in the
 same configuration (such as <code>compile</code> or <code>test</code>). For package tasks,
@@ -5839,8 +5839,8 @@ of a key. For example,
 ...
 [info] Related:
 [info]  test:compile
-</code></pre><p>This shows that in addition to the requested <code>compile:compile</code> task,
-there is also a <code>test:compile</code> task.
+</code></pre><p>This shows that in addition to the requested <code>Compile/compile</code> task,
+there is also a <code>Test/compile</code> task.
 </p><h4 id="Dependencies">Dependencies<a href="#Dependencies" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Forward dependencies show the other settings (or tasks) used to define a
 setting (or task). Reverse dependencies go the other direction, showing
 what uses a given setting. <code>inspect</code> provides this information based on
@@ -7535,7 +7535,7 @@ object Usage {
 }
 </code></pre><p>This can be then run at the console:
 </p><pre><code class="">$ sbt
-&gt; macroSub/test:run
+&gt; macroSub/Test/run
 scala.collection.immutable.List.apply[Int](1, 2, 3).reverse
 </code></pre><p>Actual tests can be defined and run as usual with <code>macro/test</code>.
 </p><p>The main project can use the macro in the same way that the tests do.
@@ -8127,7 +8127,7 @@ one of the following conditions are run:
 </li><li>The tests that have one or more transitive dependencies, maybe in a
 different project, recompiled.
 </li></ul><h5 id="Tab+completion">Tab completion<a href="#Tab+completion" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p>Tab completion is provided for test names based on the results of the
-last <code>test:compile</code>. This means that a new sources aren’t available for
+last <code>Test/compile</code>. This means that a new sources aren’t available for
 tab completion until they are compiled and deleted sources won’t be
 removed from tab completion until a recompile. A new test source can
 still be manually written out and run using <code>testOnly</code>.
@@ -9819,8 +9819,8 @@ adds one to the value produced by <code>intTask</code> and returns the result.
 </code></pre><h5 id="Task+Scope">Task Scope<a href="#Task+Scope" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p>As with settings, tasks can be defined in a specific scope. For example,
 there are separate <code>compile</code> tasks for the <code>compile</code> and <code>test</code> scopes.
 The scope of a task is defined the same as for a setting. In the
-following example, <code>test:sampleTask</code> uses the result of
-<code>compile:intTask</code>.
+following example, <code>Test/sampleTask</code> uses the result of
+<code>Compile/intTask</code>.
 </p><pre><code class="prettyprint lang-scala">Test / sampleTask := (Compile / intTask).value * 3
 </code></pre><h5 id="On+precedence">On precedence<a href="#On+precedence" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p>As a reminder, infix method precedence is by the name of the method and
 postfix methods have lower precedence than infix methods.
@@ -11425,7 +11425,7 @@ import extracted._
 // get name of current project
 val nameOpt: Option[String] = (currentRef / name).get(structure.data)
 
-// get the package options for the `test:packageSrc` task or Nil if none are defined
+// get the package options for the `Test/packageSrc` task or Nil if none are defined
 val pkgOpts: Seq[PackageOption] = (currentRef / Test / packageSrc / packageOptions).get(structure.data).getOrElse(Nil)
 </code></pre><p><a href="../api/sbt/internal/BuildStructure.html">BuildStructure</a> contains
 information about build and project relationships. Key members are:
@@ -13276,7 +13276,7 @@ commonly used settings. See <code>help settings</code> for details.
 </p><a name="listsettings"></a><h3 id="List+available+settings">List available settings<a href="#List+available+settings" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The <code>inspect</code> command displays several pieces of information about a
 given setting or task, including the dependencies of a task/setting as
 well as the tasks/settings that depend on the it. For example,
-</p><pre><code class="">&gt; inspect test:compile
+</p><pre><code class="">&gt; inspect Test/compile
 ...
 [info] Dependencies:
 [info]  Test / manipulateBytecode
@@ -13378,7 +13378,7 @@ value.
 ...
 [info] ArrayBuffer(Attributed(/Users/foo/.sbt/boot/scala-2.12.6/lib/scala-library.jar))
 </code></pre><a name="classpath"></a><h3 id="Show+the+classpath+used+for+compilation+or+testing">Show the classpath used for compilation or testing<a href="#Show+the+classpath+used+for+compilation+or+testing" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>For the test classpath,
-</p><pre><code class="">&gt; show test:dependencyClasspath
+</p><pre><code class="">&gt; show Test/dependencyClasspath
 ...
 [info] List(Attributed(/Users/foo/code/sbt.github.com/target/scala-2.12/classes), Attributed(~/.sbt/boot/scala-2.12.6/lib/scala-library.jar), Attributed(/Users/foo/.ivy2/cache/junit/junit/jars/junit-4.8.2.jar))
 ...
@@ -13393,7 +13393,7 @@ main classes discovered in the main sources:
 </code></pre><a name="tests"></a><h3 id="Show+the+test+classes+detected+in+a+project">Show the test classes detected in a project<a href="#Show+the+test+classes+detected+in+a+project" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt detects tests according to fingerprints provided by test frameworks.
 The <code>definedTestNames</code> task provides as its result the list of test
 names detected in this way. For example,
-</p><pre><code class="">&gt; show test:definedTestNames
+</p><pre><code class="">&gt; show Test/definedTestNames
 ... &lt; runs test:compile if out of date &gt; ...
 [info] List(org.example.TestA, org.example.TestB)
 </code></pre><h2 id="Interactive+mode">Interactive mode<a href="#Interactive+mode" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><a name="basic_completion"></a><h3 id="Use+tab+completion">Use tab completion<a href="#Use+tab+completion" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>By default, sbt’s interactive mode is started when no commands are
@@ -13593,7 +13593,7 @@ more information than was shown by default. A <code>logLevel</code> based soluti
 typically requires changing the logging level and running a task again.
 However, there are two cases where this is unnecessary. First, warnings
 from a previous compilation may be displayed using <code>printWarnings</code> for
-the main sources or <code>test:printWarnings</code> for test sources. Second,
+the main sources or <code>Test/printWarnings</code> for test sources. Second,
 output from the previous execution is available either for a single task
 or for in its entirety. See the section on
 <a href="#printwarnings">printWarnings</a> and the sections on
@@ -13841,11 +13841,11 @@ scalaHome := Some(file(&quot;/path/to/scala/home/&quot;))
 classpath of the Scala REPL. The project’s sources are not compiled, but
 sources of any source dependencies are compiled. To enter the REPL with
 test dependencies on the classpath but without compiling test sources,
-run <code>test:consoleQuick</code>. This will force compilation of main sources.
+run <code>Test/consoleQuick</code>. This will force compilation of main sources.
 </p><a name="console"></a><h3 id="Enter+the+Scala+REPL+with+a+project%E2%80%99s+dependencies+and+compiled+code+on+the+classpath">Enter the Scala REPL with a project’s dependencies and compiled code on the classpath<a href="#Enter+the+Scala+REPL+with+a+project%E2%80%99s+dependencies+and+compiled+code+on+the+classpath" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The <code>console</code> action retrieves dependencies and compiles sources and
 puts them on the classpath of the Scala REPL. To enter the REPL with
 test dependencies and compiled test sources on the classpath, run
-<code>test:console</code>.
+<code>Test/console</code>.
 </p><a name="consoleProject"></a><h3 id="Enter+the+Scala+REPL+with+plugins+and+the+build+definition+on+the+classpath">Enter the Scala REPL with plugins and the build definition on the classpath<a href="#Enter+the+Scala+REPL+with+plugins+and+the+build+definition+on+the+classpath" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">&gt; consoleProject
 </code></pre><p>For details, see the <a href="Console-Project.html">consoleProject</a>
 page.
@@ -14564,7 +14564,7 @@ lazy val root = (project in file(&quot;.&quot;))
     Comile / packageBin / mainClass := Some(&quot;myproject.MyMain&quot;),
 
     // set the main class for the main 'run' task
-    // change Compile to Test to set it for 'test:run'
+    // change Compile to Test to set it for 'Test/run'
     Compile / run / mainClass := Some(&quot;myproject.MyMain&quot;),
 
     // add &lt;base&gt;/input to the files that '~' triggers on
@@ -14630,7 +14630,7 @@ lazy val root = (project in file(&quot;.&quot;))
     clean / aggregate := false,
 
     // only show warnings and errors on the screen for compilations.
-    //  this applies to both test:compile and compile and is Info by default
+    //  this applies to both Test/compile and compile and is Info by default
     compile / logLevel := Level.Warn,
 
     // only show warnings and errors on the screen for all tasks (the default is Info)

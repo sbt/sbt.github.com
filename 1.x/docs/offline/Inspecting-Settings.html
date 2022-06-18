@@ -69,19 +69,19 @@ By default, this ordering is <code>compile, test, ...</code>
 </p><p>For example, the following are equivalent when run in a project <code>root</code>
 in the build in <code>/home/user/sample/</code>:
 </p><pre><code class="">&gt; compile
-&gt; compile:compile
+&gt; Compile/compile
 &gt; root/compile
-&gt; root/compile:compile
-&gt; {file:/home/user/sample/}root/compile:compile
-</code></pre><p>As another example, <code>run</code> by itself refers to <code>compile:run</code> because
+&gt; root/Compile/compile
+&gt; {file:/home/user/sample/}root/Compile/compile
+</code></pre><p>As another example, <code>run</code> by itself refers to <code>Compile/run</code> because
 there is no global <code>run</code> task and the first configuration searched,
 <code>compile</code>, defines a <code>run</code>. Therefore, to reference the <code>run</code> task for
 the <code>Test</code> configuration, the configuration axis must be specified like
-<code>test:run</code>. Some other examples that require the explicit <code>test:</code> axis:
-</p><pre><code class="">&gt; test:consoleQuick
-&gt; test:console
-&gt; test:doc
-&gt; test:package
+<code>Test/run</code>. Some other examples that require the explicit <code>Test/</code> axis:
+</p><pre><code class="">&gt; Test/consoleQuick
+&gt; Test/console
+&gt; Test/doc
+&gt; Test/package
 </code></pre><h4 id="Task-specific+Settings">Task-specific Settings<a href="#Task-specific+Settings" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Some settings are defined per-task. This is used when there are several
 related tasks, such as <code>package</code>, <code>packageSrc</code>, and <code>packageDoc</code>, in the
 same configuration (such as <code>compile</code> or <code>test</code>). For package tasks,
@@ -131,8 +131,8 @@ of a key. For example,
 ...
 [info] Related:
 [info]  test:compile
-</code></pre><p>This shows that in addition to the requested <code>compile:compile</code> task,
-there is also a <code>test:compile</code> task.
+</code></pre><p>This shows that in addition to the requested <code>Compile/compile</code> task,
+there is also a <code>Test/compile</code> task.
 </p><h4 id="Dependencies">Dependencies<a href="#Dependencies" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Forward dependencies show the other settings (or tasks) used to define a
 setting (or task). Reverse dependencies go the other direction, showing
 what uses a given setting. <code>inspect</code> provides this information based on
