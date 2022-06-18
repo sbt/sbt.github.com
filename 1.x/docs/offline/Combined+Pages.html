@@ -8341,11 +8341,17 @@ using:
 </p><pre><code class="prettyprint lang-scala">parallelExecution in Serial := false
 </code></pre><p>The tests to run in parallel would be run with <code>test</code> and the ones to
 run in serial would be run with <code>serial:test</code>.
-</p><h3 id="JUnit">JUnit<a href="#JUnit" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Support for JUnit is provided by
-<a href="https://github.com/sbt/junit-interface">junit-interface</a>. To add
-JUnit support into your project, add the junit-interface dependency in
+</p><h3 id="JUnit">JUnit<a href="#JUnit" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Support for JUnit5 is provided by
+<a href="https://github.com/sbt/sbt-jupiter-interface">sbt-jupiter-interface</a>. To add
+JUnit Jupiter support into your project, add the jupiter-interface dependency in
 your project’s main build.sbt file.
-</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;com.novocode&quot; % &quot;junit-interface&quot; % &quot;0.11&quot; % Test
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;net.aichler&quot; % &quot;jupiter-interface&quot; % &quot;0.9.0&quot; % Test
+</code></pre><p>and the sbt-jupiter-interface plugin to your project/plugins.sbt
+</p><pre><code class="prettyprint lang-scala">addSbtPlugin(&quot;net.aichler&quot; % &quot;sbt-jupiter-interface&quot; % &quot;0.9.0&quot;)
+</code></pre><p>Support for JUnit4 is provided by
+<a href="https://github.com/sbt/junit-interface">junit-interface</a>.
+Add the junit-interface dependency in your project’s main build.sbt file.
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;com.github.sbt&quot; % &quot;junit-interface&quot; % &quot;0.13.3&quot; % Test
 </code></pre><h3 id="Extensions">Extensions<a href="#Extensions" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>This page describes adding support for additional testing libraries and
 defining additional test reporters. You do this by implementing <code>sbt</code>
 interfaces (described below). If you are the author of the testing
