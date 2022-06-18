@@ -116,10 +116,10 @@ serie de dependencias:
 <code>groupID % artifactID % revision</code> (la diferencia está en el doble <code>%%</code> tras 
 <code>groupId</code>), sbt añadirá la versión del binario de Scala de tu proyecto al nombre
 del artefacto. Esto simplemente es un atajo. Podrías escribir esto sin el <code>%%</code>:
-</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-tools&quot; % &quot;scala-stm_2.11&quot; % &quot;0.3&quot;
-</code></pre><p>Si asumimos que <code>scalaVersion</code> para tu construcción es <code>2.11.1</code> lo siguiente es
-idéntico a lo anterior (fíjate en el doble <code>%%</code> tras <code>&quot;org.scala-tools&quot;</code>):
-</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-tools&quot; %% &quot;scala-stm&quot; % &quot;0.3&quot;
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-stm&quot; % &quot;scala-stm_2.13&quot; % &quot;0.9.1&quot;
+</code></pre><p>Si asumimos que <code>scalaVersion</code> para tu construcción es <code>2.13.8</code> lo siguiente es
+idéntico a lo anterior (fíjate en el doble <code>%%</code> tras <code>&quot;org.scala-stm&quot;</code>):
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-stm&quot; %% &quot;scala-stm&quot; % &quot;0.9.1&quot;
 </code></pre><p>La idea es que muchas dependencias son compiladas para múltiples versiones de
 Scala y con toda seguridad lo que querrás será obtener aquella que ofrece
 compatibilidad binaria con tu proyecto.

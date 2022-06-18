@@ -104,16 +104,16 @@ Runs a main class, passing along arguments provided on the command line.
 [info] Running example.Hello
 Hello
 [success] Total time: 1 s, completed May 6, 2018 4:10:44 PM
-</code></pre><h3 id="Set+ThisBuild+%2F+scalaVersion+from+sbt+shell">Set ThisBuild / scalaVersion from sbt shell<a href="#Set+ThisBuild+%2F+scalaVersion+from+sbt+shell" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:foo-build&gt; set ThisBuild / scalaVersion := &quot;2.13.6&quot;
+</code></pre><h3 id="Set+ThisBuild+%2F+scalaVersion+from+sbt+shell">Set ThisBuild / scalaVersion from sbt shell<a href="#Set+ThisBuild+%2F+scalaVersion+from+sbt+shell" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:foo-build&gt; set ThisBuild / scalaVersion := &quot;2.13.8&quot;
 [info] Defining ThisBuild / scalaVersion
 </code></pre><p>Check the <code>scalaVersion</code> setting:
 </p><pre><code class="">sbt:foo-build&gt; scalaVersion
-[info] 2.13.6
+[info] 2.13.8
 </code></pre><h3 id="Save+the+session+to+build.sbt">Save the session to build.sbt<a href="#Save+the+session+to+build.sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>We can save the ad-hoc settings using <code>session save</code>.
 </p><pre><code class="">sbt:foo-build&gt; session save
 [info] Reapplying settings...
 </code></pre><p><code>build.sbt</code> file should now contain:
-</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.6&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.8&quot;
 
 </code></pre><h3 id="Name+your+project">Name your project<a href="#Name+your+project" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Using an editor, change <code>build.sbt</code> as follows:
 </p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.6&quot;

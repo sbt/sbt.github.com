@@ -218,15 +218,15 @@ Runs a main class, passing along arguments provided on the command line.
 [info] Running example.Hello
 Hello
 [success] Total time: 1 s, completed May 6, 2018 4:10:44 PM
-</code></pre><h3 id="Establecer++desde+el+shell+de+sbt">Establecer <code>ThisBuild / scalaVersion</code> desde el shell de sbt<a href="#Establecer++desde+el+shell+de+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:foo-build&gt; set ThisBuild / scalaVersion := &quot;2.13.6&quot;
+</code></pre><h3 id="Establecer++desde+el+shell+de+sbt">Establecer <code>ThisBuild / scalaVersion</code> desde el shell de sbt<a href="#Establecer++desde+el+shell+de+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:foo-build&gt; set ThisBuild / scalaVersion := &quot;2.13.8&quot;
 [info] Defining ThisBuild / scalaVersion
 </code></pre><h3 id="Comprobar+la+entrada+%3A">Comprobar la entrada <code>scalaVersion</code>:<a href="#Comprobar+la+entrada+%3A" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:foo-build&gt; scalaVersion
-[info] 2.13.6
+[info] 2.13.8
 </code></pre><h3 id="Guardar+la+sesi%C3%B3n+actual+en+build.sbt">Guardar la sesión actual en build.sbt<a href="#Guardar+la+sesi%C3%B3n+actual+en+build.sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Podemos guardar la configuración temporal utilizando <code>session save</code>.
 </p><pre><code class="">sbt:foo-build&gt; session save
 [info] Reapplying settings...
 </code></pre><p>El fichero <code>build.sbt</code> ahora debería de contener:
-</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.6&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.8&quot;
 </code></pre><h3 id="Dar+un+nombre+a+tu+proyecto">Dar un nombre a tu proyecto<a href="#Dar+un+nombre+a+tu+proyecto" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Utilizando un editor, modifica <code>build.sbt</code> con el siguiente contenido:
 </p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.6&quot;
 ThisBuild / organization := &quot;com.example&quot;
@@ -850,7 +850,7 @@ de tu subproyecto. Los pares clave-valor se listan bajo el método
 clave-valor llamados <em>expresiones de configuración</em> (expression settings) 
 utilizando un <em>DSL de build.sbt</em>
 </p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.15&quot;
+ThisBuild / scalaVersion := &quot;2.12.16&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -972,7 +972,7 @@ importados.)
 lugar de ponerla dentro de la llamada a <code>.settings(...)</code>. Podemos llamar a esto 
 el “estilo plano”.
 </p><pre><code class="prettyprint lang-scala">ThisBuild / version := &quot;1.0&quot;
-ThisBuild / scalaVersion := &quot;2.12.15&quot;
+ThisBuild / scalaVersion := &quot;2.12.16&quot;
 </code></pre><p>Esta sintaxis es la recomendada para configuraciones con ámbito <code>ThisBuild</code> plugins añadidos.
 Mira secciones posteriores acerca de los ámbitos y los plugins.
 </p><h3 id="A%C3%B1adir+dependencias+de+biblioteca">Añadir dependencias de biblioteca<a href="#A%C3%B1adir+dependencias+de+biblioteca" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Para depender de bibliotecas de terceros hay dos opciones. La primera es copiar 
@@ -981,7 +981,7 @@ gestionadas, que en <code>build.sbt</code> tienen este aspecto:
 </p><pre><code class="prettyprint lang-scala">val derby = &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot;
 
 ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.15&quot;
+ThisBuild / scalaVersion := &quot;2.12.16&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -1028,7 +1028,7 @@ Para ello la parte derecha tiene que ser un valor puro o una configuración en e
 predeterminadas en el ámbito de subproyectos. (Ver <a href="Scopes.html">Ámbitos</a>)
 </p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
-ThisBuild / scalaVersion := &quot;2.12.15&quot;
+ThisBuild / scalaVersion := &quot;2.12.16&quot;
 
 lazy val core = (project in file(&quot;core&quot;))
   .settings(
@@ -1235,7 +1235,7 @@ de tareas evalúa el cuerpo de <code>scalacOptions</code>, sin importar que esas
 aparezcan en el cuerpo.</strong>
 </p><p>Mira el siguiente ejemplo:
 </p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.15&quot;
+ThisBuild / scalaVersion := &quot;2.12.16&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -1263,7 +1263,7 @@ lazy val root = (project in file(&quot;.&quot;))
 tales líneas.
 </p><p>Aquí hay otro ejemplo:
 </p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.15&quot;
+ThisBuild / scalaVersion := &quot;2.12.16&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -1368,7 +1368,7 @@ Supongamos que ya ha sido establecida a algún valor, pero que quieres filtrar
   .settings(
     name := &quot;Hello&quot;,
     organization := &quot;com.example&quot;,
-    scalaVersion := &quot;2.12.15&quot;,
+    scalaVersion := &quot;2.12.16&quot;,
     version := &quot;0.1.0-SNAPSHOT&quot;,
     scalacOptions := List(&quot;-encoding&quot;, &quot;utf8&quot;, &quot;-Xfatal-warnings&quot;, &quot;-deprecation&quot;, &quot;-unchecked&quot;),
     scalacOptions := {
@@ -1758,7 +1758,7 @@ Usando este mecanismo, podemos definir valores predeterminados a nivel de
 construcción para claves usadas con frecuencia tales como <code>version</code>,
 <code>scalaVersion</code> y <code>organization</code>.
 </p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;,
-ThisBuild / scalaVersion := &quot;2.12.15&quot;,
+ThisBuild / scalaVersion := &quot;2.12.16&quot;,
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -1916,7 +1916,7 @@ Recuerda, estamos intentando mostrar el camino de búsqueda a partir de un
   )
 </code></pre><p>¿Cuál es el valor de <code>projA / name</code>?
 </p><ol><li><code>&quot;foo-2.11.11&quot;</code>
-</li><li><code>&quot;foo-2.12.15&quot;</code>
+</li><li><code>&quot;foo-2.12.16&quot;</code>
 </li><li>¿otra cosa?
 </li></ol><p>La respuesta es <code>&quot;foo-2.11.11&quot;</code>.
 Dentro de <code>.settings(...)</code>, <code>scalaVersion</code> tiene automáticamente un ámbito de
@@ -2240,10 +2240,10 @@ serie de dependencias:
 <code>groupID % artifactID % revision</code> (la diferencia está en el doble <code>%%</code> tras 
 <code>groupId</code>), sbt añadirá la versión del binario de Scala de tu proyecto al nombre
 del artefacto. Esto simplemente es un atajo. Podrías escribir esto sin el <code>%%</code>:
-</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-tools&quot; % &quot;scala-stm_2.11&quot; % &quot;0.3&quot;
-</code></pre><p>Si asumimos que <code>scalaVersion</code> para tu construcción es <code>2.11.1</code> lo siguiente es
-idéntico a lo anterior (fíjate en el doble <code>%%</code> tras <code>&quot;org.scala-tools&quot;</code>):
-</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-tools&quot; %% &quot;scala-stm&quot; % &quot;0.3&quot;
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-stm&quot; % &quot;scala-stm_2.13&quot; % &quot;0.9.1&quot;
+</code></pre><p>Si asumimos que <code>scalaVersion</code> para tu construcción es <code>2.13.8</code> lo siguiente es
+idéntico a lo anterior (fíjate en el doble <code>%%</code> tras <code>&quot;org.scala-stm&quot;</code>):
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-stm&quot; %% &quot;scala-stm&quot; % &quot;0.9.1&quot;
 </code></pre><p>La idea es que muchas dependencias son compiladas para múltiples versiones de
 Scala y con toda seguridad lo que querrás será obtener aquella que ofrece
 compatibilidad binaria con tu proyecto.
@@ -2408,7 +2408,7 @@ val sampleIntTask = taskKey[Int](&quot;A sample int task.&quot;)
 
 ThisBuild / organization := &quot;com.example&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
-ThisBuild / scalaVersion := &quot;2.12.15&quot;
+ThisBuild / scalaVersion := &quot;2.12.16&quot;
 
 lazy val library = (project in file(&quot;library&quot;))
   .settings(
@@ -2455,7 +2455,7 @@ val sampleStringTask = taskKey[String](&quot;A sample string task.&quot;)
 
 ThisBuild / organization := &quot;com.example&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
-ThisBuild / scalaVersion := &quot;2.12.15&quot;
+ThisBuild / scalaVersion := &quot;2.12.16&quot;
 
 lazy val library = (project in file(&quot;library&quot;))
   .settings(
@@ -2645,12 +2645,12 @@ acaban convirtiéndose en parte de la definición de construcción es crear
 
 object Dependencies {
   // Versions
-  lazy val akkaVersion = &quot;2.3.8&quot;
+  lazy val akkaVersion = &quot;2.6.19&quot;
 
   // Libraries
   val akkaActor = &quot;com.typesafe.akka&quot; %% &quot;akka-actor&quot; % akkaVersion
   val akkaCluster = &quot;com.typesafe.akka&quot; %% &quot;akka-cluster&quot; % akkaVersion
-  val specs2core = &quot;org.specs2&quot; %% &quot;specs2-core&quot; % &quot;2.4.17&quot;
+  val specs2core = &quot;org.specs2&quot; %% &quot;specs2-core&quot; % &quot;4.16.0&quot;
 
   // Projects
   val backendDeps =
@@ -2663,7 +2663,7 @@ tu fichero <code>build.sbt</code>.
 
 ThisBuild / organization := &quot;com.example&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
-ThisBuild / scalaVersion := &quot;2.12.15&quot;
+ThisBuild / scalaVersion := &quot;2.12.16&quot;
 
 lazy val backend = (project in file(&quot;backend&quot;))
   .settings(

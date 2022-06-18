@@ -136,7 +136,7 @@ Hi!
   .settings(
     name := &quot;hello&quot;,
     version := &quot;1.0&quot;,
-    scalaVersion := &quot;2.12.15&quot;
+    scalaVersion := &quot;2.12.16&quot;
   )
 </code></pre><p>在 <a href="Basic-Def.html">.sbt 构建定义</a> 这节中你将会学到更多关于
 如何编写 <code>build.sbt</code> 脚本的东西。
@@ -293,7 +293,7 @@ project/
 </p><h3 id="%E5%A6%82%E4%BD%95%E5%9C%A8+build.sbt+%E4%B8%AD%E5%AE%9A%E4%B9%89%E8%AE%BE%E7%BD%AE">如何在 build.sbt 中定义设置<a href="#%E5%A6%82%E4%BD%95%E5%9C%A8+build.sbt+%E4%B8%AD%E5%AE%9A%E4%B9%89%E8%AE%BE%E7%BD%AE" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> 定义了一个 <code>Project</code>，它持有一个名为<code>settings</code>的scala表达式列表。
 </p><p>下面是一个例子：
 </p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.15&quot;
+ThisBuild / scalaVersion := &quot;2.12.16&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -362,12 +362,12 @@ import Keys._
 </p><h3 id="bare+.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">bare .sbt 构建定义<a href="#bare+.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>bare <code>.sbt</code> 构建定义由一个 <code>Setting[_]</code> 表达式的列表组成，而不是定义 <code>Project</code>。
 </p><pre><code class="prettyprint lang-scala">name := &quot;hello&quot;
 version := &quot;1.0&quot;
-scalaVersion := &quot;2.12.15&quot;
+scalaVersion := &quot;2.12.16&quot;
 </code></pre><h3 id="%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96%E5%BA%93">添加依赖库<a href="#%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96%E5%BA%93" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>有两种方式添加第三方的依赖。一种是将 jar 文件 放入 <code>lib/</code>（非托管的依赖）中，另一种是在 <code>build.sbt</code> 中添加托管的依赖，像这样：
 </p><pre><code class="prettyprint lang-scala">val derby = &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot;
 
 ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.15&quot;
+ThisBuild / scalaVersion := &quot;2.12.16&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -412,7 +412,7 @@ val clean = taskKey[Unit](&quot;Deletes files produced by the build, such as gen
 <strong>在任务引擎评估 <code>scalacOptions</code> 的打开 <code>{</code>，无论它出现在主体中的哪一行， <code>update</code> 和 <code>clean</code> 任务都已完成</strong>。
 </p><p>请参见以下示例：
 </p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.15&quot;
+ThisBuild / scalaVersion := &quot;2.12.16&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -438,7 +438,7 @@ lazy val root = (project in file(&quot;.&quot;))
 </code></pre><p>即使 <code>val ur = ...</code> 出现在 <code>log.info(&quot;123&quot;)</code> 和 <code>log.info(&quot;456&quot;)</code>，<code>update</code> 任务的评估还是要先于它们进行。
 </p><p>这是另一个例子：
 </p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.15&quot;
+ThisBuild / scalaVersion := &quot;2.12.16&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -526,7 +526,7 @@ hello
   .settings(
     name := &quot;Hello&quot;,
     organization := &quot;com.example&quot;,
-    scalaVersion := &quot;2.12.15&quot;,
+    scalaVersion := &quot;2.12.16&quot;,
     version := &quot;0.1.0-SNAPSHOT&quot;,
     scalacOptions := List(&quot;-encoding&quot;, &quot;utf8&quot;, &quot;-Xfatal-warnings&quot;, &quot;-deprecation&quot;, &quot;-unchecked&quot;),
     scalacOptions := {
@@ -824,7 +824,7 @@ lazy val projX = (project in file(&quot;x&quot;))
   )
 </code></pre><p><code>projA / name</code> 的值是什么?
 </p><ol><li><code>&quot;foo-2.11.11&quot;</code>
-</li><li><code>&quot;foo-2.12.15&quot;</code>
+</li><li><code>&quot;foo-2.12.16&quot;</code>
 </li><li>还有什么吗
 </li></ol><p>答案是 <code>&quot;foo-2.11.11&quot;</code>。
 在 <code>.settings(...)</code> 内部，<code>scalaVersion</code> 的 scope 将自动设置为 <code>projA / Zero / Zero</code>，
@@ -1078,9 +1078,9 @@ lazy val projF = (project in file(&quot;f&quot;))
 </code></pre><p>在很少情况下，你也会需要在 <code>libraryDependencies</code> 上用 <code>:=</code> 方法。
 </p><h4 id="%E9%80%9A%E8%BF%87++%E6%96%B9%E6%B3%95%E8%8E%B7%E5%8F%96%E6%AD%A3%E7%A1%AE%E7%9A%84+Scala+%E7%89%88%E6%9C%AC">通过 <code>%%</code> 方法获取正确的 Scala 版本<a href="#%E9%80%9A%E8%BF%87++%E6%96%B9%E6%B3%95%E8%8E%B7%E5%8F%96%E6%AD%A3%E7%A1%AE%E7%9A%84+Scala+%E7%89%88%E6%9C%AC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>如果你用是 <code>groupID %% artifactID % revision</code> 而不是 <code>groupID % artifactID % revision</code>（区别在于 <code>groupID</code> 后面是 <code>%%</code>），sbt 会在 工件名称中加上项目的 Scala 版本号。
 这只是一种快捷方法。你可以这样写不用 <code>%%</code>：
-</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-tools&quot; % &quot;scala-stm_2.11&quot; % &quot;0.3&quot;
-</code></pre><p>假设这个构建的 <code>scalaVersion</code> 是 <code>2.11.1</code>，下面这种方式是等效的（注意 <code>&quot;org.scala-tools&quot;</code> 后面是 <code>%%</code>）：
-</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-tools&quot; %% &quot;scala-stm&quot; % &quot;0.3&quot;
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-stm&quot; % &quot;scala-stm_2.13&quot; % &quot;0.9.1&quot;
+</code></pre><p>假设这个构建的 <code>scalaVersion</code> 是 <code>2.13.8</code>，下面这种方式是等效的（注意 <code>&quot;org.scala-stm&quot;</code> 后面是 <code>%%</code>）：
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-stm&quot; %% &quot;scala-stm&quot; % &quot;0.9.1&quot;
 </code></pre><p>这个想法是很多依赖都会被编译给多个 Scala 版本，而你想确保和项目匹配的jar是二进制兼容的。
 </p><p>参见 <a href="../docs/Cross-Build.html">交叉构建</a> 获取更多信息。
 </p><h4 id="Ivy+%E4%BF%AE%E6%AD%A3">Ivy 修正<a href="#Ivy+%E4%BF%AE%E6%AD%A3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>groupID % artifactID % revision</code> 中的 <code>revision</code> 不需要是一个固定的版本号。Ivy 能够根据你指定的约束选择一个模块的最新版本。你指定 <code>&quot;latest.integration&quot;</code>，<code>&quot;2.9.+&quot;</code> 或者 <code>&quot;[1.0,)&quot;</code>，而不是
@@ -1129,7 +1129,7 @@ lazy val core = project in file(&quot;core&quot;)
 </p><pre><code class="prettyprint lang-scala">lazy val commonSettings = Seq(
   organization := &quot;com.example&quot;,
   version := &quot;0.1.0&quot;,
-  scalaVersion := &quot;2.12.15&quot;
+  scalaVersion := &quot;2.12.16&quot;
 )
 
 lazy val core = (project in file(&quot;core&quot;))
@@ -1273,7 +1273,7 @@ val sampleIntTask = taskKey[Int](&quot;A sample int task.&quot;)
 
 ThisBuild / organization := &quot;com.example&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
-ThisBuild / scalaVersion := &quot;2.12.15&quot;
+ThisBuild / scalaVersion := &quot;2.12.16&quot;
 
 lazy val library = (project in file(&quot;library&quot;))
   .settings(
@@ -1303,7 +1303,7 @@ val sampleStringTask = taskKey[String](&quot;A sample string task.&quot;)
 
 ThisBuild / organization := &quot;com.example&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
-ThisBuild / scalaVersion := &quot;2.12.15&quot;
+ThisBuild / scalaVersion := &quot;2.12.16&quot;
 
 lazy val library = (project in file(&quot;library&quot;))
   .settings(
@@ -1428,12 +1428,12 @@ stopping...
 
 object Dependencies {
   // Versions
-  lazy val akkaVersion = &quot;2.3.8&quot;
+  lazy val akkaVersion = &quot;2.6.19&quot;
 
   // Libraries
   val akkaActor = &quot;com.typesafe.akka&quot; %% &quot;akka-actor&quot; % akkaVersion
   val akkaCluster = &quot;com.typesafe.akka&quot; %% &quot;akka-cluster&quot; % akkaVersion
-  val specs2core = &quot;org.specs2&quot; %% &quot;specs2-core&quot; % &quot;2.4.17&quot;
+  val specs2core = &quot;org.specs2&quot; %% &quot;specs2-core&quot; % &quot;4.16.0&quot;
 
   // Projects
   val backendDeps =
@@ -1444,7 +1444,7 @@ object Dependencies {
 
 ThisBuild / organization := &quot;com.example&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
-ThisBuild / scalaVersion := &quot;2.12.15&quot;
+ThisBuild / scalaVersion := &quot;2.12.16&quot;
 
 lazy val backend = (project in file(&quot;backend&quot;))
   .settings(

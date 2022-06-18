@@ -109,15 +109,15 @@ Runs a main class, passing along arguments provided on the command line.
 [info] Running example.Hello
 Hello
 [success] Total time: 1 s, completed May 6, 2018 4:10:44 PM
-</code></pre><h3 id="Establecer++desde+el+shell+de+sbt">Establecer <code>ThisBuild / scalaVersion</code> desde el shell de sbt<a href="#Establecer++desde+el+shell+de+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:foo-build&gt; set ThisBuild / scalaVersion := &quot;2.13.6&quot;
+</code></pre><h3 id="Establecer++desde+el+shell+de+sbt">Establecer <code>ThisBuild / scalaVersion</code> desde el shell de sbt<a href="#Establecer++desde+el+shell+de+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:foo-build&gt; set ThisBuild / scalaVersion := &quot;2.13.8&quot;
 [info] Defining ThisBuild / scalaVersion
 </code></pre><h3 id="Comprobar+la+entrada+%3A">Comprobar la entrada <code>scalaVersion</code>:<a href="#Comprobar+la+entrada+%3A" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:foo-build&gt; scalaVersion
-[info] 2.13.6
+[info] 2.13.8
 </code></pre><h3 id="Guardar+la+sesi%C3%B3n+actual+en+build.sbt">Guardar la sesión actual en build.sbt<a href="#Guardar+la+sesi%C3%B3n+actual+en+build.sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Podemos guardar la configuración temporal utilizando <code>session save</code>.
 </p><pre><code class="">sbt:foo-build&gt; session save
 [info] Reapplying settings...
 </code></pre><p>El fichero <code>build.sbt</code> ahora debería de contener:
-</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.6&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.8&quot;
 </code></pre><h3 id="Dar+un+nombre+a+tu+proyecto">Dar un nombre a tu proyecto<a href="#Dar+un+nombre+a+tu+proyecto" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Utilizando un editor, modifica <code>build.sbt</code> con el siguiente contenido:
 </p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.6&quot;
 ThisBuild / organization := &quot;com.example&quot;

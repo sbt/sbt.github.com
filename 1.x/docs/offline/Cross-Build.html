@@ -68,7 +68,7 @@ is capable of cross building across Scala versions and different platforms in pa
 </p><h3 id="Cross+building+a+project+statefully">Cross building a project statefully<a href="#Cross+building+a+project+statefully" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Define the versions of Scala to build against in the
 <code>crossScalaVersions</code> setting. Versions of Scala 2.10.2 or later are
 allowed. For example, in a <code>.sbt</code> build definition:
-</p><pre><code class="prettyprint lang-scala">lazy val scala212 = &quot;2.12.15&quot;
+</p><pre><code class="prettyprint lang-scala">lazy val scala212 = &quot;2.12.16&quot;
 lazy val scala211 = &quot;2.11.12&quot;
 lazy val supportedScalaVersions = List(scala212, scala211)
 
@@ -135,7 +135,7 @@ and the <code>_&lt;scala-binary-version&gt;</code> publishing convention. This m
 </p><h4 id="Cross+building+with+a+Java+project">Cross building with a Java project<a href="#Cross+building+with+a+Java+project" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>A special care must be taken when cross building involves pure Java project.
 Let’s say in the following example, <code>network</code> is a Java project, and <code>core</code> is
 a Scala project that depends on <code>network</code>.
-</p><pre><code class="prettyprint lang-scala">lazy val scala212 = &quot;2.12.15&quot;
+</p><pre><code class="prettyprint lang-scala">lazy val scala212 = &quot;2.12.16&quot;
 lazy val scala211 = &quot;2.11.12&quot;
 lazy val supportedScalaVersions = List(scala212, scala211)
 
@@ -174,8 +174,8 @@ lazy val core = (project in file(&quot;core&quot;))
 </li></ol><h4 id="Switching+Scala+version">Switching Scala version<a href="#Switching+Scala+version" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>You can use <code>++ &lt;version&gt; [command]</code> to temporarily switch the Scala version currently
 being used to build the subprojects given that <code>&lt;version&gt;</code> is listed in their <code>crossScalaVersions</code>.
 </p><p>For example:
-</p><pre><code class="">&gt; ++ 2.12.15
-[info] Setting version to 2.12.15
+</p><pre><code class="">&gt; ++ 2.12.16
+[info] Setting version to 2.12.16
 &gt; ++ 2.11.12
 [info] Setting version to 2.11.12
 &gt; compile
@@ -188,10 +188,10 @@ on the subprojects that supports the given <code>&lt;version&gt;</code>.
 </p><pre><code class="">&gt; ++ 2.11.12 -v test
 [info] Setting Scala version to 2.11.12 on 1 projects.
 [info] Switching Scala version on:
-[info]     core (2.12.15, 2.11.12)
+[info]     core (2.12.16, 2.11.12)
 [info] Excluding projects:
 [info]   * root ()
-[info]     network (2.12.15)
+[info]     network (2.12.16)
 [info] Reapplying settings...
 [info] Set current project to core (in build file:/Users/xxx/hello/)
 </code></pre><p>Sometimes you might want to force the Scala version switch regardless of the <code>crossScalaVersions</code> values.
@@ -201,8 +201,8 @@ You can use <code>++ &lt;version&gt;!</code> with exclamation mark for that.
 [info] Forcing Scala version to 2.13.0-M5 on all projects.
 [info] Switching Scala version on:
 [info]   * root ()
-[info]     core (2.12.15, 2.11.12)
-[info]     network (2.12.15)
+[info]     core (2.12.16, 2.11.12)
+[info]     network (2.12.16)
 </code></pre><h4 id="Cross+publishing">Cross publishing<a href="#Cross+publishing" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The ultimate purpose of <code>+</code> is to cross-publish your
 project. That is, by doing:
 </p><pre><code class="">&gt; + publishSigned

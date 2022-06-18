@@ -114,10 +114,10 @@ as well.
 <code>organization % moduleName % version</code> (the difference is the double <code>%%</code> after
 the <code>organization</code>), sbt will add your project’s binary Scala version to the artifact
 name. This is just a shortcut. You could write this without the <code>%%</code>:
-</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-tools&quot; % &quot;scala-stm_2.11&quot; % &quot;0.3&quot;
-</code></pre><p>Assuming the <code>scalaVersion</code> for your build is <code>2.11.1</code>, the following is
-identical (note the double <code>%%</code> after <code>&quot;org.scala-tools&quot;</code>):
-</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-tools&quot; %% &quot;scala-stm&quot; % &quot;0.3&quot;
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-stm&quot; % &quot;scala-stm_2.13&quot; % &quot;0.9.1&quot;
+</code></pre><p>Assuming the <code>scalaVersion</code> for your build is <code>2.13.8</code>, the following is
+identical (note the double <code>%%</code> after <code>&quot;org.scala-stm&quot;</code>):
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-stm&quot; %% &quot;scala-stm&quot; % &quot;0.9.1&quot;
 </code></pre><p>The idea is that many dependencies are compiled for multiple Scala
 versions, and you’d like to get the one that matches your project
 to ensure binary compatibility.

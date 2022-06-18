@@ -404,7 +404,7 @@ Hello
 ### Establecer `ThisBuild / scalaVersion` desde el shell de sbt
 
 ```
-sbt:foo-build> set ThisBuild / scalaVersion := "2.13.6"
+sbt:foo-build> set ThisBuild / scalaVersion := "2.13.8"
 [info] Defining ThisBuild / scalaVersion
 ```
 
@@ -412,7 +412,7 @@ sbt:foo-build> set ThisBuild / scalaVersion := "2.13.6"
 
 ```
 sbt:foo-build> scalaVersion
-[info] 2.13.6
+[info] 2.13.8
 ```
 
 ### Guardar la sesión actual en build.sbt
@@ -427,7 +427,7 @@ sbt:foo-build> session save
 El fichero `build.sbt` ahora debería de contener:
 
 ```scala
-ThisBuild / scalaVersion := "2.13.6"
+ThisBuild / scalaVersion := "2.13.8"
 ```
 
 ### Dar un nombre a tu proyecto
@@ -1387,7 +1387,7 @@ utilizando un *DSL de build.sbt*
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.15"
+ThisBuild / scalaVersion := "2.12.16"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -1577,7 +1577,7 @@ el "estilo plano".
 
 ```scala
 ThisBuild / version := "1.0"
-ThisBuild / scalaVersion := "2.12.15"
+ThisBuild / scalaVersion := "2.12.16"
 ```
 
 Esta sintaxis es la recomendada para configuraciones con ámbito `ThisBuild` plugins añadidos.
@@ -1593,7 +1593,7 @@ gestionadas, que en `build.sbt` tienen este aspecto:
 val derby = "org.apache.derby" % "derby" % "10.4.1.3"
 
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.15"
+ThisBuild / scalaVersion := "2.12.16"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -1673,7 +1673,7 @@ predeterminadas en el ámbito de subproyectos. (Ver [Ámbitos][Scopes])
 ```scala
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.15"
+ThisBuild / scalaVersion := "2.12.16"
 
 lazy val core = (project in file("core"))
   .settings(
@@ -1988,7 +1988,7 @@ Mira el siguiente ejemplo:
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.15"
+ThisBuild / scalaVersion := "2.12.16"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -2025,7 +2025,7 @@ Aquí hay otro ejemplo:
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.15"
+ThisBuild / scalaVersion := "2.12.16"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -2164,7 +2164,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "Hello",
     organization := "com.example",
-    scalaVersion := "2.12.15",
+    scalaVersion := "2.12.16",
     version := "0.1.0-SNAPSHOT",
     scalacOptions := List("-encoding", "utf8", "-Xfatal-warnings", "-deprecation", "-unchecked"),
     scalacOptions := {
@@ -2747,7 +2747,7 @@ construcción para claves usadas con frecuencia tales como `version`,
 
 ```scala
 ThisBuild / organization := "com.example",
-ThisBuild / scalaVersion := "2.12.15",
+ThisBuild / scalaVersion := "2.12.16",
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -2994,7 +2994,7 @@ lazy val projA = (project in file("a"))
 ¿Cuál es el valor de `projA / name`?
 
 1. `"foo-2.11.11"`
-2. `"foo-2.12.15"`
+2. `"foo-2.12.16"`
 3. ¿otra cosa?
 
 La respuesta es `"foo-2.11.11"`.
@@ -3458,14 +3458,14 @@ Si usas `groupID %% artifactID % revision` en lugar de
 del artefacto. Esto simplemente es un atajo. Podrías escribir esto sin el `%%`:
 
 ```scala
-libraryDependencies += "org.scala-tools" % "scala-stm_2.11" % "0.3"
+libraryDependencies += "org.scala-stm" % "scala-stm_2.13" % "0.9.1"
 ```
 
-Si asumimos que `scalaVersion` para tu construcción es `2.11.1` lo siguiente es
-idéntico a lo anterior (fíjate en el doble `%%` tras `"org.scala-tools"`):
+Si asumimos que `scalaVersion` para tu construcción es `2.13.8` lo siguiente es
+idéntico a lo anterior (fíjate en el doble `%%` tras `"org.scala-stm"`):
 
 ```scala
-libraryDependencies += "org.scala-tools" %% "scala-stm" % "0.3"
+libraryDependencies += "org.scala-stm" %% "scala-stm" % "0.9.1"
 ```
 
 La idea es que muchas dependencias son compiladas para múltiples versiones de
@@ -3783,7 +3783,7 @@ val sampleIntTask = taskKey[Int]("A sample int task.")
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.15"
+ThisBuild / scalaVersion := "2.12.16"
 
 lazy val library = (project in file("library"))
   .settings(
@@ -3845,7 +3845,7 @@ val sampleStringTask = taskKey[String]("A sample string task.")
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.15"
+ThisBuild / scalaVersion := "2.12.16"
 
 lazy val library = (project in file("library"))
   .settings(
@@ -4104,12 +4104,12 @@ import sbt._
 
 object Dependencies {
   // Versions
-  lazy val akkaVersion = "2.3.8"
+  lazy val akkaVersion = "2.6.19"
 
   // Libraries
   val akkaActor = "com.typesafe.akka" %% "akka-actor" % akkaVersion
   val akkaCluster = "com.typesafe.akka" %% "akka-cluster" % akkaVersion
-  val specs2core = "org.specs2" %% "specs2-core" % "2.4.17"
+  val specs2core = "org.specs2" %% "specs2-core" % "4.16.0"
 
   // Projects
   val backendDeps =
@@ -4126,7 +4126,7 @@ import Dependencies._
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.15"
+ThisBuild / scalaVersion := "2.12.16"
 
 lazy val backend = (project in file("backend"))
   .settings(

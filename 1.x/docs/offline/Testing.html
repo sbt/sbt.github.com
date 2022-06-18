@@ -55,7 +55,7 @@ methods of <code>java.lang.Class</code> or <code>java.lang.ClassLoader</code>.
 common test interface and only need to be added to the classpath to work
 with sbt. For example, ScalaCheck may be used by declaring it as a
 <a href="../tutorial/Library-Dependencies.html">managed dependency</a>:
-</p><pre><code class="prettyprint lang-scala">lazy val scalacheck = &quot;org.scalacheck&quot; %% &quot;scalacheck&quot; % &quot;1.13.4&quot;
+</p><pre><code class="prettyprint lang-scala">lazy val scalacheck = &quot;org.scalacheck&quot; %% &quot;scalacheck&quot; % &quot;1.16.0&quot;
 libraryDependencies += scalacheck % Test
 </code></pre><p><code>Test</code> is the <a href="Library-Management.html#ivy-configurations">configuration</a> and means that ScalaCheck will
 only be on the test classpath and it isn’t needed by the main sources.
@@ -173,10 +173,10 @@ to enable integration tests. The second shows how to define a customized
 test configuration. This allows you to define multiple types of tests
 per project.
 </p><h4 id="Integration+Tests">Integration Tests<a href="#Integration+Tests" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The following full build configuration demonstrates integration tests.
-</p><pre><code class="prettyprint lang-scala">lazy val scalatest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.0.5&quot;
+</p><pre><code class="prettyprint lang-scala">lazy val scalatest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.2.12&quot;
 
 ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.15&quot;
+ThisBuild / scalaVersion := &quot;2.12.16&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -219,11 +219,11 @@ configuration:
 the definitive integration test options:
 </p><pre><code class="prettyprint lang-scala">IntegrationTest / testOptions := Seq(...)
 </code></pre><h4 id="Custom+test+configuration">Custom test configuration<a href="#Custom+test+configuration" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The previous example may be generalized to a custom test configuration.
-</p><pre><code class="prettyprint lang-scala">lazy val scalatest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.0.5&quot;
+</p><pre><code class="prettyprint lang-scala">lazy val scalatest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.2.12&quot;
 lazy val FunTest = config(&quot;fun&quot;) extend(Test)
 
 ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.15&quot;
+ThisBuild / scalaVersion := &quot;2.12.16&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -254,11 +254,11 @@ We could have done it this way for integration tests as well. In fact,
 compilations) is to share sources. In this approach, the sources are
 compiled together using the same classpath and are packaged together.
 However, different tests are run depending on the configuration.
-</p><pre><code class="prettyprint lang-scala">lazy val scalatest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.0.5&quot;
+</p><pre><code class="prettyprint lang-scala">lazy val scalatest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.2.12&quot;
 lazy val FunTest = config(&quot;fun&quot;) extend(Test)
 
 ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.15&quot;
+ThisBuild / scalaVersion := &quot;2.12.16&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 def itFilter(name: String): Boolean = name endsWith &quot;ITest&quot;

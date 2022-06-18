@@ -68,7 +68,7 @@
 </p><h3 id="%E5%A6%82%E4%BD%95%E5%9C%A8+build.sbt+%E4%B8%AD%E5%AE%9A%E4%B9%89%E8%AE%BE%E7%BD%AE">如何在 build.sbt 中定义设置<a href="#%E5%A6%82%E4%BD%95%E5%9C%A8+build.sbt+%E4%B8%AD%E5%AE%9A%E4%B9%89%E8%AE%BE%E7%BD%AE" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> 定义了一个 <code>Project</code>，它持有一个名为<code>settings</code>的scala表达式列表。
 </p><p>下面是一个例子：
 </p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.15&quot;
+ThisBuild / scalaVersion := &quot;2.12.16&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -137,12 +137,12 @@ import Keys._
 </p><h3 id="bare+.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">bare .sbt 构建定义<a href="#bare+.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>bare <code>.sbt</code> 构建定义由一个 <code>Setting[_]</code> 表达式的列表组成，而不是定义 <code>Project</code>。
 </p><pre><code class="prettyprint lang-scala">name := &quot;hello&quot;
 version := &quot;1.0&quot;
-scalaVersion := &quot;2.12.15&quot;
+scalaVersion := &quot;2.12.16&quot;
 </code></pre><h3 id="%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96%E5%BA%93">添加依赖库<a href="#%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96%E5%BA%93" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>有两种方式添加第三方的依赖。一种是将 jar 文件 放入 <code>lib/</code>（非托管的依赖）中，另一种是在 <code>build.sbt</code> 中添加托管的依赖，像这样：
 </p><pre><code class="prettyprint lang-scala">val derby = &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot;
 
 ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.15&quot;
+ThisBuild / scalaVersion := &quot;2.12.16&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
