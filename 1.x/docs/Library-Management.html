@@ -132,7 +132,7 @@ specify repositories in addition to the usual defaults, configure
 the default repositories,
 </p><pre><code class="prettyprint lang-scala">resolvers += &quot;Sonatype OSS Snapshots&quot; at &quot;https://oss.sonatype.org/content/repositories/snapshots&quot;
 </code></pre><p>To use the local repository, but not the Maven Central repository:
-</p><pre><code class="prettyprint lang-scala">externalResolvers := Resolver.combineDefaultResolvers(resolvers.value, mavenCentral = false)
+</p><pre><code class="prettyprint lang-scala">externalResolvers := Resolver.combineDefaultResolvers(resolvers.value.toVector, mavenCentral = false)
 </code></pre><h5 id="Override+all+resolvers+for+all+builds">Override all resolvers for all builds<a href="#Override+all+resolvers+for+all+builds" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p>The repositories used to retrieve sbt, Scala, plugins, and application
 dependencies can be configured globally and declared to override the
 resolvers configured in a build or plugin definition. There are two
