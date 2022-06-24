@@ -291,9 +291,9 @@ object ObfuscatePlugin extends AutoPlugin {
     // default values for the tasks and settings
     lazy val baseObfuscateSettings: Seq[Def.Setting[_]] = Seq(
       obfuscate := {
-        Obfuscate(sources.value, (obfuscate / obfuscateLiterals).value)
+        Obfuscate(sources.value, (obfuscateLiterals in obfuscate).value)
       },
-      obfuscate / obfuscateLiterals := false
+      obfuscateLiterals in obfuscate := false
     )
   }
 
@@ -316,7 +316,7 @@ object Obfuscate {
   }
 }
 </code></pre><h4 id="Usage+example">Usage example<a href="#Usage+example" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>A build definition that uses the plugin might look like. <code>obfuscate.sbt</code>:
-</p><pre><code class="prettyprint lang-scala">obfuscate / obfuscateLiterals := true
+</p><pre><code class="prettyprint lang-scala">obfuscateLiterals in obfuscate := true
 </code></pre><h4 id="Global+plugins+example">Global plugins example<a href="#Global+plugins+example" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The simplest global plugin definition is declaring a library or plugin
 in <code>$HOME/.sbt/1.0/plugins/build.sbt</code>:
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.example&quot; %% &quot;example-plugin&quot; % &quot;0.1&quot;

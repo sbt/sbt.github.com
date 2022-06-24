@@ -126,9 +126,9 @@ fullRunTask(myRunTask, Test, &quot;foo.Foo&quot;, &quot;arg1&quot;, &quot;arg2&q
 <code>Compile</code>, to use that configuration’s classpath.
 </p><p>This run task can be configured individually by specifying the task key
 in the scope. For example:
-</p><pre><code class="prettyprint lang-scala">myRunTask / fork := true
+</p><pre><code class="prettyprint lang-scala">fork in myRunTask := true
 
-myRunTask / javaOptions += &quot;-Xmx6144m&quot;
+javaOptions in myRunTask += &quot;-Xmx6144m&quot;
 </code></pre><h4 id="How+should+I+express+a+dependency+on+an+outside+tool+such+as+proguard%3F">How should I express a dependency on an outside tool such as proguard?<a href="#How+should+I+express+a+dependency+on+an+outside+tool+such+as+proguard%3F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Tool dependencies are used to implement a task and are not needed by
 project source code. These dependencies can be declared in their own
 configuration and classpaths. These are the steps:

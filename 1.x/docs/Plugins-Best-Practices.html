@@ -147,7 +147,7 @@ object WhateverPlugin extends sbt.AutoPlugin {
   }
   import autoImport._
   override lazy val projectSettings = Seq(
-    Whatever / specificKey := &quot;another opinion&quot; // DON'T DO THIS
+    specificKey in Whatever := &quot;another opinion&quot; // DON'T DO THIS
   )
 }
 </code></pre><h4 id="When+to+define+your+own+configuration">When to define your own configuration<a href="#When+to+define+your+own+configuration" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>If your plugin introduces either a new set of source code or
@@ -210,8 +210,8 @@ object ObfuscatePlugin extends sbt.AutoPlugin {
   }
   import autoImport._
   lazy val baseObfuscateSettings: Seq[Def.Setting[_]] = Seq(
-    obfuscate := Obfuscate((obfuscate / sources).value),
-    obfuscate / sources := sources.value
+    obfuscate := Obfuscate((sources in obfuscate).value),
+    sources in obfuscate := sources.value
   )
   override lazy val projectSettings = inConfig(Compile)(baseObfuscateSettings)
 }
@@ -284,10 +284,10 @@ fail at load time.
 in your plugin. In this instance, you can scope your settings using the
 task itself. See the <code>baseObfuscateSettings</code>:
 </p><pre><code class="prettyprint lang-scala">  lazy val baseObfuscateSettings: Seq[Def.Setting[_]] = Seq(
-    obfuscate := Obfuscate((obfuscate / sources).value),
-    obfuscate / sources := sources.value
+    obfuscate := Obfuscate((sources in obfuscate).value),
+    sources in obfuscate := sources.value
   )
-</code></pre><p>In the above example, <code>obfuscate / sources</code> is scoped under the main
+</code></pre><p>In the above example, <code>sources in obfuscate</code> is scoped under the main
 task, <code>obfuscate</code>.
 </p><h4 id="Rewiring+existing+keys+in">Rewiring existing keys in <code>globalSettings</code><a href="#Rewiring+existing+keys+in" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>There may be times when you need to rewire an existing key in <code>globalSettings</code>.
 The general rule is <em>be careful what you touch</em>.

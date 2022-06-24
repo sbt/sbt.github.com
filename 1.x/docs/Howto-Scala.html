@@ -76,28 +76,28 @@ test dependencies and compiled test sources on the classpath, run
 </p><a name="consoleProject"></a><h3 id="Enter+the+Scala+REPL+with+plugins+and+the+build+definition+on+the+classpath">Enter the Scala REPL with plugins and the build definition on the classpath<a href="#Enter+the+Scala+REPL+with+plugins+and+the+build+definition+on+the+classpath" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">&gt; consoleProject
 </code></pre><p>For details, see the <a href="Console-Project.html">consoleProject</a>
 page.
-</p><a name="initial"></a><h3 id="Define+the+initial+commands+evaluated+when+entering+the+Scala+REPL">Define the initial commands evaluated when entering the Scala REPL<a href="#Define+the+initial+commands+evaluated+when+entering+the+Scala+REPL" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Set <code>console / initialCommands</code> to set the initial statements to
+</p><a name="initial"></a><h3 id="Define+the+initial+commands+evaluated+when+entering+the+Scala+REPL">Define the initial commands evaluated when entering the Scala REPL<a href="#Define+the+initial+commands+evaluated+when+entering+the+Scala+REPL" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Set <code>initialCommands in console</code> to set the initial statements to
 evaluate when <code>console</code> and <code>consoleQuick</code> are run. To configure
-<code>consoleQuick</code> separately, use <code>consoleQuick / initialCommands</code>. For
+<code>consoleQuick</code> separately, use <code>initialCommands in consoleQuick</code>. For
 example,
-</p><pre><code class="prettyprint lang-scala">console / initialCommands := &quot;&quot;&quot;println(&quot;Hello from console&quot;)&quot;&quot;&quot;
+</p><pre><code class="prettyprint lang-scala">initialCommands in console := &quot;&quot;&quot;println(&quot;Hello from console&quot;)&quot;&quot;&quot;
 
-consoleQuick / initialCommands := &quot;&quot;&quot;println(&quot;Hello from consoleQuick&quot;)&quot;&quot;&quot;
+initialCommands in consoleQuick := &quot;&quot;&quot;println(&quot;Hello from consoleQuick&quot;)&quot;&quot;&quot;
 </code></pre><p>The <code>consoleProject</code> command is configured separately by
-<code>consoleProject / initialCommands</code>. It does not use the value from
-<code>console / initialCommands</code> by default. For example,
-</p><pre><code class="prettyprint lang-scala">consoleProject / initialCommands := &quot;&quot;&quot;println(&quot;Hello from consoleProject&quot;)&quot;&quot;&quot;
-</code></pre><a name="cleanup"></a><h3 id="Define+the+commands+evaluated+when+exiting+the+Scala+REPL">Define the commands evaluated when exiting the Scala REPL<a href="#Define+the+commands+evaluated+when+exiting+the+Scala+REPL" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Set <code>console / cleanupCommands</code> to set the statements to evaluate after
+<code>initialCommands in consoleProject</code>. It does not use the value from
+<code>initialCommands in console</code> by default. For example,
+</p><pre><code class="prettyprint lang-scala">initialCommands in consoleProject := &quot;&quot;&quot;println(&quot;Hello from consoleProject&quot;)&quot;&quot;&quot;
+</code></pre><a name="cleanup"></a><h3 id="Define+the+commands+evaluated+when+exiting+the+Scala+REPL">Define the commands evaluated when exiting the Scala REPL<a href="#Define+the+commands+evaluated+when+exiting+the+Scala+REPL" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Set <code>cleanupCommands in console</code> to set the statements to evaluate after
 exiting the Scala REPL started by <code>console</code> and <code>consoleQuick</code>. To
 configure <code>consoleQuick</code> separately, use
-<code>consoleQuick / cleanupCommands</code>. For example,
-</p><pre><code class="prettyprint lang-scala">console / cleanupCommands := &quot;&quot;&quot;println(&quot;Bye from console&quot;)&quot;&quot;&quot;
+<code>cleanupCommands in consoleQuick</code>. For example,
+</p><pre><code class="prettyprint lang-scala">cleanupCommands in console := &quot;&quot;&quot;println(&quot;Bye from console&quot;)&quot;&quot;&quot;
 
-consoleQuick / cleanupCommands := &quot;&quot;&quot;println(&quot;Bye from consoleQuick&quot;)&quot;&quot;&quot;
+cleanupCommands in consoleQuick := &quot;&quot;&quot;println(&quot;Bye from consoleQuick&quot;)&quot;&quot;&quot;
 </code></pre><p>The <code>consoleProject</code> command is configured separately by
-<code>consoleProject / cleanupCommands</code>. It does not use the value from
-<code>console / cleanupCommands</code> by default. For example,
-</p><pre><code class="prettyprint lang-scala">consoleProject / cleanupCommands := &quot;&quot;&quot;println(&quot;Bye from consoleProject&quot;)&quot;&quot;&quot;
+<code>cleanupCommands in consoleProject</code>. It does not use the value from
+<code>cleanupCommands in console</code> by default. For example,
+</p><pre><code class="prettyprint lang-scala">cleanupCommands in consoleProject := &quot;&quot;&quot;println(&quot;Bye from consoleProject&quot;)&quot;&quot;&quot;
 </code></pre><a name="embed"></a><h3 id="Use+the+Scala+REPL+from+project+code">Use the Scala REPL from project code<a href="#Use+the+Scala+REPL+from+project+code" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt runs tests in the same JVM as sbt itself and Scala classes are not
 in the same class loader as the application classes. This is also the
 case in <code>console</code> and when <code>run</code> is not forked. Therefore, when using

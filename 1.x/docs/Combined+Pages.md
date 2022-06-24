@@ -4405,9 +4405,9 @@ This run task can be configured individually by specifying the task key
 in the scope. For example:
 
 ```scala
-myRunTask / fork := true
+fork in myRunTask := true
 
-myRunTask / javaOptions += "-Xmx6144m"
+javaOptions in myRunTask += "-Xmx6144m"
 ```
 
 #### How should I express a dependency on an outside tool such as proguard?
@@ -13603,11 +13603,11 @@ Then, we can disable parallel execution in just that configuration
 using:
 
 ```scala
-Serial / parallelExecution := false
+parallelExecution in Serial := false
 ```
 
 The tests to run in parallel would be run with `test` and the ones to
-run in serial would be run with `Serial/test`.
+run in serial would be run with `serial:test`.
 
 ### JUnit
 
@@ -16561,9 +16561,9 @@ myTask := {
 You can scope logging settings by the specific task's scope:
 
 ```scala
-myTask / logLevel := Level.Debug
+logLevel in myTask := Level.Debug
 
-myTask / traceLevel := 5
+traceLevel in myTask := 5
 ```
 
 To obtain the last logging output from a task, use the `last` command:
@@ -17889,7 +17889,7 @@ different input applied. For example:
 ```scala
 lazy val runFixed2 = taskKey[Unit]("A task that hard codes the values to `run`")
 
-run / fork := true
+fork in run := true
 
 runFixed2 := {
    val x = (Compile / run).toTask(" blue green").value
@@ -19239,9 +19239,9 @@ object ObfuscatePlugin extends AutoPlugin {
     // default values for the tasks and settings
     lazy val baseObfuscateSettings: Seq[Def.Setting[_]] = Seq(
       obfuscate := {
-        Obfuscate(sources.value, (obfuscate / obfuscateLiterals).value)
+        Obfuscate(sources.value, (obfuscateLiterals in obfuscate).value)
       },
-      obfuscate / obfuscateLiterals := false
+      obfuscateLiterals in obfuscate := false
     )
   }
 
@@ -19270,7 +19270,7 @@ object Obfuscate {
 A build definition that uses the plugin might look like. `obfuscate.sbt`:
 
 ```scala
-obfuscate / obfuscateLiterals := true
+obfuscateLiterals in obfuscate := true
 ```
 
 #### Global plugins example
@@ -19608,7 +19608,7 @@ object WhateverPlugin extends sbt.AutoPlugin {
   }
   import autoImport._
   override lazy val projectSettings = Seq(
-    Whatever / specificKey := "another opinion" // DON'T DO THIS
+    specificKey in Whatever := "another opinion" // DON'T DO THIS
   )
 }
 ```
@@ -19695,8 +19695,8 @@ object ObfuscatePlugin extends sbt.AutoPlugin {
   }
   import autoImport._
   lazy val baseObfuscateSettings: Seq[Def.Setting[_]] = Seq(
-    obfuscate := Obfuscate((obfuscate / sources).value),
-    obfuscate / sources := sources.value
+    obfuscate := Obfuscate((sources in obfuscate).value),
+    sources in obfuscate := sources.value
   )
   override lazy val projectSettings = inConfig(Compile)(baseObfuscateSettings)
 }
@@ -19794,12 +19794,12 @@ task itself. See the `baseObfuscateSettings`:
 
 ```scala
   lazy val baseObfuscateSettings: Seq[Def.Setting[_]] = Seq(
-    obfuscate := Obfuscate((obfuscate / sources).value),
-    obfuscate / sources := sources.value
+    obfuscate := Obfuscate((sources in obfuscate).value),
+    sources in obfuscate := sources.value
   )
 ```
 
-In the above example, `obfuscate / sources` is scoped under the main
+In the above example, `sources in obfuscate` is scoped under the main
 task, `obfuscate`.
 
 #### Rewiring existing keys in `globalSettings`
@@ -20513,7 +20513,7 @@ lazy val root = (project in file("."))
   .settings(
     version := "0.1",
     scalaVersion := "2.10.6",
-    assembly / assemblyJarName := "foo.jar"
+    assemblyJarName in assembly := "foo.jar"
   )
 ```
 
@@ -20602,7 +20602,7 @@ lazy val root = (project in file("."))
   .settings(
     version := "0.1",
     scalaVersion := "2.10.6",
-    assembly / assemblyJarName := "foo.jar",
+    assemblyJarName in assembly := "foo.jar",
     TaskKey[Unit]("check") := {
       val process = Process("java", Seq("-jar", (crossTarget.value / "foo.jar").toString))
       val out = (process!!)
@@ -22573,46 +22573,46 @@ page.
 
 ### Define the initial commands evaluated when entering the Scala REPL
 
-Set `console / initialCommands` to set the initial statements to
+Set `initialCommands in console` to set the initial statements to
 evaluate when `console` and `consoleQuick` are run. To configure
-`consoleQuick` separately, use `consoleQuick / initialCommands`. For
+`consoleQuick` separately, use `initialCommands in consoleQuick`. For
 example,
 
 ```scala
-console / initialCommands := """println("Hello from console")"""
+initialCommands in console := """println("Hello from console")"""
 
-consoleQuick / initialCommands := """println("Hello from consoleQuick")"""
+initialCommands in consoleQuick := """println("Hello from consoleQuick")"""
 ```
 
 The `consoleProject` command is configured separately by
-`consoleProject / initialCommands`. It does not use the value from
-`console / initialCommands` by default. For example,
+`initialCommands in consoleProject`. It does not use the value from
+`initialCommands in console` by default. For example,
 
 ```scala
-consoleProject / initialCommands := """println("Hello from consoleProject")"""
+initialCommands in consoleProject := """println("Hello from consoleProject")"""
 ```
 
 <a name="cleanup"></a>
 
 ### Define the commands evaluated when exiting the Scala REPL
 
-Set `console / cleanupCommands` to set the statements to evaluate after
+Set `cleanupCommands in console` to set the statements to evaluate after
 exiting the Scala REPL started by `console` and `consoleQuick`. To
 configure `consoleQuick` separately, use
-`consoleQuick / cleanupCommands`. For example,
+`cleanupCommands in consoleQuick`. For example,
 
 ```scala
-console / cleanupCommands := """println("Bye from console")"""
+cleanupCommands in console := """println("Bye from console")"""
 
-consoleQuick / cleanupCommands := """println("Bye from consoleQuick")"""
+cleanupCommands in consoleQuick := """println("Bye from consoleQuick")"""
 ```
 
 The `consoleProject` command is configured separately by
-`consoleProject / cleanupCommands`. It does not use the value from
-`console / cleanupCommands` by default. For example,
+`cleanupCommands in consoleProject`. It does not use the value from
+`cleanupCommands in console` by default. For example,
 
 ```scala
-consoleProject / cleanupCommands := """println("Bye from consoleProject")"""
+cleanupCommands in consoleProject := """println("Bye from consoleProject")"""
 ```
 
 <a name="embed"></a>

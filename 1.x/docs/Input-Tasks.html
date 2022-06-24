@@ -247,7 +247,7 @@ the same as the original <code>InputTask</code> (in this case, <code>run</code>)
 different input applied. For example:
 </p><pre><code class="prettyprint lang-scala">lazy val runFixed2 = taskKey[Unit](&quot;A task that hard codes the values to `run`&quot;)
 
-run / fork := true
+fork in run := true
 
 runFixed2 := {
    val x = (Compile / run).toTask(&quot; blue green&quot;).value
