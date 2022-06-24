@@ -67,49 +67,6 @@ SBT is just one of them. This is discussed for instance in issues
 #163 and #136. The reason is
 explained
 <a href="https://issues.apache.org/jira/browse/GROOVY-1627">here</a>.
-</p><h3 id="sbt%E2%80%99s+Solutions">sbt’s Solutions<a href="#sbt%E2%80%99s+Solutions" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="System.exit">System.exit<a href="#System.exit" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>User code is run with a custom <code>SecurityManager</code> that throws a custom
-<code>SecurityException</code> when <code>System.exit</code> is called. This exception is
-caught by sbt. sbt then disposes of all top-level windows, interrupts
-(not stops) all user-created threads, and handles the exit code. If the
-exit code is nonzero, <code>run</code> and <code>console</code> complete unsuccessfully. If
-the exit code is zero, they complete normally.
-</p><h4 id="Threads">Threads<a href="#Threads" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>sbt makes a list of all threads running before executing user code.
-After the user code returns, sbt can then determine the threads created
-by the user code. For each user-created thread, sbt replaces the
-uncaught exception handler with a custom one that handles the custom
-<code>SecurityException</code> thrown by calls to <code>System.exit</code> and delegates to
-the original handler for everything else. sbt then waits for each
-created thread to exit or for <code>System.exit</code> to be called. sbt handles a
-call to <code>System.exit</code> as described above.
-</p><p>A user-created thread is one that is not in the <code>system</code> thread group
-and is not an <code>AWT</code> implementation thread (e.g. <code>AWT-XAWT</code>,
-<code>AWT-Windows</code>). User-created threads include the <code>AWT-EventQueue-*</code>
-thread(s).
-</p><h4 id="User+Code">User Code<a href="#User+Code" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Given the above, when can user code be run with the <code>run</code> and <code>console</code>
-actions?
-</p><p>The user code cannot rely on shutdown hooks and at least one of the
-following situations must apply for user code to run in the same JVM:
-</p><ol><li>User code creates no threads.
-</li><li>User code creates a GUI and no other threads.
-</li><li>The program ends when user-created threads terminate on their own.
-</li><li><code>System.exit</code> is used to end the program and user-created threads
-terminate when interrupted.
-</li><li>No deserialization is done, or the deserialization code
-ensures that the right class loader is used, as in
-<a href="https://github.com/NetLogo/NetLogo/blob/5.x/src/main/org/nlogo/util/ClassLoaderObjectInputStream.scala">https://github.com/NetLogo/NetLogo/blob/5.x/src/main/org/nlogo/util/ClassLoaderObjectInputStream.scala</a>
-or
-<a href="https://github.com/scala/scala/blob/2.11.x/src/actors/scala/actors/remote/JavaSerializer.scala#L20">https://github.com/scala/scala/blob/2.11.x/src/actors/scala/actors/remote/JavaSerializer.scala#L20</a>.
-</li></ol><p>The requirements on threading and shutdown hooks are required because
-the JVM does not actually shut down. So, shutdown hooks cannot be run
-and threads are not terminated unless they stop when interrupted. If
-these requirements are not met, code must run in a
-<a href="Forking.html">forked jvm</a>.
-</p><p>The feature of allowing <code>System.exit</code> and multiple threads to be used
-cannot completely emulate the situation of running in a separate JVM and
-is intended for development. Program execution should be checked in a
-<a href="Forking.html">forked jvm</a> when using multiple threads or <code>System.exit</code>.
-</p><p>As of sbt 0.13.1, multiple <code>run</code> instances can be managed. There can
-only be one application that uses AWT at a time, however.
 </p><div class="bottom nav">
                 <div class="row">
                   <div class="col-md-auto">

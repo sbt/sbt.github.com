@@ -291,9 +291,9 @@ Let’s call the configuration <code>serial</code>:
 </p><pre><code class="prettyprint lang-scala">lazy val Serial = config(&quot;serial&quot;) extend(Test)
 </code></pre><p>Then, we can disable parallel execution in just that configuration
 using:
-</p><pre><code class="prettyprint lang-scala">parallelExecution in Serial := false
+</p><pre><code class="prettyprint lang-scala">Serial / parallelExecution := false
 </code></pre><p>The tests to run in parallel would be run with <code>test</code> and the ones to
-run in serial would be run with <code>serial:test</code>.
+run in serial would be run with <code>Serial/test</code>.
 </p><h3 id="JUnit">JUnit<a href="#JUnit" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Support for JUnit5 is provided by
 <a href="https://github.com/sbt/sbt-jupiter-interface">sbt-jupiter-interface</a>. To add
 JUnit Jupiter support into your project, add the jupiter-interface dependency in

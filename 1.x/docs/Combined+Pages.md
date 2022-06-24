@@ -4405,9 +4405,9 @@ This run task can be configured individually by specifying the task key
 in the scope. For example:
 
 ```scala
-fork in myRunTask := true
+myRunTask / fork := true
 
-javaOptions in myRunTask += "-Xmx6144m"
+myRunTask / javaOptions += "-Xmx6144m"
 ```
 
 #### How should I express a dependency on an outside tool such as proguard?
@@ -13161,66 +13161,6 @@ SBT is just one of them. This is discussed for instance in issues
 explained
 [here](https://issues.apache.org/jira/browse/GROOVY-1627).
 
-### sbt's Solutions
-
-#### System.exit
-
-User code is run with a custom `SecurityManager` that throws a custom
-`SecurityException` when `System.exit` is called. This exception is
-caught by sbt. sbt then disposes of all top-level windows, interrupts
-(not stops) all user-created threads, and handles the exit code. If the
-exit code is nonzero, `run` and `console` complete unsuccessfully. If
-the exit code is zero, they complete normally.
-
-#### Threads
-
-sbt makes a list of all threads running before executing user code.
-After the user code returns, sbt can then determine the threads created
-by the user code. For each user-created thread, sbt replaces the
-uncaught exception handler with a custom one that handles the custom
-`SecurityException` thrown by calls to `System.exit` and delegates to
-the original handler for everything else. sbt then waits for each
-created thread to exit or for `System.exit` to be called. sbt handles a
-call to `System.exit` as described above.
-
-A user-created thread is one that is not in the `system` thread group
-and is not an `AWT` implementation thread (e.g. `AWT-XAWT`,
-`AWT-Windows`). User-created threads include the `AWT-EventQueue-*`
-thread(s).
-
-#### User Code
-
-Given the above, when can user code be run with the `run` and `console`
-actions?
-
-The user code cannot rely on shutdown hooks and at least one of the
-following situations must apply for user code to run in the same JVM:
-
-1.  User code creates no threads.
-2.  User code creates a GUI and no other threads.
-3.  The program ends when user-created threads terminate on their own.
-4.  `System.exit` is used to end the program and user-created threads
-    terminate when interrupted.
-5.  No deserialization is done, or the deserialization code
-    ensures that the right class loader is used, as in
-    <https://github.com/NetLogo/NetLogo/blob/5.x/src/main/org/nlogo/util/ClassLoaderObjectInputStream.scala>
-    or
-    <https://github.com/scala/scala/blob/2.11.x/src/actors/scala/actors/remote/JavaSerializer.scala#L20>.
-
-The requirements on threading and shutdown hooks are required because
-the JVM does not actually shut down. So, shutdown hooks cannot be run
-and threads are not terminated unless they stop when interrupted. If
-these requirements are not met, code must run in a
-[forked jvm][Forking].
-
-The feature of allowing `System.exit` and multiple threads to be used
-cannot completely emulate the situation of running in a separate JVM and
-is intended for development. Program execution should be checked in a
-[forked jvm][Forking] when using multiple threads or `System.exit`.
-
-As of sbt 0.13.1, multiple `run` instances can be managed. There can
-only be one application that uses AWT at a time, however.
-
 
   [Running]: Running.html
   [Plugins]: Plugins.html
@@ -13663,11 +13603,11 @@ Then, we can disable parallel execution in just that configuration
 using:
 
 ```scala
-parallelExecution in Serial := false
+Serial / parallelExecution := false
 ```
 
 The tests to run in parallel would be run with `test` and the ones to
-run in serial would be run with `serial:test`.
+run in serial would be run with `Serial/test`.
 
 ### JUnit
 
@@ -16621,9 +16561,9 @@ myTask := {
 You can scope logging settings by the specific task's scope:
 
 ```scala
-logLevel in myTask := Level.Debug
+myTask / logLevel := Level.Debug
 
-traceLevel in myTask := 5
+myTask / traceLevel := 5
 ```
 
 To obtain the last logging output from a task, use the `last` command:
@@ -17949,7 +17889,7 @@ different input applied. For example:
 ```scala
 lazy val runFixed2 = taskKey[Unit]("A task that hard codes the values to `run`")
 
-fork in run := true
+run / fork := true
 
 runFixed2 := {
    val x = (Compile / run).toTask(" blue green").value
@@ -19299,9 +19239,9 @@ object ObfuscatePlugin extends AutoPlugin {
     // default values for the tasks and settings
     lazy val baseObfuscateSettings: Seq[Def.Setting[_]] = Seq(
       obfuscate := {
-        Obfuscate(sources.value, (obfuscateLiterals in obfuscate).value)
+        Obfuscate(sources.value, (obfuscate / obfuscateLiterals).value)
       },
-      obfuscateLiterals in obfuscate := false
+      obfuscate / obfuscateLiterals := false
     )
   }
 
@@ -19330,7 +19270,7 @@ object Obfuscate {
 A build definition that uses the plugin might look like. `obfuscate.sbt`:
 
 ```scala
-obfuscateLiterals in obfuscate := true
+obfuscate / obfuscateLiterals := true
 ```
 
 #### Global plugins example
@@ -19668,7 +19608,7 @@ object WhateverPlugin extends sbt.AutoPlugin {
   }
   import autoImport._
   override lazy val projectSettings = Seq(
-    specificKey in Whatever := "another opinion" // DON'T DO THIS
+    Whatever / specificKey := "another opinion" // DON'T DO THIS
   )
 }
 ```
@@ -19755,8 +19695,8 @@ object ObfuscatePlugin extends sbt.AutoPlugin {
   }
   import autoImport._
   lazy val baseObfuscateSettings: Seq[Def.Setting[_]] = Seq(
-    obfuscate := Obfuscate((sources in obfuscate).value),
-    sources in obfuscate := sources.value
+    obfuscate := Obfuscate((obfuscate / sources).value),
+    obfuscate / sources := sources.value
   )
   override lazy val projectSettings = inConfig(Compile)(baseObfuscateSettings)
 }
@@ -19854,12 +19794,12 @@ task itself. See the `baseObfuscateSettings`:
 
 ```scala
   lazy val baseObfuscateSettings: Seq[Def.Setting[_]] = Seq(
-    obfuscate := Obfuscate((sources in obfuscate).value),
-    sources in obfuscate := sources.value
+    obfuscate := Obfuscate((obfuscate / sources).value),
+    obfuscate / sources := sources.value
   )
 ```
 
-In the above example, `sources in obfuscate` is scoped under the main
+In the above example, `obfuscate / sources` is scoped under the main
 task, `obfuscate`.
 
 #### Rewiring existing keys in `globalSettings`
@@ -20573,7 +20513,7 @@ lazy val root = (project in file("."))
   .settings(
     version := "0.1",
     scalaVersion := "2.10.6",
-    assemblyJarName in assembly := "foo.jar"
+    assembly / assemblyJarName := "foo.jar"
   )
 ```
 
@@ -20662,7 +20602,7 @@ lazy val root = (project in file("."))
   .settings(
     version := "0.1",
     scalaVersion := "2.10.6",
-    assemblyJarName in assembly := "foo.jar",
+    assembly / assemblyJarName := "foo.jar",
     TaskKey[Unit]("check") := {
       val process = Process("java", Seq("-jar", (crossTarget.value / "foo.jar").toString))
       val out = (process!!)
@@ -22633,46 +22573,46 @@ page.
 
 ### Define the initial commands evaluated when entering the Scala REPL
 
-Set `initialCommands in console` to set the initial statements to
+Set `console / initialCommands` to set the initial statements to
 evaluate when `console` and `consoleQuick` are run. To configure
-`consoleQuick` separately, use `initialCommands in consoleQuick`. For
+`consoleQuick` separately, use `consoleQuick / initialCommands`. For
 example,
 
 ```scala
-initialCommands in console := """println("Hello from console")"""
+console / initialCommands := """println("Hello from console")"""
 
-initialCommands in consoleQuick := """println("Hello from consoleQuick")"""
+consoleQuick / initialCommands := """println("Hello from consoleQuick")"""
 ```
 
 The `consoleProject` command is configured separately by
-`initialCommands in consoleProject`. It does not use the value from
-`initialCommands in console` by default. For example,
+`consoleProject / initialCommands`. It does not use the value from
+`console / initialCommands` by default. For example,
 
 ```scala
-initialCommands in consoleProject := """println("Hello from consoleProject")"""
+consoleProject / initialCommands := """println("Hello from consoleProject")"""
 ```
 
 <a name="cleanup"></a>
 
 ### Define the commands evaluated when exiting the Scala REPL
 
-Set `cleanupCommands in console` to set the statements to evaluate after
+Set `console / cleanupCommands` to set the statements to evaluate after
 exiting the Scala REPL started by `console` and `consoleQuick`. To
 configure `consoleQuick` separately, use
-`cleanupCommands in consoleQuick`. For example,
+`consoleQuick / cleanupCommands`. For example,
 
 ```scala
-cleanupCommands in console := """println("Bye from console")"""
+console / cleanupCommands := """println("Bye from console")"""
 
-cleanupCommands in consoleQuick := """println("Bye from consoleQuick")"""
+consoleQuick / cleanupCommands := """println("Bye from consoleQuick")"""
 ```
 
 The `consoleProject` command is configured separately by
-`cleanupCommands in consoleProject`. It does not use the value from
-`cleanupCommands in console` by default. For example,
+`consoleProject / cleanupCommands`. It does not use the value from
+`console / cleanupCommands` by default. For example,
 
 ```scala
-cleanupCommands in consoleProject := """println("Bye from consoleProject")"""
+consoleProject / cleanupCommands := """println("Bye from consoleProject")"""
 ```
 
 <a name="embed"></a>

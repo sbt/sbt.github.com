@@ -352,9 +352,9 @@ aspect, is obtained by the <code>log</code> method:
   s.log.info(&quot;Hello!&quot;)
 }
 </code></pre><p>You can scope logging settings by the specific task’s scope:
-</p><pre><code class="prettyprint lang-scala">logLevel in myTask := Level.Debug
+</p><pre><code class="prettyprint lang-scala">myTask / logLevel := Level.Debug
 
-traceLevel in myTask := 5
+myTask / traceLevel := 5
 </code></pre><p>To obtain the last logging output from a task, use the <code>last</code> command:
 </p><pre><code class="">$ last myTask
 [debug] Saying hi...
