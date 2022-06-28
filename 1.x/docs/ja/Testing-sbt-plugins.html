@@ -73,7 +73,7 @@
   .settings(
     version := &quot;0.1&quot;,
     scalaVersion := &quot;2.10.6&quot;,
-    assemblyJarName in assembly := &quot;foo.jar&quot;
+    assembly / assemblyJarName := &quot;foo.jar&quot;
   )
 </code></pre><p>これが、<code>project/plugins.sbt</code>:
 </p><pre><code class="prettyprint lang-scala">sys.props.get(&quot;plugin.version&quot;) match {
@@ -126,7 +126,7 @@ lazy val root = (project in file(&quot;.&quot;))
   .settings(
     version := &quot;0.1&quot;,
     scalaVersion := &quot;2.10.6&quot;,
-    assemblyJarName in assembly := &quot;foo.jar&quot;,
+    assembly / assemblyJarName := &quot;foo.jar&quot;,
     TaskKey[Unit](&quot;check&quot;) := {
       val process = Process(&quot;java&quot;, Seq(&quot;-jar&quot;, (crossTarget.value / &quot;foo.jar&quot;).toString))
       val out = (process!!)

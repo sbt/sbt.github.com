@@ -4405,9 +4405,9 @@ This run task can be configured individually by specifying the task key
 in the scope. For example:
 
 ```scala
-fork in myRunTask := true
+myRunTask / fork := true
 
-javaOptions in myRunTask += "-Xmx6144m"
+myRunTask / javaOptions += "-Xmx6144m"
 ```
 
 #### How should I express a dependency on an outside tool such as proguard?
@@ -13603,11 +13603,11 @@ Then, we can disable parallel execution in just that configuration
 using:
 
 ```scala
-parallelExecution in Serial := false
+Serial / parallelExecution := false
 ```
 
 The tests to run in parallel would be run with `test` and the ones to
-run in serial would be run with `serial:test`.
+run in serial would be run with `Serial/test`.
 
 ### JUnit
 
@@ -16561,9 +16561,9 @@ myTask := {
 You can scope logging settings by the specific task's scope:
 
 ```scala
-logLevel in myTask := Level.Debug
+myTask / logLevel := Level.Debug
 
-traceLevel in myTask := 5
+myTask / traceLevel := 5
 ```
 
 To obtain the last logging output from a task, use the `last` command:
@@ -17889,7 +17889,7 @@ different input applied. For example:
 ```scala
 lazy val runFixed2 = taskKey[Unit]("A task that hard codes the values to `run`")
 
-fork in run := true
+run / fork := true
 
 runFixed2 := {
    val x = (Compile / run).toTask(" blue green").value
@@ -19239,9 +19239,9 @@ object ObfuscatePlugin extends AutoPlugin {
     // default values for the tasks and settings
     lazy val baseObfuscateSettings: Seq[Def.Setting[_]] = Seq(
       obfuscate := {
-        Obfuscate(sources.value, (obfuscateLiterals in obfuscate).value)
+        Obfuscate(sources.value, (obfuscate / obfuscateLiterals).value)
       },
-      obfuscateLiterals in obfuscate := false
+      obfuscate / obfuscateLiterals := false
     )
   }
 
@@ -19270,7 +19270,7 @@ object Obfuscate {
 A build definition that uses the plugin might look like. `obfuscate.sbt`:
 
 ```scala
-obfuscateLiterals in obfuscate := true
+obfuscate / obfuscateLiterals := true
 ```
 
 #### Global plugins example
@@ -19608,7 +19608,7 @@ object WhateverPlugin extends sbt.AutoPlugin {
   }
   import autoImport._
   override lazy val projectSettings = Seq(
-    specificKey in Whatever := "another opinion" // DON'T DO THIS
+    Whatever / specificKey := "another opinion" // DON'T DO THIS
   )
 }
 ```
@@ -19695,8 +19695,8 @@ object ObfuscatePlugin extends sbt.AutoPlugin {
   }
   import autoImport._
   lazy val baseObfuscateSettings: Seq[Def.Setting[_]] = Seq(
-    obfuscate := Obfuscate((sources in obfuscate).value),
-    sources in obfuscate := sources.value
+    obfuscate := Obfuscate((obfuscate / sources).value),
+    obfuscate / sources := sources.value
   )
   override lazy val projectSettings = inConfig(Compile)(baseObfuscateSettings)
 }
@@ -19794,12 +19794,12 @@ task itself. See the `baseObfuscateSettings`:
 
 ```scala
   lazy val baseObfuscateSettings: Seq[Def.Setting[_]] = Seq(
-    obfuscate := Obfuscate((sources in obfuscate).value),
-    sources in obfuscate := sources.value
+    obfuscate := Obfuscate((obfuscate / sources).value),
+    obfuscate / sources := sources.value
   )
 ```
 
-In the above example, `sources in obfuscate` is scoped under the main
+In the above example, `obfuscate / sources` is scoped under the main
 task, `obfuscate`.
 
 #### Rewiring existing keys in `globalSettings`
@@ -19874,7 +19874,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Setup JDK
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3
       with:
         distribution: temurin
         java-version: 8
@@ -19916,7 +19916,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Setup JDK
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3
       with:
         distribution: temurin
         java-version: 8
@@ -19944,24 +19944,24 @@ java
 
 You can speed up your `sbt` builds on GitHub Actions by caching various artifacts in-between the jobs.
 
-Here are sample caching steps that you can use:
+The action `setup-java` has built-in support for caching artifacts downloaded by
+sbt when loading the build or when building the project.
+
+To use it, set the input parameter `cache` of the action `setup-java` to the value `"sbt"`:
 
 ```yml
-    - name: Coursier cache
-      uses: coursier/cache-action@v6
+    - name: Setup JDK
+      uses: actions/setup-java@v3
+      with:
+        distribution: temurin
+        java-version: 8
+        cache: sbt
     - name: Build and test
       run: sbt -v +test
-    - name: Cleanup before cache
-      shell: bash
-      run: |
-        rm -rf "$HOME/.ivy2/local" || true
-        find $HOME/Library/Caches/Coursier/v1        -name "ivydata-*.properties" -delete || true
-        find $HOME/.ivy2/cache                       -name "ivydata-*.properties" -delete || true
-        find $HOME/.cache/coursier/v1                -name "ivydata-*.properties" -delete || true
-        find $HOME/.sbt                              -name "*.lock"               -delete || true
 ```
 
-With the above changes combined GitHub Actions will tar up the cached directories and uploads them to a cloud storage provider.
+Note the added line `cache: sbt`.
+
 Overall, the use of caching should shave off a few minutes of build time per job.
 
 ### Build matrix
@@ -19997,7 +19997,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Setup JDK
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3
       with:
         distribution: temurin
         java-version: ${{ matrix.java }}
@@ -20037,7 +20037,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Setup JDK
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3
       with:
         distribution: temurin
         java-version: ${{ matrix.java }}
@@ -20094,12 +20094,11 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Setup JDK
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3
       with:
         distribution: temurin
         java-version: ${{ matrix.java }}
-    - name: Coursier cache
-      uses: coursier/cache-action@v6
+        cache: sbt
     - name: Build and test (1)
       if: ${{ matrix.jobtype == 1 }}
       shell: bash
@@ -20115,14 +20114,6 @@ jobs:
       shell: bash
       run: |
         sbt -v "dependency-management/*"
-    - name: Cleanup before cache
-      shell: bash
-      run: |
-        rm -rf "$HOME/.ivy2/local" || true
-        find $HOME/Library/Caches/Coursier/v1        -name "ivydata-*.properties" -delete || true
-        find $HOME/.ivy2/cache                       -name "ivydata-*.properties" -delete || true
-        find $HOME/.cache/coursier/v1                -name "ivydata-*.properties" -delete || true
-        find $HOME/.sbt                              -name "*.lock"               -delete || true
 ```
 
 ### sbt-github-actions
@@ -20513,7 +20504,7 @@ lazy val root = (project in file("."))
   .settings(
     version := "0.1",
     scalaVersion := "2.10.6",
-    assemblyJarName in assembly := "foo.jar"
+    assembly / assemblyJarName := "foo.jar"
   )
 ```
 
@@ -20602,7 +20593,7 @@ lazy val root = (project in file("."))
   .settings(
     version := "0.1",
     scalaVersion := "2.10.6",
-    assemblyJarName in assembly := "foo.jar",
+    assembly / assemblyJarName := "foo.jar",
     TaskKey[Unit]("check") := {
       val process = Process("java", Seq("-jar", (crossTarget.value / "foo.jar").toString))
       val out = (process!!)
@@ -22573,46 +22564,46 @@ page.
 
 ### Define the initial commands evaluated when entering the Scala REPL
 
-Set `initialCommands in console` to set the initial statements to
+Set `console / initialCommands` to set the initial statements to
 evaluate when `console` and `consoleQuick` are run. To configure
-`consoleQuick` separately, use `initialCommands in consoleQuick`. For
+`consoleQuick` separately, use `consoleQuick / initialCommands`. For
 example,
 
 ```scala
-initialCommands in console := """println("Hello from console")"""
+console / initialCommands := """println("Hello from console")"""
 
-initialCommands in consoleQuick := """println("Hello from consoleQuick")"""
+consoleQuick / initialCommands := """println("Hello from consoleQuick")"""
 ```
 
 The `consoleProject` command is configured separately by
-`initialCommands in consoleProject`. It does not use the value from
-`initialCommands in console` by default. For example,
+`consoleProject / initialCommands`. It does not use the value from
+`console / initialCommands` by default. For example,
 
 ```scala
-initialCommands in consoleProject := """println("Hello from consoleProject")"""
+consoleProject / initialCommands := """println("Hello from consoleProject")"""
 ```
 
 <a name="cleanup"></a>
 
 ### Define the commands evaluated when exiting the Scala REPL
 
-Set `cleanupCommands in console` to set the statements to evaluate after
+Set `console / cleanupCommands` to set the statements to evaluate after
 exiting the Scala REPL started by `console` and `consoleQuick`. To
 configure `consoleQuick` separately, use
-`cleanupCommands in consoleQuick`. For example,
+`consoleQuick / cleanupCommands`. For example,
 
 ```scala
-cleanupCommands in console := """println("Bye from console")"""
+console / cleanupCommands := """println("Bye from console")"""
 
-cleanupCommands in consoleQuick := """println("Bye from consoleQuick")"""
+consoleQuick / cleanupCommands := """println("Bye from consoleQuick")"""
 ```
 
 The `consoleProject` command is configured separately by
-`cleanupCommands in consoleProject`. It does not use the value from
-`cleanupCommands in console` by default. For example,
+`consoleProject / cleanupCommands`. It does not use the value from
+`console / cleanupCommands` by default. For example,
 
 ```scala
-cleanupCommands in consoleProject := """println("Bye from consoleProject")"""
+consoleProject / cleanupCommands := """println("Bye from consoleProject")"""
 ```
 
 <a name="embed"></a>

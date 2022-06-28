@@ -2742,9 +2742,9 @@ fullRunTask(myRunTask, Test, &quot;foo.Foo&quot;, &quot;arg1&quot;, &quot;arg2&q
 <code>Compile</code>, to use that configuration’s classpath.
 </p><p>This run task can be configured individually by specifying the task key
 in the scope. For example:
-</p><pre><code class="prettyprint lang-scala">fork in myRunTask := true
+</p><pre><code class="prettyprint lang-scala">myRunTask / fork := true
 
-javaOptions in myRunTask += &quot;-Xmx6144m&quot;
+myRunTask / javaOptions += &quot;-Xmx6144m&quot;
 </code></pre><h4 id="How+should+I+express+a+dependency+on+an+outside+tool+such+as+proguard%3F">How should I express a dependency on an outside tool such as proguard?<a href="#How+should+I+express+a+dependency+on+an+outside+tool+such+as+proguard%3F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Tool dependencies are used to implement a task and are not needed by
 project source code. These dependencies can be declared in their own
 configuration and classpaths. These are the steps:
@@ -8295,9 +8295,9 @@ Let’s call the configuration <code>serial</code>:
 </p><pre><code class="prettyprint lang-scala">lazy val Serial = config(&quot;serial&quot;) extend(Test)
 </code></pre><p>Then, we can disable parallel execution in just that configuration
 using:
-</p><pre><code class="prettyprint lang-scala">parallelExecution in Serial := false
+</p><pre><code class="prettyprint lang-scala">Serial / parallelExecution := false
 </code></pre><p>The tests to run in parallel would be run with <code>test</code> and the ones to
-run in serial would be run with <code>serial:test</code>.
+run in serial would be run with <code>Serial/test</code>.
 </p><h3 id="JUnit">JUnit<a href="#JUnit" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Support for JUnit5 is provided by
 <a href="https://github.com/sbt/sbt-jupiter-interface">sbt-jupiter-interface</a>. To add
 JUnit Jupiter support into your project, add the jupiter-interface dependency in
@@ -10005,9 +10005,9 @@ aspect, is obtained by the <code>log</code> method:
   s.log.info(&quot;Hello!&quot;)
 }
 </code></pre><p>You can scope logging settings by the specific task’s scope:
-</p><pre><code class="prettyprint lang-scala">logLevel in myTask := Level.Debug
+</p><pre><code class="prettyprint lang-scala">myTask / logLevel := Level.Debug
 
-traceLevel in myTask := 5
+myTask / traceLevel := 5
 </code></pre><p>To obtain the last logging output from a task, use the <code>last</code> command:
 </p><pre><code class="">$ last myTask
 [debug] Saying hi...
@@ -10996,7 +10996,7 @@ the same as the original <code>InputTask</code> (in this case, <code>run</code>)
 different input applied. For example:
 </p><pre><code class="prettyprint lang-scala">lazy val runFixed2 = taskKey[Unit](&quot;A task that hard codes the values to `run`&quot;)
 
-fork in run := true
+run / fork := true
 
 runFixed2 := {
    val x = (Compile / run).toTask(&quot; blue green&quot;).value
@@ -11891,9 +11891,9 @@ object ObfuscatePlugin extends AutoPlugin {
     // default values for the tasks and settings
     lazy val baseObfuscateSettings: Seq[Def.Setting[_]] = Seq(
       obfuscate := {
-        Obfuscate(sources.value, (obfuscateLiterals in obfuscate).value)
+        Obfuscate(sources.value, (obfuscate / obfuscateLiterals).value)
       },
-      obfuscateLiterals in obfuscate := false
+      obfuscate / obfuscateLiterals := false
     )
   }
 
@@ -11916,7 +11916,7 @@ object Obfuscate {
   }
 }
 </code></pre><h4 id="Usage+example">Usage example<a href="#Usage+example" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>A build definition that uses the plugin might look like. <code>obfuscate.sbt</code>:
-</p><pre><code class="prettyprint lang-scala">obfuscateLiterals in obfuscate := true
+</p><pre><code class="prettyprint lang-scala">obfuscate / obfuscateLiterals := true
 </code></pre><h4 id="Global+plugins+example">Global plugins example<a href="#Global+plugins+example" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The simplest global plugin definition is declaring a library or plugin
 in <code>$HOME/.sbt/1.0/plugins/build.sbt</code>:
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.example&quot; %% &quot;example-plugin&quot; % &quot;0.1&quot;
@@ -12113,7 +12113,7 @@ object WhateverPlugin extends sbt.AutoPlugin {
   }
   import autoImport._
   override lazy val projectSettings = Seq(
-    specificKey in Whatever := &quot;another opinion&quot; // DON'T DO THIS
+    Whatever / specificKey := &quot;another opinion&quot; // DON'T DO THIS
   )
 }
 </code></pre><h4 id="When+to+define+your+own+configuration">When to define your own configuration<a href="#When+to+define+your+own+configuration" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>If your plugin introduces either a new set of source code or
@@ -12176,8 +12176,8 @@ object ObfuscatePlugin extends sbt.AutoPlugin {
   }
   import autoImport._
   lazy val baseObfuscateSettings: Seq[Def.Setting[_]] = Seq(
-    obfuscate := Obfuscate((sources in obfuscate).value),
-    sources in obfuscate := sources.value
+    obfuscate := Obfuscate((obfuscate / sources).value),
+    obfuscate / sources := sources.value
   )
   override lazy val projectSettings = inConfig(Compile)(baseObfuscateSettings)
 }
@@ -12250,10 +12250,10 @@ fail at load time.
 in your plugin. In this instance, you can scope your settings using the
 task itself. See the <code>baseObfuscateSettings</code>:
 </p><pre><code class="prettyprint lang-scala">  lazy val baseObfuscateSettings: Seq[Def.Setting[_]] = Seq(
-    obfuscate := Obfuscate((sources in obfuscate).value),
-    sources in obfuscate := sources.value
+    obfuscate := Obfuscate((obfuscate / sources).value),
+    obfuscate / sources := sources.value
   )
-</code></pre><p>In the above example, <code>sources in obfuscate</code> is scoped under the main
+</code></pre><p>In the above example, <code>obfuscate / sources</code> is scoped under the main
 task, <code>obfuscate</code>.
 </p><h4 id="Rewiring+existing+keys+in">Rewiring existing keys in <code>globalSettings</code><a href="#Rewiring+existing+keys+in" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>There may be times when you need to rewire an existing key in <code>globalSettings</code>.
 The general rule is <em>be careful what you touch</em>.
@@ -12294,7 +12294,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Setup JDK
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3
       with:
         distribution: temurin
         java-version: 8
@@ -12326,7 +12326,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Setup JDK
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3
       with:
         distribution: temurin
         java-version: 8
@@ -12345,21 +12345,19 @@ java
 /usr/share/sbt/bin/sbt-launch.jar
 +test
 </code></pre><h3 id="Caching">Caching<a href="#Caching" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>You can speed up your <code>sbt</code> builds on GitHub Actions by caching various artifacts in-between the jobs.
-</p><p>Here are sample caching steps that you can use:
-</p><pre><code class="prettyprint lang-yml">    - name: Coursier cache
-      uses: coursier/cache-action@v6
+</p><p>The action <code>setup-java</code> has built-in support for caching artifacts downloaded by
+sbt when loading the build or when building the project.
+</p><p>To use it, set the input parameter <code>cache</code> of the action <code>setup-java</code> to the value <code>&quot;sbt&quot;</code>:
+</p><pre><code class="prettyprint lang-yml">    - name: Setup JDK
+      uses: actions/setup-java@v3
+      with:
+        distribution: temurin
+        java-version: 8
+        cache: sbt
     - name: Build and test
       run: sbt -v +test
-    - name: Cleanup before cache
-      shell: bash
-      run: |
-        rm -rf &quot;$HOME/.ivy2/local&quot; || true
-        find $HOME/Library/Caches/Coursier/v1        -name &quot;ivydata-*.properties&quot; -delete || true
-        find $HOME/.ivy2/cache                       -name &quot;ivydata-*.properties&quot; -delete || true
-        find $HOME/.cache/coursier/v1                -name &quot;ivydata-*.properties&quot; -delete || true
-        find $HOME/.sbt                              -name &quot;*.lock&quot;               -delete || true
-</code></pre><p>With the above changes combined GitHub Actions will tar up the cached directories and uploads them to a cloud storage provider.
-Overall, the use of caching should shave off a few minutes of build time per job.
+</code></pre><p>Note the added line <code>cache: sbt</code>.
+</p><p>Overall, the use of caching should shave off a few minutes of build time per job.
 </p><h3 id="Build+matrix">Build matrix<a href="#Build+matrix" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>When creating a continous integration job, it’s fairly common to split up the task into multiple jobs that runs in parallel. For example, we could:
 </p><ul><li>Run identical tests on JDK 8, JDK 11, Linux, macOS, and Windows
 </li><li>Run different subset of tests on the same JDK, OS, and other setups
@@ -12386,7 +12384,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Setup JDK
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3
       with:
         distribution: temurin
         java-version: ${{ matrix.java }}
@@ -12420,7 +12418,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Setup JDK
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3
       with:
         distribution: temurin
         java-version: ${{ matrix.java }}
@@ -12471,12 +12469,11 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Setup JDK
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3
       with:
         distribution: temurin
         java-version: ${{ matrix.java }}
-    - name: Coursier cache
-      uses: coursier/cache-action@v6
+        cache: sbt
     - name: Build and test (1)
       if: ${{ matrix.jobtype == 1 }}
       shell: bash
@@ -12492,14 +12489,6 @@ jobs:
       shell: bash
       run: |
         sbt -v &quot;dependency-management/*&quot;
-    - name: Cleanup before cache
-      shell: bash
-      run: |
-        rm -rf &quot;$HOME/.ivy2/local&quot; || true
-        find $HOME/Library/Caches/Coursier/v1        -name &quot;ivydata-*.properties&quot; -delete || true
-        find $HOME/.ivy2/cache                       -name &quot;ivydata-*.properties&quot; -delete || true
-        find $HOME/.cache/coursier/v1                -name &quot;ivydata-*.properties&quot; -delete || true
-        find $HOME/.sbt                              -name &quot;*.lock&quot;               -delete || true
 </code></pre><h3 id="sbt-github-actions">sbt-github-actions<a href="#sbt-github-actions" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>There’s also <a href="https://github.com/djspiewak/sbt-github-actions">sbt-github-actions</a>, an sbt plugin by Daniel Spiewak that can generate the workflow files, and keep the settings in <code>build.sbt</code> file.
 </p><h2 id="Setting+up+Travis+CI+with+sbt">Setting up Travis CI with sbt<a href="#Setting+up+Travis+CI+with+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p><a href="https://travis-ci.com/">Travis CI</a> is a hosted continuous integration service for open source and private projects. Many of the OSS projects hosted on GitHub uses <a href="https://travis-ci.org/">open source edition of Travis CI</a> to validate pushes and pull requests. We’ll discuss some of the best practices setting up Travis CI.
 </p><h3 id="Set">Set <code>project/build.properties</code><a href="#Set" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Continuous integration is a great way of checking that your code works outside of your machine.
@@ -12710,7 +12699,7 @@ cache:
   .settings(
     version := &quot;0.1&quot;,
     scalaVersion := &quot;2.10.6&quot;,
-    assemblyJarName in assembly := &quot;foo.jar&quot;
+    assembly / assemblyJarName := &quot;foo.jar&quot;
   )
 </code></pre><p>In <code>project/plugins.sbt</code>:
 </p><pre><code class="prettyprint lang-scala">sys.props.get(&quot;plugin.version&quot;) match {
@@ -12763,7 +12752,7 @@ lazy val root = (project in file(&quot;.&quot;))
   .settings(
     version := &quot;0.1&quot;,
     scalaVersion := &quot;2.10.6&quot;,
-    assemblyJarName in assembly := &quot;foo.jar&quot;,
+    assembly / assemblyJarName := &quot;foo.jar&quot;,
     TaskKey[Unit](&quot;check&quot;) := {
       val process = Process(&quot;java&quot;, Seq(&quot;-jar&quot;, (crossTarget.value / &quot;foo.jar&quot;).toString))
       val out = (process!!)
@@ -13806,28 +13795,28 @@ test dependencies and compiled test sources on the classpath, run
 </p><a name="consoleProject"></a><h3 id="Enter+the+Scala+REPL+with+plugins+and+the+build+definition+on+the+classpath">Enter the Scala REPL with plugins and the build definition on the classpath<a href="#Enter+the+Scala+REPL+with+plugins+and+the+build+definition+on+the+classpath" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">&gt; consoleProject
 </code></pre><p>For details, see the <a href="Console-Project.html">consoleProject</a>
 page.
-</p><a name="initial"></a><h3 id="Define+the+initial+commands+evaluated+when+entering+the+Scala+REPL">Define the initial commands evaluated when entering the Scala REPL<a href="#Define+the+initial+commands+evaluated+when+entering+the+Scala+REPL" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Set <code>initialCommands in console</code> to set the initial statements to
+</p><a name="initial"></a><h3 id="Define+the+initial+commands+evaluated+when+entering+the+Scala+REPL">Define the initial commands evaluated when entering the Scala REPL<a href="#Define+the+initial+commands+evaluated+when+entering+the+Scala+REPL" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Set <code>console / initialCommands</code> to set the initial statements to
 evaluate when <code>console</code> and <code>consoleQuick</code> are run. To configure
-<code>consoleQuick</code> separately, use <code>initialCommands in consoleQuick</code>. For
+<code>consoleQuick</code> separately, use <code>consoleQuick / initialCommands</code>. For
 example,
-</p><pre><code class="prettyprint lang-scala">initialCommands in console := &quot;&quot;&quot;println(&quot;Hello from console&quot;)&quot;&quot;&quot;
+</p><pre><code class="prettyprint lang-scala">console / initialCommands := &quot;&quot;&quot;println(&quot;Hello from console&quot;)&quot;&quot;&quot;
 
-initialCommands in consoleQuick := &quot;&quot;&quot;println(&quot;Hello from consoleQuick&quot;)&quot;&quot;&quot;
+consoleQuick / initialCommands := &quot;&quot;&quot;println(&quot;Hello from consoleQuick&quot;)&quot;&quot;&quot;
 </code></pre><p>The <code>consoleProject</code> command is configured separately by
-<code>initialCommands in consoleProject</code>. It does not use the value from
-<code>initialCommands in console</code> by default. For example,
-</p><pre><code class="prettyprint lang-scala">initialCommands in consoleProject := &quot;&quot;&quot;println(&quot;Hello from consoleProject&quot;)&quot;&quot;&quot;
-</code></pre><a name="cleanup"></a><h3 id="Define+the+commands+evaluated+when+exiting+the+Scala+REPL">Define the commands evaluated when exiting the Scala REPL<a href="#Define+the+commands+evaluated+when+exiting+the+Scala+REPL" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Set <code>cleanupCommands in console</code> to set the statements to evaluate after
+<code>consoleProject / initialCommands</code>. It does not use the value from
+<code>console / initialCommands</code> by default. For example,
+</p><pre><code class="prettyprint lang-scala">consoleProject / initialCommands := &quot;&quot;&quot;println(&quot;Hello from consoleProject&quot;)&quot;&quot;&quot;
+</code></pre><a name="cleanup"></a><h3 id="Define+the+commands+evaluated+when+exiting+the+Scala+REPL">Define the commands evaluated when exiting the Scala REPL<a href="#Define+the+commands+evaluated+when+exiting+the+Scala+REPL" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Set <code>console / cleanupCommands</code> to set the statements to evaluate after
 exiting the Scala REPL started by <code>console</code> and <code>consoleQuick</code>. To
 configure <code>consoleQuick</code> separately, use
-<code>cleanupCommands in consoleQuick</code>. For example,
-</p><pre><code class="prettyprint lang-scala">cleanupCommands in console := &quot;&quot;&quot;println(&quot;Bye from console&quot;)&quot;&quot;&quot;
+<code>consoleQuick / cleanupCommands</code>. For example,
+</p><pre><code class="prettyprint lang-scala">console / cleanupCommands := &quot;&quot;&quot;println(&quot;Bye from console&quot;)&quot;&quot;&quot;
 
-cleanupCommands in consoleQuick := &quot;&quot;&quot;println(&quot;Bye from consoleQuick&quot;)&quot;&quot;&quot;
+consoleQuick / cleanupCommands := &quot;&quot;&quot;println(&quot;Bye from consoleQuick&quot;)&quot;&quot;&quot;
 </code></pre><p>The <code>consoleProject</code> command is configured separately by
-<code>cleanupCommands in consoleProject</code>. It does not use the value from
-<code>cleanupCommands in console</code> by default. For example,
-</p><pre><code class="prettyprint lang-scala">cleanupCommands in consoleProject := &quot;&quot;&quot;println(&quot;Bye from consoleProject&quot;)&quot;&quot;&quot;
+<code>consoleProject / cleanupCommands</code>. It does not use the value from
+<code>console / cleanupCommands</code> by default. For example,
+</p><pre><code class="prettyprint lang-scala">consoleProject / cleanupCommands := &quot;&quot;&quot;println(&quot;Bye from consoleProject&quot;)&quot;&quot;&quot;
 </code></pre><a name="embed"></a><h3 id="Use+the+Scala+REPL+from+project+code">Use the Scala REPL from project code<a href="#Use+the+Scala+REPL+from+project+code" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt runs tests in the same JVM as sbt itself and Scala classes are not
 in the same class loader as the application classes. This is also the
 case in <code>console</code> and when <code>run</code> is not forked. Therefore, when using
