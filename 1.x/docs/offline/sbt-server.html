@@ -64,7 +64,7 @@ Here is how to use sbt server as Metals backend.
 <img src="files/metals-completion.png" style="width: 100%; height: 100%; margin-bottom: 1em">
 <p>Use the following setting to opt-out some of the subprojects from BSP.
 </p><pre><code class="prettyprint lang-scala">bspEnabled := false
-</code></pre><h3 id="Language+Server+Protocol+3.0">Language Server Protocol 3.0<a href="#Language+Server+Protocol+3.0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The wire protocol we use is <a href="https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md">Language Server Protocol 3.0</a> (LSP), which in turn is based on <a href="http://www.jsonrpc.org/specification">JSON-RPC</a>.
+</code></pre><h3 id="Language+Server+Protocol+3.0">Language Server Protocol 3.0<a href="#Language+Server+Protocol+3.0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The wire protocol we use is <a href="https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md">Language Server Protocol 3.0</a> (LSP), which in turn is based on <a href="https://www.jsonrpc.org/specification">JSON-RPC</a>.
 </p><p>The base protocol consists of a header and a content part (comparable to HTTP). The header and content part are separated by a <code>\r\n</code>.
 </p><p>Currently the following header fields are supported:
 </p><ul><li><code>Content-Length</code>: The length of the content part in bytes. If you don’t provide this header, we’ll read until the end of the line.

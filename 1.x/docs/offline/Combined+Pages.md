@@ -4245,7 +4245,7 @@ Nowadays we just call sbt "sbt", and to reinforce that the name is no longer an 
 always write it in all lowercase letters. However, we are cool with [酢豚][subuta] (subuta) as a nickname.
 
 [@harrah]: https://github.com/harrah
-[sbt 0.3.2 announcement]: http://www.scala-lang.org/old/node/392.html
+[sbt 0.3.2 announcement]: https://www.scala-lang.org/old/node/392.html
 [initialism]: https://en.oxforddictionaries.com/definition/initialism
 [subuta]: https://ja.wikipedia.org/wiki/%E9%85%A2%E8%B1%9A
 
@@ -4654,7 +4654,7 @@ where to get help, find source code and how to contribute.
 Credits
 -------
 
-sbt was originally created by Mark Harrah ([@harrah][@harrah]) in [2008](http://www.scala-lang.org/old/node/392.html). Most of the fundamental aspects of sbt, such as the Scala incremental compiler, integration with Maven and Ivy dependencies, and parallel task processing were conceived and initially implemented by Mark.
+sbt was originally created by Mark Harrah ([@harrah][@harrah]) in [2008](https://www.scala-lang.org/old/node/392.html). Most of the fundamental aspects of sbt, such as the Scala incremental compiler, integration with Maven and Ivy dependencies, and parallel task processing were conceived and initially implemented by Mark.
 
 By 2010, when sbt 0.7 came out, many open-source Scala projects were using sbt as their build tool.
 
@@ -5023,9 +5023,9 @@ The sbt ecosystem would not be the same without so many awesome plugins. Here ar
 - [Scala.js](https://www.scala-js.org/) by Sébastien Doeraene, Tobias Schlatter, et al
 - [sbt-assembly](https://github.com/sbt/sbt-assembly) by Eugene Yokota (eed3si9n)
 - [coursier](https://github.com/coursier/coursier) by Alexandre Archambault
-- [sbt Native Packager](http://sbt-native-packager.readthedocs.io/en/stable/) by Nepomuk Seiler (muuki88) and Josh Suereth
+- [sbt Native Packager](https://sbt-native-packager.readthedocs.io/en/stable/) by Nepomuk Seiler (muuki88) and Josh Suereth
 - [sbt-dependency-graph](https://github.com/jrudolph/sbt-dependency-graph) by Johannes Rudolph
-- [WartRemover](http://www.wartremover.org/) by Claire Neveu and Brian McKenna
+- [WartRemover](https://www.wartremover.org/) by Claire Neveu and Brian McKenna
 - [sbt-android](https://github.com/scala-android/sbt-android) by Perry (pfn)
 - [sbt-revolver](https://github.com/spray/sbt-revolver) by Johannes Rudolph and Mathias (sirthias)
 - [sbt-docker](https://github.com/marcuslonnberg/sbt-docker) by Marcus Lönnberg
@@ -5214,7 +5214,7 @@ your plugin to the list.
 #### Release plugins
 
 - [sbt-native-packager](https://github.com/sbt/sbt-native-packager)
-  ([docs](http://sbt-native-packager.readthedocs.io/en/stable/)): build
+  ([docs](https://sbt-native-packager.readthedocs.io/en/stable/)): build
   native packages (RPM, .deb etc) for your projects. <!-- 303 stars -->
 - [sbt-pack](https://github.com/xerial/sbt-pack): create runnable distributions
   for your projects. <!-- 302 stars -->
@@ -5273,7 +5273,7 @@ your plugin to the list.
 - [sbt-revolver](https://github.com/spray/sbt-revolver): auto-restart forked
   JVMs on update. <!-- 563 stars -->
 - [sbt-conscript](https://github.com/foundweekends/conscript)
-  ([docs](http://www.foundweekends.org/conscript/)): distribute apps using
+  ([docs](https://www.foundweekends.org/conscript/)): distribute apps using
   GitHub and Maven Central. <!-- 467 stars -->
 - [sbt-git](https://github.com/sbt/sbt-git): run git commands from sbt.
   <!-- 233 stars -->
@@ -5640,11 +5640,11 @@ compatible locale, e.g. `LC_TYPE=en_US.UTF-8`, then sbt may crash with a
 [International Language Environments Guide](https://docs.oracle.com/cd/E19455-01/806-0169/6j9hsml3j/index.html).
 
 
-  [sonatype-ossrhguide]: http://central.sonatype.org/pages/ossrh-guide.html
+  [sonatype-ossrhguide]: https://central.sonatype.org/publish/publish-guide/
   [sonatype-signup]: https://issues.sonatype.org/secure/Signup!default.jspa
   [sonatype-new-project]: https://issues.sonatype.org/secure/CreateIssue.jspa?issuetype=21&pid=10134
-  [sonatype-requirements]: http://central.sonatype.org/pages/requirements.html
-  [sonatype-coordinates]: http://central.sonatype.org/pages/choosing-your-coordinates.html
+  [sonatype-requirements]: https://central.sonatype.org/publish/requirements/
+  [sonatype-coordinates]: https://central.sonatype.org/publish/requirements/coordinates/
   [sonatype-nexus]: https://oss.sonatype.org/#welcome
   [sonatype-pgp]: https://central.sonatype.org/pages/working-with-pgp-signatures.html
   [sbt-pgp]: https://github.com/sbt/sbt-pgp#sbt-pgp
@@ -5865,7 +5865,7 @@ Jira account)
 `sonatypeRelease`
 
 After publishing you have to follow the
-[release workflow of Nexus](http://central.sonatype.org/pages/releasing-the-deployment.html).
+[release workflow of Nexus](https://central.sonatype.org/publish/release/).
 
 > *Note:* the sbt-sonatype plugin can also be used to publish to other non-sonatype 
 repositories
@@ -8349,7 +8349,7 @@ This depends on some factors such as how your classes are organized, but you can
 
 sbt 1.0 includes server feature, which allows IDEs and other tools to query the build for settings, and invoke commands via a JSON API. Similar to the way that the interactive shell in sbt 0.13 is implemented with `shell` command, "server" is also just `shell` command that listens to both human input and network input. As a user, there should be minimal impact because of the server.
 
-In March 2016, we [rebooted](http://eed3si9n.com/sbt-server-reboot) the "server" feature to make it as small as possible. We worked in collaboration with JetBrains' @jastice who works on IntelliJ's sbt interface to narrow down the feature list. sbt 1.0 will not have all the things we originally wanted, but in the long term, we hope to see better integration between IDE and sbt ecosystem using this system. For example, IDEs will be able to issue the compile task and retrieve compiler warning as JSON events:
+In March 2016, we [rebooted](https://eed3si9n.com/sbt-server-reboot) the "server" feature to make it as small as possible. We worked in collaboration with JetBrains' @jastice who works on IntelliJ's sbt interface to narrow down the feature list. sbt 1.0 will not have all the things we originally wanted, but in the long term, we hope to see better integration between IDE and sbt ecosystem using this system. For example, IDEs will be able to issue the compile task and retrieve compiler warning as JSON events:
 
 ```
 {"type":"xsbti.Problem","message":{"category":"","severity":"Warn","message":"a pure expression does nothing in statement position; you may be omitting necessary parentheses","position":{"line":2,"lineContent":"  1","offset":29,"pointer":2,"pointerSpace":"  ","sourcePath":"/tmp/hello/Hello.scala","sourceFile":"file:/tmp/hello/Hello.scala"}},"level":"warn"}
@@ -10470,7 +10470,7 @@ Content-Type: application/vscode-jsonrpc; charset=utf-8
 This will respond back with the result of the action.
 
   [lsp]: https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md
-  [jsonrpc]: http://www.jsonrpc.org/specification
+  [jsonrpc]: https://www.jsonrpc.org/specification
   [vscode-sbt-scala]: https://marketplace.visualstudio.com/items?itemName=lightbend.vscode-sbt-scala
   [lsp_initialize]: https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#initialize
   [lsp_initialized]: https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#initialized
@@ -12034,7 +12034,7 @@ compile will always provide full checking, however.
 ### Known issues in mixed mode compilation
 
 The Scala compiler does not identify compile-time constant variables
-(Java specification [4.12.4](http://docs.oracle.com/javase/specs/jls/se8/html/jls-4.html#jls-4.12.4))
+(Java specification [4.12.4](https://docs.oracle.com/javase/specs/jls/se8/html/jls-4.html#jls-4.12.4))
 in Java source code if their definition is not a literal.
 This issue has several symptoms, described in the Scala ticket [SI-5333](https://github.com/scala/bug/issues/5333):
 
@@ -12042,7 +12042,7 @@ This issue has several symptoms, described in the Scala ticket [SI-5333](https:/
 to a Java annotation (a compile-time constant expression is required).
 2. The selection of a constant variable is not replaced by its value, but compiled
 as an actual field load (the
-[Scala specification 4.1](http://www.scala-lang.org/files/archive/spec/2.11/04-basic-declarations-and-definitions.html#value-declarations-and-definitions)
+[Scala specification 4.1](https://www.scala-lang.org/files/archive/spec/2.13/04-basic-declarations-and-definitions.html#value-declarations-and-definitions)
 defines that constant expressions should be replaced by their values).
 
 Since Scala 2.11.4, a similar issue arises when using a Java-defined annotation in
@@ -15199,7 +15199,7 @@ There are many good proxy repository solutions out there:
 -   [JFrog Artifactory Open Source](https://jfrog.com/open-source/)
 -   [JFrog Artifactory Pro](https://jfrog.com/artifactory/)
 -   [Sonatype Nexus Repository Manager](http://www.sonatype.org/nexus/)
--   [Apache Archiva](http://archiva.apache.org/)
+-   [Apache Archiva](https://archiva.apache.org/)
 -   [CloudRepo](https://www.cloudrepo.io)
 
 Once you have a proxy repository installed and configured, then it's
@@ -15320,7 +15320,7 @@ Here's an example setup:
 
 **NOTE**: If using Nexus as the proxy repository, then it is very important that you set the layout policy to
 "permissive" for the proxy mapping that you create to the upstream repository
-http://repo.scala-sbt.org/scalasbt/sbt-plugin-releases. If you do not, Nexus will stop short of proxying the
+https://repo.scala-sbt.org/scalasbt/sbt-plugin-releases. If you do not, Nexus will stop short of proxying the
 original request to this url and issue a HTTP 404 in its place and the dependency will not resolve.
 
 
@@ -15983,7 +15983,7 @@ updateOptions := updateOptions.value.withCachedResolution(true)
 
 ### Dependency as a graph
 
-A project declares its own library dependency using `libraryDependencies` setting. The libraries you added also bring in their transitive dependencies. For example, your project may depend on dispatch-core 0.11.2; dispatch-core 0.11.2 depends on async-http-client 1.8.10; async-http-client 1.8.10 depends on netty 3.9.2.Final, and so forth. If we think of each library to be a node with arrows going out to dependent nodes, we can think of the entire dependencies to be a graph -- specifically a [directed acyclic graph](http://en.wikipedia.org/wiki/Directed_acyclic_graph).
+A project declares its own library dependency using `libraryDependencies` setting. The libraries you added also bring in their transitive dependencies. For example, your project may depend on dispatch-core 0.11.2; dispatch-core 0.11.2 depends on async-http-client 1.8.10; async-http-client 1.8.10 depends on netty 3.9.2.Final, and so forth. If we think of each library to be a node with arrows going out to dependent nodes, we can think of the entire dependencies to be a graph -- specifically a [directed acyclic graph](https://en.wikipedia.org/wiki/Directed_acyclic_graph).
 
 This graph-like structure, which was adopted from Apache Ivy, allows us to define [override rules and exclusions][Library-Management] transitively, but as the number of the node increases, the time it takes to resolve dependencies grows significantly. See [Motivation](#motivation) section later in this page for the full description.
 
@@ -16017,7 +16017,7 @@ $ cat ~/.ivy2/cache/com.ning/async-http-client/ivy-1.8.10.xml | grep netty
     <dependency org="io.netty" name="netty" rev="3.9.2.Final" force="true" conf="compile->compile(*),master(*);runtime->runtime(*)"/>
 ```
 
-There are also some issues around multiple dependencies to the same library with different [Maven classifiers](http://maven.apache.org/pom.html#Maven_Coordinates). In these cases, reproducing the exact result as normal `update` may not make sense or is downright impossible.
+There are also some issues around multiple dependencies to the same library with different [Maven classifiers](https://maven.apache.org/pom.html#Maven_Coordinates). In these cases, reproducing the exact result as normal `update` may not make sense or is downright impossible.
 
 #### SNAPSHOT and dynamic dependencies
 
@@ -20673,8 +20673,8 @@ $ copy-file changes/A.scala A.scala
 That's it! Let me know about your experience in testing plugins!
 
 
-  [giter8]: http://www.foundweekends.org/giter8/
-  [foundweekends]: http://www.foundweekends.org/
+  [giter8]: https://www.foundweekends.org/giter8/
+  [foundweekends]: https://www.foundweekends.org/
   [CC0]: https://creativecommons.org/publicdomain/zero/1.0/
 
 sbt new and Templates
@@ -20725,7 +20725,7 @@ The unique aspect of Giter8 is that it uses GitHub (or any other git repository)
 - [scala-native/scala-native.g8](https://github.com/scala-native/scala-native.g8)       (Scala Native)
 - [scala-native/sbt-crossproject.g8](https://github.com/scala-native/sbt-crossproject.g8) (sbt-crosspoject)
 - [http4s/http4s.g8](https://github.com/http4s/http4s.g8)                               (http4s services)
-- [unfiltered/unfiltered.g8](https://github.com/unfiltered/unfiltered.g8)               ([Unfiltered](http://unfiltered.ws/) application)
+- [unfiltered/unfiltered.g8](https://github.com/unfiltered/unfiltered.g8)               ([Unfiltered](https://unfiltered.ws/) application)
 - [scalatra/scalatra-sbt.g8](https://github.com/scalatra/scalatra-sbt.g8)               (Basic Scalatra template using SBT 0.13.x.)
 
 For more, see [Giter8 templates](https://github.com/foundweekends/giter8/wiki/giter8-templates) on the Giter8 wiki. sbt provides out-of-the-box support for Giter8 templates by shipping with a template resolver for Giter8.
@@ -20740,7 +20740,7 @@ $ sbt new scala/scala-seed.g8 --branch myBranch
 
 #### How to create a Giter8 template
 
-See [Making your own templates](http://www.foundweekends.org/giter8/template.html) for the details on how to create a new Giter8 template.
+See [Making your own templates](https://www.foundweekends.org/giter8/template.html) for the details on how to create a new Giter8 template.
 
 ```
 $ sbt new foundweekends/giter8.g8
@@ -20764,7 +20764,7 @@ License
 Written in <YEAR> by <AUTHOR NAME> <AUTHOR E-MAIL ADDRESS>
 [other author/contributor lines as appropriate]
 To the extent possible under law, the author(s) have dedicated all copyright and related and neighboring rights to this software to the public domain worldwide. This software is distributed without any warranty.
-You should have received a copy of the CC0 Public Domain Dedication along with this software. If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
+You should have received a copy of the CC0 Public Domain Dedication along with this software. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>.
 ```
 
 ### How to extend sbt new

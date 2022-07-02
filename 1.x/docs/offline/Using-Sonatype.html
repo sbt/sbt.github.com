@@ -44,11 +44,11 @@
                   <div class="rightcolumn contents">
                   <h2 id="Using+Sonatype">Using Sonatype<a href="#Using+Sonatype" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Deploying to sonatype is easy! Just follow these simple steps:
 </p><h3 id="Sonatype+setup">Sonatype setup<a href="#Sonatype+setup" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The reference process for configuring and publishing to Sonatype is 
-described in their <a href="http://central.sonatype.org/pages/ossrh-guide.html">OSSRH Guide</a>.
+described in their <a href="https://central.sonatype.org/publish/publish-guide/">OSSRH Guide</a>.
 In short, you need two publicly available URLs: 
 </p><ul><li>the website of the project e.g. https://github.com/sonatype/nexus-public
 </li><li>the project’s source code e.g. https://github.com/sonatype/nexus-public.git
-</li></ul><p>The <a href="http://central.sonatype.org/pages/ossrh-guide.html">OSSRH Guide</a> walks you through the required 
+</li></ul><p>The <a href="https://central.sonatype.org/publish/publish-guide/">OSSRH Guide</a> walks you through the required 
 process of setting up the account with Sonatype. It’s as simple as 
 <a href="https://issues.sonatype.org/secure/Signup!default.jspa">creating a Sonatype's JIRA account</a> and then a 
 <a href="https://issues.sonatype.org/secure/CreateIssue.jspa?issuetype=21&amp;pid=10134">New Project ticket</a>. When creating the account, try to 
@@ -60,7 +60,7 @@ the ticket, but it is not the only method used to confirm the ownership.
 </li><li>naming the groupId for distributing the library (make sure 
 it matches the root package of your code). Sonatype provides
 additional hints on choosing the right groupId for publishing your library in 
-<a href="http://central.sonatype.org/pages/choosing-your-coordinates.html">Choosing your coordinates guide</a>.
+<a href="https://central.sonatype.org/publish/requirements/coordinates/">Choosing your coordinates guide</a>.
 </li><li>providing the SCM and Project URLs to the source code and homepage of the 
 library.
 </li></ul><p>After creating your Sonatype account on JIRA, you can log in 
@@ -69,7 +69,7 @@ although this is not required in the guide, it can be helpful later to check
 on published artifacts.
 </p><blockquote><p><em>Note:</em> Sonatype advises that responding to a <strong>New Project ticket</strong> might 
 take up to two business days, but in my case it was a few minutes.
-</p></blockquote><h3 id="sbt+setup">sbt setup<a href="#sbt+setup" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To address Sonatype’s <a href="http://central.sonatype.org/pages/requirements.html">requirements</a> for publishing to the central repository and to simplify the publishing process, you can
+</p></blockquote><h3 id="sbt+setup">sbt setup<a href="#sbt+setup" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To address Sonatype’s <a href="https://central.sonatype.org/publish/requirements/">requirements</a> for publishing to the central repository and to simplify the publishing process, you can
 use two community plugins. The <a href="https://github.com/sbt/sbt-pgp#sbt-pgp">sbt-pgp plugin</a> can sign the files with GPG/PGP.
 (Optionally <a href="https://github.com/xerial/sbt-sonatype">sbt-sonatype</a> can publish to a Sonatype repository nicer.)
 </p><h4 id="step+1%3A+PGP+Signatures">step 1: PGP Signatures<a href="#step+1%3A+PGP+Signatures" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Follow <a href="https://central.sonatype.org/pages/working-with-pgp-signatures.html">Working with PGP Signatures</a>.
@@ -172,7 +172,7 @@ Jira account)
 </li><li>Close the staging repository and promote the release to central:
 <code>sonatypeRelease</code>
 </li></ol><p>After publishing you have to follow the
-<a href="http://central.sonatype.org/pages/releasing-the-deployment.html">release workflow of Nexus</a>.
+<a href="https://central.sonatype.org/publish/release/">release workflow of Nexus</a>.
 </p><blockquote><p><em>Note:</em> the sbt-sonatype plugin can also be used to publish to other non-sonatype 
 repositories
 </p></blockquote><h4 id="Publishing+tips">Publishing tips<a href="#Publishing+tips" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Use staged releases to test across large projects of independent releases 

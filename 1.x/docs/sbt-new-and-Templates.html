@@ -54,9 +54,9 @@ however for new sbt’s launcher 0.13.13 or above is required as the command fun
 name [hello]:
 
 Template applied in ./hello
-</code></pre><p>This ran the template <a href="https://github.com/scala/scala-seed.g8">scala/scala-seed.g8</a> using <a href="http://www.foundweekends.org/giter8/">Giter8</a>, prompted for values for “name” (which has a default value of “hello”, which we accepted hitting <code>[Enter]</code>), and created a build under <code>./hello</code>.
+</code></pre><p>This ran the template <a href="https://github.com/scala/scala-seed.g8">scala/scala-seed.g8</a> using <a href="https://www.foundweekends.org/giter8/">Giter8</a>, prompted for values for “name” (which has a default value of “hello”, which we accepted hitting <code>[Enter]</code>), and created a build under <code>./hello</code>.
 </p><p><code>scala-seed</code> is the official template for a “minimal” Scala project, but it’s definitely not the only one out there.
-</p><h3 id="Giter8+support">Giter8 support<a href="#Giter8+support" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="http://www.foundweekends.org/giter8/">Giter8</a> is a templating project originally started by Nathan Hamblen in 2010, and now maintained by the <a href="http://www.foundweekends.org/">foundweekends</a> project.
+</p><h3 id="Giter8+support">Giter8 support<a href="#Giter8+support" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://www.foundweekends.org/giter8/">Giter8</a> is a templating project originally started by Nathan Hamblen in 2010, and now maintained by the <a href="https://www.foundweekends.org/">foundweekends</a> project.
 The unique aspect of Giter8 is that it uses GitHub (or any other git repository) to host the templates, so it allows anyone to participate in template creation. Here are some of the templates provided by official sources:
 </p><ul><li><a href="https://github.com/foundweekends/giter8.g8">foundweekends/giter8.g8</a>                 (A template for Giter8 templates)
 </li><li><a href="https://github.com/scala/scala-seed.g8">scala/scala-seed.g8</a>                         (Seed template for Scala)
@@ -74,12 +74,12 @@ The unique aspect of Giter8 is that it uses GitHub (or any other git repository)
 </li><li><a href="https://github.com/scala-native/scala-native.g8">scala-native/scala-native.g8</a>       (Scala Native)
 </li><li><a href="https://github.com/scala-native/sbt-crossproject.g8">scala-native/sbt-crossproject.g8</a> (sbt-crosspoject)
 </li><li><a href="https://github.com/http4s/http4s.g8">http4s/http4s.g8</a>                               (http4s services)
-</li><li><a href="https://github.com/unfiltered/unfiltered.g8">unfiltered/unfiltered.g8</a>               (<a href="http://unfiltered.ws/">Unfiltered</a> application)
+</li><li><a href="https://github.com/unfiltered/unfiltered.g8">unfiltered/unfiltered.g8</a>               (<a href="https://unfiltered.ws/">Unfiltered</a> application)
 </li><li><a href="https://github.com/scalatra/scalatra-sbt.g8">scalatra/scalatra-sbt.g8</a>               (Basic Scalatra template using SBT 0.13.x.)
 </li></ul><p>For more, see <a href="https://github.com/foundweekends/giter8/wiki/giter8-templates">Giter8 templates</a> on the Giter8 wiki. sbt provides out-of-the-box support for Giter8 templates by shipping with a template resolver for Giter8.
 </p><h4 id="Giter8+parameters">Giter8 parameters<a href="#Giter8+parameters" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>You can append Giter8 parameters to the end of the command, so for example to specify a particular branch you can use:
 </p><pre><code class="">$ sbt new scala/scala-seed.g8 --branch myBranch
-</code></pre><h4 id="How+to+create+a+Giter8+template">How to create a Giter8 template<a href="#How+to+create+a+Giter8+template" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>See <a href="http://www.foundweekends.org/giter8/template.html">Making your own templates</a> for the details on how to create a new Giter8 template.
+</code></pre><h4 id="How+to+create+a+Giter8+template">How to create a Giter8 template<a href="#How+to+create+a+Giter8+template" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>See <a href="https://www.foundweekends.org/giter8/template.html">Making your own templates</a> for the details on how to create a new Giter8 template.
 </p><pre><code class="">$ sbt new foundweekends/giter8.g8
 </code></pre><h4 id="Use+CC0+1.0+for+template+licensing">Use CC0 1.0 for template licensing<a href="#Use+CC0+1.0+for+template+licensing" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>We recommend licensing software templates under <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0 1.0</a>,
 which waives all copyrights and related rights, similar to the “public domain.”
@@ -94,7 +94,7 @@ To remove all claims to the templated snippets, distribute it under CC0, which i
 Written in &lt;YEAR&gt; by &lt;AUTHOR NAME&gt; &lt;AUTHOR E-MAIL ADDRESS&gt;
 [other author/contributor lines as appropriate]
 To the extent possible under law, the author(s) have dedicated all copyright and related and neighboring rights to this software to the public domain worldwide. This software is distributed without any warranty.
-You should have received a copy of the CC0 Public Domain Dedication along with this software. If not, see &lt;http://creativecommons.org/publicdomain/zero/1.0/&gt;.
+You should have received a copy of the CC0 Public Domain Dedication along with this software. If not, see &lt;https://creativecommons.org/publicdomain/zero/1.0/&gt;.
 </code></pre><h3 id="How+to+extend+sbt+new">How to extend sbt new<a href="#How+to+extend+sbt+new" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The rest of this page explains how to extend the <code>sbt new</code> command
 to provide support for something other than Giter8 templates.
 You can skip this section if you’re not interested in extending <code>new</code>.
