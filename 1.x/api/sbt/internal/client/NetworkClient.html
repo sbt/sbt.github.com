@@ -127,8 +127,8 @@
                         <a href="ConsoleInterface.html" title="">ConsoleInterface</a>
                       </li><li class="current-entities indented3">
                         <a class="object" href="NetworkClient$.html" title=""></a>
-                        <a class="class" href="" title="A NetworkClient connects to a running an sbt instance or starts a new instance if there isn't already one running."></a>
-                        <a href="" title="A NetworkClient connects to a running an sbt instance or starts a new instance if there isn't already one running.">NetworkClient</a>
+                        <a class="class" href="" title="A NetworkClient connects to a running sbt instance or starts a new instance if there isn't already one running."></a>
+                        <a href="" title="A NetworkClient connects to a running sbt instance or starts a new instance if there isn't already one running.">NetworkClient</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
                         <a class="class" href="ServerConnection.html" title=""></a>
@@ -163,7 +163,7 @@
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A NetworkClient connects to a running an sbt instance or starts a
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A NetworkClient connects to a running sbt instance or starts a
 new instance if there isn't already one running. Once connected,
 it can send commands for sbt to run, it can send completions to sbt
 and print the completions to stdout so that a shell can consume
@@ -173,7 +173,7 @@ in which it relays io bytes between sbt and the terminal.
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><span class="extype" name="java.lang.AutoCloseable">AutoCloseable</span>, <a href="../../../scala/index.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="java.lang.AutoCloseable">AutoCloseable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -231,7 +231,7 @@ in which it relays io bytes between sbt and the terminal.
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">NetworkClient</span><span class="params">(<span name="configuration">configuration: <span class="extype" name="xsbti.AppConfiguration">AppConfiguration</span></span>, <span name="args">args: <a href="../../../scala/index.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span>
+        <span class="name">NetworkClient</span><span class="params">(<span name="configuration">configuration: <span class="extype" name="xsbti.AppConfiguration">AppConfiguration</span></span>, <span name="args">args: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span>
       </span>
       
       
@@ -269,13 +269,13 @@ in which it relays io bytes between sbt and the terminal.
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">arguments</dt><dd class="cmt"><p>the arguments for the forked sbt server if the client
                    needs to start it. It also contains the sbt command
                    arguments to send to the server if any are present.</p></dd><dt class="param">console</dt><dd class="cmt"><p>a logging instance. This can use a ConsoleAppender or
-                   just simply print to a PrintSream.</p></dd><dt class="param">inputStream</dt><dd class="cmt"><p>the InputStream from which the client reads bytes. It
+                   just simply print to a PrintStream.</p></dd><dt class="param">inputStream</dt><dd class="cmt"><p>the InputStream from which the client reads bytes. It
                    is not hardcoded to System.in so that a NetworkClient
                    can be remotely controlled by a java process, which
-                   is useful in test.</p></dd><dt class="param">errorStream</dt><dd class="cmt"><p>the sink for messages that we always want to be printed.
+                   is useful in testing.</p></dd><dt class="param">errorStream</dt><dd class="cmt"><p>the sink for messages that we always want to be printed.
                    It is usually System.err but could be overridden in tests
                    or set to a null OutputStream if the NetworkClient needs
-                   to be silent</p></dd><dt class="param">printStream</dt><dd class="cmt"><p>the sink for standard out messages. It is typically
+                   to be silent.</p></dd><dt class="param">printStream</dt><dd class="cmt"><p>the sink for standard out messages. It is typically
                    System.out but in the case of completions, the bytes written
                    to System.out are usually treated as completion results
                    so we need to reroute standard out messages to System.err.
@@ -369,7 +369,7 @@ in which it relays io bytes between sbt and the terminal.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">batchExecute</span><span class="params">(<span name="userCommands">userCommands: <a href="../../../scala/index.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">batchExecute</span><span class="params">(<span name="userCommands">userCommands: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       
       
@@ -385,7 +385,7 @@ in which it relays io bytes between sbt and the terminal.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="../../../scala/index.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -457,7 +457,7 @@ in which it relays io bytes between sbt and the terminal.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="../../../scala/index.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -530,7 +530,7 @@ in which it relays io bytes between sbt and the terminal.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getCompletions</span><span class="params">(<span name="query">query: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="../../../scala/index.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+        <span class="name">getCompletions</span><span class="params">(<span name="query">query: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       
       
@@ -613,7 +613,7 @@ in which it relays io bytes between sbt and the terminal.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="../../../scala/index.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -859,7 +859,7 @@ in which it relays io bytes between sbt and the terminal.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">splitDiagnostics</span><span class="params">(<span name="params">params: <a href="../langserver/PublishDiagnosticsParams.html" class="extype" name="sbt.internal.langserver.PublishDiagnosticsParams">PublishDiagnosticsParams</a></span>)</span><span class="result">: <a href="../../../scala/index.html#Vector[+A]=scala.collection.immutable.Vector[A]" class="extmbr" name="scala.Vector">Vector</a>[(<a href="../../util/Level$.html#ValueextendsOrdered[Enumeration.this.Value]withSerializable" class="extmbr" name="sbt.util.Level.Value">util.Level.Value</a>, <span class="extype" name="scala.Predef.String">String</span>)]</span>
+        <span class="name">splitDiagnostics</span><span class="params">(<span name="params">params: <a href="../langserver/PublishDiagnosticsParams.html" class="extype" name="sbt.internal.langserver.PublishDiagnosticsParams">PublishDiagnosticsParams</a></span>)</span><span class="result">: <span class="extype" name="scala.Vector">Vector</span>[(<a href="../../util/Level$.html#ValueextendsOrdered[Enumeration.this.Value]withSerializable" class="extmbr" name="sbt.util.Level.Value">util.Level.Value</a>, <span class="extype" name="scala.Predef.String">String</span>)]</span>
       </span>
       
       
@@ -875,7 +875,7 @@ in which it relays io bytes between sbt and the terminal.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">splitLogMessage</span><span class="params">(<span name="params">params: <a href="../langserver/LogMessageParams.html" class="extype" name="sbt.internal.langserver.LogMessageParams">LogMessageParams</a></span>)</span><span class="result">: <a href="../../../scala/index.html#Vector[+A]=scala.collection.immutable.Vector[A]" class="extmbr" name="scala.Vector">Vector</a>[(<a href="../../util/Level$.html#ValueextendsOrdered[Enumeration.this.Value]withSerializable" class="extmbr" name="sbt.util.Level.Value">util.Level.Value</a>, <span class="extype" name="scala.Predef.String">String</span>)]</span>
+        <span class="name">splitLogMessage</span><span class="params">(<span name="params">params: <a href="../langserver/LogMessageParams.html" class="extype" name="sbt.internal.langserver.LogMessageParams">LogMessageParams</a></span>)</span><span class="result">: <span class="extype" name="scala.Vector">Vector</span>[(<a href="../../util/Level$.html#ValueextendsOrdered[Enumeration.this.Value]withSerializable" class="extmbr" name="sbt.util.Level.Value">util.Level.Value</a>, <span class="extype" name="scala.Predef.String">String</span>)]</span>
       </span>
       
       
@@ -1010,7 +1010,7 @@ This instance must be shutdown explicitly via <code>sbt -client shutdown</code>
         <div class="parent" name="java.lang.AutoCloseable">
               <h3>Inherited from <span class="extype" name="java.lang.AutoCloseable">AutoCloseable</span></h3>
             </div><div class="parent" name="scala.AnyRef">
-              <h3>Inherited from <a href="../../../scala/index.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
             </div>
