@@ -840,76 +840,80 @@ most programmers today use an Integrated Development Environment, or IDE for sho
 Two of the popular IDEs in Scala are <a href="https://scalameta.org/metals/">Metals</a> and <a href="https://www.jetbrains.com/idea/">IntelliJ IDEA</a>,
 and they both integrate with sbt builds.
 </p><ul><li><a href="#metals">Using sbt as Metals build server</a>
-</li><li><a href="#intellij-bsp">Using sbt as IntelliJ IDEA build server</a>
 </li><li><a href="#intellij-import">Importing to IntelliJ IDEA</a>
+</li><li><a href="#intellij-bsp">Using sbt as IntelliJ IDEA build server</a>
 </li></ul><a id="metals"></a><h3 id="Using+sbt+as+Metals+build+server">Using sbt as Metals build server<a href="#Using+sbt+as+Metals+build+server" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://scalameta.org/metals/">Metals</a> is an open source <em>language server</em> for Scala, which can
 act as the backend for <a href="https://code.visualstudio.com/">VS Code</a> and other editors that support <a href="https://microsoft.github.io/language-server-protocol/">LSP</a>.
 Metals in turn supports different <em>build servers</em> including sbt via the <a href="https://build-server-protocol.github.io/">Build Server Protocol</a> (BSP).
 </p><p>To use Metals on VS Code:
-</p><ol><li>Install Metals from Extensions tab:
+</p><ol><li>Install Metals from Extensions tab:<br>
 <img src="files/metals0.png" alt="Metals"/>
 </li><li>Open a directory containing a <code>build.sbt</code> file.
-</li><li>From the menubar, run View &gt; Command Palette… (<code>Cmd-Shift-P</code> on macOS) “Metals: Switch build server”, and select “sbt”
+</li><li>From the menubar, run View &gt; Command Palette… (<code>Cmd-Shift-P</code> on macOS) “Metals: Switch build server”, and select “sbt”<br>
 <img src="files/metals2.png" alt="Metals"/>
-</li><li>Once the import process is complete, open a Scala file to see that code completion works:
+</li><li>Once the import process is complete, open a Scala file to see that code completion works:<br>
 <img src="files/metals3.png" alt="Metals"/>
 </li></ol><p>Use the following setting to opt-out some of the subprojects from BSP.
 </p><pre><code class="prettyprint lang-scala">bspEnabled := false
 </code></pre><p>When you make changes to the code and save them (<code>Cmd-S</code> on macOS), Metals will invoke sbt to do
 the actual building work.
-</p><h4 id="Interactive+debugging+on+VS+Code">Interactive debugging on VS Code<a href="#Interactive+debugging+on+VS+Code" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ol><li>Metals supports interactive debugging by setting break points in the code:
+</p><h4 id="Interactive+debugging+on+VS+Code">Interactive debugging on VS Code<a href="#Interactive+debugging+on+VS+Code" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ol><li>Metals supports interactive debugging by setting break points in the code:<br>
 <img src="files/metals4.png" alt="Metals"/>
 </li><li>Interactive debugging can be started by right-clicking on an unit test, and selecting “Debug Test.”
-When the test hits a break point, you can inspect the values of the variables:
+When the test hits a break point, you can inspect the values of the variables:<br>
 <img src="files/metals5.png" alt="Metals"/>
 </li></ol><p>See <a href="https://code.visualstudio.com/docs/editor/debugging">Debugging</a> page on VS Code documentation for more details on how to navigate an interactive debugging session.
 </p><h4 id="Logging+into+sbt+session">Logging into sbt session<a href="#Logging+into+sbt+session" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>While Metals uses sbt as the build server, we can also log into the same sbt session using a thin client.
-</p><ul><li>From Terminal section, type in <code>sbt --client</code>
+</p><ul><li>From Terminal section, type in <code>sbt --client</code><br>
 <img src="files/metals6.png" alt="Metals"/>
 </li></ul><p>This lets you log into the sbt session Metals has started. In there you can call <code>testOnly</code> and other tasks with
 the code already compiled.
-</p><a id="intellij-bsp"></a><h3 id="Using+sbt+as+IntelliJ+IDEA+build+server">Using sbt as IntelliJ IDEA build server<a href="#Using+sbt+as+IntelliJ+IDEA+build+server" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://www.jetbrains.com/idea/">IntelliJ IDEA</a> is an IDE created by JetBrains, and the Community Edition is open source under Apache v2 license.
-In addition to its own compilation engine, IntelliJ supports different <em>build servers</em> including sbt via the <a href="https://build-server-protocol.github.io/">Build Server Protocol</a> (BSP).
-</p><p>To use sbt as build server on IntelliJ:
-</p><ol><li>Install Scala plugin on the Plugins tab:
+</p><a id="intellij-import"></a><h3 id="Importing+to+IntelliJ+IDEA">Importing to IntelliJ IDEA<a href="#Importing+to+IntelliJ+IDEA" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://www.jetbrains.com/idea/">IntelliJ IDEA</a> is an IDE created by JetBrains, and the Community Edition is open source under Apache v2 license.
+IntelliJ integrates with many build tools, including sbt, to import the project.
+This is a more traditional approach that might be more reliable than using BSP approach.
+</p><p>To import a build to IntelliJ IDEA:
+</p><ol><li>Install Scala plugin on the Plugins tab:<br>
 <img src="files/intellij1.png" alt="IntelliJ"/>
-</li><li>To use the BSP approach, do not use Open button on the Project tab:
+</li><li>From Projects, open a directory containing a <code>build.sbt</code> file.<br>
+<img src="files/intellij2.png" alt="IntelliJ"/>
+</li><li>Once the import process is complete, open a Scala file to see that code completion works.
+</li></ol><p>IntelliJ Scala plugin uses its own lightweight compilation engine to detect errors, which is fast but sometimes incorrect. Per <a href="https://blog.jetbrains.com/scala/2021/07/27/intellij-scala-plugin-2021-2/#Compiler-based_highlighting">compiler-based highlighting</a>, IntelliJ can be configured to use the Scala compiler for error highlighting.
+</p><h4 id="Interactive+debugging+with+IntelliJ+IDEA">Interactive debugging with IntelliJ IDEA<a href="#Interactive+debugging+with+IntelliJ+IDEA" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ol><li>IntelliJ supports interactive debugging by setting break points in the code:<br>
+<img src="files/intellij4.png" alt="IntelliJ"/>
+</li><li>Interactive debugging can be started by right-clicking on an unit test, and selecting “Debug ‘&lt;test name&gt;‘.”
+　　Alternatively, you can click the green “run” icon on the left part of the editor near the unit test.
+When the test hits a break point, you can inspect the values of the variables:<br>
+<img src="files/intellij5.png" alt="IntelliJ"/>
+</li></ol><p>See <a href="https://www.jetbrains.com/help/idea/debugging-code.html">Debug Code</a> page on IntelliJ documentation for more details on how to navigate an interactive debugging session.
+</p><a id="intellij-bsp"></a><h3 id="Using+sbt+as+IntelliJ+IDEA+build+server+%28advanced%29">Using sbt as IntelliJ IDEA build server (advanced)<a href="#Using+sbt+as+IntelliJ+IDEA+build+server+%28advanced%29" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>In addition to its own compilation engine, IntelliJ supports different <em>build servers</em> including sbt via the <a href="https://build-server-protocol.github.io/">Build Server Protocol</a> (BSP).
+BSP support in IntelliJ is less matured compared to the import approach, and you might encounter bugs and UX issues.
+</p><p>The benefit of using BSP with IntelliJ is that you’re using sbt to do the actual build work, so if you are the kind of programmer who had sbt session up on the side, this avoids double compilation.
+</p><p>To use sbt as build server on IntelliJ:
+</p><ol><li>Install Scala plugin on the Plugins tab.
+</li><li>To use the BSP approach, do not use Open button on the Project tab:<br>
 <img src="files/intellij7.png" alt="IntelliJ"/>
 </li><li>From menubar, click New &gt; “Project From Existing Sources”, or Find Action (<code>Cmd-Shift-P</code> on macOS) and
-type “Existing” to find “Import Project From Existing Sources”:
+type “Existing” to find “Import Project From Existing Sources”:<br>
 <img src="files/intellij8.png" alt="IntelliJ"/>
-</li><li>Open a <code>build.sbt</code> file. Select <strong>BSP</strong> when prompted:
+</li><li>Open a <code>build.sbt</code> file. Select <strong>BSP</strong> when prompted:<br>
 <img src="files/intellij9.png" alt="IntelliJ"/>
-</li><li>Select <strong>sbt (recommended)</strong> as the tool to import the BSP workspace:
+</li><li>Select <strong>sbt (recommended)</strong> as the tool to import the BSP workspace:<br>
 <img src="files/intellij10.png" alt="IntelliJ"/>
-</li><li>Once the import process is complete, open a Scala file to see that code completion works:
+</li><li>Once the import process is complete, open a Scala file to see that code completion works:<br>
 <img src="files/intellij11.png" alt="IntelliJ"/>
 </li></ol><p>Use the following setting to opt-out some of the subprojects from BSP.
 </p><pre><code class="prettyprint lang-scala">bspEnabled := false
-</code></pre><ul><li>Open Preferences, search BSP and check “build automatically on file save”, and uncheck “export sbt projects to Bloop before import”:
+</code></pre><ul><li>Open Preferences, search BSP and check “build automatically on file save”, and uncheck “export sbt projects to Bloop before import”:<br>
 <img src="files/intellij12.png" alt="IntelliJ"/>
 </li></ul><p>When you make changes to the code and save them (<code>Cmd-S</code> on macOS), IntelliJ will invoke sbt to do
 the actual building work.
 </p><p>See also Igal Tabachnik’s <a href="https://hmemcpy.com/2021/09/bsp-and-intellij/">Using BSP effectively in IntelliJ and Scala</a> for more details.
-</p><h4 id="Interactive+debugging+with+IntelliJ+IDEA">Interactive debugging with IntelliJ IDEA<a href="#Interactive+debugging+with+IntelliJ+IDEA" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ol><li>IntelliJ supports interactive debugging by setting break points in the code:
-<img src="files/intellij4.png" alt="IntelliJ"/>
-</li><li>Interactive debugging can be started by right-clicking on an unit test, and selecting “Debug ‘&lt;test name&gt;‘.”
-When the test hits a break point, you can inspect the values of the variables:
-<img src="files/intellij5.png" alt="IntelliJ"/>
-</li></ol><p>See <a href="https://www.jetbrains.com/help/idea/debugging-code.html">Debug Code</a> page on IntelliJ documentation for more details on how to navigate an interactive debugging session.
 </p><h4 id="Logging+into+sbt+session">Logging into sbt session<a href="#Logging+into+sbt+session" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>We can also log into the existing sbt session using the thin client.
 </p><ul><li>From Terminal section, type in <code>sbt --client</code>
 <img src="files/intellij6.png" alt="IntelliJ"/>
 </li></ul><p>This lets you log into the sbt session IntelliJ has started. In there you can call <code>testOnly</code> and other tasks with
 the code already compiled.
-</p><a id="intellij-import"></a><h3 id="Importing+to+IntelliJ+IDEA">Importing to IntelliJ IDEA<a href="#Importing+to+IntelliJ+IDEA" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>IntelliJ integrates with many build tools, including sbt, to import the project.
-This is a more traditional approach that might be more stable in some cases.
-</p><p>To import a build to IntelliJ IDEA:
-</p><ol><li>Install Scala plugin on the Plugins tab.
-</li><li>From Projects, open a directory containing a <code>build.sbt</code> file.
-<img src="files/intellij2.png" alt="IntelliJ"/>
-</li><li>Once the import process is complete, open a Scala file to see that code completion works.
-</li></ol><h2 id="Build+definition">Build definition<a href="#Build+definition" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>This page describes sbt build definitions, including some “theory” and
+</p><h2 id="Build+definition">Build definition<a href="#Build+definition" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>This page describes sbt build definitions, including some “theory” and
 the syntax of <code>build.sbt</code>.
 It assumes you have installed a recent version of sbt, such as sbt 1.7.1,
 know how to <a href="Running.html">use sbt</a>,
