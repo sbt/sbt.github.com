@@ -47,6 +47,7 @@ Scala の IDE は <a href="https://scalameta.org/metals/">Metals</a> と <a href
 </p><ul><li><a href="#metals">Metals のビルドサーバとして sbt を用いる</a>
 </li><li><a href="#intellij-import">IntelliJ IDEA へのインポート</a>
 </li><li><a href="#intellij-bsp">IntelliJ IDEA のビルドサーバとして sbt を用いる</a>
+</li><li><a href="#nvim-metals">Metals フロントエンドとして Neovim を用いる</a>
 </li></ul><a id="metals"></a><h3 id="Metals+%E3%81%AE%E3%83%93%E3%83%AB%E3%83%89%E3%82%B5%E3%83%BC%E3%83%90%E3%81%A8%E3%81%97%E3%81%A6+sbt+%E3%82%92%E7%94%A8%E3%81%84%E3%82%8B">Metals のビルドサーバとして sbt を用いる<a href="#Metals+%E3%81%AE%E3%83%93%E3%83%AB%E3%83%89%E3%82%B5%E3%83%BC%E3%83%90%E3%81%A8%E3%81%97%E3%81%A6+sbt+%E3%82%92%E7%94%A8%E3%81%84%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://scalameta.org/metals/">Metals</a> は、Scala のためのオープンソースな<strong>言語サーバ</strong>であり、<a href="https://code.visualstudio.com/">VS Code</a> その他の
 <a href="https://microsoft.github.io/language-server-protocol/">LSP</a> をサポートするエディタのバックエンドとして機能することができる。
 一方で Metals は、<a href="https://build-server-protocol.github.io/">Build Server Protocol</a> (BSP) 経由で sbt を含む異なる<strong>ビルドサーバ</strong>をサポートする。
@@ -81,7 +82,7 @@ IntelliJ は sbt を含む多くのビルドツールと統合して、プロジ
 </li><li>Projects から <code>build.sbt</code> ファイルを含んだディレクトリを開く:<br>
 <img src="../files/intellij2.png" alt="IntelliJ"/>
 </li><li>インポート処理が完了したら、Scala のファイルを開いてみてコード補完が機能していることを確認する。
-</li></ol><p>IntelliJ Scala プラグインは独自の軽量コンパイラエンジンを用いてエラーの検知を行うが、これは高速であるが正しくないこともある。[Compiler-based highlighting][intellij-scala-plugin-2021-2] といって、 IntelliJ を Scala コンパイラを使ってエラー・ハイライトを行うように設定することも可能だ。
+</li></ol><p>IntelliJ Scala プラグインは独自の軽量コンパイラエンジンを用いてエラーの検知を行うが、これは高速であるが正しくないこともある。<a href="https://blog.jetbrains.com/scala/2021/07/27/intellij-scala-plugin-2021-2/#Compiler-based_highlighting">Compiler-based highlighting</a> といって、 IntelliJ を Scala コンパイラを使ってエラー・ハイライトを行うように設定することも可能だ。
 </p><h4 id="IntelliJ+IDEA+%E3%81%A7%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%A9%E3%82%AF%E3%83%86%E3%82%A3%E3%83%96%E3%83%BB%E3%83%87%E3%83%90%E3%83%83%E3%82%B0">IntelliJ IDEA でのインタラクティブ・デバッグ<a href="#IntelliJ+IDEA+%E3%81%A7%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%A9%E3%82%AF%E3%83%86%E3%82%A3%E3%83%96%E3%83%BB%E3%83%87%E3%83%90%E3%83%83%E3%82%B0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ol><li>コードにブレークポイントを設定することで、IntelliJ はインタラクティブ・デバッグをサポートする:<br>
 <img src="../files/intellij4.png" alt="IntelliJ"/>
 </li><li>単体テストを右クリックして「Debug &lt;テスト名&gt;」を選ぶことでインタラクティブ・デバッグを開始する。
@@ -113,6 +114,48 @@ IntelliJ の BSP サポートは従来のインポートと比較すると安定
 </p><ul><li>Terminal セクションから <code>sbt --client</code> と打ち込む。<br>
 <img src="../files/intellij6.png" alt="IntelliJ"/>
 </li></ul><p>これで IntelliJ が開始した sbt セッションにログインすることができた。その中でコードが既にコンパイルされた状態から <code>testOnly</code> その他のタスクを実行できる。
+</p><a id="nvim-metals"></a><h3 id="Metals+%E3%83%95%E3%83%AD%E3%83%B3%E3%83%88%E3%82%A8%E3%83%B3%E3%83%89%E3%81%A8%E3%81%97%E3%81%A6+Neovim+%E3%82%92%E7%94%A8%E3%81%84%E3%82%8B+%28%E4%B8%8A%E7%B4%9A%E8%80%85%E5%90%91%E3%81%91%29">Metals フロントエンドとして Neovim を用いる (上級者向け)<a href="#Metals+%E3%83%95%E3%83%AD%E3%83%B3%E3%83%88%E3%82%A8%E3%83%B3%E3%83%89%E3%81%A8%E3%81%97%E3%81%A6+Neovim+%E3%82%92%E7%94%A8%E3%81%84%E3%82%8B+%28%E4%B8%8A%E7%B4%9A%E8%80%85%E5%90%91%E3%81%91%29" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://neovim.io/">Neovim</a> は、Vim エディタのモダンなフォークで、組み込みで <a href="https://microsoft.github.io/language-server-protocol/">LSP</a> をサポートしていたりする。
+そのため Neovim は Metals のフロントエンドとして設定可能だ。
+</p><p>Metals メンテナの一人である Chris Kipps さんが <a href="https://github.com/scalameta/nvim-metals">nvim-metals</a> というプラグインを作っており、これは Metals 機能を網羅的にサポートする。
+nvim-metals をインストールするには、Chris Kipps さんの <a href="https://github.com/scalameta/nvim-metals/discussions/39#discussion-82302">lsp.lua</a> を元に
+<code>$XDG_CONFIG_HOME/nvim/lua/</code> 以下に設定ファイルを書き、自分の好みに合わせていく。
+例えば、vim-plug など別のプラグインマネージャを使っている場合はプラグインの部分をコメントアウトする必要がある。
+</p><p><code>init.vim</code> から以下のようにして読み込める:
+</p><pre><code class="">lua &lt;&lt; END
+require('lsp')
+END
+</code></pre><p><code>lsp.lua</code> によると、<code>g:metals_status</code> はステータスラインに表示させるべきと書いてあり、これは lualine.nvim などを使って実現できる。
+</p><ol><li>次に、sbt を使ったビルドの Scala ファイルを Neovim を用いて開く。
+</li><li>プロンプトが表示されたら <code>:MetalsInstall</code> を実行する。
+</li><li><code>:MetalsStartServer</code> を実行する。
+</li><li>ステータスラインの設定がうまくいっていれば、「Connecting to sbt」、「Indexing」などと表示される。<br>
+<img src="../files/nvim0.png" width="900">
+</li><li>Insert モードに入るとコード補完が作動し、タブを使って候補を見ていくことができる:<br>
+<img src="../files/nvim1.png" width="900">
+</li></ol><ul><li>変更を保存するとビルドが自動で行われ、コンパイルエラーがあった場合はコード中の余白に表示される:<br>
+<img src="../files/nvim2.png" width="900">
+</li></ul><h4 id="%E5%AE%9A%E7%BE%A9%E3%81%B8%E3%81%AE%E3%82%B8%E3%83%A3%E3%83%B3%E3%83%97">定義へのジャンプ<a href="#%E5%AE%9A%E7%BE%A9%E3%81%B8%E3%81%AE%E3%82%B8%E3%83%A3%E3%83%B3%E3%83%97" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ol><li>カーソル下のシンボルの定義へは <code>gD</code> を使ってジャンプできる (具体的なキーバインドは好みのものにカスタマイズできる):<br>
+<img src="../files/nvim3.png" width="900">
+</li><li><code>Ctrl-O</code> を使って古いバッファーに戻る。
+</li></ol><h4 id="%E3%83%9B%E3%83%90%E3%83%AA%E3%83%B3%E3%82%B0">ホバリング<a href="#%E3%83%9B%E3%83%90%E3%83%AA%E3%83%B3%E3%82%B0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>「マウスオーバー」のようにカーソル下のシンボルの型情報を表示させるには、Normal モードで <code>K</code> を使う:<br>
+<img src="../files/nvim4.png" width="900">
+</li></ul><h4 id="%E3%82%A8%E3%83%A9%E3%83%BC%E3%81%AE%E5%88%97%E6%8C%99">エラーの列挙<a href="#%E3%82%A8%E3%83%A9%E3%83%BC%E3%81%AE%E5%88%97%E6%8C%99" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ol><li>全てのコンパイラエラーと警告を列挙するには <code>&lt;leader&gt;aa</code> を使う:<br>
+<img src="../files/nvim5.png" width="900">
+</li><li>これは標準の quickfix リストを使っているので、<code>:cnext</code> や <code>:cprev</code> といったコマンドを使ってエラーや警告を見ていける。
+</li><li>エラーだけ見たい場合は、<code>&lt;leader&gt;ae</code> を使う。
+</li></ol><h4 id="Neovim+%E3%81%A7%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%A9%E3%82%AF%E3%83%86%E3%82%A3%E3%83%96%E3%83%BB%E3%83%87%E3%83%90%E3%83%83%E3%82%B0">Neovim でのインタラクティブ・デバッグ<a href="#Neovim+%E3%81%A7%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%A9%E3%82%AF%E3%83%86%E3%82%A3%E3%83%96%E3%83%BB%E3%83%87%E3%83%90%E3%83%83%E3%82%B0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ol><li>nvim-dap のおかげで、Neovim はインタラクティブ・デバッグをサポートする。<code>&lt;leader&gt;dt</code> を用いてブレークポイントを設定していく:<br>
+<img src="../files/nvim6.png" width="900">
+</li><li>単体テストを開き、ビルド済みかをホバリング (<code>K</code>) で確認して、debug continue (<code>&lt;leader&gt;dc</code>) でデバッガを開始する。
+プロンプトが表示されたら、「1: RunOrTest」を選ぶ。
+</li><li>テストがブレークポイントに当たると、debug hovering (<code>&lt;leader&gt;dK</code>) を使って変数の値を検査することができる:<br>
+<img src="../files/nvim7.png" width="900">
+</li><li>再度 debug continue (<code>&lt;leader&gt;dc</code>) してセッションを終了させる。
+</li></ol><p>詳細は <a href="https://github.com/scalameta/nvim-metals">nvim-metals</a> 参考。
+</p><h4 id="sbt+%E3%82%BB%E3%83%83%E3%82%B7%E3%83%A7%E3%83%B3%E3%81%B8%E3%81%AE%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3">sbt セッションへのログイン<a href="#sbt+%E3%82%BB%E3%83%83%E3%82%B7%E3%83%A7%E3%83%B3%E3%81%B8%E3%81%AE%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>シンクライアントを使って既存の sbt セッションにログインすることができる。
+</p><ol><li>新しい vim ウィンドウに <code>:terminal</code> と打ち込んで組み込みのターミナルを立ち上げる。
+</li><li><code>sbt --client</code> と打ち込む<br>
+<img src="../files/nvim8.png" width="900">
+</li></ol><p>Neovim の中だが、タブ補完なども普通に動作する。
 </p><div class="bottom nav">
                 <div class="row">
                   <div class="col-md-auto">

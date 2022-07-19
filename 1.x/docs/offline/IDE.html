@@ -49,6 +49,7 @@ and they both integrate with sbt builds.
 </p><ul><li><a href="#metals">Using sbt as Metals build server</a>
 </li><li><a href="#intellij-import">Importing to IntelliJ IDEA</a>
 </li><li><a href="#intellij-bsp">Using sbt as IntelliJ IDEA build server</a>
+</li><li><a href="#nvim-metals">Using Neovim as Metals frontend</a>
 </li></ul><a id="metals"></a><h3 id="Using+sbt+as+Metals+build+server">Using sbt as Metals build server<a href="#Using+sbt+as+Metals+build+server" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://scalameta.org/metals/">Metals</a> is an open source <em>language server</em> for Scala, which can
 act as the backend for <a href="https://code.visualstudio.com/">VS Code</a> and other editors that support <a href="https://microsoft.github.io/language-server-protocol/">LSP</a>.
 Metals in turn supports different <em>build servers</em> including sbt via the <a href="https://build-server-protocol.github.io/">Build Server Protocol</a> (BSP).
@@ -120,6 +121,46 @@ the actual building work.
 <img src="files/intellij6.png" alt="IntelliJ"/>
 </li></ul><p>This lets you log into the sbt session IntelliJ has started. In there you can call <code>testOnly</code> and other tasks with
 the code already compiled.
+</p><a id="nvim-metals"></a><h3 id="Using+Neovim+as+Metals+frontend+%28advanced%29">Using Neovim as Metals frontend (advanced)<a href="#Using+Neovim+as+Metals+frontend+%28advanced%29" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://neovim.io/">Neovim</a> is a modern fork of Vim that supports <a href="https://microsoft.github.io/language-server-protocol/">LSP</a> out-of-box,
+which means it can be configured as a frontend for Metals.
+</p><p>Chris Kipp, who is a maintainer of Metals, created <a href="https://github.com/scalameta/nvim-metals">nvim-metals</a> plugin that provides comprehensive Metals support on Neovim. To install nvim-metals, create <code>lsp.lua</code> under <code>$XDG_CONFIG_HOME/nvim/lua/</code> based on Chris’s <a href="https://github.com/scalameta/nvim-metals/discussions/39#discussion-82302">lsp.lua</a> and adjust to your preference. For example, comment out its plugins section and load the listed plugins using the plugin manager of your choice such as vim-plug.
+</p><p>In <code>init.vim</code>, the file can be loaded as:
+</p><pre><code class="">lua &lt;&lt; END
+require('lsp')
+END
+</code></pre><p>Per <code>lsp.lua</code>, <code>g:metals_status</code> should be displayed on the status line, which can be done using lualine.nvim etc.
+</p><ol><li>Next, open a Scala file in an sbt build using Neovim.
+</li><li>Run <code>:MetalsInstall</code> when prompted.
+</li><li>Run <code>:MetalsStartServer</code>.
+</li><li>If the status line is set up, you should see something like “Connecting to sbt” or “Indexing.”<br>
+<img src="files/nvim0.png" width="900">
+</li><li>Code completion works when you’re in Insert mode, and you can tab through the candidates:<br>
+<img src="files/nvim1.png" width="900">
+</li></ol><ul><li>A build is triggered upon saving changes, and compilation errors are displayed inline:<br>
+<img src="files/nvim2.png" width="900">
+</li></ul><h4 id="Go+to+definition">Go to definition<a href="#Go+to+definition" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ol><li>You can jump to definition of the symbol under cursor by using <code>gD</code> (exact keybinding can be customized):<br>
+<img src="files/nvim3.png" width="900">
+</li><li>Use <code>Ctrl-O</code> to return to the old buffer.
+</li></ol><h4 id="Hover">Hover<a href="#Hover" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>To display the type information of the symbol under cursor, like hovering, use <code>K</code> in Normal mode:<br>
+<img src="files/nvim4.png" width="900">
+</li></ul><h4 id="Listing+diagnostics">Listing diagnostics<a href="#Listing+diagnostics" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ol><li>To list all compilation errors and warnings, use <code>&lt;leader&gt;aa</code>:<br>
+<img src="files/nvim5.png" width="900">
+</li><li>Since this is in the standard quickfix list, you can use the command such as <code>:cnext</code> and <code>:cprev</code> to nagivate through the errors and warnings.
+</li><li>To list just the errors, use <code>&lt;leader&gt;ae</code>.
+</li></ol><h4 id="Interactive+debugging+with+Neovim">Interactive debugging with Neovim<a href="#Interactive+debugging+with+Neovim" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ol><li>Thanks to nvim-dap, Neovim supports interactive debugging. Set break points in the code using <code>&lt;leader&gt;dt</code>:<br>
+<img src="files/nvim6.png" width="900">
+</li><li>Nagivate to a unit test, confirm that it’s built by hovering (<code>K</code>), and then
+“debug continue” (<code>&lt;leader&gt;dc</code>) to start a debugger.
+Choose “1: RunOrTest” when prompted.
+</li><li>When the test hits a break point, you can inspect the values of the variables by debug hovering (<code>&lt;leader&gt;dK</code>):<br>
+<img src="files/nvim7.png" width="900">
+</li><li>“debug continue” (<code>&lt;leader&gt;dc</code>) again to end the session.
+</li></ol><p>See <a href="https://github.com/scalameta/nvim-metals">nvim-metals</a> regarding further details.
+</p><h4 id="Logging+into+sbt+session">Logging into sbt session<a href="#Logging+into+sbt+session" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>We can also log into the existing sbt session using the thin client.
+</p><ol><li>In a new vim window type <code>:terminal</code> to start the built-in terminal.
+</li><li>Type in <code>sbt --client</code><br>
+<img src="files/nvim8.png" width="900">
+</li></ol><p>Even though it’s inside Neovim, tab completion etc works fine inside.
 </p><div class="bottom nav">
                 <div class="row">
                   <div class="col-md-auto">
