@@ -805,10 +805,42 @@ IntelliJ は sbt を含む多くのビルドツールと統合して、プロジ
 テストがブレークポイントに当たると、変数の値を検査することができる。<br>
 <img src="../files/intellij5.png" alt="IntelliJ"/>
 </li></ol><p>インタラクティブ・デバッグが開始してからの操作方法の詳細は IntelliJ ドキュメンテーションの <a href="https://www.jetbrains.com/help/idea/debugging-code.html">Debug code</a> ページ参照。
-</p><a id="intellij-bsp"></a><h3 id="IntelliJ+IDEA+%E3%81%AE%E3%83%93%E3%83%AB%E3%83%89%E3%82%B5%E3%83%BC%E3%83%90%E3%81%A8%E3%81%97%E3%81%A6+sbt+%E3%82%92%E7%94%A8%E3%81%84%E3%82%8B+%28%E4%B8%8A%E7%B4%9A%E8%80%85%E5%90%91%E3%81%91%29">IntelliJ IDEA のビルドサーバとして sbt を用いる (上級者向け)<a href="#IntelliJ+IDEA+%E3%81%AE%E3%83%93%E3%83%AB%E3%83%89%E3%82%B5%E3%83%BC%E3%83%90%E3%81%A8%E3%81%97%E3%81%A6+sbt+%E3%82%92%E7%94%A8%E3%81%84%E3%82%8B+%28%E4%B8%8A%E7%B4%9A%E8%80%85%E5%90%91%E3%81%91%29" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>独自のコンパイラエンジンの他に IntelliJ は <a href="https://build-server-protocol.github.io/">Build Server Protocol</a> (BSP) 経由で sbt を含む異なる<strong>ビルドサーバ</strong>をサポートする。
-IntelliJ の BSP サポートは従来のインポートと比較すると安定性が低く、バグや UX 問題などに引っかかるかもしれない。
+</p><a id="intellij-bsp"></a><h3 id="IntelliJ+IDEA+%E3%81%AE%E3%83%93%E3%83%AB%E3%83%89%E3%82%B5%E3%83%BC%E3%83%90%E3%81%A8%E3%81%97%E3%81%A6+sbt+%E3%82%92%E7%94%A8%E3%81%84%E3%82%8B+%28%E4%B8%8A%E7%B4%9A%E8%80%85%E5%90%91%E3%81%91%29">IntelliJ IDEA のビルドサーバとして sbt を用いる (上級者向け)<a href="#IntelliJ+IDEA+%E3%81%AE%E3%83%93%E3%83%AB%E3%83%89%E3%82%B5%E3%83%BC%E3%83%90%E3%81%A8%E3%81%97%E3%81%A6+sbt+%E3%82%92%E7%94%A8%E3%81%84%E3%82%8B+%28%E4%B8%8A%E7%B4%9A%E8%80%85%E5%90%91%E3%81%91%29" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>IntelliJ へビルドをインポートするということは、事実上 IntelliJ をビルドツールやコンパイラとして採用してコードを書いているということだ (<a href="https://blog.jetbrains.com/scala/2021/07/27/intellij-scala-plugin-2021-2/#Compiler-based_highlighting">compiler-based highlighting</a> も参照)。
+多くのユーザはそのエキスペリエンスで満足しているが、一方でコードベースによってはコンパイラエラーが間違っていたり、ソース生成を行うプラグインと動作しなかったり、sbt と同一のビルド意味論を用いてコードを書きたいと思う人もいる。
+幸いなことに、現代の IntelliJ は <a href="https://build-server-protocol.github.io/">Build Server Protocol</a> (BSP) 経由で sbt を含む異なる<strong>ビルドサーバ</strong>をサポートする。
 </p><p>IntelliJ において BSP を使う利点は、実際のビルド作業を sbt を用いて行うため、今までも sbt セッションを立ち上げながら IntelliJ を使っていた人は、二重でコンパイルしなくてもよくなるという利点がある。
-</p><p>IntelliJ のビルドサーバとして sbt を用いるには:
+</p><table class="table table-striped">
+  <tr>
+    <th><nobr></th>
+    <th>IntelliJ へインポート</th>
+    <th>BSP を使った IntelliJ</th>
+  </tr>
+  <tr>
+    <td>信頼性</td>
+    <td>✅ 安定した動作</td>
+    <td>⚠️ 技術的に枯れていないため、UX 問題などにあう可能性がある</td>
+  </tr>
+  <tr>
+    <td>応答性</td>
+    <td>✅</td>
+    <td>⚠️</td>
+  </tr>
+  <tr>
+    <td>正確性</td>
+    <td>⚠️ 独自のコンパイラを用いた型検査。scalac に設定することも可能。</td>
+    <td>✅ Zinc + Scala コンパイラを用いた型検査</td>
+  </tr>
+  <tr>
+    <td><nobr>ソース生成</nobr></td>
+    <td>❌ ソース生成するごとに再同期が必要</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td>ビルド</td>
+    <td>❌ sbt を併用すると二重ビルドが必要になる</td>
+    <td>✅</td>
+  </tr>
+</table><p>IntelliJ のビルドサーバとして sbt を用いるには:
 </p><ol><li>Plugins タブから Scala プラグインをインストールする。
 </li><li>BSP を使うには、Project タブの Open ボタンは使ってはいけない:<br>
 <img src="../files/intellij7.png" alt="IntelliJ"/>
