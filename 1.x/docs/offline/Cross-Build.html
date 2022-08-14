@@ -63,8 +63,9 @@ library to the dependency’s name. For example:
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;net.databinder.dispatch&quot; %% &quot;dispatch-core&quot; % &quot;0.13.3&quot;
 </code></pre><p>A nearly equivalent, manual alternative for a fixed version of Scala is:
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;net.databinder.dispatch&quot; % &quot;dispatch-core_2.12&quot; % &quot;0.13.3&quot;
-</code></pre><h3 id="Cross+building+a+project+using+sbt-projectmatrix">Cross building a project using sbt-projectmatrix<a href="#Cross+building+a+project+using+sbt-projectmatrix" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Consider using <a href="https://github.com/sbt/sbt-projectmatrix">sbt-projectmatrix</a> that
-is capable of cross building across Scala versions and different platforms in parallel.
+</code></pre><h3 id="Cross+building+a+project+using+sbt-projectmatrix">Cross building a project using sbt-projectmatrix<a href="#Cross+building+a+project+using+sbt-projectmatrix" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>No plugin is required to enable cross-building in sbt, although consider using 
+<a href="https://github.com/sbt/sbt-projectmatrix">sbt-projectmatrix</a> that is capable of 
+cross building across Scala versions and different platforms in parallel.
 </p><h3 id="Cross+building+a+project+statefully">Cross building a project statefully<a href="#Cross+building+a+project+statefully" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Define the versions of Scala to build against in the
 <code>crossScalaVersions</code> setting. Versions of Scala 2.10.2 or later are
 allowed. For example, in a <code>.sbt</code> build definition:
@@ -128,7 +129,7 @@ compiler plugin for Scala 2.12 and the <code>-Ymacro-annotations</code> compiler
 directory is included as a source directory.
 For, example if the current subproject’s <code>scalaVersion</code> is 2.12.10, then
 <code>src/main/scala-2.12</code> is included as a Scala-version specific source.
-</p><p>By <code>crossPaths</code> setting to <code>false</code> you can opt out of both Scala-version source directory
+</p><p>By setting <code>crossPaths</code> to <code>false</code>, you can opt out of both Scala-version source directory
 and the <code>_&lt;scala-binary-version&gt;</code> publishing convention. This might be useful for non-Scala projects.
 </p><p>Similarly, the build products such as <code>*.class</code> files are written into
 <code>crossTarget</code> directory, which by default is <code>target/scala-&lt;scala binary version&gt;</code>.
