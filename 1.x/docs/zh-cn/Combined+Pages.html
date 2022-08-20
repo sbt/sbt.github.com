@@ -46,7 +46,8 @@
 </p><p>最好是按顺序阅读，因为该指南中后面的小节建立在前面介绍的概念的基础上。
 </p><p>感谢尝试 sbt 并且 <em>体验其中的乐趣</em> ！
 </p><h2 id="%E5%AE%89%E8%A3%85+sbt">安装 sbt<a href="#%E5%AE%89%E8%A3%85+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>创建一个 sbt 工程，你需要经过以下几步：
-</p><ul><li>安装 sbt 并且创建脚本来运行它。
+</p><ul><li>安装 JDK (建议使用 Eclipse Adoptium Temurin JDK 8, 11, 或 17)。
+</li><li>安装 sbt 并且创建脚本来运行它。
 </li><li><p>建立一个简单的 <a href="Hello.html">hello world</a> 工程
 </p><ul><li>创建一个工程目录并且将源文件放在其中。
 </li><li>创建你的构建定义。
@@ -54,25 +55,29 @@
 </li><li>然后前往 <a href="Basic-Def.html">.sbt 构建定义</a> 学习更多关于构建的定义。
 </li></ul><p>最后，安装步骤就简化为一个 Jar 文件和一个 Shell 脚本，但是取决于你的平台，我们提供了好几种方式来使得步骤不是那么单调。 <a href="Installing-sbt-on-Mac.html">macOS</a>，<a href="Installing-sbt-on-Windows.html">Windows</a>，或<a href="Installing-sbt-on-Linux.html">Linux</a> 提供了相应的安装步骤。
 </p><h3 id="%E6%8F%90%E7%A4%BA%E5%92%8C%E6%8A%80%E5%B7%A7">提示和技巧<a href="#%E6%8F%90%E7%A4%BA%E5%92%8C%E6%8A%80%E5%B7%A7" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>如果你在运行 sbt 时遇到任何问题，查看 <a href="../docs/Setup-Notes.html">安装建议</a> 中的终端编码（terminal encoding），HTTP 代理，JVM 参数。
-</p><h2 id="%E5%9C%A8+macOS+%E4%B8%8A%E5%AE%89%E8%A3%85+sbt">在 macOS 上安装 sbt<a href="#%E5%9C%A8+macOS+%E4%B8%8A%E5%AE%89%E8%A3%85+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Install+JDK">Install JDK<a href="#Install+JDK" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Follow the link to install [JDK 8 or 11][AdoptOpenJDK].
-</p><p>Or use <a href="https://sdkman.io/">SDKMAN!</a>:
-</p><pre><code class="">$ sdk install java $(sdk list java | grep -o &quot;8\.[0-9]*\.[0-9]*\.hs-adpt&quot; | head -1)
-</code></pre><h4 id="%E9%80%9A%E8%BF%87++%E5%AE%89%E8%A3%85">通过 <a href="https://sdkman.io/">SDKMAN!</a> 安装<a href="#%E9%80%9A%E8%BF%87++%E5%AE%89%E8%A3%85" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="">$ sdk install sbt
-</code></pre><h3 id="%E9%80%9A%E8%BF%87%E9%80%9A%E7%94%A8%E7%9A%84%E5%8C%85%E5%AE%89%E8%A3%85">通过通用的包安装<a href="#%E9%80%9A%E8%BF%87%E9%80%9A%E7%94%A8%E7%9A%84%E5%8C%85%E5%AE%89%E8%A3%85" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>下载 <a href="https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.zip">ZIP</a> 或者 <a href="https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.tgz">TGZ</a> 包并解压。
+</p><h2 id="%E5%9C%A8+macOS+%E4%B8%8A%E5%AE%89%E8%A3%85+sbt">在 macOS 上安装 sbt<a href="#%E5%9C%A8+macOS+%E4%B8%8A%E5%AE%89%E8%A3%85+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Install+sbt+with">Install sbt with <strong>cs setup</strong><a href="#Install+sbt+with" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Follow <a href="https://www.scala-lang.org/download/">Install</a> page, and install Scala using Coursier. This should install the latest stable version of <code>sbt</code>.
+</p><h3 id="Install+JDK">Install JDK<a href="#Install+JDK" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Follow the link to install [JDK 8 or 11][AdoptOpenJDK], or use SDKMAN!
+</p><h4 id="%E9%80%9A%E8%BF%87++%E5%AE%89%E8%A3%85">通过 <a href="https://sdkman.io/">SDKMAN!</a> 安装<a href="#%E9%80%9A%E8%BF%87++%E5%AE%89%E8%A3%85" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">$ sdk install java $(sdk list java | grep -o &quot;\b8\.[0-9]*\.[0-9]*\-tem&quot; | head -1)
+$ sdk install sbt
+</code></pre><h3 id="%E9%80%9A%E8%BF%87%E9%80%9A%E7%94%A8%E7%9A%84%E5%8C%85%E5%AE%89%E8%A3%85">通过通用的包安装<a href="#%E9%80%9A%E8%BF%87%E9%80%9A%E7%94%A8%E7%9A%84%E5%8C%85%E5%AE%89%E8%A3%85" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>下载 <a href="https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.zip">ZIP</a> 或者 <a href="https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.tgz">TGZ</a> 包并解压。
 </p><h3 id="%E9%80%9A%E8%BF%87%E7%AC%AC%E4%B8%89%E6%96%B9%E7%9A%84%E5%8C%85%E5%AE%89%E8%A3%85">通过第三方的包安装<a href="#%E9%80%9A%E8%BF%87%E7%AC%AC%E4%B8%89%E6%96%B9%E7%9A%84%E5%8C%85%E5%AE%89%E8%A3%85" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><blockquote><p><strong>注意：</strong> 第三方的包可能没有提供最新的版本，请记得将任何问题反馈给这些包相关的维护者。
 </p></blockquote><h4 id="%E9%80%9A%E8%BF%87++%E5%AE%89%E8%A3%85">通过 <a href="https://brew.sh/">Homebrew</a> 安装<a href="#%E9%80%9A%E8%BF%87++%E5%AE%89%E8%A3%85" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="">$ brew install sbt
-</code></pre><h2 id="%E5%9C%A8+Windows+%E4%B8%8A%E5%AE%89%E8%A3%85+sbt">在 Windows 上安装 sbt<a href="#%E5%9C%A8+Windows+%E4%B8%8A%E5%AE%89%E8%A3%85+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="%E9%80%9A%E8%BF%87%E9%80%9A%E7%94%A8%E7%9A%84%E5%AE%89%E8%A3%85%E5%8C%85%E5%AE%89%E8%A3%85">通过通用的安装包安装<a href="#%E9%80%9A%E8%BF%87%E9%80%9A%E7%94%A8%E7%9A%84%E5%AE%89%E8%A3%85%E5%8C%85%E5%AE%89%E8%A3%85" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>下载 <a href="https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.zip">ZIP</a> 或者 <a href="https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.tgz">TGZ</a> 包并解压。
-</p><h3 id="%E9%80%9A%E8%BF%87+Windows+%E5%AE%89%E8%A3%85%E5%8C%85%E5%AE%89%E8%A3%85">通过 Windows 安装包安装<a href="#%E9%80%9A%E8%BF%87+Windows+%E5%AE%89%E8%A3%85%E5%8C%85%E5%AE%89%E8%A3%85" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>下载 <a href="https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.msi">msi 安装包</a> 并安装。
+</code></pre><h2 id="%E5%9C%A8+Windows+%E4%B8%8A%E5%AE%89%E8%A3%85+sbt">在 Windows 上安装 sbt<a href="#%E5%9C%A8+Windows+%E4%B8%8A%E5%AE%89%E8%A3%85+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Install+sbt+with">Install sbt with <strong>cs setup</strong><a href="#Install+sbt+with" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Follow <a href="https://www.scala-lang.org/download/">Install</a> page, and install Scala using Coursier. This should install the latest stable version of <code>sbt</code>.
+</p><h3 id="%E9%80%9A%E8%BF%87%E9%80%9A%E7%94%A8%E7%9A%84%E5%AE%89%E8%A3%85%E5%8C%85%E5%AE%89%E8%A3%85">通过通用的安装包安装<a href="#%E9%80%9A%E8%BF%87%E9%80%9A%E7%94%A8%E7%9A%84%E5%AE%89%E8%A3%85%E5%8C%85%E5%AE%89%E8%A3%85" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>下载 <a href="https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.zip">ZIP</a> 或者 <a href="https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.tgz">TGZ</a> 包并解压。
+</p><h3 id="%E9%80%9A%E8%BF%87+Windows+%E5%AE%89%E8%A3%85%E5%8C%85%E5%AE%89%E8%A3%85">通过 Windows 安装包安装<a href="#%E9%80%9A%E8%BF%87+Windows+%E5%AE%89%E8%A3%85%E5%8C%85%E5%AE%89%E8%A3%85" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>下载 <a href="https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.msi">msi 安装包</a> 并安装。
 </p><h3 id="%E9%80%9A%E8%BF%87%E7%AC%AC%E4%B8%89%E6%96%B9%E7%9A%84%E5%8C%85%E5%AE%89%E8%A3%85">通过第三方的包安装<a href="#%E9%80%9A%E8%BF%87%E7%AC%AC%E4%B8%89%E6%96%B9%E7%9A%84%E5%8C%85%E5%AE%89%E8%A3%85" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><blockquote><p><strong>注意：</strong> 第三方的包可能没有提供最新的版本，请记得将任何问题反馈给这些包相关的维护者。
 </p></blockquote><h4 id="%E9%80%9A%E8%BF%87++%E5%AE%89%E8%A3%85">通过 <a href="https://scoop.sh/">Scoop</a> 安装<a href="#%E9%80%9A%E8%BF%87++%E5%AE%89%E8%A3%85" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="">$ scoop install sbt
-</code></pre><h2 id="%E5%9C%A8+Linux+%E4%B8%8A%E5%AE%89%E8%A3%85+sbt">在 Linux 上安装 sbt<a href="#%E5%9C%A8+Linux+%E4%B8%8A%E5%AE%89%E8%A3%85+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Installing+from+SDKMAN">Installing from SDKMAN<a href="#Installing+from+SDKMAN" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To install both JDK and sbt, consider using <a href="https://sdkman.io/">SDKMAN</a>.
-</p><pre><code class="">$ sdk install java $(sdk list java | grep -o &quot;8\.[0-9]*\.[0-9]*\.hs-adpt&quot; | head -1)
+</code></pre><h2 id="%E5%9C%A8+Linux+%E4%B8%8A%E5%AE%89%E8%A3%85+sbt">在 Linux 上安装 sbt<a href="#%E5%9C%A8+Linux+%E4%B8%8A%E5%AE%89%E8%A3%85+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="Install+sbt+with">Install sbt with <strong>cs setup</strong><a href="#Install+sbt+with" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Follow <a href="https://www.scala-lang.org/download/">Install</a> page, and install Scala using Coursier. This should install the latest stable version of <code>sbt</code>.
+</p><h3 id="Installing+from+SDKMAN">Installing from SDKMAN<a href="#Installing+from+SDKMAN" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To install both JDK and sbt, consider using <a href="https://sdkman.io/">SDKMAN</a>.
+</p><pre><code class="prettyprint lang-scala">$ sdk install java $(sdk list java | grep -o &quot;\b8\.[0-9]*\.[0-9]*\-tem&quot; | head -1)
 $ sdk install sbt
-</code></pre><p>This has two advantages.
-1. It will install the official packaging by AdoptOpenJDK, as opposed to the <a href="https://mail.openjdk.java.net/pipermail/jdk8u-dev/2019-May/009330.html">“mystery meat OpenJDK builds“</a>.
-2. It will install <code>tgz</code> packaging of sbt that contains all JAR files. (DEB and RPM packages do not to save bandwidth)
-</p><h3 id="%E9%80%9A%E8%BF%87%E9%80%9A%E7%94%A8%E7%9A%84%E5%AE%89%E8%A3%85%E5%8C%85%E5%AE%89%E8%A3%85">通过通用的安装包安装<a href="#%E9%80%9A%E8%BF%87%E9%80%9A%E7%94%A8%E7%9A%84%E5%AE%89%E8%A3%85%E5%8C%85%E5%AE%89%E8%A3%85" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>下载 <a href="https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.zip">ZIP</a> 或者 <a href="https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.tgz">TGZ</a> 包并解压。
-</p><h3 id="Ubuntu%E5%92%8C%E5%85%B6%E4%BB%96%E5%9F%BA%E4%BA%8EDebian%E7%9A%84%E5%8F%91%E8%A1%8C%E7%89%88">Ubuntu和其他基于Debian的发行版<a href="#Ubuntu%E5%92%8C%E5%85%B6%E4%BB%96%E5%9F%BA%E4%BA%8EDebian%E7%9A%84%E5%8F%91%E8%A1%8C%E7%89%88" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://dl.bintray.com/sbt/debian/sbt-1.5.7.deb">DEB</a> 安装包由sbt官方支持。
+</code></pre><p>Using Coursier or SDKMAN has two advantages.
+</p><ol><li>They will install the official packaging by Eclipse Adoptium, as opposed to the <a href="https://mail.openjdk.java.net/pipermail/jdk8u-dev/2019-May/009330.html">“mystery meat OpenJDK builds“</a>.
+</li><li>They will install <code>tgz</code> packaging of sbt that contains all JAR files. (DEB and RPM packages do not to save bandwidth)
+</li></ol><h3 id="Install+JDK">Install JDK<a href="#Install+JDK" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>You must first install a JDK. We recommend <strong>Eclipse Adoptium Temurin JDK 8</strong>, <strong>JDK 11</strong>, or <strong>JDK 17</strong>.
+</p><p>The details around the package names differ from one distribution to another. For example, Ubuntu xenial (16.04LTS) has <a href="https://packages.ubuntu.com/hu/xenial/openjdk-8-jdk">openjdk-8-jdk</a>. Redhat family calls it <a href="https://pkgs.org/download/java-1.8.0-openjdk-devel">java-1.8.0-openjdk-devel</a>.
+</p><h3 id="%E9%80%9A%E8%BF%87%E9%80%9A%E7%94%A8%E7%9A%84%E5%AE%89%E8%A3%85%E5%8C%85%E5%AE%89%E8%A3%85">通过通用的安装包安装<a href="#%E9%80%9A%E8%BF%87%E9%80%9A%E7%94%A8%E7%9A%84%E5%AE%89%E8%A3%85%E5%8C%85%E5%AE%89%E8%A3%85" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>下载 <a href="https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.zip">ZIP</a> 或者 <a href="https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.tgz">TGZ</a> 包并解压。
+</p><h3 id="Ubuntu%E5%92%8C%E5%85%B6%E4%BB%96%E5%9F%BA%E4%BA%8EDebian%E7%9A%84%E5%8F%91%E8%A1%8C%E7%89%88">Ubuntu和其他基于Debian的发行版<a href="#Ubuntu%E5%92%8C%E5%85%B6%E4%BB%96%E5%9F%BA%E4%BA%8EDebian%E7%9A%84%E5%8F%91%E8%A1%8C%E7%89%88" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://dl.bintray.com/sbt/debian/sbt-1.7.1.deb">DEB</a> 安装包由sbt官方支持。
 </p><p>Ubuntu和其他基于Debian的发行版使用DEB格式，但通常你不从本地的DEB文件安装软件。相反，他们由程序包管理器安装，通过命令行（如<code>apt-get</code>，<code>aptitude</code>）或图形用户界面 （如Synaptic）。
 从终端运行下面的命令安装<code>sbt</code>（你需要超级用户权限，因此需要<code>sudo</code>）。
 </p><pre><code>echo &quot;deb https://repo.scala-sbt.org/scalasbt/debian all main&quot; | sudo tee /etc/apt/sources.list.d/sbt.list
@@ -83,7 +88,7 @@ sudo apt-get install sbt
 </code></pre><p>软件包管理器将检查若干个提供安装软件包的配置存储库。sbt 二进制文件发布到 Bintray，而Bintray 方便地提供了APT资源库。你只需要将存储库添加到你的软件包管理器将检查的地方。
 一旦安装了<code>sbt</code>，你会能够在<code>aptitude</code>或Synaptic的包缓存更新后管理了。你也应该能够看到添加的存储库，在底部的<code>System Settings -&gt; Software &amp; Updates -&gt; Other Software</code>：
 </p><p><img src="../files/ubuntu-sources.png" title="Ubuntu Software &amp; Updates Screenshot" alt="Ubuntu Software &amp; Updates Screenshot"/>
-</p><h3 id="%E7%BA%A2%E5%B8%BD%E4%BC%81%E4%B8%9A%E7%89%88Linux%E5%92%8C%E5%85%B6%E4%BB%96%E5%9F%BA%E4%BA%8ERPM%E7%9A%84%E5%8F%91%E8%A1%8C%E7%89%88">红帽企业版Linux和其他基于RPM的发行版<a href="#%E7%BA%A2%E5%B8%BD%E4%BC%81%E4%B8%9A%E7%89%88Linux%E5%92%8C%E5%85%B6%E4%BB%96%E5%9F%BA%E4%BA%8ERPM%E7%9A%84%E5%8F%91%E8%A1%8C%E7%89%88" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://dl.bintray.com/sbt/rpm/sbt-1.5.7.rpm">RPM</a> 安装包由sbt官方支持。
+</p><h3 id="%E7%BA%A2%E5%B8%BD%E4%BC%81%E4%B8%9A%E7%89%88Linux%E5%92%8C%E5%85%B6%E4%BB%96%E5%9F%BA%E4%BA%8ERPM%E7%9A%84%E5%8F%91%E8%A1%8C%E7%89%88">红帽企业版Linux和其他基于RPM的发行版<a href="#%E7%BA%A2%E5%B8%BD%E4%BC%81%E4%B8%9A%E7%89%88Linux%E5%92%8C%E5%85%B6%E4%BB%96%E5%9F%BA%E4%BA%8ERPM%E7%9A%84%E5%8F%91%E8%A1%8C%E7%89%88" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://dl.bintray.com/sbt/rpm/sbt-1.7.1.rpm">RPM</a> 安装包由sbt官方支持。
 </p><p>红帽企业版Linux和其他基于RPM的发行版使用RPM格式。
 从终端运行下面的命令安装<code>sbt</code>（你需要超级用户权限，因此需要<code>sudo</code>）。
 </p><pre><code># remove old Bintray repo file
@@ -131,13 +136,13 @@ Hi!
   .settings(
     name := &quot;hello&quot;,
     version := &quot;1.0&quot;,
-    scalaVersion := &quot;2.12.14&quot;
+    scalaVersion := &quot;2.12.16&quot;
   )
 </code></pre><p>在 <a href="Basic-Def.html">.sbt 构建定义</a> 这节中你将会学到更多关于
 如何编写 <code>build.sbt</code> 脚本的东西。
 </p><p>如果你准备将你的项目打包成一个 jar 包，在 <code>build.sbt</code> 中至少要写上 name 和 version。
-</p><h3 id="%E8%AE%BE%E7%BD%AE+sbt+%E7%89%88%E6%9C%AC">设置 sbt 版本<a href="#%E8%AE%BE%E7%BD%AE+sbt+%E7%89%88%E6%9C%AC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>你可以通过创建 <code>hello/project/build.properties</code> 文件强制指定一个版本的 sbt。在这个文件里，编写如下内容来强制使用 1.5.7：
-</p><pre><code class="">sbt.version=1.5.7
+</p><h3 id="%E8%AE%BE%E7%BD%AE+sbt+%E7%89%88%E6%9C%AC">设置 sbt 版本<a href="#%E8%AE%BE%E7%BD%AE+sbt+%E7%89%88%E6%9C%AC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>你可以通过创建 <code>hello/project/build.properties</code> 文件强制指定一个版本的 sbt。在这个文件里，编写如下内容来强制使用 1.7.1：
+</p><pre><code class="">sbt.version=1.7.1
 </code></pre><p>sbt 在不同的 release 版本中是 99% 兼容的。但是在 <code>project/build.properties</code> 文件中设置 sbt 的版本仍然能避免一些潜在的混淆。
 </p><h2 id="%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84">目录结构<a href="#%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>这一小节假设你已经 <a href="Setup.html">安装 sbt</a> 并且已经阅读过 <a href="Hello.html">Hello, World</a> 了。
 </p><h3 id="%E5%9F%BA%E7%A1%80%E7%9B%AE%E5%BD%95">基础目录<a href="#%E5%9F%BA%E7%A1%80%E7%9B%AE%E5%BD%95" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在 sbt 的术语里，“基础目录”是包含项目的目录。所以，如果你创建了一个和 <a href="Hello.html">Hello, World</a> 一样的项目 <code>hello</code> ，包含 <code>hello/build.sbt</code> 和 <code>hello/hw.scala</code>， <code>hello</code> 就是基础目录。
@@ -288,7 +293,7 @@ project/
 </p><h3 id="%E5%A6%82%E4%BD%95%E5%9C%A8+build.sbt+%E4%B8%AD%E5%AE%9A%E4%B9%89%E8%AE%BE%E7%BD%AE">如何在 build.sbt 中定义设置<a href="#%E5%A6%82%E4%BD%95%E5%9C%A8+build.sbt+%E4%B8%AD%E5%AE%9A%E4%B9%89%E8%AE%BE%E7%BD%AE" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> 定义了一个 <code>Project</code>，它持有一个名为<code>settings</code>的scala表达式列表。
 </p><p>下面是一个例子：
 </p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.14&quot;
+ThisBuild / scalaVersion := &quot;2.12.16&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -357,12 +362,12 @@ import Keys._
 </p><h3 id="bare+.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89">bare .sbt 构建定义<a href="#bare+.sbt+%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>bare <code>.sbt</code> 构建定义由一个 <code>Setting[_]</code> 表达式的列表组成，而不是定义 <code>Project</code>。
 </p><pre><code class="prettyprint lang-scala">name := &quot;hello&quot;
 version := &quot;1.0&quot;
-scalaVersion := &quot;2.12.14&quot;
+scalaVersion := &quot;2.12.16&quot;
 </code></pre><h3 id="%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96%E5%BA%93">添加依赖库<a href="#%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96%E5%BA%93" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>有两种方式添加第三方的依赖。一种是将 jar 文件 放入 <code>lib/</code>（非托管的依赖）中，另一种是在 <code>build.sbt</code> 中添加托管的依赖，像这样：
 </p><pre><code class="prettyprint lang-scala">val derby = &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot;
 
 ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.14&quot;
+ThisBuild / scalaVersion := &quot;2.12.16&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -407,7 +412,7 @@ val clean = taskKey[Unit](&quot;Deletes files produced by the build, such as gen
 <strong>在任务引擎评估 <code>scalacOptions</code> 的打开 <code>{</code>，无论它出现在主体中的哪一行， <code>update</code> 和 <code>clean</code> 任务都已完成</strong>。
 </p><p>请参见以下示例：
 </p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.14&quot;
+ThisBuild / scalaVersion := &quot;2.12.16&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -433,7 +438,7 @@ lazy val root = (project in file(&quot;.&quot;))
 </code></pre><p>即使 <code>val ur = ...</code> 出现在 <code>log.info(&quot;123&quot;)</code> 和 <code>log.info(&quot;456&quot;)</code>，<code>update</code> 任务的评估还是要先于它们进行。
 </p><p>这是另一个例子：
 </p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.14&quot;
+ThisBuild / scalaVersion := &quot;2.12.16&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -521,7 +526,7 @@ hello
   .settings(
     name := &quot;Hello&quot;,
     organization := &quot;com.example&quot;,
-    scalaVersion := &quot;2.12.14&quot;,
+    scalaVersion := &quot;2.12.16&quot;,
     version := &quot;0.1.0-SNAPSHOT&quot;,
     scalacOptions := List(&quot;-encoding&quot;, &quot;utf8&quot;, &quot;-Xfatal-warnings&quot;, &quot;-deprecation&quot;, &quot;-unchecked&quot;),
     scalacOptions := {
@@ -565,10 +570,10 @@ checksums := scalacOptions.value
 </p><pre><code class="prettyprint lang-scala">// name our organization after our project (both are SettingKey[String])
 organization := name.value
 </code></pre><p>Here’s a realistic example.
-This rewires <code>scalaSource in Compile</code> key to a different directory
+This rewires <code>Compile / scalaSource</code> key to a different directory
 only when <code>scalaBinaryVersion</code> is <code>&quot;2.11&quot;</code>.
-</p><pre><code class="prettyprint lang-scala">scalaSource in Compile := {
-  val old = (scalaSource in Compile).value
+</p><pre><code class="prettyprint lang-scala">Compile / scalaSource := {
+  val old = (Compile / scalaSource).value
   scalaBinaryVersion.value match {
     case &quot;2.11&quot; =&gt; baseDirectory.value / &quot;src-2.11&quot; / &quot;main&quot; / &quot;scala&quot;
     case _      =&gt; old
@@ -637,7 +642,7 @@ end
 </li></ul><h4 id="%E9%80%9A%E8%BF%87+Project+%E8%BD%B4%E5%88%92%E5%88%86+Scope">通过 Project 轴划分 Scope<a href="#%E9%80%9A%E8%BF%87+Project+%E8%BD%B4%E5%88%92%E5%88%86+Scope" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>如果你将 <a href="Multi-Project.html">多个项目</a> 放在同一个构建中，每个项目需要有属于自己的 settings。也就是说，keys 可以根据项目被局限在不同的上下文中。
 </p><p>Project 轴可以设置成构建全局的，因此一个 setting 可以应用到全局构建而不是单个项目。当一个项目没有定义项目层级的 setting 的时候，构建层级的 setting 通常作为默认的设置。
 </p><h4 id="%E9%80%9A%E8%BF%87+Configuration+%E8%BD%B4%E5%88%92%E5%88%86+Scope">通过 Configuration 轴划分 Scope<a href="#%E9%80%9A%E8%BF%87+Configuration+%E8%BD%B4%E5%88%92%E5%88%86+Scope" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>一个 <em>configuration</em> 定义一种特定的构建，可能包含它自己的 classpath，源文件和生成的包等。Configuration 的概念来自于它用来管理 <a href="Library-Dependencies.html">库依赖</a> 的 Ivy 
-和 <a href="http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Scope">MavenScopes</a>。
+和 <a href="https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Scope">MavenScopes</a>。
 </p><p>在 sbt 中你可以看到这些 configurations：
 </p><ul><li><code>Compile</code> 定义主构建（<code>src/main/scala</code>）
 </li><li><code>Test</code> 定义如何构建测试（<code>src/test/scala</code>）
@@ -665,7 +670,7 @@ end
 </li><li>如果省略 configuration 或者 task，会自动检测 key 所有依赖的 configuration。
 </li></ul><p>更多详细内容，请参见 <a href="../docs/Inspecting-Settings.html">与 Configuration 系统交互</a>。
 </p><h3 id="%E4%BD%BF%E7%94%A8+scoped+key+%E6%A0%87%E8%AF%86%E7%9A%84%E4%BE%8B%E5%AD%90">使用 scoped key 标识的例子<a href="#%E4%BD%BF%E7%94%A8+scoped+key+%E6%A0%87%E8%AF%86%E7%9A%84%E4%BE%8B%E5%AD%90" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li><code>fullClasspath</code> 仅仅指定了一个 key，所以会使用默认的 scope：当前的 project，key 所依赖的 configuration 和全局 task 的 scope。
-</li><li><code>test:fullClasspath</code> 指定为 configuration，所以这个 <code>fullClasspath</code> 就在 <code>test</code> configuration scope 下，其他两个 scope 轴均为默认值。
+</li><li><code>Test/fullClasspath</code> 指定为 configuration，所以这个 <code>fullClasspath</code> 就在 <code>test</code> configuration scope 下，其他两个 scope 轴均为默认值。
 </li><li><code>*:fullClasspath</code> 将 configuration 指定为 <code>Global</code>，而不是默认的 configuration。
 </li><li><code>doc::fullClasspath</code> 将 key <code>fullClasspath</code> 局限在 <code>doc</code> task 下，project 轴和 configuration 轴还是默认的。
 </li><li><code>{file:/home/hp/checkout/hello/}default-aea33a/test:fullClasspath</code> 指定了一个 project，在 <code>{file:/home/hp/checkout/hello/}default-aea33a</code> 中，<code>{file:/home/hp/checkout/hello/}</code> 标识 project，
@@ -673,9 +678,9 @@ end
 </li><li><code>{file:/home/hp/checkout/hello/}/test:fullClasspath</code> 将构建为 <code>{file:/home/hp/checkout/hello/}</code> 的 project 轴设置为全局构建。
 </li><li><code>{.}/test:fullClasspath</code> 将构建为 <code>{.}</code> 的 project 轴设置为全局构建。<code>{.}</code> 可以在 Scala 代码中写成 <code>ThisBuild</code>。
 </li><li><code>{file:/home/hp/checkout/hello/}/compile:doc::fullClasspath</code> 设置了全部的三个 scope 轴。
-</li></ul><h3 id="%E5%AE%A1%E6%9F%A5+scope">审查 scope<a href="#%E5%AE%A1%E6%9F%A5+scope" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在 sbt 的交互模式下，你可以使用 inspect 命令来理解 key 和它对应的 scope。尝试 <code>inspect test:fullClasspath</code>，
+</li></ul><h3 id="%E5%AE%A1%E6%9F%A5+scope">审查 scope<a href="#%E5%AE%A1%E6%9F%A5+scope" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>在 sbt 的交互模式下，你可以使用 inspect 命令来理解 key 和它对应的 scope。尝试 <code>inspect Test/fullClasspath</code>，
 </p><pre><code class="">$ sbt
-&gt; inspect test:fullClasspath
+&gt; inspect Test/fullClasspath
 [info] Task: scala.collection.Seq[sbt.Attributed[java.io.File]]
 [info] Description:
 [info]  The exported classpath, consisting of build products and unmanaged and managed, internal and external dependencies.
@@ -711,13 +716,13 @@ end
 </p><p>“Provided by” 表明定义该值的 scoped key，在这个例子中是 <code>{file:/home/hp/checkout/hello/}default-aea33a/test:fullClasspath</code>（<code>fullClasspath</code> 在 <code>test</code> configuration 中且在 <code>{file:/home/hp/checkout/hello/}default-aea33a</code> project 下）。
 </p><p>“Dependencies” 可能没有意义；请继续阅读 <a href="More-About-Settings.html">下一节</a>。
 </p><p>你也可以看到一些代理；如果没有定义，sbt 会通过以下途径查找：
-</p><ul><li>其他两个 configuration（<code>runtime:fullClasspath</code> 和 <code>compile:fullClasspath</code>）。在这些 scoped key中，project 没有指定的话就意味着是 “当前 project” 而且 task 没有指定的话就意味着是 <code>Global</code>。
+</p><ul><li>其他两个 configuration（<code>Runtime/fullClasspath</code> 和 <code>Compile/fullClasspath</code>）。在这些 scoped key中，project 没有指定的话就意味着是 “当前 project” 而且 task 没有指定的话就意味着是 <code>Global</code>。
 </li><li>当 project 没有指定 “当前 project” 并且 task 没有指定为 <code>Global</code> 时，configuration 会被设置成 <code>Global</code>（<code>*:fullClasspath</code>）。
 </li><li>当全局构建中没有指定特定的 project 时，project 会被设置成 <code>{.}</code> 或者 <code>ThisBuild</code>。
 </li><li>将 project 轴设置成 <code>Global</code>（<code>*/test:fullClasspath</code>）（记住，不指定 project 表示用当前的 current，所以这里查找 <code>Global</code> 是一个新的方式；例如：<code>*</code> 和 “显示没有 project” 对于 project 轴是不一样的；例如：<code>*/test:fullClasspath</code> 和 <code>test:fullClasspath</code> 不是一回事）。
 </li><li>project 轴和 configuration 轴都会被设置成 <code>Global</code>（<code>*/*:fullClasspath</code>）（还记得我们已经说过不指定 task 表示用 <code>Global</code>，所以 <code>*/*:fullClasspath</code> 表示三个轴都用 <code>Global</code>）。
 </li></ul><p>尝试用 <code>inspect fullClasspath</code>（和上面例子中的 inspect <code>test:fullClasspath</code> 相对）来查看它们的不同。因为 configuration 被省略了，sbt 自动检测并设置为 <code>compile</code>。
-因此 <code>inspect compile:fullClasspath</code> 得到的结果看起来应该和 <code>inspect fullClasspath</code> 得到的结果一样。
+因此 <code>inspect Compile/fullClasspath</code> 得到的结果看起来应该和 <code>inspect fullClasspath</code> 得到的结果一样。
 </p><p>尝试用 <code>inspect *:fullClasspath</code> 作为对比。默认情况下，<code>fullClasspath</code> 没有定义在 <code>Global</code> configuration 中。
 </p><p>更多详细的内容请参见 <a href="../docs/Inspecting-Settings.html">与 Configuration 系统交互</a>。
 </p><h3 id="%E5%9C%A8%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E4%B8%AD%E6%B6%89%E5%8F%8A+scope">在构建定义中涉及 scope<a href="#%E5%9C%A8%E6%9E%84%E5%BB%BA%E5%AE%9A%E4%B9%89%E4%B8%AD%E6%B6%89%E5%8F%8A+scope" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>如果你创建的 <code>build.sbt</code> 中有一个bare key，它的作用于将是当前的 project 下，configuration 和 task 均为 <code>Global</code>：
@@ -728,7 +733,7 @@ end
 </code></pre><p>启动 sbt 并且执行 <code>inspect name</code> 可以看到它由 <code>{file:/home/hp/checkout/hello/}default-aea33a/*:name</code> 提供，也就是说，project 是 <code>{file:/home/hp/checkout/hello/}default-aea33a</code>，
 configuration 是 <code>*</code>（表示全局），task 没有显示出来（实际上也是全局）。
 </p><p>Keys 会调用一个重载的 in 方法设置 scope。传给 in 方法的参数可以是任何 scope 轴的实例。比如说，你可以将 <code>name</code> 局限在 <code>Compile</code> configuration 中，尽管没有真实的理由要这样做：
-</p><pre><code class="prettyprint lang-scala">name in Compile := &quot;hello&quot;
+</p><pre><code class="prettyprint lang-scala">Compile / name := &quot;hello&quot;
 </code></pre><p>或者你可以把 <code>name</code> 局限在 <code>packageBin</code> task 中（没有什么意义！仅仅是个例子）：
 </p><pre><code class="prettyprint lang-scala">name in packageBin := &quot;hello&quot;
 </code></pre><p>或者你可以把 <code>name</code> 局限在多个 scope 轴中，例如在 <code>Compile</code> configuration 的 <code>packageBin</code> task 中：
@@ -741,15 +746,15 @@ configuration 是 <code>*</code>（表示全局），task 没有显示出来（�
 </p><pre><code class="prettyprint lang-scala">name.in(Compile).:=(&quot;hello&quot;)
 </code></pre><p>毫无理由使用这种丑陋的语法，但是它阐明这实际上是方法。
 </p><h3 id="%E6%8C%87%E5%AE%9A+scope+%E7%9A%84%E6%97%B6%E6%9C%BA">指定 scope 的时机<a href="#%E6%8C%87%E5%AE%9A+scope+%E7%9A%84%E6%97%B6%E6%9C%BA" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>如果一个 key 通常的作用域有问题，你需要指定 scope。例如，<code>compile</code> task 默认是在 <code>Compile</code> 和 <code>Test</code> configuration 的 scope 中，而且在这些 scope 之外它并不存在。
-</p><p>为了改变 key <code>compile</code> 的值，你需要写成 <code>compile in Compile</code> 或者 <code>compile in Test</code>。用普通的 <code>compile</code> 会在当前 project 的 scope 中定义一个新的 task，而不是覆盖 configuration 的 scope 标准的 <code>compile</code> task。
-</p><p>如果你遇到像 <em>“引用未定义的设置”</em> 这样的错误，通常是你指定 scope 失败了，或者你指定了一个错误的 scope。你使用的 key 可能定义在其他的 scope 中。sbt 会尝试在错误消息里面提示你的想法是什么；如 “你是指 compile:compile？”
+</p><p>为了改变 key <code>compile</code> 的值，你需要写成 <code>Compile / compile</code> 或者 <code>Test / compile</code>。用普通的 <code>compile</code> 会在当前 project 的 scope 中定义一个新的 task，而不是覆盖 configuration 的 scope 标准的 <code>compile</code> task。
+</p><p>如果你遇到像 <em>“引用未定义的设置”</em> 这样的错误，通常是你指定 scope 失败了，或者你指定了一个错误的 scope。你使用的 key 可能定义在其他的 scope 中。sbt 会尝试在错误消息里面提示你的想法是什么；如 “你是指 Compile/compile？”
 </p><p>一种方式是你可以这样认为，name 只是 key 的 <em>一部分</em>。实际上，所有的 key 都有 name 和 scope 组成（scope 有三个轴）。换句话说，<code>packageOptions in (Compile, packageBin)</code> 是表示 key name 的完整的表达式。
 其简写 <code>packageOptions</code> 也是一个 key name，但是是不同的（对于没有 in 方法的 key，会隐式的假设一个 scope：当前的 project，global
 config，global task）。
 </p><h2 id="%E8%BF%BD%E5%8A%A0%E5%80%BC">追加值<a href="#%E8%BF%BD%E5%8A%A0%E5%80%BC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="%E8%BF%BD%E5%8A%A0%E5%80%BC%EF%BC%9A++%E5%92%8C">追加值： <code>+=</code> 和 <code>++=</code><a href="#%E8%BF%BD%E5%8A%A0%E5%80%BC%EF%BC%9A++%E5%92%8C" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>通过 <code>:=</code> 方法赋值是最简单的转换，但是 key 也有很多其他的方法。如果 <code>SettingKey[T]</code> 中的 <code>T</code> 是一个列表，例如，一个 key 的值的类型是 sequence，你就可以往列表中追加而不是替换。
 </p><ul><li><code>+=</code> 会追加单个元素到列表中。
 </li><li><code>++=</code> 会连接两个列表。
-</li></ul><p>例如，一个 key <code>sourceDirectories in Compile</code> 的值是 <code>Seq[File]</code>。默认情况下该 key 的值会包含 <code>src/main/scala</code>。如果你也想编译叫做 source 的目录下的源代码（因为你不得不成为非标准的），你可以添加该目录：
+</li></ul><p>例如，一个 key <code>Compile / sourceDirectories</code> 的值是 <code>Seq[File]</code>。默认情况下该 key 的值会包含 <code>src/main/scala</code>。如果你也想编译叫做 source 的目录下的源代码（因为你不得不成为非标准的），你可以添加该目录：
 </p><pre><code class="prettyprint lang-scala">Compile / sourceDirectories += new File(&quot;source&quot;)
 </code></pre><p>或者，遵循约定使用 sbt 包中的 <code>file()</code> 函数：
 </p><pre><code class="prettyprint lang-scala">Compile / sourceDirectories += file(&quot;source&quot;)
@@ -765,7 +770,7 @@ config，global task）。
 </p><h4 id="%E4%BE%9D%E8%B5%96%E4%BA%8E%E5%85%B6%E4%BB%96+key+%E7%9A%84%E5%80%BC%E7%9A%84+task">依赖于其他 key 的值的 task<a href="#%E4%BE%9D%E8%B5%96%E4%BA%8E%E5%85%B6%E4%BB%96+key+%E7%9A%84%E5%80%BC%E7%9A%84+task" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>你可以计算一些 task 或者 setting 的值来定义另一个 task 或者为另一个 task 追加值。通过使用 <code>Def.task</code> 作为<code>:=</code>， <code>+=</code> 或者 <code>++=</code>的参数可以做到。
 </p><p>作为第一个例子，考虑追加一个使用项目基目录和编译 classpath 的 source generator。
 </p><pre><code class="prettyprint lang-scala">Compile / sourceGenerators += Def.task {
-  myGenerator(baseDirectory.value, (managedClasspath in Compile).value)
+  myGenerator(baseDirectory.value, (Compile / managedClasspath).value)
 }
 </code></pre><h3 id="%E8%BF%BD%E5%8A%A0%E4%BE%9D%E8%B5%96%EF%BC%9A+%E5%92%8C">追加依赖：<code>+=</code> 和 <code>++=</code><a href="#%E8%BF%BD%E5%8A%A0%E4%BE%9D%E8%B5%96%EF%BC%9A+%E5%92%8C" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>当追加到一个已经存在的 setting 或者 task 时可以使用另一些 key，就像它们可以通过 <code>:=</code> 赋值一样。例如，比方说你有一个以项目名称命名的覆盖率报告，而且你想在每次清除文件的时候都清除它：
 </p><pre><code class="prettyprint lang-scala">cleanFiles += file(&quot;coverage-report-&quot; + name.value + &quot;.txt&quot;)
@@ -819,7 +824,7 @@ lazy val projX = (project in file(&quot;x&quot;))
   )
 </code></pre><p><code>projA / name</code> 的值是什么?
 </p><ol><li><code>&quot;foo-2.11.11&quot;</code>
-</li><li><code>&quot;foo-2.12.14&quot;</code>
+</li><li><code>&quot;foo-2.12.16&quot;</code>
 </li><li>还有什么吗
 </li></ol><p>答案是 <code>&quot;foo-2.11.11&quot;</code>。
 在 <code>.settings(...)</code> 内部，<code>scalaVersion</code> 的 scope 将自动设置为 <code>projA / Zero / Zero</code>，
@@ -1063,7 +1068,7 @@ lazy val projF = (project in file(&quot;f&quot;))
 </code></pre><p>方法 <code>%</code> 从字符串创建 <code>ModuleID</code> 对象，然后将 <code>ModuleID</code> 添加到 <code>libraryDependencies</code> 中。
 </p><p>当然，要让 sbt（通过 Ivy）知道从哪里下载模块。如果你的模块和 sbt 来自相同的某个默认的仓库，这样就会工作。例如，Apache Derby 在标准的 Maven2 仓库中：
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot;
-</code></pre><p>如果你在 <code>build.sbt</code> 中输入上面这些内容，然后执行 <code>update</code>，sbt 会将 Derby 下载到 <code>~/.ivy2/cache/org.apache.derby/</code>。（顺便提一下， <code>compile</code> 依赖于 <code>update</code>，所以
+</code></pre><p>如果你在 <code>build.sbt</code> 中输入上面这些内容，然后执行 <code>update</code>，sbt 会将 Derby 下载到 <code>$COURSIER_CACHE/https/repo1.maven.org/maven2/org/apache/derby</code>。（顺便提一下， <code>compile</code> 依赖于 <code>update</code>，所以
 大多数时候不需要手动的执行 <code>update</code>。）
 </p><p>当然，你也可以通过 <code>++=</code> 一次将所有依赖作为一个列表添加：
 </p><pre><code class="prettyprint lang-scala">libraryDependencies ++= Seq(
@@ -1073,9 +1078,9 @@ lazy val projF = (project in file(&quot;f&quot;))
 </code></pre><p>在很少情况下，你也会需要在 <code>libraryDependencies</code> 上用 <code>:=</code> 方法。
 </p><h4 id="%E9%80%9A%E8%BF%87++%E6%96%B9%E6%B3%95%E8%8E%B7%E5%8F%96%E6%AD%A3%E7%A1%AE%E7%9A%84+Scala+%E7%89%88%E6%9C%AC">通过 <code>%%</code> 方法获取正确的 Scala 版本<a href="#%E9%80%9A%E8%BF%87++%E6%96%B9%E6%B3%95%E8%8E%B7%E5%8F%96%E6%AD%A3%E7%A1%AE%E7%9A%84+Scala+%E7%89%88%E6%9C%AC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>如果你用是 <code>groupID %% artifactID % revision</code> 而不是 <code>groupID % artifactID % revision</code>（区别在于 <code>groupID</code> 后面是 <code>%%</code>），sbt 会在 工件名称中加上项目的 Scala 版本号。
 这只是一种快捷方法。你可以这样写不用 <code>%%</code>：
-</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-tools&quot; % &quot;scala-stm_2.11&quot; % &quot;0.3&quot;
-</code></pre><p>假设这个构建的 <code>scalaVersion</code> 是 <code>2.11.1</code>，下面这种方式是等效的（注意 <code>&quot;org.scala-tools&quot;</code> 后面是 <code>%%</code>）：
-</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-tools&quot; %% &quot;scala-stm&quot; % &quot;0.3&quot;
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-stm&quot; % &quot;scala-stm_2.13&quot; % &quot;0.9.1&quot;
+</code></pre><p>假设这个构建的 <code>scalaVersion</code> 是 <code>2.13.8</code>，下面这种方式是等效的（注意 <code>&quot;org.scala-stm&quot;</code> 后面是 <code>%%</code>）：
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-stm&quot; %% &quot;scala-stm&quot; % &quot;0.9.1&quot;
 </code></pre><p>这个想法是很多依赖都会被编译给多个 Scala 版本，而你想确保和项目匹配的jar是二进制兼容的。
 </p><p>参见 <a href="../docs/Cross-Build.html">交叉构建</a> 获取更多信息。
 </p><h4 id="Ivy+%E4%BF%AE%E6%AD%A3">Ivy 修正<a href="#Ivy+%E4%BF%AE%E6%AD%A3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>groupID % artifactID % revision</code> 中的 <code>revision</code> 不需要是一个固定的版本号。Ivy 能够根据你指定的约束选择一个模块的最新版本。你指定 <code>&quot;latest.integration&quot;</code>，<code>&quot;2.9.+&quot;</code> 或者 <code>&quot;[1.0,)&quot;</code>，而不是
@@ -1102,7 +1107,7 @@ lazy val projF = (project in file(&quot;f&quot;))
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot; % &quot;test&quot;
 </code></pre><p>也可能也会像这样使用类型安全的 <code>Test</code> configuration：
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot; % Test
-</code></pre><p>现在，如果你在 sbt 的命令提示行里输入 <code>show compile:dependencyClasspath</code>，你不应该看到 derby jar。但是如果你输入 <code>show test:dependencyClasspath</code>，
+</code></pre><p>现在，如果你在 sbt 的命令提示行里输入 <code>show Compile/dependencyClasspath</code>，你不应该看到 derby jar。但是如果你输入 <code>show Test/dependencyClasspath</code>，
 你应该在列表中看到 derby jar。
 </p><p>通常，测试相关的依赖，如 <a href="https://scalacheck.org/">ScalaCheck</a>，
 <a href="http://specs2.org">Specs2</a> 和 <a href="https://www.scalatest.org/">ScalaTest</a> 将会被定义为 <code>% &quot;test&quot;</code>。
@@ -1124,7 +1129,7 @@ lazy val core = project in file(&quot;core&quot;)
 </p><pre><code class="prettyprint lang-scala">lazy val commonSettings = Seq(
   organization := &quot;com.example&quot;,
   version := &quot;0.1.0&quot;,
-  scalaVersion := &quot;2.12.14&quot;
+  scalaVersion := &quot;2.12.16&quot;
 )
 
 lazy val core = (project in file(&quot;core&quot;))
@@ -1268,7 +1273,7 @@ val sampleIntTask = taskKey[Int](&quot;A sample int task.&quot;)
 
 ThisBuild / organization := &quot;com.example&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
-ThisBuild / scalaVersion := &quot;2.12.14&quot;
+ThisBuild / scalaVersion := &quot;2.12.16&quot;
 
 lazy val library = (project in file(&quot;library&quot;))
   .settings(
@@ -1298,7 +1303,7 @@ val sampleStringTask = taskKey[String](&quot;A sample string task.&quot;)
 
 ThisBuild / organization := &quot;com.example&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
-ThisBuild / scalaVersion := &quot;2.12.14&quot;
+ThisBuild / scalaVersion := &quot;2.12.16&quot;
 
 lazy val library = (project in file(&quot;library&quot;))
   .settings(
@@ -1423,12 +1428,12 @@ stopping...
 
 object Dependencies {
   // Versions
-  lazy val akkaVersion = &quot;2.3.8&quot;
+  lazy val akkaVersion = &quot;2.6.19&quot;
 
   // Libraries
   val akkaActor = &quot;com.typesafe.akka&quot; %% &quot;akka-actor&quot; % akkaVersion
   val akkaCluster = &quot;com.typesafe.akka&quot; %% &quot;akka-cluster&quot; % akkaVersion
-  val specs2core = &quot;org.specs2&quot; %% &quot;specs2-core&quot; % &quot;2.4.17&quot;
+  val specs2core = &quot;org.specs2&quot; %% &quot;specs2-core&quot; % &quot;4.16.0&quot;
 
   // Projects
   val backendDeps =
@@ -1439,7 +1444,7 @@ object Dependencies {
 
 ThisBuild / organization := &quot;com.example&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
-ThisBuild / scalaVersion := &quot;2.12.14&quot;
+ThisBuild / scalaVersion := &quot;2.12.16&quot;
 
 lazy val backend = (project in file(&quot;backend&quot;))
   .settings(
@@ -1494,7 +1499,6 @@ lazy val backend = (project in file(&quot;backend&quot;))
       <div class="nav" id="topbar">
         <a href="../../../learn.html">Learn</a>
         <a href="../../../download.html">Download</a>
-        <a href="../../../support.html">Support</a>
         <a href="../../../community.html">Get Involved</a>
         <a id="source-code" href="https://github.com/sbt/sbt"><img src="../files/github-logo-teal.svg" alt="Source code" class="social"></a>
         <a id="twitter" href="https://twitter.com/scala_sbt"><img src="../files/twitter-logo-teal.svg" alt="sbt on Twitter" class="social"></a>

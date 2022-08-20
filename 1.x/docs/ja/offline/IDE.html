@@ -1,0 +1,320 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html manifest="pamflet.manifest">
+      <head>
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+        <title>sbt Reference Manual — IDE との統合</title>
+        <link rel="shortcut icon" href="../favicon.ico"/>
+        <link rel="stylesheet" href="../css/bootstrap.min.css" type="text/css"/>
+        <link rel="stylesheet" href="../css/pamflet.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamflet-print.css" type="text/css" media="print"/>
+        <link rel="stylesheet" href="../css/pamflet-grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-redmond.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-github.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/color_scheme-monokai.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="../css/pamfletheight_80px_2em.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
+        <script type="text/javascript" src="../js/bootstrap.bundle.min.js"></script>
+        <script type="text/javascript" src="../js/pamflet.js"></script>
+        <script type="text/javascript">
+          Pamflet.page.language = 'ja';
+        </script>
+        <script type="text/javascript" src="../js/prettify/prettify.js"></script><script type="text/javascript" src="../js/prettify/lang-scala.js"></script><link type="text/css" rel="stylesheet" href="../css/prettify.css"/><script type="text/javascript"><!--
+        window.onload=function() { prettyPrint(); };
+      --></script>
+        <link rel="stylesheet" href="../css/custom-202107.css" type="text/css" media="screen, projection"/>
+        
+        <script type="text/javascript">
+              Pamflet.twitter = '#sbt #scala';
+            </script>
+      </head>
+      <body class="color_scheme-github">
+        <div class="container-fluid contentswrapper h-100">
+          <div class="row minh-100">
+          <div class="col-md-4 col-xl-3 toccolumn leftcolumn">
+                  <div class="lefttocwrapper">
+      <div class="tocwrapper">
+        
+        <div class="tocbody show" id="toc">
+        
+        <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">始める sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">sbt のインストール</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">macOS への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Windows への sbt のインストール</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Linux への sbt のインストール</a></div></li> </ol></li><li><div><a href="sbt-by-example.html">例題でみる sbt</a></div></li><li><div><a href="Directories.html">ディレクトリ構造</a></div></li><li><div><a href="Running.html">実行</a></div></li><li><div class="current">IDE との統合</div></li><li><div><a href="Basic-Def.html">ビルド定義</a></div></li><li><div><a href="Multi-Project.html">マルチプロジェクト・ビルド</a></div></li><li><div><a href="Task-Graph.html">タスク・グラフ</a></div></li><li><div><a href="Scopes.html">スコープ</a></div></li><li><div><a href="Appending-Values.html">値の追加</a></div></li><li><div><a href="Scope-Delegation.html">スコープ委譲 (.value の照会)</a></div></li><li><div><a href="Library-Dependencies.html">ライブラリ依存性</a></div></li><li><div><a href="Using-Plugins.html">プラグインの使用</a></div></li><li><div><a href="Custom-Settings.html">カスタムセッティングとタスク</a></div></li><li><div><a href="Organizing-Build.html">ビルドの整理</a></div></li><li><div><a href="Summary.html">まとめ</a></div></li><li><div><a href="Bare-Def.html">付録: bare .sbt ビルド定義</a></div></li> </ol></li><li><div><a href="General-Info.html">インフォメーション</a></div><ol class="toc"> <li><div><a href="Changes.html">変更点</a></div><ol class="toc"> <li><div><a href="sbt-1.0-Release-Notes.html">sbt 1.0.0</a></div></li> </ol></li> </ol></li><li><div><a href="Detailed-Topics.html">各論</a></div><ol class="toc"> <li><div><a href="Plugins-and-Best-Practices.html">プラグインとベストプラクティス</a></div><ol class="toc"> <li><div><a href="Best-Practices.html">一般的なベストプラクティス</a></div></li><li><div><a href="Testing-sbt-plugins.html">sbt プラグインをテストする</a></div></li> </ol></li> </ol></li><li><div><a href="Howto.html">How to</a></div><ol class="toc"> <li><div><a href="Howto-Generating-Files.html">ソースファイル/リソースファイルの生成</a></div></li><li><div><a href="Howto-Sequencing.html">逐次実行</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Def.sequential を用いて逐次タスクを定義する</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Def.taskDyn を用いて動的タスクを定義する</a></div></li><li><div><a href="Howto-After-Input-Task.html">インプットタスクの後で何かする</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Def.inputTaskDyn を用いた動的インプットタスクの定義</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">コマンドを用いた逐次実行</a></div></li> </ol></li> </ol></li><li><div><a href="Archived+pages.html">Archived pages</a></div><ol class="toc"> <li><div><a href="Hello.html">Hello, World</a></div></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div>
+      </div>
+      </div>
+                </div><div class="col-md-8 col-xs-9">
+                  <div class="rightcolumn contents">
+                  <h2 id="IDE+%E3%81%A8%E3%81%AE%E7%B5%B1%E5%90%88">IDE との統合<a href="#IDE+%E3%81%A8%E3%81%AE%E7%B5%B1%E5%90%88" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>エディタと sbt だけで Scala のコードを書くことも可能だが、今日日のプログラマの多くは統合開発環境 (IDE) を用いる。
+Scala の IDE は <a href="https://scalameta.org/metals/">Metals</a> と <a href="https://www.jetbrains.com/idea/">IntelliJ IDEA</a> の二強で、それぞれ sbt ビルドとの統合をサポートする。
+</p><ul><li><a href="#metals">Metals のビルドサーバとして sbt を用いる</a>
+</li><li><a href="#intellij-import">IntelliJ IDEA へのインポート</a>
+</li><li><a href="#intellij-bsp">IntelliJ IDEA のビルドサーバとして sbt を用いる</a>
+</li><li><a href="#nvim-metals">Metals フロントエンドとして Neovim を用いる</a>
+</li></ul><a id="metals"></a><h3 id="Metals+%E3%81%AE%E3%83%93%E3%83%AB%E3%83%89%E3%82%B5%E3%83%BC%E3%83%90%E3%81%A8%E3%81%97%E3%81%A6+sbt+%E3%82%92%E7%94%A8%E3%81%84%E3%82%8B">Metals のビルドサーバとして sbt を用いる<a href="#Metals+%E3%81%AE%E3%83%93%E3%83%AB%E3%83%89%E3%82%B5%E3%83%BC%E3%83%90%E3%81%A8%E3%81%97%E3%81%A6+sbt+%E3%82%92%E7%94%A8%E3%81%84%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://scalameta.org/metals/">Metals</a> は、Scala のためのオープンソースな<strong>言語サーバ</strong>であり、<a href="https://code.visualstudio.com/">VS Code</a> その他の
+<a href="https://microsoft.github.io/language-server-protocol/">LSP</a> をサポートするエディタのバックエンドとして機能することができる。
+一方で Metals は、<a href="https://build-server-protocol.github.io/">Build Server Protocol</a> (BSP) 経由で sbt を含む異なる<strong>ビルドサーバ</strong>をサポートする。
+</p><p>VS Code で Metals を使うには:
+</p><ol><li>Extensions タブから Metals をインストールする:<br>
+<img src="../files/metals0.png" alt="Metals"/>
+</li><li><code>build.sbt</code> ファイルを含むディレクトリを開く。
+</li><li>メニューバーより View &gt; Command Palette… (macOS だと <code>Cmd-Shift-P</code>) を開き Metals: Switch build server と打ち込み、「sbt」を選択する。<br>
+<img src="../files/metals2.png" alt="Metals"/>
+</li><li>インポート処理が完了したら、Scala のファイルを開いてみてコード補完が機能していることを確認する:<br>
+<img src="../files/metals3.png" alt="Metals"/>
+</li></ol><p>一部のサブプロジェクトを BSP へ入れたく無い場合は、以下のセッティングを使うことができる。
+</p><pre><code class="prettyprint lang-scala">bspEnabled := false
+</code></pre><p>コードに変更を加えて保存 (macOS だと <code>Cmd-S</code>) すると、Metals は sbt を呼び出して実際のビルド作業を行う。
+</p><p>Igal Tabachnik さんの <a href="https://hmemcpy.com/2021/09/bsp-and-intellij/">Using BSP effectively in IntelliJ and Scala</a> という記事が参考になる。
+</p><h4 id="VS+Code+%E3%81%A7%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%A9%E3%82%AF%E3%83%86%E3%82%A3%E3%83%96%E3%83%BB%E3%83%87%E3%83%90%E3%83%83%E3%82%B0">VS Code でのインタラクティブ・デバッグ<a href="#VS+Code+%E3%81%A7%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%A9%E3%82%AF%E3%83%86%E3%82%A3%E3%83%96%E3%83%BB%E3%83%87%E3%83%90%E3%83%83%E3%82%B0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ol><li>コードにブレークポイントを設定することで、Metals はインタラクティブ・デバッグをサポートする:<br>
+<img src="../files/metals4.png" alt="Metals"/>
+</li><li>単体テストを右クリックして「Debug Test」を選ぶことでインタラクティブ・デバッグを開始する。
+テストがブレークポイントに当たると、変数の値を検査することができる。<br>
+<img src="../files/metals5.png" alt="Metals"/>
+</li></ol><p>インタラクティブ・デバッグが開始してからの操作方法の詳細は VS Code ドキュメンテーションの <a href="https://code.visualstudio.com/docs/editor/debugging">Debugging</a> ページ参照。
+</p><h4 id="sbt+%E3%82%BB%E3%83%83%E3%82%B7%E3%83%A7%E3%83%B3%E3%81%B8%E3%81%AE%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3">sbt セッションへのログイン<a href="#sbt+%E3%82%BB%E3%83%83%E3%82%B7%E3%83%A7%E3%83%B3%E3%81%B8%E3%81%AE%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Metals がビルドサーバとして sbt を使う間、シンクライアントを使って同じ sbt セッションにログインすることができる。
+</p><ul><li>Terminal セクションから <code>sbt --client</code> と打ち込む。<br>
+<img src="../files/metals6.png" alt="Metals"/>
+</li></ul><p>これで Metals が開始した sbt セッションにログインすることができた。その中でコードが既にコンパイルされた状態から <code>testOnly</code> その他のタスクを実行できる。
+</p><a id="intellij-import"></a><h3 id="IntelliJ+IDEA+%E3%81%B8%E3%81%AE%E3%82%A4%E3%83%B3%E3%83%9D%E3%83%BC%E3%83%88">IntelliJ IDEA へのインポート<a href="#IntelliJ+IDEA+%E3%81%B8%E3%81%AE%E3%82%A4%E3%83%B3%E3%83%9D%E3%83%BC%E3%83%88" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://www.jetbrains.com/idea/">IntelliJ IDEA</a> は JetBrains社が開発した IDE で、Community Edition は Apache v2 ライセンスの元でオープンソース化されている。
+IntelliJ は sbt を含む多くのビルドツールと統合して、プロジェクトをインポートすることができる。
+これは従来の方法で、BSP よりも多くの場合安定性が高い。
+</p><p>IntelliJ IDEA にビルドをインポートするには:
+</p><ol><li>Plugins タブから Scala プラグインをインストールする:<br>
+<img src="../files/intellij1.png" alt="IntelliJ"/>
+</li><li>Projects から <code>build.sbt</code> ファイルを含んだディレクトリを開く:<br>
+<img src="../files/intellij2.png" alt="IntelliJ"/>
+</li><li>インポート処理が完了したら、Scala のファイルを開いてみてコード補完が機能していることを確認する。
+</li></ol><p>IntelliJ Scala プラグインは独自の軽量コンパイラエンジンを用いてエラーの検知を行うが、これは高速であるが正しくないこともある。<a href="https://blog.jetbrains.com/scala/2021/07/27/intellij-scala-plugin-2021-2/#Compiler-based_highlighting">Compiler-based highlighting</a> といって、 IntelliJ を Scala コンパイラを使ってエラー・ハイライトを行うように設定することも可能だ。
+</p><h4 id="IntelliJ+IDEA+%E3%81%A7%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%A9%E3%82%AF%E3%83%86%E3%82%A3%E3%83%96%E3%83%BB%E3%83%87%E3%83%90%E3%83%83%E3%82%B0">IntelliJ IDEA でのインタラクティブ・デバッグ<a href="#IntelliJ+IDEA+%E3%81%A7%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%A9%E3%82%AF%E3%83%86%E3%82%A3%E3%83%96%E3%83%BB%E3%83%87%E3%83%90%E3%83%83%E3%82%B0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ol><li>コードにブレークポイントを設定することで、IntelliJ はインタラクティブ・デバッグをサポートする:<br>
+<img src="../files/intellij4.png" alt="IntelliJ"/>
+</li><li>単体テストを右クリックして「Debug &lt;テスト名&gt;」を選ぶことでインタラクティブ・デバッグを開始する。
+もしくは、単体テストの左側にある緑色の「実行」アイコンをクリックする。
+テストがブレークポイントに当たると、変数の値を検査することができる。<br>
+<img src="../files/intellij5.png" alt="IntelliJ"/>
+</li></ol><p>インタラクティブ・デバッグが開始してからの操作方法の詳細は IntelliJ ドキュメンテーションの <a href="https://www.jetbrains.com/help/idea/debugging-code.html">Debug code</a> ページ参照。
+</p><a id="intellij-bsp"></a><h3 id="IntelliJ+IDEA+%E3%81%AE%E3%83%93%E3%83%AB%E3%83%89%E3%82%B5%E3%83%BC%E3%83%90%E3%81%A8%E3%81%97%E3%81%A6+sbt+%E3%82%92%E7%94%A8%E3%81%84%E3%82%8B+%28%E4%B8%8A%E7%B4%9A%E8%80%85%E5%90%91%E3%81%91%29">IntelliJ IDEA のビルドサーバとして sbt を用いる (上級者向け)<a href="#IntelliJ+IDEA+%E3%81%AE%E3%83%93%E3%83%AB%E3%83%89%E3%82%B5%E3%83%BC%E3%83%90%E3%81%A8%E3%81%97%E3%81%A6+sbt+%E3%82%92%E7%94%A8%E3%81%84%E3%82%8B+%28%E4%B8%8A%E7%B4%9A%E8%80%85%E5%90%91%E3%81%91%29" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>IntelliJ へビルドをインポートするということは、事実上 IntelliJ をビルドツールやコンパイラとして採用してコードを書いているということだ (<a href="https://blog.jetbrains.com/scala/2021/07/27/intellij-scala-plugin-2021-2/#Compiler-based_highlighting">compiler-based highlighting</a> も参照)。
+多くのユーザはそのエキスペリエンスで満足しているが、一方でコードベースによってはコンパイラエラーが間違っていたり、ソース生成を行うプラグインと動作しなかったり、sbt と同一のビルド意味論を用いてコードを書きたいと思う人もいる。
+幸いなことに、現代の IntelliJ は <a href="https://build-server-protocol.github.io/">Build Server Protocol</a> (BSP) 経由で sbt を含む異なる<strong>ビルドサーバ</strong>をサポートする。
+</p><p>IntelliJ において BSP を使う利点は、実際のビルド作業を sbt を用いて行うため、今までも sbt セッションを立ち上げながら IntelliJ を使っていた人は、二重でコンパイルしなくてもよくなるという利点がある。
+</p><table class="table table-striped">
+  <tr>
+    <th><nobr></th>
+    <th>IntelliJ へインポート</th>
+    <th>BSP を使った IntelliJ</th>
+  </tr>
+  <tr>
+    <td>信頼性</td>
+    <td>✅ 安定した動作</td>
+    <td>⚠️ 技術的に枯れていないため、UX 問題などにあう可能性がある</td>
+  </tr>
+  <tr>
+    <td>応答性</td>
+    <td>✅</td>
+    <td>⚠️</td>
+  </tr>
+  <tr>
+    <td>正確性</td>
+    <td>⚠️ 独自のコンパイラを用いた型検査。scalac に設定することも可能。</td>
+    <td>✅ Zinc + Scala コンパイラを用いた型検査</td>
+  </tr>
+  <tr>
+    <td><nobr>ソース生成</nobr></td>
+    <td>❌ ソース生成するごとに再同期が必要</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td>ビルド</td>
+    <td>❌ sbt を併用すると二重ビルドが必要になる</td>
+    <td>✅</td>
+  </tr>
+</table><p>IntelliJ のビルドサーバとして sbt を用いるには:
+</p><ol><li>Plugins タブから Scala プラグインをインストールする。
+</li><li>BSP を使うには、Project タブの Open ボタンは使ってはいけない:<br>
+<img src="../files/intellij7.png" alt="IntelliJ"/>
+</li><li>メニューバーより New &gt; “Project From Existing Sources” をクリックするか、Find Action (macOS だと <code>Cmd-Shift-P</code>) より「Existing」 と打ち込んで「Import Project From Existing Sources」を探す:<br>
+<img src="../files/intellij8.png" alt="IntelliJ"/>
+</li><li><code>build.sbt</code> ファイルを開く。ダイアログが表示されたら <strong>BSP</strong> を選択する:<br>
+<img src="../files/intellij9.png" alt="IntelliJ"/>
+</li><li>「tool to import the BSP workspace」として <strong>sbt (recommended)</strong> を選択する:<br>
+<img src="../files/intellij10.png" alt="IntelliJ"/>
+</li><li>インポート処理が完了したら、Scala のファイルを開いてみてコード補完が機能していることを確認する:<br>
+<img src="../files/intellij11.png" alt="IntelliJ"/>
+</li></ol><p>一部のサブプロジェクトを BSP へ入れたく無い場合は、以下のセッティングを使うことができる。
+</p><pre><code class="prettyprint lang-scala">bspEnabled := false
+</code></pre><ul><li>Preferences より BSP と検索して、「build automatically on file save」を選択し、「export sbt projects to Bloop before import」を外す:<br>
+<img src="../files/intellij12.png" alt="IntelliJ"/>
+</li></ul><p>コードに変更を加えて保存 (macOS だと <code>Cmd-S</code>) すると、IntelliJ は sbt を呼び出して実際のビルド作業を行う。
+</p><h4 id="sbt+%E3%82%BB%E3%83%83%E3%82%B7%E3%83%A7%E3%83%B3%E3%81%B8%E3%81%AE%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3">sbt セッションへのログイン<a href="#sbt+%E3%82%BB%E3%83%83%E3%82%B7%E3%83%A7%E3%83%B3%E3%81%B8%E3%81%AE%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>シンクライアントを使って既存の sbt セッションにログインすることができる。
+</p><ul><li>Terminal セクションから <code>sbt --client</code> と打ち込む。<br>
+<img src="../files/intellij6.png" alt="IntelliJ"/>
+</li></ul><p>これで IntelliJ が開始した sbt セッションにログインすることができた。その中でコードが既にコンパイルされた状態から <code>testOnly</code> その他のタスクを実行できる。
+</p><a id="nvim-metals"></a><h3 id="Metals+%E3%83%95%E3%83%AD%E3%83%B3%E3%83%88%E3%82%A8%E3%83%B3%E3%83%89%E3%81%A8%E3%81%97%E3%81%A6+Neovim+%E3%82%92%E7%94%A8%E3%81%84%E3%82%8B+%28%E4%B8%8A%E7%B4%9A%E8%80%85%E5%90%91%E3%81%91%29">Metals フロントエンドとして Neovim を用いる (上級者向け)<a href="#Metals+%E3%83%95%E3%83%AD%E3%83%B3%E3%83%88%E3%82%A8%E3%83%B3%E3%83%89%E3%81%A8%E3%81%97%E3%81%A6+Neovim+%E3%82%92%E7%94%A8%E3%81%84%E3%82%8B+%28%E4%B8%8A%E7%B4%9A%E8%80%85%E5%90%91%E3%81%91%29" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://neovim.io/">Neovim</a> は、Vim エディタのモダンなフォークで、組み込みで <a href="https://microsoft.github.io/language-server-protocol/">LSP</a> をサポートしていたりする。
+そのため Neovim は Metals のフロントエンドとして設定可能だ。
+</p><p>Metals メンテナの一人である Chris Kipps さんが <a href="https://github.com/scalameta/nvim-metals">nvim-metals</a> というプラグインを作っており、これは Metals 機能を網羅的にサポートする。
+nvim-metals をインストールするには、Chris Kipps さんの <a href="https://github.com/scalameta/nvim-metals/discussions/39#discussion-82302">lsp.lua</a> を元に
+<code>$XDG_CONFIG_HOME/nvim/lua/</code> 以下に設定ファイルを書き、自分の好みに合わせていく。
+例えば、vim-plug など別のプラグインマネージャを使っている場合はプラグインの部分をコメントアウトする必要がある。
+</p><p><code>init.vim</code> から以下のようにして読み込める:
+</p><pre><code class="">lua &lt;&lt; END
+require('lsp')
+END
+</code></pre><p><code>lsp.lua</code> によると、<code>g:metals_status</code> はステータスラインに表示させるべきと書いてあり、これは lualine.nvim などを使って実現できる。
+</p><ol><li>次に、sbt を使ったビルドの Scala ファイルを Neovim を用いて開く。
+</li><li>プロンプトが表示されたら <code>:MetalsInstall</code> を実行する。
+</li><li><code>:MetalsStartServer</code> を実行する。
+</li><li>ステータスラインの設定がうまくいっていれば、「Connecting to sbt」、「Indexing」などと表示される。<br>
+<img src="../files/nvim0.png" width="900">
+</li><li>Insert モードに入るとコード補完が作動し、タブを使って候補を見ていくことができる:<br>
+<img src="../files/nvim1.png" width="900">
+</li></ol><ul><li>変更を保存するとビルドが自動で行われ、コンパイルエラーがあった場合はコード中の余白に表示される:<br>
+<img src="../files/nvim2.png" width="900">
+</li></ul><h4 id="%E5%AE%9A%E7%BE%A9%E3%81%B8%E3%81%AE%E3%82%B8%E3%83%A3%E3%83%B3%E3%83%97">定義へのジャンプ<a href="#%E5%AE%9A%E7%BE%A9%E3%81%B8%E3%81%AE%E3%82%B8%E3%83%A3%E3%83%B3%E3%83%97" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ol><li>カーソル下のシンボルの定義へは <code>gD</code> を使ってジャンプできる (具体的なキーバインドは好みのものにカスタマイズできる):<br>
+<img src="../files/nvim3.png" width="900">
+</li><li><code>Ctrl-O</code> を使って古いバッファーに戻る。
+</li></ol><h4 id="%E3%83%9B%E3%83%90%E3%83%AA%E3%83%B3%E3%82%B0">ホバリング<a href="#%E3%83%9B%E3%83%90%E3%83%AA%E3%83%B3%E3%82%B0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ul><li>「マウスオーバー」のようにカーソル下のシンボルの型情報を表示させるには、Normal モードで <code>K</code> を使う:<br>
+<img src="../files/nvim4.png" width="900">
+</li></ul><h4 id="%E3%82%A8%E3%83%A9%E3%83%BC%E3%81%AE%E5%88%97%E6%8C%99">エラーの列挙<a href="#%E3%82%A8%E3%83%A9%E3%83%BC%E3%81%AE%E5%88%97%E6%8C%99" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ol><li>全てのコンパイラエラーと警告を列挙するには <code>&lt;leader&gt;aa</code> を使う:<br>
+<img src="../files/nvim5.png" width="900">
+</li><li>これは標準の quickfix リストを使っているので、<code>:cnext</code> や <code>:cprev</code> といったコマンドを使ってエラーや警告を見ていける。
+</li><li>エラーだけ見たい場合は、<code>&lt;leader&gt;ae</code> を使う。
+</li></ol><h4 id="Neovim+%E3%81%A7%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%A9%E3%82%AF%E3%83%86%E3%82%A3%E3%83%96%E3%83%BB%E3%83%87%E3%83%90%E3%83%83%E3%82%B0">Neovim でのインタラクティブ・デバッグ<a href="#Neovim+%E3%81%A7%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%A9%E3%82%AF%E3%83%86%E3%82%A3%E3%83%96%E3%83%BB%E3%83%87%E3%83%90%E3%83%83%E3%82%B0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><ol><li>nvim-dap のおかげで、Neovim はインタラクティブ・デバッグをサポートする。<code>&lt;leader&gt;dt</code> を用いてブレークポイントを設定していく:<br>
+<img src="../files/nvim6.png" width="900">
+</li><li>単体テストを開き、ビルド済みかをホバリング (<code>K</code>) で確認して、debug continue (<code>&lt;leader&gt;dc</code>) でデバッガを開始する。
+プロンプトが表示されたら、「1: RunOrTest」を選ぶ。
+</li><li>テストがブレークポイントに当たると、debug hovering (<code>&lt;leader&gt;dK</code>) を使って変数の値を検査することができる:<br>
+<img src="../files/nvim7.png" width="900">
+</li><li>再度 debug continue (<code>&lt;leader&gt;dc</code>) してセッションを終了させる。
+</li></ol><p>詳細は <a href="https://github.com/scalameta/nvim-metals">nvim-metals</a> 参考。
+</p><h4 id="sbt+%E3%82%BB%E3%83%83%E3%82%B7%E3%83%A7%E3%83%B3%E3%81%B8%E3%81%AE%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3">sbt セッションへのログイン<a href="#sbt+%E3%82%BB%E3%83%83%E3%82%B7%E3%83%A7%E3%83%B3%E3%81%B8%E3%81%AE%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>シンクライアントを使って既存の sbt セッションにログインすることができる。
+</p><ol><li>新しい vim ウィンドウに <code>:terminal</code> と打ち込んで組み込みのターミナルを立ち上げる。
+</li><li><code>sbt --client</code> と打ち込む<br>
+<img src="../files/nvim8.png" width="900">
+</li></ol><p>Neovim の中だが、タブ補完なども普通に動作する。
+</p><div class="bottom nav">
+                <div class="row">
+                  <div class="col-md-auto">
+                    <a href="Basic-Def.html">
+                      <div class="arrowitem">
+                        <span class="arrow">&gt;</span>
+                      </div>
+
+                      <div class="arrowitem">
+                        <em>Next page</em><br/>
+                        ビルド定義
+                      </div>
+
+                    </a>
+                  </div>
+                </div>
+                <div class="row w-100">
+        <div class="col-md-auto ml-auto">
+          <ul class="language-bar">
+            <li><a href="../IDE.html"><span class="lang-item lang-en">English</span></a></li><li><a href="../ja/IDE.html"><span class="lang-item lang-ja">日本語</span></a></li>
+          </ul>
+        </div>
+      </div>
+              </div>
+                  </div>
+                </div>
+          </div> <!-- row -->
+        </div>
+        <div class="header">
+          <link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
+<div class="container-fluid top nav">
+  <div class="row w-100">
+    <div class="col-md-4">
+      <div class="logo">
+        <a href="../../../index.html"><img src="../files/sbt-logo.svg" alt="sbt"></a>
+        <span class="versions"><select id="versions"></select></span>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="nav" id="topbar">
+        <a href="../../../learn.html">Learn</a>
+        <a href="../../../download.html">Download</a>
+        <a href="../../../community.html">Get Involved</a>
+        <a id="source-code" href="https://github.com/sbt/sbt"><img src="../files/github-logo-teal.svg" alt="Source code" class="social"></a>
+        <a id="twitter" href="https://twitter.com/scala_sbt"><img src="../files/twitter-logo-teal.svg" alt="sbt on Twitter" class="social"></a>
+        <a id="edit-on-github" href="https://github.com/sbt/website/edit/develop/src/reference/00-Getting-Started/04B-IDE.md"><img src="../files/octicon-pencil.svg" alt="Edit on GitHub"></a>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" async>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41449189-1', 'scala-sbt.org');
+ga('send', 'pageview');
+</script>
+<script type="text/javascript" async>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-23127719-1', 'lightbend.com', {'allowLinker': true, 'name': 'tsTracker'});
+  ga('tsTracker.require', 'linker');
+  ga('tsTracker.linker:autoLink', ['lightbend.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org']);
+  ga('tsTracker.send', 'pageview');
+</script>
+<script type="text/javascript">
+$(function() {
+var scrollDown = function() {
+if (window.location.hash !== "") {
+  setTimeout(function() { $(window).scrollTop($(window).scrollTop() - 120); }, 100);
+}
+}
+scrollDown();
+$(window).bind('hashchange', function() {
+scrollDown();
+});
+});
+</script>
+
+        </div>
+        <div class="footer">
+          <footer>
+  <div class="container-fluid footer">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="support-item">
+          <div class="support-icon">
+            <svg class="svg-icon svg-icon-chat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.5 85.2" enable-background="new 0 0 97.5 85.2"><path stroke="#fff" stroke-width="4.282" stroke-linecap="round" stroke-miterlimit="10" d="M27 29.5h-16.3c-4.7 0-8.6 3.9-8.6 8.6v25.7c0 4.7 3.9 8.6 8.6 8.6h2.7c.8 0 1.5.7 1.5 1.5v7.8c0 1.3 1.6 2 2.5 1l9.5-9.5c.5-.5 1.2-.8 2-.8h20.2c4.7 0 8.6-3.9 8.6-8.6v-7.8" fill="none"/><path fill="#fff" d="M85 0h-40c-6.9 0-12.5 5.6-12.5 12.5v33.4c0 2.2 1.8 4.1 4.1 4.1h29.9c.7 0 1.3.3 1.8.7l10 10c1.6 1.6 4.3.5 4.3-1.8v-6.5c0-1.4 1.1-2.5 2.5-2.5 6.9 0 12.5-5.6 12.5-12.5v-25c-.1-6.8-5.8-12.4-12.6-12.4z"/></svg>
+          </div>
+          <div class="support-detail">
+            <h2>コミュニティー・サポート</h2>
+            <a href="https://stackoverflow.com/questions/tagged/sbt">StackOverflow</a>
+          </div>
+        </div>
+        <div class="support-item">
+          <div class="support-icon">
+            <svg id="lightbend-icon-reverse" class="svg-icon svg-icon-lightbend-reverse" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 302 262"><title>lightbend-icon</title><g id="icon"><path d="M1,195v56a10,10,0,0,0,10,10H291a10,10,0,0,0,10-10V195a557.85,557.85,0,0,1-150,20A557.85,557.85,0,0,1,1,195Z" style="fill:#fff"/><path d="M291,1H11A10,10,0,0,0,1,11V176a539.94,539.94,0,0,0,150,21,539.94,539.94,0,0,0,150-21V11A10,10,0,0,0,291,1Z" style="fill:#fff"/></g></svg>
+          </div>
+          <div class="support-detail">
+            <h2>商用サポート</h2>
+            <a href="https://www.lightbend.com/services/expert-support">Lightbend Subscription</a>
+            <a href="https://www.lightbend.com/services/training">Training</a>
+            <a href="https://www.lightbend.com/services/consulting">Consulting</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 text-right ts">
+        &copy; 2016-<script>document.write(new Date().getFullYear())</script>Lightbend Inc.
+        <a href="https://www.lightbend.com">
+          <img src="../files/lightbend-reverse.svg" alt="Lightbend, Inc.">
+        </a>
+      </div>
+    </div>
+  </div>
+</footer><script src="/assets/versions.js"></script><script src="/assets/set-versions.js"></script>
+        </div>
+        
+        <div class="highlight-outer">
+              <div class="highlight-menu">
+                <ul>
+                  <li><button id="highlight-button-twitter"><img src="../img/twitter-bird-dark-bgs.png"/></button></li>
+                </ul>
+              </div>
+            </div>
+      </body>
+    </html>

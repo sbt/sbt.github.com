@@ -75,7 +75,7 @@ val clean = taskKey[Unit](&quot;Deletes files produced by the build, such as gen
 <strong>在任务引擎评估 <code>scalacOptions</code> 的打开 <code>{</code>，无论它出现在主体中的哪一行， <code>update</code> 和 <code>clean</code> 任务都已完成</strong>。
 </p><p>请参见以下示例：
 </p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.14&quot;
+ThisBuild / scalaVersion := &quot;2.12.16&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -101,7 +101,7 @@ lazy val root = (project in file(&quot;.&quot;))
 </code></pre><p>即使 <code>val ur = ...</code> 出现在 <code>log.info(&quot;123&quot;)</code> 和 <code>log.info(&quot;456&quot;)</code>，<code>update</code> 任务的评估还是要先于它们进行。
 </p><p>这是另一个例子：
 </p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.14&quot;
+ThisBuild / scalaVersion := &quot;2.12.16&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -189,7 +189,7 @@ hello
   .settings(
     name := &quot;Hello&quot;,
     organization := &quot;com.example&quot;,
-    scalaVersion := &quot;2.12.14&quot;,
+    scalaVersion := &quot;2.12.16&quot;,
     version := &quot;0.1.0-SNAPSHOT&quot;,
     scalacOptions := List(&quot;-encoding&quot;, &quot;utf8&quot;, &quot;-Xfatal-warnings&quot;, &quot;-deprecation&quot;, &quot;-unchecked&quot;),
     scalacOptions := {
@@ -233,10 +233,10 @@ checksums := scalacOptions.value
 </p><pre><code class="prettyprint lang-scala">// name our organization after our project (both are SettingKey[String])
 organization := name.value
 </code></pre><p>Here’s a realistic example.
-This rewires <code>scalaSource in Compile</code> key to a different directory
+This rewires <code>Compile / scalaSource</code> key to a different directory
 only when <code>scalaBinaryVersion</code> is <code>&quot;2.11&quot;</code>.
-</p><pre><code class="prettyprint lang-scala">scalaSource in Compile := {
-  val old = (scalaSource in Compile).value
+</p><pre><code class="prettyprint lang-scala">Compile / scalaSource := {
+  val old = (Compile / scalaSource).value
   scalaBinaryVersion.value match {
     case &quot;2.11&quot; =&gt; baseDirectory.value / &quot;src-2.11&quot; / &quot;main&quot; / &quot;scala&quot;
     case _      =&gt; old
@@ -329,7 +329,6 @@ end
       <div class="nav" id="topbar">
         <a href="../../../learn.html">Learn</a>
         <a href="../../../download.html">Download</a>
-        <a href="../../../support.html">Support</a>
         <a href="../../../community.html">Get Involved</a>
         <a id="source-code" href="https://github.com/sbt/sbt"><img src="../files/github-logo-teal.svg" alt="Source code" class="social"></a>
         <a id="twitter" href="https://twitter.com/scala_sbt"><img src="../files/twitter-logo-teal.svg" alt="sbt on Twitter" class="social"></a>

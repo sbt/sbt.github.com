@@ -11,8 +11,8 @@
   [Parallel-Execution]: Parallel-Execution.html
   [Discussions]: https://github.com/sbt/sbt/discussions
   [Faq]: Faq.html
-  [Support]: https://www.scala-sbt.org/support.html
   [Apidoc]: https://www.scala-sbt.org/1.x/api/sbt/index.html
+  [Get-Help]: https://www.scala-sbt.org/community.html#how-can-I-get-help
 
 sbt Reference Manual
 ====================
@@ -35,9 +35,9 @@ All documentation may be found via the table of contents included on the left of
 
 See also [Frequently asked question][Faq].
 
-See [Support][Support] on where you can get help about sbt.
+See [How can I get help?][Get-Help] for where you can get help about sbt.
 For discussing sbt development, use [Discussions][Discussions].
-To stay up to date about the news related to sbt, follow us [@scala_sbt](https://twitter.com/scala_sbt).
+To stay up to date about the news related to sbt, follow us [@scala\_sbt](https://twitter.com/scala_sbt).
 
 ### Features of sbt
 
@@ -68,7 +68,7 @@ corrections and add documentation.
 
 Documentation for 0.13.x has been
 [archived here](https://www.scala-sbt.org/0.13/docs/index.html). This
-documentation applies to sbt 1.5.7.
+documentation applies to sbt 1.7.1.
 
 See also the [API Documentation][Apidoc],
 and the [index of names and types][Name-Index].
@@ -115,7 +115,7 @@ Installing sbt
 
 To create an sbt project, you'll need to take these steps:
 
--   Install JDK (We recommend AdoptOpenJDK JDK 8 or AdoptOpenJDK JDK 11).
+-   Install JDK (We recommend Eclipse Adoptium Temurin JDK 8, 11, or 17).
 -   Install sbt.
 -   Setup a simple [hello world][Hello] project
 -   Move on to [running][Running] to learn how to run sbt.
@@ -134,27 +134,26 @@ If you have any trouble running sbt, see [Setup Notes][Setup-Notes] on
 terminal encodings, HTTP proxies, and JVM options.
 
 
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.tgz
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.tgz
   [Manual-Installation]: Manual-Installation.html
-  [AdoptOpenJDK]: https://adoptopenjdk.net/
+  [AdoptiumOpenJDK]: https://adoptium.net/
 
 Installing sbt on macOS
 -----------------------
 
+### Install sbt with **cs setup**
+
+Follow [Install](https://www.scala-lang.org/download/) page, and install Scala using Coursier. This should install the latest stable version of `sbt`.
+
 ### Install JDK
 
-Follow the link to install [JDK 8 or 11][AdoptOpenJDK].
-
-Or use [SDKMAN!](https://sdkman.io/):
-
-```
-$ sdk install java $(sdk list java | grep -o "8\.[0-9]*\.[0-9]*\.hs-adpt" | head -1)
-```
+Follow the link to install [JDK 8 or 11][AdoptiumOpenJDK], or use [SDKMAN!](https://sdkman.io/).
 
 #### [SDKMAN!](https://sdkman.io/)
 
-```
+```scala
+$ sdk install java $(sdk list java | grep -o "\b8\.[0-9]*\.[0-9]*\-tem" | head -1)
 $ sdk install sbt
 ```
 
@@ -175,17 +174,21 @@ $ brew install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.tgz
-  [AdoptOpenJDK]: https://adoptopenjdk.net/
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.tgz
+  [AdoptiumOpenJDK]: https://adoptium.net
 
 Installing sbt on Windows
 -------------------------
 
+### Install sbt with **cs setup**
+
+Follow [Install](https://www.scala-lang.org/download/) page, and install Scala using Coursier. This should install the latest stable version of `sbt`.
+
 ### Install JDK
 
-Follow the link to install [JDK 8 or 11][AdoptOpenJDK].
+Follow the link to install [JDK 8 or 11][AdoptiumOpenJDK].
 
 ### Installing from a universal package
 
@@ -214,36 +217,42 @@ $ choco install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.5.7.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.5.7.deb
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.7.1.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.7.1.deb
   [Manual-Installation]: Manual-Installation.html
   [website127]: https://github.com/sbt/website/issues/127
   [cert-bug]: https://bugs.launchpad.net/ubuntu/+source/ca-certificates-java/+bug/1739631
+  [openjdk-devel]: https://pkgs.org/download/java-1.8.0-openjdk-devel
 
 Installing sbt on Linux
 -----------------------
+
+### Install sbt with **cs setup**
+
+Follow [Install](https://www.scala-lang.org/download/) page, and install Scala using Coursier. This should install the latest stable version of `sbt`.
 
 ### Installing from SDKMAN
 
 To install both JDK and sbt, consider using [SDKMAN](https://sdkman.io/).
 
-```
-$ sdk install java $(sdk list java | grep -o "8\.[0-9]*\.[0-9]*\.hs-adpt" | head -1)
+```scala
+$ sdk install java $(sdk list java | grep -o "\b8\.[0-9]*\.[0-9]*\-tem" | head -1)
 $ sdk install sbt
 ```
 
-This has two advantages.
-1. It will install the official packaging by AdoptOpenJDK, as opposed to the ["mystery meat OpenJDK builds"](https://mail.openjdk.java.net/pipermail/jdk8u-dev/2019-May/009330.html).
-2. It will install `tgz` packaging of sbt that contains all JAR files. (DEB and RPM packages do not to save bandwidth)
+Using Coursier or SDKMAN has two advantages.
+
+1. They will install the official packaging by Eclipse Adoptium, as opposed to the ["mystery meat OpenJDK builds"](https://mail.openjdk.java.net/pipermail/jdk8u-dev/2019-May/009330.html).
+2. They will install `tgz` packaging of sbt that contains all JAR files. (DEB and RPM packages do not to save bandwidth)
 
 ### Install JDK
 
-You must first install a JDK. We recommend **AdoptOpenJDK JDK 8** or **JDK 11**.
+You must first install a JDK. We recommend **Eclipse Adoptium Temurin JDK 8**, **JDK 11**, or **JDK 17**.
 
-The details around the package names differ from one distribution to another. For example, Ubuntu xenial (16.04LTS) has [openjdk-8-jdk](https://packages.ubuntu.com/hu/xenial/openjdk-8-jdk). Redhat family calls it [java-1.8.0-openjdk-devel](https://apps.fedoraproject.org/packages/java-1.8.0-openjdk-devel).
+The details around the package names differ from one distribution to another. For example, Ubuntu xenial (16.04LTS) has [openjdk-8-jdk](https://packages.ubuntu.com/hu/xenial/openjdk-8-jdk). Redhat family calls it [java-1.8.0-openjdk-devel][openjdk-devel].
 
 ### Installing from a universal package
 
@@ -376,8 +385,10 @@ in the `example` directory using your favorite editor as follows:
 ```scala
 package example
 
-object Hello extends App {
-  println("Hello")
+object Hello {
+  def main(args: Array[String]): Unit = {
+    println("Hello")
+  }
 }
 ```
 
@@ -440,7 +451,7 @@ Hello
 ### Set ThisBuild / scalaVersion from sbt shell
 
 ```
-sbt:foo-build> set ThisBuild / scalaVersion := "2.13.6"
+sbt:foo-build> set ThisBuild / scalaVersion := "2.13.8"
 [info] Defining ThisBuild / scalaVersion
 ```
 
@@ -448,7 +459,7 @@ Check the `scalaVersion` setting:
 
 ```
 sbt:foo-build> scalaVersion
-[info] 2.13.6
+[info] 2.13.8
 ```
 
 ### Save the session to build.sbt
@@ -463,7 +474,7 @@ sbt:foo-build> session save
 `build.sbt` file should now contain:
 
 ```scala
-ThisBuild / scalaVersion := "2.13.6"
+ThisBuild / scalaVersion := "2.13.8"
 
 ```
 
@@ -854,10 +865,12 @@ package example
 import scala.concurrent._, duration._
 import core.Weather
 
-object Hello extends App {
-  val w = Await.result(Weather.weather, 10.seconds)
-  println(s"Hello! The weather in New York is $w.")
-  Weather.http.close()
+object Hello {
+  def main(args: Array[String]): Unit = {
+    val w = Await.result(Weather.weather, 10.seconds)
+    println(s"Hello! The weather in New York is $w.")
+    Weather.http.close()
+  }
 }
 ```
 
@@ -1364,6 +1377,257 @@ sbt shell also supports the following commands:
 </table>
 
 
+  [metals]: https://scalameta.org/metals/
+  [intellij]: https://www.jetbrains.com/idea/
+  [intellij-scala-plugin-2021-2]: https://blog.jetbrains.com/scala/2021/07/27/intellij-scala-plugin-2021-2/#Compiler-based_highlighting
+  [lsp]: https://microsoft.github.io/language-server-protocol/
+  [vscode]: https://code.visualstudio.com/
+  [neovim]: https://neovim.io/
+  [bsp]: https://build-server-protocol.github.io/
+  [vscode-debugging]: https://code.visualstudio.com/docs/editor/debugging
+  [intellij-debugging]: https://www.jetbrains.com/help/idea/debugging-code.html
+  [nvim-metals]: https://github.com/scalameta/nvim-metals
+  [lsp.lua]: https://github.com/scalameta/nvim-metals/discussions/39#discussion-82302
+
+IDE Integration
+---------------
+
+While it's possible to code Scala with just an editor and sbt,
+most programmers today use an Integrated Development Environment, or IDE for short.
+Two of the popular IDEs in Scala are [Metals][metals] and [IntelliJ IDEA][intellij],
+and they both integrate with sbt builds.
+
+- [Using sbt as Metals build server](#metals)
+- [Importing to IntelliJ IDEA](#intellij-import)
+- [Using sbt as IntelliJ IDEA build server](#intellij-bsp)
+- [Using Neovim as Metals frontend](#nvim-metals)
+
+<a id="metals"></a>
+### Using sbt as Metals build server
+
+[Metals][metals] is an open source _language server_ for Scala, which can
+act as the backend for [VS Code][vscode] and other editors that support [LSP][lsp].
+Metals in turn supports different _build servers_ including sbt via the [Build Server Protocol][bsp] (BSP).
+
+To use Metals on VS Code:
+
+1. Install Metals from Extensions tab:<br>
+   ![Metals](files/metals0.png)
+2. Open a directory containing a `build.sbt` file.
+3. From the menubar, run View > Command Palette... (`Cmd-Shift-P` on macOS) "Metals: Switch build server", and select "sbt"<br>
+   ![Metals](files/metals2.png)
+4. Once the import process is complete, open a Scala file to see that code completion works:<br>
+   ![Metals](files/metals3.png)
+
+Use the following setting to opt-out some of the subprojects from BSP.
+
+```scala
+bspEnabled := false
+```
+
+When you make changes to the code and save them (`Cmd-S` on macOS), Metals will invoke sbt to do
+the actual building work.
+
+#### Interactive debugging on VS Code
+
+1. Metals supports interactive debugging by setting break points in the code:<br>
+  ![Metals](files/metals4.png)
+2. Interactive debugging can be started by right-clicking on an unit test, and selecting "Debug Test."
+   When the test hits a break point, you can inspect the values of the variables:<br>
+   ![Metals](files/metals5.png)
+
+See [Debugging][vscode-debugging] page on VS Code documentation for more details on how to navigate an interactive debugging session.
+
+#### Logging into sbt session
+
+While Metals uses sbt as the build server, we can also log into the same sbt session using a thin client.
+
+- From Terminal section, type in `sbt --client`<br>
+  ![Metals](files/metals6.png)
+
+This lets you log into the sbt session Metals has started. In there you can call `testOnly` and other tasks with
+the code already compiled.
+
+<a id="intellij-import"></a>
+### Importing to IntelliJ IDEA
+
+[IntelliJ IDEA][intellij] is an IDE created by JetBrains, and the Community Edition is open source under Apache v2 license.
+IntelliJ integrates with many build tools, including sbt, to import the project.
+This is a more traditional approach that might be more reliable than using BSP approach.
+
+To import a build to IntelliJ IDEA:
+
+1. Install Scala plugin on the Plugins tab:<br>
+   ![IntelliJ](files/intellij1.png)
+2. From Projects, open a directory containing a `build.sbt` file.<br>
+   ![IntelliJ](files/intellij2.png)
+3. Once the import process is complete, open a Scala file to see that code completion works.
+
+IntelliJ Scala plugin uses its own lightweight compilation engine to detect errors, which is fast but sometimes incorrect. Per [compiler-based highlighting][intellij-scala-plugin-2021-2], IntelliJ can be configured to use the Scala compiler for error highlighting.
+
+#### Interactive debugging with IntelliJ IDEA
+
+1. IntelliJ supports interactive debugging by setting break points in the code:<br>
+   ![IntelliJ](files/intellij4.png)
+2. Interactive debugging can be started by right-clicking on an unit test, and selecting "Debug '&lt;test name&gt;'."
+　　Alternatively, you can click the green "run" icon on the left part of the editor near the unit test.
+   When the test hits a break point, you can inspect the values of the variables:<br>
+   ![IntelliJ](files/intellij5.png)
+
+See [Debug Code][intellij-debugging] page on IntelliJ documentation for more details on how to navigate an interactive debugging session.
+
+<a id="intellij-bsp"></a>
+### Using sbt as IntelliJ IDEA build server (advanced)
+
+Importing the build to IntelliJ means that you're effectively using IntelliJ as the build tool and the compiler while you code (see also [compiler-based highlighting][intellij-scala-plugin-2021-2]).
+While many users are happy with the experience, depending on the code base some of the compilation errors may be false, it may not work well with plugins that generate sources, and generally you might want to code with the identical build semantics as sbt.
+Thankfully, modern IntelliJ supports alternative _build servers_ including sbt via the [Build Server Protocol][bsp] (BSP).
+
+The benefit of using BSP with IntelliJ is that you're using sbt to do the actual build work, so if you are the kind of programmer who had sbt session up on the side, this avoids double compilation.
+
+<table class="table table-striped">
+  <tr>
+    <th><nobr></th>
+    <th>Import to IntelliJ</th>
+    <th>BSP with IntelliJ</th>
+  </tr>
+  <tr>
+    <td>Reliability</td>
+    <td>✅ Reliable behavior</td>
+    <td>⚠️ Less mature. Might encounter UX issues.</td>
+  </tr>
+  <tr>
+    <td>Responsiveness</td>
+    <td>✅</td>
+    <td>⚠️</td>
+  </tr>
+  <tr>
+    <td>Correctness</td>
+    <td>⚠️ Uses its own compiler for type checking, but can be configured to use scalac</td>
+    <td>✅ Uses Zinc + Scala compiler for type checking</td>
+  </tr>
+  <tr>
+    <td>Generated source</td>
+    <td>❌ Generated source requires resync</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td>Build reuse</td>
+    <td>❌ Using sbt side-by-side requires double build</td>
+    <td>✅</td>
+  </tr>
+</table>
+
+To use sbt as build server on IntelliJ:
+
+1. Install Scala plugin on the Plugins tab.
+2. To use the BSP approach, do not use Open button on the Project tab:<br>
+   ![IntelliJ](files/intellij7.png)
+3. From menubar, click New > "Project From Existing Sources", or Find Action (`Cmd-Shift-P` on macOS) and
+   type "Existing" to find "Import Project From Existing Sources":<br>
+   ![IntelliJ](files/intellij8.png)
+4. Open a `build.sbt` file. Select **BSP** when prompted:<br>
+   ![IntelliJ](files/intellij9.png)
+5. Select **sbt (recommended)** as the tool to import the BSP workspace:<br>
+   ![IntelliJ](files/intellij10.png)
+6. Once the import process is complete, open a Scala file to see that code completion works:<br>
+   ![IntelliJ](files/intellij11.png)
+
+Use the following setting to opt-out some of the subprojects from BSP.
+
+```scala
+bspEnabled := false
+```
+
+- Open Preferences, search BSP and check "build automatically on file save", and uncheck "export sbt projects to Bloop before import":<br>
+  ![IntelliJ](files/intellij12.png)
+
+When you make changes to the code and save them (`Cmd-S` on macOS), IntelliJ will invoke sbt to do
+the actual building work.
+
+See also Igal Tabachnik's [Using BSP effectively in IntelliJ and Scala](https://hmemcpy.com/2021/09/bsp-and-intellij/) for more details.
+
+#### Logging into sbt session
+
+We can also log into the existing sbt session using the thin client.
+
+- From Terminal section, type in `sbt --client`
+  ![IntelliJ](files/intellij6.png)
+
+This lets you log into the sbt session IntelliJ has started. In there you can call `testOnly` and other tasks with
+the code already compiled.
+
+<a id="nvim-metals"></a>
+### Using Neovim as Metals frontend (advanced)
+
+[Neovim][neovim] is a modern fork of Vim that supports [LSP][lsp] out-of-box,
+which means it can be configured as a frontend for Metals.
+
+Chris Kipp, who is a maintainer of Metals, created [nvim-metals][nvim-metals] plugin that provides comprehensive Metals support on Neovim. To install nvim-metals, create `lsp.lua` under `$XDG_CONFIG_HOME/nvim/lua/` based on Chris's [lsp.lua][lsp.lua] and adjust to your preference. For example, comment out its plugins section and load the listed plugins using the plugin manager of your choice such as vim-plug.
+
+In `init.vim`, the file can be loaded as:
+
+```
+lua << END
+require('lsp')
+END
+```
+
+Per `lsp.lua`, `g:metals_status` should be displayed on the status line, which can be done using lualine.nvim etc.
+
+1. Next, open a Scala file in an sbt build using Neovim.
+2. Run `:MetalsInstall` when prompted.
+3. Run `:MetalsStartServer`.
+4. If the status line is set up, you should see something like "Connecting to sbt" or "Indexing."<br>
+   <img src="files/nvim0.png" width="900">
+5. Code completion works when you're in Insert mode, and you can tab through the candidates:<br>
+   <img src="files/nvim1.png" width="900">
+
+- A build is triggered upon saving changes, and compilation errors are displayed inline:<br>
+  <img src="files/nvim2.png" width="900">
+
+#### Go to definition
+
+1. You can jump to definition of the symbol under cursor by using `gD` (exact keybinding can be customized):<br>
+   <img src="files/nvim3.png" width="900">
+2. Use `Ctrl-O` to return to the old buffer.
+
+#### Hover
+
+- To display the type information of the symbol under cursor, like hovering, use `K` in Normal mode:<br>
+   <img src="files/nvim4.png" width="900">
+
+#### Listing diagnostics
+
+1. To list all compilation errors and warnings, use `<leader>aa`:<br>
+   <img src="files/nvim5.png" width="900">
+2. Since this is in the standard quickfix list, you can use the command such as `:cnext` and `:cprev` to nagivate through the errors and warnings.
+3. To list just the errors, use `<leader>ae`.
+
+#### Interactive debugging with Neovim
+
+1. Thanks to nvim-dap, Neovim supports interactive debugging. Set break points in the code using `<leader>dt`:<br>
+   <img src="files/nvim6.png" width="900">
+2. Nagivate to a unit test, confirm that it's built by hovering (`K`), and then
+   "debug continue" (`<leader>dc`) to start a debugger.
+   Choose "1: RunOrTest" when prompted.
+3. When the test hits a break point, you can inspect the values of the variables by debug hovering (`<leader>dK`):<br>
+   <img src="files/nvim7.png" width="900">
+4. "debug continue" (`<leader>dc`) again to end the session.
+
+See [nvim-metals][nvim-metals] regarding further details.
+
+#### Logging into sbt session
+
+We can also log into the existing sbt session using the thin client.
+
+1. In a new vim window type `:terminal` to start the built-in terminal.
+2. Type in `sbt --client`<br>
+   <img src="files/nvim8.png" width="900">
+
+Even though it's inside Neovim, tab completion etc works fine inside.
+
+
   [Task-Graph]: Task-Graph.html
   [Bare-Def]: Bare-Def.html
   [Full-Def]: Full-Def.html
@@ -1376,7 +1640,7 @@ Build definition
 
 This page describes sbt build definitions, including some "theory" and
 the syntax of `build.sbt`.
-It assumes you have installed a recent version of sbt, such as sbt 1.5.7,
+It assumes you have installed a recent version of sbt, such as sbt 1.7.1,
 know how to [use sbt][Running],
 and have read the previous pages in the Getting Started Guide.
 
@@ -1391,7 +1655,7 @@ build the same projects with consistent results.
 To do this, create a file named `project/build.properties` that specifies the sbt version as follows:
 
 ```
-sbt.version=1.5.7
+sbt.version=1.7.1
 ```
 
 If the required version is not available locally,
@@ -1438,7 +1702,7 @@ called *setting expressions* using *build.sbt domain-specific language(DSL)*.
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.16"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -1621,7 +1885,7 @@ putting them inside a `.settings(...)` call. We call this the "bare style."
 
 ```scala
 ThisBuild / version := "1.0"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.16"
 ```
 
 This syntax is recommended for `ThisBuild` scoped settings and adding plugins.
@@ -1637,7 +1901,7 @@ managed dependencies, which will look like this in `build.sbt`:
 val derby = "org.apache.derby" % "derby" % "10.4.1.3"
 
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.16"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -1723,7 +1987,7 @@ and there are no default settings scoped to subprojects. (See [Scopes][Scopes])
 ```scala
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.16"
 
 lazy val core = (project in file("core"))
   .settings(
@@ -2028,7 +2292,7 @@ See the following example:
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.16"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -2065,7 +2329,7 @@ Here's another example:
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.16"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -2204,7 +2468,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "Hello",
     organization := "com.example",
-    scalaVersion := "2.12.14",
+    scalaVersion := "2.12.16",
     version := "0.1.0-SNAPSHOT",
     scalacOptions := List("-encoding", "utf8", "-Xfatal-warnings", "-deprecation", "-unchecked"),
     scalacOptions := {
@@ -2740,7 +3004,7 @@ frequently used keys such as `version`, `scalaVersion`, and `organization`.
 
 ```scala
 ThisBuild / organization := "com.example",
-ThisBuild / scalaVersion := "2.12.14",
+ThisBuild / scalaVersion := "2.12.16",
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -2957,7 +3221,7 @@ lazy val projA = (project in file("a"))
 What is the value of `projA / name`?
 
 1. `"foo-2.11.11"`
-2. `"foo-2.12.14"`
+2. `"foo-2.12.16"`
 3. something else?
 
 The answer is `"foo-2.11.11"`.
@@ -3403,14 +3667,14 @@ the `organization`), sbt will add your project's binary Scala version to the art
 name. This is just a shortcut. You could write this without the `%%`:
 
 ```scala
-libraryDependencies += "org.scala-tools" % "scala-stm_2.11" % "0.3"
+libraryDependencies += "org.scala-stm" % "scala-stm_2.13" % "0.9.1"
 ```
 
-Assuming the `scalaVersion` for your build is `2.11.1`, the following is
-identical (note the double `%%` after `"org.scala-tools"`):
+Assuming the `scalaVersion` for your build is `2.13.8`, the following is
+identical (note the double `%%` after `"org.scala-stm"`):
 
 ```scala
-libraryDependencies += "org.scala-tools" %% "scala-stm" % "0.3"
+libraryDependencies += "org.scala-stm" %% "scala-stm" % "0.9.1"
 ```
 
 The idea is that many dependencies are compiled for multiple Scala
@@ -3519,9 +3783,9 @@ You may also use the type-safe version of `Test` configuration as follows:
 libraryDependencies += "org.apache.derby" % "derby" % "10.4.1.3" % Test
 ```
 
-Now, if you type `show compile:dependencyClasspath` at the sbt interactive
+Now, if you type `show Compile/dependencyClasspath` at the sbt interactive
 prompt, you should not see the derby jar. But if you type
-`show test:dependencyClasspath`, you should see the derby jar in the list.
+`show Test/dependencyClasspath`, you should see the derby jar in the list.
 
 Typically, test-related dependencies such as
 [ScalaCheck](https://scalacheck.org/),
@@ -3767,7 +4031,7 @@ val sampleIntTask = taskKey[Int]("A sample int task.")
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.16"
 
 lazy val library = (project in file("library"))
   .settings(
@@ -3826,7 +4090,7 @@ val sampleStringTask = taskKey[String]("A sample string task.")
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.16"
 
 lazy val library = (project in file("library"))
   .settings(
@@ -3901,7 +4165,7 @@ The following is a graphical notation of `sampleStringTask`'s evaluation:
 
 If we did not deduplicate the task dependencies, we will end up
 compiling test source code many times when `test` task is invoked
-since `compile in Test` appears many times as a task dependency of `test in Test`.
+since `Test / compile` appears many times as a task dependency of `Test / test`.
 
 #### Cleanup task
 
@@ -4070,12 +4334,12 @@ import sbt._
 
 object Dependencies {
   // Versions
-  lazy val akkaVersion = "2.3.8"
+  lazy val akkaVersion = "2.6.19"
 
   // Libraries
   val akkaActor = "com.typesafe.akka" %% "akka-actor" % akkaVersion
   val akkaCluster = "com.typesafe.akka" %% "akka-cluster" % akkaVersion
-  val specs2core = "org.specs2" %% "specs2-core" % "2.4.17"
+  val specs2core = "org.specs2" %% "specs2-core" % "4.16.0"
 
   // Projects
   val backendDeps =
@@ -4091,7 +4355,7 @@ import Dependencies._
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.16"
 
 lazy val backend = (project in file("backend"))
   .settings(
@@ -4125,7 +4389,7 @@ way to inject custom tasks and commands across all subprojects.
   [Basic-Def]: Basic-Def.html
   [Scopes]: Scopes.html
   [Using-Plugins]: Using-Plugins.html
-  [getting-help]: ../docs/faq.html#getting-help
+  [getting-help]:  https://www.scala-sbt.org/community.html#how-can-I-get-help
 
 Getting Started summary
 -----------------------
@@ -4232,13 +4496,13 @@ Nowadays we just call sbt "sbt", and to reinforce that the name is no longer an 
 always write it in all lowercase letters. However, we are cool with [酢豚][subuta] (subuta) as a nickname.
 
 [@harrah]: https://github.com/harrah
-[sbt 0.3.2 announcement]: http://www.scala-lang.org/old/node/392.html
+[sbt 0.3.2 announcement]: https://www.scala-lang.org/old/node/392.html
 [initialism]: https://en.oxforddictionaries.com/definition/initialism
 [subuta]: https://ja.wikipedia.org/wiki/%E9%85%A2%E8%B1%9A
 
 #### How do I get help?
 
--  See [Support](https://www.scala-sbt.org/support.html#how-can-I-get-help)
+-  See [How can I get help?](https://www.scala-sbt.org/community.html#how-can-I-get-help)
 
 #### How do I report a bug?
 
@@ -4252,7 +4516,7 @@ always write it in all lowercase letters. However, we are cool with [酢豚][sub
 
 #### My last command didn't work but I can't see an explanation. Why?
 
-sbt 1.5.7 by default suppresses most stack traces and debugging
+sbt 1.7.1 by default suppresses most stack traces and debugging
 information. It has the nice side effect of giving you less noise on
 screen, but as a newcomer it can leave you lost for explanation. To see
 the previous output of a command at a higher verbosity, type
@@ -4392,9 +4656,9 @@ This run task can be configured individually by specifying the task key
 in the scope. For example:
 
 ```scala
-fork in myRunTask := true
+myRunTask / fork := true
 
-javaOptions in myRunTask += "-Xmx6144m"
+myRunTask / javaOptions += "-Xmx6144m"
 ```
 
 #### How should I express a dependency on an outside tool such as proguard?
@@ -4625,7 +4889,7 @@ Any file name ending in `.sbt` will do, but most people use
 
 ### Miscellaneous
 
-#### Where can I find plugins for 1.5.7?
+#### Where can I find plugins for 1.7.1?
 
 See [Community Plugins][Community-Plugins] for a list of currently available
 plugins.
@@ -4641,7 +4905,7 @@ where to get help, find source code and how to contribute.
 Credits
 -------
 
-sbt was originally created by Mark Harrah ([@harrah][@harrah]) in [2008](http://www.scala-lang.org/old/node/392.html). Most of the fundamental aspects of sbt, such as the Scala incremental compiler, integration with Maven and Ivy dependencies, and parallel task processing were conceived and initially implemented by Mark.
+sbt was originally created by Mark Harrah ([@harrah][@harrah]) in [2008](https://www.scala-lang.org/old/node/392.html). Most of the fundamental aspects of sbt, such as the Scala incremental compiler, integration with Maven and Ivy dependencies, and parallel task processing were conceived and initially implemented by Mark.
 
 By 2010, when sbt 0.7 came out, many open-source Scala projects were using sbt as their build tool.
 
@@ -5010,9 +5274,9 @@ The sbt ecosystem would not be the same without so many awesome plugins. Here ar
 - [Scala.js](https://www.scala-js.org/) by Sébastien Doeraene, Tobias Schlatter, et al
 - [sbt-assembly](https://github.com/sbt/sbt-assembly) by Eugene Yokota (eed3si9n)
 - [coursier](https://github.com/coursier/coursier) by Alexandre Archambault
-- [sbt Native Packager](http://sbt-native-packager.readthedocs.io/en/stable/) by Nepomuk Seiler (muuki88) and Josh Suereth
+- [sbt Native Packager](https://sbt-native-packager.readthedocs.io/en/stable/) by Nepomuk Seiler (muuki88) and Josh Suereth
 - [sbt-dependency-graph](https://github.com/jrudolph/sbt-dependency-graph) by Johannes Rudolph
-- [WartRemover](http://www.wartremover.org/) by Claire Neveu and Brian McKenna
+- [WartRemover](https://www.wartremover.org/) by Claire Neveu and Brian McKenna
 - [sbt-android](https://github.com/scala-android/sbt-android) by Perry (pfn)
 - [sbt-revolver](https://github.com/spray/sbt-revolver) by Johannes Rudolph and Mathias (sirthias)
 - [sbt-docker](https://github.com/marcuslonnberg/sbt-docker) by Marcus Lönnberg
@@ -5201,7 +5465,7 @@ your plugin to the list.
 #### Release plugins
 
 - [sbt-native-packager](https://github.com/sbt/sbt-native-packager)
-  ([docs](http://sbt-native-packager.readthedocs.io/en/stable/)): build
+  ([docs](https://sbt-native-packager.readthedocs.io/en/stable/)): build
   native packages (RPM, .deb etc) for your projects. <!-- 303 stars -->
 - [sbt-pack](https://github.com/xerial/sbt-pack): create runnable distributions
   for your projects. <!-- 302 stars -->
@@ -5260,7 +5524,7 @@ your plugin to the list.
 - [sbt-revolver](https://github.com/spray/sbt-revolver): auto-restart forked
   JVMs on update. <!-- 563 stars -->
 - [sbt-conscript](https://github.com/foundweekends/conscript)
-  ([docs](http://www.foundweekends.org/conscript/)): distribute apps using
+  ([docs](https://www.foundweekends.org/conscript/)): distribute apps using
   GitHub and Maven Central. <!-- 467 stars -->
 - [sbt-git](https://github.com/sbt/sbt-git): run git commands from sbt.
   <!-- 233 stars -->
@@ -5544,50 +5808,73 @@ Any new plugin releases should migrate to using [Sonatype OSS][UsingSonatype].
 Setup Notes
 -----------
 
-Some notes on how to set up your `sbt` script.
-
 ### Do not put `sbt-launch.jar` on your classpath.
 
 Do *not* put `sbt-launch.jar` in your `$SCALA_HOME/lib` directory, your
 project's `lib` directory, or anywhere it will be put on a classpath. It
 isn't a library.
 
+### sbt JVM options and system properties
+
+If the `JAVA_OPTS` and/or `SBT_OPTS` environment variables are defined, 
+their content is passed as command line arguments to the JVM running sbt. 
+
+If a file named `.jvmopt` exists in the  current directory, its content 
+is appended to `JAVA_OPTS` at sbt startup. Similarly, if `.sbtopts` 
+and/or `/etc/sbt/sbtopts` exit, their content is appended to `SBT_OPTS`.
+The default value of `JAVA_OPTS` is `-Dfile.encoding=UTF8`.
+
+You can also specify JVM system properties and command line options 
+directly as `sbt` arguments: any `-Dkey=val` argument will be passed 
+as-is to the JVM, and any `-J-Xfoo` will be passed as `-Xfoo`.
+
+See also `sbt --help` for more details. 
+
 ### Terminal encoding
 
 The character encoding used by your terminal may differ from Java's
-default encoding for your platform. In this case, you will need to add
-the option `-Dfile.encoding=<encoding>` in your `sbt` script to set the
-encoding, which might look like:
+default encoding for your platform. In this case, you will need to specify
+the `file.encoding=<encoding>` system property,  which might look like:
 
 ```
-java -Dfile.encoding=UTF8
+export JAVA_OPTS="-Dfile.encoding=Cp1252"
+sbt
 ```
 
-### JVM heap, permgen, and stack sizes
+### sbt JVM heap, permgen, and stack sizes
 
 If you find yourself running out of permgen space or your workstation is
 low on memory, adjust the JVM configuration as you would for any
-application. For example a common set of memory-related options is:
+application. 
+
+For example a common set of memory-related options is:
 
 ```
-java -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled
+export SBT_OPTS="-Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled"
+sbt
+```
+
+Or if you prefer to specify them just for this session:
+
+```
+sbt -J-Xmx1536M -J-Xss1M -J-XX:+CMSClassUnloadingEnabled
 ```
 
 ### Boot directory
 
-`sbt-launch.jar` is just a bootstrap; the actual meat of sbt, and the
-Scala compiler and standard library, are downloaded to the shared
-directory `$HOME/.sbt/boot/`.
+`sbt` is just a bootstrap; the actual meat of sbt, the
+Scala compiler and standard library are by default downloaded to the 
+shared directory `$HOME/.sbt/boot/`.
 
 To change the location of this directory, set the `sbt.boot.directory`
-system property in your `sbt` script. A relative path will be resolved
+system property. A relative path will be resolved
 against the current working directory, which can be useful if you want
 to avoid sharing the boot directory between projects. For example, the
 following uses the pre-0.11 style of putting the boot directory in
 `project/boot/`:
 
 ```
-java -Dsbt.boot.directory=project/boot/
+sbt -Dsbt.boot.directory=project/boot/
 ```
 
 ### HTTP/HTTPS/FTP Proxy
@@ -5600,17 +5887,17 @@ variables. If you are behind a proxy requiring authentication, your
 `ftp.proxyPassword` properties for FTP, or `https.proxyUser` and
 `https.proxyPassword` properties for HTTPS.
 
-For example,
+For example:
 
 ```
-java -Dhttp.proxyUser=username -Dhttp.proxyPassword=mypassword
+sbt -Dhttp.proxyUser=username -Dhttp.proxyPassword=mypassword
 ```
 
 On Windows, your script should set properties for proxy host, port, and
 if applicable, username and password. For example, for HTTP:
 
 ```
-java -Dhttp.proxyHost=myproxy -Dhttp.proxyPort=8080 -Dhttp.proxyUser=username -Dhttp.proxyPassword=mypassword
+sbt -Dhttp.proxyHost=myproxy -Dhttp.proxyPort=8080 -Dhttp.proxyUser=username -Dhttp.proxyPassword=mypassword
 ```
 
 Replace `http` with `https` or `ftp` in the above command line to
@@ -5627,11 +5914,11 @@ compatible locale, e.g. `LC_TYPE=en_US.UTF-8`, then sbt may crash with a
 [International Language Environments Guide](https://docs.oracle.com/cd/E19455-01/806-0169/6j9hsml3j/index.html).
 
 
-  [sonatype-ossrhguide]: http://central.sonatype.org/pages/ossrh-guide.html
+  [sonatype-ossrhguide]: https://central.sonatype.org/publish/publish-guide/
   [sonatype-signup]: https://issues.sonatype.org/secure/Signup!default.jspa
   [sonatype-new-project]: https://issues.sonatype.org/secure/CreateIssue.jspa?issuetype=21&pid=10134
-  [sonatype-requirements]: http://central.sonatype.org/pages/requirements.html
-  [sonatype-coordinates]: http://central.sonatype.org/pages/choosing-your-coordinates.html
+  [sonatype-requirements]: https://central.sonatype.org/publish/requirements/
+  [sonatype-coordinates]: https://central.sonatype.org/publish/requirements/coordinates/
   [sonatype-nexus]: https://oss.sonatype.org/#welcome
   [sonatype-pgp]: https://central.sonatype.org/pages/working-with-pgp-signatures.html
   [sbt-pgp]: https://github.com/sbt/sbt-pgp#sbt-pgp
@@ -5852,7 +6139,7 @@ Jira account)
 `sonatypeRelease`
 
 After publishing you have to follow the
-[release workflow of Nexus](http://central.sonatype.org/pages/releasing-the-deployment.html).
+[release workflow of Nexus](https://central.sonatype.org/publish/release/).
 
 > *Note:* the sbt-sonatype plugin can also be used to publish to other non-sonatype 
 repositories
@@ -6244,7 +6531,7 @@ object HelloBuild extends Build {
   val shared = Defaults.defaultSettings ++ xyz.XyzPlugin.projectSettings ++ Seq(
     organization := "com.example",
     version      := "0.1.0",
-    scalaVersion := "2.12.1")
+    scalaVersion := "2.12.16")
 
   lazy val hello =
     Project("Hello", file("."),
@@ -6274,7 +6561,7 @@ You can migrate to `build.sbt`:
 val shared = Seq(
   organization := "com.example",
   version      := "0.1.0",
-  scalaVersion := "2.12.1"
+  scalaVersion := "2.12.16"
 )
 
 lazy val helloRoot = (project in file("."))
@@ -8336,7 +8623,7 @@ This depends on some factors such as how your classes are organized, but you can
 
 sbt 1.0 includes server feature, which allows IDEs and other tools to query the build for settings, and invoke commands via a JSON API. Similar to the way that the interactive shell in sbt 0.13 is implemented with `shell` command, "server" is also just `shell` command that listens to both human input and network input. As a user, there should be minimal impact because of the server.
 
-In March 2016, we [rebooted](http://eed3si9n.com/sbt-server-reboot) the "server" feature to make it as small as possible. We worked in collaboration with JetBrains' @jastice who works on IntelliJ's sbt interface to narrow down the feature list. sbt 1.0 will not have all the things we originally wanted, but in the long term, we hope to see better integration between IDE and sbt ecosystem using this system. For example, IDEs will be able to issue the compile task and retrieve compiler warning as JSON events:
+In March 2016, we [rebooted](https://eed3si9n.com/sbt-server-reboot) the "server" feature to make it as small as possible. We worked in collaboration with JetBrains' @jastice who works on IntelliJ's sbt interface to narrow down the feature list. sbt 1.0 will not have all the things we originally wanted, but in the long term, we hope to see better integration between IDE and sbt ecosystem using this system. For example, IDEs will be able to issue the compile task and retrieve compiler warning as JSON events:
 
 ```
 {"type":"xsbti.Problem","message":{"category":"","severity":"Warn","message":"a pure expression does nothing in statement position; you may be omitting necessary parentheses","position":{"line":2,"lineContent":"  1","offset":29,"pointer":2,"pointerSpace":"  ","sourcePath":"/tmp/hello/Hello.scala","sourceFile":"file:/tmp/hello/Hello.scala"}},"level":"warn"}
@@ -8605,22 +8892,22 @@ detail.
 ### Configuration-level tasks
 
 Configuration-level tasks are tasks associated with a configuration. For
-example, `compile`, which is equivalent to `compile:compile`, compiles
-the main source code (the `compile` configuration). `test:compile`
+example, `compile`, which is equivalent to `Compile/compile`, compiles
+the main source code (the `compile` configuration). `Test/compile`
 compiles the test source code (test `test` configuration). Most tasks
 for the `compile` configuration have an equivalent in the `test`
-configuration that can be run using a `test:` prefix.
+configuration that can be run using a `Test/` prefix.
 
 -   `compile` Compiles the main sources (in the `src/main/scala`
-    directory). `test:compile` compiles test sources (in the
+    directory). `Test/compile` compiles test sources (in the
     src/test/scala/ directory).
 -   `console` Starts the Scala interpreter with a classpath including
     the compiled sources, all jars in the lib directory, and managed
     libraries. To return to sbt, type :quit, Ctrl+D (Unix), or Ctrl+Z
-    (Windows). Similarly, test:console starts the interpreter with the
+    (Windows). Similarly, Test/console starts the interpreter with the
     test classes and classpath.
 -   `consoleQuick` Starts the Scala interpreter with the project's
-    compile-time dependencies on the classpath. test:consoleQuick uses
+    compile-time dependencies on the classpath. Test/consoleQuick uses
     the test dependencies. This task differs from console in that it
     does not force compilation of the current project's sources.
 -   `consoleProject` Enters an interactive session with sbt and the
@@ -8629,32 +8916,32 @@ configuration that can be run using a `test:` prefix.
     imported. See the [consoleProject documentation][Console-Project]
     for more information.
 -   `doc` Generates API documentation for Scala source files in
-    `src/main/scala` using scaladoc. `test:doc` generates API documentation
+    `src/main/scala` using scaladoc. `Test/doc` generates API documentation
     for source files in `src/test/scala`.
 -   `package` Creates a jar file containing the files in
     `src/main/resources` and the classes compiled from `src/main/scala`.
-    `test:package` creates a jar containing the files in
+    `Test/package` creates a jar containing the files in
     `src/test/resources` and the class compiled from `src/test/scala`.
 -   `packageDoc` Creates a jar file containing API documentation
-    generated from Scala source files in src/main/scala. test:packageDoc
+    generated from Scala source files in src/main/scala. Test/packageDoc
     creates a jar containing API documentation for test sources files in
     src/test/scala.
 -   `packageSrc`: Creates a jar file containing all main source files
     and resources. The packaged paths are relative to src/main/scala and
-    src/main/resources. Similarly, test:packageSrc operates on test
+    src/main/resources. Similarly, Test/packageSrc operates on test
     source files and resources.
 -   `run <argument>*` Runs the main class for the project in the same
     virtual machine as sbt. The main class is passed the arguments
     provided. Please see
     [Running Project Code][Running-Project-Code] for details on the use of
     System.exit and multithreading (including GUIs) in code run by this
-    action. `test:run` runs a main class in the test code.
+    action. `Test/run` runs a main class in the test code.
 -   `runMain <main-class> <argument>*` Runs the specified main class for
     the project in the same virtual machine as sbt. The main class is
     passed the arguments provided. Please see
     [Running Project Code][Running-Project-Code] for
     details on the use of System.exit and multithreading (including
-    GUIs) in code run by this action. `test:runMain` runs the specified
+    GUIs) in code run by this action. `Test/runMain` runs the specified
     main class in the test code.
 -   `test` Runs all tests detected during test compilation. See [Testing][Testing]
     for details.
@@ -8728,10 +9015,10 @@ configuration that can be run using a `test:` prefix.
     reloaded, or the setting is overridden by another set command or
     removed by the session command. See
     [.sbt build definition][Basic-Def] and
-    [inspecting settings][Inspecting-Settings] for details.
+    [Inspecting Settings][Inspecting-Settings] for details.
 -   `session <command>` Manages session settings defined by the `set`
     command. It can persist settings configured at the prompt. See
-    Inspecting-Settings for details.
+    [Inspecting Settings][Inspecting-Settings] for details.
 -   `inspect <setting-key>` Displays information about settings, such as
     the value, description, defining scope, dependencies, delegation
     chain, and related settings. See
@@ -8994,7 +9281,7 @@ influence SBT execution. Also see [sbt launcher][Sbt-Launcher].
   <tr>
     <td><tt>sbt.version</tt></td>
     <td>Version</td>
-    <td><tt>1.5.7</tt></td>
+    <td><tt>1.7.1</tt></td>
     <td>sbt version to use, usually taken from <tt>project/build.properties</tt>.</td>
   </tr>
 
@@ -9164,8 +9451,9 @@ libraryDependencies += "net.databinder.dispatch" % "dispatch-core_2.12" % "0.13.
 
 ### Cross building a project using sbt-projectmatrix
 
-Consider using [sbt-projectmatrix](https://github.com/sbt/sbt-projectmatrix) that
-is capable of cross building across Scala versions and different platforms in parallel.
+No plugin is required to enable cross-building in sbt, although consider using 
+[sbt-projectmatrix](https://github.com/sbt/sbt-projectmatrix) that is capable of 
+cross building across Scala versions and different platforms in parallel.
 
 ### Cross building a project statefully
 
@@ -9174,7 +9462,7 @@ Define the versions of Scala to build against in the
 allowed. For example, in a `.sbt` build definition:
 
 ```scala
-lazy val scala212 = "2.12.14"
+lazy val scala212 = "2.12.16"
 lazy val scala211 = "2.11.12"
 lazy val supportedScalaVersions = List(scala212, scala211)
 
@@ -9253,7 +9541,7 @@ directory is included as a source directory.
 For, example if the current subproject's `scalaVersion` is 2.12.10, then
 `src/main/scala-2.12` is included as a Scala-version specific source.
 
-By `crossPaths` setting to `false` you can opt out of both Scala-version source directory
+By setting `crossPaths` to `false`, you can opt out of both Scala-version source directory
 and the `_<scala-binary-version>` publishing convention. This might be useful for non-Scala projects.
 
 Similarly, the build products such as `*.class` files are written into
@@ -9266,7 +9554,7 @@ Let's say in the following example, `network` is a Java project, and `core` is
 a Scala project that depends on `network`.
 
 ```scala
-lazy val scala212 = "2.12.14"
+lazy val scala212 = "2.12.16"
 lazy val scala211 = "2.11.12"
 lazy val supportedScalaVersions = List(scala212, scala211)
 
@@ -9313,8 +9601,8 @@ being used to build the subprojects given that `<version>` is listed in their `c
 For example:
 
 ```
-> ++ 2.12.14
-[info] Setting version to 2.12.14
+> ++ 2.12.16
+[info] Setting version to 2.12.16
 > ++ 2.11.12
 [info] Setting version to 2.11.12
 > compile
@@ -9333,10 +9621,10 @@ For example:
 > ++ 2.11.12 -v test
 [info] Setting Scala version to 2.11.12 on 1 projects.
 [info] Switching Scala version on:
-[info]     core (2.12.14, 2.11.12)
+[info]     core (2.12.16, 2.11.12)
 [info] Excluding projects:
 [info]   * root ()
-[info]     network (2.12.14)
+[info]     network (2.12.16)
 [info] Reapplying settings...
 [info] Set current project to core (in build file:/Users/xxx/hello/)
 ```
@@ -9351,8 +9639,8 @@ For example:
 [info] Forcing Scala version to 2.13.0-M5 on all projects.
 [info] Switching Scala version on:
 [info]   * root ()
-[info]     core (2.12.14, 2.11.12)
-[info]     network (2.12.14)
+[info]     core (2.12.16, 2.11.12)
+[info]     network (2.12.16)
 ```
 
 #### Cross publishing
@@ -9566,23 +9854,23 @@ in the build in `/home/user/sample/`:
 
 ```
 > compile
-> compile:compile
+> Compile/compile
 > root/compile
-> root/compile:compile
-> {file:/home/user/sample/}root/compile:compile
+> root/Compile/compile
+> {file:/home/user/sample/}root/Compile/compile
 ```
 
-As another example, `run` by itself refers to `compile:run` because
+As another example, `run` by itself refers to `Compile/run` because
 there is no global `run` task and the first configuration searched,
 `compile`, defines a `run`. Therefore, to reference the `run` task for
 the `Test` configuration, the configuration axis must be specified like
-`test:run`. Some other examples that require the explicit `test:` axis:
+`Test/run`. Some other examples that require the explicit `Test/` axis:
 
 ```
-> test:consoleQuick
-> test:console
-> test:doc
-> test:package
+> Test/consoleQuick
+> Test/console
+> Test/doc
+> Test/package
 ```
 
 #### Task-specific Settings
@@ -9661,8 +9949,8 @@ of a key. For example,
 [info]  test:compile
 ```
 
-This shows that in addition to the requested `compile:compile` task,
-there is also a `test:compile` task.
+This shows that in addition to the requested `Compile/compile` task,
+there is also a `Test/compile` task.
 
 #### Dependencies
 
@@ -9915,7 +10203,7 @@ Def.settings {
     val clazz = Class.forName("sbt.nio.Keys$WatchBuildSourceOption")
     val manifest = new scala.reflect.Manifest[AnyRef]{ def runtimeClass = clazz }
     Seq(
-      SettingKey[AnyRef]("onChangedBuildSource")(manifest, sbt.util.NoJsonWriter()) in Global := value
+      Global / SettingKey[AnyRef]("onChangedBuildSource")(manifest, sbt.util.NoJsonWriter()) := value
     )
   } catch {
     case e: Throwable =>
@@ -10020,156 +10308,95 @@ can occur when a file is modified in short bursts. The default value is 500ms.
 
   [Setup]: Setup.html
 
-Scripts, REPL, and Dependencies
--------------------------------
+Script mode
+-----------
 
-sbt has two alternative entry points that may be used to:
+sbt has an alternative entry points that may be used to:
 
 -   Compile and execute a Scala script containing dependency
     declarations or other sbt settings
--   Start up the Scala REPL, defining the dependencies that should be on
-    the classpath
 
-These entry points should be considered experimental. A notable
+This entry point should be considered experimental. A notable
 disadvantage of these approaches is the startup time involved.
 
-### Setup
-
-To set up these entry points, you can either use
-[conscript](https://github.com/foundweekends/conscript) or manually construct
-the startup scripts. In addition, there is a
-[setup script](https://github.com/paulp/sbt-extras) for the script
-mode that only requires a JRE installed.
-
-#### Setup with Conscript
-
-Install [conscript](https://github.com/foundweekends/conscript).
-
-```
-$ cs sbt/sbt --branch 1.5.7
-```
-
-This will create two scripts: `screpl` and `scalas`.
-
-#### Manual Setup
-
-Duplicate your standard `sbt` script, which was set up according to
-[Setup][Setup], as `scalas` and `screpl` (or whatever
-names you like).
-
-`scalas` is the script runner and should use `sbt.ScriptMain` as the
-main class, by adding the `-Dsbt.main.class=sbt.ScriptMain` parameter to
-the `java` command. Its command line should look like:
-
-```
-$ java -Dsbt.main.class=sbt.ScriptMain -Dsbt.boot.directory=/home/user/.sbt/boot -jar sbt-launch.jar "$@"
-```
-
-For the REPL runner `screpl`, use `sbt.ConsoleMain` as the main class:
-
-```
-$ java -Dsbt.main.class=sbt.ConsoleMain -Dsbt.boot.directory=/home/user/.sbt/boot -jar sbt-launch.jar "$@"
-```
-
-In each case, `/home/user/.sbt/boot` should be replaced with wherever
-you want sbt's boot directory to be; you might also need to give more
-memory to the JVM via `-Xms512M -Xmx1536M` or similar options, just like
-shown in [Setup][Setup].
-
-### Usage
-
-#### sbt Script runner
+### sbt Script runner
 
 The script runner can run a standard Scala script, but with the
 additional ability to configure sbt. sbt settings may be embedded in the
 script in a comment block that opens with `/***`.
 
-##### Example
+#### Example
 
 Copy the following script and make it executable. You may need to adjust
 the first line depending on your script name and operating system. When
 run, the example should retrieve Scala, the required dependencies,
 compile the script, and run it directly. For example, if you name it
-`shout.scala`, you would do on Unix:
+`script.scala`, you would do on Unix:
 
 ```
-chmod u+x shout.scala
-./shout.scala
+chmod u+x script.scala
+./script.scala
 ```
 
 <nbsp>
 
 ```scala
-#!/usr/bin/env scalas
- 
-/***         
-scalaVersion := "2.12.14"
- 
-libraryDependencies += "org.scala-sbt" %% "io" % "1.5.7"
-*/         
- 
+#!/usr/bin/env sbt -Dsbt.version=1.6.1 -Dsbt.main.class=sbt.ScriptMain -error
+
+/***
+ThisBuild / scalaVersion := "2.13.8"
+libraryDependencies += "org.scala-sbt" %% "io" % "1.6.0"
+*/
+
+println("hello")
+```
+
+This prints out hello.
+If you're used to using IO from sbt, we can use that do basic file operations,
+like reading a text file.
+
+
+```scala
+#!/usr/bin/env sbt -Dsbt.version=1.6.1 -Dsbt.main.class=sbt.ScriptMain -error
+
+/***
+ThisBuild / scalaVersion := "2.13.8"
+libraryDependencies += "org.scala-sbt" %% "io" % "1.6.0"
+*/
+
 import sbt.io.IO
 import sbt.io.Path._
 import sbt.io.syntax._
 import java.io.File
-import java.net.{URI, URL}
+import java.net.URI
 import sys.process._
+
 def file(s: String): File = new File(s)
 def uri(s: String): URI = new URI(s)
- 
-val targetDir = file("./target/")
-val srcDir = file("./src/")
-val toTarget = rebase(srcDir, targetDir)
- 
+
 def processFile(f: File): Unit = {
-  val newParent = toTarget(f.getParentFile) getOrElse {sys.error("wat")}
-  val file1 = newParent / f.name
-  println(s"""$f => $file1""")
-  val xs = IO.readLines(f) map { _ + "!" }
-  IO.writeLines(file1, xs)
+  val lines = IO.readLines(f)
+  lines foreach { line =>
+    println(line.toUpperCase)
+  }
 }
 
-val fs: Seq[File] = (srcDir ** "*.scala").get
-fs foreach { processFile }
+args.toList match {
+  case Nil => sys.error("usage: ./script.scala <file>...")
+  case xs  => xs foreach { x => processFile(file(x)) }
+}
 ```
 
-This script will take all `*.scala` files under `src/`, append "!" at the end of the
-line, and write them under `target/`.
-
-#### sbt REPL with dependencies
-
-The arguments to the REPL mode configure the dependencies to use when
-starting up the REPL. An argument may be either a jar to include on the
-classpath, a dependency definition to retrieve and put on the classpath,
-or a resolver to use when retrieving dependencies.
-
-A dependency definition looks like:
+This script will take file names as argument and print them out in all upper case.
 
 ```
-organization%module%revision
+$ ./script.scala script.scala
+#!/USR/BIN/ENV SBT -DSBT.MAIN.CLASS=SBT.SCRIPTMAIN -ERROR
+....
 ```
 
-Or, for a cross-built dependency:
 
-```
-organization%%module%revision
-```
-
-A repository argument looks like:
-
-```
-"id at url"
-```
-
-##### Example:
-
-To add the Sonatype snapshots repository and add Scalaz 7.0-SNAPSHOT to
-REPL classpath:
-
-```
-$ screpl "sonatype-releases at https://oss.sonatype.org/content/repositories/snapshots/" "org.scalaz%%scalaz-core%7.0-SNAPSHOT"
-```
-
+  [IDE]: IDE.html
 
 sbt Server
 ----------
@@ -10180,33 +10407,7 @@ You might at first imagine server to be something that runs on remote servers, a
 Actually, sbt server just adds network access to sbt's shell command so,
 in addition to accepting input from the terminal, server also to accepts input from the network.
 This allows multiple clients to connect to a _single session_ of sbt.
-The primary use case we have in mind for the client is tooling integration such as editors and IDEs.
-
-### Metals integration
-
-As of sbt 1.4.x, sbt server implements [Build Server Protocol](https://build-server-protocol.github.io/) used by Metals.
-Here is how to use sbt server as Metals backend.
-
-1. Delete existing `.bsp`, `.metals`, `.bloop` directories if any
-2. Open VS Code in the working directory
-3. Ignore the prompt to import the project
-4. Add `Global / semanticdbEnabled := true` in `build.sbt`
-5. Start `sbt` in the View > Terminal tab. Wait till it displays "sbt server started"
-6. From command palette (Cmd-Shift-P in VS Code) issue "Metals: Switch Build Server", and select "sbt"
-7. Reload the sbt session to make sure `project/metals.sbt` gets loaded
-8. Navigate to Metals view, and select "Connect to build server"
-9. It should start compiling all your subprojects automatically
-10. Once Metals finishes indexing, it should be able to perform code completion etc
-
-<img src="files/metals-switch-build-server.png" style="margin-bottom: 1em">
-
-<img src="files/metals-completion.png" style="width: 100%; height: 100%; margin-bottom: 1em">
-
-Use the following setting to opt-out some of the subprojects from BSP.
-
-```scala
-bspEnabled := false
-```
+The primary use case we have in mind for the client is tooling integration such as editors and IDEs. See [IDE Integration][IDE] page.
 
 ### Language Server Protocol 3.0
 
@@ -10520,7 +10721,7 @@ Content-Type: application/vscode-jsonrpc; charset=utf-8
 This will respond back with the result of the action.
 
   [lsp]: https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md
-  [jsonrpc]: http://www.jsonrpc.org/specification
+  [jsonrpc]: https://www.jsonrpc.org/specification
   [vscode-sbt-scala]: https://marketplace.visualstudio.com/items?itemName=lightbend.vscode-sbt-scala
   [lsp_initialize]: https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#initialize
   [lsp_initialized]: https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#initialized
@@ -11774,7 +11975,7 @@ sbt needs Scala jars to run itself since it is written in Scala. sbt
 uses that same version of Scala to compile the build definitions that
 you write for your project because they use sbt APIs. This version of
 Scala is fixed for a specific sbt release and cannot be changed. For sbt
-1.5.7, this version is Scala 2.12.14. Because this Scala
+1.7.1, this version is Scala 2.12.16. Because this Scala
 version is needed before sbt runs, the repositories used to retrieve
 this version are configured in the sbt
 [launcher][Sbt-Launcher].
@@ -12084,7 +12285,7 @@ compile will always provide full checking, however.
 ### Known issues in mixed mode compilation
 
 The Scala compiler does not identify compile-time constant variables
-(Java specification [4.12.4](http://docs.oracle.com/javase/specs/jls/se8/html/jls-4.html#jls-4.12.4))
+(Java specification [4.12.4](https://docs.oracle.com/javase/specs/jls/se8/html/jls-4.html#jls-4.12.4))
 in Java source code if their definition is not a literal.
 This issue has several symptoms, described in the Scala ticket [SI-5333](https://github.com/scala/bug/issues/5333):
 
@@ -12092,7 +12293,7 @@ This issue has several symptoms, described in the Scala ticket [SI-5333](https:/
 to a Java annotation (a compile-time constant expression is required).
 2. The selection of a constant variable is not replaced by its value, but compiled
 as an actual field load (the
-[Scala specification 4.1](http://www.scala-lang.org/files/archive/spec/2.11/04-basic-declarations-and-definitions.html#value-declarations-and-definitions)
+[Scala specification 4.1](https://www.scala-lang.org/files/archive/spec/2.13/04-basic-declarations-and-definitions.html#value-declarations-and-definitions)
 defines that constant expressions should be replaced by their values).
 
 Since Scala 2.11.4, a similar issue arises when using a Java-defined annotation in
@@ -12295,7 +12496,7 @@ following build definition. `build.sbt`:
 
 ```scala
 lazy val commonSettings = Seq(
-  scalaVersion := "2.12.14",
+  scalaVersion := "2.12.16",
   organization := "com.example"
 )
 lazy val scalaReflect = Def.setting { "org.scala-lang" % "scala-reflect" % scalaVersion.value }
@@ -12325,7 +12526,7 @@ implementation. As an example macro, we'll use `desugar` from
 package demo
 
 import language.experimental.macros
-import scala.reflect.macros.Context
+import scala.reflect.macros.blackbox.Context
 
 object Demo {
 
@@ -12360,7 +12561,7 @@ This can be then run at the console:
 
 ```
 $ sbt
-> macroSub/test:run
+> macroSub/Test/run
 scala.collection.immutable.List.apply[Int](1, 2, 3).reverse
 ```
 
@@ -12399,7 +12600,7 @@ would look like:
 
 ```scala
 lazy val commonSettings = Seq(
-  scalaVersion := "2.12.14",
+  scalaVersion := "2.12.16",
   organization := "com.example"
 )
 lazy val scalaReflect = Def.setting { "org.scala-lang" % "scala-reflect" % scalaVersion.value }
@@ -13211,66 +13412,6 @@ SBT is just one of them. This is discussed for instance in issues
 explained
 [here](https://issues.apache.org/jira/browse/GROOVY-1627).
 
-### sbt's Solutions
-
-#### System.exit
-
-User code is run with a custom `SecurityManager` that throws a custom
-`SecurityException` when `System.exit` is called. This exception is
-caught by sbt. sbt then disposes of all top-level windows, interrupts
-(not stops) all user-created threads, and handles the exit code. If the
-exit code is nonzero, `run` and `console` complete unsuccessfully. If
-the exit code is zero, they complete normally.
-
-#### Threads
-
-sbt makes a list of all threads running before executing user code.
-After the user code returns, sbt can then determine the threads created
-by the user code. For each user-created thread, sbt replaces the
-uncaught exception handler with a custom one that handles the custom
-`SecurityException` thrown by calls to `System.exit` and delegates to
-the original handler for everything else. sbt then waits for each
-created thread to exit or for `System.exit` to be called. sbt handles a
-call to `System.exit` as described above.
-
-A user-created thread is one that is not in the `system` thread group
-and is not an `AWT` implementation thread (e.g. `AWT-XAWT`,
-`AWT-Windows`). User-created threads include the `AWT-EventQueue-*`
-thread(s).
-
-#### User Code
-
-Given the above, when can user code be run with the `run` and `console`
-actions?
-
-The user code cannot rely on shutdown hooks and at least one of the
-following situations must apply for user code to run in the same JVM:
-
-1.  User code creates no threads.
-2.  User code creates a GUI and no other threads.
-3.  The program ends when user-created threads terminate on their own.
-4.  `System.exit` is used to end the program and user-created threads
-    terminate when interrupted.
-5.  No deserialization is done, or the deserialization code
-    ensures that the right class loader is used, as in
-    <https://github.com/NetLogo/NetLogo/blob/5.x/src/main/org/nlogo/util/ClassLoaderObjectInputStream.scala>
-    or
-    <https://github.com/scala/scala/blob/2.11.x/src/actors/scala/actors/remote/JavaSerializer.scala#L20>.
-
-The requirements on threading and shutdown hooks are required because
-the JVM does not actually shut down. So, shutdown hooks cannot be run
-and threads are not terminated unless they stop when interrupted. If
-these requirements are not met, code must run in a
-[forked jvm][Forking].
-
-The feature of allowing `System.exit` and multiple threads to be used
-cannot completely emulate the situation of running in a separate JVM and
-is intended for development. Program execution should be checked in a
-[forked jvm][Forking] when using multiple threads or `System.exit`.
-
-As of sbt 0.13.1, multiple `run` instances can be managed. There can
-only be one application that uses AWT at a time, however.
-
 
   [Running]: Running.html
   [Plugins]: Plugins.html
@@ -13294,14 +13435,14 @@ methods of `java.lang.Class` or `java.lang.ClassLoader`.
 
 The main Scala testing frameworks (
 [ScalaCheck](https://scalacheck.org/),
-[ScalaTest](https://scalatest.org/), and
+[ScalaTest](https://www.scalatest.org/), and
 [specs2](http://specs2.org/)) provide an implementation of the
 common test interface and only need to be added to the classpath to work
 with sbt. For example, ScalaCheck may be used by declaring it as a
 [managed dependency][Library-Dependencies]:
 
 ```scala
-lazy val scalacheck = "org.scalacheck" %% "scalacheck" % "1.13.4"
+lazy val scalacheck = "org.scalacheck" %% "scalacheck" % "1.16.0"
 libraryDependencies += scalacheck % Test
 ```
 
@@ -13349,7 +13490,7 @@ one of the following conditions are run:
 ##### Tab completion
 
 Tab completion is provided for test names based on the results of the
-last `test:compile`. This means that a new sources aren't available for
+last `Test/compile`. This means that a new sources aren't available for
 tab completion until they are compiled and deleted sources won't be
 removed from tab completion until a recompile. A new test source can
 still be manually written out and run using `testOnly`.
@@ -13523,10 +13664,10 @@ per project.
 The following full build configuration demonstrates integration tests.
 
 ```scala
-lazy val scalatest = "org.scalatest" %% "scalatest" % "3.0.5"
+lazy val scalatest = "org.scalatest" %% "scalatest" % "3.2.12"
 
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.16"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -13598,11 +13739,11 @@ IntegrationTest / testOptions := Seq(...)
 The previous example may be generalized to a custom test configuration.
 
 ```scala
-lazy val scalatest = "org.scalatest" %% "scalatest" % "3.0.5"
+lazy val scalatest = "org.scalatest" %% "scalatest" % "3.2.12"
 lazy val FunTest = config("fun") extend(Test)
 
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.16"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -13656,11 +13797,11 @@ compiled together using the same classpath and are packaged together.
 However, different tests are run depending on the configuration.
 
 ```scala
-lazy val scalatest = "org.scalatest" %% "scalatest" % "3.0.5"
+lazy val scalatest = "org.scalatest" %% "scalatest" % "3.2.12"
 lazy val FunTest = config("fun") extend(Test)
 
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.16"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 def itFilter(name: String): Boolean = name endsWith "ITest"
@@ -13713,21 +13854,35 @@ Then, we can disable parallel execution in just that configuration
 using:
 
 ```scala
-parallelExecution in Serial := false
+Serial / parallelExecution := false
 ```
 
 The tests to run in parallel would be run with `test` and the ones to
-run in serial would be run with `serial:test`.
+run in serial would be run with `Serial/test`.
 
 ### JUnit
 
-Support for JUnit is provided by
-[junit-interface](https://github.com/sbt/junit-interface). To add
-JUnit support into your project, add the junit-interface dependency in
+Support for JUnit5 is provided by
+[sbt-jupiter-interface](https://github.com/sbt/sbt-jupiter-interface). To add
+JUnit Jupiter support into your project, add the jupiter-interface dependency in
 your project's main build.sbt file.
 
 ```scala
-libraryDependencies += "com.novocode" % "junit-interface" % "0.11" % Test
+libraryDependencies += "net.aichler" % "jupiter-interface" % "0.9.0" % Test
+```
+
+and the sbt-jupiter-interface plugin to your project/plugins.sbt
+
+```scala
+addSbtPlugin("net.aichler" % "sbt-jupiter-interface" % "0.9.0")
+```
+
+Support for JUnit4 is provided by
+[junit-interface](https://github.com/sbt/junit-interface).
+Add the junit-interface dependency in your project's main build.sbt file.
+
+```scala
+libraryDependencies += "com.github.sbt" % "junit-interface" % "0.13.3" % Test
 ```
 
 ### Extensions
@@ -14817,7 +14972,7 @@ resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repos
 To use the local repository, but not the Maven Central repository:
 
 ```scala
-externalResolvers := Resolver.combineDefaultResolvers(resolvers.value, mavenCentral = false)
+externalResolvers := Resolver.combineDefaultResolvers(resolvers.value.toVector, mavenCentral = false)
 ```
 
 ##### Override all resolvers for all builds
@@ -15201,7 +15356,7 @@ dependency's configuration `B`. The mapping for this looks like
 your dependency definition:
 
 ```scala
-libraryDependencies += "org.scalatest" %% "scalatest" % "2.1.3" % "test->compile"
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.12" % "test->compile"
 ```
 
 This says that your project's `"test"` configuration uses `ScalaTest`'s
@@ -15236,7 +15391,7 @@ configuration than those. The ScalaTest dependency above can then be
 shortened to:
 
 ```scala
-libraryDependencies += "org.scalatest" %% "scalatest" % "2.1.3" % "test"
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.12" % "test"
 ```
 
 ##### Forcing a revision (Not recommended)
@@ -15295,7 +15450,7 @@ There are many good proxy repository solutions out there:
 -   [JFrog Artifactory Open Source](https://jfrog.com/open-source/)
 -   [JFrog Artifactory Pro](https://jfrog.com/artifactory/)
 -   [Sonatype Nexus Repository Manager](http://www.sonatype.org/nexus/)
--   [Apache Archiva](http://archiva.apache.org/)
+-   [Apache Archiva](https://archiva.apache.org/)
 -   [CloudRepo](https://www.cloudrepo.io)
 
 Once you have a proxy repository installed and configured, then it's
@@ -15416,7 +15571,7 @@ Here's an example setup:
 
 **NOTE**: If using Nexus as the proxy repository, then it is very important that you set the layout policy to
 "permissive" for the proxy mapping that you create to the upstream repository
-http://repo.scala-sbt.org/scalasbt/sbt-plugin-releases. If you do not, Nexus will stop short of proxying the
+https://repo.scala-sbt.org/scalasbt/sbt-plugin-releases. If you do not, Nexus will stop short of proxying the
 original request to this url and issue a HTTP 404 in its place and the dependency will not resolve.
 
 
@@ -16079,7 +16234,7 @@ updateOptions := updateOptions.value.withCachedResolution(true)
 
 ### Dependency as a graph
 
-A project declares its own library dependency using `libraryDependencies` setting. The libraries you added also bring in their transitive dependencies. For example, your project may depend on dispatch-core 0.11.2; dispatch-core 0.11.2 depends on async-http-client 1.8.10; async-http-client 1.8.10 depends on netty 3.9.2.Final, and so forth. If we think of each library to be a node with arrows going out to dependent nodes, we can think of the entire dependencies to be a graph -- specifically a [directed acyclic graph](http://en.wikipedia.org/wiki/Directed_acyclic_graph).
+A project declares its own library dependency using `libraryDependencies` setting. The libraries you added also bring in their transitive dependencies. For example, your project may depend on dispatch-core 0.11.2; dispatch-core 0.11.2 depends on async-http-client 1.8.10; async-http-client 1.8.10 depends on netty 3.9.2.Final, and so forth. If we think of each library to be a node with arrows going out to dependent nodes, we can think of the entire dependencies to be a graph -- specifically a [directed acyclic graph](https://en.wikipedia.org/wiki/Directed_acyclic_graph).
 
 This graph-like structure, which was adopted from Apache Ivy, allows us to define [override rules and exclusions][Library-Management] transitively, but as the number of the node increases, the time it takes to resolve dependencies grows significantly. See [Motivation](#motivation) section later in this page for the full description.
 
@@ -16113,7 +16268,7 @@ $ cat ~/.ivy2/cache/com.ning/async-http-client/ivy-1.8.10.xml | grep netty
     <dependency org="io.netty" name="netty" rev="3.9.2.Final" force="true" conf="compile->compile(*),master(*);runtime->runtime(*)"/>
 ```
 
-There are also some issues around multiple dependencies to the same library with different [Maven classifiers](http://maven.apache.org/pom.html#Maven_Coordinates). In these cases, reproducing the exact result as normal `update` may not make sense or is downright impossible.
+There are also some issues around multiple dependencies to the same library with different [Maven classifiers](https://maven.apache.org/pom.html#Maven_Coordinates). In these cases, reproducing the exact result as normal `update` may not make sense or is downright impossible.
 
 #### SNAPSHOT and dynamic dependencies
 
@@ -16317,8 +16472,8 @@ stringTask := "Sample: " + sampleTask.value + ", int: " + intTask.value
 As with settings, tasks can be defined in a specific scope. For example,
 there are separate `compile` tasks for the `compile` and `test` scopes.
 The scope of a task is defined the same as for a setting. In the
-following example, `test:sampleTask` uses the result of
-`compile:intTask`.
+following example, `Test/sampleTask` uses the result of
+`Compile/intTask`.
 
 ```scala
 Test / sampleTask := (Compile / intTask).value * 3
@@ -16657,9 +16812,9 @@ myTask := {
 You can scope logging settings by the specific task's scope:
 
 ```scala
-logLevel in myTask := Level.Debug
+myTask / logLevel := Level.Debug
 
-traceLevel in myTask := 5
+myTask / traceLevel := 5
 ```
 
 To obtain the last logging output from a task, use the `last` command:
@@ -17784,12 +17939,12 @@ Def.setting {
 This Parser definition will produce a value of type `(String,String)`.
 The input syntax defined isn't very flexible; it is just a
 demonstration. It will produce one of the following values for a
-successful parse (assuming the current Scala version is 2.12.14,
-the current sbt version is 1.5.7, and there are 3 commands left to
+successful parse (assuming the current Scala version is 2.12.16,
+the current sbt version is 1.7.1, and there are 3 commands left to
 run):
 
-* (scala,2.12.14)
-* (sbt,1.5.7)
+* (scala,2.12.16)
+* (sbt,1.7.1)
 * (commands,3)
 
 Again, we were able to access the current Scala and sbt version for the
@@ -17985,7 +18140,7 @@ different input applied. For example:
 ```scala
 lazy val runFixed2 = taskKey[Unit]("A task that hard codes the values to `run`")
 
-fork in run := true
+run / fork := true
 
 runFixed2 := {
    val x = (Compile / run).toTask(" blue green").value
@@ -18132,7 +18287,7 @@ Here's `build.sbt`:
 import CommandExample._
 
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.16"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -18308,14 +18463,13 @@ val color: Parser[String] = "blue" | "green"
 val select: Parser[String] = "fg" | "bg"
 
 // A parser that matches "fg" or "bg", a space, and then the color, returning the matched values.
-//   ~ is an alias for Tuple2.
-val setColor: Parser[String ~ Char ~ String] =
+val setColor: Parser[(String, Char, String)] =
   select ~ ' ' ~ color
 
 // Often, we don't care about the value matched by a parser, such as the space above
 //  For this, we can use ~> or <~, which keep the result of
 //  the parser on the right or left, respectively
-val setColor2: Parser[String ~ String]  =  select ~ (' ' ~> color)
+val setColor2: Parser[(String, String)]  =  select ~ (' ' ~> color)
 
 // Match one or more digits, returning a list of the matched characters
 val digits: Parser[Seq[Char]]  =  charClass(_.isDigit, "digit").+
@@ -18410,7 +18564,7 @@ def select1(items: Iterable[String]) =
   token(Space ~> StringBasic.examples(FixedSetExamples(items)))
 
 def selectSome(items: Seq[String]): Parser[Seq[String]] = {
-   select1(items).flatMap { v ⇒
+   select1(items).flatMap { v =>
    val remaining = items filter { _ != v }
    if (remaining.size == 0)
      success(v :: Nil)
@@ -18548,7 +18702,7 @@ import extracted._
 // get name of current project
 val nameOpt: Option[String] = (currentRef / name).get(structure.data)
 
-// get the package options for the `test:packageSrc` task or Nil if none are defined
+// get the package options for the `Test/packageSrc` task or Nil if none are defined
 val pkgOpts: Seq[PackageOption] = (currentRef / Test / packageSrc / packageOptions).get(structure.data).getOrElse(Nil)
 ```
 
@@ -19101,7 +19255,7 @@ above for per-project plugins.
 ### Creating an auto plugin
 
 A minimal sbt plugin is a Scala library that is built against the version of
-Scala that sbt runs (currently, 2.12.14) or a Java library.
+Scala that sbt runs (currently, 2.12.16) or a Java library.
 Nothing special needs to be done for this type of library.
 A more typical plugin will provide sbt tasks, commands, or settings.
 This kind of plugin may provide these settings
@@ -19336,9 +19490,9 @@ object ObfuscatePlugin extends AutoPlugin {
     // default values for the tasks and settings
     lazy val baseObfuscateSettings: Seq[Def.Setting[_]] = Seq(
       obfuscate := {
-        Obfuscate(sources.value, (obfuscateLiterals in obfuscate).value)
+        Obfuscate(sources.value, (obfuscate / obfuscateLiterals).value)
       },
-      obfuscateLiterals in obfuscate := false
+      obfuscate / obfuscateLiterals := false
     )
   }
 
@@ -19367,7 +19521,7 @@ object Obfuscate {
 A build definition that uses the plugin might look like. `obfuscate.sbt`:
 
 ```scala
-obfuscateLiterals in obfuscate := true
+obfuscate / obfuscateLiterals := true
 ```
 
 #### Global plugins example
@@ -19705,7 +19859,7 @@ object WhateverPlugin extends sbt.AutoPlugin {
   }
   import autoImport._
   override lazy val projectSettings = Seq(
-    specificKey in Whatever := "another opinion" // DON'T DO THIS
+    Whatever / specificKey := "another opinion" // DON'T DO THIS
   )
 }
 ```
@@ -19792,8 +19946,8 @@ object ObfuscatePlugin extends sbt.AutoPlugin {
   }
   import autoImport._
   lazy val baseObfuscateSettings: Seq[Def.Setting[_]] = Seq(
-    obfuscate := Obfuscate((sources in obfuscate).value),
-    sources in obfuscate := sources.value
+    obfuscate := Obfuscate((obfuscate / sources).value),
+    obfuscate / sources := sources.value
   )
   override lazy val projectSettings = inConfig(Compile)(baseObfuscateSettings)
 }
@@ -19891,12 +20045,12 @@ task itself. See the `baseObfuscateSettings`:
 
 ```scala
   lazy val baseObfuscateSettings: Seq[Def.Setting[_]] = Seq(
-    obfuscate := Obfuscate((sources in obfuscate).value),
-    sources in obfuscate := sources.value
+    obfuscate := Obfuscate((obfuscate / sources).value),
+    obfuscate / sources := sources.value
   )
 ```
 
-In the above example, `sources in obfuscate` is scoped under the main
+In the above example, `obfuscate / sources` is scoped under the main
 task, `obfuscate`.
 
 #### Rewiring existing keys in `globalSettings`
@@ -19918,7 +20072,7 @@ object MyPlugin extends AutoPlugin {
   override def trigger = allRequirements
 
   override val globalSettings: Seq[Def.Setting[_]] = Seq(
-    onLoad in Global := (onLoad in Global).value andThen { state =>
+    Global / onLoad := (Global / onLoad).value andThen { state =>
       ... return new state ...
     }
   )
@@ -19945,10 +20099,10 @@ If you haven't created one already, make sure to create `project/build.propertie
 `sbt.version` number:
 
 ```yml
-sbt.version=1.5.7
+sbt.version=1.7.1
 ```
 
-Your build will now use 1.5.7.
+Your build will now use 1.7.1.
 
 ### Read the GitHub Actions manual
 
@@ -19971,7 +20125,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Setup JDK
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3
       with:
         distribution: temurin
         java-version: 8
@@ -20013,7 +20167,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Setup JDK
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3
       with:
         distribution: temurin
         java-version: 8
@@ -20041,24 +20195,24 @@ java
 
 You can speed up your `sbt` builds on GitHub Actions by caching various artifacts in-between the jobs.
 
-Here are sample caching steps that you can use:
+The action `setup-java` has built-in support for caching artifacts downloaded by
+sbt when loading the build or when building the project.
+
+To use it, set the input parameter `cache` of the action `setup-java` to the value `"sbt"`:
 
 ```yml
-    - name: Coursier cache
-      uses: coursier/cache-action@v6
+    - name: Setup JDK
+      uses: actions/setup-java@v3
+      with:
+        distribution: temurin
+        java-version: 8
+        cache: sbt
     - name: Build and test
       run: sbt -v +test
-    - name: Cleanup before cache
-      shell: bash
-      run: |
-        rm -rf "$HOME/.ivy2/local" || true
-        find $HOME/Library/Caches/Coursier/v1        -name "ivydata-*.properties" -delete || true
-        find $HOME/.ivy2/cache                       -name "ivydata-*.properties" -delete || true
-        find $HOME/.cache/coursier/v1                -name "ivydata-*.properties" -delete || true
-        find $HOME/.sbt                              -name "*.lock"               -delete || true
 ```
 
-With the above changes combined GitHub Actions will tar up the cached directories and uploads them to a cloud storage provider.
+Note the added line `cache: sbt`.
+
 Overall, the use of caching should shave off a few minutes of build time per job.
 
 ### Build matrix
@@ -20094,7 +20248,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Setup JDK
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3
       with:
         distribution: temurin
         java-version: ${{ matrix.java }}
@@ -20134,7 +20288,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Setup JDK
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3
       with:
         distribution: temurin
         java-version: ${{ matrix.java }}
@@ -20191,12 +20345,11 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Setup JDK
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3
       with:
         distribution: temurin
         java-version: ${{ matrix.java }}
-    - name: Coursier cache
-      uses: coursier/cache-action@v6
+        cache: sbt
     - name: Build and test (1)
       if: ${{ matrix.jobtype == 1 }}
       shell: bash
@@ -20212,14 +20365,6 @@ jobs:
       shell: bash
       run: |
         sbt -v "dependency-management/*"
-    - name: Cleanup before cache
-      shell: bash
-      run: |
-        rm -rf "$HOME/.ivy2/local" || true
-        find $HOME/Library/Caches/Coursier/v1        -name "ivydata-*.properties" -delete || true
-        find $HOME/.ivy2/cache                       -name "ivydata-*.properties" -delete || true
-        find $HOME/.cache/coursier/v1                -name "ivydata-*.properties" -delete || true
-        find $HOME/.sbt                              -name "*.lock"               -delete || true
 ```
 
 ### sbt-github-actions
@@ -20257,10 +20402,10 @@ If you haven't created one already, make sure to create `project/build.propertie
 `sbt.version` number:
 
 ```yml
-sbt.version=1.5.7
+sbt.version=1.7.1
 ```
 
-Your build will now use 1.5.7.
+Your build will now use 1.7.1.
 
 ### Read the Travis manual
 
@@ -20279,7 +20424,7 @@ jdk: openjdk8
 
 scala:
    - 2.10.4
-   - 2.12.14
+   - 2.12.16
 ```
 
 By default Travis CI executes `sbt ++$TRAVIS_SCALA_VERSION test`.
@@ -20292,7 +20437,7 @@ jdk: openjdk8
 
 scala:
    - 2.10.4
-   - 2.12.14
+   - 2.12.16
 
 script:
    - sbt ++$TRAVIS_SCALA_VERSION test
@@ -20357,7 +20502,7 @@ java
 -Xss6M
 -XX:ReservedCodeCacheSize=256M
 -jar
-/home/travis/.sbt/launchers/1.5.7/sbt-launch.jar
+/home/travis/.sbt/launchers/1.7.1/sbt-launch.jar
 ```
 
 It seems to be working. One downside of setting all of the parameters is that we might be left behind when the environment updates and the default values gives us more memory in the future.
@@ -20383,7 +20528,7 @@ java
 -XX:ReservedCodeCacheSize=256M
 -Xms1024M
 -jar
-/home/travis/.sbt/launchers/1.5.7/sbt-launch.jar
+/home/travis/.sbt/launchers/1.7.1/sbt-launch.jar
 ```
 
 **Note**: This duplicates the `-Xms` flag as intended, which might not the best thing to do.
@@ -20427,7 +20572,7 @@ jdk: openjdk8
 
 scala:
    - 2.10.4
-   - 2.12.14
+   - 2.12.16
 
 script:
    - sbt ++$TRAVIS_SCALA_VERSION test
@@ -20610,7 +20755,7 @@ lazy val root = (project in file("."))
   .settings(
     version := "0.1",
     scalaVersion := "2.10.6",
-    assemblyJarName in assembly := "foo.jar"
+    assembly / assemblyJarName := "foo.jar"
   )
 ```
 
@@ -20629,8 +20774,10 @@ This a trick I picked up from [earldouglas/xsbt-web-plugin@feabb2][feabb2], whic
 I also have `src/main/scala/hello.scala`:
 
 ```scala
-object Main extends App {
-  println("hello")
+object Main {
+  def main(args: Array[String]): Unit = {
+    println("hello")
+  }
 }
 ```
 
@@ -20697,7 +20844,7 @@ lazy val root = (project in file("."))
   .settings(
     version := "0.1",
     scalaVersion := "2.10.6",
-    assemblyJarName in assembly := "foo.jar",
+    assembly / assemblyJarName := "foo.jar",
     TaskKey[Unit]("check") := {
       val process = Process("java", Seq("-jar", (crossTarget.value / "foo.jar").toString))
       val out = (process!!)
@@ -20777,8 +20924,8 @@ $ copy-file changes/A.scala A.scala
 That's it! Let me know about your experience in testing plugins!
 
 
-  [giter8]: http://www.foundweekends.org/giter8/
-  [foundweekends]: http://www.foundweekends.org/
+  [giter8]: https://www.foundweekends.org/giter8/
+  [foundweekends]: https://www.foundweekends.org/
   [CC0]: https://creativecommons.org/publicdomain/zero/1.0/
 
 sbt new and Templates
@@ -20829,7 +20976,7 @@ The unique aspect of Giter8 is that it uses GitHub (or any other git repository)
 - [scala-native/scala-native.g8](https://github.com/scala-native/scala-native.g8)       (Scala Native)
 - [scala-native/sbt-crossproject.g8](https://github.com/scala-native/sbt-crossproject.g8) (sbt-crosspoject)
 - [http4s/http4s.g8](https://github.com/http4s/http4s.g8)                               (http4s services)
-- [unfiltered/unfiltered.g8](https://github.com/unfiltered/unfiltered.g8)               ([Unfiltered](http://unfiltered.ws/) application)
+- [unfiltered/unfiltered.g8](https://github.com/unfiltered/unfiltered.g8)               ([Unfiltered](https://unfiltered.ws/) application)
 - [scalatra/scalatra-sbt.g8](https://github.com/scalatra/scalatra-sbt.g8)               (Basic Scalatra template using SBT 0.13.x.)
 
 For more, see [Giter8 templates](https://github.com/foundweekends/giter8/wiki/giter8-templates) on the Giter8 wiki. sbt provides out-of-the-box support for Giter8 templates by shipping with a template resolver for Giter8.
@@ -20844,7 +20991,7 @@ $ sbt new scala/scala-seed.g8 --branch myBranch
 
 #### How to create a Giter8 template
 
-See [Making your own templates](http://www.foundweekends.org/giter8/template.html) for the details on how to create a new Giter8 template.
+See [Making your own templates](https://www.foundweekends.org/giter8/template.html) for the details on how to create a new Giter8 template.
 
 ```
 $ sbt new foundweekends/giter8.g8
@@ -20868,7 +21015,7 @@ License
 Written in <YEAR> by <AUTHOR NAME> <AUTHOR E-MAIL ADDRESS>
 [other author/contributor lines as appropriate]
 To the extent possible under law, the author(s) have dedicated all copyright and related and neighboring rights to this software to the public domain worldwide. This software is distributed without any warranty.
-You should have received a copy of the CC0 Public Domain Dedication along with this software. If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
+You should have received a copy of the CC0 Public Domain Dedication along with this software. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>.
 ```
 
 ### How to extend sbt new
@@ -21573,7 +21720,7 @@ given setting or task, including the dependencies of a task/setting as
 well as the tasks/settings that depend on the it. For example,
 
 ```
-> inspect test:compile
+> inspect Test/compile
 ...
 [info] Dependencies:
 [info]  Test / manipulateBytecode
@@ -21761,7 +21908,7 @@ value.
 For the test classpath,
 
 ```
-> show test:dependencyClasspath
+> show Test/dependencyClasspath
 ...
 [info] List(Attributed(/Users/foo/code/sbt.github.com/target/scala-2.12/classes), Attributed(~/.sbt/boot/scala-2.12.6/lib/scala-library.jar), Attributed(/Users/foo/.ivy2/cache/junit/junit/jars/junit-4.8.2.jar))
 ...
@@ -21792,7 +21939,7 @@ The `definedTestNames` task provides as its result the list of test
 names detected in this way. For example,
 
 ```
-> show test:definedTestNames
+> show Test/definedTestNames
 ... < runs test:compile if out of date > ...
 [info] List(org.example.TestA, org.example.TestB)
 ```
@@ -21885,7 +22032,7 @@ Examples:
 
 ```scala
 // set the prompt (for this build) to include the project id.
-shellPrompt in ThisBuild := { state => Project.extract(state).currentRef.project + "> " }
+ThisBuild / shellPrompt := { state => Project.extract(state).currentRef.project + "> " }
 
 // set the prompt (for the current project) to include the username
 shellPrompt := { state => System.getProperty("user.name") + "> " }
@@ -22157,7 +22304,7 @@ more information than was shown by default. A `logLevel` based solution
 typically requires changing the logging level and running a task again.
 However, there are two cases where this is unnecessary. First, warnings
 from a previous compilation may be displayed using `printWarnings` for
-the main sources or `test:printWarnings` for test sources. Second,
+the main sources or `Test/printWarnings` for test sources. Second,
 output from the previous execution is available either for a single task
 or for in its entirety. See the section on
 [printWarnings](#printwarnings) and the sections on
@@ -22642,7 +22789,7 @@ The `consoleQuick` action retrieves dependencies and puts them on the
 classpath of the Scala REPL. The project's sources are not compiled, but
 sources of any source dependencies are compiled. To enter the REPL with
 test dependencies on the classpath but without compiling test sources,
-run `test:consoleQuick`. This will force compilation of main sources.
+run `Test/consoleQuick`. This will force compilation of main sources.
 
 <a name="console"></a>
 
@@ -22651,7 +22798,7 @@ run `test:consoleQuick`. This will force compilation of main sources.
 The `console` action retrieves dependencies and compiles sources and
 puts them on the classpath of the Scala REPL. To enter the REPL with
 test dependencies and compiled test sources on the classpath, run
-`test:console`.
+`Test/console`.
 
 <a name="consoleProject"></a>
 
@@ -22668,46 +22815,46 @@ page.
 
 ### Define the initial commands evaluated when entering the Scala REPL
 
-Set `initialCommands in console` to set the initial statements to
+Set `console / initialCommands` to set the initial statements to
 evaluate when `console` and `consoleQuick` are run. To configure
-`consoleQuick` separately, use `initialCommands in consoleQuick`. For
+`consoleQuick` separately, use `consoleQuick / initialCommands`. For
 example,
 
 ```scala
-initialCommands in console := """println("Hello from console")"""
+console / initialCommands := """println("Hello from console")"""
 
-initialCommands in consoleQuick := """println("Hello from consoleQuick")"""
+consoleQuick / initialCommands := """println("Hello from consoleQuick")"""
 ```
 
 The `consoleProject` command is configured separately by
-`initialCommands in consoleProject`. It does not use the value from
-`initialCommands in console` by default. For example,
+`consoleProject / initialCommands`. It does not use the value from
+`console / initialCommands` by default. For example,
 
 ```scala
-initialCommands in consoleProject := """println("Hello from consoleProject")"""
+consoleProject / initialCommands := """println("Hello from consoleProject")"""
 ```
 
 <a name="cleanup"></a>
 
 ### Define the commands evaluated when exiting the Scala REPL
 
-Set `cleanupCommands in console` to set the statements to evaluate after
+Set `console / cleanupCommands` to set the statements to evaluate after
 exiting the Scala REPL started by `console` and `consoleQuick`. To
 configure `consoleQuick` separately, use
-`cleanupCommands in consoleQuick`. For example,
+`consoleQuick / cleanupCommands`. For example,
 
 ```scala
-cleanupCommands in console := """println("Bye from console")"""
+console / cleanupCommands := """println("Bye from console")"""
 
-cleanupCommands in consoleQuick := """println("Bye from consoleQuick")"""
+consoleQuick / cleanupCommands := """println("Bye from consoleQuick")"""
 ```
 
 The `consoleProject` command is configured separately by
-`cleanupCommands in consoleProject`. It does not use the value from
-`cleanupCommands in console` by default. For example,
+`consoleProject / cleanupCommands`. It does not use the value from
+`console / cleanupCommands` by default. For example,
 
 ```scala
-cleanupCommands in consoleProject := """println("Bye from consoleProject")"""
+consoleProject / cleanupCommands := """println("Bye from consoleProject")"""
 ```
 
 <a name="embed"></a>
@@ -22901,14 +23048,14 @@ lazy val startupTransition: State => State = { s: State =>
 
 lazy val root = (project in file("."))
   .settings(
-    scalaVersion in ThisBuild := "2.12.6",
-    organization in ThisBuild := "com.example",
+    ThisBuild / scalaVersion := "2.12.6",
+    ThisBuild / organization := "com.example",
     name := "helloworld",
     dependencyUpdates := { println("hi") },
 
     // onLoad is scoped to Global because there's only one.
-    onLoad in Global := {
-      val old = (onLoad in Global).value
+    Global / onLoad := {
+      val old = (Global / onLoad).value
       // compose the new transition on top of the existing one
       // in case your plugins are using this hook.
       startupTransition compose old
@@ -23319,7 +23466,7 @@ Here's how to set it up
 #### project/build.properties
 
 ```
-sbt.version=1.5.7
+sbt.version=1.7.1
 ```
 
 #### project/style.sbt
@@ -23370,7 +23517,7 @@ Let's try implementing a custom task called `compilecheck` that runs `Compile / 
 #### project/build.properties
 
 ```
-sbt.version=1.5.7
+sbt.version=1.7.1
 ```
 
 #### project/style.sbt
@@ -23430,8 +23577,10 @@ Now suppose we want to call `Compile / run` task and then open the browser for t
 #### src/main/scala/Greeting.scala
 
 ```scala
-object Greeting extends App {
-  println("hello " + args.toList)
+object Greeting {
+  def main(args: Array[String]): Unit = {
+    println("hello " + args.toList)
+  }
 }
 ```
 
@@ -23726,7 +23875,7 @@ import scala.concurrent.duration._
 
 // factor out common settings
 ThisBuild / organization := "org.myproject"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.16"
 // set the Scala version used for the project
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
@@ -23734,7 +23883,7 @@ ThisBuild / version      := "0.1.0-SNAPSHOT"
 ThisBuild / shellPrompt := { state => Project.extract(state).currentRef.project + "> " }
 
 // define ModuleID for library dependencies
-lazy val scalacheck = "org.scalacheck" %% "scalacheck" % "1.13.4"
+lazy val scalacheck = "org.scalacheck" %% "scalacheck" % "1.16.0"
 
 // define ModuleID using string interpolator
 lazy val osmlibVersion = "2.5.2-RC1"
@@ -23787,7 +23936,7 @@ lazy val root = (project in file("."))
     Comile / packageBin / mainClass := Some("myproject.MyMain"),
 
     // set the main class for the main 'run' task
-    // change Compile to Test to set it for 'test:run'
+    // change Compile to Test to set it for 'Test/run'
     Compile / run / mainClass := Some("myproject.MyMain"),
 
     // add <base>/input to the files that '~' triggers on
@@ -23853,7 +24002,7 @@ lazy val root = (project in file("."))
     clean / aggregate := false,
 
     // only show warnings and errors on the screen for compilations.
-    //  this applies to both test:compile and compile and is Info by default
+    //  this applies to both Test/compile and compile and is Info by default
     compile / logLevel := Level.Warn,
 
     // only show warnings and errors on the screen for all tasks (the default is Info)
@@ -23956,7 +24105,7 @@ object Dependencies {
   val apachenet   = "commons-net"   % "commons-net"   % "2.0"
   val apachecodec = "commons-codec" % "commons-codec" % "1.4"
 
-  val scalatest = "org.scalatest" %% "scalatest" % "3.0.5"
+  val scalatest = "org.scalatest" %% "scalatest" % "3.2.12"
 }
 ```
 
@@ -24008,7 +24157,7 @@ import Dependencies._
 lazy val buildSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.12.14"
+  scalaVersion := "2.12.16"
 )
 
 // Sub-project specific dependencies
@@ -24103,7 +24252,7 @@ lazy val CustomCompile = config("compile").extend(Saxon, Common, Scalate)
 
 // factor out common settings
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.16"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 // An example project that only uses the Scalate utilities.
@@ -24172,9 +24321,10 @@ external builds.
 import sbt._
 import Keys._
 
-object Canon extends Plugin {
+object Canon extends AutoPlugin {
   // Registers the canonicalize command in every project
-  override def settings = Seq(commands += canonicalize)
+  override def trigger = allRequirements
+  override def projectSettings = Seq(commands += canonicalize)
 
   // Define the command.  This takes the existing settings (including any session settings)
   // and applies 'f' to each Setting[_]

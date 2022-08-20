@@ -70,7 +70,7 @@
 </code></pre><p>方法 <code>%</code> 从字符串创建 <code>ModuleID</code> 对象，然后将 <code>ModuleID</code> 添加到 <code>libraryDependencies</code> 中。
 </p><p>当然，要让 sbt（通过 Ivy）知道从哪里下载模块。如果你的模块和 sbt 来自相同的某个默认的仓库，这样就会工作。例如，Apache Derby 在标准的 Maven2 仓库中：
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot;
-</code></pre><p>如果你在 <code>build.sbt</code> 中输入上面这些内容，然后执行 <code>update</code>，sbt 会将 Derby 下载到 <code>~/.ivy2/cache/org.apache.derby/</code>。（顺便提一下， <code>compile</code> 依赖于 <code>update</code>，所以
+</code></pre><p>如果你在 <code>build.sbt</code> 中输入上面这些内容，然后执行 <code>update</code>，sbt 会将 Derby 下载到 <code>$COURSIER_CACHE/https/repo1.maven.org/maven2/org/apache/derby</code>。（顺便提一下， <code>compile</code> 依赖于 <code>update</code>，所以
 大多数时候不需要手动的执行 <code>update</code>。）
 </p><p>当然，你也可以通过 <code>++=</code> 一次将所有依赖作为一个列表添加：
 </p><pre><code class="prettyprint lang-scala">libraryDependencies ++= Seq(
@@ -80,9 +80,9 @@
 </code></pre><p>在很少情况下，你也会需要在 <code>libraryDependencies</code> 上用 <code>:=</code> 方法。
 </p><h4 id="%E9%80%9A%E8%BF%87++%E6%96%B9%E6%B3%95%E8%8E%B7%E5%8F%96%E6%AD%A3%E7%A1%AE%E7%9A%84+Scala+%E7%89%88%E6%9C%AC">通过 <code>%%</code> 方法获取正确的 Scala 版本<a href="#%E9%80%9A%E8%BF%87++%E6%96%B9%E6%B3%95%E8%8E%B7%E5%8F%96%E6%AD%A3%E7%A1%AE%E7%9A%84+Scala+%E7%89%88%E6%9C%AC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>如果你用是 <code>groupID %% artifactID % revision</code> 而不是 <code>groupID % artifactID % revision</code>（区别在于 <code>groupID</code> 后面是 <code>%%</code>），sbt 会在 工件名称中加上项目的 Scala 版本号。
 这只是一种快捷方法。你可以这样写不用 <code>%%</code>：
-</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-tools&quot; % &quot;scala-stm_2.11&quot; % &quot;0.3&quot;
-</code></pre><p>假设这个构建的 <code>scalaVersion</code> 是 <code>2.11.1</code>，下面这种方式是等效的（注意 <code>&quot;org.scala-tools&quot;</code> 后面是 <code>%%</code>）：
-</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-tools&quot; %% &quot;scala-stm&quot; % &quot;0.3&quot;
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-stm&quot; % &quot;scala-stm_2.13&quot; % &quot;0.9.1&quot;
+</code></pre><p>假设这个构建的 <code>scalaVersion</code> 是 <code>2.13.8</code>，下面这种方式是等效的（注意 <code>&quot;org.scala-stm&quot;</code> 后面是 <code>%%</code>）：
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-stm&quot; %% &quot;scala-stm&quot; % &quot;0.9.1&quot;
 </code></pre><p>这个想法是很多依赖都会被编译给多个 Scala 版本，而你想确保和项目匹配的jar是二进制兼容的。
 </p><p>参见 <a href="../docs/Cross-Build.html">交叉构建</a> 获取更多信息。
 </p><h4 id="Ivy+%E4%BF%AE%E6%AD%A3">Ivy 修正<a href="#Ivy+%E4%BF%AE%E6%AD%A3" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p><code>groupID % artifactID % revision</code> 中的 <code>revision</code> 不需要是一个固定的版本号。Ivy 能够根据你指定的约束选择一个模块的最新版本。你指定 <code>&quot;latest.integration&quot;</code>，<code>&quot;2.9.+&quot;</code> 或者 <code>&quot;[1.0,)&quot;</code>，而不是
@@ -109,7 +109,7 @@
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot; % &quot;test&quot;
 </code></pre><p>也可能也会像这样使用类型安全的 <code>Test</code> configuration：
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot; % Test
-</code></pre><p>现在，如果你在 sbt 的命令提示行里输入 <code>show compile:dependencyClasspath</code>，你不应该看到 derby jar。但是如果你输入 <code>show test:dependencyClasspath</code>，
+</code></pre><p>现在，如果你在 sbt 的命令提示行里输入 <code>show Compile/dependencyClasspath</code>，你不应该看到 derby jar。但是如果你输入 <code>show Test/dependencyClasspath</code>，
 你应该在列表中看到 derby jar。
 </p><p>通常，测试相关的依赖，如 <a href="https://scalacheck.org/">ScalaCheck</a>，
 <a href="http://specs2.org">Specs2</a> 和 <a href="https://www.scalatest.org/">ScalaTest</a> 将会被定义为 <code>% &quot;test&quot;</code>。
@@ -157,7 +157,6 @@
       <div class="nav" id="topbar">
         <a href="../../../learn.html">Learn</a>
         <a href="../../../download.html">Download</a>
-        <a href="../../../support.html">Support</a>
         <a href="../../../community.html">Get Involved</a>
         <a id="source-code" href="https://github.com/sbt/sbt"><img src="../files/github-logo-teal.svg" alt="Source code" class="social"></a>
         <a id="twitter" href="https://twitter.com/scala_sbt"><img src="../files/twitter-logo-teal.svg" alt="sbt on Twitter" class="social"></a>

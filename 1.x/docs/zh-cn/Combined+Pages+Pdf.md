@@ -42,6 +42,7 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
 
 创建一个 sbt 工程，你需要经过以下几步：
 
+-   安装 JDK (建议使用 Eclipse Adoptium Temurin JDK 8, 11, 或 17)。
 -   安装 sbt 并且创建脚本来运行它。
 -   建立一个简单的 [hello world][Hello] 工程
     -   创建一个工程目录并且将源文件放在其中。
@@ -57,27 +58,26 @@ sbt 使用少数的几个概念来支撑它灵活并且强大的构建定义。�
 如果你在运行 sbt 时遇到任何问题，查看 [安装建议][Setup-Notes] 中的终端编码（terminal encoding），HTTP 代理，JVM 参数。
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.tgz
   [Manual-Installation]: Manual-Installation.html
 
 在 macOS 上安装 sbt
 ---------------------
 
+### Install sbt with **cs setup**
+
+Follow [Install](https://www.scala-lang.org/download/) page, and install Scala using Coursier. This should install the latest stable version of `sbt`.
+
 ### Install JDK
 
-Follow the link to install [JDK 8 or 11][AdoptOpenJDK].
-
-Or use [SDKMAN!](https://sdkman.io/):
-
-```
-$ sdk install java $(sdk list java | grep -o "8\.[0-9]*\.[0-9]*\.hs-adpt" | head -1)
-```
+Follow the link to install [JDK 8 or 11][AdoptOpenJDK], or use SDKMAN!
 
 #### 通过 [SDKMAN!](https://sdkman.io/) 安装
 
-```
+```scala
+$ sdk install java $(sdk list java | grep -o "\b8\.[0-9]*\.[0-9]*\-tem" | head -1)
 $ sdk install sbt
 ```
 
@@ -96,12 +96,16 @@ $ brew install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.tgz
 
 在 Windows 上安装 sbt
 -------------------------
+
+### Install sbt with **cs setup**
+
+Follow [Install](https://www.scala-lang.org/download/) page, and install Scala using Coursier. This should install the latest stable version of `sbt`.
 
 ### 通过通用的安装包安装
 
@@ -122,27 +126,42 @@ $ scoop install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.5.7.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.5.7.deb
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.7.1.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.7.1.deb
+  [Manual-Installation]: Manual-Installation.html
+  [website127]: https://github.com/sbt/website/issues/12
+  [cert-bug]: https://bugs.launchpad.net/ubuntu/+source/ca-certificates-java/+bug/1739631
+  [openjdk-devel]: https://pkgs.org/download/java-1.8.0-openjdk-devel
 
 在 Linux 上安装 sbt
 -----------------------
+
+### Install sbt with **cs setup**
+
+Follow [Install](https://www.scala-lang.org/download/) page, and install Scala using Coursier. This should install the latest stable version of `sbt`.
 
 ### Installing from SDKMAN
 
 To install both JDK and sbt, consider using [SDKMAN](https://sdkman.io/).
 
-```
-$ sdk install java $(sdk list java | grep -o "8\.[0-9]*\.[0-9]*\.hs-adpt" | head -1)
+```scala
+$ sdk install java $(sdk list java | grep -o "\b8\.[0-9]*\.[0-9]*\-tem" | head -1)
 $ sdk install sbt
 ```
 
-This has two advantages.
-1. It will install the official packaging by AdoptOpenJDK, as opposed to the ["mystery meat OpenJDK builds"](https://mail.openjdk.java.net/pipermail/jdk8u-dev/2019-May/009330.html).
-2. It will install `tgz` packaging of sbt that contains all JAR files. (DEB and RPM packages do not to save bandwidth)
+Using Coursier or SDKMAN has two advantages.
+
+1. They will install the official packaging by Eclipse Adoptium, as opposed to the ["mystery meat OpenJDK builds"](https://mail.openjdk.java.net/pipermail/jdk8u-dev/2019-May/009330.html).
+2. They will install `tgz` packaging of sbt that contains all JAR files. (DEB and RPM packages do not to save bandwidth)
+
+### Install JDK
+
+You must first install a JDK. We recommend **Eclipse Adoptium Temurin JDK 8**, **JDK 11**, or **JDK 17**.
+
+The details around the package names differ from one distribution to another. For example, Ubuntu xenial (16.04LTS) has [openjdk-8-jdk](https://packages.ubuntu.com/hu/xenial/openjdk-8-jdk). Redhat family calls it [java-1.8.0-openjdk-devel][openjdk-devel].
 
 ### 通过通用的安装包安装
 
@@ -251,7 +270,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "hello",
     version := "1.0",
-    scalaVersion := "2.12.14"
+    scalaVersion := "2.12.16"
   )
 ```
 
@@ -262,10 +281,10 @@ lazy val root = (project in file("."))
 
 ### 设置 sbt 版本
 
-你可以通过创建 `hello/project/build.properties` 文件强制指定一个版本的 sbt。在这个文件里，编写如下内容来强制使用 1.5.7：
+你可以通过创建 `hello/project/build.properties` 文件强制指定一个版本的 sbt。在这个文件里，编写如下内容来强制使用 1.7.1：
 
 ```
-sbt.version=1.5.7
+sbt.version=1.7.1
 ```
 
 sbt 在不同的 release 版本中是 99% 兼容的。但是在 `project/build.properties` 文件中设置 sbt 的版本仍然能避免一些潜在的混淆。
@@ -544,7 +563,7 @@ lazy val root = (project in file("."))
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.16"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -683,7 +702,7 @@ bare `.sbt` 构建定义由一个 `Setting[_]` 表达式的列表组成，而不
 ```scala
 name := "hello"
 version := "1.0"
-scalaVersion := "2.12.14"
+scalaVersion := "2.12.16"
 ```
 
 ### 添加依赖库
@@ -694,7 +713,7 @@ scalaVersion := "2.12.14"
 val derby = "org.apache.derby" % "derby" % "10.4.1.3"
 
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.16"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -777,7 +796,7 @@ scalacOptions := {
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.16"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -812,7 +831,7 @@ lazy val root = (project in file("."))
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.16"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -934,7 +953,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "Hello",
     organization := "com.example",
-    scalaVersion := "2.12.14",
+    scalaVersion := "2.12.16",
     version := "0.1.0-SNAPSHOT",
     scalacOptions := List("-encoding", "utf8", "-Xfatal-warnings", "-deprecation", "-unchecked"),
     scalacOptions := {
@@ -1004,12 +1023,12 @@ organization := name.value
 ```
 
 Here's a realistic example.
-This rewires `scalaSource in Compile` key to a different directory
+This rewires `Compile / scalaSource` key to a different directory
 only when `scalaBinaryVersion` is `"2.11"`.
 
 ```scala
-scalaSource in Compile := {
-  val old = (scalaSource in Compile).value
+Compile / scalaSource := {
+  val old = (Compile / scalaSource).value
   scalaBinaryVersion.value match {
     case "2.11" => baseDirectory.value / "src-2.11" / "main" / "scala"
     case _      => old
@@ -1148,7 +1167,7 @@ Project 轴可以设置成构建全局的，因此一个 setting 可以应用到
 #### 通过 Configuration 轴划分 Scope
 
 一个 *configuration* 定义一种特定的构建，可能包含它自己的 classpath，源文件和生成的包等。Configuration 的概念来自于它用来管理 [库依赖][Library-Dependencies] 的 Ivy 
-和 [MavenScopes](http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Scope)。
+和 [MavenScopes](https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Scope)。
 
 在 sbt 中你可以看到这些 configurations：
 
@@ -1208,7 +1227,7 @@ Settings 可以影响一个 task 如何工作。例如，task `packageSrc` 就�
 ### 使用 scoped key 标识的例子
 
 - `fullClasspath` 仅仅指定了一个 key，所以会使用默认的 scope：当前的 project，key 所依赖的 configuration 和全局 task 的 scope。
-- `test:fullClasspath` 指定为 configuration，所以这个 `fullClasspath` 就在 `test` configuration scope 下，其他两个 scope 轴均为默认值。
+- `Test/fullClasspath` 指定为 configuration，所以这个 `fullClasspath` 就在 `test` configuration scope 下，其他两个 scope 轴均为默认值。
 - `*:fullClasspath` 将 configuration 指定为 `Global`，而不是默认的 configuration。
 - `doc::fullClasspath` 将 key `fullClasspath` 局限在 `doc` task 下，project 轴和 configuration 轴还是默认的。
 - `{file:/home/hp/checkout/hello/}default-aea33a/test:fullClasspath` 指定了一个 project，在 `{file:/home/hp/checkout/hello/}default-aea33a` 中，`{file:/home/hp/checkout/hello/}` 标识 project，
@@ -1219,11 +1238,11 @@ Settings 可以影响一个 task 如何工作。例如，task `packageSrc` 就�
 
 ### 审查 scope
 
-在 sbt 的交互模式下，你可以使用 inspect 命令来理解 key 和它对应的 scope。尝试 `inspect test:fullClasspath`，
+在 sbt 的交互模式下，你可以使用 inspect 命令来理解 key 和它对应的 scope。尝试 `inspect Test/fullClasspath`，
 
 ```
 $ sbt
-> inspect test:fullClasspath
+> inspect Test/fullClasspath
 [info] Task: scala.collection.Seq[sbt.Attributed[java.io.File]]
 [info] Description:
 [info]  The exported classpath, consisting of build products and unmanaged and managed, internal and external dependencies.
@@ -1265,14 +1284,14 @@ $ sbt
 
 你也可以看到一些代理；如果没有定义，sbt 会通过以下途径查找：
 
-- 其他两个 configuration（`runtime:fullClasspath` 和 `compile:fullClasspath`）。在这些 scoped key中，project 没有指定的话就意味着是 “当前 project” 而且 task 没有指定的话就意味着是 `Global`。
+- 其他两个 configuration（`Runtime/fullClasspath` 和 `Compile/fullClasspath`）。在这些 scoped key中，project 没有指定的话就意味着是 “当前 project” 而且 task 没有指定的话就意味着是 `Global`。
 - 当 project 没有指定 “当前 project” 并且 task 没有指定为 `Global` 时，configuration 会被设置成 `Global`（`*:fullClasspath`）。
 - 当全局构建中没有指定特定的 project 时，project 会被设置成 `{.}` 或者 `ThisBuild`。
 - 将 project 轴设置成 `Global`（`*/test:fullClasspath`）（记住，不指定 project 表示用当前的 current，所以这里查找 `Global` 是一个新的方式；例如：`*` 和 “显示没有 project” 对于 project 轴是不一样的；例如：`*/test:fullClasspath` 和 `test:fullClasspath` 不是一回事）。
 - project 轴和 configuration 轴都会被设置成 `Global`（`*/*:fullClasspath`）（还记得我们已经说过不指定 task 表示用 `Global`，所以 `*/*:fullClasspath` 表示三个轴都用 `Global`）。
 
 尝试用 `inspect fullClasspath`（和上面例子中的 inspect `test:fullClasspath` 相对）来查看它们的不同。因为 configuration 被省略了，sbt 自动检测并设置为 `compile`。
-因此 `inspect compile:fullClasspath` 得到的结果看起来应该和 `inspect fullClasspath` 得到的结果一样。
+因此 `inspect Compile/fullClasspath` 得到的结果看起来应该和 `inspect fullClasspath` 得到的结果一样。
 
 尝试用 `inspect *:fullClasspath` 作为对比。默认情况下，`fullClasspath` 没有定义在 `Global` configuration 中。
 
@@ -1295,7 +1314,7 @@ configuration 是 `*`（表示全局），task 没有显示出来（实际上也
 Keys 会调用一个重载的 in 方法设置 scope。传给 in 方法的参数可以是任何 scope 轴的实例。比如说，你可以将 `name` 局限在 `Compile` configuration 中，尽管没有真实的理由要这样做：
 
 ```scala
-name in Compile := "hello"
+Compile / name := "hello"
 ```
 
 或者你可以把 `name` 局限在 `packageBin` task 中（没有什么意义！仅仅是个例子）：
@@ -1331,9 +1350,9 @@ name.in(Compile).:=("hello")
 
 如果一个 key 通常的作用域有问题，你需要指定 scope。例如，`compile` task 默认是在 `Compile` 和 `Test` configuration 的 scope 中，而且在这些 scope 之外它并不存在。
 
-为了改变 key `compile` 的值，你需要写成 `compile in Compile` 或者 `compile in Test`。用普通的 `compile` 会在当前 project 的 scope 中定义一个新的 task，而不是覆盖 configuration 的 scope 标准的 `compile` task。
+为了改变 key `compile` 的值，你需要写成 `Compile / compile` 或者 `Test / compile`。用普通的 `compile` 会在当前 project 的 scope 中定义一个新的 task，而不是覆盖 configuration 的 scope 标准的 `compile` task。
 
-如果你遇到像 *“引用未定义的设置”* 这样的错误，通常是你指定 scope 失败了，或者你指定了一个错误的 scope。你使用的 key 可能定义在其他的 scope 中。sbt 会尝试在错误消息里面提示你的想法是什么；如 “你是指 compile:compile？”
+如果你遇到像 *“引用未定义的设置”* 这样的错误，通常是你指定 scope 失败了，或者你指定了一个错误的 scope。你使用的 key 可能定义在其他的 scope 中。sbt 会尝试在错误消息里面提示你的想法是什么；如 “你是指 Compile/compile？”
 
 一种方式是你可以这样认为，name 只是 key 的 *一部分*。实际上，所有的 key 都有 name 和 scope 组成（scope 有三个轴）。换句话说，`packageOptions in (Compile, packageBin)` 是表示 key name 的完整的表达式。
 其简写 `packageOptions` 也是一个 key name，但是是不同的（对于没有 in 方法的 key，会隐式的假设一个 scope：当前的 project，global
@@ -1353,7 +1372,7 @@ config，global task）。
 - `+=` 会追加单个元素到列表中。
 - `++=` 会连接两个列表。
 
-例如，一个 key `sourceDirectories in Compile` 的值是 `Seq[File]`。默认情况下该 key 的值会包含 `src/main/scala`。如果你也想编译叫做 source 的目录下的源代码（因为你不得不成为非标准的），你可以添加该目录：
+例如，一个 key `Compile / sourceDirectories` 的值是 `Seq[File]`。默认情况下该 key 的值会包含 `src/main/scala`。如果你也想编译叫做 source 的目录下的源代码（因为你不得不成为非标准的），你可以添加该目录：
 
 ```scala
 Compile / sourceDirectories += new File("source")
@@ -1396,7 +1415,7 @@ Compile / sourceDirectories := Seq(file("sources1"), file("sources2"))
 
 ```scala
 Compile / sourceGenerators += Def.task {
-  myGenerator(baseDirectory.value, (managedClasspath in Compile).value)
+  myGenerator(baseDirectory.value, (Compile / managedClasspath).value)
 }
 ```
 
@@ -1494,7 +1513,7 @@ lazy val projA = (project in file("a"))
 `projA / name` 的值是什么?
 
 1. `"foo-2.11.11"`
-2. `"foo-2.12.14"`
+2. `"foo-2.12.16"`
 3. 还有什么吗
 
 答案是 `"foo-2.11.11"`。
@@ -1870,7 +1889,7 @@ val libraryDependencies = settingKey[Seq[ModuleID]]("Declares managed dependenci
 libraryDependencies += "org.apache.derby" % "derby" % "10.4.1.3"
 ```
 
-如果你在 `build.sbt` 中输入上面这些内容，然后执行 `update`，sbt 会将 Derby 下载到 `~/.ivy2/cache/org.apache.derby/`。（顺便提一下， `compile` 依赖于 `update`，所以
+如果你在 `build.sbt` 中输入上面这些内容，然后执行 `update`，sbt 会将 Derby 下载到 `$COURSIER_CACHE/https/repo1.maven.org/maven2/org/apache/derby`。（顺便提一下， `compile` 依赖于 `update`，所以
 大多数时候不需要手动的执行 `update`。）
 
 当然，你也可以通过 `++=` 一次将所有依赖作为一个列表添加：
@@ -1890,13 +1909,13 @@ libraryDependencies ++= Seq(
 这只是一种快捷方法。你可以这样写不用 `%%`：
 
 ```scala
-libraryDependencies += "org.scala-tools" % "scala-stm_2.11" % "0.3"
+libraryDependencies += "org.scala-stm" % "scala-stm_2.13" % "0.9.1"
 ```
 
-假设这个构建的 `scalaVersion` 是 `2.11.1`，下面这种方式是等效的（注意 `"org.scala-tools"` 后面是 `%%`）：
+假设这个构建的 `scalaVersion` 是 `2.13.8`，下面这种方式是等效的（注意 `"org.scala-stm"` 后面是 `%%`）：
 
 ```scala
-libraryDependencies += "org.scala-tools" %% "scala-stm" % "0.3"
+libraryDependencies += "org.scala-stm" %% "scala-stm" % "0.9.1"
 ```
 
 这个想法是很多依赖都会被编译给多个 Scala 版本，而你想确保和项目匹配的jar是二进制兼容的。
@@ -1972,7 +1991,7 @@ libraryDependencies += "org.apache.derby" % "derby" % "10.4.1.3" % "test"
 libraryDependencies += "org.apache.derby" % "derby" % "10.4.1.3" % Test
 ```
 
-现在，如果你在 sbt 的命令提示行里输入 `show compile:dependencyClasspath`，你不应该看到 derby jar。但是如果你输入 `show test:dependencyClasspath`，
+现在，如果你在 sbt 的命令提示行里输入 `show Compile/dependencyClasspath`，你不应该看到 derby jar。但是如果你输入 `show Test/dependencyClasspath`，
 你应该在列表中看到 derby jar。
 
 通常，测试相关的依赖，如 [ScalaCheck](https://scalacheck.org/)，
@@ -2024,7 +2043,7 @@ To factor out common settings across multiple projects, create a sequence named 
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.12.14"
+  scalaVersion := "2.12.16"
 )
 
 lazy val core = (project in file("core"))
@@ -2325,7 +2344,7 @@ val sampleIntTask = taskKey[Int]("A sample int task.")
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.16"
 
 lazy val library = (project in file("library"))
   .settings(
@@ -2370,7 +2389,7 @@ val sampleStringTask = taskKey[String]("A sample string task.")
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.16"
 
 lazy val library = (project in file("library"))
   .settings(
@@ -2567,12 +2586,12 @@ import sbt._
 
 object Dependencies {
   // Versions
-  lazy val akkaVersion = "2.3.8"
+  lazy val akkaVersion = "2.6.19"
 
   // Libraries
   val akkaActor = "com.typesafe.akka" %% "akka-actor" % akkaVersion
   val akkaCluster = "com.typesafe.akka" %% "akka-cluster" % akkaVersion
-  val specs2core = "org.specs2" %% "specs2-core" % "2.4.17"
+  val specs2core = "org.specs2" %% "specs2-core" % "4.16.0"
 
   // Projects
   val backendDeps =
@@ -2587,7 +2606,7 @@ import Dependencies._
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.16"
 
 lazy val backend = (project in file("backend"))
   .settings(

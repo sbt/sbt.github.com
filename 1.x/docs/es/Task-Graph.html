@@ -84,7 +84,7 @@ de tareas evalúa el cuerpo de <code>scalacOptions</code>, sin importar que esas
 aparezcan en el cuerpo.</strong>
 </p><p>Mira el siguiente ejemplo:
 </p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.14&quot;
+ThisBuild / scalaVersion := &quot;2.12.16&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -112,7 +112,7 @@ lazy val root = (project in file(&quot;.&quot;))
 tales líneas.
 </p><p>Aquí hay otro ejemplo:
 </p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.14&quot;
+ThisBuild / scalaVersion := &quot;2.12.16&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -217,7 +217,7 @@ Supongamos que ya ha sido establecida a algún valor, pero que quieres filtrar
   .settings(
     name := &quot;Hello&quot;,
     organization := &quot;com.example&quot;,
-    scalaVersion := &quot;2.12.14&quot;,
+    scalaVersion := &quot;2.12.16&quot;,
     version := &quot;0.1.0-SNAPSHOT&quot;,
     scalacOptions := List(&quot;-encoding&quot;, &quot;utf8&quot;, &quot;-Xfatal-warnings&quot;, &quot;-deprecation&quot;, &quot;-unchecked&quot;),
     scalacOptions := {
@@ -335,7 +335,7 @@ describir las acciones en lugar de comandos del sistema.
 tarea es ejecutada una única vez incluso cuando de ella dependen múltiples
 tareas.
 Por ejemplo, incluso cuando múltiples tareas a lo largo del grafo de tareas
-dependen de <code>compile in Compile</code> la compilación será ejecutada exactamente una
+dependen de <code>Compile / compile</code> la compilación será ejecutada exactamente una
 única vez.
 </p><p>La segunda es la paralelización. Utilizando el grafo de tareas el motor
 de tareas puede programar tareas mutuamente no dependientes en paralelo.
@@ -394,7 +394,6 @@ duplicaciones, procesar en paralelo y la personalización.
       <div class="nav" id="topbar">
         <a href="../../../learn.html">Learn</a>
         <a href="../../../download.html">Download</a>
-        <a href="../../../support.html">Support</a>
         <a href="../../../community.html">Get Involved</a>
         <a id="source-code" href="https://github.com/sbt/sbt"><img src="../files/github-logo-teal.svg" alt="Source code" class="social"></a>
         <a id="twitter" href="https://twitter.com/scala_sbt"><img src="../files/twitter-logo-teal.svg" alt="sbt on Twitter" class="social"></a>

@@ -51,7 +51,7 @@ Instalar sbt
 
 Para crear un proyecto sbt necesitarás realizar los siguientes pasos:
 
--   Instalar JDK (recomendamos AdoptOpenJDK JDK 8 u AdoptOpenJDK JDK 11).
+-   Instalar JDK (recomendamos Eclipse Adoptium Temurin JDK 8, 11, u 17).
 -   Instalar sbt.
 -   Configurar un proyecto [hola mundo][Hello] simple
 -   Continuar con [Ejecución][Running] para aprender cómo ejecutar sbt.
@@ -70,24 +70,30 @@ Si has tenido algún problema ejecutando sbt, revisa las
 proxies HTTP y opciones de la JVM.
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.tgz
   [Manual-Installation]: Manual-Installation.html
-  [AdoptOpenJDK]: https://adoptopenjdk.net/
+  [AdoptiumOpenJDK]: https://adoptium.net
 
 Instalar sbt on macOS
 ---------------------
 
+### Install sbt with **cs setup**
+
+Follow [Install](https://www.scala-lang.org/download/) page, and install Scala using Coursier. This should install the latest stable version of `sbt`.
+
 ### Instalar JDK
 
-Sigue el link para instalar [JDK 8 u 11][AdoptOpenJDK].
+Sigue el link para instalar [JDK 8 u 11][AdoptiumOpenJDK].
 
-Or use [SDKMAN!](https://sdkman.io/):
+Or use SDKMAN.
 
-```
-$ sdk list java
-$ sdk install java 11.0.4.hs-adpt
+#### [SDKMAN!](https://sdkman.io/)
+
+```scala
+$ sdk install java $(sdk list java | grep -o "\b8\.[0-9]*\.[0-9]*\-tem" | head -1)
+$ sdk install sbt
 ```
 
 ### Instalar desde un paquete universal
@@ -106,24 +112,22 @@ Descarga el paquete [ZIP][ZIP] o [TGZ][TGZ] y descomprímelo.
 $ brew install sbt
 ```
 
-#### [SDKMAN!](https://sdkman.io/)
 
-```
-$ sdk install sbt
-```
-
-
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.tgz
-  [AdoptOpenJDK]: https://adoptopenjdk.net/
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.tgz
+  [AdoptiumOpenJDK]: https://adoptium.net
 
 Instalar sbt en Windows
 -----------------------
 
+### Install sbt with **cs setup**
+
+Follow [Install](https://www.scala-lang.org/download/) page, and install Scala using Coursier. This should install the latest stable version of `sbt`.
+
 ### Instalar JDK
 
-Sigue el link para instalar [JDK 8 u 11][AdoptOpenJDK].
+Sigue el link para instalar [JDK 8 u 11][AdoptiumOpenJDK].
 
 ### Instalar desde un paquete universal
 
@@ -146,40 +150,46 @@ $ scoop install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.5.7/sbt-1.5.7.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.5.7.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.5.7.deb
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.7.1/sbt-1.7.1.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.7.1.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.7.1.deb
   [Manual-Installation]: Manual-Installation.html
   [website127]: https://github.com/sbt/website/issues/127
   [cert-bug]: https://bugs.launchpad.net/ubuntu/+source/ca-certificates-java/+bug/1739631
+  [openjdk-devel]: https://pkgs.org/download/java-1.8.0-openjdk-devel
 
 Installing sbt on Linux
 -----------------------
+
+### Install sbt with **cs setup**
+
+Follow [Install](https://www.scala-lang.org/download/) page, and install Scala using Coursier. This should install the latest stable version of `sbt`.
 
 ### Installing from SDKMAN
 
 To install both JDK and sbt, consider using [SDKMAN](https://sdkman.io/).
 
-```
-$ sdk install java $(sdk list java | grep -o "8\.[0-9]*\.[0-9]*\.hs-adpt" | head -1)
+```scala
+$ sdk install java $(sdk list java | grep -o "\b8\.[0-9]*\.[0-9]*\-tem" | head -1)
 $ sdk install sbt
 ```
 
-This has two advantages.
-1. It will install the official packaging by AdoptOpenJDK, as opposed to the ["mystery meat OpenJDK builds"](https://mail.openjdk.java.net/pipermail/jdk8u-dev/2019-May/009330.html).
-2. It will install `tgz` packaging of sbt that contains all JAR files. (DEB and RPM packages do not to save bandwidth)
+Using Coursier or SDKMAN has two advantages.
+
+1. They will install the official packaging by Eclipse Adoptium, as opposed to the ["mystery meat OpenJDK builds"](https://mail.openjdk.java.net/pipermail/jdk8u-dev/2019-May/009330.html).
+2. They will install `tgz` packaging of sbt that contains all JAR files. (DEB and RPM packages do not to save bandwidth)
 
 ### Instalar JDK
 
-Primero desberás de instalar JDK. Recomendamos AdoptOpenJDK JDK 8 u AdoptOpenJDK JDK 11.
+Primero desberás de instalar JDK. Recomendamos **Eclipse Adoptium Temurin JDK 8**, **JDK 11**, u **JDK 17**.
 
 Los detalles sobre el nombre de los paquetes cambian de una distribución a otra.
 Por ejemplo, Ubuntu xenial (16.04LTS) usa
 [openjdk-8-jdk](https://packages.ubuntu.com/hu/xenial/openjdk-8-jdk).
 La familia Redhat lo llama
-[java-1.8.0-openjdk-devel](https://apps.fedoraproject.org/packages/java-1.8.0-openjdk-devel).
+[java-1.8.0-openjdk-devel][openjdk-devel].
 
 ### Instalar desde un paquete universal
 
@@ -333,8 +343,10 @@ utilizando tu editor de texto favorito con este contenido:
 ```scala
 package example
 
-object Hello extends App {
-  println("Hello")
+object Hello {
+  def main(args: Array[String]): Unit = {
+    println("Hello")
+  }
 }
 ```
 
@@ -397,7 +409,7 @@ Hello
 ### Establecer `ThisBuild / scalaVersion` desde el shell de sbt
 
 ```
-sbt:foo-build> set ThisBuild / scalaVersion := "2.13.6"
+sbt:foo-build> set ThisBuild / scalaVersion := "2.13.8"
 [info] Defining ThisBuild / scalaVersion
 ```
 
@@ -405,7 +417,7 @@ sbt:foo-build> set ThisBuild / scalaVersion := "2.13.6"
 
 ```
 sbt:foo-build> scalaVersion
-[info] 2.13.6
+[info] 2.13.8
 ```
 
 ### Guardar la sesión actual en build.sbt
@@ -420,7 +432,7 @@ sbt:foo-build> session save
 El fichero `build.sbt` ahora debería de contener:
 
 ```scala
-ThisBuild / scalaVersion := "2.13.6"
+ThisBuild / scalaVersion := "2.13.8"
 ```
 
 ### Dar un nombre a tu proyecto
@@ -812,10 +824,12 @@ package example
 import scala.concurrent._, duration._
 import core.Weather
 
-object Hello extends App {
-  val w = Await.result(Weather.weather, 10.seconds)
-  println(s"Hello! The weather in New York is $w.")
-  Weather.http.close()
+object Hello {
+  def main(args: Array[String]): Unit = {
+    val w = Await.result(Weather.weather, 10.seconds)
+    println(s"Hello! The weather in New York is $w.")
+    Weather.http.close()
+  }
 }
 ```
 
@@ -1315,7 +1329,7 @@ Definiciones de construcción
 
 Esta página describe las definiciones de construcción (build definitions), 
 incluyendo algo de "teoría" y la sintaxis de `build.sbt`. Se supone que has 
-instalado una versión reciente de sbt, como sbt 1.5.7, que sabes cómo 
+instalado una versión reciente de sbt, como sbt 1.7.1, que sabes cómo 
 [usar sbt][Running] y que has leído las páginas anteriores de la Guía de inicio.
 
 Esta página explica la definición de construcción de `build.sbt`.
@@ -1331,7 +1345,7 @@ crea un fichero llamado `project/build.properties` en el que se especifica la
 versión de sbt como sigue:
 
 ```
-sbt.version=1.5.7
+sbt.version=1.7.1
 ```
 
 Si la versión requerida no está disponible localmente, el lanzador `sbt` se la 
@@ -1378,7 +1392,7 @@ utilizando un *DSL de build.sbt*
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.16"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -1568,7 +1582,7 @@ el "estilo plano".
 
 ```scala
 ThisBuild / version := "1.0"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.16"
 ```
 
 Esta sintaxis es la recomendada para configuraciones con ámbito `ThisBuild` plugins añadidos.
@@ -1584,7 +1598,7 @@ gestionadas, que en `build.sbt` tienen este aspecto:
 val derby = "org.apache.derby" % "derby" % "10.4.1.3"
 
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.16"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -1664,7 +1678,7 @@ predeterminadas en el ámbito de subproyectos. (Ver [Ámbitos][Scopes])
 ```scala
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.16"
 
 lazy val core = (project in file("core"))
   .settings(
@@ -1979,7 +1993,7 @@ Mira el siguiente ejemplo:
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.16"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -2016,7 +2030,7 @@ Aquí hay otro ejemplo:
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.16"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -2155,7 +2169,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "Hello",
     organization := "com.example",
-    scalaVersion := "2.12.14",
+    scalaVersion := "2.12.16",
     version := "0.1.0-SNAPSHOT",
     scalacOptions := List("-encoding", "utf8", "-Xfatal-warnings", "-deprecation", "-unchecked"),
     scalacOptions := {
@@ -2332,7 +2346,7 @@ La primera es evitar la duplicación. Con la programación basada en flujo una
 tarea es ejecutada una única vez incluso cuando de ella dependen múltiples
 tareas.
 Por ejemplo, incluso cuando múltiples tareas a lo largo del grafo de tareas
-dependen de `compile in Compile` la compilación será ejecutada exactamente una
+dependen de `Compile / compile` la compilación será ejecutada exactamente una
 única vez.
 
 La segunda es la paralelización. Utilizando el grafo de tareas el motor
@@ -2738,7 +2752,7 @@ construcción para claves usadas con frecuencia tales como `version`,
 
 ```scala
 ThisBuild / organization := "com.example",
-ThisBuild / scalaVersion := "2.12.14",
+ThisBuild / scalaVersion := "2.12.16",
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -2985,7 +2999,7 @@ lazy val projA = (project in file("a"))
 ¿Cuál es el valor de `projA / name`?
 
 1. `"foo-2.11.11"`
-2. `"foo-2.12.14"`
+2. `"foo-2.12.16"`
 3. ¿otra cosa?
 
 La respuesta es `"foo-2.11.11"`.
@@ -3425,7 +3439,7 @@ libraryDependencies += "org.apache.derby" % "derby" % "10.4.1.3"
 ```
 
 Si escribes eso en `build.sbt` y luego ejecutas `update`, sbt debería descargar
-Derby en `~/.ivy2/cache/org.apache.derby/`. (Por cierto, `update` es una
+Derby en `$COURSIER_CACHE/https/repo1.maven.org/maven2/org/apache/derby/`. (Por cierto, `update` es una
 dependencia de `compile` por lo que no hay necesidad de estar escribiendo 
 `update` todo el rato.)
 
@@ -3449,14 +3463,14 @@ Si usas `groupID %% artifactID % revision` en lugar de
 del artefacto. Esto simplemente es un atajo. Podrías escribir esto sin el `%%`:
 
 ```scala
-libraryDependencies += "org.scala-tools" % "scala-stm_2.11" % "0.3"
+libraryDependencies += "org.scala-stm" % "scala-stm_2.13" % "0.9.1"
 ```
 
-Si asumimos que `scalaVersion` para tu construcción es `2.11.1` lo siguiente es
-idéntico a lo anterior (fíjate en el doble `%%` tras `"org.scala-tools"`):
+Si asumimos que `scalaVersion` para tu construcción es `2.13.8` lo siguiente es
+idéntico a lo anterior (fíjate en el doble `%%` tras `"org.scala-stm"`):
 
 ```scala
-libraryDependencies += "org.scala-tools" %% "scala-stm" % "0.3"
+libraryDependencies += "org.scala-stm" %% "scala-stm" % "0.9.1"
 ```
 
 La idea es que muchas dependencias son compiladas para múltiples versiones de
@@ -3570,7 +3584,7 @@ libraryDependencies += "org.apache.derby" % "derby" % "10.4.1.3" % Test
 
 Ahora, si escribes `show compile:dependencyClasspath` en el prompt interactivo
 de sbt no deberías ver listado el jar de Derby. Pero si escribes
-`show test:dependencyClasspath` sí que deberías de verlo.
+`show Test/dependencyClasspath` sí que deberías de verlo.
 
 Habitualmente, las dependencias relacionadas con tests tales como 
 [ScalaCheck](https://scalacheck.org/),
@@ -3774,7 +3788,7 @@ val sampleIntTask = taskKey[Int]("A sample int task.")
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.16"
 
 lazy val library = (project in file("library"))
   .settings(
@@ -3836,7 +3850,7 @@ val sampleStringTask = taskKey[String]("A sample string task.")
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.16"
 
 lazy val library = (project in file("library"))
   .settings(
@@ -4095,12 +4109,12 @@ import sbt._
 
 object Dependencies {
   // Versions
-  lazy val akkaVersion = "2.3.8"
+  lazy val akkaVersion = "2.6.19"
 
   // Libraries
   val akkaActor = "com.typesafe.akka" %% "akka-actor" % akkaVersion
   val akkaCluster = "com.typesafe.akka" %% "akka-cluster" % akkaVersion
-  val specs2core = "org.specs2" %% "specs2-core" % "2.4.17"
+  val specs2core = "org.specs2" %% "specs2-core" % "4.16.0"
 
   // Projects
   val backendDeps =
@@ -4117,7 +4131,7 @@ import Dependencies._
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.14"
+ThisBuild / scalaVersion := "2.12.16"
 
 lazy val backend = (project in file("backend"))
   .settings(

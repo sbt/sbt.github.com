@@ -45,7 +45,7 @@
                   <h2 id="%E8%BF%BD%E5%8A%A0%E5%80%BC">追加值<a href="#%E8%BF%BD%E5%8A%A0%E5%80%BC" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><h3 id="%E8%BF%BD%E5%8A%A0%E5%80%BC%EF%BC%9A++%E5%92%8C">追加值： <code>+=</code> 和 <code>++=</code><a href="#%E8%BF%BD%E5%8A%A0%E5%80%BC%EF%BC%9A++%E5%92%8C" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>通过 <code>:=</code> 方法赋值是最简单的转换，但是 key 也有很多其他的方法。如果 <code>SettingKey[T]</code> 中的 <code>T</code> 是一个列表，例如，一个 key 的值的类型是 sequence，你就可以往列表中追加而不是替换。
 </p><ul><li><code>+=</code> 会追加单个元素到列表中。
 </li><li><code>++=</code> 会连接两个列表。
-</li></ul><p>例如，一个 key <code>sourceDirectories in Compile</code> 的值是 <code>Seq[File]</code>。默认情况下该 key 的值会包含 <code>src/main/scala</code>。如果你也想编译叫做 source 的目录下的源代码（因为你不得不成为非标准的），你可以添加该目录：
+</li></ul><p>例如，一个 key <code>Compile / sourceDirectories</code> 的值是 <code>Seq[File]</code>。默认情况下该 key 的值会包含 <code>src/main/scala</code>。如果你也想编译叫做 source 的目录下的源代码（因为你不得不成为非标准的），你可以添加该目录：
 </p><pre><code class="prettyprint lang-scala">Compile / sourceDirectories += new File(&quot;source&quot;)
 </code></pre><p>或者，遵循约定使用 sbt 包中的 <code>file()</code> 函数：
 </p><pre><code class="prettyprint lang-scala">Compile / sourceDirectories += file(&quot;source&quot;)
@@ -61,7 +61,7 @@
 </p><h4 id="%E4%BE%9D%E8%B5%96%E4%BA%8E%E5%85%B6%E4%BB%96+key+%E7%9A%84%E5%80%BC%E7%9A%84+task">依赖于其他 key 的值的 task<a href="#%E4%BE%9D%E8%B5%96%E4%BA%8E%E5%85%B6%E4%BB%96+key+%E7%9A%84%E5%80%BC%E7%9A%84+task" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>你可以计算一些 task 或者 setting 的值来定义另一个 task 或者为另一个 task 追加值。通过使用 <code>Def.task</code> 作为<code>:=</code>， <code>+=</code> 或者 <code>++=</code>的参数可以做到。
 </p><p>作为第一个例子，考虑追加一个使用项目基目录和编译 classpath 的 source generator。
 </p><pre><code class="prettyprint lang-scala">Compile / sourceGenerators += Def.task {
-  myGenerator(baseDirectory.value, (managedClasspath in Compile).value)
+  myGenerator(baseDirectory.value, (Compile / managedClasspath).value)
 }
 </code></pre><h3 id="%E8%BF%BD%E5%8A%A0%E4%BE%9D%E8%B5%96%EF%BC%9A+%E5%92%8C">追加依赖：<code>+=</code> 和 <code>++=</code><a href="#%E8%BF%BD%E5%8A%A0%E4%BE%9D%E8%B5%96%EF%BC%9A+%E5%92%8C" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>当追加到一个已经存在的 setting 或者 task 时可以使用另一些 key，就像它们可以通过 <code>:=</code> 赋值一样。例如，比方说你有一个以项目名称命名的覆盖率报告，而且你想在每次清除文件的时候都清除它：
 </p><pre><code class="prettyprint lang-scala">cleanFiles += file(&quot;coverage-report-&quot; + name.value + &quot;.txt&quot;)
@@ -108,7 +108,6 @@
       <div class="nav" id="topbar">
         <a href="../../../learn.html">Learn</a>
         <a href="../../../download.html">Download</a>
-        <a href="../../../support.html">Support</a>
         <a href="../../../community.html">Get Involved</a>
         <a id="source-code" href="https://github.com/sbt/sbt"><img src="../files/github-logo-teal.svg" alt="Source code" class="social"></a>
         <a id="twitter" href="https://twitter.com/scala_sbt"><img src="../files/twitter-logo-teal.svg" alt="sbt on Twitter" class="social"></a>

@@ -75,8 +75,10 @@ proyecto. Después, crea el fichero <code>Hello.scala</code> en el directorio <c
 utilizando tu editor de texto favorito con este contenido:
 </p><pre><code class="prettyprint lang-scala">package example
 
-object Hello extends App {
-  println(&quot;Hello&quot;)
+object Hello {
+  def main(args: Array[String]): Unit = {
+    println(&quot;Hello&quot;)
+  }
 }
 </code></pre><p>Este nuevo fichero debería de ser detectado por el comando en ejecución:
 </p><pre><code class="">[info] Compiling 1 Scala source to /tmp/foo-build/target/scala-2.12/classes ...
@@ -107,15 +109,15 @@ Runs a main class, passing along arguments provided on the command line.
 [info] Running example.Hello
 Hello
 [success] Total time: 1 s, completed May 6, 2018 4:10:44 PM
-</code></pre><h3 id="Establecer++desde+el+shell+de+sbt">Establecer <code>ThisBuild / scalaVersion</code> desde el shell de sbt<a href="#Establecer++desde+el+shell+de+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:foo-build&gt; set ThisBuild / scalaVersion := &quot;2.13.6&quot;
+</code></pre><h3 id="Establecer++desde+el+shell+de+sbt">Establecer <code>ThisBuild / scalaVersion</code> desde el shell de sbt<a href="#Establecer++desde+el+shell+de+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:foo-build&gt; set ThisBuild / scalaVersion := &quot;2.13.8&quot;
 [info] Defining ThisBuild / scalaVersion
 </code></pre><h3 id="Comprobar+la+entrada+%3A">Comprobar la entrada <code>scalaVersion</code>:<a href="#Comprobar+la+entrada+%3A" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:foo-build&gt; scalaVersion
-[info] 2.13.6
+[info] 2.13.8
 </code></pre><h3 id="Guardar+la+sesi%C3%B3n+actual+en+build.sbt">Guardar la sesión actual en build.sbt<a href="#Guardar+la+sesi%C3%B3n+actual+en+build.sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Podemos guardar la configuración temporal utilizando <code>session save</code>.
 </p><pre><code class="">sbt:foo-build&gt; session save
 [info] Reapplying settings...
 </code></pre><p>El fichero <code>build.sbt</code> ahora debería de contener:
-</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.6&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.8&quot;
 </code></pre><h3 id="Dar+un+nombre+a+tu+proyecto">Dar un nombre a tu proyecto<a href="#Dar+un+nombre+a+tu+proyecto" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Utilizando un editor, modifica <code>build.sbt</code> con el siguiente contenido:
 </p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.6&quot;
 ThisBuild / organization := &quot;com.example&quot;
@@ -390,10 +392,12 @@ object Weather {
 import scala.concurrent._, duration._
 import core.Weather
 
-object Hello extends App {
-  val w = Await.result(Weather.weather, 10.seconds)
-  println(s&quot;Hello! The weather in New York is $w.&quot;)
-  Weather.http.close()
+object Hello {
+  def main(args: Array[String]): Unit = {
+    val w = Await.result(Weather.weather, 10.seconds)
+    println(s&quot;Hello! The weather in New York is $w.&quot;)
+    Weather.http.close()
+  }
 }
 </code></pre><p>Vamos a ejecutar la aplicación para ver si funciona:
 </p><pre><code class="">sbt:Hello&gt; run
@@ -559,7 +563,6 @@ escrito por William “Scala William” Narmontas.
       <div class="nav" id="topbar">
         <a href="../../../learn.html">Learn</a>
         <a href="../../../download.html">Download</a>
-        <a href="../../../support.html">Support</a>
         <a href="../../../community.html">Get Involved</a>
         <a id="source-code" href="https://github.com/sbt/sbt"><img src="../files/github-logo-teal.svg" alt="Source code" class="social"></a>
         <a id="twitter" href="https://twitter.com/scala_sbt"><img src="../files/twitter-logo-teal.svg" alt="sbt on Twitter" class="social"></a>

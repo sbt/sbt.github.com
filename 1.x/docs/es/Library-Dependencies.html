@@ -102,7 +102,7 @@ sbt entonces será suficiente. Por ejemplo, Apache Derby está en el repositorio
 estándar de Maven2:
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot;
 </code></pre><p>Si escribes eso en <code>build.sbt</code> y luego ejecutas <code>update</code>, sbt debería descargar
-Derby en <code>~/.ivy2/cache/org.apache.derby/</code>. (Por cierto, <code>update</code> es una
+Derby en <code>$COURSIER_CACHE/https/repo1.maven.org/maven2/org/apache/derby/</code>. (Por cierto, <code>update</code> es una
 dependencia de <code>compile</code> por lo que no hay necesidad de estar escribiendo 
 <code>update</code> todo el rato.)
 </p><p>Por supuesto, puedes también utilizar <code>++=</code> para añadir en un único paso una
@@ -116,10 +116,10 @@ serie de dependencias:
 <code>groupID % artifactID % revision</code> (la diferencia está en el doble <code>%%</code> tras 
 <code>groupId</code>), sbt añadirá la versión del binario de Scala de tu proyecto al nombre
 del artefacto. Esto simplemente es un atajo. Podrías escribir esto sin el <code>%%</code>:
-</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-tools&quot; % &quot;scala-stm_2.11&quot; % &quot;0.3&quot;
-</code></pre><p>Si asumimos que <code>scalaVersion</code> para tu construcción es <code>2.11.1</code> lo siguiente es
-idéntico a lo anterior (fíjate en el doble <code>%%</code> tras <code>&quot;org.scala-tools&quot;</code>):
-</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-tools&quot; %% &quot;scala-stm&quot; % &quot;0.3&quot;
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-stm&quot; % &quot;scala-stm_2.13&quot; % &quot;0.9.1&quot;
+</code></pre><p>Si asumimos que <code>scalaVersion</code> para tu construcción es <code>2.13.8</code> lo siguiente es
+idéntico a lo anterior (fíjate en el doble <code>%%</code> tras <code>&quot;org.scala-stm&quot;</code>):
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-stm&quot; %% &quot;scala-stm&quot; % &quot;0.9.1&quot;
 </code></pre><p>La idea es que muchas dependencias son compiladas para múltiples versiones de
 Scala y con toda seguridad lo que querrás será obtener aquella que ofrece
 compatibilidad binaria con tu proyecto.
@@ -181,7 +181,7 @@ forma:
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot; % Test
 </code></pre><p>Ahora, si escribes <code>show compile:dependencyClasspath</code> en el prompt interactivo
 de sbt no deberías ver listado el jar de Derby. Pero si escribes
-<code>show test:dependencyClasspath</code> sí que deberías de verlo.
+<code>show Test/dependencyClasspath</code> sí que deberías de verlo.
 </p><p>Habitualmente, las dependencias relacionadas con tests tales como 
 <a href="https://scalacheck.org/">ScalaCheck</a>,
 <a href="http://specs2.org">Specs2</a> y 
@@ -231,7 +231,6 @@ bibliotecas en <a href="../docs/Library-Management.html">esta página</a>.
       <div class="nav" id="topbar">
         <a href="../../../learn.html">Learn</a>
         <a href="../../../download.html">Download</a>
-        <a href="../../../support.html">Support</a>
         <a href="../../../community.html">Get Involved</a>
         <a id="source-code" href="https://github.com/sbt/sbt"><img src="../files/github-logo-teal.svg" alt="Source code" class="social"></a>
         <a id="twitter" href="https://twitter.com/scala_sbt"><img src="../files/twitter-logo-teal.svg" alt="sbt on Twitter" class="social"></a>
