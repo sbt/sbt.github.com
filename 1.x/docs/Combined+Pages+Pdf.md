@@ -13710,7 +13710,7 @@ lazy val root = (project in file("."))
 ```
 
 -   `configs(IntegrationTest)` adds the predefined integration test
-    configuration. This configuration is referred to by the name it.
+    configuration. This configuration is referred to by the name `it`. 
 -   `settings(Defaults.itSettings)` adds compilation, packaging,
     and testing actions and settings in the IntegrationTest
     configuration.
