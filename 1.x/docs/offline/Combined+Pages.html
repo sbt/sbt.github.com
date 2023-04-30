@@ -2406,7 +2406,7 @@ to <code>addSbtPlugin</code>:
 </code></pre><p>Not every plugin is located on one of the default repositories and a
 plugin’s documentation may instruct you to also add the repository where
 it can be found:
-</p><pre><code class="prettyprint lang-scala">resolvers += Resolver.sonatypeRepo(&quot;public&quot;)
+</p><pre><code class="prettyprint lang-scala">resolvers ++= Resolver.sonatypeOssRepos(&quot;public&quot;)
 </code></pre><p>Plugins usually provide settings that get added to a project to enable
 the plugin’s functionality. This is described in the next section.
 </p><h3 id="Enabling+and+disabling+auto+plugins">Enabling and disabling auto plugins<a href="#Enabling+and+disabling+auto+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A plugin can declare that its settings be automatically added to the build definition,
@@ -9564,8 +9564,8 @@ page describes how to define other types of repositories.
 <a href="https://repo1.maven.org/maven2/">https://repo1.maven.org/maven2/</a> and is included by default
 </li><li><code>JavaNet2Repository</code> This is the java.net Maven2 Repository at
 <a href="https://maven.java.net/content/repositories/public/">https://maven.java.net/content/repositories/public/</a>
-</li><li><code>Resolver.sonatypeRepo(&quot;public&quot;)</code> (or “snapshots”, “staging”, “releases”) This is Sonatype OSS Maven Repository at
-<a href="https://oss.sonatype.org/content/repositories/public">https://oss.sonatype.org/content/repositories/public</a>
+</li><li><code>Resolver.sonatypeOssRepos(&quot;public&quot;)</code> (or “snapshots”, “staging”, “releases”) This is Sonatype OSS Maven Repository at
+<a href="https://oss.sonatype.org/content/repositories/public">https://oss.sonatype.org/content/repositories/public</a>, <a href="https://s01.oss.sonatype.org/content/repositories">https://s01.oss.sonatype.org/content/repositories</a>
 </li><li><code>Resolver.typesafeRepo(&quot;releases&quot;)</code> (or “snapshots”) This is Typesafe Repository at
 <a href="https://repo.typesafe.com/typesafe/releases">https://repo.typesafe.com/typesafe/releases</a>
 </li><li><code>Resolver.typesafeIvyRepo(&quot;releases&quot;)</code> (or “snapshots”) This is Typesafe Ivy Repository at

@@ -57,7 +57,7 @@ Ivy のモジュール ID を <code>addSbtPlugin</code> メソッドに渡して
 </p><pre><code class="prettyprint lang-scala">addSbtPlugin(&quot;com.eed3si9n&quot; % &quot;sbt-assembly&quot; % &quot;0.11.2&quot;)
 </code></pre><p>全てのプラグインがデフォルトのリポジトリに存在するわけではないので、
 プラグインのドキュメントでそのプラグインが見つかるリポジトリを resolvers に追加するよう指示されていることもあるだろう。
-</p><pre><code class="prettyprint lang-scala">resolvers += Resolver.sonatypeRepo(&quot;public&quot;)
+</p><pre><code class="prettyprint lang-scala">resolvers ++= Resolver.sonatypeOssRepos(&quot;public&quot;)
 </code></pre><p>プラグインは普通、プロジェクトでそのプラグインの機能を有効にするためのセッティング群を提供している。
 これは次のセクションで説明する。
 </p><h3 id="auto+plugin+%E3%81%AE%E6%9C%89%E5%8A%B9%E5%8C%96%E3%81%A8%E7%84%A1%E5%8A%B9%E5%8C%96">auto plugin の有効化と無効化<a href="#auto+plugin+%E3%81%AE%E6%9C%89%E5%8A%B9%E5%8C%96%E3%81%A8%E7%84%A1%E5%8A%B9%E5%8C%96" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>プラグインは、自身が持つセッティング群がビルド定義に自動的に追加されるよう宣言することができ、

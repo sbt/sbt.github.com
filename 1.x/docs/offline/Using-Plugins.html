@@ -59,7 +59,7 @@ to <code>addSbtPlugin</code>:
 </code></pre><p>Not every plugin is located on one of the default repositories and a
 plugin’s documentation may instruct you to also add the repository where
 it can be found:
-</p><pre><code class="prettyprint lang-scala">resolvers += Resolver.sonatypeRepo(&quot;public&quot;)
+</p><pre><code class="prettyprint lang-scala">resolvers ++= Resolver.sonatypeOssRepos(&quot;public&quot;)
 </code></pre><p>Plugins usually provide settings that get added to a project to enable
 the plugin’s functionality. This is described in the next section.
 </p><h3 id="Enabling+and+disabling+auto+plugins">Enabling and disabling auto plugins<a href="#Enabling+and+disabling+auto+plugins" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A plugin can declare that its settings be automatically added to the build definition,
