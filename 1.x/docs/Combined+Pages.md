@@ -5475,7 +5475,7 @@ your plugin to the list.
   ([docs](https://kevin-lee.github.io/sbt-docusaur)): build a website using Docusaurus and publish to GitHub Pages with minimal effort - works well with GitHub Actions.
 - [sbt-hl-compiler](https://github.com/cchantep/sbt-hl-compiler/): compile the code snippets from documentation (to keep it consistent). <!-- 1 star -->
 - [sbt-scaladoc-compiler](https://github.com/cchantep/sbt-scaladoc-compiler/): compile the code snippets included in Scaladoc comments. <!-- 2 stars -->
-  
+
 #### One jar plugins
 
 - [sbt-assembly](https://github.com/sbt/sbt-assembly): create fat JARs.
@@ -5539,7 +5539,7 @@ your plugin to the list.
   applications as systemd services directly to a Raspberry Pi, ensuring 
   dependencies (e.g. wiringpi) are met.
 - [sbt-kind](https://github.com/tirithel/sbt-kind): load built docker images into a [kind](https://kind.sigs.k8s.io/) cluster.
-  
+
 #### Utility and system plugins
 
 - [sbt-revolver](https://github.com/spray/sbt-revolver): auto-restart forked
@@ -7683,7 +7683,7 @@ sbt 1.1.6 was brought to you by 15 contributors, according to `git shortlog -sn 
   [@tanishiking]: https://github.com/tanishiking
   [@dwestheide]: https://github.com/dwestheide
   [@OlegYch]: https://github.com/OlegYch
-   
+
   [io150]: https://github.com/sbt/io/pull/150
   [io153]: https://github.com/sbt/io/pull/153
   [io154]: https://github.com/sbt/io/pull/154
@@ -15537,11 +15537,10 @@ with file contents
 If the above does not work for your system, then another approach is to explicitly provide the boot credentials via:
 
     -Dsbt.boot.credentials="$HOME/.ivy2/.credentials"
-  
+
 As well as add the credentials to your build file directly:
 
     credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
-    
 
 #### Launcher Script
 
@@ -18597,11 +18596,11 @@ def selectSome(items: Seq[String]): Parser[Seq[String]] = {
      selectSome(remaining).?.map(v +: _.getOrElse(Seq()))
  } 
 ```
- 
+
  As you can see, the `flatMap` function provides the previous value.  With this info, a new
  parser is constructed for the remaining items.  The `map` combinator is also used in order
  to transform the output of the parser.
- 
+
  The parser is called recursively, until it is found the trivial case of no possible choices.
 
 
@@ -19575,7 +19574,7 @@ In addition:
    `$HOME/.sbt/1.0/plugins//build.sbt`
    should contain `sbtPlugin := true`. This can be used for quicker
    turnaround when developing a plugin initially:
-   
+
    1.  Edit the global plugin code
    2.  `reload` the project you want to use the modified plugin in
    3.  sbt will rebuild the plugin and use it for the project.
