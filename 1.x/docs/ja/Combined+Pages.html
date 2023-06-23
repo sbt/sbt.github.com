@@ -187,16 +187,16 @@ Runs a main class, passing along arguments provided on the command line.
 [info] Running example.Hello
 Hello
 [success] Total time: 1 s, completed May 6, 2018 4:10:44 PM
-</code></pre><h3 id="sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%8B%E3%82%89+ThisBuild+%2F+scalaVersion+%E3%82%92%E3%82%BB%E3%83%83%E3%83%88%E3%81%99%E3%82%8B">sbt シェルから ThisBuild / scalaVersion をセットする<a href="#sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%8B%E3%82%89+ThisBuild+%2F+scalaVersion+%E3%82%92%E3%82%BB%E3%83%83%E3%83%88%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:foo-build&gt; set ThisBuild / scalaVersion := &quot;2.13.8&quot;
+</code></pre><h3 id="sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%8B%E3%82%89+ThisBuild+%2F+scalaVersion+%E3%82%92%E3%82%BB%E3%83%83%E3%83%88%E3%81%99%E3%82%8B">sbt シェルから ThisBuild / scalaVersion をセットする<a href="#sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%8B%E3%82%89+ThisBuild+%2F+scalaVersion+%E3%82%92%E3%82%BB%E3%83%83%E3%83%88%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:foo-build&gt; set ThisBuild / scalaVersion := &quot;2.13.11&quot;
 [info] Defining ThisBuild / scalaVersion
 </code></pre><p><code>scalaVersion</code> セッティングを確認する:
 </p><pre><code class="">sbt:foo-build&gt; scalaVersion
-[info] 2.13.8
+[info] 2.13.11
 </code></pre><h3 id="%E3%82%BB%E3%83%83%E3%82%B7%E3%83%A7%E3%83%B3%E3%82%92+build.sbt+%E3%81%B8%E3%81%A8%E4%BF%9D%E5%AD%98%E3%81%99%E3%82%8B">セッションを build.sbt へと保存する<a href="#%E3%82%BB%E3%83%83%E3%82%B7%E3%83%A7%E3%83%B3%E3%82%92+build.sbt+%E3%81%B8%E3%81%A8%E4%BF%9D%E5%AD%98%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>アドホックに設定したセッティングは <code>session save</code> で保存できる。
 </p><pre><code class="">sbt:foo-build&gt; session save
 [info] Reapplying settings...
 </code></pre><p><code>build.sbt</code> ファイルは以下のようになったはずだ:
-</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.8&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.11&quot;
 </code></pre><h3 id="%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%AB%E5%90%8D%E5%89%8D%E3%82%92%E4%BB%98%E3%81%91%E3%82%8B">プロジェクトに名前を付ける<a href="#%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%AB%E5%90%8D%E5%89%8D%E3%82%92%E4%BB%98%E3%81%91%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>エディタを使って、<code>build.sbt</code> を以下のように変更する:
 </p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.6&quot;
 ThisBuild / organization := &quot;com.example&quot;
@@ -938,7 +938,7 @@ sbt バージョンを指定する:
 </code></pre><h3 id="%E3%81%AF%E3%81%A9%E3%81%AE%E3%82%88%E3%81%86%E3%81%AB+settings+%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B%E3%81%8B"><code>build.sbt</code> はどのように settings を定義するか<a href="#%E3%81%AF%E3%81%A9%E3%81%AE%E3%82%88%E3%81%86%E3%81%AB+settings+%E3%82%92%E5%AE%9A%E7%BE%A9%E3%81%99%E3%82%8B%E3%81%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> において定義されるサブプロジェクトは、キーと値のペア列を持つと言ったが、
 このペアは<strong>セッティング式</strong> (setting expression) と呼ばれ、<strong>build.sbt DSL</strong> にて記述される。
 </p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.16&quot;
+ThisBuild / scalaVersion := &quot;2.12.18&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -1033,7 +1033,7 @@ import Keys._
 </p><h3 id="Bare+.sbt+%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9">Bare .sbt ビルド定義<a href="#Bare+.sbt+%E3%83%93%E3%83%AB%E3%83%89%E5%AE%9A%E7%BE%A9" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>セッティングは、<code>.settings(...)</code> の呼び出しの中だけではなく <code>build.sbt</code> に直書きすることができ、
 これは 「bare style」と呼ばれる。
 </p><pre><code class="prettyprint lang-scala">ThisBuild / version := &quot;1.0&quot;
-ThisBuild / scalaVersion := &quot;2.12.16&quot;
+ThisBuild / scalaVersion := &quot;2.12.18&quot;
 </code></pre><p>この構文は <code>ThisBuild</code> にスコープ付けされたセッティングを書いたり、プラグインを追加するのに向いている。
 スコープやプラグインに関してはまた後ほど。
 </p><h3 id="%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E3%81%B8%E3%81%AE%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%92%E5%8A%A0%E3%81%88%E3%82%8B">ライブラリへの依存性を加える<a href="#%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E3%81%B8%E3%81%AE%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%92%E5%8A%A0%E3%81%88%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>サードパーティのライブラリに依存するには二つの方法がある。
@@ -1042,7 +1042,7 @@ ThisBuild / scalaVersion := &quot;2.12.16&quot;
 </p><pre><code class="prettyprint lang-scala">val derby = &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot;
 
 ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.16&quot;
+ThisBuild / scalaVersion := &quot;2.12.18&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -1082,7 +1082,7 @@ lazy val core = project
 （<a href="Scopes.html">スコープ</a>参照）
 </p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
-ThisBuild / scalaVersion := &quot;2.12.16&quot;
+ThisBuild / scalaVersion := &quot;2.12.18&quot;
 
 lazy val core = (project in file(&quot;core&quot;))
   .settings(
@@ -1264,7 +1264,7 @@ val clean = taskKey[Unit](&quot;Deletes files produced by the build, such as gen
 の開始中括弧 (<code>{</code>) を評価するときには既に完了済みである。</strong>
 </p><p>具体例で説明しよう:
 </p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.16&quot;
+ThisBuild / scalaVersion := &quot;2.12.18&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -1292,7 +1292,7 @@ lazy val root = (project in file(&quot;.&quot;))
 <code>update</code> タスクは両者よりも事前発生している。
 </p><p>もう一つの例:
 </p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.16&quot;
+ThisBuild / scalaVersion := &quot;2.12.18&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -1388,7 +1388,7 @@ build.sbt に慣れるまでは、<code>.value</code> の呼び出しをタス�
   .settings(
     name := &quot;Hello&quot;,
     organization := &quot;com.example&quot;,
-    scalaVersion := &quot;2.12.16&quot;,
+    scalaVersion := &quot;2.12.18&quot;,
     version := &quot;0.1.0-SNAPSHOT&quot;,
     scalacOptions := List(&quot;-encoding&quot;, &quot;utf8&quot;, &quot;-Xfatal-warnings&quot;, &quot;-deprecation&quot;, &quot;-unchecked&quot;),
     scalacOptions := {
@@ -1667,7 +1667,7 @@ sbt はフォールバックとして <code>ThisBuild</code> 内を探す。
 <code>version</code>、 <code>scalaVersion</code>、 <code>organization</code>
 といったよく使われるキーに対してビルドレベルのデフォルトのセッティングを定義することができる。
 </p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;,
-ThisBuild / scalaVersion := &quot;2.12.16&quot;,
+ThisBuild / scalaVersion := &quot;2.12.18&quot;,
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -1783,7 +1783,7 @@ lazy val projX = (project in file(&quot;x&quot;))
   )
 </code></pre><p><code>name in projA</code> (sbt シェルだと <code>projA/name</code>) の値は何か?
 </p><ol><li><code>&quot;foo-2.11.11&quot;</code>
-</li><li><code>&quot;foo-2.12.16&quot;</code>
+</li><li><code>&quot;foo-2.12.18&quot;</code>
 </li><li>その他
 </li></ol><p>正解は <code>&quot;foo-2.11.11&quot;</code>。
 <code>.settings(...)</code> 内において、<code>scalaVersion</code> は自動的に <code>projA / Zero / Zero</code> にスコープ付けされるため、
@@ -2066,7 +2066,7 @@ sbt にその外部コンフィギュレーションファイルを使わせる�
 sbt はプロジェクトの Scala のバイナリバージョンをアーティファクト名に追加する。
 これはただの略記法なので <code>%%</code> 無しで書くこともできる:
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-stm&quot; % &quot;scala-stm_2.13&quot; % &quot;0.9.1&quot;
-</code></pre><p>君のビルドの Scala バージョンが <code>2.13.8</code> だとすると、以下の設定は上記と等価だ（“org.scala-stm” の後ろの二つ連なった %% に注意）:
+</code></pre><p>君のビルドの Scala バージョンが <code>2.13.11</code> だとすると、以下の設定は上記と等価だ（“org.scala-stm” の後ろの二つ連なった %% に注意）:
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-stm&quot; %% &quot;scala-stm&quot; % &quot;0.9.1&quot;
 </code></pre><p>多くの依存ライブラリは複数の Scala バイナリバージョンに対してコンパイルされており、
 ライブラリの利用者はバイナリ互換性のあるものを選択したいと思うはずである。
@@ -2214,7 +2214,7 @@ val sampleIntTask = taskKey[Int](&quot;A sample int task.&quot;)
 
 ThisBuild / organization := &quot;com.example&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
-ThisBuild / scalaVersion := &quot;2.12.16&quot;
+ThisBuild / scalaVersion := &quot;2.12.18&quot;
 
 lazy val library = (project in file(&quot;library&quot;))
   .settings(
@@ -2250,7 +2250,7 @@ val sampleStringTask = taskKey[String](&quot;A sample string task.&quot;)
 
 ThisBuild / organization := &quot;com.example&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
-ThisBuild / scalaVersion := &quot;2.12.16&quot;
+ThisBuild / scalaVersion := &quot;2.12.18&quot;
 
 lazy val library = (project in file(&quot;library&quot;))
   .settings(
@@ -2410,12 +2410,12 @@ sbt のビルドは、Scala コードにより定義されている。そのコ�
 
 object Dependencies {
   // Versions
-  lazy val akkaVersion = &quot;2.6.19&quot;
+  lazy val akkaVersion = &quot;2.6.20&quot;
 
   // Libraries
   val akkaActor = &quot;com.typesafe.akka&quot; %% &quot;akka-actor&quot; % akkaVersion
   val akkaCluster = &quot;com.typesafe.akka&quot; %% &quot;akka-cluster&quot; % akkaVersion
-  val specs2core = &quot;org.specs2&quot; %% &quot;specs2-core&quot; % &quot;4.16.0&quot;
+  val specs2core = &quot;org.specs2&quot; %% &quot;specs2-core&quot; % &quot;4.20.0&quot;
 
   // Projects
   val backendDeps =
@@ -2427,7 +2427,7 @@ object Dependencies {
 
 ThisBuild / organization := &quot;com.example&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
-ThisBuild / scalaVersion := &quot;2.12.16&quot;
+ThisBuild / scalaVersion := &quot;2.12.18&quot;
 
 lazy val backend = (project in file(&quot;backend&quot;))
   .settings(
@@ -2483,7 +2483,7 @@ bare ビルド定義は <code>.sbt</code> ファイルの位置から暗黙に�
 
 version := &quot;1.0&quot;
 
-scalaVersion := &quot;2.12.16&quot;
+scalaVersion := &quot;2.12.18&quot;
 </code></pre><h3 id="%280.13.7+%E4%BB%A5%E5%89%8D%29+%E8%A8%AD%E5%AE%9A%E3%81%AF%E7%A9%BA%E7%99%BD%E8%A1%8C%E3%81%A7%E5%8C%BA%E5%88%87%E3%82%8B">(0.13.7 以前) 設定は空白行で区切る<a href="#%280.13.7+%E4%BB%A5%E5%89%8D%29+%E8%A8%AD%E5%AE%9A%E3%81%AF%E7%A9%BA%E7%99%BD%E8%A1%8C%E3%81%A7%E5%8C%BA%E5%88%87%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><strong>注意</strong>: 0.13.7 以降は空白行の区切りを必要としない。
 </p><p>こんな風に <code>build.sbt</code> を書くことはできない。
 </p><pre><code class="prettyprint lang-scala">// 空白行がない場合はコンパイルしない

@@ -270,7 +270,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "hello",
     version := "1.0",
-    scalaVersion := "2.12.16"
+    scalaVersion := "2.12.18"
   )
 ```
 
@@ -563,7 +563,7 @@ lazy val root = (project in file("."))
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.16"
+ThisBuild / scalaVersion := "2.12.18"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -702,7 +702,7 @@ bare `.sbt` 构建定义由一个 `Setting[_]` 表达式的列表组成，而不
 ```scala
 name := "hello"
 version := "1.0"
-scalaVersion := "2.12.16"
+scalaVersion := "2.12.18"
 ```
 
 ### 添加依赖库
@@ -713,7 +713,7 @@ scalaVersion := "2.12.16"
 val derby = "org.apache.derby" % "derby" % "10.4.1.3"
 
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.16"
+ThisBuild / scalaVersion := "2.12.18"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -796,7 +796,7 @@ scalacOptions := {
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.16"
+ThisBuild / scalaVersion := "2.12.18"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -831,7 +831,7 @@ lazy val root = (project in file("."))
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.16"
+ThisBuild / scalaVersion := "2.12.18"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -953,7 +953,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "Hello",
     organization := "com.example",
-    scalaVersion := "2.12.16",
+    scalaVersion := "2.12.18",
     version := "0.1.0-SNAPSHOT",
     scalacOptions := List("-encoding", "utf8", "-Xfatal-warnings", "-deprecation", "-unchecked"),
     scalacOptions := {
@@ -1513,7 +1513,7 @@ lazy val projA = (project in file("a"))
 `projA / name` 的值是什么?
 
 1. `"foo-2.11.11"`
-2. `"foo-2.12.16"`
+2. `"foo-2.12.18"`
 3. 还有什么吗
 
 答案是 `"foo-2.11.11"`。
@@ -1912,7 +1912,7 @@ libraryDependencies ++= Seq(
 libraryDependencies += "org.scala-stm" % "scala-stm_2.13" % "0.9.1"
 ```
 
-假设这个构建的 `scalaVersion` 是 `2.13.8`，下面这种方式是等效的（注意 `"org.scala-stm"` 后面是 `%%`）：
+假设这个构建的 `scalaVersion` 是 `2.13.11`，下面这种方式是等效的（注意 `"org.scala-stm"` 后面是 `%%`）：
 
 ```scala
 libraryDependencies += "org.scala-stm" %% "scala-stm" % "0.9.1"
@@ -2043,7 +2043,7 @@ To factor out common settings across multiple projects, create a sequence named 
 lazy val commonSettings = Seq(
   organization := "com.example",
   version := "0.1.0",
-  scalaVersion := "2.12.16"
+  scalaVersion := "2.12.18"
 )
 
 lazy val core = (project in file("core"))
@@ -2344,7 +2344,7 @@ val sampleIntTask = taskKey[Int]("A sample int task.")
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.16"
+ThisBuild / scalaVersion := "2.12.18"
 
 lazy val library = (project in file("library"))
   .settings(
@@ -2389,7 +2389,7 @@ val sampleStringTask = taskKey[String]("A sample string task.")
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.16"
+ThisBuild / scalaVersion := "2.12.18"
 
 lazy val library = (project in file("library"))
   .settings(
@@ -2586,12 +2586,12 @@ import sbt._
 
 object Dependencies {
   // Versions
-  lazy val akkaVersion = "2.6.19"
+  lazy val akkaVersion = "2.6.20"
 
   // Libraries
   val akkaActor = "com.typesafe.akka" %% "akka-actor" % akkaVersion
   val akkaCluster = "com.typesafe.akka" %% "akka-cluster" % akkaVersion
-  val specs2core = "org.specs2" %% "specs2-core" % "4.16.0"
+  val specs2core = "org.specs2" %% "specs2-core" % "4.20.0"
 
   // Projects
   val backendDeps =
@@ -2606,7 +2606,7 @@ import Dependencies._
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.16"
+ThisBuild / scalaVersion := "2.12.18"
 
 lazy val backend = (project in file("backend"))
   .settings(

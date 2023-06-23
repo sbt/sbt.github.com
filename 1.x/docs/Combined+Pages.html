@@ -230,16 +230,16 @@ Runs a main class, passing along arguments provided on the command line.
 [info] Running example.Hello
 Hello
 [success] Total time: 1 s, completed May 6, 2018 4:10:44 PM
-</code></pre><h3 id="Set+ThisBuild+%2F+scalaVersion+from+sbt+shell">Set ThisBuild / scalaVersion from sbt shell<a href="#Set+ThisBuild+%2F+scalaVersion+from+sbt+shell" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:foo-build&gt; set ThisBuild / scalaVersion := &quot;2.13.8&quot;
+</code></pre><h3 id="Set+ThisBuild+%2F+scalaVersion+from+sbt+shell">Set ThisBuild / scalaVersion from sbt shell<a href="#Set+ThisBuild+%2F+scalaVersion+from+sbt+shell" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:foo-build&gt; set ThisBuild / scalaVersion := &quot;2.13.11&quot;
 [info] Defining ThisBuild / scalaVersion
 </code></pre><p>Check the <code>scalaVersion</code> setting:
 </p><pre><code class="">sbt:foo-build&gt; scalaVersion
-[info] 2.13.8
+[info] 2.13.11
 </code></pre><h3 id="Save+the+session+to+build.sbt">Save the session to build.sbt<a href="#Save+the+session+to+build.sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>We can save the ad-hoc settings using <code>session save</code>.
 </p><pre><code class="">sbt:foo-build&gt; session save
 [info] Reapplying settings...
 </code></pre><p><code>build.sbt</code> file should now contain:
-</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.8&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.11&quot;
 
 </code></pre><h3 id="Name+your+project">Name your project<a href="#Name+your+project" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Using an editor, change <code>build.sbt</code> as follows:
 </p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.6&quot;
@@ -1025,7 +1025,7 @@ The key-value pairs are listed under the <code>.settings(...)</code> method as f
 </code></pre><h3 id="How+build.sbt+defines+settings">How build.sbt defines settings<a href="#How+build.sbt+defines+settings" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> defines subprojects, which holds a sequence of key-value pairs
 called <em>setting expressions</em> using <em>build.sbt domain-specific language(DSL)</em>.
 </p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.16&quot;
+ThisBuild / scalaVersion := &quot;2.12.18&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -1154,7 +1154,7 @@ import Keys._
 </p><h3 id="Bare+.sbt+build+definition">Bare .sbt build definition<a href="#Bare+.sbt+build+definition" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The settings can be written directly into the <code>build.sbt</code> file instead of
 putting them inside a <code>.settings(...)</code> call. We call this the “bare style.”
 </p><pre><code class="prettyprint lang-scala">ThisBuild / version := &quot;1.0&quot;
-ThisBuild / scalaVersion := &quot;2.12.16&quot;
+ThisBuild / scalaVersion := &quot;2.12.18&quot;
 </code></pre><p>This syntax is recommended for <code>ThisBuild</code> scoped settings and adding plugins.
 See later section about the scoping and the plugins.
 </p><h3 id="Adding+library+dependencies">Adding library dependencies<a href="#Adding+library+dependencies" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To depend on third-party libraries, there are two options. The first is
@@ -1163,7 +1163,7 @@ managed dependencies, which will look like this in <code>build.sbt</code>:
 </p><pre><code class="prettyprint lang-scala">val derby = &quot;org.apache.derby&quot; % &quot;derby&quot; % &quot;10.4.1.3&quot;
 
 ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.16&quot;
+ThisBuild / scalaVersion := &quot;2.12.18&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -1214,7 +1214,7 @@ or settings scoped to <code>Global</code> or <code>ThisBuild</code>,
 and there are no default settings scoped to subprojects. (See <a href="Scopes.html">Scopes</a>)
 </p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
-ThisBuild / scalaVersion := &quot;2.12.16&quot;
+ThisBuild / scalaVersion := &quot;2.12.18&quot;
 
 lazy val core = (project in file(&quot;core&quot;))
   .settings(
@@ -1411,7 +1411,7 @@ by the time task engine evaluates the opening <code>{</code> of <code>scalacOpti
 regardless of which line it appears in the body.</strong>
 </p><p>See the following example:
 </p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.16&quot;
+ThisBuild / scalaVersion := &quot;2.12.18&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -1439,7 +1439,7 @@ lazy val root = (project in file(&quot;.&quot;))
 either of them.
 </p><p>Here’s another example:
 </p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.16&quot;
+ThisBuild / scalaVersion := &quot;2.12.18&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -1544,7 +1544,7 @@ filter out <code>&quot;-Xfatal-warnings&quot;</code> and <code>&quot;-deprecatio
   .settings(
     name := &quot;Hello&quot;,
     organization := &quot;com.example&quot;,
-    scalaVersion := &quot;2.12.16&quot;,
+    scalaVersion := &quot;2.12.18&quot;,
     version := &quot;0.1.0-SNAPSHOT&quot;,
     scalacOptions := List(&quot;-encoding&quot;, &quot;utf8&quot;, &quot;-Xfatal-warnings&quot;, &quot;-deprecation&quot;, &quot;-unchecked&quot;),
     scalacOptions := {
@@ -1888,7 +1888,7 @@ sbt will look for it in <code>ThisBuild</code> as a fallback.
 Using the mechanism, we can define a build-level default setting for
 frequently used keys such as <code>version</code>, <code>scalaVersion</code>, and <code>organization</code>.
 </p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;,
-ThisBuild / scalaVersion := &quot;2.12.16&quot;,
+ThisBuild / scalaVersion := &quot;2.12.18&quot;,
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -2015,7 +2015,7 @@ Remember, we are trying to show the search path given an arbitrary <code>(xxx / 
   )
 </code></pre><p>What is the value of <code>projA / name</code>?
 </p><ol><li><code>&quot;foo-2.11.11&quot;</code>
-</li><li><code>&quot;foo-2.12.16&quot;</code>
+</li><li><code>&quot;foo-2.12.18&quot;</code>
 </li><li>something else?
 </li></ol><p>The answer is <code>&quot;foo-2.11.11&quot;</code>.
 Inside of <code>.settings(...)</code>, <code>scalaVersion</code> is automatically scoped to <code>projA / Zero / Zero</code>,
@@ -2321,7 +2321,7 @@ as well.
 the <code>organization</code>), sbt will add your project’s binary Scala version to the artifact
 name. This is just a shortcut. You could write this without the <code>%%</code>:
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-stm&quot; % &quot;scala-stm_2.13&quot; % &quot;0.9.1&quot;
-</code></pre><p>Assuming the <code>scalaVersion</code> for your build is <code>2.13.8</code>, the following is
+</code></pre><p>Assuming the <code>scalaVersion</code> for your build is <code>2.13.11</code>, the following is
 identical (note the double <code>%%</code> after <code>&quot;org.scala-stm&quot;</code>):
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-stm&quot; %% &quot;scala-stm&quot; % &quot;0.9.1&quot;
 </code></pre><p>The idea is that many dependencies are compiled for multiple Scala
@@ -2523,7 +2523,7 @@ val sampleIntTask = taskKey[Int](&quot;A sample int task.&quot;)
 
 ThisBuild / organization := &quot;com.example&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
-ThisBuild / scalaVersion := &quot;2.12.16&quot;
+ThisBuild / scalaVersion := &quot;2.12.18&quot;
 
 lazy val library = (project in file(&quot;library&quot;))
   .settings(
@@ -2567,7 +2567,7 @@ val sampleStringTask = taskKey[String](&quot;A sample string task.&quot;)
 
 ThisBuild / organization := &quot;com.example&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
-ThisBuild / scalaVersion := &quot;2.12.16&quot;
+ThisBuild / scalaVersion := &quot;2.12.18&quot;
 
 lazy val library = (project in file(&quot;library&quot;))
   .settings(
@@ -2741,12 +2741,12 @@ to track dependencies in one place.
 
 object Dependencies {
   // Versions
-  lazy val akkaVersion = &quot;2.6.19&quot;
+  lazy val akkaVersion = &quot;2.6.20&quot;
 
   // Libraries
   val akkaActor = &quot;com.typesafe.akka&quot; %% &quot;akka-actor&quot; % akkaVersion
   val akkaCluster = &quot;com.typesafe.akka&quot; %% &quot;akka-cluster&quot; % akkaVersion
-  val specs2core = &quot;org.specs2&quot; %% &quot;specs2-core&quot; % &quot;4.16.0&quot;
+  val specs2core = &quot;org.specs2&quot; %% &quot;specs2-core&quot; % &quot;4.20.0&quot;
 
   // Projects
   val backendDeps =
@@ -2758,7 +2758,7 @@ To make it easier to use the <code>val</code>s defined in it, import <code>Depen
 
 ThisBuild / organization := &quot;com.example&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
-ThisBuild / scalaVersion := &quot;2.12.16&quot;
+ThisBuild / scalaVersion := &quot;2.12.18&quot;
 
 lazy val backend = (project in file(&quot;backend&quot;))
   .settings(
@@ -4211,7 +4211,7 @@ object HelloBuild extends Build {
   val shared = Defaults.defaultSettings ++ xyz.XyzPlugin.projectSettings ++ Seq(
     organization := &quot;com.example&quot;,
     version      := &quot;0.1.0&quot;,
-    scalaVersion := &quot;2.12.16&quot;)
+    scalaVersion := &quot;2.12.18&quot;)
 
   lazy val hello =
     Project(&quot;Hello&quot;, file(&quot;.&quot;),
@@ -4237,7 +4237,7 @@ object HelloBuild extends Build {
 </p><pre><code class="prettyprint lang-scala">val shared = Seq(
   organization := &quot;com.example&quot;,
   version      := &quot;0.1.0&quot;,
-  scalaVersion := &quot;2.12.16&quot;
+  scalaVersion := &quot;2.12.18&quot;
 )
 
 lazy val helloRoot = (project in file(&quot;.&quot;))
@@ -5701,7 +5701,7 @@ cross building across Scala versions and different platforms in parallel.
 </p><h3 id="Cross+building+a+project+statefully">Cross building a project statefully<a href="#Cross+building+a+project+statefully" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Define the versions of Scala to build against in the
 <code>crossScalaVersions</code> setting. Versions of Scala 2.10.2 or later are
 allowed. For example, in a <code>.sbt</code> build definition:
-</p><pre><code class="prettyprint lang-scala">lazy val scala212 = &quot;2.12.16&quot;
+</p><pre><code class="prettyprint lang-scala">lazy val scala212 = &quot;2.12.18&quot;
 lazy val scala211 = &quot;2.11.12&quot;
 lazy val supportedScalaVersions = List(scala212, scala211)
 
@@ -5768,7 +5768,7 @@ and the <code>_&lt;scala-binary-version&gt;</code> publishing convention. This m
 </p><h4 id="Cross+building+with+a+Java+project">Cross building with a Java project<a href="#Cross+building+with+a+Java+project" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>A special care must be taken when cross building involves pure Java project.
 Let’s say in the following example, <code>network</code> is a Java project, and <code>core</code> is
 a Scala project that depends on <code>network</code>.
-</p><pre><code class="prettyprint lang-scala">lazy val scala212 = &quot;2.12.16&quot;
+</p><pre><code class="prettyprint lang-scala">lazy val scala212 = &quot;2.12.18&quot;
 lazy val scala211 = &quot;2.11.12&quot;
 lazy val supportedScalaVersions = List(scala212, scala211)
 
@@ -5807,8 +5807,8 @@ lazy val core = (project in file(&quot;core&quot;))
 </li></ol><h4 id="Switching+Scala+version">Switching Scala version<a href="#Switching+Scala+version" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>You can use <code>++ &lt;version&gt; [command]</code> to temporarily switch the Scala version currently
 being used to build the subprojects given that <code>&lt;version&gt;</code> is listed in their <code>crossScalaVersions</code>.
 </p><p>For example:
-</p><pre><code class="">&gt; ++ 2.12.16
-[info] Setting version to 2.12.16
+</p><pre><code class="">&gt; ++ 2.12.18
+[info] Setting version to 2.12.18
 &gt; ++ 2.11.12
 [info] Setting version to 2.11.12
 &gt; compile
@@ -5821,10 +5821,10 @@ on the subprojects that supports the given <code>&lt;version&gt;</code>.
 </p><pre><code class="">&gt; ++ 2.11.12 -v test
 [info] Setting Scala version to 2.11.12 on 1 projects.
 [info] Switching Scala version on:
-[info]     core (2.12.16, 2.11.12)
+[info]     core (2.12.18, 2.11.12)
 [info] Excluding projects:
 [info]   * root ()
-[info]     network (2.12.16)
+[info]     network (2.12.18)
 [info] Reapplying settings...
 [info] Set current project to core (in build file:/Users/xxx/hello/)
 </code></pre><p>Sometimes you might want to force the Scala version switch regardless of the <code>crossScalaVersions</code> values.
@@ -5834,8 +5834,8 @@ You can use <code>++ &lt;version&gt;!</code> with exclamation mark for that.
 [info] Forcing Scala version to 2.13.0-M5 on all projects.
 [info] Switching Scala version on:
 [info]   * root ()
-[info]     core (2.12.16, 2.11.12)
-[info]     network (2.12.16)
+[info]     core (2.12.18, 2.11.12)
+[info]     network (2.12.18)
 </code></pre><h4 id="Cross+publishing">Cross publishing<a href="#Cross+publishing" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The ultimate purpose of <code>+</code> is to cross-publish your
 project. That is, by doing:
 </p><pre><code class="">&gt; + publishSigned
@@ -6280,7 +6280,7 @@ compile the script, and run it directly. For example, if you name it
 <pre><code class="prettyprint lang-scala">#!/usr/bin/env sbt -Dsbt.version=1.6.1 -Dsbt.main.class=sbt.ScriptMain -error
 
 /***
-ThisBuild / scalaVersion := &quot;2.13.8&quot;
+ThisBuild / scalaVersion := &quot;2.13.11&quot;
 libraryDependencies += &quot;org.scala-sbt&quot; %% &quot;io&quot; % &quot;1.6.0&quot;
 */
 
@@ -6291,7 +6291,7 @@ like reading a text file.
 </p><pre><code class="prettyprint lang-scala">#!/usr/bin/env sbt -Dsbt.version=1.6.1 -Dsbt.main.class=sbt.ScriptMain -error
 
 /***
-ThisBuild / scalaVersion := &quot;2.13.8&quot;
+ThisBuild / scalaVersion := &quot;2.13.11&quot;
 libraryDependencies += &quot;org.scala-sbt&quot; %% &quot;io&quot; % &quot;1.6.0&quot;
 */
 
@@ -7349,7 +7349,7 @@ adding them.
 uses that same version of Scala to compile the build definitions that
 you write for your project because they use sbt APIs. This version of
 Scala is fixed for a specific sbt release and cannot be changed. For sbt
-1.9.0, this version is Scala 2.12.16. Because this Scala
+1.9.0, this version is Scala 2.12.18. Because this Scala
 version is needed before sbt runs, the repositories used to retrieve
 this version are configured in the sbt
 <a href="Sbt-Launcher.html">launcher</a>.
@@ -7650,7 +7650,7 @@ directory. The core project in the <code>core/</code> directory will depend
 on this subproject and use the macro. This configuration is shown in the
 following build definition. <code>build.sbt</code>:
 </p><pre><code class="prettyprint lang-scala">lazy val commonSettings = Seq(
-  scalaVersion := &quot;2.12.16&quot;,
+  scalaVersion := &quot;2.12.18&quot;,
   organization := &quot;com.example&quot;
 )
 lazy val scalaReflect = Def.setting { &quot;org.scala-lang&quot; % &quot;scala-reflect&quot; % scalaVersion.value }
@@ -7726,7 +7726,7 @@ common code and have the main project and the macro subproject depend on
 the new subproject. For example, the project definitions from above
 would look like:
 </p><pre><code class="prettyprint lang-scala">lazy val commonSettings = Seq(
-  scalaVersion := &quot;2.12.16&quot;,
+  scalaVersion := &quot;2.12.18&quot;,
   organization := &quot;com.example&quot;
 )
 lazy val scalaReflect = Def.setting { &quot;org.scala-lang&quot; % &quot;scala-reflect&quot; % scalaVersion.value }
@@ -8227,7 +8227,7 @@ methods of <code>java.lang.Class</code> or <code>java.lang.ClassLoader</code>.
 common test interface and only need to be added to the classpath to work
 with sbt. For example, ScalaCheck may be used by declaring it as a
 <a href="../tutorial/Library-Dependencies.html">managed dependency</a>:
-</p><pre><code class="prettyprint lang-scala">lazy val scalacheck = &quot;org.scalacheck&quot; %% &quot;scalacheck&quot; % &quot;1.16.0&quot;
+</p><pre><code class="prettyprint lang-scala">lazy val scalacheck = &quot;org.scalacheck&quot; %% &quot;scalacheck&quot; % &quot;1.17.0&quot;
 libraryDependencies += scalacheck % Test
 </code></pre><p><code>Test</code> is the <a href="Library-Management.html#ivy-configurations">configuration</a> and means that ScalaCheck will
 only be on the test classpath and it isn’t needed by the main sources.
@@ -8345,10 +8345,10 @@ to enable integration tests. The second shows how to define a customized
 test configuration. This allows you to define multiple types of tests
 per project.
 </p><h4 id="Integration+Tests">Integration Tests<a href="#Integration+Tests" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The following full build configuration demonstrates integration tests.
-</p><pre><code class="prettyprint lang-scala">lazy val scalatest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.2.12&quot;
+</p><pre><code class="prettyprint lang-scala">lazy val scalatest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.2.16&quot;
 
 ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.16&quot;
+ThisBuild / scalaVersion := &quot;2.12.18&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -8391,11 +8391,11 @@ configuration:
 the definitive integration test options:
 </p><pre><code class="prettyprint lang-scala">IntegrationTest / testOptions := Seq(...)
 </code></pre><h4 id="Custom+test+configuration">Custom test configuration<a href="#Custom+test+configuration" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The previous example may be generalized to a custom test configuration.
-</p><pre><code class="prettyprint lang-scala">lazy val scalatest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.2.12&quot;
+</p><pre><code class="prettyprint lang-scala">lazy val scalatest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.2.16&quot;
 lazy val FunTest = config(&quot;fun&quot;) extend(Test)
 
 ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.16&quot;
+ThisBuild / scalaVersion := &quot;2.12.18&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -8426,11 +8426,11 @@ We could have done it this way for integration tests as well. In fact,
 compilations) is to share sources. In this approach, the sources are
 compiled together using the same classpath and are packaged together.
 However, different tests are run depending on the configuration.
-</p><pre><code class="prettyprint lang-scala">lazy val scalatest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.2.12&quot;
+</p><pre><code class="prettyprint lang-scala">lazy val scalatest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.2.16&quot;
 lazy val FunTest = config(&quot;fun&quot;) extend(Test)
 
 ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.16&quot;
+ThisBuild / scalaVersion := &quot;2.12.18&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 def itFilter(name: String): Boolean = name endsWith &quot;ITest&quot;
@@ -9317,7 +9317,7 @@ The most common case is to have one of your configurations <code>A</code> use a
 dependency’s configuration <code>B</code>. The mapping for this looks like
 <code>&quot;A-&gt;B&quot;</code>. To apply this mapping to a dependency, add it to the end of
 your dependency definition:
-</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.2.12&quot; % &quot;test-&gt;compile&quot;
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.2.16&quot; % &quot;test-&gt;compile&quot;
 </code></pre><p>This says that your project’s <code>&quot;test&quot;</code> configuration uses <code>ScalaTest</code>’s
 <code>&quot;compile&quot;</code> configuration. See the
 <a href="https://ant.apache.org/ivy/history/2.3.0/tutorial/conf.html">Ivy documentation</a>
@@ -9342,7 +9342,7 @@ managed artifacts.
 or <code>&quot;compile&quot;</code>. The <code>-&gt;</code> is only needed when mapping to a different
 configuration than those. The ScalaTest dependency above can then be
 shortened to:
-</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.2.12&quot; % &quot;test&quot;
+</p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.2.16&quot; % &quot;test&quot;
 </code></pre><h5 id="Forcing+a+revision+%28Not+recommended%29">Forcing a revision (Not recommended)<a href="#Forcing+a+revision+%28Not+recommended%29" class="header-link"><span class="header-link-content">&nbsp;</span></a></h5><p><strong>Note</strong>: Forcing can create logical inconsistencies so it’s no longer recommended.
 </p><p>To say that we prefer the version we’ve specified over the version from
 indirect dependencies, use <code>force()</code>:
@@ -11022,10 +11022,10 @@ Def.setting {
 </code></pre><p>This Parser definition will produce a value of type <code>(String,String)</code>.
 The input syntax defined isn’t very flexible; it is just a
 demonstration. It will produce one of the following values for a
-successful parse (assuming the current Scala version is 2.12.16,
+successful parse (assuming the current Scala version is 2.12.18,
 the current sbt version is 1.9.0, and there are 3 commands left to
 run):
-</p><ul><li>(scala,2.12.16)
+</p><ul><li>(scala,2.12.18)
 </li><li>(sbt,1.9.0)
 </li><li>(commands,3)
 </li></ul><p>Again, we were able to access the current Scala and sbt version for the
@@ -11251,7 +11251,7 @@ printState commands.
 </p><pre><code class="prettyprint lang-scala">import CommandExample._
 
 ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.16&quot;
+ThisBuild / scalaVersion := &quot;2.12.18&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 lazy val root = (project in file(&quot;.&quot;))
@@ -11888,7 +11888,7 @@ definition project. It is a normal sbt project whose classpath is
 available to all sbt project definitions for that user as described
 above for per-project plugins.
 </p><h3 id="Creating+an+auto+plugin">Creating an auto plugin<a href="#Creating+an+auto+plugin" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>A minimal sbt plugin is a Scala library that is built against the version of
-Scala that sbt runs (currently, 2.12.16) or a Java library.
+Scala that sbt runs (currently, 2.12.18) or a Java library.
 Nothing special needs to be done for this type of library.
 A more typical plugin will provide sbt tasks, commands, or settings.
 This kind of plugin may provide these settings
@@ -12673,7 +12673,7 @@ jdk: openjdk8
 
 scala:
    - 2.10.4
-   - 2.12.16
+   - 2.12.18
 </code></pre><p>By default Travis CI executes <code>sbt ++$TRAVIS_SCALA_VERSION test</code>.
 Let’s specify that explicitly:
 </p><pre><code class="prettyprint lang-yml">language: scala
@@ -12682,7 +12682,7 @@ jdk: openjdk8
 
 scala:
    - 2.10.4
-   - 2.12.16
+   - 2.12.18
 
 script:
    - sbt ++$TRAVIS_SCALA_VERSION test
@@ -12761,7 +12761,7 @@ jdk: openjdk8
 
 scala:
    - 2.10.4
-   - 2.12.16
+   - 2.12.18
 
 script:
    - sbt ++$TRAVIS_SCALA_VERSION test
@@ -14616,7 +14616,7 @@ See <a href="Basic-Def.html">.sbt build definition</a> for details.
 
 // factor out common settings
 ThisBuild / organization := &quot;org.myproject&quot;
-ThisBuild / scalaVersion := &quot;2.12.16&quot;
+ThisBuild / scalaVersion := &quot;2.12.18&quot;
 // set the Scala version used for the project
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
@@ -14624,7 +14624,7 @@ ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 ThisBuild / shellPrompt := { state =&gt; Project.extract(state).currentRef.project + &quot;&gt; &quot; }
 
 // define ModuleID for library dependencies
-lazy val scalacheck = &quot;org.scalacheck&quot; %% &quot;scalacheck&quot; % &quot;1.16.0&quot;
+lazy val scalacheck = &quot;org.scalacheck&quot; %% &quot;scalacheck&quot; % &quot;1.17.0&quot;
 
 // define ModuleID using string interpolator
 lazy val osmlibVersion = &quot;2.5.2-RC1&quot;
@@ -14831,7 +14831,7 @@ object Dependencies {
   val apachenet   = &quot;commons-net&quot;   % &quot;commons-net&quot;   % &quot;2.0&quot;
   val apachecodec = &quot;commons-codec&quot; % &quot;commons-codec&quot; % &quot;1.4&quot;
 
-  val scalatest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.2.12&quot;
+  val scalatest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.2.16&quot;
 }
 </code></pre><p>These files can be used mange library dependencies in one place.
 </p><h3 id="project%2FShellPromptPlugin.scala">project/ShellPromptPlugin.scala<a href="#project%2FShellPromptPlugin.scala" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>When you want to implement custom commands or tasks, you can organize your build by defining an one-off auto plugin.
@@ -14868,7 +14868,7 @@ import Dependencies._
 lazy val buildSettings = Seq(
   organization := &quot;com.example&quot;,
   version := &quot;0.1.0&quot;,
-  scalaVersion := &quot;2.12.16&quot;
+  scalaVersion := &quot;2.12.18&quot;
 )
 
 // Sub-project specific dependencies
@@ -14951,7 +14951,7 @@ lazy val CustomCompile = config(&quot;compile&quot;).extend(Saxon, Common, Scala
 
 // factor out common settings
 ThisBuild / organization := &quot;com.example&quot;
-ThisBuild / scalaVersion := &quot;2.12.16&quot;
+ThisBuild / scalaVersion := &quot;2.12.18&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
 
 // An example project that only uses the Scalate utilities.

@@ -373,7 +373,7 @@ Hello
 ### sbt シェルから ThisBuild / scalaVersion をセットする
 
 ```
-sbt:foo-build> set ThisBuild / scalaVersion := "2.13.8"
+sbt:foo-build> set ThisBuild / scalaVersion := "2.13.11"
 [info] Defining ThisBuild / scalaVersion
 ```
 
@@ -381,7 +381,7 @@ sbt:foo-build> set ThisBuild / scalaVersion := "2.13.8"
 
 ```
 sbt:foo-build> scalaVersion
-[info] 2.13.8
+[info] 2.13.11
 ```
 
 ### セッションを build.sbt へと保存する
@@ -396,7 +396,7 @@ sbt:foo-build> session save
 `build.sbt` ファイルは以下のようになったはずだ:
 
 ```scala
-ThisBuild / scalaVersion := "2.13.8"
+ThisBuild / scalaVersion := "2.13.11"
 ```
 
 ### プロジェクトに名前を付ける
@@ -1574,7 +1574,7 @@ lazy val root = (project in file("."))
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.16"
+ThisBuild / scalaVersion := "2.12.18"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -1735,7 +1735,7 @@ import Keys._
 
 ```scala
 ThisBuild / version := "1.0"
-ThisBuild / scalaVersion := "2.12.16"
+ThisBuild / scalaVersion := "2.12.18"
 ```
 
 この構文は `ThisBuild` にスコープ付けされたセッティングを書いたり、プラグインを追加するのに向いている。
@@ -1751,7 +1751,7 @@ ThisBuild / scalaVersion := "2.12.16"
 val derby = "org.apache.derby" % "derby" % "10.4.1.3"
 
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.16"
+ThisBuild / scalaVersion := "2.12.18"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -1823,7 +1823,7 @@ lazy val core = project
 ```scala
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.16"
+ThisBuild / scalaVersion := "2.12.18"
 
 lazy val core = (project in file("core"))
   .settings(
@@ -2116,7 +2116,7 @@ scalacOptions := {
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.16"
+ThisBuild / scalaVersion := "2.12.18"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -2153,7 +2153,7 @@ lazy val root = (project in file("."))
 
 ```scala
 ThisBuild / organization := "com.example"
-ThisBuild / scalaVersion := "2.12.16"
+ThisBuild / scalaVersion := "2.12.18"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -2283,7 +2283,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "Hello",
     organization := "com.example",
-    scalaVersion := "2.12.16",
+    scalaVersion := "2.12.18",
     version := "0.1.0-SNAPSHOT",
     scalacOptions := List("-encoding", "utf8", "-Xfatal-warnings", "-deprecation", "-unchecked"),
     scalacOptions := {
@@ -2756,7 +2756,7 @@ sbt はフォールバックとして `ThisBuild` 内を探す。
 
 ```scala
 ThisBuild / organization := "com.example",
-ThisBuild / scalaVersion := "2.12.16",
+ThisBuild / scalaVersion := "2.12.18",
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
@@ -2962,7 +2962,7 @@ lazy val projA = (project in file("a"))
 `name in projA` (sbt シェルだと `projA/name`) の値は何か?
 
 1. `"foo-2.11.11"`
-2. `"foo-2.12.16"`
+2. `"foo-2.12.18"`
 3. その他
 
 正解は `"foo-2.11.11"`。
@@ -3396,7 +3396,7 @@ sbt はプロジェクトの Scala のバイナリバージョンをアーティ
 libraryDependencies += "org.scala-stm" % "scala-stm_2.13" % "0.9.1"
 ```
 
-君のビルドの Scala バージョンが `2.13.8` だとすると、以下の設定は上記と等価だ（"org.scala-stm" の後ろの二つ連なった %% に注意）:
+君のビルドの Scala バージョンが `2.13.11` だとすると、以下の設定は上記と等価だ（"org.scala-stm" の後ろの二つ連なった %% に注意）:
 
 ```scala
 libraryDependencies += "org.scala-stm" %% "scala-stm" % "0.9.1"
@@ -3706,7 +3706,7 @@ val sampleIntTask = taskKey[Int]("A sample int task.")
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.16"
+ThisBuild / scalaVersion := "2.12.18"
 
 lazy val library = (project in file("library"))
   .settings(
@@ -3758,7 +3758,7 @@ val sampleStringTask = taskKey[String]("A sample string task.")
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.16"
+ThisBuild / scalaVersion := "2.12.18"
 
 lazy val library = (project in file("library"))
   .settings(
@@ -3988,12 +3988,12 @@ import sbt._
 
 object Dependencies {
   // Versions
-  lazy val akkaVersion = "2.6.19"
+  lazy val akkaVersion = "2.6.20"
 
   // Libraries
   val akkaActor = "com.typesafe.akka" %% "akka-actor" % akkaVersion
   val akkaCluster = "com.typesafe.akka" %% "akka-cluster" % akkaVersion
-  val specs2core = "org.specs2" %% "specs2-core" % "4.16.0"
+  val specs2core = "org.specs2" %% "specs2-core" % "4.20.0"
 
   // Projects
   val backendDeps =
@@ -4009,7 +4009,7 @@ import Dependencies._
 
 ThisBuild / organization := "com.example"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "2.12.16"
+ThisBuild / scalaVersion := "2.12.18"
 
 lazy val backend = (project in file("backend"))
   .settings(
@@ -4110,7 +4110,7 @@ name := "hello"
 
 version := "1.0"
 
-scalaVersion := "2.12.16"
+scalaVersion := "2.12.18"
 ```
 
 ### (0.13.7 以前) 設定は空白行で区切る
