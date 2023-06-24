@@ -5323,19 +5323,19 @@ The sbt ecosystem would not be the same without so many awesome plugins. Here ar
 - [sbt-sublime](https://github.com/orrsella/sbt-sublime) by Orr Sella
 - [sbt-errors-summary](https://github.com/Duhemm/sbt-errors-summary) by Martin Duhem
 - [sbt-bintray](https://github.com/sbt/sbt-bintray) by Doug Tangren (softprops)
-- [Migration Manager](https://github.com/lightbend/migration-manager/wiki) by Lightbend (Mirco Dotta, Seth Tisue, et al)
+- [Migration Manager](https://github.com/lightbend/mima/wiki) by Lightbend (Mirco Dotta, Seth Tisue, et al)
 - [sbt-protobuf](https://github.com/sbt/sbt-protobuf) by Gerolf Seitz and Kenji Yoshida (xuwei-k)
 - [sbt-site](https://github.com/sbt/sbt-site) by Jonas Fonseca, Josh Suereth, et al
 - [sbt-doctest](https://github.com/tkawachi/sbt-doctest) by KAWACHI Takashi
 - [sbt-robovm](https://github.com/roboscala/sbt-robovm) by Jan Polák
 - [scalastyle-sbt-plugin](https://github.com/scalastyle/scalastyle-sbt-plugin) by Matthew Farwell
-- [sbt-microsites](https://github.com/47deg/sbt-microsites) by 47 Degrees (Juan Pedro Moreno, Javier de Silóniz Sandino, et al)
+- [sbt-microsites](https://github.com/47degrees/sbt-microsites) by 47 Degrees (Juan Pedro Moreno, Javier de Silóniz Sandino, et al)
 - [sbt-header](https://github.com/sbt/sbt-header) by Heiko Seeberger and Benedikt Ritter
 - [sbt-groll](https://github.com/sbt/sbt-groll) by Heiko Seeberger
 - [sbt-ctags](https://github.com/ceedubs/sbt-ctags) by Cody Allen
 - [sbt-aws-lambda](https://github.com/gilt/sbt-aws-lambda) by Gilt (Brendan St John, et al)
-- [sbt-heroku](https://github.com/heroku/sbt-heroku) by Heroku (Joe Kutner)
-- [sbt-dynver](https://github.com/dwijnand/sbt-dynver) by Dale Wijnand
+- [sbt-heroku](https://github.com/heroku/heroku-sbt-plugin) by Heroku (Joe Kutner)
+- [sbt-dynver](https://github.com/sbt/sbt-dynver) by Dale Wijnand
 - [sbt-unidoc](https://github.com/sbt/sbt-unidoc) by Eugene Yokota and Peter Vlugter
 - [sbt-docker-compose](https://github.com/Tapad/sbt-docker-compose) by Tapad (Kurt Kopchik et al)
 - [sbt-coveralls](https://github.com/scoverage/sbt-coveralls) by Ian Forsey and Stephen Samuel
@@ -5358,7 +5358,7 @@ The sbt ecosystem would not be the same without so many awesome plugins. Here ar
 - [kotlin-plugin](https://github.com/pfn/kotlin-plugin) by Perry (pfn)
 - [sbt-avro](https://github.com/sbt/sbt-avro) by Juan Manuel Caicedo Carvajal (cavorite), Ben McCann, et al
 - [sbt-aspectj](https://github.com/sbt/sbt-aspectj) by Lightbend (Peter Vlugter et al)
-- [sbt-crossproject](https://github.com/scala-native/sbt-crossproject) Denys Shabalin and Guillaume Massé
+- [sbt-crossproject](https://github.com/portable-scala/sbt-crossproject) Denys Shabalin and Guillaume Massé
 - [sbt-scapegoat](https://github.com/sksamuel/sbt-scapegoat) by Stephen Samuel
 - [sbt-dependency-graph-sugar](https://github.com/gilt/sbt-dependency-graph-sugar) by Gilt (Brendan St John et al)
 - [sbt-aether-deploy](https://github.com/arktekk/sbt-aether-deploy) by Arktekk (Erlend Hamnaberg et al)
@@ -5456,7 +5456,7 @@ your plugin to the list.
   <!-- 161 stars -->
 - [sbt-site](https://github.com/sbt/sbt-site): site generator.
   <!-- 131 stars -->
-- [sbt-microsites](https://github.com/47deg/sbt-microsites): generate
+- [sbt-microsites](https://github.com/47degrees/sbt-microsites): generate
   and publish microsites using Jekyll. <!-- 125 stars -->
 - [sbt-unidoc](https://github.com/sbt/sbt-unidoc): create unified API
   documentation across subprojects. <!-- 86 stars -->
@@ -5531,7 +5531,7 @@ your plugin to the list.
 
 #### Deployment integration plugins
 
-- [sbt-heroku](https://github.com/heroku/sbt-heroku): deploy applications
+- [sbt-heroku](https://github.com/heroku/heroku-sbt-plugin): deploy applications
   directly to Heroku. <!-- 86 stars -->
 - [sbt-docker-compose](https://github.com/Tapad/sbt-docker-compose):
   launch Docker images using docker compose. <!-- 86 stars -->
@@ -5556,21 +5556,21 @@ your plugin to the list.
   <!-- 233 stars -->
 - [sbt-errors-summary](https://github.com/Duhemm/sbt-errors-summary): show a
   summary of compilation errors. <!-- 145 stars -->
-- [MiMa](https://github.com/lightbend/migration-manager): binary
+- [MiMa](https://github.com/lightbend/mima): binary
   compatibility management for Scala libraries. <!-- 134 stars -->
 - [sbt-groll](https://github.com/sbt/sbt-groll): navigate git history inside
   sbt. <!-- 100 stars -->
-- [sbt-dynver](https://github.com/dwijnand/sbt-dynver): set project version
+- [sbt-dynver](https://github.com/sbt/sbt-dynver): set project version
   dynamically from git metadata. <!-- 87 stars -->
 - [sbt-prompt](https://github.com/agemooij/sbt-prompt): add promptlets and
   themes to your sbt prompt. <!-- 75 stars -->
-- [sbt-crossproject](https://github.com/scala-native/sbt-crossproject):
+- [sbt-crossproject](https://github.com/portable-scala/sbt-crossproject):
   cross-build Scala, Scala.js and Scala Native. <!-- 66 stars -->
 - [sbt-proguard](https://github.com/sbt/sbt-proguard): run ProGuard on
   compiled sources. <!-- 63 stars -->
 - [sbt-structure](https://github.com/JetBrains/sbt-structure): extract project
   structure in XML format. <!-- 53 stars -->
-- [sbt-jni](https://github.com/jodersky/sbt-jni): helpers for working with
+- [sbt-jni](https://github.com/sbt/sbt-jni): helpers for working with
   projects that use JNI. <!-- 51 stars -->
 - [sbt-jol](https://github.com/ktoso/sbt-jol): inspect OpenJDK Java Object
   Layout from sbt. <!-- 48 stars -->
@@ -20995,7 +20995,7 @@ The unique aspect of Giter8 is that it uses GitHub (or any other git repository)
 - [scala/scala3.g8](https://github.com/scala/scala3.g8)                                 (A template for Scala 3 projects)
 - [scala/hello-world.g8](https://github.com/scala/hello-world.g8)                       (A template to demonstrate a minimal Scala application)
 - [scala/scalatest-example.g8](https://github.com/scala/scalatest-example.g8)           (A template for trying out ScalaTest)
-- [akka/akka-scala-seed.g8](https://github.com/akka/akka-scala-seed.g8)                 (A minimal seed template for an Akka with Scala build
+- [akka-quickstart-scala.g8](https://github.com/akka/akka-quickstart-scala.g8)          (A minimal seed template for an Akka with Scala build
 )
 - [akka/akka-java-seed.g8](https://github.com/akka/akka-java-seed.g8)                   (A minimal seed template for an Akka in Java
 )
@@ -21004,7 +21004,7 @@ The unique aspect of Giter8 is that it uses GitHub (or any other git repository)
 - [lagom/lagom-scala.g8](https://github.com/lagom/lagom-scala.g8/)                      (A [Lagom](https://www.lagomframework.com/) Scala seed template for sbt)
 - [lagom/lagom-java.g8](https://github.com/lagom/lagom-java.g8/)                        (A [Lagom](https://www.lagomframework.com/) Java seed template for sbt)
 - [scala-native/scala-native.g8](https://github.com/scala-native/scala-native.g8)       (Scala Native)
-- [scala-native/sbt-crossproject.g8](https://github.com/scala-native/sbt-crossproject.g8) (sbt-crosspoject)
+- [portable-scala/sbt-crossproject.g8](https://github.com/portable-scala/sbt-crossproject.g8) (sbt-crosspoject)
 - [http4s/http4s.g8](https://github.com/http4s/http4s.g8)                               (http4s services)
 - [unfiltered/unfiltered.g8](https://github.com/unfiltered/unfiltered.g8)               ([Unfiltered](https://unfiltered.ws/) application)
 - [scalatra/scalatra-sbt.g8](https://github.com/scalatra/scalatra-sbt.g8)               (Basic Scalatra template using SBT 0.13.x.)
@@ -24735,7 +24735,7 @@ This website's source.
 
   [jsuereth2012]: http://jsuereth.com/scala/2012/04/22/scaladays.html
   [pins_trait127]: http://www.artima.com/pins1ed/traits.html#12.7
-  [mima]: https://github.com/lightbend/migration-manager
+  [mima]: https://github.com/lightbend/mima
 
 sbt Coding Guideline
 --------------------
