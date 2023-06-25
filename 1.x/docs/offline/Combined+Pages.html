@@ -12459,7 +12459,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Setup JDK
       uses: actions/setup-java@v3
       with:
@@ -12491,7 +12491,7 @@ jobs:
       JVM_OPTS:  -Xms2048M -Xmx2048M -Xss6M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Setup JDK
       uses: actions/setup-java@v3
       with:
@@ -12549,7 +12549,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Setup JDK
       uses: actions/setup-java@v3
       with:
@@ -12583,7 +12583,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Setup JDK
       uses: actions/setup-java@v3
       with:
@@ -12634,7 +12634,7 @@ jobs:
       JVM_OPTS:  -Xms2048M -Xmx2048M -Xss6M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Setup JDK
       uses: actions/setup-java@v3
       with:
@@ -12656,7 +12656,7 @@ jobs:
       shell: bash
       run: |
         sbt -v &quot;dependency-management/*&quot;
-</code></pre><h3 id="sbt-github-actions">sbt-github-actions<a href="#sbt-github-actions" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>There’s also <a href="https://github.com/djspiewak/sbt-github-actions">sbt-github-actions</a>, an sbt plugin by Daniel Spiewak that can generate the workflow files, and keep the settings in <code>build.sbt</code> file.
+</code></pre><h3 id="sbt-github-actions">sbt-github-actions<a href="#sbt-github-actions" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>There’s also <a href="https://github.com/sbt/sbt-github-actions">sbt-github-actions</a>, an sbt plugin by Daniel Spiewak that can generate the workflow files, and keep the settings in <code>build.sbt</code> file.
 </p><h2 id="Setting+up+Travis+CI+with+sbt">Setting up Travis CI with sbt<a href="#Setting+up+Travis+CI+with+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p><a href="https://travis-ci.com/">Travis CI</a> is a hosted continuous integration service for open source and private projects. Many of the OSS projects hosted on GitHub uses <a href="https://travis-ci.org/">open source edition of Travis CI</a> to validate pushes and pull requests. We’ll discuss some of the best practices setting up Travis CI.
 </p><h3 id="Set">Set <code>project/build.properties</code><a href="#Set" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Continuous integration is a great way of checking that your code works outside of your machine.
 If you haven’t created one already, make sure to create <code>project/build.properties</code> and explicitly set the
