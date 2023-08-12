@@ -49,11 +49,13 @@
 $ cd foo-build
 $ touch build.sbt
 </code></pre><h3 id="sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%82%92%E8%B5%B7%E3%81%A1%E4%B8%8A%E3%81%92%E3%82%8B">sbt シェルを起ち上げる<a href="#sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%82%92%E8%B5%B7%E3%81%A1%E4%B8%8A%E3%81%92%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">$ sbt
-[info] Updated file /tmp/foo-build/project/build.properties: set sbt.version to 1.1.4
-[info] Loading project definition from /private/tmp/foo-build/project
-[info] Loading settings from build.sbt ...
-[info] Set current project to foo-build (in build file:/private/tmp/foo-build/)
+[info] Updated file /tmp/foo-build/project/build.properties: set sbt.version to 1.9.3
+[info] welcome to sbt 1.9.3 (Eclipse Adoptium Java 17.0.8)
+[info] Loading project definition from /tmp/foo-build/project
+[info] loading settings for project foo-build from build.sbt ...
+[info] Set current project to foo-build (in build file:/tmp/foo-build/)
 [info] sbt server started at local:///Users/eed3si9n/.sbt/1.0/server/abc4fb6c89985a00fd95/sock
+[info] started sbt server
 sbt:foo-build&gt;
 </code></pre><h3 id="sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%82%92%E7%B5%82%E4%BA%86%E3%81%95%E3%81%9B%E3%82%8B">sbt シェルを終了させる<a href="#sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%82%92%E7%B5%82%E4%BA%86%E3%81%95%E3%81%9B%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt シェルを終了させるには、<code>exit</code> と入力するか、Ctrl+D (Unix) か Ctrl+Z (Windows) を押す。
 </p><pre><code class="">sbt:foo-build&gt; exit
@@ -62,8 +64,9 @@ sbt:foo-build&gt;
 sbt:foo-build&gt; compile
 </code></pre><h3 id="%E3%82%B3%E3%83%BC%E3%83%89%E5%A4%89%E6%9B%B4%E6%99%82%E3%81%AB%E5%86%8D%E3%82%B3%E3%83%B3%E3%83%91%E3%82%A4%E3%83%AB%E3%81%99%E3%82%8B">コード変更時に再コンパイルする<a href="#%E3%82%B3%E3%83%BC%E3%83%89%E5%A4%89%E6%9B%B4%E6%99%82%E3%81%AB%E5%86%8D%E3%82%B3%E3%83%B3%E3%83%91%E3%82%A4%E3%83%AB%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>compile</code> コマンド (やその他のコマンド) を <code>~</code> で始めると、プロジェクト内のソース・ファイルが変更されるたびにそのコマンドが自動的に再実行される。
 </p><pre><code class="">sbt:foo-build&gt; ~compile
-[success] Total time: 0 s, completed May 6, 2018 3:52:08 PM
-1. Waiting for source changes... (press enter to interrupt)
+[success] Total time: 0 s, completed 28 Jul 2023, 13:32:35
+[info] 1. Monitoring source files for foo-build/compile...
+[info]    Press &lt;enter&gt; to interrupt or '?' for more options.
 </code></pre><h3 id="%E3%82%BD%E3%83%BC%E3%82%B9%E3%83%BB%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E6%9B%B8%E3%81%8F">ソース・ファイルを書く<a href="#%E3%82%BD%E3%83%BC%E3%82%B9%E3%83%BB%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E6%9B%B8%E3%81%8F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>上記のコマンドは走らせたままにする。別のシェルかファイルマネージャーからプロジェクトのディレクトリへ行って、<code>src/main/scala/example</code> というディレクトリを作る。次に好きなエディタを使って <code>example</code> ディレクトリ内に以下のファイルを作成する:
 </p><pre><code class="prettyprint lang-scala">package example
 
@@ -73,46 +76,57 @@ object Hello {
   }
 }
 </code></pre><p>この新しいファイルは実行中のコマンドが自動的に検知したはずだ:
-</p><pre><code class="">[info] Compiling 1 Scala source to /private/tmp/foo-build/target/scala-2.12/classes ...
-[info] Done compiling.
-[success] Total time: 2 s, completed May 6, 2018 3:53:42 PM
-2. Waiting for source changes... (press enter to interrupt)
+</p><pre><code class="">[info] Build triggered by /tmp/foo-build/src/main/scala/example/Hello.scala. Running 'compile'.
+[info] compiling 1 Scala source to /tmp/foo-build/target/scala-2.12/classes ...
+[success] Total time: 0 s, completed 28 Jul 2023, 13:38:55
+[info] 2. Monitoring source files for foo-build/compile...
+[info]    Press &lt;enter&gt; to interrupt or '?' for more options.
 </code></pre><p><code>~compile</code> を抜けるには <code>Enter</code> を押す。
 </p><h3 id="%E4%BB%A5%E5%89%8D%E3%81%AE%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%82%92%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B">以前のコマンドを実行する<a href="#%E4%BB%A5%E5%89%8D%E3%81%AE%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%82%92%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt シェル内で上矢印キーを 2回押して、上で実行した <code>compile</code> コマンドを探す。
 </p><pre><code class="">sbt:foo-build&gt; compile
 </code></pre><h3 id="%E3%83%98%E3%83%AB%E3%83%97%E3%82%92%E8%AA%AD%E3%82%80">ヘルプを読む<a href="#%E3%83%98%E3%83%AB%E3%83%97%E3%82%92%E8%AA%AD%E3%82%80" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>help</code> コマンドを使って、基礎コマンドの一覧を表示する。
 </p><pre><code class="">sbt:foo-build&gt; help
 
-  about                                          Displays basic information about sbt and the build.
-  tasks                                          Lists the tasks defined for the current project.
-  settings                                       Lists the settings defined for the current project.
-  reload                                         (Re)loads the current project or changes to plugins project or returns from it.
-  new                                            Creates a new sbt build.
-  projects                                       Lists the names of available projects or temporarily adds/removes extra builds to the session.
-  project                                        Displays the current project or changes to the provided `project`.
+&lt;command&gt; (; &lt;command&gt;)*                       Runs the provided semicolon-separated commands.
+about                                          Displays basic information about sbt and the build.
+tasks                                          Lists the tasks defined for the current project.
+settings                                       Lists the settings defined for the current project.
+reload                                         (Re)loads the current project or changes to plugins project or returns from it.
+new                                            Creates a new sbt build.
+new                                            Creates a new sbt build.
+projects                                       Lists the names of available projects or temporarily adds/removes extra builds to the session.
 
 ....
 </code></pre><p>特定のタスクの説明を表示させる:
 </p><pre><code class="">sbt:foo-build&gt; help run
 Runs a main class, passing along arguments provided on the command line.
 </code></pre><h3 id="%E3%82%A2%E3%83%97%E3%83%AA%E3%82%92%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B">アプリを実行する<a href="#%E3%82%A2%E3%83%97%E3%83%AA%E3%82%92%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:foo-build&gt; run
-[info] Packaging /private/tmp/foo-build/target/scala-2.12/foo-build_2.12-0.1.0-SNAPSHOT.jar ...
-[info] Done packaging.
-[info] Running example.Hello
+[info] running example.Hello
 Hello
-[success] Total time: 1 s, completed May 6, 2018 4:10:44 PM
+[success] Total time: 0 s, completed 28 Jul 2023, 13:40:31
 </code></pre><h3 id="sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%8B%E3%82%89+ThisBuild+%2F+scalaVersion+%E3%82%92%E3%82%BB%E3%83%83%E3%83%88%E3%81%99%E3%82%8B">sbt シェルから ThisBuild / scalaVersion をセットする<a href="#sbt+%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%8B%E3%82%89+ThisBuild+%2F+scalaVersion+%E3%82%92%E3%82%BB%E3%83%83%E3%83%88%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:foo-build&gt; set ThisBuild / scalaVersion := &quot;2.13.11&quot;
 [info] Defining ThisBuild / scalaVersion
+[info] The new value will be used by Compile / bspBuildTarget, Compile / dependencyTreeCrossProjectId and 50 others.
+[info]  Run `last` for details.
+[info] Reapplying settings...
+[info] set current project to foo-build (in build file:/tmp/foo-build/)
 </code></pre><p><code>scalaVersion</code> セッティングを確認する:
 </p><pre><code class="">sbt:foo-build&gt; scalaVersion
 [info] 2.13.11
 </code></pre><h3 id="%E3%82%BB%E3%83%83%E3%82%B7%E3%83%A7%E3%83%B3%E3%82%92+build.sbt+%E3%81%B8%E3%81%A8%E4%BF%9D%E5%AD%98%E3%81%99%E3%82%8B">セッションを build.sbt へと保存する<a href="#%E3%82%BB%E3%83%83%E3%82%B7%E3%83%A7%E3%83%B3%E3%82%92+build.sbt+%E3%81%B8%E3%81%A8%E4%BF%9D%E5%AD%98%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>アドホックに設定したセッティングは <code>session save</code> で保存できる。
 </p><pre><code class="">sbt:foo-build&gt; session save
 [info] Reapplying settings...
+[info] set current project to foo-build (in build file:/tmp/foo-build/)
+[warn] build source files have changed
+[warn] modified files:
+[warn]   /tmp/foo-build/build.sbt
+[warn] Apply these changes by running `reload`.
+[warn] Automatically reload the build when source changes are detected by setting `Global / onChangedBuildSource := ReloadOnSourceChanges`.
+[warn] Disable this warning by setting `Global / onChangedBuildSource := IgnoreSourceChanges`.
 </code></pre><p><code>build.sbt</code> ファイルは以下のようになったはずだ:
 </p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.11&quot;
 </code></pre><h3 id="%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%AB%E5%90%8D%E5%89%8D%E3%82%92%E4%BB%98%E3%81%91%E3%82%8B">プロジェクトに名前を付ける<a href="#%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%AB%E5%90%8D%E5%89%8D%E3%82%92%E4%BB%98%E3%81%91%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>エディタを使って、<code>build.sbt</code> を以下のように変更する:
-</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.6&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.11&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
 lazy val hello = (project in file(&quot;.&quot;))
@@ -121,144 +135,138 @@ lazy val hello = (project in file(&quot;.&quot;))
   )
 </code></pre><h3 id="%E3%83%93%E3%83%AB%E3%83%89%E3%81%AE%E5%86%8D%E8%AA%AD%E3%81%BF%E8%BE%BC%E3%81%BF">ビルドの再読み込み<a href="#%E3%83%93%E3%83%AB%E3%83%89%E3%81%AE%E5%86%8D%E8%AA%AD%E3%81%BF%E8%BE%BC%E3%81%BF" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>reload</code> コマンドを使ってビルドを再読み込みする。このコマンドは <code>build.sbt</code> を読み直して、そこに書かれたセッティングを再適用する。
 </p><pre><code class="">sbt:foo-build&gt; reload
-[info] Loading project definition from /private/tmp/foo-build/project
-[info] Loading settings from build.sbt ...
-[info] Set current project to Hello (in build file:/private/tmp/foo-build/)
+[info] welcome to sbt 1.9.3 (Eclipse Adoptium Java 17.0.8)
+[info] loading project definition from /tmp/foo-build/project
+[info] loading settings for project hello from build.sbt ...
+[info] set current project to Hello (in build file:/tmp/foo-build/)
 sbt:Hello&gt;
 </code></pre><p>プロンプトが <code>sbt:Hello&gt;</code> に変わったことに注目してほしい。
-</p><h3 id="libraryDependencies+%E3%81%AB+ScalaTest+%E3%82%92%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B">libraryDependencies に ScalaTest を追加する<a href="#libraryDependencies+%E3%81%AB+ScalaTest+%E3%82%92%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>エディタを使って、<code>build.sbt</code> を以下のように変更する:
-</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.6&quot;
+</p><h3 id="libraryDependencies+%E3%81%AB+toolkit-test+%E3%82%92%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B">libraryDependencies に toolkit-test を追加する<a href="#libraryDependencies+%E3%81%AB+toolkit-test+%E3%82%92%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>エディタを使って、<code>build.sbt</code> を以下のように変更する:
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.11&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
-lazy val hello = (project in file(&quot;.&quot;))
+lazy val hello = project
+  .in(file(&quot;.&quot;))
   .settings(
     name := &quot;Hello&quot;,
-    libraryDependencies += &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.2.7&quot; % Test,
+    libraryDependencies += &quot;org.scala-lang&quot; %% &quot;toolkit-test&quot; % &quot;0.1.7&quot; % Test
   )
 </code></pre><p><code>reload</code> コマンドを使って、<code>build.sbt</code> の変更を反映させる。
 </p><pre><code class="">sbt:Hello&gt; reload
 </code></pre><h3 id="%E3%83%86%E3%82%B9%E3%83%88%E3%82%92%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B">テストを実行する<a href="#%E3%83%86%E3%82%B9%E3%83%88%E3%82%92%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:Hello&gt; test
 </code></pre><h3 id="%E5%B7%AE%E5%88%86%E3%83%86%E3%82%B9%E3%83%88%E3%82%92%E7%B6%99%E7%B6%9A%E7%9A%84%E3%81%AB%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B">差分テストを継続的に実行する<a href="#%E5%B7%AE%E5%88%86%E3%83%86%E3%82%B9%E3%83%88%E3%82%92%E7%B6%99%E7%B6%9A%E7%9A%84%E3%81%AB%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:Hello&gt; ~testQuick
-</code></pre><h3 id="%E3%83%86%E3%82%B9%E3%83%88%E3%82%92%E6%9B%B8%E3%81%8F">テストを書く<a href="#%E3%83%86%E3%82%B9%E3%83%88%E3%82%92%E6%9B%B8%E3%81%8F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>上のコマンドを走らせたままで、エディタから <code>src/test/scala/HelloSpec.scala</code> という名前のファイルを作成する:
-</p><pre><code class="prettyprint lang-scala">import org.scalatest.funsuite._
-
-class HelloSpec extends AnyFunSuite {
+</code></pre><h3 id="%E3%83%86%E3%82%B9%E3%83%88%E3%82%92%E6%9B%B8%E3%81%8F">テストを書く<a href="#%E3%83%86%E3%82%B9%E3%83%88%E3%82%92%E6%9B%B8%E3%81%8F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>上のコマンドを走らせたままで、エディタから <code>src/test/scala/example/HelloSuite.scala</code> という名前のファイルを作成する:
+</p><pre><code class="prettyprint lang-scala">
+class HelloSuite extends munit.FunSuite {
   test(&quot;Hello should start with H&quot;) {
     assert(&quot;hello&quot;.startsWith(&quot;H&quot;))
   }
 }
 </code></pre><p><code>~testQuick</code> が検知したはずだ:
-</p><pre><code class="">2. Waiting for source changes... (press enter to interrupt)
-[info] Compiling 1 Scala source to /private/tmp/foo-build/target/scala-2.12/test-classes ...
-[info] Done compiling.
-[info] HelloSpec:
-[info] - Hello should start with H *** FAILED ***
-[info]   assert(&quot;hello&quot;.startsWith(&quot;H&quot;))
-[info]          |       |          |
-[info]          &quot;hello&quot; false      &quot;H&quot; (HelloSpec.scala:5)
-[info] Run completed in 135 milliseconds.
-[info] Total number of tests run: 1
-[info] Suites: completed 1, aborted 0
-[info] Tests: succeeded 0, failed 1, canceled 0, ignored 0, pending 0
-[info] *** 1 TEST FAILED ***
+</p><pre><code class="">[info] 2. Monitoring source files for hello/testQuick...
+[info]    Press &lt;enter&gt; to interrupt or '?' for more options.
+[info] Build triggered by /tmp/foo-build/src/test/scala/example/HelloSuite.scala. Running 'testQuick'.
+[info] compiling 1 Scala source to /tmp/foo-build/target/scala-2.13/test-classes ...
+HelloSuite:
+==&gt; X HelloSuite.Hello should start with H  0.004s munit.FailException: /tmp/foo-build/src/test/scala/example/HelloSuite.scala:4 assertion failed
+3:  test(&quot;Hello should start with H&quot;) {
+4:    assert(&quot;hello&quot;.startsWith(&quot;H&quot;))
+5:  }
+at munit.FunSuite.assert(FunSuite.scala:11)
+at HelloSuite.$anonfun$new$1(HelloSuite.scala:4)
+[error] Failed: Total 1, Failed 1, Errors 0, Passed 0
 [error] Failed tests:
-[error]   HelloSpec
+[error]         HelloSuite
 [error] (Test / testQuick) sbt.TestsFailedException: Tests unsuccessful
-</code></pre><h3 id="%E3%83%86%E3%82%B9%E3%83%88%E3%81%8C%E9%80%9A%E3%82%8B%E3%82%88%E3%81%86%E3%81%AB%E3%81%99%E3%82%8B">テストが通るようにする<a href="#%E3%83%86%E3%82%B9%E3%83%88%E3%81%8C%E9%80%9A%E3%82%8B%E3%82%88%E3%81%86%E3%81%AB%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>エディタを使って <code>src/test/scala/HelloSpec.scala</code> を以下のように変更する:
-</p><pre><code class="prettyprint lang-scala">import org.scalatest.funsuite._
-
-class HelloSpec extends AnyFunSuite {
+</code></pre><h3 id="%E3%83%86%E3%82%B9%E3%83%88%E3%81%8C%E9%80%9A%E3%82%8B%E3%82%88%E3%81%86%E3%81%AB%E3%81%99%E3%82%8B">テストが通るようにする<a href="#%E3%83%86%E3%82%B9%E3%83%88%E3%81%8C%E9%80%9A%E3%82%8B%E3%82%88%E3%81%86%E3%81%AB%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>エディタを使って <code>src/test/scala/example/HelloSuite.scala</code> を以下のように変更する:
+</p><pre><code class="prettyprint lang-scala">
+class HelloSuite extends munit.FunSuite {
   test(&quot;Hello should start with H&quot;) {
-    // Hello, as opposed to hello
     assert(&quot;Hello&quot;.startsWith(&quot;H&quot;))
   }
 }
 </code></pre><p>テストが通過したことを確認して、<code>Enter</code> を押して継続的テストを抜ける。
 </p><h3 id="%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%92%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B">ライブラリ依存性を追加する<a href="#%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E4%BE%9D%E5%AD%98%E6%80%A7%E3%82%92%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>エディタを使って <code>build.sbt</code> を以下のように変更する:
-</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.6&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.11&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
-lazy val hello = (project in file(&quot;.&quot;))
+lazy val hello = project
+  .in(file(&quot;.&quot;))
   .settings(
     name := &quot;Hello&quot;,
-    libraryDependencies += &quot;com.typesafe.play&quot; %% &quot;play-json&quot; % &quot;2.9.2&quot;,
-    libraryDependencies += &quot;com.eed3si9n&quot; %% &quot;gigahorse-okhttp&quot; % &quot;0.5.0&quot;,
-    libraryDependencies += &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.2.7&quot; % Test,
+    libraryDependencies ++= Seq(
+      &quot;org.scala-lang&quot; %% &quot;toolkit&quot; % &quot;0.1.7&quot;,
+      &quot;org.scala-lang&quot; %% &quot;toolkit-test&quot; % &quot;0.1.7&quot; % Test
+    )
   )
 </code></pre><h3 id="Scala+REPL+%E3%82%92%E4%BD%BF%E3%81%86">Scala REPL を使う<a href="#Scala+REPL+%E3%82%92%E4%BD%BF%E3%81%86" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>New York の現在の天気を調べてみる:
 </p><pre><code class="prettyprint lang-scala">sbt:Hello&gt; console
 [info] Starting scala interpreter...
-Welcome to Scala 2.12.7 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0_171).
+Welcome to Scala 2.13.11 (OpenJDK 64-Bit Server VM, Java 17).
 Type in expressions for evaluation. Or try :help.
 
 scala&gt; :paste
 // Entering paste mode (ctrl-D to finish)
 
-import scala.concurrent._, duration._
-import gigahorse._, support.okhttp.Gigahorse
-import play.api.libs.json._
+import sttp.client4.quick._
+import sttp.client4.Response
 
-Gigahorse.withHttp(Gigahorse.config) { http =&gt;
-  val baseUrl = &quot;https://www.metaweather.com/api/location&quot;
-  val rLoc = Gigahorse.url(baseUrl + &quot;/search/&quot;).get.
-    addQueryString(&quot;query&quot; -&gt; &quot;New York&quot;)
-  val fLoc = http.run(rLoc, Gigahorse.asString)
-  val loc = Await.result(fLoc, 10.seconds)
-  val woeid = (Json.parse(loc) \ 0 \ &quot;woeid&quot;).get
-  val rWeather = Gigahorse.url(baseUrl + s&quot;/$woeid/&quot;).get
-  val fWeather = http.run(rWeather, Gigahorse.asString)
-  val weather = Await.result(fWeather, 10.seconds)
-  ({Json.parse(_: String)} andThen Json.prettyPrint)(weather)
-}
+val newYorkLatitude: Double = 40.7143
+val newYorkLongitude: Double = -74.006
+val response: Response[String] = quickRequest
+.get(
+    uri&quot;https://api.open-meteo.com/v1/forecast?latitude=$newYorkLatitude&amp;longitude=$newYorkLongitude&amp;current_weather=true&quot;
+)
+.send()
 
-// Ctrl+D を押してペーストモードを抜ける
+println(ujson.read(response.body).render(indent = 2))
+
+// press Ctrl+D
 
 // Exiting paste mode, now interpreting.
 
-import scala.concurrent._
-import duration._
-import gigahorse._
-import support.okhttp.Gigahorse
-import play.api.libs.json._
-res0: String =
 {
-  &quot;consolidated_weather&quot; : [ {
-    &quot;id&quot; : 5325278131781632,
-    &quot;weather_state_name&quot; : &quot;Light Rain&quot;,
-    &quot;weather_state_abbr&quot; : &quot;lr&quot;,
-    &quot;wind_direction_compass&quot; : &quot;W&quot;,
-    &quot;created&quot; : &quot;2019-11-23T09:16:43.892336Z&quot;,
-    &quot;applicable_date&quot; : &quot;2019-11-23&quot;,
-    &quot;min_temp&quot; : 0.36,
-    &quot;max_temp&quot; : 8.375,
-    &quot;the_temp&quot; : 3.98,
-    &quot;wind_speed&quot; : 4.813710565158143,
-    &quot;wind_direction&quot; : 266.48254020294627,
-    &quot;air_pressure&quot; : 1017,
-    &quot;humidity&quot; : 58,
-    &quot;visibility&quot; : 15.37583015191283,
-    &quot;predictability&quot; : 75
-  }, {
-    &quot;id&quot; : 6428406054912000,
-    &quot;weather_state_name&quot; : &quot;Heavy Rain&quot;,
-    &quot;weather_state_abbr&quot; : &quot;hr&quot;,
-  ...
+    &quot;latitude&quot;: 40.710335,
+    &quot;longitude&quot;: -73.99307,
+    &quot;generationtime_ms&quot;: 0.36704540252685547,
+    &quot;utc_offset_seconds&quot;: 0,
+    &quot;timezone&quot;: &quot;GMT&quot;,
+    &quot;timezone_abbreviation&quot;: &quot;GMT&quot;,
+    &quot;elevation&quot;: 51,
+    &quot;current_weather&quot;: {
+        &quot;temperature&quot;: 21.3,
+        &quot;windspeed&quot;: 16.7,
+        &quot;winddirection&quot;: 205,
+        &quot;weathercode&quot;: 3,
+        &quot;is_day&quot;: 1,
+        &quot;time&quot;: &quot;2023-08-04T10:00&quot;
+    }
+}
+import sttp.client4.quick._
+import sttp.client4.Response
+val newYorkLatitude: Double = 40.7143
+val newYorkLongitude: Double = -74.006
+val response: sttp.client4.Response[String] = Response({&quot;latitude&quot;:40.710335,&quot;longitude&quot;:-73.99307,&quot;generationtime_ms&quot;:0.36704540252685547,&quot;utc_offset_seconds&quot;:0,&quot;timezone&quot;:&quot;GMT&quot;,&quot;timezone_abbreviation&quot;:&quot;GMT&quot;,&quot;elevation&quot;:51.0,&quot;current_weather&quot;:{&quot;temperature&quot;:21.3,&quot;windspeed&quot;:16.7,&quot;winddirection&quot;:205.0,&quot;weathercode&quot;:3,&quot;is_day&quot;:1,&quot;time&quot;:&quot;2023-08-04T10:00&quot;}},200,,List(:status: 200, content-encoding: deflate, content-type: application/json; charset=utf-8, date: Fri, 04 Aug 2023 10:09:11 GMT),List(),RequestMetadata(GET,https://api.open-meteo.com/v1/forecast?latitude=40.7143&amp;longitude...
 
-scala&gt; :q // これで REPL を抜ける
+scala&gt; :q // to quit
 </code></pre><h3 id="%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B">サブプロジェクトを作成する<a href="#%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> を以下のように変更する:
-</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.6&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.11&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
-lazy val hello = (project in file(&quot;.&quot;))
+lazy val hello = project
+  .in(file(&quot;.&quot;))
   .settings(
     name := &quot;Hello&quot;,
-    libraryDependencies += &quot;com.eed3si9n&quot; %% &quot;gigahorse-okhttp&quot; % &quot;0.5.0&quot;,
-    libraryDependencies += &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.2.7&quot; % Test,
+    libraryDependencies ++= Seq(
+      &quot;org.scala-lang&quot; %% &quot;toolkit&quot; % &quot;0.1.7&quot;,
+      &quot;org.scala-lang&quot; %% &quot;toolkit-test&quot; % &quot;0.1.7&quot; % Test
+    )
   )
 
-lazy val helloCore = (project in file(&quot;core&quot;))
+lazy val helloCore = project
+  .in(file(&quot;core&quot;))
   .settings(
-    name := &quot;Hello Core&quot;,
+    name := &quot;Hello Core&quot;
   )
 </code></pre><p><code>reload</code> コマンドを使って <code>build.sbt</code> の変更を反映させる。
 </p><h3 id="%E5%85%A8%E3%81%A6%E3%81%AE%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E5%88%97%E6%8C%99%E3%81%99%E3%82%8B">全てのサブプロジェクトを列挙する<a href="#%E5%85%A8%E3%81%A6%E3%81%AE%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E5%88%97%E6%8C%99%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:Hello&gt; projects
@@ -266,217 +274,224 @@ lazy val helloCore = (project in file(&quot;core&quot;))
 [info]   * hello
 [info]     helloCore
 </code></pre><h3 id="%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E3%82%B3%E3%83%B3%E3%83%91%E3%82%A4%E3%83%AB%E3%81%99%E3%82%8B">サブプロジェクトをコンパイルする<a href="#%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E3%82%B3%E3%83%B3%E3%83%91%E3%82%A4%E3%83%AB%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:Hello&gt; helloCore/compile
-</code></pre><h3 id="%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%AB+ScalaTest+%E3%82%92%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B">サブプロジェクトに ScalaTest を追加する<a href="#%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%AB+ScalaTest+%E3%82%92%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> を以下のように変更する:
-</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.6&quot;
+</code></pre><h3 id="%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%AB+toolkit-test+%E3%82%92%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B">サブプロジェクトに toolkit-test を追加する<a href="#%E3%82%B5%E3%83%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%AB+toolkit-test+%E3%82%92%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> を以下のように変更する:
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.11&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
-val scalaTest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.2.7&quot;
+val toolkitTest = &quot;org.scala-lang&quot; %% &quot;toolkit-test&quot; % &quot;0.1.7&quot;
 
-lazy val hello = (project in file(&quot;.&quot;))
+lazy val hello = project
+  .in(file(&quot;.&quot;))
   .settings(
     name := &quot;Hello&quot;,
-    libraryDependencies += &quot;com.eed3si9n&quot; %% &quot;gigahorse-okhttp&quot; % &quot;0.5.0&quot;,
-    libraryDependencies += scalaTest % Test,
+    libraryDependencies ++= Seq(
+      &quot;org.scala-lang&quot; %% &quot;toolkit&quot; % &quot;0.1.7&quot;,
+      toolkitTest % Test
+    )
   )
 
-lazy val helloCore = (project in file(&quot;core&quot;))
+lazy val helloCore = project
+  .in(file(&quot;core&quot;))
   .settings(
     name := &quot;Hello Core&quot;,
-    libraryDependencies += scalaTest % Test,
+    libraryDependencies += toolkitTest % Test
   )
 </code></pre><h3 id="%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%82%92%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%82%AD%E3%83%A3%E3%82%B9%E3%83%88%E3%81%99%E3%82%8B">コマンドをブロードキャストする<a href="#%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%82%92%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%82%AD%E3%83%A3%E3%82%B9%E3%83%88%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>hello</code> に送ったコマンドを <code>helloCore</code> にもブロードキャストするために集約を設定する:
-</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.6&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.11&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
-val scalaTest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.2.7&quot;
+val toolkitTest = &quot;org.scala-lang&quot; %% &quot;toolkit-test&quot; % &quot;0.1.7&quot;
 
-lazy val hello = (project in file(&quot;.&quot;))
+lazy val hello = project
+  .in(file(&quot;.&quot;))
   .aggregate(helloCore)
   .settings(
     name := &quot;Hello&quot;,
-    libraryDependencies += &quot;com.eed3si9n&quot; %% &quot;gigahorse-okhttp&quot; % &quot;0.5.0&quot;,
-    libraryDependencies += scalaTest % Test,
+    libraryDependencies ++= Seq(
+      &quot;org.scala-lang&quot; %% &quot;toolkit&quot; % &quot;0.1.7&quot;,
+      toolkitTest % Test
+    )
   )
 
-lazy val helloCore = (project in file(&quot;core&quot;))
+lazy val helloCore = project
+  .in(file(&quot;core&quot;))
   .settings(
     name := &quot;Hello Core&quot;,
-    libraryDependencies += scalaTest % Test,
+    libraryDependencies += toolkitTest % Test
   )
 </code></pre><p><code>reload</code> 後、<code>~testQuick</code> は両方のサブプロジェクトに作用する:
 </p><pre><code class="prettyprint lang-scala">sbt:Hello&gt; ~testQuick
 </code></pre><p><code>Enter</code> を押して継続的テストを抜ける。
 </p><h3 id="hello+%E3%81%8C+helloCore+%E3%81%AB%E4%BE%9D%E5%AD%98%E3%81%99%E3%82%8B%E3%82%88%E3%81%86%E3%81%AB%E3%81%99%E3%82%8B">hello が helloCore に依存するようにする<a href="#hello+%E3%81%8C+helloCore+%E3%81%AB%E4%BE%9D%E5%AD%98%E3%81%99%E3%82%8B%E3%82%88%E3%81%86%E3%81%AB%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>サブプロジェクト間の依存関係を定義するには <code>.dependsOn(...)</code> を使う。ついでに、Gigahorse への依存性も <code>helloCore</code> に移そう。
-</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.6&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.11&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
-val scalaTest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.2.7&quot;
+val toolkitTest = &quot;org.scala-lang&quot; %% &quot;toolkit-test&quot; % &quot;0.1.7&quot;
 
-lazy val hello = (project in file(&quot;.&quot;))
+lazy val hello = project
+  .in(file(&quot;.&quot;))
   .aggregate(helloCore)
   .dependsOn(helloCore)
   .settings(
     name := &quot;Hello&quot;,
-    libraryDependencies += scalaTest % Test,
+    libraryDependencies += toolkitTest % Test
   )
 
-lazy val helloCore = (project in file(&quot;core&quot;))
+lazy val helloCore = project
+  .in(file(&quot;core&quot;))
   .settings(
     name := &quot;Hello Core&quot;,
-    libraryDependencies += &quot;com.eed3si9n&quot; %% &quot;gigahorse-okhttp&quot; % &quot;0.5.0&quot;,
-    libraryDependencies += scalaTest % Test,
+    libraryDependencies += &quot;org.scala-lang&quot; %% &quot;toolkit&quot; % &quot;0.1.7&quot;,
+    libraryDependencies += toolkitTest % Test
   )
-</code></pre><h3 id="Play+JSON+%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6+JSON+%E3%82%92%E3%83%91%E3%83%BC%E3%82%B9%E3%81%99%E3%82%8B">Play JSON を使って JSON をパースする<a href="#Play+JSON+%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6+JSON+%E3%82%92%E3%83%91%E3%83%BC%E3%82%B9%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>helloCore</code> に Play JSON を追加しよう。
-</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.6&quot;
+</code></pre><h3 id="uJson+%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6+JSON+%E3%82%92%E3%83%91%E3%83%BC%E3%82%B9%E3%81%99%E3%82%8B">uJson を使って JSON をパースする<a href="#uJson+%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6+JSON+%E3%82%92%E3%83%91%E3%83%BC%E3%82%B9%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>helloCore</code> に uJson を追加しよう。
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.11&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
-val scalaTest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.2.7&quot;
-val gigahorse = &quot;com.eed3si9n&quot; %% &quot;gigahorse-okhttp&quot; % &quot;0.5.0&quot;
-val playJson  = &quot;com.typesafe.play&quot; %% &quot;play-json&quot; % &quot;2.9.2&quot;
+val toolkitTest = &quot;org.scala-lang&quot; %% &quot;toolkit-test&quot; % &quot;0.1.7&quot;
 
-lazy val hello = (project in file(&quot;.&quot;))
+lazy val hello = project
+  .in(file(&quot;.&quot;))
   .aggregate(helloCore)
   .dependsOn(helloCore)
   .settings(
     name := &quot;Hello&quot;,
-    libraryDependencies += scalaTest % Test,
+    libraryDependencies += toolkitTest % Test
   )
 
-lazy val helloCore = (project in file(&quot;core&quot;))
+lazy val helloCore = project
+  .in(file(&quot;core&quot;))
   .settings(
     name := &quot;Hello Core&quot;,
-    libraryDependencies ++= Seq(gigahorse, playJson),
-    libraryDependencies += scalaTest % Test,
+    libraryDependencies += &quot;org.scala-lang&quot; %% &quot;toolkit&quot; % &quot;0.1.7&quot;,
+    libraryDependencies += toolkitTest % Test
   )
 </code></pre><p><code>reload</code> 後、<code>core/src/main/scala/example/core/Weather.scala</code> を追加する:
-</p><pre><code class="prettyprint lang-scala">package example.core
+</p><pre><code class="prettyprint lang-scala">
+package example.core
 
-import gigahorse._, support.okhttp.Gigahorse
-import scala.concurrent._, duration._
-import play.api.libs.json._
+import sttp.client4.quick._
+import sttp.client4.Response
 
 object Weather {
-  lazy val http = Gigahorse.http(Gigahorse.config)
-
-  def weather: Future[String] = {
-    val baseUrl = &quot;https://www.metaweather.com/api/location&quot;
-    val locUrl = baseUrl + &quot;/search/&quot;
-    val weatherUrl = baseUrl + &quot;/%s/&quot;
-    val rLoc = Gigahorse.url(locUrl).get.
-      addQueryString(&quot;query&quot; -&gt; &quot;New York&quot;)
-    import ExecutionContext.Implicits.global
-    for {
-      loc &lt;- http.run(rLoc, parse)
-      woeid = (loc \ 0 \ &quot;woeid&quot;).get
-      rWeather = Gigahorse.url(weatherUrl format woeid).get
-      weather &lt;- http.run(rWeather, parse)
-    } yield (weather \\ &quot;weather_state_name&quot;)(0).as[String].toLowerCase
-  }
-
-  private def parse = Gigahorse.asString andThen Json.parse
+    def temp() = {
+        val response: Response[String] = quickRequest
+            .get(
+                uri&quot;https://api.open-meteo.com/v1/forecast?latitude=40.7143&amp;longitude=-74.006&amp;current_weather=true&quot;
+            )
+            .send()
+        val json = ujson.read(response.body)
+        json.obj(&quot;current_weather&quot;)(&quot;temperature&quot;).num
+    }
 }
 </code></pre><p>次に <code>src/main/scala/example/Hello.scala</code> を以下のように変更する:
 </p><pre><code class="prettyprint lang-scala">package example
 
-import scala.concurrent._, duration._
-import core.Weather
+import example.core.Weather
 
 object Hello {
-  def main(args: Array[String]): Unit = {
-    val w = Await.result(Weather.weather, 10.seconds)
-    println(s&quot;Hello! The weather in New York is $w.&quot;)
-    Weather.http.close()
-  }
+    def main(args: Array[String]): Unit = {
+        val temp = Weather.temp()
+        println(s&quot;Hello! The current temperature in New York is $temp C.&quot;)
+    }
 }
 </code></pre><p>アプリを走らせてみて、うまくいったか確認する:
 </p><pre><code class="">sbt:Hello&gt; run
-[info] Compiling 1 Scala source to /private/tmp/foo-build/core/target/scala-2.12/classes ...
-[info] Done compiling.
-[info] Compiling 1 Scala source to /private/tmp/foo-build/target/scala-2.12/classes ...
-[info] Packaging /private/tmp/foo-build/core/target/scala-2.12/hello-core_2.12-0.1.0-SNAPSHOT.jar ...
-[info] Done packaging.
-[info] Done compiling.
-[info] Packaging /private/tmp/foo-build/target/scala-2.12/hello_2.12-0.1.0-SNAPSHOT.jar ...
-[info] Done packaging.
-[info] Running example.Hello
-Hello! The weather in New York is mostly cloudy.
+[info] compiling 1 Scala source to /tmp/foo-build/core/target/scala-2.13/classes ...
+[info] compiling 1 Scala source to /tmp/foo-build/target/scala-2.13/classes ...
+[info] running example.Hello
+Hello! The current temperature in New York is 22.7 C.
 </code></pre><h3 id="sbt-native-packger+%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%82%92%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B">sbt-native-packger プラグインを追加する<a href="#sbt-native-packger+%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%82%92%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>エディタを使って <code>project/plugins.sbt</code> を追加する:
-</p><pre><code class="prettyprint lang-scala">addSbtPlugin(&quot;com.typesafe.sbt&quot; % &quot;sbt-native-packager&quot; % &quot;1.3.4&quot;)
+</p><pre><code class="prettyprint lang-scala">addSbtPlugin(&quot;com.github.sbt&quot; % &quot;sbt-native-packager&quot; % &quot;1.9.4&quot;)
 </code></pre><p>次に <code>build.sbt</code> を以下のように変更して <code>JavaAppPackaging</code> を追加する:
-</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.6&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.11&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
-val scalaTest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.2.7&quot;
-val gigahorse = &quot;com.eed3si9n&quot; %% &quot;gigahorse-okhttp&quot; % &quot;0.5.0&quot;
-val playJson  = &quot;com.typesafe.play&quot; %% &quot;play-json&quot; % &quot;2.9.2&quot;
+val toolkitTest = &quot;org.scala-lang&quot; %% &quot;toolkit-test&quot; % &quot;0.1.7&quot;
 
-lazy val hello = (project in file(&quot;.&quot;))
+lazy val hello = project
+  .in(file(&quot;.&quot;))
   .aggregate(helloCore)
   .dependsOn(helloCore)
   .enablePlugins(JavaAppPackaging)
   .settings(
     name := &quot;Hello&quot;,
-    libraryDependencies += scalaTest % Test,
+    libraryDependencies += toolkitTest % Test,
+    maintainer := &quot;A Scala Dev!&quot;
   )
 
-lazy val helloCore = (project in file(&quot;core&quot;))
+lazy val helloCore = project
+  .in(file(&quot;core&quot;))
   .settings(
     name := &quot;Hello Core&quot;,
-    libraryDependencies ++= Seq(gigahorse, playJson),
-    libraryDependencies += scalaTest % Test,
+    libraryDependencies += &quot;org.scala-lang&quot; %% &quot;toolkit&quot; % &quot;0.1.7&quot;,
+    libraryDependencies += toolkitTest % Test
   )
-</code></pre><h3 id="%E9%85%8D%E5%B8%83%E7%94%A8%E3%81%AE+.zip+%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E4%BD%9C%E3%82%8B">配布用の .zip ファイルを作る<a href="#%E9%85%8D%E5%B8%83%E7%94%A8%E3%81%AE+.zip+%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E4%BD%9C%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:Hello&gt; dist
-[info] Wrote /private/tmp/foo-build/target/scala-2.12/hello_2.12-0.1.0-SNAPSHOT.pom
-[info] Wrote /private/tmp/foo-build/core/target/scala-2.12/hello-core_2.12-0.1.0-SNAPSHOT.pom
-[info] Your package is ready in /private/tmp/foo-build/target/universal/hello-0.1.0-SNAPSHOT.zip
+</code></pre><h3 id="%E9%85%8D%E5%B8%83%E7%94%A8%E3%81%AE+.zip+%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E4%BD%9C%E3%82%8B">配布用の .zip ファイルを作る<a href="#%E9%85%8D%E5%B8%83%E7%94%A8%E3%81%AE+.zip+%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E4%BD%9C%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:Hello&gt; reload
+...
+sbt:Hello&gt; dist
+[info] Wrote /private/tmp/foo-build/target/scala-2.13/hello_2.13-0.1.0-SNAPSHOT.pom
+[info] Main Scala API documentation to /tmp/foo-build/target/scala-2.13/api...
+[info] Main Scala API documentation successful.
+[info] Main Scala API documentation to /tmp/foo-build/core/target/scala-2.13/api...
+[info] Wrote /tmp/foo-build/core/target/scala-2.13/hello-core_2.13-0.1.0-SNAPSHOT.pom
+[info] Main Scala API documentation successful.
+[success] All package validations passed
+[info] Your package is ready in /tmp/foo-build/target/universal/hello-0.1.0-SNAPSHOT.zip
 </code></pre><p>パッケージ化されたアプリの実行は以下のように行う:
 </p><pre><code class="">$ /tmp/someother
 $ cd /tmp/someother
 $ unzip -o -d /tmp/someother /tmp/foo-build/target/universal/hello-0.1.0-SNAPSHOT.zip
 $ ./hello-0.1.0-SNAPSHOT/bin/hello
-Hello! The weather in New York is mostly cloudy.
-</code></pre><h3 id="%E3%82%A2%E3%83%97%E3%83%AA%E3%82%92+Docker%E5%8C%96%E3%81%95%E3%81%9B%E3%82%8B">アプリを Docker化させる<a href="#%E3%82%A2%E3%83%97%E3%83%AA%E3%82%92+Docker%E5%8C%96%E3%81%95%E3%81%9B%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:Hello&gt; Docker/publishLocal
-....
-[info] Successfully built b6ce1b6ab2c0
-[info] Successfully tagged hello:0.1.0-SNAPSHOT
-[info] Built image hello:0.1.0-SNAPSHOT
-</code></pre><p>Docker化されたアプリは以下のように実行する:
-</p><pre><code class="">$ docker run hello:0.1.0-SNAPSHOT
-Hello! The weather in New York is mostly cloudy
-</code></pre><h3 id="version+%E3%82%92%E8%A8%AD%E5%AE%9A%E3%81%99%E3%82%8B">version を設定する<a href="#version+%E3%82%92%E8%A8%AD%E5%AE%9A%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> を以下のように変更する:
-</p><pre><code class="prettyprint lang-scala">ThisBuild / version      := &quot;0.1.0&quot;
-ThisBuild / scalaVersion := &quot;2.13.6&quot;
+Hello! The current temperature in New York is 22.7 C.
+``
+
+### アプリを Docker化させる
+
+</code></pre><p>sbt:Hello&gt; Docker/publishLocal
+….
+[info] Built image hello with tags [0.1.0-SNAPSHOT]
+```
+</p><p>Docker化されたアプリは以下のように実行する:
+</p><p><code>`
+$ docker run hello:0.1.0-SNAPSHOT
+Hello! The current temperature in New York is 22.7 C.
+</code>
+</p><h3 id="version+%E3%82%92%E8%A8%AD%E5%AE%9A%E3%81%99%E3%82%8B">version を設定する<a href="#version+%E3%82%92%E8%A8%AD%E5%AE%9A%E3%81%99%E3%82%8B" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> を以下のように変更する:
+</p><pre><code class="prettyprint lang-scala">ThisBuild / version := &quot;0.1.0&quot;
+ThisBuild / scalaVersion := &quot;2.13.11&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
-val scalaTest = &quot;org.scalatest&quot; %% &quot;scalatest&quot; % &quot;3.2.7&quot;
-val gigahorse = &quot;com.eed3si9n&quot; %% &quot;gigahorse-okhttp&quot; % &quot;0.5.0&quot;
-val playJson  = &quot;com.typesafe.play&quot; %% &quot;play-json&quot; % &quot;2.9.2&quot;
+val toolkitTest = &quot;org.scala-lang&quot; %% &quot;toolkit-test&quot; % &quot;0.1.7&quot;
 
-lazy val hello = (project in file(&quot;.&quot;))
+lazy val hello = project
+  .in(file(&quot;.&quot;))
   .aggregate(helloCore)
   .dependsOn(helloCore)
   .enablePlugins(JavaAppPackaging)
   .settings(
     name := &quot;Hello&quot;,
-    libraryDependencies += scalaTest % Test,
+    libraryDependencies += toolkitTest % Test,
+    maintainer := &quot;A Scala Dev!&quot;
   )
 
-lazy val helloCore = (project in file(&quot;core&quot;))
+lazy val helloCore = project
+  .in(file(&quot;core&quot;))
   .settings(
     name := &quot;Hello Core&quot;,
-    libraryDependencies ++= Seq(gigahorse, playJson),
-    libraryDependencies += scalaTest % Test,
+    libraryDependencies += &quot;org.scala-lang&quot; %% &quot;toolkit&quot; % &quot;0.1.7&quot;,
+    libraryDependencies += toolkitTest % Test
   )
-</code></pre><h3 id="Switch+scalaVersion+temporarily">Switch scalaVersion temporarily<a href="#Switch+scalaVersion+temporarily" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:Hello&gt; ++2.12.14!
-[info] Forcing Scala version to 2.12.14 on all projects.
+</code></pre><h3 id="Switch+scalaVersion+temporarily">Switch scalaVersion temporarily<a href="#Switch+scalaVersion+temporarily" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:Hello&gt; ++3.3.0!
+[info] Forcing Scala version to 3.3.0 on all projects.
 [info] Reapplying settings...
 [info] Set current project to Hello (in build file:/private/tmp/foo-build/)
 </code></pre><p><code>scalaVersion</code> セッティングを確認する:
 </p><pre><code class="">sbt:Hello&gt; scalaVersion
 [info] helloCore / scalaVersion
-[info]  2.12.14
+[info]  3.3.0
 [info] scalaVersion
-[info]  2.12.14
+[info]  3.3.0
 </code></pre><p>このセッティングは <code>reload</code> 後には無くなる。
 </p><h3 id="dist+%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%9A%E3%82%AF%E3%83%88">dist タスクのインスペクト<a href="#dist+%E3%82%BF%E3%82%B9%E3%82%AF%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%9A%E3%82%AF%E3%83%88" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>dist</code> タスクのことをもっと調べるために、<code>help</code> と <code>inspect</code> を実行してみる。
 </p><pre><code class="prettyprint lang-scala">sbt:Hello&gt; help dist
@@ -488,7 +503,7 @@ sbt:Hello&gt; inspect dist
 [info]   +-Universal / dist = Task[java.io.File]
 ....
 </code></pre><h3 id="%E3%83%90%E3%83%83%E3%83%81%E3%83%A2%E3%83%BC%E3%83%89">バッチモード<a href="#%E3%83%90%E3%83%83%E3%83%81%E3%83%A2%E3%83%BC%E3%83%89" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt のコマンドをターミナルから直接渡して sbt をバッチモードで実行することができる。
-</p><pre><code class="">$ sbt clean &quot;testOnly HelloSpec&quot;
+</p><pre><code class="">$ sbt clean &quot;testOnly HelloSuite&quot;
 </code></pre><p><strong>Note</strong>: バッチモードでの実行は JVM のスピンアップと JIT を毎回行うため、<strong>ビルドかなり遅くなる。</strong>
 普段のコーディングでは sbt シェル、
 もしくは <code>~testQuick</code> のような継続的テストを使うことを推奨する。
