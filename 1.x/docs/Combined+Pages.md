@@ -68,7 +68,7 @@ corrections and add documentation.
 
 Documentation for 0.13.x has been
 [archived here](https://www.scala-sbt.org/0.13/docs/index.html). This
-documentation applies to sbt 1.9.4.
+documentation applies to sbt 1.9.5.
 
 See also the [API Documentation][Apidoc],
 and the [index of names and types][Name-Index].
@@ -134,8 +134,8 @@ If you have any trouble running sbt, see [Command line reference][Command-Line-R
 JVM options.
 
 
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.9.4/sbt-1.9.4.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.9.4/sbt-1.9.4.tgz
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.9.5/sbt-1.9.5.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.9.5/sbt-1.9.5.tgz
   [Manual-Installation]: Manual-Installation.html
   [AdoptiumOpenJDK]: https://adoptium.net/
 
@@ -174,9 +174,9 @@ $ brew install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.9.4/sbt-1.9.4.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.9.4/sbt-1.9.4.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.9.4/sbt-1.9.4.tgz
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.9.5/sbt-1.9.5.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.9.5/sbt-1.9.5.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.9.5/sbt-1.9.5.tgz
   [AdoptiumOpenJDK]: https://adoptium.net
 
 Installing sbt on Windows
@@ -217,11 +217,11 @@ $ choco install sbt
 ```
 
 
-  [MSI]: https://github.com/sbt/sbt/releases/download/v1.9.4/sbt-1.9.4.msi
-  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.9.4/sbt-1.9.4.zip
-  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.9.4/sbt-1.9.4.tgz
-  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.9.4.rpm
-  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.9.4.deb
+  [MSI]: https://github.com/sbt/sbt/releases/download/v1.9.5/sbt-1.9.5.msi
+  [ZIP]: https://github.com/sbt/sbt/releases/download/v1.9.5/sbt-1.9.5.zip
+  [TGZ]: https://github.com/sbt/sbt/releases/download/v1.9.5/sbt-1.9.5.tgz
+  [RPM]: https://dl.bintray.com/sbt/rpm/sbt-1.9.5.rpm
+  [DEB]: https://dl.bintray.com/sbt/debian/sbt-1.9.5.deb
   [Manual-Installation]: Manual-Installation.html
   [website127]: https://github.com/sbt/website/issues/127
   [cert-bug]: https://bugs.launchpad.net/ubuntu/+source/ca-certificates-java/+bug/1739631
@@ -1649,7 +1649,7 @@ Build definition
 
 This page describes sbt build definitions, including some "theory" and
 the syntax of `build.sbt`.
-It assumes you have installed a recent version of sbt, such as sbt 1.9.4,
+It assumes you have installed a recent version of sbt, such as sbt 1.9.5,
 know how to [use sbt][Running],
 and have read the previous pages in the Getting Started Guide.
 
@@ -1664,7 +1664,7 @@ build the same projects with consistent results.
 To do this, create a file named `project/build.properties` that specifies the sbt version as follows:
 
 ```
-sbt.version=1.9.4
+sbt.version=1.9.5
 ```
 
 If the required version is not available locally,
@@ -4543,7 +4543,7 @@ always write it in all lowercase letters. However, we are cool with [酢豚][sub
 
 #### My last command didn't work but I can't see an explanation. Why?
 
-sbt 1.9.4 by default suppresses most stack traces and debugging
+sbt 1.9.5 by default suppresses most stack traces and debugging
 information. It has the nice side effect of giving you less noise on
 screen, but as a newcomer it can leave you lost for explanation. To see
 the previous output of a command at a higher verbosity, type
@@ -4916,7 +4916,7 @@ Any file name ending in `.sbt` will do, but most people use
 
 ### Miscellaneous
 
-#### Where can I find plugins for 1.9.4?
+#### Where can I find plugins for 1.9.5?
 
 See [Community Plugins][Community-Plugins] for a list of currently available
 plugins.
@@ -9314,7 +9314,7 @@ The following system properties can also be passed to `sbt`:
   <tr>
     <td><tt>sbt.version</tt></td>
     <td>Version</td>
-    <td><tt>1.9.4</tt></td>
+    <td><tt>1.9.5</tt></td>
     <td>sbt version to use, usually taken from <tt>project/build.properties</tt>.</td>
   </tr>
 
@@ -12008,7 +12008,7 @@ sbt needs Scala jars to run itself since it is written in Scala. sbt
 uses that same version of Scala to compile the build definitions that
 you write for your project because they use sbt APIs. This version of
 Scala is fixed for a specific sbt release and cannot be changed. For sbt
-1.9.4, this version is Scala 2.12.18. Because this Scala
+1.9.5, this version is Scala 2.12.18. Because this Scala
 version is needed before sbt runs, the repositories used to retrieve
 this version are configured in the sbt
 [launcher][Sbt-Launcher].
@@ -17981,11 +17981,11 @@ This Parser definition will produce a value of type `(String,String)`.
 The input syntax defined isn't very flexible; it is just a
 demonstration. It will produce one of the following values for a
 successful parse (assuming the current Scala version is 2.12.18,
-the current sbt version is 1.9.4, and there are 3 commands left to
+the current sbt version is 1.9.5, and there are 3 commands left to
 run):
 
 * (scala,2.12.18)
-* (sbt,1.9.4)
+* (sbt,1.9.5)
 * (commands,3)
 
 Again, we were able to access the current Scala and sbt version for the
@@ -20141,10 +20141,10 @@ If you haven't created one already, make sure to create `project/build.propertie
 `sbt.version` number:
 
 ```yml
-sbt.version=1.9.4
+sbt.version=1.9.5
 ```
 
-Your build will now use 1.9.4.
+Your build will now use 1.9.5.
 
 ### Read the GitHub Actions manual
 
@@ -20444,10 +20444,10 @@ If you haven't created one already, make sure to create `project/build.propertie
 `sbt.version` number:
 
 ```yml
-sbt.version=1.9.4
+sbt.version=1.9.5
 ```
 
-Your build will now use 1.9.4.
+Your build will now use 1.9.5.
 
 ### Read the Travis manual
 
@@ -20544,7 +20544,7 @@ java
 -Xss6M
 -XX:ReservedCodeCacheSize=256M
 -jar
-/home/travis/.sbt/launchers/1.9.4/sbt-launch.jar
+/home/travis/.sbt/launchers/1.9.5/sbt-launch.jar
 ```
 
 It seems to be working. One downside of setting all of the parameters is that we might be left behind when the environment updates and the default values gives us more memory in the future.
@@ -20570,7 +20570,7 @@ java
 -XX:ReservedCodeCacheSize=256M
 -Xms1024M
 -jar
-/home/travis/.sbt/launchers/1.9.4/sbt-launch.jar
+/home/travis/.sbt/launchers/1.9.5/sbt-launch.jar
 ```
 
 **Note**: This duplicates the `-Xms` flag as intended, which might not the best thing to do.
@@ -23508,7 +23508,7 @@ Here's how to set it up
 #### project/build.properties
 
 ```
-sbt.version=1.9.4
+sbt.version=1.9.5
 ```
 
 #### project/style.sbt
@@ -23559,7 +23559,7 @@ Let's try implementing a custom task called `compilecheck` that runs `Compile / 
 #### project/build.properties
 
 ```
-sbt.version=1.9.4
+sbt.version=1.9.5
 ```
 
 #### project/style.sbt
