@@ -1912,7 +1912,7 @@ libraryDependencies ++= Seq(
 libraryDependencies += "org.scala-stm" % "scala-stm_2.13" % "0.9.1"
 ```
 
-假设这个构建的 `scalaVersion` 是 `2.13.11`，下面这种方式是等效的（注意 `"org.scala-stm"` 后面是 `%%`）：
+假设这个构建的 `scalaVersion` 是 `2.13.12`，下面这种方式是等效的（注意 `"org.scala-stm"` 后面是 `%%`）：
 
 ```scala
 libraryDependencies += "org.scala-stm" %% "scala-stm" % "0.9.1"
@@ -2586,7 +2586,7 @@ import sbt._
 
 object Dependencies {
   // Versions
-  lazy val akkaVersion = "2.6.20"
+  lazy val akkaVersion = "2.6.21"
 
   // Libraries
   val akkaActor = "com.typesafe.akka" %% "akka-actor" % akkaVersion

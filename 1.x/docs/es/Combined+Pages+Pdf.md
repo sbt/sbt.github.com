@@ -412,7 +412,7 @@ Hello
 ### Establecer `ThisBuild / scalaVersion` desde el shell de sbt
 
 ```
-sbt:foo-build> set ThisBuild / scalaVersion := "2.13.11"
+sbt:foo-build> set ThisBuild / scalaVersion := "2.13.12"
 [info] Defining ThisBuild / scalaVersion
 [info] The new value will be used by Compile / bspBuildTarget, Compile / dependencyTreeCrossProjectId and 50 others.
 [info]  Run `last` for details.
@@ -424,7 +424,7 @@ sbt:foo-build> set ThisBuild / scalaVersion := "2.13.11"
 
 ```
 sbt:foo-build> scalaVersion
-[info] 2.13.11
+[info] 2.13.12
 ```
 
 ### Guardar la sesión actual en build.sbt
@@ -446,7 +446,7 @@ sbt:foo-build> session save
 El fichero `build.sbt` ahora debería de contener:
 
 ```scala
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 ```
 
 ### Dar un nombre a tu proyecto
@@ -454,7 +454,7 @@ ThisBuild / scalaVersion := "2.13.11"
 Utilizando un editor, modifica `build.sbt` con el siguiente contenido:
 
 ```scala
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 ThisBuild / organization := "com.example"
 
 lazy val hello = (project in file("."))
@@ -485,7 +485,7 @@ Fíjate en cómo el prompt ha cambiado a `sbt:Hello>`.
 Utilizando un editor, modifica `build.sbt` de la siguiente manera:
 
 ```scala
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 ThisBuild / organization := "com.example"
 
 lazy val hello = project
@@ -568,7 +568,7 @@ Confirma que el test pasa, luego pulsa `Intro` para salir del test continuo.
 Utilizando un editor, modifica `build.sbt` de esta forma:
 
 ```scala
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 ThisBuild / organization := "com.example"
 
 lazy val hello = project
@@ -592,7 +592,7 @@ Podemos averiguar qué tiempo hace actualmente en Nueva York.
 ```scala
 sbt:Hello> console
 [info] Starting scala interpreter...
-Welcome to Scala 2.13.11 (OpenJDK 64-Bit Server VM, Java 17).
+Welcome to Scala 2.13.12 (OpenJDK 64-Bit Server VM, Java 17).
 Type in expressions for evaluation. Or try :help.
 
 scala> :paste
@@ -646,7 +646,7 @@ scala> :q // to quit
 Cambia `build.sbt` como sigue:
 
 ```scala
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 ThisBuild / organization := "com.example"
 
 lazy val hello = project
@@ -688,7 +688,7 @@ sbt:Hello> helloCore/compile
 Cambia `build.sbt` como sigue:
 
 ```scala
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 ThisBuild / organization := "com.example"
 
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % "0.1.7"
@@ -716,7 +716,7 @@ lazy val helloCore = project
 Añade aggregate para que el comando enviado a `hello` sea difundido también a `helloCore`:
 
 ```scala
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 ThisBuild / organization := "com.example"
 
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % "0.1.7"
@@ -754,7 +754,7 @@ Usa `.dependsOn(...)` para añadir dependencias sobre otros subproyectos.
 Además, movamos la dependencia de Gigahorse a `helloCore`.
 
 ```scala
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 ThisBuild / organization := "com.example"
 
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % "0.1.7"
@@ -782,7 +782,7 @@ lazy val helloCore = project
 Vamos a añadir uJson de toolkit a `helloCore`.
 
 ```scala
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 ThisBuild / organization := "com.example"
 
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % "0.1.7"
@@ -863,7 +863,7 @@ addSbtPlugin("com.github.sbt" % "sbt-native-packager" % "1.9.4")
 Después cambia `build.sbt` como sigue para añadir `JavaAppPackaging`:
 
 ```scala
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 ThisBuild / organization := "com.example"
 
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % "0.1.7"
@@ -936,7 +936,7 @@ Cambia `build.sbt` como sigue:
 
 ```scala
 ThisBuild / version := "0.1.0"
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 ThisBuild / organization := "com.example"
 
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % "0.1.7"
@@ -964,8 +964,8 @@ lazy val helloCore = project
 ### Cambiar `scalaVersion` temporalmente
 
 ```
-sbt:Hello> ++3.3.0!
-[info] Forcing Scala version to 3.3.0 on all projects.
+sbt:Hello> ++3.3.1!
+[info] Forcing Scala version to 3.3.1 on all projects.
 [info] Reapplying settings...
 [info] Set current project to Hello (in build file:/tmp/foo-build/)
 ```
@@ -975,9 +975,9 @@ Comprueba la entrada `scalaVersion`:
 ```
 sbt:Hello> scalaVersion
 [info] helloCore / scalaVersion
-[info]  3.3.0
+[info]  3.3.1
 [info] scalaVersion
-[info]  3.3.0
+[info]  3.3.1
 ```
 
 Esta entrada se esfumará tras un `reload`.
@@ -3475,7 +3475,7 @@ del artefacto. Esto simplemente es un atajo. Podrías escribir esto sin el `%%`:
 libraryDependencies += "org.scala-stm" % "scala-stm_2.13" % "0.9.1"
 ```
 
-Si asumimos que `scalaVersion` para tu construcción es `2.13.11` lo siguiente es
+Si asumimos que `scalaVersion` para tu construcción es `2.13.12` lo siguiente es
 idéntico a lo anterior (fíjate en el doble `%%` tras `"org.scala-stm"`):
 
 ```scala
@@ -4118,7 +4118,7 @@ import sbt._
 
 object Dependencies {
   // Versions
-  lazy val akkaVersion = "2.6.20"
+  lazy val akkaVersion = "2.6.21"
 
   // Libraries
   val akkaActor = "com.typesafe.akka" %% "akka-actor" % akkaVersion

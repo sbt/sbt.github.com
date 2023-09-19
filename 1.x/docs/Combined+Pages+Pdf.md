@@ -459,7 +459,7 @@ Hello
 ### Set ThisBuild / scalaVersion from sbt shell
 
 ```
-sbt:foo-build> set ThisBuild / scalaVersion := "2.13.11"
+sbt:foo-build> set ThisBuild / scalaVersion := "2.13.12"
 [info] Defining ThisBuild / scalaVersion
 [info] The new value will be used by Compile / bspBuildTarget, Compile / dependencyTreeCrossProjectId and 50 others.
 [info]  Run `last` for details.
@@ -471,7 +471,7 @@ Check the `scalaVersion` setting:
 
 ```
 sbt:foo-build> scalaVersion
-[info] 2.13.11
+[info] 2.13.12
 ```
 
 ### Save the session to build.sbt
@@ -493,7 +493,7 @@ sbt:foo-build> session save
 `build.sbt` file should now contain:
 
 ```scala
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 
 ```
 
@@ -502,7 +502,7 @@ ThisBuild / scalaVersion := "2.13.11"
 Using an editor, change `build.sbt` as follows:
 
 ```scala
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 ThisBuild / organization := "com.example"
 
 lazy val hello = (project in file("."))
@@ -532,7 +532,7 @@ Note that the prompt has now changed to `sbt:Hello>`.
 Using an editor, change `build.sbt` as follows:
 
 ```scala
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 ThisBuild / organization := "com.example"
 
 lazy val hello = project
@@ -615,7 +615,7 @@ Confirm that the test passes, then press `Enter` to exit the continuous test.
 Using an editor, change `build.sbt` as follows:
 
 ```scala
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 ThisBuild / organization := "com.example"
 
 lazy val hello = project
@@ -638,7 +638,7 @@ We can find out the current weather in New York.
 ```scala
 sbt:Hello> console
 [info] Starting scala interpreter...
-Welcome to Scala 2.13.11 (OpenJDK 64-Bit Server VM, Java 17).
+Welcome to Scala 2.13.12 (OpenJDK 64-Bit Server VM, Java 17).
 Type in expressions for evaluation. Or try :help.
 
 scala> :paste
@@ -692,7 +692,7 @@ scala> :q // to quit
 Change `build.sbt` as follows:
 
 ```scala
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 ThisBuild / organization := "com.example"
 
 lazy val hello = project
@@ -734,7 +734,7 @@ sbt:Hello> helloCore/compile
 Change `build.sbt` as follows:
 
 ```scala
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 ThisBuild / organization := "com.example"
 
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % "0.1.7"
@@ -762,7 +762,7 @@ lazy val helloCore = project
 Set aggregate so that the command sent to `hello` is broadcast to `helloCore` too:
 
 ```scala
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 ThisBuild / organization := "com.example"
 
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % "0.1.7"
@@ -799,7 +799,7 @@ Press `Enter` to exit the continuous test.
 Use `.dependsOn(...)` to add a dependency on other subprojects. Also let's move the Gigahorse dependency to `helloCore`.
 
 ```scala
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 ThisBuild / organization := "com.example"
 
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % "0.1.7"
@@ -827,7 +827,7 @@ lazy val helloCore = project
 Let's use uJson from the toolkit in `helloCore`.
 
 ```scala
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 ThisBuild / organization := "com.example"
 
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % "0.1.7"
@@ -907,7 +907,7 @@ addSbtPlugin("com.github.sbt" % "sbt-native-packager" % "1.9.4")
 Next change `build.sbt` as follows to add `JavaAppPackaging`:
 
 ```scala
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 ThisBuild / organization := "com.example"
 
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % "0.1.7"
@@ -981,7 +981,7 @@ Change `build.sbt` as follows:
 
 ```scala
 ThisBuild / version := "0.1.0"
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 ThisBuild / organization := "com.example"
 
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % "0.1.7"
@@ -1009,8 +1009,8 @@ lazy val helloCore = project
 ### Switch scalaVersion temporarily
 
 ```
-sbt:Hello> ++3.3.0!
-[info] Forcing Scala version to 3.3.0 on all projects.
+sbt:Hello> ++3.3.1!
+[info] Forcing Scala version to 3.3.1 on all projects.
 [info] Reapplying settings...
 [info] Set current project to Hello (in build file:/tmp/foo-build/)
 ```
@@ -1020,9 +1020,9 @@ Check the `scalaVersion` setting:
 ```
 sbt:Hello> scalaVersion
 [info] helloCore / scalaVersion
-[info]  3.3.0
+[info]  3.3.1
 [info] scalaVersion
-[info]  3.3.0
+[info]  3.3.1
 ```
 
 This setting will go away after `reload`.
@@ -3702,7 +3702,7 @@ name. This is just a shortcut. You could write this without the `%%`:
 libraryDependencies += "org.scala-stm" % "scala-stm_2.13" % "0.9.1"
 ```
 
-Assuming the `scalaVersion` for your build is `2.13.11`, the following is
+Assuming the `scalaVersion` for your build is `2.13.12`, the following is
 identical (note the double `%%` after `"org.scala-stm"`):
 
 ```scala
@@ -4366,7 +4366,7 @@ import sbt._
 
 object Dependencies {
   // Versions
-  lazy val akkaVersion = "2.6.20"
+  lazy val akkaVersion = "2.6.21"
 
   // Libraries
   val akkaActor = "com.typesafe.akka" %% "akka-actor" % akkaVersion
@@ -10382,7 +10382,7 @@ chmod u+x script.scala
 #!/usr/bin/env sbt -Dsbt.version=1.6.1 -Dsbt.main.class=sbt.ScriptMain -error
 
 /***
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 libraryDependencies += "org.scala-sbt" %% "io" % "1.6.0"
 */
 
@@ -10398,7 +10398,7 @@ like reading a text file.
 #!/usr/bin/env sbt -Dsbt.version=1.6.1 -Dsbt.main.class=sbt.ScriptMain -error
 
 /***
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 libraryDependencies += "org.scala-sbt" %% "io" % "1.6.0"
 */
 
@@ -13702,7 +13702,7 @@ per project.
 The following full build configuration demonstrates integration tests.
 
 ```scala
-lazy val scalatest = "org.scalatest" %% "scalatest" % "3.2.16"
+lazy val scalatest = "org.scalatest" %% "scalatest" % "3.2.17"
 
 ThisBuild / organization := "com.example"
 ThisBuild / scalaVersion := "2.12.18"
@@ -13777,7 +13777,7 @@ IntegrationTest / testOptions := Seq(...)
 The previous example may be generalized to a custom test configuration.
 
 ```scala
-lazy val scalatest = "org.scalatest" %% "scalatest" % "3.2.16"
+lazy val scalatest = "org.scalatest" %% "scalatest" % "3.2.17"
 lazy val FunTest = config("fun") extend(Test)
 
 ThisBuild / organization := "com.example"
@@ -13835,7 +13835,7 @@ compiled together using the same classpath and are packaged together.
 However, different tests are run depending on the configuration.
 
 ```scala
-lazy val scalatest = "org.scalatest" %% "scalatest" % "3.2.16"
+lazy val scalatest = "org.scalatest" %% "scalatest" % "3.2.17"
 lazy val FunTest = config("fun") extend(Test)
 
 ThisBuild / organization := "com.example"
@@ -15394,7 +15394,7 @@ dependency's configuration `B`. The mapping for this looks like
 your dependency definition:
 
 ```scala
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.16" % "test->compile"
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.17" % "test->compile"
 ```
 
 This says that your project's `"test"` configuration uses `ScalaTest`'s
@@ -15429,7 +15429,7 @@ configuration than those. The ScalaTest dependency above can then be
 shortened to:
 
 ```scala
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.16" % "test"
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.17" % "test"
 ```
 
 ##### Forcing a revision (Not recommended)
@@ -20170,7 +20170,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Setup JDK
       uses: actions/setup-java@v3
       with:
@@ -20212,7 +20212,7 @@ jobs:
       JVM_OPTS:  -Xms2048M -Xmx2048M -Xss6M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Setup JDK
       uses: actions/setup-java@v3
       with:
@@ -20293,7 +20293,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Setup JDK
       uses: actions/setup-java@v3
       with:
@@ -20333,7 +20333,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Setup JDK
       uses: actions/setup-java@v3
       with:
@@ -20390,7 +20390,7 @@ jobs:
       JVM_OPTS:  -Xms2048M -Xmx2048M -Xss6M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Setup JDK
       uses: actions/setup-java@v3
       with:
@@ -24152,7 +24152,7 @@ object Dependencies {
   val apachenet   = "commons-net"   % "commons-net"   % "2.0"
   val apachecodec = "commons-codec" % "commons-codec" % "1.4"
 
-  val scalatest = "org.scalatest" %% "scalatest" % "3.2.16"
+  val scalatest = "org.scalatest" %% "scalatest" % "3.2.17"
 }
 ```
 

@@ -221,14 +221,14 @@ Runs a main class, passing along arguments provided on the command line.
 [info] running example.Hello
 Hello
 [success] Total time: 0 s, completed 28 Jul 2023, 13:40:31
-</code></pre><h3 id="Establecer++desde+el+shell+de+sbt">Establecer <code>ThisBuild / scalaVersion</code> desde el shell de sbt<a href="#Establecer++desde+el+shell+de+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:foo-build&gt; set ThisBuild / scalaVersion := &quot;2.13.11&quot;
+</code></pre><h3 id="Establecer++desde+el+shell+de+sbt">Establecer <code>ThisBuild / scalaVersion</code> desde el shell de sbt<a href="#Establecer++desde+el+shell+de+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:foo-build&gt; set ThisBuild / scalaVersion := &quot;2.13.12&quot;
 [info] Defining ThisBuild / scalaVersion
 [info] The new value will be used by Compile / bspBuildTarget, Compile / dependencyTreeCrossProjectId and 50 others.
 [info]  Run `last` for details.
 [info] Reapplying settings...
 [info] set current project to foo-build (in build file:/tmp/foo-build/)
 </code></pre><h3 id="Comprobar+la+entrada+%3A">Comprobar la entrada <code>scalaVersion</code>:<a href="#Comprobar+la+entrada+%3A" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:foo-build&gt; scalaVersion
-[info] 2.13.11
+[info] 2.13.12
 </code></pre><h3 id="Guardar+la+sesi%C3%B3n+actual+en+build.sbt">Guardar la sesión actual en build.sbt<a href="#Guardar+la+sesi%C3%B3n+actual+en+build.sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Podemos guardar la configuración temporal utilizando <code>session save</code>.
 </p><pre><code class="">sbt:foo-build&gt; session save
 [info] Reapplying settings...
@@ -240,9 +240,9 @@ Hello
 [warn] Automatically reload the build when source changes are detected by setting `Global / onChangedBuildSource := ReloadOnSourceChanges`.
 [warn] Disable this warning by setting `Global / onChangedBuildSource := IgnoreSourceChanges`.
 </code></pre><p>El fichero <code>build.sbt</code> ahora debería de contener:
-</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.11&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.12&quot;
 </code></pre><h3 id="Dar+un+nombre+a+tu+proyecto">Dar un nombre a tu proyecto<a href="#Dar+un+nombre+a+tu+proyecto" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Utilizando un editor, modifica <code>build.sbt</code> con el siguiente contenido:
-</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.11&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.12&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
 lazy val hello = (project in file(&quot;.&quot;))
@@ -260,7 +260,7 @@ aplicada.
 sbt:Hello&gt;
 </code></pre><p>Fíjate en cómo el prompt ha cambiado a <code>sbt:Hello&gt;</code>.
 </p><h3 id="A%C3%B1adir+toolkit-test+a">Añadir toolkit-test a <code>libraryDependencies</code><a href="#A%C3%B1adir+toolkit-test+a" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Utilizando un editor, modifica <code>build.sbt</code> de la siguiente manera:
-</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.11&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.12&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
 lazy val hello = project
@@ -306,7 +306,7 @@ class HelloSuite extends munit.FunSuite {
 }
 </code></pre><p>Confirma que el test pasa, luego pulsa <code>Intro</code> para salir del test continuo.
 </p><h3 id="A%C3%B1adir+una+dependencia+de+biblioteca">Añadir una dependencia de biblioteca<a href="#A%C3%B1adir+una+dependencia+de+biblioteca" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Utilizando un editor, modifica <code>build.sbt</code> de esta forma:
-</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.11&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.12&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
 lazy val hello = project
@@ -322,7 +322,7 @@ lazy val hello = project
 </p><h3 id="Usar+el+REPL+de+Scala">Usar el REPL de Scala<a href="#Usar+el+REPL+de+Scala" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Podemos averiguar qué tiempo hace actualmente en Nueva York.
 </p><pre><code class="prettyprint lang-scala">sbt:Hello&gt; console
 [info] Starting scala interpreter...
-Welcome to Scala 2.13.11 (OpenJDK 64-Bit Server VM, Java 17).
+Welcome to Scala 2.13.12 (OpenJDK 64-Bit Server VM, Java 17).
 Type in expressions for evaluation. Or try :help.
 
 scala&gt; :paste
@@ -370,7 +370,7 @@ val response: sttp.client4.Response[String] = Response({&quot;latitude&quot;:40.
 
 scala&gt; :q // to quit
 </code></pre><h3 id="Crear+un+subproyecto">Crear un subproyecto<a href="#Crear+un+subproyecto" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Cambia <code>build.sbt</code> como sigue:
-</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.11&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.12&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
 lazy val hello = project
@@ -395,7 +395,7 @@ lazy val helloCore = project
 [info]     helloCore
 </code></pre><h3 id="Compilar+el+subproyecto">Compilar el subproyecto<a href="#Compilar+el+subproyecto" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:Hello&gt; helloCore/compile
 </code></pre><h3 id="A%C3%B1adir+toolkit-test+al+subproyecto">Añadir toolkit-test al subproyecto<a href="#A%C3%B1adir+toolkit-test+al+subproyecto" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Cambia <code>build.sbt</code> como sigue:
-</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.11&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.12&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
 val toolkitTest = &quot;org.scala-lang&quot; %% &quot;toolkit-test&quot; % &quot;0.1.7&quot;
@@ -417,7 +417,7 @@ lazy val helloCore = project
     libraryDependencies += toolkitTest % Test
   )
 </code></pre><h3 id="Difundir+comandos">Difundir comandos<a href="#Difundir+comandos" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Añade aggregate para que el comando enviado a <code>hello</code> sea difundido también a <code>helloCore</code>:
-</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.11&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.12&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
 val toolkitTest = &quot;org.scala-lang&quot; %% &quot;toolkit-test&quot; % &quot;0.1.7&quot;
@@ -444,7 +444,7 @@ lazy val helloCore = project
 </code></pre><p>Pulsa <code>Intro</code> para salir del test continuo.
 </p><h3 id="Hacer+que+hello+dependa+de+helloCore">Hacer que hello dependa de helloCore<a href="#Hacer+que+hello+dependa+de+helloCore" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Usa <code>.dependsOn(...)</code> para añadir dependencias sobre otros subproyectos.
 Además, movamos la dependencia de Gigahorse a <code>helloCore</code>.
-</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.11&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.12&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
 val toolkitTest = &quot;org.scala-lang&quot; %% &quot;toolkit-test&quot; % &quot;0.1.7&quot;
@@ -466,7 +466,7 @@ lazy val helloCore = project
     libraryDependencies += toolkitTest % Test
   )
 </code></pre><h3 id="Parsear+JSON+con+uJson">Parsear JSON con uJson<a href="#Parsear+JSON+con+uJson" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Vamos a añadir uJson de toolkit a <code>helloCore</code>.
-</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.11&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.12&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
 val toolkitTest = &quot;org.scala-lang&quot; %% &quot;toolkit-test&quot; % &quot;0.1.7&quot;
@@ -524,7 +524,7 @@ Hello! The current temperature in New York is 22.7 C.
 </code></pre><h3 id="A%C3%B1adir+el+plugin+sbt-native-packager">Añadir el plugin sbt-native-packager<a href="#A%C3%B1adir+el+plugin+sbt-native-packager" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Utilizando un editor, crea <code>project/plugins.sbt</code>:
 </p><pre><code class="prettyprint lang-scala">addSbtPlugin(&quot;com.github.sbt&quot; % &quot;sbt-native-packager&quot; % &quot;1.9.4&quot;)
 </code></pre><p>Después cambia <code>build.sbt</code> como sigue para añadir <code>JavaAppPackaging</code>:
-</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.11&quot;
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.12&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
 val toolkitTest = &quot;org.scala-lang&quot; %% &quot;toolkit-test&quot; % &quot;0.1.7&quot;
@@ -572,7 +572,7 @@ Hello! The current temperature in New York is 22.7 C.
 Hello! The current temperature in New York is 22.7 C.
 </code></pre><h3 id="Establecer+la+versi%C3%B3n">Establecer la versión<a href="#Establecer+la+versi%C3%B3n" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Cambia <code>build.sbt</code> como sigue:
 </p><pre><code class="prettyprint lang-scala">ThisBuild / version := &quot;0.1.0&quot;
-ThisBuild / scalaVersion := &quot;2.13.11&quot;
+ThisBuild / scalaVersion := &quot;2.13.12&quot;
 ThisBuild / organization := &quot;com.example&quot;
 
 val toolkitTest = &quot;org.scala-lang&quot; %% &quot;toolkit-test&quot; % &quot;0.1.7&quot;
@@ -595,16 +595,16 @@ lazy val helloCore = project
     libraryDependencies += &quot;org.scala-lang&quot; %% &quot;toolkit&quot; % &quot;0.1.7&quot;,
     libraryDependencies += toolkitTest % Test
   )
-</code></pre><h3 id="Cambiar++temporalmente">Cambiar <code>scalaVersion</code> temporalmente<a href="#Cambiar++temporalmente" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:Hello&gt; ++3.3.0!
-[info] Forcing Scala version to 3.3.0 on all projects.
+</code></pre><h3 id="Cambiar++temporalmente">Cambiar <code>scalaVersion</code> temporalmente<a href="#Cambiar++temporalmente" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><pre><code class="">sbt:Hello&gt; ++3.3.1!
+[info] Forcing Scala version to 3.3.1 on all projects.
 [info] Reapplying settings...
 [info] Set current project to Hello (in build file:/tmp/foo-build/)
 </code></pre><p>Comprueba la entrada <code>scalaVersion</code>:
 </p><pre><code class="">sbt:Hello&gt; scalaVersion
 [info] helloCore / scalaVersion
-[info]  3.3.0
+[info]  3.3.1
 [info] scalaVersion
-[info]  3.3.0
+[info]  3.3.1
 </code></pre><p>Esta entrada se esfumará tras un <code>reload</code>.
 </p><h3 id="Inspeccionar+la+tarea">Inspeccionar la tarea <code>dist</code><a href="#Inspeccionar+la+tarea" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Para saber más acerca de <code>dist</code>, prueba <code>help</code> e <code>inspect</code>.
 </p><pre><code class="prettyprint lang-scala">sbt:Hello&gt; help dist
@@ -2247,7 +2247,7 @@ serie de dependencias:
 <code>groupId</code>), sbt añadirá la versión del binario de Scala de tu proyecto al nombre
 del artefacto. Esto simplemente es un atajo. Podrías escribir esto sin el <code>%%</code>:
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-stm&quot; % &quot;scala-stm_2.13&quot; % &quot;0.9.1&quot;
-</code></pre><p>Si asumimos que <code>scalaVersion</code> para tu construcción es <code>2.13.11</code> lo siguiente es
+</code></pre><p>Si asumimos que <code>scalaVersion</code> para tu construcción es <code>2.13.12</code> lo siguiente es
 idéntico a lo anterior (fíjate en el doble <code>%%</code> tras <code>&quot;org.scala-stm&quot;</code>):
 </p><pre><code class="prettyprint lang-scala">libraryDependencies += &quot;org.scala-stm&quot; %% &quot;scala-stm&quot; % &quot;0.9.1&quot;
 </code></pre><p>La idea es que muchas dependencias son compiladas para múltiples versiones de
@@ -2651,7 +2651,7 @@ acaban convirtiéndose en parte de la definición de construcción es crear
 
 object Dependencies {
   // Versions
-  lazy val akkaVersion = &quot;2.6.20&quot;
+  lazy val akkaVersion = &quot;2.6.21&quot;
 
   // Libraries
   val akkaActor = &quot;com.typesafe.akka&quot; %% &quot;akka-actor&quot; % akkaVersion

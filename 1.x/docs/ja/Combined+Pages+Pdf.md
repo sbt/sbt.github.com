@@ -381,7 +381,7 @@ Hello
 ### sbt シェルから ThisBuild / scalaVersion をセットする
 
 ```
-sbt:foo-build> set ThisBuild / scalaVersion := "2.13.11"
+sbt:foo-build> set ThisBuild / scalaVersion := "2.13.12"
 [info] Defining ThisBuild / scalaVersion
 [info] The new value will be used by Compile / bspBuildTarget, Compile / dependencyTreeCrossProjectId and 50 others.
 [info]  Run `last` for details.
@@ -393,7 +393,7 @@ sbt:foo-build> set ThisBuild / scalaVersion := "2.13.11"
 
 ```
 sbt:foo-build> scalaVersion
-[info] 2.13.11
+[info] 2.13.12
 ```
 
 ### セッションを build.sbt へと保存する
@@ -415,7 +415,7 @@ sbt:foo-build> session save
 `build.sbt` ファイルは以下のようになったはずだ:
 
 ```scala
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 ```
 
 ### プロジェクトに名前を付ける
@@ -423,7 +423,7 @@ ThisBuild / scalaVersion := "2.13.11"
 エディタを使って、`build.sbt` を以下のように変更する:
 
 ```scala
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 ThisBuild / organization := "com.example"
 
 lazy val hello = (project in file("."))
@@ -452,7 +452,7 @@ sbt:Hello>
 エディタを使って、`build.sbt` を以下のように変更する:
 
 ```scala
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 ThisBuild / organization := "com.example"
 
 lazy val hello = project
@@ -534,7 +534,7 @@ class HelloSuite extends munit.FunSuite {
 エディタを使って `build.sbt` を以下のように変更する:
 
 ```scala
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 ThisBuild / organization := "com.example"
 
 lazy val hello = project
@@ -555,7 +555,7 @@ New York の現在の天気を調べてみる:
 ```scala
 sbt:Hello> console
 [info] Starting scala interpreter...
-Welcome to Scala 2.13.11 (OpenJDK 64-Bit Server VM, Java 17).
+Welcome to Scala 2.13.12 (OpenJDK 64-Bit Server VM, Java 17).
 Type in expressions for evaluation. Or try :help.
 
 scala> :paste
@@ -609,7 +609,7 @@ scala> :q // to quit
 `build.sbt` を以下のように変更する:
 
 ```scala
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 ThisBuild / organization := "com.example"
 
 lazy val hello = project
@@ -651,7 +651,7 @@ sbt:Hello> helloCore/compile
 `build.sbt` を以下のように変更する:
 
 ```scala
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 ThisBuild / organization := "com.example"
 
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % "0.1.7"
@@ -679,7 +679,7 @@ lazy val helloCore = project
 `hello` に送ったコマンドを `helloCore` にもブロードキャストするために集約を設定する:
 
 ```scala
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 ThisBuild / organization := "com.example"
 
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % "0.1.7"
@@ -716,7 +716,7 @@ sbt:Hello> ~testQuick
 サブプロジェクト間の依存関係を定義するには `.dependsOn(...)` を使う。ついでに、Gigahorse への依存性も `helloCore` に移そう。
 
 ```scala
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 ThisBuild / organization := "com.example"
 
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % "0.1.7"
@@ -744,7 +744,7 @@ lazy val helloCore = project
 `helloCore` に uJson を追加しよう。
 
 ```scala
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 ThisBuild / organization := "com.example"
 
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % "0.1.7"
@@ -825,7 +825,7 @@ addSbtPlugin("com.github.sbt" % "sbt-native-packager" % "1.9.4")
 次に `build.sbt` を以下のように変更して `JavaAppPackaging` を追加する:
 
 ```scala
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 ThisBuild / organization := "com.example"
 
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % "0.1.7"
@@ -898,7 +898,7 @@ Hello! The current temperature in New York is 22.7 C.
 
 ```scala
 ThisBuild / version := "0.1.0"
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 ThisBuild / organization := "com.example"
 
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % "0.1.7"
@@ -926,8 +926,8 @@ lazy val helloCore = project
 ### Switch scalaVersion temporarily
 
 ```
-sbt:Hello> ++3.3.0!
-[info] Forcing Scala version to 3.3.0 on all projects.
+sbt:Hello> ++3.3.1!
+[info] Forcing Scala version to 3.3.1 on all projects.
 [info] Reapplying settings...
 [info] Set current project to Hello (in build file:/private/tmp/foo-build/)
 ```
@@ -937,9 +937,9 @@ sbt:Hello> ++3.3.0!
 ```
 sbt:Hello> scalaVersion
 [info] helloCore / scalaVersion
-[info]  3.3.0
+[info]  3.3.1
 [info] scalaVersion
-[info]  3.3.0
+[info]  3.3.1
 ```
 
 このセッティングは `reload` 後には無くなる。
@@ -3410,7 +3410,7 @@ sbt はプロジェクトの Scala のバイナリバージョンをアーティ
 libraryDependencies += "org.scala-stm" % "scala-stm_2.13" % "0.9.1"
 ```
 
-君のビルドの Scala バージョンが `2.13.11` だとすると、以下の設定は上記と等価だ（"org.scala-stm" の後ろの二つ連なった %% に注意）:
+君のビルドの Scala バージョンが `2.13.12` だとすると、以下の設定は上記と等価だ（"org.scala-stm" の後ろの二つ連なった %% に注意）:
 
 ```scala
 libraryDependencies += "org.scala-stm" %% "scala-stm" % "0.9.1"
@@ -4002,7 +4002,7 @@ import sbt._
 
 object Dependencies {
   // Versions
-  lazy val akkaVersion = "2.6.20"
+  lazy val akkaVersion = "2.6.21"
 
   // Libraries
   val akkaActor = "com.typesafe.akka" %% "akka-actor" % akkaVersion
