@@ -746,7 +746,7 @@ Pulsa `Intro` para salir del test continuo.
 ### Hacer que hello dependa de helloCore
 
 Usa `.dependsOn(...)` para añadir dependencias sobre otros subproyectos.
-Además, movamos la dependencia de Gigahorse a `helloCore`.
+Además, movamos la dependencia de toolkit a `helloCore`.
 
 ```scala
 ThisBuild / scalaVersion := "2.13.12"
