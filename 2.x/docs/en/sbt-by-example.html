@@ -1,0 +1,599 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>sbt by example - The book of sbt</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="src/reference/custom-2024.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Quick Start</li><li class="chapter-item expanded "><a href="Setup.html"><strong aria-hidden="true">1.</strong> Installing sbt runner</a></li><li class="chapter-item expanded "><a href="sbt-by-example.html" class="active"><strong aria-hidden="true">2.</strong> sbt by example</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Appendix</li><li class="chapter-item expanded "><a href="setup-notes.html"><strong aria-hidden="true">3.</strong> Setup notes</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The book of sbt</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="sbt-by-example"><a class="header" href="#sbt-by-example">sbt by example</a></h2>
+<p>This page assumes you've <a href="Setup.html">installed sbt runner</a>.</p>
+<p>Let's start with examples rather than explaining how sbt works or why.</p>
+<h3 id="create-a-minimum-sbt-build"><a class="header" href="#create-a-minimum-sbt-build">Create a minimum sbt build</a></h3>
+<pre><code class="language-bash">mkdir foo-build
+cd foo-build
+touch build.sbt
+mkdir project
+echo "sbt.version=2.0.0-alpha7" &gt; project/build.properties
+</code></pre>
+<h3 id="start-sbt-shell"><a class="header" href="#start-sbt-shell">Start sbt shell</a></h3>
+<pre><code class="language-bash">$ sbt
+[info] welcome to sbt 2.0.0-alpha7 (Azul Systems, Inc. Java 1.8.0_352)
+....
+[info] started sbt server
+sbt:foo-build&gt;
+</code></pre>
+<h3 id="exit-sbt-shell"><a class="header" href="#exit-sbt-shell">Exit sbt shell</a></h3>
+<p>To leave sbt shell, type <code>exit</code> or use Ctrl+D (Unix) or Ctrl+Z (Windows).</p>
+<pre><code>sbt:foo-build&gt; exit
+</code></pre>
+<h3 id="compile-a-project"><a class="header" href="#compile-a-project">Compile a project</a></h3>
+<p>As a convention, we will use the <code>sbt:...&gt;</code> or <code>&gt;</code> prompt to mean that we're in the sbt interactive shell.</p>
+<pre><code class="language-bash">$ sbt
+sbt:foo-build&gt; compile
+</code></pre>
+<h3 id="recompile-on-code-change"><a class="header" href="#recompile-on-code-change">Recompile on code change</a></h3>
+<p>Prefixing the <code>compile</code> command (or any other command) with <code>~</code> causes the command to be automatically
+re-executed whenever one of the source files within the project is modified. For example:</p>
+<pre><code>sbt:foo-build&gt; ~compile
+[success] Total time: 0 s, completed 28 Jul 2023, 13:32:35
+[info] 1. Monitoring source files for foo-build/compile...
+[info]    Press &lt;enter&gt; to interrupt or '?' for more options.
+</code></pre>
+<h3 id="create-a-source-file"><a class="header" href="#create-a-source-file">Create a source file</a></h3>
+<p>Leave the previous command running. From a different shell or in your file manager create in the foo-build
+directory the following nested directories: <code>src/main/scala/example</code>. Then, create <code>Hello.scala</code>
+in the <code>example</code> directory using your favorite editor as follows:</p>
+<pre><code class="language-scala">package example
+
+object Hello {
+  def main(args: Array[String]): Unit = {
+    println("Hello")
+  }
+}
+</code></pre>
+<p>This new file should be picked up by the running command:</p>
+<pre><code>[info] Build triggered by /tmp/foo-build/src/main/scala/example/Hello.scala. Running 'compile'.
+[info] compiling 1 Scala source to /tmp/foo-build/target/scala-2.12/classes ...
+[success] Total time: 0 s, completed 28 Jul 2023, 13:38:55
+[info] 2. Monitoring source files for foo-build/compile...
+[info]    Press &lt;enter&gt; to interrupt or '?' for more options.
+</code></pre>
+<p>Press <code>Enter</code> to exit <code>~compile</code>.</p>
+<h3 id="run-a-previous-command"><a class="header" href="#run-a-previous-command">Run a previous command</a></h3>
+<p>From sbt shell, press up-arrow twice to find the <code>compile</code> command that you
+executed at the beginning.</p>
+<pre><code>sbt:foo-build&gt; compile
+</code></pre>
+<h3 id="getting-help"><a class="header" href="#getting-help">Getting help</a></h3>
+<p>Use the <code>help</code> command to get basic help about the available commands.</p>
+<pre><code>sbt:foo-build&gt; help
+
+  &lt;command&gt; (; &lt;command&gt;)*                       Runs the provided semicolon-separated commands.
+  about                                          Displays basic information about sbt and the build.
+  tasks                                          Lists the tasks defined for the current project.
+  settings                                       Lists the settings defined for the current project.
+  reload                                         (Re)loads the current project or changes to plugins project or returns from it.
+  new                                            Creates a new sbt build.
+  new                                            Creates a new sbt build.
+  projects                                       Lists the names of available projects or temporarily adds/removes extra builds to the session.
+
+....
+</code></pre>
+<p>Display the description of a specific task:</p>
+<pre><code>sbt:foo-build&gt; help run
+Runs a main class, passing along arguments provided on the command line.
+</code></pre>
+<h3 id="run-your-app"><a class="header" href="#run-your-app">Run your app</a></h3>
+<pre><code>sbt:foo-build&gt; run
+[info] running example.Hello
+Hello
+[success] Total time: 0 s, completed 28 Jul 2023, 13:40:31
+</code></pre>
+<h3 id="set-thisbuild--scalaversion-from-sbt-shell"><a class="header" href="#set-thisbuild--scalaversion-from-sbt-shell">Set ThisBuild / scalaVersion from sbt shell</a></h3>
+<pre><code>sbt:foo-build&gt; set ThisBuild / scalaVersion := "$example_scala213$"
+[info] Defining ThisBuild / scalaVersion
+[info] The new value will be used by Compile / bspBuildTarget, Compile / dependencyTreeCrossProjectId and 50 others.
+[info]  Run `last` for details.
+[info] Reapplying settings...
+[info] set current project to foo-build (in build file:/tmp/foo-build/)
+</code></pre>
+<p>Check the <code>scalaVersion</code> setting:</p>
+<pre><code>sbt:foo-build&gt; scalaVersion
+[info] $example_scala213$
+</code></pre>
+<h3 id="save-the-session-to-buildsbt"><a class="header" href="#save-the-session-to-buildsbt">Save the session to build.sbt</a></h3>
+<p>We can save the ad-hoc settings using <code>session save</code>.</p>
+<pre><code>sbt:foo-build&gt; session save
+[info] Reapplying settings...
+[info] set current project to foo-build (in build file:/tmp/foo-build/)
+[warn] build source files have changed
+[warn] modified files:
+[warn]   /tmp/foo-build/build.sbt
+[warn] Apply these changes by running `reload`.
+[warn] Automatically reload the build when source changes are detected by setting `Global / onChangedBuildSource := ReloadOnSourceChanges`.
+[warn] Disable this warning by setting `Global / onChangedBuildSource := IgnoreSourceChanges`.
+</code></pre>
+<p><code>build.sbt</code> file should now contain:</p>
+<pre><code class="language-scala">ThisBuild / scalaVersion := "$example_scala213$"
+
+</code></pre>
+<h3 id="name-your-project"><a class="header" href="#name-your-project">Name your project</a></h3>
+<p>Using an editor, change <code>build.sbt</code> as follows:</p>
+<p>@@snip <a href="$root$/src/sbt-test/ref/example-name/build.sbt">name</a> {}</p>
+<h3 id="reload-the-build"><a class="header" href="#reload-the-build">Reload the build</a></h3>
+<p>Use the <code>reload</code> command to reload the build. The command causes the
+<code>build.sbt</code> file to be re-read, and its settings applied.</p>
+<pre><code>sbt:foo-build&gt; reload
+[info] welcome to sbt 1.9.3 (Eclipse Adoptium Java 17.0.8)
+[info] loading project definition from /tmp/foo-build/project
+[info] loading settings for project hello from build.sbt ...
+[info] set current project to Hello (in build file:/tmp/foo-build/)
+sbt:Hello&gt;
+</code></pre>
+<p>Note that the prompt has now changed to <code>sbt:Hello&gt;</code>.</p>
+<h3 id="add-toolkit-test-to-librarydependencies"><a class="header" href="#add-toolkit-test-to-librarydependencies">Add toolkit-test to libraryDependencies</a></h3>
+<p>Using an editor, change <code>build.sbt</code> as follows:</p>
+<p>@@snip <a href="$root$/src/sbt-test/ref/example-test/build.sbt">example-test</a> {}</p>
+<p>Use the <code>reload</code> command to reflect the change in <code>build.sbt</code>.</p>
+<pre><code>sbt:Hello&gt; reload
+</code></pre>
+<h3 id="run-tests"><a class="header" href="#run-tests">Run tests</a></h3>
+<pre><code>sbt:Hello&gt; test
+</code></pre>
+<h3 id="run-incremental-tests-continuously"><a class="header" href="#run-incremental-tests-continuously">Run incremental tests continuously</a></h3>
+<pre><code>sbt:Hello&gt; ~testQuick
+</code></pre>
+<h3 id="write-a-test"><a class="header" href="#write-a-test">Write a test</a></h3>
+<p>Leaving the previous command running, create a file named <code>src/test/scala/example/HelloSuite.scala</code>
+using an editor:</p>
+<p>@@snip <a href="$root$/src/sbt-test/ref/example-test/src/test/scala/example/HelloSuite.scala">example-test</a> {}</p>
+<p><code>~testQuick</code> should pick up the change:</p>
+<pre><code>[info] 2. Monitoring source files for hello/testQuick...
+[info]    Press &lt;enter&gt; to interrupt or '?' for more options.
+[info] Build triggered by /tmp/foo-build/src/test/scala/example/HelloSuite.scala. Running 'testQuick'.
+[info] compiling 1 Scala source to /tmp/foo-build/target/scala-2.13/test-classes ...
+HelloSuite:
+==&gt; X HelloSuite.Hello should start with H  0.004s munit.FailException: /tmp/foo-build/src/test/scala/example/HelloSuite.scala:4 assertion failed
+3:  test("Hello should start with H") {
+4:    assert("hello".startsWith("H"))
+5:  }
+    at munit.FunSuite.assert(FunSuite.scala:11)
+    at HelloSuite.\$anonfun\$new\$1(HelloSuite.scala:4)
+[error] Failed: Total 1, Failed 1, Errors 0, Passed 0
+[error] Failed tests:
+[error]         HelloSuite
+[error] (Test / testQuick) sbt.TestsFailedException: Tests unsuccessful
+</code></pre>
+<h3 id="make-the-test-pass"><a class="header" href="#make-the-test-pass">Make the test pass</a></h3>
+<p>Using an editor, change <code>src/test/scala/example/HelloSuite.scala</code> to:</p>
+<p>@@snip <a href="$root$/src/sbt-test/ref/example-test/changes/HelloSuite.scala">example-test</a> {}</p>
+<p>Confirm that the test passes, then press <code>Enter</code> to exit the continuous test.</p>
+<h3 id="add-a-library-dependency"><a class="header" href="#add-a-library-dependency">Add a library dependency</a></h3>
+<p>Using an editor, change <code>build.sbt</code> as follows:</p>
+<p>@@snip <a href="$root$/src/sbt-test/ref/example-library/build.sbt">example-library</a> {}</p>
+<p>Use the <code>reload</code> command to reflect the change in <code>build.sbt</code>.</p>
+<h3 id="use-scala-repl"><a class="header" href="#use-scala-repl">Use Scala REPL</a></h3>
+<p>We can find out the current weather in New York.</p>
+<pre><code class="language-scala">sbt:Hello&gt; console
+[info] Starting scala interpreter...
+Welcome to Scala 2.13.12 (OpenJDK 64-Bit Server VM, Java 17).
+Type in expressions for evaluation. Or try :help.
+
+scala&gt; :paste
+// Entering paste mode (ctrl-D to finish)
+
+import sttp.client4.quick._
+import sttp.client4.Response
+
+val newYorkLatitude: Double = 40.7143
+val newYorkLongitude: Double = -74.006
+val response: Response[String] = quickRequest
+  .get(
+    uri"https://api.open-meteo.com/v1/forecast?latitude=\$newYorkLatitude&amp;longitude=\$newYorkLongitude&amp;current_weather=true"
+  )
+  .send()
+
+println(ujson.read(response.body).render(indent = 2))
+
+// press Ctrl+D
+
+// Exiting paste mode, now interpreting.
+
+{
+  "latitude": 40.710335,
+  "longitude": -73.99307,
+  "generationtime_ms": 0.36704540252685547,
+  "utc_offset_seconds": 0,
+  "timezone": "GMT",
+  "timezone_abbreviation": "GMT",
+  "elevation": 51,
+  "current_weather": {
+    "temperature": 21.3,
+    "windspeed": 16.7,
+    "winddirection": 205,
+    "weathercode": 3,
+    "is_day": 1,
+    "time": "2023-08-04T10:00"
+  }
+}
+import sttp.client4.quick._
+import sttp.client4.Response
+val newYorkLatitude: Double = 40.7143
+val newYorkLongitude: Double = -74.006
+val response: sttp.client4.Response[String] = Response({"latitude":40.710335,"longitude":-73.99307,"generationtime_ms":0.36704540252685547,"utc_offset_seconds":0,"timezone":"GMT","timezone_abbreviation":"GMT","elevation":51.0,"current_weather":{"temperature":21.3,"windspeed":16.7,"winddirection":205.0,"weathercode":3,"is_day":1,"time":"2023-08-04T10:00"}},200,,List(:status: 200, content-encoding: deflate, content-type: application/json; charset=utf-8, date: Fri, 04 Aug 2023 10:09:11 GMT),List(),RequestMetadata(GET,https://api.open-meteo.com/v1/forecast?latitude=40.7143&amp;longitude...
+
+scala&gt; :q // to quit
+</code></pre>
+<h3 id="make-a-subproject"><a class="header" href="#make-a-subproject">Make a subproject</a></h3>
+<p>Change <code>build.sbt</code> as follows:</p>
+<p>@@snip <a href="$root$/src/sbt-test/ref/example-sub1/build.sbt">example-sub1</a> {}</p>
+<p>Use the <code>reload</code> command to reflect the change in <code>build.sbt</code>.</p>
+<h3 id="list-all-subprojects"><a class="header" href="#list-all-subprojects">List all subprojects</a></h3>
+<pre><code>sbt:Hello&gt; projects
+[info] In file:/tmp/foo-build/
+[info]   * hello
+[info]     helloCore
+</code></pre>
+<h3 id="compile-the-subproject"><a class="header" href="#compile-the-subproject">Compile the subproject</a></h3>
+<pre><code>sbt:Hello&gt; helloCore/compile
+</code></pre>
+<h3 id="add-toolkit-test-to-the-subproject"><a class="header" href="#add-toolkit-test-to-the-subproject">Add toolkit-test to the subproject</a></h3>
+<p>Change <code>build.sbt</code> as follows:</p>
+<p>@@snip <a href="$root$/src/sbt-test/ref/example-sub2/build.sbt">example-sub2</a> {}</p>
+<h3 id="broadcast-commands"><a class="header" href="#broadcast-commands">Broadcast commands</a></h3>
+<p>Set aggregate so that the command sent to <code>hello</code> is broadcast to <code>helloCore</code> too:</p>
+<p>@@snip <a href="$root$/src/sbt-test/ref/example-sub3/build.sbt">example-sub3</a> {}</p>
+<p>After <code>reload</code>, <code>~testQuick</code> now runs on both subprojects:</p>
+<pre><code class="language-scala">sbt:Hello&gt; ~testQuick
+</code></pre>
+<p>Press <code>Enter</code> to exit the continuous test.</p>
+<h3 id="make-hello-depend-on-hellocore"><a class="header" href="#make-hello-depend-on-hellocore">Make hello depend on helloCore</a></h3>
+<p>Use <code>.dependsOn(...)</code> to add a dependency on other subprojects. Also let's move the toolkit dependency to <code>helloCore</code>.</p>
+<p>@@snip <a href="$root$/src/sbt-test/ref/example-sub4/build.sbt">example-sub4</a> {}</p>
+<h3 id="parse-json-using-ujson"><a class="header" href="#parse-json-using-ujson">Parse JSON using uJson</a></h3>
+<p>Let's use uJson from the toolkit in <code>helloCore</code>.</p>
+<p>@@snip <a href="$root$/src/sbt-test/ref/example-weather/build.sbt">example-weather-build</a> {}</p>
+<p>After <code>reload</code>, add <code>core/src/main/scala/example/core/Weather.scala</code>:</p>
+<pre><code class="language-scala">package example.core
+
+import sttp.client4.quick._
+import sttp.client4.Response
+
+object Weather {
+  def temp() = {
+    val response: Response[String] = quickRequest
+      .get(
+        uri"https://api.open-meteo.com/v1/forecast?latitude=40.7143&amp;longitude=-74.006&amp;current_weather=true"
+      )
+      .send()
+    val json = ujson.read(response.body)
+    json.obj("current_weather")("temperature").num
+  }
+}
+</code></pre>
+<p>Next, change <code>src/main/scala/example/Hello.scala</code> as follows:</p>
+<pre><code class="language-scala">package example
+
+import example.core.Weather
+
+object Hello {
+  def main(args: Array[String]): Unit = {
+    val temp = Weather.temp()
+    println(s"Hello! The current temperature in New York is \$temp C.")
+  }
+}
+</code></pre>
+<p>Let's run the app to see if it worked:</p>
+<pre><code>sbt:Hello&gt; run
+[info] compiling 1 Scala source to /tmp/foo-build/core/target/scala-2.13/classes ...
+[info] compiling 1 Scala source to /tmp/foo-build/target/scala-2.13/classes ...
+[info] running example.Hello
+Hello! The current temperature in New York is 22.7 C.
+</code></pre>
+<h3 id="add-sbt-native-packager-plugin"><a class="header" href="#add-sbt-native-packager-plugin">Add sbt-native-packager plugin</a></h3>
+<p>Using an editor, create <code>project/plugins.sbt</code>:</p>
+<p>@@snip <a href="$root$/src/sbt-test/ref/example-weather/changes/plugins.sbt">example-weather-plugins</a> {}</p>
+<p>Next change <code>build.sbt</code> as follows to add <code>JavaAppPackaging</code>:</p>
+<p>@@snip <a href="$root$/src/sbt-test/ref/example-weather/changes/build.sbt">example-weather-build2</a> {}</p>
+<h3 id="reload-and-create-a-zip-distribution"><a class="header" href="#reload-and-create-a-zip-distribution">Reload and create a .zip distribution</a></h3>
+<pre><code>sbt:Hello&gt; reload
+...
+sbt:Hello&gt; dist
+[info] Wrote /private/tmp/foo-build/target/scala-2.13/hello_2.13-0.1.0-SNAPSHOT.pom
+[info] Main Scala API documentation to /tmp/foo-build/target/scala-2.13/api...
+[info] Main Scala API documentation successful.
+[info] Main Scala API documentation to /tmp/foo-build/core/target/scala-2.13/api...
+[info] Wrote /tmp/foo-build/core/target/scala-2.13/hello-core_2.13-0.1.0-SNAPSHOT.pom
+[info] Main Scala API documentation successful.
+[success] All package validations passed
+[info] Your package is ready in /tmp/foo-build/target/universal/hello-0.1.0-SNAPSHOT.zip
+</code></pre>
+<p>Here's how you can run the packaged app:</p>
+<pre><code>$ /tmp/someother
+$ cd /tmp/someother
+$ unzip -o -d /tmp/someother /tmp/foo-build/target/universal/hello-0.1.0-SNAPSHOT.zip
+$ ./hello-0.1.0-SNAPSHOT/bin/hello
+Hello! The current temperature in New York is 22.7 C.
+</code></pre>
+<h3 id="dockerize-your-app"><a class="header" href="#dockerize-your-app">Dockerize your app</a></h3>
+<p><em>Note that a Docker daemon will need to be running in order for this to work.</em></p>
+<pre><code>sbt:Hello&gt; Docker/publishLocal
+....
+[info] Built image hello with tags [0.1.0-SNAPSHOT]
+</code></pre>
+<p>Here's how to run the Dockerized app:</p>
+<pre><code>$ docker run hello:0.1.0-SNAPSHOT
+Hello! The current temperature in New York is 22.7 C.
+</code></pre>
+<h3 id="set-the-version"><a class="header" href="#set-the-version">Set the version</a></h3>
+<p>Change <code>build.sbt</code> as follows:</p>
+<p>@@snip <a href="$root$/src/sbt-test/ref/example-weather/changes/build3.sbt">example-weather-build3</a> {}</p>
+<h3 id="switch-scalaversion-temporarily"><a class="header" href="#switch-scalaversion-temporarily">Switch scalaVersion temporarily</a></h3>
+<pre><code>sbt:Hello&gt; ++3.3.1!
+[info] Forcing Scala version to 3.3.1 on all projects.
+[info] Reapplying settings...
+[info] Set current project to Hello (in build file:/tmp/foo-build/)
+</code></pre>
+<p>Check the <code>scalaVersion</code> setting:</p>
+<pre><code>sbt:Hello&gt; scalaVersion
+[info] helloCore / scalaVersion
+[info]  3.3.1
+[info] scalaVersion
+[info]  3.3.1
+</code></pre>
+<p>This setting will go away after <code>reload</code>.</p>
+<h3 id="inspect-the-dist-task"><a class="header" href="#inspect-the-dist-task">Inspect the dist task</a></h3>
+<p>To find out more about <code>dist</code>, try <code>help</code> and <code>inspect</code>.</p>
+<pre><code class="language-scala">sbt:Hello&gt; help dist
+Creates the distribution packages.
+sbt:Hello&gt; inspect dist
+</code></pre>
+<p>To call inspect recursively on the dependency tasks use <code>inspect tree</code>.</p>
+<pre><code class="language-scala">sbt:Hello&gt; inspect tree dist
+[info] dist = Task[java.io.File]
+[info]   +-Universal / dist = Task[java.io.File]
+....
+</code></pre>
+<h3 id="batch-mode"><a class="header" href="#batch-mode">Batch mode</a></h3>
+<p>You can also run sbt in batch mode, passing sbt commands directly from the terminal.</p>
+<pre><code>$ sbt clean "testOnly HelloSuite"
+</code></pre>
+<p><strong>Note</strong>: Running in batch mode requires JVM spinup and JIT each time,
+so <strong>your build will run much slower</strong>.
+For day-to-day coding, we recommend using the sbt shell
+or a continuous test like <code>~testQuick</code>.</p>
+<h3 id="sbt-new-command"><a class="header" href="#sbt-new-command">sbt new command</a></h3>
+<p>You can use the sbt <code>new</code> command to quickly setup a simple "Hello world" build.</p>
+<pre><code>$ sbt new scala/scala-seed.g8
+....
+A minimal Scala project.
+
+name [My Something Project]: hello
+
+Template applied in ./hello
+</code></pre>
+<p>When prompted for the project name, type <code>hello</code>.</p>
+<p>This will create a new project under a directory named <code>hello</code>.</p>
+<h3 id="credits"><a class="header" href="#credits">Credits</a></h3>
+<p>This page is based on the <a href="https://www.scalawilliam.com/essential-sbt/">Essential sbt</a> tutorial written by William "Scala William" Narmontas.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="Setup.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="setup-notes.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="Setup.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="setup-notes.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
