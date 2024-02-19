@@ -1,0 +1,359 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Working with an existing build - The Book of sbt</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../src/reference/custom-2024.css">
+        <link rel="stylesheet" href="../src/reference/mdbook-admonish.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Introduction</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">1.</strong> Quick Start</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../Setup.html"><strong aria-hidden="true">1.1.</strong> Installing sbt runner</a></li><li class="chapter-item expanded "><a href="../sbt-by-example.html"><strong aria-hidden="true">1.2.</strong> sbt by example</a></li></ol></li><li class="chapter-item expanded "><a href="../guide/index.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../guide/why-sbt-exists.html"><strong aria-hidden="true">2.1.</strong> Why sbt exists</a></li><li class="chapter-item expanded "><a href="../guide/sbt-new.html"><strong aria-hidden="true">2.2.</strong> Creating a new build</a></li><li class="chapter-item expanded "><a href="../guide/sbt-components.html"><strong aria-hidden="true">2.3.</strong> sbt components</a></li><li class="chapter-item expanded "><a href="../guide/running.html" class="active"><strong aria-hidden="true">2.4.</strong> Working with an existing build</a></li><li class="chapter-item expanded "><a href="../guide/build-definition-basics.html"><strong aria-hidden="true">2.5.</strong> Build definition basics</a></li><li class="chapter-item expanded "><a href="../guide/library-dependency-basics.html"><strong aria-hidden="true">2.6.</strong> Library dependency basics</a></li><li class="chapter-item expanded "><a href="../guide/build-layout.html"><strong aria-hidden="true">2.7.</strong> Build layout</a></li><li class="chapter-item expanded "><a href="../guide/IDE.html"><strong aria-hidden="true">2.8.</strong> sbt with IDEs</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> sbt Reference</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.</strong> Appendix</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../setup-notes.html"><strong aria-hidden="true">4.1.</strong> Setup notes</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Book of sbt</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="working-with-an-existing-build"><a class="header" href="#working-with-an-existing-build">Working with an existing build</a></h1>
+<p>This page describes how to use sbt once you have set up your project.
+This page assumes you've read <a href="./sbt-components.html">sbt components</a>.</p>
+<p>If you pull a repository that uses sbt, it's fairly easy to get started.
+First, get the package from GitHub, or some other repository.</p>
+<pre><code class="language-bash">$ git clone https://github.com/scalanlp/breeze.git
+$ cd breeze
+</code></pre>
+<h3 id="sbt-shell-with-sbtn"><a class="header" href="#sbt-shell-with-sbtn">sbt shell with sbtn</a></h3>
+<p>As mentioned in <a href="./sbt-components.html">sbt components</a>, start an sbt shell:</p>
+<pre><code>$ sbt --client
+</code></pre>
+<p>This should display something like the following:</p>
+<pre><code class="language-bash">$ sbt --client
+[info] entering *experimental* thin client - BEEP WHIRR
+[info] server was not detected. starting an instance
+[info] welcome to sbt 1.5.5 (Azul Systems, Inc. Java 1.8.0_352)
+[info] loading global plugins from /Users/eed3si9n/.sbt/1.0/plugins
+[info] loading settings for project breeze-build from plugins.sbt ...
+[info] loading project definition from /private/tmp/breeze/project
+Downloading https://repo1.maven.org/maven2/org/scalanlp/sbt-breeze-expand-codegen_2.12_1.0/0.2.1/sbt-breeze-expand-codegen-0.2.1.pom
+....
+[info] sbt server started at local:///Users/eed3si9n/.sbt/1.0/server/dd982e07e85c7de1b618/sock
+[info] terminate the server with `shutdown`
+[info] disconnect from the server with `exit`
+sbt:breeze-parent&gt;
+</code></pre>
+<h2 id="projects-command"><a class="header" href="#projects-command">projects command</a></h2>
+<p>Let's explore the build by listing out the subprojects with <code>projects</code> command:</p>
+<pre><code>sbt:breeze-parent&gt; projects
+[info] In file:/private/tmp/breeze/
+[info]     benchmark
+[info]     macros
+[info]     math
+[info]     natives
+[info]   * root
+[info]     viz
+</code></pre>
+<p>This shows that this build has 6 subprojects, including the current subproject called <code>root</code>.</p>
+<h2 id="tasks-command"><a class="header" href="#tasks-command">tasks command</a></h2>
+<p>Similarly, we can list the tasks availble to this build using <code>tasks</code> command:</p>
+<pre><code>sbt:breeze-parent&gt; tasks
+
+This is a list of tasks defined for the current project.
+It does not list the scopes the tasks are defined in; use the 'inspect' command for that.
+Tasks produce values.  Use the 'show' command to run the task and print the resulting value.
+
+  bgRun            Start an application's default main class as a background job
+  bgRunMain        Start a provided main class as a background job
+  clean            Deletes files produced by the build, such as generated sources, compiled classes, and task caches.
+  compile          Compiles sources.
+  console          Starts the Scala interpreter with the project classes on the classpath.
+  consoleProject   Starts the Scala interpreter with the sbt and the build definition on the classpath and useful imports.
+  consoleQuick     Starts the Scala interpreter with the project dependencies on the classpath.
+  copyResources    Copies resources to the output directory.
+  doc              Generates API documentation.
+  package          Produces the main artifact, such as a binary jar.  This is typically an alias for the task that actually does the packaging.
+  packageBin       Produces a main artifact, such as a binary jar.
+  packageDoc       Produces a documentation artifact, such as a jar containing API documentation.
+  packageSrc       Produces a source artifact, such as a jar containing sources and resources.
+  publish          Publishes artifacts to a repository.
+  publishLocal     Publishes artifacts to the local Ivy repository.
+  publishM2        Publishes artifacts to the local Maven repository.
+  run              Runs a main class, passing along arguments provided on the command line.
+  runMain          Runs the main class selected by the first argument, passing the remaining arguments to the main method.
+  test             Executes all tests.
+  testOnly         Executes the tests provided as arguments or all tests if no arguments are provided.
+  testQuick        Executes the tests that either failed before, were not run or whose transitive dependencies changed, among those provided as arguments.
+  update           Resolves and optionally retrieves dependencies, producing a report.
+
+More tasks may be viewed by increasing verbosity.  See 'help tasks'
+</code></pre>
+<h3 id="compile"><a class="header" href="#compile">compile</a></h3>
+<p>The <code>compile</code> tasks compiles the sources, after resolving and downloading the library dependendies.</p>
+<pre><code>&gt; compile
+</code></pre>
+<p>This should display something like the following:</p>
+<pre><code>sbt:breeze-parent&gt; compile
+[info] compiling 341 Scala sources and 1 Java source to /private/tmp/breeze/math/target/scala-3.1.3/classes ...
+  | =&gt; math / Compile / compileIncremental 51s
+</code></pre>
+<h3 id="run"><a class="header" href="#run">run</a></h3>
+<p>The <code>run</code> task runs the main class for the subproject.
+In the sbt shell, type <code>math/run</code>:</p>
+<pre><code>&gt; math/run
+</code></pre>
+<p><code>math/run</code> means <code>run</code> task, scoped to <code>math</code> subproject.
+This should display something like the following:</p>
+<pre><code>sbt:breeze-parent&gt; math/run
+[info] Scala version: 3.1.3 true
+....
+
+Multiple main classes detected. Select one to run:
+ [1] breeze.optimize.linear.NNLS
+ [2] breeze.optimize.proximal.NonlinearMinimizer
+ [3] breeze.optimize.proximal.QuadraticMinimizer
+ [4] breeze.util.UpdateSerializedObjects
+
+Enter number:
+</code></pre>
+<p>Enter <code>1</code> at the prompt.</p>
+<h3 id="testquick"><a class="header" href="#testquick">testQuick</a></h3>
+<p>The <code>testQuick</code> task tests either the tests that failed before, were not run, or whose transitive dependencies changed.</p>
+<pre><code>&gt; math/testQuick
+</code></pre>
+<p>This should display something like the following:</p>
+<pre><code>sbt:breeze-parent&gt; math/testQuick
+[info] FeatureVectorTest:
+[info] - axpy fv dv (1 second, 106 milliseconds)
+[info] - axpy fv vb (9 milliseconds)
+[info] - DM mult (19 milliseconds)
+[info] - CSC mult (32 milliseconds)
+[info] - DM trans mult (4 milliseconds)
+....
+[info] Run completed in 58 seconds, 183 milliseconds.
+[info] Total number of tests run: 1285
+[info] Suites: completed 168, aborted 0
+[info] Tests: succeeded 1285, failed 0, canceled 0, ignored 0, pending 0
+[info] All tests passed.
+[success] Total time: 130 s (02:10), completed Feb 19, 2024
+</code></pre>
+<h2 id="watch-tilde-command"><a class="header" href="#watch-tilde-command">Watch (tilde) command</a></h2>
+<p>To speed up your edit-compile-test cycle, you can ask sbt to
+automatically recompile or run tests whenever you save a source file.</p>
+<p>Make a command run when one or more source files change by prefixing the
+command with <code>~</code>. For example, in sbt shell try:</p>
+<pre><code>&gt; ~testQuick
+</code></pre>
+<p>Press enter to stop watching for changes.
+You can use the <code>~</code> prefix with either sbt shell or batch mode.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../guide/sbt-components.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../guide/build-definition-basics.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../guide/sbt-components.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../guide/build-definition-basics.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
