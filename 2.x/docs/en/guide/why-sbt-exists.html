@@ -177,7 +177,7 @@
                     <main>
                         <h1 id="why-sbt-exists"><a class="header" href="#why-sbt-exists">Why sbt exists</a></h1>
 <h2 id="preliminaries"><a class="header" href="#preliminaries">Preliminaries</a></h2>
-<p>In Scala, a library or a executable programs used be compiled using the Scala compiler, <code>scalac</code>, or so it is documented in <a href="https://docs.scala-lang.org/scala3/book/taste-hello-world.html">Scala 3 Book</a> at first:</p>
+<p>In Scala, a library or a program is compiled using the Scala compiler, <code>scalac</code>, as documented in the <a href="https://docs.scala-lang.org/scala3/book/taste-hello-world.html">Scala 3 Book</a>:</p>
 <pre><code class="language-scala">@main def hello() = println("Hello, World!")
 </code></pre>
 <pre><code class="language-bash">$ scalac hello.scala
@@ -186,25 +186,25 @@ Hello, World!
 </code></pre>
 <p>This process gets tedious and slow if we were to invoke <code>scalac</code> directly since we'd have to pass all the Scala source file names.</p>
 <p>Furthermore, most non-trivial programs will likely have library dependencies, and will therefore also depend transitively on their dependencies.
-This is doubly compilicated for Scala ecosystem because we have Scala 2.12, 2.13 ecosystem, Scala 3.x ecosystem, JVM, JS, and Native platforms.</p>
-<p>Rather than working with JAR files and <code>scalac</code>, we can avoid the manual toil by introducing a higher-level subproject abstraction and by using a build tool.</p>
+This is doubly complicated for Scala ecosystem because we have Scala 2.12, 2.13 ecosystem, Scala 3.x ecosystem, JVM, JS, and Native platforms.</p>
+<p>Rather than working with JAR files and <code>scalac</code>, we can avoid manual toil by introducing a higher-level subproject abstraction and by using a build tool.</p>
 <h2 id="sbt"><a class="header" href="#sbt">sbt</a></h2>
 <p><em>sbt</em> is a simple build tool created for Scala and Java.
 It lets us declare subprojects and their various dependencies and custom tasks to ensure that we'll always get a fast, repeatable build.</p>
 <p>To accomplish this goal, sbt does several things:</p>
 <ul>
 <li>The version of sbt itself is tracked in <code>project/build.properties</code>.</li>
-<li>Defines a domain-specific language (DSL) called <strong>build.sbt DSL</strong> that can declare Scala version and other subproject information in <code>build.sbt</code>.</li>
+<li>Defines a domain-specific language (DSL) called <strong>build.sbt DSL</strong> that can declare the Scala version and other subproject information in <code>build.sbt</code>.</li>
 <li>Uses Coursier to fetch subprojects dependencies and their dependencies.</li>
 <li>Invokes Zinc to incrementally compile Scala and Java sources.</li>
 <li>Automatically runs tasks in parallel whenever possible.</li>
 <li>Defines conventions on how packages are published to Maven repositories to interoperate with the wider JVM ecosystem.</li>
 </ul>
-<p>To a large extent, sbt normalizes the commands needed to build a given program or library.</p>
+<p>To a large extent, sbt standardizes the commands needed to build a given program or library.</p>
 <h2 id="why-buildsbt-dsl"><a class="header" href="#why-buildsbt-dsl">Why build.sbt DSL?</a></h2>
 <p>build.sbt DSL makes sbt a unique build tool,
 as opposed to other tools that use configuration file formats like YAML, TOML, and XML.
-Originally developed around 2010 ~ 2013, <code>build.sbt</code> can start almost like a YAML file, declaring just <code>scalaVersion</code> and <code>libraryDependencies</code>,
+Originally developed beween 2010 and 2013, <code>build.sbt</code> can start almost like a YAML file, declaring just <code>scalaVersion</code> and <code>libraryDependencies</code>,
 but it can supports more features to keep the build definition organized as the build grows larger:</p>
 <ul>
 <li>To avoid repeating the same information, like the version number for a library, <code>build.sbt</code> can declare variables using <code>val</code>.</li>

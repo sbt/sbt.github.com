@@ -612,7 +612,7 @@ and maintain an sbt build definition.</p>
 <p>It is <em>highly recommended</em> to read the Getting Started Guide!</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="why-sbt-exists"><a class="header" href="#why-sbt-exists">Why sbt exists</a></h1>
 <h2 id="preliminaries"><a class="header" href="#preliminaries">Preliminaries</a></h2>
-<p>In Scala, a library or a executable programs used be compiled using the Scala compiler, <code>scalac</code>, or so it is documented in <a href="https://docs.scala-lang.org/scala3/book/taste-hello-world.html">Scala 3 Book</a> at first:</p>
+<p>In Scala, a library or a program is compiled using the Scala compiler, <code>scalac</code>, as documented in the <a href="https://docs.scala-lang.org/scala3/book/taste-hello-world.html">Scala 3 Book</a>:</p>
 <pre><code class="language-scala">@main def hello() = println("Hello, World!")
 </code></pre>
 <pre><code class="language-bash">$ scalac hello.scala
@@ -621,25 +621,25 @@ Hello, World!
 </code></pre>
 <p>This process gets tedious and slow if we were to invoke <code>scalac</code> directly since we'd have to pass all the Scala source file names.</p>
 <p>Furthermore, most non-trivial programs will likely have library dependencies, and will therefore also depend transitively on their dependencies.
-This is doubly compilicated for Scala ecosystem because we have Scala 2.12, 2.13 ecosystem, Scala 3.x ecosystem, JVM, JS, and Native platforms.</p>
-<p>Rather than working with JAR files and <code>scalac</code>, we can avoid the manual toil by introducing a higher-level subproject abstraction and by using a build tool.</p>
+This is doubly complicated for Scala ecosystem because we have Scala 2.12, 2.13 ecosystem, Scala 3.x ecosystem, JVM, JS, and Native platforms.</p>
+<p>Rather than working with JAR files and <code>scalac</code>, we can avoid manual toil by introducing a higher-level subproject abstraction and by using a build tool.</p>
 <h2 id="sbt"><a class="header" href="#sbt">sbt</a></h2>
 <p><em>sbt</em> is a simple build tool created for Scala and Java.
 It lets us declare subprojects and their various dependencies and custom tasks to ensure that we'll always get a fast, repeatable build.</p>
 <p>To accomplish this goal, sbt does several things:</p>
 <ul>
 <li>The version of sbt itself is tracked in <code>project/build.properties</code>.</li>
-<li>Defines a domain-specific language (DSL) called <strong>build.sbt DSL</strong> that can declare Scala version and other subproject information in <code>build.sbt</code>.</li>
+<li>Defines a domain-specific language (DSL) called <strong>build.sbt DSL</strong> that can declare the Scala version and other subproject information in <code>build.sbt</code>.</li>
 <li>Uses Coursier to fetch subprojects dependencies and their dependencies.</li>
 <li>Invokes Zinc to incrementally compile Scala and Java sources.</li>
 <li>Automatically runs tasks in parallel whenever possible.</li>
 <li>Defines conventions on how packages are published to Maven repositories to interoperate with the wider JVM ecosystem.</li>
 </ul>
-<p>To a large extent, sbt normalizes the commands needed to build a given program or library.</p>
+<p>To a large extent, sbt standardizes the commands needed to build a given program or library.</p>
 <h2 id="why-buildsbt-dsl"><a class="header" href="#why-buildsbt-dsl">Why build.sbt DSL?</a></h2>
 <p>build.sbt DSL makes sbt a unique build tool,
 as opposed to other tools that use configuration file formats like YAML, TOML, and XML.
-Originally developed around 2010 ~ 2013, <code>build.sbt</code> can start almost like a YAML file, declaring just <code>scalaVersion</code> and <code>libraryDependencies</code>,
+Originally developed beween 2010 and 2013, <code>build.sbt</code> can start almost like a YAML file, declaring just <code>scalaVersion</code> and <code>libraryDependencies</code>,
 but it can supports more features to keep the build definition organized as the build grows larger:</p>
 <ul>
 <li>To avoid repeating the same information, like the version number for a library, <code>build.sbt</code> can declare variables using <code>val</code>.</li>
@@ -739,9 +739,9 @@ $ sbt new scala/scala3.g8
 <p><a href="https://github.com/foundweekends/giter8/wiki/giter8-templates">Giter8 wiki</a> lists over 100 templates that can jump start your new build.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-components"><a class="header" href="#sbt-components">sbt components</a></h1>
 <h2 id="sbt-runner"><a class="header" href="#sbt-runner">sbt runner</a></h2>
-<p>An sbt build is executed using the <code>sbt</code> runner, also called "sbt-the-shell-script" to distinguish from other components. Important thing to note is that sbt runner is designed to run <strong>any version</strong> of sbt.</p>
+<p>An sbt build is executed using the <code>sbt</code> runner, also called "sbt-the-shell-script" to distinguish from other components. It's important to note is that sbt runner is designed to run <strong>any version</strong> of sbt.</p>
 <h3 id="specifying-sbt-version-with-projectbuildproperties"><a class="header" href="#specifying-sbt-version-with-projectbuildproperties">Specifying sbt version with project/build.properties</a></h3>
-<p>The sbt runner executes a subcomponent called sbt launcher, which reads <code>project/build.properties</code> to determine the sbt version for the build, and downloads the artifacts if needed:</p>
+<p>The sbt runner executes a subcomponent called sbt launcher, which reads <code>project/build.properties</code> to determine the sbt version for the build, and downloads the artifacts if they haven't been cached:</p>
 <pre><code>sbt.version=2.0.0-alpha7
 </code></pre>
 <p>This means that:</p>
@@ -754,16 +754,16 @@ $ sbt new scala/scala3.g8
 <h2 id="sbt-server"><a class="header" href="#sbt-server">sbt server</a></h2>
 <p>The sbt server is the actual build tool whose version is specified using <code>project/build.properties</code>. The sbt server acts as a cashier to take commands from sbtn and editors.</p>
 <h3 id="coursier"><a class="header" href="#coursier">Coursier</a></h3>
-<p>The sbt server runs <a href="https://get-coursier.io/">Couriser</a> as a subcomponent to resolve Scala libary, Scala compiler, and any other library dependencies your build needs.</p>
+<p>The sbt server runs <a href="https://get-coursier.io/">Couriser</a> as a subcomponent to resolve Scala library, Scala compiler, and any other library dependencies your build needs.</p>
 <h3 id="zinc"><a class="header" href="#zinc">Zinc</a></h3>
 <p>Zinc is the incremental compiler for Scala, developed and maintained by sbt project.
-An often overlooked aspect of Zinc is that Zinc provides a stable API to invoke <strong>any modern versions</strong> of Scala compiler. Combined with the fact that Coursier can resolve any Scala versions, by installing the sbt runner, you can invoke any modern versions of Scala just by writing a single line <code>build.sbt</code>:</p>
+An often overlooked aspect of Zinc is that Zinc provides a stable API to invoke <strong>any modern versions</strong> of Scala compiler. Combined with the fact that Coursier can resolve any Scala version, with sbt we can invoke any modern versions of Scala just by writing a single line <code>build.sbt</code>:</p>
 <pre><code class="language-scala">scalaVersion := "3.3.1"
 </code></pre>
 <h3 id="bsp-server"><a class="header" href="#bsp-server">BSP server</a></h3>
 <p>The sbt server supports <a href="https://build-server-protocol.github.io/">Build Server Protocol (BSP)</a> to list build targets, build them, etc.
 This allows IDEs like IntelliJ and Metals to communicate with a running sbt server programmatically.</p>
-<h2 id="connecting-with-sbt-server"><a class="header" href="#connecting-with-sbt-server">Connecting with sbt server</a></h2>
+<h2 id="connecting-to-sbt-server"><a class="header" href="#connecting-to-sbt-server">Connecting to sbt server</a></h2>
 <p>Let's look at three ways of connecting to the sbt server.</p>
 <h3 id="sbt-shell-using-sbtn"><a class="header" href="#sbt-shell-using-sbtn">sbt shell using sbtn</a></h3>
 <p>Run <code>sbt --client</code> in the working directory of your build:</p>

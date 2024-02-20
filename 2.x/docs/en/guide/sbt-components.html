@@ -177,9 +177,9 @@
                     <main>
                         <h1 id="sbt-components"><a class="header" href="#sbt-components">sbt components</a></h1>
 <h2 id="sbt-runner"><a class="header" href="#sbt-runner">sbt runner</a></h2>
-<p>An sbt build is executed using the <code>sbt</code> runner, also called "sbt-the-shell-script" to distinguish from other components. Important thing to note is that sbt runner is designed to run <strong>any version</strong> of sbt.</p>
+<p>An sbt build is executed using the <code>sbt</code> runner, also called "sbt-the-shell-script" to distinguish from other components. It's important to note is that sbt runner is designed to run <strong>any version</strong> of sbt.</p>
 <h3 id="specifying-sbt-version-with-projectbuildproperties"><a class="header" href="#specifying-sbt-version-with-projectbuildproperties">Specifying sbt version with project/build.properties</a></h3>
-<p>The sbt runner executes a subcomponent called sbt launcher, which reads <code>project/build.properties</code> to determine the sbt version for the build, and downloads the artifacts if needed:</p>
+<p>The sbt runner executes a subcomponent called sbt launcher, which reads <code>project/build.properties</code> to determine the sbt version for the build, and downloads the artifacts if they haven't been cached:</p>
 <pre><code>sbt.version=2.0.0-alpha7
 </code></pre>
 <p>This means that:</p>
@@ -192,16 +192,16 @@
 <h2 id="sbt-server"><a class="header" href="#sbt-server">sbt server</a></h2>
 <p>The sbt server is the actual build tool whose version is specified using <code>project/build.properties</code>. The sbt server acts as a cashier to take commands from sbtn and editors.</p>
 <h3 id="coursier"><a class="header" href="#coursier">Coursier</a></h3>
-<p>The sbt server runs <a href="https://get-coursier.io/">Couriser</a> as a subcomponent to resolve Scala libary, Scala compiler, and any other library dependencies your build needs.</p>
+<p>The sbt server runs <a href="https://get-coursier.io/">Couriser</a> as a subcomponent to resolve Scala library, Scala compiler, and any other library dependencies your build needs.</p>
 <h3 id="zinc"><a class="header" href="#zinc">Zinc</a></h3>
 <p>Zinc is the incremental compiler for Scala, developed and maintained by sbt project.
-An often overlooked aspect of Zinc is that Zinc provides a stable API to invoke <strong>any modern versions</strong> of Scala compiler. Combined with the fact that Coursier can resolve any Scala versions, by installing the sbt runner, you can invoke any modern versions of Scala just by writing a single line <code>build.sbt</code>:</p>
+An often overlooked aspect of Zinc is that Zinc provides a stable API to invoke <strong>any modern versions</strong> of Scala compiler. Combined with the fact that Coursier can resolve any Scala version, with sbt we can invoke any modern versions of Scala just by writing a single line <code>build.sbt</code>:</p>
 <pre><code class="language-scala">scalaVersion := "3.3.1"
 </code></pre>
 <h3 id="bsp-server"><a class="header" href="#bsp-server">BSP server</a></h3>
 <p>The sbt server supports <a href="https://build-server-protocol.github.io/">Build Server Protocol (BSP)</a> to list build targets, build them, etc.
 This allows IDEs like IntelliJ and Metals to communicate with a running sbt server programmatically.</p>
-<h2 id="connecting-with-sbt-server"><a class="header" href="#connecting-with-sbt-server">Connecting with sbt server</a></h2>
+<h2 id="connecting-to-sbt-server"><a class="header" href="#connecting-to-sbt-server">Connecting to sbt server</a></h2>
 <p>Let's look at three ways of connecting to the sbt server.</p>
 <h3 id="sbt-shell-using-sbtn"><a class="header" href="#sbt-shell-using-sbtn">sbt shell using sbtn</a></h3>
 <p>Run <code>sbt --client</code> in the working directory of your build:</p>
