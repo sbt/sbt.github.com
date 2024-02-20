@@ -91,7 +91,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">1.</strong> Quick Start</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="Setup.html"><strong aria-hidden="true">1.1.</strong> Installing sbt runner</a></li><li class="chapter-item expanded "><a href="sbt-by-example.html"><strong aria-hidden="true">1.2.</strong> sbt by example</a></li></ol></li><li class="chapter-item expanded "><a href="guide/index.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="guide/why-sbt-exists.html"><strong aria-hidden="true">2.1.</strong> Why sbt exists</a></li><li class="chapter-item expanded "><a href="guide/sbt-new.html"><strong aria-hidden="true">2.2.</strong> Creating a new build</a></li><li class="chapter-item expanded "><a href="guide/sbt-components.html"><strong aria-hidden="true">2.3.</strong> sbt components</a></li><li class="chapter-item expanded "><a href="guide/running.html"><strong aria-hidden="true">2.4.</strong> Working with an existing build</a></li><li class="chapter-item expanded "><a href="guide/build-definition-basics.html"><strong aria-hidden="true">2.5.</strong> Build definition basics</a></li><li class="chapter-item expanded "><a href="guide/library-dependency-basics.html"><strong aria-hidden="true">2.6.</strong> Library dependency basics</a></li><li class="chapter-item expanded "><a href="guide/build-layout.html"><strong aria-hidden="true">2.7.</strong> Build layout</a></li><li class="chapter-item expanded "><a href="guide/IDE.html"><strong aria-hidden="true">2.8.</strong> sbt with IDEs</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> sbt Reference</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.</strong> Appendix</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="setup-notes.html"><strong aria-hidden="true">4.1.</strong> Setup notes</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">1.</strong> Quick Start</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="Setup.html"><strong aria-hidden="true">1.1.</strong> Installing sbt runner</a></li><li class="chapter-item expanded "><a href="sbt-by-example.html"><strong aria-hidden="true">1.2.</strong> sbt by example</a></li></ol></li><li class="chapter-item expanded "><a href="guide/index.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="guide/why-sbt-exists.html"><strong aria-hidden="true">2.1.</strong> Why sbt exists</a></li><li class="chapter-item expanded "><a href="guide/sbt-new.html"><strong aria-hidden="true">2.2.</strong> Creating a new build</a></li><li class="chapter-item expanded "><a href="guide/sbt-components.html"><strong aria-hidden="true">2.3.</strong> sbt components</a></li><li class="chapter-item expanded "><a href="guide/running.html"><strong aria-hidden="true">2.4.</strong> Working with an existing build</a></li><li class="chapter-item expanded "><a href="guide/build-definition-basics.html"><strong aria-hidden="true">2.5.</strong> Build definition basics</a></li><li class="chapter-item expanded "><a href="guide/library-dependency-basics.html"><strong aria-hidden="true">2.6.</strong> Library dependency basics</a></li><li class="chapter-item expanded "><a href="guide/multi-project-basics.html"><strong aria-hidden="true">2.7.</strong> Multi project basics</a></li><li class="chapter-item expanded "><a href="guide/build-layout.html"><strong aria-hidden="true">2.8.</strong> Build layout</a></li><li class="chapter-item expanded "><a href="guide/IDE.html"><strong aria-hidden="true">2.9.</strong> sbt with IDEs</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> sbt Reference</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.</strong> Appendix</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="setup-notes.html"><strong aria-hidden="true">4.1.</strong> Setup notes</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -1080,6 +1080,44 @@ name := "something"
 libraryDependencies += toolkit
 libraryDependencies += toolkitTest % Test
 </code></pre>
+<h2 id="viewing-library-dependencies"><a class="header" href="#viewing-library-dependencies">Viewing library dependencies</a></h2>
+<p>Type in <code>Compile/dependencyTree</code> in the sbt shell to show the library dependency tree, including the transitive dependencies:</p>
+<pre><code>&gt; Compile/dependencyTree
+</code></pre>
+<p>This should display something like the following:</p>
+<pre><code>sbt:bar&gt; Compile/dependencyTree
+[info] default:bar_3:0.1.0-SNAPSHOT
+[info]   +-org.scala-lang:scala3-library_3:3.3.1 [S]
+[info]   +-org.scala-lang:toolkit_3:0.2.0
+[info]     +-com.lihaoyi:os-lib_3:0.9.1
+[info]     | +-com.lihaoyi:geny_3:1.0.0
+[info]     | | +-org.scala-lang:scala3-library_3:3.1.3 (evicted by: 3.3.1)
+[info]     | | +-org.scala-lang:scala3-library_3:3.3.1 [S]
+....
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="multi-project-basics"><a class="header" href="#multi-project-basics">Multi project basics</a></h1>
+<p>While a simple program can start out as a single-project build,
+it's more common for a build to split into smaller, multiple subprojects.</p>
+<p>Each subproject in a build has its own source directories, generates
+its own JAR file when you run <code>packageBin</code>, and in general works like any
+other project.</p>
+<p>A project is defined by declaring a lazy val of type
+<a href="guide/../../api/sbt/Project.html">Project</a>. For example, :</p>
+<pre><code class="language-scala">scalaVersion := "3.3.1"
+
+lazy val core = (project in file("core"))
+  .settings(
+    name := "core",
+  )
+
+lazy val util = (project in file("util"))
+  .dependsOn(core)
+  .settings(
+    name := "util",
+  )
+</code></pre>
+<p>The name of the val is used as the subproject's ID, which
+is used to refer to the subproject at the sbt shell.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="build-layout"><a class="header" href="#build-layout">Build layout</a></h1>
 <p>sbt uses conventions for file placement to make it easy to dive into a new sbt build:</p>
 <pre><code>.
