@@ -197,7 +197,7 @@ incrementally compiles and tests your projects,
 integrates with IDEs like IntelliJ and VS Code,
 makes JAR packages, and publishes them to <a href="https://central.sonatype.com/">Maven Central</a>,
 JVM community's package registry.</p>
-<pre><code class="language-scala">scalaVersion := "3.3.1"
+<pre><code class="language-scala">scalaVersion := "3.3.3"
 </code></pre>
 <p>You just need one line of <code>build.sbt</code> to get started with Scala.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="installing-sbt-runner"><a class="header" href="#installing-sbt-runner">Installing sbt runner</a></h1>
@@ -557,17 +557,17 @@ Hello! The current temperature in New York is 22.7 C.
 <p>Change <code>build.sbt</code> as follows:</p>
 <p>@@snip <a href="$root$/src/sbt-test/ref/example-weather/changes/build3.sbt">example-weather-build3</a> {}</p>
 <h3 id="switch-scalaversion-temporarily"><a class="header" href="#switch-scalaversion-temporarily">Switch scalaVersion temporarily</a></h3>
-<pre><code>sbt:Hello&gt; ++3.3.1!
-[info] Forcing Scala version to 3.3.1 on all projects.
+<pre><code>sbt:Hello&gt; ++3.3.3!
+[info] Forcing Scala version to 3.3.3 on all projects.
 [info] Reapplying settings...
 [info] Set current project to Hello (in build file:/tmp/foo-build/)
 </code></pre>
 <p>Check the <code>scalaVersion</code> setting:</p>
 <pre><code>sbt:Hello&gt; scalaVersion
 [info] helloCore / scalaVersion
-[info]  3.3.1
+[info]  3.3.3
 [info] scalaVersion
-[info]  3.3.1
+[info]  3.3.3
 </code></pre>
 <p>This setting will go away after <code>reload</code>.</p>
 <h3 id="inspect-the-dist-task"><a class="header" href="#inspect-the-dist-task">Inspect the dist task</a></h3>
@@ -760,7 +760,7 @@ $ sbt new scala/scala3.g8
 <h3 id="zinc"><a class="header" href="#zinc">Zinc</a></h3>
 <p>Zinc is the incremental compiler for Scala, developed and maintained by sbt project.
 An often overlooked aspect of Zinc is that Zinc provides a stable API to invoke <strong>any modern versions</strong> of Scala compiler. Combined with the fact that Coursier can resolve any Scala version, with sbt we can invoke any modern versions of Scala just by writing a single line <code>build.sbt</code>:</p>
-<pre><code class="language-scala">scalaVersion := "3.3.1"
+<pre><code class="language-scala">scalaVersion := "3.3.3"
 </code></pre>
 <h3 id="bsp-server"><a class="header" href="#bsp-server">BSP server</a></h3>
 <p>The sbt server supports <a href="https://build-server-protocol.github.io/">Build Server Protocol (BSP)</a> to list build targets, build them, etc.
@@ -944,13 +944,13 @@ Because the term <em>project</em> can be ambiguous,
 we often call it a <em>subproject</em> in this guide.</p>
 <p>For instance, in <code>build.sbt</code> you define
 the subproject located in the current directory like this:</p>
-<pre><code class="language-scala">scalaVersion := "3.3.1"
+<pre><code class="language-scala">scalaVersion := "3.3.3"
 name := "Hello"
 </code></pre>
 <p>or more explicitly:</p>
 <pre><code class="language-scala">lazy val root = (project in file("."))
   .settings(
-    scalaVersion := "3.3.1",
+    scalaVersion := "3.3.3",
     name := "Hello",
   )
 </code></pre>
@@ -995,7 +995,7 @@ If you use the wrong value type, the build definition will not compile:</p>
 val toolkit = "org.scala-lang" %% "toolkit" % toolkitV
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % toolkitV
 
-scalaVersion := "3.3.1"
+scalaVersion := "3.3.3"
 libraryDependencies += toolkit
 libraryDependencies += (toolkitTest % Test)
 </code></pre>
@@ -1079,7 +1079,7 @@ end Dependencies
 To make it easier to use the <code>val</code>s defined in it, import <code>Dependencies.*</code> in your build.sbt file.</p>
 <pre><code class="language-scala">import Dependencies.*
 
-scalaVersion := "3.3.1"
+scalaVersion := "3.3.3"
 name := "something"
 libraryDependencies += toolkit
 libraryDependencies += toolkitTest % Test
@@ -1107,7 +1107,7 @@ its own JAR file when you run <code>packageBin</code>, and in general works like
 other project.</p>
 <p>A project is defined by declaring a lazy val of type
 <a href="guide/../../api/sbt/Project.html">Project</a>. For example, :</p>
-<pre><code class="language-scala">scalaVersion := "3.3.1"
+<pre><code class="language-scala">scalaVersion := "3.3.3"
 
 lazy val core = (project in file("core"))
   .settings(

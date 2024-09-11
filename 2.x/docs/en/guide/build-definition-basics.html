@@ -184,13 +184,13 @@ Because the term <em>project</em> can be ambiguous,
 we often call it a <em>subproject</em> in this guide.</p>
 <p>For instance, in <code>build.sbt</code> you define
 the subproject located in the current directory like this:</p>
-<pre><code class="language-scala">scalaVersion := "3.3.1"
+<pre><code class="language-scala">scalaVersion := "3.3.3"
 name := "Hello"
 </code></pre>
 <p>or more explicitly:</p>
 <pre><code class="language-scala">lazy val root = (project in file("."))
   .settings(
-    scalaVersion := "3.3.1",
+    scalaVersion := "3.3.3",
     name := "Hello",
   )
 </code></pre>
@@ -235,7 +235,7 @@ If you use the wrong value type, the build definition will not compile:</p>
 val toolkit = "org.scala-lang" %% "toolkit" % toolkitV
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % toolkitV
 
-scalaVersion := "3.3.1"
+scalaVersion := "3.3.3"
 libraryDependencies += toolkit
 libraryDependencies += (toolkitTest % Test)
 </code></pre>
