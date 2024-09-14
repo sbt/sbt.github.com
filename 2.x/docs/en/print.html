@@ -240,7 +240,7 @@ echo "sbt.version=2.0.0-alpha7" &gt; project/build.properties
 </code></pre>
 <h3 id="start-sbt-shell"><a class="header" href="#start-sbt-shell">Start sbt shell</a></h3>
 <pre><code class="language-bash">$ sbt
-[info] welcome to sbt 2.0.0-alpha7 (Azul Systems, Inc. Java 1.8.0_352)
+[info] welcome to sbt 2.0.0-alpha7 (Azul Systems, Inc. Java)
 ....
 [info] started sbt server
 sbt:foo-build&gt;
@@ -253,12 +253,13 @@ sbt:foo-build&gt;
 <p>As a convention, we will use the <code>sbt:...&gt;</code> or <code>&gt;</code> prompt to mean that we're in the sbt interactive shell.</p>
 <pre><code class="language-bash">$ sbt
 sbt:foo-build&gt; compile
+[success] elapsed time: 0 s, cache 0%, 1 onsite task
 </code></pre>
 <h3 id="recompile-on-code-change"><a class="header" href="#recompile-on-code-change">Recompile on code change</a></h3>
 <p>Prefixing the <code>compile</code> command (or any other command) with <code>~</code> causes the command to be automatically
 re-executed whenever one of the source files within the project is modified. For example:</p>
 <pre><code>sbt:foo-build&gt; ~compile
-[success] Total time: 0 s, completed 28 Jul 2023, 13:32:35
+[success] elapsed time: 0 s, cache 100%, 1 disk cache hit
 [info] 1. Monitoring source files for foo-build/compile...
 [info]    Press &lt;enter&gt; to interrupt or '?' for more options.
 </code></pre>
@@ -268,16 +269,13 @@ directory the following nested directories: <code>src/main/scala/example</code>.
 in the <code>example</code> directory using your favorite editor as follows:</p>
 <pre><code class="language-scala">package example
 
-object Hello {
-  def main(args: Array[String]): Unit = {
-    println("Hello")
-  }
-}
+@main def main(args: String*): Unit =
+  println(s"Hello ${args.mkString}")
 </code></pre>
 <p>This new file should be picked up by the running command:</p>
 <pre><code>[info] Build triggered by /tmp/foo-build/src/main/scala/example/Hello.scala. Running 'compile'.
-[info] compiling 1 Scala source to /tmp/foo-build/target/scala-2.12/classes ...
-[success] Total time: 0 s, completed 28 Jul 2023, 13:38:55
+[info] compiling 1 Scala source to /tmp/foo-build/target/out/jvm/scala-3.3.3/foo/backend ...
+[success] elapsed time: 1 s, cache 0%, 1 onsite task
 [info] 2. Monitoring source files for foo-build/compile...
 [info]    Press &lt;enter&gt; to interrupt or '?' for more options.
 </code></pre>
@@ -307,22 +305,22 @@ executed at the beginning.</p>
 Runs a main class, passing along arguments provided on the command line.
 </code></pre>
 <h3 id="run-your-app"><a class="header" href="#run-your-app">Run your app</a></h3>
-<pre><code>sbt:foo-build&gt; run
-[info] running example.Hello
+<pre><code>sbt:foo&gt; run
+[info] running example.main
 Hello
-[success] Total time: 0 s, completed 28 Jul 2023, 13:40:31
+[success] elapsed time: 0 s, cache 50%, 1 disk cache hit, 1 onsite task
 </code></pre>
 <h3 id="set-thisbuild--scalaversion-from-sbt-shell"><a class="header" href="#set-thisbuild--scalaversion-from-sbt-shell">Set ThisBuild / scalaVersion from sbt shell</a></h3>
-<pre><code>sbt:foo-build&gt; set ThisBuild / scalaVersion := "$example_scala213$"
-[info] Defining ThisBuild / scalaVersion
-[info] The new value will be used by Compile / bspBuildTarget, Compile / dependencyTreeCrossProjectId and 50 others.
+<pre><code>sbt:foo-build&gt; set scalaVersion := "3.3.3"
+[info] Defining scalaVersion
+[info] The new value will be used by Compile / bspBuildTarget, Compile / dependencyTreeCrossProjectId and 51 others.
 [info]  Run `last` for details.
 [info] Reapplying settings...
-[info] set current project to foo-build (in build file:/tmp/foo-build/)
+[info] set current project to foo (in build file:/tmp/foo-build/)
 </code></pre>
 <p>Check the <code>scalaVersion</code> setting:</p>
 <pre><code>sbt:foo-build&gt; scalaVersion
-[info] $example_scala213$
+[info] 3.3.3
 </code></pre>
 <h3 id="save-the-session-to-buildsbt"><a class="header" href="#save-the-session-to-buildsbt">Save the session to build.sbt</a></h3>
 <p>We can save the ad-hoc settings using <code>session save</code>.</p>
@@ -337,17 +335,20 @@ Hello
 [warn] Disable this warning by setting `Global / onChangedBuildSource := IgnoreSourceChanges`.
 </code></pre>
 <p><code>build.sbt</code> file should now contain:</p>
-<pre><code class="language-scala">ThisBuild / scalaVersion := "$example_scala213$"
+<pre><code class="language-scala">scalaVersion := "3.3.3"
 
 </code></pre>
 <h3 id="name-your-project"><a class="header" href="#name-your-project">Name your project</a></h3>
 <p>Using an editor, change <code>build.sbt</code> as follows:</p>
-<p>@@snip <a href="$root$/src/sbt-test/ref/example-name/build.sbt">name</a> {}</p>
+<pre><code class="language-scala">scalaVersion := "3.3.3"
+organization := "com.example"
+name := "Hello"
+</code></pre>
 <h3 id="reload-the-build"><a class="header" href="#reload-the-build">Reload the build</a></h3>
 <p>Use the <code>reload</code> command to reload the build. The command causes the
 <code>build.sbt</code> file to be re-read, and its settings applied.</p>
 <pre><code>sbt:foo-build&gt; reload
-[info] welcome to sbt 1.10.1 (Eclipse Adoptium Java 17.0.8)
+[info] welcome to sbt 2.x (Azul Systems, Inc. Java)
 [info] loading project definition from /tmp/foo-build/project
 [info] loading settings for project hello from build.sbt ...
 [info] set current project to Hello (in build file:/tmp/foo-build/)
@@ -356,7 +357,11 @@ sbt:Hello&gt;
 <p>Note that the prompt has now changed to <code>sbt:Hello&gt;</code>.</p>
 <h3 id="add-toolkit-test-to-librarydependencies"><a class="header" href="#add-toolkit-test-to-librarydependencies">Add toolkit-test to libraryDependencies</a></h3>
 <p>Using an editor, change <code>build.sbt</code> as follows:</p>
-<p>@@snip <a href="$root$/src/sbt-test/ref/example-test/build.sbt">example-test</a> {}</p>
+<pre><code class="language-scala">scalaVersion := "3.3.3"
+organization := "com.example"
+name := "Hello"
+libraryDependencies += "org.scala-lang" %% "toolkit-test" % "0.1.7" % Test
+</code></pre>
 <p>Use the <code>reload</code> command to reflect the change in <code>build.sbt</code>.</p>
 <pre><code>sbt:Hello&gt; reload
 </code></pre>
@@ -369,43 +374,58 @@ sbt:Hello&gt;
 <h3 id="write-a-test"><a class="header" href="#write-a-test">Write a test</a></h3>
 <p>Leaving the previous command running, create a file named <code>src/test/scala/example/HelloSuite.scala</code>
 using an editor:</p>
-<p>@@snip <a href="$root$/src/sbt-test/ref/example-test/src/test/scala/example/HelloSuite.scala">example-test</a> {}</p>
+<pre><code class="language-scala">package example
+
+class HelloSuite extends munit.FunSuite:
+  test("Hello should start with H") {
+    assert("hello".startsWith("H"))
+  }
+end HelloSuite
+</code></pre>
 <p><code>~testQuick</code> should pick up the change:</p>
-<pre><code>[info] 2. Monitoring source files for hello/testQuick...
-[info]    Press &lt;enter&gt; to interrupt or '?' for more options.
-[info] Build triggered by /tmp/foo-build/src/test/scala/example/HelloSuite.scala. Running 'testQuick'.
-[info] compiling 1 Scala source to /tmp/foo-build/target/scala-2.13/test-classes ...
-HelloSuite:
-==&gt; X HelloSuite.Hello should start with H  0.004s munit.FailException: /tmp/foo-build/src/test/scala/example/HelloSuite.scala:4 assertion failed
-3:  test("Hello should start with H") {
-4:    assert("hello".startsWith("H"))
-5:  }
+<pre><code>example.HelloSuite:
+==&gt; X example.HelloSuite.Hello should start with H  0.012s munit.FailException: /tmp/foo-build/src/test/scala/example/HelloSuite.scala:5 assertion failed
+4:  test("Hello should start with H") {
+5:    assert("hello".startsWith("H"))
+6:  }
     at munit.FunSuite.assert(FunSuite.scala:11)
-    at HelloSuite.\$anonfun\$new\$1(HelloSuite.scala:4)
+    at example.HelloSuite.$init$$$anonfun$1(HelloSuite.scala:5)
 [error] Failed: Total 1, Failed 1, Errors 0, Passed 0
 [error] Failed tests:
-[error]         HelloSuite
+[error]   example.HelloSuite
 [error] (Test / testQuick) sbt.TestsFailedException: Tests unsuccessful
+[error] elapsed time: 1 s, cache 50%, 3 disk cache hits, 3 onsite tasks
 </code></pre>
 <h3 id="make-the-test-pass"><a class="header" href="#make-the-test-pass">Make the test pass</a></h3>
 <p>Using an editor, change <code>src/test/scala/example/HelloSuite.scala</code> to:</p>
-<p>@@snip <a href="$root$/src/sbt-test/ref/example-test/changes/HelloSuite.scala">example-test</a> {}</p>
+<pre><code class="language-scala">package example
+
+class HelloSuite extends munit.FunSuite:
+  test("Hello should start with H") {
+    assert("Hello".startsWith("H"))
+  }
+end HelloSuite
+</code></pre>
 <p>Confirm that the test passes, then press <code>Enter</code> to exit the continuous test.</p>
 <h3 id="add-a-library-dependency"><a class="header" href="#add-a-library-dependency">Add a library dependency</a></h3>
 <p>Using an editor, change <code>build.sbt</code> as follows:</p>
-<p>@@snip <a href="$root$/src/sbt-test/ref/example-library/build.sbt">example-library</a> {}</p>
+<pre><code class="language-scala">scalaVersion := "3.3.3"
+organization := "com.example"
+name := "Hello"
+libraryDependencies ++= Seq(
+  "org.scala-lang" %% "toolkit" % "0.1.7",
+  "org.scala-lang" %% "toolkit-test" % "0.1.7" % Test,
+)
+</code></pre>
 <p>Use the <code>reload</code> command to reflect the change in <code>build.sbt</code>.</p>
 <h3 id="use-scala-repl"><a class="header" href="#use-scala-repl">Use Scala REPL</a></h3>
 <p>We can find out the current weather in New York.</p>
 <pre><code class="language-scala">sbt:Hello&gt; console
-[info] Starting scala interpreter...
-Welcome to Scala 2.13.12 (OpenJDK 64-Bit Server VM, Java 17).
+Welcome to Scala 3.3.3 (1.8.0_402, Java OpenJDK 64-Bit Server VM).
 Type in expressions for evaluation. Or try :help.
 
-scala&gt; :paste
-// Entering paste mode (ctrl-D to finish)
-
-import sttp.client4.quick._
+scala&gt;
+import sttp.client4.quick.*
 import sttp.client4.Response
 
 val newYorkLatitude: Double = 40.7143
@@ -449,7 +469,25 @@ scala&gt; :q // to quit
 </code></pre>
 <h3 id="make-a-subproject"><a class="header" href="#make-a-subproject">Make a subproject</a></h3>
 <p>Change <code>build.sbt</code> as follows:</p>
-<p>@@snip <a href="$root$/src/sbt-test/ref/example-sub1/build.sbt">example-sub1</a> {}</p>
+<pre><code class="language-scala">scalaVersion := "3.3.3"
+organization := "com.example"
+
+lazy val hello = project
+  .in(file("."))
+  .settings(
+    name := "Hello",
+    libraryDependencies ++= Seq(
+      "org.scala-lang" %% "toolkit" % "0.1.7",
+      "org.scala-lang" %% "toolkit-test" % "0.1.7" % Test
+    )
+  )
+
+lazy val helloCore = project
+  .in(file("core"))
+  .settings(
+    name := "Hello Core"
+  )
+</code></pre>
 <p>Use the <code>reload</code> command to reflect the change in <code>build.sbt</code>.</p>
 <h3 id="list-all-subprojects"><a class="header" href="#list-all-subprojects">List all subprojects</a></h3>
 <pre><code>sbt:Hello&gt; projects
@@ -462,28 +500,91 @@ scala&gt; :q // to quit
 </code></pre>
 <h3 id="add-toolkit-test-to-the-subproject"><a class="header" href="#add-toolkit-test-to-the-subproject">Add toolkit-test to the subproject</a></h3>
 <p>Change <code>build.sbt</code> as follows:</p>
-<p>@@snip <a href="$root$/src/sbt-test/ref/example-sub2/build.sbt">example-sub2</a> {}</p>
+<pre><code class="language-scala">scalaVersion := "3.3.3"
+organization := "com.example"
+
+val toolkitTest = "org.scala-lang" %% "toolkit-test" % "0.1.7"
+
+lazy val hello = project
+  .in(file("."))
+  .settings(
+    name := "Hello",
+    libraryDependencies ++= Seq(
+      "org.scala-lang" %% "toolkit" % "0.1.7",
+      toolkitTest % Test
+    )
+  )
+
+lazy val helloCore = project
+  .in(file("core"))
+  .settings(
+    name := "Hello Core",
+    libraryDependencies += toolkitTest % Test
+  )
+</code></pre>
 <h3 id="broadcast-commands"><a class="header" href="#broadcast-commands">Broadcast commands</a></h3>
 <p>Set aggregate so that the command sent to <code>hello</code> is broadcast to <code>helloCore</code> too:</p>
-<p>@@snip <a href="$root$/src/sbt-test/ref/example-sub3/build.sbt">example-sub3</a> {}</p>
+<pre><code class="language-scala">scalaVersion := "3.3.3"
+organization := "com.example"
+
+val toolkitTest = "org.scala-lang" %% "toolkit-test" % "0.1.7"
+
+lazy val hello = project
+  .in(file("."))
+  .aggregate(helloCore)
+  .settings(
+    name := "Hello",
+    libraryDependencies ++= Seq(
+      "org.scala-lang" %% "toolkit" % "0.1.7",
+      toolkitTest % Test
+    )
+  )
+
+lazy val helloCore = project
+  .in(file("core"))
+  .settings(
+    name := "Hello Core",
+    libraryDependencies += toolkitTest % Test
+  )
+</code></pre>
 <p>After <code>reload</code>, <code>~testQuick</code> now runs on both subprojects:</p>
 <pre><code class="language-scala">sbt:Hello&gt; ~testQuick
 </code></pre>
 <p>Press <code>Enter</code> to exit the continuous test.</p>
 <h3 id="make-hello-depend-on-hellocore"><a class="header" href="#make-hello-depend-on-hellocore">Make hello depend on helloCore</a></h3>
 <p>Use <code>.dependsOn(...)</code> to add a dependency on other subprojects. Also let's move the toolkit dependency to <code>helloCore</code>.</p>
-<p>@@snip <a href="$root$/src/sbt-test/ref/example-sub4/build.sbt">example-sub4</a> {}</p>
+<pre><code class="language-scala">scalaVersion := "3.3.3"
+organization := "com.example"
+
+val toolkitTest = "org.scala-lang" %% "toolkit-test" % "0.1.7"
+
+lazy val hello = project
+  .in(file("."))
+  .aggregate(helloCore)
+  .dependsOn(helloCore)
+  .settings(
+    name := "Hello",
+    libraryDependencies += toolkitTest % Test
+  )
+
+lazy val helloCore = project
+  .in(file("core"))
+  .settings(
+    name := "Hello Core",
+    libraryDependencies += "org.scala-lang" %% "toolkit" % "0.1.7",
+    libraryDependencies += toolkitTest % Test
+  )
+</code></pre>
 <h3 id="parse-json-using-ujson"><a class="header" href="#parse-json-using-ujson">Parse JSON using uJson</a></h3>
 <p>Let's use uJson from the toolkit in <code>helloCore</code>.</p>
-<p>@@snip <a href="$root$/src/sbt-test/ref/example-weather/build.sbt">example-weather-build</a> {}</p>
-<p>After <code>reload</code>, add <code>core/src/main/scala/example/core/Weather.scala</code>:</p>
+<p>Add <code>core/src/main/scala/example/core/Weather.scala</code>:</p>
 <pre><code class="language-scala">package example.core
 
 import sttp.client4.quick._
 import sttp.client4.Response
 
-object Weather {
-  def temp() = {
+object Weather:
+  def temp() =
     val response: Response[String] = quickRequest
       .get(
         uri"https://api.open-meteo.com/v1/forecast?latitude=40.7143&amp;longitude=-74.006&amp;current_weather=true"
@@ -491,20 +592,16 @@ object Weather {
       .send()
     val json = ujson.read(response.body)
     json.obj("current_weather")("temperature").num
-  }
-}
+end Weather
 </code></pre>
 <p>Next, change <code>src/main/scala/example/Hello.scala</code> as follows:</p>
 <pre><code class="language-scala">package example
 
 import example.core.Weather
 
-object Hello {
-  def main(args: Array[String]): Unit = {
-    val temp = Weather.temp()
-    println(s"Hello! The current temperature in New York is \$temp C.")
-  }
-}
+@main def main(args: String*): Unit =
+  val temp = Weather.temp()
+  println(s"Hello! The current temperature in New York is $temp C.")
 </code></pre>
 <p>Let's run the app to see if it worked:</p>
 <pre><code>sbt:Hello&gt; run
@@ -513,15 +610,23 @@ object Hello {
 [info] running example.Hello
 Hello! The current temperature in New York is 22.7 C.
 </code></pre>
-<h3 id="add-sbt-native-packager-plugin"><a class="header" href="#add-sbt-native-packager-plugin">Add sbt-native-packager plugin</a></h3>
-<p>Using an editor, create <code>project/plugins.sbt</code>:</p>
-<p>@@snip <a href="$root$/src/sbt-test/ref/example-weather/changes/plugins.sbt">example-weather-plugins</a> {}</p>
-<p>Next change <code>build.sbt</code> as follows to add <code>JavaAppPackaging</code>:</p>
-<p>@@snip <a href="$root$/src/sbt-test/ref/example-weather/changes/build.sbt">example-weather-build2</a> {}</p>
-<h3 id="reload-and-create-a-zip-distribution"><a class="header" href="#reload-and-create-a-zip-distribution">Reload and create a .zip distribution</a></h3>
-<pre><code>sbt:Hello&gt; reload
+<!--
+### Add sbt-native-packager plugin
+
+Using an editor, create `project/plugins.sbt`:
+
+@@snip [example-weather-plugins]($root$/src/sbt-test/ref/example-weather/changes/plugins.sbt) {}
+
+Next change `build.sbt` as follows to add `JavaAppPackaging`:
+
+@@snip [example-weather-build2]($root$/src/sbt-test/ref/example-weather/changes/build.sbt) {}
+
+### Reload and create a .zip distribution
+
+```
+sbt:Hello> reload
 ...
-sbt:Hello&gt; dist
+sbt:Hello> dist
 [info] Wrote /private/tmp/foo-build/target/scala-2.13/hello_2.13-0.1.0-SNAPSHOT.pom
 [info] Main Scala API documentation to /tmp/foo-build/target/scala-2.13/api...
 [info] Main Scala API documentation successful.
@@ -530,27 +635,42 @@ sbt:Hello&gt; dist
 [info] Main Scala API documentation successful.
 [success] All package validations passed
 [info] Your package is ready in /tmp/foo-build/target/universal/hello-0.1.0-SNAPSHOT.zip
-</code></pre>
-<p>Here's how you can run the packaged app:</p>
-<pre><code>$ /tmp/someother
+```
+
+Here's how you can run the packaged app:
+
+```
+$ /tmp/someother
 $ cd /tmp/someother
 $ unzip -o -d /tmp/someother /tmp/foo-build/target/universal/hello-0.1.0-SNAPSHOT.zip
 $ ./hello-0.1.0-SNAPSHOT/bin/hello
 Hello! The current temperature in New York is 22.7 C.
-</code></pre>
-<h3 id="dockerize-your-app"><a class="header" href="#dockerize-your-app">Dockerize your app</a></h3>
-<p><em>Note that a Docker daemon will need to be running in order for this to work.</em></p>
-<pre><code>sbt:Hello&gt; Docker/publishLocal
+```
+
+### Dockerize your app
+
+_Note that a Docker daemon will need to be running in order for this to work._
+
+```
+sbt:Hello> Docker/publishLocal
 ....
 [info] Built image hello with tags [0.1.0-SNAPSHOT]
-</code></pre>
-<p>Here's how to run the Dockerized app:</p>
-<pre><code>$ docker run hello:0.1.0-SNAPSHOT
+```
+
+Here's how to run the Dockerized app:
+
+```
+$ docker run hello:0.1.0-SNAPSHOT
 Hello! The current temperature in New York is 22.7 C.
-</code></pre>
-<h3 id="set-the-version"><a class="header" href="#set-the-version">Set the version</a></h3>
-<p>Change <code>build.sbt</code> as follows:</p>
-<p>@@snip <a href="$root$/src/sbt-test/ref/example-weather/changes/build3.sbt">example-weather-build3</a> {}</p>
+```
+
+### Set the version
+
+Change `build.sbt` as follows:
+
+@@snip [example-weather-build3]($root$/src/sbt-test/ref/example-weather/changes/build3.sbt) {}
+
+-->
 <h3 id="switch-scalaversion-temporarily"><a class="header" href="#switch-scalaversion-temporarily">Switch scalaVersion temporarily</a></h3>
 <pre><code>sbt:Hello&gt; ++3.3.3!
 [info] Forcing Scala version to 3.3.3 on all projects.
@@ -565,18 +685,27 @@ Hello! The current temperature in New York is 22.7 C.
 [info]  3.3.3
 </code></pre>
 <p>This setting will go away after <code>reload</code>.</p>
-<h3 id="inspect-the-dist-task"><a class="header" href="#inspect-the-dist-task">Inspect the dist task</a></h3>
-<p>To find out more about <code>dist</code>, try <code>help</code> and <code>inspect</code>.</p>
-<pre><code class="language-scala">sbt:Hello&gt; help dist
+<!--
+### Inspect the dist task
+
+To find out more about `dist`, try `help` and `inspect`.
+
+```scala
+sbt:Hello> help dist
 Creates the distribution packages.
-sbt:Hello&gt; inspect dist
-</code></pre>
-<p>To call inspect recursively on the dependency tasks use <code>inspect tree</code>.</p>
-<pre><code class="language-scala">sbt:Hello&gt; inspect tree dist
+sbt:Hello> inspect dist
+```
+
+To call inspect recursively on the dependency tasks use `inspect tree`.
+
+```scala
+sbt:Hello> inspect tree dist
 [info] dist = Task[java.io.File]
 [info]   +-Universal / dist = Task[java.io.File]
 ....
-</code></pre>
+```
+
+-->
 <h3 id="batch-mode"><a class="header" href="#batch-mode">Batch mode</a></h3>
 <p>You can also run sbt in batch mode, passing sbt commands directly from the terminal.</p>
 <pre><code>$ sbt clean "testOnly HelloSuite"
