@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>sbt components - The Book of sbt</title>
+        <title>Caching - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -90,7 +90,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Introduction</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">1.</strong> Quick Start</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../Setup.html"><strong aria-hidden="true">1.1.</strong> Installing sbt runner</a></li><li class="chapter-item expanded "><a href="../sbt-by-example.html"><strong aria-hidden="true">1.2.</strong> sbt by example</a></li></ol></li><li class="chapter-item expanded "><a href="../guide/index.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../guide/why-sbt-exists.html"><strong aria-hidden="true">2.1.</strong> Why sbt exists</a></li><li class="chapter-item expanded "><a href="../guide/sbt-new.html"><strong aria-hidden="true">2.2.</strong> Creating a new build</a></li><li class="chapter-item expanded "><a href="../guide/sbt-components.html" class="active"><strong aria-hidden="true">2.3.</strong> sbt components</a></li><li class="chapter-item expanded "><a href="../guide/basic-tasks.html"><strong aria-hidden="true">2.4.</strong> Basic tasks</a></li><li class="chapter-item expanded "><a href="../guide/build-definition-basics.html"><strong aria-hidden="true">2.5.</strong> Build definition basics</a></li><li class="chapter-item expanded "><a href="../guide/library-dependency-basics.html"><strong aria-hidden="true">2.6.</strong> Library dependency basics</a></li><li class="chapter-item expanded "><a href="../guide/multi-project-basics.html"><strong aria-hidden="true">2.7.</strong> Multi project basics</a></li><li class="chapter-item expanded "><a href="../guide/build-layout.html"><strong aria-hidden="true">2.8.</strong> Build layout</a></li><li class="chapter-item expanded "><a href="../guide/IDE.html"><strong aria-hidden="true">2.9.</strong> sbt with IDEs</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Changes</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../changes/sbt-2.0-change-summary.html"><strong aria-hidden="true">3.1.</strong> sbt 2.0 changes</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.</strong> Concepts</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../concepts/caching.html"><strong aria-hidden="true">4.1.</strong> Caching</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.</strong> Reference</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/remote-cache-setup.html"><strong aria-hidden="true">5.1.</strong> Remote cache setup</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.</strong> Appendix</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../setup-notes.html"><strong aria-hidden="true">6.1.</strong> Setup notes</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Introduction</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">1.</strong> Quick Start</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../Setup.html"><strong aria-hidden="true">1.1.</strong> Installing sbt runner</a></li><li class="chapter-item expanded "><a href="../sbt-by-example.html"><strong aria-hidden="true">1.2.</strong> sbt by example</a></li></ol></li><li class="chapter-item expanded "><a href="../guide/index.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../guide/why-sbt-exists.html"><strong aria-hidden="true">2.1.</strong> Why sbt exists</a></li><li class="chapter-item expanded "><a href="../guide/sbt-new.html"><strong aria-hidden="true">2.2.</strong> Creating a new build</a></li><li class="chapter-item expanded "><a href="../guide/sbt-components.html"><strong aria-hidden="true">2.3.</strong> sbt components</a></li><li class="chapter-item expanded "><a href="../guide/basic-tasks.html"><strong aria-hidden="true">2.4.</strong> Basic tasks</a></li><li class="chapter-item expanded "><a href="../guide/build-definition-basics.html"><strong aria-hidden="true">2.5.</strong> Build definition basics</a></li><li class="chapter-item expanded "><a href="../guide/library-dependency-basics.html"><strong aria-hidden="true">2.6.</strong> Library dependency basics</a></li><li class="chapter-item expanded "><a href="../guide/multi-project-basics.html"><strong aria-hidden="true">2.7.</strong> Multi project basics</a></li><li class="chapter-item expanded "><a href="../guide/build-layout.html"><strong aria-hidden="true">2.8.</strong> Build layout</a></li><li class="chapter-item expanded "><a href="../guide/IDE.html"><strong aria-hidden="true">2.9.</strong> sbt with IDEs</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Changes</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../changes/sbt-2.0-change-summary.html"><strong aria-hidden="true">3.1.</strong> sbt 2.0 changes</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.</strong> Concepts</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../concepts/caching.html" class="active"><strong aria-hidden="true">4.1.</strong> Caching</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.</strong> Reference</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/remote-cache-setup.html"><strong aria-hidden="true">5.1.</strong> Remote cache setup</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.</strong> Appendix</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../setup-notes.html"><strong aria-hidden="true">6.1.</strong> Setup notes</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -175,82 +175,50 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="sbt-components"><a class="header" href="#sbt-components">sbt components</a></h1>
-<h2 id="sbt-runner"><a class="header" href="#sbt-runner">sbt runner</a></h2>
-<p>An sbt build is executed using the <code>sbt</code> runner, also called "sbt-the-shell-script" to distinguish from other components. It's important to note is that sbt runner is designed to run <strong>any version</strong> of sbt.</p>
-<h3 id="specifying-sbt-version-with-projectbuildproperties"><a class="header" href="#specifying-sbt-version-with-projectbuildproperties">Specifying sbt version with project/build.properties</a></h3>
-<p>The sbt runner executes a subcomponent called sbt launcher, which reads <code>project/build.properties</code> to determine the sbt version for the build, and downloads the artifacts if they haven't been cached:</p>
-<pre><code>sbt.version=2.0.0-alpha7
+                        <h1 id="caching"><a class="header" href="#caching">Caching</a></h1>
+<p>sbt 2.0 introduces hybrid local/remote cache system, which can cache the task results to local disk and Bazel-compatible remote cache. Throughout sbt releases it has implemented various caches, like <code>update</code> cache, incremental compilation, but sbt 2.x's cache is a significant step change for a few reasons:</p>
+<ol>
+<li><strong>Automatic</strong>. sbt 2.x cache automates the caching by embedding itself into the task macro unlike sbt 1.x wherein the plugin author called the cache functions manually in the task implementation.</li>
+<li><strong>Machine-wide</strong>. sbt 2.x disk cache is shared among all builds on a machine.</li>
+<li><strong>Remote-ready</strong>. In sbt 2.x, the cache storage is configured separately such that all cacheable tasks are automatically remote-cache-ready.</li>
+</ol>
+<h2 id="basics-of-caching"><a class="header" href="#basics-of-caching">Basics of caching</a></h2>
+<p>The basic idea is treat as if the build process is a pure function that takes input <code>(A1, A2, A3, ...)</code> and return some outputs <code>(R1, List(O1, O2, O3, ...))</code>. For example, we can take a list of source files, Scala version, and produce a <code>*.jar</code> file at the end. If the assumption holds, then for the same inputs, we can memorize the ouput JAR for everyone. We are interested in this technique because using the memorized output JAR would be faster than performing the actual task like Scala compilation etc.</p>
+<h3 id="hermetic-build"><a class="header" href="#hermetic-build">Hermetic build</a></h3>
+<p>As a mental model of the <em>build as a pure function</em>, build engineers sometimes use the term <em>hermetic build</em>, which is a build that takes place in a shipping container in a dessert with no clocks or the Internet. If we can produce a JAR file from that state, then the JAR file should be safe to be shared by any machine. Why did I mention the clock? It's because a JAR file could capture the timestamp, and thus produce slightly different JARs each time. To avoid this, hermetic build tools overwrite the timestamp to a fixed date 2010-01-01 regardless of when the build took place.</p>
+<p>A build that ends up capturing ephemeral inputs, are said to <em>break the hermeticity</em> or <em>non-hermetic</em>. Another common way the hermeticity is broken is capturing absolute paths as either input or output. Sometimes the path gets embedded into the JAR via a macro, you might not know until you inspect the bytecode.</p>
+<h2 id="automatic-caching"><a class="header" href="#automatic-caching">Automatic caching</a></h2>
+<p>Here's a demonstration of the automatic caching:</p>
+<pre><code class="language-scala">import sbt.util.CacheImplicits.given
+
+val someKey = taskKey[String]("something")
+
+someKey := (Def.cachedTask {
+  name.value + version.value + "!"
+}).value
 </code></pre>
-<p>This means that:</p>
-<ul>
-<li>Anyone who checkouts your build would get the same sbt version, regardless of <em>sbt runner</em> they may have installed on their machines.</li>
-<li>The change of sbt version can be tracked in a version control system, like git.</li>
-</ul>
-<h3 id="sbtn-sbt---client"><a class="header" href="#sbtn-sbt---client">sbtn (<code>sbt --client</code>)</a></h3>
-<p>sbtn (native thin client) is a subcomponent of the sbt runner, called when you pass <code>--client</code> flag to the sbt runner, and is used to send commands to the sbt server. It is called sbtn because it is compiled to native code using GraalVM native-image. The protocol between sbtn and sbt server is stable enough that it should work between <strong>most recent versions</strong> of sbt.</p>
-<h2 id="sbt-server"><a class="header" href="#sbt-server">sbt server</a></h2>
-<p>The sbt server is the actual build tool whose version is specified using <code>project/build.properties</code>. The sbt server acts as a cashier to take commands from sbtn and editors.</p>
-<h3 id="coursier"><a class="header" href="#coursier">Coursier</a></h3>
-<p>The sbt server runs <a href="https://get-coursier.io/">Couriser</a> as a subcomponent to resolve Scala library, Scala compiler, and any other library dependencies your build needs.</p>
-<h3 id="zinc"><a class="header" href="#zinc">Zinc</a></h3>
-<p>Zinc is the incremental compiler for Scala, developed and maintained by sbt project.
-An often overlooked aspect of Zinc is that Zinc provides a stable API to invoke <strong>any modern versions</strong> of Scala compiler. Combined with the fact that Coursier can resolve any Scala version, with sbt we can invoke any modern versions of Scala just by writing a single line <code>build.sbt</code>:</p>
-<pre><code class="language-scala">scalaVersion := "3.3.3"
+<p>The task will be automatically cached based on the two settings <code>name</code> and <code>version</code>. The first time we run the task it will be executed onsite, but the second time onward, it will use the disk cache:</p>
+<pre><code>sbt:demo&gt; show someKey
+[info] demo0.1.0-SNAPSHOT!
+[success] elapsed time: 0 s, cache 0%, 1 onsite task
+sbt:demo&gt; show someKey
+[info] demo0.1.0-SNAPSHOT!
+[success] elapsed time: 0 s, cache 100%, 1 disk cache hit
 </code></pre>
-<h3 id="bsp-server"><a class="header" href="#bsp-server">BSP server</a></h3>
-<p>The sbt server supports <a href="https://build-server-protocol.github.io/">Build Server Protocol (BSP)</a> to list build targets, build them, etc.
-This allows IDEs like IntelliJ and Metals to communicate with a running sbt server programmatically.</p>
-<h2 id="connecting-to-sbt-server"><a class="header" href="#connecting-to-sbt-server">Connecting to sbt server</a></h2>
-<p>Let's look at three ways of connecting to the sbt server.</p>
-<h3 id="sbt-shell-using-sbtn"><a class="header" href="#sbt-shell-using-sbtn">sbt shell using sbtn</a></h3>
-<p>Run <code>sbt --client</code> in the working directory of your build:</p>
-<pre><code class="language-bash">sbt --client
-</code></pre>
-<p>This should display something like the following:</p>
-<pre><code class="language-bash">$ sbt --client
-[info] server was not detected. starting an instance
-[info] welcome to sbt 2.0.0-alpha7 (Azul Systems, Inc. Java 1.8.0_352)
-[info] loading project definition from /private/tmp/bar/project
-[info] loading settings for project bar from build.sbt ...
-[info] set current project to bar (in build file:/private/tmp/bar/)
-[info] sbt server started at local:///Users/eed3si9n/.sbt/2.0.0-alpha7/server/d0ac1409c0117a949d47/sock
-[info] started sbt server
-[info] terminate the server with `shutdown`
-[info] disconnect from the server with `exit`
-sbt:bar&gt;
-</code></pre>
-<p>Running sbt with no command line arguments starts sbt shell. sbt shell has a command prompt (with tab completion and history!).</p>
-<p>For example, you could type <code>compile</code> at the sbt shell:</p>
-<pre><code class="language-bash">sbt:bar&gt; compile
-</code></pre>
-<p>To <code>compile</code> again, press up arrow and then enter.</p>
-<p>To leave sbt shell, type <code>exit</code> or use <code>Ctrl-D</code> (Unix) or <code>Ctrl-Z</code> (Windows).</p>
-<h3 id="batch-mode-using-sbtn"><a class="header" href="#batch-mode-using-sbtn">Batch mode using sbtn</a></h3>
-<p>You can also run sbt in batch mode:</p>
-<pre><code class="language-bash">sbt --client compile
-sbt --client testOnly TestA
-</code></pre>
-<pre><code class="language-bash">$ sbt --client compile
-&gt; compile
-</code></pre>
-<h3 id="shutting-down-sbt-server"><a class="header" href="#shutting-down-sbt-server">Shutting down sbt server</a></h3>
-<p>Run the following to shutdown all sbt servers on your machine:</p>
-<pre><code class="language-bash">sbt shutdownall
-</code></pre>
-<p>Or the following to shutdown just the current one:</p>
-<pre><code class="language-bash">sbt --client shutdown
-</code></pre>
+<h2 id="remote-caching"><a class="header" href="#remote-caching">Remote caching</a></h2>
+<p>You can optionally extend the build to use remote cache in addition to the local disk cache. Remote caching could improve build performance by allowing multiple machines to share build artifacts and outputs.</p>
+<p>Imagine you have a dozen people in your project or a company. Each morning, you will <code>git pull</code> the changes the dozen people made, and you need to build their code. If you have a successful project, the code size will only get bigger over time, and the % of the time you spend building someone else's in your day increases. This becomes the limiting factor of your team size and code size. Remote caching reverses this tide by CI systems hydrate the cache and you can download the artifacts and task outputs.</p>
+<p>sbt 2.x implements Bazel-compatible gRPC interface, which works with number of backend both open source and commercial.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../guide/sbt-new.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../changes/sbt-2.0-change-summary.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../guide/basic-tasks.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../reference/remote-cache-setup.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -260,11 +228,11 @@ sbt --client testOnly TestA
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../guide/sbt-new.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../changes/sbt-2.0-change-summary.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../guide/basic-tasks.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../reference/remote-cache-setup.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
