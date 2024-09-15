@@ -6334,7 +6334,13 @@ You might at first imagine server to be something that runs on remote servers, a
 in addition to accepting input from the terminal, server also to accepts input from the network.
 This allows multiple clients to connect to a <em>single session</em> of sbt.
 The primary use case we have in mind for the client is tooling integration such as editors and IDEs. See <a href="IDE.html">IDE Integration</a> page.
-</p><h3 id="Language+Server+Protocol+3.0">Language Server Protocol 3.0<a href="#Language+Server+Protocol+3.0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The wire protocol we use is <a href="https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md">Language Server Protocol 3.0</a> (LSP), which in turn is based on <a href="https://www.jsonrpc.org/specification">JSON-RPC</a>.
+</p><h3 id="Configuration">Configuration<a href="#Configuration" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>There are several settings that can be used to configure the server.
+The following lists some of these and their default values.
+One may change the settings either per project or by setting values in <code>~/.sbt/1.0/global.sbt</code>.
+</p><pre><code class="prettyprint lang-scala">// If set to a defined value, sbt server will exit if it goes at least the
+// specified duration without receiving any commands.
+Global / serverIdleTimeout := Some(new FiniteDuration(5, TimeUnit.MINUTES))
+</code></pre><h3 id="Language+Server+Protocol+3.0">Language Server Protocol 3.0<a href="#Language+Server+Protocol+3.0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The wire protocol we use is <a href="https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md">Language Server Protocol 3.0</a> (LSP), which in turn is based on <a href="https://www.jsonrpc.org/specification">JSON-RPC</a>.
 </p><p>The base protocol consists of a header and a content part (comparable to HTTP). The header and content part are separated by a <code>\r\n</code>.
 </p><p>Currently the following header fields are supported:
 </p><ul><li><code>Content-Length</code>: The length of the content part in bytes. If you don’t provide this header, we’ll read until the end of the line.

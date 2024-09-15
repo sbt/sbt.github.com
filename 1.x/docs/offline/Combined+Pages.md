@@ -10443,6 +10443,18 @@ in addition to accepting input from the terminal, server also to accepts input f
 This allows multiple clients to connect to a _single session_ of sbt.
 The primary use case we have in mind for the client is tooling integration such as editors and IDEs. See [IDE Integration][IDE] page.
 
+### Configuration
+
+There are several settings that can be used to configure the server.
+The following lists some of these and their default values.
+One may change the settings either per project or by setting values in `~/.sbt/1.0/global.sbt`.
+
+```scala
+// If set to a defined value, sbt server will exit if it goes at least the
+// specified duration without receiving any commands.
+Global / serverIdleTimeout := Some(new FiniteDuration(5, TimeUnit.MINUTES))
+```
+
 ### Language Server Protocol 3.0
 
 The wire protocol we use is [Language Server Protocol 3.0][lsp] (LSP), which in turn is based on [JSON-RPC][jsonrpc].
@@ -10760,6 +10772,7 @@ This will respond back with the result of the action.
   [lsp_initialize]: https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#initialize
   [lsp_initialized]: https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#initialized
   [lsp_publishdiagnosticsparams]: https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md#publishdiagnostics-notification
+
 
 
   [466]: https://github.com/sbt/sbt/issues/466
