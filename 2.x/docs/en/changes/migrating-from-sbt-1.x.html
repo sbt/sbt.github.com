@@ -195,11 +195,23 @@ scalaVersion := "3.3.3"
 <p>In sbt 1.x bare settings were project settings that applied only to the root subproject. In sbt 2.x, the bare settings in <code>build.sbt</code> are common settings that are injected to <strong>all subprojects</strong>.</p>
 </div>
 </div>
-<pre><code class="language-scala">name := "root"
+<pre><code class="language-scala">name := "root" // every subprojects will be named root!
 publish / skip := true
 </code></pre>
 <h3 id="migrating-thisbuild"><a class="header" href="#migrating-thisbuild">Migrating ThisBuild</a></h3>
 <p>In sbt 2.x, bare settings settings should no longer be scoped to <code>ThisBuild</code>. One benefit of the new <em>common settings</em> over <code>ThisBuild</code> is that it would act in a more predictable delegation. These settings are inserted between plugins settings and those defined in <code>settings(...)</code>, meaning they can be used to define settings like <code>Compile / scalacOptions</code>, which was not possible with <code>ThisBuild</code>.</p>
+<h2 id="cross-building-sbt-plugins"><a class="header" href="#cross-building-sbt-plugins">Cross building sbt plugins</a></h2>
+<p>In sbt 2.x, if you cross build an sbt plugin with Scala 3.x and 2.12.x, it will automatically cross build against sbt 1.x and sbt 2.x:</p>
+<pre><code class="language-scala">// using sbt 2.x
+lazy val plugin = (projectMatrix in file("plugin"))
+  .enablePlugins(SbtPlugin)
+  .settings(
+    name := "sbt-vimquit",
+  )
+  .jvmPlatform(scalaVersions = Seq("3.3.3", "2.12.20"))
+</code></pre>
+<p>If you use <code>projectMatrix</code>, make sure to move the plugin to a subdirectory like <code>plugin/</code>. Otherwise, the synthetic root project will also pick up the <code>src/</code>.
+Use sbt 1.10.2 or later to cross build from sbt 1.x side.</p>
 <h2 id="migrating-to-slash-syntax"><a class="header" href="#migrating-to-slash-syntax">Migrating to slash syntax</a></h2>
 <p>sbt 1.x supported both the sbt 0.13 style syntax and the slash syntax. sbt 2.x removes the support for the sbt 0.13 syntax, so use the slash syntax for both sbt shell and in <code>build.sbt</code>:</p>
 <pre><code class="language-scala">&lt;project-id&gt; / Config / intask / key
