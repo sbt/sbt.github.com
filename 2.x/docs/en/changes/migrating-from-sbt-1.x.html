@@ -178,7 +178,10 @@
                         <h1 id="migrating-from-sbt-1x"><a class="header" href="#migrating-from-sbt-1x">Migrating from sbt 1.x</a></h1>
 <h2 id="changing-buildsbt-dsl-to-scala-3x"><a class="header" href="#changing-buildsbt-dsl-to-scala-3x">Changing <code>build.sbt</code> DSL to Scala 3.x</a></h2>
 <p>As a reminder, users can build either Scala 2.x or Scala 3.x programs using either sbt 1.x or sbt 2.x. However, the Scala that underlies the <code>build.sbt</code> DSL is determined by the sbt version. In sbt 2.0, we are migrating to Scala 3.x.</p>
-<p>This means that if you implement custom tasks or sbt plugins for sbt 2.x, it must be done using Scala 3.x. See <a href="https://docs.scala-lang.org/scala3/guides/migration/incompatibility-table.html">Scala 3.x incompatibility table</a> for the list of potential migration points.</p>
+<p>This means that if you implement custom tasks or sbt plugins for sbt 2.x, it must be done using Scala 3.x. See <a href="https://docs.scala-lang.org/scala3/guides/migration/incompatibility-table.html">Scala 3.x incompatibility table</a> and <a href="https://docs.scala-lang.org/scala3/guides/migration/tooling-scala2-xsource3.html">Scala 2 with -Xsource:3</a>.</p>
+<pre><code class="language-scala">// This works on Scala 2.12.20 under -Xsource:3
+import sbt.{ given, * }
+</code></pre>
 <h2 id="bare-settings-changes"><a class="header" href="#bare-settings-changes">Bare settings changes</a></h2>
 <pre><code class="language-scala">version := "0.1.0"
 scalaVersion := "3.3.3"
