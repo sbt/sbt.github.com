@@ -213,8 +213,26 @@ lazy val plugin = (projectMatrix in file("plugin"))
   )
   .jvmPlatform(scalaVersions = Seq("3.3.3", "2.12.20"))
 </code></pre>
-<p>If you use <code>projectMatrix</code>, make sure to move the plugin to a subdirectory like <code>plugin/</code>. Otherwise, the synthetic root project will also pick up the <code>src/</code>.
-Use sbt 1.10.2 or later to cross build from sbt 1.x side.</p>
+<p>If you use <code>projectMatrix</code>, make sure to move the plugin to a subdirectory like <code>plugin/</code>. Otherwise, the synthetic root project will also pick up the <code>src/</code>.</p>
+<h3 id="cross-building-sbt-plugin-with-sbt-1x"><a class="header" href="#cross-building-sbt-plugin-with-sbt-1x">Cross building sbt plugin with sbt 1.x</a></h3>
+<p>Use sbt 1.10.2 or later, if you want to cross build using sbt 1.x.</p>
+<pre><code class="language-scala">// using sbt 1.x
+lazy val scala212 = "2.12.20"
+lazy val scala3 = "3.3.4"
+ThisBuild / crossScalaVersions := Seq(scala212, scala3)
+
+lazy val plugin = (project in file("plugin"))
+  .enablePlugins(SbtPlugin)
+  .settings(
+    name := "sbt-vimquit",
+    (pluginCrossBuild / sbtVersion) := {
+      scalaBinaryVersion.value match {
+        case "2.12" =&gt; "1.5.8"
+        case _      =&gt; "2.0.0-M2"
+      }
+    },
+  )
+</code></pre>
 <h2 id="migrating-to-slash-syntax"><a class="header" href="#migrating-to-slash-syntax">Migrating to slash syntax</a></h2>
 <p>sbt 1.x supported both the sbt 0.13 style syntax and the slash syntax. sbt 2.x removes the support for the sbt 0.13 syntax, so use the slash syntax for both sbt shell and in <code>build.sbt</code>:</p>
 <pre><code class="language-scala">&lt;project-id&gt; / Config / intask / key
