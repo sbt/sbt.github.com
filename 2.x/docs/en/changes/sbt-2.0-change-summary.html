@@ -198,6 +198,7 @@ details of both 2.x and this doc are subject to change.</p>
 <li>sbt 2.x plugins are published with <code>_sbt2_3</code> suffix by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7671">#7671</a></li>
 <li>sbt 2.x adds <code>platform</code> setting so <code>ModuleID</code>'s <code>%%</code> operator can cross build on JVM as well as JS and Native, as opposed to <code>%%%</code> operator that was created in a plugin to workaround this issue, by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/6746">#6746</a></li>
 <li>Dropped <code>useCoursier</code> setting so Coursier cannot be opted out, by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7712">#7712</a></li>
+<li><code>Key.Classpath</code> is changed to be an alias of the <code>Seq[Attributed[xsbti.HashedVirtualFileRef]]</code> type, instead of <code>Seq[Attributed[File]]</code>. Similarly, some task keys that used to return <code>File</code> have changed to return <code>HashedVirtualFileRef</code> instead. See <a href="../concepts/caching.html#caching-files">Caching Files</a>.</li>
 </ul>
 <h3 id="dropped-dreprecations"><a class="header" href="#dropped-dreprecations">Dropped dreprecations</a></h3>
 <ul>

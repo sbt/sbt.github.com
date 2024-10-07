@@ -203,6 +203,11 @@ publish / skip := true
 </code></pre>
 <h3 id="migrating-thisbuild"><a class="header" href="#migrating-thisbuild">Migrating ThisBuild</a></h3>
 <p>In sbt 2.x, bare settings settings should no longer be scoped to <code>ThisBuild</code>. One benefit of the new <em>common settings</em> over <code>ThisBuild</code> is that it would act in a more predictable delegation. These settings are inserted between plugins settings and those defined in <code>settings(...)</code>, meaning they can be used to define settings like <code>Compile / scalacOptions</code>, which was not possible with <code>ThisBuild</code>.</p>
+<h2 id="migrating-to-slash-syntax"><a class="header" href="#migrating-to-slash-syntax">Migrating to slash syntax</a></h2>
+<p>sbt 1.x supported both the sbt 0.13 style syntax and the slash syntax. sbt 2.x removes the support for the sbt 0.13 syntax, so use the slash syntax for both sbt shell and in <code>build.sbt</code>:</p>
+<pre><code class="language-scala">&lt;project-id&gt; / Config / intask / key
+</code></pre>
+<p>For example, <code>test:compile</code> will no longer work on the shell. Use <code>Test/compile</code> instead. See <a href="https://eed3si9n.com/syntactic-scalafix-rule-for-unified-slash-syntax/">syntactic Scalafix rule for unified slash syntax</a> for semi-automated migration of <code>build.sbt</code> files.</p>
 <h2 id="cross-building-sbt-plugins"><a class="header" href="#cross-building-sbt-plugins">Cross building sbt plugins</a></h2>
 <p>In sbt 2.x, if you cross build an sbt plugin with Scala 3.x and 2.12.x, it will automatically cross build against sbt 1.x and sbt 2.x:</p>
 <pre><code class="language-scala">// using sbt 2.x
@@ -233,11 +238,6 @@ lazy val plugin = (project in file("plugin"))
     },
   )
 </code></pre>
-<h2 id="migrating-to-slash-syntax"><a class="header" href="#migrating-to-slash-syntax">Migrating to slash syntax</a></h2>
-<p>sbt 1.x supported both the sbt 0.13 style syntax and the slash syntax. sbt 2.x removes the support for the sbt 0.13 syntax, so use the slash syntax for both sbt shell and in <code>build.sbt</code>:</p>
-<pre><code class="language-scala">&lt;project-id&gt; / Config / intask / key
-</code></pre>
-<p>For example, <code>test:compile</code> will no longer work on the shell. Use <code>Test/compile</code> instead. See <a href="https://eed3si9n.com/syntactic-scalafix-rule-for-unified-slash-syntax/">syntactic Scalafix rule for unified slash syntax</a> for semi-automated migration of <code>build.sbt</code> files.</p>
 <h2 id="changes-to-"><a class="header" href="#changes-to-">Changes to <code>%%</code></a></h2>
 <p>In sbt 2.x, <code>ModuleID</code>'s <code>%%</code> operator has become platform-aware. For JVM subprojects, <code>%%</code> works as before, encoding Scala suffix (for example <code>_3</code>) on Maven repositories.</p>
 <h3 id="migrating--operator"><a class="header" href="#migrating--operator">Migrating <code>%%%</code> operator</a></h3>
@@ -245,6 +245,52 @@ lazy val plugin = (project in file("plugin"))
 <pre><code class="language-scala">libraryDependencies += "org.scala-js" %% "scalajs-dom" % "2.8.0"
 </code></pre>
 <p>Use <code>.platform(Platform.jvm)</code> in case where JVM libraries are needed.</p>
+<h2 id="the-plugincompat-technique"><a class="header" href="#the-plugincompat-technique">The PluginCompat technique</a></h2>
+<p>To use the same <code>*.scala</code> source but target both sbt 1.x and 2.x, we can create a shim, for example an object named <code>PluginCompat</code> in both <code>src/main/scala-2.12/</code> and <code>src/main/scala-3/</code>.</p>
+<h3 id="migrating-classpath-type"><a class="header" href="#migrating-classpath-type">Migrating Classpath type</a></h3>
+<p>sbt 2.x changed the <code>Classpath</code> type to be an alias of the <code>Seq[Attributed[xsbti.HashedVirtualFileRef]]</code> type. The following is a shim created to work with classpaths from both sbt 1.x and 2.x.</p>
+<pre><code class="language-scala">// src/main/scala-3/PluginCompat.scala
+
+package sbtfoo
+
+import java.nio.file.{ Path =&gt; NioPath }
+import sbt.*
+import xsbti.{ FileConverter, HashedVirtualFileRef, VirtualFile }
+
+private[sbtfoo] object PluginCompat:
+  type FileRef = HashedVirtualFileRef
+  type Out = VirtualFile
+
+  def toNioPath(a: Attributed[HashedVirtualFileRef])(using conv: FileConverter): NioPath =
+    conv.toPath(a.data)
+  inline def toFile(a: Attributed[HashedVirtualFileRef])(using conv: FileConverter): File =
+    toNioPath(a).toFile()
+  def toNioPaths(cp: Seq[Attributed[HashedVirtualFileRef]])(using conv: FileConverter): Vector[NioPath] =
+    cp.map(toNioPath).toVector
+  inline def toFiles(cp: Seq[Attributed[HashedVirtualFileRef]])(using conv: FileConverter): Vector[File] =
+    toNioPaths(cp).map(_.toFile())
+end PluginCompat
+</code></pre>
+<p>and here's for sbt 1.x:</p>
+<pre><code class="language-scala">// src/main/scala-2.12/PluginCompat.scala
+
+package sbtfoo
+
+private[sbtfoo] object PluginCompat {
+  type FileRef = java.io.File
+  type Out = java.io.File
+
+  def toNioPath(a: Attributed[File])(implicit conv: FileConverter): NioPath =
+    a.data.toPath()
+  def toFile(a: Attributed[File])(implicit conv: FileConverter): File =
+    a.data
+  def toNioPaths(cp: Seq[Attributed[File]])(implicit conv: FileConverter): Vector[NioPath] =
+    cp.map(_.data.toPath()).toVector
+  def toFiles(cp: Seq[Attributed[File]])(implicit conv: FileConverter): Vector[File] =
+    cp.map(_.data).toVector
+}
+</code></pre>
+<p>Now we can import <code>PluginCompat.*</code> and use <code>toNioPaths(...)</code> etc to absorb the differences between sbt 1.x and 2.x. The above demonstrates how we can absorb the classpath type change, and convert it into a vector of NIO Paths.</p>
 
                     </main>
 
