@@ -1,0 +1,2732 @@
+<!DOCTYPE HTML>
+<html lang="ja" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>The Book of sbt</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="src/reference/custom-202410.css">
+        <link rel="stylesheet" href="src/reference/mdbook-admonish.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">sbt 記</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">1.</strong> Quick Start</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="Setup.html"><strong aria-hidden="true">1.1.</strong> Installing sbt runner</a></li><li class="chapter-item expanded "><a href="sbt-by-example.html"><strong aria-hidden="true">1.2.</strong> sbt by example</a></li></ol></li><li class="chapter-item expanded "><a href="guide/index.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="guide/why-sbt-exists.html"><strong aria-hidden="true">2.1.</strong> Why sbt exists</a></li><li class="chapter-item expanded "><a href="guide/sbt-new.html"><strong aria-hidden="true">2.2.</strong> Creating a new build</a></li><li class="chapter-item expanded "><a href="guide/sbt-components.html"><strong aria-hidden="true">2.3.</strong> sbt components</a></li><li class="chapter-item expanded "><a href="guide/basic-tasks.html"><strong aria-hidden="true">2.4.</strong> Basic tasks</a></li><li class="chapter-item expanded "><a href="guide/build-definition-basics.html"><strong aria-hidden="true">2.5.</strong> Build definition basics</a></li><li class="chapter-item expanded "><a href="guide/library-dependency-basics.html"><strong aria-hidden="true">2.6.</strong> Library dependency basics</a></li><li class="chapter-item expanded "><a href="guide/multi-project-basics.html"><strong aria-hidden="true">2.7.</strong> Multi project basics</a></li><li class="chapter-item expanded "><a href="guide/build-layout.html"><strong aria-hidden="true">2.8.</strong> Build layout</a></li><li class="chapter-item expanded "><a href="guide/IDE.html"><strong aria-hidden="true">2.9.</strong> sbt with IDEs</a></li></ol></li><li class="chapter-item expanded "><a href="changes/index.html"><strong aria-hidden="true">3.</strong> Changes</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="changes/sbt-2.0-change-summary.html"><strong aria-hidden="true">3.1.</strong> sbt 2.0 changes</a></li><li class="chapter-item expanded "><a href="changes/migrating-from-sbt-1.x.html"><strong aria-hidden="true">3.2.</strong> Migrating from sbt 1.x</a></li></ol></li><li class="chapter-item expanded "><a href="concepts/index.html"><strong aria-hidden="true">4.</strong> Concepts</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="concepts/command.html"><strong aria-hidden="true">4.1.</strong> Command</a></li><li class="chapter-item expanded "><a href="concepts/cross-building.html"><strong aria-hidden="true">4.2.</strong> Cross building</a></li><li class="chapter-item expanded "><a href="concepts/caching.html"><strong aria-hidden="true">4.3.</strong> Caching</a></li></ol></li><li class="chapter-item expanded "><a href="reference/index.html"><strong aria-hidden="true">5.</strong> Reference</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="reference/sbt.html"><strong aria-hidden="true">5.1.</strong> sbt</a></li><li class="chapter-item expanded "><a href="reference/sbt-update.html"><strong aria-hidden="true">5.2.</strong> sbt update</a></li><li class="chapter-item expanded "><a href="reference/cross-building-setup.html"><strong aria-hidden="true">5.3.</strong> Cross building setup</a></li><li class="chapter-item expanded "><a href="reference/remote-cache-setup.html"><strong aria-hidden="true">5.4.</strong> Remote cache setup</a></li></ol></li><li class="chapter-item expanded "><a href="recipes/index.html"><strong aria-hidden="true">6.</strong> Recipes</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="recipes/hello-world.html"><strong aria-hidden="true">6.1.</strong> Write hello world</a></li><li class="chapter-item expanded "><a href="recipes/use-sbt-as-metals-build-server.html"><strong aria-hidden="true">6.2.</strong> Use sbt as Metals build server</a></li><li class="chapter-item expanded "><a href="recipes/import-to-intellij.html"><strong aria-hidden="true">6.3.</strong> Import to IntelliJ IDEA</a></li><li class="chapter-item expanded "><a href="recipes/use-neovim.html"><strong aria-hidden="true">6.4.</strong> Use Neovim</a></li></ol></li><li class="chapter-item expanded "><a href="appendix/glossary.html"><strong aria-hidden="true">7.</strong> Appendix: Glossary</a></li><li class="chapter-item expanded "><a href="appendix/setup-notes.html"><strong aria-hidden="true">8.</strong> Appendix: Setup notes</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Book of sbt</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="sbt-記-草稿"><a class="header" href="#sbt-記-草稿">sbt 記 (草稿)</a></h1>
+<p>これは未だリリースされていない sbt 2.x のドキュメンテーションの草稿だ。一般的な概念は sbt 1.x とも一貫しているが、2.x 系および本稿の詳細は今後変更される可能性がある。</p>
+<p><img src="files/sbt-logo.svg" alt="sbt logo" /></p>
+<p>sbt は Scala と Java のためのシンプルなビルド・ツールだ。sbt は、Coursier を用いたライブラリ依存性のダウンロード、プロジェクトの差分コンパイルや差分テスト、IntelliJ や VS Code などの IDE との統合、JAR パッケージの作成、および JVM コミュニティーがパッケージ登録を行う <a href="https://central.sonatype.com/">Maven Central</a> への公開などを行う。</p>
+<pre><code class="language-scala">scalaVersion := "3.3.3"
+</code></pre>
+<p>Scala を始めるには、一行の <code>build.sbt</code> を書くだけでいい。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="installing-sbt-runner"><a class="header" href="#installing-sbt-runner">Installing sbt runner</a></h1>
+<p>To build an sbt project, you'll need to take these steps:</p>
+<ul>
+<li>Install JDK (We recommend Eclipse Adoptium Temurin JDK 8, 11, or 17, or Zulu JDK 8 for macOS with ARM chips).</li>
+<li>Install sbt runner.</li>
+</ul>
+<p>sbt runner is a script that invokes a declared version of sbt, downloading it beforehand if necessary. This allows build authors to precisely control the sbt version, instead of relying on users' machine environment.</p>
+<h3 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h3>
+<p>sbt runs on all major operating systems; however, it requires JDK 8 or higher to run.</p>
+<pre><code class="language-bash">java -version
+# openjdk version "1.8.0_352"
+</code></pre>
+<h3 id="installing-from-sdkman"><a class="header" href="#installing-from-sdkman">Installing from SDKMAN</a></h3>
+<p>To install both JDK and sbt, consider using <a href="https://sdkman.io/">SDKMAN</a>.</p>
+<pre><code class="language-bash">sdk install java $(sdk list java | grep -o "\b8\.[0-9]*\.[0-9]*\-tem" | head -1)
+sdk install sbt
+</code></pre>
+<h3 id="universal-packages"><a class="header" href="#universal-packages">Universal packages</a></h3>
+<ul>
+<li><a href="https://github.com/sbt/sbt/releases/download/v1.10.0/sbt-1.10.0.zip">sbt-1.10.0.zip</a></li>
+<li><a href="https://github.com/sbt/sbt/releases/download/v1.10.0/sbt-1.10.0.tgz">sbt-1.10.0.tgz</a></li>
+<li><a href="https://github.com/sbt/sbt/releases/download/v1.10.0/sbt-1.10.0.msi">sbt-1.10.0.msi</a></li>
+</ul>
+<h2 id="verify-the-sbt-runner"><a class="header" href="#verify-the-sbt-runner">Verify the sbt runner</a></h2>
+<pre><code class="language-bash">sbt --script-version
+# 1.10.0
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="sbt-by-example"><a class="header" href="#sbt-by-example">sbt by example</a></h2>
+<p>This page assumes you've <a href="Setup.html">installed sbt runner</a>.</p>
+<p>Let's start with examples rather than explaining how sbt works or why.</p>
+<h3 id="create-a-minimum-sbt-build"><a class="header" href="#create-a-minimum-sbt-build">Create a minimum sbt build</a></h3>
+<pre><code class="language-bash">mkdir foo-build
+cd foo-build
+touch build.sbt
+mkdir project
+echo "sbt.version=2.0.0-M2" &gt; project/build.properties
+</code></pre>
+<h3 id="start-sbt-shell"><a class="header" href="#start-sbt-shell">Start sbt shell</a></h3>
+<pre><code class="language-bash">$ sbt
+[info] welcome to sbt 2.0.0-M2 (Azul Systems, Inc. Java)
+....
+[info] started sbt server
+sbt:foo-build&gt;
+</code></pre>
+<h3 id="exit-sbt-shell"><a class="header" href="#exit-sbt-shell">Exit sbt shell</a></h3>
+<p>To leave sbt shell, type <code>exit</code> or use Ctrl+D (Unix) or Ctrl+Z (Windows).</p>
+<pre><code>sbt:foo-build&gt; exit
+</code></pre>
+<h3 id="compile-a-project"><a class="header" href="#compile-a-project">Compile a project</a></h3>
+<p>As a convention, we will use the <code>sbt:...&gt;</code> or <code>&gt;</code> prompt to mean that we're in the sbt interactive shell.</p>
+<pre><code class="language-bash">$ sbt
+sbt:foo-build&gt; compile
+[success] elapsed time: 0 s, cache 0%, 1 onsite task
+</code></pre>
+<h3 id="recompile-on-code-change"><a class="header" href="#recompile-on-code-change">Recompile on code change</a></h3>
+<p>Prefixing the <code>compile</code> command (or any other command) with <code>~</code> causes the command to be automatically re-executed whenever one of the source files within the project is modified. For example:</p>
+<pre><code>sbt:foo-build&gt; ~compile
+[success] elapsed time: 0 s, cache 100%, 1 disk cache hit
+[info] 1. Monitoring source files for foo-build/compile...
+[info]    Press &lt;enter&gt; to interrupt or '?' for more options.
+</code></pre>
+<h3 id="create-a-source-file"><a class="header" href="#create-a-source-file">Create a source file</a></h3>
+<p>Leave the previous command running. From a different shell or in your file manager create in the foo-build directory the following nested directories: <code>src/main/scala/example</code>. Then, create <code>Hello.scala</code> in the <code>example</code> directory using your favorite editor as follows:</p>
+<pre><code class="language-scala">package example
+
+@main def main(args: String*): Unit =
+  println(s"Hello ${args.mkString}")
+</code></pre>
+<p>This new file should be picked up by the running command:</p>
+<pre><code>[info] Build triggered by /tmp/foo-build/src/main/scala/example/Hello.scala. Running 'compile'.
+[info] compiling 1 Scala source to /tmp/foo-build/target/out/jvm/scala-3.3.3/foo/backend ...
+[success] elapsed time: 1 s, cache 0%, 1 onsite task
+[info] 2. Monitoring source files for foo-build/compile...
+[info]    Press &lt;enter&gt; to interrupt or '?' for more options.
+</code></pre>
+<p>Press <code>Enter</code> to exit <code>~compile</code>.</p>
+<h3 id="run-a-previous-command"><a class="header" href="#run-a-previous-command">Run a previous command</a></h3>
+<p>From sbt shell, press up-arrow twice to find the <code>compile</code> command that you executed at the beginning.</p>
+<pre><code>sbt:foo-build&gt; compile
+</code></pre>
+<h3 id="getting-help"><a class="header" href="#getting-help">Getting help</a></h3>
+<p>Use the <code>help</code> command to get basic help about the available commands.</p>
+<pre><code>sbt:foo-build&gt; help
+
+  &lt;command&gt; (; &lt;command&gt;)*                       Runs the provided semicolon-separated commands.
+  about                                          Displays basic information about sbt and the build.
+  tasks                                          Lists the tasks defined for the current project.
+  settings                                       Lists the settings defined for the current project.
+  reload                                         (Re)loads the current project or changes to plugins project or returns from it.
+  new                                            Creates a new sbt build.
+  new                                            Creates a new sbt build.
+  projects                                       Lists the names of available projects or temporarily adds/removes extra builds to the session.
+
+....
+</code></pre>
+<p>Display the description of a specific task:</p>
+<pre><code>sbt:foo-build&gt; help run
+Runs a main class, passing along arguments provided on the command line.
+</code></pre>
+<h3 id="run-your-app"><a class="header" href="#run-your-app">Run your app</a></h3>
+<pre><code>sbt:foo&gt; run
+[info] running example.main
+Hello
+[success] elapsed time: 0 s, cache 50%, 1 disk cache hit, 1 onsite task
+</code></pre>
+<h3 id="set-thisbuild--scalaversion-from-sbt-shell"><a class="header" href="#set-thisbuild--scalaversion-from-sbt-shell">Set ThisBuild / scalaVersion from sbt shell</a></h3>
+<pre><code>sbt:foo-build&gt; set scalaVersion := "3.3.3"
+[info] Defining scalaVersion
+[info] The new value will be used by Compile / bspBuildTarget, Compile / dependencyTreeCrossProjectId and 51 others.
+[info]  Run `last` for details.
+[info] Reapplying settings...
+[info] set current project to foo (in build file:/tmp/foo-build/)
+</code></pre>
+<p>Check the <code>scalaVersion</code> setting:</p>
+<pre><code>sbt:foo-build&gt; scalaVersion
+[info] 3.3.3
+</code></pre>
+<h3 id="save-the-session-to-buildsbt"><a class="header" href="#save-the-session-to-buildsbt">Save the session to build.sbt</a></h3>
+<p>We can save the ad-hoc settings using <code>session save</code>.</p>
+<pre><code>sbt:foo-build&gt; session save
+[info] Reapplying settings...
+[info] set current project to foo-build (in build file:/tmp/foo-build/)
+[warn] build source files have changed
+[warn] modified files:
+[warn]   /tmp/foo-build/build.sbt
+[warn] Apply these changes by running `reload`.
+[warn] Automatically reload the build when source changes are detected by setting `Global / onChangedBuildSource := ReloadOnSourceChanges`.
+[warn] Disable this warning by setting `Global / onChangedBuildSource := IgnoreSourceChanges`.
+</code></pre>
+<p><code>build.sbt</code> file should now contain:</p>
+<pre><code class="language-scala">scalaVersion := "3.3.3"
+
+</code></pre>
+<h3 id="name-your-project"><a class="header" href="#name-your-project">Name your project</a></h3>
+<p>Using an editor, change <code>build.sbt</code> as follows:</p>
+<pre><code class="language-scala">scalaVersion := "3.3.3"
+organization := "com.example"
+name := "Hello"
+</code></pre>
+<h3 id="reload-the-build"><a class="header" href="#reload-the-build">Reload the build</a></h3>
+<p>Use the <code>reload</code> command to reload the build. The command causes the <code>build.sbt</code> file to be re-read, and its settings applied.</p>
+<pre><code>sbt:foo-build&gt; reload
+[info] welcome to sbt 2.x (Azul Systems, Inc. Java)
+[info] loading project definition from /tmp/foo-build/project
+[info] loading settings for project hello from build.sbt ...
+[info] set current project to Hello (in build file:/tmp/foo-build/)
+sbt:Hello&gt;
+</code></pre>
+<p>Note that the prompt has now changed to <code>sbt:Hello&gt;</code>.</p>
+<h3 id="add-toolkit-test-to-librarydependencies"><a class="header" href="#add-toolkit-test-to-librarydependencies">Add toolkit-test to libraryDependencies</a></h3>
+<p>Using an editor, change <code>build.sbt</code> as follows:</p>
+<pre><code class="language-scala">scalaVersion := "3.3.3"
+organization := "com.example"
+name := "Hello"
+libraryDependencies += "org.scala-lang" %% "toolkit-test" % "0.1.7" % Test
+</code></pre>
+<p>Use the <code>reload</code> command to reflect the change in <code>build.sbt</code>.</p>
+<pre><code>sbt:Hello&gt; reload
+</code></pre>
+<h3 id="run-incremental-tests"><a class="header" href="#run-incremental-tests">Run incremental tests</a></h3>
+<pre><code>sbt:Hello&gt; test
+</code></pre>
+<h3 id="run-incremental-tests-continuously"><a class="header" href="#run-incremental-tests-continuously">Run incremental tests continuously</a></h3>
+<pre><code>sbt:Hello&gt; ~test
+</code></pre>
+<h3 id="write-a-test"><a class="header" href="#write-a-test">Write a test</a></h3>
+<p>Leaving the previous command running, create a file named <code>src/test/scala/example/HelloSuite.scala</code> using an editor:</p>
+<pre><code class="language-scala">package example
+
+class HelloSuite extends munit.FunSuite:
+  test("Hello should start with H") {
+    assert("hello".startsWith("H"))
+  }
+end HelloSuite
+</code></pre>
+<p><code>~test</code> should pick up the change:</p>
+<pre><code>example.HelloSuite:
+==&gt; X example.HelloSuite.Hello should start with H  0.012s munit.FailException: /tmp/foo-build/src/test/scala/example/HelloSuite.scala:5 assertion failed
+4:  test("Hello should start with H") {
+5:    assert("hello".startsWith("H"))
+6:  }
+    at munit.FunSuite.assert(FunSuite.scala:11)
+    at example.HelloSuite.$init$$$anonfun$1(HelloSuite.scala:5)
+[error] Failed: Total 1, Failed 1, Errors 0, Passed 0
+[error] Failed tests:
+[error]   example.HelloSuite
+[error] (Test / testQuick) sbt.TestsFailedException: Tests unsuccessful
+[error] elapsed time: 1 s, cache 50%, 3 disk cache hits, 3 onsite tasks
+</code></pre>
+<h3 id="make-the-test-pass"><a class="header" href="#make-the-test-pass">Make the test pass</a></h3>
+<p>Using an editor, change <code>src/test/scala/example/HelloSuite.scala</code> to:</p>
+<pre><code class="language-scala">package example
+
+class HelloSuite extends munit.FunSuite:
+  test("Hello should start with H") {
+    assert("Hello".startsWith("H"))
+  }
+end HelloSuite
+</code></pre>
+<p>Confirm that the test passes, then press <code>Enter</code> to exit the continuous test.</p>
+<h3 id="add-a-library-dependency"><a class="header" href="#add-a-library-dependency">Add a library dependency</a></h3>
+<p>Using an editor, change <code>build.sbt</code> as follows:</p>
+<pre><code class="language-scala">scalaVersion := "3.3.3"
+organization := "com.example"
+name := "Hello"
+libraryDependencies ++= Seq(
+  "org.scala-lang" %% "toolkit" % "0.1.7",
+  "org.scala-lang" %% "toolkit-test" % "0.1.7" % Test,
+)
+</code></pre>
+<p>Use the <code>reload</code> command to reflect the change in <code>build.sbt</code>.</p>
+<h3 id="use-scala-repl"><a class="header" href="#use-scala-repl">Use Scala REPL</a></h3>
+<p>We can find out the current weather in New York.</p>
+<pre><code class="language-scala">sbt:Hello&gt; console
+Welcome to Scala 3.3.3 (1.8.0_402, Java OpenJDK 64-Bit Server VM).
+Type in expressions for evaluation. Or try :help.
+
+scala&gt;
+import sttp.client4.quick.*
+import sttp.client4.Response
+
+val newYorkLatitude: Double = 40.7143
+val newYorkLongitude: Double = -74.006
+val response: Response[String] = quickRequest
+  .get(
+    uri"https://api.open-meteo.com/v1/forecast?latitude=\$newYorkLatitude&amp;longitude=\$newYorkLongitude&amp;current_weather=true"
+  )
+  .send()
+
+println(ujson.read(response.body).render(indent = 2))
+
+// press Ctrl+D
+
+// Exiting paste mode, now interpreting.
+
+{
+  "latitude": 40.710335,
+  "longitude": -73.99307,
+  "generationtime_ms": 0.36704540252685547,
+  "utc_offset_seconds": 0,
+  "timezone": "GMT",
+  "timezone_abbreviation": "GMT",
+  "elevation": 51,
+  "current_weather": {
+    "temperature": 21.3,
+    "windspeed": 16.7,
+    "winddirection": 205,
+    "weathercode": 3,
+    "is_day": 1,
+    "time": "2023-08-04T10:00"
+  }
+}
+import sttp.client4.quick._
+import sttp.client4.Response
+val newYorkLatitude: Double = 40.7143
+val newYorkLongitude: Double = -74.006
+val response: sttp.client4.Response[String] = Response({"latitude":40.710335,"longitude":-73.99307,"generationtime_ms":0.36704540252685547,"utc_offset_seconds":0,"timezone":"GMT","timezone_abbreviation":"GMT","elevation":51.0,"current_weather":{"temperature":21.3,"windspeed":16.7,"winddirection":205.0,"weathercode":3,"is_day":1,"time":"2023-08-04T10:00"}},200,,List(:status: 200, content-encoding: deflate, content-type: application/json; charset=utf-8, date: Fri, 04 Aug 2023 10:09:11 GMT),List(),RequestMetadata(GET,https://api.open-meteo.com/v1/forecast?latitude=40.7143&amp;longitude...
+
+scala&gt; :q // to quit
+</code></pre>
+<h3 id="make-a-subproject"><a class="header" href="#make-a-subproject">Make a subproject</a></h3>
+<p>Change <code>build.sbt</code> as follows:</p>
+<pre><code class="language-scala">scalaVersion := "3.3.3"
+organization := "com.example"
+
+lazy val hello = project
+  .in(file("."))
+  .settings(
+    name := "Hello",
+    libraryDependencies ++= Seq(
+      "org.scala-lang" %% "toolkit" % "0.1.7",
+      "org.scala-lang" %% "toolkit-test" % "0.1.7" % Test
+    )
+  )
+
+lazy val helloCore = project
+  .in(file("core"))
+  .settings(
+    name := "Hello Core"
+  )
+</code></pre>
+<p>Use the <code>reload</code> command to reflect the change in <code>build.sbt</code>.</p>
+<h3 id="list-all-subprojects"><a class="header" href="#list-all-subprojects">List all subprojects</a></h3>
+<pre><code>sbt:Hello&gt; projects
+[info] In file:/tmp/foo-build/
+[info]   * hello
+[info]     helloCore
+</code></pre>
+<h3 id="compile-the-subproject"><a class="header" href="#compile-the-subproject">Compile the subproject</a></h3>
+<pre><code>sbt:Hello&gt; helloCore/compile
+</code></pre>
+<h3 id="add-toolkit-test-to-the-subproject"><a class="header" href="#add-toolkit-test-to-the-subproject">Add toolkit-test to the subproject</a></h3>
+<p>Change <code>build.sbt</code> as follows:</p>
+<pre><code class="language-scala">scalaVersion := "3.3.3"
+organization := "com.example"
+
+val toolkitTest = "org.scala-lang" %% "toolkit-test" % "0.1.7"
+
+lazy val hello = project
+  .in(file("."))
+  .settings(
+    name := "Hello",
+    libraryDependencies ++= Seq(
+      "org.scala-lang" %% "toolkit" % "0.1.7",
+      toolkitTest % Test
+    )
+  )
+
+lazy val helloCore = project
+  .in(file("core"))
+  .settings(
+    name := "Hello Core",
+    libraryDependencies += toolkitTest % Test
+  )
+</code></pre>
+<h3 id="broadcast-commands"><a class="header" href="#broadcast-commands">Broadcast commands</a></h3>
+<p>Set aggregate so that the command sent to <code>hello</code> is broadcast to <code>helloCore</code> too:</p>
+<pre><code class="language-scala">scalaVersion := "3.3.3"
+organization := "com.example"
+
+val toolkitTest = "org.scala-lang" %% "toolkit-test" % "0.1.7"
+
+lazy val hello = project
+  .in(file("."))
+  .aggregate(helloCore)
+  .settings(
+    name := "Hello",
+    libraryDependencies ++= Seq(
+      "org.scala-lang" %% "toolkit" % "0.1.7",
+      toolkitTest % Test
+    )
+  )
+
+lazy val helloCore = project
+  .in(file("core"))
+  .settings(
+    name := "Hello Core",
+    libraryDependencies += toolkitTest % Test
+  )
+</code></pre>
+<p>After <code>reload</code>, <code>~test</code> now runs on both subprojects:</p>
+<pre><code class="language-scala">sbt:Hello&gt; ~test
+</code></pre>
+<p>Press <code>Enter</code> to exit the continuous test.</p>
+<h3 id="make-hello-depend-on-hellocore"><a class="header" href="#make-hello-depend-on-hellocore">Make hello depend on helloCore</a></h3>
+<p>Use <code>.dependsOn(...)</code> to add a dependency on other subprojects. Also let's move the toolkit dependency to <code>helloCore</code>.</p>
+<pre><code class="language-scala">scalaVersion := "3.3.3"
+organization := "com.example"
+
+val toolkitTest = "org.scala-lang" %% "toolkit-test" % "0.1.7"
+
+lazy val hello = project
+  .in(file("."))
+  .aggregate(helloCore)
+  .dependsOn(helloCore)
+  .settings(
+    name := "Hello",
+    libraryDependencies += toolkitTest % Test
+  )
+
+lazy val helloCore = project
+  .in(file("core"))
+  .settings(
+    name := "Hello Core",
+    libraryDependencies += "org.scala-lang" %% "toolkit" % "0.1.7",
+    libraryDependencies += toolkitTest % Test
+  )
+</code></pre>
+<h3 id="parse-json-using-ujson"><a class="header" href="#parse-json-using-ujson">Parse JSON using uJson</a></h3>
+<p>Let's use uJson from the toolkit in <code>helloCore</code>.</p>
+<p>Add <code>core/src/main/scala/example/core/Weather.scala</code>:</p>
+<pre><code class="language-scala">package example.core
+
+import sttp.client4.quick._
+import sttp.client4.Response
+
+object Weather:
+  def temp() =
+    val response: Response[String] = quickRequest
+      .get(
+        uri"https://api.open-meteo.com/v1/forecast?latitude=40.7143&amp;longitude=-74.006&amp;current_weather=true"
+      )
+      .send()
+    val json = ujson.read(response.body)
+    json.obj("current_weather")("temperature").num
+end Weather
+</code></pre>
+<p>Next, change <code>src/main/scala/example/Hello.scala</code> as follows:</p>
+<pre><code class="language-scala">package example
+
+import example.core.Weather
+
+@main def main(args: String*): Unit =
+  val temp = Weather.temp()
+  println(s"Hello! The current temperature in New York is $temp C.")
+</code></pre>
+<p>Let's run the app to see if it worked:</p>
+<pre><code>sbt:Hello&gt; run
+[info] compiling 1 Scala source to /tmp/foo-build/core/target/scala-2.13/classes ...
+[info] compiling 1 Scala source to /tmp/foo-build/target/scala-2.13/classes ...
+[info] running example.Hello
+Hello! The current temperature in New York is 22.7 C.
+</code></pre>
+<!--
+### Add sbt-native-packager plugin
+
+Using an editor, create `project/plugins.sbt`:
+
+@@snip [example-weather-plugins]($root$/src/sbt-test/ref/example-weather/changes/plugins.sbt) {}
+
+Next change `build.sbt` as follows to add `JavaAppPackaging`:
+
+@@snip [example-weather-build2]($root$/src/sbt-test/ref/example-weather/changes/build.sbt) {}
+
+### Reload and create a .zip distribution
+
+```
+sbt:Hello> reload
+...
+sbt:Hello> dist
+[info] Wrote /private/tmp/foo-build/target/scala-2.13/hello_2.13-0.1.0-SNAPSHOT.pom
+[info] Main Scala API documentation to /tmp/foo-build/target/scala-2.13/api...
+[info] Main Scala API documentation successful.
+[info] Main Scala API documentation to /tmp/foo-build/core/target/scala-2.13/api...
+[info] Wrote /tmp/foo-build/core/target/scala-2.13/hello-core_2.13-0.1.0-SNAPSHOT.pom
+[info] Main Scala API documentation successful.
+[success] All package validations passed
+[info] Your package is ready in /tmp/foo-build/target/universal/hello-0.1.0-SNAPSHOT.zip
+```
+
+Here's how you can run the packaged app:
+
+```
+$ /tmp/someother
+$ cd /tmp/someother
+$ unzip -o -d /tmp/someother /tmp/foo-build/target/universal/hello-0.1.0-SNAPSHOT.zip
+$ ./hello-0.1.0-SNAPSHOT/bin/hello
+Hello! The current temperature in New York is 22.7 C.
+```
+
+### Dockerize your app
+
+_Note that a Docker daemon will need to be running in order for this to work._
+
+```
+sbt:Hello> Docker/publishLocal
+....
+[info] Built image hello with tags [0.1.0-SNAPSHOT]
+```
+
+Here's how to run the Dockerized app:
+
+```
+$ docker run hello:0.1.0-SNAPSHOT
+Hello! The current temperature in New York is 22.7 C.
+```
+
+### Set the version
+
+Change `build.sbt` as follows:
+
+@@snip [example-weather-build3]($root$/src/sbt-test/ref/example-weather/changes/build3.sbt) {}
+
+-->
+<h3 id="switch-scalaversion-temporarily"><a class="header" href="#switch-scalaversion-temporarily">Switch scalaVersion temporarily</a></h3>
+<pre><code>sbt:Hello&gt; ++3.3.3!
+[info] Forcing Scala version to 3.3.3 on all projects.
+[info] Reapplying settings...
+[info] Set current project to Hello (in build file:/tmp/foo-build/)
+</code></pre>
+<p>Check the <code>scalaVersion</code> setting:</p>
+<pre><code>sbt:Hello&gt; scalaVersion
+[info] helloCore / scalaVersion
+[info]  3.3.3
+[info] scalaVersion
+[info]  3.3.3
+</code></pre>
+<p>This setting will go away after <code>reload</code>.</p>
+<!--
+### Inspect the dist task
+
+To find out more about `dist`, try `help` and `inspect`.
+
+```scala
+sbt:Hello> help dist
+Creates the distribution packages.
+sbt:Hello> inspect dist
+```
+
+To call inspect recursively on the dependency tasks use `inspect tree`.
+
+```scala
+sbt:Hello> inspect tree dist
+[info] dist = Task[java.io.File]
+[info]   +-Universal / dist = Task[java.io.File]
+....
+```
+
+-->
+<h3 id="batch-mode"><a class="header" href="#batch-mode">Batch mode</a></h3>
+<p>You can also run sbt in batch mode, passing sbt commands directly from the terminal.</p>
+<pre><code>$ sbt clean "testOnly HelloSuite"
+</code></pre>
+<p><strong>Note</strong>: Running in batch mode requires JVM spinup and JIT each time, so <strong>your build will run much slower</strong>. For day-to-day coding, we recommend using the sbt shell or a continuous test like <code>~test</code>.</p>
+<h3 id="sbt-new-command"><a class="header" href="#sbt-new-command">sbt new command</a></h3>
+<p>You can use the sbt <code>new</code> command to quickly setup a simple "Hello world" build.</p>
+<pre><code>$ sbt new scala/scala-seed.g8
+....
+A minimal Scala project.
+
+name [My Something Project]: hello
+
+Template applied in ./hello
+</code></pre>
+<p>When prompted for the project name, type <code>hello</code>.</p>
+<p>This will create a new project under a directory named <code>hello</code>.</p>
+<h3 id="credits"><a class="header" href="#credits">Credits</a></h3>
+<p>This page is based on the <a href="https://www.scalawilliam.com/essential-sbt/">Essential sbt</a> tutorial written by William "Scala William" Narmontas.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="getting-started-with-sbt"><a class="header" href="#getting-started-with-sbt">Getting Started with sbt</a></h1>
+<p>sbt uses a small number of concepts to support flexible and powerful build definitions. There are not that many concepts, but sbt is not exactly like other build systems and there are details you <em>will</em> stumble on if you haven't read the documentation.</p>
+<p>The Getting Started Guide covers the concepts you need to know to create and maintain an sbt build definition.</p>
+<p>It is <em>highly recommended</em> to read the Getting Started Guide!</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="why-sbt-exists"><a class="header" href="#why-sbt-exists">Why sbt exists</a></h1>
+<h2 id="preliminaries"><a class="header" href="#preliminaries">Preliminaries</a></h2>
+<p>In Scala, a library or a program is compiled using the Scala compiler, <code>scalac</code>, as documented in the <a href="https://docs.scala-lang.org/scala3/book/taste-hello-world.html">Scala 3 Book</a>:</p>
+<pre><code class="language-scala">@main def hello() = println("Hello, World!")
+</code></pre>
+<pre><code class="language-bash">$ scalac hello.scala
+$ scala hello
+Hello, World!
+</code></pre>
+<p>This process gets tedious and slow if we were to invoke <code>scalac</code> directly since we'd have to pass all the Scala source file names.</p>
+<p>Furthermore, most non-trivial programs will likely have library dependencies, and will therefore also depend transitively on their dependencies. This is doubly complicated for Scala ecosystem because we have Scala 2.12, 2.13 ecosystem, Scala 3.x ecosystem, JVM, JS, and Native platforms.</p>
+<p>Rather than working with JAR files and <code>scalac</code>, we can avoid manual toil by introducing a higher-level subproject abstraction and by using a build tool.</p>
+<h2 id="sbt"><a class="header" href="#sbt">sbt</a></h2>
+<p><em>sbt</em> is a simple build tool created for Scala and Java. It lets us declare subprojects and their various dependencies and custom tasks to ensure that we'll always get a fast, repeatable build.</p>
+<p>To accomplish this goal, sbt does several things:</p>
+<ul>
+<li>The version of sbt itself is tracked in <code>project/build.properties</code>.</li>
+<li>Defines a domain-specific language (DSL) called <strong>build.sbt DSL</strong> that can declare the Scala version and other subproject information in <code>build.sbt</code>.</li>
+<li>Uses Coursier to fetch subprojects dependencies and their dependencies.</li>
+<li>Invokes Zinc to incrementally compile Scala and Java sources.</li>
+<li>Automatically runs tasks in parallel whenever possible.</li>
+<li>Defines conventions on how packages are published to Maven repositories to interoperate with the wider JVM ecosystem.</li>
+</ul>
+<p>To a large extent, sbt standardizes the commands needed to build a given program or library.</p>
+<h2 id="why-buildsbt-dsl"><a class="header" href="#why-buildsbt-dsl">Why build.sbt DSL?</a></h2>
+<p>build.sbt DSL makes sbt a unique build tool, as opposed to other tools that use configuration file formats like YAML, TOML, and XML. Originally developed beween 2010 and 2013, <code>build.sbt</code> can start almost like a YAML file, declaring just <code>scalaVersion</code> and <code>libraryDependencies</code>, but it can supports more features to keep the build definition organized as the build grows larger:</p>
+<ul>
+<li>To avoid repeating the same information, like the version number for a library, <code>build.sbt</code> can declare variables using <code>val</code>.</li>
+<li>Uses Scala language constructs like <code>if</code> to define settings and tasks, when needed.</li>
+<li>Statically typed settings and tasks, to catch typos and type errors before the build starts. The type also helps passing data from one task from another.</li>
+<li>Provides <strong>structured concurrency</strong> via <code>Initialized[Task[A]]</code>. The DSL uses <em>direct style</em> <code>.value</code> syntax to concisely define task graphs.</li>
+<li>Enpowers the community to extend sbt with plugins that provide custom tasks or language extensions like Scala.JS.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="creating-a-new-build"><a class="header" href="#creating-a-new-build">Creating a new build</a></h1>
+<p>To start a new build with <code>sbt</code>, use <code>sbt new</code>.</p>
+<pre><code class="language-bash">$ mkdir /tmp/foo
+$ cd /tmp/foo
+$ sbt new
+
+Welcome to sbt new!
+Here are some templates to get started:
+ a) scala/toolkit.local               - Scala Toolkit (beta) by Scala Center and VirtusLab
+ b) typelevel/toolkit.local           - Toolkit to start building Typelevel apps
+ c) sbt/cross-platform.local          - A cross-JVM/JS/Native project
+ d) scala/scala3.g8                   - Scala 3 seed template
+ e) scala/scala-seed.g8               - Scala 2 seed template
+ f) playframework/play-scala-seed.g8  - A Play project in Scala
+ g) playframework/play-java-seed.g8   - A Play project in Java
+ i) softwaremill/tapir.g8             - A tapir project using Netty
+ m) scala-js/vite.g8                  - A Scala.JS + Vite project
+ n) holdenk/sparkProjectTemplate.g8   - A Scala Spark project
+ o) spotify/scio.g8                   - A Scio project
+ p) disneystreaming/smithy4s.g8       - A Smithy4s project
+ q) quit
+Select a template:
+</code></pre>
+<p>If you select "a", you will be prompted by more questions:</p>
+<pre><code class="language-bash">Select a template: a
+Scala version (default: 3.3.0):
+Scala Toolkit version (default: 0.2.0):
+</code></pre>
+<p>Hit return key to select the default values.</p>
+<pre><code>[info] Updated file /private/tmp/bar/project/build.properties: set sbt.version to 1.9.8
+[info] welcome to sbt 1.9.8 (Azul Systems, Inc. Java 1.8.0_352)
+....
+[info] set current project to bar (in build file:/private/tmp/foo/)
+[info] sbt server started at local:///Users/eed3si9n/.sbt/1.0/server/d0ac1409c0117a949d47/sock
+[info] started sbt server
+sbt:bar&gt; exit
+[info] shutting down sbt server
+</code></pre>
+<p>Here are the files that are created by this template:</p>
+<pre><code class="language-bash">.
+├── build.sbt
+├── project
+│   └── build.properties
+├── src
+│   ├── main
+│   │   └── scala
+│   │       └── example
+│   │           └── Main.scala
+│   └── test
+│       └── scala
+│           └── example
+│               └── ExampleSuite.scala
+└── target
+</code></pre>
+<p>Let's take a look at the <code>build.sbt</code> file:</p>
+<pre><code class="language-scala">val toolkitV = "0.2.0"
+val toolkit = "org.scala-lang" %% "toolkit" % toolkitV
+val toolkitTest = "org.scala-lang" %% "toolkit-test" % toolkitV
+
+scalaVersion := "3.3.0"
+libraryDependencies += toolkit
+libraryDependencies += (toolkitTest % Test)
+</code></pre>
+<p>This is called a <strong>build definition</strong>, and it contains the information sbt needs to compile your project. This is written in <code>.sbt</code> format, a subset of Scala language.</p>
+<p>Here's what's in <code>src/main/scala/example/Main.scala</code>:</p>
+<pre><code class="language-scala">package example
+
+@main def main(args: String*): Unit =
+  println(s"Hello ${args.mkString}")
+</code></pre>
+<p>This is a Hello world template. We can run it from the sbt shell by starting <code>sbt --client</code> and typing <code>run &lt;your_name&gt;</code> inside the shell:</p>
+<pre><code>$ sbt --client
+[info] entering *experimental* thin client - BEEP WHIRR
+[info] server was not detected. starting an instance
+....
+info] terminate the server with `shutdown`
+[info] disconnect from the server with `exit`
+sbt:bar&gt; run Raj
+[info] running example.main Raj
+Hello Raj
+[success] Total time: 0 s, completed Feb 18, 2024 2:38:10 PM
+</code></pre>
+<h3 id="giter8-templates"><a class="header" href="#giter8-templates">Giter8 templates</a></h3>
+<p>In addition to a few <code>.local</code> templates, <code>sbt new</code> integrates with <a href="https://www.foundweekends.org/giter8/">Giter8</a>, and open templating system that uses GitHub to host templates. For example, <code>scala/scala3.g8</code> is maintained by the Scala team to create a new Scala 3 build:</p>
+<pre><code>$ /tmp
+$ sbt new scala/scala3.g8
+</code></pre>
+<p><a href="https://github.com/foundweekends/giter8/wiki/giter8-templates">Giter8 wiki</a> lists over 100 templates that can jump start your new build.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-components"><a class="header" href="#sbt-components">sbt components</a></h1>
+<h2 id="sbt-runner"><a class="header" href="#sbt-runner">sbt runner</a></h2>
+<p>An sbt build is executed using <code>sbt</code> runner, also called "sbt-the-shell-script" to distinguish from other components. It's important to note is that sbt runner is designed to run <strong>any version</strong> of sbt.</p>
+<h3 id="specifying-sbt-version-with-projectbuildproperties"><a class="header" href="#specifying-sbt-version-with-projectbuildproperties">Specifying sbt version with project/build.properties</a></h3>
+<p>sbt runner executes a subcomponent called sbt launcher, which reads <code>project/build.properties</code> to determine the sbt version for the build, and downloads the artifacts if they haven't been cached:</p>
+<pre><code>sbt.version=2.0.0-M2
+</code></pre>
+<p>This means that:</p>
+<ul>
+<li>Anyone who checkouts your build would get the same sbt version, regardless of <em>sbt runner</em> they may have installed on their machines.</li>
+<li>The change of sbt version can be tracked in a version control system, like git.</li>
+</ul>
+<h3 id="sbtn-sbt---client"><a class="header" href="#sbtn-sbt---client">sbtn (<code>sbt --client</code>)</a></h3>
+<p>sbtn (native thin client) is a subcomponent of sbt runner, called when you pass <code>--client</code> flag to sbt runner, and is used to send commands to sbt server. It is called sbtn because it is compiled to native code using GraalVM native-image. The protocol between sbtn and sbt server is stable enough that it should work between <strong>most recent versions</strong> of sbt.</p>
+<h2 id="sbt-server"><a class="header" href="#sbt-server">sbt server</a></h2>
+<p>sbt server is the actual build tool whose version is specified using <code>project/build.properties</code>. sbt server acts as a cashier to take commands from sbtn and editors.</p>
+<h3 id="coursier"><a class="header" href="#coursier">Coursier</a></h3>
+<p>sbt server runs <a href="https://get-coursier.io/">Couriser</a> as a subcomponent to resolve Scala library, Scala compiler, and any other library dependencies your build needs.</p>
+<h3 id="zinc"><a class="header" href="#zinc">Zinc</a></h3>
+<p>Zinc is the incremental compiler for Scala, developed and maintained by sbt project. An often overlooked aspect of Zinc is that Zinc provides a stable API to invoke <strong>any modern versions</strong> of Scala compiler. Combined with the fact that Coursier can resolve any Scala version, with sbt we can invoke any modern versions of Scala just by writing a single line <code>build.sbt</code>:</p>
+<pre><code class="language-scala">scalaVersion := "3.3.3"
+</code></pre>
+<h3 id="bsp-server"><a class="header" href="#bsp-server">BSP server</a></h3>
+<p>sbt server supports <a href="https://build-server-protocol.github.io/">Build Server Protocol (BSP)</a> to list build targets, build them, etc. This allows IDEs like IntelliJ and Metals to communicate with a running sbt server programmatically.</p>
+<h2 id="connecting-to-sbt-server"><a class="header" href="#connecting-to-sbt-server">Connecting to sbt server</a></h2>
+<p>Let's look at three ways of connecting to sbt server.</p>
+<h3 id="sbt-shell-using-sbtn"><a class="header" href="#sbt-shell-using-sbtn">sbt shell using sbtn</a></h3>
+<p>Run <code>sbt --client</code> in the working directory of your build:</p>
+<pre><code class="language-bash">sbt --client
+</code></pre>
+<p>This should display something like the following:</p>
+<pre><code class="language-bash">$ sbt --client
+[info] server was not detected. starting an instance
+[info] welcome to sbt 2.0.0-alpha7 (Azul Systems, Inc. Java 1.8.0_352)
+[info] loading project definition from /private/tmp/bar/project
+[info] loading settings for project bar from build.sbt ...
+[info] set current project to bar (in build file:/private/tmp/bar/)
+[info] sbt server started at local:///Users/eed3si9n/.sbt/2.0.0-alpha7/server/d0ac1409c0117a949d47/sock
+[info] started sbt server
+[info] terminate the server with `shutdown`
+[info] disconnect from the server with `exit`
+sbt:bar&gt;
+</code></pre>
+<p>Running sbt with no command line arguments starts sbt shell. sbt shell has a command prompt (with tab completion and history!).</p>
+<p>For example, you could type <code>compile</code> at the sbt shell:</p>
+<pre><code class="language-bash">sbt:bar&gt; compile
+</code></pre>
+<p>To <code>compile</code> again, press up arrow and then enter.</p>
+<p>To leave sbt shell, type <code>exit</code> or use <code>Ctrl-D</code> (Unix) or <code>Ctrl-Z</code> (Windows).</p>
+<h3 id="batch-mode-using-sbtn"><a class="header" href="#batch-mode-using-sbtn">Batch mode using sbtn</a></h3>
+<p>You can also run sbt in batch mode:</p>
+<pre><code class="language-bash">sbt --client compile
+sbt --client testOnly TestA
+</code></pre>
+<pre><code class="language-bash">$ sbt --client compile
+&gt; compile
+</code></pre>
+<h3 id="shutting-down-sbt-server"><a class="header" href="#shutting-down-sbt-server">Shutting down sbt server</a></h3>
+<p>Run the following to shutdown all sbt servers on your machine:</p>
+<pre><code class="language-bash">sbt shutdownall
+</code></pre>
+<p>Or the following to shutdown just the current one:</p>
+<pre><code class="language-bash">sbt --client shutdown
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="basic-tasks"><a class="header" href="#basic-tasks">Basic tasks</a></h1>
+<p>This page describes how to use sbt once you have set up your project. This page assumes you've read <a href="guide/./sbt-components.html">sbt components</a>.</p>
+<p>If you pull a repository that uses sbt, it's fairly easy to get started. First, get the package from GitHub, or some other repository.</p>
+<pre><code class="language-bash">$ git clone https://github.com/scalanlp/breeze.git
+$ cd breeze
+</code></pre>
+<h3 id="sbt-shell-with-sbtn"><a class="header" href="#sbt-shell-with-sbtn">sbt shell with sbtn</a></h3>
+<p>As mentioned in <a href="guide/./sbt-components.html">sbt components</a>, start an sbt shell:</p>
+<pre><code>$ sbt --client
+</code></pre>
+<p>This should display something like the following:</p>
+<pre><code class="language-bash">$ sbt --client
+[info] entering *experimental* thin client - BEEP WHIRR
+[info] server was not detected. starting an instance
+[info] welcome to sbt 1.5.5 (Azul Systems, Inc. Java 1.8.0_352)
+[info] loading global plugins from /Users/eed3si9n/.sbt/1.0/plugins
+[info] loading settings for project breeze-build from plugins.sbt ...
+[info] loading project definition from /private/tmp/breeze/project
+Downloading https://repo1.maven.org/maven2/org/scalanlp/sbt-breeze-expand-codegen_2.12_1.0/0.2.1/sbt-breeze-expand-codegen-0.2.1.pom
+....
+[info] sbt server started at local:///Users/eed3si9n/.sbt/1.0/server/dd982e07e85c7de1b618/sock
+[info] terminate the server with `shutdown`
+[info] disconnect from the server with `exit`
+sbt:breeze-parent&gt;
+</code></pre>
+<h2 id="projects-command"><a class="header" href="#projects-command">projects command</a></h2>
+<p>Let's explore the build by listing out the subprojects with <code>projects</code> command:</p>
+<pre><code>sbt:breeze-parent&gt; projects
+[info] In file:/private/tmp/breeze/
+[info]     benchmark
+[info]     macros
+[info]     math
+[info]     natives
+[info]   * root
+[info]     viz
+</code></pre>
+<p>This shows that this build has 6 subprojects, including the current subproject called <code>root</code>.</p>
+<h2 id="tasks-command"><a class="header" href="#tasks-command">tasks command</a></h2>
+<p>Similarly, we can list the tasks availble to this build using <code>tasks</code> command:</p>
+<pre><code>sbt:breeze-parent&gt; tasks
+
+This is a list of tasks defined for the current project.
+It does not list the scopes the tasks are defined in; use the 'inspect' command for that.
+Tasks produce values.  Use the 'show' command to run the task and print the resulting value.
+
+  bgRun            Start an application's default main class as a background job
+  bgRunMain        Start a provided main class as a background job
+  clean            Deletes files produced by the build, such as generated sources, compiled classes, and task caches.
+  compile          Compiles sources.
+  console          Starts the Scala interpreter with the project classes on the classpath.
+  consoleProject   Starts the Scala interpreter with the sbt and the build definition on the classpath and useful imports.
+  consoleQuick     Starts the Scala interpreter with the project dependencies on the classpath.
+  copyResources    Copies resources to the output directory.
+  doc              Generates API documentation.
+  package          Produces the main artifact, such as a binary jar.  This is typically an alias for the task that actually does the packaging.
+  packageBin       Produces a main artifact, such as a binary jar.
+  packageDoc       Produces a documentation artifact, such as a jar containing API documentation.
+  packageSrc       Produces a source artifact, such as a jar containing sources and resources.
+  publish          Publishes artifacts to a repository.
+  publishLocal     Publishes artifacts to the local Ivy repository.
+  publishM2        Publishes artifacts to the local Maven repository.
+  run              Runs a main class, passing along arguments provided on the command line.
+  runMain          Runs the main class selected by the first argument, passing the remaining arguments to the main method.
+  test             Executes all tests.
+  testOnly         Executes the tests provided as arguments or all tests if no arguments are provided.
+  testQuick        Executes the tests that either failed before, were not run or whose transitive dependencies changed, among those provided as arguments.
+  update           Resolves and optionally retrieves dependencies, producing a report.
+
+More tasks may be viewed by increasing verbosity.  See 'help tasks'
+</code></pre>
+<h3 id="compile"><a class="header" href="#compile">compile</a></h3>
+<p>The <code>compile</code> tasks compiles the sources, after resolving and downloading the library dependendies.</p>
+<pre><code>&gt; compile
+</code></pre>
+<p>This should display something like the following:</p>
+<pre><code>sbt:breeze-parent&gt; compile
+[info] compiling 341 Scala sources and 1 Java source to /private/tmp/breeze/math/target/scala-3.1.3/classes ...
+  | =&gt; math / Compile / compileIncremental 51s
+</code></pre>
+<h3 id="run"><a class="header" href="#run">run</a></h3>
+<p>The <code>run</code> task runs the main class for the subproject. In the sbt shell, type <code>math/run</code>:</p>
+<pre><code>&gt; math/run
+</code></pre>
+<p><code>math/run</code> means <code>run</code> task, scoped to <code>math</code> subproject. This should display something like the following:</p>
+<pre><code>sbt:breeze-parent&gt; math/run
+[info] Scala version: 3.1.3 true
+....
+
+Multiple main classes detected. Select one to run:
+ [1] breeze.optimize.linear.NNLS
+ [2] breeze.optimize.proximal.NonlinearMinimizer
+ [3] breeze.optimize.proximal.QuadraticMinimizer
+ [4] breeze.util.UpdateSerializedObjects
+
+Enter number:
+</code></pre>
+<p>Enter <code>1</code> at the prompt.</p>
+<h3 id="testquick"><a class="header" href="#testquick">testQuick</a></h3>
+<p>The <code>testQuick</code> task tests either the tests that failed before, were not run, or whose transitive dependencies changed.</p>
+<pre><code>&gt; math/testQuick
+</code></pre>
+<p>This should display something like the following:</p>
+<pre><code>sbt:breeze-parent&gt; math/testQuick
+[info] FeatureVectorTest:
+[info] - axpy fv dv (1 second, 106 milliseconds)
+[info] - axpy fv vb (9 milliseconds)
+[info] - DM mult (19 milliseconds)
+[info] - CSC mult (32 milliseconds)
+[info] - DM trans mult (4 milliseconds)
+....
+[info] Run completed in 58 seconds, 183 milliseconds.
+[info] Total number of tests run: 1285
+[info] Suites: completed 168, aborted 0
+[info] Tests: succeeded 1285, failed 0, canceled 0, ignored 0, pending 0
+[info] All tests passed.
+[success] Total time: 130 s (02:10), completed Feb 19, 2024
+</code></pre>
+<h2 id="watch-tilde-command"><a class="header" href="#watch-tilde-command">Watch (tilde) command</a></h2>
+<p>To speed up your edit-compile-test cycle, you can ask sbt to automatically recompile or run tests whenever you save a source file.</p>
+<p>Make a command run when one or more source files change by prefixing the command with <code>~</code>. For example, in sbt shell try:</p>
+<pre><code>&gt; ~testQuick
+</code></pre>
+<p>Press enter to stop watching for changes. You can use the <code>~</code> prefix with either sbt shell or batch mode.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="build-definition-basics"><a class="header" href="#build-definition-basics">Build definition basics</a></h1>
+<p>This page discusses the <code>build.sbt</code> build definition.</p>
+<h3 id="what-is-a-build-definition"><a class="header" href="#what-is-a-build-definition">What is a build definition?</a></h3>
+<p>A <em>build definition</em> is defined in <code>build.sbt</code>, and it consists of a set of projects (of type <a href="guide/../api/sbt/Project.html"><code>Project</code></a>). Because the term <em>project</em> can be ambiguous, we often call it a <em>subproject</em> in this guide.</p>
+<p>For instance, in <code>build.sbt</code> you define the subproject located in the current directory like this:</p>
+<pre><code class="language-scala">scalaVersion := "3.3.3"
+name := "Hello"
+</code></pre>
+<p>or more explicitly:</p>
+<pre><code class="language-scala">lazy val root = (project in file("."))
+  .settings(
+    scalaVersion := "3.3.3",
+    name := "Hello",
+  )
+</code></pre>
+<p>Each subproject is configured by key-value pairs. For example, one key is <code>name</code> and it maps to a string value, the name of your subproject. The key-value pairs are listed under the <code>.settings(...)</code> method.</p>
+<h2 id="buildsbt-dsl"><a class="header" href="#buildsbt-dsl">build.sbt DSL</a></h2>
+<p><code>build.sbt</code> defines subprojects using a DSL called build.sbt DSL, which is based on Scala. Initially you can use build.sbt DSL, like a YAML file, declaring just <code>scalaVersion</code> and <code>libraryDependencies</code>, but it can supports more features to keep the build definition organized as the build grows larger.</p>
+<h3 id="typed-setting-expression"><a class="header" href="#typed-setting-expression">Typed setting expression</a></h3>
+<p>Let's take a closer look at the <code>build.sbt</code> DSL:</p>
+<pre><code class="language-scala">organization  :=         "com.example"
+^^^^^^^^^^^^  ^^^^^^^^   ^^^^^^^^^^^^^
+key           operator   (setting/task) body
+</code></pre>
+<p>Each entry is called a <em>setting expression</em>. Some among them are also called task expressions. We will see more on the difference later in this page.</p>
+<p>A setting expression consists of three parts:</p>
+<ol>
+<li>Left-hand side is a <em>key</em>.</li>
+<li><em>Operator</em>, which in this case is <code>:=</code></li>
+<li>Right-hand side is called the <em>body</em>, or the <em>setting/task body</em>.</li>
+</ol>
+<p>On the left-hand side, <code>name</code>, <code>version</code>, and <code>scalaVersion</code> are <em>keys</em>. A key is an instance of <a href="guide/../../api/sbt/SettingKey.html"><code>SettingKey[A]</code></a>, <a href="guide/../../api/sbt/TaskKey.html"><code>TaskKey[A]</code></a>, or <a href="guide/../../api/sbt/InputKey.html"><code>InputKey[A]</code></a> where <code>A</code> is the expected value type.</p>
+<p>Because key <code>name</code> is typed to <code>SettingKey[String]</code>, the <code>:=</code> operator on <code>name</code> is also typed specifically to <code>String</code>. If you use the wrong value type, the build definition will not compile:</p>
+<pre><code class="language-scala">name := 42 // will not compile
+</code></pre>
+<h3 id="vals-and-lazy-vals"><a class="header" href="#vals-and-lazy-vals"><code>val</code>s and <code>lazy val</code>s</a></h3>
+<p>To avoid repeating the same information, like the version number for a library, <code>build.sbt</code> may be interspersed with <code>val</code>s, <code>lazy val</code>s, and <code>def</code>s.</p>
+<pre><code class="language-scala">val toolkitV = "0.2.0"
+val toolkit = "org.scala-lang" %% "toolkit" % toolkitV
+val toolkitTest = "org.scala-lang" %% "toolkit-test" % toolkitV
+
+scalaVersion := "3.3.3"
+libraryDependencies += toolkit
+libraryDependencies += (toolkitTest % Test)
+</code></pre>
+<p>In the above, <code>val</code> defines a variable, which are initialized from the top to bottom. This means that <code>toolkitV</code> must be defined before it is referenced.</p>
+<p>Here's a bad example:</p>
+<pre><code class="language-scala">// bad example
+val toolkit = "org.scala-lang" %% "toolkit" % toolkitV // uninitialized reference!
+val toolkitTest = "org.scala-lang" %% "toolkit-test" % toolkitV // uninitialized reference!
+val toolkitV = "0.2.0"
+</code></pre>
+<p>sbt will fail to load with <code>java.lang.ExceptionInInitializerError</code> cased by a <code>NullPointerException</code> if your build.sbt contains an uninitialized forward reference. One way to let the compiler fix this is to define the variables as <code>lazy</code>:</p>
+<pre><code class="language-scala">lazy val toolkit = "org.scala-lang" %% "toolkit" % toolkitV
+lazy val toolkitTest = "org.scala-lang" %% "toolkit-test" % toolkitV
+lazy val toolkitV = "0.2.0"
+</code></pre>
+<p>Some frown upon gratuitous <code>lazy val</code>s, but Scala 3 lazy vals are efficient, and we think it makes the build definition more robust for copy-pasting.</p>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="guide/build-definition-basics.html#admonition-note"></a>
+</div>
+<div>
+<p>Top-level objects and classes are not allowed in <code>build.sbt</code>. Those should go in the <code>project/</code> directory as Scala source files.</p>
+</div>
+</div>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="library-dependency-basics"><a class="header" href="#library-dependency-basics">Library dependency basics</a></h1>
+<p>This page explains the basics of library dependency management using sbt.</p>
+<p>sbt uses <a href="https://get-coursier.io/">Coursier</a> to implement managed dependencies, so if you're familiar with package managers like Coursier, npm, PIP, etc you won't have much trouble.</p>
+<h2 id="the-librarydependencies-key"><a class="header" href="#the-librarydependencies-key">The <code>libraryDependencies</code> key</a></h2>
+<p>Declaring a dependency looks like this, where <code>groupId</code>, <code>artifactId</code>, and <code>revision</code> are strings:</p>
+<pre><code class="language-scala">libraryDependencies += groupID % artifactID % revision
+</code></pre>
+<p>or like this, where <code>configuration</code> can be a string or a <code>Configuration</code> value (such as <code>Test</code>):</p>
+<pre><code class="language-scala">libraryDependencies += groupID % artifactID % revision % configuration
+</code></pre>
+<p>When you run:</p>
+<pre><code>&gt; compile
+</code></pre>
+<p>sbt will automatically resolve the dependencies and download the JAR files.</p>
+<h3 id="getting-the-right-scala-version-with-"><a class="header" href="#getting-the-right-scala-version-with-">Getting the right Scala version with <code>%%</code></a></h3>
+<p>If you use <code>organization %% moduleName % version</code> rather than <code>organization % moduleName % version</code> (the difference is the double <code>%%</code> after the <code>organization</code>), sbt will add your project's binary Scala version to the artifact name. This is just a shortcut. You could write this without the <code>%%</code>:</p>
+<pre><code class="language-scala">libraryDependencies += "org.scala-lang" % "toolkit_3" % "0.2.0"
+</code></pre>
+<p>Assuming the <code>scalaVersion</code> for your build is 3.x, the following is identical (note the double <code>%%</code> after <code>"toolkit"</code>):</p>
+<pre><code class="language-scala">libraryDependencies += "org.scala-lang" %% "toolkit" % "0.2.0"
+</code></pre>
+<p>The idea is that many dependencies are compiled for multiple Scala versions, and you'd like to get the one that matches your project to ensure binary compatibility.</p>
+<h2 id="tracking-dependencies-in-one-place"><a class="header" href="#tracking-dependencies-in-one-place">Tracking dependencies in one place</a></h2>
+<p><code>.scala</code> files under <code>project</code> becomes part of the build definition, which we can use to track dependencies in one place by creating a file named <code>project/Dependencies.scala</code>.</p>
+<pre><code class="language-scala">// place this file at project/Dependencies.scala
+
+import sbt.*
+
+object Dependencies:
+  // versions
+  lazy val toolkitV = "0.2.0"
+
+  // libraries
+  val toolkit = "org.scala-lang" %% "toolkit" % toolkitV
+  val toolkitTest = "org.scala-lang" %% "toolkit-test" % toolkitV
+end Dependencies
+</code></pre>
+<p>The <code>Dependencies</code> object will be available in <code>build.sbt</code>. To make it easier to use the <code>val</code>s defined in it, import <code>Dependencies.*</code> in your build.sbt file.</p>
+<pre><code class="language-scala">import Dependencies.*
+
+scalaVersion := "3.3.3"
+name := "something"
+libraryDependencies += toolkit
+libraryDependencies += toolkitTest % Test
+</code></pre>
+<h2 id="viewing-library-dependencies"><a class="header" href="#viewing-library-dependencies">Viewing library dependencies</a></h2>
+<p>Type in <code>Compile/dependencyTree</code> in the sbt shell to show the library dependency tree, including the transitive dependencies:</p>
+<pre><code>&gt; Compile/dependencyTree
+</code></pre>
+<p>This should display something like the following:</p>
+<pre><code>sbt:bar&gt; Compile/dependencyTree
+[info] default:bar_3:0.1.0-SNAPSHOT
+[info]   +-org.scala-lang:scala3-library_3:3.3.1 [S]
+[info]   +-org.scala-lang:toolkit_3:0.2.0
+[info]     +-com.lihaoyi:os-lib_3:0.9.1
+[info]     | +-com.lihaoyi:geny_3:1.0.0
+[info]     | | +-org.scala-lang:scala3-library_3:3.1.3 (evicted by: 3.3.1)
+[info]     | | +-org.scala-lang:scala3-library_3:3.3.1 [S]
+....
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="multi-project-basics"><a class="header" href="#multi-project-basics">Multi project basics</a></h1>
+<p>While a simple program can start out as a single-project build, it's more common for a build to split into smaller, multiple subprojects.</p>
+<p>Each subproject in a build has its own source directories, generates its own JAR file when you run <code>packageBin</code>, and in general works like any other project.</p>
+<p>A project is defined by declaring a lazy val of type <a href="guide/../../api/sbt/Project.html">Project</a>. For example, :</p>
+<pre><code class="language-scala">scalaVersion := "3.3.3"
+
+lazy val core = (project in file("core"))
+  .settings(
+    name := "core",
+  )
+
+lazy val util = (project in file("util"))
+  .dependsOn(core)
+  .settings(
+    name := "util",
+  )
+</code></pre>
+<p>The name of the val is used as the subproject's ID, which is used to refer to the subproject at the sbt shell.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="build-layout"><a class="header" href="#build-layout">Build layout</a></h1>
+<p>sbt uses conventions for file placement to make it easy to dive into a new sbt build:</p>
+<pre><code>.
+├── build.sbt
+├── project/
+│   ├── build.properties
+│   ├── Dependencies.scala
+│   └── plugins.sbt
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   ├── resources/
+│   │   ├── scala/
+│   │   └── scala-2.13/
+│   └── test/
+│       ├── java/
+│       ├── resources/
+│       ├── scala/
+│       └── scala-2.13/
+├── subproject-core/
+│   └── src/
+│       ├── main/
+│       └── test/
+├─── subproject-util/
+│   └── src/
+│       ├── main/
+│       └── test/
+└── target/
+</code></pre>
+<ul>
+<li>The local root directory <code>.</code> is the starting point of your build.</li>
+<li>In sbt's terminology, the <em>base directory</em> is the directory containing the subproject. In the above, <code>.</code>, <code>subproject-core</code>, and <code>subproject-util</code> are base directories.</li>
+<li>The build definition is described in <code>build.sbt</code> (actually any files named <code>*.sbt</code>) in the local root directory.</li>
+<li>The sbt version is tracked in <code>project/build.properties</code>.</li>
+<li>Generated files (compiled classes, packaged jars, managed files, caches, and documentation) will be written to the <code>target</code> directory by default.</li>
+</ul>
+<h3 id="build-support-files"><a class="header" href="#build-support-files">Build support files</a></h3>
+<p>In addition to <code>build.sbt</code>, <code>project</code> directory can contain <code>.scala</code> files that define helper objects and one-off plugins. See <a href="guide/Organizing-Build.html">organizing the build</a> for more.</p>
+<pre><code>.
+├── build.sbt
+├── project/
+│   ├── build.properties
+│   ├── Dependencies.scala
+│   └── plugins.sbt
+....
+</code></pre>
+<p>You may see <code>.sbt</code> files inside <code>project/</code> but they are not equivalent to <code>.sbt</code> files in the project's base directory. Explaining this will come <a href="guide/Organizing-Build.html">later</a>, since you'll need some background information first.</p>
+<h3 id="source-code"><a class="header" href="#source-code">Source code</a></h3>
+<p>sbt uses the same directory structure as <a href="https://maven.apache.org/">Maven</a> for source files by default (all paths are relative to the base directory):</p>
+<pre><code>....
+├── src/
+│   ├── main/
+│   │   ├── java/        &lt;main Java sources&gt;
+│   │   ├── resources/   &lt;files to include in main JAR&gt;
+│   │   ├── scala/       &lt;main Scala sources&gt;
+│   │   └── scala-2.13/  &lt;main Scala 2.13 specific sources&gt;
+│   └── test/
+│       ├── java/        &lt;test Java sources&gt;
+│       ├── resources/   &lt;files to include in test JAR&gt;
+│       ├── scala/       &lt;test Scala sources&gt;
+│       └── scala-2.13/  &lt;test Scala 2.13 specific sources&gt;
+....
+</code></pre>
+<p>Other directories in <code>src/</code> will be ignored. Additionally, all hidden directories will be ignored.</p>
+<p>Source code can be placed in the project's base directory as <code>hello/app.scala</code>, which may be OK for small projects, though for normal projects people tend to keep the projects in the <code>src/main/</code> directory to keep things neat. The fact that you can place <code>*.scala</code> source code in the base directory might seem like an odd trick, but this fact becomes relevant <a href="guide/Organizing-Build.html">later</a>.</p>
+<h3 id="configuring-version-control"><a class="header" href="#configuring-version-control">Configuring version control</a></h3>
+<p>Your <code>.gitignore</code> (or equivalent for other version control systems) should contain:</p>
+<pre><code>target/
+</code></pre>
+<p>Note that this deliberately has a trailing <code>/</code> (to match only directories) and it deliberately has no leading <code>/</code> (to match <code>project/target/</code> in addition to plain <code>target/</code>).</p>
+<p>sbt automates building, testing, and deployment of your subprojects from information in the build definition.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-with-ides"><a class="header" href="#sbt-with-ides">sbt with IDEs</a></h1>
+<p>While it's possible to code Scala with just an editor and sbt, most programmers today use an Integrated Development Environment, or IDE for short. Two of the popular IDEs in Scala are <a href="https://scalameta.org/metals/">Metals</a> and <a href="https://www.jetbrains.com/idea/">IntelliJ IDEA</a>, and they both integrate with sbt builds.</p>
+<p>A few of the advantages of using the IDEs are:</p>
+<ul>
+<li>Jump to definition</li>
+<li>Code completion based on static types</li>
+<li>Listing compilation errors, and jumping to the error positions</li>
+<li>Interactive debugging</li>
+</ul>
+<p>Here are a few recipes on how to configure the IDEs to integrate with sbt:</p>
+<ul>
+<li><a href="guide/../recipes/use-sbt-as-metals-build-server.html">Use sbt as Metals build server</a></li>
+<li><a href="guide/../recipes/import-to-intellij.html">Import to IntelliJ IDEA</a></li>
+<li><a href="guide/../recipes/use-neovim.html">Use Neovim</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="changes"><a class="header" href="#changes">Changes</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-20-changes-draft"><a class="header" href="#sbt-20-changes-draft">sbt 2.0 changes (draft)</a></h1>
+<div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
+<div class="admonition-title">
+<div id="admonition-warning-title">
+<p>Warning</p>
+</div>
+<a class="admonition-anchor-link" href="changes/sbt-2.0-change-summary.html#admonition-warning"></a>
+</div>
+<div>
+<p>これは未だリリースされていない sbt 2.x のドキュメンテーションの草稿だ。一般的な概念は sbt 1.x とも一貫しているが、2.x 系および本稿の詳細は今後変更される可能性がある。</p>
+</div>
+</div>
+<h2 id="changes-with-compatibility-implications"><a class="header" href="#changes-with-compatibility-implications">Changes with compatibility implications</a></h2>
+<p>See also <a href="changes/./migrating-from-sbt-1.x.html">Migrating from sbt 1.x</a>.</p>
+<ul>
+<li>sbt 2.x uses Scala 3.x for build definitions and plugins (Both sbt 1.x and 2.x are capable of building Scala 2.x and 3.x) by <a href="https://github.com/eed3si9n">@eed3si9n</a>, <a href="https://github.com/adpi2">@adpi2</a>, and others.</li>
+<li>Bare settings are added to all subprojects, as opposed to just the root subproject, and thus replacing the role that <code>ThisBuild</code> has played.</li>
+<li><code>test</code> task is changed to be incremental test that can cache test results. Use <code>testFull</code> for full test by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7686">#7686</a></li>
+<li>sbt 2.x plugins are published with <code>_sbt2_3</code> suffix by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7671">#7671</a></li>
+<li>sbt 2.x adds <code>platform</code> setting so <code>ModuleID</code>'s <code>%%</code> operator can cross build on JVM as well as JS and Native, as opposed to <code>%%%</code> operator that was created in a plugin to workaround this issue, by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/6746">#6746</a></li>
+<li>Dropped <code>useCoursier</code> setting so Coursier cannot be opted out, by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7712">#7712</a></li>
+<li><code>Key.Classpath</code> is changed to be an alias of the <code>Seq[Attributed[xsbti.HashedVirtualFileRef]]</code> type, instead of <code>Seq[Attributed[File]]</code>. Similarly, some task keys that used to return <code>File</code> have changed to return <code>HashedVirtualFileRef</code> instead. See <a href="changes/../concepts/caching.html#caching-files">Caching Files</a>.</li>
+</ul>
+<h3 id="dropped-dreprecations"><a class="header" href="#dropped-dreprecations">Dropped dreprecations</a></h3>
+<ul>
+<li>sbt 0.13 style shell syntax by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7700">#7700</a></li>
+</ul>
+<h2 id="features"><a class="header" href="#features">Features</a></h2>
+<ul>
+<li>Project matrix, which was available via plugin in sbt 1.x, is in-sourced.</li>
+<li>sbt 2.x extends the unified slash syntax to support query of subprojects. Details below.</li>
+<li>Local/remote cache system. Details below</li>
+</ul>
+<h3 id="common-settings"><a class="header" href="#common-settings">Common settings</a></h3>
+<p>In sbt 2.x, the bare settings in <code>build.sbt</code> are interpreted to be common settings, and are injected to all subprojects. This means we can now set <code>scalaVersion</code> without using <code>ThisBuild</code> scoping:</p>
+<pre><code class="language-scala">scalaVersion := "3.3.3"
+</code></pre>
+<p>This also fixes the so-called dynamic dispatch problem:</p>
+<pre><code class="language-scala">lazy val hi = taskKey[String]("")
+hi := name.value + "!"
+</code></pre>
+<p>In sbt 1.x <code>hi</code> task will capture the name of the root project, but in sbt 2.x it will return the <code>name</code> of each subproject with <code>!</code>:</p>
+<pre><code class="language-scala">$ export SBT_NATIVE_CLIENT=true
+$ sbt show hi
+[info] entering *experimental* thin client - BEEP WHIRR
+[info] terminate the server with `shutdown`
+&gt; show hi
+[info] foo / hi
+[info]  foo!
+[info] hi
+[info]  root!
+</code></pre>
+<p>Contributed by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/6746">#6746</a></p>
+<h3 id="sbt-query"><a class="header" href="#sbt-query">sbt query</a></h3>
+<p>To filter down the subprojects, sbt 2.x introduces sbt query.</p>
+<pre><code class="language-bash">$ export SBT_NATIVE_CLIENT=true
+$ sbt foo.../test
+</code></pre>
+<p>The above runs all subprojects that begins with <code>foo</code>.</p>
+<pre><code class="language-bash">$ sbt ...@scalaBinaryVersion=3/test
+</code></pre>
+<p>The above runs all subprojects whose <code>scalaBinaryVersion</code> is <code>3</code>. Contributed by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7699">#7699</a></p>
+<h3 id="localremote-cache-system"><a class="header" href="#localremote-cache-system">Local/remote cache system</a></h3>
+<p>sbt 2.x implements cached task, which can automatically cache the task results to local disk and Bazel-compatible remote cache.</p>
+<pre><code class="language-scala">lazy val task1 = taskKey[String]("doc for task1")
+
+task1 := (Def.cachedTask {
+  name.value + version.value + "!"
+}).value
+</code></pre>
+<p>This tracks the inputs into the <code>task1</code> and creates a machine-wide disk cache, which can also be configured to also use a remote cache. Since it's common for sbt tasks to also produce files on the side, we also provide a mechanism to cache file contents:</p>
+<pre><code class="language-scala">lazy val task1 = taskKey[String]("doc for task1")
+
+task1 := (Def.cachedTask {
+  val converter = fileConverter.value
+  ....
+  val output = converter.toVirtualFile(somefile)
+  Def.declareOutput(output)
+  name.value + version.value + "!"
+}).value
+</code></pre>
+<p>Contributed by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7464">#7464</a> / <a href="https://github.com/sbt/sbt/pull/7525">#7525</a></p>
+<h2 id="previously-on-sbt"><a class="header" href="#previously-on-sbt">Previously on sbt</a></h2>
+<p>See also:</p>
+<ul>
+<li><a href="https://www.scala-sbt.org/1.x/docs/sbt-1.0-Release-Notes.html">sbt 1.0 changes</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="migrating-from-sbt-1x"><a class="header" href="#migrating-from-sbt-1x">Migrating from sbt 1.x</a></h1>
+<h2 id="changing-buildsbt-dsl-to-scala-3x"><a class="header" href="#changing-buildsbt-dsl-to-scala-3x">Changing <code>build.sbt</code> DSL to Scala 3.x</a></h2>
+<p>As a reminder, users can build either Scala 2.x or Scala 3.x programs using either sbt 1.x or sbt 2.x. However, the Scala that underlies the <code>build.sbt</code> DSL is determined by the sbt version. In sbt 2.0, we are migrating to Scala 3.x.</p>
+<p>This means that if you implement custom tasks or sbt plugins for sbt 2.x, it must be done using Scala 3.x. See <a href="https://docs.scala-lang.org/scala3/guides/migration/incompatibility-table.html">Scala 3.x incompatibility table</a> and <a href="https://docs.scala-lang.org/scala3/guides/migration/tooling-scala2-xsource3.html">Scala 2 with -Xsource:3</a>.</p>
+<pre><code class="language-scala">// This works on Scala 2.12.20 under -Xsource:3
+import sbt.{ given, * }
+</code></pre>
+<h2 id="bare-settings-changes"><a class="header" href="#bare-settings-changes">Bare settings changes</a></h2>
+<pre><code class="language-scala">version := "0.1.0"
+scalaVersion := "3.3.3"
+</code></pre>
+<p><em>Bare settings</em>, like the example above, are settings written directly in <code>build.sbt</code> without <code>settings(...)</code>.</p>
+<div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
+<div class="admonition-title">
+<div id="admonition-warning-title">
+<p>Warning</p>
+</div>
+<a class="admonition-anchor-link" href="changes/migrating-from-sbt-1.x.html#admonition-warning"></a>
+</div>
+<div>
+<p>In sbt 1.x bare settings were project settings that applied only to the root subproject. In sbt 2.x, the bare settings in <code>build.sbt</code> are common settings that are injected to <strong>all subprojects</strong>.</p>
+</div>
+</div>
+<pre><code class="language-scala">name := "root" // every subprojects will be named root!
+publish / skip := true
+</code></pre>
+<h3 id="migrating-thisbuild"><a class="header" href="#migrating-thisbuild">Migrating ThisBuild</a></h3>
+<p>In sbt 2.x, bare settings settings should no longer be scoped to <code>ThisBuild</code>. One benefit of the new <em>common settings</em> over <code>ThisBuild</code> is that it would act in a more predictable delegation. These settings are inserted between plugins settings and those defined in <code>settings(...)</code>, meaning they can be used to define settings like <code>Compile / scalacOptions</code>, which was not possible with <code>ThisBuild</code>.</p>
+<h2 id="migrating-to-slash-syntax"><a class="header" href="#migrating-to-slash-syntax">Migrating to slash syntax</a></h2>
+<p>sbt 1.x supported both the sbt 0.13 style syntax and the slash syntax. sbt 2.x removes the support for the sbt 0.13 syntax, so use the slash syntax for both sbt shell and in <code>build.sbt</code>:</p>
+<pre><code class="language-scala">&lt;project-id&gt; / Config / intask / key
+</code></pre>
+<p>For example, <code>test:compile</code> will no longer work on the shell. Use <code>Test/compile</code> instead. See <a href="https://eed3si9n.com/syntactic-scalafix-rule-for-unified-slash-syntax/">syntactic Scalafix rule for unified slash syntax</a> for semi-automated migration of <code>build.sbt</code> files.</p>
+<h2 id="cross-building-sbt-plugins"><a class="header" href="#cross-building-sbt-plugins">Cross building sbt plugins</a></h2>
+<p>In sbt 2.x, if you cross build an sbt plugin with Scala 3.x and 2.12.x, it will automatically cross build against sbt 1.x and sbt 2.x:</p>
+<pre><code class="language-scala">// using sbt 2.x
+lazy val plugin = (projectMatrix in file("plugin"))
+  .enablePlugins(SbtPlugin)
+  .settings(
+    name := "sbt-vimquit",
+  )
+  .jvmPlatform(scalaVersions = Seq("3.3.3", "2.12.20"))
+</code></pre>
+<p>If you use <code>projectMatrix</code>, make sure to move the plugin to a subdirectory like <code>plugin/</code>. Otherwise, the synthetic root project will also pick up the <code>src/</code>.</p>
+<h3 id="cross-building-sbt-plugin-with-sbt-1x"><a class="header" href="#cross-building-sbt-plugin-with-sbt-1x">Cross building sbt plugin with sbt 1.x</a></h3>
+<p>Use sbt 1.10.2 or later, if you want to cross build using sbt 1.x.</p>
+<pre><code class="language-scala">// using sbt 1.x
+lazy val scala212 = "2.12.20"
+lazy val scala3 = "3.3.4"
+ThisBuild / crossScalaVersions := Seq(scala212, scala3)
+
+lazy val plugin = (project in file("plugin"))
+  .enablePlugins(SbtPlugin)
+  .settings(
+    name := "sbt-vimquit",
+    (pluginCrossBuild / sbtVersion) := {
+      scalaBinaryVersion.value match {
+        case "2.12" =&gt; "1.5.8"
+        case _      =&gt; "2.0.0-M2"
+      }
+    },
+  )
+</code></pre>
+<h2 id="changes-to-"><a class="header" href="#changes-to-">Changes to <code>%%</code></a></h2>
+<p>In sbt 2.x, <code>ModuleID</code>'s <code>%%</code> operator has become platform-aware. For JVM subprojects, <code>%%</code> works as before, encoding Scala suffix (for example <code>_3</code>) on Maven repositories.</p>
+<h3 id="migrating--operator"><a class="header" href="#migrating--operator">Migrating <code>%%%</code> operator</a></h3>
+<p>When Scala.JS or Scala Native becomes available on sbt 2.x, <code>%%</code> will encode both the Scala version (such as <code>_3</code>) and the platform suffix (<code>_sjs1</code> etc). As a result, <code>%%%</code> can be replaced with <code>%%</code>:</p>
+<pre><code class="language-scala">libraryDependencies += "org.scala-js" %% "scalajs-dom" % "2.8.0"
+</code></pre>
+<p>Use <code>.platform(Platform.jvm)</code> in case where JVM libraries are needed.</p>
+<h2 id="the-plugincompat-technique"><a class="header" href="#the-plugincompat-technique">The PluginCompat technique</a></h2>
+<p>To use the same <code>*.scala</code> source but target both sbt 1.x and 2.x, we can create a shim, for example an object named <code>PluginCompat</code> in both <code>src/main/scala-2.12/</code> and <code>src/main/scala-3/</code>.</p>
+<h3 id="migrating-classpath-type"><a class="header" href="#migrating-classpath-type">Migrating Classpath type</a></h3>
+<p>sbt 2.x changed the <code>Classpath</code> type to be an alias of the <code>Seq[Attributed[xsbti.HashedVirtualFileRef]]</code> type. The following is a shim created to work with classpaths from both sbt 1.x and 2.x.</p>
+<pre><code class="language-scala">// src/main/scala-3/PluginCompat.scala
+
+package sbtfoo
+
+import java.nio.file.{ Path =&gt; NioPath }
+import sbt.*
+import xsbti.{ FileConverter, HashedVirtualFileRef, VirtualFile }
+
+private[sbtfoo] object PluginCompat:
+  type FileRef = HashedVirtualFileRef
+  type Out = VirtualFile
+
+  def toNioPath(a: Attributed[HashedVirtualFileRef])(using conv: FileConverter): NioPath =
+    conv.toPath(a.data)
+  inline def toFile(a: Attributed[HashedVirtualFileRef])(using conv: FileConverter): File =
+    toNioPath(a).toFile()
+  def toNioPaths(cp: Seq[Attributed[HashedVirtualFileRef]])(using conv: FileConverter): Vector[NioPath] =
+    cp.map(toNioPath).toVector
+  inline def toFiles(cp: Seq[Attributed[HashedVirtualFileRef]])(using conv: FileConverter): Vector[File] =
+    toNioPaths(cp).map(_.toFile())
+end PluginCompat
+</code></pre>
+<p>and here's for sbt 1.x:</p>
+<pre><code class="language-scala">// src/main/scala-2.12/PluginCompat.scala
+
+package sbtfoo
+
+private[sbtfoo] object PluginCompat {
+  type FileRef = java.io.File
+  type Out = java.io.File
+
+  def toNioPath(a: Attributed[File])(implicit conv: FileConverter): NioPath =
+    a.data.toPath()
+  def toFile(a: Attributed[File])(implicit conv: FileConverter): File =
+    a.data
+  def toNioPaths(cp: Seq[Attributed[File]])(implicit conv: FileConverter): Vector[NioPath] =
+    cp.map(_.data.toPath()).toVector
+  def toFiles(cp: Seq[Attributed[File]])(implicit conv: FileConverter): Vector[File] =
+    cp.map(_.data).toVector
+}
+</code></pre>
+<p>Now we can import <code>PluginCompat.*</code> and use <code>toNioPaths(...)</code> etc to absorb the differences between sbt 1.x and 2.x. The above demonstrates how we can absorb the classpath type change, and convert it into a vector of NIO Paths.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="concepts"><a class="header" href="#concepts">Concepts</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="command"><a class="header" href="#command">Command</a></h1>
+<p>A <em>command</em> is a system-level building block of sbt, often used to capture user interaction or IDE interaction.</p>
+<p><img src="concepts/../files/command.svg" style="width: 50%;"></img></p>
+<p>We can think of each command as a <code>State =&gt; State</code> function. In sbt, the state represents the following:</p>
+<ol>
+<li>Build structure (<code>build.sbt</code> etc)</li>
+<li>Your disk (source code, JAR outputs, etc)</li>
+</ol>
+<p>Thus, a command would typically modify either the build structure or the disk. For example, the <code>set</code> command can apply a setting to modify the build strcuture:</p>
+<pre><code class="language-scala">&gt; set name := "foo"
+</code></pre>
+<p>The <code>act</code> command can lift a task such as <code>compile</code> into a command:</p>
+<pre><code class="language-scala">&gt; compile
+</code></pre>
+<p>The compilation would read from the disk and write outputs, or display error messages on the screen.</p>
+<h2 id="commands-are-sequentially-processed"><a class="header" href="#commands-are-sequentially-processed">Commands are sequentially processed</a></h2>
+<p>Because there is only one state, a characteristic of commands is that they are executed one at a time.</p>
+<p><img src="concepts/../files/command2.svg" alt="command" /></p>
+<p>There are some execptions to this rule, but generally commands run sequentially. One mental image that might be useful is that a command is similar to a cashier taking an order in a cafe, and it will be processed in the sequence it was received.</p>
+<h2 id="tasks-run-in-parallel"><a class="header" href="#tasks-run-in-parallel">Tasks run in parallel</a></h2>
+<p>As mentioned above, the <code>act</code> command translates tasks into the command level. While doing so, the <code>act</code> command will broadcast the task across the aggregated subprojects and run independent tasks in parallel.</p>
+<p>Similarly, the <code>reload</code> command that runs during the startup of a session will initialize the settings in parallel.</p>
+<p><img src="concepts/../files/act.svg" alt="act" /></p>
+<h2 id="the-role-of-sbt-server"><a class="header" href="#the-role-of-sbt-server">The role of sbt server</a></h2>
+<p>sbt server is a service that accepts commands from either the command line or a network API called Build Server Protocol. This mechanism allows both the build user and IDEs to share the same sbt session.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="cross-building"><a class="header" href="#cross-building">Cross building</a></h1>
+<p><em>Cross building</em> refers to the idea of building multiple targets from the same set of source file. This includes Scala cross building, targeting multiple versions of Scala releases; platform cross building, targeting JVM, Scala.JS, and Scala Native; and custom virtual axes like Spark versions.</p>
+<h2 id="using-cross-built-libraries"><a class="header" href="#using-cross-built-libraries">Using cross-built libraries</a></h2>
+<p>To use a library built against multiple versions of Scala, double the first <code>%</code> in a ModuleID to be <code>%%</code>. This tells sbt that it should append the Scala ABI (application binary interface) suffix to the dependency's name. For example:</p>
+<pre><code class="language-scala">libraryDependencies += "org.typelevel" %% "cats-effect" % "3.5.4"
+</code></pre>
+<p>When the current Scala version is Scala 3.x, the above is equivalent to the following:</p>
+<pre><code class="language-scala">libraryDependencies += "org.typelevel" % "cats-effect_3" % "3.5.4"
+</code></pre>
+<p>See <a href="concepts/../reference/cross-building-setup.html">cross building setup</a> for more details on the setup.</p>
+<h2 id="historical-context"><a class="header" href="#historical-context">Historical context</a></h2>
+<p>In the earlier years of Scala (pre-Scala 2.9), the Scala library did not maintain binary compatibility even at the patch level, so each time a new Scala version was released, the libraries had to be re-released against the new version of Scala. This meant that a library user needed to pick a specific version that was compatible with the Scala version they were using.</p>
+<p>Even after Scala 2.9.x, the Scala library did not maintain the binary compatibility at minor version level, so the libraries compiled against Scala 2.10.x was not compatible with 2.11.x.</p>
+<p>To workaround this problem, sbt developed cross building mechanism such that:</p>
+<ul>
+<li>Same set of source files can be compiled against multiple versions of Scala</li>
+<li>Define a convention to append ABI version (e.g. <code>_2.12</code>) to the Maven artifact</li>
+<li>Later this mechanism was extended to support Scala.JS and other platforms</li>
+</ul>
+<h2 id="project-matrix"><a class="header" href="#project-matrix">Project matrix</a></h2>
+<p>sbt 2.x introduces project matrix, which enables cross building to happen in parallel.</p>
+<pre><code class="language-scala">organization := "com.example"
+scalaVersion := "3.3.3"
+version      := "0.1.0-SNAPSHOT"
+
+lazy val core = (projectMatrix in file("core"))
+  .settings(
+    name := "core"
+  )
+  .jvmPlatform(scalaVersions = Seq("3.3.3", "2.13.15"))
+</code></pre>
+<p>See <a href="concepts/../reference/cross-building-setup.html">cross building setup</a> for more details on the setup.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="caching"><a class="header" href="#caching">Caching</a></h1>
+<p>sbt 2.0 introduces hybrid local/remote cache system, which can cache the task results to local disk and Bazel-compatible remote cache. Throughout sbt releases it has implemented various caches, like <code>update</code> cache, incremental compilation, but sbt 2.x's cache is a significant step change for a few reasons:</p>
+<ol>
+<li><strong>Automatic</strong>. sbt 2.x cache automates the caching by embedding itself into the task macro unlike sbt 1.x wherein the plugin author called the cache functions manually in the task implementation.</li>
+<li><strong>Machine-wide</strong>. sbt 2.x disk cache is shared among all builds on a machine.</li>
+<li><strong>Remote-ready</strong>. In sbt 2.x, the cache storage is configured separately such that all cacheable tasks are automatically remote-cache-ready.</li>
+</ol>
+<h2 id="basics-of-caching"><a class="header" href="#basics-of-caching">Basics of caching</a></h2>
+<p>The basic idea is treat as if the build process is a pure function that takes input <code>(A1, A2, A3, ...)</code> and return some outputs <code>(R1, List(O1, O2, O3, ...))</code>. For example, we can take a list of source files, Scala version, and produce a <code>*.jar</code> file at the end. If the assumption holds, then for the same inputs, we can memorize the ouput JAR for everyone. We are interested in this technique because using the memorized output JAR would be faster than performing the actual task like Scala compilation etc.</p>
+<h3 id="hermetic-build"><a class="header" href="#hermetic-build">Hermetic build</a></h3>
+<p>As a mental model of the <em>build as a pure function</em>, build engineers sometimes use the term <em>hermetic build</em>, which is a build that takes place in a shipping container in a dessert with no clocks or the Internet. If we can produce a JAR file from that state, then the JAR file should be safe to be shared by any machine. Why did I mention the clock? It's because a JAR file could capture the timestamp, and thus produce slightly different JARs each time. To avoid this, hermetic build tools overwrite the timestamp to a fixed date 2010-01-01 regardless of when the build took place.</p>
+<p>A build that ends up capturing ephemeral inputs, are said to <em>break the hermeticity</em> or <em>non-hermetic</em>. Another common way the hermeticity is broken is capturing absolute paths as either input or output. Sometimes the path gets embedded into the JAR via a macro, you might not know until you inspect the bytecode.</p>
+<h2 id="automatic-caching"><a class="header" href="#automatic-caching">Automatic caching</a></h2>
+<p>Here's a demonstration of the automatic caching:</p>
+<pre><code class="language-scala">import sbt.util.CacheImplicits.given
+
+val someKey = taskKey[String]("something")
+
+someKey := (Def.cachedTask {
+  name.value + version.value + "!"
+}).value
+</code></pre>
+<p>The task will be automatically cached based on the two settings <code>name</code> and <code>version</code>. The first time we run the task it will be executed onsite, but the second time onward, it will use the disk cache:</p>
+<pre><code>sbt:demo&gt; show someKey
+[info] demo0.1.0-SNAPSHOT!
+[success] elapsed time: 0 s, cache 0%, 1 onsite task
+sbt:demo&gt; show someKey
+[info] demo0.1.0-SNAPSHOT!
+[success] elapsed time: 0 s, cache 100%, 1 disk cache hit
+</code></pre>
+<h3 id="caching-is-serialization-hard"><a class="header" href="#caching-is-serialization-hard">Caching is serialization-hard</a></h3>
+<p>To participate in the automatic caching, the input keys (e.g. <code>name</code> and <code>version</code>) must provide a given for <code>sjsonnew.HashWriter</code> typeclass and return type must provide a given for <code>sjsonnew.JsonFormat</code>. <a href="https://www.scala-sbt.org/contraband/">Contraband</a> can be used to generate sjson-new codecs.</p>
+<h2 id="caching-files"><a class="header" href="#caching-files">Caching files</a></h2>
+<p>Caching files (e.g. <code>java.io.File</code>) requires its own consideration, not because it's technically difficult, but mostly because of the ambiguity and assumptions when files are involved. When we say a "file" it could actually mean:</p>
+<ol>
+<li>Relative path from a well-known location</li>
+<li>Materialized actual file</li>
+<li>A unique proof of a file, or a content hash</li>
+</ol>
+<p>Technically speaking, a <code>File</code> just means the file path, so we can deserialize just the filename such as <code>target/a/b.jar</code>. This will fail the downstream tasks if they assumed that <code>target/a/b.jar</code> would exist in the file system. For clarity, and also for avoiding to capture absolute paths, sbt 2.x provides three separate types for the three cases.</p>
+<ul>
+<li><code>xsbti.VirtualFileRef</code> is used to mean just the relative path, which is equivalent to passing a string</li>
+<li><code>xsbti.VirtualFile</code> represents a materialized file with contents, which could be a virtual file or a file in your disk</li>
+</ul>
+<p>However, for the purpose of hermetic build, neither is great to represent a list of files. Having just the filename alone doesn't guarantee that the file will be the same, and carrying the entire content of the files is too inefficient in a JSON etc.</p>
+<p>This is where the mysterious third option, a unique proof of file comes in handy. In addition to the relative path, <code>HashedVirtualFileRef</code> tracks the SHA-256 content hash and the file size. This can easily be serialized to JSON yet we can reference the exact file.</p>
+<h3 id="the-effect-of-file-creation"><a class="header" href="#the-effect-of-file-creation">The effect of file creation</a></h3>
+<p>There are many tasks that generate file that do not use <code>VirtualFile</code> as the return type. For example, <code>compile</code> returns <code>Analysis</code> instead, and <code>*.class</code> file generation happens as a <em>side effect</em> in sbt 1.x.</p>
+<p>To participate in caching, we need to declare these effects as something we care about.</p>
+<pre><code class="language-scala">someKey := Def.cachedTask {
+  val conv = fileConverter.value
+  val out: java.nio.file.Path = createFile(...)
+  val vf: xsbti.VirtualFile = conv.toVirtualFile(out)
+  Def.declareOutput(vf)
+  vf: xsbti.HashedVirtualFileRef
+}
+</code></pre>
+<h2 id="remote-caching"><a class="header" href="#remote-caching">Remote caching</a></h2>
+<p>You can optionally extend the build to use remote cache in addition to the local disk cache. Remote caching could improve build performance by allowing multiple machines to share build artifacts and outputs.</p>
+<p>Imagine you have a dozen people in your project or a company. Each morning, you will <code>git pull</code> the changes the dozen people made, and you need to build their code. If you have a successful project, the code size will only get bigger over time, and the % of the time you spend building someone else's in your day increases. This becomes the limiting factor of your team size and code size. Remote caching reverses this tide by CI systems hydrate the cache and you can download the artifacts and task outputs.</p>
+<p>sbt 2.x implements Bazel-compatible gRPC interface, which works with number of backend both open source and commercial.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="reference"><a class="header" href="#reference">Reference</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-1"><a class="header" href="#sbt-1">sbt</a></h1>
+<p>See <a href="reference/../guide/basic-tasks.html">Basic Tasks</a> in the Getting Started Guide for an intro to the basics.</p>
+<h2 id="synopsis"><a class="header" href="#synopsis">Synopsis</a></h2>
+<p><code>sbt</code><br> <code>sbt --client</code> <em>command</em> <em>args</em></p>
+<h2 id="description"><a class="header" href="#description">Description</a></h2>
+<p>sbt is a simple build tool created originally for Scala and Java. It lets us declare subprojects and their various dependencies and custom tasks to ensure that we'll always get a fast, repeatable build.</p>
+<h3 id="sbt-runner-and-sbt-server"><a class="header" href="#sbt-runner-and-sbt-server">sbt runner and sbt server</a></h3>
+<ul>
+<li>sbt runner is a system shell script named <code>sbt</code>, or <code>sbt.bat</code> on Windows. That is capable of running <em>any version of sbt</em>. This is sometimes called "sbt-the-shell-script".
+<ul>
+<li>When executed with <code>--client</code>, sbt runner executes sbtn, a client program compiled a native code using GraalVM native image.</li>
+<li>sbt runner also executes sbt launcher, a launcher that is capable of running <em>any verions of sbt</em>.</li>
+<li>When you install sbt from a installer, what you're installing is the sbt runner.</li>
+</ul>
+</li>
+<li>sbt server is the actual build tool.
+<ul>
+<li>The sbt version is determined by <code>project/build.properties</code> in each working directory.</li>
+<li>sbt server accepts commands from sbtn, network API, or via its own sbt shell.</li>
+</ul>
+</li>
+</ul>
+<pre><code>sbt.version=2.0.0-M2
+</code></pre>
+<p>This mechanism allows builds to be configured to a specific version of sbt, and everyone working on the project would use the same build semantics, regardless of the sbt runner installed on their machine.</p>
+<p>This also means that some features are implemented at sbt runner or sbtn level, while other features are implemented at sbt server level.</p>
+<h2 id="sbt-commands"><a class="header" href="#sbt-commands">sbt commands</a></h2>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="reference/sbt.html#admonition-note"></a>
+</div>
+<div>
+<p>There is a technical distinction in sbt between <em>tasks</em>, which are <em>inside</em> the build definition, and <em>commands</em>, which often manipulate the build definition itself. This specific sbt meaning of <em>command</em> means there's no good general term for <em>thing you can type at the sbt prompt</em>, which may be a setting, task, or command.</p>
+</div>
+</div>
+<!--
+-   Some tasks produce useful values. The `toString` representation of
+    these values can be shown using `show <task>` to run the task
+    instead of just `<task>`.
+-   In a multi-project build, execution dependencies and the aggregate
+    setting control which tasks from which projects are executed. See
+    [multi-project builds][Multi-Project].
+-->
+<h3 id="project-level-tasks"><a class="header" href="#project-level-tasks">Project-level tasks</a></h3>
+<ul>
+<li><code>clean</code> Deletes all generated files (the <code>target</code> directory).</li>
+<li><code>publishLocal</code> Publishes artifacts (such as JARs) to the local Ivy repository as described in Publishing.</li>
+<li><code>publish</code> Publishes artifacts (such as JARs) to the repository defined by the publishTo setting, described in Publishing.</li>
+</ul>
+<!--
+-   `update` Resolves and retrieves external dependencies as described
+    in [library dependencies][Library-Dependencies].
+-->
+<h3 id="configuration-level-tasks"><a class="header" href="#configuration-level-tasks">Configuration-level tasks</a></h3>
+<p>Configuration-level tasks are tasks associated with a configuration. For example, <code>compile</code>, which is equivalent to <code>Compile/compile</code>, compiles the main source code (the <code>Compile</code> configuration). <code>Test/compile</code> compiles the test source code (the <code>Test</code> configuration). Most tasks for the <code>Compile</code> configuration have an equivalent in the <code>Test</code> configuration that can be run using a <code>Test/</code> prefix.</p>
+<ul>
+<li>
+<p><code>compile</code> Compiles the main sources (in the <code>src/main/scala</code> directory). <code>Test/compile</code> compiles test sources (in the src/test/scala/ directory).</p>
+</li>
+<li>
+<p><code>console</code> Starts the Scala interpreter with a classpath including the compiled sources, all JARs in the lib directory, and managed libraries. To return to sbt, type :quit, Ctrl+D (Unix), or Ctrl+Z (Windows). Similarly, Test/console starts the interpreter with the test classes and classpath.</p>
+</li>
+<li>
+<p><code>doc</code> Generates API documentation for Scala source files in <code>src/main/scala</code> using scaladoc. <code>Test/doc</code> generates API documentation for source files in <code>src/test/scala</code>.</p>
+</li>
+<li>
+<p><code>package</code> Creates a JAR file containing the files in <code>src/main/resources</code> and the classes compiled from <code>src/main/scala</code>. <code>Test/package</code> creates a JAR containing the files in <code>src/test/resources</code> and the class compiled from <code>src/test/scala</code>.</p>
+</li>
+<li>
+<p><code>packageDoc</code> Creates a JAR file containing API documentation generated from Scala source files in src/main/scala. Test/packageDoc creates a JAR containing API documentation for test sources files in src/test/scala.</p>
+</li>
+<li>
+<p><code>packageSrc</code>: Creates a JAR file containing all main source files and resources. The packaged paths are relative to src/main/scala and src/main/resources. Similarly, Test/packageSrc operates on test source files and resources.</p>
+</li>
+<li>
+<p><code>run &lt;argument&gt;*</code> Runs the main class for the project in the same virtual machine as sbt. The main class is passed the arguments provided.<!-- See [Running Project Code][Running-Project-Code] for details on the use of
+  System.exit and multithreading (including GUIs) in code run by this
+  action. `Test/run` runs a main class in the test code. --></p>
+</li>
+<li>
+<p><code>runMain &lt;main-class&gt; &lt;argument&gt;*</code> Runs the specified main class for the project in the same virtual machine as sbt. The main class is passed the arguments provided.<!-- See
+  [Running Project Code][Running-Project-Code] for
+  details on the use of System.exit and multithreading (including
+  GUIs) in code run by this action. `Test/runMain` runs the specified
+  main class in the test code. --></p>
+</li>
+<li>
+<p><code>testFull</code> Runs all tests detected during test compilation.<!-- See [Testing][Testing] for details. --></p>
+</li>
+<li>
+<p><code>testOnly &lt;test&gt;*</code> Runs the tests provided as arguments. <code>*</code> (will be) interpreted as a wildcard in the test name.<!-- See [Testing][Testing] for details. --></p>
+</li>
+<li>
+<p><code>test &lt;test&gt;*</code> Runs the tests specified as arguments (or all tests if no arguments are given) that:</p>
+<ol>
+<li>have not been run yet OR</li>
+<li>failed the last time they were run OR</li>
+<li>had any transitive dependencies recompiled since the last successful run <code>*</code> (will be) interpreted as a wildcard in the test name.<!-- See [Testing][Testing] for details. --></li>
+</ol>
+</li>
+</ul>
+<!--
+-   `consoleQuick` Starts the Scala interpreter with the project's
+    compile-time dependencies on the classpath. Test/consoleQuick uses
+    the test dependencies. This task differs from console in that it
+    does not force compilation of the current project's sources.
+-   `consoleProject` Enters an interactive session with sbt and the
+    build definition on the classpath. The build definition and related
+    values are bound to variables and common packages and values are
+    imported. See the [consoleProject documentation][Console-Project]
+    for more information.
+-->
+<h3 id="general-commands"><a class="header" href="#general-commands">General commands</a></h3>
+<ul>
+<li>
+<p><code>exit</code> or <code>quit</code> End the current interactive session or build. Additionally, Ctrl+D (Unix) or Ctrl+Z (Windows) will exit the interactive prompt.</p>
+</li>
+<li>
+<p><code>help &lt;command&gt;</code> Displays detailed help for the specified command. If the command does not exist, help lists detailed help for commands whose name or description match the argument, which is interpreted as a regular expression. If no command is provided, displays brief descriptions of the main commands. Related commands are tasks and settings.</p>
+</li>
+<li>
+<p><code>projects [add|remove &lt;URI&gt;]</code> List all available projects if no arguments provided or adds/removes the build at the provided URI.</p>
+<!-- (See [multi-project builds][Multi-Project] for details on multi-project
+builds.) -->
+</li>
+<li>
+<p><code>project &lt;project-id&gt;</code> Change the current project to the project with ID <code>&lt;project-id&gt;</code>. Further operations will be done in the context of the given project.</p>
+<!-- (See [multi-project builds][Multi-Project] for
+details on multiple project builds.) -->
+</li>
+<li>
+<p><code>~ &lt;command&gt;</code> Executes the project specified action or method whenever source files change.</p>
+<!-- See [Triggered Execution][Triggered-Execution] for details. -->
+</li>
+<li>
+<p><code>&lt; filename</code> Executes the commands in the given file. Each command should be on its own line. Empty lines and lines beginning with '#' are ignored</p>
+</li>
+<li>
+<p><code>A ; B</code> Execute A and if it succeeds, run B. Note that the leading semicolon is required.</p>
+</li>
+<li>
+<p><code>eval &lt;Scala-expression&gt;</code> Evaluates the given Scala expression and returns the result and inferred type. This can be used to set system properties, as a calculator, to fork processes, etc ... For example:</p>
+<pre><code>&gt; eval System.setProperty("demo", "true")
+&gt; eval 1+1
+&gt; eval "ls -l" !
+</code></pre>
+</li>
+</ul>
+<!--
+-   `+ <command>` Executes the project specified action or method for
+    all versions of Scala defined in the crossScalaVersions setting.
+-   `++ <version|home-directory> <command>` Temporarily changes the
+    version of Scala building the project and executes the provided
+    command. `<command>` is optional. The specified version of Scala is
+    used until the project is reloaded, settings are modified (such as
+    by the set or session commands), or ++ is run again. `<version>`
+    does not need to be listed in the build definition, but it must be
+    available in a repository. Alternatively, specify the path to a
+    Scala installation.
+-->
+<h3 id="commands-for-managing-the-build-definition"><a class="header" href="#commands-for-managing-the-build-definition">Commands for managing the build definition</a></h3>
+<ul>
+<li>
+<p><code>reload [plugins|return]</code> If no argument is specified, reloads the build, recompiling any build or plugin definitions as necessary. reload plugins changes the current project to the build definition project (in <code>project/</code>). This can be useful to directly manipulate the build definition. For example, running clean on the build definition project will force snapshots to be updated and the build definition to be recompiled. reload return changes back to the main project.</p>
+</li>
+<li>
+<p><code>set &lt;setting-expression&gt;</code> Evaluates and applies the given setting definition. The setting applies until sbt is restarted, the build is reloaded, or the setting is overridden by another set command or removed by the session command.<!-- See [.sbt build definition][Basic-Def] and
+  [Inspecting Settings][Inspecting-Settings] for details. --></p>
+</li>
+<li>
+<p><code>session &lt;command&gt;</code> Manages session settings defined by the <code>set</code> command. It can persist settings configured at the prompt.<!-- See [Inspecting Settings][Inspecting-Settings] for details. --></p>
+</li>
+<li>
+<p><code>inspect &lt;setting-key&gt;</code> Displays information about settings, such as the value, description, defining scope, dependencies, delegation chain, and related settings.<!-- See [Inspecting Settings][Inspecting-Settings] for details. --></p>
+</li>
+</ul>
+<h2 id="sbt-runner-and-launcher"><a class="header" href="#sbt-runner-and-launcher">sbt runner and launcher</a></h2>
+<p>When launching the <code>sbt</code> runner from the system shell, various system properties or JVM extra options can be specified to influence its behaviour.</p>
+<h3 id="sbt-jvm-options-and-system-properties"><a class="header" href="#sbt-jvm-options-and-system-properties">sbt JVM options and system properties</a></h3>
+<p>If the <code>JAVA_OPTS</code> and/or <code>SBT_OPTS</code> environment variables are defined when <code>sbt</code> starts, their content is passed as command line arguments to the JVM running sbt server.</p>
+<p>If a file named <code>.jvmopts</code> exists in the  current directory, its content is appended to <code>JAVA_OPTS</code> at sbt startup. Similarly, if <code>.sbtopts</code> and/or <code>/etc/sbt/sbtopts</code> exist, their content is appended to <code>SBT_OPTS</code>. The default value of <code>JAVA_OPTS</code> is <code>-Dfile.encoding=UTF8</code>.</p>
+<p>You can also specify JVM system properties and command line options directly as <code>sbt</code> arguments: any <code>-Dkey=val</code> argument will be passed as-is to the JVM, and any <code>-J-Xfoo</code> will be passed as <code>-Xfoo</code>.</p>
+<p>See also <code>sbt --help</code> for more details.</p>
+<h3 id="sbt-jvm-heap-permgen-and-stack-sizes"><a class="header" href="#sbt-jvm-heap-permgen-and-stack-sizes">sbt JVM heap, permgen, and stack sizes</a></h3>
+<p>If you find yourself running out of permgen space or your workstation is low on memory, adjust the JVM configuration as you would for any java application.</p>
+<p>For example a common set of memory-related options is:</p>
+<pre><code class="language-bash">export SBT_OPTS="-Xmx2048M -Xss2M"
+sbt
+</code></pre>
+<p>Or if you prefer to specify them just for this session:</p>
+<pre><code class="language-bash">sbt -J-Xmx2048M -J-Xss2M
+</code></pre>
+<h3 id="boot-directory"><a class="header" href="#boot-directory">Boot directory</a></h3>
+<p><code>sbt</code> runner is just a bootstrap, the actual sbt server, Scala compiler and standard library are by default downloaded to the shared directory  <code>\$HOME/.sbt/boot/</code>.</p>
+<p>To change the location of this directory, set the <code>sbt.boot.directory</code> system property. A relative path will be resolved against the current working directory, which can be useful if you want to avoid sharing the boot directory between projects. For example, the following uses the pre-0.11 style of putting the boot directory in <code>project/boot/</code>:</p>
+<pre><code class="language-bash">sbt -Dsbt.boot.directory=project/boot/
+</code></pre>
+<h3 id="terminal-encoding"><a class="header" href="#terminal-encoding">Terminal encoding</a></h3>
+<p>The character encoding used by your terminal may differ from Java's default encoding for your platform. In this case, you will need to specify the <code>file.encoding=&lt;encoding&gt;</code> system property, which might look like:</p>
+<pre><code class="language-bash">export JAVA_OPTS="-Dfile.encoding=Cp1252"
+sbt
+</code></pre>
+<h3 id="httphttpsftp-proxy"><a class="header" href="#httphttpsftp-proxy">HTTP/HTTPS/FTP Proxy</a></h3>
+<p>On Unix, sbt will pick up any HTTP, HTTPS, or FTP proxy settings from the standard <code>http_proxy</code>, <code>https_proxy</code>, and <code>ftp_proxy</code> environment variables. If you are behind a proxy requiring authentication, you need to pass some supplementary flags at sbt startup. See <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/doc-files/net-properties.html">JVM networking system properties</a> for more details.</p>
+<p>For example:</p>
+<pre><code class="language-bash">sbt -Dhttp.proxyUser=username -Dhttp.proxyPassword=mypassword
+</code></pre>
+<p>On Windows, your script should set properties for proxy host, port, and if applicable, username and password. For example, for HTTP:</p>
+<pre><code class="language-bash">sbt -Dhttp.proxyHost=myproxy -Dhttp.proxyPort=8080 -Dhttp.proxyUser=username -Dhttp.proxyPassword=mypassword
+</code></pre>
+<p>Replace <code>http</code> with <code>https</code> or <code>ftp</code> in the above command line to configure HTTPS or FTP.</p>
+<h3 id="other-system-properties"><a class="header" href="#other-system-properties">Other system properties</a></h3>
+<p>The following system properties can also be passed to <code>sbt</code> runner:</p>
+<h4 id="-dsbtbannertrue"><a class="header" href="#-dsbtbannertrue"><code>-Dsbt.banner=true</code></a></h4>
+<p>Show a welcome banner advertising new features.</p>
+<h4 id="-dsbtcitrue"><a class="header" href="#-dsbtcitrue"><code>-Dsbt.ci=true</code></a></h4>
+<p>Default <code>false</code> (unless then env var <code>BUILD_NUMBER</code> is set). For continuous integration environments. Suppress supershell and color.</p>
+<h4 id="-dsbtclienttrue"><a class="header" href="#-dsbtclienttrue"><code>-Dsbt.client=true</code></a></h4>
+<p>Run the sbt client.</p>
+<h4 id="-dsbtcolorauto"><a class="header" href="#-dsbtcolorauto"><code>-Dsbt.color=auto</code></a></h4>
+<ul>
+<li>To turn on color, use <code>always</code> or <code>true</code>.</li>
+<li>To turn off color, use <code>never</code> or <code>false</code>.</li>
+<li>To use color if the output is a terminal (not a pipe) that supports color, use <code>auto</code>.</li>
+</ul>
+<h4 id="-dsbtcoursierhomehomecachecoursierv1"><a class="header" href="#-dsbtcoursierhomehomecachecoursierv1"><code>-Dsbt.coursier.home=$HOME/.cache/coursier/v1</code></a></h4>
+<p>Location of the Coursier artifact cache, where the default is defined by <a href="https://get-coursier.io/docs/cache.html#default-location">Coursier cache resolution logic</a>. You can verify the value with the command <code>csrCacheDirectory</code>.</p>
+<h4 id="-dsbtgenbuildpropstrue"><a class="header" href="#-dsbtgenbuildpropstrue"><code>-Dsbt.genbuildprops=true</code></a></h4>
+<p>Generate <code>build.properties</code> if missing. If unset, this defers to <code>sbt.skip.version.write</code>.</p>
+<h4 id="-dsbtglobalbasehomesbt"><a class="header" href="#-dsbtglobalbasehomesbt"><code>-Dsbt.global.base=$HOME/.sbt/</code></a></h4>
+<p>The directory containing global settings and plugins.</p>
+<h4 id="-dsbtoverridebuildrepostrue"><a class="header" href="#-dsbtoverridebuildrepostrue"><code>-Dsbt.override.build.repos=true</code></a></h4>
+<p>If true, repositories configured in a build definition are ignored and the repositories configured for the launcher are used instead.</p>
+<!-- See <tt>sbt.repository.config</tt> and the <a href="reference/Launcher-Configuration.html">sbt launcher</a> documentation. -->
+<h4 id="-dsbtrepositoryconfighomesbtrepositories"><a class="header" href="#-dsbtrepositoryconfighomesbtrepositories"><code>-Dsbt.repository.config=$HOME/.sbt/repositories</code></a></h4>
+<p>A file containing the repositories to use for the launcher. The format is the same as a <code>[repositories]</code> section for a sbt launcher configuration file. This setting is typically used in conjunction with setting <code>sbt.override.build.repos</code> to <code>true</code>.</p>
+<!-- (see <tt>sbt.override.build.repos</tt> and the <a href="reference/Launcher-Configuration.html">sbt launcher</a> documentation).</td> -->
+<div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-update"><a class="header" href="#sbt-update">sbt update</a></h1>
+<p>See <a href="reference/../guide/library-dependency-basics.html">library depdency basics</a> in the Getting Started guide to learn about the basics.</p>
+<h2 id="synopsis-1"><a class="header" href="#synopsis-1">Synopsis</a></h2>
+<p><code>sbt --client update</code></p>
+<h2 id="description-1"><a class="header" href="#description-1">Description</a></h2>
+<p>sbt uses <a href="https://get-coursier.io/">Coursier</a> to implement library management, also known as a package manager in other ecosystems. The general idea of library management is that you can specify external libraries you would like to use in your subprojects, and the library management system would:</p>
+<ul>
+<li>Check if such versions exists in the listed repositories</li>
+<li>Look for the transitive dependencies (i.e. the libraries used by the libraries)</li>
+<li>Attempt to resolve version conflicts, if any</li>
+<li>Download the artifacts, such as JAR files, from the repositories</li>
+</ul>
+<h3 id="dependencies"><a class="header" href="#dependencies">Dependencies</a></h3>
+<p>Declaring a dependency looks like:</p>
+<pre><code class="language-scala">libraryDependencies += groupID %% artifactID % revision
+</code></pre>
+<p>or</p>
+<pre><code class="language-scala">libraryDependencies += groupID %% artifactID % revision % configuration
+</code></pre>
+<!--
+See [configurations](#ivy-configurations) for details on configuration
+mappings.
+-->
+<p>Also, several dependencies can be declared together:</p>
+<pre><code class="language-scala">libraryDependencies ++= Seq(
+  groupID %% artifactID % revision,
+  groupID %% otherID % otherRevision
+)
+</code></pre>
+<p>If you are using a dependency that was built with sbt, double the first <code>%</code> to be <code>%%</code>:</p>
+<pre><code class="language-scala">libraryDependencies += groupID %% artifactID % revision
+</code></pre>
+<p>This will use the right JAR for the dependency built with the version of Scala that you are currently using. If you get an error while resolving this kind of dependency, that dependency probably wasn't published for the version of Scala you are using. See <a href="reference/../concepts/cross-building.html">Cross building</a> for details.</p>
+<!--
+Ivy can select the latest revision of a module according to constraints
+you specify. Instead of a fixed revision like `"1.6.1"`, you specify
+`"latest.integration"`, `"2.9.+"`, or `"[1.0,)"`. See the
+[Ivy revisions](https://ant.apache.org/ivy/history/2.3.0/ivyfile/dependency.html#revision)
+documentation for details.
+-->
+<h3 id="versionscheme-and-eviction-errors"><a class="header" href="#versionscheme-and-eviction-errors"><code>versionScheme</code> and eviction errors</a></h3>
+<p>sbt allows library authors to declare the version semantics using the <code>versionScheme</code> setting:</p>
+<pre><code class="language-scala">// Semantic Versioning applied to 0.x, as well as 1.x, 2.x, etc
+versionScheme := Some(VersionScheme.EarlySemVer)
+</code></pre>
+<p>When Coursier finds multiple versions of a library, for example Cats Effect 2.x and Cats Effect 3.0.0-M4, it often resolves the conflict by removing the older version from the graph. This process is colloquially called eviction, like "Cats Effect 2.2.0 was evicted."</p>
+<p>This would work if the new tenant is binary compatible with Cats Effect 2.2.0. In this case, the library authors have declared that they are <em>not</em> binary compatible, so the eviction was actually unsafe. An unsafe eviction would cause runtime issues such as <code>ClassNotFoundException</code>. Instead Coursier should've failed to resolve.</p>
+<pre><code class="language-scala">lazy val use = project
+  .settings(
+    name := "use",
+    libraryDependencies ++= Seq(
+      "org.http4s" %% "http4s-blaze-server" % "0.21.11",
+      "org.typelevel" %% "cats-effect" % "3.0.0-M4",
+    ),
+  )
+</code></pre>
+<p>sbt performs this secondary compatibility check after Coursier returns a candidate:</p>
+<pre><code>[error] stack trace is suppressed; run last use / update for the full output
+[error] (use / update) found version conflict(s) in library dependencies; some are suspected to be binary incompatible:
+[error]
+[error]   * org.typelevel:cats-effect_2.12:3.0.0-M4 (early-semver) is selected over {2.2.0, 2.0.0, 2.0.0, 2.2.0}
+[error]       +- use:use_2.12:0.1.0-SNAPSHOT                        (depends on 3.0.0-M4)
+[error]       +- org.http4s:http4s-core_2.12:0.21.11                (depends on 2.2.0)
+[error]       +- io.chrisdavenport:vault_2.12:2.0.0                 (depends on 2.0.0)
+[error]       +- io.chrisdavenport:unique_2.12:2.0.0                (depends on 2.0.0)
+[error]       +- co.fs2:fs2-core_2.12:2.4.5                         (depends on 2.2.0)
+[error]
+[error]
+[error] this can be overridden using libraryDependencySchemes or evictionErrorLevel
+</code></pre>
+<p>This mechanism is called the <em>eviction error</em>.</p>
+<h4 id="opting-out-of-the-the-eviction-error"><a class="header" href="#opting-out-of-the-the-eviction-error">Opting out of the the eviction error</a></h4>
+<p>If the library authors have declared the compatibility breakage, but if you want to ignore the strict check (often for <code>scala-xml</code>), you can write this in <code>project/plugins.sbt</code> and <code>build.sbt</code>:</p>
+<pre><code class="language-scala">libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always
+</code></pre>
+<p>To ignore all eviction errors:</p>
+<pre><code class="language-scala">evictionErrorLevel := Level.Info
+</code></pre>
+<h3 id="resolvers"><a class="header" href="#resolvers">Resolvers</a></h3>
+<p>sbt uses the standard Maven Central repository by default. Declare additional repositories with the form:</p>
+<pre><code class="language-scala">resolvers += name at location
+</code></pre>
+<p>For example:</p>
+<pre><code class="language-scala">libraryDependencies ++= Seq(
+    "org.apache.derby" % "derby" % "10.4.1.3",
+    "org.specs" % "specs" % "1.6.1"
+)
+
+resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
+</code></pre>
+<p>sbt can search your local Maven repository if you add it as a repository:</p>
+<pre><code class="language-scala">resolvers += Resolver.mavenLocal
+</code></pre>
+<!--
+See [Resolvers][Resolvers] for details on defining other types of repositories.
+-->
+<h4 id="override-default-resolvers"><a class="header" href="#override-default-resolvers">Override default resolvers</a></h4>
+<p><code>resolvers</code> configures additional, inline user resolvers. By default, <code>sbt</code> combines these resolvers with default repositories (Maven Central and the local Ivy repository) to form <code>externalResolvers</code>. To have more control over repositories, set <code>externalResolvers</code> directly. To only specify repositories in addition to the usual defaults, configure <code>resolvers</code>.</p>
+<p>For example, to use the Sonatype OSS Snapshots repository in addition to the default repositories,</p>
+<pre><code class="language-scala">resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
+</code></pre>
+<p>To use the local repository, but not the Maven Central repository:</p>
+<pre><code class="language-scala">externalResolvers := Resolver.combineDefaultResolvers(resolvers.value.toVector, mavenCentral = false)
+</code></pre>
+<h4 id="override-all-resolvers-for-all-builds"><a class="header" href="#override-all-resolvers-for-all-builds">Override all resolvers for all builds</a></h4>
+<p>The repositories used to retrieve sbt, Scala, plugins, and application dependencies can be configured globally and declared to override the resolvers configured in a build or plugin definition. There are two parts:</p>
+<ol>
+<li>Define the repositories used by the launcher.</li>
+<li>Specify that these repositories should override those in build definitions.</li>
+</ol>
+<p>The repositories used by the launcher can be overridden by defining <code>~/.sbt/repositories</code>, which must contain a <code>[repositories]</code> section with the same format as the <code>Launcher</code> configuration file. For example:</p>
+<pre><code>[repositories]
+local
+my-maven-repo: https://example.org/repo
+my-ivy-repo: https://example.org/ivy-repo/, [organization]/[module]/[revision]/[type]s/[artifact](-[classifier]).[ext]
+</code></pre>
+<p>A different location for the repositories file may be specified by the <code>sbt.repository.config</code> system property in the sbt startup script. The final step is to set <code>sbt.override.build.repos</code> to true to use these repositories for dependency resolution and retrieval.</p>
+<h3 id="exclude-transitive-dependencies"><a class="header" href="#exclude-transitive-dependencies">Exclude Transitive Dependencies</a></h3>
+<p>In certain cases a transitive dependency should be excluded from all dependencies. This can be achieved by setting up <code>ExclusionRules</code> in <code>excludeDependencies</code>.</p>
+<pre><code class="language-scala">excludeDependencies ++= Seq(
+  // commons-logging is replaced by jcl-over-slf4j
+  ExclusionRule("commons-logging", "commons-logging")
+)
+</code></pre>
+<p>To exclude certain transitive dependencies of a dependency, use the <code>excludeAll</code> or <code>exclude</code> methods. The <code>exclude</code> method should be used when a pom will be published for the project. It requires the organization and module name to exclude. For example,</p>
+<pre><code class="language-scala">libraryDependencies += 
+  ("log4j" % "log4j" % "1.2.15").exclude("javax.jms", "jms")
+</code></pre>
+<!--
+The `excludeAll` method is more flexible, but because it cannot be
+represented in a pom.xml, it should only be used when a pom doesn't need
+to be generated. For example,
+
+```scala
+libraryDependencies +=
+  "log4j" % "log4j" % "1.2.15" excludeAll(
+    ExclusionRule(organization = "com.sun.jdmk"),
+    ExclusionRule(organization = "com.sun.jmx"),
+    ExclusionRule(organization = "javax.jms")
+  )
+```
+
+See [ModuleID](../api/sbt/librarymanagement/ModuleID.html) for API details.
+-->
+<h3 id="explicit-url"><a class="header" href="#explicit-url">Explicit URL</a></h3>
+<p>If your project requires a dependency that is not present in a repository, a direct URL to its jar can be specified as follows:</p>
+<pre><code class="language-scala">libraryDependencies += "slinky" % "slinky" % "2.1" from "https://slinky2.googlecode.com/svn/artifacts/2.1/slinky.jar"
+</code></pre>
+<p>The URL is only used as a fallback if the dependency cannot be found through the configured repositories. Also, the explicit URL is not included in published metadata (that is, the pom or ivy.xml).</p>
+<h3 id="disable-transitivity"><a class="header" href="#disable-transitivity">Disable Transitivity</a></h3>
+<p>By default, these declarations fetch all project dependencies, transitively. In some instances, you may find that the dependencies listed for a project aren't necessary for it to build. Projects using the Felix OSGI framework, for instance, only explicitly require its main jar to compile and run. Avoid fetching artifact dependencies with either <code>intransitive()</code> or <code>notTransitive()</code>, as in this example:</p>
+<pre><code class="language-scala">libraryDependencies += ("org.apache.felix" % "org.apache.felix.framework" % "1.8.0").intransitive()
+</code></pre>
+<h3 id="classifiers"><a class="header" href="#classifiers">Classifiers</a></h3>
+<p>You can specify the classifier for a dependency using the <code>classifier</code> method. For example, to get the jdk15 version of TestNG:</p>
+<pre><code class="language-scala">libraryDependencies += ("org.testng" % "testng" % "5.7").classifier("jdk15")
+</code></pre>
+<p>For multiple classifiers, use multiple <code>classifier</code> calls:</p>
+<pre><code class="language-scala">libraryDependencies += 
+  "org.lwjgl.lwjgl" % "lwjgl-platform" % lwjglVersion classifier "natives-windows" classifier "natives-linux" classifier "natives-osx"
+</code></pre>
+<p>To obtain particular classifiers for all dependencies transitively, run the <code>updateClassifiers</code> task. By default, this resolves all artifacts with the <code>sources</code> or <code>javadoc</code> classifier. Select the classifiers to obtain by configuring the <code>transitiveClassifiers</code> setting. For example, to only retrieve sources:</p>
+<pre><code class="language-scala">transitiveClassifiers := Seq("sources")
+</code></pre>
+<h3 id="download-sources"><a class="header" href="#download-sources">Download Sources</a></h3>
+<p>Downloading source and API documentation jars is usually handled by an IDE plugin. These plugins use the <code>updateClassifiers</code> and <code>updateSbtClassifiers</code> tasks, which produce an <code>Update-Report</code> referencing these jars.</p>
+<p>To have sbt download the dependency's sources without using an IDE plugin, add <code>withSources()</code> to the dependency definition. For API jars, add <code>withJavadoc()</code>. For example:</p>
+<pre><code class="language-scala">libraryDependencies += 
+  ("org.apache.felix" % "org.apache.felix.framework" % "1.8.0").withSources().withJavadoc()
+</code></pre>
+<p>Note that this is not transitive. Use the <code>update*Classifiers</code> tasks for that.</p>
+<!--
+### Extra Attributes
+
+[Extra attributes](https://ant.apache.org/ivy/history/2.3.0/concept.html#extra)
+can be specified by passing key/value pairs to the `extra` method.
+
+To select dependencies by extra attributes:
+
+```scala
+libraryDependencies += ("org" % "name" % "rev").extra("color" -> "blue")
+```
+
+To define extra attributes on the current project:
+
+```scala
+projectID := {
+    val previous = projectID.value
+    previous.extra("color" -> "blue", "component" -> "compiler-interface")
+}
+```
+-->
+<!--
+#### Configurations
+
+Ivy configurations are a useful feature for your build when you need
+custom groups of dependencies, such as for a plugin. Ivy configurations
+are essentially named sets of dependencies. You can read the
+[Ivy documentation](https://ant.apache.org/ivy/history/2.3.0/tutorial/conf.html)
+for details.
+
+The built-in use of configurations in sbt is similar to scopes in Maven.
+sbt adds dependencies to different classpaths by the configuration that
+they are defined in. See the description of
+[Maven Scopes](https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Scope)
+for details.
+
+You put a dependency in a configuration by selecting one or more of its
+configurations to map to one or more of your project's configurations.
+The most common case is to have one of your configurations `A` use a
+dependency's configuration `B`. The mapping for this looks like
+`"A->B"`. To apply this mapping to a dependency, add it to the end of
+your dependency definition:
+
+```scala
+libraryDependencies += "org.scalatest" %% "scalatest" % "$example_scalatest_version$" % "test->compile"
+```
+
+This says that your project's `"test"` configuration uses `ScalaTest`'s
+`"compile"` configuration. See the
+[Ivy documentation](https://ant.apache.org/ivy/history/2.3.0/tutorial/conf.html)
+for more advanced mappings. Most projects published to Maven
+repositories will use the `"compile"` configuration.
+
+A useful application of configurations is to group dependencies that are
+not used on normal classpaths. For example, your project might use a
+`"js"` configuration to automatically download jQuery and then include
+it in your jar by modifying `resources`. For example:
+
+```scala
+val JS = config("js") hide
+
+ivyConfigurations += JS
+
+libraryDependencies += "jquery" % "jquery" % "3.2.1" % "js->default" from "https://code.jquery.com/jquery-3.2.1.min.js"
+
+Compile / resources ++= update.value.select(configurationFilter("js"))
+```
+
+The `config` method defines a new configuration with name `"js"` and
+makes it private to the project so that it is not used for publishing.
+See [Update Report][Update-Report] for more information on selecting
+managed artifacts.
+
+A configuration without a mapping (no `"->"`) is mapped to `"default"`
+or `"compile"`. The `->` is only needed when mapping to a different
+configuration than those. The ScalaTest dependency above can then be
+shortened to:
+
+```scala
+libraryDependencies += "org.scalatest" %% "scalatest" % "$example_scalatest_version$" % "test"
+```
+-->
+<div style="break-before: page; page-break-before: always;"></div><h1 id="cross-building-setup"><a class="header" href="#cross-building-setup">Cross building setup</a></h1>
+<p>This page covers cross building setup. See <a href="reference/../concepts/cross-building.html">Cross building</a> for general explanation.</p>
+<h2 id="using-cross-built-libraries-1"><a class="header" href="#using-cross-built-libraries-1">Using cross-built libraries</a></h2>
+<p>To use a library built against multiple versions of Scala, double the first <code>%</code> in a ModuleID to be <code>%%</code>. This tells sbt that it should append the current version of Scala being used to build the library to the dependency’s name. For example:</p>
+<pre><code class="language-scala">libraryDependencies += "org.typelevel" %% "cats-effect" % "3.5.4"
+</code></pre>
+<p>A nearly equivalent, manual alternative for a fixed version of Scala is:</p>
+<pre><code class="language-scala">libraryDependencies += "org.typelevel" % "cats-effect_3" % "3.5.4"
+</code></pre>
+<h3 id="scala-3-specific-cross-versions"><a class="header" href="#scala-3-specific-cross-versions">Scala 3 specific cross-versions</a></h3>
+<p>If you are developing an application in Scala 3, you can use Scala 2.13 libraries:</p>
+<pre><code class="language-scala">("a" % "b" % "1.0").cross(CrossVersion.for3Use2_13)
+</code></pre>
+<p>This is equivalent to using <code>%%</code> except it resolves the <code>_2.13</code> variant of the library  when <code>scalaVersion</code> is 3.x.y.</p>
+<p>Conversely we have <code>CrossVersion.for2_13Use3</code> to use the <code>_3</code> variant of the library when <code>scalaVersion</code> is 2.13.x:</p>
+<pre><code class="language-scala">("a" % "b" % "1.0").cross(CrossVersion.for2_13Use3)
+</code></pre>
+<div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
+<div class="admonition-title">
+<div id="admonition-warning-title">
+<p>Warning</p>
+</div>
+<a class="admonition-anchor-link" href="reference/cross-building-setup.html#admonition-warning"></a>
+</div>
+<div>
+<p><strong>Warning for library authors:</strong> It is generally not safe to publish a Scala 3 library that depends on a Scala 2.13 library or vice-versa. Doing so could introduce two versions of the same library like <code>scala-xml_2.13</code> and <code>scala-xml_3</code> on the end users' classpath.</p>
+</div>
+</div>
+<h3 id="more-about-using-cross-built-libraries"><a class="header" href="#more-about-using-cross-built-libraries">More about using cross-built libraries</a></h3>
+<p>You can have fine-grained control over the behavior for different Scala versions by using the <code>cross</code> method on <code>ModuleID</code> These are equivalent:</p>
+<pre><code class="language-scala">"a" % "b" % "1.0"
+("a" % "b" % "1.0").cross(CrossVersion.disabled)
+</code></pre>
+<p>These are equivalent:</p>
+<pre><code class="language-scala">"a" %% "b" % "1.0"
+("a" % "b" % "1.0").cross(CrossVersion.binary)
+</code></pre>
+<p>This overrides the defaults to always use the full Scala version instead of the binary Scala version:</p>
+<pre><code class="language-scala">("a" % "b" % "1.0").cross(CrossVersion.full)
+</code></pre>
+<p><code>CrossVersion.patch</code> sits between <code>CrossVersion.binary</code> and <code>CrossVersion.full</code> in that it strips off any trailing <code>-bin-...</code> suffix which is used to distinguish variant but binary compatible Scala toolchain builds.</p>
+<pre><code class="language-scala">("a" % "b" % "1.0").cross(CrossVersion.patch)
+</code></pre>
+<p><code>CrossVersion.constant</code> fixes a constant value:</p>
+<pre><code class="language-scala">("a" % "b" % "1.0").cross(CrossVersion.constant("2.9.1"))
+</code></pre>
+<p>It is equivalent to:</p>
+<pre><code class="language-scala">"a" % "b_2.9.1" % "1.0"
+</code></pre>
+<h2 id="project-matrix-1"><a class="header" href="#project-matrix-1">Project matrix</a></h2>
+<p>sbt 2.x introduces project matrix, which enables cross building to happen in parallel.</p>
+<pre><code class="language-scala">organization := "com.example"
+scalaVersion := "3.3.3"
+version      := "0.1.0-SNAPSHOT"
+
+lazy val core = (projectMatrix in file("core"))
+  .settings(
+    name := "core"
+  )
+  .jvmPlatform(scalaVersions = Seq("3.3.3", "2.13.15"))
+</code></pre>
+<h2 id="publishing-convention"><a class="header" href="#publishing-convention">Publishing convention</a></h2>
+<p>We use the Scala ABI (application binary interface) version as suffix to denote which version of Scala was used to compile a library. For example, the artifact name <code>cats-effect_2.13</code> means Scala 2.13.x was used. <code>cats-effect_3</code> means Scala 3.x was used. This fairly simple approach allows interoperability with users of Maven, Ant and other build tools. For pre-prelease versions of Scala, such as 2.13.0-RC1, full version will be considered the ABI version.</p>
+<p><code>crossVersion</code> setting can be used to override the publishing convention:</p>
+<ul>
+<li><code>CrossVersion.disabled</code> (no suffix)</li>
+<li><code>CrossVersion.binary</code> (<code>_&lt;scala-abi-version&gt;</code>)</li>
+<li><code>CrossVersion.full</code> (<code>_&lt;scala-version&gt;</code>)</li>
+</ul>
+<p>The default is either <code>CrossVersion.binary</code> or <code>CrossVersion.disabled</code> depending on the value of <code>crossPaths</code>. Because (unlike Scala library) Scala compiler is not forward compatible among the patch releases, compiler plugins should use <code>CrossVersion.full</code>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="remote-cache-setup"><a class="header" href="#remote-cache-setup">Remote cache setup</a></h1>
+<p>This page covers remote caching setup. See <a href="reference/../concepts/caching.html">Caching</a> for general explanation of the caching system.</p>
+<h2 id="grpc-remote-cache"><a class="header" href="#grpc-remote-cache">gRPC remote cache</a></h2>
+<p>While there might be multiple remote cache store implemention in the future, sbt 2.0 ships with a gRPC client that is compatible with the Bazel remote cache backends. To configure sbt 2.x, add the following to <code>project/plugins.sbt</code></p>
+<pre><code class="language-scala">addRemoteCachePlugin
+</code></pre>
+<p>There are many Bazel remote cache backends, both open source and commercial solutions. While this page documents is not an exhaustive list of all Bazel remote cache implementations, hopefully it shows how sbt 2.x can be set up for wide array of them.</p>
+<h3 id="authentication"><a class="header" href="#authentication">Authentication</a></h3>
+<p>There are a few flavors of <a href="https://grpc.io/docs/guides/auth/">gRPC authentication</a>, and Bazel remote cache backends use various kind of them:</p>
+<ol>
+<li>Unauthenticated. Useful for testing.</li>
+<li>Default TLS/SSL.</li>
+<li>TLS/SSL with custom server certificate.</li>
+<li>TTL/SSL with custom server and client certificate, mTLS.</li>
+<li>Default TLS/SSL with API token header.</li>
+</ol>
+<h3 id="bazel-remote-without-authentication"><a class="header" href="#bazel-remote-without-authentication">bazel-remote without authentication</a></h3>
+<p>You can grab the code from <a href="https://github.com/buchgr/bazel-remote">buchgr/bazel-remote</a> and run it on a laptop using Bazel:</p>
+<pre><code class="language-bash">bazel run :bazel-remote  -- --max_size 5 --dir $HOME/work/bazel-remote/temp \
+  --http_address localhost:8000 \
+  --grpc_address localhost:2024
+</code></pre>
+<p>To configure sbt 2.x, add the following to <code>project/plugins.sbt</code></p>
+<pre><code class="language-scala">addRemoteCachePlugin
+</code></pre>
+<p>and append the following to <code>build.sbt</code>:</p>
+<pre><code class="language-scala">Global / remoteCache := Some(uri("grpc://localhost:2024"))
+</code></pre>
+<h3 id="bazel-remote-with-mtls"><a class="header" href="#bazel-remote-with-mtls">bazel-remote with mTLS</a></h3>
+<p>In a real environment, mTLS can ensure that the transport is encrypted and mutually authenticated. bazel-remote can be started with something like the follows:</p>
+<pre><code class="language-bash">bazel run :bazel-remote  -- --max_size 5 --dir $HOME/work/bazel-remote/temp \
+  --http_address localhost:8000 \
+  --grpc_address localhost:2024 \
+  --tls_ca_file /tmp/sslcert/ca.crt \
+  --tls_cert_file /tmp/sslcert/server.crt \
+  --tls_key_file /tmp/sslcert/server.pem
+</code></pre>
+<p>sbt 2.x setting would look like this in this scenario:</p>
+<pre><code class="language-scala">Global / remoteCache := Some(uri("grpcs://localhost:2024"))
+Global / remoteCacheTlsCertificate := Some(file("/tmp/sslcert/ca.crt"))
+Global / remoteCacheTlsClientCertificate := Some(file("/tmp/sslcert/client.crt"))
+Global / remoteCacheTlsClientKey := Some(file("/tmp/sslcert/client.pem"))
+</code></pre>
+<p>Note the <code>grpcs://</code>, as opposed to <code>grpc://</code>.</p>
+<h3 id="engflow"><a class="header" href="#engflow">EngFlow</a></h3>
+<p><a href="https://www.engflow.com/">EngFlow GmbH</a> is a build solution company founded in 2020 by core members of Bazel team, providing build analytics and remote execution backend for Bazel, which includes remote cache.</p>
+<p>After signing up for trial on <a href="https://my.engflow.com/">https://my.engflow.com/</a>, the page instructs you to start a trial cluster using a docker. If you followed the instruction, this should start a remote cache service on port 8080. The sbt 2.x configuration would look like this for the trial cluster:</p>
+<pre><code class="language-scala">Global / remoteCache := Some(uri("grpc://localhost:8080"))
+</code></pre>
+<h3 id="buildbuddy"><a class="header" href="#buildbuddy">BuildBuddy</a></h3>
+<p><a href="https://www.buildbuddy.io/">BuildBuddy</a> is a build solution company founded by ex-Google engineers, providing build analytics and remote execution backend for Bazel. It's also available open source as <a href="https://github.com/buildbuddy-io/buildbuddy">buildbuddy-io/buildbuddy</a>.</p>
+<p>After signing up, BuildBuddy Personal plan lets you use BuildBuddy across the Internet.</p>
+<ol>
+<li>From <a href="https://app.buildbuddy.io/">https://app.buildbuddy.io/</a>, go to Settings, and change the Organization URL to <code>&lt;something&gt;.buildbuddy.io</code>.</li>
+<li>Next, go to Quickstart and take note of the URLs and <code>--remote_headers</code>.</li>
+<li>Create a file called <code>$HOME/.sbt/buildbuddy_credential.txt</code> and put in the API key:</li>
+</ol>
+<pre><code>x-buildbuddy-api-key=*******
+</code></pre>
+<p>The sbt 2.x configuration would look like this:</p>
+<pre><code class="language-scala">Global / remoteCache := Some(uri("grpcs://something.buildbuddy.io"))
+Global / remoteCacheHeaders += IO.read(BuildPaths.defaultGlobalBase / "buildbuddy_credential.txt").trim
+</code></pre>
+<h3 id="nativelink"><a class="header" href="#nativelink">NativeLink</a></h3>
+<p><a href="https://docs.nativelink.dev/">NativeLink</a> is an open-source Bazel remote execution backend implementated in Rust with emphasis on performance. As of June 2024, there's NativeLink Cloud in beta.</p>
+<ol>
+<li>From <a href="https://app.nativelink.com/">https://app.nativelink.com/</a>, go to Quickstart and take note of the URLs and <code>--remote_header</code>.</li>
+<li>Create a file called <code>$HOME/.sbt/nativelink_credential.txt</code> and put in the API key:</li>
+</ol>
+<pre><code>x-nativelink-api-key=*******
+</code></pre>
+<p>The sbt 2.x configuration would look like this:</p>
+<pre><code class="language-scala">Global / remoteCache := Some(uri("grpcs://something.build-faster.nativelink.net"))
+Global / remoteCacheHeaders += IO.read(BuildPaths.defaultGlobalBase / "nativelink_credential.txt").trim
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="recipes"><a class="header" href="#recipes">Recipes</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="how-to-write-hello-world"><a class="header" href="#how-to-write-hello-world">How to write hello world</a></h1>
+<h2 id="objective"><a class="header" href="#objective">Objective</a></h2>
+<p>I want to write a hello world program in Scala, and run it.</p>
+<h2 id="steps"><a class="header" href="#steps">Steps</a></h2>
+<ol>
+<li>
+<p>Create a fresh directory, like <code>hello_scala/</code></p>
+</li>
+<li>
+<p>Create a directory named <code>project/</code> under <code>hello_scala/</code>, and create <code>project/build.properties</code> with</p>
+<pre><code>sbt.version=2.0.0-M2
+</code></pre>
+</li>
+<li>
+<p>Under <code>hello_scala/</code>, create <code>build.sbt</code>:</p>
+<pre><code class="language-scala">scalaVersion := "3.3.3"
+</code></pre>
+</li>
+<li>
+<p>Under <code>hello_scala/</code>, create <code>Hello.scala</code>:</p>
+<pre><code class="language-scala"> @main def main(args: String*): Unit =
+   println(s"Hello ${args.mkString}")
+</code></pre>
+</li>
+<li>
+<p>Navigate to <code>hello_scala/</code> from the terminal, and run <code>sbt</code>:</p>
+<pre><code class="language-bash">$ sbt
+</code></pre>
+</li>
+<li>
+<p>When the prompt appears, type <code>run</code>:</p>
+<pre><code class="language-scala">sbt:hello_scala&gt; run
+</code></pre>
+</li>
+<li>
+<p>Type <code>exit</code> to exit the sbt shell:</p>
+<pre><code class="language-scala">sbt:hello_scala&gt; exit
+</code></pre>
+</li>
+</ol>
+<h2 id="alternatives"><a class="header" href="#alternatives">Alternatives</a></h2>
+<p>When you're in a hurry, you can run <code>sbt init</code> in a fresh directory, and select the first template.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="use-sbt-as-metals-build-server"><a class="header" href="#use-sbt-as-metals-build-server">Use sbt as Metals build server</a></h1>
+<div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
+<div class="admonition-title">
+<div id="admonition-warning-title">
+<p>Warning</p>
+</div>
+<a class="admonition-anchor-link" href="recipes/use-sbt-as-metals-build-server.html#admonition-warning"></a>
+</div>
+<div>
+<p>This is a draft documentation of sbt 2.x that is yet to be released. This is a placeholder, copied from sbt 1.x.</p>
+</div>
+</div>
+<h2 id="objective-1"><a class="header" href="#objective-1">Objective</a></h2>
+<p>I want to use <a href="https://scalameta.org/metals/">Metals</a> on VS Code with sbt as the build server.</p>
+<h2 id="steps-1"><a class="header" href="#steps-1">Steps</a></h2>
+<p>To use Metals on VS Code:</p>
+<ol>
+<li>Install Metals from Extensions tab:<br> <img src="recipes/../files/metals0.png" alt="Metals" /></li>
+<li>Open a directory containing a <code>build.sbt</code> file.</li>
+<li>From the menubar, run View &gt; Command Palette... (<code>Cmd-Shift-P</code> on macOS) "Metals: Switch build server", and select "sbt"<br> <img src="recipes/../files/metals2.png" alt="Metals" /></li>
+<li>Once the import process is complete, open a Scala file to see that code completion works:<br> <img src="recipes/../files/metals3.png" alt="Metals" /></li>
+</ol>
+<p>Use the following setting to opt-out some of the subprojects from BSP.</p>
+<pre><code class="language-scala">bspEnabled := false
+</code></pre>
+<p>When you make changes to the code and save them (<code>Cmd-S</code> on macOS), Metals will invoke sbt to do the actual building work.</p>
+<h4 id="interactive-debugging-on-vs-code"><a class="header" href="#interactive-debugging-on-vs-code">Interactive debugging on VS Code</a></h4>
+<ol>
+<li>Metals supports interactive debugging by setting break points in the code:<br> <img src="recipes/../files/metals4.png" alt="Metals" /></li>
+<li>Interactive debugging can be started by right-clicking on an unit test, and selecting "Debug Test." When the test hits a break point, you can inspect the values of the variables:<br> <img src="recipes/../files/metals5.png" alt="Metals" /></li>
+</ol>
+<p>See <a href="https://code.visualstudio.com/docs/editor/debugging">Debugging</a> page on VS Code documentation for more details on how to navigate an interactive debugging session.</p>
+<h4 id="logging-into-sbt-session"><a class="header" href="#logging-into-sbt-session">Logging into sbt session</a></h4>
+<p>While Metals uses sbt as the build server, we can also log into the same sbt session using a thin client.</p>
+<ul>
+<li>From Terminal section, type in <code>sbt --client</code><br> <img src="recipes/../files/metals6.png" alt="Metals" /></li>
+</ul>
+<p>This lets you log into the sbt session Metals has started. In there you can call <code>testOnly</code> and other tasks with the code already compiled.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="import-to-intellij-idea"><a class="header" href="#import-to-intellij-idea">Import to IntelliJ IDEA</a></h1>
+<div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
+<div class="admonition-title">
+<div id="admonition-warning-title">
+<p>Warning</p>
+</div>
+<a class="admonition-anchor-link" href="recipes/import-to-intellij.html#admonition-warning"></a>
+</div>
+<div>
+<p>This is a draft documentation of sbt 2.x that is yet to be released. This is a placeholder, copied from sbt 1.x.</p>
+</div>
+</div>
+<h2 id="objective-2"><a class="header" href="#objective-2">Objective</a></h2>
+<p>I want to import sbt build to IntelliJ IDEA.</p>
+<h2 id="steps-2"><a class="header" href="#steps-2">Steps</a></h2>
+<p><a href="https://www.jetbrains.com/idea/">IntelliJ IDEA</a> is an IDE created by JetBrains, and the Community Edition is open source under Apache v2 license. IntelliJ integrates with many build tools, including sbt, to import the project.</p>
+<p>To import a build to IntelliJ IDEA:</p>
+<ol>
+<li>Install Scala plugin on the Plugins tab:<br> <img src="recipes/../files/intellij1.png" alt="IntelliJ" /></li>
+<li>From Projects, open a directory containing a <code>build.sbt</code> file.<br> <img src="recipes/../files/intellij2.png" alt="IntelliJ" /></li>
+<li>Once the import process is complete, open a Scala file to see that code completion works.</li>
+</ol>
+<p>IntelliJ Scala plugin uses its own lightweight compilation engine to detect errors, which is fast but sometimes incorrect. Per <a href="https://blog.jetbrains.com/scala/2021/07/27/intellij-scala-plugin-2021-2/#Compiler-based_highlighting">compiler-based highlighting</a>, IntelliJ can be configured to use the Scala compiler for error highlighting.</p>
+<h3 id="interactive-debugging-with-intellij-idea"><a class="header" href="#interactive-debugging-with-intellij-idea">Interactive debugging with IntelliJ IDEA</a></h3>
+<ol>
+<li>IntelliJ supports interactive debugging by setting break points in the code:<br> <img src="recipes/../files/intellij4.png" alt="IntelliJ" /></li>
+<li>Interactive debugging can be started by right-clicking on an unit test, and selecting "Debug '&lt;test name&gt;'." Alternatively, you can click the green "run" icon on the left part of the editor near the unit test. When the test hits a break point, you can inspect the values of the variables:<br> <img src="recipes/../files/intellij5.png" alt="IntelliJ" /></li>
+</ol>
+<p>See <a href="https://www.jetbrains.com/help/idea/debugging-code.html">Debug Code</a> page on IntelliJ documentation for more details on how to navigate an interactive debugging session.</p>
+<h2 id="alternative"><a class="header" href="#alternative">Alternative</a></h2>
+<h3 id="using-sbt-as-intellij-idea-build-server-advanced"><a class="header" href="#using-sbt-as-intellij-idea-build-server-advanced">Using sbt as IntelliJ IDEA build server (advanced)</a></h3>
+<p>Importing the build to IntelliJ means that you're effectively using IntelliJ as the build tool and the compiler while you code (see also <a href="https://blog.jetbrains.com/scala/2021/07/27/intellij-scala-plugin-2021-2/#Compiler-based_highlighting">compiler-based highlighting</a>). While many users are happy with the experience, depending on the code base some of the compilation errors may be false, it may not work well with plugins that generate sources, and generally you might want to code with the identical build semantics as sbt. Thankfully, modern IntelliJ supports alternative <em>build servers</em> including sbt via the <a href="https://build-server-protocol.github.io/">Build Server Protocol</a> (BSP).</p>
+<p>The benefit of using BSP with IntelliJ is that you're using sbt to do the actual build work, so if you are the kind of programmer who had sbt session up on the side, this avoids double compilation.</p>
+<table class="table table-striped">
+  <tr>
+    <th><nobr></th>
+    <th>Import to IntelliJ</th>
+    <th>BSP with IntelliJ</th>
+  </tr>
+  <tr>
+    <td>Reliability</td>
+    <td>✅ Reliable behavior</td>
+    <td>⚠️ Less mature. Might encounter UX issues.</td>
+  </tr>
+  <tr>
+    <td>Responsiveness</td>
+    <td>✅</td>
+    <td>⚠️</td>
+  </tr>
+  <tr>
+    <td>Correctness</td>
+    <td>⚠️ Uses its own compiler for type checking, but can be configured to use scalac</td>
+    <td>✅ Uses Zinc + Scala compiler for type checking</td>
+  </tr>
+  <tr>
+    <td>Generated source</td>
+    <td>❌ Generated source requires resync</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td>Build reuse</td>
+    <td>❌ Using sbt side-by-side requires double build</td>
+    <td>✅</td>
+  </tr>
+</table>
+<p>To use sbt as build server on IntelliJ:</p>
+<ol>
+<li>Install Scala plugin on the Plugins tab.</li>
+<li>To use the BSP approach, do not use Open button on the Project tab:<br> <img src="recipes/../files/intellij7.png" alt="IntelliJ" /></li>
+<li>From menubar, click New &gt; "Project From Existing Sources", or Find Action (<code>Cmd-Shift-P</code> on macOS) and type "Existing" to find "Import Project From Existing Sources":<br> <img src="recipes/../files/intellij8.png" alt="IntelliJ" /></li>
+<li>Open a <code>build.sbt</code> file. Select <strong>BSP</strong> when prompted:<br> <img src="recipes/../files/intellij9.png" alt="IntelliJ" /></li>
+<li>Select <strong>sbt (recommended)</strong> as the tool to import the BSP workspace:<br> <img src="recipes/../files/intellij10.png" alt="IntelliJ" /></li>
+<li>Once the import process is complete, open a Scala file to see that code completion works:<br> <img src="recipes/../files/intellij11.png" alt="IntelliJ" /></li>
+</ol>
+<p>Use the following setting to opt-out some of the subprojects from BSP.</p>
+<pre><code class="language-scala">bspEnabled := false
+</code></pre>
+<ul>
+<li>Open Preferences, search BSP and check "build automatically on file save", and uncheck "export sbt projects to Bloop before import":<br> <img src="recipes/../files/intellij12.png" alt="IntelliJ" /></li>
+</ul>
+<p>When you make changes to the code and save them (<code>Cmd-S</code> on macOS), IntelliJ will invoke sbt to do the actual building work.</p>
+<p>See also Igal Tabachnik's <a href="https://hmemcpy.com/2021/09/bsp-and-intellij/">Using BSP effectively in IntelliJ and Scala</a> for more details.</p>
+<h4 id="logging-into-sbt-session-1"><a class="header" href="#logging-into-sbt-session-1">Logging into sbt session</a></h4>
+<p>We can also log into the existing sbt session using the thin client.</p>
+<ul>
+<li>From Terminal section, type in <code>sbt --client</code> <img src="recipes/../files/intellij6.png" alt="IntelliJ" /></li>
+</ul>
+<p>This lets you log into the sbt session IntelliJ has started. In there you can call <code>testOnly</code> and other tasks with the code already compiled.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="use-neovim"><a class="header" href="#use-neovim">Use Neovim</a></h1>
+<div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
+<div class="admonition-title">
+<div id="admonition-warning-title">
+<p>Warning</p>
+</div>
+<a class="admonition-anchor-link" href="recipes/use-neovim.html#admonition-warning"></a>
+</div>
+<div>
+<p>This is a draft documentation of sbt 2.x that is yet to be released. This is a placeholder, copied from sbt 1.x.</p>
+</div>
+</div>
+<h2 id="objective-3"><a class="header" href="#objective-3">Objective</a></h2>
+<p>I want to use Metals on Neovim with sbt as the build server.</p>
+<h2 id="steps-3"><a class="header" href="#steps-3">Steps</a></h2>
+<p>Chris Kipp, who is a maintainer of Metals, created <a href="https://github.com/scalameta/nvim-metals">nvim-metals</a> plugin that provides comprehensive Metals support on Neovim. To install nvim-metals, create <code>lsp.lua</code> under <code>$XDG_CONFIG_HOME/nvim/lua/</code> based on Chris's <a href="https://github.com/scalameta/nvim-metals/discussions/39#discussion-82302">lsp.lua</a> and adjust to your preference. For example, comment out its plugins section and load the listed plugins using the plugin manager of your choice such as vim-plug.</p>
+<p>In <code>init.vim</code>, the file can be loaded as:</p>
+<pre><code class="language-lua">lua &lt;&lt; END
+require('lsp')
+END
+</code></pre>
+<p>Per <code>lsp.lua</code>, <code>g:metals_status</code> should be displayed on the status line, which can be done using lualine.nvim etc.</p>
+<ol>
+<li>Next, open a Scala file in an sbt build using Neovim.</li>
+<li>Run <code>:MetalsInstall</code> when prompted.</li>
+<li>Run <code>:MetalsStartServer</code>.</li>
+<li>If the status line is set up, you should see something like "Connecting to sbt" or "Indexing."<br> <img src="recipes/../files/nvim0.png" width="900"></li>
+<li>Code completion works when you're in Insert mode, and you can tab through the candidates:<br> <img src="recipes/../files/nvim1.png" width="900"></li>
+</ol>
+<ul>
+<li>A build is triggered upon saving changes, and compilation errors are displayed inline:<br> <img src="recipes/../files/nvim2.png" width="900"></li>
+</ul>
+<h4 id="go-to-definition"><a class="header" href="#go-to-definition">Go to definition</a></h4>
+<ol>
+<li>You can jump to definition of the symbol under cursor by using <code>gD</code> (exact keybinding can be customized):<br> <img src="recipes/../files/nvim3.png" width="900"></li>
+<li>Use <code>Ctrl-O</code> to return to the old buffer.</li>
+</ol>
+<h4 id="hover"><a class="header" href="#hover">Hover</a></h4>
+<ul>
+<li>To display the type information of the symbol under cursor, like hovering, use <code>K</code> in Normal mode:<br> <img src="recipes/../files/nvim4.png" width="900"></li>
+</ul>
+<h4 id="listing-diagnostics"><a class="header" href="#listing-diagnostics">Listing diagnostics</a></h4>
+<ol>
+<li>To list all compilation errors and warnings, use <code>&lt;leader&gt;aa</code>:<br> <img src="recipes/../files/nvim5.png" width="900"></li>
+<li>Since this is in the standard quickfix list, you can use the command such as <code>:cnext</code> and <code>:cprev</code> to nagivate through the errors and warnings.</li>
+<li>To list just the errors, use <code>&lt;leader&gt;ae</code>.</li>
+</ol>
+<h4 id="interactive-debugging-with-neovim"><a class="header" href="#interactive-debugging-with-neovim">Interactive debugging with Neovim</a></h4>
+<ol>
+<li>Thanks to nvim-dap, Neovim supports interactive debugging. Set break points in the code using <code>&lt;leader&gt;dt</code>:<br> <img src="recipes/../files/nvim6.png" width="900"></li>
+<li>Nagivate to a unit test, confirm that it's built by hovering (<code>K</code>), and then "debug continue" (<code>&lt;leader&gt;dc</code>) to start a debugger. Choose "1: RunOrTest" when prompted.</li>
+<li>When the test hits a break point, you can inspect the values of the variables by debug hovering (<code>&lt;leader&gt;dK</code>):<br> <img src="recipes/../files/nvim7.png" width="900"></li>
+<li>"debug continue" (<code>&lt;leader&gt;dc</code>) again to end the session.</li>
+</ol>
+<p>See <a href="https://github.com/scalameta/nvim-metals">nvim-metals</a> regarding further details.</p>
+<h4 id="logging-into-sbt-session-2"><a class="header" href="#logging-into-sbt-session-2">Logging into sbt session</a></h4>
+<p>We can also log into the existing sbt session using the thin client.</p>
+<ol>
+<li>In a new vim window type <code>:terminal</code> to start the built-in terminal.</li>
+<li>Type in <code>sbt --client</code><br> <img src="recipes/../files/nvim8.png" width="900"></li>
+</ol>
+<p>Even though it's inside Neovim, tab completion etc works fine inside.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="glossary"><a class="header" href="#glossary">Glossary</a></h1>
+<h2 id="symbols"><a class="header" href="#symbols">Symbols</a></h2>
+<h3 id="--"><a class="header" href="#--"><code>:=</code>, <code>+=</code>, <code>++=</code></a></h3>
+<p>These construct a <a href="appendix/../../../../1.x/api/sbt/internal/util/Init$Setting.html">Setting</a>, which is the fundamental type in the <a href="appendix/../guide/build-definition-basics.html">settings</a> system.</p>
+<h3 id=""><a class="header" href="#"><code>%</code></a></h3>
+<p>This is used to build up a <a href="appendix/../../../../1.x/api/sbt/librarymanagement/ModuleID.html">ModuleID</a>.</p>
+<h3 id="-1"><a class="header" href="#-1"><code>%%</code></a></h3>
+<p>This is similar to <code>%</code> except that it identifies a dependency that has been <a href="appendix/../concepts/cross-building.html">cross built</a>.</p>
+<h3 id="-2"><a class="header" href="#-2"><code>%%%</code></a></h3>
+<p>This is defined in <a href="https://github.com/portable-scala/sbt-platform-deps">sbt-platform-deps</a> in sbt 1.x.</p>
+<h2 id="c"><a class="header" href="#c">C</a></h2>
+<h3 id="command-1"><a class="header" href="#command-1">Command</a></h3>
+<p>A system-level building block of sbt, often used to capture user interaction or IDE interaction. See <a href="appendix/../concepts/command.html">Command</a>.</p>
+<h3 id="cross-building-1"><a class="header" href="#cross-building-1">Cross building</a></h3>
+<p>The idea of building multiple targets from the same set of source file. This includes Scala cross building, targetting multiple versions of Scala releases; platform cross building, targetting JVM, Scala.JS, and Scala Native; and custom virtual axis like Spark versions.</p>
+<h2 id="d"><a class="header" href="#d">D</a></h2>
+<h3 id="dependency-resolution"><a class="header" href="#dependency-resolution">Dependency resolution</a></h3>
+<p>During library management, when multiple version candidates (e.g. <code>foo:2.2.0</code> and <code>foo:3.0.0</code>) are found for a library <code>foo</code> within a dependency graph, it is called a <em>dependency conflict</em>. The process of mediating the conflict into a single version is called <em>dependency resolution</em>. Often, this would result in the older version beging removed from the dependency graph, which is called an <em>eviction</em> of <code>foo:2.2.0</code>. In some cases, an eviction is considered unsafe because the candidates are not replacable. See <a href="appendix/../reference/sbt-update.html">sbt update</a>.</p>
+<h2 id="e"><a class="header" href="#e">E</a></h2>
+<h3 id="eviction"><a class="header" href="#eviction">Eviction</a></h3>
+<p>See <a href="appendix/glossary.html#dependency-resolution">dependency resolution</a>.</p>
+<h2 id="v"><a class="header" href="#v">V</a></h2>
+<h3 id="value"><a class="header" href="#value"><code>value</code></a></h3>
+<p><code>.value</code> is used to denote a happens-before relationship from one task or setting to another. This method is special (it is a macro) and cannot be used except in <code>:=</code> or in the standalone construction methods <code>Def.setting</code> and <code>Def.task</code>.</p>
+<!--
+This is an index of common methods, types, and values you might find in
+an sbt build definition. For command names, see
+[Running][Running]. For available plugins, see
+[the plugins list][Community-Plugins].
+-->
+<!--
+#### Dependency Management
+
+-   [ModuleID](../api/sbt/librarymanagement/ModuleID.html) is the type of a dependency
+    definition. See
+    [Library Management][Library-Management].
+-   [Artifact](../api/sbt/librarymanagement/Artifact.html) represents a single artifact
+    (such as a jar or a pom) to be built and published. See
+    [Library Management][Library-Management] and [Artifacts][Artifacts].
+-   A [Resolver](../api/sbt/librarymanagement/Resolver.html) can resolve and retrieve
+    dependencies. Many types of Resolvers can publish dependencies as
+    well. A repository is a closely linked idea that typically refers to
+    the actual location of the dependencies. However, sbt is not very
+    consistent with this terminology and repository and resolver are
+    occasionally used interchangeably.
+-   A [ModuleConfiguration](../api/sbt/librarymanagement/ModuleConfiguration.html) defines
+    a specific resolver to use for a group of dependencies.
+-   A [Configuration](../api/sbt/librarymanagement/Configuration.html) is a useful Ivy
+    construct for grouping dependencies. See ivy-configurations. It is
+    also used for [scoping settings][Scopes].
+-   `Compile`, `Test`, `Runtime`, `Provided`, and `Optional` are
+    predefined [configurations][ivy-configurations].
+-->
+<!--
+#### Settings and Tasks
+
+-   A [Setting](../api/sbt/internal/util/Init\$Setting.html) describes how to
+    initialize a specific setting in the build. It can use the values of
+    other settings or the previous value of the setting being
+    initialized.
+-   A [SettingsDefinition](../api/sbt/internal/util/Init\$SettingsDefinition.html)
+    is the actual type of an expression in a build.sbt. This allows
+    either a single [Setting](../api/sbt/internal/util/Init\$Setting.html) or a
+    sequence of settings
+    ([SettingList](../api/sbt/internal/util/Init\$SettingList.html)) to be defined at
+    once. The types in a [.scala build definition][Full-Def] always use just a
+    plain [Setting](../api/sbt/internal/util/Init\$Setting.html).
+-   [Initialize](../api/sbt/internal/util/Init\$Initialize.html) describes how to
+    initialize a setting using other settings, but isn't bound to a
+    particular setting yet. Combined with an initialization method and a
+    setting to initialize, it produces a full
+    [Setting](../api/sbt/internal/util/Init\$Setting.html).
+-   [TaskKey](../api/sbt/TaskKey.html),
+    [SettingKey](../api/sbt/SettingKey.html), and
+    [InputKey](../api/sbt/InputKey.html) are keys that represent a task
+    or setting. These are not the actual tasks, but keys that are used
+    to refer to them. They can be scoped to produce
+    [ScopedTask](../api/sbt/ScopedTask.html),
+    [ScopedSetting](../api/sbt/ScopedSetting.html), and
+    [ScopedInput](../api/sbt/ScopedInput.html). These form the base
+    types that provide the Settings methods.
+-   [InputTask](../api/sbt/InputTask.html) parses and tab completes
+    user input, producing a task to run.
+-   [Task](../api/sbt/Task.html) is the type of a task. A task is an
+    action that runs on demand. This is in contrast to a setting, which
+    is run once at project initialization.
+-->
+<!--
+#### Build Structure
+
+-   [AutoPlugin](../api/sbt/AutoPlugin.html) is the trait implemented for sbt
+    [plugins][Using-Plugins].
+-   [Project](../api/sbt/Project.html) is both a trait and a
+    companion object that declares a single module in a build. See
+    [.scala build definition][Full-Def].
+-   [Keys](../api/sbt/Keys\$.html) is an object that provides all of
+    the built-in keys for settings and tasks.
+-   [State](../api/sbt/State.html) contains the full state for a
+    build. It is mainly used by [Commands][Commands] and sometimes
+    [Input Tasks][Input-Tasks]. See also [State and Actions][Build-State].
+
+-->
+<!--
+#### Settings and Tasks
+
+See the [Getting Started Guide][Basic-Def] for
+details.
+
+-   `in` specifies the [Scope](../api/sbt/Scope.html) or part of the
+    [Scope](../api/sbt/Scope.html) of a setting being referenced. See
+    [scopes][Scopes].
+-->
+<!--
+#### File and IO
+
+See [RichFile](../api/sbt/io/RichFile.html),
+[PathFinder](../api/sbt/io/PathFinder.html), and
+[Paths][Paths] for the full documentation.
+
+-   `/` When called on a single File, this is `new File(x,y)`. For
+    Seq[File], this is applied for each member of the sequence..
+-   `*` and `**` are methods for selecting children (`*`) or descendants
+    (`**`) of a File or Seq[File] that match a filter.
+-   `|`, `||`, `&&`, `&`, `-`, and `--` are methods for combining
+    filters, which are often used for selecting Files. See
+    [NameFilter](../api/sbt/io/NameFilter.html) and
+    [FileFilter](../api/sbt/io/FileFilter.html). Note that methods with
+    these names also exist for other types, such as collections (like
+    Seq) and [Parser](../api/sbt/internal/util/complete/Parser.html) (see
+    [Parsing Input][Parsing-Input]).
+-   `pair` Used to construct mappings from a `File` to another `File` or
+    to a String. See [Mapping Files][Mapping-Files].
+-   `get` forces a [PathFinder](../api/sbt/io/PathFinder.html) (a
+    call-by-name data structure) to a strict `Seq[File]` representation.
+    This is a common name in Scala, used by types like Option.
+-->
+<!--
+#### Dependency Management
+
+See [Library Management][Library-Management] for full documentation.
+
+-   `from` Used to specify the fallback URL for a dependency
+-   `classifier` Used to specify the classifier for a dependency.
+-   `at` Used to define a Maven-style resolver.
+-   `intransitive` Marks a [dependency](../api/sbt/librarymanagement/ModuleID.html) or
+    [Configuration](../api/sbt/librarymanagement/Configuration.html) as being
+    intransitive.
+-   `hide` Marks a [Configuration](../api/sbt/librarymanagement/Configuration.html) as
+    internal and not to be included in the published metadata.
+-->
+<!--
+#### Parsing
+
+These methods are used to build up
+[Parser](../api/sbt/internal/util/complete/Parser.html)s from smaller
+[Parser](../api/sbt/internal/util/complete/Parser.html)s. They closely follow the
+names of the standard library's parser combinators. See
+[Parsing Input][Parsing-Input] for the full documentation. These are
+used for
+[Input Tasks][Input-Tasks] and
+[Commands][Commands].
+
+-   `~`, `~>`, `<~` Sequencing methods.
+-   `??`, `?` Methods for making a Parser optional. `?` is postfix.
+-   `id` Used for turning a Char or String literal into a Parser. It is
+    generally used to trigger an implicit conversion to a Parser.
+-   `|`, `||` Choice methods. These are common method names in Scala.
+-   `^^^` Produces a constant value when a Parser matches.
+-   `+`, `*` Postfix repetition methods. These are common method names
+    in Scala.
+-   `map`, `flatMap` Transforms the result of a Parser. These are common
+    method names in Scala.
+-   `filter` Restricts the inputs that a Parser matches on. This is a
+    common method name in Scala.
+-   `-` Prefix negation. Only matches the input when the original parser
+    doesn't match the input.
+-   `examples`, `token` Tab completion
+-   `!!!` Provides an error message to use when the original parser
+    doesn't match the input.
+-->
+<div style="break-before: page; page-break-before: always;"></div><h1 id="setup-notes"><a class="header" href="#setup-notes">Setup Notes</a></h1>
+<p>See <a href="appendix/Setup.html">Installing sbt runner</a> for the instruction on general setup. Using Coursier or SDKMAN has two advantages.</p>
+<ol>
+<li>They will install the official packaging by Eclipse Adoptium etc, as opposed to the <a href="https://mail.openjdk.java.net/pipermail/jdk8u-dev/2019-May/009330.html">"mystery meat OpenJDK builds"</a>.</li>
+<li>They will install <code>tgz</code> packaging of sbt that contains all JAR files. (DEB and RPM packages do not to save bandwidth)</li>
+</ol>
+<p>This page describes alternative ways of installing the sbt runner. Note that some of the third-party packages may not provide the latest version.</p>
+<h2 id="os-specific-setup"><a class="header" href="#os-specific-setup">OS specific setup</a></h2>
+<h3 id="macos"><a class="header" href="#macos">macOS</a></h3>
+<h4 id="homebrew"><a class="header" href="#homebrew">Homebrew</a></h4>
+<pre><code class="language-bash">$ brew install sbt
+</code></pre>
+<div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
+<div class="admonition-title">
+<div id="admonition-warning-title">
+<p>Warning</p>
+</div>
+<a class="admonition-anchor-link" href="appendix/setup-notes.html#admonition-warning"></a>
+</div>
+<div>
+<p>Homebrew maintainers have added a dependency to JDK 13 because they want to use more brew dependencies (<a href="https://github.com/Homebrew/homebrew-core/issues/50649">brew#50649</a>). This causes sbt to use JDK 13 even when <code>java</code> available on PATH is JDK 8 or 11. To prevent <code>sbt</code> from running on JDK 13, install <a href="https://www.jenv.be/">jEnv</a> or switch to using <a href="https://sdkman.io/">SDKMAN</a>.</p>
+</div>
+</div>
+<h3 id="windows"><a class="header" href="#windows">Windows</a></h3>
+<ul>
+<li><a href="https://github.com/sbt/sbt/releases/download/v/sbt-.msi">sbt-.msi</a></li>
+</ul>
+<h4 id="chocolatey"><a class="header" href="#chocolatey"><a href="https://chocolatey.org/packages/sbt">Chocolatey</a></a></h4>
+<pre><code>&gt; choco install sbt
+</code></pre>
+<h4 id="scoop"><a class="header" href="#scoop"><a href="https://scoop.sh/">Scoop</a></a></h4>
+<pre><code>&gt; scoop install sbt
+</code></pre>
+<h3 id="linux"><a class="header" href="#linux">Linux</a></h3>
+<h4 id="ubuntu-and-other-debian-based-distributions"><a class="header" href="#ubuntu-and-other-debian-based-distributions">Ubuntu and other Debian-based distributions</a></h4>
+<p><a href="appendix/$sbt_deb_package_base$sbt-$app_version$.deb">DEB</a> package is officially supported by sbt, but it does not contain JAR files to save bandwidth.</p>
+<p>Ubuntu and other Debian-based distributions use the DEB format, but usually you don't install your software from a local DEB file. Instead they come with package managers both for the command line (e.g. <code>apt-get</code>, <code>aptitude</code>) or with a graphical user interface (e.g. Synaptic). Run the following from the terminal to install <code>sbt</code> (You'll need superuser privileges to do so, hence the <code>sudo</code>).</p>
+<pre><code class="language-bash">sudo apt-get update
+sudo apt-get install apt-transport-https curl gnupg -yqq
+echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | sudo tee /etc/apt/sources.list.d/sbt.list
+echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | sudo tee /etc/apt/sources.list.d/sbt_old.list
+curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&amp;search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | sudo -H gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/scalasbt-release.gpg --import
+sudo chmod 644 /etc/apt/trusted.gpg.d/scalasbt-release.gpg
+sudo apt-get update
+sudo apt-get install sbt
+</code></pre>
+<p>Package managers will check a number of configured repositories for packages to offer for installation. You just have to add the repository to the places your package manager will check.</p>
+<p>Once <code>sbt</code> is installed, you'll be able to manage the package in <code>aptitude</code> or Synaptic after you updated their package cache. You should also be able to see the added repository at the bottom of the list in System Settings -&gt; Software &amp; Updates -&gt; Other Software:</p>
+<p><img src="appendix//files/ubuntu-sources.png" alt="Ubuntu Software &amp; Updates Screenshot" title="Ubuntu Software &amp; Updates Screenshot" /></p>
+<p><code>sudo apt-key adv --keyserver hkps://keyserver.ubuntu.com:443 --recv 2EE0EA64E40A89B84B2DF73499E82A75642AC823</code> may not work on Ubuntu Bionic LTS (18.04) since it's using a buggy GnuPG, so we are advising to use web API to download the public key in the above.</p>
+<h4 id="red-hat-enterprise-linux-and-other-rpm-based-distributions"><a class="header" href="#red-hat-enterprise-linux-and-other-rpm-based-distributions">Red Hat Enterprise Linux and other RPM-based distributions</a></h4>
+<p><a href="appendix/$sbt_rpm_package_base$sbt-$app_version$.rpm">RPM</a> package is officially supported by sbt, but it does not contain JAR files to save bandwidth.</p>
+<p>Red Hat Enterprise Linux and other RPM-based distributions use the RPM format. Run the following from the terminal to install <code>sbt</code> (You'll need superuser privileges to do so, hence the <code>sudo</code>).</p>
+<pre><code class="language-bash"># remove old Bintray repo file
+sudo rm -f /etc/yum.repos.d/bintray-rpm.repo
+curl -L https://www.scala-sbt.org/sbt-rpm.repo &gt; sbt-rpm.repo
+sudo mv sbt-rpm.repo /etc/yum.repos.d/
+sudo yum install sbt
+</code></pre>
+<p>On Fedora (31 and above), use <code>sbt-rpm.repo</code>:</p>
+<pre><code class="language-bash"># remove old Bintray repo file
+sudo rm -f /etc/yum.repos.d/bintray-rpm.repo
+curl -L https://www.scala-sbt.org/sbt-rpm.repo &gt; sbt-rpm.repo
+sudo mv sbt-rpm.repo /etc/yum.repos.d/
+sudo dnf install sbt
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+    </div>
+    </body>
+</html>

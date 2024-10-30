@@ -1,0 +1,289 @@
+<!DOCTYPE HTML>
+<html lang="ja" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Library dependency basics - The Book of sbt</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../src/reference/custom-202410.css">
+        <link rel="stylesheet" href="../src/reference/mdbook-admonish.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">sbt 記</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">1.</strong> Quick Start</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../Setup.html"><strong aria-hidden="true">1.1.</strong> Installing sbt runner</a></li><li class="chapter-item expanded "><a href="../sbt-by-example.html"><strong aria-hidden="true">1.2.</strong> sbt by example</a></li></ol></li><li class="chapter-item expanded "><a href="../guide/index.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../guide/why-sbt-exists.html"><strong aria-hidden="true">2.1.</strong> Why sbt exists</a></li><li class="chapter-item expanded "><a href="../guide/sbt-new.html"><strong aria-hidden="true">2.2.</strong> Creating a new build</a></li><li class="chapter-item expanded "><a href="../guide/sbt-components.html"><strong aria-hidden="true">2.3.</strong> sbt components</a></li><li class="chapter-item expanded "><a href="../guide/basic-tasks.html"><strong aria-hidden="true">2.4.</strong> Basic tasks</a></li><li class="chapter-item expanded "><a href="../guide/build-definition-basics.html"><strong aria-hidden="true">2.5.</strong> Build definition basics</a></li><li class="chapter-item expanded "><a href="../guide/library-dependency-basics.html" class="active"><strong aria-hidden="true">2.6.</strong> Library dependency basics</a></li><li class="chapter-item expanded "><a href="../guide/multi-project-basics.html"><strong aria-hidden="true">2.7.</strong> Multi project basics</a></li><li class="chapter-item expanded "><a href="../guide/build-layout.html"><strong aria-hidden="true">2.8.</strong> Build layout</a></li><li class="chapter-item expanded "><a href="../guide/IDE.html"><strong aria-hidden="true">2.9.</strong> sbt with IDEs</a></li></ol></li><li class="chapter-item expanded "><a href="../changes/index.html"><strong aria-hidden="true">3.</strong> Changes</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../changes/sbt-2.0-change-summary.html"><strong aria-hidden="true">3.1.</strong> sbt 2.0 changes</a></li><li class="chapter-item expanded "><a href="../changes/migrating-from-sbt-1.x.html"><strong aria-hidden="true">3.2.</strong> Migrating from sbt 1.x</a></li></ol></li><li class="chapter-item expanded "><a href="../concepts/index.html"><strong aria-hidden="true">4.</strong> Concepts</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../concepts/command.html"><strong aria-hidden="true">4.1.</strong> Command</a></li><li class="chapter-item expanded "><a href="../concepts/cross-building.html"><strong aria-hidden="true">4.2.</strong> Cross building</a></li><li class="chapter-item expanded "><a href="../concepts/caching.html"><strong aria-hidden="true">4.3.</strong> Caching</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/index.html"><strong aria-hidden="true">5.</strong> Reference</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/sbt.html"><strong aria-hidden="true">5.1.</strong> sbt</a></li><li class="chapter-item expanded "><a href="../reference/sbt-update.html"><strong aria-hidden="true">5.2.</strong> sbt update</a></li><li class="chapter-item expanded "><a href="../reference/cross-building-setup.html"><strong aria-hidden="true">5.3.</strong> Cross building setup</a></li><li class="chapter-item expanded "><a href="../reference/remote-cache-setup.html"><strong aria-hidden="true">5.4.</strong> Remote cache setup</a></li></ol></li><li class="chapter-item expanded "><a href="../recipes/index.html"><strong aria-hidden="true">6.</strong> Recipes</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../recipes/hello-world.html"><strong aria-hidden="true">6.1.</strong> Write hello world</a></li><li class="chapter-item expanded "><a href="../recipes/use-sbt-as-metals-build-server.html"><strong aria-hidden="true">6.2.</strong> Use sbt as Metals build server</a></li><li class="chapter-item expanded "><a href="../recipes/import-to-intellij.html"><strong aria-hidden="true">6.3.</strong> Import to IntelliJ IDEA</a></li><li class="chapter-item expanded "><a href="../recipes/use-neovim.html"><strong aria-hidden="true">6.4.</strong> Use Neovim</a></li></ol></li><li class="chapter-item expanded "><a href="../appendix/glossary.html"><strong aria-hidden="true">7.</strong> Appendix: Glossary</a></li><li class="chapter-item expanded "><a href="../appendix/setup-notes.html"><strong aria-hidden="true">8.</strong> Appendix: Setup notes</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Book of sbt</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="library-dependency-basics"><a class="header" href="#library-dependency-basics">Library dependency basics</a></h1>
+<p>This page explains the basics of library dependency management using sbt.</p>
+<p>sbt uses <a href="https://get-coursier.io/">Coursier</a> to implement managed dependencies, so if you're familiar with package managers like Coursier, npm, PIP, etc you won't have much trouble.</p>
+<h2 id="the-librarydependencies-key"><a class="header" href="#the-librarydependencies-key">The <code>libraryDependencies</code> key</a></h2>
+<p>Declaring a dependency looks like this, where <code>groupId</code>, <code>artifactId</code>, and <code>revision</code> are strings:</p>
+<pre><code class="language-scala">libraryDependencies += groupID % artifactID % revision
+</code></pre>
+<p>or like this, where <code>configuration</code> can be a string or a <code>Configuration</code> value (such as <code>Test</code>):</p>
+<pre><code class="language-scala">libraryDependencies += groupID % artifactID % revision % configuration
+</code></pre>
+<p>When you run:</p>
+<pre><code>&gt; compile
+</code></pre>
+<p>sbt will automatically resolve the dependencies and download the JAR files.</p>
+<h3 id="getting-the-right-scala-version-with-"><a class="header" href="#getting-the-right-scala-version-with-">Getting the right Scala version with <code>%%</code></a></h3>
+<p>If you use <code>organization %% moduleName % version</code> rather than <code>organization % moduleName % version</code> (the difference is the double <code>%%</code> after the <code>organization</code>), sbt will add your project's binary Scala version to the artifact name. This is just a shortcut. You could write this without the <code>%%</code>:</p>
+<pre><code class="language-scala">libraryDependencies += "org.scala-lang" % "toolkit_3" % "0.2.0"
+</code></pre>
+<p>Assuming the <code>scalaVersion</code> for your build is 3.x, the following is identical (note the double <code>%%</code> after <code>"toolkit"</code>):</p>
+<pre><code class="language-scala">libraryDependencies += "org.scala-lang" %% "toolkit" % "0.2.0"
+</code></pre>
+<p>The idea is that many dependencies are compiled for multiple Scala versions, and you'd like to get the one that matches your project to ensure binary compatibility.</p>
+<h2 id="tracking-dependencies-in-one-place"><a class="header" href="#tracking-dependencies-in-one-place">Tracking dependencies in one place</a></h2>
+<p><code>.scala</code> files under <code>project</code> becomes part of the build definition, which we can use to track dependencies in one place by creating a file named <code>project/Dependencies.scala</code>.</p>
+<pre><code class="language-scala">// place this file at project/Dependencies.scala
+
+import sbt.*
+
+object Dependencies:
+  // versions
+  lazy val toolkitV = "0.2.0"
+
+  // libraries
+  val toolkit = "org.scala-lang" %% "toolkit" % toolkitV
+  val toolkitTest = "org.scala-lang" %% "toolkit-test" % toolkitV
+end Dependencies
+</code></pre>
+<p>The <code>Dependencies</code> object will be available in <code>build.sbt</code>. To make it easier to use the <code>val</code>s defined in it, import <code>Dependencies.*</code> in your build.sbt file.</p>
+<pre><code class="language-scala">import Dependencies.*
+
+scalaVersion := "3.3.3"
+name := "something"
+libraryDependencies += toolkit
+libraryDependencies += toolkitTest % Test
+</code></pre>
+<h2 id="viewing-library-dependencies"><a class="header" href="#viewing-library-dependencies">Viewing library dependencies</a></h2>
+<p>Type in <code>Compile/dependencyTree</code> in the sbt shell to show the library dependency tree, including the transitive dependencies:</p>
+<pre><code>&gt; Compile/dependencyTree
+</code></pre>
+<p>This should display something like the following:</p>
+<pre><code>sbt:bar&gt; Compile/dependencyTree
+[info] default:bar_3:0.1.0-SNAPSHOT
+[info]   +-org.scala-lang:scala3-library_3:3.3.1 [S]
+[info]   +-org.scala-lang:toolkit_3:0.2.0
+[info]     +-com.lihaoyi:os-lib_3:0.9.1
+[info]     | +-com.lihaoyi:geny_3:1.0.0
+[info]     | | +-org.scala-lang:scala3-library_3:3.1.3 (evicted by: 3.3.1)
+[info]     | | +-org.scala-lang:scala3-library_3:3.3.1 [S]
+....
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../guide/build-definition-basics.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../guide/multi-project-basics.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../guide/build-definition-basics.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../guide/multi-project-basics.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

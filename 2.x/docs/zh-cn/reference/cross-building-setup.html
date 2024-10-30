@@ -1,0 +1,299 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Cross building setup - The Book of sbt</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../src/reference/custom-202410.css">
+        <link rel="stylesheet" href="../src/reference/mdbook-admonish.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Introduction</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">1.</strong> Quick Start</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../Setup.html"><strong aria-hidden="true">1.1.</strong> Installing sbt runner</a></li><li class="chapter-item expanded "><a href="../sbt-by-example.html"><strong aria-hidden="true">1.2.</strong> sbt by example</a></li></ol></li><li class="chapter-item expanded "><a href="../guide/index.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../guide/why-sbt-exists.html"><strong aria-hidden="true">2.1.</strong> Why sbt exists</a></li><li class="chapter-item expanded "><a href="../guide/sbt-new.html"><strong aria-hidden="true">2.2.</strong> Creating a new build</a></li><li class="chapter-item expanded "><a href="../guide/sbt-components.html"><strong aria-hidden="true">2.3.</strong> sbt components</a></li><li class="chapter-item expanded "><a href="../guide/basic-tasks.html"><strong aria-hidden="true">2.4.</strong> Basic tasks</a></li><li class="chapter-item expanded "><a href="../guide/build-definition-basics.html"><strong aria-hidden="true">2.5.</strong> Build definition basics</a></li><li class="chapter-item expanded "><a href="../guide/library-dependency-basics.html"><strong aria-hidden="true">2.6.</strong> Library dependency basics</a></li><li class="chapter-item expanded "><a href="../guide/multi-project-basics.html"><strong aria-hidden="true">2.7.</strong> Multi project basics</a></li><li class="chapter-item expanded "><a href="../guide/build-layout.html"><strong aria-hidden="true">2.8.</strong> Build layout</a></li><li class="chapter-item expanded "><a href="../guide/IDE.html"><strong aria-hidden="true">2.9.</strong> sbt with IDEs</a></li></ol></li><li class="chapter-item expanded "><a href="../changes/index.html"><strong aria-hidden="true">3.</strong> Changes</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../changes/sbt-2.0-change-summary.html"><strong aria-hidden="true">3.1.</strong> sbt 2.0 changes</a></li><li class="chapter-item expanded "><a href="../changes/migrating-from-sbt-1.x.html"><strong aria-hidden="true">3.2.</strong> Migrating from sbt 1.x</a></li></ol></li><li class="chapter-item expanded "><a href="../concepts/index.html"><strong aria-hidden="true">4.</strong> Concepts</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../concepts/command.html"><strong aria-hidden="true">4.1.</strong> Command</a></li><li class="chapter-item expanded "><a href="../concepts/cross-building.html"><strong aria-hidden="true">4.2.</strong> Cross building</a></li><li class="chapter-item expanded "><a href="../concepts/caching.html"><strong aria-hidden="true">4.3.</strong> Caching</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/index.html"><strong aria-hidden="true">5.</strong> Reference</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/sbt.html"><strong aria-hidden="true">5.1.</strong> sbt</a></li><li class="chapter-item expanded "><a href="../reference/sbt-update.html"><strong aria-hidden="true">5.2.</strong> sbt update</a></li><li class="chapter-item expanded "><a href="../reference/cross-building-setup.html" class="active"><strong aria-hidden="true">5.3.</strong> Cross building setup</a></li><li class="chapter-item expanded "><a href="../reference/remote-cache-setup.html"><strong aria-hidden="true">5.4.</strong> Remote cache setup</a></li></ol></li><li class="chapter-item expanded "><a href="../recipes/index.html"><strong aria-hidden="true">6.</strong> Recipes</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../recipes/hello-world.html"><strong aria-hidden="true">6.1.</strong> Write hello world</a></li><li class="chapter-item expanded "><a href="../recipes/use-sbt-as-metals-build-server.html"><strong aria-hidden="true">6.2.</strong> Use sbt as Metals build server</a></li><li class="chapter-item expanded "><a href="../recipes/import-to-intellij.html"><strong aria-hidden="true">6.3.</strong> Import to IntelliJ IDEA</a></li><li class="chapter-item expanded "><a href="../recipes/use-neovim.html"><strong aria-hidden="true">6.4.</strong> Use Neovim</a></li></ol></li><li class="chapter-item expanded "><a href="../appendix/glossary.html"><strong aria-hidden="true">7.</strong> Appendix: Glossary</a></li><li class="chapter-item expanded "><a href="../appendix/setup-notes.html"><strong aria-hidden="true">8.</strong> Appendix: Setup notes</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Book of sbt</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="cross-building-setup"><a class="header" href="#cross-building-setup">Cross building setup</a></h1>
+<p>This page covers cross building setup. See <a href="../concepts/cross-building.html">Cross building</a> for general explanation.</p>
+<h2 id="using-cross-built-libraries"><a class="header" href="#using-cross-built-libraries">Using cross-built libraries</a></h2>
+<p>To use a library built against multiple versions of Scala, double the first <code>%</code> in a ModuleID to be <code>%%</code>. This tells sbt that it should append the current version of Scala being used to build the library to the dependency’s name. For example:</p>
+<pre><code class="language-scala">libraryDependencies += "org.typelevel" %% "cats-effect" % "3.5.4"
+</code></pre>
+<p>A nearly equivalent, manual alternative for a fixed version of Scala is:</p>
+<pre><code class="language-scala">libraryDependencies += "org.typelevel" % "cats-effect_3" % "3.5.4"
+</code></pre>
+<h3 id="scala-3-specific-cross-versions"><a class="header" href="#scala-3-specific-cross-versions">Scala 3 specific cross-versions</a></h3>
+<p>If you are developing an application in Scala 3, you can use Scala 2.13 libraries:</p>
+<pre><code class="language-scala">("a" % "b" % "1.0").cross(CrossVersion.for3Use2_13)
+</code></pre>
+<p>This is equivalent to using <code>%%</code> except it resolves the <code>_2.13</code> variant of the library  when <code>scalaVersion</code> is 3.x.y.</p>
+<p>Conversely we have <code>CrossVersion.for2_13Use3</code> to use the <code>_3</code> variant of the library when <code>scalaVersion</code> is 2.13.x:</p>
+<pre><code class="language-scala">("a" % "b" % "1.0").cross(CrossVersion.for2_13Use3)
+</code></pre>
+<div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
+<div class="admonition-title">
+<div id="admonition-warning-title">
+<p>Warning</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-warning"></a>
+</div>
+<div>
+<p><strong>Warning for library authors:</strong> It is generally not safe to publish a Scala 3 library that depends on a Scala 2.13 library or vice-versa. Doing so could introduce two versions of the same library like <code>scala-xml_2.13</code> and <code>scala-xml_3</code> on the end users' classpath.</p>
+</div>
+</div>
+<h3 id="more-about-using-cross-built-libraries"><a class="header" href="#more-about-using-cross-built-libraries">More about using cross-built libraries</a></h3>
+<p>You can have fine-grained control over the behavior for different Scala versions by using the <code>cross</code> method on <code>ModuleID</code> These are equivalent:</p>
+<pre><code class="language-scala">"a" % "b" % "1.0"
+("a" % "b" % "1.0").cross(CrossVersion.disabled)
+</code></pre>
+<p>These are equivalent:</p>
+<pre><code class="language-scala">"a" %% "b" % "1.0"
+("a" % "b" % "1.0").cross(CrossVersion.binary)
+</code></pre>
+<p>This overrides the defaults to always use the full Scala version instead of the binary Scala version:</p>
+<pre><code class="language-scala">("a" % "b" % "1.0").cross(CrossVersion.full)
+</code></pre>
+<p><code>CrossVersion.patch</code> sits between <code>CrossVersion.binary</code> and <code>CrossVersion.full</code> in that it strips off any trailing <code>-bin-...</code> suffix which is used to distinguish variant but binary compatible Scala toolchain builds.</p>
+<pre><code class="language-scala">("a" % "b" % "1.0").cross(CrossVersion.patch)
+</code></pre>
+<p><code>CrossVersion.constant</code> fixes a constant value:</p>
+<pre><code class="language-scala">("a" % "b" % "1.0").cross(CrossVersion.constant("2.9.1"))
+</code></pre>
+<p>It is equivalent to:</p>
+<pre><code class="language-scala">"a" % "b_2.9.1" % "1.0"
+</code></pre>
+<h2 id="project-matrix"><a class="header" href="#project-matrix">Project matrix</a></h2>
+<p>sbt 2.x introduces project matrix, which enables cross building to happen in parallel.</p>
+<pre><code class="language-scala">organization := "com.example"
+scalaVersion := "3.3.3"
+version      := "0.1.0-SNAPSHOT"
+
+lazy val core = (projectMatrix in file("core"))
+  .settings(
+    name := "core"
+  )
+  .jvmPlatform(scalaVersions = Seq("3.3.3", "2.13.15"))
+</code></pre>
+<h2 id="publishing-convention"><a class="header" href="#publishing-convention">Publishing convention</a></h2>
+<p>We use the Scala ABI (application binary interface) version as suffix to denote which version of Scala was used to compile a library. For example, the artifact name <code>cats-effect_2.13</code> means Scala 2.13.x was used. <code>cats-effect_3</code> means Scala 3.x was used. This fairly simple approach allows interoperability with users of Maven, Ant and other build tools. For pre-prelease versions of Scala, such as 2.13.0-RC1, full version will be considered the ABI version.</p>
+<p><code>crossVersion</code> setting can be used to override the publishing convention:</p>
+<ul>
+<li><code>CrossVersion.disabled</code> (no suffix)</li>
+<li><code>CrossVersion.binary</code> (<code>_&lt;scala-abi-version&gt;</code>)</li>
+<li><code>CrossVersion.full</code> (<code>_&lt;scala-version&gt;</code>)</li>
+</ul>
+<p>The default is either <code>CrossVersion.binary</code> or <code>CrossVersion.disabled</code> depending on the value of <code>crossPaths</code>. Because (unlike Scala library) Scala compiler is not forward compatible among the patch releases, compiler plugins should use <code>CrossVersion.full</code>.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../reference/sbt-update.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../reference/remote-cache-setup.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../reference/sbt-update.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../reference/remote-cache-setup.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
