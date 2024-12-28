@@ -217,7 +217,7 @@ import sbt.{ given, * }
 </code></pre>
 <h2 id="bare-settings-changes"><a class="header" href="#bare-settings-changes">Bare settings changes</a></h2>
 <pre><code class="language-scala">version := "0.1.0"
-scalaVersion := "3.3.3"
+scalaVersion := "3.6.2"
 </code></pre>
 <p><em>Bare settings</em>, like the example above, are settings written directly in <code>build.sbt</code> without <code>settings(...)</code>.</p>
 <div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
@@ -278,6 +278,19 @@ lazy val plugin = (project in file("plugin"))
 <pre><code class="language-scala">libraryDependencies += "org.scala-js" %% "scalajs-dom" % "2.8.0"
 </code></pre>
 <p>Use <code>.platform(Platform.jvm)</code> in case where JVM libraries are needed.</p>
+<h2 id="changes-to-target"><a class="header" href="#changes-to-target">Changes to <code>target</code></a></h2>
+<p>In sbt 2.x, the <code>target</code> directory is unified to be a single <code>target/</code> directory in the working directory, and each subproject creates a subdirectory encoding platform, Scala version, and the subproject id. To absorb this change in scripted tests, <code>exists</code>, <code>absent</code>, and <code>delete</code> now supports glob expression <code>**</code>, as well as <code>||</code>.</p>
+<pre><code class="language-bash"># before
+$ absent target/out/jvm/scala-3.3.1/clean-managed/src_managed/foo.txt
+$ exists target/out/jvm/scala-3.3.1/clean-managed/src_managed/bar.txt
+
+# after
+$ absent target/**/src_managed/foo.txt
+$ exists target/**/src_managed/bar.txt
+
+# either is ok
+$ exists target/**/proj/src_managed/bar.txt || proj/target/**/src_managed/bar.txt
+</code></pre>
 <h2 id="the-plugincompat-technique"><a class="header" href="#the-plugincompat-technique">The PluginCompat technique</a></h2>
 <p>To use the same <code>*.scala</code> source but target both sbt 1.x and 2.x, we can create a shim, for example an object named <code>PluginCompat</code> in both <code>src/main/scala-2.12/</code> and <code>src/main/scala-3/</code>.</p>
 <h3 id="migrating-classpath-type"><a class="header" href="#migrating-classpath-type">Migrating Classpath type</a></h3>
