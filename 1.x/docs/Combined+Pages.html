@@ -1030,7 +1030,7 @@ The key-value pairs are listed under the <code>.settings(...)</code> method as f
     scalaVersion := &quot;2.12.7&quot;
   )
 </code></pre><h3 id="How+build.sbt+defines+settings">How build.sbt defines settings<a href="#How+build.sbt+defines+settings" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>build.sbt</code> defines subprojects, which holds a sequence of key-value pairs
-called <em>setting expressions</em> using <em>build.sbt domain-specific language(DSL)</em>.
+called <em>setting expressions</em> using <em>build.sbt domain-specific language (DSL)</em>.
 </p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example&quot;
 ThisBuild / scalaVersion := &quot;2.12.18&quot;
 ThisBuild / version      := &quot;0.1.0-SNAPSHOT&quot;
@@ -1609,7 +1609,7 @@ only when <code>scalaBinaryVersion</code> is <code>&quot;2.11&quot;</code>.
     case _      =&gt; old
   }
 }
-</code></pre><h3 id="What%E2%80%99s+the+point+of+the+build.sbt+DSL%3F">What’s the point of the build.sbt DSL?<a href="#What%E2%80%99s+the+point+of+the+build.sbt+DSL%3F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>We use the <code>build.sbt</code> domain-specific language(DSL) to construct a DAG of settings and tasks.
+</code></pre><h3 id="What%E2%80%99s+the+point+of+the+build.sbt+DSL%3F">What’s the point of the build.sbt DSL?<a href="#What%E2%80%99s+the+point+of+the+build.sbt+DSL%3F" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>We use the <code>build.sbt</code> domain-specific language (DSL) to construct a DAG of settings and tasks.
 The setting expressions encode settings, tasks and the dependencies among them.
 </p><p>This structure is common to <a href="https://en.wikipedia.org/wiki/Make_(software)">Make</a> (1976), <a href="https://ant.apache.org/">Ant</a> (2000), and <a href="https://ruby.github.io/rake/">Rake</a> (2003).
 </p><h4 id="Intro+to+Make">Intro to Make<a href="#Intro+to+Make" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The basic Makefile syntax looks like the following:
@@ -12102,7 +12102,7 @@ object Obfuscate {
     sources
   }
 }
-</code></pre><h4 id="Usage+example">Usage example<a href="#Usage+example" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>A build definition that uses the plugin might look like. <code>obfuscate.sbt</code>:
+</code></pre><h4 id="Usage+example">Usage example<a href="#Usage+example" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>A build definition that uses the plugin might look like <code>obfuscate.sbt</code>:
 </p><pre><code class="prettyprint lang-scala">obfuscate / obfuscateLiterals := true
 </code></pre><h4 id="Global+plugins+example">Global plugins example<a href="#Global+plugins+example" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The simplest global plugin definition is declaring a library or plugin
 in <code>$HOME/.sbt/1.0/plugins/build.sbt</code>:
@@ -12194,14 +12194,14 @@ libraryDependencies ++=
 </code></pre><h3 id="Publishing+a+plugin">Publishing a plugin<a href="#Publishing+a+plugin" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Plugins can be published like any other projects. When publishing your plugin to a Maven-layout repository, use sbt 1.9.x or above.
 </p><p>However, there is one caveat if you attempt to publish your plugin to a repository that follows the Maven layout.
 </p><p>If your artifacts repository expect artifacts to be compliant with Maven layout and rejects artifacts that do not adhere to it you can:
-1. (recommended) If you and consumers of your plugin use sbt 1.9.x or above
-</p><p>   Since sbt 1.9, it tries to publish any plugin with both the new and legacy Maven style (for backward compatibility). The legacy Maven style is not fully compatible with Maven layout.
+</p><ol><li>(recommended) If you and consumers of your plugin use sbt 1.9.x or above
+</li></ol><p>   Since sbt 1.9, it tries to publish any plugin with both the new and legacy Maven style (for backward compatibility). The legacy Maven style is not fully compatible with Maven layout.
    You need to disable it with:
    <code>sbtPluginPublishLegacyMavenStyle := false</code>
    Notice that you won’t be able to consume this plugin with sbt older than 1.9, as it can only resolve the legacy Maven style (or you need to use the trick described in <a href="https://github.com/esbeetee/sbt-vspp">sbt-vspp</a>).
-3. If you use sbt &lt; 1.9.x
-</p><p>   You can use https://github.com/esbeetee/sbt-vspp/
-5. If you cannot use sbt 1.9.x and you cannot/don’t want to use sbt-vspp
+</p><ol><li>If you use sbt &lt; 1.9.x
+</li></ol><p>   You can use https://github.com/esbeetee/sbt-vspp/
+1. If you cannot use sbt 1.9.x and you cannot/don’t want to use sbt-vspp
 </p><p>   There should be an option like <code>Suppress POM Consistency Checks</code> in your artifactory settings that will allow you to submit artifacts even if they don’t fully follow Maven layout.
 </p><p>You can find more details about this in the <a href="https://github.com/sbt/sbt/issues/3410">following issue</a>.
 </p><h3 id="Best+Practices">Best Practices<a href="#Best+Practices" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>If you’re a plugin writer, please consult the <a href="Plugins-Best-Practices.html">Plugins Best Practices</a>
