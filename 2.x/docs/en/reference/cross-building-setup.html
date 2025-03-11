@@ -260,14 +260,14 @@
 <h2 id="project-matrix"><a class="header" href="#project-matrix">Project matrix</a></h2>
 <p>sbt 2.x introduces project matrix, which enables cross building to happen in parallel.</p>
 <pre><code class="language-scala">organization := "com.example"
-scalaVersion := "3.6.2"
+scalaVersion := "3.6.4"
 version      := "0.1.0-SNAPSHOT"
 
 lazy val core = (projectMatrix in file("core"))
   .settings(
     name := "core"
   )
-  .jvmPlatform(scalaVersions = Seq("3.6.2", "2.13.15"))
+  .jvmPlatform(scalaVersions = Seq("3.6.4", "2.13.15"))
 </code></pre>
 <h2 id="publishing-convention"><a class="header" href="#publishing-convention">Publishing convention</a></h2>
 <p>We use the Scala ABI (application binary interface) version as suffix to denote which version of Scala was used to compile a library. For example, the artifact name <code>cats-effect_2.13</code> means Scala 2.13.x was used. <code>cats-effect_3</code> means Scala 3.x was used. This fairly simple approach allows interoperability with users of Maven, Ant and other build tools. For pre-prelease versions of Scala, such as 2.13.0-RC1, full version will be considered the ABI version.</p>
@@ -283,7 +283,7 @@ lazy val core = (projectMatrix in file("core"))
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../reference/sbt-update.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../reference/sbt-run.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
@@ -297,7 +297,7 @@ lazy val core = (projectMatrix in file("core"))
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../reference/sbt-update.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../reference/sbt-run.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 

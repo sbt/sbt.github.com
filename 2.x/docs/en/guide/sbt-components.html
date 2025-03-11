@@ -222,14 +222,14 @@
 </ul>
 <h3 id="sbtn-sbt---client"><a class="header" href="#sbtn-sbt---client">sbtn (<code>sbt --client</code>)</a></h3>
 <p>sbtn (native thin client) is a subcomponent of sbt runner, called when you pass <code>--client</code> flag to sbt runner, and is used to send commands to sbt server. It is called sbtn because it is compiled to native code using GraalVM native-image. The protocol between sbtn and sbt server is stable enough that it should work between <strong>most recent versions</strong> of sbt.</p>
-<h2 id="sbt-server"><a class="header" href="#sbt-server">sbt server</a></h2>
+<h2 id="sbt-server-sbt---server"><a class="header" href="#sbt-server-sbt---server">sbt server (<code>sbt --server</code>)</a></h2>
 <p>sbt server is the actual build tool whose version is specified using <code>project/build.properties</code>. sbt server acts as a cashier to take commands from sbtn and editors.</p>
 <h3 id="coursier"><a class="header" href="#coursier">Coursier</a></h3>
 <p>sbt server runs <a href="https://get-coursier.io/">Couriser</a> as a subcomponent to resolve Scala library, Scala compiler, and any other library dependencies your build needs.</p>
 <h3 id="zinc"><a class="header" href="#zinc">Zinc</a></h3>
 <p>Zinc is the incremental compiler for Scala, developed and maintained by sbt project.
 An often overlooked aspect of Zinc is that Zinc provides a stable API to invoke <strong>any modern versions</strong> of Scala compiler. Combined with the fact that Coursier can resolve any Scala version, with sbt we can invoke any modern versions of Scala just by writing a single line <code>build.sbt</code>:</p>
-<pre><code class="language-scala">scalaVersion := "3.6.2"
+<pre><code class="language-scala">scalaVersion := "3.6.4"
 </code></pre>
 <h3 id="bsp-server"><a class="header" href="#bsp-server">BSP server</a></h3>
 <p>sbt server supports <a href="https://build-server-protocol.github.io/">Build Server Protocol (BSP)</a> to list build targets, build them, etc.
@@ -237,11 +237,22 @@ This allows IDEs like IntelliJ and Metals to communicate with a running sbt serv
 <h2 id="connecting-to-sbt-server"><a class="header" href="#connecting-to-sbt-server">Connecting to sbt server</a></h2>
 <p>Let's look at three ways of connecting to sbt server.</p>
 <h3 id="sbt-shell-using-sbtn"><a class="header" href="#sbt-shell-using-sbtn">sbt shell using sbtn</a></h3>
-<p>Run <code>sbt --client</code> in the working directory of your build:</p>
-<pre><code class="language-bash">sbt --client
+<p>Run <code>sbt</code> in the working directory of your build:</p>
+<pre><code class="language-bash">sbt
 </code></pre>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note"></a>
+</div>
+<div>
+<p>In sbt 1.x, equivalent command was <code>sbt --client</code></p>
+</div>
+</div>
 <p>This should display something like the following:</p>
-<pre><code class="language-bash">$ sbt --client
+<pre><code class="language-bash">$ sbt
 [info] server was not detected. starting an instance
 [info] welcome to sbt 2.0.0-alpha7 (Azul Systems, Inc. Java 1.8.0_352)
 [info] loading project definition from /private/tmp/bar/project
@@ -261,10 +272,10 @@ sbt:bar&gt;
 <p>To leave sbt shell, type <code>exit</code> or use <code>Ctrl-D</code> (Unix) or <code>Ctrl-Z</code> (Windows).</p>
 <h3 id="batch-mode-using-sbtn"><a class="header" href="#batch-mode-using-sbtn">Batch mode using sbtn</a></h3>
 <p>You can also run sbt in batch mode:</p>
-<pre><code class="language-bash">sbt --client compile
-sbt --client testOnly TestA
+<pre><code class="language-bash">sbt compile
+sbt testOnly TestA
 </code></pre>
-<pre><code class="language-bash">$ sbt --client compile
+<pre><code class="language-bash">$ sbt compile
 &gt; compile
 </code></pre>
 <h3 id="shutting-down-sbt-server"><a class="header" href="#shutting-down-sbt-server">Shutting down sbt server</a></h3>
@@ -272,7 +283,7 @@ sbt --client testOnly TestA
 <pre><code class="language-bash">sbt shutdownall
 </code></pre>
 <p>Or the following to shutdown just the current one:</p>
-<pre><code class="language-bash">sbt --client shutdown
+<pre><code class="language-bash">sbt shutdown
 </code></pre>
 
                     </main>

@@ -213,7 +213,7 @@
 <p>这是关于 sbt 2.x 的草稿文档，目前尚未发布。虽然总体概念可以应用到 sbt 1.x，但 2.x 及本文档的详细内容可能会有所变动。</p>
 <p><img src="files/sbt-logo.svg" alt="sbt logo" /></p>
 <p>sbt 是一个用于 Scala 和 Java 的简单构建工具。 sbt 通过 Coursier 下载你的库依赖， 增量编译和测试项目， 并与 IntelliJ 和 VS Code 等 IDE 集成， 打包 JAR 文件并发布到 <a href="https://central.sonatype.com/">Maven Central</a>， 这是 JVM 社区的包注册表。</p>
-<pre><code class="language-scala">scalaVersion := "3.6.2"
+<pre><code class="language-scala">scalaVersion := "3.6.4"
 </code></pre>
 <p>你只需要在 <code>build.sbt</code> 中添加一行代码即可开始使用 Scala。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="安装-sbt-runner"><a class="header" href="#安装-sbt-runner">安装 sbt runner</a></h1>
@@ -322,7 +322,7 @@ Hello
 [success] elapsed time: 0 s, cache 50%, 1 disk cache hit, 1 onsite task
 </code></pre>
 <h3 id="set-thisbuild--scalaversion-from-sbt-shell"><a class="header" href="#set-thisbuild--scalaversion-from-sbt-shell">Set ThisBuild / scalaVersion from sbt shell</a></h3>
-<pre><code>sbt:foo-build&gt; set scalaVersion := "3.6.2"
+<pre><code>sbt:foo-build&gt; set scalaVersion := "3.6.4"
 [info] Defining scalaVersion
 [info] The new value will be used by Compile / bspBuildTarget, Compile / dependencyTreeCrossProjectId and 51 others.
 [info]  Run `last` for details.
@@ -331,7 +331,7 @@ Hello
 </code></pre>
 <p>Check the <code>scalaVersion</code> setting:</p>
 <pre><code>sbt:foo-build&gt; scalaVersion
-[info] 3.6.2
+[info] 3.6.4
 </code></pre>
 <h3 id="save-the-session-to-buildsbt"><a class="header" href="#save-the-session-to-buildsbt">Save the session to build.sbt</a></h3>
 <p>We can save the ad-hoc settings using <code>session save</code>.</p>
@@ -346,7 +346,7 @@ Hello
 [warn] Disable this warning by setting `Global / onChangedBuildSource := IgnoreSourceChanges`.
 </code></pre>
 <p><code>build.sbt</code> file should now contain:</p>
-<pre><code class="language-scala">scalaVersion := "3.6.2"
+<pre><code class="language-scala">scalaVersion := "3.6.4"
 
 </code></pre>
 <h3 id="name-your-project"><a class="header" href="#name-your-project">Name your project</a></h3>
@@ -873,24 +873,35 @@ $ sbt new scala/scala3.g8
 </ul>
 <h3 id="sbtn-sbt---client"><a class="header" href="#sbtn-sbt---client">sbtn (<code>sbt --client</code>)</a></h3>
 <p>sbtn (native thin client) is a subcomponent of sbt runner, called when you pass <code>--client</code> flag to sbt runner, and is used to send commands to sbt server. It is called sbtn because it is compiled to native code using GraalVM native-image. The protocol between sbtn and sbt server is stable enough that it should work between <strong>most recent versions</strong> of sbt.</p>
-<h2 id="sbt-server"><a class="header" href="#sbt-server">sbt server</a></h2>
+<h2 id="sbt-server-sbt---server"><a class="header" href="#sbt-server-sbt---server">sbt server (<code>sbt --server</code>)</a></h2>
 <p>sbt server is the actual build tool whose version is specified using <code>project/build.properties</code>. sbt server acts as a cashier to take commands from sbtn and editors.</p>
 <h3 id="coursier"><a class="header" href="#coursier">Coursier</a></h3>
 <p>sbt server runs <a href="https://get-coursier.io/">Couriser</a> as a subcomponent to resolve Scala library, Scala compiler, and any other library dependencies your build needs.</p>
 <h3 id="zinc"><a class="header" href="#zinc">Zinc</a></h3>
 <p>Zinc is the incremental compiler for Scala, developed and maintained by sbt project. An often overlooked aspect of Zinc is that Zinc provides a stable API to invoke <strong>any modern versions</strong> of Scala compiler. Combined with the fact that Coursier can resolve any Scala version, with sbt we can invoke any modern versions of Scala just by writing a single line <code>build.sbt</code>:</p>
-<pre><code class="language-scala">scalaVersion := "3.6.2"
+<pre><code class="language-scala">scalaVersion := "3.6.4"
 </code></pre>
 <h3 id="bsp-server"><a class="header" href="#bsp-server">BSP server</a></h3>
 <p>sbt server supports <a href="https://build-server-protocol.github.io/">Build Server Protocol (BSP)</a> to list build targets, build them, etc. This allows IDEs like IntelliJ and Metals to communicate with a running sbt server programmatically.</p>
 <h2 id="connecting-to-sbt-server"><a class="header" href="#connecting-to-sbt-server">Connecting to sbt server</a></h2>
 <p>Let's look at three ways of connecting to sbt server.</p>
 <h3 id="sbt-shell-using-sbtn"><a class="header" href="#sbt-shell-using-sbtn">sbt shell using sbtn</a></h3>
-<p>Run <code>sbt --client</code> in the working directory of your build:</p>
-<pre><code class="language-bash">sbt --client
+<p>Run <code>sbt</code> in the working directory of your build:</p>
+<pre><code class="language-bash">sbt
 </code></pre>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="guide/sbt-components.html#admonition-note"></a>
+</div>
+<div>
+<p>In sbt 1.x, equivalent command was <code>sbt --client</code></p>
+</div>
+</div>
 <p>This should display something like the following:</p>
-<pre><code class="language-bash">$ sbt --client
+<pre><code class="language-bash">$ sbt
 [info] server was not detected. starting an instance
 [info] welcome to sbt 2.0.0-alpha7 (Azul Systems, Inc. Java 1.8.0_352)
 [info] loading project definition from /private/tmp/bar/project
@@ -910,10 +921,10 @@ sbt:bar&gt;
 <p>To leave sbt shell, type <code>exit</code> or use <code>Ctrl-D</code> (Unix) or <code>Ctrl-Z</code> (Windows).</p>
 <h3 id="batch-mode-using-sbtn"><a class="header" href="#batch-mode-using-sbtn">Batch mode using sbtn</a></h3>
 <p>You can also run sbt in batch mode:</p>
-<pre><code class="language-bash">sbt --client compile
-sbt --client testOnly TestA
+<pre><code class="language-bash">sbt compile
+sbt testOnly TestA
 </code></pre>
-<pre><code class="language-bash">$ sbt --client compile
+<pre><code class="language-bash">$ sbt compile
 &gt; compile
 </code></pre>
 <h3 id="shutting-down-sbt-server"><a class="header" href="#shutting-down-sbt-server">Shutting down sbt server</a></h3>
@@ -921,7 +932,7 @@ sbt --client testOnly TestA
 <pre><code class="language-bash">sbt shutdownall
 </code></pre>
 <p>Or the following to shutdown just the current one:</p>
-<pre><code class="language-bash">sbt --client shutdown
+<pre><code class="language-bash">sbt shutdown
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="basic-tasks"><a class="header" href="#basic-tasks">Basic tasks</a></h1>
 <p>This page describes how to use sbt once you have set up your project. This page assumes you've read <a href="guide/./sbt-components.html">sbt components</a>.</p>
@@ -1087,7 +1098,7 @@ key           operator   (setting/task) body
 val toolkit = "org.scala-lang" %% "toolkit" % toolkitV
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % toolkitV
 
-scalaVersion := "3.6.2"
+scalaVersion := "3.6.4"
 libraryDependencies += toolkit
 libraryDependencies += (toolkitTest % Test)
 </code></pre>
@@ -1155,7 +1166,7 @@ end Dependencies
 <p>The <code>Dependencies</code> object will be available in <code>build.sbt</code>. To make it easier to use the <code>val</code>s defined in it, import <code>Dependencies.*</code> in your build.sbt file.</p>
 <pre><code class="language-scala">import Dependencies.*
 
-scalaVersion := "3.6.2"
+scalaVersion := "3.6.4"
 name := "something"
 libraryDependencies += toolkit
 libraryDependencies += toolkitTest % Test
@@ -1179,7 +1190,7 @@ libraryDependencies += toolkitTest % Test
 <p>While a simple program can start out as a single-project build, it's more common for a build to split into smaller, multiple subprojects.</p>
 <p>Each subproject in a build has its own source directories, generates its own JAR file when you run <code>packageBin</code>, and in general works like any other project.</p>
 <p>A project is defined by declaring a lazy val of type <a href="guide/../../api/sbt/Project.html">Project</a>. For example, :</p>
-<pre><code class="language-scala">scalaVersion := "3.6.2"
+<pre><code class="language-scala">scalaVersion := "3.6.4"
 
 lazy val core = (project in file("core"))
   .settings(
@@ -1295,7 +1306,7 @@ lazy val util = (project in file("util"))
 <h2 id="changes-with-compatibility-implications"><a class="header" href="#changes-with-compatibility-implications">Changes with compatibility implications</a></h2>
 <p>See also <a href="changes/./migrating-from-sbt-1.x.html">Migrating from sbt 1.x</a>.</p>
 <ul>
-<li>sbt 2.x uses Scala 3.x (currently <strong>3.6.2</strong>) for build definitions and plugins (Both sbt 1.x and 2.x are capable of building Scala 2.x and 3.x) by <a href="https://github.com/eed3si9n">@eed3si9n</a>, <a href="https://github.com/adpi2">@adpi2</a>, and others.</li>
+<li>sbt 2.x uses Scala 3.x (currently <strong>3.6.4</strong>) for build definitions and plugins (Both sbt 1.x and 2.x are capable of building Scala 2.x and 3.x) by <a href="https://github.com/eed3si9n">@eed3si9n</a>, <a href="https://github.com/adpi2">@adpi2</a>, and others.</li>
 <li>Bare settings are added to all subprojects, as opposed to just the root subproject, and thus replacing the role that <code>ThisBuild</code> has played.</li>
 <li><code>test</code> task is changed to be incremental test that can cache test results. Use <code>testFull</code> for full test by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7686">#7686</a></li>
 <li>Default settings and tasks keys typed to <code>URL</code> <code>apiMappings</code>, <code>apiURL</code>, <code>homepage</code>, <code>organizationHomepage</code>, <code>releaseNotesURL</code> were changed to <code>URI</code> in <a href="https://github.com/sbt/sbt/pull/7927">#7927</a>.</li>
@@ -1304,7 +1315,7 @@ lazy val util = (project in file("util"))
 <li>sbt 2.x adds <code>platform</code> setting so <code>ModuleID</code>'s <code>%%</code> operator can cross build on JVM as well as JS and Native, as opposed to <code>%%%</code> operator that was created in a plugin to workaround this issue, by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/6746">#6746</a></li>
 <li>Dropped <code>useCoursier</code> setting so Coursier cannot be opted out, by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7712">#7712</a></li>
 <li><code>Key.Classpath</code> is changed to be an alias of the <code>Seq[Attributed[xsbti.HashedVirtualFileRef]]</code> type, instead of <code>Seq[Attributed[File]]</code>. Similarly, some task keys that used to return <code>File</code> have changed to return <code>HashedVirtualFileRef</code> instead. See <a href="changes/../concepts/caching.html#caching-files">Caching Files</a>.</li>
-<li>In sbt 2.x <code>target</code> defaults to <code>target/out/jvm/scala-3.6.2/&lt;subproject&gt;/</code>, as opposed to <code>&lt;subproject&gt;/target/</code>.</li>
+<li>In sbt 2.x <code>target</code> defaults to <code>target/out/jvm/scala-3.6.4/&lt;subproject&gt;/</code>, as opposed to <code>&lt;subproject&gt;/target/</code>.</li>
 </ul>
 <h3 id="dropped-dreprecations"><a class="header" href="#dropped-dreprecations">Dropped dreprecations</a></h3>
 <ul>
@@ -1318,7 +1329,7 @@ lazy val util = (project in file("util"))
 </ul>
 <h3 id="common-settings"><a class="header" href="#common-settings">Common settings</a></h3>
 <p>In sbt 2.x, the bare settings in <code>build.sbt</code> are interpreted to be common settings, and are injected to all subprojects. This means we can now set <code>scalaVersion</code> without using <code>ThisBuild</code> scoping:</p>
-<pre><code class="language-scala">scalaVersion := "3.6.2"
+<pre><code class="language-scala">scalaVersion := "3.6.4"
 </code></pre>
 <p>This also fixes the so-called dynamic dispatch problem:</p>
 <pre><code class="language-scala">lazy val hi = taskKey[String]("")
@@ -1379,7 +1390,7 @@ import sbt.{ given, * }
 </code></pre>
 <h2 id="bare-settings-changes"><a class="header" href="#bare-settings-changes">Bare settings changes</a></h2>
 <pre><code class="language-scala">version := "0.1.0"
-scalaVersion := "3.6.2"
+scalaVersion := "3.6.4"
 </code></pre>
 <p><em>Bare settings</em>, like the example above, are settings written directly in <code>build.sbt</code> without <code>settings(...)</code>.</p>
 <div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
@@ -1547,14 +1558,14 @@ private[sbtfoo] object PluginCompat {
 <h2 id="project-matrix"><a class="header" href="#project-matrix">Project matrix</a></h2>
 <p>sbt 2.x introduces project matrix, which enables cross building to happen in parallel.</p>
 <pre><code class="language-scala">organization := "com.example"
-scalaVersion := "3.6.2"
+scalaVersion := "3.6.4"
 version      := "0.1.0-SNAPSHOT"
 
 lazy val core = (projectMatrix in file("core"))
   .settings(
     name := "core"
   )
-  .jvmPlatform(scalaVersions = Seq("3.6.2", "2.13.15"))
+  .jvmPlatform(scalaVersions = Seq("3.6.4", "2.13.15"))
 </code></pre>
 <p>See <a href="concepts/../reference/cross-building-setup.html">cross building setup</a> for more details on the setup.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="caching"><a class="header" href="#caching">Caching</a></h1>
@@ -2112,6 +2123,20 @@ shortened to:
 libraryDependencies += "org.scalatest" %% "scalatest" % "$example_scalatest_version$" % "test"
 ```
 -->
+<div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-run"><a class="header" href="#sbt-run">sbt run</a></h1>
+<h2 id="synopsis-2"><a class="header" href="#synopsis-2">Synopsis</a></h2>
+<p><code>sbt run</code></p>
+<h2 id="description-2"><a class="header" href="#description-2">Description</a></h2>
+<p>The <code>run</code> task provides a means for running the user program.</p>
+<p>In sbt 1.x and earlier, <code>run</code> task ran the user program in the same Java virtual machine (JVM) as the sbt server. sbt 2.x implements <em>client-side run</em>: the <code>run</code> task creates a sandbox environment that contains the program, sends the information back to sbtn, and sbtn launches the user program in a fresh JVM.</p>
+<h3 id="motivations"><a class="header" href="#motivations">Motivations</a></h3>
+<p>There are several motivations for the client-side run.</p>
+<h4 id="sysexit"><a class="header" href="#sysexit">sys.exit</a></h4>
+<p>User code can call <code>sys.exit</code>, which normally shuts down the JVM. In sbt 1.x, we needed to trap these <code>sys.exit</code> calls to prevent <code>run</code> from shutting down the sbt session, using the JDK SecurityManager; however, TrapExit was dropped in sbt 1.6.0 (2021) since JDK 17 deprecated SecurityManager feature.</p>
+<h4 id="isolation"><a class="header" href="#isolation">Isolation</a></h4>
+<p>User code can also start threads, or otherwise allocate resources that can be left running after the main method returns. Running user code in a separate JVM gives isolation between the sbt server and the user code.</p>
+<h4 id="sbt-server-availability"><a class="header" href="#sbt-server-availability">sbt server availability</a></h4>
+<p>Since the program will run outside of the sbt server, it can become available to the more requests by other clients, for example test or IDE integration.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="cross-building-setup"><a class="header" href="#cross-building-setup">Cross building setup</a></h1>
 <p>This page covers cross building setup. See <a href="reference/../concepts/cross-building.html">Cross building</a> for general explanation.</p>
 <h2 id="using-cross-built-libraries-1"><a class="header" href="#using-cross-built-libraries-1">Using cross-built libraries</a></h2>
@@ -2164,14 +2189,14 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "$example_scalatest_vers
 <h2 id="project-matrix-1"><a class="header" href="#project-matrix-1">Project matrix</a></h2>
 <p>sbt 2.x introduces project matrix, which enables cross building to happen in parallel.</p>
 <pre><code class="language-scala">organization := "com.example"
-scalaVersion := "3.6.2"
+scalaVersion := "3.6.4"
 version      := "0.1.0-SNAPSHOT"
 
 lazy val core = (projectMatrix in file("core"))
   .settings(
     name := "core"
   )
-  .jvmPlatform(scalaVersions = Seq("3.6.2", "2.13.15"))
+  .jvmPlatform(scalaVersions = Seq("3.6.4", "2.13.15"))
 </code></pre>
 <h2 id="publishing-convention"><a class="header" href="#publishing-convention">Publishing convention</a></h2>
 <p>We use the Scala ABI (application binary interface) version as suffix to denote which version of Scala was used to compile a library. For example, the artifact name <code>cats-effect_2.13</code> means Scala 2.13.x was used. <code>cats-effect_3</code> means Scala 3.x was used. This fairly simple approach allows interoperability with users of Maven, Ant and other build tools. For pre-prelease versions of Scala, such as 2.13.0-RC1, full version will be considered the ABI version.</p>
@@ -2273,7 +2298,7 @@ Global / remoteCacheHeaders += IO.read(BuildPaths.defaultGlobalBase / "nativelin
 </li>
 <li>
 <p>Under <code>hello_scala/</code>, create <code>build.sbt</code>:</p>
-<pre><code class="language-scala">scalaVersion := "3.6.2"
+<pre><code class="language-scala">scalaVersion := "3.6.4"
 </code></pre>
 </li>
 <li>
