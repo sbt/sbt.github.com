@@ -1,9 +1,9 @@
 <!DOCTYPE HTML>
-<html lang="ja" class="light sidebar-visible" dir="ltr">
+<html lang="en" class="light sidebar-visible" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Caching - The Book of sbt</title>
+        <title>sbt query - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -151,7 +151,7 @@
                           langToggle.addEventListener("click", (event) => {
                               langList.style.display = langList.style.display == "block" ? "none" : "block";
                           });
-                          let selectedLang = document.getElementById("ja");
+                          let selectedLang = document.getElementById("en");
                           if (selectedLang) {
                               selectedLang.parentNode.classList.add("theme-selected");
                           }
@@ -161,7 +161,7 @@
                           let full_path_to_root = "../../";
                           // The page path (mdbook only gives us
                           // access to the path to the Markdown file).
-                          let path = "concepts/caching.md".replace(/\.md$/, ".html");
+                          let path = "concepts/sbt-query.md".replace(/\.md$/, ".html");
                           for (let lang of langList.querySelectorAll("a")) {
                             lang.href = `${full_path_to_root}${lang.id}/${path}`;
                           }
@@ -208,77 +208,99 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="caching"><a class="header" href="#caching">Caching</a></h1>
-<p>sbt 2.0 introduces hybrid local/remote cache system, which can cache the task results to local disk and Bazel-compatible remote cache. Throughout sbt releases it has implemented various caches, like <code>update</code> cache, incremental compilation, but sbt 2.x's cache is a significant step change for a few reasons:</p>
-<ol>
-<li><strong>Automatic</strong>. sbt 2.x cache automates the caching by embedding itself into the task macro unlike sbt 1.x wherein the plugin author called the cache functions manually in the task implementation.</li>
-<li><strong>Machine-wide</strong>. sbt 2.x disk cache is shared among all builds on a machine.</li>
-<li><strong>Remote-ready</strong>. In sbt 2.x, the cache storage is configured separately such that all cacheable tasks are automatically remote-cache-ready.</li>
-</ol>
-<h2 id="basics-of-caching"><a class="header" href="#basics-of-caching">Basics of caching</a></h2>
-<p>The basic idea is treat as if the build process is a pure function that takes input <code>(A1, A2, A3, ...)</code> and return some outputs <code>(R1, List(O1, O2, O3, ...))</code>. For example, we can take a list of source files, Scala version, and produce a <code>*.jar</code> file at the end. If the assumption holds, then for the same inputs, we can memorize the ouput JAR for everyone. We are interested in this technique because using the memorized output JAR would be faster than performing the actual task like Scala compilation etc.</p>
-<h3 id="hermetic-build"><a class="header" href="#hermetic-build">Hermetic build</a></h3>
-<p>As a mental model of the <em>build as a pure function</em>, build engineers sometimes use the term <em>hermetic build</em>, which is a build that takes place in a shipping container in a dessert with no clocks or the Internet. If we can produce a JAR file from that state, then the JAR file should be safe to be shared by any machine. Why did I mention the clock? It's because a JAR file could capture the timestamp, and thus produce slightly different JARs each time. To avoid this, hermetic build tools overwrite the timestamp to a fixed date 2010-01-01 regardless of when the build took place.</p>
-<p>A build that ends up capturing ephemeral inputs, are said to <em>break the hermeticity</em> or <em>non-hermetic</em>. Another common way the hermeticity is broken is capturing absolute paths as either input or output. Sometimes the path gets embedded into the JAR via a macro, you might not know until you inspect the bytecode.</p>
-<h2 id="automatic-caching"><a class="header" href="#automatic-caching">Automatic caching</a></h2>
-<p>Here's a demonstration of the automatic caching:</p>
-<pre><code class="language-scala">import sbt.util.CacheImplicits.given
+                        <h1 id="sbt-query"><a class="header" href="#sbt-query">sbt query</a></h1>
+<p>sbt 2.x extends the slash syntax to enable aggregation of subprojects:</p>
+<p><em>act</em> <code>::=</code> [ <em>query</em> <code>/</code> ] [ <em>config</em> <code>/</code> ] [ <em>in-task</em> <code>/</code> ] ( <em>taskKey</em> | <em>settingKey</em> )</p>
+<p>In other words, sbt query is a new way of writing the subproject-axis.</p>
+<h3 id="subproject-reference"><a class="header" href="#subproject-reference">Subproject reference</a></h3>
+<p>A subproject reference works a query to select the subproject:</p>
+<div id="admonition-buildsbt-example-1" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-example-1-title">
+<div class="admonition-title">
+<div id="admonition-buildsbt-example-1-title">
+<p>build.sbt example 1</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-buildsbt-example-1"></a>
+</div>
+<div>
+<pre><code class="language-scala">scalaVersion := "3.6.4"
 
-val someKey = taskKey[String]("something")
+lazy val foo = project
+</code></pre>
+</div>
+</div>
+<p>Given the above build, we can run tests on <code>foo</code> subproject as follows, which is the same syntax as it was in sbt 1.x:</p>
+<pre><code>foo/test
+</code></pre>
+<h3 id="-wildcard"><a class="header" href="#-wildcard"><code>...</code> wildcard</a></h3>
+<p><code>...</code> wildcard matches to any characters, and can be combined with other letters and numbers to filter down the root aggregate list. For example, we can run tests on all subproject that starts with <code>foo</code> as follows:</p>
+<pre><code>foo.../test
+</code></pre>
+<div id="admonition-note--vs-" class="admonition admonish-note" role="note" aria-labelledby="admonition-note--vs--title">
+<div class="admonition-title">
+<div id="admonition-note--vs--title">
+<p>Note: * vs ...</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note--vs-"></a>
+</div>
+<div>
+<p>sbt query intentionally uses <code>...</code> (dot dot dot) instead of more intuitive <code>*</code> (asterisk) because <code>*</code> is often used in a shell as a wildcard to match existing files or directories. This would require quoting, and forgetting to quote <code>*/test</code> would match to something like <code>src/test</code>.</p>
+</div>
+</div>
+<h3 id="scalabinaryversion-parameter"><a class="header" href="#scalabinaryversion-parameter"><code>@scalaBinaryVersion</code> parameter</a></h3>
+<p><code>@scalaBinaryVersion</code> parameter matches to the subproject's <code>scalaBinaryVersion</code> setting.</p>
+<div id="admonition-example" class="admonition admonish-example" role="note" aria-labelledby="admonition-example-title">
+<div class="admonition-title">
+<div id="admonition-example-title">
+<p>Example</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-example"></a>
+</div>
+<div>
+<pre><code class="language-scala">val toolkitV = "0.5.0"
+val toolkit = "org.scala-lang" %% "toolkit" % toolkitV
 
-someKey := (Def.cachedTask {
-  name.value + version.value + "!"
-}).value
+lazy val foo = projectMatrix
+  .settings(
+    libraryDependencies += toolkit,
+  )
+  .jvmPlatform(scalaVersions = Seq("3.6.4", "2.13.15"))
+
+lazy val bar = projectMatrix
+  .settings(
+    libraryDependencies += toolkit,
+  )
+  .jvmPlatform(scalaVersions = Seq("3.6.4", "2.13.15"))
 </code></pre>
-<p>The task will be automatically cached based on the two settings <code>name</code> and <code>version</code>. The first time we run the task it will be executed onsite, but the second time onward, it will use the disk cache:</p>
-<pre><code>sbt:demo&gt; show someKey
-[info] demo0.1.0-SNAPSHOT!
-[success] elapsed time: 0 s, cache 0%, 1 onsite task
-sbt:demo&gt; show someKey
-[info] demo0.1.0-SNAPSHOT!
-[success] elapsed time: 0 s, cache 100%, 1 disk cache hit
+</div>
+</div>
+<p>For example, we can run tests on all 3.x subprojects as follows:</p>
+<pre><code>...@scalaBinaryVersion=3/test
 </code></pre>
-<h3 id="caching-is-serialization-hard"><a class="header" href="#caching-is-serialization-hard">Caching is serialization-hard</a></h3>
-<p>To participate in the automatic caching, the input keys (e.g. <code>name</code> and <code>version</code>) must provide a given for <code>sjsonnew.HashWriter</code> typeclass and return type must provide a given for <code>sjsonnew.JsonFormat</code>. <a href="https://www.scala-sbt.org/contraband/">Contraband</a> can be used to generate sjson-new codecs.</p>
-<h2 id="caching-files"><a class="header" href="#caching-files">Caching files</a></h2>
-<p>Caching files (e.g. <code>java.io.File</code>) requires its own consideration, not because it's technically difficult, but mostly because of the ambiguity and assumptions when files are involved. When we say a "file" it could actually mean:</p>
-<ol>
-<li>Relative path from a well-known location</li>
-<li>Materialized actual file</li>
-<li>A unique proof of a file, or a content hash</li>
-</ol>
-<p>Technically speaking, a <code>File</code> just means the file path, so we can deserialize just the filename such as <code>target/a/b.jar</code>. This will fail the downstream tasks if they assumed that <code>target/a/b.jar</code> would exist in the file system. For clarity, and also for avoiding to capture absolute paths, sbt 2.x provides three separate types for the three cases.</p>
-<ul>
-<li><code>xsbti.VirtualFileRef</code> is used to mean just the relative path, which is equivalent to passing a string</li>
-<li><code>xsbti.VirtualFile</code> represents a materialized file with contents, which could be a virtual file or a file in your disk</li>
-</ul>
-<p>However, for the purpose of hermetic build, neither is great to represent a list of files. Having just the filename alone doesn't guarantee that the file will be the same, and carrying the entire content of the files is too inefficient in a JSON etc.</p>
-<p>This is where the mysterious third option, a unique proof of file comes in handy. In addition to the relative path, <code>HashedVirtualFileRef</code> tracks the SHA-256 content hash and the file size. This can easily be serialized to JSON yet we can reference the exact file.</p>
-<h3 id="the-effect-of-file-creation"><a class="header" href="#the-effect-of-file-creation">The effect of file creation</a></h3>
-<p>There are many tasks that generate file that do not use <code>VirtualFile</code> as the return type. For example, <code>compile</code> returns <code>Analysis</code> instead, and <code>*.class</code> file generation happens as a <em>side effect</em> in sbt 1.x.</p>
-<p>To participate in caching, we need to declare these effects as something we care about.</p>
-<pre><code class="language-scala">someKey := Def.cachedTask {
-  val conv = fileConverter.value
-  val out: java.nio.file.Path = createFile(...)
-  val vf: xsbti.VirtualFile = conv.toVirtualFile(out)
-  Def.declareOutput(vf)
-  vf: xsbti.HashedVirtualFileRef
-}
+<p>This can be used from a terminal as follows:</p>
+<pre><code class="language-bash">$ sbt ...@scalaBinaryVersion=3/test
+[info] entering *experimental* thin client - BEEP WHIRR
+[info] terminate the server with `shutdown`
+&gt; ...@scalaBinaryVersion=3/test
+[info] Passed: Total 0, Failed 0, Errors 0, Passed 0
+[info] No tests to run for Test / testQuick
+[info] compiling 1 Scala source to /tmp/foo/target/out/jvm/scala-3.6.4/foo/test-backend ...
+[info] Passed: Total 0, Failed 0, Errors 0, Passed 0
+[info] No tests to run for bar / Test / testQuick
+example.ExampleSuite:
+  + Scala version 0.003s
+[info] Passed: Total 1, Failed 0, Errors 0, Passed 1
 </code></pre>
-<h2 id="remote-caching"><a class="header" href="#remote-caching">Remote caching</a></h2>
-<p>You can optionally extend the build to use remote cache in addition to the local disk cache. Remote caching could improve build performance by allowing multiple machines to share build artifacts and outputs.</p>
-<p>Imagine you have a dozen people in your project or a company. Each morning, you will <code>git pull</code> the changes the dozen people made, and you need to build their code. If you have a successful project, the code size will only get bigger over time, and the % of the time you spend building someone else's in your day increases. This becomes the limiting factor of your team size and code size. Remote caching reverses this tide by CI systems hydrate the cache and you can download the artifacts and task outputs.</p>
-<p>sbt 2.x implements Bazel-compatible gRPC interface, which works with number of backend both open source and commercial.</p>
+<p>This lets us filter down the aggregated subprojects, which could be a lot using <code>projectMatrix</code>.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../concepts/sbt-query.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../concepts/cross-building.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../reference/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../concepts/caching.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -288,11 +310,11 @@ sbt:demo&gt; show someKey
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../concepts/sbt-query.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../concepts/cross-building.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../reference/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../concepts/caching.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

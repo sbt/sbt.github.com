@@ -1666,6 +1666,89 @@ lazy val core = (projectMatrix in file("core"))
   .jvmPlatform(scalaVersions = Seq("3.6.4", "2.13.15"))
 </code></pre>
 <p>See <a href="concepts/../reference/cross-building-setup.html">cross building setup</a> for more details on the setup.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-query-1"><a class="header" href="#sbt-query-1">sbt query</a></h1>
+<p>sbt 2.x extends the slash syntax to enable aggregation of subprojects:</p>
+<p><em>act</em> <code>::=</code> [ <em>query</em> <code>/</code> ] [ <em>config</em> <code>/</code> ] [ <em>in-task</em> <code>/</code> ] ( <em>taskKey</em> | <em>settingKey</em> )</p>
+<p>In other words, sbt query is a new way of writing the subproject-axis.</p>
+<h3 id="subproject-reference"><a class="header" href="#subproject-reference">Subproject reference</a></h3>
+<p>A subproject reference works a query to select the subproject:</p>
+<div id="admonition-buildsbt-example-1" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-example-1-title">
+<div class="admonition-title">
+<div id="admonition-buildsbt-example-1-title">
+<p>build.sbt example 1</p>
+</div>
+<a class="admonition-anchor-link" href="concepts/sbt-query.html#admonition-buildsbt-example-1"></a>
+</div>
+<div>
+<pre><code class="language-scala">scalaVersion := "3.6.4"
+
+lazy val foo = project
+</code></pre>
+</div>
+</div>
+<p>Given the above build, we can run tests on <code>foo</code> subproject as follows, which is the same syntax as it was in sbt 1.x:</p>
+<pre><code>foo/test
+</code></pre>
+<h3 id="-wildcard"><a class="header" href="#-wildcard"><code>...</code> wildcard</a></h3>
+<p><code>...</code> wildcard matches to any characters, and can be combined with other letters and numbers to filter down the root aggregate list. For example, we can run tests on all subproject that starts with <code>foo</code> as follows:</p>
+<pre><code>foo.../test
+</code></pre>
+<div id="admonition-note--vs-" class="admonition admonish-note" role="note" aria-labelledby="admonition-note--vs--title">
+<div class="admonition-title">
+<div id="admonition-note--vs--title">
+<p>Note: * vs ...</p>
+</div>
+<a class="admonition-anchor-link" href="concepts/sbt-query.html#admonition-note--vs-"></a>
+</div>
+<div>
+<p>sbt query intentionally uses <code>...</code> (dot dot dot) instead of more intuitive <code>*</code> (asterisk) because <code>*</code> is often used in a shell as a wildcard to match existing files or directories. This would require quoting, and forgetting to quote <code>*/test</code> would match to something like <code>src/test</code>.</p>
+</div>
+</div>
+<h3 id="scalabinaryversion-parameter"><a class="header" href="#scalabinaryversion-parameter"><code>@scalaBinaryVersion</code> parameter</a></h3>
+<p><code>@scalaBinaryVersion</code> parameter matches to the subproject's <code>scalaBinaryVersion</code> setting.</p>
+<div id="admonition-example" class="admonition admonish-example" role="note" aria-labelledby="admonition-example-title">
+<div class="admonition-title">
+<div id="admonition-example-title">
+<p>Example</p>
+</div>
+<a class="admonition-anchor-link" href="concepts/sbt-query.html#admonition-example"></a>
+</div>
+<div>
+<pre><code class="language-scala">val toolkitV = "0.5.0"
+val toolkit = "org.scala-lang" %% "toolkit" % toolkitV
+
+lazy val foo = projectMatrix
+  .settings(
+    libraryDependencies += toolkit,
+  )
+  .jvmPlatform(scalaVersions = Seq("3.6.4", "2.13.15"))
+
+lazy val bar = projectMatrix
+  .settings(
+    libraryDependencies += toolkit,
+  )
+  .jvmPlatform(scalaVersions = Seq("3.6.4", "2.13.15"))
+</code></pre>
+</div>
+</div>
+<p>For example, we can run tests on all 3.x subprojects as follows:</p>
+<pre><code>...@scalaBinaryVersion=3/test
+</code></pre>
+<p>This can be used from a terminal as follows:</p>
+<pre><code class="language-bash">$ sbt ...@scalaBinaryVersion=3/test
+[info] entering *experimental* thin client - BEEP WHIRR
+[info] terminate the server with `shutdown`
+&gt; ...@scalaBinaryVersion=3/test
+[info] Passed: Total 0, Failed 0, Errors 0, Passed 0
+[info] No tests to run for Test / testQuick
+[info] compiling 1 Scala source to /tmp/foo/target/out/jvm/scala-3.6.4/foo/test-backend ...
+[info] Passed: Total 0, Failed 0, Errors 0, Passed 0
+[info] No tests to run for bar / Test / testQuick
+example.ExampleSuite:
+  + Scala version 0.003s
+[info] Passed: Total 1, Failed 0, Errors 0, Passed 1
+</code></pre>
+<p>This lets us filter down the aggregated subprojects, which could be a lot using <code>projectMatrix</code>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="caching"><a class="header" href="#caching">Caching</a></h1>
 <p>sbt 2.0 introduces hybrid local/remote cache system, which can cache the task results to local disk and Bazel-compatible remote cache. Throughout sbt releases it has implemented various caches, like <code>update</code> cache, incremental compilation, but sbt 2.x's cache is a significant step change for a few reasons:</p>
 <ol>
