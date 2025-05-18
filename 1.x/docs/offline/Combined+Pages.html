@@ -3845,37 +3845,38 @@ and redirected <a href="https://repo.scala-sbt.org/scalasbt/">https://repo.scala
 so existing builds should continue to work without making any changes today and after May 1st.
 For plugin hosting, we will operate this as a read-only repository.
 Any new plugin releases should migrate to using <a href="Using-Sonatype.html">Sonatype OSS</a>.
-</p><h2 id="Using+Sonatype">Using Sonatype<a href="#Using+Sonatype" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Deploying to sonatype is easy! Just follow these simple steps:
-</p><h3 id="Sonatype+setup">Sonatype setup<a href="#Sonatype+setup" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The reference process for configuring and publishing to Sonatype is
-described in their <a href="https://central.sonatype.org/publish/publish-guide/">OSSRH Guide</a>.
-In short, you need two publicly available URLs:
-</p><ul><li>the website of the project e.g. https://github.com/sonatype/nexus-public
-</li><li>the project’s source code e.g. https://github.com/sonatype/nexus-public.git
-</li></ul><p>The <a href="https://central.sonatype.org/publish/publish-guide/">OSSRH Guide</a> walks you through the required
-process of setting up the account with Sonatype. It’s as simple as
-<a href="https://issues.sonatype.org/secure/Signup!default.jspa">creating a Sonatype's JIRA account</a> and then a
-<a href="https://issues.sonatype.org/secure/CreateIssue.jspa?issuetype=21&amp;pid=10134">New Project ticket</a>. When creating the account, try to
-use the same domain in your email address that the project is hosted on.
-It makes it easier for Sonatype to validate the relationship with the groupId requested in
-the ticket, but it is not the only method used to confirm the ownership.
-</p><p>Creation of the <em>New Project ticket</em> is as simple as:
-</p><ul><li>providing the name of the library in the ticket’s subject,
-</li><li>naming the groupId for distributing the library (make sure
-it matches the root package of your code). Sonatype provides
-additional hints on choosing the right groupId for publishing your library in
-<a href="https://central.sonatype.org/publish/requirements/coordinates/">Choosing your coordinates guide</a>.
-</li><li>providing the SCM and Project URLs to the source code and homepage of the
-library.
-</li></ul><p>After creating your Sonatype account on JIRA, you can log in
-to the <a href="https://oss.sonatype.org/#welcome">Nexus Repository Manager</a> using the same credentials,
-although this is not required in the guide, it can be helpful later to check
-on published artifacts.
-</p><blockquote><p><em>Note:</em> Sonatype advises that responding to a <strong>New Project ticket</strong> might
-take up to two business days, but in my case it was a few minutes.
-</p></blockquote><h3 id="sbt+setup">sbt setup<a href="#sbt+setup" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To address Sonatype’s <a href="https://central.sonatype.org/publish/requirements/">requirements</a> for publishing to the central repository and to simplify the publishing process, you can
+</p><h2 id="Using+Sonatype">Using Sonatype<a href="#Using+Sonatype" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Publishing to the Central Repository is easy!
+</p><h4 id="Central+Portal+and+Legacy+OSSRH">Central Portal and Legacy OSSRH<a href="#Central+Portal+and+Legacy+OSSRH" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The Central Repository (aka Maven Central) has long been the pillar of the JVM ecosystem,
+including Scala. The mechanism to publish libraries to the Central has been hosted by Sonatype
+as OSS Repository Hosting (OSSRH) via <code>HTTP PUT</code>; however, in March 2025 it was
+<a href="https://central.sonatype.org/news/20250326_ossrh_sunset/">announced</a> that the endpoint will be sunset on June 30th, 2025
+in favor of the Central Portal at <a href="https://central.sonatype.com/">https://central.sonatype.com/</a>.
+</p><table style="border: 1px solid gray; width: 80%;">
+<tr><th>&nbsp;</th><th>Central Portal</th> <th>Legacy OSSRH</th></tr>
+<tr><td>sbt version</td> <td>Use sbt <b>1.11.0-RC2</b>+</td> <td>Any sbt 1.x version</td></tr>
+<tr><td>Availability</td> <td>Available</td> <td>Sunset on 2025-06-30</td></tr>
+</table><br>
+<p>Publishing to the Central Portal is built into sbt, for sbt 1.11.0-RC2 and above.
+The rest of this page will document the publishing process for Central Portal,
+but there are some notes at the end for the Legacy OSSRH publishing.
+</p><h4 id="Central+Portal+registration">Central Portal registration<a href="#Central+Portal+registration" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The reference process for configuring and publishing to the Central Repository is
+described in Sonatype’s <a href="https://central.sonatype.org/register/central-portal/">Publish guides</a>.
+</p><p>The <a href="https://central.sonatype.org/register/central-portal/">Publish guides</a> walk you through the required
+process of setting up the account with the Central Portal.
+When creating a personal account, try to authenticate via GitHub,
+which will automatically associate <code>io.github.&lt;user_name&gt;</code>.
+</p><p>Otherwise, follow the steps described in <a href="https://central.sonatype.org/register/namespace/">register a namespace</a> guide
+to associate a domain name with your account.
+</p><p><strong>Note</strong>: To convert an existing account to the Central Portal,
+go to <a href="https://central.sonatype.com/">https://central.sonatype.com/</a>, nagivate to <strong>Sign In</strong>, then use the existing
+Sonatype OSSRH user name and password to try to log in. If it doesn’t work, use <strong>Forgot password</strong>
+link to reset the password instead of creating a fresh account.
+This should let you log into the Central Portal while still keeping your namespaces still associated
+with the Legacy OSSRH publishing until you migrate them.
+</p><h3 id="sbt+setup">sbt setup<a href="#sbt+setup" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To address Sonatype’s <a href="https://central.sonatype.org/publish/requirements/">requirements</a> for publishing to the central repository and to simplify the publishing process, you can
 use two community plugins. The <a href="https://github.com/sbt/sbt-pgp#sbt-pgp">sbt-pgp plugin</a> can sign the files with GPG/PGP.
-(Optionally <a href="https://github.com/xerial/sbt-sonatype">sbt-sonatype</a> can publish to a Sonatype repository nicer.)
-</p><h4 id="step+1%3A+PGP+Signatures">step 1: PGP Signatures<a href="#step+1%3A+PGP+Signatures" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Follow <a href="https://central.sonatype.org/pages/working-with-pgp-signatures.html">Working with PGP Signatures</a>.
+(Optionally <a href="https://github.com/sbt/sbt-ci-release">sbt-ci-release</a> can automate the publishing process.)
+</p><h4 id="step+1%3A+PGP+Signatures">step 1: PGP Signatures<a href="#step+1%3A+PGP+Signatures" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Follow the Sonatype’s <a href="https://central.sonatype.org/publish/requirements/gpg/">GPG guide</a>.
 </p><p>First, you should <a href="https://www.gnupg.org/download/">install GnuPG</a>, and verify the version:
 </p><pre><code class="">$ gpg --version
 gpg (GnuPG/MacGPG2) 2.2.8
@@ -3900,27 +3901,26 @@ sub   rsa4096 2018-08-22 [E]
 you want to publish to the Sonatype repository with the <a href="https://github.com/sbt/sbt-pgp#sbt-pgp">sbt-pgp plugin</a>. Follow
 the instructions for the plugin and you’ll have PGP signed artifacts in no
 time.
-</p><p>In short, add the following line to your <code>~/.sbt/1.0/plugins/gpg.sbt</code> file to
-enable it globally for SBT projects:
-</p><pre><code class="">addSbtPlugin(&quot;com.github.sbt&quot; % &quot;sbt-pgp&quot; % &quot;2.1.2&quot;)
+</p><p>In short, add the following line to your <code>project/plugins.sbt</code> file to
+enable it for your build:
+</p><pre><code class="">addSbtPlugin(&quot;com.github.sbt&quot; % &quot;sbt-pgp&quot; % &quot;2.3.1&quot;)
 </code></pre><blockquote><p><em>Note:</em> The plugin is a solution to sign artifacts. It works with the GPG command line tool.
 </p></blockquote><p>Make sure that the <code>gpg</code> command is in PATH available to the sbt.
-</p><h4 id="step+3%3A+Credentials">step 3: Credentials<a href="#step+3%3A+Credentials" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The credentials for your Sonatype OSSRH account need to be stored
-somewhere safe (<em>e.g. NOT in the repository</em>). Common convention is a
-<code>$HOME/.sbt/1.0/sonatype.sbt</code> file, with the following:
-</p><pre><code class="prettyprint lang-scala">credentials += Credentials(Path.userHome / &quot;.sbt&quot; / &quot;sonatype_credentials&quot;)
-</code></pre><p>Next create a file <code>~/.sbt/sonatype_credentials</code>:
-</p><pre><code class="">realm=Sonatype Nexus Repository Manager
-host=oss.sonatype.org
+</p><h4 id="step+3%3A+Credentials">step 3: Credentials<a href="#step+3%3A+Credentials" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Generate a user token from the portal to be used for the credentials.
+The token must be stored somewhere safe (<em>e.g. NOT in the repository</em>).
+A common convention is a <code>$HOME/.sbt/1.0/credentials.sbt</code> file, with the following:
+</p><pre><code class="prettyprint lang-scala">credentials += Credentials(Path.userHome / &quot;.sbt&quot; / &quot;sonatype_central_credentials&quot;)
+</code></pre><p>Next create a file <code>~/.sbt/sonatype_central_credentials</code>:
+</p><pre><code class="">host=central.sonatype.com
 user=&lt;your username&gt;
 password=&lt;your password&gt;
-</code></pre><blockquote><p><em>Note:</em> The first two strings must be <code>&quot;Sonatype Nexus Repository Manager&quot;</code>
-and <code>&quot;oss.sonatype.org&quot;</code> for Coursier to use the credentials. If you are using
-a new OSSRH account created after February 2021, use <code>&quot;s01.oss.sonatype.org&quot;</code>
-instead of <code>&quot;oss.sonatype.org&quot;</code>
-</p></blockquote><h4 id="step+4%3A+Configure+build.sbt">step 4: Configure build.sbt<a href="#step+4%3A+Configure+build.sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>To publish to a maven repository, you’ll need to configure a few
+</code></pre><h4 id="step+4%3A+Configure+build.sbt">step 4: Configure build.sbt<a href="#step+4%3A+Configure+build.sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>To publish to a Maven repository, you’ll need to configure a few
 settings so that the correct metadata is generated.
-</p><p>Add these settings at the end of <code>build.sbt</code> or a separate <code>publish.sbt</code>:
+</p><p><strong>Note</strong>: To publish to the Central Portal, set <code>ThisBuild / publishTo</code>
+must be set to the <code>localStaging</code> repository:
+</p><pre><code class="prettyprint lang-scala">// new setting for the Central Portal
+ThisBuild / publishTo := localStaging.value
+</code></pre><p>Add these settings at the end of <code>build.sbt</code> or a separate <code>publish.sbt</code>:
 </p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example.project2&quot;
 ThisBuild / organizationName := &quot;example&quot;
 ThisBuild / organizationHomepage := Some(url(&quot;http://example.com/&quot;))
@@ -3948,72 +3948,59 @@ ThisBuild / homepage := Some(url(&quot;https://github.com/example/project&quot;)
 
 // Remove all additional repository other than Maven Central from POM
 ThisBuild / pomIncludeRepository := { _ =&gt; false }
-ThisBuild / publishTo := {
-  // For accounts created after Feb 2021:
-  // val nexus = &quot;https://s01.oss.sonatype.org/&quot;
-  val nexus = &quot;https://oss.sonatype.org/&quot;
-  if (isSnapshot.value) Some(&quot;snapshots&quot; at nexus + &quot;content/repositories/snapshots&quot;)
-  else Some(&quot;releases&quot; at nexus + &quot;service/local/staging/deploy/maven2&quot;)
-}
 ThisBuild / publishMavenStyle := true
+ThisBuild / publishTo := localStaging.value
 </code></pre><p>The full format of a <code>pom.xml</code> (an end product of the project configuration
 used by Maven) file is <a href="https://maven.apache.org/pom.html">outlined here</a>.
 You can add more data to it with the <code>pomExtra</code> option in <code>build.sbt</code>.
-</p><h4 id="step+5%3A+Publishing">step 5: Publishing<a href="#step+5%3A+Publishing" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>From sbt shell run:
+</p><h4 id="step+5%3A+Stage+the+artifacts">step 5: Stage the artifacts<a href="#step+5%3A+Stage+the+artifacts" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>From sbt shell run:
 </p><pre><code class="">&gt; publishSigned
-</code></pre><p>Check the published artifacts in the <a href="https://oss.sonatype.org/#welcome">Nexus Repository Manager</a>
-(same login as Sonatype’s Jira account).
-</p><p>Close the staging repository and promote the release to central, by hitting
-“Close” button, then “Release” button.
-</p><h3 id="Optional+steps">Optional steps<a href="#Optional+steps" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="sbt-sonatype">sbt-sonatype<a href="#sbt-sonatype" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><blockquote><p><em>Note:</em> sbt-sonatype is a third-party plugin meaning it is not covered by Lightbend subscription.
-</p></blockquote><p>To simplify the usage of the Sonatype’s Nexus, add the following line to
-<code>project/plugins.sbt</code> to import the <a href="https://github.com/xerial/sbt-sonatype">sbt-sonatype plugin</a> to your project:
-</p><pre><code class="">addSbtPlugin(&quot;org.xerial.sbt&quot; % &quot;sbt-sonatype&quot; % &quot;3.9.13&quot;)
-</code></pre><p>This plugin will facilitate the publishing process, but in short, these are
-the main steps for publishing the libraries to the repository:
-</p><ol><li>Create a new staging repository:
-<code>sonatypeOpen &quot;your groupId&quot; &quot;Some staging name&quot;</code>
-</li><li>Sign and publish the library to the staging repository:
-<code>publishSigned</code>
-</li><li>You can and should check the published artifacts in the
-<a href="https://oss.sonatype.org/#welcome">Nexus Repository Manager</a> (same login as Sonatype’s
-Jira account)
-</li><li>Close the staging repository and promote the release to central:
-<code>sonatypeRelease</code>
-</li></ol><p>Below are some important keys to take note of when using this plugin. <a href="https://github.com/xerial/sbt-sonatype">Read here</a>
-for more information.
-</p><pre><code class="prettyprint lang-scala">// This becomes a simplified version of the above key.
-publishTo := sonatypePublishToBundle.value
-// Set this to the same value set as your credential files host.
-sonatypeCredentialHost := &quot;oss.sonatype.org&quot;
-// Set this to the repository to publish to using `s01.oss.sonatype.org`
-// for accounts created after Feb. 2021.
-sonatypeRepository := &quot;https://oss.sonatype.org/service/local&quot;
-</code></pre><p>After publishing you have to follow the
-<a href="https://central.sonatype.org/publish/release/">release workflow of Nexus</a>.
-</p><blockquote><p><em>Note:</em> the sbt-sonatype plugin can also be used to publish to other non-sonatype
-repositories
-</p></blockquote><h4 id="Publishing+tips">Publishing tips<a href="#Publishing+tips" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Use staged releases to test across large projects of independent releases
-before pushing the full project.
-</p><blockquote><p><em>Note:</em> An error message of <code>PGPException: checksum mismatch at 0 of 20</code>
-indicates that you got the passphrase wrong. We have found at least on
-OS X that there may be issues with characters outside the 7-bit ASCII
-range (e.g. Umlauts). If you are absolutely sure that you typed the
-right phrase and the error doesn’t disappear, try changing the
-passphrase.
-</p></blockquote><blockquote><p><em>Note:</em> If you are using a new OSSRH account created after February 2021,
-use <code>&quot;s01.oss.sonatype.org&quot;</code> instead of <code>&quot;oss.sonatype.org&quot;</code>
-</p></blockquote><h4 id="Integrate+with+the+release+process">Integrate with the release process<a href="#Integrate+with+the+release+process" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><blockquote><p><em>Note:</em> sbt-release is a third-party plugin meaning it is not covered by Lightbend subscription.
-</p></blockquote><p>To automate the publishing approach above with the <a href="https://github.com/sbt/sbt-release">sbt-release plugin</a>, you should simply add the publishing commands as steps in the
+</code></pre><h4 id="step+6%3A+Upload+or+release+the+bundle">step 6: Upload or release the bundle<a href="#step+6%3A+Upload+or+release+the+bundle" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>From sbt shell run:
+</p><pre><code class="">&gt; sonaUpload
+</code></pre><p>This will upload the bundle to the <a href="https://central.sonatype.com/">Central Portal</a>.
+Hit the “Publish” button to publish to the Central Repository.
+</p><p>If you want to automate the publishing, run:
+</p><pre><code class="">&gt; sonaRelease
+</code></pre><p>It might take 10 minutes to a few hours for the published artifacts to be
+visible on the Central Repository <a href="https://repo1.maven.org/maven2/">https://repo1.maven.org/maven2/</a>.
+</p><h3 id="Optional+steps">Optional steps<a href="#Optional+steps" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="Tag-based+publishing+via+sbt-ci-release">Tag-based publishing via sbt-ci-release<a href="#Tag-based+publishing+via+sbt-ci-release" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>You can further optimize the publishing flow by using the <a href="https://github.com/sbt/sbt-ci-release">sbt-ci-release</a> plugin.
+</p><p>Once you set it up, all you have to do is push a git tag to trigger a release.
+</p><h4 id="Integrate+with+the+release+process">Integrate with the release process<a href="#Integrate+with+the+release+process" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>To automate the publishing approach above with the <a href="https://github.com/sbt/sbt-release">sbt-release plugin</a>, you should simply add the publishing commands as steps in the
 <code>releaseProcess</code> task:
 </p><pre><code class="">...
 releaseStepCommand(&quot;sonatypeOpen \&quot;your groupId\&quot; \&quot;Some staging name\&quot;&quot;),
 ...
 releaseStepCommand(&quot;publishSigned&quot;),
 ...
-releaseStepCommand(&quot;sonatypeRelease&quot;),
+releaseStepCommand(&quot;sonaRelease&quot;),
 ...
-</code></pre><h2 id="Contributing+to+sbt">Contributing to sbt<a href="#Contributing+to+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Below is a running list of potential areas of contribution. This list
+</code></pre><a id="ossrh"></a><h3 id="Publishing+to+the+Legacy+OSSRH">Publishing to the Legacy OSSRH<a href="#Publishing+to+the+Legacy+OSSRH" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="Credentials+for+the+Legacy+OSSRH">Credentials for the Legacy OSSRH<a href="#Credentials+for+the+Legacy+OSSRH" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The credentials for your OSSRH account need to be stored
+somewhere safe (<em>e.g. NOT in the repository</em>). Common convention is a
+<code>$HOME/.sbt/1.0/sonatype.sbt</code> file, with the following:
+</p><pre><code class="prettyprint lang-scala">credentials += Credentials(Path.userHome / &quot;.sbt&quot; / &quot;sonatype_credentials&quot;)
+</code></pre><p>Next create a file <code>~/.sbt/sonatype_credentials</code>:
+</p><pre><code class="">realm=Sonatype Nexus Repository Manager
+host=oss.sonatype.org
+user=&lt;your username&gt;
+password=&lt;your password&gt;
+</code></pre><blockquote><p><em>Note:</em> The first two strings must be <code>&quot;Sonatype Nexus Repository Manager&quot;</code>
+and <code>&quot;oss.sonatype.org&quot;</code> for Coursier to use the credentials. If you are using
+an OSSRH account created between February 2021 and May 2025, use <code>&quot;s01.oss.sonatype.org&quot;</code>
+instead of <code>&quot;oss.sonatype.org&quot;</code>
+</p></blockquote><h4 id="sbt+setup+for+the+Legacy+OSSRH">sbt setup for the Legacy OSSRH<a href="#sbt+setup+for+the+Legacy+OSSRH" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">ThisBuild / publishTo := {
+  // For accounts created after Feb 2021:
+  // val nexus = &quot;https://s01.oss.sonatype.org/&quot;
+  val nexus = &quot;https://oss.sonatype.org/&quot;
+  if (isSnapshot.value) Some(&quot;snapshots&quot; at nexus + &quot;content/repositories/snapshots&quot;)
+  else Some(&quot;releases&quot; at nexus + &quot;service/local/staging/deploy/maven2&quot;)
+}
+</code></pre><h4 id="The+Legacy+OSSRH+publishing+step">The Legacy OSSRH publishing step<a href="#The+Legacy+OSSRH+publishing+step" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>From sbt shell run:
+</p><pre><code class="">&gt; publishSigned
+</code></pre><p>Check the published artifacts in the <a href="https://oss.sonatype.org/#welcome">Nexus Repository Manager</a>
+(same login as Sonatype’s Jira account).
+Close the staging repository and promote the release to central, by hitting
+“Close” button, then “Release” button.
+</p><h2 id="Contributing+to+sbt">Contributing to sbt<a href="#Contributing+to+sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Below is a running list of potential areas of contribution. This list
 may become out of date quickly, so you may want to check on the
 <a href="https://groups.google.com/d/forum/sbt-dev">sbt-dev mailing list</a> if you are interested in a specific topic.
 </p><ol><li><p>There are plenty of possible visualization and analysis
