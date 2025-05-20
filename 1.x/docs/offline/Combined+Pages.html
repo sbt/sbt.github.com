@@ -3919,7 +3919,11 @@ settings so that the correct metadata is generated.
 </p><p><strong>Note</strong>: To publish to the Central Portal, set <code>ThisBuild / publishTo</code>
 must be set to the <code>localStaging</code> repository:
 </p><pre><code class="prettyprint lang-scala">// new setting for the Central Portal
-ThisBuild / publishTo := localStaging.value
+ThisBuild / publishTo := {
+  val centralSnapshots = &quot;https://central.sonatype.com/repository/maven-snapshots/&quot;
+  if (isSnapshot.value) Some(&quot;central-snapshots&quot; at centralSnapshots)
+  else localStaging.value
+}
 </code></pre><p>Add these settings at the end of <code>build.sbt</code> or a separate <code>publish.sbt</code>:
 </p><pre><code class="prettyprint lang-scala">ThisBuild / organization := &quot;com.example.project2&quot;
 ThisBuild / organizationName := &quot;example&quot;
@@ -3949,7 +3953,13 @@ ThisBuild / homepage := Some(url(&quot;https://github.com/example/project&quot;)
 // Remove all additional repository other than Maven Central from POM
 ThisBuild / pomIncludeRepository := { _ =&gt; false }
 ThisBuild / publishMavenStyle := true
-ThisBuild / publishTo := localStaging.value
+
+// new setting for the Central Portal
+ThisBuild / publishTo := {
+  val centralSnapshots = &quot;https://central.sonatype.com/repository/maven-snapshots/&quot;
+  if (isSnapshot.value) Some(&quot;central-snapshots&quot; at centralSnapshots)
+  else localStaging.value
+}
 </code></pre><p>The full format of a <code>pom.xml</code> (an end product of the project configuration
 used by Maven) file is <a href="https://maven.apache.org/pom.html">outlined here</a>.
 You can add more data to it with the <code>pomExtra</code> option in <code>build.sbt</code>.
@@ -3963,7 +3973,11 @@ Hit the “Publish” button to publish to the Central Repository.
 </p><pre><code class="">&gt; sonaRelease
 </code></pre><p>It might take 10 minutes to a few hours for the published artifacts to be
 visible on the Central Repository <a href="https://repo1.maven.org/maven2/">https://repo1.maven.org/maven2/</a>.
-</p><h3 id="Optional+steps">Optional steps<a href="#Optional+steps" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="Tag-based+publishing+via+sbt-ci-release">Tag-based publishing via sbt-ci-release<a href="#Tag-based+publishing+via+sbt-ci-release" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>You can further optimize the publishing flow by using the <a href="https://github.com/sbt/sbt-ci-release">sbt-ci-release</a> plugin.
+</p><h3 id="Optional+steps">Optional steps<a href="#Optional+steps" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="Publishing+SNAPSHOTs">Publishing SNAPSHOTs<a href="#Publishing+SNAPSHOTs" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>In general, the use of SNAPSHOT artifacts should be limited to short-term testing,
+and we do not recommend publishing SNAPSHOTs publicly.
+However, should you decide to publish SNAPSHOTs, you can enable it from the Central Portal per namespace.
+See Sonatype’s <a href="https://central.sonatype.org/publish/publish-portal-snapshots/">Publishing -SNAPSHOT Releases</a> guide for details.
+</p><h4 id="Tag-based+publishing+via+sbt-ci-release">Tag-based publishing via sbt-ci-release<a href="#Tag-based+publishing+via+sbt-ci-release" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>You can further optimize the publishing flow by using the <a href="https://github.com/sbt/sbt-ci-release">sbt-ci-release</a> plugin.
 </p><p>Once you set it up, all you have to do is push a git tag to trigger a release.
 </p><h4 id="Integrate+with+the+release+process">Integrate with the release process<a href="#Integrate+with+the+release+process" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>To automate the publishing approach above with the <a href="https://github.com/sbt/sbt-release">sbt-release plugin</a>, you should simply add the publishing commands as steps in the
 <code>releaseProcess</code> task:
