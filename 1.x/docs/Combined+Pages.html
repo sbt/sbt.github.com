@@ -19,7 +19,7 @@
         <script type="text/javascript">
           Pamflet.page.language = 'en';
         </script>
-        <script type="text/javascript" src="js/prettify/prettify.js"></script><script type="text/javascript" src="js/prettify/lang-scala.js"></script><link type="text/css" rel="stylesheet" href="css/prettify.css"/><script type="text/javascript"><!--
+        <script type="text/javascript" src="js/prettify/prettify.js"></script><script type="text/javascript" src="js/prettify/lang-yaml.js"></script><script type="text/javascript" src="js/prettify/lang-scala.js"></script><link type="text/css" rel="stylesheet" href="css/prettify.css"/><script type="text/javascript"><!--
         window.onload=function() { prettyPrint(); };
       --></script>
         <link rel="stylesheet" href="css/custom-202107.css" type="text/css" media="screen, projection"/>
@@ -3908,7 +3908,14 @@ enable it for your build:
 </p></blockquote><p>Make sure that the <code>gpg</code> command is in PATH available to the sbt.
 </p><h4 id="step+3%3A+Credentials">step 3: Credentials<a href="#step+3%3A+Credentials" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>Generate a user token from the portal to be used for the credentials.
 The token must be stored somewhere safe (<em>e.g. NOT in the repository</em>).
-A common convention is a <code>$HOME/.sbt/1.0/credentials.sbt</code> file, with the following:
+</p><p>sbt 1.11.x reads from the environment variables <code>SONATYPE_USERNAME</code> and <code>SONATYPE_PASSWORD</code> and appends a credential for <code>central.sonatype.com</code> out-of-box, which might be useful for automatic publishing from the CI environment, such as GitHub Actions.
+</p><pre><code class="prettyprint lang-yaml">- run: sbt ci-release
+  env:
+    PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
+    PGP_SECRET: ${{ secrets.PGP_SECRET }}
+    SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+    SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+</code></pre><p>On a local machine, a common convention is a <code>$HOME/.sbt/1.0/credentials.sbt</code> file, with the following:
 </p><pre><code class="prettyprint lang-scala">credentials += Credentials(Path.userHome / &quot;.sbt&quot; / &quot;sonatype_central_credentials&quot;)
 </code></pre><p>Next create a file <code>~/.sbt/sonatype_central_credentials</code>:
 </p><pre><code class="">host=central.sonatype.com
