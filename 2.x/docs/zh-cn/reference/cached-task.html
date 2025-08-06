@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Build definition basics - The Book of sbt</title>
+        <title>Cached task - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -161,7 +161,7 @@
                           let full_path_to_root = "../../";
                           // The page path (mdbook only gives us
                           // access to the path to the Markdown file).
-                          let path = "guide/build-definition-basics.md".replace(/\.md$/, ".html");
+                          let path = "reference/cached-task.md".replace(/\.md$/, ".html");
                           for (let lang of langList.querySelectorAll("a")) {
                             lang.href = `${full_path_to_root}${lang.id}/${path}`;
                           }
@@ -208,64 +208,39 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="build-definition-basics"><a class="header" href="#build-definition-basics">Build definition basics</a></h1>
-<p>This page discusses the <code>build.sbt</code> build definition.</p>
-<h3 id="what-is-a-build-definition"><a class="header" href="#what-is-a-build-definition">What is a build definition?</a></h3>
-<p>A <em>build definition</em> is defined in <code>build.sbt</code>, and it consists of a set of projects (of type <a href="../api/sbt/Project.html"><code>Project</code></a>). Because the term <em>project</em> can be ambiguous, we often call it a <em>subproject</em> in this guide.</p>
-<p>For instance, in <code>build.sbt</code> you define the subproject located in the current directory like this:</p>
-<pre><code class="language-scala">scalaVersion := "3.3.3"
-name := "Hello"
-</code></pre>
-<p>or more explicitly:</p>
-<pre><code class="language-scala">lazy val root = (project in file("."))
-  .settings(
-    scalaVersion := "3.3.3",
-    name := "Hello",
-  )
-</code></pre>
-<p>Each subproject is configured by key-value pairs. For example, one key is <code>name</code> and it maps to a string value, the name of your subproject. The key-value pairs are listed under the <code>.settings(...)</code> method.</p>
-<h2 id="buildsbt-dsl"><a class="header" href="#buildsbt-dsl">build.sbt DSL</a></h2>
-<p><code>build.sbt</code> defines subprojects using a DSL called build.sbt DSL, which is based on Scala. Initially you can use build.sbt DSL, like a YAML file, declaring just <code>scalaVersion</code> and <code>libraryDependencies</code>, but it can supports more features to keep the build definition organized as the build grows larger.</p>
-<h3 id="typed-setting-expression"><a class="header" href="#typed-setting-expression">Typed setting expression</a></h3>
-<p>Let's take a closer look at the <code>build.sbt</code> DSL:</p>
-<pre><code class="language-scala">organization  :=         "com.example"
-^^^^^^^^^^^^  ^^^^^^^^   ^^^^^^^^^^^^^
-key           operator   (setting/task) body
-</code></pre>
-<p>Each entry is called a <em>setting expression</em>. Some among them are also called task expressions. We will see more on the difference later in this page.</p>
-<p>A setting expression consists of three parts:</p>
-<ol>
-<li>Left-hand side is a <em>key</em>.</li>
-<li><em>Operator</em>, which in this case is <code>:=</code></li>
-<li>Right-hand side is called the <em>body</em>, or the <em>setting/task body</em>.</li>
-</ol>
-<p>On the left-hand side, <code>name</code>, <code>version</code>, and <code>scalaVersion</code> are <em>keys</em>. A key is an instance of <a href="../../api/sbt/SettingKey.html"><code>SettingKey[A]</code></a>, <a href="../../api/sbt/TaskKey.html"><code>TaskKey[A]</code></a>, or <a href="../../api/sbt/InputKey.html"><code>InputKey[A]</code></a> where <code>A</code> is the expected value type.</p>
-<p>Because key <code>name</code> is typed to <code>SettingKey[String]</code>, the <code>:=</code> operator on <code>name</code> is also typed specifically to <code>String</code>. If you use the wrong value type, the build definition will not compile:</p>
-<pre><code class="language-scala">name := 42 // will not compile
-</code></pre>
-<h3 id="vals-and-lazy-vals"><a class="header" href="#vals-and-lazy-vals"><code>val</code>s and <code>lazy val</code>s</a></h3>
-<p>To avoid repeating the same information, like the version number for a library, <code>build.sbt</code> may be interspersed with <code>val</code>s, <code>lazy val</code>s, and <code>def</code>s.</p>
-<pre><code class="language-scala">val toolkitV = "0.2.0"
-val toolkit = "org.scala-lang" %% "toolkit" % toolkitV
-val toolkitTest = "org.scala-lang" %% "toolkit-test" % toolkitV
+                        <h1 id="cached-task"><a class="header" href="#cached-task">Cached task</a></h1>
+<p>This page covers the cached task details. See <a href="../concepts/caching.html">Caching</a> for a general explanation.</p>
+<h2 id="automatic-caching"><a class="header" href="#automatic-caching">Automatic caching</a></h2>
+<pre><code class="language-scala">val someKey = taskKey[String]("something")
 
-scalaVersion := "3.7.2"
-libraryDependencies += toolkit
-libraryDependencies += (toolkitTest % Test)
+someKey := name.value + version.value + "!"
 </code></pre>
-<p>In the above, <code>val</code> defines a variable, which are initialized from the top to bottom. This means that <code>toolkitV</code> must be defined before it is referenced.</p>
-<p>Here's a bad example:</p>
-<pre><code class="language-scala">// bad example
-val toolkit = "org.scala-lang" %% "toolkit" % toolkitV // uninitialized reference!
-val toolkitTest = "org.scala-lang" %% "toolkit-test" % toolkitV // uninitialized reference!
-val toolkitV = "0.2.0"
+<p>In sbt 2.x, the task result will be automatically cached based on the two settings <code>name</code> and <code>version</code>. The first time we run the task it will be executed onsite, but the second time onward, it will use the disk cache:</p>
+<pre><code>sbt:demo&gt; show someKey
+[info] demo0.1.0-SNAPSHOT!
+[success] elapsed time: 0 s, cache 0%, 1 onsite task
+sbt:demo&gt; show someKey
+[info] demo0.1.0-SNAPSHOT!
+[success] elapsed time: 0 s, cache 100%, 1 disk cache hit
 </code></pre>
-<p>sbt will fail to load with <code>java.lang.ExceptionInInitializerError</code> cased by a <code>NullPointerException</code> if your build.sbt contains an uninitialized forward reference. One way to let the compiler fix this is to define the variables as <code>lazy</code>:</p>
-<pre><code class="language-scala">lazy val toolkit = "org.scala-lang" %% "toolkit" % toolkitV
-lazy val toolkitTest = "org.scala-lang" %% "toolkit-test" % toolkitV
-lazy val toolkitV = "0.2.0"
+<h3 id="caching-is-serialization-hard"><a class="header" href="#caching-is-serialization-hard">Caching is serialization-hard</a></h3>
+<p>To participate in the automatic caching, the input keys (e.g. <code>name</code> and <code>version</code>) must provide a given for <code>sjsonnew.HashWriter</code> typeclass and return type must provide a given for <code>sjsonnew.JsonFormat</code>. <a href="https://www.scala-sbt.org/contraband/">Contraband</a> can be used to generate sjson-new codecs.</p>
+<h2 id="effect-tracking"><a class="header" href="#effect-tracking">Effect tracking</a></h2>
+<h3 id="the-effect-of-file-creation"><a class="header" href="#the-effect-of-file-creation">The effect of file creation</a></h3>
+<p>To cache the effect of file creation, not just returning the name of the file, we need to track the effect of file creation using <code>Def.declareOutput(vf)</code>.</p>
+<pre><code class="language-scala">someKey := {
+  val conv = fileConverter.value
+  val out: java.nio.file.Path = createFile(...)
+  val vf: xsbti.VirtualFile = conv.toVirtualFile(out)
+  Def.declareOutput(vf)
+  vf: xsbti.HashedVirtualFileRef
+}
 </code></pre>
-<p>Some frown upon gratuitous <code>lazy val</code>s, but Scala 3 lazy vals are efficient, and we think it makes the build definition more robust for copy-pasting.</p>
+<h2 id="opting-out-from-caching"><a class="header" href="#opting-out-from-caching">Opting out from caching</a></h2>
+<h3 id="build-wide-opt-out"><a class="header" href="#build-wide-opt-out">Build-wide opt-out</a></h3>
+<p>To opt out of by-default custom task caching, add the following to <code>project/plugins.sbt</code>:</p>
+<pre><code class="language-scala">Compile / scalacOptions += "-Xmacro-settings:sbt:no-default-task-cache"
+</code></pre>
 <div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
 <div class="admonition-title">
 <div id="admonition-note-title">
@@ -274,19 +249,34 @@ lazy val toolkitV = "0.2.0"
 <a class="admonition-anchor-link" href="#admonition-note"></a>
 </div>
 <div>
-<p>Top-level objects and classes are not allowed in <code>build.sbt</code>. Those should go in the <code>project/</code> directory as Scala source files.</p>
+<p>This applies only to the custom tasks introduced in the build. Any cached tasks provided by sbt or plugins will remain cached.</p>
 </div>
 </div>
+<h3 id="per-task-key-opt-out"><a class="header" href="#per-task-key-opt-out">Per-task-key opt-out</a></h3>
+<p>Next, if you want to opt some task keys from caching, you can set the cache level as follows:</p>
+<pre><code class="language-scala">@cacheLevel(include = Array.empty)
+val someKey = taskKey[String]("something")
+</code></pre>
+<h3 id="per-task-opt-out"><a class="header" href="#per-task-opt-out">Per-task opt-out</a></h3>
+<p>To opt out of the cache individually, use <code>Def.uncached(...)</code> as follows:</p>
+<pre><code class="language-scala">val someKey = taskKey[String]("something")
+
+someKey := Def.uncached {
+  name.value + somethingUncachable.value + "!"
+}
+</code></pre>
+<h2 id="remote-caching"><a class="header" href="#remote-caching">Remote caching</a></h2>
+<p>sbt 2.x implements Bazel-compatible gRPC interface, which works with number of backend both open source and commercial. See <a href="./remote-cache-setup.html">Remote cache setup</a> for more details.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../guide/basic-tasks.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../reference/sbt-run.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../guide/library-dependency-basics.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../reference/cross-building-setup.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -296,11 +286,11 @@ lazy val toolkitV = "0.2.0"
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../guide/basic-tasks.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../reference/sbt-run.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../guide/library-dependency-basics.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../reference/cross-building-setup.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

@@ -222,15 +222,11 @@
 <p>A build that ends up capturing ephemeral inputs, are said to <em>break the hermeticity</em> or <em>non-hermetic</em>. Another common way the hermeticity is broken is capturing absolute paths as either input or output. Sometimes the path gets embedded into the JAR via a macro, you might not know until you inspect the bytecode.</p>
 <h2 id="automatic-caching"><a class="header" href="#automatic-caching">Automatic caching</a></h2>
 <p>Here's a demonstration of the automatic caching:</p>
-<pre><code class="language-scala">import sbt.util.CacheImplicits.given
+<pre><code class="language-scala">val someKey = taskKey[String]("something")
 
-val someKey = taskKey[String]("something")
-
-someKey := (Def.cachedTask {
-  name.value + version.value + "!"
-}).value
+someKey := name.value + version.value + "!"
 </code></pre>
-<p>The task will be automatically cached based on the two settings <code>name</code> and <code>version</code>. The first time we run the task it will be executed onsite, but the second time onward, it will use the disk cache:</p>
+<p>In sbt 2.x, the task result will be automatically cached based on the two settings <code>name</code> and <code>version</code>. The first time we run the task it will be executed onsite, but the second time onward, it will use the disk cache:</p>
 <pre><code>sbt:demo&gt; show someKey
 [info] demo0.1.0-SNAPSHOT!
 [success] elapsed time: 0 s, cache 0%, 1 onsite task
@@ -257,7 +253,7 @@ sbt:demo&gt; show someKey
 <h3 id="the-effect-of-file-creation"><a class="header" href="#the-effect-of-file-creation">The effect of file creation</a></h3>
 <p>There are many tasks that generate file that do not use <code>VirtualFile</code> as the return type. For example, <code>compile</code> returns <code>Analysis</code> instead, and <code>*.class</code> file generation happens as a <em>side effect</em> in sbt 1.x.</p>
 <p>To participate in caching, we need to declare these effects as something we care about.</p>
-<pre><code class="language-scala">someKey := Def.cachedTask {
+<pre><code class="language-scala">someKey := {
   val conv = fileConverter.value
   val out: java.nio.file.Path = createFile(...)
   val vf: xsbti.VirtualFile = conv.toVirtualFile(out)
@@ -268,7 +264,9 @@ sbt:demo&gt; show someKey
 <h2 id="remote-caching"><a class="header" href="#remote-caching">Remote caching</a></h2>
 <p>You can optionally extend the build to use remote cache in addition to the local disk cache. Remote caching could improve build performance by allowing multiple machines to share build artifacts and outputs.</p>
 <p>Imagine you have a dozen people in your project or a company. Each morning, you will <code>git pull</code> the changes the dozen people made, and you need to build their code. If you have a successful project, the code size will only get bigger over time, and the % of the time you spend building someone else's in your day increases. This becomes the limiting factor of your team size and code size. Remote caching reverses this tide by CI systems hydrate the cache and you can download the artifacts and task outputs.</p>
-<p>sbt 2.x implements Bazel-compatible gRPC interface, which works with number of backend both open source and commercial.</p>
+<p>sbt 2.x implements Bazel-compatible gRPC interface, which works with number of backend both open source and commercial. See <a href="../reference/remote-cache-setup.html">Remote cache setup</a> for more details.</p>
+<h2 id="reference"><a class="header" href="#reference">Reference</a></h2>
+<p>See also <a href="../reference/cached-task.html">Cached task</a> reference guide.</p>
 
                     </main>
 

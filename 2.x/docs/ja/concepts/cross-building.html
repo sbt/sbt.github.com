@@ -230,14 +230,14 @@
 <h2 id="project-matrix"><a class="header" href="#project-matrix">Project matrix</a></h2>
 <p>sbt 2.x introduces project matrix, which enables cross building to happen in parallel.</p>
 <pre><code class="language-scala">organization := "com.example"
-scalaVersion := "3.6.4"
+scalaVersion := "3.7.2"
 version      := "0.1.0-SNAPSHOT"
 
 lazy val core = (projectMatrix in file("core"))
   .settings(
     name := "core"
   )
-  .jvmPlatform(scalaVersions = Seq("3.6.4", "2.13.15"))
+  .jvmPlatform(scalaVersions = Seq("3.7.2", "2.13.16"))
 </code></pre>
 <p>See <a href="../reference/cross-building-setup.html">cross building setup</a> for more details on the setup.</p>
 

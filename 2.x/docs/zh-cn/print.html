@@ -213,7 +213,7 @@
 <p>这是关于 sbt 2.x 的草稿文档，目前尚未发布。虽然总体概念可以应用到 sbt 1.x，但 2.x 及本文档的详细内容可能会有所变动。</p>
 <p><img src="files/sbt-logo.svg" alt="sbt logo" /></p>
 <p>sbt 是一个用于 Scala 和 Java 的简单构建工具。 sbt 通过 Coursier 下载你的库依赖， 增量编译和测试项目， 并与 IntelliJ 和 VS Code 等 IDE 集成， 打包 JAR 文件并发布到 <a href="https://central.sonatype.com/">Maven Central</a>， 这是 JVM 社区的包注册表。</p>
-<pre><code class="language-scala">scalaVersion := "3.6.4"
+<pre><code class="language-scala">scalaVersion := "3.7.2"
 </code></pre>
 <p>你只需要在 <code>build.sbt</code> 中添加一行代码即可开始使用 Scala。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="安装-sbt-runner"><a class="header" href="#安装-sbt-runner">安装 sbt runner</a></h1>
@@ -235,13 +235,13 @@ sdk install sbt
 </code></pre>
 <h3 id="通用的包安装"><a class="header" href="#通用的包安装">通用的包安装</a></h3>
 <ul>
-<li><a href="https://github.com/sbt/sbt/releases/download/v1.10.0/sbt-1.10.0.zip">sbt-1.10.0.zip</a></li>
-<li><a href="https://github.com/sbt/sbt/releases/download/v1.10.0/sbt-1.10.0.tgz">sbt-1.10.0.tgz</a></li>
-<li><a href="https://github.com/sbt/sbt/releases/download/v1.10.0/sbt-1.10.0.msi">sbt-1.10.0.msi</a></li>
+<li><a href="https://github.com/sbt/sbt/releases/download/v1.11.4/sbt-1.11.4.zip">sbt-1.11.4.zip</a></li>
+<li><a href="https://github.com/sbt/sbt/releases/download/v1.11.4/sbt-1.11.4.tgz">sbt-1.11.4.tgz</a></li>
+<li><a href="https://github.com/sbt/sbt/releases/download/v1.11.4/sbt-1.11.4.msi">sbt-1.11.4.msi</a></li>
 </ul>
 <h2 id="验证-sbt-runner"><a class="header" href="#验证-sbt-runner">验证 sbt runner</a></h2>
 <pre><code class="language-bash">sbt --script-version
-# 1.10.0
+# 1.11.4
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-示例教程"><a class="header" href="#sbt-示例教程">sbt 示例教程</a></h1>
 <p>This page assumes you've <a href="Setup.html">installed sbt runner</a>.</p>
@@ -322,7 +322,7 @@ Hello
 [success] elapsed time: 0 s, cache 50%, 1 disk cache hit, 1 onsite task
 </code></pre>
 <h3 id="set-thisbuild--scalaversion-from-sbt-shell"><a class="header" href="#set-thisbuild--scalaversion-from-sbt-shell">Set ThisBuild / scalaVersion from sbt shell</a></h3>
-<pre><code>sbt:foo-build&gt; set scalaVersion := "3.6.4"
+<pre><code>sbt:foo-build&gt; set scalaVersion := "3.7.2"
 [info] Defining scalaVersion
 [info] The new value will be used by Compile / bspBuildTarget, Compile / dependencyTreeCrossProjectId and 51 others.
 [info]  Run `last` for details.
@@ -331,7 +331,7 @@ Hello
 </code></pre>
 <p>Check the <code>scalaVersion</code> setting:</p>
 <pre><code>sbt:foo-build&gt; scalaVersion
-[info] 3.6.4
+[info] 3.7.2
 </code></pre>
 <h3 id="save-the-session-to-buildsbt"><a class="header" href="#save-the-session-to-buildsbt">Save the session to build.sbt</a></h3>
 <p>We can save the ad-hoc settings using <code>session save</code>.</p>
@@ -346,7 +346,7 @@ Hello
 [warn] Disable this warning by setting `Global / onChangedBuildSource := IgnoreSourceChanges`.
 </code></pre>
 <p><code>build.sbt</code> file should now contain:</p>
-<pre><code class="language-scala">scalaVersion := "3.6.4"
+<pre><code class="language-scala">scalaVersion := "3.7.2"
 
 </code></pre>
 <h3 id="name-your-project"><a class="header" href="#name-your-project">Name your project</a></h3>
@@ -879,7 +879,7 @@ $ sbt new scala/scala3.g8
 <p>sbt server runs <a href="https://get-coursier.io/">Couriser</a> as a subcomponent to resolve Scala library, Scala compiler, and any other library dependencies your build needs.</p>
 <h3 id="zinc"><a class="header" href="#zinc">Zinc</a></h3>
 <p>Zinc is the incremental compiler for Scala, developed and maintained by sbt project. An often overlooked aspect of Zinc is that Zinc provides a stable API to invoke <strong>any modern versions</strong> of Scala compiler. Combined with the fact that Coursier can resolve any Scala version, with sbt we can invoke any modern versions of Scala just by writing a single line <code>build.sbt</code>:</p>
-<pre><code class="language-scala">scalaVersion := "3.6.4"
+<pre><code class="language-scala">scalaVersion := "3.7.2"
 </code></pre>
 <h3 id="bsp-server"><a class="header" href="#bsp-server">BSP server</a></h3>
 <p>sbt server supports <a href="https://build-server-protocol.github.io/">Build Server Protocol (BSP)</a> to list build targets, build them, etc. This allows IDEs like IntelliJ and Metals to communicate with a running sbt server programmatically.</p>
@@ -1098,7 +1098,7 @@ key           operator   (setting/task) body
 val toolkit = "org.scala-lang" %% "toolkit" % toolkitV
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % toolkitV
 
-scalaVersion := "3.6.4"
+scalaVersion := "3.7.2"
 libraryDependencies += toolkit
 libraryDependencies += (toolkitTest % Test)
 </code></pre>
@@ -1166,7 +1166,7 @@ end Dependencies
 <p>The <code>Dependencies</code> object will be available in <code>build.sbt</code>. To make it easier to use the <code>val</code>s defined in it, import <code>Dependencies.*</code> in your build.sbt file.</p>
 <pre><code class="language-scala">import Dependencies.*
 
-scalaVersion := "3.6.4"
+scalaVersion := "3.7.2"
 name := "something"
 libraryDependencies += toolkit
 libraryDependencies += toolkitTest % Test
@@ -1190,7 +1190,7 @@ libraryDependencies += toolkitTest % Test
 <p>While a simple program can start out as a single-project build, it's more common for a build to split into smaller, multiple subprojects.</p>
 <p>Each subproject in a build has its own source directories, generates its own JAR file when you run <code>packageBin</code>, and in general works like any other project.</p>
 <p>A project is defined by declaring a lazy val of type <a href="guide/../../api/sbt/Project.html">Project</a>. For example, :</p>
-<pre><code class="language-scala">scalaVersion := "3.6.4"
+<pre><code class="language-scala">scalaVersion := "3.7.2"
 
 lazy val core = (project in file("core"))
   .settings(
@@ -1306,20 +1306,23 @@ lazy val util = (project in file("util"))
 <h2 id="changes-with-compatibility-implications"><a class="header" href="#changes-with-compatibility-implications">Changes with compatibility implications</a></h2>
 <p>See also <a href="changes/./migrating-from-sbt-1.x.html">Migrating from sbt 1.x</a>.</p>
 <ul>
-<li>sbt 2.x uses Scala 3.x (currently <strong>3.6.4</strong>) for build definitions and plugins (Both sbt 1.x and 2.x are capable of building Scala 2.x and 3.x) by <a href="https://github.com/eed3si9n">@eed3si9n</a>, <a href="https://github.com/adpi2">@adpi2</a>, and others.</li>
-<li>Bare settings are added to all subprojects, as opposed to just the root subproject, and thus replacing the role that <code>ThisBuild</code> has played.</li>
-<li><code>test</code> task is changed to be incremental test that can cache test results. Use <code>testFull</code> for full test by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7686">#7686</a></li>
-<li>Default settings and tasks keys typed to <code>URL</code> <code>apiMappings</code>, <code>apiURL</code>, <code>homepage</code>, <code>organizationHomepage</code>, <code>releaseNotesURL</code> were changed to <code>URI</code> in <a href="https://github.com/sbt/sbt/pull/7927">#7927</a>.</li>
+<li><strong>Scala 3 in metabuild</strong>. sbt 2.x build.sbt DSL, used for build definitions and plugins, is based on Scala 3.x (currently <strong>3.7.2</strong>)  (Both sbt 1.x and 2.x are capable of building Scala 2.x and 3.x) by <a href="https://github.com/eed3si9n">@eed3si9n</a>, <a href="https://github.com/adpi2">@adpi2</a>, and others.</li>
+<li><strong>Common settings</strong>. Bare settings are added to all subprojects, as opposed to just the root subproject, and thus replacing the role that <code>ThisBuild</code> has played.</li>
+<li><strong>Cached task</strong>. All tasks are cached by default. Details in <a href="changes/../concepts/caching.html">Caching</a>.</li>
+<li><strong>Incremental test</strong>. <code>test</code> task is changed to be incremental test that can cache test results. Use <code>testFull</code> for full test by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7686">#7686</a></li>
+<li><code>test</code> task type is changed from <code>Unit</code> to <code>TestResult</code> by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8181">#8181</a></li>
+<li>Default settings and tasks keys typed to <code>URL</code> (i.e. <code>apiMappings</code>, <code>apiURL</code>, <code>homepage</code>, <code>organizationHomepage</code>, <code>releaseNotesURL</code>) were changed to <code>URI</code> in <a href="https://github.com/sbt/sbt/pull/7927">#7927</a>.</li>
 <li><code>licenses</code> key is changed from <code>Seq[(String, URL)]</code> to <code>Seq[License]</code> in <a href="https://github.com/sbt/sbt/pull/7927">#7927</a>.</li>
 <li>sbt 2.x plugins are published with <code>_sbt2_3</code> suffix by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7671">#7671</a></li>
 <li>sbt 2.x adds <code>platform</code> setting so <code>ModuleID</code>'s <code>%%</code> operator can cross build on JVM as well as JS and Native, as opposed to <code>%%%</code> operator that was created in a plugin to workaround this issue, by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/6746">#6746</a></li>
 <li>Dropped <code>useCoursier</code> setting so Coursier cannot be opted out, by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7712">#7712</a></li>
 <li><code>Key.Classpath</code> is changed to be an alias of the <code>Seq[Attributed[xsbti.HashedVirtualFileRef]]</code> type, instead of <code>Seq[Attributed[File]]</code>. Similarly, some task keys that used to return <code>File</code> have changed to return <code>HashedVirtualFileRef</code> instead. See <a href="changes/../concepts/caching.html#caching-files">Caching Files</a>.</li>
-<li>In sbt 2.x <code>target</code> defaults to <code>target/out/jvm/scala-3.6.4/&lt;subproject&gt;/</code>, as opposed to <code>&lt;subproject&gt;/target/</code>.</li>
+<li>In sbt 2.x <code>target</code> defaults to <code>target/out/jvm/scala-3.7.2/&lt;subproject&gt;/</code>, as opposed to <code>&lt;subproject&gt;/target/</code>.</li>
 </ul>
 <h3 id="dropped-dreprecations"><a class="header" href="#dropped-dreprecations">Dropped dreprecations</a></h3>
 <ul>
-<li>sbt 0.13 style shell syntax by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7700">#7700</a></li>
+<li>Removed <code>IntegrationTest</code> configuration in <a href="https://github.com/sbt/sbt/pull/8184">#8184</a></li>
+<li>Removed sbt 0.13 style shell syntax in <a href="https://github.com/sbt/sbt/pull/7700">#7700</a></li>
 </ul>
 <h2 id="features"><a class="header" href="#features">Features</a></h2>
 <ul>
@@ -1329,15 +1332,14 @@ lazy val util = (project in file("util"))
 </ul>
 <h3 id="common-settings"><a class="header" href="#common-settings">Common settings</a></h3>
 <p>In sbt 2.x, the bare settings in <code>build.sbt</code> are interpreted to be common settings, and are injected to all subprojects. This means we can now set <code>scalaVersion</code> without using <code>ThisBuild</code> scoping:</p>
-<pre><code class="language-scala">scalaVersion := "3.6.4"
+<pre><code class="language-scala">scalaVersion := "3.7.2"
 </code></pre>
 <p>This also fixes the so-called dynamic dispatch problem:</p>
 <pre><code class="language-scala">lazy val hi = taskKey[String]("")
 hi := name.value + "!"
 </code></pre>
 <p>In sbt 1.x <code>hi</code> task will capture the name of the root project, but in sbt 2.x it will return the <code>name</code> of each subproject with <code>!</code>:</p>
-<pre><code class="language-scala">$ export SBT_NATIVE_CLIENT=true
-$ sbt show hi
+<pre><code class="language-scala">$ sbt show hi
 [info] entering *experimental* thin client - BEEP WHIRR
 [info] terminate the server with `shutdown`
 &gt; show hi
@@ -1349,33 +1351,30 @@ $ sbt show hi
 <p>Contributed by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/6746">#6746</a></p>
 <h3 id="sbt-query"><a class="header" href="#sbt-query">sbt query</a></h3>
 <p>To filter down the subprojects, sbt 2.x introduces sbt query.</p>
-<pre><code class="language-bash">$ export SBT_NATIVE_CLIENT=true
-$ sbt foo.../test
+<pre><code class="language-bash">$ sbt foo.../test
 </code></pre>
 <p>The above runs all subprojects that begins with <code>foo</code>.</p>
 <pre><code class="language-bash">$ sbt ...@scalaBinaryVersion=3/test
 </code></pre>
 <p>The above runs all subprojects whose <code>scalaBinaryVersion</code> is <code>3</code>. Contributed by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7699">#7699</a></p>
 <h3 id="localremote-cache-system"><a class="header" href="#localremote-cache-system">Local/remote cache system</a></h3>
-<p>sbt 2.x implements cached task, which can automatically cache the task results to local disk and Bazel-compatible remote cache.</p>
+<p>sbt 2.x implements cached task by default, which can automatically cache the task results to local disk and Bazel-compatible remote cache.</p>
 <pre><code class="language-scala">lazy val task1 = taskKey[String]("doc for task1")
 
-task1 := (Def.cachedTask {
-  name.value + version.value + "!"
-}).value
+task1 := name.value + version.value + "!"
 </code></pre>
 <p>This tracks the inputs into the <code>task1</code> and creates a machine-wide disk cache, which can also be configured to also use a remote cache. Since it's common for sbt tasks to also produce files on the side, we also provide a mechanism to cache file contents:</p>
 <pre><code class="language-scala">lazy val task1 = taskKey[String]("doc for task1")
 
-task1 := (Def.cachedTask {
+task1 := {
   val converter = fileConverter.value
   ....
   val output = converter.toVirtualFile(somefile)
   Def.declareOutput(output)
   name.value + version.value + "!"
-}).value
+}
 </code></pre>
-<p>Contributed by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7464">#7464</a> / <a href="https://github.com/sbt/sbt/pull/7525">#7525</a></p>
+<p>See <a href="changes/../concepts/caching.html">Caching</a> for details. Contributed by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7464">#7464</a> / <a href="https://github.com/sbt/sbt/pull/7525">#7525</a>.</p>
 <h2 id="previously-on-sbt"><a class="header" href="#previously-on-sbt">Previously on sbt</a></h2>
 <p>See also:</p>
 <ul>
@@ -1384,13 +1383,13 @@ task1 := (Def.cachedTask {
 <div style="break-before: page; page-break-before: always;"></div><h1 id="migrating-from-sbt-1x"><a class="header" href="#migrating-from-sbt-1x">Migrating from sbt 1.x</a></h1>
 <h2 id="changing-buildsbt-dsl-to-scala-3x"><a class="header" href="#changing-buildsbt-dsl-to-scala-3x">Changing <code>build.sbt</code> DSL to Scala 3.x</a></h2>
 <p>As a reminder, users can build either Scala 2.x or Scala 3.x programs using either sbt 1.x or sbt 2.x. However, the Scala that underlies the <code>build.sbt</code> DSL is determined by the sbt version. In sbt 2.0, we are migrating to Scala 3.x.</p>
-<p>This means that if you implement custom tasks or sbt plugins for sbt 2.x, it must be done using Scala 3.x. See <a href="https://docs.scala-lang.org/scala3/guides/migration/incompatibility-table.html">Scala 3.x incompatibility table</a> and <a href="https://docs.scala-lang.org/scala3/guides/migration/tooling-scala2-xsource3.html">Scala 2 with -Xsource:3</a>.</p>
+<p>This means that if you implement custom tasks or sbt plugins for sbt 2.x, it must be done using Scala 3.x. Consult <a href="https://docs.scala-lang.org/scala3/guides/migration/incompatibility-table.html">Scala 3.x incompatibility table</a> and <a href="https://docs.scala-lang.org/scala3/guides/migration/tooling-scala2-xsource3.html">Scala 2 with -Xsource:3</a> for details about Scala 3.x.</p>
 <pre><code class="language-scala">// This works on Scala 2.12.20 under -Xsource:3
 import sbt.{ given, * }
 </code></pre>
 <h2 id="bare-settings-changes"><a class="header" href="#bare-settings-changes">Bare settings changes</a></h2>
 <pre><code class="language-scala">version := "0.1.0"
-scalaVersion := "3.6.4"
+scalaVersion := "3.7.2"
 </code></pre>
 <p><em>Bare settings</em>, like the example above, are settings written directly in <code>build.sbt</code> without <code>settings(...)</code>.</p>
 <div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
@@ -1409,11 +1408,17 @@ publish / skip := true
 </code></pre>
 <h3 id="migrating-thisbuild"><a class="header" href="#migrating-thisbuild">Migrating ThisBuild</a></h3>
 <p>In sbt 2.x, bare settings settings should no longer be scoped to <code>ThisBuild</code>. One benefit of the new <em>common settings</em> over <code>ThisBuild</code> is that it would act in a more predictable delegation. These settings are inserted between plugins settings and those defined in <code>settings(...)</code>, meaning they can be used to define settings like <code>Compile / scalacOptions</code>, which was not possible with <code>ThisBuild</code>.</p>
+<h2 id="migrating-to-cached-tasks"><a class="header" href="#migrating-to-cached-tasks">Migrating to cached tasks</a></h2>
+<p>See <a href="changes/../reference/cached-task.html">Cached task</a> reference for details, including the way to opt out of caching.</p>
+<h2 id="migration-away-from-integrationtest"><a class="header" href="#migration-away-from-integrationtest">Migration away from IntegrationTest</a></h2>
+<p>To migrate away from the <code>IntegrationTest</code> configuration, create a separate subproject and implement it as normal test.</p>
 <h2 id="migrating-to-slash-syntax"><a class="header" href="#migrating-to-slash-syntax">Migrating to slash syntax</a></h2>
 <p>sbt 1.x supported both the sbt 0.13 style syntax and the slash syntax. sbt 2.x removes the support for the sbt 0.13 syntax, so use the slash syntax for both sbt shell and in <code>build.sbt</code>:</p>
 <pre><code class="language-scala">&lt;project-id&gt; / Config / intask / key
 </code></pre>
 <p>For example, <code>test:compile</code> will no longer work on the shell. Use <code>Test/compile</code> instead. See <a href="https://eed3si9n.com/syntactic-scalafix-rule-for-unified-slash-syntax/">syntactic Scalafix rule for unified slash syntax</a> for semi-automated migration of <code>build.sbt</code> files.</p>
+<pre><code class="language-bash">scalafix --rules=https://gist.githubusercontent.com/eed3si9n/57e83f5330592d968ce49f0d5030d4d5/raw/7f576f16a90e432baa49911c9a66204c354947bb/Sbt0_13BuildSyntax.scala *.sbt project/*.scala
+</code></pre>
 <h2 id="cross-building-sbt-plugins"><a class="header" href="#cross-building-sbt-plugins">Cross building sbt plugins</a></h2>
 <p>In sbt 2.x, if you cross build an sbt plugin with Scala 3.x and 2.12.x, it will automatically cross build against sbt 1.x and sbt 2.x:</p>
 <pre><code class="language-scala">// using sbt 2.x
@@ -1558,14 +1563,14 @@ private[sbtfoo] object PluginCompat {
 <h2 id="project-matrix"><a class="header" href="#project-matrix">Project matrix</a></h2>
 <p>sbt 2.x introduces project matrix, which enables cross building to happen in parallel.</p>
 <pre><code class="language-scala">organization := "com.example"
-scalaVersion := "3.6.4"
+scalaVersion := "3.7.2"
 version      := "0.1.0-SNAPSHOT"
 
 lazy val core = (projectMatrix in file("core"))
   .settings(
     name := "core"
   )
-  .jvmPlatform(scalaVersions = Seq("3.6.4", "2.13.15"))
+  .jvmPlatform(scalaVersions = Seq("3.7.2", "2.13.16"))
 </code></pre>
 <p>See <a href="concepts/../reference/cross-building-setup.html">cross building setup</a> for more details on the setup.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-query-1"><a class="header" href="#sbt-query-1">sbt query</a></h1>
@@ -1582,7 +1587,7 @@ lazy val core = (projectMatrix in file("core"))
 <a class="admonition-anchor-link" href="concepts/sbt-query.html#admonition-buildsbt-example-1"></a>
 </div>
 <div>
-<pre><code class="language-scala">scalaVersion := "3.6.4"
+<pre><code class="language-scala">scalaVersion := "3.7.2"
 
 lazy val foo = project
 </code></pre>
@@ -1623,13 +1628,13 @@ lazy val foo = projectMatrix
   .settings(
     libraryDependencies += toolkit,
   )
-  .jvmPlatform(scalaVersions = Seq("3.6.4", "2.13.15"))
+  .jvmPlatform(scalaVersions = Seq("3.7.2", "2.13.16"))
 
 lazy val bar = projectMatrix
   .settings(
     libraryDependencies += toolkit,
   )
-  .jvmPlatform(scalaVersions = Seq("3.6.4", "2.13.15"))
+  .jvmPlatform(scalaVersions = Seq("3.7.2", "2.13.16"))
 </code></pre>
 </div>
 </div>
@@ -1665,15 +1670,11 @@ example.ExampleSuite:
 <p>A build that ends up capturing ephemeral inputs, are said to <em>break the hermeticity</em> or <em>non-hermetic</em>. Another common way the hermeticity is broken is capturing absolute paths as either input or output. Sometimes the path gets embedded into the JAR via a macro, you might not know until you inspect the bytecode.</p>
 <h2 id="automatic-caching"><a class="header" href="#automatic-caching">Automatic caching</a></h2>
 <p>Here's a demonstration of the automatic caching:</p>
-<pre><code class="language-scala">import sbt.util.CacheImplicits.given
+<pre><code class="language-scala">val someKey = taskKey[String]("something")
 
-val someKey = taskKey[String]("something")
-
-someKey := (Def.cachedTask {
-  name.value + version.value + "!"
-}).value
+someKey := name.value + version.value + "!"
 </code></pre>
-<p>The task will be automatically cached based on the two settings <code>name</code> and <code>version</code>. The first time we run the task it will be executed onsite, but the second time onward, it will use the disk cache:</p>
+<p>In sbt 2.x, the task result will be automatically cached based on the two settings <code>name</code> and <code>version</code>. The first time we run the task it will be executed onsite, but the second time onward, it will use the disk cache:</p>
 <pre><code>sbt:demo&gt; show someKey
 [info] demo0.1.0-SNAPSHOT!
 [success] elapsed time: 0 s, cache 0%, 1 onsite task
@@ -1700,7 +1701,7 @@ sbt:demo&gt; show someKey
 <h3 id="the-effect-of-file-creation"><a class="header" href="#the-effect-of-file-creation">The effect of file creation</a></h3>
 <p>There are many tasks that generate file that do not use <code>VirtualFile</code> as the return type. For example, <code>compile</code> returns <code>Analysis</code> instead, and <code>*.class</code> file generation happens as a <em>side effect</em> in sbt 1.x.</p>
 <p>To participate in caching, we need to declare these effects as something we care about.</p>
-<pre><code class="language-scala">someKey := Def.cachedTask {
+<pre><code class="language-scala">someKey := {
   val conv = fileConverter.value
   val out: java.nio.file.Path = createFile(...)
   val vf: xsbti.VirtualFile = conv.toVirtualFile(out)
@@ -1711,8 +1712,10 @@ sbt:demo&gt; show someKey
 <h2 id="remote-caching"><a class="header" href="#remote-caching">Remote caching</a></h2>
 <p>You can optionally extend the build to use remote cache in addition to the local disk cache. Remote caching could improve build performance by allowing multiple machines to share build artifacts and outputs.</p>
 <p>Imagine you have a dozen people in your project or a company. Each morning, you will <code>git pull</code> the changes the dozen people made, and you need to build their code. If you have a successful project, the code size will only get bigger over time, and the % of the time you spend building someone else's in your day increases. This becomes the limiting factor of your team size and code size. Remote caching reverses this tide by CI systems hydrate the cache and you can download the artifacts and task outputs.</p>
-<p>sbt 2.x implements Bazel-compatible gRPC interface, which works with number of backend both open source and commercial.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="reference"><a class="header" href="#reference">Reference</a></h1>
+<p>sbt 2.x implements Bazel-compatible gRPC interface, which works with number of backend both open source and commercial. See <a href="concepts/../reference/remote-cache-setup.html">Remote cache setup</a> for more details.</p>
+<h2 id="reference"><a class="header" href="#reference">Reference</a></h2>
+<p>See also <a href="concepts/../reference/cached-task.html">Cached task</a> reference guide.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="reference-1"><a class="header" href="#reference-1">Reference</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-1"><a class="header" href="#sbt-1">sbt</a></h1>
 <p>See <a href="reference/../guide/basic-tasks.html">Basic Tasks</a> in the Getting Started Guide for an intro to the basics.</p>
 <h2 id="synopsis"><a class="header" href="#synopsis">Synopsis</a></h2>
@@ -2220,6 +2223,65 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "$example_scalatest_vers
 <p>User code can also start threads, or otherwise allocate resources that can be left running after the main method returns. Running user code in a separate JVM gives isolation between the sbt server and the user code.</p>
 <h4 id="sbt-server-availability"><a class="header" href="#sbt-server-availability">sbt server availability</a></h4>
 <p>Since the program will run outside of the sbt server, it can become available to the more requests by other clients, for example test or IDE integration.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="cached-task"><a class="header" href="#cached-task">Cached task</a></h1>
+<p>This page covers the cached task details. See <a href="reference/../concepts/caching.html">Caching</a> for a general explanation.</p>
+<h2 id="automatic-caching-1"><a class="header" href="#automatic-caching-1">Automatic caching</a></h2>
+<pre><code class="language-scala">val someKey = taskKey[String]("something")
+
+someKey := name.value + version.value + "!"
+</code></pre>
+<p>In sbt 2.x, the task result will be automatically cached based on the two settings <code>name</code> and <code>version</code>. The first time we run the task it will be executed onsite, but the second time onward, it will use the disk cache:</p>
+<pre><code>sbt:demo&gt; show someKey
+[info] demo0.1.0-SNAPSHOT!
+[success] elapsed time: 0 s, cache 0%, 1 onsite task
+sbt:demo&gt; show someKey
+[info] demo0.1.0-SNAPSHOT!
+[success] elapsed time: 0 s, cache 100%, 1 disk cache hit
+</code></pre>
+<h3 id="caching-is-serialization-hard-1"><a class="header" href="#caching-is-serialization-hard-1">Caching is serialization-hard</a></h3>
+<p>To participate in the automatic caching, the input keys (e.g. <code>name</code> and <code>version</code>) must provide a given for <code>sjsonnew.HashWriter</code> typeclass and return type must provide a given for <code>sjsonnew.JsonFormat</code>. <a href="https://www.scala-sbt.org/contraband/">Contraband</a> can be used to generate sjson-new codecs.</p>
+<h2 id="effect-tracking"><a class="header" href="#effect-tracking">Effect tracking</a></h2>
+<h3 id="the-effect-of-file-creation-1"><a class="header" href="#the-effect-of-file-creation-1">The effect of file creation</a></h3>
+<p>To cache the effect of file creation, not just returning the name of the file, we need to track the effect of file creation using <code>Def.declareOutput(vf)</code>.</p>
+<pre><code class="language-scala">someKey := {
+  val conv = fileConverter.value
+  val out: java.nio.file.Path = createFile(...)
+  val vf: xsbti.VirtualFile = conv.toVirtualFile(out)
+  Def.declareOutput(vf)
+  vf: xsbti.HashedVirtualFileRef
+}
+</code></pre>
+<h2 id="opting-out-from-caching"><a class="header" href="#opting-out-from-caching">Opting out from caching</a></h2>
+<h3 id="build-wide-opt-out"><a class="header" href="#build-wide-opt-out">Build-wide opt-out</a></h3>
+<p>To opt out of by-default custom task caching, add the following to <code>project/plugins.sbt</code>:</p>
+<pre><code class="language-scala">Compile / scalacOptions += "-Xmacro-settings:sbt:no-default-task-cache"
+</code></pre>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="reference/cached-task.html#admonition-note"></a>
+</div>
+<div>
+<p>This applies only to the custom tasks introduced in the build. Any cached tasks provided by sbt or plugins will remain cached.</p>
+</div>
+</div>
+<h3 id="per-task-key-opt-out"><a class="header" href="#per-task-key-opt-out">Per-task-key opt-out</a></h3>
+<p>Next, if you want to opt some task keys from caching, you can set the cache level as follows:</p>
+<pre><code class="language-scala">@cacheLevel(include = Array.empty)
+val someKey = taskKey[String]("something")
+</code></pre>
+<h3 id="per-task-opt-out"><a class="header" href="#per-task-opt-out">Per-task opt-out</a></h3>
+<p>To opt out of the cache individually, use <code>Def.uncached(...)</code> as follows:</p>
+<pre><code class="language-scala">val someKey = taskKey[String]("something")
+
+someKey := Def.uncached {
+  name.value + somethingUncachable.value + "!"
+}
+</code></pre>
+<h2 id="remote-caching-1"><a class="header" href="#remote-caching-1">Remote caching</a></h2>
+<p>sbt 2.x implements Bazel-compatible gRPC interface, which works with number of backend both open source and commercial. See <a href="reference/./remote-cache-setup.html">Remote cache setup</a> for more details.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="cross-building-setup"><a class="header" href="#cross-building-setup">Cross building setup</a></h1>
 <p>This page covers cross building setup. See <a href="reference/../concepts/cross-building.html">Cross building</a> for general explanation.</p>
 <h2 id="using-cross-built-libraries-1"><a class="header" href="#using-cross-built-libraries-1">Using cross-built libraries</a></h2>
@@ -2272,14 +2334,14 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "$example_scalatest_vers
 <h2 id="project-matrix-1"><a class="header" href="#project-matrix-1">Project matrix</a></h2>
 <p>sbt 2.x introduces project matrix, which enables cross building to happen in parallel.</p>
 <pre><code class="language-scala">organization := "com.example"
-scalaVersion := "3.6.4"
+scalaVersion := "3.7.2"
 version      := "0.1.0-SNAPSHOT"
 
 lazy val core = (projectMatrix in file("core"))
   .settings(
     name := "core"
   )
-  .jvmPlatform(scalaVersions = Seq("3.6.4", "2.13.15"))
+  .jvmPlatform(scalaVersions = Seq("3.7.2", "2.13.16"))
 </code></pre>
 <h2 id="publishing-convention"><a class="header" href="#publishing-convention">Publishing convention</a></h2>
 <p>We use the Scala ABI (application binary interface) version as suffix to denote which version of Scala was used to compile a library. For example, the artifact name <code>cats-effect_2.13</code> means Scala 2.13.x was used. <code>cats-effect_3</code> means Scala 3.x was used. This fairly simple approach allows interoperability with users of Maven, Ant and other build tools. For pre-prelease versions of Scala, such as 2.13.0-RC1, full version will be considered the ABI version.</p>
@@ -2381,7 +2443,7 @@ Global / remoteCacheHeaders += IO.read(BuildPaths.defaultGlobalBase / "nativelin
 </li>
 <li>
 <p>Under <code>hello_scala/</code>, create <code>build.sbt</code>:</p>
-<pre><code class="language-scala">scalaVersion := "3.6.4"
+<pre><code class="language-scala">scalaVersion := "3.7.2"
 </code></pre>
 </li>
 <li>

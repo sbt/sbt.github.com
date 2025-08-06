@@ -211,13 +211,13 @@
                         <h1 id="migrating-from-sbt-1x"><a class="header" href="#migrating-from-sbt-1x">Migrating from sbt 1.x</a></h1>
 <h2 id="changing-buildsbt-dsl-to-scala-3x"><a class="header" href="#changing-buildsbt-dsl-to-scala-3x">Changing <code>build.sbt</code> DSL to Scala 3.x</a></h2>
 <p>As a reminder, users can build either Scala 2.x or Scala 3.x programs using either sbt 1.x or sbt 2.x. However, the Scala that underlies the <code>build.sbt</code> DSL is determined by the sbt version. In sbt 2.0, we are migrating to Scala 3.x.</p>
-<p>This means that if you implement custom tasks or sbt plugins for sbt 2.x, it must be done using Scala 3.x. See <a href="https://docs.scala-lang.org/scala3/guides/migration/incompatibility-table.html">Scala 3.x incompatibility table</a> and <a href="https://docs.scala-lang.org/scala3/guides/migration/tooling-scala2-xsource3.html">Scala 2 with -Xsource:3</a>.</p>
+<p>This means that if you implement custom tasks or sbt plugins for sbt 2.x, it must be done using Scala 3.x. Consult <a href="https://docs.scala-lang.org/scala3/guides/migration/incompatibility-table.html">Scala 3.x incompatibility table</a> and <a href="https://docs.scala-lang.org/scala3/guides/migration/tooling-scala2-xsource3.html">Scala 2 with -Xsource:3</a> for details about Scala 3.x.</p>
 <pre><code class="language-scala">// This works on Scala 2.12.20 under -Xsource:3
 import sbt.{ given, * }
 </code></pre>
 <h2 id="bare-settings-changes"><a class="header" href="#bare-settings-changes">Bare settings changes</a></h2>
 <pre><code class="language-scala">version := "0.1.0"
-scalaVersion := "3.6.4"
+scalaVersion := "3.7.2"
 </code></pre>
 <p><em>Bare settings</em>, like the example above, are settings written directly in <code>build.sbt</code> without <code>settings(...)</code>.</p>
 <div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
@@ -236,11 +236,17 @@ publish / skip := true
 </code></pre>
 <h3 id="migrating-thisbuild"><a class="header" href="#migrating-thisbuild">Migrating ThisBuild</a></h3>
 <p>In sbt 2.x, bare settings settings should no longer be scoped to <code>ThisBuild</code>. One benefit of the new <em>common settings</em> over <code>ThisBuild</code> is that it would act in a more predictable delegation. These settings are inserted between plugins settings and those defined in <code>settings(...)</code>, meaning they can be used to define settings like <code>Compile / scalacOptions</code>, which was not possible with <code>ThisBuild</code>.</p>
+<h2 id="migrating-to-cached-tasks"><a class="header" href="#migrating-to-cached-tasks">Migrating to cached tasks</a></h2>
+<p>See <a href="../reference/cached-task.html">Cached task</a> reference for details, including the way to opt out of caching.</p>
+<h2 id="migration-away-from-integrationtest"><a class="header" href="#migration-away-from-integrationtest">Migration away from IntegrationTest</a></h2>
+<p>To migrate away from the <code>IntegrationTest</code> configuration, create a separate subproject and implement it as normal test.</p>
 <h2 id="migrating-to-slash-syntax"><a class="header" href="#migrating-to-slash-syntax">Migrating to slash syntax</a></h2>
 <p>sbt 1.x supported both the sbt 0.13 style syntax and the slash syntax. sbt 2.x removes the support for the sbt 0.13 syntax, so use the slash syntax for both sbt shell and in <code>build.sbt</code>:</p>
 <pre><code class="language-scala">&lt;project-id&gt; / Config / intask / key
 </code></pre>
 <p>For example, <code>test:compile</code> will no longer work on the shell. Use <code>Test/compile</code> instead. See <a href="https://eed3si9n.com/syntactic-scalafix-rule-for-unified-slash-syntax/">syntactic Scalafix rule for unified slash syntax</a> for semi-automated migration of <code>build.sbt</code> files.</p>
+<pre><code class="language-bash">scalafix --rules=https://gist.githubusercontent.com/eed3si9n/57e83f5330592d968ce49f0d5030d4d5/raw/7f576f16a90e432baa49911c9a66204c354947bb/Sbt0_13BuildSyntax.scala *.sbt project/*.scala
+</code></pre>
 <h2 id="cross-building-sbt-plugins"><a class="header" href="#cross-building-sbt-plugins">Cross building sbt plugins</a></h2>
 <p>In sbt 2.x, if you cross build an sbt plugin with Scala 3.x and 2.12.x, it will automatically cross build against sbt 1.x and sbt 2.x:</p>
 <pre><code class="language-scala">// using sbt 2.x

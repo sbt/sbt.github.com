@@ -223,20 +223,23 @@
 <h2 id="changes-with-compatibility-implications"><a class="header" href="#changes-with-compatibility-implications">Changes with compatibility implications</a></h2>
 <p>See also <a href="./migrating-from-sbt-1.x.html">Migrating from sbt 1.x</a>.</p>
 <ul>
-<li>sbt 2.x uses Scala 3.x (currently <strong>3.6.4</strong>) for build definitions and plugins (Both sbt 1.x and 2.x are capable of building Scala 2.x and 3.x) by <a href="https://github.com/eed3si9n">@eed3si9n</a>, <a href="https://github.com/adpi2">@adpi2</a>, and others.</li>
-<li>Bare settings are added to all subprojects, as opposed to just the root subproject, and thus replacing the role that <code>ThisBuild</code> has played.</li>
-<li><code>test</code> task is changed to be incremental test that can cache test results. Use <code>testFull</code> for full test by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7686">#7686</a></li>
-<li>Default settings and tasks keys typed to <code>URL</code> <code>apiMappings</code>, <code>apiURL</code>, <code>homepage</code>, <code>organizationHomepage</code>, <code>releaseNotesURL</code> were changed to <code>URI</code> in <a href="https://github.com/sbt/sbt/pull/7927">#7927</a>.</li>
+<li><strong>Scala 3 in metabuild</strong>. sbt 2.x build.sbt DSL, used for build definitions and plugins, is based on Scala 3.x (currently <strong>3.7.2</strong>)  (Both sbt 1.x and 2.x are capable of building Scala 2.x and 3.x) by <a href="https://github.com/eed3si9n">@eed3si9n</a>, <a href="https://github.com/adpi2">@adpi2</a>, and others.</li>
+<li><strong>Common settings</strong>. Bare settings are added to all subprojects, as opposed to just the root subproject, and thus replacing the role that <code>ThisBuild</code> has played.</li>
+<li><strong>Cached task</strong>. All tasks are cached by default. Details in <a href="../concepts/caching.html">Caching</a>.</li>
+<li><strong>Incremental test</strong>. <code>test</code> task is changed to be incremental test that can cache test results. Use <code>testFull</code> for full test by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7686">#7686</a></li>
+<li><code>test</code> task type is changed from <code>Unit</code> to <code>TestResult</code> by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8181">#8181</a></li>
+<li>Default settings and tasks keys typed to <code>URL</code> (i.e. <code>apiMappings</code>, <code>apiURL</code>, <code>homepage</code>, <code>organizationHomepage</code>, <code>releaseNotesURL</code>) were changed to <code>URI</code> in <a href="https://github.com/sbt/sbt/pull/7927">#7927</a>.</li>
 <li><code>licenses</code> key is changed from <code>Seq[(String, URL)]</code> to <code>Seq[License]</code> in <a href="https://github.com/sbt/sbt/pull/7927">#7927</a>.</li>
 <li>sbt 2.x plugins are published with <code>_sbt2_3</code> suffix by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7671">#7671</a></li>
 <li>sbt 2.x adds <code>platform</code> setting so <code>ModuleID</code>'s <code>%%</code> operator can cross build on JVM as well as JS and Native, as opposed to <code>%%%</code> operator that was created in a plugin to workaround this issue, by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/6746">#6746</a></li>
 <li>Dropped <code>useCoursier</code> setting so Coursier cannot be opted out, by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7712">#7712</a></li>
 <li><code>Key.Classpath</code> is changed to be an alias of the <code>Seq[Attributed[xsbti.HashedVirtualFileRef]]</code> type, instead of <code>Seq[Attributed[File]]</code>. Similarly, some task keys that used to return <code>File</code> have changed to return <code>HashedVirtualFileRef</code> instead. See <a href="../concepts/caching.html#caching-files">Caching Files</a>.</li>
-<li>In sbt 2.x <code>target</code> defaults to <code>target/out/jvm/scala-3.6.4/&lt;subproject&gt;/</code>, as opposed to <code>&lt;subproject&gt;/target/</code>.</li>
+<li>In sbt 2.x <code>target</code> defaults to <code>target/out/jvm/scala-3.7.2/&lt;subproject&gt;/</code>, as opposed to <code>&lt;subproject&gt;/target/</code>.</li>
 </ul>
 <h3 id="dropped-dreprecations"><a class="header" href="#dropped-dreprecations">Dropped dreprecations</a></h3>
 <ul>
-<li>sbt 0.13 style shell syntax by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7700">#7700</a></li>
+<li>Removed <code>IntegrationTest</code> configuration in <a href="https://github.com/sbt/sbt/pull/8184">#8184</a></li>
+<li>Removed sbt 0.13 style shell syntax in <a href="https://github.com/sbt/sbt/pull/7700">#7700</a></li>
 </ul>
 <h2 id="features"><a class="header" href="#features">Features</a></h2>
 <ul>
@@ -246,15 +249,14 @@
 </ul>
 <h3 id="common-settings"><a class="header" href="#common-settings">Common settings</a></h3>
 <p>In sbt 2.x, the bare settings in <code>build.sbt</code> are interpreted to be common settings, and are injected to all subprojects. This means we can now set <code>scalaVersion</code> without using <code>ThisBuild</code> scoping:</p>
-<pre><code class="language-scala">scalaVersion := "3.6.4"
+<pre><code class="language-scala">scalaVersion := "3.7.2"
 </code></pre>
 <p>This also fixes the so-called dynamic dispatch problem:</p>
 <pre><code class="language-scala">lazy val hi = taskKey[String]("")
 hi := name.value + "!"
 </code></pre>
 <p>In sbt 1.x <code>hi</code> task will capture the name of the root project, but in sbt 2.x it will return the <code>name</code> of each subproject with <code>!</code>:</p>
-<pre><code class="language-scala">$ export SBT_NATIVE_CLIENT=true
-$ sbt show hi
+<pre><code class="language-scala">$ sbt show hi
 [info] entering *experimental* thin client - BEEP WHIRR
 [info] terminate the server with `shutdown`
 &gt; show hi
@@ -266,33 +268,30 @@ $ sbt show hi
 <p>Contributed by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/6746">#6746</a></p>
 <h3 id="sbt-query"><a class="header" href="#sbt-query">sbt query</a></h3>
 <p>To filter down the subprojects, sbt 2.x introduces sbt query.</p>
-<pre><code class="language-bash">$ export SBT_NATIVE_CLIENT=true
-$ sbt foo.../test
+<pre><code class="language-bash">$ sbt foo.../test
 </code></pre>
 <p>The above runs all subprojects that begins with <code>foo</code>.</p>
 <pre><code class="language-bash">$ sbt ...@scalaBinaryVersion=3/test
 </code></pre>
 <p>The above runs all subprojects whose <code>scalaBinaryVersion</code> is <code>3</code>. Contributed by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7699">#7699</a></p>
 <h3 id="localremote-cache-system"><a class="header" href="#localremote-cache-system">Local/remote cache system</a></h3>
-<p>sbt 2.x implements cached task, which can automatically cache the task results to local disk and Bazel-compatible remote cache.</p>
+<p>sbt 2.x implements cached task by default, which can automatically cache the task results to local disk and Bazel-compatible remote cache.</p>
 <pre><code class="language-scala">lazy val task1 = taskKey[String]("doc for task1")
 
-task1 := (Def.cachedTask {
-  name.value + version.value + "!"
-}).value
+task1 := name.value + version.value + "!"
 </code></pre>
 <p>This tracks the inputs into the <code>task1</code> and creates a machine-wide disk cache, which can also be configured to also use a remote cache. Since it's common for sbt tasks to also produce files on the side, we also provide a mechanism to cache file contents:</p>
 <pre><code class="language-scala">lazy val task1 = taskKey[String]("doc for task1")
 
-task1 := (Def.cachedTask {
+task1 := {
   val converter = fileConverter.value
   ....
   val output = converter.toVirtualFile(somefile)
   Def.declareOutput(output)
   name.value + version.value + "!"
-}).value
+}
 </code></pre>
-<p>Contributed by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7464">#7464</a> / <a href="https://github.com/sbt/sbt/pull/7525">#7525</a></p>
+<p>See <a href="../concepts/caching.html">Caching</a> for details. Contributed by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7464">#7464</a> / <a href="https://github.com/sbt/sbt/pull/7525">#7525</a>.</p>
 <h2 id="previously-on-sbt"><a class="header" href="#previously-on-sbt">Previously on sbt</a></h2>
 <p>See also:</p>
 <ul>
