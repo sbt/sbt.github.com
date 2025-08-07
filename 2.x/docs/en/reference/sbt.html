@@ -212,19 +212,21 @@
 <p>See <a href="../guide/basic-tasks.html">Basic Tasks</a> in the Getting Started Guide for an intro to the basics.</p>
 <h2 id="synopsis"><a class="header" href="#synopsis">Synopsis</a></h2>
 <p><code>sbt</code><br>
-<code>sbt --client</code> <em>command</em> <em>args</em></p>
+<code>sbt</code> <em>command</em> <em>args</em><br>
+<code>sbt --server</code><br>
+<code>sbt --script-version</code></p>
 <h2 id="description"><a class="header" href="#description">Description</a></h2>
 <p>sbt is a simple build tool created originally for Scala and Java. It lets us declare subprojects and their various dependencies and custom tasks to ensure that we'll always get a fast, repeatable build.</p>
 <h3 id="sbt-runner-and-sbt-server"><a class="header" href="#sbt-runner-and-sbt-server">sbt runner and sbt server</a></h3>
 <ul>
 <li>sbt runner is a system shell script named <code>sbt</code>, or <code>sbt.bat</code> on Windows. That is capable of running <em>any version of sbt</em>. This is sometimes called "sbt-the-shell-script".
 <ul>
-<li>When executed with <code>--client</code>, sbt runner executes sbtn, a client program compiled a native code using GraalVM native image.</li>
+<li>When sbt 2.x is detected, sbt runner executes in a client mode, typically using sbtn, a GraalVM native implementation of the thin client program.</li>
 <li>sbt runner also executes sbt launcher, a launcher that is capable of running <em>any verions of sbt</em>.</li>
 <li>When you install sbt from a installer, what you're installing is the sbt runner.</li>
 </ul>
 </li>
-<li>sbt server is the actual build tool.
+<li>sbt server is sbt's main artifact, and the actual build tool.
 <ul>
 <li>The sbt version is determined by <code>project/build.properties</code> in each working directory.</li>
 <li>sbt server accepts commands from sbtn, network API, or via its own sbt shell.</li>

@@ -1818,19 +1818,21 @@ sbt:demo&gt; show someKey
 <p>See <a href="reference/../guide/basic-tasks.html">Basic Tasks</a> in the Getting Started Guide for an intro to the basics.</p>
 <h2 id="synopsis"><a class="header" href="#synopsis">Synopsis</a></h2>
 <p><code>sbt</code><br>
-<code>sbt --client</code> <em>command</em> <em>args</em></p>
+<code>sbt</code> <em>command</em> <em>args</em><br>
+<code>sbt --server</code><br>
+<code>sbt --script-version</code></p>
 <h2 id="description"><a class="header" href="#description">Description</a></h2>
 <p>sbt is a simple build tool created originally for Scala and Java. It lets us declare subprojects and their various dependencies and custom tasks to ensure that we'll always get a fast, repeatable build.</p>
 <h3 id="sbt-runner-and-sbt-server"><a class="header" href="#sbt-runner-and-sbt-server">sbt runner and sbt server</a></h3>
 <ul>
 <li>sbt runner is a system shell script named <code>sbt</code>, or <code>sbt.bat</code> on Windows. That is capable of running <em>any version of sbt</em>. This is sometimes called "sbt-the-shell-script".
 <ul>
-<li>When executed with <code>--client</code>, sbt runner executes sbtn, a client program compiled a native code using GraalVM native image.</li>
+<li>When sbt 2.x is detected, sbt runner executes in a client mode, typically using sbtn, a GraalVM native implementation of the thin client program.</li>
 <li>sbt runner also executes sbt launcher, a launcher that is capable of running <em>any verions of sbt</em>.</li>
 <li>When you install sbt from a installer, what you're installing is the sbt runner.</li>
 </ul>
 </li>
-<li>sbt server is the actual build tool.
+<li>sbt server is sbt's main artifact, and the actual build tool.
 <ul>
 <li>The sbt version is determined by <code>project/build.properties</code> in each working directory.</li>
 <li>sbt server accepts commands from sbtn, network API, or via its own sbt shell.</li>
@@ -2126,7 +2128,7 @@ configure HTTPS or FTP.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-update"><a class="header" href="#sbt-update">sbt update</a></h1>
 <p>See <a href="reference/../guide/library-dependency-basics.html">library depdency basics</a> in the Getting Started guide to learn about the basics.</p>
 <h2 id="synopsis-1"><a class="header" href="#synopsis-1">Synopsis</a></h2>
-<p><code>sbt --client update</code></p>
+<p><code>sbt</code> [<em>query</em> / ] <code>update</code></p>
 <h2 id="description-1"><a class="header" href="#description-1">Description</a></h2>
 <p>sbt uses <a href="https://get-coursier.io/">Coursier</a> to implement library management,
 also known as a package manager in other ecosystems.
@@ -2430,19 +2432,408 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "$example_scalatest_vers
 -->
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-run"><a class="header" href="#sbt-run">sbt run</a></h1>
 <h2 id="synopsis-2"><a class="header" href="#synopsis-2">Synopsis</a></h2>
-<p><code>sbt run</code></p>
+<p><code>sbt</code> [<em>query</em> / ] <code>run</code> [<em>args</em>]</p>
 <h2 id="description-2"><a class="header" href="#description-2">Description</a></h2>
 <p>The <code>run</code> task provides a means for running the user program.</p>
 <p>In sbt 1.x and earlier, <code>run</code> task ran the user program in the same Java virtual machine (JVM) as the sbt server. sbt 2.x implements <em>client-side run</em>: the <code>run</code> task creates a sandbox environment that contains the program, sends the information back to sbtn, and sbtn launches the user program in a fresh JVM.</p>
 <h3 id="motivations"><a class="header" href="#motivations">Motivations</a></h3>
 <p>There are several motivations for the client-side run.</p>
-<h4 id="sysexit"><a class="header" href="#sysexit">sys.exit</a></h4>
-<p>User code can call <code>sys.exit</code>, which normally shuts down the JVM.
-In sbt 1.x, we needed to trap these <code>sys.exit</code> calls to prevent <code>run</code> from shutting down the sbt session, using the JDK SecurityManager; however, TrapExit was dropped in sbt 1.6.0 (2021) since JDK 17 deprecated SecurityManager feature.</p>
-<h4 id="isolation"><a class="header" href="#isolation">Isolation</a></h4>
-<p>User code can also start threads, or otherwise allocate resources that can be left running after the main method returns. Running user code in a separate JVM gives isolation between the sbt server and the user code.</p>
-<h4 id="sbt-server-availability"><a class="header" href="#sbt-server-availability">sbt server availability</a></h4>
-<p>Since the program will run outside of the sbt server, it can become available to the more requests by other clients, for example test or IDE integration.</p>
+<ol>
+<li><strong>sys.exit support</strong>. User code can call <code>sys.exit</code>, which normally shuts down the JVM.
+In sbt 1.x, we needed to trap these <code>sys.exit</code> calls to prevent <code>run</code> from shutting down the sbt session, using the JDK SecurityManager; however, TrapExit was dropped in sbt 1.6.0 (2021) since JDK 17 deprecated SecurityManager feature. Because client-side run runs the user program in its own JVM, it can call <code>sys.exit</code>.</li>
+<li><strong>Isolation</strong>. User code can also start threads, or otherwise allocate resources that can be left running after the main method returns. Running user code in a separate JVM gives isolation between the sbt server and the user code.</li>
+<li><strong>sbt server availability</strong>. Since the program will run outside of the sbt server, it can become available to the more requests by other clients, for example test or IDE integration.</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-test"><a class="header" href="#sbt-test">sbt test</a></h1>
+<h2 id="synopsis-3"><a class="header" href="#synopsis-3">Synopsis</a></h2>
+<p><code>sbt</code> [<em>query</em> / ] <code>test</code> [<em>testname1</em> <em>testname2</em>] [ -- <em>options</em> ]</p>
+<h2 id="description-3"><a class="header" href="#description-3">Description</a></h2>
+<p>The <code>test</code> task provides a means for compiling and running the tests.</p>
+<p>By default, the <code>test</code> task in sbt 2.x:</p>
+<ol>
+<li><strong>Subproject parallelism</strong>. Performs compilation of the relevant subprojects in parallel, specified by the <a href="reference/../concepts/sbt-query.html">query</a>.</li>
+<li><strong>Test suite parallelism</strong>. Maps discovered test suites, to tasks and executes them in parallel.</li>
+<li><strong>Incremental test</strong>. Runs only the tests that either failed in the previous run, never run, or if sbt detects changes in the test or its dependencies.</li>
+<li><strong>Cached</strong>. The test result is cached machine-wide, and optionally remote cached.</li>
+</ol>
+<p>The standard source locations for testing are:</p>
+<ul>
+<li>Scala sources in <code>src/test/scala/</code></li>
+<li>Java sources in <code>src/test/java/</code></li>
+<li>Resources for the test classpath in <code>src/test/resources/</code></li>
+</ul>
+<p>The resources may be accessed from tests by using the <code>getResource</code>
+methods of <code>java.lang.Class</code> or <code>java.lang.ClassLoader</code>.</p>
+<h3 id="test-interfaces"><a class="header" href="#test-interfaces">Test interfaces</a></h3>
+<p>sbt defines the common interface for JVM-based test frameworks, allowing automatic test suite discovery and parallel execution. By default sbt integrates with <a href="https://scalameta.org/munit/">MUnit</a>, <a href="https://www.scalatest.org/">ScalaTest</a>, <a href="https://hedgehogqa.github.io/scala-hedgehog/">Hedgehog</a>, <a href="https://scalacheck.org/">ScalaCheck</a>, <a href="https://etorreborre.github.io/specs2/">Specs2</a>, <a href="https://typelevel.org/weaver-test/">Weaver</a>, <a href="https://zio.dev/reference/test/">ZIO Test</a>, and <a href="https://github.com/sbt/junit-interface">JUnit 4</a>; this means you only need to add the test framework to the classpath to work with sbt. For example, MUnit may be used by declaring it as a <code>libraryDependency</code>:</p>
+<pre><code class="language-scala">lazy val munit = "org.scalameta" %% "munit" % "1.1.1"
+
+libraryDependencies += munit % Test
+</code></pre>
+<p>In the above, <code>Test</code> denotes the <code>Test</code> configuration, and means that MUnit will
+only be on the test classpath and it isn't needed by the main sources.</p>
+<h4 id="junit"><a class="header" href="#junit">JUnit</a></h4>
+<p>Support for JUnit 5 is provided by
+<a href="https://github.com/sbt/sbt-jupiter-interface">sbt-jupiter-interface</a>. To add
+JUnit Jupiter support into your project, add the jupiter-interface dependency in
+your project's main build.sbt file.</p>
+<pre><code class="language-scala">libraryDependencies += "com.github.sbt.junit" % "jupiter-interface" % "0.15.1" % Test
+</code></pre>
+<p>and the sbt-jupiter-interface plugin to your <code>project/plugins.sbt</code>:</p>
+<pre><code class="language-scala">addSbtPlugin("com.github.sbt.junit" % "sbt-jupiter-interface" % "0.15.1")
+</code></pre>
+<p>Support for JUnit 4 is provided by
+<a href="https://github.com/sbt/junit-interface">junit-interface</a>.
+Add the junit-interface dependency in your project's main build.sbt file.</p>
+<pre><code class="language-scala">libraryDependencies += "com.github.sbt" % "junit-interface" % "0.13.3" % Test
+</code></pre>
+<h3 id="test-filtering"><a class="header" href="#test-filtering">Test filtering</a></h3>
+<p>In sbt 2.x, the <code>test</code> task accepts a whitespace separated list of test names to
+run. For example:</p>
+<pre><code class="language-bash">&gt; test example.ExampleSuite example.ExampleSuite2
+</code></pre>
+<p>Here's an example output:</p>
+<pre><code class="language-bash">&gt; test example.ExampleSuite example.ExampleSuite2
+[info] compiling 1 Scala source to /tmp/foo/target/out/jvm/scala-3.7.2/foo/backend ...
+[info] compiling 2 Scala sources to /tmp/foo/target/out/jvm/scala-3.7.2/foo/test-backend ...
+example.ExampleSuite:
+  + addition 0.003s
+example.ExampleSuite2:
+  + subtraction 0.003s
+[info] Passed: Total 2, Failed 0, Errors 0, Passed 2
+[success] elapsed time: 3 s, cache 49%, 25 disk cache hits, 26 onsite tasks
+</code></pre>
+<p>It supports wildcards as well:</p>
+<pre><code>&gt; test *Example*
+</code></pre>
+<h3 id="incremental-testing"><a class="header" href="#incremental-testing">Incremental testing</a></h3>
+<p>In addition to the explicit filter, the <code>test</code> task runs only the tests that satisfy
+one of the following conditions are run:</p>
+<ul>
+<li>The tests that failed in the previous run</li>
+<li>The tests that were not run before</li>
+<li>The tests that have one or more transitive dependencies, maybe in a
+different project, recompiled.</li>
+</ul>
+<h3 id="full-testing"><a class="header" href="#full-testing">Full testing</a></h3>
+<p>To run, uncached full tests, like sbt 1.x, use the <code>testFull</code> task.</p>
+<!--
+### Tab completion
+
+Tab completion is provided for test names based on the results of the
+last `Test/compile`. This means that a new sources aren't available for
+tab completion until they are compiled and deleted sources won't be
+removed from tab completion until a recompile. A new test source can
+still be manually written out and run using `test`.
+-->
+<h3 id="other-tasks"><a class="header" href="#other-tasks">Other tasks</a></h3>
+<p>Tasks that are available for main sources are generally available for
+test sources, but are prefixed with <code>Test /</code> on the command line and are
+referenced in Scala code with <code>Test /</code> as well. These tasks include:</p>
+<ul>
+<li><code>Test / compile</code></li>
+<li><code>Test / console</code></li>
+<li><code>Test / consoleQuick</code></li>
+<li><code>Test / run</code></li>
+<li><code>Test / runMain</code></li>
+</ul>
+<p>See <a href="reference/./sbt-run.html">sbt run</a> for details on these tasks.</p>
+<h3 id="output"><a class="header" href="#output">Output</a></h3>
+<p>By default, logging is buffered for each test source file until all
+tests for that file complete. This can be disabled by setting
+<code>logBuffered</code>:</p>
+<pre><code class="language-scala">Test / logBuffered := false
+</code></pre>
+<h4 id="test-reports"><a class="header" href="#test-reports">Test Reports</a></h4>
+<p>By default, sbt will generate JUnit XML test reports for all tests in
+the build, located in the <code>target/test-reports</code> directory for a project.
+This can be disabled by disabling the <code>JUnitXmlReportPlugin</code></p>
+<pre><code class="language-scala">val myProject = (project in file(".")).disablePlugins(plugins.JUnitXmlReportPlugin)
+</code></pre>
+<h3 id="options"><a class="header" href="#options">Options</a></h3>
+<h4 id="test-framework-arguments"><a class="header" href="#test-framework-arguments">Test framework arguments</a></h4>
+<p>Arguments to the test framework may be provided on the command line to
+the <code>test</code> tasks following a <code>--</code> separator. For example:</p>
+<pre><code>&gt; test org.example.MyTest -- -verbosity 1
+</code></pre>
+<p>To specify test framework arguments as part of the build, add options
+constructed by <code>Tests.Argument</code>:</p>
+<pre><code class="language-scala">Test / testOptions += Tests.Argument("-verbosity", "1")
+</code></pre>
+<p>To specify them for a specific test framework only:</p>
+<pre><code class="language-scala">Test / testOptions += Tests.Argument(TestFrameworks.ScalaCheck, "-verbosity", "1")
+</code></pre>
+<h4 id="setup-and-cleanup"><a class="header" href="#setup-and-cleanup">Setup and Cleanup</a></h4>
+<p>Specify setup and cleanup actions using <code>Tests.Setup</code> and
+<code>Tests.Cleanup</code>. These accept either a function of type <code>() =&gt; Unit</code> or
+a function of type <code>ClassLoader =&gt; Unit</code>. The variant that accepts a
+ClassLoader is passed the class loader that is (or was) used for running
+the tests. It provides access to the test classes as well as the test
+framework classes.</p>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="reference/sbt-test.html#admonition-note"></a>
+</div>
+<div>
+<p>When forking, the <code>ClassLoader</code> containing the test classes cannot be
+provided because it is in another JVM. Only use the <code>() =&gt; Unit</code>
+variants in this case.</p>
+</div>
+</div>
+<p>Examples:</p>
+<pre><code class="language-scala">Test / testOptions += Tests.Setup( () =&gt; println("Setup") )
+Test / testOptions += Tests.Cleanup( () =&gt; println("Cleanup") )
+Test / testOptions += Tests.Setup( loader =&gt; ... )
+Test / testOptions += Tests.Cleanup( loader =&gt; ... )
+</code></pre>
+<h4 id="disable-parallel-execution-of-test-suites"><a class="header" href="#disable-parallel-execution-of-test-suites">Disable parallel execution of test suites</a></h4>
+<p>By default, sbt runs all tasks in parallel and within the same JVM as sbt itself.
+Because each test suite is mapped to a task, tests are also run in parallel by default.
+To make tests within a given project execute serially:</p>
+<pre><code class="language-scala">Test / parallelExecution := false
+</code></pre>
+<p>Note that tests from different projects may
+still execute concurrently.</p>
+<h4 id="filter-classes"><a class="header" href="#filter-classes">Filter classes</a></h4>
+<p>If you want to only run test classes whose name ends with "Test", use
+<code>Tests.Filter</code>:</p>
+<pre><code class="language-scala">Test / testOptions := Seq(Tests.Filter(s =&gt; s.endsWith("Test")))
+</code></pre>
+<h4 id="forking-tests"><a class="header" href="#forking-tests">Forking tests</a></h4>
+<p>The setting:</p>
+<pre><code class="language-scala">Test / fork := true
+</code></pre>
+<p>specifies that all tests will be executed in a single external JVM. <!-- See
+[Forking][Forking] for configuring standard options for forking.
+By default,
+tests executed in a forked JVM are executed *sequentially*.
+--></p>
+<p>More control over how tests are assigned to JVMs and what options to pass to those is
+available with <code>testGrouping</code> key.</p>
+<!--
+For example in build.sbt:
+
+```scala
+import Tests._
+
+{
+  def groupByFirst(tests: Seq[TestDefinition]) =
+    tests groupBy (_.name(0)) map {
+      case (letter, tests) =>
+        val options = ForkOptions().withRunJVMOptions(Vector("-Dfirst.letter"+letter))
+        new Group(letter.toString, tests, SubProcess(options))
+    } toSeq
+
+    Test / testGrouping := groupByFirst( (Test / definedTests).value )
+}
+```
+
+
+The tests in a single group are run sequentially.
+-->
+<p>Control the number of
+forked JVMs allowed to run at the same time by setting the limit on
+<code>Tags.ForkedTestGroup</code> tag, which is 1 by default. <code>Setup</code> and <code>Cleanup</code>
+actions cannot be provided with the actual test class loader when a
+group is forked.</p>
+<!--
+In addition, forked tests can optionally be run in parallel within the
+forked JVM(s), using the following setting:
+
+```scala
+Test / testForkedParallel := true
+```
+
+<a name="additional-test-configurations"></a>
+
+### Additional test configurations
+
+You can add an additional test configuration to have a separate set of
+test sources and associated compilation, packaging, and testing tasks
+and settings. The steps are:
+
+-   Define the configuration
+-   Add the tasks and settings
+-   Declare library dependencies
+-   Create sources
+-   Run tasks
+
+The following two examples demonstrate this. The first example shows how
+to enable integration tests. The second shows how to define a customized
+test configuration. This allows you to define multiple types of tests
+per project.
+
+#### Custom test configuration
+
+The previous example may be generalized to a custom test configuration.
+
+```scala
+lazy val scalatest = "org.scalatest" %% "scalatest" % "$example_scalatest_version$"
+lazy val FunTest = config("fun") extend(Test)
+
+ThisBuild / organization := "com.example"
+ThisBuild / scalaVersion := "$example_scala_version$"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
+
+lazy val root = (project in file("."))
+  .configs(FunTest)
+  .settings(
+    inConfig(FunTest)(Defaults.testSettings),
+    libraryDependencies += scalatest % FunTest
+    // other settings here
+  )
+```
+
+Instead of using the built-in configuration, we defined a new one:
+
+```scala
+lazy val FunTest = config("fun") extend(Test)
+```
+
+The `extend(Test)` part means to delegate to `Test` for undefined
+`FunTest` settings. The line that adds the tasks and settings for the
+new test configuration is:
+
+```scala
+settings(inConfig(FunTest)(Defaults.testSettings))
+```
+
+This says to add test and settings tasks in the `FunTest` configuration.
+We could have done it this way for integration tests as well. In fact,
+`Defaults.itSettings` is a convenience definition:
+`val itSettings = inConfig(IntegrationTest)(Defaults.testSettings)`.
+
+The comments in the integration test section hold, except with
+`IntegrationTest` replaced with `FunTest` and `"it"` replaced with
+`"fun"`. For example, test options can be configured specifically for
+`FunTest`:
+
+```scala
+FunTest / testOptions += ...
+```
+
+Test tasks are run by prefixing them with `fun:`
+
+```
+> FunTest / test
+```
+
+#### Additional test configurations with shared sources
+
+An alternative to adding separate sets of test sources (and
+compilations) is to share sources. In this approach, the sources are
+compiled together using the same classpath and are packaged together.
+However, different tests are run depending on the configuration.
+
+```scala
+lazy val scalatest = "org.scalatest" %% "scalatest" % "$example_scalatest_version$"
+lazy val FunTest = config("fun") extend(Test)
+
+ThisBuild / organization := "com.example"
+ThisBuild / scalaVersion := "$example_scala_version$"
+ThisBuild / version      := "0.1.0-SNAPSHOT"
+
+def itFilter(name: String): Boolean = name endsWith "ITest"
+def unitFilter(name: String): Boolean = (name endsWith "Test") && !itFilter(name)
+
+lazy val root = (project in file("."))
+  .configs(FunTest)
+  .settings(
+    inConfig(FunTest)(Defaults.testTasks),
+    libraryDependencies += scalatest % FunTest,
+    Test / testOptions := Seq(Tests.Filter(unitFilter)),
+    FunTest / testOptions := Seq(Tests.Filter(itFilter))
+    // other settings here
+  )
+```
+
+The key differences are:
+
+-   We are now only adding the test tasks
+    (inConfig(FunTest)(Defaults.testTasks)) and not compilation and
+    packaging tasks and settings.
+-   We filter the tests to be run for each configuration.
+
+To run standard unit tests, run `test` (or equivalently, `Test / test`):
+
+```
+> test
+```
+
+To run tests for the added configuration (here, `"FunTest"`), prefix it with
+the configuration name as before:
+
+```
+> FunTest / test
+> FunTest / testOnly org.example.AFunTest
+```
+
+##### Application to parallel execution
+
+One use for this shared-source approach is to separate tests that can
+run in parallel from those that must execute serially. Apply the
+procedure described in this section for an additional configuration.
+Let's call the configuration `serial`:
+
+```scala
+lazy val Serial = config("serial") extend(Test)
+```
+
+Then, we can disable parallel execution in just that configuration
+using:
+
+```scala
+Serial / parallelExecution := false
+```
+
+The tests to run in parallel would be run with `test` and the ones to
+run in serial would be run with `Serial/test`.
+
+### Extensions
+
+This page describes adding support for additional testing libraries and
+defining additional test reporters. You do this by implementing `sbt`
+interfaces (described below). If you are the author of the testing
+framework, you can depend on the test interface as a provided
+dependency. Alternatively, anyone can provide support for a test
+framework by implementing the interfaces in a separate project and
+packaging the project as an sbt [Plugin][Plugins].
+
+#### Custom Test Framework
+
+The main Scala testing libraries have built-in support for sbt. To add
+support for a different framework, implement the
+[uniform test interface](https://github.com/sbt/test-interface).
+
+#### Custom Test Reporters
+
+Test frameworks report status and results to test reporters. You can
+create a new test reporter by implementing either
+[TestReportListener](../api/sbt/TestReportListener.html) or
+[TestsListener](../api/sbt/TestsListener.html).
+
+#### Using Extensions
+
+To use your extensions in a project definition:
+
+Modify the `testFrameworks` setting to reference your test framework:
+
+```scala
+testFrameworks += new TestFramework("custom.framework.ClassName")
+```
+
+Specify the test reporters you want to use by overriding the
+`testListeners` setting in your project definition.
+
+```scala
+testListeners += customTestListener
+```
+
+where `customTestListener` is of type `sbt.TestReportListener`.
+-->
 <div style="break-before: page; page-break-before: always;"></div><h1 id="cached-task"><a class="header" href="#cached-task">Cached task</a></h1>
 <p>This page covers the cached task details. See <a href="reference/../concepts/caching.html">Caching</a> for a general explanation.</p>
 <h2 id="automatic-caching-1"><a class="header" href="#automatic-caching-1">Automatic caching</a></h2>
