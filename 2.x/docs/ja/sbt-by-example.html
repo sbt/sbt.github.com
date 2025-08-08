@@ -209,60 +209,60 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="例題でみる-sbt"><a class="header" href="#例題でみる-sbt">例題でみる sbt</a></h1>
-<p>This page assumes you've <a href="Setup.html">installed sbt runner</a>.</p>
-<p>Let's start with examples rather than explaining how sbt works or why.</p>
-<h3 id="create-a-minimum-sbt-build"><a class="header" href="#create-a-minimum-sbt-build">Create a minimum sbt build</a></h3>
+<p>このページは、 <a href="Setup.html">sbt runner をインストール</a>したことを前提とする。</p>
+<p>sbt の内部がどうなっているかや理由みたいなことを解説する代わりに、例題を次々と見ていこう。</p>
+<h3 id="最小-sbt-ビルドを作る"><a class="header" href="#最小-sbt-ビルドを作る">最小 sbt ビルドを作る</a></h3>
 <pre><code class="language-bash">mkdir foo-build
 cd foo-build
 touch build.sbt
 mkdir project
 echo "sbt.version=2.0.0-M3" &gt; project/build.properties
 </code></pre>
-<h3 id="start-sbt-shell"><a class="header" href="#start-sbt-shell">Start sbt shell</a></h3>
+<h3 id="sbt-シェルを起ち上げる"><a class="header" href="#sbt-シェルを起ち上げる">sbt シェルを起ち上げる</a></h3>
 <pre><code class="language-bash">$ sbt
 [info] welcome to sbt 2.0.0-M3 (Azul Systems, Inc. Java)
 ....
 [info] started sbt server
 sbt:foo-build&gt;
 </code></pre>
-<h3 id="exit-sbt-shell"><a class="header" href="#exit-sbt-shell">Exit sbt shell</a></h3>
-<p>To leave sbt shell, type <code>exit</code> or use Ctrl+D (Unix) or Ctrl+Z (Windows).</p>
+<h3 id="sbt-シェルを終了させる"><a class="header" href="#sbt-シェルを終了させる">sbt シェルを終了させる</a></h3>
+<p>sbt シェルを終了させるには、<code>exit</code> と入力するか、Ctrl+D (Unix) か Ctrl+Z (Windows) を押す。</p>
 <pre><code>sbt:foo-build&gt; exit
 </code></pre>
-<h3 id="compile-a-project"><a class="header" href="#compile-a-project">Compile a project</a></h3>
-<p>As a convention, we will use the <code>sbt:...&gt;</code> or <code>&gt;</code> prompt to mean that we're in the sbt interactive shell.</p>
+<h3 id="プロジェクトをコンパイルする"><a class="header" href="#プロジェクトをコンパイルする">プロジェクトをコンパイルする</a></h3>
+<p>表記の慣例として <code>sbt:...&gt;</code> や <code>&gt;</code> というプロンプトは、sbt シェルに入っていることを意味することにする。</p>
 <pre><code class="language-bash">$ sbt
 sbt:foo-build&gt; compile
 [success] elapsed time: 0 s, cache 0%, 1 onsite task
 </code></pre>
-<h3 id="recompile-on-code-change"><a class="header" href="#recompile-on-code-change">Recompile on code change</a></h3>
-<p>Prefixing the <code>compile</code> command (or any other command) with <code>~</code> causes the command to be automatically re-executed whenever one of the source files within the project is modified. For example:</p>
+<h3 id="コード変更時に再コンパイルする"><a class="header" href="#コード変更時に再コンパイルする">コード変更時に再コンパイルする</a></h3>
+<p><code>compile</code> コマンド (やその他のコマンド) を <code>~</code> で始めると、プロジェクト内のソース・ファイルが変更されるたびにそのコマンドが自動的に再実行される。</p>
 <pre><code>sbt:foo-build&gt; ~compile
 [success] elapsed time: 0 s, cache 100%, 1 disk cache hit
 [info] 1. Monitoring source files for foo-build/compile...
 [info]    Press &lt;enter&gt; to interrupt or '?' for more options.
 </code></pre>
-<h3 id="create-a-source-file"><a class="header" href="#create-a-source-file">Create a source file</a></h3>
-<p>Leave the previous command running. From a different shell or in your file manager create in the foo-build directory the following nested directories: <code>src/main/scala/example</code>. Then, create <code>Hello.scala</code> in the <code>example</code> directory using your favorite editor as follows:</p>
+<h3 id="ソースファイルを書く"><a class="header" href="#ソースファイルを書く">ソース・ファイルを書く</a></h3>
+<p>上記のコマンドは走らせたままにする。別のシェルかファイルマネージャーからプロジェクトのディレクトリへ行って、<code>src/main/scala/example</code> というディレクトリを作る。次に好きなエディタを使って <code>example</code> ディレクトリ内に以下のファイルを作成する:</p>
 <pre><code class="language-scala">package example
 
 @main def main(args: String*): Unit =
   println(s"Hello ${args.mkString}")
 </code></pre>
-<p>This new file should be picked up by the running command:</p>
+<p>この新しいファイルは実行中のコマンドが自動的に検知したはずだ:</p>
 <pre><code>[info] Build triggered by /tmp/foo-build/src/main/scala/example/Hello.scala. Running 'compile'.
 [info] compiling 1 Scala source to /tmp/foo-build/target/out/jvm/scala-3.3.3/foo/backend ...
 [success] elapsed time: 1 s, cache 0%, 1 onsite task
 [info] 2. Monitoring source files for foo-build/compile...
 [info]    Press &lt;enter&gt; to interrupt or '?' for more options.
 </code></pre>
-<p>Press <code>Enter</code> to exit <code>~compile</code>.</p>
-<h3 id="run-a-previous-command"><a class="header" href="#run-a-previous-command">Run a previous command</a></h3>
-<p>From sbt shell, press up-arrow twice to find the <code>compile</code> command that you executed at the beginning.</p>
+<p><code>~compile</code> を抜けるには <code>Enter</code> を押す。</p>
+<h3 id="以前のコマンドを実行する"><a class="header" href="#以前のコマンドを実行する">以前のコマンドを実行する</a></h3>
+<p>sbt シェル内で上矢印キーを 2回押して、上で実行した <code>compile</code> コマンドを探す。</p>
 <pre><code>sbt:foo-build&gt; compile
 </code></pre>
-<h3 id="getting-help"><a class="header" href="#getting-help">Getting help</a></h3>
-<p>Use the <code>help</code> command to get basic help about the available commands.</p>
+<h3 id="ヘルプを読む"><a class="header" href="#ヘルプを読む">ヘルプを読む</a></h3>
+<p><code>help</code> コマンドを使って、基礎コマンドの一覧を表示する。</p>
 <pre><code>sbt:foo-build&gt; help
 
   &lt;command&gt; (; &lt;command&gt;)*                       Runs the provided semicolon-separated commands.
@@ -276,17 +276,17 @@ sbt:foo-build&gt; compile
 
 ....
 </code></pre>
-<p>Display the description of a specific task:</p>
+<p>特定のタスクの説明を表示させる:</p>
 <pre><code>sbt:foo-build&gt; help run
 Runs a main class, passing along arguments provided on the command line.
 </code></pre>
-<h3 id="run-your-app"><a class="header" href="#run-your-app">Run your app</a></h3>
-<pre><code>sbt:foo&gt; run
+<h3 id="アプリを実行する"><a class="header" href="#アプリを実行する">アプリを実行する</a></h3>
+<pre><code>sbt:foo-build&gt; run
 [info] running example.main
 Hello
 [success] elapsed time: 0 s, cache 50%, 1 disk cache hit, 1 onsite task
 </code></pre>
-<h3 id="set-thisbuild--scalaversion-from-sbt-shell"><a class="header" href="#set-thisbuild--scalaversion-from-sbt-shell">Set ThisBuild / scalaVersion from sbt shell</a></h3>
+<h3 id="sbt-シェルから-scalaversion-を設定する"><a class="header" href="#sbt-シェルから-scalaversion-を設定する">sbt シェルから scalaVersion を設定する</a></h3>
 <pre><code>sbt:foo-build&gt; set scalaVersion := "3.7.2"
 [info] Defining scalaVersion
 [info] The new value will be used by Compile / bspBuildTarget, Compile / dependencyTreeCrossProjectId and 51 others.
@@ -294,12 +294,12 @@ Hello
 [info] Reapplying settings...
 [info] set current project to foo (in build file:/tmp/foo-build/)
 </code></pre>
-<p>Check the <code>scalaVersion</code> setting:</p>
+<p><code>scalaVersion</code> セッティングを確認する:</p>
 <pre><code>sbt:foo-build&gt; scalaVersion
 [info] 3.7.2
 </code></pre>
-<h3 id="save-the-session-to-buildsbt"><a class="header" href="#save-the-session-to-buildsbt">Save the session to build.sbt</a></h3>
-<p>We can save the ad-hoc settings using <code>session save</code>.</p>
+<h3 id="セッションを-buildsbt-へと保存する"><a class="header" href="#セッションを-buildsbt-へと保存する">セッションを build.sbt へと保存する</a></h3>
+<p>アドホックに設定したセッティングは <code>session save</code> で保存できる。</p>
 <pre><code>sbt:foo-build&gt; session save
 [info] Reapplying settings...
 [info] set current project to foo-build (in build file:/tmp/foo-build/)
@@ -310,18 +310,18 @@ Hello
 [warn] Automatically reload the build when source changes are detected by setting `Global / onChangedBuildSource := ReloadOnSourceChanges`.
 [warn] Disable this warning by setting `Global / onChangedBuildSource := IgnoreSourceChanges`.
 </code></pre>
-<p><code>build.sbt</code> file should now contain:</p>
+<p><code>build.sbt</code> ファイルは以下のようになったはずだ:</p>
 <pre><code class="language-scala">scalaVersion := "3.7.2"
 
 </code></pre>
-<h3 id="name-your-project"><a class="header" href="#name-your-project">Name your project</a></h3>
-<p>Using an editor, change <code>build.sbt</code> as follows:</p>
+<h3 id="プロジェクトに名前を付ける"><a class="header" href="#プロジェクトに名前を付ける">プロジェクトに名前を付ける</a></h3>
+<p>エディタを使って、<code>build.sbt</code> を以下のように変更する:</p>
 <pre><code class="language-scala">scalaVersion := "3.3.3"
 organization := "com.example"
 name := "Hello"
 </code></pre>
-<h3 id="reload-the-build"><a class="header" href="#reload-the-build">Reload the build</a></h3>
-<p>Use the <code>reload</code> command to reload the build. The command causes the <code>build.sbt</code> file to be re-read, and its settings applied.</p>
+<h3 id="ビルドの再読み込み"><a class="header" href="#ビルドの再読み込み">ビルドの再読み込み</a></h3>
+<p><code>reload</code> コマンドを使ってビルドを再読み込みする。このコマンドは <code>build.sbt</code> を読み直して、そこに書かれたセッティングを再適用する。</p>
 <pre><code>sbt:foo-build&gt; reload
 [info] welcome to sbt 2.x (Azul Systems, Inc. Java)
 [info] loading project definition from /tmp/foo-build/project
@@ -329,25 +329,25 @@ name := "Hello"
 [info] set current project to Hello (in build file:/tmp/foo-build/)
 sbt:Hello&gt;
 </code></pre>
-<p>Note that the prompt has now changed to <code>sbt:Hello&gt;</code>.</p>
-<h3 id="add-toolkit-test-to-librarydependencies"><a class="header" href="#add-toolkit-test-to-librarydependencies">Add toolkit-test to libraryDependencies</a></h3>
-<p>Using an editor, change <code>build.sbt</code> as follows:</p>
+<p>プロンプトが <code>sbt:Hello&gt;</code> に変わったことに注目してほしい。</p>
+<h3 id="librarydependencies-に-toolkit-test-を追加する"><a class="header" href="#librarydependencies-に-toolkit-test-を追加する">libraryDependencies に toolkit-test を追加する</a></h3>
+<p>エディタを使って、<code>build.sbt</code> を以下のように変更する:</p>
 <pre><code class="language-scala">scalaVersion := "3.3.3"
 organization := "com.example"
 name := "Hello"
 libraryDependencies += "org.scala-lang" %% "toolkit-test" % "0.1.7" % Test
 </code></pre>
-<p>Use the <code>reload</code> command to reflect the change in <code>build.sbt</code>.</p>
+<p><code>reload</code> コマンドを使って、<code>build.sbt</code> の変更を反映させる。</p>
 <pre><code>sbt:Hello&gt; reload
 </code></pre>
-<h3 id="run-incremental-tests"><a class="header" href="#run-incremental-tests">Run incremental tests</a></h3>
+<h3 id="差分テストを実行する"><a class="header" href="#差分テストを実行する">差分テストを実行する</a></h3>
 <pre><code>sbt:Hello&gt; test
 </code></pre>
-<h3 id="run-incremental-tests-continuously"><a class="header" href="#run-incremental-tests-continuously">Run incremental tests continuously</a></h3>
+<h3 id="差分テストを継続的に実行する"><a class="header" href="#差分テストを継続的に実行する">差分テストを継続的に実行する</a></h3>
 <pre><code>sbt:Hello&gt; ~test
 </code></pre>
-<h3 id="write-a-test"><a class="header" href="#write-a-test">Write a test</a></h3>
-<p>Leaving the previous command running, create a file named <code>src/test/scala/example/HelloSuite.scala</code> using an editor:</p>
+<h3 id="テストを書く"><a class="header" href="#テストを書く">テストを書く</a></h3>
+<p>上のコマンドを走らせたままで、エディタから <code>src/test/scala/example/HelloSuite.scala</code> という名前のファイルを作成する:</p>
 <pre><code class="language-scala">package example
 
 class HelloSuite extends munit.FunSuite:
@@ -356,7 +356,7 @@ class HelloSuite extends munit.FunSuite:
   }
 end HelloSuite
 </code></pre>
-<p><code>~test</code> should pick up the change:</p>
+<p><code>~test</code> が検知したはずだ:</p>
 <pre><code>example.HelloSuite:
 ==&gt; X example.HelloSuite.Hello should start with H  0.012s munit.FailException: /tmp/foo-build/src/test/scala/example/HelloSuite.scala:5 assertion failed
 4:  test("Hello should start with H") {
@@ -370,8 +370,8 @@ end HelloSuite
 [error] (Test / testQuick) sbt.TestsFailedException: Tests unsuccessful
 [error] elapsed time: 1 s, cache 50%, 3 disk cache hits, 3 onsite tasks
 </code></pre>
-<h3 id="make-the-test-pass"><a class="header" href="#make-the-test-pass">Make the test pass</a></h3>
-<p>Using an editor, change <code>src/test/scala/example/HelloSuite.scala</code> to:</p>
+<h3 id="テストが通るようにする"><a class="header" href="#テストが通るようにする">テストが通るようにする</a></h3>
+<p>エディタを使って <code>src/test/scala/example/HelloSuite.scala</code> を以下のように変更する:</p>
 <pre><code class="language-scala">package example
 
 class HelloSuite extends munit.FunSuite:
@@ -380,9 +380,9 @@ class HelloSuite extends munit.FunSuite:
   }
 end HelloSuite
 </code></pre>
-<p>Confirm that the test passes, then press <code>Enter</code> to exit the continuous test.</p>
-<h3 id="add-a-library-dependency"><a class="header" href="#add-a-library-dependency">Add a library dependency</a></h3>
-<p>Using an editor, change <code>build.sbt</code> as follows:</p>
+<p>テストが通過したことを確認して、<code>Enter</code> を押して継続的テストを抜ける。</p>
+<h3 id="ライブラリ依存性を追加する"><a class="header" href="#ライブラリ依存性を追加する">ライブラリ依存性を追加する</a></h3>
+<p>エディタを使って、<code>build.sbt</code> を以下のように変更する:</p>
 <pre><code class="language-scala">scalaVersion := "3.3.3"
 organization := "com.example"
 name := "Hello"
@@ -391,9 +391,9 @@ libraryDependencies ++= Seq(
   "org.scala-lang" %% "toolkit-test" % "0.1.7" % Test,
 )
 </code></pre>
-<p>Use the <code>reload</code> command to reflect the change in <code>build.sbt</code>.</p>
-<h3 id="use-scala-repl"><a class="header" href="#use-scala-repl">Use Scala REPL</a></h3>
-<p>We can find out the current weather in New York.</p>
+<p><code>reload</code> コマンドを使って、<code>build.sbt</code> の変更を反映させる。</p>
+<h3 id="scala-repl-を使う"><a class="header" href="#scala-repl-を使う">Scala REPL を使う</a></h3>
+<p>New York の現在の天気を調べてみる。</p>
 <pre><code class="language-scala">sbt:Hello&gt; console
 Welcome to Scala 3.3.3 (1.8.0_402, Java OpenJDK 64-Bit Server VM).
 Type in expressions for evaluation. Or try :help.
@@ -441,8 +441,8 @@ val response: sttp.client4.Response[String] = Response({"latitude":40.710335,"lo
 
 scala&gt; :q // to quit
 </code></pre>
-<h3 id="make-a-subproject"><a class="header" href="#make-a-subproject">Make a subproject</a></h3>
-<p>Change <code>build.sbt</code> as follows:</p>
+<h3 id="サブプロジェクトを作成する"><a class="header" href="#サブプロジェクトを作成する">サブプロジェクトを作成する</a></h3>
+<p><code>build.sbt</code> を以下のように変更する:</p>
 <pre><code class="language-scala">scalaVersion := "3.3.3"
 organization := "com.example"
 
@@ -462,18 +462,18 @@ lazy val helloCore = project
     name := "Hello Core"
   )
 </code></pre>
-<p>Use the <code>reload</code> command to reflect the change in <code>build.sbt</code>.</p>
-<h3 id="list-all-subprojects"><a class="header" href="#list-all-subprojects">List all subprojects</a></h3>
+<p><code>reload</code> コマンドを使って、<code>build.sbt</code> の変更を反映させる。</p>
+<h3 id="全てのサブプロジェクトを列挙する"><a class="header" href="#全てのサブプロジェクトを列挙する">全てのサブプロジェクトを列挙する</a></h3>
 <pre><code>sbt:Hello&gt; projects
 [info] In file:/tmp/foo-build/
 [info]   * hello
 [info]     helloCore
 </code></pre>
-<h3 id="compile-the-subproject"><a class="header" href="#compile-the-subproject">Compile the subproject</a></h3>
+<h3 id="サブプロジェクトをコンパイルする"><a class="header" href="#サブプロジェクトをコンパイルする">サブプロジェクトをコンパイルする</a></h3>
 <pre><code>sbt:Hello&gt; helloCore/compile
 </code></pre>
-<h3 id="add-toolkit-test-to-the-subproject"><a class="header" href="#add-toolkit-test-to-the-subproject">Add toolkit-test to the subproject</a></h3>
-<p>Change <code>build.sbt</code> as follows:</p>
+<h3 id="サブプロジェクトに-toolkit-test-を追加する"><a class="header" href="#サブプロジェクトに-toolkit-test-を追加する">サブプロジェクトに toolkit-test を追加する</a></h3>
+<p><code>build.sbt</code> を以下のように変更する:</p>
 <pre><code class="language-scala">scalaVersion := "3.3.3"
 organization := "com.example"
 
@@ -496,8 +496,8 @@ lazy val helloCore = project
     libraryDependencies += toolkitTest % Test
   )
 </code></pre>
-<h3 id="broadcast-commands"><a class="header" href="#broadcast-commands">Broadcast commands</a></h3>
-<p>Set aggregate so that the command sent to <code>hello</code> is broadcast to <code>helloCore</code> too:</p>
+<h3 id="コマンドをブロードキャストする"><a class="header" href="#コマンドをブロードキャストする">コマンドをブロードキャストする</a></h3>
+<p><code>hello</code> に送ったコマンドを <code>helloCore</code> にもブロードキャストするために集約を設定する:</p>
 <pre><code class="language-scala">scalaVersion := "3.3.3"
 organization := "com.example"
 
@@ -521,12 +521,12 @@ lazy val helloCore = project
     libraryDependencies += toolkitTest % Test
   )
 </code></pre>
-<p>After <code>reload</code>, <code>~test</code> now runs on both subprojects:</p>
+<p><code>reload</code> 後、<code>~test</code> は両方のサブプロジェクトに作用する:</p>
 <pre><code class="language-scala">sbt:Hello&gt; ~test
 </code></pre>
-<p>Press <code>Enter</code> to exit the continuous test.</p>
-<h3 id="make-hello-depend-on-hellocore"><a class="header" href="#make-hello-depend-on-hellocore">Make hello depend on helloCore</a></h3>
-<p>Use <code>.dependsOn(...)</code> to add a dependency on other subprojects. Also let's move the toolkit dependency to <code>helloCore</code>.</p>
+<p><code>Enter</code> を押して継続的テストを抜ける。</p>
+<h3 id="hello-が-hellocore-に依存するようにする"><a class="header" href="#hello-が-hellocore-に依存するようにする">hello が helloCore に依存するようにする</a></h3>
+<p>サブプロジェクト間の依存関係を定義するには <code>.dependsOn(...)</code> を使う。ついでに、toolkit への依存性も <code>helloCore</code> に移そう。</p>
 <pre><code class="language-scala">scalaVersion := "3.3.3"
 organization := "com.example"
 
@@ -549,9 +549,9 @@ lazy val helloCore = project
     libraryDependencies += toolkitTest % Test
   )
 </code></pre>
-<h3 id="parse-json-using-ujson"><a class="header" href="#parse-json-using-ujson">Parse JSON using uJson</a></h3>
-<p>Let's use uJson from the toolkit in <code>helloCore</code>.</p>
-<p>Add <code>core/src/main/scala/example/core/Weather.scala</code>:</p>
+<h3 id="ujson-を使って-json-をパースする"><a class="header" href="#ujson-を使って-json-をパースする">uJson を使って JSON をパースする</a></h3>
+<p><code>helloCore</code> に uJson を追加しよう。</p>
+<p><code>core/src/main/scala/example/core/Weather.scala</code> を追加する:</p>
 <pre><code class="language-scala">package example.core
 
 import sttp.client4.quick._
@@ -568,7 +568,7 @@ object Weather:
     json.obj("current_weather")("temperature").num
 end Weather
 </code></pre>
-<p>Next, change <code>src/main/scala/example/Hello.scala</code> as follows:</p>
+<p>次に <code>src/main/scala/example/Hello.scala</code> を以下のように変更する:</p>
 <pre><code class="language-scala">package example
 
 import example.core.Weather
@@ -577,7 +577,7 @@ import example.core.Weather
   val temp = Weather.temp()
   println(s"Hello! The current temperature in New York is $temp C.")
 </code></pre>
-<p>Let's run the app to see if it worked:</p>
+<p>アプリを走らせてみて、うまくいったか確認する:</p>
 <pre><code>sbt:Hello&gt; run
 [info] compiling 1 Scala source to /tmp/foo-build/core/target/scala-2.13/classes ...
 [info] compiling 1 Scala source to /tmp/foo-build/target/scala-2.13/classes ...
@@ -645,20 +645,20 @@ Change `build.sbt` as follows:
 @@snip [example-weather-build3]($root$/src/sbt-test/ref/example-weather/changes/build3.sbt) {}
 
 -->
-<h3 id="switch-scalaversion-temporarily"><a class="header" href="#switch-scalaversion-temporarily">Switch scalaVersion temporarily</a></h3>
+<h3 id="一時的に-scalaversion-を変更する"><a class="header" href="#一時的に-scalaversion-を変更する">一時的に scalaVersion を変更する</a></h3>
 <pre><code>sbt:Hello&gt; ++3.3.3!
 [info] Forcing Scala version to 3.3.3 on all projects.
 [info] Reapplying settings...
 [info] Set current project to Hello (in build file:/tmp/foo-build/)
 </code></pre>
-<p>Check the <code>scalaVersion</code> setting:</p>
+<p><code>scalaVersion</code> セッティングを確認する:</p>
 <pre><code>sbt:Hello&gt; scalaVersion
 [info] helloCore / scalaVersion
 [info]  3.3.3
 [info] scalaVersion
 [info]  3.3.3
 </code></pre>
-<p>This setting will go away after <code>reload</code>.</p>
+<p>このセッティングは <code>reload</code> 後には無効となる。</p>
 <!--
 ### Inspect the dist task
 
@@ -680,13 +680,12 @@ sbt:Hello> inspect tree dist
 ```
 
 -->
-<h3 id="batch-mode"><a class="header" href="#batch-mode">Batch mode</a></h3>
-<p>You can also run sbt in batch mode, passing sbt commands directly from the terminal.</p>
+<h3 id="バッチモード"><a class="header" href="#バッチモード">バッチ・モード</a></h3>
+<p>sbt のコマンドをターミナルから直接渡して sbt をバッチモードで実行することができる。</p>
 <pre><code>$ sbt clean "testOnly HelloSuite"
 </code></pre>
-<p><strong>Note</strong>: Running in batch mode requires JVM spinup and JIT each time, so <strong>your build will run much slower</strong>. For day-to-day coding, we recommend using the sbt shell or a continuous test like <code>~test</code>.</p>
-<h3 id="sbt-new-command"><a class="header" href="#sbt-new-command">sbt new command</a></h3>
-<p>You can use the sbt <code>new</code> command to quickly setup a simple "Hello world" build.</p>
+<h3 id="sbt-new-コマンド"><a class="header" href="#sbt-new-コマンド">sbt new コマンド</a></h3>
+<p>sbt <code>new</code> コマンドを使って手早く簡単な Hello world ビルドをセットアップすることができる。</p>
 <pre><code>$ sbt new scala/scala-seed.g8
 ....
 A minimal Scala project.
@@ -695,10 +694,10 @@ name [My Something Project]: hello
 
 Template applied in ./hello
 </code></pre>
-<p>When prompted for the project name, type <code>hello</code>.</p>
-<p>This will create a new project under a directory named <code>hello</code>.</p>
-<h3 id="credits"><a class="header" href="#credits">Credits</a></h3>
-<p>This page is based on the <a href="https://www.scalawilliam.com/essential-sbt/">Essential sbt</a> tutorial written by William "Scala William" Narmontas.</p>
+<p>プロジェクト名を入力するプロンプトが出てきたら <code>hello</code> と入力する。</p>
+<p>これで、<code>hello</code> ディレクトリ以下に新しいプロジェクトができた。</p>
+<h3 id="クレジット"><a class="header" href="#クレジット">クレジット</a></h3>
+<p>本ページは William “Scala William” Narmontas さん作の <a href="https://www.scalawilliam.com/essential-sbt/">Essential sbt</a> というチュートリアルに基づいて書かれた。</p>
 
                     </main>
 

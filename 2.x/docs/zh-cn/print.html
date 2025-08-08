@@ -209,7 +209,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="sbt-记-草稿"><a class="header" href="#sbt-记-草稿">sbt 记 (草稿)</a></h1>
+                        <h1 id="sbt-之书-草稿"><a class="header" href="#sbt-之书-草稿">sbt 之书 (草稿)</a></h1>
 <p>这是关于 sbt 2.x 的草稿文档，目前尚未发布。虽然总体概念可以应用到 sbt 1.x，但 2.x 及本文档的详细内容可能会有所变动。</p>
 <p><img src="files/sbt-logo.svg" alt="sbt logo" /></p>
 <p>sbt 是一个用于 Scala 和 Java 的简单构建工具。 sbt 通过 Coursier 下载你的库依赖， 增量编译和测试项目， 并与 IntelliJ 和 VS Code 等 IDE 集成， 打包 JAR 文件并发布到 <a href="https://central.sonatype.com/">Maven Central</a>， 这是 JVM 社区的包注册表。</p>
@@ -316,12 +316,12 @@ sbt:foo-build&gt; compile
 Runs a main class, passing along arguments provided on the command line.
 </code></pre>
 <h3 id="run-your-app"><a class="header" href="#run-your-app">Run your app</a></h3>
-<pre><code>sbt:foo&gt; run
+<pre><code>sbt:foo-build&gt; run
 [info] running example.main
 Hello
 [success] elapsed time: 0 s, cache 50%, 1 disk cache hit, 1 onsite task
 </code></pre>
-<h3 id="set-thisbuild--scalaversion-from-sbt-shell"><a class="header" href="#set-thisbuild--scalaversion-from-sbt-shell">Set ThisBuild / scalaVersion from sbt shell</a></h3>
+<h3 id="set-scalaversion-from-sbt-shell"><a class="header" href="#set-scalaversion-from-sbt-shell">Set scalaVersion from sbt shell</a></h3>
 <pre><code>sbt:foo-build&gt; set scalaVersion := "3.7.2"
 [info] Defining scalaVersion
 [info] The new value will be used by Compile / bspBuildTarget, Compile / dependencyTreeCrossProjectId and 51 others.
@@ -719,7 +719,6 @@ sbt:Hello> inspect tree dist
 <p>You can also run sbt in batch mode, passing sbt commands directly from the terminal.</p>
 <pre><code>$ sbt clean "testOnly HelloSuite"
 </code></pre>
-<p><strong>Note</strong>: Running in batch mode requires JVM spinup and JIT each time, so <strong>your build will run much slower</strong>. For day-to-day coding, we recommend using the sbt shell or a continuous test like <code>~test</code>.</p>
 <h3 id="sbt-new-command"><a class="header" href="#sbt-new-command">sbt new command</a></h3>
 <p>You can use the sbt <code>new</code> command to quickly setup a simple "Hello world" build.</p>
 <pre><code>$ sbt new scala/scala-seed.g8
