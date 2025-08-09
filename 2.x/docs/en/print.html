@@ -2426,10 +2426,39 @@ shortened to:
 libraryDependencies += "org.scalatest" %% "scalatest" % "$example_scalatest_version$" % "test"
 ```
 -->
-<div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-run"><a class="header" href="#sbt-run">sbt run</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-compile"><a class="header" href="#sbt-compile">sbt compile</a></h1>
 <h2 id="synopsis-2"><a class="header" href="#synopsis-2">Synopsis</a></h2>
-<p><code>sbt</code> [<em>query</em> / ] <code>run</code> [<em>args</em>]</p>
+<p><code>sbt</code> [<em>query</em> / ] <code>compile</code><br>
+<code>sbt</code> [<em>query</em> / ] <code>Test</code> / <code>compile</code><br></p>
 <h2 id="description-2"><a class="header" href="#description-2">Description</a></h2>
+<p>The <code>compile</code> task compiles the selected subprojects and their subproject dependencies. Since sbt 2.x, the compiled artifacts are cached automatically.</p>
+<p>Compiling Scala code with the raw Scala compiler has been slow, so significant poriton of sbt's development efforts deal with various strategies for speeding up compilation.</p>
+<h3 id="reduce-the-overhead-of-restarting-the-compiler"><a class="header" href="#reduce-the-overhead-of-restarting-the-compiler">Reduce the overhead of restarting the compiler</a></h3>
+<p>sbt server stays up in the background, allowing Scala compilation to run the same Java virtual machine (JVM). Keeping the JVM warm makes compilation significantly faster because it takes a long time to classload the compiler and for the Just-in-Time compiler to optimize it.</p>
+<h3 id="incremental-compilation"><a class="header" href="#incremental-compilation">Incremental compilation</a></h3>
+<p>When a source file <code>A.scala</code> is modified, sbt goes to great effort
+to minimize the other source files recompiled due to <code>A.scala</code>'s change. This process of tracking dependencies between the language constructs and recompiling only the required sources is called <em>incremental compilation</em>.</p>
+<h3 id="remote-caching-1"><a class="header" href="#remote-caching-1">(Remote) caching</a></h3>
+<p>In sbt 2.x, compiled artifacts are not only cached across the sessions and builds, but can optionally be cached across different machines using Bazel-compatible remote cache. See <a href="reference/../concepts/caching.html">Caching</a> for details.</p>
+<h3 id="test--compile"><a class="header" href="#test--compile">Test / compile</a></h3>
+<p>Scoping the <code>compile</code> task with a configuration, like <code>Test / compile</code> will compile the test sources and their source dependencies.</p>
+<h3 id="compilation-settings"><a class="header" href="#compilation-settings">Compilation settings</a></h3>
+<h4 id="scalaversion"><a class="header" href="#scalaversion">scalaVersion</a></h4>
+<p>The version of Scala used for compilation.</p>
+<pre><code class="language-scala">scalaVersion := "3.7.2"
+</code></pre>
+<h4 id="scalacoptions"><a class="header" href="#scalacoptions">scalacOptions</a></h4>
+<p>Options for the Scala compiler.</p>
+<pre><code class="language-scala">Compile / scalacOptions += "-Werror"
+</code></pre>
+<h4 id="javacoptions"><a class="header" href="#javacoptions">javacOptions</a></h4>
+<p>Options for the Java compiler.</p>
+<pre><code class="language-scala">Compile / javacOptions ++= List("-Xlint", "-Xlint:-serial")
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-run"><a class="header" href="#sbt-run">sbt run</a></h1>
+<h2 id="synopsis-3"><a class="header" href="#synopsis-3">Synopsis</a></h2>
+<p><code>sbt</code> [<em>query</em> / ] <code>run</code> [<em>args</em>]</p>
+<h2 id="description-3"><a class="header" href="#description-3">Description</a></h2>
 <p>The <code>run</code> task provides a means for running the user program.</p>
 <p>In sbt 1.x and earlier, <code>run</code> task ran the user program in the same Java virtual machine (JVM) as the sbt server. sbt 2.x implements <em>client-side run</em>: the <code>run</code> task creates a sandbox environment that contains the program, sends the information back to sbtn, and sbtn launches the user program in a fresh JVM.</p>
 <h3 id="motivations"><a class="header" href="#motivations">Motivations</a></h3>
@@ -2441,9 +2470,9 @@ In sbt 1.x, we needed to trap these <code>sys.exit</code> calls to prevent <code
 <li><strong>sbt server availability</strong>. Since the program will run outside of the sbt server, it can become available to the more requests by other clients, for example test or IDE integration.</li>
 </ol>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-test"><a class="header" href="#sbt-test">sbt test</a></h1>
-<h2 id="synopsis-3"><a class="header" href="#synopsis-3">Synopsis</a></h2>
+<h2 id="synopsis-4"><a class="header" href="#synopsis-4">Synopsis</a></h2>
 <p><code>sbt</code> [<em>query</em> / ] <code>test</code> [<em>testname1</em> <em>testname2</em>] [ -- <em>options</em> ]</p>
-<h2 id="description-3"><a class="header" href="#description-3">Description</a></h2>
+<h2 id="description-4"><a class="header" href="#description-4">Description</a></h2>
 <p>The <code>test</code> task provides a means for compiling and running the tests.</p>
 <p>By default, the <code>test</code> task in sbt 2.x:</p>
 <ol>
@@ -2887,7 +2916,7 @@ someKey := Def.uncached {
   name.value + somethingUncachable.value + "!"
 }
 </code></pre>
-<h2 id="remote-caching-1"><a class="header" href="#remote-caching-1">Remote caching</a></h2>
+<h2 id="remote-caching-2"><a class="header" href="#remote-caching-2">Remote caching</a></h2>
 <p>sbt 2.x implements Bazel-compatible gRPC interface, which works with number of backend both open source and commercial. See <a href="reference/./remote-cache-setup.html">Remote cache setup</a> for more details.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="cross-building-setup"><a class="header" href="#cross-building-setup">Cross building setup</a></h1>
 <p>This page covers cross building setup. See <a href="reference/../concepts/cross-building.html">Cross building</a> for general explanation.</p>
