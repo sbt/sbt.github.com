@@ -231,8 +231,12 @@ scalaVersion := "3.7.2"
 <p>In sbt 1.x bare settings were project settings that applied only to the root subproject. In sbt 2.x, the bare settings in <code>build.sbt</code> are common settings that are injected to <strong>all subprojects</strong>.</p>
 </div>
 </div>
-<pre><code class="language-scala">name := "root" // every subprojects will be named root!
-publish / skip := true
+<pre><code class="language-scala">name := "root"         // all subprojects will be named root!
+publish / skip := true // all subprojects will be skipped!
+</code></pre>
+<p>To apply some settings to the root subproject only, either define it using multi-project build, or scope the setting under <code>LocalRootProject</code>:</p>
+<pre><code class="language-scala">LocalRootProject / name := "root"
+LocalRootProject / publish / skip := true
 </code></pre>
 <h3 id="migrating-thisbuild"><a class="header" href="#migrating-thisbuild">Migrating ThisBuild</a></h3>
 <p>In sbt 2.x, bare settings settings should no longer be scoped to <code>ThisBuild</code>. One benefit of the new <em>common settings</em> over <code>ThisBuild</code> is that it would act in a more predictable delegation. These settings are inserted between plugins settings and those defined in <code>settings(...)</code>, meaning they can be used to define settings like <code>Compile / scalacOptions</code>, which was not possible with <code>ThisBuild</code>.</p>

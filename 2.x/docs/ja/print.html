@@ -1291,24 +1291,14 @@ lazy val util = (project in file("util"))
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="変更点"><a class="header" href="#変更点">変更点</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-20-の変更点"><a class="header" href="#sbt-20-の変更点">sbt 2.0 の変更点</a></h1>
-<div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
-<div class="admonition-title">
-<div id="admonition-warning-title">
-<p>Warning</p>
-</div>
-<a class="admonition-anchor-link" href="changes/sbt-2.0-change-summary.html#admonition-warning"></a>
-</div>
-<div>
-<p>これは未だリリースされていない sbt 2.x のドキュメンテーションの草稿だ。一般的な概念は sbt 1.x とも一貫しているが、2.x 系および本稿の詳細は今後変更される可能性がある。</p>
-</div>
-</div>
 <h2 id="互換性に影響のある変更点"><a class="header" href="#互換性に影響のある変更点">互換性に影響のある変更点</a></h2>
 <p>See also <a href="changes/./migrating-from-sbt-1.x.html">Migrating from sbt 1.x</a>.</p>
 <ul>
 <li><strong>Scala 3 を用いたメタビルド</strong>。ビルド定義やプラグインに使われる sbt 2.x build.sbt DSL は Scala 3.x ベースとなった (現行では <strong>3.7.2</strong>)  (sbt 1.x 並びに 2.x は、Scala 2.x と 3.x の両方をビルドすることが可能) by <a href="https://github.com/eed3si9n">@eed3si9n</a>, <a href="https://github.com/adpi2">@adpi2</a>, and others.</li>
 <li><strong>コモン・セッティング</strong>。build.sbt に直書きされたセッティングは、ルートサブプロジェクトだけではなく、全てのサブプロジェクトに追加され、これまで <code>ThisBuild</code> が受け持ってきた役目を果たすことができる。</li>
-<li><strong>キャッシュ化されたタスク</strong>。全てのタスクはデフォルトで、キャッシュ化されている。詳細は<a href="changes/../concepts/caching.html">キャッシュ</a>参照。</li>
 <li><strong>差分テスト</strong>。<code>test</code> は、テスト結果をキャッシュする差分テストへと変更された。全テストを走らせたい場合は <code>testFull</code> を使う by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7686">#7686</a></li>
+<li><strong>キャッシュ化されたタスク</strong>。全てのタスクはデフォルトで、キャッシュ化されている。詳細は<a href="changes/../concepts/caching.html">キャッシュ</a>参照。</li>
+<li><strong>Depedency tree</strong>. <code>dependencyTree</code> tasks are unified to one input task by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8199">#8199</a></li>
 <li><code>test</code> タスクの形が <code>Unit</code> から <code>TestResult</code> へと変更された by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8181">#8181</a></li>
 <li>以前 <code>URL</code> に型付けされていたデフォルトのセッティングやタスクキー (<code>apiMappings</code>, <code>apiURL</code>, <code>homepage</code>, <code>organizationHomepage</code>, <code>releaseNotesURL</code> など) は <code>URI</code> に変更された in <a href="https://github.com/sbt/sbt/pull/7927">#7927</a></li>
 <li><code>license</code> キーの型が <code>Seq[(String, URL)]</code> から <code>Seq[License]</code> へと変更された in  <a href="https://github.com/sbt/sbt/pull/7927">#7927</a></li>
@@ -1325,9 +1315,10 @@ lazy val util = (project in file("util"))
 </ul>
 <h2 id="features"><a class="header" href="#features">Features</a></h2>
 <ul>
-<li>Project matrix, which was available via plugin in sbt 1.x, is in-sourced.</li>
-<li>sbt 2.x extends the unified slash syntax to support query of subprojects. Details below.</li>
-<li>Local/remote cache system. Details below</li>
+<li><strong>Project matrix</strong>. Project matrix, which was available via plugin in sbt 1.x, is in-sourced to provide parallel cross build support.</li>
+<li><strong>sbt query</strong>. sbt 2.x extends the unified slash syntax to support query of subprojects. Details below.</li>
+<li><strong>Local/remote cache system</strong>. Details below</li>
+<li><strong>Client-side run</strong>. Details below.</li>
 </ul>
 <h3 id="common-settings"><a class="header" href="#common-settings">Common settings</a></h3>
 <p>In sbt 2.x, the bare settings in <code>build.sbt</code> are interpreted to be common settings, and are injected to all subprojects. This means we can now set <code>scalaVersion</code> without using <code>ThisBuild</code> scoping:</p>
@@ -1356,6 +1347,12 @@ hi := name.value + "!"
 <pre><code class="language-bash">$ sbt ...@scalaBinaryVersion=3/test
 </code></pre>
 <p>The above runs all subprojects whose <code>scalaBinaryVersion</code> is <code>3</code>. Contributed by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7699">#7699</a></p>
+<h3 id="incremental-test"><a class="header" href="#incremental-test">Incremental test</a></h3>
+<p>In sbt 2.x, <code>test</code> task became an input task that accept arguments that can filter the test suites to run:</p>
+<pre><code class="language-bash">&gt; test *Example*
+</code></pre>
+<p>In addition, <code>test</code> is incremental and cached. This means, the test will not run unless it previously failed or something changed since the last run.</p>
+<p>See <a href="changes/../reference/sbt-test.html">test</a> for details.</p>
 <h3 id="localremote-cache-system"><a class="header" href="#localremote-cache-system">Local/remote cache system</a></h3>
 <p>sbt 2.x implements cached task by default, which can automatically cache the task results to local disk and Bazel-compatible remote cache.</p>
 <pre><code class="language-scala">lazy val task1 = taskKey[String]("doc for task1")
@@ -1374,6 +1371,19 @@ task1 := {
 }
 </code></pre>
 <p>See <a href="changes/../concepts/caching.html">Caching</a> for details. Contributed by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7464">#7464</a> / <a href="https://github.com/sbt/sbt/pull/7525">#7525</a>.</p>
+<h3 id="client-side-run"><a class="header" href="#client-side-run">Client-side run</a></h3>
+<p>The sbt runner 1.10.10 and later script defaults to using sbtn (GraalVM native-image client) for sbt 2.x. In sbt 2.0, sbt server sends the <code>run</code> task back to sbtn, which will fork a fresh JVM. All you have to do is:</p>
+<pre><code class="language-bash">sbt run
+</code></pre>
+<p>This avoids blocking the sbt server, and you can have multiple runs. Contributed by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8060">#8060</a>. See also <a href="changes/../reference/sbt-run.html">run</a> documentation.</p>
+<h3 id="performance-improvements"><a class="header" href="#performance-improvements">Performance improvements</a></h3>
+<p>Adrien Piquerez contributed a series of changes to improve performance while he was at Scala Center.</p>
+<ul>
+<li>perf: Reduces number of long-living instances to speed up startup by 20% relative to 2.0.0-M2 by <a href="https://github.com/adpi2">@adpi2</a> in <a href="https://github.com/sbt/sbt/pull/7866">#7866</a></li>
+<li>perf: Reduces creation of <code>Setting</code> and <code>Initialize</code>  by <a href="https://github.com/adpi2">@adpi2</a> in <a href="https://github.com/sbt/sbt/pull/7880">#7880</a></li>
+<li>perf: Refactors <code>Settings</code> and optimize indexing of aggregate keys by <a href="https://github.com/adpi2">@adpi2</a> in <a href="https://github.com/sbt/sbt/pull/7879">#7879</a></li>
+<li>perf: Removes instances of <code>Info</code> and <code>BasicAttributeMap</code> by <a href="https://github.com/adpi2">@adpi2</a> in <a href="https://github.com/sbt/sbt/pull/7882">#7882</a></li>
+</ul>
 <h2 id="previously-on-sbt"><a class="header" href="#previously-on-sbt">Previously on sbt</a></h2>
 <p>See also:</p>
 <ul>
@@ -1402,8 +1412,12 @@ scalaVersion := "3.7.2"
 <p>In sbt 1.x bare settings were project settings that applied only to the root subproject. In sbt 2.x, the bare settings in <code>build.sbt</code> are common settings that are injected to <strong>all subprojects</strong>.</p>
 </div>
 </div>
-<pre><code class="language-scala">name := "root" // every subprojects will be named root!
-publish / skip := true
+<pre><code class="language-scala">name := "root"         // all subprojects will be named root!
+publish / skip := true // all subprojects will be skipped!
+</code></pre>
+<p>To apply some settings to the root subproject only, either define it using multi-project build, or scope the setting under <code>LocalRootProject</code>:</p>
+<pre><code class="language-scala">LocalRootProject / name := "root"
+LocalRootProject / publish / skip := true
 </code></pre>
 <h3 id="migrating-thisbuild"><a class="header" href="#migrating-thisbuild">Migrating ThisBuild</a></h3>
 <p>In sbt 2.x, bare settings settings should no longer be scoped to <code>ThisBuild</code>. One benefit of the new <em>common settings</em> over <code>ThisBuild</code> is that it would act in a more predictable delegation. These settings are inserted between plugins settings and those defined in <code>settings(...)</code>, meaning they can be used to define settings like <code>Compile / scalacOptions</code>, which was not possible with <code>ThisBuild</code>.</p>
