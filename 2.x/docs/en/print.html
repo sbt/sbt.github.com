@@ -218,11 +218,16 @@ details of both 2.x and this doc are subject to change.</p>
 sbt downloads your library dependencies via Coursier,
 incrementally compiles and tests your projects,
 integrates with IDEs like IntelliJ and VS Code,
-makes JAR packages, and publishes them to <a href="https://central.sonatype.com/">Maven Central</a>,
+makes JAR packages, and publishes them to <a href="https://central.sonatype.com/">the Central Repo</a>,
 JVM community's package registry.</p>
 <pre><code class="language-scala">scalaVersion := "3.7.2"
 </code></pre>
 <p>You just need one line of <code>build.sbt</code> to get started with Scala.</p>
+<h2 id="links"><a class="header" href="#links">Links</a></h2>
+<ul>
+<li>The source for this documentation is hosted at <a href="https://github.com/sbt/website/">sbt/website</a></li>
+<li>The <a href="https://www.scala-sbt.org/1.x/docs/">documentation for sbt 1.x</a> is available</li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="installing-sbt-runner"><a class="header" href="#installing-sbt-runner">Installing sbt runner</a></h1>
 <p>To build an sbt project, you'll need to take these steps:</p>
 <ul>
@@ -259,11 +264,11 @@ sdk install sbt
 cd foo-build
 touch build.sbt
 mkdir project
-echo "sbt.version=2.0.0-M3" &gt; project/build.properties
+echo "sbt.version=2.0.0-RC2" &gt; project/build.properties
 </code></pre>
 <h3 id="start-sbt-shell"><a class="header" href="#start-sbt-shell">Start sbt shell</a></h3>
 <pre><code class="language-bash">$ sbt
-[info] welcome to sbt 2.0.0-M3 (Azul Systems, Inc. Java)
+[info] welcome to sbt 2.0.0-RC2 (Azul Systems, Inc. Java)
 ....
 [info] started sbt server
 sbt:foo-build&gt;
@@ -887,7 +892,7 @@ $ sbt new scala/scala3.g8
 <p>An sbt build is executed using <code>sbt</code> runner, also called "sbt-the-shell-script" to distinguish from other components. It's important to note is that sbt runner is designed to run <strong>any version</strong> of sbt.</p>
 <h3 id="specifying-sbt-version-with-projectbuildproperties"><a class="header" href="#specifying-sbt-version-with-projectbuildproperties">Specifying sbt version with project/build.properties</a></h3>
 <p>sbt runner executes a subcomponent called sbt launcher, which reads <code>project/build.properties</code> to determine the sbt version for the build, and downloads the artifacts if they haven't been cached:</p>
-<pre><code>sbt.version=2.0.0-M3
+<pre><code>sbt.version=2.0.0-RC2
 </code></pre>
 <p>This means that:</p>
 <ul>
@@ -1550,7 +1555,7 @@ lazy val plugin = (project in file("plugin"))
     (pluginCrossBuild / sbtVersion) := {
       scalaBinaryVersion.value match {
         case "2.12" =&gt; "1.5.8"
-        case _      =&gt; "2.0.0-M3"
+        case _      =&gt; "2.0.0-RC2"
       }
     },
   )
@@ -1847,7 +1852,7 @@ sbt:demo&gt; show someKey
 </ul>
 </li>
 </ul>
-<pre><code>sbt.version=2.0.0-M3
+<pre><code>sbt.version=2.0.0-RC2
 </code></pre>
 <p>This mechanism allows builds to be configured to a specific version of sbt, and everyone working on the project would use the same build semantics, regardless of the sbt runner installed on their machine.</p>
 <p>This also means that some features are implemented at sbt runner or sbtn level, while other features are implemented at sbt server level.</p>
@@ -1878,15 +1883,12 @@ This specific sbt meaning of <em>command</em> means there's no good general term
 <h3 id="project-level-tasks"><a class="header" href="#project-level-tasks">Project-level tasks</a></h3>
 <ul>
 <li><code>clean</code> Deletes all generated files (the <code>target</code> directory).</li>
-<li><code>publishLocal</code> Publishes artifacts (such as JARs) to the local Ivy
-repository as described in Publishing.</li>
-<li><code>publish</code> Publishes artifacts (such as JARs) to the repository
+<li><a href="reference/./sbt-publish.html"><code>publish</code></a> Publishes artifacts (such as JARs) to the repository
 defined by the publishTo setting, described in Publishing.</li>
+<li><a href="reference/./sbt-publish.html"><code>publishLocal</code></a> Publishes artifacts (such as JARs) to the local Ivy
+repository as described in Publishing.</li>
+<li><a href="reference/./sbt-update.html"><code>update</code></a> Resolves and retrieves external dependencies.</li>
 </ul>
-<!--
--   `update` Resolves and retrieves external dependencies as described
-    in [library dependencies][Library-Dependencies].
--->
 <h3 id="configuration-level-tasks"><a class="header" href="#configuration-level-tasks">Configuration-level tasks</a></h3>
 <p>Configuration-level tasks are tasks associated with a configuration. For
 example, <code>compile</code>, which is equivalent to <code>Compile/compile</code>, compiles
@@ -1895,7 +1897,7 @@ compiles the test source code (the <code>Test</code> configuration). Most tasks
 for the <code>Compile</code> configuration have an equivalent in the <code>Test</code>
 configuration that can be run using a <code>Test/</code> prefix.</p>
 <ul>
-<li><code>compile</code> Compiles the main sources (in the <code>src/main/scala</code>
+<li><a href="reference/./sbt-compile.html"><code>compile</code></a> Compiles the main sources (in the <code>src/main/scala</code>
 directory). <code>Test/compile</code> compiles test sources (in the
 src/test/scala/ directory).</li>
 <li><code>console</code> Starts the Scala interpreter with a classpath including
@@ -1918,12 +1920,9 @@ src/test/scala.</li>
 and resources. The packaged paths are relative to src/main/scala and
 src/main/resources. Similarly, Test/packageSrc operates on test
 source files and resources.</li>
-<li><code>run &lt;argument&gt;*</code> Runs the main class for the project in the same
+<li><a href="reference/./sbt-run.html"><code>run &lt;argument&gt;*</code></a> Runs the main class for the project in the same
 virtual machine as sbt. The main class is passed the arguments
-provided.<!-- See [Running Project Code][Running-Project-Code] for details on the use of
-System.exit and multithreading (including GUIs) in code run by this
-action. `Test/run` runs a main class in the test code. -->
-</li>
+provided.</li>
 <li><code>runMain &lt;main-class&gt; &lt;argument&gt;*</code> Runs the specified main class for
 the project in the same virtual machine as sbt. The main class is
 passed the arguments provided.<!-- See
@@ -1932,22 +1931,18 @@ details on the use of System.exit and multithreading (including
 GUIs) in code run by this action. `Test/runMain` runs the specified
 main class in the test code. -->
 </li>
-<li><code>testFull</code> Runs all tests detected during test compilation.<!-- See [Testing][Testing] for details. -->
-</li>
-<li><code>testOnly &lt;test&gt;*</code> Runs the tests provided as arguments. <code>*</code> (will
-be) interpreted as a wildcard in the test name.<!-- See [Testing][Testing] for details. -->
-</li>
-<li><code>test &lt;test&gt;*</code> Runs the tests specified as arguments (or all
+<li><a href="reference/./sbt-tes.html"><code>test &lt;test&gt;*</code></a> Runs the tests specified as arguments (or all
 tests if no arguments are given) that:
 <ol>
 <li>have not been run yet OR</li>
 <li>failed the last time they were run OR</li>
 <li>had any transitive dependencies recompiled since the last
-successful run <code>*</code> (will be) interpreted as a wildcard in the
-test name.<!-- See [Testing][Testing] for details. -->
-</li>
+successful run <code>*</code> is interpreted as a wildcard in the
+test name.</li>
 </ol>
 </li>
+<li><a href="reference/./sbt-test.html"><code>testFull</code></a> Runs all tests detected during test compilation.</li>
+<li><a href="reference/./sbt-test.html"><code>testOnly &lt;test&gt;*</code></a> Runs the tests provided as arguments.</li>
 </ul>
 <!--
 -   `consoleQuick` Starts the Scala interpreter with the project's
@@ -1989,9 +1984,8 @@ context of the given project.</p>
 details on multiple project builds.) -->
 </li>
 <li>
-<p><code>~ &lt;command&gt;</code> Executes the project specified action or method
+<p><a href="reference/./watch.html">Watch command</a> <code>~ &lt;command&gt;</code> Executes the project specified action or method
 whenever source files change.</p>
-<!-- See [Triggered Execution][Triggered-Execution] for details. -->
 </li>
 <li>
 <p><code>&lt; filename</code> Executes the commands in the given file. Each command
@@ -3040,6 +3034,172 @@ repositories:</p>
   repo.root.startsWith("file:")
 }
 </code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="watch-command"><a class="header" href="#watch-command">Watch command</a></h1>
+<h2 id="synopsis-6"><a class="header" href="#synopsis-6">Synopsis</a></h2>
+<p><code>sbt</code> <code>~</code> <em>command1</em><br>
+<code>sbt</code> <code>~</code> <em>command1</em> [ <code>;</code> <em>command2</em> <code>;</code> ... ]</p>
+<h2 id="descrption"><a class="header" href="#descrption">Descrption</a></h2>
+<p>The watch command is denoted by <code>~</code> (tilde), and it provides the ability
+to monitor the input files for particular tasks
+and repeat the tasks when changes to those files occur.</p>
+<p>Some example usages are described below:</p>
+<h3 id="compile-1"><a class="header" href="#compile-1">Compile</a></h3>
+<p>A common use-case is continuous compilation. The following commands will make
+sbt watch for source changes in the Test and Compile (default) configurations
+respectively and re-run the compile command.</p>
+<pre><code class="language-bash">&gt; ~ Test / compile
+
+&gt; ~ compile
+</code></pre>
+<p>Note that because <code>Test / compile</code> depends on <code>Compile / compile</code>,
+source changes in the main source directory will trigger recompilation
+of the test sources.</p>
+<h3 id="testing"><a class="header" href="#testing">Testing</a></h3>
+<p>Triggered execution is often used when developing in a test driven development
+(TDD) style. The following command will monitor changes to both the main and
+test source sources for the build and re-run only the tests that reference
+classes that have been re-compiled since the last test run.</p>
+<pre><code class="language-bash">&gt; ~ test
+</code></pre>
+<p>It is also possible to re-run only a particular test if its dependencies
+have changed.</p>
+<pre><code class="language-bash">&gt; ~ test foo.BarTest
+</code></pre>
+<p>It is possible to always re-run a test when source changes are
+detected regardless of whether the test depends on any of the updated
+source files.</p>
+<pre><code class="language-bash">&gt; ~ testOnly foo.BarTest
+</code></pre>
+<p>To run all of the tests in the project when any sources change, use</p>
+<pre><code class="language-bash">&gt; ~ testFull
+</code></pre>
+<h3 id="running-multiple-commands"><a class="header" href="#running-multiple-commands">Running Multiple Commands</a></h3>
+<p>The watch command supports watching multiple, semicolon separated, tasks.
+For example, the following command will monitor for source file changes and run <code>clean</code> and
+<code>test</code>:</p>
+<pre><code class="language-bash">&gt; ~ clean; test
+</code></pre>
+<h3 id="build-sources"><a class="header" href="#build-sources">Build sources</a></h3>
+<p>If the build is configured to automatically reload when build source changes
+are made by setting <code>Global / onChangedBuildSource := ReloadOnSourceChanges</code>,
+then sbt will monitor the build sources (i.e. <code>*.sbt</code> and <code>*.{java,scala}</code>
+files in the <code>project</code> directory). When build source changes are detected,
+the build will be reloaded and sbt will re-enter triggered execution mode
+when the reload completes.</p>
+<!--
+The following snippet can be added as a [global setting](../api/sbt/Global-Settings.html) to `~/.sbt/1.0/config.sbt` to enable `ReloadOnSourceChanges` for all sbt 1.3+ builds without breaking earlier versions:
+
+```
+Def.settings {
+  try {
+    val value = Class.forName("sbt.nio.Keys\$ReloadOnSourceChanges\$").getDeclaredField("MODULE\$").get(null)
+    val clazz = Class.forName("sbt.nio.Keys\$WatchBuildSourceOption")
+    val manifest = new scala.reflect.Manifest[AnyRef]{ def runtimeClass = clazz }
+    Seq(
+      Global / SettingKey[AnyRef]("onChangedBuildSource")(manifest, sbt.util.NoJsonWriter()) := value
+    )
+  } catch {
+    case e: Throwable =>
+      Nil
+  }
+}
+```
+-->
+<h3 id="clearing-the-screen"><a class="header" href="#clearing-the-screen">Clearing the screen</a></h3>
+<p>sbt can clear the console screen before it evaluates the task or after it
+triggers an event. To configure sbt to clear the screen after an event is
+triggered add</p>
+<pre><code class="language-scala">ThisBuild / watchTriggeredMessage := Watch.clearScreenOnTrigger
+</code></pre>
+<p>to the build settings. To clear the screen before running the task, add</p>
+<pre><code class="language-scala">ThisBuild  / watchBeforeCommand := Watch.clearScreen
+</code></pre>
+<p>to the build settings.</p>
+<h3 id="configuration"><a class="header" href="#configuration">Configuration</a></h3>
+<p>The behavior of triggered execution can be configured via a number of settings.</p>
+<ul>
+<li>
+<p><code>watchTriggers: Seq[Glob]</code> adds search queries for files that should task
+trigger evaluation but that the task does not directly depend on. For
+example, if the project build.sbt file contains <code>foo / watchTriggers += baseDirectory.value.toGlob / "*.txt"</code>, then any modifications to files
+ending with the <code>txt</code> extension will cause the <code>foo</code> command to trigger
+when in triggered execution mode.</p>
+</li>
+<li>
+<p><code>watchTriggeredMessage: (Int, Path, Seq[String]) =&gt; Option[String]</code>
+sets the message that is displayed when a file modification triggers a
+new build. Its input parameters are the current watch iteration count,
+the file that triggered the build and the command(s) that are going to
+be run. By default, it prints a message indicating what file triggered
+the build and what commands its going to run. No message is printed when
+the function returns <code>None</code>. To clear the screen before printing the
+message, just add <code>Watch.clearScreen()</code> inside of the task definition.
+This will ensure that the screen is cleared and that the message, if
+any is defined, will be printed after the screen clearing.</p>
+</li>
+<li>
+<p><code>watchInputOptions: Seq[Watch.InputOption]</code> allows the build to
+override the default watch options. For example, to add the ability to
+reload the build by typing the 'l' key, add
+<code>ThisBuild / watchInputOptions += Watch.InputOption('l', "reload", Watch.Reload)</code> to the <code>build.sbt</code> file. When using the default
+<code>watchStartMessage</code>, this will also add the option to the list displayed
+by the '?' option.</p>
+</li>
+<li>
+<p><code>watchBeforeCommand: () =&gt; Unit</code> provides a callback to run before
+evaluating the task.  It can be used to clear the console screen by
+adding <code>ThisBuild / watchBeforeCommand := Watch.clearScreen</code> to the
+project build.sbt file. By default it is no-op.</p>
+</li>
+<li>
+<p><code>watchLogLevel</code> sets the logging level of the file monitoring system.
+This can be useful if the triggered execution is not being evaluated
+when source files or modified or if is unexpectedly triggering due to
+modifications to files that should not be monitored.</p>
+</li>
+<li>
+<p><code>watchInputParser: Parser[Watch.Action]</code> changes how the monitor
+handles input events. For example, setting <code>watchInputParser := 'l' ^^^ Watch.Reload | '\r' ^^^ new Watch.Run("")</code> will make it so that
+typing the 'l' key will reload the build and typing a newline will
+return to the shell. By default this is automatically derived from the
+<code>watchInputOptions</code>.</p>
+</li>
+<li>
+<p><code>watchStartMessage: (Int, ProjectRef, Seq[String]) =&gt; Option[String]</code>
+sets the banner that is printed while the watch process is waiting for
+file or input events. The inputs are the iteration count, the current
+project and the commands to run. The default message includes
+instructions for terminating the watch or displaying all available
+options. This banner is only displayed if <code>watchOnIteration</code> logs the
+result of <code>watchStartMessage</code>.</p>
+</li>
+<li>
+<p><code>watchOnIteration: (Int, ProjectRef, Seq[String]) =&gt; Watch.Action</code> a
+function that is evaluated before waiting for source or input events. It
+can be used to terminate the watch early if, for example, a certain
+number of iterations have been reached. By default, it just logs the
+result of <code>watchStartMessage</code>.</p>
+</li>
+<li>
+<p><code>watchForceTriggerOnAnyChange: Boolean</code> configures whether or not the
+contents of a source file must change in order to trigger a build. The default
+value is false.</p>
+</li>
+<li>
+<p><code>watchPersistFileStamps: Boolean</code> toggles whether or not sbt will
+persist the file hashes computed for source files across multiple task
+evaluation runs. This can improve performance for projects with many
+source files. Because the file hashes are cached, it is possible for the
+evaluated task to read an invalid hash if many source files are being
+concurrently modified. The default value is false.</p>
+</li>
+<li>
+<p><code>watchAntiEntropy: FiniteDuration</code> controls the time that must elapse
+before a build is re-triggered by the same file that previously
+triggered the build. This is intended to prevent spurious builds that
+can occur when a file is modified in short bursts. The default value is 500ms.</p>
+</li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="cached-task"><a class="header" href="#cached-task">Cached task</a></h1>
 <p>This page covers the cached task details. See <a href="reference/../concepts/caching.html">Caching</a> for a general explanation.</p>
 <h2 id="automatic-caching-1"><a class="header" href="#automatic-caching-1">Automatic caching</a></h2>
@@ -3424,6 +3584,9 @@ def classifier(c: String) = artifacts(Artifact(name, c))
 libraryDependencies += ("org.testng" % "testng" % "5.7").artifacts(Artifact("testng", "jdk15"))
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="recipes"><a class="header" href="#recipes">Recipes</a></h1>
+<p>The recipe section of the documentation focuses on the objectives
+with minimal explanations.</p>
+<p>If you are new to sbt, see <a href="recipes/../sbt-by-example.html">sbt by example</a> and <a href="recipes/../guide/index.html">Getting Started</a> section first.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="how-to-write-hello-world"><a class="header" href="#how-to-write-hello-world">How to write hello world</a></h1>
 <h2 id="objective"><a class="header" href="#objective">Objective</a></h2>
 <p>I want to write a hello world program in Scala, and run it.</p>
@@ -3431,7 +3594,7 @@ libraryDependencies += ("org.testng" % "testng" % "5.7").artifacts(Artifact("tes
 <ol>
 <li>Create a fresh directory, like <code>hello_scala/</code></li>
 <li>Create a directory named <code>project/</code> under <code>hello_scala/</code>, and create <code>project/build.properties</code> with
-<pre><code>sbt.version=2.0.0-M3
+<pre><code>sbt.version=2.0.0-RC2
 </code></pre>
 </li>
 <li>Under <code>hello_scala/</code>, create <code>build.sbt</code>:
@@ -3467,8 +3630,8 @@ libraryDependencies += ("org.testng" % "testng" % "5.7").artifacts(Artifact("tes
 <a class="admonition-anchor-link" href="recipes/central.html#admonition-note"></a>
 </div>
 <div>
-<p>This is the recipe section of the documentation.
-We generally assume that you are familar with the sbt concepts, and focus on how-tos.</p>
+<p>The recipe section of the documentation focuses on the objectives
+with minimal explanations.</p>
 <p>See also Sonatype's <a href="https://central.sonatype.org/register/central-portal/">Publish guides</a> for general concepts around publishing to the Central Portal.</p>
 </div>
 </div>
