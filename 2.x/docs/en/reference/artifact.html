@@ -1,9 +1,9 @@
 <!DOCTYPE HTML>
-<html lang="ja" class="light sidebar-visible" dir="ltr">
+<html lang="en" class="light sidebar-visible" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Remote cache setup - The Book of sbt</title>
+        <title>Artifact - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -151,7 +151,7 @@
                           langToggle.addEventListener("click", (event) => {
                               langList.style.display = langList.style.display == "block" ? "none" : "block";
                           });
-                          let selectedLang = document.getElementById("ja");
+                          let selectedLang = document.getElementById("en");
                           if (selectedLang) {
                               selectedLang.parentNode.classList.add("theme-selected");
                           }
@@ -161,7 +161,7 @@
                           let full_path_to_root = "../../";
                           // The page path (mdbook only gives us
                           // access to the path to the Markdown file).
-                          let path = "reference/remote-cache-setup.md".replace(/\.md$/, ".html");
+                          let path = "reference/artifact.md".replace(/\.md$/, ".html");
                           for (let lang of langList.querySelectorAll("a")) {
                             lang.href = `${full_path_to_root}${lang.id}/${path}`;
                           }
@@ -208,91 +208,195 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="remote-cache-setup"><a class="header" href="#remote-cache-setup">Remote cache setup</a></h1>
-<p>This page covers remote caching setup. See <a href="../concepts/caching.html">Caching</a> for general explanation of the caching system.</p>
-<h2 id="grpc-remote-cache"><a class="header" href="#grpc-remote-cache">gRPC remote cache</a></h2>
-<p>While there might be multiple remote cache store implemention in the future, sbt 2.0 ships with a gRPC client that is compatible with the Bazel remote cache backends. To configure sbt 2.x, add the following to <code>project/plugins.sbt</code></p>
-<pre><code class="language-scala">addRemoteCachePlugin
+                        <h1 id="artifact"><a class="header" href="#artifact">Artifact</a></h1>
+<h2 id="description"><a class="header" href="#description">Description</a></h2>
+<p>An artifact is a single file ready for publishing a specific version of a subproject. This is a concept that originated in <a href="https://maven.apache.org/ref/3.9.11/maven-core/artifact-handlers.html">Apache Maven</a> and <a href="https://ant.apache.org/ivy/history/2.3.0/terminology.html#artifact">Ivy</a>.</p>
+<p>In the JVM ecosystem, common artifacts are Java archives, or JAR files.
+Compressed package formats are often preferred because they are easier to manage, download, and store.</p>
+<p>To illustrate, the following is a list of artifacts for a library, enumerated in an <code>ivy.xml</code> file:</p>
+<pre><code class="language-xml">  &lt;publications&gt;
+    &lt;artifact name="core_3" type="jar" ext="jar" conf="compile"/&gt;
+    &lt;artifact e:classifier="sources" name="core_3" type="src" ext="jar" conf="sources"/&gt;
+    &lt;artifact e:classifier="javadoc" name="core_3" type="doc" ext="jar" conf="docs"/&gt;
+    &lt;artifact name="core_3" type="pom" ext="pom" conf="pom"/&gt;
+  &lt;/publications&gt;
 </code></pre>
-<p>There are many Bazel remote cache backends, both open source and commercial solutions. While this page documents is not an exhaustive list of all Bazel remote cache implementations, hopefully it shows how sbt 2.x can be set up for wide array of them.</p>
-<h3 id="authentication"><a class="header" href="#authentication">Authentication</a></h3>
-<p>There are a few flavors of <a href="https://grpc.io/docs/guides/auth/">gRPC authentication</a>, and Bazel remote cache backends use various kind of them:</p>
+<p>This shows that an artifact has a name, a type, and an extention, and optionally a classifier.</p>
+<ul>
+<li><strong>name</strong>. This is going to be the same as the subproject's module name.</li>
+<li><strong>type</strong>. The functional category of the artifact, such as <code>jar</code>, <code>src</code>, and <code>doc</code>.</li>
+<li><strong>extension</strong>. The file extention, such as <code>jar</code>, <code>war</code>, <code>zip</code>, <code>xml</code> etc.</li>
+<li><strong>classifier</strong>. In Maven, classifier is an arbitrary string that can be appended for an alternative or secondary artifact.</li>
+</ul>
+<h3 id="selecting-default-artifacts"><a class="header" href="#selecting-default-artifacts">Selecting default artifacts</a></h3>
+<p>By default, the published artifacts are:</p>
 <ol>
-<li>Unauthenticated. Useful for testing.</li>
-<li>Default TLS/SSL.</li>
-<li>TLS/SSL with custom server certificate.</li>
-<li>TTL/SSL with custom server and client certificate, mTLS.</li>
-<li>Default TLS/SSL with API token header.</li>
+<li>The main binary JAR</li>
+<li>The JAR containing the main sources and resources</li>
+<li>The JAR containing the API documentation</li>
 </ol>
-<h3 id="bazel-remote-without-authentication"><a class="header" href="#bazel-remote-without-authentication">bazel-remote without authentication</a></h3>
-<p>You can grab the code from <a href="https://github.com/buchgr/bazel-remote">buchgr/bazel-remote</a> and run it on a laptop using Bazel:</p>
-<pre><code class="language-bash">bazel run :bazel-remote  -- --max_size 5 --dir $HOME/work/bazel-remote/temp \
-  --http_address localhost:8000 \
-  --grpc_address localhost:2024
+<p>You can add artifacts for the test classes, sources, or
+API or you can disable some of the main artifacts.</p>
+<p>To add all <code>Test</code> artifacts:</p>
+<pre><code class="language-scala">lazy val app = (project in file("app"))
+  .settings(
+    Test / publishArtifact := true,
+  )
 </code></pre>
-<p>To configure sbt 2.x, add the following to <code>project/plugins.sbt</code></p>
-<pre><code class="language-scala">addRemoteCachePlugin
+<p>To add them individually:</p>
+<pre><code class="language-scala">lazy val app = (project in file("app"))
+  .settings(
+    // enable publishing the jar produced by `Test/package`
+    Test / packageBin / publishArtifact := true,
+
+    // enable publishing the test API jar
+    Test / packageDoc / publishArtifact := true,
+
+    // enable publishing the test sources jar
+    Test / packageSrc / publishArtifact := true,
+  )
 </code></pre>
-<p>and append the following to <code>build.sbt</code>:</p>
-<pre><code class="language-scala">Global / remoteCache := Some(uri("grpc://localhost:2024"))
+<p>To disable main artifacts individually:</p>
+<pre><code class="language-scala">lazy val app = (project in file("app"))
+  .settings(
+    // disable publishing the main jar produced by `package`
+    Compile / packageBin / publishArtifact := false,
+
+    // disable publishing the main API jar
+    Compile / packageDoc / publishArtifact := false,
+
+    // disable publishing the main sources jar
+    Compile / packageSrc / publishArtifact := false,
+  )
 </code></pre>
-<h3 id="bazel-remote-with-mtls"><a class="header" href="#bazel-remote-with-mtls">bazel-remote with mTLS</a></h3>
-<p>In a real environment, mTLS can ensure that the transport is encrypted and mutually authenticated. bazel-remote can be started with something like the follows:</p>
-<pre><code class="language-bash">bazel run :bazel-remote  -- --max_size 5 --dir $HOME/work/bazel-remote/temp \
-  --http_address localhost:8000 \
-  --grpc_address localhost:2024 \
-  --tls_ca_file /tmp/sslcert/ca.crt \
-  --tls_cert_file /tmp/sslcert/server.crt \
-  --tls_key_file /tmp/sslcert/server.pem
+<h3 id="modifying-default-artifacts"><a class="header" href="#modifying-default-artifacts">Modifying default artifacts</a></h3>
+<p>Each built-in artifact has several configurable settings in addition to
+<code>publishArtifact</code>. The basic ones are <code>artifact</code> (of type
+<code>SettingKey[Artifact]</code>), <code>mappings</code> (of type <code>TaskKey[(File, String)]</code>),
+and <code>artifactPath</code> (of type <code>SettingKey[File]</code>).
+They are scoped by <code>(Config / &lt;task&gt;)</code> as indicated in the previous section.</p>
+<p>To modify the type of the main artifact, for example:</p>
+<pre><code class="language-scala">Compile / packageBin / artifact := {
+  val prev: Artifact = (Compile / packageBin / artifact).value
+  prev.withType("bundle")
+}
 </code></pre>
-<p>sbt 2.x setting would look like this in this scenario:</p>
-<pre><code class="language-scala">Global / remoteCache := Some(uri("grpcs://localhost:2024"))
-Global / remoteCacheTlsCertificate := Some(file("/tmp/sslcert/ca.crt"))
-Global / remoteCacheTlsClientCertificate := Some(file("/tmp/sslcert/client.crt"))
-Global / remoteCacheTlsClientKey := Some(file("/tmp/sslcert/client.pem"))
+<p>The generated artifact name is determined by the <code>artifactName</code> setting.
+This setting is of type <code>(ScalaVersion, ModuleID, Artifact) =&gt; String</code>.
+The ScalaVersion argument provides the full Scala version String and the
+binary compatible part of the version String. The String result is the
+name of the file to produce. The default implementation is
+<code>Artifact.artifactName _</code>. The function may be modified to produce
+different local names for artifacts without affecting the published
+name, which is determined by the <code>artifact</code> definition combined with the
+repository pattern.</p>
+<p>For example, to produce a minimal name without a classifier or cross
+path:</p>
+<pre><code class="language-scala">artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) =&gt;
+  artifact.name + "-" + module.revision + "." + artifact.extension
+}
 </code></pre>
-<p>Note the <code>grpcs://</code>, as opposed to <code>grpc://</code>.</p>
-<h3 id="engflow"><a class="header" href="#engflow">EngFlow</a></h3>
-<p><a href="https://www.engflow.com/">EngFlow GmbH</a> is a build solution company founded in 2020 by core members of Bazel team, providing build analytics and remote execution backend for Bazel, which includes remote cache.</p>
-<p>After signing up for trial on <a href="https://my.engflow.com/">https://my.engflow.com/</a>, the page instructs you to start a trial cluster using a docker. If you followed the instruction, this should start a remote cache service on port 8080. The sbt 2.x configuration would look like this for the trial cluster:</p>
-<pre><code class="language-scala">Global / remoteCache := Some(uri("grpc://localhost:8080"))
+<p>(Note that in practice you rarely want to drop the classifier.)</p>
+<p>Finally, you can get the <code>(Artifact, File)</code> pair for the artifact by
+mapping the <code>packagedArtifact</code> task. Note that if you don't need the
+<code>Artifact</code>, you can get just the File from the package task (<code>package</code>,
+<code>packageDoc</code>, or <code>packageSrc</code>). In both cases, mapping the task to get
+the file ensures that the artifact is generated first and so the file is
+guaranteed to be up-to-date.</p>
+<p>For example:</p>
+<pre><code class="language-scala">val myTask = taskKey[Unit]("My task.")
+
+myTask :=  {
+  val (art, file) = (Compile / packageBin / packagedArtifact).value
+  println("Artifact definition: " + art)
+  println("Packaged file: " + file.getAbsolutePath)
+}
 </code></pre>
-<h3 id="buildbuddy"><a class="header" href="#buildbuddy">BuildBuddy</a></h3>
-<p><a href="https://www.buildbuddy.io/">BuildBuddy</a> is a build solution company founded by ex-Google engineers, providing build analytics and remote execution backend for Bazel. It's also available open source as <a href="https://github.com/buildbuddy-io/buildbuddy">buildbuddy-io/buildbuddy</a>.</p>
-<p>After signing up, BuildBuddy Personal plan lets you use BuildBuddy across the Internet.</p>
-<ol>
-<li>From <a href="https://app.buildbuddy.io/">https://app.buildbuddy.io/</a>, go to Settings, and change the Organization URL to <code>&lt;something&gt;.buildbuddy.io</code>.</li>
-<li>Next, go to Quickstart and take note of the URLs and <code>--remote_headers</code>.</li>
-<li>Create a file called <code>$HOME/.sbt/buildbuddy_credential.txt</code> and put in the API key:</li>
-</ol>
-<pre><code>x-buildbuddy-api-key=*******
+<h3 id="defining-custom-artifacts"><a class="header" href="#defining-custom-artifacts">Defining custom artifacts</a></h3>
+<p>In addition to configuring the built-in artifacts, you can declare other
+artifacts to publish. Multiple artifacts are allowed when using Ivy
+metadata, but a Maven POM file only supports distinguishing artifacts
+based on classifiers and these are not recorded in the POM.</p>
+<p>Basic <code>Artifact</code> construction look like:</p>
+<pre><code class="language-scala">Artifact("name", "type", "extension")
+Artifact("name", "classifier")
+Artifact("name", url: URL)
+Artifact("name", Map("extra1" -&gt; "value1", "extra2" -&gt; "value2"))
 </code></pre>
-<p>The sbt 2.x configuration would look like this:</p>
-<pre><code class="language-scala">Global / remoteCache := Some(uri("grpcs://something.buildbuddy.io"))
-Global / remoteCacheHeaders += IO.read(BuildPaths.defaultGlobalBase / "buildbuddy_credential.txt").trim
+<p>For example:</p>
+<pre><code class="language-scala">Artifact("myproject", "zip", "zip")
+Artifact("myproject", "image", "jpg")
+Artifact("myproject", "jdk15")
 </code></pre>
-<h3 id="nativelink"><a class="header" href="#nativelink">NativeLink</a></h3>
-<p><a href="https://docs.nativelink.dev/">NativeLink</a> is an open-source Bazel remote execution backend implementated in Rust with emphasis on performance. As of June 2024, there's NativeLink Cloud in beta.</p>
-<ol>
-<li>From <a href="https://app.nativelink.com/">https://app.nativelink.com/</a>, go to Quickstart and take note of the URLs and <code>--remote_header</code>.</li>
-<li>Create a file called <code>$HOME/.sbt/nativelink_credential.txt</code> and put in the API key:</li>
-</ol>
-<pre><code>x-nativelink-api-key=*******
+<p>See the
+<a href="https://ant.apache.org/ivy/history/2.3.0/ivyfile/dependency-artifact.html">Ivy documentation</a>
+for more details on artifacts. See the
+<a href="../api/sbt/librarymanagement/Artifact$.html">Artifact API</a> for combining the
+parameters above and specifying [Configurations] and extra attributes.</p>
+<p>To declare these artifacts for publishing, map them to the task that
+generates the artifact:</p>
+<pre><code class="language-scala">val myImageTask = taskKey[File](...)
+
+myImageTask := {
+  val artifact: File = makeArtifact(...)
+  artifact
+}
+
+addArtifact(Artifact("myproject", "image", "jpg"), myImageTask)
 </code></pre>
-<p>The sbt 2.x configuration would look like this:</p>
-<pre><code class="language-scala">Global / remoteCache := Some(uri("grpcs://something.build-faster.nativelink.net"))
-Global / remoteCacheHeaders += IO.read(BuildPaths.defaultGlobalBase / "nativelink_credential.txt").trim
+<p><code>addArtifact</code> returns a sequence of settings (wrapped in a
+<a href="../api/sbt/internal/util/Init$SettingsDefinition.html">SettingsDefinition</a>). In a
+full build configuration, usage looks like:</p>
+<pre><code class="language-scala">lazy val app = (project in file("app"))
+  .settings(
+    addArtifact(...)
+  )
+</code></pre>
+<h3 id="publishing-war-files"><a class="header" href="#publishing-war-files">Publishing .war files</a></h3>
+<p>A common use case for web applications is to publish the <code>.war</code> file
+instead of the <code>.jar</code> file.</p>
+<pre><code class="language-scala">lazy val app = (project in file("app"))
+  .settings(
+    // disable .jar publishing
+    Compile / packageBin / publishArtifact := false,
+
+    // create an Artifact for publishing the .war file
+    Compile / packageWar / artifact := {
+      val prev: Artifact = (Compile / packageWar / artifact).value
+      prev.withType("war").withExtension("war")
+    },
+
+    // add the .war file to what gets published
+    addArtifact(Compile / packageWar / artifact, packageWar),
+  )
+</code></pre>
+<h3 id="using-dependencies-with-artifacts"><a class="header" href="#using-dependencies-with-artifacts">Using dependencies with artifacts</a></h3>
+<p>To specify the artifacts to use from a dependency that has custom or
+multiple artifacts, use the <code>artifacts</code> method on your dependencies. For
+example:</p>
+<pre><code class="language-scala">libraryDependencies += ("org" % "name" % "rev").artifacts(Artifact("name", "type", "ext"))
+</code></pre>
+<p>The <code>from</code> and <code>classifer</code> methods (described on the
+<a href="./sbt-update.html">sbt update</a> page) are actually convenience
+methods that translate to <code>artifacts</code>:</p>
+<pre><code class="language-scala">def from(url: String) = artifacts(Artifact(name, new URL(url)))
+def classifier(c: String) = artifacts(Artifact(name, c))
+</code></pre>
+<p>That is, the following two dependency declarations are equivalent:</p>
+<pre><code class="language-scala">libraryDependencies += ("org.testng" % "testng" % "5.7").classifier("jdk15")
+
+libraryDependencies += ("org.testng" % "testng" % "5.7").artifacts(Artifact("testng", "jdk15"))
 </code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../reference/cross-building-setup.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../reference/remote-cache-setup.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../reference/artifact.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../recipes/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -302,11 +406,11 @@ Global / remoteCacheHeaders += IO.read(BuildPaths.defaultGlobalBase / "nativelin
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../reference/cross-building-setup.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../reference/remote-cache-setup.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../reference/artifact.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../recipes/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

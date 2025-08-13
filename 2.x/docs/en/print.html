@@ -2871,6 +2871,175 @@ testListeners += customTestListener
 
 where `customTestListener` is of type `sbt.TestReportListener`.
 -->
+<div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-publish"><a class="header" href="#sbt-publish">sbt publish</a></h1>
+<h2 id="synopsis-5"><a class="header" href="#synopsis-5">Synopsis</a></h2>
+<p><code>sbt</code> [<em>query</em> / ] <code>publish</code><br>
+<code>sbt</code> [<em>query</em> / ] <code>publishSigned</code><br>
+<code>sbt</code> [<em>query</em> / ] <code>publishLocal</code><br>
+<code>sbt</code> [<em>query</em> / ] <code>publishM2</code></p>
+<h2 id="description-5"><a class="header" href="#description-5">Description</a></h2>
+<p>The publish family of tasks provide means for compiling and publishing your project.
+<em>Publishing</em> in this context consists of
+uploading a descriptor, such as a Maven POM or <code>ivy.xml</code>, and artifacts,
+such as a JAR or <code>war</code> file, to a repository so that other projects can specify
+your project as a dependency.</p>
+<ul>
+<li>The <code>publish</code> task publishes your project to a remote repository,
+such as JFrog Artifactory or Sonatype Nexus instance.</li>
+<li>The <code>publishSigned</code> task, enabled using <a href="https://github.com/sbt/sbt-pgp">sbt-pgp plugin</a>,
+is used to publish GPG-signed artifacts.</li>
+<li>The <code>publishLocal</code> task publishes your project to
+the Ivy local file repository, which is usually located at <code>$HOME/.ivy2/local/</code>. You can then use this project from other projects on the same machine.</li>
+<li>The <code>publishM2</code> task publishes your project to the local Maven repository.</li>
+</ul>
+<p>There's a specific recipe for <a href="reference/../recipes/central.html">publishing to the Central Repo</a>.</p>
+<h3 id="skip-publishing"><a class="header" href="#skip-publishing">Skip publishing</a></h3>
+<p>To avoid publishing a project, add the following setting to the subprojects that you want to skip:</p>
+<pre><code class="language-scala">publish / skip := true
+</code></pre>
+<p>Common use case is to prevent publishing of the root project.</p>
+<h3 id="define-the-repository"><a class="header" href="#define-the-repository">Define the repository</a></h3>
+<p>To specify the repository, assign a repository to <code>publishTo</code> and
+optionally set the publishing style. For example, to upload to Nexus:</p>
+<pre><code class="language-scala">publishTo := Some("Sonatype Snapshots Nexus" at "https://oss.sonatype.org/content/repositories/snapshots")
+</code></pre>
+<p>To publish to a local maven repository:</p>
+<pre><code class="language-scala">publishTo := Some(MavenCache("local-maven", file("path/to/maven-repo/releases")))
+</code></pre>
+<p>To publish to a local Ivy repository:</p>
+<pre><code class="language-scala">publishTo := Some(Resolver.file("local-ivy", file("path/to/ivy-repo/releases")))
+</code></pre>
+<p>If you're publishing the Central Repository, you will also have to select the
+right repository depending on your artifacts: SNAPSHOT versions go to
+the central-snapshots repository while other versions go to
+the local staging repository.
+Doing this selection can be done by using the value of the <code>version</code> setting:</p>
+<pre><code class="language-scala">publishTo := {
+  val centralSnapshots = "https://central.sonatype.com/repository/maven-snapshots/"
+  if version.value.endsWith("-SNAPSHOT") then Some("central-snapshots" at centralSnapshots)
+  else localStaging.value
+}
+</code></pre>
+<h3 id="publishing-locally"><a class="header" href="#publishing-locally">Publishing locally</a></h3>
+<p>The <code>publishLocal</code> task will publish to the "local" Ivy repository.
+By default, this is at <code>$HOME/.ivy2/local/</code>. Other builds on the
+same machine can then list the project as a dependency. For example, if
+the project you are publishing has configuration parameters like:</p>
+<pre><code class="language-scala">organization := "com.example"
+version := "0.1-SNAPSHOT"
+name := "hello"
+</code></pre>
+<p>Then another build on the same machine can depend on it:</p>
+<pre><code class="language-scala">libraryDependencies += "com.example" %% "hello" % "0.1-SNAPSHOT"
+</code></pre>
+<p>The version number you select must end with <code>SNAPSHOT</code>, or you must
+change the version number each time you publish to indicate that it's
+a changing artifact.</p>
+<div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
+<div class="admonition-title">
+<div id="admonition-warning-title">
+<p>Warning</p>
+</div>
+<a class="admonition-anchor-link" href="reference/sbt-publish.html#admonition-warning"></a>
+</div>
+<div>
+<p>Generally the use of SNAPSHOT dependencies should be avoided beyond testing on a single machine
+since it makes dependency resolution slower and the build non-repeatable.</p>
+</div>
+</div>
+<p>Similar to <code>publishLocal</code>, <code>publishM2</code> task will publish the user's Maven local repository.
+This is at the location specified by <code>$HOME/.m2/settings.xml</code> or at
+<code>$HOME/.m2/repository/</code> by default.
+Another build would require <code>Resolver.mavenLocal</code> to resolve out of it:</p>
+<pre><code class="language-scala">resolvers += Resolver.mavenLocal
+</code></pre>
+<!--
+See [Resolvers][Resolvers] for more details.
+-->
+<h3 id="credentials"><a class="header" href="#credentials">Credentials</a></h3>
+<p>There are two ways to specify credentials for such a repository.</p>
+<p>The first and better way is to load them from a file, for example:</p>
+<pre><code class="language-scala">credentials += Credentials(Path.userHome / ".sbt" / ".credentials")
+</code></pre>
+<p>The credentials file is a properties file with keys <code>realm</code>, <code>host</code>,
+<code>user</code>, and <code>password</code>. For example:</p>
+<pre><code>realm=Sonatype Nexus Repository Manager
+host=my.artifact.repo.net
+user=admin
+password=admin123
+</code></pre>
+<p>The second way is to specify them inline:</p>
+<pre><code class="language-scala">credentials += Credentials("Sonatype Nexus Repository Manager", "my.artifact.repo.net", "admin", "admin123")
+</code></pre>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="reference/sbt-publish.html#admonition-note"></a>
+</div>
+<div>
+<p>Credentials matching is done using both: <code>realm</code> and <code>host</code> keys.
+The <code>realm</code> key is the HTTP <code>WWW-Authenticate</code> header's realm directive, which is
+part of the response of HTTP servers for <a href="https://en.wikipedia.org/wiki/Basic_access_authentication#Server_side">HTTP Basic Authentication</a>.
+For a given repository, this can be found by reading all the headers received.
+For example:</p>
+<pre><code class="language-bash">curl -D - my.artifact.repo.net
+</code></pre>
+</div>
+</div>
+<h3 id="cross-publishing"><a class="header" href="#cross-publishing">Cross-publishing</a></h3>
+<p>To support multiple incompatible Scala versions, use projectMatrix
+and publish (see <a href="reference/./cross-building-setup.html">Cross building setup</a>).</p>
+<h3 id="overriding-the-publishing-convention"><a class="header" href="#overriding-the-publishing-convention">Overriding the publishing convention</a></h3>
+<p>By default sbt will publish your artifact with the binary version of Scala
+you're using. For example if your project is using Scala 2.13.x your example
+artifact would be published under <code>example_2.13</code>. This is often what you want,
+but if you're publishing a pure Java artifact or a compiler plugin you'll want
+to change the <code>CrossVersion</code>.
+See the <a href="reference/./cross-building-setup.html">Cross building setup</a> page for more
+details under the <em>Publishing convention</em> section.</p>
+<h3 id="published-artifacts"><a class="header" href="#published-artifacts">Published artifacts</a></h3>
+<p>By default, the main binary JAR, a sources JAR, and a API documentation
+JAR are published. You can declare other types of artifacts to publish
+and disable or modify the default artifacts.
+See the <a href="reference/./artifact.html">Artifact</a> page for details.</p>
+<h3 id="version-scheme"><a class="header" href="#version-scheme">Version scheme</a></h3>
+<p><code>versionScheme</code> setting tracks the version scheme of the build:</p>
+<pre><code class="language-scala">versionScheme := Some("early-semver")
+</code></pre>
+<p>The supported values are <code>"early-semver"</code>, <code>"pvp"</code>, <code>"semver-spec"</code>, and <code>"strict"</code>. sbt will include this information into <code>pom.xml</code> and <code>ivy.xml</code> as a property.</p>
+<ul>
+<li><code>Some("early-semver")</code>: Early Semantic Versioning that would keep binary compatibility across patch updates within 0.Y.z (for instance 0.13.0 and 0.13.2). Once it goes 1.0.0, it follows the regular Semantic Versioning where 1.1.0 is bincompat with 1.0.0.</li>
+<li><code>Some("semver-spec")</code>: Semantic Versioning where all 0.y.z are treated as initial development (no bincompat guarantees).</li>
+<li><code>Some("pvp")</code>. Haskell Package Versioning Policy where X.Y are treated as major version.</li>
+<li><code>Some("strict")</code>. Requires exact match of version.</li>
+</ul>
+<p>This information will be annotated into the <code>pom.xml</code> file, which helps
+downstream projects determine whether a version conflict is safe to resolve or not.
+See <a href="https://www.scala-lang.org/blog/2021/02/16/preventing-version-conflicts-with-versionscheme.html">Preventing version conflicts with versionScheme</a> (2021).</p>
+<h3 id="modifying-the-generated-pom"><a class="header" href="#modifying-the-generated-pom">Modifying the generated POM</a></h3>
+<p>When <code>publishMavenStyle</code> is <code>true</code>, a POM is generated by the <code>makePom</code>
+action and published to the repository instead of an Ivy file. This POM
+file may be altered by changing a few settings. Set <code>pomExtra</code> to
+provide XML (<code>scala.xml.NodeSeq</code>) to insert directly into the generated
+pom. For example:</p>
+<pre><code class="language-scala">pomExtra := &lt;something&gt;&lt;/something&gt;
+</code></pre>
+<p>There is also a <code>pomPostProcess</code> setting that can be used to manipulate
+the final XML before it is written. It's type is <code>Node =&gt; Node</code>.</p>
+<pre><code class="language-scala">pomPostProcess := { (node: Node) =&gt;
+  ....
+}
+</code></pre>
+<p><code>makePom</code> adds to the POM any Maven-style repositories you have
+declared. You can filter these by modifying <code>pomRepositoryFilter</code>, which
+by default excludes local repositories. To instead only include local
+repositories:</p>
+<pre><code class="language-scala">pomIncludeRepository := { (repo: MavenRepository) =&gt;
+  repo.root.startsWith("file:")
+}
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="cached-task"><a class="header" href="#cached-task">Cached task</a></h1>
 <p>This page covers the cached task details. See <a href="reference/../concepts/caching.html">Caching</a> for a general explanation.</p>
 <h2 id="automatic-caching-1"><a class="header" href="#automatic-caching-1">Automatic caching</a></h2>
@@ -3075,6 +3244,185 @@ Global / remoteCacheHeaders += IO.read(BuildPaths.defaultGlobalBase / "buildbudd
 <pre><code class="language-scala">Global / remoteCache := Some(uri("grpcs://something.build-faster.nativelink.net"))
 Global / remoteCacheHeaders += IO.read(BuildPaths.defaultGlobalBase / "nativelink_credential.txt").trim
 </code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="artifact"><a class="header" href="#artifact">Artifact</a></h1>
+<h2 id="description-6"><a class="header" href="#description-6">Description</a></h2>
+<p>An artifact is a single file ready for publishing a specific version of a subproject. This is a concept that originated in <a href="https://maven.apache.org/ref/3.9.11/maven-core/artifact-handlers.html">Apache Maven</a> and <a href="https://ant.apache.org/ivy/history/2.3.0/terminology.html#artifact">Ivy</a>.</p>
+<p>In the JVM ecosystem, common artifacts are Java archives, or JAR files.
+Compressed package formats are often preferred because they are easier to manage, download, and store.</p>
+<p>To illustrate, the following is a list of artifacts for a library, enumerated in an <code>ivy.xml</code> file:</p>
+<pre><code class="language-xml">  &lt;publications&gt;
+    &lt;artifact name="core_3" type="jar" ext="jar" conf="compile"/&gt;
+    &lt;artifact e:classifier="sources" name="core_3" type="src" ext="jar" conf="sources"/&gt;
+    &lt;artifact e:classifier="javadoc" name="core_3" type="doc" ext="jar" conf="docs"/&gt;
+    &lt;artifact name="core_3" type="pom" ext="pom" conf="pom"/&gt;
+  &lt;/publications&gt;
+</code></pre>
+<p>This shows that an artifact has a name, a type, and an extention, and optionally a classifier.</p>
+<ul>
+<li><strong>name</strong>. This is going to be the same as the subproject's module name.</li>
+<li><strong>type</strong>. The functional category of the artifact, such as <code>jar</code>, <code>src</code>, and <code>doc</code>.</li>
+<li><strong>extension</strong>. The file extention, such as <code>jar</code>, <code>war</code>, <code>zip</code>, <code>xml</code> etc.</li>
+<li><strong>classifier</strong>. In Maven, classifier is an arbitrary string that can be appended for an alternative or secondary artifact.</li>
+</ul>
+<h3 id="selecting-default-artifacts"><a class="header" href="#selecting-default-artifacts">Selecting default artifacts</a></h3>
+<p>By default, the published artifacts are:</p>
+<ol>
+<li>The main binary JAR</li>
+<li>The JAR containing the main sources and resources</li>
+<li>The JAR containing the API documentation</li>
+</ol>
+<p>You can add artifacts for the test classes, sources, or
+API or you can disable some of the main artifacts.</p>
+<p>To add all <code>Test</code> artifacts:</p>
+<pre><code class="language-scala">lazy val app = (project in file("app"))
+  .settings(
+    Test / publishArtifact := true,
+  )
+</code></pre>
+<p>To add them individually:</p>
+<pre><code class="language-scala">lazy val app = (project in file("app"))
+  .settings(
+    // enable publishing the jar produced by `Test/package`
+    Test / packageBin / publishArtifact := true,
+
+    // enable publishing the test API jar
+    Test / packageDoc / publishArtifact := true,
+
+    // enable publishing the test sources jar
+    Test / packageSrc / publishArtifact := true,
+  )
+</code></pre>
+<p>To disable main artifacts individually:</p>
+<pre><code class="language-scala">lazy val app = (project in file("app"))
+  .settings(
+    // disable publishing the main jar produced by `package`
+    Compile / packageBin / publishArtifact := false,
+
+    // disable publishing the main API jar
+    Compile / packageDoc / publishArtifact := false,
+
+    // disable publishing the main sources jar
+    Compile / packageSrc / publishArtifact := false,
+  )
+</code></pre>
+<h3 id="modifying-default-artifacts"><a class="header" href="#modifying-default-artifacts">Modifying default artifacts</a></h3>
+<p>Each built-in artifact has several configurable settings in addition to
+<code>publishArtifact</code>. The basic ones are <code>artifact</code> (of type
+<code>SettingKey[Artifact]</code>), <code>mappings</code> (of type <code>TaskKey[(File, String)]</code>),
+and <code>artifactPath</code> (of type <code>SettingKey[File]</code>).
+They are scoped by <code>(Config / &lt;task&gt;)</code> as indicated in the previous section.</p>
+<p>To modify the type of the main artifact, for example:</p>
+<pre><code class="language-scala">Compile / packageBin / artifact := {
+  val prev: Artifact = (Compile / packageBin / artifact).value
+  prev.withType("bundle")
+}
+</code></pre>
+<p>The generated artifact name is determined by the <code>artifactName</code> setting.
+This setting is of type <code>(ScalaVersion, ModuleID, Artifact) =&gt; String</code>.
+The ScalaVersion argument provides the full Scala version String and the
+binary compatible part of the version String. The String result is the
+name of the file to produce. The default implementation is
+<code>Artifact.artifactName _</code>. The function may be modified to produce
+different local names for artifacts without affecting the published
+name, which is determined by the <code>artifact</code> definition combined with the
+repository pattern.</p>
+<p>For example, to produce a minimal name without a classifier or cross
+path:</p>
+<pre><code class="language-scala">artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) =&gt;
+  artifact.name + "-" + module.revision + "." + artifact.extension
+}
+</code></pre>
+<p>(Note that in practice you rarely want to drop the classifier.)</p>
+<p>Finally, you can get the <code>(Artifact, File)</code> pair for the artifact by
+mapping the <code>packagedArtifact</code> task. Note that if you don't need the
+<code>Artifact</code>, you can get just the File from the package task (<code>package</code>,
+<code>packageDoc</code>, or <code>packageSrc</code>). In both cases, mapping the task to get
+the file ensures that the artifact is generated first and so the file is
+guaranteed to be up-to-date.</p>
+<p>For example:</p>
+<pre><code class="language-scala">val myTask = taskKey[Unit]("My task.")
+
+myTask :=  {
+  val (art, file) = (Compile / packageBin / packagedArtifact).value
+  println("Artifact definition: " + art)
+  println("Packaged file: " + file.getAbsolutePath)
+}
+</code></pre>
+<h3 id="defining-custom-artifacts"><a class="header" href="#defining-custom-artifacts">Defining custom artifacts</a></h3>
+<p>In addition to configuring the built-in artifacts, you can declare other
+artifacts to publish. Multiple artifacts are allowed when using Ivy
+metadata, but a Maven POM file only supports distinguishing artifacts
+based on classifiers and these are not recorded in the POM.</p>
+<p>Basic <code>Artifact</code> construction look like:</p>
+<pre><code class="language-scala">Artifact("name", "type", "extension")
+Artifact("name", "classifier")
+Artifact("name", url: URL)
+Artifact("name", Map("extra1" -&gt; "value1", "extra2" -&gt; "value2"))
+</code></pre>
+<p>For example:</p>
+<pre><code class="language-scala">Artifact("myproject", "zip", "zip")
+Artifact("myproject", "image", "jpg")
+Artifact("myproject", "jdk15")
+</code></pre>
+<p>See the
+<a href="https://ant.apache.org/ivy/history/2.3.0/ivyfile/dependency-artifact.html">Ivy documentation</a>
+for more details on artifacts. See the
+<a href="reference/../api/sbt/librarymanagement/Artifact$.html">Artifact API</a> for combining the
+parameters above and specifying [Configurations] and extra attributes.</p>
+<p>To declare these artifacts for publishing, map them to the task that
+generates the artifact:</p>
+<pre><code class="language-scala">val myImageTask = taskKey[File](...)
+
+myImageTask := {
+  val artifact: File = makeArtifact(...)
+  artifact
+}
+
+addArtifact(Artifact("myproject", "image", "jpg"), myImageTask)
+</code></pre>
+<p><code>addArtifact</code> returns a sequence of settings (wrapped in a
+<a href="reference/../api/sbt/internal/util/Init$SettingsDefinition.html">SettingsDefinition</a>). In a
+full build configuration, usage looks like:</p>
+<pre><code class="language-scala">lazy val app = (project in file("app"))
+  .settings(
+    addArtifact(...)
+  )
+</code></pre>
+<h3 id="publishing-war-files"><a class="header" href="#publishing-war-files">Publishing .war files</a></h3>
+<p>A common use case for web applications is to publish the <code>.war</code> file
+instead of the <code>.jar</code> file.</p>
+<pre><code class="language-scala">lazy val app = (project in file("app"))
+  .settings(
+    // disable .jar publishing
+    Compile / packageBin / publishArtifact := false,
+
+    // create an Artifact for publishing the .war file
+    Compile / packageWar / artifact := {
+      val prev: Artifact = (Compile / packageWar / artifact).value
+      prev.withType("war").withExtension("war")
+    },
+
+    // add the .war file to what gets published
+    addArtifact(Compile / packageWar / artifact, packageWar),
+  )
+</code></pre>
+<h3 id="using-dependencies-with-artifacts"><a class="header" href="#using-dependencies-with-artifacts">Using dependencies with artifacts</a></h3>
+<p>To specify the artifacts to use from a dependency that has custom or
+multiple artifacts, use the <code>artifacts</code> method on your dependencies. For
+example:</p>
+<pre><code class="language-scala">libraryDependencies += ("org" % "name" % "rev").artifacts(Artifact("name", "type", "ext"))
+</code></pre>
+<p>The <code>from</code> and <code>classifer</code> methods (described on the
+<a href="reference/./sbt-update.html">sbt update</a> page) are actually convenience
+methods that translate to <code>artifacts</code>:</p>
+<pre><code class="language-scala">def from(url: String) = artifacts(Artifact(name, new URL(url)))
+def classifier(c: String) = artifacts(Artifact(name, c))
+</code></pre>
+<p>That is, the following two dependency declarations are equivalent:</p>
+<pre><code class="language-scala">libraryDependencies += ("org.testng" % "testng" % "5.7").classifier("jdk15")
+
+libraryDependencies += ("org.testng" % "testng" % "5.7").artifacts(Artifact("testng", "jdk15"))
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="recipes"><a class="header" href="#recipes">Recipes</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="how-to-write-hello-world"><a class="header" href="#how-to-write-hello-world">How to write hello world</a></h1>
 <h2 id="objective"><a class="header" href="#objective">Objective</a></h2>
@@ -3110,6 +3458,191 @@ Global / remoteCacheHeaders += IO.read(BuildPaths.defaultGlobalBase / "nativelin
 </ol>
 <h2 id="alternatives"><a class="header" href="#alternatives">Alternatives</a></h2>
 <p>When you're in a hurry, you can run <code>sbt init</code> in a fresh directory, and select the first template.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="publishing-to-the-central-repo"><a class="header" href="#publishing-to-the-central-repo">Publishing to the Central Repo</a></h1>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="recipes/central.html#admonition-note"></a>
+</div>
+<div>
+<p>This is the recipe section of the documentation.
+We generally assume that you are familar with the sbt concepts, and focus on how-tos.</p>
+<p>See also Sonatype's <a href="https://central.sonatype.org/register/central-portal/">Publish guides</a> for general concepts around publishing to the Central Portal.</p>
+</div>
+</div>
+<h2 id="objective-1"><a class="header" href="#objective-1">Objective</a></h2>
+<p>I want to publish my project to the Central Repository.</p>
+<h2 id="steps-1"><a class="header" href="#steps-1">Steps</a></h2>
+<h3 id="preliminary-1-central-portal-registration"><a class="header" href="#preliminary-1-central-portal-registration">Preliminary 1: Central Portal registration</a></h3>
+<p>Create a Central Portal account, following Sonatype's <a href="https://central.sonatype.org/register/central-portal/">Publish guides</a>.</p>
+<ul>
+<li>If you had an OSSRH account, use <strong>Forgot password</strong> flow to convert the account to the new Central Portal, which lets you keep the previous namespace associations.</li>
+<li>If you authenticate via GitHub, <code>io.github.&lt;user_name&gt;</code> will automatically be associated with the account.</li>
+</ul>
+<p>Follow the steps described in <a href="https://central.sonatype.org/register/namespace/">register a namespace</a> guide
+to associate a domain name with your account.</p>
+<h4 id="preliminary-2-pgp-key-pair"><a class="header" href="#preliminary-2-pgp-key-pair">Preliminary 2: PGP key pair</a></h4>
+<p>Follow the Sonatype's <a href="https://central.sonatype.org/publish/requirements/gpg/">GPG guide</a> to generate a PGP key pair.</p>
+<p><a href="https://www.gnupg.org/download/">Install GnuPG</a>, and verify the version:</p>
+<pre><code class="language-bash">$ gpg --version
+gpg (GnuPG/MacGPG2) 2.2.8
+libgcrypt 1.8.3
+Copyright (C) 2018 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later &lt;https://gnu.org/licenses/gpl.html&gt;
+</code></pre>
+<p>Next generate a key:</p>
+<pre><code>$ gpg --gen-key
+</code></pre>
+<p>List the keys:</p>
+<pre><code>$ gpg --list-keys
+
+/home/foo/.gnupg/pubring.gpg
+------------------------------
+
+pub   rsa4096 2018-08-22 [SC]
+      1234517530FB96F147C6A146A326F592D39AAAAA
+uid           [ultimate] your name &lt;you@example.com&gt;
+sub   rsa4096 2018-08-22 [E]
+</code></pre>
+<p>Distribute the key:</p>
+<pre><code>$ gpg --keyserver keyserver.ubuntu.com --send-keys 1234517530FB96F147C6A146A326F592D39AAAAA
+</code></pre>
+<h3 id="step-1-sbt-pgp"><a class="header" href="#step-1-sbt-pgp">Step 1: sbt-pgp</a></h3>
+<p>The <a href="https://github.com/sbt/sbt-pgp#sbt-pgp">sbt-pgp plugin</a> can sign the published artifacts with GPG/PGP.
+(Optionally <a href="https://github.com/sbt/sbt-ci-release">sbt-ci-release</a> can automate the publishing process.)</p>
+<p>Add the following line to your <code>project/plugins.sbt</code> file to
+enable it for your build:</p>
+<pre><code class="language-scala">addSbtPlugin("com.github.sbt" % "sbt-pgp" % "2.3.1")
+</code></pre>
+<div id="admonition-note-1" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-1-title">
+<div class="admonition-title">
+<div id="admonition-note-1-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="recipes/central.html#admonition-note-1"></a>
+</div>
+<div>
+<p>Make sure that the <code>gpg</code> command is in PATH available to the sbt.</p>
+</div>
+</div>
+<h3 id="step-2-credentials"><a class="header" href="#step-2-credentials">Step 2: Credentials</a></h3>
+<p>Generate a user token from the portal to be used for the credentials.
+The token must be stored somewhere safe (NOT in the repository).</p>
+<p>sbt 2.x can also reads from the environment variables <code>SONATYPE_USERNAME</code> and <code>SONATYPE_PASSWORD</code> and appends a credential for <code>central.sonatype.com</code> out-of-box, which might be useful for automatic publishing from the CI environment, such as GitHub Actions.</p>
+<pre><code class="language-yaml">- run: sbt ci-release
+  env:
+    PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
+    PGP_SECRET: ${{ secrets.PGP_SECRET }}
+    SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+    SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+</code></pre>
+<p>On a local machine, a common convention is a <code>$HOME/.sbt/2/credentials.sbt</code> file, with the following:</p>
+<pre><code class="language-scala">credentials += Credentials(Path.userHome / ".sbt" / "sonatype_central_credentials")
+</code></pre>
+<p>Next create a file <code>$HOME/.sbt/sonatype_central_credentials</code>:</p>
+<pre><code class="language-property">host=central.sonatype.com
+user=&lt;your username&gt;
+password=&lt;your password&gt;
+</code></pre>
+<h3 id="step-3-configure-buildsbt"><a class="header" href="#step-3-configure-buildsbt">Step 3: Configure build.sbt</a></h3>
+<p>To publish to a Maven repository, you'll need to configure a few
+settings so that the correct metadata is generated.</p>
+<p><strong>Note</strong>: To publish to the Central Portal, <code>publishTo</code>
+must be set to the <code>localStaging</code> repository:</p>
+<pre><code class="language-scala">// new setting for the Central Portal
+publishTo := {
+  val centralSnapshots = "https://central.sonatype.com/repository/maven-snapshots/"
+  if version.value.endsWith("-SNAPSHOT") then Some("central-snapshots" at centralSnapshots)
+  else localStaging.value
+}
+</code></pre>
+<p>Add these settings at the end of <code>build.sbt</code> or a separate <code>publish.sbt</code>:</p>
+<pre><code class="language-scala">organization := "com.example.project2"
+organizationName := "example"
+organizationHomepage := Some(url("http://example.com/"))
+
+scmInfo := Some(
+  ScmInfo(
+    url("https://github.com/your-account/your-project"),
+    "scm:git@github.com:your-account/your-project.git"
+  )
+)
+developers := List(
+  Developer(
+    id = "Your identifier",
+    name = "Your Name",
+    email = "your@email",
+    url = url("http://your.url")
+  )
+)
+
+description := "Some description about your project."
+licenses := List(License.Apache2)
+homepage := Some(url("https://github.com/example/project"))
+
+// Remove all additional repository other than Maven Central from POM
+pomIncludeRepository := { _ =&gt; false }
+publishMavenStyle := true
+
+// new setting for the Central Portal
+publishTo := {
+  val centralSnapshots = "https://central.sonatype.com/repository/maven-snapshots/"
+  if version.value.endsWith("-SNAPSHOT") then Some("central-snapshots" at centralSnapshots)
+  else localStaging.value
+}
+</code></pre>
+<p>The full format of a <code>pom.xml</code> (an end product of the project configuration
+used by Maven) file is outlined in <a href="https://maven.apache.org/pom.html">POM Reference</a>.
+You can add more data to it with the <code>pomExtra</code> option in <code>build.sbt</code>.</p>
+<h3 id="step-4-stage-the-artifacts"><a class="header" href="#step-4-stage-the-artifacts">Step 4: Stage the artifacts</a></h3>
+<p>From sbt shell run:</p>
+<pre><code class="language-bash">&gt; publishSigned
+</code></pre>
+<h3 id="step-5-upload-or-release-the-bundle"><a class="header" href="#step-5-upload-or-release-the-bundle">Step 5: Upload or release the bundle</a></h3>
+<p>From sbt shell run:</p>
+<pre><code class="language-bash">&gt; sonaUpload
+</code></pre>
+<p>This will upload the bundle to the <a href="https://central.sonatype.com/">Central Portal</a>.
+Hit the "Publish" button to publish to the Central Repository.</p>
+<p>If you want to automate the publishing, run:</p>
+<pre><code class="language-bash">&gt; sonaRelease
+</code></pre>
+<p>It might take 10 minutes to a few hours for the published artifacts to be
+visible on the Central Repository <a href="https://repo1.maven.org/maven2/">https://repo1.maven.org/maven2/</a>.</p>
+<!--
+### Optional steps
+
+#### Publishing SNAPSHOTs
+
+In general, the use of SNAPSHOT artifacts should be limited to short-term testing,
+and we do not recommend publishing SNAPSHOTs publicly.
+However, should you decide to publish SNAPSHOTs, you can enable it from the Central Portal per namespace.
+See Sonatype's [Publishing -SNAPSHOT Releases][publish-portal-snapshots] guide for details.
+
+#### Tag-based publishing via sbt-ci-release
+
+You can further optimize the publishing flow by using the [sbt-ci-release][sbt-ci-release] plugin.
+
+Once you set it up, all you have to do is push a git tag to trigger a release.
+
+#### Integrate with the release process
+
+To automate the publishing approach above with the [sbt-release plugin]
+[sbt-release], you should simply add the publishing commands as steps in the
+`releaseProcess` task:
+
+```
+...
+releaseStepCommand("sonatypeOpen \"your groupId\" \"Some staging name\""),
+...
+releaseStepCommand("publishSigned"),
+...
+releaseStepCommand("sonaRelease"),
+...
+```
+-->
 <div style="break-before: page; page-break-before: always;"></div><h1 id="use-sbt-as-metals-build-server"><a class="header" href="#use-sbt-as-metals-build-server">Use sbt as Metals build server</a></h1>
 <div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
 <div class="admonition-title">
@@ -3123,9 +3656,9 @@ Global / remoteCacheHeaders += IO.read(BuildPaths.defaultGlobalBase / "nativelin
 This is a placeholder, copied from sbt 1.x.</p>
 </div>
 </div>
-<h2 id="objective-1"><a class="header" href="#objective-1">Objective</a></h2>
+<h2 id="objective-2"><a class="header" href="#objective-2">Objective</a></h2>
 <p>I want to use <a href="https://scalameta.org/metals/">Metals</a> on VS Code with sbt as the build server.</p>
-<h2 id="steps-1"><a class="header" href="#steps-1">Steps</a></h2>
+<h2 id="steps-2"><a class="header" href="#steps-2">Steps</a></h2>
 <p>To use Metals on VS Code:</p>
 <ol>
 <li>Install Metals from Extensions tab:<br>
@@ -3171,9 +3704,9 @@ the code already compiled.</p>
 This is a placeholder, copied from sbt 1.x.</p>
 </div>
 </div>
-<h2 id="objective-2"><a class="header" href="#objective-2">Objective</a></h2>
+<h2 id="objective-3"><a class="header" href="#objective-3">Objective</a></h2>
 <p>I want to import sbt build to IntelliJ IDEA.</p>
-<h2 id="steps-2"><a class="header" href="#steps-2">Steps</a></h2>
+<h2 id="steps-3"><a class="header" href="#steps-3">Steps</a></h2>
 <p><a href="https://www.jetbrains.com/idea/">IntelliJ IDEA</a> is an IDE created by JetBrains, and the Community Edition is open source under Apache v2 license. IntelliJ integrates with many build tools, including sbt, to import the project.</p>
 <p>To import a build to IntelliJ IDEA:</p>
 <ol>
@@ -3277,9 +3810,9 @@ the code already compiled.</p>
 This is a placeholder, copied from sbt 1.x.</p>
 </div>
 </div>
-<h2 id="objective-3"><a class="header" href="#objective-3">Objective</a></h2>
+<h2 id="objective-4"><a class="header" href="#objective-4">Objective</a></h2>
 <p>I want to use Metals on Neovim with sbt as the build server.</p>
-<h2 id="steps-3"><a class="header" href="#steps-3">Steps</a></h2>
+<h2 id="steps-4"><a class="header" href="#steps-4">Steps</a></h2>
 <p>Chris Kipp, who is a maintainer of Metals, created <a href="https://github.com/scalameta/nvim-metals">nvim-metals</a> plugin that provides comprehensive Metals support on Neovim. To install nvim-metals, create <code>lsp.lua</code> under <code>$XDG_CONFIG_HOME/nvim/lua/</code> based on Chris's <a href="https://github.com/scalameta/nvim-metals/discussions/39#discussion-82302">lsp.lua</a> and adjust to your preference. For example, comment out its plugins section and load the listed plugins using the plugin manager of your choice such as vim-plug.</p>
 <p>In <code>init.vim</code>, the file can be loaded as:</p>
 <pre><code class="language-lua">lua &lt;&lt; END

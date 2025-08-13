@@ -1,9 +1,9 @@
 <!DOCTYPE HTML>
-<html lang="ja" class="light sidebar-visible" dir="ltr">
+<html lang="en" class="light sidebar-visible" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Remote cache setup - The Book of sbt</title>
+        <title>sbt publish - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -151,7 +151,7 @@
                           langToggle.addEventListener("click", (event) => {
                               langList.style.display = langList.style.display == "block" ? "none" : "block";
                           });
-                          let selectedLang = document.getElementById("ja");
+                          let selectedLang = document.getElementById("en");
                           if (selectedLang) {
                               selectedLang.parentNode.classList.add("theme-selected");
                           }
@@ -161,7 +161,7 @@
                           let full_path_to_root = "../../";
                           // The page path (mdbook only gives us
                           // access to the path to the Markdown file).
-                          let path = "reference/remote-cache-setup.md".replace(/\.md$/, ".html");
+                          let path = "reference/sbt-publish.md".replace(/\.md$/, ".html");
                           for (let lang of langList.querySelectorAll("a")) {
                             lang.href = `${full_path_to_root}${lang.id}/${path}`;
                           }
@@ -208,91 +208,185 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="remote-cache-setup"><a class="header" href="#remote-cache-setup">Remote cache setup</a></h1>
-<p>This page covers remote caching setup. See <a href="../concepts/caching.html">Caching</a> for general explanation of the caching system.</p>
-<h2 id="grpc-remote-cache"><a class="header" href="#grpc-remote-cache">gRPC remote cache</a></h2>
-<p>While there might be multiple remote cache store implemention in the future, sbt 2.0 ships with a gRPC client that is compatible with the Bazel remote cache backends. To configure sbt 2.x, add the following to <code>project/plugins.sbt</code></p>
-<pre><code class="language-scala">addRemoteCachePlugin
+                        <h1 id="sbt-publish"><a class="header" href="#sbt-publish">sbt publish</a></h1>
+<h2 id="synopsis"><a class="header" href="#synopsis">Synopsis</a></h2>
+<p><code>sbt</code> [<em>query</em> / ] <code>publish</code><br>
+<code>sbt</code> [<em>query</em> / ] <code>publishSigned</code><br>
+<code>sbt</code> [<em>query</em> / ] <code>publishLocal</code><br>
+<code>sbt</code> [<em>query</em> / ] <code>publishM2</code></p>
+<h2 id="description"><a class="header" href="#description">Description</a></h2>
+<p>The publish family of tasks provide means for compiling and publishing your project.
+<em>Publishing</em> in this context consists of
+uploading a descriptor, such as a Maven POM or <code>ivy.xml</code>, and artifacts,
+such as a JAR or <code>war</code> file, to a repository so that other projects can specify
+your project as a dependency.</p>
+<ul>
+<li>The <code>publish</code> task publishes your project to a remote repository,
+such as JFrog Artifactory or Sonatype Nexus instance.</li>
+<li>The <code>publishSigned</code> task, enabled using <a href="https://github.com/sbt/sbt-pgp">sbt-pgp plugin</a>,
+is used to publish GPG-signed artifacts.</li>
+<li>The <code>publishLocal</code> task publishes your project to
+the Ivy local file repository, which is usually located at <code>$HOME/.ivy2/local/</code>. You can then use this project from other projects on the same machine.</li>
+<li>The <code>publishM2</code> task publishes your project to the local Maven repository.</li>
+</ul>
+<p>There's a specific recipe for <a href="../recipes/central.html">publishing to the Central Repo</a>.</p>
+<h3 id="skip-publishing"><a class="header" href="#skip-publishing">Skip publishing</a></h3>
+<p>To avoid publishing a project, add the following setting to the subprojects that you want to skip:</p>
+<pre><code class="language-scala">publish / skip := true
 </code></pre>
-<p>There are many Bazel remote cache backends, both open source and commercial solutions. While this page documents is not an exhaustive list of all Bazel remote cache implementations, hopefully it shows how sbt 2.x can be set up for wide array of them.</p>
-<h3 id="authentication"><a class="header" href="#authentication">Authentication</a></h3>
-<p>There are a few flavors of <a href="https://grpc.io/docs/guides/auth/">gRPC authentication</a>, and Bazel remote cache backends use various kind of them:</p>
-<ol>
-<li>Unauthenticated. Useful for testing.</li>
-<li>Default TLS/SSL.</li>
-<li>TLS/SSL with custom server certificate.</li>
-<li>TTL/SSL with custom server and client certificate, mTLS.</li>
-<li>Default TLS/SSL with API token header.</li>
-</ol>
-<h3 id="bazel-remote-without-authentication"><a class="header" href="#bazel-remote-without-authentication">bazel-remote without authentication</a></h3>
-<p>You can grab the code from <a href="https://github.com/buchgr/bazel-remote">buchgr/bazel-remote</a> and run it on a laptop using Bazel:</p>
-<pre><code class="language-bash">bazel run :bazel-remote  -- --max_size 5 --dir $HOME/work/bazel-remote/temp \
-  --http_address localhost:8000 \
-  --grpc_address localhost:2024
+<p>Common use case is to prevent publishing of the root project.</p>
+<h3 id="define-the-repository"><a class="header" href="#define-the-repository">Define the repository</a></h3>
+<p>To specify the repository, assign a repository to <code>publishTo</code> and
+optionally set the publishing style. For example, to upload to Nexus:</p>
+<pre><code class="language-scala">publishTo := Some("Sonatype Snapshots Nexus" at "https://oss.sonatype.org/content/repositories/snapshots")
 </code></pre>
-<p>To configure sbt 2.x, add the following to <code>project/plugins.sbt</code></p>
-<pre><code class="language-scala">addRemoteCachePlugin
+<p>To publish to a local maven repository:</p>
+<pre><code class="language-scala">publishTo := Some(MavenCache("local-maven", file("path/to/maven-repo/releases")))
 </code></pre>
-<p>and append the following to <code>build.sbt</code>:</p>
-<pre><code class="language-scala">Global / remoteCache := Some(uri("grpc://localhost:2024"))
+<p>To publish to a local Ivy repository:</p>
+<pre><code class="language-scala">publishTo := Some(Resolver.file("local-ivy", file("path/to/ivy-repo/releases")))
 </code></pre>
-<h3 id="bazel-remote-with-mtls"><a class="header" href="#bazel-remote-with-mtls">bazel-remote with mTLS</a></h3>
-<p>In a real environment, mTLS can ensure that the transport is encrypted and mutually authenticated. bazel-remote can be started with something like the follows:</p>
-<pre><code class="language-bash">bazel run :bazel-remote  -- --max_size 5 --dir $HOME/work/bazel-remote/temp \
-  --http_address localhost:8000 \
-  --grpc_address localhost:2024 \
-  --tls_ca_file /tmp/sslcert/ca.crt \
-  --tls_cert_file /tmp/sslcert/server.crt \
-  --tls_key_file /tmp/sslcert/server.pem
+<p>If you're publishing the Central Repository, you will also have to select the
+right repository depending on your artifacts: SNAPSHOT versions go to
+the central-snapshots repository while other versions go to
+the local staging repository.
+Doing this selection can be done by using the value of the <code>version</code> setting:</p>
+<pre><code class="language-scala">publishTo := {
+  val centralSnapshots = "https://central.sonatype.com/repository/maven-snapshots/"
+  if version.value.endsWith("-SNAPSHOT") then Some("central-snapshots" at centralSnapshots)
+  else localStaging.value
+}
 </code></pre>
-<p>sbt 2.x setting would look like this in this scenario:</p>
-<pre><code class="language-scala">Global / remoteCache := Some(uri("grpcs://localhost:2024"))
-Global / remoteCacheTlsCertificate := Some(file("/tmp/sslcert/ca.crt"))
-Global / remoteCacheTlsClientCertificate := Some(file("/tmp/sslcert/client.crt"))
-Global / remoteCacheTlsClientKey := Some(file("/tmp/sslcert/client.pem"))
+<h3 id="publishing-locally"><a class="header" href="#publishing-locally">Publishing locally</a></h3>
+<p>The <code>publishLocal</code> task will publish to the "local" Ivy repository.
+By default, this is at <code>$HOME/.ivy2/local/</code>. Other builds on the
+same machine can then list the project as a dependency. For example, if
+the project you are publishing has configuration parameters like:</p>
+<pre><code class="language-scala">organization := "com.example"
+version := "0.1-SNAPSHOT"
+name := "hello"
 </code></pre>
-<p>Note the <code>grpcs://</code>, as opposed to <code>grpc://</code>.</p>
-<h3 id="engflow"><a class="header" href="#engflow">EngFlow</a></h3>
-<p><a href="https://www.engflow.com/">EngFlow GmbH</a> is a build solution company founded in 2020 by core members of Bazel team, providing build analytics and remote execution backend for Bazel, which includes remote cache.</p>
-<p>After signing up for trial on <a href="https://my.engflow.com/">https://my.engflow.com/</a>, the page instructs you to start a trial cluster using a docker. If you followed the instruction, this should start a remote cache service on port 8080. The sbt 2.x configuration would look like this for the trial cluster:</p>
-<pre><code class="language-scala">Global / remoteCache := Some(uri("grpc://localhost:8080"))
+<p>Then another build on the same machine can depend on it:</p>
+<pre><code class="language-scala">libraryDependencies += "com.example" %% "hello" % "0.1-SNAPSHOT"
 </code></pre>
-<h3 id="buildbuddy"><a class="header" href="#buildbuddy">BuildBuddy</a></h3>
-<p><a href="https://www.buildbuddy.io/">BuildBuddy</a> is a build solution company founded by ex-Google engineers, providing build analytics and remote execution backend for Bazel. It's also available open source as <a href="https://github.com/buildbuddy-io/buildbuddy">buildbuddy-io/buildbuddy</a>.</p>
-<p>After signing up, BuildBuddy Personal plan lets you use BuildBuddy across the Internet.</p>
-<ol>
-<li>From <a href="https://app.buildbuddy.io/">https://app.buildbuddy.io/</a>, go to Settings, and change the Organization URL to <code>&lt;something&gt;.buildbuddy.io</code>.</li>
-<li>Next, go to Quickstart and take note of the URLs and <code>--remote_headers</code>.</li>
-<li>Create a file called <code>$HOME/.sbt/buildbuddy_credential.txt</code> and put in the API key:</li>
-</ol>
-<pre><code>x-buildbuddy-api-key=*******
+<p>The version number you select must end with <code>SNAPSHOT</code>, or you must
+change the version number each time you publish to indicate that it's
+a changing artifact.</p>
+<div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
+<div class="admonition-title">
+<div id="admonition-warning-title">
+<p>Warning</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-warning"></a>
+</div>
+<div>
+<p>Generally the use of SNAPSHOT dependencies should be avoided beyond testing on a single machine
+since it makes dependency resolution slower and the build non-repeatable.</p>
+</div>
+</div>
+<p>Similar to <code>publishLocal</code>, <code>publishM2</code> task will publish the user's Maven local repository.
+This is at the location specified by <code>$HOME/.m2/settings.xml</code> or at
+<code>$HOME/.m2/repository/</code> by default.
+Another build would require <code>Resolver.mavenLocal</code> to resolve out of it:</p>
+<pre><code class="language-scala">resolvers += Resolver.mavenLocal
 </code></pre>
-<p>The sbt 2.x configuration would look like this:</p>
-<pre><code class="language-scala">Global / remoteCache := Some(uri("grpcs://something.buildbuddy.io"))
-Global / remoteCacheHeaders += IO.read(BuildPaths.defaultGlobalBase / "buildbuddy_credential.txt").trim
+<!--
+See [Resolvers][Resolvers] for more details.
+-->
+<h3 id="credentials"><a class="header" href="#credentials">Credentials</a></h3>
+<p>There are two ways to specify credentials for such a repository.</p>
+<p>The first and better way is to load them from a file, for example:</p>
+<pre><code class="language-scala">credentials += Credentials(Path.userHome / ".sbt" / ".credentials")
 </code></pre>
-<h3 id="nativelink"><a class="header" href="#nativelink">NativeLink</a></h3>
-<p><a href="https://docs.nativelink.dev/">NativeLink</a> is an open-source Bazel remote execution backend implementated in Rust with emphasis on performance. As of June 2024, there's NativeLink Cloud in beta.</p>
-<ol>
-<li>From <a href="https://app.nativelink.com/">https://app.nativelink.com/</a>, go to Quickstart and take note of the URLs and <code>--remote_header</code>.</li>
-<li>Create a file called <code>$HOME/.sbt/nativelink_credential.txt</code> and put in the API key:</li>
-</ol>
-<pre><code>x-nativelink-api-key=*******
+<p>The credentials file is a properties file with keys <code>realm</code>, <code>host</code>,
+<code>user</code>, and <code>password</code>. For example:</p>
+<pre><code>realm=Sonatype Nexus Repository Manager
+host=my.artifact.repo.net
+user=admin
+password=admin123
 </code></pre>
-<p>The sbt 2.x configuration would look like this:</p>
-<pre><code class="language-scala">Global / remoteCache := Some(uri("grpcs://something.build-faster.nativelink.net"))
-Global / remoteCacheHeaders += IO.read(BuildPaths.defaultGlobalBase / "nativelink_credential.txt").trim
+<p>The second way is to specify them inline:</p>
+<pre><code class="language-scala">credentials += Credentials("Sonatype Nexus Repository Manager", "my.artifact.repo.net", "admin", "admin123")
+</code></pre>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note"></a>
+</div>
+<div>
+<p>Credentials matching is done using both: <code>realm</code> and <code>host</code> keys.
+The <code>realm</code> key is the HTTP <code>WWW-Authenticate</code> header's realm directive, which is
+part of the response of HTTP servers for <a href="https://en.wikipedia.org/wiki/Basic_access_authentication#Server_side">HTTP Basic Authentication</a>.
+For a given repository, this can be found by reading all the headers received.
+For example:</p>
+<pre><code class="language-bash">curl -D - my.artifact.repo.net
+</code></pre>
+</div>
+</div>
+<h3 id="cross-publishing"><a class="header" href="#cross-publishing">Cross-publishing</a></h3>
+<p>To support multiple incompatible Scala versions, use projectMatrix
+and publish (see <a href="./cross-building-setup.html">Cross building setup</a>).</p>
+<h3 id="overriding-the-publishing-convention"><a class="header" href="#overriding-the-publishing-convention">Overriding the publishing convention</a></h3>
+<p>By default sbt will publish your artifact with the binary version of Scala
+you're using. For example if your project is using Scala 2.13.x your example
+artifact would be published under <code>example_2.13</code>. This is often what you want,
+but if you're publishing a pure Java artifact or a compiler plugin you'll want
+to change the <code>CrossVersion</code>.
+See the <a href="./cross-building-setup.html">Cross building setup</a> page for more
+details under the <em>Publishing convention</em> section.</p>
+<h3 id="published-artifacts"><a class="header" href="#published-artifacts">Published artifacts</a></h3>
+<p>By default, the main binary JAR, a sources JAR, and a API documentation
+JAR are published. You can declare other types of artifacts to publish
+and disable or modify the default artifacts.
+See the <a href="./artifact.html">Artifact</a> page for details.</p>
+<h3 id="version-scheme"><a class="header" href="#version-scheme">Version scheme</a></h3>
+<p><code>versionScheme</code> setting tracks the version scheme of the build:</p>
+<pre><code class="language-scala">versionScheme := Some("early-semver")
+</code></pre>
+<p>The supported values are <code>"early-semver"</code>, <code>"pvp"</code>, <code>"semver-spec"</code>, and <code>"strict"</code>. sbt will include this information into <code>pom.xml</code> and <code>ivy.xml</code> as a property.</p>
+<ul>
+<li><code>Some("early-semver")</code>: Early Semantic Versioning that would keep binary compatibility across patch updates within 0.Y.z (for instance 0.13.0 and 0.13.2). Once it goes 1.0.0, it follows the regular Semantic Versioning where 1.1.0 is bincompat with 1.0.0.</li>
+<li><code>Some("semver-spec")</code>: Semantic Versioning where all 0.y.z are treated as initial development (no bincompat guarantees).</li>
+<li><code>Some("pvp")</code>. Haskell Package Versioning Policy where X.Y are treated as major version.</li>
+<li><code>Some("strict")</code>. Requires exact match of version.</li>
+</ul>
+<p>This information will be annotated into the <code>pom.xml</code> file, which helps
+downstream projects determine whether a version conflict is safe to resolve or not.
+See <a href="https://www.scala-lang.org/blog/2021/02/16/preventing-version-conflicts-with-versionscheme.html">Preventing version conflicts with versionScheme</a> (2021).</p>
+<h3 id="modifying-the-generated-pom"><a class="header" href="#modifying-the-generated-pom">Modifying the generated POM</a></h3>
+<p>When <code>publishMavenStyle</code> is <code>true</code>, a POM is generated by the <code>makePom</code>
+action and published to the repository instead of an Ivy file. This POM
+file may be altered by changing a few settings. Set <code>pomExtra</code> to
+provide XML (<code>scala.xml.NodeSeq</code>) to insert directly into the generated
+pom. For example:</p>
+<pre><code class="language-scala">pomExtra := &lt;something&gt;&lt;/something&gt;
+</code></pre>
+<p>There is also a <code>pomPostProcess</code> setting that can be used to manipulate
+the final XML before it is written. It's type is <code>Node =&gt; Node</code>.</p>
+<pre><code class="language-scala">pomPostProcess := { (node: Node) =&gt;
+  ....
+}
+</code></pre>
+<p><code>makePom</code> adds to the POM any Maven-style repositories you have
+declared. You can filter these by modifying <code>pomRepositoryFilter</code>, which
+by default excludes local repositories. To instead only include local
+repositories:</p>
+<pre><code class="language-scala">pomIncludeRepository := { (repo: MavenRepository) =&gt;
+  repo.root.startsWith("file:")
+}
 </code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../reference/cross-building-setup.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../reference/sbt-test.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../reference/artifact.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../reference/cached-task.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -302,11 +396,11 @@ Global / remoteCacheHeaders += IO.read(BuildPaths.defaultGlobalBase / "nativelin
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../reference/cross-building-setup.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../reference/sbt-test.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../reference/artifact.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../reference/cached-task.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

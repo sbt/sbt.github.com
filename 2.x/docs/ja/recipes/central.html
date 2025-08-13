@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Remote cache setup - The Book of sbt</title>
+        <title>Publishing to the Central Repo - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -161,7 +161,7 @@
                           let full_path_to_root = "../../";
                           // The page path (mdbook only gives us
                           // access to the path to the Markdown file).
-                          let path = "reference/remote-cache-setup.md".replace(/\.md$/, ".html");
+                          let path = "recipes/central.md".replace(/\.md$/, ".html");
                           for (let lang of langList.querySelectorAll("a")) {
                             lang.href = `${full_path_to_root}${lang.id}/${path}`;
                           }
@@ -208,91 +208,190 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="remote-cache-setup"><a class="header" href="#remote-cache-setup">Remote cache setup</a></h1>
-<p>This page covers remote caching setup. See <a href="../concepts/caching.html">Caching</a> for general explanation of the caching system.</p>
-<h2 id="grpc-remote-cache"><a class="header" href="#grpc-remote-cache">gRPC remote cache</a></h2>
-<p>While there might be multiple remote cache store implemention in the future, sbt 2.0 ships with a gRPC client that is compatible with the Bazel remote cache backends. To configure sbt 2.x, add the following to <code>project/plugins.sbt</code></p>
-<pre><code class="language-scala">addRemoteCachePlugin
+                        <h1 id="publishing-to-the-central-repo"><a class="header" href="#publishing-to-the-central-repo">Publishing to the Central Repo</a></h1>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note"></a>
+</div>
+<div>
+<p>This is the recipe section of the documentation. We generally assume that you are familar with the sbt concepts, and focus on how-tos.</p>
+<p>See also Sonatype's <a href="https://central.sonatype.org/register/central-portal/">Publish guides</a> for general concepts around publishing to the Central Portal.</p>
+</div>
+</div>
+<h2 id="objective"><a class="header" href="#objective">Objective</a></h2>
+<p>I want to publish my project to the Central Repository.</p>
+<h2 id="steps"><a class="header" href="#steps">Steps</a></h2>
+<h3 id="preliminary-1-central-portal-registration"><a class="header" href="#preliminary-1-central-portal-registration">Preliminary 1: Central Portal registration</a></h3>
+<p>Create a Central Portal account, following Sonatype's <a href="https://central.sonatype.org/register/central-portal/">Publish guides</a>.</p>
+<ul>
+<li>If you had an OSSRH account, use <strong>Forgot password</strong> flow to convert the account to the new Central Portal, which lets you keep the previous namespace associations.</li>
+<li>If you authenticate via GitHub, <code>io.github.&lt;user_name&gt;</code> will automatically be associated with the account.</li>
+</ul>
+<p>Follow the steps described in <a href="https://central.sonatype.org/register/namespace/">register a namespace</a> guide to associate a domain name with your account.</p>
+<h4 id="preliminary-2-pgp-key-pair"><a class="header" href="#preliminary-2-pgp-key-pair">Preliminary 2: PGP key pair</a></h4>
+<p>Follow the Sonatype's <a href="https://central.sonatype.org/publish/requirements/gpg/">GPG guide</a> to generate a PGP key pair.</p>
+<p><a href="https://www.gnupg.org/download/">Install GnuPG</a>, and verify the version:</p>
+<pre><code class="language-bash">$ gpg --version
+gpg (GnuPG/MacGPG2) 2.2.8
+libgcrypt 1.8.3
+Copyright (C) 2018 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later &lt;https://gnu.org/licenses/gpl.html&gt;
 </code></pre>
-<p>There are many Bazel remote cache backends, both open source and commercial solutions. While this page documents is not an exhaustive list of all Bazel remote cache implementations, hopefully it shows how sbt 2.x can be set up for wide array of them.</p>
-<h3 id="authentication"><a class="header" href="#authentication">Authentication</a></h3>
-<p>There are a few flavors of <a href="https://grpc.io/docs/guides/auth/">gRPC authentication</a>, and Bazel remote cache backends use various kind of them:</p>
-<ol>
-<li>Unauthenticated. Useful for testing.</li>
-<li>Default TLS/SSL.</li>
-<li>TLS/SSL with custom server certificate.</li>
-<li>TTL/SSL with custom server and client certificate, mTLS.</li>
-<li>Default TLS/SSL with API token header.</li>
-</ol>
-<h3 id="bazel-remote-without-authentication"><a class="header" href="#bazel-remote-without-authentication">bazel-remote without authentication</a></h3>
-<p>You can grab the code from <a href="https://github.com/buchgr/bazel-remote">buchgr/bazel-remote</a> and run it on a laptop using Bazel:</p>
-<pre><code class="language-bash">bazel run :bazel-remote  -- --max_size 5 --dir $HOME/work/bazel-remote/temp \
-  --http_address localhost:8000 \
-  --grpc_address localhost:2024
+<p>Next generate a key:</p>
+<pre><code>$ gpg --gen-key
 </code></pre>
-<p>To configure sbt 2.x, add the following to <code>project/plugins.sbt</code></p>
-<pre><code class="language-scala">addRemoteCachePlugin
+<p>List the keys:</p>
+<pre><code>$ gpg --list-keys
+
+/home/foo/.gnupg/pubring.gpg
+------------------------------
+
+pub   rsa4096 2018-08-22 [SC]
+      1234517530FB96F147C6A146A326F592D39AAAAA
+uid           [ultimate] your name &lt;you@example.com&gt;
+sub   rsa4096 2018-08-22 [E]
 </code></pre>
-<p>and append the following to <code>build.sbt</code>:</p>
-<pre><code class="language-scala">Global / remoteCache := Some(uri("grpc://localhost:2024"))
+<p>Distribute the key:</p>
+<pre><code>$ gpg --keyserver keyserver.ubuntu.com --send-keys 1234517530FB96F147C6A146A326F592D39AAAAA
 </code></pre>
-<h3 id="bazel-remote-with-mtls"><a class="header" href="#bazel-remote-with-mtls">bazel-remote with mTLS</a></h3>
-<p>In a real environment, mTLS can ensure that the transport is encrypted and mutually authenticated. bazel-remote can be started with something like the follows:</p>
-<pre><code class="language-bash">bazel run :bazel-remote  -- --max_size 5 --dir $HOME/work/bazel-remote/temp \
-  --http_address localhost:8000 \
-  --grpc_address localhost:2024 \
-  --tls_ca_file /tmp/sslcert/ca.crt \
-  --tls_cert_file /tmp/sslcert/server.crt \
-  --tls_key_file /tmp/sslcert/server.pem
+<h3 id="step-1-sbt-pgp"><a class="header" href="#step-1-sbt-pgp">Step 1: sbt-pgp</a></h3>
+<p>The <a href="https://github.com/sbt/sbt-pgp#sbt-pgp">sbt-pgp plugin</a> can sign the published artifacts with GPG/PGP. (Optionally <a href="https://github.com/sbt/sbt-ci-release">sbt-ci-release</a> can automate the publishing process.)</p>
+<p>Add the following line to your <code>project/plugins.sbt</code> file to enable it for your build:</p>
+<pre><code class="language-scala">addSbtPlugin("com.github.sbt" % "sbt-pgp" % "2.3.1")
 </code></pre>
-<p>sbt 2.x setting would look like this in this scenario:</p>
-<pre><code class="language-scala">Global / remoteCache := Some(uri("grpcs://localhost:2024"))
-Global / remoteCacheTlsCertificate := Some(file("/tmp/sslcert/ca.crt"))
-Global / remoteCacheTlsClientCertificate := Some(file("/tmp/sslcert/client.crt"))
-Global / remoteCacheTlsClientKey := Some(file("/tmp/sslcert/client.pem"))
+<div id="admonition-note-1" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-1-title">
+<div class="admonition-title">
+<div id="admonition-note-1-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-1"></a>
+</div>
+<div>
+<p>Make sure that the <code>gpg</code> command is in PATH available to the sbt.</p>
+</div>
+</div>
+<h3 id="step-2-credentials"><a class="header" href="#step-2-credentials">Step 2: Credentials</a></h3>
+<p>Generate a user token from the portal to be used for the credentials. The token must be stored somewhere safe (NOT in the repository).</p>
+<p>sbt 2.x can also reads from the environment variables <code>SONATYPE_USERNAME</code> and <code>SONATYPE_PASSWORD</code> and appends a credential for <code>central.sonatype.com</code> out-of-box, which might be useful for automatic publishing from the CI environment, such as GitHub Actions.</p>
+<pre><code class="language-yaml">- run: sbt ci-release
+  env:
+    PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
+    PGP_SECRET: ${{ secrets.PGP_SECRET }}
+    SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+    SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
 </code></pre>
-<p>Note the <code>grpcs://</code>, as opposed to <code>grpc://</code>.</p>
-<h3 id="engflow"><a class="header" href="#engflow">EngFlow</a></h3>
-<p><a href="https://www.engflow.com/">EngFlow GmbH</a> is a build solution company founded in 2020 by core members of Bazel team, providing build analytics and remote execution backend for Bazel, which includes remote cache.</p>
-<p>After signing up for trial on <a href="https://my.engflow.com/">https://my.engflow.com/</a>, the page instructs you to start a trial cluster using a docker. If you followed the instruction, this should start a remote cache service on port 8080. The sbt 2.x configuration would look like this for the trial cluster:</p>
-<pre><code class="language-scala">Global / remoteCache := Some(uri("grpc://localhost:8080"))
+<p>On a local machine, a common convention is a <code>$HOME/.sbt/2/credentials.sbt</code> file, with the following:</p>
+<pre><code class="language-scala">credentials += Credentials(Path.userHome / ".sbt" / "sonatype_central_credentials")
 </code></pre>
-<h3 id="buildbuddy"><a class="header" href="#buildbuddy">BuildBuddy</a></h3>
-<p><a href="https://www.buildbuddy.io/">BuildBuddy</a> is a build solution company founded by ex-Google engineers, providing build analytics and remote execution backend for Bazel. It's also available open source as <a href="https://github.com/buildbuddy-io/buildbuddy">buildbuddy-io/buildbuddy</a>.</p>
-<p>After signing up, BuildBuddy Personal plan lets you use BuildBuddy across the Internet.</p>
-<ol>
-<li>From <a href="https://app.buildbuddy.io/">https://app.buildbuddy.io/</a>, go to Settings, and change the Organization URL to <code>&lt;something&gt;.buildbuddy.io</code>.</li>
-<li>Next, go to Quickstart and take note of the URLs and <code>--remote_headers</code>.</li>
-<li>Create a file called <code>$HOME/.sbt/buildbuddy_credential.txt</code> and put in the API key:</li>
-</ol>
-<pre><code>x-buildbuddy-api-key=*******
+<p>Next create a file <code>$HOME/.sbt/sonatype_central_credentials</code>:</p>
+<pre><code class="language-property">host=central.sonatype.com
+user=&lt;your username&gt;
+password=&lt;your password&gt;
 </code></pre>
-<p>The sbt 2.x configuration would look like this:</p>
-<pre><code class="language-scala">Global / remoteCache := Some(uri("grpcs://something.buildbuddy.io"))
-Global / remoteCacheHeaders += IO.read(BuildPaths.defaultGlobalBase / "buildbuddy_credential.txt").trim
+<h3 id="step-3-configure-buildsbt"><a class="header" href="#step-3-configure-buildsbt">Step 3: Configure build.sbt</a></h3>
+<p>To publish to a Maven repository, you'll need to configure a few settings so that the correct metadata is generated.</p>
+<p><strong>Note</strong>: To publish to the Central Portal, <code>publishTo</code> must be set to the <code>localStaging</code> repository:</p>
+<pre><code class="language-scala">// new setting for the Central Portal
+publishTo := {
+  val centralSnapshots = "https://central.sonatype.com/repository/maven-snapshots/"
+  if version.value.endsWith("-SNAPSHOT") then Some("central-snapshots" at centralSnapshots)
+  else localStaging.value
+}
 </code></pre>
-<h3 id="nativelink"><a class="header" href="#nativelink">NativeLink</a></h3>
-<p><a href="https://docs.nativelink.dev/">NativeLink</a> is an open-source Bazel remote execution backend implementated in Rust with emphasis on performance. As of June 2024, there's NativeLink Cloud in beta.</p>
-<ol>
-<li>From <a href="https://app.nativelink.com/">https://app.nativelink.com/</a>, go to Quickstart and take note of the URLs and <code>--remote_header</code>.</li>
-<li>Create a file called <code>$HOME/.sbt/nativelink_credential.txt</code> and put in the API key:</li>
-</ol>
-<pre><code>x-nativelink-api-key=*******
+<p>Add these settings at the end of <code>build.sbt</code> or a separate <code>publish.sbt</code>:</p>
+<pre><code class="language-scala">organization := "com.example.project2"
+organizationName := "example"
+organizationHomepage := Some(url("http://example.com/"))
+
+scmInfo := Some(
+  ScmInfo(
+    url("https://github.com/your-account/your-project"),
+    "scm:git@github.com:your-account/your-project.git"
+  )
+)
+developers := List(
+  Developer(
+    id = "Your identifier",
+    name = "Your Name",
+    email = "your@email",
+    url = url("http://your.url")
+  )
+)
+
+description := "Some description about your project."
+licenses := List(License.Apache2)
+homepage := Some(url("https://github.com/example/project"))
+
+// Remove all additional repository other than Maven Central from POM
+pomIncludeRepository := { _ =&gt; false }
+publishMavenStyle := true
+
+// new setting for the Central Portal
+publishTo := {
+  val centralSnapshots = "https://central.sonatype.com/repository/maven-snapshots/"
+  if version.value.endsWith("-SNAPSHOT") then Some("central-snapshots" at centralSnapshots)
+  else localStaging.value
+}
 </code></pre>
-<p>The sbt 2.x configuration would look like this:</p>
-<pre><code class="language-scala">Global / remoteCache := Some(uri("grpcs://something.build-faster.nativelink.net"))
-Global / remoteCacheHeaders += IO.read(BuildPaths.defaultGlobalBase / "nativelink_credential.txt").trim
+<p>The full format of a <code>pom.xml</code> (an end product of the project configuration used by Maven) file is outlined in <a href="https://maven.apache.org/pom.html">POM Reference</a>. You can add more data to it with the <code>pomExtra</code> option in <code>build.sbt</code>.</p>
+<h3 id="step-4-stage-the-artifacts"><a class="header" href="#step-4-stage-the-artifacts">Step 4: Stage the artifacts</a></h3>
+<p>From sbt shell run:</p>
+<pre><code class="language-bash">&gt; publishSigned
 </code></pre>
+<h3 id="step-5-upload-or-release-the-bundle"><a class="header" href="#step-5-upload-or-release-the-bundle">Step 5: Upload or release the bundle</a></h3>
+<p>From sbt shell run:</p>
+<pre><code class="language-bash">&gt; sonaUpload
+</code></pre>
+<p>This will upload the bundle to the <a href="https://central.sonatype.com/">Central Portal</a>. Hit the "Publish" button to publish to the Central Repository.</p>
+<p>If you want to automate the publishing, run:</p>
+<pre><code class="language-bash">&gt; sonaRelease
+</code></pre>
+<p>It might take 10 minutes to a few hours for the published artifacts to be visible on the Central Repository <a href="https://repo1.maven.org/maven2/">https://repo1.maven.org/maven2/</a>.</p>
+<!--
+### Optional steps
+
+#### Publishing SNAPSHOTs
+
+In general, the use of SNAPSHOT artifacts should be limited to short-term testing,
+and we do not recommend publishing SNAPSHOTs publicly.
+However, should you decide to publish SNAPSHOTs, you can enable it from the Central Portal per namespace.
+See Sonatype's [Publishing -SNAPSHOT Releases][publish-portal-snapshots] guide for details.
+
+#### Tag-based publishing via sbt-ci-release
+
+You can further optimize the publishing flow by using the [sbt-ci-release][sbt-ci-release] plugin.
+
+Once you set it up, all you have to do is push a git tag to trigger a release.
+
+#### Integrate with the release process
+
+To automate the publishing approach above with the [sbt-release plugin]
+[sbt-release], you should simply add the publishing commands as steps in the
+`releaseProcess` task:
+
+```
+...
+releaseStepCommand("sonatypeOpen \"your groupId\" \"Some staging name\""),
+...
+releaseStepCommand("publishSigned"),
+...
+releaseStepCommand("sonaRelease"),
+...
+```
+-->
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../reference/cross-building-setup.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../recipes/hello-world.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../reference/artifact.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../recipes/use-sbt-as-metals-build-server.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -302,11 +401,11 @@ Global / remoteCacheHeaders += IO.read(BuildPaths.defaultGlobalBase / "nativelin
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../reference/cross-building-setup.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../recipes/hello-world.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../reference/artifact.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../recipes/use-sbt-as-metals-build-server.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
