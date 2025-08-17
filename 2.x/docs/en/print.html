@@ -264,11 +264,11 @@ sdk install sbt
 cd foo-build
 touch build.sbt
 mkdir project
-echo "sbt.version=2.0.0-RC2" &gt; project/build.properties
+echo "sbt.version=2.0.0-RC3" &gt; project/build.properties
 </code></pre>
 <h3 id="start-sbt-shell"><a class="header" href="#start-sbt-shell">Start sbt shell</a></h3>
 <pre><code class="language-bash">$ sbt
-[info] welcome to sbt 2.0.0-RC2 (Azul Systems, Inc. Java)
+[info] welcome to sbt 2.0.0-RC3 (Azul Systems, Inc. Java)
 ....
 [info] started sbt server
 sbt:foo-build&gt;
@@ -892,7 +892,7 @@ $ sbt new scala/scala3.g8
 <p>An sbt build is executed using <code>sbt</code> runner, also called "sbt-the-shell-script" to distinguish from other components. It's important to note is that sbt runner is designed to run <strong>any version</strong> of sbt.</p>
 <h3 id="specifying-sbt-version-with-projectbuildproperties"><a class="header" href="#specifying-sbt-version-with-projectbuildproperties">Specifying sbt version with project/build.properties</a></h3>
 <p>sbt runner executes a subcomponent called sbt launcher, which reads <code>project/build.properties</code> to determine the sbt version for the build, and downloads the artifacts if they haven't been cached:</p>
-<pre><code>sbt.version=2.0.0-RC2
+<pre><code>sbt.version=2.0.0-RC3
 </code></pre>
 <p>This means that:</p>
 <ul>
@@ -1403,6 +1403,7 @@ Two of the popular IDEs in Scala are <a href="https://scalameta.org/metals/">Met
 <li>Dropped <code>useCoursier</code> setting so Coursier cannot be opted out, by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7712">#7712</a></li>
 <li><code>Key.Classpath</code> is changed to be an alias of the <code>Seq[Attributed[xsbti.HashedVirtualFileRef]]</code> type, instead of <code>Seq[Attributed[File]]</code>. Similarly, some task keys that used to return <code>File</code> have changed to return <code>HashedVirtualFileRef</code> instead. See <a href="changes/../concepts/caching.html#caching-files">Caching Files</a>.</li>
 <li>In sbt 2.x <code>target</code> defaults to <code>target/out/jvm/scala-3.7.2/&lt;subproject&gt;/</code>, as opposed to <code>&lt;subproject&gt;/target/</code>.</li>
+<li>sbt 2.x auto reloads by default on <code>build.sbt</code> changes, by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8211">#8211</a></li>
 </ul>
 <h3 id="dropped-dreprecations"><a class="header" href="#dropped-dreprecations">Dropped dreprecations</a></h3>
 <ul>
@@ -1555,7 +1556,7 @@ lazy val plugin = (project in file("plugin"))
     (pluginCrossBuild / sbtVersion) := {
       scalaBinaryVersion.value match {
         case "2.12" =&gt; "1.5.8"
-        case _      =&gt; "2.0.0-RC2"
+        case _      =&gt; "2.0.0-RC3"
       }
     },
   )
@@ -1611,6 +1612,8 @@ end PluginCompat
 
 package sbtfoo
 
+import sbt.*
+
 private[sbtfoo] object PluginCompat {
   type FileRef = java.io.File
   type Out = java.io.File
@@ -1623,6 +1626,11 @@ private[sbtfoo] object PluginCompat {
     cp.map(_.data.toPath()).toVector
   def toFiles(cp: Seq[Attributed[File]])(implicit conv: FileConverter): Vector[File] =
     cp.map(_.data).toVector
+
+  // This adds `Def.uncached(...)`
+  implicit class DefOp(singleton: Def.type) {
+    def uncached[A1](a: A1): A1 = a
+  }
 }
 </code></pre>
 <p>Now we can import <code>PluginCompat.*</code> and use <code>toNioPaths(...)</code> etc to absorb the differences between sbt 1.x and 2.x. The above demonstrates how we can absorb the classpath type change, and convert it into a vector of NIO Paths.</p>
@@ -1852,7 +1860,7 @@ sbt:demo&gt; show someKey
 </ul>
 </li>
 </ul>
-<pre><code>sbt.version=2.0.0-RC2
+<pre><code>sbt.version=2.0.0-RC3
 </code></pre>
 <p>This mechanism allows builds to be configured to a specific version of sbt, and everyone working on the project would use the same build semantics, regardless of the sbt runner installed on their machine.</p>
 <p>This also means that some features are implemented at sbt runner or sbtn level, while other features are implemented at sbt server level.</p>
@@ -3246,6 +3254,10 @@ sbt:demo&gt; show someKey
 </div>
 <h3 id="per-task-key-opt-out"><a class="header" href="#per-task-key-opt-out">Per-task-key opt-out</a></h3>
 <p>Next, if you want to opt some task keys from caching, you can set the cache level as follows:</p>
+<pre><code class="language-scala">@transient
+val someKey = taskKey[String]("something")
+</code></pre>
+<p>or</p>
 <pre><code class="language-scala">@cacheLevel(include = Array.empty)
 val someKey = taskKey[String]("something")
 </code></pre>
@@ -4020,7 +4032,7 @@ with minimal explanations.</p>
 <ol>
 <li>Create a fresh directory, like <code>hello_scala/</code></li>
 <li>Create a directory named <code>project/</code> under <code>hello_scala/</code>, and create <code>project/build.properties</code> with
-<pre><code>sbt.version=2.0.0-RC2
+<pre><code>sbt.version=2.0.0-RC3
 </code></pre>
 </li>
 <li>Under <code>hello_scala/</code>, create <code>build.sbt</code>:

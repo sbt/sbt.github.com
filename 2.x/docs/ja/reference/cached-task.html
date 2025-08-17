@@ -254,6 +254,10 @@ sbt:demo&gt; show someKey
 </div>
 <h3 id="per-task-key-opt-out"><a class="header" href="#per-task-key-opt-out">Per-task-key opt-out</a></h3>
 <p>Next, if you want to opt some task keys from caching, you can set the cache level as follows:</p>
+<pre><code class="language-scala">@transient
+val someKey = taskKey[String]("something")
+</code></pre>
+<p>or</p>
 <pre><code class="language-scala">@cacheLevel(include = Array.empty)
 val someKey = taskKey[String]("something")
 </code></pre>

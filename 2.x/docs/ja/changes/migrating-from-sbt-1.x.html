@@ -276,7 +276,7 @@ lazy val plugin = (project in file("plugin"))
     (pluginCrossBuild / sbtVersion) := {
       scalaBinaryVersion.value match {
         case "2.12" =&gt; "1.5.8"
-        case _      =&gt; "2.0.0-RC2"
+        case _      =&gt; "2.0.0-RC3"
       }
     },
   )
@@ -332,6 +332,8 @@ end PluginCompat
 
 package sbtfoo
 
+import sbt.*
+
 private[sbtfoo] object PluginCompat {
   type FileRef = java.io.File
   type Out = java.io.File
@@ -344,6 +346,11 @@ private[sbtfoo] object PluginCompat {
     cp.map(_.data.toPath()).toVector
   def toFiles(cp: Seq[Attributed[File]])(implicit conv: FileConverter): Vector[File] =
     cp.map(_.data).toVector
+
+  // This adds `Def.uncached(...)`
+  implicit class DefOp(singleton: Def.type) {
+    def uncached[A1](a: A1): A1 = a
+  }
 }
 </code></pre>
 <p>Now we can import <code>PluginCompat.*</code> and use <code>toNioPaths(...)</code> etc to absorb the differences between sbt 1.x and 2.x. The above demonstrates how we can absorb the classpath type change, and convert it into a vector of NIO Paths.</p>
