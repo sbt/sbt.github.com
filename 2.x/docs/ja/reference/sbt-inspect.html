@@ -1,9 +1,9 @@
 <!DOCTYPE HTML>
-<html lang="zh-cn" class="light sidebar-visible" dir="ltr">
+<html lang="ja" class="light sidebar-visible" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>sbt publish - The Book of sbt</title>
+        <title>sbt inspect - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -151,7 +151,7 @@
                           langToggle.addEventListener("click", (event) => {
                               langList.style.display = langList.style.display == "block" ? "none" : "block";
                           });
-                          let selectedLang = document.getElementById("zh-cn");
+                          let selectedLang = document.getElementById("ja");
                           if (selectedLang) {
                               selectedLang.parentNode.classList.add("theme-selected");
                           }
@@ -161,7 +161,7 @@
                           let full_path_to_root = "../../";
                           // The page path (mdbook only gives us
                           // access to the path to the Markdown file).
-                          let path = "reference/sbt-publish.md".replace(/\.md$/, ".html");
+                          let path = "reference/sbt-inspect.md".replace(/\.md$/, ".html");
                           for (let lang of langList.querySelectorAll("a")) {
                             lang.href = `${full_path_to_root}${lang.id}/${path}`;
                           }
@@ -208,136 +208,150 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="sbt-publish"><a class="header" href="#sbt-publish">sbt publish</a></h1>
+                        <h1 id="sbt-inspect"><a class="header" href="#sbt-inspect">sbt inspect</a></h1>
 <h2 id="synopsis"><a class="header" href="#synopsis">Synopsis</a></h2>
-<p><code>sbt</code> [<em>query</em> / ] <code>publish</code><br> <code>sbt</code> [<em>query</em> / ] <code>publishSigned</code><br> <code>sbt</code> [<em>query</em> / ] <code>publishLocal</code><br> <code>sbt</code> [<em>query</em> / ] <code>publishM2</code></p>
+<p><code>sbt</code> <code>inspect</code> [<em>subproject</em> / ] [ <em>config</em> / ] <em>task</em><br> <code>sbt</code> <code>inspect actual</code> [<em>subproject</em> / ] [ <em>config</em> / ] <em>task</em><br> <code>sbt</code> <code>inspect tree</code> [<em>subproject</em> / ] [ <em>config</em> / ] <em>task</em></p>
 <h2 id="description"><a class="header" href="#description">Description</a></h2>
-<p>The publish family of tasks provide means for compiling and publishing your project. <em>Publishing</em> in this context consists of uploading a descriptor, such as a Maven POM or <code>ivy.xml</code>, and artifacts, such as a JAR or <code>war</code> file, to a repository so that other projects can specify your project as a dependency.</p>
-<ul>
-<li>The <code>publish</code> task publishes your project to a remote repository, such as JFrog Artifactory or Sonatype Nexus instance.</li>
-<li>The <code>publishSigned</code> task, enabled using <a href="https://github.com/sbt/sbt-pgp">sbt-pgp plugin</a>, is used to publish GPG-signed artifacts.</li>
-<li>The <code>publishLocal</code> task publishes your project to the Ivy local file repository, which is usually located at <code>$HOME/.ivy2/local/</code>. You can then use this project from other projects on the same machine.</li>
-<li>The <code>publishM2</code> task publishes your project to the local Maven repository.</li>
-</ul>
-<p>There's a specific recipe for <a href="../recipes/central.html">publishing to the Central Repo</a>.</p>
-<h3 id="skip-publishing"><a class="header" href="#skip-publishing">Skip publishing</a></h3>
-<p>To avoid publishing a project, add the following setting to the subprojects that you want to skip:</p>
-<pre><code class="language-scala">publish / skip := true
+<p>The <code>inspect</code> command provides a means to inspect the task and setting graph. For instace, it can be used to determine which setting should be modified to affect another task.</p>
+<h3 id="value-description-and-provided-by"><a class="header" href="#value-description-and-provided-by">Value, Description, and Provided By</a></h3>
+<p>The first piece of information provided by <code>inspect</code> is the type of a task or the value and type of a setting.</p>
+<p>For example,</p>
+<pre><code class="language-bash">$ sbt inspect libraryDependencies
+[info] Setting: interface scala.collection.immutable.Seq =
+  List(org.scala-lang:scala3-library:3.7.2,
+       org.typelevel:toolkit:0.1.29,
+       org.typelevel:toolkit-test:0.1.29:test)
+[info] Description:
+[info]  Declares managed dependencies.
+[info] Provided by:
+[info]  ProjectRef(uri("file:/tmp/aaa/"), "aaa") / libraryDependencies
+....
 </code></pre>
-<p>Common use case is to prevent publishing of the root project.</p>
-<h3 id="define-the-repository"><a class="header" href="#define-the-repository">Define the repository</a></h3>
-<p>To specify the repository, assign a repository to <code>publishTo</code> and optionally set the publishing style. For example, to upload to Nexus:</p>
-<pre><code class="language-scala">publishTo := Some("Sonatype Snapshots Nexus" at "https://oss.sonatype.org/content/repositories/snapshots")
+<p>The following section of output is labeled "Provided by". This shows the actual scope where the setting is defined.</p>
+<p>This shows that <code>libraryDependencies</code> has been defined on the current project (<code>ProjectRef(uri("file:/tmp/aaa/"), "aaa")</code>).</p>
+<h3 id="related-settings"><a class="header" href="#related-settings">Related Settings</a></h3>
+<p>The <em>Related</em> section of <code>inspect</code> output lists all of the definitions of a key. For example,</p>
+<pre><code class="language-bash">&gt; inspect compile
+...
+[info] Related:
+[info]  Test / compile
 </code></pre>
-<p>To publish to a local maven repository:</p>
-<pre><code class="language-scala">publishTo := Some(MavenCache("local-maven", file("path/to/maven-repo/releases")))
+<p>This shows that in addition to the requested <code>Compile / compile</code> task, there is also a <code>Test / compile</code> task.</p>
+<h3 id="dependencies"><a class="header" href="#dependencies">Dependencies</a></h3>
+<p>Forward dependencies show the other settings (or tasks) used to define a setting (or task). Reverse dependencies go the other direction, showing what uses a given setting. <code>inspect</code> provides this information based on either the requested dependencies or the actual dependencies. Requested dependencies are those that a setting directly specifies. Actual settings are what those dependencies get resolved to. This distinction is explained in more detail in the following sections.</p>
+<h4 id="requested-dependencies"><a class="header" href="#requested-dependencies">Requested Dependencies</a></h4>
+<p>As an example, we'll look at <code>console</code>:</p>
+<pre><code class="language-bash">$ sbt inspect console
+...
+[info] Dependencies:
+[info]  Compile / console / initialCommands
+[info]  Compile / console / compilers
+[info]  Compile / state
+[info]  Compile / console / cleanupCommands
+[info]  Compile / console / taskTemporaryDirectory
+[info]  Compile / console / scalaInstance
+[info]  Compile / console / scalacOptions
+[info]  Compile / console / fullClasspath
+[info]  Compile / fileConverter
+[info]  Compile / console / streams
+
+...
 </code></pre>
-<p>To publish to a local Ivy repository:</p>
-<pre><code class="language-scala">publishTo := Some(Resolver.file("local-ivy", file("path/to/ivy-repo/releases")))
+<p>This shows the inputs to the <code>console</code> task. We can see that it gets its classpath and options from <code>Compile / console / fullClasspath</code> and <code>Compile / console / scalacOptions</code>. The information provided by the <code>inspect</code> command can thus assist in finding the right setting to change. The convention for keys, like <code>console</code> and <code>fullClasspath</code>, is that the Scala identifier is camel case, while the String representation is lowercase and separated by dashes. The Scala identifier for a configuration is uppercase to distinguish it from tasks like <code>compile</code> and <code>test</code>. For example, we can infer from the previous example how to add code to be run when the Scala interpreter starts up:</p>
+<pre><code class="language-scala">&gt; set Compile / console / initialCommands := "import mypackage._"
+&gt; console
+...
+import mypackage._
+...
 </code></pre>
-<p>If you're publishing the Central Repository, you will also have to select the right repository depending on your artifacts: SNAPSHOT versions go to the central-snapshots repository while other versions go to the local staging repository. Doing this selection can be done by using the value of the <code>version</code> setting:</p>
-<pre><code class="language-scala">publishTo := {
-  val centralSnapshots = "https://central.sonatype.com/repository/maven-snapshots/"
-  if version.value.endsWith("-SNAPSHOT") then Some("central-snapshots" at centralSnapshots)
-  else localStaging.value
-}
+<p><code>inspect</code> showed that <code>console</code> used the setting <code>Compile / console / initialCommands</code>. Translating the <code>initialCommands</code> string to the Scala identifier gives us <code>initialCommands</code>. <code>compile</code> indicates that this is for the main sources. <code>console /</code> indicates that the setting is specific to <code>console</code>. Because of this, we can set the initial commands on the <code>console</code> task without affecting the <code>consoleQuick</code> task, for example.</p>
+<h4 id="actual-dependencies"><a class="header" href="#actual-dependencies">Actual Dependencies</a></h4>
+<p><code>inspect actual &lt;scoped-key&gt;</code> shows the actual dependency used. This is useful because delegation means that the dependency can come from a scope other than the requested one. Using <code>inspect actual</code>, we see exactly which scope is providing a value for a setting. Combining <code>inspect actual</code> with plain <code>inspect</code>, we can see the range of scopes that will affect a setting. Returning to the example in Requested Dependencies,</p>
+<pre><code class="language-bash">$ sbt inspect actual console
+...
+[info] Dependencies:
+[info]  Compile / console / streams
+[info]  Global / taskTemporaryDirectory
+[info]  scalaInstance
+[info]  Compile / scalacOptions
+[info]  Global / initialCommands
+[info]  Global / cleanupCommands
+[info]  Compile / fullClasspath
+[info]  console / compilers
+...
 </code></pre>
-<h3 id="publishing-locally"><a class="header" href="#publishing-locally">Publishing locally</a></h3>
-<p>The <code>publishLocal</code> task will publish to the "local" Ivy repository. By default, this is at <code>$HOME/.ivy2/local/</code>. Other builds on the same machine can then list the project as a dependency. For example, if the project you are publishing has configuration parameters like:</p>
-<pre><code class="language-scala">organization := "com.example"
-version := "0.1-SNAPSHOT"
-name := "hello"
+<p>For <code>initialCommands</code>, we see that it comes from the global scope (<code>Global</code>). Combining this with the relevant output from <code>inspect console</code>:</p>
+<pre><code>Compile / console / initialCommands
 </code></pre>
-<p>Then another build on the same machine can depend on it:</p>
-<pre><code class="language-scala">libraryDependencies += "com.example" %% "hello" % "0.1-SNAPSHOT"
+<p>we know that we can set <code>initialCommands</code> as generally as the global scope, as specific as the current project's <code>console</code> task scope, or anything in between. This means that we can, for example, set <code>initialCommands</code> for the whole project and will affect <code>console</code>:</p>
+<pre><code class="language-scala">&gt; set initialCommands := "import mypackage._"
+...
 </code></pre>
-<p>The version number you select must end with <code>SNAPSHOT</code>, or you must change the version number each time you publish to indicate that it's a changing artifact.</p>
-<div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
-<div class="admonition-title">
-<div id="admonition-warning-title">
-<p>Warning</p>
-</div>
-<a class="admonition-anchor-link" href="#admonition-warning"></a>
-</div>
-<div>
-<p>Generally the use of SNAPSHOT dependencies should be avoided beyond testing on a single machine since it makes dependency resolution slower and the build non-repeatable.</p>
-</div>
-</div>
-<p>Similar to <code>publishLocal</code>, <code>publishM2</code> task will publish the user's Maven local repository. This is at the location specified by <code>$HOME/.m2/settings.xml</code> or at <code>$HOME/.m2/repository/</code> by default. Another build would require <code>Resolver.mavenLocal</code> to resolve out of it:</p>
-<pre><code class="language-scala">resolvers += Resolver.mavenLocal
+<p>The reason we might want to set it here this is that other console tasks will use this value now. We can see which ones use our new setting by looking at the reverse dependencies output of <code>inspect actual</code>:</p>
+<pre><code class="language-bash">$ sbt inspect actual Global/initialCommands
+...
+[info] Reverse dependencies:
+[info]  Compile / console
+[info]  consoleProject
+[info]  Test / console
+[info]  Test / consoleQuick
+[info]  Compile / consoleQuick
+...
 </code></pre>
-<!--
-See [Resolvers][Resolvers] for more details.
--->
-<h3 id="credentials"><a class="header" href="#credentials">Credentials</a></h3>
-<p>There are two ways to specify credentials for such a repository.</p>
-<p>The first and better way is to load them from a file, for example:</p>
-<pre><code class="language-scala">credentials += Credentials(Path.userHome / ".sbt" / ".credentials")
+<p>We now know that by setting <code>initialCommands</code> on the whole project, we affect all console tasks in all configurations in that project. If we didn't want the initial commands to apply for <code>consoleProject</code>, which doesn't have our project's classpath available, we could use the more specific task axis:</p>
+<pre><code class="language-scala">&gt; set console / initialCommands := "import mypackage._"
+&gt; set consoleQuick / initialCommands := "import mypackage._"`
 </code></pre>
-<p>The credentials file is a properties file with keys <code>realm</code>, <code>host</code>, <code>user</code>, and <code>password</code>. For example:</p>
-<pre><code>realm=Sonatype Nexus Repository Manager
-host=my.artifact.repo.net
-user=admin
-password=admin123
+<p>or configuration axis:</p>
+<pre><code class="language-scala">&gt; set Compile/　initialCommands := "import mypackage._"
+&gt; set Test / initialCommands := "import mypackage._"
 </code></pre>
-<p>The second way is to specify them inline:</p>
-<pre><code class="language-scala">credentials += Credentials("Sonatype Nexus Repository Manager", "my.artifact.repo.net", "admin", "admin123")
+<p>The next part describes the Delegates section, which shows the chain of delegation for scopes.</p>
+<h3 id="delegates"><a class="header" href="#delegates">Delegates</a></h3>
+<p>A setting has a key and a scope. A request for a key in a scope A may be delegated to another scope if A doesn't define a value for the key. The delegation chain is well-defined and is displayed in the Delegates section of the <code>inspect</code> command. The Delegates section shows the order in which scopes are searched when a value is not defined for the requested key.</p>
+<p>As an example, consider the initial commands for <code>console</code> again:</p>
+<pre><code class="language-bash">$ sbt inspect console/initialCommands
+...
+[info] Delegates:
+[info]  console / initialCommands
+[info]  initialCommands
+[info]  ThisBuild / console / initialCommands
+[info]  ThisBuild / initialCommands
+[info]  Zero / console / initialCommands
+[info]  Global / initialCommands
+...
 </code></pre>
-<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
-<div class="admonition-title">
-<div id="admonition-note-title">
-<p>Note</p>
-</div>
-<a class="admonition-anchor-link" href="#admonition-note"></a>
-</div>
-<div>
-<p>Credentials matching is done using both: <code>realm</code> and <code>host</code> keys. The <code>realm</code> key is the HTTP <code>WWW-Authenticate</code> header's realm directive, which is part of the response of HTTP servers for <a href="https://en.wikipedia.org/wiki/Basic_access_authentication#Server_side">HTTP Basic Authentication</a>. For a given repository, this can be found by reading all the headers received. For example:</p>
-<pre><code class="language-bash">curl -D - my.artifact.repo.net
+<p>This means that if there is no value specifically for <code>console/initialCommands</code>, the scopes listed under Delegates will be searched in order until a defined value is found.</p>
+<h3 id="inspect-tree"><a class="header" href="#inspect-tree">Inspect tree</a></h3>
+<p>In addition to displaying immediate forward and reverse dependencies as described in the previous section, the <code>inspect tree</code> command can display the full dependency tree for a task or setting. For example,</p>
+<pre><code class="language-bash">$ sbt inspect tree console
+[info] Compile / console = Task[void]
+[info]   +-Global / cleanupCommands =
+[info]   +-console / compilers = Task[class xsbti.compile.Compilers]
+[info]   +-Compile / fullClasspath = Task[Seq[class sbt.internal.util.Attributed]]
+[info]   +-Global / initialCommands =
+[info]   +-scalaInstance = Task[class sbt.internal.inc.ScalaInstance]
+[info]   +-Compile / scalacOptions = Task[Seq[class java.lang.String]]
+[info]   +-Compile / console / streams = Task[interface sbt.std.TaskStreams]
+[info]   | +-Global / streamsManager = Task[interface sbt.std.Streams]
+[info]   |
+[info]   +-Global / taskTemporaryDirectory = target/....
+[info]   +-Global / fileConverter = sbt.internal.inc.MappedFileConverter@10095d95
+[info]   +-Global / state = Task[class sbt.State]
+[info]
+[success] elapsed: 0 s
 </code></pre>
-</div>
-</div>
-<h3 id="cross-publishing"><a class="header" href="#cross-publishing">Cross-publishing</a></h3>
-<p>To support multiple incompatible Scala versions, use projectMatrix and publish (see <a href="./cross-building-setup.html">Cross building setup</a>).</p>
-<h3 id="overriding-the-publishing-convention"><a class="header" href="#overriding-the-publishing-convention">Overriding the publishing convention</a></h3>
-<p>By default sbt will publish your artifact with the binary version of Scala you're using. For example if your project is using Scala 2.13.x your example artifact would be published under <code>example_2.13</code>. This is often what you want, but if you're publishing a pure Java artifact or a compiler plugin you'll want to change the <code>CrossVersion</code>. See the <a href="./cross-building-setup.html">Cross building setup</a> page for more details under the <em>Publishing convention</em> section.</p>
-<h3 id="published-artifacts"><a class="header" href="#published-artifacts">Published artifacts</a></h3>
-<p>By default, the main binary JAR, a sources JAR, and a API documentation JAR are published. You can declare other types of artifacts to publish and disable or modify the default artifacts. See the <a href="./artifact.html">Artifact</a> page for details.</p>
-<h3 id="version-scheme"><a class="header" href="#version-scheme">Version scheme</a></h3>
-<p><code>versionScheme</code> setting tracks the version scheme of the build:</p>
-<pre><code class="language-scala">versionScheme := Some("early-semver")
-</code></pre>
-<p>The supported values are <code>"early-semver"</code>, <code>"pvp"</code>, <code>"semver-spec"</code>, and <code>"strict"</code>. sbt will include this information into <code>pom.xml</code> and <code>ivy.xml</code> as a property.</p>
-<ul>
-<li><code>Some("early-semver")</code>: Early Semantic Versioning that would keep binary compatibility across patch updates within 0.Y.z (for instance 0.13.0 and 0.13.2). Once it goes 1.0.0, it follows the regular Semantic Versioning where 1.1.0 is bincompat with 1.0.0.</li>
-<li><code>Some("semver-spec")</code>: Semantic Versioning where all 0.y.z are treated as initial development (no bincompat guarantees).</li>
-<li><code>Some("pvp")</code>. Haskell Package Versioning Policy where X.Y are treated as major version.</li>
-<li><code>Some("strict")</code>. Requires exact match of version.</li>
-</ul>
-<p>This information will be annotated into the <code>pom.xml</code> file, which helps downstream projects determine whether a version conflict is safe to resolve or not. See <a href="https://www.scala-lang.org/blog/2021/02/16/preventing-version-conflicts-with-versionscheme.html">Preventing version conflicts with versionScheme</a> (2021).</p>
-<h3 id="modifying-the-generated-pom"><a class="header" href="#modifying-the-generated-pom">Modifying the generated POM</a></h3>
-<p>When <code>publishMavenStyle</code> is <code>true</code>, a POM is generated by the <code>makePom</code> action and published to the repository instead of an Ivy file. This POM file may be altered by changing a few settings. Set <code>pomExtra</code> to provide XML (<code>scala.xml.NodeSeq</code>) to insert directly into the generated pom. For example:</p>
-<pre><code class="language-scala">pomExtra := &lt;something&gt;&lt;/something&gt;
-</code></pre>
-<p>There is also a <code>pomPostProcess</code> setting that can be used to manipulate the final XML before it is written. It's type is <code>Node =&gt; Node</code>.</p>
-<pre><code class="language-scala">pomPostProcess := { (node: Node) =&gt;
-  ....
-}
-</code></pre>
-<p><code>makePom</code> adds to the POM any Maven-style repositories you have declared. You can filter these by modifying <code>pomRepositoryFilter</code>, which by default excludes local repositories. To instead only include local repositories:</p>
-<pre><code class="language-scala">pomIncludeRepository := { (repo: MavenRepository) =&gt;
-  repo.root.startsWith("file:")
-}
-</code></pre>
+<p>For each task, <code>inspect tree</code> show the type of the value generated by the task. For a setting, the <code>toString</code> of the setting is displayed.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../reference/sbt-inspect.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../reference/sbt-test.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../reference/watch.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../reference/sbt-publish.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -347,11 +361,11 @@ password=admin123
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../reference/sbt-inspect.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../reference/sbt-test.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../reference/watch.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../reference/sbt-publish.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
