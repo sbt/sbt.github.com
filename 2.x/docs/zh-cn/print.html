@@ -240,13 +240,13 @@ sdk install sbt
 </code></pre>
 <h3 id="通用的包安装"><a class="header" href="#通用的包安装">通用的包安装</a></h3>
 <ul>
-<li><a href="https://github.com/sbt/sbt/releases/download/v1.11.5/sbt-1.11.5.zip">sbt-1.11.5.zip</a></li>
-<li><a href="https://github.com/sbt/sbt/releases/download/v1.11.5/sbt-1.11.5.tgz">sbt-1.11.5.tgz</a></li>
-<li><a href="https://github.com/sbt/sbt/releases/download/v1.11.5/sbt-1.11.5.msi">sbt-1.11.5.msi</a></li>
+<li><a href="https://github.com/sbt/sbt/releases/download/v1.11.6/sbt-1.11.6.zip">sbt-1.11.6.zip</a></li>
+<li><a href="https://github.com/sbt/sbt/releases/download/v1.11.6/sbt-1.11.6.tgz">sbt-1.11.6.tgz</a></li>
+<li><a href="https://github.com/sbt/sbt/releases/download/v1.11.6/sbt-1.11.6.msi">sbt-1.11.6.msi</a></li>
 </ul>
 <h2 id="验证-sbt-runner"><a class="header" href="#验证-sbt-runner">验证 sbt runner</a></h2>
 <pre><code class="language-bash">sbt --script-version
-# 1.11.5
+# 1.11.6
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-示例教程"><a class="header" href="#sbt-示例教程">sbt 示例教程</a></h1>
 <p>This page assumes you've <a href="Setup.html">installed sbt runner</a>.</p>
@@ -256,11 +256,11 @@ sdk install sbt
 cd foo-build
 touch build.sbt
 mkdir project
-echo "sbt.version=2.0.0-RC3" &gt; project/build.properties
+echo "sbt.version=2.0.0-RC4" &gt; project/build.properties
 </code></pre>
 <h3 id="start-sbt-shell"><a class="header" href="#start-sbt-shell">Start sbt shell</a></h3>
 <pre><code class="language-bash">$ sbt
-[info] welcome to sbt 2.0.0-RC3 (Azul Systems, Inc. Java)
+[info] welcome to sbt 2.0.0-RC4 (Azul Systems, Inc. Java)
 ....
 [info] started sbt server
 sbt:foo-build&gt;
@@ -868,7 +868,7 @@ $ sbt new scala/scala3.g8
 <p>An sbt build is executed using <code>sbt</code> runner, also called "sbt-the-shell-script" to distinguish from other components. It's important to note is that sbt runner is designed to run <strong>any version</strong> of sbt.</p>
 <h3 id="specifying-sbt-version-with-projectbuildproperties"><a class="header" href="#specifying-sbt-version-with-projectbuildproperties">Specifying sbt version with project/build.properties</a></h3>
 <p>sbt runner executes a subcomponent called sbt launcher, which reads <code>project/build.properties</code> to determine the sbt version for the build, and downloads the artifacts if they haven't been cached:</p>
-<pre><code>sbt.version=2.0.0-RC3
+<pre><code>sbt.version=2.0.0-RC4
 </code></pre>
 <p>This means that:</p>
 <ul>
@@ -1463,7 +1463,7 @@ lazy val plugin = (project in file("plugin"))
     (pluginCrossBuild / sbtVersion) := {
       scalaBinaryVersion.value match {
         case "2.12" =&gt; "1.5.8"
-        case _      =&gt; "2.0.0-RC3"
+        case _      =&gt; "2.0.0-RC4"
       }
     },
   )
@@ -1764,7 +1764,7 @@ sbt:demo&gt; show someKey
 </ul>
 </li>
 </ul>
-<pre><code>sbt.version=2.0.0-RC3
+<pre><code>sbt.version=2.0.0-RC4
 </code></pre>
 <p>This mechanism allows builds to be configured to a specific version of sbt, and everyone working on the project would use the same build semantics, regardless of the sbt runner installed on their machine.</p>
 <p>This also means that some features are implemented at sbt runner or sbtn level, while other features are implemented at sbt server level.</p>
@@ -3785,7 +3785,7 @@ libraryDependencies += ("org.testng" % "testng" % "5.7").artifacts(Artifact("tes
 </li>
 <li>
 <p>Create a directory named <code>project/</code> under <code>hello_scala/</code>, and create <code>project/build.properties</code> with</p>
-<pre><code>sbt.version=2.0.0-RC3
+<pre><code>sbt.version=2.0.0-RC4
 </code></pre>
 </li>
 <li>
