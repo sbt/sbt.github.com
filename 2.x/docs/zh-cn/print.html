@@ -3374,6 +3374,7 @@ libraryDependencies += ("org.testng" % "testng" % "5.7").artifacts(Artifact("tes
 <h3 id="release-plugins"><a class="header" href="#release-plugins">Release plugins</a></h3>
 <ul>
 <li><a href="https://github.com/sbt/sbt-native-packager">sbt-native-packager</a> (<a href="https://sbt-native-packager.readthedocs.io/en/stable/">docs</a>): build native packages (RPM, .deb etc) for your projects. <!-- 1602 stars --></li>
+<li><a href="https://github.com/sbt/sbt-release">sbt-release</a>: create a customizable release process. <!-- 652 stars --></li>
 <li><a href="https://github.com/sbt/sbt-ci-release">sbt-ci-release</a>: automate Central Repo releases from GitHub Actions. <!-- 302 stars --></li>
 <li><a href="https://github.com/sbt/sbt-pgp">sbt-pgp</a>: sign artifacts using PGP/GPG and manage signing keys. <!-- 149 stars --></li>
 </ul>
@@ -3381,9 +3382,6 @@ libraryDependencies += ("org.testng" % "testng" % "5.7").artifacts(Artifact("tes
 <ul>
 <li>
 <p><a href="https://github.com/xerial/sbt-pack">sbt-pack</a>: create runnable distributions for your projects. <!-- 302 stars --></p>
-</li>
-<li>
-<p><a href="https://github.com/sbt/sbt-release">sbt-release</a>: create a customizable release process. <!-- 113 stars --></p>
 </li>
 <li>
 <p><a href="https://github.com/marcuslonnberg/sbt-docker">sbt-docker</a>: create and push Docker images. <!-- 72 stars --></p>
@@ -3460,6 +3458,7 @@ libraryDependencies += ("org.testng" % "testng" % "5.7").artifacts(Artifact("tes
 <ul>
 <li><a href="https://github.com/stryker-mutator/stryker4s">sbt-stryker4s</a>: Test your tests with mutation testing. <!-- 202 stars --></li>
 <li><a href="https://github.com/tkawachi/sbt-doctest">sbt-doctest</a>: generate and run tests from Scaladoc comments. <!-- 120 stars --></li>
+<li><a href="https://github.com/xuwei-k/test-times-reporter">test-times-reporter</a>: report slow tests. <!-- 3 stars --></li>
 </ul>
 <div style="display: none;">
 <ul>
@@ -3473,11 +3472,15 @@ libraryDependencies += ("org.testng" % "testng" % "5.7").artifacts(Artifact("tes
 <li><a href="https://github.com/OlegYch/sbt-cached-ci">sbt-cached-ci</a>: Incremental sbt builds for CI environments. <!-- 0 stars --></li>
 </ul>
 </div>
-<div style="display: none;">
 <h3 id="library-dependency-plugins"><a class="header" href="#library-dependency-plugins">Library dependency plugins</a></h3>
 <ul>
-<li><a href="https://github.com/coursier/coursier">coursier</a>: pure Scala dependency fetcher. <!-- 1021 stars --></li>
-<li><a href="https://github.com/jrudolph/sbt-dependency-graph">sbt-dependency-graph</a>: create dependency graphs using GraphML, graphviz or ASCII. <!-- 821 stars --></li>
+<li><a href="https://github.com/xuwei-k/sbt-conflict-classes">sbt-conflict-classes</a>: show conflict classes in the classpath. <!-- 16 stars --></li>
+<li><a href="https://github.com/philippus/sbt-license-check">sbt-license-check</a>: check and report on licenses used, fail build for disallowed licenses. <!-- 9 stars --></li>
+<li><a href="https://github.com/philippus/sbt-pekko-version-check">sbt-pekko-version-check</a>: check if the Apache Pekko modules match. <!-- 5 stars --></li>
+<li><a href="https://github.com/philippus/sbt-jackson-version-check">sbt-jackson-version-check</a>: check if the Jackson modules match. <!-- 3 stars --></li>
+</ul>
+<div style="display: none;">
+<ul>
 <li><a href="https://github.com/rtimush/sbt-updates">sbt-updates</a>: list updated versions of dependencies. <!-- 361 stars --></li>
 <li><a href="https://github.com/frugalmechanic/fm-sbt-s3-resolver">fm-sbt-s3-resolver</a>: resolve and publish artefacts using Amazon S3. <!-- 79 stars --></li>
 <li><a href="https://github.com/ohnosequences/sbt-s3-resolver">sbt-s3-resolver</a>: resolve dependencies using Amazon S3. <!-- 73 stars --></li>
@@ -3490,12 +3493,11 @@ libraryDependencies += ("org.testng" % "testng" % "5.7").artifacts(Artifact("tes
 <li><a href="https://github.com/leobenkel/safety_plugin">safety-plugin</a>: Enforce the use of specified versions of dependencies across your company</li>
 <li><a href="https://stringbean.github.io/sbt-dependency-lock">sbt-dependency-lock</a>: generate dependency lockfiles and check for changes at build time.</li>
 <li><a href="https://github.com/djice/sbt-unzip-plugin">sbt-unzip</a>: Extract zip dependencies where you want in your project.</li>
-<li><a href="https://github.com/philippus/sbt-license-check">sbt-license-check</a>: check and report on licenses used, fail build for disallowed licenses.</li>
-<li><a href="https://github.com/philippus/sbt-pekko-version-check">sbt-pekko-version-check</a>: check if the Apache Pekko modules match, fail build if they don't.</li>
 </ul>
 </div>
 <h3 id="web-and-frontend-development-plugins"><a class="header" href="#web-and-frontend-development-plugins">Web and frontend development plugins</a></h3>
 <ul>
+<li><a href="https://github.com/earldouglas/sbt-war">sbt-war</a>: package and run WAR files <!-- 381 stars --></li>
 <li><a href="https://github.com/sbt/sbt-web">sbt-web</a>: library for building sbt plugins for the web. <!-- 314 stars --></li>
 </ul>
 <div style="display: none;">
@@ -3567,17 +3569,23 @@ libraryDependencies += ("org.testng" % "testng" % "5.7").artifacts(Artifact("tes
 </div>
 <h3 id="code-generator-plugins"><a class="header" href="#code-generator-plugins">Code generator plugins</a></h3>
 <ul>
-<li><a href="https://github.com/sbt/sbt-buildinfo">sbt-buildinfo</a>: generate Scala code from sbt setting keys. <!-- 559 stars --></li>
-<li><a href="https://github.com/sbt/sbt-github-actions">sbt-github-actions</a>: generate GitHub Actions YAML <!-- 197 stars --></li>
-<li><a href="https://github.com/sbt-teavm/sbt-teavm">sbt-teavm</a>: generate JavaScript and WebAssembly from Java bytecode <!-- 11 stars --></li>
+<li>
+<p><a href="https://github.com/sbt/sbt-buildinfo">sbt-buildinfo</a>: generate Scala code from sbt setting keys. <!-- 559 stars --></p>
+</li>
+<li>
+<p><a href="https://github.com/sbt/sbt-github-actions">sbt-github-actions</a>: generate GitHub Actions YAML <!-- 197 stars --></p>
+</li>
+<li>
+<p><a href="https://github.com/sbt/sbt-protobuf">sbt-protobuf</a>: protobuf code generator.<!-- 173 stars --></p>
+</li>
+<li>
+<p><a href="https://github.com/sbt-teavm/sbt-teavm">sbt-teavm</a>: generate JavaScript and WebAssembly from Java bytecode <!-- 11 stars --></p>
+</li>
 </ul>
 <div style="display: none;">
 <ul>
 <li>
 <p><a href="https://github.com/eed3si9n/scalaxb">sbt-scalaxb</a>: generate model classes from XML schemas and WSDL. <!-- 243 stars --></p>
-</li>
-<li>
-<p><a href="https://github.com/sbt/sbt-protobuf">sbt-protobuf</a>: protobuf code generator.<!-- 132 stars --></p>
 </li>
 <li>
 <p><a href="https://github.com/sbt/sbt-header">sbt-header</a>: auto-generate source code file headers (such as copyright notices). <!-- 111 stars --></p>
@@ -3644,10 +3652,16 @@ libraryDependencies += ("org.testng" % "testng" % "5.7").artifacts(Artifact("tes
 <p><a href="https://github.com/sbt/sbt-git">sbt-git</a>: run git commands from sbt.<!-- 233 stars --></p>
 </li>
 <li>
+<p><a href="https://github.com/philippus/sbt-dotenv">sbt-dotenv</a>: load environment variables from .env into the JVM System Environment for local development. <!-- 189 stars --></p>
+</li>
+<li>
 <p><a href="https://github.com/sbt/sbt-dynver">sbt-dynver</a>: set project version dynamically from git metadata. <!-- 87 stars --></p>
 </li>
 <li>
 <p><a href="https://github.com/sbt/sbt-nocomma">sbt-nocomma</a>: reduce commas. <!-- 13 stars --></p>
+</li>
+<li>
+<p><a href="https://github.com/xuwei-k/sbt-jshell">sbt-jshell</a>: Java REPL for sbt.<!-- 10 stars --></p>
 </li>
 <li>
 <p><a href="https://github.com/sbt/sbt-vimquit">sbt-vimquit</a>: adds <code>:q</code> command. <!-- 6 stars --></p>
@@ -3683,23 +3697,31 @@ libraryDependencies += ("org.testng" % "testng" % "5.7").artifacts(Artifact("tes
   artefacts for future builds. <!-- 31 stars -->
 - [sbt-javaagent](https://github.com/sbt/sbt-javaagent): add Java agents to
   projects. <!-- 13 stars -->
-- [sbt-jshell](https://github.com/xuwei-k/sbt-jshell): Java REPL for sbt.
-  <!-- 10 stars -->
-- [sbt-check](https://github.com/jeffreyolchovy/sbt-check): compile up to,
-  and including, the typer phase. <!-- 10 stars -->
-- [sbt-mima-version-check](https://github.com/ChristopherDavenport/sbt-mima-version-check): Automate which Mima Versions to Check <!-- 6 stars -->
-- [sbt-tmpfs](https://github.com/cuzfrog/sbt-tmpfs): utilize tmpfs to speed
-  up builds. <!-- 4 stars -->
-- [sbt-sh](https://github.com/melezov/sbt-sh): run shell commands from sbt.
-  <!-- 2 stars -->
-- [sbt-ammonite-classpath](https://github.com/ThoughtWorksInc/sbt-ammonite-classpath): export classpath for [Ammonite](https://ammonite.io/) and [Almond](https://almond.sh/).
-  <!-- 2 stars -->
-- [sbt-version-scheme-enforcer-plugin](https://github.com/isomarcte/sbt-version-scheme-enforcer): Derive Mima settings for your library from your declared `versionScheme`. This supports Early SemVer, Strict SemVer, and Package Versioning Policy (PVP).
-- [sbt-dotenv](https://github.com/philippus/sbt-dotenv): load environment variables from .env into the JVM System Environment for local development.
+<ul>
+<li>
+<p><a href="https://github.com/jeffreyolchovy/sbt-check">sbt-check</a>: compile up to, and including, the typer phase. <!-- 10 stars --></p>
+</li>
+<li>
+<p><a href="https://github.com/ChristopherDavenport/sbt-mima-version-check">sbt-mima-version-check</a>: Automate which Mima Versions to Check <!-- 6 stars --></p>
+</li>
+<li>
+<p><a href="https://github.com/cuzfrog/sbt-tmpfs">sbt-tmpfs</a>: utilize tmpfs to speed up builds. <!-- 4 stars --></p>
+</li>
+<li>
+<p><a href="https://github.com/melezov/sbt-sh">sbt-sh</a>: run shell commands from sbt.<!-- 2 stars --></p>
+</li>
+<li>
+<p><a href="https://github.com/ThoughtWorksInc/sbt-ammonite-classpath">sbt-ammonite-classpath</a>: export classpath for <a href="https://ammonite.io/">Ammonite</a> and <a href="https://almond.sh/">Almond</a>.<!-- 2 stars --></p>
+</li>
+<li>
+<p><a href="https://github.com/isomarcte/sbt-version-scheme-enforcer">sbt-version-scheme-enforcer-plugin</a>: Derive Mima settings for your library from your declared <code>versionScheme</code>. This supports Early SemVer, Strict SemVer, and Package Versioning Policy (PVP).</p>
+</li>
+</ul>
 </div>
 <h3 id="documentation-plugins"><a class="header" href="#documentation-plugins">Documentation plugins</a></h3>
 <ul>
-<li><a href="https://github.com/xuwei-k/sbt-class-diagram">sbt-class-diagram</a>: generate class diagrams from Scala source code. <!-- 54 stars --></li>
+<li><a href="https://github.com/sbt/sbt-unidoc">sbt-unidoc</a>: create unified API documentation across subprojects. <!-- 126 stars --></li>
+<li><a href="https://github.com/xuwei-k/sbt-class-diagram">sbt-class-diagram</a>: generate class diagrams from Scala source code. <!-- 100 stars --></li>
 </ul>
 <div style="display: none;">
 <ul>
@@ -3714,9 +3736,6 @@ libraryDependencies += ("org.testng" % "testng" % "5.7").artifacts(Artifact("tes
 </li>
 <li>
 <p><a href="https://github.com/47degrees/sbt-microsites">sbt-microsites</a>: generate and publish microsites using Jekyll. <!-- 125 stars --></p>
-</li>
-<li>
-<p><a href="https://github.com/sbt/sbt-unidoc">sbt-unidoc</a>: create unified API documentation across subprojects. <!-- 86 stars --></p>
 </li>
 <li>
 <p><a href="https://github.com/sbt/sbt-ghpages">sbt-ghpages</a>: publish generated sites to GitHub pages. <!-- 71 stars --></p>
