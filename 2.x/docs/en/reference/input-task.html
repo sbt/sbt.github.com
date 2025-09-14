@@ -1,0 +1,534 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Input task - The Book of sbt</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../src/reference/custom-202410.css">
+        <link rel="stylesheet" href="../src/reference/mdbook-admonish.css">
+        <link rel="stylesheet" href="../theme/language-picker.css">
+
+
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            
+            // var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+            var default_theme = "light";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Book of sbt</h1>
+
+                    <div class="right-buttons">
+                        <button id="language-toggle" class="icon-button" type="button"
+                                title="Change language" aria-label="Change language"
+                                aria-haspopup="true" aria-expanded="false"
+                                aria-controls="language-list">
+                            <i class="fa fa-globe"></i>
+                        </button>
+                        <ul id="language-list" class="theme-popup" aria-label="Languages" role="menu">
+                          <li role="none"><button role="menuitem" class="theme">
+                              <a id="en">English</a>
+                          </button></li>
+                          <li role="none"><button role="menuitem" class="theme">
+                              <a id="zh-cn">Chinese Simplified (中文)</a>
+                          </button></li>
+                          <li role="none"><button role="menuitem" class="theme">
+                              <a id="ja">Japanese (日本語)</a>
+                          </button></li>
+                        </ul>
+                        <script>
+                          let langToggle = document.getElementById("language-toggle");
+                          let langList = document.getElementById("language-list");
+                          langToggle.addEventListener("click", (event) => {
+                              langList.style.display = langList.style.display == "block" ? "none" : "block";
+                          });
+                          let selectedLang = document.getElementById("en");
+                          if (selectedLang) {
+                              selectedLang.parentNode.classList.add("theme-selected");
+                          }
+
+                          // The path to the root, taking the current
+                          // language into account.
+                          let full_path_to_root = "../../";
+                          // The page path (mdbook only gives us
+                          // access to the path to the Markdown file).
+                          let path = "reference/input-task.md".replace(/\.md$/, ".html");
+                          for (let lang of langList.querySelectorAll("a")) {
+                            lang.href = `${full_path_to_root}${lang.id}/${path}`;
+                          }
+
+                          // When the user clicks a list item, the page jump is performed, just like clicking the internal <a> tag.
+                          langList.querySelectorAll("li").forEach(function(li) {
+                            li.addEventListener("click", function(event) {
+                              event.preventDefault();
+        
+                              let link = this.querySelector("a");
+                              if (link && window.location.href !== link.href) {
+                                window.location.href = link.href;
+                              }
+                            });
+                          });
+                        </script>
+
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="input-task"><a class="header" href="#input-task">Input task</a></h1>
+<p>sbt provides a capability to define custom tasks that can parse
+user inputs and offer tab completion.
+The details of the parser will be covered in <a href="tab-completion-parser.html">tab-completion parser</a> later.</p>
+<p>This page describes how to hook those parser combinators into the input task
+system.</p>
+<h2 id="input-keys"><a class="header" href="#input-keys">Input keys</a></h2>
+<p>A key for an input task is of type <code>InputKey</code> and represents the input
+task like a <code>SettingKey</code> represents a setting or a <code>TaskKey</code> represents
+a task. Define a new input task key using the <code>inputKey.apply</code> factory
+method:</p>
+<pre><code class="language-scala">// goes in project/Build.scala or in build.sbt
+val demo = inputKey[Unit]("A demo input task.")
+</code></pre>
+<p>The definition of an input task is similar to that of a normal task, but
+it can also use the result of a</p>
+<p><a href="tab-completion-parser.html">Parser</a> applied to user input. Just as
+the special <code>value</code> method gets the value of a setting or task, the
+special <code>parsed</code> method gets the result of a <code>Parser</code>.</p>
+<h2 id="basic-input-task-definition"><a class="header" href="#basic-input-task-definition">Basic input task definition</a></h2>
+<p>The simplest input task accepts a space-delimited sequence of arguments.
+It does not provide useful tab completion and parsing is basic. The
+built-in parser for space-delimited arguments is constructed via the
+<code>spaceDelimited</code> method, which accepts as its only argument the label to
+present to the user during tab completion.</p>
+<p>For example, the following task prints the current Scala version and
+then echoes the arguments passed to it on their own line.</p>
+<pre><code class="language-scala">import complete.DefaultParsers.{ *, given }
+
+demo := {
+  // get the result of parsing
+  val args: Seq[String] = spaceDelimited("&lt;arg&gt;").parsed
+  // Here, we also use the value of the `scalaVersion` setting
+  println("The current Scala version is " + scalaVersion.value)
+  println("The arguments to demo were:")
+  args.foreach(println(_))
+}
+</code></pre>
+<h2 id="input-task-using-parsers"><a class="header" href="#input-task-using-parsers">Input task using Parsers</a></h2>
+<p>The Parser provided by the <code>spaceDelimited</code> method does not provide any
+flexibility in defining the input syntax. Using a custom parser is just
+a matter of defining your own <code>Parser</code> as described on the
+<a href="tab-completion-parser.html">Parsing Input</a> page.</p>
+<h3 id="constructing-the-parser"><a class="header" href="#constructing-the-parser">Constructing the Parser</a></h3>
+<p>The first step is to construct the actual <code>Parser</code> by defining a value
+of one of the following types:</p>
+<ol>
+<li><code>Parser[I]</code>: a basic parser that does not use any settings</li>
+<li><code>Initialize[Parser[I]]</code>: a parser whose definition depends on one or
+more settings</li>
+<li><code>Initialize[State =&gt; Parser[I]]</code>: a parser that is defined using
+both settings and the current <a href="Build-State.html">state</a></li>
+</ol>
+<p>We already saw an example of the first case with <code>spaceDelimited</code>, which
+doesn't use any settings in its definition. As an example of the third
+case, the following defines a contrived <code>Parser</code> that uses the project's
+Scala and sbt version settings as well as the state. To use these
+settings, we need to wrap the Parser construction in <code>Def.setting</code> and
+get the setting values with the special <code>value</code> method:</p>
+<pre><code class="language-scala">import sbt.complete.DefaultParsers.{ *, given }
+import sbt.complete.Parser
+
+val parser: Def.Initialize[State =&gt; Parser[(String,String)]] =
+Def.setting {
+  (state: State) =&gt;
+    ( token("scala" &lt;~ Space) ~ token(scalaVersion.value) ) |
+    ( token("sbt" &lt;~ Space) ~ token(sbtVersion.value) ) |
+    ( token("commands" &lt;~ Space) ~
+        token(state.remainingCommands.size.toString) )
+}
+</code></pre>
+<p>This Parser definition will produce a value of type <code>(String,String)</code>.
+The input syntax defined isn't very flexible; it is just a
+demonstration. It will produce one of the following values for a
+successful parse (assuming the current Scala version is 3.7.2,
+the current sbt version is 2.0.0-RC4, and there are 3 commands left to
+run):</p>
+<ul>
+<li>(scala,3.7.2)</li>
+<li>(sbt,2.0.0-RC4)</li>
+<li>(commands,3)</li>
+</ul>
+<p>Again, we were able to access the current Scala and sbt version for the
+project because they are settings. Tasks cannot be used to define the
+parser.</p>
+<h3 id="constructing-the-task"><a class="header" href="#constructing-the-task">Constructing the Task</a></h3>
+<p>Next, we construct the actual task to execute from the result of the
+<code>Parser</code>. For this, we define a task as usual, but we can access the
+result of parsing via the special <code>parsed</code> method on <code>Parser</code>.</p>
+<p>The following contrived example uses the previous example's output (of
+type <code>(String,String)</code>) and the result of the <code>package</code> task to print
+some information to the screen.</p>
+<pre><code class="language-scala">demo := {
+    val (tpe, value) = parser.parsed
+    println("Type: " + tpe)
+    println("Value: " + value)
+    println("Packaged: " + packageBin.value.getAbsolutePath)
+}
+</code></pre>
+<h2 id="the-inputtask-type"><a class="header" href="#the-inputtask-type">The InputTask type</a></h2>
+<p>It helps to look at the <code>InputTask</code> type to understand more advanced
+usage of input tasks. The core input task type is:</p>
+<pre><code class="language-scala">class InputTask[A1](val parser: State =&gt; Parser[Task[A1]])
+</code></pre>
+<p>Normally, an input task is assigned to a setting and you work with
+<code>Initialize[InputTask[A1]]</code>.</p>
+<p>Breaking this down,</p>
+<ol>
+<li>You can use other settings (via Initialize) to construct an input
+task.</li>
+<li>You can use the current State to construct the parser.</li>
+<li>The parser accepts user input and provides tab completion.</li>
+<li>The parser produces the task to run.</li>
+</ol>
+<p>So, you can use settings or <code>State</code> to construct the parser that defines
+an input task's command line syntax. This was described in the previous
+section. You can then use settings, <code>State</code>, or user input to construct
+the task to run. This is implicit in the input task syntax.</p>
+<h2 id="using-other-input-tasks"><a class="header" href="#using-other-input-tasks">Using other input tasks</a></h2>
+<p>The types involved in an input task are composable, so it is possible to
+reuse input tasks. The <code>.parsed</code> and <code>.evaluated</code> methods are defined on
+InputTasks to make this more convenient in common situations:</p>
+<ul>
+<li>Call <code>.parsed</code> on an <code>InputTask[A1]</code> or <code>Initialize[InputTask[A1]]</code>
+to get the <code>Task[A1]</code> created after parsing the command line</li>
+<li>Call <code>.evaluated</code> on an <code>InputTask[A1]</code> or
+<code>Initialize[InputTask[A1]]</code> to get the value of type <code>A1</code> from
+evaluating that task</li>
+</ul>
+<p>In both situations, the underlying <code>Parser</code> is sequenced with other
+parsers in the input task definition. In the case of <code>.evaluated</code>, the
+generated task is evaluated.</p>
+<p>The following example applies the <code>run</code> input task, a literal separator
+parser <code>--</code>, and <code>run</code> again. The parsers are sequenced in order of
+syntactic appearance, so that the arguments before <code>--</code> are passed to
+the first <code>run</code> and the ones after are passed to the second.</p>
+<pre><code class="language-scala">val run2 = inputKey[Unit](
+    "Runs the main class twice with different argument lists separated by --")
+
+val separator: Parser[String] = "--"
+
+run2 := {
+   val one = (Compile / run).evaluated
+   val sep = separator.parsed
+   val two = (Compile / run).evaluated
+}
+</code></pre>
+<p>For a main class Demo that echoes its arguments, this looks like:</p>
+<pre><code class="language-bash">$ sbt
+&gt; run2 a b -- c d
+[info] Running Demo c d
+[info] Running Demo a b
+c
+d
+a
+b
+</code></pre>
+<h2 id="preapplying-input"><a class="header" href="#preapplying-input">Preapplying input</a></h2>
+<p>Because <code>InputTasks</code> are built from <code>Parsers</code>, it is possible to
+generate a new <code>InputTask</code> by applying some input programmatically. (It
+is also possible to generate a <code>Task</code>, which is covered in the next
+section.) Two convenience methods are provided on <code>InputTask[T]</code> and
+<code>Initialize[InputTask[T]]</code> that accept the String to apply.</p>
+<ul>
+<li><code>partialInput</code> applies the input and allows further input, such as
+from the command line</li>
+<li><code>fullInput</code> applies the input and terminates parsing, so that
+further input is not accepted</li>
+</ul>
+<p>In each case, the input is applied to the input task's parser. Because
+input tasks handle all input after the task name, they usually require
+initial whitespace to be provided in the input.</p>
+<p>Consider the example in the previous section. We can modify it so that
+we:</p>
+<ul>
+<li>Explicitly specify all of the arguments to the first <code>run</code>. We use
+<code>name</code> and <code>version</code> to show that settings can be used to define
+and modify parsers.</li>
+<li>Define the initial arguments passed to the second <code>run</code>, but allow
+further input on the command line.</li>
+</ul>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note"></a>
+</div>
+<div>
+<p>If the input derives from settings you need to use, for
+example, <code>Def.taskDyn { ... }.value</code></p>
+</div>
+</div>
+<pre><code class="language-scala">lazy val run2 = inputKey[Unit]("Runs the main class twice: " +
+   "once with the project name and version as arguments"
+   "and once with command line arguments preceded by hard coded values.")
+
+// The argument string for the first run task is ' &lt;name&gt; &lt;version&gt;'
+lazy val firstInput: Initialize[String] =
+   Def.setting(s" ${name.value} ${version.value}")
+
+// Make the first arguments to the second run task ' red blue'
+lazy val secondInput: String = " red blue"
+
+run2 := {
+   val one = (Compile / run).fullInput(firstInput.value).evaluated
+   val two = (Compile / run).partialInput(secondInput).evaluated
+}
+</code></pre>
+<p>For a main class Demo that echoes its arguments, this looks like:</p>
+<pre><code class="language-bash">$ sbt
+&gt; run2 green
+[info] Running Demo demo 1.0
+[info] Running Demo red blue green
+demo
+1.0
+red
+blue
+green
+</code></pre>
+<h2 id="get-a-task-from-an-inputtask"><a class="header" href="#get-a-task-from-an-inputtask">Get a Task from an InputTask</a></h2>
+<p>The previous section showed how to derive a new <code>InputTask</code> by applying
+input. In this section, applying input produces a <code>Task</code>. The <code>toTask</code>
+method on <code>Initialize[InputTask[A1]]</code> accepts the <code>String</code> input to apply
+and produces a task that can be used normally. For example, the
+following defines a plain task <code>runFixed</code> that can be used by other
+tasks or run directly without providing any input:</p>
+<pre><code class="language-scala">lazy val runFixed = taskKey[Unit]("A task that hard codes the values to `run`")
+
+runFixed := {
+   val _ = (Compile / run).toTask(" blue green").value
+   println("Done!")
+}
+</code></pre>
+<p>For a main class Demo that echoes its arguments, running <code>runFixed</code>
+looks like:</p>
+<pre><code class="language-bash">$ sbt
+&gt; runFixed
+[info] Running Demo blue green
+blue
+green
+Done!
+</code></pre>
+<p>Each call to <code>toTask</code> generates a new task, but each task is configured
+the same as the original <code>InputTask</code> (in this case, <code>run</code>) but with
+different input applied. For example:</p>
+<pre><code class="language-scala">lazy val runFixed2 = taskKey[Unit]("A task that hard codes the values to `run`")
+
+run / fork := true
+
+runFixed2 := {
+   val x = (Compile / run).toTask(" blue green").value
+   val y = (Compile / run).toTask(" red orange").value
+   println("Done!")
+}
+</code></pre>
+<p>The different <code>toTask</code> calls define different tasks that each run the
+project's main class in a new jvm. That is, the <code>fork</code> setting
+configures both, each has the same classpath, and each run the same main
+class. However, each task passes different arguments to the main class.
+For a main class Demo that echoes its arguments, the output of running
+<code>runFixed2</code> might look like:</p>
+<pre><code class="language-bash">$ sbt
+&gt; runFixed2
+[info] Running Demo blue green
+[info] Running Demo red orange
+blue
+green
+red
+orange
+Done!
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../reference/artifact.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../reference/tab-completion-parser.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../reference/artifact.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../reference/tab-completion-parser.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

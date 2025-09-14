@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Artifact - The Book of sbt</title>
+        <title>Tab-completion parser - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -161,7 +161,7 @@
                           let full_path_to_root = "../../";
                           // The page path (mdbook only gives us
                           // access to the path to the Markdown file).
-                          let path = "reference/artifact.md".replace(/\.md$/, ".html");
+                          let path = "reference/tab-completion-parser.md".replace(/\.md$/, ".html");
                           for (let lang of langList.querySelectorAll("a")) {
                             lang.href = `${full_path_to_root}${lang.id}/${path}`;
                           }
@@ -208,160 +208,140 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="artifact"><a class="header" href="#artifact">Artifact</a></h1>
-<h2 id="description"><a class="header" href="#description">Description</a></h2>
-<p>An artifact is a single file ready for publishing a specific version of a subproject. This is a concept that originated in <a href="https://maven.apache.org/ref/3.9.11/maven-core/artifact-handlers.html">Apache Maven</a> and <a href="https://ant.apache.org/ivy/history/2.3.0/terminology.html#artifact">Ivy</a>.</p>
-<p>In the JVM ecosystem, common artifacts are Java archives, or JAR files. Compressed package formats are often preferred because they are easier to manage, download, and store.</p>
-<p>To illustrate, the following is a list of artifacts for a library, enumerated in an <code>ivy.xml</code> file:</p>
-<pre><code class="language-xml">  &lt;publications&gt;
-    &lt;artifact name="core_3" type="jar" ext="jar" conf="compile"/&gt;
-    &lt;artifact e:classifier="sources" name="core_3" type="src" ext="jar" conf="sources"/&gt;
-    &lt;artifact e:classifier="javadoc" name="core_3" type="doc" ext="jar" conf="docs"/&gt;
-    &lt;artifact name="core_3" type="pom" ext="pom" conf="pom"/&gt;
-  &lt;/publications&gt;
+                        <h1 id="tab-completion-parser"><a class="header" href="#tab-completion-parser">Tab-completion parser</a></h1>
+<p>This page describes the parser combinators in sbt. These parsers are used to parse user input and provide tab completion for <a href="input-task.html">input tasks</a> and <a href="../concepts/command.html">commands</a>.</p>
+<!--
+If you are already familiar with Scala's parser combinators, the methods
+are mostly the same except that their arguments are strict. There are
+two additional methods for controlling tab completion that are discussed
+at the end of the section.
+-->
+<p>Parser combinators build up a parser from smaller parsers. A <code>Parser[A]</code> in its most basic usage is a function <code>String =&gt; Option[A]</code>. It accepts a <code>String</code> to parse and produces a value wrapped in <code>Some</code> if parsing succeeds or <code>None</code> if it fails. Error handling and tab completion make this picture more complicated, but we'll stick with <code>Option</code> for this discussion.</p>
+<h2 id="basic-parsers"><a class="header" href="#basic-parsers">Basic parsers</a></h2>
+<p>The simplest parser combinators match exact inputs:</p>
+<pre><code class="language-scala">import sbt.{ *, given }
+import sbt.complete.DefaultParsers.{ *, given }
+
+// A parser that succeeds if the input is 'x', returning the Char 'x'
+//  and failing otherwise
+val singleChar: Parser[Char] = 'x'
+
+// A parser that succeeds if the input is "blue", returning the String "blue"
+//   and failing otherwise
+val litString: Parser[String] = "blue"
 </code></pre>
-<p>This shows that an artifact has a name, a type, and an extention, and optionally a classifier.</p>
+<p>In these examples, implicit conversions produce a literal <code>Parser</code> from a <code>Char</code> or <code>String</code>. Other basic parser constructors are the <code>charClass</code>, <code>success</code> and <code>failure</code> methods:</p>
+<pre><code class="language-scala">import sbt.{ *, given }
+import sbt.complete.DefaultParsers.{ *, given }
+
+// A parser that succeeds if the character is a digit, returning the matched Char
+//   The second argument, "digit", describes the parser and is used in error messages
+val digit: Parser[Char] = charClass((c: Char) =&gt; c.isDigit, "digit")
+
+// A parser that produces the value 3 for an empty input string, fails otherwise
+val alwaysSucceed: Parser[Int] = success(3)
+
+// Represents failure (always returns None for an input String).
+//  The argument is the error message.
+val alwaysFail: Parser[Nothing] = failure("Invalid input.")
+</code></pre>
+<h2 id="built-in-parsers"><a class="header" href="#built-in-parsers">Built-in parsers</a></h2>
+<p>sbt comes with several built-in parsers defined in <code>sbt.complete.DefaultParsers</code>. <!-- ../api/sbt/internal/util/complete/DefaultParsers$.html --></p>
+<p>Some commonly used built-in parsers are:</p>
 <ul>
-<li><strong>name</strong>. This is going to be the same as the subproject's module name.</li>
-<li><strong>type</strong>. The functional category of the artifact, such as <code>jar</code>, <code>src</code>, and <code>doc</code>.</li>
-<li><strong>extension</strong>. The file extention, such as <code>jar</code>, <code>war</code>, <code>zip</code>, <code>xml</code> etc.</li>
-<li><strong>classifier</strong>. In Maven, classifier is an arbitrary string that can be appended for an alternative or secondary artifact.</li>
+<li><code>Space</code>, <code>NotSpace</code>, <code>OptSpace</code>, and <code>OptNotSpace</code> for parsing spaces or non-spaces, required or not.</li>
+<li><code>StringBasic</code> for parsing text that may be quoted.</li>
+<li><code>IntBasic</code> for parsing a signed Int value.</li>
+<li><code>Digit</code> and <code>HexDigit</code> for parsing a single decimal or hexadecimal digit.</li>
+<li><code>Bool</code> for parsing a <code>Boolean</code> value</li>
 </ul>
-<h3 id="selecting-default-artifacts"><a class="header" href="#selecting-default-artifacts">Selecting default artifacts</a></h3>
-<p>By default, the published artifacts are:</p>
-<ol>
-<li>The main binary JAR</li>
-<li>The JAR containing the main sources and resources</li>
-<li>The JAR containing the API documentation</li>
-</ol>
-<p>You can add artifacts for the test classes, sources, or API or you can disable some of the main artifacts.</p>
-<p>To add all <code>Test</code> artifacts:</p>
-<pre><code class="language-scala">lazy val app = (project in file("app"))
-  .settings(
-    Test / publishArtifact := true,
-  )
-</code></pre>
-<p>To add them individually:</p>
-<pre><code class="language-scala">lazy val app = (project in file("app"))
-  .settings(
-    // enable publishing the jar produced by `Test/package`
-    Test / packageBin / publishArtifact := true,
+<p>See the <a href="../api/sbt/internal/util/complete/DefaultParsers$.html">DefaultParsers API</a> for details.</p>
+<h2 id="combining-parsers"><a class="header" href="#combining-parsers">Combining parsers</a></h2>
+<p>We build on these basic parsers to construct more interesting parsers. We can combine parsers in a sequence, choose between parsers, or repeat a parser.</p>
+<pre><code class="language-scala">// A parser that succeeds if the input is "blue" or "green",
+//  returning the matched input
+val color: Parser[String] = "blue" | "green"
 
-    // enable publishing the test API jar
-    Test / packageDoc / publishArtifact := true,
+// A parser that matches either "fg" or "bg"
+val select: Parser[String] = "fg" | "bg"
 
-    // enable publishing the test sources jar
-    Test / packageSrc / publishArtifact := true,
-  )
-</code></pre>
-<p>To disable main artifacts individually:</p>
-<pre><code class="language-scala">lazy val app = (project in file("app"))
-  .settings(
-    // disable publishing the main jar produced by `package`
-    Compile / packageBin / publishArtifact := false,
+// A parser that matches "fg" or "bg", a space, and then the color, returning the matched values.
+val setColor: Parser[(String, Char, String)] =
+  select ~ ' ' ~ color
 
-    // disable publishing the main API jar
-    Compile / packageDoc / publishArtifact := false,
+// Often, we don't care about the value matched by a parser, such as the space above
+//  For this, we can use ~&gt; or &lt;~, which keep the result of
+//  the parser on the right or left, respectively
+val setColor2: Parser[(String, String)]  =  select ~ (' ' ~&gt; color)
 
-    // disable publishing the main sources jar
-    Compile / packageSrc / publishArtifact := false,
-  )
-</code></pre>
-<h3 id="modifying-default-artifacts"><a class="header" href="#modifying-default-artifacts">Modifying default artifacts</a></h3>
-<p>Each built-in artifact has several configurable settings in addition to <code>publishArtifact</code>. The basic ones are <code>artifact</code> (of type <code>SettingKey[Artifact]</code>), <code>mappings</code> (of type <code>TaskKey[(File, String)]</code>), and <code>artifactPath</code> (of type <code>SettingKey[File]</code>). They are scoped by <code>(Config / &lt;task&gt;)</code> as indicated in the previous section.</p>
-<p>To modify the type of the main artifact, for example:</p>
-<pre><code class="language-scala">Compile / packageBin / artifact := {
-  val prev: Artifact = (Compile / packageBin / artifact).value
-  prev.withType("bundle")
-}
-</code></pre>
-<p>The generated artifact name is determined by the <code>artifactName</code> setting. This setting is of type <code>(ScalaVersion, ModuleID, Artifact) =&gt; String</code>. The ScalaVersion argument provides the full Scala version String and the binary compatible part of the version String. The String result is the name of the file to produce. The default implementation is <code>Artifact.artifactName _</code>. The function may be modified to produce different local names for artifacts without affecting the published name, which is determined by the <code>artifact</code> definition combined with the repository pattern.</p>
-<p>For example, to produce a minimal name without a classifier or cross path:</p>
-<pre><code class="language-scala">artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) =&gt;
-  artifact.name + "-" + module.revision + "." + artifact.extension
-}
-</code></pre>
-<p>(Note that in practice you rarely want to drop the classifier.)</p>
-<p>Finally, you can get the <code>(Artifact, File)</code> pair for the artifact by mapping the <code>packagedArtifact</code> task. Note that if you don't need the <code>Artifact</code>, you can get just the File from the package task (<code>package</code>, <code>packageDoc</code>, or <code>packageSrc</code>). In both cases, mapping the task to get the file ensures that the artifact is generated first and so the file is guaranteed to be up-to-date.</p>
-<p>For example:</p>
-<pre><code class="language-scala">val myTask = taskKey[Unit]("My task.")
+// Match one or more digits, returning a list of the matched characters
+val digits: Parser[Seq[Char]] = charClass(_.isDigit, "digit").+
 
-myTask :=  {
-  val (art, file) = (Compile / packageBin / packagedArtifact).value
-  println("Artifact definition: " + art)
-  println("Packaged file: " + file.getAbsolutePath)
-}
-</code></pre>
-<h3 id="defining-custom-artifacts"><a class="header" href="#defining-custom-artifacts">Defining custom artifacts</a></h3>
-<p>In addition to configuring the built-in artifacts, you can declare other artifacts to publish. Multiple artifacts are allowed when using Ivy metadata, but a Maven POM file only supports distinguishing artifacts based on classifiers and these are not recorded in the POM.</p>
-<p>Basic <code>Artifact</code> construction look like:</p>
-<pre><code class="language-scala">Artifact("name", "type", "extension")
-Artifact("name", "classifier")
-Artifact("name", url: URL)
-Artifact("name", Map("extra1" -&gt; "value1", "extra2" -&gt; "value2"))
-</code></pre>
-<p>For example:</p>
-<pre><code class="language-scala">Artifact("myproject", "zip", "zip")
-Artifact("myproject", "image", "jpg")
-Artifact("myproject", "jdk15")
-</code></pre>
-<p>See the <a href="https://ant.apache.org/ivy/history/2.3.0/ivyfile/dependency-artifact.html">Ivy documentation</a> for more details on artifacts. See the <a href="../api/sbt/librarymanagement/Artifact$.html">Artifact API</a> for combining the parameters above and specifying [Configurations] and extra attributes.</p>
-<p>To declare these artifacts for publishing, map them to the task that generates the artifact:</p>
-<pre><code class="language-scala">val myImageTask = taskKey[File](...)
+// Match zero or more digits, returning a list of the matched characters
+val digits0: Parser[Seq[Char]] = charClass(_.isDigit, "digit").*
 
-myImageTask := {
-  val artifact: File = makeArtifact(...)
-  artifact
-}
+// Optionally match a digit
+val optDigit: Parser[Option[Char]] = charClass(_.isDigit, "digit").?
+</code></pre>
+<h2 id="transforming-results"><a class="header" href="#transforming-results">Transforming results</a></h2>
+<p>A key aspect of parser combinators is transforming results along the way into more useful data structures. The fundamental methods for this are <code>map</code> and <code>flatMap</code>. Here are examples of <code>map</code> and some convenience methods implemented on top of <code>map</code>.</p>
+<pre><code class="language-scala">// Apply the `digits` parser and apply the provided function to the matched
+//   character sequence
+val num: Parser[Int] = digits.map: (chars: Seq[Char]) =&gt;
+  chars.mkString.toInt }
 
-addArtifact(Artifact("myproject", "image", "jpg"), myImageTask)
-</code></pre>
-<p><code>addArtifact</code> returns a sequence of settings (wrapped in a <a href="../api/sbt/internal/util/Init$SettingsDefinition.html">SettingsDefinition</a>). In a full build configuration, usage looks like:</p>
-<pre><code class="language-scala">lazy val app = (project in file("app"))
-  .settings(
-    addArtifact(...)
-  )
-</code></pre>
-<h3 id="publishing-war-files"><a class="header" href="#publishing-war-files">Publishing .war files</a></h3>
-<p>A common use case for web applications is to publish the <code>.war</code> file instead of the <code>.jar</code> file.</p>
-<pre><code class="language-scala">lazy val app = (project in file("app"))
-  .settings(
-    // disable .jar publishing
-    Compile / packageBin / publishArtifact := false,
+// Match a digit character, returning the matched character or return '0' if the input is not a digit
+val digitWithDefault: Parser[Char] = charClass(_.isDigit, "digit") ?? '0'
 
-    // create an Artifact for publishing the .war file
-    Compile / packageWar / artifact := {
-      val prev: Artifact = (Compile / packageWar / artifact).value
-      prev.withType("war").withExtension("war")
-    },
+// The previous example is equivalent to:
+val digitDefault: Parser[Char] =
+  charClass(_.isDigit, "digit").?.map: (d: Option[Char]) =&gt;
+    d.getOrElse('0')
 
-    // add the .war file to what gets published
-    addArtifact(Compile / packageWar / artifact, packageWar),
-  )
-</code></pre>
-<h3 id="using-dependencies-with-artifacts"><a class="header" href="#using-dependencies-with-artifacts">Using dependencies with artifacts</a></h3>
-<p>To specify the artifacts to use from a dependency that has custom or multiple artifacts, use the <code>artifacts</code> method on your dependencies. For example:</p>
-<pre><code class="language-scala">libraryDependencies += ("org" % "name" % "rev").artifacts(Artifact("name", "type", "ext"))
-</code></pre>
-<p>The <code>from</code> and <code>classifer</code> methods (described on the <a href="./sbt-update.html">sbt update</a> page) are actually convenience methods that translate to <code>artifacts</code>:</p>
-<pre><code class="language-scala">def from(url: String) = artifacts(Artifact(name, new URL(url)))
-def classifier(c: String) = artifacts(Artifact(name, c))
-</code></pre>
-<p>That is, the following two dependency declarations are equivalent:</p>
-<pre><code class="language-scala">libraryDependencies += ("org.testng" % "testng" % "5.7").classifier("jdk15")
+// Succeed if the input is "blue" and return the value 4
+val blue = "blue" ^^^ 4
 
-libraryDependencies += ("org.testng" % "testng" % "5.7").artifacts(Artifact("testng", "jdk15"))
+// The above is equivalent to:
+val blueM = "blue".map((s: String) =&gt; 4)
 </code></pre>
+<h2 id="controlling-tab-completion"><a class="header" href="#controlling-tab-completion">Controlling tab completion</a></h2>
+<p>Most parsers have reasonable default tab completion behavior. For example, the string and character literal parsers will suggest the underlying literal for an empty input string. However, it is impractical to determine the valid completions for <code>charClass</code>, since it accepts an arbitrary predicate. The <code>examples</code> method defines explicit completions for such a parser:</p>
+<pre><code class="language-scala">val digit = charClass(_.isDigit, "digit").examples("0", "1", "2")
+</code></pre>
+<p>Tab completion will use the examples as suggestions. The other method controlling tab completion is <code>token</code>. The main purpose of <code>token</code> is to determine the boundaries for suggestions. For example, if your parser is:</p>
+<pre><code class="language-scala">("fg" | "bg") ~ ' ' ~ ("green" | "blue")
+</code></pre>
+<p>then the potential completions on empty input are: <code>console fg green fg blue bg green bg blue</code></p>
+<p>Typically, you want to suggest smaller segments or the number of suggestions becomes unmanageable. A better parser is:</p>
+<pre><code class="language-scala">token( ("fg" | "bg") ~ ' ') ~ token("green" | "blue")
+</code></pre>
+<p>Now, the initial suggestions would be (with <code>_</code> representing a space): <code>console fg_ bg_</code></p>
+<p>Be careful not to overlap or nest tokens, as in <code>token("green" ~ token("blue"))</code>. The behavior is unspecified (and should generate an error in the future), but typically the outer most token definition will be used.</p>
+<h2 id="dependent-parsers"><a class="header" href="#dependent-parsers">Dependent parsers</a></h2>
+<p>Sometimes a parser must analyze some data and then more data needs to be parsed, and it is dependent on the previous one. The key for obtaining this behaviour is to use the <code>flatMap</code> function.</p>
+<p>As an example, it will shown how to select several items from a list of valid ones with completion, but no duplicates are possible.  A space is used to separate the different items.</p>
+<pre><code class="language-scala">def select1(items: Iterable[String]) =
+  token(Space ~&gt; StringBasic.examples(FixedSetExamples(items)))
+
+def selectSome(items: Seq[String]): Parser[Seq[String]] = {
+   select1(items).flatMap: v =&gt;
+     val remaining = items.filter(_ != v)
+     if remaining.size == 0 then success(v :: Nil)
+     else selectSome(remaining).?.map(v +: _.getOrElse(Seq()))
+ }
+</code></pre>
+<p>As you can see, the <code>flatMap</code> function provides the previous value.  With this info, a new parser is constructed for the remaining items.  The <code>map</code> combinator is also used in order to transform the output of the parser.</p>
+<p>The parser is called recursively, until it is found the trivial case of no possible choices.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../reference/remote-cache-setup.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../reference/input-task.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../reference/input-task.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../community-plugins.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -371,11 +351,11 @@ libraryDependencies += ("org.testng" % "testng" % "5.7").artifacts(Artifact("tes
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../reference/remote-cache-setup.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../reference/input-task.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../reference/input-task.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../community-plugins.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
