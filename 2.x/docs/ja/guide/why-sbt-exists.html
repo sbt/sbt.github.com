@@ -233,7 +233,8 @@ Hello, World!
 </ul>
 <p>sbt は、プログラムやライブラリのビルドに必要なコマンド実装の大部分を標準化していると言っても過言ではない。</p>
 <h2 id="buildsbt-dsl-の必要性"><a class="header" href="#buildsbt-dsl-の必要性">build.sbt DSL の必要性</a></h2>
-<p>build.sbt DSL makes sbt a unique build tool, as opposed to other tools that use configuration file formats like YAML, TOML, and XML. Originally developed beween 2010 and 2013, <code>build.sbt</code> can start almost like a YAML file, declaring just <code>scalaVersion</code> and <code>libraryDependencies</code>, but it can supports more features to keep the build definition organized as the build grows larger:</p>
+<p>sbt adopts Scala-based build.sbt DSL to declare the subproject and task graph. Nowadays, using a DSL as opposed to configuration formats like YAML and XML hardly makes sbt unique. Many of the build tools such as Gradle, Google's Bazel, Meta's Buck, and Apple's SwiftPM use DSL to define the subproject.</p>
+<p><code>build.sbt</code> can start almost like a YAML file, declaring just <code>scalaVersion</code> and <code>libraryDependencies</code>, but it can scale as your need for the build system grows:</p>
 <ul>
 <li>ライブラリのためのバージョン番号など同じ情報の繰り返しを回避するため、<code>build.sbt</code> は <code>val</code> を使って変数を宣言できる。</li>
 <li>セッティングやタスクの定義内で必要に応じて <code>if</code> のような Scala 言語の言語構文を使うことができる。</li>
