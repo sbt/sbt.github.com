@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Why sbt exists - The Book of sbt</title>
+        <title>sbt の存在理由 - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -208,38 +208,38 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="why-sbt-exists"><a class="header" href="#why-sbt-exists">Why sbt exists</a></h1>
-<h2 id="preliminaries"><a class="header" href="#preliminaries">Preliminaries</a></h2>
-<p>In Scala, a library or a program is compiled using the Scala compiler, <code>scalac</code>, as documented in the <a href="https://docs.scala-lang.org/scala3/book/taste-hello-world.html">Scala 3 Book</a>:</p>
+                        <h1 id="sbt-の存在理由"><a class="header" href="#sbt-の存在理由">sbt の存在理由</a></h1>
+<h2 id="背景"><a class="header" href="#背景">背景</a></h2>
+<p><a href="https://docs.scala-lang.org/scala3/book/taste-hello-world.html">Scala 3 Book</a> に書かれてある通り、Scala においてライブラリやプログラムは Scala コンパイラ <code>scalac</code> によってコンパイルされる:</p>
 <pre><code class="language-scala">@main def hello() = println("Hello, World!")
 </code></pre>
 <pre><code class="language-bash">$ scalac hello.scala
 $ scala hello
 Hello, World!
 </code></pre>
-<p>This process gets tedious and slow if we were to invoke <code>scalac</code> directly since we'd have to pass all the Scala source file names.</p>
-<p>Furthermore, most non-trivial programs will likely have library dependencies, and will therefore also depend transitively on their dependencies. This is doubly complicated for Scala ecosystem because we have Scala 2.12, 2.13 ecosystem, Scala 3.x ecosystem, JVM, JS, and Native platforms.</p>
-<p>Rather than working with JAR files and <code>scalac</code>, we can avoid manual toil by introducing a higher-level subproject abstraction and by using a build tool.</p>
+<p>いちいち毎回 <code>scalac</code> に全ての Scala ソースファイル名を直接渡すのは面倒だし遅い。</p>
+<p>さらに、例題的なプログラム以外のものを書こうとすると普通はライブラリ依存性を持つことになり、つまり間接的なライブラリ依存を持つことにもなる。Scala エコシステムは、Scala 2.12系、2.13系、3.x系、JVMプラットフォーム、 JSプラットフォーム、 Native プラットフォームなどがあるため二重、三重に複雑な問題だ。</p>
+<p>JAR ファイルや <code>scalac</code> を直接用いるという代わりに、サブプロジェクトという抽象概念とビルドツールを導入することで、無意味に非効率的な苦労を回避することができる。</p>
 <h2 id="sbt"><a class="header" href="#sbt">sbt</a></h2>
-<p><em>sbt</em> is a simple build tool created for Scala and Java. It lets us declare subprojects and their various dependencies and custom tasks to ensure that we'll always get a fast, repeatable build.</p>
-<p>To accomplish this goal, sbt does several things:</p>
+<p><strong>sbt</strong> は主に Scala と Java のためのシンプルなビルド・ツールだ。sbt を使うことで、サブプロジェクトおよびそれらの依存性、カスタム・タスクを宣言することができ、高速かつ再現性のあるビルドを得ることができる。</p>
+<p>この目標のため、sbt はいくつかのことを行う:</p>
 <ul>
-<li>The version of sbt itself is tracked in <code>project/build.properties</code>.</li>
-<li>Defines a domain-specific language (DSL) called <strong>build.sbt DSL</strong> that can declare the Scala version and other subproject information in <code>build.sbt</code>.</li>
-<li>Uses Coursier to fetch subprojects dependencies and their dependencies.</li>
-<li>Invokes Zinc to incrementally compile Scala and Java sources.</li>
-<li>Automatically runs tasks in parallel whenever possible.</li>
-<li>Defines conventions on how packages are published to Maven repositories to interoperate with the wider JVM ecosystem.</li>
+<li>sbt 自身のバージョンは <code>project/build.properties</code> にて指定される。</li>
+<li><strong>build.sbt DSL</strong> という DSL (ドメイン特定言語) を定義し、<code>build.sbt</code> にて Scala バージョンその他のサブプロジェクトに関する情報を宣言できるようにする。</li>
+<li>Cousier を用いてサブプロジェクトのライブラリ依存性や間接的依存性を取得する。</li>
+<li>Zinc を呼び出して Scala や Java ソースの差分コンパイルを行う。</li>
+<li>可能な限り、タスクを並列実行する。</li>
+<li>JVM エコシステム全般と相互乗り入れが可能なように、パッケージが Maven リポジトリにどのように公開されるべきかの慣習を定義する。</li>
 </ul>
-<p>To a large extent, sbt standardizes the commands needed to build a given program or library.</p>
-<h2 id="why-buildsbt-dsl"><a class="header" href="#why-buildsbt-dsl">Why build.sbt DSL?</a></h2>
+<p>sbt は、プログラムやライブラリのビルドに必要なコマンド実装の大部分を標準化していると言っても過言ではない。</p>
+<h2 id="buildsbt-dsl-の必要性"><a class="header" href="#buildsbt-dsl-の必要性">build.sbt DSL の必要性</a></h2>
 <p>build.sbt DSL makes sbt a unique build tool, as opposed to other tools that use configuration file formats like YAML, TOML, and XML. Originally developed beween 2010 and 2013, <code>build.sbt</code> can start almost like a YAML file, declaring just <code>scalaVersion</code> and <code>libraryDependencies</code>, but it can supports more features to keep the build definition organized as the build grows larger:</p>
 <ul>
-<li>To avoid repeating the same information, like the version number for a library, <code>build.sbt</code> can declare variables using <code>val</code>.</li>
-<li>Uses Scala language constructs like <code>if</code> to define settings and tasks, when needed.</li>
-<li>Statically typed settings and tasks, to catch typos and type errors before the build starts. The type also helps passing data from one task from another.</li>
-<li>Provides <strong>structured concurrency</strong> via <code>Initialized[Task[A]]</code>. The DSL uses <em>direct style</em> <code>.value</code> syntax to concisely define task graphs.</li>
-<li>Enpowers the community to extend sbt with plugins that provide custom tasks or language extensions like Scala.JS.</li>
+<li>ライブラリのためのバージョン番号など同じ情報の繰り返しを回避するため、<code>build.sbt</code> は <code>val</code> を使って変数を宣言できる。</li>
+<li>セッティングやタスクの定義内で必要に応じて <code>if</code> のような Scala 言語の言語構文を使うことができる。</li>
+<li>セッティングやタスクが静的型付けされているため、ビルドが始まる前にタイポミスや型の間違いなどをキャッチできる。型は、タスク間でのデータの受け渡しにも役立つ。</li>
+<li><code>Initialized[Task[A]]</code> を用いた<strong>構造的並行性</strong>を提供する。この DSL はいわゆる「直接スタイル」な <code>.value</code> 構文を用いて簡潔にタスクグラフを定義することができる。</li>
+<li>プラグインを通して sbt の機能を拡張して、カスタム・タスクや Scala.JS といった言語拡張を行うという強力な権限をコミュニティーに与えている。</li>
 </ul>
 
                     </main>
