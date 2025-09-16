@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Creating a new build - The Book of sbt</title>
+        <title>创建新的构建 - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -208,8 +208,8 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="creating-a-new-build"><a class="header" href="#creating-a-new-build">Creating a new build</a></h1>
-<p>To start a new build with <code>sbt</code>, use <code>sbt new</code>.</p>
+                        <h1 id="创建新的构建"><a class="header" href="#创建新的构建">创建新的构建</a></h1>
+<p>要使用 <code>sbt</code> 开始新的构建，请使用 <code>sbt new</code>。</p>
 <pre><code class="language-bash">$ mkdir /tmp/foo
 $ cd /tmp/foo
 $ sbt new
@@ -231,12 +231,12 @@ Here are some templates to get started:
  q) quit
 Select a template:
 </code></pre>
-<p>If you select "a", you will be prompted by more questions:</p>
+<p>如果您选择 "a"，您将会收到更多问题的提示:</p>
 <pre><code class="language-bash">Select a template: a
 Scala version (default: 3.3.0):
 Scala Toolkit version (default: 0.2.0):
 </code></pre>
-<p>Hit return key to select the default values.</p>
+<p>按回车键选择默认值。</p>
 <pre><code>[info] Updated file /private/tmp/bar/project/build.properties: set sbt.version to 1.9.8
 [info] welcome to sbt 1.9.8 (Azul Systems, Inc. Java 1.8.0_352)
 ....
@@ -246,7 +246,7 @@ Scala Toolkit version (default: 0.2.0):
 sbt:bar&gt; exit
 [info] shutting down sbt server
 </code></pre>
-<p>Here are the files that are created by this template:</p>
+<p>以下是此模板创建的文件:</p>
 <pre><code class="language-bash">.
 ├── build.sbt
 ├── project
@@ -262,7 +262,7 @@ sbt:bar&gt; exit
 │               └── ExampleSuite.scala
 └── target
 </code></pre>
-<p>Let's take a look at the <code>build.sbt</code> file:</p>
+<p>让我们看一下 <code>build.sbt</code> 文件:</p>
 <pre><code class="language-scala">val toolkitV = "0.2.0"
 val toolkit = "org.scala-lang" %% "toolkit" % toolkitV
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % toolkitV
@@ -271,14 +271,14 @@ scalaVersion := "3.3.0"
 libraryDependencies += toolkit
 libraryDependencies += (toolkitTest % Test)
 </code></pre>
-<p>This is called a <strong>build definition</strong>, and it contains the information sbt needs to compile your project. This is written in <code>.sbt</code> format, a subset of Scala language.</p>
-<p>Here's what's in <code>src/main/scala/example/Main.scala</code>:</p>
+<p>这被称为<strong>构建定义</strong>，它包含 sbt 编译项目所需的信息。这是用 <code>.sbt</code> 格式编写的，它是 Scala 语言的一个子集。</p>
+<p>以下是 <code>src/main/scala/example/Main.scala</code> 中的内容:</p>
 <pre><code class="language-scala">package example
 
 @main def main(args: String*): Unit =
   println(s"Hello ${args.mkString}")
 </code></pre>
-<p>This is a Hello world template. We can run it from the sbt shell by starting <code>sbt --client</code> and typing <code>run &lt;your_name&gt;</code> inside the shell:</p>
+<p>这是一个 Hello world 模板。我们可以通过启动 <code>sbt --client</code> 并在 shell 中输入 <code>run &lt;您的名字&gt;</code> 来从 sbt shell 运行它:</p>
 <pre><code>$ sbt --client
 [info] entering *experimental* thin client - BEEP WHIRR
 [info] server was not detected. starting an instance
@@ -290,12 +290,12 @@ sbt:bar&gt; run Raj
 Hello Raj
 [success] Total time: 0 s, completed Feb 18, 2024 2:38:10 PM
 </code></pre>
-<h3 id="giter8-templates"><a class="header" href="#giter8-templates">Giter8 templates</a></h3>
-<p>In addition to a few <code>.local</code> templates, <code>sbt new</code> integrates with <a href="https://www.foundweekends.org/giter8/">Giter8</a>, and open templating system that uses GitHub to host templates. For example, <code>scala/scala3.g8</code> is maintained by the Scala team to create a new Scala 3 build:</p>
+<h3 id="giter8-模板"><a class="header" href="#giter8-模板">Giter8 模板</a></h3>
+<p>除了几个 <code>.local</code> 模板外，<code>sbt new</code> 还与 <a href="https://www.foundweekends.org/giter8/">Giter8</a> 集成，这是一个使用 GitHub 托管模板的开放模板系统。例如，<code>scala/scala3.g8</code> 由 Scala 团队维护，用于创建新的 Scala 3 构建:</p>
 <pre><code>$ /tmp
 $ sbt new scala/scala3.g8
 </code></pre>
-<p><a href="https://github.com/foundweekends/giter8/wiki/giter8-templates">Giter8 wiki</a> lists over 100 templates that can jump start your new build.</p>
+<p><a href="https://github.com/foundweekends/giter8/wiki/giter8-templates">Giter8 wiki</a> 列出了 100 多个可以快速启动您新构建的模板。</p>
 
                     </main>
 
