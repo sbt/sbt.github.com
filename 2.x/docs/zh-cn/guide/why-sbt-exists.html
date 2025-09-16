@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Why sbt exists - The Book of sbt</title>
+        <title>sbt 的存在理由 - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -208,39 +208,39 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="why-sbt-exists"><a class="header" href="#why-sbt-exists">Why sbt exists</a></h1>
-<h2 id="preliminaries"><a class="header" href="#preliminaries">Preliminaries</a></h2>
-<p>In Scala, a library or a program is compiled using the Scala compiler, <code>scalac</code>, as documented in the <a href="https://docs.scala-lang.org/scala3/book/taste-hello-world.html">Scala 3 Book</a>:</p>
+                        <h1 id="sbt-的存在理由"><a class="header" href="#sbt-的存在理由">sbt 的存在理由</a></h1>
+<h2 id="预备知识"><a class="header" href="#预备知识">预备知识</a></h2>
+<p>在 Scala 中，库或程序使用 Scala 编译器 <code>scalac</code> 进行编译，正如 <a href="https://docs.scala-lang.org/scala3/book/taste-hello-world.html">Scala 3 Book</a> 中所记录的:</p>
 <pre><code class="language-scala">@main def hello() = println("Hello, World!")
 </code></pre>
 <pre><code class="language-bash">$ scalac hello.scala
 $ scala hello
 Hello, World!
 </code></pre>
-<p>This process gets tedious and slow if we were to invoke <code>scalac</code> directly since we'd have to pass all the Scala source file names.</p>
-<p>Furthermore, most non-trivial programs will likely have library dependencies, and will therefore also depend transitively on their dependencies. This is doubly complicated for Scala ecosystem because we have Scala 2.12, 2.13 ecosystem, Scala 3.x ecosystem, JVM, JS, and Native platforms.</p>
-<p>Rather than working with JAR files and <code>scalac</code>, we can avoid manual toil by introducing a higher-level subproject abstraction and by using a build tool.</p>
+<p>如果我们直接调用 <code>scalac</code>，这个过程会变得乏味且缓慢，因为我们必须传递所有 Scala 源文件名。</p>
+<p>此外，大多数非平凡的程序可能会有库依赖，因此也会传递性地依赖于它们的依赖项。对于 Scala 生态系统来说，这更加复杂，因为我们有 Scala 2.12，2.13 生态系统，Scala 3.x 生态系统，以及 JVM，JS 和 Native 平台。</p>
+<p>与其使用 JAR 文件和 <code>scalac</code>，我们可以通过引入更高级别的子项目抽象概念并使用构建工具来避免手动劳作。</p>
 <h2 id="sbt"><a class="header" href="#sbt">sbt</a></h2>
-<p><em>sbt</em> is a simple build tool created for Scala and Java. It lets us declare subprojects and their various dependencies and custom tasks to ensure that we'll always get a fast, repeatable build.</p>
-<p>To accomplish this goal, sbt does several things:</p>
+<p><em>sbt</em> 是为 Scala 和 Java 创建的简单构建工具。它允许我们声明子项目及其各种依赖项和自定义任务，以确保我们始终能获得快速，可重复的构建。</p>
+<p>为了实现这一目标，sbt 做了几件事:</p>
 <ul>
-<li>The version of sbt itself is tracked in <code>project/build.properties</code>.</li>
-<li>Defines a domain-specific language (DSL) called <strong>build.sbt DSL</strong> that can declare the Scala version and other subproject information in <code>build.sbt</code>.</li>
-<li>Uses Coursier to fetch subprojects dependencies and their dependencies.</li>
-<li>Invokes Zinc to incrementally compile Scala and Java sources.</li>
-<li>Automatically runs tasks in parallel whenever possible.</li>
-<li>Defines conventions on how packages are published to Maven repositories to interoperate with the wider JVM ecosystem.</li>
+<li>sbt 本身的版本记录在 <code>project/build.properties</code> 中。</li>
+<li>定义了一种称为 <strong>build.sbt DSL</strong> 的领域特定语言，可以在 <code>build.sbt</code> 中声明 Scala 版本和其他子项目信息。</li>
+<li>使用 Coursier 获取子项目依赖及其依赖项。</li>
+<li>调用 Zinc 增量编译 Scala 和 Java 源代码。</li>
+<li>在可能的情况下自动并行运行任务。</li>
+<li>定义了如何将包发布到 Maven 仓库的约定，以便与更广泛的 JVM 生态系统进行互操作。</li>
 </ul>
-<p>To a large extent, sbt standardizes the commands needed to build a given program or library.</p>
-<h2 id="why-buildsbt-dsl"><a class="header" href="#why-buildsbt-dsl">Why build.sbt DSL?</a></h2>
-<p>sbt adopts Scala-based build.sbt DSL to declare the subproject and task graph. Nowadays, using a DSL as opposed to configuration formats like YAML and XML hardly makes sbt unique. Many of the build tools such as Gradle, Google's Bazel, Meta's Buck, and Apple's SwiftPM use DSL to define the subproject.</p>
-<p><code>build.sbt</code> can start almost like a YAML file, declaring just <code>scalaVersion</code> and <code>libraryDependencies</code>, but it can scale as your need for the build system grows:</p>
+<p>在很大程度上，sbt 标准化了构建给定程序或库所需的命令。</p>
+<h2 id="buildsbt-dsl-的必要性"><a class="header" href="#buildsbt-dsl-的必要性">build.sbt DSL 的必要性</a></h2>
+<p>sbt 采用基于 Scala 的 build.sbt DSL 来声明子项目和任务图。如今，使用 DSL 而非 YAML 和 XML 等配置格式几乎不再是 sbt 的独特之处。许多构建工具，如 Gradle，Google 的 Bazel，Meta 的 Buck 以及 Apple 的 SwiftPM 都使用 DSL 来定义子项目。</p>
+<p><code>build.sbt</code> 最初几乎可以像 YAML 文件一样，仅声明 <code>scalaVersion</code> 和 <code>libraryDependencies</code>，但随着您对构建系统需求的增长，它可以进行扩展:</p>
 <ul>
-<li>To avoid repeating the same information, like the version number for a library, <code>build.sbt</code> can declare variables using <code>val</code>.</li>
-<li>Uses Scala language constructs like <code>if</code> to define settings and tasks, when needed.</li>
-<li>Statically typed settings and tasks, to catch typos and type errors before the build starts. The type also helps passing data from one task from another.</li>
-<li>Provides <strong>structured concurrency</strong> via <code>Initialized[Task[A]]</code>. The DSL uses <em>direct style</em> <code>.value</code> syntax to concisely define task graphs.</li>
-<li>Enpowers the community to extend sbt with plugins that provide custom tasks or language extensions like Scala.JS.</li>
+<li>为了避免重复相同的信息，例如库的版本号，<code>build.sbt</code> 可以使用 <code>val</code> 声明变量。</li>
+<li>在需要时使用 Scala 语言结构（如 <code>if</code>）来定义设置和任务。</li>
+<li>静态类型的设置和任务，可在构建开始前捕获拼写错误和类型错误。类型还有助于将数据从一个任务传递到另一个任务。</li>
+<li>通过 <code>Initialized[Task[A]]</code> 提供<strong>结构化并发</strong>。DSL 使用所谓的<strong>直接风格</strong> <code>.value</code> 语法来简洁地定义任务图。</li>
+<li>使社区能够通过插件扩展 sbt，这些插件提供自定义任务或语言扩展，如 Scala.JS。</li>
 </ul>
 
                     </main>
