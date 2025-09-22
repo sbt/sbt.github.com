@@ -210,10 +210,34 @@
                     <main>
                         <h1 id="migrating-from-sbt-1x"><a class="header" href="#migrating-from-sbt-1x">Migrating from sbt 1.x</a></h1>
 <h2 id="changing-buildsbt-dsl-to-scala-3x"><a class="header" href="#changing-buildsbt-dsl-to-scala-3x">Changing <code>build.sbt</code> DSL to Scala 3.x</a></h2>
-<p>As a reminder, users can build either Scala 2.x or Scala 3.x programs using either sbt 1.x or sbt 2.x. However, the Scala that underlies the <code>build.sbt</code> DSL is determined by the sbt version. In sbt 2.0, we are migrating to Scala 3.x.</p>
+<p>As a reminder, users can build either Scala 2.x or Scala 3.x programs using either sbt 1.x or sbt 2.x. However, the Scala that underlies the <code>build.sbt</code> DSL is determined by the sbt version. In sbt 2.0, we are migrating to Scala 3.7.x.</p>
 <p>This means that if you implement custom tasks or sbt plugins for sbt 2.x, it must be done using Scala 3.x. Consult <a href="https://docs.scala-lang.org/scala3/guides/migration/incompatibility-table.html">Scala 3.x incompatibility table</a> and <a href="https://docs.scala-lang.org/scala3/guides/migration/tooling-scala2-xsource3.html">Scala 2 with -Xsource:3</a> for details about Scala 3.x.</p>
 <pre><code class="language-scala">// This works on Scala 2.12.20 under -Xsource:3
 import sbt.{ given, * }
+</code></pre>
+<h3 id="import-given"><a class="header" href="#import-given">Import given</a></h3>
+<p>One of the differences between Scala 2.x and 3.x is the way typeclass instances are imported into scope. In Scala 2.x <code>import FooCodec._</code> was used whereas Scala 3 uses <code>import FooCodec.given</code>. Writing:</p>
+<pre><code class="language-scala">// The following works for both sbt 1.x and 2.x
+import sbt.librarymanagement.LibraryManagementCodec.{ given, * }
+</code></pre>
+<h3 id="avoid-postfix"><a class="header" href="#avoid-postfix">Avoid postfix</a></h3>
+<p>It wasn't uncommon for sbt 0.13 and 1.x examples to use postfix notations, especially with <code>ModuleID</code>:</p>
+<pre><code class="language-scala">// BAD
+libraryDependencies +=
+  "com.github.sbt" % "junit-interface" % "0.13.2" withSources() withJavadoc()
+</code></pre>
+<p>The above will fail to load on sbt 2.x:</p>
+<pre><code class="language-scala">-- Error: /private/tmp/foo/build.sbt:9:61 --------------------------------------
+9 |  "com.github.sbt" % "junit-interface" % "0.13.2" withSources() withJavadoc()
+  |                                                             ^^
+  |can't supply unit value with infix notation because nullary method withSources
+   in class ModuleIDExtra: (): sbt.librarymanagement.ModuleID takes no arguments;
+   use dotted invocation instead: (...).withSources()
+</code></pre>
+<p>To fix this, use the normal (dotted) function call notation:</p>
+<pre><code class="language-scala">// GOOD
+libraryDependencies +=
+  ("com.github.sbt" % "junit-interface" % "0.13.2").withSources().withJavadoc()
 </code></pre>
 <h2 id="bare-settings-changes"><a class="header" href="#bare-settings-changes">Bare settings changes</a></h2>
 <pre><code class="language-scala">version := "0.1.0"
@@ -276,7 +300,7 @@ lazy val plugin = (project in file("plugin"))
     (pluginCrossBuild / sbtVersion) := {
       scalaBinaryVersion.value match {
         case "2.12" =&gt; "1.5.8"
-        case _      =&gt; "2.0.0-RC4"
+        case _      =&gt; "2.0.0-RC5"
       }
     },
   )

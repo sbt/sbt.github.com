@@ -264,11 +264,11 @@ sdk install sbt
 cd foo-build
 touch build.sbt
 mkdir project
-echo "sbt.version=2.0.0-RC4" &gt; project/build.properties
+echo "sbt.version=2.0.0-RC5" &gt; project/build.properties
 </code></pre>
 <h3 id="start-sbt-shell"><a class="header" href="#start-sbt-shell">Start sbt shell</a></h3>
 <pre><code class="language-bash">$ sbt
-[info] welcome to sbt 2.0.0-RC4 (Azul Systems, Inc. Java)
+[info] welcome to sbt 2.0.0-RC5 (Azul Systems, Inc. Java)
 ....
 [info] started sbt server
 sbt:foo-build&gt;
@@ -891,7 +891,7 @@ $ sbt new scala/scala3.g8
 <p>An sbt build is executed using <code>sbt</code> runner, also called "sbt-the-shell-script" to distinguish from other components. It's important to note is that sbt runner is designed to run <strong>any version</strong> of sbt.</p>
 <h3 id="specifying-sbt-version-with-projectbuildproperties"><a class="header" href="#specifying-sbt-version-with-projectbuildproperties">Specifying sbt version with project/build.properties</a></h3>
 <p>sbt runner executes a subcomponent called sbt launcher, which reads <code>project/build.properties</code> to determine the sbt version for the build, and downloads the artifacts if they haven't been cached:</p>
-<pre><code>sbt.version=2.0.0-RC4
+<pre><code>sbt.version=2.0.0-RC5
 </code></pre>
 <p>This means that:</p>
 <ul>
@@ -1403,6 +1403,7 @@ Two of the popular IDEs in Scala are <a href="https://scalameta.org/metals/">Met
 <li><code>Key.Classpath</code> is changed to be an alias of the <code>Seq[Attributed[xsbti.HashedVirtualFileRef]]</code> type, instead of <code>Seq[Attributed[File]]</code>. Similarly, some task keys that used to return <code>File</code> have changed to return <code>HashedVirtualFileRef</code> instead. See <a href="changes/../concepts/caching.html#caching-files">Caching Files</a>.</li>
 <li>In sbt 2.x <code>target</code> defaults to <code>target/out/jvm/scala-3.7.2/&lt;subproject&gt;/</code>, as opposed to <code>&lt;subproject&gt;/target/</code>.</li>
 <li>sbt 2.x auto reloads by default on <code>build.sbt</code> changes, by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8211">#8211</a></li>
+<li><code>Project#autoAggregate</code> is added for automatic aggregation, by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8290">#8290</a></li>
 </ul>
 <h3 id="dropped-dreprecations"><a class="header" href="#dropped-dreprecations">Dropped dreprecations</a></h3>
 <ul>
@@ -1489,10 +1490,34 @@ task1 := {
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="migrating-from-sbt-1x"><a class="header" href="#migrating-from-sbt-1x">Migrating from sbt 1.x</a></h1>
 <h2 id="changing-buildsbt-dsl-to-scala-3x"><a class="header" href="#changing-buildsbt-dsl-to-scala-3x">Changing <code>build.sbt</code> DSL to Scala 3.x</a></h2>
-<p>As a reminder, users can build either Scala 2.x or Scala 3.x programs using either sbt 1.x or sbt 2.x. However, the Scala that underlies the <code>build.sbt</code> DSL is determined by the sbt version. In sbt 2.0, we are migrating to Scala 3.x.</p>
+<p>As a reminder, users can build either Scala 2.x or Scala 3.x programs using either sbt 1.x or sbt 2.x. However, the Scala that underlies the <code>build.sbt</code> DSL is determined by the sbt version. In sbt 2.0, we are migrating to Scala 3.7.x.</p>
 <p>This means that if you implement custom tasks or sbt plugins for sbt 2.x, it must be done using Scala 3.x. Consult <a href="https://docs.scala-lang.org/scala3/guides/migration/incompatibility-table.html">Scala 3.x incompatibility table</a> and <a href="https://docs.scala-lang.org/scala3/guides/migration/tooling-scala2-xsource3.html">Scala 2 with -Xsource:3</a> for details about Scala 3.x.</p>
 <pre><code class="language-scala">// This works on Scala 2.12.20 under -Xsource:3
 import sbt.{ given, * }
+</code></pre>
+<h3 id="import-given"><a class="header" href="#import-given">Import given</a></h3>
+<p>One of the differences between Scala 2.x and 3.x is the way typeclass instances are imported into scope. In Scala 2.x <code>import FooCodec._</code> was used whereas Scala 3 uses <code>import FooCodec.given</code>. Writing:</p>
+<pre><code class="language-scala">// The following works for both sbt 1.x and 2.x
+import sbt.librarymanagement.LibraryManagementCodec.{ given, * }
+</code></pre>
+<h3 id="avoid-postfix"><a class="header" href="#avoid-postfix">Avoid postfix</a></h3>
+<p>It wasn't uncommon for sbt 0.13 and 1.x examples to use postfix notations, especially with <code>ModuleID</code>:</p>
+<pre><code class="language-scala">// BAD
+libraryDependencies +=
+  "com.github.sbt" % "junit-interface" % "0.13.2" withSources() withJavadoc()
+</code></pre>
+<p>The above will fail to load on sbt 2.x:</p>
+<pre><code class="language-scala">-- Error: /private/tmp/foo/build.sbt:9:61 --------------------------------------
+9 |  "com.github.sbt" % "junit-interface" % "0.13.2" withSources() withJavadoc()
+  |                                                             ^^
+  |can't supply unit value with infix notation because nullary method withSources
+   in class ModuleIDExtra: (): sbt.librarymanagement.ModuleID takes no arguments;
+   use dotted invocation instead: (...).withSources()
+</code></pre>
+<p>To fix this, use the normal (dotted) function call notation:</p>
+<pre><code class="language-scala">// GOOD
+libraryDependencies +=
+  ("com.github.sbt" % "junit-interface" % "0.13.2").withSources().withJavadoc()
 </code></pre>
 <h2 id="bare-settings-changes"><a class="header" href="#bare-settings-changes">Bare settings changes</a></h2>
 <pre><code class="language-scala">version := "0.1.0"
@@ -1555,7 +1580,7 @@ lazy val plugin = (project in file("plugin"))
     (pluginCrossBuild / sbtVersion) := {
       scalaBinaryVersion.value match {
         case "2.12" =&gt; "1.5.8"
-        case _      =&gt; "2.0.0-RC4"
+        case _      =&gt; "2.0.0-RC5"
       }
     },
   )
@@ -1859,7 +1884,7 @@ sbt:demo&gt; show someKey
 </ul>
 </li>
 </ul>
-<pre><code>sbt.version=2.0.0-RC4
+<pre><code>sbt.version=2.0.0-RC5
 </code></pre>
 <p>This mechanism allows builds to be configured to a specific version of sbt, and everyone working on the project would use the same build semantics, regardless of the sbt runner installed on their machine.</p>
 <p>This also means that some features are implemented at sbt runner or sbtn level, while other features are implemented at sbt server level.</p>
@@ -3862,11 +3887,11 @@ Def.setting {
 The input syntax defined isn't very flexible; it is just a
 demonstration. It will produce one of the following values for a
 successful parse (assuming the current Scala version is 3.7.2,
-the current sbt version is 2.0.0-RC4, and there are 3 commands left to
+the current sbt version is 2.0.0-RC5, and there are 3 commands left to
 run):</p>
 <ul>
 <li>(scala,3.7.2)</li>
-<li>(sbt,2.0.0-RC4)</li>
+<li>(sbt,2.0.0-RC5)</li>
 <li>(commands,3)</li>
 </ul>
 <p>Again, we were able to access the current Scala and sbt version for the
@@ -4668,7 +4693,7 @@ with minimal explanations.</p>
 <ol>
 <li>Create a fresh directory, like <code>hello_scala/</code></li>
 <li>Create a directory named <code>project/</code> under <code>hello_scala/</code>, and create <code>project/build.properties</code> with
-<pre><code>sbt.version=2.0.0-RC4
+<pre><code>sbt.version=2.0.0-RC5
 </code></pre>
 </li>
 <li>Under <code>hello_scala/</code>, create <code>build.sbt</code>:
