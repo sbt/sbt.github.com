@@ -1280,6 +1280,120 @@ lazy val util = (project in file("util"))
 </code></pre>
 <p>The name of the val is used as the subproject's ID, which
 is used to refer to the subproject at the sbt shell.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="plugin-basics"><a class="header" href="#plugin-basics">Plugin basics</a></h1>
+<!--
+Please read the earlier pages in the Getting Started Guide first, in
+particular you need to understand [build.sbt][Basic-Def], [task graph][Task-Graph],
+[library dependencies][Library-Dependencies], before reading this page.
+-->
+<h2 id="what-is-a-plugin"><a class="header" href="#what-is-a-plugin">What is a plugin?</a></h2>
+<p>A plugin extends the build definition, most commonly by adding new settings and tasks.
+For example, a plugin could add <code>githubWorkflowGenerate</code> task to generate GitHub Actions YAML.</p>
+<!--
+For example, a plugin
+could add a `codeCoverage` task which would generate a test coverage report.
+-->
+<h2 id="finding-the-plugin-versions-using-scaladex"><a class="header" href="#finding-the-plugin-versions-using-scaladex">Finding the plugin versions using Scaladex</a></h2>
+<p>You can use <a href="https://index.scala-lang.org/search?platform=sbt2">Scaladex</a> to search for plugins, and find out the latest version of the plugin.</p>
+<h2 id="declaring-a-plugin"><a class="header" href="#declaring-a-plugin">Declaring a plugin</a></h2>
+<p>If your project is in directory <code>hello</code>, and
+if you are adding sbt-github-actions to the build definition,
+create <code>hello/project/plugins.sbt</code>
+and declare the plugin dependency by passing the plugin's module ID
+to <code>addSbtPlugin(...)</code>:</p>
+<pre><code class="language-scala">// In project/plugins.sbt
+
+addSbtPlugin("com.github.sbt" % "sbt-github-actions" % "0.28.0")
+</code></pre>
+<p>If you're adding sbt-assembly, add the following:</p>
+<pre><code class="language-scala">// In project/plugins.sbt
+
+addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "2.3.1")
+</code></pre>
+<p>See <a href="guide/../recipes/source-dependency-plugin.html">Source dependency plugin</a> recipe for an experimental technique of using plugins hosted on git repos.</p>
+<p>Plugins usually provide settings and tasks that get added to a subproject to enable
+the plugin's functionality. This is described in the next section.</p>
+<h2 id="enabling-and-disabling-auto-plugins"><a class="header" href="#enabling-and-disabling-auto-plugins">Enabling and disabling auto plugins</a></h2>
+<p>A plugin can declare that its settings be automatically added to the build definition,
+in which case you don't have to do anything to add them.</p>
+<p>The <!-- [auto plugins][Plugins] --> auto plugins feature enables
+plugins to automatically, and safely, ensure their settings and
+dependencies are on a project. Many auto plugins should have their default
+settings automatically.</p>
+<p>If you're using an auto plugin that requires explicit enablement, then you
+have to add the following to your <code>build.sbt</code>:</p>
+<pre><code class="language-scala">lazy val util = (project in file("util"))
+  .enablePlugins(FooPlugin, BarPlugin)
+  .settings(
+    name := "hello-util"
+  )
+</code></pre>
+<p>The <code>enablePlugins</code> method allows projects to explicitly define the
+auto plugins they wish to consume.</p>
+<p>Projects can also exclude plugins using the <code>disablePlugins</code>
+method. For example, if we wish to remove the <code>IvyPlugin</code> settings
+from <code>util</code>, we modify our <code>build.sbt</code> as follows:</p>
+<pre><code class="language-scala">lazy val util = (project in file("util"))
+  .enablePlugins(FooPlugin, BarPlugin)
+  .disablePlugins(plugins.IvyPlugin)
+  .settings(
+    name := "hello-util"
+  )
+</code></pre>
+<p>Auto plugins should document whether they need to be explicitly enabled. If you're
+curious which auto plugins are enabled for a given project, just run the
+<code>plugins</code> command on the sbt console.</p>
+<p>For example:</p>
+<pre><code class="language-scala">sbt:hello&gt; plugins
+In build /tmp/hello/:
+  Enabled plugins in hello:
+    sbt.plugins.CorePlugin
+    sbt.plugins.DependencyTreePlugin
+    sbt.plugins.Giter8TemplatePlugin
+    sbt.plugins.IvyPlugin
+    sbt.plugins.JUnitXmlReportPlugin
+    sbt.plugins.JvmPlugin
+    sbt.plugins.SemanticdbPlugin
+Plugins that are loaded to the build but not enabled in any subprojects:
+  sbt.ScriptedPlugin
+  sbt.plugins.SbtPlugin
+</code></pre>
+<p>Here, the <code>plugins</code> output is showing that the sbt default plugins are all
+enabled. sbt's default settings are provided via 7 plugins:</p>
+<ol>
+<li><code>CorePlugin</code>: Provides the core parallelism controls for tasks.</li>
+<li><code>DependencyTreePlugin</code>: Provides dependency tree tasks.</li>
+<li><code>Giter8TemplatePlugin</code>: Provides <code>sbt new</code> support.</li>
+<li><code>IvyPlugin</code>: Provides the mechanisms to publish/resolve modules.</li>
+<li><code>JUnitXmlReportPlugin</code>: Provides support for generating junit-xml.</li>
+<li><code>JvmPlugin</code>: Provides the mechanisms to compile/test/run/package
+Java/Scala projects.</li>
+<li><code>SemanticdbPlugin</code>: Provides support for generating SemanticDB.</li>
+</ol>
+<!--
+### Global plugins
+
+Plugins can be installed for all your projects at once by declaring them
+in `$global_plugins_base$`. `$global_plugins_base$` is an sbt project whose
+classpath is exported to all sbt build definition projects. Roughly
+speaking, any `.sbt` or `.scala` files in `$global_plugins_base$` behave as if
+they were in the `project/` directory for all projects.
+
+You can create `$global_plugins_base$build.sbt` and put `addSbtPlugin()`
+expressions in there to add plugins to all your projects at once.
+Because doing so would increase the dependency on the machine environment,
+this feature should be used sparingly. See
+[Best Practices][global-vs-local-plugins].
+-->
+<h2 id="available-plugins"><a class="header" href="#available-plugins">Available plugins</a></h2>
+<p>In addition to <a href="https://index.scala-lang.org/search?platform=sbt2">Scaladex</a>, there's
+also <a href="guide/../community-plugins.html">a list of available plugins</a>.</p>
+<!--
+For more details, including ways of developing plugins, see
+[Plugins][Plugins].
+For best practices, see
+[Plugins-Best-Practices][Plugins-Best-Practices].
+-->
 <div style="break-before: page; page-break-before: always;"></div><h1 id="build-layout"><a class="header" href="#build-layout">Build layout</a></h1>
 <p>sbt uses conventions for file placement to make it easy to dive into a new sbt build:</p>
 <pre><code>.
@@ -5059,80 +5173,35 @@ the actual building work.</p>
 </ul>
 <p>This lets you log into the sbt session IntelliJ has started. In there you can call <code>testOnly</code> and other tasks with
 the code already compiled.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="use-neovim"><a class="header" href="#use-neovim">Use Neovim</a></h1>
-<div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
+<div style="break-before: page; page-break-before: always;"></div><h1 id="source-dependency-plugin"><a class="header" href="#source-dependency-plugin">Source dependency plugin</a></h1>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
 <div class="admonition-title">
-<div id="admonition-warning-title">
-<p>Warning</p>
+<div id="admonition-note-title">
+<p>Note</p>
 </div>
-<a class="admonition-anchor-link" href="recipes/use-neovim.html#admonition-warning"></a>
+<a class="admonition-anchor-link" href="recipes/source-dependency-plugin.html#admonition-note"></a>
 </div>
 <div>
-<p>This is a draft documentation of sbt 2.x that is yet to be released.
-This is a placeholder, copied from sbt 1.x.</p>
+<p>The recipe section of the documentation focuses on the objectives
+with minimal explanations.</p>
 </div>
 </div>
 <h2 id="objective-4"><a class="header" href="#objective-4">Objective</a></h2>
-<p>I want to use Metals on Neovim with sbt as the build server.</p>
+<p>I want to use a plugin hosted on a git repository, without publishing to the Central Repo.</p>
 <h2 id="steps-4"><a class="header" href="#steps-4">Steps</a></h2>
-<p>Chris Kipp, who is a maintainer of Metals, created <a href="https://github.com/scalameta/nvim-metals">nvim-metals</a> plugin that provides comprehensive Metals support on Neovim. To install nvim-metals, create <code>lsp.lua</code> under <code>$XDG_CONFIG_HOME/nvim/lua/</code> based on Chris's <a href="https://github.com/scalameta/nvim-metals/discussions/39#discussion-82302">lsp.lua</a> and adjust to your preference. For example, comment out its plugins section and load the listed plugins using the plugin manager of your choice such as vim-plug.</p>
-<p>In <code>init.vim</code>, the file can be loaded as:</p>
-<pre><code class="language-lua">lua &lt;&lt; END
-require('lsp')
-END
+<ol>
+<li>Host an sbt 2.x plugin on a git repository, built using sbt 2.x.</li>
+<li>Add the following to <code>project/plugins.sbt</code>:
+<pre><code class="language-scala">// In project/plugins.sbt
+lazy val jmhRef = ProjectRef(
+  uri("https://github.com/eed3si9n/sbt-jmh.git#303c3e98e1d1523e6a4f99abe09c900165028edb"),
+  "plugin")
+BareBuildSyntax.dependsOn(jmhRef)
 </code></pre>
-<p>Per <code>lsp.lua</code>, <code>g:metals_status</code> should be displayed on the status line, which can be done using lualine.nvim etc.</p>
-<ol>
-<li>Next, open a Scala file in an sbt build using Neovim.</li>
-<li>Run <code>:MetalsInstall</code> when prompted.</li>
-<li>Run <code>:MetalsStartServer</code>.</li>
-<li>If the status line is set up, you should see something like "Connecting to sbt" or "Indexing."<br>
-<img src="recipes/../files/nvim0.png" width="900"></li>
-<li>Code completion works when you're in Insert mode, and you can tab through the candidates:<br>
-<img src="recipes/../files/nvim1.png" width="900"></li>
+</li>
+<li>When you start sbt, it will automatically clone the repository under <code>$HOME/.sbt/2/staging/</code>.</li>
 </ol>
-<ul>
-<li>A build is triggered upon saving changes, and compilation errors are displayed inline:<br>
-<img src="recipes/../files/nvim2.png" width="900"></li>
-</ul>
-<h4 id="go-to-definition"><a class="header" href="#go-to-definition">Go to definition</a></h4>
-<ol>
-<li>You can jump to definition of the symbol under cursor by using <code>gD</code> (exact keybinding can be customized):<br>
-<img src="recipes/../files/nvim3.png" width="900"></li>
-<li>Use <code>Ctrl-O</code> to return to the old buffer.</li>
-</ol>
-<h4 id="hover"><a class="header" href="#hover">Hover</a></h4>
-<ul>
-<li>To display the type information of the symbol under cursor, like hovering, use <code>K</code> in Normal mode:<br>
-<img src="recipes/../files/nvim4.png" width="900"></li>
-</ul>
-<h4 id="listing-diagnostics"><a class="header" href="#listing-diagnostics">Listing diagnostics</a></h4>
-<ol>
-<li>To list all compilation errors and warnings, use <code>&lt;leader&gt;aa</code>:<br>
-<img src="recipes/../files/nvim5.png" width="900"></li>
-<li>Since this is in the standard quickfix list, you can use the command such as <code>:cnext</code> and <code>:cprev</code> to nagivate through the errors and warnings.</li>
-<li>To list just the errors, use <code>&lt;leader&gt;ae</code>.</li>
-</ol>
-<h4 id="interactive-debugging-with-neovim"><a class="header" href="#interactive-debugging-with-neovim">Interactive debugging with Neovim</a></h4>
-<ol>
-<li>Thanks to nvim-dap, Neovim supports interactive debugging. Set break points in the code using <code>&lt;leader&gt;dt</code>:<br>
-<img src="recipes/../files/nvim6.png" width="900"></li>
-<li>Nagivate to a unit test, confirm that it's built by hovering (<code>K</code>), and then
-"debug continue" (<code>&lt;leader&gt;dc</code>) to start a debugger.
-Choose "1: RunOrTest" when prompted.</li>
-<li>When the test hits a break point, you can inspect the values of the variables by debug hovering (<code>&lt;leader&gt;dK</code>):<br>
-<img src="recipes/../files/nvim7.png" width="900"></li>
-<li>"debug continue" (<code>&lt;leader&gt;dc</code>) again to end the session.</li>
-</ol>
-<p>See <a href="https://github.com/scalameta/nvim-metals">nvim-metals</a> regarding further details.</p>
-<h4 id="logging-into-sbt-session-2"><a class="header" href="#logging-into-sbt-session-2">Logging into sbt session</a></h4>
-<p>We can also log into the existing sbt session using the thin client.</p>
-<ol>
-<li>In a new vim window type <code>:terminal</code> to start the built-in terminal.</li>
-<li>Type in <code>sbt --client</code><br>
-<img src="recipes/../files/nvim8.png" width="900"></li>
-</ol>
-<p>Even though it's inside Neovim, tab completion etc works fine inside.</p>
+<p>In the above, <code>https://github.com/eed3si9n/sbt-jmh.git</code> is the HTTP endpoint for a plugin hosted on GitHub, and <code>303c3e98e1d1523e6a4f99abe09c900165028edb</code> is a commit id on the default branch.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="glossary"><a class="header" href="#glossary">Glossary</a></h1>
 <h2 id="symbols"><a class="header" href="#symbols">Symbols</a></h2>
 <h3 id="--"><a class="header" href="#--"><code>:=</code>, <code>+=</code>, <code>++=</code></a></h3>

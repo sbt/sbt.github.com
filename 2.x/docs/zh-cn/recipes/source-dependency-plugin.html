@@ -1,9 +1,9 @@
 <!DOCTYPE HTML>
-<html lang="en" class="light sidebar-visible" dir="ltr">
+<html lang="zh-cn" class="light sidebar-visible" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Import to IntelliJ IDEA - The Book of sbt</title>
+        <title>Source dependency plugin - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -151,7 +151,7 @@
                           langToggle.addEventListener("click", (event) => {
                               langList.style.display = langList.style.display == "block" ? "none" : "block";
                           });
-                          let selectedLang = document.getElementById("en");
+                          let selectedLang = document.getElementById("zh-cn");
                           if (selectedLang) {
                               selectedLang.parentNode.classList.add("theme-selected");
                           }
@@ -161,7 +161,7 @@
                           let full_path_to_root = "../../";
                           // The page path (mdbook only gives us
                           // access to the path to the Markdown file).
-                          let path = "recipes/import-to-intellij.md".replace(/\.md$/, ".html");
+                          let path = "recipes/source-dependency-plugin.md".replace(/\.md$/, ".html");
                           for (let lang of langList.querySelectorAll("a")) {
                             lang.href = `${full_path_to_root}${lang.id}/${path}`;
                           }
@@ -208,122 +208,49 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="import-to-intellij-idea"><a class="header" href="#import-to-intellij-idea">Import to IntelliJ IDEA</a></h1>
-<div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
+                        <h1 id="source-dependency-plugin"><a class="header" href="#source-dependency-plugin">Source dependency plugin</a></h1>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
 <div class="admonition-title">
-<div id="admonition-warning-title">
-<p>Warning</p>
+<div id="admonition-note-title">
+<p>Note</p>
 </div>
-<a class="admonition-anchor-link" href="#admonition-warning"></a>
+<a class="admonition-anchor-link" href="#admonition-note"></a>
 </div>
 <div>
-<p>This is a draft documentation of sbt 2.x that is yet to be released.
-This is a placeholder, copied from sbt 1.x.</p>
+<p>The recipe section of the documentation focuses on the objectives with minimal explanations.</p>
 </div>
 </div>
 <h2 id="objective"><a class="header" href="#objective">Objective</a></h2>
-<p>I want to import sbt build to IntelliJ IDEA.</p>
+<p>I want to use a plugin hosted on a git repository, without publishing to the Central Repo.</p>
 <h2 id="steps"><a class="header" href="#steps">Steps</a></h2>
-<p><a href="https://www.jetbrains.com/idea/">IntelliJ IDEA</a> is an IDE created by JetBrains, and the Community Edition is open source under Apache v2 license. IntelliJ integrates with many build tools, including sbt, to import the project.</p>
-<p>To import a build to IntelliJ IDEA:</p>
 <ol>
-<li>Install Scala plugin on the Plugins tab:<br>
-<img src="../files/intellij1.png" alt="IntelliJ" /></li>
-<li>From Projects, open a directory containing a <code>build.sbt</code> file.<br>
-<img src="../files/intellij2.png" alt="IntelliJ" /></li>
-<li>Once the import process is complete, open a Scala file to see that code completion works.</li>
-</ol>
-<p>IntelliJ Scala plugin uses its own lightweight compilation engine to detect errors, which is fast but sometimes incorrect. Per <a href="https://blog.jetbrains.com/scala/2021/07/27/intellij-scala-plugin-2021-2/#Compiler-based_highlighting">compiler-based highlighting</a>, IntelliJ can be configured to use the Scala compiler for error highlighting.</p>
-<h3 id="interactive-debugging-with-intellij-idea"><a class="header" href="#interactive-debugging-with-intellij-idea">Interactive debugging with IntelliJ IDEA</a></h3>
-<ol>
-<li>IntelliJ supports interactive debugging by setting break points in the code:<br>
-<img src="../files/intellij4.png" alt="IntelliJ" /></li>
-<li>Interactive debugging can be started by right-clicking on an unit test, and selecting "Debug '&lt;test name&gt;'." Alternatively, you can click the green "run" icon on the left part of the editor near the unit test.
-When the test hits a break point, you can inspect the values of the variables:<br>
-<img src="../files/intellij5.png" alt="IntelliJ" /></li>
-</ol>
-<p>See <a href="https://www.jetbrains.com/help/idea/debugging-code.html">Debug Code</a> page on IntelliJ documentation for more details on how to navigate an interactive debugging session.</p>
-<h2 id="alternative"><a class="header" href="#alternative">Alternative</a></h2>
-<h3 id="using-sbt-as-intellij-idea-build-server-advanced"><a class="header" href="#using-sbt-as-intellij-idea-build-server-advanced">Using sbt as IntelliJ IDEA build server (advanced)</a></h3>
-<p>Importing the build to IntelliJ means that you're effectively using IntelliJ as the build tool and the compiler while you code (see also <a href="https://blog.jetbrains.com/scala/2021/07/27/intellij-scala-plugin-2021-2/#Compiler-based_highlighting">compiler-based highlighting</a>).
-While many users are happy with the experience, depending on the code base some of the compilation errors may be false, it may not work well with plugins that generate sources, and generally you might want to code with the identical build semantics as sbt.
-Thankfully, modern IntelliJ supports alternative <em>build servers</em> including sbt via the <a href="https://build-server-protocol.github.io/">Build Server Protocol</a> (BSP).</p>
-<p>The benefit of using BSP with IntelliJ is that you're using sbt to do the actual build work, so if you are the kind of programmer who had sbt session up on the side, this avoids double compilation.</p>
-<table class="table table-striped">
-  <tr>
-    <th><nobr></th>
-    <th>Import to IntelliJ</th>
-    <th>BSP with IntelliJ</th>
-  </tr>
-  <tr>
-    <td>Reliability</td>
-    <td>✅ Reliable behavior</td>
-    <td>⚠️ Less mature. Might encounter UX issues.</td>
-  </tr>
-  <tr>
-    <td>Responsiveness</td>
-    <td>✅</td>
-    <td>⚠️</td>
-  </tr>
-  <tr>
-    <td>Correctness</td>
-    <td>⚠️ Uses its own compiler for type checking, but can be configured to use scalac</td>
-    <td>✅ Uses Zinc + Scala compiler for type checking</td>
-  </tr>
-  <tr>
-    <td>Generated source</td>
-    <td>❌ Generated source requires resync</td>
-    <td>✅</td>
-  </tr>
-  <tr>
-    <td>Build reuse</td>
-    <td>❌ Using sbt side-by-side requires double build</td>
-    <td>✅</td>
-  </tr>
-</table>
-<p>To use sbt as build server on IntelliJ:</p>
-<ol>
-<li>Install Scala plugin on the Plugins tab.</li>
-<li>To use the BSP approach, do not use Open button on the Project tab:<br>
-<img src="../files/intellij7.png" alt="IntelliJ" /></li>
-<li>From menubar, click New &gt; "Project From Existing Sources", or Find Action (<code>Cmd-Shift-P</code> on macOS) and
-type "Existing" to find "Import Project From Existing Sources":<br>
-<img src="../files/intellij8.png" alt="IntelliJ" /></li>
-<li>Open a <code>build.sbt</code> file. Select <strong>BSP</strong> when prompted:<br>
-<img src="../files/intellij9.png" alt="IntelliJ" /></li>
-<li>Select <strong>sbt (recommended)</strong> as the tool to import the BSP workspace:<br>
-<img src="../files/intellij10.png" alt="IntelliJ" /></li>
-<li>Once the import process is complete, open a Scala file to see that code completion works:<br>
-<img src="../files/intellij11.png" alt="IntelliJ" /></li>
-</ol>
-<p>Use the following setting to opt-out some of the subprojects from BSP.</p>
-<pre><code class="language-scala">bspEnabled := false
+<li>
+<p>Host an sbt 2.x plugin on a git repository, built using sbt 2.x.</p>
+</li>
+<li>
+<p>Add the following to <code>project/plugins.sbt</code>:</p>
+<pre><code class="language-scala">// In project/plugins.sbt
+lazy val jmhRef = ProjectRef(
+  uri("https://github.com/eed3si9n/sbt-jmh.git#303c3e98e1d1523e6a4f99abe09c900165028edb"),
+  "plugin")
+BareBuildSyntax.dependsOn(jmhRef)
 </code></pre>
-<ul>
-<li>Open Preferences, search BSP and check "build automatically on file save", and uncheck "export sbt projects to Bloop before import":<br>
-<img src="../files/intellij12.png" alt="IntelliJ" /></li>
-</ul>
-<p>When you make changes to the code and save them (<code>Cmd-S</code> on macOS), IntelliJ will invoke sbt to do
-the actual building work.</p>
-<p>See also Igal Tabachnik's <a href="https://hmemcpy.com/2021/09/bsp-and-intellij/">Using BSP effectively in IntelliJ and Scala</a> for more details.</p>
-<h4 id="logging-into-sbt-session"><a class="header" href="#logging-into-sbt-session">Logging into sbt session</a></h4>
-<p>We can also log into the existing sbt session using the thin client.</p>
-<ul>
-<li>From Terminal section, type in <code>sbt --client</code>
-<img src="../files/intellij6.png" alt="IntelliJ" /></li>
-</ul>
-<p>This lets you log into the sbt session IntelliJ has started. In there you can call <code>testOnly</code> and other tasks with
-the code already compiled.</p>
+</li>
+<li>
+<p>When you start sbt, it will automatically clone the repository under <code>$HOME/.sbt/2/staging/</code>.</p>
+</li>
+</ol>
+<p>In the above, <code>https://github.com/eed3si9n/sbt-jmh.git</code> is the HTTP endpoint for a plugin hosted on GitHub, and <code>303c3e98e1d1523e6a4f99abe09c900165028edb</code> is a commit id on the default branch.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../recipes/use-sbt-as-metals-build-server.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../recipes/import-to-intellij.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../recipes/source-dependency-plugin.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../appendix/glossary.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -333,11 +260,11 @@ the code already compiled.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../recipes/use-sbt-as-metals-build-server.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../recipes/import-to-intellij.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../recipes/source-dependency-plugin.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../appendix/glossary.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

@@ -1,9 +1,9 @@
 <!DOCTYPE HTML>
-<html lang="en" class="light sidebar-visible" dir="ltr">
+<html lang="ja" class="light sidebar-visible" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Use Neovim - The Book of sbt</title>
+        <title>Source dependency plugin - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -151,7 +151,7 @@
                           langToggle.addEventListener("click", (event) => {
                               langList.style.display = langList.style.display == "block" ? "none" : "block";
                           });
-                          let selectedLang = document.getElementById("en");
+                          let selectedLang = document.getElementById("ja");
                           if (selectedLang) {
                               selectedLang.parentNode.classList.add("theme-selected");
                           }
@@ -161,7 +161,7 @@
                           let full_path_to_root = "../../";
                           // The page path (mdbook only gives us
                           // access to the path to the Markdown file).
-                          let path = "recipes/use-neovim.md".replace(/\.md$/, ".html");
+                          let path = "recipes/source-dependency-plugin.md".replace(/\.md$/, ".html");
                           for (let lang of langList.querySelectorAll("a")) {
                             lang.href = `${full_path_to_root}${lang.id}/${path}`;
                           }
@@ -208,80 +208,39 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="use-neovim"><a class="header" href="#use-neovim">Use Neovim</a></h1>
-<div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
+                        <h1 id="source-dependency-plugin"><a class="header" href="#source-dependency-plugin">Source dependency plugin</a></h1>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
 <div class="admonition-title">
-<div id="admonition-warning-title">
-<p>Warning</p>
+<div id="admonition-note-title">
+<p>Note</p>
 </div>
-<a class="admonition-anchor-link" href="#admonition-warning"></a>
+<a class="admonition-anchor-link" href="#admonition-note"></a>
 </div>
 <div>
-<p>This is a draft documentation of sbt 2.x that is yet to be released.
-This is a placeholder, copied from sbt 1.x.</p>
+<p>The recipe section of the documentation focuses on the objectives with minimal explanations.</p>
 </div>
 </div>
 <h2 id="objective"><a class="header" href="#objective">Objective</a></h2>
-<p>I want to use Metals on Neovim with sbt as the build server.</p>
+<p>I want to use a plugin hosted on a git repository, without publishing to the Central Repo.</p>
 <h2 id="steps"><a class="header" href="#steps">Steps</a></h2>
-<p>Chris Kipp, who is a maintainer of Metals, created <a href="https://github.com/scalameta/nvim-metals">nvim-metals</a> plugin that provides comprehensive Metals support on Neovim. To install nvim-metals, create <code>lsp.lua</code> under <code>$XDG_CONFIG_HOME/nvim/lua/</code> based on Chris's <a href="https://github.com/scalameta/nvim-metals/discussions/39#discussion-82302">lsp.lua</a> and adjust to your preference. For example, comment out its plugins section and load the listed plugins using the plugin manager of your choice such as vim-plug.</p>
-<p>In <code>init.vim</code>, the file can be loaded as:</p>
-<pre><code class="language-lua">lua &lt;&lt; END
-require('lsp')
-END
+<ol>
+<li>
+<p>Host an sbt 2.x plugin on a git repository, built using sbt 2.x.</p>
+</li>
+<li>
+<p>Add the following to <code>project/plugins.sbt</code>:</p>
+<pre><code class="language-scala">// In project/plugins.sbt
+lazy val jmhRef = ProjectRef(
+  uri("https://github.com/eed3si9n/sbt-jmh.git#303c3e98e1d1523e6a4f99abe09c900165028edb"),
+  "plugin")
+BareBuildSyntax.dependsOn(jmhRef)
 </code></pre>
-<p>Per <code>lsp.lua</code>, <code>g:metals_status</code> should be displayed on the status line, which can be done using lualine.nvim etc.</p>
-<ol>
-<li>Next, open a Scala file in an sbt build using Neovim.</li>
-<li>Run <code>:MetalsInstall</code> when prompted.</li>
-<li>Run <code>:MetalsStartServer</code>.</li>
-<li>If the status line is set up, you should see something like "Connecting to sbt" or "Indexing."<br>
-<img src="../files/nvim0.png" width="900"></li>
-<li>Code completion works when you're in Insert mode, and you can tab through the candidates:<br>
-<img src="../files/nvim1.png" width="900"></li>
+</li>
+<li>
+<p>When you start sbt, it will automatically clone the repository under <code>$HOME/.sbt/2/staging/</code>.</p>
+</li>
 </ol>
-<ul>
-<li>A build is triggered upon saving changes, and compilation errors are displayed inline:<br>
-<img src="../files/nvim2.png" width="900"></li>
-</ul>
-<h4 id="go-to-definition"><a class="header" href="#go-to-definition">Go to definition</a></h4>
-<ol>
-<li>You can jump to definition of the symbol under cursor by using <code>gD</code> (exact keybinding can be customized):<br>
-<img src="../files/nvim3.png" width="900"></li>
-<li>Use <code>Ctrl-O</code> to return to the old buffer.</li>
-</ol>
-<h4 id="hover"><a class="header" href="#hover">Hover</a></h4>
-<ul>
-<li>To display the type information of the symbol under cursor, like hovering, use <code>K</code> in Normal mode:<br>
-<img src="../files/nvim4.png" width="900"></li>
-</ul>
-<h4 id="listing-diagnostics"><a class="header" href="#listing-diagnostics">Listing diagnostics</a></h4>
-<ol>
-<li>To list all compilation errors and warnings, use <code>&lt;leader&gt;aa</code>:<br>
-<img src="../files/nvim5.png" width="900"></li>
-<li>Since this is in the standard quickfix list, you can use the command such as <code>:cnext</code> and <code>:cprev</code> to nagivate through the errors and warnings.</li>
-<li>To list just the errors, use <code>&lt;leader&gt;ae</code>.</li>
-</ol>
-<h4 id="interactive-debugging-with-neovim"><a class="header" href="#interactive-debugging-with-neovim">Interactive debugging with Neovim</a></h4>
-<ol>
-<li>Thanks to nvim-dap, Neovim supports interactive debugging. Set break points in the code using <code>&lt;leader&gt;dt</code>:<br>
-<img src="../files/nvim6.png" width="900"></li>
-<li>Nagivate to a unit test, confirm that it's built by hovering (<code>K</code>), and then
-"debug continue" (<code>&lt;leader&gt;dc</code>) to start a debugger.
-Choose "1: RunOrTest" when prompted.</li>
-<li>When the test hits a break point, you can inspect the values of the variables by debug hovering (<code>&lt;leader&gt;dK</code>):<br>
-<img src="../files/nvim7.png" width="900"></li>
-<li>"debug continue" (<code>&lt;leader&gt;dc</code>) again to end the session.</li>
-</ol>
-<p>See <a href="https://github.com/scalameta/nvim-metals">nvim-metals</a> regarding further details.</p>
-<h4 id="logging-into-sbt-session"><a class="header" href="#logging-into-sbt-session">Logging into sbt session</a></h4>
-<p>We can also log into the existing sbt session using the thin client.</p>
-<ol>
-<li>In a new vim window type <code>:terminal</code> to start the built-in terminal.</li>
-<li>Type in <code>sbt --client</code><br>
-<img src="../files/nvim8.png" width="900"></li>
-</ol>
-<p>Even though it's inside Neovim, tab completion etc works fine inside.</p>
+<p>In the above, <code>https://github.com/eed3si9n/sbt-jmh.git</code> is the HTTP endpoint for a plugin hosted on GitHub, and <code>303c3e98e1d1523e6a4f99abe09c900165028edb</code> is a commit id on the default branch.</p>
 
                     </main>
 
