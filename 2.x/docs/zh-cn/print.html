@@ -213,7 +213,7 @@
 <p>这是关于 sbt 2.x 的草稿文档，目前尚未发布。虽然总体概念可以应用到 sbt 1.x，但 2.x 及本文档的详细内容可能会有所变动。</p>
 <p><img src="files/sbt-logo.svg" alt="sbt logo" /></p>
 <p>sbt 是一个用于 Scala 和 Java 的简单构建工具。 sbt 通过 Coursier 下载您的库依赖， 增量编译和测试项目， 并与 IntelliJ 和 VS Code 等 IDE 集成， 打包 JAR 文件并发布到 <a href="https://central.sonatype.com/">Central repo</a>， 这是 JVM 社区的包注册表。</p>
-<pre><code class="language-scala">scalaVersion := "3.7.2"
+<pre><code class="language-scala">scalaVersion := "3.7.3"
 </code></pre>
 <p>您只需要在 <code>build.sbt</code> 中添加一行代码即可开始使用 Scala。</p>
 <h2 id="链接"><a class="header" href="#链接">链接</a></h2>
@@ -256,11 +256,11 @@ sdk install sbt
 cd foo-build
 touch build.sbt
 mkdir project
-echo "sbt.version=2.0.0-RC5" &gt; project/build.properties
+echo "sbt.version=2.0.0-RC6" &gt; project/build.properties
 </code></pre>
 <h3 id="启动-sbt-shell"><a class="header" href="#启动-sbt-shell">启动 sbt shell</a></h3>
 <pre><code class="language-bash">$ sbt
-[info] welcome to sbt 2.0.0-RC5 (Azul Systems, Inc. Java)
+[info] welcome to sbt 2.0.0-RC6 (Azul Systems, Inc. Java)
 ....
 [info] started sbt server
 sbt:foo-build&gt;
@@ -327,7 +327,7 @@ Hello
 [success] elapsed time: 0 s, cache 50%, 1 disk cache hit, 1 onsite task
 </code></pre>
 <h3 id="从-sbt-shell-设置-scalaversion"><a class="header" href="#从-sbt-shell-设置-scalaversion">从 sbt shell 设置 scalaVersion</a></h3>
-<pre><code>sbt:foo-build&gt; set scalaVersion := "3.7.2"
+<pre><code>sbt:foo-build&gt; set scalaVersion := "3.7.3"
 [info] Defining scalaVersion
 [info] The new value will be used by Compile / bspBuildTarget, Compile / dependencyTreeCrossProjectId and 51 others.
 [info]  Run `last` for details.
@@ -336,7 +336,7 @@ Hello
 </code></pre>
 <p>检查 <code>scalaVersion</code> 设置：</p>
 <pre><code>sbt:foo-build&gt; scalaVersion
-[info] 3.7.2
+[info] 3.7.3
 </code></pre>
 <h3 id="将会话保存到-buildsbt"><a class="header" href="#将会话保存到-buildsbt">将会话保存到 build.sbt</a></h3>
 <p>我们可以使用 <code>session save</code> 保存临时设置。</p>
@@ -351,7 +351,7 @@ Hello
 [warn] Disable this warning by setting `Global / onChangedBuildSource := IgnoreSourceChanges`.
 </code></pre>
 <p><code>build.sbt</code> 文件现在应该包含：</p>
-<pre><code class="language-scala">scalaVersion := "3.7.2"
+<pre><code class="language-scala">scalaVersion := "3.7.3"
 
 </code></pre>
 <h3 id="命名您的项目"><a class="header" href="#命名您的项目">命名您的项目</a></h3>
@@ -869,7 +869,7 @@ $ sbt new scala/scala3.g8
 <p>An sbt build is executed using <code>sbt</code> runner, also called "sbt-the-shell-script" to distinguish from other components. It's important to note is that sbt runner is designed to run <strong>any version</strong> of sbt.</p>
 <h3 id="specifying-sbt-version-with-projectbuildproperties"><a class="header" href="#specifying-sbt-version-with-projectbuildproperties">Specifying sbt version with project/build.properties</a></h3>
 <p>sbt runner executes a subcomponent called sbt launcher, which reads <code>project/build.properties</code> to determine the sbt version for the build, and downloads the artifacts if they haven't been cached:</p>
-<pre><code>sbt.version=2.0.0-RC5
+<pre><code>sbt.version=2.0.0-RC6
 </code></pre>
 <p>This means that:</p>
 <ul>
@@ -884,7 +884,7 @@ $ sbt new scala/scala3.g8
 <p>sbt server runs <a href="https://get-coursier.io/">Couriser</a> as a subcomponent to resolve Scala library, Scala compiler, and any other library dependencies your build needs.</p>
 <h3 id="zinc"><a class="header" href="#zinc">Zinc</a></h3>
 <p>Zinc is the incremental compiler for Scala, developed and maintained by sbt project. An often overlooked aspect of Zinc is that Zinc provides a stable API to invoke <strong>any modern versions</strong> of Scala compiler. Combined with the fact that Coursier can resolve any Scala version, with sbt we can invoke any modern versions of Scala just by writing a single line <code>build.sbt</code>:</p>
-<pre><code class="language-scala">scalaVersion := "3.7.2"
+<pre><code class="language-scala">scalaVersion := "3.7.3"
 </code></pre>
 <h3 id="bsp-server"><a class="header" href="#bsp-server">BSP server</a></h3>
 <p>sbt server supports <a href="https://build-server-protocol.github.io/">Build Server Protocol (BSP)</a> to list build targets, build them, etc. This allows IDEs like IntelliJ and Metals to communicate with a running sbt server programmatically.</p>
@@ -1103,7 +1103,7 @@ key           operator   (setting/task) body
 val toolkit = "org.scala-lang" %% "toolkit" % toolkitV
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % toolkitV
 
-scalaVersion := "3.7.2"
+scalaVersion := "3.7.3"
 libraryDependencies += toolkit
 libraryDependencies += (toolkitTest % Test)
 </code></pre>
@@ -1171,7 +1171,7 @@ end Dependencies
 <p>The <code>Dependencies</code> object will be available in <code>build.sbt</code>. To make it easier to use the <code>val</code>s defined in it, import <code>Dependencies.*</code> in your build.sbt file.</p>
 <pre><code class="language-scala">import Dependencies.*
 
-scalaVersion := "3.7.2"
+scalaVersion := "3.7.3"
 name := "something"
 libraryDependencies += toolkit
 libraryDependencies += toolkitTest % Test
@@ -1195,7 +1195,7 @@ libraryDependencies += toolkitTest % Test
 <p>While a simple program can start out as a single-project build, it's more common for a build to split into smaller, multiple subprojects.</p>
 <p>Each subproject in a build has its own source directories, generates its own JAR file when you run <code>packageBin</code>, and in general works like any other project.</p>
 <p>A project is defined by declaring a lazy val of type <a href="guide/../../api/sbt/Project.html">Project</a>. For example, :</p>
-<pre><code class="language-scala">scalaVersion := "3.7.2"
+<pre><code class="language-scala">scalaVersion := "3.7.3"
 
 lazy val core = (project in file("core"))
   .settings(
@@ -1395,7 +1395,7 @@ For best practices, see
 <h2 id="changes-with-compatibility-implications"><a class="header" href="#changes-with-compatibility-implications">Changes with compatibility implications</a></h2>
 <p>See also <a href="changes/./migrating-from-sbt-1.x.html">Migrating from sbt 1.x</a>.</p>
 <ul>
-<li><strong>Scala 3 in metabuild</strong>. sbt 2.x build.sbt DSL, used for build definitions and plugins, is based on Scala 3.x (currently <strong>3.7.2</strong>)  (Both sbt 1.x and 2.x are capable of building Scala 2.x and 3.x) by <a href="https://github.com/eed3si9n">@eed3si9n</a>, <a href="https://github.com/adpi2">@adpi2</a>, and others.</li>
+<li><strong>Scala 3 in metabuild</strong>. sbt 2.x build.sbt DSL, used for build definitions and plugins, is based on Scala 3.x (currently <strong>3.7.3</strong>)  (Both sbt 1.x and 2.x are capable of building Scala 2.x and 3.x) by <a href="https://github.com/eed3si9n">@eed3si9n</a>, <a href="https://github.com/adpi2">@adpi2</a>, and others.</li>
 <li><strong>Common settings</strong>. Bare settings are added to all subprojects, as opposed to just the root subproject, and thus replacing the role that <code>ThisBuild</code> has played.</li>
 <li><strong>Incremental test</strong>. <code>test</code> task is changed to be incremental test that can cache test results. Use <code>testFull</code> for full test by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7686">#7686</a></li>
 <li><strong>Cached task</strong>. All tasks are cached by default. Details in <a href="changes/../concepts/caching.html">Caching</a>.</li>
@@ -1407,7 +1407,7 @@ For best practices, see
 <li>sbt 2.x adds <code>platform</code> setting so <code>ModuleID</code>'s <code>%%</code> operator can cross build on JVM as well as JS and Native, as opposed to <code>%%%</code> operator that was created in a plugin to workaround this issue, by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/6746">#6746</a></li>
 <li>Dropped <code>useCoursier</code> setting so Coursier cannot be opted out, by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7712">#7712</a></li>
 <li><code>Key.Classpath</code> is changed to be an alias of the <code>Seq[Attributed[xsbti.HashedVirtualFileRef]]</code> type, instead of <code>Seq[Attributed[File]]</code>. Similarly, some task keys that used to return <code>File</code> have changed to return <code>HashedVirtualFileRef</code> instead. See <a href="changes/../concepts/caching.html#caching-files">Caching Files</a>.</li>
-<li>In sbt 2.x <code>target</code> defaults to <code>target/out/jvm/scala-3.7.2/&lt;subproject&gt;/</code>, as opposed to <code>&lt;subproject&gt;/target/</code>.</li>
+<li>In sbt 2.x <code>target</code> defaults to <code>target/out/jvm/scala-3.7.3/&lt;subproject&gt;/</code>, as opposed to <code>&lt;subproject&gt;/target/</code>.</li>
 <li>sbt 2.x auto reloads by default on <code>build.sbt</code> changes, by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8211">#8211</a></li>
 <li><code>Project#autoAggregate</code> is added for automatic aggregation, by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8290">#8290</a></li>
 </ul>
@@ -1425,7 +1425,7 @@ For best practices, see
 </ul>
 <h3 id="common-settings"><a class="header" href="#common-settings">Common settings</a></h3>
 <p>In sbt 2.x, the bare settings in <code>build.sbt</code> are interpreted to be common settings, and are injected to all subprojects. This means we can now set <code>scalaVersion</code> without using <code>ThisBuild</code> scoping:</p>
-<pre><code class="language-scala">scalaVersion := "3.7.2"
+<pre><code class="language-scala">scalaVersion := "3.7.3"
 </code></pre>
 <p>This also fixes the so-called dynamic dispatch problem:</p>
 <pre><code class="language-scala">lazy val hi = taskKey[String]("")
@@ -1525,7 +1525,7 @@ libraryDependencies +=
 </code></pre>
 <h2 id="bare-settings-changes"><a class="header" href="#bare-settings-changes">Bare settings changes</a></h2>
 <pre><code class="language-scala">version := "0.1.0"
-scalaVersion := "3.7.2"
+scalaVersion := "3.7.3"
 </code></pre>
 <p><em>Bare settings</em>, like the example above, are settings written directly in <code>build.sbt</code> without <code>settings(...)</code>.</p>
 <div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
@@ -1584,7 +1584,7 @@ lazy val plugin = (project in file("plugin"))
     (pluginCrossBuild / sbtVersion) := {
       scalaBinaryVersion.value match {
         case "2.12" =&gt; "1.5.8"
-        case _      =&gt; "2.0.0-RC5"
+        case _      =&gt; "2.0.0-RC6"
       }
     },
   )
@@ -1710,14 +1710,14 @@ private[sbtfoo] object PluginCompat {
 <h2 id="project-matrix"><a class="header" href="#project-matrix">Project matrix</a></h2>
 <p>sbt 2.x introduces project matrix, which enables cross building to happen in parallel.</p>
 <pre><code class="language-scala">organization := "com.example"
-scalaVersion := "3.7.2"
+scalaVersion := "3.7.3"
 version      := "0.1.0-SNAPSHOT"
 
 lazy val core = (projectMatrix in file("core"))
   .settings(
     name := "core"
   )
-  .jvmPlatform(scalaVersions = Seq("3.7.2", "2.13.16"))
+  .jvmPlatform(scalaVersions = Seq("3.7.3", "2.13.17"))
 </code></pre>
 <p>See <a href="concepts/../reference/cross-building-setup.html">cross building setup</a> for more details on the setup.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-query-1"><a class="header" href="#sbt-query-1">sbt query</a></h1>
@@ -1734,7 +1734,7 @@ lazy val core = (projectMatrix in file("core"))
 <a class="admonition-anchor-link" href="concepts/sbt-query.html#admonition-buildsbt-example-1"></a>
 </div>
 <div>
-<pre><code class="language-scala">scalaVersion := "3.7.2"
+<pre><code class="language-scala">scalaVersion := "3.7.3"
 
 lazy val foo = project
 </code></pre>
@@ -1775,13 +1775,13 @@ lazy val foo = projectMatrix
   .settings(
     libraryDependencies += toolkit,
   )
-  .jvmPlatform(scalaVersions = Seq("3.7.2", "2.13.16"))
+  .jvmPlatform(scalaVersions = Seq("3.7.3", "2.13.17"))
 
 lazy val bar = projectMatrix
   .settings(
     libraryDependencies += toolkit,
   )
-  .jvmPlatform(scalaVersions = Seq("3.7.2", "2.13.16"))
+  .jvmPlatform(scalaVersions = Seq("3.7.3", "2.13.17"))
 </code></pre>
 </div>
 </div>
@@ -1885,7 +1885,7 @@ sbt:demo&gt; show someKey
 </ul>
 </li>
 </ul>
-<pre><code>sbt.version=2.0.0-RC5
+<pre><code>sbt.version=2.0.0-RC6
 </code></pre>
 <p>This mechanism allows builds to be configured to a specific version of sbt, and everyone working on the project would use the same build semantics, regardless of the sbt runner installed on their machine.</p>
 <p>This also means that some features are implemented at sbt runner or sbtn level, while other features are implemented at sbt server level.</p>
@@ -2367,7 +2367,7 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "$example_scalatest_vers
 <h3 id="compilation-settings"><a class="header" href="#compilation-settings">Compilation settings</a></h3>
 <h4 id="scalaversion"><a class="header" href="#scalaversion">scalaVersion</a></h4>
 <p>The version of Scala used for compilation.</p>
-<pre><code class="language-scala">scalaVersion := "3.7.2"
+<pre><code class="language-scala">scalaVersion := "3.7.3"
 </code></pre>
 <h4 id="scalacoptions"><a class="header" href="#scalacoptions">scalacOptions</a></h4>
 <p>Options for the Scala compiler.</p>
@@ -2411,7 +2411,7 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "$example_scalatest_vers
 <p>The resources may be accessed from tests by using the <code>getResource</code> methods of <code>java.lang.Class</code> or <code>java.lang.ClassLoader</code>.</p>
 <h3 id="test-interfaces"><a class="header" href="#test-interfaces">Test interfaces</a></h3>
 <p>sbt defines the common interface for JVM-based test frameworks, allowing automatic test suite discovery and parallel execution. By default sbt integrates with <a href="https://scalameta.org/munit/">MUnit</a>, <a href="https://www.scalatest.org/">ScalaTest</a>, <a href="https://hedgehogqa.github.io/scala-hedgehog/">Hedgehog</a>, <a href="https://scalacheck.org/">ScalaCheck</a>, <a href="https://etorreborre.github.io/specs2/">Specs2</a>, <a href="https://typelevel.org/weaver-test/">Weaver</a>, <a href="https://zio.dev/reference/test/">ZIO Test</a>, and <a href="https://github.com/sbt/junit-interface">JUnit 4</a>; this means you only need to add the test framework to the classpath to work with sbt. For example, MUnit may be used by declaring it as a <code>libraryDependency</code>:</p>
-<pre><code class="language-scala">lazy val munit = "org.scalameta" %% "munit" % "1.1.1"
+<pre><code class="language-scala">lazy val munit = "org.scalameta" %% "munit" % "1.2.0"
 
 libraryDependencies += munit % Test
 </code></pre>
@@ -3211,14 +3211,14 @@ someKey := Def.uncached {
 <h2 id="project-matrix-1"><a class="header" href="#project-matrix-1">Project matrix</a></h2>
 <p>sbt 2.x introduces project matrix, which enables cross building to happen in parallel.</p>
 <pre><code class="language-scala">organization := "com.example"
-scalaVersion := "3.7.2"
+scalaVersion := "3.7.3"
 version      := "0.1.0-SNAPSHOT"
 
 lazy val core = (projectMatrix in file("core"))
   .settings(
     name := "core"
   )
-  .jvmPlatform(scalaVersions = Seq("3.7.2", "2.13.16"))
+  .jvmPlatform(scalaVersions = Seq("3.7.3", "2.13.17"))
 </code></pre>
 <h2 id="publishing-convention"><a class="header" href="#publishing-convention">Publishing convention</a></h2>
 <p>We use the Scala ABI (application binary interface) version as suffix to denote which version of Scala was used to compile a library. For example, the artifact name <code>cats-effect_2.13</code> means Scala 2.13.x was used. <code>cats-effect_3</code> means Scala 3.x was used. This fairly simple approach allows interoperability with users of Maven, Ant and other build tools. For pre-prelease versions of Scala, such as 2.13.0-RC1, full version will be considered the ABI version.</p>
@@ -3494,10 +3494,10 @@ Def.setting {
         token(state.remainingCommands.size.toString) )
 }
 </code></pre>
-<p>This Parser definition will produce a value of type <code>(String,String)</code>. The input syntax defined isn't very flexible; it is just a demonstration. It will produce one of the following values for a successful parse (assuming the current Scala version is 3.7.2, the current sbt version is 2.0.0-RC5, and there are 3 commands left to run):</p>
+<p>This Parser definition will produce a value of type <code>(String,String)</code>. The input syntax defined isn't very flexible; it is just a demonstration. It will produce one of the following values for a successful parse (assuming the current Scala version is 3.7.3, the current sbt version is 2.0.0-RC6, and there are 3 commands left to run):</p>
 <ul>
-<li>(scala,3.7.2)</li>
-<li>(sbt,2.0.0-RC5)</li>
+<li>(scala,3.7.3)</li>
+<li>(sbt,2.0.0-RC6)</li>
 <li>(commands,3)</li>
 </ul>
 <p>Again, we were able to access the current Scala and sbt version for the project because they are settings. Tasks cannot be used to define the parser.</p>
@@ -4244,12 +4244,12 @@ def selectSome(items: Seq[String]): Parser[Seq[String]] = {
 </li>
 <li>
 <p>Create a directory named <code>project/</code> under <code>hello_scala/</code>, and create <code>project/build.properties</code> with</p>
-<pre><code>sbt.version=2.0.0-RC5
+<pre><code>sbt.version=2.0.0-RC6
 </code></pre>
 </li>
 <li>
 <p>Under <code>hello_scala/</code>, create <code>build.sbt</code>:</p>
-<pre><code class="language-scala">scalaVersion := "3.7.2"
+<pre><code class="language-scala">scalaVersion := "3.7.3"
 </code></pre>
 </li>
 <li>

@@ -216,11 +216,11 @@
 cd foo-build
 touch build.sbt
 mkdir project
-echo "sbt.version=2.0.0-RC5" &gt; project/build.properties
+echo "sbt.version=2.0.0-RC6" &gt; project/build.properties
 </code></pre>
 <h3 id="启动-sbt-shell"><a class="header" href="#启动-sbt-shell">启动 sbt shell</a></h3>
 <pre><code class="language-bash">$ sbt
-[info] welcome to sbt 2.0.0-RC5 (Azul Systems, Inc. Java)
+[info] welcome to sbt 2.0.0-RC6 (Azul Systems, Inc. Java)
 ....
 [info] started sbt server
 sbt:foo-build&gt;
@@ -287,7 +287,7 @@ Hello
 [success] elapsed time: 0 s, cache 50%, 1 disk cache hit, 1 onsite task
 </code></pre>
 <h3 id="从-sbt-shell-设置-scalaversion"><a class="header" href="#从-sbt-shell-设置-scalaversion">从 sbt shell 设置 scalaVersion</a></h3>
-<pre><code>sbt:foo-build&gt; set scalaVersion := "3.7.2"
+<pre><code>sbt:foo-build&gt; set scalaVersion := "3.7.3"
 [info] Defining scalaVersion
 [info] The new value will be used by Compile / bspBuildTarget, Compile / dependencyTreeCrossProjectId and 51 others.
 [info]  Run `last` for details.
@@ -296,7 +296,7 @@ Hello
 </code></pre>
 <p>检查 <code>scalaVersion</code> 设置：</p>
 <pre><code>sbt:foo-build&gt; scalaVersion
-[info] 3.7.2
+[info] 3.7.3
 </code></pre>
 <h3 id="将会话保存到-buildsbt"><a class="header" href="#将会话保存到-buildsbt">将会话保存到 build.sbt</a></h3>
 <p>我们可以使用 <code>session save</code> 保存临时设置。</p>
@@ -311,7 +311,7 @@ Hello
 [warn] Disable this warning by setting `Global / onChangedBuildSource := IgnoreSourceChanges`.
 </code></pre>
 <p><code>build.sbt</code> 文件现在应该包含：</p>
-<pre><code class="language-scala">scalaVersion := "3.7.2"
+<pre><code class="language-scala">scalaVersion := "3.7.3"
 
 </code></pre>
 <h3 id="命名您的项目"><a class="header" href="#命名您的项目">命名您的项目</a></h3>

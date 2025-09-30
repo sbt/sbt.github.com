@@ -216,11 +216,11 @@
 cd foo-build
 touch build.sbt
 mkdir project
-echo "sbt.version=2.0.0-RC5" &gt; project/build.properties
+echo "sbt.version=2.0.0-RC6" &gt; project/build.properties
 </code></pre>
 <h3 id="start-sbt-shell"><a class="header" href="#start-sbt-shell">Start sbt shell</a></h3>
 <pre><code class="language-bash">$ sbt
-[info] welcome to sbt 2.0.0-RC5 (Azul Systems, Inc. Java)
+[info] welcome to sbt 2.0.0-RC6 (Azul Systems, Inc. Java)
 ....
 [info] started sbt server
 sbt:foo-build&gt;
@@ -291,7 +291,7 @@ Hello
 [success] elapsed time: 0 s, cache 50%, 1 disk cache hit, 1 onsite task
 </code></pre>
 <h3 id="set-scalaversion-from-sbt-shell"><a class="header" href="#set-scalaversion-from-sbt-shell">Set scalaVersion from sbt shell</a></h3>
-<pre><code>sbt:foo-build&gt; set scalaVersion := "3.7.2"
+<pre><code>sbt:foo-build&gt; set scalaVersion := "3.7.3"
 [info] Defining scalaVersion
 [info] The new value will be used by Compile / bspBuildTarget, Compile / dependencyTreeCrossProjectId and 51 others.
 [info]  Run `last` for details.
@@ -300,7 +300,7 @@ Hello
 </code></pre>
 <p>Check the <code>scalaVersion</code> setting:</p>
 <pre><code>sbt:foo-build&gt; scalaVersion
-[info] 3.7.2
+[info] 3.7.3
 </code></pre>
 <h3 id="save-the-session-to-buildsbt"><a class="header" href="#save-the-session-to-buildsbt">Save the session to build.sbt</a></h3>
 <p>We can save the ad-hoc settings using <code>session save</code>.</p>
@@ -315,7 +315,7 @@ Hello
 [warn] Disable this warning by setting `Global / onChangedBuildSource := IgnoreSourceChanges`.
 </code></pre>
 <p><code>build.sbt</code> file should now contain:</p>
-<pre><code class="language-scala">scalaVersion := "3.7.2"
+<pre><code class="language-scala">scalaVersion := "3.7.3"
 
 </code></pre>
 <h3 id="name-your-project"><a class="header" href="#name-your-project">Name your project</a></h3>
