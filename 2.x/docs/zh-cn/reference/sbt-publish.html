@@ -260,7 +260,8 @@ name := "hello"
 <a class="admonition-anchor-link" href="#admonition-warning"></a>
 </div>
 <div>
-<p>Generally the use of SNAPSHOT dependencies should be avoided beyond testing on a single machine since it makes dependency resolution slower and the build non-repeatable.</p>
+<p>Generally the use of SNAPSHOT dependencies should be avoided beyond testing on a single machine
+since it makes dependency resolution slower and the build non-repeatable.</p>
 </div>
 </div>
 <p>Similar to <code>publishLocal</code>, <code>publishM2</code> task will publish the user's Maven local repository. This is at the location specified by <code>$HOME/.m2/settings.xml</code> or at <code>$HOME/.m2/repository/</code> by default. Another build would require <code>Resolver.mavenLocal</code> to resolve out of it:</p>
@@ -291,7 +292,11 @@ password=admin123
 <a class="admonition-anchor-link" href="#admonition-note"></a>
 </div>
 <div>
-<p>Credentials matching is done using both: <code>realm</code> and <code>host</code> keys. The <code>realm</code> key is the HTTP <code>WWW-Authenticate</code> header's realm directive, which is part of the response of HTTP servers for <a href="https://en.wikipedia.org/wiki/Basic_access_authentication#Server_side">HTTP Basic Authentication</a>. For a given repository, this can be found by reading all the headers received. For example:</p>
+<p>Credentials matching is done using both: <code>realm</code> and <code>host</code> keys.
+The <code>realm</code> key is the HTTP <code>WWW-Authenticate</code> header's realm directive, which is
+part of the response of HTTP servers for <a href="https://en.wikipedia.org/wiki/Basic_access_authentication#Server_side">HTTP Basic Authentication</a>.
+For a given repository, this can be found by reading all the headers received.
+For example:</p>
 <pre><code class="language-bash">curl -D - my.artifact.repo.net
 </code></pre>
 </div>

@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Basic tasks - The Book of sbt</title>
+        <title>基本タスク - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -208,18 +208,29 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="basic-tasks"><a class="header" href="#basic-tasks">Basic tasks</a></h1>
-<p>This page describes how to use sbt once you have set up your project. This page assumes you've read <a href="./sbt-components.html">sbt components</a>.</p>
-<p>If you pull a repository that uses sbt, it's fairly easy to get started. First, get the package from GitHub, or some other repository.</p>
+                        <h1 id="基本タスク"><a class="header" href="#基本タスク">基本タスク</a></h1>
+<p>このページは sbt をセットアップした後の、基本的な使い方を解説する。このページは、<a href="./sbt-components.html">sbt のコンポーネント</a>を既に読んだことを前提とする。</p>
+<p>sbt を使っているリポジトリを pull してきたら、手軽に使ってみることができる。まずは、GitHub などから、リポジトリを選んでチェックアウトする。</p>
 <pre><code class="language-bash">$ git clone https://github.com/scalanlp/breeze.git
 $ cd breeze
 </code></pre>
-<h3 id="sbt-shell-with-sbtn"><a class="header" href="#sbt-shell-with-sbtn">sbt shell with sbtn</a></h3>
-<p>As mentioned in <a href="./sbt-components.html">sbt components</a>, start an sbt shell:</p>
-<pre><code>$ sbt --client
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note"></a>
+</div>
+<div>
+<p>scalanlp/breeze は sbt 1.x を使っているが、ここでは sbt 2.x を使っている想定で書いていく。</p>
+</div>
+</div>
+<h3 id="sbtn-を用いた-sbt-シェル"><a class="header" href="#sbtn-を用いた-sbt-シェル">sbtn を用いた sbt シェル</a></h3>
+<p><a href="./sbt-components.html">sbt のコンポーネント</a> でも言及されたように、sbt シェルを起動する:</p>
+<pre><code>$ sbt
 </code></pre>
 <p>これは以下のように表示されるはずだ:</p>
-<pre><code class="language-bash">$ sbt --client
+<pre><code class="language-bash">$ sbt
 [info] entering *experimental* thin client - BEEP WHIRR
 [info] server was not detected. starting an instance
 [info] welcome to sbt 1.5.5 (Azul Systems, Inc. Java 1.8.0_352)
@@ -233,8 +244,8 @@ Downloading https://repo1.maven.org/maven2/org/scalanlp/sbt-breeze-expand-codege
 [info] disconnect from the server with `exit`
 sbt:breeze-parent&gt;
 </code></pre>
-<h2 id="projects-command"><a class="header" href="#projects-command">projects command</a></h2>
-<p>Let's explore the build by listing out the subprojects with <code>projects</code> command:</p>
+<h2 id="projects-コマンド"><a class="header" href="#projects-コマンド">projects コマンド</a></h2>
+<p>まずは手始めに、<code>projects</code> コマンドを使ってサブプロジェクトを列挙してみる:</p>
 <pre><code>sbt:breeze-parent&gt; projects
 [info] In file:/private/tmp/breeze/
 [info]     benchmark
@@ -244,9 +255,9 @@ sbt:breeze-parent&gt;
 [info]   * root
 [info]     viz
 </code></pre>
-<p>This shows that this build has 6 subprojects, including the current subproject called <code>root</code>.</p>
-<h2 id="tasks-command"><a class="header" href="#tasks-command">tasks command</a></h2>
-<p>Similarly, we can list the tasks availble to this build using <code>tasks</code> command:</p>
+<p>現行のサプブロジェクト <code>root</code> を含み、合計 6つのをサブプロジェクトを持つビルドであることが分かる。</p>
+<h2 id="tasks-コマンド"><a class="header" href="#tasks-コマンド">tasks コマンド</a></h2>
+<p>同様に、<code>tasks</code> コマンドを用いて、このビルドが持つ全タスクを列挙することができる:</p>
 <pre><code>sbt:breeze-parent&gt; tasks
 
 This is a list of tasks defined for the current project.
@@ -279,7 +290,7 @@ Tasks produce values.  Use the 'show' command to run the task and print the resu
 More tasks may be viewed by increasing verbosity.  See 'help tasks'
 </code></pre>
 <h3 id="compile"><a class="header" href="#compile">compile</a></h3>
-<p>The <code>compile</code> tasks compiles the sources, after resolving and downloading the library dependendies.</p>
+<p><code>compile</code> タスクは、ライブラリ依存性の解決とダウンロードを行った後に、ソースのコンパイルを行う。</p>
 <pre><code>&gt; compile
 </code></pre>
 <p>これは以下のように表示されるはずだ:</p>
@@ -288,10 +299,10 @@ More tasks may be viewed by increasing verbosity.  See 'help tasks'
   | =&gt; math / Compile / compileIncremental 51s
 </code></pre>
 <h3 id="run"><a class="header" href="#run">run</a></h3>
-<p>The <code>run</code> task runs the main class for the subproject. In the sbt shell, type <code>math/run</code>:</p>
+<p><code>run</code> タスクは、サブプロジェクトのメインクラスを実行する。sbt シェルから <code>math/run</code> と打ち込む:</p>
 <pre><code>&gt; math/run
 </code></pre>
-<p><code>math/run</code> means <code>run</code> task, scoped to <code>math</code> subproject. This should display something like the following:</p>
+<p><code>math/run</code> は、<code>math</code> サブプロジェクトにスコープ付けされた <code>run</code> タスクを意味する。これは、以下のように表示されるはずだ:</p>
 <pre><code>sbt:breeze-parent&gt; math/run
 [info] Scala version: 3.1.3 true
 ....
@@ -304,10 +315,10 @@ Multiple main classes detected. Select one to run:
 
 Enter number:
 </code></pre>
-<p>Enter <code>1</code> at the prompt.</p>
-<h3 id="testquick"><a class="header" href="#testquick">testQuick</a></h3>
-<p>The <code>testQuick</code> task tests either the tests that failed before, were not run, or whose transitive dependencies changed.</p>
-<pre><code>&gt; math/testQuick
+<p>プロンプトには <code>1</code> と入力する。</p>
+<h3 id="test"><a class="header" href="#test">test</a></h3>
+<p><code>test</code> タスクは、以前に失敗したテスト、未だ実行されていないテスト、及び間接的依存性に変化があったテストを実行する。</p>
+<pre><code>&gt; math/test
 </code></pre>
 <p>これは以下のように表示されるはずだ:</p>
 <pre><code>sbt:breeze-parent&gt; math/testQuick
@@ -325,12 +336,12 @@ Enter number:
 [info] All tests passed.
 [success] Total time: 130 s (02:10), completed Feb 19, 2024
 </code></pre>
-<h2 id="watch-tilde-command"><a class="header" href="#watch-tilde-command">Watch (tilde) command</a></h2>
-<p>To speed up your edit-compile-test cycle, you can ask sbt to automatically recompile or run tests whenever you save a source file.</p>
-<p>Make a command run when one or more source files change by prefixing the command with <code>~</code>. For example, in sbt shell try:</p>
-<pre><code>&gt; ~testQuick
+<h2 id="watch-チルダ-コマンド"><a class="header" href="#watch-チルダ-コマンド">watch (チルダ) コマンド</a></h2>
+<p>編集-コンパイル-テストの一連のサイクルの高速化のために、ソースが保存されるたびに自動的に再コンパイルか再テストを行うように sbt に命令することができる。</p>
+<p>コマンドの前に <code>~</code> を付けることで、ファイルが変更されるたびに自動的にそのコマンドが実行されるようになる。例えば、sbt シェルから以下のように打ち込む:</p>
+<pre><code>&gt; ~test
 </code></pre>
-<p>Press enter to stop watching for changes. You can use the <code>~</code> prefix with either sbt shell or batch mode.</p>
+<p>リターンキーを押下して、監視を中止する。<code>~</code> の前置記法は sbt シェルからもバッチ・モードからでも使用可能。</p>
 
                     </main>
 

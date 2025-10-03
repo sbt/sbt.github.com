@@ -945,12 +945,23 @@ sbt testOnly TestA
 <pre><code class="language-bash">$ git clone https://github.com/scalanlp/breeze.git
 $ cd breeze
 </code></pre>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="guide/basic-tasks.html#admonition-note"></a>
+</div>
+<div>
+<p>scalanlp/breeze is on sbt 1.x, but we'll write this section as if it is an sbt 2.x build.</p>
+</div>
+</div>
 <h3 id="sbt-shell-with-sbtn"><a class="header" href="#sbt-shell-with-sbtn">sbt shell with sbtn</a></h3>
 <p>As mentioned in <a href="guide/./sbt-components.html">sbt components</a>, start an sbt shell:</p>
-<pre><code>$ sbt --client
+<pre><code>$ sbt
 </code></pre>
 <p>This should display something like the following:</p>
-<pre><code class="language-bash">$ sbt --client
+<pre><code class="language-bash">$ sbt
 [info] entering *experimental* thin client - BEEP WHIRR
 [info] server was not detected. starting an instance
 [info] welcome to sbt 1.5.5 (Azul Systems, Inc. Java 1.8.0_352)
@@ -1036,9 +1047,9 @@ Multiple main classes detected. Select one to run:
 Enter number:
 </code></pre>
 <p>Enter <code>1</code> at the prompt.</p>
-<h3 id="testquick"><a class="header" href="#testquick">testQuick</a></h3>
-<p>The <code>testQuick</code> task tests either the tests that failed before, were not run, or whose transitive dependencies changed.</p>
-<pre><code>&gt; math/testQuick
+<h3 id="test"><a class="header" href="#test">test</a></h3>
+<p>The <code>test</code> task tests either the tests that failed before, were not run, or whose transitive dependencies changed.</p>
+<pre><code>&gt; math/test
 </code></pre>
 <p>This should display something like the following:</p>
 <pre><code>sbt:breeze-parent&gt; math/testQuick
@@ -1059,7 +1070,7 @@ Enter number:
 <h2 id="watch-tilde-command"><a class="header" href="#watch-tilde-command">Watch (tilde) command</a></h2>
 <p>To speed up your edit-compile-test cycle, you can ask sbt to automatically recompile or run tests whenever you save a source file.</p>
 <p>Make a command run when one or more source files change by prefixing the command with <code>~</code>. For example, in sbt shell try:</p>
-<pre><code>&gt; ~testQuick
+<pre><code>&gt; ~test
 </code></pre>
 <p>Press enter to stop watching for changes. You can use the <code>~</code> prefix with either sbt shell or batch mode.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="build-definition-basics"><a class="header" href="#build-definition-basics">Build definition basics</a></h1>
@@ -1128,10 +1139,10 @@ lazy val toolkitV = "0.2.0"
 <a class="admonition-anchor-link" href="guide/build-definition-basics.html#admonition-note"></a>
 </div>
 <div>
-<p>Top-level objects and classes are not allowed in <code>build.sbt</code>. Those should go in the <code>project/</code> directory as Scala source files.</p>
+<p>Top-level objects and classes are not allowed in <code>build.sbt</code>.
+Those should go in the <code>project/</code> directory as Scala source files.</p>
 </div>
-</div>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="library-dependency-basics"><a class="header" href="#library-dependency-basics">Library dependency basics</a></h1>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="library-dependency-basics"><a class="header" href="#library-dependency-basics">Library dependency basics</a></h1>
 <p>This page explains the basics of library dependency management using sbt.</p>
 <p>sbt uses <a href="https://get-coursier.io/">Coursier</a> to implement managed dependencies, so if you're familiar with package managers like Coursier, npm, PIP, etc you won't have much trouble.</p>
 <h2 id="the-librarydependencies-key"><a class="header" href="#the-librarydependencies-key">The <code>libraryDependencies</code> key</a></h2>
@@ -1898,7 +1909,11 @@ sbt:demo&gt; show someKey
 <a class="admonition-anchor-link" href="reference/sbt.html#admonition-note"></a>
 </div>
 <div>
-<p>There is a technical distinction in sbt between <em>tasks</em>, which are <em>inside</em> the build definition, and <em>commands</em>, which often manipulate the build definition itself. This specific sbt meaning of <em>command</em> means there's no good general term for <em>thing you can type at the sbt prompt</em>, which may be a setting, task, or command.</p>
+<p>There is a technical distinction in sbt between <em>tasks</em>, which are
+<em>inside</em> the build definition, and <em>commands</em>, which often manipulate the
+build definition itself.
+This specific sbt meaning of <em>command</em> means there's no good general term for
+<em>thing you can type at the sbt prompt</em>, which may be a setting, task, or command.</p>
 </div>
 </div>
 <!--
@@ -2501,7 +2516,9 @@ still be manually written out and run using `test`.
 <a class="admonition-anchor-link" href="reference/sbt-test.html#admonition-note"></a>
 </div>
 <div>
-<p>When forking, the <code>ClassLoader</code> containing the test classes cannot be provided because it is in another JVM. Only use the <code>() =&gt; Unit</code> variants in this case.</p>
+<p>When forking, the <code>ClassLoader</code> containing the test classes cannot be
+provided because it is in another JVM. Only use the <code>() =&gt; Unit</code>
+variants in this case.</p>
 </div>
 </div>
 <p>Examples:</p>
@@ -2932,7 +2949,8 @@ name := "hello"
 <a class="admonition-anchor-link" href="reference/sbt-publish.html#admonition-warning"></a>
 </div>
 <div>
-<p>Generally the use of SNAPSHOT dependencies should be avoided beyond testing on a single machine since it makes dependency resolution slower and the build non-repeatable.</p>
+<p>Generally the use of SNAPSHOT dependencies should be avoided beyond testing on a single machine
+since it makes dependency resolution slower and the build non-repeatable.</p>
 </div>
 </div>
 <p>Similar to <code>publishLocal</code>, <code>publishM2</code> task will publish the user's Maven local repository. This is at the location specified by <code>$HOME/.m2/settings.xml</code> or at <code>$HOME/.m2/repository/</code> by default. Another build would require <code>Resolver.mavenLocal</code> to resolve out of it:</p>
@@ -2963,7 +2981,11 @@ password=admin123
 <a class="admonition-anchor-link" href="reference/sbt-publish.html#admonition-note"></a>
 </div>
 <div>
-<p>Credentials matching is done using both: <code>realm</code> and <code>host</code> keys. The <code>realm</code> key is the HTTP <code>WWW-Authenticate</code> header's realm directive, which is part of the response of HTTP servers for <a href="https://en.wikipedia.org/wiki/Basic_access_authentication#Server_side">HTTP Basic Authentication</a>. For a given repository, this can be found by reading all the headers received. For example:</p>
+<p>Credentials matching is done using both: <code>realm</code> and <code>host</code> keys.
+The <code>realm</code> key is the HTTP <code>WWW-Authenticate</code> header's realm directive, which is
+part of the response of HTTP servers for <a href="https://en.wikipedia.org/wiki/Basic_access_authentication#Server_side">HTTP Basic Authentication</a>.
+For a given repository, this can be found by reading all the headers received.
+For example:</p>
 <pre><code class="language-bash">curl -D - my.artifact.repo.net
 </code></pre>
 </div>
@@ -3573,7 +3595,8 @@ b
 <a class="admonition-anchor-link" href="reference/input-task.html#admonition-note"></a>
 </div>
 <div>
-<p>If the input derives from settings you need to use, for example, <code>Def.taskDyn { ... }.value</code></p>
+<p>If the input derives from settings you need to use, for
+example, <code>Def.taskDyn { ... }.value</code></p>
 </div>
 </div>
 <pre><code class="language-scala">lazy val run2 = inputKey[Unit]("Runs the main class twice: " +
@@ -3779,7 +3802,9 @@ def selectSome(items: Seq[String]): Parser[Seq[String]] = {
 <a class="admonition-anchor-link" href="community-plugins.html#admonition-plugins-available-for-sbt-2x"></a>
 </div>
 <div>
-<p><a href="https://github.com/sbt/website/edit/develop/src/reference/community-plugins.md">[Edit]</a> this page to submit a pull request that adds your plugin to the list.</p>
+<p><a href="https://github.com/sbt/website/edit/develop/src/reference/community-plugins.md">[Edit]</a> this page to
+submit a pull request that adds
+your plugin to the list.</p>
 </div>
 </div>
 <div style="display: none;">
@@ -4285,8 +4310,9 @@ def selectSome(items: Seq[String]): Parser[Seq[String]] = {
 <a class="admonition-anchor-link" href="recipes/central.html#admonition-note"></a>
 </div>
 <div>
-<p>The recipe section of the documentation focuses on the objectives with minimal explanations.</p>
-<p>See also Sonatype's <a href="https://central.sonatype.org/register/central-portal/">Publish guides</a> for general concepts around publishing to the Central Portal.</p>
+<p>The recipe section of the documentation focuses on the objectives
+with minimal explanations.</p>
+<p>See also Sonatype's [Publish guides][sonatype-central-portal-register] for general concepts around publishing to the Central Portal.</p>
 </div>
 </div>
 <h2 id="objective-1"><a class="header" href="#objective-1">Objective</a></h2>
@@ -4459,7 +4485,8 @@ releaseStepCommand("sonaRelease"),
 <a class="admonition-anchor-link" href="recipes/use-sbt-as-metals-build-server.html#admonition-warning"></a>
 </div>
 <div>
-<p>This is a draft documentation of sbt 2.x that is yet to be released. This is a placeholder, copied from sbt 1.x.</p>
+<p>This is a draft documentation of sbt 2.x that is yet to be released.
+This is a placeholder, copied from sbt 1.x.</p>
 </div>
 </div>
 <h2 id="objective-2"><a class="header" href="#objective-2">Objective</a></h2>
@@ -4497,7 +4524,8 @@ releaseStepCommand("sonaRelease"),
 <a class="admonition-anchor-link" href="recipes/import-to-intellij.html#admonition-warning"></a>
 </div>
 <div>
-<p>This is a draft documentation of sbt 2.x that is yet to be released. This is a placeholder, copied from sbt 1.x.</p>
+<p>This is a draft documentation of sbt 2.x that is yet to be released.
+This is a placeholder, copied from sbt 1.x.</p>
 </div>
 </div>
 <h2 id="objective-3"><a class="header" href="#objective-3">Objective</a></h2>
@@ -4585,7 +4613,8 @@ releaseStepCommand("sonaRelease"),
 <a class="admonition-anchor-link" href="recipes/source-dependency-plugin.html#admonition-note"></a>
 </div>
 <div>
-<p>The recipe section of the documentation focuses on the objectives with minimal explanations.</p>
+<p>The recipe section of the documentation focuses on the objectives
+with minimal explanations.</p>
 </div>
 </div>
 <h2 id="objective-4"><a class="header" href="#objective-4">Objective</a></h2>

@@ -216,12 +216,23 @@ First, get the package from GitHub, or some other repository.</p>
 <pre><code class="language-bash">$ git clone https://github.com/scalanlp/breeze.git
 $ cd breeze
 </code></pre>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note"></a>
+</div>
+<div>
+<p>scalanlp/breeze is on sbt 1.x, but we'll write this section as if it is an sbt 2.x build.</p>
+</div>
+</div>
 <h3 id="sbt-shell-with-sbtn"><a class="header" href="#sbt-shell-with-sbtn">sbt shell with sbtn</a></h3>
 <p>As mentioned in <a href="./sbt-components.html">sbt components</a>, start an sbt shell:</p>
-<pre><code>$ sbt --client
+<pre><code>$ sbt
 </code></pre>
 <p>This should display something like the following:</p>
-<pre><code class="language-bash">$ sbt --client
+<pre><code class="language-bash">$ sbt
 [info] entering *experimental* thin client - BEEP WHIRR
 [info] server was not detected. starting an instance
 [info] welcome to sbt 1.5.5 (Azul Systems, Inc. Java 1.8.0_352)
@@ -309,9 +320,9 @@ Multiple main classes detected. Select one to run:
 Enter number:
 </code></pre>
 <p>Enter <code>1</code> at the prompt.</p>
-<h3 id="testquick"><a class="header" href="#testquick">testQuick</a></h3>
-<p>The <code>testQuick</code> task tests either the tests that failed before, were not run, or whose transitive dependencies changed.</p>
-<pre><code>&gt; math/testQuick
+<h3 id="test"><a class="header" href="#test">test</a></h3>
+<p>The <code>test</code> task tests either the tests that failed before, were not run, or whose transitive dependencies changed.</p>
+<pre><code>&gt; math/test
 </code></pre>
 <p>This should display something like the following:</p>
 <pre><code>sbt:breeze-parent&gt; math/testQuick
@@ -334,7 +345,7 @@ Enter number:
 automatically recompile or run tests whenever you save a source file.</p>
 <p>Make a command run when one or more source files change by prefixing the
 command with <code>~</code>. For example, in sbt shell try:</p>
-<pre><code>&gt; ~testQuick
+<pre><code>&gt; ~test
 </code></pre>
 <p>Press enter to stop watching for changes.
 You can use the <code>~</code> prefix with either sbt shell or batch mode.</p>
