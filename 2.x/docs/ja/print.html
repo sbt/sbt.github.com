@@ -209,7 +209,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="sbt-書-日本語版草稿"><a class="header" href="#sbt-書-日本語版草稿">sbt 書 (日本語版草稿)</a></h1>
+                        <h1 id="sbt-ハンドブック-日本語版草稿"><a class="header" href="#sbt-ハンドブック-日本語版草稿">sbt ハンドブック (日本語版草稿)</a></h1>
 <p>これは未だリリースされていない sbt 2.x のドキュメンテーションの草稿だ。一般的な概念は sbt 1.x とも一貫しているが、2.x 系および本稿の詳細は今後変更される可能性がある。</p>
 <p><img src="files/sbt-logo.svg" alt="sbt logo" /></p>
 <p>sbt は主に Scala と Java のためのシンプルなビルド・ツールだ。sbt は、Coursier を用いたライブラリ依存性のダウンロード、プロジェクトの差分コンパイルや差分テスト、IntelliJ や VS Code などの IDE との統合、JAR パッケージの作成、および JVM コミュニティーがパッケージ管理に用いる <a href="https://central.sonatype.com/">Central Repo</a> への公開などを行う。</p>
@@ -864,34 +864,34 @@ Hello Raj
 $ sbt new scala/scala3.g8
 </code></pre>
 <p><a href="https://github.com/foundweekends/giter8/wiki/giter8-templates">Giter8 wiki</a> では 100 以上のテンプレートが列挙されていて、新しいビルドを手早く作ることができる。</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-components"><a class="header" href="#sbt-components">sbt components</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-のコンポーネント"><a class="header" href="#sbt-のコンポーネント">sbt のコンポーネント</a></h1>
 <h2 id="sbt-runner"><a class="header" href="#sbt-runner">sbt runner</a></h2>
-<p>An sbt build is executed using <code>sbt</code> runner, also called "sbt-the-shell-script" to distinguish from other components. It's important to note is that sbt runner is designed to run <strong>any version</strong> of sbt.</p>
-<h3 id="specifying-sbt-version-with-projectbuildproperties"><a class="header" href="#specifying-sbt-version-with-projectbuildproperties">Specifying sbt version with project/build.properties</a></h3>
-<p>sbt runner executes a subcomponent called sbt launcher, which reads <code>project/build.properties</code> to determine the sbt version for the build, and downloads the artifacts if they haven't been cached:</p>
+<p>sbt のビルドは、「<code>sbt</code> という名前のシェルスクリプト」によって実行され、このスクリプトは sbt runner と呼ばれる。</p>
+<h3 id="projectbuildproperties-による-sbt-バージョンの指定"><a class="header" href="#projectbuildproperties-による-sbt-バージョンの指定">project/build.properties による sbt バージョンの指定</a></h3>
+<p>sbt runner は、そのサブコンポーネントである sbt launcher を実行し、sbt launcher は <code>project/build.properties</code> を読み込んで、そのビルドに使われる sbt のバージョンを決定し、キャッシュに無ければ sbt 本体をダウンロードする:</p>
 <pre><code>sbt.version=2.0.0-RC6
 </code></pre>
-<p>This means that:</p>
+<p>これは、つまり</p>
 <ul>
-<li>Anyone who checkouts your build would get the same sbt version, regardless of <em>sbt runner</em> they may have installed on their machines.</li>
-<li>The change of sbt version can be tracked in a version control system, like git.</li>
+<li>ビルドをチェックアウトした人が、各々の sbt runner のバージョンに関わらわず、同一の sbt のバージョンを実行し</li>
+<li>sbt 本体のバージョンは git のようなバージョン管理システムによって管理されることを意味する</li>
 </ul>
 <h3 id="sbtn-sbt---client"><a class="header" href="#sbtn-sbt---client">sbtn (<code>sbt --client</code>)</a></h3>
-<p>sbtn (native thin client) is a subcomponent of sbt runner, called when you pass <code>--client</code> flag to sbt runner, and is used to send commands to sbt server. It is called sbtn because it is compiled to native code using GraalVM native-image. The protocol between sbtn and sbt server is stable enough that it should work between <strong>most recent versions</strong> of sbt.</p>
+<p>sbtn (native thin client) は sbt runner のサブコンポーネントの一つで、sbt runner に <code>--client</code> フラグを渡すと呼ばれ、sbt server にコマンドを送信するのに使われる。名前に n が付いているのは、それが GraalVM native-image によってネーティブ・コードにコンパイルされていることに由来する。sbtn と sbt server は安定しているため、最近の sbt のバージョンなら大体動作するようになっている。</p>
 <h2 id="sbt-server-sbt---server"><a class="header" href="#sbt-server-sbt---server">sbt server (<code>sbt --server</code>)</a></h2>
-<p>sbt server is the actual build tool whose version is specified using <code>project/build.properties</code>. sbt server acts as a cashier to take commands from sbtn and editors.</p>
+<p>sbt server は、ビルドツール本体で、そのバージョンは <code>project/build.properties</code> によって指定される。sbt server は、sbtn やエディタから注文を受け取るレジ係の役割を持つ。</p>
 <h3 id="coursier"><a class="header" href="#coursier">Coursier</a></h3>
-<p>sbt server runs <a href="https://get-coursier.io/">Couriser</a> as a subcomponent to resolve Scala library, Scala compiler, and any other library dependencies your build needs.</p>
+<p>sbt server は、そのサブコンポーネントとして <a href="https://get-coursier.io/">Couriser</a> を実行して、Scala 標準ライブラリ、Scala コンパイラ、ビルドで使われるその他のライブラリ依存性の解決を行う。</p>
 <h3 id="zinc"><a class="header" href="#zinc">Zinc</a></h3>
-<p>Zinc is the incremental compiler for Scala, developed and maintained by sbt project. An often overlooked aspect of Zinc is that Zinc provides a stable API to invoke <strong>any modern versions</strong> of Scala compiler. Combined with the fact that Coursier can resolve any Scala version, with sbt we can invoke any modern versions of Scala just by writing a single line <code>build.sbt</code>:</p>
+<p>Zinc は、sbt プロジェクトにより開発、メンテされている、Scala の差分コンパイラだ。Zinc の側面として見落とされがちなのは、Zinc は<strong>ここ数年に出た全てのバージョン</strong>の Scala コンパイラに対する安定した API を提供しているということがある。Coursier がどんな Scala バージョンでも解決できることと合わせると、sbt は <code>build.sbt</code> に一行書くだけで、ここ数年に出たどのバージョンの Scala でも走らせることができる:</p>
 <pre><code class="language-scala">scalaVersion := "3.7.3"
 </code></pre>
 <h3 id="bsp-server"><a class="header" href="#bsp-server">BSP server</a></h3>
-<p>sbt server supports <a href="https://build-server-protocol.github.io/">Build Server Protocol (BSP)</a> to list build targets, build them, etc. This allows IDEs like IntelliJ and Metals to communicate with a running sbt server programmatically.</p>
-<h2 id="connecting-to-sbt-server"><a class="header" href="#connecting-to-sbt-server">Connecting to sbt server</a></h2>
-<p>Let's look at three ways of connecting to sbt server.</p>
-<h3 id="sbt-shell-using-sbtn"><a class="header" href="#sbt-shell-using-sbtn">sbt shell using sbtn</a></h3>
-<p>Run <code>sbt</code> in the working directory of your build:</p>
+<p>sbt server は <a href="https://build-server-protocol.github.io/">Build Server Protocol (BSP)</a> をサポートして、ビルド対象の列挙、ビルドの実行、その他を行うことができる。これにより、IntelliJ や Metals といった IDE が既に実行中の sbt server  とコードを用いて通信することが可能となる。</p>
+<h2 id="sbt-server-との接続"><a class="header" href="#sbt-server-との接続">sbt server との接続</a></h2>
+<p>sbt server との接続方法を 3通りみていく。</p>
+<h3 id="sbtn-を用いた-sbt-シェル"><a class="header" href="#sbtn-を用いた-sbt-シェル">sbtn を用いた sbt シェル</a></h3>
+<p>ビルドのワーキング・ディレクトリ内で <code>sbt</code> を実行する:</p>
 <pre><code class="language-bash">sbt
 </code></pre>
 <div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
@@ -905,7 +905,7 @@ $ sbt new scala/scala3.g8
 <p>In sbt 1.x, equivalent command was <code>sbt --client</code></p>
 </div>
 </div>
-<p>This should display something like the following:</p>
+<p>これは以下のように表示されるはずだ:</p>
 <pre><code class="language-bash">$ sbt
 [info] server was not detected. starting an instance
 [info] welcome to sbt 2.0.0-alpha7 (Azul Systems, Inc. Java 1.8.0_352)
@@ -918,25 +918,25 @@ $ sbt new scala/scala3.g8
 [info] disconnect from the server with `exit`
 sbt:bar&gt;
 </code></pre>
-<p>Running sbt with no command line arguments starts sbt shell. sbt shell has a command prompt (with tab completion and history!).</p>
-<p>For example, you could type <code>compile</code> at the sbt shell:</p>
+<p>sbt をコマンドラインの引数無しで実行すると、sbt シェルが起動する。sbt シェルは、コマンド打ち込むためのプロンプトを持つが、タブ補完が効き、履歴も持っている。</p>
+<p>例えば、sbt シェルに <code>compile</code> と打ち込むことができる:</p>
 <pre><code class="language-bash">sbt:bar&gt; compile
 </code></pre>
-<p>To <code>compile</code> again, press up arrow and then enter.</p>
-<p>To leave sbt shell, type <code>exit</code> or use <code>Ctrl-D</code> (Unix) or <code>Ctrl-Z</code> (Windows).</p>
-<h3 id="batch-mode-using-sbtn"><a class="header" href="#batch-mode-using-sbtn">Batch mode using sbtn</a></h3>
-<p>You can also run sbt in batch mode:</p>
+<p><code>compile</code> を再実行するには、上矢印を押下して、リターンキーを押す。</p>
+<p>sbt シェルを中止するには、<code>exit</code> と打ち込むか、 <code>Ctrl-D</code> (Unix) もしくは <code>Ctrl-Z</code> (Windows) を使う。</p>
+<h3 id="sbtn-を用いたバッチモード"><a class="header" href="#sbtn-を用いたバッチモード">sbtn を用いたバッチ・モード</a></h3>
+<p>sbt をバッチ・モードで使うことも可能だ:</p>
 <pre><code class="language-bash">sbt compile
 sbt testOnly TestA
 </code></pre>
 <pre><code class="language-bash">$ sbt compile
 &gt; compile
 </code></pre>
-<h3 id="shutting-down-sbt-server"><a class="header" href="#shutting-down-sbt-server">Shutting down sbt server</a></h3>
-<p>Run the following to shutdown all sbt servers on your machine:</p>
+<h3 id="sbt-server-のシャットダウン"><a class="header" href="#sbt-server-のシャットダウン">sbt server のシャットダウン</a></h3>
+<p>マシン上の sbt server を全てシャットダウンするには以下を実行する:</p>
 <pre><code class="language-bash">sbt shutdownall
 </code></pre>
-<p>Or the following to shutdown just the current one:</p>
+<p>現行のものだけをシャットダウンするには以下を実行する:</p>
 <pre><code class="language-bash">sbt shutdown
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="basic-tasks"><a class="header" href="#basic-tasks">Basic tasks</a></h1>
@@ -949,7 +949,7 @@ $ cd breeze
 <p>As mentioned in <a href="guide/./sbt-components.html">sbt components</a>, start an sbt shell:</p>
 <pre><code>$ sbt --client
 </code></pre>
-<p>This should display something like the following:</p>
+<p>これは以下のように表示されるはずだ:</p>
 <pre><code class="language-bash">$ sbt --client
 [info] entering *experimental* thin client - BEEP WHIRR
 [info] server was not detected. starting an instance
@@ -1013,7 +1013,7 @@ More tasks may be viewed by increasing verbosity.  See 'help tasks'
 <p>The <code>compile</code> tasks compiles the sources, after resolving and downloading the library dependendies.</p>
 <pre><code>&gt; compile
 </code></pre>
-<p>This should display something like the following:</p>
+<p>これは以下のように表示されるはずだ:</p>
 <pre><code>sbt:breeze-parent&gt; compile
 [info] compiling 341 Scala sources and 1 Java source to /private/tmp/breeze/math/target/scala-3.1.3/classes ...
   | =&gt; math / Compile / compileIncremental 51s
@@ -1040,7 +1040,7 @@ Enter number:
 <p>The <code>testQuick</code> task tests either the tests that failed before, were not run, or whose transitive dependencies changed.</p>
 <pre><code>&gt; math/testQuick
 </code></pre>
-<p>This should display something like the following:</p>
+<p>これは以下のように表示されるはずだ:</p>
 <pre><code>sbt:breeze-parent&gt; math/testQuick
 [info] FeatureVectorTest:
 [info] - axpy fv dv (1 second, 106 milliseconds)
@@ -1180,7 +1180,7 @@ libraryDependencies += toolkitTest % Test
 <p>Type in <code>Compile/dependencyTree</code> in the sbt shell to show the library dependency tree, including the transitive dependencies:</p>
 <pre><code>&gt; Compile/dependencyTree
 </code></pre>
-<p>This should display something like the following:</p>
+<p>これは以下のように表示されるはずだ:</p>
 <pre><code>sbt:bar&gt; Compile/dependencyTree
 [info] default:bar_3:0.1.0-SNAPSHOT
 [info]   +-org.scala-lang:scala3-library_3:3.3.1 [S]
