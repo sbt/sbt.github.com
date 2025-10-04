@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Build definition basics - The Book of sbt</title>
+        <title>ビルド定義の基本 - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -208,43 +208,43 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="build-definition-basics"><a class="header" href="#build-definition-basics">Build definition basics</a></h1>
-<p>This page discusses the <code>build.sbt</code> build definition.</p>
-<h3 id="what-is-a-build-definition"><a class="header" href="#what-is-a-build-definition">What is a build definition?</a></h3>
-<p>A <em>build definition</em> is defined in <code>build.sbt</code>, and it consists of a set of projects (of type <a href="../api/sbt/Project.html"><code>Project</code></a>). Because the term <em>project</em> can be ambiguous, we often call it a <em>subproject</em> in this guide.</p>
-<p>For instance, in <code>build.sbt</code> you define the subproject located in the current directory like this:</p>
+                        <h1 id="ビルド定義の基本"><a class="header" href="#ビルド定義の基本">ビルド定義の基本</a></h1>
+<p>このページは <code>build.sbt</code> のビルド定義を解説する。</p>
+<h3 id="ビルド定義とは何か"><a class="header" href="#ビルド定義とは何か">ビルド定義とは何か</a></h3>
+<p><strong>ビルド定義</strong>は、<code>build.sbt</code> にて定義され、プロジェクト (型は <code>Project</code>) の集合によって構成される。 <strong>プロジェクト</strong>という用語が曖昧であることがあるため、このガイドではこれらを<strong>サブプロジェクト</strong>と呼ぶことが多い。</p>
+<p>例えば、カレントディレクトリにあるサブプロジェクトは <code>build.sbt</code> に以下のように定義できる：</p>
 <pre><code class="language-scala">scalaVersion := "3.3.3"
 name := "Hello"
 </code></pre>
-<p>or more explicitly:</p>
+<p>より明示的に書くと:</p>
 <pre><code class="language-scala">lazy val root = (project in file("."))
   .settings(
     scalaVersion := "3.3.3",
     name := "Hello",
   )
 </code></pre>
-<p>Each subproject is configured by key-value pairs. For example, one key is <code>name</code> and it maps to a string value, the name of your subproject. The key-value pairs are listed under the <code>.settings(...)</code> method.</p>
+<p>それぞれのサブプロジェクトは、キーと値のペアによって詳細が設定される。例えば、<code>name</code> というキーがあるが、それはサブプロジェクト名という文字列の値に関連付けられる。キーと値のペア列は <code>.settings(...)</code> メソッド内に列挙される。</p>
 <h2 id="buildsbt-dsl"><a class="header" href="#buildsbt-dsl">build.sbt DSL</a></h2>
-<p><code>build.sbt</code> defines subprojects using a DSL called build.sbt DSL, which is based on Scala. Initially you can use build.sbt DSL, like a YAML file, declaring just <code>scalaVersion</code> and <code>libraryDependencies</code>, but it can supports more features to keep the build definition organized as the build grows larger.</p>
-<h3 id="typed-setting-expression"><a class="header" href="#typed-setting-expression">Typed setting expression</a></h3>
-<p>Let's take a closer look at the <code>build.sbt</code> DSL:</p>
+<p><code>build.sbt</code> は、Scala に基づいた build.sbt DSL と呼ばれるドメイン特定言語 (DSL) を用いてサブプロジェクトを定義する。まずは <code>scalaVersion</code> と <code>libraryDependencies</code> のみを宣言して、YAML ファイルのように <code>build.sbt</code> を使うことができるが、ビルドの成長に応じてその他の機能を使ってビルド定義を整理することができる。</p>
+<h3 id="型付けされたセッティング式"><a class="header" href="#型付けされたセッティング式">型付けされたセッティング式</a></h3>
+<p><code>build.sbt</code> DSL をより詳しくみていこう:</p>
 <pre><code class="language-scala">organization  :=         "com.example"
 ^^^^^^^^^^^^  ^^^^^^^^   ^^^^^^^^^^^^^
 key           operator   (setting/task) body
 </code></pre>
-<p>Each entry is called a <em>setting expression</em>. Some among them are also called task expressions. We will see more on the difference later in this page.</p>
-<p>A setting expression consists of three parts:</p>
+<p>それぞれのエントリーは<strong>セッティング式</strong>と呼ばれる。セッティング式にはタスク式と呼ばれるものもある。この違いは後で説明する。</p>
+<p>セッティング式は以下の 3部から構成される:</p>
 <ol>
-<li>Left-hand side is a <em>key</em>.</li>
-<li><em>Operator</em>, which in this case is <code>:=</code></li>
-<li>Right-hand side is called the <em>body</em>, or the <em>setting/task body</em>.</li>
+<li>左辺項を<strong>キー</strong> (key) という。</li>
+<li><strong>演算子</strong>。この場合は <code>:=</code>。</li>
+<li>右辺項は<strong>本文</strong> (body)、もしくはセッティング本文という。</li>
 </ol>
-<p>On the left-hand side, <code>name</code>, <code>version</code>, and <code>scalaVersion</code> are <em>keys</em>. A key is an instance of <a href="../../api/sbt/SettingKey.html"><code>SettingKey[A]</code></a>, <a href="../../api/sbt/TaskKey.html"><code>TaskKey[A]</code></a>, or <a href="../../api/sbt/InputKey.html"><code>InputKey[A]</code></a> where <code>A</code> is the expected value type.</p>
-<p>Because key <code>name</code> is typed to <code>SettingKey[String]</code>, the <code>:=</code> operator on <code>name</code> is also typed specifically to <code>String</code>. If you use the wrong value type, the build definition will not compile:</p>
-<pre><code class="language-scala">name := 42 // will not compile
+<p>左辺値の <code>name</code>、<code>version</code>、および <code>scalaVersion</code> はキーである。 キーは <a href="../../api/sbt/SettingKey.html"><code>SettingKey[A]</code></a>、 <a href="../../api/sbt/TaskKey.html"><code>TaskKey[A]</code></a>、もしくは <a href="../../api/sbt/InputKey.html"><code>InputKey[A]</code></a> のインスタンスで、 <code>A</code> はその値の型である。キーの種類に関しては後述する。</p>
+<p><code>name</code> キーは <code>SettingKey[String]</code> に型付けされているため、 <code>name</code> の <code>:=</code> 演算子も <code>String</code> に型付けされている。これにより、誤った型の値を使おうとするとビルド定義はコンパイルエラーになる:</p>
+<pre><code class="language-scala">name := 42 // コンパイルできない
 </code></pre>
-<h3 id="vals-and-lazy-vals"><a class="header" href="#vals-and-lazy-vals"><code>val</code>s and <code>lazy val</code>s</a></h3>
-<p>To avoid repeating the same information, like the version number for a library, <code>build.sbt</code> may be interspersed with <code>val</code>s, <code>lazy val</code>s, and <code>def</code>s.</p>
+<h3 id="val-と-lazy-val"><a class="header" href="#val-と-lazy-val"><code>val</code> と <code>lazy val</code></a></h3>
+<p>ライブラリのバージョン番号など同じ情報の繰り返しを避けるために、<code>build.sbt</code> 内の任意の行に <code>val</code>、<code>lazy val</code>、<code>def</code> を書くことができる。</p>
 <pre><code class="language-scala">val toolkitV = "0.2.0"
 val toolkit = "org.scala-lang" %% "toolkit" % toolkitV
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % toolkitV
@@ -253,19 +253,19 @@ scalaVersion := "3.7.3"
 libraryDependencies += toolkit
 libraryDependencies += (toolkitTest % Test)
 </code></pre>
-<p>In the above, <code>val</code> defines a variable, which are initialized from the top to bottom. This means that <code>toolkitV</code> must be defined before it is referenced.</p>
-<p>Here's a bad example:</p>
-<pre><code class="language-scala">// bad example
-val toolkit = "org.scala-lang" %% "toolkit" % toolkitV // uninitialized reference!
-val toolkitTest = "org.scala-lang" %% "toolkit-test" % toolkitV // uninitialized reference!
+<p>上の例で <code>val</code> は変数を定義し、上の行から順に初期化される。そのため、<code>toolkitV</code> が参照される前に定義される必要がある。</p>
+<p>以下は悪い例:</p>
+<pre><code class="language-scala">// 悪い例
+val toolkit = "org.scala-lang" %% "toolkit" % toolkitV // 未初期化の参照!
+val toolkitTest = "org.scala-lang" %% "toolkit-test" % toolkitV // 未初期化の参照!
 val toolkitV = "0.2.0"
 </code></pre>
-<p>sbt will fail to load with <code>java.lang.ExceptionInInitializerError</code> cased by a <code>NullPointerException</code> if your build.sbt contains an uninitialized forward reference. One way to let the compiler fix this is to define the variables as <code>lazy</code>:</p>
+<p><code>build.sbt</code> に未初期化の事前参照を含む場合、sbt は <code>NullPointerException</code> による <code>java.lang.ExceptionInInitializerError</code> を投げて起動に失敗する。これをコンパイラに直させる方法の 1つとして、変数に <code>lazy</code> を付けて遅延変数として定義するという方法がある:</p>
 <pre><code class="language-scala">lazy val toolkit = "org.scala-lang" %% "toolkit" % toolkitV
 lazy val toolkitTest = "org.scala-lang" %% "toolkit-test" % toolkitV
 lazy val toolkitV = "0.2.0"
 </code></pre>
-<p>Some frown upon gratuitous <code>lazy val</code>s, but Scala 3 lazy vals are efficient, and we think it makes the build definition more robust for copy-pasting.</p>
+<p>何でも <code>lazy val</code> を付けるのに渋い顔をする人もいるかもしれないが、僕たちは Scala 3 の <code>lazy val</code> は効率が良く、ビルド定義をコピー・ペーストに対して堅牢にすると思っている。</p>
 <div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
 <div class="admonition-title">
 <div id="admonition-note-title">
@@ -274,8 +274,8 @@ lazy val toolkitV = "0.2.0"
 <a class="admonition-anchor-link" href="#admonition-note"></a>
 </div>
 <div>
-<p>Top-level objects and classes are not allowed in <code>build.sbt</code>.
-Those should go in the <code>project/</code> directory as Scala source files.</p>
+<p><code>build.sbt</code> トップレベルでのクラスやオブジェクトの定義は禁止されている。
+それらは、<code>project/</code> ディレクトリ内の Scala ソース内に書かれる。</p>
 </div>
 </div>
                     </main>
