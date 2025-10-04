@@ -213,6 +213,17 @@
 <p>sbt uses <a href="https://get-coursier.io/">Coursier</a> to implement managed
 dependencies, so if you're familiar with package managers like Coursier,
 npm, PIP, etc you won't have much trouble.</p>
+<div id="admonition-whats-a-managed-dependency" class="admonition admonish-note" role="note" aria-labelledby="admonition-whats-a-managed-dependency-title">
+<div class="admonition-title">
+<div id="admonition-whats-a-managed-dependency-title">
+<p>What's a managed dependency?</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-whats-a-managed-dependency"></a>
+</div>
+<div>
+<p>As opposed to downloading required JAR files by hand (<em>unmanaged</em> dependencies), a <em>managed</em> dependency system automates fetching external libraries for a subproject. Tools like Coursier interpret the declared <code>ModuleID</code>, perform dependency resolution (expand all the transitive dependencies, and resolve any version conflicts to determine the exact versions), and download and cache the resulting artifacts, ensuring consistent JAR management.</p>
+</div>
+</div>
 <h2 id="the-librarydependencies-key"><a class="header" href="#the-librarydependencies-key">The <code>libraryDependencies</code> key</a></h2>
 <p>Declaring a dependency looks like this, where <code>groupId</code>, <code>artifactId</code>, and
 <code>revision</code> are strings:</p>
@@ -233,7 +244,7 @@ name. This is just a shortcut. You could write this without the <code>%%</code>:
 <pre><code class="language-scala">libraryDependencies += "org.scala-lang" % "toolkit_3" % "0.2.0"
 </code></pre>
 <p>Assuming the <code>scalaVersion</code> for your build is 3.x, the following is
-identical (note the double <code>%%</code> after <code>"toolkit"</code>):</p>
+identical (note the double <code>%%</code> after <code>"org.scala-lang"</code>):</p>
 <pre><code class="language-scala">libraryDependencies += "org.scala-lang" %% "toolkit" % "0.2.0"
 </code></pre>
 <p>The idea is that many dependencies are compiled for multiple Scala

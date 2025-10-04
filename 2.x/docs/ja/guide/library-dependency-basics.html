@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Library dependency basics - The Book of sbt</title>
+        <title>ライブラリ依存性の基本 - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -208,31 +208,42 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="library-dependency-basics"><a class="header" href="#library-dependency-basics">Library dependency basics</a></h1>
-<p>This page explains the basics of library dependency management using sbt.</p>
-<p>sbt uses <a href="https://get-coursier.io/">Coursier</a> to implement managed dependencies, so if you're familiar with package managers like Coursier, npm, PIP, etc you won't have much trouble.</p>
-<h2 id="the-librarydependencies-key"><a class="header" href="#the-librarydependencies-key">The <code>libraryDependencies</code> key</a></h2>
-<p>Declaring a dependency looks like this, where <code>groupId</code>, <code>artifactId</code>, and <code>revision</code> are strings:</p>
+                        <h1 id="ライブラリ依存性の基本"><a class="header" href="#ライブラリ依存性の基本">ライブラリ依存性の基本</a></h1>
+<p>このページは、sbt を使ったライブラリ依存性管理の基本を説明する。</p>
+<p>sbt はマネージ依存性 (managed dependency) を実装するのに内部で <a href="https://get-coursier.io/">Coursier</a> を採用していて、Coursier、npm、PIP などのパッケージ管理を使った事がある人は違和感無く入り込めるだろう。</p>
+<div id="admonition-マネージ依存性とは何か" class="admonition admonish-note" role="note" aria-labelledby="admonition-マネージ依存性とは何か-title">
+<div class="admonition-title">
+<div id="admonition-マネージ依存性とは何か-title">
+<p>マネージ依存性とは何か</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-マネージ依存性とは何か"></a>
+</div>
+<div>
+<p>JAR ファイルを 1つ 1つ手でダウンロードする (アンマネージ依存性) 代わりに、マネージ依存性システムはサブプロジェクトで使われる外部ライブラリの取得を自動化する。Coursier のようなツールは宣言された <code>ModuleID</code> 列を解釈して、依存性解決 (全ての間接的依存性を展開して、バージョン衝突を解決して、正確なバージョンを決定する) を行い、結果となったアーティファクトをダウンロードしキャッシュして、一貫性のある JAR 管理を保証する。</p>
+</div>
+</div>
+<h2 id="librarydependencies-キー"><a class="header" href="#librarydependencies-キー"><code>libraryDependencies</code> キー</a></h2>
+<p>依存性の宣言は、以下のようになる。ここで、<code>groupId</code>、<code>artifactId</code>、と <code>revision</code> は文字列だ:</p>
 <pre><code class="language-scala">libraryDependencies += groupID % artifactID % revision
 </code></pre>
-<p>or like this, where <code>configuration</code> can be a string or a <code>Configuration</code> value (such as <code>Test</code>):</p>
+<p>もしくは、以下のようになる。このときの <code>configuration</code> は文字列もしくは <code>Configuration</code> の値だ (<code>Test</code> など)。</p>
 <pre><code class="language-scala">libraryDependencies += groupID % artifactID % revision % configuration
 </code></pre>
-<p>When you run:</p>
+<p>コンパイルを実行すると:</p>
 <pre><code>&gt; compile
 </code></pre>
-<p>sbt will automatically resolve the dependencies and download the JAR files.</p>
-<h3 id="getting-the-right-scala-version-with-"><a class="header" href="#getting-the-right-scala-version-with-">Getting the right Scala version with <code>%%</code></a></h3>
-<p>If you use <code>organization %% moduleName % version</code> rather than <code>organization % moduleName % version</code> (the difference is the double <code>%%</code> after the <code>organization</code>), sbt will add your project's binary Scala version to the artifact name. This is just a shortcut. You could write this without the <code>%%</code>:</p>
+<p>sbt は自動的に依存性を解決して、JAR ファイルをダウンロードする。</p>
+<h3 id="-を使って正しい-scala-バージョンを入手する"><a class="header" href="#-を使って正しい-scala-バージョンを入手する"><code>%%</code> を使って正しい Scala バージョンを入手する</a></h3>
+<p><code>groupID % artifactID % revision</code> のかわりに、 <code>groupID %% artifactID % revision</code> を使うと（違いは <code>groupID</code> の後ろの二つ連なった <code>%%</code>）、 sbt はプロジェクトの Scala のバイナリバージョンをアーティファクト名に追加する。これはただの略記法なので <code>%%</code> 無しで書くこともできる:</p>
 <pre><code class="language-scala">libraryDependencies += "org.scala-lang" % "toolkit_3" % "0.2.0"
 </code></pre>
-<p>Assuming the <code>scalaVersion</code> for your build is 3.x, the following is identical (note the double <code>%%</code> after <code>"toolkit"</code>):</p>
+<p>ビルドの Scala バージョンが 3.x だとすると、以下の設定は上記と等価だ（<code>"org.scala-lang"</code> の後ろの二つ連なった <code>%%</code> に注意）:</p>
 <pre><code class="language-scala">libraryDependencies += "org.scala-lang" %% "toolkit" % "0.2.0"
 </code></pre>
-<p>The idea is that many dependencies are compiled for multiple Scala versions, and you'd like to get the one that matches your project to ensure binary compatibility.</p>
-<h2 id="tracking-dependencies-in-one-place"><a class="header" href="#tracking-dependencies-in-one-place">Tracking dependencies in one place</a></h2>
-<p><code>.scala</code> files under <code>project</code> becomes part of the build definition, which we can use to track dependencies in one place by creating a file named <code>project/Dependencies.scala</code>.</p>
-<pre><code class="language-scala">// place this file at project/Dependencies.scala
+<p>多くの依存ライブラリは複数の Scala バイナリバージョンに対してコンパイルされており、この機構はそのうちの中からプロジェクトとバイナリ互換性のある正しいものを選択する便利機能だ。</p>
+<h2 id="ライブラリ依存性を一箇所にまとめる"><a class="header" href="#ライブラリ依存性を一箇所にまとめる">ライブラリ依存性を一箇所にまとめる</a></h2>
+<p><code>project</code> 内の任意の <code>.scala</code> ファイルがビルド定義の一部となることを利用する一つの例として <code>project/Dependencies.scala</code> というファイルを作ってライブラリ依存性を一箇所にまとめるということができる。</p>
+<pre><code class="language-scala">// project/Dependencies.scala にこのファイルを置く
 
 import sbt.*
 
@@ -245,7 +256,7 @@ object Dependencies:
   val toolkitTest = "org.scala-lang" %% "toolkit-test" % toolkitV
 end Dependencies
 </code></pre>
-<p>The <code>Dependencies</code> object will be available in <code>build.sbt</code>. To make it easier to use the <code>val</code>s defined in it, import <code>Dependencies.*</code> in your build.sbt file.</p>
+<p>この <code>Dependencies</code> オブジェクトは <code>build.sbt</code> 内で利用可能となる。 定義されている <code>val</code> が使いやすいように <code>Dependencies.*</code> を import しておこう。</p>
 <pre><code class="language-scala">import Dependencies.*
 
 scalaVersion := "3.7.3"
@@ -253,8 +264,8 @@ name := "something"
 libraryDependencies += toolkit
 libraryDependencies += toolkitTest % Test
 </code></pre>
-<h2 id="viewing-library-dependencies"><a class="header" href="#viewing-library-dependencies">Viewing library dependencies</a></h2>
-<p>Type in <code>Compile/dependencyTree</code> in the sbt shell to show the library dependency tree, including the transitive dependencies:</p>
+<h2 id="ライブラリ依存性の可視化"><a class="header" href="#ライブラリ依存性の可視化">ライブラリ依存性の可視化</a></h2>
+<p>sbt シェルに <code>Compile/dependencyTree</code> と入力すると、ライブラリ依存性の間接的依存性を含むツリーが表示される:</p>
 <pre><code>&gt; Compile/dependencyTree
 </code></pre>
 <p>これは以下のように表示されるはずだ:</p>
