@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Plugin basics - The Book of sbt</title>
+        <title>プラグインの基本 - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -208,45 +208,45 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="plugin-basics"><a class="header" href="#plugin-basics">Plugin basics</a></h1>
+                        <h1 id="プラグインの基本"><a class="header" href="#プラグインの基本">プラグインの基本</a></h1>
 <!--
 Please read the earlier pages in the Getting Started Guide first, in
 particular you need to understand [build.sbt][Basic-Def], [task graph][Task-Graph],
 [library dependencies][Library-Dependencies], before reading this page.
 -->
-<h2 id="what-is-a-plugin"><a class="header" href="#what-is-a-plugin">What is a plugin?</a></h2>
-<p>A plugin extends the build definition, most commonly by adding new settings and tasks. For example, a plugin could add <code>githubWorkflowGenerate</code> task to generate GitHub Actions YAML.</p>
+<h2 id="プラグインとは何か"><a class="header" href="#プラグインとは何か">プラグインとは何か</a></h2>
+<p>プラグインは、新しいセッティングやタスクを追加することでビルド定義を拡張する。例えば、プラグインを使って <code>githubWorkflowGenerate</code> というタスクを追加して、GitHub Actions のための YAML を自動生成することができる。</p>
 <!--
 For example, a plugin
 could add a `codeCoverage` task which would generate a test coverage report.
 -->
-<h2 id="finding-the-plugin-versions-using-scaladex"><a class="header" href="#finding-the-plugin-versions-using-scaladex">Finding the plugin versions using Scaladex</a></h2>
-<p>You can use <a href="https://index.scala-lang.org/search?platform=sbt2">Scaladex</a> to search for plugins, and find out the latest version of the plugin.</p>
-<h2 id="declaring-a-plugin"><a class="header" href="#declaring-a-plugin">Declaring a plugin</a></h2>
-<p>If your project is in directory <code>hello</code>, and if you are adding sbt-github-actions to the build definition, create <code>hello/project/plugins.sbt</code> and declare the plugin dependency by passing the plugin's module ID to <code>addSbtPlugin(...)</code>:</p>
+<h2 id="scaladex-を使ったプラグインバージョンの検索"><a class="header" href="#scaladex-を使ったプラグインバージョンの検索">Scaladex を使ったプラグイン・バージョンの検索</a></h2>
+<p><a href="https://index.scala-lang.org/search?platform=sbt2">Scaladex</a> を用いてプラグインを検索して、そのプラグインの最新バージョンを探すことができる。</p>
+<h2 id="プラグインの宣言"><a class="header" href="#プラグインの宣言">プラグインの宣言</a></h2>
+<p>ビルドが <code>hello</code> というディレクトリにあるとして、sbt-github-actions をビルド定義に追加したい場合、<code>hello/project/plugins.sbt</code> というファイルを作成して、プラグインの ModuleID を <code>addSbtPlugin(...)</code> に渡すことで、プラグイン依存性を宣言する:</p>
 <pre><code class="language-scala">// In project/plugins.sbt
 
 addSbtPlugin("com.github.sbt" % "sbt-github-actions" % "0.28.0")
 </code></pre>
-<p>If you're adding sbt-assembly, add the following:</p>
+<p>ビルドに sbt-assembly を追加する場合、以下を追加する:</p>
 <pre><code class="language-scala">// In project/plugins.sbt
 
 addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "2.3.1")
 </code></pre>
-<p>See <a href="../recipes/source-dependency-plugin.html">Source dependency plugin</a> recipe for an experimental technique of using plugins hosted on git repos.</p>
-<p>Plugins usually provide settings and tasks that get added to a subproject to enable the plugin's functionality. This is described in the next section.</p>
-<h2 id="enabling-and-disabling-auto-plugins"><a class="header" href="#enabling-and-disabling-auto-plugins">Enabling and disabling auto plugins</a></h2>
-<p>A plugin can declare that its settings be automatically added to the build definition, in which case you don't have to do anything to add them.</p>
-<p>The <!-- [auto plugins][Plugins] --> auto plugins feature enables plugins to automatically, and safely, ensure their settings and dependencies are on a project. Many auto plugins should have their default settings automatically.</p>
-<p>If you're using an auto plugin that requires explicit enablement, then you have to add the following to your <code>build.sbt</code>:</p>
+<p><a href="../recipes/source-dependency-plugin.html">ソース依存性プラグイン</a>レシピには git リポジトリにホスティングされたプラグインを直接使う実験的技法が書かれてる。</p>
+<p>プラグインは、通常サブプロジェクトに追加されるセッティングやタスクを提供することでその機能を実現する。次のセクションでその仕組みをもう少し詳しくみていく。</p>
+<h2 id="auto-plugin-の有効化と無効化"><a class="header" href="#auto-plugin-の有効化と無効化">auto plugin の有効化と無効化</a></h2>
+<p>プラグインは、自身が持つセッティング群がビルド定義に自動的に追加されるよう宣言することができ、 その場合、プラグインの利用者は何もしなくてもいい。</p>
+<p>auto plugin 機能は、セッティング群とその依存関係がサブプロジェクトに自動的、かつ安全に設定されることを保証する。auto plugin の多くはデフォルトのセッティング群を自動的に追加するが、中には明示的な有効化を必要とするものもある。</p>
+<p>明示的な有効化が必要な auto plugin を使っている場合は、以下を <code>build.sbt</code> に追加する必要がある:</p>
 <pre><code class="language-scala">lazy val util = (project in file("util"))
   .enablePlugins(FooPlugin, BarPlugin)
   .settings(
     name := "hello-util"
   )
 </code></pre>
-<p>The <code>enablePlugins</code> method allows projects to explicitly define the auto plugins they wish to consume.</p>
-<p>Projects can also exclude plugins using the <code>disablePlugins</code> method. For example, if we wish to remove the <code>IvyPlugin</code> settings from <code>util</code>, we modify our <code>build.sbt</code> as follows:</p>
+<p><code>enablePlugins</code> メソッドを使って、そのサブプロジェクトで使用したい auto plugin を明示的に定義できる。</p>
+<p>逆に <code>disablePlugins</code> メソッドを使ってプラグインを除外することもできる。例えば、<code>util</code> から <code>IvyPlugin</code> のセッティングを除外したいとすると、<code>build.sbt</code> を以下のように変更する:</p>
 <pre><code class="language-scala">lazy val util = (project in file("util"))
   .enablePlugins(FooPlugin, BarPlugin)
   .disablePlugins(plugins.IvyPlugin)
@@ -254,8 +254,7 @@ addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "2.3.1")
     name := "hello-util"
   )
 </code></pre>
-<p>Auto plugins should document whether they need to be explicitly enabled. If you're curious which auto plugins are enabled for a given project, just run the <code>plugins</code> command on the sbt console.</p>
-<p>For example:</p>
+<p>明示的な有効化が必要か否かは、それぞれの auto plugin がドキュメントで明記しておくべきだ。あるプロジェクトでどんな auto plugin が有効化されているか気になったら、 sbt シェルから <code>plugins</code> コマンドを実行してみよう。</p>
 <pre><code class="language-scala">sbt:hello&gt; plugins
 In build /tmp/hello/:
   Enabled plugins in hello:
@@ -270,15 +269,15 @@ Plugins that are loaded to the build but not enabled in any subprojects:
   sbt.ScriptedPlugin
   sbt.plugins.SbtPlugin
 </code></pre>
-<p>Here, the <code>plugins</code> output is showing that the sbt default plugins are all enabled. sbt's default settings are provided via 7 plugins:</p>
+<p>ここでは、<code>plugins</code> の表示によって sbt のデフォルトのプラグインが全て有効化されていることが分かる。 sbt のデフォルトセッティングは 7つのプラグインによって提供される:</p>
 <ol>
-<li><code>CorePlugin</code>: Provides the core parallelism controls for tasks.</li>
-<li><code>DependencyTreePlugin</code>: Provides dependency tree tasks.</li>
-<li><code>Giter8TemplatePlugin</code>: Provides <code>sbt new</code> support.</li>
-<li><code>IvyPlugin</code>: Provides the mechanisms to publish/resolve modules.</li>
-<li><code>JUnitXmlReportPlugin</code>: Provides support for generating junit-xml.</li>
-<li><code>JvmPlugin</code>: Provides the mechanisms to compile/test/run/package Java/Scala projects.</li>
-<li><code>SemanticdbPlugin</code>: Provides support for generating SemanticDB.</li>
+<li><code>CorePlugin</code>: タスクの並列実行などのコア機能。</li>
+<li><code>DependencyTreePlugin</code>: 依存性のツリー表示タスク。</li>
+<li><code>Giter8TemplatePlugin</code>: <code>sbt new</code> 機能の提供。</li>
+<li><code>IvyPlugin</code>: モジュールの依存性解決と公開機能。</li>
+<li><code>JUnitXmlReportPlugin</code>: junit-xml の生成。</li>
+<li><code>JvmPlugin</code>: Java/Scala サブプロジェクトのコンパイル、テスト、実行、パッケージ化の機構。</li>
+<li><code>SemanticdbPlugin</code>: SemanticDB の生成。</li>
 </ol>
 <!--
 ### Global plugins
@@ -295,8 +294,8 @@ Because doing so would increase the dependency on the machine environment,
 this feature should be used sparingly. See
 [Best Practices][global-vs-local-plugins].
 -->
-<h2 id="available-plugins"><a class="header" href="#available-plugins">Available plugins</a></h2>
-<p>In addition to <a href="https://index.scala-lang.org/search?platform=sbt2">Scaladex</a>, there's also <a href="../community-plugins.html">a list of available plugins</a>.</p>
+<h2 id="利用可能なプラグイン"><a class="header" href="#利用可能なプラグイン">利用可能なプラグイン</a></h2>
+<p><a href="https://index.scala-lang.org/search?platform=sbt2">Scaladex</a> の他に<a href="../community-plugins.html">プラグインのリスト</a>がある。</p>
 <!--
 For more details, including ways of developing plugins, see
 [Plugins][Plugins].
