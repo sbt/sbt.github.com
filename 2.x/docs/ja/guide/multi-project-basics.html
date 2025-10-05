@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Multi project basics - The Book of sbt</title>
+        <title>マルチプロジェクトの基本 - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -208,11 +208,12 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="multi-project-basics"><a class="header" href="#multi-project-basics">Multi project basics</a></h1>
-<p>While a simple program can start out as a single-project build, it's more common for a build to split into smaller, multiple subprojects.</p>
-<p>Each subproject in a build has its own source directories, generates its own JAR file when you run <code>packageBin</code>, and in general works like any other project.</p>
-<p>A project is defined by declaring a lazy val of type <a href="../../api/sbt/Project.html">Project</a>. For example, :</p>
+                        <h1 id="マルチプロジェクトの基本"><a class="header" href="#マルチプロジェクトの基本">マルチプロジェクトの基本</a></h1>
+<p>簡単なプログラムならば単一プロジェクトから作り始めてもいいが、ビルドが複数の小さいのサブプロジェクトに分かれていくのが普通だ。</p>
+<p>ビルド内のサブプロジェクトは、それぞれ独自のソースディレクトリを持ち、<code>packageBin</code> を実行すると独自の JAR ファイルを生成するなど、概ね通常のプロジェクトと同様に動作する。</p>
+<p><strong>サブプロジェクト</strong>は、<code>lazy val</code> を用いて <a href="../../api/sbt/Project.html">Project</a> 型の値を宣言することで定義される。例えば:</p>
 <pre><code class="language-scala">scalaVersion := "3.7.3"
+LocalRootProject / publish / skip := true
 
 lazy val core = (project in file("core"))
   .settings(
@@ -225,7 +226,63 @@ lazy val util = (project in file("util"))
     name := "util",
   )
 </code></pre>
-<p>The name of the val is used as the subproject's ID, which is used to refer to the subproject at the sbt shell.</p>
+<p><code>val</code> 定義された変数名はプロジェクトの ID 及びベースディレクトリの名前になる。ID は sbt シェルからプロジェクトを指定する時に用いられる。</p>
+<p>sbt は必ずルートプロジェクトを定義するので、上の例のビルド定義は合計 3つのサブプロジェクトを持つ。</p>
+<h2 id="サブプロジェクト間依存性"><a class="header" href="#サブプロジェクト間依存性">サブプロジェクト間依存性</a></h2>
+<p>あるサブプロジェクトを、他のサブプロジェクトにあるコードに依存させたい場合、<code>dependsOn(...)</code> を使ってこれを宣言する。例えば、<code>util</code> に <code>core</code> のクラスパスが必要な場合は <code>util</code> の定義を次のように書く:</p>
+<pre><code class="language-scala">lazy val util = (project in file("util"))
+  .dependsOn(core)
+</code></pre>
+<h2 id="タスク集約"><a class="header" href="#タスク集約">タスク集約</a></h2>
+<p>タスク集約は、集約する側のサブプロジェクトで任意のタスクを実行するとき、集約される側の複数のサブプロジェクトでも同じタスクが実行されるという関係を意味する。</p>
+<pre><code class="language-scala">scalaVersion := "3.7.3"
+
+lazy val root = (project in file("."))
+  .autoAggregate
+  .settings(
+    publish / skip := true
+  )
+
+lazy val util = (project in file("util"))
+
+lazy val core = (project in file("core"))
+</code></pre>
+<p>上の例では、ルートプロジェクトが <code>util</code> と <code>core</code> を集約する。そのため、sbt シェルに <code>compile</code> と打ち込むと、3つのサブプロジェクトが並列にコンパイルされる。</p>
+<h2 id="ルートプロジェクト"><a class="header" href="#ルートプロジェクト">ルートプロジェクト</a></h2>
+<p>ビルドのルートにあるサブプロジェクトは、<strong>ルートプロジェクト</strong>と呼ばれ、ビルドの中で特別な役割を果たすことがある。もしルートディレクトリにサブプロジェクトが定義されてない場合、sbt は自動的に他のプロジェクトを集約するデフォルトのルートプロジェクトを生成する。</p>
+<h2 id="コモンセッティング"><a class="header" href="#コモンセッティング">コモン・セッティング</a></h2>
+<p>sbt 2.x系では、<code>settings(...)</code> を使わずに <code>build.sbt</code> にセッティングを直書きした場合、<strong>コモン・セッティング</strong>として全サブプロジェクトに注入される。</p>
+<pre><code class="language-scala">scalaVersion := "3.7.3"
+
+lazy val core = (project in file("core"))
+
+lazy val app = (project in file("app"))
+  .dependsOn(core)
+</code></pre>
+<p>上の例では、<code>scalaVersion</code> セッティングはデフォルトのルートプロジェクト、<code>core</code>、<code>util</code> に適用される。</p>
+<p>既にサブプロジェクトにスコープ付けされたセッティングはこのルールの例外となる。</p>
+<pre><code class="language-scala">scalaVersion := "3.7.3"
+
+lazy val core = (project in file("core"))
+
+lazy val app = (project in file("app"))
+  .dependsOn(core)
+
+// これは app のみに適用される
+app / name := "app1"
+</code></pre>
+<p>この例外を利用して、以下のように、ルートプロジェクトにのみ適用されるセッティングを書くことができる:</p>
+<pre><code class="language-scala">scalaVersion := "3.7.3"
+
+lazy val core = (project in file("core"))
+
+lazy val app = (project in file("app"))
+  .dependsOn(core)
+
+// これらは root にのみ適用される
+LocalRootProject / name := "root"
+LocalRootProject / publish / skip := true
+</code></pre>
 
                     </main>
 

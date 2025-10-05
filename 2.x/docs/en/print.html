@@ -1285,9 +1285,10 @@ it's more common for a build to split into smaller, multiple subprojects.</p>
 <p>Each subproject in a build has its own source directories, generates
 its own JAR file when you run <code>packageBin</code>, and in general works like any
 other project.</p>
-<p>A project is defined by declaring a lazy val of type
+<p>A <strong>subproject</strong> is defined by declaring a <code>lazy val</code> of type
 <a href="guide/../../api/sbt/Project.html">Project</a>. For example, :</p>
 <pre><code class="language-scala">scalaVersion := "3.7.3"
+LocalRootProject / publish / skip := true
 
 lazy val core = (project in file("core"))
   .settings(
@@ -1300,8 +1301,69 @@ lazy val util = (project in file("util"))
     name := "util",
   )
 </code></pre>
-<p>The name of the val is used as the subproject's ID, which
-is used to refer to the subproject at the sbt shell.</p>
+<p>The name of the <code>val</code> is used as the subproject's ID, which
+is used to refer to the subproject in the sbt shell.</p>
+<p>sbt will always define a root project, so in the above build definition,
+we will have total of three subprojects.</p>
+<h2 id="subproject-dependency"><a class="header" href="#subproject-dependency">Subproject dependency</a></h2>
+<p>A subproject may depend on the code from another subproject.
+This is done by declaring <code>dependsOn(...)</code>. For example, if <code>util</code> needed <code>util</code> on its classpath, you would define <code>util</code> as:</p>
+<pre><code class="language-scala">lazy val util = (project in file("util"))
+  .dependsOn(core)
+</code></pre>
+<h2 id="task-aggregation"><a class="header" href="#task-aggregation">Task aggregation</a></h2>
+<p>Task aggregation means that running a task on the aggregate subproject will also run on the aggregated subprojects.</p>
+<pre><code class="language-scala">scalaVersion := "3.7.3"
+
+lazy val root = (project in file("."))
+  .autoAggregate
+  .settings(
+    publish / skip := true
+  )
+
+lazy val util = (project in file("util"))
+
+lazy val core = (project in file("core"))
+</code></pre>
+<p>In the above example, the root subproject aggregates <code>util</code> and <code>core</code>. When you type <code>compile</code> in the sbt shell, all tree subprojects are compiled in parallel.</p>
+<h2 id="root-project"><a class="header" href="#root-project">Root project</a></h2>
+<p>The subproject at the root of the build is called a <strong>root project</strong>,
+and often plays a special role in the build.
+If a subproject is not defined at the root directory of the build,
+sbt automatically creates a default one that aggregates all other subprojects in the build.</p>
+<h2 id="common-settings"><a class="header" href="#common-settings">Common settings</a></h2>
+<p>In sbt 2.x, bare settings that are written directly in <code>build.sbt</code> without <code>settings(...)</code> are <strong>common settings</strong> that are injected to all subprojects.</p>
+<pre><code class="language-scala">scalaVersion := "3.7.3"
+
+lazy val core = (project in file("core"))
+
+lazy val app = (project in file("app"))
+  .dependsOn(core)
+</code></pre>
+<p>In the above, the <code>scalaVersion</code> setting is applied to the default root subproject, <code>core</code>, and <code>util</code>.</p>
+<p>One exception to this rule is settings that are already scoped to a subproject.</p>
+<pre><code class="language-scala">scalaVersion := "3.7.3"
+
+lazy val core = (project in file("core"))
+
+lazy val app = (project in file("app"))
+  .dependsOn(core)
+
+// This is applied only to app
+app / name := "app1"
+</code></pre>
+<p>We can take advantage of this exception to add some settings that only apply to the default root project as follows:</p>
+<pre><code class="language-scala">scalaVersion := "3.7.3"
+
+lazy val core = (project in file("core"))
+
+lazy val app = (project in file("app"))
+  .dependsOn(core)
+
+// These are applied only to root
+LocalRootProject / name := "root"
+LocalRootProject / publish / skip := true
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="plugin-basics"><a class="header" href="#plugin-basics">Plugin basics</a></h1>
 <!--
 Please read the earlier pages in the Getting Started Guide first, in
@@ -1553,7 +1615,7 @@ Two of the popular IDEs in Scala are <a href="https://scalameta.org/metals/">Met
 <li><strong>Local/remote cache system</strong>. Details below</li>
 <li><strong>Client-side run</strong>. Details below.</li>
 </ul>
-<h3 id="common-settings"><a class="header" href="#common-settings">Common settings</a></h3>
+<h3 id="common-settings-1"><a class="header" href="#common-settings-1">Common settings</a></h3>
 <p>In sbt 2.x, the bare settings in <code>build.sbt</code> are interpreted to be common settings, and are injected to all subprojects. This means we can now set <code>scalaVersion</code> without using <code>ThisBuild</code> scoping:</p>
 <pre><code class="language-scala">scalaVersion := "3.7.3"
 </code></pre>
