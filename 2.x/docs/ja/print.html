@@ -1382,8 +1382,8 @@ For more details, including ways of developing plugins, see
 For best practices, see
 [Plugins-Best-Practices][Plugins-Best-Practices].
 -->
-<div style="break-before: page; page-break-before: always;"></div><h1 id="build-layout"><a class="header" href="#build-layout">Build layout</a></h1>
-<p>sbt uses conventions for file placement to make it easy to dive into a new sbt build:</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ビルドのレイアウト"><a class="header" href="#ビルドのレイアウト">ビルドのレイアウト</a></h1>
+<p>sbt は、知らない sbt ビルドを見てもだいたい勝手が分かるようにファイルをどこに置くかの慣習を持っている:</p>
 <pre><code>.
 ├── build.sbt
 ├── project/
@@ -1412,14 +1412,17 @@ For best practices, see
 └── target/
 </code></pre>
 <ul>
-<li>The local root directory <code>.</code> is the starting point of your build.</li>
-<li>In sbt's terminology, the <em>base directory</em> is the directory containing the subproject. In the above, <code>.</code>, <code>subproject-core</code>, and <code>subproject-util</code> are base directories.</li>
-<li>The build definition is described in <code>build.sbt</code> (actually any files named <code>*.sbt</code>) in the local root directory.</li>
-<li>The sbt version is tracked in <code>project/build.properties</code>.</li>
-<li>Generated files (compiled classes, packaged jars, managed files, caches, and documentation) will be written to the <code>target</code> directory by default.</li>
+<li><code>.</code> で表記したローカルのルートディレクトリはビルドのスタート地点だ。</li>
+<li><strong>ベース・ディレクトリ</strong>は sbt 用語で、サブプロジェクトを構成するディレクトリを指す。上の例では、<code>.</code>、<code>subproject-core</code>、<code>subproject-util</code> は全てベース・ディレクトリだ。</li>
+<li>ビルド定義は、ローカルのルートディレクトリに置かれた <code>build.sbt</code> にて記述される(実は <code>*.sbt</code> という名前のファイルなら何でもいい)。</li>
+<li>sbt のバージョンは <code>project/build.properties</code> によって管理される。</li>
+<li>生成されたファイル (コンパイルされたクラス、パッケージ化された JAR、マネージファイル、キャッシュ、ドキュメンテーションなど) はデフォルトでは <code>target</code> ディレクトリに書き込まれる。</li>
 </ul>
-<h3 id="build-support-files"><a class="header" href="#build-support-files">Build support files</a></h3>
-<p>In addition to <code>build.sbt</code>, <code>project</code> directory can contain <code>.scala</code> files that define helper objects and one-off plugins. See <a href="guide/Organizing-Build.html">organizing the build</a> for more.</p>
+<h3 id="ビルドサポートファイル"><a class="header" href="#ビルドサポートファイル">ビルドサポートファイル</a></h3>
+<p>In addition to <code>build.sbt</code>, <code>project</code> directory can contain <code>.scala</code> files that define helper objects and one-off plugins.</p>
+<!--
+See [organizing the build][Organizing-Build] for more.
+-->
 <pre><code>.
 ├── build.sbt
 ├── project/
@@ -1428,9 +1431,9 @@ For best practices, see
 │   └── plugins.sbt
 ....
 </code></pre>
-<p>You may see <code>.sbt</code> files inside <code>project/</code> but they are not equivalent to <code>.sbt</code> files in the project's base directory. Explaining this will come <a href="guide/Organizing-Build.html">later</a>, since you'll need some background information first.</p>
-<h3 id="source-code"><a class="header" href="#source-code">Source code</a></h3>
-<p>sbt uses the same directory structure as <a href="https://maven.apache.org/">Maven</a> for source files by default (all paths are relative to the base directory):</p>
+<p><code>project/</code> 内に <code>.sbt</code> ファイルを見かけることもあるかもしれないが、これらは通常プラグインを宣言するのに用いられる。<a href="guide/./plugin-basics.html">プラグインの基本</a>参照。</p>
+<h3 id="ソースコード"><a class="header" href="#ソースコード">ソースコード</a></h3>
+<p>ソースコードに関して sbt は、デフォルトで <a href="https://maven.apache.org/">Maven</a> と同じディレクトリ構造を使う:</p>
 <pre><code>....
 ├── src/
 │   ├── main/
@@ -1445,15 +1448,27 @@ For best practices, see
 │       └── scala-2.13/  &lt;test Scala 2.13 specific sources&gt;
 ....
 </code></pre>
-<p>Other directories in <code>src/</code> will be ignored. Additionally, all hidden directories will be ignored.</p>
-<p>Source code can be placed in the project's base directory as <code>hello/app.scala</code>, which may be OK for small projects, though for normal projects people tend to keep the projects in the <code>src/main/</code> directory to keep things neat. The fact that you can place <code>*.scala</code> source code in the base directory might seem like an odd trick, but this fact becomes relevant <a href="guide/Organizing-Build.html">later</a>.</p>
-<h3 id="configuring-version-control"><a class="header" href="#configuring-version-control">Configuring version control</a></h3>
-<p>Your <code>.gitignore</code> (or equivalent for other version control systems) should contain:</p>
+<p><code>src/</code> 内の他のディレクトリは無視される。また、隠しディレクトリも無視される。</p>
+<p>ソースコードは <code>hello/app.scala</code> のようにプロジェクトのベースディレクトリに置くこともできるが、小さいプロジェクトはともかくとして、通常のプロジェクトでは <code>src/main/</code> 以下のディレクトリにソースを入れて整理するのが普通だ。</p>
+<!--
+The fact that you can place `*.scala` source code in the base directory might seem like
+an odd trick, but this fact becomes relevant [later][Organizing-Build].
+-->
+<h3 id="バージョン管理の設定"><a class="header" href="#バージョン管理の設定">バージョン管理の設定</a></h3>
+<p><code>.gitignore</code> （もしくは、他のバージョン管理システムの同様のファイル）には以下を追加しておくとよいだろう:</p>
 <pre><code>target/
 </code></pre>
-<p>Note that this deliberately has a trailing <code>/</code> (to match only directories) and it deliberately has no leading <code>/</code> (to match <code>project/target/</code> in addition to plain <code>target/</code>).</p>
-<p>sbt automates building, testing, and deployment of your subprojects from information in the build definition.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-with-ides"><a class="header" href="#sbt-with-ides">sbt with IDEs</a></h1>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="guide/build-layout.html#admonition-note"></a>
+</div>
+<div>
+<p>ここでは（ディレクトリだけにマッチさせるために）語尾の <code>/</code> を意図的につけていて、一方で （普通の <code>target/</code> に加えて <code>project/target/</code> にもマッチさせるために）先頭の <code>/</code> は意図的に つけていないことに注意。</p>
+</div>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-with-ides"><a class="header" href="#sbt-with-ides">sbt with IDEs</a></h1>
 <p>While it's possible to code Scala with just an editor and sbt, most programmers today use an Integrated Development Environment, or IDE for short. Two of the popular IDEs in Scala are <a href="https://scalameta.org/metals/">Metals</a> and <a href="https://www.jetbrains.com/idea/">IntelliJ IDEA</a>, and they both integrate with sbt builds.</p>
 <p>A few of the advantages of using the IDEs are:</p>
 <ul>

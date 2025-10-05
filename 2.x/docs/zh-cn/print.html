@@ -1419,7 +1419,10 @@ For best practices, see
 <li>Generated files (compiled classes, packaged jars, managed files, caches, and documentation) will be written to the <code>target</code> directory by default.</li>
 </ul>
 <h3 id="build-support-files"><a class="header" href="#build-support-files">Build support files</a></h3>
-<p>In addition to <code>build.sbt</code>, <code>project</code> directory can contain <code>.scala</code> files that define helper objects and one-off plugins. See <a href="guide/Organizing-Build.html">organizing the build</a> for more.</p>
+<p>In addition to <code>build.sbt</code>, <code>project</code> directory can contain <code>.scala</code> files that define helper objects and one-off plugins.</p>
+<!--
+See [organizing the build][Organizing-Build] for more.
+-->
 <pre><code>.
 ├── build.sbt
 ├── project/
@@ -1428,7 +1431,7 @@ For best practices, see
 │   └── plugins.sbt
 ....
 </code></pre>
-<p>You may see <code>.sbt</code> files inside <code>project/</code> but they are not equivalent to <code>.sbt</code> files in the project's base directory. Explaining this will come <a href="guide/Organizing-Build.html">later</a>, since you'll need some background information first.</p>
+<p>You may see <code>.sbt</code> files inside <code>project/</code>, which is typically used to declare plugins. See <a href="guide/./plugin-basics.html">Plugin basics</a>.</p>
 <h3 id="source-code"><a class="header" href="#source-code">Source code</a></h3>
 <p>sbt uses the same directory structure as <a href="https://maven.apache.org/">Maven</a> for source files by default (all paths are relative to the base directory):</p>
 <pre><code>....
@@ -1446,14 +1449,28 @@ For best practices, see
 ....
 </code></pre>
 <p>Other directories in <code>src/</code> will be ignored. Additionally, all hidden directories will be ignored.</p>
-<p>Source code can be placed in the project's base directory as <code>hello/app.scala</code>, which may be OK for small projects, though for normal projects people tend to keep the projects in the <code>src/main/</code> directory to keep things neat. The fact that you can place <code>*.scala</code> source code in the base directory might seem like an odd trick, but this fact becomes relevant <a href="guide/Organizing-Build.html">later</a>.</p>
+<p>Source code can be placed in the project's base directory as <code>hello/app.scala</code>, which may be OK for small projects, though for normal projects people tend to keep the projects in the <code>src/main/</code> directory to keep things neat.</p>
+<!--
+The fact that you can place `*.scala` source code in the base directory might seem like
+an odd trick, but this fact becomes relevant [later][Organizing-Build].
+-->
 <h3 id="configuring-version-control"><a class="header" href="#configuring-version-control">Configuring version control</a></h3>
 <p>Your <code>.gitignore</code> (or equivalent for other version control systems) should contain:</p>
 <pre><code>target/
 </code></pre>
-<p>Note that this deliberately has a trailing <code>/</code> (to match only directories) and it deliberately has no leading <code>/</code> (to match <code>project/target/</code> in addition to plain <code>target/</code>).</p>
-<p>sbt automates building, testing, and deployment of your subprojects from information in the build definition.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-with-ides"><a class="header" href="#sbt-with-ides">sbt with IDEs</a></h1>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="guide/build-layout.html#admonition-note"></a>
+</div>
+<div>
+<p>Note that this deliberately has a trailing <code>/</code> (to match only directories)
+and it deliberately has no leading <code>/</code> (to match <code>project/target/</code> in
+addition to plain <code>target/</code>).</p>
+</div>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-with-ides"><a class="header" href="#sbt-with-ides">sbt with IDEs</a></h1>
 <p>While it's possible to code Scala with just an editor and sbt, most programmers today use an Integrated Development Environment, or IDE for short. Two of the popular IDEs in Scala are <a href="https://scalameta.org/metals/">Metals</a> and <a href="https://www.jetbrains.com/idea/">IntelliJ IDEA</a>, and they both integrate with sbt builds.</p>
 <p>A few of the advantages of using the IDEs are:</p>
 <ul>
