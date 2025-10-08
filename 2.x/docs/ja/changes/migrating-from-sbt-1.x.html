@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Migrating from sbt 1.x - The Book of sbt</title>
+        <title>sbt 1.x からのマイグレーション - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -208,25 +208,25 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="migrating-from-sbt-1x"><a class="header" href="#migrating-from-sbt-1x">Migrating from sbt 1.x</a></h1>
-<h2 id="changing-buildsbt-dsl-to-scala-3x"><a class="header" href="#changing-buildsbt-dsl-to-scala-3x">Changing <code>build.sbt</code> DSL to Scala 3.x</a></h2>
-<p>As a reminder, users can build either Scala 2.x or Scala 3.x programs using either sbt 1.x or sbt 2.x. However, the Scala that underlies the <code>build.sbt</code> DSL is determined by the sbt version. In sbt 2.0, we are migrating to Scala 3.7.x.</p>
-<p>This means that if you implement custom tasks or sbt plugins for sbt 2.x, it must be done using Scala 3.x. Consult <a href="https://docs.scala-lang.org/scala3/guides/migration/incompatibility-table.html">Scala 3.x incompatibility table</a> and <a href="https://docs.scala-lang.org/scala3/guides/migration/tooling-scala2-xsource3.html">Scala 2 with -Xsource:3</a> for details about Scala 3.x.</p>
+                        <h1 id="sbt-1x-からのマイグレーション"><a class="header" href="#sbt-1x-からのマイグレーション">sbt 1.x からのマイグレーション</a></h1>
+<h2 id="buildsbt-dsl-の-scala-3x-への移行"><a class="header" href="#buildsbt-dsl-の-scala-3x-への移行"><code>build.sbt</code> DSL の Scala 3.x への移行</a></h2>
+<p>念の為書いておくと、sbt 1.x 系 2.x 系のどちらを使ってもScala 2.x および Scala 3.x 両方のプログラムをビルドすることが可能だ。ただし、<code>build.sbt</code> DSL を裏付ける Scala は sbt のバージョンによって決定される。sbt 2.0 では、Scala 3.7.x 系に移行する。</p>
+<p>そのため、sbt 2.x 用のカスタムタスクや sbt プラグインを実装する場合、それは Scala 3.x を用いて行われることとなる。Scala 3.x に関する詳細は<a href="https://docs.scala-lang.org/scala3/guides/migration/incompatibility-table.html">Scala 3.x incompatibility table</a> や <a href="https://docs.scala-lang.org/scala3/guides/migration/tooling-scala2-xsource3.html">Scala 2 with -Xsource:3</a> なども参照。</p>
 <pre><code class="language-scala">// This works on Scala 2.12.20 under -Xsource:3
 import sbt.{ given, * }
 </code></pre>
 <h3 id="import-given"><a class="header" href="#import-given">Import given</a></h3>
-<p>One of the differences between Scala 2.x and 3.x is the way typeclass instances are imported into scope. In Scala 2.x <code>import FooCodec._</code> was used whereas Scala 3 uses <code>import FooCodec.given</code>. Writing:</p>
-<pre><code class="language-scala">// The following works for both sbt 1.x and 2.x
+<p>Scala 2.x と 3.x の違いの 1つとして、型クラスのインスタンスの言語スコープへの取り込み方の違いが挙げられる。Scala 2.x では <code>import FooCodec._</code> と書いたが、Scala 3 は、<code>import FooCodec.given</code> と書く。</p>
+<pre><code class="language-scala">// 以下は、sbt 1.x と 2.x の両方で動作する
 import sbt.librarymanagement.LibraryManagementCodec.{ given, * }
 </code></pre>
-<h3 id="avoid-postfix"><a class="header" href="#avoid-postfix">Avoid postfix</a></h3>
-<p>It wasn't uncommon for sbt 0.13 and 1.x examples to use postfix notations, especially with <code>ModuleID</code>:</p>
+<h3 id="後置記法の回避"><a class="header" href="#後置記法の回避">後置記法の回避</a></h3>
+<p>特に <code>ModuleID</code> 関連で、 sbt 0.13 や 1.x のコード例で後置記法を見ることは珍しく無かった:</p>
 <pre><code class="language-scala">// BAD
 libraryDependencies +=
   "com.github.sbt" % "junit-interface" % "0.13.2" withSources() withJavadoc()
 </code></pre>
-<p>The above will fail to load on sbt 2.x:</p>
+<p>これは、sbt 2.x では起動に失敗する:</p>
 <pre><code class="language-scala">-- Error: /private/tmp/foo/build.sbt:9:61 --------------------------------------
 9 |  "com.github.sbt" % "junit-interface" % "0.13.2" withSources() withJavadoc()
   |                                                             ^^
@@ -234,16 +234,16 @@ libraryDependencies +=
    in class ModuleIDExtra: (): sbt.librarymanagement.ModuleID takes no arguments;
    use dotted invocation instead: (...).withSources()
 </code></pre>
-<p>To fix this, use the normal (dotted) function call notation:</p>
+<p>これを修正するには、普通の (ピリオドを使った) 関数呼び出しの記法で書く:</p>
 <pre><code class="language-scala">// GOOD
 libraryDependencies +=
   ("com.github.sbt" % "junit-interface" % "0.13.2").withSources().withJavadoc()
 </code></pre>
-<h2 id="bare-settings-changes"><a class="header" href="#bare-settings-changes">Bare settings changes</a></h2>
+<h2 id="ベアセッティングの変更点"><a class="header" href="#ベアセッティングの変更点">ベア・セッティングの変更点</a></h2>
 <pre><code class="language-scala">version := "0.1.0"
 scalaVersion := "3.7.3"
 </code></pre>
-<p><em>Bare settings</em>, like the example above, are settings written directly in <code>build.sbt</code> without <code>settings(...)</code>.</p>
+<p><code>settings(...)</code> を介さず、上の例のように <code>build.sbt</code> に直書きされたセッティングを<strong>ベア・セッティング</strong> (bare settings) と呼ぶ。</p>
 <div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
 <div class="admonition-title">
 <div id="admonition-warning-title">
@@ -252,32 +252,32 @@ scalaVersion := "3.7.3"
 <a class="admonition-anchor-link" href="#admonition-warning"></a>
 </div>
 <div>
-<p>In sbt 1.x bare settings were project settings that applied only to the root subproject. In sbt 2.x, the bare settings in <code>build.sbt</code> are common settings that are injected to <strong>all subprojects</strong>.</p>
+<p>sbt 1.x において、ベア・セッティングはルートプロジェクトにのみ適用されるセッティングだった。sbt 2.x においては、<code>build.sbt</code> のベア・セッティングは<strong>全サブプロジェクト</strong>に注入されるコモン・セッティングとして解釈される。</p>
 </div>
 </div>
-<pre><code class="language-scala">name := "root"         // all subprojects will be named root!
-publish / skip := true // all subprojects will be skipped!
+<pre><code class="language-scala">name := "root"         // 全サブプロジェクトの名前が root になる!
+publish / skip := true // 全サブプロジェクトがスキップされる!
 </code></pre>
-<p>To apply some settings to the root subproject only, either define it using multi-project build, or scope the setting under <code>LocalRootProject</code>:</p>
+<p>ルートプロジェクトにのみセッティングを適用させるためには、マルチ・プロジェクトなビルドを定義するか、セッティングを <code>LocalRootProject</code> にスコープ付けさせる:</p>
 <pre><code class="language-scala">LocalRootProject / name := "root"
 LocalRootProject / publish / skip := true
 </code></pre>
-<h3 id="migrating-thisbuild"><a class="header" href="#migrating-thisbuild">Migrating ThisBuild</a></h3>
-<p>In sbt 2.x, bare settings settings should no longer be scoped to <code>ThisBuild</code>. One benefit of the new <em>common settings</em> over <code>ThisBuild</code> is that it would act in a more predictable delegation. These settings are inserted between plugins settings and those defined in <code>settings(...)</code>, meaning they can be used to define settings like <code>Compile / scalacOptions</code>, which was not possible with <code>ThisBuild</code>.</p>
-<h2 id="migrating-to-cached-tasks"><a class="header" href="#migrating-to-cached-tasks">Migrating to cached tasks</a></h2>
-<p>See <a href="../reference/cached-task.html">Cached task</a> reference for details, including the way to opt out of caching.</p>
-<h2 id="migration-away-from-integrationtest"><a class="header" href="#migration-away-from-integrationtest">Migration away from IntegrationTest</a></h2>
-<p>To migrate away from the <code>IntegrationTest</code> configuration, create a separate subproject and implement it as normal test.</p>
-<h2 id="migrating-to-slash-syntax"><a class="header" href="#migrating-to-slash-syntax">Migrating to slash syntax</a></h2>
-<p>sbt 1.x supported both the sbt 0.13 style syntax and the slash syntax. sbt 2.x removes the support for the sbt 0.13 syntax, so use the slash syntax for both sbt shell and in <code>build.sbt</code>:</p>
+<h3 id="thisbuild-のマイグレーション"><a class="header" href="#thisbuild-のマイグレーション">ThisBuild のマイグレーション</a></h3>
+<p>sbt 2.x においては、ベア・セッティングが <code>ThisBuild</code> にスコープ付けされる場面は無くなったはずだ。コモン・セッティングの <code>ThisBuild</code> に対する利点として委譲の振る舞いが、分かりやすくなるということがある。これらのセッティングはプラグインのセッティングと、<code>settings(...)</code> の間に入るため、 <code>Compile / scalacOptions</code> といったセッティングを定義するのに使える。 <code>ThisBuild</code> ではそれは不可能だった。</p>
+<h2 id="キャッシュタスクへのマイグレーション"><a class="header" href="#キャッシュタスクへのマイグレーション">キャッシュ・タスクへのマイグレーション</a></h2>
+<p>キャッシュ化のオプトアウトを含め<a href="../reference/cached-task.html">キャッシュ・タスク</a>参照。</p>
+<h2 id="integrationtest-の廃止"><a class="header" href="#integrationtest-の廃止">IntegrationTest の廃止</a></h2>
+<p><code>IntegrationTest</code> コンフィギュレーションの廃止に対応するためには、別のサブプロジェクトを定義して、普通のテストとして実装するのが推奨される。</p>
+<h2 id="スラッシュ構文へのマイグレーション"><a class="header" href="#スラッシュ構文へのマイグレーション">スラッシュ構文へのマイグレーション</a></h2>
+<p>sbt 1.x は sbt 0.13 スタイル構文とスラッシュ構文の両方をサポートしたきた。2.x で sbt 0.13 構文のサポートが無くなるので、sbt シェルと <code>build.sbt</code> の両方で統一スラッシュ構文を使う:</p>
 <pre><code class="language-scala">&lt;project-id&gt; / Config / intask / key
 </code></pre>
-<p>For example, <code>test:compile</code> will no longer work on the shell. Use <code>Test/compile</code> instead. See <a href="https://eed3si9n.com/syntactic-scalafix-rule-for-unified-slash-syntax/">syntactic Scalafix rule for unified slash syntax</a> for semi-automated migration of <code>build.sbt</code> files.</p>
+<p>具体的には、<code>test:compile</code> という表記はシェルからは使えなくなる。代わりに <code>Test/compile</code> と書く。<code>build.sbt</code> ファイルの半自動的なマイグレーションには<a href="https://eed3si9n.com/ja/syntactic-scalafix-rule-for-unified-slash-syntax/">統一スラッシュ構文のための syntactic Scalafix rule</a> 参照。</p>
 <pre><code class="language-bash">scalafix --rules=https://gist.githubusercontent.com/eed3si9n/57e83f5330592d968ce49f0d5030d4d5/raw/7f576f16a90e432baa49911c9a66204c354947bb/Sbt0_13BuildSyntax.scala *.sbt project/*.scala
 </code></pre>
-<h2 id="cross-building-sbt-plugins"><a class="header" href="#cross-building-sbt-plugins">Cross building sbt plugins</a></h2>
-<p>In sbt 2.x, if you cross build an sbt plugin with Scala 3.x and 2.12.x, it will automatically cross build against sbt 1.x and sbt 2.x:</p>
-<pre><code class="language-scala">// using sbt 2.x
+<h2 id="sbt-プラグインのクロスビルド"><a class="header" href="#sbt-プラグインのクロスビルド">sbt プラグインのクロスビルド</a></h2>
+<p>sbt 2.x では、sbt プラグインを Scala 3.x と 2.12.x に対してクロスビルドすると自動的に sbt 1.x 向けと sbt 2.x 向けにクロスビルドするようになっている。</p>
+<pre><code class="language-scala">// sbt 2.x を使った場合
 lazy val plugin = (projectMatrix in file("plugin"))
   .enablePlugins(SbtPlugin)
   .settings(
@@ -285,10 +285,10 @@ lazy val plugin = (projectMatrix in file("plugin"))
   )
   .jvmPlatform(scalaVersions = Seq("3.6.2", "2.12.20"))
 </code></pre>
-<p>If you use <code>projectMatrix</code>, make sure to move the plugin to a subdirectory like <code>plugin/</code>. Otherwise, the synthetic root project will also pick up the <code>src/</code>.</p>
-<h3 id="cross-building-sbt-plugin-with-sbt-1x"><a class="header" href="#cross-building-sbt-plugin-with-sbt-1x">Cross building sbt plugin with sbt 1.x</a></h3>
-<p>Use sbt 1.10.2 or later, if you want to cross build using sbt 1.x.</p>
-<pre><code class="language-scala">// using sbt 1.x
+<p><code>projectMatrix</code> を使った場合、プラグインを <code>plugin/</code> のようなサブディレクトリに移動させる必要がある。そうしないと、デフォルトのルートプロジェクトも <code>src/</code> を拾ってしまうからだ。</p>
+<h3 id="sbt-1x-を使った-sbt-プラグインのクロスビルド"><a class="header" href="#sbt-1x-を使った-sbt-プラグインのクロスビルド">sbt 1.x を使った sbt プラグインのクロスビルド</a></h3>
+<p>sbt 1.x を使ってクロスビルドする場合 sbt 1.10.2 以降を使う必要がある。</p>
+<pre><code class="language-scala">// sbt 1.x を使った場合
 lazy val scala212 = "2.12.20"
 lazy val scala3 = "3.6.2"
 ThisBuild / crossScalaVersions := Seq(scala212, scala3)
@@ -305,15 +305,15 @@ lazy val plugin = (project in file("plugin"))
     },
   )
 </code></pre>
-<h2 id="changes-to-"><a class="header" href="#changes-to-">Changes to <code>%%</code></a></h2>
-<p>In sbt 2.x, <code>ModuleID</code>'s <code>%%</code> operator has become platform-aware. For JVM subprojects, <code>%%</code> works as before, encoding Scala suffix (for example <code>_3</code>) on Maven repositories.</p>
-<h3 id="migrating--operator"><a class="header" href="#migrating--operator">Migrating <code>%%%</code> operator</a></h3>
-<p>When Scala.JS or Scala Native becomes available on sbt 2.x, <code>%%</code> will encode both the Scala version (such as <code>_3</code>) and the platform suffix (<code>_sjs1</code> etc). As a result, <code>%%%</code> can be replaced with <code>%%</code>:</p>
+<h2 id="-の変更点"><a class="header" href="#-の変更点"><code>%%</code> の変更点</a></h2>
+<p>sbt 2.x において <code>ModuleID</code> の <code>%%</code> 演算子は多プラットフォームに対応するようになった。JVM系のサブプロジェクトは、<code>%%</code> は以前同様に Maven リポジトリにおける (<code>_3</code> のような) Scala バージョンの接尾辞をエンコードする。</p>
+<h3 id="-演算子のマイグレーション"><a class="header" href="#-演算子のマイグレーション"><code>%%%</code> 演算子のマイグレーション</a></h3>
+<p>Scala.JS や Scala Native の sbt 2.x の対応ができるようになった場合、<code>%%</code> は (<code>_3</code> のような) Scala バージョンと (<code>_sjs1</code> その他の) プラットフォーム接尾辞をエンコードできるようになっている。そのため、<code>%%%</code> は <code>%%</code> に置き換えれるようになるはずだ:</p>
 <pre><code class="language-scala">libraryDependencies += "org.scala-js" %% "scalajs-dom" % "2.8.0"
 </code></pre>
-<p>Use <code>.platform(Platform.jvm)</code> in case where JVM libraries are needed.</p>
-<h2 id="changes-to-target"><a class="header" href="#changes-to-target">Changes to <code>target</code></a></h2>
-<p>In sbt 2.x, the <code>target</code> directory is unified to be a single <code>target/</code> directory in the working directory, and each subproject creates a subdirectory encoding platform, Scala version, and the subproject id. To absorb this change in scripted tests, <code>exists</code>, <code>absent</code>, and <code>delete</code> now supports glob expression <code>**</code>, as well as <code>||</code>.</p>
+<p>JVM ライブラリが必要な場合は <code>.platform(Platform.jvm)</code> を使う。</p>
+<h2 id="target-に関する変更"><a class="header" href="#target-に関する変更"><code>target</code> に関する変更</a></h2>
+<p>sbt 2.x では、<code>target</code> ディレクトリが単一の <code>target/</code> ディレクトリに統一され、それぞれのサブプロジェクトがプラットフォーム、Scala バージョン、id をエンコードしたサブディレクトリを作る。scripted test でこの変更点を吸収するために、<code>exists</code>、<code>absent</code>、<code>delete</code> のコマンドは glob式 <code>**</code> および <code>||</code> をサポートする。</p>
 <pre><code class="language-bash"># before
 $ absent target/out/jvm/scala-3.3.1/clean-managed/src_managed/foo.txt
 $ exists target/out/jvm/scala-3.3.1/clean-managed/src_managed/bar.txt
@@ -322,13 +322,13 @@ $ exists target/out/jvm/scala-3.3.1/clean-managed/src_managed/bar.txt
 $ absent target/**/src_managed/foo.txt
 $ exists target/**/src_managed/bar.txt
 
-# either is ok
+# どちらでも ok
 $ exists target/**/proj/src_managed/bar.txt || proj/target/**/src_managed/bar.txt
 </code></pre>
-<h2 id="the-plugincompat-technique"><a class="header" href="#the-plugincompat-technique">The PluginCompat technique</a></h2>
-<p>To use the same <code>*.scala</code> source but target both sbt 1.x and 2.x, we can create a shim, for example an object named <code>PluginCompat</code> in both <code>src/main/scala-2.12/</code> and <code>src/main/scala-3/</code>.</p>
-<h3 id="migrating-classpath-type"><a class="header" href="#migrating-classpath-type">Migrating Classpath type</a></h3>
-<p>sbt 2.x changed the <code>Classpath</code> type to be an alias of the <code>Seq[Attributed[xsbti.HashedVirtualFileRef]]</code> type. The following is a shim created to work with classpaths from both sbt 1.x and 2.x.</p>
+<h2 id="plugincompat-技法"><a class="header" href="#plugincompat-技法">PluginCompat 技法</a></h2>
+<p>同じ <code>*.scala</code> ソースから sbt 1.x と 2.x 向けのプラグインを作るには「詰め木」的なコードとして <code>PluginCompat</code> という名前のオブジェクトを<code>src/main/scala-2.12/</code> と <code>src/main/scala-3/</code> の両方に入れて違いを吸収することができる。</p>
+<h3 id="classpath-型のマイグレーション"><a class="header" href="#classpath-型のマイグレーション">Classpath 型のマイグレーション</a></h3>
+<p>sbt 2.x からは <code>Classpath</code> 型が<code>Seq[Attributed[xsbti.HashedVirtualFileRef]]</code> 型のエイリアスとなった。以下は、sbt 1.x と 2.x の両方のクラスパスに対応するための詰め木だ。</p>
 <pre><code class="language-scala">// src/main/scala-3/PluginCompat.scala
 
 package sbtfoo
@@ -351,7 +351,7 @@ private[sbtfoo] object PluginCompat:
     toNioPaths(cp).map(_.toFile())
 end PluginCompat
 </code></pre>
-<p>and here's for sbt 1.x:</p>
+<p>これが sbt 1.x 用だ:</p>
 <pre><code class="language-scala">// src/main/scala-2.12/PluginCompat.scala
 
 package sbtfoo
@@ -377,7 +377,7 @@ private[sbtfoo] object PluginCompat {
   }
 }
 </code></pre>
-<p>Now we can import <code>PluginCompat.*</code> and use <code>toNioPaths(...)</code> etc to absorb the differences between sbt 1.x and 2.x. The above demonstrates how we can absorb the classpath type change, and convert it into a vector of NIO Paths.</p>
+<p>これで <code>PluginCompat.*</code> を import して <code>toNioPaths(...)</code> などを使って sbt 1.x と 2.x の違いを吸収できる。特にこれは、クラスパス型の違いを吸収して NIO Path ベクトルに変換できることを示している。</p>
 
                     </main>
 
