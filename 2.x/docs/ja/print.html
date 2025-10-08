@@ -1755,32 +1755,32 @@ private[sbtfoo] object PluginCompat {
 }
 </code></pre>
 <p>これで <code>PluginCompat.*</code> を import して <code>toNioPaths(...)</code> などを使って sbt 1.x と 2.x の違いを吸収できる。特にこれは、クラスパス型の違いを吸収して NIO Path ベクトルに変換できることを示している。</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="concepts"><a class="header" href="#concepts">Concepts</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="command"><a class="header" href="#command">Command</a></h1>
-<p>A <em>command</em> is a system-level building block of sbt, often used to capture user interaction or IDE interaction.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="コンセプト"><a class="header" href="#コンセプト">コンセプト</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="コマンド"><a class="header" href="#コマンド">コマンド</a></h1>
+<p><strong>コマンド</strong>は、システム・レベルでの sbt の構成要素で、ユーザや IDE とのやり取りを捕捉する。</p>
 <p><img src="concepts/../files/command.svg" style="width: 50%;"></img></p>
-<p>We can think of each command as a <code>State =&gt; State</code> function. In sbt, the state represents the following:</p>
+<p>便宜的に、各コマンドは <code>State =&gt; State</code> への関数だと考えることができる。 sbt において状態 (state) は以下を表す。</p>
 <ol>
-<li>Build structure (<code>build.sbt</code> etc)</li>
-<li>Your disk (source code, JAR outputs, etc)</li>
+<li>ビルド構造 (<code>build.sbt</code> など)</li>
+<li>ディスク (ソースコード、JAR 成果物など)</li>
 </ol>
-<p>Thus, a command would typically modify either the build structure or the disk. For example, the <code>set</code> command can apply a setting to modify the build strcuture:</p>
+<p>そのため、コマンドは通常ビルド構造もしくはディスクを変更する。例えば、<code>set</code> コマンドはセッティングを適用してビルド構造を変更する。</p>
 <pre><code class="language-scala">&gt; set name := "foo"
 </code></pre>
-<p>The <code>act</code> command can lift a task such as <code>compile</code> into a command:</p>
+<p><code>act</code> コマンドは、<code>compile</code> のようなタスクをコマンドに持ち上げる:</p>
 <pre><code class="language-scala">&gt; compile
 </code></pre>
-<p>The compilation would read from the disk and write outputs, or display error messages on the screen.</p>
-<h2 id="commands-are-sequentially-processed"><a class="header" href="#commands-are-sequentially-processed">Commands are sequentially processed</a></h2>
-<p>Because there is only one state, a characteristic of commands is that they are executed one at a time.</p>
+<p>コンパイルはディスクからの読み込みを行い、アウトプットをディスクに書き込むか画面にエラーメッセージを表示する。</p>
+<h2 id="コマンドは逐次処理される"><a class="header" href="#コマンドは逐次処理される">コマンドは逐次処理される</a></h2>
+<p>状態は 1つしか存在しないものなので、コマンドは 1つづつ実行されるという特徴がある。</p>
 <p><img src="concepts/../files/command2.svg" alt="command" /></p>
-<p>There are some execptions to this rule, but generally commands run sequentially. One mental image that might be useful is that a command is similar to a cashier taking an order in a cafe, and it will be processed in the sequence it was received.</p>
-<h2 id="tasks-run-in-parallel"><a class="header" href="#tasks-run-in-parallel">Tasks run in parallel</a></h2>
-<p>As mentioned above, the <code>act</code> command translates tasks into the command level. While doing so, the <code>act</code> command will broadcast the task across the aggregated subprojects and run independent tasks in parallel.</p>
-<p>Similarly, the <code>reload</code> command that runs during the startup of a session will initialize the settings in parallel.</p>
+<p>一部例外もあるが、基本的にコマンドは逐次実行される。メンタルモデルとしては、コマンドはカフェで注文を受け取るレジ係で、注文の順番に処理が行われると考えることができる。</p>
+<h2 id="タスクは並列実行される"><a class="header" href="#タスクは並列実行される">タスクは並列実行される</a></h2>
+<p>前述の通り、<code>act</code> コマンドはタスクをコマンドのレベルに持ち上げる。その際に <code>act</code> コマンドは、集約されたサブプロジェクトにタスクを転送して、独立したタスクを並列実装する。</p>
+<p>同様に、セッション起動時に実行される <code>reload</code> コマンドはセッティングを並列に初期化する。</p>
 <p><img src="concepts/../files/act.svg" alt="act" /></p>
-<h2 id="the-role-of-sbt-server"><a class="header" href="#the-role-of-sbt-server">The role of sbt server</a></h2>
-<p>sbt server is a service that accepts commands from either the command line or a network API called Build Server Protocol. This mechanism allows both the build user and IDEs to share the same sbt session.</p>
+<h2 id="sbt-server-の役割"><a class="header" href="#sbt-server-の役割">sbt server の役割</a></h2>
+<p>sbt server は、コマンドラインもしくは Build Server Protocol と呼ばれるネットワーク API 経由からコマンドを受け取ることができるサービスだ。この機構によって、ビルドユーザと IDE が同一の sbt セッションを共有することができる。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="cross-building"><a class="header" href="#cross-building">Cross building</a></h1>
 <p><em>Cross building</em> refers to the idea of building multiple targets from the same set of source file. This includes Scala cross building, targeting multiple versions of Scala releases; platform cross building, targeting JVM, Scala.JS, and Scala Native; and custom virtual axes like Spark versions.</p>
 <h2 id="using-cross-built-libraries"><a class="header" href="#using-cross-built-libraries">Using cross-built libraries</a></h2>
@@ -4731,7 +4731,7 @@ BareBuildSyntax.dependsOn(jmhRef)
 <h3 id="-2"><a class="header" href="#-2"><code>%%%</code></a></h3>
 <p>This is defined in <a href="https://github.com/portable-scala/sbt-platform-deps">sbt-platform-deps</a> in sbt 1.x.</p>
 <h2 id="c"><a class="header" href="#c">C</a></h2>
-<h3 id="command-1"><a class="header" href="#command-1">Command</a></h3>
+<h3 id="コマンド-1"><a class="header" href="#コマンド-1">コマンド</a></h3>
 <p>A system-level building block of sbt, often used to capture user interaction or IDE interaction. See <a href="appendix/../concepts/command.html">Command</a>.</p>
 <h3 id="cross-building-1"><a class="header" href="#cross-building-1">Cross building</a></h3>
 <p>The idea of building multiple targets from the same set of source file. This includes Scala cross building, targetting multiple versions of Scala releases; platform cross building, targetting JVM, Scala.JS, and Scala Native; and custom virtual axis like Spark versions.</p>
