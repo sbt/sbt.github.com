@@ -1781,24 +1781,24 @@ private[sbtfoo] object PluginCompat {
 <p><img src="concepts/../files/act.svg" alt="act" /></p>
 <h2 id="sbt-server-の役割"><a class="header" href="#sbt-server-の役割">sbt server の役割</a></h2>
 <p>sbt server は、コマンドラインもしくは Build Server Protocol と呼ばれるネットワーク API 経由からコマンドを受け取ることができるサービスだ。この機構によって、ビルドユーザと IDE が同一の sbt セッションを共有することができる。</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="cross-building"><a class="header" href="#cross-building">Cross building</a></h1>
-<p><em>Cross building</em> refers to the idea of building multiple targets from the same set of source file. This includes Scala cross building, targeting multiple versions of Scala releases; platform cross building, targeting JVM, Scala.JS, and Scala Native; and custom virtual axes like Spark versions.</p>
-<h2 id="using-cross-built-libraries"><a class="header" href="#using-cross-built-libraries">Using cross-built libraries</a></h2>
-<p>To use a library built against multiple versions of Scala, double the first <code>%</code> in a ModuleID to be <code>%%</code>. This tells sbt that it should append the Scala ABI (application binary interface) suffix to the dependency's name. For example:</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="クロスビルド"><a class="header" href="#クロスビルド">クロスビルド</a></h1>
+<p>同じソースファイルの集合から複数のターゲットに対してビルドすることを<strong>クロスビルド</strong>と呼ぶ。これは、複数の Scala リリースを対象とする Scala クロスビルド、JVM、Scala.JS、Scala Native を対象とするプラットフォーム・クロスビルド、Spark バージョンのような仮想軸を含む。</p>
+<h2 id="クロスビルドされたライブラリの使用"><a class="header" href="#クロスビルドされたライブラリの使用">クロスビルドされたライブラリの使用</a></h2>
+<p>複数の Scala バージョンに対してビルドされたライブラリを使うには ModuleID の最初の <code>%</code> を 2重に <code>%%</code> とする。これは、依存性の名前に Scala ABI (アプリケーション・バイナリ・インターフェイス) サフィックスを付随するという sbt への指示となる。具体例を用いて説明すると:</p>
 <pre><code class="language-scala">libraryDependencies += "org.typelevel" %% "cats-effect" % "3.5.4"
 </code></pre>
-<p>When the current Scala version is Scala 3.x, the above is equivalent to the following:</p>
+<p>現行 Scala バージョンが Scala 3.x であるならば、上の例は以下と等価となる:</p>
 <pre><code class="language-scala">libraryDependencies += "org.typelevel" % "cats-effect_3" % "3.5.4"
 </code></pre>
-<p>See <a href="concepts/../reference/cross-building-setup.html">cross building setup</a> for more details on the setup.</p>
-<h2 id="historical-context"><a class="header" href="#historical-context">Historical context</a></h2>
-<p>In the earlier years of Scala (pre-Scala 2.9), the Scala library did not maintain binary compatibility even at the patch level, so each time a new Scala version was released, the libraries had to be re-released against the new version of Scala. This meant that a library user needed to pick a specific version that was compatible with the Scala version they were using.</p>
-<p>Even after Scala 2.9.x, the Scala library did not maintain the binary compatibility at minor version level, so the libraries compiled against Scala 2.10.x was not compatible with 2.11.x.</p>
-<p>To workaround this problem, sbt developed cross building mechanism such that:</p>
+<p>セットアップに関しては、<a href="concepts/../reference/cross-building-setup.html">cross building setup</a> 参照。</p>
+<h2 id="歴史的経緯"><a class="header" href="#歴史的経緯">歴史的経緯</a></h2>
+<p>Scala の初期時代 (Scala 2.9 以前) は、Scala 標準ライブラリがパッチレベルでもバイナリ互換性を保たなかったため、新しい Scala バージョンがリリースされるたびに全ライブラリが、新しい Scala バージョンに対して再リリースされる必要があった。そのため、ライブラリのユーザ側は、自分が使う Scala バージョンに互換の特定のライブラリのバージョンを選ぶ必要があった。</p>
+<p>Scala 2.9.x 以降も Scala 標準ライブラリはマイナーレベルでの互換性を持たなかったため、Scala 2.10.x に対してコンパイルされたライブラリは 2.11.x と互換性を持たなかった。</p>
+<p>これらの問題の対策として、sbt は以下の特徴を持つクロスビルド機構を開発した:</p>
 <ul>
-<li>Same set of source files can be compiled against multiple versions of Scala</li>
-<li>Define a convention to append ABI version (e.g. <code>_2.12</code>) to the Maven artifact</li>
-<li>Later this mechanism was extended to support Scala.JS and other platforms</li>
+<li>同じソース・ファイルの集合から、複数の Scala バージョンに対してコンパイルできる</li>
+<li>Maven のアーティファクト名に ABI バージョン (<code>_2.12</code> など) を付随するという慣例を定義した</li>
+<li>この機構は Scala.JS その他のプラットフォームもサポートするよう拡張された</li>
 </ul>
 <h2 id="project-matrix"><a class="header" href="#project-matrix">Project matrix</a></h2>
 <p>sbt 2.x introduces project matrix, which enables cross building to happen in parallel.</p>
@@ -1812,7 +1812,7 @@ lazy val core = (projectMatrix in file("core"))
   )
   .jvmPlatform(scalaVersions = Seq("3.7.3", "2.13.17"))
 </code></pre>
-<p>See <a href="concepts/../reference/cross-building-setup.html">cross building setup</a> for more details on the setup.</p>
+<p>セットアップに関しては、<a href="concepts/../reference/cross-building-setup.html">cross building setup</a> 参照。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-クエリ-1"><a class="header" href="#sbt-クエリ-1">sbt クエリ</a></h1>
 <p>sbt 2.x extends the slash syntax to enable aggregation of subprojects:</p>
 <p><em>act</em> <code>::=</code> [ <em>query</em> <code>/</code> ] [ <em>config</em> <code>/</code> ] [ <em>in-task</em> <code>/</code> ] ( <em>taskKey</em> | <em>settingKey</em> )</p>
@@ -3265,7 +3265,7 @@ someKey := Def.uncached {
 <p>sbt 2.x implements Bazel-compatible gRPC interface, which works with number of backend both open source and commercial. See <a href="reference/./remote-cache-setup.html">Remote cache setup</a> for more details.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="cross-building-setup"><a class="header" href="#cross-building-setup">Cross building setup</a></h1>
 <p>This page covers cross building setup. See <a href="reference/../concepts/cross-building.html">Cross building</a> for general explanation.</p>
-<h2 id="using-cross-built-libraries-1"><a class="header" href="#using-cross-built-libraries-1">Using cross-built libraries</a></h2>
+<h2 id="using-cross-built-libraries"><a class="header" href="#using-cross-built-libraries">Using cross-built libraries</a></h2>
 <p>To use a library built against multiple versions of Scala, double the first <code>%</code> in a ModuleID to be <code>%%</code>. This tells sbt that it should append the current version of Scala being used to build the library to the dependency’s name. For example:</p>
 <pre><code class="language-scala">libraryDependencies += "org.typelevel" %% "cats-effect" % "3.5.4"
 </code></pre>
@@ -4733,7 +4733,7 @@ BareBuildSyntax.dependsOn(jmhRef)
 <h2 id="c"><a class="header" href="#c">C</a></h2>
 <h3 id="コマンド-1"><a class="header" href="#コマンド-1">コマンド</a></h3>
 <p>A system-level building block of sbt, often used to capture user interaction or IDE interaction. See <a href="appendix/../concepts/command.html">Command</a>.</p>
-<h3 id="cross-building-1"><a class="header" href="#cross-building-1">Cross building</a></h3>
+<h3 id="クロスビルド-1"><a class="header" href="#クロスビルド-1">クロスビルド</a></h3>
 <p>The idea of building multiple targets from the same set of source file. This includes Scala cross building, targetting multiple versions of Scala releases; platform cross building, targetting JVM, Scala.JS, and Scala Native; and custom virtual axis like Spark versions.</p>
 <h2 id="d"><a class="header" href="#d">D</a></h2>
 <h3 id="dependency-resolution"><a class="header" href="#dependency-resolution">Dependency resolution</a></h3>

@@ -1785,7 +1785,7 @@ private[sbtfoo] object PluginCompat {
 <p>sbt server is a service that accepts commands from either the command line or a network API called Build Server Protocol. This mechanism allows both the build user and IDEs to share the same sbt session.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="cross-building"><a class="header" href="#cross-building">Cross building</a></h1>
 <p><em>Cross building</em> refers to the idea of building multiple targets from the same set of source file. This includes Scala cross building, targeting multiple versions of Scala releases; platform cross building, targeting JVM, Scala.JS, and Scala Native; and custom virtual axes like Spark versions.</p>
-<h2 id="using-cross-built-libraries"><a class="header" href="#using-cross-built-libraries">Using cross-built libraries</a></h2>
+<h2 id="using-the-cross-built-libraries"><a class="header" href="#using-the-cross-built-libraries">Using the cross-built libraries</a></h2>
 <p>To use a library built against multiple versions of Scala, double the first <code>%</code> in a ModuleID to be <code>%%</code>. This tells sbt that it should append the Scala ABI (application binary interface) suffix to the dependency's name. For example:</p>
 <pre><code class="language-scala">libraryDependencies += "org.typelevel" %% "cats-effect" % "3.5.4"
 </code></pre>
@@ -3267,7 +3267,7 @@ someKey := Def.uncached {
 <p>sbt 2.x implements Bazel-compatible gRPC interface, which works with number of backend both open source and commercial. See <a href="reference/./remote-cache-setup.html">Remote cache setup</a> for more details.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="cross-building-setup"><a class="header" href="#cross-building-setup">Cross building setup</a></h1>
 <p>This page covers cross building setup. See <a href="reference/../concepts/cross-building.html">Cross building</a> for general explanation.</p>
-<h2 id="using-cross-built-libraries-1"><a class="header" href="#using-cross-built-libraries-1">Using cross-built libraries</a></h2>
+<h2 id="using-cross-built-libraries"><a class="header" href="#using-cross-built-libraries">Using cross-built libraries</a></h2>
 <p>To use a library built against multiple versions of Scala, double the first <code>%</code> in a ModuleID to be <code>%%</code>. This tells sbt that it should append the current version of Scala being used to build the library to the dependency’s name. For example:</p>
 <pre><code class="language-scala">libraryDependencies += "org.typelevel" %% "cats-effect" % "3.5.4"
 </code></pre>
