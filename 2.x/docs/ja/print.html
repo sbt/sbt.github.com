@@ -1814,11 +1814,11 @@ lazy val core = (projectMatrix in file("core"))
 </code></pre>
 <p>セットアップに関しては、<a href="concepts/../reference/cross-building-setup.html">cross building setup</a> 参照。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-クエリ-1"><a class="header" href="#sbt-クエリ-1">sbt クエリ</a></h1>
-<p>sbt 2.x extends the slash syntax to enable aggregation of subprojects:</p>
+<p>sbt 2.x はスラッシュ構文を拡張してサブプロジェクトの集約を可能とする:</p>
 <p><em>act</em> <code>::=</code> [ <em>query</em> <code>/</code> ] [ <em>config</em> <code>/</code> ] [ <em>in-task</em> <code>/</code> ] ( <em>taskKey</em> | <em>settingKey</em> )</p>
-<p>In other words, sbt query is a new way of writing the subproject-axis.</p>
-<h3 id="subproject-reference"><a class="header" href="#subproject-reference">Subproject reference</a></h3>
-<p>A subproject reference works a query to select the subproject:</p>
+<p>言い換えると、sbt クエリはサブプロジェクト軸の新しい書き方だと言える。</p>
+<h3 id="サブプロジェクトの参照"><a class="header" href="#サブプロジェクトの参照">サブプロジェクトの参照</a></h3>
+<p>サブプロジェクトの参照は、サブプロジェクトを選択するクエリとしてそのまま使える:</p>
 <div id="admonition-buildsbt-example-1" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-example-1-title">
 <div class="admonition-title">
 <div id="admonition-buildsbt-example-1-title">
@@ -1833,26 +1833,26 @@ lazy val foo = project
 </code></pre>
 </div>
 </div>
-<p>Given the above build, we can run tests on <code>foo</code> subproject as follows, which is the same syntax as it was in sbt 1.x:</p>
+<p>上のようなビルドがあるとき、sbt 1.x と同様の構文を使って <code>foo</code> サブプロジェクトのテストを実行できる:</p>
 <pre><code>foo/test
 </code></pre>
-<h3 id="-wildcard"><a class="header" href="#-wildcard"><code>...</code> wildcard</a></h3>
-<p><code>...</code> wildcard matches to any characters, and can be combined with other letters and numbers to filter down the root aggregate list. For example, we can run tests on all subproject that starts with <code>foo</code> as follows:</p>
+<h3 id="-ワイルドカード"><a class="header" href="#-ワイルドカード"><code>...</code> ワイルドカード</a></h3>
+<p><code>...</code> ワイルドカードはどの文字列にもマッチして、他の文字や数字とも組み合わせて、ルートの集約リストを絞り込むことができる。例えば、以下のようにして <code>foo</code> で始まる全サブプロジェクトのテストを実行することができる:</p>
 <pre><code>foo.../test
 </code></pre>
-<div id="admonition-note--vs-" class="admonition admonish-note" role="note" aria-labelledby="admonition-note--vs--title">
+<div id="admonition-備考--vs-" class="admonition admonish-note" role="note" aria-labelledby="admonition-備考--vs--title">
 <div class="admonition-title">
-<div id="admonition-note--vs--title">
-<p>Note: * vs ...</p>
+<div id="admonition-備考--vs--title">
+<p>備考: * vs ...</p>
 </div>
-<a class="admonition-anchor-link" href="concepts/sbt-query.html#admonition-note--vs-"></a>
+<a class="admonition-anchor-link" href="concepts/sbt-query.html#admonition-備考--vs-"></a>
 </div>
 <div>
-<p>sbt query intentionally uses <code>...</code> (dot dot dot) instead of more intuitive <code>*</code> (asterisk) because <code>*</code> is often used in a shell as a wildcard to match existing files or directories. This would require quoting, and forgetting to quote <code>*/test</code> would match to something like <code>src/test</code>.</p>
+<p>sbt クエリは、直感的に分かりやすそうな <code>*</code> (アスタリスク) でなく、意図的に <code>...</code> (ドット・ドット・ドット) を採用する。これは <code>*</code> がシェル環境においてワイルドカードとして使われることが多いからだ。そのため、常にクォートで囲む必要があり、また <code>*/test</code> をクォートし忘れると <code>src/test</code> のようなディレクトリにマッチしてしまう可能性が高い。</p>
 </div>
 </div>
-<h3 id="scalabinaryversion-parameter"><a class="header" href="#scalabinaryversion-parameter"><code>@scalaBinaryVersion</code> parameter</a></h3>
-<p><code>@scalaBinaryVersion</code> parameter matches to the subproject's <code>scalaBinaryVersion</code> setting.</p>
+<h3 id="scalabinaryversion-パラメータ"><a class="header" href="#scalabinaryversion-パラメータ"><code>@scalaBinaryVersion</code> パラメータ</a></h3>
+<p><code>@scalaBinaryVersion</code> パラメータは、サブプロジェクトの <code>scalaBinaryVersion</code> セッティングにマッチする。</p>
 <div id="admonition-example" class="admonition admonish-example" role="note" aria-labelledby="admonition-example-title">
 <div class="admonition-title">
 <div id="admonition-example-title">
@@ -1878,10 +1878,10 @@ lazy val bar = projectMatrix
 </code></pre>
 </div>
 </div>
-<p>For example, we can run tests on all 3.x subprojects as follows:</p>
+<p>例えば、全ての 3.x サブプロジェクトのテストを以下のように実行できる:</p>
 <pre><code>...@scalaBinaryVersion=3/test
 </code></pre>
-<p>This can be used from a terminal as follows:</p>
+<p>以下のように、ターミナル上からも使うことができる:</p>
 <pre><code class="language-bash">$ sbt ...@scalaBinaryVersion=3/test
 [info] entering *experimental* thin client - BEEP WHIRR
 [info] terminate the server with `shutdown`
@@ -1895,7 +1895,7 @@ example.ExampleSuite:
   + Scala version 0.003s
 [info] Passed: Total 1, Failed 0, Errors 0, Passed 1
 </code></pre>
-<p>This lets us filter down the aggregated subprojects, which could be a lot using <code>projectMatrix</code>.</p>
+<p><code>projectMatrix</code> を使っていると集約サブプロジェクトの絞り込みが欲しくなる場面が多々あるが、sbt クエリがこれが解決する。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="caching"><a class="header" href="#caching">Caching</a></h1>
 <p>sbt 2.0 introduces hybrid local/remote cache system, which can cache the task results to local disk and Bazel-compatible remote cache. Throughout sbt releases it has implemented various caches, like <code>update</code> cache, incremental compilation, but sbt 2.x's cache is a significant step change for a few reasons:</p>
 <ol>
