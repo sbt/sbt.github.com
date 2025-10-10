@@ -215,6 +215,8 @@
 <li><strong>Machine-wide</strong>. sbt 2.x disk cache is shared among all builds on a machine.</li>
 <li><strong>Remote-ready</strong>. In sbt 2.x, the cache storage is configured separately such that all cacheable tasks are automatically remote-cache-ready.</li>
 </ol>
+<p>The overall objective of caching is to flatten the build and test time growth as the code size increases compared to the status quo.
+For this reason, speedup ratio would depend on the code size etc, but aiming for 5x to 20x is achievable for builds that currently takes 10+ minutes to test.</p>
 <h2 id="basics-of-caching"><a class="header" href="#basics-of-caching">Basics of caching</a></h2>
 <p>The basic idea is treat as if the build process is a pure function that takes input <code>(A1, A2, A3, ...)</code> and return some outputs <code>(R1, List(O1, O2, O3, ...))</code>. For example, we can take a list of source files, Scala version, and produce a <code>*.jar</code> file at the end. If the assumption holds, then for the same inputs, we can memorize the ouput JAR for everyone. We are interested in this technique because using the memorized output JAR would be faster than performing the actual task like Scala compilation etc.</p>
 <h3 id="hermetic-build"><a class="header" href="#hermetic-build">Hermetic build</a></h3>
@@ -226,7 +228,8 @@
 
 someKey := name.value + version.value + "!"
 </code></pre>
-<p>In sbt 2.x, the task result will be automatically cached based on the two settings <code>name</code> and <code>version</code>. The first time we run the task it will be executed onsite, but the second time onward, it will use the disk cache:</p>
+<p>In sbt 2.x, the task result will be cached based on the values of two settings <code>name</code> and <code>version</code>.
+The first time we run the task, it will be executed onsite, but it will use the disk cache from the second time onwards:</p>
 <pre><code>sbt:demo&gt; show someKey
 [info] demo0.1.0-SNAPSHOT!
 [success] elapsed time: 0 s, cache 0%, 1 onsite task
@@ -234,8 +237,12 @@ sbt:demo&gt; show someKey
 [info] demo0.1.0-SNAPSHOT!
 [success] elapsed time: 0 s, cache 100%, 1 disk cache hit
 </code></pre>
-<h3 id="caching-is-serialization-hard"><a class="header" href="#caching-is-serialization-hard">Caching is serialization-hard</a></h3>
-<p>To participate in the automatic caching, the input keys (e.g. <code>name</code> and <code>version</code>) must provide a given for <code>sjsonnew.HashWriter</code> typeclass and return type must provide a given for <code>sjsonnew.JsonFormat</code>. <a href="https://www.scala-sbt.org/contraband/">Contraband</a> can be used to generate sjson-new codecs.</p>
+<h3 id="caching-is-just-as-hard-as-serialization"><a class="header" href="#caching-is-just-as-hard-as-serialization">Caching is just as hard as serialization</a></h3>
+<p>To participate in the automatic caching,
+the input keys (e.g. <code>name</code> and <code>version</code>) must provide a given　for
+<code>sjsonnew.HashWriter</code> typeclass and return type must provide a given for
+<code>sjsonnew.JsonFormat</code>.
+<a href="https://www.scala-sbt.org/contraband/">Contraband</a> can be used to generate sjson-new codecs.</p>
 <h2 id="caching-files"><a class="header" href="#caching-files">Caching files</a></h2>
 <p>Caching files (e.g. <code>java.io.File</code>) requires its own consideration, not because it's technically difficult, but mostly because of the ambiguity and assumptions when files are involved. When we say a "file" it could actually mean:</p>
 <ol>
@@ -250,7 +257,7 @@ sbt:demo&gt; show someKey
 </ul>
 <p>However, for the purpose of hermetic build, neither is great to represent a list of files. Having just the filename alone doesn't guarantee that the file will be the same, and carrying the entire content of the files is too inefficient in a JSON etc.</p>
 <p>This is where the mysterious third option, a unique proof of file comes in handy. In addition to the relative path, <code>HashedVirtualFileRef</code> tracks the SHA-256 content hash and the file size. This can easily be serialized to JSON yet we can reference the exact file.</p>
-<h3 id="the-effect-of-file-creation"><a class="header" href="#the-effect-of-file-creation">The effect of file creation</a></h3>
+<h3 id="the-effect-of-file"><a class="header" href="#the-effect-of-file">The effect of file</a></h3>
 <p>There are many tasks that generate file that do not use <code>VirtualFile</code> as the return type. For example, <code>compile</code> returns <code>Analysis</code> instead, and <code>*.class</code> file generation happens as a <em>side effect</em> in sbt 1.x.</p>
 <p>To participate in caching, we need to declare these effects as something we care about.</p>
 <pre><code class="language-scala">someKey := {
