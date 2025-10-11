@@ -209,45 +209,43 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="sbt"><a class="header" href="#sbt">sbt</a></h1>
-<p>See <a href="../guide/basic-tasks.html">Basic Tasks</a> in the Getting Started Guide for an intro to the basics.</p>
-<h2 id="synopsis"><a class="header" href="#synopsis">Synopsis</a></h2>
+<p>基本的な導入としては、sbt 入門ガイドの<a href="../guide/basic-tasks.html">基本タスク</a>をまず読んでみてほしい。</p>
+<h2 id="書式"><a class="header" href="#書式">書式</a></h2>
 <p><code>sbt</code><br> <code>sbt</code> <em>command</em> <em>args</em><br> <code>sbt --server</code><br> <code>sbt --script-version</code></p>
-<h2 id="description"><a class="header" href="#description">Description</a></h2>
-<p>sbt is a simple build tool created originally for Scala and Java. It lets us declare subprojects and their various dependencies and custom tasks to ensure that we'll always get a fast, repeatable build.</p>
-<h3 id="sbt-runner-and-sbt-server"><a class="header" href="#sbt-runner-and-sbt-server">sbt runner and sbt server</a></h3>
+<h2 id="説明"><a class="header" href="#説明">説明</a></h2>
+<p>sbt は最初は Scala と Java のために作られたシンプルなビルド・ツールだ。sbt はサブプロジェクト、様々な依存性、カスタムタスクなどを宣言することで高速かつ再現性の高いビルドが得られることを保証する。</p>
+<h3 id="sbt-runner-と-sbt-server"><a class="header" href="#sbt-runner-と-sbt-server">sbt runner と sbt server</a></h3>
 <ul>
-<li>sbt runner is a system shell script named <code>sbt</code>, or <code>sbt.bat</code> on Windows. That is capable of running <em>any version of sbt</em>. This is sometimes called "sbt-the-shell-script".
+<li>sbt runner は <code>sbt</code> という名前のシステム・シェル・スクリプトで、Windows では <code>sbt.bat</code> と呼ばれる。これは、どのバージョンの sbt でも実行することが可能で、これは「sbt という名前のシェル・スクリプト」とも呼ばれる。
 <ul>
-<li>When sbt 2.x is detected, sbt runner executes in a client mode, typically using sbtn, a GraalVM native implementation of the thin client program.</li>
-<li>sbt runner also executes sbt launcher, a launcher that is capable of running <em>any verions of sbt</em>.</li>
-<li>When you install sbt from a installer, what you're installing is the sbt runner.</li>
+<li>sbt 2.x が検知されると、sbt runner は、典型的には GraalVM ネイティブで実装されたクライアント・プログラムである sbtn を用いて、クライアント・モードで実行する。</li>
+<li>sbt runner は sbt ランチャーという、全てのバージョンの sbt を起動できるランチャーを実行する。</li>
+<li>sbt をインストールした場合、インストールされるのは sbt runner だ。</li>
 </ul>
 </li>
-<li>sbt server is sbt's main artifact, and the actual build tool.
+<li>sbt server は、sbt の本体で、実際のビルドツールだ。
 <ul>
-<li>The sbt version is determined by <code>project/build.properties</code> in each working directory.</li>
-<li>sbt server accepts commands from sbtn, network API, or via its own sbt shell.</li>
+<li>sbt のバージョンは、それぞれのワーキング・ディレクトリ内にある <code>project/build.properties</code> によって決定される。</li>
+<li>sbt server は、sbtn、ネットワーク API、もしくは独自の sbt シェルのいずれかからコマンドを受け取る。</li>
 </ul>
 </li>
 </ul>
 <pre><code>sbt.version=2.0.0-RC6
 </code></pre>
-<p>This mechanism allows builds to be configured to a specific version of sbt, and everyone working on the project would use the same build semantics, regardless of the sbt runner installed on their machine.</p>
-<p>This also means that some features are implemented at sbt runner or sbtn level, while other features are implemented at sbt server level.</p>
-<h2 id="sbt-commands"><a class="header" href="#sbt-commands">sbt commands</a></h2>
-<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<p>この機構によってビルドを特定のバージョンの sbt に設置することができ、プロジェクトで作業する人全員が、マシンにインストールされた sbt runner に関わらず同一のビルド意味論を共有できるようになる。</p>
+<p>このような分割があるため、機能の一部は sbt runner や sbtn のレベルで実装され、その他の機能は sbt server レベルで実装される。</p>
+<h2 id="sbt-コマンド"><a class="header" href="#sbt-コマンド">sbt コマンド</a></h2>
+<div id="admonition-コマンドに関する備考" class="admonition admonish-note" role="note" aria-labelledby="admonition-コマンドに関する備考-title">
 <div class="admonition-title">
-<div id="admonition-note-title">
-<p>Note</p>
+<div id="admonition-コマンドに関する備考-title">
+<p>コマンドに関する備考</p>
 </div>
-<a class="admonition-anchor-link" href="#admonition-note"></a>
+<a class="admonition-anchor-link" href="#admonition-コマンドに関する備考"></a>
 </div>
 <div>
-<p>There is a technical distinction in sbt between <em>tasks</em>, which are
-<em>inside</em> the build definition, and <em>commands</em>, which often manipulate the
-build definition itself.
-This specific sbt meaning of <em>command</em> means there's no good general term for
-<em>thing you can type at the sbt prompt</em>, which may be a setting, task, or command.</p>
+<p>sbt には、サブプロジェクトのレベルで動作する<strong>タスク</strong> (<code>compile</code> など) とビルド定義そのものを操作することも可能な狭義の<strong>コマンド</strong> (<code>set</code> など) がある。</p>
+<p>しかし、<code>act</code> コマンドによってセッティングやタスクもコマンドに持ち上げることが可能なため「sbt シェルに打ち込むことができるもの全て」を広義のコマンドとしても解釈できる。
+詳細は<a href="../concepts/command.html">コマンド</a>のコンセプトのページを参照。</p>
 </div>
 </div>
 <!--
@@ -258,60 +256,59 @@ This specific sbt meaning of <em>command</em> means there's no good general term
     setting control which tasks from which projects are executed. See
     [multi-project builds][Multi-Project].
 -->
-<h3 id="project-level-tasks"><a class="header" href="#project-level-tasks">Project-level tasks</a></h3>
+<h3 id="サブプロジェクトレベルのタスク"><a class="header" href="#サブプロジェクトレベルのタスク">サブプロジェクト・レベルのタスク</a></h3>
 <ul>
-<li><code>clean</code> Deletes all generated files (the <code>target</code> directory).</li>
-<li><a href="./sbt-publish.html"><code>publish</code></a> Publishes artifacts (such as JARs) to the repository defined by the publishTo setting, described in Publishing.</li>
-<li><a href="./sbt-publish.html"><code>publishLocal</code></a> Publishes artifacts (such as JARs) to the local Ivy repository as described in Publishing.</li>
-<li><a href="./sbt-update.html"><code>update</code></a> Resolves and retrieves external dependencies.</li>
+<li><code>clean</code> 生成されたファイル (<code>target</code> ディレクトリ) を削除する。</li>
+<li><a href="./sbt-publish.html"><code>publish</code></a> <code>publishTo</code> セッティングで指定されたリポジトリにJAR ファイルなどのアーティファクトを公開する。</li>
+<li><a href="./sbt-publish.html"><code>publishLocal</code></a> JAR ファイルなどのアーティファクトをローカルの Ivy リポジトリに公開する。</li>
+<li><a href="./sbt-update.html"><code>update</code></a> ライブラリ依存性の解決と取得を行う。</li>
 </ul>
-<h3 id="configuration-level-tasks"><a class="header" href="#configuration-level-tasks">Configuration-level tasks</a></h3>
-<p>Configuration-level tasks are tasks associated with a configuration. For example, <code>compile</code>, which is equivalent to <code>Compile/compile</code>, compiles the main source code (the <code>Compile</code> configuration). <code>Test/compile</code> compiles the test source code (the <code>Test</code> configuration). Most tasks for the <code>Compile</code> configuration have an equivalent in the <code>Test</code> configuration that can be run using a <code>Test/</code> prefix.</p>
+<h3 id="コンフィギュレーションレベルのタスク"><a class="header" href="#コンフィギュレーションレベルのタスク">コンフィギュレーション・レベルのタスク</a></h3>
+<p>コンフィギュレーション・レベルのタスクは、コンフィギュレーションに関連付けされたタスクだ。例えば、<code>compile</code> は <code>Compile/compile</code> と等価であり、(<code>Compile</code> コンフィギュレーションで管理される) main のソースコードをコンパイルする。<code>Test/compile</code> は (<code>Test</code> コンフィギュレーションで管理される) テストのソースコードをコンパイルする。<code>Compile</code> コンフィギュレーションのほとんどのタスクは<code>Test</code> コンフィギュレーション内に対応するものがあり、<code>Test/</code> とプレフィックスを付けることで実行できる。</p>
 <ul>
 <li>
-<p><a href="./sbt-compile.html"><code>compile</code></a> Compiles the main sources (in the <code>src/main/scala</code> directory). <code>Test/compile</code> compiles test sources (in the src/test/scala/ directory).</p>
+<p><a href="./sbt-compile.html"><code>compile</code></a> (<code>src/main/scala</code> ディレクトリの中の) main のソースをコンパイルする。<code>Test/compile</code> は、 (<code>src/test/scala</code> ディレクトリの中の) テストのソースをコンパイルする。</p>
 </li>
 <li>
-<p><code>console</code> Starts the Scala interpreter with a classpath including the compiled sources, all JARs in the lib directory, and managed libraries. To return to sbt, type :quit, Ctrl+D (Unix), or Ctrl+Z (Windows). Similarly, Test/console starts the interpreter with the test classes and classpath.</p>
+<p><code>console</code> コンパイルされたソース、<code>lib</code> ディレクトリ内の全ての JAR、マネージ依存性を含んだクラスパスを用いて Scala インタプリタを起動する。sbt へ戻るには、<code>:quit</code>、Ctrl+D (Unix)、もしくは Ctrl+Z (Windows) と打ち込む。同様に、<code>Test/console</code> はテストクラスとクラスパスを用いてインタプリタを起動する。</p>
 </li>
 <li>
-<p><code>doc</code> Generates API documentation for Scala source files in <code>src/main/scala</code> using scaladoc. <code>Test/doc</code> generates API documentation for source files in <code>src/test/scala</code>.</p>
+<p><code>doc</code> scaladoc を用いて <code>src/main/scala/</code> 内の Scala ソースの API ドキュメンテーションを生成する。<code>Test/doc</code> は、<code>src/test/scala</code> 内のソースファイルのための API ドキュメンテーションを生成する。</p>
 </li>
 <li>
-<p><code>package</code> Creates a JAR file containing the files in <code>src/main/resources</code> and the classes compiled from <code>src/main/scala</code>. <code>Test/package</code> creates a JAR containing the files in <code>src/test/resources</code> and the class compiled from <code>src/test/scala</code>.</p>
+<p><code>package</code> <code>src/main/resources</code> 内のファイルと <code>src/main/scala</code> からコンパイルされたクラスを含む JAR ファイルを作成する。<code>Test/package</code> は、<code>src/test/resources</code> 内のファイルと <code>src/test/scala</code> からコンパイルされたクラスを含む JAR ファイルを作成する。</p>
 </li>
 <li>
-<p><code>packageDoc</code> Creates a JAR file containing API documentation generated from Scala source files in src/main/scala. Test/packageDoc creates a JAR containing API documentation for test sources files in src/test/scala.</p>
+<p><code>packageDoc</code> <code>src/main/scala</code> 内の Scala ソースより生成された API ドキュメンテーションを含む JAR ファイルを作成する。<code>Test/packageDoc</code> は、<code>src/test/scala</code> 内のテスト・ソースより生成された API ドキュメンテーションを含む JAR ファイルを作成する。</p>
 </li>
 <li>
-<p><code>packageSrc</code>: Creates a JAR file containing all main source files and resources. The packaged paths are relative to src/main/scala and src/main/resources. Similarly, Test/packageSrc operates on test source files and resources.</p>
+<p><code>packageSrc</code> 全ての main のソースファイルとリソースを含む JAR ファイルを作成する。パッケージは <code>src/main/scala</code> および <code>src/main/resources</code> からの相対パスとなる。同様に、<code>Test/packageSrc</code> はテストソースとリソースをパッケージ化する。</p>
 </li>
 <li>
-<p><a href="./sbt-run.html"><code>run &lt;argument&gt;*</code></a> Runs the main class for the project in the same virtual machine as sbt. The main class is passed the arguments provided.</p>
+<p><a href="./sbt-run.html"><code>run &lt;引数&gt;*</code></a> サブプロジェクトのメインクラスを sbt と同じ JVM 上から実行する。引数はそのままメインクラスに渡される。</p>
 </li>
 <li>
-<p><code>runMain &lt;main-class&gt; &lt;argument&gt;*</code> Runs the specified main class for the project in the same virtual machine as sbt. The main class is passed the arguments provided.<!-- See
+<p><code>runMain &lt;メインクラス&gt; &lt;引数&gt;*</code> サブプロジェクトから指定されたメインクラスを sbt と同じ JVM 上から実行する。引数はそのままメインクラスに渡される。<!-- See
   [Running Project Code][Running-Project-Code] for
   details on the use of System.exit and multithreading (including
   GUIs) in code run by this action. `Test/runMain` runs the specified
   main class in the test code. --></p>
 </li>
 <li>
-<p><a href="./sbt-tes.html"><code>test &lt;test&gt;*</code></a> Runs the tests specified as arguments (or all tests if no arguments are given) that:</p>
+<p><a href="./sbt-tes.html"><code>test &lt;test&gt;*</code></a> 引数で指定されたテスト (省略された場合は全てのテスト) を以下の条件で実行する:</p>
 <ol>
-<li>have not been run yet OR</li>
-<li>failed the last time they were run OR</li>
-<li>had any transitive dependencies recompiled since the last successful run <code>*</code> is interpreted as a wildcard in the test name.</li>
+<li>未だ実行されていない、もしくは</li>
+<li>前回実行されたときに失敗した、もしくは</li>
+<li>前に成功してから間接的依存性のいずれかが再コンパイルされた<br><code>*</code> は、テスト名のワイルドカードとして解釈される。</li>
 </ol>
 </li>
 <li>
-<p><a href="./sbt-test.html"><code>testFull</code></a> Runs all tests detected during test compilation.</p>
-</li>
-<li>
-<p><a href="./sbt-test.html"><code>testOnly &lt;test&gt;*</code></a> Runs the tests provided as arguments.</p>
+<p><a href="./sbt-test.html"><code>testFull</code></a> テストのコンパイル時に検知された全てのテストを実行する。</p>
 </li>
 </ul>
 <!--
+-   [`testOnly <test>*`](./sbt-test.md) Runs the tests provided as arguments.
+
 -   `consoleQuick` Starts the Scala interpreter with the project's
     compile-time dependencies on the classpath. Test/consoleQuick uses
     the test dependencies. This task differs from console in that it
@@ -322,24 +319,22 @@ This specific sbt meaning of <em>command</em> means there's no good general term
     imported. See the [consoleProject documentation][Console-Project]
     for more information.
 -->
-<h3 id="general-commands"><a class="header" href="#general-commands">General commands</a></h3>
+<h3 id="一般コマンド"><a class="header" href="#一般コマンド">一般コマンド</a></h3>
 <ul>
-<li>
-<p><code>exit</code> or <code>quit</code> End the current interactive session or build. Additionally, Ctrl+D (Unix) or Ctrl+Z (Windows) will exit the interactive prompt.</p>
-</li>
-<li>
-<p><code>help &lt;command&gt;</code> Displays detailed help for the specified command. If the command does not exist, help lists detailed help for commands whose name or description match the argument, which is interpreted as a regular expression. If no command is provided, displays brief descriptions of the main commands. Related commands are tasks and settings.</p>
-</li>
-<li>
-<p><code>projects [add|remove &lt;URI&gt;]</code> List all available projects if no arguments provided or adds/removes the build at the provided URI.</p>
-<!-- (See [multi-project builds][Multi-Project] for details on multi-project
-builds.) -->
-</li>
-<li>
-<p><code>project &lt;project-id&gt;</code> Change the current project to the project with ID <code>&lt;project-id&gt;</code>. Further operations will be done in the context of the given project.</p>
-<!-- (See [multi-project builds][Multi-Project] for
-details on multiple project builds.) -->
-</li>
+<li><code>shutdown</code> sbt server をシャットダウンして現行の sbt セッションを終了する。</li>
+<li><code>exit</code> or <code>quit</code> End the current interactive session or build. Additionally, Ctrl+D (Unix) or Ctrl+Z (Windows) will exit the interactive prompt.</li>
+<li><code>help &lt;command&gt;</code> Displays detailed help for the specified command. If the command does not exist, help lists detailed help for commands whose name or description match the argument, which is interpreted as a regular expression. If no command is provided, displays brief descriptions of the main commands. Related commands are tasks and settings.</li>
+<li><code>projects [add|remove &lt;URI&gt;]</code> List all available projects if no arguments provided or adds/removes the build at the provided URI.<!-- (See [multi-project builds][Multi-Project] for details on multi-project
+  builds.) --></li>
+</ul>
+<!--
+-   `project <project-id>` Change the current project to the project
+    with ID `<project-id>`. Further operations will be done in the
+    context of the given project.
+    (See [multi-project builds][Multi-Project] for
+    details on multiple project builds.)
+-->
+<ul>
 <li>
 <p><a href="./watch.html">Watch command</a> <code>~ &lt;command&gt;</code> Executes the project specified action or method whenever source files change.</p>
 </li>
