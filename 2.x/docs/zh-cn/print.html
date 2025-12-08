@@ -1643,6 +1643,8 @@ LocalRootProject / publish / skip := true
 </code></pre>
 <h3 id="migrating-thisbuild"><a class="header" href="#migrating-thisbuild">Migrating ThisBuild</a></h3>
 <p>In sbt 2.x, bare settings settings should no longer be scoped to <code>ThisBuild</code>. One benefit of the new <em>common settings</em> over <code>ThisBuild</code> is that it would act in a more predictable delegation. These settings are inserted between plugins settings and those defined in <code>settings(...)</code>, meaning they can be used to define settings like <code>Compile / scalacOptions</code>, which was not possible with <code>ThisBuild</code>.</p>
+<h2 id="changes-to-exportjars"><a class="header" href="#changes-to-exportjars">Changes to <code>exportJars</code></a></h2>
+<p><code>exportJars</code> defaults to <code>true</code>, was <code>false</code>. This might break <code>getResource("/")</code> and <code>resource.toURI</code>. Set <code>exportJars := false</code> if this logic is broken in your build, producing <code>NullPointerException</code>s and <code>FileSystemNotFoundException</code>s. Set <code>exportJars := false</code> in your build if you want to keep the old behavior. The change was introduced by <a href="https://github.com/sbt/sbt/pull/7464">sbt/sbt#7464</a>, see also <a href="https://eed3si9n.com/sbt-remote-cache/">blog</a>.</p>
 <h2 id="migrating-to-cached-tasks"><a class="header" href="#migrating-to-cached-tasks">Migrating to cached tasks</a></h2>
 <p>See <a href="changes/../reference/cached-task.html">Cached task</a> reference for details, including the way to opt out of caching.</p>
 <h2 id="migration-away-from-integrationtest"><a class="header" href="#migration-away-from-integrationtest">Migration away from IntegrationTest</a></h2>

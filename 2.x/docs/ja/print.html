@@ -1641,6 +1641,8 @@ LocalRootProject / publish / skip := true
 </code></pre>
 <h3 id="thisbuild-のマイグレーション"><a class="header" href="#thisbuild-のマイグレーション">ThisBuild のマイグレーション</a></h3>
 <p>sbt 2.x においては、ベア・セッティングが <code>ThisBuild</code> にスコープ付けされる場面は無くなったはずだ。コモン・セッティングの <code>ThisBuild</code> に対する利点として委譲の振る舞いが、分かりやすくなるということがある。これらのセッティングはプラグインのセッティングと、<code>settings(...)</code> の間に入るため、 <code>Compile / scalacOptions</code> といったセッティングを定義するのに使える。 <code>ThisBuild</code> ではそれは不可能だった。</p>
+<h2 id="changes-to-exportjars"><a class="header" href="#changes-to-exportjars">Changes to <code>exportJars</code></a></h2>
+<p><code>exportJars</code> defaults to <code>true</code>, was <code>false</code>. This might break <code>getResource("/")</code> and <code>resource.toURI</code>. Set <code>exportJars := false</code> if this logic is broken in your build, producing <code>NullPointerException</code>s and <code>FileSystemNotFoundException</code>s. Set <code>exportJars := false</code> in your build if you want to keep the old behavior. The change was introduced by <a href="https://github.com/sbt/sbt/pull/7464">sbt/sbt#7464</a>, see also <a href="https://eed3si9n.com/sbt-remote-cache/">blog</a>.</p>
 <h2 id="キャッシュタスクへのマイグレーション"><a class="header" href="#キャッシュタスクへのマイグレーション">キャッシュ・タスクへのマイグレーション</a></h2>
 <p>キャッシュ化のオプトアウトを含め<a href="changes/../reference/cached-task.html">キャッシュ・タスク</a>参照。</p>
 <h2 id="integrationtest-の廃止"><a class="header" href="#integrationtest-の廃止">IntegrationTest の廃止</a></h2>
