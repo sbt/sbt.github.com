@@ -1591,7 +1591,6 @@ Two of the popular IDEs in Scala are <a href="https://scalameta.org/metals/">Met
 <ul>
 <li><a href="guide/../recipes/use-sbt-as-metals-build-server.html">Use sbt as Metals build server</a></li>
 <li><a href="guide/../recipes/import-to-intellij.html">Import to IntelliJ IDEA</a></li>
-<li><a href="guide/../recipes/use-neovim.html">Use Neovim</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="changes"><a class="header" href="#changes">Changes</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-20-changes-draft"><a class="header" href="#sbt-20-changes-draft">sbt 2.0 changes (draft)</a></h1>
@@ -5121,18 +5120,6 @@ releaseStepCommand("sonaRelease"),
 ```
 -->
 <div style="break-before: page; page-break-before: always;"></div><h1 id="use-sbt-as-metals-build-server"><a class="header" href="#use-sbt-as-metals-build-server">Use sbt as Metals build server</a></h1>
-<div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
-<div class="admonition-title">
-<div id="admonition-warning-title">
-<p>Warning</p>
-</div>
-<a class="admonition-anchor-link" href="recipes/use-sbt-as-metals-build-server.html#admonition-warning"></a>
-</div>
-<div>
-<p>This is a draft documentation of sbt 2.x that is yet to be released.
-This is a placeholder, copied from sbt 1.x.</p>
-</div>
-</div>
 <h2 id="objective-2"><a class="header" href="#objective-2">Objective</a></h2>
 <p>I want to use <a href="https://scalameta.org/metals/">Metals</a> on VS Code with sbt as the build server.</p>
 <h2 id="steps-2"><a class="header" href="#steps-2">Steps</a></h2>
@@ -5151,15 +5138,6 @@ This is a placeholder, copied from sbt 1.x.</p>
 </code></pre>
 <p>When you make changes to the code and save them (<code>Cmd-S</code> on macOS), Metals will invoke sbt to do
 the actual building work.</p>
-<h4 id="interactive-debugging-on-vs-code"><a class="header" href="#interactive-debugging-on-vs-code">Interactive debugging on VS Code</a></h4>
-<ol>
-<li>Metals supports interactive debugging by setting break points in the code:<br>
-<img src="recipes/../files/metals4.png" alt="Metals" /></li>
-<li>Interactive debugging can be started by right-clicking on an unit test, and selecting "Debug Test."
-When the test hits a break point, you can inspect the values of the variables:<br>
-<img src="recipes/../files/metals5.png" alt="Metals" /></li>
-</ol>
-<p>See <a href="https://code.visualstudio.com/docs/editor/debugging">Debugging</a> page on VS Code documentation for more details on how to navigate an interactive debugging session.</p>
 <h4 id="logging-into-sbt-session"><a class="header" href="#logging-into-sbt-session">Logging into sbt session</a></h4>
 <p>While Metals uses sbt as the build server, we can also log into the same sbt session using a thin client.</p>
 <ul>
@@ -5168,19 +5146,18 @@ When the test hits a break point, you can inspect the values of the variables:<b
 </ul>
 <p>This lets you log into the sbt session Metals has started. In there you can call <code>testOnly</code> and other tasks with
 the code already compiled.</p>
+<!--
+#### Interactive debugging on VS Code
+
+1. Metals supports interactive debugging by setting break points in the code:<br>
+  ![Metals](../files/metals4.png)
+2. Interactive debugging can be started by right-clicking on an unit test, and selecting "Debug Test."
+   When the test hits a break point, you can inspect the values of the variables:<br>
+   ![Metals](../files/metals5.png)
+
+See [Debugging][vscode-debugging] page on VS Code documentation for more details on how to navigate an interactive debugging session.
+-->
 <div style="break-before: page; page-break-before: always;"></div><h1 id="import-to-intellij-idea"><a class="header" href="#import-to-intellij-idea">Import to IntelliJ IDEA</a></h1>
-<div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
-<div class="admonition-title">
-<div id="admonition-warning-title">
-<p>Warning</p>
-</div>
-<a class="admonition-anchor-link" href="recipes/import-to-intellij.html#admonition-warning"></a>
-</div>
-<div>
-<p>This is a draft documentation of sbt 2.x that is yet to be released.
-This is a placeholder, copied from sbt 1.x.</p>
-</div>
-</div>
 <h2 id="objective-3"><a class="header" href="#objective-3">Objective</a></h2>
 <p>I want to import sbt build to IntelliJ IDEA.</p>
 <h2 id="steps-3"><a class="header" href="#steps-3">Steps</a></h2>
@@ -5208,7 +5185,7 @@ When the test hits a break point, you can inspect the values of the variables:<b
 <p>Importing the build to IntelliJ means that you're effectively using IntelliJ as the build tool and the compiler while you code (see also <a href="https://blog.jetbrains.com/scala/2021/07/27/intellij-scala-plugin-2021-2/#Compiler-based_highlighting">compiler-based highlighting</a>).
 While many users are happy with the experience, depending on the code base some of the compilation errors may be false, it may not work well with plugins that generate sources, and generally you might want to code with the identical build semantics as sbt.
 Thankfully, modern IntelliJ supports alternative <em>build servers</em> including sbt via the <a href="https://build-server-protocol.github.io/">Build Server Protocol</a> (BSP).</p>
-<p>The benefit of using BSP with IntelliJ is that you're using sbt to do the actual build work, so if you are the kind of programmer who had sbt session up on the side, this avoids double compilation.</p>
+<p>The benefit of using Build Server Protocol (BSP) with IntelliJ is that you're using sbt to do the actual build work, so if you are the kind of programmer who had sbt session up on the side, this avoids double compilation.</p>
 <table class="table table-striped">
   <tr>
     <th><nobr></th>
@@ -5244,15 +5221,10 @@ Thankfully, modern IntelliJ supports alternative <em>build servers</em> includin
 <p>To use sbt as build server on IntelliJ:</p>
 <ol>
 <li>Install Scala plugin on the Plugins tab.</li>
-<li>To use the BSP approach, do not use Open button on the Project tab:<br>
-<img src="recipes/../files/intellij7.png" alt="IntelliJ" /></li>
-<li>From menubar, click New &gt; "Project From Existing Sources", or Find Action (<code>Cmd-Shift-P</code> on macOS) and
-type "Existing" to find "Import Project From Existing Sources":<br>
-<img src="recipes/../files/intellij8.png" alt="IntelliJ" /></li>
-<li>Open a <code>build.sbt</code> file. Select <strong>BSP</strong> when prompted:<br>
-<img src="recipes/../files/intellij9.png" alt="IntelliJ" /></li>
-<li>Select <strong>sbt (recommended)</strong> as the tool to import the BSP workspace:<br>
-<img src="recipes/../files/intellij10.png" alt="IntelliJ" /></li>
+<li>To use the BSP approach, close IntelliJ, and remove exising <code>.idea</code> directory, if any.</li>
+<li>From the terminal, run <code>sbt bspConfig</code> to generate <code>.bsp</code> directory.</li>
+<li>Open IntelliJ, and open a <code>build.sbt</code> file. Select <strong>BSP project</strong> when prompted:<br>
+<img src="recipes/../files/intellij_bsp.png" alt="IntelliJ" /></li>
 <li>Once the import process is complete, open a Scala file to see that code completion works:<br>
 <img src="recipes/../files/intellij11.png" alt="IntelliJ" /></li>
 </ol>
