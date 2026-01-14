@@ -1,9 +1,9 @@
 <!DOCTYPE HTML>
-<html lang="ja" class="light sidebar-visible" dir="ltr">
+<html lang="zh-cn" class="light sidebar-visible" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>sbt compile - The Book of sbt</title>
+        <title>sbt dependencyTree - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -151,7 +151,7 @@
                           langToggle.addEventListener("click", (event) => {
                               langList.style.display = langList.style.display == "block" ? "none" : "block";
                           });
-                          let selectedLang = document.getElementById("ja");
+                          let selectedLang = document.getElementById("zh-cn");
                           if (selectedLang) {
                               selectedLang.parentNode.classList.add("theme-selected");
                           }
@@ -161,7 +161,7 @@
                           let full_path_to_root = "../../";
                           // The page path (mdbook only gives us
                           // access to the path to the Markdown file).
-                          let path = "reference/sbt-compile.md".replace(/\.md$/, ".html");
+                          let path = "reference/sbt-dependency-tree.md".replace(/\.md$/, ".html");
                           for (let lang of langList.querySelectorAll("a")) {
                             lang.href = `${full_path_to_root}${lang.id}/${path}`;
                           }
@@ -208,43 +208,139 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="sbt-compile"><a class="header" href="#sbt-compile">sbt compile</a></h1>
-<h2 id="書式"><a class="header" href="#書式">書式</a></h2>
-<p><code>sbt</code> [<em>query</em> / ] <code>compile</code><br> <code>sbt</code> [<em>query</em> / ] <code>Test</code> / <code>compile</code><br></p>
-<h2 id="説明"><a class="header" href="#説明">説明</a></h2>
-<p>The <code>compile</code> task compiles the selected subprojects and their subproject dependencies. Since sbt 2.x, the compiled artifacts are cached automatically.</p>
-<p>Compiling Scala code with the raw Scala compiler has been slow, so significant poriton of sbt's development efforts deal with various strategies for speeding up compilation.</p>
-<h3 id="reduce-the-overhead-of-restarting-the-compiler"><a class="header" href="#reduce-the-overhead-of-restarting-the-compiler">Reduce the overhead of restarting the compiler</a></h3>
-<p>sbt server stays up in the background, allowing Scala compilation to run the same Java virtual machine (JVM). Keeping the JVM warm makes compilation significantly faster because it takes a long time to classload the compiler and for the Just-in-Time compiler to optimize it.</p>
-<h3 id="incremental-compilation"><a class="header" href="#incremental-compilation">Incremental compilation</a></h3>
-<p>When a source file <code>A.scala</code> is modified, sbt goes to great effort to minimize the other source files recompiled due to <code>A.scala</code>'s change. This process of tracking dependencies between the language constructs and recompiling only the required sources is called <em>incremental compilation</em>.</p>
-<h3 id="remote-caching"><a class="header" href="#remote-caching">(Remote) caching</a></h3>
-<p>In sbt 2.x, compiled artifacts are not only cached across the sessions and builds, but can optionally be cached across different machines using Bazel-compatible remote cache. See <a href="../concepts/caching.html">Caching</a> for details.</p>
-<h3 id="test--compile"><a class="header" href="#test--compile">Test / compile</a></h3>
-<p>Scoping the <code>compile</code> task with a configuration, like <code>Test / compile</code> will compile the test sources and their source dependencies.</p>
-<h3 id="compilation-settings"><a class="header" href="#compilation-settings">Compilation settings</a></h3>
-<h4 id="scalaversion"><a class="header" href="#scalaversion">scalaVersion</a></h4>
-<p>The version of Scala used for compilation.</p>
-<pre><code class="language-scala">scalaVersion := "3.7.3"
+                        <h1 id="sbt-dependencytree"><a class="header" href="#sbt-dependencytree">sbt dependencyTree</a></h1>
+<h2 id="synopsis"><a class="header" href="#synopsis">Synopsis</a></h2>
+<p><code>sbt</code> <code>dependencyTree</code> [<em>subcommand</em>] [<em>options</em>]<br> <code>sbt</code> <code>dependencyTree</code> <code>list</code> [<em>options</em>]<br> <code>sbt</code> <code>dependencyTree</code> <code>graph</code> [<em>options</em>]<br> <code>sbt</code> <code>dependencyTree</code> <code>html</code> [<em>options</em>]<br> <code>sbt</code> <code>dependencyTree</code> <code>html-graph</code> [<em>options</em>]<br> <code>sbt</code> <code>dependencyTree</code> <code>json</code> [<em>options</em>]<br> <code>sbt</code> <code>dependencyTree</code> <code>xml</code> [<em>options</em>]<br> <code>sbt</code> <code>dependencyTree</code> <code>stats</code> [<em>options</em>]</p>
+<h2 id="description"><a class="header" href="#description">Description</a></h2>
+<p>The <code>dependencyTree</code> task displays the dependency graph of your project in various formats, helping you visualize and analyze transitive dependencies. It is provided by the <code>DependencyTreePlugin</code>, which was in-sourced from Johannes Rudolph's sbt-dependency-graph in sbt 1.4.0. The task resolves dependencies before generating output, so it may trigger downloads if needed.</p>
+<h3 id="usage"><a class="header" href="#usage">Usage</a></h3>
+<p>Run this in the sbt shell. The default subcommand is <code>tree</code>, which prints an ASCII tree.</p>
+<h4 id="subcommands"><a class="header" href="#subcommands">Subcommands</a></h4>
+<ul>
+<li><code>tree</code> (default): Prints an ASCII tree of dependencies, showing hierarchical relationships. Useful for quick overviews.</li>
+<li><code>list</code>: Prints a flat list of all dependencies, one per line. Ideal for scripting or grepping.</li>
+<li><code>graph</code> / <code>dot</code>: Prints a GraphViz DOT file for visualization. The <code>dot</code> alias is provided for compatibility.</li>
+<li><code>html</code>: Creates a standalone HTML page with the dependency graph rendered as text.</li>
+<li><code>html-graph</code>: Creates an HTML page with an embedded GraphViz diagram (requires GraphViz on the system).</li>
+<li><code>json</code>: Prints dependencies in JSON format, structured for programmatic use.</li>
+<li><code>xml</code>: Prints dependencies in GraphML format, suitable for graph analysis tools.</li>
+<li><code>stats</code>: Prints summary statistics, such as total dependencies and versions.</li>
+<li><code>help</code>: Displays the usage help (same as running <code>dependencyTree</code> without arguments).</li>
+</ul>
+<h4 id="options"><a class="header" href="#options">Options</a></h4>
+<ul>
+<li><code>--quiet</code>: Suppresses console output and returns the result as a task value (e.g., for use in other tasks).</li>
+<li><code>--out &lt;file&gt;</code>: Writes output to the specified file instead of stdout. The file extension determines the default subcommand:
+<ul>
+<li><code>.txt</code>: <code>tree</code></li>
+<li><code>.dot</code>: <code>graph</code></li>
+<li><code>.html</code>: <code>html</code></li>
+<li><code>.json</code>: <code>json</code></li>
+<li><code>.xml</code>: <code>xml</code></li>
+</ul>
+</li>
+<li><code>--browse</code>: Automatically opens the output file in your default browser (only works with <code>graph</code> or <code>html</code> subcommands).</li>
+</ul>
+<h3 id="examples"><a class="header" href="#examples">Examples</a></h3>
+<h4 id="ascii-tree-default"><a class="header" href="#ascii-tree-default">ASCII Tree (Default)</a></h4>
+<p>Displays a hierarchical view of dependencies, with <code>[S]</code> indicating Scala library dependencies.</p>
+<pre><code class="language-bash">&gt; Compile/dependencyTree
+[info] default:example_3:0.1.0-SNAPSHOT
+[info]   +-org.scala-lang:scala3-library_3:3.3.1 [S]
+[info]   +-com.example:library_3:1.0.0
+[info]     +-org.typelevel:cats-core_3:2.9.0
+[info]     | +-org.typelevel:cats-kernel_3:2.9.0
+[info]     |   +-org.scala-lang:scala3-library_3:3.1.3 (evicted by: 3.3.1)
+[info]     +-org.typelevel:cats-effect_3:3.4.0
 </code></pre>
-<h4 id="scalacoptions"><a class="header" href="#scalacoptions">scalacOptions</a></h4>
-<p>Options for the Scala compiler.</p>
-<pre><code class="language-scala">Compile / scalacOptions += "-Werror"
+<p>Evicted dependencies (older versions replaced by newer ones) are shown in parentheses.</p>
+<h4 id="list-of-dependencies"><a class="header" href="#list-of-dependencies">List of Dependencies</a></h4>
+<pre><code class="language-bash">&gt; Compile/dependencyTree list
+org.scala-lang:scala3-library_3:3.3.1
+com.example:library_3:1.0.0
+org.typelevel:cats-core_3:2.9.0
+org.typelevel:cats-kernel_3:2.9.0
+org.typelevel:cats-effect_3:3.4.0
 </code></pre>
-<h4 id="javacoptions"><a class="header" href="#javacoptions">javacOptions</a></h4>
-<p>Options for the Java compiler.</p>
-<pre><code class="language-scala">Compile / javacOptions ++= List("-Xlint", "-Xlint:-serial")
+<h4 id="graphviz-dot-file"><a class="header" href="#graphviz-dot-file">GraphViz DOT File</a></h4>
+<p>Generates a DOT file for rendering graphs (e.g., with <code>dot</code> command).</p>
+<pre><code class="language-bash">&gt; Compile/dependencyTree graph --out dependencies.dot
 </code></pre>
+<p>Contents of <code>dependencies.dot</code>:</p>
+<pre><code>digraph "dependency-graph" {
+    graph[rankdir="LR"; splines=polyline]
+    edge [arrowtail="none"]
+    "default:example_3:0.1.0-SNAPSHOT" -&gt; "org.scala-lang:scala3-library_3:3.3.1"
+    "default:example_3:0.1.0-SNAPSHOT" -&gt; "com.example:library_3:1.0.0"
+    "com.example:library_3:1.0.0" -&gt; "org.typelevel:cats-core_3:2.9.0"
+    // ... more edges
+}
+</code></pre>
+<p>Render to PNG: <code>dot -Tpng dependencies.dot -o dependencies.png</code></p>
+<h4 id="html-output"><a class="header" href="#html-output">HTML Output</a></h4>
+<pre><code class="language-bash">&gt; Compile/dependencyTree html --out deps.html --browse
+</code></pre>
+<p>Creates <code>deps.html</code> with a text-based graph and opens it in the browser.</p>
+<h4 id="html-with-embedded-graph"><a class="header" href="#html-with-embedded-graph">HTML with Embedded Graph</a></h4>
+<pre><code class="language-bash">&gt; Compile/dependencyTree html-graph --browse
+</code></pre>
+<p>Requires GraphViz installed. Embeds a visual graph in the HTML.</p>
+<h4 id="json-output"><a class="header" href="#json-output">JSON Output</a></h4>
+<pre><code class="language-bash">&gt; Compile/dependencyTree json --out deps.json
+</code></pre>
+<p>Sample output:</p>
+<pre><code class="language-json">{
+  "organization": "default",
+  "name": "example_3",
+  "version": "0.1.0-SNAPSHOT",
+  "dependencies": [
+    {
+      "organization": "org.scala-lang",
+      "name": "scala3-library_3",
+      "version": "3.3.1",
+      "configurations": ["compile"],
+      "evicted": false
+    },
+    // ... more
+  ]
+}
+</code></pre>
+<h4 id="xml-graphml-output"><a class="header" href="#xml-graphml-output">XML (GraphML) Output</a></h4>
+<pre><code class="language-bash">&gt; Compile/dependencyTree xml --out deps.graphml
+</code></pre>
+<p>Suitable for import into graph visualization tools like yEd.</p>
+<h4 id="statistics"><a class="header" href="#statistics">Statistics</a></h4>
+<pre><code class="language-bash">&gt; Compile/dependencyTree stats
+Total dependencies: 15
+Unique organizations: 5
+Versions: 10 distinct
+Evictions: 2
+</code></pre>
+<h3 id="configuration-keys"><a class="header" href="#configuration-keys">Configuration Keys</a></h3>
+<p>Customize behavior with these settings in <code>build.sbt</code>:</p>
+<ul>
+<li><code>dependencyTreeIncludeScalaLibrary := true</code>: Include Scala library dependencies in output (default: <code>false</code>).</li>
+<li><code>dependencyDotNodeColors := false</code>: Disable colors in DOT node labels (default: <code>true</code>).</li>
+<li><code>dependencyDotNodeLabel := (org: String, name: String, version: String) =&gt; s"$org:$name:$version"</code>: Customize DOT node labels.</li>
+<li><code>dependencyDotHeader := """digraph "custom" { rankdir="TB"; }"""</code>: Set a custom DOT header.</li>
+</ul>
+<h3 id="related-tasks"><a class="header" href="#related-tasks">Related Tasks</a></h3>
+<ul>
+<li><code>whatDependsOn &lt;module&gt;</code>: Shows what depends on a specific module (e.g., <code>whatDependsOn org.example:lib:1.0</code>).</li>
+<li><code>dependencyLicenseInfo</code>: Displays license information for dependencies.</li>
+</ul>
+<h3 id="scopes"><a class="header" href="#scopes">Scopes</a></h3>
+<p>Available in <code>Compile</code> and <code>Test</code> configurations. Use <code>Global/</code> for cross-configuration views if needed.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../reference/sbt-dependency-tree.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../reference/sbt-update.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../reference/sbt-run.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../reference/sbt-compile.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -254,11 +350,11 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../reference/sbt-dependency-tree.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../reference/sbt-update.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../reference/sbt-run.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../reference/sbt-compile.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

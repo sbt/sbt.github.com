@@ -2446,10 +2446,133 @@ shortened to:
 libraryDependencies += "org.scalatest" %% "scalatest" % "$example_scalatest_version$" % "test"
 ```
 -->
-<div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-示例教程-1"><a class="header" href="#sbt-示例教程-1">sbt 示例教程</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-dependencytree"><a class="header" href="#sbt-dependencytree">sbt dependencyTree</a></h1>
 <h2 id="synopsis-2"><a class="header" href="#synopsis-2">Synopsis</a></h2>
-<p><code>sbt</code> [<em>query</em> / ] <code>compile</code><br> <code>sbt</code> [<em>query</em> / ] <code>Test</code> / <code>compile</code><br></p>
+<p><code>sbt</code> <code>dependencyTree</code> [<em>subcommand</em>] [<em>options</em>]<br> <code>sbt</code> <code>dependencyTree</code> <code>list</code> [<em>options</em>]<br> <code>sbt</code> <code>dependencyTree</code> <code>graph</code> [<em>options</em>]<br> <code>sbt</code> <code>dependencyTree</code> <code>html</code> [<em>options</em>]<br> <code>sbt</code> <code>dependencyTree</code> <code>html-graph</code> [<em>options</em>]<br> <code>sbt</code> <code>dependencyTree</code> <code>json</code> [<em>options</em>]<br> <code>sbt</code> <code>dependencyTree</code> <code>xml</code> [<em>options</em>]<br> <code>sbt</code> <code>dependencyTree</code> <code>stats</code> [<em>options</em>]</p>
 <h2 id="description-2"><a class="header" href="#description-2">Description</a></h2>
+<p>The <code>dependencyTree</code> task displays the dependency graph of your project in various formats, helping you visualize and analyze transitive dependencies. It is provided by the <code>DependencyTreePlugin</code>, which was in-sourced from Johannes Rudolph's sbt-dependency-graph in sbt 1.4.0. The task resolves dependencies before generating output, so it may trigger downloads if needed.</p>
+<h3 id="usage"><a class="header" href="#usage">Usage</a></h3>
+<p>Run this in the sbt shell. The default subcommand is <code>tree</code>, which prints an ASCII tree.</p>
+<h4 id="subcommands"><a class="header" href="#subcommands">Subcommands</a></h4>
+<ul>
+<li><code>tree</code> (default): Prints an ASCII tree of dependencies, showing hierarchical relationships. Useful for quick overviews.</li>
+<li><code>list</code>: Prints a flat list of all dependencies, one per line. Ideal for scripting or grepping.</li>
+<li><code>graph</code> / <code>dot</code>: Prints a GraphViz DOT file for visualization. The <code>dot</code> alias is provided for compatibility.</li>
+<li><code>html</code>: Creates a standalone HTML page with the dependency graph rendered as text.</li>
+<li><code>html-graph</code>: Creates an HTML page with an embedded GraphViz diagram (requires GraphViz on the system).</li>
+<li><code>json</code>: Prints dependencies in JSON format, structured for programmatic use.</li>
+<li><code>xml</code>: Prints dependencies in GraphML format, suitable for graph analysis tools.</li>
+<li><code>stats</code>: Prints summary statistics, such as total dependencies and versions.</li>
+<li><code>help</code>: Displays the usage help (same as running <code>dependencyTree</code> without arguments).</li>
+</ul>
+<h4 id="options"><a class="header" href="#options">Options</a></h4>
+<ul>
+<li><code>--quiet</code>: Suppresses console output and returns the result as a task value (e.g., for use in other tasks).</li>
+<li><code>--out &lt;file&gt;</code>: Writes output to the specified file instead of stdout. The file extension determines the default subcommand:
+<ul>
+<li><code>.txt</code>: <code>tree</code></li>
+<li><code>.dot</code>: <code>graph</code></li>
+<li><code>.html</code>: <code>html</code></li>
+<li><code>.json</code>: <code>json</code></li>
+<li><code>.xml</code>: <code>xml</code></li>
+</ul>
+</li>
+<li><code>--browse</code>: Automatically opens the output file in your default browser (only works with <code>graph</code> or <code>html</code> subcommands).</li>
+</ul>
+<h3 id="examples"><a class="header" href="#examples">Examples</a></h3>
+<h4 id="ascii-tree-default"><a class="header" href="#ascii-tree-default">ASCII Tree (Default)</a></h4>
+<p>Displays a hierarchical view of dependencies, with <code>[S]</code> indicating Scala library dependencies.</p>
+<pre><code class="language-bash">&gt; Compile/dependencyTree
+[info] default:example_3:0.1.0-SNAPSHOT
+[info]   +-org.scala-lang:scala3-library_3:3.3.1 [S]
+[info]   +-com.example:library_3:1.0.0
+[info]     +-org.typelevel:cats-core_3:2.9.0
+[info]     | +-org.typelevel:cats-kernel_3:2.9.0
+[info]     |   +-org.scala-lang:scala3-library_3:3.1.3 (evicted by: 3.3.1)
+[info]     +-org.typelevel:cats-effect_3:3.4.0
+</code></pre>
+<p>Evicted dependencies (older versions replaced by newer ones) are shown in parentheses.</p>
+<h4 id="list-of-dependencies"><a class="header" href="#list-of-dependencies">List of Dependencies</a></h4>
+<pre><code class="language-bash">&gt; Compile/dependencyTree list
+org.scala-lang:scala3-library_3:3.3.1
+com.example:library_3:1.0.0
+org.typelevel:cats-core_3:2.9.0
+org.typelevel:cats-kernel_3:2.9.0
+org.typelevel:cats-effect_3:3.4.0
+</code></pre>
+<h4 id="graphviz-dot-file"><a class="header" href="#graphviz-dot-file">GraphViz DOT File</a></h4>
+<p>Generates a DOT file for rendering graphs (e.g., with <code>dot</code> command).</p>
+<pre><code class="language-bash">&gt; Compile/dependencyTree graph --out dependencies.dot
+</code></pre>
+<p>Contents of <code>dependencies.dot</code>:</p>
+<pre><code>digraph "dependency-graph" {
+    graph[rankdir="LR"; splines=polyline]
+    edge [arrowtail="none"]
+    "default:example_3:0.1.0-SNAPSHOT" -&gt; "org.scala-lang:scala3-library_3:3.3.1"
+    "default:example_3:0.1.0-SNAPSHOT" -&gt; "com.example:library_3:1.0.0"
+    "com.example:library_3:1.0.0" -&gt; "org.typelevel:cats-core_3:2.9.0"
+    // ... more edges
+}
+</code></pre>
+<p>Render to PNG: <code>dot -Tpng dependencies.dot -o dependencies.png</code></p>
+<h4 id="html-output"><a class="header" href="#html-output">HTML Output</a></h4>
+<pre><code class="language-bash">&gt; Compile/dependencyTree html --out deps.html --browse
+</code></pre>
+<p>Creates <code>deps.html</code> with a text-based graph and opens it in the browser.</p>
+<h4 id="html-with-embedded-graph"><a class="header" href="#html-with-embedded-graph">HTML with Embedded Graph</a></h4>
+<pre><code class="language-bash">&gt; Compile/dependencyTree html-graph --browse
+</code></pre>
+<p>Requires GraphViz installed. Embeds a visual graph in the HTML.</p>
+<h4 id="json-output"><a class="header" href="#json-output">JSON Output</a></h4>
+<pre><code class="language-bash">&gt; Compile/dependencyTree json --out deps.json
+</code></pre>
+<p>Sample output:</p>
+<pre><code class="language-json">{
+  "organization": "default",
+  "name": "example_3",
+  "version": "0.1.0-SNAPSHOT",
+  "dependencies": [
+    {
+      "organization": "org.scala-lang",
+      "name": "scala3-library_3",
+      "version": "3.3.1",
+      "configurations": ["compile"],
+      "evicted": false
+    },
+    // ... more
+  ]
+}
+</code></pre>
+<h4 id="xml-graphml-output"><a class="header" href="#xml-graphml-output">XML (GraphML) Output</a></h4>
+<pre><code class="language-bash">&gt; Compile/dependencyTree xml --out deps.graphml
+</code></pre>
+<p>Suitable for import into graph visualization tools like yEd.</p>
+<h4 id="statistics"><a class="header" href="#statistics">Statistics</a></h4>
+<pre><code class="language-bash">&gt; Compile/dependencyTree stats
+Total dependencies: 15
+Unique organizations: 5
+Versions: 10 distinct
+Evictions: 2
+</code></pre>
+<h3 id="configuration-keys"><a class="header" href="#configuration-keys">Configuration Keys</a></h3>
+<p>Customize behavior with these settings in <code>build.sbt</code>:</p>
+<ul>
+<li><code>dependencyTreeIncludeScalaLibrary := true</code>: Include Scala library dependencies in output (default: <code>false</code>).</li>
+<li><code>dependencyDotNodeColors := false</code>: Disable colors in DOT node labels (default: <code>true</code>).</li>
+<li><code>dependencyDotNodeLabel := (org: String, name: String, version: String) =&gt; s"$org:$name:$version"</code>: Customize DOT node labels.</li>
+<li><code>dependencyDotHeader := """digraph "custom" { rankdir="TB"; }"""</code>: Set a custom DOT header.</li>
+</ul>
+<h3 id="related-tasks"><a class="header" href="#related-tasks">Related Tasks</a></h3>
+<ul>
+<li><code>whatDependsOn &lt;module&gt;</code>: Shows what depends on a specific module (e.g., <code>whatDependsOn org.example:lib:1.0</code>).</li>
+<li><code>dependencyLicenseInfo</code>: Displays license information for dependencies.</li>
+</ul>
+<h3 id="scopes"><a class="header" href="#scopes">Scopes</a></h3>
+<p>Available in <code>Compile</code> and <code>Test</code> configurations. Use <code>Global/</code> for cross-configuration views if needed.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-示例教程-1"><a class="header" href="#sbt-示例教程-1">sbt 示例教程</a></h1>
+<h2 id="synopsis-3"><a class="header" href="#synopsis-3">Synopsis</a></h2>
+<p><code>sbt</code> [<em>query</em> / ] <code>compile</code><br> <code>sbt</code> [<em>query</em> / ] <code>Test</code> / <code>compile</code><br></p>
+<h2 id="description-3"><a class="header" href="#description-3">Description</a></h2>
 <p>The <code>compile</code> task compiles the selected subprojects and their subproject dependencies. Since sbt 2.x, the compiled artifacts are cached automatically.</p>
 <p>Compiling Scala code with the raw Scala compiler has been slow, so significant poriton of sbt's development efforts deal with various strategies for speeding up compilation.</p>
 <h3 id="reduce-the-overhead-of-restarting-the-compiler"><a class="header" href="#reduce-the-overhead-of-restarting-the-compiler">Reduce the overhead of restarting the compiler</a></h3>
@@ -2474,9 +2597,9 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "$example_scalatest_vers
 <pre><code class="language-scala">Compile / javacOptions ++= List("-Xlint", "-Xlint:-serial")
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-run"><a class="header" href="#sbt-run">sbt run</a></h1>
-<h2 id="synopsis-3"><a class="header" href="#synopsis-3">Synopsis</a></h2>
+<h2 id="synopsis-4"><a class="header" href="#synopsis-4">Synopsis</a></h2>
 <p><code>sbt</code> [<em>query</em> / ] <code>run</code> [<em>args</em>]</p>
-<h2 id="description-3"><a class="header" href="#description-3">Description</a></h2>
+<h2 id="description-4"><a class="header" href="#description-4">Description</a></h2>
 <p>The <code>run</code> task provides a means for running the user program.</p>
 <p>In sbt 1.x and earlier, <code>run</code> task ran the user program in the same Java virtual machine (JVM) as the sbt server. sbt 2.x implements <em>client-side run</em>: the <code>run</code> task creates a sandbox environment that contains the program, sends the information back to sbtn, and sbtn launches the user program in a fresh JVM.</p>
 <h3 id="motivations"><a class="header" href="#motivations">Motivations</a></h3>
@@ -2487,9 +2610,9 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "$example_scalatest_vers
 <li><strong>sbt server availability</strong>. Since the program will run outside of the sbt server, it can become available to the more requests by other clients, for example test or IDE integration.</li>
 </ol>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-test"><a class="header" href="#sbt-test">sbt test</a></h1>
-<h2 id="synopsis-4"><a class="header" href="#synopsis-4">Synopsis</a></h2>
+<h2 id="synopsis-5"><a class="header" href="#synopsis-5">Synopsis</a></h2>
 <p><code>sbt</code> [<em>query</em> / ] <code>test</code> [<em>testname1</em> <em>testname2</em>] [ -- <em>options</em> ]</p>
-<h2 id="description-4"><a class="header" href="#description-4">Description</a></h2>
+<h2 id="description-5"><a class="header" href="#description-5">Description</a></h2>
 <p>The <code>test</code> task provides a means for compiling and running the tests.</p>
 <p>By default, the <code>test</code> task in sbt 2.x:</p>
 <ol>
@@ -2576,7 +2699,7 @@ still be manually written out and run using `test`.
 <p>By default, sbt will generate JUnit XML test reports for all tests in the build, located in the <code>target/test-reports</code> directory for a project. This can be disabled by disabling the <code>JUnitXmlReportPlugin</code></p>
 <pre><code class="language-scala">val myProject = (project in file(".")).disablePlugins(plugins.JUnitXmlReportPlugin)
 </code></pre>
-<h3 id="options"><a class="header" href="#options">Options</a></h3>
+<h3 id="options-1"><a class="header" href="#options-1">Options</a></h3>
 <h4 id="test-framework-arguments"><a class="header" href="#test-framework-arguments">Test framework arguments</a></h4>
 <p>Arguments to the test framework may be provided on the command line to the <code>test</code> tasks following a <code>--</code> separator. For example:</p>
 <pre><code>&gt; test org.example.MyTest -- -verbosity 1
@@ -2845,9 +2968,9 @@ testListeners += customTestListener
 where `customTestListener` is of type `sbt.TestReportListener`.
 -->
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-inspect"><a class="header" href="#sbt-inspect">sbt inspect</a></h1>
-<h2 id="synopsis-5"><a class="header" href="#synopsis-5">Synopsis</a></h2>
+<h2 id="synopsis-6"><a class="header" href="#synopsis-6">Synopsis</a></h2>
 <p><code>sbt</code> <code>inspect</code> [<em>subproject</em> / ] [ <em>config</em> / ] <em>task</em><br> <code>sbt</code> <code>inspect actual</code> [<em>subproject</em> / ] [ <em>config</em> / ] <em>task</em><br> <code>sbt</code> <code>inspect tree</code> [<em>subproject</em> / ] [ <em>config</em> / ] <em>task</em></p>
-<h2 id="description-5"><a class="header" href="#description-5">Description</a></h2>
+<h2 id="description-6"><a class="header" href="#description-6">Description</a></h2>
 <p>The <code>inspect</code> command provides a means to inspect the task and setting graph. For instace, it can be used to determine which setting should be modified to affect another task.</p>
 <h3 id="value-description-and-provided-by"><a class="header" href="#value-description-and-provided-by">Value, Description, and Provided By</a></h3>
 <p>The first piece of information provided by <code>inspect</code> is the type of a task or the value and type of a setting.</p>
@@ -2979,9 +3102,9 @@ import mypackage._
 </code></pre>
 <p>For each task, <code>inspect tree</code> show the type of the value generated by the task. For a setting, the <code>toString</code> of the setting is displayed.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-publish"><a class="header" href="#sbt-publish">sbt publish</a></h1>
-<h2 id="synopsis-6"><a class="header" href="#synopsis-6">Synopsis</a></h2>
+<h2 id="synopsis-7"><a class="header" href="#synopsis-7">Synopsis</a></h2>
 <p><code>sbt</code> [<em>query</em> / ] <code>publish</code><br> <code>sbt</code> [<em>query</em> / ] <code>publishSigned</code><br> <code>sbt</code> [<em>query</em> / ] <code>publishLocal</code><br> <code>sbt</code> [<em>query</em> / ] <code>publishM2</code></p>
-<h2 id="description-6"><a class="header" href="#description-6">Description</a></h2>
+<h2 id="description-7"><a class="header" href="#description-7">Description</a></h2>
 <p>The publish family of tasks provide means for compiling and publishing your project. <em>Publishing</em> in this context consists of uploading a descriptor, such as a Maven POM or <code>ivy.xml</code>, and artifacts, such as a JAR or <code>war</code> file, to a repository so that other projects can specify your project as a dependency.</p>
 <ul>
 <li>The <code>publish</code> task publishes your project to a remote repository, such as JFrog Artifactory or Sonatype Nexus instance.</li>
@@ -3104,7 +3227,7 @@ For example:</p>
 }
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="watch-command"><a class="header" href="#watch-command">Watch command</a></h1>
-<h2 id="synopsis-7"><a class="header" href="#synopsis-7">Synopsis</a></h2>
+<h2 id="synopsis-8"><a class="header" href="#synopsis-8">Synopsis</a></h2>
 <p><code>sbt</code> <code>~</code> <em>command1</em><br> <code>sbt</code> <code>~</code> <em>command1</em> [ <code>;</code> <em>command2</em> <code>;</code> ... ]</p>
 <h2 id="descrption"><a class="header" href="#descrption">Descrption</a></h2>
 <p>The watch command is denoted by <code>~</code> (tilde), and it provides the ability to monitor the input files for particular tasks and repeat the tasks when changes to those files occur.</p>
@@ -3408,7 +3531,7 @@ Global / remoteCacheHeaders += IO.read(BuildPaths.defaultGlobalBase / "buildbudd
 Global / remoteCacheHeaders += IO.read(BuildPaths.defaultGlobalBase / "nativelink_credential.txt").trim
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="artifact"><a class="header" href="#artifact">Artifact</a></h1>
-<h2 id="description-7"><a class="header" href="#description-7">Description</a></h2>
+<h2 id="description-8"><a class="header" href="#description-8">Description</a></h2>
 <p>An artifact is a single file ready for publishing a specific version of a subproject. This is a concept that originated in <a href="https://maven.apache.org/ref/3.9.11/maven-core/artifact-handlers.html">Apache Maven</a> and <a href="https://ant.apache.org/ivy/history/2.3.0/terminology.html#artifact">Ivy</a>.</p>
 <p>In the JVM ecosystem, common artifacts are Java archives, or JAR files. Compressed package formats are often preferred because they are easier to manage, download, and store.</p>
 <p>To illustrate, the following is a list of artifacts for a library, enumerated in an <code>ivy.xml</code> file:</p>
