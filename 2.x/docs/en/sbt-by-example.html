@@ -452,20 +452,18 @@ scala&gt; :q // to quit
 <pre><code class="language-scala">scalaVersion := "3.3.3"
 organization := "com.example"
 
-lazy val hello = project
-  .in(file("."))
+lazy val hello = rootProject
   .settings(
     name := "Hello",
     libraryDependencies ++= Seq(
       "org.scala-lang" %% "toolkit" % "0.1.7",
-      "org.scala-lang" %% "toolkit-test" % "0.1.7" % Test
-    )
+      "org.scala-lang" %% "toolkit-test" % "0.1.7" % Test,
+    ),
   )
 
-lazy val helloCore = project
-  .in(file("core"))
+lazy val helloCore = (project in file("core"))
   .settings(
-    name := "Hello Core"
+    name := "Hello Core",
   )
 </code></pre>
 <p>Use the <code>reload</code> command to reflect the change in <code>build.sbt</code>.</p>
@@ -485,21 +483,19 @@ organization := "com.example"
 
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % "0.1.7"
 
-lazy val hello = project
-  .in(file("."))
+lazy val hello = rootProject
   .settings(
     name := "Hello",
     libraryDependencies ++= Seq(
       "org.scala-lang" %% "toolkit" % "0.1.7",
-      toolkitTest % Test
-    )
+      toolkitTest % Test,
+    ),
   )
 
-lazy val helloCore = project
-  .in(file("core"))
+lazy val helloCore = (project in file("core"))
   .settings(
     name := "Hello Core",
-    libraryDependencies += toolkitTest % Test
+    libraryDependencies += toolkitTest % Test,
   )
 </code></pre>
 <h3 id="broadcast-commands"><a class="header" href="#broadcast-commands">Broadcast commands</a></h3>
@@ -509,22 +505,20 @@ organization := "com.example"
 
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % "0.1.7"
 
-lazy val hello = project
-  .in(file("."))
-  .aggregate(helloCore)
+lazy val hello = rootProject
+  .autoAggregate
   .settings(
     name := "Hello",
     libraryDependencies ++= Seq(
       "org.scala-lang" %% "toolkit" % "0.1.7",
-      toolkitTest % Test
-    )
+      toolkitTest % Test,
+    ),
   )
 
-lazy val helloCore = project
-  .in(file("core"))
+lazy val helloCore = (project in file("core"))
   .settings(
     name := "Hello Core",
-    libraryDependencies += toolkitTest % Test
+    libraryDependencies += toolkitTest % Test,
   )
 </code></pre>
 <p>After <code>reload</code>, <code>~test</code> now runs on both subprojects:</p>
@@ -538,21 +532,21 @@ organization := "com.example"
 
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % "0.1.7"
 
-lazy val hello = project
-  .in(file("."))
-  .aggregate(helloCore)
+lazy val hello = rootProject
+  .autoAggregate
   .dependsOn(helloCore)
   .settings(
     name := "Hello",
-    libraryDependencies += toolkitTest % Test
+    libraryDependencies ++= Seq(
+      "org.scala-lang" %% "toolkit" % "0.1.7",
+      toolkitTest % Test,
+    ),
   )
 
-lazy val helloCore = project
-  .in(file("core"))
+lazy val helloCore = (project in file("core"))
   .settings(
     name := "Hello Core",
-    libraryDependencies += "org.scala-lang" %% "toolkit" % "0.1.7",
-    libraryDependencies += toolkitTest % Test
+    libraryDependencies += toolkitTest % Test,
   )
 </code></pre>
 <h3 id="parse-json-using-ujson"><a class="header" href="#parse-json-using-ujson">Parse JSON using uJson</a></h3>

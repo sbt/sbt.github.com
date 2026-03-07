@@ -502,20 +502,18 @@ scala&gt; :q // to quit
 <pre><code class="language-scala">scalaVersion := "3.3.3"
 organization := "com.example"
 
-lazy val hello = project
-  .in(file("."))
+lazy val hello = rootProject
   .settings(
     name := "Hello",
     libraryDependencies ++= Seq(
       "org.scala-lang" %% "toolkit" % "0.1.7",
-      "org.scala-lang" %% "toolkit-test" % "0.1.7" % Test
-    )
+      "org.scala-lang" %% "toolkit-test" % "0.1.7" % Test,
+    ),
   )
 
-lazy val helloCore = project
-  .in(file("core"))
+lazy val helloCore = (project in file("core"))
   .settings(
-    name := "Hello Core"
+    name := "Hello Core",
   )
 </code></pre>
 <p><code>reload</code> コマンドを使って、<code>build.sbt</code> の変更を反映させる。</p>
@@ -535,21 +533,19 @@ organization := "com.example"
 
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % "0.1.7"
 
-lazy val hello = project
-  .in(file("."))
+lazy val hello = rootProject
   .settings(
     name := "Hello",
     libraryDependencies ++= Seq(
       "org.scala-lang" %% "toolkit" % "0.1.7",
-      toolkitTest % Test
-    )
+      toolkitTest % Test,
+    ),
   )
 
-lazy val helloCore = project
-  .in(file("core"))
+lazy val helloCore = (project in file("core"))
   .settings(
     name := "Hello Core",
-    libraryDependencies += toolkitTest % Test
+    libraryDependencies += toolkitTest % Test,
   )
 </code></pre>
 <h3 id="コマンドをブロードキャストする"><a class="header" href="#コマンドをブロードキャストする">コマンドをブロードキャストする</a></h3>
@@ -559,22 +555,20 @@ organization := "com.example"
 
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % "0.1.7"
 
-lazy val hello = project
-  .in(file("."))
-  .aggregate(helloCore)
+lazy val hello = rootProject
+  .autoAggregate
   .settings(
     name := "Hello",
     libraryDependencies ++= Seq(
       "org.scala-lang" %% "toolkit" % "0.1.7",
-      toolkitTest % Test
-    )
+      toolkitTest % Test,
+    ),
   )
 
-lazy val helloCore = project
-  .in(file("core"))
+lazy val helloCore = (project in file("core"))
   .settings(
     name := "Hello Core",
-    libraryDependencies += toolkitTest % Test
+    libraryDependencies += toolkitTest % Test,
   )
 </code></pre>
 <p><code>reload</code> 後、<code>~test</code> は両方のサブプロジェクトに作用する:</p>
@@ -588,21 +582,21 @@ organization := "com.example"
 
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % "0.1.7"
 
-lazy val hello = project
-  .in(file("."))
-  .aggregate(helloCore)
+lazy val hello = rootProject
+  .autoAggregate
   .dependsOn(helloCore)
   .settings(
     name := "Hello",
-    libraryDependencies += toolkitTest % Test
+    libraryDependencies ++= Seq(
+      "org.scala-lang" %% "toolkit" % "0.1.7",
+      toolkitTest % Test,
+    ),
   )
 
-lazy val helloCore = project
-  .in(file("core"))
+lazy val helloCore = (project in file("core"))
   .settings(
     name := "Hello Core",
-    libraryDependencies += "org.scala-lang" %% "toolkit" % "0.1.7",
-    libraryDependencies += toolkitTest % Test
+    libraryDependencies += toolkitTest % Test,
   )
 </code></pre>
 <h3 id="ujson-を使って-json-をパースする"><a class="header" href="#ujson-を使って-json-をパースする">uJson を使って JSON をパースする</a></h3>
@@ -1098,7 +1092,7 @@ Enter number:
 name := "Hello"
 </code></pre>
 <p>より明示的に書くと:</p>
-<pre><code class="language-scala">lazy val root = (project in file("."))
+<pre><code class="language-scala">lazy val root = rootProject
   .settings(
     scalaVersion := "3.3.3",
     name := "Hello",
@@ -1254,11 +1248,13 @@ lazy val util = (project in file("util"))
 <pre><code class="language-scala">lazy val util = (project in file("util"))
   .dependsOn(core)
 </code></pre>
+<h2 id="ルートプロジェクト"><a class="header" href="#ルートプロジェクト">ルートプロジェクト</a></h2>
+<p>ビルドのルートにあるサブプロジェクトは、<strong>ルートプロジェクト</strong>と呼ばれ、ビルドの中で特別な役割を果たすことがある。もしルートディレクトリにサブプロジェクトが定義されてない場合、sbt は自動的に他のプロジェクトを集約するデフォルトのルートプロジェクトを生成する。</p>
 <h2 id="タスク集約"><a class="header" href="#タスク集約">タスク集約</a></h2>
 <p>タスク集約は、集約する側のサブプロジェクトで任意のタスクを実行するとき、集約される側の複数のサブプロジェクトでも同じタスクが実行されるという関係を意味する。</p>
 <pre><code class="language-scala">scalaVersion := "3.8.1"
 
-lazy val root = (project in file("."))
+lazy val root = rootProject
   .autoAggregate
   .settings(
     publish / skip := true
@@ -1269,8 +1265,6 @@ lazy val util = (project in file("util"))
 lazy val core = (project in file("core"))
 </code></pre>
 <p>上の例では、ルートプロジェクトが <code>util</code> と <code>core</code> を集約する。そのため、sbt シェルに <code>compile</code> と打ち込むと、3つのサブプロジェクトが並列にコンパイルされる。</p>
-<h2 id="ルートプロジェクト"><a class="header" href="#ルートプロジェクト">ルートプロジェクト</a></h2>
-<p>ビルドのルートにあるサブプロジェクトは、<strong>ルートプロジェクト</strong>と呼ばれ、ビルドの中で特別な役割を果たすことがある。もしルートディレクトリにサブプロジェクトが定義されてない場合、sbt は自動的に他のプロジェクトを集約するデフォルトのルートプロジェクトを生成する。</p>
 <h2 id="コモンセッティング"><a class="header" href="#コモンセッティング">コモン・セッティング</a></h2>
 <p>sbt 2.x では、<code>settings(...)</code> を使わずに <code>build.sbt</code> にセッティングを直書きした場合、<strong>コモン・セッティング</strong>として全サブプロジェクトに注入される。</p>
 <pre><code class="language-scala">scalaVersion := "3.8.1"

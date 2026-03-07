@@ -514,20 +514,18 @@ scala&gt; :q // to quit
 <pre><code class="language-scala">scalaVersion := "3.3.3"
 organization := "com.example"
 
-lazy val hello = project
-  .in(file("."))
+lazy val hello = rootProject
   .settings(
     name := "Hello",
     libraryDependencies ++= Seq(
       "org.scala-lang" %% "toolkit" % "0.1.7",
-      "org.scala-lang" %% "toolkit-test" % "0.1.7" % Test
-    )
+      "org.scala-lang" %% "toolkit-test" % "0.1.7" % Test,
+    ),
   )
 
-lazy val helloCore = project
-  .in(file("core"))
+lazy val helloCore = (project in file("core"))
   .settings(
-    name := "Hello Core"
+    name := "Hello Core",
   )
 </code></pre>
 <p>Use the <code>reload</code> command to reflect the change in <code>build.sbt</code>.</p>
@@ -547,21 +545,19 @@ organization := "com.example"
 
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % "0.1.7"
 
-lazy val hello = project
-  .in(file("."))
+lazy val hello = rootProject
   .settings(
     name := "Hello",
     libraryDependencies ++= Seq(
       "org.scala-lang" %% "toolkit" % "0.1.7",
-      toolkitTest % Test
-    )
+      toolkitTest % Test,
+    ),
   )
 
-lazy val helloCore = project
-  .in(file("core"))
+lazy val helloCore = (project in file("core"))
   .settings(
     name := "Hello Core",
-    libraryDependencies += toolkitTest % Test
+    libraryDependencies += toolkitTest % Test,
   )
 </code></pre>
 <h3 id="broadcast-commands"><a class="header" href="#broadcast-commands">Broadcast commands</a></h3>
@@ -571,22 +567,20 @@ organization := "com.example"
 
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % "0.1.7"
 
-lazy val hello = project
-  .in(file("."))
-  .aggregate(helloCore)
+lazy val hello = rootProject
+  .autoAggregate
   .settings(
     name := "Hello",
     libraryDependencies ++= Seq(
       "org.scala-lang" %% "toolkit" % "0.1.7",
-      toolkitTest % Test
-    )
+      toolkitTest % Test,
+    ),
   )
 
-lazy val helloCore = project
-  .in(file("core"))
+lazy val helloCore = (project in file("core"))
   .settings(
     name := "Hello Core",
-    libraryDependencies += toolkitTest % Test
+    libraryDependencies += toolkitTest % Test,
   )
 </code></pre>
 <p>After <code>reload</code>, <code>~test</code> now runs on both subprojects:</p>
@@ -600,21 +594,21 @@ organization := "com.example"
 
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % "0.1.7"
 
-lazy val hello = project
-  .in(file("."))
-  .aggregate(helloCore)
+lazy val hello = rootProject
+  .autoAggregate
   .dependsOn(helloCore)
   .settings(
     name := "Hello",
-    libraryDependencies += toolkitTest % Test
+    libraryDependencies ++= Seq(
+      "org.scala-lang" %% "toolkit" % "0.1.7",
+      toolkitTest % Test,
+    ),
   )
 
-lazy val helloCore = project
-  .in(file("core"))
+lazy val helloCore = (project in file("core"))
   .settings(
     name := "Hello Core",
-    libraryDependencies += "org.scala-lang" %% "toolkit" % "0.1.7",
-    libraryDependencies += toolkitTest % Test
+    libraryDependencies += toolkitTest % Test,
   )
 </code></pre>
 <h3 id="parse-json-using-ujson"><a class="header" href="#parse-json-using-ujson">Parse JSON using uJson</a></h3>
@@ -1131,7 +1125,7 @@ the subproject located in the current directory like this:</p>
 name := "Hello"
 </code></pre>
 <p>or more explicitly:</p>
-<pre><code class="language-scala">lazy val root = (project in file("."))
+<pre><code class="language-scala">lazy val root = rootProject
   .settings(
     scalaVersion := "3.3.3",
     name := "Hello",
@@ -1325,11 +1319,16 @@ This is done by declaring <code>dependsOn(...)</code>. For example, if <code>uti
 <pre><code class="language-scala">lazy val util = (project in file("util"))
   .dependsOn(core)
 </code></pre>
+<h2 id="root-project"><a class="header" href="#root-project">Root project</a></h2>
+<p>The subproject at the root of the build is called a <strong>root project</strong>,
+and often plays a special role in the build.
+If a subproject is not defined at the root directory of the build,
+sbt automatically creates a default one that aggregates all other subprojects in the build.</p>
 <h2 id="task-aggregation"><a class="header" href="#task-aggregation">Task aggregation</a></h2>
 <p>Task aggregation means that running a task on the aggregate subproject will also run on the aggregated subprojects.</p>
 <pre><code class="language-scala">scalaVersion := "3.8.1"
 
-lazy val root = (project in file("."))
+lazy val root = rootProject
   .autoAggregate
   .settings(
     publish / skip := true
@@ -1340,11 +1339,6 @@ lazy val util = (project in file("util"))
 lazy val core = (project in file("core"))
 </code></pre>
 <p>In the above example, the root subproject aggregates <code>util</code> and <code>core</code>. When you type <code>compile</code> in the sbt shell, all tree subprojects are compiled in parallel.</p>
-<h2 id="root-project"><a class="header" href="#root-project">Root project</a></h2>
-<p>The subproject at the root of the build is called a <strong>root project</strong>,
-and often plays a special role in the build.
-If a subproject is not defined at the root directory of the build,
-sbt automatically creates a default one that aggregates all other subprojects in the build.</p>
 <h2 id="common-settings"><a class="header" href="#common-settings">Common settings</a></h2>
 <p>In sbt 2.x, bare settings that are written directly in <code>build.sbt</code> without <code>settings(...)</code> are <strong>common settings</strong> that are injected to all subprojects.</p>
 <pre><code class="language-scala">scalaVersion := "3.8.1"

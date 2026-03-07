@@ -233,11 +233,13 @@ lazy val util = (project in file("util"))
 <pre><code class="language-scala">lazy val util = (project in file("util"))
   .dependsOn(core)
 </code></pre>
+<h2 id="ルートプロジェクト"><a class="header" href="#ルートプロジェクト">ルートプロジェクト</a></h2>
+<p>ビルドのルートにあるサブプロジェクトは、<strong>ルートプロジェクト</strong>と呼ばれ、ビルドの中で特別な役割を果たすことがある。もしルートディレクトリにサブプロジェクトが定義されてない場合、sbt は自動的に他のプロジェクトを集約するデフォルトのルートプロジェクトを生成する。</p>
 <h2 id="タスク集約"><a class="header" href="#タスク集約">タスク集約</a></h2>
 <p>タスク集約は、集約する側のサブプロジェクトで任意のタスクを実行するとき、集約される側の複数のサブプロジェクトでも同じタスクが実行されるという関係を意味する。</p>
 <pre><code class="language-scala">scalaVersion := "3.8.1"
 
-lazy val root = (project in file("."))
+lazy val root = rootProject
   .autoAggregate
   .settings(
     publish / skip := true
@@ -248,8 +250,6 @@ lazy val util = (project in file("util"))
 lazy val core = (project in file("core"))
 </code></pre>
 <p>上の例では、ルートプロジェクトが <code>util</code> と <code>core</code> を集約する。そのため、sbt シェルに <code>compile</code> と打ち込むと、3つのサブプロジェクトが並列にコンパイルされる。</p>
-<h2 id="ルートプロジェクト"><a class="header" href="#ルートプロジェクト">ルートプロジェクト</a></h2>
-<p>ビルドのルートにあるサブプロジェクトは、<strong>ルートプロジェクト</strong>と呼ばれ、ビルドの中で特別な役割を果たすことがある。もしルートディレクトリにサブプロジェクトが定義されてない場合、sbt は自動的に他のプロジェクトを集約するデフォルトのルートプロジェクトを生成する。</p>
 <h2 id="コモンセッティング"><a class="header" href="#コモンセッティング">コモン・セッティング</a></h2>
 <p>sbt 2.x では、<code>settings(...)</code> を使わずに <code>build.sbt</code> にセッティングを直書きした場合、<strong>コモン・セッティング</strong>として全サブプロジェクトに注入される。</p>
 <pre><code class="language-scala">scalaVersion := "3.8.1"
