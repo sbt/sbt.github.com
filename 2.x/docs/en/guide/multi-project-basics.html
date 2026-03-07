@@ -216,7 +216,7 @@ its own JAR file when you run <code>packageBin</code>, and in general works like
 other project.</p>
 <p>A <strong>subproject</strong> is defined by declaring a <code>lazy val</code> of type
 <a href="../../api/sbt/Project.html">Project</a>. For example, :</p>
-<pre><code class="language-scala">scalaVersion := "3.7.3"
+<pre><code class="language-scala">scalaVersion := "3.8.1"
 LocalRootProject / publish / skip := true
 
 lazy val core = (project in file("core"))
@@ -242,7 +242,7 @@ This is done by declaring <code>dependsOn(...)</code>. For example, if <code>uti
 </code></pre>
 <h2 id="task-aggregation"><a class="header" href="#task-aggregation">Task aggregation</a></h2>
 <p>Task aggregation means that running a task on the aggregate subproject will also run on the aggregated subprojects.</p>
-<pre><code class="language-scala">scalaVersion := "3.7.3"
+<pre><code class="language-scala">scalaVersion := "3.8.1"
 
 lazy val root = (project in file("."))
   .autoAggregate
@@ -262,7 +262,7 @@ If a subproject is not defined at the root directory of the build,
 sbt automatically creates a default one that aggregates all other subprojects in the build.</p>
 <h2 id="common-settings"><a class="header" href="#common-settings">Common settings</a></h2>
 <p>In sbt 2.x, bare settings that are written directly in <code>build.sbt</code> without <code>settings(...)</code> are <strong>common settings</strong> that are injected to all subprojects.</p>
-<pre><code class="language-scala">scalaVersion := "3.7.3"
+<pre><code class="language-scala">scalaVersion := "3.8.1"
 
 lazy val core = (project in file("core"))
 
@@ -271,7 +271,7 @@ lazy val app = (project in file("app"))
 </code></pre>
 <p>In the above, the <code>scalaVersion</code> setting is applied to the default root subproject, <code>core</code>, and <code>util</code>.</p>
 <p>One exception to this rule is settings that are already scoped to a subproject.</p>
-<pre><code class="language-scala">scalaVersion := "3.7.3"
+<pre><code class="language-scala">scalaVersion := "3.8.1"
 
 lazy val core = (project in file("core"))
 
@@ -282,7 +282,7 @@ lazy val app = (project in file("app"))
 app / name := "app1"
 </code></pre>
 <p>We can take advantage of this exception to add some settings that only apply to the default root project as follows:</p>
-<pre><code class="language-scala">scalaVersion := "3.7.3"
+<pre><code class="language-scala">scalaVersion := "3.8.1"
 
 lazy val core = (project in file("core"))
 

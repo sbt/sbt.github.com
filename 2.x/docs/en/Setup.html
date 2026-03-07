@@ -217,24 +217,24 @@
 <p>sbt runner is a script that invokes a declared version of sbt, downloading it beforehand if necessary. This allows build authors to precisely control
 the sbt version, instead of relying on users' machine environment.</p>
 <h3 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h3>
-<p>sbt runs on all major operating systems; however, it requires JDK 8 or higher to run.</p>
-<pre><code class="language-bash">java -version
-# openjdk version "1.8.0_352"
+<p>sbt runs on all major operating systems; however, sbt 2.x requires JDK 17 or higher to run.</p>
+<pre><code class="language-bash">java --version
+# openjdk 17.0.12 2024-07-16 LTS
 </code></pre>
 <h3 id="installing-from-sdkman"><a class="header" href="#installing-from-sdkman">Installing from SDKMAN</a></h3>
 <p>To install both JDK and sbt, consider using <a href="https://sdkman.io/">SDKMAN</a>.</p>
-<pre><code class="language-bash">sdk install java $(sdk list java | grep -o "\b8\.[0-9]*\.[0-9]*\-tem" | head -1)
+<pre><code class="language-bash">sdk install java $(sdk list java | grep -o "\b17\.[0-9]*\.[0-9]*\-zulu" | head -1)
 sdk install sbt
 </code></pre>
 <h3 id="universal-packages"><a class="header" href="#universal-packages">Universal packages</a></h3>
 <ul>
-<li><a href="https://github.com/sbt/sbt/releases/download/v1.12.0/sbt-1.12.0.zip">sbt-1.12.0.zip</a></li>
-<li><a href="https://github.com/sbt/sbt/releases/download/v1.12.0/sbt-1.12.0.tgz">sbt-1.12.0.tgz</a></li>
-<li><a href="https://github.com/sbt/sbt/releases/download/v1.12.0/sbt-1.12.0.msi">sbt-1.12.0.msi</a></li>
+<li><a href="https://github.com/sbt/sbt/releases/download/v1.12.5/sbt-1.12.5.zip">sbt-1.12.5.zip</a></li>
+<li><a href="https://github.com/sbt/sbt/releases/download/v1.12.5/sbt-1.12.5.tgz">sbt-1.12.5.tgz</a></li>
+<li><a href="https://github.com/sbt/sbt/releases/download/v1.12.5/sbt-1.12.5.msi">sbt-1.12.5.msi</a></li>
 </ul>
 <h2 id="verify-the-sbt-runner"><a class="header" href="#verify-the-sbt-runner">Verify the sbt runner</a></h2>
 <pre><code class="language-bash">sbt --script-version
-# 1.12.0
+# 1.12.5
 </code></pre>
 
                     </main>

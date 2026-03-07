@@ -241,7 +241,7 @@ libraryDependencies +=
 </code></pre>
 <h2 id="ベアセッティングの変更点"><a class="header" href="#ベアセッティングの変更点">ベア・セッティングの変更点</a></h2>
 <pre><code class="language-scala">version := "0.1.0"
-scalaVersion := "3.7.3"
+scalaVersion := "3.8.1"
 </code></pre>
 <p><code>settings(...)</code> を介さず、上の例のように <code>build.sbt</code> に直書きされたセッティングを<strong>ベア・セッティング</strong> (bare settings) と呼ぶ。</p>
 <div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
@@ -302,7 +302,7 @@ lazy val plugin = (project in file("plugin"))
     (pluginCrossBuild / sbtVersion) := {
       scalaBinaryVersion.value match {
         case "2.12" =&gt; "1.5.8"
-        case _      =&gt; "2.0.0-RC6"
+        case _      =&gt; "2.0.0-RC9"
       }
     },
   )

@@ -216,24 +216,24 @@
 </ul>
 <p>sbt runner 是一个 shell 脚本，它会在必要时提前下载指定版本的 sbt 并调用它。通过这种机制，构建作者可以精确控制 sbt 的版本，而不是依赖用户的机器环境。</p>
 <h3 id="软件需求"><a class="header" href="#软件需求">软件需求</a></h3>
-<p>sbt 可在所有主流操作系统上运行；但是，运行它需要 JDK 8 或更高版本。</p>
-<pre><code class="language-bash">java -version
-# openjdk version "1.8.0_352"
+<p>sbt 可在所有主流操作系统上运行；但是，运行它需要 JDK 17 或更高版本。</p>
+<pre><code class="language-bash">java --version
+# openjdk 17.0.12 2024-07-16 LTS
 </code></pre>
 <h3 id="通过-sdkman-安装"><a class="header" href="#通过-sdkman-安装">通过 SDKMAN 安装</a></h3>
 <p>要同时安装 JDK 和 sbt，可以考虑使用 <a href="https://sdkman.io/">SDKMAN</a>。</p>
-<pre><code class="language-bash">sdk install java $(sdk list java | grep -o "\b8\.[0-9]*\.[0-9]*\-tem" | head -1)
+<pre><code class="language-bash">sdk install java $(sdk list java | grep -o "\b17\.[0-9]*\.[0-9]*\-zulu" | head -1)
 sdk install sbt
 </code></pre>
 <h3 id="通用的包安装"><a class="header" href="#通用的包安装">通用的包安装</a></h3>
 <ul>
-<li><a href="https://github.com/sbt/sbt/releases/download/v1.12.0/sbt-1.12.0.zip">sbt-1.12.0.zip</a></li>
-<li><a href="https://github.com/sbt/sbt/releases/download/v1.12.0/sbt-1.12.0.tgz">sbt-1.12.0.tgz</a></li>
-<li><a href="https://github.com/sbt/sbt/releases/download/v1.12.0/sbt-1.12.0.msi">sbt-1.12.0.msi</a></li>
+<li><a href="https://github.com/sbt/sbt/releases/download/v1.12.5/sbt-1.12.5.zip">sbt-1.12.5.zip</a></li>
+<li><a href="https://github.com/sbt/sbt/releases/download/v1.12.5/sbt-1.12.5.tgz">sbt-1.12.5.tgz</a></li>
+<li><a href="https://github.com/sbt/sbt/releases/download/v1.12.5/sbt-1.12.5.msi">sbt-1.12.5.msi</a></li>
 </ul>
 <h2 id="验证-sbt-runner"><a class="header" href="#验证-sbt-runner">验证 sbt runner</a></h2>
 <pre><code class="language-bash">sbt --script-version
-# 1.12.0
+# 1.12.5
 </code></pre>
 
                     </main>

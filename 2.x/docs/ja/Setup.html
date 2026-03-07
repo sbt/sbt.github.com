@@ -216,24 +216,24 @@
 </ul>
 <p>sbt runner は、宣言されたバージョンの sbt を必要に応じてダウンロードして、実行するスクリプトだ。この機構によってユーザのマシン環境に依存することなく、ビルド作者が sbt のバージョンを正確に管理することができる。</p>
 <h3 id="システム要件"><a class="header" href="#システム要件">システム要件</a></h3>
-<p>sbt は主なオペレーティング・システムにおいて動作するが、事前に JDK 8 以上がインストールされていることを必要とする。</p>
-<pre><code class="language-bash">java -version
-# openjdk version "1.8.0_352"
+<p>sbt は主なオペレーティング・システムにおいて動作するが、事前に JDK 17 以上がインストールされていることを必要とする。</p>
+<pre><code class="language-bash">java --version
+# openjdk 17.0.12 2024-07-16 LTS
 </code></pre>
 <h3 id="sdkman-からのインストール"><a class="header" href="#sdkman-からのインストール">SDKMAN からのインストール</a></h3>
 <p>JDK と sbt のインストールをするのに、<a href="https://sdkman.io/">SDKMAN</a> を使うことができる。</p>
-<pre><code class="language-bash">sdk install java $(sdk list java | grep -o "\b8\.[0-9]*\.[0-9]*\-tem" | head -1)
+<pre><code class="language-bash">sdk install java $(sdk list java | grep -o "\b17\.[0-9]*\.[0-9]*\-zulu" | head -1)
 sdk install sbt
 </code></pre>
 <h3 id="ユニバーサルパッケージ"><a class="header" href="#ユニバーサルパッケージ">ユニバーサル・パッケージ</a></h3>
 <ul>
-<li><a href="https://github.com/sbt/sbt/releases/download/v1.12.0/sbt-1.12.0.zip">sbt-1.12.0.zip</a></li>
-<li><a href="https://github.com/sbt/sbt/releases/download/v1.12.0/sbt-1.12.0.tgz">sbt-1.12.0.tgz</a></li>
-<li><a href="https://github.com/sbt/sbt/releases/download/v1.12.0/sbt-1.12.0.msi">sbt-1.12.0.msi</a></li>
+<li><a href="https://github.com/sbt/sbt/releases/download/v1.12.5/sbt-1.12.5.zip">sbt-1.12.5.zip</a></li>
+<li><a href="https://github.com/sbt/sbt/releases/download/v1.12.5/sbt-1.12.5.tgz">sbt-1.12.5.tgz</a></li>
+<li><a href="https://github.com/sbt/sbt/releases/download/v1.12.5/sbt-1.12.5.msi">sbt-1.12.5.msi</a></li>
 </ul>
 <h2 id="sbt-runner-の確認"><a class="header" href="#sbt-runner-の確認">sbt runner の確認</a></h2>
 <pre><code class="language-bash">sbt --script-version
-# 1.12.0
+# 1.12.5
 </code></pre>
 
                     </main>

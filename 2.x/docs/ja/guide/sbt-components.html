@@ -213,7 +213,7 @@
 <p>sbt のビルドは、「<code>sbt</code> という名前のシェルスクリプト」によって実行され、このスクリプトは sbt runner と呼ばれる。</p>
 <h3 id="projectbuildproperties-による-sbt-バージョンの指定"><a class="header" href="#projectbuildproperties-による-sbt-バージョンの指定">project/build.properties による sbt バージョンの指定</a></h3>
 <p>sbt runner は、そのサブコンポーネントである sbt launcher を実行し、sbt launcher は <code>project/build.properties</code> を読み込んで、そのビルドに使われる sbt のバージョンを決定し、キャッシュに無ければ sbt 本体をダウンロードする:</p>
-<pre><code>sbt.version=2.0.0-RC6
+<pre><code>sbt.version=2.0.0-RC9
 </code></pre>
 <p>これは、つまり</p>
 <ul>
@@ -228,7 +228,7 @@
 <p>sbt server は、そのサブコンポーネントとして <a href="https://get-coursier.io/">Couriser</a> を実行して、Scala 標準ライブラリ、Scala コンパイラ、ビルドで使われるその他のライブラリ依存性の解決を行う。</p>
 <h3 id="zinc"><a class="header" href="#zinc">Zinc</a></h3>
 <p>Zinc は、sbt プロジェクトにより開発、メンテされている、Scala の差分コンパイラだ。Zinc の側面として見落とされがちなのは、Zinc は<strong>ここ数年に出た全てのバージョン</strong>の Scala コンパイラに対する安定した API を提供しているということがある。Coursier がどんな Scala バージョンでも解決できることと合わせると、sbt は <code>build.sbt</code> に一行書くだけで、ここ数年に出たどのバージョンの Scala でも走らせることができる:</p>
-<pre><code class="language-scala">scalaVersion := "3.7.3"
+<pre><code class="language-scala">scalaVersion := "3.8.1"
 </code></pre>
 <h3 id="bsp-server"><a class="header" href="#bsp-server">BSP server</a></h3>
 <p>sbt server は <a href="https://build-server-protocol.github.io/">Build Server Protocol (BSP)</a> をサポートして、ビルド対象の列挙、ビルドの実行、その他を行うことができる。これにより、IntelliJ や Metals といった IDE が既に実行中の sbt server  とコードを用いて通信することが可能となる。</p>
