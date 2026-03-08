@@ -1971,7 +1971,7 @@ sbt:demo&gt; show someKey
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-1"><a class="header" href="#sbt-1">sbt</a></h1>
 <p>基本的な導入としては、sbt 入門ガイドの<a href="reference/../guide/basic-tasks.html">基本タスク</a>をまず読んでみてほしい。</p>
 <h2 id="書式"><a class="header" href="#書式">書式</a></h2>
-<p><code>sbt</code><br> <code>sbt</code> <em>command</em> <em>args</em><br> <code>sbt --server</code><br> <code>sbt --script-version</code></p>
+<p><code>sbt</code><br> <code>sbt</code> <em>コマンド</em> <em>引数</em><br> <code>sbt --server</code><br> <code>sbt --script-version</code></p>
 <h2 id="説明"><a class="header" href="#説明">説明</a></h2>
 <p>sbt は最初は Scala と Java のために作られたシンプルなビルド・ツールだ。sbt はサブプロジェクト、様々な依存性、カスタムタスクなどを宣言することで高速かつ再現性の高いビルドが得られることを保証する。</p>
 <h3 id="sbt-runner-と-sbt-server"><a class="header" href="#sbt-runner-と-sbt-server">sbt runner と sbt server</a></h3>
@@ -2082,9 +2082,9 @@ sbt:demo&gt; show someKey
 <h3 id="一般コマンド"><a class="header" href="#一般コマンド">一般コマンド</a></h3>
 <ul>
 <li><code>shutdown</code> sbt server をシャットダウンして現行の sbt セッションを終了する。</li>
-<li><code>exit</code> or <code>quit</code> End the current interactive session or build. Additionally, Ctrl+D (Unix) or Ctrl+Z (Windows) will exit the interactive prompt.</li>
-<li><code>help &lt;command&gt;</code> Displays detailed help for the specified command. If the command does not exist, help lists detailed help for commands whose name or description match the argument, which is interpreted as a regular expression. If no command is provided, displays brief descriptions of the main commands. Related commands are tasks and settings.</li>
-<li><code>projects [add|remove &lt;URI&gt;]</code> List all available projects if no arguments provided or adds/removes the build at the provided URI.<!-- (See [multi-project builds][Multi-Project] for details on multi-project
+<li><code>exit</code> または <code>quit</code> 現行の sbt セッションまたはビルドを終了する。また、Ctrl+D (Unix) または Ctrl+Z (Windows) でもシェルを終了できる。</li>
+<li><code>help &lt;command&gt;</code> 渡されたコマンドの詳細なヘルプを表示する。コマンドが存在しない場合、引数（正規表現として解釈される）に名前または説明が一致するコマンドの詳細ヘルプを一覧表示する。引数が指定されていない場合、主要なコマンドの簡潔な説明を表示する。関連コマンド: tasks、settings</li>
+<li><code>projects [add|remove &lt;URI&gt;]</code> 引数が指定されていない場合は利用可能なプロジェクトを一覧表示し、指定された URI のビルドを追加または削除する。<!-- (See [multi-project builds][Multi-Project] for details on multi-project
   builds.) --></li>
 </ul>
 <!--
@@ -2096,16 +2096,16 @@ sbt:demo&gt; show someKey
 -->
 <ul>
 <li>
-<p><a href="reference/./watch.html">Watch command</a> <code>~ &lt;command&gt;</code> Executes the project specified action or method whenever source files change.</p>
+<p><a href="reference/./watch.html">Watch コマンド</a> <code>~ &lt;command&gt;</code> ソースファイルが変更されるたびに指定されたアクションを実行する。</p>
 </li>
 <li>
-<p><code>&lt; filename</code> Executes the commands in the given file. Each command should be on its own line. Empty lines and lines beginning with '#' are ignored</p>
+<p><code>&lt; filename</code> 指定されたファイル内のコマンドを実行する。各コマンドは1行ずつ記述する。空行と '#' で始まる行は無視される。</p>
 </li>
 <li>
-<p><code>A ; B</code> Execute A and if it succeeds, run B. Note that the leading semicolon is required.</p>
+<p><code>A ; B</code> A を実行し、成功したら B を実行する。先頭のセミコロンが必要であることに注意。</p>
 </li>
 <li>
-<p><code>eval &lt;Scala-expression&gt;</code> Evaluates the given Scala expression and returns the result and inferred type. This can be used to set system properties, as a calculator, to fork processes, etc ... For example:</p>
+<p><code>eval &lt;Scala-expression&gt;</code> 渡された Scala 式を評価し、結果と推論された型を返す。システムプロパティの設定、電卓としての使用、プロセスのフォークなどに使用できる。例:</p>
 <pre><code>&gt; eval System.setProperty("demo", "true")
 &gt; eval 1+1
 &gt; eval "ls -l" !
@@ -2124,82 +2124,82 @@ sbt:demo&gt; show someKey
     available in a repository. Alternatively, specify the path to a
     Scala installation.
 -->
-<h3 id="commands-for-managing-the-build-definition"><a class="header" href="#commands-for-managing-the-build-definition">Commands for managing the build definition</a></h3>
+<h3 id="ビルド定義を管理するコマンド"><a class="header" href="#ビルド定義を管理するコマンド">ビルド定義を管理するコマンド</a></h3>
 <ul>
 <li>
-<p><code>reload [plugins|return]</code> If no argument is specified, reloads the build, recompiling any build or plugin definitions as necessary. reload plugins changes the current project to the build definition project (in <code>project/</code>). This can be useful to directly manipulate the build definition. For example, running clean on the build definition project will force snapshots to be updated and the build definition to be recompiled. reload return changes back to the main project.</p>
+<p><code>reload [plugins|return]</code> 引数が指定されていない場合、ビルドをリロードし、必要に応じてビルド定義やプラグイン定義を再コンパイルする。<code>reload plugins</code> は現在のプロジェクトをメタビルドプロジェクト (<code>project/</code> 内) に切り替える。ビルド定義を直接操作するのに便利である。例えば、ビルド定義プロジェクトで clean を実行すると、スナップショットの更新とビルド定義の再コンパイルが強制される。<code>reload return</code> はメインプロジェクトに戻る。</p>
 </li>
 <li>
-<p><code>set &lt;setting-expression&gt;</code> Evaluates and applies the given setting definition. The setting applies until sbt is restarted, the build is reloaded, or the setting is overridden by another set command or removed by the session command.<!-- See [.sbt build definition][Basic-Def] and
+<p><code>set &lt;setting-expression&gt;</code> 渡されたセッティング定義を評価して適用する。セッティングは sbt が再起動されるか、ビルドがリロードされるか、別の set コマンドで上書きされるか、session コマンドで削除されるまで有効である。<!-- See [.sbt build definition][Basic-Def] and
   [Inspecting Settings][Inspecting-Settings] for details. --></p>
 </li>
 <li>
-<p><code>session &lt;command&gt;</code> Manages session settings defined by the <code>set</code> command. It can persist settings configured at the prompt.<!-- See [Inspecting Settings][Inspecting-Settings] for details. --></p>
+<p><code>session &lt;command&gt;</code> <code>set</code> コマンドで定義されたセッションセッティングを管理する。プロンプトで設定したセッティングを永続化できる。<!-- See [Inspecting Settings][Inspecting-Settings] for details. --></p>
 </li>
 <li>
-<p><code>inspect &lt;setting-key&gt;</code> Displays information about settings, such as the value, description, defining scope, dependencies, delegation chain, and related settings.<!-- See [Inspecting Settings][Inspecting-Settings] for details. --></p>
+<p><code>inspect &lt;setting-key&gt;</code> 値、説明、定義スコープ、依存関係、委譲チェーン、関連セッティングなど、セッティングに関する情報を表示する。<!-- See [Inspecting Settings][Inspecting-Settings] for details. --></p>
 </li>
 </ul>
-<h2 id="sbt-runner-and-launcher"><a class="header" href="#sbt-runner-and-launcher">sbt runner and launcher</a></h2>
-<p>When launching the <code>sbt</code> runner from the system shell, various system properties or JVM extra options can be specified to influence its behaviour.</p>
-<h3 id="sbt-jvm-options-and-system-properties"><a class="header" href="#sbt-jvm-options-and-system-properties">sbt JVM options and system properties</a></h3>
-<p>If the <code>JAVA_OPTS</code> and/or <code>SBT_OPTS</code> environment variables are defined when <code>sbt</code> starts, their content is passed as command line arguments to the JVM running sbt server.</p>
-<p>If a file named <code>.jvmopts</code> exists in the  current directory, its content is appended to <code>JAVA_OPTS</code> at sbt startup. Similarly, if <code>.sbtopts</code> and/or <code>/etc/sbt/sbtopts</code> exist, their content is appended to <code>SBT_OPTS</code>. The default value of <code>JAVA_OPTS</code> is <code>-Dfile.encoding=UTF8</code>.</p>
-<p>You can also specify JVM system properties and command line options directly as <code>sbt</code> arguments: any <code>-Dkey=val</code> argument will be passed as-is to the JVM, and any <code>-J-Xfoo</code> will be passed as <code>-Xfoo</code>.</p>
-<p>See also <code>sbt --help</code> for more details.</p>
-<h3 id="sbt-jvm-heap-permgen-and-stack-sizes"><a class="header" href="#sbt-jvm-heap-permgen-and-stack-sizes">sbt JVM heap, permgen, and stack sizes</a></h3>
-<p>If you find yourself running out of permgen space or your workstation is low on memory, adjust the JVM configuration as you would for any java application.</p>
-<p>For example a common set of memory-related options is:</p>
+<h2 id="sbt-runner-とランチャー"><a class="header" href="#sbt-runner-とランチャー">sbt runner とランチャー</a></h2>
+<p>システムシェルから <code>sbt</code> runner を起動する際、動作に影響を与える様々なシステムプロパティや JVM の追加オプションを指定できる。</p>
+<h3 id="sbt-の-jvm-オプションとシステムプロパティ"><a class="header" href="#sbt-の-jvm-オプションとシステムプロパティ">sbt の JVM オプションとシステムプロパティ</a></h3>
+<p><code>sbt</code> 起動時に <code>JAVA_OPTS</code> および/または <code>SBT_OPTS</code> 環境変数が定義されている場合、その内容は sbt server を実行する JVM にコマンドライン引数として渡される。</p>
+<p>カレントディレクトリに <code>.jvmopts</code> という名前のファイルが存在する場合、sbt 起動時にその内容が <code>JAVA_OPTS</code> に追加される。同様に、<code>.sbtopts</code> および/または <code>/etc/sbt/sbtopts</code> が存在する場合、その内容が <code>SBT_OPTS</code> に追加される。<code>JAVA_OPTS</code> のデフォルト値は <code>-Dfile.encoding=UTF8</code> である。</p>
+<p>JVM のシステムプロパティとコマンドラインオプションは、<code>sbt</code> の引数として直接指定することもできる。<code>-Dkey=val</code> 形式の引数はそのまま JVM に渡され、<code>-J-Xfoo</code> は <code>-Xfoo</code> として渡される。</p>
+<p>詳細は <code>sbt --help</code> も参照のこと。</p>
+<h3 id="sbt-の-jvm-ヒープpermgenスタックサイズ"><a class="header" href="#sbt-の-jvm-ヒープpermgenスタックサイズ">sbt の JVM ヒープ、permgen、スタックサイズ</a></h3>
+<p>permgen やメモリが不足している場合は、他の Java アプリケーションと同様に JVMの設定を調整する必要がある。</p>
+<p>例えば、メモリ関連の一般的なオプションは以下の通り:</p>
 <pre><code class="language-bash">export SBT_OPTS="-Xmx2048M -Xss2M"
 sbt
 </code></pre>
-<p>Or if you prefer to specify them just for this session:</p>
+<p>現行セッションのみで指定したい場合:</p>
 <pre><code class="language-bash">sbt -J-Xmx2048M -J-Xss2M
 </code></pre>
-<h3 id="boot-directory"><a class="header" href="#boot-directory">Boot directory</a></h3>
-<p><code>sbt</code> runner is just a bootstrap, the actual sbt server, Scala compiler and standard library are by default downloaded to the shared directory  <code>\$HOME/.sbt/boot/</code>.</p>
-<p>To change the location of this directory, set the <code>sbt.boot.directory</code> system property. A relative path will be resolved against the current working directory, which can be useful if you want to avoid sharing the boot directory between projects. For example, the following uses the pre-0.11 style of putting the boot directory in <code>project/boot/</code>:</p>
+<h3 id="ブートディレクトリ"><a class="header" href="#ブートディレクトリ">ブートディレクトリ</a></h3>
+<p><code>sbt</code> runner はただの起動スクリプトであり、実際の sbt server、Scala コンパイラ、標準ライブラリはデフォルトで共有ディレクトリ <code>$HOME/.sbt/boot/</code> にダウンロードされる。</p>
+<p>このディレクトリの場所を変更するには、<code>sbt.boot.directory</code> システムプロパティを設定する。相対パスはカレントワーキングディレクトリに対して解決される。プロジェクト間でブートディレクトリを共有したくない場合に便利である。例えば、以下は 0.11 以前のスタイルで <code>project/boot/</code> にブートディレクトリを配置する:</p>
 <pre><code class="language-bash">sbt -Dsbt.boot.directory=project/boot/
 </code></pre>
-<h3 id="terminal-encoding"><a class="header" href="#terminal-encoding">Terminal encoding</a></h3>
-<p>The character encoding used by your terminal may differ from Java's default encoding for your platform. In this case, you will need to specify the <code>file.encoding=&lt;encoding&gt;</code> system property, which might look like:</p>
+<h3 id="ターミナルエンコーディング"><a class="header" href="#ターミナルエンコーディング">ターミナルエンコーディング</a></h3>
+<p>ターミナルで使用する文字エンコーディングは、プラットフォームの Java デフォルトエンコーディングと異なる場合がある。その場合、<code>file.encoding=&lt;encoding&gt;</code> システムプロパティを指定する必要がある。例:</p>
 <pre><code class="language-bash">export JAVA_OPTS="-Dfile.encoding=Cp1252"
 sbt
 </code></pre>
-<h3 id="httphttpsftp-proxy"><a class="header" href="#httphttpsftp-proxy">HTTP/HTTPS/FTP Proxy</a></h3>
-<p>On Unix, sbt will pick up any HTTP, HTTPS, or FTP proxy settings from the standard <code>http_proxy</code>, <code>https_proxy</code>, and <code>ftp_proxy</code> environment variables. If you are behind a proxy requiring authentication, you need to pass some supplementary flags at sbt startup. See <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/doc-files/net-properties.html">JVM networking system properties</a> for more details.</p>
-<p>For example:</p>
+<h3 id="httphttpsftp-プロキシ"><a class="header" href="#httphttpsftp-プロキシ">HTTP/HTTPS/FTP プロキシ</a></h3>
+<p>Unix では、sbt は標準の <code>http_proxy</code>、<code>https_proxy</code>、<code>ftp_proxy</code> 環境変数からHTTP、HTTPS、FTP のプロキシ設定を取得する。認証が必要なプロキシの内側にいる場合、sbt 起動時に追加のフラグを渡す必要がある。詳細は<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/doc-files/net-properties.html">JVM ネットワーキングシステムプロパティ</a>を参照。</p>
+<p>例:</p>
 <pre><code class="language-bash">sbt -Dhttp.proxyUser=username -Dhttp.proxyPassword=mypassword
 </code></pre>
-<p>On Windows, your script should set properties for proxy host, port, and if applicable, username and password. For example, for HTTP:</p>
+<p>Windows では、スクリプトでプロキシホスト、ポート、必要に応じてユーザー名とパスワードのプロパティを設定する。例えば HTTP の場合:</p>
 <pre><code class="language-bash">sbt -Dhttp.proxyHost=myproxy -Dhttp.proxyPort=8080 -Dhttp.proxyUser=username -Dhttp.proxyPassword=mypassword
 </code></pre>
-<p>Replace <code>http</code> with <code>https</code> or <code>ftp</code> in the above command line to configure HTTPS or FTP.</p>
-<h3 id="other-system-properties"><a class="header" href="#other-system-properties">Other system properties</a></h3>
-<p>The following system properties can also be passed to <code>sbt</code> runner:</p>
+<p>上記のコマンドラインで <code>http</code> を <code>https</code> または <code>ftp</code> に置き換えて HTTPS または FTP を設定する。</p>
+<h3 id="その他のシステムプロパティ"><a class="header" href="#その他のシステムプロパティ">その他のシステムプロパティ</a></h3>
+<p>以下のシステムプロパティも <code>sbt</code> runner に渡すことができる:</p>
 <h4 id="-dsbtbannertrue"><a class="header" href="#-dsbtbannertrue"><code>-Dsbt.banner=true</code></a></h4>
-<p>Show a welcome banner advertising new features.</p>
+<p>新機能を宣伝するウェルカムバナーを表示する。</p>
 <h4 id="-dsbtcitrue"><a class="header" href="#-dsbtcitrue"><code>-Dsbt.ci=true</code></a></h4>
-<p>Default <code>false</code> (unless then env var <code>BUILD_NUMBER</code> is set). For continuous integration environments. Suppress supershell and color.</p>
+<p>デフォルトは <code>false</code>（環境変数 <code>BUILD_NUMBER</code> が設定されている場合を除く）。CI 環境用。supershell とカラー出力を抑制する。</p>
 <h4 id="-dsbtclienttrue"><a class="header" href="#-dsbtclienttrue"><code>-Dsbt.client=true</code></a></h4>
-<p>Run the sbt client.</p>
+<p>sbt クライアントを実行する。</p>
 <h4 id="-dsbtcolorauto"><a class="header" href="#-dsbtcolorauto"><code>-Dsbt.color=auto</code></a></h4>
 <ul>
-<li>To turn on color, use <code>always</code> or <code>true</code>.</li>
-<li>To turn off color, use <code>never</code> or <code>false</code>.</li>
-<li>To use color if the output is a terminal (not a pipe) that supports color, use <code>auto</code>.</li>
+<li>カラーを有効にするには <code>always</code> または <code>true</code> を使用する。</li>
+<li>カラーを無効にするには <code>never</code> または <code>false</code> を使用する。</li>
+<li>出力がカラーをサポートするターミナル（パイプではない）の場合にカラーを使用するには <code>auto</code> を使用する。</li>
 </ul>
 <h4 id="-dsbtcoursierhomehomecachecoursierv1"><a class="header" href="#-dsbtcoursierhomehomecachecoursierv1"><code>-Dsbt.coursier.home=$HOME/.cache/coursier/v1</code></a></h4>
-<p>Location of the Coursier artifact cache, where the default is defined by <a href="https://get-coursier.io/docs/cache.html#default-location">Coursier cache resolution logic</a>. You can verify the value with the command <code>csrCacheDirectory</code>.</p>
+<p>Coursier アーティファクトキャッシュの場所。デフォルトは<a href="https://get-coursier.io/docs/cache.html#default-location">Coursier キャッシュ解決ロジック</a>で定義される。値は <code>csrCacheDirectory</code> コマンドで確認できる。</p>
 <h4 id="-dsbtgenbuildpropstrue"><a class="header" href="#-dsbtgenbuildpropstrue"><code>-Dsbt.genbuildprops=true</code></a></h4>
-<p>Generate <code>build.properties</code> if missing. If unset, this defers to <code>sbt.skip.version.write</code>.</p>
+<p>存在しない場合に <code>build.properties</code> を生成する。未設定の場合、<code>sbt.skip.version.write</code> に委譲される。</p>
 <h4 id="-dsbtglobalbasehomesbt"><a class="header" href="#-dsbtglobalbasehomesbt"><code>-Dsbt.global.base=$HOME/.sbt/</code></a></h4>
-<p>The directory containing global settings and plugins.</p>
+<p>グローバルセッティングとプラグインを含むディレクトリ。</p>
 <h4 id="-dsbtoverridebuildrepostrue"><a class="header" href="#-dsbtoverridebuildrepostrue"><code>-Dsbt.override.build.repos=true</code></a></h4>
-<p>If true, repositories configured in a build definition are ignored and the repositories configured for the launcher are used instead.</p>
+<p>true の場合、ビルド定義で設定されたリポジトリは無視され、ランチャー用に設定されたリポジトリが代わりに使用される。</p>
 <!-- See <tt>sbt.repository.config</tt> and the <a href="reference/Launcher-Configuration.html">sbt launcher</a> documentation. -->
 <h4 id="-dsbtrepositoryconfighomesbtrepositories"><a class="header" href="#-dsbtrepositoryconfighomesbtrepositories"><code>-Dsbt.repository.config=$HOME/.sbt/repositories</code></a></h4>
-<p>A file containing the repositories to use for the launcher. The format is the same as a <code>[repositories]</code> section for a sbt launcher configuration file. This setting is typically used in conjunction with setting <code>sbt.override.build.repos</code> to <code>true</code>.</p>
+<p>ランチャーが使用するリポジトリを含むファイル。フォーマットは sbt ランチャー設定ファイルの <code>[repositories]</code> セクションと同じである。この設定は通常 <code>sbt.override.build.repos</code> を <code>true</code> に設定することと併用される。</p>
 <!-- (see <tt>sbt.override.build.repos</tt> and the <a href="reference/Launcher-Configuration.html">sbt launcher</a> documentation).</td> -->
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-update"><a class="header" href="#sbt-update">sbt update</a></h1>
 <p>See <a href="reference/../guide/library-dependency-basics.html">library depdency basics</a> in the Getting Started guide to learn about the basics.</p>
@@ -2283,7 +2283,7 @@ versionScheme := Some(VersionScheme.EarlySemVer)
 <p>sbt uses the standard Maven Central repository by default. Declare additional repositories with the form:</p>
 <pre><code class="language-scala">resolvers += name at location
 </code></pre>
-<p>For example:</p>
+<p>例:</p>
 <pre><code class="language-scala">libraryDependencies ++= Seq(
     "org.apache.derby" % "derby" % "10.4.1.3",
     "org.specs" % "specs" % "1.6.1"
@@ -3613,7 +3613,7 @@ Global / remoteCacheHeaders += IO.read(BuildPaths.defaultGlobalBase / "nativelin
 </code></pre>
 <p>(Note that in practice you rarely want to drop the classifier.)</p>
 <p>Finally, you can get the <code>(Artifact, File)</code> pair for the artifact by mapping the <code>packagedArtifact</code> task. Note that if you don't need the <code>Artifact</code>, you can get just the File from the package task (<code>package</code>, <code>packageDoc</code>, or <code>packageSrc</code>). In both cases, mapping the task to get the file ensures that the artifact is generated first and so the file is guaranteed to be up-to-date.</p>
-<p>For example:</p>
+<p>例:</p>
 <pre><code class="language-scala">val myTask = taskKey[Unit]("My task.")
 
 myTask :=  {
@@ -3630,7 +3630,7 @@ Artifact("name", "classifier")
 Artifact("name", url: URL)
 Artifact("name", Map("extra1" -&gt; "value1", "extra2" -&gt; "value2"))
 </code></pre>
-<p>For example:</p>
+<p>例:</p>
 <pre><code class="language-scala">Artifact("myproject", "zip", "zip")
 Artifact("myproject", "image", "jpg")
 Artifact("myproject", "jdk15")

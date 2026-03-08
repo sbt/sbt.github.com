@@ -283,7 +283,7 @@
 </code></pre>
 <p>(Note that in practice you rarely want to drop the classifier.)</p>
 <p>Finally, you can get the <code>(Artifact, File)</code> pair for the artifact by mapping the <code>packagedArtifact</code> task. Note that if you don't need the <code>Artifact</code>, you can get just the File from the package task (<code>package</code>, <code>packageDoc</code>, or <code>packageSrc</code>). In both cases, mapping the task to get the file ensures that the artifact is generated first and so the file is guaranteed to be up-to-date.</p>
-<p>For example:</p>
+<p>例:</p>
 <pre><code class="language-scala">val myTask = taskKey[Unit]("My task.")
 
 myTask :=  {
@@ -300,7 +300,7 @@ Artifact("name", "classifier")
 Artifact("name", url: URL)
 Artifact("name", Map("extra1" -&gt; "value1", "extra2" -&gt; "value2"))
 </code></pre>
-<p>For example:</p>
+<p>例:</p>
 <pre><code class="language-scala">Artifact("myproject", "zip", "zip")
 Artifact("myproject", "image", "jpg")
 Artifact("myproject", "jdk15")
