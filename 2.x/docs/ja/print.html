@@ -1961,7 +1961,7 @@ sbt:demo&gt; show someKey
 <div style="break-before: page; page-break-before: always;"></div><h1 id="レファレンス-1"><a class="header" href="#レファレンス-1">レファレンス</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-1"><a class="header" href="#sbt-1">sbt</a></h1>
 <p>基本的な導入としては、sbt 入門ガイドの<a href="reference/../guide/basic-tasks.html">基本タスク</a>をまず読んでみてほしい。</p>
-<h2 id="書式"><a class="header" href="#書式">書式</a></h2>
+<h2 id="概要"><a class="header" href="#概要">概要</a></h2>
 <p><code>sbt</code><br> <code>sbt</code> <em>コマンド</em> <em>引数</em><br> <code>sbt --server</code><br> <code>sbt --script-version</code></p>
 <h2 id="説明"><a class="header" href="#説明">説明</a></h2>
 <p>sbt は最初は Scala と Java のために作られたシンプルなビルド・ツールだ。sbt はサブプロジェクト、様々な依存性、カスタムタスクなどを宣言することで高速かつ再現性の高いビルドが得られることを保証する。</p>
@@ -2194,7 +2194,7 @@ sbt
 <!-- (see <tt>sbt.override.build.repos</tt> and the <a href="reference/Launcher-Configuration.html">sbt launcher</a> documentation).</td> -->
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-update"><a class="header" href="#sbt-update">sbt update</a></h1>
 <p>基本的な導入としては、入門ガイドの<a href="reference/../guide/library-dependency-basics.html">ライブラリ依存性の基礎</a>をまずは読んでみてほしい。</p>
-<h2 id="書式-1"><a class="header" href="#書式-1">書式</a></h2>
+<h2 id="概要-1"><a class="header" href="#概要-1">概要</a></h2>
 <p><code>sbt</code> [<em>query</em> / ] <code>update</code></p>
 <h2 id="説明-1"><a class="header" href="#説明-1">説明</a></h2>
 <p>sbt は <a href="https://get-coursier.io/">Coursier</a> を使ってライブラリ管理（他エコシステムではパッケージマネージャーとも呼ばれる）を実装している。ライブラリ管理の一般的な考え方は、<nobr>サブプロジェクト</nobr>が使用する外部ライブラリを宣言するだけで、ライブラリ管理システムが以下を行うことである:</p>
@@ -2446,7 +2446,7 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "$example_scalatest_vers
 ```
 -->
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-dependencytree"><a class="header" href="#sbt-dependencytree">sbt dependencyTree</a></h1>
-<h2 id="書式-2"><a class="header" href="#書式-2">書式</a></h2>
+<h2 id="概要-2"><a class="header" href="#概要-2">概要</a></h2>
 <p><code>sbt</code> <code>dependencyTree</code> [<em>サブコマンド</em>] [<em>オプション</em>]<br> <code>sbt</code> <code>dependencyTree</code> <code>list</code> [<em>オプション</em>]<br> <code>sbt</code> <code>dependencyTree</code> <code>graph</code> [<em>オプション</em>]<br> <code>sbt</code> <code>dependencyTree</code> <code>html</code> [<em>オプション</em>]<br> <code>sbt</code> <code>dependencyTree</code> <code>html-graph</code> [<em>オプション</em>]<br> <code>sbt</code> <code>dependencyTree</code> <code>json</code> [<em>オプション</em>]<br> <code>sbt</code> <code>dependencyTree</code> <code>xml</code> [<em>オプション</em>]<br> <code>sbt</code> <code>dependencyTree</code> <code>stats</code> [<em>オプション</em>]</p>
 <h2 id="説明-2"><a class="header" href="#説明-2">説明</a></h2>
 <p><code>dependencyTree</code> タスクは、プロジェクトの依存関係グラフを様々な形式で表示し、間接依存ライブラリの可視化と分析を支援する。このタスクは、sbt 1.4.0 で Johannes Rudolph さん作の sbt-dependency-graph より取り込まれた<code>DependencyTreePlugin</code> により提供される。なお、グラフの生成時にライブラリ依存性が解決されるため、実行時にダウンロードが発生する場合がある。</p>
@@ -2569,7 +2569,7 @@ Evictions: 2
 <h3 id="スコープ"><a class="header" href="#スコープ">スコープ</a></h3>
 <p><code>Compile</code> と <code>Test</code> コンフィギュレーションで利用可能。必要に応じて <code>Global/</code> でクロスコンフィギュレーション表示を行う。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-compile"><a class="header" href="#sbt-compile">sbt compile</a></h1>
-<h2 id="書式-3"><a class="header" href="#書式-3">書式</a></h2>
+<h2 id="概要-3"><a class="header" href="#概要-3">概要</a></h2>
 <p><code>sbt</code> [<em>query</em> / ] <code>compile</code><br> <code>sbt</code> [<em>query</em> / ] <code>Test</code> / <code>compile</code><br></p>
 <h2 id="説明-3"><a class="header" href="#説明-3">説明</a></h2>
 <p><code>compile</code> タスクは、選択されたサブプロジェクトとそのサブプロジェクト依存関係をコンパイルする。sbt 2.x 以降、コンパイルされたアーティファクトは自動的にキャッシュされる。</p>
@@ -2596,7 +2596,7 @@ Evictions: 2
 <pre><code class="language-scala">Compile / javacOptions ++= List("-Xlint", "-Xlint:-serial")
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-run"><a class="header" href="#sbt-run">sbt run</a></h1>
-<h2 id="書式-4"><a class="header" href="#書式-4">書式</a></h2>
+<h2 id="概要-4"><a class="header" href="#概要-4">概要</a></h2>
 <p><code>sbt</code> [<em>query</em> / ] <code>run</code> [<em>args</em>]</p>
 <h2 id="説明-4"><a class="header" href="#説明-4">説明</a></h2>
 <p><code>run</code> タスクはユーザープログラムを実行する手段を提供する。</p>
@@ -2609,7 +2609,7 @@ Evictions: 2
 <li><strong>sbt server の可用性</strong>。プログラムは sbt server の外で実行されるため、テストや IDE 連携など、他のクライアントからのより多くのリクエストに対応できる。</li>
 </ol>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-test"><a class="header" href="#sbt-test">sbt test</a></h1>
-<h2 id="書式-5"><a class="header" href="#書式-5">書式</a></h2>
+<h2 id="概要-5"><a class="header" href="#概要-5">概要</a></h2>
 <p><code>sbt</code> [<em>query</em> / ] <code>test</code> [<em>testname1</em> <em>testname2</em>] [ -- <em>options</em> ]</p>
 <h2 id="説明-5"><a class="header" href="#説明-5">説明</a></h2>
 <p><code>test</code> タスクはテストのコンパイルと実行の手段を提供する。</p>
@@ -2962,7 +2962,7 @@ testListeners += customTestListener
 where `customTestListener` is of type `sbt.TestReportListener`.
 -->
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-inspect"><a class="header" href="#sbt-inspect">sbt inspect</a></h1>
-<h2 id="書式-6"><a class="header" href="#書式-6">書式</a></h2>
+<h2 id="概要-6"><a class="header" href="#概要-6">概要</a></h2>
 <p><code>sbt</code> <code>inspect</code> [<em>subproject</em> / ] [ <em>config</em> / ] <em>task</em><br> <code>sbt</code> <code>inspect actual</code> [<em>subproject</em> / ] [ <em>config</em> / ] <em>task</em><br> <code>sbt</code> <code>inspect tree</code> [<em>subproject</em> / ] [ <em>config</em> / ] <em>task</em></p>
 <h2 id="説明-6"><a class="header" href="#説明-6">説明</a></h2>
 <p><code>inspect</code> コマンドはタスクとセッティングのグラフを調査する手段を提供する。例えば、別のタスクに影響を与えるためにどのセッティングを変更すべきか判断するのに使える。</p>
@@ -3096,7 +3096,7 @@ import mypackage._
 </code></pre>
 <p>各タスクについて、<code>inspect tree</code> はタスクが生成する値の型を表示する。セッティングの場合は、セッティングの <code>toString</code> が表示される。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-publish"><a class="header" href="#sbt-publish">sbt publish</a></h1>
-<h2 id="書式-7"><a class="header" href="#書式-7">書式</a></h2>
+<h2 id="概要-7"><a class="header" href="#概要-7">概要</a></h2>
 <p><code>sbt</code> [<em>query</em> / ] <code>publish</code><br> <code>sbt</code> [<em>query</em> / ] <code>publishSigned</code><br> <code>sbt</code> [<em>query</em> / ] <code>publishLocal</code><br> <code>sbt</code> [<em>query</em> / ] <code>publishM2</code></p>
 <h2 id="説明-7"><a class="header" href="#説明-7">説明</a></h2>
 <p>publish 系タスクはプロジェクトのコンパイルと公開の手段を提供する。この文脈での<strong>公開</strong>とは、Maven POM や <code>ivy.xml</code> などのディスクリプタと、JAR や <code>war</code> ファイルなどのアーティファクトをリポジトリにアップロードし、他のプロジェクトがライブラリ依存性として指定できるようにすることである。</p>
@@ -3220,38 +3220,38 @@ password=admin123
   repo.root.startsWith("file:")
 }
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="watch-command"><a class="header" href="#watch-command">Watch command</a></h1>
-<h2 id="書式-8"><a class="header" href="#書式-8">書式</a></h2>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="watch-コマンド"><a class="header" href="#watch-コマンド">Watch コマンド</a></h1>
+<h2 id="概要-8"><a class="header" href="#概要-8">概要</a></h2>
 <p><code>sbt</code> <code>~</code> <em>command1</em><br> <code>sbt</code> <code>~</code> <em>command1</em> [ <code>;</code> <em>command2</em> <code>;</code> ... ]</p>
-<h2 id="descrption"><a class="header" href="#descrption">Descrption</a></h2>
-<p>The watch command is denoted by <code>~</code> (tilde), and it provides the ability to monitor the input files for particular tasks and repeat the tasks when changes to those files occur.</p>
-<p>Some example usages are described below:</p>
-<h3 id="compile-1"><a class="header" href="#compile-1">Compile</a></h3>
-<p>A common use-case is continuous compilation. The following commands will make sbt watch for source changes in the Test and Compile (default) configurations respectively and re-run the compile command.</p>
+<h2 id="説明-8"><a class="header" href="#説明-8">説明</a></h2>
+<p>Watch コマンドは <code>~</code> (チルダ) で表し、特定タスクの入力ファイルを監視し、ファイルに変更が発生したときにタスクを再実行する機能を提供する。</p>
+<p>以下に使用例を用いて解説する:</p>
+<h3 id="コンパイル"><a class="header" href="#コンパイル">コンパイル</a></h3>
+<p>一般的な用途は継続的コンパイルである。以下のコマンドはそれぞれ Test と Compile （デフォルト）のコンフィギュレーションでソース変更を監視し、compile コマンドを再実行する。</p>
 <pre><code class="language-bash">&gt; ~ Test / compile
 
 &gt; ~ compile
 </code></pre>
-<p>Note that because <code>Test / compile</code> depends on <code>Compile / compile</code>, source changes in the main source directory will trigger recompilation of the test sources.</p>
-<h3 id="testing"><a class="header" href="#testing">Testing</a></h3>
-<p>Triggered execution is often used when developing in a test driven development (TDD) style. The following command will monitor changes to both the main and test source sources for the build and re-run only the tests that reference classes that have been re-compiled since the last test run.</p>
+<p><code>Test / compile</code> は <code>Compile / compile</code> に依存するため、メインソースディレクトリの変更はテストソースの再コンパイルも駆動することに注意。</p>
+<h3 id="テスト"><a class="header" href="#テスト">テスト</a></h3>
+<p>トリガー実行はテスト駆動開発（TDD）スタイルでの開発でよく使われる。以下のコマンドはビルドのメインおよびテストソースの変更を監視し、前回のテスト実行以降に再コンパイルされたクラスを参照するテストのみを再実行する。</p>
 <pre><code class="language-bash">&gt; ~ test
 </code></pre>
-<p>It is also possible to re-run only a particular test if its dependencies have changed.</p>
+<p>依存関係が変更された場合に特定のテストのみを再実行することも可能である。</p>
 <pre><code class="language-bash">&gt; ~ test foo.BarTest
 </code></pre>
-<p>It is possible to always re-run a test when source changes are detected regardless of whether the test depends on any of the updated source files.</p>
+<p>テストが更新されたソースファイルに依存しているかどうかに関わらず、ソース変更が検出されたときに常にテストを再実行することも可能である。</p>
 <pre><code class="language-bash">&gt; ~ testOnly foo.BarTest
 </code></pre>
-<p>To run all of the tests in the project when any sources change, use</p>
+<p>ソースが変更されたときにプロジェクト内のすべてのテストを実行するには、以下を使用する:</p>
 <pre><code class="language-bash">&gt; ~ testFull
 </code></pre>
-<h3 id="running-multiple-commands"><a class="header" href="#running-multiple-commands">Running Multiple Commands</a></h3>
-<p>The watch command supports watching multiple, semicolon separated, tasks. For example, the following command will monitor for source file changes and run <code>clean</code> and <code>test</code>:</p>
+<h3 id="複数コマンドの実行"><a class="header" href="#複数コマンドの実行">複数コマンドの実行</a></h3>
+<p>Watch コマンドはセミコロンで区切られた複数タスクの監視をサポートする。例えば、以下のコマンドはソースファイルの変更を監視し、<code>clean</code> と <code>test</code> を実行する:</p>
 <pre><code class="language-bash">&gt; ~ clean; test
 </code></pre>
-<h3 id="build-sources"><a class="header" href="#build-sources">Build sources</a></h3>
-<p>If the build is configured to automatically reload when build source changes are made by setting <code>Global / onChangedBuildSource := ReloadOnSourceChanges</code>, then sbt will monitor the build sources (i.e. <code>*.sbt</code> and <code>*.{java,scala}</code> files in the <code>project</code> directory). When build source changes are detected, the build will be reloaded and sbt will re-enter triggered execution mode when the reload completes.</p>
+<h3 id="ビルドソース"><a class="header" href="#ビルドソース">ビルドソース</a></h3>
+<p><code>Global / onChangedBuildSource := ReloadOnSourceChanges</code> を設定してビルドソース変更時に自動リロードするように構成されている場合、sbt はビルドソース（<code>project</code> ディレクトリ内の <code>*.sbt</code> および <code>*.{java,scala}</code> ファイル）を監視する。ビルドソースの変更が検出されると、ビルドがリロードされ、リロード完了時に sbt はトリガー実行モードに再入する。</p>
 <!--
 The following snippet can be added as a [global setting](../api/sbt/Global-Settings.html) to `~/.sbt/1.0/config.sbt` to enable `ReloadOnSourceChanges` for all sbt 1.3+ builds without breaking earlier versions:
 
@@ -3271,49 +3271,49 @@ Def.settings {
 }
 ```
 -->
-<h3 id="clearing-the-screen"><a class="header" href="#clearing-the-screen">Clearing the screen</a></h3>
-<p>sbt can clear the console screen before it evaluates the task or after it triggers an event. To configure sbt to clear the screen after an event is triggered add</p>
+<h3 id="画面のクリア"><a class="header" href="#画面のクリア">画面のクリア</a></h3>
+<p>sbt はタスクを評価する前、またはイベントがトリガーされた後にコンソール画面をクリアできる。イベントトリガー後に画面をクリアするには、以下を追加する:</p>
 <pre><code class="language-scala">ThisBuild / watchTriggeredMessage := Watch.clearScreenOnTrigger
 </code></pre>
-<p>to the build settings. To clear the screen before running the task, add</p>
+<p>ビルド設定に追加する。タスク実行前に画面をクリアするには、以下を追加する:</p>
 <pre><code class="language-scala">ThisBuild  / watchBeforeCommand := Watch.clearScreen
 </code></pre>
-<p>to the build settings.</p>
-<h3 id="configuration"><a class="header" href="#configuration">Configuration</a></h3>
-<p>The behavior of triggered execution can be configured via a number of settings.</p>
+<p>ビルド設定に追加する。</p>
+<h3 id="設定"><a class="header" href="#設定">設定</a></h3>
+<p>トリガー実行の動作は様々なセッティングによって設定できる。</p>
 <ul>
 <li>
-<p><code>watchTriggers: Seq[Glob]</code> adds search queries for files that should task trigger evaluation but that the task does not directly depend on. For example, if the project build.sbt file contains <code>foo / watchTriggers += baseDirectory.value.toGlob / "*.txt"</code>, then any modifications to files ending with the <code>txt</code> extension will cause the <code>foo</code> command to trigger when in triggered execution mode.</p>
+<p><code>watchTriggers: Seq[Glob]</code> は、タスクが直接依存していないが評価をトリガーすべきファイルの検索クエリを追加する。例えば、プロジェクトの build.sbt に <code>foo / watchTriggers += baseDirectory.value.toGlob / "*.txt"</code> が含まれている場合、<code>txt</code> 拡張子のファイルへの変更はトリガー実行モードで <code>foo</code> コマンドをトリガーする。</p>
 </li>
 <li>
-<p><code>watchTriggeredMessage: (Int, Path, Seq[String]) =&gt; Option[String]</code> sets the message that is displayed when a file modification triggers a new build. Its input parameters are the current watch iteration count, the file that triggered the build and the command(s) that are going to be run. By default, it prints a message indicating what file triggered the build and what commands its going to run. No message is printed when the function returns <code>None</code>. To clear the screen before printing the message, just add <code>Watch.clearScreen()</code> inside of the task definition. This will ensure that the screen is cleared and that the message, if any is defined, will be printed after the screen clearing.</p>
+<p><code>watchTriggeredMessage: (Int, Path, Seq[String]) =&gt; Option[String]</code> は、ファイル変更が新規ビルドをトリガーしたときに表示するメッセージを設定する。入力パラメータは現在の watch イテレーション回数、ビルドをトリガーしたファイル、実行予定のコマンドである。デフォルトでは、どのファイルがビルドをトリガーしたか、どのコマンドを実行するかを示すメッセージを出力する。関数が <code>None</code> を返すとメッセージは出力されない。メッセージ出力前に画面をクリアするには、タスク定義内に <code>Watch.clearScreen()</code> を追加する。これにより画面がクリアされ、定義されていればメッセージがその後に出力される。</p>
 </li>
 <li>
-<p><code>watchInputOptions: Seq[Watch.InputOption]</code> allows the build to override the default watch options. For example, to add the ability to reload the build by typing the 'l' key, add <code>ThisBuild / watchInputOptions += Watch.InputOption('l', "reload", Watch.Reload)</code> to the <code>build.sbt</code> file. When using the default <code>watchStartMessage</code>, this will also add the option to the list displayed by the '?' option.</p>
+<p><code>watchInputOptions: Seq[Watch.InputOption]</code> はビルドがデフォルトの watch オプションをオーバーライドできるようにする。例えば、'l' キーでビルドをリロードする機能を追加するには、<code>build.sbt</code> に <code>ThisBuild / watchInputOptions += Watch.InputOption('l', "reload", Watch.Reload)</code> を追加する。デフォルトの <code>watchStartMessage</code> を使用している場合、'?' オプションで表示される一覧にも追加される。</p>
 </li>
 <li>
-<p><code>watchBeforeCommand: () =&gt; Unit</code> provides a callback to run before evaluating the task.  It can be used to clear the console screen by adding <code>ThisBuild / watchBeforeCommand := Watch.clearScreen</code> to the project build.sbt file. By default it is no-op.</p>
+<p><code>watchBeforeCommand: () =&gt; Unit</code> はタスク評価前に実行するコールバックを提供する。プロジェクトの build.sbt に <code>ThisBuild / watchBeforeCommand := Watch.clearScreen</code> を追加するとコンソール画面をクリアできる。デフォルトでは何もしない。</p>
 </li>
 <li>
-<p><code>watchLogLevel</code> sets the logging level of the file monitoring system. This can be useful if the triggered execution is not being evaluated when source files or modified or if is unexpectedly triggering due to modifications to files that should not be monitored.</p>
+<p><code>watchLogLevel</code> はファイル監視システムのログレベルを設定する。ソースファイルが変更されているのにトリガー実行が評価されない場合や、監視すべきでないファイルの変更で予期せずトリガーされる場合に有用である。</p>
 </li>
 <li>
-<p><code>watchInputParser: Parser[Watch.Action]</code> changes how the monitor handles input events. For example, setting <code>watchInputParser := 'l' ^^^ Watch.Reload | '\r' ^^^ new Watch.Run("")</code> will make it so that typing the 'l' key will reload the build and typing a newline will return to the shell. By default this is automatically derived from the <code>watchInputOptions</code>.</p>
+<p><code>watchInputParser: Parser[Watch.Action]</code> は監視が入力イベントを処理する方法を変更する。例えば、<code>watchInputParser := 'l' ^^^ Watch.Reload | '\r' ^^^ new Watch.Run("")</code> を設定すると、'l' キーでビルドがリロードされ、改行でシェルに戻る。デフォルトでは <code>watchInputOptions</code> から自動的に導出される。</p>
 </li>
 <li>
-<p><code>watchStartMessage: (Int, ProjectRef, Seq[String]) =&gt; Option[String]</code> sets the banner that is printed while the watch process is waiting for file or input events. The inputs are the iteration count, the current project and the commands to run. The default message includes instructions for terminating the watch or displaying all available options. This banner is only displayed if <code>watchOnIteration</code> logs the result of <code>watchStartMessage</code>.</p>
+<p><code>watchStartMessage: (Int, ProjectRef, Seq[String]) =&gt; Option[String]</code> は、watch プロセスがファイルまたは入力イベントを待機しているときに表示するバナーを設定する。入力はイテレーション回数、カレント・プロジェクト、実行するコマンドである。デフォルトのメッセージには watch の終了や利用可能なオプションの表示の説明が含まれる。このバナーは <code>watchOnIteration</code> が <code>watchStartMessage</code> の結果をログ出力する場合にのみ表示される。</p>
 </li>
 <li>
-<p><code>watchOnIteration: (Int, ProjectRef, Seq[String]) =&gt; Watch.Action</code> a function that is evaluated before waiting for source or input events. It can be used to terminate the watch early if, for example, a certain number of iterations have been reached. By default, it just logs the result of <code>watchStartMessage</code>.</p>
+<p><code>watchOnIteration: (Int, ProjectRef, Seq[String]) =&gt; Watch.Action</code> は、ソースまたは入力イベントを待つ前に評価される関数である。例えば、一定回数のイテレーションに達した場合に watch を早期終了するのに使える。デフォルトでは <code>watchStartMessage</code> の結果をログ出力するだけである。</p>
 </li>
 <li>
-<p><code>watchForceTriggerOnAnyChange: Boolean</code> configures whether or not the contents of a source file must change in order to trigger a build. The default value is false.</p>
+<p><code>watchForceTriggerOnAnyChange: Boolean</code> は、ビルドをトリガーするためにソースファイルの内容が変更されている必要があるかを設定する。デフォルト値は false である。</p>
 </li>
 <li>
-<p><code>watchPersistFileStamps: Boolean</code> toggles whether or not sbt will persist the file hashes computed for source files across multiple task evaluation runs. This can improve performance for projects with many source files. Because the file hashes are cached, it is possible for the evaluated task to read an invalid hash if many source files are being concurrently modified. The default value is false.</p>
+<p><code>watchPersistFileStamps: Boolean</code> は、sbt が複数のタスク評価実行にわたってソースファイル用に計算したファイルハッシュを永続化するかどうかを切り替える。ソースファイルが多いプロジェクトでパフォーマンスが向上する。ファイルハッシュがキャッシュされるため、多くのソースファイルが同時に変更されている場合、評価されたタスクが無効なハッシュを読み取る可能性がある。デフォルト値は false である。</p>
 </li>
 <li>
-<p><code>watchAntiEntropy: FiniteDuration</code> controls the time that must elapse before a build is re-triggered by the same file that previously triggered the build. This is intended to prevent spurious builds that can occur when a file is modified in short bursts. The default value is 500ms.</p>
+<p><code>watchAntiEntropy: FiniteDuration</code> は、以前ビルドをトリガーした同じファイルがビルドを再トリガーするまでに経過すべき時間を制御する。ファイルが短時間に連続して変更されたときに発生する不要なビルドを防ぐためのものである。デフォルト値は 500ms である。</p>
 </li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="cached-task"><a class="header" href="#cached-task">Cached task</a></h1>
@@ -3525,7 +3525,7 @@ Global / remoteCacheHeaders += IO.read(BuildPaths.defaultGlobalBase / "buildbudd
 Global / remoteCacheHeaders += IO.read(BuildPaths.defaultGlobalBase / "nativelink_credential.txt").trim
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="artifact"><a class="header" href="#artifact">Artifact</a></h1>
-<h2 id="説明-8"><a class="header" href="#説明-8">説明</a></h2>
+<h2 id="説明-9"><a class="header" href="#説明-9">説明</a></h2>
 <p>An artifact is a single file ready for publishing a specific version of a subproject. This is a concept that originated in <a href="https://maven.apache.org/ref/3.9.11/maven-core/artifact-handlers.html">Apache Maven</a> and <a href="https://ant.apache.org/ivy/history/2.3.0/terminology.html#artifact">Ivy</a>.</p>
 <p>In the JVM ecosystem, common artifacts are Java archives, or JAR files. Compressed package formats are often preferred because they are easier to manage, download, and store.</p>
 <p>To illustrate, the following is a list of artifacts for a library, enumerated in an <code>ivy.xml</code> file:</p>
