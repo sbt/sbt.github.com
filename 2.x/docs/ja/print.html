@@ -218,7 +218,7 @@
 <a class="admonition-anchor-link" href="index.html#admonition-note"></a>
 </div>
 <div>
-<p>これは未だリリースされていない sbt 2.x のドキュメンテーションの草稿だ。</p>
+<p>This is a draft documentation of sbt 2.x that is yet to be released.</p>
 </div>
 </div>
 <p><strong>言語</strong>:</p>
@@ -963,7 +963,7 @@ $ cd breeze
 <a class="admonition-anchor-link" href="guide/basic-tasks.html#admonition-note"></a>
 </div>
 <div>
-<p>scalanlp/breeze は sbt 1.x を使っているが、ここでは sbt 2.x を使っている想定で書いていく。</p>
+<p>scalanlp/breeze is on sbt 1.x, but we'll write this section as if it is an sbt 2.x build.</p>
 </div>
 </div>
 <h3 id="sbtn-を用いた-sbt-シェル-1"><a class="header" href="#sbtn-を用いた-sbt-シェル-1">sbtn を用いた sbt シェル</a></h3>
@@ -1149,8 +1149,8 @@ lazy val toolkitV = "0.2.0"
 <a class="admonition-anchor-link" href="guide/build-definition-basics.html#admonition-note"></a>
 </div>
 <div>
-<p><code>build.sbt</code> トップレベルでのクラスやオブジェクトの定義は禁止されている。
-それらは、<code>project/</code> ディレクトリ内の Scala ソース内に書かれる。</p>
+<p>Top-level objects and classes are not allowed in <code>build.sbt</code>.
+Those should go in the <code>project/</code> directory as Scala source files.</p>
 </div>
 </div><div style="break-before: page; page-break-before: always;"></div><h1 id="ライブラリ依存性の基本"><a class="header" href="#ライブラリ依存性の基本">ライブラリ依存性の基本</a></h1>
 <p>このページは、sbt を使ったライブラリ依存性管理の基本を説明する。</p>
@@ -1299,17 +1299,8 @@ LocalRootProject / name := "root"
 LocalRootProject / publish / skip := true
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="プラグインの基本"><a class="header" href="#プラグインの基本">プラグインの基本</a></h1>
-<!--
-Please read the earlier pages in the Getting Started Guide first, in
-particular you need to understand [build.sbt][Basic-Def], [task graph][Task-Graph],
-[library dependencies][Library-Dependencies], before reading this page.
--->
 <h2 id="プラグインとは何か"><a class="header" href="#プラグインとは何か">プラグインとは何か</a></h2>
 <p>プラグインは、新しいセッティングやタスクを追加することでビルド定義を拡張する。例えば、プラグインを使って <code>githubWorkflowGenerate</code> というタスクを追加して、GitHub Actions のための YAML を自動生成することができる。</p>
-<!--
-For example, a plugin
-could add a `codeCoverage` task which would generate a test coverage report.
--->
 <h2 id="scaladex-を使ったプラグインバージョンの検索"><a class="header" href="#scaladex-を使ったプラグインバージョンの検索">Scaladex を使ったプラグイン・バージョンの検索</a></h2>
 <p><a href="https://index.scala-lang.org/search?platform=sbt2">Scaladex</a> を用いてプラグインを検索して、そのプラグインの最新バージョンを探すことができる。</p>
 <h2 id="プラグインの宣言"><a class="header" href="#プラグインの宣言">プラグインの宣言</a></h2>
@@ -1476,7 +1467,9 @@ an odd trick, but this fact becomes relevant [later][Organizing-Build].
 <a class="admonition-anchor-link" href="guide/build-layout.html#admonition-note"></a>
 </div>
 <div>
-<p>ここでは（ディレクトリだけにマッチさせるために）語尾の <code>/</code> を意図的につけていて、一方で （普通の <code>target/</code> に加えて <code>project/target/</code> にもマッチさせるために）先頭の <code>/</code> は意図的に つけていないことに注意。</p>
+<p>Note that this deliberately has a trailing <code>/</code> (to match only directories)
+and it deliberately has no leading <code>/</code> (to match <code>project/target/</code> in
+addition to plain <code>target/</code>).</p>
 </div>
 </div><div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-と-ide"><a class="header" href="#sbt-と-ide">sbt と IDE</a></h1>
 <p>エディタと sbt だけで Scala のコードを書くことも可能だが、今日日のプログラマの多くは統合開発環境 (IDE) を用いる。Scala の IDE は <a href="https://scalameta.org/metals/">Metals</a> と <a href="https://www.jetbrains.com/idea/">IntelliJ IDEA</a> の二強で、それぞれ sbt ビルドとの統合をサポートする。</p>
@@ -1638,7 +1631,7 @@ scalaVersion := "3.8.1"
 <a class="admonition-anchor-link" href="changes/migrating-from-sbt-1.x.html#admonition-warning"></a>
 </div>
 <div>
-<p>sbt 1.x において、ベア・セッティングはルートプロジェクトにのみ適用されるセッティングだった。sbt 2.x においては、<code>build.sbt</code> のベア・セッティングは<strong>全サブプロジェクト</strong>に注入されるコモン・セッティングとして解釈される。</p>
+<p>In sbt 1.x bare settings were project settings that applied only to the root subproject. In sbt 2.x, the bare settings in <code>build.sbt</code> are common settings that are injected to <strong>all subprojects</strong>.</p>
 </div>
 </div>
 <pre><code class="language-scala">name := "root"         // 全サブプロジェクトの名前が root になる!
@@ -1851,15 +1844,15 @@ lazy val foo = project
 <p><code>...</code> ワイルドカードはどの文字列にもマッチして、他の文字や数字とも組み合わせて、ルートの集約リストを絞り込むことができる。例えば、以下のようにして <code>foo</code> で始まる全サブプロジェクトのテストを実行することができる:</p>
 <pre><code>foo.../test
 </code></pre>
-<div id="admonition-備考--vs-" class="admonition admonish-note" role="note" aria-labelledby="admonition-備考--vs--title">
+<div id="admonition-note--vs-" class="admonition admonish-note" role="note" aria-labelledby="admonition-note--vs--title">
 <div class="admonition-title">
-<div id="admonition-備考--vs--title">
-<p>備考: * vs ...</p>
+<div id="admonition-note--vs--title">
+<p>Note: * vs ...</p>
 </div>
-<a class="admonition-anchor-link" href="concepts/sbt-query.html#admonition-備考--vs-"></a>
+<a class="admonition-anchor-link" href="concepts/sbt-query.html#admonition-note--vs-"></a>
 </div>
 <div>
-<p>sbt クエリは、直感的に分かりやすそうな <code>*</code> (アスタリスク) でなく、意図的に <code>...</code> (ドット・ドット・ドット) を採用する。これは <code>*</code> がシェル環境においてワイルドカードとして使われることが多いからだ。そのため、常にクォートで囲む必要があり、また <code>*/test</code> をクォートし忘れると <code>src/test</code> のようなディレクトリにマッチしてしまう可能性が高い。</p>
+<p>sbt query intentionally uses <code>...</code> (dot dot dot) instead of more intuitive <code>*</code> (asterisk) because <code>*</code> is often used in a shell as a wildcard to match existing files or directories. This would require quoting, and forgetting to quote <code>*/test</code> would match to something like <code>src/test</code>.</p>
 </div>
 </div>
 <h3 id="scalabinaryversion-パラメータ"><a class="header" href="#scalabinaryversion-パラメータ"><code>@scalaBinaryVersion</code> パラメータ</a></h3>

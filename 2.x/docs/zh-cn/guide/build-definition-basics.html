@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Build definition basics - The Book of sbt</title>
+        <title>构建定义基础 - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -208,43 +208,43 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="build-definition-basics"><a class="header" href="#build-definition-basics">Build definition basics</a></h1>
-<p>This page discusses the <code>build.sbt</code> build definition.</p>
-<h3 id="what-is-a-build-definition"><a class="header" href="#what-is-a-build-definition">What is a build definition?</a></h3>
-<p>A <em>build definition</em> is defined in <code>build.sbt</code>, and it consists of a set of projects (of type <a href="../api/sbt/Project.html"><code>Project</code></a>). Because the term <em>project</em> can be ambiguous, we often call it a <em>subproject</em> in this guide.</p>
-<p>For instance, in <code>build.sbt</code> you define the subproject located in the current directory like this:</p>
+                        <h1 id="构建定义基础"><a class="header" href="#构建定义基础">构建定义基础</a></h1>
+<p>本页讨论 <code>build.sbt</code> 构建定义。</p>
+<h3 id="什么是构建定义"><a class="header" href="#什么是构建定义">什么是构建定义？</a></h3>
+<p>构建定义在 <code>build.sbt</code> 中定义，由一组项目（类型为 <a href="../api/sbt/Project.html"><code>Project</code></a>）组成。由于项目一词可能产生歧义，本指南中我们通常称其为 <em>subproject</em>（子项目）。</p>
+<p>例如，在 <code>build.sbt</code> 中您这样定义位于当前目录的子项目：</p>
 <pre><code class="language-scala">scalaVersion := "3.3.3"
 name := "Hello"
 </code></pre>
-<p>or more explicitly:</p>
+<p>或更明确地：</p>
 <pre><code class="language-scala">lazy val root = rootProject
   .settings(
     scalaVersion := "3.3.3",
     name := "Hello",
   )
 </code></pre>
-<p>Each subproject is configured by key-value pairs. For example, one key is <code>name</code> and it maps to a string value, the name of your subproject. The key-value pairs are listed under the <code>.settings(...)</code> method.</p>
+<p>每个子项目通过键值对配置。例如，<code>name</code> 是一个键，映射到字符串值，即您子项目的名称。键值对列在 <code>.settings(...)</code> 方法下。</p>
 <h2 id="buildsbt-dsl"><a class="header" href="#buildsbt-dsl">build.sbt DSL</a></h2>
-<p><code>build.sbt</code> defines subprojects using a DSL called build.sbt DSL, which is based on Scala. Initially you can use build.sbt DSL, like a YAML file, declaring just <code>scalaVersion</code> and <code>libraryDependencies</code>, but it can supports more features to keep the build definition organized as the build grows larger.</p>
-<h3 id="typed-setting-expression"><a class="header" href="#typed-setting-expression">Typed setting expression</a></h3>
-<p>Let's take a closer look at the <code>build.sbt</code> DSL:</p>
+<p><code>build.sbt</code> 使用名为 build.sbt DSL 的 DSL 定义子项目，该 DSL 基于 Scala。最初您可以像使用 YAML 文件一样使用 build.sbt DSL，仅声明 <code>scalaVersion</code> 和 <code>libraryDependencies</code>，但随着构建规模增大，它支持更多功能以保持构建定义井然有序。</p>
+<h3 id="类型化设置表达式"><a class="header" href="#类型化设置表达式">类型化设置表达式</a></h3>
+<p>让我们仔细看看 <code>build.sbt</code> DSL：</p>
 <pre><code class="language-scala">organization  :=         "com.example"
 ^^^^^^^^^^^^  ^^^^^^^^   ^^^^^^^^^^^^^
 key           operator   (setting/task) body
 </code></pre>
-<p>Each entry is called a <em>setting expression</em>. Some among them are also called task expressions. We will see more on the difference later in this page.</p>
-<p>A setting expression consists of three parts:</p>
+<p>每个条目称为 <em>setting expression</em>（设置表达式）。其中一些也称为 <em>task expression</em>（任务表达式）。我们将在本页后面更详细地了解两者的区别。</p>
+<p>设置表达式由三部分组成：</p>
 <ol>
-<li>Left-hand side is a <em>key</em>.</li>
-<li><em>Operator</em>, which in this case is <code>:=</code></li>
-<li>Right-hand side is called the <em>body</em>, or the <em>setting/task body</em>.</li>
+<li>左侧是键。</li>
+<li>运算符，此处为 <code>:=</code></li>
+<li>右侧称为主体或设置/任务主体。</li>
 </ol>
-<p>On the left-hand side, <code>name</code>, <code>version</code>, and <code>scalaVersion</code> are <em>keys</em>. A key is an instance of <a href="../../api/sbt/SettingKey.html"><code>SettingKey[A]</code></a>, <a href="../../api/sbt/TaskKey.html"><code>TaskKey[A]</code></a>, or <a href="../../api/sbt/InputKey.html"><code>InputKey[A]</code></a> where <code>A</code> is the expected value type.</p>
-<p>Because key <code>name</code> is typed to <code>SettingKey[String]</code>, the <code>:=</code> operator on <code>name</code> is also typed specifically to <code>String</code>. If you use the wrong value type, the build definition will not compile:</p>
+<p>在左侧，<code>name</code>、<code>version</code> 和 <code>scalaVersion</code> 是 <em>keys</em>（键）。键是 <a href="../../api/sbt/SettingKey.html"><code>SettingKey[A]</code></a>、<a href="../../api/sbt/TaskKey.html"><code>TaskKey[A]</code></a> 或 <a href="../../api/sbt/InputKey.html"><code>InputKey[A]</code></a> 的实例，其中 <code>A</code> 是期望的值类型。</p>
+<p>由于键 <code>name</code> 的类型为 <code>SettingKey[String]</code>，<code>name</code> 上的 <code>:=</code> 运算符也专门类型为 <code>String</code>。如果您使用错误的值类型，构建定义将无法编译：</p>
 <pre><code class="language-scala">name := 42 // will not compile
 </code></pre>
-<h3 id="vals-and-lazy-vals"><a class="header" href="#vals-and-lazy-vals"><code>val</code>s and <code>lazy val</code>s</a></h3>
-<p>To avoid repeating the same information, like the version number for a library, <code>build.sbt</code> may be interspersed with <code>val</code>s, <code>lazy val</code>s, and <code>def</code>s.</p>
+<h3 id="val-和-lazy-val"><a class="header" href="#val-和-lazy-val"><code>val</code> 和 <code>lazy val</code></a></h3>
+<p>为避免重复相同信息（如库的版本号），<code>build.sbt</code> 中可以穿插使用 <code>val</code>、<code>lazy val</code> 和 <code>def</code>。</p>
 <pre><code class="language-scala">val toolkitV = "0.2.0"
 val toolkit = "org.scala-lang" %% "toolkit" % toolkitV
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % toolkitV
@@ -253,19 +253,19 @@ scalaVersion := "3.8.1"
 libraryDependencies += toolkit
 libraryDependencies += (toolkitTest % Test)
 </code></pre>
-<p>In the above, <code>val</code> defines a variable, which are initialized from the top to bottom. This means that <code>toolkitV</code> must be defined before it is referenced.</p>
-<p>Here's a bad example:</p>
+<p>在上面的代码中，<code>val</code> 定义变量，变量从上到下初始化。这意味着 <code>toolkitV</code> 必须在被引用之前定义。</p>
+<p>以下是一个错误示例：</p>
 <pre><code class="language-scala">// bad example
 val toolkit = "org.scala-lang" %% "toolkit" % toolkitV // uninitialized reference!
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % toolkitV // uninitialized reference!
 val toolkitV = "0.2.0"
 </code></pre>
-<p>sbt will fail to load with <code>java.lang.ExceptionInInitializerError</code> cased by a <code>NullPointerException</code> if your build.sbt contains an uninitialized forward reference. One way to let the compiler fix this is to define the variables as <code>lazy</code>:</p>
+<p>如果您的 build.sbt 包含未初始化的前向引用，sbt 将无法加载，并因 <code>NullPointerException</code> 而抛出 <code>java.lang.ExceptionInInitializerError</code>。让编译器解决此问题的一种方法是将变量定义为 <code>lazy</code>：</p>
 <pre><code class="language-scala">lazy val toolkit = "org.scala-lang" %% "toolkit" % toolkitV
 lazy val toolkitTest = "org.scala-lang" %% "toolkit-test" % toolkitV
 lazy val toolkitV = "0.2.0"
 </code></pre>
-<p>Some frown upon gratuitous <code>lazy val</code>s, but Scala 3 lazy vals are efficient, and we think it makes the build definition more robust for copy-pasting.</p>
+<p>有些人反对过多使用 <code>lazy val</code>，但 Scala 3 的 lazy val 效率很高，我们认为它使构建定义在复制粘贴时更加稳健。</p>
 <div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
 <div class="admonition-title">
 <div id="admonition-note-title">

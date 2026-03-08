@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Library dependency basics - The Book of sbt</title>
+        <title>库依赖基础 - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -208,41 +208,41 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="library-dependency-basics"><a class="header" href="#library-dependency-basics">Library dependency basics</a></h1>
-<p>This page explains the basics of library dependency management using sbt.</p>
-<p>sbt uses <a href="https://get-coursier.io/">Coursier</a> to implement managed dependencies, so if you're familiar with package managers like Coursier, npm, PIP, etc you won't have much trouble.</p>
-<div id="admonition-whats-a-managed-dependency" class="admonition admonish-note" role="note" aria-labelledby="admonition-whats-a-managed-dependency-title">
+                        <h1 id="库依赖基础"><a class="header" href="#库依赖基础">库依赖基础</a></h1>
+<p>本页介绍使用 sbt 进行库依赖管理的基础知识。</p>
+<p>sbt 使用 <a href="https://get-coursier.io/">Coursier</a> 实现托管依赖，因此如果您熟悉 Coursier、npm、PIP 等包管理器，不会有太大困难。</p>
+<div id="admonition-什么是托管依赖" class="admonition admonish-note" role="note" aria-labelledby="admonition-什么是托管依赖-title">
 <div class="admonition-title">
-<div id="admonition-whats-a-managed-dependency-title">
-<p>What's a managed dependency?</p>
+<div id="admonition-什么是托管依赖-title">
+<p>什么是托管依赖？</p>
 </div>
-<a class="admonition-anchor-link" href="#admonition-whats-a-managed-dependency"></a>
+<a class="admonition-anchor-link" href="#admonition-什么是托管依赖"></a>
 </div>
 <div>
-<p>As opposed to downloading required JAR files by hand (<em>unmanaged</em> dependencies), a <em>managed</em> dependency system automates fetching external libraries for a subproject. Tools like Coursier interpret the declared <code>ModuleID</code>, perform dependency resolution (expand all the transitive dependencies, and resolve any version conflicts to determine the exact versions), and download and cache the resulting artifacts, ensuring consistent JAR management.</p>
+<p>与手动下载所需 JAR 文件（<em>unmanaged</em> 依赖）不同，<em>managed</em>（托管）依赖系统可自动为子项目获取外部库。Coursier 等工具会解析声明的 <code>ModuleID</code>，执行依赖解析（展开所有传递依赖并解决版本冲突以确定确切版本），下载并缓存生成的构件，确保 JAR 管理的一致性。</p>
 </div>
 </div>
-<h2 id="the-librarydependencies-key"><a class="header" href="#the-librarydependencies-key">The <code>libraryDependencies</code> key</a></h2>
-<p>Declaring a dependency looks like this, where <code>groupId</code>, <code>artifactId</code>, and <code>revision</code> are strings:</p>
+<h2 id="librarydependencies-键"><a class="header" href="#librarydependencies-键"><code>libraryDependencies</code> 键</a></h2>
+<p>声明依赖如下所示，其中 <code>groupId</code>、<code>artifactId</code> 和 <code>revision</code> 为字符串：</p>
 <pre><code class="language-scala">libraryDependencies += groupID % artifactID % revision
 </code></pre>
-<p>or like this, where <code>configuration</code> can be a string or a <code>Configuration</code> value (such as <code>Test</code>):</p>
+<p>或如下所示，其中 <code>configuration</code> 可以是字符串或 <code>Configuration</code> 值（如 <code>Test</code>）：</p>
 <pre><code class="language-scala">libraryDependencies += groupID % artifactID % revision % configuration
 </code></pre>
-<p>When you run:</p>
+<p>当您运行：</p>
 <pre><code>&gt; compile
 </code></pre>
-<p>sbt will automatically resolve the dependencies and download the JAR files.</p>
-<h3 id="getting-the-right-scala-version-with-"><a class="header" href="#getting-the-right-scala-version-with-">Getting the right Scala version with <code>%%</code></a></h3>
-<p>If you use <code>organization %% moduleName % version</code> rather than <code>organization % moduleName % version</code> (the difference is the double <code>%%</code> after the <code>organization</code>), sbt will add your project's binary Scala version to the artifact name. This is just a shortcut. You could write this without the <code>%%</code>:</p>
+<p>sbt 将自动解析依赖并下载 JAR 文件。</p>
+<h3 id="使用--获取正确的-scala-版本"><a class="header" href="#使用--获取正确的-scala-版本">使用 <code>%%</code> 获取正确的 Scala 版本</a></h3>
+<p>如果您使用 <code>organization %% moduleName % version</code> 而非 <code>organization % moduleName % version</code>（区别在于 <code>organization</code> 后的双 <code>%%</code>），sbt 会将您项目的二进制 Scala 版本添加到构件名称中。这只是一个快捷方式。您也可以不使用 <code>%%</code> 来编写：</p>
 <pre><code class="language-scala">libraryDependencies += "org.scala-lang" % "toolkit_3" % "0.2.0"
 </code></pre>
-<p>Assuming the <code>scalaVersion</code> for your build is 3.x, the following is identical (note the double <code>%%</code> after <code>"org.scala-lang"</code>):</p>
+<p>假设您构建的 <code>scalaVersion</code> 为 3.x，以下写法是等价的（注意 <code>"org.scala-lang"</code> 后的双 <code>%%</code>）：</p>
 <pre><code class="language-scala">libraryDependencies += "org.scala-lang" %% "toolkit" % "0.2.0"
 </code></pre>
-<p>The idea is that many dependencies are compiled for multiple Scala versions, and you'd like to get the one that matches your project to ensure binary compatibility.</p>
-<h2 id="tracking-dependencies-in-one-place"><a class="header" href="#tracking-dependencies-in-one-place">Tracking dependencies in one place</a></h2>
-<p><code>.scala</code> files under <code>project</code> becomes part of the build definition, which we can use to track dependencies in one place by creating a file named <code>project/Dependencies.scala</code>.</p>
+<p>其思路是许多依赖针对多个 Scala 版本编译，您希望获取与您项目匹配的版本以确保二进制兼容性。</p>
+<h2 id="在一处跟踪依赖"><a class="header" href="#在一处跟踪依赖">在一处跟踪依赖</a></h2>
+<p><code>project</code> 下的 <code>.scala</code> 文件成为构建定义的一部分，我们可以通过创建名为 <code>project/Dependencies.scala</code> 的文件在一处跟踪依赖。</p>
 <pre><code class="language-scala">// place this file at project/Dependencies.scala
 
 import sbt.*
@@ -256,7 +256,7 @@ object Dependencies:
   val toolkitTest = "org.scala-lang" %% "toolkit-test" % toolkitV
 end Dependencies
 </code></pre>
-<p>The <code>Dependencies</code> object will be available in <code>build.sbt</code>. To make it easier to use the <code>val</code>s defined in it, import <code>Dependencies.*</code> in your build.sbt file.</p>
+<p><code>Dependencies</code> 对象将在 <code>build.sbt</code> 中可用。为便于使用其中定义的 <code>val</code>，请在您的 build.sbt 文件中导入 <code>Dependencies.*</code>。</p>
 <pre><code class="language-scala">import Dependencies.*
 
 scalaVersion := "3.8.1"
@@ -264,8 +264,8 @@ name := "something"
 libraryDependencies += toolkit
 libraryDependencies += toolkitTest % Test
 </code></pre>
-<h2 id="viewing-library-dependencies"><a class="header" href="#viewing-library-dependencies">Viewing library dependencies</a></h2>
-<p>Type in <code>Compile/dependencyTree</code> in the sbt shell to show the library dependency tree, including the transitive dependencies:</p>
+<h2 id="查看库依赖"><a class="header" href="#查看库依赖">查看库依赖</a></h2>
+<p>在 sbt shell 中输入 <code>Compile/dependencyTree</code> 可显示库依赖树，包括传递依赖：</p>
 <pre><code>&gt; Compile/dependencyTree
 </code></pre>
 <p>这应该会显示类似以下的内容：</p>

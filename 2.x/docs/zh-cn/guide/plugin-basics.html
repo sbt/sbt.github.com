@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Plugin basics - The Book of sbt</title>
+        <title>插件基础 - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -208,45 +208,36 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="plugin-basics"><a class="header" href="#plugin-basics">Plugin basics</a></h1>
-<!--
-Please read the earlier pages in the Getting Started Guide first, in
-particular you need to understand [build.sbt][Basic-Def], [task graph][Task-Graph],
-[library dependencies][Library-Dependencies], before reading this page.
--->
-<h2 id="what-is-a-plugin"><a class="header" href="#what-is-a-plugin">What is a plugin?</a></h2>
-<p>A plugin extends the build definition, most commonly by adding new settings and tasks. For example, a plugin could add <code>githubWorkflowGenerate</code> task to generate GitHub Actions YAML.</p>
-<!--
-For example, a plugin
-could add a `codeCoverage` task which would generate a test coverage report.
--->
-<h2 id="finding-the-plugin-versions-using-scaladex"><a class="header" href="#finding-the-plugin-versions-using-scaladex">Finding the plugin versions using Scaladex</a></h2>
-<p>You can use <a href="https://index.scala-lang.org/search?platform=sbt2">Scaladex</a> to search for plugins, and find out the latest version of the plugin.</p>
-<h2 id="declaring-a-plugin"><a class="header" href="#declaring-a-plugin">Declaring a plugin</a></h2>
-<p>If your project is in directory <code>hello</code>, and if you are adding sbt-github-actions to the build definition, create <code>hello/project/plugins.sbt</code> and declare the plugin dependency by passing the plugin's module ID to <code>addSbtPlugin(...)</code>:</p>
+                        <h1 id="插件基础"><a class="header" href="#插件基础">插件基础</a></h1>
+<h2 id="什么是插件"><a class="header" href="#什么是插件">什么是插件？</a></h2>
+<p>插件扩展构建定义，最常见的方式是添加新的设置和任务。例如，插件可以添加 <code>githubWorkflowGenerate</code> 任务来生成 GitHub Actions YAML。</p>
+<h2 id="使用-scaladex-查找插件版本"><a class="header" href="#使用-scaladex-查找插件版本">使用 Scaladex 查找插件版本</a></h2>
+<p>您可以使用 <a href="https://index.scala-lang.org/search?platform=sbt2">Scaladex</a> 搜索插件，并查找插件的最新版本。</p>
+<h2 id="声明插件"><a class="header" href="#声明插件">声明插件</a></h2>
+<p>如果您的项目在目录 <code>hello</code> 中，且您要向构建定义添加 sbt-github-actions，请创建 <code>hello/project/plugins.sbt</code>，并通过将插件的模块 ID 传递给 <code>addSbtPlugin(...)</code> 来声明插件依赖：</p>
 <pre><code class="language-scala">// In project/plugins.sbt
 
 addSbtPlugin("com.github.sbt" % "sbt-github-actions" % "0.28.0")
 </code></pre>
-<p>If you're adding sbt-assembly, add the following:</p>
+<p>如果您要添加 sbt-assembly，请添加以下内容：</p>
 <pre><code class="language-scala">// In project/plugins.sbt
 
 addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "2.3.1")
 </code></pre>
-<p>See <a href="../recipes/source-dependency-plugin.html">Source dependency plugin</a> recipe for an experimental technique of using plugins hosted on git repos.</p>
-<p>Plugins usually provide settings and tasks that get added to a subproject to enable the plugin's functionality. This is described in the next section.</p>
-<h2 id="enabling-and-disabling-auto-plugins"><a class="header" href="#enabling-and-disabling-auto-plugins">Enabling and disabling auto plugins</a></h2>
-<p>A plugin can declare that its settings be automatically added to the build definition, in which case you don't have to do anything to add them.</p>
-<p>The <!-- [auto plugins][Plugins] --> auto plugins feature enables plugins to automatically, and safely, ensure their settings and dependencies are on a project. Many auto plugins should have their default settings automatically.</p>
-<p>If you're using an auto plugin that requires explicit enablement, then you have to add the following to your <code>build.sbt</code>:</p>
+<p>有关使用托管在 git 仓库中的插件的实验性技术，请参阅 <a href="../recipes/source-dependency-plugin.html">Source dependency plugin</a> 配方。</p>
+<p>插件通常提供设置和任务，这些设置和任务会添加到子项目中以启用插件的功能。下一节将对此进行说明。</p>
+<h2 id="启用和禁用自动插件"><a class="header" href="#启用和禁用自动插件">启用和禁用自动插件</a></h2>
+<p>插件可以声明其设置自动添加到构建定义中，在这种情况下您无需做任何操作即可添加它们。</p>
+<p>自动插件功能使插件能够自动且安全地确保其设置和依赖位于项目上。许多自动插件应自动具有其默认设置。</p>
+<p>如果您使用的自动插件需要显式启用，则必须在您的 <code>build.sbt</code> 中添加以下内容：</p>
 <pre><code class="language-scala">lazy val util = (project in file("util"))
   .enablePlugins(FooPlugin, BarPlugin)
   .settings(
     name := "hello-util"
   )
 </code></pre>
-<p>The <code>enablePlugins</code> method allows projects to explicitly define the auto plugins they wish to consume.</p>
-<p>Projects can also exclude plugins using the <code>disablePlugins</code> method. For example, if we wish to remove the <code>IvyPlugin</code> settings from <code>util</code>, we modify our <code>build.sbt</code> as follows:</p>
+<p><code>enablePlugins</code> 方法允许项目显式定义它们希望使用的自动插件。</p>
+<p>项目还可以使用 <code>disablePlugins</code> 方法排除插件。例如，如果我们希望从 <code>util</code> 中移除 <code>IvyPlugin</code> 设置，可以按如下方式修改 <code>build.sbt</code>：</p>
 <pre><code class="language-scala">lazy val util = (project in file("util"))
   .enablePlugins(FooPlugin, BarPlugin)
   .disablePlugins(plugins.IvyPlugin)
@@ -254,7 +245,7 @@ addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "2.3.1")
     name := "hello-util"
   )
 </code></pre>
-<p>Auto plugins should document whether they need to be explicitly enabled. If you're curious which auto plugins are enabled for a given project, just run the <code>plugins</code> command on the sbt console.</p>
+<p>自动插件应记录它们是否需要显式启用。如果您想了解给定项目启用了哪些自动插件，只需在 sbt 控制台中运行 <code>plugins</code> 命令。</p>
 <pre><code class="language-scala">sbt:hello&gt; plugins
 In build /tmp/hello/:
   Enabled plugins in hello:
@@ -269,15 +260,15 @@ Plugins that are loaded to the build but not enabled in any subprojects:
   sbt.ScriptedPlugin
   sbt.plugins.SbtPlugin
 </code></pre>
-<p>Here, the <code>plugins</code> output is showing that the sbt default plugins are all enabled. sbt's default settings are provided via 7 plugins:</p>
+<p>此处，<code>plugins</code> 输出显示 sbt 的默认插件均已启用。sbt 的默认设置由 7 个插件提供：</p>
 <ol>
-<li><code>CorePlugin</code>: Provides the core parallelism controls for tasks.</li>
-<li><code>DependencyTreePlugin</code>: Provides dependency tree tasks.</li>
-<li><code>Giter8TemplatePlugin</code>: Provides <code>sbt new</code> support.</li>
-<li><code>IvyPlugin</code>: Provides the mechanisms to publish/resolve modules.</li>
-<li><code>JUnitXmlReportPlugin</code>: Provides support for generating junit-xml.</li>
-<li><code>JvmPlugin</code>: Provides the mechanisms to compile/test/run/package Java/Scala projects.</li>
-<li><code>SemanticdbPlugin</code>: Provides support for generating SemanticDB.</li>
+<li><code>CorePlugin</code>：提供任务的核心并行控制。</li>
+<li><code>DependencyTreePlugin</code>：提供依赖树任务。</li>
+<li><code>Giter8TemplatePlugin</code>：提供 <code>sbt new</code> 支持。</li>
+<li><code>IvyPlugin</code>：提供发布/解析模块的机制。</li>
+<li><code>JUnitXmlReportPlugin</code>：提供生成 junit-xml 的支持。</li>
+<li><code>JvmPlugin</code>：提供编译/测试/运行/打包 Java/Scala 项目的机制。</li>
+<li><code>SemanticdbPlugin</code>：提供生成 SemanticDB 的支持。</li>
 </ol>
 <!--
 ### Global plugins
@@ -294,8 +285,8 @@ Because doing so would increase the dependency on the machine environment,
 this feature should be used sparingly. See
 [Best Practices][global-vs-local-plugins].
 -->
-<h2 id="available-plugins"><a class="header" href="#available-plugins">Available plugins</a></h2>
-<p>In addition to <a href="https://index.scala-lang.org/search?platform=sbt2">Scaladex</a>, there's also <a href="../community-plugins.html">a list of available plugins</a>.</p>
+<h2 id="可用插件"><a class="header" href="#可用插件">可用插件</a></h2>
+<p>除了 <a href="https://index.scala-lang.org/search?platform=sbt2">Scaladex</a> 之外，还有<a href="../community-plugins.html">可用插件列表</a>。</p>
 <!--
 For more details, including ways of developing plugins, see
 [Plugins][Plugins].

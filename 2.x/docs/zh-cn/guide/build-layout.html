@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Build layout - The Book of sbt</title>
+        <title>构建布局 - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -208,8 +208,8 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="build-layout"><a class="header" href="#build-layout">Build layout</a></h1>
-<p>sbt uses conventions for file placement to make it easy to dive into a new sbt build:</p>
+                        <h1 id="构建布局"><a class="header" href="#构建布局">构建布局</a></h1>
+<p>sbt 使用文件放置约定，便于快速上手新的 sbt 构建：</p>
 <pre><code>.
 ├── build.sbt
 ├── project/
@@ -238,14 +238,14 @@
 └── target/
 </code></pre>
 <ul>
-<li>The local root directory <code>.</code> is the starting point of your build.</li>
-<li>In sbt's terminology, the <em>base directory</em> is the directory containing the subproject. In the above, <code>.</code>, <code>subproject-core</code>, and <code>subproject-util</code> are base directories.</li>
-<li>The build definition is described in <code>build.sbt</code> (actually any files named <code>*.sbt</code>) in the local root directory.</li>
-<li>The sbt version is tracked in <code>project/build.properties</code>.</li>
-<li>Generated files (compiled classes, packaged jars, managed files, caches, and documentation) will be written to the <code>target</code> directory by default.</li>
+<li>本地根目录 <code>.</code> 是您构建的起点。</li>
+<li>在 sbt 的术语中，<em>base directory</em>（基目录）是包含子项目的目录。在上面的示例中，<code>.</code>、<code>subproject-core</code> 和 <code>subproject-util</code> 都是基目录。</li>
+<li>构建定义在本地根目录的 <code>build.sbt</code>（实际上是任何名为 <code>*.sbt</code> 的文件）中描述。</li>
+<li>sbt 版本在 <code>project/build.properties</code> 中跟踪。</li>
+<li>生成的文件（编译后的类、打包的 jar、托管文件、缓存和文档）默认会写入 <code>target</code> 目录。</li>
 </ul>
-<h3 id="build-support-files"><a class="header" href="#build-support-files">Build support files</a></h3>
-<p>In addition to <code>build.sbt</code>, <code>project</code> directory can contain <code>.scala</code> files that define helper objects and one-off plugins.</p>
+<h3 id="构建支持文件"><a class="header" href="#构建支持文件">构建支持文件</a></h3>
+<p>除了 <code>build.sbt</code> 之外，<code>project</code> 目录还可以包含定义辅助对象和一次性插件的 <code>.scala</code> 文件。</p>
 <!--
 See [organizing the build][Organizing-Build] for more.
 -->
@@ -257,9 +257,9 @@ See [organizing the build][Organizing-Build] for more.
 │   └── plugins.sbt
 ....
 </code></pre>
-<p>You may see <code>.sbt</code> files inside <code>project/</code>, which is typically used to declare plugins. See <a href="./plugin-basics.html">Plugin basics</a>.</p>
-<h3 id="source-code"><a class="header" href="#source-code">Source code</a></h3>
-<p>sbt uses the same directory structure as <a href="https://maven.apache.org/">Maven</a> for source files by default (all paths are relative to the base directory):</p>
+<p>您可能会在 <code>project/</code> 内看到 <code>.sbt</code> 文件，通常用于声明插件。请参阅 <a href="./plugin-basics.html">插件基础</a>。</p>
+<h3 id="源代码"><a class="header" href="#源代码">源代码</a></h3>
+<p>sbt 默认使用与 <a href="https://maven.apache.org/">Maven</a> 相同的目录结构存放源文件（所有路径均相对于基目录）：</p>
 <pre><code>....
 ├── src/
 │   ├── main/
@@ -274,14 +274,14 @@ See [organizing the build][Organizing-Build] for more.
 │       └── scala-2.13/  &lt;test Scala 2.13 specific sources&gt;
 ....
 </code></pre>
-<p>Other directories in <code>src/</code> will be ignored. Additionally, all hidden directories will be ignored.</p>
-<p>Source code can be placed in the project's base directory as <code>hello/app.scala</code>, which may be OK for small projects, though for normal projects people tend to keep the projects in the <code>src/main/</code> directory to keep things neat.</p>
+<p><code>src/</code> 中的其他目录将被忽略。此外，所有隐藏目录也将被忽略。</p>
+<p>源代码可以放在项目的基目录中，如 <code>hello/app.scala</code>，这对于小项目可能可以接受，但对于常规项目，人们倾向于将项目放在 <code>src/main/</code> 目录中以保持整洁。</p>
 <!--
 The fact that you can place `*.scala` source code in the base directory might seem like
 an odd trick, but this fact becomes relevant [later][Organizing-Build].
 -->
-<h3 id="configuring-version-control"><a class="header" href="#configuring-version-control">Configuring version control</a></h3>
-<p>Your <code>.gitignore</code> (or equivalent for other version control systems) should contain:</p>
+<h3 id="配置版本控制"><a class="header" href="#配置版本控制">配置版本控制</a></h3>
+<p>您的 <code>.gitignore</code>（或其他版本控制系统的等效文件）应包含：</p>
 <pre><code>target/
 </code></pre>
 <div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">

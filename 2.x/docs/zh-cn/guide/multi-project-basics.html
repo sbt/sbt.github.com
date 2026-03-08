@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Multi project basics - The Book of sbt</title>
+        <title>多项目基础 - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -208,10 +208,10 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="multi-project-basics"><a class="header" href="#multi-project-basics">Multi project basics</a></h1>
-<p>While a simple program can start out as a single-project build, it's more common for a build to split into smaller, multiple subprojects.</p>
-<p>Each subproject in a build has its own source directories, generates its own JAR file when you run <code>packageBin</code>, and in general works like any other project.</p>
-<p>A <strong>subproject</strong> is defined by declaring a <code>lazy val</code> of type <a href="../../api/sbt/Project.html">Project</a>. For example, :</p>
+                        <h1 id="多项目基础"><a class="header" href="#多项目基础">多项目基础</a></h1>
+<p>虽然简单程序可以从单项目构建开始，但更常见的是将构建拆分为多个较小的子项目。</p>
+<p>构建中的每个子项目都有自己的源目录，运行 <code>packageBin</code> 时会生成自己的 JAR 文件，总体上与其他项目的工作方式相同。</p>
+<p><strong>子项目</strong>通过声明类型为 <a href="../../api/sbt/Project.html">Project</a> 的 <code>lazy val</code> 来定义。例如：</p>
 <pre><code class="language-scala">scalaVersion := "3.8.1"
 LocalRootProject / publish / skip := true
 
@@ -226,17 +226,17 @@ lazy val util = (project in file("util"))
     name := "util",
   )
 </code></pre>
-<p>The name of the <code>val</code> is used as the subproject's ID, which is used to refer to the subproject in the sbt shell.</p>
-<p>sbt will always define a root project, so in the above build definition, we will have total of three subprojects.</p>
-<h2 id="subproject-dependency"><a class="header" href="#subproject-dependency">Subproject dependency</a></h2>
-<p>A subproject may depend on the code from another subproject. This is done by declaring <code>dependsOn(...)</code>. For example, if <code>util</code> needed <code>util</code> on its classpath, you would define <code>util</code> as:</p>
+<p><code>val</code> 的名称用作子项目的 ID，用于在 sbt shell 中引用该子项目。</p>
+<p>sbt 始终会定义一个根项目，因此在上面的构建定义中，我们将共有三个子项目。</p>
+<h2 id="子项目依赖"><a class="header" href="#子项目依赖">子项目依赖</a></h2>
+<p>子项目可以依赖另一个子项目的代码。通过声明 <code>dependsOn(...)</code> 实现。例如，如果 <code>util</code> 需要在其 classpath 上使用 <code>core</code>，您可以将 <code>util</code> 定义为：</p>
 <pre><code class="language-scala">lazy val util = (project in file("util"))
   .dependsOn(core)
 </code></pre>
-<h2 id="root-project"><a class="header" href="#root-project">Root project</a></h2>
-<p>The subproject at the root of the build is called a <strong>root project</strong>, and often plays a special role in the build. If a subproject is not defined at the root directory of the build, sbt automatically creates a default one that aggregates all other subprojects in the build.</p>
-<h2 id="task-aggregation"><a class="header" href="#task-aggregation">Task aggregation</a></h2>
-<p>Task aggregation means that running a task on the aggregate subproject will also run on the aggregated subprojects.</p>
+<h2 id="根项目"><a class="header" href="#根项目">根项目</a></h2>
+<p>构建根目录下的子项目称为 <strong>root project</strong>（根项目），通常在构建中扮演特殊角色。如果未在构建的根目录定义子项目，sbt 会自动创建一个默认的根项目，用于聚合构建中的所有其他子项目。</p>
+<h2 id="任务聚合"><a class="header" href="#任务聚合">任务聚合</a></h2>
+<p>任务聚合是指在聚合子项目上运行任务时，也会在被聚合的子项目上运行。</p>
 <pre><code class="language-scala">scalaVersion := "3.8.1"
 
 lazy val root = rootProject
@@ -249,9 +249,9 @@ lazy val util = (project in file("util"))
 
 lazy val core = (project in file("core"))
 </code></pre>
-<p>In the above example, the root subproject aggregates <code>util</code> and <code>core</code>. When you type <code>compile</code> in the sbt shell, all tree subprojects are compiled in parallel.</p>
-<h2 id="common-settings"><a class="header" href="#common-settings">Common settings</a></h2>
-<p>In sbt 2.x, bare settings that are written directly in <code>build.sbt</code> without <code>settings(...)</code> are <strong>common settings</strong> that are injected to all subprojects.</p>
+<p>在上面的示例中，根子项目聚合了 <code>util</code> 和 <code>core</code>。当您在 sbt shell 中输入 <code>compile</code> 时，所有三个子项目将并行编译。</p>
+<h2 id="通用设置"><a class="header" href="#通用设置">通用设置</a></h2>
+<p>在 sbt 2.x 中，直接在 <code>build.sbt</code> 中编写且不带 <code>settings(...)</code> 的裸设置是 <strong>common settings</strong>（通用设置），会注入到所有子项目中。</p>
 <pre><code class="language-scala">scalaVersion := "3.8.1"
 
 lazy val core = (project in file("core"))
@@ -259,8 +259,8 @@ lazy val core = (project in file("core"))
 lazy val app = (project in file("app"))
   .dependsOn(core)
 </code></pre>
-<p>In the above, the <code>scalaVersion</code> setting is applied to the default root subproject, <code>core</code>, and <code>util</code>.</p>
-<p>One exception to this rule is settings that are already scoped to a subproject.</p>
+<p>在上面的示例中，<code>scalaVersion</code> 设置应用于默认根子项目、<code>core</code> 和 <code>util</code>。</p>
+<p>此规则的一个例外是已经限定到子项目的设置。</p>
 <pre><code class="language-scala">scalaVersion := "3.8.1"
 
 lazy val core = (project in file("core"))
@@ -271,7 +271,7 @@ lazy val app = (project in file("app"))
 // This is applied only to app
 app / name := "app1"
 </code></pre>
-<p>We can take advantage of this exception to add some settings that only apply to the default root project as follows:</p>
+<p>我们可以利用此例外，添加仅适用于默认根项目的设置，如下所示：</p>
 <pre><code class="language-scala">scalaVersion := "3.8.1"
 
 lazy val core = (project in file("core"))
