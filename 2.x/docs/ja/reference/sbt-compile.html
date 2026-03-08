@@ -212,27 +212,27 @@
 <h2 id="書式"><a class="header" href="#書式">書式</a></h2>
 <p><code>sbt</code> [<em>query</em> / ] <code>compile</code><br> <code>sbt</code> [<em>query</em> / ] <code>Test</code> / <code>compile</code><br></p>
 <h2 id="説明"><a class="header" href="#説明">説明</a></h2>
-<p>The <code>compile</code> task compiles the selected subprojects and their subproject dependencies. Since sbt 2.x, the compiled artifacts are cached automatically.</p>
-<p>Compiling Scala code with the raw Scala compiler has been slow, so significant poriton of sbt's development efforts deal with various strategies for speeding up compilation.</p>
-<h3 id="reduce-the-overhead-of-restarting-the-compiler"><a class="header" href="#reduce-the-overhead-of-restarting-the-compiler">Reduce the overhead of restarting the compiler</a></h3>
-<p>sbt server stays up in the background, allowing Scala compilation to run the same Java virtual machine (JVM). Keeping the JVM warm makes compilation significantly faster because it takes a long time to classload the compiler and for the Just-in-Time compiler to optimize it.</p>
-<h3 id="incremental-compilation"><a class="header" href="#incremental-compilation">Incremental compilation</a></h3>
-<p>When a source file <code>A.scala</code> is modified, sbt goes to great effort to minimize the other source files recompiled due to <code>A.scala</code>'s change. This process of tracking dependencies between the language constructs and recompiling only the required sources is called <em>incremental compilation</em>.</p>
-<h3 id="remote-caching"><a class="header" href="#remote-caching">(Remote) caching</a></h3>
-<p>In sbt 2.x, compiled artifacts are not only cached across the sessions and builds, but can optionally be cached across different machines using Bazel-compatible remote cache. See <a href="../concepts/caching.html">Caching</a> for details.</p>
+<p><code>compile</code> タスクは、選択されたサブプロジェクトとそのサブプロジェクト依存関係をコンパイルする。sbt 2.x 以降、コンパイルされたアーティファクトは自動的にキャッシュされる。</p>
+<p>生の Scala コンパイラでの Scala コードのコンパイルは遅いため、sbt の開発努力の相当部分はコンパイル高速化の様々な戦略に費やされている。</p>
+<h3 id="コンパイラ再起動のオーバーヘッドを削減"><a class="header" href="#コンパイラ再起動のオーバーヘッドを削減">コンパイラ再起動のオーバーヘッドを削減</a></h3>
+<p>sbt server はバックグラウンドで稼働し続け、Scala のコンパイルが同じ Java 仮想マシン (JVM) 上で実行される。JVM を「温まった」状態に保つことでコンパイルが大幅に高速化される。コンパイラのクラスロードと Just-in-Time コンパイラによる最適化に時間がかかるためである。</p>
+<h3 id="差分コンパイル"><a class="header" href="#差分コンパイル">差分コンパイル</a></h3>
+<p>任意のソース <code>A.scala</code> が変更されると、sbt は <code>A.scala</code> の変更に伴って再コンパイルされる他のソースファイルを最小限に抑えるよう努める。言語構成要素間の依存関係を追跡し、必要なソースのみを再コンパイルするこのプロセスは<strong>差分コンパイル</strong>と呼ばれる。</p>
+<h3 id="リモートキャッシュ"><a class="header" href="#リモートキャッシュ">（リモート）キャッシュ</a></h3>
+<p>sbt 2.x では、コンパイルされたアーティファクトはセッションやビルド間でキャッシュされるだけでなく、Bazel 互換のリモートキャッシュを使って異なるマシン間でオプションとしてキャッシュすることもできる。詳細は<a href="../concepts/caching.html">キャッシュ化</a>を参照。</p>
 <h3 id="test--compile"><a class="header" href="#test--compile">Test / compile</a></h3>
-<p>Scoping the <code>compile</code> task with a configuration, like <code>Test / compile</code> will compile the test sources and their source dependencies.</p>
-<h3 id="compilation-settings"><a class="header" href="#compilation-settings">Compilation settings</a></h3>
+<p><code>Test / compile</code> のようにコンフィギュレーションで <code>compile</code> タスクをスコープ付けすると、テストソースとそのソース依存関係をコンパイルする。</p>
+<h3 id="コンパイル設定"><a class="header" href="#コンパイル設定">コンパイル設定</a></h3>
 <h4 id="scalaversion"><a class="header" href="#scalaversion">scalaVersion</a></h4>
-<p>The version of Scala used for compilation.</p>
+<p>コンパイルに使用する Scala のバージョン。</p>
 <pre><code class="language-scala">scalaVersion := "3.8.1"
 </code></pre>
 <h4 id="scalacoptions"><a class="header" href="#scalacoptions">scalacOptions</a></h4>
-<p>Options for the Scala compiler.</p>
+<p>Scala コンパイラのオプション。</p>
 <pre><code class="language-scala">Compile / scalacOptions += "-Werror"
 </code></pre>
 <h4 id="javacoptions"><a class="header" href="#javacoptions">javacOptions</a></h4>
-<p>Options for the Java compiler.</p>
+<p>Java コンパイラのオプション。</p>
 <pre><code class="language-scala">Compile / javacOptions ++= List("-Xlint", "-Xlint:-serial")
 </code></pre>
 
