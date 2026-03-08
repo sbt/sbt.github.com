@@ -212,76 +212,76 @@
 <h2 id="書式"><a class="header" href="#書式">書式</a></h2>
 <p><code>sbt</code> [<em>query</em> / ] <code>publish</code><br> <code>sbt</code> [<em>query</em> / ] <code>publishSigned</code><br> <code>sbt</code> [<em>query</em> / ] <code>publishLocal</code><br> <code>sbt</code> [<em>query</em> / ] <code>publishM2</code></p>
 <h2 id="説明"><a class="header" href="#説明">説明</a></h2>
-<p>The publish family of tasks provide means for compiling and publishing your project. <em>Publishing</em> in this context consists of uploading a descriptor, such as a Maven POM or <code>ivy.xml</code>, and artifacts, such as a JAR or <code>war</code> file, to a repository so that other projects can specify your project as a dependency.</p>
+<p>publish 系タスクはプロジェクトのコンパイルと公開の手段を提供する。この文脈での<strong>公開</strong>とは、Maven POM や <code>ivy.xml</code> などのディスクリプタと、JAR や <code>war</code> ファイルなどのアーティファクトをリポジトリにアップロードし、他のプロジェクトがライブラリ依存性として指定できるようにすることである。</p>
 <ul>
-<li>The <code>publish</code> task publishes your project to a remote repository, such as JFrog Artifactory or Sonatype Nexus instance.</li>
-<li>The <code>publishSigned</code> task, enabled using <a href="https://github.com/sbt/sbt-pgp">sbt-pgp plugin</a>, is used to publish GPG-signed artifacts.</li>
-<li>The <code>publishLocal</code> task publishes your project to the Ivy local file repository, which is usually located at <code>$HOME/.ivy2/local/</code>. You can then use this project from other projects on the same machine.</li>
-<li>The <code>publishM2</code> task publishes your project to the local Maven repository.</li>
+<li><code>publish</code> タスクはプロジェクトを JFrog Artifactory や Sonatype Nexus などのリモートリポジトリに公開する。</li>
+<li><code>publishSigned</code> タスクは <a href="https://github.com/sbt/sbt-pgp">sbt-pgp プラグイン</a> で有効化され、GPG 署名付きアーティファクトの公開に使用する。</li>
+<li><code>publishLocal</code> タスクはプロジェクトを Ivy のローカルファイルリポジトリ（通常は <code>$HOME/.ivy2/local/</code>）に公開する。同一マシン上の他のプロジェクトからこのプロジェクトをライブラリ依存性として利用できる。</li>
+<li><code>publishM2</code> タスクはプロジェクトをローカル Maven リポジトリに公開する。</li>
 </ul>
-<p>There's a specific recipe for <a href="../recipes/central.html">publishing to the Central Repo</a>.</p>
-<h3 id="skip-publishing"><a class="header" href="#skip-publishing">Skip publishing</a></h3>
-<p>To avoid publishing a project, add the following setting to the subprojects that you want to skip:</p>
+<p><a href="../recipes/central.html">Central Repo への公開</a> に関してはレシピ参照。</p>
+<h3 id="公開のスキップ"><a class="header" href="#公開のスキップ">公開のスキップ</a></h3>
+<p>公開を避けるには、スキップしたいサブプロジェクトに以下のセッティングを追加する:</p>
 <pre><code class="language-scala">publish / skip := true
 </code></pre>
-<p>Common use case is to prevent publishing of the root project.</p>
-<h3 id="define-the-repository"><a class="header" href="#define-the-repository">Define the repository</a></h3>
-<p>To specify the repository, assign a repository to <code>publishTo</code> and optionally set the publishing style. For example, to upload to Nexus:</p>
+<p>一般的な用途はルートプロジェクトの公開を防ぐことである。</p>
+<h3 id="リポジトリの定義"><a class="header" href="#リポジトリの定義">リポジトリの定義</a></h3>
+<p>リポジトリを指定するには、<code>publishTo</code> にリポジトリを割り当て、必要に応じて公開スタイルを設定する。例えば Nexus にアップロードする場合:</p>
 <pre><code class="language-scala">publishTo := Some("Sonatype Snapshots Nexus" at "https://oss.sonatype.org/content/repositories/snapshots")
 </code></pre>
-<p>To publish to a local maven repository:</p>
+<p>ローカル Maven リポジトリに公開する場合:</p>
 <pre><code class="language-scala">publishTo := Some(MavenCache("local-maven", file("path/to/maven-repo/releases")))
 </code></pre>
-<p>To publish to a local Ivy repository:</p>
+<p>ローカル Ivy リポジトリに公開する場合:</p>
 <pre><code class="language-scala">publishTo := Some(Resolver.file("local-ivy", file("path/to/ivy-repo/releases")))
 </code></pre>
-<p>If you're publishing the Central Repository, you will also have to select the right repository depending on your artifacts: SNAPSHOT versions go to the central-snapshots repository while other versions go to the local staging repository. Doing this selection can be done by using the value of the <code>version</code> setting:</p>
+<p>Central Repository に公開する場合、アーティファクトに応じて適切なリポジトリを選択する必要がある。SNAPSHOT バージョンは central-snapshots リポジトリへ、それ以外のバージョンはローカルのステージングリポジトリへ公開する。この選択は <code>version</code> セッティングの値を使って行える:</p>
 <pre><code class="language-scala">publishTo := {
   val centralSnapshots = "https://central.sonatype.com/repository/maven-snapshots/"
   if version.value.endsWith("-SNAPSHOT") then Some("central-snapshots" at centralSnapshots)
   else localStaging.value
 }
 </code></pre>
-<h3 id="publishing-locally"><a class="header" href="#publishing-locally">Publishing locally</a></h3>
-<p>The <code>publishLocal</code> task will publish to the "local" Ivy repository. By default, this is at <code>$HOME/.ivy2/local/</code>. Other builds on the same machine can then list the project as a dependency. For example, if the project you are publishing has configuration parameters like:</p>
+<h3 id="ローカルへの公開"><a class="header" href="#ローカルへの公開">ローカルへの公開</a></h3>
+<p><code>publishLocal</code> タスクは、デフォルトでは <code>$HOME/.ivy2/local/</code> である「ローカル」の Ivy リポジトリに公開する。同一マシン上の他のビルドがこのプロジェクトをライブラリ依存性として指定できる。例えば、公開するプロジェクトに以下のような設定がある場合:</p>
 <pre><code class="language-scala">organization := "com.example"
 version := "0.1-SNAPSHOT"
 name := "hello"
 </code></pre>
-<p>Then another build on the same machine can depend on it:</p>
+<p>同一マシン上の別のビルドで以下のように依存関係として指定できる:</p>
 <pre><code class="language-scala">libraryDependencies += "com.example" %% "hello" % "0.1-SNAPSHOT"
 </code></pre>
-<p>The version number you select must end with <code>SNAPSHOT</code>, or you must change the version number each time you publish to indicate that it's a changing artifact.</p>
-<div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
+<p>選択するバージョン番号は <code>SNAPSHOT</code> で終わるか、変更されるアーティファクトであることを示すため公開のたびにバージョン番号を変更する必要がある。</p>
+<div id="admonition-警告" class="admonition admonish-warning" role="note" aria-labelledby="admonition-警告-title">
 <div class="admonition-title">
-<div id="admonition-warning-title">
-<p>Warning</p>
+<div id="admonition-警告-title">
+<p>警告</p>
 </div>
-<a class="admonition-anchor-link" href="#admonition-warning"></a>
+<a class="admonition-anchor-link" href="#admonition-警告"></a>
 </div>
 <div>
-<p>Generally the use of SNAPSHOT dependencies should be avoided beyond testing on a single machine
-since it makes dependency resolution slower and the build non-repeatable.</p>
+<p>SNAPSHOT ライブラリ依存性の使用は、単一マシン内でのテスト以外は避けるべきである。
+ライブラリ依存性の解決が遅くなり、ビルドの再現性が失われるためだ。</p>
 </div>
 </div>
-<p>Similar to <code>publishLocal</code>, <code>publishM2</code> task will publish the user's Maven local repository. This is at the location specified by <code>$HOME/.m2/settings.xml</code> or at <code>$HOME/.m2/repository/</code> by default. Another build would require <code>Resolver.mavenLocal</code> to resolve out of it:</p>
+<p><code>publishLocal</code> と同様に、<code>publishM2</code> タスクはユーザーの Maven ローカルリポジトリに公開する。場所は <code>$HOME/.m2/settings.xml</code> で指定されるか、デフォルトでは <code>$HOME/.m2/repository/</code> である。別のビルドから解決するには <code>Resolver.mavenLocal</code> が必要である:</p>
 <pre><code class="language-scala">resolvers += Resolver.mavenLocal
 </code></pre>
 <!--
 See [Resolvers][Resolvers] for more details.
 -->
-<h3 id="credentials"><a class="header" href="#credentials">Credentials</a></h3>
-<p>There are two ways to specify credentials for such a repository.</p>
-<p>The first and better way is to load them from a file, for example:</p>
+<h3 id="認証情報"><a class="header" href="#認証情報">認証情報</a></h3>
+<p>リポジトリの認証情報を指定する方法は2つある。</p>
+<p>推奨される方法はファイルから読み込むことである。例:</p>
 <pre><code class="language-scala">credentials += Credentials(Path.userHome / ".sbt" / ".credentials")
 </code></pre>
-<p>The credentials file is a properties file with keys <code>realm</code>, <code>host</code>, <code>user</code>, and <code>password</code>. For example:</p>
+<p>認証情報ファイルは <code>realm</code>、<code>host</code>、<code>user</code>、<code>password</code> をキーとするプロパティファイルである。例:</p>
 <pre><code>realm=Sonatype Nexus Repository Manager
 host=my.artifact.repo.net
 user=admin
 password=admin123
 </code></pre>
-<p>The second way is to specify them inline:</p>
+<p>2つ目の方法はインラインで指定することである:</p>
 <pre><code class="language-scala">credentials += Credentials("Sonatype Nexus Repository Manager", "my.artifact.repo.net", "admin", "admin123")
 </code></pre>
 <div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
@@ -292,43 +292,43 @@ password=admin123
 <a class="admonition-anchor-link" href="#admonition-note"></a>
 </div>
 <div>
-<p>Credentials matching is done using both: <code>realm</code> and <code>host</code> keys.
-The <code>realm</code> key is the HTTP <code>WWW-Authenticate</code> header's realm directive, which is
-part of the response of HTTP servers for <a href="https://en.wikipedia.org/wiki/Basic_access_authentication#Server_side">HTTP Basic Authentication</a>.
-For a given repository, this can be found by reading all the headers received.
-For example:</p>
+<p>認証情報のマッチングは <code>realm</code> と <code>host</code> の両方のキーを使って行う。
+<code>realm</code> キーは HTTP の <code>WWW-Authenticate</code> ヘッダーの realm ディレクティブで、
+<a href="https://en.wikipedia.org/wiki/Basic_access_authentication#Server_side">HTTP Basic Authentication</a> に対する HTTP サーバーのレスポンスの一部である。
+リポジトリごとに、受信した全ヘッダーを読むことで確認できる。
+例:</p>
 <pre><code class="language-bash">curl -D - my.artifact.repo.net
 </code></pre>
 </div>
 </div>
-<h3 id="cross-publishing"><a class="header" href="#cross-publishing">Cross-publishing</a></h3>
-<p>To support multiple incompatible Scala versions, use projectMatrix and publish (see <a href="./cross-building-setup.html">Cross building setup</a>).</p>
-<h3 id="overriding-the-publishing-convention"><a class="header" href="#overriding-the-publishing-convention">Overriding the publishing convention</a></h3>
-<p>By default sbt will publish your artifact with the binary version of Scala you're using. For example if your project is using Scala 2.13.x your example artifact would be published under <code>example_2.13</code>. This is often what you want, but if you're publishing a pure Java artifact or a compiler plugin you'll want to change the <code>CrossVersion</code>. See the <a href="./cross-building-setup.html">Cross building setup</a> page for more details under the <em>Publishing convention</em> section.</p>
-<h3 id="published-artifacts"><a class="header" href="#published-artifacts">Published artifacts</a></h3>
-<p>By default, the main binary JAR, a sources JAR, and a API documentation JAR are published. You can declare other types of artifacts to publish and disable or modify the default artifacts. See the <a href="./artifact.html">Artifact</a> page for details.</p>
-<h3 id="version-scheme"><a class="header" href="#version-scheme">Version scheme</a></h3>
-<p><code>versionScheme</code> setting tracks the version scheme of the build:</p>
+<h3 id="クロス公開"><a class="header" href="#クロス公開">クロス公開</a></h3>
+<p>互換性のない複数の Scala バージョンをサポートするには、projectMatrix と publish を使用する（<a href="./cross-building-setup.html">クロスビルドのセットアップ</a> を参照）。</p>
+<h3 id="公開規約のオーバーライド"><a class="header" href="#公開規約のオーバーライド">公開規約のオーバーライド</a></h3>
+<p>デフォルトでは sbt は使用中の Scala のバイナリバージョンでアーティファクトを公開する。例えばプロジェクトが Scala 2.13.x を使用している場合、example アーティファクトは <code>example_2.13</code> として公開される。多くの場合これで十分だが、純粋な Java アーティファクトやコンパイラプラグインを公開する場合は <code>CrossVersion</code> を変更する必要がある。詳細は <a href="./cross-building-setup.html">クロスビルドのセットアップ</a> の <em>Publishing convention</em> セクションを参照のこと。</p>
+<h3 id="公開されるアーティファクト"><a class="header" href="#公開されるアーティファクト">公開されるアーティファクト</a></h3>
+<p>デフォルトでは、メインのバイナリ JAR、ソース JAR、API ドキュメント JAR が公開される。他の種類のアーティファクトを公開する宣言や、デフォルトのアーティファクトの無効化・変更が可能である。詳細は <a href="./artifact.html">Artifact</a> を参照のこと。</p>
+<h3 id="バージョンスキーム"><a class="header" href="#バージョンスキーム">バージョンスキーム</a></h3>
+<p><code>versionScheme</code> セッティングはビルドのバージョンスキームを追跡する:</p>
 <pre><code class="language-scala">versionScheme := Some("early-semver")
 </code></pre>
-<p>The supported values are <code>"early-semver"</code>, <code>"pvp"</code>, <code>"semver-spec"</code>, and <code>"strict"</code>. sbt will include this information into <code>pom.xml</code> and <code>ivy.xml</code> as a property.</p>
+<p>サポートされる値は <code>"early-semver"</code>、<code>"pvp"</code>、<code>"semver-spec"</code>、<code>"strict"</code> である。sbt はこの情報を <code>pom.xml</code> と <code>ivy.xml</code> にプロパティとして含める。</p>
 <ul>
-<li><code>Some("early-semver")</code>: Early Semantic Versioning that would keep binary compatibility across patch updates within 0.Y.z (for instance 0.13.0 and 0.13.2). Once it goes 1.0.0, it follows the regular Semantic Versioning where 1.1.0 is bincompat with 1.0.0.</li>
-<li><code>Some("semver-spec")</code>: Semantic Versioning where all 0.y.z are treated as initial development (no bincompat guarantees).</li>
-<li><code>Some("pvp")</code>. Haskell Package Versioning Policy where X.Y are treated as major version.</li>
-<li><code>Some("strict")</code>. Requires exact match of version.</li>
+<li><code>Some("early-semver")</code>: 0.Y.z 内のパッチ更新（例: 0.13.0 と 0.13.2）でバイナリ互換性を保つ Early Semantic Versioning。1.0.0 以降は通常の Semantic Versioning に従い、1.1.0 は 1.0.0 とバイナリ互換である。</li>
+<li><code>Some("semver-spec")</code>: すべての 0.y.z を初期開発として扱う Semantic Versioning （バイナリ互換性の保証なし）。</li>
+<li><code>Some("pvp")</code>: X.Y をメジャーバージョンとして扱う Haskell Package Versioning Policy。</li>
+<li><code>Some("strict")</code>: バージョンの完全一致を要求する。</li>
 </ul>
-<p>This information will be annotated into the <code>pom.xml</code> file, which helps downstream projects determine whether a version conflict is safe to resolve or not. See <a href="https://www.scala-lang.org/blog/2021/02/16/preventing-version-conflicts-with-versionscheme.html">Preventing version conflicts with versionScheme</a> (2021).</p>
-<h3 id="modifying-the-generated-pom"><a class="header" href="#modifying-the-generated-pom">Modifying the generated POM</a></h3>
-<p>When <code>publishMavenStyle</code> is <code>true</code>, a POM is generated by the <code>makePom</code> action and published to the repository instead of an Ivy file. This POM file may be altered by changing a few settings. Set <code>pomExtra</code> to provide XML (<code>scala.xml.NodeSeq</code>) to insert directly into the generated pom. For example:</p>
+<p>この情報は <code>pom.xml</code> に注釈として追加され、下流プロジェクトがバージョン競合を安全に解決できるか判断するのに役立つ。<a href="https://www.scala-lang.org/blog/2021/02/16/preventing-version-conflicts-with-versionscheme.html">Preventing version conflicts with versionScheme</a> (2021) を参照のこと。</p>
+<h3 id="生成される-pom-の変更"><a class="header" href="#生成される-pom-の変更">生成される POM の変更</a></h3>
+<p><code>publishMavenStyle</code> が <code>true</code> の場合、<code>makePom</code> アクションで POM が生成され、Ivy ファイルの代わりにリポジトリに公開される。いくつかのセッティングを変更することで POM ファイルを編集できる。<code>pomExtra</code> に XML（<code>scala.xml.NodeSeq</code>）を設定すると、生成される pom に直接挿入される。例:</p>
 <pre><code class="language-scala">pomExtra := &lt;something&gt;&lt;/something&gt;
 </code></pre>
-<p>There is also a <code>pomPostProcess</code> setting that can be used to manipulate the final XML before it is written. It's type is <code>Node =&gt; Node</code>.</p>
+<p><code>pomPostProcess</code> セッティングもあり、書き込み前に最終的な XML を操作できる。型は <code>Node =&gt; Node</code> である。</p>
 <pre><code class="language-scala">pomPostProcess := { (node: Node) =&gt;
   ....
 }
 </code></pre>
-<p><code>makePom</code> adds to the POM any Maven-style repositories you have declared. You can filter these by modifying <code>pomRepositoryFilter</code>, which by default excludes local repositories. To instead only include local repositories:</p>
+<p><code>makePom</code> は宣言した Maven 形式のリポジトリを POM に追加する。<code>pomRepositoryFilter</code> を変更してフィルタリングでき、デフォルトではローカルリポジトリを除外する。ローカルリポジトリのみを含める場合:</p>
 <pre><code class="language-scala">pomIncludeRepository := { (repo: MavenRepository) =&gt;
   repo.root.startsWith("file:")
 }
