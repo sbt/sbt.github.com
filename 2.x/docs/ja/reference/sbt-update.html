@@ -209,38 +209,38 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="sbt-update"><a class="header" href="#sbt-update">sbt update</a></h1>
-<p>See <a href="../guide/library-dependency-basics.html">library depdency basics</a> in the Getting Started guide to learn about the basics.</p>
+<p>基本的な導入としては、入門ガイドの<a href="../guide/library-dependency-basics.html">ライブラリ依存性の基礎</a>をまずは読んでみてほしい。</p>
 <h2 id="書式"><a class="header" href="#書式">書式</a></h2>
 <p><code>sbt</code> [<em>query</em> / ] <code>update</code></p>
 <h2 id="説明"><a class="header" href="#説明">説明</a></h2>
-<p>sbt uses <a href="https://get-coursier.io/">Coursier</a> to implement library management, also known as a package manager in other ecosystems. The general idea of library management is that you can specify external libraries you would like to use in your subprojects, and the library management system would:</p>
+<p>sbt は <a href="https://get-coursier.io/">Coursier</a> を使ってライブラリ管理（他エコシステムではパッケージマネージャーとも呼ばれる）を実装している。ライブラリ管理の一般的な考え方は、<nobr>サブプロジェクト</nobr>が使用する外部ライブラリを宣言するだけで、ライブラリ管理システムが以下を行うことである:</p>
 <ul>
-<li>Check if such versions exists in the listed repositories</li>
-<li>Look for the transitive dependencies (i.e. the libraries used by the libraries)</li>
-<li>Attempt to resolve version conflicts, if any</li>
-<li>Download the artifacts, such as JAR files, from the repositories</li>
+<li>指定リポジトリにそのバージョンが存在するか確認する</li>
+<li>間接依存ライブラリ（つまり、ライブラリが使用しているライブラリ）を検索する</li>
+<li>バージョン競合があれば解決を試みる</li>
+<li>リポジトリから JAR ファイルなどのアーティファクトをダウンロードする</li>
 </ul>
-<h3 id="dependencies"><a class="header" href="#dependencies">Dependencies</a></h3>
-<p>Declaring a dependency looks like:</p>
+<h3 id="ライブラリ依存性"><a class="header" href="#ライブラリ依存性">ライブラリ依存性</a></h3>
+<p>ライブラリ依存性の宣言は以下のようになる:</p>
 <pre><code class="language-scala">libraryDependencies += groupID %% artifactID % revision
 </code></pre>
-<p>or</p>
+<p>または</p>
 <pre><code class="language-scala">libraryDependencies += groupID %% artifactID % revision % configuration
 </code></pre>
 <!--
 See [configurations](#ivy-configurations) for details on configuration
 mappings.
 -->
-<p>Also, several dependencies can be declared together:</p>
+<p>複数のライブラリ依存性をまとめて宣言することもできる:</p>
 <pre><code class="language-scala">libraryDependencies ++= Seq(
   groupID %% artifactID % revision,
   groupID %% otherID % otherRevision
 )
 </code></pre>
-<p>If you are using a dependency that was built with sbt, double the first <code>%</code> to be <code>%%</code>:</p>
+<p>sbt でビルドされたライブラリ依存性を使用する場合、最初の <code>%</code> を <code>%%</code> にする:</p>
 <pre><code class="language-scala">libraryDependencies += groupID %% artifactID % revision
 </code></pre>
-<p>This will use the right JAR for the dependency built with the version of Scala that you are currently using. If you get an error while resolving this kind of dependency, that dependency probably wasn't published for the version of Scala you are using. See <a href="../concepts/cross-building.html">Cross building</a> for details.</p>
+<p>これにより、現在使用している Scala のバージョンでビルドされたライブラリ依存性に正しい JAR が使用される。この種のライブラリ依存性の解決中にエラーが発生した場合、そのライブラリ依存性は使用している Scala のバージョン用に公開されていない可能性がある。詳細は<a href="../concepts/cross-building.html">クロスビルド</a>を参照。</p>
 <!--
 Ivy can select the latest revision of a module according to constraints
 you specify. Instead of a fixed revision like `"1.6.1"`, you specify
@@ -248,13 +248,13 @@ you specify. Instead of a fixed revision like `"1.6.1"`, you specify
 [Ivy revisions](https://ant.apache.org/ivy/history/2.3.0/ivyfile/dependency.html#revision)
 documentation for details.
 -->
-<h3 id="versionscheme-and-eviction-errors"><a class="header" href="#versionscheme-and-eviction-errors"><code>versionScheme</code> and eviction errors</a></h3>
-<p>sbt allows library authors to declare the version semantics using the <code>versionScheme</code> setting:</p>
-<pre><code class="language-scala">// Semantic Versioning applied to 0.x, as well as 1.x, 2.x, etc
+<h3 id="versionscheme-と-eviction-エラー"><a class="header" href="#versionscheme-と-eviction-エラー"><code>versionScheme</code> と eviction エラー</a></h3>
+<p>sbt では、ライブラリ作者が <code>versionScheme</code> セッティングを使ってバージョン意味論を宣言できる:</p>
+<pre><code class="language-scala">// 0.x および 1.x、2.x などにセマンティックバージョニングを適用
 versionScheme := Some(VersionScheme.EarlySemVer)
 </code></pre>
-<p>When Coursier finds multiple versions of a library, for example Cats Effect 2.x and Cats Effect 3.0.0-M4, it often resolves the conflict by removing the older version from the graph. This process is colloquially called eviction, like "Cats Effect 2.2.0 was evicted."</p>
-<p>This would work if the new tenant is binary compatible with Cats Effect 2.2.0. In this case, the library authors have declared that they are <em>not</em> binary compatible, so the eviction was actually unsafe. An unsafe eviction would cause runtime issues such as <code>ClassNotFoundException</code>. Instead Coursier should've failed to resolve.</p>
+<p>Coursier がライブラリの複数バージョン（例えば Cats Effect 2.x と Cats Effect 3.0.0-M4）を検出すると、グラフから古いバージョンを削除して競合を解決することが多い。このプロセスは eviction（退去）と呼ばれ、「Cats Effect 2.2.0 evict された」のように表現される。</p>
+<p>新しいバージョンが Cats Effect 2.2.0 とバイナリ互換性がある場合は問題ない。今回のケースでは、ライブラリ作者がバイナリ互換性がないと宣言しているため、eviction は実際には安全ではない。 安全でない eviction は <code>ClassNotFoundException</code> などのランタイム問題を引き起こすため、Coursier は解決に失敗すべきだった。</p>
 <pre><code class="language-scala">lazy val use = project
   .settings(
     name := "use",
@@ -264,7 +264,7 @@ versionScheme := Some(VersionScheme.EarlySemVer)
     ),
   )
 </code></pre>
-<p>sbt performs this secondary compatibility check after Coursier returns a candidate:</p>
+<p>sbt は Coursier が候補を返した後に、この二次互換性チェックを行う:</p>
 <pre><code>[error] stack trace is suppressed; run last use / update for the full output
 [error] (use / update) found version conflict(s) in library dependencies; some are suspected to be binary incompatible:
 [error]
@@ -278,16 +278,16 @@ versionScheme := Some(VersionScheme.EarlySemVer)
 [error]
 [error] this can be overridden using libraryDependencySchemes or evictionErrorLevel
 </code></pre>
-<p>This mechanism is called the <em>eviction error</em>.</p>
-<h4 id="opting-out-of-the-the-eviction-error"><a class="header" href="#opting-out-of-the-the-eviction-error">Opting out of the the eviction error</a></h4>
-<p>If the library authors have declared the compatibility breakage, but if you want to ignore the strict check (often for <code>scala-xml</code>), you can write this in <code>project/plugins.sbt</code> and <code>build.sbt</code>:</p>
+<p>この機構は <em>eviction エラー</em> と呼ばれる。</p>
+<h4 id="eviction-エラーを無効にする"><a class="header" href="#eviction-エラーを無効にする">eviction エラーを無効にする</a></h4>
+<p>ライブラリ作者が互換性の破壊を宣言している場合でも、厳格なチェックを無視したい場合（<code>scala-xml</code> でよくある）は、<code>project/plugins.sbt</code> と <code>build.sbt</code> に以下を記述する:</p>
 <pre><code class="language-scala">libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always
 </code></pre>
-<p>To ignore all eviction errors:</p>
+<p>全ての eviction エラーを無視するには:</p>
 <pre><code class="language-scala">evictionErrorLevel := Level.Info
 </code></pre>
-<h3 id="resolvers"><a class="header" href="#resolvers">Resolvers</a></h3>
-<p>sbt uses the standard Maven Central repository by default. Declare additional repositories with the form:</p>
+<h3 id="リゾルバ"><a class="header" href="#リゾルバ">リゾルバ</a></h3>
+<p>sbt はデフォルトで標準の Maven Central リポジトリを使用する。追加のリポジトリは以下の形式で宣言する:</p>
 <pre><code class="language-scala">resolvers += name at location
 </code></pre>
 <p>例:</p>
@@ -298,41 +298,41 @@ versionScheme := Some(VersionScheme.EarlySemVer)
 
 resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
 </code></pre>
-<p>sbt can search your local Maven repository if you add it as a repository:</p>
+<p>リポジトリとして追加すれば、sbt はローカルの Maven リポジトリを検索できる:</p>
 <pre><code class="language-scala">resolvers += Resolver.mavenLocal
 </code></pre>
 <!--
 See [Resolvers][Resolvers] for details on defining other types of repositories.
 -->
-<h4 id="override-default-resolvers"><a class="header" href="#override-default-resolvers">Override default resolvers</a></h4>
-<p><code>resolvers</code> configures additional, inline user resolvers. By default, <code>sbt</code> combines these resolvers with default repositories (Maven Central and the local Ivy repository) to form <code>externalResolvers</code>. To have more control over repositories, set <code>externalResolvers</code> directly. To only specify repositories in addition to the usual defaults, configure <code>resolvers</code>.</p>
-<p>For example, to use the Sonatype OSS Snapshots repository in addition to the default repositories,</p>
+<h4 id="デフォルトのリゾルバを上書きする"><a class="header" href="#デフォルトのリゾルバを上書きする">デフォルトのリゾルバを上書きする</a></h4>
+<p><code>resolvers</code> は追加のインラインユーザーリゾルバを設定する。デフォルトでは、<code>sbt</code> はこれらのリゾルバとデフォルトリポジトリ（Maven Central とローカル Ivy リポジトリ）を組み合わせて <code>externalResolvers</code> を形成する。リポジトリをより細かく制御するには、<code>externalResolvers</code> を直接設定する。通常のデフォルトに加えてリポジトリを指定するだけの場合は、<code>resolvers</code> を設定する。</p>
+<p>例えば、デフォルトのリポジトリに加えて Sonatype OSS Snapshots リポジトリを使用するには、</p>
 <pre><code class="language-scala">resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
 </code></pre>
-<p>To use the local repository, but not the Maven Central repository:</p>
+<p>ローカルリポジトリを使用し、Maven Central は使用しない場合:</p>
 <pre><code class="language-scala">externalResolvers := Resolver.combineDefaultResolvers(resolvers.value.toVector, mavenCentral = false)
 </code></pre>
-<h4 id="override-all-resolvers-for-all-builds"><a class="header" href="#override-all-resolvers-for-all-builds">Override all resolvers for all builds</a></h4>
-<p>The repositories used to retrieve sbt, Scala, plugins, and application dependencies can be configured globally and declared to override the resolvers configured in a build or plugin definition. There are two parts:</p>
+<h4 id="全てのビルドのリゾルバを上書きする"><a class="header" href="#全てのビルドのリゾルバを上書きする">全てのビルドのリゾルバを上書きする</a></h4>
+<p>sbt、Scala、プラグイン、アプリケーションのライブラリ依存依存性の取得に使用するリポジトリは、グローバルに設定し、ビルドまたはプラグイン定義で設定されたリゾルバを上書きするように宣言できる。以下の 2つの手順を踏む:</p>
 <ol>
-<li>Define the repositories used by the launcher.</li>
-<li>Specify that these repositories should override those in build definitions.</li>
+<li>ランチャー用のリポジトリを定義する。</li>
+<li>これらのリポジトリがビルド定義のリポジトリを上書きすることを指定する。</li>
 </ol>
-<p>The repositories used by the launcher can be overridden by defining <code>~/.sbt/repositories</code>, which must contain a <code>[repositories]</code> section with the same format as the <code>Launcher</code> configuration file. For example:</p>
+<p>ランチャーが使用するリポジトリは、<code>~/.sbt/repositories</code> を定義することで上書きできる。このファイルには <code>Launcher</code> 設定ファイルと同じ形式の <code>[repositories]</code> セクションを含める必要がある。例:</p>
 <pre><code>[repositories]
 local
 my-maven-repo: https://example.org/repo
 my-ivy-repo: https://example.org/ivy-repo/, [organization]/[module]/[revision]/[type]s/[artifact](-[classifier]).[ext]
 </code></pre>
-<p>A different location for the repositories file may be specified by the <code>sbt.repository.config</code> system property in the sbt startup script. The final step is to set <code>sbt.override.build.repos</code> to true to use these repositories for dependency resolution and retrieval.</p>
-<h3 id="exclude-transitive-dependencies"><a class="header" href="#exclude-transitive-dependencies">Exclude Transitive Dependencies</a></h3>
-<p>In certain cases a transitive dependency should be excluded from all dependencies. This can be achieved by setting up <code>ExclusionRules</code> in <code>excludeDependencies</code>.</p>
+<p>リポジトリファイルの別の場所は、sbt 起動スクリプトの <code>sbt.repository.config</code> システムプロパティで指定できる。最後に、ライブラリ依存性の解決と取得にこれらのリポジトリを使用するには、<code>sbt.override.build.repos</code> を true に設定する。</p>
+<h3 id="間接依存ライブラリを除外する"><a class="header" href="#間接依存ライブラリを除外する">間接依存ライブラリを除外する</a></h3>
+<p>特定のケースでは、間接依存ライブラリを全てのライブラリ依存性から除外する必要がある。<code>excludeDependencies</code> で <code>ExclusionRules</code> を設定することで実現できる。</p>
 <pre><code class="language-scala">excludeDependencies ++= Seq(
-  // commons-logging is replaced by jcl-over-slf4j
+  // commons-logging は jcl-over-slf4j で置き換えられる
   ExclusionRule("commons-logging", "commons-logging")
 )
 </code></pre>
-<p>To exclude certain transitive dependencies of a dependency, use the <code>excludeAll</code> or <code>exclude</code> methods. The <code>exclude</code> method should be used when a pom will be published for the project. It requires the organization and module name to exclude. For example,</p>
+<p>ライブラリ依存性の特定の間接依存ライブラリを除外するには、<code>excludeAll</code> または <code>exclude</code> メソッドを使用する。プロジェクト用の POM を公開する場合は <code>exclude</code> メソッドを使用する。除外するには組織名とモジュール名が必要である。例:</p>
 <pre><code class="language-scala">libraryDependencies += 
   ("log4j" % "log4j" % "1.2.15").exclude("javax.jms", "jms")
 </code></pre>
@@ -352,33 +352,33 @@ libraryDependencies +=
 
 See [ModuleID](../api/sbt/librarymanagement/ModuleID.html) for API details.
 -->
-<h3 id="explicit-url"><a class="header" href="#explicit-url">Explicit URL</a></h3>
-<p>If your project requires a dependency that is not present in a repository, a direct URL to its jar can be specified as follows:</p>
+<h3 id="明示的な-url"><a class="header" href="#明示的な-url">明示的な URL</a></h3>
+<p>プロジェクトにリポジトリに存在しないライブラリ依存性が必要な場合、その jar への直接 URL を以下のように指定できる:</p>
 <pre><code class="language-scala">libraryDependencies += "slinky" % "slinky" % "2.1" from "https://slinky2.googlecode.com/svn/artifacts/2.1/slinky.jar"
 </code></pre>
-<p>The URL is only used as a fallback if the dependency cannot be found through the configured repositories. Also, the explicit URL is not included in published metadata (that is, the pom or ivy.xml).</p>
-<h3 id="disable-transitivity"><a class="header" href="#disable-transitivity">Disable Transitivity</a></h3>
-<p>By default, these declarations fetch all project dependencies, transitively. In some instances, you may find that the dependencies listed for a project aren't necessary for it to build. Projects using the Felix OSGI framework, for instance, only explicitly require its main jar to compile and run. Avoid fetching artifact dependencies with either <code>intransitive()</code> or <code>notTransitive()</code>, as in this example:</p>
+<p>URL は、設定されたリポジトリでライブラリ依存性が見つからない場合のフォールバックとしてのみ使用される。また、明示的な URL は公開メタデータ（pom や ivy.xml）には含まれない。</p>
+<h3 id="推移性を無効にする"><a class="header" href="#推移性を無効にする">推移性を無効にする</a></h3>
+<p>デフォルトでは、これらの宣言は全てのプロジェクトライブラリ依存性を推移的に取得する。場合によっては、プロジェクトにリストされたライブラリ依存性がビルドに不要なことがある。例えば、Felix OSGI フレームワークを使用するプロジェクトでは、コンパイルと実行にメイン jar のみが明示的に必要である。この例のように <code>intransitive()</code> または<code>notTransitive()</code> でアーティファクトのライブラリ依存性の取得を避ける:</p>
 <pre><code class="language-scala">libraryDependencies += ("org.apache.felix" % "org.apache.felix.framework" % "1.8.0").intransitive()
 </code></pre>
-<h3 id="classifiers"><a class="header" href="#classifiers">Classifiers</a></h3>
-<p>You can specify the classifier for a dependency using the <code>classifier</code> method. For example, to get the jdk15 version of TestNG:</p>
+<h3 id="クラシファイア"><a class="header" href="#クラシファイア">クラシファイア</a></h3>
+<p><code>classifier</code> メソッドでライブラリ依存性のクラシファイアを指定できる。例えば、TestNG の jdk15 バージョンを取得するには:</p>
 <pre><code class="language-scala">libraryDependencies += ("org.testng" % "testng" % "5.7").classifier("jdk15")
 </code></pre>
-<p>For multiple classifiers, use multiple <code>classifier</code> calls:</p>
+<p>複数のクラシファイアには、複数回 <code>classifier</code> を呼び出す:</p>
 <pre><code class="language-scala">libraryDependencies += 
   "org.lwjgl.lwjgl" % "lwjgl-platform" % lwjglVersion classifier "natives-windows" classifier "natives-linux" classifier "natives-osx"
 </code></pre>
-<p>To obtain particular classifiers for all dependencies transitively, run the <code>updateClassifiers</code> task. By default, this resolves all artifacts with the <code>sources</code> or <code>javadoc</code> classifier. Select the classifiers to obtain by configuring the <code>transitiveClassifiers</code> setting. For example, to only retrieve sources:</p>
+<p>全てのライブラリ依存性の特定クラシファイアを推移的に取得するには、<code>updateClassifiers</code> タスクを実行する。デフォルトでは、<code>sources</code> または <code>javadoc</code> クラシファイアを持つ全アーティファクトを解決する。取得するクラシファイアは <code>transitiveClassifiers</code> セッティングで選択する。例えば、ソースのみを取得するには:</p>
 <pre><code class="language-scala">transitiveClassifiers := Seq("sources")
 </code></pre>
-<h3 id="download-sources"><a class="header" href="#download-sources">Download Sources</a></h3>
-<p>Downloading source and API documentation jars is usually handled by an IDE plugin. These plugins use the <code>updateClassifiers</code> and <code>updateSbtClassifiers</code> tasks, which produce an <code>Update-Report</code> referencing these jars.</p>
-<p>To have sbt download the dependency's sources without using an IDE plugin, add <code>withSources()</code> to the dependency definition. For API jars, add <code>withJavadoc()</code>. For example:</p>
+<h3 id="ソースのダウンロード"><a class="header" href="#ソースのダウンロード">ソースのダウンロード</a></h3>
+<p>ソースと API ドキュメントの JAR ファイルのダウンロードは通常 IDE プラグインが行う。これらのプラグインは <code>updateClassifiers</code> と <code>updateSbtClassifiers</code> タスクを使用し、これらの JAR を参照する <code>UpdateReport</code> を生成する。</p>
+<p>IDE プラグインを使わずに sbt にライブラリ依存性のソースをダウンロードさせるには、ライブラリ依存性の定義に <code>withSources()</code> を追加する。API JAR をダウンロードするには <code>withJavadoc()</code> を追加する。例:</p>
 <pre><code class="language-scala">libraryDependencies += 
   ("org.apache.felix" % "org.apache.felix.framework" % "1.8.0").withSources().withJavadoc()
 </code></pre>
-<p>Note that this is not transitive. Use the <code>update*Classifiers</code> tasks for that.</p>
+<p>これは推移的ではないことに注意。その場合は <code>update*Classifiers</code> タスクを使用する。</p>
 <!--
 ### Extra Attributes
 
