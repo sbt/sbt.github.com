@@ -2118,7 +2118,7 @@ sbt:demo&gt; show someKey
 <h3 id="ビルド定義を管理するコマンド"><a class="header" href="#ビルド定義を管理するコマンド">ビルド定義を管理するコマンド</a></h3>
 <ul>
 <li>
-<p><code>reload [plugins|return]</code> 引数が指定されていない場合、ビルドをリロードし、必要に応じてビルド定義やプラグイン定義を再コンパイルする。<code>reload plugins</code> は現在のプロジェクトをメタビルドプロジェクト (<code>project/</code> 内) に切り替える。ビルド定義を直接操作するのに便利である。例えば、ビルド定義プロジェクトで clean を実行すると、スナップショットの更新とビルド定義の再コンパイルが強制される。<code>reload return</code> はメインプロジェクトに戻る。</p>
+<p><code>reload [plugins|return]</code> 引数が指定されていない場合、ビルドをリロードし、必要に応じてビルド定義やプラグイン定義を再コンパイルする。<code>reload plugins</code> はカレント・プロジェクトをメタビルドプロジェクト (<code>project/</code> 内) に切り替える。ビルド定義を直接操作するのに便利である。例えば、ビルド定義プロジェクトで clean を実行すると、スナップショットの更新とビルド定義の再コンパイルが強制される。<code>reload return</code> はメインプロジェクトに戻る。</p>
 </li>
 <li>
 <p><code>set &lt;setting-expression&gt;</code> 渡されたセッティング定義を評価して適用する。セッティングは sbt が再起動されるか、ビルドがリロードされるか、別の set コマンドで上書きされるか、session コマンドで削除されるまで有効である。<!-- See [.sbt build definition][Basic-Def] and
@@ -2464,7 +2464,7 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "$example_scalatest_vers
 <li><code>stats</code>: ライブラリ依存性の総数やバージョン数などの要約統計を表示する。</li>
 <li><code>help</code>: 使用ヘルプを表示する（引数なしで <code>dependencyTree</code> を実行した場合と同様）。</li>
 </ul>
-<h4 id="options"><a class="header" href="#options">Options</a></h4>
+<h4 id="オプション"><a class="header" href="#オプション">オプション</a></h4>
 <ul>
 <li><code>--quiet</code>: コンソール出力を抑制し、タスク値として結果を返す（他タスクでの利用など）。</li>
 <li><code>--out &lt;ファイル&gt;</code>: 標準出力の代わりに指定ファイルへ出力する。ファイル拡張子でデフォルトのサブコマンドが決まる:
@@ -2599,56 +2599,56 @@ Evictions: 2
 <h2 id="書式-4"><a class="header" href="#書式-4">書式</a></h2>
 <p><code>sbt</code> [<em>query</em> / ] <code>run</code> [<em>args</em>]</p>
 <h2 id="説明-4"><a class="header" href="#説明-4">説明</a></h2>
-<p>The <code>run</code> task provides a means for running the user program.</p>
-<p>In sbt 1.x and earlier, <code>run</code> task ran the user program in the same Java virtual machine (JVM) as the sbt server. sbt 2.x implements <em>client-side run</em>: the <code>run</code> task creates a sandbox environment that contains the program, sends the information back to sbtn, and sbtn launches the user program in a fresh JVM.</p>
-<h3 id="motivations"><a class="header" href="#motivations">Motivations</a></h3>
-<p>There are several motivations for the client-side run.</p>
+<p><code>run</code> タスクはユーザープログラムを実行する手段を提供する。</p>
+<p>sbt 1.x 以前では、<code>run</code> タスクはユーザープログラムを sbt server と同じ Java 仮想マシン (JVM) 上で実行していた。sbt 2.x では<strong>クライアントサイド run</strong>を実装している。<code>run</code> タスクはプログラムを含むサンドボックス環境を作成し、情報を sbtn に送り返す。ユーザープログラムは、sbtn が起動する新しい JVM 内で実行されるという仕組みだ。</p>
+<h3 id="特長"><a class="header" href="#特長">特長</a></h3>
+<p>クライアントサイド run にはいくつかの特長がある。</p>
 <ol>
-<li><strong>sys.exit support</strong>. User code can call <code>sys.exit</code>, which normally shuts down the JVM. In sbt 1.x, we needed to trap these <code>sys.exit</code> calls to prevent <code>run</code> from shutting down the sbt session, using the JDK SecurityManager; however, TrapExit was dropped in sbt 1.6.0 (2021) since JDK 17 deprecated SecurityManager feature. Because client-side run runs the user program in its own JVM, it can call <code>sys.exit</code>.</li>
-<li><strong>Isolation</strong>. User code can also start threads, or otherwise allocate resources that can be left running after the main method returns. Running user code in a separate JVM gives isolation between the sbt server and the user code.</li>
-<li><strong>sbt server availability</strong>. Since the program will run outside of the sbt server, it can become available to the more requests by other clients, for example test or IDE integration.</li>
+<li><strong>sys.exit のサポート</strong>。ユーザーコードは <code>sys.exit</code> を呼び出せる。通常これは JVM をシャットダウンする。sbt 1.x では、JDK の SecurityManager を使ってこれらの <code>sys.exit</code> 呼び出しをトラップし、<code>run</code> が sbt セッションをシャットダウンするのを防ぐ必要があった。しかし JDK 17 で SecurityManager が非推奨になったため、TrapExit は sbt 1.6.0 (2021) で削除された。クライアントサイド run はユーザープログラムを専用の JVM で実行するため、<code>sys.exit</code> を呼び出せる。</li>
+<li><strong>分離</strong>。ユーザーコードはスレッドを開始したり、main メソッドが戻った後も動作し続けるリソースを割り当てたりできる。別の JVM でユーザーコードを実行することで、sbt server とユーザーコードの間の分離が得られる。</li>
+<li><strong>sbt server の可用性</strong>。プログラムは sbt server の外で実行されるため、テストや IDE 連携など、他のクライアントからのより多くのリクエストに対応できる。</li>
 </ol>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-test"><a class="header" href="#sbt-test">sbt test</a></h1>
 <h2 id="書式-5"><a class="header" href="#書式-5">書式</a></h2>
 <p><code>sbt</code> [<em>query</em> / ] <code>test</code> [<em>testname1</em> <em>testname2</em>] [ -- <em>options</em> ]</p>
 <h2 id="説明-5"><a class="header" href="#説明-5">説明</a></h2>
-<p>The <code>test</code> task provides a means for compiling and running the tests.</p>
-<p>By default, the <code>test</code> task in sbt 2.x:</p>
+<p><code>test</code> タスクはテストのコンパイルと実行の手段を提供する。</p>
+<p>sbt 2.x の <code>test</code> タスクの特長:</p>
 <ol>
-<li><strong>Subproject parallelism</strong>. Performs compilation of the relevant subprojects in parallel, specified by the <a href="reference/../concepts/sbt-query.html">query</a>.</li>
-<li><strong>Test suite parallelism</strong>. Maps discovered test suites, to tasks and executes them in parallel.</li>
-<li><strong>Incremental test</strong>. Runs only the tests that either failed in the previous run, never run, or if sbt detects changes in the test or its dependencies.</li>
-<li><strong>Cached</strong>. The test result is cached machine-wide, and optionally remote cached.</li>
+<li><strong>サブプロジェクトの並列化</strong>。<a href="reference/../concepts/sbt-query.html">クエリ</a>で指定された関連サブプロジェクトのコンパイルを並列で実行する。</li>
+<li><strong>テストスイートの並列化</strong>。検出されたテストスイートをタスクにマッピングし、並列で実行する。</li>
+<li><strong>差分テスト</strong>。前回失敗したテスト、未実行のテスト、または sbt がテストやその依存関係の変更を検出した場合のみ実行する。</li>
+<li><strong>キャッシュ</strong>。テスト結果はマシン全体でキャッシュされ、オプションでリモートキャッシュも可能。</li>
 </ol>
-<p>The standard source locations for testing are:</p>
+<p>テスト用の標準ソース配置は以下の通り:</p>
 <ul>
-<li>Scala sources in <code>src/test/scala/</code></li>
-<li>Java sources in <code>src/test/java/</code></li>
-<li>Resources for the test classpath in <code>src/test/resources/</code></li>
+<li><code>src/test/scala/</code> 内の Scala ソース</li>
+<li><code>src/test/java/</code> 内の Java ソース</li>
+<li><code>src/test/resources/</code> 内のテストクラスパス用リソース</li>
 </ul>
-<p>The resources may be accessed from tests by using the <code>getResource</code> methods of <code>java.lang.Class</code> or <code>java.lang.ClassLoader</code>.</p>
-<h3 id="test-interfaces"><a class="header" href="#test-interfaces">Test interfaces</a></h3>
-<p>sbt defines the common interface for JVM-based test frameworks, allowing automatic test suite discovery and parallel execution. By default sbt integrates with <a href="https://scalameta.org/munit/">MUnit</a>, <a href="https://www.scalatest.org/">ScalaTest</a>, <a href="https://hedgehogqa.github.io/scala-hedgehog/">Hedgehog</a>, <a href="https://scalacheck.org/">ScalaCheck</a>, <a href="https://etorreborre.github.io/specs2/">Specs2</a>, <a href="https://typelevel.org/weaver-test/">Weaver</a>, <a href="https://zio.dev/reference/test/">ZIO Test</a>, and <a href="https://github.com/sbt/junit-interface">JUnit 4</a>; this means you only need to add the test framework to the classpath to work with sbt. For example, MUnit may be used by declaring it as a <code>libraryDependency</code>:</p>
+<p>リソースは <code>java.lang.Class</code> または <code>java.lang.ClassLoader</code> の <code>getResource</code> メソッドでテストからアクセスできる。</p>
+<h3 id="テストインターフェース"><a class="header" href="#テストインターフェース">テストインターフェース</a></h3>
+<p>sbt は JVM ベースのテストフレームワーク用の共通インターフェースを定義し、テストスイートの自動検出と並列実行を可能にする。デフォルトで sbt は <a href="https://scalameta.org/munit/">MUnit</a>、<a href="https://www.scalatest.org/">ScalaTest</a>、<a href="https://hedgehogqa.github.io/scala-hedgehog/">Hedgehog</a>、<a href="https://scalacheck.org/">ScalaCheck</a>、<a href="https://etorreborre.github.io/specs2/">Specs2</a>、<a href="https://typelevel.org/weaver-test/">Weaver</a>、<a href="https://zio.dev/reference/test/">ZIO Test</a>、<a href="https://github.com/sbt/junit-interface">JUnit 4</a> と連携する。テストフレームワークをクラスパスに追加するだけで sbt で利用できる。例えば MUnit は <code>libraryDependency</code> として宣言して使用する:</p>
 <pre><code class="language-scala">lazy val munit = "org.scalameta" %% "munit" % "1.2.0"
 
 libraryDependencies += munit % Test
 </code></pre>
-<p>In the above, <code>Test</code> denotes the <code>Test</code> configuration, and means that MUnit will only be on the test classpath and it isn't needed by the main sources.</p>
+<p>上記では、<code>Test</code> は <code>Test</code> コンフィギュレーションを表し、MUnit はテストクラスパスにのみ含まれ、main ソースでは不要であることを意味する。</p>
 <h4 id="junit"><a class="header" href="#junit">JUnit</a></h4>
-<p>Support for JUnit 5 is provided by <a href="https://github.com/sbt/sbt-jupiter-interface">sbt-jupiter-interface</a>. To add JUnit Jupiter support into your project, add the jupiter-interface dependency in your project's main build.sbt file.</p>
+<p>JUnit 5 のサポートは <a href="https://github.com/sbt/sbt-jupiter-interface">sbt-jupiter-interface</a> にて提供される。プロジェクトに JUnit Jupiter サポートを追加するには、プロジェクトのメイン build.sbt に jupiter-interface のライブラリ依存性を追加する。</p>
 <pre><code class="language-scala">libraryDependencies += "com.github.sbt.junit" % "jupiter-interface" % "0.15.1" % Test
 </code></pre>
-<p>and the sbt-jupiter-interface plugin to your <code>project/plugins.sbt</code>:</p>
+<p><code>project/plugins.sbt</code> に sbt-jupiter-interface プラグインを追加する:</p>
 <pre><code class="language-scala">addSbtPlugin("com.github.sbt.junit" % "sbt-jupiter-interface" % "0.15.1")
 </code></pre>
-<p>Support for JUnit 4 is provided by <a href="https://github.com/sbt/junit-interface">junit-interface</a>. Add the junit-interface dependency in your project's main build.sbt file.</p>
+<p>JUnit 4 のサポートは <a href="https://github.com/sbt/junit-interface">junit-interface</a> にて提供される。プロジェクトのメイン build.sbt に junit-interface のライブラリ依存性を追加する。</p>
 <pre><code class="language-scala">libraryDependencies += "com.github.sbt" % "junit-interface" % "0.13.3" % Test
 </code></pre>
-<h3 id="test-filtering"><a class="header" href="#test-filtering">Test filtering</a></h3>
-<p>In sbt 2.x, the <code>test</code> task accepts a whitespace separated list of test names to run. For example:</p>
+<h3 id="テストフィルタリング"><a class="header" href="#テストフィルタリング">テストフィルタリング</a></h3>
+<p>sbt 2.x では、<code>test</code> タスクは実行するテスト名の空白区切りリストを受け付ける。例:</p>
 <pre><code class="language-bash">&gt; test example.ExampleSuite example.ExampleSuite2
 </code></pre>
-<p>Here's an example output:</p>
+<p>出力例:</p>
 <pre><code class="language-bash">&gt; test example.ExampleSuite example.ExampleSuite2
 [info] compiling 1 Scala source to /tmp/foo/target/out/jvm/scala-3.7.2/foo/backend ...
 [info] compiling 2 Scala sources to /tmp/foo/target/out/jvm/scala-3.7.2/foo/test-backend ...
@@ -2659,18 +2659,18 @@ example.ExampleSuite2:
 [info] Passed: Total 2, Failed 0, Errors 0, Passed 2
 [success] elapsed time: 3 s, cache 49%, 25 disk cache hits, 26 onsite tasks
 </code></pre>
-<p>It supports wildcards as well:</p>
+<p>ワイルドカードもサポートする:</p>
 <pre><code>&gt; test *Example*
 </code></pre>
-<h3 id="incremental-testing"><a class="header" href="#incremental-testing">Incremental testing</a></h3>
-<p>In addition to the explicit filter, the <code>test</code> task runs only the tests that satisfy one of the following conditions are run:</p>
+<h3 id="差分テスト-1"><a class="header" href="#差分テスト-1">差分テスト</a></h3>
+<p>明示的なフィルタに加え、<code>test</code> タスクは以下のいずれかの条件を満たすテストのみを実行する:</p>
 <ul>
-<li>The tests that failed in the previous run</li>
-<li>The tests that were not run before</li>
+<li>前回失敗したテスト</li>
+<li>以前実行されていなかったテスト</li>
 <li>1つ以上の間接依存ライブラリが、別のプロジェクトにある場合も含め、再コンパイルされたテスト。</li>
 </ul>
-<h3 id="full-testing"><a class="header" href="#full-testing">Full testing</a></h3>
-<p>To run, uncached full tests, like sbt 1.x, use the <code>testFull</code> task.</p>
+<h3 id="フルテスト"><a class="header" href="#フルテスト">フルテスト</a></h3>
+<p>sbt 1.x のようにキャッシュなしのフルテストを実行するには、<code>testFull</code> タスクを使用する。</p>
 <!--
 ### Tab completion
 
@@ -2680,8 +2680,8 @@ tab completion until they are compiled and deleted sources won't be
 removed from tab completion until a recompile. A new test source can
 still be manually written out and run using `test`.
 -->
-<h3 id="other-tasks"><a class="header" href="#other-tasks">Other tasks</a></h3>
-<p>Tasks that are available for main sources are generally available for test sources, but are prefixed with <code>Test /</code> on the command line and are referenced in Scala code with <code>Test /</code> as well. These tasks include:</p>
+<h3 id="その他のタスク"><a class="header" href="#その他のタスク">その他のタスク</a></h3>
+<p>main ソースで利用可能なタスクは、テストソースでも利用可能である。コマンドラインでは <code>Test /</code> をプレフィックスとして付け、Scala コードでも <code>Test /</code> で参照する。これらのタスクには以下が含まれる:</p>
 <ul>
 <li><code>Test / compile</code></li>
 <li><code>Test / console</code></li>
@@ -2689,28 +2689,28 @@ still be manually written out and run using `test`.
 <li><code>Test / run</code></li>
 <li><code>Test / runMain</code></li>
 </ul>
-<p>See <a href="reference/./sbt-run.html">sbt run</a> for details on these tasks.</p>
-<h3 id="output"><a class="header" href="#output">Output</a></h3>
-<p>By default, logging is buffered for each test source file until all tests for that file complete. This can be disabled by setting <code>logBuffered</code>:</p>
+<p>これらのタスクの詳細は<a href="reference/./sbt-run.html">sbt run</a>を参照。</p>
+<h3 id="出力"><a class="header" href="#出力">出力</a></h3>
+<p>デフォルトでは、各テストソースファイルのログはそのファイルの全テストが完了するまでバッファリングされる。<code>logBuffered</code> を設定することで無効にできる:</p>
 <pre><code class="language-scala">Test / logBuffered := false
 </code></pre>
-<h4 id="test-reports"><a class="header" href="#test-reports">Test Reports</a></h4>
-<p>By default, sbt will generate JUnit XML test reports for all tests in the build, located in the <code>target/test-reports</code> directory for a project. This can be disabled by disabling the <code>JUnitXmlReportPlugin</code></p>
+<h4 id="テストレポート"><a class="header" href="#テストレポート">テストレポート</a></h4>
+<p>デフォルトでは、sbt はビルド内の全テストの JUnit XML テストレポートをプロジェクトの <code>target/test-reports</code> ディレクトリに生成する。<code>JUnitXmlReportPlugin</code> を無効にすることで無効にできる。</p>
 <pre><code class="language-scala">val myProject = (project in file(".")).disablePlugins(plugins.JUnitXmlReportPlugin)
 </code></pre>
-<h3 id="options-1"><a class="header" href="#options-1">Options</a></h3>
-<h4 id="test-framework-arguments"><a class="header" href="#test-framework-arguments">Test framework arguments</a></h4>
-<p>Arguments to the test framework may be provided on the command line to the <code>test</code> tasks following a <code>--</code> separator. For example:</p>
+<h3 id="オプション-1"><a class="header" href="#オプション-1">オプション</a></h3>
+<h4 id="テストフレームワークの引数"><a class="header" href="#テストフレームワークの引数">テストフレームワークの引数</a></h4>
+<p>テストフレームワークへの引数は、<code>--</code> 区切りに続けて <code>test</code> タスクのコマンドラインで指定できる。例:</p>
 <pre><code>&gt; test org.example.MyTest -- -verbosity 1
 </code></pre>
-<p>To specify test framework arguments as part of the build, add options constructed by <code>Tests.Argument</code>:</p>
+<p>ビルドの一部としてテストフレームワークの引数を指定するには、<code>Tests.Argument</code> で構築したオプションを追加する:</p>
 <pre><code class="language-scala">Test / testOptions += Tests.Argument("-verbosity", "1")
 </code></pre>
-<p>To specify them for a specific test framework only:</p>
+<p>特定のテストフレームワーク用にのみ指定する場合:</p>
 <pre><code class="language-scala">Test / testOptions += Tests.Argument(TestFrameworks.ScalaCheck, "-verbosity", "1")
 </code></pre>
-<h4 id="setup-and-cleanup"><a class="header" href="#setup-and-cleanup">Setup and Cleanup</a></h4>
-<p>Specify setup and cleanup actions using <code>Tests.Setup</code> and <code>Tests.Cleanup</code>. These accept either a function of type <code>() =&gt; Unit</code> or a function of type <code>ClassLoader =&gt; Unit</code>. The variant that accepts a ClassLoader is passed the class loader that is (or was) used for running the tests. It provides access to the test classes as well as the test framework classes.</p>
+<h4 id="セットアップとクリーンアップ"><a class="header" href="#セットアップとクリーンアップ">セットアップとクリーンアップ</a></h4>
+<p><code>Tests.Setup</code> と <code>Tests.Cleanup</code> でセットアップとクリーンアップのアクションを指定する。<code>() =&gt; Unit</code> 型と <code>ClassLoader =&gt; Unit</code> 型の両方の関数を受け付ける。ClassLoader を受け取るバリアントには、テスト実行に使用される（または使用されていた）クラスローダーが渡される。テストクラスとテストフレームワーククラスにアクセスできる。</p>
 <div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
 <div class="admonition-title">
 <div id="admonition-note-title">
@@ -2719,36 +2719,31 @@ still be manually written out and run using `test`.
 <a class="admonition-anchor-link" href="reference/sbt-test.html#admonition-note"></a>
 </div>
 <div>
-<p>When forking, the <code>ClassLoader</code> containing the test classes cannot be
-provided because it is in another JVM. Only use the <code>() =&gt; Unit</code>
-variants in this case.</p>
+<p>フォーク時は、テストクラスを含む <code>ClassLoader</code> は別の JVM にあるため提供でき
+ない。この場合は <code>() =&gt; Unit</code> バリアントのみを使用すること。</p>
 </div>
 </div>
-<p>Examples:</p>
+<p>例:</p>
 <pre><code class="language-scala">Test / testOptions += Tests.Setup( () =&gt; println("Setup") )
 Test / testOptions += Tests.Cleanup( () =&gt; println("Cleanup") )
 Test / testOptions += Tests.Setup( loader =&gt; ... )
 Test / testOptions += Tests.Cleanup( loader =&gt; ... )
 </code></pre>
-<h4 id="disable-parallel-execution-of-test-suites"><a class="header" href="#disable-parallel-execution-of-test-suites">Disable parallel execution of test suites</a></h4>
-<p>By default, sbt runs all tasks in parallel and within the same JVM as sbt itself. Because each test suite is mapped to a task, tests are also run in parallel by default. To make tests within a given project execute serially:</p>
+<h4 id="テストスイートの並列実行を無効にする"><a class="header" href="#テストスイートの並列実行を無効にする">テストスイートの並列実行を無効にする</a></h4>
+<p>デフォルトでは、sbt は全タスクを sbt 自身と同じ JVM 内で並列実行する。各テストスイートはタスクにマッピングされるため、テストもデフォルトで並列実行される。特定のプロジェクト内のテストを直列実行するには:</p>
 <pre><code class="language-scala">Test / parallelExecution := false
 </code></pre>
-<p>Note that tests from different projects may still execute concurrently.</p>
-<h4 id="filter-classes"><a class="header" href="#filter-classes">Filter classes</a></h4>
-<p>If you want to only run test classes whose name ends with "Test", use <code>Tests.Filter</code>:</p>
+<p>異なるプロジェクトのテストは依然として並行実行される場合がある。</p>
+<h4 id="クラスのフィルタ"><a class="header" href="#クラスのフィルタ">クラスのフィルタ</a></h4>
+<p>名前が "Test" で終わるテストクラスのみを実行するには、<code>Tests.Filter</code> を使用する:</p>
 <pre><code class="language-scala">Test / testOptions := Seq(Tests.Filter(s =&gt; s.endsWith("Test")))
 </code></pre>
-<h4 id="forking-tests"><a class="header" href="#forking-tests">Forking tests</a></h4>
-<p>The setting:</p>
+<h4 id="テストのフォーク"><a class="header" href="#テストのフォーク">テストのフォーク</a></h4>
+<p>設定:</p>
 <pre><code class="language-scala">Test / fork := true
 </code></pre>
-<p>specifies that all tests will be executed in a single external JVM. <!-- See
-[Forking][Forking] for configuring standard options for forking.
-By default,
-tests executed in a forked JVM are executed *sequentially*.
---></p>
-<p>More control over how tests are assigned to JVMs and what options to pass to those is available with <code>testGrouping</code> key.</p>
+<p>全てのテストを単一の外部 JVM で実行することを指定する。</p>
+<p>テストを JVM に割り当てる方法や渡すオプションの詳細は、<code>testGrouping</code> キーで制御できる。</p>
 <!--
 For example in build.sbt:
 
@@ -2770,7 +2765,7 @@ import Tests._
 
 The tests in a single group are run sequentially.
 -->
-<p>Control the number of forked JVMs allowed to run at the same time by setting the limit on <code>Tags.ForkedTestGroup</code> tag, which is 1 by default. <code>Setup</code> and <code>Cleanup</code> actions cannot be provided with the actual test class loader when a group is forked.</p>
+<p>同時に実行できるフォーク JVM の最大数は、<code>Tags.ForkedTestGroup</code> タグの制限で制御する（デフォルトは 1）。グループがフォークされる場合、<code>Setup</code> と <code>Cleanup</code> アクションには実際のテストクラスローダーを渡せない。</p>
 <!--
 In addition, forked tests can optionally be run in parallel within the
 forked JVM(s), using the following setting:
@@ -2970,10 +2965,10 @@ where `customTestListener` is of type `sbt.TestReportListener`.
 <h2 id="書式-6"><a class="header" href="#書式-6">書式</a></h2>
 <p><code>sbt</code> <code>inspect</code> [<em>subproject</em> / ] [ <em>config</em> / ] <em>task</em><br> <code>sbt</code> <code>inspect actual</code> [<em>subproject</em> / ] [ <em>config</em> / ] <em>task</em><br> <code>sbt</code> <code>inspect tree</code> [<em>subproject</em> / ] [ <em>config</em> / ] <em>task</em></p>
 <h2 id="説明-6"><a class="header" href="#説明-6">説明</a></h2>
-<p>The <code>inspect</code> command provides a means to inspect the task and setting graph. For instace, it can be used to determine which setting should be modified to affect another task.</p>
-<h3 id="value-description-and-provided-by"><a class="header" href="#value-description-and-provided-by">Value, Description, and Provided By</a></h3>
-<p>The first piece of information provided by <code>inspect</code> is the type of a task or the value and type of a setting.</p>
-<p>For example,</p>
+<p><code>inspect</code> コマンドはタスクとセッティングのグラフを調査する手段を提供する。例えば、別のタスクに影響を与えるためにどのセッティングを変更すべきか判断するのに使える。</p>
+<h3 id="値説明提供元"><a class="header" href="#値説明提供元">値、説明、提供元</a></h3>
+<p><code>inspect</code> が提供する最初の情報は、タスクの型またはセッティングの値と型である。</p>
+<p>例:</p>
 <pre><code class="language-bash">$ sbt inspect libraryDependencies
 [info] Setting: interface scala.collection.immutable.Seq =
   List(org.scala-lang:scala3-library:3.7.2,
@@ -2985,20 +2980,20 @@ where `customTestListener` is of type `sbt.TestReportListener`.
 [info]  ProjectRef(uri("file:/tmp/aaa/"), "aaa") / libraryDependencies
 ....
 </code></pre>
-<p>The following section of output is labeled "Provided by". This shows the actual scope where the setting is defined.</p>
-<p>This shows that <code>libraryDependencies</code> has been defined on the current project (<code>ProjectRef(uri("file:/tmp/aaa/"), "aaa")</code>).</p>
-<h3 id="related-settings"><a class="header" href="#related-settings">Related Settings</a></h3>
-<p>The <em>Related</em> section of <code>inspect</code> output lists all of the definitions of a key. For example,</p>
+<p>出力の次のセクションは「Provided by」とラベル付けされる。セッティングが定義されている実際のスコープを示す。</p>
+<p><code>libraryDependencies</code> がカレント・プロジェクト（<code>ProjectRef(uri("file:/tmp/aaa/"), "aaa")</code>）で定義されていることを示す。</p>
+<h3 id="関連セッティング"><a class="header" href="#関連セッティング">関連セッティング</a></h3>
+<p><code>inspect</code> 出力の「Related」セクションは、キーの全ての定義を一覧表示する。例:</p>
 <pre><code class="language-bash">&gt; inspect compile
 ...
 [info] Related:
 [info]  Test / compile
 </code></pre>
-<p>This shows that in addition to the requested <code>Compile / compile</code> task, there is also a <code>Test / compile</code> task.</p>
-<h3 id="ライブラリ依存性-1"><a class="header" href="#ライブラリ依存性-1">ライブラリ依存性</a></h3>
-<p>Forward dependencies show the other settings (or tasks) used to define a setting (or task). Reverse dependencies go the other direction, showing what uses a given setting. <code>inspect</code> provides this information based on either the requested dependencies or the actual dependencies. Requested dependencies are those that a setting directly specifies. Actual settings are what those dependencies get resolved to. This distinction is explained in more detail in the following sections.</p>
-<h4 id="requested-dependencies"><a class="header" href="#requested-dependencies">Requested Dependencies</a></h4>
-<p>As an example, we'll look at <code>console</code>:</p>
+<p>要求された <code>Compile / compile</code> タスクに加え、<code>Test / compile</code> タスクも存在することを示す。</p>
+<h3 id="セッティング依存性"><a class="header" href="#セッティング依存性">セッティング依存性</a></h3>
+<p>順方向セッティング依存性は、セッティング（またはタスク）の定義に使用される他のセッティング（またはタスク）を示す。逆方向セッティング依存性は逆方向に、どの設定が与えられたセッティングを使用するかを示す。<code>inspect</code> は指定セッティング依存性または実効セッティング依存性に基づいてこの情報を提供する。指定セッティング依存性はセッティングが直接指定するものである。実効セッティングはそれらの依存関係が解決された結果である。この区別は以下のセクションで詳しく説明する。</p>
+<h4 id="指定セッティング依存性"><a class="header" href="#指定セッティング依存性">指定セッティング依存性</a></h4>
+<p>例として、<code>console</code> を見てみる:</p>
 <pre><code class="language-bash">$ sbt inspect console
 ...
 [info] Dependencies:
@@ -3015,16 +3010,16 @@ where `customTestListener` is of type `sbt.TestReportListener`.
 
 ...
 </code></pre>
-<p>This shows the inputs to the <code>console</code> task. We can see that it gets its classpath and options from <code>Compile / console / fullClasspath</code> and <code>Compile / console / scalacOptions</code>. The information provided by the <code>inspect</code> command can thus assist in finding the right setting to change. The convention for keys, like <code>console</code> and <code>fullClasspath</code>, is that the Scala identifier is camel case, while the String representation is lowercase and separated by dashes. The Scala identifier for a configuration is uppercase to distinguish it from tasks like <code>compile</code> and <code>test</code>. For example, we can infer from the previous example how to add code to be run when the Scala interpreter starts up:</p>
+<p><code>console</code> タスクへの入力が表示される。クラスパスとオプションは <code>Compile / console / fullClasspath</code> と <code>Compile / console / scalacOptions</code> から取得されることが分かる。<code>inspect</code> コマンドの情報により、変更すべきセッティングを見つけるのに役立つ。<code>console</code> や <code>fullClasspath</code> などのキーの慣例では、Scala 識別子はキャメルケース、文字列表現は小文字でハイフン区切りである。コンフィギュレーションの Scala 識別子は <code>compile</code> や <code>test</code> などのタスクと区別するため大文字である。例えば、前の例から Scala インタプリタ起動時に実行するコードの追加方法を推測できる:</p>
 <pre><code class="language-scala">&gt; set Compile / console / initialCommands := "import mypackage._"
 &gt; console
 ...
 import mypackage._
 ...
 </code></pre>
-<p><code>inspect</code> showed that <code>console</code> used the setting <code>Compile / console / initialCommands</code>. Translating the <code>initialCommands</code> string to the Scala identifier gives us <code>initialCommands</code>. <code>compile</code> indicates that this is for the main sources. <code>console /</code> indicates that the setting is specific to <code>console</code>. Because of this, we can set the initial commands on the <code>console</code> task without affecting the <code>consoleQuick</code> task, for example.</p>
-<h4 id="actual-dependencies"><a class="header" href="#actual-dependencies">Actual Dependencies</a></h4>
-<p><code>inspect actual &lt;scoped-key&gt;</code> shows the actual dependency used. This is useful because delegation means that the dependency can come from a scope other than the requested one. Using <code>inspect actual</code>, we see exactly which scope is providing a value for a setting. Combining <code>inspect actual</code> with plain <code>inspect</code>, we can see the range of scopes that will affect a setting. Returning to the example in Requested Dependencies,</p>
+<p><code>inspect</code> は <code>console</code> が <code>Compile / console / initialCommands</code> セッティングを使用していることを示した。<code>initialCommands</code> 文字列を Scala 識別子に変換すると <code>initialCommands</code> になる。<code>compile</code> は main ソース用であることを示す。<code>console /</code> はセッティングが <code>console</code> 専用であることを示す。このため、<code>consoleQuick</code> タスクに影響を与えずに <code>console</code> タスクの初期コマンドを設定できる。</p>
+<h4 id="実効セッティング依存性"><a class="header" href="#実効セッティング依存性">実効セッティング依存性</a></h4>
+<p><code>inspect actual &lt;スコープ付きキー&gt;</code> は使用される実効セッティング依存性を表示する。委譲により依存関係が指定されたスコープ以外から来る可能性があるため有用である。<code>inspect actual</code> を使うと、どのスコープがセッティングに値を提供しているか正確に分かる。<code>inspect actual</code> と通常の <code>inspect</code> を組み合わせると、セッティングに影響するスコープの範囲が分かる。上記の例に戻ると、</p>
 <pre><code class="language-bash">$ sbt inspect actual console
 ...
 [info] Dependencies:
@@ -3038,14 +3033,14 @@ import mypackage._
 [info]  console / compilers
 ...
 </code></pre>
-<p>For <code>initialCommands</code>, we see that it comes from the global scope (<code>Global</code>). Combining this with the relevant output from <code>inspect console</code>:</p>
+<p><code>initialCommands</code> はグローバルスコープ（<code>Global</code>）から来ていることが分かる。これを <code>inspect console</code> の関連出力と組み合わせると:</p>
 <pre><code>Compile / console / initialCommands
 </code></pre>
-<p>we know that we can set <code>initialCommands</code> as generally as the global scope, as specific as the current project's <code>console</code> task scope, or anything in between. This means that we can, for example, set <code>initialCommands</code> for the whole project and will affect <code>console</code>:</p>
+<p>この例から分かるのは <code>initialCommands</code> セッティングは、グローバルスコープを使って全域スコープ付けしたり、カレント・プロジェクトの <code>console</code> タスクスコープのように狭くスコープ付けしたり、またはその間の任意のスコープで設定できるということだ。例えば、プロジェクト全体で <code>initialCommands</code> を設定すると <code>console</code> に影響する:</p>
 <pre><code class="language-scala">&gt; set initialCommands := "import mypackage._"
 ...
 </code></pre>
-<p>The reason we might want to set it here this is that other console tasks will use this value now. We can see which ones use our new setting by looking at the reverse dependencies output of <code>inspect actual</code>:</p>
+<p>ここで設定したい理由は、他の console 系タスクもこの値を使用するようになるためである。<code>inspect actual</code> の逆方向セッティング依存性の出力を見ると、どのタスクが新しいセッティングを使用するか分かる:</p>
 <pre><code class="language-bash">$ sbt inspect actual Global/initialCommands
 ...
 [info] Reverse dependencies:
@@ -3056,18 +3051,18 @@ import mypackage._
 [info]  Compile / consoleQuick
 ...
 </code></pre>
-<p>We now know that by setting <code>initialCommands</code> on the whole project, we affect all console tasks in all configurations in that project. If we didn't want the initial commands to apply for <code>consoleProject</code>, which doesn't have our project's classpath available, we could use the more specific task axis:</p>
+<p>プロジェクトで <code>initialCommands</code> を設定すると、そのプロジェクトの全コンフィギュレーションの全 console 系タスクに影響する例をみた。プロジェクトのクラスパスが利用できない <code>consoleProject</code> には初期コマンドを適用したくない場合、より具体的なタスク軸を使用できる:</p>
 <pre><code class="language-scala">&gt; set console / initialCommands := "import mypackage._"
 &gt; set consoleQuick / initialCommands := "import mypackage._"`
 </code></pre>
-<p>or configuration axis:</p>
+<p>またはコンフィギュレーション軸:</p>
 <pre><code class="language-scala">&gt; set Compile/　initialCommands := "import mypackage._"
 &gt; set Test / initialCommands := "import mypackage._"
 </code></pre>
-<p>The next part describes the Delegates section, which shows the chain of delegation for scopes.</p>
-<h3 id="delegates"><a class="header" href="#delegates">Delegates</a></h3>
-<p>A setting has a key and a scope. A request for a key in a scope A may be delegated to another scope if A doesn't define a value for the key. The delegation chain is well-defined and is displayed in the Delegates section of the <code>inspect</code> command. The Delegates section shows the order in which scopes are searched when a value is not defined for the requested key.</p>
-<p>As an example, consider the initial commands for <code>console</code> again:</p>
+<p>次は Delegates セクションについて説明する。スコープの委譲チェーンを示す。</p>
+<h3 id="スコープ委譲"><a class="header" href="#スコープ委譲">スコープ委譲</a></h3>
+<p>セッティングはキーとスコープを持つ。スコープ A の任意のキーへの要求があるが、スコープ A にて値が定義されていない場合、要求は別のスコープに委譲される。委譲チェーンは明確に定義され、<code>inspect</code> コマンドの Delegates セクションに表示される。Delegates セクションは、要求されたキーに値が定義されていない場合にスコープが検索される順序を示す。</p>
+<p>具体例として、<code>console</code> の <code>initialCommands</code> を再び考える:</p>
 <pre><code class="language-bash">$ sbt inspect console/initialCommands
 ...
 [info] Delegates:
@@ -3079,9 +3074,9 @@ import mypackage._
 [info]  Global / initialCommands
 ...
 </code></pre>
-<p>This means that if there is no value specifically for <code>console/initialCommands</code>, the scopes listed under Delegates will be searched in order until a defined value is found.</p>
-<h3 id="inspect-tree"><a class="header" href="#inspect-tree">Inspect tree</a></h3>
-<p>In addition to displaying immediate forward and reverse dependencies as described in the previous section, the <code>inspect tree</code> command can display the full dependency tree for a task or setting. For example,</p>
+<p><code>console/initialCommands</code> 用に具体的な値がない場合、Delegates の下にリストされたスコープが定義された値が見つかるまで順に検索されることを意味する。</p>
+<h3 id="inspect-tree"><a class="header" href="#inspect-tree">inspect tree</a></h3>
+<p>前述のセクションで説明した直接の順方向・逆方向セッティング依存性の表示に加え、<code>inspect tree</code> コマンドはタスクまたはセッティングのセッティング依存性ツリーを表示できる。例:</p>
 <pre><code class="language-bash">$ sbt inspect tree console
 [info] Compile / console = Task[void]
 [info]   +-Global / cleanupCommands =
@@ -3099,7 +3094,7 @@ import mypackage._
 [info]
 [success] elapsed: 0 s
 </code></pre>
-<p>For each task, <code>inspect tree</code> show the type of the value generated by the task. For a setting, the <code>toString</code> of the setting is displayed.</p>
+<p>各タスクについて、<code>inspect tree</code> はタスクが生成する値の型を表示する。セッティングの場合は、セッティングの <code>toString</code> が表示される。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-publish"><a class="header" href="#sbt-publish">sbt publish</a></h1>
 <h2 id="書式-7"><a class="header" href="#書式-7">書式</a></h2>
 <p><code>sbt</code> [<em>query</em> / ] <code>publish</code><br> <code>sbt</code> [<em>query</em> / ] <code>publishSigned</code><br> <code>sbt</code> [<em>query</em> / ] <code>publishLocal</code><br> <code>sbt</code> [<em>query</em> / ] <code>publishM2</code></p>

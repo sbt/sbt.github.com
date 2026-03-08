@@ -212,43 +212,43 @@
 <h2 id="書式"><a class="header" href="#書式">書式</a></h2>
 <p><code>sbt</code> [<em>query</em> / ] <code>test</code> [<em>testname1</em> <em>testname2</em>] [ -- <em>options</em> ]</p>
 <h2 id="説明"><a class="header" href="#説明">説明</a></h2>
-<p>The <code>test</code> task provides a means for compiling and running the tests.</p>
-<p>By default, the <code>test</code> task in sbt 2.x:</p>
+<p><code>test</code> タスクはテストのコンパイルと実行の手段を提供する。</p>
+<p>sbt 2.x の <code>test</code> タスクの特長:</p>
 <ol>
-<li><strong>Subproject parallelism</strong>. Performs compilation of the relevant subprojects in parallel, specified by the <a href="../concepts/sbt-query.html">query</a>.</li>
-<li><strong>Test suite parallelism</strong>. Maps discovered test suites, to tasks and executes them in parallel.</li>
-<li><strong>Incremental test</strong>. Runs only the tests that either failed in the previous run, never run, or if sbt detects changes in the test or its dependencies.</li>
-<li><strong>Cached</strong>. The test result is cached machine-wide, and optionally remote cached.</li>
+<li><strong>サブプロジェクトの並列化</strong>。<a href="../concepts/sbt-query.html">クエリ</a>で指定された関連サブプロジェクトのコンパイルを並列で実行する。</li>
+<li><strong>テストスイートの並列化</strong>。検出されたテストスイートをタスクにマッピングし、並列で実行する。</li>
+<li><strong>差分テスト</strong>。前回失敗したテスト、未実行のテスト、または sbt がテストやその依存関係の変更を検出した場合のみ実行する。</li>
+<li><strong>キャッシュ</strong>。テスト結果はマシン全体でキャッシュされ、オプションでリモートキャッシュも可能。</li>
 </ol>
-<p>The standard source locations for testing are:</p>
+<p>テスト用の標準ソース配置は以下の通り:</p>
 <ul>
-<li>Scala sources in <code>src/test/scala/</code></li>
-<li>Java sources in <code>src/test/java/</code></li>
-<li>Resources for the test classpath in <code>src/test/resources/</code></li>
+<li><code>src/test/scala/</code> 内の Scala ソース</li>
+<li><code>src/test/java/</code> 内の Java ソース</li>
+<li><code>src/test/resources/</code> 内のテストクラスパス用リソース</li>
 </ul>
-<p>The resources may be accessed from tests by using the <code>getResource</code> methods of <code>java.lang.Class</code> or <code>java.lang.ClassLoader</code>.</p>
-<h3 id="test-interfaces"><a class="header" href="#test-interfaces">Test interfaces</a></h3>
-<p>sbt defines the common interface for JVM-based test frameworks, allowing automatic test suite discovery and parallel execution. By default sbt integrates with <a href="https://scalameta.org/munit/">MUnit</a>, <a href="https://www.scalatest.org/">ScalaTest</a>, <a href="https://hedgehogqa.github.io/scala-hedgehog/">Hedgehog</a>, <a href="https://scalacheck.org/">ScalaCheck</a>, <a href="https://etorreborre.github.io/specs2/">Specs2</a>, <a href="https://typelevel.org/weaver-test/">Weaver</a>, <a href="https://zio.dev/reference/test/">ZIO Test</a>, and <a href="https://github.com/sbt/junit-interface">JUnit 4</a>; this means you only need to add the test framework to the classpath to work with sbt. For example, MUnit may be used by declaring it as a <code>libraryDependency</code>:</p>
+<p>リソースは <code>java.lang.Class</code> または <code>java.lang.ClassLoader</code> の <code>getResource</code> メソッドでテストからアクセスできる。</p>
+<h3 id="テストインターフェース"><a class="header" href="#テストインターフェース">テストインターフェース</a></h3>
+<p>sbt は JVM ベースのテストフレームワーク用の共通インターフェースを定義し、テストスイートの自動検出と並列実行を可能にする。デフォルトで sbt は <a href="https://scalameta.org/munit/">MUnit</a>、<a href="https://www.scalatest.org/">ScalaTest</a>、<a href="https://hedgehogqa.github.io/scala-hedgehog/">Hedgehog</a>、<a href="https://scalacheck.org/">ScalaCheck</a>、<a href="https://etorreborre.github.io/specs2/">Specs2</a>、<a href="https://typelevel.org/weaver-test/">Weaver</a>、<a href="https://zio.dev/reference/test/">ZIO Test</a>、<a href="https://github.com/sbt/junit-interface">JUnit 4</a> と連携する。テストフレームワークをクラスパスに追加するだけで sbt で利用できる。例えば MUnit は <code>libraryDependency</code> として宣言して使用する:</p>
 <pre><code class="language-scala">lazy val munit = "org.scalameta" %% "munit" % "1.2.0"
 
 libraryDependencies += munit % Test
 </code></pre>
-<p>In the above, <code>Test</code> denotes the <code>Test</code> configuration, and means that MUnit will only be on the test classpath and it isn't needed by the main sources.</p>
+<p>上記では、<code>Test</code> は <code>Test</code> コンフィギュレーションを表し、MUnit はテストクラスパスにのみ含まれ、main ソースでは不要であることを意味する。</p>
 <h4 id="junit"><a class="header" href="#junit">JUnit</a></h4>
-<p>Support for JUnit 5 is provided by <a href="https://github.com/sbt/sbt-jupiter-interface">sbt-jupiter-interface</a>. To add JUnit Jupiter support into your project, add the jupiter-interface dependency in your project's main build.sbt file.</p>
+<p>JUnit 5 のサポートは <a href="https://github.com/sbt/sbt-jupiter-interface">sbt-jupiter-interface</a> にて提供される。プロジェクトに JUnit Jupiter サポートを追加するには、プロジェクトのメイン build.sbt に jupiter-interface のライブラリ依存性を追加する。</p>
 <pre><code class="language-scala">libraryDependencies += "com.github.sbt.junit" % "jupiter-interface" % "0.15.1" % Test
 </code></pre>
-<p>and the sbt-jupiter-interface plugin to your <code>project/plugins.sbt</code>:</p>
+<p><code>project/plugins.sbt</code> に sbt-jupiter-interface プラグインを追加する:</p>
 <pre><code class="language-scala">addSbtPlugin("com.github.sbt.junit" % "sbt-jupiter-interface" % "0.15.1")
 </code></pre>
-<p>Support for JUnit 4 is provided by <a href="https://github.com/sbt/junit-interface">junit-interface</a>. Add the junit-interface dependency in your project's main build.sbt file.</p>
+<p>JUnit 4 のサポートは <a href="https://github.com/sbt/junit-interface">junit-interface</a> にて提供される。プロジェクトのメイン build.sbt に junit-interface のライブラリ依存性を追加する。</p>
 <pre><code class="language-scala">libraryDependencies += "com.github.sbt" % "junit-interface" % "0.13.3" % Test
 </code></pre>
-<h3 id="test-filtering"><a class="header" href="#test-filtering">Test filtering</a></h3>
-<p>In sbt 2.x, the <code>test</code> task accepts a whitespace separated list of test names to run. For example:</p>
+<h3 id="テストフィルタリング"><a class="header" href="#テストフィルタリング">テストフィルタリング</a></h3>
+<p>sbt 2.x では、<code>test</code> タスクは実行するテスト名の空白区切りリストを受け付ける。例:</p>
 <pre><code class="language-bash">&gt; test example.ExampleSuite example.ExampleSuite2
 </code></pre>
-<p>Here's an example output:</p>
+<p>出力例:</p>
 <pre><code class="language-bash">&gt; test example.ExampleSuite example.ExampleSuite2
 [info] compiling 1 Scala source to /tmp/foo/target/out/jvm/scala-3.7.2/foo/backend ...
 [info] compiling 2 Scala sources to /tmp/foo/target/out/jvm/scala-3.7.2/foo/test-backend ...
@@ -259,18 +259,18 @@ example.ExampleSuite2:
 [info] Passed: Total 2, Failed 0, Errors 0, Passed 2
 [success] elapsed time: 3 s, cache 49%, 25 disk cache hits, 26 onsite tasks
 </code></pre>
-<p>It supports wildcards as well:</p>
+<p>ワイルドカードもサポートする:</p>
 <pre><code>&gt; test *Example*
 </code></pre>
-<h3 id="incremental-testing"><a class="header" href="#incremental-testing">Incremental testing</a></h3>
-<p>In addition to the explicit filter, the <code>test</code> task runs only the tests that satisfy one of the following conditions are run:</p>
+<h3 id="差分テスト"><a class="header" href="#差分テスト">差分テスト</a></h3>
+<p>明示的なフィルタに加え、<code>test</code> タスクは以下のいずれかの条件を満たすテストのみを実行する:</p>
 <ul>
-<li>The tests that failed in the previous run</li>
-<li>The tests that were not run before</li>
+<li>前回失敗したテスト</li>
+<li>以前実行されていなかったテスト</li>
 <li>1つ以上の間接依存ライブラリが、別のプロジェクトにある場合も含め、再コンパイルされたテスト。</li>
 </ul>
-<h3 id="full-testing"><a class="header" href="#full-testing">Full testing</a></h3>
-<p>To run, uncached full tests, like sbt 1.x, use the <code>testFull</code> task.</p>
+<h3 id="フルテスト"><a class="header" href="#フルテスト">フルテスト</a></h3>
+<p>sbt 1.x のようにキャッシュなしのフルテストを実行するには、<code>testFull</code> タスクを使用する。</p>
 <!--
 ### Tab completion
 
@@ -280,8 +280,8 @@ tab completion until they are compiled and deleted sources won't be
 removed from tab completion until a recompile. A new test source can
 still be manually written out and run using `test`.
 -->
-<h3 id="other-tasks"><a class="header" href="#other-tasks">Other tasks</a></h3>
-<p>Tasks that are available for main sources are generally available for test sources, but are prefixed with <code>Test /</code> on the command line and are referenced in Scala code with <code>Test /</code> as well. These tasks include:</p>
+<h3 id="その他のタスク"><a class="header" href="#その他のタスク">その他のタスク</a></h3>
+<p>main ソースで利用可能なタスクは、テストソースでも利用可能である。コマンドラインでは <code>Test /</code> をプレフィックスとして付け、Scala コードでも <code>Test /</code> で参照する。これらのタスクには以下が含まれる:</p>
 <ul>
 <li><code>Test / compile</code></li>
 <li><code>Test / console</code></li>
@@ -289,28 +289,28 @@ still be manually written out and run using `test`.
 <li><code>Test / run</code></li>
 <li><code>Test / runMain</code></li>
 </ul>
-<p>See <a href="./sbt-run.html">sbt run</a> for details on these tasks.</p>
-<h3 id="output"><a class="header" href="#output">Output</a></h3>
-<p>By default, logging is buffered for each test source file until all tests for that file complete. This can be disabled by setting <code>logBuffered</code>:</p>
+<p>これらのタスクの詳細は<a href="./sbt-run.html">sbt run</a>を参照。</p>
+<h3 id="出力"><a class="header" href="#出力">出力</a></h3>
+<p>デフォルトでは、各テストソースファイルのログはそのファイルの全テストが完了するまでバッファリングされる。<code>logBuffered</code> を設定することで無効にできる:</p>
 <pre><code class="language-scala">Test / logBuffered := false
 </code></pre>
-<h4 id="test-reports"><a class="header" href="#test-reports">Test Reports</a></h4>
-<p>By default, sbt will generate JUnit XML test reports for all tests in the build, located in the <code>target/test-reports</code> directory for a project. This can be disabled by disabling the <code>JUnitXmlReportPlugin</code></p>
+<h4 id="テストレポート"><a class="header" href="#テストレポート">テストレポート</a></h4>
+<p>デフォルトでは、sbt はビルド内の全テストの JUnit XML テストレポートをプロジェクトの <code>target/test-reports</code> ディレクトリに生成する。<code>JUnitXmlReportPlugin</code> を無効にすることで無効にできる。</p>
 <pre><code class="language-scala">val myProject = (project in file(".")).disablePlugins(plugins.JUnitXmlReportPlugin)
 </code></pre>
-<h3 id="options"><a class="header" href="#options">Options</a></h3>
-<h4 id="test-framework-arguments"><a class="header" href="#test-framework-arguments">Test framework arguments</a></h4>
-<p>Arguments to the test framework may be provided on the command line to the <code>test</code> tasks following a <code>--</code> separator. For example:</p>
+<h3 id="オプション"><a class="header" href="#オプション">オプション</a></h3>
+<h4 id="テストフレームワークの引数"><a class="header" href="#テストフレームワークの引数">テストフレームワークの引数</a></h4>
+<p>テストフレームワークへの引数は、<code>--</code> 区切りに続けて <code>test</code> タスクのコマンドラインで指定できる。例:</p>
 <pre><code>&gt; test org.example.MyTest -- -verbosity 1
 </code></pre>
-<p>To specify test framework arguments as part of the build, add options constructed by <code>Tests.Argument</code>:</p>
+<p>ビルドの一部としてテストフレームワークの引数を指定するには、<code>Tests.Argument</code> で構築したオプションを追加する:</p>
 <pre><code class="language-scala">Test / testOptions += Tests.Argument("-verbosity", "1")
 </code></pre>
-<p>To specify them for a specific test framework only:</p>
+<p>特定のテストフレームワーク用にのみ指定する場合:</p>
 <pre><code class="language-scala">Test / testOptions += Tests.Argument(TestFrameworks.ScalaCheck, "-verbosity", "1")
 </code></pre>
-<h4 id="setup-and-cleanup"><a class="header" href="#setup-and-cleanup">Setup and Cleanup</a></h4>
-<p>Specify setup and cleanup actions using <code>Tests.Setup</code> and <code>Tests.Cleanup</code>. These accept either a function of type <code>() =&gt; Unit</code> or a function of type <code>ClassLoader =&gt; Unit</code>. The variant that accepts a ClassLoader is passed the class loader that is (or was) used for running the tests. It provides access to the test classes as well as the test framework classes.</p>
+<h4 id="セットアップとクリーンアップ"><a class="header" href="#セットアップとクリーンアップ">セットアップとクリーンアップ</a></h4>
+<p><code>Tests.Setup</code> と <code>Tests.Cleanup</code> でセットアップとクリーンアップのアクションを指定する。<code>() =&gt; Unit</code> 型と <code>ClassLoader =&gt; Unit</code> 型の両方の関数を受け付ける。ClassLoader を受け取るバリアントには、テスト実行に使用される（または使用されていた）クラスローダーが渡される。テストクラスとテストフレームワーククラスにアクセスできる。</p>
 <div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
 <div class="admonition-title">
 <div id="admonition-note-title">
@@ -319,36 +319,31 @@ still be manually written out and run using `test`.
 <a class="admonition-anchor-link" href="#admonition-note"></a>
 </div>
 <div>
-<p>When forking, the <code>ClassLoader</code> containing the test classes cannot be
-provided because it is in another JVM. Only use the <code>() =&gt; Unit</code>
-variants in this case.</p>
+<p>フォーク時は、テストクラスを含む <code>ClassLoader</code> は別の JVM にあるため提供でき
+ない。この場合は <code>() =&gt; Unit</code> バリアントのみを使用すること。</p>
 </div>
 </div>
-<p>Examples:</p>
+<p>例:</p>
 <pre><code class="language-scala">Test / testOptions += Tests.Setup( () =&gt; println("Setup") )
 Test / testOptions += Tests.Cleanup( () =&gt; println("Cleanup") )
 Test / testOptions += Tests.Setup( loader =&gt; ... )
 Test / testOptions += Tests.Cleanup( loader =&gt; ... )
 </code></pre>
-<h4 id="disable-parallel-execution-of-test-suites"><a class="header" href="#disable-parallel-execution-of-test-suites">Disable parallel execution of test suites</a></h4>
-<p>By default, sbt runs all tasks in parallel and within the same JVM as sbt itself. Because each test suite is mapped to a task, tests are also run in parallel by default. To make tests within a given project execute serially:</p>
+<h4 id="テストスイートの並列実行を無効にする"><a class="header" href="#テストスイートの並列実行を無効にする">テストスイートの並列実行を無効にする</a></h4>
+<p>デフォルトでは、sbt は全タスクを sbt 自身と同じ JVM 内で並列実行する。各テストスイートはタスクにマッピングされるため、テストもデフォルトで並列実行される。特定のプロジェクト内のテストを直列実行するには:</p>
 <pre><code class="language-scala">Test / parallelExecution := false
 </code></pre>
-<p>Note that tests from different projects may still execute concurrently.</p>
-<h4 id="filter-classes"><a class="header" href="#filter-classes">Filter classes</a></h4>
-<p>If you want to only run test classes whose name ends with "Test", use <code>Tests.Filter</code>:</p>
+<p>異なるプロジェクトのテストは依然として並行実行される場合がある。</p>
+<h4 id="クラスのフィルタ"><a class="header" href="#クラスのフィルタ">クラスのフィルタ</a></h4>
+<p>名前が "Test" で終わるテストクラスのみを実行するには、<code>Tests.Filter</code> を使用する:</p>
 <pre><code class="language-scala">Test / testOptions := Seq(Tests.Filter(s =&gt; s.endsWith("Test")))
 </code></pre>
-<h4 id="forking-tests"><a class="header" href="#forking-tests">Forking tests</a></h4>
-<p>The setting:</p>
+<h4 id="テストのフォーク"><a class="header" href="#テストのフォーク">テストのフォーク</a></h4>
+<p>設定:</p>
 <pre><code class="language-scala">Test / fork := true
 </code></pre>
-<p>specifies that all tests will be executed in a single external JVM. <!-- See
-[Forking][Forking] for configuring standard options for forking.
-By default,
-tests executed in a forked JVM are executed *sequentially*.
---></p>
-<p>More control over how tests are assigned to JVMs and what options to pass to those is available with <code>testGrouping</code> key.</p>
+<p>全てのテストを単一の外部 JVM で実行することを指定する。</p>
+<p>テストを JVM に割り当てる方法や渡すオプションの詳細は、<code>testGrouping</code> キーで制御できる。</p>
 <!--
 For example in build.sbt:
 
@@ -370,7 +365,7 @@ import Tests._
 
 The tests in a single group are run sequentially.
 -->
-<p>Control the number of forked JVMs allowed to run at the same time by setting the limit on <code>Tags.ForkedTestGroup</code> tag, which is 1 by default. <code>Setup</code> and <code>Cleanup</code> actions cannot be provided with the actual test class loader when a group is forked.</p>
+<p>同時に実行できるフォーク JVM の最大数は、<code>Tags.ForkedTestGroup</code> タグの制限で制御する（デフォルトは 1）。グループがフォークされる場合、<code>Setup</code> と <code>Cleanup</code> アクションには実際のテストクラスローダーを渡せない。</p>
 <!--
 In addition, forked tests can optionally be run in parallel within the
 forked JVM(s), using the following setting:

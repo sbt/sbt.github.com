@@ -212,14 +212,14 @@
 <h2 id="書式"><a class="header" href="#書式">書式</a></h2>
 <p><code>sbt</code> [<em>query</em> / ] <code>run</code> [<em>args</em>]</p>
 <h2 id="説明"><a class="header" href="#説明">説明</a></h2>
-<p>The <code>run</code> task provides a means for running the user program.</p>
-<p>In sbt 1.x and earlier, <code>run</code> task ran the user program in the same Java virtual machine (JVM) as the sbt server. sbt 2.x implements <em>client-side run</em>: the <code>run</code> task creates a sandbox environment that contains the program, sends the information back to sbtn, and sbtn launches the user program in a fresh JVM.</p>
-<h3 id="motivations"><a class="header" href="#motivations">Motivations</a></h3>
-<p>There are several motivations for the client-side run.</p>
+<p><code>run</code> タスクはユーザープログラムを実行する手段を提供する。</p>
+<p>sbt 1.x 以前では、<code>run</code> タスクはユーザープログラムを sbt server と同じ Java 仮想マシン (JVM) 上で実行していた。sbt 2.x では<strong>クライアントサイド run</strong>を実装している。<code>run</code> タスクはプログラムを含むサンドボックス環境を作成し、情報を sbtn に送り返す。ユーザープログラムは、sbtn が起動する新しい JVM 内で実行されるという仕組みだ。</p>
+<h3 id="特長"><a class="header" href="#特長">特長</a></h3>
+<p>クライアントサイド run にはいくつかの特長がある。</p>
 <ol>
-<li><strong>sys.exit support</strong>. User code can call <code>sys.exit</code>, which normally shuts down the JVM. In sbt 1.x, we needed to trap these <code>sys.exit</code> calls to prevent <code>run</code> from shutting down the sbt session, using the JDK SecurityManager; however, TrapExit was dropped in sbt 1.6.0 (2021) since JDK 17 deprecated SecurityManager feature. Because client-side run runs the user program in its own JVM, it can call <code>sys.exit</code>.</li>
-<li><strong>Isolation</strong>. User code can also start threads, or otherwise allocate resources that can be left running after the main method returns. Running user code in a separate JVM gives isolation between the sbt server and the user code.</li>
-<li><strong>sbt server availability</strong>. Since the program will run outside of the sbt server, it can become available to the more requests by other clients, for example test or IDE integration.</li>
+<li><strong>sys.exit のサポート</strong>。ユーザーコードは <code>sys.exit</code> を呼び出せる。通常これは JVM をシャットダウンする。sbt 1.x では、JDK の SecurityManager を使ってこれらの <code>sys.exit</code> 呼び出しをトラップし、<code>run</code> が sbt セッションをシャットダウンするのを防ぐ必要があった。しかし JDK 17 で SecurityManager が非推奨になったため、TrapExit は sbt 1.6.0 (2021) で削除された。クライアントサイド run はユーザープログラムを専用の JVM で実行するため、<code>sys.exit</code> を呼び出せる。</li>
+<li><strong>分離</strong>。ユーザーコードはスレッドを開始したり、main メソッドが戻った後も動作し続けるリソースを割り当てたりできる。別の JVM でユーザーコードを実行することで、sbt server とユーザーコードの間の分離が得られる。</li>
+<li><strong>sbt server の可用性</strong>。プログラムは sbt server の外で実行されるため、テストや IDE 連携など、他のクライアントからのより多くのリクエストに対応できる。</li>
 </ol>
 
                     </main>

@@ -212,10 +212,10 @@
 <h2 id="書式"><a class="header" href="#書式">書式</a></h2>
 <p><code>sbt</code> <code>inspect</code> [<em>subproject</em> / ] [ <em>config</em> / ] <em>task</em><br> <code>sbt</code> <code>inspect actual</code> [<em>subproject</em> / ] [ <em>config</em> / ] <em>task</em><br> <code>sbt</code> <code>inspect tree</code> [<em>subproject</em> / ] [ <em>config</em> / ] <em>task</em></p>
 <h2 id="説明"><a class="header" href="#説明">説明</a></h2>
-<p>The <code>inspect</code> command provides a means to inspect the task and setting graph. For instace, it can be used to determine which setting should be modified to affect another task.</p>
-<h3 id="value-description-and-provided-by"><a class="header" href="#value-description-and-provided-by">Value, Description, and Provided By</a></h3>
-<p>The first piece of information provided by <code>inspect</code> is the type of a task or the value and type of a setting.</p>
-<p>For example,</p>
+<p><code>inspect</code> コマンドはタスクとセッティングのグラフを調査する手段を提供する。例えば、別のタスクに影響を与えるためにどのセッティングを変更すべきか判断するのに使える。</p>
+<h3 id="値説明提供元"><a class="header" href="#値説明提供元">値、説明、提供元</a></h3>
+<p><code>inspect</code> が提供する最初の情報は、タスクの型またはセッティングの値と型である。</p>
+<p>例:</p>
 <pre><code class="language-bash">$ sbt inspect libraryDependencies
 [info] Setting: interface scala.collection.immutable.Seq =
   List(org.scala-lang:scala3-library:3.7.2,
@@ -227,20 +227,20 @@
 [info]  ProjectRef(uri("file:/tmp/aaa/"), "aaa") / libraryDependencies
 ....
 </code></pre>
-<p>The following section of output is labeled "Provided by". This shows the actual scope where the setting is defined.</p>
-<p>This shows that <code>libraryDependencies</code> has been defined on the current project (<code>ProjectRef(uri("file:/tmp/aaa/"), "aaa")</code>).</p>
-<h3 id="related-settings"><a class="header" href="#related-settings">Related Settings</a></h3>
-<p>The <em>Related</em> section of <code>inspect</code> output lists all of the definitions of a key. For example,</p>
+<p>出力の次のセクションは「Provided by」とラベル付けされる。セッティングが定義されている実際のスコープを示す。</p>
+<p><code>libraryDependencies</code> がカレント・プロジェクト（<code>ProjectRef(uri("file:/tmp/aaa/"), "aaa")</code>）で定義されていることを示す。</p>
+<h3 id="関連セッティング"><a class="header" href="#関連セッティング">関連セッティング</a></h3>
+<p><code>inspect</code> 出力の「Related」セクションは、キーの全ての定義を一覧表示する。例:</p>
 <pre><code class="language-bash">&gt; inspect compile
 ...
 [info] Related:
 [info]  Test / compile
 </code></pre>
-<p>This shows that in addition to the requested <code>Compile / compile</code> task, there is also a <code>Test / compile</code> task.</p>
-<h3 id="ライブラリ依存性"><a class="header" href="#ライブラリ依存性">ライブラリ依存性</a></h3>
-<p>Forward dependencies show the other settings (or tasks) used to define a setting (or task). Reverse dependencies go the other direction, showing what uses a given setting. <code>inspect</code> provides this information based on either the requested dependencies or the actual dependencies. Requested dependencies are those that a setting directly specifies. Actual settings are what those dependencies get resolved to. This distinction is explained in more detail in the following sections.</p>
-<h4 id="requested-dependencies"><a class="header" href="#requested-dependencies">Requested Dependencies</a></h4>
-<p>As an example, we'll look at <code>console</code>:</p>
+<p>要求された <code>Compile / compile</code> タスクに加え、<code>Test / compile</code> タスクも存在することを示す。</p>
+<h3 id="セッティング依存性"><a class="header" href="#セッティング依存性">セッティング依存性</a></h3>
+<p>順方向セッティング依存性は、セッティング（またはタスク）の定義に使用される他のセッティング（またはタスク）を示す。逆方向セッティング依存性は逆方向に、どの設定が与えられたセッティングを使用するかを示す。<code>inspect</code> は指定セッティング依存性または実効セッティング依存性に基づいてこの情報を提供する。指定セッティング依存性はセッティングが直接指定するものである。実効セッティングはそれらの依存関係が解決された結果である。この区別は以下のセクションで詳しく説明する。</p>
+<h4 id="指定セッティング依存性"><a class="header" href="#指定セッティング依存性">指定セッティング依存性</a></h4>
+<p>例として、<code>console</code> を見てみる:</p>
 <pre><code class="language-bash">$ sbt inspect console
 ...
 [info] Dependencies:
@@ -257,16 +257,16 @@
 
 ...
 </code></pre>
-<p>This shows the inputs to the <code>console</code> task. We can see that it gets its classpath and options from <code>Compile / console / fullClasspath</code> and <code>Compile / console / scalacOptions</code>. The information provided by the <code>inspect</code> command can thus assist in finding the right setting to change. The convention for keys, like <code>console</code> and <code>fullClasspath</code>, is that the Scala identifier is camel case, while the String representation is lowercase and separated by dashes. The Scala identifier for a configuration is uppercase to distinguish it from tasks like <code>compile</code> and <code>test</code>. For example, we can infer from the previous example how to add code to be run when the Scala interpreter starts up:</p>
+<p><code>console</code> タスクへの入力が表示される。クラスパスとオプションは <code>Compile / console / fullClasspath</code> と <code>Compile / console / scalacOptions</code> から取得されることが分かる。<code>inspect</code> コマンドの情報により、変更すべきセッティングを見つけるのに役立つ。<code>console</code> や <code>fullClasspath</code> などのキーの慣例では、Scala 識別子はキャメルケース、文字列表現は小文字でハイフン区切りである。コンフィギュレーションの Scala 識別子は <code>compile</code> や <code>test</code> などのタスクと区別するため大文字である。例えば、前の例から Scala インタプリタ起動時に実行するコードの追加方法を推測できる:</p>
 <pre><code class="language-scala">&gt; set Compile / console / initialCommands := "import mypackage._"
 &gt; console
 ...
 import mypackage._
 ...
 </code></pre>
-<p><code>inspect</code> showed that <code>console</code> used the setting <code>Compile / console / initialCommands</code>. Translating the <code>initialCommands</code> string to the Scala identifier gives us <code>initialCommands</code>. <code>compile</code> indicates that this is for the main sources. <code>console /</code> indicates that the setting is specific to <code>console</code>. Because of this, we can set the initial commands on the <code>console</code> task without affecting the <code>consoleQuick</code> task, for example.</p>
-<h4 id="actual-dependencies"><a class="header" href="#actual-dependencies">Actual Dependencies</a></h4>
-<p><code>inspect actual &lt;scoped-key&gt;</code> shows the actual dependency used. This is useful because delegation means that the dependency can come from a scope other than the requested one. Using <code>inspect actual</code>, we see exactly which scope is providing a value for a setting. Combining <code>inspect actual</code> with plain <code>inspect</code>, we can see the range of scopes that will affect a setting. Returning to the example in Requested Dependencies,</p>
+<p><code>inspect</code> は <code>console</code> が <code>Compile / console / initialCommands</code> セッティングを使用していることを示した。<code>initialCommands</code> 文字列を Scala 識別子に変換すると <code>initialCommands</code> になる。<code>compile</code> は main ソース用であることを示す。<code>console /</code> はセッティングが <code>console</code> 専用であることを示す。このため、<code>consoleQuick</code> タスクに影響を与えずに <code>console</code> タスクの初期コマンドを設定できる。</p>
+<h4 id="実効セッティング依存性"><a class="header" href="#実効セッティング依存性">実効セッティング依存性</a></h4>
+<p><code>inspect actual &lt;スコープ付きキー&gt;</code> は使用される実効セッティング依存性を表示する。委譲により依存関係が指定されたスコープ以外から来る可能性があるため有用である。<code>inspect actual</code> を使うと、どのスコープがセッティングに値を提供しているか正確に分かる。<code>inspect actual</code> と通常の <code>inspect</code> を組み合わせると、セッティングに影響するスコープの範囲が分かる。上記の例に戻ると、</p>
 <pre><code class="language-bash">$ sbt inspect actual console
 ...
 [info] Dependencies:
@@ -280,14 +280,14 @@ import mypackage._
 [info]  console / compilers
 ...
 </code></pre>
-<p>For <code>initialCommands</code>, we see that it comes from the global scope (<code>Global</code>). Combining this with the relevant output from <code>inspect console</code>:</p>
+<p><code>initialCommands</code> はグローバルスコープ（<code>Global</code>）から来ていることが分かる。これを <code>inspect console</code> の関連出力と組み合わせると:</p>
 <pre><code>Compile / console / initialCommands
 </code></pre>
-<p>we know that we can set <code>initialCommands</code> as generally as the global scope, as specific as the current project's <code>console</code> task scope, or anything in between. This means that we can, for example, set <code>initialCommands</code> for the whole project and will affect <code>console</code>:</p>
+<p>この例から分かるのは <code>initialCommands</code> セッティングは、グローバルスコープを使って全域スコープ付けしたり、カレント・プロジェクトの <code>console</code> タスクスコープのように狭くスコープ付けしたり、またはその間の任意のスコープで設定できるということだ。例えば、プロジェクト全体で <code>initialCommands</code> を設定すると <code>console</code> に影響する:</p>
 <pre><code class="language-scala">&gt; set initialCommands := "import mypackage._"
 ...
 </code></pre>
-<p>The reason we might want to set it here this is that other console tasks will use this value now. We can see which ones use our new setting by looking at the reverse dependencies output of <code>inspect actual</code>:</p>
+<p>ここで設定したい理由は、他の console 系タスクもこの値を使用するようになるためである。<code>inspect actual</code> の逆方向セッティング依存性の出力を見ると、どのタスクが新しいセッティングを使用するか分かる:</p>
 <pre><code class="language-bash">$ sbt inspect actual Global/initialCommands
 ...
 [info] Reverse dependencies:
@@ -298,18 +298,18 @@ import mypackage._
 [info]  Compile / consoleQuick
 ...
 </code></pre>
-<p>We now know that by setting <code>initialCommands</code> on the whole project, we affect all console tasks in all configurations in that project. If we didn't want the initial commands to apply for <code>consoleProject</code>, which doesn't have our project's classpath available, we could use the more specific task axis:</p>
+<p>プロジェクトで <code>initialCommands</code> を設定すると、そのプロジェクトの全コンフィギュレーションの全 console 系タスクに影響する例をみた。プロジェクトのクラスパスが利用できない <code>consoleProject</code> には初期コマンドを適用したくない場合、より具体的なタスク軸を使用できる:</p>
 <pre><code class="language-scala">&gt; set console / initialCommands := "import mypackage._"
 &gt; set consoleQuick / initialCommands := "import mypackage._"`
 </code></pre>
-<p>or configuration axis:</p>
+<p>またはコンフィギュレーション軸:</p>
 <pre><code class="language-scala">&gt; set Compile/　initialCommands := "import mypackage._"
 &gt; set Test / initialCommands := "import mypackage._"
 </code></pre>
-<p>The next part describes the Delegates section, which shows the chain of delegation for scopes.</p>
-<h3 id="delegates"><a class="header" href="#delegates">Delegates</a></h3>
-<p>A setting has a key and a scope. A request for a key in a scope A may be delegated to another scope if A doesn't define a value for the key. The delegation chain is well-defined and is displayed in the Delegates section of the <code>inspect</code> command. The Delegates section shows the order in which scopes are searched when a value is not defined for the requested key.</p>
-<p>As an example, consider the initial commands for <code>console</code> again:</p>
+<p>次は Delegates セクションについて説明する。スコープの委譲チェーンを示す。</p>
+<h3 id="スコープ委譲"><a class="header" href="#スコープ委譲">スコープ委譲</a></h3>
+<p>セッティングはキーとスコープを持つ。スコープ A の任意のキーへの要求があるが、スコープ A にて値が定義されていない場合、要求は別のスコープに委譲される。委譲チェーンは明確に定義され、<code>inspect</code> コマンドの Delegates セクションに表示される。Delegates セクションは、要求されたキーに値が定義されていない場合にスコープが検索される順序を示す。</p>
+<p>具体例として、<code>console</code> の <code>initialCommands</code> を再び考える:</p>
 <pre><code class="language-bash">$ sbt inspect console/initialCommands
 ...
 [info] Delegates:
@@ -321,9 +321,9 @@ import mypackage._
 [info]  Global / initialCommands
 ...
 </code></pre>
-<p>This means that if there is no value specifically for <code>console/initialCommands</code>, the scopes listed under Delegates will be searched in order until a defined value is found.</p>
-<h3 id="inspect-tree"><a class="header" href="#inspect-tree">Inspect tree</a></h3>
-<p>In addition to displaying immediate forward and reverse dependencies as described in the previous section, the <code>inspect tree</code> command can display the full dependency tree for a task or setting. For example,</p>
+<p><code>console/initialCommands</code> 用に具体的な値がない場合、Delegates の下にリストされたスコープが定義された値が見つかるまで順に検索されることを意味する。</p>
+<h3 id="inspect-tree"><a class="header" href="#inspect-tree">inspect tree</a></h3>
+<p>前述のセクションで説明した直接の順方向・逆方向セッティング依存性の表示に加え、<code>inspect tree</code> コマンドはタスクまたはセッティングのセッティング依存性ツリーを表示できる。例:</p>
 <pre><code class="language-bash">$ sbt inspect tree console
 [info] Compile / console = Task[void]
 [info]   +-Global / cleanupCommands =
@@ -341,7 +341,7 @@ import mypackage._
 [info]
 [success] elapsed: 0 s
 </code></pre>
-<p>For each task, <code>inspect tree</code> show the type of the value generated by the task. For a setting, the <code>toString</code> of the setting is displayed.</p>
+<p>各タスクについて、<code>inspect tree</code> はタスクが生成する値の型を表示する。セッティングの場合は、セッティングの <code>toString</code> が表示される。</p>
 
                     </main>
 
