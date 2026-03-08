@@ -218,7 +218,7 @@
 <a class="admonition-anchor-link" href="index.html#admonition-note"></a>
 </div>
 <div>
-<p>This is a draft documentation of sbt 2.x that is yet to be released.</p>
+<p>这是关于 sbt 2.x 的草稿文档，目前尚未发布。</p>
 </div>
 </div>
 <p><strong>语言</strong>:</p>
@@ -912,7 +912,7 @@ $ sbt new scala/scala3.g8
 <a class="admonition-anchor-link" href="guide/sbt-components.html#admonition-note"></a>
 </div>
 <div>
-<p>In sbt 1.x, equivalent command was <code>sbt --client</code></p>
+<p>在 sbt 1.x 中，等效命令为 <code>sbt --client</code></p>
 </div>
 </div>
 <p>这应该会显示类似以下的内容：</p>
@@ -963,7 +963,7 @@ $ cd breeze
 <a class="admonition-anchor-link" href="guide/basic-tasks.html#admonition-note"></a>
 </div>
 <div>
-<p>scalanlp/breeze is on sbt 1.x, but we'll write this section as if it is an sbt 2.x build.</p>
+<p>scalanlp/breeze 使用 sbt 1.x，但我们将按 sbt 2.x 构建来编写本节。</p>
 </div>
 </div>
 <h3 id="使用-sbtn-的-sbt-shell-1"><a class="header" href="#使用-sbtn-的-sbt-shell-1">使用 sbtn 的 sbt shell</a></h3>
@@ -1149,8 +1149,8 @@ lazy val toolkitV = "0.2.0"
 <a class="admonition-anchor-link" href="guide/build-definition-basics.html#admonition-note"></a>
 </div>
 <div>
-<p>Top-level objects and classes are not allowed in <code>build.sbt</code>.
-Those should go in the <code>project/</code> directory as Scala source files.</p>
+<p><code>build.sbt</code> 中不允许顶层对象和类。
+它们应放在 <code>project/</code> 目录中作为 Scala 源文件。</p>
 </div>
 </div><div style="break-before: page; page-break-before: always;"></div><h1 id="库依赖基础"><a class="header" href="#库依赖基础">库依赖基础</a></h1>
 <p>本页介绍使用 sbt 进行库依赖管理的基础知识。</p>
@@ -1759,53 +1759,53 @@ private[sbtfoo] object PluginCompat {
 }
 </code></pre>
 <p>现在我们可以导入 <code>PluginCompat.*</code> 并使用 <code>toNioPaths(...)</code> 等来吸收 sbt 1.x 与 2.x 之间的差异。以上演示了如何吸收 classpath 类型变更，并将其转换为 NIO Path 的向量。</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="concepts"><a class="header" href="#concepts">Concepts</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="command"><a class="header" href="#command">Command</a></h1>
-<p>A <em>command</em> is a system-level building block of sbt, often used to capture user interaction or IDE interaction.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="概念"><a class="header" href="#概念">概念</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="命令"><a class="header" href="#命令">命令</a></h1>
+<p>命令（<em>command</em>）是 sbt 的系统级构建块，常用于捕获用户交互或 IDE 交互。</p>
 <p><img src="concepts/../files/command.svg" style="width: 50%;"></img></p>
-<p>We can think of each command as a <code>State =&gt; State</code> function. In sbt, the state represents the following:</p>
+<p>我们可以将每个命令视为 <code>State =&gt; State</code> 函数。在 sbt 中，状态表示以下内容：</p>
 <ol>
-<li>Build structure (<code>build.sbt</code> etc)</li>
-<li>Your disk (source code, JAR outputs, etc)</li>
+<li>构建结构（<code>build.sbt</code> 等）</li>
+<li>您的磁盘（源代码、JAR 输出等）</li>
 </ol>
-<p>Thus, a command would typically modify either the build structure or the disk. For example, the <code>set</code> command can apply a setting to modify the build strcuture:</p>
+<p>因此，命令通常会修改构建结构或磁盘。例如，<code>set</code> 命令可以应用设置来修改构建结构：</p>
 <pre><code class="language-scala">&gt; set name := "foo"
 </code></pre>
-<p>The <code>act</code> command can lift a task such as <code>compile</code> into a command:</p>
+<p><code>act</code> 命令可以将 <code>compile</code> 等任务提升为命令：</p>
 <pre><code class="language-scala">&gt; compile
 </code></pre>
-<p>The compilation would read from the disk and write outputs, or display error messages on the screen.</p>
-<h2 id="commands-are-sequentially-processed"><a class="header" href="#commands-are-sequentially-processed">Commands are sequentially processed</a></h2>
-<p>Because there is only one state, a characteristic of commands is that they are executed one at a time.</p>
+<p>编译会从磁盘读取并写入输出，或在屏幕上显示错误信息。</p>
+<h2 id="命令按顺序处理"><a class="header" href="#命令按顺序处理">命令按顺序处理</a></h2>
+<p>由于只有一个状态，命令的特点是它们一次执行一个。</p>
 <p><img src="concepts/../files/command2.svg" alt="command" /></p>
-<p>There are some execptions to this rule, but generally commands run sequentially. One mental image that might be useful is that a command is similar to a cashier taking an order in a cafe, and it will be processed in the sequence it was received.</p>
-<h2 id="tasks-run-in-parallel"><a class="header" href="#tasks-run-in-parallel">Tasks run in parallel</a></h2>
-<p>As mentioned above, the <code>act</code> command translates tasks into the command level. While doing so, the <code>act</code> command will broadcast the task across the aggregated subprojects and run independent tasks in parallel.</p>
-<p>Similarly, the <code>reload</code> command that runs during the startup of a session will initialize the settings in parallel.</p>
+<p>此规则有一些例外，但通常命令按顺序运行。一个有用的比喻是，命令类似于咖啡馆收银员接单，会按接收顺序处理。</p>
+<h2 id="任务并行运行"><a class="header" href="#任务并行运行">任务并行运行</a></h2>
+<p>如上所述，<code>act</code> 命令将任务转换为命令级别。在此过程中，<code>act</code> 命令会将任务广播到聚合的子项目，并并行运行独立任务。</p>
+<p>同样，在会话启动期间运行的 <code>reload</code> 命令将并行初始化设置。</p>
 <p><img src="concepts/../files/act.svg" alt="act" /></p>
-<h2 id="the-role-of-sbt-server"><a class="header" href="#the-role-of-sbt-server">The role of sbt server</a></h2>
-<p>sbt server is a service that accepts commands from either the command line or a network API called Build Server Protocol. This mechanism allows both the build user and IDEs to share the same sbt session.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="cross-building"><a class="header" href="#cross-building">Cross building</a></h1>
-<p><em>Cross building</em> refers to the idea of building multiple targets from the same set of source file. This includes Scala cross building, targeting multiple versions of Scala releases; platform cross building, targeting JVM, Scala.JS, and Scala Native; and custom virtual axes like Spark versions.</p>
-<h2 id="using-the-cross-built-libraries"><a class="header" href="#using-the-cross-built-libraries">Using the cross-built libraries</a></h2>
-<p>To use a library built against multiple versions of Scala, double the first <code>%</code> in a ModuleID to be <code>%%</code>. This tells sbt that it should append the Scala ABI (application binary interface) suffix to the dependency's name. For example:</p>
+<h2 id="sbt-server-的角色"><a class="header" href="#sbt-server-的角色">sbt server 的角色</a></h2>
+<p>sbt server 是一项服务，可接受来自命令行或名为 Build Server Protocol 的网络 API 的命令。此机制使构建用户和 IDE 能够共享同一 sbt 会话。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="交叉构建"><a class="header" href="#交叉构建">交叉构建</a></h1>
+<p>交叉构建（<em>cross building</em>）指从同一组源文件构建多个目标。这包括 Scala 交叉构建（针对多个 Scala 发布版本）、平台交叉构建（针对 JVM、Scala.JS 和 Scala Native）以及 Spark 版本等自定义虚拟轴。</p>
+<h2 id="使用交叉构建的库"><a class="header" href="#使用交叉构建的库">使用交叉构建的库</a></h2>
+<p>要使用针对多个 Scala 版本构建的库，请将 ModuleID 中的第一个 <code>%</code> 改为 <code>%%</code>。这会告诉 sbt 将 Scala ABI（应用程序二进制接口）后缀附加到依赖名称。例如：</p>
 <pre><code class="language-scala">libraryDependencies += "org.typelevel" %% "cats-effect" % "3.5.4"
 </code></pre>
-<p>When the current Scala version is Scala 3.x, the above is equivalent to the following:</p>
+<p>当当前 Scala 版本为 Scala 3.x 时，以上写法等价于以下：</p>
 <pre><code class="language-scala">libraryDependencies += "org.typelevel" % "cats-effect_3" % "3.5.4"
 </code></pre>
-<p>See <a href="concepts/../reference/cross-building-setup.html">cross building setup</a> for more details on the setup.</p>
-<h2 id="historical-context"><a class="header" href="#historical-context">Historical context</a></h2>
-<p>In the earlier years of Scala (pre-Scala 2.9), the Scala library did not maintain binary compatibility even at the patch level, so each time a new Scala version was released, the libraries had to be re-released against the new version of Scala. This meant that a library user needed to pick a specific version that was compatible with the Scala version they were using.</p>
-<p>Even after Scala 2.9.x, the Scala library did not maintain the binary compatibility at minor version level, so the libraries compiled against Scala 2.10.x was not compatible with 2.11.x.</p>
-<p>To workaround this problem, sbt developed cross building mechanism such that:</p>
+<p>有关设置的更多详情，请参阅 <a href="concepts/../reference/cross-building-setup.html">cross building setup</a>。</p>
+<h2 id="历史背景"><a class="header" href="#历史背景">历史背景</a></h2>
+<p>在 Scala 早期（Scala 2.9 之前），Scala 库即使在补丁级别也不保持二进制兼容性，因此每次发布新 Scala 版本时，库都必须针对新版本重新发布。这意味着库用户需要选择与其使用的 Scala 版本兼容的特定版本。</p>
+<p>即使在 Scala 2.9.x 之后，Scala 库在次版本级别也不保持二进制兼容性，因此针对 Scala 2.10.x 编译的库与 2.11.x 不兼容。</p>
+<p>为解决此问题，sbt 开发了交叉构建机制，使得：</p>
 <ul>
-<li>Same set of source files can be compiled against multiple versions of Scala</li>
-<li>Define a convention to append ABI version (e.g. <code>_2.12</code>) to the Maven artifact</li>
-<li>Later this mechanism was extended to support Scala.JS and other platforms</li>
+<li>同一组源文件可以针对多个 Scala 版本编译</li>
+<li>定义将 ABI 版本（如 <code>_2.12</code>）附加到 Maven 构件的约定</li>
+<li>后来此机制扩展以支持 Scala.JS 和其他平台</li>
 </ul>
-<h2 id="project-matrix"><a class="header" href="#project-matrix">Project matrix</a></h2>
-<p>sbt 2.x introduces project matrix, which enables cross building to happen in parallel.</p>
+<h2 id="项目矩阵"><a class="header" href="#项目矩阵">项目矩阵</a></h2>
+<p>sbt 2.x 引入了项目矩阵，使交叉构建可以并行进行。</p>
 <pre><code class="language-scala">organization := "com.example"
 scalaVersion := "3.8.1"
 version      := "0.1.0-SNAPSHOT"
@@ -1816,19 +1816,19 @@ lazy val core = (projectMatrix in file("core"))
   )
   .jvmPlatform(scalaVersions = Seq("3.8.1", "2.13.17"))
 </code></pre>
-<p>See <a href="concepts/../reference/cross-building-setup.html">cross building setup</a> for more details on the setup.</p>
+<p>有关设置的更多详情，请参阅 <a href="concepts/../reference/cross-building-setup.html">cross building setup</a>。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-query-1"><a class="header" href="#sbt-query-1">sbt query</a></h1>
-<p>sbt 2.x extends the slash syntax to enable aggregation of subprojects:</p>
+<p>sbt 2.x 扩展了斜杠语法以支持子项目聚合：</p>
 <p><em>act</em> <code>::=</code> [ <em>query</em> <code>/</code> ] [ <em>config</em> <code>/</code> ] [ <em>in-task</em> <code>/</code> ] ( <em>taskKey</em> | <em>settingKey</em> )</p>
-<p>In other words, sbt query is a new way of writing the subproject-axis.</p>
-<h3 id="subproject-reference"><a class="header" href="#subproject-reference">Subproject reference</a></h3>
-<p>A subproject reference works as a query to select the subproject:</p>
-<div id="admonition-buildsbt-example-1" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-example-1-title">
+<p>换言之，sbt query 是编写子项目轴的新方式。</p>
+<h3 id="子项目引用"><a class="header" href="#子项目引用">子项目引用</a></h3>
+<p>子项目引用作为查询来选择子项目：</p>
+<div id="admonition-buildsbt-示例-1" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-示例-1-title">
 <div class="admonition-title">
-<div id="admonition-buildsbt-example-1-title">
-<p>build.sbt example 1</p>
+<div id="admonition-buildsbt-示例-1-title">
+<p>build.sbt 示例 1</p>
 </div>
-<a class="admonition-anchor-link" href="concepts/sbt-query.html#admonition-buildsbt-example-1"></a>
+<a class="admonition-anchor-link" href="concepts/sbt-query.html#admonition-buildsbt-示例-1"></a>
 </div>
 <div>
 <pre><code class="language-scala">scalaVersion := "3.8.1"
@@ -1837,26 +1837,26 @@ lazy val foo = project
 </code></pre>
 </div>
 </div>
-<p>Given the above build, we can run tests on <code>foo</code> subproject as follows, which is the same syntax as it was in sbt 1.x:</p>
+<p>对于上述构建，我们可以按以下方式在 <code>foo</code> 子项目上运行测试，语法与 sbt 1.x 相同：</p>
 <pre><code>foo/test
 </code></pre>
-<h3 id="-wildcard"><a class="header" href="#-wildcard"><code>...</code> wildcard</a></h3>
-<p><code>...</code> wildcard matches to any characters, and can be combined with other letters and numbers to filter down the root aggregate list. For example, we can run tests on all subproject that starts with <code>foo</code> as follows:</p>
+<h3 id="-通配符"><a class="header" href="#-通配符"><code>...</code> 通配符</a></h3>
+<p><code>...</code> 通配符可匹配任意字符，并可与其他字母和数字组合以筛选根聚合列表。例如，我们可以按以下方式在所有以 <code>foo</code> 开头的子项目上运行测试：</p>
 <pre><code>foo.../test
 </code></pre>
-<div id="admonition-note--vs-" class="admonition admonish-note" role="note" aria-labelledby="admonition-note--vs--title">
+<div id="admonition-注意-与-" class="admonition admonish-note" role="note" aria-labelledby="admonition-注意-与--title">
 <div class="admonition-title">
-<div id="admonition-note--vs--title">
-<p>Note: * vs ...</p>
+<div id="admonition-注意-与--title">
+<p>注意：* 与 ...</p>
 </div>
-<a class="admonition-anchor-link" href="concepts/sbt-query.html#admonition-note--vs-"></a>
+<a class="admonition-anchor-link" href="concepts/sbt-query.html#admonition-注意-与-"></a>
 </div>
 <div>
-<p>sbt query intentionally uses <code>...</code> (dot dot dot) instead of more intuitive <code>*</code> (asterisk) because <code>*</code> is often used in a shell as a wildcard to match existing files or directories. This would require quoting, and forgetting to quote <code>*/test</code> would match to something like <code>src/test</code>.</p>
+<p>sbt query 有意使用 <code>...</code>（省略号）而非更直观的 <code>*</code>（星号），因为 <code>*</code> 在 shell 中常被用作通配符来匹配现有文件或目录。这需要加引号，而忘记给 <code>*/test</code> 加引号会匹配到类似 <code>src/test</code> 的内容。</p>
 </div>
 </div>
-<h3 id="scalabinaryversion-parameter"><a class="header" href="#scalabinaryversion-parameter"><code>@scalaBinaryVersion</code> parameter</a></h3>
-<p><code>@scalaBinaryVersion</code> parameter matches to the subproject's <code>scalaBinaryVersion</code> setting.</p>
+<h3 id="scalabinaryversion-参数"><a class="header" href="#scalabinaryversion-参数"><code>@scalaBinaryVersion</code> 参数</a></h3>
+<p><code>@scalaBinaryVersion</code> 参数与子项目的 <code>scalaBinaryVersion</code> 设置匹配。</p>
 <div id="admonition-example" class="admonition admonish-example" role="note" aria-labelledby="admonition-example-title">
 <div class="admonition-title">
 <div id="admonition-example-title">
@@ -1882,10 +1882,10 @@ lazy val bar = projectMatrix
 </code></pre>
 </div>
 </div>
-<p>For example, we can run tests on all 3.x subprojects as follows:</p>
+<p>例如，我们可以按以下方式在所有 3.x 子项目上运行测试：</p>
 <pre><code>...@scalaBinaryVersion=3/test
 </code></pre>
-<p>This can be used from a terminal as follows:</p>
+<p>可以从终端按以下方式使用：</p>
 <pre><code class="language-bash">$ sbt ...@scalaBinaryVersion=3/test
 [info] entering *experimental* thin client - BEEP WHIRR
 [info] terminate the server with `shutdown`
@@ -1899,27 +1899,27 @@ example.ExampleSuite:
   + Scala version 0.003s
 [info] Passed: Total 1, Failed 0, Errors 0, Passed 1
 </code></pre>
-<p>This lets us filter down the aggregated subprojects, which could be a lot using <code>projectMatrix</code>.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="caching"><a class="header" href="#caching">Caching</a></h1>
-<p>sbt 2.0 introduces hybrid local/remote cache system, which can cache the task results to local disk and Bazel-compatible remote cache. Throughout sbt releases it has implemented various caches, like <code>update</code> cache, incremental compilation, but sbt 2.x's cache is a significant step change for a few reasons:</p>
+<p>这使我们能够筛选聚合的子项目，使用 <code>projectMatrix</code> 时子项目可能很多。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="缓存"><a class="header" href="#缓存">缓存</a></h1>
+<p>sbt 2.0 引入了混合本地/远程缓存系统，可将任务结果缓存到本地磁盘和与 Bazel 兼容的远程缓存。sbt 历史上已实现多种缓存，如 <code>update</code> 缓存、增量编译等，但 sbt 2.x 的缓存在以下方面具有显著变革：</p>
 <ol>
-<li><strong>Automatic</strong>. sbt 2.x cache automates the caching by embedding itself into the task macro unlike sbt 1.x wherein the plugin author called the cache functions manually in the task implementation.</li>
-<li><strong>Machine-wide</strong>. sbt 2.x disk cache is shared among all builds on a machine.</li>
-<li><strong>Remote-ready</strong>. In sbt 2.x, the cache storage is configured separately such that all cacheable tasks are automatically remote-cache-ready.</li>
+<li><strong>自动</strong>。sbt 2.x 缓存通过将自身嵌入任务宏实现自动化，而 sbt 1.x 中插件作者需在任务实现中手动调用缓存函数。</li>
+<li><strong>机器级</strong>。sbt 2.x 的磁盘缓存在机器上的所有构建之间共享。</li>
+<li><strong>支持远程</strong>。在 sbt 2.x 中，缓存存储单独配置，使所有可缓存任务自动支持远程缓存。</li>
 </ol>
-<p>The overall objective of caching is to flatten the build and test time growth as the code size increases compared to the status quo. For this reason, speedup ratio would depend on the code size etc, but aiming for 5x to 20x is achievable for builds that currently takes 10+ minutes to test.</p>
-<h2 id="basics-of-caching"><a class="header" href="#basics-of-caching">Basics of caching</a></h2>
-<p>The basic idea is treat as if the build process is a pure function that takes input <code>(A1, A2, A3, ...)</code> and return some outputs <code>(R1, List(O1, O2, O3, ...))</code>. For example, we can take a list of source files, Scala version, and produce a <code>*.jar</code> file at the end. If the assumption holds, then for the same inputs, we can memorize the ouput JAR for everyone. We are interested in this technique because using the memorized output JAR would be faster than performing the actual task like Scala compilation etc.</p>
-<h3 id="hermetic-build"><a class="header" href="#hermetic-build">Hermetic build</a></h3>
-<p>As a mental model of the <em>build as a pure function</em>, build engineers sometimes use the term <em>hermetic build</em>, which is a build that takes place in a shipping container in a dessert with no clocks or the Internet. If we can produce a JAR file from that state, then the JAR file should be safe to be shared by any machine. Why did I mention the clock? It's because a JAR file could capture the timestamp, and thus produce slightly different JARs each time. To avoid this, hermetic build tools overwrite the timestamp to a fixed date 2010-01-01 regardless of when the build took place.</p>
-<p>A build that ends up capturing ephemeral inputs, are said to <em>break the hermeticity</em> or <em>non-hermetic</em>. Another common way the hermeticity is broken is capturing absolute paths as either input or output. Sometimes the path gets embedded into the JAR via a macro, you might not know until you inspect the bytecode.</p>
-<h2 id="automatic-caching"><a class="header" href="#automatic-caching">Automatic caching</a></h2>
-<p>Here's a demonstration of the automatic caching:</p>
+<p>缓存的总体目标是随着代码规模的增长，使构建和测试时间的增长趋于平缓，而非像现状那样线性增长。因此，加速比取决于代码规模等因素，但对于当前测试需要 10 分钟以上的构建，实现 5 倍到 20 倍加速是可达到的。</p>
+<h2 id="缓存基础"><a class="header" href="#缓存基础">缓存基础</a></h2>
+<p>基本思路是将构建过程视为纯函数，接受输入 <code>(A1, A2, A3, ...)</code> 并返回输出 <code>(R1, List(O1, O2, O3, ...))</code>。例如，我们可以接受源文件列表、Scala 版本，最终产生 <code>*.jar</code> 文件。若此假设成立，则对于相同输入，我们可以为所有人记忆输出 JAR。我们关注此技术，是因为使用记忆的输出 JAR 比执行 Scala 编译等实际任务更快。</p>
+<h3 id="密闭构建"><a class="header" href="#密闭构建">密闭构建</a></h3>
+<p>作为构建即纯函数的心智模型，构建工程师有时使用密闭构建（<em>hermetic build</em>）一词，指在沙漠中无钟表、无网络的集装箱内进行的构建。若能从该状态产生 JAR 文件，则该 JAR 应可安全地被任何机器共享。为何提到钟表？因为JAR 可能包含时间戳，因此每次产生略有不同的 JAR。为避免此问题，密闭构建工具会将时间戳覆盖为固定日期 2010-01-01，无论构建何时进行。</p>
+<p>最终捕获临时输入的构建被称为破坏密闭性或非密闭。另一种常见的破坏密闭性的方式是将绝对路径作为输入或输出捕获。有时路径通过宏嵌入 JAR，您可能直到检查字节码才知道。</p>
+<h2 id="自动缓存"><a class="header" href="#自动缓存">自动缓存</a></h2>
+<p>以下是自动缓存的演示：</p>
 <pre><code class="language-scala">val someKey = taskKey[String]("something")
 
 someKey := name.value + version.value + "!"
 </code></pre>
-<p>In sbt 2.x, the task result will be cached based on the values of two settings <code>name</code> and <code>version</code>. The first time we run the task, it will be executed onsite, but it will use the disk cache from the second time onwards:</p>
+<p>在 sbt 2.x 中，任务结果将根据 <code>name</code> 和 <code>version</code> 两个设置的值进行缓存。首次运行任务时将在现场执行，但自第二次起将使用磁盘缓存：</p>
 <pre><code>sbt:demo&gt; show someKey
 [info] demo0.1.0-SNAPSHOT!
 [success] elapsed time: 0 s, cache 0%, 1 onsite task
@@ -1927,25 +1927,25 @@ sbt:demo&gt; show someKey
 [info] demo0.1.0-SNAPSHOT!
 [success] elapsed time: 0 s, cache 100%, 1 disk cache hit
 </code></pre>
-<h3 id="caching-is-just-as-hard-as-serialization"><a class="header" href="#caching-is-just-as-hard-as-serialization">Caching is just as hard as serialization</a></h3>
-<p>To participate in the automatic caching, the input keys (e.g. <code>name</code> and <code>version</code>) must provide a given　for <code>sjsonnew.HashWriter</code> typeclass and return type must provide a given for <code>sjsonnew.JsonFormat</code>. <a href="https://www.scala-sbt.org/contraband/">Contraband</a> can be used to generate sjson-new codecs.</p>
-<h2 id="caching-files"><a class="header" href="#caching-files">Caching files</a></h2>
-<p>Caching files (e.g. <code>java.io.File</code>) requires its own consideration, not because it's technically difficult, but mostly because of the ambiguity and assumptions when files are involved. When we say a "file" it could actually mean:</p>
+<h3 id="缓存与序列化同样困难"><a class="header" href="#缓存与序列化同样困难">缓存与序列化同样困难</a></h3>
+<p>要参与自动缓存，输入键（如 <code>name</code> 和 <code>version</code>）必须为 <code>sjsonnew.HashWriter</code> typeclass 提供 given，返回类型必须为 <code>sjsonnew.JsonFormat</code> 提供 given。<a href="https://www.scala-sbt.org/contraband/">Contraband</a> 可用于生成 sjson-new 编解码器。</p>
+<h2 id="缓存文件"><a class="header" href="#缓存文件">缓存文件</a></h2>
+<p>缓存文件（如 <code>java.io.File</code>）需要单独考虑，不是因为技术难度，而主要是因为涉及文件时的歧义和假设。当我们说「文件」时，它可能实际指：</p>
 <ol>
-<li>Relative path from a well-known location</li>
-<li>Materialized actual file</li>
-<li>A unique proof of a file, or a content hash</li>
+<li>从已知位置的相对路径</li>
+<li>物化的实际文件</li>
+<li>文件的唯一证明或内容哈希</li>
 </ol>
-<p>Technically speaking, a <code>File</code> just means the file path, so we can deserialize just the filename such as <code>target/a/b.jar</code>. This will fail the downstream tasks if they assumed that <code>target/a/b.jar</code> would exist in the file system. For clarity, and also for avoiding to capture absolute paths, sbt 2.x provides three separate types for the three cases.</p>
+<p>从技术上讲，<code>File</code> 仅表示文件路径，因此我们只能反序列化文件名如 <code>target/a/b.jar</code>。若下游任务假设 <code>target/a/b.jar</code> 存在于文件系统中，这将失败。为清晰起见，也为避免捕获绝对路径，sbt 2.x 为这三种情况提供了三种独立的类型。</p>
 <ul>
-<li><code>xsbti.VirtualFileRef</code> is used to mean just the relative path, which is equivalent to passing a string</li>
-<li><code>xsbti.VirtualFile</code> represents a materialized file with contents, which could be a virtual file or a file in your disk</li>
+<li><code>xsbti.VirtualFileRef</code> 用于表示仅相对路径，相当于传递字符串</li>
+<li><code>xsbti.VirtualFile</code> 表示带内容的物化文件，可以是虚拟文件或您磁盘上的文件</li>
 </ul>
-<p>However, for the purpose of hermetic build, neither is great to represent a list of files. Having just the filename alone doesn't guarantee that the file will be the same, and carrying the entire content of the files is too inefficient in a JSON etc.</p>
-<p>This is where the mysterious third option, a unique proof of file comes in handy. In addition to the relative path, <code>HashedVirtualFileRef</code> tracks the SHA-256 content hash and the file size. This can easily be serialized to JSON yet we can reference the exact file.</p>
-<h3 id="the-effect-of-file"><a class="header" href="#the-effect-of-file">The effect of file</a></h3>
-<p>There are many tasks that generate file that do not use <code>VirtualFile</code> as the return type. For example, <code>compile</code> returns <code>Analysis</code> instead, and <code>*.class</code> file generation happens as a <em>side effect</em> in sbt 1.x.</p>
-<p>To participate in caching, we need to declare these effects as something we care about.</p>
+<p>然而，对于密闭构建而言，两者都不适合表示文件列表。仅文件名无法保证文件相同，而在 JSON 等中携带完整文件内容效率太低。</p>
+<p>神秘的第三个选项——文件的唯一证明——在此发挥作用。除相对路径外，<code>HashedVirtualFileRef</code> 还跟踪 SHA-256 内容哈希和文件大小。这可轻松序列化为 JSON，同时我们仍能引用确切文件。</p>
+<h3 id="文件的效果"><a class="header" href="#文件的效果">文件的效果</a></h3>
+<p>有许多生成文件的任务不以 <code>VirtualFile</code> 为返回类型。例如，<code>compile</code> 返回 <code>Analysis</code>，而 <code>*.class</code> 文件的生成在 sbt 1.x 中作为 <em>side effect</em>（副作用）发生。</p>
+<p>要参与缓存，我们需要将这些效果声明为我们关心的事物。</p>
 <pre><code class="language-scala">someKey := {
   val conv = fileConverter.value
   val out: java.nio.file.Path = createFile(...)
@@ -1955,11 +1955,11 @@ sbt:demo&gt; show someKey
 }
 </code></pre>
 <h2 id="remote-caching"><a class="header" href="#remote-caching">Remote caching</a></h2>
-<p>You can optionally extend the build to use remote cache in addition to the local disk cache. Remote caching could improve build performance by allowing multiple machines to share build artifacts and outputs.</p>
-<p>Imagine you have a dozen people in your project or a company. Each morning, you will <code>git pull</code> the changes the dozen people made, and you need to build their code. If you have a successful project, the code size will only get bigger over time, and the % of the time you spend building someone else's in your day increases. This becomes the limiting factor of your team size and code size. Remote caching reverses this tide by CI systems hydrate the cache and you can download the artifacts and task outputs.</p>
-<p>sbt 2.x implements Bazel-compatible gRPC interface, which works with number of backend both open source and commercial. See <a href="concepts/../reference/remote-cache-setup.html">Remote cache setup</a> for more details.</p>
+<p>您可以选择性地扩展构建，除本地磁盘缓存外还使用远程缓存。远程缓存允许多台机器共享构建构件和输出，从而提升构建性能。</p>
+<p>假设您的项目或公司有十几个人。每天早晨，您会 <code>git pull</code> 这些人所做的更改，并需要构建他们的代码。若项目成功，代码规模会随时间增长，您花在构建他人代码上的时间占比会增加。这成为团队规模和代码规模的限制因素。远程缓存通过 CI 系统填充缓存、您可下载构件和任务输出来扭转这一趋势。</p>
+<p>sbt 2.x 实现了与 Bazel 兼容的 gRPC 接口，可与多种开源和商业后端配合使用。详见 <a href="concepts/../reference/remote-cache-setup.html">Remote cache setup</a>。</p>
 <h2 id="reference"><a class="header" href="#reference">Reference</a></h2>
-<p>See also <a href="concepts/../reference/cached-task.html">Cached task</a> reference guide.</p>
+<p>另请参阅 <a href="concepts/../reference/cached-task.html">Cached task</a> 参考指南。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="reference-1"><a class="header" href="#reference-1">Reference</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-1"><a class="header" href="#sbt-1">sbt</a></h1>
 <p>See <a href="reference/../guide/basic-tasks.html">Basic Tasks</a> in the Getting Started Guide for an intro to the basics.</p>
@@ -3325,7 +3325,7 @@ Def.settings {
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="cached-task"><a class="header" href="#cached-task">Cached task</a></h1>
 <p>This page covers the cached task details. See <a href="reference/../concepts/caching.html">Caching</a> for a general explanation.</p>
-<h2 id="automatic-caching-1"><a class="header" href="#automatic-caching-1">Automatic caching</a></h2>
+<h2 id="自动缓存-1"><a class="header" href="#自动缓存-1">自动缓存</a></h2>
 <pre><code class="language-scala">val someKey = taskKey[String]("something")
 
 someKey := name.value + version.value + "!"
@@ -3435,8 +3435,8 @@ someKey := Def.uncached {
 <p>It is equivalent to:</p>
 <pre><code class="language-scala">"a" % "b_2.9.1" % "1.0"
 </code></pre>
-<h2 id="project-matrix-1"><a class="header" href="#project-matrix-1">Project matrix</a></h2>
-<p>sbt 2.x introduces project matrix, which enables cross building to happen in parallel.</p>
+<h2 id="项目矩阵-1"><a class="header" href="#项目矩阵-1">项目矩阵</a></h2>
+<p>sbt 2.x 引入了项目矩阵，使交叉构建可以并行进行。</p>
 <pre><code class="language-scala">organization := "com.example"
 scalaVersion := "3.8.1"
 version      := "0.1.0-SNAPSHOT"
@@ -4835,9 +4835,9 @@ BareBuildSyntax.dependsOn(jmhRef)
 <h3 id="-2"><a class="header" href="#-2"><code>%%%</code></a></h3>
 <p>This is defined in <a href="https://github.com/portable-scala/sbt-platform-deps">sbt-platform-deps</a> in sbt 1.x.</p>
 <h2 id="c"><a class="header" href="#c">C</a></h2>
-<h3 id="command-1"><a class="header" href="#command-1">Command</a></h3>
+<h3 id="命令-1"><a class="header" href="#命令-1">命令</a></h3>
 <p>A system-level building block of sbt, often used to capture user interaction or IDE interaction. See <a href="appendix/../concepts/command.html">Command</a>.</p>
-<h3 id="cross-building-1"><a class="header" href="#cross-building-1">Cross building</a></h3>
+<h3 id="交叉构建-1"><a class="header" href="#交叉构建-1">交叉构建</a></h3>
 <p>The idea of building multiple targets from the same set of source file. This includes Scala cross building, targetting multiple versions of Scala releases; platform cross building, targetting JVM, Scala.JS, and Scala Native; and custom virtual axis like Spark versions.</p>
 <h2 id="d"><a class="header" href="#d">D</a></h2>
 <h3 id="dependency-resolution"><a class="header" href="#dependency-resolution">Dependency resolution</a></h3>

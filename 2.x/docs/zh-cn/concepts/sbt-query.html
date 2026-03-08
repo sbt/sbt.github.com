@@ -209,17 +209,17 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="sbt-query"><a class="header" href="#sbt-query">sbt query</a></h1>
-<p>sbt 2.x extends the slash syntax to enable aggregation of subprojects:</p>
+<p>sbt 2.x 扩展了斜杠语法以支持子项目聚合：</p>
 <p><em>act</em> <code>::=</code> [ <em>query</em> <code>/</code> ] [ <em>config</em> <code>/</code> ] [ <em>in-task</em> <code>/</code> ] ( <em>taskKey</em> | <em>settingKey</em> )</p>
-<p>In other words, sbt query is a new way of writing the subproject-axis.</p>
-<h3 id="subproject-reference"><a class="header" href="#subproject-reference">Subproject reference</a></h3>
-<p>A subproject reference works as a query to select the subproject:</p>
-<div id="admonition-buildsbt-example-1" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-example-1-title">
+<p>换言之，sbt query 是编写子项目轴的新方式。</p>
+<h3 id="子项目引用"><a class="header" href="#子项目引用">子项目引用</a></h3>
+<p>子项目引用作为查询来选择子项目：</p>
+<div id="admonition-buildsbt-示例-1" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-示例-1-title">
 <div class="admonition-title">
-<div id="admonition-buildsbt-example-1-title">
-<p>build.sbt example 1</p>
+<div id="admonition-buildsbt-示例-1-title">
+<p>build.sbt 示例 1</p>
 </div>
-<a class="admonition-anchor-link" href="#admonition-buildsbt-example-1"></a>
+<a class="admonition-anchor-link" href="#admonition-buildsbt-示例-1"></a>
 </div>
 <div>
 <pre><code class="language-scala">scalaVersion := "3.8.1"
@@ -228,26 +228,26 @@ lazy val foo = project
 </code></pre>
 </div>
 </div>
-<p>Given the above build, we can run tests on <code>foo</code> subproject as follows, which is the same syntax as it was in sbt 1.x:</p>
+<p>对于上述构建，我们可以按以下方式在 <code>foo</code> 子项目上运行测试，语法与 sbt 1.x 相同：</p>
 <pre><code>foo/test
 </code></pre>
-<h3 id="-wildcard"><a class="header" href="#-wildcard"><code>...</code> wildcard</a></h3>
-<p><code>...</code> wildcard matches to any characters, and can be combined with other letters and numbers to filter down the root aggregate list. For example, we can run tests on all subproject that starts with <code>foo</code> as follows:</p>
+<h3 id="-通配符"><a class="header" href="#-通配符"><code>...</code> 通配符</a></h3>
+<p><code>...</code> 通配符可匹配任意字符，并可与其他字母和数字组合以筛选根聚合列表。例如，我们可以按以下方式在所有以 <code>foo</code> 开头的子项目上运行测试：</p>
 <pre><code>foo.../test
 </code></pre>
-<div id="admonition-note--vs-" class="admonition admonish-note" role="note" aria-labelledby="admonition-note--vs--title">
+<div id="admonition-注意-与-" class="admonition admonish-note" role="note" aria-labelledby="admonition-注意-与--title">
 <div class="admonition-title">
-<div id="admonition-note--vs--title">
-<p>Note: * vs ...</p>
+<div id="admonition-注意-与--title">
+<p>注意：* 与 ...</p>
 </div>
-<a class="admonition-anchor-link" href="#admonition-note--vs-"></a>
+<a class="admonition-anchor-link" href="#admonition-注意-与-"></a>
 </div>
 <div>
-<p>sbt query intentionally uses <code>...</code> (dot dot dot) instead of more intuitive <code>*</code> (asterisk) because <code>*</code> is often used in a shell as a wildcard to match existing files or directories. This would require quoting, and forgetting to quote <code>*/test</code> would match to something like <code>src/test</code>.</p>
+<p>sbt query 有意使用 <code>...</code>（省略号）而非更直观的 <code>*</code>（星号），因为 <code>*</code> 在 shell 中常被用作通配符来匹配现有文件或目录。这需要加引号，而忘记给 <code>*/test</code> 加引号会匹配到类似 <code>src/test</code> 的内容。</p>
 </div>
 </div>
-<h3 id="scalabinaryversion-parameter"><a class="header" href="#scalabinaryversion-parameter"><code>@scalaBinaryVersion</code> parameter</a></h3>
-<p><code>@scalaBinaryVersion</code> parameter matches to the subproject's <code>scalaBinaryVersion</code> setting.</p>
+<h3 id="scalabinaryversion-参数"><a class="header" href="#scalabinaryversion-参数"><code>@scalaBinaryVersion</code> 参数</a></h3>
+<p><code>@scalaBinaryVersion</code> 参数与子项目的 <code>scalaBinaryVersion</code> 设置匹配。</p>
 <div id="admonition-example" class="admonition admonish-example" role="note" aria-labelledby="admonition-example-title">
 <div class="admonition-title">
 <div id="admonition-example-title">
@@ -273,10 +273,10 @@ lazy val bar = projectMatrix
 </code></pre>
 </div>
 </div>
-<p>For example, we can run tests on all 3.x subprojects as follows:</p>
+<p>例如，我们可以按以下方式在所有 3.x 子项目上运行测试：</p>
 <pre><code>...@scalaBinaryVersion=3/test
 </code></pre>
-<p>This can be used from a terminal as follows:</p>
+<p>可以从终端按以下方式使用：</p>
 <pre><code class="language-bash">$ sbt ...@scalaBinaryVersion=3/test
 [info] entering *experimental* thin client - BEEP WHIRR
 [info] terminate the server with `shutdown`
@@ -290,7 +290,7 @@ example.ExampleSuite:
   + Scala version 0.003s
 [info] Passed: Total 1, Failed 0, Errors 0, Passed 1
 </code></pre>
-<p>This lets us filter down the aggregated subprojects, which could be a lot using <code>projectMatrix</code>.</p>
+<p>这使我们能够筛选聚合的子项目，使用 <code>projectMatrix</code> 时子项目可能很多。</p>
 
                     </main>
 
