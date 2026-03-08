@@ -235,15 +235,15 @@ lazy val foo = project
 <p><code>...</code> ワイルドカードはどの文字列にもマッチして、他の文字や数字とも組み合わせて、ルートの集約リストを絞り込むことができる。例えば、以下のようにして <code>foo</code> で始まる全サブプロジェクトのテストを実行することができる:</p>
 <pre><code>foo.../test
 </code></pre>
-<div id="admonition-note--vs-" class="admonition admonish-note" role="note" aria-labelledby="admonition-note--vs--title">
+<div id="admonition-備考--vs-" class="admonition admonish-note" role="note" aria-labelledby="admonition-備考--vs--title">
 <div class="admonition-title">
-<div id="admonition-note--vs--title">
-<p>Note: * vs ...</p>
+<div id="admonition-備考--vs--title">
+<p>備考: * vs ...</p>
 </div>
-<a class="admonition-anchor-link" href="#admonition-note--vs-"></a>
+<a class="admonition-anchor-link" href="#admonition-備考--vs-"></a>
 </div>
 <div>
-<p>sbt query intentionally uses <code>...</code> (dot dot dot) instead of more intuitive <code>*</code> (asterisk) because <code>*</code> is often used in a shell as a wildcard to match existing files or directories. This would require quoting, and forgetting to quote <code>*/test</code> would match to something like <code>src/test</code>.</p>
+<p>sbt クエリは、直感的に分かりやすそうな <code>*</code> (アスタリスク) でなく、意図的に <code>...</code> (ドット・ドット・ドット) を採用する。これは <code>*</code> がシェル環境においてワイルドカードとして使われることが多いからだ。そのため、常にクォートで囲む必要があり、また <code>*/test</code> をクォートし忘れると <code>src/test</code> のようなディレクトリにマッチしてしまう可能性が高い。</p>
 </div>
 </div>
 <h3 id="scalabinaryversion-パラメータ"><a class="header" href="#scalabinaryversion-パラメータ"><code>@scalaBinaryVersion</code> パラメータ</a></h3>
