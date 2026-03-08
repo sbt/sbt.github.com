@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Cached task - The Book of sbt</title>
+        <title>キャッシュ化タスク - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -208,14 +208,14 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="cached-task"><a class="header" href="#cached-task">Cached task</a></h1>
-<p>This page covers the cached task details. See <a href="../concepts/caching.html">Caching</a> for a general explanation.</p>
-<h2 id="automatic-caching"><a class="header" href="#automatic-caching">Automatic caching</a></h2>
+                        <h1 id="キャッシュ化タスク"><a class="header" href="#キャッシュ化タスク">キャッシュ化タスク</a></h1>
+<p>このページではキャッシュ化タスクの詳細を説明する。概要の解説は<a href="../concepts/caching.html">キャッシュ化</a>を参照。</p>
+<h2 id="自動キャッシュ"><a class="header" href="#自動キャッシュ">自動キャッシュ</a></h2>
 <pre><code class="language-scala">val someKey = taskKey[String]("something")
 
 someKey := name.value + version.value + "!"
 </code></pre>
-<p>In sbt 2.x, the task result will be automatically cached based on the two settings <code>name</code> and <code>version</code>. The first time we run the task it will be executed onsite, but the second time onward, it will use the disk cache:</p>
+<p>sbt 2.x では、タスク結果は <code>name</code> と <code>version</code> の 2 つのセッティングに基づいて自動的にキャッシュされる。初回実行時はオンサイトで実行されるが、2 回目以降はディスクキャッシュが使用される:</p>
 <pre><code>sbt:demo&gt; show someKey
 [info] demo0.1.0-SNAPSHOT!
 [success] elapsed time: 0 s, cache 0%, 1 onsite task
@@ -223,11 +223,11 @@ sbt:demo&gt; show someKey
 [info] demo0.1.0-SNAPSHOT!
 [success] elapsed time: 0 s, cache 100%, 1 disk cache hit
 </code></pre>
-<h3 id="caching-is-serialization-hard"><a class="header" href="#caching-is-serialization-hard">Caching is serialization-hard</a></h3>
-<p>To participate in the automatic caching, the input keys (e.g. <code>name</code> and <code>version</code>) must provide a given for <code>sjsonnew.HashWriter</code> typeclass and return type must provide a given for <code>sjsonnew.JsonFormat</code>. <a href="https://www.scala-sbt.org/contraband/">Contraband</a> can be used to generate sjson-new codecs.</p>
-<h2 id="effect-tracking"><a class="header" href="#effect-tracking">Effect tracking</a></h2>
-<h3 id="the-effect-of-file-creation"><a class="header" href="#the-effect-of-file-creation">The effect of file creation</a></h3>
-<p>To cache the effect of file creation, not just returning the name of the file, we need to track the effect of file creation using <code>Def.declareOutput(vf)</code>.</p>
+<h3 id="キャッシュ化はシリアライズ困難である"><a class="header" href="#キャッシュ化はシリアライズ困難である">キャッシュ化はシリアライズ困難である</a></h3>
+<p>自動キャッシュに参加するには、入力キー（例: <code>name</code> と <code>version</code>）が <code>sjsonnew.HashWriter</code> 型クラス用の given を提供し、戻り値の型が <code>sjsonnew.JsonFormat</code> 用の given を提供する必要がある。<a href="https://www.scala-sbt.org/contraband/">Contraband</a> で sjson-new のコーデックを生成できる。</p>
+<h2 id="エフェクトの追跡"><a class="header" href="#エフェクトの追跡">エフェクトの追跡</a></h2>
+<h3 id="ファイル作成のエフェクト"><a class="header" href="#ファイル作成のエフェクト">ファイル作成のエフェクト</a></h3>
+<p>ファイル名を返すだけでなく、ファイル作成のエフェクトをキャッシュするには、<code>Def.declareOutput(vf)</code> を使ってファイル作成のエフェクトを追跡する必要がある。</p>
 <pre><code class="language-scala">someKey := {
   val conv = fileConverter.value
   val out: java.nio.file.Path = createFile(...)
@@ -236,9 +236,9 @@ sbt:demo&gt; show someKey
   vf: xsbti.HashedVirtualFileRef
 }
 </code></pre>
-<h2 id="opting-out-from-caching"><a class="header" href="#opting-out-from-caching">Opting out from caching</a></h2>
-<h3 id="build-wide-opt-out"><a class="header" href="#build-wide-opt-out">Build-wide opt-out</a></h3>
-<p>To opt out of by-default custom task caching, add the following to <code>project/plugins.sbt</code>:</p>
+<h2 id="キャッシュからのオプトアウト"><a class="header" href="#キャッシュからのオプトアウト">キャッシュからのオプトアウト</a></h2>
+<h3 id="ビルド全体でのオプトアウト"><a class="header" href="#ビルド全体でのオプトアウト">ビルド全体でのオプトアウト</a></h3>
+<p>デフォルトのカスタムタスクキャッシュをオプトアウトするには、<code>project/plugins.sbt</code> に以下を追加する:</p>
 <pre><code class="language-scala">Compile / scalacOptions += "-Xmacro-settings:sbt:no-default-task-cache"
 </code></pre>
 <div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
@@ -249,11 +249,11 @@ sbt:demo&gt; show someKey
 <a class="admonition-anchor-link" href="#admonition-note"></a>
 </div>
 <div>
-<p>This applies only to the custom tasks introduced in the build. Any cached tasks provided by sbt or plugins will remain cached.</p>
+<p>これはビルドで導入したカスタムタスクにのみ適用される。sbt またはプラグインが提供するキャッシュ化タスクはキャッシュされたままである。</p>
 </div>
 </div>
-<h3 id="per-task-key-opt-out"><a class="header" href="#per-task-key-opt-out">Per-task-key opt-out</a></h3>
-<p>Next, if you want to opt some task keys from caching, you can set the cache level as follows:</p>
+<h3 id="タスクキー単位でのオプトアウト"><a class="header" href="#タスクキー単位でのオプトアウト">タスクキー単位でのオプトアウト</a></h3>
+<p>次に、一部のタスクキーをキャッシュからオプトアウトしたい場合は、以下のようにキャッシュレベルを設定する:</p>
 <pre><code class="language-scala">@transient
 val someKey = taskKey[String]("something")
 </code></pre>
@@ -261,8 +261,8 @@ val someKey = taskKey[String]("something")
 <pre><code class="language-scala">@cacheLevel(include = Array.empty)
 val someKey = taskKey[String]("something")
 </code></pre>
-<h3 id="per-task-opt-out"><a class="header" href="#per-task-opt-out">Per-task opt-out</a></h3>
-<p>To opt out of the cache individually, use <code>Def.uncached(...)</code> as follows:</p>
+<h3 id="タスク単位でのオプトアウト"><a class="header" href="#タスク単位でのオプトアウト">タスク単位でのオプトアウト</a></h3>
+<p>キャッシュを個別にオプトアウトするには、以下のように <code>Def.uncached(...)</code> を使用する:</p>
 <pre><code class="language-scala">val someKey = taskKey[String]("something")
 
 someKey := Def.uncached {
@@ -270,7 +270,7 @@ someKey := Def.uncached {
 }
 </code></pre>
 <h2 id="リモートキャッシュ"><a class="header" href="#リモートキャッシュ">リモート・キャッシュ</a></h2>
-<p>sbt 2.x implements Bazel-compatible gRPC interface, which works with number of backend both open source and commercial. See <a href="./remote-cache-setup.html">Remote cache setup</a> for more details.</p>
+<p>sbt 2.x は Bazel 互換の gRPC インターフェースを実装しており、オープンソースおよび商用の多数のバックエンドと連携する。詳細は <a href="./remote-cache-setup.html">リモート・キャッシュのセットアップ</a> を参照のこと。</p>
 
                     </main>
 
