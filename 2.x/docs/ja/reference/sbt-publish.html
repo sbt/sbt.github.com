@@ -302,11 +302,11 @@ password=admin123
 </div>
 </div>
 <h3 id="クロス公開"><a class="header" href="#クロス公開">クロス公開</a></h3>
-<p>互換性のない複数の Scala バージョンをサポートするには、projectMatrix と publish を使用する（<a href="./cross-building-setup.html">クロスビルドのセットアップ</a> を参照）。</p>
+<p>互換性のない複数の Scala バージョンをサポートするには、projectMatrix と publish を使用する（<a href="./cross-building-setup.html">クロスビルドの設定</a> を参照）。</p>
 <h3 id="公開規約のオーバーライド"><a class="header" href="#公開規約のオーバーライド">公開規約のオーバーライド</a></h3>
-<p>デフォルトでは sbt は使用中の Scala のバイナリバージョンでアーティファクトを公開する。例えばプロジェクトが Scala 2.13.x を使用している場合、example アーティファクトは <code>example_2.13</code> として公開される。多くの場合これで十分だが、純粋な Java アーティファクトやコンパイラプラグインを公開する場合は <code>CrossVersion</code> を変更する必要がある。詳細は <a href="./cross-building-setup.html">クロスビルドのセットアップ</a> の <em>Publishing convention</em> セクションを参照のこと。</p>
+<p>デフォルトでは sbt は使用中の Scala のバイナリバージョンでアーティファクトを公開する。例えばプロジェクトが Scala 2.13.x を使用している場合、example アーティファクトは <code>example_2.13</code> として公開される。多くの場合これで十分だが、純粋な Java アーティファクトやコンパイラプラグインを公開する場合は <code>CrossVersion</code> を変更する必要がある。詳細は<a href="./cross-building-setup.html">クロスビルドの設定</a> の <em>Publishing convention</em> セクションを参照。</p>
 <h3 id="公開されるアーティファクト"><a class="header" href="#公開されるアーティファクト">公開されるアーティファクト</a></h3>
-<p>デフォルトでは、メインのバイナリ JAR、ソース JAR、API ドキュメント JAR が公開される。他の種類のアーティファクトを公開する宣言や、デフォルトのアーティファクトの無効化・変更が可能である。詳細は <a href="./artifact.html">Artifact</a> を参照のこと。</p>
+<p>デフォルトでは、メインのバイナリ JAR、ソース JAR、API ドキュメント JAR が公開される。他の種類のアーティファクトを公開する宣言や、デフォルトのアーティファクトの無効化・変更が可能である。詳細は<a href="./artifact.html">Artifact</a>を参照。</p>
 <h3 id="バージョンスキーム"><a class="header" href="#バージョンスキーム">バージョンスキーム</a></h3>
 <p><code>versionScheme</code> セッティングはビルドのバージョンスキームを追跡する:</p>
 <pre><code class="language-scala">versionScheme := Some("early-semver")
@@ -318,7 +318,7 @@ password=admin123
 <li><code>Some("pvp")</code>: X.Y をメジャーバージョンとして扱う Haskell Package Versioning Policy。</li>
 <li><code>Some("strict")</code>: バージョンの完全一致を要求する。</li>
 </ul>
-<p>この情報は <code>pom.xml</code> に注釈として追加され、下流プロジェクトがバージョン競合を安全に解決できるか判断するのに役立つ。<a href="https://www.scala-lang.org/blog/2021/02/16/preventing-version-conflicts-with-versionscheme.html">Preventing version conflicts with versionScheme</a> (2021) を参照のこと。</p>
+<p>この情報は <code>pom.xml</code> に注釈として追加され、下流プロジェクトがバージョン競合を安全に解決できるか判断するのに役立つ。<a href="https://www.scala-lang.org/blog/2021/02/16/preventing-version-conflicts-with-versionscheme.html">Preventing version conflicts with versionScheme</a> (2021)を参照。</p>
 <h3 id="生成される-pom-の変更"><a class="header" href="#生成される-pom-の変更">生成される POM の変更</a></h3>
 <p><code>publishMavenStyle</code> が <code>true</code> の場合、<code>makePom</code> アクションで POM が生成され、Ivy ファイルの代わりにリポジトリに公開される。いくつかのセッティングを変更することで POM ファイルを編集できる。<code>pomExtra</code> に XML（<code>scala.xml.NodeSeq</code>）を設定すると、生成される pom に直接挿入される。例:</p>
 <pre><code class="language-scala">pomExtra := &lt;something&gt;&lt;/something&gt;
