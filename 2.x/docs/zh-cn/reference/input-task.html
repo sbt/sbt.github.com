@@ -216,8 +216,7 @@
 <pre><code class="language-scala">// goes in project/Build.scala or in build.sbt
 val demo = inputKey[Unit]("A demo input task.")
 </code></pre>
-<p>The definition of an input task is similar to that of a normal task, but it can also use the result of a</p>
-<p><a href="tab-completion-parser.html">Parser</a> applied to user input. Just as the special <code>value</code> method gets the value of a setting or task, the special <code>parsed</code> method gets the result of a <code>Parser</code>.</p>
+<p>The definition of an input task is similar to that of a normal task, but it can also use the result of a <a href="tab-completion-parser.html">Parser</a> applied to user input. Just as the special <code>value</code> method gets the value of a setting or task, the special <code>parsed</code> method gets the result of a <code>Parser</code>.</p>
 <h2 id="basic-input-task-definition"><a class="header" href="#basic-input-task-definition">Basic input task definition</a></h2>
 <p>The simplest input task accepts a space-delimited sequence of arguments. It does not provide useful tab completion and parsing is basic. The built-in parser for space-delimited arguments is constructed via the <code>spaceDelimited</code> method, which accepts as its only argument the label to present to the user during tab completion.</p>
 <p>For example, the following task prints the current Scala version and then echoes the arguments passed to it on their own line.</p>

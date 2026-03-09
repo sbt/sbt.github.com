@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Input task - The Book of sbt</title>
+        <title>インプットタスク - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -208,19 +208,18 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="input-task"><a class="header" href="#input-task">Input task</a></h1>
-<p>sbt provides a capability to define custom tasks that can parse user inputs and offer tab completion. The details of the parser will be covered in <a href="tab-completion-parser.html">tab-completion parser</a> later.</p>
-<p>This page describes how to hook those parser combinators into the input task system.</p>
-<h2 id="input-keys"><a class="header" href="#input-keys">Input keys</a></h2>
-<p>A key for an input task is of type <code>InputKey</code> and represents the input task like a <code>SettingKey</code> represents a setting or a <code>TaskKey</code> represents a task. Define a new input task key using the <code>inputKey.apply</code> factory method:</p>
+                        <h1 id="インプットタスク"><a class="header" href="#インプットタスク">インプットタスク</a></h1>
+<p>sbt はユーザー入力をパースし、タブ補完を提供するカスタムタスクを定義する機能を提供する。パーサーの詳細は後で<a href="tab-completion-parser.html">タブ補完パーサー</a> で説明する。</p>
+<p>このページでは、パーサーコンビネータをインプットタスク・システムに組み込む方法を説明する。</p>
+<h2 id="input-キー"><a class="header" href="#input-キー">Input キー</a></h2>
+<p>インプットタスクのキーは <code>InputKey</code> 型であり、<code>SettingKey</code> がセッティングを、<code>TaskKey</code> がタスクを表すのと同様にインプットタスクを表す。<code>inputKey.apply</code> ファクトリメソッドで新しいインプットタスクのキーを定義する:</p>
 <pre><code class="language-scala">// goes in project/Build.scala or in build.sbt
 val demo = inputKey[Unit]("A demo input task.")
 </code></pre>
-<p>The definition of an input task is similar to that of a normal task, but it can also use the result of a</p>
-<p><a href="tab-completion-parser.html">Parser</a> applied to user input. Just as the special <code>value</code> method gets the value of a setting or task, the special <code>parsed</code> method gets the result of a <code>Parser</code>.</p>
-<h2 id="basic-input-task-definition"><a class="header" href="#basic-input-task-definition">Basic input task definition</a></h2>
-<p>The simplest input task accepts a space-delimited sequence of arguments. It does not provide useful tab completion and parsing is basic. The built-in parser for space-delimited arguments is constructed via the <code>spaceDelimited</code> method, which accepts as its only argument the label to present to the user during tab completion.</p>
-<p>For example, the following task prints the current Scala version and then echoes the arguments passed to it on their own line.</p>
+<p>インプットタスクの定義は通常のタスクと同様だが、ユーザー入力を捕獲した <a href="tab-completion-parser.html">Parser</a> の結果も使用できる。セッティングやタスクの値を取得する特殊な <code>value</code> メソッドと同様に、<code>Parser</code> の結果は特殊な <code>parsed</code> メソッドで取得する。</p>
+<h2 id="基本的なインプットタスクの定義"><a class="header" href="#基本的なインプットタスクの定義">基本的なインプットタスクの定義</a></h2>
+<p>最もシンプルなインプットタスクはスペース区切りの引数シーケンスを受け付ける。パースは簡素で、有用なタブ補完は提供されない。スペース区切り引数用の組み込みパーサーは <code>spaceDelimited</code> メソッドで構築され、唯一の引数としてタブ補完時にユーザーに表示するラベルを受け取る。</p>
+<p>例えば、以下のタスクは現在の Scala バージョンを表示し、渡された引数を各行にエコーする。</p>
 <pre><code class="language-scala">import complete.DefaultParsers.{ *, given }
 
 demo := {
@@ -232,16 +231,16 @@ demo := {
   args.foreach(println(_))
 }
 </code></pre>
-<h2 id="input-task-using-parsers"><a class="header" href="#input-task-using-parsers">Input task using Parsers</a></h2>
-<p>The Parser provided by the <code>spaceDelimited</code> method does not provide any flexibility in defining the input syntax. Using a custom parser is just a matter of defining your own <code>Parser</code> as described on the <a href="tab-completion-parser.html">Parsing Input</a> page.</p>
-<h3 id="constructing-the-parser"><a class="header" href="#constructing-the-parser">Constructing the Parser</a></h3>
-<p>The first step is to construct the actual <code>Parser</code> by defining a value of one of the following types:</p>
+<h2 id="parser-を使ったインプットタスク"><a class="header" href="#parser-を使ったインプットタスク">Parser を使ったインプットタスク</a></h2>
+<p><code>spaceDelimited</code> メソッドが提供する Parser は入力構文の定義に柔軟性がない。カスタムパーサーを使うには、<a href="tab-completion-parser.html">タブ補完パーサー</a>で説明する通り独自の <code>Parser</code> を定義すればよい。</p>
+<h3 id="parser-の構築"><a class="header" href="#parser-の構築">Parser の構築</a></h3>
+<p>最初のステップは、以下のいずれかの型の値を定義して実際の <code>Parser</code> を構築することである:</p>
 <ol>
-<li><code>Parser[I]</code>: a basic parser that does not use any settings</li>
-<li><code>Initialize[Parser[I]]</code>: a parser whose definition depends on one or more settings</li>
-<li><code>Initialize[State =&gt; Parser[I]]</code>: a parser that is defined using both settings and the current <a href="Build-State.html">state</a></li>
+<li><code>Parser[I]</code>: セッティングを使用しない基本パーサー</li>
+<li><code>Initialize[Parser[I]]</code>: 定義が 1 つ以上のセッティングに依存するパーサー</li>
+<li><code>Initialize[State =&gt; Parser[I]]</code>: セッティングと現在の <a href="Build-State.html">state</a> の両方を使って定義されるパーサー</li>
 </ol>
-<p>We already saw an example of the first case with <code>spaceDelimited</code>, which doesn't use any settings in its definition. As an example of the third case, the following defines a contrived <code>Parser</code> that uses the project's Scala and sbt version settings as well as the state. To use these settings, we need to wrap the Parser construction in <code>Def.setting</code> and get the setting values with the special <code>value</code> method:</p>
+<p><code>spaceDelimited</code> による最初のケースの例は既に見た。定義でセッティングを使用していない。3 つ目のケースの例として、以下はプロジェクトの Scala と sbt のバージョンセッティングおよび state を使う作為的な <code>Parser</code> を定義する。これらのセッティングを使うには、Parser の構築を <code>Def.setting</code> でラップし、特殊な <code>value</code> メソッドでセッティング値を取得する必要がある:</p>
 <pre><code class="language-scala">import sbt.complete.DefaultParsers.{ *, given }
 import sbt.complete.Parser
 
@@ -254,16 +253,16 @@ Def.setting {
         token(state.remainingCommands.size.toString) )
 }
 </code></pre>
-<p>This Parser definition will produce a value of type <code>(String,String)</code>. The input syntax defined isn't very flexible; it is just a demonstration. It will produce one of the following values for a successful parse (assuming the current Scala version is 3.8.1, the current sbt version is 2.0.0-RC9, and there are 3 commands left to run):</p>
+<p>この Parser 定義は <code>(String,String)</code> 型の値を生成する。定義した入力構文は柔軟ではない。デモンストレーションである。パースが成功すると以下のいずれかの値を生成する（現在の Scala バージョンが 3.8.1、sbt バージョンが 2.0.0-RC9、実行待ちコマンドが 3 つの場合）:</p>
 <ul>
 <li>(scala,3.8.1)</li>
 <li>(sbt,2.0.0-RC9)</li>
 <li>(commands,3)</li>
 </ul>
-<p>Again, we were able to access the current Scala and sbt version for the project because they are settings. Tasks cannot be used to define the parser.</p>
-<h3 id="constructing-the-task"><a class="header" href="#constructing-the-task">Constructing the Task</a></h3>
-<p>Next, we construct the actual task to execute from the result of the <code>Parser</code>. For this, we define a task as usual, but we can access the result of parsing via the special <code>parsed</code> method on <code>Parser</code>.</p>
-<p>The following contrived example uses the previous example's output (of type <code>(String,String)</code>) and the result of the <code>package</code> task to print some information to the screen.</p>
+<p>プロジェクトの現在の Scala と sbt のバージョンにアクセスできたのは、それらがセッティングだからである。タスクはパーサーの定義に使用できない。</p>
+<h3 id="タスクの構築"><a class="header" href="#タスクの構築">タスクの構築</a></h3>
+<p>次に、<code>Parser</code> の結果から実行する実際のタスクを構築する。通常通りタスクを定義するが、<code>Parser</code> の特殊な <code>parsed</code> メソッドでパース結果にアクセスできる。</p>
+<p>以下の作為的な例は、前の例の出力（型 <code>(String,String)</code>）と <code>package</code> タスクの結果を使って、画面に情報を表示する。</p>
 <pre><code class="language-scala">demo := {
     val (tpe, value) = parser.parsed
     println("Type: " + tpe)
@@ -271,27 +270,27 @@ Def.setting {
     println("Packaged: " + packageBin.value.getAbsolutePath)
 }
 </code></pre>
-<h2 id="the-inputtask-type"><a class="header" href="#the-inputtask-type">The InputTask type</a></h2>
-<p>It helps to look at the <code>InputTask</code> type to understand more advanced usage of input tasks. The core input task type is:</p>
+<h2 id="inputtask-型"><a class="header" href="#inputtask-型">InputTask 型</a></h2>
+<p>インプットタスクのより高度な使い方を理解するには <code>InputTask</code> 型を見るとよい。コアとなるインプットタスク 型は以下の通りである:</p>
 <pre><code class="language-scala">class InputTask[A1](val parser: State =&gt; Parser[Task[A1]])
 </code></pre>
-<p>Normally, an input task is assigned to a setting and you work with <code>Initialize[InputTask[A1]]</code>.</p>
-<p>Breaking this down,</p>
+<p>通常、インプットタスクはセッティングに割り当てられ、<code>Initialize[InputTask[A1]]</code> を扱う。</p>
+<p>分解すると、</p>
 <ol>
-<li>You can use other settings (via Initialize) to construct an input task.</li>
-<li>You can use the current State to construct the parser.</li>
-<li>The parser accepts user input and provides tab completion.</li>
-<li>The parser produces the task to run.</li>
+<li>他のセッティング（Initialize 経由）を使ってインプットタスクを構築できる。</li>
+<li>現在の State を使ってパーサーを構築できる。</li>
+<li>パーサーはユーザー入力を受け付け、タブ補完を提供する。</li>
+<li>パーサーは実行するタスクを生成する。</li>
 </ol>
-<p>So, you can use settings or <code>State</code> to construct the parser that defines an input task's command line syntax. This was described in the previous section. You can then use settings, <code>State</code>, or user input to construct the task to run. This is implicit in the input task syntax.</p>
-<h2 id="using-other-input-tasks"><a class="header" href="#using-other-input-tasks">Using other input tasks</a></h2>
-<p>The types involved in an input task are composable, so it is possible to reuse input tasks. The <code>.parsed</code> and <code>.evaluated</code> methods are defined on InputTasks to make this more convenient in common situations:</p>
+<p>つまり、セッティングまたは <code>State</code> を使って インプットタスク のコマンドライン構文を定義するパーサーを構築できる。これは前セクションで説明した。次に、セッティング、<code>State</code>、またはユーザー入力を使って実行するタスクを構築できる。これは インプットタスク 構文に暗黙的に含まれる。</p>
+<h2 id="他のインプットタスクの再利用"><a class="header" href="#他のインプットタスクの再利用">他のインプットタスクの再利用</a></h2>
+<p>インプットタスクに関わる型は合成可能であるため、インプットタスクを再利用できる。InputTask には <code>.parsed</code> と <code>.evaluated</code> メソッドが定義され、一般的な状況で便利になる:</p>
 <ul>
-<li>Call <code>.parsed</code> on an <code>InputTask[A1]</code> or <code>Initialize[InputTask[A1]]</code> to get the <code>Task[A1]</code> created after parsing the command line</li>
-<li>Call <code>.evaluated</code> on an <code>InputTask[A1]</code> or <code>Initialize[InputTask[A1]]</code> to get the value of type <code>A1</code> from evaluating that task</li>
+<li><code>InputTask[A1]</code> または <code>Initialize[InputTask[A1]]</code> で <code>.parsed</code> を呼ぶと、コマンドラインをパースした後に作成された <code>Task[A1]</code> を取得する</li>
+<li><code>InputTask[A1]</code> または <code>Initialize[InputTask[A1]]</code> で <code>.evaluated</code> を呼ぶと、そのタスクを評価した型 <code>A1</code> の値を取得する</li>
 </ul>
-<p>In both situations, the underlying <code>Parser</code> is sequenced with other parsers in the input task definition. In the case of <code>.evaluated</code>, the generated task is evaluated.</p>
-<p>The following example applies the <code>run</code> input task, a literal separator parser <code>--</code>, and <code>run</code> again. The parsers are sequenced in order of syntactic appearance, so that the arguments before <code>--</code> are passed to the first <code>run</code> and the ones after are passed to the second.</p>
+<p>いずれの場合も、基となる <code>Parser</code> はインプットタスク定義内の他のパーサーと順序付けられる。<code>.evaluated</code> の場合は、生成されたタスクが評価される。</p>
+<p>以下の例は <code>run</code> インプットタスク、リテラル区切りパーサー <code>--</code>、そして再度 <code>run</code> を適用する。パーサーは構文的な出現順に並べられるため、<code>--</code> の前の引数は最初の <code>run</code> に、後の引数は 2 番目の <code>run</code> に渡される。</p>
 <pre><code class="language-scala">val run2 = inputKey[Unit](
     "Runs the main class twice with different argument lists separated by --")
 
@@ -303,7 +302,7 @@ run2 := {
    val two = (Compile / run).evaluated
 }
 </code></pre>
-<p>For a main class Demo that echoes its arguments, this looks like:</p>
+<p>引数をエコーするメインクラス Demo の場合、以下のようになる:</p>
 <pre><code class="language-bash">$ sbt
 &gt; run2 a b -- c d
 [info] Running Demo c d
@@ -313,17 +312,17 @@ d
 a
 b
 </code></pre>
-<h2 id="preapplying-input"><a class="header" href="#preapplying-input">Preapplying input</a></h2>
-<p>Because <code>InputTasks</code> are built from <code>Parsers</code>, it is possible to generate a new <code>InputTask</code> by applying some input programmatically. (It is also possible to generate a <code>Task</code>, which is covered in the next section.) Two convenience methods are provided on <code>InputTask[T]</code> and <code>Initialize[InputTask[T]]</code> that accept the String to apply.</p>
+<h2 id="入力の事前適用"><a class="header" href="#入力の事前適用">入力の事前適用</a></h2>
+<p><code>InputTask</code> は <code>Parser</code> から構築されるため、プログラムで入力を適用して新しい <code>InputTask</code> を生成できる。（<code>Task</code> を生成することも可能で、次セクションで説明する。）適用する String を受け取る 2 つの便利メソッドが <code>InputTask[T]</code> と <code>Initialize[InputTask[T]]</code> に用意されている。</p>
 <ul>
-<li><code>partialInput</code> applies the input and allows further input, such as from the command line</li>
-<li><code>fullInput</code> applies the input and terminates parsing, so that further input is not accepted</li>
+<li><code>partialInput</code> は入力を適用し、コマンドラインなどからの追加入力を許可する</li>
+<li><code>fullInput</code> は入力を適用してパースを終了し、追加入力を受け付けない</li>
 </ul>
-<p>In each case, the input is applied to the input task's parser. Because input tasks handle all input after the task name, they usually require initial whitespace to be provided in the input.</p>
-<p>Consider the example in the previous section. We can modify it so that we:</p>
+<p>いずれの場合も、入力は インプットタスク のパーサーに適用される。インプットタスク はタスク名以降のすべての入力を扱うため、入力に先頭の空白を含める必要があることが多い。</p>
+<p>前セクションの例を考える。以下のように変更できる:</p>
 <ul>
-<li>Explicitly specify all of the arguments to the first <code>run</code>. We use <code>name</code> and <code>version</code> to show that settings can be used to define and modify parsers.</li>
-<li>Define the initial arguments passed to the second <code>run</code>, but allow further input on the command line.</li>
+<li>最初の <code>run</code> への引数をすべて明示的に指定する。<code>name</code> と <code>version</code> を使って、セッティングでパーサーを定義・変更できることを示す。</li>
+<li>2 番目の <code>run</code> に渡す初期引数を定義するが、コマンドラインからの追加入力を許可する。</li>
 </ul>
 <div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
 <div class="admonition-title">
@@ -333,8 +332,8 @@ b
 <a class="admonition-anchor-link" href="#admonition-note"></a>
 </div>
 <div>
-<p>If the input derives from settings you need to use, for
-example, <code>Def.taskDyn { ... }.value</code></p>
+<p>入力がセッティングに由来する場合は、例えば <code>Def.taskDyn { ... }.value</code> を
+使用する必要がある。</p>
 </div>
 </div>
 <pre><code class="language-scala">lazy val run2 = inputKey[Unit]("Runs the main class twice: " +
@@ -353,7 +352,7 @@ run2 := {
    val two = (Compile / run).partialInput(secondInput).evaluated
 }
 </code></pre>
-<p>For a main class Demo that echoes its arguments, this looks like:</p>
+<p>引数をエコーするメインクラス Demo の場合、以下のようになる:</p>
 <pre><code class="language-bash">$ sbt
 &gt; run2 green
 [info] Running Demo demo 1.0
@@ -364,8 +363,8 @@ red
 blue
 green
 </code></pre>
-<h2 id="get-a-task-from-an-inputtask"><a class="header" href="#get-a-task-from-an-inputtask">Get a Task from an InputTask</a></h2>
-<p>The previous section showed how to derive a new <code>InputTask</code> by applying input. In this section, applying input produces a <code>Task</code>. The <code>toTask</code> method on <code>Initialize[InputTask[A1]]</code> accepts the <code>String</code> input to apply and produces a task that can be used normally. For example, the following defines a plain task <code>runFixed</code> that can be used by other tasks or run directly without providing any input:</p>
+<h2 id="inputtask-から-task-を取得する"><a class="header" href="#inputtask-から-task-を取得する">InputTask から Task を取得する</a></h2>
+<p>前セクションでは入力を適用して新しい <code>InputTask</code> を導出する方法を示した。このセクションでは、入力を適用すると <code>Task</code> が生成される。<code>Initialize[InputTask[A1]]</code> の <code>toTask</code> メソッドは適用する <code>String</code> 入力を受け取り、通常通り使用できるタスクを生成する。例えば、以下は他のタスクから使用したり、入力を渡さずに直接実行できる通常のタスク <code>runFixed</code> を定義する:</p>
 <pre><code class="language-scala">lazy val runFixed = taskKey[Unit]("A task that hard codes the values to `run`")
 
 runFixed := {
@@ -373,7 +372,7 @@ runFixed := {
    println("Done!")
 }
 </code></pre>
-<p>For a main class Demo that echoes its arguments, running <code>runFixed</code> looks like:</p>
+<p>引数をエコーするメインクラス Demo の場合、<code>runFixed</code> の実行は以下のようになる:</p>
 <pre><code class="language-bash">$ sbt
 &gt; runFixed
 [info] Running Demo blue green
@@ -381,7 +380,7 @@ blue
 green
 Done!
 </code></pre>
-<p>Each call to <code>toTask</code> generates a new task, but each task is configured the same as the original <code>InputTask</code> (in this case, <code>run</code>) but with different input applied. For example:</p>
+<p><code>toTask</code> の各呼び出しは新しいタスクを生成するが、各タスクは元の <code>InputTask</code> （この場合は <code>run</code>）と同じように設定され、異なる入力が適用される。例:</p>
 <pre><code class="language-scala">lazy val runFixed2 = taskKey[Unit]("A task that hard codes the values to `run`")
 
 run / fork := true
@@ -392,7 +391,7 @@ runFixed2 := {
    println("Done!")
 }
 </code></pre>
-<p>The different <code>toTask</code> calls define different tasks that each run the project's main class in a new jvm. That is, the <code>fork</code> setting configures both, each has the same classpath, and each run the same main class. However, each task passes different arguments to the main class. For a main class Demo that echoes its arguments, the output of running <code>runFixed2</code> might look like:</p>
+<p>異なる <code>toTask</code> 呼び出しは、それぞれ新しい JVM でプロジェクトのメインクラスを実行する異なるタスクを定義する。つまり、<code>fork</code> セッティングが両方に適用され、同じクラスパスを持ち、同じメインクラスを実行する。ただし、各タスクはメインクラスに異なる引数を渡す。引数をエコーするメインクラス Demo の場合、<code>runFixed2</code> の実行出力は以下のようになる:</p>
 <pre><code class="language-bash">$ sbt
 &gt; runFixed2
 [info] Running Demo blue green
