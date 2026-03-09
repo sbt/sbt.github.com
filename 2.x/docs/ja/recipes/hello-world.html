@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Write hello world - The Book of sbt</title>
+        <title>Hello World の書き方 - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -208,48 +208,48 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="how-to-write-hello-world"><a class="header" href="#how-to-write-hello-world">How to write hello world</a></h1>
-<h2 id="objective"><a class="header" href="#objective">Objective</a></h2>
-<p>I want to write a hello world program in Scala, and run it.</p>
-<h2 id="steps"><a class="header" href="#steps">Steps</a></h2>
+                        <h1 id="hello-world-の書き方"><a class="header" href="#hello-world-の書き方">Hello World の書き方</a></h1>
+<h2 id="目的"><a class="header" href="#目的">目的</a></h2>
+<p>Scala で Hello World プログラムを書き、実行したい。</p>
+<h2 id="手順"><a class="header" href="#手順">手順</a></h2>
 <ol>
 <li>
-<p>Create a fresh directory, like <code>hello_scala/</code></p>
+<p><code>hello_scala/</code> のような新規ディレクトリを作成する</p>
 </li>
 <li>
-<p>Create a directory named <code>project/</code> under <code>hello_scala/</code>, and create <code>project/build.properties</code> with</p>
+<p><code>hello_scala/</code> の下に <code>project/</code> ディレクトリを作成し、<code>project/build.properties</code> を次の内容で作成する:</p>
 <pre><code>sbt.version=2.0.0-RC9
 </code></pre>
 </li>
 <li>
-<p>Under <code>hello_scala/</code>, create <code>build.sbt</code>:</p>
+<p><code>hello_scala/</code> の下に <code>build.sbt</code> を作成する:</p>
 <pre><code class="language-scala">scalaVersion := "3.8.1"
 </code></pre>
 </li>
 <li>
-<p>Under <code>hello_scala/</code>, create <code>Hello.scala</code>:</p>
+<p><code>hello_scala/</code> の下に <code>Hello.scala</code> を作成する:</p>
 <pre><code class="language-scala"> @main def main(args: String*): Unit =
    println(s"Hello ${args.mkString}")
 </code></pre>
 </li>
 <li>
-<p>Navigate to <code>hello_scala/</code> from the terminal, and run <code>sbt</code>:</p>
+<p>ターミナルで <code>hello_scala/</code> に移動し、<code>sbt</code> を実行する:</p>
 <pre><code class="language-bash">$ sbt
 </code></pre>
 </li>
 <li>
-<p>When the prompt appears, type <code>run</code>:</p>
+<p>プロンプトが表示されたら <code>run</code> と入力する:</p>
 <pre><code class="language-scala">sbt:hello_scala&gt; run
 </code></pre>
 </li>
 <li>
-<p>Type <code>exit</code> to exit the sbt shell:</p>
+<p>sbt シェルを終了するには <code>exit</code> と入力する:</p>
 <pre><code class="language-scala">sbt:hello_scala&gt; exit
 </code></pre>
 </li>
 </ol>
-<h2 id="alternatives"><a class="header" href="#alternatives">Alternatives</a></h2>
-<p>When you're in a hurry, you can run <code>sbt init</code> in a fresh directory, and select the first template.</p>
+<h2 id="代替方法"><a class="header" href="#代替方法">代替方法</a></h2>
+<p>急ぐ場合は、新規ディレクトリで <code>sbt init</code> を実行し、最初のテンプレートを選択すればよい。</p>
 
                     </main>
 
