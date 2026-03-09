@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Artifact - The Book of sbt</title>
+        <title>アーティファクト - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -208,11 +208,11 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="artifact"><a class="header" href="#artifact">Artifact</a></h1>
+                        <h1 id="アーティファクト"><a class="header" href="#アーティファクト">アーティファクト</a></h1>
 <h2 id="説明"><a class="header" href="#説明">説明</a></h2>
-<p>An artifact is a single file ready for publishing a specific version of a subproject. This is a concept that originated in <a href="https://maven.apache.org/ref/3.9.11/maven-core/artifact-handlers.html">Apache Maven</a> and <a href="https://ant.apache.org/ivy/history/2.3.0/terminology.html#artifact">Ivy</a>.</p>
-<p>In the JVM ecosystem, common artifacts are Java archives, or JAR files. Compressed package formats are often preferred because they are easier to manage, download, and store.</p>
-<p>To illustrate, the following is a list of artifacts for a library, enumerated in an <code>ivy.xml</code> file:</p>
+<p>サブプロジェクトの特定バージョンを公開するためのファイルは、特別に「アーティファクト」と呼ばれる。この概念は <a href="https://maven.apache.org/ref/3.9.11/maven-core/artifact-handlers.html">Apache Maven</a> と <a href="https://ant.apache.org/ivy/history/2.3.0/terminology.html#artifact">Ivy</a> に由来する。</p>
+<p>JVM エコシステムでは、一般的なアーティファクトは Java アーカイブ（JAR ファイル）である。管理・ダウンロード・保存が容易なため、圧縮パッケージ形式が好まれる。</p>
+<p>例として、ライブラリのアーティファクト一覧を <code>ivy.xml</code> ファイルで示す:</p>
 <pre><code class="language-xml">  &lt;publications&gt;
     &lt;artifact name="core_3" type="jar" ext="jar" conf="compile"/&gt;
     &lt;artifact e:classifier="sources" name="core_3" type="src" ext="jar" conf="sources"/&gt;
@@ -220,28 +220,28 @@
     &lt;artifact name="core_3" type="pom" ext="pom" conf="pom"/&gt;
   &lt;/publications&gt;
 </code></pre>
-<p>This shows that an artifact has a name, a type, and an extention, and optionally a classifier.</p>
+<p>ここから、アーティファクトは name、type、extension という属性を持ち、オプションで classifier があることが分かる。</p>
 <ul>
-<li><strong>name</strong>. This is going to be the same as the subproject's module name.</li>
-<li><strong>type</strong>. The functional category of the artifact, such as <code>jar</code>, <code>src</code>, and <code>doc</code>.</li>
-<li><strong>extension</strong>. The file extention, such as <code>jar</code>, <code>war</code>, <code>zip</code>, <code>xml</code> etc.</li>
-<li><strong>classifier</strong>. In Maven, classifier is an arbitrary string that can be appended for an alternative or secondary artifact.</li>
+<li><strong>name</strong>。サブプロジェクトのモジュール名と同じになる。</li>
+<li><strong>type</strong>。アーティファクトの機能カテゴリ。<code>jar</code>、<code>src</code>、<code>doc</code> など。</li>
+<li><strong>extension</strong>。<code>jar</code>、<code>war</code>、<code>zip</code>、<code>xml</code> などのファイル拡張子。</li>
+<li><strong>classifier</strong>。Maven では、代替または二次アーティファクト用に付加できる任意の文字列である。</li>
 </ul>
-<h3 id="selecting-default-artifacts"><a class="header" href="#selecting-default-artifacts">Selecting default artifacts</a></h3>
-<p>By default, the published artifacts are:</p>
+<h3 id="デフォルトアーティファクトの選択"><a class="header" href="#デフォルトアーティファクトの選択">デフォルト・アーティファクトの選択</a></h3>
+<p>デフォルトで公開されるアーティファクトは以下の通りである:</p>
 <ol>
-<li>The main binary JAR</li>
-<li>The JAR containing the main sources and resources</li>
-<li>The JAR containing the API documentation</li>
+<li>メインのバイナリ JAR</li>
+<li>メインのソースとリソースを含む JAR</li>
+<li>API ドキュメントを含む JAR</li>
 </ol>
-<p>You can add artifacts for the test classes, sources, or API or you can disable some of the main artifacts.</p>
-<p>To add all <code>Test</code> artifacts:</p>
+<p>テストクラス、ソース、API 用のアーティファクトを追加したり、メインアーティファクトの一部を無効にしたりできる。</p>
+<p>すべての <code>Test</code> アーティファクトを追加する場合:</p>
 <pre><code class="language-scala">lazy val app = (project in file("app"))
   .settings(
     Test / publishArtifact := true,
   )
 </code></pre>
-<p>To add them individually:</p>
+<p>個別に追加する場合:</p>
 <pre><code class="language-scala">lazy val app = (project in file("app"))
   .settings(
     // enable publishing the jar produced by `Test/package`
@@ -254,7 +254,7 @@
     Test / packageSrc / publishArtifact := true,
   )
 </code></pre>
-<p>To disable main artifacts individually:</p>
+<p>メインアーティファクトを個別に無効にする場合:</p>
 <pre><code class="language-scala">lazy val app = (project in file("app"))
   .settings(
     // disable publishing the main jar produced by `package`
@@ -267,22 +267,22 @@
     Compile / packageSrc / publishArtifact := false,
   )
 </code></pre>
-<h3 id="modifying-default-artifacts"><a class="header" href="#modifying-default-artifacts">Modifying default artifacts</a></h3>
-<p>Each built-in artifact has several configurable settings in addition to <code>publishArtifact</code>. The basic ones are <code>artifact</code> (of type <code>SettingKey[Artifact]</code>), <code>mappings</code> (of type <code>TaskKey[(File, String)]</code>), and <code>artifactPath</code> (of type <code>SettingKey[File]</code>). They are scoped by <code>(Config / &lt;task&gt;)</code> as indicated in the previous section.</p>
-<p>To modify the type of the main artifact, for example:</p>
+<h3 id="デフォルトアーティファクトの変更"><a class="header" href="#デフォルトアーティファクトの変更">デフォルト・アーティファクトの変更</a></h3>
+<p>組み込みアーティファクトには <code>publishArtifact</code> に加え、いくつかの設定可能なセッティングがある。基本となるのは <code>artifact</code>（型 <code>SettingKey[Artifact]</code>）、<code>mappings</code>（型 <code>TaskKey[(File, String)]</code>）、<code>artifactPath</code>（型 <code>SettingKey[File]</code>）である。前セクションで示した通り、<code>(Config / &lt;task&gt;)</code> でスコープされる。</p>
+<p>メインアーティファクトの type を変更する例:</p>
 <pre><code class="language-scala">Compile / packageBin / artifact := {
   val prev: Artifact = (Compile / packageBin / artifact).value
   prev.withType("bundle")
 }
 </code></pre>
-<p>The generated artifact name is determined by the <code>artifactName</code> setting. This setting is of type <code>(ScalaVersion, ModuleID, Artifact) =&gt; String</code>. The ScalaVersion argument provides the full Scala version String and the binary compatible part of the version String. The String result is the name of the file to produce. The default implementation is <code>Artifact.artifactName _</code>. The function may be modified to produce different local names for artifacts without affecting the published name, which is determined by the <code>artifact</code> definition combined with the repository pattern.</p>
-<p>For example, to produce a minimal name without a classifier or cross path:</p>
+<p>生成されるアーティファクト名は <code>artifactName</code> セッティングで決まる。このセッティングの型は <code>(ScalaVersion, ModuleID, Artifact) =&gt; String</code> である。ScalaVersion 引数は Scala のフルバージョン文字列とバイナリ互換部分を提供する。結果の文字列は生成するファイル名である。デフォルト実装は <code>Artifact.artifactName _</code> である。この関数を変更すると、<code>artifact</code> 定義とリポジトリパターンで決まる公開名に影響せず、ローカル名を変えられる。</p>
+<p>例えば、classifier や cross path なしの最小限の名前を生成する場合:</p>
 <pre><code class="language-scala">artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) =&gt;
   artifact.name + "-" + module.revision + "." + artifact.extension
 }
 </code></pre>
-<p>(Note that in practice you rarely want to drop the classifier.)</p>
-<p>Finally, you can get the <code>(Artifact, File)</code> pair for the artifact by mapping the <code>packagedArtifact</code> task. Note that if you don't need the <code>Artifact</code>, you can get just the File from the package task (<code>package</code>, <code>packageDoc</code>, or <code>packageSrc</code>). In both cases, mapping the task to get the file ensures that the artifact is generated first and so the file is guaranteed to be up-to-date.</p>
+<p>（実際には classifier を削除することはほとんどない。）</p>
+<p>最後に、<code>packagedArtifact</code> タスクをマッピングしてアーティファクトの <code>(Artifact, File)</code> ペアを取得できる。<code>Artifact</code> が不要な場合は、パッケージタスク（<code>package</code>、<code>packageDoc</code>、<code>packageSrc</code>）から File のみ取得できる。いずれの場合も、タスクをマッピングしてファイルを取得すると、アーティファクトが先に生成され、ファイルが最新であることが保証される。</p>
 <p>例:</p>
 <pre><code class="language-scala">val myTask = taskKey[Unit]("My task.")
 
@@ -292,9 +292,9 @@ myTask :=  {
   println("Packaged file: " + file.getAbsolutePath)
 }
 </code></pre>
-<h3 id="defining-custom-artifacts"><a class="header" href="#defining-custom-artifacts">Defining custom artifacts</a></h3>
-<p>In addition to configuring the built-in artifacts, you can declare other artifacts to publish. Multiple artifacts are allowed when using Ivy metadata, but a Maven POM file only supports distinguishing artifacts based on classifiers and these are not recorded in the POM.</p>
-<p>Basic <code>Artifact</code> construction look like:</p>
+<h3 id="カスタムアーティファクトの定義"><a class="header" href="#カスタムアーティファクトの定義">カスタムアーティファクトの定義</a></h3>
+<p>組み込みアーティファクトの設定に加え、公開する他のアーティファクトを宣言できる。Ivy メタデータでは複数アーティファクトが許可されるが、Maven POM ファイルは classifier による区別のみサポートし、これらは POM に記録されない。</p>
+<p>基本的な <code>Artifact</code> の構築は以下のようになる:</p>
 <pre><code class="language-scala">Artifact("name", "type", "extension")
 Artifact("name", "classifier")
 Artifact("name", url: URL)
@@ -305,8 +305,8 @@ Artifact("name", Map("extra1" -&gt; "value1", "extra2" -&gt; "value2"))
 Artifact("myproject", "image", "jpg")
 Artifact("myproject", "jdk15")
 </code></pre>
-<p>See the <a href="https://ant.apache.org/ivy/history/2.3.0/ivyfile/dependency-artifact.html">Ivy documentation</a> for more details on artifacts. See the <a href="../api/sbt/librarymanagement/Artifact$.html">Artifact API</a> for combining the parameters above and specifying [Configurations] and extra attributes.</p>
-<p>To declare these artifacts for publishing, map them to the task that generates the artifact:</p>
+<p>アーティファクトの詳細は<a href="https://ant.apache.org/ivy/history/2.3.0/ivyfile/dependency-artifact.html">Ivy ドキュメント</a>を参照。上記パラメータの組み合わせと [Configurations] および追加属性の指定は<a href="../api/sbt/librarymanagement/Artifact$.html">Artifact API</a>を参照。</p>
+<p>これらのアーティファクトを公開用に宣言するには、アーティファクトを生成するタスクにマッピングする:</p>
 <pre><code class="language-scala">val myImageTask = taskKey[File](...)
 
 myImageTask := {
@@ -316,14 +316,14 @@ myImageTask := {
 
 addArtifact(Artifact("myproject", "image", "jpg"), myImageTask)
 </code></pre>
-<p><code>addArtifact</code> returns a sequence of settings (wrapped in a <a href="../api/sbt/internal/util/Init$SettingsDefinition.html">SettingsDefinition</a>). In a full build configuration, usage looks like:</p>
+<p><code>addArtifact</code> はセッティングのシーケンスを返す（<a href="../api/sbt/internal/util/Init$SettingsDefinition.html">SettingsDefinition</a> でラップされる）。完全なビルドコンフィギュレーションでは、以下のように使用する:</p>
 <pre><code class="language-scala">lazy val app = (project in file("app"))
   .settings(
     addArtifact(...)
   )
 </code></pre>
-<h3 id="publishing-war-files"><a class="header" href="#publishing-war-files">Publishing .war files</a></h3>
-<p>A common use case for web applications is to publish the <code>.war</code> file instead of the <code>.jar</code> file.</p>
+<h3 id="war-ファイルの公開"><a class="header" href="#war-ファイルの公開">.war ファイルの公開</a></h3>
+<p>Web アプリケーションの一般的な用途として、<code>.jar</code> ファイルの代わりに <code>.war</code> ファイルを公開する。</p>
 <pre><code class="language-scala">lazy val app = (project in file("app"))
   .settings(
     // disable .jar publishing
@@ -339,15 +339,15 @@ addArtifact(Artifact("myproject", "image", "jpg"), myImageTask)
     addArtifact(Compile / packageWar / artifact, packageWar),
   )
 </code></pre>
-<h3 id="using-dependencies-with-artifacts"><a class="header" href="#using-dependencies-with-artifacts">Using dependencies with artifacts</a></h3>
-<p>To specify the artifacts to use from a dependency that has custom or multiple artifacts, use the <code>artifacts</code> method on your dependencies. For example:</p>
+<h3 id="アーティファクト付きライブラリ依存性の使用"><a class="header" href="#アーティファクト付きライブラリ依存性の使用">アーティファクト付きライブラリ依存性の使用</a></h3>
+<p>カスタムまたは複数アーティファクトを持つライブラリ依存性から使用するアーティファクトを指定するには、ライブラリ依存性の <code>artifacts</code> メソッドを使用する。例:</p>
 <pre><code class="language-scala">libraryDependencies += ("org" % "name" % "rev").artifacts(Artifact("name", "type", "ext"))
 </code></pre>
-<p>The <code>from</code> and <code>classifer</code> methods (described on the <a href="./sbt-update.html">sbt update</a> page) are actually convenience methods that translate to <code>artifacts</code>:</p>
+<p><code>from</code> と <code>classifier</code> メソッド（<a href="./sbt-update.html">sbt update</a> で説明）は、実際には<code>artifacts</code> に変換される便利メソッドである:</p>
 <pre><code class="language-scala">def from(url: String) = artifacts(Artifact(name, new URL(url)))
 def classifier(c: String) = artifacts(Artifact(name, c))
 </code></pre>
-<p>That is, the following two dependency declarations are equivalent:</p>
+<p>つまり、以下の 2つのライブラリ依存性宣言は等価である:</p>
 <pre><code class="language-scala">libraryDependencies += ("org.testng" % "testng" % "5.7").classifier("jdk15")
 
 libraryDependencies += ("org.testng" % "testng" % "5.7").artifacts(Artifact("testng", "jdk15"))
