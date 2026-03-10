@@ -267,7 +267,14 @@ LocalRootProject / publish / skip := true
 <h2 id="changes-to-exportjars"><a class="header" href="#changes-to-exportjars">Changes to <code>exportJars</code></a></h2>
 <p><code>exportJars</code> defaults to <code>true</code>, was <code>false</code>. This might break <code>getResource("/")</code> and <code>resource.toURI</code>. Set <code>exportJars := false</code> if this logic is broken in your build, producing <code>NullPointerException</code>s and <code>FileSystemNotFoundException</code>s. Set <code>exportJars := false</code> in your build if you want to keep the old behavior. The change was introduced by <a href="https://github.com/sbt/sbt/pull/7464">sbt/sbt#7464</a>, see also <a href="https://eed3si9n.com/sbt-remote-cache/">blog</a>.</p>
 <h2 id="migrating-to-cached-tasks"><a class="header" href="#migrating-to-cached-tasks">Migrating to cached tasks</a></h2>
-<p>See <a href="../reference/cached-task.html">Cached task</a> reference for details, including the way to opt out of caching.</p>
+<p>In sbt 2.x, all tasks are cached by default. To participate in caching, the task result type must provide a given for <code>sjsonnew.JsonFormat</code>. Any task whose result type lacks <code>JsonFormat</code> (e.g. complex objects like <code>ParadoxProcessor</code>, <code>ClassLoader</code>, <code>Seq[PathMapping]</code>, or function types) will fail at build load time in sbt 2.</p>
+<p>If you don't want to define the given, the easiest way to migrate is to wrap the tasks with <code>Def.uncached(...)</code> so sbt 2 skips caching and always re-executes them:</p>
+<pre><code class="language-scala">myTask := Def.uncached {
+  // task body returning a non-serializable type
+}
+</code></pre>
+<p>When considering caching for a task, watch out for side-effecting tasks. When sbt 2 restores a task result from its disk cache, it returns the cached value without re-executing the task body. Any side effect (e.g. writing files, syncing mappings) is silently skipped. If a task is meant to produce a side effect every time it runs, wrap it in <code>Def.uncached(...)</code> so sbt 2 always re-executes it.</p>
+<p>The <a href="https://github.com/sbt/sbt2-compat">sbt2-compat</a> plugin provides <code>Def.uncached</code> as a compatibility shim on sbt 1.x (where it is a no-op). See <a href="../reference/cached-task.html">Cached task</a> reference for details, including build-wide and per-task opt-out options.</p>
 <h2 id="migration-away-from-integrationtest"><a class="header" href="#migration-away-from-integrationtest">Migration away from IntegrationTest</a></h2>
 <p>To migrate away from the <code>IntegrationTest</code> configuration, create a separate subproject and implement it as normal test.</p>
 <h2 id="migrating-to-slash-syntax"><a class="header" href="#migrating-to-slash-syntax">Migrating to slash syntax</a></h2>
@@ -327,59 +334,61 @@ $ exists target/**/src_managed/bar.txt
 # either is ok
 $ exists target/**/proj/src_managed/bar.txt || proj/target/**/src_managed/bar.txt
 </code></pre>
+<p>In sbt 1.x, <code>target.value</code> resolves to the project root <code>target/</code> directory. In sbt 2.x, it resolves to <code>target/out/jvm/scala-&lt;ver&gt;/&lt;project-name&gt;</code> instead. Plugins should be aware of this change during migration.</p>
 <h2 id="the-plugincompat-technique"><a class="header" href="#the-plugincompat-technique">The PluginCompat technique</a></h2>
-<p>To use the same <code>*.scala</code> source but target both sbt 1.x and 2.x, we can create a shim, for example an object named <code>PluginCompat</code> in both <code>src/main/scala-2.12/</code> and <code>src/main/scala-3/</code>.</p>
-<h3 id="migrating-classpath-type"><a class="header" href="#migrating-classpath-type">Migrating Classpath type</a></h3>
-<p>sbt 2.x changed the <code>Classpath</code> type to be an alias of the <code>Seq[Attributed[xsbti.HashedVirtualFileRef]]</code> type. The following is a shim created to work with classpaths from both sbt 1.x and 2.x.</p>
-<pre><code class="language-scala">// src/main/scala-3/PluginCompat.scala
-
-package sbtfoo
-
-import java.nio.file.{ Path =&gt; NioPath }
-import sbt.*
-import xsbti.{ FileConverter, HashedVirtualFileRef, VirtualFile }
-
-private[sbtfoo] object PluginCompat:
-  type FileRef = HashedVirtualFileRef
-  type Out = VirtualFile
-
-  def toNioPath(a: Attributed[HashedVirtualFileRef])(using conv: FileConverter): NioPath =
-    conv.toPath(a.data)
-  inline def toFile(a: Attributed[HashedVirtualFileRef])(using conv: FileConverter): File =
-    toNioPath(a).toFile()
-  def toNioPaths(cp: Seq[Attributed[HashedVirtualFileRef]])(using conv: FileConverter): Vector[NioPath] =
-    cp.map(toNioPath).toVector
-  inline def toFiles(cp: Seq[Attributed[HashedVirtualFileRef]])(using conv: FileConverter): Vector[File] =
-    toNioPaths(cp).map(_.toFile())
-end PluginCompat
+<p>To use the same <code>*.scala</code> source but target both sbt 1.x and 2.x, we can create a shim, for example an object named <code>PluginCompat</code> in both <code>src/main/scala-2.12/</code> and <code>src/main/scala-3/</code>. APIs commonly encountered during migrations are abstracted into the <a href="https://github.com/sbt/sbt2-compat">sbt2-compat</a> plugin that can be used to avoid creating the shims manually. To use it in your sbt plugin, you can add it to your sbt plugin's <code>build.sbt</code>:</p>
+<pre><code class="language-scala">addSbtPlugin("com.github.sbt" % "sbt2-compat" % "&lt;version&gt;")
 </code></pre>
-<p>and here's for sbt 1.x:</p>
+<p>And import and use the conversion methods in your shared source:</p>
+<pre><code class="language-scala">import sbtcompat.PluginCompat._
+
+// Use the conversion methods here
+</code></pre>
+<p>You can read more about <code>sbt2-compat</code>, the <code>PluginCompat</code> pattern and how to use them the following blog article: <a href="https://www.scala-lang.org/blog/2026/03/02/sbt2-compat.html">Migrating sbt plugins to sbt 2 with sbt2-compat plugin</a>.</p>
+<h3 id="migrating-classpath-type"><a class="header" href="#migrating-classpath-type">Migrating Classpath type</a></h3>
+<p>sbt 2.x changed the <code>Classpath</code> type to be an alias of <code>Seq[Attributed[xsbti.HashedVirtualFileRef]]</code> instead of <code>Seq[Attributed[File]]</code>. Any plugin that needs <code>File</code> or <code>Path</code> for I/O (classpath URLs, mappings, sync, validation) must convert these references. With <code>sbt2-compat</code> added and imported as above, use <code>toNioPaths</code> and <code>toFiles</code>, for example:</p>
+<pre><code class="language-scala">import sbtcompat.PluginCompat._
+
+myTask := {
+  implicit val conv: FileConverter = fileConverter.value
+  val paths = toNioPaths((Compile / dependencyClasspath).value)
+  val files = toFiles((Compile / dependencyClasspath).value)
+  // ...
+}
+</code></pre>
+<p><code>sbt2-compat</code> also provides <code>toNioPath</code>, <code>toFile</code>, <code>toFileRefsMapping</code>, <code>Def.uncached</code> and other convenience methods to be used in the shared sources. See the <a href="https://github.com/sbt/sbt2-compat">sbt2-compat README</a> for the up-to-date documentation on the API provided by the plugin.</p>
+<h3 id="defining-your-own-plugincompat-shims"><a class="header" href="#defining-your-own-plugincompat-shims">Defining your own PluginCompat shims</a></h3>
+<p>For the APIs broken between sbt 1.x and 2.x that are not covered by <code>sbt2-compat</code>, you can define your own <code>PluginCompat</code> shims by creating separate source files under <code>src/main/scala-2.12/PluginCompat.scala</code> and <code>src/main/scala-3/PluginCompat.scala</code>. For example:</p>
 <pre><code class="language-scala">// src/main/scala-2.12/PluginCompat.scala
 
 package sbtfoo
 
-import sbt.*
+import sbt._
+import Keys._
 
-private[sbtfoo] object PluginCompat {
-  type FileRef = java.io.File
-  type Out = java.io.File
-
-  def toNioPath(a: Attributed[File])(implicit conv: FileConverter): NioPath =
-    a.data.toPath()
-  def toFile(a: Attributed[File])(implicit conv: FileConverter): File =
-    a.data
-  def toNioPaths(cp: Seq[Attributed[File]])(implicit conv: FileConverter): Vector[NioPath] =
-    cp.map(_.data.toPath()).toVector
-  def toFiles(cp: Seq[Attributed[File]])(implicit conv: FileConverter): Vector[File] =
-    cp.map(_.data).toVector
-
-  // This adds `Def.uncached(...)`
-  implicit class DefOp(singleton: Def.type) {
-    def uncached[A1](a: A1): A1 = a
-  }
+object PluginCompat {
+  def someSharedMethod(): Unit = ...
 }
 </code></pre>
-<p>Now we can import <code>PluginCompat.*</code> and use <code>toNioPaths(...)</code> etc to absorb the differences between sbt 1.x and 2.x. The above demonstrates how we can absorb the classpath type change, and convert it into a vector of NIO Paths.</p>
+<pre><code class="language-scala">// src/main/scala-3/PluginCompat.scala
+
+package sbtfoo
+
+import sbt._
+import Keys._
+
+object PluginCompat {
+  def someSharedMethod(): Unit = ...
+}
+</code></pre>
+<p>Then use your own <code>PluginCompat</code> shims in your sbt plugin:</p>
+<pre><code class="language-scala">import sbtfoo.PluginCompat._
+
+myTask := {
+  someSharedMethod()
+}
+</code></pre>
+<p>This pattern is compatible with <code>sbt2-compat</code> and can be used alongside it to absorb the differences between sbt 1.x and 2.x.</p>
 
                     </main>
 
