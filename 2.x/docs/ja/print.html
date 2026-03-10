@@ -4673,27 +4673,27 @@ releaseStepCommand("sonaRelease"),
 ...
 ```
 -->
-<div style="break-before: page; page-break-before: always;"></div><h1 id="use-sbt-as-metals-build-server"><a class="header" href="#use-sbt-as-metals-build-server">Use sbt as Metals build server</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="metals-のビルドサーバーとして-sbt-を使う"><a class="header" href="#metals-のビルドサーバーとして-sbt-を使う">Metals のビルドサーバーとして sbt を使う</a></h1>
 <h2 id="目的-2"><a class="header" href="#目的-2">目的</a></h2>
-<p>I want to use <a href="https://scalameta.org/metals/">Metals</a> on VS Code with sbt as the build server.</p>
+<p>VS Code で <a href="https://scalameta.org/metals/">Metals</a> のビルドサーバーとして sbt を使いたい。</p>
 <h2 id="手順-2"><a class="header" href="#手順-2">手順</a></h2>
-<p>To use Metals on VS Code:</p>
+<p>VS Code で Metals を使うには:</p>
 <ol>
-<li>Install Metals from Extensions tab:<br> <img src="recipes/../files/metals0.png" alt="Metals" /></li>
-<li>Open a directory containing a <code>build.sbt</code> file.</li>
-<li>From the menubar, run View &gt; Command Palette... (<code>Cmd-Shift-P</code> on macOS) "Metals: Switch build server", and select "sbt"<br> <img src="recipes/../files/metals2.png" alt="Metals" /></li>
-<li>Once the import process is complete, open a Scala file to see that code completion works:<br> <img src="recipes/../files/metals3.png" alt="Metals" /></li>
+<li>Extensions タブから Metals をインストールする:<br> <img src="recipes/../files/metals0.png" alt="Metals" /></li>
+<li><code>build.sbt</code> を含むディレクトリを開く。</li>
+<li>メニューバーから View &gt; Command Palette...（macOS では <code>Cmd-Shift-P</code>）から「Metals: Switch build server」を実行し「sbt」を選択する:<br> <img src="recipes/../files/metals2.png" alt="Metals" /></li>
+<li>インポートが完了したら、Scala ファイルを開いてコード補完が動作することを確認する:<br> <img src="recipes/../files/metals3.png" alt="Metals" /></li>
 </ol>
-<p>Use the following setting to opt-out some of the subprojects from BSP.</p>
+<p>一部のサブプロジェクトを BSP から除外するには、次のセッティングを使う:</p>
 <pre><code class="language-scala">bspEnabled := false
 </code></pre>
-<p>When you make changes to the code and save them (<code>Cmd-S</code> on macOS), Metals will invoke sbt to do the actual building work.</p>
-<h4 id="logging-into-sbt-session"><a class="header" href="#logging-into-sbt-session">Logging into sbt session</a></h4>
-<p>While Metals uses sbt as the build server, we can also log into the same sbt session using a thin client.</p>
+<p>コードを変更して保存すると（macOS では <code>Cmd-S</code>）、Metals が sbt を呼び出して実際のビルドを行う。</p>
+<h4 id="sbt-セッションへのログイン"><a class="header" href="#sbt-セッションへのログイン">sbt セッションへのログイン</a></h4>
+<p>Metals が sbt をビルドサーバーとして使っている間、シンクライアントで同じ sbt セッションにログインすることもできる。</p>
 <ul>
-<li>From Terminal section, type in <code>sbt --client</code><br> <img src="recipes/../files/metals6.png" alt="Metals" /></li>
+<li>Terminal セクションで <code>sbt --client</code> と入力する:<br> <img src="recipes/../files/metals6.png" alt="Metals" /></li>
 </ul>
-<p>This lets you log into the sbt session Metals has started. In there you can call <code>testOnly</code> and other tasks with the code already compiled.</p>
+<p>これで Metals が起動した sbt セッションにログインできる。その中で <code>testOnly</code> や他のタスクを、すでにコンパイル済みのコードに対して呼び出せる。</p>
 <!--
 #### Interactive debugging on VS Code
 
@@ -4705,28 +4705,28 @@ releaseStepCommand("sonaRelease"),
 
 See [Debugging][vscode-debugging] page on VS Code documentation for more details on how to navigate an interactive debugging session.
 -->
-<div style="break-before: page; page-break-before: always;"></div><h1 id="import-to-intellij-idea"><a class="header" href="#import-to-intellij-idea">Import to IntelliJ IDEA</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="intellij-idea-へのインポート"><a class="header" href="#intellij-idea-へのインポート">IntelliJ IDEA へのインポート</a></h1>
 <h2 id="目的-3"><a class="header" href="#目的-3">目的</a></h2>
-<p>I want to import sbt build to IntelliJ IDEA.</p>
+<p>sbt を使ったビルドを IntelliJ IDEA にインポートしたい。</p>
 <h2 id="手順-3"><a class="header" href="#手順-3">手順</a></h2>
-<p><a href="https://www.jetbrains.com/idea/">IntelliJ IDEA</a> is an IDE created by JetBrains, and the Community Edition is open source under Apache v2 license. IntelliJ integrates with many build tools, including sbt, to import the project.</p>
-<p>To import a build to IntelliJ IDEA:</p>
+<p><a href="https://www.jetbrains.com/idea/">IntelliJ IDEA</a> は JetBrains社が開発した IDE で、Community Edition は Apache v2 ライセンスの元で公開されている。IntelliJ は sbt を含む多くのビルドツールと連携してプロジェクトをインポートする。</p>
+<p>IntelliJ IDEA にビルドをインポートするには:</p>
 <ol>
-<li>Install Scala plugin on the Plugins tab:<br> <img src="recipes/../files/intellij1.png" alt="IntelliJ" /></li>
-<li>From Projects, open a directory containing a <code>build.sbt</code> file.<br> <img src="recipes/../files/intellij2.png" alt="IntelliJ" /></li>
-<li>Once the import process is complete, open a Scala file to see that code completion works.</li>
+<li>Plugins タブから Scala プラグインをインストールする:<br> <img src="recipes/../files/intellij1.png" alt="IntelliJ" /></li>
+<li>Projects から <code>build.sbt</code> を含むディレクトリを開く:<br> <img src="recipes/../files/intellij2.png" alt="IntelliJ" /></li>
+<li>インポートが完了したら、Scala ファイルを開いてコード補完が動作することを確認する。</li>
 </ol>
-<p>IntelliJ Scala plugin uses its own lightweight compilation engine to detect errors, which is fast but sometimes incorrect. Per <a href="https://blog.jetbrains.com/scala/2021/07/27/intellij-scala-plugin-2021-2/#Compiler-based_highlighting">compiler-based highlighting</a>, IntelliJ can be configured to use the Scala compiler for error highlighting.</p>
-<h3 id="interactive-debugging-with-intellij-idea"><a class="header" href="#interactive-debugging-with-intellij-idea">Interactive debugging with IntelliJ IDEA</a></h3>
+<p>IntelliJ Scala プラグインは独自の軽量コンパイルエンジンでエラーを検出する。高速だが誤検出することもある。<a href="https://blog.jetbrains.com/scala/2021/07/27/intellij-scala-plugin-2021-2/#Compiler-based_highlighting">compiler-based highlighting</a> に従い、IntelliJ を Scala コンパイラでエラーハイライトするよう設定できる。</p>
+<h3 id="intellij-idea-のデバッガー"><a class="header" href="#intellij-idea-のデバッガー">IntelliJ IDEA のデバッガー</a></h3>
 <ol>
-<li>IntelliJ supports interactive debugging by setting break points in the code:<br> <img src="recipes/../files/intellij4.png" alt="IntelliJ" /></li>
-<li>Interactive debugging can be started by right-clicking on an unit test, and selecting "Debug '&lt;test name&gt;'." Alternatively, you can click the green "run" icon on the left part of the editor near the unit test. When the test hits a break point, you can inspect the values of the variables:<br> <img src="recipes/../files/intellij5.png" alt="IntelliJ" /></li>
+<li>IntelliJ は、コードにブレークポイントを設置できるデバッガーを持つ:<br> <img src="recipes/../files/intellij4.png" alt="IntelliJ" /></li>
+<li>ユニットテストを右クリックして「Debug '&lt;test name&gt;'」を選択すると対話的デバッグを開始できる。または、ユニットテスト近くのエディタ左側の緑の run アイコンをクリックしてもよい。テストがブレークポイントに達すると、変数の値を確認できる:<br> <img src="recipes/../files/intellij5.png" alt="IntelliJ" /></li>
 </ol>
-<p>See <a href="https://www.jetbrains.com/help/idea/debugging-code.html">Debug Code</a> page on IntelliJ documentation for more details on how to navigate an interactive debugging session.</p>
-<h2 id="alternative"><a class="header" href="#alternative">Alternative</a></h2>
-<h3 id="using-sbt-as-intellij-idea-build-server-advanced"><a class="header" href="#using-sbt-as-intellij-idea-build-server-advanced">Using sbt as IntelliJ IDEA build server (advanced)</a></h3>
-<p>Importing the build to IntelliJ means that you're effectively using IntelliJ as the build tool and the compiler while you code (see also <a href="https://blog.jetbrains.com/scala/2021/07/27/intellij-scala-plugin-2021-2/#Compiler-based_highlighting">compiler-based highlighting</a>). While many users are happy with the experience, depending on the code base some of the compilation errors may be false, it may not work well with plugins that generate sources, and generally you might want to code with the identical build semantics as sbt. Thankfully, modern IntelliJ supports alternative <em>build servers</em> including sbt via the <a href="https://build-server-protocol.github.io/">Build Server Protocol</a> (BSP).</p>
-<p>The benefit of using Build Server Protocol (BSP) with IntelliJ is that you're using sbt to do the actual build work, so if you are the kind of programmer who had sbt session up on the side, this avoids double compilation.</p>
+<p>デバッガーセッションの操作方法の詳細は、IntelliJ ドキュメントの<a href="https://pleiades.io/help/idea/debugging-code.html">コードのデバッグ</a>を参照。</p>
+<h2 id="代替方法-1"><a class="header" href="#代替方法-1">代替方法</a></h2>
+<h3 id="intellij-idea-のビルドサーバーとして-sbt-を使う上級者向け"><a class="header" href="#intellij-idea-のビルドサーバーとして-sbt-を使う上級者向け">IntelliJ IDEA のビルドサーバーとして sbt を使う（上級者向け）</a></h3>
+<p>IntelliJ にビルドをインポートするということは、実質 IntelliJ をビルドツール兼コンパイラとして使うことになる（<a href="https://blog.jetbrains.com/scala/2021/07/27/intellij-scala-plugin-2021-2/#Compiler-based_highlighting">compiler-based highlighting</a> も参照）。多くのユーザーはその方式で満足しているが、コードベースによってはコンパイルエラーの一部が誤検出になる、ソースを生成するプラグインとうまく連携しないなど、sbt と同一のビルドセマンティクスでコーディングしたい、といった場合がある。幸い、現代の IntelliJ は <a href="https://build-server-protocol.github.io/">Build Server Protocol</a> (BSP) 経由で sbt を含む代替の「ビルドサーバー」をサポートしている。</p>
+<p>IntelliJ で Build Server Protocol (BSP) を使う利点は、実際のビルド作業に sbt を使うことである。横で sbt セッションを起動していたようなプログラマーなら、二重コンパイルを避けられる。</p>
 <table class="table table-striped">
   <tr>
     <th><nobr></th>
@@ -4759,29 +4759,29 @@ See [Debugging][vscode-debugging] page on VS Code documentation for more details
     <td>✅</td>
   </tr>
 </table>
-<p>To use sbt as build server on IntelliJ:</p>
+<p>IntelliJ で sbt をビルドサーバーとして使うには:</p>
 <ol>
-<li>Install Scala plugin on the Plugins tab.</li>
-<li>To use the BSP approach, close IntelliJ, and remove exising <code>.idea</code> directory, if any.</li>
-<li>From the terminal, run <code>sbt bspConfig</code> to generate <code>.bsp</code> directory.</li>
-<li>Open IntelliJ, and open a <code>build.sbt</code> file. Select <strong>BSP project</strong> when prompted:<br> <img src="recipes/../files/intellij_bsp.png" alt="IntelliJ" /></li>
-<li>Once the import process is complete, open a Scala file to see that code completion works:<br> <img src="recipes/../files/intellij11.png" alt="IntelliJ" /></li>
+<li>Plugins タブから Scala プラグインをインストールする。</li>
+<li>BSP 方式を使うには、IntelliJ を終了し、既存の <code>.idea</code> ディレクトリがあれば削除する。</li>
+<li>ターミナルで <code>sbt bspConfig</code> を実行して <code>.bsp</code> ディレクトリを生成する。</li>
+<li>IntelliJ を開き、<code>build.sbt</code> ファイルを開く。プロンプトが表示されたら <strong>BSP project</strong> を選択する:<br> <img src="recipes/../files/intellij_bsp.png" alt="IntelliJ" /></li>
+<li>インポートが完了したら、Scala ファイルを開いてコード補完が動作することを確認する:<br> <img src="recipes/../files/intellij11.png" alt="IntelliJ" /></li>
 </ol>
-<p>Use the following setting to opt-out some of the subprojects from BSP.</p>
+<p>一部のサブプロジェクトを BSP から除外するには、次のセッティングを使う:</p>
 <pre><code class="language-scala">bspEnabled := false
 </code></pre>
 <ul>
-<li>Open Preferences, search BSP and check "build automatically on file save", and uncheck "export sbt projects to Bloop before import":<br> <img src="recipes/../files/intellij12.png" alt="IntelliJ" /></li>
+<li>Preferences を開き、BSP を検索して「build automatically on file save」にチェックを入れ、「export sbt projects to Bloop before import」のチェックを外す:<br> <img src="recipes/../files/intellij12.png" alt="IntelliJ" /></li>
 </ul>
-<p>When you make changes to the code and save them (<code>Cmd-S</code> on macOS), IntelliJ will invoke sbt to do the actual building work.</p>
-<p>See also Igal Tabachnik's <a href="https://hmemcpy.com/2021/09/bsp-and-intellij/">Using BSP effectively in IntelliJ and Scala</a> for more details.</p>
-<h4 id="logging-into-sbt-session-1"><a class="header" href="#logging-into-sbt-session-1">Logging into sbt session</a></h4>
+<p>コードを変更して保存すると（macOS では <code>Cmd-S</code>）、IntelliJ が sbt を呼び出して実際のビルドを行う。</p>
+<p>詳細は Igal Tabachnik さんの <a href="https://hmemcpy.com/2021/09/bsp-and-intellij/">Using BSP effectively in IntelliJ and Scala</a> も参照。</p>
+<h4 id="sbt-セッションへのログイン-1"><a class="header" href="#sbt-セッションへのログイン-1">sbt セッションへのログイン</a></h4>
 <p>We can also log into the existing sbt session using the thin client.</p>
 <ul>
-<li>From Terminal section, type in <code>sbt --client</code> <img src="recipes/../files/intellij6.png" alt="IntelliJ" /></li>
+<li>Terminal セクションで <code>sbt --client</code> と入力する: <img src="recipes/../files/intellij6.png" alt="IntelliJ" /></li>
 </ul>
-<p>This lets you log into the sbt session IntelliJ has started. In there you can call <code>testOnly</code> and other tasks with the code already compiled.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="source-dependency-plugin"><a class="header" href="#source-dependency-plugin">Source dependency plugin</a></h1>
+<p>これで IntelliJ が起動した sbt セッションにログインできる。その中で <code>testOnly</code> や他のタスクを、すでにコンパイル済みのコードに対して呼び出せる。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ソース依存プラグイン"><a class="header" href="#ソース依存プラグイン">ソース依存プラグイン</a></h1>
 <div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
 <div class="admonition-title">
 <div id="admonition-note-title">
@@ -4790,19 +4790,18 @@ See [Debugging][vscode-debugging] page on VS Code documentation for more details
 <a class="admonition-anchor-link" href="recipes/source-dependency-plugin.html#admonition-note"></a>
 </div>
 <div>
-<p>The recipe section of the documentation focuses on the objectives
-with minimal explanations.</p>
+<p>レシピセクションは目的に焦点を当て、説明は最小限に留める。</p>
 </div>
 </div>
 <h2 id="目的-4"><a class="header" href="#目的-4">目的</a></h2>
-<p>I want to use a plugin hosted on a git repository, without publishing to the Central Repo.</p>
+<p>Central Repo に公開せず、git リポジトリでホストされているプラグインを使いたい。</p>
 <h2 id="手順-4"><a class="header" href="#手順-4">手順</a></h2>
 <ol>
 <li>
-<p>Host an sbt 2.x plugin on a git repository, built using sbt 2.x.</p>
+<p>sbt 2.x でビルドした sbt 2.x プラグインを git リポジトリでホストする。</p>
 </li>
 <li>
-<p>Add the following to <code>project/plugins.sbt</code>:</p>
+<p><code>project/plugins.sbt</code> に以下を追加する:</p>
 <pre><code class="language-scala">// In project/plugins.sbt
 lazy val jmhRef = ProjectRef(
   uri("https://github.com/eed3si9n/sbt-jmh.git#303c3e98e1d1523e6a4f99abe09c900165028edb"),
@@ -4811,10 +4810,10 @@ BareBuildSyntax.dependsOn(jmhRef)
 </code></pre>
 </li>
 <li>
-<p>When you start sbt, it will automatically clone the repository under <code>$HOME/.sbt/2/staging/</code>.</p>
+<p>sbt を起動すると、リポジトリが <code>$HOME/.sbt/2/staging/</code> の下に自動的にクローンされる。</p>
 </li>
 </ol>
-<p>In the above, <code>https://github.com/eed3si9n/sbt-jmh.git</code> is the HTTP endpoint for a plugin hosted on GitHub, and <code>303c3e98e1d1523e6a4f99abe09c900165028edb</code> is a commit id on the default branch.</p>
+<p>上記において、<code>https://github.com/eed3si9n/sbt-jmh.git</code> は GitHub でホストされているプラグインの HTTP エンドポイントであり、<code>303c3e98e1d1523e6a4f99abe09c900165028edb</code> はデフォルトブランチのコミット ID である。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="glossary"><a class="header" href="#glossary">Glossary</a></h1>
 <h2 id="symbols"><a class="header" href="#symbols">Symbols</a></h2>
 <h3 id="--"><a class="header" href="#--"><code>:=</code>, <code>+=</code>, <code>++=</code></a></h3>

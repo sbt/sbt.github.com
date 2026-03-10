@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Source dependency plugin - The Book of sbt</title>
+        <title>ソース依存プラグイン - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -208,7 +208,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="source-dependency-plugin"><a class="header" href="#source-dependency-plugin">Source dependency plugin</a></h1>
+                        <h1 id="ソース依存プラグイン"><a class="header" href="#ソース依存プラグイン">ソース依存プラグイン</a></h1>
 <div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
 <div class="admonition-title">
 <div id="admonition-note-title">
@@ -217,19 +217,18 @@
 <a class="admonition-anchor-link" href="#admonition-note"></a>
 </div>
 <div>
-<p>The recipe section of the documentation focuses on the objectives
-with minimal explanations.</p>
+<p>レシピセクションは目的に焦点を当て、説明は最小限に留める。</p>
 </div>
 </div>
 <h2 id="目的"><a class="header" href="#目的">目的</a></h2>
-<p>I want to use a plugin hosted on a git repository, without publishing to the Central Repo.</p>
+<p>Central Repo に公開せず、git リポジトリでホストされているプラグインを使いたい。</p>
 <h2 id="手順"><a class="header" href="#手順">手順</a></h2>
 <ol>
 <li>
-<p>Host an sbt 2.x plugin on a git repository, built using sbt 2.x.</p>
+<p>sbt 2.x でビルドした sbt 2.x プラグインを git リポジトリでホストする。</p>
 </li>
 <li>
-<p>Add the following to <code>project/plugins.sbt</code>:</p>
+<p><code>project/plugins.sbt</code> に以下を追加する:</p>
 <pre><code class="language-scala">// In project/plugins.sbt
 lazy val jmhRef = ProjectRef(
   uri("https://github.com/eed3si9n/sbt-jmh.git#303c3e98e1d1523e6a4f99abe09c900165028edb"),
@@ -238,10 +237,10 @@ BareBuildSyntax.dependsOn(jmhRef)
 </code></pre>
 </li>
 <li>
-<p>When you start sbt, it will automatically clone the repository under <code>$HOME/.sbt/2/staging/</code>.</p>
+<p>sbt を起動すると、リポジトリが <code>$HOME/.sbt/2/staging/</code> の下に自動的にクローンされる。</p>
 </li>
 </ol>
-<p>In the above, <code>https://github.com/eed3si9n/sbt-jmh.git</code> is the HTTP endpoint for a plugin hosted on GitHub, and <code>303c3e98e1d1523e6a4f99abe09c900165028edb</code> is a commit id on the default branch.</p>
+<p>上記において、<code>https://github.com/eed3si9n/sbt-jmh.git</code> は GitHub でホストされているプラグインの HTTP エンドポイントであり、<code>303c3e98e1d1523e6a4f99abe09c900165028edb</code> はデフォルトブランチのコミット ID である。</p>
 
                     </main>
 
