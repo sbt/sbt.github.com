@@ -209,13 +209,13 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="sbt-inspect"><a class="header" href="#sbt-inspect">sbt inspect</a></h1>
-<h2 id="synopsis"><a class="header" href="#synopsis">Synopsis</a></h2>
+<h2 id="概要"><a class="header" href="#概要">概要</a></h2>
 <p><code>sbt</code> <code>inspect</code> [<em>subproject</em> / ] [ <em>config</em> / ] <em>task</em><br> <code>sbt</code> <code>inspect actual</code> [<em>subproject</em> / ] [ <em>config</em> / ] <em>task</em><br> <code>sbt</code> <code>inspect tree</code> [<em>subproject</em> / ] [ <em>config</em> / ] <em>task</em></p>
-<h2 id="description"><a class="header" href="#description">Description</a></h2>
-<p>The <code>inspect</code> command provides a means to inspect the task and setting graph. For instace, it can be used to determine which setting should be modified to affect another task.</p>
-<h3 id="value-description-and-provided-by"><a class="header" href="#value-description-and-provided-by">Value, Description, and Provided By</a></h3>
-<p>The first piece of information provided by <code>inspect</code> is the type of a task or the value and type of a setting.</p>
-<p>For example,</p>
+<h2 id="描述"><a class="header" href="#描述">描述</a></h2>
+<p><code>inspect</code> 命令提供检查任务和设置图的方式。例如，可用于确定应修改哪个设置以影响其他任务。</p>
+<h3 id="值描述和提供来源"><a class="header" href="#值描述和提供来源">值、描述和提供来源</a></h3>
+<p><code>inspect</code> 提供的第一条信息是任务的类型或设置的值和类型。</p>
+<p>例如：</p>
 <pre><code class="language-bash">$ sbt inspect libraryDependencies
 [info] Setting: interface scala.collection.immutable.Seq =
   List(org.scala-lang:scala3-library:3.7.2,
@@ -227,20 +227,20 @@
 [info]  ProjectRef(uri("file:/tmp/aaa/"), "aaa") / libraryDependencies
 ....
 </code></pre>
-<p>The following section of output is labeled "Provided by". This shows the actual scope where the setting is defined.</p>
-<p>This shows that <code>libraryDependencies</code> has been defined on the current project (<code>ProjectRef(uri("file:/tmp/aaa/"), "aaa")</code>).</p>
-<h3 id="related-settings"><a class="header" href="#related-settings">Related Settings</a></h3>
-<p>The <em>Related</em> section of <code>inspect</code> output lists all of the definitions of a key. For example,</p>
+<p>输出的下一部分标为 "Provided by"。显示定义该设置的实际作用域。</p>
+<p>这表明 <code>libraryDependencies</code> 已在当前项目（<code>ProjectRef(uri("file:/tmp/aaa/"), "aaa")</code>）上定义。</p>
+<h3 id="相关设置"><a class="header" href="#相关设置">相关设置</a></h3>
+<p><code>inspect</code> 输出的 <em>Related</em> 部分列出键的所有定义。例如：</p>
 <pre><code class="language-bash">&gt; inspect compile
 ...
 [info] Related:
 [info]  Test / compile
 </code></pre>
-<p>This shows that in addition to the requested <code>Compile / compile</code> task, there is also a <code>Test / compile</code> task.</p>
-<h3 id="setting-dependencies"><a class="header" href="#setting-dependencies">Setting dependencies</a></h3>
-<p>Forward dependencies show the other settings (or tasks) used to define a setting (or task). Reverse dependencies go the other direction, showing what uses a given setting. <code>inspect</code> provides this information based on either the requested dependencies or the actual dependencies. Requested dependencies are those that a setting directly specifies. Actual settings are what those dependencies get resolved to. This distinction is explained in more detail in the following sections.</p>
-<h4 id="requested-dependencies"><a class="header" href="#requested-dependencies">Requested Dependencies</a></h4>
-<p>As an example, we'll look at <code>console</code>:</p>
+<p>这表明除请求的 <code>Compile / compile</code> 任务外，还有 <code>Test / compile</code> 任务。</p>
+<h3 id="设置依赖关系"><a class="header" href="#设置依赖关系">设置依赖关系</a></h3>
+<p>正向依赖显示用于定义设置（或任务）的其他设置（或任务）。反向依赖则相反，显示哪些使用了给定设置。<code>inspect</code> 根据指定依赖或有效依赖提供此信息。指定依赖是设置直接指定的；有效设置是这些依赖解析后的结果。以下各节将更详细地说明这一区别。</p>
+<h4 id="指定设置依赖"><a class="header" href="#指定设置依赖">指定设置依赖</a></h4>
+<p>例如，我们来看 <code>console</code>：</p>
 <pre><code class="language-bash">$ sbt inspect console
 ...
 [info] Dependencies:
@@ -257,16 +257,16 @@
 
 ...
 </code></pre>
-<p>This shows the inputs to the <code>console</code> task. We can see that it gets its classpath and options from <code>Compile / console / fullClasspath</code> and <code>Compile / console / scalacOptions</code>. The information provided by the <code>inspect</code> command can thus assist in finding the right setting to change. The convention for keys, like <code>console</code> and <code>fullClasspath</code>, is that the Scala identifier is camel case, while the String representation is lowercase and separated by dashes. The Scala identifier for a configuration is uppercase to distinguish it from tasks like <code>compile</code> and <code>test</code>. For example, we can infer from the previous example how to add code to be run when the Scala interpreter starts up:</p>
+<p>这显示 <code>console</code> 任务的输入。可见其 classpath 和选项来自 <code>Compile / console / fullClasspath</code> 和 <code>Compile / console / scalacOptions</code>。<code>inspect</code> 命令提供的信息有助于找到要修改的正确设置。键的约定（如 <code>console</code> 和 <code>fullClasspath</code>）是：Scala 标识符为驼峰式，字符串表示为小写并用连字符分隔。配置的 Scala 标识符为大写，以区别于 <code>compile</code> 和 <code>test</code> 等任务。例如，从前例可推断如何在 Scala 解释器启动时添加要运行的代码：</p>
 <pre><code class="language-scala">&gt; set Compile / console / initialCommands := "import mypackage._"
 &gt; console
 ...
 import mypackage._
 ...
 </code></pre>
-<p><code>inspect</code> showed that <code>console</code> used the setting <code>Compile / console / initialCommands</code>. Translating the <code>initialCommands</code> string to the Scala identifier gives us <code>initialCommands</code>. <code>compile</code> indicates that this is for the main sources. <code>console /</code> indicates that the setting is specific to <code>console</code>. Because of this, we can set the initial commands on the <code>console</code> task without affecting the <code>consoleQuick</code> task, for example.</p>
-<h4 id="actual-dependencies"><a class="header" href="#actual-dependencies">Actual Dependencies</a></h4>
-<p><code>inspect actual &lt;scoped-key&gt;</code> shows the actual dependency used. This is useful because delegation means that the dependency can come from a scope other than the requested one. Using <code>inspect actual</code>, we see exactly which scope is providing a value for a setting. Combining <code>inspect actual</code> with plain <code>inspect</code>, we can see the range of scopes that will affect a setting. Returning to the example in Requested Dependencies,</p>
+<p><code>inspect</code> 显示 <code>console</code> 使用设置 <code>Compile / console / initialCommands</code>。将 <code>initialCommands</code> 字符串转换为 Scala 标识符即得 <code>initialCommands</code>。<code>compile</code> 表示用于主源。<code>console /</code> 表示该设置专用于 <code>console</code>。因此，我们可在 <code>console</code> 任务上设置初始命令而不影响 <code>consoleQuick</code> 任务。</p>
+<h4 id="有效设置依赖"><a class="header" href="#有效设置依赖">有效设置依赖</a></h4>
+<p><code>inspect actual &lt;scoped-key&gt;</code> 显示实际使用的依赖。这很有用，因为委托意味着依赖可能来自请求作用域之外。使用 <code>inspect actual</code> 可准确看到哪个作用域为设置提供值。将 <code>inspect actual</code> 与普通 <code>inspect</code> 结合，可看到影响设置的作用域范围。回到「指定设置依赖」中的示例：</p>
 <pre><code class="language-bash">$ sbt inspect actual console
 ...
 [info] Dependencies:
@@ -280,14 +280,14 @@ import mypackage._
 [info]  console / compilers
 ...
 </code></pre>
-<p>For <code>initialCommands</code>, we see that it comes from the global scope (<code>Global</code>). Combining this with the relevant output from <code>inspect console</code>:</p>
+<p>对于 <code>initialCommands</code>，可见其来自全局作用域（<code>Global</code>）。结合 <code>inspect console</code> 的相关输出：</p>
 <pre><code>Compile / console / initialCommands
 </code></pre>
-<p>we know that we can set <code>initialCommands</code> as generally as the global scope, as specific as the current project's <code>console</code> task scope, or anything in between. This means that we can, for example, set <code>initialCommands</code> for the whole project and will affect <code>console</code>:</p>
+<p>可知可将 <code>initialCommands</code> 设置为与全局作用域一样通用、与当前项目的 <code>console</code> 任务作用域一样具体，或介于两者之间。这意味着例如可为整个项目设置 <code>initialCommands</code>，将影响 <code>console</code>：</p>
 <pre><code class="language-scala">&gt; set initialCommands := "import mypackage._"
 ...
 </code></pre>
-<p>The reason we might want to set it here this is that other console tasks will use this value now. We can see which ones use our new setting by looking at the reverse dependencies output of <code>inspect actual</code>:</p>
+<p>在此设置的原因可能是其他 console 任务现在会使用该值。通过查看 <code>inspect actual</code> 的反向依赖输出，可看到哪些使用了我们的新设置：</p>
 <pre><code class="language-bash">$ sbt inspect actual Global/initialCommands
 ...
 [info] Reverse dependencies:
@@ -298,18 +298,18 @@ import mypackage._
 [info]  Compile / consoleQuick
 ...
 </code></pre>
-<p>We now know that by setting <code>initialCommands</code> on the whole project, we affect all console tasks in all configurations in that project. If we didn't want the initial commands to apply for <code>consoleProject</code>, which doesn't have our project's classpath available, we could use the more specific task axis:</p>
+<p>现在可知，通过在整个项目上设置 <code>initialCommands</code>，会影响该项目所有配置中的全部 console 任务。若不想让初始命令应用于 <code>consoleProject</code>（其无法使用我们项目的 classpath），可使用更具体的任务轴：</p>
 <pre><code class="language-scala">&gt; set console / initialCommands := "import mypackage._"
 &gt; set consoleQuick / initialCommands := "import mypackage._"`
 </code></pre>
-<p>or configuration axis:</p>
+<p>或配置轴：</p>
 <pre><code class="language-scala">&gt; set Compile/　initialCommands := "import mypackage._"
 &gt; set Test / initialCommands := "import mypackage._"
 </code></pre>
-<p>The next part describes the Delegates section, which shows the chain of delegation for scopes.</p>
-<h3 id="delegates"><a class="header" href="#delegates">Delegates</a></h3>
-<p>A setting has a key and a scope. A request for a key in a scope A may be delegated to another scope if A doesn't define a value for the key. The delegation chain is well-defined and is displayed in the Delegates section of the <code>inspect</code> command. The Delegates section shows the order in which scopes are searched when a value is not defined for the requested key.</p>
-<p>As an example, consider the initial commands for <code>console</code> again:</p>
+<p>下一部分描述 Delegates 部分，显示作用域的委托链。</p>
+<h3 id="委托"><a class="header" href="#委托">委托</a></h3>
+<p>设置有键和作用域。若作用域 A 未定义键的值，对该键的请求可能委托给另一作用域。委托链是明确定义的，在 <code>inspect</code> 命令的 Delegates 部分显示。Delegates 部分显示当请求的键未定义值时搜索作用域的顺序。</p>
+<p>例如，再次考虑 <code>console</code> 的初始命令：</p>
 <pre><code class="language-bash">$ sbt inspect console/initialCommands
 ...
 [info] Delegates:
@@ -321,9 +321,9 @@ import mypackage._
 [info]  Global / initialCommands
 ...
 </code></pre>
-<p>This means that if there is no value specifically for <code>console/initialCommands</code>, the scopes listed under Delegates will be searched in order until a defined value is found.</p>
+<p>这意味着若没有专门针对 <code>console/initialCommands</code> 的值，将按顺序搜索 Delegates 下列出的作用域，直到找到已定义的值。</p>
 <h3 id="inspect-tree"><a class="header" href="#inspect-tree">Inspect tree</a></h3>
-<p>In addition to displaying immediate forward and reverse dependencies as described in the previous section, the <code>inspect tree</code> command can display the full dependency tree for a task or setting. For example,</p>
+<p>除显示上一节所述的直接正向和反向依赖外，<code>inspect tree</code> 命令还可显示任务或设置的完整依赖树。例如：</p>
 <pre><code class="language-bash">$ sbt inspect tree console
 [info] Compile / console = Task[void]
 [info]   +-Global / cleanupCommands =
@@ -341,7 +341,7 @@ import mypackage._
 [info]
 [success] elapsed: 0 s
 </code></pre>
-<p>For each task, <code>inspect tree</code> show the type of the value generated by the task. For a setting, the <code>toString</code> of the setting is displayed.</p>
+<p>对于每个任务，<code>inspect tree</code> 显示该任务生成值的类型。对于设置，显示其 <code>toString</code>。</p>
 
                     </main>
 

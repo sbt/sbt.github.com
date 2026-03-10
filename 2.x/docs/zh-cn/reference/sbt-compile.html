@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>sbt 示例教程 - The Book of sbt</title>
+        <title>sbt compile - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -208,31 +208,31 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="sbt-示例教程"><a class="header" href="#sbt-示例教程">sbt 示例教程</a></h1>
-<h2 id="synopsis"><a class="header" href="#synopsis">Synopsis</a></h2>
+                        <h1 id="sbt-compile"><a class="header" href="#sbt-compile">sbt compile</a></h1>
+<h2 id="概要"><a class="header" href="#概要">概要</a></h2>
 <p><code>sbt</code> [<em>query</em> / ] <code>compile</code><br> <code>sbt</code> [<em>query</em> / ] <code>Test</code> / <code>compile</code><br></p>
-<h2 id="description"><a class="header" href="#description">Description</a></h2>
-<p>The <code>compile</code> task compiles the selected subprojects and their subproject dependencies. Since sbt 2.x, the compiled artifacts are cached automatically.</p>
-<p>Compiling Scala code with the raw Scala compiler has been slow, so significant poriton of sbt's development efforts deal with various strategies for speeding up compilation.</p>
-<h3 id="reduce-the-overhead-of-restarting-the-compiler"><a class="header" href="#reduce-the-overhead-of-restarting-the-compiler">Reduce the overhead of restarting the compiler</a></h3>
-<p>sbt server stays up in the background, allowing Scala compilation to run the same Java virtual machine (JVM). Keeping the JVM warm makes compilation significantly faster because it takes a long time to classload the compiler and for the Just-in-Time compiler to optimize it.</p>
-<h3 id="incremental-compilation"><a class="header" href="#incremental-compilation">Incremental compilation</a></h3>
-<p>When a source file <code>A.scala</code> is modified, sbt goes to great effort to minimize the other source files recompiled due to <code>A.scala</code>'s change. This process of tracking dependencies between the language constructs and recompiling only the required sources is called <em>incremental compilation</em>.</p>
-<h3 id="remote-caching"><a class="header" href="#remote-caching">(Remote) caching</a></h3>
-<p>In sbt 2.x, compiled artifacts are not only cached across the sessions and builds, but can optionally be cached across different machines using Bazel-compatible remote cache. See <a href="../concepts/caching.html">Caching</a> for details.</p>
+<h2 id="描述"><a class="header" href="#描述">描述</a></h2>
+<p><code>compile</code> 任务编译选定的子项目及其子项目依赖。自 sbt 2.x 起，编译后的构件会自动缓存。</p>
+<p>使用原始 Scala 编译器编译 Scala 代码一直较慢，因此 sbt 的相当一部分开发工作致力于各种加速编译的策略。</p>
+<h3 id="降低重启编译器的开销"><a class="header" href="#降低重启编译器的开销">降低重启编译器的开销</a></h3>
+<p>sbt server 在后台持续运行，使 Scala 编译可在同一 Java 虚拟机（JVM）中执行。保持 JVM 常驻可显著加快编译，因为加载编译器并让即时编译器优化需要较长时间。</p>
+<h3 id="增量编译"><a class="header" href="#增量编译">增量编译</a></h3>
+<p>当源文件 <code>A.scala</code> 被修改时，sbt 会尽力减少因 <code>A.scala</code> 变更而需重新编译的其他源文件。这种跟踪语言结构间依赖并仅重新编译所需源文件的过程称为 <em>增量编译</em>。</p>
+<h3 id="远程缓存"><a class="header" href="#远程缓存">（远程）缓存</a></h3>
+<p>在 sbt 2.x 中，编译后的构件可在会话和构建间缓存，还可选择使用 Bazel 兼容的远程缓存在不同机器间缓存。详见<a href="../concepts/caching.html">缓存</a>。</p>
 <h3 id="test--compile"><a class="header" href="#test--compile">Test / compile</a></h3>
-<p>Scoping the <code>compile</code> task with a configuration, like <code>Test / compile</code> will compile the test sources and their source dependencies.</p>
-<h3 id="compilation-settings"><a class="header" href="#compilation-settings">Compilation settings</a></h3>
+<p>使用配置限定 <code>compile</code> 任务，如 <code>Test / compile</code> 将编译测试源及其源依赖。</p>
+<h3 id="编译设置"><a class="header" href="#编译设置">编译设置</a></h3>
 <h4 id="scalaversion"><a class="header" href="#scalaversion">scalaVersion</a></h4>
-<p>The version of Scala used for compilation.</p>
+<p>用于编译的 Scala 版本。</p>
 <pre><code class="language-scala">scalaVersion := "3.8.1"
 </code></pre>
 <h4 id="scalacoptions"><a class="header" href="#scalacoptions">scalacOptions</a></h4>
-<p>Options for the Scala compiler.</p>
+<p>Scala 编译器选项。</p>
 <pre><code class="language-scala">Compile / scalacOptions += "-Werror"
 </code></pre>
 <h4 id="javacoptions"><a class="header" href="#javacoptions">javacOptions</a></h4>
-<p>Options for the Java compiler.</p>
+<p>Java 编译器选项。</p>
 <pre><code class="language-scala">Compile / javacOptions ++= List("-Xlint", "-Xlint:-serial")
 </code></pre>
 

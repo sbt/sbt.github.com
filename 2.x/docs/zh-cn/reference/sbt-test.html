@@ -209,46 +209,46 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="sbt-test"><a class="header" href="#sbt-test">sbt test</a></h1>
-<h2 id="synopsis"><a class="header" href="#synopsis">Synopsis</a></h2>
+<h2 id="概要"><a class="header" href="#概要">概要</a></h2>
 <p><code>sbt</code> [<em>query</em> / ] <code>test</code> [<em>testname1</em> <em>testname2</em>] [ -- <em>options</em> ]</p>
-<h2 id="description"><a class="header" href="#description">Description</a></h2>
-<p>The <code>test</code> task provides a means for compiling and running the tests.</p>
-<p>By default, the <code>test</code> task in sbt 2.x:</p>
+<h2 id="描述"><a class="header" href="#描述">描述</a></h2>
+<p><code>test</code> 任务提供编译和运行测试的方式。</p>
+<p>默认情况下，sbt 2.x 中的 <code>test</code> 任务：</p>
 <ol>
-<li><strong>Subproject parallelism</strong>. Performs compilation of the relevant subprojects in parallel, specified by the <a href="../concepts/sbt-query.html">query</a>.</li>
-<li><strong>Test suite parallelism</strong>. Maps discovered test suites, to tasks and executes them in parallel.</li>
-<li><strong>Incremental test</strong>. Runs only the tests that either failed in the previous run, never run, or if sbt detects changes in the test or its dependencies.</li>
-<li><strong>Cached</strong>. The test result is cached machine-wide, and optionally remote cached.</li>
+<li><strong>子项目并行</strong>。并行编译由 <a href="../concepts/sbt-query.html">query</a> 指定的相关子项目。</li>
+<li><strong>测试套件并行</strong>。将发现的测试套件映射为任务并并行执行。</li>
+<li><strong>增量测试</strong>。仅运行上次失败、从未运行，或 sbt 检测到测试或其依赖有变更的测试。</li>
+<li><strong>缓存</strong>。测试结果在机器范围内缓存，并可选择远程缓存。</li>
 </ol>
-<p>The standard source locations for testing are:</p>
+<p>测试的标准源位置为：</p>
 <ul>
-<li>Scala sources in <code>src/test/scala/</code></li>
-<li>Java sources in <code>src/test/java/</code></li>
-<li>Resources for the test classpath in <code>src/test/resources/</code></li>
+<li><code>src/test/scala/</code> 中的 Scala 源</li>
+<li><code>src/test/java/</code> 中的 Java 源</li>
+<li><code>src/test/resources/</code> 中用于测试 classpath 的资源</li>
 </ul>
-<p>The resources may be accessed from tests by using the <code>getResource</code> methods of <code>java.lang.Class</code> or <code>java.lang.ClassLoader</code>.</p>
-<h3 id="test-interfaces"><a class="header" href="#test-interfaces">Test interfaces</a></h3>
-<p>sbt defines the common interface for JVM-based test frameworks, allowing automatic test suite discovery and parallel execution. By default sbt integrates with <a href="https://scalameta.org/munit/">MUnit</a>, <a href="https://www.scalatest.org/">ScalaTest</a>, <a href="https://hedgehogqa.github.io/scala-hedgehog/">Hedgehog</a>, <a href="https://scalacheck.org/">ScalaCheck</a>, <a href="https://etorreborre.github.io/specs2/">Specs2</a>, <a href="https://typelevel.org/weaver-test/">Weaver</a>, <a href="https://zio.dev/reference/test/">ZIO Test</a>, and <a href="https://github.com/sbt/junit-interface">JUnit 4</a>; this means you only need to add the test framework to the classpath to work with sbt. For example, MUnit may be used by declaring it as a <code>libraryDependency</code>:</p>
+<p>测试中可通过 <code>java.lang.Class</code> 或 <code>java.lang.ClassLoader</code> 的 <code>getResource</code> 方法访问资源。</p>
+<h3 id="测试接口"><a class="header" href="#测试接口">测试接口</a></h3>
+<p>sbt 为基于 JVM 的测试框架定义了通用接口，支持自动发现测试套件和并行执行。默认情况下 sbt 与 <a href="https://scalameta.org/munit/">MUnit</a>、<a href="https://www.scalatest.org/">ScalaTest</a>、<a href="https://hedgehogqa.github.io/scala-hedgehog/">Hedgehog</a>、<a href="https://scalacheck.org/">ScalaCheck</a>、<a href="https://etorreborre.github.io/specs2/">Specs2</a>、<a href="https://typelevel.org/weaver-test/">Weaver</a>、<a href="https://zio.dev/reference/test/">ZIO Test</a> 和 <a href="https://github.com/sbt/junit-interface">JUnit 4</a> 集成；这意味着您只需将测试框架添加到 classpath 即可与 sbt 配合使用。例如，可通过将其声明为 <code>libraryDependency</code> 使用 MUnit：</p>
 <pre><code class="language-scala">lazy val munit = "org.scalameta" %% "munit" % "1.2.0"
 
 libraryDependencies += munit % Test
 </code></pre>
-<p>In the above, <code>Test</code> denotes the <code>Test</code> configuration, and means that MUnit will only be on the test classpath and it isn't needed by the main sources.</p>
+<p>上述中，<code>Test</code> 表示 <code>Test</code> 配置，意味着 MUnit 仅出现在测试 classpath 中，主源不需要它。</p>
 <h4 id="junit"><a class="header" href="#junit">JUnit</a></h4>
-<p>Support for JUnit 5 is provided by <a href="https://github.com/sbt/sbt-jupiter-interface">sbt-jupiter-interface</a>. To add JUnit Jupiter support into your project, add the jupiter-interface dependency in your project's main build.sbt file.</p>
+<p>JUnit 5 支持由 <a href="https://github.com/sbt/sbt-jupiter-interface">sbt-jupiter-interface</a> 提供。要为项目添加 JUnit Jupiter 支持，请在项目主 <code>build.sbt</code> 文件中添加 jupiter-interface 依赖。</p>
 <pre><code class="language-scala">libraryDependencies += "com.github.sbt.junit" % "jupiter-interface" % "0.15.1" % Test
 </code></pre>
-<p>and the sbt-jupiter-interface plugin to your <code>project/plugins.sbt</code>:</p>
+<p>并将 sbt-jupiter-interface 插件添加到 <code>project/plugins.sbt</code>：</p>
 <pre><code class="language-scala">addSbtPlugin("com.github.sbt.junit" % "sbt-jupiter-interface" % "0.15.1")
 </code></pre>
-<p>Support for JUnit 4 is provided by <a href="https://github.com/sbt/junit-interface">junit-interface</a>. Add the junit-interface dependency in your project's main build.sbt file.</p>
+<p>JUnit 4 支持由 <a href="https://github.com/sbt/junit-interface">junit-interface</a> 提供。请在项目主 <code>build.sbt</code> 文件中添加 junit-interface 依赖。</p>
 <pre><code class="language-scala">libraryDependencies += "com.github.sbt" % "junit-interface" % "0.13.3" % Test
 </code></pre>
-<h3 id="test-filtering"><a class="header" href="#test-filtering">Test filtering</a></h3>
-<p>In sbt 2.x, the <code>test</code> task accepts a whitespace separated list of test names to run. For example:</p>
+<h3 id="测试过滤"><a class="header" href="#测试过滤">测试过滤</a></h3>
+<p>在 sbt 2.x 中，<code>test</code> 任务接受以空格分隔的测试名称列表。例如：</p>
 <pre><code class="language-bash">&gt; test example.ExampleSuite example.ExampleSuite2
 </code></pre>
-<p>Here's an example output:</p>
+<p>示例输出：</p>
 <pre><code class="language-bash">&gt; test example.ExampleSuite example.ExampleSuite2
 [info] compiling 1 Scala source to /tmp/foo/target/out/jvm/scala-3.7.2/foo/backend ...
 [info] compiling 2 Scala sources to /tmp/foo/target/out/jvm/scala-3.7.2/foo/test-backend ...
@@ -259,18 +259,18 @@ example.ExampleSuite2:
 [info] Passed: Total 2, Failed 0, Errors 0, Passed 2
 [success] elapsed time: 3 s, cache 49%, 25 disk cache hits, 26 onsite tasks
 </code></pre>
-<p>It supports wildcards as well:</p>
+<p>也支持通配符：</p>
 <pre><code>&gt; test *Example*
 </code></pre>
-<h3 id="incremental-testing"><a class="header" href="#incremental-testing">Incremental testing</a></h3>
-<p>In addition to the explicit filter, the <code>test</code> task runs only the tests that satisfy one of the following conditions are run:</p>
+<h3 id="增量测试"><a class="header" href="#增量测试">增量测试</a></h3>
+<p>除显式过滤外，<code>test</code> 任务仅运行满足以下条件之一的测试：</p>
 <ul>
-<li>The tests that failed in the previous run</li>
-<li>The tests that were not run before</li>
-<li>The tests that have one or more transitive dependencies, maybe in a different project, recompiled.</li>
+<li>上次运行失败的测试</li>
+<li>之前未运行过的测试</li>
+<li>有一个或多个传递依赖（可能在不同项目中）被重新编译的测试。</li>
 </ul>
-<h3 id="full-testing"><a class="header" href="#full-testing">Full testing</a></h3>
-<p>To run, uncached full tests, like sbt 1.x, use the <code>testFull</code> task.</p>
+<h3 id="完整测试"><a class="header" href="#完整测试">完整测试</a></h3>
+<p>要运行未缓存的完整测试（如 sbt 1.x），请使用 <code>testFull</code> 任务。</p>
 <!--
 ### Tab completion
 
@@ -280,8 +280,8 @@ tab completion until they are compiled and deleted sources won't be
 removed from tab completion until a recompile. A new test source can
 still be manually written out and run using `test`.
 -->
-<h3 id="other-tasks"><a class="header" href="#other-tasks">Other tasks</a></h3>
-<p>Tasks that are available for main sources are generally available for test sources, but are prefixed with <code>Test /</code> on the command line and are referenced in Scala code with <code>Test /</code> as well. These tasks include:</p>
+<h3 id="其他任务"><a class="header" href="#其他任务">其他任务</a></h3>
+<p>主源可用的任务通常也可用于测试源，但在命令行中需加 <code>Test /</code> 前缀，在 Scala 代码中也以 <code>Test /</code> 引用。这些任务包括：</p>
 <ul>
 <li><code>Test / compile</code></li>
 <li><code>Test / console</code></li>
@@ -289,28 +289,28 @@ still be manually written out and run using `test`.
 <li><code>Test / run</code></li>
 <li><code>Test / runMain</code></li>
 </ul>
-<p>See <a href="./sbt-run.html">sbt run</a> for details on these tasks.</p>
-<h3 id="output"><a class="header" href="#output">Output</a></h3>
-<p>By default, logging is buffered for each test source file until all tests for that file complete. This can be disabled by setting <code>logBuffered</code>:</p>
+<p>详见 <a href="./sbt-run.html">sbt run</a> 了解这些任务。</p>
+<h3 id="输出"><a class="header" href="#输出">输出</a></h3>
+<p>默认情况下，每个测试源文件的日志会缓冲到该文件所有测试完成。可通过设置 <code>logBuffered</code> 禁用：</p>
 <pre><code class="language-scala">Test / logBuffered := false
 </code></pre>
-<h4 id="test-reports"><a class="header" href="#test-reports">Test Reports</a></h4>
-<p>By default, sbt will generate JUnit XML test reports for all tests in the build, located in the <code>target/test-reports</code> directory for a project. This can be disabled by disabling the <code>JUnitXmlReportPlugin</code></p>
+<h4 id="测试报告"><a class="header" href="#测试报告">测试报告</a></h4>
+<p>默认情况下，sbt 会为构建中所有测试生成 JUnit XML 测试报告，位于项目的 <code>target/test-reports</code> 目录。可通过禁用 <code>JUnitXmlReportPlugin</code> 来禁用此功能。</p>
 <pre><code class="language-scala">val myProject = (project in file(".")).disablePlugins(plugins.JUnitXmlReportPlugin)
 </code></pre>
-<h3 id="options"><a class="header" href="#options">Options</a></h3>
-<h4 id="test-framework-arguments"><a class="header" href="#test-framework-arguments">Test framework arguments</a></h4>
-<p>Arguments to the test framework may be provided on the command line to the <code>test</code> tasks following a <code>--</code> separator. For example:</p>
+<h3 id="选项"><a class="header" href="#选项">选项</a></h3>
+<h4 id="测试框架参数"><a class="header" href="#测试框架参数">测试框架参数</a></h4>
+<p>测试框架参数可在命令行中通过 <code>--</code> 分隔符传递给 <code>test</code> 任务。例如：</p>
 <pre><code>&gt; test org.example.MyTest -- -verbosity 1
 </code></pre>
-<p>To specify test framework arguments as part of the build, add options constructed by <code>Tests.Argument</code>:</p>
+<p>要在构建中指定测试框架参数，添加由 <code>Tests.Argument</code> 构造的选项：</p>
 <pre><code class="language-scala">Test / testOptions += Tests.Argument("-verbosity", "1")
 </code></pre>
-<p>To specify them for a specific test framework only:</p>
+<p>要仅为特定测试框架指定：</p>
 <pre><code class="language-scala">Test / testOptions += Tests.Argument(TestFrameworks.ScalaCheck, "-verbosity", "1")
 </code></pre>
-<h4 id="setup-and-cleanup"><a class="header" href="#setup-and-cleanup">Setup and Cleanup</a></h4>
-<p>Specify setup and cleanup actions using <code>Tests.Setup</code> and <code>Tests.Cleanup</code>. These accept either a function of type <code>() =&gt; Unit</code> or a function of type <code>ClassLoader =&gt; Unit</code>. The variant that accepts a ClassLoader is passed the class loader that is (or was) used for running the tests. It provides access to the test classes as well as the test framework classes.</p>
+<h4 id="设置与清理"><a class="header" href="#设置与清理">设置与清理</a></h4>
+<p>使用 <code>Tests.Setup</code> 和 <code>Tests.Cleanup</code> 指定设置和清理操作。它们接受 <code>() =&gt; Unit</code> 类型或 <code>ClassLoader =&gt; Unit</code> 类型的函数。接受 ClassLoader 的变体会接收用于运行测试的（或曾用于运行测试的）类加载器，可访问测试类和测试框架类。</p>
 <div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
 <div class="admonition-title">
 <div id="admonition-note-title">
@@ -319,36 +319,31 @@ still be manually written out and run using `test`.
 <a class="admonition-anchor-link" href="#admonition-note"></a>
 </div>
 <div>
-<p>When forking, the <code>ClassLoader</code> containing the test classes cannot be
-provided because it is in another JVM. Only use the <code>() =&gt; Unit</code>
-variants in this case.</p>
+<p>fork 时无法提供包含测试类的 <code>ClassLoader</code>，因其在另一个 JVM 中。
+此情况下仅使用 <code>() =&gt; Unit</code> 变体。</p>
 </div>
 </div>
-<p>Examples:</p>
+<p>示例：</p>
 <pre><code class="language-scala">Test / testOptions += Tests.Setup( () =&gt; println("Setup") )
 Test / testOptions += Tests.Cleanup( () =&gt; println("Cleanup") )
 Test / testOptions += Tests.Setup( loader =&gt; ... )
 Test / testOptions += Tests.Cleanup( loader =&gt; ... )
 </code></pre>
-<h4 id="disable-parallel-execution-of-test-suites"><a class="header" href="#disable-parallel-execution-of-test-suites">Disable parallel execution of test suites</a></h4>
-<p>By default, sbt runs all tasks in parallel and within the same JVM as sbt itself. Because each test suite is mapped to a task, tests are also run in parallel by default. To make tests within a given project execute serially:</p>
+<h4 id="禁用测试套件并行执行"><a class="header" href="#禁用测试套件并行执行">禁用测试套件并行执行</a></h4>
+<p>默认情况下，sbt 在与自身相同的 JVM 中并行运行所有任务。由于每个测试套件映射为一个任务，测试默认也并行运行。要使给定项目内的测试串行执行：</p>
 <pre><code class="language-scala">Test / parallelExecution := false
 </code></pre>
-<p>Note that tests from different projects may still execute concurrently.</p>
-<h4 id="filter-classes"><a class="header" href="#filter-classes">Filter classes</a></h4>
-<p>If you want to only run test classes whose name ends with "Test", use <code>Tests.Filter</code>:</p>
+<p>注意，不同项目的测试仍可能并发执行。</p>
+<h4 id="过滤类"><a class="header" href="#过滤类">过滤类</a></h4>
+<p>若您只想运行名称以 "Test" 结尾的测试类，使用 <code>Tests.Filter</code>：</p>
 <pre><code class="language-scala">Test / testOptions := Seq(Tests.Filter(s =&gt; s.endsWith("Test")))
 </code></pre>
-<h4 id="forking-tests"><a class="header" href="#forking-tests">Forking tests</a></h4>
-<p>The setting:</p>
+<h4 id="fork-测试"><a class="header" href="#fork-测试">Fork 测试</a></h4>
+<p>该设置：</p>
 <pre><code class="language-scala">Test / fork := true
 </code></pre>
-<p>specifies that all tests will be executed in a single external JVM. <!-- See
-[Forking][Forking] for configuring standard options for forking.
-By default,
-tests executed in a forked JVM are executed *sequentially*.
---></p>
-<p>More control over how tests are assigned to JVMs and what options to pass to those is available with <code>testGrouping</code> key.</p>
+<p>指定所有测试将在单个外部 JVM 中执行。</p>
+<p>可通过 <code>testGrouping</code> 键更精细控制测试如何分配到 JVM 以及传递哪些选项。</p>
 <!--
 For example in build.sbt:
 
@@ -370,7 +365,7 @@ import Tests._
 
 The tests in a single group are run sequentially.
 -->
-<p>Control the number of forked JVMs allowed to run at the same time by setting the limit on <code>Tags.ForkedTestGroup</code> tag, which is 1 by default. <code>Setup</code> and <code>Cleanup</code> actions cannot be provided with the actual test class loader when a group is forked.</p>
+<p>通过设置 <code>Tags.ForkedTestGroup</code> 标签的限制可控制同时运行的 fork JVM 数量，默认为 1。当组被 fork 时，无法为 <code>Setup</code> 和 <code>Cleanup</code> 操作提供实际测试类加载器。</p>
 <!--
 In addition, forked tests can optionally be run in parallel within the
 forked JVM(s), using the following setting:

@@ -1963,51 +1963,51 @@ sbt:demo&gt; show someKey
   vf: xsbti.HashedVirtualFileRef
 }
 </code></pre>
-<h2 id="remote-caching"><a class="header" href="#remote-caching">Remote caching</a></h2>
+<h2 id="远程缓存"><a class="header" href="#远程缓存">远程缓存</a></h2>
 <p>您可以选择性地扩展构建，除本地磁盘缓存外还使用远程缓存。远程缓存允许多台机器共享构建构件和输出，从而提升构建性能。</p>
 <p>假设您的项目或公司有十几个人。每天早晨，您会 <code>git pull</code> 这些人所做的更改，并需要构建他们的代码。若项目成功，代码规模会随时间增长，您花在构建他人代码上的时间占比会增加。这成为团队规模和代码规模的限制因素。远程缓存通过 CI 系统填充缓存、您可下载构件和任务输出来扭转这一趋势。</p>
 <p>sbt 2.x 实现了与 Bazel 兼容的 gRPC 接口，可与多种开源和商业后端配合使用。详见 <a href="concepts/../reference/remote-cache-setup.html">Remote cache setup</a>。</p>
-<h2 id="reference"><a class="header" href="#reference">Reference</a></h2>
+<h2 id="参考"><a class="header" href="#参考">参考</a></h2>
 <p>另请参阅 <a href="concepts/../reference/cached-task.html">Cached task</a> 参考指南。</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="reference-1"><a class="header" href="#reference-1">Reference</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="参考-1"><a class="header" href="#参考-1">参考</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-1"><a class="header" href="#sbt-1">sbt</a></h1>
-<p>See <a href="reference/../guide/basic-tasks.html">Basic Tasks</a> in the Getting Started Guide for an intro to the basics.</p>
-<h2 id="synopsis"><a class="header" href="#synopsis">Synopsis</a></h2>
+<p>有关基础介绍，请参阅入门指南中的<a href="reference/../guide/basic-tasks.html">基本任务</a>。</p>
+<h2 id="概要"><a class="header" href="#概要">概要</a></h2>
 <p><code>sbt</code><br> <code>sbt</code> <em>command</em> <em>args</em><br> <code>sbt --server</code><br> <code>sbt --script-version</code></p>
-<h2 id="description"><a class="header" href="#description">Description</a></h2>
-<p>sbt is a simple build tool created originally for Scala and Java. It lets us declare subprojects and their various dependencies and custom tasks to ensure that we'll always get a fast, repeatable build.</p>
-<h3 id="sbt-runner-and-sbt-server"><a class="header" href="#sbt-runner-and-sbt-server">sbt runner and sbt server</a></h3>
+<h2 id="描述"><a class="header" href="#描述">描述</a></h2>
+<p>sbt 是最初为 Scala 和 Java 创建的简单构建工具。它让我们声明子项目及其各种依赖和自定义任务，以确保始终获得快速、可重复的构建。</p>
+<h3 id="sbt-runner-和-sbt-server"><a class="header" href="#sbt-runner-和-sbt-server">sbt runner 和 sbt server</a></h3>
 <ul>
-<li>sbt runner is a system shell script named <code>sbt</code>, or <code>sbt.bat</code> on Windows. That is capable of running <em>any version of sbt</em>. This is sometimes called "sbt-the-shell-script".
+<li>sbt runner 是名为 <code>sbt</code> 的系统 shell 脚本，Windows 上为 <code>sbt.bat</code>。它能够运行_任意版本的 sbt_。有时也称为 "sbt-the-shell-script"。
 <ul>
-<li>When sbt 2.x is detected, sbt runner executes in a client mode, typically using sbtn, a GraalVM native implementation of the thin client program.</li>
-<li>sbt runner also executes sbt launcher, a launcher that is capable of running <em>any verions of sbt</em>.</li>
-<li>When you install sbt from a installer, what you're installing is the sbt runner.</li>
+<li>当检测到 sbt 2.x 时，sbt runner 以客户端模式执行，通常使用 sbtn（瘦客户端程序的 GraalVM 原生实现）。</li>
+<li>sbt runner 还执行 sbt launcher，该启动器能够运行 <em>任意版本的 sbt</em>。</li>
+<li>当您从安装程序安装 sbt 时，您安装的是 sbt runner。</li>
 </ul>
 </li>
-<li>sbt server is sbt's main artifact, and the actual build tool.
+<li>sbt server 是 sbt 的主要构件，也是实际的构建工具。
 <ul>
-<li>The sbt version is determined by <code>project/build.properties</code> in each working directory.</li>
-<li>sbt server accepts commands from sbtn, network API, or via its own sbt shell.</li>
+<li>sbt 版本由每个工作目录中的 <code>project/build.properties</code> 确定。</li>
+<li>sbt server 接受来自 sbtn、网络 API 或通过其自身 sbt shell 的命令。</li>
 </ul>
 </li>
 </ul>
 <pre><code>sbt.version=2.0.0-RC9
 </code></pre>
-<p>This mechanism allows builds to be configured to a specific version of sbt, and everyone working on the project would use the same build semantics, regardless of the sbt runner installed on their machine.</p>
-<p>This also means that some features are implemented at sbt runner or sbtn level, while other features are implemented at sbt server level.</p>
-<h2 id="sbt-commands"><a class="header" href="#sbt-commands">sbt commands</a></h2>
-<div id="admonition-note-on-commands" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-on-commands-title">
+<p>此机制允许将构建配置为特定版本的 sbt，项目中的每个人都会使用相同的构建语义，无论其机器上安装的 sbt runner 是什么。</p>
+<p>这也意味着某些功能在 sbt runner 或 sbtn 级别实现，而其他功能在 sbt server 级别实现。</p>
+<h2 id="sbt-命令"><a class="header" href="#sbt-命令">sbt 命令</a></h2>
+<div id="admonition-关于命令的说明" class="admonition admonish-note" role="note" aria-labelledby="admonition-关于命令的说明-title">
 <div class="admonition-title">
-<div id="admonition-note-on-commands-title">
-<p>Note on commands</p>
+<div id="admonition-关于命令的说明-title">
+<p>关于命令的说明</p>
 </div>
-<a class="admonition-anchor-link" href="reference/sbt.html#admonition-note-on-commands"></a>
+<a class="admonition-anchor-link" href="reference/sbt.html#admonition-关于命令的说明"></a>
 </div>
 <div>
-<p>In sbt, there are <em>tasks</em> that operate at the subproject level (like <code>compile</code>), and <em>commands</em> in the narrow sense (like <code>set</code>), which is capable of manipulating the build definition itself.</p>
-<p>Given that settings and tasks are lifted into the <code>act</code> command, we can consider <em>all things that can be typed into the sbt shell</em> as commands in the wide sense.
-See the <a href="reference/../concepts/command.html">Command</a> concept page for details.</p>
+<p>在 sbt 中，有在子项目级别操作的<strong>任务</strong>（如 <code>compile</code>），以及狭义上的命令（如 <code>set</code>），后者能够操作构建定义本身。</p>
+<p>鉴于设置和任务被提升到 <code>act</code> 命令中，我们可以将 <em>所有可输入 sbt shell 的内容</em> 视为广义上的命令。
+详见<a href="reference/../concepts/command.html">命令</a> 概念页。</p>
 </div>
 </div>
 <!--
@@ -2018,54 +2018,54 @@ See the <a href="reference/../concepts/command.html">Command</a> concept page fo
     setting control which tasks from which projects are executed. See
     [multi-project builds][Multi-Project].
 -->
-<h3 id="subproject-level-tasks"><a class="header" href="#subproject-level-tasks">Subproject-level tasks</a></h3>
+<h3 id="子项目级任务"><a class="header" href="#子项目级任务">子项目级任务</a></h3>
 <ul>
-<li><code>clean</code> Deletes all generated files (the <code>target</code> directory).</li>
-<li><a href="reference/./sbt-publish.html"><code>publish</code></a> Publishes artifacts (such as JARs) to the repository defined by the <code>publishTo</code> setting.</li>
-<li><a href="reference/./sbt-publish.html"><code>publishLocal</code></a> Publishes artifacts (such as JARs) to the local Ivy repository as described in Publishing.</li>
-<li><a href="reference/./sbt-update.html"><code>update</code></a> Resolves and retrieves external dependencies.</li>
+<li><code>clean</code> 删除所有生成的文件（<code>target</code> 目录）。</li>
+<li><a href="reference/./sbt-publish.html"><code>publish</code></a> 将构件（如 JAR）发布到由 <code>publishTo</code> 设置定义的仓库。</li>
+<li><a href="reference/./sbt-publish.html"><code>publishLocal</code></a> 将构件（如 JAR）发布到本地 Ivy 仓库，如发布章节所述。</li>
+<li><a href="reference/./sbt-update.html"><code>update</code></a> 解析并获取外部依赖。</li>
 </ul>
-<h3 id="configuration-level-tasks"><a class="header" href="#configuration-level-tasks">Configuration-level tasks</a></h3>
-<p>Configuration-level tasks are tasks associated with a configuration. For example, <code>compile</code>, which is equivalent to <code>Compile/compile</code>, compiles the main source code (the <code>Compile</code> configuration). <code>Test/compile</code> compiles the test source code (the <code>Test</code> configuration). Most tasks for the <code>Compile</code> configuration have an equivalent in the <code>Test</code> configuration that can be run using a <code>Test/</code> prefix.</p>
+<h3 id="配置级任务"><a class="header" href="#配置级任务">配置级任务</a></h3>
+<p>配置级任务是与配置关联的任务。例如，<code>compile</code>（等价于 <code>Compile/compile</code>）编译主源代码（<code>Compile</code> 配置）。<code>Test/compile</code> 编译测试源代码（<code>Test</code> 配置）。<code>Compile</code> 配置的大多数任务在 <code>Test</code> 配置中都有等效项，可使用 <code>Test/</code> 前缀运行。</p>
 <ul>
 <li>
-<p><a href="reference/./sbt-compile.html"><code>compile</code></a> Compiles the main sources (in the <code>src/main/scala</code> directory). <code>Test/compile</code> compiles test sources (in the src/test/scala/ directory).</p>
+<p><a href="reference/./sbt-compile.html"><code>compile</code></a> 编译主源代码（在 <code>src/main/scala</code> 目录中）。<code>Test/compile</code> 编译测试源代码（在 src/test/scala/ 目录中）。</p>
 </li>
 <li>
-<p><code>console</code> Starts the Scala interpreter with a classpath including the compiled sources, all JARs in the lib directory, and managed libraries. To return to sbt, type :quit, Ctrl+D (Unix), or Ctrl+Z (Windows). Similarly, Test/console starts the interpreter with the test classes and classpath.</p>
+<p><code>console</code> 使用包含编译源、lib 目录中所有 JAR 和托管库的 classpath 启动 Scala 解释器。返回 sbt 请输入 :quit、Ctrl+D（Unix）或 Ctrl+Z（Windows）。同样，Test/console 使用测试类和 classpath 启动解释器。</p>
 </li>
 <li>
-<p><code>doc</code> Generates API documentation for Scala source files in <code>src/main/scala</code> using scaladoc. <code>Test/doc</code> generates API documentation for source files in <code>src/test/scala</code>.</p>
+<p><code>doc</code> 使用 scaladoc 为 <code>src/main/scala</code> 中的 Scala 源文件生成 API 文档。<code>Test/doc</code> 为 <code>src/test/scala</code> 中的源文件生成 API 文档。</p>
 </li>
 <li>
-<p><code>package</code> Creates a JAR file containing the files in <code>src/main/resources</code> and the classes compiled from <code>src/main/scala</code>. <code>Test/package</code> creates a JAR containing the files in <code>src/test/resources</code> and the class compiled from <code>src/test/scala</code>.</p>
+<p><code>package</code> 创建包含 <code>src/main/resources</code> 中文件和从 <code>src/main/scala</code> 编译的类的 JAR 文件。<code>Test/package</code> 创建包含 <code>src/test/resources</code> 中文件和从 <code>src/test/scala</code> 编译的类的 JAR。</p>
 </li>
 <li>
-<p><code>packageDoc</code> Creates a JAR file containing API documentation generated from Scala source files in src/main/scala. Test/packageDoc creates a JAR containing API documentation for test sources files in src/test/scala.</p>
+<p><code>packageDoc</code> 创建包含从 src/main/scala 中 Scala 源文件生成的 API 文档的 JAR 文件。Test/packageDoc 创建包含 src/test/scala 中测试源文件 API 文档的 JAR。</p>
 </li>
 <li>
-<p><code>packageSrc</code>: Creates a JAR file containing all main source files and resources. The packaged paths are relative to src/main/scala and src/main/resources. Similarly, Test/packageSrc operates on test source files and resources.</p>
+<p><code>packageSrc</code>：创建包含所有主源文件和资源的 JAR 文件。打包路径相对于 src/main/scala 和 src/main/resources。同样，Test/packageSrc 对测试源文件和资源进行操作。</p>
 </li>
 <li>
-<p><a href="reference/./sbt-run.html"><code>run &lt;argument&gt;*</code></a> Runs the main class for the project in the same virtual machine as sbt. The main class is passed the arguments provided.</p>
+<p><a href="reference/./sbt-run.html"><code>run &lt;argument&gt;*</code></a> 在与 sbt 相同的虚拟机中运行项目的主类。主类接收提供的参数。</p>
 </li>
 <li>
-<p><code>runMain &lt;main-class&gt; &lt;argument&gt;*</code> Runs the specified main class for the project in the same virtual machine as sbt. The main class is passed the arguments provided.<!-- See
+<p><code>runMain &lt;main-class&gt; &lt;argument&gt;*</code> 在与 sbt 相同的虚拟机中运行项目指定的主类。主类接收提供的参数。<!-- See
   [Running Project Code][Running-Project-Code] for
   details on the use of System.exit and multithreading (including
   GUIs) in code run by this action. `Test/runMain` runs the specified
   main class in the test code. --></p>
 </li>
 <li>
-<p><a href="reference/./sbt-tes.html"><code>test &lt;test&gt;*</code></a> Runs the tests specified as arguments (or all tests if no arguments are given) that:</p>
+<p><a href="reference/./sbt-test.html"><code>test &lt;test&gt;*</code></a> 运行指定的测试（或未提供参数时运行所有测试），包括：</p>
 <ol>
-<li>have not been run yet OR</li>
-<li>failed the last time they were run OR</li>
-<li>had any transitive dependencies recompiled since the last successful run<br> <code>*</code> is interpreted as a wildcard in the test name.</li>
+<li>尚未运行，或</li>
+<li>上次运行失败，或</li>
+<li>自上次成功运行以来有任何传递依赖被重新编译<br> <code>*</code> 在测试名称中解释为通配符。</li>
 </ol>
 </li>
 <li>
-<p><a href="reference/./sbt-test.html"><code>testFull</code></a> Runs all tests detected during test compilation.</p>
+<p><a href="reference/./sbt-test.html"><code>testFull</code></a> 运行测试编译期间检测到的所有测试。</p>
 </li>
 </ul>
 <!--
@@ -2081,12 +2081,12 @@ See the <a href="reference/../concepts/command.html">Command</a> concept page fo
     imported. See the [consoleProject documentation][Console-Project]
     for more information.
 -->
-<h3 id="general-commands"><a class="header" href="#general-commands">General commands</a></h3>
+<h3 id="通用命令"><a class="header" href="#通用命令">通用命令</a></h3>
 <ul>
-<li><code>shutdown</code> Shuts down the sbt server to end the current sbt session.</li>
-<li><code>exit</code> or <code>quit</code> End the current interactive session or build. Additionally, Ctrl+D (Unix) or Ctrl+Z (Windows) will exit the interactive prompt.</li>
-<li><code>help &lt;command&gt;</code> Displays detailed help for the specified command. If the command does not exist, help lists detailed help for commands whose name or description match the argument, which is interpreted as a regular expression. If no command is provided, displays brief descriptions of the main commands. Related commands are tasks and settings.</li>
-<li><code>projects [add|remove &lt;URI&gt;]</code> List all available projects if no arguments provided or adds/removes the build at the provided URI.<!-- (See [multi-project builds][Multi-Project] for details on multi-project
+<li><code>shutdown</code> 关闭 sbt server 以结束当前 sbt 会话。</li>
+<li><code>exit</code> 或 <code>quit</code> 结束当前交互式会话或构建。此外，Ctrl+D（Unix）或 Ctrl+Z（Windows）将退出交互式提示符。</li>
+<li><code>help &lt;command&gt;</code> 显示指定命令的详细帮助。若命令不存在，help 会列出名称或描述与参数（解释为正则表达式）匹配的命令的详细帮助。若未提供命令，则显示主要命令的简要描述。相关命令包括任务和设置。</li>
+<li><code>projects [add|remove &lt;URI&gt;]</code> 若无参数则列出所有可用项目，或添加/移除指定 URI 的构建。<!-- (See [multi-project builds][Multi-Project] for details on multi-project
   builds.) --></li>
 </ul>
 <!--
@@ -2098,16 +2098,16 @@ See the <a href="reference/../concepts/command.html">Command</a> concept page fo
 -->
 <ul>
 <li>
-<p><a href="reference/./watch.html">Watch command</a> <code>~ &lt;command&gt;</code> Executes the project specified action or method whenever source files change.</p>
+<p><a href="reference/./watch.html">Watch 命令</a> <code>~ &lt;command&gt;</code> 在源文件变更时执行项目指定的操作或方法。</p>
 </li>
 <li>
-<p><code>&lt; filename</code> Executes the commands in the given file. Each command should be on its own line. Empty lines and lines beginning with '#' are ignored</p>
+<p><code>&lt; filename</code> 执行给定文件中的命令。每个命令应单独一行。空行和以 '#' 开头的行将被忽略</p>
 </li>
 <li>
-<p><code>A ; B</code> Execute A and if it succeeds, run B. Note that the leading semicolon is required.</p>
+<p><code>A ; B</code> 执行 A，若成功则运行 B。注意前导分号是必需的。</p>
 </li>
 <li>
-<p><code>eval &lt;Scala-expression&gt;</code> Evaluates the given Scala expression and returns the result and inferred type. This can be used to set system properties, as a calculator, to fork processes, etc ... For example:</p>
+<p><code>eval &lt;Scala-expression&gt;</code> 计算给定的 Scala 表达式并返回结果和推断类型。可用于设置系统属性、作为计算器、fork 进程等。例如：</p>
 <pre><code>&gt; eval System.setProperty("demo", "true")
 &gt; eval 1+1
 &gt; eval "ls -l" !
@@ -2126,116 +2126,116 @@ See the <a href="reference/../concepts/command.html">Command</a> concept page fo
     available in a repository. Alternatively, specify the path to a
     Scala installation.
 -->
-<h3 id="commands-for-managing-the-build-definition"><a class="header" href="#commands-for-managing-the-build-definition">Commands for managing the build definition</a></h3>
+<h3 id="管理构建定义的命令"><a class="header" href="#管理构建定义的命令">管理构建定义的命令</a></h3>
 <ul>
 <li>
-<p><code>reload [plugins|return]</code> If no argument is specified, reloads the build, recompiling any build or plugin definitions as necessary. reload plugins changes the current project to the build definition project (in <code>project/</code>). This can be useful to directly manipulate the build definition. For example, running clean on the build definition project will force snapshots to be updated and the build definition to be recompiled. reload return changes back to the main project.</p>
+<p><code>reload [plugins|return]</code> 若未指定参数，则重新加载构建，必要时重新编译任何构建或插件定义。reload plugins 将当前项目改为构建定义项目（在 <code>project/</code> 中）。这可用于直接操作构建定义。例如，在构建定义项目上运行 clean 将强制更新快照并重新编译构建定义。reload return 切换回主项目。</p>
 </li>
 <li>
-<p><code>set &lt;setting-expression&gt;</code> Evaluates and applies the given setting definition. The setting applies until sbt is restarted, the build is reloaded, or the setting is overridden by another set command or removed by the session command.<!-- See [.sbt build definition][Basic-Def] and
+<p><code>set &lt;setting-expression&gt;</code> 计算并应用给定的设置定义。该设置一直有效，直到 sbt 重启、构建重新加载，或被另一个 set 命令覆盖或被 session 命令移除。<!-- See [.sbt build definition][Basic-Def] and
   [Inspecting Settings][Inspecting-Settings] for details. --></p>
 </li>
 <li>
-<p><code>session &lt;command&gt;</code> Manages session settings defined by the <code>set</code> command. It can persist settings configured at the prompt.<!-- See [Inspecting Settings][Inspecting-Settings] for details. --></p>
+<p><code>session &lt;command&gt;</code> 管理由 <code>set</code> 命令定义的会话设置。可持久化在提示符处配置的设置。<!-- See [Inspecting Settings][Inspecting-Settings] for details. --></p>
 </li>
 <li>
-<p><code>inspect &lt;setting-key&gt;</code> Displays information about settings, such as the value, description, defining scope, dependencies, delegation chain, and related settings.<!-- See [Inspecting Settings][Inspecting-Settings] for details. --></p>
+<p><code>inspect &lt;setting-key&gt;</code> 显示有关设置的信息，如值、描述、定义作用域、依赖、委托链和关联设置。<!-- See [Inspecting Settings][Inspecting-Settings] for details. --></p>
 </li>
 </ul>
-<h2 id="sbt-runner-and-launcher"><a class="header" href="#sbt-runner-and-launcher">sbt runner and launcher</a></h2>
-<p>When launching the <code>sbt</code> runner from the system shell, various system properties or JVM extra options can be specified to influence its behaviour.</p>
-<h3 id="sbt-jvm-options-and-system-properties"><a class="header" href="#sbt-jvm-options-and-system-properties">sbt JVM options and system properties</a></h3>
-<p>If the <code>JAVA_OPTS</code> and/or <code>SBT_OPTS</code> environment variables are defined when <code>sbt</code> starts, their content is passed as command line arguments to the JVM running sbt server.</p>
-<p>If a file named <code>.jvmopts</code> exists in the  current directory, its content is appended to <code>JAVA_OPTS</code> at sbt startup. Similarly, if <code>.sbtopts</code> and/or <code>/etc/sbt/sbtopts</code> exist, their content is appended to <code>SBT_OPTS</code>. The default value of <code>JAVA_OPTS</code> is <code>-Dfile.encoding=UTF8</code>.</p>
-<p>You can also specify JVM system properties and command line options directly as <code>sbt</code> arguments: any <code>-Dkey=val</code> argument will be passed as-is to the JVM, and any <code>-J-Xfoo</code> will be passed as <code>-Xfoo</code>.</p>
-<p>See also <code>sbt --help</code> for more details.</p>
-<h3 id="sbt-jvm-heap-permgen-and-stack-sizes"><a class="header" href="#sbt-jvm-heap-permgen-and-stack-sizes">sbt JVM heap, permgen, and stack sizes</a></h3>
-<p>If you find yourself running out of permgen space or your workstation is low on memory, adjust the JVM configuration as you would for any java application.</p>
-<p>For example a common set of memory-related options is:</p>
+<h2 id="sbt-runner-和-launcher"><a class="header" href="#sbt-runner-和-launcher">sbt runner 和 launcher</a></h2>
+<p>从系统 shell 启动 <code>sbt</code> runner 时，可指定各种系统属性或 JVM 额外选项以影响其行为。</p>
+<h3 id="sbt-jvm-选项和系统属性"><a class="header" href="#sbt-jvm-选项和系统属性">sbt JVM 选项和系统属性</a></h3>
+<p>若在 <code>sbt</code> 启动时定义了 <code>JAVA_OPTS</code> 和/或 <code>SBT_OPTS</code> 环境变量，其内容将作为命令行参数传递给运行 sbt server 的 JVM。</p>
+<p>若当前目录存在名为 <code>.jvmopts</code> 的文件，其内容在 sbt 启动时追加到 <code>JAVA_OPTS</code>。同样，若存在 <code>.sbtopts</code> 和/或 <code>/etc/sbt/sbtopts</code>，其内容追加到 <code>SBT_OPTS</code>。<code>JAVA_OPTS</code> 的默认值为 <code>-Dfile.encoding=UTF8</code>。</p>
+<p>您也可以直接以 <code>sbt</code> 参数形式指定 JVM 系统属性和命令行选项：任何 <code>-Dkey=val</code> 参数将原样传递给 JVM，任何 <code>-J-Xfoo</code> 将作为 <code>-Xfoo</code> 传递。</p>
+<p>另请参阅 <code>sbt --help</code> 获取更多详情。</p>
+<h3 id="sbt-jvm-堆permgen-和栈大小"><a class="header" href="#sbt-jvm-堆permgen-和栈大小">sbt JVM 堆、permgen 和栈大小</a></h3>
+<p>若您发现 permgen 空间不足或工作站内存不足，请像对待任何 Java 应用一样调整 JVM 配置。</p>
+<p>例如，常见的内存相关选项集为：</p>
 <pre><code class="language-bash">export SBT_OPTS="-Xmx2048M -Xss2M"
 sbt
 </code></pre>
-<p>Or if you prefer to specify them just for this session:</p>
+<p>或若您希望仅为此会话指定：</p>
 <pre><code class="language-bash">sbt -J-Xmx2048M -J-Xss2M
 </code></pre>
-<h3 id="boot-directory"><a class="header" href="#boot-directory">Boot directory</a></h3>
-<p><code>sbt</code> runner is just a bootstrap, the actual sbt server, Scala compiler and standard library are by default downloaded to the shared directory  <code>\$HOME/.sbt/boot/</code>.</p>
-<p>To change the location of this directory, set the <code>sbt.boot.directory</code> system property. A relative path will be resolved against the current working directory, which can be useful if you want to avoid sharing the boot directory between projects. For example, the following uses the pre-0.11 style of putting the boot directory in <code>project/boot/</code>:</p>
+<h3 id="启动目录"><a class="header" href="#启动目录">启动目录</a></h3>
+<p><code>sbt</code> runner 仅是引导程序，实际的 sbt server、Scala 编译器和标准库默认下载到共享目录 <code>$HOME/.sbt/boot/</code>。</p>
+<p>要更改此目录位置，请设置 <code>sbt.boot.directory</code> 系统属性。相对路径将相对于当前工作目录解析，若您希望避免在项目间共享启动目录，这会很有用。例如，以下使用将启动目录放在 <code>project/boot/</code> 的 0.11 之前风格：</p>
 <pre><code class="language-bash">sbt -Dsbt.boot.directory=project/boot/
 </code></pre>
-<h3 id="terminal-encoding"><a class="header" href="#terminal-encoding">Terminal encoding</a></h3>
-<p>The character encoding used by your terminal may differ from Java's default encoding for your platform. In this case, you will need to specify the <code>file.encoding=&lt;encoding&gt;</code> system property, which might look like:</p>
+<h3 id="终端编码"><a class="header" href="#终端编码">终端编码</a></h3>
+<p>您终端使用的字符编码可能与您平台上 Java 的默认编码不同。在这种情况下，您需要指定<code>file.encoding=&lt;encoding&gt;</code> 系统属性，可能类似：</p>
 <pre><code class="language-bash">export JAVA_OPTS="-Dfile.encoding=Cp1252"
 sbt
 </code></pre>
-<h3 id="httphttpsftp-proxy"><a class="header" href="#httphttpsftp-proxy">HTTP/HTTPS/FTP Proxy</a></h3>
-<p>On Unix, sbt will pick up any HTTP, HTTPS, or FTP proxy settings from the standard <code>http_proxy</code>, <code>https_proxy</code>, and <code>ftp_proxy</code> environment variables. If you are behind a proxy requiring authentication, you need to pass some supplementary flags at sbt startup. See <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/doc-files/net-properties.html">JVM networking system properties</a> for more details.</p>
-<p>For example:</p>
+<h3 id="httphttpsftp-代理"><a class="header" href="#httphttpsftp-代理">HTTP/HTTPS/FTP 代理</a></h3>
+<p>在 Unix 上，sbt 会从标准环境变量 <code>http_proxy</code>、<code>https_proxy</code> 和 <code>ftp_proxy</code> 获取 HTTP、HTTPS 或 FTP 代理设置。若您在使用需要认证的代理后面，需在 sbt 启动时传递一些补充标志。详见 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/doc-files/net-properties.html">JVM networking system properties</a>。</p>
+<p>例如：</p>
 <pre><code class="language-bash">sbt -Dhttp.proxyUser=username -Dhttp.proxyPassword=mypassword
 </code></pre>
-<p>On Windows, your script should set properties for proxy host, port, and if applicable, username and password. For example, for HTTP:</p>
+<p>在 Windows 上，您的脚本应设置代理主机、端口的属性，如适用还包括用户名和密码。例如，对于 HTTP：</p>
 <pre><code class="language-bash">sbt -Dhttp.proxyHost=myproxy -Dhttp.proxyPort=8080 -Dhttp.proxyUser=username -Dhttp.proxyPassword=mypassword
 </code></pre>
-<p>Replace <code>http</code> with <code>https</code> or <code>ftp</code> in the above command line to configure HTTPS or FTP.</p>
-<h3 id="other-system-properties"><a class="header" href="#other-system-properties">Other system properties</a></h3>
-<p>The following system properties can also be passed to <code>sbt</code> runner:</p>
+<p>将上述命令行中的 <code>http</code> 替换为 <code>https</code> 或 <code>ftp</code> 以配置 HTTPS 或 FTP。</p>
+<h3 id="其他系统属性"><a class="header" href="#其他系统属性">其他系统属性</a></h3>
+<p>以下系统属性也可传递给 <code>sbt</code> runner：</p>
 <h4 id="-dsbtbannertrue"><a class="header" href="#-dsbtbannertrue"><code>-Dsbt.banner=true</code></a></h4>
-<p>Show a welcome banner advertising new features.</p>
+<p>显示宣传新功能的欢迎横幅。</p>
 <h4 id="-dsbtcitrue"><a class="header" href="#-dsbtcitrue"><code>-Dsbt.ci=true</code></a></h4>
-<p>Default <code>false</code> (unless then env var <code>BUILD_NUMBER</code> is set). For continuous integration environments. Suppress supershell and color.</p>
+<p>默认为 <code>false</code>（除非设置了环境变量 <code>BUILD_NUMBER</code>）。用于持续集成环境。抑制 supershell 和颜色。</p>
 <h4 id="-dsbtclienttrue"><a class="header" href="#-dsbtclienttrue"><code>-Dsbt.client=true</code></a></h4>
-<p>Run the sbt client.</p>
+<p>运行 sbt 客户端。</p>
 <h4 id="-dsbtcolorauto"><a class="header" href="#-dsbtcolorauto"><code>-Dsbt.color=auto</code></a></h4>
 <ul>
-<li>To turn on color, use <code>always</code> or <code>true</code>.</li>
-<li>To turn off color, use <code>never</code> or <code>false</code>.</li>
-<li>To use color if the output is a terminal (not a pipe) that supports color, use <code>auto</code>.</li>
+<li>要开启颜色，使用 <code>always</code> 或 <code>true</code>。</li>
+<li>要关闭颜色，使用 <code>never</code> 或 <code>false</code>。</li>
+<li>若输出是支持颜色的终端（非管道）则使用颜色，使用 <code>auto</code>。</li>
 </ul>
 <h4 id="-dsbtcoursierhomehomecachecoursierv1"><a class="header" href="#-dsbtcoursierhomehomecachecoursierv1"><code>-Dsbt.coursier.home=$HOME/.cache/coursier/v1</code></a></h4>
-<p>Location of the Coursier artifact cache, where the default is defined by <a href="https://get-coursier.io/docs/cache.html#default-location">Coursier cache resolution logic</a>. You can verify the value with the command <code>csrCacheDirectory</code>.</p>
+<p>Coursier 构件缓存的位置，默认由 <a href="https://get-coursier.io/docs/cache.html#default-location">Coursier cache resolution logic</a> 定义。您可使用 <code>csrCacheDirectory</code> 命令验证该值。</p>
 <h4 id="-dsbtgenbuildpropstrue"><a class="header" href="#-dsbtgenbuildpropstrue"><code>-Dsbt.genbuildprops=true</code></a></h4>
-<p>Generate <code>build.properties</code> if missing. If unset, this defers to <code>sbt.skip.version.write</code>.</p>
+<p>若缺失则生成 <code>build.properties</code>。若未设置，则遵从 <code>sbt.skip.version.write</code>。</p>
 <h4 id="-dsbtglobalbasehomesbt"><a class="header" href="#-dsbtglobalbasehomesbt"><code>-Dsbt.global.base=$HOME/.sbt/</code></a></h4>
-<p>The directory containing global settings and plugins.</p>
+<p>包含全局设置和插件的目录。</p>
 <h4 id="-dsbtoverridebuildrepostrue"><a class="header" href="#-dsbtoverridebuildrepostrue"><code>-Dsbt.override.build.repos=true</code></a></h4>
-<p>If true, repositories configured in a build definition are ignored and the repositories configured for the launcher are used instead.</p>
+<p>若为 true，则忽略构建定义中配置的仓库，改用为 launcher 配置的仓库。</p>
 <!-- See <tt>sbt.repository.config</tt> and the <a href="reference/Launcher-Configuration.html">sbt launcher</a> documentation. -->
 <h4 id="-dsbtrepositoryconfighomesbtrepositories"><a class="header" href="#-dsbtrepositoryconfighomesbtrepositories"><code>-Dsbt.repository.config=$HOME/.sbt/repositories</code></a></h4>
-<p>A file containing the repositories to use for the launcher. The format is the same as a <code>[repositories]</code> section for a sbt launcher configuration file. This setting is typically used in conjunction with setting <code>sbt.override.build.repos</code> to <code>true</code>.</p>
+<p>包含 launcher 使用的仓库的文件。格式与 sbt launcher 配置文件的 <code>[repositories]</code> 部分相同。此设置通常与将 <code>sbt.override.build.repos</code> 设为 <code>true</code> 配合使用。</p>
 <!-- (see <tt>sbt.override.build.repos</tt> and the <a href="reference/Launcher-Configuration.html">sbt launcher</a> documentation).</td> -->
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-update"><a class="header" href="#sbt-update">sbt update</a></h1>
-<p>See <a href="reference/../guide/library-dependency-basics.html">library depdency basics</a> in the Getting Started guide to learn about the basics.</p>
-<h2 id="synopsis-1"><a class="header" href="#synopsis-1">Synopsis</a></h2>
+<p>有关基础介绍，请参阅入门指南中的<a href="reference/../guide/library-dependency-basics.html">库依赖基础</a>。</p>
+<h2 id="概要-1"><a class="header" href="#概要-1">概要</a></h2>
 <p><code>sbt</code> [<em>query</em> / ] <code>update</code></p>
-<h2 id="description-1"><a class="header" href="#description-1">Description</a></h2>
-<p>sbt uses <a href="https://get-coursier.io/">Coursier</a> to implement library management, also known as a package manager in other ecosystems. The general idea of library management is that you can specify external libraries you would like to use in your subprojects, and the library management system would:</p>
+<h2 id="描述-1"><a class="header" href="#描述-1">描述</a></h2>
+<p>sbt 使用 <a href="https://get-coursier.io/">Coursier</a> 实现库管理，在其他生态系统中也称为包管理器。库管理的一般思路是，您可以在子项目中指定要使用的外部库，库管理系统将：</p>
 <ul>
-<li>Check if such versions exists in the listed repositories</li>
-<li>Look for the transitive dependencies (i.e. the libraries used by the libraries)</li>
-<li>Attempt to resolve version conflicts, if any</li>
-<li>Download the artifacts, such as JAR files, from the repositories</li>
+<li>检查所列仓库中是否存在这些版本</li>
+<li>查找传递依赖（即库所依赖的库）</li>
+<li>尝试解决版本冲突（如有）</li>
+<li>从仓库下载构件（如 JAR 文件）</li>
 </ul>
-<h3 id="dependencies"><a class="header" href="#dependencies">Dependencies</a></h3>
-<p>Declaring a dependency looks like:</p>
+<h3 id="依赖关系"><a class="header" href="#依赖关系">依赖关系</a></h3>
+<p>声明依赖关系看起来像：</p>
 <pre><code class="language-scala">libraryDependencies += groupID %% artifactID % revision
 </code></pre>
-<p>or</p>
+<p>或</p>
 <pre><code class="language-scala">libraryDependencies += groupID %% artifactID % revision % configuration
 </code></pre>
 <!--
 See [configurations](#ivy-configurations) for details on configuration
 mappings.
 -->
-<p>Also, several dependencies can be declared together:</p>
+<p>此外，可以一起声明多个依赖：</p>
 <pre><code class="language-scala">libraryDependencies ++= Seq(
   groupID %% artifactID % revision,
   groupID %% otherID % otherRevision
 )
 </code></pre>
-<p>If you are using a dependency that was built with sbt, double the first <code>%</code> to be <code>%%</code>:</p>
+<p>若您使用的依赖是用 sbt 构建的，请将第一个 <code>%</code> 改为 <code>%%</code>：</p>
 <pre><code class="language-scala">libraryDependencies += groupID %% artifactID % revision
 </code></pre>
-<p>This will use the right JAR for the dependency built with the version of Scala that you are currently using. If you get an error while resolving this kind of dependency, that dependency probably wasn't published for the version of Scala you are using. See <a href="reference/../concepts/cross-building.html">Cross building</a> for details.</p>
+<p>这将使用与您当前 Scala 版本匹配的依赖 JAR。若解析此类依赖时出错，该依赖可能未为您使用的 Scala 版本发布。详见<a href="reference/../concepts/cross-building.html">交叉构建</a>。</p>
 <!--
 Ivy can select the latest revision of a module according to constraints
 you specify. Instead of a fixed revision like `"1.6.1"`, you specify
@@ -2243,13 +2243,13 @@ you specify. Instead of a fixed revision like `"1.6.1"`, you specify
 [Ivy revisions](https://ant.apache.org/ivy/history/2.3.0/ivyfile/dependency.html#revision)
 documentation for details.
 -->
-<h3 id="versionscheme-and-eviction-errors"><a class="header" href="#versionscheme-and-eviction-errors"><code>versionScheme</code> and eviction errors</a></h3>
-<p>sbt allows library authors to declare the version semantics using the <code>versionScheme</code> setting:</p>
+<h3 id="versionscheme-与驱逐错误"><a class="header" href="#versionscheme-与驱逐错误"><code>versionScheme</code> 与驱逐错误</a></h3>
+<p>sbt 允许库作者使用 <code>versionScheme</code> 设置声明版本语义：</p>
 <pre><code class="language-scala">// Semantic Versioning applied to 0.x, as well as 1.x, 2.x, etc
 versionScheme := Some(VersionScheme.EarlySemVer)
 </code></pre>
-<p>When Coursier finds multiple versions of a library, for example Cats Effect 2.x and Cats Effect 3.0.0-M4, it often resolves the conflict by removing the older version from the graph. This process is colloquially called eviction, like "Cats Effect 2.2.0 was evicted."</p>
-<p>This would work if the new tenant is binary compatible with Cats Effect 2.2.0. In this case, the library authors have declared that they are <em>not</em> binary compatible, so the eviction was actually unsafe. An unsafe eviction would cause runtime issues such as <code>ClassNotFoundException</code>. Instead Coursier should've failed to resolve.</p>
+<p>当 Coursier 发现库的多个版本（例如 Cats Effect 2.x 和 Cats Effect 3.0.0-M4）时，通常通过从图中移除较旧版本来解决冲突。此过程俗称驱逐，如「Cats Effect 2.2.0 被驱逐」。</p>
+<p>若新版本与 Cats Effect 2.2.0 二进制兼容，则可行。但本例中库作者已声明其 <em>不</em> 二进制兼容，因此该驱逐实际上不安全。不安全的驱逐会导致运行时问题，如 <code>ClassNotFoundException</code>。Coursier 本应解析失败。</p>
 <pre><code class="language-scala">lazy val use = project
   .settings(
     name := "use",
@@ -2259,7 +2259,7 @@ versionScheme := Some(VersionScheme.EarlySemVer)
     ),
   )
 </code></pre>
-<p>sbt performs this secondary compatibility check after Coursier returns a candidate:</p>
+<p>sbt 在 Coursier 返回候选版本后执行此二次兼容性检查：</p>
 <pre><code>[error] stack trace is suppressed; run last use / update for the full output
 [error] (use / update) found version conflict(s) in library dependencies; some are suspected to be binary incompatible:
 [error]
@@ -2273,19 +2273,19 @@ versionScheme := Some(VersionScheme.EarlySemVer)
 [error]
 [error] this can be overridden using libraryDependencySchemes or evictionErrorLevel
 </code></pre>
-<p>This mechanism is called the <em>eviction error</em>.</p>
-<h4 id="opting-out-of-the-the-eviction-error"><a class="header" href="#opting-out-of-the-the-eviction-error">Opting out of the the eviction error</a></h4>
-<p>If the library authors have declared the compatibility breakage, but if you want to ignore the strict check (often for <code>scala-xml</code>), you can write this in <code>project/plugins.sbt</code> and <code>build.sbt</code>:</p>
+<p>此机制称为 <em>驱逐错误</em>。</p>
+<h4 id="选择退出驱逐错误检查"><a class="header" href="#选择退出驱逐错误检查">选择退出驱逐错误检查</a></h4>
+<p>若库作者已声明兼容性破坏，但您希望忽略严格检查（常用于 <code>scala-xml</code>），可在 <code>project/plugins.sbt</code> 和 <code>build.sbt</code> 中编写：</p>
 <pre><code class="language-scala">libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always
 </code></pre>
-<p>To ignore all eviction errors:</p>
+<p>要忽略所有驱逐错误：</p>
 <pre><code class="language-scala">evictionErrorLevel := Level.Info
 </code></pre>
-<h3 id="resolvers"><a class="header" href="#resolvers">Resolvers</a></h3>
-<p>sbt uses the standard Maven Central repository by default. Declare additional repositories with the form:</p>
+<h3 id="解析器"><a class="header" href="#解析器">解析器</a></h3>
+<p>sbt 默认使用标准 Maven Central 仓库。使用以下形式声明额外仓库：</p>
 <pre><code class="language-scala">resolvers += name at location
 </code></pre>
-<p>For example:</p>
+<p>例如：</p>
 <pre><code class="language-scala">libraryDependencies ++= Seq(
     "org.apache.derby" % "derby" % "10.4.1.3",
     "org.specs" % "specs" % "1.6.1"
@@ -2293,41 +2293,41 @@ versionScheme := Some(VersionScheme.EarlySemVer)
 
 resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
 </code></pre>
-<p>sbt can search your local Maven repository if you add it as a repository:</p>
+<p>若您将本地 Maven 仓库添加为仓库，sbt 可搜索该仓库：</p>
 <pre><code class="language-scala">resolvers += Resolver.mavenLocal
 </code></pre>
 <!--
 See [Resolvers][Resolvers] for details on defining other types of repositories.
 -->
-<h4 id="override-default-resolvers"><a class="header" href="#override-default-resolvers">Override default resolvers</a></h4>
-<p><code>resolvers</code> configures additional, inline user resolvers. By default, <code>sbt</code> combines these resolvers with default repositories (Maven Central and the local Ivy repository) to form <code>externalResolvers</code>. To have more control over repositories, set <code>externalResolvers</code> directly. To only specify repositories in addition to the usual defaults, configure <code>resolvers</code>.</p>
-<p>For example, to use the Sonatype OSS Snapshots repository in addition to the default repositories,</p>
+<h4 id="覆盖默认解析器"><a class="header" href="#覆盖默认解析器">覆盖默认解析器</a></h4>
+<p><code>resolvers</code> 配置额外的内联用户解析器。默认情况下，<code>sbt</code> 将这些解析器与默认仓库（Maven Central 和本地 Ivy 仓库）组合形成 <code>externalResolvers</code>。要更精细控制仓库，直接设置 <code>externalResolvers</code>。若仅需在常规默认之外指定仓库，则配置 <code>resolvers</code>。</p>
+<p>例如，在默认仓库之外使用 Sonatype OSS Snapshots 仓库：</p>
 <pre><code class="language-scala">resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
 </code></pre>
-<p>To use the local repository, but not the Maven Central repository:</p>
+<p>要使用本地仓库但不使用 Maven Central 仓库：</p>
 <pre><code class="language-scala">externalResolvers := Resolver.combineDefaultResolvers(resolvers.value.toVector, mavenCentral = false)
 </code></pre>
-<h4 id="override-all-resolvers-for-all-builds"><a class="header" href="#override-all-resolvers-for-all-builds">Override all resolvers for all builds</a></h4>
-<p>The repositories used to retrieve sbt, Scala, plugins, and application dependencies can be configured globally and declared to override the resolvers configured in a build or plugin definition. There are two parts:</p>
+<h4 id="覆盖所有构建的解析器"><a class="header" href="#覆盖所有构建的解析器">覆盖所有构建的解析器</a></h4>
+<p>用于获取 sbt、Scala、插件和应用依赖的仓库可全局配置，并声明为覆盖构建或插件定义中配置的解析器。分为两部分：</p>
 <ol>
-<li>Define the repositories used by the launcher.</li>
-<li>Specify that these repositories should override those in build definitions.</li>
+<li>定义 launcher 使用的仓库。</li>
+<li>指定这些仓库应覆盖构建定义中的仓库。</li>
 </ol>
-<p>The repositories used by the launcher can be overridden by defining <code>~/.sbt/repositories</code>, which must contain a <code>[repositories]</code> section with the same format as the <code>Launcher</code> configuration file. For example:</p>
+<p>可通过定义 <code>~/.sbt/repositories</code> 覆盖 launcher 使用的仓库，该文件必须包含与 <code>Launcher</code> 配置文件格式相同的 <code>[repositories]</code> 部分。例如：</p>
 <pre><code>[repositories]
 local
 my-maven-repo: https://example.org/repo
 my-ivy-repo: https://example.org/ivy-repo/, [organization]/[module]/[revision]/[type]s/[artifact](-[classifier]).[ext]
 </code></pre>
-<p>A different location for the repositories file may be specified by the <code>sbt.repository.config</code> system property in the sbt startup script. The final step is to set <code>sbt.override.build.repos</code> to true to use these repositories for dependency resolution and retrieval.</p>
-<h3 id="exclude-transitive-dependencies"><a class="header" href="#exclude-transitive-dependencies">Exclude Transitive Dependencies</a></h3>
-<p>In certain cases a transitive dependency should be excluded from all dependencies. This can be achieved by setting up <code>ExclusionRules</code> in <code>excludeDependencies</code>.</p>
+<p>可通过 sbt 启动脚本中的 <code>sbt.repository.config</code> 系统属性指定仓库文件的不同位置。最后一步是将 <code>sbt.override.build.repos</code> 设为 true，以使用这些仓库进行依赖解析和获取。</p>
+<h3 id="排除传递依赖"><a class="header" href="#排除传递依赖">排除传递依赖</a></h3>
+<p>某些情况下需从所有依赖中排除传递依赖。可通过在 <code>excludeDependencies</code> 中设置 <code>ExclusionRules</code> 实现。</p>
 <pre><code class="language-scala">excludeDependencies ++= Seq(
   // commons-logging is replaced by jcl-over-slf4j
   ExclusionRule("commons-logging", "commons-logging")
 )
 </code></pre>
-<p>To exclude certain transitive dependencies of a dependency, use the <code>excludeAll</code> or <code>exclude</code> methods. The <code>exclude</code> method should be used when a pom will be published for the project. It requires the organization and module name to exclude. For example,</p>
+<p>要排除依赖的某些传递依赖，使用 <code>excludeAll</code> 或 <code>exclude</code> 方法。当项目将发布 pom 时应使用 <code>exclude</code> 方法。需提供要排除的组织和模块名。例如：</p>
 <pre><code class="language-scala">libraryDependencies += 
   ("log4j" % "log4j" % "1.2.15").exclude("javax.jms", "jms")
 </code></pre>
@@ -2347,33 +2347,33 @@ libraryDependencies +=
 
 See [ModuleID](../api/sbt/librarymanagement/ModuleID.html) for API details.
 -->
-<h3 id="explicit-url"><a class="header" href="#explicit-url">Explicit URL</a></h3>
-<p>If your project requires a dependency that is not present in a repository, a direct URL to its jar can be specified as follows:</p>
+<h3 id="显式-url"><a class="header" href="#显式-url">显式 URL</a></h3>
+<p>若您的项目需要仓库中不存在的依赖，可按以下方式指定其 jar 的直接 URL：</p>
 <pre><code class="language-scala">libraryDependencies += "slinky" % "slinky" % "2.1" from "https://slinky2.googlecode.com/svn/artifacts/2.1/slinky.jar"
 </code></pre>
-<p>The URL is only used as a fallback if the dependency cannot be found through the configured repositories. Also, the explicit URL is not included in published metadata (that is, the pom or ivy.xml).</p>
-<h3 id="disable-transitivity"><a class="header" href="#disable-transitivity">Disable Transitivity</a></h3>
-<p>By default, these declarations fetch all project dependencies, transitively. In some instances, you may find that the dependencies listed for a project aren't necessary for it to build. Projects using the Felix OSGI framework, for instance, only explicitly require its main jar to compile and run. Avoid fetching artifact dependencies with either <code>intransitive()</code> or <code>notTransitive()</code>, as in this example:</p>
+<p>仅当通过配置的仓库无法找到依赖时，才将 URL 用作后备。此外，显式 URL 不包含在发布的元数据（即 pom 或 ivy.xml）中。</p>
+<h3 id="禁用传递性"><a class="header" href="#禁用传递性">禁用传递性</a></h3>
+<p>默认情况下，这些声明会传递式获取所有项目依赖。某些情况下，您可能发现项目列出的依赖对其构建并非必需。例如，使用 Felix OSGI 框架的项目仅显式需要其主 jar 来编译和运行。使用 <code>intransitive()</code> 或 <code>notTransitive()</code> 避免获取构件依赖，如下例：</p>
 <pre><code class="language-scala">libraryDependencies += ("org.apache.felix" % "org.apache.felix.framework" % "1.8.0").intransitive()
 </code></pre>
-<h3 id="classifiers"><a class="header" href="#classifiers">Classifiers</a></h3>
-<p>You can specify the classifier for a dependency using the <code>classifier</code> method. For example, to get the jdk15 version of TestNG:</p>
+<h3 id="分类器"><a class="header" href="#分类器">分类器</a></h3>
+<p>您可使用 <code>classifier</code> 方法为依赖指定分类器。例如，获取 TestNG 的 jdk15 版本：</p>
 <pre><code class="language-scala">libraryDependencies += ("org.testng" % "testng" % "5.7").classifier("jdk15")
 </code></pre>
-<p>For multiple classifiers, use multiple <code>classifier</code> calls:</p>
+<p>对于多个分类器，使用多次 <code>classifier</code> 调用：</p>
 <pre><code class="language-scala">libraryDependencies += 
   "org.lwjgl.lwjgl" % "lwjgl-platform" % lwjglVersion classifier "natives-windows" classifier "natives-linux" classifier "natives-osx"
 </code></pre>
-<p>To obtain particular classifiers for all dependencies transitively, run the <code>updateClassifiers</code> task. By default, this resolves all artifacts with the <code>sources</code> or <code>javadoc</code> classifier. Select the classifiers to obtain by configuring the <code>transitiveClassifiers</code> setting. For example, to only retrieve sources:</p>
+<p>要传递式获取所有依赖的特定分类器，运行 <code>updateClassifiers</code> 任务。默认情况下，这会解析具有 <code>sources</code> 或 <code>javadoc</code> 分类器的所有构件。通过配置 <code>transitiveClassifiers</code> 设置选择要获取的分类器。例如，仅获取源码：</p>
 <pre><code class="language-scala">transitiveClassifiers := Seq("sources")
 </code></pre>
-<h3 id="download-sources"><a class="header" href="#download-sources">Download Sources</a></h3>
-<p>Downloading source and API documentation jars is usually handled by an IDE plugin. These plugins use the <code>updateClassifiers</code> and <code>updateSbtClassifiers</code> tasks, which produce an <code>Update-Report</code> referencing these jars.</p>
-<p>To have sbt download the dependency's sources without using an IDE plugin, add <code>withSources()</code> to the dependency definition. For API jars, add <code>withJavadoc()</code>. For example:</p>
+<h3 id="下载源码"><a class="header" href="#下载源码">下载源码</a></h3>
+<p>下载源码和 API 文档 jar 通常由 IDE 插件处理。这些插件使用 <code>updateClassifiers</code> 和 <code>updateSbtClassifiers</code> 任务，生成引用这些 jar 的 <code>Update-Report</code>。</p>
+<p>要让 sbt 在不使用 IDE 插件的情况下下载依赖的源码，在依赖定义中添加 <code>withSources()</code>。对于 API jar，添加 <code>withJavadoc()</code>。例如：</p>
 <pre><code class="language-scala">libraryDependencies += 
   ("org.apache.felix" % "org.apache.felix.framework" % "1.8.0").withSources().withJavadoc()
 </code></pre>
-<p>Note that this is not transitive. Use the <code>update*Classifiers</code> tasks for that.</p>
+<p>注意此操作不具传递性。为此请使用 <code>update*Classifiers</code> 任务。</p>
 <!--
 ### Extra Attributes
 
@@ -2457,28 +2457,28 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "$example_scalatest_vers
 ```
 -->
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-dependencytree"><a class="header" href="#sbt-dependencytree">sbt dependencyTree</a></h1>
-<h2 id="synopsis-2"><a class="header" href="#synopsis-2">Synopsis</a></h2>
+<h2 id="概要-2"><a class="header" href="#概要-2">概要</a></h2>
 <p><code>sbt</code> <code>dependencyTree</code> [<em>subcommand</em>] [<em>options</em>]<br> <code>sbt</code> <code>dependencyTree</code> <code>list</code> [<em>options</em>]<br> <code>sbt</code> <code>dependencyTree</code> <code>graph</code> [<em>options</em>]<br> <code>sbt</code> <code>dependencyTree</code> <code>html</code> [<em>options</em>]<br> <code>sbt</code> <code>dependencyTree</code> <code>html-graph</code> [<em>options</em>]<br> <code>sbt</code> <code>dependencyTree</code> <code>json</code> [<em>options</em>]<br> <code>sbt</code> <code>dependencyTree</code> <code>xml</code> [<em>options</em>]<br> <code>sbt</code> <code>dependencyTree</code> <code>stats</code> [<em>options</em>]</p>
-<h2 id="description-2"><a class="header" href="#description-2">Description</a></h2>
-<p>The <code>dependencyTree</code> task displays the dependency graph of your project in various formats, helping you visualize and analyze transitive dependencies. It is provided by the <code>DependencyTreePlugin</code>, which was in-sourced from Johannes Rudolph's sbt-dependency-graph in sbt 1.4.0. The task resolves dependencies before generating output, so it may trigger downloads if needed.</p>
-<h3 id="usage"><a class="header" href="#usage">Usage</a></h3>
-<p>Run this in the sbt shell. The default subcommand is <code>tree</code>, which prints an ASCII tree.</p>
-<h4 id="subcommands"><a class="header" href="#subcommands">Subcommands</a></h4>
+<h2 id="描述-2"><a class="header" href="#描述-2">描述</a></h2>
+<p><code>dependencyTree</code> 任务以多种格式显示您项目的依赖图，帮助您可视化和分析传递依赖。由 <code>DependencyTreePlugin</code> 提供，该插件在 sbt 1.4.0 中从 Johannes Rudolph 的 sbt-dependency-graph 内源化而来。该任务在生成输出前会解析依赖，因此必要时可能触发下载。</p>
+<h3 id="用法"><a class="header" href="#用法">用法</a></h3>
+<p>在 sbt shell 中运行。默认子命令为 <code>tree</code>，输出 ASCII 树形图。</p>
+<h4 id="子命令"><a class="header" href="#子命令">子命令</a></h4>
 <ul>
-<li><code>tree</code> (default): Prints an ASCII tree of dependencies, showing hierarchical relationships. Useful for quick overviews.</li>
-<li><code>list</code>: Prints a flat list of all dependencies, one per line. Ideal for scripting or grepping.</li>
-<li><code>graph</code> / <code>dot</code>: Prints a GraphViz DOT file for visualization. The <code>dot</code> alias is provided for compatibility.</li>
-<li><code>html</code>: Creates a standalone HTML page with the dependency graph rendered as text.</li>
-<li><code>html-graph</code>: Creates an HTML page with an embedded GraphViz diagram (requires GraphViz on the system).</li>
-<li><code>json</code>: Prints dependencies in JSON format, structured for programmatic use.</li>
-<li><code>xml</code>: Prints dependencies in GraphML format, suitable for graph analysis tools.</li>
-<li><code>stats</code>: Prints summary statistics, such as total dependencies and versions.</li>
-<li><code>help</code>: Displays the usage help (same as running <code>dependencyTree</code> without arguments).</li>
+<li><code>tree</code>（默认）：输出依赖的 ASCII 树形图，显示层级关系。适用于快速概览。</li>
+<li><code>list</code>：输出所有依赖的扁平列表，每行一个。适用于脚本或 grep。</li>
+<li><code>graph</code> / <code>dot</code>：输出用于可视化的 GraphViz DOT 文件。提供 <code>dot</code> 别名以保持兼容。</li>
+<li><code>html</code>：创建以文本形式渲染依赖图的独立 HTML 页面。</li>
+<li><code>html-graph</code>：创建嵌入 GraphViz 图的 HTML 页面（系统需安装 GraphViz）。</li>
+<li><code>json</code>：以 JSON 格式输出依赖，便于程序化使用。</li>
+<li><code>xml</code>：以 GraphML 格式输出依赖，适用于图分析工具。</li>
+<li><code>stats</code>：输出汇总统计，如依赖总数和版本数。</li>
+<li><code>help</code>：显示用法帮助（与不带参数运行 <code>dependencyTree</code> 相同）。</li>
 </ul>
-<h4 id="options"><a class="header" href="#options">Options</a></h4>
+<h4 id="选项"><a class="header" href="#选项">选项</a></h4>
 <ul>
-<li><code>--quiet</code>: Suppresses console output and returns the result as a task value (e.g., for use in other tasks).</li>
-<li><code>--out &lt;file&gt;</code>: Writes output to the specified file instead of stdout. The file extension determines the default subcommand:
+<li><code>--quiet</code>：抑制控制台输出，将结果作为任务值返回（例如供其他任务使用）。</li>
+<li><code>--out &lt;file&gt;</code>：将输出写入指定文件而非 stdout。文件扩展名决定默认子命令：
 <ul>
 <li><code>.txt</code>: <code>tree</code></li>
 <li><code>.dot</code>: <code>graph</code></li>
@@ -2487,11 +2487,11 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "$example_scalatest_vers
 <li><code>.xml</code>: <code>xml</code></li>
 </ul>
 </li>
-<li><code>--browse</code>: Automatically opens the output file in your default browser (only works with <code>graph</code> or <code>html</code> subcommands).</li>
+<li><code>--browse</code>：在默认浏览器中自动打开输出文件（仅对 <code>graph</code> 或 <code>html</code> 子命令有效）。</li>
 </ul>
-<h3 id="examples"><a class="header" href="#examples">Examples</a></h3>
-<h4 id="ascii-tree-default"><a class="header" href="#ascii-tree-default">ASCII Tree (Default)</a></h4>
-<p>Displays a hierarchical view of dependencies, with <code>[S]</code> indicating Scala library dependencies.</p>
+<h3 id="示例"><a class="header" href="#示例">示例</a></h3>
+<h4 id="ascii-树形图默认"><a class="header" href="#ascii-树形图默认">ASCII 树形图（默认）</a></h4>
+<p>显示依赖的层级视图，<code>[S]</code> 表示 Scala 库依赖。</p>
 <pre><code class="language-bash">&gt; Compile/dependencyTree
 [info] default:example_3:0.1.0-SNAPSHOT
 [info]   +-org.scala-lang:scala3-library_3:3.3.1 [S]
@@ -2501,8 +2501,8 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "$example_scalatest_vers
 [info]     |   +-org.scala-lang:scala3-library_3:3.1.3 (evicted by: 3.3.1)
 [info]     +-org.typelevel:cats-effect_3:3.4.0
 </code></pre>
-<p>Evicted dependencies (older versions replaced by newer ones) are shown in parentheses.</p>
-<h4 id="list-of-dependencies"><a class="header" href="#list-of-dependencies">List of Dependencies</a></h4>
+<p>被驱逐的依赖（被较新版本替换的旧版本）显示在括号中。</p>
+<h4 id="依赖列表"><a class="header" href="#依赖列表">依赖列表</a></h4>
 <pre><code class="language-bash">&gt; Compile/dependencyTree list
 org.scala-lang:scala3-library_3:3.3.1
 com.example:library_3:1.0.0
@@ -2510,11 +2510,11 @@ org.typelevel:cats-core_3:2.9.0
 org.typelevel:cats-kernel_3:2.9.0
 org.typelevel:cats-effect_3:3.4.0
 </code></pre>
-<h4 id="graphviz-dot-file"><a class="header" href="#graphviz-dot-file">GraphViz DOT File</a></h4>
-<p>Generates a DOT file for rendering graphs (e.g., with <code>dot</code> command).</p>
+<h4 id="graphviz-dot-文件"><a class="header" href="#graphviz-dot-文件">GraphViz DOT 文件</a></h4>
+<p>生成用于渲染图的 DOT 文件（例如使用 <code>dot</code> 命令）。</p>
 <pre><code class="language-bash">&gt; Compile/dependencyTree graph --out dependencies.dot
 </code></pre>
-<p>Contents of <code>dependencies.dot</code>:</p>
+<p><code>dependencies.dot</code> 内容：</p>
 <pre><code>digraph "dependency-graph" {
     graph[rankdir="LR"; splines=polyline]
     edge [arrowtail="none"]
@@ -2524,19 +2524,19 @@ org.typelevel:cats-effect_3:3.4.0
     // ... more edges
 }
 </code></pre>
-<p>Render to PNG: <code>dot -Tpng dependencies.dot -o dependencies.png</code></p>
-<h4 id="html-output"><a class="header" href="#html-output">HTML Output</a></h4>
+<p>渲染为 PNG：<code>dot -Tpng dependencies.dot -o dependencies.png</code></p>
+<h4 id="html-输出"><a class="header" href="#html-输出">HTML 输出</a></h4>
 <pre><code class="language-bash">&gt; Compile/dependencyTree html --out deps.html --browse
 </code></pre>
-<p>Creates <code>deps.html</code> with a text-based graph and opens it in the browser.</p>
-<h4 id="html-with-embedded-graph"><a class="header" href="#html-with-embedded-graph">HTML with Embedded Graph</a></h4>
+<p>创建包含文本图的 <code>deps.html</code> 并在浏览器中打开。</p>
+<h4 id="嵌入图的-html"><a class="header" href="#嵌入图的-html">嵌入图的 HTML</a></h4>
 <pre><code class="language-bash">&gt; Compile/dependencyTree html-graph --browse
 </code></pre>
-<p>Requires GraphViz installed. Embeds a visual graph in the HTML.</p>
-<h4 id="json-output"><a class="header" href="#json-output">JSON Output</a></h4>
+<p>需要安装 GraphViz。在 HTML 中嵌入可视化图。</p>
+<h4 id="json-输出"><a class="header" href="#json-输出">JSON 输出</a></h4>
 <pre><code class="language-bash">&gt; Compile/dependencyTree json --out deps.json
 </code></pre>
-<p>Sample output:</p>
+<p>示例输出：</p>
 <pre><code class="language-json">{
   "organization": "default",
   "name": "example_3",
@@ -2553,113 +2553,113 @@ org.typelevel:cats-effect_3:3.4.0
   ]
 }
 </code></pre>
-<h4 id="xml-graphml-output"><a class="header" href="#xml-graphml-output">XML (GraphML) Output</a></h4>
+<h4 id="xml-graphml-输出"><a class="header" href="#xml-graphml-输出">XML (GraphML) 输出</a></h4>
 <pre><code class="language-bash">&gt; Compile/dependencyTree xml --out deps.graphml
 </code></pre>
-<p>Suitable for import into graph visualization tools like yEd.</p>
-<h4 id="statistics"><a class="header" href="#statistics">Statistics</a></h4>
+<p>适用于导入 yEd 等图可视化工具。</p>
+<h4 id="统计"><a class="header" href="#统计">统计</a></h4>
 <pre><code class="language-bash">&gt; Compile/dependencyTree stats
 Total dependencies: 15
 Unique organizations: 5
 Versions: 10 distinct
 Evictions: 2
 </code></pre>
-<h3 id="configuration-keys"><a class="header" href="#configuration-keys">Configuration Keys</a></h3>
-<p>Customize behavior with these settings in <code>build.sbt</code>:</p>
+<h3 id="配置键"><a class="header" href="#配置键">配置键</a></h3>
+<p>在 <code>build.sbt</code> 中使用以下设置自定义行为：</p>
 <ul>
-<li><code>dependencyTreeIncludeScalaLibrary := true</code>: Include Scala library dependencies in output (default: <code>false</code>).</li>
-<li><code>dependencyDotNodeColors := false</code>: Disable colors in DOT node labels (default: <code>true</code>).</li>
-<li><code>dependencyDotNodeLabel := (org: String, name: String, version: String) =&gt; s"$org:$name:$version"</code>: Customize DOT node labels.</li>
-<li><code>dependencyDotHeader := """digraph "custom" { rankdir="TB"; }"""</code>: Set a custom DOT header.</li>
+<li><code>dependencyTreeIncludeScalaLibrary := true</code>：在输出中包含 Scala 库依赖（默认：<code>false</code>）。</li>
+<li><code>dependencyDotNodeColors := false</code>：禁用 DOT 节点标签中的颜色（默认：<code>true</code>）。</li>
+<li><code>dependencyDotNodeLabel := (org: String, name: String, version: String) =&gt; s"$org:$name:$version"</code>：自定义 DOT 节点标签。</li>
+<li><code>dependencyDotHeader := """digraph "custom" { rankdir="TB"; }"""</code>：设置自定义 DOT 头部。</li>
 </ul>
-<h3 id="related-tasks"><a class="header" href="#related-tasks">Related Tasks</a></h3>
+<h3 id="相关任务"><a class="header" href="#相关任务">相关任务</a></h3>
 <ul>
-<li><code>whatDependsOn &lt;module&gt;</code>: Shows what depends on a specific module (e.g., <code>whatDependsOn org.example:lib:1.0</code>).</li>
-<li><code>dependencyLicenseInfo</code>: Displays license information for dependencies.</li>
+<li><code>whatDependsOn &lt;module&gt;</code>：显示哪些模块依赖指定模块（例如 <code>whatDependsOn org.example:lib:1.0</code>）。</li>
+<li><code>dependencyLicenseInfo</code>：显示依赖的许可证信息。</li>
 </ul>
 <h3 id="scopes"><a class="header" href="#scopes">Scopes</a></h3>
-<p>Available in <code>Compile</code> and <code>Test</code> configurations. Use <code>Global/</code> for cross-configuration views if needed.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-示例教程-1"><a class="header" href="#sbt-示例教程-1">sbt 示例教程</a></h1>
-<h2 id="synopsis-3"><a class="header" href="#synopsis-3">Synopsis</a></h2>
+<p>在 <code>Compile</code> 和 <code>Test</code> 配置中可用。如需跨配置视图，使用 <code>Global/</code>。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-compile"><a class="header" href="#sbt-compile">sbt compile</a></h1>
+<h2 id="概要-3"><a class="header" href="#概要-3">概要</a></h2>
 <p><code>sbt</code> [<em>query</em> / ] <code>compile</code><br> <code>sbt</code> [<em>query</em> / ] <code>Test</code> / <code>compile</code><br></p>
-<h2 id="description-3"><a class="header" href="#description-3">Description</a></h2>
-<p>The <code>compile</code> task compiles the selected subprojects and their subproject dependencies. Since sbt 2.x, the compiled artifacts are cached automatically.</p>
-<p>Compiling Scala code with the raw Scala compiler has been slow, so significant poriton of sbt's development efforts deal with various strategies for speeding up compilation.</p>
-<h3 id="reduce-the-overhead-of-restarting-the-compiler"><a class="header" href="#reduce-the-overhead-of-restarting-the-compiler">Reduce the overhead of restarting the compiler</a></h3>
-<p>sbt server stays up in the background, allowing Scala compilation to run the same Java virtual machine (JVM). Keeping the JVM warm makes compilation significantly faster because it takes a long time to classload the compiler and for the Just-in-Time compiler to optimize it.</p>
-<h3 id="incremental-compilation"><a class="header" href="#incremental-compilation">Incremental compilation</a></h3>
-<p>When a source file <code>A.scala</code> is modified, sbt goes to great effort to minimize the other source files recompiled due to <code>A.scala</code>'s change. This process of tracking dependencies between the language constructs and recompiling only the required sources is called <em>incremental compilation</em>.</p>
-<h3 id="remote-caching-1"><a class="header" href="#remote-caching-1">(Remote) caching</a></h3>
-<p>In sbt 2.x, compiled artifacts are not only cached across the sessions and builds, but can optionally be cached across different machines using Bazel-compatible remote cache. See <a href="reference/../concepts/caching.html">Caching</a> for details.</p>
+<h2 id="描述-3"><a class="header" href="#描述-3">描述</a></h2>
+<p><code>compile</code> 任务编译选定的子项目及其子项目依赖。自 sbt 2.x 起，编译后的构件会自动缓存。</p>
+<p>使用原始 Scala 编译器编译 Scala 代码一直较慢，因此 sbt 的相当一部分开发工作致力于各种加速编译的策略。</p>
+<h3 id="降低重启编译器的开销"><a class="header" href="#降低重启编译器的开销">降低重启编译器的开销</a></h3>
+<p>sbt server 在后台持续运行，使 Scala 编译可在同一 Java 虚拟机（JVM）中执行。保持 JVM 常驻可显著加快编译，因为加载编译器并让即时编译器优化需要较长时间。</p>
+<h3 id="增量编译"><a class="header" href="#增量编译">增量编译</a></h3>
+<p>当源文件 <code>A.scala</code> 被修改时，sbt 会尽力减少因 <code>A.scala</code> 变更而需重新编译的其他源文件。这种跟踪语言结构间依赖并仅重新编译所需源文件的过程称为 <em>增量编译</em>。</p>
+<h3 id="远程缓存-1"><a class="header" href="#远程缓存-1">（远程）缓存</a></h3>
+<p>在 sbt 2.x 中，编译后的构件可在会话和构建间缓存，还可选择使用 Bazel 兼容的远程缓存在不同机器间缓存。详见<a href="reference/../concepts/caching.html">缓存</a>。</p>
 <h3 id="test--compile"><a class="header" href="#test--compile">Test / compile</a></h3>
-<p>Scoping the <code>compile</code> task with a configuration, like <code>Test / compile</code> will compile the test sources and their source dependencies.</p>
-<h3 id="compilation-settings"><a class="header" href="#compilation-settings">Compilation settings</a></h3>
+<p>使用配置限定 <code>compile</code> 任务，如 <code>Test / compile</code> 将编译测试源及其源依赖。</p>
+<h3 id="编译设置"><a class="header" href="#编译设置">编译设置</a></h3>
 <h4 id="scalaversion"><a class="header" href="#scalaversion">scalaVersion</a></h4>
-<p>The version of Scala used for compilation.</p>
+<p>用于编译的 Scala 版本。</p>
 <pre><code class="language-scala">scalaVersion := "3.8.1"
 </code></pre>
 <h4 id="scalacoptions"><a class="header" href="#scalacoptions">scalacOptions</a></h4>
-<p>Options for the Scala compiler.</p>
+<p>Scala 编译器选项。</p>
 <pre><code class="language-scala">Compile / scalacOptions += "-Werror"
 </code></pre>
 <h4 id="javacoptions"><a class="header" href="#javacoptions">javacOptions</a></h4>
-<p>Options for the Java compiler.</p>
+<p>Java 编译器选项。</p>
 <pre><code class="language-scala">Compile / javacOptions ++= List("-Xlint", "-Xlint:-serial")
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-run"><a class="header" href="#sbt-run">sbt run</a></h1>
-<h2 id="synopsis-4"><a class="header" href="#synopsis-4">Synopsis</a></h2>
+<h2 id="概要-4"><a class="header" href="#概要-4">概要</a></h2>
 <p><code>sbt</code> [<em>query</em> / ] <code>run</code> [<em>args</em>]</p>
-<h2 id="description-4"><a class="header" href="#description-4">Description</a></h2>
-<p>The <code>run</code> task provides a means for running the user program.</p>
-<p>In sbt 1.x and earlier, <code>run</code> task ran the user program in the same Java virtual machine (JVM) as the sbt server. sbt 2.x implements <em>client-side run</em>: the <code>run</code> task creates a sandbox environment that contains the program, sends the information back to sbtn, and sbtn launches the user program in a fresh JVM.</p>
-<h3 id="motivations"><a class="header" href="#motivations">Motivations</a></h3>
-<p>There are several motivations for the client-side run.</p>
+<h2 id="描述-4"><a class="header" href="#描述-4">描述</a></h2>
+<p><code>run</code> 任务提供运行用户程序的方式。</p>
+<p>在 sbt 1.x 及更早版本中，<code>run</code> 任务在与 sbt server 相同的 Java 虚拟机（JVM）中运行用户程序。sbt 2.x 实现了 <em>客户端 run</em>：<code>run</code> 任务创建包含程序的沙箱环境，将信息发回 sbtn，由 sbtn 在新的 JVM 中启动用户程序。</p>
+<h3 id="动机"><a class="header" href="#动机">动机</a></h3>
+<p>客户端 run 有若干动机。</p>
 <ol>
-<li><strong>sys.exit support</strong>. User code can call <code>sys.exit</code>, which normally shuts down the JVM. In sbt 1.x, we needed to trap these <code>sys.exit</code> calls to prevent <code>run</code> from shutting down the sbt session, using the JDK SecurityManager; however, TrapExit was dropped in sbt 1.6.0 (2021) since JDK 17 deprecated SecurityManager feature. Because client-side run runs the user program in its own JVM, it can call <code>sys.exit</code>.</li>
-<li><strong>Isolation</strong>. User code can also start threads, or otherwise allocate resources that can be left running after the main method returns. Running user code in a separate JVM gives isolation between the sbt server and the user code.</li>
-<li><strong>sbt server availability</strong>. Since the program will run outside of the sbt server, it can become available to the more requests by other clients, for example test or IDE integration.</li>
+<li><strong>sys.exit 支持</strong>。用户代码可调用 <code>sys.exit</code>，通常会关闭 JVM。在 sbt 1.x 中，我们需使用 JDK SecurityManager 拦截这些 <code>sys.exit</code> 调用，以防 <code>run</code> 关闭 sbt 会话；但 JDK 17 弃用 SecurityManager 后，TrapExit 在 sbt 1.6.0（2021）中被移除。由于客户端 run 在独立 JVM 中运行用户程序，因此可调用 <code>sys.exit</code>。</li>
+<li><strong>隔离</strong>。用户代码也可启动线程或分配其他资源，这些可能在 main 方法返回后继续运行。在独立 JVM 中运行用户代码可在 sbt server 与用户代码之间提供隔离。</li>
+<li><strong>sbt server 可用性</strong>。由于程序在 sbt server 外运行，sbt server 可更及时响应其他客户端的请求，例如测试或 IDE 集成。</li>
 </ol>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-test"><a class="header" href="#sbt-test">sbt test</a></h1>
-<h2 id="synopsis-5"><a class="header" href="#synopsis-5">Synopsis</a></h2>
+<h2 id="概要-5"><a class="header" href="#概要-5">概要</a></h2>
 <p><code>sbt</code> [<em>query</em> / ] <code>test</code> [<em>testname1</em> <em>testname2</em>] [ -- <em>options</em> ]</p>
-<h2 id="description-5"><a class="header" href="#description-5">Description</a></h2>
-<p>The <code>test</code> task provides a means for compiling and running the tests.</p>
-<p>By default, the <code>test</code> task in sbt 2.x:</p>
+<h2 id="描述-5"><a class="header" href="#描述-5">描述</a></h2>
+<p><code>test</code> 任务提供编译和运行测试的方式。</p>
+<p>默认情况下，sbt 2.x 中的 <code>test</code> 任务：</p>
 <ol>
-<li><strong>Subproject parallelism</strong>. Performs compilation of the relevant subprojects in parallel, specified by the <a href="reference/../concepts/sbt-query.html">query</a>.</li>
-<li><strong>Test suite parallelism</strong>. Maps discovered test suites, to tasks and executes them in parallel.</li>
-<li><strong>Incremental test</strong>. Runs only the tests that either failed in the previous run, never run, or if sbt detects changes in the test or its dependencies.</li>
-<li><strong>Cached</strong>. The test result is cached machine-wide, and optionally remote cached.</li>
+<li><strong>子项目并行</strong>。并行编译由 <a href="reference/../concepts/sbt-query.html">query</a> 指定的相关子项目。</li>
+<li><strong>测试套件并行</strong>。将发现的测试套件映射为任务并并行执行。</li>
+<li><strong>增量测试</strong>。仅运行上次失败、从未运行，或 sbt 检测到测试或其依赖有变更的测试。</li>
+<li><strong>缓存</strong>。测试结果在机器范围内缓存，并可选择远程缓存。</li>
 </ol>
-<p>The standard source locations for testing are:</p>
+<p>测试的标准源位置为：</p>
 <ul>
-<li>Scala sources in <code>src/test/scala/</code></li>
-<li>Java sources in <code>src/test/java/</code></li>
-<li>Resources for the test classpath in <code>src/test/resources/</code></li>
+<li><code>src/test/scala/</code> 中的 Scala 源</li>
+<li><code>src/test/java/</code> 中的 Java 源</li>
+<li><code>src/test/resources/</code> 中用于测试 classpath 的资源</li>
 </ul>
-<p>The resources may be accessed from tests by using the <code>getResource</code> methods of <code>java.lang.Class</code> or <code>java.lang.ClassLoader</code>.</p>
-<h3 id="test-interfaces"><a class="header" href="#test-interfaces">Test interfaces</a></h3>
-<p>sbt defines the common interface for JVM-based test frameworks, allowing automatic test suite discovery and parallel execution. By default sbt integrates with <a href="https://scalameta.org/munit/">MUnit</a>, <a href="https://www.scalatest.org/">ScalaTest</a>, <a href="https://hedgehogqa.github.io/scala-hedgehog/">Hedgehog</a>, <a href="https://scalacheck.org/">ScalaCheck</a>, <a href="https://etorreborre.github.io/specs2/">Specs2</a>, <a href="https://typelevel.org/weaver-test/">Weaver</a>, <a href="https://zio.dev/reference/test/">ZIO Test</a>, and <a href="https://github.com/sbt/junit-interface">JUnit 4</a>; this means you only need to add the test framework to the classpath to work with sbt. For example, MUnit may be used by declaring it as a <code>libraryDependency</code>:</p>
+<p>测试中可通过 <code>java.lang.Class</code> 或 <code>java.lang.ClassLoader</code> 的 <code>getResource</code> 方法访问资源。</p>
+<h3 id="测试接口"><a class="header" href="#测试接口">测试接口</a></h3>
+<p>sbt 为基于 JVM 的测试框架定义了通用接口，支持自动发现测试套件和并行执行。默认情况下 sbt 与 <a href="https://scalameta.org/munit/">MUnit</a>、<a href="https://www.scalatest.org/">ScalaTest</a>、<a href="https://hedgehogqa.github.io/scala-hedgehog/">Hedgehog</a>、<a href="https://scalacheck.org/">ScalaCheck</a>、<a href="https://etorreborre.github.io/specs2/">Specs2</a>、<a href="https://typelevel.org/weaver-test/">Weaver</a>、<a href="https://zio.dev/reference/test/">ZIO Test</a> 和 <a href="https://github.com/sbt/junit-interface">JUnit 4</a> 集成；这意味着您只需将测试框架添加到 classpath 即可与 sbt 配合使用。例如，可通过将其声明为 <code>libraryDependency</code> 使用 MUnit：</p>
 <pre><code class="language-scala">lazy val munit = "org.scalameta" %% "munit" % "1.2.0"
 
 libraryDependencies += munit % Test
 </code></pre>
-<p>In the above, <code>Test</code> denotes the <code>Test</code> configuration, and means that MUnit will only be on the test classpath and it isn't needed by the main sources.</p>
+<p>上述中，<code>Test</code> 表示 <code>Test</code> 配置，意味着 MUnit 仅出现在测试 classpath 中，主源不需要它。</p>
 <h4 id="junit"><a class="header" href="#junit">JUnit</a></h4>
-<p>Support for JUnit 5 is provided by <a href="https://github.com/sbt/sbt-jupiter-interface">sbt-jupiter-interface</a>. To add JUnit Jupiter support into your project, add the jupiter-interface dependency in your project's main build.sbt file.</p>
+<p>JUnit 5 支持由 <a href="https://github.com/sbt/sbt-jupiter-interface">sbt-jupiter-interface</a> 提供。要为项目添加 JUnit Jupiter 支持，请在项目主 <code>build.sbt</code> 文件中添加 jupiter-interface 依赖。</p>
 <pre><code class="language-scala">libraryDependencies += "com.github.sbt.junit" % "jupiter-interface" % "0.15.1" % Test
 </code></pre>
-<p>and the sbt-jupiter-interface plugin to your <code>project/plugins.sbt</code>:</p>
+<p>并将 sbt-jupiter-interface 插件添加到 <code>project/plugins.sbt</code>：</p>
 <pre><code class="language-scala">addSbtPlugin("com.github.sbt.junit" % "sbt-jupiter-interface" % "0.15.1")
 </code></pre>
-<p>Support for JUnit 4 is provided by <a href="https://github.com/sbt/junit-interface">junit-interface</a>. Add the junit-interface dependency in your project's main build.sbt file.</p>
+<p>JUnit 4 支持由 <a href="https://github.com/sbt/junit-interface">junit-interface</a> 提供。请在项目主 <code>build.sbt</code> 文件中添加 junit-interface 依赖。</p>
 <pre><code class="language-scala">libraryDependencies += "com.github.sbt" % "junit-interface" % "0.13.3" % Test
 </code></pre>
-<h3 id="test-filtering"><a class="header" href="#test-filtering">Test filtering</a></h3>
-<p>In sbt 2.x, the <code>test</code> task accepts a whitespace separated list of test names to run. For example:</p>
+<h3 id="测试过滤"><a class="header" href="#测试过滤">测试过滤</a></h3>
+<p>在 sbt 2.x 中，<code>test</code> 任务接受以空格分隔的测试名称列表。例如：</p>
 <pre><code class="language-bash">&gt; test example.ExampleSuite example.ExampleSuite2
 </code></pre>
-<p>Here's an example output:</p>
+<p>示例输出：</p>
 <pre><code class="language-bash">&gt; test example.ExampleSuite example.ExampleSuite2
 [info] compiling 1 Scala source to /tmp/foo/target/out/jvm/scala-3.7.2/foo/backend ...
 [info] compiling 2 Scala sources to /tmp/foo/target/out/jvm/scala-3.7.2/foo/test-backend ...
@@ -2670,18 +2670,18 @@ example.ExampleSuite2:
 [info] Passed: Total 2, Failed 0, Errors 0, Passed 2
 [success] elapsed time: 3 s, cache 49%, 25 disk cache hits, 26 onsite tasks
 </code></pre>
-<p>It supports wildcards as well:</p>
+<p>也支持通配符：</p>
 <pre><code>&gt; test *Example*
 </code></pre>
-<h3 id="incremental-testing"><a class="header" href="#incremental-testing">Incremental testing</a></h3>
-<p>In addition to the explicit filter, the <code>test</code> task runs only the tests that satisfy one of the following conditions are run:</p>
+<h3 id="增量测试-1"><a class="header" href="#增量测试-1">增量测试</a></h3>
+<p>除显式过滤外，<code>test</code> 任务仅运行满足以下条件之一的测试：</p>
 <ul>
-<li>The tests that failed in the previous run</li>
-<li>The tests that were not run before</li>
-<li>The tests that have one or more transitive dependencies, maybe in a different project, recompiled.</li>
+<li>上次运行失败的测试</li>
+<li>之前未运行过的测试</li>
+<li>有一个或多个传递依赖（可能在不同项目中）被重新编译的测试。</li>
 </ul>
-<h3 id="full-testing"><a class="header" href="#full-testing">Full testing</a></h3>
-<p>To run, uncached full tests, like sbt 1.x, use the <code>testFull</code> task.</p>
+<h3 id="完整测试"><a class="header" href="#完整测试">完整测试</a></h3>
+<p>要运行未缓存的完整测试（如 sbt 1.x），请使用 <code>testFull</code> 任务。</p>
 <!--
 ### Tab completion
 
@@ -2691,8 +2691,8 @@ tab completion until they are compiled and deleted sources won't be
 removed from tab completion until a recompile. A new test source can
 still be manually written out and run using `test`.
 -->
-<h3 id="other-tasks"><a class="header" href="#other-tasks">Other tasks</a></h3>
-<p>Tasks that are available for main sources are generally available for test sources, but are prefixed with <code>Test /</code> on the command line and are referenced in Scala code with <code>Test /</code> as well. These tasks include:</p>
+<h3 id="其他任务"><a class="header" href="#其他任务">其他任务</a></h3>
+<p>主源可用的任务通常也可用于测试源，但在命令行中需加 <code>Test /</code> 前缀，在 Scala 代码中也以 <code>Test /</code> 引用。这些任务包括：</p>
 <ul>
 <li><code>Test / compile</code></li>
 <li><code>Test / console</code></li>
@@ -2700,28 +2700,28 @@ still be manually written out and run using `test`.
 <li><code>Test / run</code></li>
 <li><code>Test / runMain</code></li>
 </ul>
-<p>See <a href="reference/./sbt-run.html">sbt run</a> for details on these tasks.</p>
-<h3 id="output"><a class="header" href="#output">Output</a></h3>
-<p>By default, logging is buffered for each test source file until all tests for that file complete. This can be disabled by setting <code>logBuffered</code>:</p>
+<p>详见 <a href="reference/./sbt-run.html">sbt run</a> 了解这些任务。</p>
+<h3 id="输出"><a class="header" href="#输出">输出</a></h3>
+<p>默认情况下，每个测试源文件的日志会缓冲到该文件所有测试完成。可通过设置 <code>logBuffered</code> 禁用：</p>
 <pre><code class="language-scala">Test / logBuffered := false
 </code></pre>
-<h4 id="test-reports"><a class="header" href="#test-reports">Test Reports</a></h4>
-<p>By default, sbt will generate JUnit XML test reports for all tests in the build, located in the <code>target/test-reports</code> directory for a project. This can be disabled by disabling the <code>JUnitXmlReportPlugin</code></p>
+<h4 id="测试报告"><a class="header" href="#测试报告">测试报告</a></h4>
+<p>默认情况下，sbt 会为构建中所有测试生成 JUnit XML 测试报告，位于项目的 <code>target/test-reports</code> 目录。可通过禁用 <code>JUnitXmlReportPlugin</code> 来禁用此功能。</p>
 <pre><code class="language-scala">val myProject = (project in file(".")).disablePlugins(plugins.JUnitXmlReportPlugin)
 </code></pre>
-<h3 id="options-1"><a class="header" href="#options-1">Options</a></h3>
-<h4 id="test-framework-arguments"><a class="header" href="#test-framework-arguments">Test framework arguments</a></h4>
-<p>Arguments to the test framework may be provided on the command line to the <code>test</code> tasks following a <code>--</code> separator. For example:</p>
+<h3 id="选项-1"><a class="header" href="#选项-1">选项</a></h3>
+<h4 id="测试框架参数"><a class="header" href="#测试框架参数">测试框架参数</a></h4>
+<p>测试框架参数可在命令行中通过 <code>--</code> 分隔符传递给 <code>test</code> 任务。例如：</p>
 <pre><code>&gt; test org.example.MyTest -- -verbosity 1
 </code></pre>
-<p>To specify test framework arguments as part of the build, add options constructed by <code>Tests.Argument</code>:</p>
+<p>要在构建中指定测试框架参数，添加由 <code>Tests.Argument</code> 构造的选项：</p>
 <pre><code class="language-scala">Test / testOptions += Tests.Argument("-verbosity", "1")
 </code></pre>
-<p>To specify them for a specific test framework only:</p>
+<p>要仅为特定测试框架指定：</p>
 <pre><code class="language-scala">Test / testOptions += Tests.Argument(TestFrameworks.ScalaCheck, "-verbosity", "1")
 </code></pre>
-<h4 id="setup-and-cleanup"><a class="header" href="#setup-and-cleanup">Setup and Cleanup</a></h4>
-<p>Specify setup and cleanup actions using <code>Tests.Setup</code> and <code>Tests.Cleanup</code>. These accept either a function of type <code>() =&gt; Unit</code> or a function of type <code>ClassLoader =&gt; Unit</code>. The variant that accepts a ClassLoader is passed the class loader that is (or was) used for running the tests. It provides access to the test classes as well as the test framework classes.</p>
+<h4 id="设置与清理"><a class="header" href="#设置与清理">设置与清理</a></h4>
+<p>使用 <code>Tests.Setup</code> 和 <code>Tests.Cleanup</code> 指定设置和清理操作。它们接受 <code>() =&gt; Unit</code> 类型或 <code>ClassLoader =&gt; Unit</code> 类型的函数。接受 ClassLoader 的变体会接收用于运行测试的（或曾用于运行测试的）类加载器，可访问测试类和测试框架类。</p>
 <div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
 <div class="admonition-title">
 <div id="admonition-note-title">
@@ -2730,36 +2730,31 @@ still be manually written out and run using `test`.
 <a class="admonition-anchor-link" href="reference/sbt-test.html#admonition-note"></a>
 </div>
 <div>
-<p>When forking, the <code>ClassLoader</code> containing the test classes cannot be
-provided because it is in another JVM. Only use the <code>() =&gt; Unit</code>
-variants in this case.</p>
+<p>fork 时无法提供包含测试类的 <code>ClassLoader</code>，因其在另一个 JVM 中。
+此情况下仅使用 <code>() =&gt; Unit</code> 变体。</p>
 </div>
 </div>
-<p>Examples:</p>
+<p>示例：</p>
 <pre><code class="language-scala">Test / testOptions += Tests.Setup( () =&gt; println("Setup") )
 Test / testOptions += Tests.Cleanup( () =&gt; println("Cleanup") )
 Test / testOptions += Tests.Setup( loader =&gt; ... )
 Test / testOptions += Tests.Cleanup( loader =&gt; ... )
 </code></pre>
-<h4 id="disable-parallel-execution-of-test-suites"><a class="header" href="#disable-parallel-execution-of-test-suites">Disable parallel execution of test suites</a></h4>
-<p>By default, sbt runs all tasks in parallel and within the same JVM as sbt itself. Because each test suite is mapped to a task, tests are also run in parallel by default. To make tests within a given project execute serially:</p>
+<h4 id="禁用测试套件并行执行"><a class="header" href="#禁用测试套件并行执行">禁用测试套件并行执行</a></h4>
+<p>默认情况下，sbt 在与自身相同的 JVM 中并行运行所有任务。由于每个测试套件映射为一个任务，测试默认也并行运行。要使给定项目内的测试串行执行：</p>
 <pre><code class="language-scala">Test / parallelExecution := false
 </code></pre>
-<p>Note that tests from different projects may still execute concurrently.</p>
-<h4 id="filter-classes"><a class="header" href="#filter-classes">Filter classes</a></h4>
-<p>If you want to only run test classes whose name ends with "Test", use <code>Tests.Filter</code>:</p>
+<p>注意，不同项目的测试仍可能并发执行。</p>
+<h4 id="过滤类"><a class="header" href="#过滤类">过滤类</a></h4>
+<p>若您只想运行名称以 "Test" 结尾的测试类，使用 <code>Tests.Filter</code>：</p>
 <pre><code class="language-scala">Test / testOptions := Seq(Tests.Filter(s =&gt; s.endsWith("Test")))
 </code></pre>
-<h4 id="forking-tests"><a class="header" href="#forking-tests">Forking tests</a></h4>
-<p>The setting:</p>
+<h4 id="fork-测试"><a class="header" href="#fork-测试">Fork 测试</a></h4>
+<p>该设置：</p>
 <pre><code class="language-scala">Test / fork := true
 </code></pre>
-<p>specifies that all tests will be executed in a single external JVM. <!-- See
-[Forking][Forking] for configuring standard options for forking.
-By default,
-tests executed in a forked JVM are executed *sequentially*.
---></p>
-<p>More control over how tests are assigned to JVMs and what options to pass to those is available with <code>testGrouping</code> key.</p>
+<p>指定所有测试将在单个外部 JVM 中执行。</p>
+<p>可通过 <code>testGrouping</code> 键更精细控制测试如何分配到 JVM 以及传递哪些选项。</p>
 <!--
 For example in build.sbt:
 
@@ -2781,7 +2776,7 @@ import Tests._
 
 The tests in a single group are run sequentially.
 -->
-<p>Control the number of forked JVMs allowed to run at the same time by setting the limit on <code>Tags.ForkedTestGroup</code> tag, which is 1 by default. <code>Setup</code> and <code>Cleanup</code> actions cannot be provided with the actual test class loader when a group is forked.</p>
+<p>通过设置 <code>Tags.ForkedTestGroup</code> 标签的限制可控制同时运行的 fork JVM 数量，默认为 1。当组被 fork 时，无法为 <code>Setup</code> 和 <code>Cleanup</code> 操作提供实际测试类加载器。</p>
 <!--
 In addition, forked tests can optionally be run in parallel within the
 forked JVM(s), using the following setting:
@@ -2978,13 +2973,13 @@ testListeners += customTestListener
 where `customTestListener` is of type `sbt.TestReportListener`.
 -->
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-inspect"><a class="header" href="#sbt-inspect">sbt inspect</a></h1>
-<h2 id="synopsis-6"><a class="header" href="#synopsis-6">Synopsis</a></h2>
+<h2 id="概要-6"><a class="header" href="#概要-6">概要</a></h2>
 <p><code>sbt</code> <code>inspect</code> [<em>subproject</em> / ] [ <em>config</em> / ] <em>task</em><br> <code>sbt</code> <code>inspect actual</code> [<em>subproject</em> / ] [ <em>config</em> / ] <em>task</em><br> <code>sbt</code> <code>inspect tree</code> [<em>subproject</em> / ] [ <em>config</em> / ] <em>task</em></p>
-<h2 id="description-6"><a class="header" href="#description-6">Description</a></h2>
-<p>The <code>inspect</code> command provides a means to inspect the task and setting graph. For instace, it can be used to determine which setting should be modified to affect another task.</p>
-<h3 id="value-description-and-provided-by"><a class="header" href="#value-description-and-provided-by">Value, Description, and Provided By</a></h3>
-<p>The first piece of information provided by <code>inspect</code> is the type of a task or the value and type of a setting.</p>
-<p>For example,</p>
+<h2 id="描述-6"><a class="header" href="#描述-6">描述</a></h2>
+<p><code>inspect</code> 命令提供检查任务和设置图的方式。例如，可用于确定应修改哪个设置以影响其他任务。</p>
+<h3 id="值描述和提供来源"><a class="header" href="#值描述和提供来源">值、描述和提供来源</a></h3>
+<p><code>inspect</code> 提供的第一条信息是任务的类型或设置的值和类型。</p>
+<p>例如：</p>
 <pre><code class="language-bash">$ sbt inspect libraryDependencies
 [info] Setting: interface scala.collection.immutable.Seq =
   List(org.scala-lang:scala3-library:3.7.2,
@@ -2996,20 +2991,20 @@ where `customTestListener` is of type `sbt.TestReportListener`.
 [info]  ProjectRef(uri("file:/tmp/aaa/"), "aaa") / libraryDependencies
 ....
 </code></pre>
-<p>The following section of output is labeled "Provided by". This shows the actual scope where the setting is defined.</p>
-<p>This shows that <code>libraryDependencies</code> has been defined on the current project (<code>ProjectRef(uri("file:/tmp/aaa/"), "aaa")</code>).</p>
-<h3 id="related-settings"><a class="header" href="#related-settings">Related Settings</a></h3>
-<p>The <em>Related</em> section of <code>inspect</code> output lists all of the definitions of a key. For example,</p>
+<p>输出的下一部分标为 "Provided by"。显示定义该设置的实际作用域。</p>
+<p>这表明 <code>libraryDependencies</code> 已在当前项目（<code>ProjectRef(uri("file:/tmp/aaa/"), "aaa")</code>）上定义。</p>
+<h3 id="相关设置"><a class="header" href="#相关设置">相关设置</a></h3>
+<p><code>inspect</code> 输出的 <em>Related</em> 部分列出键的所有定义。例如：</p>
 <pre><code class="language-bash">&gt; inspect compile
 ...
 [info] Related:
 [info]  Test / compile
 </code></pre>
-<p>This shows that in addition to the requested <code>Compile / compile</code> task, there is also a <code>Test / compile</code> task.</p>
-<h3 id="setting-dependencies"><a class="header" href="#setting-dependencies">Setting dependencies</a></h3>
-<p>Forward dependencies show the other settings (or tasks) used to define a setting (or task). Reverse dependencies go the other direction, showing what uses a given setting. <code>inspect</code> provides this information based on either the requested dependencies or the actual dependencies. Requested dependencies are those that a setting directly specifies. Actual settings are what those dependencies get resolved to. This distinction is explained in more detail in the following sections.</p>
-<h4 id="requested-dependencies"><a class="header" href="#requested-dependencies">Requested Dependencies</a></h4>
-<p>As an example, we'll look at <code>console</code>:</p>
+<p>这表明除请求的 <code>Compile / compile</code> 任务外，还有 <code>Test / compile</code> 任务。</p>
+<h3 id="设置依赖关系"><a class="header" href="#设置依赖关系">设置依赖关系</a></h3>
+<p>正向依赖显示用于定义设置（或任务）的其他设置（或任务）。反向依赖则相反，显示哪些使用了给定设置。<code>inspect</code> 根据指定依赖或有效依赖提供此信息。指定依赖是设置直接指定的；有效设置是这些依赖解析后的结果。以下各节将更详细地说明这一区别。</p>
+<h4 id="指定设置依赖"><a class="header" href="#指定设置依赖">指定设置依赖</a></h4>
+<p>例如，我们来看 <code>console</code>：</p>
 <pre><code class="language-bash">$ sbt inspect console
 ...
 [info] Dependencies:
@@ -3026,16 +3021,16 @@ where `customTestListener` is of type `sbt.TestReportListener`.
 
 ...
 </code></pre>
-<p>This shows the inputs to the <code>console</code> task. We can see that it gets its classpath and options from <code>Compile / console / fullClasspath</code> and <code>Compile / console / scalacOptions</code>. The information provided by the <code>inspect</code> command can thus assist in finding the right setting to change. The convention for keys, like <code>console</code> and <code>fullClasspath</code>, is that the Scala identifier is camel case, while the String representation is lowercase and separated by dashes. The Scala identifier for a configuration is uppercase to distinguish it from tasks like <code>compile</code> and <code>test</code>. For example, we can infer from the previous example how to add code to be run when the Scala interpreter starts up:</p>
+<p>这显示 <code>console</code> 任务的输入。可见其 classpath 和选项来自 <code>Compile / console / fullClasspath</code> 和 <code>Compile / console / scalacOptions</code>。<code>inspect</code> 命令提供的信息有助于找到要修改的正确设置。键的约定（如 <code>console</code> 和 <code>fullClasspath</code>）是：Scala 标识符为驼峰式，字符串表示为小写并用连字符分隔。配置的 Scala 标识符为大写，以区别于 <code>compile</code> 和 <code>test</code> 等任务。例如，从前例可推断如何在 Scala 解释器启动时添加要运行的代码：</p>
 <pre><code class="language-scala">&gt; set Compile / console / initialCommands := "import mypackage._"
 &gt; console
 ...
 import mypackage._
 ...
 </code></pre>
-<p><code>inspect</code> showed that <code>console</code> used the setting <code>Compile / console / initialCommands</code>. Translating the <code>initialCommands</code> string to the Scala identifier gives us <code>initialCommands</code>. <code>compile</code> indicates that this is for the main sources. <code>console /</code> indicates that the setting is specific to <code>console</code>. Because of this, we can set the initial commands on the <code>console</code> task without affecting the <code>consoleQuick</code> task, for example.</p>
-<h4 id="actual-dependencies"><a class="header" href="#actual-dependencies">Actual Dependencies</a></h4>
-<p><code>inspect actual &lt;scoped-key&gt;</code> shows the actual dependency used. This is useful because delegation means that the dependency can come from a scope other than the requested one. Using <code>inspect actual</code>, we see exactly which scope is providing a value for a setting. Combining <code>inspect actual</code> with plain <code>inspect</code>, we can see the range of scopes that will affect a setting. Returning to the example in Requested Dependencies,</p>
+<p><code>inspect</code> 显示 <code>console</code> 使用设置 <code>Compile / console / initialCommands</code>。将 <code>initialCommands</code> 字符串转换为 Scala 标识符即得 <code>initialCommands</code>。<code>compile</code> 表示用于主源。<code>console /</code> 表示该设置专用于 <code>console</code>。因此，我们可在 <code>console</code> 任务上设置初始命令而不影响 <code>consoleQuick</code> 任务。</p>
+<h4 id="有效设置依赖"><a class="header" href="#有效设置依赖">有效设置依赖</a></h4>
+<p><code>inspect actual &lt;scoped-key&gt;</code> 显示实际使用的依赖。这很有用，因为委托意味着依赖可能来自请求作用域之外。使用 <code>inspect actual</code> 可准确看到哪个作用域为设置提供值。将 <code>inspect actual</code> 与普通 <code>inspect</code> 结合，可看到影响设置的作用域范围。回到「指定设置依赖」中的示例：</p>
 <pre><code class="language-bash">$ sbt inspect actual console
 ...
 [info] Dependencies:
@@ -3049,14 +3044,14 @@ import mypackage._
 [info]  console / compilers
 ...
 </code></pre>
-<p>For <code>initialCommands</code>, we see that it comes from the global scope (<code>Global</code>). Combining this with the relevant output from <code>inspect console</code>:</p>
+<p>对于 <code>initialCommands</code>，可见其来自全局作用域（<code>Global</code>）。结合 <code>inspect console</code> 的相关输出：</p>
 <pre><code>Compile / console / initialCommands
 </code></pre>
-<p>we know that we can set <code>initialCommands</code> as generally as the global scope, as specific as the current project's <code>console</code> task scope, or anything in between. This means that we can, for example, set <code>initialCommands</code> for the whole project and will affect <code>console</code>:</p>
+<p>可知可将 <code>initialCommands</code> 设置为与全局作用域一样通用、与当前项目的 <code>console</code> 任务作用域一样具体，或介于两者之间。这意味着例如可为整个项目设置 <code>initialCommands</code>，将影响 <code>console</code>：</p>
 <pre><code class="language-scala">&gt; set initialCommands := "import mypackage._"
 ...
 </code></pre>
-<p>The reason we might want to set it here this is that other console tasks will use this value now. We can see which ones use our new setting by looking at the reverse dependencies output of <code>inspect actual</code>:</p>
+<p>在此设置的原因可能是其他 console 任务现在会使用该值。通过查看 <code>inspect actual</code> 的反向依赖输出，可看到哪些使用了我们的新设置：</p>
 <pre><code class="language-bash">$ sbt inspect actual Global/initialCommands
 ...
 [info] Reverse dependencies:
@@ -3067,18 +3062,18 @@ import mypackage._
 [info]  Compile / consoleQuick
 ...
 </code></pre>
-<p>We now know that by setting <code>initialCommands</code> on the whole project, we affect all console tasks in all configurations in that project. If we didn't want the initial commands to apply for <code>consoleProject</code>, which doesn't have our project's classpath available, we could use the more specific task axis:</p>
+<p>现在可知，通过在整个项目上设置 <code>initialCommands</code>，会影响该项目所有配置中的全部 console 任务。若不想让初始命令应用于 <code>consoleProject</code>（其无法使用我们项目的 classpath），可使用更具体的任务轴：</p>
 <pre><code class="language-scala">&gt; set console / initialCommands := "import mypackage._"
 &gt; set consoleQuick / initialCommands := "import mypackage._"`
 </code></pre>
-<p>or configuration axis:</p>
+<p>或配置轴：</p>
 <pre><code class="language-scala">&gt; set Compile/　initialCommands := "import mypackage._"
 &gt; set Test / initialCommands := "import mypackage._"
 </code></pre>
-<p>The next part describes the Delegates section, which shows the chain of delegation for scopes.</p>
-<h3 id="delegates"><a class="header" href="#delegates">Delegates</a></h3>
-<p>A setting has a key and a scope. A request for a key in a scope A may be delegated to another scope if A doesn't define a value for the key. The delegation chain is well-defined and is displayed in the Delegates section of the <code>inspect</code> command. The Delegates section shows the order in which scopes are searched when a value is not defined for the requested key.</p>
-<p>As an example, consider the initial commands for <code>console</code> again:</p>
+<p>下一部分描述 Delegates 部分，显示作用域的委托链。</p>
+<h3 id="委托"><a class="header" href="#委托">委托</a></h3>
+<p>设置有键和作用域。若作用域 A 未定义键的值，对该键的请求可能委托给另一作用域。委托链是明确定义的，在 <code>inspect</code> 命令的 Delegates 部分显示。Delegates 部分显示当请求的键未定义值时搜索作用域的顺序。</p>
+<p>例如，再次考虑 <code>console</code> 的初始命令：</p>
 <pre><code class="language-bash">$ sbt inspect console/initialCommands
 ...
 [info] Delegates:
@@ -3090,9 +3085,9 @@ import mypackage._
 [info]  Global / initialCommands
 ...
 </code></pre>
-<p>This means that if there is no value specifically for <code>console/initialCommands</code>, the scopes listed under Delegates will be searched in order until a defined value is found.</p>
+<p>这意味着若没有专门针对 <code>console/initialCommands</code> 的值，将按顺序搜索 Delegates 下列出的作用域，直到找到已定义的值。</p>
 <h3 id="inspect-tree"><a class="header" href="#inspect-tree">Inspect tree</a></h3>
-<p>In addition to displaying immediate forward and reverse dependencies as described in the previous section, the <code>inspect tree</code> command can display the full dependency tree for a task or setting. For example,</p>
+<p>除显示上一节所述的直接正向和反向依赖外，<code>inspect tree</code> 命令还可显示任务或设置的完整依赖树。例如：</p>
 <pre><code class="language-bash">$ sbt inspect tree console
 [info] Compile / console = Task[void]
 [info]   +-Global / cleanupCommands =
@@ -3110,51 +3105,51 @@ import mypackage._
 [info]
 [success] elapsed: 0 s
 </code></pre>
-<p>For each task, <code>inspect tree</code> show the type of the value generated by the task. For a setting, the <code>toString</code> of the setting is displayed.</p>
+<p>对于每个任务，<code>inspect tree</code> 显示该任务生成值的类型。对于设置，显示其 <code>toString</code>。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-publish"><a class="header" href="#sbt-publish">sbt publish</a></h1>
-<h2 id="synopsis-7"><a class="header" href="#synopsis-7">Synopsis</a></h2>
+<h2 id="概要-7"><a class="header" href="#概要-7">概要</a></h2>
 <p><code>sbt</code> [<em>query</em> / ] <code>publish</code><br> <code>sbt</code> [<em>query</em> / ] <code>publishSigned</code><br> <code>sbt</code> [<em>query</em> / ] <code>publishLocal</code><br> <code>sbt</code> [<em>query</em> / ] <code>publishM2</code></p>
-<h2 id="description-7"><a class="header" href="#description-7">Description</a></h2>
-<p>The publish family of tasks provide means for compiling and publishing your project. <em>Publishing</em> in this context consists of uploading a descriptor, such as a Maven POM or <code>ivy.xml</code>, and artifacts, such as a JAR or <code>war</code> file, to a repository so that other projects can specify your project as a dependency.</p>
+<h2 id="描述-7"><a class="header" href="#描述-7">描述</a></h2>
+<p>publish 系列任务提供编译和发布您项目的方式。此处的 <em>发布</em> 包括将描述符（如 Maven POM 或 <code>ivy.xml</code>）和构件（如 JAR 或 <code>war</code> 文件）上传到仓库，以便其他项目可将您的项目指定为依赖。</p>
 <ul>
-<li>The <code>publish</code> task publishes your project to a remote repository, such as JFrog Artifactory or Sonatype Nexus instance.</li>
-<li>The <code>publishSigned</code> task, enabled using <a href="https://github.com/sbt/sbt-pgp">sbt-pgp plugin</a>, is used to publish GPG-signed artifacts.</li>
-<li>The <code>publishLocal</code> task publishes your project to the Ivy local file repository, which is usually located at <code>$HOME/.ivy2/local/</code>. You can then use this project from other projects on the same machine.</li>
-<li>The <code>publishM2</code> task publishes your project to the local Maven repository.</li>
+<li><code>publish</code> 任务将您的项目发布到远程仓库，如 JFrog Artifactory 或 Sonatype Nexus 实例。</li>
+<li><code>publishSigned</code> 任务通过 <a href="https://github.com/sbt/sbt-pgp">sbt-pgp 插件</a> 启用，用于发布 GPG 签名的构件。</li>
+<li><code>publishLocal</code> 任务将您的项目发布到 Ivy 本地文件仓库，通常位于 <code>$HOME/.ivy2/local/</code>。然后您可在同一机器上的其他项目中使用此项目。</li>
+<li><code>publishM2</code> 任务将您的项目发布到本地 Maven 仓库。</li>
 </ul>
-<p>There's a specific recipe for <a href="reference/../recipes/central.html">publishing to the Central Repo</a>.</p>
-<h3 id="skip-publishing"><a class="header" href="#skip-publishing">Skip publishing</a></h3>
-<p>To avoid publishing a project, add the following setting to the subprojects that you want to skip:</p>
+<p>有专门的配方说明如何<a href="reference/../recipes/central.html">发布到 Central 仓库</a>。</p>
+<h3 id="跳过发布"><a class="header" href="#跳过发布">跳过发布</a></h3>
+<p>要避免发布项目，在要跳过的子项目中添加以下设置：</p>
 <pre><code class="language-scala">publish / skip := true
 </code></pre>
-<p>Common use case is to prevent publishing of the root project.</p>
-<h3 id="define-the-repository"><a class="header" href="#define-the-repository">Define the repository</a></h3>
-<p>To specify the repository, assign a repository to <code>publishTo</code> and optionally set the publishing style. For example, to upload to Nexus:</p>
+<p>常见用途是阻止根项目的发布。</p>
+<h3 id="定义仓库"><a class="header" href="#定义仓库">定义仓库</a></h3>
+<p>要指定仓库，将仓库赋给 <code>publishTo</code>，并可选择设置发布风格。例如，上传到 Nexus：</p>
 <pre><code class="language-scala">publishTo := Some("Sonatype Snapshots Nexus" at "https://oss.sonatype.org/content/repositories/snapshots")
 </code></pre>
-<p>To publish to a local maven repository:</p>
+<p>要发布到本地 Maven 仓库：</p>
 <pre><code class="language-scala">publishTo := Some(MavenCache("local-maven", file("path/to/maven-repo/releases")))
 </code></pre>
-<p>To publish to a local Ivy repository:</p>
+<p>要发布到本地 Ivy 仓库：</p>
 <pre><code class="language-scala">publishTo := Some(Resolver.file("local-ivy", file("path/to/ivy-repo/releases")))
 </code></pre>
-<p>If you're publishing the Central Repository, you will also have to select the right repository depending on your artifacts: SNAPSHOT versions go to the central-snapshots repository while other versions go to the local staging repository. Doing this selection can be done by using the value of the <code>version</code> setting:</p>
+<p>若您要发布到 Central 仓库，还需根据构件选择正确的仓库：SNAPSHOT 版本发布到 central-snapshots 仓库，其他版本发布到本地 staging 仓库。可使用 <code>version</code> 设置的值进行此选择：</p>
 <pre><code class="language-scala">publishTo := {
   val centralSnapshots = "https://central.sonatype.com/repository/maven-snapshots/"
   if version.value.endsWith("-SNAPSHOT") then Some("central-snapshots" at centralSnapshots)
   else localStaging.value
 }
 </code></pre>
-<h3 id="publishing-locally"><a class="header" href="#publishing-locally">Publishing locally</a></h3>
-<p>The <code>publishLocal</code> task will publish to the "local" Ivy repository. By default, this is at <code>$HOME/.ivy2/local/</code>. Other builds on the same machine can then list the project as a dependency. For example, if the project you are publishing has configuration parameters like:</p>
+<h3 id="本地发布"><a class="header" href="#本地发布">本地发布</a></h3>
+<p><code>publishLocal</code> 任务将发布到 "local" Ivy 仓库。默认位于 <code>$HOME/.ivy2/local/</code>。同一机器上的其他构建可将该项目列为依赖。例如，若您发布的项目具有如下配置参数：</p>
 <pre><code class="language-scala">organization := "com.example"
 version := "0.1-SNAPSHOT"
 name := "hello"
 </code></pre>
-<p>Then another build on the same machine can depend on it:</p>
+<p>则同一机器上的另一构建可依赖它：</p>
 <pre><code class="language-scala">libraryDependencies += "com.example" %% "hello" % "0.1-SNAPSHOT"
 </code></pre>
-<p>The version number you select must end with <code>SNAPSHOT</code>, or you must change the version number each time you publish to indicate that it's a changing artifact.</p>
+<p>您选择的版本号必须以 <code>SNAPSHOT</code> 结尾，或每次发布时更改版本号以表明其为可变构件。</p>
 <div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
 <div class="admonition-title">
 <div id="admonition-warning-title">
@@ -3163,28 +3158,28 @@ name := "hello"
 <a class="admonition-anchor-link" href="reference/sbt-publish.html#admonition-warning"></a>
 </div>
 <div>
-<p>Generally the use of SNAPSHOT dependencies should be avoided beyond testing on a single machine
-since it makes dependency resolution slower and the build non-repeatable.</p>
+<p>通常应避免在单机测试之外使用 SNAPSHOT 依赖，
+因其会使依赖解析变慢且构建不可重复。</p>
 </div>
 </div>
-<p>Similar to <code>publishLocal</code>, <code>publishM2</code> task will publish the user's Maven local repository. This is at the location specified by <code>$HOME/.m2/settings.xml</code> or at <code>$HOME/.m2/repository/</code> by default. Another build would require <code>Resolver.mavenLocal</code> to resolve out of it:</p>
+<p>与 <code>publishLocal</code> 类似，<code>publishM2</code> 任务将发布到用户的 Maven 本地仓库。默认位于 <code>$HOME/.m2/settings.xml</code> 指定的位置或 <code>$HOME/.m2/repository/</code>。另一构建需使用 <code>Resolver.mavenLocal</code> 从中解析：</p>
 <pre><code class="language-scala">resolvers += Resolver.mavenLocal
 </code></pre>
 <!--
 See [Resolvers][Resolvers] for more details.
 -->
-<h3 id="credentials"><a class="header" href="#credentials">Credentials</a></h3>
-<p>There are two ways to specify credentials for such a repository.</p>
-<p>The first and better way is to load them from a file, for example:</p>
+<h3 id="凭据"><a class="header" href="#凭据">凭据</a></h3>
+<p>有两种方式可为此类仓库指定凭据。</p>
+<p>第一种且更好的方式是从文件加载，例如：</p>
 <pre><code class="language-scala">credentials += Credentials(Path.userHome / ".sbt" / ".credentials")
 </code></pre>
-<p>The credentials file is a properties file with keys <code>realm</code>, <code>host</code>, <code>user</code>, and <code>password</code>. For example:</p>
+<p>凭据文件是包含 <code>realm</code>、<code>host</code>、<code>user</code> 和 <code>password</code> 键的属性文件。例如：</p>
 <pre><code>realm=Sonatype Nexus Repository Manager
 host=my.artifact.repo.net
 user=admin
 password=admin123
 </code></pre>
-<p>The second way is to specify them inline:</p>
+<p>第二种方式是内联指定：</p>
 <pre><code class="language-scala">credentials += Credentials("Sonatype Nexus Repository Manager", "my.artifact.repo.net", "admin", "admin123")
 </code></pre>
 <div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
@@ -3195,79 +3190,79 @@ password=admin123
 <a class="admonition-anchor-link" href="reference/sbt-publish.html#admonition-note"></a>
 </div>
 <div>
-<p>Credentials matching is done using both: <code>realm</code> and <code>host</code> keys.
-The <code>realm</code> key is the HTTP <code>WWW-Authenticate</code> header's realm directive, which is
-part of the response of HTTP servers for <a href="https://en.wikipedia.org/wiki/Basic_access_authentication#Server_side">HTTP Basic Authentication</a>.
-For a given repository, this can be found by reading all the headers received.
-For example:</p>
+<p>凭据匹配使用 <code>realm</code> 和 <code>host</code> 两个键。
+<code>realm</code> 键是 HTTP <code>WWW-Authenticate</code> 头的 realm 指令，
+是 HTTP 服务器对 <a href="https://en.wikipedia.org/wiki/Basic_access_authentication#Server_side">HTTP Basic Authentication</a> 响应的一部分。
+对于给定仓库，可通过读取收到的所有头来找到。
+例如：</p>
 <pre><code class="language-bash">curl -D - my.artifact.repo.net
 </code></pre>
 </div>
 </div>
-<h3 id="cross-publishing"><a class="header" href="#cross-publishing">Cross-publishing</a></h3>
-<p>To support multiple incompatible Scala versions, use projectMatrix and publish (see <a href="reference/./cross-building-setup.html">Cross building setup</a>).</p>
-<h3 id="overriding-the-publishing-convention"><a class="header" href="#overriding-the-publishing-convention">Overriding the publishing convention</a></h3>
-<p>By default sbt will publish your artifact with the binary version of Scala you're using. For example if your project is using Scala 2.13.x your example artifact would be published under <code>example_2.13</code>. This is often what you want, but if you're publishing a pure Java artifact or a compiler plugin you'll want to change the <code>CrossVersion</code>. See the <a href="reference/./cross-building-setup.html">Cross building setup</a> page for more details under the <em>Publishing convention</em> section.</p>
-<h3 id="published-artifacts"><a class="header" href="#published-artifacts">Published artifacts</a></h3>
-<p>By default, the main binary JAR, a sources JAR, and a API documentation JAR are published. You can declare other types of artifacts to publish and disable or modify the default artifacts. See the <a href="reference/./artifact.html">Artifact</a> page for details.</p>
-<h3 id="version-scheme"><a class="header" href="#version-scheme">Version scheme</a></h3>
-<p><code>versionScheme</code> setting tracks the version scheme of the build:</p>
+<h3 id="交叉发布"><a class="header" href="#交叉发布">交叉发布</a></h3>
+<p>要支持多个不兼容的 Scala 版本，请使用 projectMatrix 和 publish（参见 <a href="reference/./cross-building-setup.html">Cross building setup</a>）。</p>
+<h3 id="覆盖发布约定"><a class="header" href="#覆盖发布约定">覆盖发布约定</a></h3>
+<p>默认情况下，sbt 会使用您正在使用的 Scala 二进制版本发布构件。例如，若项目使用 Scala 2.13.x，示例构件将发布为 <code>example_2.13</code>。这通常是您想要的，但若发布纯 Java 构件或编译器插件，您需要更改 <code>CrossVersion</code>。详见 <a href="reference/./cross-building-setup.html">Cross building setup</a> 页面的 <em>Publishing convention</em> 部分。</p>
+<h3 id="已发布构件"><a class="header" href="#已发布构件">已发布构件</a></h3>
+<p>默认发布主二进制 JAR、源码 JAR 和 API 文档 JAR。您可声明要发布的其他类型构件，并禁用或修改默认构件。详见 <a href="reference/./artifact.html">Artifact</a> 页面。</p>
+<h3 id="版本方案"><a class="header" href="#版本方案">版本方案</a></h3>
+<p><code>versionScheme</code> 设置跟踪构建的版本方案：</p>
 <pre><code class="language-scala">versionScheme := Some("early-semver")
 </code></pre>
-<p>The supported values are <code>"early-semver"</code>, <code>"pvp"</code>, <code>"semver-spec"</code>, and <code>"strict"</code>. sbt will include this information into <code>pom.xml</code> and <code>ivy.xml</code> as a property.</p>
+<p>支持的值有 <code>"early-semver"</code>、<code>"pvp"</code>、<code>"semver-spec"</code> 和 <code>"strict"</code>。sbt 会将此信息作为属性包含到 <code>pom.xml</code> 和 <code>ivy.xml</code> 中。</p>
 <ul>
-<li><code>Some("early-semver")</code>: Early Semantic Versioning that would keep binary compatibility across patch updates within 0.Y.z (for instance 0.13.0 and 0.13.2). Once it goes 1.0.0, it follows the regular Semantic Versioning where 1.1.0 is bincompat with 1.0.0.</li>
-<li><code>Some("semver-spec")</code>: Semantic Versioning where all 0.y.z are treated as initial development (no bincompat guarantees).</li>
-<li><code>Some("pvp")</code>. Haskell Package Versioning Policy where X.Y are treated as major version.</li>
-<li><code>Some("strict")</code>. Requires exact match of version.</li>
+<li><code>Some("early-semver")</code>：早期语义化版本，在 0.Y.z 内保持补丁更新间的二进制兼容（如 0.13.0 与 0.13.2）。达到 1.0.0 后遵循常规语义化版本，1.1.0 与 1.0.0 二进制兼容。</li>
+<li><code>Some("semver-spec")</code>：语义化版本，所有 0.y.z 视为初始开发（无二进制兼容保证）。</li>
+<li><code>Some("pvp")</code>：Haskell 包版本策略，X.Y 视为主版本。</li>
+<li><code>Some("strict")</code>：要求版本完全匹配。</li>
 </ul>
-<p>This information will be annotated into the <code>pom.xml</code> file, which helps downstream projects determine whether a version conflict is safe to resolve or not. See <a href="https://www.scala-lang.org/blog/2021/02/16/preventing-version-conflicts-with-versionscheme.html">Preventing version conflicts with versionScheme</a> (2021).</p>
-<h3 id="modifying-the-generated-pom"><a class="header" href="#modifying-the-generated-pom">Modifying the generated POM</a></h3>
-<p>When <code>publishMavenStyle</code> is <code>true</code>, a POM is generated by the <code>makePom</code> action and published to the repository instead of an Ivy file. This POM file may be altered by changing a few settings. Set <code>pomExtra</code> to provide XML (<code>scala.xml.NodeSeq</code>) to insert directly into the generated pom. For example:</p>
+<p>此信息将标注到 <code>pom.xml</code> 文件中，便于下游项目判断版本冲突是否可安全解析。参见 <a href="https://www.scala-lang.org/blog/2021/02/16/preventing-version-conflicts-with-versionscheme.html">Preventing version conflicts with versionScheme</a> (2021)。</p>
+<h3 id="修改生成的-pom"><a class="header" href="#修改生成的-pom">修改生成的 POM</a></h3>
+<p>当 <code>publishMavenStyle</code> 为 <code>true</code> 时，POM 由 <code>makePom</code> 操作生成并发布到仓库而非 Ivy 文件。可通过修改若干设置来更改此 POM 文件。设置 <code>pomExtra</code> 提供 XML（<code>scala.xml.NodeSeq</code>）以直接插入生成的 pom。例如：</p>
 <pre><code class="language-scala">pomExtra := &lt;something&gt;&lt;/something&gt;
 </code></pre>
-<p>There is also a <code>pomPostProcess</code> setting that can be used to manipulate the final XML before it is written. It's type is <code>Node =&gt; Node</code>.</p>
+<p>还有 <code>pomPostProcess</code> 设置可用于在写入前操作最终 XML。其类型为 <code>Node =&gt; Node</code>。</p>
 <pre><code class="language-scala">pomPostProcess := { (node: Node) =&gt;
   ....
 }
 </code></pre>
-<p><code>makePom</code> adds to the POM any Maven-style repositories you have declared. You can filter these by modifying <code>pomRepositoryFilter</code>, which by default excludes local repositories. To instead only include local repositories:</p>
+<p><code>makePom</code> 将您声明的所有 Maven 风格仓库添加到 POM。可通过修改 <code>pomRepositoryFilter</code> 过滤这些仓库，默认排除本地仓库。若要仅包含本地仓库：</p>
 <pre><code class="language-scala">pomIncludeRepository := { (repo: MavenRepository) =&gt;
   repo.root.startsWith("file:")
 }
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="watch-command"><a class="header" href="#watch-command">Watch command</a></h1>
-<h2 id="synopsis-8"><a class="header" href="#synopsis-8">Synopsis</a></h2>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="watch-命令"><a class="header" href="#watch-命令">Watch 命令</a></h1>
+<h2 id="概要-8"><a class="header" href="#概要-8">概要</a></h2>
 <p><code>sbt</code> <code>~</code> <em>command1</em><br> <code>sbt</code> <code>~</code> <em>command1</em> [ <code>;</code> <em>command2</em> <code>;</code> ... ]</p>
-<h2 id="descrption"><a class="header" href="#descrption">Descrption</a></h2>
-<p>The watch command is denoted by <code>~</code> (tilde), and it provides the ability to monitor the input files for particular tasks and repeat the tasks when changes to those files occur.</p>
-<p>Some example usages are described below:</p>
-<h3 id="compile-1"><a class="header" href="#compile-1">Compile</a></h3>
-<p>A common use-case is continuous compilation. The following commands will make sbt watch for source changes in the Test and Compile (default) configurations respectively and re-run the compile command.</p>
+<h2 id="描述-8"><a class="header" href="#描述-8">描述</a></h2>
+<p>Watch 命令以 <code>~</code>（波浪号）表示，可监控特定任务的输入文件，并在这些文件发生变更时重复执行任务。</p>
+<p>以下描述了一些示例用法：</p>
+<h3 id="编译"><a class="header" href="#编译">编译</a></h3>
+<p>常见用途是持续编译。以下命令将分别让 sbt 监控 Test 和 Compile（默认）配置中的源变更，并重新运行 compile 命令。</p>
 <pre><code class="language-bash">&gt; ~ Test / compile
 
 &gt; ~ compile
 </code></pre>
-<p>Note that because <code>Test / compile</code> depends on <code>Compile / compile</code>, source changes in the main source directory will trigger recompilation of the test sources.</p>
-<h3 id="testing"><a class="header" href="#testing">Testing</a></h3>
-<p>Triggered execution is often used when developing in a test driven development (TDD) style. The following command will monitor changes to both the main and test source sources for the build and re-run only the tests that reference classes that have been re-compiled since the last test run.</p>
+<p>注意，由于 <code>Test / compile</code> 依赖 <code>Compile / compile</code>，主源目录中的源变更将触发测试源的重新编译。</p>
+<h3 id="测试"><a class="header" href="#测试">测试</a></h3>
+<p>触发式执行常用于测试驱动开发（TDD）风格。以下命令将监控构建的主源和测试源变更，并仅重新运行引用自上次测试运行以来已重新编译的类的测试。</p>
 <pre><code class="language-bash">&gt; ~ test
 </code></pre>
-<p>It is also possible to re-run only a particular test if its dependencies have changed.</p>
+<p>若某测试的依赖已变更，也可仅重新运行该测试。</p>
 <pre><code class="language-bash">&gt; ~ test foo.BarTest
 </code></pre>
-<p>It is possible to always re-run a test when source changes are detected regardless of whether the test depends on any of the updated source files.</p>
+<p>可配置为在检测到源变更时始终重新运行某测试，无论该测试是否依赖任何已更新的源文件。</p>
 <pre><code class="language-bash">&gt; ~ testOnly foo.BarTest
 </code></pre>
-<p>To run all of the tests in the project when any sources change, use</p>
+<p>要在任何源变更时运行项目中所有测试，请使用</p>
 <pre><code class="language-bash">&gt; ~ testFull
 </code></pre>
-<h3 id="running-multiple-commands"><a class="header" href="#running-multiple-commands">Running Multiple Commands</a></h3>
-<p>The watch command supports watching multiple, semicolon separated, tasks. For example, the following command will monitor for source file changes and run <code>clean</code> and <code>test</code>:</p>
+<h3 id="运行多个命令"><a class="header" href="#运行多个命令">运行多个命令</a></h3>
+<p>Watch 命令支持监控多个以分号分隔的任务。例如，以下命令将监控源文件变更并运行 <code>clean</code> 和 <code>test</code>：</p>
 <pre><code class="language-bash">&gt; ~ clean; test
 </code></pre>
-<h3 id="build-sources"><a class="header" href="#build-sources">Build sources</a></h3>
-<p>If the build is configured to automatically reload when build source changes are made by setting <code>Global / onChangedBuildSource := ReloadOnSourceChanges</code>, then sbt will monitor the build sources (i.e. <code>*.sbt</code> and <code>*.{java,scala}</code> files in the <code>project</code> directory). When build source changes are detected, the build will be reloaded and sbt will re-enter triggered execution mode when the reload completes.</p>
+<h3 id="构建源"><a class="header" href="#构建源">构建源</a></h3>
+<p>若通过设置 <code>Global / onChangedBuildSource := ReloadOnSourceChanges</code> 将构建配置为在构建源变更时自动重新加载，则 sbt 将监控构建源（即 <code>project</code> 目录中的 <code>*.sbt</code> 和 <code>*.{java,scala}</code> 文件）。检测到构建源变更时，构建将重新加载，重新加载完成后 sbt 将重新进入触发式执行模式。</p>
 <!--
 The following snippet can be added as a [global setting](../api/sbt/Global-Settings.html) to `~/.sbt/1.0/config.sbt` to enable `ReloadOnSourceChanges` for all sbt 1.3+ builds without breaking earlier versions:
 
@@ -3287,59 +3282,59 @@ Def.settings {
 }
 ```
 -->
-<h3 id="clearing-the-screen"><a class="header" href="#clearing-the-screen">Clearing the screen</a></h3>
-<p>sbt can clear the console screen before it evaluates the task or after it triggers an event. To configure sbt to clear the screen after an event is triggered add</p>
+<h3 id="清屏"><a class="header" href="#清屏">清屏</a></h3>
+<p>sbt 可在评估任务前或触发事件后清空控制台屏幕。要配置 sbt 在事件触发后清屏，请添加</p>
 <pre><code class="language-scala">ThisBuild / watchTriggeredMessage := Watch.clearScreenOnTrigger
 </code></pre>
-<p>to the build settings. To clear the screen before running the task, add</p>
+<p>到构建设置中。要在运行任务前清屏，请添加</p>
 <pre><code class="language-scala">ThisBuild  / watchBeforeCommand := Watch.clearScreen
 </code></pre>
-<p>to the build settings.</p>
-<h3 id="configuration"><a class="header" href="#configuration">Configuration</a></h3>
-<p>The behavior of triggered execution can be configured via a number of settings.</p>
+<p>到构建设置中。</p>
+<h3 id="配置"><a class="header" href="#配置">配置</a></h3>
+<p>触发式执行的行为可通过若干设置进行配置。</p>
 <ul>
 <li>
-<p><code>watchTriggers: Seq[Glob]</code> adds search queries for files that should task trigger evaluation but that the task does not directly depend on. For example, if the project build.sbt file contains <code>foo / watchTriggers += baseDirectory.value.toGlob / "*.txt"</code>, then any modifications to files ending with the <code>txt</code> extension will cause the <code>foo</code> command to trigger when in triggered execution mode.</p>
+<p><code>watchTriggers: Seq[Glob]</code> 为应触发任务评估但任务不直接依赖的文件添加搜索查询。例如，若项目 build.sbt 包含 <code>foo / watchTriggers += baseDirectory.value.toGlob / "*.txt"</code>，则对以 <code>txt</code> 扩展名结尾的文件的任何修改都会在触发式执行模式下触发 <code>foo</code> 命令。</p>
 </li>
 <li>
-<p><code>watchTriggeredMessage: (Int, Path, Seq[String]) =&gt; Option[String]</code> sets the message that is displayed when a file modification triggers a new build. Its input parameters are the current watch iteration count, the file that triggered the build and the command(s) that are going to be run. By default, it prints a message indicating what file triggered the build and what commands its going to run. No message is printed when the function returns <code>None</code>. To clear the screen before printing the message, just add <code>Watch.clearScreen()</code> inside of the task definition. This will ensure that the screen is cleared and that the message, if any is defined, will be printed after the screen clearing.</p>
+<p><code>watchTriggeredMessage: (Int, Path, Seq[String]) =&gt; Option[String]</code> 设置文件修改触发新构建时显示的消息。其输入参数为当前 watch 迭代次数、触发构建的文件以及将要运行的命令。默认打印指示哪个文件触发构建以及将运行哪些命令的消息。函数返回 <code>None</code> 时不打印消息。要在打印消息前清屏，在任务定义中添加 <code>Watch.clearScreen()</code> 即可。这将确保先清屏，再打印（若有定义的）消息。</p>
 </li>
 <li>
-<p><code>watchInputOptions: Seq[Watch.InputOption]</code> allows the build to override the default watch options. For example, to add the ability to reload the build by typing the 'l' key, add <code>ThisBuild / watchInputOptions += Watch.InputOption('l', "reload", Watch.Reload)</code> to the <code>build.sbt</code> file. When using the default <code>watchStartMessage</code>, this will also add the option to the list displayed by the '?' option.</p>
+<p><code>watchInputOptions: Seq[Watch.InputOption]</code> 允许构建覆盖默认 watch 选项。例如，要添加通过按 'l' 键重新加载构建的能力，在 <code>build.sbt</code> 中添加 <code>ThisBuild / watchInputOptions += Watch.InputOption('l', "reload", Watch.Reload)</code>。使用默认 <code>watchStartMessage</code> 时，这也会将该选项添加到 '?' 选项显示的列表中。</p>
 </li>
 <li>
-<p><code>watchBeforeCommand: () =&gt; Unit</code> provides a callback to run before evaluating the task.  It can be used to clear the console screen by adding <code>ThisBuild / watchBeforeCommand := Watch.clearScreen</code> to the project build.sbt file. By default it is no-op.</p>
+<p><code>watchBeforeCommand: () =&gt; Unit</code> 提供在评估任务前运行的回调。可通过在项目 build.sbt 中添加 <code>ThisBuild / watchBeforeCommand := Watch.clearScreen</code> 来清空控制台屏幕。默认为空操作。</p>
 </li>
 <li>
-<p><code>watchLogLevel</code> sets the logging level of the file monitoring system. This can be useful if the triggered execution is not being evaluated when source files or modified or if is unexpectedly triggering due to modifications to files that should not be monitored.</p>
+<p><code>watchLogLevel</code> 设置文件监控系统的日志级别。当源文件被修改时触发式执行未评估，或因对不应监控的文件的修改而意外触发时，此设置很有用。</p>
 </li>
 <li>
-<p><code>watchInputParser: Parser[Watch.Action]</code> changes how the monitor handles input events. For example, setting <code>watchInputParser := 'l' ^^^ Watch.Reload | '\r' ^^^ new Watch.Run("")</code> will make it so that typing the 'l' key will reload the build and typing a newline will return to the shell. By default this is automatically derived from the <code>watchInputOptions</code>.</p>
+<p><code>watchInputParser: Parser[Watch.Action]</code> 更改监控器处理输入事件的方式。例如，设置 <code>watchInputParser := 'l' ^^^ Watch.Reload | '\r' ^^^ new Watch.Run("")</code> 将使按 'l' 键重新加载构建，按换行键返回 shell。默认从 <code>watchInputOptions</code> 自动派生。</p>
 </li>
 <li>
-<p><code>watchStartMessage: (Int, ProjectRef, Seq[String]) =&gt; Option[String]</code> sets the banner that is printed while the watch process is waiting for file or input events. The inputs are the iteration count, the current project and the commands to run. The default message includes instructions for terminating the watch or displaying all available options. This banner is only displayed if <code>watchOnIteration</code> logs the result of <code>watchStartMessage</code>.</p>
+<p><code>watchStartMessage: (Int, ProjectRef, Seq[String]) =&gt; Option[String]</code> 设置 watch 进程等待文件或输入事件时打印的横幅。输入为迭代次数、当前项目和要运行的命令。默认消息包含终止 watch 或显示所有可用选项的说明。仅当 <code>watchOnIteration</code> 记录 <code>watchStartMessage</code> 结果时才显示此横幅。</p>
 </li>
 <li>
-<p><code>watchOnIteration: (Int, ProjectRef, Seq[String]) =&gt; Watch.Action</code> a function that is evaluated before waiting for source or input events. It can be used to terminate the watch early if, for example, a certain number of iterations have been reached. By default, it just logs the result of <code>watchStartMessage</code>.</p>
+<p><code>watchOnIteration: (Int, ProjectRef, Seq[String]) =&gt; Watch.Action</code> 在等待源或输入事件前评估的函数。例如，若达到一定迭代次数，可用于提前终止 watch。默认仅记录 <code>watchStartMessage</code> 的结果。</p>
 </li>
 <li>
-<p><code>watchForceTriggerOnAnyChange: Boolean</code> configures whether or not the contents of a source file must change in order to trigger a build. The default value is false.</p>
+<p><code>watchForceTriggerOnAnyChange: Boolean</code> 配置源文件内容是否必须变更才能触发构建。默认值为 false。</p>
 </li>
 <li>
-<p><code>watchPersistFileStamps: Boolean</code> toggles whether or not sbt will persist the file hashes computed for source files across multiple task evaluation runs. This can improve performance for projects with many source files. Because the file hashes are cached, it is possible for the evaluated task to read an invalid hash if many source files are being concurrently modified. The default value is false.</p>
+<p><code>watchPersistFileStamps: Boolean</code> 切换 sbt 是否在多次任务评估运行间持久化为源文件计算的文件哈希。这可提高具有大量源文件的项目的性能。由于文件哈希被缓存，若多个源文件被并发修改，评估的任务可能读取到无效哈希。默认值为 false。</p>
 </li>
 <li>
-<p><code>watchAntiEntropy: FiniteDuration</code> controls the time that must elapse before a build is re-triggered by the same file that previously triggered the build. This is intended to prevent spurious builds that can occur when a file is modified in short bursts. The default value is 500ms.</p>
+<p><code>watchAntiEntropy: FiniteDuration</code> 控制同一文件在先前触发构建后，必须经过多长时间才能再次触发构建。用于防止文件在短时间内多次修改时产生虚假构建。默认值为 500ms。</p>
 </li>
 </ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="cached-task"><a class="header" href="#cached-task">Cached task</a></h1>
-<p>This page covers the cached task details. See <a href="reference/../concepts/caching.html">Caching</a> for a general explanation.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="缓存任务"><a class="header" href="#缓存任务">缓存任务</a></h1>
+<p>本页介绍缓存任务的细节。有关一般说明，请参阅<a href="reference/../concepts/caching.html">缓存</a>。</p>
 <h2 id="自动缓存-1"><a class="header" href="#自动缓存-1">自动缓存</a></h2>
 <pre><code class="language-scala">val someKey = taskKey[String]("something")
 
 someKey := name.value + version.value + "!"
 </code></pre>
-<p>In sbt 2.x, the task result will be automatically cached based on the two settings <code>name</code> and <code>version</code>. The first time we run the task it will be executed onsite, but the second time onward, it will use the disk cache:</p>
+<p>在 sbt 2.x 中，任务结果将根据 <code>name</code> 和 <code>version</code> 两个设置自动缓存。首次运行任务时将在现场执行，第二次起将使用磁盘缓存：</p>
 <pre><code>sbt:demo&gt; show someKey
 [info] demo0.1.0-SNAPSHOT!
 [success] elapsed time: 0 s, cache 0%, 1 onsite task
@@ -3347,11 +3342,11 @@ sbt:demo&gt; show someKey
 [info] demo0.1.0-SNAPSHOT!
 [success] elapsed time: 0 s, cache 100%, 1 disk cache hit
 </code></pre>
-<h3 id="caching-is-serialization-hard"><a class="header" href="#caching-is-serialization-hard">Caching is serialization-hard</a></h3>
-<p>To participate in the automatic caching, the input keys (e.g. <code>name</code> and <code>version</code>) must provide a given for <code>sjsonnew.HashWriter</code> typeclass and return type must provide a given for <code>sjsonnew.JsonFormat</code>. <a href="https://www.scala-sbt.org/contraband/">Contraband</a> can be used to generate sjson-new codecs.</p>
-<h2 id="effect-tracking"><a class="header" href="#effect-tracking">Effect tracking</a></h2>
-<h3 id="the-effect-of-file-creation"><a class="header" href="#the-effect-of-file-creation">The effect of file creation</a></h3>
-<p>To cache the effect of file creation, not just returning the name of the file, we need to track the effect of file creation using <code>Def.declareOutput(vf)</code>.</p>
+<h3 id="缓存依赖序列化"><a class="header" href="#缓存依赖序列化">缓存依赖序列化</a></h3>
+<p>要参与自动缓存，输入键（如 <code>name</code> 和 <code>version</code>）必须为 <code>sjsonnew.HashWriter</code> 类型类提供 given，返回类型必须为 <code>sjsonnew.JsonFormat</code> 提供 given。<a href="https://www.scala-sbt.org/contraband/">Contraband</a> 可用于生成 sjson-new 编解码器。</p>
+<h2 id="效果跟踪"><a class="header" href="#效果跟踪">效果跟踪</a></h2>
+<h3 id="文件创建的效果"><a class="header" href="#文件创建的效果">文件创建的效果</a></h3>
+<p>要缓存文件创建的效果（而不仅是返回文件名），需使用 <code>Def.declareOutput(vf)</code> 跟踪文件创建的效果。</p>
 <pre><code class="language-scala">someKey := {
   val conv = fileConverter.value
   val out: java.nio.file.Path = createFile(...)
@@ -3360,9 +3355,9 @@ sbt:demo&gt; show someKey
   vf: xsbti.HashedVirtualFileRef
 }
 </code></pre>
-<h2 id="opting-out-from-caching"><a class="header" href="#opting-out-from-caching">Opting out from caching</a></h2>
-<h3 id="build-wide-opt-out"><a class="header" href="#build-wide-opt-out">Build-wide opt-out</a></h3>
-<p>To opt out of by-default custom task caching, add the following to <code>project/plugins.sbt</code>:</p>
+<h2 id="选择退出缓存"><a class="header" href="#选择退出缓存">选择退出缓存</a></h2>
+<h3 id="构建级退出"><a class="header" href="#构建级退出">构建级退出</a></h3>
+<p>要选择退出默认的自定义任务缓存，请在 <code>project/plugins.sbt</code> 中添加以下内容：</p>
 <pre><code class="language-scala">Compile / scalacOptions += "-Xmacro-settings:sbt:no-default-task-cache"
 </code></pre>
 <div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
@@ -3373,43 +3368,43 @@ sbt:demo&gt; show someKey
 <a class="admonition-anchor-link" href="reference/cached-task.html#admonition-note"></a>
 </div>
 <div>
-<p>This applies only to the custom tasks introduced in the build. Any cached tasks provided by sbt or plugins will remain cached.</p>
+<p>此设置仅适用于构建中引入的自定义任务。sbt 或插件提供的任何缓存任务仍将保持缓存。</p>
 </div>
 </div>
-<h3 id="per-task-key-opt-out"><a class="header" href="#per-task-key-opt-out">Per-task-key opt-out</a></h3>
-<p>Next, if you want to opt some task keys from caching, you can set the cache level as follows:</p>
+<h3 id="按任务键退出"><a class="header" href="#按任务键退出">按任务键退出</a></h3>
+<p>若您希望某些任务键退出缓存，可按以下方式设置缓存级别：</p>
 <pre><code class="language-scala">@transient
 val someKey = taskKey[String]("something")
 </code></pre>
-<p>or</p>
+<p>或</p>
 <pre><code class="language-scala">@cacheLevel(include = Array.empty)
 val someKey = taskKey[String]("something")
 </code></pre>
-<h3 id="per-task-opt-out"><a class="header" href="#per-task-opt-out">Per-task opt-out</a></h3>
-<p>To opt out of the cache individually, use <code>Def.uncached(...)</code> as follows:</p>
+<h3 id="按任务退出"><a class="header" href="#按任务退出">按任务退出</a></h3>
+<p>要单独退出缓存，请按以下方式使用 <code>Def.uncached(...)</code>：</p>
 <pre><code class="language-scala">val someKey = taskKey[String]("something")
 
 someKey := Def.uncached {
   name.value + somethingUncachable.value + "!"
 }
 </code></pre>
-<h2 id="remote-caching-2"><a class="header" href="#remote-caching-2">Remote caching</a></h2>
-<p>sbt 2.x implements Bazel-compatible gRPC interface, which works with number of backend both open source and commercial. See <a href="reference/./remote-cache-setup.html">Remote cache setup</a> for more details.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="cross-building-setup"><a class="header" href="#cross-building-setup">Cross building setup</a></h1>
-<p>This page covers cross building setup. See <a href="reference/../concepts/cross-building.html">Cross building</a> for general explanation.</p>
-<h2 id="using-cross-built-libraries"><a class="header" href="#using-cross-built-libraries">Using cross-built libraries</a></h2>
-<p>To use a library built against multiple versions of Scala, double the first <code>%</code> in a ModuleID to be <code>%%</code>. This tells sbt that it should append the current version of Scala being used to build the library to the dependency’s name. For example:</p>
+<h2 id="远程缓存-2"><a class="header" href="#远程缓存-2">远程缓存</a></h2>
+<p>sbt 2.x 实现了 Bazel 兼容的 gRPC 接口，可与多种开源和商业后端配合使用。详见 <a href="reference/./remote-cache-setup.html">Remote cache setup</a>。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="交叉构建设置"><a class="header" href="#交叉构建设置">交叉构建设置</a></h1>
+<p>本页介绍交叉构建设置。有关一般说明，请参阅<a href="reference/../concepts/cross-building.html">交叉构建</a>。</p>
+<h2 id="使用交叉构建的库-1"><a class="header" href="#使用交叉构建的库-1">使用交叉构建的库</a></h2>
+<p>要使用针对多个 Scala 版本构建的库，请将 ModuleID 中的第一个 <code>%</code> 改为 <code>%%</code>。这告诉 sbt 应将用于构建库的当前 Scala 版本追加到依赖名称。例如：</p>
 <pre><code class="language-scala">libraryDependencies += "org.typelevel" %% "cats-effect" % "3.5.4"
 </code></pre>
-<p>A nearly equivalent, manual alternative for a fixed version of Scala is:</p>
+<p>对于固定 Scala 版本，几乎等效的手动替代方式为：</p>
 <pre><code class="language-scala">libraryDependencies += "org.typelevel" % "cats-effect_3" % "3.5.4"
 </code></pre>
-<h3 id="scala-3-specific-cross-versions"><a class="header" href="#scala-3-specific-cross-versions">Scala 3 specific cross-versions</a></h3>
-<p>If you are developing an application in Scala 3, you can use Scala 2.13 libraries:</p>
+<h3 id="scala-3-专用交叉版本"><a class="header" href="#scala-3-专用交叉版本">Scala 3 专用交叉版本</a></h3>
+<p>若您在 Scala 3 中开发应用，可使用 Scala 2.13 库：</p>
 <pre><code class="language-scala">("a" % "b" % "1.0").cross(CrossVersion.for3Use2_13)
 </code></pre>
-<p>This is equivalent to using <code>%%</code> except it resolves the <code>_2.13</code> variant of the library  when <code>scalaVersion</code> is 3.x.y.</p>
-<p>Conversely we have <code>CrossVersion.for2_13Use3</code> to use the <code>_3</code> variant of the library when <code>scalaVersion</code> is 2.13.x:</p>
+<p>这与使用 <code>%%</code> 等效，但当 <code>scalaVersion</code> 为 3.x.y 时解析库的 <code>_2.13</code> 变体。</p>
+<p>反之，当 <code>scalaVersion</code> 为 2.13.x 时，可使用 <code>CrossVersion.for2_13Use3</code> 使用库的 <code>_3</code> 变体：</p>
 <pre><code class="language-scala">("a" % "b" % "1.0").cross(CrossVersion.for2_13Use3)
 </code></pre>
 <div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
@@ -3420,28 +3415,29 @@ someKey := Def.uncached {
 <a class="admonition-anchor-link" href="reference/cross-building-setup.html#admonition-warning"></a>
 </div>
 <div>
-<p><strong>Warning for library authors:</strong> It is generally not safe to publish a Scala 3 library that depends on a Scala 2.13 library or vice-versa. Doing so could introduce two versions of the same library like <code>scala-xml_2.13</code> and <code>scala-xml_3</code> on the end users' classpath.</p>
+<p><strong>库作者注意：</strong> 发布依赖 Scala 2.13 库的 Scala 3 库（或反之）通常不安全。
+这可能使最终用户的 classpath 上出现同一库的两个版本，如 <code>scala-xml_2.13</code> 和 <code>scala-xml_3</code>。</p>
 </div>
 </div>
-<h3 id="more-about-using-cross-built-libraries"><a class="header" href="#more-about-using-cross-built-libraries">More about using cross-built libraries</a></h3>
-<p>You can have fine-grained control over the behavior for different Scala versions by using the <code>cross</code> method on <code>ModuleID</code> These are equivalent:</p>
+<h3 id="关于使用交叉构建库的更多说明"><a class="header" href="#关于使用交叉构建库的更多说明">关于使用交叉构建库的更多说明</a></h3>
+<p>您可通过在 <code>ModuleID</code> 上使用 <code>cross</code> 方法，对不同 Scala 版本的行为进行细粒度控制。以下等价：</p>
 <pre><code class="language-scala">"a" % "b" % "1.0"
 ("a" % "b" % "1.0").cross(CrossVersion.disabled)
 </code></pre>
-<p>These are equivalent:</p>
+<p>以下等价：</p>
 <pre><code class="language-scala">"a" %% "b" % "1.0"
 ("a" % "b" % "1.0").cross(CrossVersion.binary)
 </code></pre>
-<p>This overrides the defaults to always use the full Scala version instead of the binary Scala version:</p>
+<p>这会覆盖默认设置，始终使用完整 Scala 版本而非二进制 Scala 版本：</p>
 <pre><code class="language-scala">("a" % "b" % "1.0").cross(CrossVersion.full)
 </code></pre>
-<p><code>CrossVersion.patch</code> sits between <code>CrossVersion.binary</code> and <code>CrossVersion.full</code> in that it strips off any trailing <code>-bin-...</code> suffix which is used to distinguish variant but binary compatible Scala toolchain builds.</p>
+<p><code>CrossVersion.patch</code> 介于 <code>CrossVersion.binary</code> 和 <code>CrossVersion.full</code> 之间，会移除用于区分变体但二进制兼容的 Scala 工具链构建的任何尾随 <code>-bin-...</code> 后缀。</p>
 <pre><code class="language-scala">("a" % "b" % "1.0").cross(CrossVersion.patch)
 </code></pre>
-<p><code>CrossVersion.constant</code> fixes a constant value:</p>
+<p><code>CrossVersion.constant</code> 固定常量值：</p>
 <pre><code class="language-scala">("a" % "b" % "1.0").cross(CrossVersion.constant("2.9.1"))
 </code></pre>
-<p>It is equivalent to:</p>
+<p>等价于：</p>
 <pre><code class="language-scala">"a" % "b_2.9.1" % "1.0"
 </code></pre>
 <h2 id="项目矩阵-1"><a class="header" href="#项目矩阵-1">项目矩阵</a></h2>
@@ -3456,45 +3452,45 @@ lazy val core = (projectMatrix in file("core"))
   )
   .jvmPlatform(scalaVersions = Seq("3.8.1", "2.13.17"))
 </code></pre>
-<h2 id="publishing-convention"><a class="header" href="#publishing-convention">Publishing convention</a></h2>
-<p>We use the Scala ABI (application binary interface) version as suffix to denote which version of Scala was used to compile a library. For example, the artifact name <code>cats-effect_2.13</code> means Scala 2.13.x was used. <code>cats-effect_3</code> means Scala 3.x was used. This fairly simple approach allows interoperability with users of Maven, Ant and other build tools. For pre-prelease versions of Scala, such as 2.13.0-RC1, full version will be considered the ABI version.</p>
-<p><code>crossVersion</code> setting can be used to override the publishing convention:</p>
+<h2 id="发布约定"><a class="header" href="#发布约定">发布约定</a></h2>
+<p>我们使用 Scala ABI（应用二进制接口）版本作为后缀，表示用于编译库的 Scala 版本。例如，构件名 <code>cats-effect_2.13</code> 表示使用了 Scala 2.13.x，<code>cats-effect_3</code> 表示使用了 Scala 3.x。这种简单方式可与 Maven、Ant 及其他构建工具的用户互操作。对于 Scala 的预发布版本（如 2.13.0-RC1），完整版本将视为 ABI 版本。</p>
+<p><code>crossVersion</code> 设置可用于覆盖发布约定：</p>
 <ul>
-<li><code>CrossVersion.disabled</code> (no suffix)</li>
-<li><code>CrossVersion.binary</code> (<code>_&lt;scala-abi-version&gt;</code>)</li>
-<li><code>CrossVersion.full</code> (<code>_&lt;scala-version&gt;</code>)</li>
+<li><code>CrossVersion.disabled</code>（无后缀）</li>
+<li><code>CrossVersion.binary</code>（<code>_&lt;scala-abi-version&gt;</code>）</li>
+<li><code>CrossVersion.full</code>（<code>_&lt;scala-version&gt;</code>）</li>
 </ul>
-<p>The default is either <code>CrossVersion.binary</code> or <code>CrossVersion.disabled</code> depending on the value of <code>crossPaths</code>. Because (unlike Scala library) Scala compiler is not forward compatible among the patch releases, compiler plugins should use <code>CrossVersion.full</code>.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="remote-cache-setup"><a class="header" href="#remote-cache-setup">Remote cache setup</a></h1>
-<p>This page covers remote caching setup. See <a href="reference/../concepts/caching.html">Caching</a> for general explanation of the caching system.</p>
-<h2 id="grpc-remote-cache"><a class="header" href="#grpc-remote-cache">gRPC remote cache</a></h2>
-<p>While there might be multiple remote cache store implemention in the future, sbt 2.0 ships with a gRPC client that is compatible with the Bazel remote cache backends. To configure sbt 2.x, add the following to <code>project/plugins.sbt</code></p>
+<p>默认根据 <code>crossPaths</code> 的值为 <code>CrossVersion.binary</code> 或 <code>CrossVersion.disabled</code>。由于（与 Scala 库不同）Scala 编译器在补丁版本间不向前兼容，编译器插件应使用 <code>CrossVersion.full</code>。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="远程缓存设置"><a class="header" href="#远程缓存设置">远程缓存设置</a></h1>
+<p>本页介绍远程缓存设置。有关缓存系统的一般说明，请参阅<a href="reference/../concepts/caching.html">缓存</a>。</p>
+<h2 id="grpc-远程缓存"><a class="header" href="#grpc-远程缓存">gRPC 远程缓存</a></h2>
+<p>虽然未来可能有多种远程缓存存储实现，sbt 2.0 已内置与 Bazel 远程缓存后端兼容的 gRPC 客户端。要配置 sbt 2.x，请将以下内容添加到 <code>project/plugins.sbt</code>：</p>
 <pre><code class="language-scala">addRemoteCachePlugin
 </code></pre>
-<p>There are many Bazel remote cache backends, both open source and commercial solutions. While this page documents is not an exhaustive list of all Bazel remote cache implementations, hopefully it shows how sbt 2.x can be set up for wide array of them.</p>
-<h3 id="authentication"><a class="header" href="#authentication">Authentication</a></h3>
-<p>There are a few flavors of <a href="https://grpc.io/docs/guides/auth/">gRPC authentication</a>, and Bazel remote cache backends use various kind of them:</p>
+<p>Bazel 远程缓存后端众多，既有开源也有商业方案。虽然本页并非所有 Bazel 远程缓存实现的完整列表，但希望能展示如何为多种后端配置 sbt 2.x。</p>
+<h3 id="认证"><a class="header" href="#认证">认证</a></h3>
+<p><a href="https://grpc.io/docs/guides/auth/">gRPC 认证</a>有多种方式，Bazel 远程缓存后端使用其中不同种类：</p>
 <ol>
-<li>Unauthenticated. Useful for testing.</li>
-<li>Default TLS/SSL.</li>
-<li>TLS/SSL with custom server certificate.</li>
-<li>TTL/SSL with custom server and client certificate, mTLS.</li>
-<li>Default TLS/SSL with API token header.</li>
+<li>无认证。适用于测试。</li>
+<li>默认 TLS/SSL。</li>
+<li>使用自定义服务器证书的 TLS/SSL。</li>
+<li>使用自定义服务器和客户端证书的 TLS/SSL，即 mTLS。</li>
+<li>带 API 令牌头的默认 TLS/SSL。</li>
 </ol>
-<h3 id="bazel-remote-without-authentication"><a class="header" href="#bazel-remote-without-authentication">bazel-remote without authentication</a></h3>
-<p>You can grab the code from <a href="https://github.com/buchgr/bazel-remote">buchgr/bazel-remote</a> and run it on a laptop using Bazel:</p>
+<h3 id="无认证的-bazel-remote"><a class="header" href="#无认证的-bazel-remote">无认证的 bazel-remote</a></h3>
+<p>您可从 <a href="https://github.com/buchgr/bazel-remote">buchgr/bazel-remote</a> 获取代码，并使用 Bazel 在笔记本上运行：</p>
 <pre><code class="language-bash">bazel run :bazel-remote  -- --max_size 5 --dir $HOME/work/bazel-remote/temp \
   --http_address localhost:8000 \
   --grpc_address localhost:2024
 </code></pre>
-<p>To configure sbt 2.x, add the following to <code>project/plugins.sbt</code></p>
+<p>要配置 sbt 2.x，请将以下内容添加到 <code>project/plugins.sbt</code>：</p>
 <pre><code class="language-scala">addRemoteCachePlugin
 </code></pre>
-<p>and append the following to <code>build.sbt</code>:</p>
+<p>并将以下内容追加到 <code>build.sbt</code>：</p>
 <pre><code class="language-scala">Global / remoteCache := Some(uri("grpc://localhost:2024"))
 </code></pre>
-<h3 id="bazel-remote-with-mtls"><a class="header" href="#bazel-remote-with-mtls">bazel-remote with mTLS</a></h3>
-<p>In a real environment, mTLS can ensure that the transport is encrypted and mutually authenticated. bazel-remote can be started with something like the follows:</p>
+<h3 id="使用-mtls-的-bazel-remote"><a class="header" href="#使用-mtls-的-bazel-remote">使用 mTLS 的 bazel-remote</a></h3>
+<p>在实际环境中，mTLS 可确保传输加密且双向认证。bazel-remote 可按如下方式启动：</p>
 <pre><code class="language-bash">bazel run :bazel-remote  -- --max_size 5 --dir $HOME/work/bazel-remote/temp \
   --http_address localhost:8000 \
   --grpc_address localhost:2024 \
@@ -3502,49 +3498,49 @@ lazy val core = (projectMatrix in file("core"))
   --tls_cert_file /tmp/sslcert/server.crt \
   --tls_key_file /tmp/sslcert/server.pem
 </code></pre>
-<p>sbt 2.x setting would look like this in this scenario:</p>
+<p>在此场景下，sbt 2.x 设置如下：</p>
 <pre><code class="language-scala">Global / remoteCache := Some(uri("grpcs://localhost:2024"))
 Global / remoteCacheTlsCertificate := Some(file("/tmp/sslcert/ca.crt"))
 Global / remoteCacheTlsClientCertificate := Some(file("/tmp/sslcert/client.crt"))
 Global / remoteCacheTlsClientKey := Some(file("/tmp/sslcert/client.pem"))
 </code></pre>
-<p>Note the <code>grpcs://</code>, as opposed to <code>grpc://</code>.</p>
+<p>注意使用 <code>grpcs://</code>，而非 <code>grpc://</code>。</p>
 <h3 id="engflow"><a class="header" href="#engflow">EngFlow</a></h3>
-<p><a href="https://www.engflow.com/">EngFlow GmbH</a> is a build solution company founded in 2020 by core members of Bazel team, providing build analytics and remote execution backend for Bazel, which includes remote cache.</p>
-<p>After signing up for trial on <a href="https://my.engflow.com/">https://my.engflow.com/</a>, the page instructs you to start a trial cluster using a docker. If you followed the instruction, this should start a remote cache service on port 8080. The sbt 2.x configuration would look like this for the trial cluster:</p>
+<p><a href="https://www.engflow.com/">EngFlow GmbH</a> 是由 Bazel 团队核心成员于 2020 年创立的构建解决方案公司，为 Bazel 提供构建分析和远程执行后端，包括远程缓存。</p>
+<p>在 <a href="https://my.engflow.com/">https://my.engflow.com/</a> 注册试用后，页面会指导您使用 docker 启动试用集群。若按说明操作，将在端口 8080 启动远程缓存服务。试用集群的 sbt 2.x 配置如下：</p>
 <pre><code class="language-scala">Global / remoteCache := Some(uri("grpc://localhost:8080"))
 </code></pre>
 <h3 id="buildbuddy"><a class="header" href="#buildbuddy">BuildBuddy</a></h3>
-<p><a href="https://www.buildbuddy.io/">BuildBuddy</a> is a build solution company founded by ex-Google engineers, providing build analytics and remote execution backend for Bazel. It's also available open source as <a href="https://github.com/buildbuddy-io/buildbuddy">buildbuddy-io/buildbuddy</a>.</p>
-<p>After signing up, BuildBuddy Personal plan lets you use BuildBuddy across the Internet.</p>
+<p><a href="https://www.buildbuddy.io/">BuildBuddy</a> 由前 Google 工程师创立的构建解决方案公司，为 Bazel 提供构建分析和远程执行后端。也以 <a href="https://github.com/buildbuddy-io/buildbuddy">buildbuddy-io/buildbuddy</a> 开源提供。</p>
+<p>注册后，BuildBuddy Personal 计划允许您通过互联网使用 BuildBuddy。</p>
 <ol>
-<li>From <a href="https://app.buildbuddy.io/">https://app.buildbuddy.io/</a>, go to Settings, and change the Organization URL to <code>&lt;something&gt;.buildbuddy.io</code>.</li>
-<li>Next, go to Quickstart and take note of the URLs and <code>--remote_headers</code>.</li>
-<li>Create a file called <code>$HOME/.sbt/buildbuddy_credential.txt</code> and put in the API key:</li>
+<li>在 <a href="https://app.buildbuddy.io/">https://app.buildbuddy.io/</a> 中，进入 Settings，将 Organization URL 改为 <code>&lt;something&gt;.buildbuddy.io</code>。</li>
+<li>接下来，进入 Quickstart 并记录 URL 和 <code>--remote_headers</code>。</li>
+<li>创建名为 <code>$HOME/.sbt/buildbuddy_credential.txt</code> 的文件并填入 API 密钥：</li>
 </ol>
 <pre><code>x-buildbuddy-api-key=*******
 </code></pre>
-<p>The sbt 2.x configuration would look like this:</p>
+<p>sbt 2.x 配置如下：</p>
 <pre><code class="language-scala">Global / remoteCache := Some(uri("grpcs://something.buildbuddy.io"))
 Global / remoteCacheHeaders += IO.read(BuildPaths.defaultGlobalBase / "buildbuddy_credential.txt").trim
 </code></pre>
 <h3 id="nativelink"><a class="header" href="#nativelink">NativeLink</a></h3>
-<p><a href="https://docs.nativelink.dev/">NativeLink</a> is an open-source Bazel remote execution backend implementated in Rust with emphasis on performance. As of June 2024, there's NativeLink Cloud in beta.</p>
+<p><a href="https://docs.nativelink.dev/">NativeLink</a> 是用 Rust 实现的开源 Bazel 远程执行后端，注重性能。截至 2024 年 6 月，NativeLink Cloud 处于测试阶段。</p>
 <ol>
-<li>From <a href="https://app.nativelink.com/">https://app.nativelink.com/</a>, go to Quickstart and take note of the URLs and <code>--remote_header</code>.</li>
-<li>Create a file called <code>$HOME/.sbt/nativelink_credential.txt</code> and put in the API key:</li>
+<li>在 <a href="https://app.nativelink.com/">https://app.nativelink.com/</a> 中，进入 Quickstart 并记录 URL 和 <code>--remote_header</code>。</li>
+<li>创建名为 <code>$HOME/.sbt/nativelink_credential.txt</code> 的文件并填入 API 密钥：</li>
 </ol>
 <pre><code>x-nativelink-api-key=*******
 </code></pre>
-<p>The sbt 2.x configuration would look like this:</p>
+<p>sbt 2.x 配置如下：</p>
 <pre><code class="language-scala">Global / remoteCache := Some(uri("grpcs://something.build-faster.nativelink.net"))
 Global / remoteCacheHeaders += IO.read(BuildPaths.defaultGlobalBase / "nativelink_credential.txt").trim
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="artifact"><a class="header" href="#artifact">Artifact</a></h1>
-<h2 id="description-8"><a class="header" href="#description-8">Description</a></h2>
-<p>An artifact is a single file ready for publishing a specific version of a subproject. This is a concept that originated in <a href="https://maven.apache.org/ref/3.9.11/maven-core/artifact-handlers.html">Apache Maven</a> and <a href="https://ant.apache.org/ivy/history/2.3.0/terminology.html#artifact">Ivy</a>.</p>
-<p>In the JVM ecosystem, common artifacts are Java archives, or JAR files. Compressed package formats are often preferred because they are easier to manage, download, and store.</p>
-<p>To illustrate, the following is a list of artifacts for a library, enumerated in an <code>ivy.xml</code> file:</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="工件"><a class="header" href="#工件">工件</a></h1>
+<h2 id="描述-9"><a class="header" href="#描述-9">描述</a></h2>
+<p>工件是用于发布子项目特定版本的单个文件。该概念源自 <a href="https://maven.apache.org/ref/3.9.11/maven-core/artifact-handlers.html">Apache Maven</a> 和 <a href="https://ant.apache.org/ivy/history/2.3.0/terminology.html#artifact">Ivy</a>。</p>
+<p>在 JVM 生态中，常见工件为 Java 归档（JAR 文件）。压缩包格式通常更受青睐，因其更易管理、下载和存储。</p>
+<p>举例来说，以下是库的工件列表，在 <code>ivy.xml</code> 文件中枚举：</p>
 <pre><code class="language-xml">  &lt;publications&gt;
     &lt;artifact name="core_3" type="jar" ext="jar" conf="compile"/&gt;
     &lt;artifact e:classifier="sources" name="core_3" type="src" ext="jar" conf="sources"/&gt;
@@ -3552,28 +3548,28 @@ Global / remoteCacheHeaders += IO.read(BuildPaths.defaultGlobalBase / "nativelin
     &lt;artifact name="core_3" type="pom" ext="pom" conf="pom"/&gt;
   &lt;/publications&gt;
 </code></pre>
-<p>This shows that an artifact has a name, a type, and an extention, and optionally a classifier.</p>
+<p>这表明工件具有名称、类型和扩展名，以及可选的 classifier。</p>
 <ul>
-<li><strong>name</strong>. This is going to be the same as the subproject's module name.</li>
-<li><strong>type</strong>. The functional category of the artifact, such as <code>jar</code>, <code>src</code>, and <code>doc</code>.</li>
-<li><strong>extension</strong>. The file extention, such as <code>jar</code>, <code>war</code>, <code>zip</code>, <code>xml</code> etc.</li>
-<li><strong>classifier</strong>. In Maven, classifier is an arbitrary string that can be appended for an alternative or secondary artifact.</li>
+<li><strong>name</strong>。与子项目的模块名相同。</li>
+<li><strong>type</strong>。工件的功能类别，如 <code>jar</code>、<code>src</code> 和 <code>doc</code>。</li>
+<li><strong>extension</strong>。文件扩展名，如 <code>jar</code>、<code>war</code>、<code>zip</code>、<code>xml</code> 等。</li>
+<li><strong>classifier</strong>。在 Maven 中，classifier 是可为替代或次要工件追加的任意字符串。</li>
 </ul>
-<h3 id="selecting-default-artifacts"><a class="header" href="#selecting-default-artifacts">Selecting default artifacts</a></h3>
-<p>By default, the published artifacts are:</p>
+<h3 id="选择默认工件"><a class="header" href="#选择默认工件">选择默认工件</a></h3>
+<p>默认发布的工件为：</p>
 <ol>
-<li>The main binary JAR</li>
-<li>The JAR containing the main sources and resources</li>
-<li>The JAR containing the API documentation</li>
+<li>主二进制 JAR</li>
+<li>包含主源码和资源的 JAR</li>
+<li>包含 API 文档的 JAR</li>
 </ol>
-<p>You can add artifacts for the test classes, sources, or API or you can disable some of the main artifacts.</p>
-<p>To add all <code>Test</code> artifacts:</p>
+<p>您可添加测试类、源码或 API 的工件，也可禁用部分主工件。</p>
+<p>要添加所有 <code>Test</code> 工件：</p>
 <pre><code class="language-scala">lazy val app = (project in file("app"))
   .settings(
     Test / publishArtifact := true,
   )
 </code></pre>
-<p>To add them individually:</p>
+<p>要单独添加：</p>
 <pre><code class="language-scala">lazy val app = (project in file("app"))
   .settings(
     // enable publishing the jar produced by `Test/package`
@@ -3586,7 +3582,7 @@ Global / remoteCacheHeaders += IO.read(BuildPaths.defaultGlobalBase / "nativelin
     Test / packageSrc / publishArtifact := true,
   )
 </code></pre>
-<p>To disable main artifacts individually:</p>
+<p>要单独禁用主工件：</p>
 <pre><code class="language-scala">lazy val app = (project in file("app"))
   .settings(
     // disable publishing the main jar produced by `package`
@@ -3599,23 +3595,23 @@ Global / remoteCacheHeaders += IO.read(BuildPaths.defaultGlobalBase / "nativelin
     Compile / packageSrc / publishArtifact := false,
   )
 </code></pre>
-<h3 id="modifying-default-artifacts"><a class="header" href="#modifying-default-artifacts">Modifying default artifacts</a></h3>
-<p>Each built-in artifact has several configurable settings in addition to <code>publishArtifact</code>. The basic ones are <code>artifact</code> (of type <code>SettingKey[Artifact]</code>), <code>mappings</code> (of type <code>TaskKey[(File, String)]</code>), and <code>artifactPath</code> (of type <code>SettingKey[File]</code>). They are scoped by <code>(Config / &lt;task&gt;)</code> as indicated in the previous section.</p>
-<p>To modify the type of the main artifact, for example:</p>
+<h3 id="修改默认工件"><a class="header" href="#修改默认工件">修改默认工件</a></h3>
+<p>除 <code>publishArtifact</code> 外，每个内置工件还有若干可配置设置。基本包括 <code>artifact</code>（类型为 <code>SettingKey[Artifact]</code>）、<code>mappings</code>（类型为 <code>TaskKey[(File, String)]</code>）和 <code>artifactPath</code>（类型为 <code>SettingKey[File]</code>）。它们按上一节所述以 <code>(Config / &lt;task&gt;)</code> 限定作用域。</p>
+<p>例如，要修改主工件的类型：</p>
 <pre><code class="language-scala">Compile / packageBin / artifact := {
   val prev: Artifact = (Compile / packageBin / artifact).value
   prev.withType("bundle")
 }
 </code></pre>
-<p>The generated artifact name is determined by the <code>artifactName</code> setting. This setting is of type <code>(ScalaVersion, ModuleID, Artifact) =&gt; String</code>. The ScalaVersion argument provides the full Scala version String and the binary compatible part of the version String. The String result is the name of the file to produce. The default implementation is <code>Artifact.artifactName _</code>. The function may be modified to produce different local names for artifacts without affecting the published name, which is determined by the <code>artifact</code> definition combined with the repository pattern.</p>
-<p>For example, to produce a minimal name without a classifier or cross path:</p>
+<p>生成的工件名由 <code>artifactName</code> 设置决定。该设置类型为 <code>(ScalaVersion, ModuleID, Artifact) =&gt; String</code>。ScalaVersion 参数提供完整 Scala 版本字符串及版本字符串的二进制兼容部分。返回的 String 为要生成的文件名。默认实现为 <code>Artifact.artifactName _</code>。可修改该函数以生成不同的本地工件名，而不影响发布名（发布名由 <code>artifact</code> 定义与仓库模式共同决定）。</p>
+<p>例如，要生成不含 classifier 或交叉路径的最小名称：</p>
 <pre><code class="language-scala">artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) =&gt;
   artifact.name + "-" + module.revision + "." + artifact.extension
 }
 </code></pre>
-<p>(Note that in practice you rarely want to drop the classifier.)</p>
-<p>Finally, you can get the <code>(Artifact, File)</code> pair for the artifact by mapping the <code>packagedArtifact</code> task. Note that if you don't need the <code>Artifact</code>, you can get just the File from the package task (<code>package</code>, <code>packageDoc</code>, or <code>packageSrc</code>). In both cases, mapping the task to get the file ensures that the artifact is generated first and so the file is guaranteed to be up-to-date.</p>
-<p>For example:</p>
+<p>（注意：实践中很少会去掉 classifier。）</p>
+<p>最后，您可通过映射 <code>packagedArtifact</code> 任务获取工件的 <code>(Artifact, File)</code> 对。若不需要 <code>Artifact</code>，可从打包任务（<code>package</code>、<code>packageDoc</code> 或 <code>packageSrc</code>）直接获取 File。两种情况下，映射任务以获取文件均可确保先生成工件，从而保证文件为最新。</p>
+<p>例如：</p>
 <pre><code class="language-scala">val myTask = taskKey[Unit]("My task.")
 
 myTask :=  {
@@ -3624,21 +3620,21 @@ myTask :=  {
   println("Packaged file: " + file.getAbsolutePath)
 }
 </code></pre>
-<h3 id="defining-custom-artifacts"><a class="header" href="#defining-custom-artifacts">Defining custom artifacts</a></h3>
-<p>In addition to configuring the built-in artifacts, you can declare other artifacts to publish. Multiple artifacts are allowed when using Ivy metadata, but a Maven POM file only supports distinguishing artifacts based on classifiers and these are not recorded in the POM.</p>
-<p>Basic <code>Artifact</code> construction look like:</p>
+<h3 id="定义自定义工件"><a class="header" href="#定义自定义工件">定义自定义工件</a></h3>
+<p>除配置内置工件外，您还可声明要发布的其他工件。使用 Ivy 元数据时允许多个工件，但 Maven POM 文件仅支持基于 classifier 区分工件，且这些信息不会记录在 POM 中。</p>
+<p>基本 <code>Artifact</code> 构造如下：</p>
 <pre><code class="language-scala">Artifact("name", "type", "extension")
 Artifact("name", "classifier")
 Artifact("name", url: URL)
 Artifact("name", Map("extra1" -&gt; "value1", "extra2" -&gt; "value2"))
 </code></pre>
-<p>For example:</p>
+<p>例如：</p>
 <pre><code class="language-scala">Artifact("myproject", "zip", "zip")
 Artifact("myproject", "image", "jpg")
 Artifact("myproject", "jdk15")
 </code></pre>
-<p>See the <a href="https://ant.apache.org/ivy/history/2.3.0/ivyfile/dependency-artifact.html">Ivy documentation</a> for more details on artifacts. See the <a href="reference/../api/sbt/librarymanagement/Artifact$.html">Artifact API</a> for combining the parameters above and specifying [Configurations] and extra attributes.</p>
-<p>To declare these artifacts for publishing, map them to the task that generates the artifact:</p>
+<p>有关工件的更多详情，请参阅 <a href="https://ant.apache.org/ivy/history/2.3.0/ivyfile/dependency-artifact.html">Ivy 文档</a>。有关组合上述参数并指定 [Configurations] 和额外属性，请参阅 <a href="reference/../api/sbt/librarymanagement/Artifact$.html">Artifact API</a>。</p>
+<p>要将这些工件声明为发布，请将它们映射到生成工件的任务：</p>
 <pre><code class="language-scala">val myImageTask = taskKey[File](...)
 
 myImageTask := {
@@ -3648,14 +3644,14 @@ myImageTask := {
 
 addArtifact(Artifact("myproject", "image", "jpg"), myImageTask)
 </code></pre>
-<p><code>addArtifact</code> returns a sequence of settings (wrapped in a <a href="reference/../api/sbt/internal/util/Init$SettingsDefinition.html">SettingsDefinition</a>). In a full build configuration, usage looks like:</p>
+<p><code>addArtifact</code> 返回一系列设置（包装在 <a href="reference/../api/sbt/internal/util/Init$SettingsDefinition.html">SettingsDefinition</a> 中）。在完整构建配置中的用法如下：</p>
 <pre><code class="language-scala">lazy val app = (project in file("app"))
   .settings(
     addArtifact(...)
   )
 </code></pre>
-<h3 id="publishing-war-files"><a class="header" href="#publishing-war-files">Publishing .war files</a></h3>
-<p>A common use case for web applications is to publish the <code>.war</code> file instead of the <code>.jar</code> file.</p>
+<h3 id="发布-war-文件"><a class="header" href="#发布-war-文件">发布 .war 文件</a></h3>
+<p>Web 应用的常见做法是发布 <code>.war</code> 文件而非 <code>.jar</code> 文件。</p>
 <pre><code class="language-scala">lazy val app = (project in file("app"))
   .settings(
     // disable .jar publishing
@@ -3671,31 +3667,31 @@ addArtifact(Artifact("myproject", "image", "jpg"), myImageTask)
     addArtifact(Compile / packageWar / artifact, packageWar),
   )
 </code></pre>
-<h3 id="using-dependencies-with-artifacts"><a class="header" href="#using-dependencies-with-artifacts">Using dependencies with artifacts</a></h3>
-<p>To specify the artifacts to use from a dependency that has custom or multiple artifacts, use the <code>artifacts</code> method on your dependencies. For example:</p>
+<h3 id="使用带工件的依赖"><a class="header" href="#使用带工件的依赖">使用带工件的依赖</a></h3>
+<p>要从具有自定义或多个工件的依赖中指定要使用的工件，请在依赖上使用 <code>artifacts</code> 方法。例如：</p>
 <pre><code class="language-scala">libraryDependencies += ("org" % "name" % "rev").artifacts(Artifact("name", "type", "ext"))
 </code></pre>
-<p>The <code>from</code> and <code>classifer</code> methods (described on the <a href="reference/./sbt-update.html">sbt update</a> page) are actually convenience methods that translate to <code>artifacts</code>:</p>
+<p><code>from</code> 和 <code>classifer</code> 方法（在 <a href="reference/./sbt-update.html">sbt update</a> 页中描述）实际上是转换为 <code>artifacts</code> 的便捷方法：</p>
 <pre><code class="language-scala">def from(url: String) = artifacts(Artifact(name, new URL(url)))
 def classifier(c: String) = artifacts(Artifact(name, c))
 </code></pre>
-<p>That is, the following two dependency declarations are equivalent:</p>
+<p>即，以下两种依赖声明等价：</p>
 <pre><code class="language-scala">libraryDependencies += ("org.testng" % "testng" % "5.7").classifier("jdk15")
 
 libraryDependencies += ("org.testng" % "testng" % "5.7").artifacts(Artifact("testng", "jdk15"))
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="input-task"><a class="header" href="#input-task">Input task</a></h1>
-<p>sbt provides a capability to define custom tasks that can parse user inputs and offer tab completion. The details of the parser will be covered in <a href="reference/tab-completion-parser.html">tab-completion parser</a> later.</p>
-<p>This page describes how to hook those parser combinators into the input task system.</p>
-<h2 id="input-keys"><a class="header" href="#input-keys">Input keys</a></h2>
-<p>A key for an input task is of type <code>InputKey</code> and represents the input task like a <code>SettingKey</code> represents a setting or a <code>TaskKey</code> represents a task. Define a new input task key using the <code>inputKey.apply</code> factory method:</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="输入任务"><a class="header" href="#输入任务">输入任务</a></h1>
+<p>sbt 支持定义可解析用户输入并提供 Tab 补全的自定义任务。解析器详情将在后续的 <a href="reference/tab-completion-parser.html">Tab 补全解析器</a>中介绍。</p>
+<p>本页介绍如何将这些解析器组合子接入输入任务系统。</p>
+<h2 id="输入键"><a class="header" href="#输入键">输入键</a></h2>
+<p>输入任务的键类型为 <code>InputKey</code>，表示输入任务，如同 <code>SettingKey</code> 表示设置、<code>TaskKey</code> 表示任务。使用 <code>inputKey.apply</code> 工厂方法定义新的输入任务键：</p>
 <pre><code class="language-scala">// goes in project/Build.scala or in build.sbt
 val demo = inputKey[Unit]("A demo input task.")
 </code></pre>
-<p>The definition of an input task is similar to that of a normal task, but it can also use the result of a <a href="reference/tab-completion-parser.html">Parser</a> applied to user input. Just as the special <code>value</code> method gets the value of a setting or task, the special <code>parsed</code> method gets the result of a <code>Parser</code>.</p>
-<h2 id="basic-input-task-definition"><a class="header" href="#basic-input-task-definition">Basic input task definition</a></h2>
-<p>The simplest input task accepts a space-delimited sequence of arguments. It does not provide useful tab completion and parsing is basic. The built-in parser for space-delimited arguments is constructed via the <code>spaceDelimited</code> method, which accepts as its only argument the label to present to the user during tab completion.</p>
-<p>For example, the following task prints the current Scala version and then echoes the arguments passed to it on their own line.</p>
+<p>输入任务的定义与普通任务类似，但还可使用应用于用户输入的 <a href="reference/tab-completion-parser.html">Parser</a> 的结果。正如特殊的 <code>value</code> 方法获取设置或任务的值，特殊的 <code>parsed</code> 方法获取 <code>Parser</code> 的结果。</p>
+<h2 id="基本输入任务定义"><a class="header" href="#基本输入任务定义">基本输入任务定义</a></h2>
+<p>最简单的输入任务接受空格分隔的参数序列。它不提供有用的 Tab 补全，解析也较基础。空格分隔参数的内置解析器通过 <code>spaceDelimited</code> 方法构建，其唯一参数为 Tab 补全时向用户展示的标签。</p>
+<p>例如，以下任务打印当前 Scala 版本，然后将传入的参数逐行回显。</p>
 <pre><code class="language-scala">import complete.DefaultParsers.{ *, given }
 
 demo := {
@@ -3707,16 +3703,16 @@ demo := {
   args.foreach(println(_))
 }
 </code></pre>
-<h2 id="input-task-using-parsers"><a class="header" href="#input-task-using-parsers">Input task using Parsers</a></h2>
-<p>The Parser provided by the <code>spaceDelimited</code> method does not provide any flexibility in defining the input syntax. Using a custom parser is just a matter of defining your own <code>Parser</code> as described on the <a href="reference/tab-completion-parser.html">Parsing Input</a> page.</p>
-<h3 id="constructing-the-parser"><a class="header" href="#constructing-the-parser">Constructing the Parser</a></h3>
-<p>The first step is to construct the actual <code>Parser</code> by defining a value of one of the following types:</p>
+<h2 id="使用解析器的输入任务"><a class="header" href="#使用解析器的输入任务">使用解析器的输入任务</a></h2>
+<p><code>spaceDelimited</code> 方法提供的 Parser 在定义输入语法时缺乏灵活性。使用自定义解析器只需按 <a href="reference/tab-completion-parser.html">Parsing Input</a> 页所述定义您自己的 <code>Parser</code>。</p>
+<h3 id="构建解析器"><a class="header" href="#构建解析器">构建解析器</a></h3>
+<p>第一步是通过定义以下类型之一的值来构建实际的 <code>Parser</code>：</p>
 <ol>
-<li><code>Parser[I]</code>: a basic parser that does not use any settings</li>
-<li><code>Initialize[Parser[I]]</code>: a parser whose definition depends on one or more settings</li>
-<li><code>Initialize[State =&gt; Parser[I]]</code>: a parser that is defined using both settings and the current <a href="reference/Build-State.html">state</a></li>
+<li><code>Parser[I]</code>：不使用任何设置的基本解析器</li>
+<li><code>Initialize[Parser[I]]</code>：定义依赖一个或多个设置的解析器</li>
+<li><code>Initialize[State =&gt; Parser[I]]</code>：使用设置和当前 <a href="reference/Build-State.html">state</a> 定义的解析器</li>
 </ol>
-<p>We already saw an example of the first case with <code>spaceDelimited</code>, which doesn't use any settings in its definition. As an example of the third case, the following defines a contrived <code>Parser</code> that uses the project's Scala and sbt version settings as well as the state. To use these settings, we need to wrap the Parser construction in <code>Def.setting</code> and get the setting values with the special <code>value</code> method:</p>
+<p>我们已在 <code>spaceDelimited</code> 中见过第一种情况的示例，其定义不使用任何设置。作为第三种情况的示例，以下定义了一个使用项目 Scala 和 sbt 版本设置以及 state 的示例 <code>Parser</code>。要使用这些设置，需将 Parser 构建包装在 <code>Def.setting</code> 中，并用特殊的 <code>value</code> 方法获取设置值：</p>
 <pre><code class="language-scala">import sbt.complete.DefaultParsers.{ *, given }
 import sbt.complete.Parser
 
@@ -3729,16 +3725,16 @@ Def.setting {
         token(state.remainingCommands.size.toString) )
 }
 </code></pre>
-<p>This Parser definition will produce a value of type <code>(String,String)</code>. The input syntax defined isn't very flexible; it is just a demonstration. It will produce one of the following values for a successful parse (assuming the current Scala version is 3.8.1, the current sbt version is 2.0.0-RC9, and there are 3 commands left to run):</p>
+<p>该 Parser 定义将产生类型为 <code>(String,String)</code> 的值。定义的输入语法不够灵活，仅为演示。解析成功时将产生以下值之一（假设当前 Scala 版本为 3.8.1、sbt 版本为 2.0.0-RC9，且还有 3 个命令待运行）：</p>
 <ul>
 <li>(scala,3.8.1)</li>
 <li>(sbt,2.0.0-RC9)</li>
 <li>(commands,3)</li>
 </ul>
-<p>Again, we were able to access the current Scala and sbt version for the project because they are settings. Tasks cannot be used to define the parser.</p>
-<h3 id="constructing-the-task"><a class="header" href="#constructing-the-task">Constructing the Task</a></h3>
-<p>Next, we construct the actual task to execute from the result of the <code>Parser</code>. For this, we define a task as usual, but we can access the result of parsing via the special <code>parsed</code> method on <code>Parser</code>.</p>
-<p>The following contrived example uses the previous example's output (of type <code>(String,String)</code>) and the result of the <code>package</code> task to print some information to the screen.</p>
+<p>同样，我们能访问项目当前 Scala 和 sbt 版本是因为它们是设置。任务不能用于定义解析器。</p>
+<h3 id="构建任务"><a class="header" href="#构建任务">构建任务</a></h3>
+<p>接下来，我们根据 <code>Parser</code> 的结果构建要执行的实际任务。为此，我们按常规定义任务，但可通过 <code>Parser</code> 上的特殊 <code>parsed</code> 方法访问解析结果。</p>
+<p>以下示例使用前一示例的输出（类型为 <code>(String,String)</code>）和 <code>package</code> 任务的结果，在屏幕上打印一些信息。</p>
 <pre><code class="language-scala">demo := {
     val (tpe, value) = parser.parsed
     println("Type: " + tpe)
@@ -3746,27 +3742,27 @@ Def.setting {
     println("Packaged: " + packageBin.value.getAbsolutePath)
 }
 </code></pre>
-<h2 id="the-inputtask-type"><a class="header" href="#the-inputtask-type">The InputTask type</a></h2>
-<p>It helps to look at the <code>InputTask</code> type to understand more advanced usage of input tasks. The core input task type is:</p>
+<h2 id="inputtask-类型"><a class="header" href="#inputtask-类型">InputTask 类型</a></h2>
+<p>查看 <code>InputTask</code> 类型有助于理解输入任务的更高级用法。核心输入任务类型为：</p>
 <pre><code class="language-scala">class InputTask[A1](val parser: State =&gt; Parser[Task[A1]])
 </code></pre>
-<p>Normally, an input task is assigned to a setting and you work with <code>Initialize[InputTask[A1]]</code>.</p>
-<p>Breaking this down,</p>
+<p>通常，输入任务会赋给设置，您会使用 <code>Initialize[InputTask[A1]]</code>。</p>
+<p>分解如下：</p>
 <ol>
-<li>You can use other settings (via Initialize) to construct an input task.</li>
-<li>You can use the current State to construct the parser.</li>
-<li>The parser accepts user input and provides tab completion.</li>
-<li>The parser produces the task to run.</li>
+<li>您可使用其他设置（通过 Initialize）构建输入任务。</li>
+<li>您可使用当前 State 构建解析器。</li>
+<li>解析器接受用户输入并提供 Tab 补全。</li>
+<li>解析器产生要运行的任务。</li>
 </ol>
-<p>So, you can use settings or <code>State</code> to construct the parser that defines an input task's command line syntax. This was described in the previous section. You can then use settings, <code>State</code>, or user input to construct the task to run. This is implicit in the input task syntax.</p>
-<h2 id="using-other-input-tasks"><a class="header" href="#using-other-input-tasks">Using other input tasks</a></h2>
-<p>The types involved in an input task are composable, so it is possible to reuse input tasks. The <code>.parsed</code> and <code>.evaluated</code> methods are defined on InputTasks to make this more convenient in common situations:</p>
+<p>因此，您可使用设置或 <code>State</code> 构建定义输入任务命令行语法的解析器。上一节已说明。然后可使用设置、<code>State</code> 或用户输入构建要运行的任务。这在输入任务语法中是隐式的。</p>
+<h2 id="使用其他输入任务"><a class="header" href="#使用其他输入任务">使用其他输入任务</a></h2>
+<p>输入任务涉及的类型可组合，因此可复用输入任务。<code>InputTasks</code> 上定义了 <code>.parsed</code> 和 <code>.evaluated</code> 方法，便于常见场景：</p>
 <ul>
-<li>Call <code>.parsed</code> on an <code>InputTask[A1]</code> or <code>Initialize[InputTask[A1]]</code> to get the <code>Task[A1]</code> created after parsing the command line</li>
-<li>Call <code>.evaluated</code> on an <code>InputTask[A1]</code> or <code>Initialize[InputTask[A1]]</code> to get the value of type <code>A1</code> from evaluating that task</li>
+<li>在 <code>InputTask[A1]</code> 或 <code>Initialize[InputTask[A1]]</code> 上调用 <code>.parsed</code>，获取解析命令行后创建的 <code>Task[A1]</code></li>
+<li>在 <code>InputTask[A1]</code> 或 <code>Initialize[InputTask[A1]]</code> 上调用 <code>.evaluated</code>，从执行该任务获取类型为 <code>A1</code> 的值</li>
 </ul>
-<p>In both situations, the underlying <code>Parser</code> is sequenced with other parsers in the input task definition. In the case of <code>.evaluated</code>, the generated task is evaluated.</p>
-<p>The following example applies the <code>run</code> input task, a literal separator parser <code>--</code>, and <code>run</code> again. The parsers are sequenced in order of syntactic appearance, so that the arguments before <code>--</code> are passed to the first <code>run</code> and the ones after are passed to the second.</p>
+<p>两种情况下，底层 <code>Parser</code> 都会与输入任务定义中的其他解析器按序组合。对于 <code>.evaluated</code>，会执行生成的任务。</p>
+<p>以下示例依次应用 <code>run</code> 输入任务、字面分隔符解析器 <code>--</code> 和再次的 <code>run</code>。解析器按语法出现顺序组合，因此 <code>--</code> 前的参数传给第一个 <code>run</code>，之后的传给第二个。</p>
 <pre><code class="language-scala">val run2 = inputKey[Unit](
     "Runs the main class twice with different argument lists separated by --")
 
@@ -3778,7 +3774,7 @@ run2 := {
    val two = (Compile / run).evaluated
 }
 </code></pre>
-<p>For a main class Demo that echoes its arguments, this looks like:</p>
+<p>对于回显其参数的主类 Demo，输出如下：</p>
 <pre><code class="language-bash">$ sbt
 &gt; run2 a b -- c d
 [info] Running Demo c d
@@ -3788,17 +3784,17 @@ d
 a
 b
 </code></pre>
-<h2 id="preapplying-input"><a class="header" href="#preapplying-input">Preapplying input</a></h2>
-<p>Because <code>InputTasks</code> are built from <code>Parsers</code>, it is possible to generate a new <code>InputTask</code> by applying some input programmatically. (It is also possible to generate a <code>Task</code>, which is covered in the next section.) Two convenience methods are provided on <code>InputTask[T]</code> and <code>Initialize[InputTask[T]]</code> that accept the String to apply.</p>
+<h2 id="预应用输入"><a class="header" href="#预应用输入">预应用输入</a></h2>
+<p>由于 <code>InputTasks</code> 由 <code>Parsers</code> 构建，可通过编程方式应用输入来生成新的 <code>InputTask</code>。（也可生成 <code>Task</code>，下一节将介绍。）<code>InputTask[T]</code> 和 <code>Initialize[InputTask[T]]</code> 上提供了两个接受要应用的 String 的便捷方法。</p>
 <ul>
-<li><code>partialInput</code> applies the input and allows further input, such as from the command line</li>
-<li><code>fullInput</code> applies the input and terminates parsing, so that further input is not accepted</li>
+<li><code>partialInput</code> 应用输入并允许进一步输入，如来自命令行</li>
+<li><code>fullInput</code> 应用输入并终止解析，不再接受进一步输入</li>
 </ul>
-<p>In each case, the input is applied to the input task's parser. Because input tasks handle all input after the task name, they usually require initial whitespace to be provided in the input.</p>
-<p>Consider the example in the previous section. We can modify it so that we:</p>
+<p>每种情况下，输入都会应用于输入任务的解析器。由于输入任务处理任务名后的所有输入，通常需要在输入中提供起始空白。</p>
+<p>考虑上一节的示例。我们可以修改为：</p>
 <ul>
-<li>Explicitly specify all of the arguments to the first <code>run</code>. We use <code>name</code> and <code>version</code> to show that settings can be used to define and modify parsers.</li>
-<li>Define the initial arguments passed to the second <code>run</code>, but allow further input on the command line.</li>
+<li>显式指定第一个 <code>run</code> 的全部参数。我们使用 <code>name</code> 和 <code>version</code> 展示设置可用于定义和修改解析器。</li>
+<li>定义传给第二个 <code>run</code> 的初始参数，但允许命令行上的进一步输入。</li>
 </ul>
 <div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
 <div class="admonition-title">
@@ -3828,7 +3824,7 @@ run2 := {
    val two = (Compile / run).partialInput(secondInput).evaluated
 }
 </code></pre>
-<p>For a main class Demo that echoes its arguments, this looks like:</p>
+<p>对于回显其参数的主类 Demo，输出如下：</p>
 <pre><code class="language-bash">$ sbt
 &gt; run2 green
 [info] Running Demo demo 1.0
@@ -3839,8 +3835,8 @@ red
 blue
 green
 </code></pre>
-<h2 id="get-a-task-from-an-inputtask"><a class="header" href="#get-a-task-from-an-inputtask">Get a Task from an InputTask</a></h2>
-<p>The previous section showed how to derive a new <code>InputTask</code> by applying input. In this section, applying input produces a <code>Task</code>. The <code>toTask</code> method on <code>Initialize[InputTask[A1]]</code> accepts the <code>String</code> input to apply and produces a task that can be used normally. For example, the following defines a plain task <code>runFixed</code> that can be used by other tasks or run directly without providing any input:</p>
+<h2 id="从-inputtask-获取-task"><a class="header" href="#从-inputtask-获取-task">从 InputTask 获取 Task</a></h2>
+<p>上一节展示了如何通过应用输入派生新的 <code>InputTask</code>。本节中，应用输入会产生 <code>Task</code>。<code>Initialize[InputTask[A1]]</code> 上的 <code>toTask</code> 方法接受要应用的 <code>String</code> 输入，并产生可正常使用的任务。例如，以下定义了一个普通任务 <code>runFixed</code>，可被其他任务使用或直接运行而无需提供任何输入：</p>
 <pre><code class="language-scala">lazy val runFixed = taskKey[Unit]("A task that hard codes the values to `run`")
 
 runFixed := {
@@ -3856,7 +3852,7 @@ blue
 green
 Done!
 </code></pre>
-<p>Each call to <code>toTask</code> generates a new task, but each task is configured the same as the original <code>InputTask</code> (in this case, <code>run</code>) but with different input applied. For example:</p>
+<p>每次调用 <code>toTask</code> 都会生成新任务，但每个任务的配置与原始 <code>InputTask</code>（本例为 <code>run</code>）相同，只是应用的输入不同。例如：</p>
 <pre><code class="language-scala">lazy val runFixed2 = taskKey[Unit]("A task that hard codes the values to `run`")
 
 run / fork := true
@@ -3867,7 +3863,7 @@ runFixed2 := {
    println("Done!")
 }
 </code></pre>
-<p>The different <code>toTask</code> calls define different tasks that each run the project's main class in a new jvm. That is, the <code>fork</code> setting configures both, each has the same classpath, and each run the same main class. However, each task passes different arguments to the main class. For a main class Demo that echoes its arguments, the output of running <code>runFixed2</code> might look like:</p>
+<p>不同的 <code>toTask</code> 调用定义不同的任务，每个任务都在新的 jvm 中运行项目主类。即，<code>fork</code> 设置同时配置两者，每个都有相同的 classpath，都运行相同的主类。但每个任务向主类传递不同的参数。对于回显其参数的主类 Demo，运行 <code>runFixed2</code> 的输出可能如下：</p>
 <pre><code class="language-bash">$ sbt
 &gt; runFixed2
 [info] Running Demo blue green
@@ -3878,17 +3874,17 @@ red
 orange
 Done!
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="tab-completion-parser"><a class="header" href="#tab-completion-parser">Tab-completion parser</a></h1>
-<p>This page describes the parser combinators in sbt. These parsers are used to parse user input and provide tab completion for <a href="reference/input-task.html">input tasks</a> and <a href="reference/../concepts/command.html">commands</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="tab-补全解析器"><a class="header" href="#tab-补全解析器">Tab 补全解析器</a></h1>
+<p>本页介绍 sbt 中的解析器组合子。这些解析器用于解析用户输入，并为<a href="reference/input-task.html">输入任务</a>和<a href="reference/../concepts/command.html">命令</a>提供 Tab 补全。</p>
 <!--
 If you are already familiar with Scala's parser combinators, the methods
 are mostly the same except that their arguments are strict. There are
 two additional methods for controlling tab completion that are discussed
 at the end of the section.
 -->
-<p>Parser combinators build up a parser from smaller parsers. A <code>Parser[A]</code> in its most basic usage is a function <code>String =&gt; Option[A]</code>. It accepts a <code>String</code> to parse and produces a value wrapped in <code>Some</code> if parsing succeeds or <code>None</code> if it fails. Error handling and tab completion make this picture more complicated, but we'll stick with <code>Option</code> for this discussion.</p>
-<h2 id="basic-parsers"><a class="header" href="#basic-parsers">Basic parsers</a></h2>
-<p>The simplest parser combinators match exact inputs:</p>
+<p>解析器组合子由较小的解析器构建解析器。<code>Parser[A]</code> 最基本用法是函数 <code>String =&gt; Option[A]</code>。它接受要解析的 <code>String</code>，解析成功时产生包装在 <code>Some</code> 中的值，失败时产生 <code>None</code>。错误处理和 Tab 补全使情况更复杂，但本文仅讨论 <code>Option</code>。</p>
+<h2 id="基本解析器"><a class="header" href="#基本解析器">基本解析器</a></h2>
+<p>最简单的解析器组合子匹配精确输入：</p>
 <pre><code class="language-scala">import sbt.{ *, given }
 import sbt.complete.DefaultParsers.{ *, given }
 
@@ -3900,7 +3896,7 @@ val singleChar: Parser[Char] = 'x'
 //   and failing otherwise
 val litString: Parser[String] = "blue"
 </code></pre>
-<p>In these examples, implicit conversions produce a literal <code>Parser</code> from a <code>Char</code> or <code>String</code>. Other basic parser constructors are the <code>charClass</code>, <code>success</code> and <code>failure</code> methods:</p>
+<p>在这些示例中，隐式转换从 <code>Char</code> 或 <code>String</code> 产生字面 <code>Parser</code>。其他基本解析器构造器为 <code>charClass</code>、<code>success</code> 和 <code>failure</code> 方法：</p>
 <pre><code class="language-scala">import sbt.{ *, given }
 import sbt.complete.DefaultParsers.{ *, given }
 
@@ -3915,19 +3911,19 @@ val alwaysSucceed: Parser[Int] = success(3)
 //  The argument is the error message.
 val alwaysFail: Parser[Nothing] = failure("Invalid input.")
 </code></pre>
-<h2 id="built-in-parsers"><a class="header" href="#built-in-parsers">Built-in parsers</a></h2>
-<p>sbt comes with several built-in parsers defined in <code>sbt.complete.DefaultParsers</code>. <!-- ../api/sbt/internal/util/complete/DefaultParsers$.html --></p>
-<p>Some commonly used built-in parsers are:</p>
+<h2 id="内置解析器"><a class="header" href="#内置解析器">内置解析器</a></h2>
+<p>sbt 在 <code>sbt.complete.DefaultParsers</code> 中定义了若干内置解析器。</p>
+<p>常用内置解析器包括：</p>
 <ul>
-<li><code>Space</code>, <code>NotSpace</code>, <code>OptSpace</code>, and <code>OptNotSpace</code> for parsing spaces or non-spaces, required or not.</li>
-<li><code>StringBasic</code> for parsing text that may be quoted.</li>
-<li><code>IntBasic</code> for parsing a signed Int value.</li>
-<li><code>Digit</code> and <code>HexDigit</code> for parsing a single decimal or hexadecimal digit.</li>
-<li><code>Bool</code> for parsing a <code>Boolean</code> value</li>
+<li><code>Space</code>、<code>NotSpace</code>、<code>OptSpace</code> 和 <code>OptNotSpace</code> 用于解析空格或非空格，必需或可选。</li>
+<li><code>StringBasic</code> 用于解析可能带引号的文本。</li>
+<li><code>IntBasic</code> 用于解析有符号 Int 值。</li>
+<li><code>Digit</code> 和 <code>HexDigit</code> 用于解析单个十进制或十六进制数字。</li>
+<li><code>Bool</code> 用于解析 <code>Boolean</code> 值</li>
 </ul>
-<p>See the <a href="reference/../api/sbt/internal/util/complete/DefaultParsers$.html">DefaultParsers API</a> for details.</p>
-<h2 id="combining-parsers"><a class="header" href="#combining-parsers">Combining parsers</a></h2>
-<p>We build on these basic parsers to construct more interesting parsers. We can combine parsers in a sequence, choose between parsers, or repeat a parser.</p>
+<p>详情请参阅 <a href="reference/../api/sbt/internal/util/complete/DefaultParsers$.html">DefaultParsers API</a>。</p>
+<h2 id="组合解析器"><a class="header" href="#组合解析器">组合解析器</a></h2>
+<p>我们在这些基本解析器基础上构建更有用的解析器。可将解析器按序组合、在解析器间选择或重复解析器。</p>
 <pre><code class="language-scala">// A parser that succeeds if the input is "blue" or "green",
 //  returning the matched input
 val color: Parser[String] = "blue" | "green"
@@ -3953,8 +3949,8 @@ val digits0: Parser[Seq[Char]] = charClass(_.isDigit, "digit").*
 // Optionally match a digit
 val optDigit: Parser[Option[Char]] = charClass(_.isDigit, "digit").?
 </code></pre>
-<h2 id="transforming-results"><a class="header" href="#transforming-results">Transforming results</a></h2>
-<p>A key aspect of parser combinators is transforming results along the way into more useful data structures. The fundamental methods for this are <code>map</code> and <code>flatMap</code>. Here are examples of <code>map</code> and some convenience methods implemented on top of <code>map</code>.</p>
+<h2 id="转换结果"><a class="header" href="#转换结果">转换结果</a></h2>
+<p>解析器组合子的关键是在解析过程中将结果转换为更有用的数据结构。基本方法为 <code>map</code> 和 <code>flatMap</code>。以下是 <code>map</code> 及基于 <code>map</code> 实现的便捷方法示例。</p>
 <pre><code class="language-scala">// Apply the `digits` parser and apply the provided function to the matched
 //   character sequence
 val num: Parser[Int] = digits.map: (chars: Seq[Char]) =&gt;
@@ -3974,22 +3970,22 @@ val blue = "blue" ^^^ 4
 // The above is equivalent to:
 val blueM = "blue".map((s: String) =&gt; 4)
 </code></pre>
-<h2 id="controlling-tab-completion"><a class="header" href="#controlling-tab-completion">Controlling tab completion</a></h2>
-<p>Most parsers have reasonable default tab completion behavior. For example, the string and character literal parsers will suggest the underlying literal for an empty input string. However, it is impractical to determine the valid completions for <code>charClass</code>, since it accepts an arbitrary predicate. The <code>examples</code> method defines explicit completions for such a parser:</p>
+<h2 id="控制-tab-补全"><a class="header" href="#控制-tab-补全">控制 Tab 补全</a></h2>
+<p>大多数解析器有合理的默认 Tab 补全行为。例如，字符串和字符字面解析器会在空输入时建议底层字面。但 <code>charClass</code> 接受任意谓词，难以确定有效补全。<code>examples</code> 方法为此类解析器定义显式补全：</p>
 <pre><code class="language-scala">val digit = charClass(_.isDigit, "digit").examples("0", "1", "2")
 </code></pre>
-<p>Tab completion will use the examples as suggestions. The other method controlling tab completion is <code>token</code>. The main purpose of <code>token</code> is to determine the boundaries for suggestions. For example, if your parser is:</p>
+<p>Tab 补全将使用 examples 作为建议。另一种控制 Tab 补全的方法是 <code>token</code>。<code>token</code> 的主要用途是确定建议边界。例如，若您的解析器为：</p>
 <pre><code class="language-scala">("fg" | "bg") ~ ' ' ~ ("green" | "blue")
 </code></pre>
-<p>then the potential completions on empty input are: <code>console fg green fg blue bg green bg blue</code></p>
-<p>Typically, you want to suggest smaller segments or the number of suggestions becomes unmanageable. A better parser is:</p>
+<p>则空输入时的潜在补全为：<code>console fg green fg blue bg green bg blue</code></p>
+<p>通常您希望建议更小的片段，否则建议数量会难以管理。更好的解析器为：</p>
 <pre><code class="language-scala">token( ("fg" | "bg") ~ ' ') ~ token("green" | "blue")
 </code></pre>
-<p>Now, the initial suggestions would be (with <code>_</code> representing a space): <code>console fg_ bg_</code></p>
-<p>Be careful not to overlap or nest tokens, as in <code>token("green" ~ token("blue"))</code>. The behavior is unspecified (and should generate an error in the future), but typically the outer most token definition will be used.</p>
-<h2 id="dependent-parsers"><a class="header" href="#dependent-parsers">Dependent parsers</a></h2>
-<p>Sometimes a parser must analyze some data and then more data needs to be parsed, and it is dependent on the previous one. The key for obtaining this behaviour is to use the <code>flatMap</code> function.</p>
-<p>As an example, it will shown how to select several items from a list of valid ones with completion, but no duplicates are possible.  A space is used to separate the different items.</p>
+<p>此时，初始建议为（<code>_</code> 表示空格）：<code>console fg_ bg_</code></p>
+<p>注意不要重叠或嵌套 token，如 <code>token("green" ~ token("blue"))</code>。行为未指定（未来应会报错），但通常使用最外层的 token 定义。</p>
+<h2 id="依赖解析器"><a class="header" href="#依赖解析器">依赖解析器</a></h2>
+<p>有时解析器需先分析部分数据，再解析更多依赖前者的数据。实现此行为的关键是使用 <code>flatMap</code> 函数。</p>
+<p>例如，将展示如何从有效列表中带补全地选择多项，且不允许重复。使用空格分隔不同项。</p>
 <pre><code class="language-scala">def select1(items: Iterable[String]) =
   token(Space ~&gt; StringBasic.examples(FixedSetExamples(items)))
 
@@ -4000,8 +3996,8 @@ def selectSome(items: Seq[String]): Parser[Seq[String]] = {
      else selectSome(remaining).?.map(v +: _.getOrElse(Seq()))
  }
 </code></pre>
-<p>As you can see, the <code>flatMap</code> function provides the previous value.  With this info, a new parser is constructed for the remaining items.  The <code>map</code> combinator is also used in order to transform the output of the parser.</p>
-<p>The parser is called recursively, until it is found the trivial case of no possible choices.</p>
+<p>如您所见，<code>flatMap</code> 函数提供前一个值。据此可为剩余项构建新解析器。<code>map</code> 组合子也用于转换解析器输出。</p>
+<p>解析器递归调用，直至找到无可选选择的平凡情况。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="community-plugins"><a class="header" href="#community-plugins">Community Plugins</a></h1>
 <h3 id="the-github-sbt-organization"><a class="header" href="#the-github-sbt-organization">The GitHub sbt Organization</a></h3>
 <p>The <a href="https://github.com/sbt">sbt organization</a> is available for use by any sbt plugin. Developers who contribute their plugins into the community organization will still retain control over their repository and its access. The goal of the sbt organization is to organize sbt software into one central location.</p>

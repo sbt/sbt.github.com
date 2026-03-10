@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Input task - The Book of sbt</title>
+        <title>输入任务 - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -208,18 +208,18 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="input-task"><a class="header" href="#input-task">Input task</a></h1>
-<p>sbt provides a capability to define custom tasks that can parse user inputs and offer tab completion. The details of the parser will be covered in <a href="tab-completion-parser.html">tab-completion parser</a> later.</p>
-<p>This page describes how to hook those parser combinators into the input task system.</p>
-<h2 id="input-keys"><a class="header" href="#input-keys">Input keys</a></h2>
-<p>A key for an input task is of type <code>InputKey</code> and represents the input task like a <code>SettingKey</code> represents a setting or a <code>TaskKey</code> represents a task. Define a new input task key using the <code>inputKey.apply</code> factory method:</p>
+                        <h1 id="输入任务"><a class="header" href="#输入任务">输入任务</a></h1>
+<p>sbt 支持定义可解析用户输入并提供 Tab 补全的自定义任务。解析器详情将在后续的 <a href="tab-completion-parser.html">Tab 补全解析器</a>中介绍。</p>
+<p>本页介绍如何将这些解析器组合子接入输入任务系统。</p>
+<h2 id="输入键"><a class="header" href="#输入键">输入键</a></h2>
+<p>输入任务的键类型为 <code>InputKey</code>，表示输入任务，如同 <code>SettingKey</code> 表示设置、<code>TaskKey</code> 表示任务。使用 <code>inputKey.apply</code> 工厂方法定义新的输入任务键：</p>
 <pre><code class="language-scala">// goes in project/Build.scala or in build.sbt
 val demo = inputKey[Unit]("A demo input task.")
 </code></pre>
-<p>The definition of an input task is similar to that of a normal task, but it can also use the result of a <a href="tab-completion-parser.html">Parser</a> applied to user input. Just as the special <code>value</code> method gets the value of a setting or task, the special <code>parsed</code> method gets the result of a <code>Parser</code>.</p>
-<h2 id="basic-input-task-definition"><a class="header" href="#basic-input-task-definition">Basic input task definition</a></h2>
-<p>The simplest input task accepts a space-delimited sequence of arguments. It does not provide useful tab completion and parsing is basic. The built-in parser for space-delimited arguments is constructed via the <code>spaceDelimited</code> method, which accepts as its only argument the label to present to the user during tab completion.</p>
-<p>For example, the following task prints the current Scala version and then echoes the arguments passed to it on their own line.</p>
+<p>输入任务的定义与普通任务类似，但还可使用应用于用户输入的 <a href="tab-completion-parser.html">Parser</a> 的结果。正如特殊的 <code>value</code> 方法获取设置或任务的值，特殊的 <code>parsed</code> 方法获取 <code>Parser</code> 的结果。</p>
+<h2 id="基本输入任务定义"><a class="header" href="#基本输入任务定义">基本输入任务定义</a></h2>
+<p>最简单的输入任务接受空格分隔的参数序列。它不提供有用的 Tab 补全，解析也较基础。空格分隔参数的内置解析器通过 <code>spaceDelimited</code> 方法构建，其唯一参数为 Tab 补全时向用户展示的标签。</p>
+<p>例如，以下任务打印当前 Scala 版本，然后将传入的参数逐行回显。</p>
 <pre><code class="language-scala">import complete.DefaultParsers.{ *, given }
 
 demo := {
@@ -231,16 +231,16 @@ demo := {
   args.foreach(println(_))
 }
 </code></pre>
-<h2 id="input-task-using-parsers"><a class="header" href="#input-task-using-parsers">Input task using Parsers</a></h2>
-<p>The Parser provided by the <code>spaceDelimited</code> method does not provide any flexibility in defining the input syntax. Using a custom parser is just a matter of defining your own <code>Parser</code> as described on the <a href="tab-completion-parser.html">Parsing Input</a> page.</p>
-<h3 id="constructing-the-parser"><a class="header" href="#constructing-the-parser">Constructing the Parser</a></h3>
-<p>The first step is to construct the actual <code>Parser</code> by defining a value of one of the following types:</p>
+<h2 id="使用解析器的输入任务"><a class="header" href="#使用解析器的输入任务">使用解析器的输入任务</a></h2>
+<p><code>spaceDelimited</code> 方法提供的 Parser 在定义输入语法时缺乏灵活性。使用自定义解析器只需按 <a href="tab-completion-parser.html">Parsing Input</a> 页所述定义您自己的 <code>Parser</code>。</p>
+<h3 id="构建解析器"><a class="header" href="#构建解析器">构建解析器</a></h3>
+<p>第一步是通过定义以下类型之一的值来构建实际的 <code>Parser</code>：</p>
 <ol>
-<li><code>Parser[I]</code>: a basic parser that does not use any settings</li>
-<li><code>Initialize[Parser[I]]</code>: a parser whose definition depends on one or more settings</li>
-<li><code>Initialize[State =&gt; Parser[I]]</code>: a parser that is defined using both settings and the current <a href="Build-State.html">state</a></li>
+<li><code>Parser[I]</code>：不使用任何设置的基本解析器</li>
+<li><code>Initialize[Parser[I]]</code>：定义依赖一个或多个设置的解析器</li>
+<li><code>Initialize[State =&gt; Parser[I]]</code>：使用设置和当前 <a href="Build-State.html">state</a> 定义的解析器</li>
 </ol>
-<p>We already saw an example of the first case with <code>spaceDelimited</code>, which doesn't use any settings in its definition. As an example of the third case, the following defines a contrived <code>Parser</code> that uses the project's Scala and sbt version settings as well as the state. To use these settings, we need to wrap the Parser construction in <code>Def.setting</code> and get the setting values with the special <code>value</code> method:</p>
+<p>我们已在 <code>spaceDelimited</code> 中见过第一种情况的示例，其定义不使用任何设置。作为第三种情况的示例，以下定义了一个使用项目 Scala 和 sbt 版本设置以及 state 的示例 <code>Parser</code>。要使用这些设置，需将 Parser 构建包装在 <code>Def.setting</code> 中，并用特殊的 <code>value</code> 方法获取设置值：</p>
 <pre><code class="language-scala">import sbt.complete.DefaultParsers.{ *, given }
 import sbt.complete.Parser
 
@@ -253,16 +253,16 @@ Def.setting {
         token(state.remainingCommands.size.toString) )
 }
 </code></pre>
-<p>This Parser definition will produce a value of type <code>(String,String)</code>. The input syntax defined isn't very flexible; it is just a demonstration. It will produce one of the following values for a successful parse (assuming the current Scala version is 3.8.1, the current sbt version is 2.0.0-RC9, and there are 3 commands left to run):</p>
+<p>该 Parser 定义将产生类型为 <code>(String,String)</code> 的值。定义的输入语法不够灵活，仅为演示。解析成功时将产生以下值之一（假设当前 Scala 版本为 3.8.1、sbt 版本为 2.0.0-RC9，且还有 3 个命令待运行）：</p>
 <ul>
 <li>(scala,3.8.1)</li>
 <li>(sbt,2.0.0-RC9)</li>
 <li>(commands,3)</li>
 </ul>
-<p>Again, we were able to access the current Scala and sbt version for the project because they are settings. Tasks cannot be used to define the parser.</p>
-<h3 id="constructing-the-task"><a class="header" href="#constructing-the-task">Constructing the Task</a></h3>
-<p>Next, we construct the actual task to execute from the result of the <code>Parser</code>. For this, we define a task as usual, but we can access the result of parsing via the special <code>parsed</code> method on <code>Parser</code>.</p>
-<p>The following contrived example uses the previous example's output (of type <code>(String,String)</code>) and the result of the <code>package</code> task to print some information to the screen.</p>
+<p>同样，我们能访问项目当前 Scala 和 sbt 版本是因为它们是设置。任务不能用于定义解析器。</p>
+<h3 id="构建任务"><a class="header" href="#构建任务">构建任务</a></h3>
+<p>接下来，我们根据 <code>Parser</code> 的结果构建要执行的实际任务。为此，我们按常规定义任务，但可通过 <code>Parser</code> 上的特殊 <code>parsed</code> 方法访问解析结果。</p>
+<p>以下示例使用前一示例的输出（类型为 <code>(String,String)</code>）和 <code>package</code> 任务的结果，在屏幕上打印一些信息。</p>
 <pre><code class="language-scala">demo := {
     val (tpe, value) = parser.parsed
     println("Type: " + tpe)
@@ -270,27 +270,27 @@ Def.setting {
     println("Packaged: " + packageBin.value.getAbsolutePath)
 }
 </code></pre>
-<h2 id="the-inputtask-type"><a class="header" href="#the-inputtask-type">The InputTask type</a></h2>
-<p>It helps to look at the <code>InputTask</code> type to understand more advanced usage of input tasks. The core input task type is:</p>
+<h2 id="inputtask-类型"><a class="header" href="#inputtask-类型">InputTask 类型</a></h2>
+<p>查看 <code>InputTask</code> 类型有助于理解输入任务的更高级用法。核心输入任务类型为：</p>
 <pre><code class="language-scala">class InputTask[A1](val parser: State =&gt; Parser[Task[A1]])
 </code></pre>
-<p>Normally, an input task is assigned to a setting and you work with <code>Initialize[InputTask[A1]]</code>.</p>
-<p>Breaking this down,</p>
+<p>通常，输入任务会赋给设置，您会使用 <code>Initialize[InputTask[A1]]</code>。</p>
+<p>分解如下：</p>
 <ol>
-<li>You can use other settings (via Initialize) to construct an input task.</li>
-<li>You can use the current State to construct the parser.</li>
-<li>The parser accepts user input and provides tab completion.</li>
-<li>The parser produces the task to run.</li>
+<li>您可使用其他设置（通过 Initialize）构建输入任务。</li>
+<li>您可使用当前 State 构建解析器。</li>
+<li>解析器接受用户输入并提供 Tab 补全。</li>
+<li>解析器产生要运行的任务。</li>
 </ol>
-<p>So, you can use settings or <code>State</code> to construct the parser that defines an input task's command line syntax. This was described in the previous section. You can then use settings, <code>State</code>, or user input to construct the task to run. This is implicit in the input task syntax.</p>
-<h2 id="using-other-input-tasks"><a class="header" href="#using-other-input-tasks">Using other input tasks</a></h2>
-<p>The types involved in an input task are composable, so it is possible to reuse input tasks. The <code>.parsed</code> and <code>.evaluated</code> methods are defined on InputTasks to make this more convenient in common situations:</p>
+<p>因此，您可使用设置或 <code>State</code> 构建定义输入任务命令行语法的解析器。上一节已说明。然后可使用设置、<code>State</code> 或用户输入构建要运行的任务。这在输入任务语法中是隐式的。</p>
+<h2 id="使用其他输入任务"><a class="header" href="#使用其他输入任务">使用其他输入任务</a></h2>
+<p>输入任务涉及的类型可组合，因此可复用输入任务。<code>InputTasks</code> 上定义了 <code>.parsed</code> 和 <code>.evaluated</code> 方法，便于常见场景：</p>
 <ul>
-<li>Call <code>.parsed</code> on an <code>InputTask[A1]</code> or <code>Initialize[InputTask[A1]]</code> to get the <code>Task[A1]</code> created after parsing the command line</li>
-<li>Call <code>.evaluated</code> on an <code>InputTask[A1]</code> or <code>Initialize[InputTask[A1]]</code> to get the value of type <code>A1</code> from evaluating that task</li>
+<li>在 <code>InputTask[A1]</code> 或 <code>Initialize[InputTask[A1]]</code> 上调用 <code>.parsed</code>，获取解析命令行后创建的 <code>Task[A1]</code></li>
+<li>在 <code>InputTask[A1]</code> 或 <code>Initialize[InputTask[A1]]</code> 上调用 <code>.evaluated</code>，从执行该任务获取类型为 <code>A1</code> 的值</li>
 </ul>
-<p>In both situations, the underlying <code>Parser</code> is sequenced with other parsers in the input task definition. In the case of <code>.evaluated</code>, the generated task is evaluated.</p>
-<p>The following example applies the <code>run</code> input task, a literal separator parser <code>--</code>, and <code>run</code> again. The parsers are sequenced in order of syntactic appearance, so that the arguments before <code>--</code> are passed to the first <code>run</code> and the ones after are passed to the second.</p>
+<p>两种情况下，底层 <code>Parser</code> 都会与输入任务定义中的其他解析器按序组合。对于 <code>.evaluated</code>，会执行生成的任务。</p>
+<p>以下示例依次应用 <code>run</code> 输入任务、字面分隔符解析器 <code>--</code> 和再次的 <code>run</code>。解析器按语法出现顺序组合，因此 <code>--</code> 前的参数传给第一个 <code>run</code>，之后的传给第二个。</p>
 <pre><code class="language-scala">val run2 = inputKey[Unit](
     "Runs the main class twice with different argument lists separated by --")
 
@@ -302,7 +302,7 @@ run2 := {
    val two = (Compile / run).evaluated
 }
 </code></pre>
-<p>For a main class Demo that echoes its arguments, this looks like:</p>
+<p>对于回显其参数的主类 Demo，输出如下：</p>
 <pre><code class="language-bash">$ sbt
 &gt; run2 a b -- c d
 [info] Running Demo c d
@@ -312,17 +312,17 @@ d
 a
 b
 </code></pre>
-<h2 id="preapplying-input"><a class="header" href="#preapplying-input">Preapplying input</a></h2>
-<p>Because <code>InputTasks</code> are built from <code>Parsers</code>, it is possible to generate a new <code>InputTask</code> by applying some input programmatically. (It is also possible to generate a <code>Task</code>, which is covered in the next section.) Two convenience methods are provided on <code>InputTask[T]</code> and <code>Initialize[InputTask[T]]</code> that accept the String to apply.</p>
+<h2 id="预应用输入"><a class="header" href="#预应用输入">预应用输入</a></h2>
+<p>由于 <code>InputTasks</code> 由 <code>Parsers</code> 构建，可通过编程方式应用输入来生成新的 <code>InputTask</code>。（也可生成 <code>Task</code>，下一节将介绍。）<code>InputTask[T]</code> 和 <code>Initialize[InputTask[T]]</code> 上提供了两个接受要应用的 String 的便捷方法。</p>
 <ul>
-<li><code>partialInput</code> applies the input and allows further input, such as from the command line</li>
-<li><code>fullInput</code> applies the input and terminates parsing, so that further input is not accepted</li>
+<li><code>partialInput</code> 应用输入并允许进一步输入，如来自命令行</li>
+<li><code>fullInput</code> 应用输入并终止解析，不再接受进一步输入</li>
 </ul>
-<p>In each case, the input is applied to the input task's parser. Because input tasks handle all input after the task name, they usually require initial whitespace to be provided in the input.</p>
-<p>Consider the example in the previous section. We can modify it so that we:</p>
+<p>每种情况下，输入都会应用于输入任务的解析器。由于输入任务处理任务名后的所有输入，通常需要在输入中提供起始空白。</p>
+<p>考虑上一节的示例。我们可以修改为：</p>
 <ul>
-<li>Explicitly specify all of the arguments to the first <code>run</code>. We use <code>name</code> and <code>version</code> to show that settings can be used to define and modify parsers.</li>
-<li>Define the initial arguments passed to the second <code>run</code>, but allow further input on the command line.</li>
+<li>显式指定第一个 <code>run</code> 的全部参数。我们使用 <code>name</code> 和 <code>version</code> 展示设置可用于定义和修改解析器。</li>
+<li>定义传给第二个 <code>run</code> 的初始参数，但允许命令行上的进一步输入。</li>
 </ul>
 <div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
 <div class="admonition-title">
@@ -352,7 +352,7 @@ run2 := {
    val two = (Compile / run).partialInput(secondInput).evaluated
 }
 </code></pre>
-<p>For a main class Demo that echoes its arguments, this looks like:</p>
+<p>对于回显其参数的主类 Demo，输出如下：</p>
 <pre><code class="language-bash">$ sbt
 &gt; run2 green
 [info] Running Demo demo 1.0
@@ -363,8 +363,8 @@ red
 blue
 green
 </code></pre>
-<h2 id="get-a-task-from-an-inputtask"><a class="header" href="#get-a-task-from-an-inputtask">Get a Task from an InputTask</a></h2>
-<p>The previous section showed how to derive a new <code>InputTask</code> by applying input. In this section, applying input produces a <code>Task</code>. The <code>toTask</code> method on <code>Initialize[InputTask[A1]]</code> accepts the <code>String</code> input to apply and produces a task that can be used normally. For example, the following defines a plain task <code>runFixed</code> that can be used by other tasks or run directly without providing any input:</p>
+<h2 id="从-inputtask-获取-task"><a class="header" href="#从-inputtask-获取-task">从 InputTask 获取 Task</a></h2>
+<p>上一节展示了如何通过应用输入派生新的 <code>InputTask</code>。本节中，应用输入会产生 <code>Task</code>。<code>Initialize[InputTask[A1]]</code> 上的 <code>toTask</code> 方法接受要应用的 <code>String</code> 输入，并产生可正常使用的任务。例如，以下定义了一个普通任务 <code>runFixed</code>，可被其他任务使用或直接运行而无需提供任何输入：</p>
 <pre><code class="language-scala">lazy val runFixed = taskKey[Unit]("A task that hard codes the values to `run`")
 
 runFixed := {
@@ -380,7 +380,7 @@ blue
 green
 Done!
 </code></pre>
-<p>Each call to <code>toTask</code> generates a new task, but each task is configured the same as the original <code>InputTask</code> (in this case, <code>run</code>) but with different input applied. For example:</p>
+<p>每次调用 <code>toTask</code> 都会生成新任务，但每个任务的配置与原始 <code>InputTask</code>（本例为 <code>run</code>）相同，只是应用的输入不同。例如：</p>
 <pre><code class="language-scala">lazy val runFixed2 = taskKey[Unit]("A task that hard codes the values to `run`")
 
 run / fork := true
@@ -391,7 +391,7 @@ runFixed2 := {
    println("Done!")
 }
 </code></pre>
-<p>The different <code>toTask</code> calls define different tasks that each run the project's main class in a new jvm. That is, the <code>fork</code> setting configures both, each has the same classpath, and each run the same main class. However, each task passes different arguments to the main class. For a main class Demo that echoes its arguments, the output of running <code>runFixed2</code> might look like:</p>
+<p>不同的 <code>toTask</code> 调用定义不同的任务，每个任务都在新的 jvm 中运行项目主类。即，<code>fork</code> 设置同时配置两者，每个都有相同的 classpath，都运行相同的主类。但每个任务向主类传递不同的参数。对于回显其参数的主类 Demo，运行 <code>runFixed2</code> 的输出可能如下：</p>
 <pre><code class="language-bash">$ sbt
 &gt; runFixed2
 [info] Running Demo blue green

@@ -209,28 +209,28 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="sbt-dependencytree"><a class="header" href="#sbt-dependencytree">sbt dependencyTree</a></h1>
-<h2 id="synopsis"><a class="header" href="#synopsis">Synopsis</a></h2>
+<h2 id="概要"><a class="header" href="#概要">概要</a></h2>
 <p><code>sbt</code> <code>dependencyTree</code> [<em>subcommand</em>] [<em>options</em>]<br> <code>sbt</code> <code>dependencyTree</code> <code>list</code> [<em>options</em>]<br> <code>sbt</code> <code>dependencyTree</code> <code>graph</code> [<em>options</em>]<br> <code>sbt</code> <code>dependencyTree</code> <code>html</code> [<em>options</em>]<br> <code>sbt</code> <code>dependencyTree</code> <code>html-graph</code> [<em>options</em>]<br> <code>sbt</code> <code>dependencyTree</code> <code>json</code> [<em>options</em>]<br> <code>sbt</code> <code>dependencyTree</code> <code>xml</code> [<em>options</em>]<br> <code>sbt</code> <code>dependencyTree</code> <code>stats</code> [<em>options</em>]</p>
-<h2 id="description"><a class="header" href="#description">Description</a></h2>
-<p>The <code>dependencyTree</code> task displays the dependency graph of your project in various formats, helping you visualize and analyze transitive dependencies. It is provided by the <code>DependencyTreePlugin</code>, which was in-sourced from Johannes Rudolph's sbt-dependency-graph in sbt 1.4.0. The task resolves dependencies before generating output, so it may trigger downloads if needed.</p>
-<h3 id="usage"><a class="header" href="#usage">Usage</a></h3>
-<p>Run this in the sbt shell. The default subcommand is <code>tree</code>, which prints an ASCII tree.</p>
-<h4 id="subcommands"><a class="header" href="#subcommands">Subcommands</a></h4>
+<h2 id="描述"><a class="header" href="#描述">描述</a></h2>
+<p><code>dependencyTree</code> 任务以多种格式显示您项目的依赖图，帮助您可视化和分析传递依赖。由 <code>DependencyTreePlugin</code> 提供，该插件在 sbt 1.4.0 中从 Johannes Rudolph 的 sbt-dependency-graph 内源化而来。该任务在生成输出前会解析依赖，因此必要时可能触发下载。</p>
+<h3 id="用法"><a class="header" href="#用法">用法</a></h3>
+<p>在 sbt shell 中运行。默认子命令为 <code>tree</code>，输出 ASCII 树形图。</p>
+<h4 id="子命令"><a class="header" href="#子命令">子命令</a></h4>
 <ul>
-<li><code>tree</code> (default): Prints an ASCII tree of dependencies, showing hierarchical relationships. Useful for quick overviews.</li>
-<li><code>list</code>: Prints a flat list of all dependencies, one per line. Ideal for scripting or grepping.</li>
-<li><code>graph</code> / <code>dot</code>: Prints a GraphViz DOT file for visualization. The <code>dot</code> alias is provided for compatibility.</li>
-<li><code>html</code>: Creates a standalone HTML page with the dependency graph rendered as text.</li>
-<li><code>html-graph</code>: Creates an HTML page with an embedded GraphViz diagram (requires GraphViz on the system).</li>
-<li><code>json</code>: Prints dependencies in JSON format, structured for programmatic use.</li>
-<li><code>xml</code>: Prints dependencies in GraphML format, suitable for graph analysis tools.</li>
-<li><code>stats</code>: Prints summary statistics, such as total dependencies and versions.</li>
-<li><code>help</code>: Displays the usage help (same as running <code>dependencyTree</code> without arguments).</li>
+<li><code>tree</code>（默认）：输出依赖的 ASCII 树形图，显示层级关系。适用于快速概览。</li>
+<li><code>list</code>：输出所有依赖的扁平列表，每行一个。适用于脚本或 grep。</li>
+<li><code>graph</code> / <code>dot</code>：输出用于可视化的 GraphViz DOT 文件。提供 <code>dot</code> 别名以保持兼容。</li>
+<li><code>html</code>：创建以文本形式渲染依赖图的独立 HTML 页面。</li>
+<li><code>html-graph</code>：创建嵌入 GraphViz 图的 HTML 页面（系统需安装 GraphViz）。</li>
+<li><code>json</code>：以 JSON 格式输出依赖，便于程序化使用。</li>
+<li><code>xml</code>：以 GraphML 格式输出依赖，适用于图分析工具。</li>
+<li><code>stats</code>：输出汇总统计，如依赖总数和版本数。</li>
+<li><code>help</code>：显示用法帮助（与不带参数运行 <code>dependencyTree</code> 相同）。</li>
 </ul>
-<h4 id="options"><a class="header" href="#options">Options</a></h4>
+<h4 id="选项"><a class="header" href="#选项">选项</a></h4>
 <ul>
-<li><code>--quiet</code>: Suppresses console output and returns the result as a task value (e.g., for use in other tasks).</li>
-<li><code>--out &lt;file&gt;</code>: Writes output to the specified file instead of stdout. The file extension determines the default subcommand:
+<li><code>--quiet</code>：抑制控制台输出，将结果作为任务值返回（例如供其他任务使用）。</li>
+<li><code>--out &lt;file&gt;</code>：将输出写入指定文件而非 stdout。文件扩展名决定默认子命令：
 <ul>
 <li><code>.txt</code>: <code>tree</code></li>
 <li><code>.dot</code>: <code>graph</code></li>
@@ -239,11 +239,11 @@
 <li><code>.xml</code>: <code>xml</code></li>
 </ul>
 </li>
-<li><code>--browse</code>: Automatically opens the output file in your default browser (only works with <code>graph</code> or <code>html</code> subcommands).</li>
+<li><code>--browse</code>：在默认浏览器中自动打开输出文件（仅对 <code>graph</code> 或 <code>html</code> 子命令有效）。</li>
 </ul>
-<h3 id="examples"><a class="header" href="#examples">Examples</a></h3>
-<h4 id="ascii-tree-default"><a class="header" href="#ascii-tree-default">ASCII Tree (Default)</a></h4>
-<p>Displays a hierarchical view of dependencies, with <code>[S]</code> indicating Scala library dependencies.</p>
+<h3 id="示例"><a class="header" href="#示例">示例</a></h3>
+<h4 id="ascii-树形图默认"><a class="header" href="#ascii-树形图默认">ASCII 树形图（默认）</a></h4>
+<p>显示依赖的层级视图，<code>[S]</code> 表示 Scala 库依赖。</p>
 <pre><code class="language-bash">&gt; Compile/dependencyTree
 [info] default:example_3:0.1.0-SNAPSHOT
 [info]   +-org.scala-lang:scala3-library_3:3.3.1 [S]
@@ -253,8 +253,8 @@
 [info]     |   +-org.scala-lang:scala3-library_3:3.1.3 (evicted by: 3.3.1)
 [info]     +-org.typelevel:cats-effect_3:3.4.0
 </code></pre>
-<p>Evicted dependencies (older versions replaced by newer ones) are shown in parentheses.</p>
-<h4 id="list-of-dependencies"><a class="header" href="#list-of-dependencies">List of Dependencies</a></h4>
+<p>被驱逐的依赖（被较新版本替换的旧版本）显示在括号中。</p>
+<h4 id="依赖列表"><a class="header" href="#依赖列表">依赖列表</a></h4>
 <pre><code class="language-bash">&gt; Compile/dependencyTree list
 org.scala-lang:scala3-library_3:3.3.1
 com.example:library_3:1.0.0
@@ -262,11 +262,11 @@ org.typelevel:cats-core_3:2.9.0
 org.typelevel:cats-kernel_3:2.9.0
 org.typelevel:cats-effect_3:3.4.0
 </code></pre>
-<h4 id="graphviz-dot-file"><a class="header" href="#graphviz-dot-file">GraphViz DOT File</a></h4>
-<p>Generates a DOT file for rendering graphs (e.g., with <code>dot</code> command).</p>
+<h4 id="graphviz-dot-文件"><a class="header" href="#graphviz-dot-文件">GraphViz DOT 文件</a></h4>
+<p>生成用于渲染图的 DOT 文件（例如使用 <code>dot</code> 命令）。</p>
 <pre><code class="language-bash">&gt; Compile/dependencyTree graph --out dependencies.dot
 </code></pre>
-<p>Contents of <code>dependencies.dot</code>:</p>
+<p><code>dependencies.dot</code> 内容：</p>
 <pre><code>digraph "dependency-graph" {
     graph[rankdir="LR"; splines=polyline]
     edge [arrowtail="none"]
@@ -276,19 +276,19 @@ org.typelevel:cats-effect_3:3.4.0
     // ... more edges
 }
 </code></pre>
-<p>Render to PNG: <code>dot -Tpng dependencies.dot -o dependencies.png</code></p>
-<h4 id="html-output"><a class="header" href="#html-output">HTML Output</a></h4>
+<p>渲染为 PNG：<code>dot -Tpng dependencies.dot -o dependencies.png</code></p>
+<h4 id="html-输出"><a class="header" href="#html-输出">HTML 输出</a></h4>
 <pre><code class="language-bash">&gt; Compile/dependencyTree html --out deps.html --browse
 </code></pre>
-<p>Creates <code>deps.html</code> with a text-based graph and opens it in the browser.</p>
-<h4 id="html-with-embedded-graph"><a class="header" href="#html-with-embedded-graph">HTML with Embedded Graph</a></h4>
+<p>创建包含文本图的 <code>deps.html</code> 并在浏览器中打开。</p>
+<h4 id="嵌入图的-html"><a class="header" href="#嵌入图的-html">嵌入图的 HTML</a></h4>
 <pre><code class="language-bash">&gt; Compile/dependencyTree html-graph --browse
 </code></pre>
-<p>Requires GraphViz installed. Embeds a visual graph in the HTML.</p>
-<h4 id="json-output"><a class="header" href="#json-output">JSON Output</a></h4>
+<p>需要安装 GraphViz。在 HTML 中嵌入可视化图。</p>
+<h4 id="json-输出"><a class="header" href="#json-输出">JSON 输出</a></h4>
 <pre><code class="language-bash">&gt; Compile/dependencyTree json --out deps.json
 </code></pre>
-<p>Sample output:</p>
+<p>示例输出：</p>
 <pre><code class="language-json">{
   "organization": "default",
   "name": "example_3",
@@ -305,32 +305,32 @@ org.typelevel:cats-effect_3:3.4.0
   ]
 }
 </code></pre>
-<h4 id="xml-graphml-output"><a class="header" href="#xml-graphml-output">XML (GraphML) Output</a></h4>
+<h4 id="xml-graphml-输出"><a class="header" href="#xml-graphml-输出">XML (GraphML) 输出</a></h4>
 <pre><code class="language-bash">&gt; Compile/dependencyTree xml --out deps.graphml
 </code></pre>
-<p>Suitable for import into graph visualization tools like yEd.</p>
-<h4 id="statistics"><a class="header" href="#statistics">Statistics</a></h4>
+<p>适用于导入 yEd 等图可视化工具。</p>
+<h4 id="统计"><a class="header" href="#统计">统计</a></h4>
 <pre><code class="language-bash">&gt; Compile/dependencyTree stats
 Total dependencies: 15
 Unique organizations: 5
 Versions: 10 distinct
 Evictions: 2
 </code></pre>
-<h3 id="configuration-keys"><a class="header" href="#configuration-keys">Configuration Keys</a></h3>
-<p>Customize behavior with these settings in <code>build.sbt</code>:</p>
+<h3 id="配置键"><a class="header" href="#配置键">配置键</a></h3>
+<p>在 <code>build.sbt</code> 中使用以下设置自定义行为：</p>
 <ul>
-<li><code>dependencyTreeIncludeScalaLibrary := true</code>: Include Scala library dependencies in output (default: <code>false</code>).</li>
-<li><code>dependencyDotNodeColors := false</code>: Disable colors in DOT node labels (default: <code>true</code>).</li>
-<li><code>dependencyDotNodeLabel := (org: String, name: String, version: String) =&gt; s"$org:$name:$version"</code>: Customize DOT node labels.</li>
-<li><code>dependencyDotHeader := """digraph "custom" { rankdir="TB"; }"""</code>: Set a custom DOT header.</li>
+<li><code>dependencyTreeIncludeScalaLibrary := true</code>：在输出中包含 Scala 库依赖（默认：<code>false</code>）。</li>
+<li><code>dependencyDotNodeColors := false</code>：禁用 DOT 节点标签中的颜色（默认：<code>true</code>）。</li>
+<li><code>dependencyDotNodeLabel := (org: String, name: String, version: String) =&gt; s"$org:$name:$version"</code>：自定义 DOT 节点标签。</li>
+<li><code>dependencyDotHeader := """digraph "custom" { rankdir="TB"; }"""</code>：设置自定义 DOT 头部。</li>
 </ul>
-<h3 id="related-tasks"><a class="header" href="#related-tasks">Related Tasks</a></h3>
+<h3 id="相关任务"><a class="header" href="#相关任务">相关任务</a></h3>
 <ul>
-<li><code>whatDependsOn &lt;module&gt;</code>: Shows what depends on a specific module (e.g., <code>whatDependsOn org.example:lib:1.0</code>).</li>
-<li><code>dependencyLicenseInfo</code>: Displays license information for dependencies.</li>
+<li><code>whatDependsOn &lt;module&gt;</code>：显示哪些模块依赖指定模块（例如 <code>whatDependsOn org.example:lib:1.0</code>）。</li>
+<li><code>dependencyLicenseInfo</code>：显示依赖的许可证信息。</li>
 </ul>
 <h3 id="scopes"><a class="header" href="#scopes">Scopes</a></h3>
-<p>Available in <code>Compile</code> and <code>Test</code> configurations. Use <code>Global/</code> for cross-configuration views if needed.</p>
+<p>在 <code>Compile</code> 和 <code>Test</code> 配置中可用。如需跨配置视图，使用 <code>Global/</code>。</p>
 
                     </main>
 

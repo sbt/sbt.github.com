@@ -209,38 +209,38 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="sbt-update"><a class="header" href="#sbt-update">sbt update</a></h1>
-<p>See <a href="../guide/library-dependency-basics.html">library depdency basics</a> in the Getting Started guide to learn about the basics.</p>
-<h2 id="synopsis"><a class="header" href="#synopsis">Synopsis</a></h2>
+<p>有关基础介绍，请参阅入门指南中的<a href="../guide/library-dependency-basics.html">库依赖基础</a>。</p>
+<h2 id="概要"><a class="header" href="#概要">概要</a></h2>
 <p><code>sbt</code> [<em>query</em> / ] <code>update</code></p>
-<h2 id="description"><a class="header" href="#description">Description</a></h2>
-<p>sbt uses <a href="https://get-coursier.io/">Coursier</a> to implement library management, also known as a package manager in other ecosystems. The general idea of library management is that you can specify external libraries you would like to use in your subprojects, and the library management system would:</p>
+<h2 id="描述"><a class="header" href="#描述">描述</a></h2>
+<p>sbt 使用 <a href="https://get-coursier.io/">Coursier</a> 实现库管理，在其他生态系统中也称为包管理器。库管理的一般思路是，您可以在子项目中指定要使用的外部库，库管理系统将：</p>
 <ul>
-<li>Check if such versions exists in the listed repositories</li>
-<li>Look for the transitive dependencies (i.e. the libraries used by the libraries)</li>
-<li>Attempt to resolve version conflicts, if any</li>
-<li>Download the artifacts, such as JAR files, from the repositories</li>
+<li>检查所列仓库中是否存在这些版本</li>
+<li>查找传递依赖（即库所依赖的库）</li>
+<li>尝试解决版本冲突（如有）</li>
+<li>从仓库下载构件（如 JAR 文件）</li>
 </ul>
-<h3 id="dependencies"><a class="header" href="#dependencies">Dependencies</a></h3>
-<p>Declaring a dependency looks like:</p>
+<h3 id="依赖关系"><a class="header" href="#依赖关系">依赖关系</a></h3>
+<p>声明依赖关系看起来像：</p>
 <pre><code class="language-scala">libraryDependencies += groupID %% artifactID % revision
 </code></pre>
-<p>or</p>
+<p>或</p>
 <pre><code class="language-scala">libraryDependencies += groupID %% artifactID % revision % configuration
 </code></pre>
 <!--
 See [configurations](#ivy-configurations) for details on configuration
 mappings.
 -->
-<p>Also, several dependencies can be declared together:</p>
+<p>此外，可以一起声明多个依赖：</p>
 <pre><code class="language-scala">libraryDependencies ++= Seq(
   groupID %% artifactID % revision,
   groupID %% otherID % otherRevision
 )
 </code></pre>
-<p>If you are using a dependency that was built with sbt, double the first <code>%</code> to be <code>%%</code>:</p>
+<p>若您使用的依赖是用 sbt 构建的，请将第一个 <code>%</code> 改为 <code>%%</code>：</p>
 <pre><code class="language-scala">libraryDependencies += groupID %% artifactID % revision
 </code></pre>
-<p>This will use the right JAR for the dependency built with the version of Scala that you are currently using. If you get an error while resolving this kind of dependency, that dependency probably wasn't published for the version of Scala you are using. See <a href="../concepts/cross-building.html">Cross building</a> for details.</p>
+<p>这将使用与您当前 Scala 版本匹配的依赖 JAR。若解析此类依赖时出错，该依赖可能未为您使用的 Scala 版本发布。详见<a href="../concepts/cross-building.html">交叉构建</a>。</p>
 <!--
 Ivy can select the latest revision of a module according to constraints
 you specify. Instead of a fixed revision like `"1.6.1"`, you specify
@@ -248,13 +248,13 @@ you specify. Instead of a fixed revision like `"1.6.1"`, you specify
 [Ivy revisions](https://ant.apache.org/ivy/history/2.3.0/ivyfile/dependency.html#revision)
 documentation for details.
 -->
-<h3 id="versionscheme-and-eviction-errors"><a class="header" href="#versionscheme-and-eviction-errors"><code>versionScheme</code> and eviction errors</a></h3>
-<p>sbt allows library authors to declare the version semantics using the <code>versionScheme</code> setting:</p>
+<h3 id="versionscheme-与驱逐错误"><a class="header" href="#versionscheme-与驱逐错误"><code>versionScheme</code> 与驱逐错误</a></h3>
+<p>sbt 允许库作者使用 <code>versionScheme</code> 设置声明版本语义：</p>
 <pre><code class="language-scala">// Semantic Versioning applied to 0.x, as well as 1.x, 2.x, etc
 versionScheme := Some(VersionScheme.EarlySemVer)
 </code></pre>
-<p>When Coursier finds multiple versions of a library, for example Cats Effect 2.x and Cats Effect 3.0.0-M4, it often resolves the conflict by removing the older version from the graph. This process is colloquially called eviction, like "Cats Effect 2.2.0 was evicted."</p>
-<p>This would work if the new tenant is binary compatible with Cats Effect 2.2.0. In this case, the library authors have declared that they are <em>not</em> binary compatible, so the eviction was actually unsafe. An unsafe eviction would cause runtime issues such as <code>ClassNotFoundException</code>. Instead Coursier should've failed to resolve.</p>
+<p>当 Coursier 发现库的多个版本（例如 Cats Effect 2.x 和 Cats Effect 3.0.0-M4）时，通常通过从图中移除较旧版本来解决冲突。此过程俗称驱逐，如「Cats Effect 2.2.0 被驱逐」。</p>
+<p>若新版本与 Cats Effect 2.2.0 二进制兼容，则可行。但本例中库作者已声明其 <em>不</em> 二进制兼容，因此该驱逐实际上不安全。不安全的驱逐会导致运行时问题，如 <code>ClassNotFoundException</code>。Coursier 本应解析失败。</p>
 <pre><code class="language-scala">lazy val use = project
   .settings(
     name := "use",
@@ -264,7 +264,7 @@ versionScheme := Some(VersionScheme.EarlySemVer)
     ),
   )
 </code></pre>
-<p>sbt performs this secondary compatibility check after Coursier returns a candidate:</p>
+<p>sbt 在 Coursier 返回候选版本后执行此二次兼容性检查：</p>
 <pre><code>[error] stack trace is suppressed; run last use / update for the full output
 [error] (use / update) found version conflict(s) in library dependencies; some are suspected to be binary incompatible:
 [error]
@@ -278,19 +278,19 @@ versionScheme := Some(VersionScheme.EarlySemVer)
 [error]
 [error] this can be overridden using libraryDependencySchemes or evictionErrorLevel
 </code></pre>
-<p>This mechanism is called the <em>eviction error</em>.</p>
-<h4 id="opting-out-of-the-the-eviction-error"><a class="header" href="#opting-out-of-the-the-eviction-error">Opting out of the the eviction error</a></h4>
-<p>If the library authors have declared the compatibility breakage, but if you want to ignore the strict check (often for <code>scala-xml</code>), you can write this in <code>project/plugins.sbt</code> and <code>build.sbt</code>:</p>
+<p>此机制称为 <em>驱逐错误</em>。</p>
+<h4 id="选择退出驱逐错误检查"><a class="header" href="#选择退出驱逐错误检查">选择退出驱逐错误检查</a></h4>
+<p>若库作者已声明兼容性破坏，但您希望忽略严格检查（常用于 <code>scala-xml</code>），可在 <code>project/plugins.sbt</code> 和 <code>build.sbt</code> 中编写：</p>
 <pre><code class="language-scala">libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always
 </code></pre>
-<p>To ignore all eviction errors:</p>
+<p>要忽略所有驱逐错误：</p>
 <pre><code class="language-scala">evictionErrorLevel := Level.Info
 </code></pre>
-<h3 id="resolvers"><a class="header" href="#resolvers">Resolvers</a></h3>
-<p>sbt uses the standard Maven Central repository by default. Declare additional repositories with the form:</p>
+<h3 id="解析器"><a class="header" href="#解析器">解析器</a></h3>
+<p>sbt 默认使用标准 Maven Central 仓库。使用以下形式声明额外仓库：</p>
 <pre><code class="language-scala">resolvers += name at location
 </code></pre>
-<p>For example:</p>
+<p>例如：</p>
 <pre><code class="language-scala">libraryDependencies ++= Seq(
     "org.apache.derby" % "derby" % "10.4.1.3",
     "org.specs" % "specs" % "1.6.1"
@@ -298,41 +298,41 @@ versionScheme := Some(VersionScheme.EarlySemVer)
 
 resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
 </code></pre>
-<p>sbt can search your local Maven repository if you add it as a repository:</p>
+<p>若您将本地 Maven 仓库添加为仓库，sbt 可搜索该仓库：</p>
 <pre><code class="language-scala">resolvers += Resolver.mavenLocal
 </code></pre>
 <!--
 See [Resolvers][Resolvers] for details on defining other types of repositories.
 -->
-<h4 id="override-default-resolvers"><a class="header" href="#override-default-resolvers">Override default resolvers</a></h4>
-<p><code>resolvers</code> configures additional, inline user resolvers. By default, <code>sbt</code> combines these resolvers with default repositories (Maven Central and the local Ivy repository) to form <code>externalResolvers</code>. To have more control over repositories, set <code>externalResolvers</code> directly. To only specify repositories in addition to the usual defaults, configure <code>resolvers</code>.</p>
-<p>For example, to use the Sonatype OSS Snapshots repository in addition to the default repositories,</p>
+<h4 id="覆盖默认解析器"><a class="header" href="#覆盖默认解析器">覆盖默认解析器</a></h4>
+<p><code>resolvers</code> 配置额外的内联用户解析器。默认情况下，<code>sbt</code> 将这些解析器与默认仓库（Maven Central 和本地 Ivy 仓库）组合形成 <code>externalResolvers</code>。要更精细控制仓库，直接设置 <code>externalResolvers</code>。若仅需在常规默认之外指定仓库，则配置 <code>resolvers</code>。</p>
+<p>例如，在默认仓库之外使用 Sonatype OSS Snapshots 仓库：</p>
 <pre><code class="language-scala">resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
 </code></pre>
-<p>To use the local repository, but not the Maven Central repository:</p>
+<p>要使用本地仓库但不使用 Maven Central 仓库：</p>
 <pre><code class="language-scala">externalResolvers := Resolver.combineDefaultResolvers(resolvers.value.toVector, mavenCentral = false)
 </code></pre>
-<h4 id="override-all-resolvers-for-all-builds"><a class="header" href="#override-all-resolvers-for-all-builds">Override all resolvers for all builds</a></h4>
-<p>The repositories used to retrieve sbt, Scala, plugins, and application dependencies can be configured globally and declared to override the resolvers configured in a build or plugin definition. There are two parts:</p>
+<h4 id="覆盖所有构建的解析器"><a class="header" href="#覆盖所有构建的解析器">覆盖所有构建的解析器</a></h4>
+<p>用于获取 sbt、Scala、插件和应用依赖的仓库可全局配置，并声明为覆盖构建或插件定义中配置的解析器。分为两部分：</p>
 <ol>
-<li>Define the repositories used by the launcher.</li>
-<li>Specify that these repositories should override those in build definitions.</li>
+<li>定义 launcher 使用的仓库。</li>
+<li>指定这些仓库应覆盖构建定义中的仓库。</li>
 </ol>
-<p>The repositories used by the launcher can be overridden by defining <code>~/.sbt/repositories</code>, which must contain a <code>[repositories]</code> section with the same format as the <code>Launcher</code> configuration file. For example:</p>
+<p>可通过定义 <code>~/.sbt/repositories</code> 覆盖 launcher 使用的仓库，该文件必须包含与 <code>Launcher</code> 配置文件格式相同的 <code>[repositories]</code> 部分。例如：</p>
 <pre><code>[repositories]
 local
 my-maven-repo: https://example.org/repo
 my-ivy-repo: https://example.org/ivy-repo/, [organization]/[module]/[revision]/[type]s/[artifact](-[classifier]).[ext]
 </code></pre>
-<p>A different location for the repositories file may be specified by the <code>sbt.repository.config</code> system property in the sbt startup script. The final step is to set <code>sbt.override.build.repos</code> to true to use these repositories for dependency resolution and retrieval.</p>
-<h3 id="exclude-transitive-dependencies"><a class="header" href="#exclude-transitive-dependencies">Exclude Transitive Dependencies</a></h3>
-<p>In certain cases a transitive dependency should be excluded from all dependencies. This can be achieved by setting up <code>ExclusionRules</code> in <code>excludeDependencies</code>.</p>
+<p>可通过 sbt 启动脚本中的 <code>sbt.repository.config</code> 系统属性指定仓库文件的不同位置。最后一步是将 <code>sbt.override.build.repos</code> 设为 true，以使用这些仓库进行依赖解析和获取。</p>
+<h3 id="排除传递依赖"><a class="header" href="#排除传递依赖">排除传递依赖</a></h3>
+<p>某些情况下需从所有依赖中排除传递依赖。可通过在 <code>excludeDependencies</code> 中设置 <code>ExclusionRules</code> 实现。</p>
 <pre><code class="language-scala">excludeDependencies ++= Seq(
   // commons-logging is replaced by jcl-over-slf4j
   ExclusionRule("commons-logging", "commons-logging")
 )
 </code></pre>
-<p>To exclude certain transitive dependencies of a dependency, use the <code>excludeAll</code> or <code>exclude</code> methods. The <code>exclude</code> method should be used when a pom will be published for the project. It requires the organization and module name to exclude. For example,</p>
+<p>要排除依赖的某些传递依赖，使用 <code>excludeAll</code> 或 <code>exclude</code> 方法。当项目将发布 pom 时应使用 <code>exclude</code> 方法。需提供要排除的组织和模块名。例如：</p>
 <pre><code class="language-scala">libraryDependencies += 
   ("log4j" % "log4j" % "1.2.15").exclude("javax.jms", "jms")
 </code></pre>
@@ -352,33 +352,33 @@ libraryDependencies +=
 
 See [ModuleID](../api/sbt/librarymanagement/ModuleID.html) for API details.
 -->
-<h3 id="explicit-url"><a class="header" href="#explicit-url">Explicit URL</a></h3>
-<p>If your project requires a dependency that is not present in a repository, a direct URL to its jar can be specified as follows:</p>
+<h3 id="显式-url"><a class="header" href="#显式-url">显式 URL</a></h3>
+<p>若您的项目需要仓库中不存在的依赖，可按以下方式指定其 jar 的直接 URL：</p>
 <pre><code class="language-scala">libraryDependencies += "slinky" % "slinky" % "2.1" from "https://slinky2.googlecode.com/svn/artifacts/2.1/slinky.jar"
 </code></pre>
-<p>The URL is only used as a fallback if the dependency cannot be found through the configured repositories. Also, the explicit URL is not included in published metadata (that is, the pom or ivy.xml).</p>
-<h3 id="disable-transitivity"><a class="header" href="#disable-transitivity">Disable Transitivity</a></h3>
-<p>By default, these declarations fetch all project dependencies, transitively. In some instances, you may find that the dependencies listed for a project aren't necessary for it to build. Projects using the Felix OSGI framework, for instance, only explicitly require its main jar to compile and run. Avoid fetching artifact dependencies with either <code>intransitive()</code> or <code>notTransitive()</code>, as in this example:</p>
+<p>仅当通过配置的仓库无法找到依赖时，才将 URL 用作后备。此外，显式 URL 不包含在发布的元数据（即 pom 或 ivy.xml）中。</p>
+<h3 id="禁用传递性"><a class="header" href="#禁用传递性">禁用传递性</a></h3>
+<p>默认情况下，这些声明会传递式获取所有项目依赖。某些情况下，您可能发现项目列出的依赖对其构建并非必需。例如，使用 Felix OSGI 框架的项目仅显式需要其主 jar 来编译和运行。使用 <code>intransitive()</code> 或 <code>notTransitive()</code> 避免获取构件依赖，如下例：</p>
 <pre><code class="language-scala">libraryDependencies += ("org.apache.felix" % "org.apache.felix.framework" % "1.8.0").intransitive()
 </code></pre>
-<h3 id="classifiers"><a class="header" href="#classifiers">Classifiers</a></h3>
-<p>You can specify the classifier for a dependency using the <code>classifier</code> method. For example, to get the jdk15 version of TestNG:</p>
+<h3 id="分类器"><a class="header" href="#分类器">分类器</a></h3>
+<p>您可使用 <code>classifier</code> 方法为依赖指定分类器。例如，获取 TestNG 的 jdk15 版本：</p>
 <pre><code class="language-scala">libraryDependencies += ("org.testng" % "testng" % "5.7").classifier("jdk15")
 </code></pre>
-<p>For multiple classifiers, use multiple <code>classifier</code> calls:</p>
+<p>对于多个分类器，使用多次 <code>classifier</code> 调用：</p>
 <pre><code class="language-scala">libraryDependencies += 
   "org.lwjgl.lwjgl" % "lwjgl-platform" % lwjglVersion classifier "natives-windows" classifier "natives-linux" classifier "natives-osx"
 </code></pre>
-<p>To obtain particular classifiers for all dependencies transitively, run the <code>updateClassifiers</code> task. By default, this resolves all artifacts with the <code>sources</code> or <code>javadoc</code> classifier. Select the classifiers to obtain by configuring the <code>transitiveClassifiers</code> setting. For example, to only retrieve sources:</p>
+<p>要传递式获取所有依赖的特定分类器，运行 <code>updateClassifiers</code> 任务。默认情况下，这会解析具有 <code>sources</code> 或 <code>javadoc</code> 分类器的所有构件。通过配置 <code>transitiveClassifiers</code> 设置选择要获取的分类器。例如，仅获取源码：</p>
 <pre><code class="language-scala">transitiveClassifiers := Seq("sources")
 </code></pre>
-<h3 id="download-sources"><a class="header" href="#download-sources">Download Sources</a></h3>
-<p>Downloading source and API documentation jars is usually handled by an IDE plugin. These plugins use the <code>updateClassifiers</code> and <code>updateSbtClassifiers</code> tasks, which produce an <code>Update-Report</code> referencing these jars.</p>
-<p>To have sbt download the dependency's sources without using an IDE plugin, add <code>withSources()</code> to the dependency definition. For API jars, add <code>withJavadoc()</code>. For example:</p>
+<h3 id="下载源码"><a class="header" href="#下载源码">下载源码</a></h3>
+<p>下载源码和 API 文档 jar 通常由 IDE 插件处理。这些插件使用 <code>updateClassifiers</code> 和 <code>updateSbtClassifiers</code> 任务，生成引用这些 jar 的 <code>Update-Report</code>。</p>
+<p>要让 sbt 在不使用 IDE 插件的情况下下载依赖的源码，在依赖定义中添加 <code>withSources()</code>。对于 API jar，添加 <code>withJavadoc()</code>。例如：</p>
 <pre><code class="language-scala">libraryDependencies += 
   ("org.apache.felix" % "org.apache.felix.framework" % "1.8.0").withSources().withJavadoc()
 </code></pre>
-<p>Note that this is not transitive. Use the <code>update*Classifiers</code> tasks for that.</p>
+<p>注意此操作不具传递性。为此请使用 <code>update*Classifiers</code> 任务。</p>
 <!--
 ### Extra Attributes
 

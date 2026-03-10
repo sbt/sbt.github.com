@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Watch command - The Book of sbt</title>
+        <title>Watch 命令 - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -208,38 +208,38 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="watch-command"><a class="header" href="#watch-command">Watch command</a></h1>
-<h2 id="synopsis"><a class="header" href="#synopsis">Synopsis</a></h2>
+                        <h1 id="watch-命令"><a class="header" href="#watch-命令">Watch 命令</a></h1>
+<h2 id="概要"><a class="header" href="#概要">概要</a></h2>
 <p><code>sbt</code> <code>~</code> <em>command1</em><br> <code>sbt</code> <code>~</code> <em>command1</em> [ <code>;</code> <em>command2</em> <code>;</code> ... ]</p>
-<h2 id="descrption"><a class="header" href="#descrption">Descrption</a></h2>
-<p>The watch command is denoted by <code>~</code> (tilde), and it provides the ability to monitor the input files for particular tasks and repeat the tasks when changes to those files occur.</p>
-<p>Some example usages are described below:</p>
-<h3 id="compile"><a class="header" href="#compile">Compile</a></h3>
-<p>A common use-case is continuous compilation. The following commands will make sbt watch for source changes in the Test and Compile (default) configurations respectively and re-run the compile command.</p>
+<h2 id="描述"><a class="header" href="#描述">描述</a></h2>
+<p>Watch 命令以 <code>~</code>（波浪号）表示，可监控特定任务的输入文件，并在这些文件发生变更时重复执行任务。</p>
+<p>以下描述了一些示例用法：</p>
+<h3 id="编译"><a class="header" href="#编译">编译</a></h3>
+<p>常见用途是持续编译。以下命令将分别让 sbt 监控 Test 和 Compile（默认）配置中的源变更，并重新运行 compile 命令。</p>
 <pre><code class="language-bash">&gt; ~ Test / compile
 
 &gt; ~ compile
 </code></pre>
-<p>Note that because <code>Test / compile</code> depends on <code>Compile / compile</code>, source changes in the main source directory will trigger recompilation of the test sources.</p>
-<h3 id="testing"><a class="header" href="#testing">Testing</a></h3>
-<p>Triggered execution is often used when developing in a test driven development (TDD) style. The following command will monitor changes to both the main and test source sources for the build and re-run only the tests that reference classes that have been re-compiled since the last test run.</p>
+<p>注意，由于 <code>Test / compile</code> 依赖 <code>Compile / compile</code>，主源目录中的源变更将触发测试源的重新编译。</p>
+<h3 id="测试"><a class="header" href="#测试">测试</a></h3>
+<p>触发式执行常用于测试驱动开发（TDD）风格。以下命令将监控构建的主源和测试源变更，并仅重新运行引用自上次测试运行以来已重新编译的类的测试。</p>
 <pre><code class="language-bash">&gt; ~ test
 </code></pre>
-<p>It is also possible to re-run only a particular test if its dependencies have changed.</p>
+<p>若某测试的依赖已变更，也可仅重新运行该测试。</p>
 <pre><code class="language-bash">&gt; ~ test foo.BarTest
 </code></pre>
-<p>It is possible to always re-run a test when source changes are detected regardless of whether the test depends on any of the updated source files.</p>
+<p>可配置为在检测到源变更时始终重新运行某测试，无论该测试是否依赖任何已更新的源文件。</p>
 <pre><code class="language-bash">&gt; ~ testOnly foo.BarTest
 </code></pre>
-<p>To run all of the tests in the project when any sources change, use</p>
+<p>要在任何源变更时运行项目中所有测试，请使用</p>
 <pre><code class="language-bash">&gt; ~ testFull
 </code></pre>
-<h3 id="running-multiple-commands"><a class="header" href="#running-multiple-commands">Running Multiple Commands</a></h3>
-<p>The watch command supports watching multiple, semicolon separated, tasks. For example, the following command will monitor for source file changes and run <code>clean</code> and <code>test</code>:</p>
+<h3 id="运行多个命令"><a class="header" href="#运行多个命令">运行多个命令</a></h3>
+<p>Watch 命令支持监控多个以分号分隔的任务。例如，以下命令将监控源文件变更并运行 <code>clean</code> 和 <code>test</code>：</p>
 <pre><code class="language-bash">&gt; ~ clean; test
 </code></pre>
-<h3 id="build-sources"><a class="header" href="#build-sources">Build sources</a></h3>
-<p>If the build is configured to automatically reload when build source changes are made by setting <code>Global / onChangedBuildSource := ReloadOnSourceChanges</code>, then sbt will monitor the build sources (i.e. <code>*.sbt</code> and <code>*.{java,scala}</code> files in the <code>project</code> directory). When build source changes are detected, the build will be reloaded and sbt will re-enter triggered execution mode when the reload completes.</p>
+<h3 id="构建源"><a class="header" href="#构建源">构建源</a></h3>
+<p>若通过设置 <code>Global / onChangedBuildSource := ReloadOnSourceChanges</code> 将构建配置为在构建源变更时自动重新加载，则 sbt 将监控构建源（即 <code>project</code> 目录中的 <code>*.sbt</code> 和 <code>*.{java,scala}</code> 文件）。检测到构建源变更时，构建将重新加载，重新加载完成后 sbt 将重新进入触发式执行模式。</p>
 <!--
 The following snippet can be added as a [global setting](../api/sbt/Global-Settings.html) to `~/.sbt/1.0/config.sbt` to enable `ReloadOnSourceChanges` for all sbt 1.3+ builds without breaking earlier versions:
 
@@ -259,49 +259,49 @@ Def.settings {
 }
 ```
 -->
-<h3 id="clearing-the-screen"><a class="header" href="#clearing-the-screen">Clearing the screen</a></h3>
-<p>sbt can clear the console screen before it evaluates the task or after it triggers an event. To configure sbt to clear the screen after an event is triggered add</p>
+<h3 id="清屏"><a class="header" href="#清屏">清屏</a></h3>
+<p>sbt 可在评估任务前或触发事件后清空控制台屏幕。要配置 sbt 在事件触发后清屏，请添加</p>
 <pre><code class="language-scala">ThisBuild / watchTriggeredMessage := Watch.clearScreenOnTrigger
 </code></pre>
-<p>to the build settings. To clear the screen before running the task, add</p>
+<p>到构建设置中。要在运行任务前清屏，请添加</p>
 <pre><code class="language-scala">ThisBuild  / watchBeforeCommand := Watch.clearScreen
 </code></pre>
-<p>to the build settings.</p>
-<h3 id="configuration"><a class="header" href="#configuration">Configuration</a></h3>
-<p>The behavior of triggered execution can be configured via a number of settings.</p>
+<p>到构建设置中。</p>
+<h3 id="配置"><a class="header" href="#配置">配置</a></h3>
+<p>触发式执行的行为可通过若干设置进行配置。</p>
 <ul>
 <li>
-<p><code>watchTriggers: Seq[Glob]</code> adds search queries for files that should task trigger evaluation but that the task does not directly depend on. For example, if the project build.sbt file contains <code>foo / watchTriggers += baseDirectory.value.toGlob / "*.txt"</code>, then any modifications to files ending with the <code>txt</code> extension will cause the <code>foo</code> command to trigger when in triggered execution mode.</p>
+<p><code>watchTriggers: Seq[Glob]</code> 为应触发任务评估但任务不直接依赖的文件添加搜索查询。例如，若项目 build.sbt 包含 <code>foo / watchTriggers += baseDirectory.value.toGlob / "*.txt"</code>，则对以 <code>txt</code> 扩展名结尾的文件的任何修改都会在触发式执行模式下触发 <code>foo</code> 命令。</p>
 </li>
 <li>
-<p><code>watchTriggeredMessage: (Int, Path, Seq[String]) =&gt; Option[String]</code> sets the message that is displayed when a file modification triggers a new build. Its input parameters are the current watch iteration count, the file that triggered the build and the command(s) that are going to be run. By default, it prints a message indicating what file triggered the build and what commands its going to run. No message is printed when the function returns <code>None</code>. To clear the screen before printing the message, just add <code>Watch.clearScreen()</code> inside of the task definition. This will ensure that the screen is cleared and that the message, if any is defined, will be printed after the screen clearing.</p>
+<p><code>watchTriggeredMessage: (Int, Path, Seq[String]) =&gt; Option[String]</code> 设置文件修改触发新构建时显示的消息。其输入参数为当前 watch 迭代次数、触发构建的文件以及将要运行的命令。默认打印指示哪个文件触发构建以及将运行哪些命令的消息。函数返回 <code>None</code> 时不打印消息。要在打印消息前清屏，在任务定义中添加 <code>Watch.clearScreen()</code> 即可。这将确保先清屏，再打印（若有定义的）消息。</p>
 </li>
 <li>
-<p><code>watchInputOptions: Seq[Watch.InputOption]</code> allows the build to override the default watch options. For example, to add the ability to reload the build by typing the 'l' key, add <code>ThisBuild / watchInputOptions += Watch.InputOption('l', "reload", Watch.Reload)</code> to the <code>build.sbt</code> file. When using the default <code>watchStartMessage</code>, this will also add the option to the list displayed by the '?' option.</p>
+<p><code>watchInputOptions: Seq[Watch.InputOption]</code> 允许构建覆盖默认 watch 选项。例如，要添加通过按 'l' 键重新加载构建的能力，在 <code>build.sbt</code> 中添加 <code>ThisBuild / watchInputOptions += Watch.InputOption('l', "reload", Watch.Reload)</code>。使用默认 <code>watchStartMessage</code> 时，这也会将该选项添加到 '?' 选项显示的列表中。</p>
 </li>
 <li>
-<p><code>watchBeforeCommand: () =&gt; Unit</code> provides a callback to run before evaluating the task.  It can be used to clear the console screen by adding <code>ThisBuild / watchBeforeCommand := Watch.clearScreen</code> to the project build.sbt file. By default it is no-op.</p>
+<p><code>watchBeforeCommand: () =&gt; Unit</code> 提供在评估任务前运行的回调。可通过在项目 build.sbt 中添加 <code>ThisBuild / watchBeforeCommand := Watch.clearScreen</code> 来清空控制台屏幕。默认为空操作。</p>
 </li>
 <li>
-<p><code>watchLogLevel</code> sets the logging level of the file monitoring system. This can be useful if the triggered execution is not being evaluated when source files or modified or if is unexpectedly triggering due to modifications to files that should not be monitored.</p>
+<p><code>watchLogLevel</code> 设置文件监控系统的日志级别。当源文件被修改时触发式执行未评估，或因对不应监控的文件的修改而意外触发时，此设置很有用。</p>
 </li>
 <li>
-<p><code>watchInputParser: Parser[Watch.Action]</code> changes how the monitor handles input events. For example, setting <code>watchInputParser := 'l' ^^^ Watch.Reload | '\r' ^^^ new Watch.Run("")</code> will make it so that typing the 'l' key will reload the build and typing a newline will return to the shell. By default this is automatically derived from the <code>watchInputOptions</code>.</p>
+<p><code>watchInputParser: Parser[Watch.Action]</code> 更改监控器处理输入事件的方式。例如，设置 <code>watchInputParser := 'l' ^^^ Watch.Reload | '\r' ^^^ new Watch.Run("")</code> 将使按 'l' 键重新加载构建，按换行键返回 shell。默认从 <code>watchInputOptions</code> 自动派生。</p>
 </li>
 <li>
-<p><code>watchStartMessage: (Int, ProjectRef, Seq[String]) =&gt; Option[String]</code> sets the banner that is printed while the watch process is waiting for file or input events. The inputs are the iteration count, the current project and the commands to run. The default message includes instructions for terminating the watch or displaying all available options. This banner is only displayed if <code>watchOnIteration</code> logs the result of <code>watchStartMessage</code>.</p>
+<p><code>watchStartMessage: (Int, ProjectRef, Seq[String]) =&gt; Option[String]</code> 设置 watch 进程等待文件或输入事件时打印的横幅。输入为迭代次数、当前项目和要运行的命令。默认消息包含终止 watch 或显示所有可用选项的说明。仅当 <code>watchOnIteration</code> 记录 <code>watchStartMessage</code> 结果时才显示此横幅。</p>
 </li>
 <li>
-<p><code>watchOnIteration: (Int, ProjectRef, Seq[String]) =&gt; Watch.Action</code> a function that is evaluated before waiting for source or input events. It can be used to terminate the watch early if, for example, a certain number of iterations have been reached. By default, it just logs the result of <code>watchStartMessage</code>.</p>
+<p><code>watchOnIteration: (Int, ProjectRef, Seq[String]) =&gt; Watch.Action</code> 在等待源或输入事件前评估的函数。例如，若达到一定迭代次数，可用于提前终止 watch。默认仅记录 <code>watchStartMessage</code> 的结果。</p>
 </li>
 <li>
-<p><code>watchForceTriggerOnAnyChange: Boolean</code> configures whether or not the contents of a source file must change in order to trigger a build. The default value is false.</p>
+<p><code>watchForceTriggerOnAnyChange: Boolean</code> 配置源文件内容是否必须变更才能触发构建。默认值为 false。</p>
 </li>
 <li>
-<p><code>watchPersistFileStamps: Boolean</code> toggles whether or not sbt will persist the file hashes computed for source files across multiple task evaluation runs. This can improve performance for projects with many source files. Because the file hashes are cached, it is possible for the evaluated task to read an invalid hash if many source files are being concurrently modified. The default value is false.</p>
+<p><code>watchPersistFileStamps: Boolean</code> 切换 sbt 是否在多次任务评估运行间持久化为源文件计算的文件哈希。这可提高具有大量源文件的项目的性能。由于文件哈希被缓存，若多个源文件被并发修改，评估的任务可能读取到无效哈希。默认值为 false。</p>
 </li>
 <li>
-<p><code>watchAntiEntropy: FiniteDuration</code> controls the time that must elapse before a build is re-triggered by the same file that previously triggered the build. This is intended to prevent spurious builds that can occur when a file is modified in short bursts. The default value is 500ms.</p>
+<p><code>watchAntiEntropy: FiniteDuration</code> 控制同一文件在先前触发构建后，必须经过多长时间才能再次触发构建。用于防止文件在短时间内多次修改时产生虚假构建。默认值为 500ms。</p>
 </li>
 </ul>
 

@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Remote cache setup - The Book of sbt</title>
+        <title>远程缓存设置 - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -208,36 +208,36 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="remote-cache-setup"><a class="header" href="#remote-cache-setup">Remote cache setup</a></h1>
-<p>This page covers remote caching setup. See <a href="../concepts/caching.html">Caching</a> for general explanation of the caching system.</p>
-<h2 id="grpc-remote-cache"><a class="header" href="#grpc-remote-cache">gRPC remote cache</a></h2>
-<p>While there might be multiple remote cache store implemention in the future, sbt 2.0 ships with a gRPC client that is compatible with the Bazel remote cache backends. To configure sbt 2.x, add the following to <code>project/plugins.sbt</code></p>
+                        <h1 id="远程缓存设置"><a class="header" href="#远程缓存设置">远程缓存设置</a></h1>
+<p>本页介绍远程缓存设置。有关缓存系统的一般说明，请参阅<a href="../concepts/caching.html">缓存</a>。</p>
+<h2 id="grpc-远程缓存"><a class="header" href="#grpc-远程缓存">gRPC 远程缓存</a></h2>
+<p>虽然未来可能有多种远程缓存存储实现，sbt 2.0 已内置与 Bazel 远程缓存后端兼容的 gRPC 客户端。要配置 sbt 2.x，请将以下内容添加到 <code>project/plugins.sbt</code>：</p>
 <pre><code class="language-scala">addRemoteCachePlugin
 </code></pre>
-<p>There are many Bazel remote cache backends, both open source and commercial solutions. While this page documents is not an exhaustive list of all Bazel remote cache implementations, hopefully it shows how sbt 2.x can be set up for wide array of them.</p>
-<h3 id="authentication"><a class="header" href="#authentication">Authentication</a></h3>
-<p>There are a few flavors of <a href="https://grpc.io/docs/guides/auth/">gRPC authentication</a>, and Bazel remote cache backends use various kind of them:</p>
+<p>Bazel 远程缓存后端众多，既有开源也有商业方案。虽然本页并非所有 Bazel 远程缓存实现的完整列表，但希望能展示如何为多种后端配置 sbt 2.x。</p>
+<h3 id="认证"><a class="header" href="#认证">认证</a></h3>
+<p><a href="https://grpc.io/docs/guides/auth/">gRPC 认证</a>有多种方式，Bazel 远程缓存后端使用其中不同种类：</p>
 <ol>
-<li>Unauthenticated. Useful for testing.</li>
-<li>Default TLS/SSL.</li>
-<li>TLS/SSL with custom server certificate.</li>
-<li>TTL/SSL with custom server and client certificate, mTLS.</li>
-<li>Default TLS/SSL with API token header.</li>
+<li>无认证。适用于测试。</li>
+<li>默认 TLS/SSL。</li>
+<li>使用自定义服务器证书的 TLS/SSL。</li>
+<li>使用自定义服务器和客户端证书的 TLS/SSL，即 mTLS。</li>
+<li>带 API 令牌头的默认 TLS/SSL。</li>
 </ol>
-<h3 id="bazel-remote-without-authentication"><a class="header" href="#bazel-remote-without-authentication">bazel-remote without authentication</a></h3>
-<p>You can grab the code from <a href="https://github.com/buchgr/bazel-remote">buchgr/bazel-remote</a> and run it on a laptop using Bazel:</p>
+<h3 id="无认证的-bazel-remote"><a class="header" href="#无认证的-bazel-remote">无认证的 bazel-remote</a></h3>
+<p>您可从 <a href="https://github.com/buchgr/bazel-remote">buchgr/bazel-remote</a> 获取代码，并使用 Bazel 在笔记本上运行：</p>
 <pre><code class="language-bash">bazel run :bazel-remote  -- --max_size 5 --dir $HOME/work/bazel-remote/temp \
   --http_address localhost:8000 \
   --grpc_address localhost:2024
 </code></pre>
-<p>To configure sbt 2.x, add the following to <code>project/plugins.sbt</code></p>
+<p>要配置 sbt 2.x，请将以下内容添加到 <code>project/plugins.sbt</code>：</p>
 <pre><code class="language-scala">addRemoteCachePlugin
 </code></pre>
-<p>and append the following to <code>build.sbt</code>:</p>
+<p>并将以下内容追加到 <code>build.sbt</code>：</p>
 <pre><code class="language-scala">Global / remoteCache := Some(uri("grpc://localhost:2024"))
 </code></pre>
-<h3 id="bazel-remote-with-mtls"><a class="header" href="#bazel-remote-with-mtls">bazel-remote with mTLS</a></h3>
-<p>In a real environment, mTLS can ensure that the transport is encrypted and mutually authenticated. bazel-remote can be started with something like the follows:</p>
+<h3 id="使用-mtls-的-bazel-remote"><a class="header" href="#使用-mtls-的-bazel-remote">使用 mTLS 的 bazel-remote</a></h3>
+<p>在实际环境中，mTLS 可确保传输加密且双向认证。bazel-remote 可按如下方式启动：</p>
 <pre><code class="language-bash">bazel run :bazel-remote  -- --max_size 5 --dir $HOME/work/bazel-remote/temp \
   --http_address localhost:8000 \
   --grpc_address localhost:2024 \
@@ -245,41 +245,41 @@
   --tls_cert_file /tmp/sslcert/server.crt \
   --tls_key_file /tmp/sslcert/server.pem
 </code></pre>
-<p>sbt 2.x setting would look like this in this scenario:</p>
+<p>在此场景下，sbt 2.x 设置如下：</p>
 <pre><code class="language-scala">Global / remoteCache := Some(uri("grpcs://localhost:2024"))
 Global / remoteCacheTlsCertificate := Some(file("/tmp/sslcert/ca.crt"))
 Global / remoteCacheTlsClientCertificate := Some(file("/tmp/sslcert/client.crt"))
 Global / remoteCacheTlsClientKey := Some(file("/tmp/sslcert/client.pem"))
 </code></pre>
-<p>Note the <code>grpcs://</code>, as opposed to <code>grpc://</code>.</p>
+<p>注意使用 <code>grpcs://</code>，而非 <code>grpc://</code>。</p>
 <h3 id="engflow"><a class="header" href="#engflow">EngFlow</a></h3>
-<p><a href="https://www.engflow.com/">EngFlow GmbH</a> is a build solution company founded in 2020 by core members of Bazel team, providing build analytics and remote execution backend for Bazel, which includes remote cache.</p>
-<p>After signing up for trial on <a href="https://my.engflow.com/">https://my.engflow.com/</a>, the page instructs you to start a trial cluster using a docker. If you followed the instruction, this should start a remote cache service on port 8080. The sbt 2.x configuration would look like this for the trial cluster:</p>
+<p><a href="https://www.engflow.com/">EngFlow GmbH</a> 是由 Bazel 团队核心成员于 2020 年创立的构建解决方案公司，为 Bazel 提供构建分析和远程执行后端，包括远程缓存。</p>
+<p>在 <a href="https://my.engflow.com/">https://my.engflow.com/</a> 注册试用后，页面会指导您使用 docker 启动试用集群。若按说明操作，将在端口 8080 启动远程缓存服务。试用集群的 sbt 2.x 配置如下：</p>
 <pre><code class="language-scala">Global / remoteCache := Some(uri("grpc://localhost:8080"))
 </code></pre>
 <h3 id="buildbuddy"><a class="header" href="#buildbuddy">BuildBuddy</a></h3>
-<p><a href="https://www.buildbuddy.io/">BuildBuddy</a> is a build solution company founded by ex-Google engineers, providing build analytics and remote execution backend for Bazel. It's also available open source as <a href="https://github.com/buildbuddy-io/buildbuddy">buildbuddy-io/buildbuddy</a>.</p>
-<p>After signing up, BuildBuddy Personal plan lets you use BuildBuddy across the Internet.</p>
+<p><a href="https://www.buildbuddy.io/">BuildBuddy</a> 由前 Google 工程师创立的构建解决方案公司，为 Bazel 提供构建分析和远程执行后端。也以 <a href="https://github.com/buildbuddy-io/buildbuddy">buildbuddy-io/buildbuddy</a> 开源提供。</p>
+<p>注册后，BuildBuddy Personal 计划允许您通过互联网使用 BuildBuddy。</p>
 <ol>
-<li>From <a href="https://app.buildbuddy.io/">https://app.buildbuddy.io/</a>, go to Settings, and change the Organization URL to <code>&lt;something&gt;.buildbuddy.io</code>.</li>
-<li>Next, go to Quickstart and take note of the URLs and <code>--remote_headers</code>.</li>
-<li>Create a file called <code>$HOME/.sbt/buildbuddy_credential.txt</code> and put in the API key:</li>
+<li>在 <a href="https://app.buildbuddy.io/">https://app.buildbuddy.io/</a> 中，进入 Settings，将 Organization URL 改为 <code>&lt;something&gt;.buildbuddy.io</code>。</li>
+<li>接下来，进入 Quickstart 并记录 URL 和 <code>--remote_headers</code>。</li>
+<li>创建名为 <code>$HOME/.sbt/buildbuddy_credential.txt</code> 的文件并填入 API 密钥：</li>
 </ol>
 <pre><code>x-buildbuddy-api-key=*******
 </code></pre>
-<p>The sbt 2.x configuration would look like this:</p>
+<p>sbt 2.x 配置如下：</p>
 <pre><code class="language-scala">Global / remoteCache := Some(uri("grpcs://something.buildbuddy.io"))
 Global / remoteCacheHeaders += IO.read(BuildPaths.defaultGlobalBase / "buildbuddy_credential.txt").trim
 </code></pre>
 <h3 id="nativelink"><a class="header" href="#nativelink">NativeLink</a></h3>
-<p><a href="https://docs.nativelink.dev/">NativeLink</a> is an open-source Bazel remote execution backend implementated in Rust with emphasis on performance. As of June 2024, there's NativeLink Cloud in beta.</p>
+<p><a href="https://docs.nativelink.dev/">NativeLink</a> 是用 Rust 实现的开源 Bazel 远程执行后端，注重性能。截至 2024 年 6 月，NativeLink Cloud 处于测试阶段。</p>
 <ol>
-<li>From <a href="https://app.nativelink.com/">https://app.nativelink.com/</a>, go to Quickstart and take note of the URLs and <code>--remote_header</code>.</li>
-<li>Create a file called <code>$HOME/.sbt/nativelink_credential.txt</code> and put in the API key:</li>
+<li>在 <a href="https://app.nativelink.com/">https://app.nativelink.com/</a> 中，进入 Quickstart 并记录 URL 和 <code>--remote_header</code>。</li>
+<li>创建名为 <code>$HOME/.sbt/nativelink_credential.txt</code> 的文件并填入 API 密钥：</li>
 </ol>
 <pre><code>x-nativelink-api-key=*******
 </code></pre>
-<p>The sbt 2.x configuration would look like this:</p>
+<p>sbt 2.x 配置如下：</p>
 <pre><code class="language-scala">Global / remoteCache := Some(uri("grpcs://something.build-faster.nativelink.net"))
 Global / remoteCacheHeaders += IO.read(BuildPaths.defaultGlobalBase / "nativelink_credential.txt").trim
 </code></pre>

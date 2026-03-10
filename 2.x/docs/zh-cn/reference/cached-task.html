@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Cached task - The Book of sbt</title>
+        <title>缓存任务 - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -208,14 +208,14 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="cached-task"><a class="header" href="#cached-task">Cached task</a></h1>
-<p>This page covers the cached task details. See <a href="../concepts/caching.html">Caching</a> for a general explanation.</p>
+                        <h1 id="缓存任务"><a class="header" href="#缓存任务">缓存任务</a></h1>
+<p>本页介绍缓存任务的细节。有关一般说明，请参阅<a href="../concepts/caching.html">缓存</a>。</p>
 <h2 id="自动缓存"><a class="header" href="#自动缓存">自动缓存</a></h2>
 <pre><code class="language-scala">val someKey = taskKey[String]("something")
 
 someKey := name.value + version.value + "!"
 </code></pre>
-<p>In sbt 2.x, the task result will be automatically cached based on the two settings <code>name</code> and <code>version</code>. The first time we run the task it will be executed onsite, but the second time onward, it will use the disk cache:</p>
+<p>在 sbt 2.x 中，任务结果将根据 <code>name</code> 和 <code>version</code> 两个设置自动缓存。首次运行任务时将在现场执行，第二次起将使用磁盘缓存：</p>
 <pre><code>sbt:demo&gt; show someKey
 [info] demo0.1.0-SNAPSHOT!
 [success] elapsed time: 0 s, cache 0%, 1 onsite task
@@ -223,11 +223,11 @@ sbt:demo&gt; show someKey
 [info] demo0.1.0-SNAPSHOT!
 [success] elapsed time: 0 s, cache 100%, 1 disk cache hit
 </code></pre>
-<h3 id="caching-is-serialization-hard"><a class="header" href="#caching-is-serialization-hard">Caching is serialization-hard</a></h3>
-<p>To participate in the automatic caching, the input keys (e.g. <code>name</code> and <code>version</code>) must provide a given for <code>sjsonnew.HashWriter</code> typeclass and return type must provide a given for <code>sjsonnew.JsonFormat</code>. <a href="https://www.scala-sbt.org/contraband/">Contraband</a> can be used to generate sjson-new codecs.</p>
-<h2 id="effect-tracking"><a class="header" href="#effect-tracking">Effect tracking</a></h2>
-<h3 id="the-effect-of-file-creation"><a class="header" href="#the-effect-of-file-creation">The effect of file creation</a></h3>
-<p>To cache the effect of file creation, not just returning the name of the file, we need to track the effect of file creation using <code>Def.declareOutput(vf)</code>.</p>
+<h3 id="缓存依赖序列化"><a class="header" href="#缓存依赖序列化">缓存依赖序列化</a></h3>
+<p>要参与自动缓存，输入键（如 <code>name</code> 和 <code>version</code>）必须为 <code>sjsonnew.HashWriter</code> 类型类提供 given，返回类型必须为 <code>sjsonnew.JsonFormat</code> 提供 given。<a href="https://www.scala-sbt.org/contraband/">Contraband</a> 可用于生成 sjson-new 编解码器。</p>
+<h2 id="效果跟踪"><a class="header" href="#效果跟踪">效果跟踪</a></h2>
+<h3 id="文件创建的效果"><a class="header" href="#文件创建的效果">文件创建的效果</a></h3>
+<p>要缓存文件创建的效果（而不仅是返回文件名），需使用 <code>Def.declareOutput(vf)</code> 跟踪文件创建的效果。</p>
 <pre><code class="language-scala">someKey := {
   val conv = fileConverter.value
   val out: java.nio.file.Path = createFile(...)
@@ -236,9 +236,9 @@ sbt:demo&gt; show someKey
   vf: xsbti.HashedVirtualFileRef
 }
 </code></pre>
-<h2 id="opting-out-from-caching"><a class="header" href="#opting-out-from-caching">Opting out from caching</a></h2>
-<h3 id="build-wide-opt-out"><a class="header" href="#build-wide-opt-out">Build-wide opt-out</a></h3>
-<p>To opt out of by-default custom task caching, add the following to <code>project/plugins.sbt</code>:</p>
+<h2 id="选择退出缓存"><a class="header" href="#选择退出缓存">选择退出缓存</a></h2>
+<h3 id="构建级退出"><a class="header" href="#构建级退出">构建级退出</a></h3>
+<p>要选择退出默认的自定义任务缓存，请在 <code>project/plugins.sbt</code> 中添加以下内容：</p>
 <pre><code class="language-scala">Compile / scalacOptions += "-Xmacro-settings:sbt:no-default-task-cache"
 </code></pre>
 <div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
@@ -249,28 +249,28 @@ sbt:demo&gt; show someKey
 <a class="admonition-anchor-link" href="#admonition-note"></a>
 </div>
 <div>
-<p>This applies only to the custom tasks introduced in the build. Any cached tasks provided by sbt or plugins will remain cached.</p>
+<p>此设置仅适用于构建中引入的自定义任务。sbt 或插件提供的任何缓存任务仍将保持缓存。</p>
 </div>
 </div>
-<h3 id="per-task-key-opt-out"><a class="header" href="#per-task-key-opt-out">Per-task-key opt-out</a></h3>
-<p>Next, if you want to opt some task keys from caching, you can set the cache level as follows:</p>
+<h3 id="按任务键退出"><a class="header" href="#按任务键退出">按任务键退出</a></h3>
+<p>若您希望某些任务键退出缓存，可按以下方式设置缓存级别：</p>
 <pre><code class="language-scala">@transient
 val someKey = taskKey[String]("something")
 </code></pre>
-<p>or</p>
+<p>或</p>
 <pre><code class="language-scala">@cacheLevel(include = Array.empty)
 val someKey = taskKey[String]("something")
 </code></pre>
-<h3 id="per-task-opt-out"><a class="header" href="#per-task-opt-out">Per-task opt-out</a></h3>
-<p>To opt out of the cache individually, use <code>Def.uncached(...)</code> as follows:</p>
+<h3 id="按任务退出"><a class="header" href="#按任务退出">按任务退出</a></h3>
+<p>要单独退出缓存，请按以下方式使用 <code>Def.uncached(...)</code>：</p>
 <pre><code class="language-scala">val someKey = taskKey[String]("something")
 
 someKey := Def.uncached {
   name.value + somethingUncachable.value + "!"
 }
 </code></pre>
-<h2 id="remote-caching"><a class="header" href="#remote-caching">Remote caching</a></h2>
-<p>sbt 2.x implements Bazel-compatible gRPC interface, which works with number of backend both open source and commercial. See <a href="./remote-cache-setup.html">Remote cache setup</a> for more details.</p>
+<h2 id="远程缓存"><a class="header" href="#远程缓存">远程缓存</a></h2>
+<p>sbt 2.x 实现了 Bazel 兼容的 gRPC 接口，可与多种开源和商业后端配合使用。详见 <a href="./remote-cache-setup.html">Remote cache setup</a>。</p>
 
                     </main>
 
