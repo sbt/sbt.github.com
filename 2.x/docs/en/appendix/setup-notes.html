@@ -211,7 +211,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="setup-notes"><a class="header" href="#setup-notes">Setup Notes</a></h1>
+                        <h1 id="setup-notes"><a class="header" href="#setup-notes">Setup notes</a></h1>
 <p>See <a href="Setup.html">Installing sbt runner</a> for the instruction on general setup. Using Coursier or SDKMAN has two advantages.</p>
 <ol>
 <li>They will install the official packaging by Eclipse Adoptium etc, as opposed to the <a href="https://mail.openjdk.java.net/pipermail/jdk8u-dev/2019-May/009330.html">"mystery meat OpenJDK builds"</a>.</li>
@@ -251,10 +251,8 @@
 Run the following from the terminal to install <code>sbt</code> (You'll need superuser privileges to do so, hence the <code>sudo</code>).</p>
 <pre><code class="language-bash">sudo apt-get update
 sudo apt-get install apt-transport-https curl gnupg -yqq
-echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | sudo tee /etc/apt/sources.list.d/sbt.list
-echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | sudo tee /etc/apt/sources.list.d/sbt_old.list
-curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&amp;search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | sudo -H gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/scalasbt-release.gpg --import
-sudo chmod 644 /etc/apt/trusted.gpg.d/scalasbt-release.gpg
+curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&amp;search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | sudo gpg --dearmor -o /etc/apt/keyrings/scalasbt.gpg
+echo "deb [signed-by=/etc/apt/keyrings/scalasbt.gpg] https://repo.scala-sbt.org/scalasbt/debian all main" | sudo tee /etc/apt/sources.list.d/sbt.list
 sudo apt-get update
 sudo apt-get install sbt
 </code></pre>
