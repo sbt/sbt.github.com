@@ -1770,7 +1770,7 @@ myTask := {
 </code></pre>
 <p>This pattern is compatible with <code>sbt2-compat</code> and can be used alongside it to absorb the differences between sbt 1.x and 2.x.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="コンセプト"><a class="header" href="#コンセプト">コンセプト</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="コマンド"><a class="header" href="#コマンド">コマンド</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="コマンドの基本"><a class="header" href="#コマンドの基本">コマンドの基本</a></h1>
 <p><strong>コマンド</strong>は、システム・レベルでの sbt の構成要素で、ユーザや IDE とのやり取りを捕捉する。</p>
 <p><img src="concepts/../files/command.svg" style="width: 50%;"></img></p>
 <p>便宜的に、各コマンドは <code>State =&gt; State</code> への関数だと考えることができる。 sbt において状態 (state) は以下を表す。</p>
@@ -3998,7 +3998,164 @@ def selectSome(items: Seq[String]): Parser[Seq[String]] = {
 </code></pre>
 <p>この例から分かる通り、<code>flatMap</code> 関数は前の値を提供する。この情報で、残りの項目用に新しいパーサーが構築される。パーサーの出力を変換するために <code>map</code> コンビネータも使われる。</p>
 <p>パーサーは、選択肢がなくなる自明なケースに達するまで再帰的に呼ばれる。</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="community-plugins"><a class="header" href="#community-plugins">Community Plugins</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="command"><a class="header" href="#command">Command</a></h1>
+<p>This page covers commands in detail. See <a href="reference/../concepts/command-basics.html">Command basics</a> for a general explanation.</p>
+<h2 id="説明-10"><a class="header" href="#説明-10">説明</a></h2>
+<p>A <em>command</em> is a system-level building block of sbt, often used to capture user interactions. At the command level, there is little support for subprojects and parallel processing since those are implemented in the <code>act</code> command.</p>
+<p>Plugin authors should try to solve their problem using settings, tasks, and input tasks first. Several notable exceptions are:</p>
+<ul>
+<li>Extending the user experience of sbt itself</li>
+<li>Providing sequential processing, for example for <code>release</code> command</li>
+</ul>
+<h3 id="sbt-ハンドブック"><a class="header" href="#sbt-ハンドブック">sbt ハンドブック</a></h3>
+<p>There are three main aspects to commands:</p>
+<ol>
+<li>The syntax used by the user to invoke the command, including:
+<ul>
+<li>Tab completion for the syntax</li>
+<li>The parser to turn input into an appropriate data structure</li>
+</ul>
+</li>
+<li>The action to perform using the parsed data structure. This action transforms the build <code>State</code>.</li>
+<li>Help provided to the user</li>
+</ol>
+<p>In sbt, the syntax part, including tab completion, is specified with parser combinators. If you are familiar with the parser combinators in Scala's standard library, these are very similar. See the <a href="reference/./tab-completion-parser.html">Tab-completion parser</a> page for how to use the parser combinators.</p>
+<p>State provides access to the build state, such as all registered commands, the remaining commands to execute, and all project-related information.</p>
+<!--
+See [States and Actions][Build-State] for details on
+State.
+-->
+<p>Finally, basic help information may be provided that is used by the <code>help</code> command to display command help.</p>
+<h2 id="defining-a-command"><a class="header" href="#defining-a-command">Defining a Command</a></h2>
+<p>A command combines a function <code>State =&gt; Parser[T]</code> with an action <code>(State, T) =&gt; State</code>. The reason for <code>State =&gt; Parser[T]</code> and not simply <code>Parser[T]</code> is that often the current <code>State</code> is used to build the parser. For example, the currently loaded projects (provided by <code>State</code>) determine valid completions for the <code>project</code> command. Examples for the general and specific cases are shown in the following sections.</p>
+<p>See <a href="https://github.com/sbt/sbt/blob/develop/main-command/src/main/scala/sbt/Command.scala">Command.scala</a> for the source API details for constructing commands.</p>
+<h3 id="一般コマンド-1"><a class="header" href="#一般コマンド-1">一般コマンド</a></h3>
+<p>General command construction looks like:</p>
+<pre><code class="language-scala">val action: (State, A) =&gt; State = ...
+val parser: State =&gt; Parser[A] = ...
+val command: Command = Command("name")(parser)(action)
+</code></pre>
+<h3 id="no-argument-commands"><a class="header" href="#no-argument-commands">No-argument commands</a></h3>
+<p>There is a convenience method for constructing commands that do not accept any arguments.</p>
+<pre><code class="language-scala">val action: State =&gt; State = ...
+val command: Command = Command.command("name")(action)
+</code></pre>
+<h3 id="single-argument-command"><a class="header" href="#single-argument-command">Single-argument command</a></h3>
+<p>There is a convenience method for constructing commands that accept a single argument with arbitrary content.</p>
+<pre><code class="language-scala">// accepts the state and the single argument
+val action: (State, String) =&gt; State = ...
+val command: Command = Command.single("name")(action)
+</code></pre>
+<h3 id="multi-argument-command"><a class="header" href="#multi-argument-command">Multi-argument command</a></h3>
+<p>There is a convenience method for constructing commands that accept multiple arguments separated by spaces.</p>
+<pre><code class="language-scala">val action: (State, Seq[String]) =&gt; State = ...
+
+// &lt;arg&gt; is the suggestion printed for tab completion on an argument
+val command: Command = Command.args("name", "&lt;arg&gt;")(action)
+</code></pre>
+<h2 id="full-example"><a class="header" href="#full-example">Full Example</a></h2>
+<p>The following example is a sample build that adds commands to a project. To try it out:</p>
+<ol>
+<li>Create <code>build.sbt</code> and <code>project/CommandExample.scala</code>.</li>
+<li>Run sbt on the project.</li>
+<li>Try out the <code>hello</code>, <code>helloAll</code>, <code>failIfTrue</code>, <code>color</code>, and printState commands.</li>
+<li>Use tab-completion and the code below as guidance.</li>
+</ol>
+<p>Here's <code>build.sbt</code>:</p>
+<div id="admonition-buildsbt" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-title">
+<div class="admonition-title">
+<div id="admonition-buildsbt-title">
+<p>build.sbt</p>
+</div>
+<a class="admonition-anchor-link" href="reference/command.html#admonition-buildsbt"></a>
+</div>
+<div>
+<pre><code class="language-scala">import CommandExample.*
+
+scalaVersion := "3.8.2"
+LocalRootProject / commands ++= Seq(hello, helloAll, failIfTrue, changeColor, printState)
+</code></pre>
+</div>
+</div>
+<p>Here's <code>project/CommandExample.scala</code>:</p>
+<div id="admonition-projectcommandexamplescala" class="admonition admonish-example" role="note" aria-labelledby="admonition-projectcommandexamplescala-title">
+<div class="admonition-title">
+<div id="admonition-projectcommandexamplescala-title">
+<p>project/CommandExample.scala</p>
+</div>
+<a class="admonition-anchor-link" href="reference/command.html#admonition-projectcommandexamplescala"></a>
+</div>
+<div>
+<pre><code class="language-scala">import sbt.*
+import Keys.*
+import scala.Console
+
+// imports standard command parsing functionality
+import complete.DefaultParsers.*
+
+object CommandExample:
+  // A simple, no-argument command that prints "Hi",
+  //  leaving the current state unchanged.
+  def hello = Command.command("hello"): s0 =&gt;
+    Console.out.println("Hi!")
+    s0
+
+  // A simple, multiple-argument command that prints "Hi" followed by the arguments.
+  //   Again, it leaves the current state unchanged.
+  def helloAll = Command.args("helloAll", "&lt;name&gt;"): (s0, args) =&gt;
+    println("Hi " + args.mkString(" "))
+    s0
+
+  // A command that demonstrates failing or succeeding based on the input
+  def failIfTrue = Command.single("failIfTrue"):
+    case (s0, "true") =&gt; s0.fail
+    case (s0, _)      =&gt; s0
+
+  // Demonstration of a custom parser.
+  // The command changes the foreground or background terminal color
+  //  according to the input.
+  lazy val change = Space ~&gt; (reset | setColor)
+  lazy val reset = token("reset" ^^^ Console.RESET)
+  lazy val color = token( Space ~&gt; ("blue" ^^^ "4" | "green" ^^^ "2") )
+  lazy val select = token( "fg" ^^^ "3" | "bg" ^^^ "4" )
+  lazy val setColor = (select ~ color).map: (g, c) =&gt;
+    s"\u001B[${g}${c}m"
+
+  def changeColor = Command("color")(_ =&gt; change): (s0, ansicode) =&gt;
+    Console.out.print(ansicode)
+    Console.out.println("Hi")
+    s0
+
+  // A command that demonstrates getting information out of State.
+  def printState = Command.command("printState"): s0 =&gt;
+    import s0.*
+    println(s"definedCommands.size registered commands")
+    println(s"commands to run: ${show(remainingCommands)}")
+    println()
+
+    println(s"original arguments: ${show(configuration.arguments.toSeq)}")
+    println(s"base directory: ${configuration.baseDirectory}")
+    println()
+
+    println(s"sbt version: ${configuration.provider.id.version}")
+    println(s"Scala version (for sbt): ${configuration.provider.scalaProvider.version}")
+    println()
+
+    val extracted = Project.extract(s0)
+    import extracted.*
+    println(s"Current build: ${currentRef.build}")
+    println(s"Current project: ${currentRef.project}")
+    println(s"Original setting count: ${session.original.size}")
+    println(s"Session setting count: ${session.append.size}")
+    s0
+
+  def show[A1](s: Seq[A1]) =
+    s.map("'" + _ + "'").mkString("[", ", ", "]")
+
+end CommandExample
+</code></pre>
+</div>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="community-plugins"><a class="header" href="#community-plugins">Community Plugins</a></h1>
 <h3 id="the-github-sbt-organization"><a class="header" href="#the-github-sbt-organization">The GitHub sbt Organization</a></h3>
 <p>The <a href="https://github.com/sbt">sbt organization</a> is available for use by any sbt plugin. Developers who contribute their plugins into the community organization will still retain control over their repository and its access. The goal of the sbt organization is to organize sbt software into one central location.</p>
 <p>A side benefit to using the sbt organization for projects is that you can use gh-pages to host websites under the https://www.scala-sbt.org domain.</p>
@@ -4838,8 +4995,8 @@ BareBuildSyntax.dependsOn(jmhRef)
 <h3 id="-2"><a class="header" href="#-2"><code>%%%</code></a></h3>
 <p>This is defined in <a href="https://github.com/portable-scala/sbt-platform-deps">sbt-platform-deps</a> in sbt 1.x.</p>
 <h2 id="c"><a class="header" href="#c">C</a></h2>
-<h3 id="コマンド-1"><a class="header" href="#コマンド-1">コマンド</a></h3>
-<p>A system-level building block of sbt, often used to capture user interaction or IDE interaction. See <a href="appendix/../concepts/command.html">Command</a>.</p>
+<h3 id="command-1"><a class="header" href="#command-1">Command</a></h3>
+<p>A system-level building block of sbt, often used to capture user interaction or IDE interaction. See <a href="appendix/../concepts/command-basics.html">Command basics</a>.</p>
 <h3 id="クロスビルド-1"><a class="header" href="#クロスビルド-1">クロスビルド</a></h3>
 <p>The idea of building multiple targets from the same set of source file. This includes Scala cross building, targetting multiple versions of Scala releases; platform cross building, targetting JVM, Scala.JS, and Scala Native; and custom virtual axis like Spark versions.</p>
 <h2 id="d"><a class="header" href="#d">D</a></h2>
