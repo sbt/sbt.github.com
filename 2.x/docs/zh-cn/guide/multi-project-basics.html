@@ -215,7 +215,7 @@
 <p>虽然简单程序可以从单项目构建开始，但更常见的是将构建拆分为多个较小的子项目。</p>
 <p>构建中的每个子项目都有自己的源目录，运行 <code>packageBin</code> 时会生成自己的 JAR 文件，总体上与其他项目的工作方式相同。</p>
 <p><strong>子项目</strong>通过声明类型为 <a href="../../api/sbt/Project.html">Project</a> 的 <code>lazy val</code> 来定义。例如：</p>
-<pre><code class="language-scala">scalaVersion := "3.8.1"
+<pre><code class="language-scala">scalaVersion := "3.8.2"
 LocalRootProject / publish / skip := true
 
 lazy val core = (project in file("core"))
@@ -240,7 +240,7 @@ lazy val util = (project in file("util"))
 <p>构建根目录下的子项目称为 <strong>root project</strong>（根项目），通常在构建中扮演特殊角色。如果未在构建的根目录定义子项目，sbt 会自动创建一个默认的根项目，用于聚合构建中的所有其他子项目。</p>
 <h2 id="任务聚合"><a class="header" href="#任务聚合">任务聚合</a></h2>
 <p>任务聚合是指在聚合子项目上运行任务时，也会在被聚合的子项目上运行。</p>
-<pre><code class="language-scala">scalaVersion := "3.8.1"
+<pre><code class="language-scala">scalaVersion := "3.8.2"
 
 lazy val root = rootProject
   .autoAggregate
@@ -255,7 +255,7 @@ lazy val core = (project in file("core"))
 <p>在上面的示例中，根子项目聚合了 <code>util</code> 和 <code>core</code>。当您在 sbt shell 中输入 <code>compile</code> 时，所有三个子项目将并行编译。</p>
 <h2 id="通用设置"><a class="header" href="#通用设置">通用设置</a></h2>
 <p>在 sbt 2.x 中，直接在 <code>build.sbt</code> 中编写且不带 <code>settings(...)</code> 的裸设置是 <strong>common settings</strong>（通用设置），会注入到所有子项目中。</p>
-<pre><code class="language-scala">scalaVersion := "3.8.1"
+<pre><code class="language-scala">scalaVersion := "3.8.2"
 
 lazy val core = (project in file("core"))
 
@@ -264,7 +264,7 @@ lazy val app = (project in file("app"))
 </code></pre>
 <p>在上面的示例中，<code>scalaVersion</code> 设置应用于默认根子项目、<code>core</code> 和 <code>util</code>。</p>
 <p>此规则的一个例外是已经限定到子项目的设置。</p>
-<pre><code class="language-scala">scalaVersion := "3.8.1"
+<pre><code class="language-scala">scalaVersion := "3.8.2"
 
 lazy val core = (project in file("core"))
 
@@ -275,7 +275,7 @@ lazy val app = (project in file("app"))
 app / name := "app1"
 </code></pre>
 <p>我们可以利用此例外，添加仅适用于默认根项目的设置，如下所示：</p>
-<pre><code class="language-scala">scalaVersion := "3.8.1"
+<pre><code class="language-scala">scalaVersion := "3.8.2"
 
 lazy val core = (project in file("core"))
 

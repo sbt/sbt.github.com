@@ -216,7 +216,7 @@
 <p>sbt 构建使用 <code>sbt</code> 运行器执行，也称为 "sbt-the-shell-script" 以区别于其他组件。需要注意的是，sbt runner旨在运行<strong>任意版本</strong>的 sbt。</p>
 <h3 id="使用-projectbuildproperties-指定-sbt-版本"><a class="header" href="#使用-projectbuildproperties-指定-sbt-版本">使用 project/build.properties 指定 sbt 版本</a></h3>
 <p>sbt runner执行名为 sbt launcher 的子组件，该组件读取 <code>project/build.properties</code> 以确定构建的 sbt 版本，并在未缓存时下载相应的构件：</p>
-<pre><code>sbt.version=2.0.0-RC9
+<pre><code>sbt.version=2.0.0-RC10
 </code></pre>
 <p>这意味着：</p>
 <ul>
@@ -231,7 +231,7 @@
 <p>sbt server将 <a href="https://get-coursier.io/">Coursier</a> 作为子组件运行，用于解析 Scala 库、Scala 编译器以及您的构建所需的任何其他库依赖。</p>
 <h3 id="zinc"><a class="header" href="#zinc">Zinc</a></h3>
 <p>Zinc 是 Scala 的增量编译器，由 sbt 项目开发和维护。Zinc 的一个常被忽视的方面是，它提供了稳定的 API 来调用 Scala 编译器的<strong>任何现代版本</strong>。结合 Coursier 可以解析任何 Scala 版本这一事实，使用 sbt 我们只需在 <code>build.sbt</code> 中写一行即可调用任何现代版本的 Scala：</p>
-<pre><code class="language-scala">scalaVersion := "3.8.1"
+<pre><code class="language-scala">scalaVersion := "3.8.2"
 </code></pre>
 <h3 id="bsp-server"><a class="header" href="#bsp-server">BSP server</a></h3>
 <p>sbt server支持 <a href="https://build-server-protocol.github.io/">Build Server Protocol (BSP)</a> 来列出构建目标、构建它们等。这使得 IntelliJ 和 Metals 等 IDE 能够以编程方式与运行中的 sbt server通信。</p>

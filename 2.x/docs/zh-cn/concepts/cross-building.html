@@ -233,14 +233,14 @@
 <h2 id="项目矩阵"><a class="header" href="#项目矩阵">项目矩阵</a></h2>
 <p>sbt 2.x 引入了项目矩阵，使交叉构建可以并行进行。</p>
 <pre><code class="language-scala">organization := "com.example"
-scalaVersion := "3.8.1"
+scalaVersion := "3.8.2"
 version      := "0.1.0-SNAPSHOT"
 
 lazy val core = (projectMatrix in file("core"))
   .settings(
     name := "core"
   )
-  .jvmPlatform(scalaVersions = Seq("3.8.1", "2.13.17"))
+  .jvmPlatform(scalaVersions = Seq("3.8.2", "2.13.17"))
 </code></pre>
 <p>有关设置的更多详情，请参阅 <a href="../reference/cross-building-setup.html">cross building setup</a>。</p>
 

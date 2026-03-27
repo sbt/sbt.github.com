@@ -263,14 +263,14 @@
 <h2 id="プロジェクトマトリックス"><a class="header" href="#プロジェクトマトリックス">プロジェクトマトリックス</a></h2>
 <p>sbt 2.x ではプロジェクトマトリックスが導入され、クロスビルドを並列実行できるようになった。</p>
 <pre><code class="language-scala">organization := "com.example"
-scalaVersion := "3.8.1"
+scalaVersion := "3.8.2"
 version      := "0.1.0-SNAPSHOT"
 
 lazy val core = (projectMatrix in file("core"))
   .settings(
     name := "core"
   )
-  .jvmPlatform(scalaVersions = Seq("3.8.1", "2.13.17"))
+  .jvmPlatform(scalaVersions = Seq("3.8.2", "2.13.17"))
 </code></pre>
 <h2 id="公開規約"><a class="header" href="#公開規約">公開規約</a></h2>
 <p>ライブラリのコンパイルに使用した Scala のバージョンを示すため、Scala ABI（アプリケーションバイナリインターフェース）バージョンをサフィックスとして使用する。例えば、アーティファクト名 <code>cats-effect_2.13</code> は Scala 2.13.x が使用されたことを意味し、<code>cats-effect_3</code> は Scala 3.x が使用されたことを意味する。このシンプルな方式で Maven、Ant などのビルドツールユーザーとの相互運用が可能である。2.13.0-RC1 のようなプレリリース版の Scala では、フルバージョンが ABI バージョンとして扱われる。</p>

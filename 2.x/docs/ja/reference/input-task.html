@@ -256,10 +256,10 @@ Def.setting {
         token(state.remainingCommands.size.toString) )
 }
 </code></pre>
-<p>この Parser 定義は <code>(String,String)</code> 型の値を生成する。定義した入力構文は柔軟ではない。デモンストレーションである。パースが成功すると以下のいずれかの値を生成する（現在の Scala バージョンが 3.8.1、sbt バージョンが 2.0.0-RC9、実行待ちコマンドが 3 つの場合）:</p>
+<p>This Parser definition will produce a value of type <code>(String,String)</code>. The input syntax defined isn't very flexible; it is just a demonstration. It will produce one of the following values for a successful parse (assuming the current Scala version is 3.8.2, the current sbt version is 2.0.0-RC10, and there are 3 commands left to run):</p>
 <ul>
-<li>(scala,3.8.1)</li>
-<li>(sbt,2.0.0-RC9)</li>
+<li>(scala,3.8.2)</li>
+<li>(sbt,2.0.0-RC10)</li>
 <li>(commands,3)</li>
 </ul>
 <p>プロジェクトの現在の Scala と sbt のバージョンにアクセスできたのは、それらがセッティングだからである。タスクはパーサーの定義に使用できない。</p>

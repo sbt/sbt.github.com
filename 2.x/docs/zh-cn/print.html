@@ -232,7 +232,7 @@
 </ul>
 <p><img src="files/sbt-logo.svg" alt="sbt logo" /></p>
 <p>sbt 是一个用于 Scala 和 Java 的简单构建工具。 sbt 通过 Coursier 下载您的库依赖， 增量编译和测试项目， 并与 IntelliJ 和 VS Code 等 IDE 集成， 打包 JAR 文件并发布到 <a href="https://central.sonatype.com/">Central repo</a>， 这是 JVM 社区的包注册表。</p>
-<pre><code class="language-scala">scalaVersion := "3.8.1"
+<pre><code class="language-scala">scalaVersion := "3.8.2"
 </code></pre>
 <p>您只需要在 <code>build.sbt</code> 中添加一行代码即可开始使用 Scala。</p>
 <h2 id="链接"><a class="header" href="#链接">链接</a></h2>
@@ -259,13 +259,13 @@ sdk install sbt
 </code></pre>
 <h3 id="通用的包安装"><a class="header" href="#通用的包安装">通用的包安装</a></h3>
 <ul>
-<li><a href="https://github.com/sbt/sbt/releases/download/v1.12.7/sbt-1.12.7.zip">sbt-1.12.7.zip</a></li>
-<li><a href="https://github.com/sbt/sbt/releases/download/v1.12.7/sbt-1.12.7.tgz">sbt-1.12.7.tgz</a></li>
-<li><a href="https://github.com/sbt/sbt/releases/download/v1.12.7/sbt-1.12.7.msi">sbt-1.12.7.msi</a></li>
+<li><a href="https://github.com/sbt/sbt/releases/download/v1.12.8/sbt-1.12.8.zip">sbt-1.12.8.zip</a></li>
+<li><a href="https://github.com/sbt/sbt/releases/download/v1.12.8/sbt-1.12.8.tgz">sbt-1.12.8.tgz</a></li>
+<li><a href="https://github.com/sbt/sbt/releases/download/v1.12.8/sbt-1.12.8.msi">sbt-1.12.8.msi</a></li>
 </ul>
 <h2 id="验证-sbt-runner"><a class="header" href="#验证-sbt-runner">验证 sbt runner</a></h2>
 <pre><code class="language-bash">sbt --script-version
-# 1.12.7
+# 1.12.8
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-示例教程"><a class="header" href="#sbt-示例教程">sbt 示例教程</a></h1>
 <p>本页面假设您已经安装了 <a href="Setup.html">sbt runner</a>。</p>
@@ -275,11 +275,11 @@ sdk install sbt
 cd foo-build
 touch build.sbt
 mkdir project
-echo "sbt.version=2.0.0-RC9" &gt; project/build.properties
+echo "sbt.version=2.0.0-RC10" &gt; project/build.properties
 </code></pre>
 <h3 id="启动-sbt-shell"><a class="header" href="#启动-sbt-shell">启动 sbt shell</a></h3>
 <pre><code class="language-bash">$ sbt
-[info] welcome to sbt 2.0.0-RC9 (Azul Systems, Inc. Java)
+[info] welcome to sbt 2.0.0-RC10 (Azul Systems, Inc. Java)
 ....
 [info] started sbt server
 sbt:foo-build&gt;
@@ -346,7 +346,7 @@ Hello
 [success] elapsed time: 0 s, cache 50%, 1 disk cache hit, 1 onsite task
 </code></pre>
 <h3 id="从-sbt-shell-设置-scalaversion"><a class="header" href="#从-sbt-shell-设置-scalaversion">从 sbt shell 设置 scalaVersion</a></h3>
-<pre><code>sbt:foo-build&gt; set scalaVersion := "3.8.1"
+<pre><code>sbt:foo-build&gt; set scalaVersion := "3.8.2"
 [info] Defining scalaVersion
 [info] The new value will be used by Compile / bspBuildTarget, Compile / dependencyTreeCrossProjectId and 51 others.
 [info]  Run `last` for details.
@@ -355,7 +355,7 @@ Hello
 </code></pre>
 <p>检查 <code>scalaVersion</code> 设置：</p>
 <pre><code>sbt:foo-build&gt; scalaVersion
-[info] 3.8.1
+[info] 3.8.2
 </code></pre>
 <h3 id="将会话保存到-buildsbt"><a class="header" href="#将会话保存到-buildsbt">将会话保存到 build.sbt</a></h3>
 <p>我们可以使用 <code>session save</code> 保存临时设置。</p>
@@ -370,7 +370,7 @@ Hello
 [warn] Disable this warning by setting `Global / onChangedBuildSource := IgnoreSourceChanges`.
 </code></pre>
 <p><code>build.sbt</code> 文件现在应该包含：</p>
-<pre><code class="language-scala">scalaVersion := "3.8.1"
+<pre><code class="language-scala">scalaVersion := "3.8.2"
 
 </code></pre>
 <h3 id="命名您的项目"><a class="header" href="#命名您的项目">命名您的项目</a></h3>
@@ -882,7 +882,7 @@ $ sbt new scala/scala3.g8
 <p>sbt 构建使用 <code>sbt</code> 运行器执行，也称为 "sbt-the-shell-script" 以区别于其他组件。需要注意的是，sbt runner旨在运行<strong>任意版本</strong>的 sbt。</p>
 <h3 id="使用-projectbuildproperties-指定-sbt-版本"><a class="header" href="#使用-projectbuildproperties-指定-sbt-版本">使用 project/build.properties 指定 sbt 版本</a></h3>
 <p>sbt runner执行名为 sbt launcher 的子组件，该组件读取 <code>project/build.properties</code> 以确定构建的 sbt 版本，并在未缓存时下载相应的构件：</p>
-<pre><code>sbt.version=2.0.0-RC9
+<pre><code>sbt.version=2.0.0-RC10
 </code></pre>
 <p>这意味着：</p>
 <ul>
@@ -897,7 +897,7 @@ $ sbt new scala/scala3.g8
 <p>sbt server将 <a href="https://get-coursier.io/">Coursier</a> 作为子组件运行，用于解析 Scala 库、Scala 编译器以及您的构建所需的任何其他库依赖。</p>
 <h3 id="zinc"><a class="header" href="#zinc">Zinc</a></h3>
 <p>Zinc 是 Scala 的增量编译器，由 sbt 项目开发和维护。Zinc 的一个常被忽视的方面是，它提供了稳定的 API 来调用 Scala 编译器的<strong>任何现代版本</strong>。结合 Coursier 可以解析任何 Scala 版本这一事实，使用 sbt 我们只需在 <code>build.sbt</code> 中写一行即可调用任何现代版本的 Scala：</p>
-<pre><code class="language-scala">scalaVersion := "3.8.1"
+<pre><code class="language-scala">scalaVersion := "3.8.2"
 </code></pre>
 <h3 id="bsp-server"><a class="header" href="#bsp-server">BSP server</a></h3>
 <p>sbt server支持 <a href="https://build-server-protocol.github.io/">Build Server Protocol (BSP)</a> 来列出构建目标、构建它们等。这使得 IntelliJ 和 Metals 等 IDE 能够以编程方式与运行中的 sbt server通信。</p>
@@ -1127,7 +1127,7 @@ key           operator   (setting/task) body
 val toolkit = "org.scala-lang" %% "toolkit" % toolkitV
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % toolkitV
 
-scalaVersion := "3.8.1"
+scalaVersion := "3.8.2"
 libraryDependencies += toolkit
 libraryDependencies += (toolkitTest % Test)
 </code></pre>
@@ -1206,7 +1206,7 @@ end Dependencies
 <p><code>Dependencies</code> 对象将在 <code>build.sbt</code> 中可用。为便于使用其中定义的 <code>val</code>，请在您的 build.sbt 文件中导入 <code>Dependencies.*</code>。</p>
 <pre><code class="language-scala">import Dependencies.*
 
-scalaVersion := "3.8.1"
+scalaVersion := "3.8.2"
 name := "something"
 libraryDependencies += toolkit
 libraryDependencies += toolkitTest % Test
@@ -1230,7 +1230,7 @@ libraryDependencies += toolkitTest % Test
 <p>虽然简单程序可以从单项目构建开始，但更常见的是将构建拆分为多个较小的子项目。</p>
 <p>构建中的每个子项目都有自己的源目录，运行 <code>packageBin</code> 时会生成自己的 JAR 文件，总体上与其他项目的工作方式相同。</p>
 <p><strong>子项目</strong>通过声明类型为 <a href="guide/../../api/sbt/Project.html">Project</a> 的 <code>lazy val</code> 来定义。例如：</p>
-<pre><code class="language-scala">scalaVersion := "3.8.1"
+<pre><code class="language-scala">scalaVersion := "3.8.2"
 LocalRootProject / publish / skip := true
 
 lazy val core = (project in file("core"))
@@ -1255,7 +1255,7 @@ lazy val util = (project in file("util"))
 <p>构建根目录下的子项目称为 <strong>root project</strong>（根项目），通常在构建中扮演特殊角色。如果未在构建的根目录定义子项目，sbt 会自动创建一个默认的根项目，用于聚合构建中的所有其他子项目。</p>
 <h2 id="任务聚合"><a class="header" href="#任务聚合">任务聚合</a></h2>
 <p>任务聚合是指在聚合子项目上运行任务时，也会在被聚合的子项目上运行。</p>
-<pre><code class="language-scala">scalaVersion := "3.8.1"
+<pre><code class="language-scala">scalaVersion := "3.8.2"
 
 lazy val root = rootProject
   .autoAggregate
@@ -1270,7 +1270,7 @@ lazy val core = (project in file("core"))
 <p>在上面的示例中，根子项目聚合了 <code>util</code> 和 <code>core</code>。当您在 sbt shell 中输入 <code>compile</code> 时，所有三个子项目将并行编译。</p>
 <h2 id="通用设置"><a class="header" href="#通用设置">通用设置</a></h2>
 <p>在 sbt 2.x 中，直接在 <code>build.sbt</code> 中编写且不带 <code>settings(...)</code> 的裸设置是 <strong>common settings</strong>（通用设置），会注入到所有子项目中。</p>
-<pre><code class="language-scala">scalaVersion := "3.8.1"
+<pre><code class="language-scala">scalaVersion := "3.8.2"
 
 lazy val core = (project in file("core"))
 
@@ -1279,7 +1279,7 @@ lazy val app = (project in file("app"))
 </code></pre>
 <p>在上面的示例中，<code>scalaVersion</code> 设置应用于默认根子项目、<code>core</code> 和 <code>util</code>。</p>
 <p>此规则的一个例外是已经限定到子项目的设置。</p>
-<pre><code class="language-scala">scalaVersion := "3.8.1"
+<pre><code class="language-scala">scalaVersion := "3.8.2"
 
 lazy val core = (project in file("core"))
 
@@ -1290,7 +1290,7 @@ lazy val app = (project in file("app"))
 app / name := "app1"
 </code></pre>
 <p>我们可以利用此例外，添加仅适用于默认根项目的设置，如下所示：</p>
-<pre><code class="language-scala">scalaVersion := "3.8.1"
+<pre><code class="language-scala">scalaVersion := "3.8.2"
 
 lazy val core = (project in file("core"))
 
@@ -1493,7 +1493,7 @@ addition to plain <code>target/</code>).</p>
 <h2 id="涉及兼容性的变更"><a class="header" href="#涉及兼容性的变更">涉及兼容性的变更</a></h2>
 <p>另请参阅 <a href="changes/./migrating-from-sbt-1.x.html">从 sbt 1.x 迁移</a>。</p>
 <ul>
-<li><strong>元构建中的 Scala 3</strong>。sbt 2.x 的 build.sbt DSL 用于构建定义和插件，基于 Scala 3.x（当前为 <strong>3.8.1</strong>）。（sbt 1.x 和 2.x 均能构建 Scala 2.x 和 3.x）由 <a href="https://github.com/eed3si9n">@eed3si9n</a>、<a href="https://github.com/adpi2">@adpi2</a> 等贡献。</li>
+<li><strong>Scala 3 in metabuild</strong>. sbt 2.x build.sbt DSL, used for build definitions and plugins, is based on Scala 3.x (currently <strong>3.8.2</strong>)  (Both sbt 1.x and 2.x are capable of building Scala 2.x and 3.x) by <a href="https://github.com/eed3si9n">@eed3si9n</a>, <a href="https://github.com/adpi2">@adpi2</a>, and others.</li>
 <li><strong>通用设置</strong>。裸设置会添加到所有子项目，而不仅仅是根子项目，从而取代 <code>ThisBuild</code> 所扮演的角色。</li>
 <li><strong>增量测试</strong>。<code>test</code> 任务已改为可缓存测试结果的增量测试。使用 <code>testFull</code> 进行完整测试，由 <a href="https://github.com/eed3si9n">@eed3si9n</a> 在 <a href="https://github.com/sbt/sbt/pull/7686">#7686</a> 中贡献</li>
 <li><strong>缓存任务</strong>。默认情况下所有任务都会被缓存。详见 <a href="changes/../concepts/caching.html">Caching</a>。</li>
@@ -1505,7 +1505,7 @@ addition to plain <code>target/</code>).</p>
 <li>sbt 2.x 添加了 <code>platform</code> 设置，使 <code>ModuleID</code> 的 <code>%%</code> 运算符可以在 JVM、JS 和 Native 上进行交叉构建，而无需使用插件中为规避此问题而创建的 <code>%%%</code> 运算符，由 <a href="https://github.com/eed3si9n">@eed3si9n</a> 在 <a href="https://github.com/sbt/sbt/pull/6746">#6746</a> 中贡献</li>
 <li>移除了 <code>useCoursier</code> 设置，因此无法选择不使用 Coursier，由 <a href="https://github.com/eed3si9n">@eed3si9n</a> 在 <a href="https://github.com/sbt/sbt/pull/7712">#7712</a> 中贡献</li>
 <li><code>Key.Classpath</code> 已改为 <code>Seq[Attributed[xsbti.HashedVirtualFileRef]]</code> 类型的别名，而非 <code>Seq[Attributed[File]]</code>。同样，一些曾返回 <code>File</code> 的任务键已改为返回 <code>HashedVirtualFileRef</code>。详见 <a href="changes/../concepts/caching.html#caching-files">Caching Files</a>。</li>
-<li>在 sbt 2.x 中，<code>target</code> 默认为 <code>target/out/jvm/scala-3.8.1/&lt;subproject&gt;/</code>，而非 <code>&lt;subproject&gt;/target/</code>。</li>
+<li>In sbt 2.x <code>target</code> defaults to <code>target/out/jvm/scala-3.8.2/&lt;subproject&gt;/</code>, as opposed to <code>&lt;subproject&gt;/target/</code>.</li>
 <li>sbt 2.x 在 <code>build.sbt</code> 变更时默认自动重新加载，由 <a href="https://github.com/eed3si9n">@eed3si9n</a> 在 <a href="https://github.com/sbt/sbt/pull/8211">#8211</a> 中贡献</li>
 <li>添加了 <code>Project#autoAggregate</code> 以实现自动聚合，由 <a href="https://github.com/eed3si9n">@eed3si9n</a> 在 <a href="https://github.com/sbt/sbt/pull/8290">#8290</a> 中贡献</li>
 </ul>
@@ -1523,7 +1523,7 @@ addition to plain <code>target/</code>).</p>
 </ul>
 <h3 id="通用设置-1"><a class="header" href="#通用设置-1">通用设置</a></h3>
 <p>在 sbt 2.x 中，<code>build.sbt</code> 中的裸设置被解释为通用设置，并注入到所有子项目中。这意味着我们现在可以在不使用 <code>ThisBuild</code> 作用域的情况下设置 <code>scalaVersion</code>：</p>
-<pre><code class="language-scala">scalaVersion := "3.8.1"
+<pre><code class="language-scala">scalaVersion := "3.8.2"
 </code></pre>
 <p>这也修复了所谓的动态分派问题：</p>
 <pre><code class="language-scala">lazy val hi = taskKey[String]("")
@@ -1623,7 +1623,7 @@ libraryDependencies +=
 </code></pre>
 <h2 id="裸设置变更"><a class="header" href="#裸设置变更">裸设置变更</a></h2>
 <pre><code class="language-scala">version := "0.1.0"
-scalaVersion := "3.8.1"
+scalaVersion := "3.8.2"
 </code></pre>
 <p>如上例所示，<em>Bare settings</em>（裸设置）是直接在 <code>build.sbt</code> 中编写且不带 <code>settings(...)</code> 的设置。</p>
 <div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
@@ -1691,7 +1691,7 @@ lazy val plugin = (project in file("plugin"))
     (pluginCrossBuild / sbtVersion) := {
       scalaBinaryVersion.value match {
         case "2.12" =&gt; "1.5.8"
-        case _      =&gt; "2.0.0-RC9"
+        case _      =&gt; "2.0.0-RC10"
       }
     },
   )
@@ -1819,14 +1819,14 @@ myTask := {
 <h2 id="项目矩阵"><a class="header" href="#项目矩阵">项目矩阵</a></h2>
 <p>sbt 2.x 引入了项目矩阵，使交叉构建可以并行进行。</p>
 <pre><code class="language-scala">organization := "com.example"
-scalaVersion := "3.8.1"
+scalaVersion := "3.8.2"
 version      := "0.1.0-SNAPSHOT"
 
 lazy val core = (projectMatrix in file("core"))
   .settings(
     name := "core"
   )
-  .jvmPlatform(scalaVersions = Seq("3.8.1", "2.13.17"))
+  .jvmPlatform(scalaVersions = Seq("3.8.2", "2.13.17"))
 </code></pre>
 <p>有关设置的更多详情，请参阅 <a href="concepts/../reference/cross-building-setup.html">cross building setup</a>。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-query-1"><a class="header" href="#sbt-query-1">sbt query</a></h1>
@@ -1835,15 +1835,15 @@ lazy val core = (projectMatrix in file("core"))
 <p>换言之，sbt query 是编写子项目轴的新方式。</p>
 <h3 id="子项目引用"><a class="header" href="#子项目引用">子项目引用</a></h3>
 <p>子项目引用作为查询来选择子项目：</p>
-<div id="admonition-buildsbt-示例-1" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-示例-1-title">
+<div id="admonition-buildsbt-example-1" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-example-1-title">
 <div class="admonition-title">
-<div id="admonition-buildsbt-示例-1-title">
-<p>build.sbt 示例 1</p>
+<div id="admonition-buildsbt-example-1-title">
+<p>build.sbt example 1</p>
 </div>
-<a class="admonition-anchor-link" href="concepts/sbt-query.html#admonition-buildsbt-示例-1"></a>
+<a class="admonition-anchor-link" href="concepts/sbt-query.html#admonition-buildsbt-example-1"></a>
 </div>
 <div>
-<pre><code class="language-scala">scalaVersion := "3.8.1"
+<pre><code class="language-scala">scalaVersion := "3.8.2"
 
 lazy val foo = project
 </code></pre>
@@ -1884,13 +1884,13 @@ lazy val foo = projectMatrix
   .settings(
     libraryDependencies += toolkit,
   )
-  .jvmPlatform(scalaVersions = Seq("3.8.1", "2.13.17"))
+  .jvmPlatform(scalaVersions = Seq("3.8.2", "2.13.17"))
 
 lazy val bar = projectMatrix
   .settings(
     libraryDependencies += toolkit,
   )
-  .jvmPlatform(scalaVersions = Seq("3.8.1", "2.13.17"))
+  .jvmPlatform(scalaVersions = Seq("3.8.2", "2.13.17"))
 </code></pre>
 </div>
 </div>
@@ -1995,7 +1995,7 @@ sbt:demo&gt; show someKey
 </ul>
 </li>
 </ul>
-<pre><code>sbt.version=2.0.0-RC9
+<pre><code>sbt.version=2.0.0-RC10
 </code></pre>
 <p>此机制允许将构建配置为特定版本的 sbt，项目中的每个人都会使用相同的构建语义，无论其机器上安装的 sbt runner 是什么。</p>
 <p>这也意味着某些功能在 sbt runner 或 sbtn 级别实现，而其他功能在 sbt server 级别实现。</p>
@@ -2599,7 +2599,7 @@ Evictions: 2
 <h3 id="编译设置"><a class="header" href="#编译设置">编译设置</a></h3>
 <h4 id="scalaversion"><a class="header" href="#scalaversion">scalaVersion</a></h4>
 <p>用于编译的 Scala 版本。</p>
-<pre><code class="language-scala">scalaVersion := "3.8.1"
+<pre><code class="language-scala">scalaVersion := "3.8.2"
 </code></pre>
 <h4 id="scalacoptions"><a class="header" href="#scalacoptions">scalacOptions</a></h4>
 <p>Scala 编译器选项。</p>
@@ -3446,14 +3446,14 @@ someKey := Def.uncached {
 <h2 id="项目矩阵-1"><a class="header" href="#项目矩阵-1">项目矩阵</a></h2>
 <p>sbt 2.x 引入了项目矩阵，使交叉构建可以并行进行。</p>
 <pre><code class="language-scala">organization := "com.example"
-scalaVersion := "3.8.1"
+scalaVersion := "3.8.2"
 version      := "0.1.0-SNAPSHOT"
 
 lazy val core = (projectMatrix in file("core"))
   .settings(
     name := "core"
   )
-  .jvmPlatform(scalaVersions = Seq("3.8.1", "2.13.17"))
+  .jvmPlatform(scalaVersions = Seq("3.8.2", "2.13.17"))
 </code></pre>
 <h2 id="发布约定"><a class="header" href="#发布约定">发布约定</a></h2>
 <p>我们使用 Scala ABI（应用二进制接口）版本作为后缀，表示用于编译库的 Scala 版本。例如，构件名 <code>cats-effect_2.13</code> 表示使用了 Scala 2.13.x，<code>cats-effect_3</code> 表示使用了 Scala 3.x。这种简单方式可与 Maven、Ant 及其他构建工具的用户互操作。对于 Scala 的预发布版本（如 2.13.0-RC1），完整版本将视为 ABI 版本。</p>
@@ -3728,10 +3728,10 @@ Def.setting {
         token(state.remainingCommands.size.toString) )
 }
 </code></pre>
-<p>该 Parser 定义将产生类型为 <code>(String,String)</code> 的值。定义的输入语法不够灵活，仅为演示。解析成功时将产生以下值之一（假设当前 Scala 版本为 3.8.1、sbt 版本为 2.0.0-RC9，且还有 3 个命令待运行）：</p>
+<p>This Parser definition will produce a value of type <code>(String,String)</code>. The input syntax defined isn't very flexible; it is just a demonstration. It will produce one of the following values for a successful parse (assuming the current Scala version is 3.8.2, the current sbt version is 2.0.0-RC10, and there are 3 commands left to run):</p>
 <ul>
-<li>(scala,3.8.1)</li>
-<li>(sbt,2.0.0-RC9)</li>
+<li>(scala,3.8.2)</li>
+<li>(sbt,2.0.0-RC10)</li>
 <li>(commands,3)</li>
 </ul>
 <p>同样，我们能访问项目当前 Scala 和 sbt 版本是因为它们是设置。任务不能用于定义解析器。</p>
@@ -4483,12 +4483,12 @@ your plugin to the list.</p>
 </li>
 <li>
 <p>Create a directory named <code>project/</code> under <code>hello_scala/</code>, and create <code>project/build.properties</code> with</p>
-<pre><code>sbt.version=2.0.0-RC9
+<pre><code>sbt.version=2.0.0-RC10
 </code></pre>
 </li>
 <li>
 <p>Under <code>hello_scala/</code>, create <code>build.sbt</code>:</p>
-<pre><code class="language-scala">scalaVersion := "3.8.1"
+<pre><code class="language-scala">scalaVersion := "3.8.2"
 </code></pre>
 </li>
 <li>

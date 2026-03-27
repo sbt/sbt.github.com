@@ -264,14 +264,14 @@
 <h2 id="项目矩阵"><a class="header" href="#项目矩阵">项目矩阵</a></h2>
 <p>sbt 2.x 引入了项目矩阵，使交叉构建可以并行进行。</p>
 <pre><code class="language-scala">organization := "com.example"
-scalaVersion := "3.8.1"
+scalaVersion := "3.8.2"
 version      := "0.1.0-SNAPSHOT"
 
 lazy val core = (projectMatrix in file("core"))
   .settings(
     name := "core"
   )
-  .jvmPlatform(scalaVersions = Seq("3.8.1", "2.13.17"))
+  .jvmPlatform(scalaVersions = Seq("3.8.2", "2.13.17"))
 </code></pre>
 <h2 id="发布约定"><a class="header" href="#发布约定">发布约定</a></h2>
 <p>我们使用 Scala ABI（应用二进制接口）版本作为后缀，表示用于编译库的 Scala 版本。例如，构件名 <code>cats-effect_2.13</code> 表示使用了 Scala 2.13.x，<code>cats-effect_3</code> 表示使用了 Scala 3.x。这种简单方式可与 Maven、Ant 及其他构建工具的用户互操作。对于 Scala 的预发布版本（如 2.13.0-RC1），完整版本将视为 ABI 版本。</p>
