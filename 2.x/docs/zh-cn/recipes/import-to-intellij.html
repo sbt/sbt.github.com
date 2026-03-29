@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Import to IntelliJ IDEA - The Book of sbt</title>
+        <title>导入到 IntelliJ IDEA - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -211,28 +211,28 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="import-to-intellij-idea"><a class="header" href="#import-to-intellij-idea">Import to IntelliJ IDEA</a></h1>
-<h2 id="objective"><a class="header" href="#objective">Objective</a></h2>
-<p>I want to import sbt build to IntelliJ IDEA.</p>
-<h2 id="steps"><a class="header" href="#steps">Steps</a></h2>
-<p><a href="https://www.jetbrains.com/idea/">IntelliJ IDEA</a> is an IDE created by JetBrains, and the Community Edition is open source under Apache v2 license. IntelliJ integrates with many build tools, including sbt, to import the project.</p>
-<p>To import a build to IntelliJ IDEA:</p>
+                        <h1 id="导入到-intellij-idea"><a class="header" href="#导入到-intellij-idea">导入到 IntelliJ IDEA</a></h1>
+<h2 id="目标"><a class="header" href="#目标">目标</a></h2>
+<p>我想将 sbt 构建导入 IntelliJ IDEA。</p>
+<h2 id="步骤"><a class="header" href="#步骤">步骤</a></h2>
+<p><a href="https://www.jetbrains.com/idea/">IntelliJ IDEA</a> 是 JetBrains 开发的 IDE，Community Edition 在 Apache v2 许可证下开源。IntelliJ 可与多种构建工具（包括 sbt）集成以导入项目。</p>
+<p>要将构建导入 IntelliJ IDEA：</p>
 <ol>
-<li>Install Scala plugin on the Plugins tab:<br> <img src="../files/intellij1.png" alt="IntelliJ" /></li>
-<li>From Projects, open a directory containing a <code>build.sbt</code> file.<br> <img src="../files/intellij2.png" alt="IntelliJ" /></li>
-<li>Once the import process is complete, open a Scala file to see that code completion works.</li>
+<li>在插件页安装 Scala 插件：<br> <img src="../files/intellij1.png" alt="IntelliJ" /></li>
+<li>在「项目」中打开包含 <code>build.sbt</code> 文件的目录。<br> <img src="../files/intellij2.png" alt="IntelliJ" /></li>
+<li>导入完成后，打开 Scala 文件以确认代码补全可用。</li>
 </ol>
-<p>IntelliJ Scala plugin uses its own lightweight compilation engine to detect errors, which is fast but sometimes incorrect. Per <a href="https://blog.jetbrains.com/scala/2021/07/27/intellij-scala-plugin-2021-2/#Compiler-based_highlighting">compiler-based highlighting</a>, IntelliJ can be configured to use the Scala compiler for error highlighting.</p>
-<h3 id="interactive-debugging-with-intellij-idea"><a class="header" href="#interactive-debugging-with-intellij-idea">Interactive debugging with IntelliJ IDEA</a></h3>
+<p>IntelliJ Scala 插件使用自带的轻量编译引擎检测错误，速度快但有时不准确。按 <a href="https://blog.jetbrains.com/scala/2021/07/27/intellij-scala-plugin-2021-2/#Compiler-based_highlighting">compiler-based highlighting</a> 所述，可将 IntelliJ 配置为使用 Scala 编译器进行错误高亮。</p>
+<h3 id="使用-intellij-idea-交互式调试"><a class="header" href="#使用-intellij-idea-交互式调试">使用 IntelliJ IDEA 交互式调试</a></h3>
 <ol>
-<li>IntelliJ supports interactive debugging by setting break points in the code:<br> <img src="../files/intellij4.png" alt="IntelliJ" /></li>
-<li>Interactive debugging can be started by right-clicking on an unit test, and selecting "Debug '&lt;test name&gt;'." Alternatively, you can click the green "run" icon on the left part of the editor near the unit test. When the test hits a break point, you can inspect the values of the variables:<br> <img src="../files/intellij5.png" alt="IntelliJ" /></li>
+<li>IntelliJ 支持在代码中设置断点进行交互式调试：<br> <img src="../files/intellij4.png" alt="IntelliJ" /></li>
+<li>您可在单元测试上右键，选择 "Debug '&lt;test name&gt;'." 也可点击编辑器左侧单元测试旁的绿色 "run" 图标。测试命中断点时，可查看变量取值：<br> <img src="../files/intellij5.png" alt="IntelliJ" /></li>
 </ol>
-<p>See <a href="https://www.jetbrains.com/help/idea/debugging-code.html">Debug Code</a> page on IntelliJ documentation for more details on how to navigate an interactive debugging session.</p>
-<h2 id="alternative"><a class="header" href="#alternative">Alternative</a></h2>
-<h3 id="using-sbt-as-intellij-idea-build-server-advanced"><a class="header" href="#using-sbt-as-intellij-idea-build-server-advanced">Using sbt as IntelliJ IDEA build server (advanced)</a></h3>
-<p>Importing the build to IntelliJ means that you're effectively using IntelliJ as the build tool and the compiler while you code (see also <a href="https://blog.jetbrains.com/scala/2021/07/27/intellij-scala-plugin-2021-2/#Compiler-based_highlighting">compiler-based highlighting</a>). While many users are happy with the experience, depending on the code base some of the compilation errors may be false, it may not work well with plugins that generate sources, and generally you might want to code with the identical build semantics as sbt. Thankfully, modern IntelliJ supports alternative <em>build servers</em> including sbt via the <a href="https://build-server-protocol.github.io/">Build Server Protocol</a> (BSP).</p>
-<p>The benefit of using Build Server Protocol (BSP) with IntelliJ is that you're using sbt to do the actual build work, so if you are the kind of programmer who had sbt session up on the side, this avoids double compilation.</p>
+<p>交互式调试会话中的操作方式，详见 IntelliJ 文档中的 <a href="https://www.jetbrains.com/help/idea/debugging-code.html">Debug Code</a> 页面。</p>
+<h2 id="其他方式"><a class="header" href="#其他方式">其他方式</a></h2>
+<h3 id="将-sbt-用作-intellij-idea-构建服务器进阶"><a class="header" href="#将-sbt-用作-intellij-idea-构建服务器进阶">将 sbt 用作 IntelliJ IDEA 构建服务器（进阶）</a></h3>
+<p>将构建导入 IntelliJ 意味着编码时实际以 IntelliJ 作为构建工具与编译器（另见 <a href="https://blog.jetbrains.com/scala/2021/07/27/intellij-scala-plugin-2021-2/#Compiler-based_highlighting">compiler-based highlighting</a>）。许多用户满意这种体验，但依代码库不同，部分编译错误可能为误报，与生成源码的插件配合也可能不佳，且您可能希望与 sbt 完全一致的构建语义。所幸现代 IntelliJ 通过 <a href="https://build-server-protocol.github.io/">Build Server Protocol</a>（BSP）支持包括 sbt 在内的其他 <em>构建服务器</em>。</p>
+<p>在 IntelliJ 中使用 BSP 的好处是由 sbt 承担实际构建，因此若您习惯在旁边开着 sbt 会话，可避免重复编译。</p>
 <table class="table table-striped">
   <tr>
     <th><nobr></th>
@@ -265,28 +265,28 @@
     <td>✅</td>
   </tr>
 </table>
-<p>To use sbt as build server on IntelliJ:</p>
+<p>要在 IntelliJ 上将 sbt 用作构建服务器：</p>
 <ol>
-<li>Install Scala plugin on the Plugins tab.</li>
-<li>To use the BSP approach, close IntelliJ, and remove exising <code>.idea</code> directory, if any.</li>
-<li>From the terminal, run <code>sbt bspConfig</code> to generate <code>.bsp</code> directory.</li>
-<li>Open IntelliJ, and open a <code>build.sbt</code> file. Select <strong>BSP project</strong> when prompted:<br> <img src="../files/intellij_bsp.png" alt="IntelliJ" /></li>
-<li>Once the import process is complete, open a Scala file to see that code completion works:<br> <img src="../files/intellij11.png" alt="IntelliJ" /></li>
+<li>在插件页安装 Scala 插件。</li>
+<li>若采用 BSP 方式，请关闭 IntelliJ，并删除已存在的 <code>.idea</code> 目录（如有）。</li>
+<li>在终端运行 <code>sbt bspConfig</code> 以生成 <code>.bsp</code> 目录。</li>
+<li>打开 IntelliJ，并打开 <code>build.sbt</code> 文件。出现提示时选择 <strong>BSP project</strong>：<br> <img src="../files/intellij_bsp.png" alt="IntelliJ" /></li>
+<li>导入完成后，打开 Scala 文件以确认代码补全可用：<br> <img src="../files/intellij11.png" alt="IntelliJ" /></li>
 </ol>
-<p>Use the following setting to opt-out some of the subprojects from BSP.</p>
+<p>使用以下设置可使部分子项目不参与 BSP。</p>
 <pre><code class="language-scala">bspEnabled := false
 </code></pre>
 <ul>
-<li>Open Preferences, search BSP and check "build automatically on file save", and uncheck "export sbt projects to Bloop before import":<br> <img src="../files/intellij12.png" alt="IntelliJ" /></li>
+<li>打开 Preferences，搜索 BSP，勾选 "build automatically on file save"，并取消勾选 "export sbt projects to Bloop before import"：<br> <img src="../files/intellij12.png" alt="IntelliJ" /></li>
 </ul>
-<p>When you make changes to the code and save them (<code>Cmd-S</code> on macOS), IntelliJ will invoke sbt to do the actual building work.</p>
-<p>See also Igal Tabachnik's <a href="https://hmemcpy.com/2021/09/bsp-and-intellij/">Using BSP effectively in IntelliJ and Scala</a> for more details.</p>
-<h4 id="logging-into-sbt-session"><a class="header" href="#logging-into-sbt-session">Logging into sbt session</a></h4>
-<p>We can also log into the existing sbt session using the thin client.</p>
+<p>修改代码并保存（在 macOS 上为 <code>Cmd-S</code>）时，IntelliJ 会调用 sbt 执行实际构建。</p>
+<p>更多说明另见 Igal Tabachnik 的 <a href="https://hmemcpy.com/2021/09/bsp-and-intellij/">Using BSP effectively in IntelliJ and Scala</a>。</p>
+<h4 id="登录-sbt-会话"><a class="header" href="#登录-sbt-会话">登录 sbt 会话</a></h4>
+<p>您也可通过瘦客户端登录已有的 sbt 会话。</p>
 <ul>
-<li>From Terminal section, type in <code>sbt --client</code> <img src="../files/intellij6.png" alt="IntelliJ" /></li>
+<li>在终端面板中输入 <code>sbt --client</code> <img src="../files/intellij6.png" alt="IntelliJ" /></li>
 </ul>
-<p>This lets you log into the sbt session IntelliJ has started. In there you can call <code>testOnly</code> and other tasks with the code already compiled.</p>
+<p>这样可登录 IntelliJ 已启动的 sbt 会话。在其中可调用 <code>testOnly</code> 等任务，且代码已编译。</p>
 
                     </main>
 

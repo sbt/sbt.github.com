@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Command - The Book of sbt</title>
+        <title>命令 - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -211,70 +211,70 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="command"><a class="header" href="#command">Command</a></h1>
-<p>This page covers commands in detail. See <a href="../concepts/command-basics.html">Command basics</a> for a general explanation.</p>
+                        <h1 id="命令"><a class="header" href="#命令">命令</a></h1>
+<p>本页详细介绍命令。一般说明请参阅<a href="../concepts/command-basics.html">命令基础</a>。</p>
 <h2 id="描述"><a class="header" href="#描述">描述</a></h2>
-<p>A <em>command</em> is a system-level building block of sbt, often used to capture user interactions. At the command level, there is little support for subprojects and parallel processing since those are implemented in the <code>act</code> command.</p>
-<p>Plugin authors should try to solve their problem using settings, tasks, and input tasks first. Several notable exceptions are:</p>
+<p><strong>命令</strong>是 sbt 的系统级构建块，常用于捕获用户交互。在命令层面，对子项目和并行处理的支持很少，因为这些由 <code>act</code> 命令实现。</p>
+<p>插件作者应优先尝试用设置、任务和输入任务解决问题。若干值得注意的例外包括：</p>
 <ul>
-<li>Extending the user experience of sbt itself</li>
-<li>Providing sequential processing, for example for <code>release</code> command</li>
+<li>扩展 sbt 自身的用户体验</li>
+<li>提供顺序处理，例如 <code>release</code> 命令</li>
 </ul>
-<h3 id="introduction"><a class="header" href="#introduction">Introduction</a></h3>
-<p>There are three main aspects to commands:</p>
+<h3 id="简介"><a class="header" href="#简介">简介</a></h3>
+<p>命令主要有三个方面：</p>
 <ol>
-<li>The syntax used by the user to invoke the command, including:
+<li>用户调用命令时使用的语法，包括：
 <ul>
-<li>Tab completion for the syntax</li>
-<li>The parser to turn input into an appropriate data structure</li>
+<li>语法的 Tab 补全</li>
+<li>将输入转换为适当数据结构的解析器</li>
 </ul>
 </li>
-<li>The action to perform using the parsed data structure. This action transforms the build <code>State</code>.</li>
-<li>Help provided to the user</li>
+<li>使用解析后的数据结构执行的操作。该操作会转换构建 <code>State</code></li>
+<li>向用户提供的帮助</li>
 </ol>
-<p>In sbt, the syntax part, including tab completion, is specified with parser combinators. If you are familiar with the parser combinators in Scala's standard library, these are very similar. See the <a href="./tab-completion-parser.html">Tab-completion parser</a> page for how to use the parser combinators.</p>
-<p>State provides access to the build state, such as all registered commands, the remaining commands to execute, and all project-related information.</p>
+<p>在 sbt 中，语法部分（包括 Tab 补全）由解析器组合子指定。若您熟悉 Scala 标准库中的解析器组合子，二者非常相似。解析器组合子的用法请参阅 <a href="./tab-completion-parser.html">Tab 补全解析器</a>。</p>
+<p>State 提供对构建状态的访问，例如所有已注册命令、待执行命令以及所有与项目相关的信息。</p>
 <!--
 See [States and Actions][Build-State] for details on
 State.
 -->
-<p>Finally, basic help information may be provided that is used by the <code>help</code> command to display command help.</p>
-<h2 id="defining-a-command"><a class="header" href="#defining-a-command">Defining a Command</a></h2>
-<p>A command combines a function <code>State =&gt; Parser[T]</code> with an action <code>(State, T) =&gt; State</code>. The reason for <code>State =&gt; Parser[T]</code> and not simply <code>Parser[T]</code> is that often the current <code>State</code> is used to build the parser. For example, the currently loaded projects (provided by <code>State</code>) determine valid completions for the <code>project</code> command. Examples for the general and specific cases are shown in the following sections.</p>
-<p>See <a href="https://github.com/sbt/sbt/blob/develop/main-command/src/main/scala/sbt/Command.scala">Command.scala</a> for the source API details for constructing commands.</p>
+<p>最后，可提供由 <code>help</code> 命令用于显示命令帮助的基本帮助信息。</p>
+<h2 id="定义命令"><a class="header" href="#定义命令">定义命令</a></h2>
+<p>命令将函数 <code>State =&gt; Parser[T]</code> 与操作 <code>(State, T) =&gt; State</code> 组合。使用 <code>State =&gt; Parser[T]</code> 而非单纯的 <code>Parser[T]</code>，是因为通常需要用当前 <code>State</code> 构建解析器。例如，当前已加载的项目（由 <code>State</code> 提供）决定 <code>project</code> 命令的有效补全。一般与具体情况的示例见以下各节。</p>
+<p>构建命令的源码 API 详情请参阅 <a href="https://github.com/sbt/sbt/blob/develop/main-command/src/main/scala/sbt/Command.scala">Command.scala</a>。</p>
 <h3 id="通用命令"><a class="header" href="#通用命令">通用命令</a></h3>
-<p>General command construction looks like:</p>
+<p>一般命令的构造如下：</p>
 <pre><code class="language-scala">val action: (State, A) =&gt; State = ...
 val parser: State =&gt; Parser[A] = ...
 val command: Command = Command("name")(parser)(action)
 </code></pre>
-<h3 id="no-argument-commands"><a class="header" href="#no-argument-commands">No-argument commands</a></h3>
-<p>There is a convenience method for constructing commands that do not accept any arguments.</p>
+<h3 id="无参数命令"><a class="header" href="#无参数命令">无参数命令</a></h3>
+<p>构造不接受任何参数的命令时有便捷方法。</p>
 <pre><code class="language-scala">val action: State =&gt; State = ...
 val command: Command = Command.command("name")(action)
 </code></pre>
-<h3 id="single-argument-command"><a class="header" href="#single-argument-command">Single-argument command</a></h3>
-<p>There is a convenience method for constructing commands that accept a single argument with arbitrary content.</p>
+<h3 id="单参数命令"><a class="header" href="#单参数命令">单参数命令</a></h3>
+<p>构造接受单个任意内容参数的命令时有便捷方法。</p>
 <pre><code class="language-scala">// accepts the state and the single argument
 val action: (State, String) =&gt; State = ...
 val command: Command = Command.single("name")(action)
 </code></pre>
-<h3 id="multi-argument-command"><a class="header" href="#multi-argument-command">Multi-argument command</a></h3>
-<p>There is a convenience method for constructing commands that accept multiple arguments separated by spaces.</p>
+<h3 id="多参数命令"><a class="header" href="#多参数命令">多参数命令</a></h3>
+<p>构造接受空格分隔的多个参数的命令时有便捷方法。</p>
 <pre><code class="language-scala">val action: (State, Seq[String]) =&gt; State = ...
 
 // &lt;arg&gt; is the suggestion printed for tab completion on an argument
 val command: Command = Command.args("name", "&lt;arg&gt;")(action)
 </code></pre>
-<h2 id="full-example"><a class="header" href="#full-example">Full Example</a></h2>
-<p>The following example is a sample build that adds commands to a project. To try it out:</p>
+<h2 id="完整示例"><a class="header" href="#完整示例">完整示例</a></h2>
+<p>以下示例是在项目中添加命令的示例构建。可按下列步骤试用：</p>
 <ol>
-<li>Create <code>build.sbt</code> and <code>project/CommandExample.scala</code>.</li>
-<li>Run sbt on the project.</li>
-<li>Try out the <code>hello</code>, <code>helloAll</code>, <code>failIfTrue</code>, <code>color</code>, and printState commands.</li>
-<li>Use tab-completion and the code below as guidance.</li>
+<li>创建 <code>build.sbt</code> 和 <code>project/CommandExample.scala</code>。</li>
+<li>在该项目上运行 sbt。</li>
+<li>试用 <code>hello</code>、<code>helloAll</code>、<code>failIfTrue</code>、<code>color</code> 和 <code>printState</code> 命令。</li>
+<li>可结合 Tab 补全与下方代码进行尝试。</li>
 </ol>
-<p>Here's <code>build.sbt</code>:</p>
+<p>以下为 <code>build.sbt</code>：</p>
 <div id="admonition-buildsbt" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-title">
 <div class="admonition-title">
 <div id="admonition-buildsbt-title">
@@ -290,7 +290,7 @@ LocalRootProject / commands ++= Seq(hello, helloAll, failIfTrue, changeColor, pr
 </code></pre>
 </div>
 </div>
-<p>Here's <code>project/CommandExample.scala</code>:</p>
+<p>以下为 <code>project/CommandExample.scala</code>：</p>
 <div id="admonition-projectcommandexamplescala" class="admonition admonish-example" role="note" aria-labelledby="admonition-projectcommandexamplescala-title">
 <div class="admonition-title">
 <div id="admonition-projectcommandexamplescala-title">

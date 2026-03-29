@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Publishing to the Central Repo - The Book of sbt</title>
+        <title>发布到中央仓库 - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -211,7 +211,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="publishing-to-the-central-repo"><a class="header" href="#publishing-to-the-central-repo">Publishing to the Central Repo</a></h1>
+                        <h1 id="发布到中央仓库"><a class="header" href="#发布到中央仓库">发布到中央仓库</a></h1>
 <div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
 <div class="admonition-title">
 <div id="admonition-note-title">
@@ -220,34 +220,33 @@
 <a class="admonition-anchor-link" href="#admonition-note"></a>
 </div>
 <div>
-<p>The recipe section of the documentation focuses on the objectives
-with minimal explanations.</p>
-<p>See also Sonatype's [Publish guides][sonatype-central-portal-register] for general concepts around publishing to the Central Portal.</p>
+<p>文档中的食谱部分以最少说明聚焦于目标。</p>
+<p>向 Central Portal 发布的一般概念，另请参阅 Sonatype 的 <a href="https://central.sonatype.org/register/central-portal/">Publish guides</a>。</p>
 </div>
 </div>
-<h2 id="objective"><a class="header" href="#objective">Objective</a></h2>
-<p>I want to publish my project to the Central Repository.</p>
-<h2 id="steps"><a class="header" href="#steps">Steps</a></h2>
-<h3 id="preliminary-1-central-portal-registration"><a class="header" href="#preliminary-1-central-portal-registration">Preliminary 1: Central Portal registration</a></h3>
-<p>Create a Central Portal account, following Sonatype's <a href="https://central.sonatype.org/register/central-portal/">Publish guides</a>.</p>
+<h2 id="目标"><a class="header" href="#目标">目标</a></h2>
+<p>我想将项目发布到中央仓库。</p>
+<h2 id="步骤"><a class="header" href="#步骤">步骤</a></h2>
+<h3 id="准备-1central-portal-注册"><a class="header" href="#准备-1central-portal-注册">准备 1：Central Portal 注册</a></h3>
+<p>请按 Sonatype 的 <a href="https://central.sonatype.org/register/central-portal/">Publish guides</a> 创建 Central Portal 账户。</p>
 <ul>
-<li>If you had an OSSRH account, use <strong>Forgot password</strong> flow to convert the account to the new Central Portal, which lets you keep the previous namespace associations.</li>
-<li>If you authenticate via GitHub, <code>io.github.&lt;user_name&gt;</code> will automatically be associated with the account.</li>
+<li>若您曾有 OSSRH 账户，请使用 <strong>Forgot password</strong> 流程将账户迁移到新的 Central Portal，以保留此前的命名空间关联。</li>
+<li>若通过 GitHub 认证，<code>io.github.&lt;user_name&gt;</code> 会自动关联到该账户。</li>
 </ul>
-<p>Follow the steps described in <a href="https://central.sonatype.org/register/namespace/">register a namespace</a> guide to associate a domain name with your account.</p>
-<h4 id="preliminary-2-pgp-key-pair"><a class="header" href="#preliminary-2-pgp-key-pair">Preliminary 2: PGP key pair</a></h4>
-<p>Follow the Sonatype's <a href="https://central.sonatype.org/publish/requirements/gpg/">GPG guide</a> to generate a PGP key pair.</p>
-<p><a href="https://www.gnupg.org/download/">Install GnuPG</a>, and verify the version:</p>
+<p>请按 <a href="https://central.sonatype.org/register/namespace/">register a namespace</a> 指南中的步骤，将域名与您的账户关联。</p>
+<h4 id="准备-2pgp-密钥对"><a class="header" href="#准备-2pgp-密钥对">准备 2：PGP 密钥对</a></h4>
+<p>请按 Sonatype 的 <a href="https://central.sonatype.org/publish/requirements/gpg/">GPG guide</a> 生成 PGP 密钥对。</p>
+<p><a href="https://www.gnupg.org/download/">安装 GnuPG</a>，并确认版本：</p>
 <pre><code class="language-bash">$ gpg --version
 gpg (GnuPG/MacGPG2) 2.2.8
 libgcrypt 1.8.3
 Copyright (C) 2018 Free Software Foundation, Inc.
 License GPLv3+: GNU GPL version 3 or later &lt;https://gnu.org/licenses/gpl.html&gt;
 </code></pre>
-<p>Next generate a key:</p>
+<p>接下来生成密钥：</p>
 <pre><code>$ gpg --gen-key
 </code></pre>
-<p>List the keys:</p>
+<p>列出密钥：</p>
 <pre><code>$ gpg --list-keys
 
 /home/foo/.gnupg/pubring.gpg
@@ -258,12 +257,12 @@ pub   rsa4096 2018-08-22 [SC]
 uid           [ultimate] your name &lt;you@example.com&gt;
 sub   rsa4096 2018-08-22 [E]
 </code></pre>
-<p>Distribute the key:</p>
+<p>分发密钥：</p>
 <pre><code>$ gpg --keyserver keyserver.ubuntu.com --send-keys 1234517530FB96F147C6A146A326F592D39AAAAA
 </code></pre>
-<h3 id="step-1-sbt-pgp"><a class="header" href="#step-1-sbt-pgp">Step 1: sbt-pgp</a></h3>
-<p>The <a href="https://github.com/sbt/sbt-pgp#sbt-pgp">sbt-pgp plugin</a> can sign the published artifacts with GPG/PGP. (Optionally <a href="https://github.com/sbt/sbt-ci-release">sbt-ci-release</a> can automate the publishing process.)</p>
-<p>Add the following line to your <code>project/plugins.sbt</code> file to enable it for your build:</p>
+<h3 id="步骤-1sbt-pgp"><a class="header" href="#步骤-1sbt-pgp">步骤 1：sbt-pgp</a></h3>
+<p><a href="https://github.com/sbt/sbt-pgp#sbt-pgp">sbt-pgp 插件</a> 可用 GPG/PGP 为发布的工件签名。（也可选用 <a href="https://github.com/sbt/sbt-ci-release">sbt-ci-release</a> 自动化发布流程。）</p>
+<p>将以下一行加入 <code>project/plugins.sbt</code>，以便在构建中启用：</p>
 <pre><code class="language-scala">addSbtPlugin("com.github.sbt" % "sbt-pgp" % "2.3.1")
 </code></pre>
 <div id="admonition-note-1" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-1-title">
@@ -274,12 +273,12 @@ sub   rsa4096 2018-08-22 [E]
 <a class="admonition-anchor-link" href="#admonition-note-1"></a>
 </div>
 <div>
-<p>Make sure that the <code>gpg</code> command is in PATH available to the sbt.</p>
+<p>请确保 sbt 可用的 PATH 中包含 <code>gpg</code> 命令。</p>
 </div>
 </div>
-<h3 id="step-2-credentials"><a class="header" href="#step-2-credentials">Step 2: Credentials</a></h3>
-<p>Generate a user token from the portal to be used for the credentials. The token must be stored somewhere safe (NOT in the repository).</p>
-<p>sbt 2.x can also reads from the environment variables <code>SONATYPE_USERNAME</code> and <code>SONATYPE_PASSWORD</code> and appends a credential for <code>central.sonatype.com</code> out-of-box, which might be useful for automatic publishing from the CI environment, such as GitHub Actions.</p>
+<h3 id="步骤-2凭据"><a class="header" href="#步骤-2凭据">步骤 2：凭据</a></h3>
+<p>在门户中生成用于凭据的用户令牌。令牌须保存在安全位置（不要放在仓库中）。</p>
+<p>sbt 2.x 还可读取环境变量 <code>SONATYPE_USERNAME</code> 和 <code>SONATYPE_PASSWORD</code>，并开箱即为 <code>central.sonatype.com</code> 追加凭据，便于在 CI 环境（如 GitHub Actions）中自动发布。</p>
 <pre><code class="language-yaml">- run: sbt ci-release
   env:
     PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
@@ -287,17 +286,17 @@ sub   rsa4096 2018-08-22 [E]
     SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
     SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
 </code></pre>
-<p>On a local machine, a common convention is a <code>$HOME/.sbt/2/credentials.sbt</code> file, with the following:</p>
+<p>在本机上，常见做法是使用 <code>$HOME/.sbt/2/credentials.sbt</code> 文件，内容如下：</p>
 <pre><code class="language-scala">credentials += Credentials(Path.userHome / ".sbt" / "sonatype_central_credentials")
 </code></pre>
-<p>Next create a file <code>$HOME/.sbt/sonatype_central_credentials</code>:</p>
+<p>接下来创建文件 <code>$HOME/.sbt/sonatype_central_credentials</code>：</p>
 <pre><code class="language-property">host=central.sonatype.com
 user=&lt;your username&gt;
 password=&lt;your password&gt;
 </code></pre>
-<h3 id="step-3-configure-buildsbt"><a class="header" href="#step-3-configure-buildsbt">Step 3: Configure build.sbt</a></h3>
-<p>To publish to a Maven repository, you'll need to configure a few settings so that the correct metadata is generated.</p>
-<p><strong>Note</strong>: To publish to the Central Portal, <code>publishTo</code> must be set to the <code>localStaging</code> repository:</p>
+<h3 id="步骤-3配置-buildsbt"><a class="header" href="#步骤-3配置-buildsbt">步骤 3：配置 build.sbt</a></h3>
+<p>要发布到 Maven 仓库，需要配置若干设置以生成正确的元数据。</p>
+<p><strong>注意</strong>：向 Central Portal 发布时，必须将 <code>publishTo</code> 设为 <code>localStaging</code> 仓库：</p>
 <pre><code class="language-scala">// new setting for the Central Portal
 publishTo := {
   val centralSnapshots = "https://central.sonatype.com/repository/maven-snapshots/"
@@ -305,7 +304,7 @@ publishTo := {
   else localStaging.value
 }
 </code></pre>
-<p>Add these settings at the end of <code>build.sbt</code> or a separate <code>publish.sbt</code>:</p>
+<p>将这些设置放在 <code>build.sbt</code> 末尾，或单独的 <code>publish.sbt</code> 中：</p>
 <pre><code class="language-scala">organization := "com.example.project2"
 organizationName := "example"
 organizationHomepage := Some(url("http://example.com/"))
@@ -340,20 +339,20 @@ publishTo := {
   else localStaging.value
 }
 </code></pre>
-<p>The full format of a <code>pom.xml</code> (an end product of the project configuration used by Maven) file is outlined in <a href="https://maven.apache.org/pom.html">POM Reference</a>. You can add more data to it with the <code>pomExtra</code> option in <code>build.sbt</code>.</p>
-<h3 id="step-4-stage-the-artifacts"><a class="header" href="#step-4-stage-the-artifacts">Step 4: Stage the artifacts</a></h3>
-<p>From sbt shell run:</p>
+<p><code>pom.xml</code> 的完整格式（Maven 所用项目配置的产物）见 <a href="https://maven.apache.org/pom.html">POM Reference</a>。您可在 <code>build.sbt</code> 中通过 <code>pomExtra</code> 选项添加更多内容。</p>
+<h3 id="步骤-4暂存工件"><a class="header" href="#步骤-4暂存工件">步骤 4：暂存工件</a></h3>
+<p>在 sbt shell 中执行：</p>
 <pre><code class="language-bash">&gt; publishSigned
 </code></pre>
-<h3 id="step-5-upload-or-release-the-bundle"><a class="header" href="#step-5-upload-or-release-the-bundle">Step 5: Upload or release the bundle</a></h3>
-<p>From sbt shell run:</p>
+<h3 id="步骤-5上传或发布-bundle"><a class="header" href="#步骤-5上传或发布-bundle">步骤 5：上传或发布 bundle</a></h3>
+<p>在 sbt shell 中执行：</p>
 <pre><code class="language-bash">&gt; sonaUpload
 </code></pre>
-<p>This will upload the bundle to the <a href="https://central.sonatype.com/">Central Portal</a>. Hit the "Publish" button to publish to the Central Repository.</p>
-<p>If you want to automate the publishing, run:</p>
+<p>这会将 bundle 上传到 <a href="https://central.sonatype.com/">Central Portal</a>。点击 "Publish" 按钮即可发布到中央仓库。</p>
+<p>若要自动化发布，请执行：</p>
 <pre><code class="language-bash">&gt; sonaRelease
 </code></pre>
-<p>It might take 10 minutes to a few hours for the published artifacts to be visible on the Central Repository <a href="https://repo1.maven.org/maven2/">https://repo1.maven.org/maven2/</a>.</p>
+<p>发布后，工件在中央仓库 <a href="https://repo1.maven.org/maven2/">https://repo1.maven.org/maven2/</a> 上可见可能需要十分钟到数小时。</p>
 <!--
 ### Optional steps
 

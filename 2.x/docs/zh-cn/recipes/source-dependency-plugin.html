@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Source dependency plugin - The Book of sbt</title>
+        <title>源码依赖插件 - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -211,7 +211,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="source-dependency-plugin"><a class="header" href="#source-dependency-plugin">Source dependency plugin</a></h1>
+                        <h1 id="源码依赖插件"><a class="header" href="#源码依赖插件">源码依赖插件</a></h1>
 <div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
 <div class="admonition-title">
 <div id="admonition-note-title">
@@ -220,19 +220,18 @@
 <a class="admonition-anchor-link" href="#admonition-note"></a>
 </div>
 <div>
-<p>The recipe section of the documentation focuses on the objectives
-with minimal explanations.</p>
+<p>文档中的食谱部分以最少说明聚焦于目标。</p>
 </div>
 </div>
-<h2 id="objective"><a class="header" href="#objective">Objective</a></h2>
-<p>I want to use a plugin hosted on a git repository, without publishing to the Central Repo.</p>
-<h2 id="steps"><a class="header" href="#steps">Steps</a></h2>
+<h2 id="目标"><a class="header" href="#目标">目标</a></h2>
+<p>我想使用托管在 git 仓库上的插件，而无需发布到中央仓库。</p>
+<h2 id="步骤"><a class="header" href="#步骤">步骤</a></h2>
 <ol>
 <li>
-<p>Host an sbt 2.x plugin on a git repository, built using sbt 2.x.</p>
+<p>在 git 仓库中托管 sbt 2.x 插件，并使用 sbt 2.x 构建。</p>
 </li>
 <li>
-<p>Add the following to <code>project/plugins.sbt</code>:</p>
+<p>将以下内容添加到 <code>project/plugins.sbt</code>：</p>
 <pre><code class="language-scala">// In project/plugins.sbt
 lazy val jmhRef = ProjectRef(
   uri("https://github.com/eed3si9n/sbt-jmh.git#303c3e98e1d1523e6a4f99abe09c900165028edb"),
@@ -241,10 +240,10 @@ BareBuildSyntax.dependsOn(jmhRef)
 </code></pre>
 </li>
 <li>
-<p>When you start sbt, it will automatically clone the repository under <code>$HOME/.sbt/2/staging/</code>.</p>
+<p>当您启动 sbt 时，会在 <code>$HOME/.sbt/2/staging/</code> 下自动克隆该仓库。</p>
 </li>
 </ol>
-<p>In the above, <code>https://github.com/eed3si9n/sbt-jmh.git</code> is the HTTP endpoint for a plugin hosted on GitHub, and <code>303c3e98e1d1523e6a4f99abe09c900165028edb</code> is a commit id on the default branch.</p>
+<p>上例中，<code>https://github.com/eed3si9n/sbt-jmh.git</code> 是托管在 GitHub 上的插件的 HTTP 端点，<code>303c3e98e1d1523e6a4f99abe09c900165028edb</code> 是默认分支上的提交 id。</p>
 
                     </main>
 

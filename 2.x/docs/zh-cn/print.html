@@ -4001,70 +4001,70 @@ def selectSome(items: Seq[String]): Parser[Seq[String]] = {
 </code></pre>
 <p>如您所见，<code>flatMap</code> 函数提供前一个值。据此可为剩余项构建新解析器。<code>map</code> 组合子也用于转换解析器输出。</p>
 <p>解析器递归调用，直至找到无可选选择的平凡情况。</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="command"><a class="header" href="#command">Command</a></h1>
-<p>This page covers commands in detail. See <a href="reference/../concepts/command-basics.html">Command basics</a> for a general explanation.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="命令"><a class="header" href="#命令">命令</a></h1>
+<p>本页详细介绍命令。一般说明请参阅<a href="reference/../concepts/command-basics.html">命令基础</a>。</p>
 <h2 id="描述-10"><a class="header" href="#描述-10">描述</a></h2>
-<p>A <em>command</em> is a system-level building block of sbt, often used to capture user interactions. At the command level, there is little support for subprojects and parallel processing since those are implemented in the <code>act</code> command.</p>
-<p>Plugin authors should try to solve their problem using settings, tasks, and input tasks first. Several notable exceptions are:</p>
+<p><strong>命令</strong>是 sbt 的系统级构建块，常用于捕获用户交互。在命令层面，对子项目和并行处理的支持很少，因为这些由 <code>act</code> 命令实现。</p>
+<p>插件作者应优先尝试用设置、任务和输入任务解决问题。若干值得注意的例外包括：</p>
 <ul>
-<li>Extending the user experience of sbt itself</li>
-<li>Providing sequential processing, for example for <code>release</code> command</li>
+<li>扩展 sbt 自身的用户体验</li>
+<li>提供顺序处理，例如 <code>release</code> 命令</li>
 </ul>
-<h3 id="introduction"><a class="header" href="#introduction">Introduction</a></h3>
-<p>There are three main aspects to commands:</p>
+<h3 id="简介"><a class="header" href="#简介">简介</a></h3>
+<p>命令主要有三个方面：</p>
 <ol>
-<li>The syntax used by the user to invoke the command, including:
+<li>用户调用命令时使用的语法，包括：
 <ul>
-<li>Tab completion for the syntax</li>
-<li>The parser to turn input into an appropriate data structure</li>
+<li>语法的 Tab 补全</li>
+<li>将输入转换为适当数据结构的解析器</li>
 </ul>
 </li>
-<li>The action to perform using the parsed data structure. This action transforms the build <code>State</code>.</li>
-<li>Help provided to the user</li>
+<li>使用解析后的数据结构执行的操作。该操作会转换构建 <code>State</code></li>
+<li>向用户提供的帮助</li>
 </ol>
-<p>In sbt, the syntax part, including tab completion, is specified with parser combinators. If you are familiar with the parser combinators in Scala's standard library, these are very similar. See the <a href="reference/./tab-completion-parser.html">Tab-completion parser</a> page for how to use the parser combinators.</p>
-<p>State provides access to the build state, such as all registered commands, the remaining commands to execute, and all project-related information.</p>
+<p>在 sbt 中，语法部分（包括 Tab 补全）由解析器组合子指定。若您熟悉 Scala 标准库中的解析器组合子，二者非常相似。解析器组合子的用法请参阅 <a href="reference/./tab-completion-parser.html">Tab 补全解析器</a>。</p>
+<p>State 提供对构建状态的访问，例如所有已注册命令、待执行命令以及所有与项目相关的信息。</p>
 <!--
 See [States and Actions][Build-State] for details on
 State.
 -->
-<p>Finally, basic help information may be provided that is used by the <code>help</code> command to display command help.</p>
-<h2 id="defining-a-command"><a class="header" href="#defining-a-command">Defining a Command</a></h2>
-<p>A command combines a function <code>State =&gt; Parser[T]</code> with an action <code>(State, T) =&gt; State</code>. The reason for <code>State =&gt; Parser[T]</code> and not simply <code>Parser[T]</code> is that often the current <code>State</code> is used to build the parser. For example, the currently loaded projects (provided by <code>State</code>) determine valid completions for the <code>project</code> command. Examples for the general and specific cases are shown in the following sections.</p>
-<p>See <a href="https://github.com/sbt/sbt/blob/develop/main-command/src/main/scala/sbt/Command.scala">Command.scala</a> for the source API details for constructing commands.</p>
+<p>最后，可提供由 <code>help</code> 命令用于显示命令帮助的基本帮助信息。</p>
+<h2 id="定义命令"><a class="header" href="#定义命令">定义命令</a></h2>
+<p>命令将函数 <code>State =&gt; Parser[T]</code> 与操作 <code>(State, T) =&gt; State</code> 组合。使用 <code>State =&gt; Parser[T]</code> 而非单纯的 <code>Parser[T]</code>，是因为通常需要用当前 <code>State</code> 构建解析器。例如，当前已加载的项目（由 <code>State</code> 提供）决定 <code>project</code> 命令的有效补全。一般与具体情况的示例见以下各节。</p>
+<p>构建命令的源码 API 详情请参阅 <a href="https://github.com/sbt/sbt/blob/develop/main-command/src/main/scala/sbt/Command.scala">Command.scala</a>。</p>
 <h3 id="通用命令-1"><a class="header" href="#通用命令-1">通用命令</a></h3>
-<p>General command construction looks like:</p>
+<p>一般命令的构造如下：</p>
 <pre><code class="language-scala">val action: (State, A) =&gt; State = ...
 val parser: State =&gt; Parser[A] = ...
 val command: Command = Command("name")(parser)(action)
 </code></pre>
-<h3 id="no-argument-commands"><a class="header" href="#no-argument-commands">No-argument commands</a></h3>
-<p>There is a convenience method for constructing commands that do not accept any arguments.</p>
+<h3 id="无参数命令"><a class="header" href="#无参数命令">无参数命令</a></h3>
+<p>构造不接受任何参数的命令时有便捷方法。</p>
 <pre><code class="language-scala">val action: State =&gt; State = ...
 val command: Command = Command.command("name")(action)
 </code></pre>
-<h3 id="single-argument-command"><a class="header" href="#single-argument-command">Single-argument command</a></h3>
-<p>There is a convenience method for constructing commands that accept a single argument with arbitrary content.</p>
+<h3 id="单参数命令"><a class="header" href="#单参数命令">单参数命令</a></h3>
+<p>构造接受单个任意内容参数的命令时有便捷方法。</p>
 <pre><code class="language-scala">// accepts the state and the single argument
 val action: (State, String) =&gt; State = ...
 val command: Command = Command.single("name")(action)
 </code></pre>
-<h3 id="multi-argument-command"><a class="header" href="#multi-argument-command">Multi-argument command</a></h3>
-<p>There is a convenience method for constructing commands that accept multiple arguments separated by spaces.</p>
+<h3 id="多参数命令"><a class="header" href="#多参数命令">多参数命令</a></h3>
+<p>构造接受空格分隔的多个参数的命令时有便捷方法。</p>
 <pre><code class="language-scala">val action: (State, Seq[String]) =&gt; State = ...
 
 // &lt;arg&gt; is the suggestion printed for tab completion on an argument
 val command: Command = Command.args("name", "&lt;arg&gt;")(action)
 </code></pre>
-<h2 id="full-example"><a class="header" href="#full-example">Full Example</a></h2>
-<p>The following example is a sample build that adds commands to a project. To try it out:</p>
+<h2 id="完整示例"><a class="header" href="#完整示例">完整示例</a></h2>
+<p>以下示例是在项目中添加命令的示例构建。可按下列步骤试用：</p>
 <ol>
-<li>Create <code>build.sbt</code> and <code>project/CommandExample.scala</code>.</li>
-<li>Run sbt on the project.</li>
-<li>Try out the <code>hello</code>, <code>helloAll</code>, <code>failIfTrue</code>, <code>color</code>, and printState commands.</li>
-<li>Use tab-completion and the code below as guidance.</li>
+<li>创建 <code>build.sbt</code> 和 <code>project/CommandExample.scala</code>。</li>
+<li>在该项目上运行 sbt。</li>
+<li>试用 <code>hello</code>、<code>helloAll</code>、<code>failIfTrue</code>、<code>color</code> 和 <code>printState</code> 命令。</li>
+<li>可结合 Tab 补全与下方代码进行尝试。</li>
 </ol>
-<p>Here's <code>build.sbt</code>:</p>
+<p>以下为 <code>build.sbt</code>：</p>
 <div id="admonition-buildsbt" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-title">
 <div class="admonition-title">
 <div id="admonition-buildsbt-title">
@@ -4080,7 +4080,7 @@ LocalRootProject / commands ++= Seq(hello, helloAll, failIfTrue, changeColor, pr
 </code></pre>
 </div>
 </div>
-<p>Here's <code>project/CommandExample.scala</code>:</p>
+<p>以下为 <code>project/CommandExample.scala</code>：</p>
 <div id="admonition-projectcommandexamplescala" class="admonition admonish-example" role="note" aria-labelledby="admonition-projectcommandexamplescala-title">
 <div class="admonition-title">
 <div id="admonition-projectcommandexamplescala-title">
@@ -4158,7 +4158,7 @@ object CommandExample:
 end CommandExample
 </code></pre>
 </div>
-</div><div style="break-before: page; page-break-before: always;"></div><h1 id="插件基础-1"><a class="header" href="#插件基础-1">插件基础</a></h1>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="插件"><a class="header" href="#插件">插件</a></h1>
 <div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
 <div class="admonition-title">
 <div id="admonition-note-title">
@@ -4167,17 +4167,17 @@ end CommandExample
 <a class="admonition-anchor-link" href="reference/plugin.html#admonition-note"></a>
 </div>
 <div>
-<p>This page covers plugin details for intermediate users.
-See [Plugin basics][plugin-basics] for the general introduction of the plugin system.</p>
+<p>本页面向中级用户介绍插件细节。
+插件系统的一般介绍请参阅<a href="reference/../guide/plugin-basics.html">插件基础</a>。</p>
 </div>
 </div>
 <h2 id="描述-11"><a class="header" href="#描述-11">描述</a></h2>
-<p>A <em>plugin</em> is a way to extend the build definition, often to add capabilities beyond the built-in settings and tasks. Some of the example usages includes building Docker containers, supporting to Scala.JS, and generate GitHub Actions YAML.</p>
-<p>A plugin defines a sequence of sbt settings that are automatically added to all projects or that are explicitly declared for selected projects. A plugin can also define new commands. The plugins in sbt 1.x and 2.x extend the <code>sbt.AutoPlugin</code> trait, which automates the setting orders between dependent plugins.</p>
-<h2 id="creating-a-plugin"><a class="header" href="#creating-a-plugin">Creating a plugin</a></h2>
-<p>Conceptually we can think of the sbt plugins to be <em>any other libraries on the metabuild</em>, which is currently on Scala 3.8.2. However, in practice modern sbt plugins are built around auto plugin (<code>sbt.AutoPlugin</code>), which provides tasks and settings in the correct order. See the Plugin dependencies section for more details.</p>
-<h3 id="buildsbt-setup"><a class="header" href="#buildsbt-setup">build.sbt setup</a></h3>
-<p>To make an auto plugin, create a project and enable <code>SbtPlugin</code>.</p>
+<p><strong>插件</strong>用于扩展构建定义，常用来增加内置设置和任务之外的能力。示例用途包括构建 Docker 容器、支持 Scala.JS、生成 GitHub Actions YAML 等。</p>
+<p>插件定义一系列 sbt 设置，可自动加入所有项目，或为选定项目显式声明。插件也可定义新命令。sbt 1.x 与 2.x 中的插件扩展 <code>sbt.AutoPlugin</code> trait，可自动处理依赖插件之间的设置顺序。</p>
+<h2 id="创建插件"><a class="header" href="#创建插件">创建插件</a></h2>
+<p>概念上，可将 sbt 插件视为「metabuild 上的普通库」，当前 metabuild 使用 Scala 3.8.2。实践中，现代 sbt 插件围绕 auto plugin（<code>sbt.AutoPlugin</code>）构建，按正确顺序提供任务和设置。更多说明请参阅「插件依赖」一节。</p>
+<h3 id="buildsbt-设置"><a class="header" href="#buildsbt-设置">build.sbt 设置</a></h3>
+<p>要创建 auto plugin，请创建项目并启用 <code>SbtPlugin</code>。</p>
 <div id="admonition-buildsbt" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-title">
 <div class="admonition-title">
 <div id="admonition-buildsbt-title">
@@ -4211,13 +4211,13 @@ lazy val root = rootProject
 </div>
 <div>
 <ul>
-<li>sbt 2.x plugins must be compiled with Scala 3.x. By not specifying <code>scalaVersion</code>, sbt will default to the Scala version suited for a plugin.</li>
-<li><code>pluginCrossBuild / sbtVersion</code> is a setting to compile your plugin against an <em>older</em> version of sbt, which allows the plugin users to choose from a range of sbt versions.</li>
+<li>sbt 2.x 插件须使用 Scala 3.x 编译。不指定 <code>scalaVersion</code> 时，sbt 会默认使用适合插件的 Scala 版本。</li>
+<li><code>pluginCrossBuild / sbtVersion</code> 用于针对<strong>较旧</strong>的 sbt 版本编译插件，使插件用户可在一定范围内选择 sbt 版本。</li>
 </ul>
 </div>
 </div>
 <h3 id="projectsettings"><a class="header" href="#projectsettings">projectSettings</a></h3>
-<p>In an appropriate namespace, define your auto plugin object by extending <code>sbt.AutoPlugin</code>. With auto plugins, settings are provided by the plugin directly via the <code>projectSettings</code> method. Here's an example plugin that adds a task named <code>hello</code> to the subprojects:</p>
+<p>在合适的命名空间中，通过扩展 <code>sbt.AutoPlugin</code> 定义 auto plugin 对象。使用 auto plugin 时，设置由插件通过 <code>projectSettings</code> 方法直接提供。以下示例插件向子项目添加名为 <code>hello</code> 的任务：</p>
 <div id="admonition-srcmainsbthellohellopluginscala" class="admonition admonish-example" role="note" aria-labelledby="admonition-srcmainsbthellohellopluginscala-title">
 <div class="admonition-title">
 <div id="admonition-srcmainsbthellohellopluginscala-title">
@@ -4255,16 +4255,16 @@ end HelloPlugin
 </code></pre>
 </div>
 </div>
-<div id="admonition-def-vs-lazy-val" class="admonition admonish-note" role="note" aria-labelledby="admonition-def-vs-lazy-val-title">
+<div id="admonition-def-与-lazy-val" class="admonition admonish-note" role="note" aria-labelledby="admonition-def-与-lazy-val-title">
 <div class="admonition-title">
-<div id="admonition-def-vs-lazy-val-title">
-<p>def vs lazy val</p>
+<div id="admonition-def-与-lazy-val-title">
+<p>def 与 lazy val</p>
 </div>
-<a class="admonition-anchor-link" href="reference/plugin.html#admonition-def-vs-lazy-val"></a>
+<a class="admonition-anchor-link" href="reference/plugin.html#admonition-def-与-lazy-val"></a>
 </div>
 <div>
-<p>In Scala, a <code>def</code> method can be overridden using a <code>lazy val</code>, using a mechanism called <em>uniform access principle</em>.
-We recommending using <code>lazy val</code> for <code>projectSettings</code> since the setting definitions tend to be immutable.</p>
+<p>在 Scala 中，可用 <code>lazy val</code> 重写 <code>def</code> 方法，这称为<strong>统一访问原则</strong>。
+建议对 <code>projectSettings</code> 使用 <code>lazy val</code>，因为设置定义通常是不可变的。</p>
 </div>
 </div>
 <!--
@@ -4278,12 +4278,12 @@ override def buildSettings: Seq[Setting[?]] = Nil
 ```
 -->
 <h3 id="globalsettings"><a class="header" href="#globalsettings">globalSettings</a></h3>
-<p>The <code>globalSettings</code> is appended once to the global settings (for example, <code>Global / helloGreeting</code>). These allow a plugin to provide new functionality or new defaults. One main use of this feature is to globally add commands, such as for IDE plugins.</p>
+<p><code>globalSettings</code> 会一次性追加到全局设置（例如 <code>Global / helloGreeting</code>）。这使插件可提供新功能或新默认值。常见用途之一是在全局添加命令，例如 IDE 插件。</p>
 <pre><code class="language-scala">override lazy val globalSettings: Seq[Setting[?]] = Nil
 </code></pre>
-<p>Where possible, your plugin should define the default value using <code>globalSettings</code>. Providing the value in the widest scope and using the value in narrowest scope give the user the maximum flexibility to change the settings.</p>
-<h3 id="implementing-plugin-dependencies"><a class="header" href="#implementing-plugin-dependencies">Implementing plugin dependencies</a></h3>
-<p>Next step is to define the plugin dependencies.</p>
+<p>在可能的情况下，插件应使用 <code>globalSettings</code> 定义默认值。在最宽作用域提供值、在最窄作用域使用值，可让用户最大程度灵活地修改设置。</p>
+<h3 id="实现插件依赖"><a class="header" href="#实现插件依赖">实现插件依赖</a></h3>
+<p>下一步是定义插件依赖。</p>
 <pre><code class="language-scala">package sbtless
 
 import sbt.*
@@ -4293,16 +4293,16 @@ object SbtLessPlugin extends AutoPlugin:
   override lazy val projectSettings = ...
 end SbtLessPlugin
 </code></pre>
-<p>The <code>requires</code> method returns a value of type <code>Plugins</code>, which is a DSL for constructing the dependency list. The requires method typically contains one of the following values:</p>
+<p><code>requires</code> 方法返回类型为 <code>Plugins</code> 的值，用于构造依赖列表的 DSL。<code>requires</code> 方法通常包含以下值之一：</p>
 <ul>
-<li><code>empty</code> (No plugins)</li>
-<li>Other auto plugins</li>
-<li><code>&amp;&amp;</code> operator (for defining multiple dependencies)</li>
+<li><code>empty</code>（无插件）</li>
+<li>其他 auto plugin</li>
+<li><code>&amp;&amp;</code> 运算符（用于定义多个依赖）</li>
 </ul>
-<h3 id="root-plugins-and-triggered-plugins"><a class="header" href="#root-plugins-and-triggered-plugins">Root plugins and triggered plugins</a></h3>
-<p>Some plugins should always be explicitly enabled on subprojects. We call these root plugins, i.e. plugins that are <em>root</em> nodes in the plugin dependency graph.</p>
-<p>Auto plugins also provide a way for plugins to automatically attach themselves to projects if their dependencies are met. We call these triggered plugins, and they are created by overriding the <code>trigger</code> method.</p>
-<p>For example, we might want to create a triggered plugin that can append commands automatically to the build. To do this, set the <code>requires</code> method to return <code>empty</code>, and override the <code>trigger</code> method with <code>allRequirements</code>.</p>
+<h3 id="根插件与触发式插件"><a class="header" href="#根插件与触发式插件">根插件与触发式插件</a></h3>
+<p>有些插件应始终在子项目上显式启用。我们称之为根插件，即插件依赖图中的 <em>根</em> 节点。</p>
+<p>Auto plugin 还提供一种方式：在依赖满足时自动挂接到项目。我们称之为触发式插件，通过重写 <code>trigger</code> 方法创建。</p>
+<p>例如，若要创建能自动向构建追加命令的触发式插件，可将 <code>requires</code> 设为返回 <code>empty</code>，并将 <code>trigger</code> 重写为 <code>allRequirements</code>。</p>
 <pre><code class="language-scala">package sbthello
 
 import sbt.*
@@ -4314,7 +4314,7 @@ object HelloPlugin2 extends AutoPlugin:
   ....
 end HelloPlugin2
 </code></pre>
-<p>The build user still needs to include this plugin in <code>project/plugins.sbt</code>, but it is no longer needed to be included in <code>build.sbt</code>. This becomes more interesting when you do specify a plugin with requirements. Let's modify the <code>SbtLessPlugin</code> so that it depends on another plugin:</p>
+<p>构建用户仍须在 <code>project/plugins.sbt</code> 中包含该插件，但不再需要在 <code>build.sbt</code> 中包含。当您指定带依赖要求的插件时，情况会更有趣。下面将 <code>SbtLessPlugin</code> 修改为依赖另一插件：</p>
 <pre><code class="language-scala">package sbtless
 
 import sbt.*
@@ -4326,14 +4326,14 @@ object SbtLessPlugin extends AutoPlugin:
   override lazy val projectSettings = ...
 end SbtLessPlugin
 </code></pre>
-<p>As it turns out, <code>PlayScala</code> plugin (in case you didn't know, the Play framework is an sbt plugin) lists <code>SbtJsTaskPlugin</code> as one of its required plugins. So, if we define a <code>build.sbt</code> with:</p>
+<p>事实上，<code>PlayScala</code> 插件（若您尚不了解，Play 框架是一个 sbt 插件）将 <code>SbtJsTaskPlugin</code> 列为其必需插件之一。因此，若定义如下 <code>build.sbt</code>：</p>
 <pre><code class="language-scala">lazy val root = rootProject
   .enablePlugins(PlayScala)
 </code></pre>
-<p>then the setting sequence from <code>SbtLessPlugin</code> will be automatically appended somewhere after the settings from <code>PlayScala</code>.</p>
-<p>This allows plugins to silently, and correctly, extend existing plugins with more features.  It also can help remove the burden of ordering from the user, allowing the plugin authors greater freedom and power when providing feature for their users.</p>
-<h3 id="controlling-the-import-with-autoimport"><a class="header" href="#controlling-the-import-with-autoimport">Controlling the import with autoImport</a></h3>
-<p>When an auto plugin provides a <code>val</code>, <code>lazy val</code>, or <code>object</code> named <code>autoImport</code>, the contents of the field are wildcard imported in <code>set</code>, <code>eval</code>, and <code>*.sbt</code> files.</p>
+<p>则 <code>SbtLessPlugin</code> 的设置序列会自动追加在 <code>PlayScala</code> 的设置之后某处。</p>
+<p>这使插件可在不打扰用户的前提下正确扩展现有插件。也有助于减轻用户的排序负担，让插件作者在向用户提供功能时有更大自由度。</p>
+<h3 id="使用-autoimport-控制导入"><a class="header" href="#使用-autoimport-控制导入">使用 autoImport 控制导入</a></h3>
+<p>当 auto plugin 提供名为 <code>autoImport</code> 的 <code>val</code>、<code>lazy val</code> 或 <code>object</code> 时，该字段的内容会在 <code>set</code>、<code>eval</code> 和 <code>*.sbt</code> 文件中被通配导入。</p>
 <pre><code class="language-scala">package sbthello
 
 import sbt.*
@@ -4350,9 +4350,9 @@ object HelloPlugin3 extends AutoPlugin:
   ....
 end HelloPlugin3
 </code></pre>
-<p>Typically, <code>autoImport</code> is used to provide new keys - <code>SettingKey</code>s, <code>TaskKey</code>s, or <code>InputKey</code>s - or core methods without requiring an import or qualification.</p>
-<h3 id="example-plugin"><a class="header" href="#example-plugin">Example Plugin</a></h3>
-<p>An example of a typical plugin:</p>
+<p>通常，<code>autoImport</code> 用于提供新的键——<code>SettingKey</code>、<code>TaskKey</code> 或 <code>InputKey</code>——或核心方法，而无需显式 import 或限定名。</p>
+<h3 id="示例插件"><a class="header" href="#示例插件">示例插件</a></h3>
+<p>典型插件示例：</p>
 <div id="admonition-plugin-buildsbt" class="admonition admonish-example" role="note" aria-labelledby="admonition-plugin-buildsbt-title">
 <div class="admonition-title">
 <div id="admonition-plugin-buildsbt-title">
@@ -4436,12 +4436,12 @@ end Obfuscate
 </code></pre>
 </div>
 </div>
-<h4 id="usage-example"><a class="header" href="#usage-example">Usage example</a></h4>
-<p>A build definition that uses the plugin might look like <code>build.sbt</code>:</p>
+<h4 id="使用示例"><a class="header" href="#使用示例">使用示例</a></h4>
+<p>使用该插件的构建定义可能类似 <code>build.sbt</code>：</p>
 <pre><code class="language-scala">obfuscateLiterals := true
 </code></pre>
-<h2 id="using-an-auto-plugin"><a class="header" href="#using-an-auto-plugin">Using an auto plugin</a></h2>
-<p>A common situation is when using a binary plugin published to a repository. You can create <code>project/plugins.sbt</code> with all of the desired sbt plugins, any general dependencies, and any necessary repositories:</p>
+<h2 id="使用-auto-plugin"><a class="header" href="#使用-auto-plugin">使用 auto plugin</a></h2>
+<p>常见情况是使用发布到仓库的二进制插件。您可创建 <code>project/plugins.sbt</code>，在其中声明所需的 sbt 插件、一般依赖及必要的仓库：</p>
 <pre><code class="language-scala">addSbtPlugin("org.example" % "plugin" % "1.0")
 addSbtPlugin("org.example" % "another-plugin" % "2.0")
 
@@ -4450,7 +4450,7 @@ libraryDependencies += "org.example" % "utilities" % "1.3"
 
 resolvers += "Example Plugin Repository" at "https://example.org/repo/"
 </code></pre>
-<p>Many of the auto plugins automatically add settings into projects, however, some may require explicit enablement. Here's an example:</p>
+<p>许多 auto plugin 会自动向项目添加设置，但有些也可能需要显式启用。示例如下：</p>
 <pre><code class="language-scala">lazy val util = (project in file("util"))
   .enablePlugins(FooPlugin, BarPlugin)
   .disablePlugins(plugins.IvyPlugin)
@@ -4459,33 +4459,33 @@ resolvers += "Example Plugin Repository" at "https://example.org/repo/"
   )
 </code></pre>
 <h2 id="metabuild"><a class="header" href="#metabuild">Metabuild</a></h2>
-<p>A metabuild is a project under <code>project/</code> folder. This project's classpath is the classpath used for build definitions in <code>project/</code> and any <code>.sbt</code> files in the project's base directory. It is also used for the <code>eval</code> and <code>set</code> commands.</p>
-<p>Specifically,</p>
+<p>metabuild 是 <code>project/</code> 目录下的项目。该项目的 classpath 用作 <code>project/</code> 中构建定义以及项目根目录下任意 <code>.sbt</code> 文件的 classpath，也用于 <code>eval</code> 和 <code>set</code> 命令。</p>
+<p>具体而言：</p>
 <ol>
-<li>Managed dependencies declared by the metabuild are retrieved and are available on the build definition classpath, just like for a normal project.</li>
-<li>Unmanaged dependencies in <code>project/lib/</code> are available to the build definition, just like for a normal project.</li>
-<li>Sources in the <code>project/</code> project are the build definition files and are compiled using the classpath built from the managed and unmanaged dependencies.</li>
-<li>Project dependencies can be declared in <code>project/plugins.sbt</code> (similarly to <code>build.sbt</code> file in a normal project) and will be available to the build definitions.</li>
+<li>metabuild 声明的托管依赖会被解析并出现在构建定义 classpath 上，与普通项目相同。</li>
+<li><code>project/lib/</code> 中的非托管依赖可用于构建定义，与普通项目相同。</li>
+<li><code>project/</code> 项目中的源码即构建定义文件，使用由托管与非托管依赖构成的 classpath 编译。</li>
+<li>可在 <code>project/plugins.sbt</code> 中声明项目依赖（方式类似普通项目中的 <code>build.sbt</code>），这些依赖将对构建定义可用。</li>
 </ol>
-<p>The build definition classpath is searched for <code>sbt/sbt.autoplugins</code> descriptor files containing the names of <code>sbt.AutoPlugin</code> implementations.</p>
-<p>The <code>reload plugins</code> command changes the current build to the (root) project's metabuild definition. This allows manipulating the metabuild project like a normal subproject. <code>reload return</code> changes back to the original build. Any session settings for the metabuild project that have not been saved are dropped.</p>
-<p>An auto plugin is a module that defines settings to automatically inject into subprojects. Additionally, an auto plugin provides the following feature:</p>
+<p>会在构建定义 classpath 上查找 <code>sbt/sbt.autoplugins</code> 描述文件，其中包含 <code>sbt.AutoPlugin</code> 实现类名。</p>
+<p><code>reload plugins</code> 命令将当前构建切换为（根）项目的 metabuild 定义，从而像普通子项目一样操作 metabuild。<code>reload return</code> 切换回原始构建。未保存的 metabuild 会话设置会被丢弃。</p>
+<p>auto plugin 是定义可自动注入子项目的设置的模块。此外，auto plugin 还提供以下能力：</p>
 <ul>
-<li>Automatically import selective names to <code>.sbt</code> files and the <code>eval</code> and <code>set</code> commands.</li>
-<li>Specify plugin dependencies to other auto plugins.</li>
-<li>Automatically activate itself when all dependencies are present.</li>
-<li>Specify <code>projectSettings</code>, <code>buildSettings</code>, and <code>globalSettings</code> as appropriate.</li>
+<li>将选定名称自动导入 <code>.sbt</code> 文件以及 <code>eval</code> 和 <code>set</code> 命令。</li>
+<li>指定对其他 auto plugin 的依赖。</li>
+<li>在全部依赖满足时自动激活自身。</li>
+<li>按需指定 <code>projectSettings</code>、<code>buildSettings</code> 和 <code>globalSettings</code>。</li>
 </ul>
-<h2 id="plugin-dependencies"><a class="header" href="#plugin-dependencies">Plugin dependencies</a></h2>
-<p>Prior to the introduction of the <code>AutoPlugin</code> system in sbt 0.13.5, if a plugin depended on the settings and tasks from another plugin, the build users had to include the plugins in the right order. This became complicated and error-prone as the number of plugins increased within an application.</p>
-<p>An auto plugin can depend on other auto plugins and ensure these dependency settings are loaded first.</p>
-<p>Suppose we have the <code>SbtLessPlugin</code> and the <code>SbtCoffeeScriptPlugin</code>, which in turn depends on the <code>SbtJsTaskPlugin</code>, <code>SbtWebPlugin</code>, and <code>JvmPlugin</code>. Instead of manually activating all of these plugins, a project can just activate the <code>SbtLessPlugin</code> and <code>SbtCoffeeScriptPlugin</code> like this:</p>
+<h2 id="插件依赖"><a class="header" href="#插件依赖">插件依赖</a></h2>
+<p>在 sbt 0.13.5 引入 <code>AutoPlugin</code> 系统之前，若插件依赖另一插件的设置和任务，构建用户必须按正确顺序包含插件。随着应用中插件增多，这变得复杂且易错。</p>
+<p>auto plugin 可依赖其他 auto plugin，并确保这些依赖的设置先被加载。</p>
+<p>假设有 <code>SbtLessPlugin</code> 和 <code>SbtCoffeeScriptPlugin</code>，后者又依赖 <code>SbtJsTaskPlugin</code>、<code>SbtWebPlugin</code> 和 <code>JvmPlugin</code>。无需手动激活所有这些插件，项目只需启用 <code>SbtLessPlugin</code> 和 <code>SbtCoffeeScriptPlugin</code>：</p>
 <pre><code class="language-scala">lazy val root = (project in file("."))
   .enablePlugins(SbtLessPlugin, SbtCoffeeScriptPlugin)
 </code></pre>
-<p>This will pull in the right setting sequence from the plugins in the right order.</p>
-<h2 id="maven-publishing-convention"><a class="header" href="#maven-publishing-convention">Maven publishing convention</a></h2>
-<p>sbt 2.x plugins are published to Maven layout repositories with <code>_sbt2_3</code> suffix in its artifact name. For example, sbt-ci-release 1.11.2 is published to the Central Repo as <a href="https://repo1.maven.org/maven2/com/github/sbt/sbt-ci-release_sbt2_3/1.11.2/">https://repo1.maven.org/maven2/com/github/sbt/sbt-ci-release_sbt2_3/1.11.2/</a>. This suffix is appended automatically by sbt, so the <code>name</code> should just be called <code>sbt-ci-release</code> etc in <code>build.sbt</code>.</p>
+<p>这将按正确顺序从各插件拉入正确的设置序列。</p>
+<h2 id="maven-发布约定"><a class="header" href="#maven-发布约定">Maven 发布约定</a></h2>
+<p>sbt 2.x 插件发布到 Maven 布局仓库时，工件名带有 <code>_sbt2_3</code> 后缀。例如 sbt-ci-release 1.11.2 发布至中央仓库 <a href="https://repo1.maven.org/maven2/com/github/sbt/sbt-ci-release_sbt2_3/1.11.2/">https://repo1.maven.org/maven2/com/github/sbt/sbt-ci-release_sbt2_3/1.11.2/</a>。该后缀由 sbt 自动追加，因此在 <code>build.sbt</code> 中 <code>name</code> 只需写 <code>sbt-ci-release</code> 等即可。</p>
 <!--
 ### Best Practices
 
@@ -4964,52 +4964,52 @@ your plugin to the list.</p>
 <li><a href="https://github.com/sirocchj/sbt-api-builder">sbt-api-builder</a>: support for ApiBuilder from within sbt's shell. <!-- 1 star --></li>
 </ul>
 </div>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="recipes"><a class="header" href="#recipes">Recipes</a></h1>
-<p>The recipe section of the documentation focuses on the objectives with minimal explanations.</p>
-<p>If you are new to sbt, see <a href="recipes/../sbt-by-example.html">sbt by example</a> and <a href="recipes/../guide/index.html">Getting Started</a> section first.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="how-to-write-hello-world"><a class="header" href="#how-to-write-hello-world">How to write hello world</a></h1>
-<h2 id="objective"><a class="header" href="#objective">Objective</a></h2>
-<p>I want to write a hello world program in Scala, and run it.</p>
-<h2 id="steps"><a class="header" href="#steps">Steps</a></h2>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="食谱"><a class="header" href="#食谱">食谱</a></h1>
+<p>文档中的食谱部分以最少说明聚焦于目标。</p>
+<p>若您是 sbt 新手，请先阅读 <a href="recipes/../sbt-by-example.html">sbt 示例教程</a>和 <a href="recipes/../guide/index.html">sbt 入门</a>一节。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="如何编写-hello-world"><a class="header" href="#如何编写-hello-world">如何编写 hello world</a></h1>
+<h2 id="目标"><a class="header" href="#目标">目标</a></h2>
+<p>我想用 Scala 编写 hello world 程序并运行它。</p>
+<h2 id="步骤"><a class="header" href="#步骤">步骤</a></h2>
 <ol>
 <li>
-<p>Create a fresh directory, like <code>hello_scala/</code></p>
+<p>新建一个目录，例如 <code>hello_scala/</code></p>
 </li>
 <li>
-<p>Create a directory named <code>project/</code> under <code>hello_scala/</code>, and create <code>project/build.properties</code> with</p>
+<p>在 <code>hello_scala/</code> 下创建名为 <code>project/</code> 的目录，并创建 <code>project/build.properties</code>，内容为</p>
 <pre><code>sbt.version=2.0.0-RC10
 </code></pre>
 </li>
 <li>
-<p>Under <code>hello_scala/</code>, create <code>build.sbt</code>:</p>
+<p>在 <code>hello_scala/</code> 下创建 <code>build.sbt</code>：</p>
 <pre><code class="language-scala">scalaVersion := "3.8.2"
 </code></pre>
 </li>
 <li>
-<p>Under <code>hello_scala/</code>, create <code>Hello.scala</code>:</p>
+<p>在 <code>hello_scala/</code> 下创建 <code>Hello.scala</code>：</p>
 <pre><code class="language-scala"> @main def main(args: String*): Unit =
    println(s"Hello ${args.mkString}")
 </code></pre>
 </li>
 <li>
-<p>Navigate to <code>hello_scala/</code> from the terminal, and run <code>sbt</code>:</p>
+<p>在终端中进入 <code>hello_scala/</code> 并运行 <code>sbt</code>：</p>
 <pre><code class="language-bash">$ sbt
 </code></pre>
 </li>
 <li>
-<p>When the prompt appears, type <code>run</code>:</p>
+<p>出现提示符后，输入 <code>run</code>：</p>
 <pre><code class="language-scala">sbt:hello_scala&gt; run
 </code></pre>
 </li>
 <li>
-<p>Type <code>exit</code> to exit the sbt shell:</p>
+<p>输入 <code>exit</code> 退出 sbt shell：</p>
 <pre><code class="language-scala">sbt:hello_scala&gt; exit
 </code></pre>
 </li>
 </ol>
-<h2 id="alternatives"><a class="header" href="#alternatives">Alternatives</a></h2>
-<p>When you're in a hurry, you can run <code>sbt init</code> in a fresh directory, and select the first template.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="publishing-to-the-central-repo"><a class="header" href="#publishing-to-the-central-repo">Publishing to the Central Repo</a></h1>
+<h2 id="其他方式"><a class="header" href="#其他方式">其他方式</a></h2>
+<p>若您赶时间，可在空目录中运行 <code>sbt init</code>，并选择第一个模板。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="发布到中央仓库"><a class="header" href="#发布到中央仓库">发布到中央仓库</a></h1>
 <div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
 <div class="admonition-title">
 <div id="admonition-note-title">
@@ -5018,34 +5018,33 @@ your plugin to the list.</p>
 <a class="admonition-anchor-link" href="recipes/central.html#admonition-note"></a>
 </div>
 <div>
-<p>The recipe section of the documentation focuses on the objectives
-with minimal explanations.</p>
-<p>See also Sonatype's [Publish guides][sonatype-central-portal-register] for general concepts around publishing to the Central Portal.</p>
+<p>文档中的食谱部分以最少说明聚焦于目标。</p>
+<p>向 Central Portal 发布的一般概念，另请参阅 Sonatype 的 <a href="https://central.sonatype.org/register/central-portal/">Publish guides</a>。</p>
 </div>
 </div>
-<h2 id="objective-1"><a class="header" href="#objective-1">Objective</a></h2>
-<p>I want to publish my project to the Central Repository.</p>
-<h2 id="steps-1"><a class="header" href="#steps-1">Steps</a></h2>
-<h3 id="preliminary-1-central-portal-registration"><a class="header" href="#preliminary-1-central-portal-registration">Preliminary 1: Central Portal registration</a></h3>
-<p>Create a Central Portal account, following Sonatype's <a href="https://central.sonatype.org/register/central-portal/">Publish guides</a>.</p>
+<h2 id="目标-1"><a class="header" href="#目标-1">目标</a></h2>
+<p>我想将项目发布到中央仓库。</p>
+<h2 id="步骤-1"><a class="header" href="#步骤-1">步骤</a></h2>
+<h3 id="准备-1central-portal-注册"><a class="header" href="#准备-1central-portal-注册">准备 1：Central Portal 注册</a></h3>
+<p>请按 Sonatype 的 <a href="https://central.sonatype.org/register/central-portal/">Publish guides</a> 创建 Central Portal 账户。</p>
 <ul>
-<li>If you had an OSSRH account, use <strong>Forgot password</strong> flow to convert the account to the new Central Portal, which lets you keep the previous namespace associations.</li>
-<li>If you authenticate via GitHub, <code>io.github.&lt;user_name&gt;</code> will automatically be associated with the account.</li>
+<li>若您曾有 OSSRH 账户，请使用 <strong>Forgot password</strong> 流程将账户迁移到新的 Central Portal，以保留此前的命名空间关联。</li>
+<li>若通过 GitHub 认证，<code>io.github.&lt;user_name&gt;</code> 会自动关联到该账户。</li>
 </ul>
-<p>Follow the steps described in <a href="https://central.sonatype.org/register/namespace/">register a namespace</a> guide to associate a domain name with your account.</p>
-<h4 id="preliminary-2-pgp-key-pair"><a class="header" href="#preliminary-2-pgp-key-pair">Preliminary 2: PGP key pair</a></h4>
-<p>Follow the Sonatype's <a href="https://central.sonatype.org/publish/requirements/gpg/">GPG guide</a> to generate a PGP key pair.</p>
-<p><a href="https://www.gnupg.org/download/">Install GnuPG</a>, and verify the version:</p>
+<p>请按 <a href="https://central.sonatype.org/register/namespace/">register a namespace</a> 指南中的步骤，将域名与您的账户关联。</p>
+<h4 id="准备-2pgp-密钥对"><a class="header" href="#准备-2pgp-密钥对">准备 2：PGP 密钥对</a></h4>
+<p>请按 Sonatype 的 <a href="https://central.sonatype.org/publish/requirements/gpg/">GPG guide</a> 生成 PGP 密钥对。</p>
+<p><a href="https://www.gnupg.org/download/">安装 GnuPG</a>，并确认版本：</p>
 <pre><code class="language-bash">$ gpg --version
 gpg (GnuPG/MacGPG2) 2.2.8
 libgcrypt 1.8.3
 Copyright (C) 2018 Free Software Foundation, Inc.
 License GPLv3+: GNU GPL version 3 or later &lt;https://gnu.org/licenses/gpl.html&gt;
 </code></pre>
-<p>Next generate a key:</p>
+<p>接下来生成密钥：</p>
 <pre><code>$ gpg --gen-key
 </code></pre>
-<p>List the keys:</p>
+<p>列出密钥：</p>
 <pre><code>$ gpg --list-keys
 
 /home/foo/.gnupg/pubring.gpg
@@ -5056,12 +5055,12 @@ pub   rsa4096 2018-08-22 [SC]
 uid           [ultimate] your name &lt;you@example.com&gt;
 sub   rsa4096 2018-08-22 [E]
 </code></pre>
-<p>Distribute the key:</p>
+<p>分发密钥：</p>
 <pre><code>$ gpg --keyserver keyserver.ubuntu.com --send-keys 1234517530FB96F147C6A146A326F592D39AAAAA
 </code></pre>
-<h3 id="step-1-sbt-pgp"><a class="header" href="#step-1-sbt-pgp">Step 1: sbt-pgp</a></h3>
-<p>The <a href="https://github.com/sbt/sbt-pgp#sbt-pgp">sbt-pgp plugin</a> can sign the published artifacts with GPG/PGP. (Optionally <a href="https://github.com/sbt/sbt-ci-release">sbt-ci-release</a> can automate the publishing process.)</p>
-<p>Add the following line to your <code>project/plugins.sbt</code> file to enable it for your build:</p>
+<h3 id="步骤-1sbt-pgp"><a class="header" href="#步骤-1sbt-pgp">步骤 1：sbt-pgp</a></h3>
+<p><a href="https://github.com/sbt/sbt-pgp#sbt-pgp">sbt-pgp 插件</a> 可用 GPG/PGP 为发布的工件签名。（也可选用 <a href="https://github.com/sbt/sbt-ci-release">sbt-ci-release</a> 自动化发布流程。）</p>
+<p>将以下一行加入 <code>project/plugins.sbt</code>，以便在构建中启用：</p>
 <pre><code class="language-scala">addSbtPlugin("com.github.sbt" % "sbt-pgp" % "2.3.1")
 </code></pre>
 <div id="admonition-note-1" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-1-title">
@@ -5072,12 +5071,12 @@ sub   rsa4096 2018-08-22 [E]
 <a class="admonition-anchor-link" href="recipes/central.html#admonition-note-1"></a>
 </div>
 <div>
-<p>Make sure that the <code>gpg</code> command is in PATH available to the sbt.</p>
+<p>请确保 sbt 可用的 PATH 中包含 <code>gpg</code> 命令。</p>
 </div>
 </div>
-<h3 id="step-2-credentials"><a class="header" href="#step-2-credentials">Step 2: Credentials</a></h3>
-<p>Generate a user token from the portal to be used for the credentials. The token must be stored somewhere safe (NOT in the repository).</p>
-<p>sbt 2.x can also reads from the environment variables <code>SONATYPE_USERNAME</code> and <code>SONATYPE_PASSWORD</code> and appends a credential for <code>central.sonatype.com</code> out-of-box, which might be useful for automatic publishing from the CI environment, such as GitHub Actions.</p>
+<h3 id="步骤-2凭据"><a class="header" href="#步骤-2凭据">步骤 2：凭据</a></h3>
+<p>在门户中生成用于凭据的用户令牌。令牌须保存在安全位置（不要放在仓库中）。</p>
+<p>sbt 2.x 还可读取环境变量 <code>SONATYPE_USERNAME</code> 和 <code>SONATYPE_PASSWORD</code>，并开箱即为 <code>central.sonatype.com</code> 追加凭据，便于在 CI 环境（如 GitHub Actions）中自动发布。</p>
 <pre><code class="language-yaml">- run: sbt ci-release
   env:
     PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
@@ -5085,17 +5084,17 @@ sub   rsa4096 2018-08-22 [E]
     SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
     SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
 </code></pre>
-<p>On a local machine, a common convention is a <code>$HOME/.sbt/2/credentials.sbt</code> file, with the following:</p>
+<p>在本机上，常见做法是使用 <code>$HOME/.sbt/2/credentials.sbt</code> 文件，内容如下：</p>
 <pre><code class="language-scala">credentials += Credentials(Path.userHome / ".sbt" / "sonatype_central_credentials")
 </code></pre>
-<p>Next create a file <code>$HOME/.sbt/sonatype_central_credentials</code>:</p>
+<p>接下来创建文件 <code>$HOME/.sbt/sonatype_central_credentials</code>：</p>
 <pre><code class="language-property">host=central.sonatype.com
 user=&lt;your username&gt;
 password=&lt;your password&gt;
 </code></pre>
-<h3 id="step-3-configure-buildsbt"><a class="header" href="#step-3-configure-buildsbt">Step 3: Configure build.sbt</a></h3>
-<p>To publish to a Maven repository, you'll need to configure a few settings so that the correct metadata is generated.</p>
-<p><strong>Note</strong>: To publish to the Central Portal, <code>publishTo</code> must be set to the <code>localStaging</code> repository:</p>
+<h3 id="步骤-3配置-buildsbt"><a class="header" href="#步骤-3配置-buildsbt">步骤 3：配置 build.sbt</a></h3>
+<p>要发布到 Maven 仓库，需要配置若干设置以生成正确的元数据。</p>
+<p><strong>注意</strong>：向 Central Portal 发布时，必须将 <code>publishTo</code> 设为 <code>localStaging</code> 仓库：</p>
 <pre><code class="language-scala">// new setting for the Central Portal
 publishTo := {
   val centralSnapshots = "https://central.sonatype.com/repository/maven-snapshots/"
@@ -5103,7 +5102,7 @@ publishTo := {
   else localStaging.value
 }
 </code></pre>
-<p>Add these settings at the end of <code>build.sbt</code> or a separate <code>publish.sbt</code>:</p>
+<p>将这些设置放在 <code>build.sbt</code> 末尾，或单独的 <code>publish.sbt</code> 中：</p>
 <pre><code class="language-scala">organization := "com.example.project2"
 organizationName := "example"
 organizationHomepage := Some(url("http://example.com/"))
@@ -5138,20 +5137,20 @@ publishTo := {
   else localStaging.value
 }
 </code></pre>
-<p>The full format of a <code>pom.xml</code> (an end product of the project configuration used by Maven) file is outlined in <a href="https://maven.apache.org/pom.html">POM Reference</a>. You can add more data to it with the <code>pomExtra</code> option in <code>build.sbt</code>.</p>
-<h3 id="step-4-stage-the-artifacts"><a class="header" href="#step-4-stage-the-artifacts">Step 4: Stage the artifacts</a></h3>
-<p>From sbt shell run:</p>
+<p><code>pom.xml</code> 的完整格式（Maven 所用项目配置的产物）见 <a href="https://maven.apache.org/pom.html">POM Reference</a>。您可在 <code>build.sbt</code> 中通过 <code>pomExtra</code> 选项添加更多内容。</p>
+<h3 id="步骤-4暂存工件"><a class="header" href="#步骤-4暂存工件">步骤 4：暂存工件</a></h3>
+<p>在 sbt shell 中执行：</p>
 <pre><code class="language-bash">&gt; publishSigned
 </code></pre>
-<h3 id="step-5-upload-or-release-the-bundle"><a class="header" href="#step-5-upload-or-release-the-bundle">Step 5: Upload or release the bundle</a></h3>
-<p>From sbt shell run:</p>
+<h3 id="步骤-5上传或发布-bundle"><a class="header" href="#步骤-5上传或发布-bundle">步骤 5：上传或发布 bundle</a></h3>
+<p>在 sbt shell 中执行：</p>
 <pre><code class="language-bash">&gt; sonaUpload
 </code></pre>
-<p>This will upload the bundle to the <a href="https://central.sonatype.com/">Central Portal</a>. Hit the "Publish" button to publish to the Central Repository.</p>
-<p>If you want to automate the publishing, run:</p>
+<p>这会将 bundle 上传到 <a href="https://central.sonatype.com/">Central Portal</a>。点击 "Publish" 按钮即可发布到中央仓库。</p>
+<p>若要自动化发布，请执行：</p>
 <pre><code class="language-bash">&gt; sonaRelease
 </code></pre>
-<p>It might take 10 minutes to a few hours for the published artifacts to be visible on the Central Repository <a href="https://repo1.maven.org/maven2/">https://repo1.maven.org/maven2/</a>.</p>
+<p>发布后，工件在中央仓库 <a href="https://repo1.maven.org/maven2/">https://repo1.maven.org/maven2/</a> 上可见可能需要十分钟到数小时。</p>
 <!--
 ### Optional steps
 
@@ -5184,27 +5183,27 @@ releaseStepCommand("sonaRelease"),
 ...
 ```
 -->
-<div style="break-before: page; page-break-before: always;"></div><h1 id="use-sbt-as-metals-build-server"><a class="header" href="#use-sbt-as-metals-build-server">Use sbt as Metals build server</a></h1>
-<h2 id="objective-2"><a class="header" href="#objective-2">Objective</a></h2>
-<p>I want to use <a href="https://scalameta.org/metals/">Metals</a> on VS Code with sbt as the build server.</p>
-<h2 id="steps-2"><a class="header" href="#steps-2">Steps</a></h2>
-<p>To use Metals on VS Code:</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="将-sbt-用作-metals-构建服务器"><a class="header" href="#将-sbt-用作-metals-构建服务器">将 sbt 用作 Metals 构建服务器</a></h1>
+<h2 id="目标-2"><a class="header" href="#目标-2">目标</a></h2>
+<p>我想在 VS Code 上使用 <a href="https://scalameta.org/metals/">Metals</a>，并以 sbt 作为构建服务器。</p>
+<h2 id="步骤-2"><a class="header" href="#步骤-2">步骤</a></h2>
+<p>要在 VS Code 上使用 Metals：</p>
 <ol>
-<li>Install Metals from Extensions tab:<br> <img src="recipes/../files/metals0.png" alt="Metals" /></li>
-<li>Open a directory containing a <code>build.sbt</code> file.</li>
-<li>From the menubar, run View &gt; Command Palette... (<code>Cmd-Shift-P</code> on macOS) "Metals: Switch build server", and select "sbt"<br> <img src="recipes/../files/metals2.png" alt="Metals" /></li>
-<li>Once the import process is complete, open a Scala file to see that code completion works:<br> <img src="recipes/../files/metals3.png" alt="Metals" /></li>
+<li>在扩展视图安装 Metals：<br> <img src="recipes/../files/metals0.png" alt="Metals" /></li>
+<li>打开包含 <code>build.sbt</code> 文件的目录。</li>
+<li>在菜单栏选择 查看 &gt; 命令面板…（在 macOS 上为 <code>Cmd-Shift-P</code>），执行 "Metals: Switch build server"，并选择 "sbt"<br> <img src="recipes/../files/metals2.png" alt="Metals" /></li>
+<li>导入完成后，打开 Scala 文件以确认代码补全可用：<br> <img src="recipes/../files/metals3.png" alt="Metals" /></li>
 </ol>
-<p>Use the following setting to opt-out some of the subprojects from BSP.</p>
+<p>使用以下设置可使部分子项目不参与 BSP。</p>
 <pre><code class="language-scala">bspEnabled := false
 </code></pre>
-<p>When you make changes to the code and save them (<code>Cmd-S</code> on macOS), Metals will invoke sbt to do the actual building work.</p>
-<h4 id="logging-into-sbt-session"><a class="header" href="#logging-into-sbt-session">Logging into sbt session</a></h4>
-<p>While Metals uses sbt as the build server, we can also log into the same sbt session using a thin client.</p>
+<p>修改代码并保存（在 macOS 上为 <code>Cmd-S</code>）时，Metals 会调用 sbt 执行实际构建。</p>
+<h4 id="登录-sbt-会话"><a class="header" href="#登录-sbt-会话">登录 sbt 会话</a></h4>
+<p>在 Metals 以 sbt 作为构建服务器时，您还可以通过瘦客户端登录同一 sbt 会话。</p>
 <ul>
-<li>From Terminal section, type in <code>sbt --client</code><br> <img src="recipes/../files/metals6.png" alt="Metals" /></li>
+<li>在终端面板中输入 <code>sbt --client</code><br> <img src="recipes/../files/metals6.png" alt="Metals" /></li>
 </ul>
-<p>This lets you log into the sbt session Metals has started. In there you can call <code>testOnly</code> and other tasks with the code already compiled.</p>
+<p>这样可登录 Metals 已启动的 sbt 会话。在其中可调用 <code>testOnly</code> 等任务，且代码已编译。</p>
 <!--
 #### Interactive debugging on VS Code
 
@@ -5216,28 +5215,28 @@ releaseStepCommand("sonaRelease"),
 
 See [Debugging][vscode-debugging] page on VS Code documentation for more details on how to navigate an interactive debugging session.
 -->
-<div style="break-before: page; page-break-before: always;"></div><h1 id="import-to-intellij-idea"><a class="header" href="#import-to-intellij-idea">Import to IntelliJ IDEA</a></h1>
-<h2 id="objective-3"><a class="header" href="#objective-3">Objective</a></h2>
-<p>I want to import sbt build to IntelliJ IDEA.</p>
-<h2 id="steps-3"><a class="header" href="#steps-3">Steps</a></h2>
-<p><a href="https://www.jetbrains.com/idea/">IntelliJ IDEA</a> is an IDE created by JetBrains, and the Community Edition is open source under Apache v2 license. IntelliJ integrates with many build tools, including sbt, to import the project.</p>
-<p>To import a build to IntelliJ IDEA:</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="导入到-intellij-idea"><a class="header" href="#导入到-intellij-idea">导入到 IntelliJ IDEA</a></h1>
+<h2 id="目标-3"><a class="header" href="#目标-3">目标</a></h2>
+<p>我想将 sbt 构建导入 IntelliJ IDEA。</p>
+<h2 id="步骤-3"><a class="header" href="#步骤-3">步骤</a></h2>
+<p><a href="https://www.jetbrains.com/idea/">IntelliJ IDEA</a> 是 JetBrains 开发的 IDE，Community Edition 在 Apache v2 许可证下开源。IntelliJ 可与多种构建工具（包括 sbt）集成以导入项目。</p>
+<p>要将构建导入 IntelliJ IDEA：</p>
 <ol>
-<li>Install Scala plugin on the Plugins tab:<br> <img src="recipes/../files/intellij1.png" alt="IntelliJ" /></li>
-<li>From Projects, open a directory containing a <code>build.sbt</code> file.<br> <img src="recipes/../files/intellij2.png" alt="IntelliJ" /></li>
-<li>Once the import process is complete, open a Scala file to see that code completion works.</li>
+<li>在插件页安装 Scala 插件：<br> <img src="recipes/../files/intellij1.png" alt="IntelliJ" /></li>
+<li>在「项目」中打开包含 <code>build.sbt</code> 文件的目录。<br> <img src="recipes/../files/intellij2.png" alt="IntelliJ" /></li>
+<li>导入完成后，打开 Scala 文件以确认代码补全可用。</li>
 </ol>
-<p>IntelliJ Scala plugin uses its own lightweight compilation engine to detect errors, which is fast but sometimes incorrect. Per <a href="https://blog.jetbrains.com/scala/2021/07/27/intellij-scala-plugin-2021-2/#Compiler-based_highlighting">compiler-based highlighting</a>, IntelliJ can be configured to use the Scala compiler for error highlighting.</p>
-<h3 id="interactive-debugging-with-intellij-idea"><a class="header" href="#interactive-debugging-with-intellij-idea">Interactive debugging with IntelliJ IDEA</a></h3>
+<p>IntelliJ Scala 插件使用自带的轻量编译引擎检测错误，速度快但有时不准确。按 <a href="https://blog.jetbrains.com/scala/2021/07/27/intellij-scala-plugin-2021-2/#Compiler-based_highlighting">compiler-based highlighting</a> 所述，可将 IntelliJ 配置为使用 Scala 编译器进行错误高亮。</p>
+<h3 id="使用-intellij-idea-交互式调试"><a class="header" href="#使用-intellij-idea-交互式调试">使用 IntelliJ IDEA 交互式调试</a></h3>
 <ol>
-<li>IntelliJ supports interactive debugging by setting break points in the code:<br> <img src="recipes/../files/intellij4.png" alt="IntelliJ" /></li>
-<li>Interactive debugging can be started by right-clicking on an unit test, and selecting "Debug '&lt;test name&gt;'." Alternatively, you can click the green "run" icon on the left part of the editor near the unit test. When the test hits a break point, you can inspect the values of the variables:<br> <img src="recipes/../files/intellij5.png" alt="IntelliJ" /></li>
+<li>IntelliJ 支持在代码中设置断点进行交互式调试：<br> <img src="recipes/../files/intellij4.png" alt="IntelliJ" /></li>
+<li>您可在单元测试上右键，选择 "Debug '&lt;test name&gt;'." 也可点击编辑器左侧单元测试旁的绿色 "run" 图标。测试命中断点时，可查看变量取值：<br> <img src="recipes/../files/intellij5.png" alt="IntelliJ" /></li>
 </ol>
-<p>See <a href="https://www.jetbrains.com/help/idea/debugging-code.html">Debug Code</a> page on IntelliJ documentation for more details on how to navigate an interactive debugging session.</p>
-<h2 id="alternative"><a class="header" href="#alternative">Alternative</a></h2>
-<h3 id="using-sbt-as-intellij-idea-build-server-advanced"><a class="header" href="#using-sbt-as-intellij-idea-build-server-advanced">Using sbt as IntelliJ IDEA build server (advanced)</a></h3>
-<p>Importing the build to IntelliJ means that you're effectively using IntelliJ as the build tool and the compiler while you code (see also <a href="https://blog.jetbrains.com/scala/2021/07/27/intellij-scala-plugin-2021-2/#Compiler-based_highlighting">compiler-based highlighting</a>). While many users are happy with the experience, depending on the code base some of the compilation errors may be false, it may not work well with plugins that generate sources, and generally you might want to code with the identical build semantics as sbt. Thankfully, modern IntelliJ supports alternative <em>build servers</em> including sbt via the <a href="https://build-server-protocol.github.io/">Build Server Protocol</a> (BSP).</p>
-<p>The benefit of using Build Server Protocol (BSP) with IntelliJ is that you're using sbt to do the actual build work, so if you are the kind of programmer who had sbt session up on the side, this avoids double compilation.</p>
+<p>交互式调试会话中的操作方式，详见 IntelliJ 文档中的 <a href="https://www.jetbrains.com/help/idea/debugging-code.html">Debug Code</a> 页面。</p>
+<h2 id="其他方式-1"><a class="header" href="#其他方式-1">其他方式</a></h2>
+<h3 id="将-sbt-用作-intellij-idea-构建服务器进阶"><a class="header" href="#将-sbt-用作-intellij-idea-构建服务器进阶">将 sbt 用作 IntelliJ IDEA 构建服务器（进阶）</a></h3>
+<p>将构建导入 IntelliJ 意味着编码时实际以 IntelliJ 作为构建工具与编译器（另见 <a href="https://blog.jetbrains.com/scala/2021/07/27/intellij-scala-plugin-2021-2/#Compiler-based_highlighting">compiler-based highlighting</a>）。许多用户满意这种体验，但依代码库不同，部分编译错误可能为误报，与生成源码的插件配合也可能不佳，且您可能希望与 sbt 完全一致的构建语义。所幸现代 IntelliJ 通过 <a href="https://build-server-protocol.github.io/">Build Server Protocol</a>（BSP）支持包括 sbt 在内的其他 <em>构建服务器</em>。</p>
+<p>在 IntelliJ 中使用 BSP 的好处是由 sbt 承担实际构建，因此若您习惯在旁边开着 sbt 会话，可避免重复编译。</p>
 <table class="table table-striped">
   <tr>
     <th><nobr></th>
@@ -5270,29 +5269,29 @@ See [Debugging][vscode-debugging] page on VS Code documentation for more details
     <td>✅</td>
   </tr>
 </table>
-<p>To use sbt as build server on IntelliJ:</p>
+<p>要在 IntelliJ 上将 sbt 用作构建服务器：</p>
 <ol>
-<li>Install Scala plugin on the Plugins tab.</li>
-<li>To use the BSP approach, close IntelliJ, and remove exising <code>.idea</code> directory, if any.</li>
-<li>From the terminal, run <code>sbt bspConfig</code> to generate <code>.bsp</code> directory.</li>
-<li>Open IntelliJ, and open a <code>build.sbt</code> file. Select <strong>BSP project</strong> when prompted:<br> <img src="recipes/../files/intellij_bsp.png" alt="IntelliJ" /></li>
-<li>Once the import process is complete, open a Scala file to see that code completion works:<br> <img src="recipes/../files/intellij11.png" alt="IntelliJ" /></li>
+<li>在插件页安装 Scala 插件。</li>
+<li>若采用 BSP 方式，请关闭 IntelliJ，并删除已存在的 <code>.idea</code> 目录（如有）。</li>
+<li>在终端运行 <code>sbt bspConfig</code> 以生成 <code>.bsp</code> 目录。</li>
+<li>打开 IntelliJ，并打开 <code>build.sbt</code> 文件。出现提示时选择 <strong>BSP project</strong>：<br> <img src="recipes/../files/intellij_bsp.png" alt="IntelliJ" /></li>
+<li>导入完成后，打开 Scala 文件以确认代码补全可用：<br> <img src="recipes/../files/intellij11.png" alt="IntelliJ" /></li>
 </ol>
-<p>Use the following setting to opt-out some of the subprojects from BSP.</p>
+<p>使用以下设置可使部分子项目不参与 BSP。</p>
 <pre><code class="language-scala">bspEnabled := false
 </code></pre>
 <ul>
-<li>Open Preferences, search BSP and check "build automatically on file save", and uncheck "export sbt projects to Bloop before import":<br> <img src="recipes/../files/intellij12.png" alt="IntelliJ" /></li>
+<li>打开 Preferences，搜索 BSP，勾选 "build automatically on file save"，并取消勾选 "export sbt projects to Bloop before import"：<br> <img src="recipes/../files/intellij12.png" alt="IntelliJ" /></li>
 </ul>
-<p>When you make changes to the code and save them (<code>Cmd-S</code> on macOS), IntelliJ will invoke sbt to do the actual building work.</p>
-<p>See also Igal Tabachnik's <a href="https://hmemcpy.com/2021/09/bsp-and-intellij/">Using BSP effectively in IntelliJ and Scala</a> for more details.</p>
-<h4 id="logging-into-sbt-session-1"><a class="header" href="#logging-into-sbt-session-1">Logging into sbt session</a></h4>
-<p>We can also log into the existing sbt session using the thin client.</p>
+<p>修改代码并保存（在 macOS 上为 <code>Cmd-S</code>）时，IntelliJ 会调用 sbt 执行实际构建。</p>
+<p>更多说明另见 Igal Tabachnik 的 <a href="https://hmemcpy.com/2021/09/bsp-and-intellij/">Using BSP effectively in IntelliJ and Scala</a>。</p>
+<h4 id="登录-sbt-会话-1"><a class="header" href="#登录-sbt-会话-1">登录 sbt 会话</a></h4>
+<p>您也可通过瘦客户端登录已有的 sbt 会话。</p>
 <ul>
-<li>From Terminal section, type in <code>sbt --client</code> <img src="recipes/../files/intellij6.png" alt="IntelliJ" /></li>
+<li>在终端面板中输入 <code>sbt --client</code> <img src="recipes/../files/intellij6.png" alt="IntelliJ" /></li>
 </ul>
-<p>This lets you log into the sbt session IntelliJ has started. In there you can call <code>testOnly</code> and other tasks with the code already compiled.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="source-dependency-plugin"><a class="header" href="#source-dependency-plugin">Source dependency plugin</a></h1>
+<p>这样可登录 IntelliJ 已启动的 sbt 会话。在其中可调用 <code>testOnly</code> 等任务，且代码已编译。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="源码依赖插件"><a class="header" href="#源码依赖插件">源码依赖插件</a></h1>
 <div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
 <div class="admonition-title">
 <div id="admonition-note-title">
@@ -5301,19 +5300,18 @@ See [Debugging][vscode-debugging] page on VS Code documentation for more details
 <a class="admonition-anchor-link" href="recipes/source-dependency-plugin.html#admonition-note"></a>
 </div>
 <div>
-<p>The recipe section of the documentation focuses on the objectives
-with minimal explanations.</p>
+<p>文档中的食谱部分以最少说明聚焦于目标。</p>
 </div>
 </div>
-<h2 id="objective-4"><a class="header" href="#objective-4">Objective</a></h2>
-<p>I want to use a plugin hosted on a git repository, without publishing to the Central Repo.</p>
-<h2 id="steps-4"><a class="header" href="#steps-4">Steps</a></h2>
+<h2 id="目标-4"><a class="header" href="#目标-4">目标</a></h2>
+<p>我想使用托管在 git 仓库上的插件，而无需发布到中央仓库。</p>
+<h2 id="步骤-4"><a class="header" href="#步骤-4">步骤</a></h2>
 <ol>
 <li>
-<p>Host an sbt 2.x plugin on a git repository, built using sbt 2.x.</p>
+<p>在 git 仓库中托管 sbt 2.x 插件，并使用 sbt 2.x 构建。</p>
 </li>
 <li>
-<p>Add the following to <code>project/plugins.sbt</code>:</p>
+<p>将以下内容添加到 <code>project/plugins.sbt</code>：</p>
 <pre><code class="language-scala">// In project/plugins.sbt
 lazy val jmhRef = ProjectRef(
   uri("https://github.com/eed3si9n/sbt-jmh.git#303c3e98e1d1523e6a4f99abe09c900165028edb"),
@@ -5322,10 +5320,10 @@ BareBuildSyntax.dependsOn(jmhRef)
 </code></pre>
 </li>
 <li>
-<p>When you start sbt, it will automatically clone the repository under <code>$HOME/.sbt/2/staging/</code>.</p>
+<p>当您启动 sbt 时，会在 <code>$HOME/.sbt/2/staging/</code> 下自动克隆该仓库。</p>
 </li>
 </ol>
-<p>In the above, <code>https://github.com/eed3si9n/sbt-jmh.git</code> is the HTTP endpoint for a plugin hosted on GitHub, and <code>303c3e98e1d1523e6a4f99abe09c900165028edb</code> is a commit id on the default branch.</p>
+<p>上例中，<code>https://github.com/eed3si9n/sbt-jmh.git</code> 是托管在 GitHub 上的插件的 HTTP 端点，<code>303c3e98e1d1523e6a4f99abe09c900165028edb</code> 是默认分支上的提交 id。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="glossary"><a class="header" href="#glossary">Glossary</a></h1>
 <h2 id="symbols"><a class="header" href="#symbols">Symbols</a></h2>
 <h3 id="--"><a class="header" href="#--"><code>:=</code>, <code>+=</code>, <code>++=</code></a></h3>
@@ -5337,7 +5335,7 @@ BareBuildSyntax.dependsOn(jmhRef)
 <h3 id="-2"><a class="header" href="#-2"><code>%%%</code></a></h3>
 <p>This is defined in <a href="https://github.com/portable-scala/sbt-platform-deps">sbt-platform-deps</a> in sbt 1.x.</p>
 <h2 id="c"><a class="header" href="#c">C</a></h2>
-<h3 id="command-1"><a class="header" href="#command-1">Command</a></h3>
+<h3 id="命令-1"><a class="header" href="#命令-1">命令</a></h3>
 <p>A system-level building block of sbt, often used to capture user interaction or IDE interaction. See <a href="appendix/../concepts/command-basics.html">Command basics</a>.</p>
 <h3 id="交叉构建-1"><a class="header" href="#交叉构建-1">交叉构建</a></h3>
 <p>The idea of building multiple targets from the same set of source file. This includes Scala cross building, targetting multiple versions of Scala releases; platform cross building, targetting JVM, Scala.JS, and Scala Native; and custom virtual axis like Spark versions.</p>
