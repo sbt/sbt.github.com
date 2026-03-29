@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Command - The Book of sbt</title>
+        <title>コマンド - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -211,70 +211,70 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="command"><a class="header" href="#command">Command</a></h1>
-<p>This page covers commands in detail. See <a href="../concepts/command-basics.html">Command basics</a> for a general explanation.</p>
+                        <h1 id="コマンド"><a class="header" href="#コマンド">コマンド</a></h1>
+<p>このページではコマンドの詳細を解説する。概要は<a href="../concepts/command-basics.html">コマンドの基本</a>を参照。</p>
 <h2 id="説明"><a class="header" href="#説明">説明</a></h2>
-<p>A <em>command</em> is a system-level building block of sbt, often used to capture user interactions. At the command level, there is little support for subprojects and parallel processing since those are implemented in the <code>act</code> command.</p>
-<p>Plugin authors should try to solve their problem using settings, tasks, and input tasks first. Several notable exceptions are:</p>
+<p><strong>コマンド</strong>は、システムレベルの構成要素であり、ユーザとのやり取りを捕捉するのによく使われる。コマンドレベルではサブプロジェクトや並列処理のサポートはほとんどなく、それらは <code>act</code> コマンドで実装されている。</p>
+<p>プラグイン作者は、まずセッティング、タスク、インプットタスクで問題を解決することを試みるべきである。主な例外は次の通りである:</p>
 <ul>
-<li>Extending the user experience of sbt itself</li>
-<li>Providing sequential processing, for example for <code>release</code> command</li>
+<li>sbt 自体の UX を拡張する場合</li>
+<li>順次処理を必要とする場合（例: <code>release</code> コマンド）</li>
 </ul>
-<h3 id="introduction"><a class="header" href="#introduction">Introduction</a></h3>
-<p>There are three main aspects to commands:</p>
+<h3 id="はじめに"><a class="header" href="#はじめに">はじめに</a></h3>
+<p>コマンドには主に 3つの側面がある:</p>
 <ol>
-<li>The syntax used by the user to invoke the command, including:
+<li>ユーザーがコマンドを呼び出すために使う構文。これには次が含まれる:
 <ul>
-<li>Tab completion for the syntax</li>
-<li>The parser to turn input into an appropriate data structure</li>
+<li>構文のタブ補完</li>
+<li>入力を適切なデータ構造に変換するパーサー</li>
 </ul>
 </li>
-<li>The action to perform using the parsed data structure. This action transforms the build <code>State</code>.</li>
-<li>Help provided to the user</li>
+<li>パースしたデータ構造を使って実行するアクション。このアクションはビルドの <code>State</code> を変換する。</li>
+<li>ユーザー向けのヘルプ</li>
 </ol>
-<p>In sbt, the syntax part, including tab completion, is specified with parser combinators. If you are familiar with the parser combinators in Scala's standard library, these are very similar. See the <a href="./tab-completion-parser.html">Tab-completion parser</a> page for how to use the parser combinators.</p>
-<p>State provides access to the build state, such as all registered commands, the remaining commands to execute, and all project-related information.</p>
+<p>sbt では、タブ補完を含む構文部分はパーサーコンビネータで指定する。Scala 標準ライブラリのパーサーコンビネータに慣れていれば、似たようなものだと思って構わない。具体的なパーサーコンビネータの使い方は<a href="./tab-completion-parser.html">タブ補完パーサー</a>を参照。</p>
+<p><code>State</code> はビルド状態へのアクセスを提供する。登録済みのすべてのコマンド、実行残りのコマンド、プロジェクト関連の情報などである。</p>
 <!--
 See [States and Actions][Build-State] for details on
 State.
 -->
-<p>Finally, basic help information may be provided that is used by the <code>help</code> command to display command help.</p>
-<h2 id="defining-a-command"><a class="header" href="#defining-a-command">Defining a Command</a></h2>
-<p>A command combines a function <code>State =&gt; Parser[T]</code> with an action <code>(State, T) =&gt; State</code>. The reason for <code>State =&gt; Parser[T]</code> and not simply <code>Parser[T]</code> is that often the current <code>State</code> is used to build the parser. For example, the currently loaded projects (provided by <code>State</code>) determine valid completions for the <code>project</code> command. Examples for the general and specific cases are shown in the following sections.</p>
-<p>See <a href="https://github.com/sbt/sbt/blob/develop/main-command/src/main/scala/sbt/Command.scala">Command.scala</a> for the source API details for constructing commands.</p>
+<p>最後に、<code>help</code> コマンドがコマンドヘルプを表示するために使う基本的なヘルプ情報を提供できる。</p>
+<h2 id="コマンドの定義"><a class="header" href="#コマンドの定義">コマンドの定義</a></h2>
+<p>コマンドは関数 <code>State =&gt; Parser[T]</code> とアクション <code>(State, T) =&gt; State</code> を組み合わせる。単に <code>Parser[T]</code> ではなく <code>State =&gt; Parser[T]</code> とするのは、現在の <code>State</code> をパーサー構築に使うことが多いためである。例えば、（<code>State</code> が提供する）現在ロード済みのサブプロジェクトが <code>project</code> コマンドの有効な補完を決定する。一般的なケースと個別のケースの例は次の節に示す。</p>
+<p>コマンド構築のソース API の詳細は <a href="https://github.com/sbt/sbt/blob/develop/main-command/src/main/scala/sbt/Command.scala">Command.scala</a> を参照。</p>
 <h3 id="一般コマンド"><a class="header" href="#一般コマンド">一般コマンド</a></h3>
-<p>General command construction looks like:</p>
+<p>一般的なコマンドの構築は次のようになる:</p>
 <pre><code class="language-scala">val action: (State, A) =&gt; State = ...
 val parser: State =&gt; Parser[A] = ...
 val command: Command = Command("name")(parser)(action)
 </code></pre>
-<h3 id="no-argument-commands"><a class="header" href="#no-argument-commands">No-argument commands</a></h3>
-<p>There is a convenience method for constructing commands that do not accept any arguments.</p>
+<h3 id="引数なしコマンド"><a class="header" href="#引数なしコマンド">引数なしコマンド</a></h3>
+<p>引数を受け付けないコマンドを構築するための便利メソッド:</p>
 <pre><code class="language-scala">val action: State =&gt; State = ...
 val command: Command = Command.command("name")(action)
 </code></pre>
-<h3 id="single-argument-command"><a class="header" href="#single-argument-command">Single-argument command</a></h3>
-<p>There is a convenience method for constructing commands that accept a single argument with arbitrary content.</p>
-<pre><code class="language-scala">// accepts the state and the single argument
+<h3 id="単一引数コマンド"><a class="header" href="#単一引数コマンド">単一引数コマンド</a></h3>
+<p>任意の内容の単一引数を受け付けるコマンドを構築するための便利メソッド:</p>
+<pre><code class="language-scala">// State と単一の引数を受け取る
 val action: (State, String) =&gt; State = ...
 val command: Command = Command.single("name")(action)
 </code></pre>
-<h3 id="multi-argument-command"><a class="header" href="#multi-argument-command">Multi-argument command</a></h3>
-<p>There is a convenience method for constructing commands that accept multiple arguments separated by spaces.</p>
+<h3 id="複数引数コマンド"><a class="header" href="#複数引数コマンド">複数引数コマンド</a></h3>
+<p>スペースで区切られた複数の引数を受け付けるコマンドを構築するための便利メソッド:</p>
 <pre><code class="language-scala">val action: (State, Seq[String]) =&gt; State = ...
 
-// &lt;arg&gt; is the suggestion printed for tab completion on an argument
+// &lt;arg&gt; は引数のタブ補完時に表示されるヒントである
 val command: Command = Command.args("name", "&lt;arg&gt;")(action)
 </code></pre>
-<h2 id="full-example"><a class="header" href="#full-example">Full Example</a></h2>
-<p>The following example is a sample build that adds commands to a project. To try it out:</p>
+<h2 id="例"><a class="header" href="#例">例</a></h2>
+<p>次の例は、プロジェクトにコマンドを追加するサンプルビルドである。試すには:</p>
 <ol>
-<li>Create <code>build.sbt</code> and <code>project/CommandExample.scala</code>.</li>
-<li>Run sbt on the project.</li>
-<li>Try out the <code>hello</code>, <code>helloAll</code>, <code>failIfTrue</code>, <code>color</code>, and printState commands.</li>
-<li>Use tab-completion and the code below as guidance.</li>
+<li><code>build.sbt</code> と <code>project/CommandExample.scala</code> を作成する。</li>
+<li>プロジェクトで sbt を実行する。</li>
+<li><code>hello</code>、<code>helloAll</code>、<code>failIfTrue</code>、<code>color</code>、<code>printState</code> コマンドを試す。</li>
+<li>タブ補完と以下のコードを参考にする。</li>
 </ol>
-<p>Here's <code>build.sbt</code>:</p>
+<p><code>build.sbt</code> は次の通りである:</p>
 <div id="admonition-buildsbt" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-title">
 <div class="admonition-title">
 <div id="admonition-buildsbt-title">
@@ -290,7 +290,7 @@ LocalRootProject / commands ++= Seq(hello, helloAll, failIfTrue, changeColor, pr
 </code></pre>
 </div>
 </div>
-<p>Here's <code>project/CommandExample.scala</code>:</p>
+<p><code>project/CommandExample.scala</code> は次の通りである:</p>
 <div id="admonition-projectcommandexamplescala" class="admonition admonish-example" role="note" aria-labelledby="admonition-projectcommandexamplescala-title">
 <div class="admonition-title">
 <div id="admonition-projectcommandexamplescala-title">

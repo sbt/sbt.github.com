@@ -1775,28 +1775,28 @@ myTask := {
 <div style="break-before: page; page-break-before: always;"></div><h1 id="命令基础"><a class="header" href="#命令基础">命令基础</a></h1>
 <p>命令（<em>command</em>）是 sbt 的系统级构建块，常用于捕获用户交互或 IDE 交互。</p>
 <p><img src="concepts/../files/command.svg" style="width: 50%;"></img></p>
-<p>We can think of each command as a <code>State =&gt; State</code> function. In sbt, the state represents the following:</p>
+<p>我们可以将每个命令视为 <code>State =&gt; State</code> 函数。在 sbt 中，状态表示以下内容：</p>
 <ol>
-<li>Build structure (<code>build.sbt</code> etc)</li>
-<li>Your disk (source code, JAR outputs, etc)</li>
+<li>构建结构（<code>build.sbt</code> 等）</li>
+<li>您的磁盘（源代码、JAR 输出等）</li>
 </ol>
-<p>Thus, a command would typically modify either the build structure or the disk. For example, the <code>set</code> command can apply a setting to modify the build strcuture:</p>
+<p>因此，命令通常会修改构建结构或磁盘。例如，<code>set</code> 命令可以应用设置来修改构建结构：</p>
 <pre><code class="language-scala">&gt; set name := "foo"
 </code></pre>
-<p>The <code>act</code> command can lift a task such as <code>compile</code> into a command:</p>
+<p><code>act</code> 命令可以将 <code>compile</code> 等任务提升为命令：</p>
 <pre><code class="language-scala">&gt; compile
 </code></pre>
-<p>The compilation would read from the disk and write outputs, or display error messages on the screen.</p>
-<h2 id="commands-are-sequentially-processed"><a class="header" href="#commands-are-sequentially-processed">Commands are sequentially processed</a></h2>
-<p>Because there is only one state, a characteristic of commands is that they are executed one at a time.</p>
+<p>编译会从磁盘读取并写入输出，或在屏幕上显示错误信息。</p>
+<h2 id="命令按顺序处理"><a class="header" href="#命令按顺序处理">命令按顺序处理</a></h2>
+<p>由于只有一个状态，命令的特点是它们一次执行一个。</p>
 <p><img src="concepts/../files/command2.svg" alt="command" /></p>
-<p>There are some execptions to this rule, but generally commands run sequentially. One mental image that might be useful is that a command is similar to a cashier taking an order in a cafe, and it will be processed in the sequence it was received.</p>
-<h2 id="tasks-run-in-parallel"><a class="header" href="#tasks-run-in-parallel">Tasks run in parallel</a></h2>
-<p>As mentioned above, the <code>act</code> command translates tasks into the command level. While doing so, the <code>act</code> command will broadcast the task across the aggregated subprojects and run independent tasks in parallel.</p>
-<p>Similarly, the <code>reload</code> command that runs during the startup of a session will initialize the settings in parallel.</p>
+<p>此规则有一些例外，但通常命令按顺序运行。一个有用的比喻是，命令类似于咖啡馆收银员接单，会按接收顺序处理。</p>
+<h2 id="任务并行运行"><a class="header" href="#任务并行运行">任务并行运行</a></h2>
+<p>如上所述，<code>act</code> 命令将任务转换为命令级别。在此过程中，<code>act</code> 命令会将任务广播到聚合的子项目，并并行运行独立任务。</p>
+<p>同样，在会话启动期间运行的 <code>reload</code> 命令将并行初始化设置。</p>
 <p><img src="concepts/../files/act.svg" alt="act" /></p>
-<h2 id="the-role-of-sbt-server"><a class="header" href="#the-role-of-sbt-server">The role of sbt server</a></h2>
-<p>sbt server is a service that accepts commands from either the command line or a network API called Build Server Protocol. This mechanism allows both the build user and IDEs to share the same sbt session.</p>
+<h2 id="sbt-server-的角色"><a class="header" href="#sbt-server-的角色">sbt server 的角色</a></h2>
+<p>sbt server 是一项服务，可接受来自命令行或名为 Build Server Protocol 的网络 API 的命令。此机制使构建用户和 IDE 能够共享同一 sbt 会话。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="交叉构建"><a class="header" href="#交叉构建">交叉构建</a></h1>
 <p>交叉构建（<em>cross building</em>）指从同一组源文件构建多个目标。这包括 Scala 交叉构建（针对多个 Scala 发布版本）、平台交叉构建（针对 JVM、Scala.JS 和 Scala Native）以及 Spark 版本等自定义虚拟轴。</p>
 <h2 id="使用交叉构建的库"><a class="header" href="#使用交叉构建的库">使用交叉构建的库</a></h2>
@@ -4217,7 +4217,7 @@ lazy val root = rootProject
 </div>
 </div>
 <h3 id="projectsettings"><a class="header" href="#projectsettings">projectSettings</a></h3>
-<p>In an appropriate namespace, define your auto plugin object by extending <code>sbt.AutoPlugin</code>. With auto plugins, all provided settings are provided by the plugin directly via the <code>projectSettings</code> method. Here's an example plugin that adds a task named <code>hello</code> to the subprojects:</p>
+<p>In an appropriate namespace, define your auto plugin object by extending <code>sbt.AutoPlugin</code>. With auto plugins, settings are provided by the plugin directly via the <code>projectSettings</code> method. Here's an example plugin that adds a task named <code>hello</code> to the subprojects:</p>
 <div id="admonition-srcmainsbthellohellopluginscala" class="admonition admonish-example" role="note" aria-labelledby="admonition-srcmainsbthellohellopluginscala-title">
 <div class="admonition-title">
 <div id="admonition-srcmainsbthellohellopluginscala-title">
@@ -4263,7 +4263,7 @@ end HelloPlugin
 <a class="admonition-anchor-link" href="reference/plugin.html#admonition-def-vs-lazy-val"></a>
 </div>
 <div>
-<p>In Scala, a <code>def</code> method can be overridden using a <code>lazy val</code>, using a mechanism called <em>universal access principle</em>.
+<p>In Scala, a <code>def</code> method can be overridden using a <code>lazy val</code>, using a mechanism called <em>uniform access principle</em>.
 We recommending using <code>lazy val</code> for <code>projectSettings</code> since the setting definitions tend to be immutable.</p>
 </div>
 </div>

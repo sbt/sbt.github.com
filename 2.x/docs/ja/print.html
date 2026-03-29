@@ -1773,28 +1773,28 @@ myTask := {
 <div style="break-before: page; page-break-before: always;"></div><h1 id="コマンドの基本"><a class="header" href="#コマンドの基本">コマンドの基本</a></h1>
 <p><strong>コマンド</strong>は、システム・レベルでの sbt の構成要素で、ユーザや IDE とのやり取りを捕捉する。</p>
 <p><img src="concepts/../files/command.svg" style="width: 50%;"></img></p>
-<p>We can think of each command as a <code>State =&gt; State</code> function. In sbt, the state represents the following:</p>
+<p>便宜的に、各コマンドは <code>State =&gt; State</code> への関数だと考えることができる。 sbt において状態 (state) は以下を表す。</p>
 <ol>
-<li>Build structure (<code>build.sbt</code> etc)</li>
-<li>Your disk (source code, JAR outputs, etc)</li>
+<li>ビルド構造 (<code>build.sbt</code> など)</li>
+<li>ディスク (ソースコード、JAR 成果物など)</li>
 </ol>
-<p>Thus, a command would typically modify either the build structure or the disk. For example, the <code>set</code> command can apply a setting to modify the build strcuture:</p>
+<p>そのため、コマンドは通常ビルド構造もしくはディスクを変更する。例えば、<code>set</code> コマンドはセッティングを適用してビルド構造を変更する。</p>
 <pre><code class="language-scala">&gt; set name := "foo"
 </code></pre>
-<p>The <code>act</code> command can lift a task such as <code>compile</code> into a command:</p>
+<p><code>act</code> コマンドは、<code>compile</code> のようなタスクをコマンドに持ち上げる:</p>
 <pre><code class="language-scala">&gt; compile
 </code></pre>
-<p>The compilation would read from the disk and write outputs, or display error messages on the screen.</p>
-<h2 id="commands-are-sequentially-processed"><a class="header" href="#commands-are-sequentially-processed">Commands are sequentially processed</a></h2>
-<p>Because there is only one state, a characteristic of commands is that they are executed one at a time.</p>
+<p>コンパイルはディスクからの読み込みを行い、アウトプットをディスクに書き込むか画面にエラーメッセージを表示する。</p>
+<h2 id="コマンドは逐次処理される"><a class="header" href="#コマンドは逐次処理される">コマンドは逐次処理される</a></h2>
+<p>状態は 1つしか存在しないものなので、コマンドは 1つづつ実行されるという特徴がある。</p>
 <p><img src="concepts/../files/command2.svg" alt="command" /></p>
-<p>There are some execptions to this rule, but generally commands run sequentially. One mental image that might be useful is that a command is similar to a cashier taking an order in a cafe, and it will be processed in the sequence it was received.</p>
-<h2 id="tasks-run-in-parallel"><a class="header" href="#tasks-run-in-parallel">Tasks run in parallel</a></h2>
-<p>As mentioned above, the <code>act</code> command translates tasks into the command level. While doing so, the <code>act</code> command will broadcast the task across the aggregated subprojects and run independent tasks in parallel.</p>
-<p>Similarly, the <code>reload</code> command that runs during the startup of a session will initialize the settings in parallel.</p>
+<p>一部例外もあるが、基本的にコマンドは逐次実行される。メンタルモデルとしては、コマンドはカフェで注文を受け取るレジ係で、注文の順番に処理が行われると考えることができる。</p>
+<h2 id="タスクは並列実行される"><a class="header" href="#タスクは並列実行される">タスクは並列実行される</a></h2>
+<p>前述の通り、<code>act</code> コマンドはタスクをコマンドのレベルに持ち上げる。その際に <code>act</code> コマンドは、集約されたサブプロジェクトにタスクを転送して、独立したタスクを並列実装する。</p>
+<p>同様に、セッション起動時に実行される <code>reload</code> コマンドはセッティングを並列に初期化する。</p>
 <p><img src="concepts/../files/act.svg" alt="act" /></p>
-<h2 id="the-role-of-sbt-server"><a class="header" href="#the-role-of-sbt-server">The role of sbt server</a></h2>
-<p>sbt server is a service that accepts commands from either the command line or a network API called Build Server Protocol. This mechanism allows both the build user and IDEs to share the same sbt session.</p>
+<h2 id="sbt-server-の役割"><a class="header" href="#sbt-server-の役割">sbt server の役割</a></h2>
+<p>sbt server は、コマンドラインもしくは Build Server Protocol と呼ばれるネットワーク API 経由からコマンドを受け取ることができるサービスだ。この機構によって、ビルドユーザと IDE が同一の sbt セッションを共有することができる。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="クロスビルド"><a class="header" href="#クロスビルド">クロスビルド</a></h1>
 <p>同じソースファイルの集合から複数のターゲットに対してビルドすることを<strong>クロスビルド</strong>と呼ぶ。これは、複数の Scala リリースを対象とする Scala クロスビルド、JVM、Scala.JS、Scala Native を対象とするプラットフォーム・クロスビルド、Spark バージョンのような仮想軸を含む。</p>
 <h2 id="クロスビルドされたライブラリの使用"><a class="header" href="#クロスビルドされたライブラリの使用">クロスビルドされたライブラリの使用</a></h2>
@@ -3998,70 +3998,70 @@ def selectSome(items: Seq[String]): Parser[Seq[String]] = {
 </code></pre>
 <p>この例から分かる通り、<code>flatMap</code> 関数は前の値を提供する。この情報で、残りの項目用に新しいパーサーが構築される。パーサーの出力を変換するために <code>map</code> コンビネータも使われる。</p>
 <p>パーサーは、選択肢がなくなる自明なケースに達するまで再帰的に呼ばれる。</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="command"><a class="header" href="#command">Command</a></h1>
-<p>This page covers commands in detail. See <a href="reference/../concepts/command-basics.html">Command basics</a> for a general explanation.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="コマンド"><a class="header" href="#コマンド">コマンド</a></h1>
+<p>このページではコマンドの詳細を解説する。概要は<a href="reference/../concepts/command-basics.html">コマンドの基本</a>を参照。</p>
 <h2 id="説明-10"><a class="header" href="#説明-10">説明</a></h2>
-<p>A <em>command</em> is a system-level building block of sbt, often used to capture user interactions. At the command level, there is little support for subprojects and parallel processing since those are implemented in the <code>act</code> command.</p>
-<p>Plugin authors should try to solve their problem using settings, tasks, and input tasks first. Several notable exceptions are:</p>
+<p><strong>コマンド</strong>は、システムレベルの構成要素であり、ユーザとのやり取りを捕捉するのによく使われる。コマンドレベルではサブプロジェクトや並列処理のサポートはほとんどなく、それらは <code>act</code> コマンドで実装されている。</p>
+<p>プラグイン作者は、まずセッティング、タスク、インプットタスクで問題を解決することを試みるべきである。主な例外は次の通りである:</p>
 <ul>
-<li>Extending the user experience of sbt itself</li>
-<li>Providing sequential processing, for example for <code>release</code> command</li>
+<li>sbt 自体の UX を拡張する場合</li>
+<li>順次処理を必要とする場合（例: <code>release</code> コマンド）</li>
 </ul>
-<h3 id="introduction"><a class="header" href="#introduction">Introduction</a></h3>
-<p>There are three main aspects to commands:</p>
+<h3 id="はじめに"><a class="header" href="#はじめに">はじめに</a></h3>
+<p>コマンドには主に 3つの側面がある:</p>
 <ol>
-<li>The syntax used by the user to invoke the command, including:
+<li>ユーザーがコマンドを呼び出すために使う構文。これには次が含まれる:
 <ul>
-<li>Tab completion for the syntax</li>
-<li>The parser to turn input into an appropriate data structure</li>
+<li>構文のタブ補完</li>
+<li>入力を適切なデータ構造に変換するパーサー</li>
 </ul>
 </li>
-<li>The action to perform using the parsed data structure. This action transforms the build <code>State</code>.</li>
-<li>Help provided to the user</li>
+<li>パースしたデータ構造を使って実行するアクション。このアクションはビルドの <code>State</code> を変換する。</li>
+<li>ユーザー向けのヘルプ</li>
 </ol>
-<p>In sbt, the syntax part, including tab completion, is specified with parser combinators. If you are familiar with the parser combinators in Scala's standard library, these are very similar. See the <a href="reference/./tab-completion-parser.html">Tab-completion parser</a> page for how to use the parser combinators.</p>
-<p>State provides access to the build state, such as all registered commands, the remaining commands to execute, and all project-related information.</p>
+<p>sbt では、タブ補完を含む構文部分はパーサーコンビネータで指定する。Scala 標準ライブラリのパーサーコンビネータに慣れていれば、似たようなものだと思って構わない。具体的なパーサーコンビネータの使い方は<a href="reference/./tab-completion-parser.html">タブ補完パーサー</a>を参照。</p>
+<p><code>State</code> はビルド状態へのアクセスを提供する。登録済みのすべてのコマンド、実行残りのコマンド、プロジェクト関連の情報などである。</p>
 <!--
 See [States and Actions][Build-State] for details on
 State.
 -->
-<p>Finally, basic help information may be provided that is used by the <code>help</code> command to display command help.</p>
-<h2 id="defining-a-command"><a class="header" href="#defining-a-command">Defining a Command</a></h2>
-<p>A command combines a function <code>State =&gt; Parser[T]</code> with an action <code>(State, T) =&gt; State</code>. The reason for <code>State =&gt; Parser[T]</code> and not simply <code>Parser[T]</code> is that often the current <code>State</code> is used to build the parser. For example, the currently loaded projects (provided by <code>State</code>) determine valid completions for the <code>project</code> command. Examples for the general and specific cases are shown in the following sections.</p>
-<p>See <a href="https://github.com/sbt/sbt/blob/develop/main-command/src/main/scala/sbt/Command.scala">Command.scala</a> for the source API details for constructing commands.</p>
+<p>最後に、<code>help</code> コマンドがコマンドヘルプを表示するために使う基本的なヘルプ情報を提供できる。</p>
+<h2 id="コマンドの定義"><a class="header" href="#コマンドの定義">コマンドの定義</a></h2>
+<p>コマンドは関数 <code>State =&gt; Parser[T]</code> とアクション <code>(State, T) =&gt; State</code> を組み合わせる。単に <code>Parser[T]</code> ではなく <code>State =&gt; Parser[T]</code> とするのは、現在の <code>State</code> をパーサー構築に使うことが多いためである。例えば、（<code>State</code> が提供する）現在ロード済みのサブプロジェクトが <code>project</code> コマンドの有効な補完を決定する。一般的なケースと個別のケースの例は次の節に示す。</p>
+<p>コマンド構築のソース API の詳細は <a href="https://github.com/sbt/sbt/blob/develop/main-command/src/main/scala/sbt/Command.scala">Command.scala</a> を参照。</p>
 <h3 id="一般コマンド-1"><a class="header" href="#一般コマンド-1">一般コマンド</a></h3>
-<p>General command construction looks like:</p>
+<p>一般的なコマンドの構築は次のようになる:</p>
 <pre><code class="language-scala">val action: (State, A) =&gt; State = ...
 val parser: State =&gt; Parser[A] = ...
 val command: Command = Command("name")(parser)(action)
 </code></pre>
-<h3 id="no-argument-commands"><a class="header" href="#no-argument-commands">No-argument commands</a></h3>
-<p>There is a convenience method for constructing commands that do not accept any arguments.</p>
+<h3 id="引数なしコマンド"><a class="header" href="#引数なしコマンド">引数なしコマンド</a></h3>
+<p>引数を受け付けないコマンドを構築するための便利メソッド:</p>
 <pre><code class="language-scala">val action: State =&gt; State = ...
 val command: Command = Command.command("name")(action)
 </code></pre>
-<h3 id="single-argument-command"><a class="header" href="#single-argument-command">Single-argument command</a></h3>
-<p>There is a convenience method for constructing commands that accept a single argument with arbitrary content.</p>
-<pre><code class="language-scala">// accepts the state and the single argument
+<h3 id="単一引数コマンド"><a class="header" href="#単一引数コマンド">単一引数コマンド</a></h3>
+<p>任意の内容の単一引数を受け付けるコマンドを構築するための便利メソッド:</p>
+<pre><code class="language-scala">// State と単一の引数を受け取る
 val action: (State, String) =&gt; State = ...
 val command: Command = Command.single("name")(action)
 </code></pre>
-<h3 id="multi-argument-command"><a class="header" href="#multi-argument-command">Multi-argument command</a></h3>
-<p>There is a convenience method for constructing commands that accept multiple arguments separated by spaces.</p>
+<h3 id="複数引数コマンド"><a class="header" href="#複数引数コマンド">複数引数コマンド</a></h3>
+<p>スペースで区切られた複数の引数を受け付けるコマンドを構築するための便利メソッド:</p>
 <pre><code class="language-scala">val action: (State, Seq[String]) =&gt; State = ...
 
-// &lt;arg&gt; is the suggestion printed for tab completion on an argument
+// &lt;arg&gt; は引数のタブ補完時に表示されるヒントである
 val command: Command = Command.args("name", "&lt;arg&gt;")(action)
 </code></pre>
-<h2 id="full-example"><a class="header" href="#full-example">Full Example</a></h2>
-<p>The following example is a sample build that adds commands to a project. To try it out:</p>
+<h2 id="例-1"><a class="header" href="#例-1">例</a></h2>
+<p>次の例は、プロジェクトにコマンドを追加するサンプルビルドである。試すには:</p>
 <ol>
-<li>Create <code>build.sbt</code> and <code>project/CommandExample.scala</code>.</li>
-<li>Run sbt on the project.</li>
-<li>Try out the <code>hello</code>, <code>helloAll</code>, <code>failIfTrue</code>, <code>color</code>, and printState commands.</li>
-<li>Use tab-completion and the code below as guidance.</li>
+<li><code>build.sbt</code> と <code>project/CommandExample.scala</code> を作成する。</li>
+<li>プロジェクトで sbt を実行する。</li>
+<li><code>hello</code>、<code>helloAll</code>、<code>failIfTrue</code>、<code>color</code>、<code>printState</code> コマンドを試す。</li>
+<li>タブ補完と以下のコードを参考にする。</li>
 </ol>
-<p>Here's <code>build.sbt</code>:</p>
+<p><code>build.sbt</code> は次の通りである:</p>
 <div id="admonition-buildsbt" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-title">
 <div class="admonition-title">
 <div id="admonition-buildsbt-title">
@@ -4077,7 +4077,7 @@ LocalRootProject / commands ++= Seq(hello, helloAll, failIfTrue, changeColor, pr
 </code></pre>
 </div>
 </div>
-<p>Here's <code>project/CommandExample.scala</code>:</p>
+<p><code>project/CommandExample.scala</code> は次の通りである:</p>
 <div id="admonition-projectcommandexamplescala" class="admonition admonish-example" role="note" aria-labelledby="admonition-projectcommandexamplescala-title">
 <div class="admonition-title">
 <div id="admonition-projectcommandexamplescala-title">
@@ -4155,7 +4155,7 @@ object CommandExample:
 end CommandExample
 </code></pre>
 </div>
-</div><div style="break-before: page; page-break-before: always;"></div><h1 id="plugin"><a class="header" href="#plugin">Plugin</a></h1>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="プラグイン"><a class="header" href="#プラグイン">プラグイン</a></h1>
 <div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
 <div class="admonition-title">
 <div id="admonition-note-title">
@@ -4164,17 +4164,17 @@ end CommandExample
 <a class="admonition-anchor-link" href="reference/plugin.html#admonition-note"></a>
 </div>
 <div>
-<p>This page covers plugin details for intermediate users.
-See [Plugin basics][plugin-basics] for the general introduction of the plugin system.</p>
+<p>このページでは中級者向けにプラグインの詳細を解説する。
+プラグインシステムの概要は<a href="reference/../guide/plugin-basics.html">プラグインの基本</a>を参照。</p>
 </div>
 </div>
 <h2 id="説明-11"><a class="header" href="#説明-11">説明</a></h2>
-<p>A <em>plugin</em> is a way to extend the build definition, often to add capabilities beyond the built-in settings and tasks. Some of the example usages includes building Docker containers, supporting to Scala.JS, and generate GitHub Actions YAML.</p>
-<p>A plugin defines a sequence of sbt settings that are automatically added to all projects or that are explicitly declared for selected projects. A plugin can also define new commands. The plugins in sbt 1.x and 2.x extend the <code>sbt.AutoPlugin</code> trait, which automates the setting orders between dependent plugins.</p>
-<h2 id="creating-a-plugin"><a class="header" href="#creating-a-plugin">Creating a plugin</a></h2>
-<p>Conceptually we can think of the sbt plugins to be <em>any other libraries on the metabuild</em>, which is currently on Scala 3.8.2. However, in practice modern sbt plugins are built around auto plugin (<code>sbt.AutoPlugin</code>), which provides tasks and settings in the correct order. See the Plugin dependencies section for more details.</p>
-<h3 id="buildsbt-setup"><a class="header" href="#buildsbt-setup">build.sbt setup</a></h3>
-<p>To make an auto plugin, create a project and enable <code>SbtPlugin</code>.</p>
+<p><strong>プラグイン</strong>はビルド定義を拡張する手段であり、組み込みのセッティングやタスクではできない機能を追加するのに使われる。例としては Docker コンテナの構築、Scala.JS のサポート、GitHub Actions の YAML 生成などがある。</p>
+<p>プラグインは sbt のセッティングの列を定義し、すべてのプロジェクトに自動的に追加するか、選択したプロジェクトに明示的に宣言する。プラグインは新しいコマンドも定義できる。sbt 1.x および 2.x のプラグインは <code>sbt.AutoPlugin</code> トレイトを継承し、依存プラグイン間のセッティングの順序を自動化する。</p>
+<h2 id="プラグインの作成"><a class="header" href="#プラグインの作成">プラグインの作成</a></h2>
+<p>概念的には、sbt プラグインは「メタビルド (現在は Scala 3.8.2) 上にある何の変哲もないライブラリ」と考えられる。しかし実際には、現代の sbt プラグインは auto plugin（<code>sbt.AutoPlugin</code>）を中心に構築され、正しい順序でタスクとセッティングを提供する。詳細はプラグイン依存性の節を参照。</p>
+<h3 id="buildsbt-の設定"><a class="header" href="#buildsbt-の設定">build.sbt の設定</a></h3>
+<p>auto plugin を作るには、プロジェクトを作成し <code>SbtPlugin</code> を有効にする。</p>
 <div id="admonition-buildsbt" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-title">
 <div class="admonition-title">
 <div id="admonition-buildsbt-title">
@@ -4208,13 +4208,13 @@ lazy val root = rootProject
 </div>
 <div>
 <ul>
-<li>sbt 2.x plugins must be compiled with Scala 3.x. By not specifying <code>scalaVersion</code>, sbt will default to the Scala version suited for a plugin.</li>
-<li><code>pluginCrossBuild / sbtVersion</code> is a setting to compile your plugin against an <em>older</em> version of sbt, which allows the plugin users to choose from a range of sbt versions.</li>
+<li>sbt 2.x のプラグインは Scala 3.x でコンパイルする必要がある。<code>scalaVersion</code> を指定しない場合、sbt はプラグインに適した Scala バージョンをデフォルトとする。</li>
+<li><code>pluginCrossBuild / sbtVersion</code> は、プラグインを <em>より古い</em> sbt バージョン向けにコンパイルするためのセッティングであり、プラグイン利用者が sbt のバージョン範囲から選べるようにする。</li>
 </ul>
 </div>
 </div>
 <h3 id="projectsettings"><a class="header" href="#projectsettings">projectSettings</a></h3>
-<p>In an appropriate namespace, define your auto plugin object by extending <code>sbt.AutoPlugin</code>. With auto plugins, all provided settings are provided by the plugin directly via the <code>projectSettings</code> method. Here's an example plugin that adds a task named <code>hello</code> to the subprojects:</p>
+<p>適切な名前空間で、<code>sbt.AutoPlugin</code> を継承して auto plugin オブジェクトを定義する。auto plugin では、セッティングはプラグインが <code>projectSettings</code> メソッドを通じて直接提供する。サブプロジェクトに <code>hello</code> という名前のタスクを追加する例を示す:</p>
 <div id="admonition-srcmainsbthellohellopluginscala" class="admonition admonish-example" role="note" aria-labelledby="admonition-srcmainsbthellohellopluginscala-title">
 <div class="admonition-title">
 <div id="admonition-srcmainsbthellohellopluginscala-title">
@@ -4260,8 +4260,8 @@ end HelloPlugin
 <a class="admonition-anchor-link" href="reference/plugin.html#admonition-def-vs-lazy-val"></a>
 </div>
 <div>
-<p>In Scala, a <code>def</code> method can be overridden using a <code>lazy val</code>, using a mechanism called <em>universal access principle</em>.
-We recommending using <code>lazy val</code> for <code>projectSettings</code> since the setting definitions tend to be immutable.</p>
+<p>Scala では、<code>def</code> メソッドは統一アクセス原理と呼ばれる仕組みで <code>lazy val</code> によりオーバーライドできる。
+<code>projectSettings</code> には <code>lazy val</code> を使うことを推奨する。セッティング定義は不変であることが多いためである。</p>
 </div>
 </div>
 <!--
@@ -4275,12 +4275,12 @@ override def buildSettings: Seq[Setting[?]] = Nil
 ```
 -->
 <h3 id="globalsettings"><a class="header" href="#globalsettings">globalSettings</a></h3>
-<p>The <code>globalSettings</code> is appended once to the global settings (for example, <code>Global / helloGreeting</code>). These allow a plugin to provide new functionality or new defaults. One main use of this feature is to globally add commands, such as for IDE plugins.</p>
+<p><code>globalSettings</code> はグローバルなセッティングに一度だけ追加される（例: <code>Global / helloGreeting</code>）。これによりプラグインは新しい機能や新しいデフォルトを提供できる。主な用途の一つは、IDE プラグインのようにコマンドをグローバルに追加することである。</p>
 <pre><code class="language-scala">override lazy val globalSettings: Seq[Setting[?]] = Nil
 </code></pre>
-<p>Where possible, your plugin should define the default value using <code>globalSettings</code>. Providing the value in the widest scope and using the value in narrowest scope give the user the maximum flexibility to change the settings.</p>
-<h3 id="implementing-plugin-dependencies"><a class="header" href="#implementing-plugin-dependencies">Implementing plugin dependencies</a></h3>
-<p>Next step is to define the plugin dependencies.</p>
+<p>可能な限り、プラグインは <code>globalSettings</code> でデフォルト値を定義すべきである。値を最も広いスコープで提供し、最も狭いスコープで使用すると、ユーザーがセッティングを変更できる自由度が最大になる。</p>
+<h3 id="プラグイン依存性の実装"><a class="header" href="#プラグイン依存性の実装">プラグイン依存性の実装</a></h3>
+<p>次にプラグイン依存性を定義する。</p>
 <pre><code class="language-scala">package sbtless
 
 import sbt.*
@@ -4290,16 +4290,16 @@ object SbtLessPlugin extends AutoPlugin:
   override lazy val projectSettings = ...
 end SbtLessPlugin
 </code></pre>
-<p>The <code>requires</code> method returns a value of type <code>Plugins</code>, which is a DSL for constructing the dependency list. The requires method typically contains one of the following values:</p>
+<p><code>requires</code> メソッドは <code>Plugins</code> 型の値を返し、依存リストを構築する DSL である。<code>requires</code> メソッドには通常、次のいずれかが含まれる:</p>
 <ul>
-<li><code>empty</code> (No plugins)</li>
-<li>Other auto plugins</li>
-<li><code>&amp;&amp;</code> operator (for defining multiple dependencies)</li>
+<li><code>empty</code>（プラグインなし）</li>
+<li>他の auto plugin</li>
+<li><code>&amp;&amp;</code> 演算子（複数の依存を定義する）</li>
 </ul>
-<h3 id="root-plugins-and-triggered-plugins"><a class="header" href="#root-plugins-and-triggered-plugins">Root plugins and triggered plugins</a></h3>
-<p>Some plugins should always be explicitly enabled on subprojects. We call these root plugins, i.e. plugins that are <em>root</em> nodes in the plugin dependency graph.</p>
-<p>Auto plugins also provide a way for plugins to automatically attach themselves to projects if their dependencies are met. We call these triggered plugins, and they are created by overriding the <code>trigger</code> method.</p>
-<p>For example, we might want to create a triggered plugin that can append commands automatically to the build. To do this, set the <code>requires</code> method to return <code>empty</code>, and override the <code>trigger</code> method with <code>allRequirements</code>.</p>
+<h3 id="ルートプラグインとトリガー付きプラグイン"><a class="header" href="#ルートプラグインとトリガー付きプラグイン">ルートプラグインとトリガー付きプラグイン</a></h3>
+<p>一部のプラグインは常にサブプロジェクトで明示的に有効化される必要がある。これらをルートプラグインと呼ぶ。プラグイン依存グラフの「ルート」ノードとなるからだ。</p>
+<p>auto plugin は、依存が満たされるサブプロジェクトに自動的に発動される方法も提供する。これらをトリガー付きプラグインと呼び、<code>trigger</code> メソッドをオーバーライドして作成する。</p>
+<p>例えば、ビルドにコマンドを自動的に追加できるトリガー付きプラグインを作りたい場合がある。そうするには、<code>requires</code> メソッドが <code>empty</code> を返すようにし、<code>trigger</code> メソッドを <code>allRequirements</code> でオーバーライドする。</p>
 <pre><code class="language-scala">package sbthello
 
 import sbt.*
@@ -4311,7 +4311,7 @@ object HelloPlugin2 extends AutoPlugin:
   ....
 end HelloPlugin2
 </code></pre>
-<p>The build user still needs to include this plugin in <code>project/plugins.sbt</code>, but it is no longer needed to be included in <code>build.sbt</code>. This becomes more interesting when you do specify a plugin with requirements. Let's modify the <code>SbtLessPlugin</code> so that it depends on another plugin:</p>
+<p>ビルドユーザーは、このプラグインを <code>project/plugins.sbt</code> に含める必要があるが、<code>build.sbt</code> に含める必要はなくなる。この機能はプラグイン依存性と組み合わせると真価を発揮する。<code>SbtLessPlugin</code> を別のプラグインに依存するよう修正してみる:</p>
 <pre><code class="language-scala">package sbtless
 
 import sbt.*
@@ -4323,14 +4323,14 @@ object SbtLessPlugin extends AutoPlugin:
   override lazy val projectSettings = ...
 end SbtLessPlugin
 </code></pre>
-<p>As it turns out, <code>PlayScala</code> plugin (in case you didn't know, the Play framework is an sbt plugin) lists <code>SbtJsTaskPlugin</code> as one of its required plugins. So, if we define a <code>build.sbt</code> with:</p>
+<p>実際、<code>PlayScala</code> プラグイン（Play フレームワークは sbt プラグインである）は <code>SbtJsTaskPlugin</code> をプラグイン依存性の 1つとして列挙している。したがって、次のような <code>build.sbt</code> を定義すると:</p>
 <pre><code class="language-scala">lazy val root = rootProject
   .enablePlugins(PlayScala)
 </code></pre>
-<p>then the setting sequence from <code>SbtLessPlugin</code> will be automatically appended somewhere after the settings from <code>PlayScala</code>.</p>
-<p>This allows plugins to silently, and correctly, extend existing plugins with more features.  It also can help remove the burden of ordering from the user, allowing the plugin authors greater freedom and power when providing feature for their users.</p>
-<h3 id="controlling-the-import-with-autoimport"><a class="header" href="#controlling-the-import-with-autoimport">Controlling the import with autoImport</a></h3>
-<p>When an auto plugin provides a <code>val</code>, <code>lazy val</code>, or <code>object</code> named <code>autoImport</code>, the contents of the field are wildcard imported in <code>set</code>, <code>eval</code>, and <code>*.sbt</code> files.</p>
+<p><code>SbtLessPlugin</code> からのセッティング列が、<code>PlayScala</code> のセッティングの後のどこかに自動的に追加される。</p>
+<p>これによりプラグインは、既存のプラグインを透過的に、かつ正しく、機能拡張することができる。またユーザーから手動でセッティング列の順序付けをする負担を取り除くことで、プラグイン作者は安心して機能拡張を提供することができる。</p>
+<h3 id="autoimport-によるインポートの制御"><a class="header" href="#autoimport-によるインポートの制御">autoImport によるインポートの制御</a></h3>
+<p>auto plugin が <code>autoImport</code> という名前の <code>val</code>、<code>lazy val</code>、または <code>object</code> を提供すると、そのフィールドの内容は <code>set</code>、<code>eval</code>、および <code>*.sbt</code> ファイルでワイルドカードインポートされる。</p>
 <pre><code class="language-scala">package sbthello
 
 import sbt.*
@@ -4347,9 +4347,9 @@ object HelloPlugin3 extends AutoPlugin:
   ....
 end HelloPlugin3
 </code></pre>
-<p>Typically, <code>autoImport</code> is used to provide new keys - <code>SettingKey</code>s, <code>TaskKey</code>s, or <code>InputKey</code>s - or core methods without requiring an import or qualification.</p>
-<h3 id="example-plugin"><a class="header" href="#example-plugin">Example Plugin</a></h3>
-<p>An example of a typical plugin:</p>
+<p>通常、<code>autoImport</code> は新しいキー（<code>SettingKey</code>、<code>TaskKey</code>、または <code>InputKey</code>）や、インポートや修飾なしで使えるコアメソッドを提供するために使われる。</p>
+<h3 id="プラグインの例"><a class="header" href="#プラグインの例">プラグインの例</a></h3>
+<p>典型的なプラグインの例:</p>
 <div id="admonition-plugin-buildsbt" class="admonition admonish-example" role="note" aria-labelledby="admonition-plugin-buildsbt-title">
 <div class="admonition-title">
 <div id="admonition-plugin-buildsbt-title">
@@ -4433,21 +4433,21 @@ end Obfuscate
 </code></pre>
 </div>
 </div>
-<h4 id="usage-example"><a class="header" href="#usage-example">Usage example</a></h4>
-<p>A build definition that uses the plugin might look like <code>build.sbt</code>:</p>
+<h4 id="使用例"><a class="header" href="#使用例">使用例</a></h4>
+<p>プラグインを使うビルド定義は、例えば次のような <code>build.sbt</code> になる:</p>
 <pre><code class="language-scala">obfuscateLiterals := true
 </code></pre>
-<h2 id="using-an-auto-plugin"><a class="header" href="#using-an-auto-plugin">Using an auto plugin</a></h2>
-<p>A common situation is when using a binary plugin published to a repository. You can create <code>project/plugins.sbt</code> with all of the desired sbt plugins, any general dependencies, and any necessary repositories:</p>
+<h2 id="auto-plugin-の利用"><a class="header" href="#auto-plugin-の利用">auto plugin の利用</a></h2>
+<p>よくあるのは、リポジトリに公開されたバイナリプラグインを使う場合である。必要な sbt プラグイン、一般的な依存、必要なリポジトリをすべて含む <code>project/plugins.sbt</code> を作成できる:</p>
 <pre><code class="language-scala">addSbtPlugin("org.example" % "plugin" % "1.0")
 addSbtPlugin("org.example" % "another-plugin" % "2.0")
 
-// plain library (not an sbt plugin) for use in the build definition
+// ビルド定義で使う通常のライブラリ（sbt プラグインではない）
 libraryDependencies += "org.example" % "utilities" % "1.3"
 
 resolvers += "Example Plugin Repository" at "https://example.org/repo/"
 </code></pre>
-<p>Many of the auto plugins automatically add settings into projects, however, some may require explicit enablement. Here's an example:</p>
+<p>多くの auto plugin はプロジェクトにセッティングを自動追加するが、明示的な有効化が必要なものもある。例を示す:</p>
 <pre><code class="language-scala">lazy val util = (project in file("util"))
   .enablePlugins(FooPlugin, BarPlugin)
   .disablePlugins(plugins.IvyPlugin)
@@ -4455,34 +4455,34 @@ resolvers += "Example Plugin Repository" at "https://example.org/repo/"
     name := "hello-util"
   )
 </code></pre>
-<h2 id="metabuild"><a class="header" href="#metabuild">Metabuild</a></h2>
-<p>A metabuild is a project under <code>project/</code> folder. This project's classpath is the classpath used for build definitions in <code>project/</code> and any <code>.sbt</code> files in the project's base directory. It is also used for the <code>eval</code> and <code>set</code> commands.</p>
-<p>Specifically,</p>
+<h2 id="メタビルド"><a class="header" href="#メタビルド">メタビルド</a></h2>
+<p>メタビルドは <code>project/</code> フォルダ下のプロジェクトである。このプロジェクトのクラスパスは、<code>project/</code> 内のビルド定義およびプロジェクトのベースディレクトリにある <code>.sbt</code> ファイルに使われる。<code>eval</code> および <code>set</code> コマンドにも使われる。</p>
+<p>具体的には、</p>
 <ol>
-<li>Managed dependencies declared by the metabuild are retrieved and are available on the build definition classpath, just like for a normal project.</li>
-<li>Unmanaged dependencies in <code>project/lib/</code> are available to the build definition, just like for a normal project.</li>
-<li>Sources in the <code>project/</code> project are the build definition files and are compiled using the classpath built from the managed and unmanaged dependencies.</li>
-<li>Project dependencies can be declared in <code>project/plugins.sbt</code> (similarly to <code>build.sbt</code> file in a normal project) and will be available to the build definitions.</li>
+<li>メタビルドが宣言したマネージ依存性は取得され、通常のプロジェクトと同様にビルド定義のクラスパスで利用できる。</li>
+<li><code>project/lib/</code> のアンマネージ依存性は、通常のプロジェクトと同様にビルド定義で利用できる。</li>
+<li><code>project/</code> プロジェクト内のソースはビルド定義ファイルであり、マネージ依存性とアンマネージ依存性から構築したクラスパスでコンパイルされる。</li>
+<li>サブプロジェクト依存は <code>project/plugins.sbt</code> に宣言できる（通常プロジェクトの <code>build.sbt</code> と同様）し、ビルド定義から利用できる。</li>
 </ol>
-<p>The build definition classpath is searched for <code>sbt/sbt.autoplugins</code> descriptor files containing the names of <code>sbt.AutoPlugin</code> implementations.</p>
-<p>The <code>reload plugins</code> command changes the current build to the (root) project's metabuild definition. This allows manipulating the metabuild project like a normal subproject. <code>reload return</code> changes back to the original build. Any session settings for the metabuild project that have not been saved are dropped.</p>
-<p>An auto plugin is a module that defines settings to automatically inject into subprojects. Additionally, an auto plugin provides the following feature:</p>
+<p>ビルド定義のクラスパスから <code>sbt/sbt.autoplugins</code> 記述子ファイルが検索され、<code>sbt.AutoPlugin</code> 実装の名前が含まれる。</p>
+<p><code>reload plugins</code> コマンドは現在のビルドを（ルート）プロジェクトのメタビルド定義に切り替える。これによりメタビルドプロジェクトを通常のサブプロジェクトのように操作できる。<code>reload return</code> は元のビルドに戻る。メタビルドプロジェクトのセッションで保存されていないセッティングは破棄される。</p>
+<p>auto plugin は、サブプロジェクトに自動注入するセッティングを定義するモジュールである。さらに auto plugin は次の機能を提供する:</p>
 <ul>
-<li>Automatically import selective names to <code>.sbt</code> files and the <code>eval</code> and <code>set</code> commands.</li>
-<li>Specify plugin dependencies to other auto plugins.</li>
-<li>Automatically activate itself when all dependencies are present.</li>
-<li>Specify <code>projectSettings</code>, <code>buildSettings</code>, and <code>globalSettings</code> as appropriate.</li>
+<li>選択した名前を <code>.sbt</code> ファイルおよび <code>eval</code> と <code>set</code> コマンドに自動インポートする。</li>
+<li>他の auto plugin へのプラグイン依存を指定する。</li>
+<li>すべての依存が揃うと自動的に自身を有効化する。</li>
+<li>必要に応じて <code>projectSettings</code>、<code>buildSettings</code>、<code>globalSettings</code> を指定する。</li>
 </ul>
-<h2 id="plugin-dependencies"><a class="header" href="#plugin-dependencies">Plugin dependencies</a></h2>
-<p>Prior to the introduction of the <code>AutoPlugin</code> system in sbt 0.13.5, if a plugin depended on the settings and tasks from another plugin, the build users had to include the plugins in the right order. This became complicated and error-prone as the number of plugins increased within an application.</p>
-<p>An auto plugin can depend on other auto plugins and ensure these dependency settings are loaded first.</p>
-<p>Suppose we have the <code>SbtLessPlugin</code> and the <code>SbtCoffeeScriptPlugin</code>, which in turn depends on the <code>SbtJsTaskPlugin</code>, <code>SbtWebPlugin</code>, and <code>JvmPlugin</code>. Instead of manually activating all of these plugins, a project can just activate the <code>SbtLessPlugin</code> and <code>SbtCoffeeScriptPlugin</code> like this:</p>
+<h2 id="プラグイン依存性"><a class="header" href="#プラグイン依存性">プラグイン依存性</a></h2>
+<p>sbt 0.13.5 で <code>AutoPlugin</code> システムが導入される前は、あるプラグインが別のプラグインのセッティングやタスクに依存する場合、ビルド利用者が正しい順序でプラグインを含める必要があった。アプリケーション内のプラグイン数が増えると複雑でエラーが起きやすくなった。</p>
+<p>auto plugin は他の auto plugin に依存でき、これらの依存セッティングが先にロードされるようにできる。</p>
+<p><code>SbtLessPlugin</code> と、さらに <code>SbtJsTaskPlugin</code>、<code>SbtWebPlugin</code>、<code>JvmPlugin</code> に依存する <code>SbtCoffeeScriptPlugin</code> があるとする。これらすべてを手動で有効化する代わりに、プロジェクトは次のように <code>SbtLessPlugin</code> と <code>SbtCoffeeScriptPlugin</code> だけを有効化すればよい:</p>
 <pre><code class="language-scala">lazy val root = (project in file("."))
   .enablePlugins(SbtLessPlugin, SbtCoffeeScriptPlugin)
 </code></pre>
-<p>This will pull in the right setting sequence from the plugins in the right order.</p>
-<h2 id="maven-publishing-convention"><a class="header" href="#maven-publishing-convention">Maven publishing convention</a></h2>
-<p>sbt 2.x plugins are published to Maven layout repositories with <code>_sbt2_3</code> suffix in its artifact name. For example, sbt-ci-release 1.11.2 is published to the Central Repo as <a href="https://repo1.maven.org/maven2/com/github/sbt/sbt-ci-release_sbt2_3/1.11.2/">https://repo1.maven.org/maven2/com/github/sbt/sbt-ci-release_sbt2_3/1.11.2/</a>. This suffix is appended automatically by sbt, so the <code>name</code> should just be called <code>sbt-ci-release</code> etc in <code>build.sbt</code>.</p>
+<p>これにより、正しい順序でプラグインから適切なセッティング列が引き込まれる。</p>
+<h2 id="maven-公開の慣例"><a class="header" href="#maven-公開の慣例">Maven 公開の慣例</a></h2>
+<p>sbt 2.x のプラグインは、成果物名に <code>_sbt2_3</code> サフィックスを付けて Maven レイアウトのリポジトリに公開される。例えば sbt-ci-release 1.11.2 は Central Repo に <a href="https://repo1.maven.org/maven2/com/github/sbt/sbt-ci-release_sbt2_3/1.11.2/">https://repo1.maven.org/maven2/com/github/sbt/sbt-ci-release_sbt2_3/1.11.2/</a> として公開される。このサフィックスは sbt が自動的に付加するため、<code>build.sbt</code> の <code>name</code> は <code>sbt-ci-release</code> などとだけ書けばよい。</p>
 <!--
 ### Best Practices
 
@@ -5332,7 +5332,7 @@ BareBuildSyntax.dependsOn(jmhRef)
 <h3 id="-2"><a class="header" href="#-2"><code>%%%</code></a></h3>
 <p>This is defined in <a href="https://github.com/portable-scala/sbt-platform-deps">sbt-platform-deps</a> in sbt 1.x.</p>
 <h2 id="c"><a class="header" href="#c">C</a></h2>
-<h3 id="command-1"><a class="header" href="#command-1">Command</a></h3>
+<h3 id="コマンド-1"><a class="header" href="#コマンド-1">コマンド</a></h3>
 <p>A system-level building block of sbt, often used to capture user interaction or IDE interaction. See <a href="appendix/../concepts/command-basics.html">Command basics</a>.</p>
 <h3 id="クロスビルド-1"><a class="header" href="#クロスビルド-1">クロスビルド</a></h3>
 <p>The idea of building multiple targets from the same set of source file. This includes Scala cross building, targetting multiple versions of Scala releases; platform cross building, targetting JVM, Scala.JS, and Scala Native; and custom virtual axis like Spark versions.</p>
