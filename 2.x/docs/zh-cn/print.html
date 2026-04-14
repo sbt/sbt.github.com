@@ -1507,7 +1507,7 @@ addition to plain <code>target/</code>).</p>
 <li><code>Key.Classpath</code> 已改为 <code>Seq[Attributed[xsbti.HashedVirtualFileRef]]</code> 类型的别名，而非 <code>Seq[Attributed[File]]</code>。同样，一些曾返回 <code>File</code> 的任务键已改为返回 <code>HashedVirtualFileRef</code>。详见 <a href="changes/../concepts/caching.html#caching-files">Caching Files</a>。</li>
 <li>In sbt 2.x <code>target</code> defaults to <code>target/out/jvm/scala-3.8.2/&lt;subproject&gt;/</code>, as opposed to <code>&lt;subproject&gt;/target/</code>.</li>
 <li>sbt 2.x 在 <code>build.sbt</code> 变更时默认自动重新加载，由 <a href="https://github.com/eed3si9n">@eed3si9n</a> 在 <a href="https://github.com/sbt/sbt/pull/8211">#8211</a> 中贡献</li>
-<li>添加了 <code>Project#autoAggregate</code> 以实现自动聚合，由 <a href="https://github.com/eed3si9n">@eed3si9n</a> 在 <a href="https://github.com/sbt/sbt/pull/8290">#8290</a> 中贡献</li>
+<li>sbt 2.x disables the delegation of scoped tasks in the sbt shell by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8539">#8539</a></li>
 </ul>
 <h3 id="已移除的弃用项"><a class="header" href="#已移除的弃用项">已移除的弃用项</a></h3>
 <ul>
@@ -1520,6 +1520,8 @@ addition to plain <code>target/</code>).</p>
 <li><strong>sbt query</strong>。sbt 2.x 扩展了统一斜杠语法以支持子项目查询。详见下文。</li>
 <li><strong>本地/远程缓存系统</strong>。详见下文</li>
 <li><strong>客户端运行</strong>。详见下文。</li>
+<li><strong>rootProject and autoAggregate</strong>. Details below</li>
+<li><strong>Maven BOM (Bill of Materials) usage</strong>. Details below</li>
 </ul>
 <h3 id="通用设置-1"><a class="header" href="#通用设置-1">通用设置</a></h3>
 <p>在 sbt 2.x 中，<code>build.sbt</code> 中的裸设置被解释为通用设置，并注入到所有子项目中。这意味着我们现在可以在不使用 <code>ThisBuild</code> 作用域的情况下设置 <code>scalaVersion</code>：</p>
@@ -1577,6 +1579,23 @@ task1 := {
 <pre><code class="language-bash">sbt run
 </code></pre>
 <p>这避免了阻塞 sbt server，您可以同时运行多个任务。由 <a href="https://github.com/eed3si9n">@eed3si9n</a> 在 <a href="https://github.com/sbt/sbt/pull/8060">#8060</a> 中贡献。另请参阅 <a href="changes/../reference/sbt-run.html">run</a> 文档。</p>
+<h3 id="rootproject-and-autoaggregate"><a class="header" href="#rootproject-and-autoaggregate">rootProject and autoAggregate</a></h3>
+<p>sbt 2.0 adds <code>rootProject</code> macro:</p>
+<pre><code class="language-scala">lazy val root = rootProject
+</code></pre>
+<p>This is a shortcut for <code>(project in file("."))</code>, which tends to be a boilerplate in <code>build.sbt</code>.</p>
+<pre><code class="language-scala">lazy val root = rootProject
+  .autoAggregate
+</code></pre>
+<p>sbt 2.0 also adds <code>autoAggregate</code> method, which at the loading time expands to local subprojects.</p>
+<h3 id="maven-bom-bill-of-materials-usage"><a class="header" href="#maven-bom-bill-of-materials-usage">Maven BOM (Bill of Materials) usage</a></h3>
+<p>sbt 2.0 adds Maven BOM (Bill of Materials) usage support. Subprojects can depend on published BOM artifacts using <code>.pomOnly()</code>:</p>
+<pre><code class="language-scala">libraryDependencies += ("com.fasterxml.jackson" % "jackson-bom" % "2.21.0").pomOnly()
+</code></pre>
+<p>These bill of materials are forwarded to Coursier via via Resolve.addBom(), which should introduce version constraints for specific libraries (such as Jackson). You can use <code>"*"</code> to declare versionless dependency:</p>
+<pre><code class="language-scala">libraryDependencies += "com.fasterxml.jackson.core" % "jackson-core" % "*"
+</code></pre>
+<p>This will let Coursier automatically fill in the version based on the bill of material constraints (in this case <code>"2.21.0"</code>). Contributed by <a href="https://github.com/bitloi">@bitloi</a> in <a href="https://github.com/sbt/sbt/pull/8675">#8675</a>.</p>
 <h3 id="性能改进"><a class="header" href="#性能改进">性能改进</a></h3>
 <p>Adrien Piquerez 在 Scala Center 期间贡献了一系列性能改进。</p>
 <ul>

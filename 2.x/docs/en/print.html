@@ -1613,7 +1613,7 @@ Two of the popular IDEs in Scala are <a href="https://scalameta.org/metals/">Met
 <li><code>Key.Classpath</code> is changed to be an alias of the <code>Seq[Attributed[xsbti.HashedVirtualFileRef]]</code> type, instead of <code>Seq[Attributed[File]]</code>. Similarly, some task keys that used to return <code>File</code> have changed to return <code>HashedVirtualFileRef</code> instead. See <a href="changes/../concepts/caching.html#caching-files">Caching Files</a>.</li>
 <li>In sbt 2.x <code>target</code> defaults to <code>target/out/jvm/scala-3.8.2/&lt;subproject&gt;/</code>, as opposed to <code>&lt;subproject&gt;/target/</code>.</li>
 <li>sbt 2.x auto reloads by default on <code>build.sbt</code> changes, by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8211">#8211</a></li>
-<li><code>Project#autoAggregate</code> is added for automatic aggregation, by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8290">#8290</a></li>
+<li>sbt 2.x disables the delegation of scoped tasks in the sbt shell by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8539">#8539</a></li>
 </ul>
 <h3 id="dropped-dreprecations"><a class="header" href="#dropped-dreprecations">Dropped dreprecations</a></h3>
 <ul>
@@ -1626,6 +1626,8 @@ Two of the popular IDEs in Scala are <a href="https://scalameta.org/metals/">Met
 <li><strong>sbt query</strong>. sbt 2.x extends the unified slash syntax to support query of subprojects. Details below.</li>
 <li><strong>Local/remote cache system</strong>. Details below</li>
 <li><strong>Client-side run</strong>. Details below.</li>
+<li><strong>rootProject and autoAggregate</strong>. Details below</li>
+<li><strong>Maven BOM (Bill of Materials) usage</strong>. Details below</li>
 </ul>
 <h3 id="common-settings-1"><a class="header" href="#common-settings-1">Common settings</a></h3>
 <p>In sbt 2.x, the bare settings in <code>build.sbt</code> are interpreted to be common settings, and are injected to all subprojects. This means we can now set <code>scalaVersion</code> without using <code>ThisBuild</code> scoping:</p>
@@ -1683,6 +1685,23 @@ task1 := {
 <pre><code class="language-bash">sbt run
 </code></pre>
 <p>This avoids blocking the sbt server, and you can have multiple runs. Contributed by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8060">#8060</a>. See also <a href="changes/../reference/sbt-run.html">run</a> documentation.</p>
+<h3 id="rootproject-and-autoaggregate"><a class="header" href="#rootproject-and-autoaggregate">rootProject and autoAggregate</a></h3>
+<p>sbt 2.0 adds <code>rootProject</code> macro:</p>
+<pre><code class="language-scala">lazy val root = rootProject
+</code></pre>
+<p>This is a shortcut for <code>(project in file("."))</code>, which tends to be a boilerplate in <code>build.sbt</code>.</p>
+<pre><code class="language-scala">lazy val root = rootProject
+  .autoAggregate
+</code></pre>
+<p>sbt 2.0 also adds <code>autoAggregate</code> method, which at the loading time expands to local subprojects.</p>
+<h3 id="maven-bom-bill-of-materials-usage"><a class="header" href="#maven-bom-bill-of-materials-usage">Maven BOM (Bill of Materials) usage</a></h3>
+<p>sbt 2.0 adds Maven BOM (Bill of Materials) usage support. Subprojects can depend on published BOM artifacts using <code>.pomOnly()</code>:</p>
+<pre><code class="language-scala">libraryDependencies += ("com.fasterxml.jackson" % "jackson-bom" % "2.21.0").pomOnly()
+</code></pre>
+<p>These bill of materials are forwarded to Coursier via via Resolve.addBom(), which should introduce version constraints for specific libraries (such as Jackson). You can use <code>"*"</code> to declare versionless dependency:</p>
+<pre><code class="language-scala">libraryDependencies += "com.fasterxml.jackson.core" % "jackson-core" % "*"
+</code></pre>
+<p>This will let Coursier automatically fill in the version based on the bill of material constraints (in this case <code>"2.21.0"</code>). Contributed by <a href="https://github.com/bitloi">@bitloi</a> in <a href="https://github.com/sbt/sbt/pull/8675">#8675</a>.</p>
 <h3 id="performance-improvements"><a class="header" href="#performance-improvements">Performance improvements</a></h3>
 <p>Adrien Piquerez contributed a series of changes to improve performance while he was at Scala Center.</p>
 <ul>
