@@ -240,6 +240,13 @@ sbt:demo&gt; show someKey
 </code></pre>
 <h3 id="キャッシュ化はシリアライゼーション問題と同等に困難だ"><a class="header" href="#キャッシュ化はシリアライゼーション問題と同等に困難だ">キャッシュ化はシリアライゼーション問題と同等に困難だ</a></h3>
 <p>キャッシュの自動化に参加するためには、(<code>name</code> や <code>version</code> などの) インプットキーは <code>sjsonnew.HashWriter</code> 型クラスの given、戻り値は <code>sjsonnew.JsonFormat</code> 型クラスの given を提供する必要がある。<a href="https://www.scala-sbt.org/contraband/">Contraband</a> を使って sjson-new のコーデックを生成することができる。</p>
+<h3 id="生焼け"><a class="header" href="#生焼け">生焼け</a></h3>
+<p>キャッシュ化タスクの失敗状態を表す言葉があると便利なので定義しよう。</p>
+<ul>
+<li><strong>焼き過ぎ</strong> (overbaking): キャッシュ化タスクに余計な入力 <code>(A1, A2, A3, ...)</code> があることで必要以上に無効化され、過剰な作業が行われる状態であるとき、そのタスクは「焼き過ぎ」だということができる。</li>
+<li><strong>生焼け</strong> (underbaking): キャッシュ化タスクのインプットが不十分で、無効化に失敗し、無効な結果を返す状態であるとき、そのタスクは「生焼け」だということができる。特に、差分コンパイルの局面では、<em>under-compilation</em> という。</li>
+</ul>
+<p>例えば、<code>@transient</code> なキーをキャッシュ化タスクに混ぜると、生焼けにつながるリスクがあるということができる。</p>
 <h2 id="ファイルのキャッシュ化"><a class="header" href="#ファイルのキャッシュ化">ファイルのキャッシュ化</a></h2>
 <p>ファイル (<code>java.io.File</code> など) のキャッシュ化は特別な配慮を必要とするが、それは技術的に難しいからというよりは、ファイルが関わったときに発生する曖昧さと思い込みによる所が大きい。一言に「ファイル」といっても、実は様々なことを意味する:</p>
 <ol>

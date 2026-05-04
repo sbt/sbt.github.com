@@ -275,11 +275,11 @@ sdk install sbt
 cd foo-build
 touch build.sbt
 mkdir project
-echo "sbt.version=2.0.0-RC10" &gt; project/build.properties
+echo "sbt.version=2.0.0-RC12" &gt; project/build.properties
 </code></pre>
 <h3 id="sbt-シェルを起ち上げる"><a class="header" href="#sbt-シェルを起ち上げる">sbt シェルを起ち上げる</a></h3>
 <pre><code class="language-bash">$ sbt
-[info] welcome to sbt 2.0.0-RC10 (Azul Systems, Inc. Java)
+[info] welcome to sbt 2.0.0-RC12 (Azul Systems, Inc. Java)
 ....
 [info] started sbt server
 sbt:foo-build&gt;
@@ -882,7 +882,7 @@ $ sbt new scala/scala3.g8
 <p>sbt のビルドは、「<code>sbt</code> という名前のシェルスクリプト」によって実行され、このスクリプトは sbt runner と呼ばれる。</p>
 <h3 id="projectbuildproperties-による-sbt-バージョンの指定"><a class="header" href="#projectbuildproperties-による-sbt-バージョンの指定">project/build.properties による sbt バージョンの指定</a></h3>
 <p>sbt runner は、そのサブコンポーネントである sbt launcher を実行し、sbt launcher は <code>project/build.properties</code> を読み込んで、そのビルドに使われる sbt のバージョンを決定し、キャッシュに無ければ sbt 本体をダウンロードする:</p>
-<pre><code>sbt.version=2.0.0-RC10
+<pre><code>sbt.version=2.0.0-RC12
 </code></pre>
 <p>これは、つまり</p>
 <ul>
@@ -1708,7 +1708,7 @@ lazy val plugin = (project in file("plugin"))
     (pluginCrossBuild / sbtVersion) := {
       scalaBinaryVersion.value match {
         case "2.12" =&gt; "1.5.8"
-        case _      =&gt; "2.0.0-RC10"
+        case _      =&gt; "2.0.0-RC12"
       }
     },
   )
@@ -1958,6 +1958,13 @@ sbt:demo&gt; show someKey
 </code></pre>
 <h3 id="キャッシュ化はシリアライゼーション問題と同等に困難だ"><a class="header" href="#キャッシュ化はシリアライゼーション問題と同等に困難だ">キャッシュ化はシリアライゼーション問題と同等に困難だ</a></h3>
 <p>キャッシュの自動化に参加するためには、(<code>name</code> や <code>version</code> などの) インプットキーは <code>sjsonnew.HashWriter</code> 型クラスの given、戻り値は <code>sjsonnew.JsonFormat</code> 型クラスの given を提供する必要がある。<a href="https://www.scala-sbt.org/contraband/">Contraband</a> を使って sjson-new のコーデックを生成することができる。</p>
+<h3 id="生焼け"><a class="header" href="#生焼け">生焼け</a></h3>
+<p>キャッシュ化タスクの失敗状態を表す言葉があると便利なので定義しよう。</p>
+<ul>
+<li><strong>焼き過ぎ</strong> (overbaking): キャッシュ化タスクに余計な入力 <code>(A1, A2, A3, ...)</code> があることで必要以上に無効化され、過剰な作業が行われる状態であるとき、そのタスクは「焼き過ぎ」だということができる。</li>
+<li><strong>生焼け</strong> (underbaking): キャッシュ化タスクのインプットが不十分で、無効化に失敗し、無効な結果を返す状態であるとき、そのタスクは「生焼け」だということができる。特に、差分コンパイルの局面では、<em>under-compilation</em> という。</li>
+</ul>
+<p>例えば、<code>@transient</code> なキーをキャッシュ化タスクに混ぜると、生焼けにつながるリスクがあるということができる。</p>
 <h2 id="ファイルのキャッシュ化"><a class="header" href="#ファイルのキャッシュ化">ファイルのキャッシュ化</a></h2>
 <p>ファイル (<code>java.io.File</code> など) のキャッシュ化は特別な配慮を必要とするが、それは技術的に難しいからというよりは、ファイルが関わったときに発生する曖昧さと思い込みによる所が大きい。一言に「ファイル」といっても、実は様々なことを意味する:</p>
 <ol>
@@ -2012,7 +2019,7 @@ sbt:demo&gt; show someKey
 </ul>
 </li>
 </ul>
-<pre><code>sbt.version=2.0.0-RC10
+<pre><code>sbt.version=2.0.0-RC12
 </code></pre>
 <p>この機構によってビルドを特定のバージョンの sbt に設置することができ、プロジェクトで作業する人全員が、マシンにインストールされた sbt runner に関わらず同一のビルド意味論を共有できるようになる。</p>
 <p>このような分割があるため、機能の一部は sbt runner や sbtn のレベルで実装され、その他の機能は sbt server レベルで実装される。</p>
@@ -3363,7 +3370,29 @@ sbt:demo&gt; show someKey
 [success] elapsed time: 0 s, cache 100%, 1 disk cache hit
 </code></pre>
 <h3 id="キャッシュ化はシリアライズ困難である"><a class="header" href="#キャッシュ化はシリアライズ困難である">キャッシュ化はシリアライズ困難である</a></h3>
-<p>自動キャッシュに参加するには、入力キー（例: <code>name</code> と <code>version</code>）が <code>sjsonnew.HashWriter</code> 型クラス用の given を提供し、戻り値の型が <code>sjsonnew.JsonFormat</code> 用の given を提供する必要がある。<a href="https://www.scala-sbt.org/contraband/">Contraband</a> で sjson-new のコーデックを生成できる。</p>
+<p>自動キャッシュに参加するには、入力キー（例: <code>name</code> と <code>version</code>）が <code>sjsonnew.HashWriter</code> 型クラス用の given インスタンスを提供し、戻り値の型が <code>sjsonnew.JsonFormat</code> 用の given インスタンスを提供する必要がある。</p>
+<pre><code class="language-bash">[error] -- Error: /Users/xxx/caching/project/FooPlugin.scala:17:4 -
+[error]  17 |    foo := {
+[error]     |    ^
+[error]     |given evidence sjsonnew.JsonFormat[sbt.HashedVirtualFileRef] is not found; opt out of caching by annotating the key with @transient, or as foo := Def.uncached(...), or provide a given value
+[error]     |
+[error]  18 |      val b = baseDirectory.value
+</code></pre>
+<p><code>HashedVirtualFileRef</code> のような組み込み型のコーデックは <code>CacheImplicits.given</code> にて提供される:</p>
+<pre><code class="language-scala">import CacheImplicits.given
+
+....
+
+  override lazy val projectSettings: Seq[Setting[?]] = Seq(
+    foo := {
+      val b = baseDirectory.value
+      val conv = fileConverter.value
+      conv.toVirtualFile((b / "build.sbt").toPath)
+    },
+    bar := foo.value,
+  )
+</code></pre>
+<p><a href="https://www.scala-sbt.org/contraband/">Contraband</a> で sjson-new のコーデックを生成することもできる。</p>
 <h2 id="エフェクトの追跡"><a class="header" href="#エフェクトの追跡">エフェクトの追跡</a></h2>
 <h3 id="ファイル作成のエフェクト"><a class="header" href="#ファイル作成のエフェクト">ファイル作成のエフェクト</a></h3>
 <p>ファイル名を返すだけでなく、ファイル作成のエフェクトをキャッシュするには、<code>Def.declareOutput(vf)</code> を使ってファイル作成のエフェクトを追跡する必要がある。</p>
@@ -3375,22 +3404,63 @@ sbt:demo&gt; show someKey
   vf: xsbti.HashedVirtualFileRef
 }
 </code></pre>
-<h2 id="キャッシュからのオプトアウト"><a class="header" href="#キャッシュからのオプトアウト">キャッシュからのオプトアウト</a></h2>
-<h3 id="ビルド全体でのオプトアウト"><a class="header" href="#ビルド全体でのオプトアウト">ビルド全体でのオプトアウト</a></h3>
-<p>デフォルトのカスタムタスクキャッシュをオプトアウトするには、<code>project/plugins.sbt</code> に以下を追加する:</p>
-<pre><code class="language-scala">Compile / scalacOptions += "-Xmacro-settings:sbt:no-default-task-cache"
-</code></pre>
-<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<h3 id="システムプロパティーのエフェクト"><a class="header" href="#システムプロパティーのエフェクト">システム・プロパティーのエフェクト</a></h3>
+<p>キャッシュ化タスクからシステム・プロパティーや環境変数の捕獲するとキャッシュの安定性を破壊することがある。以下に具体例を用いて説明する:</p>
+<div id="admonition-buildsbt-bad-example" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-bad-example-title">
 <div class="admonition-title">
-<div id="admonition-note-title">
-<p>Note</p>
+<div id="admonition-buildsbt-bad-example-title">
+<p>build.sbt bad example</p>
 </div>
-<a class="admonition-anchor-link" href="reference/cached-task.html#admonition-note"></a>
+<a class="admonition-anchor-link" href="reference/cached-task.html#admonition-buildsbt-bad-example"></a>
 </div>
 <div>
-<p>これはビルドで導入したカスタムタスクにのみ適用される。sbt またはプラグインが提供するキャッシュ化タスクはキャッシュされたままである。</p>
+<pre><code class="language-scala">lazy val someInt = taskKey[Int]("")
+
+// BAD
+someInt := {
+  sys.props("release").toInt + 1
+}
+</code></pre>
 </div>
 </div>
+<p>まずは <code>-Drelease=0</code> とともに実行したとする:</p>
+<pre><code class="language-bash">$ sbt --server -Drelease=0
+....
+sbt:caching&gt; show someInt
+[info] 1
+[success] elapsed time: 0 s, cache 0%, 1 onsite task
+</code></pre>
+<p>しかし、次に <code>-Drelease=1</code> とともに実行したとしても、値は変化しない:</p>
+<pre><code class="language-bash">$ sbt --server -Drelease=1
+....
+sbt:caching&gt; show someInt
+[info] 1
+[success] elapsed time: 0 s, cache 100%, 1 disk cache hit
+</code></pre>
+<p>これは、<code>someInt</code> がタスク定義のコードの形と入力となるセッティングとタスクのみをキャッシュ・キーとして見ているためだ。<code>someInt</code> を正しくキャッシュ化するには、システム・プロパティーをセッティングで包む必要がある:</p>
+<div id="admonition-buildsbt" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-title">
+<div class="admonition-title">
+<div id="admonition-buildsbt-title">
+<p>build.sbt</p>
+</div>
+<a class="admonition-anchor-link" href="reference/cached-task.html#admonition-buildsbt"></a>
+</div>
+<div>
+<pre><code class="language-scala">lazy val someInt = taskKey[Int]("")
+lazy val releaseVer = settingKey[Int]("")
+
+releaseVer := sys.props("release").toInt
+someInt := releaseVer.value + 1
+</code></pre>
+</div>
+</div>
+<p>これでビルドが読み込まれるたびにシステム・プロパティーが再評価されるようになった:</p>
+<pre><code class="language-bash">$ sbt --server -Drelease=1
+sbt:caching&gt; show someInt
+[info] 2
+[success] elapsed time: 0 s, cache 0%, 1 onsite tas
+</code></pre>
+<h2 id="キャッシュからのオプトアウト"><a class="header" href="#キャッシュからのオプトアウト">キャッシュからのオプトアウト</a></h2>
 <h3 id="タスクキー単位でのオプトアウト"><a class="header" href="#タスクキー単位でのオプトアウト">タスクキー単位でのオプトアウト</a></h3>
 <p>次に、一部のタスクキーをキャッシュからオプトアウトしたい場合は、以下のようにキャッシュレベルを設定する:</p>
 <pre><code class="language-scala">@transient
@@ -3408,6 +3478,21 @@ someKey := Def.uncached {
   name.value + somethingUncachable.value + "!"
 }
 </code></pre>
+<h3 id="ビルド全体でのオプトアウト"><a class="header" href="#ビルド全体でのオプトアウト">ビルド全体でのオプトアウト</a></h3>
+<p>デフォルトのカスタムタスクキャッシュをオプトアウトするには、<code>project/plugins.sbt</code> に以下を追加する:</p>
+<pre><code class="language-scala">Compile / scalacOptions += "-Xmacro-settings:sbt:no-default-task-cache"
+</code></pre>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="reference/cached-task.html#admonition-note"></a>
+</div>
+<div>
+<p>これはビルドで導入したカスタムタスクにのみ適用される。sbt またはプラグインが提供するキャッシュ化タスクはキャッシュされたままである。</p>
+</div>
+</div>
 <h2 id="リモートキャッシュ-2"><a class="header" href="#リモートキャッシュ-2">リモート・キャッシュ</a></h2>
 <p>sbt 2.x は Bazel 互換の gRPC インターフェースを実装しており、オープンソースおよび商用の多数のバックエンドと連携する。詳細は<a href="reference/./remote-cache-setup.html">リモート・キャッシュの設定</a>を参照。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="クロスビルドの設定"><a class="header" href="#クロスビルドの設定">クロスビルドの設定</a></h1>
@@ -3744,10 +3829,10 @@ Def.setting {
         token(state.remainingCommands.size.toString) )
 }
 </code></pre>
-<p>This Parser definition will produce a value of type <code>(String,String)</code>. The input syntax defined isn't very flexible; it is just a demonstration. It will produce one of the following values for a successful parse (assuming the current Scala version is 3.8.2, the current sbt version is 2.0.0-RC10, and there are 3 commands left to run):</p>
+<p>This Parser definition will produce a value of type <code>(String,String)</code>. The input syntax defined isn't very flexible; it is just a demonstration. It will produce one of the following values for a successful parse (assuming the current Scala version is 3.8.2, the current sbt version is 2.0.0-RC12, and there are 3 commands left to run):</p>
 <ul>
 <li>(scala,3.8.2)</li>
-<li>(sbt,2.0.0-RC10)</li>
+<li>(sbt,2.0.0-RC12)</li>
 <li>(commands,3)</li>
 </ul>
 <p>プロジェクトの現在の Scala と sbt のバージョンにアクセスできたのは、それらがセッティングだからである。タスクはパーサーの定義に使用できない。</p>
@@ -4990,7 +5075,7 @@ your plugin to the list.</p>
 </li>
 <li>
 <p><code>hello_scala/</code> の下に <code>project/</code> ディレクトリを作成し、<code>project/build.properties</code> を次の内容で作成する:</p>
-<pre><code>sbt.version=2.0.0-RC10
+<pre><code>sbt.version=2.0.0-RC12
 </code></pre>
 </li>
 <li>

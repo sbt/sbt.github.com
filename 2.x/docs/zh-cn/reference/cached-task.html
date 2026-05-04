@@ -227,7 +227,29 @@ sbt:demo&gt; show someKey
 [success] elapsed time: 0 s, cache 100%, 1 disk cache hit
 </code></pre>
 <h3 id="缓存依赖序列化"><a class="header" href="#缓存依赖序列化">缓存依赖序列化</a></h3>
-<p>要参与自动缓存，输入键（如 <code>name</code> 和 <code>version</code>）必须为 <code>sjsonnew.HashWriter</code> 类型类提供 given，返回类型必须为 <code>sjsonnew.JsonFormat</code> 提供 given。<a href="https://www.scala-sbt.org/contraband/">Contraband</a> 可用于生成 sjson-new 编解码器。</p>
+<p>To participate in the automatic caching, the input keys (e.g. <code>name</code> and <code>version</code>) must provide a given instance for <code>sjsonnew.HashWriter</code> typeclass and return type must provide a given instance for <code>sjsonnew.JsonFormat</code>.</p>
+<pre><code class="language-bash">[error] -- Error: /Users/xxx/caching/project/FooPlugin.scala:17:4 -
+[error]  17 |    foo := {
+[error]     |    ^
+[error]     |given evidence sjsonnew.JsonFormat[sbt.HashedVirtualFileRef] is not found; opt out of caching by annotating the key with @transient, or as foo := Def.uncached(...), or provide a given value
+[error]     |
+[error]  18 |      val b = baseDirectory.value
+</code></pre>
+<p>Codecs for some of the built-in types like <code>HashedVirtualFileRef</code> can be made available using <code>CacheImplicits.given</code>:</p>
+<pre><code class="language-scala">import CacheImplicits.given
+
+....
+
+  override lazy val projectSettings: Seq[Setting[?]] = Seq(
+    foo := {
+      val b = baseDirectory.value
+      val conv = fileConverter.value
+      conv.toVirtualFile((b / "build.sbt").toPath)
+    },
+    bar := foo.value,
+  )
+</code></pre>
+<p><a href="https://www.scala-sbt.org/contraband/">Contraband</a> can be used to generate sjson-new codecs.</p>
 <h2 id="效果跟踪"><a class="header" href="#效果跟踪">效果跟踪</a></h2>
 <h3 id="文件创建的效果"><a class="header" href="#文件创建的效果">文件创建的效果</a></h3>
 <p>要缓存文件创建的效果（而不仅是返回文件名），需使用 <code>Def.declareOutput(vf)</code> 跟踪文件创建的效果。</p>
@@ -239,22 +261,63 @@ sbt:demo&gt; show someKey
   vf: xsbti.HashedVirtualFileRef
 }
 </code></pre>
-<h2 id="选择退出缓存"><a class="header" href="#选择退出缓存">选择退出缓存</a></h2>
-<h3 id="构建级退出"><a class="header" href="#构建级退出">构建级退出</a></h3>
-<p>要选择退出默认的自定义任务缓存，请在 <code>project/plugins.sbt</code> 中添加以下内容：</p>
-<pre><code class="language-scala">Compile / scalacOptions += "-Xmacro-settings:sbt:no-default-task-cache"
-</code></pre>
-<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<h3 id="the-effect-of-system-properties"><a class="header" href="#the-effect-of-system-properties">The effect of system properties</a></h3>
+<p>Capturing a system property or an environment variable in a cached task can break the cache stability. Consider the following cached task:</p>
+<div id="admonition-buildsbt-bad-example" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-bad-example-title">
 <div class="admonition-title">
-<div id="admonition-note-title">
-<p>Note</p>
+<div id="admonition-buildsbt-bad-example-title">
+<p>build.sbt bad example</p>
 </div>
-<a class="admonition-anchor-link" href="#admonition-note"></a>
+<a class="admonition-anchor-link" href="#admonition-buildsbt-bad-example"></a>
 </div>
 <div>
-<p>此设置仅适用于构建中引入的自定义任务。sbt 或插件提供的任何缓存任务仍将保持缓存。</p>
+<pre><code class="language-scala">lazy val someInt = taskKey[Int]("")
+
+// BAD
+someInt := {
+  sys.props("release").toInt + 1
+}
+</code></pre>
 </div>
 </div>
+<p>Suppose we run it first with <code>-Drelease=0</code>:</p>
+<pre><code class="language-bash">$ sbt --server -Drelease=0
+....
+sbt:caching&gt; show someInt
+[info] 1
+[success] elapsed time: 0 s, cache 0%, 1 onsite task
+</code></pre>
+<p>However, even if we run with <code>-Drelease=1</code> the value does not change:</p>
+<pre><code class="language-bash">$ sbt --server -Drelease=1
+....
+sbt:caching&gt; show someInt
+[info] 1
+[success] elapsed time: 0 s, cache 100%, 1 disk cache hit
+</code></pre>
+<p>This is because <code>someInt</code> only looks at the shape of its task definition and the input settings and tasks as cache key. To correctly cache <code>someInt</code>, wrap the system property as a setting as follows:</p>
+<div id="admonition-buildsbt" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-title">
+<div class="admonition-title">
+<div id="admonition-buildsbt-title">
+<p>build.sbt</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-buildsbt"></a>
+</div>
+<div>
+<pre><code class="language-scala">lazy val someInt = taskKey[Int]("")
+lazy val releaseVer = settingKey[Int]("")
+
+releaseVer := sys.props("release").toInt
+someInt := releaseVer.value + 1
+</code></pre>
+</div>
+</div>
+<p>This will reevaluate the system property each time the build loads:</p>
+<pre><code class="language-bash">$ sbt --server -Drelease=1
+sbt:caching&gt; show someInt
+[info] 2
+[success] elapsed time: 0 s, cache 0%, 1 onsite tas
+</code></pre>
+<h2 id="选择退出缓存"><a class="header" href="#选择退出缓存">选择退出缓存</a></h2>
 <h3 id="按任务键退出"><a class="header" href="#按任务键退出">按任务键退出</a></h3>
 <p>若您希望某些任务键退出缓存，可按以下方式设置缓存级别：</p>
 <pre><code class="language-scala">@transient
@@ -272,6 +335,21 @@ someKey := Def.uncached {
   name.value + somethingUncachable.value + "!"
 }
 </code></pre>
+<h3 id="构建级退出"><a class="header" href="#构建级退出">构建级退出</a></h3>
+<p>要选择退出默认的自定义任务缓存，请在 <code>project/plugins.sbt</code> 中添加以下内容：</p>
+<pre><code class="language-scala">Compile / scalacOptions += "-Xmacro-settings:sbt:no-default-task-cache"
+</code></pre>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note"></a>
+</div>
+<div>
+<p>此设置仅适用于构建中引入的自定义任务。sbt 或插件提供的任何缓存任务仍将保持缓存。</p>
+</div>
+</div>
 <h2 id="远程缓存"><a class="header" href="#远程缓存">远程缓存</a></h2>
 <p>sbt 2.x 实现了 Bazel 兼容的 gRPC 接口，可与多种开源和商业后端配合使用。详见 <a href="./remote-cache-setup.html">Remote cache setup</a>。</p>
 

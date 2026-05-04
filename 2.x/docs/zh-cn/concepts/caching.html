@@ -240,6 +240,13 @@ sbt:demo&gt; show someKey
 </code></pre>
 <h3 id="缓存与序列化同样困难"><a class="header" href="#缓存与序列化同样困难">缓存与序列化同样困难</a></h3>
 <p>要参与自动缓存，输入键（如 <code>name</code> 和 <code>version</code>）必须为 <code>sjsonnew.HashWriter</code> typeclass 提供 given，返回类型必须为 <code>sjsonnew.JsonFormat</code> 提供 given。<a href="https://www.scala-sbt.org/contraband/">Contraband</a> 可用于生成 sjson-new 编解码器。</p>
+<h3 id="underbaking"><a class="header" href="#underbaking">Underbaking</a></h3>
+<p>It's useful to have words to describe the failure states of cached tasks.</p>
+<ul>
+<li><strong>Overbaking</strong>: When a cached task is invalidated more than necessary because of excess input <code>(A1, A2, A3, ...)</code>, leading to unnecessary work, we can say that the task is <em>overbaked</em>.</li>
+<li><strong>Underbaking</strong>: When a cached task fails to invalidate because of insufficient inputs, leading to invalid result, we can say that the task is <em>underbaked</em>. In the context of incremental compilation, we call it <em>under-compilation</em>.</li>
+</ul>
+<p>For example, we can say that mixing <code>@transient</code> keys into a cached task could potentially lead to underbaking.</p>
 <h2 id="缓存文件"><a class="header" href="#缓存文件">缓存文件</a></h2>
 <p>缓存文件（如 <code>java.io.File</code>）需要单独考虑，不是因为技术难度，而主要是因为涉及文件时的歧义和假设。当我们说「文件」时，它可能实际指：</p>
 <ol>

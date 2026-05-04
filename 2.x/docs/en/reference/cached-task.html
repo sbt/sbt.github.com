@@ -227,7 +227,29 @@ sbt:demo&gt; show someKey
 [success] elapsed time: 0 s, cache 100%, 1 disk cache hit
 </code></pre>
 <h3 id="caching-is-serialization-hard"><a class="header" href="#caching-is-serialization-hard">Caching is serialization-hard</a></h3>
-<p>To participate in the automatic caching, the input keys (e.g. <code>name</code> and <code>version</code>) must provide a given for <code>sjsonnew.HashWriter</code> typeclass and return type must provide a given for <code>sjsonnew.JsonFormat</code>. <a href="https://www.scala-sbt.org/contraband/">Contraband</a> can be used to generate sjson-new codecs.</p>
+<p>To participate in the automatic caching, the input keys (e.g. <code>name</code> and <code>version</code>) must provide a given instance for <code>sjsonnew.HashWriter</code> typeclass and return type must provide a given instance for <code>sjsonnew.JsonFormat</code>.</p>
+<pre><code class="language-bash">[error] -- Error: /Users/xxx/caching/project/FooPlugin.scala:17:4 -
+[error]  17 |    foo := {
+[error]     |    ^
+[error]     |given evidence sjsonnew.JsonFormat[sbt.HashedVirtualFileRef] is not found; opt out of caching by annotating the key with @transient, or as foo := Def.uncached(...), or provide a given value
+[error]     |
+[error]  18 |      val b = baseDirectory.value
+</code></pre>
+<p>Codecs for some of the built-in types like <code>HashedVirtualFileRef</code> can be made available using <code>CacheImplicits.given</code>:</p>
+<pre><code class="language-scala">import CacheImplicits.given
+
+....
+
+  override lazy val projectSettings: Seq[Setting[?]] = Seq(
+    foo := {
+      val b = baseDirectory.value
+      val conv = fileConverter.value
+      conv.toVirtualFile((b / "build.sbt").toPath)
+    },
+    bar := foo.value,
+  )
+</code></pre>
+<p><a href="https://www.scala-sbt.org/contraband/">Contraband</a> can be used to generate sjson-new codecs.</p>
 <h2 id="effect-tracking"><a class="header" href="#effect-tracking">Effect tracking</a></h2>
 <h3 id="the-effect-of-file-creation"><a class="header" href="#the-effect-of-file-creation">The effect of file creation</a></h3>
 <p>To cache the effect of file creation, not just returning the name of the file, we need to track the effect of file creation using <code>Def.declareOutput(vf)</code>.</p>
@@ -239,22 +261,65 @@ sbt:demo&gt; show someKey
   vf: xsbti.HashedVirtualFileRef
 }
 </code></pre>
-<h2 id="opting-out-from-caching"><a class="header" href="#opting-out-from-caching">Opting out from caching</a></h2>
-<h3 id="build-wide-opt-out"><a class="header" href="#build-wide-opt-out">Build-wide opt-out</a></h3>
-<p>To opt out of by-default custom task caching, add the following to <code>project/plugins.sbt</code>:</p>
-<pre><code class="language-scala">Compile / scalacOptions += "-Xmacro-settings:sbt:no-default-task-cache"
-</code></pre>
-<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<h3 id="the-effect-of-system-properties"><a class="header" href="#the-effect-of-system-properties">The effect of system properties</a></h3>
+<p>Capturing a system property or an environment variable in a cached task can break the cache stability.
+Consider the following cached task:</p>
+<div id="admonition-buildsbt-bad-example" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-bad-example-title">
 <div class="admonition-title">
-<div id="admonition-note-title">
-<p>Note</p>
+<div id="admonition-buildsbt-bad-example-title">
+<p>build.sbt bad example</p>
 </div>
-<a class="admonition-anchor-link" href="#admonition-note"></a>
+<a class="admonition-anchor-link" href="#admonition-buildsbt-bad-example"></a>
 </div>
 <div>
-<p>This applies only to the custom tasks introduced in the build. Any cached tasks provided by sbt or plugins will remain cached.</p>
+<pre><code class="language-scala">lazy val someInt = taskKey[Int]("")
+
+// BAD
+someInt := {
+  sys.props("release").toInt + 1
+}
+</code></pre>
 </div>
 </div>
+<p>Suppose we run it first with <code>-Drelease=0</code>:</p>
+<pre><code class="language-bash">$ sbt --server -Drelease=0
+....
+sbt:caching&gt; show someInt
+[info] 1
+[success] elapsed time: 0 s, cache 0%, 1 onsite task
+</code></pre>
+<p>However, even if we run with <code>-Drelease=1</code> the value does not change:</p>
+<pre><code class="language-bash">$ sbt --server -Drelease=1
+....
+sbt:caching&gt; show someInt
+[info] 1
+[success] elapsed time: 0 s, cache 100%, 1 disk cache hit
+</code></pre>
+<p>This is because <code>someInt</code> only looks at the shape of its task definition and the input settings and tasks as cache key.
+To correctly cache <code>someInt</code>, wrap the system property as a setting as follows:</p>
+<div id="admonition-buildsbt" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-title">
+<div class="admonition-title">
+<div id="admonition-buildsbt-title">
+<p>build.sbt</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-buildsbt"></a>
+</div>
+<div>
+<pre><code class="language-scala">lazy val someInt = taskKey[Int]("")
+lazy val releaseVer = settingKey[Int]("")
+
+releaseVer := sys.props("release").toInt
+someInt := releaseVer.value + 1
+</code></pre>
+</div>
+</div>
+<p>This will reevaluate the system property each time the build loads:</p>
+<pre><code class="language-bash">$ sbt --server -Drelease=1
+sbt:caching&gt; show someInt
+[info] 2
+[success] elapsed time: 0 s, cache 0%, 1 onsite tas
+</code></pre>
+<h2 id="opting-out-from-caching"><a class="header" href="#opting-out-from-caching">Opting out from caching</a></h2>
 <h3 id="per-task-key-opt-out"><a class="header" href="#per-task-key-opt-out">Per-task-key opt-out</a></h3>
 <p>Next, if you want to opt some task keys from caching, you can set the cache level as follows:</p>
 <pre><code class="language-scala">@transient
@@ -272,6 +337,21 @@ someKey := Def.uncached {
   name.value + somethingUncachable.value + "!"
 }
 </code></pre>
+<h3 id="build-wide-opt-out"><a class="header" href="#build-wide-opt-out">Build-wide opt-out</a></h3>
+<p>To opt out of by-default custom task caching, add the following to <code>project/plugins.sbt</code>:</p>
+<pre><code class="language-scala">Compile / scalacOptions += "-Xmacro-settings:sbt:no-default-task-cache"
+</code></pre>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note"></a>
+</div>
+<div>
+<p>This applies only to the custom tasks introduced in the build. Any cached tasks provided by sbt or plugins will remain cached.</p>
+</div>
+</div>
 <h2 id="remote-caching"><a class="header" href="#remote-caching">Remote caching</a></h2>
 <p>sbt 2.x implements Bazel-compatible gRPC interface, which works with number of backend both open source and commercial. See <a href="./remote-cache-setup.html">Remote cache setup</a> for more details.</p>
 

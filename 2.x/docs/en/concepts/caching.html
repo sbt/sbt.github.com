@@ -246,6 +246,13 @@ the input keys (e.g. <code>name</code> and <code>version</code>) must provide a 
 <code>sjsonnew.HashWriter</code> typeclass and return type must provide a given for
 <code>sjsonnew.JsonFormat</code>.
 <a href="https://www.scala-sbt.org/contraband/">Contraband</a> can be used to generate sjson-new codecs.</p>
+<h3 id="underbaking"><a class="header" href="#underbaking">Underbaking</a></h3>
+<p>It's useful to have words to describe the failure states of cached tasks.</p>
+<ul>
+<li><strong>Overbaking</strong>: When a cached task is invalidated more than necessary because of excess input <code>(A1, A2, A3, ...)</code>, leading to unnecessary work, we can say that the task is <em>overbaked</em>.</li>
+<li><strong>Underbaking</strong>: When a cached task fails to invalidate because of insufficient inputs, leading to invalid result, we can say that the task is <em>underbaked</em>. In the context of incremental compilation, we call it <em>under-compilation</em>.</li>
+</ul>
+<p>For example, we can say that mixing <code>@transient</code> keys into a cached task could potentially lead to underbaking.</p>
 <h2 id="caching-files"><a class="header" href="#caching-files">Caching files</a></h2>
 <p>Caching files (e.g. <code>java.io.File</code>) requires its own consideration, not because it's technically difficult, but mostly because of the ambiguity and assumptions when files are involved. When we say a "file" it could actually mean:</p>
 <ol>
