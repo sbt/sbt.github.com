@@ -222,7 +222,7 @@
 <h2 id="缓存基础"><a class="header" href="#缓存基础">缓存基础</a></h2>
 <p>基本思路是将构建过程视为纯函数，接受输入 <code>(A1, A2, A3, ...)</code> 并返回输出 <code>(R1, List(O1, O2, O3, ...))</code>。例如，我们可以接受源文件列表、Scala 版本，最终产生 <code>*.jar</code> 文件。若此假设成立，则对于相同输入，我们可以为所有人记忆输出 JAR。我们关注此技术，是因为使用记忆的输出 JAR 比执行 Scala 编译等实际任务更快。</p>
 <h3 id="密闭构建"><a class="header" href="#密闭构建">密闭构建</a></h3>
-<p>作为构建即纯函数的心智模型，构建工程师有时使用密闭构建（<em>hermetic build</em>）一词，指在沙漠中无钟表、无网络的集装箱内进行的构建。若能从该状态产生 JAR 文件，则该 JAR 应可安全地被任何机器共享。为何提到钟表？因为JAR 可能包含时间戳，因此每次产生略有不同的 JAR。为避免此问题，密闭构建工具会将时间戳覆盖为固定日期 2010-01-01，无论构建何时进行。</p>
+<p>作为构建即纯函数的心智模型，构建工程师有时使用密闭构建（<em>hermetic build</em>）一词，指在沙漠中、于货运集装箱内进行、无钟表、无网络的构建。若能从该状态产生 JAR 文件，则该 JAR 应可安全地在任意机器间共享。为何提到钟表？因为 JAR 可能包含时间戳，因此每次产生略有不同的 JAR。为避免此问题，密闭构建工具会将时间戳覆盖为固定日期 2010-01-01，无论构建何时进行。</p>
 <p>最终捕获临时输入的构建被称为破坏密闭性或非密闭。另一种常见的破坏密闭性的方式是将绝对路径作为输入或输出捕获。有时路径通过宏嵌入 JAR，您可能直到检查字节码才知道。</p>
 <h2 id="自动缓存"><a class="header" href="#自动缓存">自动缓存</a></h2>
 <p>以下是自动缓存的演示：</p>
@@ -240,13 +240,13 @@ sbt:demo&gt; show someKey
 </code></pre>
 <h3 id="缓存与序列化同样困难"><a class="header" href="#缓存与序列化同样困难">缓存与序列化同样困难</a></h3>
 <p>要参与自动缓存，输入键（如 <code>name</code> 和 <code>version</code>）必须为 <code>sjsonnew.HashWriter</code> typeclass 提供 given，返回类型必须为 <code>sjsonnew.JsonFormat</code> 提供 given。<a href="https://www.scala-sbt.org/contraband/">Contraband</a> 可用于生成 sjson-new 编解码器。</p>
-<h3 id="underbaking"><a class="header" href="#underbaking">Underbaking</a></h3>
-<p>It's useful to have words to describe the failure states of cached tasks.</p>
+<h3 id="欠烤与过烤"><a class="header" href="#欠烤与过烤">欠烤与过烤</a></h3>
+<p>为描述缓存任务的失败状态，事先约定一些用语会很有帮助。</p>
 <ul>
-<li><strong>Overbaking</strong>: When a cached task is invalidated more than necessary because of excess input <code>(A1, A2, A3, ...)</code>, leading to unnecessary work, we can say that the task is <em>overbaked</em>.</li>
-<li><strong>Underbaking</strong>: When a cached task fails to invalidate because of insufficient inputs, leading to invalid result, we can say that the task is <em>underbaked</em>. In the context of incremental compilation, we call it <em>under-compilation</em>.</li>
+<li><strong>过烤（Overbaking）</strong>：当缓存任务因输入 <code>(A1, A2, A3, ...)</code> 过多而不必要地失效，产生多余工作时，称该任务过烤。</li>
+<li><strong>欠烤（Underbaking）</strong>：当缓存任务因输入不足而未能失效，导致结果无效时，称该任务欠烤。在增量编译语境下，称之为 <em>under-compilation</em>（欠编译）。</li>
 </ul>
-<p>For example, we can say that mixing <code>@transient</code> keys into a cached task could potentially lead to underbaking.</p>
+<p>例如，在缓存任务中混入 <code>@transient</code> 键可能导致欠烤。</p>
 <h2 id="缓存文件"><a class="header" href="#缓存文件">缓存文件</a></h2>
 <p>缓存文件（如 <code>java.io.File</code>）需要单独考虑，不是因为技术难度，而主要是因为涉及文件时的歧义和假设。当我们说「文件」时，它可能实际指：</p>
 <ol>

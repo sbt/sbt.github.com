@@ -1942,7 +1942,7 @@ example.ExampleSuite:
 <h2 id="缓存基础"><a class="header" href="#缓存基础">缓存基础</a></h2>
 <p>基本思路是将构建过程视为纯函数，接受输入 <code>(A1, A2, A3, ...)</code> 并返回输出 <code>(R1, List(O1, O2, O3, ...))</code>。例如，我们可以接受源文件列表、Scala 版本，最终产生 <code>*.jar</code> 文件。若此假设成立，则对于相同输入，我们可以为所有人记忆输出 JAR。我们关注此技术，是因为使用记忆的输出 JAR 比执行 Scala 编译等实际任务更快。</p>
 <h3 id="密闭构建"><a class="header" href="#密闭构建">密闭构建</a></h3>
-<p>作为构建即纯函数的心智模型，构建工程师有时使用密闭构建（<em>hermetic build</em>）一词，指在沙漠中无钟表、无网络的集装箱内进行的构建。若能从该状态产生 JAR 文件，则该 JAR 应可安全地被任何机器共享。为何提到钟表？因为JAR 可能包含时间戳，因此每次产生略有不同的 JAR。为避免此问题，密闭构建工具会将时间戳覆盖为固定日期 2010-01-01，无论构建何时进行。</p>
+<p>作为构建即纯函数的心智模型，构建工程师有时使用密闭构建（<em>hermetic build</em>）一词，指在沙漠中、于货运集装箱内进行、无钟表、无网络的构建。若能从该状态产生 JAR 文件，则该 JAR 应可安全地在任意机器间共享。为何提到钟表？因为 JAR 可能包含时间戳，因此每次产生略有不同的 JAR。为避免此问题，密闭构建工具会将时间戳覆盖为固定日期 2010-01-01，无论构建何时进行。</p>
 <p>最终捕获临时输入的构建被称为破坏密闭性或非密闭。另一种常见的破坏密闭性的方式是将绝对路径作为输入或输出捕获。有时路径通过宏嵌入 JAR，您可能直到检查字节码才知道。</p>
 <h2 id="自动缓存"><a class="header" href="#自动缓存">自动缓存</a></h2>
 <p>以下是自动缓存的演示：</p>
@@ -1960,13 +1960,13 @@ sbt:demo&gt; show someKey
 </code></pre>
 <h3 id="缓存与序列化同样困难"><a class="header" href="#缓存与序列化同样困难">缓存与序列化同样困难</a></h3>
 <p>要参与自动缓存，输入键（如 <code>name</code> 和 <code>version</code>）必须为 <code>sjsonnew.HashWriter</code> typeclass 提供 given，返回类型必须为 <code>sjsonnew.JsonFormat</code> 提供 given。<a href="https://www.scala-sbt.org/contraband/">Contraband</a> 可用于生成 sjson-new 编解码器。</p>
-<h3 id="underbaking"><a class="header" href="#underbaking">Underbaking</a></h3>
-<p>It's useful to have words to describe the failure states of cached tasks.</p>
+<h3 id="欠烤与过烤"><a class="header" href="#欠烤与过烤">欠烤与过烤</a></h3>
+<p>为描述缓存任务的失败状态，事先约定一些用语会很有帮助。</p>
 <ul>
-<li><strong>Overbaking</strong>: When a cached task is invalidated more than necessary because of excess input <code>(A1, A2, A3, ...)</code>, leading to unnecessary work, we can say that the task is <em>overbaked</em>.</li>
-<li><strong>Underbaking</strong>: When a cached task fails to invalidate because of insufficient inputs, leading to invalid result, we can say that the task is <em>underbaked</em>. In the context of incremental compilation, we call it <em>under-compilation</em>.</li>
+<li><strong>过烤（Overbaking）</strong>：当缓存任务因输入 <code>(A1, A2, A3, ...)</code> 过多而不必要地失效，产生多余工作时，称该任务过烤。</li>
+<li><strong>欠烤（Underbaking）</strong>：当缓存任务因输入不足而未能失效，导致结果无效时，称该任务欠烤。在增量编译语境下，称之为 <em>under-compilation</em>（欠编译）。</li>
 </ul>
-<p>For example, we can say that mixing <code>@transient</code> keys into a cached task could potentially lead to underbaking.</p>
+<p>例如，在缓存任务中混入 <code>@transient</code> 键可能导致欠烤。</p>
 <h2 id="缓存文件"><a class="header" href="#缓存文件">缓存文件</a></h2>
 <p>缓存文件（如 <code>java.io.File</code>）需要单独考虑，不是因为技术难度，而主要是因为涉及文件时的歧义和假设。当我们说「文件」时，它可能实际指：</p>
 <ol>
@@ -3371,8 +3371,8 @@ sbt:demo&gt; show someKey
 [info] demo0.1.0-SNAPSHOT!
 [success] elapsed time: 0 s, cache 100%, 1 disk cache hit
 </code></pre>
-<h3 id="缓存依赖序列化"><a class="header" href="#缓存依赖序列化">缓存依赖序列化</a></h3>
-<p>To participate in the automatic caching, the input keys (e.g. <code>name</code> and <code>version</code>) must provide a given instance for <code>sjsonnew.HashWriter</code> typeclass and return type must provide a given instance for <code>sjsonnew.JsonFormat</code>.</p>
+<h3 id="缓存与序列化同样困难-1"><a class="header" href="#缓存与序列化同样困难-1">缓存与序列化同样困难</a></h3>
+<p>要参与自动缓存，输入键（如 <code>name</code> 和 <code>version</code>）必须为 <code>sjsonnew.HashWriter</code> typeclass 提供 given 实例，返回类型必须为 <code>sjsonnew.JsonFormat</code> 提供 given 实例。</p>
 <pre><code class="language-bash">[error] -- Error: /Users/xxx/caching/project/FooPlugin.scala:17:4 -
 [error]  17 |    foo := {
 [error]     |    ^
@@ -3380,7 +3380,7 @@ sbt:demo&gt; show someKey
 [error]     |
 [error]  18 |      val b = baseDirectory.value
 </code></pre>
-<p>Codecs for some of the built-in types like <code>HashedVirtualFileRef</code> can be made available using <code>CacheImplicits.given</code>:</p>
+<p>部分内置类型（如 <code>HashedVirtualFileRef</code>）的编解码器可通过 <code>CacheImplicits.given</code> 提供：</p>
 <pre><code class="language-scala">import CacheImplicits.given
 
 ....
@@ -3394,7 +3394,7 @@ sbt:demo&gt; show someKey
     bar := foo.value,
   )
 </code></pre>
-<p><a href="https://www.scala-sbt.org/contraband/">Contraband</a> can be used to generate sjson-new codecs.</p>
+<p><a href="https://www.scala-sbt.org/contraband/">Contraband</a> 可用于生成 sjson-new 编解码器。</p>
 <h2 id="效果跟踪"><a class="header" href="#效果跟踪">效果跟踪</a></h2>
 <h3 id="文件创建的效果"><a class="header" href="#文件创建的效果">文件创建的效果</a></h3>
 <p>要缓存文件创建的效果（而不仅是返回文件名），需使用 <code>Def.declareOutput(vf)</code> 跟踪文件创建的效果。</p>
@@ -3406,8 +3406,8 @@ sbt:demo&gt; show someKey
   vf: xsbti.HashedVirtualFileRef
 }
 </code></pre>
-<h3 id="the-effect-of-system-properties"><a class="header" href="#the-effect-of-system-properties">The effect of system properties</a></h3>
-<p>Capturing a system property or an environment variable in a cached task can break the cache stability. Consider the following cached task:</p>
+<h3 id="系统属性的影响"><a class="header" href="#系统属性的影响">系统属性的影响</a></h3>
+<p>在缓存任务中捕获系统属性或环境变量会破坏缓存稳定性。考虑以下缓存任务：</p>
 <div id="admonition-buildsbt-bad-example" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-bad-example-title">
 <div class="admonition-title">
 <div id="admonition-buildsbt-bad-example-title">
@@ -3425,21 +3425,21 @@ someInt := {
 </code></pre>
 </div>
 </div>
-<p>Suppose we run it first with <code>-Drelease=0</code>:</p>
+<p>首先假设我们使用 <code>-Drelease=0</code> 运行：</p>
 <pre><code class="language-bash">$ sbt --server -Drelease=0
 ....
 sbt:caching&gt; show someInt
 [info] 1
 [success] elapsed time: 0 s, cache 0%, 1 onsite task
 </code></pre>
-<p>However, even if we run with <code>-Drelease=1</code> the value does not change:</p>
+<p>然而，即使我们使用 <code>-Drelease=1</code> 运行，数值也不会改变：</p>
 <pre><code class="language-bash">$ sbt --server -Drelease=1
 ....
 sbt:caching&gt; show someInt
 [info] 1
 [success] elapsed time: 0 s, cache 100%, 1 disk cache hit
 </code></pre>
-<p>This is because <code>someInt</code> only looks at the shape of its task definition and the input settings and tasks as cache key. To correctly cache <code>someInt</code>, wrap the system property as a setting as follows:</p>
+<p>这是因为在使用缓存键时，<code>someInt</code> 只考察任务定义的形态以及输入设置与任务。要正确缓存 <code>someInt</code>，请将系统属性包装为设置，如下所示：</p>
 <div id="admonition-buildsbt" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-title">
 <div class="admonition-title">
 <div id="admonition-buildsbt-title">
@@ -3456,7 +3456,7 @@ someInt := releaseVer.value + 1
 </code></pre>
 </div>
 </div>
-<p>This will reevaluate the system property each time the build loads:</p>
+<p>这将在每次加载构建时重新求值系统属性：</p>
 <pre><code class="language-bash">$ sbt --server -Drelease=1
 sbt:caching&gt; show someInt
 [info] 2
@@ -3496,7 +3496,7 @@ someKey := Def.uncached {
 </div>
 </div>
 <h2 id="远程缓存-2"><a class="header" href="#远程缓存-2">远程缓存</a></h2>
-<p>sbt 2.x 实现了 Bazel 兼容的 gRPC 接口，可与多种开源和商业后端配合使用。详见 <a href="reference/./remote-cache-setup.html">Remote cache setup</a>。</p>
+<p>sbt 2.x 实现了与 Bazel 兼容的 gRPC 接口，可与多种开源和商业后端配合使用。详见 <a href="reference/./remote-cache-setup.html">远程缓存设置</a>。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="交叉构建设置"><a class="header" href="#交叉构建设置">交叉构建设置</a></h1>
 <p>本页介绍交叉构建设置。有关一般说明，请参阅<a href="reference/../concepts/cross-building.html">交叉构建</a>。</p>
 <h2 id="使用交叉构建的库-1"><a class="header" href="#使用交叉构建的库-1">使用交叉构建的库</a></h2>
