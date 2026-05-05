@@ -220,7 +220,7 @@
 <p>現行 Scala バージョンが Scala 3.x であるならば、上の例は以下と等価となる:</p>
 <pre><code class="language-scala">libraryDependencies += "org.typelevel" % "cats-effect_3" % "3.5.4"
 </code></pre>
-<p>セットアップに関しては、<a href="../reference/cross-building-setup.html">cross building setup</a> 参照。</p>
+<p>セットアップに関しては、<a href="../reference/cross-building-setup.html">クロスビルドの設定</a>を参照。</p>
 <h2 id="歴史的経緯"><a class="header" href="#歴史的経緯">歴史的経緯</a></h2>
 <p>Scala の初期時代 (Scala 2.9 以前) は、Scala 標準ライブラリがパッチレベルでもバイナリ互換性を保たなかったため、新しい Scala バージョンがリリースされるたびに全ライブラリが、新しい Scala バージョンに対して再リリースされる必要があった。そのため、ライブラリのユーザ側は、自分が使う Scala バージョンに互換の特定のライブラリのバージョンを選ぶ必要があった。</p>
 <p>Scala 2.9.x 以降も Scala 標準ライブラリはマイナーレベルでの互換性を持たなかったため、Scala 2.10.x に対してコンパイルされたライブラリは 2.11.x と互換性を持たなかった。</p>
@@ -230,19 +230,19 @@
 <li>Maven のアーティファクト名に ABI バージョン (<code>_2.12</code> など) を付随するという慣例を定義した</li>
 <li>この機構は Scala.JS その他のプラットフォームもサポートするよう拡張された</li>
 </ul>
-<h2 id="プロジェクトマトリックス"><a class="header" href="#プロジェクトマトリックス">プロジェクトマトリックス</a></h2>
-<p>sbt 2.x ではプロジェクトマトリックスが導入され、クロスビルドを並列実行できるようになった。</p>
+<h2 id="project-matrix"><a class="header" href="#project-matrix">Project matrix</a></h2>
+<p>sbt 2.x は project matrix を導入して、並列クロスビルドを可能とする。</p>
 <pre><code class="language-scala">organization := "com.example"
-scalaVersion := "3.8.2"
+scalaVersion := "3.8.3"
 version      := "0.1.0-SNAPSHOT"
 
 lazy val core = (projectMatrix in file("core"))
   .settings(
     name := "core"
   )
-  .jvmPlatform(scalaVersions = Seq("3.8.2", "2.13.17"))
+  .jvmPlatform(scalaVersions = Seq("3.8.3", "2.13.18"))
 </code></pre>
-<p>セットアップに関しては、<a href="../reference/cross-building-setup.html">cross building setup</a> 参照。</p>
+<p>セットアップに関しては、<a href="../reference/cross-building-setup.html">クロスビルドの設定</a>を参照。</p>
 
                     </main>
 

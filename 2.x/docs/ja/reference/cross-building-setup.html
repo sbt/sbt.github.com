@@ -260,18 +260,109 @@
 <p>以下と等価である:</p>
 <pre><code class="language-scala">"a" % "b_2.9.1" % "1.0"
 </code></pre>
-<h2 id="プロジェクトマトリックス"><a class="header" href="#プロジェクトマトリックス">プロジェクトマトリックス</a></h2>
-<p>sbt 2.x ではプロジェクトマトリックスが導入され、クロスビルドを並列実行できるようになった。</p>
-<pre><code class="language-scala">organization := "com.example"
-scalaVersion := "3.8.2"
+<h2 id="project-matrix"><a class="header" href="#project-matrix">Project matrix</a></h2>
+<p>sbt 2.x では project matrix が導入され、クロスビルドをサブプロジェクトとして表すことで、並列実行できるようになった。</p>
+<div id="admonition-buildsbt" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-title">
+<div class="admonition-title">
+<div id="admonition-buildsbt-title">
+<p>build.sbt</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-buildsbt"></a>
+</div>
+<div>
+<pre><code class="language-scala">lazy val scala3 = "3.8.3"
+lazy val scala2_13 = "2.13.18"
+
+organization := "com.example"
+scalaVersion := scala3
 version      := "0.1.0-SNAPSHOT"
 
 lazy val core = (projectMatrix in file("core"))
   .settings(
-    name := "core"
+    name := "core",
   )
-  .jvmPlatform(scalaVersions = Seq("3.8.2", "2.13.17"))
+  .jvmPlatform(scalaVersions = Seq(scala3, scala2_13))
+  .nativePlatform(scalaVersions = Seq(scala3, scala2_13))
+  // .jsPlatform(scalaVersions = Seq(scala3))
+
+// optional
+lazy val core3 = core.jvm(scala3)
+lazy val coreNative3 = core.native(scala3)
 </code></pre>
+</div>
+</div>
+<div id="admonition-projectpluginssbt" class="admonition admonish-example" role="note" aria-labelledby="admonition-projectpluginssbt-title">
+<div class="admonition-title">
+<div id="admonition-projectpluginssbt-title">
+<p>project/plugins.sbt</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-projectpluginssbt"></a>
+</div>
+<div>
+<pre><code class="language-scala">addSbtPlugin("org.scala-native" % "sbt-scala-native" % "0.5.11")
+</code></pre>
+</div>
+</div>
+<h3 id="サプブロジェクトの生成"><a class="header" href="#サプブロジェクトの生成">サプブロジェクトの生成</a></h3>
+<p>読み込み時に project matrix は、プラットフォームと Scala バージョンの組み合わせをサブプロジェクトへと展開する。</p>
+<pre><code class="language-bash">sbt:cross-root&gt; projects
+[info]     core
+[info]     core2_13
+[info]     coreNative
+[info]     coreNative2_13
+[info]   * cross-root
+</code></pre>
+<p>規約により、マトリックス中の JVM Scala 3 バリアントは、<code>core</code>のように接尾辞を持たない名前が与えられる。</p>
+<pre><code class="language-bash">sbt:cross-root&gt; core/run
+[info] running (fork) example.main
+Hello
+[success] ok
+</code></pre>
+<p><code>build.sbt</code> 内で、サブプロジェクトを参照するには、<code>jvm(...)</code>、<code>js(...)</code>, もしくは <code>native(...)</code> を呼ぶことができる:</p>
+<pre><code class="language-scala">// For Scala
+lazy val core3 = core.jvm(scalaVersion = scala3)
+
+// For Java
+lazy val intf0 = intf.jvm(autoScalaLibrary = false)
+</code></pre>
+<h3 id="virtual-axis"><a class="header" href="#virtual-axis">Virtual axis</a></h3>
+<p>マトリックスの各組み合わせは <code>ProjectRow</code> と呼ばれ、ProjectRow は、<code>VirtualAxis</code> の列によって構成されている。</p>
+<pre><code class="language-scala">final class ProjectRow(
+    val autoScalaLibrary: Boolean,
+    val axisValues: Seq[VirtualAxis],
+    val process: Project =&gt; Project
+)
+
+object VirtualAxis:
+
+  /**
+   * WeakAxis allows a row to depend on another row with Zero value.
+   * For example, Scala version can be Zero for Java project, and it's ok.
+   */
+  abstract class WeakAxis extends VirtualAxis
+
+  /** StrongAxis requires a row to depend on another row with the same selected value. */
+  abstract class StrongAxis extends VirtualAxis
+end VirtualAxis
+</code></pre>
+<p>VirtualAxis はさらに、<code>WeakAxis</code> と <code>StrongAxis</code> に分岐する。Scala バージョンは、弱い軸の例で、ある Scala バージョンを持つ列は、Scala バージョンを持たない Java の列に依存することができる。一方、同一のプラットフォーム間でしか依存することができないため、プラットフォームは強い軸として定義される。</p>
+<p>例えば、SparkAxis は以下のように定義できる:</p>
+<div id="admonition-projectaxisscala" class="admonition admonish-example" role="note" aria-labelledby="admonition-projectaxisscala-title">
+<div class="admonition-title">
+<div id="admonition-projectaxisscala-title">
+<p>project/Axis.scala</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-projectaxisscala"></a>
+</div>
+<div>
+<pre><code class="language-scala">import sbt.*
+
+case class SparkAxis(idSuffix: String, directorySuffix: String)
+  extends VirtualAxis.WeakAxis
+</code></pre>
+</div>
+</div>
+<p>具体的な <code>SparkAxis</code> の使用方法に関しては <a href="../recipes/virtual-axis.html">VirtualAxis に対するクロスビルド</a>のレシピ参照。</p>
 <h2 id="公開規約"><a class="header" href="#公開規約">公開規約</a></h2>
 <p>ライブラリのコンパイルに使用した Scala のバージョンを示すため、Scala ABI（アプリケーションバイナリインターフェース）バージョンをサフィックスとして使用する。例えば、アーティファクト名 <code>cats-effect_2.13</code> は Scala 2.13.x が使用されたことを意味し、<code>cats-effect_3</code> は Scala 3.x が使用されたことを意味する。このシンプルな方式で Maven、Ant などのビルドツールユーザーとの相互運用が可能である。2.13.0-RC1 のようなプレリリース版の Scala では、フルバージョンが ABI バージョンとして扱われる。</p>
 <p><code>crossVersion</code> セッティングで公開規約をオーバーライドできる:</p>

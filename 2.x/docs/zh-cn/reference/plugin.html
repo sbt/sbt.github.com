@@ -228,7 +228,7 @@
 <p><strong>插件</strong>用于扩展构建定义，常用来增加内置设置和任务之外的能力。示例用途包括构建 Docker 容器、支持 Scala.JS、生成 GitHub Actions YAML 等。</p>
 <p>插件定义一系列 sbt 设置，可自动加入所有项目，或为选定项目显式声明。插件也可定义新命令。sbt 1.x 与 2.x 中的插件扩展 <code>sbt.AutoPlugin</code> trait，可自动处理依赖插件之间的设置顺序。</p>
 <h2 id="创建插件"><a class="header" href="#创建插件">创建插件</a></h2>
-<p>概念上，可将 sbt 插件视为「metabuild 上的普通库」，当前 metabuild 使用 Scala 3.8.2。实践中，现代 sbt 插件围绕 auto plugin（<code>sbt.AutoPlugin</code>）构建，按正确顺序提供任务和设置。更多说明请参阅「插件依赖」一节。</p>
+<p>Conceptually we can think of the sbt plugins to be <em>any other libraries on the metabuild</em>, which is currently on Scala 3.8.3. However, in practice modern sbt plugins are built around auto plugin (<code>sbt.AutoPlugin</code>), which provides tasks and settings in the correct order. See the Plugin dependencies section for more details.</p>
 <h3 id="buildsbt-设置"><a class="header" href="#buildsbt-设置">build.sbt 设置</a></h3>
 <p>要创建 auto plugin，请创建项目并启用 <code>SbtPlugin</code>。</p>
 <div id="admonition-buildsbt" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-title">

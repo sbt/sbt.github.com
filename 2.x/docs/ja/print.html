@@ -232,7 +232,7 @@
 </ul>
 <p><img src="files/sbt-logo.svg" alt="sbt logo" /></p>
 <p>sbt は主に Scala と Java のためのシンプルなビルド・ツールだ。sbt は、Coursier を用いたライブラリ依存性のダウンロード、プロジェクトの差分コンパイルや差分テスト、IntelliJ や VS Code などの IDE との統合、JAR パッケージの作成、および JVM コミュニティーがパッケージ管理に用いる <a href="https://central.sonatype.com/">Central Repo</a> への公開などを行う。</p>
-<pre><code class="language-scala">scalaVersion := "3.8.2"
+<pre><code class="language-scala">scalaVersion := "3.8.3"
 </code></pre>
 <p>Scala を始めるには、一行の <code>build.sbt</code> を書くだけでいい。</p>
 <h2 id="リンク"><a class="header" href="#リンク">リンク</a></h2>
@@ -346,7 +346,7 @@ Hello
 [success] elapsed time: 0 s, cache 50%, 1 disk cache hit, 1 onsite task
 </code></pre>
 <h3 id="sbt-シェルから-scalaversion-を設定する"><a class="header" href="#sbt-シェルから-scalaversion-を設定する">sbt シェルから scalaVersion を設定する</a></h3>
-<pre><code>sbt:foo-build&gt; set scalaVersion := "3.8.2"
+<pre><code>sbt:foo-build&gt; set scalaVersion := "3.8.3"
 [info] Defining scalaVersion
 [info] The new value will be used by Compile / bspBuildTarget, Compile / dependencyTreeCrossProjectId and 51 others.
 [info]  Run `last` for details.
@@ -355,7 +355,7 @@ Hello
 </code></pre>
 <p><code>scalaVersion</code> セッティングを確認する:</p>
 <pre><code>sbt:foo-build&gt; scalaVersion
-[info] 3.8.2
+[info] 3.8.3
 </code></pre>
 <h3 id="セッションを-buildsbt-へと保存する"><a class="header" href="#セッションを-buildsbt-へと保存する">セッションを build.sbt へと保存する</a></h3>
 <p>アドホックに設定したセッティングは <code>session save</code> で保存できる。</p>
@@ -370,7 +370,7 @@ Hello
 [warn] Disable this warning by setting `Global / onChangedBuildSource := IgnoreSourceChanges`.
 </code></pre>
 <p><code>build.sbt</code> ファイルは以下のようになったはずだ:</p>
-<pre><code class="language-scala">scalaVersion := "3.8.2"
+<pre><code class="language-scala">scalaVersion := "3.8.3"
 
 </code></pre>
 <h3 id="プロジェクトに名前を付ける"><a class="header" href="#プロジェクトに名前を付ける">プロジェクトに名前を付ける</a></h3>
@@ -897,7 +897,7 @@ $ sbt new scala/scala3.g8
 <p>sbt server は、そのサブコンポーネントとして <a href="https://get-coursier.io/">Couriser</a> を実行して、Scala 標準ライブラリ、Scala コンパイラ、ビルドで使われるその他のライブラリ依存性の解決を行う。</p>
 <h3 id="zinc"><a class="header" href="#zinc">Zinc</a></h3>
 <p>Zinc は、sbt プロジェクトにより開発、メンテされている、Scala の差分コンパイラだ。Zinc の側面として見落とされがちなのは、Zinc は<strong>ここ数年に出た全てのバージョン</strong>の Scala コンパイラに対する安定した API を提供しているということがある。Coursier がどんな Scala バージョンでも解決できることと合わせると、sbt は <code>build.sbt</code> に一行書くだけで、ここ数年に出たどのバージョンの Scala でも走らせることができる:</p>
-<pre><code class="language-scala">scalaVersion := "3.8.2"
+<pre><code class="language-scala">scalaVersion := "3.8.3"
 </code></pre>
 <h3 id="bsp-server"><a class="header" href="#bsp-server">BSP server</a></h3>
 <p>sbt server は <a href="https://build-server-protocol.github.io/">Build Server Protocol (BSP)</a> をサポートして、ビルド対象の列挙、ビルドの実行、その他を行うことができる。これにより、IntelliJ や Metals といった IDE が既に実行中の sbt server  とコードを用いて通信することが可能となる。</p>
@@ -1127,7 +1127,7 @@ key           operator   (setting/task) body
 val toolkit = "org.scala-lang" %% "toolkit" % toolkitV
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % toolkitV
 
-scalaVersion := "3.8.2"
+scalaVersion := "3.8.3"
 libraryDependencies += toolkit
 libraryDependencies += (toolkitTest % Test)
 </code></pre>
@@ -1206,7 +1206,7 @@ end Dependencies
 <p>この <code>Dependencies</code> オブジェクトは <code>build.sbt</code> 内で利用可能となる。 定義されている <code>val</code> が使いやすいように <code>Dependencies.*</code> を import しておこう。</p>
 <pre><code class="language-scala">import Dependencies.*
 
-scalaVersion := "3.8.2"
+scalaVersion := "3.8.3"
 name := "something"
 libraryDependencies += toolkit
 libraryDependencies += toolkitTest % Test
@@ -1230,7 +1230,7 @@ libraryDependencies += toolkitTest % Test
 <p>簡単なプログラムならば単一プロジェクトから作り始めてもいいが、ビルドが複数の小さいのサブプロジェクトに分かれていくのが普通だ。</p>
 <p>ビルド内のサブプロジェクトは、それぞれ独自のソースディレクトリを持ち、<code>packageBin</code> を実行すると独自の JAR ファイルを生成するなど、概ね通常のプロジェクトと同様に動作する。</p>
 <p><strong>サブプロジェクト</strong>は、<code>lazy val</code> を用いて <a href="guide/../../api/sbt/Project.html">Project</a> 型の値を宣言することで定義される。例えば:</p>
-<pre><code class="language-scala">scalaVersion := "3.8.2"
+<pre><code class="language-scala">scalaVersion := "3.8.3"
 LocalRootProject / publish / skip := true
 
 lazy val core = (project in file("core"))
@@ -1255,7 +1255,7 @@ lazy val util = (project in file("util"))
 <p>ビルドのルートにあるサブプロジェクトは、<strong>ルートプロジェクト</strong>と呼ばれ、ビルドの中で特別な役割を果たすことがある。もしルートディレクトリにサブプロジェクトが定義されてない場合、sbt は自動的に他のプロジェクトを集約するデフォルトのルートプロジェクトを生成する。</p>
 <h2 id="タスク集約"><a class="header" href="#タスク集約">タスク集約</a></h2>
 <p>タスク集約は、集約する側のサブプロジェクトで任意のタスクを実行するとき、集約される側の複数のサブプロジェクトでも同じタスクが実行されるという関係を意味する。</p>
-<pre><code class="language-scala">scalaVersion := "3.8.2"
+<pre><code class="language-scala">scalaVersion := "3.8.3"
 
 lazy val root = rootProject
   .autoAggregate
@@ -1270,7 +1270,7 @@ lazy val core = (project in file("core"))
 <p>上の例では、ルートプロジェクトが <code>util</code> と <code>core</code> を集約する。そのため、sbt シェルに <code>compile</code> と打ち込むと、3つのサブプロジェクトが並列にコンパイルされる。</p>
 <h2 id="コモンセッティング"><a class="header" href="#コモンセッティング">コモン・セッティング</a></h2>
 <p>sbt 2.x では、<code>settings(...)</code> を使わずに <code>build.sbt</code> にセッティングを直書きした場合、<strong>コモン・セッティング</strong>として全サブプロジェクトに注入される。</p>
-<pre><code class="language-scala">scalaVersion := "3.8.2"
+<pre><code class="language-scala">scalaVersion := "3.8.3"
 
 lazy val core = (project in file("core"))
 
@@ -1279,7 +1279,7 @@ lazy val app = (project in file("app"))
 </code></pre>
 <p>上の例では、<code>scalaVersion</code> セッティングはデフォルトのルートプロジェクト、<code>core</code>、<code>util</code> に適用される。</p>
 <p>既にサブプロジェクトにスコープ付けされたセッティングはこのルールの例外となる。</p>
-<pre><code class="language-scala">scalaVersion := "3.8.2"
+<pre><code class="language-scala">scalaVersion := "3.8.3"
 
 lazy val core = (project in file("core"))
 
@@ -1290,7 +1290,7 @@ lazy val app = (project in file("app"))
 app / name := "app1"
 </code></pre>
 <p>この例外を利用して、以下のように、ルートプロジェクトにのみ適用されるセッティングを書くことができる:</p>
-<pre><code class="language-scala">scalaVersion := "3.8.2"
+<pre><code class="language-scala">scalaVersion := "3.8.3"
 
 lazy val core = (project in file("core"))
 
@@ -1523,7 +1523,7 @@ an odd trick, but this fact becomes relevant [later][Organizing-Build].
 </ul>
 <h3 id="コモンセッティング-1"><a class="header" href="#コモンセッティング-1">コモン・セッティング</a></h3>
 <p>sbt 2.x では、<code>build.sbt</code> に直書きされたセッティングはコモン・セッティングとして解釈され、全サブプロジェクトに注入される。そのため、<code>ThisBuild</code> スコープ付けを使わずに <code>scalaVersion</code> を設定できる:</p>
-<pre><code class="language-scala">scalaVersion := "3.8.2"
+<pre><code class="language-scala">scalaVersion := "3.8.3"
 </code></pre>
 <p>さらに、これはいわゆる動的ディスパッチ問題を解決する:</p>
 <pre><code class="language-scala">lazy val hi = taskKey[String]("")
@@ -1640,7 +1640,7 @@ libraryDependencies +=
 </code></pre>
 <h2 id="ベアセッティングの変更点"><a class="header" href="#ベアセッティングの変更点">ベア・セッティングの変更点</a></h2>
 <pre><code class="language-scala">version := "0.1.0"
-scalaVersion := "3.8.2"
+scalaVersion := "3.8.3"
 </code></pre>
 <p><code>settings(...)</code> を介さず、上の例のように <code>build.sbt</code> に直書きされたセッティングを<strong>ベア・セッティング</strong> (bare settings) と呼ぶ。</p>
 <div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
@@ -1823,7 +1823,7 @@ myTask := {
 <p>現行 Scala バージョンが Scala 3.x であるならば、上の例は以下と等価となる:</p>
 <pre><code class="language-scala">libraryDependencies += "org.typelevel" % "cats-effect_3" % "3.5.4"
 </code></pre>
-<p>セットアップに関しては、<a href="concepts/../reference/cross-building-setup.html">cross building setup</a> 参照。</p>
+<p>セットアップに関しては、<a href="concepts/../reference/cross-building-setup.html">クロスビルドの設定</a>を参照。</p>
 <h2 id="歴史的経緯"><a class="header" href="#歴史的経緯">歴史的経緯</a></h2>
 <p>Scala の初期時代 (Scala 2.9 以前) は、Scala 標準ライブラリがパッチレベルでもバイナリ互換性を保たなかったため、新しい Scala バージョンがリリースされるたびに全ライブラリが、新しい Scala バージョンに対して再リリースされる必要があった。そのため、ライブラリのユーザ側は、自分が使う Scala バージョンに互換の特定のライブラリのバージョンを選ぶ必要があった。</p>
 <p>Scala 2.9.x 以降も Scala 標準ライブラリはマイナーレベルでの互換性を持たなかったため、Scala 2.10.x に対してコンパイルされたライブラリは 2.11.x と互換性を持たなかった。</p>
@@ -1833,19 +1833,19 @@ myTask := {
 <li>Maven のアーティファクト名に ABI バージョン (<code>_2.12</code> など) を付随するという慣例を定義した</li>
 <li>この機構は Scala.JS その他のプラットフォームもサポートするよう拡張された</li>
 </ul>
-<h2 id="プロジェクトマトリックス"><a class="header" href="#プロジェクトマトリックス">プロジェクトマトリックス</a></h2>
-<p>sbt 2.x ではプロジェクトマトリックスが導入され、クロスビルドを並列実行できるようになった。</p>
+<h2 id="project-matrix"><a class="header" href="#project-matrix">Project matrix</a></h2>
+<p>sbt 2.x は project matrix を導入して、並列クロスビルドを可能とする。</p>
 <pre><code class="language-scala">organization := "com.example"
-scalaVersion := "3.8.2"
+scalaVersion := "3.8.3"
 version      := "0.1.0-SNAPSHOT"
 
 lazy val core = (projectMatrix in file("core"))
   .settings(
     name := "core"
   )
-  .jvmPlatform(scalaVersions = Seq("3.8.2", "2.13.17"))
+  .jvmPlatform(scalaVersions = Seq("3.8.3", "2.13.18"))
 </code></pre>
-<p>セットアップに関しては、<a href="concepts/../reference/cross-building-setup.html">cross building setup</a> 参照。</p>
+<p>セットアップに関しては、<a href="concepts/../reference/cross-building-setup.html">クロスビルドの設定</a>を参照。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-クエリ-1"><a class="header" href="#sbt-クエリ-1">sbt クエリ</a></h1>
 <p>sbt 2.x はスラッシュ構文を拡張してサブプロジェクトの集約を可能とする:</p>
 <p><em>act</em> <code>::=</code> [ <em>query</em> <code>/</code> ] [ <em>config</em> <code>/</code> ] [ <em>in-task</em> <code>/</code> ] ( <em>taskKey</em> | <em>settingKey</em> )</p>
@@ -1860,7 +1860,7 @@ lazy val core = (projectMatrix in file("core"))
 <a class="admonition-anchor-link" href="concepts/sbt-query.html#admonition-buildsbt-example-1"></a>
 </div>
 <div>
-<pre><code class="language-scala">scalaVersion := "3.8.2"
+<pre><code class="language-scala">scalaVersion := "3.8.3"
 
 lazy val foo = project
 </code></pre>
@@ -1901,13 +1901,13 @@ lazy val foo = projectMatrix
   .settings(
     libraryDependencies += toolkit,
   )
-  .jvmPlatform(scalaVersions = Seq("3.8.2", "2.13.17"))
+  .jvmPlatform(scalaVersions = Seq("3.8.3", "2.13.18"))
 
 lazy val bar = projectMatrix
   .settings(
     libraryDependencies += toolkit,
   )
-  .jvmPlatform(scalaVersions = Seq("3.8.2", "2.13.17"))
+  .jvmPlatform(scalaVersions = Seq("3.8.3", "2.13.18"))
 </code></pre>
 </div>
 </div>
@@ -2623,7 +2623,7 @@ Evictions: 2
 <h3 id="コンパイル設定"><a class="header" href="#コンパイル設定">コンパイル設定</a></h3>
 <h4 id="scalaversion"><a class="header" href="#scalaversion">scalaVersion</a></h4>
 <p>コンパイルに使用する Scala のバージョン。</p>
-<pre><code class="language-scala">scalaVersion := "3.8.2"
+<pre><code class="language-scala">scalaVersion := "3.8.3"
 </code></pre>
 <h4 id="scalacoptions"><a class="header" href="#scalacoptions">scalacOptions</a></h4>
 <p>Scala コンパイラのオプション。</p>
@@ -3544,18 +3544,109 @@ someKey := Def.uncached {
 <p>以下と等価である:</p>
 <pre><code class="language-scala">"a" % "b_2.9.1" % "1.0"
 </code></pre>
-<h2 id="プロジェクトマトリックス-1"><a class="header" href="#プロジェクトマトリックス-1">プロジェクトマトリックス</a></h2>
-<p>sbt 2.x ではプロジェクトマトリックスが導入され、クロスビルドを並列実行できるようになった。</p>
-<pre><code class="language-scala">organization := "com.example"
-scalaVersion := "3.8.2"
+<h2 id="project-matrix-1"><a class="header" href="#project-matrix-1">Project matrix</a></h2>
+<p>sbt 2.x では project matrix が導入され、クロスビルドをサブプロジェクトとして表すことで、並列実行できるようになった。</p>
+<div id="admonition-buildsbt" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-title">
+<div class="admonition-title">
+<div id="admonition-buildsbt-title">
+<p>build.sbt</p>
+</div>
+<a class="admonition-anchor-link" href="reference/cross-building-setup.html#admonition-buildsbt"></a>
+</div>
+<div>
+<pre><code class="language-scala">lazy val scala3 = "3.8.3"
+lazy val scala2_13 = "2.13.18"
+
+organization := "com.example"
+scalaVersion := scala3
 version      := "0.1.0-SNAPSHOT"
 
 lazy val core = (projectMatrix in file("core"))
   .settings(
-    name := "core"
+    name := "core",
   )
-  .jvmPlatform(scalaVersions = Seq("3.8.2", "2.13.17"))
+  .jvmPlatform(scalaVersions = Seq(scala3, scala2_13))
+  .nativePlatform(scalaVersions = Seq(scala3, scala2_13))
+  // .jsPlatform(scalaVersions = Seq(scala3))
+
+// optional
+lazy val core3 = core.jvm(scala3)
+lazy val coreNative3 = core.native(scala3)
 </code></pre>
+</div>
+</div>
+<div id="admonition-projectpluginssbt" class="admonition admonish-example" role="note" aria-labelledby="admonition-projectpluginssbt-title">
+<div class="admonition-title">
+<div id="admonition-projectpluginssbt-title">
+<p>project/plugins.sbt</p>
+</div>
+<a class="admonition-anchor-link" href="reference/cross-building-setup.html#admonition-projectpluginssbt"></a>
+</div>
+<div>
+<pre><code class="language-scala">addSbtPlugin("org.scala-native" % "sbt-scala-native" % "0.5.11")
+</code></pre>
+</div>
+</div>
+<h3 id="サプブロジェクトの生成"><a class="header" href="#サプブロジェクトの生成">サプブロジェクトの生成</a></h3>
+<p>読み込み時に project matrix は、プラットフォームと Scala バージョンの組み合わせをサブプロジェクトへと展開する。</p>
+<pre><code class="language-bash">sbt:cross-root&gt; projects
+[info]     core
+[info]     core2_13
+[info]     coreNative
+[info]     coreNative2_13
+[info]   * cross-root
+</code></pre>
+<p>規約により、マトリックス中の JVM Scala 3 バリアントは、<code>core</code>のように接尾辞を持たない名前が与えられる。</p>
+<pre><code class="language-bash">sbt:cross-root&gt; core/run
+[info] running (fork) example.main
+Hello
+[success] ok
+</code></pre>
+<p><code>build.sbt</code> 内で、サブプロジェクトを参照するには、<code>jvm(...)</code>、<code>js(...)</code>, もしくは <code>native(...)</code> を呼ぶことができる:</p>
+<pre><code class="language-scala">// For Scala
+lazy val core3 = core.jvm(scalaVersion = scala3)
+
+// For Java
+lazy val intf0 = intf.jvm(autoScalaLibrary = false)
+</code></pre>
+<h3 id="virtual-axis"><a class="header" href="#virtual-axis">Virtual axis</a></h3>
+<p>マトリックスの各組み合わせは <code>ProjectRow</code> と呼ばれ、ProjectRow は、<code>VirtualAxis</code> の列によって構成されている。</p>
+<pre><code class="language-scala">final class ProjectRow(
+    val autoScalaLibrary: Boolean,
+    val axisValues: Seq[VirtualAxis],
+    val process: Project =&gt; Project
+)
+
+object VirtualAxis:
+
+  /**
+   * WeakAxis allows a row to depend on another row with Zero value.
+   * For example, Scala version can be Zero for Java project, and it's ok.
+   */
+  abstract class WeakAxis extends VirtualAxis
+
+  /** StrongAxis requires a row to depend on another row with the same selected value. */
+  abstract class StrongAxis extends VirtualAxis
+end VirtualAxis
+</code></pre>
+<p>VirtualAxis はさらに、<code>WeakAxis</code> と <code>StrongAxis</code> に分岐する。Scala バージョンは、弱い軸の例で、ある Scala バージョンを持つ列は、Scala バージョンを持たない Java の列に依存することができる。一方、同一のプラットフォーム間でしか依存することができないため、プラットフォームは強い軸として定義される。</p>
+<p>例えば、SparkAxis は以下のように定義できる:</p>
+<div id="admonition-projectaxisscala" class="admonition admonish-example" role="note" aria-labelledby="admonition-projectaxisscala-title">
+<div class="admonition-title">
+<div id="admonition-projectaxisscala-title">
+<p>project/Axis.scala</p>
+</div>
+<a class="admonition-anchor-link" href="reference/cross-building-setup.html#admonition-projectaxisscala"></a>
+</div>
+<div>
+<pre><code class="language-scala">import sbt.*
+
+case class SparkAxis(idSuffix: String, directorySuffix: String)
+  extends VirtualAxis.WeakAxis
+</code></pre>
+</div>
+</div>
+<p>具体的な <code>SparkAxis</code> の使用方法に関しては <a href="reference/../recipes/virtual-axis.html">VirtualAxis に対するクロスビルド</a>のレシピ参照。</p>
 <h2 id="公開規約"><a class="header" href="#公開規約">公開規約</a></h2>
 <p>ライブラリのコンパイルに使用した Scala のバージョンを示すため、Scala ABI（アプリケーションバイナリインターフェース）バージョンをサフィックスとして使用する。例えば、アーティファクト名 <code>cats-effect_2.13</code> は Scala 2.13.x が使用されたことを意味し、<code>cats-effect_3</code> は Scala 3.x が使用されたことを意味する。このシンプルな方式で Maven、Ant などのビルドツールユーザーとの相互運用が可能である。2.13.0-RC1 のようなプレリリース版の Scala では、フルバージョンが ABI バージョンとして扱われる。</p>
 <p><code>crossVersion</code> セッティングで公開規約をオーバーライドできる:</p>
@@ -3829,9 +3920,9 @@ Def.setting {
         token(state.remainingCommands.size.toString) )
 }
 </code></pre>
-<p>This Parser definition will produce a value of type <code>(String,String)</code>. The input syntax defined isn't very flexible; it is just a demonstration. It will produce one of the following values for a successful parse (assuming the current Scala version is 3.8.2, the current sbt version is 2.0.0-RC12, and there are 3 commands left to run):</p>
+<p>This Parser definition will produce a value of type <code>(String,String)</code>. The input syntax defined isn't very flexible; it is just a demonstration. It will produce one of the following values for a successful parse (assuming the current Scala version is 3.8.3, the current sbt version is 2.0.0-RC12, and there are 3 commands left to run):</p>
 <ul>
-<li>(scala,3.8.2)</li>
+<li>(scala,3.8.3)</li>
 <li>(sbt,2.0.0-RC12)</li>
 <li>(commands,3)</li>
 </ul>
@@ -4276,7 +4367,7 @@ end CommandExample
 <p><strong>プラグイン</strong>はビルド定義を拡張する手段であり、組み込みのセッティングやタスクではできない機能を追加するのに使われる。例としては Docker コンテナの構築、Scala.JS のサポート、GitHub Actions の YAML 生成などがある。</p>
 <p>プラグインは sbt のセッティングの列を定義し、すべてのプロジェクトに自動的に追加するか、選択したプロジェクトに明示的に宣言する。プラグインは新しいコマンドも定義できる。sbt 1.x および 2.x のプラグインは <code>sbt.AutoPlugin</code> トレイトを継承し、依存プラグイン間のセッティングの順序を自動化する。</p>
 <h2 id="プラグインの作成"><a class="header" href="#プラグインの作成">プラグインの作成</a></h2>
-<p>概念的には、sbt プラグインは「メタビルド (現在は Scala 3.8.2) 上にある何の変哲もないライブラリ」と考えられる。しかし実際には、現代の sbt プラグインは auto plugin（<code>sbt.AutoPlugin</code>）を中心に構築され、正しい順序でタスクとセッティングを提供する。詳細はプラグイン依存性の節を参照。</p>
+<p>Conceptually we can think of the sbt plugins to be <em>any other libraries on the metabuild</em>, which is currently on Scala 3.8.3. However, in practice modern sbt plugins are built around auto plugin (<code>sbt.AutoPlugin</code>), which provides tasks and settings in the correct order. See the Plugin dependencies section for more details.</p>
 <h3 id="buildsbt-の設定"><a class="header" href="#buildsbt-の設定">build.sbt の設定</a></h3>
 <p>auto plugin を作るには、プロジェクトを作成し <code>SbtPlugin</code> を有効にする。</p>
 <div id="admonition-buildsbt" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-title">
@@ -5080,7 +5171,7 @@ your plugin to the list.</p>
 </li>
 <li>
 <p><code>hello_scala/</code> の下に <code>build.sbt</code> を作成する:</p>
-<pre><code class="language-scala">scalaVersion := "3.8.2"
+<pre><code class="language-scala">scalaVersion := "3.8.3"
 </code></pre>
 </li>
 <li>
@@ -5422,6 +5513,113 @@ BareBuildSyntax.dependsOn(jmhRef)
 </li>
 </ol>
 <p>上記において、<code>https://github.com/eed3si9n/sbt-jmh.git</code> は GitHub でホストされているプラグインの HTTP エンドポイントであり、<code>303c3e98e1d1523e6a4f99abe09c900165028edb</code> はデフォルトブランチのコミット ID である。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="virtualaxis-に対するクロスビルド"><a class="header" href="#virtualaxis-に対するクロスビルド">VirtualAxis に対するクロスビルド</a></h1>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="recipes/virtual-axis.html#admonition-note"></a>
+</div>
+<div>
+<p>レシピセクションは目的に焦点を当て、説明は最小限に留める。</p>
+</div>
+</div>
+<h2 id="目的-5"><a class="header" href="#目的-5">目的</a></h2>
+<p>Apache Spark バージョンを表す VirtualAxis に対してクロスビルドしたい。</p>
+<h2 id="手順-5"><a class="header" href="#手順-5">手順</a></h2>
+<ol>
+<li>ローカルで弱い軸を定義する:</li>
+</ol>
+<div id="admonition-projectaxisscala" class="admonition admonish-example" role="note" aria-labelledby="admonition-projectaxisscala-title">
+<div class="admonition-title">
+<div id="admonition-projectaxisscala-title">
+<p>project/Axis.scala</p>
+</div>
+<a class="admonition-anchor-link" href="recipes/virtual-axis.html#admonition-projectaxisscala"></a>
+</div>
+<div>
+<pre><code class="language-scala">import sbt.*
+
+case class SparkAxis(idSuffix: String, directorySuffix: String)
+  extends VirtualAxis.WeakAxis
+</code></pre>
+</div>
+</div>
+<ol start="2">
+<li>カスタム列を持つ project matrix を定義する。以下の例では、Spark 3 に対しては Scala 2.12 と 2.13、Spark 4 に対しては Scala 2.13 と 3 をビルドする。</li>
+</ol>
+<div id="admonition-buildsbt" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-title">
+<div class="admonition-title">
+<div id="admonition-buildsbt-title">
+<p>build.sbt</p>
+</div>
+<a class="admonition-anchor-link" href="recipes/virtual-axis.html#admonition-buildsbt"></a>
+</div>
+<div>
+<pre><code class="language-scala">lazy val scala212 = "2.12.21"
+lazy val scala213 = "2.13.18"
+lazy val scala3 = "3.8.3"
+lazy val spark3 = SparkAxis(idSuffix = "Spark3", directorySuffix = "spark3")
+lazy val spark4 = SparkAxis(idSuffix = "Spark4", directorySuffix = "spark4")
+
+organization := "com.example"
+version := "0.1.0-SNAPSHOT"
+
+lazy val app = (projectMatrix in file("app"))
+  .settings(
+    name := "app"
+  )
+  .customRow(
+    scalaVersions = Seq(scala212, scala213),
+    axisValues = Seq(spark3, VirtualAxis.jvm),
+    settings = Seq(
+      moduleName := name.value + "_spark3",
+      libraryDependencies += "org.apache.spark" %% "spark-core" % "3.5.8",
+    )
+  )
+  .customRow(
+    scalaVersions = Seq(scala213, scala3),
+    axisValues = Seq(spark4, VirtualAxis.jvm),
+    settings = Seq(
+      moduleName := name.value + "_spark4",
+      libraryDependencies += ("org.apache.spark" %% "spark-core" % "4.1.0")
+        .cross(CrossVersion.for3Use2_13),
+    )
+  )
+</code></pre>
+</div>
+</div>
+<ol start="3">
+<li><code>app/src/main/scala</code> 以下にソースを置く:</li>
+</ol>
+<div id="admonition-appsrcmainscalaexampleascala" class="admonition admonish-example" role="note" aria-labelledby="admonition-appsrcmainscalaexampleascala-title">
+<div class="admonition-title">
+<div id="admonition-appsrcmainscalaexampleascala-title">
+<p>app/src/main/scala/example/A.scala</p>
+</div>
+<a class="admonition-anchor-link" href="recipes/virtual-axis.html#admonition-appsrcmainscalaexampleascala"></a>
+</div>
+<div>
+<pre><code class="language-scala">package example
+
+import org.apache.spark.SparkContext
+
+object A {
+  def main(args: Array[String]): Unit = {
+    val sc = new SparkContext("local", "test")
+    sc.stop()
+  }
+}
+</code></pre>
+</div>
+</div>
+<p>実行を確認する:</p>
+<pre><code class="language-bash">sbt:virtual-axis-root&gt; appSpark4/run
+[info] running (fork) example.A
+Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties
+26/05/05 00:00:00 INFO SparkContext: Running Spark version 4.1.0
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="glossary"><a class="header" href="#glossary">Glossary</a></h1>
 <h2 id="symbols"><a class="header" href="#symbols">Symbols</a></h2>
 <h3 id="--"><a class="header" href="#--"><code>:=</code>, <code>+=</code>, <code>++=</code></a></h3>
