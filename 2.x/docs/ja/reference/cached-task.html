@@ -350,6 +350,28 @@ someKey := Def.uncached {
 <p>これはビルドで導入したカスタムタスクにのみ適用される。sbt またはプラグインが提供するキャッシュ化タスクはキャッシュされたままである。</p>
 </div>
 </div>
+<h2 id="実行ログ"><a class="header" href="#実行ログ">実行ログ</a></h2>
+<p>キャッシュ化に関連する問題をデバッグするために、sbt は実行ログ機能を持つ。実行ログ機能は、<code>sbt.experimental_execution_log</code> システム・プロパティを <code>true</code> もしくはファイル名に設定することで、有効化される:</p>
+<pre><code class="language-bash">$ sbt --server -Dsbt.experimental_execution_log=true compile
+</code></pre>
+<p><code>true</code> に設定した場合、実行ログは <code>target/global-logging</code> 以下に生成される:</p>
+<pre><code class="language-json">{
+  "input": {
+    "digest": "sha256-a50da1cd086987bc273861a815da4e90ba4735d4a21b965e861e583382a985d6/48",
+    "codeContentHash": "murmur3-0000000000000000ffffffffce70de5a/0",
+    "extraHash": "murmur3-00000000000000000000000000000000/0",
+    "str": "(CompileInputs2(Vector(
+${CSR_CACHE}/https/repo1.maven.org/maven2/org/scala-lang/scala3-library_3/3.7.4/scala3-library_3-3.7.4.jar, ...))))"
+  },
+  "cacheHit": true,
+  "exitCode": 0,
+  "outputs": [
+    "${OUT}/value/sha256-a50da1cd086987bc273861a815da4e90ba4735d4a21b965e861e583382a985d6/48.json&gt;
+    sha256-f222bfd59f319bb6a2d4d58003b2131c0c42a10cdb4da9df971480ca8d044f7b/179",
+  ]
+}
+</code></pre>
+<p>JSON の形式は将来的に変更される可能性があるので、この機能は実験的 (experimental) フラグを使っている。</p>
 <h2 id="リモートキャッシュ"><a class="header" href="#リモートキャッシュ">リモート・キャッシュ</a></h2>
 <p>sbt 2.x は Bazel 互換の gRPC インターフェースを実装しており、オープンソースおよび商用の多数のバックエンドと連携する。詳細は<a href="./remote-cache-setup.html">リモート・キャッシュの設定</a>を参照。</p>
 

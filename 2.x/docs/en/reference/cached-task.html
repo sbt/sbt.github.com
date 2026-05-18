@@ -352,6 +352,28 @@ someKey := Def.uncached {
 <p>This applies only to the custom tasks introduced in the build. Any cached tasks provided by sbt or plugins will remain cached.</p>
 </div>
 </div>
+<h2 id="execution-log"><a class="header" href="#execution-log">Execution log</a></h2>
+<p>To debug caching issues, sbt ships with execution log feature. The execution log can be enabled with <code>sbt.experimental_execution_log</code> system property set to either <code>true</code> or a file path:</p>
+<pre><code class="language-bash">$ sbt --server -Dsbt.experimental_execution_log=true compile
+</code></pre>
+<p>When set to <code>true</code>, an execution log will be created <code>target/global-logging</code>:</p>
+<pre><code class="language-json">{
+  "input": {
+    "digest": "sha256-a50da1cd086987bc273861a815da4e90ba4735d4a21b965e861e583382a985d6/48",
+    "codeContentHash": "murmur3-0000000000000000ffffffffce70de5a/0",
+    "extraHash": "murmur3-00000000000000000000000000000000/0",
+    "str": "(CompileInputs2(Vector(
+${CSR_CACHE}/https/repo1.maven.org/maven2/org/scala-lang/scala3-library_3/3.7.4/scala3-library_3-3.7.4.jar, ...))))"
+  },
+  "cacheHit": true,
+  "exitCode": 0,
+  "outputs": [
+    "${OUT}/value/sha256-a50da1cd086987bc273861a815da4e90ba4735d4a21b965e861e583382a985d6/48.json&gt;
+    sha256-f222bfd59f319bb6a2d4d58003b2131c0c42a10cdb4da9df971480ca8d044f7b/179",
+  ]
+}
+</code></pre>
+<p>This feature is under an experimental flag since the JSON format is subject to change.</p>
 <h2 id="remote-caching"><a class="header" href="#remote-caching">Remote caching</a></h2>
 <p>sbt 2.x implements Bazel-compatible gRPC interface, which works with number of backend both open source and commercial. See <a href="./remote-cache-setup.html">Remote cache setup</a> for more details.</p>
 

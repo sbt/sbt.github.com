@@ -3502,6 +3502,28 @@ someKey := Def.uncached {
 <p>此设置仅适用于构建中引入的自定义任务。sbt 或插件提供的任何缓存任务仍将保持缓存。</p>
 </div>
 </div>
+<h2 id="execution-log"><a class="header" href="#execution-log">Execution log</a></h2>
+<p>To debug caching issues, sbt ships with execution log feature. The execution log can be enabled with <code>sbt.experimental_execution_log</code> system property set to either <code>true</code> or a file path:</p>
+<pre><code class="language-bash">$ sbt --server -Dsbt.experimental_execution_log=true compile
+</code></pre>
+<p>When set to <code>true</code>, an execution log will be created <code>target/global-logging</code>:</p>
+<pre><code class="language-json">{
+  "input": {
+    "digest": "sha256-a50da1cd086987bc273861a815da4e90ba4735d4a21b965e861e583382a985d6/48",
+    "codeContentHash": "murmur3-0000000000000000ffffffffce70de5a/0",
+    "extraHash": "murmur3-00000000000000000000000000000000/0",
+    "str": "(CompileInputs2(Vector(
+${CSR_CACHE}/https/repo1.maven.org/maven2/org/scala-lang/scala3-library_3/3.7.4/scala3-library_3-3.7.4.jar, ...))))"
+  },
+  "cacheHit": true,
+  "exitCode": 0,
+  "outputs": [
+    "${OUT}/value/sha256-a50da1cd086987bc273861a815da4e90ba4735d4a21b965e861e583382a985d6/48.json&gt;
+    sha256-f222bfd59f319bb6a2d4d58003b2131c0c42a10cdb4da9df971480ca8d044f7b/179",
+  ]
+}
+</code></pre>
+<p>This feature is under an experimental flag since the JSON format is subject to change.</p>
 <h2 id="远程缓存-2"><a class="header" href="#远程缓存-2">远程缓存</a></h2>
 <p>sbt 2.x 实现了与 Bazel 兼容的 gRPC 接口，可与多种开源和商业后端配合使用。详见 <a href="reference/./remote-cache-setup.html">远程缓存设置</a>。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="交叉构建设置"><a class="header" href="#交叉构建设置">交叉构建设置</a></h1>
