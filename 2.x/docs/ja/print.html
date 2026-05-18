@@ -275,11 +275,11 @@ sdk install sbt
 cd foo-build
 touch build.sbt
 mkdir project
-echo "sbt.version=2.0.0-RC12" &gt; project/build.properties
+echo "sbt.version=2.0.0-RC13" &gt; project/build.properties
 </code></pre>
 <h3 id="sbt-シェルを起ち上げる"><a class="header" href="#sbt-シェルを起ち上げる">sbt シェルを起ち上げる</a></h3>
 <pre><code class="language-bash">$ sbt
-[info] welcome to sbt 2.0.0-RC12 (Azul Systems, Inc. Java)
+[info] welcome to sbt 2.0.0-RC13 (Azul Systems, Inc. Java)
 ....
 [info] started sbt server
 sbt:foo-build&gt;
@@ -882,7 +882,7 @@ $ sbt new scala/scala3.g8
 <p>sbt のビルドは、「<code>sbt</code> という名前のシェルスクリプト」によって実行され、このスクリプトは sbt runner と呼ばれる。</p>
 <h3 id="projectbuildproperties-による-sbt-バージョンの指定"><a class="header" href="#projectbuildproperties-による-sbt-バージョンの指定">project/build.properties による sbt バージョンの指定</a></h3>
 <p>sbt runner は、そのサブコンポーネントである sbt launcher を実行し、sbt launcher は <code>project/build.properties</code> を読み込んで、そのビルドに使われる sbt のバージョンを決定し、キャッシュに無ければ sbt 本体をダウンロードする:</p>
-<pre><code>sbt.version=2.0.0-RC12
+<pre><code>sbt.version=2.0.0-RC13
 </code></pre>
 <p>これは、つまり</p>
 <ul>
@@ -1491,7 +1491,7 @@ an odd trick, but this fact becomes relevant [later][Organizing-Build].
 <h2 id="互換性に影響のある変更点"><a class="header" href="#互換性に影響のある変更点">互換性に影響のある変更点</a></h2>
 <p><a href="changes/./migrating-from-sbt-1.x.html">sbt 1.x からのマイグレーション</a>も参照。</p>
 <ul>
-<li><strong>Scala 3 を用いたメタビルド</strong>。ビルド定義やプラグインに使われる sbt 2.x build.sbt DSL は Scala 3.x ベースとなった (現行では <strong>3.8.2</strong>)  (sbt 1.x 並びに 2.x は、Scala 2.x と 3.x の両方をビルドすることが可能) by <a href="https://github.com/eed3si9n">@eed3si9n</a>, <a href="https://github.com/adpi2">@adpi2</a>, and others.</li>
+<li><strong>Scala 3 を用いたメタビルド</strong>。ビルド定義やプラグインに使われる sbt 2.x build.sbt DSL は Scala 3.x ベースとなった (現行では <strong>3.8.3</strong>)  (sbt 1.x 並びに 2.x は、Scala 2.x と 3.x の両方をビルドすることが可能) by <a href="https://github.com/eed3si9n">@eed3si9n</a>, <a href="https://github.com/adpi2">@adpi2</a>, and others.</li>
 <li><strong>コモン・セッティング</strong>。build.sbt に直書きされたセッティングは、ルートサブプロジェクトだけではなく、全てのサブプロジェクトに追加され、これまで <code>ThisBuild</code> が受け持ってきた役目を果たすことができる。</li>
 <li><strong>差分テスト</strong>。<code>test</code> は、テスト結果をキャッシュする差分テストへと変更された。全テストを走らせたい場合は <code>testFull</code> を使う by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7686">#7686</a></li>
 <li><strong>キャッシュ化されたタスク</strong>。全てのタスクはデフォルトで、キャッシュ化されている。詳細は<a href="changes/../concepts/caching.html">キャッシュ化</a>を参照。</li>
@@ -1506,6 +1506,7 @@ an odd trick, but this fact becomes relevant [later][Organizing-Build].
 <li>sbt 2.x では、<code>target</code> のデフォルトが <code>&lt;subproject&gt;/target/</code> から <code>target/out/jvm/scala-3.8.2/&lt;subproject&gt;/</code> へと変更された。</li>
 <li>sbt 2.x は <code>build.sbt</code> に変更があると、デフォルトで自動的リロードされるようになった <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8211">#8211</a></li>
 <li>sbt 2.x は、sbt シェル内でのスコープ付きタスクの委譲を禁止する <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8539">#8539</a></li>
+<li>sbt 2.x は、エヴィクション・エラー規制を <code>Test</code> コンフィギュレーションでも施行する by <a href="https://github.com/calm329">@calm329</a> and <a href="https://github.com/zainab-ali">@zainab-ali</a> in <a href="https://github.com/sbt/sbt/pull/8451">#8451</a> + <a href="https://github.com/sbt/sbt/pull/9102">#9102</a></li>
 </ul>
 <h3 id="勧告どおり廃止された機能"><a class="header" href="#勧告どおり廃止された機能">勧告どおり廃止された機能</a></h3>
 <ul>
@@ -1518,6 +1519,7 @@ an odd trick, but this fact becomes relevant [later][Organizing-Build].
 <li><strong>sbt クエリ</strong>。sbt 2.x は統一スラッシュ構文を拡張してサブプロジェクトのクエリを可能とする。詳細は下記参照。</li>
 <li><strong>ローカル/リモート兼用のキャッシュ・システム</strong>。詳細は下記参照。</li>
 <li><strong>クライアントサイド・ラン</strong>。詳細は下記参照。</li>
+<li><strong>クライアントサイド REPL</strong>。詳細は下記参照。</li>
 <li><strong>rootProject と autoAggregate</strong>。詳細は下記参照。</li>
 <li><strong>Maven BOM (Bill of Materials) の使用</strong>。詳細は下記参照。</li>
 </ul>
@@ -1550,7 +1552,7 @@ hi := name.value + "!"
 <p>上の例では、<code>scalaBinaryVersion</code> が <code>3</code> の全てのサブプロジェクトを実行する。これは、<a href="https://github.com/eed3si9n">@eed3si9n</a> によって <a href="https://github.com/sbt/sbt/pull/7699">#7699</a> としてコントリされた。</p>
 <h3 id="差分テスト"><a class="header" href="#差分テスト">差分テスト</a></h3>
 <p>sbt 2.x では、<code>test</code> タスクはインプット・タスクとなって、実行するテスト・スイートをフィルターできるようになった:</p>
-<pre><code class="language-bash">&gt; test *Example*
+<pre><code class="language-bash">&gt; test ...ExampleTest
 </code></pre>
 <p>さらに、<code>test</code> はキャッシュ化された差分テストとなった。そのため、以前にテストが失敗したか、前回の実行から何かが変更されないと実行されないようになった。</p>
 <p>詳細は<a href="changes/../reference/sbt-test.html">test</a>を参照</p>
@@ -1573,10 +1575,15 @@ task1 := {
 </code></pre>
 <p>詳細は<a href="changes/../concepts/caching.html">キャッシュ化</a>を参照。これは <a href="https://github.com/eed3si9n">@eed3si9n</a> によって <a href="https://github.com/sbt/sbt/pull/7464">#7464</a> / <a href="https://github.com/sbt/sbt/pull/7525">#7525</a> としてコントリされた。</p>
 <h3 id="クライアントサイドラン"><a class="header" href="#クライアントサイドラン">クライアントサイド・ラン</a></h3>
-<p>sbt runner 1.10.10 以降は sbt 2.x を起動するのに、デフォルトで sbtn (GraalVM native-image のクライアント) を使う。sbt 2.0 は <code>run</code> タスクを sbtn に送り返して、sbtn 側で新しい JVM にフォークさせる。以下のように実行するだけでいい:</p>
+<p>sbt 2.0 では、sbt server は <code>run</code> タスクを sbtn に送り返して、sbtn 側で新しい JVM にフォークさせる。以下のように実行するだけでいい:</p>
 <pre><code class="language-bash">sbt run
 </code></pre>
 <p>これは、sbt server をブロックしてしまうことを回避し、かつ複数の実行を行うことができる。これは <a href="https://github.com/eed3si9n">@eed3si9n</a> によって<a href="https://github.com/sbt/sbt/pull/8060">#8060</a> としてコントリされた。<a href="changes/../reference/sbt-run.html">run</a> ドキュメンテーション参照。</p>
+<h3 id="クライアントサイド-repl"><a class="header" href="#クライアントサイド-repl">クライアントサイド REPL</a></h3>
+<p>クライアントサイド・ラン同様に、sbt server は <code>console</code> (Scala REPL) を sbtn に送り返して、sbtn 側で新しい JVM をフォークして REPL を実行する。以下のように実行するだけでいい:</p>
+<pre><code class="language-bash">sbt console
+</code></pre>
+<p>これは、sbt server をブロックしてしまうことを回避する。これは <a href="https://github.com/eed3si9n">@eed3si9n</a> と <a href="https://github.com/calm329">@calm329</a> によって<a href="https://github.com/sbt/sbt/pull/8018">#8018</a>, <a href="https://github.com/sbt/sbt/pull/8604">#8604</a>, <a href="https://github.com/sbt/sbt/pull/8677">#8677</a>, <a href="https://github.com/sbt/sbt/pull/8705">#8705</a>, <a href="https://github.com/sbt/sbt/pull/8722">#8722</a> としてコントリされた。</p>
 <h3 id="rootproject-と-autoaggregate"><a class="header" href="#rootproject-と-autoaggregate">rootProject と autoAggregate</a></h3>
 <p>sbt 2.0 は <code>rootProject</code> マクロを追加する:</p>
 <pre><code class="language-scala">lazy val root = rootProject
@@ -1708,7 +1715,7 @@ lazy val plugin = (project in file("plugin"))
     (pluginCrossBuild / sbtVersion) := {
       scalaBinaryVersion.value match {
         case "2.12" =&gt; "1.5.8"
-        case _      =&gt; "2.0.0-RC12"
+        case _      =&gt; "2.0.0-RC13"
       }
     },
   )
@@ -2019,7 +2026,7 @@ sbt:demo&gt; show someKey
 </ul>
 </li>
 </ul>
-<pre><code>sbt.version=2.0.0-RC12
+<pre><code>sbt.version=2.0.0-RC13
 </code></pre>
 <p>この機構によってビルドを特定のバージョンの sbt に設置することができ、プロジェクトで作業する人全員が、マシンにインストールされた sbt runner に関わらず同一のビルド意味論を共有できるようになる。</p>
 <p>このような分割があるため、機能の一部は sbt runner や sbtn のレベルで実装され、その他の機能は sbt server レベルで実装される。</p>
@@ -3920,10 +3927,10 @@ Def.setting {
         token(state.remainingCommands.size.toString) )
 }
 </code></pre>
-<p>This Parser definition will produce a value of type <code>(String,String)</code>. The input syntax defined isn't very flexible; it is just a demonstration. It will produce one of the following values for a successful parse (assuming the current Scala version is 3.8.3, the current sbt version is 2.0.0-RC12, and there are 3 commands left to run):</p>
+<p>This Parser definition will produce a value of type <code>(String,String)</code>. The input syntax defined isn't very flexible; it is just a demonstration. It will produce one of the following values for a successful parse (assuming the current Scala version is 3.8.3, the current sbt version is 2.0.0-RC13, and there are 3 commands left to run):</p>
 <ul>
 <li>(scala,3.8.3)</li>
-<li>(sbt,2.0.0-RC12)</li>
+<li>(sbt,2.0.0-RC13)</li>
 <li>(commands,3)</li>
 </ul>
 <p>プロジェクトの現在の Scala と sbt のバージョンにアクセスできたのは、それらがセッティングだからである。タスクはパーサーの定義に使用できない。</p>
@@ -5166,7 +5173,7 @@ your plugin to the list.</p>
 </li>
 <li>
 <p><code>hello_scala/</code> の下に <code>project/</code> ディレクトリを作成し、<code>project/build.properties</code> を次の内容で作成する:</p>
-<pre><code>sbt.version=2.0.0-RC12
+<pre><code>sbt.version=2.0.0-RC13
 </code></pre>
 </li>
 <li>

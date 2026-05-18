@@ -215,7 +215,7 @@
 <h2 id="changes-with-compatibility-implications"><a class="header" href="#changes-with-compatibility-implications">Changes with compatibility implications</a></h2>
 <p>See also <a href="./migrating-from-sbt-1.x.html">Migrating from sbt 1.x</a>.</p>
 <ul>
-<li><strong>Scala 3 in metabuild</strong>. sbt 2.x build.sbt DSL, used for build definitions and plugins, is based on Scala 3.x (currently <strong>3.8.2</strong>)  (Both sbt 1.x and 2.x are capable of building Scala 2.x and 3.x) by <a href="https://github.com/eed3si9n">@eed3si9n</a>, <a href="https://github.com/adpi2">@adpi2</a>, and others.</li>
+<li><strong>Scala 3 in metabuild</strong>. sbt 2.x build.sbt DSL, used for build definitions and plugins, is based on Scala 3.x (currently <strong>3.8.3</strong>)  (Both sbt 1.x and 2.x are capable of building Scala 2.x and 3.x) by <a href="https://github.com/eed3si9n">@eed3si9n</a>, <a href="https://github.com/adpi2">@adpi2</a>, and others.</li>
 <li><strong>Common settings</strong>. Bare settings are added to all subprojects, as opposed to just the root subproject, and thus replacing the role that <code>ThisBuild</code> has played.</li>
 <li><strong>Incremental test</strong>. <code>test</code> task is changed to be incremental test that can cache test results. Use <code>testFull</code> for full test by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7686">#7686</a></li>
 <li><strong>Cached task</strong>. All tasks are cached by default. Details in <a href="../concepts/caching.html">Caching</a>.</li>
@@ -230,6 +230,7 @@
 <li>In sbt 2.x <code>target</code> defaults to <code>target/out/jvm/scala-3.8.2/&lt;subproject&gt;/</code>, as opposed to <code>&lt;subproject&gt;/target/</code>.</li>
 <li>sbt 2.x auto reloads by default on <code>build.sbt</code> changes, by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8211">#8211</a></li>
 <li>sbt 2.x disables the delegation of scoped tasks in the sbt shell by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8539">#8539</a></li>
+<li>sbt 2.x enforces eviction error in <code>Test</code> configuration by <a href="https://github.com/calm329">@calm329</a> and <a href="https://github.com/zainab-ali">@zainab-ali</a> in <a href="https://github.com/sbt/sbt/pull/8451">#8451</a> + <a href="https://github.com/sbt/sbt/pull/9102">#9102</a></li>
 </ul>
 <h3 id="dropped-dreprecations"><a class="header" href="#dropped-dreprecations">Dropped dreprecations</a></h3>
 <ul>
@@ -242,6 +243,7 @@
 <li><strong>sbt query</strong>. sbt 2.x extends the unified slash syntax to support query of subprojects. Details below.</li>
 <li><strong>Local/remote cache system</strong>. Details below</li>
 <li><strong>Client-side run</strong>. Details below.</li>
+<li><strong>Client-side console</strong>. Details below.</li>
 <li><strong>rootProject and autoAggregate</strong>. Details below</li>
 <li><strong>Maven BOM (Bill of Materials) usage</strong>. Details below</li>
 </ul>
@@ -274,7 +276,7 @@ hi := name.value + "!"
 <p>The above runs all subprojects whose <code>scalaBinaryVersion</code> is <code>3</code>. Contributed by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7699">#7699</a></p>
 <h3 id="incremental-test"><a class="header" href="#incremental-test">Incremental test</a></h3>
 <p>In sbt 2.x, <code>test</code> task became an input task that accept arguments that can filter the test suites to run:</p>
-<pre><code class="language-bash">&gt; test *Example*
+<pre><code class="language-bash">&gt; test ...ExampleTest
 </code></pre>
 <p>In addition, <code>test</code> is incremental and cached. This means, the test will not run unless it previously failed or something changed since the last run.</p>
 <p>See <a href="../reference/sbt-test.html">test</a> for details.</p>
@@ -297,10 +299,15 @@ task1 := {
 </code></pre>
 <p>See <a href="../concepts/caching.html">Caching</a> for details. Contributed by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7464">#7464</a> / <a href="https://github.com/sbt/sbt/pull/7525">#7525</a>.</p>
 <h3 id="client-side-run"><a class="header" href="#client-side-run">Client-side run</a></h3>
-<p>The sbt runner 1.10.10 and later script defaults to using sbtn (GraalVM native-image client) for sbt 2.x. In sbt 2.0, sbt server sends the <code>run</code> task back to sbtn, which will fork a fresh JVM. All you have to do is:</p>
+<p>In sbt 2.0, sbt server sends the <code>run</code> task back to sbtn, which will fork a fresh JVM. All you have to do is:</p>
 <pre><code class="language-bash">sbt run
 </code></pre>
 <p>This avoids blocking the sbt server, and you can have multiple runs. Contributed by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8060">#8060</a>. See also <a href="../reference/sbt-run.html">run</a> documentation.</p>
+<h3 id="client-side-console"><a class="header" href="#client-side-console">Client-side console</a></h3>
+<p>Similar to the client-side run, sbt server sends <code>console</code> (Scala REPL) back to the sbtn, which forks a fresh JVM to run the REPL. All you have to do is:</p>
+<pre><code class="language-bash">sbt console
+</code></pre>
+<p>This avoids blocking the sbt server. This was contributed by <a href="https://github.com/eed3si9n">@eed3si9n</a> and <a href="https://github.com/calm329">@calm329</a> in <a href="https://github.com/sbt/sbt/pull/8018">#8018</a>, <a href="https://github.com/sbt/sbt/pull/8604">#8604</a>, <a href="https://github.com/sbt/sbt/pull/8677">#8677</a>, <a href="https://github.com/sbt/sbt/pull/8705">#8705</a>, <a href="https://github.com/sbt/sbt/pull/8722">#8722</a>.</p>
 <h3 id="rootproject-and-autoaggregate"><a class="header" href="#rootproject-and-autoaggregate">rootProject and autoAggregate</a></h3>
 <p>sbt 2.0 adds <code>rootProject</code> macro:</p>
 <pre><code class="language-scala">lazy val root = rootProject

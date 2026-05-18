@@ -275,11 +275,11 @@ sdk install sbt
 cd foo-build
 touch build.sbt
 mkdir project
-echo "sbt.version=2.0.0-RC12" &gt; project/build.properties
+echo "sbt.version=2.0.0-RC13" &gt; project/build.properties
 </code></pre>
 <h3 id="启动-sbt-shell"><a class="header" href="#启动-sbt-shell">启动 sbt shell</a></h3>
 <pre><code class="language-bash">$ sbt
-[info] welcome to sbt 2.0.0-RC12 (Azul Systems, Inc. Java)
+[info] welcome to sbt 2.0.0-RC13 (Azul Systems, Inc. Java)
 ....
 [info] started sbt server
 sbt:foo-build&gt;
@@ -882,7 +882,7 @@ $ sbt new scala/scala3.g8
 <p>sbt 构建使用 <code>sbt</code> 运行器执行，也称为 "sbt-the-shell-script" 以区别于其他组件。需要注意的是，sbt runner旨在运行<strong>任意版本</strong>的 sbt。</p>
 <h3 id="使用-projectbuildproperties-指定-sbt-版本"><a class="header" href="#使用-projectbuildproperties-指定-sbt-版本">使用 project/build.properties 指定 sbt 版本</a></h3>
 <p>sbt runner执行名为 sbt launcher 的子组件，该组件读取 <code>project/build.properties</code> 以确定构建的 sbt 版本，并在未缓存时下载相应的构件：</p>
-<pre><code>sbt.version=2.0.0-RC12
+<pre><code>sbt.version=2.0.0-RC13
 </code></pre>
 <p>这意味着：</p>
 <ul>
@@ -1493,7 +1493,7 @@ addition to plain <code>target/</code>).</p>
 <h2 id="涉及兼容性的变更"><a class="header" href="#涉及兼容性的变更">涉及兼容性的变更</a></h2>
 <p>另请参阅 <a href="changes/./migrating-from-sbt-1.x.html">从 sbt 1.x 迁移</a>。</p>
 <ul>
-<li><strong>Scala 3 in metabuild</strong>. sbt 2.x build.sbt DSL, used for build definitions and plugins, is based on Scala 3.x (currently <strong>3.8.2</strong>)  (Both sbt 1.x and 2.x are capable of building Scala 2.x and 3.x) by <a href="https://github.com/eed3si9n">@eed3si9n</a>, <a href="https://github.com/adpi2">@adpi2</a>, and others.</li>
+<li><strong>Scala 3 in metabuild</strong>. sbt 2.x build.sbt DSL, used for build definitions and plugins, is based on Scala 3.x (currently <strong>3.8.3</strong>)  (Both sbt 1.x and 2.x are capable of building Scala 2.x and 3.x) by <a href="https://github.com/eed3si9n">@eed3si9n</a>, <a href="https://github.com/adpi2">@adpi2</a>, and others.</li>
 <li><strong>通用设置</strong>。裸设置会添加到所有子项目，而不仅仅是根子项目，从而取代 <code>ThisBuild</code> 所扮演的角色。</li>
 <li><strong>增量测试</strong>。<code>test</code> 任务已改为可缓存测试结果的增量测试。使用 <code>testFull</code> 进行完整测试，由 <a href="https://github.com/eed3si9n">@eed3si9n</a> 在 <a href="https://github.com/sbt/sbt/pull/7686">#7686</a> 中贡献</li>
 <li><strong>缓存任务</strong>。默认情况下所有任务都会被缓存。详见 <a href="changes/../concepts/caching.html">Caching</a>。</li>
@@ -1508,6 +1508,7 @@ addition to plain <code>target/</code>).</p>
 <li>In sbt 2.x <code>target</code> defaults to <code>target/out/jvm/scala-3.8.2/&lt;subproject&gt;/</code>, as opposed to <code>&lt;subproject&gt;/target/</code>.</li>
 <li>sbt 2.x 在 <code>build.sbt</code> 变更时默认自动重新加载，由 <a href="https://github.com/eed3si9n">@eed3si9n</a> 在 <a href="https://github.com/sbt/sbt/pull/8211">#8211</a> 中贡献</li>
 <li>sbt 2.x disables the delegation of scoped tasks in the sbt shell by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8539">#8539</a></li>
+<li>sbt 2.x enforces eviction error in <code>Test</code> configuration by <a href="https://github.com/calm329">@calm329</a> and <a href="https://github.com/zainab-ali">@zainab-ali</a> in <a href="https://github.com/sbt/sbt/pull/8451">#8451</a> + <a href="https://github.com/sbt/sbt/pull/9102">#9102</a></li>
 </ul>
 <h3 id="已移除的弃用项"><a class="header" href="#已移除的弃用项">已移除的弃用项</a></h3>
 <ul>
@@ -1520,6 +1521,7 @@ addition to plain <code>target/</code>).</p>
 <li><strong>sbt query</strong>。sbt 2.x 扩展了统一斜杠语法以支持子项目查询。详见下文。</li>
 <li><strong>本地/远程缓存系统</strong>。详见下文</li>
 <li><strong>客户端运行</strong>。详见下文。</li>
+<li><strong>Client-side console</strong>. Details below.</li>
 <li><strong>rootProject and autoAggregate</strong>. Details below</li>
 <li><strong>Maven BOM (Bill of Materials) usage</strong>. Details below</li>
 </ul>
@@ -1552,7 +1554,7 @@ hi := name.value + "!"
 <p>以上命令运行所有 <code>scalaBinaryVersion</code> 为 <code>3</code> 的子项目。由 <a href="https://github.com/eed3si9n">@eed3si9n</a> 在 <a href="https://github.com/sbt/sbt/pull/7699">#7699</a> 中贡献</p>
 <h3 id="增量测试"><a class="header" href="#增量测试">增量测试</a></h3>
 <p>在 sbt 2.x 中，<code>test</code> 任务已成为接受可筛选要运行的测试套件的参数的输入任务：</p>
-<pre><code class="language-bash">&gt; test *Example*
+<pre><code class="language-bash">&gt; test ...ExampleTest
 </code></pre>
 <p>此外，<code>test</code> 是增量且缓存的。这意味着，除非之前失败或自上次运行以来有所变更，否则测试不会运行。</p>
 <p>详见 <a href="changes/../reference/sbt-test.html">test</a>。</p>
@@ -1575,10 +1577,15 @@ task1 := {
 </code></pre>
 <p>详见 <a href="changes/../concepts/caching.html">Caching</a>。由 <a href="https://github.com/eed3si9n">@eed3si9n</a> 在 <a href="https://github.com/sbt/sbt/pull/7464">#7464</a> / <a href="https://github.com/sbt/sbt/pull/7525">#7525</a> 中贡献</p>
 <h3 id="客户端运行"><a class="header" href="#客户端运行">客户端运行</a></h3>
-<p>sbt runner 1.10.10 及更高版本的脚本默认对 sbt 2.x 使用 sbtn（GraalVM native-image 客户端）。在 sbt 2.0 中，sbt server 将 <code>run</code> 任务发回 sbtn，sbtn 将 fork 一个新的 JVM。您只需执行：</p>
+<p>In sbt 2.0, sbt server sends the <code>run</code> task back to sbtn, which will fork a fresh JVM. All you have to do is:</p>
 <pre><code class="language-bash">sbt run
 </code></pre>
 <p>这避免了阻塞 sbt server，您可以同时运行多个任务。由 <a href="https://github.com/eed3si9n">@eed3si9n</a> 在 <a href="https://github.com/sbt/sbt/pull/8060">#8060</a> 中贡献。另请参阅 <a href="changes/../reference/sbt-run.html">run</a> 文档。</p>
+<h3 id="client-side-console"><a class="header" href="#client-side-console">Client-side console</a></h3>
+<p>Similar to the client-side run, sbt server sends <code>console</code> (Scala REPL) back to the sbtn, which forks a fresh JVM to run the REPL. All you have to do is:</p>
+<pre><code class="language-bash">sbt console
+</code></pre>
+<p>This avoids blocking the sbt server. This was contributed by <a href="https://github.com/eed3si9n">@eed3si9n</a> and <a href="https://github.com/calm329">@calm329</a> in <a href="https://github.com/sbt/sbt/pull/8018">#8018</a>, <a href="https://github.com/sbt/sbt/pull/8604">#8604</a>, <a href="https://github.com/sbt/sbt/pull/8677">#8677</a>, <a href="https://github.com/sbt/sbt/pull/8705">#8705</a>, <a href="https://github.com/sbt/sbt/pull/8722">#8722</a>.</p>
 <h3 id="rootproject-and-autoaggregate"><a class="header" href="#rootproject-and-autoaggregate">rootProject and autoAggregate</a></h3>
 <p>sbt 2.0 adds <code>rootProject</code> macro:</p>
 <pre><code class="language-scala">lazy val root = rootProject
@@ -1710,7 +1717,7 @@ lazy val plugin = (project in file("plugin"))
     (pluginCrossBuild / sbtVersion) := {
       scalaBinaryVersion.value match {
         case "2.12" =&gt; "1.5.8"
-        case _      =&gt; "2.0.0-RC12"
+        case _      =&gt; "2.0.0-RC13"
       }
     },
   )
@@ -2021,7 +2028,7 @@ sbt:demo&gt; show someKey
 </ul>
 </li>
 </ul>
-<pre><code>sbt.version=2.0.0-RC12
+<pre><code>sbt.version=2.0.0-RC13
 </code></pre>
 <p>此机制允许将构建配置为特定版本的 sbt，项目中的每个人都会使用相同的构建语义，无论其机器上安装的 sbt runner 是什么。</p>
 <p>这也意味着某些功能在 sbt runner 或 sbtn 级别实现，而其他功能在 sbt server 级别实现。</p>
@@ -3923,10 +3930,10 @@ Def.setting {
         token(state.remainingCommands.size.toString) )
 }
 </code></pre>
-<p>This Parser definition will produce a value of type <code>(String,String)</code>. The input syntax defined isn't very flexible; it is just a demonstration. It will produce one of the following values for a successful parse (assuming the current Scala version is 3.8.3, the current sbt version is 2.0.0-RC12, and there are 3 commands left to run):</p>
+<p>This Parser definition will produce a value of type <code>(String,String)</code>. The input syntax defined isn't very flexible; it is just a demonstration. It will produce one of the following values for a successful parse (assuming the current Scala version is 3.8.3, the current sbt version is 2.0.0-RC13, and there are 3 commands left to run):</p>
 <ul>
 <li>(scala,3.8.3)</li>
-<li>(sbt,2.0.0-RC12)</li>
+<li>(sbt,2.0.0-RC13)</li>
 <li>(commands,3)</li>
 </ul>
 <p>同样，我们能访问项目当前 Scala 和 sbt 版本是因为它们是设置。任务不能用于定义解析器。</p>
@@ -5169,7 +5176,7 @@ your plugin to the list.</p>
 </li>
 <li>
 <p>在 <code>hello_scala/</code> 下创建名为 <code>project/</code> 的目录，并创建 <code>project/build.properties</code>，内容为</p>
-<pre><code>sbt.version=2.0.0-RC12
+<pre><code>sbt.version=2.0.0-RC13
 </code></pre>
 </li>
 <li>
