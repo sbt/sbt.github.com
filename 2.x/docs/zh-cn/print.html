@@ -5512,6 +5512,111 @@ See [Debugging][vscode-debugging] page on VS Code documentation for more details
 <li>在终端面板中输入 <code>sbt --client</code> <img src="recipes/../files/intellij6.png" alt="IntelliJ" /></li>
 </ul>
 <p>这样可登录 IntelliJ 已启动的 sbt 会话。在其中可调用 <code>testOnly</code> 等任务，且代码已编译。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="github-actions-setup"><a class="header" href="#github-actions-setup">GitHub Actions setup</a></h1>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="recipes/github-actions-setup.html#admonition-note"></a>
+</div>
+<div>
+<p>The recipe section of the documentation focuses on the objectives
+with minimal explanations.</p>
+<p>See also <a href="https://docs.github.com/en/actions">GitHub Actions documentation</a> for general concepts around GitHub Actions.</p>
+</div>
+</div>
+<h2 id="目标-4"><a class="header" href="#目标-4">目标</a></h2>
+<p>I want to build and test my project on GitHub Actions.</p>
+<h3 id="basic-setup"><a class="header" href="#basic-setup">Basic setup</a></h3>
+<p>Setting up your build for GitHub Actions is mostly about setting up <code>.github/workflows/ci.yml</code>. Here's what a minimal CI workflow could look like using <a href="https://github.com/actions/setup-java">setup-java</a>:</p>
+<pre><code class="language-yml">name: CI
+on:
+  pull_request:
+  push:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v6
+    - name: Setup JDK
+      uses: actions/setup-java@v5
+      with:
+        distribution: temurin
+        java-version: 17
+        cache: sbt
+    - name: Setup sbt
+      uses: sbt/setup-sbt@v1
+    - name: Build and Test
+      run: sbt -v test
+</code></pre>
+<h3 id="opting-out-of-disk-cache"><a class="header" href="#opting-out-of-disk-cache">Opting out of disk cache</a></h3>
+<p>By default setup-sbt enables the disk cache on sbt 2.x. This can be opted out:</p>
+<pre><code class="language-yml">- uses: sbt/setup-sbt@v1
+  with:
+    disk-cache: false
+</code></pre>
+<h3 id="build-matrix"><a class="header" href="#build-matrix">Build matrix</a></h3>
+<p>Here's a sample that uses build matrix:</p>
+<pre><code class="language-yml">name: CI
+on:
+  pull_request:
+  push:
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            java: 17
+            distribution: temurin
+            jobtype: 1
+          - os: ubuntu-latest
+            java: 17
+            distribution: temurin
+            jobtype: 2
+          - os: windows-latest
+            java: 17
+            distribution: temurin
+            jobtype: 2
+          - os: ubuntu-latest
+            java: 17
+            distribution: temurin
+            jobtype: 3
+    runs-on: ${{ matrix.os }}}
+    env:
+      JAVA_OPTS: -Xms2048M -Xmx2048M -Xss6M -Dfile.encoding=UTF-8
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v6
+    - name: Setup JDK
+      uses: actions/setup-java@v5
+      with:
+        distribution: ${{ matrix.distribution }}}
+        java-version: ${{ matrix.java }}}
+        cache: sbt
+    - name: Setup sbt
+      uses: sbt/setup-sbt@v1
+    - name: Build and test (1)
+      if: ${{ matrix.jobtype == 1 }}}
+      shell: bash
+      run: |
+        sbt -v "mimaReportBinaryIssues; scalafmtCheckAll; test;"
+    - name: Build and test (2)
+      if: ${{ matrix.jobtype == 2 }}}
+      shell: bash
+      run: |
+        sbt -v "scripted actions/*"
+    - name: Build and test (3)
+      if: ${{ matrix.jobtype == 3 }}}
+      shell: bash
+      run: |
+        sbt -v "scripted dependency-management/*"
+</code></pre>
+<h3 id="sbt-github-actions"><a class="header" href="#sbt-github-actions">sbt-github-actions</a></h3>
+<p>There's also <a href="https://github.com/sbt/sbt-github-actions">sbt-github-actions</a>, an sbt plugin by Daniel Spiewak that can generate the workflow files, and keep the settings in <code>build.sbt</code> file.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="源码依赖插件"><a class="header" href="#源码依赖插件">源码依赖插件</a></h1>
 <div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
 <div class="admonition-title">
@@ -5524,7 +5629,7 @@ See [Debugging][vscode-debugging] page on VS Code documentation for more details
 <p>文档中的食谱部分以最少说明聚焦于目标。</p>
 </div>
 </div>
-<h2 id="目标-4"><a class="header" href="#目标-4">目标</a></h2>
+<h2 id="目标-5"><a class="header" href="#目标-5">目标</a></h2>
 <p>我想使用托管在 git 仓库上的插件，而无需发布到中央仓库。</p>
 <h2 id="步骤-4"><a class="header" href="#步骤-4">步骤</a></h2>
 <ol>
@@ -5557,7 +5662,7 @@ BareBuildSyntax.dependsOn(jmhRef)
 <p>文档中的食谱部分以最少说明聚焦于目标。</p>
 </div>
 </div>
-<h2 id="目标-5"><a class="header" href="#目标-5">目标</a></h2>
+<h2 id="目标-6"><a class="header" href="#目标-6">目标</a></h2>
 <p>I want to cross build on a virtual axis that represents Apache Spark version.</p>
 <h2 id="步骤-5"><a class="header" href="#步骤-5">步骤</a></h2>
 <ol>

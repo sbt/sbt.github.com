@@ -5509,6 +5509,110 @@ See [Debugging][vscode-debugging] page on VS Code documentation for more details
 <li>Terminal セクションで <code>sbt --client</code> と入力する: <img src="recipes/../files/intellij6.png" alt="IntelliJ" /></li>
 </ul>
 <p>これで IntelliJ が起動した sbt セッションにログインできる。その中で <code>testOnly</code> や他のタスクを、すでにコンパイル済みのコードに対して呼び出せる。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="github-actions-の設定"><a class="header" href="#github-actions-の設定">GitHub Actions の設定</a></h1>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="recipes/github-actions-setup.html#admonition-note"></a>
+</div>
+<div>
+<p>レシピセクションは目的に焦点を当て、説明は最小限に留める。</p>
+<p>GitHub Actions に関する一般的な概念については <a href="https://docs.github.com/en/actions">GitHub Actions documentation</a> も参照。</p>
+</div>
+</div>
+<h2 id="目的-4"><a class="header" href="#目的-4">目的</a></h2>
+<p>プロジェクトを GitHub Actions でビルド、テストしたい。</p>
+<h3 id="基本的な設定"><a class="header" href="#基本的な設定">基本的な設定</a></h3>
+<p>GitHub Actions の設定は主に <code>.github/workflows/ci.yml</code> にて行われる。以下は、<a href="https://github.com/actions/setup-java">setup-java</a> を用いた最小の CI ワークフローだ:</p>
+<pre><code class="language-yml">name: CI
+on:
+  pull_request:
+  push:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v6
+    - name: Setup JDK
+      uses: actions/setup-java@v5
+      with:
+        distribution: temurin
+        java-version: 17
+        cache: sbt
+    - name: Setup sbt
+      uses: sbt/setup-sbt@v1
+    - name: Build and Test
+      run: sbt -v test
+</code></pre>
+<h3 id="ディスクキャッシュの拒否"><a class="header" href="#ディスクキャッシュの拒否">ディスク・キャッシュの拒否</a></h3>
+<p>setup-sbt は、sbt 2.x のディスクキャッシュを自動的に有効化する。これは以下のようにして拒否できる:</p>
+<pre><code class="language-yml">- uses: sbt/setup-sbt@v1
+  with:
+    disk-cache: false
+</code></pre>
+<h3 id="ビルドマトリックス"><a class="header" href="#ビルドマトリックス">ビルド・マトリックス</a></h3>
+<p>以下は、ビルド・マトリックスの使用例だ:</p>
+<pre><code class="language-yml">name: CI
+on:
+  pull_request:
+  push:
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            java: 17
+            distribution: temurin
+            jobtype: 1
+          - os: ubuntu-latest
+            java: 17
+            distribution: temurin
+            jobtype: 2
+          - os: windows-latest
+            java: 17
+            distribution: temurin
+            jobtype: 2
+          - os: ubuntu-latest
+            java: 17
+            distribution: temurin
+            jobtype: 3
+    runs-on: ${{ matrix.os }}}
+    env:
+      JAVA_OPTS: -Xms2048M -Xmx2048M -Xss6M -Dfile.encoding=UTF-8
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v6
+    - name: Setup JDK
+      uses: actions/setup-java@v5
+      with:
+        distribution: ${{ matrix.distribution }}}
+        java-version: ${{ matrix.java }}}
+        cache: sbt
+    - name: Setup sbt
+      uses: sbt/setup-sbt@v1
+    - name: Build and test (1)
+      if: ${{ matrix.jobtype == 1 }}}
+      shell: bash
+      run: |
+        sbt -v "mimaReportBinaryIssues; scalafmtCheckAll; test;"
+    - name: Build and test (2)
+      if: ${{ matrix.jobtype == 2 }}}
+      shell: bash
+      run: |
+        sbt -v "scripted actions/*"
+    - name: Build and test (3)
+      if: ${{ matrix.jobtype == 3 }}}
+      shell: bash
+      run: |
+        sbt -v "scripted dependency-management/*"
+</code></pre>
+<h3 id="sbt-github-actions"><a class="header" href="#sbt-github-actions">sbt-github-actions</a></h3>
+<p>他にも Daniel Spiewak さんが作った <a href="https://github.com/sbt/sbt-github-actions">sbt-github-actions</a> という sbt プラグインがあり、これは <code>build.sbt</code> を用いてワークフローファイルを生成することができる。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ソース依存プラグイン"><a class="header" href="#ソース依存プラグイン">ソース依存プラグイン</a></h1>
 <div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
 <div class="admonition-title">
@@ -5521,7 +5625,7 @@ See [Debugging][vscode-debugging] page on VS Code documentation for more details
 <p>レシピセクションは目的に焦点を当て、説明は最小限に留める。</p>
 </div>
 </div>
-<h2 id="目的-4"><a class="header" href="#目的-4">目的</a></h2>
+<h2 id="目的-5"><a class="header" href="#目的-5">目的</a></h2>
 <p>Central Repo に公開せず、git リポジトリでホストされているプラグインを使いたい。</p>
 <h2 id="手順-4"><a class="header" href="#手順-4">手順</a></h2>
 <ol>
@@ -5554,7 +5658,7 @@ BareBuildSyntax.dependsOn(jmhRef)
 <p>レシピセクションは目的に焦点を当て、説明は最小限に留める。</p>
 </div>
 </div>
-<h2 id="目的-5"><a class="header" href="#目的-5">目的</a></h2>
+<h2 id="目的-6"><a class="header" href="#目的-6">目的</a></h2>
 <p>Apache Spark バージョンを表す VirtualAxis に対してクロスビルドしたい。</p>
 <h2 id="手順-5"><a class="header" href="#手順-5">手順</a></h2>
 <ol>

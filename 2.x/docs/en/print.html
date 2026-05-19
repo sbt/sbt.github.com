@@ -6144,6 +6144,111 @@ the actual building work.</p>
 </ul>
 <p>This lets you log into the sbt session IntelliJ has started. In there you can call <code>testOnly</code> and other tasks with
 the code already compiled.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="github-actions-setup"><a class="header" href="#github-actions-setup">GitHub Actions setup</a></h1>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="recipes/github-actions-setup.html#admonition-note"></a>
+</div>
+<div>
+<p>The recipe section of the documentation focuses on the objectives
+with minimal explanations.</p>
+<p>See also <a href="https://docs.github.com/en/actions">GitHub Actions documentation</a> for general concepts around GitHub Actions.</p>
+</div>
+</div>
+<h2 id="objective-4"><a class="header" href="#objective-4">Objective</a></h2>
+<p>I want to build and test my project on GitHub Actions.</p>
+<h3 id="basic-setup"><a class="header" href="#basic-setup">Basic setup</a></h3>
+<p>Setting up your build for GitHub Actions is mostly about setting up <code>.github/workflows/ci.yml</code>. Here's what a minimal CI workflow could look like using <a href="https://github.com/actions/setup-java">setup-java</a>:</p>
+<pre><code class="language-yml">name: CI
+on:
+  pull_request:
+  push:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v6
+    - name: Setup JDK
+      uses: actions/setup-java@v5
+      with:
+        distribution: temurin
+        java-version: 17
+        cache: sbt
+    - name: Setup sbt
+      uses: sbt/setup-sbt@v1
+    - name: Build and Test
+      run: sbt -v test
+</code></pre>
+<h3 id="opting-out-of-disk-cache"><a class="header" href="#opting-out-of-disk-cache">Opting out of disk cache</a></h3>
+<p>By default setup-sbt enables the disk cache on sbt 2.x. This can be opted out:</p>
+<pre><code class="language-yml">- uses: sbt/setup-sbt@v1
+  with:
+    disk-cache: false
+</code></pre>
+<h3 id="build-matrix"><a class="header" href="#build-matrix">Build matrix</a></h3>
+<p>Here's a sample that uses build matrix:</p>
+<pre><code class="language-yml">name: CI
+on:
+  pull_request:
+  push:
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            java: 17
+            distribution: temurin
+            jobtype: 1
+          - os: ubuntu-latest
+            java: 17
+            distribution: temurin
+            jobtype: 2
+          - os: windows-latest
+            java: 17
+            distribution: temurin
+            jobtype: 2
+          - os: ubuntu-latest
+            java: 17
+            distribution: temurin
+            jobtype: 3
+    runs-on: ${{ matrix.os }}}
+    env:
+      JAVA_OPTS: -Xms2048M -Xmx2048M -Xss6M -Dfile.encoding=UTF-8
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v6
+    - name: Setup JDK
+      uses: actions/setup-java@v5
+      with:
+        distribution: ${{ matrix.distribution }}}
+        java-version: ${{ matrix.java }}}
+        cache: sbt
+    - name: Setup sbt
+      uses: sbt/setup-sbt@v1
+    - name: Build and test (1)
+      if: ${{ matrix.jobtype == 1 }}}
+      shell: bash
+      run: |
+        sbt -v "mimaReportBinaryIssues; scalafmtCheckAll; test;"
+    - name: Build and test (2)
+      if: ${{ matrix.jobtype == 2 }}}
+      shell: bash
+      run: |
+        sbt -v "scripted actions/*"
+    - name: Build and test (3)
+      if: ${{ matrix.jobtype == 3 }}}
+      shell: bash
+      run: |
+        sbt -v "scripted dependency-management/*"
+</code></pre>
+<h3 id="sbt-github-actions"><a class="header" href="#sbt-github-actions">sbt-github-actions</a></h3>
+<p>There's also <a href="https://github.com/sbt/sbt-github-actions">sbt-github-actions</a>, an sbt plugin by Daniel Spiewak that can generate the workflow files, and keep the settings in <code>build.sbt</code> file.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="source-dependency-plugin"><a class="header" href="#source-dependency-plugin">Source dependency plugin</a></h1>
 <div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
 <div class="admonition-title">
@@ -6157,7 +6262,7 @@ the code already compiled.</p>
 with minimal explanations.</p>
 </div>
 </div>
-<h2 id="objective-4"><a class="header" href="#objective-4">Objective</a></h2>
+<h2 id="objective-5"><a class="header" href="#objective-5">Objective</a></h2>
 <p>I want to use a plugin hosted on a git repository, without publishing to the Central Repo.</p>
 <h2 id="steps-4"><a class="header" href="#steps-4">Steps</a></h2>
 <ol>
@@ -6186,7 +6291,7 @@ BareBuildSyntax.dependsOn(jmhRef)
 with minimal explanations.</p>
 </div>
 </div>
-<h2 id="objective-5"><a class="header" href="#objective-5">Objective</a></h2>
+<h2 id="objective-6"><a class="header" href="#objective-6">Objective</a></h2>
 <p>I want to cross build on a virtual axis that represents Apache Spark version.</p>
 <h2 id="steps-5"><a class="header" href="#steps-5">Steps</a></h2>
 <ol>
