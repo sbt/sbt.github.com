@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>GitHub Actions setup - The Book of sbt</title>
+        <title>GitHub Actions 设置 - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -211,7 +211,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="github-actions-setup"><a class="header" href="#github-actions-setup">GitHub Actions setup</a></h1>
+                        <h1 id="github-actions-设置"><a class="header" href="#github-actions-设置">GitHub Actions 设置</a></h1>
 <div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
 <div class="admonition-title">
 <div id="admonition-note-title">
@@ -220,15 +220,14 @@
 <a class="admonition-anchor-link" href="#admonition-note"></a>
 </div>
 <div>
-<p>The recipe section of the documentation focuses on the objectives
-with minimal explanations.</p>
-<p>See also <a href="https://docs.github.com/en/actions">GitHub Actions documentation</a> for general concepts around GitHub Actions.</p>
+<p>文档中的食谱部分以最少说明聚焦于目标。</p>
+<p>有关 GitHub Actions 的一般概念，另请参阅 <a href="https://docs.github.com/en/actions">GitHub Actions documentation</a>。</p>
 </div>
 </div>
 <h2 id="目标"><a class="header" href="#目标">目标</a></h2>
-<p>I want to build and test my project on GitHub Actions.</p>
-<h3 id="basic-setup"><a class="header" href="#basic-setup">Basic setup</a></h3>
-<p>Setting up your build for GitHub Actions is mostly about setting up <code>.github/workflows/ci.yml</code>. Here's what a minimal CI workflow could look like using <a href="https://github.com/actions/setup-java">setup-java</a>:</p>
+<p>我想在 GitHub Actions 上构建并测试我的项目。</p>
+<h3 id="基本设置"><a class="header" href="#基本设置">基本设置</a></h3>
+<p>为 GitHub Actions 配置构建主要是设置 <code>.github/workflows/ci.yml</code>。以下是使用 <a href="https://github.com/actions/setup-java">setup-java</a> 的最小 CI 工作流示例：</p>
 <pre><code class="language-yml">name: CI
 on:
   pull_request:
@@ -250,14 +249,14 @@ jobs:
     - name: Build and Test
       run: sbt -v test
 </code></pre>
-<h3 id="opting-out-of-disk-cache"><a class="header" href="#opting-out-of-disk-cache">Opting out of disk cache</a></h3>
-<p>By default setup-sbt enables the disk cache on sbt 2.x. This can be opted out:</p>
+<h3 id="选择退出磁盘缓存"><a class="header" href="#选择退出磁盘缓存">选择退出磁盘缓存</a></h3>
+<p>默认情况下，setup-sbt 会在 sbt 2.x 上启用磁盘缓存。可按以下方式选择退出：</p>
 <pre><code class="language-yml">- uses: sbt/setup-sbt@v1
   with:
     disk-cache: false
 </code></pre>
-<h3 id="build-matrix"><a class="header" href="#build-matrix">Build matrix</a></h3>
-<p>Here's a sample that uses build matrix:</p>
+<h3 id="构建矩阵"><a class="header" href="#构建矩阵">构建矩阵</a></h3>
+<p>以下是使用构建矩阵的示例：</p>
 <pre><code class="language-yml">name: CI
 on:
   pull_request:
@@ -315,7 +314,7 @@ jobs:
         sbt -v "scripted dependency-management/*"
 </code></pre>
 <h3 id="sbt-github-actions"><a class="header" href="#sbt-github-actions">sbt-github-actions</a></h3>
-<p>There's also <a href="https://github.com/sbt/sbt-github-actions">sbt-github-actions</a>, an sbt plugin by Daniel Spiewak that can generate the workflow files, and keep the settings in <code>build.sbt</code> file.</p>
+<p>此外还有 Daniel Spiewak 开发的 <a href="https://github.com/sbt/sbt-github-actions">sbt-github-actions</a> sbt 插件，可生成工作流文件并将设置保留在 <code>build.sbt</code> 文件中。</p>
 
                     </main>
 

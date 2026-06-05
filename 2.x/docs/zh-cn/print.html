@@ -3502,11 +3502,11 @@ someKey := Def.uncached {
 <p>此设置仅适用于构建中引入的自定义任务。sbt 或插件提供的任何缓存任务仍将保持缓存。</p>
 </div>
 </div>
-<h2 id="execution-log"><a class="header" href="#execution-log">Execution log</a></h2>
-<p>To debug caching issues, sbt ships with execution log feature. The execution log can be enabled with <code>sbt.experimental_execution_log</code> system property set to either <code>true</code> or a file path:</p>
+<h2 id="执行日志"><a class="header" href="#执行日志">执行日志</a></h2>
+<p>要调试缓存相关问题，sbt 内置了执行日志功能。可将 <code>sbt.experimental_execution_log</code> 系统属性设为 <code>true</code> 或文件路径以启用执行日志：</p>
 <pre><code class="language-bash">$ sbt --server -Dsbt.experimental_execution_log=true compile
 </code></pre>
-<p>When set to <code>true</code>, an execution log will be created <code>target/global-logging</code>:</p>
+<p>设为 <code>true</code> 时，将在 <code>target/global-logging</code> 下生成执行日志：</p>
 <pre><code class="language-json">{
   "input": {
     "digest": "sha256-a50da1cd086987bc273861a815da4e90ba4735d4a21b965e861e583382a985d6/48",
@@ -3523,11 +3523,11 @@ ${CSR_CACHE}/https/repo1.maven.org/maven2/org/scala-lang/scala3-library_3/3.7.4/
   ]
 }
 </code></pre>
-<p>This feature is under an experimental flag since the JSON format is subject to change.</p>
+<p>由于 JSON 格式可能变更，此功能仍处于实验性标志之下。</p>
 <h2 id="远程缓存-2"><a class="header" href="#远程缓存-2">远程缓存</a></h2>
 <p>sbt 2.x 实现了与 Bazel 兼容的 gRPC 接口，可与多种开源和商业后端配合使用。详见 <a href="reference/./remote-cache-setup.html">远程缓存设置</a>。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="交叉构建设置"><a class="header" href="#交叉构建设置">交叉构建设置</a></h1>
-<p>本页介绍交叉构建设置。有关一般说明，请参阅<a href="reference/../concepts/cross-building.html">交叉构建</a>。</p>
+<p>本页介绍交叉构建设置。有关一般说明，请参阅 <a href="reference/../concepts/cross-building.html">交叉构建</a>。</p>
 <h2 id="使用交叉构建的库-1"><a class="header" href="#使用交叉构建的库-1">使用交叉构建的库</a></h2>
 <p>要使用针对多个 Scala 版本构建的库，请将 ModuleID 中的第一个 <code>%</code> 改为 <code>%%</code>。这告诉 sbt 应将用于构建库的当前 Scala 版本追加到依赖名称。例如：</p>
 <pre><code class="language-scala">libraryDependencies += "org.typelevel" %% "cats-effect" % "3.5.4"
@@ -3577,7 +3577,7 @@ ${CSR_CACHE}/https/repo1.maven.org/maven2/org/scala-lang/scala3-library_3/3.7.4/
 <pre><code class="language-scala">"a" % "b_2.9.1" % "1.0"
 </code></pre>
 <h2 id="项目矩阵-1"><a class="header" href="#项目矩阵-1">项目矩阵</a></h2>
-<p>sbt 2.x introduces project matrix, which enables cross building to happen in parallel by representing cross build using subprojects.</p>
+<p>sbt 2.x 引入了项目矩阵，通过以子项目表示交叉构建，使交叉构建可以并行进行。</p>
 <div id="admonition-buildsbt" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-title">
 <div class="admonition-title">
 <div id="admonition-buildsbt-title">
@@ -3619,8 +3619,8 @@ lazy val coreNative3 = core.native(scala3)
 </code></pre>
 </div>
 </div>
-<h3 id="generated-subprojects"><a class="header" href="#generated-subprojects">Generated subprojects</a></h3>
-<p>At the loading time, project matrices expand into subproject by combining the platform and Scala versions:</p>
+<h3 id="生成的子项目"><a class="header" href="#生成的子项目">生成的子项目</a></h3>
+<p>在加载时，项目矩阵会通过组合平台与 Scala 版本展开为子项目：</p>
 <pre><code class="language-bash">sbt:cross-root&gt; projects
 [info]     core
 [info]     core2_13
@@ -3628,21 +3628,21 @@ lazy val coreNative3 = core.native(scala3)
 [info]     coreNative2_13
 [info]   * cross-root
 </code></pre>
-<p>By convention, the JVM Scala 3 variant of the matrix is given the name without any suffix, for example <code>core</code>.</p>
+<p>按惯例，矩阵的 JVM Scala 3 变体将使用不带任何后缀的名称，例如 <code>core</code>。</p>
 <pre><code class="language-bash">sbt:cross-root&gt; core/run
 [info] running (fork) example.main
 Hello
 [success] ok
 </code></pre>
-<p>To reference the subprojects inside <code>build.sbt</code>, you can call <code>jvm(...)</code>, <code>js(...)</code>, or <code>native(...)</code>:</p>
+<p>要在 <code>build.sbt</code> 内引用子项目，可调用 <code>jvm(...)</code>、<code>js(...)</code> 或 <code>native(...)</code>：</p>
 <pre><code class="language-scala">// For Scala
 lazy val core3 = core.jvm(scalaVersion = scala3)
 
 // For Java
 lazy val intf0 = intf.jvm(autoScalaLibrary = false)
 </code></pre>
-<h3 id="virtual-axis"><a class="header" href="#virtual-axis">Virtual axis</a></h3>
-<p>Each combination in a matrix is called a <code>ProjectRow</code>; and a ProjectRow is represented as a sequence of <code>VirtualAxis</code>.</p>
+<h3 id="虚拟轴"><a class="header" href="#虚拟轴">虚拟轴</a></h3>
+<p>矩阵中的每个组合称为 <code>ProjectRow</code>；<code>ProjectRow</code> 表示为 <code>VirtualAxis</code> 的序列。</p>
 <pre><code class="language-scala">final class ProjectRow(
     val autoScalaLibrary: Boolean,
     val axisValues: Seq[VirtualAxis],
@@ -3661,8 +3661,8 @@ object VirtualAxis:
   abstract class StrongAxis extends VirtualAxis
 end VirtualAxis
 </code></pre>
-<p>VirtualAxis splits into <code>WeakAxis</code> and <code>StrongAxis</code>. Scala version is an example of a weak axis where a row with a Scala version can depend on another Java row without a Scala version. Meanwhile, the platform is a strong axis where a row can depend on another only if the platform matches exactly.</p>
-<p>For example, we can define SparkAxis as follows:</p>
+<p><code>VirtualAxis</code> 分为 <code>WeakAxis</code> 和 <code>StrongAxis</code>。Scala 版本是弱轴的一例：带 Scala 版本的行可依赖不带 Scala 版本的 Java 行。同时，平台是强轴：一行只能依赖平台完全匹配的另一行。</p>
+<p>例如，可按以下方式定义 <code>SparkAxis</code>：</p>
 <div id="admonition-projectaxisscala" class="admonition admonish-example" role="note" aria-labelledby="admonition-projectaxisscala-title">
 <div class="admonition-title">
 <div id="admonition-projectaxisscala-title">
@@ -3678,7 +3678,7 @@ case class SparkAxis(idSuffix: String, directorySuffix: String)
 </code></pre>
 </div>
 </div>
-<p>See <a href="reference/../recipes/virtual-axis.html">Cross building on a virtual axis</a> recipe for the details on how to use <code>SparkAxis</code>.</p>
+<p>有关如何使用 <code>SparkAxis</code> 的详情，请参阅 <a href="reference/../recipes/virtual-axis.html">在虚拟轴上交叉构建</a> 食谱。</p>
 <h2 id="发布约定"><a class="header" href="#发布约定">发布约定</a></h2>
 <p>我们使用 Scala ABI（应用二进制接口）版本作为后缀，表示用于编译库的 Scala 版本。例如，构件名 <code>cats-effect_2.13</code> 表示使用了 Scala 2.13.x，<code>cats-effect_3</code> 表示使用了 Scala 3.x。这种简单方式可与 Maven、Ant 及其他构建工具的用户互操作。对于 Scala 的预发布版本（如 2.13.0-RC1），完整版本将视为 ABI 版本。</p>
 <p><code>crossVersion</code> 设置可用于覆盖发布约定：</p>
@@ -5512,7 +5512,7 @@ See [Debugging][vscode-debugging] page on VS Code documentation for more details
 <li>在终端面板中输入 <code>sbt --client</code> <img src="recipes/../files/intellij6.png" alt="IntelliJ" /></li>
 </ul>
 <p>这样可登录 IntelliJ 已启动的 sbt 会话。在其中可调用 <code>testOnly</code> 等任务，且代码已编译。</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="github-actions-setup"><a class="header" href="#github-actions-setup">GitHub Actions setup</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="github-actions-设置"><a class="header" href="#github-actions-设置">GitHub Actions 设置</a></h1>
 <div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
 <div class="admonition-title">
 <div id="admonition-note-title">
@@ -5521,15 +5521,14 @@ See [Debugging][vscode-debugging] page on VS Code documentation for more details
 <a class="admonition-anchor-link" href="recipes/github-actions-setup.html#admonition-note"></a>
 </div>
 <div>
-<p>The recipe section of the documentation focuses on the objectives
-with minimal explanations.</p>
-<p>See also <a href="https://docs.github.com/en/actions">GitHub Actions documentation</a> for general concepts around GitHub Actions.</p>
+<p>文档中的食谱部分以最少说明聚焦于目标。</p>
+<p>有关 GitHub Actions 的一般概念，另请参阅 <a href="https://docs.github.com/en/actions">GitHub Actions documentation</a>。</p>
 </div>
 </div>
 <h2 id="目标-4"><a class="header" href="#目标-4">目标</a></h2>
-<p>I want to build and test my project on GitHub Actions.</p>
-<h3 id="basic-setup"><a class="header" href="#basic-setup">Basic setup</a></h3>
-<p>Setting up your build for GitHub Actions is mostly about setting up <code>.github/workflows/ci.yml</code>. Here's what a minimal CI workflow could look like using <a href="https://github.com/actions/setup-java">setup-java</a>:</p>
+<p>我想在 GitHub Actions 上构建并测试我的项目。</p>
+<h3 id="基本设置"><a class="header" href="#基本设置">基本设置</a></h3>
+<p>为 GitHub Actions 配置构建主要是设置 <code>.github/workflows/ci.yml</code>。以下是使用 <a href="https://github.com/actions/setup-java">setup-java</a> 的最小 CI 工作流示例：</p>
 <pre><code class="language-yml">name: CI
 on:
   pull_request:
@@ -5551,14 +5550,14 @@ jobs:
     - name: Build and Test
       run: sbt -v test
 </code></pre>
-<h3 id="opting-out-of-disk-cache"><a class="header" href="#opting-out-of-disk-cache">Opting out of disk cache</a></h3>
-<p>By default setup-sbt enables the disk cache on sbt 2.x. This can be opted out:</p>
+<h3 id="选择退出磁盘缓存"><a class="header" href="#选择退出磁盘缓存">选择退出磁盘缓存</a></h3>
+<p>默认情况下，setup-sbt 会在 sbt 2.x 上启用磁盘缓存。可按以下方式选择退出：</p>
 <pre><code class="language-yml">- uses: sbt/setup-sbt@v1
   with:
     disk-cache: false
 </code></pre>
-<h3 id="build-matrix"><a class="header" href="#build-matrix">Build matrix</a></h3>
-<p>Here's a sample that uses build matrix:</p>
+<h3 id="构建矩阵"><a class="header" href="#构建矩阵">构建矩阵</a></h3>
+<p>以下是使用构建矩阵的示例：</p>
 <pre><code class="language-yml">name: CI
 on:
   pull_request:
@@ -5616,7 +5615,7 @@ jobs:
         sbt -v "scripted dependency-management/*"
 </code></pre>
 <h3 id="sbt-github-actions"><a class="header" href="#sbt-github-actions">sbt-github-actions</a></h3>
-<p>There's also <a href="https://github.com/sbt/sbt-github-actions">sbt-github-actions</a>, an sbt plugin by Daniel Spiewak that can generate the workflow files, and keep the settings in <code>build.sbt</code> file.</p>
+<p>此外还有 Daniel Spiewak 开发的 <a href="https://github.com/sbt/sbt-github-actions">sbt-github-actions</a> sbt 插件，可生成工作流文件并将设置保留在 <code>build.sbt</code> 文件中。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="源码依赖插件"><a class="header" href="#源码依赖插件">源码依赖插件</a></h1>
 <div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
 <div class="admonition-title">
@@ -5650,7 +5649,7 @@ BareBuildSyntax.dependsOn(jmhRef)
 </li>
 </ol>
 <p>上例中，<code>https://github.com/eed3si9n/sbt-jmh.git</code> 是托管在 GitHub 上的插件的 HTTP 端点，<code>303c3e98e1d1523e6a4f99abe09c900165028edb</code> 是默认分支上的提交 id。</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="cross-building-on-a-virtual-axis"><a class="header" href="#cross-building-on-a-virtual-axis">Cross building on a virtual axis</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="在虚拟轴上交叉构建"><a class="header" href="#在虚拟轴上交叉构建">在虚拟轴上交叉构建</a></h1>
 <div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
 <div class="admonition-title">
 <div id="admonition-note-title">
@@ -5663,10 +5662,10 @@ BareBuildSyntax.dependsOn(jmhRef)
 </div>
 </div>
 <h2 id="目标-6"><a class="header" href="#目标-6">目标</a></h2>
-<p>I want to cross build on a virtual axis that represents Apache Spark version.</p>
+<p>我想在表示 Apache Spark 版本的虚拟轴上进行交叉构建。</p>
 <h2 id="步骤-5"><a class="header" href="#步骤-5">步骤</a></h2>
 <ol>
-<li>Define a weak axis locally:</li>
+<li>在本地定义弱轴：</li>
 </ol>
 <div id="admonition-projectaxisscala" class="admonition admonish-example" role="note" aria-labelledby="admonition-projectaxisscala-title">
 <div class="admonition-title">
@@ -5684,7 +5683,7 @@ case class SparkAxis(idSuffix: String, directorySuffix: String)
 </div>
 </div>
 <ol start="2">
-<li>Define a project matrix with custom rows. The following builds Scala 2.12 and 2.13 for Spark 3, and Scala 2.13 and 3 for Spark 4:</li>
+<li>定义带自定义行的项目矩阵。以下示例为 Spark 3 构建 Scala 2.12 和 2.13，为 Spark 4 构建 Scala 2.13 和 3：</li>
 </ol>
 <div id="admonition-buildsbt" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-title">
 <div class="admonition-title">
@@ -5728,7 +5727,7 @@ lazy val app = (projectMatrix in file("app"))
 </div>
 </div>
 <ol start="3">
-<li>Place the source code under <code>app/src/main/scala</code>:</li>
+<li>将源代码放在 <code>app/src/main/scala</code> 下：</li>
 </ol>
 <div id="admonition-appsrcmainscalaexampleascala" class="admonition admonish-example" role="note" aria-labelledby="admonition-appsrcmainscalaexampleascala-title">
 <div class="admonition-title">
@@ -5751,7 +5750,7 @@ object A {
 </code></pre>
 </div>
 </div>
-<p>Confirm that this runs:</p>
+<p>确认可以运行：</p>
 <pre><code class="language-bash">sbt:virtual-axis-root&gt; appSpark4/run
 [info] running (fork) example.A
 Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties

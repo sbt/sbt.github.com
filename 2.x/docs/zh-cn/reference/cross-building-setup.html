@@ -212,7 +212,7 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="交叉构建设置"><a class="header" href="#交叉构建设置">交叉构建设置</a></h1>
-<p>本页介绍交叉构建设置。有关一般说明，请参阅<a href="../concepts/cross-building.html">交叉构建</a>。</p>
+<p>本页介绍交叉构建设置。有关一般说明，请参阅 <a href="../concepts/cross-building.html">交叉构建</a>。</p>
 <h2 id="使用交叉构建的库"><a class="header" href="#使用交叉构建的库">使用交叉构建的库</a></h2>
 <p>要使用针对多个 Scala 版本构建的库，请将 ModuleID 中的第一个 <code>%</code> 改为 <code>%%</code>。这告诉 sbt 应将用于构建库的当前 Scala 版本追加到依赖名称。例如：</p>
 <pre><code class="language-scala">libraryDependencies += "org.typelevel" %% "cats-effect" % "3.5.4"
@@ -262,7 +262,7 @@
 <pre><code class="language-scala">"a" % "b_2.9.1" % "1.0"
 </code></pre>
 <h2 id="项目矩阵"><a class="header" href="#项目矩阵">项目矩阵</a></h2>
-<p>sbt 2.x introduces project matrix, which enables cross building to happen in parallel by representing cross build using subprojects.</p>
+<p>sbt 2.x 引入了项目矩阵，通过以子项目表示交叉构建，使交叉构建可以并行进行。</p>
 <div id="admonition-buildsbt" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-title">
 <div class="admonition-title">
 <div id="admonition-buildsbt-title">
@@ -304,8 +304,8 @@ lazy val coreNative3 = core.native(scala3)
 </code></pre>
 </div>
 </div>
-<h3 id="generated-subprojects"><a class="header" href="#generated-subprojects">Generated subprojects</a></h3>
-<p>At the loading time, project matrices expand into subproject by combining the platform and Scala versions:</p>
+<h3 id="生成的子项目"><a class="header" href="#生成的子项目">生成的子项目</a></h3>
+<p>在加载时，项目矩阵会通过组合平台与 Scala 版本展开为子项目：</p>
 <pre><code class="language-bash">sbt:cross-root&gt; projects
 [info]     core
 [info]     core2_13
@@ -313,21 +313,21 @@ lazy val coreNative3 = core.native(scala3)
 [info]     coreNative2_13
 [info]   * cross-root
 </code></pre>
-<p>By convention, the JVM Scala 3 variant of the matrix is given the name without any suffix, for example <code>core</code>.</p>
+<p>按惯例，矩阵的 JVM Scala 3 变体将使用不带任何后缀的名称，例如 <code>core</code>。</p>
 <pre><code class="language-bash">sbt:cross-root&gt; core/run
 [info] running (fork) example.main
 Hello
 [success] ok
 </code></pre>
-<p>To reference the subprojects inside <code>build.sbt</code>, you can call <code>jvm(...)</code>, <code>js(...)</code>, or <code>native(...)</code>:</p>
+<p>要在 <code>build.sbt</code> 内引用子项目，可调用 <code>jvm(...)</code>、<code>js(...)</code> 或 <code>native(...)</code>：</p>
 <pre><code class="language-scala">// For Scala
 lazy val core3 = core.jvm(scalaVersion = scala3)
 
 // For Java
 lazy val intf0 = intf.jvm(autoScalaLibrary = false)
 </code></pre>
-<h3 id="virtual-axis"><a class="header" href="#virtual-axis">Virtual axis</a></h3>
-<p>Each combination in a matrix is called a <code>ProjectRow</code>; and a ProjectRow is represented as a sequence of <code>VirtualAxis</code>.</p>
+<h3 id="虚拟轴"><a class="header" href="#虚拟轴">虚拟轴</a></h3>
+<p>矩阵中的每个组合称为 <code>ProjectRow</code>；<code>ProjectRow</code> 表示为 <code>VirtualAxis</code> 的序列。</p>
 <pre><code class="language-scala">final class ProjectRow(
     val autoScalaLibrary: Boolean,
     val axisValues: Seq[VirtualAxis],
@@ -346,8 +346,8 @@ object VirtualAxis:
   abstract class StrongAxis extends VirtualAxis
 end VirtualAxis
 </code></pre>
-<p>VirtualAxis splits into <code>WeakAxis</code> and <code>StrongAxis</code>. Scala version is an example of a weak axis where a row with a Scala version can depend on another Java row without a Scala version. Meanwhile, the platform is a strong axis where a row can depend on another only if the platform matches exactly.</p>
-<p>For example, we can define SparkAxis as follows:</p>
+<p><code>VirtualAxis</code> 分为 <code>WeakAxis</code> 和 <code>StrongAxis</code>。Scala 版本是弱轴的一例：带 Scala 版本的行可依赖不带 Scala 版本的 Java 行。同时，平台是强轴：一行只能依赖平台完全匹配的另一行。</p>
+<p>例如，可按以下方式定义 <code>SparkAxis</code>：</p>
 <div id="admonition-projectaxisscala" class="admonition admonish-example" role="note" aria-labelledby="admonition-projectaxisscala-title">
 <div class="admonition-title">
 <div id="admonition-projectaxisscala-title">
@@ -363,7 +363,7 @@ case class SparkAxis(idSuffix: String, directorySuffix: String)
 </code></pre>
 </div>
 </div>
-<p>See <a href="../recipes/virtual-axis.html">Cross building on a virtual axis</a> recipe for the details on how to use <code>SparkAxis</code>.</p>
+<p>有关如何使用 <code>SparkAxis</code> 的详情，请参阅 <a href="../recipes/virtual-axis.html">在虚拟轴上交叉构建</a> 食谱。</p>
 <h2 id="发布约定"><a class="header" href="#发布约定">发布约定</a></h2>
 <p>我们使用 Scala ABI（应用二进制接口）版本作为后缀，表示用于编译库的 Scala 版本。例如，构件名 <code>cats-effect_2.13</code> 表示使用了 Scala 2.13.x，<code>cats-effect_3</code> 表示使用了 Scala 3.x。这种简单方式可与 Maven、Ant 及其他构建工具的用户互操作。对于 Scala 的预发布版本（如 2.13.0-RC1），完整版本将视为 ABI 版本。</p>
 <p><code>crossVersion</code> 设置可用于覆盖发布约定：</p>

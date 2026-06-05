@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Cross building on a virtual axis - The Book of sbt</title>
+        <title>在虚拟轴上交叉构建 - The Book of sbt</title>
 
 
         <!-- Custom HTML head -->
@@ -211,7 +211,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="cross-building-on-a-virtual-axis"><a class="header" href="#cross-building-on-a-virtual-axis">Cross building on a virtual axis</a></h1>
+                        <h1 id="在虚拟轴上交叉构建"><a class="header" href="#在虚拟轴上交叉构建">在虚拟轴上交叉构建</a></h1>
 <div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
 <div class="admonition-title">
 <div id="admonition-note-title">
@@ -224,10 +224,10 @@
 </div>
 </div>
 <h2 id="目标"><a class="header" href="#目标">目标</a></h2>
-<p>I want to cross build on a virtual axis that represents Apache Spark version.</p>
+<p>我想在表示 Apache Spark 版本的虚拟轴上进行交叉构建。</p>
 <h2 id="步骤"><a class="header" href="#步骤">步骤</a></h2>
 <ol>
-<li>Define a weak axis locally:</li>
+<li>在本地定义弱轴：</li>
 </ol>
 <div id="admonition-projectaxisscala" class="admonition admonish-example" role="note" aria-labelledby="admonition-projectaxisscala-title">
 <div class="admonition-title">
@@ -245,7 +245,7 @@ case class SparkAxis(idSuffix: String, directorySuffix: String)
 </div>
 </div>
 <ol start="2">
-<li>Define a project matrix with custom rows. The following builds Scala 2.12 and 2.13 for Spark 3, and Scala 2.13 and 3 for Spark 4:</li>
+<li>定义带自定义行的项目矩阵。以下示例为 Spark 3 构建 Scala 2.12 和 2.13，为 Spark 4 构建 Scala 2.13 和 3：</li>
 </ol>
 <div id="admonition-buildsbt" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-title">
 <div class="admonition-title">
@@ -289,7 +289,7 @@ lazy val app = (projectMatrix in file("app"))
 </div>
 </div>
 <ol start="3">
-<li>Place the source code under <code>app/src/main/scala</code>:</li>
+<li>将源代码放在 <code>app/src/main/scala</code> 下：</li>
 </ol>
 <div id="admonition-appsrcmainscalaexampleascala" class="admonition admonish-example" role="note" aria-labelledby="admonition-appsrcmainscalaexampleascala-title">
 <div class="admonition-title">
@@ -312,7 +312,7 @@ object A {
 </code></pre>
 </div>
 </div>
-<p>Confirm that this runs:</p>
+<p>确认可以运行：</p>
 <pre><code class="language-bash">sbt:virtual-axis-root&gt; appSpark4/run
 [info] running (fork) example.A
 Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties
