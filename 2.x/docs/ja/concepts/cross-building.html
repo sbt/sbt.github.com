@@ -233,14 +233,14 @@
 <h2 id="project-matrix"><a class="header" href="#project-matrix">Project matrix</a></h2>
 <p>sbt 2.x は project matrix を導入して、並列クロスビルドを可能とする。</p>
 <pre><code class="language-scala">organization := "com.example"
-scalaVersion := "3.8.3"
+scalaVersion := "3.8.4"
 version      := "0.1.0-SNAPSHOT"
 
 lazy val core = (projectMatrix in file("core"))
   .settings(
     name := "core"
   )
-  .jvmPlatform(scalaVersions = Seq("3.8.3", "2.13.18"))
+  .jvmPlatform(scalaVersions = Seq("3.8.4", "2.13.18"))
 </code></pre>
 <p>セットアップに関しては、<a href="../reference/cross-building-setup.html">クロスビルドの設定</a>を参照。</p>
 
