@@ -213,7 +213,7 @@
                     <main>
                         <h1 id="sbt-1x-からのマイグレーション"><a class="header" href="#sbt-1x-からのマイグレーション">sbt 1.x からのマイグレーション</a></h1>
 <h2 id="buildsbt-dsl-の-scala-3x-への移行"><a class="header" href="#buildsbt-dsl-の-scala-3x-への移行"><code>build.sbt</code> DSL の Scala 3.x への移行</a></h2>
-<p>念の為書いておくと、sbt 1.x 系 2.x 系のどちらを使ってもScala 2.x および Scala 3.x 両方のプログラムをビルドすることが可能だ。ただし、<code>build.sbt</code> DSL を裏付ける Scala は sbt のバージョンによって決定される。sbt 2.0 では、Scala 3.7.x 系に移行する。</p>
+<p>念の為書いておくと、sbt 1.x 系 2.x 系のどちらを使ってもScala 2.x および Scala 3.x 両方のプログラムをビルドすることが可能だ。ただし、<code>build.sbt</code> DSL を裏付ける Scala は sbt のバージョンによって決定される。sbt 2.0 では、Scala 3.8.x 系に移行する。</p>
 <p>そのため、sbt 2.x 用のカスタムタスクや sbt プラグインを実装する場合、それは Scala 3.x を用いて行われることとなる。Scala 3.x に関する詳細は<a href="https://docs.scala-lang.org/scala3/guides/migration/incompatibility-table.html">Scala 3.x incompatibility table</a> や <a href="https://docs.scala-lang.org/scala3/guides/migration/tooling-scala2-xsource3.html">Scala 2 with -Xsource:3</a> なども参照。</p>
 <pre><code class="language-scala">// This works on Scala 2.12.20 under -Xsource:3
 import sbt.{ given, * }
@@ -295,14 +295,14 @@ lazy val plugin = (projectMatrix in file("plugin"))
   .settings(
     name := "sbt-vimquit",
   )
-  .jvmPlatform(scalaVersions = Seq("3.6.2", "2.12.20"))
+  .jvmPlatform(scalaVersions = Seq("3.8.4", "2.12.20"))
 </code></pre>
 <p><code>projectMatrix</code> を使った場合、プラグインを <code>plugin/</code> のようなサブディレクトリに移動させる必要がある。そうしないと、デフォルトのルートプロジェクトも <code>src/</code> を拾ってしまうからだ。</p>
 <h3 id="sbt-1x-を使った-sbt-プラグインのクロスビルド"><a class="header" href="#sbt-1x-を使った-sbt-プラグインのクロスビルド">sbt 1.x を使った sbt プラグインのクロスビルド</a></h3>
 <p>sbt 1.x を使ってクロスビルドする場合 sbt 1.10.2 以降を使う必要がある。</p>
 <pre><code class="language-scala">// sbt 1.x を使った場合
 lazy val scala212 = "2.12.20"
-lazy val scala3 = "3.6.2"
+lazy val scala3 = "3.8.4"
 ThisBuild / crossScalaVersions := Seq(scala212, scala3)
 
 lazy val plugin = (project in file("plugin"))

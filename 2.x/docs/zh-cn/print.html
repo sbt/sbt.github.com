@@ -1607,7 +1607,7 @@ task1 := {
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="从-sbt-1x-迁移"><a class="header" href="#从-sbt-1x-迁移">从 sbt 1.x 迁移</a></h1>
 <h2 id="将-buildsbt-dsl-改为-scala-3x"><a class="header" href="#将-buildsbt-dsl-改为-scala-3x">将 <code>build.sbt</code> DSL 改为 Scala 3.x</a></h2>
-<p>提醒一下，用户可以使用 sbt 1.x 或 sbt 2.x 构建 Scala 2.x 或 Scala 3.x 程序。但 <code>build.sbt</code> DSL 所基于的 Scala 版本由 sbt 版本决定。在 sbt 2.0 中，我们正在迁移到 Scala 3.7.x。</p>
+<p>提醒一下，用户可以使用 sbt 1.x 或 sbt 2.x 构建 Scala 2.x 或 Scala 3.x 程序。但 <code>build.sbt</code> DSL 所基于的 Scala 版本由 sbt 版本决定。在 sbt 2.0 中，我们正在迁移到 Scala 3.8.x。</p>
 <p>这意味着如果您为 sbt 2.x 实现自定义任务或 sbt 插件，必须使用 Scala 3.x。有关 Scala 3.x 的详细信息，请参阅 <a href="https://docs.scala-lang.org/scala3/guides/migration/incompatibility-table.html">Scala 3.x 不兼容性表</a> 和 <a href="https://docs.scala-lang.org/scala3/guides/migration/tooling-scala2-xsource3.html">Scala 2 with -Xsource:3</a>。</p>
 <pre><code class="language-scala">// This works on Scala 2.12.20 under -Xsource:3
 import sbt.{ given, * }
@@ -1689,14 +1689,14 @@ lazy val plugin = (projectMatrix in file("plugin"))
   .settings(
     name := "sbt-vimquit",
   )
-  .jvmPlatform(scalaVersions = Seq("3.6.2", "2.12.20"))
+  .jvmPlatform(scalaVersions = Seq("3.8.4", "2.12.20"))
 </code></pre>
 <p>如果使用 <code>projectMatrix</code>，请确保将插件移至 <code>plugin/</code> 等子目录。否则，合成根项目也会包含 <code>src/</code>。</p>
 <h3 id="使用-sbt-1x-交叉构建-sbt-插件"><a class="header" href="#使用-sbt-1x-交叉构建-sbt-插件">使用 sbt 1.x 交叉构建 sbt 插件</a></h3>
 <p>如需使用 sbt 1.x 进行交叉构建，请使用 sbt 1.10.2 或更高版本。</p>
 <pre><code class="language-scala">// using sbt 1.x
 lazy val scala212 = "2.12.20"
-lazy val scala3 = "3.6.2"
+lazy val scala3 = "3.8.4"
 ThisBuild / crossScalaVersions := Seq(scala212, scala3)
 
 lazy val plugin = (project in file("plugin"))

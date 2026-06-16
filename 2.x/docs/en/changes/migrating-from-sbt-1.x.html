@@ -213,7 +213,7 @@
                     <main>
                         <h1 id="migrating-from-sbt-1x"><a class="header" href="#migrating-from-sbt-1x">Migrating from sbt 1.x</a></h1>
 <h2 id="changing-buildsbt-dsl-to-scala-3x"><a class="header" href="#changing-buildsbt-dsl-to-scala-3x">Changing <code>build.sbt</code> DSL to Scala 3.x</a></h2>
-<p>As a reminder, users can build either Scala 2.x or Scala 3.x programs using either sbt 1.x or sbt 2.x. However, the Scala that underlies the <code>build.sbt</code> DSL is determined by the sbt version. In sbt 2.0, we are migrating to Scala 3.7.x.</p>
+<p>As a reminder, users can build either Scala 2.x or Scala 3.x programs using either sbt 1.x or sbt 2.x. However, the Scala that underlies the <code>build.sbt</code> DSL is determined by the sbt version. In sbt 2.0, we are migrating to Scala 3.8.x.</p>
 <p>This means that if you implement custom tasks or sbt plugins for sbt 2.x, it must be done using Scala 3.x. Consult <a href="https://docs.scala-lang.org/scala3/guides/migration/incompatibility-table.html">Scala 3.x incompatibility table</a> and <a href="https://docs.scala-lang.org/scala3/guides/migration/tooling-scala2-xsource3.html">Scala 2 with -Xsource:3</a> for details about Scala 3.x.</p>
 <pre><code class="language-scala">// This works on Scala 2.12.20 under -Xsource:3
 import sbt.{ given, * }
@@ -295,14 +295,14 @@ lazy val plugin = (projectMatrix in file("plugin"))
   .settings(
     name := "sbt-vimquit",
   )
-  .jvmPlatform(scalaVersions = Seq("3.6.2", "2.12.20"))
+  .jvmPlatform(scalaVersions = Seq("3.8.4", "2.12.20"))
 </code></pre>
 <p>If you use <code>projectMatrix</code>, make sure to move the plugin to a subdirectory like <code>plugin/</code>. Otherwise, the synthetic root project will also pick up the <code>src/</code>.</p>
 <h3 id="cross-building-sbt-plugin-with-sbt-1x"><a class="header" href="#cross-building-sbt-plugin-with-sbt-1x">Cross building sbt plugin with sbt 1.x</a></h3>
 <p>Use sbt 1.10.2 or later, if you want to cross build using sbt 1.x.</p>
 <pre><code class="language-scala">// using sbt 1.x
 lazy val scala212 = "2.12.20"
-lazy val scala3 = "3.6.2"
+lazy val scala3 = "3.8.4"
 ThisBuild / crossScalaVersions := Seq(scala212, scala3)
 
 lazy val plugin = (project in file("plugin"))
