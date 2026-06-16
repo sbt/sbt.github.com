@@ -1784,6 +1784,23 @@ myTask := {
 }
 </code></pre>
 <p>This pattern is compatible with <code>sbt2-compat</code> and can be used alongside it to absorb the differences between sbt 1.x and 2.x.</p>
+<h2 id="migrating-ci-pipelines"><a class="header" href="#migrating-ci-pipelines">Migrating CI pipelines</a></h2>
+<p>There are some behavior changes that may affect CI pipelines.</p>
+<h3 id="running-a-sequence-of-commands"><a class="header" href="#running-a-sequence-of-commands">Running a sequence of commands</a></h3>
+<p>A sequence of commands must now be supplied as a quoted string separated by semicolons:</p>
+<pre><code class="language-bash">sbt "clean ; compile ; test"
+</code></pre>
+<p>Previously, you could write <code>sbt clean compile test</code>. That now produces the error "Expected whitespace character".</p>
+<h3 id="persistent-sbt-server-with-multiple-steps"><a class="header" href="#persistent-sbt-server-with-multiple-steps">Persistent sbt server with multiple steps</a></h3>
+<p>If a CI pipeline contains multiple steps that run <code>sbt</code>, later steps reuse the persistent server started by the first invocation instead of starting a new <code>sbt</code> process each time. As a result, these later steps continue to use the environment variables passed to the first session.</p>
+<p>If your pipeline relies on passing different environment variables (such as <code>JAVA_OPTS</code>) to each session, you must either provide all variables at the job level so they are identical for all <code>sbt</code> invocations, or shut down <code>sbt</code> after each step or between steps.</p>
+<pre><code class="language-bash">sbt "clean ; compile ; test ; shutdown"
+</code></pre>
+<p>Note that this applies whether you run <code>sbt</code> directly or through a third-party action such as <code>sbt-dependency-submission</code> that invokes <code>sbt</code> internally.</p>
+<h3 id="test-artifacts"><a class="header" href="#test-artifacts">Test artifacts</a></h3>
+<p>Output artifacts such as test results are now stored in subdirectories beneath <code>target/out</code> so you may need to update the paths used for test publishing and artifact archival:</p>
+<pre><code class="language-yaml">path: target/out/**/test-reports/*.xml
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="コンセプト"><a class="header" href="#コンセプト">コンセプト</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="コマンドの基本"><a class="header" href="#コマンドの基本">コマンドの基本</a></h1>
 <p><strong>コマンド</strong>は、システム・レベルでの sbt の構成要素で、ユーザや IDE とのやり取りを捕捉する。</p>
