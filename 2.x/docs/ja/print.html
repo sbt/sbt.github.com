@@ -1492,7 +1492,7 @@ an odd trick, but this fact becomes relevant [later][Organizing-Build].
 <li>sbt 2.x は、<code>platform</code> セッティングを追加して、<code>ModuleID</code> の <code>%%%</code> 演算子を使わなくても、<code>%%</code> 演算子だけで JVM、JS、Native のクロスビルドができるようにした by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/6746">#6746</a></li>
 <li><code>useCoursier</code> セッティングを廃止して、Coursier をオプトアウトできないようにした by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7712">#7712</a></li>
 <li><code>Key.Classpath</code> 型は、<code>Seq[Attributed[File]]</code> から<code>Seq[Attributed[xsbti.HashedVirtualFileRef]]</code> 型のへのエイリアスへと変更された。同様に、以前 <code>File</code> を返していたタスクキーのいくつかは<code>HashedVirtualFileRef</code> を返すように変更された。<a href="changes/../concepts/caching.html#caching-files">ファイルのキャッシュ化</a>も参照。</li>
-<li>sbt 2.x では、<code>target</code> のデフォルトが <code>&lt;subproject&gt;/target/</code> から <code>target/out/jvm/scala-3.8.2/&lt;subproject&gt;/</code> へと変更された。</li>
+<li>sbt 2.x では、<code>target</code> のデフォルトが <code>&lt;subproject&gt;/target/</code> から <code>target/out/jvm/scala-3.8.4/&lt;subproject&gt;/</code> へと変更された。</li>
 <li>sbt 2.x は <code>build.sbt</code> に変更があると、デフォルトで自動的リロードされるようになった <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8211">#8211</a></li>
 <li>sbt 2.x は、sbt シェル内でのスコープ付きタスクの委譲を禁止する <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8539">#8539</a></li>
 <li>sbt 2.x は、エヴィクション・エラー規制を <code>Test</code> コンフィギュレーションでも施行する by <a href="https://github.com/calm329">@calm329</a> and <a href="https://github.com/zainab-ali">@zainab-ali</a> in <a href="https://github.com/sbt/sbt/pull/8451">#8451</a> + <a href="https://github.com/sbt/sbt/pull/9102">#9102</a></li>
@@ -4302,7 +4302,7 @@ val command: Command = Command.args("name", "&lt;arg&gt;")(action)
 <div>
 <pre><code class="language-scala">import CommandExample.*
 
-scalaVersion := "3.8.2"
+scalaVersion := "3.8.4"
 LocalRootProject / commands ++= Seq(hello, helloAll, failIfTrue, changeColor, printState)
 </code></pre>
 </div>

@@ -1600,7 +1600,7 @@ Two of the popular IDEs in Scala are <a href="https://scalameta.org/metals/">Met
 <li>sbt 2.x adds <code>platform</code> setting so <code>ModuleID</code>'s <code>%%</code> operator can cross build on JVM as well as JS and Native, as opposed to <code>%%%</code> operator that was created in a plugin to workaround this issue, by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/6746">#6746</a></li>
 <li>Dropped <code>useCoursier</code> setting so Coursier cannot be opted out, by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7712">#7712</a></li>
 <li><code>Key.Classpath</code> is changed to be an alias of the <code>Seq[Attributed[xsbti.HashedVirtualFileRef]]</code> type, instead of <code>Seq[Attributed[File]]</code>. Similarly, some task keys that used to return <code>File</code> have changed to return <code>HashedVirtualFileRef</code> instead. See <a href="changes/../concepts/caching.html#caching-files">Caching Files</a>.</li>
-<li>In sbt 2.x <code>target</code> defaults to <code>target/out/jvm/scala-3.8.2/&lt;subproject&gt;/</code>, as opposed to <code>&lt;subproject&gt;/target/</code>.</li>
+<li>In sbt 2.x <code>target</code> defaults to <code>target/out/jvm/scala-3.8.4/&lt;subproject&gt;/</code>, as opposed to <code>&lt;subproject&gt;/target/</code>.</li>
 <li>sbt 2.x auto reloads by default on <code>build.sbt</code> changes, by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8211">#8211</a></li>
 <li>sbt 2.x disables the delegation of scoped tasks in the sbt shell by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8539">#8539</a></li>
 <li>sbt 2.x enforces eviction error in <code>Test</code> configuration by <a href="https://github.com/calm329">@calm329</a> and <a href="https://github.com/zainab-ali">@zainab-ali</a> in <a href="https://github.com/sbt/sbt/pull/8451">#8451</a> + <a href="https://github.com/sbt/sbt/pull/9102">#9102</a></li>
@@ -4937,7 +4937,7 @@ printState commands.</li>
 <div>
 <pre><code class="language-scala">import CommandExample.*
 
-scalaVersion := "3.8.2"
+scalaVersion := "3.8.4"
 LocalRootProject / commands ++= Seq(hello, helloAll, failIfTrue, changeColor, printState)
 </code></pre>
 </div>

@@ -227,7 +227,7 @@
 <li>sbt 2.x 添加了 <code>platform</code> 设置，使 <code>ModuleID</code> 的 <code>%%</code> 运算符可以在 JVM、JS 和 Native 上进行交叉构建，而无需使用插件中为规避此问题而创建的 <code>%%%</code> 运算符，由 <a href="https://github.com/eed3si9n">@eed3si9n</a> 在 <a href="https://github.com/sbt/sbt/pull/6746">#6746</a> 中贡献</li>
 <li>移除了 <code>useCoursier</code> 设置，因此无法选择不使用 Coursier，由 <a href="https://github.com/eed3si9n">@eed3si9n</a> 在 <a href="https://github.com/sbt/sbt/pull/7712">#7712</a> 中贡献</li>
 <li><code>Key.Classpath</code> 已改为 <code>Seq[Attributed[xsbti.HashedVirtualFileRef]]</code> 类型的别名，而非 <code>Seq[Attributed[File]]</code>。同样，一些曾返回 <code>File</code> 的任务键已改为返回 <code>HashedVirtualFileRef</code>。详见 <a href="../concepts/caching.html#caching-files">Caching Files</a>。</li>
-<li>In sbt 2.x <code>target</code> defaults to <code>target/out/jvm/scala-3.8.2/&lt;subproject&gt;/</code>, as opposed to <code>&lt;subproject&gt;/target/</code>.</li>
+<li>In sbt 2.x <code>target</code> defaults to <code>target/out/jvm/scala-3.8.4/&lt;subproject&gt;/</code>, as opposed to <code>&lt;subproject&gt;/target/</code>.</li>
 <li>sbt 2.x 在 <code>build.sbt</code> 变更时默认自动重新加载，由 <a href="https://github.com/eed3si9n">@eed3si9n</a> 在 <a href="https://github.com/sbt/sbt/pull/8211">#8211</a> 中贡献</li>
 <li>sbt 2.x disables the delegation of scoped tasks in the sbt shell by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8539">#8539</a></li>
 <li>sbt 2.x enforces eviction error in <code>Test</code> configuration by <a href="https://github.com/calm329">@calm329</a> and <a href="https://github.com/zainab-ali">@zainab-ali</a> in <a href="https://github.com/sbt/sbt/pull/8451">#8451</a> + <a href="https://github.com/sbt/sbt/pull/9102">#9102</a></li>
