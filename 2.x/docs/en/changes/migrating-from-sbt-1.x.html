@@ -338,6 +338,35 @@ $ exists target/**/src_managed/bar.txt
 $ exists target/**/proj/src_managed/bar.txt || proj/target/**/src_managed/bar.txt
 </code></pre>
 <p>In sbt 1.x, <code>target.value</code> resolves to the project root <code>target/</code> directory. In sbt 2.x, it resolves to <code>target/out/jvm/scala-&lt;ver&gt;/&lt;project-name&gt;</code> instead. Plugins should be aware of this change during migration.</p>
+<h2 id="migrating-ci-pipelines"><a class="header" href="#migrating-ci-pipelines">Migrating CI pipelines</a></h2>
+<p>There are some behavior changes that may affect CI pipelines.</p>
+<h3 id="running-a-sequence-of-commands"><a class="header" href="#running-a-sequence-of-commands">Running a sequence of commands</a></h3>
+<p>A sequence of commands must now be supplied as a quoted string separated by
+semicolons:</p>
+<pre><code class="language-bash">sbt "clean ; compile ; test"
+</code></pre>
+<p>Previously, you could write <code>sbt clean compile test</code>. That now produces the
+error "Expected whitespace character".</p>
+<h3 id="sbt-server-with-multiple-steps"><a class="header" href="#sbt-server-with-multiple-steps">sbt server with multiple steps</a></h3>
+<p>If a CI pipeline contains multiple steps that run <code>sbt</code>, later steps reuse the
+sbt server started by the first invocation instead of starting a new <code>sbt</code>
+process each time. As a result, these later steps continue to use the environment
+variables passed to the first session.</p>
+<p>If your pipeline relies on passing different environment variables (such as <code>JAVA_OPTS</code>)
+to each session, you must either provide all variables at the job level so they are
+identical for all <code>sbt</code> invocations, or shut down <code>sbt</code> after each step or between steps.</p>
+<pre><code class="language-bash">sbt "clean ; compile ; test ; shutdown"
+</code></pre>
+<p>Note that this applies whether you run <code>sbt</code> directly or through a third-party action
+such as <code>sbt-dependency-submission</code> that invokes <code>sbt</code> internally.</p>
+<h3 id="test-artifacts"><a class="header" href="#test-artifacts">Test artifacts</a></h3>
+<p>Output artifacts such as test results are now stored in subdirectories beneath
+<code>target/out</code> so you may need to update the paths used for test publishing and
+artifact archival:</p>
+<pre><code class="language-yaml">path: target/out/**/test-reports/*.xml
+</code></pre>
+<h3 id="change-of-global-base-directory"><a class="header" href="#change-of-global-base-directory">Change of global base directory</a></h3>
+<p>In sbt 2.x, the global base directory follows directory standard. The default value on Windows is <code>%LOCALAPPDATA%/sbt/2</code>. Otherwise, it is <code>$XDG_CONFIG_HOME/sbt/2</code> or <code>$HOME/.config/sbt/2</code>. See <a href="../reference/sbt.html#global-base-directory">sbt reference</a> for details.</p>
 <h2 id="the-plugincompat-technique"><a class="header" href="#the-plugincompat-technique">The PluginCompat technique</a></h2>
 <p>To use the same <code>*.scala</code> source but target both sbt 1.x and 2.x, we can create a shim, for example an object named <code>PluginCompat</code> in both <code>src/main/scala-2.12/</code> and <code>src/main/scala-3/</code>. APIs commonly encountered during migrations are abstracted into the <a href="https://github.com/sbt/sbt2-compat">sbt2-compat</a> plugin that can be used to avoid creating the shims manually. To use it in your sbt plugin, you can add it to your sbt plugin's <code>build.sbt</code>:</p>
 <pre><code class="language-scala">addSbtPlugin("com.github.sbt" % "sbt2-compat" % "&lt;version&gt;")
@@ -392,33 +421,6 @@ myTask := {
 }
 </code></pre>
 <p>This pattern is compatible with <code>sbt2-compat</code> and can be used alongside it to absorb the differences between sbt 1.x and 2.x.</p>
-<h2 id="migrating-ci-pipelines"><a class="header" href="#migrating-ci-pipelines">Migrating CI pipelines</a></h2>
-<p>There are some behavior changes that may affect CI pipelines.</p>
-<h3 id="running-a-sequence-of-commands"><a class="header" href="#running-a-sequence-of-commands">Running a sequence of commands</a></h3>
-<p>A sequence of commands must now be supplied as a quoted string separated by
-semicolons:</p>
-<pre><code class="language-bash">sbt "clean ; compile ; test"
-</code></pre>
-<p>Previously, you could write <code>sbt clean compile test</code>. That now produces the
-error "Expected whitespace character".</p>
-<h3 id="persistent-sbt-server-with-multiple-steps"><a class="header" href="#persistent-sbt-server-with-multiple-steps">Persistent sbt server with multiple steps</a></h3>
-<p>If a CI pipeline contains multiple steps that run <code>sbt</code>, later steps reuse the
-persistent server started by the first invocation instead of starting a new <code>sbt</code>
-process each time. As a result, these later steps continue to use the environment
-variables passed to the first session.</p>
-<p>If your pipeline relies on passing different environment variables (such as <code>JAVA_OPTS</code>)
-to each session, you must either provide all variables at the job level so they are
-identical for all <code>sbt</code> invocations, or shut down <code>sbt</code> after each step or between steps.</p>
-<pre><code class="language-bash">sbt "clean ; compile ; test ; shutdown"
-</code></pre>
-<p>Note that this applies whether you run <code>sbt</code> directly or through a third-party action
-such as <code>sbt-dependency-submission</code> that invokes <code>sbt</code> internally.</p>
-<h3 id="test-artifacts"><a class="header" href="#test-artifacts">Test artifacts</a></h3>
-<p>Output artifacts such as test results are now stored in subdirectories beneath
-<code>target/out</code> so you may need to update the paths used for test publishing and
-artifact archival:</p>
-<pre><code class="language-yaml">path: target/out/**/test-reports/*.xml
-</code></pre>
 
                     </main>
 

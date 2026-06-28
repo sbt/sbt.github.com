@@ -215,10 +215,10 @@
 <h2 id="buildsbt-dsl-の-scala-3x-への移行"><a class="header" href="#buildsbt-dsl-の-scala-3x-への移行"><code>build.sbt</code> DSL の Scala 3.x への移行</a></h2>
 <p>念の為書いておくと、sbt 1.x 系 2.x 系のどちらを使ってもScala 2.x および Scala 3.x 両方のプログラムをビルドすることが可能だ。ただし、<code>build.sbt</code> DSL を裏付ける Scala は sbt のバージョンによって決定される。sbt 2.0 では、Scala 3.8.x 系に移行する。</p>
 <p>そのため、sbt 2.x 用のカスタムタスクや sbt プラグインを実装する場合、それは Scala 3.x を用いて行われることとなる。Scala 3.x に関する詳細は<a href="https://docs.scala-lang.org/scala3/guides/migration/incompatibility-table.html">Scala 3.x incompatibility table</a> や <a href="https://docs.scala-lang.org/scala3/guides/migration/tooling-scala2-xsource3.html">Scala 2 with -Xsource:3</a> なども参照。</p>
-<pre><code class="language-scala">// This works on Scala 2.12.20 under -Xsource:3
+<pre><code class="language-scala">// これは -Xsource:3 で Scala 2.12.20 上で動作する
 import sbt.{ given, * }
 </code></pre>
-<h3 id="import-given"><a class="header" href="#import-given">Import given</a></h3>
+<h3 id="given-のインポート"><a class="header" href="#given-のインポート">given のインポート</a></h3>
 <p>Scala 2.x と 3.x の違いの 1つとして、型クラスのインスタンスの言語スコープへの取り込み方の違いが挙げられる。Scala 2.x では <code>import FooCodec._</code> と書いたが、Scala 3 は、<code>import FooCodec.given</code> と書く。</p>
 <pre><code class="language-scala">// 以下は、sbt 1.x と 2.x の両方で動作する
 import sbt.librarymanagement.LibraryManagementCodec.{ given, * }
@@ -267,17 +267,17 @@ LocalRootProject / publish / skip := true
 </code></pre>
 <h3 id="thisbuild-のマイグレーション"><a class="header" href="#thisbuild-のマイグレーション">ThisBuild のマイグレーション</a></h3>
 <p>sbt 2.x においては、ベア・セッティングが <code>ThisBuild</code> にスコープ付けされる場面は無くなったはずだ。コモン・セッティングの <code>ThisBuild</code> に対する利点として委譲の振る舞いが、分かりやすくなるということがある。これらのセッティングはプラグインのセッティングと、<code>settings(...)</code> の間に入るため、 <code>Compile / scalacOptions</code> といったセッティングを定義するのに使える。 <code>ThisBuild</code> ではそれは不可能だった。</p>
-<h2 id="changes-to-exportjars"><a class="header" href="#changes-to-exportjars">Changes to <code>exportJars</code></a></h2>
-<p><code>exportJars</code> defaults to <code>true</code>, was <code>false</code>. This might break <code>getResource("/")</code> and <code>resource.toURI</code>. Set <code>exportJars := false</code> if this logic is broken in your build, producing <code>NullPointerException</code>s and <code>FileSystemNotFoundException</code>s. Set <code>exportJars := false</code> in your build if you want to keep the old behavior. The change was introduced by <a href="https://github.com/sbt/sbt/pull/7464">sbt/sbt#7464</a>, see also <a href="https://eed3si9n.com/sbt-remote-cache/">blog</a>.</p>
+<h2 id="exportjars-の変更点"><a class="header" href="#exportjars-の変更点"><code>exportJars</code> の変更点</a></h2>
+<p><code>exportJars</code> のデフォルト値は <code>false</code> から <code>true</code> に変更された。これは <code>getResource("/")</code> や <code>resource.toURI</code> を壊す可能性がある。ビルドでこのロジックが壊れ、<code>NullPointerException</code> や <code>FileSystemNotFoundException</code> が発生する場合は <code>exportJars := false</code> を設定する。古い振る舞いを維持したい場合は <code>exportJars := false</code> をビルドに設定する。この変更は <a href="https://github.com/sbt/sbt/pull/7464">sbt/sbt#7464</a> によって導入された。<a href="https://eed3si9n.com/sbt-remote-cache/">ブログ</a> も参照。</p>
 <h2 id="キャッシュタスクへのマイグレーション"><a class="header" href="#キャッシュタスクへのマイグレーション">キャッシュ・タスクへのマイグレーション</a></h2>
-<p>In sbt 2.x, all tasks are cached by default. To participate in caching, the task result type must provide a given for <code>sjsonnew.JsonFormat</code>. Any task whose result type lacks <code>JsonFormat</code> (e.g. complex objects like <code>ParadoxProcessor</code>, <code>ClassLoader</code>, <code>Seq[PathMapping]</code>, or function types) will fail at build load time in sbt 2.</p>
-<p>If you don't want to define the given, the easiest way to migrate is to wrap the tasks with <code>Def.uncached(...)</code> so sbt 2 skips caching and always re-executes them:</p>
+<p>sbt 2.x において、全タスクはデフォルトでキャッシュされる。キャッシュに参加するためには、タスクの戻り型が <code>sjsonnew.JsonFormat</code> の given を提供する必要がある。戻り型に <code>JsonFormat</code> が無い (<code>ParadoxProcessor</code>、<code>ClassLoader</code>、<code>Seq[PathMapping]</code> 等の複合オブジェクトや関数型など) タスクは sbt 2 においてビルドのロード時に失敗する。</p>
+<p>given を定義したくない場合、最も簡単なマイグレーション方法はタスクを <code>Def.uncached(...)</code> でラップして sbt 2 がキャッシュをスキップして常に再実行するようにすることだ:</p>
 <pre><code class="language-scala">myTask := Def.uncached {
-  // task body returning a non-serializable type
+  // シリアライズ不可能な型を返すタスク本体
 }
 </code></pre>
-<p>When considering caching for a task, watch out for side-effecting tasks. When sbt 2 restores a task result from its disk cache, it returns the cached value without re-executing the task body. Any side effect (e.g. writing files, syncing mappings) is silently skipped. If a task is meant to produce a side effect every time it runs, wrap it in <code>Def.uncached(...)</code> so sbt 2 always re-executes it.</p>
-<p>The <a href="https://github.com/sbt/sbt2-compat">sbt2-compat</a> plugin provides <code>Def.uncached</code> as a compatibility shim on sbt 1.x (where it is a no-op). See <a href="../reference/cached-task.html">Cached task</a> reference for details, including build-wide and per-task opt-out options.</p>
+<p>タスクのキャッシュを検討するにあたって、副作用のあるタスクには注意が必要だ。sbt 2 がディスクキャッシュからタスクの結果を復元するとき、タスク本体を再実行せずにキャッシュされた値を返す。副作用 (ファイルの書き込みやマッピングの同期など) はサイレントにスキップされる。タスクが毎回副作用を生じることを意図している場合、<code>Def.uncached(...)</code> でラップして sbt 2 が常に再実行するようにする。</p>
+<p><a href="https://github.com/sbt/sbt2-compat">sbt2-compat</a> プラグインは sbt 1.x 上で <code>Def.uncached</code> を互換性 shim (no-op) として提供する。ビルド全体及びタスク単位でのオプトアウトの方法などの詳細は <a href="../reference/cached-task.html">キャッシュ・タスク</a> リファレンスを参照。</p>
 <h2 id="integrationtest-の廃止"><a class="header" href="#integrationtest-の廃止">IntegrationTest の廃止</a></h2>
 <p><code>IntegrationTest</code> コンフィギュレーションの廃止に対応するためには、別のサブプロジェクトを定義して、普通のテストとして実装するのが推奨される。</p>
 <h2 id="スラッシュ構文へのマイグレーション"><a class="header" href="#スラッシュ構文へのマイグレーション">スラッシュ構文へのマイグレーション</a></h2>
@@ -326,30 +326,49 @@ lazy val plugin = (project in file("plugin"))
 <p>JVM ライブラリが必要な場合は <code>.platform(Platform.jvm)</code> を使う。</p>
 <h2 id="target-に関する変更"><a class="header" href="#target-に関する変更"><code>target</code> に関する変更</a></h2>
 <p>sbt 2.x では、<code>target</code> ディレクトリが単一の <code>target/</code> ディレクトリに統一され、それぞれのサブプロジェクトがプラットフォーム、Scala バージョン、id をエンコードしたサブディレクトリを作る。scripted test でこの変更点を吸収するために、<code>exists</code>、<code>absent</code>、<code>delete</code> のコマンドは glob式 <code>**</code> および <code>||</code> をサポートする。</p>
-<pre><code class="language-bash"># before
+<pre><code class="language-bash"># 変更前
 $ absent target/out/jvm/scala-3.3.1/clean-managed/src_managed/foo.txt
 $ exists target/out/jvm/scala-3.3.1/clean-managed/src_managed/bar.txt
 
-# after
+# 変更後
 $ absent target/**/src_managed/foo.txt
 $ exists target/**/src_managed/bar.txt
 
 # どちらでも ok
 $ exists target/**/proj/src_managed/bar.txt || proj/target/**/src_managed/bar.txt
 </code></pre>
-<p>In sbt 1.x, <code>target.value</code> resolves to the project root <code>target/</code> directory. In sbt 2.x, it resolves to <code>target/out/jvm/scala-&lt;ver&gt;/&lt;project-name&gt;</code> instead. Plugins should be aware of this change during migration.</p>
+<p>sbt 1.x では、<code>target.value</code> はプロジェクトルートの <code>target/</code> ディレクトリを指す。sbt 2.x では代わりに <code>target/out/jvm/scala-&lt;ver&gt;/&lt;project-name&gt;</code> を指す。プラグインのマイグレーション時にこの変更点に注意する必要がある。</p>
+<h2 id="ci-パイプラインのマイグレーション"><a class="header" href="#ci-パイプラインのマイグレーション">CI パイプラインのマイグレーション</a></h2>
+<p>CI パイプラインに影響する可能性のある振る舞いの変更点がいくつかある。</p>
+<h3 id="コマンドを連続して実行する"><a class="header" href="#コマンドを連続して実行する">コマンドを連続して実行する</a></h3>
+<p>コマンドの連続実行はセミコロンで区切られたクォートされた文字列として指定するようになった:</p>
+<pre><code class="language-bash">sbt "clean ; compile ; test"
+</code></pre>
+<p>以前は <code>sbt clean compile test</code> と書くことができたが、現在では "Expected whitespace character" というエラーが発生する。</p>
+<h3 id="複数のステップを持つ-sbt-サーバー"><a class="header" href="#複数のステップを持つ-sbt-サーバー">複数のステップを持つ sbt サーバー</a></h3>
+<p>CI パイプラインに <code>sbt</code> を実行する複数のステップが含まれている場合、後続のステップは毎回新しい <code>sbt</code> プロセスを起動する代わりに、最初の呼び出しで起動されたサーバーを再利用する。その結果、後続のステップは最初のセッションに渡された環境変数を引き続き使用する。</p>
+<p>パイプラインが各セッションに異なる環境変数 (<code>JAVA_OPTS</code> など) を渡すことに依存している場合、全ての <code>sbt</code> 呼び出しで同一になるようにジョブレベルで全ての変数を提供するか、各ステップの後またはステップ間で <code>sbt</code> をシャットダウンする必要がある。</p>
+<pre><code class="language-bash">sbt "clean ; compile ; test ; shutdown"
+</code></pre>
+<p>これは <code>sbt</code> を直接実行する場合でも、内部的に <code>sbt</code> を呼び出す <code>sbt-dependency-submission</code> のようなサードパーティーのアクションを通じて実行する場合でも適用される点に注意。</p>
+<h3 id="テスト成果物"><a class="header" href="#テスト成果物">テスト成果物</a></h3>
+<p>テスト結果などの出力成果物は <code>target/out</code> 以下のサブディレクトリに保存されるようになったため、テストパブリッシュや成果物のアーカイブに使用されるパスを更新する必要があるかもしれない:</p>
+<pre><code class="language-yaml">path: target/out/**/test-reports/*.xml
+</code></pre>
+<h3 id="グローバルベースディレクトリの変更"><a class="header" href="#グローバルベースディレクトリの変更">グローバルベースディレクトリの変更</a></h3>
+<p>sbt 2.x において、グローバルベースディレクトリはディレクトリ標準に従う。Windows でのデフォルト値は <code>%LOCALAPPDATA%/sbt/2</code> だ。その他の場合は <code>$XDG_CONFIG_HOME/sbt/2</code> もしくは <code>$HOME/.config/sbt/2</code> だ。詳細は <a href="../reference/sbt.html#%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%90%E3%83%AB%E3%83%99%E3%83%BC%E3%82%B9%E3%83%87%E3%82%A3%E3%83%AC%E3%82%AF%E3%83%88%E3%83%AA">sbt リファレンス</a> を参照。</p>
 <h2 id="plugincompat-技法"><a class="header" href="#plugincompat-技法">PluginCompat 技法</a></h2>
-<p>To use the same <code>*.scala</code> source but target both sbt 1.x and 2.x, we can create a shim, for example an object named <code>PluginCompat</code> in both <code>src/main/scala-2.12/</code> and <code>src/main/scala-3/</code>. APIs commonly encountered during migrations are abstracted into the <a href="https://github.com/sbt/sbt2-compat">sbt2-compat</a> plugin that can be used to avoid creating the shims manually. To use it in your sbt plugin, you can add it to your sbt plugin's <code>build.sbt</code>:</p>
+<p>同じ <code>*.scala</code> ソースを sbt 1.x と 2.x の両方をターゲットとして使うために、例えば <code>src/main/scala-2.12/</code> と <code>src/main/scala-3/</code> の両方に <code>PluginCompat</code> という名前のオブジェクトなどの shim を作成することができる。マイグレーション時によく遭遇する API は <a href="https://github.com/sbt/sbt2-compat">sbt2-compat</a> プラグインに抽象化されており、手動で shim を作成することを避けるために使用できる。sbt プラグインで使用するには、sbt プラグインの <code>build.sbt</code> に追加する:</p>
 <pre><code class="language-scala">addSbtPlugin("com.github.sbt" % "sbt2-compat" % "&lt;version&gt;")
 </code></pre>
-<p>And import and use the conversion methods in your shared source:</p>
+<p>そして共有ソース内で変換メソッドをインポートして使用する:</p>
 <pre><code class="language-scala">import sbtcompat.PluginCompat._
 
-// Use the conversion methods here
+// 変換メソッドをここで使用する
 </code></pre>
-<p>You can read more about <code>sbt2-compat</code>, the <code>PluginCompat</code> pattern and how to use them the following blog article: <a href="https://www.scala-lang.org/blog/2026/03/02/sbt2-compat.html">Migrating sbt plugins to sbt 2 with sbt2-compat plugin</a>.</p>
+<p><code>sbt2-compat</code>、<code>PluginCompat</code> パターン、及びそれらの使い方の詳細については以下のブログ記事を参照: <a href="https://www.scala-lang.org/blog/2026/03/02/sbt2-compat.html">Migrating sbt plugins to sbt 2 with sbt2-compat plugin</a>。</p>
 <h3 id="classpath-型のマイグレーション"><a class="header" href="#classpath-型のマイグレーション">Classpath 型のマイグレーション</a></h3>
-<p>sbt 2.x changed the <code>Classpath</code> type to be an alias of <code>Seq[Attributed[xsbti.HashedVirtualFileRef]]</code> instead of <code>Seq[Attributed[File]]</code>. Any plugin that needs <code>File</code> or <code>Path</code> for I/O (classpath URLs, mappings, sync, validation) must convert these references. With <code>sbt2-compat</code> added and imported as above, use <code>toNioPaths</code> and <code>toFiles</code>, for example:</p>
+<p>sbt 2.x では <code>Classpath</code> 型が <code>Seq[Attributed[File]]</code> の代わりに <code>Seq[Attributed[xsbti.HashedVirtualFileRef]]</code> のエイリアスに変更された。I/O (クラスパス URL、マッピング、同期、検証) に <code>File</code> や <code>Path</code> を必要とするプラグインはこれらの参照を変換する必要がある。上記のように <code>sbt2-compat</code> を追加してインポートした場合、<code>toNioPaths</code> と <code>toFiles</code> を使う。例:</p>
 <pre><code class="language-scala">import sbtcompat.PluginCompat._
 
 myTask := {
@@ -359,9 +378,9 @@ myTask := {
   // ...
 }
 </code></pre>
-<p><code>sbt2-compat</code> also provides <code>toNioPath</code>, <code>toFile</code>, <code>toFileRefsMapping</code>, <code>Def.uncached</code> and other convenience methods to be used in the shared sources. See the <a href="https://github.com/sbt/sbt2-compat">sbt2-compat README</a> for the up-to-date documentation on the API provided by the plugin.</p>
-<h3 id="defining-your-own-plugincompat-shims"><a class="header" href="#defining-your-own-plugincompat-shims">Defining your own PluginCompat shims</a></h3>
-<p>For the APIs broken between sbt 1.x and 2.x that are not covered by <code>sbt2-compat</code>, you can define your own <code>PluginCompat</code> shims by creating separate source files under <code>src/main/scala-2.12/PluginCompat.scala</code> and <code>src/main/scala-3/PluginCompat.scala</code>. For example:</p>
+<p><code>sbt2-compat</code> は共有ソースで使用するための <code>toNioPath</code>、<code>toFile</code>、<code>toFileRefsMapping</code>、<code>Def.uncached</code> その他の便利メソッドも提供する。プラグインが提供する API の最新ドキュメントは <a href="https://github.com/sbt/sbt2-compat">sbt2-compat README</a> を参照。</p>
+<h3 id="独自の-plugincompat-shim-の定義"><a class="header" href="#独自の-plugincompat-shim-の定義">独自の PluginCompat shim の定義</a></h3>
+<p><code>sbt2-compat</code> がカバーしていない sbt 1.x と 2.x 間で壊れた API に対しては、<code>src/main/scala-2.12/PluginCompat.scala</code> と <code>src/main/scala-3/PluginCompat.scala</code> に別々のソースファイルを作成することで独自の <code>PluginCompat</code> shim を定義することができる。例:</p>
 <pre><code class="language-scala">// src/main/scala-2.12/PluginCompat.scala
 
 package sbtfoo
@@ -384,31 +403,14 @@ object PluginCompat {
   def someSharedMethod(): Unit = ...
 }
 </code></pre>
-<p>Then use your own <code>PluginCompat</code> shims in your sbt plugin:</p>
+<p>そして sbt プラグインで独自の <code>PluginCompat</code> shim を使用する:</p>
 <pre><code class="language-scala">import sbtfoo.PluginCompat._
 
 myTask := {
   someSharedMethod()
 }
 </code></pre>
-<p>This pattern is compatible with <code>sbt2-compat</code> and can be used alongside it to absorb the differences between sbt 1.x and 2.x.</p>
-<h2 id="migrating-ci-pipelines"><a class="header" href="#migrating-ci-pipelines">Migrating CI pipelines</a></h2>
-<p>There are some behavior changes that may affect CI pipelines.</p>
-<h3 id="running-a-sequence-of-commands"><a class="header" href="#running-a-sequence-of-commands">Running a sequence of commands</a></h3>
-<p>A sequence of commands must now be supplied as a quoted string separated by semicolons:</p>
-<pre><code class="language-bash">sbt "clean ; compile ; test"
-</code></pre>
-<p>Previously, you could write <code>sbt clean compile test</code>. That now produces the error "Expected whitespace character".</p>
-<h3 id="persistent-sbt-server-with-multiple-steps"><a class="header" href="#persistent-sbt-server-with-multiple-steps">Persistent sbt server with multiple steps</a></h3>
-<p>If a CI pipeline contains multiple steps that run <code>sbt</code>, later steps reuse the persistent server started by the first invocation instead of starting a new <code>sbt</code> process each time. As a result, these later steps continue to use the environment variables passed to the first session.</p>
-<p>If your pipeline relies on passing different environment variables (such as <code>JAVA_OPTS</code>) to each session, you must either provide all variables at the job level so they are identical for all <code>sbt</code> invocations, or shut down <code>sbt</code> after each step or between steps.</p>
-<pre><code class="language-bash">sbt "clean ; compile ; test ; shutdown"
-</code></pre>
-<p>Note that this applies whether you run <code>sbt</code> directly or through a third-party action such as <code>sbt-dependency-submission</code> that invokes <code>sbt</code> internally.</p>
-<h3 id="test-artifacts"><a class="header" href="#test-artifacts">Test artifacts</a></h3>
-<p>Output artifacts such as test results are now stored in subdirectories beneath <code>target/out</code> so you may need to update the paths used for test publishing and artifact archival:</p>
-<pre><code class="language-yaml">path: target/out/**/test-reports/*.xml
-</code></pre>
+<p>このパターンは <code>sbt2-compat</code> と互換性があり、sbt 1.x と 2.x の違いを吸収するために併用することができる。</p>
 
                     </main>
 

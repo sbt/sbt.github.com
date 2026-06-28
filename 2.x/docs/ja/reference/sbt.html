@@ -404,6 +404,16 @@ sbt
 <p>このディレクトリの場所を変更するには、<code>sbt.boot.directory</code> システムプロパティを設定する。相対パスはカレントワーキングディレクトリに対して解決される。プロジェクト間でブートディレクトリを共有したくない場合に便利である。例えば、以下は 0.11 以前のスタイルで <code>project/boot/</code> にブートディレクトリを配置する:</p>
 <pre><code class="language-bash">sbt -Dsbt.boot.directory=project/boot/
 </code></pre>
+<h3 id="グローバルベースディレクトリ"><a class="header" href="#グローバルベースディレクトリ">グローバルベースディレクトリ</a></h3>
+<p>グローバルベースディレクトリは、マシンワイドなセッティングとプラグインを含むディレクトリ。これは、以下の設定により決定される:</p>
+<ol>
+<li><code>-Dsbt.boot.directory</code> システムプロパティー</li>
+<li><code>$SBT_CONFIG_HOME</code> 環境変数</li>
+<li>Windows の場合、<code>%LOCALAPPDATA%/sbt</code></li>
+<li>非 Windows の場合、<code>$XDG_CONFIG_HOME/sbt</code></li>
+<li><code>$HOME/.config/sbt</code></li>
+</ol>
+<p>次に、<code>$HOME/.config/sbt/2</code> というふうに <code>2</code> という名前の子ディレクトリが作られる。</p>
 <h3 id="ターミナルエンコーディング"><a class="header" href="#ターミナルエンコーディング">ターミナルエンコーディング</a></h3>
 <p>ターミナルで使用する文字エンコーディングは、プラットフォームの Java デフォルトエンコーディングと異なる場合がある。その場合、<code>file.encoding=&lt;encoding&gt;</code> システムプロパティを指定する必要がある。例:</p>
 <pre><code class="language-bash">export JAVA_OPTS="-Dfile.encoding=Cp1252"
@@ -436,8 +446,6 @@ sbt
 <p>Coursier アーティファクトキャッシュの場所。デフォルトは<a href="https://get-coursier.io/docs/cache.html#default-location">Coursier キャッシュ解決ロジック</a>で定義される。値は <code>csrCacheDirectory</code> コマンドで確認できる。</p>
 <h4 id="-dsbtgenbuildpropstrue"><a class="header" href="#-dsbtgenbuildpropstrue"><code>-Dsbt.genbuildprops=true</code></a></h4>
 <p>存在しない場合に <code>build.properties</code> を生成する。未設定の場合、<code>sbt.skip.version.write</code> に委譲される。</p>
-<h4 id="-dsbtglobalbasehomesbt"><a class="header" href="#-dsbtglobalbasehomesbt"><code>-Dsbt.global.base=$HOME/.sbt/</code></a></h4>
-<p>グローバルセッティングとプラグインを含むディレクトリ。</p>
 <h4 id="-dsbtoverridebuildrepostrue"><a class="header" href="#-dsbtoverridebuildrepostrue"><code>-Dsbt.override.build.repos=true</code></a></h4>
 <p>true の場合、ビルド定義で設定されたリポジトリは無視され、ランチャー用に設定されたリポジトリが代わりに使用される。</p>
 <!-- See <tt>sbt.repository.config</tt> and the <a href="Launcher-Configuration.html">sbt launcher</a> documentation. -->

@@ -1609,12 +1609,12 @@ task1 := {
 <h2 id="将-buildsbt-dsl-改为-scala-3x"><a class="header" href="#将-buildsbt-dsl-改为-scala-3x">将 <code>build.sbt</code> DSL 改为 Scala 3.x</a></h2>
 <p>提醒一下，用户可以使用 sbt 1.x 或 sbt 2.x 构建 Scala 2.x 或 Scala 3.x 程序。但 <code>build.sbt</code> DSL 所基于的 Scala 版本由 sbt 版本决定。在 sbt 2.0 中，我们正在迁移到 Scala 3.8.x。</p>
 <p>这意味着如果您为 sbt 2.x 实现自定义任务或 sbt 插件，必须使用 Scala 3.x。有关 Scala 3.x 的详细信息，请参阅 <a href="https://docs.scala-lang.org/scala3/guides/migration/incompatibility-table.html">Scala 3.x 不兼容性表</a> 和 <a href="https://docs.scala-lang.org/scala3/guides/migration/tooling-scala2-xsource3.html">Scala 2 with -Xsource:3</a>。</p>
-<pre><code class="language-scala">// This works on Scala 2.12.20 under -Xsource:3
+<pre><code class="language-scala">// 此代码在 -Xsource:3 下适用于 Scala 2.12.20
 import sbt.{ given, * }
 </code></pre>
 <h3 id="导入-given"><a class="header" href="#导入-given">导入 given</a></h3>
 <p>Scala 2.x 与 3.x 的区别之一是将类型类实例导入作用域的方式。Scala 2.x 使用 <code>import FooCodec._</code>，而 Scala 3 使用 <code>import FooCodec.given</code>。编写：</p>
-<pre><code class="language-scala">// The following works for both sbt 1.x and 2.x
+<pre><code class="language-scala">// 以下代码在 sbt 1.x 和 2.x 中均适用
 import sbt.librarymanagement.LibraryManagementCodec.{ given, * }
 </code></pre>
 <h3 id="避免后缀"><a class="header" href="#避免后缀">避免后缀</a></h3>
@@ -1649,11 +1649,11 @@ scalaVersion := "3.8.4"
 <a class="admonition-anchor-link" href="changes/migrating-from-sbt-1.x.html#admonition-warning"></a>
 </div>
 <div>
-<p>In sbt 1.x bare settings were project settings that applied only to the root subproject. In sbt 2.x, the bare settings in <code>build.sbt</code> are common settings that are injected to <strong>all subprojects</strong>.</p>
+<p>在 sbt 1.x 中，裸设置是仅应用于根子项目的项目设置。在 sbt 2.x 中，<code>build.sbt</code> 中的裸设置是注入到<strong>所有子项目</strong>的通用设置。</p>
 </div>
 </div>
-<pre><code class="language-scala">name := "root"         // all subprojects will be named root!
-publish / skip := true // all subprojects will be skipped!
+<pre><code class="language-scala">name := "root"         // 所有子项目将命名为 root！
+publish / skip := true // 所有子项目将被跳过！
 </code></pre>
 <p>若要将某些设置仅应用于根子项目，可以使用多项目构建定义，或将设置限定在 <code>LocalRootProject</code> 下：</p>
 <pre><code class="language-scala">LocalRootProject / name := "root"
@@ -1664,14 +1664,14 @@ LocalRootProject / publish / skip := true
 <h2 id="exportjars-的变更"><a class="header" href="#exportjars-的变更"><code>exportJars</code> 的变更</a></h2>
 <p><code>exportJars</code> 默认为 <code>true</code>，之前为 <code>false</code>。这可能会破坏 <code>getResource("/")</code> 和 <code>resource.toURI</code>。如果您的构建中此逻辑被破坏并产生 <code>NullPointerException</code> 和 <code>FileSystemNotFoundException</code>，请设置 <code>exportJars := false</code>。如需保留旧行为，请在构建中设置 <code>exportJars := false</code>。此变更由 <a href="https://github.com/sbt/sbt/pull/7464">sbt/sbt#7464</a> 引入，另请参阅 <a href="https://eed3si9n.com/sbt-remote-cache/">blog</a>。</p>
 <h2 id="迁移到缓存任务"><a class="header" href="#迁移到缓存任务">迁移到缓存任务</a></h2>
-<p>In sbt 2.x, all tasks are cached by default. To participate in caching, the task result type must provide a given for <code>sjsonnew.JsonFormat</code>. Any task whose result type lacks <code>JsonFormat</code> (e.g. complex objects like <code>ParadoxProcessor</code>, <code>ClassLoader</code>, <code>Seq[PathMapping]</code>, or function types) will fail at build load time in sbt 2.</p>
-<p>If you don't want to define the given, the easiest way to migrate is to wrap the tasks with <code>Def.uncached(...)</code> so sbt 2 skips caching and always re-executes them:</p>
+<p>在 sbt 2.x 中，所有任务默认都会被缓存。为参与缓存，任务的结果类型必须提供 <code>sjsonnew.JsonFormat</code> 的 given。任何结果类型缺少 <code>JsonFormat</code>（例如 <code>ParadoxProcessor</code>、<code>ClassLoader</code>、<code>Seq[PathMapping]</code> 等复杂对象或函数类型）的任务将在 sbt 2 的构建加载时失败。</p>
+<p>如果不想定义 given，最简单的迁移方式是用 <code>Def.uncached(...)</code> 包装任务，使 sbt 2 跳过缓存并始终重新执行它们：</p>
 <pre><code class="language-scala">myTask := Def.uncached {
-  // task body returning a non-serializable type
+  // 返回不可序列化类型的任务体
 }
 </code></pre>
-<p>When considering caching for a task, watch out for side-effecting tasks. When sbt 2 restores a task result from its disk cache, it returns the cached value without re-executing the task body. Any side effect (e.g. writing files, syncing mappings) is silently skipped. If a task is meant to produce a side effect every time it runs, wrap it in <code>Def.uncached(...)</code> so sbt 2 always re-executes it.</p>
-<p>The <a href="https://github.com/sbt/sbt2-compat">sbt2-compat</a> plugin provides <code>Def.uncached</code> as a compatibility shim on sbt 1.x (where it is a no-op). See <a href="changes/../reference/cached-task.html">Cached task</a> reference for details, including build-wide and per-task opt-out options.</p>
+<p>在考虑任务缓存时，需注意有副作用的任务。当 sbt 2 从磁盘缓存恢复任务结果时，它会返回缓存值而不重新执行任务体。任何副作用（例如写文件、同步映射）都会被静默跳过。如果任务每次运行都应产生副作用，请用 <code>Def.uncached(...)</code> 包装，使 sbt 2 始终重新执行它。</p>
+<p><a href="https://github.com/sbt/sbt2-compat">sbt2-compat</a> 插件在 sbt 1.x 上提供 <code>Def.uncached</code> 作为兼容性 shim（其中它是无操作）。有关详情，包括构建范围和每任务退出选项，请参阅<a href="changes/../reference/cached-task.html">缓存任务</a>参考文档。</p>
 <h2 id="从-integrationtest-迁移"><a class="header" href="#从-integrationtest-迁移">从 IntegrationTest 迁移</a></h2>
 <p>要从 <code>IntegrationTest</code> 配置迁移，请创建单独的子项目并作为普通测试实现。</p>
 <h2 id="迁移到斜杠语法"><a class="header" href="#迁移到斜杠语法">迁移到斜杠语法</a></h2>
@@ -1683,7 +1683,7 @@ LocalRootProject / publish / skip := true
 </code></pre>
 <h2 id="交叉构建-sbt-插件"><a class="header" href="#交叉构建-sbt-插件">交叉构建 sbt 插件</a></h2>
 <p>在 sbt 2.x 中，如果您使用 Scala 3.x 和 2.12.x 交叉构建 sbt 插件，它将自动针对 sbt 1.x 和 sbt 2.x 进行交叉构建：</p>
-<pre><code class="language-scala">// using sbt 2.x
+<pre><code class="language-scala">// 使用 sbt 2.x
 lazy val plugin = (projectMatrix in file("plugin"))
   .enablePlugins(SbtPlugin)
   .settings(
@@ -1694,7 +1694,7 @@ lazy val plugin = (projectMatrix in file("plugin"))
 <p>如果使用 <code>projectMatrix</code>，请确保将插件移至 <code>plugin/</code> 等子目录。否则，合成根项目也会包含 <code>src/</code>。</p>
 <h3 id="使用-sbt-1x-交叉构建-sbt-插件"><a class="header" href="#使用-sbt-1x-交叉构建-sbt-插件">使用 sbt 1.x 交叉构建 sbt 插件</a></h3>
 <p>如需使用 sbt 1.x 进行交叉构建，请使用 sbt 1.10.2 或更高版本。</p>
-<pre><code class="language-scala">// using sbt 1.x
+<pre><code class="language-scala">// 使用 sbt 1.x
 lazy val scala212 = "2.12.20"
 lazy val scala3 = "3.8.4"
 ThisBuild / crossScalaVersions := Seq(scala212, scala3)
@@ -1720,30 +1720,49 @@ lazy val plugin = (project in file("plugin"))
 <p>需要 JVM 库时请使用 <code>.platform(Platform.jvm)</code>。</p>
 <h2 id="target-的变更"><a class="header" href="#target-的变更"><code>target</code> 的变更</a></h2>
 <p>在 sbt 2.x 中，<code>target</code> 目录统一为工作目录中的单个 <code>target/</code> 目录，每个子项目创建编码平台、Scala 版本和子项目 ID 的子目录。为在脚本化测试中适应此变更，<code>exists</code>、<code>absent</code> 和 <code>delete</code> 现已支持 glob 表达式 <code>**</code> 以及 <code>||</code>。</p>
-<pre><code class="language-bash"># before
+<pre><code class="language-bash"># 之前
 $ absent target/out/jvm/scala-3.3.1/clean-managed/src_managed/foo.txt
 $ exists target/out/jvm/scala-3.3.1/clean-managed/src_managed/bar.txt
 
-# after
+# 之后
 $ absent target/**/src_managed/foo.txt
 $ exists target/**/src_managed/bar.txt
 
-# either is ok
+# 均可
 $ exists target/**/proj/src_managed/bar.txt || proj/target/**/src_managed/bar.txt
 </code></pre>
-<p>In sbt 1.x, <code>target.value</code> resolves to the project root <code>target/</code> directory. In sbt 2.x, it resolves to <code>target/out/jvm/scala-&lt;ver&gt;/&lt;project-name&gt;</code> instead. Plugins should be aware of this change during migration.</p>
+<p>在 sbt 1.x 中，<code>target.value</code> 解析为项目根 <code>target/</code> 目录。在 sbt 2.x 中，它改为解析为 <code>target/out/jvm/scala-&lt;ver&gt;/&lt;project-name&gt;</code>。插件在迁移过程中应注意此变更。</p>
+<h2 id="迁移-ci-流水线"><a class="header" href="#迁移-ci-流水线">迁移 CI 流水线</a></h2>
+<p>有一些行为变更可能影响 CI 流水线。</p>
+<h3 id="运行一系列命令"><a class="header" href="#运行一系列命令">运行一系列命令</a></h3>
+<p>现在必须将命令序列作为以分号分隔的带引号字符串提供：</p>
+<pre><code class="language-bash">sbt "clean ; compile ; test"
+</code></pre>
+<p>以前，您可以写 <code>sbt clean compile test</code>。现在这会产生错误 "Expected whitespace character"。</p>
+<h3 id="具有多个步骤的-sbt-server"><a class="header" href="#具有多个步骤的-sbt-server">具有多个步骤的 sbt server</a></h3>
+<p>如果 CI 流水线包含多个运行 <code>sbt</code> 的步骤，后续步骤将复用第一次调用启动的 sbt server，而不是每次启动新的 <code>sbt</code> 进程。因此，这些后续步骤将继续使用传递给第一次会话的环境变量。</p>
+<p>如果您的流水线依赖于向每个会话传递不同的环境变量（如 <code>JAVA_OPTS</code>），则必须在作业级别提供所有变量使其对所有 <code>sbt</code> 调用相同，或在每个步骤之后或步骤之间关闭 <code>sbt</code>。</p>
+<pre><code class="language-bash">sbt "clean ; compile ; test ; shutdown"
+</code></pre>
+<p>请注意，无论您是直接运行 <code>sbt</code> 还是通过在内部调用 <code>sbt</code> 的第三方操作（如 <code>sbt-dependency-submission</code>），此情况均适用。</p>
+<h3 id="测试产物"><a class="header" href="#测试产物">测试产物</a></h3>
+<p>测试结果等输出产物现在存储在 <code>target/out</code> 下的子目录中，因此您可能需要更新用于测试发布和产物归档的路径：</p>
+<pre><code class="language-yaml">path: target/out/**/test-reports/*.xml
+</code></pre>
+<h3 id="全局基础目录的变更"><a class="header" href="#全局基础目录的变更">全局基础目录的变更</a></h3>
+<p>在 sbt 2.x 中，全局基础目录遵循目录标准。Windows 上的默认值为 <code>%LOCALAPPDATA%/sbt/2</code>，否则为 <code>$XDG_CONFIG_HOME/sbt/2</code> 或 <code>$HOME/.config/sbt/2</code>。详情请参阅 <a href="changes/../reference/sbt.html#global-base-directory">sbt 参考</a>。</p>
 <h2 id="plugincompat-技术"><a class="header" href="#plugincompat-技术">PluginCompat 技术</a></h2>
-<p>To use the same <code>*.scala</code> source but target both sbt 1.x and 2.x, we can create a shim, for example an object named <code>PluginCompat</code> in both <code>src/main/scala-2.12/</code> and <code>src/main/scala-3/</code>. APIs commonly encountered during migrations are abstracted into the <a href="https://github.com/sbt/sbt2-compat">sbt2-compat</a> plugin that can be used to avoid creating the shims manually. To use it in your sbt plugin, you can add it to your sbt plugin's <code>build.sbt</code>:</p>
+<p>为使用相同的 <code>*.scala</code> 源但同时面向 sbt 1.x 和 2.x，我们可以创建一个 shim，例如在 <code>src/main/scala-2.12/</code> 和 <code>src/main/scala-3/</code> 中创建名为 <code>PluginCompat</code> 的对象。迁移过程中常遇到的 API 已被抽象到 <a href="https://github.com/sbt/sbt2-compat">sbt2-compat</a> 插件中，可用于避免手动创建 shim。要在 sbt 插件中使用它，可将其添加到 sbt 插件的 <code>build.sbt</code>：</p>
 <pre><code class="language-scala">addSbtPlugin("com.github.sbt" % "sbt2-compat" % "&lt;version&gt;")
 </code></pre>
-<p>And import and use the conversion methods in your shared source:</p>
+<p>然后在共享源中导入并使用转换方法：</p>
 <pre><code class="language-scala">import sbtcompat.PluginCompat._
 
-// Use the conversion methods here
+// 在此处使用转换方法
 </code></pre>
-<p>You can read more about <code>sbt2-compat</code>, the <code>PluginCompat</code> pattern and how to use them the following blog article: <a href="https://www.scala-lang.org/blog/2026/03/02/sbt2-compat.html">Migrating sbt plugins to sbt 2 with sbt2-compat plugin</a>.</p>
+<p>您可以在以下博客文章中了解更多关于 <code>sbt2-compat</code>、<code>PluginCompat</code> 模式及其使用方法：<a href="https://www.scala-lang.org/blog/2026/03/02/sbt2-compat.html">Migrating sbt plugins to sbt 2 with sbt2-compat plugin</a>。</p>
 <h3 id="迁移-classpath-类型"><a class="header" href="#迁移-classpath-类型">迁移 Classpath 类型</a></h3>
-<p>sbt 2.x changed the <code>Classpath</code> type to be an alias of <code>Seq[Attributed[xsbti.HashedVirtualFileRef]]</code> instead of <code>Seq[Attributed[File]]</code>. Any plugin that needs <code>File</code> or <code>Path</code> for I/O (classpath URLs, mappings, sync, validation) must convert these references. With <code>sbt2-compat</code> added and imported as above, use <code>toNioPaths</code> and <code>toFiles</code>, for example:</p>
+<p>sbt 2.x 将 <code>Classpath</code> 类型更改为 <code>Seq[Attributed[xsbti.HashedVirtualFileRef]]</code> 的别名，而不再是 <code>Seq[Attributed[File]]</code>。任何需要 <code>File</code> 或 <code>Path</code> 进行 I/O（类路径 URL、映射、同步、验证）的插件必须转换这些引用。如上所示添加并导入 <code>sbt2-compat</code> 后，请使用 <code>toNioPaths</code> 和 <code>toFiles</code>，例如：</p>
 <pre><code class="language-scala">import sbtcompat.PluginCompat._
 
 myTask := {
@@ -1753,9 +1772,9 @@ myTask := {
   // ...
 }
 </code></pre>
-<p><code>sbt2-compat</code> also provides <code>toNioPath</code>, <code>toFile</code>, <code>toFileRefsMapping</code>, <code>Def.uncached</code> and other convenience methods to be used in the shared sources. See the <a href="https://github.com/sbt/sbt2-compat">sbt2-compat README</a> for the up-to-date documentation on the API provided by the plugin.</p>
-<h3 id="defining-your-own-plugincompat-shims"><a class="header" href="#defining-your-own-plugincompat-shims">Defining your own PluginCompat shims</a></h3>
-<p>For the APIs broken between sbt 1.x and 2.x that are not covered by <code>sbt2-compat</code>, you can define your own <code>PluginCompat</code> shims by creating separate source files under <code>src/main/scala-2.12/PluginCompat.scala</code> and <code>src/main/scala-3/PluginCompat.scala</code>. For example:</p>
+<p><code>sbt2-compat</code> 还提供 <code>toNioPath</code>、<code>toFile</code>、<code>toFileRefsMapping</code>、<code>Def.uncached</code> 和其他便捷方法，可在共享源中使用。有关插件提供的 API 的最新文档，请参阅 <a href="https://github.com/sbt/sbt2-compat">sbt2-compat README</a>。</p>
+<h3 id="定义您自己的-plugincompat-shim"><a class="header" href="#定义您自己的-plugincompat-shim">定义您自己的 PluginCompat shim</a></h3>
+<p>对于 <code>sbt2-compat</code> 未覆盖的 sbt 1.x 和 2.x 之间损坏的 API，您可以通过在 <code>src/main/scala-2.12/PluginCompat.scala</code> 和 <code>src/main/scala-3/PluginCompat.scala</code> 下创建单独的源文件来定义自己的 <code>PluginCompat</code> shim。例如：</p>
 <pre><code class="language-scala">// src/main/scala-2.12/PluginCompat.scala
 
 package sbtfoo
@@ -1778,31 +1797,14 @@ object PluginCompat {
   def someSharedMethod(): Unit = ...
 }
 </code></pre>
-<p>Then use your own <code>PluginCompat</code> shims in your sbt plugin:</p>
+<p>然后在 sbt 插件中使用您自己的 <code>PluginCompat</code> shim：</p>
 <pre><code class="language-scala">import sbtfoo.PluginCompat._
 
 myTask := {
   someSharedMethod()
 }
 </code></pre>
-<p>This pattern is compatible with <code>sbt2-compat</code> and can be used alongside it to absorb the differences between sbt 1.x and 2.x.</p>
-<h2 id="migrating-ci-pipelines"><a class="header" href="#migrating-ci-pipelines">Migrating CI pipelines</a></h2>
-<p>There are some behavior changes that may affect CI pipelines.</p>
-<h3 id="running-a-sequence-of-commands"><a class="header" href="#running-a-sequence-of-commands">Running a sequence of commands</a></h3>
-<p>A sequence of commands must now be supplied as a quoted string separated by semicolons:</p>
-<pre><code class="language-bash">sbt "clean ; compile ; test"
-</code></pre>
-<p>Previously, you could write <code>sbt clean compile test</code>. That now produces the error "Expected whitespace character".</p>
-<h3 id="persistent-sbt-server-with-multiple-steps"><a class="header" href="#persistent-sbt-server-with-multiple-steps">Persistent sbt server with multiple steps</a></h3>
-<p>If a CI pipeline contains multiple steps that run <code>sbt</code>, later steps reuse the persistent server started by the first invocation instead of starting a new <code>sbt</code> process each time. As a result, these later steps continue to use the environment variables passed to the first session.</p>
-<p>If your pipeline relies on passing different environment variables (such as <code>JAVA_OPTS</code>) to each session, you must either provide all variables at the job level so they are identical for all <code>sbt</code> invocations, or shut down <code>sbt</code> after each step or between steps.</p>
-<pre><code class="language-bash">sbt "clean ; compile ; test ; shutdown"
-</code></pre>
-<p>Note that this applies whether you run <code>sbt</code> directly or through a third-party action such as <code>sbt-dependency-submission</code> that invokes <code>sbt</code> internally.</p>
-<h3 id="test-artifacts"><a class="header" href="#test-artifacts">Test artifacts</a></h3>
-<p>Output artifacts such as test results are now stored in subdirectories beneath <code>target/out</code> so you may need to update the paths used for test publishing and artifact archival:</p>
-<pre><code class="language-yaml">path: target/out/**/test-reports/*.xml
-</code></pre>
+<p>此模式与 <code>sbt2-compat</code> 兼容，可与其一起使用以吸收 sbt 1.x 和 2.x 之间的差异。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="概念"><a class="header" href="#概念">概念</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="命令基础"><a class="header" href="#命令基础">命令基础</a></h1>
 <p>命令（<em>command</em>）是 sbt 的系统级构建块，常用于捕获用户交互或 IDE 交互。</p>
@@ -2205,6 +2207,16 @@ sbt
 <p>要更改此目录位置，请设置 <code>sbt.boot.directory</code> 系统属性。相对路径将相对于当前工作目录解析，若您希望避免在项目间共享启动目录，这会很有用。例如，以下使用将启动目录放在 <code>project/boot/</code> 的 0.11 之前风格：</p>
 <pre><code class="language-bash">sbt -Dsbt.boot.directory=project/boot/
 </code></pre>
+<h3 id="全局基础目录"><a class="header" href="#全局基础目录">全局基础目录</a></h3>
+<p>全局基础目录包含机器范围的设置和插件。它由以下决定：</p>
+<ol>
+<li><code>-Dsbt.boot.directory</code> 系统属性</li>
+<li><code>$SBT_CONFIG_HOME</code> 环境变量。</li>
+<li>Windows 上的 <code>%LOCALAPPDATA%/sbt</code></li>
+<li>非 Windows 上的 <code>$XDG_CONFIG_HOME/sbt</code></li>
+<li><code>$HOME/.config/sbt</code></li>
+</ol>
+<p>然后是名为 <code>2</code> 的子目录，例如 <code>$HOME/.config/sbt/2</code>。</p>
 <h3 id="终端编码"><a class="header" href="#终端编码">终端编码</a></h3>
 <p>您终端使用的字符编码可能与您平台上 Java 的默认编码不同。在这种情况下，您需要指定<code>file.encoding=&lt;encoding&gt;</code> 系统属性，可能类似：</p>
 <pre><code class="language-bash">export JAVA_OPTS="-Dfile.encoding=Cp1252"
@@ -2237,8 +2249,6 @@ sbt
 <p>Coursier 构件缓存的位置，默认由 <a href="https://get-coursier.io/docs/cache.html#default-location">Coursier cache resolution logic</a> 定义。您可使用 <code>csrCacheDirectory</code> 命令验证该值。</p>
 <h4 id="-dsbtgenbuildpropstrue"><a class="header" href="#-dsbtgenbuildpropstrue"><code>-Dsbt.genbuildprops=true</code></a></h4>
 <p>若缺失则生成 <code>build.properties</code>。若未设置，则遵从 <code>sbt.skip.version.write</code>。</p>
-<h4 id="-dsbtglobalbasehomesbt"><a class="header" href="#-dsbtglobalbasehomesbt"><code>-Dsbt.global.base=$HOME/.sbt/</code></a></h4>
-<p>包含全局设置和插件的目录。</p>
 <h4 id="-dsbtoverridebuildrepostrue"><a class="header" href="#-dsbtoverridebuildrepostrue"><code>-Dsbt.override.build.repos=true</code></a></h4>
 <p>若为 true，则忽略构建定义中配置的仓库，改用为 launcher 配置的仓库。</p>
 <!-- See <tt>sbt.repository.config</tt> and the <a href="reference/Launcher-Configuration.html">sbt launcher</a> documentation. -->

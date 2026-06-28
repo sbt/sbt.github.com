@@ -404,6 +404,16 @@ sbt
 <p>要更改此目录位置，请设置 <code>sbt.boot.directory</code> 系统属性。相对路径将相对于当前工作目录解析，若您希望避免在项目间共享启动目录，这会很有用。例如，以下使用将启动目录放在 <code>project/boot/</code> 的 0.11 之前风格：</p>
 <pre><code class="language-bash">sbt -Dsbt.boot.directory=project/boot/
 </code></pre>
+<h3 id="全局基础目录"><a class="header" href="#全局基础目录">全局基础目录</a></h3>
+<p>全局基础目录包含机器范围的设置和插件。它由以下决定：</p>
+<ol>
+<li><code>-Dsbt.boot.directory</code> 系统属性</li>
+<li><code>$SBT_CONFIG_HOME</code> 环境变量。</li>
+<li>Windows 上的 <code>%LOCALAPPDATA%/sbt</code></li>
+<li>非 Windows 上的 <code>$XDG_CONFIG_HOME/sbt</code></li>
+<li><code>$HOME/.config/sbt</code></li>
+</ol>
+<p>然后是名为 <code>2</code> 的子目录，例如 <code>$HOME/.config/sbt/2</code>。</p>
 <h3 id="终端编码"><a class="header" href="#终端编码">终端编码</a></h3>
 <p>您终端使用的字符编码可能与您平台上 Java 的默认编码不同。在这种情况下，您需要指定<code>file.encoding=&lt;encoding&gt;</code> 系统属性，可能类似：</p>
 <pre><code class="language-bash">export JAVA_OPTS="-Dfile.encoding=Cp1252"
@@ -436,8 +446,6 @@ sbt
 <p>Coursier 构件缓存的位置，默认由 <a href="https://get-coursier.io/docs/cache.html#default-location">Coursier cache resolution logic</a> 定义。您可使用 <code>csrCacheDirectory</code> 命令验证该值。</p>
 <h4 id="-dsbtgenbuildpropstrue"><a class="header" href="#-dsbtgenbuildpropstrue"><code>-Dsbt.genbuildprops=true</code></a></h4>
 <p>若缺失则生成 <code>build.properties</code>。若未设置，则遵从 <code>sbt.skip.version.write</code>。</p>
-<h4 id="-dsbtglobalbasehomesbt"><a class="header" href="#-dsbtglobalbasehomesbt"><code>-Dsbt.global.base=$HOME/.sbt/</code></a></h4>
-<p>包含全局设置和插件的目录。</p>
 <h4 id="-dsbtoverridebuildrepostrue"><a class="header" href="#-dsbtoverridebuildrepostrue"><code>-Dsbt.override.build.repos=true</code></a></h4>
 <p>若为 true，则忽略构建定义中配置的仓库，改用为 launcher 配置的仓库。</p>
 <!-- See <tt>sbt.repository.config</tt> and the <a href="Launcher-Configuration.html">sbt launcher</a> documentation. -->

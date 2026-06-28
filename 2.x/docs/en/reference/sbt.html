@@ -450,7 +450,7 @@ sbt
 <h3 id="boot-directory"><a class="header" href="#boot-directory">Boot directory</a></h3>
 <p><code>sbt</code> runner is just a bootstrap, the actual sbt server,
 Scala compiler and standard library are by default downloaded to
-the shared directory  <code>\$HOME/.sbt/boot/</code>.</p>
+the shared directory  <code>$HOME/.sbt/boot/</code>.</p>
 <p>To change the location of this directory, set the <code>sbt.boot.directory</code>
 system property. A relative path will be resolved
 against the current working directory, which can be useful if you want
@@ -459,6 +459,17 @@ following uses the pre-0.11 style of putting the boot directory in
 <code>project/boot/</code>:</p>
 <pre><code class="language-bash">sbt -Dsbt.boot.directory=project/boot/
 </code></pre>
+<h3 id="global-base-directory"><a class="header" href="#global-base-directory">Global base directory</a></h3>
+<p>Global base directory contains machine-wide settings and plugins.
+This is determined by:</p>
+<ol>
+<li><code>-Dsbt.boot.directory</code> system property</li>
+<li><code>$SBT_CONFIG_HOME</code> environment variable.</li>
+<li><code>%LOCALAPPDATA%/sbt</code> on Windows</li>
+<li><code>$XDG_CONFIG_HOME/sbt</code> on non-Windows</li>
+<li><code>$HOME/.config/sbt</code></li>
+</ol>
+<p>Then a subdirectory named <code>2</code>, for example, <code>$HOME/.config/sbt/2</code>.</p>
 <h3 id="terminal-encoding"><a class="header" href="#terminal-encoding">Terminal encoding</a></h3>
 <p>The character encoding used by your terminal may differ from Java's
 default encoding for your platform. In this case, you will need to specify
@@ -499,8 +510,6 @@ configure HTTPS or FTP.</p>
 <p>Location of the Coursier artifact cache, where the default is defined by <a href="https://get-coursier.io/docs/cache.html#default-location">Coursier cache resolution logic</a>. You can verify the value with the command <code>csrCacheDirectory</code>.</p>
 <h4 id="-dsbtgenbuildpropstrue"><a class="header" href="#-dsbtgenbuildpropstrue"><code>-Dsbt.genbuildprops=true</code></a></h4>
 <p>Generate <code>build.properties</code> if missing. If unset, this defers to <code>sbt.skip.version.write</code>.</p>
-<h4 id="-dsbtglobalbasehomesbt"><a class="header" href="#-dsbtglobalbasehomesbt"><code>-Dsbt.global.base=$HOME/.sbt/</code></a></h4>
-<p>The directory containing global settings and plugins.</p>
 <h4 id="-dsbtoverridebuildrepostrue"><a class="header" href="#-dsbtoverridebuildrepostrue"><code>-Dsbt.override.build.repos=true</code></a></h4>
 <p>If true, repositories configured in a build definition are ignored and the repositories configured for the launcher are used instead.</p>
 <!-- See <tt>sbt.repository.config</tt> and the <a href="Launcher-Configuration.html">sbt launcher</a> documentation. -->
