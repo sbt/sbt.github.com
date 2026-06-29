@@ -248,13 +248,13 @@ sdk install sbt
 </code></pre>
 <h3 id="通用的包安装"><a class="header" href="#通用的包安装">通用的包安装</a></h3>
 <ul>
-<li><a href="https://github.com/sbt/sbt/releases/download/v2.0.0/sbt-2.0.0.zip">sbt-2.0.0.zip</a></li>
-<li><a href="https://github.com/sbt/sbt/releases/download/v2.0.0/sbt-2.0.0.tgz">sbt-2.0.0.tgz</a></li>
-<li><a href="https://github.com/sbt/sbt/releases/download/v2.0.0/sbt-2.0.0.msi">sbt-2.0.0.msi</a></li>
+<li><a href="https://github.com/sbt/sbt/releases/download/v2.0.1/sbt-2.0.1.zip">sbt-2.0.1.zip</a></li>
+<li><a href="https://github.com/sbt/sbt/releases/download/v2.0.1/sbt-2.0.1.tgz">sbt-2.0.1.tgz</a></li>
+<li><a href="https://github.com/sbt/sbt/releases/download/v2.0.1/sbt-2.0.1.msi">sbt-2.0.1.msi</a></li>
 </ul>
 <h2 id="验证-sbt-runner"><a class="header" href="#验证-sbt-runner">验证 sbt runner</a></h2>
 <pre><code class="language-bash">sbt --script-version
-# 2.0.0
+# 2.0.1
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-示例教程"><a class="header" href="#sbt-示例教程">sbt 示例教程</a></h1>
 <p>本页面假设您已经安装了 <a href="Setup.html">sbt runner</a>。</p>
@@ -264,11 +264,11 @@ sdk install sbt
 cd foo-build
 touch build.sbt
 mkdir project
-echo "sbt.version=2.0.0" &gt; project/build.properties
+echo "sbt.version=2.0.1" &gt; project/build.properties
 </code></pre>
 <h3 id="启动-sbt-shell"><a class="header" href="#启动-sbt-shell">启动 sbt shell</a></h3>
 <pre><code class="language-bash">$ sbt
-[info] welcome to sbt 2.0.0 (Azul Systems, Inc. Java)
+[info] welcome to sbt 2.0.1 (Azul Systems, Inc. Java)
 ....
 [info] started sbt server
 sbt:foo-build&gt;
@@ -871,7 +871,7 @@ $ sbt new scala/scala3.g8
 <p>sbt 构建使用 <code>sbt</code> 运行器执行，也称为 "sbt-the-shell-script" 以区别于其他组件。需要注意的是，sbt runner旨在运行<strong>任意版本</strong>的 sbt。</p>
 <h3 id="使用-projectbuildproperties-指定-sbt-版本"><a class="header" href="#使用-projectbuildproperties-指定-sbt-版本">使用 project/build.properties 指定 sbt 版本</a></h3>
 <p>sbt runner执行名为 sbt launcher 的子组件，该组件读取 <code>project/build.properties</code> 以确定构建的 sbt 版本，并在未缓存时下载相应的构件：</p>
-<pre><code>sbt.version=2.0.0
+<pre><code>sbt.version=2.0.1
 </code></pre>
 <p>这意味着：</p>
 <ul>
@@ -1706,7 +1706,7 @@ lazy val plugin = (project in file("plugin"))
     (pluginCrossBuild / sbtVersion) := {
       scalaBinaryVersion.value match {
         case "2.12" =&gt; "1.5.8"
-        case _      =&gt; "2.0.0"
+        case _      =&gt; "2.0.1"
       }
     },
   )
@@ -2036,7 +2036,7 @@ sbt:demo&gt; show someKey
 </ul>
 </li>
 </ul>
-<pre><code>sbt.version=2.0.0
+<pre><code>sbt.version=2.0.1
 </code></pre>
 <p>此机制允许将构建配置为特定版本的 sbt，项目中的每个人都会使用相同的构建语义，无论其机器上安装的 sbt runner 是什么。</p>
 <p>这也意味着某些功能在 sbt runner 或 sbtn 级别实现，而其他功能在 sbt server 级别实现。</p>
@@ -3968,10 +3968,10 @@ Def.setting {
         token(state.remainingCommands.size.toString) )
 }
 </code></pre>
-<p>This Parser definition will produce a value of type <code>(String,String)</code>. The input syntax defined isn't very flexible; it is just a demonstration. It will produce one of the following values for a successful parse (assuming the current Scala version is 3.8.4, the current sbt version is 2.0.0, and there are 3 commands left to run):</p>
+<p>This Parser definition will produce a value of type <code>(String,String)</code>. The input syntax defined isn't very flexible; it is just a demonstration. It will produce one of the following values for a successful parse (assuming the current Scala version is 3.8.4, the current sbt version is 2.0.1, and there are 3 commands left to run):</p>
 <ul>
 <li>(scala,3.8.4)</li>
-<li>(sbt,2.0.0)</li>
+<li>(sbt,2.0.1)</li>
 <li>(commands,3)</li>
 </ul>
 <p>同样，我们能访问项目当前 Scala 和 sbt 版本是因为它们是设置。任务不能用于定义解析器。</p>
@@ -4611,7 +4611,7 @@ lazy val root = rootProject
     name := "sbt-obfuscate",
     pluginCrossBuild / sbtVersion := {
       scalaBinaryVersion.value match
-        case "3" =&gt; "2.0.0-RC10" // set minimum sbt version
+        case "3" =&gt; "2.0.1" // set minimum sbt version
     }
   )
 </code></pre>
@@ -5214,7 +5214,7 @@ your plugin to the list.</p>
 </li>
 <li>
 <p>在 <code>hello_scala/</code> 下创建名为 <code>project/</code> 的目录，并创建 <code>project/build.properties</code>，内容为</p>
-<pre><code>sbt.version=2.0.0
+<pre><code>sbt.version=2.0.1
 </code></pre>
 </li>
 <li>

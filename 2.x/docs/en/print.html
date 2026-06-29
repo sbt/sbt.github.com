@@ -254,13 +254,13 @@ sdk install sbt
 </code></pre>
 <h3 id="universal-packages"><a class="header" href="#universal-packages">Universal packages</a></h3>
 <ul>
-<li><a href="https://github.com/sbt/sbt/releases/download/v2.0.0/sbt-2.0.0.zip">sbt-2.0.0.zip</a></li>
-<li><a href="https://github.com/sbt/sbt/releases/download/v2.0.0/sbt-2.0.0.tgz">sbt-2.0.0.tgz</a></li>
-<li><a href="https://github.com/sbt/sbt/releases/download/v2.0.0/sbt-2.0.0.msi">sbt-2.0.0.msi</a></li>
+<li><a href="https://github.com/sbt/sbt/releases/download/v2.0.1/sbt-2.0.1.zip">sbt-2.0.1.zip</a></li>
+<li><a href="https://github.com/sbt/sbt/releases/download/v2.0.1/sbt-2.0.1.tgz">sbt-2.0.1.tgz</a></li>
+<li><a href="https://github.com/sbt/sbt/releases/download/v2.0.1/sbt-2.0.1.msi">sbt-2.0.1.msi</a></li>
 </ul>
 <h2 id="verify-the-sbt-runner"><a class="header" href="#verify-the-sbt-runner">Verify the sbt runner</a></h2>
 <pre><code class="language-bash">sbt --script-version
-# 2.0.0
+# 2.0.1
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-by-example"><a class="header" href="#sbt-by-example">sbt by example</a></h1>
 <p>This page assumes you've <a href="Setup.html">installed sbt runner</a>.</p>
@@ -270,11 +270,11 @@ sdk install sbt
 cd foo-build
 touch build.sbt
 mkdir project
-echo "sbt.version=2.0.0" &gt; project/build.properties
+echo "sbt.version=2.0.1" &gt; project/build.properties
 </code></pre>
 <h3 id="start-sbt-shell"><a class="header" href="#start-sbt-shell">Start sbt shell</a></h3>
 <pre><code class="language-bash">$ sbt
-[info] welcome to sbt 2.0.0 (Azul Systems, Inc. Java)
+[info] welcome to sbt 2.0.1 (Azul Systems, Inc. Java)
 ....
 [info] started sbt server
 sbt:foo-build&gt;
@@ -891,7 +891,7 @@ $ sbt new scala/scala3.g8
 <p>An sbt build is executed using <code>sbt</code> runner, also called "sbt-the-shell-script" to distinguish from other components. It's important to note is that sbt runner is designed to run <strong>any version</strong> of sbt.</p>
 <h3 id="specifying-sbt-version-with-projectbuildproperties"><a class="header" href="#specifying-sbt-version-with-projectbuildproperties">Specifying sbt version with project/build.properties</a></h3>
 <p>sbt runner executes a subcomponent called sbt launcher, which reads <code>project/build.properties</code> to determine the sbt version for the build, and downloads the artifacts if they haven't been cached:</p>
-<pre><code>sbt.version=2.0.0
+<pre><code>sbt.version=2.0.1
 </code></pre>
 <p>This means that:</p>
 <ul>
@@ -1814,7 +1814,7 @@ lazy val plugin = (project in file("plugin"))
     (pluginCrossBuild / sbtVersion) := {
       scalaBinaryVersion.value match {
         case "2.12" =&gt; "1.5.8"
-        case _      =&gt; "2.0.0"
+        case _      =&gt; "2.0.1"
       }
     },
   )
@@ -2163,7 +2163,7 @@ the input keys (e.g. <code>name</code> and <code>version</code>) must provide a 
 </ul>
 </li>
 </ul>
-<pre><code>sbt.version=2.0.0
+<pre><code>sbt.version=2.0.1
 </code></pre>
 <p>This mechanism allows builds to be configured to a specific version of sbt, and everyone working on the project would use the same build semantics, regardless of the sbt runner installed on their machine.</p>
 <p>This also means that some features are implemented at sbt runner or sbtn level, while other features are implemented at sbt server level.</p>
@@ -4494,11 +4494,11 @@ Def.setting {
 The input syntax defined isn't very flexible; it is just a
 demonstration. It will produce one of the following values for a
 successful parse (assuming the current Scala version is 3.8.4,
-the current sbt version is 2.0.0, and there are 3 commands left to
+the current sbt version is 2.0.1, and there are 3 commands left to
 run):</p>
 <ul>
 <li>(scala,3.8.4)</li>
-<li>(sbt,2.0.0)</li>
+<li>(sbt,2.0.1)</li>
 <li>(commands,3)</li>
 </ul>
 <p>Again, we were able to access the current Scala and sbt version for the
@@ -5259,7 +5259,7 @@ lazy val root = rootProject
     name := "sbt-obfuscate",
     pluginCrossBuild / sbtVersion := {
       scalaBinaryVersion.value match
-        case "3" =&gt; "2.0.0-RC10" // set minimum sbt version
+        case "3" =&gt; "2.0.1" // set minimum sbt version
     }
   )
 </code></pre>
@@ -5832,7 +5832,7 @@ with minimal explanations.</p>
 <ol>
 <li>Create a fresh directory, like <code>hello_scala/</code></li>
 <li>Create a directory named <code>project/</code> under <code>hello_scala/</code>, and create <code>project/build.properties</code> with
-<pre><code>sbt.version=2.0.0
+<pre><code>sbt.version=2.0.1
 </code></pre>
 </li>
 <li>Under <code>hello_scala/</code>, create <code>build.sbt</code>:

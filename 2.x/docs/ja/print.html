@@ -248,13 +248,13 @@ sdk install sbt
 </code></pre>
 <h3 id="ユニバーサルパッケージ"><a class="header" href="#ユニバーサルパッケージ">ユニバーサル・パッケージ</a></h3>
 <ul>
-<li><a href="https://github.com/sbt/sbt/releases/download/v2.0.0/sbt-2.0.0.zip">sbt-2.0.0.zip</a></li>
-<li><a href="https://github.com/sbt/sbt/releases/download/v2.0.0/sbt-2.0.0.tgz">sbt-2.0.0.tgz</a></li>
-<li><a href="https://github.com/sbt/sbt/releases/download/v2.0.0/sbt-2.0.0.msi">sbt-2.0.0.msi</a></li>
+<li><a href="https://github.com/sbt/sbt/releases/download/v2.0.1/sbt-2.0.1.zip">sbt-2.0.1.zip</a></li>
+<li><a href="https://github.com/sbt/sbt/releases/download/v2.0.1/sbt-2.0.1.tgz">sbt-2.0.1.tgz</a></li>
+<li><a href="https://github.com/sbt/sbt/releases/download/v2.0.1/sbt-2.0.1.msi">sbt-2.0.1.msi</a></li>
 </ul>
 <h2 id="sbt-runner-の確認"><a class="header" href="#sbt-runner-の確認">sbt runner の確認</a></h2>
 <pre><code class="language-bash">sbt --script-version
-# 2.0.0
+# 2.0.1
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="例題でみる-sbt"><a class="header" href="#例題でみる-sbt">例題でみる sbt</a></h1>
 <p>このページは、 <a href="Setup.html">sbt runner をインストール</a>したことを前提とする。</p>
@@ -264,11 +264,11 @@ sdk install sbt
 cd foo-build
 touch build.sbt
 mkdir project
-echo "sbt.version=2.0.0" &gt; project/build.properties
+echo "sbt.version=2.0.1" &gt; project/build.properties
 </code></pre>
 <h3 id="sbt-シェルを起ち上げる"><a class="header" href="#sbt-シェルを起ち上げる">sbt シェルを起ち上げる</a></h3>
 <pre><code class="language-bash">$ sbt
-[info] welcome to sbt 2.0.0 (Azul Systems, Inc. Java)
+[info] welcome to sbt 2.0.1 (Azul Systems, Inc. Java)
 ....
 [info] started sbt server
 sbt:foo-build&gt;
@@ -871,7 +871,7 @@ $ sbt new scala/scala3.g8
 <p>sbt のビルドは、「<code>sbt</code> という名前のシェルスクリプト」によって実行され、このスクリプトは sbt runner と呼ばれる。</p>
 <h3 id="projectbuildproperties-による-sbt-バージョンの指定"><a class="header" href="#projectbuildproperties-による-sbt-バージョンの指定">project/build.properties による sbt バージョンの指定</a></h3>
 <p>sbt runner は、そのサブコンポーネントである sbt launcher を実行し、sbt launcher は <code>project/build.properties</code> を読み込んで、そのビルドに使われる sbt のバージョンを決定し、キャッシュに無ければ sbt 本体をダウンロードする:</p>
-<pre><code>sbt.version=2.0.0
+<pre><code>sbt.version=2.0.1
 </code></pre>
 <p>これは、つまり</p>
 <ul>
@@ -1704,7 +1704,7 @@ lazy val plugin = (project in file("plugin"))
     (pluginCrossBuild / sbtVersion) := {
       scalaBinaryVersion.value match {
         case "2.12" =&gt; "1.5.8"
-        case _      =&gt; "2.0.0"
+        case _      =&gt; "2.0.1"
       }
     },
   )
@@ -2034,7 +2034,7 @@ sbt:demo&gt; show someKey
 </ul>
 </li>
 </ul>
-<pre><code>sbt.version=2.0.0
+<pre><code>sbt.version=2.0.1
 </code></pre>
 <p>この機構によってビルドを特定のバージョンの sbt に設置することができ、プロジェクトで作業する人全員が、マシンにインストールされた sbt runner に関わらず同一のビルド意味論を共有できるようになる。</p>
 <p>このような分割があるため、機能の一部は sbt runner や sbtn のレベルで実装され、その他の機能は sbt server レベルで実装される。</p>
@@ -3965,10 +3965,10 @@ Def.setting {
         token(state.remainingCommands.size.toString) )
 }
 </code></pre>
-<p>This Parser definition will produce a value of type <code>(String,String)</code>. The input syntax defined isn't very flexible; it is just a demonstration. It will produce one of the following values for a successful parse (assuming the current Scala version is 3.8.4, the current sbt version is 2.0.0, and there are 3 commands left to run):</p>
+<p>This Parser definition will produce a value of type <code>(String,String)</code>. The input syntax defined isn't very flexible; it is just a demonstration. It will produce one of the following values for a successful parse (assuming the current Scala version is 3.8.4, the current sbt version is 2.0.1, and there are 3 commands left to run):</p>
 <ul>
 <li>(scala,3.8.4)</li>
-<li>(sbt,2.0.0)</li>
+<li>(sbt,2.0.1)</li>
 <li>(commands,3)</li>
 </ul>
 <p>プロジェクトの現在の Scala と sbt のバージョンにアクセスできたのは、それらがセッティングだからである。タスクはパーサーの定義に使用できない。</p>
@@ -4608,7 +4608,7 @@ lazy val root = rootProject
     name := "sbt-obfuscate",
     pluginCrossBuild / sbtVersion := {
       scalaBinaryVersion.value match
-        case "3" =&gt; "2.0.0-RC10" // set minimum sbt version
+        case "3" =&gt; "2.0.1" // set minimum sbt version
     }
   )
 </code></pre>
@@ -5211,7 +5211,7 @@ your plugin to the list.</p>
 </li>
 <li>
 <p><code>hello_scala/</code> の下に <code>project/</code> ディレクトリを作成し、<code>project/build.properties</code> を次の内容で作成する:</p>
-<pre><code>sbt.version=2.0.0
+<pre><code>sbt.version=2.0.1
 </code></pre>
 </li>
 <li>
