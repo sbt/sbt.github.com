@@ -301,6 +301,14 @@ the strict check (often for <code>scala-xml</code>), you can write this in <code
 <p>To ignore all eviction errors:</p>
 <pre><code class="language-scala">evictionErrorLevel := Level.Info
 </code></pre>
+<h3 id="maven-bom-bill-of-materials-usage"><a class="header" href="#maven-bom-bill-of-materials-usage">Maven BOM (Bill of Materials) usage</a></h3>
+<p>sbt 2 supports Maven BOM (Bill of Materials) usage. Subprojects can depend on published BOM artifacts using <code>.pomOnly()</code>:</p>
+<pre><code class="language-scala">libraryDependencies += ("com.fasterxml.jackson" % "jackson-bom" % "2.21.0").pomOnly()
+</code></pre>
+<p>These bill of materials are forwarded to Coursier, which should introduce version constraints for specific libraries (such as Jackson). You can use <code>"*"</code> to declare versionless dependency:</p>
+<pre><code class="language-scala">libraryDependencies += "com.fasterxml.jackson.core" % "jackson-core" % "*"
+</code></pre>
+<p>This will let Coursier automatically fill in the version based on the bill of material constraints (in this case <code>"2.21.0"</code>).</p>
 <h3 id="resolvers"><a class="header" href="#resolvers">Resolvers</a></h3>
 <p>sbt uses the standard Maven Central repository by default. Declare additional repositories with the form:</p>
 <pre><code class="language-scala">resolvers += name at location
@@ -369,7 +377,7 @@ in <code>excludeDependencies</code>.</p>
 <code>excludeAll</code> or <code>exclude</code> methods. The <code>exclude</code> method should be used
 when a pom will be published for the project. It requires the
 organization and module name to exclude. For example,</p>
-<pre><code class="language-scala">libraryDependencies += 
+<pre><code class="language-scala">libraryDependencies +=
   ("log4j" % "log4j" % "1.2.15").exclude("javax.jms", "jms")
 </code></pre>
 <!--
@@ -411,7 +419,7 @@ method. For example, to get the jdk15 version of TestNG:</p>
 <pre><code class="language-scala">libraryDependencies += ("org.testng" % "testng" % "5.7").classifier("jdk15")
 </code></pre>
 <p>For multiple classifiers, use multiple <code>classifier</code> calls:</p>
-<pre><code class="language-scala">libraryDependencies += 
+<pre><code class="language-scala">libraryDependencies +=
   "org.lwjgl.lwjgl" % "lwjgl-platform" % lwjglVersion classifier "natives-windows" classifier "natives-linux" classifier "natives-osx"
 </code></pre>
 <p>To obtain particular classifiers for all dependencies transitively, run
@@ -429,7 +437,7 @@ referencing these jars.</p>
 <p>To have sbt download the dependency's sources without using an IDE
 plugin, add <code>withSources()</code> to the dependency definition. For API jars,
 add <code>withJavadoc()</code>. For example:</p>
-<pre><code class="language-scala">libraryDependencies += 
+<pre><code class="language-scala">libraryDependencies +=
   ("org.apache.felix" % "org.apache.felix.framework" % "1.8.0").withSources().withJavadoc()
 </code></pre>
 <p>Note that this is not transitive. Use the <code>update*Classifiers</code> tasks

@@ -253,7 +253,7 @@ documentation for details.
 -->
 <h3 id="versionscheme-与驱逐错误"><a class="header" href="#versionscheme-与驱逐错误"><code>versionScheme</code> 与驱逐错误</a></h3>
 <p>sbt 允许库作者使用 <code>versionScheme</code> 设置声明版本语义：</p>
-<pre><code class="language-scala">// Semantic Versioning applied to 0.x, as well as 1.x, 2.x, etc
+<pre><code class="language-scala">// 语义化版本控制，适用于 0.x 以及 1.x、2.x 等
 versionScheme := Some(VersionScheme.EarlySemVer)
 </code></pre>
 <p>当 Coursier 发现库的多个版本（例如 Cats Effect 2.x 和 Cats Effect 3.0.0-M4）时，通常通过从图中移除较旧版本来解决冲突。此过程俗称驱逐，如「Cats Effect 2.2.0 被驱逐」。</p>
@@ -289,6 +289,14 @@ versionScheme := Some(VersionScheme.EarlySemVer)
 <p>要忽略所有驱逐错误：</p>
 <pre><code class="language-scala">evictionErrorLevel := Level.Info
 </code></pre>
+<h3 id="maven-bom物料清单使用"><a class="header" href="#maven-bom物料清单使用">Maven BOM（物料清单）使用</a></h3>
+<p>sbt 2 支持 Maven BOM（物料清单）的使用。子项目可以使用 <code>.pomOnly()</code> 依赖已发布的 BOM 构件：</p>
+<pre><code class="language-scala">libraryDependencies += ("com.fasterxml.jackson" % "jackson-bom" % "2.21.0").pomOnly()
+</code></pre>
+<p>这些物料清单会转发给 Coursier，后者应为特定库（如 Jackson）引入版本约束。您可以使用 <code>"*"</code> 声明无版本依赖：</p>
+<pre><code class="language-scala">libraryDependencies += "com.fasterxml.jackson.core" % "jackson-core" % "*"
+</code></pre>
+<p>这将让 Coursier 根据物料清单约束（本例中为 <code>"2.21.0"</code>）自动填入版本。</p>
 <h3 id="解析器"><a class="header" href="#解析器">解析器</a></h3>
 <p>sbt 默认使用标准 Maven Central 仓库。使用以下形式声明额外仓库：</p>
 <pre><code class="language-scala">resolvers += name at location
@@ -331,12 +339,12 @@ my-ivy-repo: https://example.org/ivy-repo/, [organization]/[module]/[revision]/[
 <h3 id="排除传递依赖"><a class="header" href="#排除传递依赖">排除传递依赖</a></h3>
 <p>某些情况下需从所有依赖中排除传递依赖。可通过在 <code>excludeDependencies</code> 中设置 <code>ExclusionRules</code> 实现。</p>
 <pre><code class="language-scala">excludeDependencies ++= Seq(
-  // commons-logging is replaced by jcl-over-slf4j
+  // commons-logging 由 jcl-over-slf4j 替代
   ExclusionRule("commons-logging", "commons-logging")
 )
 </code></pre>
 <p>要排除依赖的某些传递依赖，使用 <code>excludeAll</code> 或 <code>exclude</code> 方法。当项目将发布 pom 时应使用 <code>exclude</code> 方法。需提供要排除的组织和模块名。例如：</p>
-<pre><code class="language-scala">libraryDependencies += 
+<pre><code class="language-scala">libraryDependencies +=
   ("log4j" % "log4j" % "1.2.15").exclude("javax.jms", "jms")
 </code></pre>
 <!--
@@ -369,7 +377,7 @@ See [ModuleID](../api/sbt/librarymanagement/ModuleID.html) for API details.
 <pre><code class="language-scala">libraryDependencies += ("org.testng" % "testng" % "5.7").classifier("jdk15")
 </code></pre>
 <p>对于多个分类器，使用多次 <code>classifier</code> 调用：</p>
-<pre><code class="language-scala">libraryDependencies += 
+<pre><code class="language-scala">libraryDependencies +=
   "org.lwjgl.lwjgl" % "lwjgl-platform" % lwjglVersion classifier "natives-windows" classifier "natives-linux" classifier "natives-osx"
 </code></pre>
 <p>要传递式获取所有依赖的特定分类器，运行 <code>updateClassifiers</code> 任务。默认情况下，这会解析具有 <code>sources</code> 或 <code>javadoc</code> 分类器的所有构件。通过配置 <code>transitiveClassifiers</code> 设置选择要获取的分类器。例如，仅获取源码：</p>
@@ -378,7 +386,7 @@ See [ModuleID](../api/sbt/librarymanagement/ModuleID.html) for API details.
 <h3 id="下载源码"><a class="header" href="#下载源码">下载源码</a></h3>
 <p>下载源码和 API 文档 jar 通常由 IDE 插件处理。这些插件使用 <code>updateClassifiers</code> 和 <code>updateSbtClassifiers</code> 任务，生成引用这些 jar 的 <code>Update-Report</code>。</p>
 <p>要让 sbt 在不使用 IDE 插件的情况下下载依赖的源码，在依赖定义中添加 <code>withSources()</code>。对于 API jar，添加 <code>withJavadoc()</code>。例如：</p>
-<pre><code class="language-scala">libraryDependencies += 
+<pre><code class="language-scala">libraryDependencies +=
   ("org.apache.felix" % "org.apache.felix.framework" % "1.8.0").withSources().withJavadoc()
 </code></pre>
 <p>注意此操作不具传递性。为此请使用 <code>update*Classifiers</code> 任务。</p>

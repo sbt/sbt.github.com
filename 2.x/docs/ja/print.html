@@ -2331,6 +2331,14 @@ versionScheme := Some(VersionScheme.EarlySemVer)
 <p>全ての eviction エラーを無視するには:</p>
 <pre><code class="language-scala">evictionErrorLevel := Level.Info
 </code></pre>
+<h3 id="maven-bom-bill-of-materials-の使用-1"><a class="header" href="#maven-bom-bill-of-materials-の使用-1">Maven BOM (Bill of Materials) の使用</a></h3>
+<p>sbt 2 は Maven BOM (Bill of Materials) の使用を追加する。サブプロジェクトは <code>.pomOnly()</code> を使って公開された BOM アーティファクトに依存することができる:</p>
+<pre><code class="language-scala">libraryDependencies += ("com.fasterxml.jackson" % "jackson-bom" % "2.21.0").pomOnly()
+</code></pre>
+<p>これらの部品表 (Bill of Materials) は Coursier に転送され、特定のライブラリ（Jackson など）にバージョン制約を導入する。<code>"*"</code> を使って無バージョンの依存性を宣言できる:</p>
+<pre><code class="language-scala">libraryDependencies += "com.fasterxml.jackson.core" % "jackson-core" % "*"
+</code></pre>
+<p>これによって Coursier に自動的に部品表からのバージョンを穴埋めさせることができる (この場合 <code>"2.21.0"</code>)。</p>
 <h3 id="リゾルバ"><a class="header" href="#リゾルバ">リゾルバ</a></h3>
 <p>sbt はデフォルトで標準の Maven Central リポジトリを使用する。追加のリポジトリは以下の形式で宣言する:</p>
 <pre><code class="language-scala">resolvers += name at location
@@ -2378,7 +2386,7 @@ my-ivy-repo: https://example.org/ivy-repo/, [organization]/[module]/[revision]/[
 )
 </code></pre>
 <p>ライブラリ依存性の特定の間接依存ライブラリを除外するには、<code>excludeAll</code> または <code>exclude</code> メソッドを使用する。プロジェクト用の POM を公開する場合は <code>exclude</code> メソッドを使用する。除外するには組織名とモジュール名が必要である。例:</p>
-<pre><code class="language-scala">libraryDependencies += 
+<pre><code class="language-scala">libraryDependencies +=
   ("log4j" % "log4j" % "1.2.15").exclude("javax.jms", "jms")
 </code></pre>
 <!--
@@ -2411,7 +2419,7 @@ See [ModuleID](../api/sbt/librarymanagement/ModuleID.html) for API details.
 <pre><code class="language-scala">libraryDependencies += ("org.testng" % "testng" % "5.7").classifier("jdk15")
 </code></pre>
 <p>複数のクラシファイアには、複数回 <code>classifier</code> を呼び出す:</p>
-<pre><code class="language-scala">libraryDependencies += 
+<pre><code class="language-scala">libraryDependencies +=
   "org.lwjgl.lwjgl" % "lwjgl-platform" % lwjglVersion classifier "natives-windows" classifier "natives-linux" classifier "natives-osx"
 </code></pre>
 <p>全てのライブラリ依存性の特定クラシファイアを推移的に取得するには、<code>updateClassifiers</code> タスクを実行する。デフォルトでは、<code>sources</code> または <code>javadoc</code> クラシファイアを持つ全アーティファクトを解決する。取得するクラシファイアは <code>transitiveClassifiers</code> セッティングで選択する。例えば、ソースのみを取得するには:</p>
@@ -2420,7 +2428,7 @@ See [ModuleID](../api/sbt/librarymanagement/ModuleID.html) for API details.
 <h3 id="ソースのダウンロード"><a class="header" href="#ソースのダウンロード">ソースのダウンロード</a></h3>
 <p>ソースと API ドキュメントの JAR ファイルのダウンロードは通常 IDE プラグインが行う。これらのプラグインは <code>updateClassifiers</code> と <code>updateSbtClassifiers</code> タスクを使用し、これらの JAR を参照する <code>UpdateReport</code> を生成する。</p>
 <p>IDE プラグインを使わずに sbt にライブラリ依存性のソースをダウンロードさせるには、ライブラリ依存性の定義に <code>withSources()</code> を追加する。API JAR をダウンロードするには <code>withJavadoc()</code> を追加する。例:</p>
-<pre><code class="language-scala">libraryDependencies += 
+<pre><code class="language-scala">libraryDependencies +=
   ("org.apache.felix" % "org.apache.felix.framework" % "1.8.0").withSources().withJavadoc()
 </code></pre>
 <p>これは推移的ではないことに注意。その場合は <code>update*Classifiers</code> タスクを使用する。</p>
