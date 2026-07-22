@@ -6421,6 +6421,82 @@ object A {
 Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties
 26/05/05 00:00:00 INFO SparkContext: Running Spark version 4.1.0
 </code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="getting-user-inputs"><a class="header" href="#getting-user-inputs">Getting user inputs</a></h1>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="recipes/console-interaction.html#admonition-note"></a>
+</div>
+<div>
+<p>The recipe section of the documentation focuses on the objectives
+with minimal explanations about the basics.</p>
+<p>Generally, we recommend the use of <a href="recipes/../reference/input-task.html">input task</a> rather than making a task or a command interactive.</p>
+</div>
+</div>
+<h2 id="objective-7"><a class="header" href="#objective-7">Objective</a></h2>
+<p>I want to read user input from the console in a task or a command.</p>
+<h2 id="steps-6"><a class="header" href="#steps-6">Steps</a></h2>
+<ol>
+<li>Use the <code>interactionService</code> key to acquire <code>sbt.InteractionService</code>:</li>
+</ol>
+<pre><code class="language-scala">lazy val demo1 = taskKey[Int]("demo1")
+
+scalaVersion := "3.8.4"
+
+demo1 := Def.uncached {
+  val srv = interactionService.value
+  srv.readLine(prompt = "enter a number: ", mask = false) match
+    case Some(x) =&gt; x.toInt
+    case None    =&gt; sys.error("error getting an input!")
+}
+</code></pre>
+<ol start="2">
+<li>For commands, use <code>CommandLineUIService</code> directly:</li>
+</ol>
+<pre><code class="language-scala">lazy val demo2 = Command.command("demo2"): s0 =&gt;
+  val srv = CommandLineUIService
+  srv.readLine(prompt = "enter a number: ", mask = false) match
+    case Some(x) =&gt; x.toInt
+    case None    =&gt; sys.error("error getting an input!")
+  s0
+
+LocalRootProject / commands += demo2
+</code></pre>
+<h2 id="test-1"><a class="header" href="#test-1">Test</a></h2>
+<pre><code class="language-bash">$ sbt --client
+sbt:demo&gt; demo1
+enter a number: 1
+[success] elapsed time: 1 s
+sbt:demo&gt; demo2
+enter a number: 1
+sbt:demo&gt; shutdown
+[info] disconnected
+
+$ sbt --server
+sbt:demo&gt; demo1
+enter a number: 1
+[success] elapsed time: 1 s
+sbt:demo&gt; demo2
+enter a number: 1
+sbt:demo&gt; exit
+[info] shutting down sbt server
+</code></pre>
+<h2 id="alternative-1"><a class="header" href="#alternative-1">Alternative</a></h2>
+<p>You can also use <code>scala.io.StdIn.readLine</code> function.</p>
+<pre><code class="language-scala">lazy val demo3 = taskKey[Int]("demo3")
+demo3 := Def.uncached {
+  import scala.io.StdIn
+  Option(StdIn.readLine("enter a number: ")) match
+    case Some(x) =&gt; x.toInt
+    case None    =&gt; sys.error("error getting an input!")
+}
+</code></pre>
+<h2 id="explanation"><a class="header" href="#explanation">Explanation</a></h2>
+<p>sbt 2 runs in client-server mode by default, involving sbtn and the sbt server process. This means that when a task prompts the user for input, the prompting happens on the client (sbtn) while the task executes on the server.
+This client-server separation also existed in sbt 0.13 when Activator provided a web-based frontend to sbt. To abstract over simple user interactions, sbt provides <code>interactionService</code>, initialized to <code>CommandLineUIService</code>. This key is also supported in both sbt 1.x and 2.x, where it enables sbtn terminal virtualization.</p>
+<p>Alternatively, you can use <code>scala.io.StdIn.readLine</code> inside a task or command definition. Note that this relies on the sbt server proxying terminal interactions to sbtn over the wire.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="glossary"><a class="header" href="#glossary">Glossary</a></h1>
 <h2 id="symbols"><a class="header" href="#symbols">Symbols</a></h2>
 <h3 id="--"><a class="header" href="#--"><code>:=</code>, <code>+=</code>, <code>++=</code></a></h3>

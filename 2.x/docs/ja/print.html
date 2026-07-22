@@ -5777,6 +5777,81 @@ object A {
 Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties
 26/05/05 00:00:00 INFO SparkContext: Running Spark version 4.1.0
 </code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ユーザー入力の取得"><a class="header" href="#ユーザー入力の取得">ユーザー入力の取得</a></h1>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="recipes/console-interaction.html#admonition-note"></a>
+</div>
+<div>
+<p>ドキュメントのレシピセクションは、基本的な説明を最小限にとどめ、
+目的に絞って解説する。</p>
+<p>一般的に、タスクやコマンドをインタラクティブにするよりも、<a href="recipes/../reference/input-task.html">インプットタスク</a>の使用を推奨する。</p>
+</div>
+</div>
+<h2 id="目的-7"><a class="header" href="#目的-7">目的</a></h2>
+<p>タスクまたはコマンドでコンソールからユーザー入力を読み込みたい。</p>
+<h2 id="手順-6"><a class="header" href="#手順-6">手順</a></h2>
+<ol>
+<li><code>interactionService</code> キーを使って <code>sbt.InteractionService</code> を取得する：</li>
+</ol>
+<pre><code class="language-scala">lazy val demo1 = taskKey[Int]("demo1")
+
+scalaVersion := "3.8.4"
+
+demo1 := Def.uncached {
+  val srv = interactionService.value
+  srv.readLine(prompt = "enter a number: ", mask = false) match
+    case Some(x) =&gt; x.toInt
+    case None    =&gt; sys.error("error getting an input!")
+}
+</code></pre>
+<ol start="2">
+<li>コマンドの場合は、<code>CommandLineUIService</code> を直接使う：</li>
+</ol>
+<pre><code class="language-scala">lazy val demo2 = Command.command("demo2"): s0 =&gt;
+  val srv = CommandLineUIService
+  srv.readLine(prompt = "enter a number: ", mask = false) match
+    case Some(x) =&gt; x.toInt
+    case None    =&gt; sys.error("error getting an input!")
+  s0
+
+LocalRootProject / commands += demo2
+</code></pre>
+<h2 id="テスト-1"><a class="header" href="#テスト-1">テスト</a></h2>
+<pre><code class="language-bash">$ sbt --client
+sbt:demo&gt; demo1
+enter a number: 1
+[success] elapsed time: 1 s
+sbt:demo&gt; demo2
+enter a number: 1
+sbt:demo&gt; shutdown
+[info] disconnected
+
+$ sbt --server
+sbt:demo&gt; demo1
+enter a number: 1
+[success] elapsed time: 1 s
+sbt:demo&gt; demo2
+enter a number: 1
+sbt:demo&gt; exit
+[info] shutting down sbt server
+</code></pre>
+<h2 id="代替方法-2"><a class="header" href="#代替方法-2">代替方法</a></h2>
+<p><code>scala.io.StdIn.readLine</code> 関数を使うこともできる。</p>
+<pre><code class="language-scala">lazy val demo3 = taskKey[Int]("demo3")
+demo3 := Def.uncached {
+  import scala.io.StdIn
+  Option(StdIn.readLine("enter a number: ")) match
+    case Some(x) =&gt; x.toInt
+    case None    =&gt; sys.error("error getting an input!")
+}
+</code></pre>
+<h2 id="解説"><a class="header" href="#解説">解説</a></h2>
+<p>sbt 2 はデフォルトでクライアント・サーバーモードで動作し、sbtn と sbt サーバープロセスが関与する。そのため、タスクがユーザーに入力を求めるとき、実際のプロンプトはクライアント（sbtn）側で行われるが、タスク実行はサーバー側で行われる。このクライアント・サーバーの分離は、Activator が sbt に Web ベースのフロントエンドを提供していた sbt 0.13 にも存在していた。簡単なユーザーインタラクションを抽象化するため、sbt は <code>interactionService</code> を提供しており、<code>CommandLineUIService</code> に初期化されている。このキーは sbt 1.x および 2.x の両方でサポートされており、現在は sbtn のターミナル仮想化を可能にする。</p>
+<p>代替案として、タスクまたはコマンド定義の内部で <code>scala.io.StdIn.readLine</code> を使うこともできる。ただし、これも sbt サーバーが IPC ソケット越しにターミナルのやり取りを sbtn にプロキシすることで成り立っていることに注意。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="glossary"><a class="header" href="#glossary">Glossary</a></h1>
 <h2 id="symbols"><a class="header" href="#symbols">Symbols</a></h2>
 <h3 id="--"><a class="header" href="#--"><code>:=</code>, <code>+=</code>, <code>++=</code></a></h3>

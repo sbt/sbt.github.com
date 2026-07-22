@@ -5780,6 +5780,80 @@ object A {
 Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties
 26/05/05 00:00:00 INFO SparkContext: Running Spark version 4.1.0
 </code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="获取用户输入"><a class="header" href="#获取用户输入">获取用户输入</a></h1>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="recipes/console-interaction.html#admonition-note"></a>
+</div>
+<div>
+<p>文档的配方部分以目标为中心，对基础知识仅作最简要的说明。</p>
+<p>通常建议使用<a href="recipes/../reference/input-task.html">输入任务</a>，而非将任务或命令设计为交互式。</p>
+</div>
+</div>
+<h2 id="目标-7"><a class="header" href="#目标-7">目标</a></h2>
+<p>我想在任务或命令中从控制台读取用户输入。</p>
+<h2 id="步骤-6"><a class="header" href="#步骤-6">步骤</a></h2>
+<ol>
+<li>使用 <code>interactionService</code> 键获取 <code>sbt.InteractionService</code>：</li>
+</ol>
+<pre><code class="language-scala">lazy val demo1 = taskKey[Int]("demo1")
+
+scalaVersion := "3.8.4"
+
+demo1 := Def.uncached {
+  val srv = interactionService.value
+  srv.readLine(prompt = "enter a number: ", mask = false) match
+    case Some(x) =&gt; x.toInt
+    case None    =&gt; sys.error("error getting an input!")
+}
+</code></pre>
+<ol start="2">
+<li>对于命令，直接使用 <code>CommandLineUIService</code>：</li>
+</ol>
+<pre><code class="language-scala">lazy val demo2 = Command.command("demo2"): s0 =&gt;
+  val srv = CommandLineUIService
+  srv.readLine(prompt = "enter a number: ", mask = false) match
+    case Some(x) =&gt; x.toInt
+    case None    =&gt; sys.error("error getting an input!")
+  s0
+
+LocalRootProject / commands += demo2
+</code></pre>
+<h2 id="测试-1"><a class="header" href="#测试-1">测试</a></h2>
+<pre><code class="language-bash">$ sbt --client
+sbt:demo&gt; demo1
+enter a number: 1
+[success] elapsed time: 1 s
+sbt:demo&gt; demo2
+enter a number: 1
+sbt:demo&gt; shutdown
+[info] disconnected
+
+$ sbt --server
+sbt:demo&gt; demo1
+enter a number: 1
+[success] elapsed time: 1 s
+sbt:demo&gt; demo2
+enter a number: 1
+sbt:demo&gt; exit
+[info] shutting down sbt server
+</code></pre>
+<h2 id="其他方式-2"><a class="header" href="#其他方式-2">其他方式</a></h2>
+<p>也可以使用 <code>scala.io.StdIn.readLine</code> 函数。</p>
+<pre><code class="language-scala">lazy val demo3 = taskKey[Int]("demo3")
+demo3 := Def.uncached {
+  import scala.io.StdIn
+  Option(StdIn.readLine("enter a number: ")) match
+    case Some(x) =&gt; x.toInt
+    case None    =&gt; sys.error("error getting an input!")
+}
+</code></pre>
+<h2 id="说明"><a class="header" href="#说明">说明</a></h2>
+<p>sbt 2 默认以客户端-服务器模式运行，涉及 sbtn 和 sbt 服务器进程。这意味着当任务提示用户输入时，提示在客户端（sbtn）侧发生，而任务在服务器侧执行。这种客户端-服务器分离在 sbt 0.13 中也存在，当时 Activator 为 sbt 提供了基于 Web 的前端。为了抽象化简单的用户交互，sbt 提供了 <code>interactionService</code>，并初始化为 <code>CommandLineUIService</code>。该键在 sbt 1.x 和 2.x 中均受支持，可实现 sbtn 的终端虚拟化。</p>
+<p>也可以在任务或命令定义中使用 <code>scala.io.StdIn.readLine</code>。请注意，这依赖于 sbt 服务器经由 IPC 套接字将终端交互代理到 sbtn。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="glossary"><a class="header" href="#glossary">Glossary</a></h1>
 <h2 id="symbols"><a class="header" href="#symbols">Symbols</a></h2>
 <h3 id="--"><a class="header" href="#--"><code>:=</code>, <code>+=</code>, <code>++=</code></a></h3>
