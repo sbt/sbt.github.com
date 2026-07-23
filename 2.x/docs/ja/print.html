@@ -1955,7 +1955,7 @@ example.ExampleSuite:
 <h2 id="キャッシュ化の基本"><a class="header" href="#キャッシュ化の基本">キャッシュ化の基本</a></h2>
 <p>ビルドプロセスがあたかも <code>(A1, A2, A3, ...)</code> というインプットを受け取り、 <code>(R1, List(O1, O2, O3, ...))</code> というアウトプットを返す純粋関数であるかのように扱うというのがキャッシュ化の基本的な考えだ。例えば、ソース・ファイルのリストと Scala バージョンを受け取って、<code>*.jar</code> ファイルを生成することができる。もし仮定が成立するなら、同一のインプットに対してはアウトプットの JAR を全員に対してメモ化できる。メモ化された JAR を使うほうが、Scala コンパイルのような実際のタスクを実行するよりも高速であることがこのような技法を使うメリットとなる。</p>
 <h3 id="密閉ビルド"><a class="header" href="#密閉ビルド">密閉ビルド</a></h3>
-<p>As a mental model of the <em>build as a pure function</em>, build engineers sometimes use the term <em>hermetic build</em>, which is a build that takes place in a shipping container in a desert with no clocks or the Internet. If we can produce a JAR file from that state, then the JAR file should be safe to be shared by any machine. Why did I mention the clock? It's because a JAR file could capture the timestamp, and thus produce slightly different JARs each time. To avoid this, hermetic build tools overwrite the timestamp to a fixed date 2010-01-01 regardless of when the build took place.</p>
+<p>「純粋関数としてのビルド」のメンタルモデルとして、ビルド界隈のエンジニアは密閉ビルド (<em>hermetic build</em>)、つまり砂漠の真ん中に置かれたコンテナの中で時計も Internet も無い状態で行われるビルドという用語を使うことがある。そのような状態で JAR ファイルを生成することができれば、その JAR ファイルはどのマシンと共有しても大丈夫なはずだ。何故時計の話が出てきたのだろうか? それは、JAR ファイルが仕様としてタイムスタンプを捕捉するため、毎回少しづつ違った JAR を生成するからだ。これを回避するために、「密閉な」ビルドツールはいつビルドが実行されてもタイムスタンプを 2010-01-01 に上書きする慣習がある。</p>
 <p>逆に、不安定なインプットを捕捉してしまったビルドは「密閉性を壊した」、または「非密閉である」という。密閉性が壊れるもう 1つのよくあるパターンは、インプットもしくはアウトプットで絶対パスを捕捉してしまうことだ。時としてはパスはマクロ経由で JAR に入ってしまう事があるので、バイトコードの差を検査しないと発見できないかもしれない。</p>
 <h2 id="自動キャッシュ"><a class="header" href="#自動キャッシュ">自動キャッシュ</a></h2>
 <p>以下に、自動的キャッシュ化を具体例を用いて解説する:</p>
