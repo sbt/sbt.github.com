@@ -1,0 +1,734 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Task - The Book of sbt</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../src/reference/custom-202602.css">
+        <link rel="stylesheet" href="../src/reference/mdbook-admonish.css">
+        <link rel="stylesheet" href="../theme/language-picker.css">
+
+
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            
+            // var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+            var default_theme = "light";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <div class="versions" style="padding-top:0.5em;">
+                            <select id="versions" role="menu"></select>
+                        </div>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Book of sbt</h1>
+
+                    <div class="right-buttons">
+                        <button id="language-toggle" class="icon-button" type="button"
+                                title="Change language" aria-label="Change language"
+                                aria-haspopup="true" aria-expanded="false"
+                                aria-controls="language-list">
+                            <i class="fa fa-globe"></i>
+                        </button>
+                        <ul id="language-list" class="theme-popup" aria-label="Languages" role="menu">
+                          <li role="none"><button role="menuitem" class="theme">
+                              <a id="en">English</a>
+                          </button></li>
+                          <li role="none"><button role="menuitem" class="theme">
+                              <a id="zh-cn">Chinese Simplified (中文)</a>
+                          </button></li>
+                          <li role="none"><button role="menuitem" class="theme">
+                              <a id="ja">Japanese (日本語)</a>
+                          </button></li>
+                        </ul>
+                        <script>
+                          let langToggle = document.getElementById("language-toggle");
+                          let langList = document.getElementById("language-list");
+                          langToggle.addEventListener("click", (event) => {
+                              langList.style.display = langList.style.display == "block" ? "none" : "block";
+                          });
+                          let selectedLang = document.getElementById("en");
+                          if (selectedLang) {
+                              selectedLang.parentNode.classList.add("theme-selected");
+                          }
+
+                          // The path to the root, taking the current
+                          // language into account.
+                          let full_path_to_root = "../../";
+                          // The page path (mdbook only gives us
+                          // access to the path to the Markdown file).
+                          let path = "reference/task.md".replace(/\.md$/, ".html");
+                          for (let lang of langList.querySelectorAll("a")) {
+                            lang.href = `${full_path_to_root}${lang.id}/${path}`;
+                          }
+
+                          // When the user clicks a list item, the page jump is performed, just like clicking the internal <a> tag.
+                          langList.querySelectorAll("li").forEach(function(li) {
+                            li.addEventListener("click", function(event) {
+                              event.preventDefault();
+        
+                              let link = this.querySelector("a");
+                              if (link && window.location.href !== link.href) {
+                                window.location.href = link.href;
+                              }
+                            });
+                          });
+                        </script>
+
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="task"><a class="header" href="#task">Task</a></h1>
+<h2 id="description"><a class="header" href="#description">Description</a></h2>
+<p>A task is a unit of work in an sbt build.
+Tasks <code>compile</code> your code, run <code>test</code>s incrementally, <code>package</code> JAR files,
+or do anything else a build needs to do.</p>
+<p>An interesting aspect of tasks is that they enable parallel programming,
+similar to <code>Future[A]</code> and <code>IO[A]</code>.
+While <code>Future</code> and <code>IO</code> are often composed via <code>for</code> comprehension,
+sbt provides <em>structured concurrency</em> of tasks via the direct-style <code>build.sbt</code> DSL.</p>
+<pre><code class="language-scala">lazy val intTaskA = taskKey[Int]("")
+lazy val intTaskB = taskKey[Int]("")
+lazy val intTaskC = taskKey[Int]("")
+
+intTaskA := 1
+intTaskB := 2
+
+// intTaskA and intTaskB will run in parallel
+intTaskC := {
+  val a = intTaskA.value
+  val b = intTaskB.value
+  a + b
+}
+</code></pre>
+<h3 id="definitializedtaska"><a class="header" href="#definitializedtaska">Def.Initialized[Task[A]]</a></h3>
+<p>Under the hood, all tasks including task keys are typed as <code>Def.Initialized[Task[A]]</code>.</p>
+<ol>
+<li><code>Def.Initialized[A]</code>. This is the same type as a setting, and
+used to construct the setting/task graph at load time.
+It is so named because it represents an initialized value of <code>A</code>.</li>
+<li><code>sbt.Task[A]</code>. This a datatype that represents repeatable asynchronous
+computation.
+This is the part that gets executed by sbt's task engine.</li>
+</ol>
+<p>By nesting these together, a task can be read as a node in a setting/task graph
+that produces an asynchronous computation of <code>A</code>.</p>
+<h3 id="settings-vs-tasks"><a class="header" href="#settings-vs-tasks">Settings vs tasks</a></h3>
+<p>Both settings and tasks produce values, but there is a major
+difference between them:</p>
+<ul>
+<li>Settings are evaluated at build load time. Tasks are executed on
+demand, often in response to the user invoking them from the shell.</li>
+</ul>
+<h3 id="features"><a class="header" href="#features">Features</a></h3>
+<p>There are several features of the task system:</p>
+<ol>
+<li>By integrating with the settings system, tasks can be added,
+removed, and modified as easily as settings.</li>
+<li>Tasks produce values. Other tasks can access a task's value by
+calling <code>value</code> on it within a task definition.</li>
+<li>Task values are cached automatically based on its inputs.
+See <a href="cached-task.html">cached task</a> for details.</li>
+<li><a href="input-task.html">Input tasks</a> use
+<a href="tab-completion-parser.html">parser combinators</a> to define the syntax for their
+arguments. This allows flexible syntax and tab-completions in the
+same way as <a href="command.html">commands</a>.</li>
+<li>Dynamically changing the structure of the task graph is possible.
+Tasks can be injected into the execution graph based on the result
+of another task.</li>
+<li>There are ways to handle task failure, similar to
+<code>try/catch/finally</code>.</li>
+<li>Each task has access to its own Logger that by default persists the
+logging for that task at a more verbose level than is initially
+printed to the screen.</li>
+</ol>
+<p>These features are discussed in detail in the following sections.</p>
+<h2 id="defining-a-task"><a class="header" href="#defining-a-task">Defining a task</a></h2>
+<h3 id="hello-world-example"><a class="header" href="#hello-world-example">Hello world example</a></h3>
+<div id="admonition-buildsbt" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-title">
+<div class="admonition-title">
+<div id="admonition-buildsbt-title">
+<p>build.sbt</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-buildsbt"></a>
+</div>
+<div>
+<pre><code class="language-scala">lazy val hello = taskKey[Unit]("prints 'hello world'")
+
+hello := println("hello world!")
+</code></pre>
+</div>
+</div>
+<p>Run <code>sbt hello</code> from command line to invoke the task.
+Run <code>sbt tasks</code> to see this task listed.</p>
+<h3 id="define-the-key"><a class="header" href="#define-the-key">Define the key</a></h3>
+<p>To declare a new task, define a lazy val of type <code>TaskKey</code>:</p>
+<pre><code class="language-scala">lazy val sampleTask = taskKey[Int]("A sample task.")
+</code></pre>
+<p>The name of the <code>val</code> is used when referring to the task in <code>build.sbt</code>
+and at the command line. The string passed to the <code>taskKey</code> method is a
+description of the task. The type parameter passed to <code>taskKey</code> (here,
+<code>Int</code>) is the type of value produced by the task.</p>
+<p>We'll define a couple of other keys for the examples:</p>
+<div id="admonition-buildsbt-1" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-1-title">
+<div class="admonition-title">
+<div id="admonition-buildsbt-1-title">
+<p>build.sbt</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-buildsbt-1"></a>
+</div>
+<div>
+<pre><code class="language-scala">lazy val intTask = taskKey[Int]("An int task")
+lazy val stringTask = taskKey[String]("A string task")
+</code></pre>
+</div>
+</div>
+<p>The examples themselves are valid entries in a <code>build.sbt</code>.</p>
+<h3 id="implement-the-task"><a class="header" href="#implement-the-task">Implement the task</a></h3>
+<p>There are three main parts to implementing a task once its key is
+defined:</p>
+<ol>
+<li>Determine the settings and other tasks needed by the task. They are
+the task's inputs.</li>
+<li>Define the code that implements the task in terms of these inputs.</li>
+<li>Determine the scope the task will go in.</li>
+</ol>
+<p>These parts are then combined just like the parts of a setting are
+combined.</p>
+<h4 id="defining-a-basic-task"><a class="header" href="#defining-a-basic-task">Defining a basic task</a></h4>
+<p>A task is defined using <code>:=</code></p>
+<div id="admonition-buildsbt-2" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-2-title">
+<div class="admonition-title">
+<div id="admonition-buildsbt-2-title">
+<p>build.sbt</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-buildsbt-2"></a>
+</div>
+<div>
+<pre><code class="language-scala">lazy val intTask = taskKey[Int]("An int task")
+lazy val stringTask = taskKey[String]("A string task")
+
+intTask := 1 + 2
+
+stringTask := Def.uncached {
+  sys.props("user.name")
+}
+</code></pre>
+</div>
+</div>
+<h4 id="tasks-with-inputs"><a class="header" href="#tasks-with-inputs">Tasks with inputs</a></h4>
+<p>Tasks with other tasks or settings as inputs are also defined using
+<code>:=</code>. The values of the inputs are referenced by the <code>value</code> method.
+This method is a special syntax and can only be called when defining a
+task, such as in the argument to <code>:=</code>. The following defines a task that
+adds one to the value produced by <code>intTask</code> and returns the result.</p>
+<pre><code class="language-scala">sampleTask := intTask.value + 1
+</code></pre>
+<p>Multiple settings are handled similarly:</p>
+<pre><code class="language-scala">stringTask := {
+  val x = sampleTask.value
+  val i = intTask.value
+  s"sample: $x, int: $i"
+}
+</code></pre>
+<h4 id="task-scope"><a class="header" href="#task-scope">Task scope</a></h4>
+<p>As with settings, tasks can be defined in a specific scope. For example,
+there are separate <code>compile</code> tasks for the <code>Compile</code> and <code>Test</code> scopes.</p>
+<p>In the following example, <code>Test/sampleTask</code> uses the result of
+<code>Compile/intTask</code>:</p>
+<pre><code class="language-scala">Test / sampleTask := (Compile / intTask).value * 3
+</code></pre>
+<div id="admonition-on-operator-precedence" class="admonition admonish-note" role="note" aria-labelledby="admonition-on-operator-precedence-title">
+<div class="admonition-title">
+<div id="admonition-on-operator-precedence-title">
+<p>On operator precedence</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-on-operator-precedence"></a>
+</div>
+<div>
+<p>As a reminder, infix method precedence is determined by the name of the method.</p>
+<ol>
+<li>Assignment methods have the lowest precedence. These are methods
+with names ending in <code>=</code>, except for <code>!=</code>, <code>&lt;=</code>, <code>&gt;=</code>, and names that
+start with <code>=</code>.</li>
+<li>Methods starting with a letter have the next highest precedence.</li>
+<li>Methods with names that start with a symbol and aren't included in
+1 have the highest precedence. (This category is divided further
+according to the specific character it starts with. See the Scala
+specification for details.)</li>
+</ol>
+<p>Therefore, the previous example is equivalent to the following:</p>
+<pre><code class="language-scala">(Test / sampleTask).:=((Compile / intTask).value * 3)
+</code></pre>
+</div>
+</div>
+<h3 id="separating-implementations"><a class="header" href="#separating-implementations">Separating implementations</a></h3>
+<p>The implementation of a task can be separated from the binding. For
+example, a basic separate definition looks like:</p>
+<pre><code class="language-scala">// Define a new, standalone task implemention
+lazy val intTaskImpl: Initialize[Task[Int]] =
+   Def.cachedTask { sampleTask.value - 3 }
+
+// Bind the implementation to a specific key
+intTask := intTaskImpl.value
+</code></pre>
+<p>Note that whenever <code>.value</code> is used, it must be within a task
+definition, such as within <code>Def.task</code> above or as an argument to <code>:=</code>.</p>
+<h3 id="modifying-an-existing-task"><a class="header" href="#modifying-an-existing-task">Modifying an existing task</a></h3>
+<p>In the general case, modify a task by declaring the previous task as an
+input.</p>
+<pre><code class="language-scala">// initial definition
+intTask := 3
+
+// overriding definition that references the previous definition
+intTask := intTask.value + 1
+</code></pre>
+<p>Completely override a task by not declaring the previous task as an
+input. Each of the definitions in the following example completely
+overrides the previous one. That is, when <code>intTask</code> is run, it will only
+print <code>#3</code>.</p>
+<pre><code class="language-scala">intTask := {
+  println("#1")
+  3
+}
+
+intTask := {
+  println("#2")
+  5
+}
+
+intTask :=  {
+  println("#3")
+  sampleTask.value - 3
+}
+</code></pre>
+<h2 id="error-handling"><a class="header" href="#error-handling">Error handling</a></h2>
+<h3 id="errors-in-a-task"><a class="header" href="#errors-in-a-task">Errors in a task</a></h3>
+<p>To express an error state in a task, throw an exception.
+For example:</p>
+<div id="admonition-buildsbt-3" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-3-title">
+<div class="admonition-title">
+<div id="admonition-buildsbt-3-title">
+<p>build.sbt</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-buildsbt-3"></a>
+</div>
+<div>
+<pre><code class="language-scala">lazy val intTask = taskKey[Int]("An int task")
+
+intTask := sys.error("failed")
+</code></pre>
+</div>
+</div>
+<p>sbt's task engine will catch and handling the error without crashing sbt:</p>
+<pre><code class="language-bash">sbt:aaa&gt; intTask
+[error] stack trace is suppressed; run last intTask for the full output
+[error] (intTask) boom
+[error] elapsed time: 0 s, cache 0%, 1 error
+</code></pre>
+<p>The stacktrace can be shown using <code>last intTask</code>.</p>
+<h3 id="result"><a class="header" href="#result"><code>result</code></a></h3>
+<p>The <code>result</code> method creates a new task that returns the full <code>Result[A1]</code>
+value for the original task. <code>Result</code> has
+the same structure as <code>Either[Incomplete, A1]</code> for a task result of type
+<code>A1</code>. That is, it has two subtypes:</p>
+<ul>
+<li><code>Result.Inc</code>, which wraps <code>Incomplete</code> in case of failure</li>
+<li><code>Result.Value</code>, which wraps a task's result in case of success.</li>
+</ul>
+<p>Thus, the task created by <code>result</code> executes whether or not the original
+task succeeds or fails.</p>
+<div id="admonition-buildsbt-4" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-4-title">
+<div class="admonition-title">
+<div id="admonition-buildsbt-4-title">
+<p>build.sbt</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-buildsbt-4"></a>
+</div>
+<div>
+<pre><code class="language-scala">lazy val intTask = taskKey[Int]("An int task")
+
+intTask := sys.error("boom")
+
+intTask := Def.uncached {
+  intTask.result.value match
+    case Result.Inc(inc: Incomplete) =&gt;
+      println("Ignoring failure: " + inc)
+      3
+    case Result.Value(v) =&gt;
+      println("Using successful result: " + v)
+      v
+}
+</code></pre>
+</div>
+</div>
+<p>This rewires the original <code>intTask</code> definition so that if the original
+task fails, the exception is printed and the constant <code>3</code> is returned.
+If it succeeds, the value is printed and returned.</p>
+<h3 id="failure"><a class="header" href="#failure"><code>failure</code></a></h3>
+<p>The <code>failure</code> method creates a new task that returns the <code>Incomplete</code>
+value when the original task fails to complete normally. If the original
+task succeeds, the new task fails.</p>
+<div id="admonition-buildsbt-5" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-5-title">
+<div class="admonition-title">
+<div id="admonition-buildsbt-5-title">
+<p>build.sbt</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-buildsbt-5"></a>
+</div>
+<div>
+<pre><code class="language-scala">lazy val intTask = taskKey[Int]("An int task")
+
+intTask := sys.error("boom")
+
+intTask := Def.uncached {
+  println("Ignoring failure: " + intTask.failure.value)
+  3
+}
+</code></pre>
+</div>
+</div>
+<p>This rewires the <code>intTask</code> so that the original exception is printed
+and the constant <code>3</code> is returned.</p>
+<h2 id="advanced-task-operations"><a class="header" href="#advanced-task-operations">Advanced task operations</a></h2>
+<h3 id="streams-per-task-logging"><a class="header" href="#streams-per-task-logging">Streams: Per-task logging</a></h3>
+<p>Per-task loggers are part of a more general system for task-specific
+data called Streams.</p>
+<p>To use Streams, get the value of the <code>streams</code> task.
+A logger can be obtained by the <code>log</code> method:</p>
+<pre><code class="language-scala">foo := {
+  val s = streams.value
+  s.log.debug("Saying hi...")
+  s.log.info("Hello!")
+}
+</code></pre>
+<p>You can scope logging settings by the specific task's scope:</p>
+<pre><code class="language-scala">foo / logLevel := Level.Debug
+foo / traceLevel := 5
+</code></pre>
+<p>To obtain the last logging output from a task, use the <code>last</code> command:</p>
+<pre><code>$ last foo
+[debug] Saying hi...
+[info] Hello!
+</code></pre>
+<p>The verbosity with which logging is persisted is controlled using the
+<code>persistLogLevel</code> and <code>persistTraceLevel</code> settings. The <code>last</code> command
+displays what was logged according to these levels. The levels do not
+affect already logged information.</p>
+<h3 id="conditional-task"><a class="header" href="#conditional-task">Conditional task</a></h3>
+<p>When a task consists of an <code>if</code>-expression at the top-level, a conditional task is automatically created:</p>
+<pre><code class="language-scala">bar := {
+  if number.value &lt; 0 then negAction.value
+  else if number.value == 0 then zeroAction.value
+  else posAction.value
+}
+</code></pre>
+<p>Unlike the regular (Applicative) task composition, conditional tasks delays the evaluation of then-clause and else-clause as naturally expected of an <code>if</code>-expression. This is already possible with <code>Def.taskDyn { ... }</code>, but unlike dynamic tasks, conditional task works with <code>inspect</code> command.</p>
+<p><a name="dynamic"></a></p>
+<h3 id="dynamic-computations-with-deftaskdyn"><a class="header" href="#dynamic-computations-with-deftaskdyn">Dynamic Computations with <code>Def.taskDyn</code></a></h3>
+<p>It can be useful to use the result of a task to determine the next tasks
+to evaluate. This is done using <code>Def.taskDyn</code>.</p>
+<p>The result of <code>taskDyn</code>
+is called a dynamic task because it introduces dependencies at runtime.
+The <code>taskDyn</code> method supports the same syntax as <code>Def.task</code> and <code>:=</code>
+except that you return a task instead of a plain value.</p>
+<p>For example,</p>
+<div id="admonition-buildsbt-6" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-6-title">
+<div class="admonition-title">
+<div id="admonition-buildsbt-6-title">
+<p>build.sbt</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-buildsbt-6"></a>
+</div>
+<div>
+<pre><code class="language-scala">lazy val stringTask = taskKey[String]("A string task")
+lazy val intTask = taskKey[Int]("An int task")
+lazy val foo = taskKey[Int]("foo")
+
+val dynamic = Def.taskDyn {
+  // decide what to evaluate based on the value of `stringTask`
+  if stringTask.value == "dev" then
+    // create the dev-mode task: this is only evaluated if the
+    //   value of stringTask is "dev"
+    Def.task {
+      3
+    }
+  else
+    // create the production task: only evaluated if the value
+    //    of the stringTask is not "dev"
+    Def.task {
+      intTask.value + 5
+    }
+}
+
+stringTask := "test"
+intTask := 1
+
+foo := Def.uncached {
+  val num = dynamic.value
+  println(s"number selected was $num")
+  num
+}
+</code></pre>
+</div>
+</div>
+<p>The only static dependency of <code>foo</code> is <code>stringTask</code>. The dependency
+on <code>intTask</code> is only introduced in non-dev mode.</p>
+<div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
+<div class="admonition-title">
+<div id="admonition-warning-title">
+<p>Warning</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-warning"></a>
+</div>
+<div>
+<p>A dynamic task cannot refer to itself or a circular dependency will
+result. In the example above, there would be a circular dependency if
+the code passed to taskDyn referenced <code>foo</code>.</p>
+</div>
+</div>
+<h3 id="using-defsequential"><a class="header" href="#using-defsequential">Using <code>Def.sequential</code></a></h3>
+<p><code>Def.sequential</code> is a helper function to define a semi-sequential task.
+This is similar to the dynamic task, but easier to define.
+To demonstrate the sequential task, let's create a custom task called <code>compilecheck</code> that runs <code>Compile / compile</code> and then <code>Compile / scalastyle</code> task.</p>
+<pre><code class="language-scala">lazy val compilecheck = taskKey[Unit]("compile and then scalastyle")
+
+lazy val root = (project in file("."))
+  .settings(
+    Compile / compilecheck := Def.sequential(
+      Compile / compile,
+      (Compile / scalastyle).toTask("")
+    ).value
+  )
+</code></pre>
+<p>For a completely sequential execution, use <a href="command.html">commands</a> instead.</p>
+<p><a name="multiple-scopes"></a></p>
+<h3 id="getting-values-from-multiple-scopes"><a class="header" href="#getting-values-from-multiple-scopes">Getting values from multiple scopes</a></h3>
+<p>The general form of an expression that gets values from multiple scopes
+is:</p>
+<pre><code class="language-scala">&lt;setting-or-task&gt;.all(&lt;scope-filter&gt;).value
+</code></pre>
+<div id="admonition-warning-1" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-1-title">
+<div class="admonition-title">
+<div id="admonition-warning-1-title">
+<p>Warning</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-warning-1"></a>
+</div>
+<div>
+<p>Make sure to assign the <code>ScopeFilter</code> as a <code>val</code>! This is an
+implementation detail requirement of the <code>.all</code> macro.</p>
+</div>
+</div>
+<p>The <code>all</code> method is implicitly added to tasks and settings. It accepts a
+<code>ScopeFilter</code> that will select the <code>Scopes</code>. The result has type
+<code>Seq[A]</code>, where <code>A</code> is the key's underlying type.</p>
+<p>A common scenario is getting the sources for all subprojects for
+processing all at once, such as passing them to scaladoc. The task that
+we want to obtain values for is <code>sources</code> and we want to get the values
+in all non-root projects and in the <code>Compile</code> configuration. This looks
+like:</p>
+<pre><code class="language-scala">lazy val core = project
+
+lazy val util = project
+
+val filter = ScopeFilter(inProjects(core, util), inConfigurations(Compile))
+
+lazy val root = rootProject
+  .settings(
+    sources := {
+      // each sources definition is of type Seq[File],
+      //   giving us a Seq[Seq[File]] that we then flatten to Seq[File]
+      val allSources: Seq[Seq[File]] = sources.all(filter).value
+      allSources.flatten
+    }
+  )
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../reference/watch.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../reference/cached-task.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../reference/watch.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../reference/cached-task.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+        <script src="https://www.scala-sbt.org/assets/jquery.min.js" type="text/javascript"></script>
+        <script src="https://www.scala-sbt.org/assets/versions.js"></script>
+        <script src="https://www.scala-sbt.org/assets/set-versions.js"></script>
+    </div>
+    </body>
+</html>

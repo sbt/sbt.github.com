@@ -3847,6 +3847,472 @@ triggered the build. This is intended to prevent spurious builds that
 can occur when a file is modified in short bursts. The default value is 500ms.</p>
 </li>
 </ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="task"><a class="header" href="#task">Task</a></h1>
+<h2 id="description-8"><a class="header" href="#description-8">Description</a></h2>
+<p>A task is a unit of work in an sbt build.
+Tasks <code>compile</code> your code, run <code>test</code>s incrementally, <code>package</code> JAR files,
+or do anything else a build needs to do.</p>
+<p>An interesting aspect of tasks is that they enable parallel programming,
+similar to <code>Future[A]</code> and <code>IO[A]</code>.
+While <code>Future</code> and <code>IO</code> are often composed via <code>for</code> comprehension,
+sbt provides <em>structured concurrency</em> of tasks via the direct-style <code>build.sbt</code> DSL.</p>
+<pre><code class="language-scala">lazy val intTaskA = taskKey[Int]("")
+lazy val intTaskB = taskKey[Int]("")
+lazy val intTaskC = taskKey[Int]("")
+
+intTaskA := 1
+intTaskB := 2
+
+// intTaskA and intTaskB will run in parallel
+intTaskC := {
+  val a = intTaskA.value
+  val b = intTaskB.value
+  a + b
+}
+</code></pre>
+<h3 id="definitializedtaska"><a class="header" href="#definitializedtaska">Def.Initialized[Task[A]]</a></h3>
+<p>Under the hood, all tasks including task keys are typed as <code>Def.Initialized[Task[A]]</code>.</p>
+<ol>
+<li><code>Def.Initialized[A]</code>. This is the same type as a setting, and
+used to construct the setting/task graph at load time.
+It is so named because it represents an initialized value of <code>A</code>.</li>
+<li><code>sbt.Task[A]</code>. This a datatype that represents repeatable asynchronous
+computation.
+This is the part that gets executed by sbt's task engine.</li>
+</ol>
+<p>By nesting these together, a task can be read as a node in a setting/task graph
+that produces an asynchronous computation of <code>A</code>.</p>
+<h3 id="settings-vs-tasks"><a class="header" href="#settings-vs-tasks">Settings vs tasks</a></h3>
+<p>Both settings and tasks produce values, but there is a major
+difference between them:</p>
+<ul>
+<li>Settings are evaluated at build load time. Tasks are executed on
+demand, often in response to the user invoking them from the shell.</li>
+</ul>
+<h3 id="features-1"><a class="header" href="#features-1">Features</a></h3>
+<p>There are several features of the task system:</p>
+<ol>
+<li>By integrating with the settings system, tasks can be added,
+removed, and modified as easily as settings.</li>
+<li>Tasks produce values. Other tasks can access a task's value by
+calling <code>value</code> on it within a task definition.</li>
+<li>Task values are cached automatically based on its inputs.
+See <a href="reference/cached-task.html">cached task</a> for details.</li>
+<li><a href="reference/input-task.html">Input tasks</a> use
+<a href="reference/tab-completion-parser.html">parser combinators</a> to define the syntax for their
+arguments. This allows flexible syntax and tab-completions in the
+same way as <a href="reference/command.html">commands</a>.</li>
+<li>Dynamically changing the structure of the task graph is possible.
+Tasks can be injected into the execution graph based on the result
+of another task.</li>
+<li>There are ways to handle task failure, similar to
+<code>try/catch/finally</code>.</li>
+<li>Each task has access to its own Logger that by default persists the
+logging for that task at a more verbose level than is initially
+printed to the screen.</li>
+</ol>
+<p>These features are discussed in detail in the following sections.</p>
+<h2 id="defining-a-task"><a class="header" href="#defining-a-task">Defining a task</a></h2>
+<h3 id="hello-world-example"><a class="header" href="#hello-world-example">Hello world example</a></h3>
+<div id="admonition-buildsbt" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-title">
+<div class="admonition-title">
+<div id="admonition-buildsbt-title">
+<p>build.sbt</p>
+</div>
+<a class="admonition-anchor-link" href="reference/task.html#admonition-buildsbt"></a>
+</div>
+<div>
+<pre><code class="language-scala">lazy val hello = taskKey[Unit]("prints 'hello world'")
+
+hello := println("hello world!")
+</code></pre>
+</div>
+</div>
+<p>Run <code>sbt hello</code> from command line to invoke the task.
+Run <code>sbt tasks</code> to see this task listed.</p>
+<h3 id="define-the-key"><a class="header" href="#define-the-key">Define the key</a></h3>
+<p>To declare a new task, define a lazy val of type <code>TaskKey</code>:</p>
+<pre><code class="language-scala">lazy val sampleTask = taskKey[Int]("A sample task.")
+</code></pre>
+<p>The name of the <code>val</code> is used when referring to the task in <code>build.sbt</code>
+and at the command line. The string passed to the <code>taskKey</code> method is a
+description of the task. The type parameter passed to <code>taskKey</code> (here,
+<code>Int</code>) is the type of value produced by the task.</p>
+<p>We'll define a couple of other keys for the examples:</p>
+<div id="admonition-buildsbt-1" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-1-title">
+<div class="admonition-title">
+<div id="admonition-buildsbt-1-title">
+<p>build.sbt</p>
+</div>
+<a class="admonition-anchor-link" href="reference/task.html#admonition-buildsbt-1"></a>
+</div>
+<div>
+<pre><code class="language-scala">lazy val intTask = taskKey[Int]("An int task")
+lazy val stringTask = taskKey[String]("A string task")
+</code></pre>
+</div>
+</div>
+<p>The examples themselves are valid entries in a <code>build.sbt</code>.</p>
+<h3 id="implement-the-task"><a class="header" href="#implement-the-task">Implement the task</a></h3>
+<p>There are three main parts to implementing a task once its key is
+defined:</p>
+<ol>
+<li>Determine the settings and other tasks needed by the task. They are
+the task's inputs.</li>
+<li>Define the code that implements the task in terms of these inputs.</li>
+<li>Determine the scope the task will go in.</li>
+</ol>
+<p>These parts are then combined just like the parts of a setting are
+combined.</p>
+<h4 id="defining-a-basic-task"><a class="header" href="#defining-a-basic-task">Defining a basic task</a></h4>
+<p>A task is defined using <code>:=</code></p>
+<div id="admonition-buildsbt-2" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-2-title">
+<div class="admonition-title">
+<div id="admonition-buildsbt-2-title">
+<p>build.sbt</p>
+</div>
+<a class="admonition-anchor-link" href="reference/task.html#admonition-buildsbt-2"></a>
+</div>
+<div>
+<pre><code class="language-scala">lazy val intTask = taskKey[Int]("An int task")
+lazy val stringTask = taskKey[String]("A string task")
+
+intTask := 1 + 2
+
+stringTask := Def.uncached {
+  sys.props("user.name")
+}
+</code></pre>
+</div>
+</div>
+<h4 id="tasks-with-inputs"><a class="header" href="#tasks-with-inputs">Tasks with inputs</a></h4>
+<p>Tasks with other tasks or settings as inputs are also defined using
+<code>:=</code>. The values of the inputs are referenced by the <code>value</code> method.
+This method is a special syntax and can only be called when defining a
+task, such as in the argument to <code>:=</code>. The following defines a task that
+adds one to the value produced by <code>intTask</code> and returns the result.</p>
+<pre><code class="language-scala">sampleTask := intTask.value + 1
+</code></pre>
+<p>Multiple settings are handled similarly:</p>
+<pre><code class="language-scala">stringTask := {
+  val x = sampleTask.value
+  val i = intTask.value
+  s"sample: $x, int: $i"
+}
+</code></pre>
+<h4 id="task-scope"><a class="header" href="#task-scope">Task scope</a></h4>
+<p>As with settings, tasks can be defined in a specific scope. For example,
+there are separate <code>compile</code> tasks for the <code>Compile</code> and <code>Test</code> scopes.</p>
+<p>In the following example, <code>Test/sampleTask</code> uses the result of
+<code>Compile/intTask</code>:</p>
+<pre><code class="language-scala">Test / sampleTask := (Compile / intTask).value * 3
+</code></pre>
+<div id="admonition-on-operator-precedence" class="admonition admonish-note" role="note" aria-labelledby="admonition-on-operator-precedence-title">
+<div class="admonition-title">
+<div id="admonition-on-operator-precedence-title">
+<p>On operator precedence</p>
+</div>
+<a class="admonition-anchor-link" href="reference/task.html#admonition-on-operator-precedence"></a>
+</div>
+<div>
+<p>As a reminder, infix method precedence is determined by the name of the method.</p>
+<ol>
+<li>Assignment methods have the lowest precedence. These are methods
+with names ending in <code>=</code>, except for <code>!=</code>, <code>&lt;=</code>, <code>&gt;=</code>, and names that
+start with <code>=</code>.</li>
+<li>Methods starting with a letter have the next highest precedence.</li>
+<li>Methods with names that start with a symbol and aren't included in
+1 have the highest precedence. (This category is divided further
+according to the specific character it starts with. See the Scala
+specification for details.)</li>
+</ol>
+<p>Therefore, the previous example is equivalent to the following:</p>
+<pre><code class="language-scala">(Test / sampleTask).:=((Compile / intTask).value * 3)
+</code></pre>
+</div>
+</div>
+<h3 id="separating-implementations"><a class="header" href="#separating-implementations">Separating implementations</a></h3>
+<p>The implementation of a task can be separated from the binding. For
+example, a basic separate definition looks like:</p>
+<pre><code class="language-scala">// Define a new, standalone task implemention
+lazy val intTaskImpl: Initialize[Task[Int]] =
+   Def.cachedTask { sampleTask.value - 3 }
+
+// Bind the implementation to a specific key
+intTask := intTaskImpl.value
+</code></pre>
+<p>Note that whenever <code>.value</code> is used, it must be within a task
+definition, such as within <code>Def.task</code> above or as an argument to <code>:=</code>.</p>
+<h3 id="modifying-an-existing-task"><a class="header" href="#modifying-an-existing-task">Modifying an existing task</a></h3>
+<p>In the general case, modify a task by declaring the previous task as an
+input.</p>
+<pre><code class="language-scala">// initial definition
+intTask := 3
+
+// overriding definition that references the previous definition
+intTask := intTask.value + 1
+</code></pre>
+<p>Completely override a task by not declaring the previous task as an
+input. Each of the definitions in the following example completely
+overrides the previous one. That is, when <code>intTask</code> is run, it will only
+print <code>#3</code>.</p>
+<pre><code class="language-scala">intTask := {
+  println("#1")
+  3
+}
+
+intTask := {
+  println("#2")
+  5
+}
+
+intTask :=  {
+  println("#3")
+  sampleTask.value - 3
+}
+</code></pre>
+<h2 id="error-handling"><a class="header" href="#error-handling">Error handling</a></h2>
+<h3 id="errors-in-a-task"><a class="header" href="#errors-in-a-task">Errors in a task</a></h3>
+<p>To express an error state in a task, throw an exception.
+For example:</p>
+<div id="admonition-buildsbt-3" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-3-title">
+<div class="admonition-title">
+<div id="admonition-buildsbt-3-title">
+<p>build.sbt</p>
+</div>
+<a class="admonition-anchor-link" href="reference/task.html#admonition-buildsbt-3"></a>
+</div>
+<div>
+<pre><code class="language-scala">lazy val intTask = taskKey[Int]("An int task")
+
+intTask := sys.error("failed")
+</code></pre>
+</div>
+</div>
+<p>sbt's task engine will catch and handling the error without crashing sbt:</p>
+<pre><code class="language-bash">sbt:aaa&gt; intTask
+[error] stack trace is suppressed; run last intTask for the full output
+[error] (intTask) boom
+[error] elapsed time: 0 s, cache 0%, 1 error
+</code></pre>
+<p>The stacktrace can be shown using <code>last intTask</code>.</p>
+<h3 id="result"><a class="header" href="#result"><code>result</code></a></h3>
+<p>The <code>result</code> method creates a new task that returns the full <code>Result[A1]</code>
+value for the original task. <code>Result</code> has
+the same structure as <code>Either[Incomplete, A1]</code> for a task result of type
+<code>A1</code>. That is, it has two subtypes:</p>
+<ul>
+<li><code>Result.Inc</code>, which wraps <code>Incomplete</code> in case of failure</li>
+<li><code>Result.Value</code>, which wraps a task's result in case of success.</li>
+</ul>
+<p>Thus, the task created by <code>result</code> executes whether or not the original
+task succeeds or fails.</p>
+<div id="admonition-buildsbt-4" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-4-title">
+<div class="admonition-title">
+<div id="admonition-buildsbt-4-title">
+<p>build.sbt</p>
+</div>
+<a class="admonition-anchor-link" href="reference/task.html#admonition-buildsbt-4"></a>
+</div>
+<div>
+<pre><code class="language-scala">lazy val intTask = taskKey[Int]("An int task")
+
+intTask := sys.error("boom")
+
+intTask := Def.uncached {
+  intTask.result.value match
+    case Result.Inc(inc: Incomplete) =&gt;
+      println("Ignoring failure: " + inc)
+      3
+    case Result.Value(v) =&gt;
+      println("Using successful result: " + v)
+      v
+}
+</code></pre>
+</div>
+</div>
+<p>This rewires the original <code>intTask</code> definition so that if the original
+task fails, the exception is printed and the constant <code>3</code> is returned.
+If it succeeds, the value is printed and returned.</p>
+<h3 id="failure"><a class="header" href="#failure"><code>failure</code></a></h3>
+<p>The <code>failure</code> method creates a new task that returns the <code>Incomplete</code>
+value when the original task fails to complete normally. If the original
+task succeeds, the new task fails.</p>
+<div id="admonition-buildsbt-5" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-5-title">
+<div class="admonition-title">
+<div id="admonition-buildsbt-5-title">
+<p>build.sbt</p>
+</div>
+<a class="admonition-anchor-link" href="reference/task.html#admonition-buildsbt-5"></a>
+</div>
+<div>
+<pre><code class="language-scala">lazy val intTask = taskKey[Int]("An int task")
+
+intTask := sys.error("boom")
+
+intTask := Def.uncached {
+  println("Ignoring failure: " + intTask.failure.value)
+  3
+}
+</code></pre>
+</div>
+</div>
+<p>This rewires the <code>intTask</code> so that the original exception is printed
+and the constant <code>3</code> is returned.</p>
+<h2 id="advanced-task-operations"><a class="header" href="#advanced-task-operations">Advanced task operations</a></h2>
+<h3 id="streams-per-task-logging"><a class="header" href="#streams-per-task-logging">Streams: Per-task logging</a></h3>
+<p>Per-task loggers are part of a more general system for task-specific
+data called Streams.</p>
+<p>To use Streams, get the value of the <code>streams</code> task.
+A logger can be obtained by the <code>log</code> method:</p>
+<pre><code class="language-scala">foo := {
+  val s = streams.value
+  s.log.debug("Saying hi...")
+  s.log.info("Hello!")
+}
+</code></pre>
+<p>You can scope logging settings by the specific task's scope:</p>
+<pre><code class="language-scala">foo / logLevel := Level.Debug
+foo / traceLevel := 5
+</code></pre>
+<p>To obtain the last logging output from a task, use the <code>last</code> command:</p>
+<pre><code>$ last foo
+[debug] Saying hi...
+[info] Hello!
+</code></pre>
+<p>The verbosity with which logging is persisted is controlled using the
+<code>persistLogLevel</code> and <code>persistTraceLevel</code> settings. The <code>last</code> command
+displays what was logged according to these levels. The levels do not
+affect already logged information.</p>
+<h3 id="conditional-task"><a class="header" href="#conditional-task">Conditional task</a></h3>
+<p>When a task consists of an <code>if</code>-expression at the top-level, a conditional task is automatically created:</p>
+<pre><code class="language-scala">bar := {
+  if number.value &lt; 0 then negAction.value
+  else if number.value == 0 then zeroAction.value
+  else posAction.value
+}
+</code></pre>
+<p>Unlike the regular (Applicative) task composition, conditional tasks delays the evaluation of then-clause and else-clause as naturally expected of an <code>if</code>-expression. This is already possible with <code>Def.taskDyn { ... }</code>, but unlike dynamic tasks, conditional task works with <code>inspect</code> command.</p>
+<p><a name="dynamic"></a></p>
+<h3 id="dynamic-computations-with-deftaskdyn"><a class="header" href="#dynamic-computations-with-deftaskdyn">Dynamic Computations with <code>Def.taskDyn</code></a></h3>
+<p>It can be useful to use the result of a task to determine the next tasks
+to evaluate. This is done using <code>Def.taskDyn</code>.</p>
+<p>The result of <code>taskDyn</code>
+is called a dynamic task because it introduces dependencies at runtime.
+The <code>taskDyn</code> method supports the same syntax as <code>Def.task</code> and <code>:=</code>
+except that you return a task instead of a plain value.</p>
+<p>For example,</p>
+<div id="admonition-buildsbt-6" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-6-title">
+<div class="admonition-title">
+<div id="admonition-buildsbt-6-title">
+<p>build.sbt</p>
+</div>
+<a class="admonition-anchor-link" href="reference/task.html#admonition-buildsbt-6"></a>
+</div>
+<div>
+<pre><code class="language-scala">lazy val stringTask = taskKey[String]("A string task")
+lazy val intTask = taskKey[Int]("An int task")
+lazy val foo = taskKey[Int]("foo")
+
+val dynamic = Def.taskDyn {
+  // decide what to evaluate based on the value of `stringTask`
+  if stringTask.value == "dev" then
+    // create the dev-mode task: this is only evaluated if the
+    //   value of stringTask is "dev"
+    Def.task {
+      3
+    }
+  else
+    // create the production task: only evaluated if the value
+    //    of the stringTask is not "dev"
+    Def.task {
+      intTask.value + 5
+    }
+}
+
+stringTask := "test"
+intTask := 1
+
+foo := Def.uncached {
+  val num = dynamic.value
+  println(s"number selected was $num")
+  num
+}
+</code></pre>
+</div>
+</div>
+<p>The only static dependency of <code>foo</code> is <code>stringTask</code>. The dependency
+on <code>intTask</code> is only introduced in non-dev mode.</p>
+<div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
+<div class="admonition-title">
+<div id="admonition-warning-title">
+<p>Warning</p>
+</div>
+<a class="admonition-anchor-link" href="reference/task.html#admonition-warning"></a>
+</div>
+<div>
+<p>A dynamic task cannot refer to itself or a circular dependency will
+result. In the example above, there would be a circular dependency if
+the code passed to taskDyn referenced <code>foo</code>.</p>
+</div>
+</div>
+<h3 id="using-defsequential"><a class="header" href="#using-defsequential">Using <code>Def.sequential</code></a></h3>
+<p><code>Def.sequential</code> is a helper function to define a semi-sequential task.
+This is similar to the dynamic task, but easier to define.
+To demonstrate the sequential task, let's create a custom task called <code>compilecheck</code> that runs <code>Compile / compile</code> and then <code>Compile / scalastyle</code> task.</p>
+<pre><code class="language-scala">lazy val compilecheck = taskKey[Unit]("compile and then scalastyle")
+
+lazy val root = (project in file("."))
+  .settings(
+    Compile / compilecheck := Def.sequential(
+      Compile / compile,
+      (Compile / scalastyle).toTask("")
+    ).value
+  )
+</code></pre>
+<p>For a completely sequential execution, use <a href="reference/command.html">commands</a> instead.</p>
+<p><a name="multiple-scopes"></a></p>
+<h3 id="getting-values-from-multiple-scopes"><a class="header" href="#getting-values-from-multiple-scopes">Getting values from multiple scopes</a></h3>
+<p>The general form of an expression that gets values from multiple scopes
+is:</p>
+<pre><code class="language-scala">&lt;setting-or-task&gt;.all(&lt;scope-filter&gt;).value
+</code></pre>
+<div id="admonition-warning-1" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-1-title">
+<div class="admonition-title">
+<div id="admonition-warning-1-title">
+<p>Warning</p>
+</div>
+<a class="admonition-anchor-link" href="reference/task.html#admonition-warning-1"></a>
+</div>
+<div>
+<p>Make sure to assign the <code>ScopeFilter</code> as a <code>val</code>! This is an
+implementation detail requirement of the <code>.all</code> macro.</p>
+</div>
+</div>
+<p>The <code>all</code> method is implicitly added to tasks and settings. It accepts a
+<code>ScopeFilter</code> that will select the <code>Scopes</code>. The result has type
+<code>Seq[A]</code>, where <code>A</code> is the key's underlying type.</p>
+<p>A common scenario is getting the sources for all subprojects for
+processing all at once, such as passing them to scaladoc. The task that
+we want to obtain values for is <code>sources</code> and we want to get the values
+in all non-root projects and in the <code>Compile</code> configuration. This looks
+like:</p>
+<pre><code class="language-scala">lazy val core = project
+
+lazy val util = project
+
+val filter = ScopeFilter(inProjects(core, util), inConfigurations(Compile))
+
+lazy val root = rootProject
+  .settings(
+    sources := {
+      // each sources definition is of type Seq[File],
+      //   giving us a Seq[Seq[File]] that we then flatten to Seq[File]
+      val allSources: Seq[Seq[File]] = sources.all(filter).value
+      allSources.flatten
+    }
+  )
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="cached-task"><a class="header" href="#cached-task">Cached task</a></h1>
 <p>This page covers the cached task details. See <a href="reference/../concepts/caching.html">Caching</a> for a general explanation.</p>
 <h2 id="automatic-caching-1"><a class="header" href="#automatic-caching-1">Automatic caching</a></h2>
@@ -4249,7 +4715,7 @@ Global / remoteCacheHeaders += IO.read(BuildPaths.defaultGlobalBase / "buildbudd
 Global / remoteCacheHeaders += IO.read(BuildPaths.defaultGlobalBase / "nativelink_credential.txt").trim
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="artifact"><a class="header" href="#artifact">Artifact</a></h1>
-<h2 id="description-8"><a class="header" href="#description-8">Description</a></h2>
+<h2 id="description-9"><a class="header" href="#description-9">Description</a></h2>
 <p>An artifact is a single file ready for publishing a specific version of a subproject. This is a concept that originated in <a href="https://maven.apache.org/ref/3.9.11/maven-core/artifact-handlers.html">Apache Maven</a> and <a href="https://ant.apache.org/ivy/history/2.3.0/terminology.html#artifact">Ivy</a>.</p>
 <p>In the JVM ecosystem, common artifacts are Java archives, or JAR files.
 Compressed package formats are often preferred because they are easier to manage, download, and store.</p>
@@ -4864,7 +5330,7 @@ to transform the output of the parser.</p>
 <p>The parser is called recursively, until it is found the trivial case of no possible choices.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="command"><a class="header" href="#command">Command</a></h1>
 <p>This page covers commands in detail. See <a href="reference/../concepts/command-basics.html">Command basics</a> for a general explanation.</p>
-<h2 id="description-9"><a class="header" href="#description-9">Description</a></h2>
+<h2 id="description-10"><a class="header" href="#description-10">Description</a></h2>
 <p>A <em>command</em> is a system-level building block of sbt, often used to capture user interactions. At the command level, there is little support for subprojects and parallel processing since those are implemented in the <code>act</code> command.</p>
 <p>Plugin authors should try to solve their problem using settings, tasks, and input tasks first. Several notable exceptions are:</p>
 <ul>
@@ -5053,7 +5519,7 @@ end CommandExample
 See <a href="reference/../guide/plugin-basics.html">Plugin basics</a> for the general introduction of the plugin system.</p>
 </div>
 </div>
-<h2 id="description-10"><a class="header" href="#description-10">Description</a></h2>
+<h2 id="description-11"><a class="header" href="#description-11">Description</a></h2>
 <p>A <em>plugin</em> is a way to extend the build definition, often to add capabilities beyond the built-in settings and tasks. Some of the example usages includes building Docker containers, supporting to Scala.JS, and generate GitHub Actions YAML.</p>
 <p>A plugin defines a sequence of sbt settings
 that are automatically added to all projects or that are explicitly

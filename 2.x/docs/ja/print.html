@@ -1502,7 +1502,7 @@ an odd trick, but this fact becomes relevant [later][Organizing-Build].
 <li><code>IntegrationTest</code> コンフィギュレーションは廃止された in <a href="https://github.com/sbt/sbt/pull/8184">#8184</a></li>
 <li>sbt 0.13 スタイルのシェル構文は廃止された in <a href="https://github.com/sbt/sbt/pull/7700">#7700</a></li>
 </ul>
-<h2 id="新機能"><a class="header" href="#新機能">新機能</a></h2>
+<h2 id="機能"><a class="header" href="#機能">機能</a></h2>
 <ul>
 <li><strong>project matrix</strong>。sbt 1.x からプラグインで使用可能だった project matrix が本体に取り込まれ、並列クロスビルドができるようになった。</li>
 <li><strong>sbt クエリ</strong>。sbt 2.x は統一スラッシュ構文を拡張してサブプロジェクトのクエリを可能とする。詳細は下記参照。</li>
@@ -3037,7 +3037,7 @@ where `customTestListener` is of type `sbt.TestReportListener`.
 <p><code>inspect</code> コマンドはタスクとセッティングのグラフを調査する手段を提供する。例えば、別のタスクに影響を与えるためにどのセッティングを変更すべきか判断するのに使える。</p>
 <h3 id="値説明提供元"><a class="header" href="#値説明提供元">値、説明、提供元</a></h3>
 <p><code>inspect</code> が提供する最初の情報は、タスクの型またはセッティングの値と型である。</p>
-<p>例:</p>
+<p>例えば、</p>
 <pre><code class="language-bash">$ sbt inspect libraryDependencies
 [info] Setting: interface scala.collection.immutable.Seq =
   List(org.scala-lang:scala3-library:3.7.2,
@@ -3385,6 +3385,396 @@ Def.settings {
 <p><code>watchAntiEntropy: FiniteDuration</code> は、以前ビルドをトリガーした同じファイルがビルドを再トリガーするまでに経過すべき時間を制御する。ファイルが短時間に連続して変更されたときに発生する不要なビルドを防ぐためのものである。デフォルト値は 500ms である。</p>
 </li>
 </ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="タスク"><a class="header" href="#タスク">タスク</a></h1>
+<h2 id="説明-9"><a class="header" href="#説明-9">説明</a></h2>
+<p>タスクは sbt ビルドにおける作業の単位だ。タスクはコードを <code>compile</code> し、<code>test</code> を差分実行し、JAR ファイルを <code>package</code> するなど、ビルドに必要なことを何でも行う。</p>
+<p>タスクの興味深い点は、<code>Future[A]</code> や <code>IO[A]</code> と同様に並列プログラミングを可能にすることだ。<code>Future</code> や <code>IO</code> はしばしば <code>for</code> 内包表記で合成されるが、sbt はダイレクトスタイルの <code>build.sbt</code> DSL によってタスクの <em>structured concurrency</em>（構造化並行性）を提供する。</p>
+<pre><code class="language-scala">lazy val intTaskA = taskKey[Int]("")
+lazy val intTaskB = taskKey[Int]("")
+lazy val intTaskC = taskKey[Int]("")
+
+intTaskA := 1
+intTaskB := 2
+
+// intTaskA と intTaskB は並列で実行される
+intTaskC := {
+  val a = intTaskA.value
+  val b = intTaskB.value
+  a + b
+}
+</code></pre>
+<h3 id="definitializedtaska"><a class="header" href="#definitializedtaska">Def.Initialized[Task[A]]</a></h3>
+<p>内部的には、タスクキーを含むすべてのタスクは <code>Def.Initialized[Task[A]]</code> として型付けられている。</p>
+<ol>
+<li><code>Def.Initialized[A]</code>。これはセッティングと同じ型であり、ロード時にセッティング/タスクグラフを構築するために使われる。<code>A</code> の初期化済みの値を表すためにこう命名されている。</li>
+<li><code>sbt.Task[A]</code>。これは繰り返し実行可能な非同期計算を表すデータ型だ。sbt のタスクエンジンによって実行される部分だ。</li>
+</ol>
+<p>これらを入れ子にすることで、タスクは <code>A</code> の非同期計算を生成するセッティング/タスクグラフのノードだと解釈できる。</p>
+<h3 id="セッティングとタスク"><a class="header" href="#セッティングとタスク">セッティングとタスク</a></h3>
+<p>セッティングとタスクはどちらも値を生成するが、両者には大きな違いがある：</p>
+<ul>
+<li>セッティングはビルドのロード時に評価される。タスクは必要に応じて実行され、多くの場合ユーザーがシェルから呼び出したときに応答する。</li>
+</ul>
+<h3 id="機能-1"><a class="header" href="#機能-1">機能</a></h3>
+<p>タスクシステムにはいくつかの機能がある：</p>
+<ol>
+<li>セッティングシステムと統合することで、タスクをセッティングと同じくらい簡単に追加、削除、変更できる。</li>
+<li>タスクは値を生成する。他のタスクはタスク定義内でそのタスクに <code>.value</code> を呼び出すことで値にアクセスできる。</li>
+<li>タスクの値はその入力に基づいて自動的にキャッシュ化される。詳細は<a href="reference/cached-task.html">キャッシュ化タスク</a> を参照。</li>
+<li><a href="reference/input-task.html">インプットタスク</a>は<a href="reference/tab-completion-parser.html">パーサーコンビネーター</a> を使用して引数の構文を定義する。これにより<a href="reference/command.html">コマンド</a> と同様に柔軟な構文とタブ補完が可能になる。</li>
+<li>タスクグラフの構造を動的に変更できる。別のタスクの結果に基づいて、タスクを実行グラフに挿入できる。</li>
+<li><code>try/catch/finally</code> と同様に、タスクの失敗を処理する方法がある。</li>
+<li>各タスクは独自のロガーにアクセスできる。デフォルトでは、そのタスクのログを最初に画面に出力されるより詳細なレベルで保持する。</li>
+</ol>
+<p>これらの機能については、以下のセクションで詳しく説明する。</p>
+<h2 id="タスクの定義"><a class="header" href="#タスクの定義">タスクの定義</a></h2>
+<h3 id="hello-world-の例"><a class="header" href="#hello-world-の例">Hello world の例</a></h3>
+<div id="admonition-buildsbt" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-title">
+<div class="admonition-title">
+<div id="admonition-buildsbt-title">
+<p>build.sbt</p>
+</div>
+<a class="admonition-anchor-link" href="reference/task.html#admonition-buildsbt"></a>
+</div>
+<div>
+<pre><code class="language-scala">lazy val hello = taskKey[Unit]("prints 'hello world'")
+
+hello := println("hello world!")
+</code></pre>
+</div>
+</div>
+<p>コマンドラインから <code>sbt hello</code> を実行してタスクを呼び出す。<code>sbt tasks</code> を実行するとこのタスクが一覧に表示される。</p>
+<h3 id="キーを定義する"><a class="header" href="#キーを定義する">キーを定義する</a></h3>
+<p>新しいタスクを宣言するには、<code>TaskKey</code> 型の lazy val を定義する：</p>
+<pre><code class="language-scala">lazy val sampleTask = taskKey[Int]("A sample task.")
+</code></pre>
+<p><code>val</code> の名前は <code>build.sbt</code> やコマンドラインでタスクを参照するときに使われる。<code>taskKey</code> メソッドに渡す文字列はタスクの説明だ。<code>taskKey</code> に渡す型パラメーター（ここでは <code>Int</code>）はタスクが生成する値の型だ。</p>
+<p>例として他にいくつかのキーを定義する：</p>
+<div id="admonition-buildsbt-1" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-1-title">
+<div class="admonition-title">
+<div id="admonition-buildsbt-1-title">
+<p>build.sbt</p>
+</div>
+<a class="admonition-anchor-link" href="reference/task.html#admonition-buildsbt-1"></a>
+</div>
+<div>
+<pre><code class="language-scala">lazy val intTask = taskKey[Int]("An int task")
+lazy val stringTask = taskKey[String]("A string task")
+</code></pre>
+</div>
+</div>
+<p>これらの例はそのまま <code>build.sbt</code> の有効なエントリーだ。</p>
+<h3 id="タスクの実装"><a class="header" href="#タスクの実装">タスクの実装</a></h3>
+<p>キーを定義した後にタスクを実装する主な部分は 3 つある：</p>
+<ol>
+<li>タスクに必要なセッティングや他のタスクを決める。これらはタスクの入力となる。</li>
+<li>これらの入力を基にタスクを実装するコードを定義する。</li>
+<li>タスクが属するスコープを決める。</li>
+</ol>
+<p>これらの部分は、セッティングの各部分を組み合わせるのと同じように組み合わせる。</p>
+<h4 id="基本的なタスクの定義"><a class="header" href="#基本的なタスクの定義">基本的なタスクの定義</a></h4>
+<p>タスクは <code>:=</code> を使って定義する</p>
+<div id="admonition-buildsbt-2" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-2-title">
+<div class="admonition-title">
+<div id="admonition-buildsbt-2-title">
+<p>build.sbt</p>
+</div>
+<a class="admonition-anchor-link" href="reference/task.html#admonition-buildsbt-2"></a>
+</div>
+<div>
+<pre><code class="language-scala">lazy val intTask = taskKey[Int]("An int task")
+lazy val stringTask = taskKey[String]("A string task")
+
+intTask := 1 + 2
+
+stringTask := Def.uncached {
+  sys.props("user.name")
+}
+</code></pre>
+</div>
+</div>
+<h4 id="入力を持つタスク"><a class="header" href="#入力を持つタスク">入力を持つタスク</a></h4>
+<p>他のタスクやセッティングを入力として持つタスクも <code>:=</code> を使って定義する。入力の値は <code>value</code> メソッドで参照する。このメソッドは特殊な構文であり、<code>:=</code> の引数の中など、タスクを定義するときにのみ呼び出せる。以下は <code>intTask</code> が生成する値に 1 を加えて結果を返すタスクを定義する例だ。</p>
+<pre><code class="language-scala">sampleTask := intTask.value + 1
+</code></pre>
+<p>複数のセッティングも同様に扱う：</p>
+<pre><code class="language-scala">stringTask := {
+  val x = sampleTask.value
+  val i = intTask.value
+  s"sample: $x, int: $i"
+}
+</code></pre>
+<h4 id="タスクのスコープ"><a class="header" href="#タスクのスコープ">タスクのスコープ</a></h4>
+<p>セッティングと同様に、タスクも特定のスコープで定義できる。例えば、<code>Compile</code> スコープと <code>Test</code> スコープにはそれぞれ別の <code>compile</code> タスクがある。</p>
+<p>次の例では、<code>Test/sampleTask</code> は <code>Compile/intTask</code> の結果を使う：</p>
+<pre><code class="language-scala">Test / sampleTask := (Compile / intTask).value * 3
+</code></pre>
+<div id="admonition-演算子の優先順位について" class="admonition admonish-note" role="note" aria-labelledby="admonition-演算子の優先順位について-title">
+<div class="admonition-title">
+<div id="admonition-演算子の優先順位について-title">
+<p>演算子の優先順位について</p>
+</div>
+<a class="admonition-anchor-link" href="reference/task.html#admonition-演算子の優先順位について"></a>
+</div>
+<div>
+<p>中置メソッドの優先順位はメソッドの名前によって決まる。</p>
+<ol>
+<li>代入メソッドの優先順位は最も低い。これは <code>!=</code>、<code>&lt;=</code>、<code>&gt;=</code> および
+<code>=</code> で始まる名前を除き、名前が <code>=</code> で終わるメソッドだ。</li>
+<li>文字で始まるメソッドは次に高い優先順位を持つ。</li>
+<li>記号で始まり 1 に含まれないメソッドは最も高い優先順位を持つ。
+（このカテゴリーは先頭文字に応じてさらに細分化される。詳細は
+Scala 仕様を参照。）</li>
+</ol>
+<p>したがって、前の例は以下と等価だ：</p>
+<pre><code class="language-scala">(Test / sampleTask).:=((Compile / intTask).value * 3)
+</code></pre>
+</div>
+</div>
+<h3 id="実装の分離"><a class="header" href="#実装の分離">実装の分離</a></h3>
+<p>タスクの実装をバインディングから分離できる。例えば、基本的な分離定義は次のようになる：</p>
+<pre><code class="language-scala">// 独立したタスクの実装を新規定義する
+lazy val intTaskImpl: Initialize[Task[Int]] =
+   Def.cachedTask { sampleTask.value - 3 }
+
+// 実装を特定のキーにバインドする
+intTask := intTaskImpl.value
+</code></pre>
+<p><code>.value</code> はタスク定義内、たとえば上記の <code>Def.task</code> の中や <code>:=</code> の引数の中でのみ使える点に注意。</p>
+<h3 id="既存タスクの変更"><a class="header" href="#既存タスクの変更">既存タスクの変更</a></h3>
+<p>一般的には、以前のタスクを入力として宣言することでタスクを変更する。</p>
+<pre><code class="language-scala">// 初期定義
+intTask := 3
+
+// 前の定義を参照するオーバーライド定義
+intTask := intTask.value + 1
+</code></pre>
+<p>以前のタスクを入力として宣言しないことで、タスクを完全にオーバーライドできる。次の例の各定義は前の定義を完全にオーバーライドする。つまり、<code>intTask</code> を実行すると <code>#3</code> だけが出力される。</p>
+<pre><code class="language-scala">intTask := {
+  println("#1")
+  3
+}
+
+intTask := {
+  println("#2")
+  5
+}
+
+intTask :=  {
+  println("#3")
+  sampleTask.value - 3
+}
+</code></pre>
+<h2 id="エラー処理"><a class="header" href="#エラー処理">エラー処理</a></h2>
+<h3 id="タスク内のエラー"><a class="header" href="#タスク内のエラー">タスク内のエラー</a></h3>
+<p>タスク内でエラー状態を表現するには、例外をスローする。例えば：</p>
+<div id="admonition-buildsbt-3" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-3-title">
+<div class="admonition-title">
+<div id="admonition-buildsbt-3-title">
+<p>build.sbt</p>
+</div>
+<a class="admonition-anchor-link" href="reference/task.html#admonition-buildsbt-3"></a>
+</div>
+<div>
+<pre><code class="language-scala">lazy val intTask = taskKey[Int]("An int task")
+
+intTask := sys.error("failed")
+</code></pre>
+</div>
+</div>
+<p>sbt のタスクエンジンは sbt をクラッシュさせることなくエラーをキャッチして処理する：</p>
+<pre><code class="language-bash">sbt:aaa&gt; intTask
+[error] stack trace is suppressed; run last intTask for the full output
+[error] (intTask) boom
+[error] elapsed time: 0 s, cache 0%, 1 error
+</code></pre>
+<p>スタックトレースは <code>last intTask</code> を使って表示できる。</p>
+<h3 id="result"><a class="header" href="#result"><code>result</code></a></h3>
+<p><code>result</code> メソッドは元のタスクの完全な <code>Result[A1]</code> 値を返す新しいタスクを作る。<code>Result</code> は型 <code>A1</code> のタスク結果に対して <code>Either[Incomplete, A1]</code> と同じ構造を持つ。つまり、2 つのサブタイプがある：</p>
+<ul>
+<li><code>Result.Inc</code>：失敗時に <code>Incomplete</code> をラップする</li>
+<li><code>Result.Value</code>：成功時にタスクの結果をラップする。</li>
+</ul>
+<p>したがって、<code>result</code> によって作られたタスクは元のタスクが成功しても失敗しても実行される。</p>
+<div id="admonition-buildsbt-4" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-4-title">
+<div class="admonition-title">
+<div id="admonition-buildsbt-4-title">
+<p>build.sbt</p>
+</div>
+<a class="admonition-anchor-link" href="reference/task.html#admonition-buildsbt-4"></a>
+</div>
+<div>
+<pre><code class="language-scala">lazy val intTask = taskKey[Int]("An int task")
+
+intTask := sys.error("boom")
+
+intTask := Def.uncached {
+  intTask.result.value match
+    case Result.Inc(inc: Incomplete) =&gt;
+      println("Ignoring failure: " + inc)
+      3
+    case Result.Value(v) =&gt;
+      println("Using successful result: " + v)
+      v
+}
+</code></pre>
+</div>
+</div>
+<p>これは元の <code>intTask</code> 定義を書き換え、元のタスクが失敗した場合は例外を出力して定数 <code>3</code> を返し、成功した場合は値を出力して返すようにする。</p>
+<h3 id="failure"><a class="header" href="#failure"><code>failure</code></a></h3>
+<p><code>failure</code> メソッドは元のタスクが正常に完了しなかったときに <code>Incomplete</code> 値を返す新しいタスクを作る。元のタスクが成功した場合、新しいタスクは失敗する。</p>
+<div id="admonition-buildsbt-5" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-5-title">
+<div class="admonition-title">
+<div id="admonition-buildsbt-5-title">
+<p>build.sbt</p>
+</div>
+<a class="admonition-anchor-link" href="reference/task.html#admonition-buildsbt-5"></a>
+</div>
+<div>
+<pre><code class="language-scala">lazy val intTask = taskKey[Int]("An int task")
+
+intTask := sys.error("boom")
+
+intTask := Def.uncached {
+  println("Ignoring failure: " + intTask.failure.value)
+  3
+}
+</code></pre>
+</div>
+</div>
+<p>これは <code>intTask</code> を書き換え、元の例外を出力して定数 <code>3</code> を返すようにする。</p>
+<h2 id="タスクの応用機能"><a class="header" href="#タスクの応用機能">タスクの応用機能</a></h2>
+<h3 id="streamsタスクごとのログ記録"><a class="header" href="#streamsタスクごとのログ記録">Streams：タスクごとのログ記録</a></h3>
+<p>タスクごとのロガーは、Streams と呼ばれるタスク固有データのより一般的なシステムの一部だ。</p>
+<p>Streams を使うには、<code>streams</code> タスクの値を取得する。ロガーは <code>log</code> メソッドで取得できる：</p>
+<pre><code class="language-scala">foo := {
+  val s = streams.value
+  s.log.debug("Saying hi...")
+  s.log.info("Hello!")
+}
+</code></pre>
+<p>特定のタスクのスコープでログセッティングをスコープ化できる：</p>
+<pre><code class="language-scala">foo / logLevel := Level.Debug
+foo / traceLevel := 5
+</code></pre>
+<p>タスクの最後のログ出力を取得するには、<code>last</code> コマンドを使う：</p>
+<pre><code>$ last foo
+[debug] Saying hi...
+[info] Hello!
+</code></pre>
+<p>ログの保持レベルは <code>persistLogLevel</code> と <code>persistTraceLevel</code> セッティングで制御する。<code>last</code> コマンドはこれらのレベルに従ってログに記録された内容を表示する。これらのレベルはすでに記録されたログには影響しない。</p>
+<h3 id="条件付きタスク"><a class="header" href="#条件付きタスク">条件付きタスク</a></h3>
+<p>タスクがトップレベルで <code>if</code> 式で構成されている場合、条件付きタスクが自動的に作られる：</p>
+<pre><code class="language-scala">bar := {
+  if number.value &lt; 0 then negAction.value
+  else if number.value == 0 then zeroAction.value
+  else posAction.value
+}
+</code></pre>
+<p>通常の（アプリカティブな）タスク合成とは異なり、条件付きタスクは <code>if</code> 式として自然に期待されるように then 節と else 節の評価を遅延する。これは <code>Def.taskDyn { ... }</code> でも可能だが、ダイナミックタスクとは異なり、条件付きタスクは <code>inspect</code> コマンドで動作する。</p>
+<p><a name="dynamic"></a></p>
+<h3 id="deftaskdyn-による動的計算"><a class="header" href="#deftaskdyn-による動的計算"><code>Def.taskDyn</code> による動的計算</a></h3>
+<p>タスクの結果を使って次に評価するタスクを決定することが有用な場合がある。これは <code>Def.taskDyn</code> を使って行う。</p>
+<p><code>taskDyn</code> の結果はランタイムに依存関係を導入するため、ダイナミックタスクと呼ばれる。<code>taskDyn</code> メソッドは <code>Def.task</code> や <code>:=</code> と同じ構文をサポートするが、プレーンな値の代わりにタスクを返す点が異なる。</p>
+<p>例えば、</p>
+<div id="admonition-buildsbt-6" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-6-title">
+<div class="admonition-title">
+<div id="admonition-buildsbt-6-title">
+<p>build.sbt</p>
+</div>
+<a class="admonition-anchor-link" href="reference/task.html#admonition-buildsbt-6"></a>
+</div>
+<div>
+<pre><code class="language-scala">lazy val stringTask = taskKey[String]("A string task")
+lazy val intTask = taskKey[Int]("An int task")
+lazy val foo = taskKey[Int]("foo")
+
+val dynamic = Def.taskDyn {
+  // `stringTask` の値に基づいて評価するものを決める
+  if stringTask.value == "dev" then
+    // dev モードのタスクを作る：stringTask の値が "dev" の場合にのみ評価される
+    Def.task {
+      3
+    }
+  else
+    // 本番タスクを作る：stringTask の値が "dev" でない場合にのみ評価される
+    Def.task {
+      intTask.value + 5
+    }
+}
+
+stringTask := "test"
+intTask := 1
+
+foo := Def.uncached {
+  val num = dynamic.value
+  println(s"number selected was $num")
+  num
+}
+</code></pre>
+</div>
+</div>
+<p><code>foo</code> の唯一の静的な依存関係は <code>stringTask</code> だ。<code>intTask</code> への依存関係は非 dev モードでのみ導入される。</p>
+<div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
+<div class="admonition-title">
+<div id="admonition-warning-title">
+<p>Warning</p>
+</div>
+<a class="admonition-anchor-link" href="reference/task.html#admonition-warning"></a>
+</div>
+<div>
+<p>ダイナミックタスクは自分自身を参照できない。そうすると循環依存が発生する。
+上の例では、taskDyn に渡されたコードが <code>foo</code> を参照すると循環依存になる。</p>
+</div>
+</div>
+<h3 id="defsequential-の使用"><a class="header" href="#defsequential-の使用"><code>Def.sequential</code> の使用</a></h3>
+<p><code>Def.sequential</code> はセミシーケンシャルなタスクを定義するヘルパー関数だ。ダイナミックタスクに似ているが、より簡単に定義できる。シーケンシャルタスクを説明するために、<code>Compile / compile</code> を実行した後に <code>Compile / scalastyle</code> タスクを実行する <code>compilecheck</code> というカスタムタスクを作ろう。</p>
+<pre><code class="language-scala">lazy val compilecheck = taskKey[Unit]("compile and then scalastyle")
+
+lazy val root = (project in file("."))
+  .settings(
+    Compile / compilecheck := Def.sequential(
+      Compile / compile,
+      (Compile / scalastyle).toTask("")
+    ).value
+  )
+</code></pre>
+<p>完全にシーケンシャルな実行には、代わりに <a href="reference/command.html">コマンド</a> を使う。</p>
+<p><a name="multiple-scopes"></a></p>
+<h3 id="複数のスコープから値を取得する"><a class="header" href="#複数のスコープから値を取得する">複数のスコープから値を取得する</a></h3>
+<p>複数のスコープから値を取得する式の一般的な形式は次のとおりだ：</p>
+<pre><code class="language-scala">&lt;setting-or-task&gt;.all(&lt;scope-filter&gt;).value
+</code></pre>
+<div id="admonition-warning-1" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-1-title">
+<div class="admonition-title">
+<div id="admonition-warning-1-title">
+<p>Warning</p>
+</div>
+<a class="admonition-anchor-link" href="reference/task.html#admonition-warning-1"></a>
+</div>
+<div>
+<p><code>ScopeFilter</code> は必ず <code>val</code> として代入すること！これは <code>.all</code> マクロの
+実装上の要件だ。</p>
+</div>
+</div>
+<p><code>all</code> メソッドはタスクとセッティングに暗黙的に追加される。<code>Scopes</code> を選択する <code>ScopeFilter</code> を受け取る。結果の型は <code>Seq[A]</code> で、<code>A</code> はキーの基底型だ。</p>
+<p>よくあるシナリオは、scaladoc に渡すなど、すべてのサブプロジェクトのソースを一括処理するために取得することだ。値を取得したいタスクは <code>sources</code> であり、すべての非ルートプロジェクトの <code>Compile</code> コンフィギュレーションから値を取得する。これは次のようになる：</p>
+<pre><code class="language-scala">lazy val core = project
+
+lazy val util = project
+
+val filter = ScopeFilter(inProjects(core, util), inConfigurations(Compile))
+
+lazy val root = rootProject
+  .settings(
+    sources := {
+      // sources の各定義は Seq[File] 型であり、
+      //   Seq[Seq[File]] が得られ、それを Seq[File] にフラット化する
+      val allSources: Seq[Seq[File]] = sources.all(filter).value
+      allSources.flatten
+    }
+  )
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="キャッシュ化タスク"><a class="header" href="#キャッシュ化タスク">キャッシュ化タスク</a></h1>
 <p>このページではキャッシュ化タスクの詳細を説明する。概要の解説は<a href="reference/../concepts/caching.html">キャッシュ化</a>を参照。</p>
 <h2 id="自動キャッシュ-1"><a class="header" href="#自動キャッシュ-1">自動キャッシュ</a></h2>
@@ -3785,7 +4175,7 @@ Global / remoteCacheHeaders += IO.read(BuildPaths.defaultGlobalBase / "buildbudd
 Global / remoteCacheHeaders += IO.read(BuildPaths.defaultGlobalBase / "nativelink_credential.txt").trim
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="アーティファクト"><a class="header" href="#アーティファクト">アーティファクト</a></h1>
-<h2 id="説明-9"><a class="header" href="#説明-9">説明</a></h2>
+<h2 id="説明-10"><a class="header" href="#説明-10">説明</a></h2>
 <p>サブプロジェクトの特定バージョンを公開するためのファイルは、特別に「アーティファクト」と呼ばれる。この概念は <a href="https://maven.apache.org/ref/3.9.11/maven-core/artifact-handlers.html">Apache Maven</a> と <a href="https://ant.apache.org/ivy/history/2.3.0/terminology.html#artifact">Ivy</a> に由来する。</p>
 <p>JVM エコシステムでは、一般的なアーティファクトは Java アーカイブ（JAR ファイル）である。管理・ダウンロード・保存が容易なため、圧縮パッケージ形式が好まれる。</p>
 <p>例として、ライブラリのアーティファクト一覧を <code>ivy.xml</code> ファイルで示す:</p>
@@ -4248,7 +4638,7 @@ def selectSome(items: Seq[String]): Parser[Seq[String]] = {
 <p>パーサーは、選択肢がなくなる自明なケースに達するまで再帰的に呼ばれる。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="コマンド"><a class="header" href="#コマンド">コマンド</a></h1>
 <p>このページではコマンドの詳細を解説する。概要は<a href="reference/../concepts/command-basics.html">コマンドの基本</a>を参照。</p>
-<h2 id="説明-10"><a class="header" href="#説明-10">説明</a></h2>
+<h2 id="説明-11"><a class="header" href="#説明-11">説明</a></h2>
 <p><strong>コマンド</strong>は、システムレベルの構成要素であり、ユーザとのやり取りを捕捉するのによく使われる。コマンドレベルではサブプロジェクトや並列処理のサポートはほとんどなく、それらは <code>act</code> コマンドで実装されている。</p>
 <p>プラグイン作者は、まずセッティング、タスク、インプットタスクで問題を解決することを試みるべきである。主な例外は次の通りである:</p>
 <ul>
@@ -4416,7 +4806,7 @@ end CommandExample
 プラグインシステムの概要は<a href="reference/../guide/plugin-basics.html">プラグインの基本</a>を参照。</p>
 </div>
 </div>
-<h2 id="説明-11"><a class="header" href="#説明-11">説明</a></h2>
+<h2 id="説明-12"><a class="header" href="#説明-12">説明</a></h2>
 <p><strong>プラグイン</strong>はビルド定義を拡張する手段であり、組み込みのセッティングやタスクではできない機能を追加するのに使われる。例としては Docker コンテナの構築、Scala.JS のサポート、GitHub Actions の YAML 生成などがある。</p>
 <p>プラグインは sbt のセッティングの列を定義し、すべてのプロジェクトに自動的に追加するか、選択したプロジェクトに明示的に宣言する。プラグインは新しいコマンドも定義できる。sbt 1.x および 2.x のプラグインは <code>sbt.AutoPlugin</code> トレイトを継承し、依存プラグイン間のセッティングの順序を自動化する。</p>
 <h2 id="プラグインの作成"><a class="header" href="#プラグインの作成">プラグインの作成</a></h2>
