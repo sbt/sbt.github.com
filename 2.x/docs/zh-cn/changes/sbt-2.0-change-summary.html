@@ -215,7 +215,7 @@
 <h2 id="涉及兼容性的变更"><a class="header" href="#涉及兼容性的变更">涉及兼容性的变更</a></h2>
 <p>另请参阅 <a href="./migrating-from-sbt-1.x.html">从 sbt 1.x 迁移</a>。</p>
 <ul>
-<li><strong>元构建中的 Scala 3</strong>。sbt 2.x 的 build.sbt DSL 用于构建定义和插件，基于 Scala 3.x（当前为 <strong>3.8.4</strong>）。（sbt 1.x 和 2.x 均能构建 Scala 2.x 和 3.x）由 <a href="https://github.com/eed3si9n">@eed3si9n</a>、<a href="https://github.com/adpi2">@adpi2</a> 等贡献。</li>
+<li><strong>元构建中的 Scala 3</strong>。sbt 2.x 的 build.sbt DSL 用于构建定义和插件，基于 Scala 3.x。（sbt 1.x 和 2.x 均能构建 Scala 2.x 和 3.x）由 <a href="https://github.com/eed3si9n">@eed3si9n</a>、<a href="https://github.com/adpi2">@adpi2</a> 等贡献。</li>
 <li><strong>通用设置</strong>。裸设置会添加到所有子项目，而不仅仅是根子项目，从而取代 <code>ThisBuild</code> 所扮演的角色。</li>
 <li><strong>增量测试</strong>。<code>test</code> 任务已改为可缓存测试结果的增量测试。使用 <code>testFull</code> 进行完整测试，由 <a href="https://github.com/eed3si9n">@eed3si9n</a> 在 <a href="https://github.com/sbt/sbt/pull/7686">#7686</a> 中贡献</li>
 <li><strong>缓存任务</strong>。默认情况下所有任务都会被缓存。详见 <a href="../concepts/caching.html">Caching</a>。</li>
@@ -231,6 +231,7 @@
 <li>sbt 2.x 在 <code>build.sbt</code> 变更时默认自动重新加载，由 <a href="https://github.com/eed3si9n">@eed3si9n</a> 在 <a href="https://github.com/sbt/sbt/pull/8211">#8211</a> 中贡献</li>
 <li>sbt 2.x disables the delegation of scoped tasks in the sbt shell by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8539">#8539</a></li>
 <li>sbt 2.x enforces eviction error in <code>Test</code> configuration by <a href="https://github.com/calm329">@calm329</a> and <a href="https://github.com/zainab-ali">@zainab-ali</a> in <a href="https://github.com/sbt/sbt/pull/8451">#8451</a> + <a href="https://github.com/sbt/sbt/pull/9102">#9102</a></li>
+<li>在 sbt 2.x 中，全局基础目录遵循目录标准。Windows 上的默认值为 <code>%LOCALAPPDATA%/sbt/2</code>，否则为 <code>$XDG_CONFIG_HOME/sbt/2</code> 或 <code>$HOME/.config/sbt/2</code>。详情请参阅 <a href="../reference/sbt.html#global-base-directory">sbt 参考</a>。</li>
 </ul>
 <h3 id="已移除的弃用项"><a class="header" href="#已移除的弃用项">已移除的弃用项</a></h3>
 <ul>
@@ -329,7 +330,7 @@ task1 := {
 <p>Adrien Piquerez 在 Scala Center 期间贡献了一系列性能改进。</p>
 <ul>
 <li>perf：减少长生命周期实例数量，相对于 2.0.0-M2 启动速度提升 20%，由 <a href="https://github.com/adpi2">@adpi2</a> 在 <a href="https://github.com/sbt/sbt/pull/7866">#7866</a> 中贡献</li>
-<li>perf：减少 <code>Setting</code> 和 <code>Initialize</code> 的创建，由 <a href="https://github.com/adpi2">@adpi2</a> 在 <a href="https://github.com/sbt/sbt/pull/7880">#7880</a> 中贡献</li>
+<li>perf: Reduces creation of <code>Setting</code> and <code>Initialize</code> by <a href="https://github.com/adpi2">@adpi2</a> in <a href="https://github.com/sbt/sbt/pull/7880">#7880</a></li>
 <li>perf：重构 <code>Settings</code> 并优化聚合键的索引，由 <a href="https://github.com/adpi2">@adpi2</a> 在 <a href="https://github.com/sbt/sbt/pull/7879">#7879</a> 中贡献</li>
 <li>perf：移除 <code>Info</code> 和 <code>BasicAttributeMap</code> 的实例，由 <a href="https://github.com/adpi2">@adpi2</a> 在 <a href="https://github.com/sbt/sbt/pull/7882">#7882</a> 中贡献</li>
 </ul>
