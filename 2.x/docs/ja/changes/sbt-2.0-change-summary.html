@@ -228,10 +228,13 @@
 <li><code>useCoursier</code> セッティングを廃止して、Coursier をオプトアウトできないようにした by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7712">#7712</a></li>
 <li><code>Key.Classpath</code> 型は、<code>Seq[Attributed[File]]</code> から<code>Seq[Attributed[xsbti.HashedVirtualFileRef]]</code> 型のへのエイリアスへと変更された。同様に、以前 <code>File</code> を返していたタスクキーのいくつかは<code>HashedVirtualFileRef</code> を返すように変更された。<a href="../concepts/caching.html#caching-files">ファイルのキャッシュ化</a>も参照。</li>
 <li>sbt 2.x では、<code>target</code> のデフォルトが <code>&lt;subproject&gt;/target/</code> から <code>target/out/jvm/scala-3.8.4/&lt;subproject&gt;/</code> へと変更された。</li>
+<li><code>exportJars</code> のデフォルトが <code>true</code> となり、コンパイルやテスト時に JAR ファイルがクラスパスに追加される。</li>
 <li>sbt 2.x は <code>build.sbt</code> に変更があると、デフォルトで自動的リロードされるようになった <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8211">#8211</a></li>
 <li>sbt 2.x は、sbt シェル内でのスコープ付きタスクの委譲を禁止する <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8539">#8539</a></li>
 <li>sbt 2.x は、エヴィクション・エラー規制を <code>Test</code> コンフィギュレーションでも施行する by <a href="https://github.com/calm329">@calm329</a> and <a href="https://github.com/zainab-ali">@zainab-ali</a> in <a href="https://github.com/sbt/sbt/pull/8451">#8451</a> + <a href="https://github.com/sbt/sbt/pull/9102">#9102</a></li>
 <li>sbt 2.x において、グローバルベースディレクトリはディレクトリ標準に従う。Windows でのデフォルト値は <code>%LOCALAPPDATA%/sbt/2</code> だ。その他の場合は <code>$XDG_CONFIG_HOME/sbt/2</code> もしくは <code>$HOME/.config/sbt/2</code> だ。詳細は <a href="../reference/sbt.html#%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%90%E3%83%AB%E3%83%99%E3%83%BC%E3%82%B9%E3%83%87%E3%82%A3%E3%83%AC%E3%82%AF%E3%83%88%E3%83%AA">sbt リファレンス</a> を参照。</li>
+<li>sbt 2.0.4 より、フォーク・ランはサブプロジェクトのベースディレクトリではなく、カレントディレクトリで実行される。</li>
+<li>sbt 2.0.5 より、インプロセスのアドホックなテスト ClassLoader をクローズするため、<code>closeClassLoaders</code> セッティングのデフォルトが <code>true</code> になった in <a href="https://github.com/sbt/sbt/pull/9538">#9538</a></li>
 </ul>
 <h3 id="勧告どおり廃止された機能"><a class="header" href="#勧告どおり廃止された機能">勧告どおり廃止された機能</a></h3>
 <ul>
@@ -330,14 +333,14 @@ task1 := {
 <p>Adrien Piquerez さんが Scala Center に在籍していたときに、性能改善に関連するコントリをいくつか行った。</p>
 <ul>
 <li>perf: 長生きするオブジェクトの数を削減して、2.0.0-M2 比較で起動を 20% 高速化した by <a href="https://github.com/adpi2">@adpi2</a> in <a href="https://github.com/sbt/sbt/pull/7866">#7866</a></li>
-<li>perf: Reduces creation of <code>Setting</code> and <code>Initialize</code> by <a href="https://github.com/adpi2">@adpi2</a> in <a href="https://github.com/sbt/sbt/pull/7880">#7880</a></li>
+<li>perf: <code>Setting</code> と <code>Initialize</code> が作成される数を削減した by <a href="https://github.com/adpi2">@adpi2</a> in <a href="https://github.com/sbt/sbt/pull/7880">#7880</a></li>
 <li>perf: <code>Settings</code> をリファクタリングして、集約キーのインデックス化を最適化した <a href="https://github.com/adpi2">@adpi2</a> in <a href="https://github.com/sbt/sbt/pull/7879">#7879</a></li>
 <li>perf: <code>Info</code> と <code>BasicAttributeMap</code> のインスタンスを削除した by <a href="https://github.com/adpi2">@adpi2</a> in <a href="https://github.com/sbt/sbt/pull/7882">#7882</a></li>
 </ul>
 <h2 id="過去の変更点"><a class="header" href="#過去の変更点">過去の変更点</a></h2>
 <p>以下も参照:</p>
 <ul>
-<li><a href="https://www.scala-sbt.org/1.x/docs/sbt-1.0-Release-Notes.html">sbt 1.0 changes</a></li>
+<li><a href="https://www.scala-sbt.org/1.x/docs/sbt-1.0-Release-Notes.html">sbt 1.0 の変更点</a></li>
 </ul>
 
                     </main>

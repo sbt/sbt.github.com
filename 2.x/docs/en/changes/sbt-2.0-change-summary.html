@@ -228,10 +228,13 @@
 <li>Dropped <code>useCoursier</code> setting so Coursier cannot be opted out, by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7712">#7712</a></li>
 <li><code>Key.Classpath</code> is changed to be an alias of the <code>Seq[Attributed[xsbti.HashedVirtualFileRef]]</code> type, instead of <code>Seq[Attributed[File]]</code>. Similarly, some task keys that used to return <code>File</code> have changed to return <code>HashedVirtualFileRef</code> instead. See <a href="../concepts/caching.html#caching-files">Caching Files</a>.</li>
 <li>In sbt 2.x <code>target</code> defaults to <code>target/out/jvm/scala-3.8.4/&lt;subproject&gt;/</code>, as opposed to <code>&lt;subproject&gt;/target/</code>.</li>
+<li><code>exportJars</code> defaults to <code>true</code>, which puts JAR files on the classpath during compilation or testing.</li>
 <li>sbt 2.x auto reloads by default on <code>build.sbt</code> changes, by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8211">#8211</a></li>
 <li>sbt 2.x disables the delegation of scoped tasks in the sbt shell by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8539">#8539</a></li>
 <li>sbt 2.x enforces eviction error in <code>Test</code> configuration by <a href="https://github.com/calm329">@calm329</a> and <a href="https://github.com/zainab-ali">@zainab-ali</a> in <a href="https://github.com/sbt/sbt/pull/8451">#8451</a> + <a href="https://github.com/sbt/sbt/pull/9102">#9102</a></li>
 <li>In sbt 2.x, the global base directory follows directory standard. The default value on Windows is <code>%LOCALAPPDATA%/sbt/2</code>. Otherwise, it is <code>$XDG_CONFIG_HOME/sbt/2</code> or <code>$HOME/.config/sbt/2</code>. See <a href="../reference/sbt.html#global-base-directory">sbt reference</a> for details.</li>
+<li>Starting sbt 2.0.4, forked run runs in current directory, instead of the base directory of the subproject.</li>
+<li>Starting sbt 2.0.5, <code>closeClassLoaders</code> setting defaults to <code>true</code> to close the in-process, adhoc test ClassLoaders in <a href="https://github.com/sbt/sbt/pull/9538">#9538</a></li>
 </ul>
 <h3 id="dropped-dreprecations"><a class="header" href="#dropped-dreprecations">Dropped dreprecations</a></h3>
 <ul>

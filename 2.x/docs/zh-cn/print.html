@@ -1494,11 +1494,14 @@ addition to plain <code>target/</code>).</p>
 <li>sbt 2.x 添加了 <code>platform</code> 设置，使 <code>ModuleID</code> 的 <code>%%</code> 运算符可以在 JVM、JS 和 Native 上进行交叉构建，而无需使用插件中为规避此问题而创建的 <code>%%%</code> 运算符，由 <a href="https://github.com/eed3si9n">@eed3si9n</a> 在 <a href="https://github.com/sbt/sbt/pull/6746">#6746</a> 中贡献</li>
 <li>移除了 <code>useCoursier</code> 设置，因此无法选择不使用 Coursier，由 <a href="https://github.com/eed3si9n">@eed3si9n</a> 在 <a href="https://github.com/sbt/sbt/pull/7712">#7712</a> 中贡献</li>
 <li><code>Key.Classpath</code> 已改为 <code>Seq[Attributed[xsbti.HashedVirtualFileRef]]</code> 类型的别名，而非 <code>Seq[Attributed[File]]</code>。同样，一些曾返回 <code>File</code> 的任务键已改为返回 <code>HashedVirtualFileRef</code>。详见 <a href="changes/../concepts/caching.html#caching-files">Caching Files</a>。</li>
-<li>In sbt 2.x <code>target</code> defaults to <code>target/out/jvm/scala-3.8.4/&lt;subproject&gt;/</code>, as opposed to <code>&lt;subproject&gt;/target/</code>.</li>
+<li>在 sbt 2.x 中，<code>target</code> 默认为 <code>target/out/jvm/scala-3.8.4/&lt;subproject&gt;/</code>，而非 <code>&lt;subproject&gt;/target/</code>。</li>
+<li><code>exportJars</code> 默认为 <code>true</code>，在编译或测试时将 JAR 文件添加到类路径中。</li>
 <li>sbt 2.x 在 <code>build.sbt</code> 变更时默认自动重新加载，由 <a href="https://github.com/eed3si9n">@eed3si9n</a> 在 <a href="https://github.com/sbt/sbt/pull/8211">#8211</a> 中贡献</li>
-<li>sbt 2.x disables the delegation of scoped tasks in the sbt shell by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8539">#8539</a></li>
-<li>sbt 2.x enforces eviction error in <code>Test</code> configuration by <a href="https://github.com/calm329">@calm329</a> and <a href="https://github.com/zainab-ali">@zainab-ali</a> in <a href="https://github.com/sbt/sbt/pull/8451">#8451</a> + <a href="https://github.com/sbt/sbt/pull/9102">#9102</a></li>
+<li>sbt 2.x 在 sbt shell 中禁用了作用域任务的委派，由 <a href="https://github.com/eed3si9n">@eed3si9n</a> 在 <a href="https://github.com/sbt/sbt/pull/8539">#8539</a> 中贡献</li>
+<li>sbt 2.x 在 <code>Test</code> 配置中强制执行驱逐错误，由 <a href="https://github.com/calm329">@calm329</a> 和 <a href="https://github.com/zainab-ali">@zainab-ali</a> 在 <a href="https://github.com/sbt/sbt/pull/8451">#8451</a> + <a href="https://github.com/sbt/sbt/pull/9102">#9102</a> 中贡献</li>
 <li>在 sbt 2.x 中，全局基础目录遵循目录标准。Windows 上的默认值为 <code>%LOCALAPPDATA%/sbt/2</code>，否则为 <code>$XDG_CONFIG_HOME/sbt/2</code> 或 <code>$HOME/.config/sbt/2</code>。详情请参阅 <a href="changes/../reference/sbt.html#global-base-directory">sbt 参考</a>。</li>
+<li>自 sbt 2.0.4 起，fork 运行在当前目录中执行，而非子项目的基础目录。</li>
+<li>自 sbt 2.0.5 起，<code>closeClassLoaders</code> 设置默认为 <code>true</code>，用于关闭进程内的临时测试 ClassLoader，见 <a href="https://github.com/sbt/sbt/pull/9538">#9538</a></li>
 </ul>
 <h3 id="已移除的弃用项"><a class="header" href="#已移除的弃用项">已移除的弃用项</a></h3>
 <ul>
@@ -1511,9 +1514,9 @@ addition to plain <code>target/</code>).</p>
 <li><strong>sbt query</strong>。sbt 2.x 扩展了统一斜杠语法以支持子项目查询。详见下文。</li>
 <li><strong>本地/远程缓存系统</strong>。详见下文</li>
 <li><strong>客户端运行</strong>。详见下文。</li>
-<li><strong>Client-side console</strong>. Details below.</li>
-<li><strong>rootProject and autoAggregate</strong>. Details below</li>
-<li><strong>Maven BOM (Bill of Materials) usage</strong>. Details below</li>
+<li><strong>客户端控制台</strong>。详见下文。</li>
+<li><strong>rootProject 和 autoAggregate</strong>。详见下文</li>
+<li><strong>Maven BOM（材料清单）的使用</strong>。详见下文</li>
 </ul>
 <h3 id="通用设置-1"><a class="header" href="#通用设置-1">通用设置</a></h3>
 <p>在 sbt 2.x 中，<code>build.sbt</code> 中的裸设置被解释为通用设置，并注入到所有子项目中。这意味着我们现在可以在不使用 <code>ThisBuild</code> 作用域的情况下设置 <code>scalaVersion</code>：</p>
@@ -1567,37 +1570,37 @@ task1 := {
 </code></pre>
 <p>详见 <a href="changes/../concepts/caching.html">Caching</a>。由 <a href="https://github.com/eed3si9n">@eed3si9n</a> 在 <a href="https://github.com/sbt/sbt/pull/7464">#7464</a> / <a href="https://github.com/sbt/sbt/pull/7525">#7525</a> 中贡献</p>
 <h3 id="客户端运行"><a class="header" href="#客户端运行">客户端运行</a></h3>
-<p>In sbt 2.0, sbt server sends the <code>run</code> task back to sbtn, which will fork a fresh JVM. All you have to do is:</p>
+<p>在 sbt 2.0 中，sbt server 将 <code>run</code> 任务发回 sbtn，后者将 fork 一个新的 JVM。您只需执行：</p>
 <pre><code class="language-bash">sbt run
 </code></pre>
 <p>这避免了阻塞 sbt server，您可以同时运行多个任务。由 <a href="https://github.com/eed3si9n">@eed3si9n</a> 在 <a href="https://github.com/sbt/sbt/pull/8060">#8060</a> 中贡献。另请参阅 <a href="changes/../reference/sbt-run.html">run</a> 文档。</p>
-<h3 id="client-side-console"><a class="header" href="#client-side-console">Client-side console</a></h3>
-<p>Similar to the client-side run, sbt server sends <code>console</code> (Scala REPL) back to the sbtn, which forks a fresh JVM to run the REPL. All you have to do is:</p>
+<h3 id="客户端控制台"><a class="header" href="#客户端控制台">客户端控制台</a></h3>
+<p>与客户端运行类似，sbt server 将 <code>console</code>（Scala REPL）发回 sbtn，后者 fork 一个新的 JVM 来运行 REPL。您只需执行：</p>
 <pre><code class="language-bash">sbt console
 </code></pre>
-<p>This avoids blocking the sbt server. This was contributed by <a href="https://github.com/eed3si9n">@eed3si9n</a> and <a href="https://github.com/calm329">@calm329</a> in <a href="https://github.com/sbt/sbt/pull/8018">#8018</a>, <a href="https://github.com/sbt/sbt/pull/8604">#8604</a>, <a href="https://github.com/sbt/sbt/pull/8677">#8677</a>, <a href="https://github.com/sbt/sbt/pull/8705">#8705</a>, <a href="https://github.com/sbt/sbt/pull/8722">#8722</a>.</p>
-<h3 id="rootproject-and-autoaggregate"><a class="header" href="#rootproject-and-autoaggregate">rootProject and autoAggregate</a></h3>
-<p>sbt 2.0 adds <code>rootProject</code> macro:</p>
+<p>这避免了阻塞 sbt server。由 <a href="https://github.com/eed3si9n">@eed3si9n</a> 和 <a href="https://github.com/calm329">@calm329</a> 在 <a href="https://github.com/sbt/sbt/pull/8018">#8018</a>、<a href="https://github.com/sbt/sbt/pull/8604">#8604</a>、<a href="https://github.com/sbt/sbt/pull/8677">#8677</a>、<a href="https://github.com/sbt/sbt/pull/8705">#8705</a>、<a href="https://github.com/sbt/sbt/pull/8722">#8722</a> 中贡献。</p>
+<h3 id="rootproject-和-autoaggregate"><a class="header" href="#rootproject-和-autoaggregate">rootProject 和 autoAggregate</a></h3>
+<p>sbt 2.0 添加了 <code>rootProject</code> 宏：</p>
 <pre><code class="language-scala">lazy val root = rootProject
 </code></pre>
-<p>This is a shortcut for <code>(project in file("."))</code>, which tends to be a boilerplate in <code>build.sbt</code>.</p>
+<p>这是 <code>(project in file("."))</code> 的快捷方式，在 <code>build.sbt</code> 中往往是样板代码。</p>
 <pre><code class="language-scala">lazy val root = rootProject
   .autoAggregate
 </code></pre>
-<p>sbt 2.0 also adds <code>autoAggregate</code> method, which at the loading time expands to local subprojects.</p>
+<p>sbt 2.0 还添加了 <code>autoAggregate</code> 方法，在加载时扩展为本地子项目。</p>
 <h3 id="maven-bom物料清单使用"><a class="header" href="#maven-bom物料清单使用">Maven BOM（物料清单）使用</a></h3>
-<p>sbt 2.0 adds Maven BOM (Bill of Materials) usage support. Subprojects can depend on published BOM artifacts using <code>.pomOnly()</code>:</p>
+<p>sbt 2.0 添加了 Maven BOM（材料清单）的使用支持。子项目可以使用 <code>.pomOnly()</code> 依赖已发布的 BOM 工件：</p>
 <pre><code class="language-scala">libraryDependencies += ("com.fasterxml.jackson" % "jackson-bom" % "2.21.0").pomOnly()
 </code></pre>
-<p>These bill of materials are forwarded to Coursier via via Resolve.addBom(), which should introduce version constraints for specific libraries (such as Jackson). You can use <code>"*"</code> to declare versionless dependency:</p>
+<p>这些材料清单通过 Resolve.addBom() 转发给 Coursier，为特定库（如 Jackson）引入版本约束。您可以使用 <code>"*"</code> 声明无版本依赖：</p>
 <pre><code class="language-scala">libraryDependencies += "com.fasterxml.jackson.core" % "jackson-core" % "*"
 </code></pre>
-<p>This will let Coursier automatically fill in the version based on the bill of material constraints (in this case <code>"2.21.0"</code>). Contributed by <a href="https://github.com/bitloi">@bitloi</a> in <a href="https://github.com/sbt/sbt/pull/8675">#8675</a>.</p>
+<p>这将让 Coursier 根据材料清单约束自动填入版本（此例中为 <code>"2.21.0"</code>）。由 <a href="https://github.com/bitloi">@bitloi</a> 在 <a href="https://github.com/sbt/sbt/pull/8675">#8675</a> 中贡献。</p>
 <h3 id="性能改进"><a class="header" href="#性能改进">性能改进</a></h3>
 <p>Adrien Piquerez 在 Scala Center 期间贡献了一系列性能改进。</p>
 <ul>
 <li>perf：减少长生命周期实例数量，相对于 2.0.0-M2 启动速度提升 20%，由 <a href="https://github.com/adpi2">@adpi2</a> 在 <a href="https://github.com/sbt/sbt/pull/7866">#7866</a> 中贡献</li>
-<li>perf: Reduces creation of <code>Setting</code> and <code>Initialize</code> by <a href="https://github.com/adpi2">@adpi2</a> in <a href="https://github.com/sbt/sbt/pull/7880">#7880</a></li>
+<li>perf：减少 <code>Setting</code> 和 <code>Initialize</code> 的创建，由 <a href="https://github.com/adpi2">@adpi2</a> 在 <a href="https://github.com/sbt/sbt/pull/7880">#7880</a> 中贡献</li>
 <li>perf：重构 <code>Settings</code> 并优化聚合键的索引，由 <a href="https://github.com/adpi2">@adpi2</a> 在 <a href="https://github.com/sbt/sbt/pull/7879">#7879</a> 中贡献</li>
 <li>perf：移除 <code>Info</code> 和 <code>BasicAttributeMap</code> 的实例，由 <a href="https://github.com/adpi2">@adpi2</a> 在 <a href="https://github.com/sbt/sbt/pull/7882">#7882</a> 中贡献</li>
 </ul>
@@ -1663,7 +1666,13 @@ LocalRootProject / publish / skip := true
 <h3 id="迁移-thisbuild"><a class="header" href="#迁移-thisbuild">迁移 ThisBuild</a></h3>
 <p>在 sbt 2.x 中，裸设置不应再限定到 <code>ThisBuild</code>。新的 <em>common settings</em>（通用设置）相比 <code>ThisBuild</code> 的一个优势是它采用更可预测的委托行为。这些设置插入在插件设置与 <code>settings(...)</code> 中定义的设置之间，这意味着可以用于定义诸如 <code>Compile / scalacOptions</code> 之类的设置，而 <code>ThisBuild</code> 无法做到这一点。</p>
 <h2 id="exportjars-的变更"><a class="header" href="#exportjars-的变更"><code>exportJars</code> 的变更</a></h2>
-<p><code>exportJars</code> 默认为 <code>true</code>，之前为 <code>false</code>。这可能会破坏 <code>getResource("/")</code> 和 <code>resource.toURI</code>。如果您的构建中此逻辑被破坏并产生 <code>NullPointerException</code> 和 <code>FileSystemNotFoundException</code>，请设置 <code>exportJars := false</code>。如需保留旧行为，请在构建中设置 <code>exportJars := false</code>。此变更由 <a href="https://github.com/sbt/sbt/pull/7464">sbt/sbt#7464</a> 引入，另请参阅 <a href="https://eed3si9n.com/sbt-remote-cache/">blog</a>。</p>
+<p><code>exportJars</code> 默认值已从 <code>false</code> 改为 <code>true</code>，在编译或测试时将 JAR 文件添加到类路径中。这将减少类路径上的文件数量并降低哈希开销。</p>
+<p>作为副作用，如果您调用了 <code>Path.of(...)</code>，这可能会破坏从资源 URI 到 Path 的转换。我们建议按如下方式迁移代码：</p>
+<pre><code class="language-scala">val str = new String(
+  getClass.getResourceAsStream("/test-resource.txt").readAllBytes()
+)
+</code></pre>
+<p>通过将 <code>exportJars</code> 改回 <code>false</code> 来选择退出。此变更在 <a href="https://github.com/sbt/sbt/pull/7464">#7464</a> 中引入。另请参阅 <a href="https://eed3si9n.com/sbt-remote-cache/">blog</a>。</p>
 <h2 id="迁移到缓存任务"><a class="header" href="#迁移到缓存任务">迁移到缓存任务</a></h2>
 <p>在 sbt 2.x 中，所有任务默认都会被缓存。为参与缓存，任务的结果类型必须提供 <code>sjsonnew.JsonFormat</code> 的 given。任何结果类型缺少 <code>JsonFormat</code>（例如 <code>ParadoxProcessor</code>、<code>ClassLoader</code>、<code>Seq[PathMapping]</code> 等复杂对象或函数类型）的任务将在 sbt 2 的构建加载时失败。</p>
 <p>如果不想定义 given，最简单的迁移方式是用 <code>Def.uncached(...)</code> 包装任务，使 sbt 2 跳过缓存并始终重新执行它们：</p>
@@ -1733,6 +1742,16 @@ $ exists target/**/src_managed/bar.txt
 $ exists target/**/proj/src_managed/bar.txt || proj/target/**/src_managed/bar.txt
 </code></pre>
 <p>在 sbt 1.x 中，<code>target.value</code> 解析为项目根 <code>target/</code> 目录。在 sbt 2.x 中，它改为解析为 <code>target/out/jvm/scala-&lt;ver&gt;/&lt;project-name&gt;</code>。插件在迁移过程中应注意此变更。</p>
+<h2 id="fork-运行的工作目录"><a class="header" href="#fork-运行的工作目录">Fork 运行的工作目录</a></h2>
+<p>自 sbt 2.0.4 起，fork 运行的工作目录从子项目的 <code>baseDirectory</code> 改为构建的工作目录。这是为了使客户端运行的行为类似于 sbt 1.x 的进程内 <code>run</code> 任务。</p>
+<p>您可以使用 <code>Compile / run / baseDirectory</code> 将其改回 <code>baseDirectory</code>：</p>
+<pre><code class="language-scala">Compile / run / baseDirectory := baseDirectory.value
+</code></pre>
+<h2 id="测试-classloader"><a class="header" href="#测试-classloader">测试 ClassLoader</a></h2>
+<p>自 sbt 2.0.5 起，<code>closeClassLoaders</code> 设置默认为 <code>true</code>，用于关闭进程内的临时测试 ClassLoader。这是为了修复在 Windows 上观察到的 <code>AccessDeniedException</code>。关闭临时测试 ClassLoader 在大多数情况下没有问题，但某些在测试任务完成前未关闭所有线程的测试或库可能会出现 <code>ClassNotFound</code> 等运行时错误。</p>
+<p>要解决此问题，您可以按如下方式 fork 测试：</p>
+<pre><code class="language-scala">Test / fork := true
+</code></pre>
 <h2 id="迁移-ci-流水线"><a class="header" href="#迁移-ci-流水线">迁移 CI 流水线</a></h2>
 <p>有一些行为变更可能影响 CI 流水线。</p>
 <h3 id="运行一系列命令"><a class="header" href="#运行一系列命令">运行一系列命令</a></h3>

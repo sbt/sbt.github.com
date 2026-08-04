@@ -1493,10 +1493,13 @@ an odd trick, but this fact becomes relevant [later][Organizing-Build].
 <li><code>useCoursier</code> セッティングを廃止して、Coursier をオプトアウトできないようにした by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/7712">#7712</a></li>
 <li><code>Key.Classpath</code> 型は、<code>Seq[Attributed[File]]</code> から<code>Seq[Attributed[xsbti.HashedVirtualFileRef]]</code> 型のへのエイリアスへと変更された。同様に、以前 <code>File</code> を返していたタスクキーのいくつかは<code>HashedVirtualFileRef</code> を返すように変更された。<a href="changes/../concepts/caching.html#caching-files">ファイルのキャッシュ化</a>も参照。</li>
 <li>sbt 2.x では、<code>target</code> のデフォルトが <code>&lt;subproject&gt;/target/</code> から <code>target/out/jvm/scala-3.8.4/&lt;subproject&gt;/</code> へと変更された。</li>
+<li><code>exportJars</code> のデフォルトが <code>true</code> となり、コンパイルやテスト時に JAR ファイルがクラスパスに追加される。</li>
 <li>sbt 2.x は <code>build.sbt</code> に変更があると、デフォルトで自動的リロードされるようになった <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8211">#8211</a></li>
 <li>sbt 2.x は、sbt シェル内でのスコープ付きタスクの委譲を禁止する <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8539">#8539</a></li>
 <li>sbt 2.x は、エヴィクション・エラー規制を <code>Test</code> コンフィギュレーションでも施行する by <a href="https://github.com/calm329">@calm329</a> and <a href="https://github.com/zainab-ali">@zainab-ali</a> in <a href="https://github.com/sbt/sbt/pull/8451">#8451</a> + <a href="https://github.com/sbt/sbt/pull/9102">#9102</a></li>
 <li>sbt 2.x において、グローバルベースディレクトリはディレクトリ標準に従う。Windows でのデフォルト値は <code>%LOCALAPPDATA%/sbt/2</code> だ。その他の場合は <code>$XDG_CONFIG_HOME/sbt/2</code> もしくは <code>$HOME/.config/sbt/2</code> だ。詳細は <a href="changes/../reference/sbt.html#%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%90%E3%83%AB%E3%83%99%E3%83%BC%E3%82%B9%E3%83%87%E3%82%A3%E3%83%AC%E3%82%AF%E3%83%88%E3%83%AA">sbt リファレンス</a> を参照。</li>
+<li>sbt 2.0.4 より、フォーク・ランはサブプロジェクトのベースディレクトリではなく、カレントディレクトリで実行される。</li>
+<li>sbt 2.0.5 より、インプロセスのアドホックなテスト ClassLoader をクローズするため、<code>closeClassLoaders</code> セッティングのデフォルトが <code>true</code> になった in <a href="https://github.com/sbt/sbt/pull/9538">#9538</a></li>
 </ul>
 <h3 id="勧告どおり廃止された機能"><a class="header" href="#勧告どおり廃止された機能">勧告どおり廃止された機能</a></h3>
 <ul>
@@ -1595,14 +1598,14 @@ task1 := {
 <p>Adrien Piquerez さんが Scala Center に在籍していたときに、性能改善に関連するコントリをいくつか行った。</p>
 <ul>
 <li>perf: 長生きするオブジェクトの数を削減して、2.0.0-M2 比較で起動を 20% 高速化した by <a href="https://github.com/adpi2">@adpi2</a> in <a href="https://github.com/sbt/sbt/pull/7866">#7866</a></li>
-<li>perf: Reduces creation of <code>Setting</code> and <code>Initialize</code> by <a href="https://github.com/adpi2">@adpi2</a> in <a href="https://github.com/sbt/sbt/pull/7880">#7880</a></li>
+<li>perf: <code>Setting</code> と <code>Initialize</code> が作成される数を削減した by <a href="https://github.com/adpi2">@adpi2</a> in <a href="https://github.com/sbt/sbt/pull/7880">#7880</a></li>
 <li>perf: <code>Settings</code> をリファクタリングして、集約キーのインデックス化を最適化した <a href="https://github.com/adpi2">@adpi2</a> in <a href="https://github.com/sbt/sbt/pull/7879">#7879</a></li>
 <li>perf: <code>Info</code> と <code>BasicAttributeMap</code> のインスタンスを削除した by <a href="https://github.com/adpi2">@adpi2</a> in <a href="https://github.com/sbt/sbt/pull/7882">#7882</a></li>
 </ul>
 <h2 id="過去の変更点"><a class="header" href="#過去の変更点">過去の変更点</a></h2>
 <p>以下も参照:</p>
 <ul>
-<li><a href="https://www.scala-sbt.org/1.x/docs/sbt-1.0-Release-Notes.html">sbt 1.0 changes</a></li>
+<li><a href="https://www.scala-sbt.org/1.x/docs/sbt-1.0-Release-Notes.html">sbt 1.0 の変更点</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-1x-からのマイグレーション"><a class="header" href="#sbt-1x-からのマイグレーション">sbt 1.x からのマイグレーション</a></h1>
 <h2 id="buildsbt-dsl-の-scala-3x-への移行"><a class="header" href="#buildsbt-dsl-の-scala-3x-への移行"><code>build.sbt</code> DSL の Scala 3.x への移行</a></h2>
@@ -1661,7 +1664,13 @@ LocalRootProject / publish / skip := true
 <h3 id="thisbuild-のマイグレーション"><a class="header" href="#thisbuild-のマイグレーション">ThisBuild のマイグレーション</a></h3>
 <p>sbt 2.x においては、ベア・セッティングが <code>ThisBuild</code> にスコープ付けされる場面は無くなったはずだ。コモン・セッティングの <code>ThisBuild</code> に対する利点として委譲の振る舞いが、分かりやすくなるということがある。これらのセッティングはプラグインのセッティングと、<code>settings(...)</code> の間に入るため、 <code>Compile / scalacOptions</code> といったセッティングを定義するのに使える。 <code>ThisBuild</code> ではそれは不可能だった。</p>
 <h2 id="exportjars-の変更点"><a class="header" href="#exportjars-の変更点"><code>exportJars</code> の変更点</a></h2>
-<p><code>exportJars</code> のデフォルト値は <code>false</code> から <code>true</code> に変更された。これは <code>getResource("/")</code> や <code>resource.toURI</code> を壊す可能性がある。ビルドでこのロジックが壊れ、<code>NullPointerException</code> や <code>FileSystemNotFoundException</code> が発生する場合は <code>exportJars := false</code> を設定する。古い振る舞いを維持したい場合は <code>exportJars := false</code> をビルドに設定する。この変更は <a href="https://github.com/sbt/sbt/pull/7464">sbt/sbt#7464</a> によって導入された。<a href="https://eed3si9n.com/sbt-remote-cache/">ブログ</a> も参照。</p>
+<p><code>exportJars</code> のデフォルトが <code>false</code> から <code>true</code> に変更され、コンパイルやテスト時に JAR ファイルがクラスパスに追加されるようになった。これにより、クラスパス上のファイル数が減り、ハッシュ化のオーバーヘッドが削減される。</p>
+<p>副作用として、<code>Path.of(...)</code> を呼び出していた場合、リソース URI から Path への変換が壊れる可能性がある。以下のようにコードをマイグレーションすることを推奨する:</p>
+<pre><code class="language-scala">val str = new String(
+  getClass.getResourceAsStream("/test-resource.txt").readAllBytes()
+)
+</code></pre>
+<p><code>exportJars</code> を <code>false</code> に戻すことでオプトアウトできる。この変更は <a href="https://github.com/sbt/sbt/pull/7464">#7464</a> で導入された。<a href="https://eed3si9n.com/sbt-remote-cache/">ブログ</a> も参照。</p>
 <h2 id="キャッシュタスクへのマイグレーション"><a class="header" href="#キャッシュタスクへのマイグレーション">キャッシュ・タスクへのマイグレーション</a></h2>
 <p>sbt 2.x において、全タスクはデフォルトでキャッシュされる。キャッシュに参加するためには、タスクの戻り型が <code>sjsonnew.JsonFormat</code> の given を提供する必要がある。戻り型に <code>JsonFormat</code> が無い (<code>ParadoxProcessor</code>、<code>ClassLoader</code>、<code>Seq[PathMapping]</code> 等の複合オブジェクトや関数型など) タスクは sbt 2 においてビルドのロード時に失敗する。</p>
 <p>given を定義したくない場合、最も簡単なマイグレーション方法はタスクを <code>Def.uncached(...)</code> でラップして sbt 2 がキャッシュをスキップして常に再実行するようにすることだ:</p>
@@ -1731,6 +1740,16 @@ $ exists target/**/src_managed/bar.txt
 $ exists target/**/proj/src_managed/bar.txt || proj/target/**/src_managed/bar.txt
 </code></pre>
 <p>sbt 1.x では、<code>target.value</code> はプロジェクトルートの <code>target/</code> ディレクトリを指す。sbt 2.x では代わりに <code>target/out/jvm/scala-&lt;ver&gt;/&lt;project-name&gt;</code> を指す。プラグインのマイグレーション時にこの変更点に注意する必要がある。</p>
+<h2 id="フォークランのワーキングディレクトリ"><a class="header" href="#フォークランのワーキングディレクトリ">フォーク・ランのワーキングディレクトリ</a></h2>
+<p>sbt 2.0.4 より、フォーク・ランのワーキングディレクトリがサブプロジェクトの <code>baseDirectory</code> ではなく、ビルドのワーキングディレクトリに変更された。これはクライアントサイド実行を sbt 1.x のインプロセス <code>run</code> タスクと同様の振る舞いにするためだ。</p>
+<p><code>Compile / run / baseDirectory</code> を使って元の <code>baseDirectory</code> に戻すことができる:</p>
+<pre><code class="language-scala">Compile / run / baseDirectory := baseDirectory.value
+</code></pre>
+<h2 id="テスト-classloader"><a class="header" href="#テスト-classloader">テスト ClassLoader</a></h2>
+<p>sbt 2.0.5 より、インプロセスのアドホックなテスト ClassLoader をクローズするため、<code>closeClassLoaders</code> セッティングのデフォルトが <code>true</code> になった。これは Windows で観察された <code>AccessDeniedException</code> を修正することを意図している。アドホックなテスト ClassLoader をクローズしても多くの場合は問題無いが、テストタスクの完了前に全スレッドをクローズしないテストやライブラリによっては <code>ClassNotFound</code> のような実行時エラーが発生する可能性がある。</p>
+<p>この問題を回避するには、以下のようにテストをフォークする:</p>
+<pre><code class="language-scala">Test / fork := true
+</code></pre>
 <h2 id="ci-パイプラインのマイグレーション"><a class="header" href="#ci-パイプラインのマイグレーション">CI パイプラインのマイグレーション</a></h2>
 <p>CI パイプラインに影響する可能性のある振る舞いの変更点がいくつかある。</p>
 <h3 id="コマンドを連続して実行する"><a class="header" href="#コマンドを連続して実行する">コマンドを連続して実行する</a></h3>

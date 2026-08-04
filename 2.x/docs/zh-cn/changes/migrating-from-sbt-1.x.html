@@ -268,7 +268,13 @@ LocalRootProject / publish / skip := true
 <h3 id="迁移-thisbuild"><a class="header" href="#迁移-thisbuild">迁移 ThisBuild</a></h3>
 <p>在 sbt 2.x 中，裸设置不应再限定到 <code>ThisBuild</code>。新的 <em>common settings</em>（通用设置）相比 <code>ThisBuild</code> 的一个优势是它采用更可预测的委托行为。这些设置插入在插件设置与 <code>settings(...)</code> 中定义的设置之间，这意味着可以用于定义诸如 <code>Compile / scalacOptions</code> 之类的设置，而 <code>ThisBuild</code> 无法做到这一点。</p>
 <h2 id="exportjars-的变更"><a class="header" href="#exportjars-的变更"><code>exportJars</code> 的变更</a></h2>
-<p><code>exportJars</code> 默认为 <code>true</code>，之前为 <code>false</code>。这可能会破坏 <code>getResource("/")</code> 和 <code>resource.toURI</code>。如果您的构建中此逻辑被破坏并产生 <code>NullPointerException</code> 和 <code>FileSystemNotFoundException</code>，请设置 <code>exportJars := false</code>。如需保留旧行为，请在构建中设置 <code>exportJars := false</code>。此变更由 <a href="https://github.com/sbt/sbt/pull/7464">sbt/sbt#7464</a> 引入，另请参阅 <a href="https://eed3si9n.com/sbt-remote-cache/">blog</a>。</p>
+<p><code>exportJars</code> 默认值已从 <code>false</code> 改为 <code>true</code>，在编译或测试时将 JAR 文件添加到类路径中。这将减少类路径上的文件数量并降低哈希开销。</p>
+<p>作为副作用，如果您调用了 <code>Path.of(...)</code>，这可能会破坏从资源 URI 到 Path 的转换。我们建议按如下方式迁移代码：</p>
+<pre><code class="language-scala">val str = new String(
+  getClass.getResourceAsStream("/test-resource.txt").readAllBytes()
+)
+</code></pre>
+<p>通过将 <code>exportJars</code> 改回 <code>false</code> 来选择退出。此变更在 <a href="https://github.com/sbt/sbt/pull/7464">#7464</a> 中引入。另请参阅 <a href="https://eed3si9n.com/sbt-remote-cache/">blog</a>。</p>
 <h2 id="迁移到缓存任务"><a class="header" href="#迁移到缓存任务">迁移到缓存任务</a></h2>
 <p>在 sbt 2.x 中，所有任务默认都会被缓存。为参与缓存，任务的结果类型必须提供 <code>sjsonnew.JsonFormat</code> 的 given。任何结果类型缺少 <code>JsonFormat</code>（例如 <code>ParadoxProcessor</code>、<code>ClassLoader</code>、<code>Seq[PathMapping]</code> 等复杂对象或函数类型）的任务将在 sbt 2 的构建加载时失败。</p>
 <p>如果不想定义 given，最简单的迁移方式是用 <code>Def.uncached(...)</code> 包装任务，使 sbt 2 跳过缓存并始终重新执行它们：</p>
@@ -338,6 +344,16 @@ $ exists target/**/src_managed/bar.txt
 $ exists target/**/proj/src_managed/bar.txt || proj/target/**/src_managed/bar.txt
 </code></pre>
 <p>在 sbt 1.x 中，<code>target.value</code> 解析为项目根 <code>target/</code> 目录。在 sbt 2.x 中，它改为解析为 <code>target/out/jvm/scala-&lt;ver&gt;/&lt;project-name&gt;</code>。插件在迁移过程中应注意此变更。</p>
+<h2 id="fork-运行的工作目录"><a class="header" href="#fork-运行的工作目录">Fork 运行的工作目录</a></h2>
+<p>自 sbt 2.0.4 起，fork 运行的工作目录从子项目的 <code>baseDirectory</code> 改为构建的工作目录。这是为了使客户端运行的行为类似于 sbt 1.x 的进程内 <code>run</code> 任务。</p>
+<p>您可以使用 <code>Compile / run / baseDirectory</code> 将其改回 <code>baseDirectory</code>：</p>
+<pre><code class="language-scala">Compile / run / baseDirectory := baseDirectory.value
+</code></pre>
+<h2 id="测试-classloader"><a class="header" href="#测试-classloader">测试 ClassLoader</a></h2>
+<p>自 sbt 2.0.5 起，<code>closeClassLoaders</code> 设置默认为 <code>true</code>，用于关闭进程内的临时测试 ClassLoader。这是为了修复在 Windows 上观察到的 <code>AccessDeniedException</code>。关闭临时测试 ClassLoader 在大多数情况下没有问题，但某些在测试任务完成前未关闭所有线程的测试或库可能会出现 <code>ClassNotFound</code> 等运行时错误。</p>
+<p>要解决此问题，您可以按如下方式 fork 测试：</p>
+<pre><code class="language-scala">Test / fork := true
+</code></pre>
 <h2 id="迁移-ci-流水线"><a class="header" href="#迁移-ci-流水线">迁移 CI 流水线</a></h2>
 <p>有一些行为变更可能影响 CI 流水线。</p>
 <h3 id="运行一系列命令"><a class="header" href="#运行一系列命令">运行一系列命令</a></h3>

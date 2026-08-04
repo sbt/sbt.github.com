@@ -268,7 +268,13 @@ LocalRootProject / publish / skip := true
 <h3 id="thisbuild-のマイグレーション"><a class="header" href="#thisbuild-のマイグレーション">ThisBuild のマイグレーション</a></h3>
 <p>sbt 2.x においては、ベア・セッティングが <code>ThisBuild</code> にスコープ付けされる場面は無くなったはずだ。コモン・セッティングの <code>ThisBuild</code> に対する利点として委譲の振る舞いが、分かりやすくなるということがある。これらのセッティングはプラグインのセッティングと、<code>settings(...)</code> の間に入るため、 <code>Compile / scalacOptions</code> といったセッティングを定義するのに使える。 <code>ThisBuild</code> ではそれは不可能だった。</p>
 <h2 id="exportjars-の変更点"><a class="header" href="#exportjars-の変更点"><code>exportJars</code> の変更点</a></h2>
-<p><code>exportJars</code> のデフォルト値は <code>false</code> から <code>true</code> に変更された。これは <code>getResource("/")</code> や <code>resource.toURI</code> を壊す可能性がある。ビルドでこのロジックが壊れ、<code>NullPointerException</code> や <code>FileSystemNotFoundException</code> が発生する場合は <code>exportJars := false</code> を設定する。古い振る舞いを維持したい場合は <code>exportJars := false</code> をビルドに設定する。この変更は <a href="https://github.com/sbt/sbt/pull/7464">sbt/sbt#7464</a> によって導入された。<a href="https://eed3si9n.com/sbt-remote-cache/">ブログ</a> も参照。</p>
+<p><code>exportJars</code> のデフォルトが <code>false</code> から <code>true</code> に変更され、コンパイルやテスト時に JAR ファイルがクラスパスに追加されるようになった。これにより、クラスパス上のファイル数が減り、ハッシュ化のオーバーヘッドが削減される。</p>
+<p>副作用として、<code>Path.of(...)</code> を呼び出していた場合、リソース URI から Path への変換が壊れる可能性がある。以下のようにコードをマイグレーションすることを推奨する:</p>
+<pre><code class="language-scala">val str = new String(
+  getClass.getResourceAsStream("/test-resource.txt").readAllBytes()
+)
+</code></pre>
+<p><code>exportJars</code> を <code>false</code> に戻すことでオプトアウトできる。この変更は <a href="https://github.com/sbt/sbt/pull/7464">#7464</a> で導入された。<a href="https://eed3si9n.com/sbt-remote-cache/">ブログ</a> も参照。</p>
 <h2 id="キャッシュタスクへのマイグレーション"><a class="header" href="#キャッシュタスクへのマイグレーション">キャッシュ・タスクへのマイグレーション</a></h2>
 <p>sbt 2.x において、全タスクはデフォルトでキャッシュされる。キャッシュに参加するためには、タスクの戻り型が <code>sjsonnew.JsonFormat</code> の given を提供する必要がある。戻り型に <code>JsonFormat</code> が無い (<code>ParadoxProcessor</code>、<code>ClassLoader</code>、<code>Seq[PathMapping]</code> 等の複合オブジェクトや関数型など) タスクは sbt 2 においてビルドのロード時に失敗する。</p>
 <p>given を定義したくない場合、最も簡単なマイグレーション方法はタスクを <code>Def.uncached(...)</code> でラップして sbt 2 がキャッシュをスキップして常に再実行するようにすることだ:</p>
@@ -338,6 +344,16 @@ $ exists target/**/src_managed/bar.txt
 $ exists target/**/proj/src_managed/bar.txt || proj/target/**/src_managed/bar.txt
 </code></pre>
 <p>sbt 1.x では、<code>target.value</code> はプロジェクトルートの <code>target/</code> ディレクトリを指す。sbt 2.x では代わりに <code>target/out/jvm/scala-&lt;ver&gt;/&lt;project-name&gt;</code> を指す。プラグインのマイグレーション時にこの変更点に注意する必要がある。</p>
+<h2 id="フォークランのワーキングディレクトリ"><a class="header" href="#フォークランのワーキングディレクトリ">フォーク・ランのワーキングディレクトリ</a></h2>
+<p>sbt 2.0.4 より、フォーク・ランのワーキングディレクトリがサブプロジェクトの <code>baseDirectory</code> ではなく、ビルドのワーキングディレクトリに変更された。これはクライアントサイド実行を sbt 1.x のインプロセス <code>run</code> タスクと同様の振る舞いにするためだ。</p>
+<p><code>Compile / run / baseDirectory</code> を使って元の <code>baseDirectory</code> に戻すことができる:</p>
+<pre><code class="language-scala">Compile / run / baseDirectory := baseDirectory.value
+</code></pre>
+<h2 id="テスト-classloader"><a class="header" href="#テスト-classloader">テスト ClassLoader</a></h2>
+<p>sbt 2.0.5 より、インプロセスのアドホックなテスト ClassLoader をクローズするため、<code>closeClassLoaders</code> セッティングのデフォルトが <code>true</code> になった。これは Windows で観察された <code>AccessDeniedException</code> を修正することを意図している。アドホックなテスト ClassLoader をクローズしても多くの場合は問題無いが、テストタスクの完了前に全スレッドをクローズしないテストやライブラリによっては <code>ClassNotFound</code> のような実行時エラーが発生する可能性がある。</p>
+<p>この問題を回避するには、以下のようにテストをフォークする:</p>
+<pre><code class="language-scala">Test / fork := true
+</code></pre>
 <h2 id="ci-パイプラインのマイグレーション"><a class="header" href="#ci-パイプラインのマイグレーション">CI パイプラインのマイグレーション</a></h2>
 <p>CI パイプラインに影響する可能性のある振る舞いの変更点がいくつかある。</p>
 <h3 id="コマンドを連続して実行する"><a class="header" href="#コマンドを連続して実行する">コマンドを連続して実行する</a></h3>
