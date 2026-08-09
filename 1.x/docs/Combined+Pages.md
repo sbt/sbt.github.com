@@ -5699,6 +5699,8 @@ generate dependency lockfiles and check for changes at build time.
   Amazon DynamoDB test instance from sbt. <!-- 41 stars -->
 - [sbt-migrations](https://github.com/LeonhardtDavid/migrations): database
   migrations manager.
+- [sbt-sliquibase](https://codeberg.org/PerformantData/sbt-sliquibase): generate
+  code for Slick API types from a Liquibase changelog.
 
 #### Framework-specific plugins
 
@@ -5858,24 +5860,22 @@ Using Sonatype
 
 Publishing to the Central Repository is easy!
 
-#### Central Portal and Legacy OSSRH
+#### Publishing to the Central Repository
 
-The Central Repository (aka Maven Central) has long been the pillar of the JVM ecosystem,
-including Scala. The mechanism to publish libraries to the Central has been hosted by Sonatype
-as OSS Repository Hosting (OSSRH) via `HTTP PUT`; however, in March 2025 it was
-[announced][20250326_ossrh_sunset] that the endpoint will be sunset on June 30th, 2025
-in favor of the Central Portal at <https://central.sonatype.com/>.
+In March 2025, Sonatype [announced][20250326_ossrh_sunset] that its Legacy OSSRH HTTP endpoints to publish to the Central Repository (aka Maven Central) would be sunset in favor of the Central Portal at <https://central.sonatype.com/>.
 
 <table style="border: 1px solid gray; width: 80%;">
 <tr><th>&nbsp;</th><th>Central Portal</th> <th>Legacy OSSRH</th></tr>
-<tr><td>sbt version</td> <td>Use sbt <b>1.11.0-RC2</b>+</td> <td>Any sbt 1.x version</td></tr>
-<tr><td>Availability</td> <td>Available</td> <td>Sunset on 2025-06-30</td></tr>
+<tr><td>Availability</td> <td>✅ Available</td> <td>❌ Sunset on 2025-06-30</td></tr>
+<tr><td>sbt version</td> <td>Use sbt <b>1.12.15</b>+</td> <td>n/a<td></tr>
+<tr><td>Command</td> <td><b><pre>+publishSigned; sonaRelease</pre></b></td> <td><pre>+publishSigned</pre><td></tr>
 </table>
 <br>
 
-Publishing to the Central Portal is built into sbt, for sbt 1.11.0-RC2 and above.
-The rest of this page will document the publishing process for Central Portal,
-but there are some notes at the end for the Legacy OSSRH publishing.
+**⚠️ Note**: Note that with the new setup, `publishSigned` will only release to the staging directory. Run `sonaUpload` or `sonaRelease` command additionally to release the staged artifacts.
+
+When sbt 1.11.0 was released, sbt incorporated the Sonatype's publishing API.
+The rest of this page will document the publishing process for Central Portal, step by step.
 
 #### Central Portal registration
 
@@ -6111,58 +6111,6 @@ releaseStepCommand("publishSigned"),
 releaseStepCommand("sonaRelease"),
 ...
 ```
-
-<a id="ossrh"></a>
-### Publishing to the Legacy OSSRH
-
-#### Credentials for the Legacy OSSRH
-
-The credentials for your OSSRH account need to be stored
-somewhere safe (*e.g. NOT in the repository*). Common convention is a
-`$HOME/.sbt/1.0/sonatype.sbt` file, with the following:
-
-```scala
-credentials += Credentials(Path.userHome / ".sbt" / "sonatype_credentials")
-```
-
-Next create a file `~/.sbt/sonatype_credentials`:
-
-```
-realm=Sonatype Nexus Repository Manager
-host=oss.sonatype.org
-user=<your username>
-password=<your password>
-```
-
-> *Note:* The first two strings must be `"Sonatype Nexus Repository Manager"`
-> and `"oss.sonatype.org"` for Coursier to use the credentials. If you are using
-> an OSSRH account created between February 2021 and May 2025, use `"s01.oss.sonatype.org"`
-> instead of `"oss.sonatype.org"`
-
-#### sbt setup for the Legacy OSSRH
-
-```scala
-ThisBuild / publishTo := {
-  // For accounts created after Feb 2021:
-  // val nexus = "https://s01.oss.sonatype.org/"
-  val nexus = "https://oss.sonatype.org/"
-  if (isSnapshot.value) Some("snapshots" at nexus + "content/repositories/snapshots")
-  else Some("releases" at nexus + "service/local/staging/deploy/maven2")
-}
-```
-
-#### The Legacy OSSRH publishing step
-
-From sbt shell run:
-
-```
-> publishSigned
-```
-
-Check the published artifacts in the [Nexus Repository Manager][sonatype-nexus]
-(same login as Sonatype's Jira account).
-Close the staging repository and promote the release to central, by hitting
-"Close" button, then "Release" button.
 
 
   [sbt-dev]: https://groups.google.com/d/forum/sbt-dev
@@ -11932,7 +11880,7 @@ definition uses Scala only for tests:
 ```scala
 autoScalaLibrary := false
 
-libraryDependencies += "org.scala-lang" % "scala-library" % scalaVersion.value % "test"
+libraryDependencies += "org.scala-lang" % "scala-library" % scalaVersion.value % Test
 ```
 
 #### Configuring additional Scala dependencies
@@ -11965,29 +11913,31 @@ This will also disable the automatic dependency on `scala-library`. If
 you do not need the Scala compiler for anything (compiling, the REPL,
 scaladoc, etc...), you can stop here. sbt does not need an instance of
 Scala for your project in that case. Otherwise, sbt will still need
-access to the jars for the Scala compiler for compilation and other
-tasks. You can provide them by either declaring a dependency in the
-`scala-tool` configuration or by explicitly defining `scalaInstance`.
+access to the JARs for the Scala toochain for compilation and other
+tasks. You can provide them by either declaring a dependency in the toolchain configurations or by explicitly defining `scalaInstance`.
 
-In the first case, add the `scala-tool` configuration and add a
-dependency on `scala-compiler` in this configuration. The organization
-is not important, but sbt needs the module name to be `scala-compiler`
-and `scala-library` in order to handle those jars appropriately. For
+In the first case, add the toolchain configurations and add an appropriate toochain dependency on the configurations. For
 example,
 
 ```scala
+import Configurations.{ ScalaDocTool, ScalaReplTool, ScalaTool, ZincTool }
+
 managedScalaInstance := false
 
 // Add the configuration for the dependencies on Scala tool jars
-// You can also use a manually constructed configuration like:
-//   config("scala-tool").hide
-ivyConfigurations += Configurations.ScalaTool
+ivyConfigurations ++= Seq(ScalaDocTool, ScalaReplTool, ScalaTool, ZincTool)
 
-// Add the usual dependency on the library as well on the compiler in the
-//  'scala-tool' configuration
 libraryDependencies ++= Seq(
-   "org.scala-lang" % "scala-library" % scalaVersion.value,
-   "org.scala-lang" % "scala-compiler" % scalaVersion.value % "scala-tool"
+  // 1. Add the standard library (scala-library for 2.x, scala3-library_3 for 3.x)
+  "org.scala-lang" % "scala-library" % scalaVersion.value,
+  // 2. Add the compiler
+  "org.scala-lang" % "scala-compiler" % scalaVersion.value % ScalaTool,
+  // 3. Add the pre-compiled compiler bridge, if any
+  "org.scala-lang" % "scala2-sbt-bridge" % scalaVersion.value % ZincTool,
+  // 4. Add the scala-doc
+  "org.scala-lang" % "scala-compiler" % scalaVersion.value % ScalaDocTool,
+  // 5. Add the repl
+  "org.scala-lang" % "scala-compiler" % scalaVersion.value % ScalaReplTool,
 )
 ```
 

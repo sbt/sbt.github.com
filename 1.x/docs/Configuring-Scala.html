@@ -66,7 +66,7 @@ it like any other dependency. For example, the following dependency
 definition uses Scala only for tests:
 </p><pre><code class="prettyprint lang-scala">autoScalaLibrary := false
 
-libraryDependencies += &quot;org.scala-lang&quot; % &quot;scala-library&quot; % scalaVersion.value % &quot;test&quot;
+libraryDependencies += &quot;org.scala-lang&quot; % &quot;scala-library&quot; % scalaVersion.value % Test
 </code></pre><h4 id="Configuring+additional+Scala+dependencies">Configuring additional Scala dependencies<a href="#Configuring+additional+Scala+dependencies" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>When using a Scala dependency other than the standard library, add it as
 a normal managed dependency. For example, to depend on the Scala
 compiler,
@@ -84,26 +84,28 @@ automatic behavior with the <code>managedScalaInstance</code> key:
 you do not need the Scala compiler for anything (compiling, the REPL,
 scaladoc, etc…), you can stop here. sbt does not need an instance of
 Scala for your project in that case. Otherwise, sbt will still need
-access to the jars for the Scala compiler for compilation and other
-tasks. You can provide them by either declaring a dependency in the
-<code>scala-tool</code> configuration or by explicitly defining <code>scalaInstance</code>.
-</p><p>In the first case, add the <code>scala-tool</code> configuration and add a
-dependency on <code>scala-compiler</code> in this configuration. The organization
-is not important, but sbt needs the module name to be <code>scala-compiler</code>
-and <code>scala-library</code> in order to handle those jars appropriately. For
+access to the JARs for the Scala toochain for compilation and other
+tasks. You can provide them by either declaring a dependency in the toolchain configurations or by explicitly defining <code>scalaInstance</code>.
+</p><p>In the first case, add the toolchain configurations and add an appropriate toochain dependency on the configurations. For
 example,
-</p><pre><code class="prettyprint lang-scala">managedScalaInstance := false
+</p><pre><code class="prettyprint lang-scala">import Configurations.{ ScalaDocTool, ScalaReplTool, ScalaTool, ZincTool }
+
+managedScalaInstance := false
 
 // Add the configuration for the dependencies on Scala tool jars
-// You can also use a manually constructed configuration like:
-//   config(&quot;scala-tool&quot;).hide
-ivyConfigurations += Configurations.ScalaTool
+ivyConfigurations ++= Seq(ScalaDocTool, ScalaReplTool, ScalaTool, ZincTool)
 
-// Add the usual dependency on the library as well on the compiler in the
-//  'scala-tool' configuration
 libraryDependencies ++= Seq(
-   &quot;org.scala-lang&quot; % &quot;scala-library&quot; % scalaVersion.value,
-   &quot;org.scala-lang&quot; % &quot;scala-compiler&quot; % scalaVersion.value % &quot;scala-tool&quot;
+  // 1. Add the standard library (scala-library for 2.x, scala3-library_3 for 3.x)
+  &quot;org.scala-lang&quot; % &quot;scala-library&quot; % scalaVersion.value,
+  // 2. Add the compiler
+  &quot;org.scala-lang&quot; % &quot;scala-compiler&quot; % scalaVersion.value % ScalaTool,
+  // 3. Add the pre-compiled compiler bridge, if any
+  &quot;org.scala-lang&quot; % &quot;scala2-sbt-bridge&quot; % scalaVersion.value % ZincTool,
+  // 4. Add the scala-doc
+  &quot;org.scala-lang&quot; % &quot;scala-compiler&quot; % scalaVersion.value % ScalaDocTool,
+  // 5. Add the repl
+  &quot;org.scala-lang&quot; % &quot;scala-compiler&quot; % scalaVersion.value % ScalaReplTool,
 )
 </code></pre><p>In the second case, directly construct a value of type
 <a href="../api/sbt/internal/inc/ScalaInstance.html">ScalaInstance</a>, typically using a

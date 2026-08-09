@@ -43,19 +43,16 @@
                 </div><div class="col-md-8 col-xs-9">
                   <div class="rightcolumn contents">
                   <h2 id="Using+Sonatype">Using Sonatype<a href="#Using+Sonatype" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Publishing to the Central Repository is easy!
-</p><h4 id="Central+Portal+and+Legacy+OSSRH">Central Portal and Legacy OSSRH<a href="#Central+Portal+and+Legacy+OSSRH" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The Central Repository (aka Maven Central) has long been the pillar of the JVM ecosystem,
-including Scala. The mechanism to publish libraries to the Central has been hosted by Sonatype
-as OSS Repository Hosting (OSSRH) via <code>HTTP PUT</code>; however, in March 2025 it was
-<a href="https://central.sonatype.org/news/20250326_ossrh_sunset/">announced</a> that the endpoint will be sunset on June 30th, 2025
-in favor of the Central Portal at <a href="https://central.sonatype.com/">https://central.sonatype.com/</a>.
+</p><h4 id="Publishing+to+the+Central+Repository">Publishing to the Central Repository<a href="#Publishing+to+the+Central+Repository" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>In March 2025, Sonatype <a href="https://central.sonatype.org/news/20250326_ossrh_sunset/">announced</a> that its Legacy OSSRH HTTP endpoints to publish to the Central Repository (aka Maven Central) would be sunset in favor of the Central Portal at <a href="https://central.sonatype.com/">https://central.sonatype.com/</a>.
 </p><table style="border: 1px solid gray; width: 80%;">
 <tr><th>&nbsp;</th><th>Central Portal</th> <th>Legacy OSSRH</th></tr>
-<tr><td>sbt version</td> <td>Use sbt <b>1.11.0-RC2</b>+</td> <td>Any sbt 1.x version</td></tr>
-<tr><td>Availability</td> <td>Available</td> <td>Sunset on 2025-06-30</td></tr>
+<tr><td>Availability</td> <td>✅ Available</td> <td>❌ Sunset on 2025-06-30</td></tr>
+<tr><td>sbt version</td> <td>Use sbt <b>1.12.15</b>+</td> <td>n/a<td></tr>
+<tr><td>Command</td> <td><b><pre>+publishSigned; sonaRelease</pre></b></td> <td><pre>+publishSigned</pre><td></tr>
 </table><br>
-<p>Publishing to the Central Portal is built into sbt, for sbt 1.11.0-RC2 and above.
-The rest of this page will document the publishing process for Central Portal,
-but there are some notes at the end for the Legacy OSSRH publishing.
+<p><strong>⚠️ Note</strong>: Note that with the new setup, <code>publishSigned</code> will only release to the staging directory. Run <code>sonaUpload</code> or <code>sonaRelease</code> command additionally to release the staged artifacts.
+</p><p>When sbt 1.11.0 was released, sbt incorporated the Sonatype’s publishing API.
+The rest of this page will document the publishing process for Central Portal, step by step.
 </p><h4 id="Central+Portal+registration">Central Portal registration<a href="#Central+Portal+registration" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The reference process for configuring and publishing to the Central Repository is
 described in Sonatype’s <a href="https://central.sonatype.org/register/central-portal/">Publish guides</a>.
 </p><p>The <a href="https://central.sonatype.org/register/central-portal/">Publish guides</a> walk you through the required
@@ -192,33 +189,7 @@ releaseStepCommand(&quot;publishSigned&quot;),
 ...
 releaseStepCommand(&quot;sonaRelease&quot;),
 ...
-</code></pre><a id="ossrh"></a><h3 id="Publishing+to+the+Legacy+OSSRH">Publishing to the Legacy OSSRH<a href="#Publishing+to+the+Legacy+OSSRH" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><h4 id="Credentials+for+the+Legacy+OSSRH">Credentials for the Legacy OSSRH<a href="#Credentials+for+the+Legacy+OSSRH" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>The credentials for your OSSRH account need to be stored
-somewhere safe (<em>e.g. NOT in the repository</em>). Common convention is a
-<code>$HOME/.sbt/1.0/sonatype.sbt</code> file, with the following:
-</p><pre><code class="prettyprint lang-scala">credentials += Credentials(Path.userHome / &quot;.sbt&quot; / &quot;sonatype_credentials&quot;)
-</code></pre><p>Next create a file <code>~/.sbt/sonatype_credentials</code>:
-</p><pre><code class="">realm=Sonatype Nexus Repository Manager
-host=oss.sonatype.org
-user=&lt;your username&gt;
-password=&lt;your password&gt;
-</code></pre><blockquote><p><em>Note:</em> The first two strings must be <code>&quot;Sonatype Nexus Repository Manager&quot;</code>
-and <code>&quot;oss.sonatype.org&quot;</code> for Coursier to use the credentials. If you are using
-an OSSRH account created between February 2021 and May 2025, use <code>&quot;s01.oss.sonatype.org&quot;</code>
-instead of <code>&quot;oss.sonatype.org&quot;</code>
-</p></blockquote><h4 id="sbt+setup+for+the+Legacy+OSSRH">sbt setup for the Legacy OSSRH<a href="#sbt+setup+for+the+Legacy+OSSRH" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><pre><code class="prettyprint lang-scala">ThisBuild / publishTo := {
-  // For accounts created after Feb 2021:
-  // val nexus = &quot;https://s01.oss.sonatype.org/&quot;
-  val nexus = &quot;https://oss.sonatype.org/&quot;
-  if (isSnapshot.value) Some(&quot;snapshots&quot; at nexus + &quot;content/repositories/snapshots&quot;)
-  else Some(&quot;releases&quot; at nexus + &quot;service/local/staging/deploy/maven2&quot;)
-}
-</code></pre><h4 id="The+Legacy+OSSRH+publishing+step">The Legacy OSSRH publishing step<a href="#The+Legacy+OSSRH+publishing+step" class="header-link"><span class="header-link-content">&nbsp;</span></a></h4><p>From sbt shell run:
-</p><pre><code class="">&gt; publishSigned
-</code></pre><p>Check the published artifacts in the <a href="https://oss.sonatype.org/#welcome">Nexus Repository Manager</a>
-(same login as Sonatype’s Jira account).
-Close the staging repository and promote the release to central, by hitting
-“Close” button, then “Release” button.
-</p><div class="bottom nav">
+</code></pre><div class="bottom nav">
                 <div class="row">
                   <div class="col-md-auto">
                     <a href="Contributing-to-sbt.html">
