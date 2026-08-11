@@ -224,7 +224,10 @@ Hello, World!
 <p>此外，大多数非平凡的程序可能会有库依赖，因此也会传递性地依赖于它们的依赖项。对于 Scala 生态系统来说，这更加复杂，因为我们有 Scala 2.12，2.13 生态系统，Scala 3.x 生态系统，以及 JVM，JS 和 Native 平台。</p>
 <p>与其使用 JAR 文件和 <code>scalac</code>，我们可以通过引入更高级别的子项目抽象概念并使用构建工具来避免手动劳作。</p>
 <h2 id="sbt"><a class="header" href="#sbt">sbt</a></h2>
-<p><em>sbt</em> 是为 Scala 和 Java 创建的简单构建工具。它允许我们声明子项目及其各种依赖项和自定义任务，以确保我们始终能获得快速，可重复的构建。</p>
+<p><em>sbt</em> 是为 Scala 和 Java 创建的简单构建工具。它允许我们声明子项目及其各种依赖项和自定义任务，以确保我们始终能获得快速、可重复的构建。您无需自行下载编译器，只需写下：</p>
+<pre><code class="language-scala">scalaVersion := "3.8.4"
+</code></pre>
+<p>sbt 就会自动为您下载编译器。</p>
 <p>为了实现这一目标，sbt 做了几件事:</p>
 <ul>
 <li>sbt 本身的版本记录在 <code>project/build.properties</code> 中。</li>

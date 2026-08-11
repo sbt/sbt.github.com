@@ -775,7 +775,10 @@ This is doubly complicated for Scala ecosystem because we have Scala 2.12, 2.13 
 <p>Rather than working with JAR files and <code>scalac</code>, we can avoid manual toil by introducing a higher-level subproject abstraction and by using a build tool.</p>
 <h2 id="sbt"><a class="header" href="#sbt">sbt</a></h2>
 <p><em>sbt</em> is a simple build tool created for Scala and Java.
-It lets us declare subprojects and their various dependencies and custom tasks to ensure that we'll always get a fast, repeatable build.</p>
+It lets us declare subprojects, their various dependencies, and custom tasks in a configuration file to ensure that we'll always get a fast, repeatable build. Instead of downloading the compiler yourself, you can write:</p>
+<pre><code class="language-scala">scalaVersion := "3.8.4"
+</code></pre>
+<p>and sbt will download the compiler for you.</p>
 <p>To accomplish this goal, sbt does several things:</p>
 <ul>
 <li>The version of sbt itself is tracked in <code>project/build.properties</code>.</li>
