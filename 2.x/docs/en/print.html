@@ -6994,6 +6994,86 @@ demo3 := Def.uncached {
 <p>sbt 2 runs in client-server mode by default, involving sbtn and the sbt server process. This means that when a task prompts the user for input, the prompting happens on the client (sbtn) while the task executes on the server.
 This client-server separation also existed in sbt 0.13 when Activator provided a web-based frontend to sbt. To abstract over simple user interactions, sbt provides <code>interactionService</code>, initialized to <code>CommandLineUIService</code>. This key is also supported in both sbt 1.x and 2.x, where it enables sbtn terminal virtualization.</p>
 <p>Alternatively, you can use <code>scala.io.StdIn.readLine</code> inside a task or command definition. Note that this relies on the sbt server proxying terminal interactions to sbtn over the wire.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="performance-profiling"><a class="header" href="#performance-profiling">Performance profiling</a></h1>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="recipes/performance-profiling.html#admonition-note"></a>
+</div>
+<div>
+<p>The recipe section of the documentation focuses on the objectives
+with minimal explanations about the basics.</p>
+</div>
+</div>
+<h2 id="objective-8"><a class="header" href="#objective-8">Objective</a></h2>
+<p>I want to profile sbt to understand what it spent time on.</p>
+<h2 id="solution-traces"><a class="header" href="#solution-traces">Solution: traces</a></h2>
+<ol>
+<li>Shutdown an existing server if any: <code>sbt shutdown</code></li>
+<li>Run a command with <code>--server --traces</code></li>
+</ol>
+<pre><code class="language-bash">$ sbt --server --traces compile
+....
+$ ls target/traces/build.trace
+target/traces/build.trace
+</code></pre>
+<p>This produces a Chrome tracing file <code>target/traces/build.trace</code>,
+which can be viewed using <a href="https://ui.perfetto.dev/">Perfetto</a>,
+shows how long each task took.</p>
+<h2 id="solution-timings"><a class="header" href="#solution-timings">Solution: timings</a></h2>
+<ol>
+<li>Shutdown an existing server if any: <code>sbt shutdown</code></li>
+<li>Run a command with <code>--server --timings</code></li>
+</ol>
+<pre><code class="language-bash">$ sbt --server --timings compile
+....
+Total time: 4116 ms
+  aaa-build / Compile / compileIncremental      : 731 ms
+....
+</code></pre>
+<p>This outputs task timing information on the terminal.</p>
+<h2 id="solution-flame-graph"><a class="header" href="#solution-flame-graph">Solution: flame graph</a></h2>
+<p>Install <a href="https://github.com/async-profiler/async-profiler">async-profiler</a>
+by putting <code>asprof</code> and <code>jfrconv</code> on your <code>PATH</code>:</p>
+<pre><code class="language-bash">$ ln -s $HOME/Applications/async-profiler-4.2/bin/asprof $HOME/bin/asprof
+$ ln -s $HOME/Applications/async-profiler-4.2/bin/jfrconv $HOME/bin/jfrconv
+</code></pre>
+<ol>
+<li>
+<p>Close anything that may affect the profiling, and run sbt in one terminal</p>
+</li>
+<li>
+<p>In another terminal run <code>jps</code> to identify the process ID of sbt</p>
+<pre><code class="language-bash">$ jps
+92746 sbt-launch.jar
+92780 Jps
+</code></pre>
+</li>
+<li>
+<p>Run <code>asprof</code> with the duration flag. <code>-d 60</code> means 60s:</p>
+<pre><code class="language-bash">$ asprof -d 60 -f /tmp/flamegraph.jfr &lt;process id&gt;
+</code></pre>
+<p>This produces a JFR (Java Flight Recorder) file.</p>
+</li>
+<li>
+<p>Run <code>jfrconv</code> as follows to convert the <code>*.jfr</code> file to a flame graph:</p>
+<pre><code class="language-bash">$ jfrconv --lines /tmp/flamegraph.jfr /tmp/flamegraph.html
+</code></pre>
+</li>
+</ol>
+<h2 id="alternative-jvm-profiling"><a class="header" href="#alternative-jvm-profiling">Alternative: JVM profiling</a></h2>
+<p>You can use a profiler like <a href="https://visualvm.github.io/">VisualVM</a> to identify implementation-level timings.</p>
+<ol>
+<li>Shutdown all existing servers if any: <code>sbt shutdownall</code></li>
+<li>Start an sbt session with <code>--server</code></li>
+<li>Launch VisualVM, and double-click on <code>xsbt.boot.Boot</code></li>
+<li>Go to Sampler tab, and click CPU</li>
+<li>Run a command inside the sbt shell</li>
+<li>Click on the Stop button in Sampler tab</li>
+</ol>
+<p>The threads named pool-n-thread-m are the task threads.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="glossary"><a class="header" href="#glossary">Glossary</a></h1>
 <h2 id="symbols"><a class="header" href="#symbols">Symbols</a></h2>
 <h3 id="--"><a class="header" href="#--"><code>:=</code>, <code>+=</code>, <code>++=</code></a></h3>

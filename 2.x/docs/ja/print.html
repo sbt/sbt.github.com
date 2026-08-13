@@ -6286,6 +6286,82 @@ demo3 := Def.uncached {
 <h2 id="解説"><a class="header" href="#解説">解説</a></h2>
 <p>sbt 2 はデフォルトでクライアント・サーバーモードで動作し、sbtn と sbt サーバープロセスが関与する。そのため、タスクがユーザーに入力を求めるとき、実際のプロンプトはクライアント（sbtn）側で行われるが、タスク実行はサーバー側で行われる。このクライアント・サーバーの分離は、Activator が sbt に Web ベースのフロントエンドを提供していた sbt 0.13 にも存在していた。簡単なユーザーインタラクションを抽象化するため、sbt は <code>interactionService</code> を提供しており、<code>CommandLineUIService</code> に初期化されている。このキーは sbt 1.x および 2.x の両方でサポートされており、現在は sbtn のターミナル仮想化を可能にする。</p>
 <p>代替案として、タスクまたはコマンド定義の内部で <code>scala.io.StdIn.readLine</code> を使うこともできる。ただし、これも sbt サーバーが IPC ソケット越しにターミナルのやり取りを sbtn にプロキシすることで成り立っていることに注意。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="プロファイリング"><a class="header" href="#プロファイリング">プロファイリング</a></h1>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="recipes/performance-profiling.html#admonition-note"></a>
+</div>
+<div>
+<p>このドキュメントのレシピ・セクションは、基礎についての説明を最小限にとどめ、目標に焦点を当てている。</p>
+</div>
+</div>
+<h2 id="目的-8"><a class="header" href="#目的-8">目的</a></h2>
+<p>sbt が何に時間を費やしているかを理解するためにプロファイリングを行いたい。</p>
+<h2 id="解決策-トレース"><a class="header" href="#解決策-トレース">解決策: トレース</a></h2>
+<ol>
+<li>既存のサーバーがあればシャットダウンする: <code>sbt shutdown</code></li>
+<li><code>--server --traces</code> を付けてコマンドを実行する</li>
+</ol>
+<pre><code class="language-bash">$ sbt --server --traces compile
+....
+$ ls target/traces/build.trace
+target/traces/build.trace
+</code></pre>
+<p>これにより Chrome トレースファイル <code>target/traces/build.trace</code> が生成される。<a href="https://ui.perfetto.dev/">Perfetto</a> で開くことができ、各タスクにかかった時間を確認できる。</p>
+<h2 id="解決策-タイミング"><a class="header" href="#解決策-タイミング">解決策: タイミング</a></h2>
+<ol>
+<li>既存のサーバーがあればシャットダウンする: <code>sbt shutdown</code></li>
+<li><code>--server --timings</code> を付けてコマンドを実行する</li>
+</ol>
+<pre><code class="language-bash">$ sbt --server --timings compile
+....
+Total time: 4116 ms
+  aaa-build / Compile / compileIncremental      : 731 ms
+....
+</code></pre>
+<p>タスクのタイミング情報をターミナルに出力する。</p>
+<h2 id="解決策-フレームグラフ"><a class="header" href="#解決策-フレームグラフ">解決策: フレームグラフ</a></h2>
+<p><a href="https://github.com/async-profiler/async-profiler">async-profiler</a> をインストールし、<code>asprof</code> と <code>jfrconv</code> を <code>PATH</code> に追加する:</p>
+<pre><code class="language-bash">$ ln -s $HOME/Applications/async-profiler-4.2/bin/asprof $HOME/bin/asprof
+$ ln -s $HOME/Applications/async-profiler-4.2/bin/jfrconv $HOME/bin/jfrconv
+</code></pre>
+<ol>
+<li>
+<p>プロファイリングに影響する可能性のあるものを閉じ、1つのターミナルで sbt を実行する</p>
+</li>
+<li>
+<p>別のターミナルで <code>jps</code> を実行して sbt のプロセス ID を確認する</p>
+<pre><code class="language-bash">$ jps
+92746 sbt-launch.jar
+92780 Jps
+</code></pre>
+</li>
+<li>
+<p>継続時間フラグを付けて <code>asprof</code> を実行する。<code>-d 60</code> は 60秒を意味する:</p>
+<pre><code class="language-bash">$ asprof -d 60 -f /tmp/flamegraph.jfr &lt;process id&gt;
+</code></pre>
+<p>これにより JFR (Java Flight Recorder) ファイルが生成される。</p>
+</li>
+<li>
+<p><code>*.jfr</code> ファイルをフレームグラフに変換するため、以下のように <code>jfrconv</code> を実行する:</p>
+<pre><code class="language-bash">$ jfrconv --lines /tmp/flamegraph.jfr /tmp/flamegraph.html
+</code></pre>
+</li>
+</ol>
+<h2 id="代替手段-jvm-プロファイリング"><a class="header" href="#代替手段-jvm-プロファイリング">代替手段: JVM プロファイリング</a></h2>
+<p><a href="https://visualvm.github.io/">VisualVM</a> のようなプロファイラーを使って、実装レベルのタイミングを特定することができる。</p>
+<ol>
+<li>既存のサーバーを全てシャットダウンする: <code>sbt shutdownall</code></li>
+<li><code>--server</code> を付けて sbt セッションを開始する</li>
+<li>VisualVM を起動して、<code>xsbt.boot.Boot</code> をダブルクリックする</li>
+<li>Sampler タブに移動して、CPU をクリックする</li>
+<li>sbt シェル内でコマンドを実行する</li>
+<li>Sampler タブの Stop ボタンをクリックする</li>
+</ol>
+<p><code>pool-n-thread-m</code> という名前のスレッドがタスクスレッドだ。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="glossary"><a class="header" href="#glossary">Glossary</a></h1>
 <h2 id="symbols"><a class="header" href="#symbols">Symbols</a></h2>
 <h3 id="--"><a class="header" href="#--"><code>:=</code>, <code>+=</code>, <code>++=</code></a></h3>
