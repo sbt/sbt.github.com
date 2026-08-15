@@ -7074,6 +7074,146 @@ $ ln -s $HOME/Applications/async-profiler-4.2/bin/jfrconv $HOME/bin/jfrconv
 <li>Click on the Stop button in Sampler tab</li>
 </ol>
 <p>The threads named pool-n-thread-m are the task threads.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="isolate-plugin-classpath"><a class="header" href="#isolate-plugin-classpath">Isolate plugin classpath</a></h1>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="recipes/plugin-isolation.html#admonition-note"></a>
+</div>
+<div>
+<p>The recipe section of the documentation focuses on the objectives
+with minimal explanations about the basics.</p>
+</div>
+</div>
+<h2 id="objective-9"><a class="header" href="#objective-9">Objective</a></h2>
+<p>I want to isolate plugin classpath, for example so I can use a Scala 2.12 app.</p>
+<h2 id="steps-7"><a class="header" href="#steps-7">Steps</a></h2>
+<ol>
+<li>Start with a command-line application published to Maven Central, for example Coursier CLI, or your own application.</li>
+<li>Define a synthetic subproject that wraps the command-line app:
+<pre><code class="language-scala">package example
+
+import sbt.{ *, given }
+import Keys.*
+
+object BootstrapPlugin extends AutoPlugin:
+  override lazy val requires = sbt.plugins.JvmPlugin
+
+  lazy val bootstrapCs = project
+    .settings(
+      scalaVersion := "2.12.21",
+      libraryDependencies += "io.get-coursier" %% "coursier-cli" % "2.1.14",
+      Compile / run / mainClass := Some("coursier.cli.Coursier"),
+      // applicable to sbt 2.x only
+      clientSide := false,
+    )
+
+  override lazy val extraProjects = Vector(bootstrapCs)
+
+  ....
+end BootstrapPlugin
+</code></pre>
+</li>
+<li>Define a setting that represents the command-line argument and a dynamic task that calls <code>run</code> task on the synthetic subproject.</li>
+</ol>
+<div id="admonition-projectbootstrappluginscala" class="admonition admonish-example" role="note" aria-labelledby="admonition-projectbootstrappluginscala-title">
+<div class="admonition-title">
+<div id="admonition-projectbootstrappluginscala-title">
+<p>project/BootstrapPlugin.scala</p>
+</div>
+<a class="admonition-anchor-link" href="recipes/plugin-isolation.html#admonition-projectbootstrappluginscala"></a>
+</div>
+<div>
+<pre><code class="language-scala">package example
+
+import sbt.{ *, given }
+import Keys.*
+
+object BootstrapPlugin extends AutoPlugin:
+  override lazy val requires = sbt.plugins.JvmPlugin
+
+  object autoImport:
+    val packageBootstrap = taskKey[HashedVirtualFileRef]("packageBootstrap")
+    val packageBootstrapArgs = settingKey[Seq[String]]("packageBootstrapArgs")
+    val packageBootstrapOutput = settingKey[File]("packageBootstrapOutput")
+  end autoImport
+  import autoImport.*
+
+  lazy val bootstrapCs = project
+    .settings(
+      scalaVersion := "2.12.21",
+      libraryDependencies += "io.get-coursier" %% "coursier-cli" % "2.1.14",
+      Compile / run / mainClass := Some("coursier.cli.Coursier"),
+      // applicable to sbt 2.x only
+      clientSide := false,
+    )
+
+  override lazy val extraProjects = Vector(bootstrapCs)
+
+  override lazy val projectSettings = Vector(
+    packageBootstrapOutput := target.value / "bootstrap" / s"${moduleName.value}.jar",
+    packageBootstrapArgs := {
+      val coord =
+        s"${organization.value}:${name.value}_${scalaBinaryVersion.value}:${version.value}"
+      val sv = scalaVersion.value
+      Vector("bootstrap", "--verbose", "--bat=true",
+        "--scala-version", sv,
+        "-f", coord,
+        "-o", packageBootstrapOutput.value.toString)
+    },
+    packageBootstrap := Def.uncached {
+      // to process args before toTask, we need to use dynamic tasks
+      (Def.taskDyn {
+        // phase 1
+        val c = fileConverter.value
+        val args = packageBootstrapArgs.value
+        val out = packageBootstrapOutput.value
+        // phase 2
+        val outVf: HashedVirtualFileRef = c.toVirtualFile(out.toPath())
+        IO.createDirectory(out.getParentFile())
+        // phase 3
+        (bootstrapCs / Compile / run)
+          .toTask(args.mkString(" ", " ", ""))
+          .map(_ =&gt; outVf)
+      }).value
+    },
+  )
+end BootstrapPlugin
+</code></pre>
+</div>
+</div>
+<div id="admonition-note-1" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-1-title">
+<div class="admonition-title">
+<div id="admonition-note-1-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="recipes/plugin-isolation.html#admonition-note-1"></a>
+</div>
+<div>
+<p>If the command-line app calls <code>sys.exit(1)</code>, you have to fork the <code>run</code>:</p>
+<pre><code class="language-scala">// default for sbtn
+clientSide := true,
+// for sbt --server
+Compile / run / fork := true,
+</code></pre>
+</div>
+</div>
+<h2 id="test-2"><a class="header" href="#test-2">Test</a></h2>
+<pre><code class="language-bash">$ sbt app/publishLocal
+$ sbt app/packageBootstrap
+[info] running coursier.cli.Coursier bootstrap --verbose --bat=true 
+  --scala-version 3.8.4 -f com.example:hello_3:0.1.0-SNAPSHOT
+  -o /.../isolation/target/out/jvm/scala-3.8.4/hello/bootstrap/hello.jar
+  Dependencies:
+com.example:hello_3:0.1.0-SNAPSHOT:
+Wrote target/out/jvm/scala-3.8.4/hello/bootstrap/hello.jar
+Wrote target/out/jvm/scala-3.8.4/hello/bootstrap/hello.jar.bat
+[success] elapsed time: 3 s, cache 100%, 17 disk cache hits
+$ target/out/jvm/scala-3.8.4/hello/bootstrap/hello.jar world
+hi world
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="glossary"><a class="header" href="#glossary">Glossary</a></h1>
 <h2 id="symbols"><a class="header" href="#symbols">Symbols</a></h2>
 <h3 id="--"><a class="header" href="#--"><code>:=</code>, <code>+=</code>, <code>++=</code></a></h3>

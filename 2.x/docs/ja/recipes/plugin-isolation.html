@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>プロファイリング - sbt ハンドブック</title>
+        <title>プラグイン・クラスパスの隔離 - sbt ハンドブック</title>
 
 
         <!-- Custom HTML head -->
@@ -164,7 +164,7 @@
                           let full_path_to_root = "../../";
                           // The page path (mdbook only gives us
                           // access to the path to the Markdown file).
-                          let path = "recipes/performance-profiling.md".replace(/\.md$/, ".html");
+                          let path = "recipes/plugin-isolation.md".replace(/\.md$/, ".html");
                           for (let lang of langList.querySelectorAll("a")) {
                             lang.href = `${full_path_to_root}${lang.id}/${path}`;
                           }
@@ -211,7 +211,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="プロファイリング"><a class="header" href="#プロファイリング">プロファイリング</a></h1>
+                        <h1 id="プラグインクラスパスの隔離"><a class="header" href="#プラグインクラスパスの隔離">プラグイン・クラスパスの隔離</a></h1>
 <div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
 <div class="admonition-title">
 <div id="admonition-note-title">
@@ -224,79 +224,147 @@
 </div>
 </div>
 <h2 id="目的"><a class="header" href="#目的">目的</a></h2>
-<p>sbt が何に時間を費やしているかを理解するためにプロファイリングを行いたい。</p>
-<h2 id="解決策-トレース"><a class="header" href="#解決策-トレース">解決策: トレース</a></h2>
-<ol>
-<li>既存のサーバーがあればシャットダウンする: <code>sbt shutdown</code></li>
-<li><code>--server --traces</code> を付けてコマンドを実行する</li>
-</ol>
-<pre><code class="language-bash">$ sbt --server --traces compile
-....
-$ ls target/traces/build.trace
-target/traces/build.trace
-</code></pre>
-<p>これにより Chrome トレースファイル <code>target/traces/build.trace</code> が生成される。<a href="https://ui.perfetto.dev/">Perfetto</a> で開くことができ、各タスクにかかった時間を確認できる。</p>
-<h2 id="解決策-タイミング"><a class="header" href="#解決策-タイミング">解決策: タイミング</a></h2>
-<ol>
-<li>既存のサーバーがあればシャットダウンする: <code>sbt shutdown</code></li>
-<li><code>--server --timings</code> を付けてコマンドを実行する</li>
-</ol>
-<pre><code class="language-bash">$ sbt --server --timings compile
-....
-Total time: 4116 ms
-  aaa-build / Compile / compileIncremental      : 731 ms
-....
-</code></pre>
-<p>タスクのタイミング情報をターミナルに出力する。</p>
-<h2 id="解決策-フレームグラフ"><a class="header" href="#解決策-フレームグラフ">解決策: フレームグラフ</a></h2>
-<p><a href="https://github.com/async-profiler/async-profiler">async-profiler</a> をインストールし、<code>asprof</code> と <code>jfrconv</code> を <code>PATH</code> に追加する:</p>
-<pre><code class="language-bash">$ ln -s $HOME/Applications/async-profiler-4.2/bin/asprof $HOME/bin/asprof
-$ ln -s $HOME/Applications/async-profiler-4.2/bin/jfrconv $HOME/bin/jfrconv
-</code></pre>
+<p>プラグインのクラスパスを隔離したい。例えば、Scala 2.12 アプリケーションを使いたい場合など。</p>
+<h2 id="手順"><a class="header" href="#手順">手順</a></h2>
 <ol>
 <li>
-<p>プロファイリングに影響する可能性のあるものを閉じ、1つのターミナルで sbt を実行する</p>
+<p>Maven Central にコマンドライン・アプリ (例えば Coursier CLI) か、独自のアプリケーションが公開されていることを前提とする。</p>
 </li>
 <li>
-<p>別のターミナルで <code>jps</code> を実行して sbt のプロセス ID を確認する</p>
-<pre><code class="language-bash">$ jps
-92746 sbt-launch.jar
-92780 Jps
+<p>コマンドライン・アプリを呼び出す合成サブプロジェクトを定義する:</p>
+<pre><code class="language-scala">package example
+
+import sbt.{ *, given }
+import Keys.*
+
+object BootstrapPlugin extends AutoPlugin:
+  override lazy val requires = sbt.plugins.JvmPlugin
+
+  lazy val bootstrapCs = project
+    .settings(
+      scalaVersion := "2.12.21",
+      libraryDependencies += "io.get-coursier" %% "coursier-cli" % "2.1.14",
+      Compile / run / mainClass := Some("coursier.cli.Coursier"),
+      // sbt 2.x のみに適用される
+      clientSide := false,
+    )
+
+  override lazy val extraProjects = Vector(bootstrapCs)
+
+  ....
+end BootstrapPlugin
 </code></pre>
 </li>
 <li>
-<p>継続時間フラグを付けて <code>asprof</code> を実行する。<code>-d 60</code> は 60秒を意味する:</p>
-<pre><code class="language-bash">$ asprof -d 60 -f /tmp/flamegraph.jfr &lt;process id&gt;
-</code></pre>
-<p>これにより JFR (Java Flight Recorder) ファイルが生成される。</p>
-</li>
-<li>
-<p><code>*.jfr</code> ファイルをフレームグラフに変換するため、以下のように <code>jfrconv</code> を実行する:</p>
-<pre><code class="language-bash">$ jfrconv --lines /tmp/flamegraph.jfr /tmp/flamegraph.html
-</code></pre>
+<p>コマンドライン引数を表すセッティングと、合成サブプロジェクトの <code>run</code> タスクを呼び出す動的タスクを定義する。</p>
 </li>
 </ol>
-<h2 id="代替手段-jvm-プロファイリング"><a class="header" href="#代替手段-jvm-プロファイリング">代替手段: JVM プロファイリング</a></h2>
-<p><a href="https://visualvm.github.io/">VisualVM</a> のようなプロファイラーを使って、実装レベルのタイミングを特定することができる。</p>
-<ol>
-<li>既存のサーバーを全てシャットダウンする: <code>sbt shutdownall</code></li>
-<li><code>--server</code> を付けて sbt セッションを開始する</li>
-<li>VisualVM を起動して、<code>xsbt.boot.Boot</code> をダブルクリックする</li>
-<li>Sampler タブに移動して、CPU をクリックする</li>
-<li>sbt シェル内でコマンドを実行する</li>
-<li>Sampler タブの Stop ボタンをクリックする</li>
-</ol>
-<p><code>pool-n-thread-m</code> という名前のスレッドがタスクスレッドだ。</p>
+<div id="admonition-projectbootstrappluginscala" class="admonition admonish-example" role="note" aria-labelledby="admonition-projectbootstrappluginscala-title">
+<div class="admonition-title">
+<div id="admonition-projectbootstrappluginscala-title">
+<p>project/BootstrapPlugin.scala</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-projectbootstrappluginscala"></a>
+</div>
+<div>
+<pre><code class="language-scala">package example
+
+import sbt.{ *, given }
+import Keys.*
+
+object BootstrapPlugin extends AutoPlugin:
+  override lazy val requires = sbt.plugins.JvmPlugin
+
+  object autoImport:
+    val packageBootstrap = taskKey[HashedVirtualFileRef]("packageBootstrap")
+    val packageBootstrapArgs = settingKey[Seq[String]]("packageBootstrapArgs")
+    val packageBootstrapOutput = settingKey[File]("packageBootstrapOutput")
+  end autoImport
+  import autoImport.*
+
+  lazy val bootstrapCs = project
+    .settings(
+      scalaVersion := "2.12.21",
+      libraryDependencies += "io.get-coursier" %% "coursier-cli" % "2.1.14",
+      Compile / run / mainClass := Some("coursier.cli.Coursier"),
+      // applicable to sbt 2.x only
+      clientSide := false,
+    )
+
+  override lazy val extraProjects = Vector(bootstrapCs)
+
+  override lazy val projectSettings = Vector(
+    packageBootstrapOutput := target.value / "bootstrap" / s"${moduleName.value}.jar",
+    packageBootstrapArgs := {
+      val coord =
+        s"${organization.value}:${name.value}_${scalaBinaryVersion.value}:${version.value}"
+      val sv = scalaVersion.value
+      Vector("bootstrap", "--verbose", "--bat=true",
+        "--scala-version", sv,
+        "-f", coord,
+        "-o", packageBootstrapOutput.value.toString)
+    },
+    packageBootstrap := Def.uncached {
+      // to process args before toTask, we need to use dynamic tasks
+      (Def.taskDyn {
+        // phase 1
+        val c = fileConverter.value
+        val args = packageBootstrapArgs.value
+        val out = packageBootstrapOutput.value
+        // phase 2
+        val outVf: HashedVirtualFileRef = c.toVirtualFile(out.toPath())
+        IO.createDirectory(out.getParentFile())
+        // phase 3
+        (bootstrapCs / Compile / run)
+          .toTask(args.mkString(" ", " ", ""))
+          .map(_ =&gt; outVf)
+      }).value
+    },
+  )
+end BootstrapPlugin
+</code></pre>
+</div>
+</div>
+<div id="admonition-note-1" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-1-title">
+<div class="admonition-title">
+<div id="admonition-note-1-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-1"></a>
+</div>
+<div>
+<p>コマンドライン・アプリが <code>sys.exit(1)</code> を呼び出す場合、<code>run</code> をフォークする必要がある:</p>
+<pre><code class="language-scala">// sbtn のデフォルト値
+clientSide := true,
+// sbt --server の場合
+Compile / run / fork := true,
+</code></pre>
+</div>
+</div>
+<h2 id="テスト"><a class="header" href="#テスト">テスト</a></h2>
+<pre><code class="language-bash">$ sbt app/publishLocal
+$ sbt app/packageBootstrap
+[info] running coursier.cli.Coursier bootstrap --verbose --bat=true 
+  --scala-version 3.8.4 -f com.example:hello_3:0.1.0-SNAPSHOT
+  -o /.../isolation/target/out/jvm/scala-3.8.4/hello/bootstrap/hello.jar
+  Dependencies:
+com.example:hello_3:0.1.0-SNAPSHOT:
+Wrote target/out/jvm/scala-3.8.4/hello/bootstrap/hello.jar
+Wrote target/out/jvm/scala-3.8.4/hello/bootstrap/hello.jar.bat
+[success] elapsed time: 3 s, cache 100%, 17 disk cache hits
+$ target/out/jvm/scala-3.8.4/hello/bootstrap/hello.jar world
+hi world
+</code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../recipes/console-interaction.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../recipes/performance-profiling.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../recipes/plugin-isolation.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../appendix/glossary.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -306,11 +374,11 @@ $ ln -s $HOME/Applications/async-profiler-4.2/bin/jfrconv $HOME/bin/jfrconv
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../recipes/console-interaction.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../recipes/performance-profiling.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../recipes/plugin-isolation.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../appendix/glossary.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
