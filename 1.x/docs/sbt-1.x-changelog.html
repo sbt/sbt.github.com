@@ -1,0 +1,597 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html>
+      <head>
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+        <title>sbt Reference Manual — sbt 1.x release summary</title>
+        <link rel="shortcut icon" href="favicon.ico"/>
+        <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css"/>
+        <link rel="stylesheet" href="css/pamflet.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/pamflet-print.css" type="text/css" media="print"/>
+        <link rel="stylesheet" href="css/pamflet-grid.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <link rel="stylesheet" href="css/color_scheme-redmond.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/color_scheme-github.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/color_scheme-monokai.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="css/pamfletheight_80px_2em.css" type="text/css" media="screen and (min-device-width: 800px), projection"/>
+        <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+        <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
+        <script type="text/javascript" src="js/pamflet.js"></script>
+        <script type="text/javascript">
+          Pamflet.page.language = 'en';
+        </script>
+        <script type="text/javascript" src="js/prettify/prettify.js"></script><script type="text/javascript" src="js/prettify/lang-scala.js"></script><script type="text/javascript" src="js/prettify/lang-yaml.js"></script><link type="text/css" rel="stylesheet" href="css/prettify.css"/><script type="text/javascript"><!--
+        window.onload=function() { prettyPrint(); };
+      --></script>
+        <link rel="stylesheet" href="css/custom-202107.css" type="text/css" media="screen, projection"/>
+        
+        <script type="text/javascript">
+              Pamflet.twitter = '#sbt #scala';
+            </script>
+      </head>
+      <body class="color_scheme-github">
+        <div class="container-fluid contentswrapper h-100">
+          <div class="row minh-100">
+          <div class="col-md-4 col-xl-3 toccolumn leftcolumn">
+                  <div class="lefttocwrapper">
+      <div class="tocwrapper">
+        
+        <div class="tocbody show" id="toc">
+        
+        <div><a href="index.html">sbt Reference Manual</a></div><ol class="toc"> <li><div><a href="Getting-Started.html">Getting Started with sbt</a></div><ol class="toc"> <li><div><a href="Setup.html">Installing sbt</a></div><ol class="toc"> <li><div><a href="Installing-sbt-on-Mac.html">Installing sbt on macOS</a></div></li><li><div><a href="Installing-sbt-on-Windows.html">Installing sbt on Windows</a></div></li><li><div><a href="Installing-sbt-on-Linux.html">Installing sbt on Linux</a></div></li> </ol></li><li><div><a href="sbt-by-example.html">sbt by example</a></div></li><li><div><a href="Directories.html">Directory structure</a></div></li><li><div><a href="Running.html">Running</a></div></li><li><div><a href="IDE.html">IDE Integration</a></div></li><li><div><a href="Basic-Def.html">Build definition</a></div></li><li><div><a href="Multi-Project.html">Multi-project builds</a></div></li><li><div><a href="Task-Graph.html">Task graph</a></div></li><li><div><a href="Scopes.html">Scopes</a></div></li><li><div><a href="Appending-Values.html">Appending values</a></div></li><li><div><a href="Scope-Delegation.html">Scope delegation (.value lookup)</a></div></li><li><div><a href="Library-Dependencies.html">Library dependencies</a></div></li><li><div><a href="Using-Plugins.html">Using plugins</a></div></li><li><div><a href="Custom-Settings.html">Custom settings and tasks</a></div></li><li><div><a href="Organizing-Build.html">Organizing the build</a></div></li><li><div><a href="Summary.html">Getting Started summary</a></div></li> </ol></li><li><div><a href="Faq.html">Frequently Asked Questions</a></div><ol class="toc">  </ol></li><li><div><a href="General-Info.html">General Information</a></div><ol class="toc"> <li><div><a href="Credits.html">Credits</a></div></li><li><div><a href="Community-Plugins.html">Community Plugins</a></div></li><li><div><a href="Repository-Roles.html">Community Repository Policy</a></div></li><li><div><a href="Bintray-For-Plugins.html">Bintray For Plugins</a></div></li><li><div><a href="Using-Sonatype.html">Using Sonatype</a></div></li><li><div><a href="Contributing-to-sbt.html">Contributing to sbt</a></div></li><li><div><a href="Changes.html">Changes</a></div><ol class="toc"> <li><div><a href="Migrating-from-sbt-013x.html">Migrating from sbt 0.13.x</a></div></li><li><div><a href="sbt-1.0-Release-Notes.html">sbt 1.0.x releases</a></div></li><li><div class="current">sbt 1.x release summary</div></li> </ol></li> </ol></li><li><div><a href="Detailed-Topics.html">Detailed Topics</a></div><ol class="toc"> <li><div><a href="Using-sbt.html">Using sbt</a></div><ol class="toc"> <li><div><a href="Command-Line-Reference.html">Command Line Reference</a></div></li><li><div><a href="Console-Project.html">Console Project</a></div></li><li><div><a href="Cross-Build.html">Cross-building</a></div></li><li><div><a href="Inspecting-Settings.html">Interacting with the Configuration System</a></div></li><li><div><a href="Triggered-Execution.html">Triggered Execution</a></div></li><li><div><a href="Scripts.html">Script mode</a></div></li><li><div><a href="sbt-server.html">sbt Server</a></div></li><li><div><a href="Understanding-Recompilation.html">Understanding Incremental Recompilation</a></div></li> </ol></li><li><div><a href="Configuration-Index.html">Configuration</a></div><ol class="toc"> <li><div><a href="Classpaths.html">Classpaths, sources, and resources</a></div></li><li><div><a href="Compiler-Plugins.html">Compiler Plugin Support</a></div></li><li><div><a href="Configuring-Scala.html">Configuring Scala</a></div></li><li><div><a href="Forking.html">Forking</a></div></li><li><div><a href="Global-Settings.html">Global Settings</a></div></li><li><div><a href="Java-Sources.html">Java Sources</a></div></li><li><div><a href="Mapping-Files.html">Mapping Files</a></div></li><li><div><a href="Local-Scala.html">Local Scala</a></div></li><li><div><a href="Macro-Projects.html">Macro Projects</a></div></li><li><div><a href="Paths.html">Paths</a></div></li><li><div><a href="Parallel-Execution.html">Parallel Execution</a></div></li><li><div><a href="Process.html">External Processes</a></div></li><li><div><a href="Running-Project-Code.html">Running Project Code</a></div></li><li><div><a href="Testing.html">Testing</a></div></li><li><div><a href="In-Process-Classloaders.html">In process class loading</a></div></li><li><div><a href="Globs.html">Globs</a></div></li><li><div><a href="Remote-Caching.html">Remote Caching</a></div></li> </ol></li><li><div><a href="Dependency-Management-Index.html">Dependency Management</a></div><ol class="toc"> <li><div><a href="Artifacts.html">Artifacts</a></div></li><li><div><a href="Dependency-Management-Flow.html">Dependency Management Flow</a></div></li><li><div><a href="Library-Management.html">Library Management</a></div></li><li><div><a href="Proxy-Repositories.html">Proxy Repositories</a></div></li><li><div><a href="Publishing.html">Publishing</a></div></li><li><div><a href="Resolvers.html">Resolvers</a></div></li><li><div><a href="Update-Report.html">Update Report</a></div></li><li><div><a href="Cached-Resolution.html">Cached Resolution</a></div></li> </ol></li><li><div><a href="Tasks-and-Commands.html">Tasks and Commands</a></div><ol class="toc"> <li><div><a href="Tasks.html">Tasks</a></div></li><li><div><a href="Caching.html">Caching</a></div></li><li><div><a href="Input-Tasks.html">Input Tasks</a></div></li><li><div><a href="Commands.html">Commands</a></div></li><li><div><a href="Parsing-Input.html">Parsing and tab completion</a></div></li><li><div><a href="Build-State.html">State and actions</a></div></li><li><div><a href="Task-Inputs.html">Tasks/Settings: Motivation</a></div></li> </ol></li><li><div><a href="Plugins-and-Best-Practices.html">Plugins and Best Practices</a></div><ol class="toc"> <li><div><a href="Best-Practices.html">General Best Practices</a></div></li><li><div><a href="Plugins.html">Plugins</a></div></li><li><div><a href="Plugins-Best-Practices.html">Plugins Best Practices</a></div></li><li><div><a href="GitHub-Actions-with-sbt.html">Setting up GitHub Actions with sbt</a></div></li><li><div><a href="Travis-CI-with-sbt.html">Setting up Travis CI with sbt</a></div></li><li><div><a href="Testing-sbt-plugins.html">Testing sbt plugins</a></div></li><li><div><a href="sbt-new-and-Templates.html">sbt new and Templates</a></div></li><li><div><a href="Cross-Build-Plugins.html">Cross building plugins</a></div></li> </ol></li> </ol></li><li><div><a href="Howto.html">How to…</a></div><ol class="toc"> <li><div><a href="Howto-Classpaths.html">Classpaths</a></div></li><li><div><a href="Howto-Customizing-Paths.html">Customizing paths</a></div></li><li><div><a href="Howto-Generating-Files.html">Generating files</a></div></li><li><div><a href="Howto-Inspect-the-Build.html">Inspect the build</a></div></li><li><div><a href="Howto-Interactive-Mode.html">Interactive mode</a></div></li><li><div><a href="Howto-Logging.html">Configure and use logging</a></div></li><li><div><a href="Howto-Project-Metadata.html">Project metadata</a></div></li><li><div><a href="Howto-Package.html">Configure packaging</a></div></li><li><div><a href="Howto-Running-Commands.html">Running commands</a></div></li><li><div><a href="Howto-Scala.html">Configure and use Scala</a></div></li><li><div><a href="Howto-Scaladoc.html">Generate API documentation</a></div></li><li><div><a href="Define+Custom+Tasks.html">Define Custom Tasks</a></div></li><li><div><a href="Howto-Startup.html">How to take an action on startup</a></div></li><li><div><a href="Howto-Track-File-Inputs-and-Outputs.html">Track file inputs and outputs</a></div></li><li><div><a href="Troubleshoot-Memory-Issues.html">Troubleshoot memory issues</a></div></li><li><div><a href="Howto-Sequencing.html">Sequencing</a></div><ol class="toc"> <li><div><a href="Howto-Sequential-Task.html">Defining a sequential task with Def.sequential</a></div></li><li><div><a href="Howto-Dynamic-Task.html">Defining a dynamic task with Def.taskDyn</a></div></li><li><div><a href="Howto-After-Input-Task.html">Doing something after an input task</a></div></li><li><div><a href="Howto-Dynamic-Input-Task.html">Defining a dynamic input task with Def.inputTaskDyn</a></div></li><li><div><a href="Howto-Sequence-using-Commands.html">How to sequence using commands</a></div></li> </ol></li><li><div><a href="Custom-Dependency-Configuration.html">How to define a custom dependency configuration</a></div></li><li><div><a href="Examples.html">Examples</a></div><ol class="toc"> <li><div><a href="Basic-Def-Examples.html">.sbt build examples</a></div></li><li><div><a href="Scala-Files-Example.html">.sbt build with .scala files example</a></div></li><li><div><a href="Advanced-Configurations-Example.html">Advanced configurations example</a></div></li><li><div><a href="Advanced-Command-Example.html">Advanced command example</a></div></li> </ol></li> </ol></li><li><div><a href="Name-Index.html">Index</a></div></li><li><div><a href="Developers-Guide.html">Developer’s Guide (Work in progress)</a></div><ol class="toc"> <li><div><a href="Modularization.html">Modularization</a></div><ol class="toc"> <li><div><a href="Module-Summary.html">Module summary</a></div></li> </ol></li><li><div><a href="Coding-Guideline.html">sbt Coding Guideline</a></div><ol class="toc">  </ol></li><li><div><a href="Datatype.html">sbt-datatype</a></div><ol class="toc">  </ol></li><li><div><a href="Compiler-Interface.html">Compiler Interface</a></div><ol class="toc"> <li><div><a href="Version-Specific-Sources.html">Fetching the most specific sources</a></div></li> </ol></li><li><div><a href="Sbt-Launcher.html">sbt Launcher</a></div><ol class="toc"> <li><div><a href="Launcher-Getting-Started.html">Getting Started with the sbt launcher</a></div></li><li><div><a href="Launcher-Architecture.html">Sbt Launcher Architecture</a></div></li><li><div><a href="Launcher-Configuration.html">sbt Launcher Configuration</a></div></li> </ol></li><li><div><a href="DevGuide-Notes.html">Notes</a></div><ol class="toc"> <li><div><a href="Core-Principles.html">Core Principles</a></div></li><li><div><a href="Settings-Core.html">Settings Core</a></div></li><li><div><a href="Setting-Initialization.html">Setting Initialization</a></div></li><li><div><a href="Command-Line-Applications.html">Creating Command Line Applications Using sbt</a></div></li> </ol></li> </ol></li><li class="generated"><div><a href="Contents+in+Depth.html">Contents in Depth</a></div></li><li class="generated"><div><a href="Combined+Pages.html">Combined Pages</a></div></li> </ol></div>
+      </div>
+      </div>
+                </div><div class="col-md-8 col-xs-9">
+                  <div class="rightcolumn contents">
+                  <h1 id="sbt+1.x+release+summary">sbt 1.x release summary<a href="#sbt+1.x+release+summary" class="header-link"><span class="header-link-content">&nbsp;</span></a></h1><p>This page summarizes the highlights of sbt 1.x feature releases.
+For sbt 1.0 changes, see <a href="sbt-1.0-Release-Notes.html">sbt 1.0 Release Notes</a>.
+</p><table style="margin-bottom: 3rem; vertical-align: top;">
+<tr><th style="width: 8rem;">Version</th><th>Highlights</th></tr>
+<tr><td><nobr><a href="#sbt-1.12.0">sbt 1.12.0</a></nobr></td><td>Scala 3.8 REPL support </td></tr>
+<tr><td style="vertical-align: top;"><a href="#sbt-1.11.0">sbt 1.11.0</a></td><td>Publishing to the Central Repository via the Central Portal</td></tr>
+<tr><td style="vertical-align: top;"><a href="#sbt-1.10.0">sbt 1.10.0</a></td><td>SIP-51 support for Scala 2.13 evolution, a wide range of Zinc fixes, CommandProgress API, and ConsistentAnalysisFormat</td></tr>
+<tr><td style="vertical-align: top;"><a href="#sbt-1.9.0">sbt 1.9.0</a></td><td>POM consistency of sbt plugin publishing, <code>sbt new</code>, <code>releaseNotesURL</code> setting, and deprecation of <code>IntegrationTest</code></td></tr>
+<tr><td style="vertical-align: top;"><a href="#sbt-1.8.0">sbt 1.8.0</a></td><td>CVE-2022-37866 security fix and upgrade to scala-xml 2.x</td></tr>
+<tr><td style="vertical-align: top;"><a href="#sbt-1.7.0">sbt 1.7.0</a></td><td>Semantic-version-aware <code>++ &lt;sv&gt;</code> subproject switching</td></tr>
+<tr><td style="vertical-align: top;"><a href="#sbt-1.6.0">sbt 1.6.0</a></td><td>Improved JDK 17 support</td></tr>
+<tr><td style="vertical-align: top;"><a href="#sbt-1.5.0">sbt 1.5.0</a></td><td>Built-in Scala 3 support, eviction error, and deprecation of sbt 0.13 syntax</td></tr>
+<tr><td style="vertical-align: top;"><a href="#sbt-1.4.0">sbt 1.4.0</a></td><td>Build server protocol (BSP) support, <code>sbtn</code> native thin client, build caching, and <code>ThisBuild / versionScheme</code></td></tr>
+<tr><td style="vertical-align: top;"><a href="#sbt-1.3.0">sbt 1.3.0</a></td><td>Out-of-box Coursier library management, ClassLoader layering, and super shell</td></tr>
+<tr><td style="vertical-align: top;"><a href="#sbt-1.2.0">sbt 1.2.0</a></td><td>Cross JDK forking and experimental thin clients</td></tr>
+<tr><td style="vertical-align: top;"><a href="#sbt-1.1.0">sbt 1.1.0</a></td><td>Unified slash syntax and sbt server</td></tr>
+</table><a id="sbt-1.12.0"></a><h2 id="sbt+1.12.0">sbt 1.12.0<a href="#sbt+1.12.0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Released on <a href="https://eed3si9n.com/sbt-1.12.0">2026-01-04</a>, the headline features of sbt 1.12.0 are Scala 3.8 REPL support and <code>dependencyTree</code> to show <code>Provided</code> deps.
+</p><p>Full release note is available at <a href="https://github.com/sbt/sbt/releases/tag/v1.12.0">https://github.com/sbt/sbt/releases/tag/v1.12.0</a>.
+</p><h3 id="Changes+with+compatibility+implications">Changes with compatibility implications<a href="#Changes+with+compatibility+implications" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li><code>dependencyTree</code> displays internal config, which includes <code>Provided</code> by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8359">#8359</a>
+</li><li>Scaladoc now requires <code>Compile / doc / compilers</code> scoped to <code>doc</code> task
+</li></ul><h3 id="Scala+3.8+REPL">Scala 3.8 REPL<a href="#Scala+3.8+REPL" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 1.12.0 adds Scala 3.8 REPL support. Scala 3.8 split its REPL into a separate artifact from the compiler.
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;3.8.0-RC5&quot;
+
+// Uncomment for a nightly
+// resolvers += Resolver.scalaNightlyRepository
+</code></pre><p>To adjust to this change, sbt 1.12.0 adds a new sandbox configuration to resolve <code>scala3-repl</code>, which then is funneled to a classloader used by the <code>console</code> task. This was contributed by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/zinc/pull/1612">zinc#1612</a> and <a href="https://github.com/sbt/sbt/pull/8349">#8349</a>.
+</p><blockquote><p><strong>Note</strong>: <a href="/sbt-1.11.5">sbt 1.11.5</a> added Scala 3.8.0 compilation suppoort.
+</p></blockquote><a id="sbt-1.11.0"></a><h2 id="sbt+1.11.0">sbt 1.11.0<a href="#sbt+1.11.0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>The headline feature of sbt 1.11.0 is support for the Central Repository publishing.
+</p><p>Full release note is available at <a href="https://github.com/sbt/sbt/releases/tag/v1.11.0">https://github.com/sbt/sbt/releases/tag/v1.11.0</a>.
+</p><h3 id="Central+Repository+publishing">Central Repository publishing<a href="#Central+Repository+publishing" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>The Central Repository (aka Maven Central) has long been the pillar of the JVM ecosystem including Scala. The mechanism to publish libraries to the Central has been hosted by Sonatype as OSS Repository Hosting (OSSRH) via HTTP PUT, but in March it was <a href="https://central.sonatype.org/news/20250326_ossrh_sunset/">announced</a> that the endpoint will be sunset in June 2025 in favor of the <a href="https://central.sonatype.org/publish/publish-portal-guide/">Central Portal</a> at <a href="https://central.sonatype.com/">https://central.sonatype.com/</a>.
+</p><p>sbt 1.11.0 implements a built-in support to publish to Central Repository via the Central Portal. To publish to the Central Portal, first set <code>ThisBuild / publishTo</code> setting to the <code>localStaging</code> repository:
+</p><pre><code class="prettyprint lang-scala">ThisBuild / publishTo := {
+  val centralSnapshots = &quot;https://central.sonatype.com/repository/maven-snapshots/&quot;
+  if (isSnapshot.value) Some(&quot;central-snapshots&quot; at centralSnapshots)
+  else localStaging.value
+}
+</code></pre><p>Add <code>credentials</code> to the host <code>central.sonatype.com</code> using the generated user token user name and password.
+</p><p>sbt 1.11.0 will read from the environment variables <code>SONATYPE_USERNAME</code> and <code>SONATYPE_PASSWORD</code> and append a credential for <code>central.sonatype.com</code> out-of-box, which might be useful for automatic publishing from the CI environment, such as GitHub Actions.
+</p><pre><code class="prettyprint lang-yaml">- run: sbt ci-release
+  env:
+    PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
+    PGP_SECRET: ${{ secrets.PGP_SECRET }}
+    SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+    SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+</code></pre><p>When you’re ready to publish, call <code>publishSigned</code> task (available via <a href="https://github.com/sbt/sbt-pgp">sbt-pgp</a>). At this point, the JARs and POM files will be staged to your local <code>target/sona-staging</code> directory.
+</p><p>Next, call <code>sonaUpload</code> to upload to the Central Portal and manually release the bundle, or call <code>sonaRelease</code> to upload and automatically release to the Cental Repository.
+</p><p>This was contributed by <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/sbt/sbt/pull/8126">#8126</a>. The feature was inspired by sbt-sonatype’s workflow pioneered by Taro Saito, and <a href="https://github.com/lumidion/sonatype-central-client">sonatype-central-client</a> spearheaded by David Doyle at <a href="https://www.lumidion.com/">Lumidion</a>.
+</p><a id="sbt-1.10.0"></a><h2 id="sbt+1.10.0">sbt 1.10.0<a href="#sbt+1.10.0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>The headline features of sbt 1.10.0 are <a href="https://docs.scala-lang.org/sips/drop-stdlib-forwards-bin-compat.html">SIP-51</a> Support for Scala 2.13 Evolution, a wide range of Zinc fixes contributed by Jerry Tan and others, CommandProgress API, and ConsistentAnalysisFormat: New Zinc Analysis serialization.
+</p><p>Full release note is available at <a href="https://github.com/sbt/sbt/releases/tag/v1.10.0">https://github.com/sbt/sbt/releases/tag/v1.10.0</a>.
+</p><h3 id="SIP-51+Support+for+Scala+2.13+Evolution">SIP-51 Support for Scala 2.13 Evolution<a href="#SIP-51+Support+for+Scala+2.13+Evolution" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Modern Scala 2.x has kept both forward and backward binary compatibility so a library compiled using Scala 2.13.12 can be used by an application compiled with Scala 2.13.11 etc, and vice versa. The forward compatibility restricts Scala 2.x from evolving during the patch releases, so in <a href="https://docs.scala-lang.org/sips/drop-stdlib-forwards-bin-compat.html">SIP-51</a> Lukas Rytz at Lightbend Scala Team proposed:
+</p><blockquote><p>I propose to drop the forwards binary compatibility requirement that build tools enforce on the Scala 2.13 standard library. This will allow implementing performance optimizations of collection operations that are currently not possible. It also unblocks adding new classes and new members to existing classes in the standard library.
+</p></blockquote><p>Lukas has also contributed changes to sbt 1.10.0 to enforce stricter <code>scalaVersion</code>. Starting sbt 1.10.0, when a Scala 2.13.x patch version newer than <code>scalaVersion</code> is found, it will fail the build as follows:
+</p><pre><code class="prettyprint lang-scala">sbt:foo&gt; run
+[error] stack trace is suppressed; run last scalaInstance for the full output
+[error] (scalaInstance) expected `foo/scalaVersion` to be &quot;2.13.10&quot; or later,
+[error] but found &quot;2.13.5&quot;; upgrade scalaVerion to fix the build.
+[error]
+[error] to support backwards-only binary compatibility (SIP-51),
+[error] the Scala 2.13 compiler cannot be older than scala-library on the
+[error] dependency classpath.
+[error] see `foo/evicted` to know why scala-library 2.13.10 is getting pulled in.
+</code></pre><p>When you see the error message like above, you can fix this by updating the Scala version to the suggested version (e.g. 2.13.10):
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;2.13.10&quot;
+</code></pre><p>Side note: Old timers might know that <a href="https://www.scala-sbt.org/0.13/docs/ChangeSummary_0.13.0.html#sbt+0.13.0">sbt 0.13.0</a> also introduced the idea of <em>scala-library as a normal dependency</em>. This created various confusions as developers expected <code>scalaVersion</code>, compiler version, and scala-library version as expected to align. With the hindsight, sbt 1.10.0 will continue to respect <code>scalaVersion</code> to be the source-of-truth, but will reject bad ones at build time.
+</p><p>This was contributed by Lukas Rytz in <a href="https://github.com/sbt/sbt/pull/7480">#7480</a>.
+</p><h3 id="ConsistentAnalysisFormat%3A+new+Zinc+Analysis+serialization">ConsistentAnalysisFormat: new Zinc Analysis serialization<a href="#ConsistentAnalysisFormat%3A+new+Zinc+Analysis+serialization" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 1.10.0 adds a new Zinc serialization format that is faster and repeatable, unlike the current Protobuf-based serialization. Since Zinc Analysis is internal to sbt, sbt 1.10.0 will enable this format by default. The following setting can be used to opt-out:
+</p><pre><code class="prettyprint lang-scala">Global / enableConsistentCompileAnalysis := false
+</code></pre><p>This was contributed by Stefan Zeiger at Databricks in <a href="https://github.com/sbt/zinc/pull/1326">zinc#1326</a>.
+</p><a id="sbt-1.9.0"></a><h2 id="sbt+1.9.0">sbt 1.9.0<a href="#sbt+1.9.0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Released on <a href="https://eed3si9n.com/sbt-1.9.0">2023-06-02</a>, the headline features of sbt 1.9.0 are POM consistency of sbt plugin publishing, <code>sbt new</code>, a text-based adventure, <code>releaseNotesURL</code> setting, and deprecation of <code>IntegrationTest</code> configuration.
+</p><p>Full release note is available at <a href="https://github.com/sbt/sbt/releases/tag/v1.9.0">https://github.com/sbt/sbt/releases/tag/v1.9.0</a>.
+</p><h3 id="Deprecation+of+IntegrationTest+configuration">Deprecation of IntegrationTest configuration<a href="#Deprecation+of+IntegrationTest+configuration" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 1.9.0 deprecates <code>IntegrationTest</code> configuration.
+</p><p>The recommended migration path is to create a subproject named “integration”, or “foo-integration” etc.
+</p><pre><code class="prettyprint lang-scala">lazy val integration = (project in file(&quot;integration&quot;))
+  .dependsOn(core) // your current subproject
+  .settings(
+    publish / skip := true,
+    // test dependencies
+    libraryDependencies += something % Test,
+  )
+</code></pre><p>From the shell you can run:
+</p><pre><code class="prettyprint lang-scala">&gt; integration/test
+</code></pre><p>Assuming these are slow tests compared to the regular tests, I might not aggregate them at all from other subprojects, and maybe only run it on CI, but it’s up to you.
+</p><p>Why deprecate <code>IntegrationTest</code>? <code>IntegrationTest</code> was a demoware for the idea of custom configuration axis, and now that we are planning to deprecate the mechanism to simplify sbt, we wanted to stop advertising it. We won’t remove it during sbt 1.x series, but deprecation signals the non-recommendation status.
+</p><p>This was contributed by <a href="https://github.com/eed3si9n">@eed3si9n</a> and <a href="https://github.com/mdedetrich">@mdedetrich</a> in <a href="https://github.com/sbt/librarymanagement/pull/414">lm#414</a>/<a href="https://github.com/sbt/sbt/pull/7261">#7261</a>.
+</p><a id="pom"></a><h3 id="POM+consistency+of+sbt+plugin+publishing">POM consistency of sbt plugin publishing<a href="#POM+consistency+of+sbt+plugin+publishing" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 1.9.0 publishes sbt plugin to Maven repository in a POM-consistent way. sbt has been publishing POM file of sbt plugins as <code>sbt-something-1.2.3.pom</code> even though the artifact URL is suffixed as <code>sbt-something_2.12_1.0</code>. This allowed “sbt-something” to be registered by Maven Central, allowing <a href="https://central.sonatype.com/search?smo=true&amp;q=sbt-pgp">search</a>. However, as more plugins moved to Maven Central, it was considered that keeping POM consisntency rule was more important, especially for corporate repositories to proxy them.
+</p><p>sbt 1.9.0 will publish using both the conventional POM-inconsistent style and POM-consistent style so prior sbt releases can still consume the plugin. However, this can be opted-out using <code>sbtPluginPublishLegacyMavenStyle</code> setting.
+</p><p>This fix was contributed by Adrien Piquerez (<a href="https://github.com/adpi2">@adpi2</a>) at Scala Center in <a href="https://github.com/coursier/coursier/pull/2633">coursier#2633</a>, <a href="https://github.com/sbt/sbt/pull/7096">sbt#7096</a> etc. Special thanks to William Narmontas (<a href="https://github.com/ScalaWilliam">@ScalaWilliam</a>) and Wudong Liu (<a href="https://github.com/wudong">@wudong</a>) whose experimental plugin <a href="https://github.com/esbeetee/sbt-vspp">sbt-vspp</a> paved the way for this feature.
+</p><a id="init"></a><h3 id="%2C+a+text-based+adventure"><code>sbt new</code>, a text-based adventure<a href="#%2C+a+text-based+adventure" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 1.9.0 adds text-based menu when <code>sbt new</code> or <code>sbt init</code> is called without arguments:
+</p><pre><code class="prettyprint lang-bash">$ sbt -Dsbt.version=1.9.0 init
+....
+
+Welcome to sbt new!
+Here are some templates to get started:
+ a) scala/toolkit.local               - Scala Toolkit (beta) by Scala Center and VirtusLab
+ b) typelevel/toolkit.local           - Toolkit to start building Typelevel apps
+ c) sbt/cross-platform.local          - A cross-JVM/JS/Native project
+ d) scala/scala-seed.g8               - Scala 2 seed template
+ e) playframework/play-scala-seed.g8  - A Play project in Scala
+ f) playframework/play-java-seed.g8   - A Play project in Java
+ g) scala-js/vite.g8                  - A Scala.JS + Vite project
+ i) holdenk/sparkProjectTemplate.g8   - A Scala Spark project
+ m) spotify/scio.g8                   - A Scio project
+ n) disneystreaming/smithy4s.g8       - A Smithy4s project
+ q) quit
+Select a template (default: a):
+</code></pre><p>Unlike Giter8, <code>.local</code> template creates <code>build.sbt</code> etc in the <strong>current directory</strong>, and reboots into an sbt session.
+</p><p>This was contributed by Eugene Yokota (<a href="https://github.com/eed3si9n">@eed3si9n</a>) in <a href="https://github.com/sbt/sbt/pull/7228">#7228</a>.
+</p><h3 id="Towards+actionable+diagnostics">Towards actionable diagnostics<a href="#Towards+actionable+diagnostics" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 1.9.0 adds <code>actions</code> field to <code>Problem</code> datatype, allowing the compiler to suggest code edits as part of the compiler warnings and errors in a structual manner.
+</p><p>See <a href="https://contributors.scala-lang.org/t/roadmap-for-actionable-diagnostics/6172/1">Roadmap for actionable diagnostics</a> for more details. The changes were contributed by <a href="https://github.com/ckipp01">@ckipp01</a> in <a href="https://github.com/sbt/sbt/pull/7242">#7242</a> and <a href="https://github.com/eed3si9n">@eed3si9n</a> in <a href="https://github.com/build-server-protocol/build-server-protocol/pull/527">bsp#527</a>/<a href="https://github.com/sbt/sbt/pull/7251">#7251</a>/<a href="https://github.com/sbt/zinc/pull/1186">zinc#1186</a> etc.
+</p><h3 id="setting"><code>releaseNotesURL</code> setting<a href="#setting" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 1.9.0 adds <code>releaseNotesURL</code> setting, which creates <code>info.releaseNotesUrl</code> property in the POM file. This will then be used by Scala Steward. See <a href="https://contributors.scala-lang.org/t/add-release-notes-urls-to-your-poms/6059/1">
+Add release notes URLs to your POMs</a> for details.
+</p><p>This was contributed by Arman Bilge in <a href="https://github.com/sbt/librarymanagement/pull/410">lm#410</a>.
+</p><a id="sbt-1.8.0"></a><h2 id="sbt+1.8.0">sbt 1.8.0<a href="#sbt+1.8.0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Full release note is available at <a href="https://github.com/sbt/sbt/releases/tag/v1.8.0">https://github.com/sbt/sbt/releases/tag/v1.8.0</a>.
+</p><h3 id="CVE-2022-37866">CVE-2022-37866<a href="#CVE-2022-37866" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><a href="https://github.com/advisories/GHSA-wv7w-rj2x-556x">CVE-2022-37866</a> is a security vulnerability discovered in Apache Ivy, but found also in Coursier.
+</p><p>With coordination with Apache Foundation, Adrien Piquerez from Scala Center backported the fix to both our Ivy 2.3 fork and Coursier.
+</p><h3 id="scala-xml">scala-xml<a href="#scala-xml" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 1.8.0 upgrades scala-xml to 2.x. In theory this breaks the binary compatibility in the plugin ecosystem, but in practice there’s already a mixture of both 1.x and 2.x.
+</p><p>If you encounter a conflict in plugins, try putting the following in <code>project/plugins.sbt</code>:
+</p><pre><code class="prettyprint lang-scala">ThisBuild / libraryDependencySchemes += &quot;org.scala-lang.modules&quot; %% &quot;scala-xml&quot; % VersionScheme.Always
+</code></pre><h2 id="Changes+with+compatibility+implications">Changes with compatibility implications<a href="#Changes+with+compatibility+implications" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><ul><li>Updates to Scala 2.12.17 + Scala compiler 2.12.17, which upgrades to scala-xml 2.x <a href="https://github.com/sbt/sbt/pull/7021">#7021</a>
+</li></ul><a id="sbt-1.7.0"></a><h2 id="sbt+1.7.0">sbt 1.7.0<a href="#sbt+1.7.0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Full release note is available at <a href="https://github.com/sbt/sbt/releases/tag/v1.7.0">https://github.com/sbt/sbt/releases/tag/v1.7.0</a>.
+</p><h3 id="Changes+with+compatibility+implications">Changes with compatibility implications<a href="#Changes+with+compatibility+implications" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Moves domain socket location to <code>XDG_RUNTIME_DIR</code> and <code>/tmp</code> <a href="https://github.com/sbt/sbt/pull/6887">#6887</a> by <a href="https://github.com/AlonsoM45">@AlonsoM45</a>
+</li><li>Deprecates <code>Resolver.sonatypeRepo</code> and adds <code>Resolver.sonatypeOssRepos</code>, which includes https://s01.oss.sonatype.org/ <a href="https://github.com/sbt/librarymanagement/pull/393">lm393</a> by <a href="https://github.com/armanbilge">@armanbilge</a>
+</li></ul><h3 id="command+updates"><code>++</code> command updates<a href="#command+updates" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Prior to sbt 1.7 <code>++ &lt;sv&gt; &lt;command1&gt;</code> filtered subprojects using <code>crossScalaVersions</code> having the same ABI suffix as <code>&lt;sv&gt;</code>. This behavior was generally not well understood, and also created incorrect result for Scala 3.x since <code>++ 3.0.1 test</code> could downgrade subproject that may require 3.1 or above.
+</p><p>sbt 1.7.0 fixes this by requiring <code>++ &lt;sv&gt; &lt;command1&gt;</code> so <code>&lt;sv&gt;</code> part can be given as a <a href="https://github.com/npm/node-semver">semantic version selector</a> expression, such as <code>3.1.x</code> or <code>2.13.x</code>. Note that the expression may match at most one Scala version to switch into. In sbt 1.7.0, a concrete version such as <code>++ 3.0.1</code> equires exact version to be present in <code>crossScalaVersion</code>.
+</p><p>This contribution was a collaborated effort among <a href="https://github.com/raboof">Arnout Engelen</a> <a href="https://github.com/sbt/sbt/pull/6894">#6894</a>, <a href="https://github.com/ruippeixotog">Rui Gonçalves</a> <a href="https://github.com/sbt/librarymanagement/pull/400">lm#400</a>, and <a href="https://github.com/eed3si9n">Eugene Yokota</a>.
+</p><a id="sbt-1.6.0"></a><h2 id="sbt+1.6.0">sbt 1.6.0<a href="#sbt+1.6.0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Released on <a href="https://eed3si9n.com/sbt-1.6.0">2021-12-26</a>, the headline features of sbt 1.6.0 are improved JDK 17 support and BSP improvements.
+</p><p>Full release note is available at <a href="https://github.com/sbt/sbt/releases/tag/v1.6.0">https://github.com/sbt/sbt/releases/tag/v1.6.0</a>.
+</p><h3 id="Changes+with+compatibility+implications">Changes with compatibility implications<a href="#Changes+with+compatibility+implications" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>The Scala version used to compile <code>build.sbt</code> is updated to <a href="https://github.com/scala/scala/releases/tag/v2.12.15">Scala 2.12.15</a>, which improves the compatibility with JDK 17+. The metabuild is compiled with <code>-Xsource:3</code> flag <a href="https://github.com/sbt/sbt/pull/6664">#6664</a> by <a href="https://github.com/Nirvikalpa108">@Nirvikalpa108</a> + <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li><li><code>sbt.TrapExit</code> is dropped due to Security Manager being deprecated in JDK 17. Calling <code>sys.exit</code> in <code>run</code> or <code>test</code> would shutdown the sbt session. Use <a href="https://www.scala-sbt.org/1.x/docs/Forking.html">forking</a> to prevent it <a href="https://github.com/sbt/sbt/pull/6665">#6665</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li><li>sbt 1.6.0 reads credentials from the file specified using <code>SBT_CREDENTIALS</code> environment variable, following sbt launcher <a href="https://github.com/sbt/sbt/pull/6724">#6724</a> by <a href="https://github.com/daddykotex">@daddykotex</a>
+</li></ul><a id="sbt-1.5.0"></a><h2 id="sbt+1.5.0">sbt 1.5.0<a href="#sbt+1.5.0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Released on <a href="https://eed3si9n.com/sbt-1.5.0">2021-04-04</a>, the headline features of sbt 1.5.0 are built-in Scala 3 support, eviction error, deprecation of sbt 0.13 syntax, and Coursier-based launcher.
+</p><p>Full release note is available at <a href="https://github.com/sbt/sbt/releases/tag/v1.5.0">https://github.com/sbt/sbt/releases/tag/v1.5.0</a>.
+</p><h3 id="Built-in+Scala+3+support">Built-in Scala 3 support<a href="#Built-in+Scala+3+support" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 1.5.0 adds built-in Scala 3 support, contributed by Scala Center. Main implementation was done by Adrien Piquerez (<a href="https://github.com/adpi2">@adpi2</a>) based on EPFL/LAMP’s <a href="https://github.com/lampepfl/dotty/tree/master/sbt-dotty">sbt-dotty</a>. You can now use Scala 3.0.0-RC2 without using the sbt-dotty plugin.
+</p><pre><code class="prettyprint lang-scala">ThisBuild / scalaVersion := &quot;3.0.0-RC2&quot;
+</code></pre><p>This will compile the following <code>Hello.scala</code>:
+</p><pre><code class="prettyprint lang-scala">package example
+
+@main def hello(arg: String*): Unit =
+  if arg.isEmpty then println(&quot;hello&quot;)
+  else println(s&quot;hi ${arg.head}&quot;)
+</code></pre><p><strong>Note</strong>: To support cross testing of various Scala 3.x releases, <code>crossTarget</code> directory will contain the full Scala version. <a href="https://github.com/sbt/sbt/pull/6415">#6415</a>
+</p><h3 id="Scala+2.13-3.x+sandwich">Scala 2.13-3.x sandwich<a href="#Scala+2.13-3.x+sandwich" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>Scala 3.0.x <a href="https://www.scala-lang.org/2019/12/18/road-to-scala-3.html">shares</a> the standard library with Scala 2.13, and since Scala 2.13.4, they can mutually consume the output of each other as external library. This allows you to create Scala 2.13-3.x sandwich, a layering of dependencies coming from different Scala versions.
+</p><p>sbt 1.5.0 introduces new cross building operand to use <code>_3</code> variant when <code>scalaVersion</code> is 2.13.x, and vice versa:
+</p><pre><code class="prettyprint lang-scala">(&quot;a&quot; % &quot;b&quot; % &quot;1.0&quot;).cross(CrossVersion.for3Use2_13)
+
+(&quot;a&quot; % &quot;b&quot; % &quot;1.0&quot;).cross(CrossVersion.for2_13Use3)
+</code></pre><p>These are analogous to <code>%%</code> operator that selects <code>_2.13</code> etc based on <code>scalaVersion</code>. 
+</p><p><strong>Warning</strong>: Library authors should generally treat Scala 3.0 as any other major version, and prefer to cross publish <code>_3</code> variant to avoid the conflict. Some libraries may encode a particular notion in different ways for Scala 2.13 and 3.0. For example, arity abstraction may use Shapeless HList in Scala 2.13, but built-in Tuple types in Scala 3.0. Thus it’s generally not safe to have <code>_2.13</code> and <code>_3</code> versions of the same library in the classpath, even transitively. Application developers should be free to use <code>.cross(CrossVersion.for3Use2_13)</code> as long as the transitive dependency graph will not introduce <code>_2.13</code> variant of a library you already have in <code>_3</code> variant.
+</p><p><a href="https://github.com/sbt/librarymanagement/pull/361">lm#361</a> by <a href="https://github.com/adpi2">@adpi2</a>
+</p><h3 id="Deprecation+of+sbt+0.13+syntax">Deprecation of sbt 0.13 syntax<a href="#Deprecation+of+sbt+0.13+syntax" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 1.5.0 deprecates both the sbt 0.13 style shell syntax <code>proj/cofing:intask::key</code> and sbt 0.13 styld build.sbt DSL <code>key in (Compile, intask)</code> in favor of the unified slash syntax.
+</p><p>There’s a <a href="https://eed3si9n.com/syntactic-scalafix-rule-for-unified-slash-syntax">syntactic Scalafix rule for unified slash syntax</a>
+to semi-automatically rewrite existing sbt 0.13 syntax to the slash syntax. Currently it requires the use of scalafix CLI
+and it’s not very precise (because it’s a syntactic rule that only looks at the shape of the code) but it gets most of the job done.
+</p><pre><code class="prettyprint lang-bash">$ scalafix --rules=https://gist.githubusercontent.com/eed3si9n/57e83f5330592d968ce49f0d5030d4d5/raw/7f576f16a90e432baa49911c9a66204c354947bb/Sbt0_13BuildSyntax.scala *.sbt project/*.scala
+</code></pre><p>See <a href="https://www.scala-sbt.org/1.x/docs/Migrating-from-sbt-013x.html#slash">https://www.scala-sbt.org/1.x/docs/Migrating-from-sbt-013x.html#slash</a> for details.
+</p><h3 id="Eviction+error">Eviction error<a href="#Eviction+error" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 1.5.0 removes eviction warning, and replaces it with stricter eviction error. Unlike the eviction warning that was based on speculation, eviction error only uses the <a href="Publishing.html#Version+scheme"><code>ThisBuild / versionScheme</code> information</a> supplied by the library authors.
+</p><p>For example:
+</p><pre><code class="prettyprint lang-scala">lazy val use = project
+  .settings(
+    name := &quot;use&quot;,
+    libraryDependencies ++= Seq(
+      &quot;org.http4s&quot; %% &quot;http4s-blaze-server&quot; % &quot;0.21.11&quot;,
+      // https://repo1.maven.org/maven2/org/typelevel/cats-effect_2.13/3.0.0-M4/cats-effect_2.13-3.0.0-M4.pom
+      // is published with early-semver
+      &quot;org.typelevel&quot; %% &quot;cats-effect&quot; % &quot;3.0.0-M4&quot;,
+    ),
+  )
+</code></pre><p>The above build will fail to build <code>use/compile</code> with the following error:
+</p><pre><code class="prettyprint lang-scala">[error] stack trace is suppressed; run last use / update for the full output
+[error] (use / update) found version conflict(s) in library dependencies; some are suspected to be binary incompatible:
+[error]
+[error]   * org.typelevel:cats-effect_2.12:3.0.0-M4 (early-semver) is selected over {2.2.0, 2.0.0, 2.0.0, 2.2.0}
+[error]       +- use:use_2.12:0.1.0-SNAPSHOT                        (depends on 3.0.0-M4)
+[error]       +- org.http4s:http4s-core_2.12:0.21.11                (depends on 2.2.0)
+[error]       +- io.chrisdavenport:vault_2.12:2.0.0                 (depends on 2.0.0)
+[error]       +- io.chrisdavenport:unique_2.12:2.0.0                (depends on 2.0.0)
+[error]       +- co.fs2:fs2-core_2.12:2.4.5                         (depends on 2.2.0)
+[error]
+[error]
+[error] this can be overridden using libraryDependencySchemes or evictionErrorLevel
+</code></pre><p>This is because Cats Effect 2.x and 3.x are found in the classpath, and Cats Effect has declared that it uses early-semver. If the user wants to opt-out of this, the user can do so per module:
+</p><pre><code class="prettyprint lang-scala">ThisBuild / libraryDependencySchemes += &quot;org.typelevel&quot; %% &quot;cats-effect&quot; % &quot;always&quot;
+</code></pre><p>or globally as:
+</p><pre><code class="prettyprint lang-scala">ThisBuild / evictionErrorLevel := Level.Info
+</code></pre><p>On the other hand, if you want to bring back the guessing feature in eviction warning, you can do using the following settings:
+</p><pre><code class="prettyprint lang-scala">ThisBuild / assumedVersionScheme := VersionScheme.PVP
+ThisBuild / assumedVersionSchemeJava := VersionScheme.EarlySemVer
+ThisBuild / assumedEvictionErrorLevel := Level.Warn
+</code></pre><p><a href="https://github.com/eed3si9n">@eed3si9n</a> implemented this in <a href="https://github.com/sbt/sbt/pull/6221">#6221</a>, inspired in part by Scala Center’s <a href="https://github.com/scalacenter/sbt-eviction-rules">sbt-eviction-rules</a>, which was implemented by Alexandre Archambault (<a href="https://github.com/alxarchambault">@alxarchambault</a>) and Julien Richard-Foy (<a href="https://github.com/julienrf">@julienrf</a>).
+</p><h3 id="ThisBuild+%2F+packageTimestamp+setting">ThisBuild / packageTimestamp setting<a href="#ThisBuild+%2F+packageTimestamp+setting" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>In sbt 1.4.0 we started wiping out the timestamps in JAR to make the builds more repeatable. This had an unintended consequence of breaking Play’s last-modified response header.
+</p><p>To opt out of this default, the user can use:
+</p><pre><code class="prettyprint lang-scala">ThisBuild / packageTimestamp := Package.keepTimestamps
+
+// or
+
+ThisBuild / packageTimestamp := Package.gitCommitDateTimestamp
+</code></pre><p><a href="https://github.com/sbt/sbt/pull/6237">#6237</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</p><h3 id="Coursier-based+launcher">Coursier-based launcher<a href="#Coursier-based+launcher" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt launcher shipped in the official installer of sbt is a generic launcher that is able to launch all versions of sbt. For the sbt launcher shipped with sbt 1.5.0 installer, its internal dependency resolver used to resolve sbt itself was updated from Apache Ivy to Coursier (Dependency resolver for the built has been updated to Coursier in sbt 1.3.0).
+</p><a id="sbt-1.4.0"></a><h2 id="sbt+1.4.0">sbt 1.4.0<a href="#sbt+1.4.0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Released on <a href="https://eed3si9n.com/sbt-1.4.0">2020-10-05</a>, the headline features of sbt 1.4.0 are build server protocol (BSP) support, sbtn: a native thin client for sbt, build caching, and <code>ThisBuild / versionScheme</code> to take the guessing out of eviction warning.
+</p><p>Full release note is available at <a href="https://github.com/sbt/sbt/releases/tag/v1.4.0">https://github.com/sbt/sbt/releases/tag/v1.4.0</a>.
+</p><h3 id="Build+server+protocol+%28BSP%29+support">Build server protocol (BSP) support<a href="#Build+server+protocol+%28BSP%29+support" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 1.4.0 adds build server protocol (BSP) support, contributed by <a href="https://contributors.scala-lang.org/t/build-server-protocol-in-sbt/4234">Scala Center</a>. Main implementation was done by Adrien Piquerez (<a href="https://github.com/adpi2">@adpi2</a> based on <a href="https://github.com/eed3si9n">@eed3si9n</a>’s prototype.
+</p><p>When sbt 1.4.0 starts, it will create a file named <code>.bsp/sbt.json</code> containing a machine-readable instruction on how to run <code>sbt -bsp</code>, which is a command line program that uses standard input and output to communicate to sbt server using build server protocol. BSP enables programmatic integration with IDEs like IntelliJ Scala plugin and Metals.
+</p><h3 id="Native+thin+client">Native thin client<a href="#Native+thin+client" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 1.4.0 adds an official native thin client called <code>sbtn</code> that supports all tasks. If you’re using the official sbt launcher 1.4.0 and not the knockoff kind you can use <code>--client</code> option to run the native thin client:
+</p><pre><code class="prettyprint lang-bash">$ sbt --client compile
+$ sbt --client shutdown
+</code></pre><p>The native thin client will run sbt (server) as a daemon, which avoids the JVM spinup and loading time for the second call onwards. This could be an option if you would like to use sbt from the system shell such as Zsh and Fish.
+</p><p>Remember to call <code>sbt --client shutdown</code> when you’re done! If you want to enable this via an environment variable you can set <code>SBT_NATIVE_CLIENT</code> to <code>true</code>.
+<code>sbtn</code> binary files are also available from https://github.com/sbt/sbtn-dist/releases/tag/v1.4.0
+</p><p><a href="https://github.com/sbt/sbt/pull/5620">#5620</a> by <a href="https://github.com/eatkins">@eatkins</a>
+</p><h3 id="ThisBuild+%2F+versionScheme">ThisBuild / versionScheme<a href="#ThisBuild+%2F+versionScheme" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 1.4.0 adds a new setting called <code>ThisBuild / versionScheme</code> to track version scheme of the build:
+</p><pre><code class="prettyprint lang-scala">ThisBuild / versionScheme := Some(&quot;early-semver&quot;)
+</code></pre><p>The supported values are <code>&quot;early-semver&quot;</code>, <code>&quot;pvp&quot;</code>, and <code>&quot;semver-spec&quot;</code>. sbt will include this information into <code>pom.xml</code> and <code>ivy.xml</code> as a property. In addition, sbt 1.4.0 will use the information to take the guessing out of eviction warning when this information is available. <a href="https://github.com/sbt/sbt/pull/5724">#5724</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</p><h3 id="VirtualFile+%2B+sbt+1.x+RemoteCache">VirtualFile + sbt 1.x RemoteCache<a href="#VirtualFile+%2B+sbt+1.x+RemoteCache" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 1.4.0 / Zinc 1.4.0 virtualizes the file paths tracked during incremental compilation. The benefit for this that the state of incremental compilation can shared across <em>different</em> machines, as long as <code>ThisBuild / rootPaths</code> are enumerated beforehand.
+</p><p>To demonstrate this, we’ve also added <strong>experimental</strong> <a href="http://eed3si9n.com/cached-compilation-for-sbt">cached compilation</a> feature to sbt. All you need is the following setting:
+</p><pre><code class="">ThisBuild / pushRemoteCacheTo := Some(MavenCache(&quot;local-cache&quot;, file(&quot;/tmp/remote-cache&quot;)))
+</code></pre><p>Then from machine 1, call <code>pushRemoteCache</code>. This will publish the <code>*.class</code> and Zinc Analysis artifacts to the location. Next, from machine 2, call <code>pullRemoteCache</code>.
+</p><p><a href="https://github.com/sbt/zinc/pull/712">zinc#712</a>/<a href="https://github.com/sbt/sbt/pull/5417">#5417</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</p><h3 id="Build+linting">Build linting<a href="#Build+linting" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>On start up, sbt 1.4.0 checks for unused settings/tasks. Because most settings are on the intermediary to other settings/tasks, they are included into the linting by default. The notable exceptions are settings used exclusively by a command. To opt-out, you can either append it to <code>Global / excludeLintKeys</code> or set the rank to invisible.
+</p><p><a href="https://github.com/sbt/sbt/pull/5153">#5153</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</p><h3 id="Conditional+task">Conditional task<a href="#Conditional+task" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 1.4.0 adds support for conditional task (or Selective task), which is a new kind of task automatically created when <code>Def.task { ... }</code> consists of an <code>if</code>-expression:
+</p><pre><code class="prettyprint lang-scala">bar := {
+  if (number.value &lt; 0) negAction.value
+  else if (number.value == 0) zeroAction.value
+  else posAction.value
+}
+</code></pre><p>Unlike the regular (Applicative) task composition, conditional tasks delays the evaluation of then-clause and else-clause as naturally expected of an <code>if</code>-expression. This is already possible with <code>Def.taskDyn { ... }</code>, but unlike dynamic tasks, conditional task works with <code>inspect</code> command. See <a href="http://eed3si9n.com/selective-functor-in-sbt">Selective functor for sbt</a> for more details. <a href="https://github.com/sbt/sbt/pull/5558">#5558</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</p><h3 id="Incremental+build+pipelining">Incremental build pipelining<a href="#Incremental+build+pipelining" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 1.4.0 adds experimental incremental build pipelining. To enable build pipelining for the build:
+</p><pre><code class="">ThisBuild / usePipelining := true
+</code></pre><p>To opt-out of creating an early output for some of the subprojects:
+</p><pre><code class="">exportPipelining := false
+</code></pre><p><a href="https://github.com/sbt/sbt/pull/5703">#5703</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</p><h3 id="sbt-dependency-graph+is+in-sourced">sbt-dependency-graph is in-sourced<a href="#sbt-dependency-graph+is+in-sourced" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 1.4.0 brings in Johannes Rudolph’s sbt-dependency-graph plugin into the code base.
+Since it injects many tasks per subprojects, the plugin is split into two parts:
+- <code>MiniDependencyTreePlugin</code> that is enabled by default, bringing in <code>dependencyTree</code> task to <code>Compile</code> and <code>Test</code> configurations
+- Full strength <code>DependencyTreePlugin</code> that is enabled by putting the following to <code>project/plugins.sbt</code>:
+</p><pre><code class="prettyprint lang-scala">addDependencyTreePlugin
+</code></pre><h3 id="Fixes+with+compatibility+implications">Fixes with compatibility implications<a href="#Fixes+with+compatibility+implications" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><ul><li>Replaces Apache Log4j with our own logger by default to avoid Appender leakage. Use <code>ThisBuild / useLog4J := true</code> to use Log4j. <a href="https://github.com/sbt/sbt/pull/5731">#5731</a> by <a href="https://github.com/eatkins">@eatkins</a>
+</li><li>Makes JAR file creation repeatable by sorting entry by name and dropping timestamps <a href="https://github.com/sbt/sbt/pull/5344">#5344</a>/<a href="https://github.com/sbt/io/pull/279">io#279</a> by <a href="https://github.com/raboof">@raboof</a>
+</li><li>Loads bare settings in the alphabetic order of the build files <a href="https://github.com/sbt/sbt/issues/2697">#2697</a>/<a href="https://github.com/sbt/sbt/pull/5447">#5447</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li><li>Loads <code>val</code>s from top-to-bottom within a build file <a href="https://github.com/sbt/sbt/issues/2232">#2232</a>/<a href="https://github.com/sbt/sbt/pull/5448">#5448</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li><li>HTTP resolvers require explicit opt-in using <code>.withAllowInsecureProtocol(true)</code> <a href="https://github.com/sbt/sbt/pull/5593">#5593</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</li><li>Ctrl-C during triggered execution <code>~</code> returns to the shell instead of shutting down sbt <a href="https://github.com/sbt/sbt/pull/5804">#5804</a> by <a href="https://github.com/eatkins">@eatkins</a>
+</li></ul><a id="sbt-1.3.0"></a><h2 id="sbt+1.3.0">sbt 1.3.0<a href="#sbt+1.3.0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Released on <a href="https://web.archive.org/web/20191017213505/https://www.lightbend.com/blog/sbt-1.3.0-release">2019-09-04</a>, the headline features of sbt 1.3 are out-of-box <a href="https://get-coursier.io/">Coursier</a> library management, ClassLoader layering, IO improvements, and super shell.
+</p><p>Full release note is available at <a href="https://github.com/sbt/sbt/releases/tag/v1.3.0">https://github.com/sbt/sbt/releases/tag/v1.3.0</a>.
+</p><h3 id="Library+management+with+Coursier">Library management with Coursier<a href="#Library+management+with+Coursier" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 1.3.0 adopts <a href="https://get-coursier.io/">Coursier</a> for the library management. Coursier is a dependency resolver like Ivy, rewritten in Scala by Alexandre Archambault (<a href="https://github.com/alexarchambault">@alexarchambault</a>), aiming to be a faster alternative.
+</p><p><strong>Note</strong>: Under some situations, Coursier may not resolve the same way as Ivy (for example remote <code>-SNAPSHOT</code>s are cached for 24 hours). If you wish to go back to Apache Ivy for library management, put the following in your <code>build.sbt</code>:
+</p><pre><code class="prettyprint lang-scala">ThisBuild / useCoursier := false
+</code></pre><p>Many people were involved in the effort of bringing Coursier to sbt. Early in 2018 Leonard Ehrenfried (<a href="https://github.com/leonardehrenfried">@leonardehrenfried</a>) started the Coursier-backed LM API implementation as <a href="https://github.com/sbt/librarymanagement/pull/190">lm#190</a>. During the fall, it was further improved by Andrea Peruffo (<a href="https://github.com/andreaTP">@andreaTP</a>), and <code>lm-coursier</code> eventually became part of coursier/sbt-coursier repository maintained by Alex. This spring, Eugene (<a href="https://github.com/eed3si9n">@eed3si9n</a>) revisited this again to make a few more changes so we can swap out the LM engine in <a href="https://github.com/sbt/sbt/pull/4614">#4614</a> with the help from Alex.
+</p><h3 id="Turbo+mode+with+ClassLoader+layering">Turbo mode with ClassLoader layering<a href="#Turbo+mode+with+ClassLoader+layering" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 1.3.0 adds “turbo” mode that enables experimental or advanced features that might require some debugging by the build user when it doesn’t work.
+</p><pre><code class="prettyprint lang-scala">ThisBuild / turbo := true
+</code></pre><p>Initially we are putting the layered ClassLoader (<code>ClassLoaderLayeringStrategy.AllLibraryJars</code>) behind this flag.
+</p><p>sbt has always created two-layer ClassLoaders when evaluating the <code>run</code> and <code>test</code> tasks. The top layer of the ClassLoader contains the scala library jars so that the classes in the scala package may be reused across multiple task evaluations. The second layer loads the rest of the project classpath including the library dependencies and project class files. sbt 1.3.0 introduces <strong>experimental</strong> <code>classLoaderLayeringStrategy</code> feature that furthers this concept.
+</p><pre><code class="prettyprint lang-scala">Compile / classLoaderLayeringStrategy := ClassLoaderLayeringStrategy.Flat
+// default
+Compile / classLoaderLayeringStrategy := ClassLoaderLayeringStrategy.ScalaLibrary
+// enabled with turbo
+Compile / classLoaderLayeringStrategy := ClassLoaderLayeringStrategy.AllLibraryJars
+
+Test / classLoaderLayeringStrategy := ClassLoaderLayeringStrategy.Flat
+// default
+Test / classLoaderLayeringStrategy := ClassLoaderLayeringStrategy.ScalaLibrary
+// enabled with turbo
+Test / classLoaderLayeringStrategy := ClassLoaderLayeringStrategy.AllLibraryJars
+</code></pre><ul><li><code>ClassLoaderLayeringStrategy.Flat</code> includes all classes and JARs except for the Java runtime. The behavior of tasks using this strategy should be similar to forking without the overhead of starting a new jvm.
+</li><li><code>ClassLoaderLayeringStrategy.ScalaLibrary</code> creates a two-layer ClassLoader where Scala standard library is kept warm, similar to sbt 1.2.x
+</li><li><code>ClassLoaderLayeringStrategy.AllLibraryJars</code> creates a three-layer ClassLoader where library dependencies, in addition to Scala standard libraries are kept warm
+</li></ul><p><code>ClassLoaderLayeringStrategy.AllLibraryJars</code> should benefit the response time of run and test tasks. By caching the library jar classloader, the startup latency of the run and test tasks can be reduced significantly when they are run multiple times within the same session. GC pressure is also reduced because libraries jars will not be reloaded every time the task is evaluated.
+</p><p><strong>Note</strong>: ClassLoaderLayeringStrategy.AllLibraryJars reuses the singleton object between the tests, which requires libraries to clean after itself.
+</p><p><code>ClassLoaderLayeringStrategy.Flat</code> on the other hand will benefit certain applications that do not work well with layered ClassLoaders. One such example is Java serialization + serialization proxy pattern used by Scala collections.
+</p><p>ClassLoader layering was contributed by Ethan Atkins (@eatkins) as #4476
+</p><h3 id="Glob">Glob<a href="#Glob" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 1.3.0 introduces a new type, <code>Glob,</code> that describes a path search query. For example, all of the scala sources in the project directory can be described by <code>Glob(baseDirectory.value, RecursiveGlob / &quot;*.scala&quot;)</code> or <code>baseDirectory.value.toGlob / ** / &quot;*.scala&quot;,</code> where <code>**</code> is an alias for <code>RecursiveGlob</code>. Glob expands on <a href="https://www.scala-sbt.org/1.x/docs/Paths.html#Path+Finders">PathFinders</a> but they can be composed with no io overhead. Globs can be retrieved using a <code>FileTreeView</code>. For example, one can write:
+</p><pre><code class="prettyprint lang-scala">val scalaSources = baseDirectory.value.toGlob / ** / &quot;*.scala&quot;
+val javaSources = baseDirectory.value.toGlob / ** / &quot;*.java&quot;
+val allSources = fileTreeView.value.list(Seq(scalaSources, javaSources))
+</code></pre><p>and the <code>FileTreeView</code> will only traverse the base directory once. Globs and FileTreeView were added by Ethan Atkins (<a href="https://github.com/eatkins">@eatkins</a>) in <a href="https://github.com/sbt/io/pull/178">io#178</a>,<a href="https://github.com/sbt/io/pull/216">io#216</a>,<a href="https://github.com/sbt/io/pull/226">io#226</a>
+</p><h3 id="Watch+improvements">Watch improvements<a href="#Watch+improvements" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 1.3.0 introduces a new file monitoring implementation. It uses enhanced apis for tracking file change events using os events. It adds a new parser that extracts the specific task(s) for which it will monitor source files and rerun when it detects changes. Only source dependencies of the running tasks are monitored. For example, when running <code>~compile</code>, changes to test source files will not trigger a new build. Between file events, there are also now options to return to the shell, rerun the previous command(s) or exit sbt. These changes were implemented by Ethan Atkins (<a href="https://github.com/eatkins">@eatkins</a>) in <a href="https://github.com/sbt/io/pull/178">io#178</a>,<a href="https://github.com/sbt/io/pull/216">#216</a>,<a href="https://github.com/sbt/io/pull/226">#226</a>,<a href="https://github.com/sbt/sbt/pull/4512">#4512</a>,<a href="https://github.com/sbt/sbt/pull/4627">#4627</a>.
+</p><h3 id="Build+definition+source+watch">Build definition source watch<a href="#Build+definition+source+watch" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 1.3.0 automatically watches the build definition sources and displays a warning
+if you execute a task without reloading. This can be configured to reload automatically as follows:
+</p><pre><code class="prettyprint lang-scala">Global / onChangedBuildSource := ReloadOnSourceChanges
+</code></pre><p>This feature was contributed by Ethan Atkins (<a href="https://github.com/eatkins">@eatkins</a>) in <a href="https://github.com/sbt/sbt/pull/4664">#4664</a>
+</p><h3 id="Super+shell">Super shell<a href="#Super+shell" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>When running in an ANSI-compatible terminal, sbt 1.3.0 will display the currently running tasks. This gives the developer the idea of what tasks are being processed in parallel, and where the build is spending its time. In homage to Gradle’s “Rich Console” and Buck’s “Super Console”, we call ours “Super shell.”
+</p><p>To opt-out put the following in the build:
+</p><pre><code class="prettyprint lang-scala">ThisBuild / useSuperShell := false
+</code></pre><p>or run sbt with <code>--supershell=false</code> (or <code>-Dsbt.supershell=false</code>). This feature was added by Eugene Yokota (<a href="https://github.com/eed3si9n">@eed3si9n</a>) as <a href="https://github.com/sbt/sbt/pull/4396">#4396</a>/<a href="https://github.com/sbt/util/pull/196">util#196</a>.
+</p><h3 id="Tracing">Tracing<a href="#Tracing" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>To view the task breakdown visually, run sbt with <code>--traces</code> (or <code>-Dsbt.traces=true</code>). This will generate <code>build.traces</code> file, which is viewable using Chrome Tracing <code>chrome://tracing/</code>. This feature was contributed by Jason Zaugg (<a href="https://github.com/retronym">@retronym</a>).
+</p><p>To output the task timings on screen, run sbt with <code>--timings</code> (or <code>-Dsbt.task.timings=true -Dsbt.task.timings.on.shutdown=true</code>).
+</p><h3 id="SemanticDB+support">SemanticDB support<a href="#SemanticDB+support" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 1.3.0 makes it easier to generate <a href="https://scalameta.org/docs/semanticdb/guide.html">SemanticDB</a>. To enable the generation of SemanticDB build-wide:
+</p><pre><code class="">ThisBuild / semanticdbEnabled := true
+ThisBuild / semanticdbVersion := &quot;4.1.9&quot;
+ThisBuild / semanticdbIncludeInJar := false
+</code></pre><p>This was added by <a href="https://github.com/eed3si9n">@eed3si9n</a> as <a href="https://github.com/sbt/sbt/pull/4410">#4410</a>.
+</p><h3 id="print+command">print command<a href="#print+command" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 1.3.0 adds a new <code>print</code> command, similar to <code>show</code> but prints directly to standard out.
+</p><pre><code class=""># sbt -no-colors --error  &quot;print akka-cluster/scalaVersion&quot;
+2.12.8
+</code></pre><p>This was contributed by David Knapp (<a href="https://github.com/Falmarri">@Falmarri</a>) as <a href="https://github.com/sbt/sbt/pull/4341">#4341</a>
+</p><h3 id="JDK+11+support">JDK 11 support<a href="#JDK+11+support" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 1.3.0 is first release of sbt that’s been testing on JDK11 extensively.
+All integration tests on Travis CI are on AdoptOpenJDK’s JDK 11, which were updated by <a href="https://github.com/eed3si9n">@eed3si9n</a> as <a href="https://github.com/sbt/sbt/pull/4389">#4389</a>/<a href="https://github.com/sbt/zinc/pull/639">zinc#639</a>/<a href="https://github.com/sbt/zinc/pull/640">zinc640</a>.
+</p><ul><li>Fixes warnings on JDK 9+ by upgrading to protobuf 3.7.0 <a href="https://github.com/sbt/zinc/pull/644">zinc#644</a> by <a href="https://github.com/smarter">@smarter</a>
+</li><li>Fixes spurious rebuilds caused by invalidation of <code>rt.jar</code> on JDK 11 <a href="https://github.com/sbt/sbt/pull/4679">#4679</a> by <a href="https://github.com/eatkins">@eatkins</a>
+</li></ul><a id="sbt-1.2.0"></a><h2 id="sbt+1.2.0">sbt 1.2.0<a href="#sbt+1.2.0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Released on <a href="https://web.archive.org/web/20180723155330/https://developer.lightbend.com/blog/2018-07-02-sbt-1-2-0/">2018-07-30</a>, the headline features of sbt 1.2 are cross JDK forking and experimental thin clients.
+</p><p>Full release note is available at <a href="https://github.com/sbt/sbt/releases/tag/v1.2.0">https://github.com/sbt/sbt/releases/tag/v1.2.0</a>.
+</p><h3 id="Project+matrix">Project matrix<a href="#Project+matrix" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>As a reference implementation of the <code>CompositeProject</code> I implemented a new DSL called <code>projectMatrix</code> introduced by <a href="https://github.com/sbt/sbt-projectmatrix">sbt-projectmatrix</a> plugin.
+</p><pre><code class="prettyprint lang-scala">lazy val core = (projectMatrix in file(&quot;core&quot;))
+  .scalaVersions(&quot;2.12.7&quot;, &quot;2.11.12&quot;)
+  .settings(
+    name := &quot;core&quot;
+  )
+  .jvmPlatform()
+
+lazy val app = (projectMatrix in file(&quot;app&quot;))
+  .dependsOn(core)
+  .scalaVersions(&quot;2.12.7&quot;)
+  .settings(
+    name := &quot;app&quot;
+  )
+  .jvmPlatform()
+</code></pre><p>The aim of the plugin is to support a generic notion of cross building (Scala version, platform, etc) expressed using subprojects. In the above <code>projectMarix</code> will produce three subprojects: <code>coreJVM2_12</code>, <code>coreJVM2_11</code>, and <code>appJVM2_12</code>.
+</p><h3 id="SbtPlugin+for+plugin+development">SbtPlugin for plugin development<a href="#SbtPlugin+for+plugin+development" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><code>SbtPlugin</code> is a plugin to declare a project for sbt plugins. This automatically brings in scripted tests, and sets <code>sbtPlugin := true</code>.
+</p><pre><code class="prettyprint lang-scala">lazy val root = (project in file(&quot;.&quot;))
+  .enablePlugins(SbtPlugin)
+</code></pre><p><strong>Compatibility note</strong>: <code>ScriptedPlugin</code> is no longer a triggered plugin.
+</p><p><a href="https://github.com/sbt/sbt/pull/3875">#3875</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</p><h3 id="Cross+JDK+forking">Cross JDK forking<a href="#Cross+JDK+forking" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>For forked <code>run</code> and <code>test</code>, <code>java++</code> can now switch Java Home.
+</p><pre><code class="">sbt:helloworld&gt; run
+[info] Running (fork) Hello
+[info] 1.8.0_171
+sbt:helloworld&gt; java++ 10!
+[info] Reapplying settings...
+sbt:helloworld&gt; run
+[info] Running (fork) Hello
+[info] 10.0.1
+</code></pre><p>sbt will try to detect Java homes into <code>discoveredJavaHomes</code> setting, supporting <a href="https://github.com/shyiko/jabba">shyiko/jabba</a>. This can be augmented by <code>Global / javaHomes</code>:
+</p><pre><code class="">Global / javaHomes += &quot;6&quot; -&gt; file(&quot;/something/java-6&quot;)
+</code></pre><p>This feature is intended for testing your library in an older JVM to check compatibility.
+</p><p><a href="https://github.com/sbt/sbt/pull/4139">#4139</a> by <a href="https://github.com/2m">@2m</a>, <a href="https://github.com/cunei">@cunei</a>, and <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</p><h3 id="Semantic+Version+selector+API">Semantic Version selector API<a href="#Semantic+Version+selector+API" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt 1.2.0 introduces Semantic Version selector on <code>VersionNumber()</code> datatype supporting basic match, comparison (<code>&lt;=</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&gt;</code>), combination (<code>&gt;1.0.0 &lt;2.0.0</code>, <code>||</code>), ranges (<code>A.B.C - D.E.F</code>), and wildcard (<code>2.12.x</code>).
+</p><pre><code class="prettyprint lang-scala">scala&gt; import sbt.librarymanagement.{ VersionNumber, SemanticSelector }
+import sbt.librarymanagement.{VersionNumber, SemanticSelector}
+
+scala&gt; VersionNumber(&quot;2.12.5&quot;).matchesSemVer(SemanticSelector(&quot;&gt;=2.12&quot;))
+res1: Boolean = true
+
+scala&gt; VersionNumber(&quot;2.12.5&quot;).matchesSemVer(SemanticSelector(&quot;&lt;2.12&quot;))
+res2: Boolean = false
+
+scala&gt; VersionNumber(&quot;2.13.0-M4&quot;).matchesSemVer(SemanticSelector(&quot;2.13&quot;))
+res3: Boolean = false
+
+scala&gt; VersionNumber(&quot;2.12.5&quot;).matchesSemVer(SemanticSelector(&quot;2.12.1 - 2.12.7&quot;))
+res4: Boolean = true
+
+scala&gt; VersionNumber(&quot;2.12.5&quot;).matchesSemVer(SemanticSelector(&quot;2.12.x&quot;))
+res5: Boolean = true
+
+scala&gt; VersionNumber(&quot;2.12.5&quot;).matchesSemVer(SemanticSelector(&quot;2.11.x || 2.12.x&quot;))
+res6: Boolean = true
+</code></pre><p><strong>Note</strong>: This has no effect on library management at the moment.
+</p><p>This was contributed by Rikito Taniguchi (<a href="https://github.com/tanishiking">@tanishiking</a>) as <a href="https://github.com/sbt/librarymanagement/pull/239">lm#239</a>.
+</p><h3 id="addPluginSbtFile+command">addPluginSbtFile command<a href="#addPluginSbtFile+command" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>There’s been a request from IntelliJ to safely inject a plugin to a build. sbt 1.2.0 adds <code>-addPluginSbtFile</code> command to do so.
+</p><pre><code class="prettyprint lang-bash">$ cat /tmp/extra.sbt
+addSbtPlugin(&quot;com.eed3si9n&quot; % &quot;sbt-assembly&quot; % &quot;0.14.7&quot;)
+
+$ sbt -addPluginSbtFile=/tmp/extra.sbt
+...
+sbt:helloworld&gt; plugins
+In file:/xxxx/hellotest/
+  ...
+  sbtassembly.AssemblyPlugin: enabled in root
+</code></pre><p>Implmented by <a href="https://github.com/eed3si9n">@eed3si9n</a> as <a href="https://github.com/sbt/sbt/pull/4211">#4211</a>.
+</p><h3 id="Thin+client%28s%29">Thin client(s)<a href="#Thin+client%28s%29" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p><strong>Experimental</strong>. sbt 1.2.0 adds a new mode called <code>-client</code>. When sbt is started with -client command, it no longer to loads the build, and instead tries to connect to an instance of sbt server over JSON-RPC. When the server is not running (portfile is not found), it will fork a new instance of sbt entirely in a new JVM.
+</p><p>This lets you invoke <code>sbt</code> from the terminal shell or from an editor.
+</p><pre><code class="prettyprint lang-bash">$ time sbt -client clean
+[info] entering *experimental* thin client - BEEP WHIRR
+[info] server was not detected. starting an instance
+[info] waiting for the server...
+[info] waiting for the server...
+[info] waiting for the server...
+[info] waiting for the server...
+[info] server found
+&gt; clean
+[success] completed
+sbt -client clean  9.23s user 2.33s system 22% cpu 50.558 total
+
+# server stays
+$ ps | rg java
+21860 ttys015    1:22.43 java -Xms2048M -Xmx2048M -Xss2M -jar /usr/local/Cellar/sbt/1.1.6/libexec/bin/sbt-launch.jar
+22014 ttys015    0:00.00 rg java
+
+$ time sbt -client clean
+[info] entering *experimental* thin client - BEEP WHIRR
+&gt; clean
+[info] Updating ...
+[info] Done updating.
+[success] completed
+sbt -client clean  3.39s user 1.75s system 104% cpu 4.898 total
+</code></pre><p>To end the server, call <code>sbt -client shutdown</code>. <a href="https://github.com/sbt/sbt/pull/4227">#4227</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</p><p>In addition, there are also an alternative thin clients <a href="https://github.com/cb372/sbt-client">cb372/sbt-client</a> and <a href="https://github.com/dwijnand/sbtl">dwijnand/sbtl</a> implemented using Rust.
+</p><a id="sbt-1.1.0"></a><h2 id="sbt+1.1.0">sbt 1.1.0<a href="#sbt+1.1.0" class="header-link"><span class="header-link-content">&nbsp;</span></a></h2><p>Released on <a href="https://web.archive.org/web/20180106183229/https://developer.lightbend.com/blog/2017-11-30-sbt-1-1-0-RC1-sbt-server/?final?final">2018-01-05</a>, the headline features of sbt 1.1 are unified slash syntax and sbt server.
+</p><p>Full release note is available at <a href="https://github.com/sbt/sbt/releases/tag/v1.1.0">https://github.com/sbt/sbt/releases/tag/v1.1.0</a>.
+</p><h3 id="Unified+slash+syntax+for+sbt+shell+and+build.sbt">Unified slash syntax for sbt shell and build.sbt<a href="#Unified+slash+syntax+for+sbt+shell+and+build.sbt" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>This adds unified slash syntax for both sbt shell and the build.sbt DSL.
+Instead of the current <code>&lt;project-id&gt;/config:intask::key</code>, this adds
+<code>&lt;project-id&gt;/&lt;config-ident&gt;/intask/key</code> where <code>&lt;config-ident&gt;</code> is the Scala identifier
+notation for the configurations like <code>Compile</code> and <code>Test</code>. (The old shell syntax will continue to function)
+</p><p>These examples work both from the shell and in build.sbt.
+</p><pre><code>Global / cancelable
+ThisBuild / scalaVersion
+Test / test
+root / Compile / compile / scalacOptions
+ProjectRef(uri(&quot;file:/xxx/helloworld/&quot;),&quot;root&quot;)/Compile/scalacOptions
+Zero / Zero / name
+</code></pre><p>The inspect command now outputs something that can be copy-pasted:
+</p><pre><code>&gt; inspect compile
+[info] Task: sbt.inc.Analysis
+[info] Description:
+[info]  Compiles sources.
+[info] Provided by:
+[info]  ProjectRef(uri(&quot;file:/xxx/helloworld/&quot;),&quot;root&quot;)/Compile/compile
+[info] Defined at:
+[info]  (sbt.Defaults) Defaults.scala:326
+[info] Dependencies:
+[info]  Compile/manipulateBytecode
+[info]  Compile/incCompileSetup
+....
+</code></pre><p>Contributed by <a href="https://github.com/eed3si9n">@eed3si9n</a> and <a href="https://github.com/dwijnand">@dwijnand</a> in <a href="https://github.com/sbt/sbt/issues/1812">#1812</a>/<a href="https://github.com/sbt/sbt/pull/3434">#3434</a>/<a href="https://github.com/sbt/sbt/pull/3617">#3617</a>/<a href="https://github.com/sbt/sbt/pull/3620">#3620</a>.
+</p><h3 id="sbt+server">sbt server<a href="#sbt+server" class="header-link"><span class="header-link-content">&nbsp;</span></a></h3><p>sbt server feature was reworked to use Language Server Protocol 3.0 (LSP) as the wire protocol, a protocol created by Microsoft for Visual Studio Code.
+</p><p>To discover a running server, sbt 1.1.0 creates a port file at <code>./project/target/active.json</code> relative to a build:
+</p><pre><code class="prettyprint lang-json">{&quot;uri&quot;:&quot;local:///Users/foo/.sbt/1.0/server/0845deda85cb41abcdef/sock&quot;}
+</code></pre><p><code>local:</code> indicates a UNIX domain socket. Here’s how we can say hello to the server using <code>nc</code>. (<code>^M</code> can be sent <code>Ctrl-V</code> then <code>Return</code>):
+</p><pre><code class="prettyprint lang-bash">$ nc -U /Users/foo/.sbt/1.0/server/0845deda85cb41abcdef/sock
+Content-Length: 99^M
+^M
+{ &quot;jsonrpc&quot;: &quot;2.0&quot;, &quot;id&quot;: 1, &quot;method&quot;: &quot;initialize&quot;, &quot;params&quot;: { &quot;initializationOptions&quot;: { } } }^M
+</code></pre><p>sbt server adds network access to sbt’s shell command so, in addition to accepting input from the terminal, server also to accepts input from the network. Here’s how we can call <code>compile</code>:
+</p><pre><code class="prettyprint lang-json">Content-Length: 93^M
+^M
+{ &quot;jsonrpc&quot;: &quot;2.0&quot;, &quot;id&quot;: 2, &quot;method&quot;: &quot;sbt/exec&quot;, &quot;params&quot;: { &quot;commandLine&quot;: &quot;compile&quot; } }^M
+</code></pre><p>The running sbt session should now queue <code>compile</code>, and return back with compiler warnings and errors, if any:
+</p><pre><code class="prettyprint lang-json">Content-Length: 296
+Content-Type: application/vscode-jsonrpc; charset=utf-8
+
+{&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;method&quot;:&quot;textDocument/publishDiagnostics&quot;,&quot;params&quot;:{&quot;uri&quot;:&quot;file:/Users/foo/work/hellotest/Hello.scala&quot;,&quot;diagnostics&quot;:[{&quot;range&quot;:{&quot;start&quot;:{&quot;line&quot;:2,&quot;character&quot;:26},&quot;end&quot;:{&quot;line&quot;:2,&quot;character&quot;:27}},&quot;severity&quot;:1,&quot;source&quot;:&quot;sbt&quot;,&quot;message&quot;:&quot;object X is not a member of package foo&quot;}]}}
+</code></pre><p><a href="https://github.com/sbt/sbt/pull/3524">#3524</a>/<a href="https://github.com/sbt/sbt/pull/3556">#3556</a> by <a href="https://github.com/eed3si9n">@eed3si9n</a>
+</p><div class="bottom nav">
+                <div class="row">
+                  <div class="col-md-auto">
+                    <a href="Detailed-Topics.html">
+                      <div class="arrowitem">
+                        <span class="arrow">&gt;</span>
+                      </div>
+
+                      <div class="arrowitem">
+                        <em>Next page</em><br/>
+                        Detailed Topics
+                      </div>
+
+                    </a>
+                  </div>
+                </div>
+                <div class="row w-100">
+        <div class="col-md-auto ml-auto">
+          <ul class="language-bar">
+            
+          </ul>
+        </div>
+      </div>
+              </div>
+                  </div>
+                </div>
+          </div> <!-- row -->
+        </div>
+        <div class="header">
+          <link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic,700italic" rel="stylesheet" type="text/css">
+<!-- Algolia stylesheet -->
+<link href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" rel="stylesheet" type = "text/css">
+<div class="container-fluid top nav">
+  <div class="row w-100">
+    <div class="col-md-4">
+      <div class="logo">
+        <a href="../../"><img src="files/sbt-logo.svg" alt="sbt"></a>
+        <span class="versions"><select id="versions"></select></span>
+      </div>
+    </div>
+    <div class="col-md-8">
+        <div class="docsearch">
+          <input type="text" id="doc-search-bar" placeholder="Search...">
+          <ul class="result-container" id="result-container" style="display: none;"></ul>
+        </div>
+        <div class="nav" id="topbar">
+          <a href="../../learn.html">Learn</a>
+          <a href="../../download.html">Download</a>
+          <a href="../../community.html">Get Involved</a>
+          <a id="source-code" href="https://github.com/sbt/sbt"><img src="files/github-logo-teal.svg" alt="Source code" class="social"></a>
+          <a id="twitter" href="https://twitter.com/scala_sbt"><img src="files/twitter-logo-teal.svg" alt="sbt on Twitter" class="social"></a>
+          <a id="edit-on-github" href="https://github.com/sbt/website/edit/develop/src/reference/01-General-Info/90-Changes/40-sbt-1.x-changelog.md"><img src="files/octicon-pencil.svg" alt="Edit on GitHub"></a>
+        </div>
+    </div>
+  </div>
+</div>
+<script defer data-domain="scala-sbt.org" src="https://plausible.scala-lang.org/js/script.js"></script>
+<script type="text/javascript">
+$(function() {
+var scrollDown = function() {
+if (window.location.hash !== "") {
+  setTimeout(function() { $(window).scrollTop($(window).scrollTop() - 120); }, 100);
+}
+}
+scrollDown();
+$(window).bind('hashchange', function() {
+scrollDown();
+});
+});
+</script>
+
+        </div>
+        <div class="footer">
+          <footer>
+  <div class="container-fluid footer">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="support-item">
+          <div class="support-icon">
+            <svg class="svg-icon svg-icon-chat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.5 85.2" enable-background="new 0 0 97.5 85.2"><path stroke="#fff" stroke-width="4.282" stroke-linecap="round" stroke-miterlimit="10" d="M27 29.5h-16.3c-4.7 0-8.6 3.9-8.6 8.6v25.7c0 4.7 3.9 8.6 8.6 8.6h2.7c.8 0 1.5.7 1.5 1.5v7.8c0 1.3 1.6 2 2.5 1l9.5-9.5c.5-.5 1.2-.8 2-.8h20.2c4.7 0 8.6-3.9 8.6-8.6v-7.8" fill="none"/><path fill="#fff" d="M85 0h-40c-6.9 0-12.5 5.6-12.5 12.5v33.4c0 2.2 1.8 4.1 4.1 4.1h29.9c.7 0 1.3.3 1.8.7l10 10c1.6 1.6 4.3.5 4.3-1.8v-6.5c0-1.4 1.1-2.5 2.5-2.5 6.9 0 12.5-5.6 12.5-12.5v-25c-.1-6.8-5.8-12.4-12.6-12.4z"/></svg>
+          </div>
+          <div class="support-detail">
+            <h2>Community Support</h2>
+            <a href="https://stackoverflow.com/questions/tagged/sbt">StackOverflow</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 text-right ts">
+        &copy; 2023-<script>document.write(new Date().getFullYear())</script> Scala Center
+      </div>
+    </div>
+  </div>
+</footer><script src="/assets/versions.js"></script><script src="/assets/set-versions.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script><script type="text/javascript"> docsearch({
+  apiKey: 'e47ee877a07ea1c48722f08430d54913',
+  indexName: 'scala-sbt',
+  inputSelector: '#doc-search-bar',
+  debug: false // Set debug to true if you want to inspect the dropdown
+});
+</script>
+        </div>
+        
+        <div class="highlight-outer">
+              <div class="highlight-menu">
+                <ul>
+                  <li><button id="highlight-button-twitter"><img src="img/twitter-bird-dark-bgs.png"/></button></li>
+                </ul>
+              </div>
+            </div>
+      </body>
+    </html>
