@@ -1415,7 +1415,7 @@ For best practices, see
 <li>生成されたファイル (コンパイルされたクラス、パッケージ化された JAR、マネージファイル、キャッシュ、ドキュメンテーションなど) はデフォルトでは <code>target</code> ディレクトリに書き込まれる。</li>
 </ul>
 <h3 id="ビルドサポートファイル"><a class="header" href="#ビルドサポートファイル">ビルドサポートファイル</a></h3>
-<p>In addition to <code>build.sbt</code>, <code>project</code> directory can contain <code>.scala</code> files that define helper objects and one-off plugins.</p>
+<p><code>build.sbt</code> の他に、<code>project</code> ディレクトリにはヘルパーオブジェクトや一点物のプラグインを定義した <code>*.scala</code> ファイルを含むことができる。</p>
 <!--
 See [organizing the build][Organizing-Build] for more.
 -->
@@ -2122,7 +2122,7 @@ sbt:demo&gt; show someKey
   main class in the test code. --></p>
 </li>
 <li>
-<p><a href="reference/./sbt-test.html"><code>test &lt;test&gt;*</code></a> Runs the tests specified as arguments (or all tests if no arguments are given) that:</p>
+<p><a href="reference/./sbt-tes.html"><code>test &lt;test&gt;*</code></a> 引数で指定されたテスト (省略された場合は全てのテスト) を以下の条件で実行する:</p>
 <ol>
 <li>未だ実行されていない、もしくは</li>
 <li>前回実行されたときに失敗した、もしくは</li>
@@ -4386,7 +4386,7 @@ Def.setting {
         token(state.remainingCommands.size.toString) )
 }
 </code></pre>
-<p>This Parser definition will produce a value of type <code>(String,String)</code>. The input syntax defined isn't very flexible; it is just a demonstration. It will produce one of the following values for a successful parse (assuming the current Scala version is 3.8.4, the current sbt version is 2.0.7, and there are 3 commands left to run):</p>
+<p>この Parser 定義は <code>(String,String)</code> 型の値を生成する。定義した入力構文は柔軟ではない。デモンストレーションである。パースが成功すると以下のいずれかの値を生成する（現在の Scala バージョンが 3.8.4、sbt バージョンが 2.0.7、実行待ちコマンドが 3 つの場合）:</p>
 <ul>
 <li>(scala,3.8.4)</li>
 <li>(sbt,2.0.7)</li>
@@ -4833,7 +4833,7 @@ end CommandExample
 <p><strong>プラグイン</strong>はビルド定義を拡張する手段であり、組み込みのセッティングやタスクではできない機能を追加するのに使われる。例としては Docker コンテナの構築、Scala.JS のサポート、GitHub Actions の YAML 生成などがある。</p>
 <p>プラグインは sbt のセッティングの列を定義し、すべてのプロジェクトに自動的に追加するか、選択したプロジェクトに明示的に宣言する。プラグインは新しいコマンドも定義できる。sbt 1.x および 2.x のプラグインは <code>sbt.AutoPlugin</code> トレイトを継承し、依存プラグイン間のセッティングの順序を自動化する。</p>
 <h2 id="プラグインの作成"><a class="header" href="#プラグインの作成">プラグインの作成</a></h2>
-<p>Conceptually we can think of the sbt plugins to be <em>any other libraries on the metabuild</em>, which is currently on Scala 3.8.4. However, in practice modern sbt plugins are built around auto plugin (<code>sbt.AutoPlugin</code>), which provides tasks and settings in the correct order. See the Plugin dependencies section for more details.</p>
+<p>概念的には、sbt プラグインは「メタビルド (現在は Scala 3.8.4) 上にある何の変哲もないライブラリ」と考えられる。しかし実際には、現代の sbt プラグインは auto plugin（<code>sbt.AutoPlugin</code>）を中心に構築され、正しい順序でタスクとセッティングを提供する。詳細はプラグイン依存性の節を参照。</p>
 <h3 id="buildsbt-の設定"><a class="header" href="#buildsbt-の設定">build.sbt の設定</a></h3>
 <p>auto plugin を作るには、プロジェクトを作成し <code>SbtPlugin</code> を有効にする。</p>
 <div id="admonition-buildsbt" class="admonition admonish-example" role="note" aria-labelledby="admonition-buildsbt-title">
@@ -5760,7 +5760,7 @@ sub   rsa4096 2018-08-22 [E]
     SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
     SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
 </code></pre>
-<p>ローカルマシンでは、<code>$HOME/.sbt/2/credentials.sbt</code> ファイルに次の内容を記述するのが一般的である:</p>
+<p>ローカルマシンでは、<code>$HOME/.config/sbt/2/credentials.sbt</code> ファイルに次の内容を記述するのが一般的である:</p>
 <pre><code class="language-scala">credentials += Credentials(Path.userHome / ".sbt" / "sonatype_central_credentials")
 </code></pre>
 <p>次に <code>$HOME/.sbt/sonatype_central_credentials</code> ファイルを作成する:</p>
