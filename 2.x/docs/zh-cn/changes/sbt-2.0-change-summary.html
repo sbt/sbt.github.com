@@ -216,6 +216,7 @@
 <p>另请参阅 <a href="./migrating-from-sbt-1.x.html">从 sbt 1.x 迁移</a>。</p>
 <ul>
 <li><strong>元构建中的 Scala 3</strong>。sbt 2.x 的 build.sbt DSL 用于构建定义和插件，基于 Scala 3.x。（sbt 1.x 和 2.x 均能构建 Scala 2.x 和 3.x）由 <a href="https://github.com/eed3si9n">@eed3si9n</a>、<a href="https://github.com/adpi2">@adpi2</a> 等贡献。</li>
+<li><strong>客户端-服务器模式</strong>。sbt 2.x 默认使用 sbtn 以加快启动速度。</li>
 <li><strong>通用设置</strong>。裸设置会添加到所有子项目，而不仅仅是根子项目，从而取代 <code>ThisBuild</code> 所扮演的角色。</li>
 <li><strong>增量测试</strong>。<code>test</code> 任务已改为可缓存测试结果的增量测试。使用 <code>testFull</code> 进行完整测试，由 <a href="https://github.com/eed3si9n">@eed3si9n</a> 在 <a href="https://github.com/sbt/sbt/pull/7686">#7686</a> 中贡献</li>
 <li><strong>缓存任务</strong>。默认情况下所有任务都会被缓存。详见 <a href="../concepts/caching.html">Caching</a>。</li>
@@ -251,6 +252,17 @@
 <li><strong>rootProject 和 autoAggregate</strong>。详见下文</li>
 <li><strong>Maven BOM（材料清单）的使用</strong>。详见下文</li>
 </ul>
+<h3 id="客户端-服务器模式"><a class="header" href="#客户端-服务器模式">客户端-服务器模式</a></h3>
+<p>在客户端-服务器模式下，sbt server 作为守护进程启动，<code>sbt</code> runner 脚本将处理委托给 sbtn（原生客户端）以连接到 sbt 会话。该模式在 sbt 1.x 中可通过 <code>--client</code> 标志启用，而在 sbt 2.x 中已成为默认模式。</p>
+<ol>
+<li>客户端-服务器模式的主要动机是避免每个命令都要经历 JVM 启动、JIT 预热和构建加载。sbt 传统上通过实现自己的 shell 来避免这一启动开销，这种方式适用于交互式会话，但仅限于单个用户使用。服务器进程一旦启动，sbtn 便可在一秒以内与其建立连接。</li>
+<li>客户端-服务器模式使构建用户、IDE 和 AI 代理之间能够安全协作。</li>
+<li>借助 sbtn，用户既可以使用 sbt shell，也可以使用 Bash、Zsh 等系统 shell。</li>
+<li>sbtn 可以在客户端执行部分任务。</li>
+</ol>
+<p>若要改用仅服务器模式，请使用 <code>--server</code> 标志：</p>
+<pre><code class="language-bash">$ sbt --server test
+</code></pre>
 <h3 id="通用设置"><a class="header" href="#通用设置">通用设置</a></h3>
 <p>在 sbt 2.x 中，<code>build.sbt</code> 中的裸设置被解释为通用设置，并注入到所有子项目中。这意味着我们现在可以在不使用 <code>ThisBuild</code> 作用域的情况下设置 <code>scalaVersion</code>：</p>
 <pre><code class="language-scala">scalaVersion := "3.8.4"
