@@ -3025,8 +3025,11 @@ example.ExampleSuite2:
 [info] Passed: Total 2, Failed 0, Errors 0, Passed 2
 [success] elapsed time: 3 s, cache 49%, 25 disk cache hits, 26 onsite tasks
 </code></pre>
-<p>It supports wildcards as well:</p>
-<pre><code>&gt; test *Example*
+<p>It supports wildcards (<code>...</code>, <code>*</code>, <code>**</code>) as well:</p>
+<pre><code class="language-bash">&gt; test ...Example...
+</code></pre>
+<p>The filter can be used to exclude the tests using minus (<code>-</code>):</p>
+<pre><code class="language-bash">&gt; test -...Example...
 </code></pre>
 <h3 id="incremental-testing"><a class="header" href="#incremental-testing">Incremental testing</a></h3>
 <p>In addition to the explicit filter, the <code>test</code> task runs only the tests that satisfy

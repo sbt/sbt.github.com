@@ -2765,8 +2765,11 @@ example.ExampleSuite2:
 [info] Passed: Total 2, Failed 0, Errors 0, Passed 2
 [success] elapsed time: 3 s, cache 49%, 25 disk cache hits, 26 onsite tasks
 </code></pre>
-<p>也支持通配符：</p>
-<pre><code>&gt; test *Example*
+<p>也支持通配符（<code>...</code>、<code>*</code>、<code>**</code>）：</p>
+<pre><code class="language-bash">&gt; test ...Example...
+</code></pre>
+<p>也可使用减号（<code>-</code>）通过过滤器排除测试：</p>
+<pre><code class="language-bash">&gt; test -...Example...
 </code></pre>
 <h3 id="增量测试-1"><a class="header" href="#增量测试-1">增量测试</a></h3>
 <p>除显式过滤外，<code>test</code> 任务仅运行满足以下条件之一的测试：</p>

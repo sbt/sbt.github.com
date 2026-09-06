@@ -262,8 +262,11 @@ example.ExampleSuite2:
 [info] Passed: Total 2, Failed 0, Errors 0, Passed 2
 [success] elapsed time: 3 s, cache 49%, 25 disk cache hits, 26 onsite tasks
 </code></pre>
-<p>ワイルドカードもサポートする:</p>
-<pre><code>&gt; test *Example*
+<p>ワイルドカード（<code>...</code>、<code>*</code>、<code>**</code>）もサポートする:</p>
+<pre><code class="language-bash">&gt; test ...Example...
+</code></pre>
+<p>マイナス記号 (<code>-</code>) を使ってテストを除外することもできる:</p>
+<pre><code class="language-bash">&gt; test -...Example...
 </code></pre>
 <h3 id="差分テスト"><a class="header" href="#差分テスト">差分テスト</a></h3>
 <p>明示的なフィルタに加え、<code>test</code> タスクは以下のいずれかの条件を満たすテストのみを実行する:</p>
