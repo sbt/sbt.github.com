@@ -221,7 +221,7 @@
 </ul>
 <p><img src="files/sbt-logo.svg" alt="sbt logo" /></p>
 <p>sbt 是一个用于 Scala 和 Java 的简单构建工具。 sbt 通过 Coursier 下载您的库依赖， 增量编译和测试项目， 并与 IntelliJ 和 VS Code 等 IDE 集成， 打包 JAR 文件并发布到 <a href="https://central.sonatype.com/">Central repo</a>， 这是 JVM 社区的包注册表。</p>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 </code></pre>
 <p>您只需要在 <code>build.sbt</code> 中添加一行代码即可开始使用 Scala。</p>
 <h2 id="链接"><a class="header" href="#链接">链接</a></h2>
@@ -335,7 +335,7 @@ Hello
 [success] elapsed time: 0 s, cache 50%, 1 disk cache hit, 1 onsite task
 </code></pre>
 <h3 id="从-sbt-shell-设置-scalaversion"><a class="header" href="#从-sbt-shell-设置-scalaversion">从 sbt shell 设置 scalaVersion</a></h3>
-<pre><code>sbt:foo-build&gt; set scalaVersion := "3.8.4"
+<pre><code>sbt:foo-build&gt; set scalaVersion := "3.9.0"
 [info] Defining scalaVersion
 [info] The new value will be used by Compile / bspBuildTarget, Compile / dependencyTreeCrossProjectId and 51 others.
 [info]  Run `last` for details.
@@ -344,7 +344,7 @@ Hello
 </code></pre>
 <p>检查 <code>scalaVersion</code> 设置：</p>
 <pre><code>sbt:foo-build&gt; scalaVersion
-[info] 3.8.4
+[info] 3.9.0
 </code></pre>
 <h3 id="将会话保存到-buildsbt"><a class="header" href="#将会话保存到-buildsbt">将会话保存到 build.sbt</a></h3>
 <p>我们可以使用 <code>session save</code> 保存临时设置。</p>
@@ -359,7 +359,7 @@ Hello
 [warn] Disable this warning by setting `Global / onChangedBuildSource := IgnoreSourceChanges`.
 </code></pre>
 <p><code>build.sbt</code> 文件现在应该包含：</p>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 
 </code></pre>
 <h3 id="命名您的项目"><a class="header" href="#命名您的项目">命名您的项目</a></h3>
@@ -758,7 +758,7 @@ Hello, World!
 <p>与其使用 JAR 文件和 <code>scalac</code>，我们可以通过引入更高级别的子项目抽象概念并使用构建工具来避免手动劳作。</p>
 <h2 id="sbt"><a class="header" href="#sbt">sbt</a></h2>
 <p><em>sbt</em> 是为 Scala 和 Java 创建的简单构建工具。它允许我们声明子项目及其各种依赖项和自定义任务，以确保我们始终能获得快速、可重复的构建。您无需自行下载编译器，只需写下：</p>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 </code></pre>
 <p>sbt 就会自动为您下载编译器。</p>
 <p>为了实现这一目标，sbt 做了几件事:</p>
@@ -889,7 +889,7 @@ $ sbt new scala/scala3.g8
 <p>sbt server将 <a href="https://get-coursier.io/">Coursier</a> 作为子组件运行，用于解析 Scala 库、Scala 编译器以及您的构建所需的任何其他库依赖。</p>
 <h3 id="zinc"><a class="header" href="#zinc">Zinc</a></h3>
 <p>Zinc 是 Scala 的增量编译器，由 sbt 项目开发和维护。Zinc 的一个常被忽视的方面是，它提供了稳定的 API 来调用 Scala 编译器的<strong>任何现代版本</strong>。结合 Coursier 可以解析任何 Scala 版本这一事实，使用 sbt 我们只需在 <code>build.sbt</code> 中写一行即可调用任何现代版本的 Scala：</p>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 </code></pre>
 <h3 id="bsp-server"><a class="header" href="#bsp-server">BSP server</a></h3>
 <p>sbt server支持 <a href="https://build-server-protocol.github.io/">Build Server Protocol (BSP)</a> 来列出构建目标、构建它们等。这使得 IntelliJ 和 Metals 等 IDE 能够以编程方式与运行中的 sbt server通信。</p>
@@ -1119,7 +1119,7 @@ key           operator   (setting/task) body
 val toolkit = "org.scala-lang" %% "toolkit" % toolkitV
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % toolkitV
 
-scalaVersion := "3.8.4"
+scalaVersion := "3.9.0"
 libraryDependencies += toolkit
 libraryDependencies += (toolkitTest % Test)
 </code></pre>
@@ -1147,7 +1147,88 @@ lazy val toolkitV = "0.2.0"
 <p><code>build.sbt</code> 中不允许顶层对象和类。
 它们应放在 <code>project/</code> 目录中作为 Scala 源文件。</p>
 </div>
-</div><div style="break-before: page; page-break-before: always;"></div><h1 id="库依赖基础"><a class="header" href="#库依赖基础">库依赖基础</a></h1>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="作用域基础"><a class="header" href="#作用域基础">作用域基础</a></h1>
+<p>本页介绍作用域。</p>
+<h2 id="关于键的完整说明"><a class="header" href="#关于键的完整说明">关于键的完整说明</a></h2>
+<p><a href="guide/build-definition-basics.html">前面</a>我们假设像 <code>name</code> 这样的键对应 sbt 键值对映射中的一个条目。这是一种简化。在实际构建中，每个键可以在多个上下文中各自关联一个值，这些上下文称为<strong>作用域</strong>。</p>
+<p>一些具体示例：</p>
+<ul>
+<li>如果构建定义中有多个子项目，同一个键在每个子项目中可以有不同的值。</li>
+<li>如果您希望以不同方式编译主源代码和测试源代码，<code>compile</code> 键可以为两者分别设置不同的值。</li>
+<li><code>scalacOptions</code> 键（包含 Scala 编译器选项）在编译类文件（<code>compile</code>）和运行 REPL（<code>console</code>）时可以有不同的值。</li>
+</ul>
+<h2 id="统一斜杠语法"><a class="header" href="#统一斜杠语法">统一斜杠语法</a></h2>
+<p>sbt 中完整的作用域使用<strong>统一斜杠语法</strong>来描述：</p>
+<pre><code class="language-scala">projA / Compile / console / scalacOptions
+</code></pre>
+<p>它们表示三个层级的作用域划分：</p>
+<ul>
+<li>子项目作用域</li>
+<li>依赖配置作用域</li>
+<li>任务作用域</li>
+</ul>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="guide/scope-basics.html#admonition-note"></a>
+</div>
+<div>
+<p>统一斜杠语法于 sbt 1.1 引入，可同时用于 sbt shell 和 <code>build.sbt</code>。</p>
+</div>
+</div>
+<h3 id="按子项目划分作用域"><a class="header" href="#按子项目划分作用域">按子项目划分作用域</a></h3>
+<p>如果您<a href="guide/multi-project-basics.html">在一个构建中放置多个子项目</a>，每个子项目都需要各自的设置。在 sbt shell 中，可以按如下方式编译特定的子项目：</p>
+<pre><code class="language-bash">sbt&gt; projA/compile
+</code></pre>
+<h3 id="按依赖配置划分作用域"><a class="header" href="#按依赖配置划分作用域">按依赖配置划分作用域</a></h3>
+<p>依赖配置（简称<strong>配置</strong>）定义了一个库依赖图，并可能拥有自己的类路径、源代码、生成的包等。</p>
+<p>sbt 中常见的一些配置：</p>
+<ul>
+<li><code>Compile</code>：定义主代码（<code>src/main/scala</code>）。</li>
+<li><code>Test</code>：定义如何编译测试（<code>src/test/scala</code>）。</li>
+<li><code>Runtime</code>：定义 <code>run</code> 任务的类路径。</li>
+</ul>
+<p>在 sbt shell 中，可以按如下方式编译测试代码，这同时也会编译主代码：</p>
+<pre><code class="language-bash">sbt&gt; Test/compile
+</code></pre>
+<p>在 <code>build.sbt</code> 中，可以按如下方式指定以 fork 方式运行测试：</p>
+<pre><code class="language-scala">Test / fork := true
+</code></pre>
+<h3 id="按任务划分作用域"><a class="header" href="#按任务划分作用域">按任务划分作用域</a></h3>
+<p>设置可以影响任务的工作方式。例如，<code>compile</code> 任务会受到 <code>scalacOptions</code> 设置的影响。</p>
+<p>为此，任务键（如 <code>compile</code>）可以作为另一个键（如 <code>scalacOptions</code>）的作用域。调用 Scala 编译器的各种任务（<code>compile</code>、<code>console</code>、<code>doc</code>）可以共享 <code>scalacOptions</code> 等与编译相关的键，并且这些键在各任务中可以有不同的值。</p>
+<pre><code class="language-scala">scalaVersion := "3.9.0"
+Compile / scalacOptions ++= List("-deprecation", "-Werror", "-Wunused:imports")
+Compile / console / scalacOptions --= List("-Werror", "-Wunused:imports")
+</code></pre>
+<h3 id="检查作用域"><a class="header" href="#检查作用域">检查作用域</a></h3>
+<p>在 sbt shell 中，可以使用 <code>inspect</code> 命令来了解键及其作用域。试试 <code>inspect Test / fullClasspath</code>：</p>
+<pre><code class="language-bash">sbt:Hello&gt; inspect Test / fullClasspath
+[info] Task: Seq[class sbt.internal.util.Attributed]
+[info] Description:
+[info] 	The exported classpath, consisting of build products and unmanaged and
+        managed, internal and external dependencies.
+[info] Provided by:
+[info] 	Test / fullClasspath
+[info] Defined at:
+[info] 	Defaults.scala:2823
+[info] Dependencies:
+[info] 	Test / fullClasspath / streams
+[info] 	Test / exportedProducts
+[info] 	Test / dependencyClasspath
+[info] Reverse dependencies:
+[info] 	Test / fgRun
+[info] 	Test / run / bspBuildTargetJvmEnvironmentItem
+[info] 	Test / console
+[info] 	Test / fgRunMain
+[info] 	Test / testLoader
+[info] 	Test / bspBuildTargetJvmEnvironmentItem
+....
+</code></pre>
+<p>更多详情，请参阅 <a href="guide/../reference/sbt-inspect.html">sbt inspect</a> 参考指南。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="库依赖基础"><a class="header" href="#库依赖基础">库依赖基础</a></h1>
 <p>本页介绍使用 sbt 进行库依赖管理的基础知识。</p>
 <p>sbt 使用 <a href="https://get-coursier.io/">Coursier</a> 实现托管依赖，因此如果您熟悉 Coursier、npm、PIP 等包管理器，不会有太大困难。</p>
 <div id="admonition-什么是托管依赖" class="admonition admonish-note" role="note" aria-labelledby="admonition-什么是托管依赖-title">
@@ -1198,7 +1279,7 @@ end Dependencies
 <p><code>Dependencies</code> 对象将在 <code>build.sbt</code> 中可用。为便于使用其中定义的 <code>val</code>，请在您的 build.sbt 文件中导入 <code>Dependencies.*</code>。</p>
 <pre><code class="language-scala">import Dependencies.*
 
-scalaVersion := "3.8.4"
+scalaVersion := "3.9.0"
 name := "something"
 libraryDependencies += toolkit
 libraryDependencies += toolkitTest % Test
@@ -1222,7 +1303,7 @@ libraryDependencies += toolkitTest % Test
 <p>虽然简单程序可以从单项目构建开始，但更常见的是将构建拆分为多个较小的子项目。</p>
 <p>构建中的每个子项目都有自己的源目录，运行 <code>packageBin</code> 时会生成自己的 JAR 文件，总体上与其他项目的工作方式相同。</p>
 <p><strong>子项目</strong>通过声明类型为 <a href="guide/../../api/sbt/Project.html">Project</a> 的 <code>lazy val</code> 来定义。例如：</p>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 LocalRootProject / publish / skip := true
 
 lazy val core = (project in file("core"))
@@ -1247,7 +1328,7 @@ lazy val util = (project in file("util"))
 <p>构建根目录下的子项目称为 <strong>root project</strong>（根项目），通常在构建中扮演特殊角色。如果未在构建的根目录定义子项目，sbt 会自动创建一个默认的根项目，用于聚合构建中的所有其他子项目。</p>
 <h2 id="任务聚合"><a class="header" href="#任务聚合">任务聚合</a></h2>
 <p>任务聚合是指在聚合子项目上运行任务时，也会在被聚合的子项目上运行。</p>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 
 lazy val root = rootProject
   .autoAggregate
@@ -1262,7 +1343,7 @@ lazy val core = (project in file("core"))
 <p>在上面的示例中，根子项目聚合了 <code>util</code> 和 <code>core</code>。当您在 sbt shell 中输入 <code>compile</code> 时，所有三个子项目将并行编译。</p>
 <h2 id="通用设置"><a class="header" href="#通用设置">通用设置</a></h2>
 <p>在 sbt 2.x 中，直接在 <code>build.sbt</code> 中编写且不带 <code>settings(...)</code> 的裸设置是 <strong>common settings</strong>（通用设置），会注入到所有子项目中。</p>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 
 lazy val core = (project in file("core"))
 
@@ -1271,7 +1352,7 @@ lazy val app = (project in file("app"))
 </code></pre>
 <p>在上面的示例中，<code>scalaVersion</code> 设置应用于默认根子项目、<code>core</code> 和 <code>util</code>。</p>
 <p>此规则的一个例外是已经限定到子项目的设置。</p>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 
 lazy val core = (project in file("core"))
 
@@ -1282,7 +1363,7 @@ lazy val app = (project in file("app"))
 app / name := "app1"
 </code></pre>
 <p>我们可以利用此例外，添加仅适用于默认根项目的设置，如下所示：</p>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 
 lazy val core = (project in file("core"))
 
@@ -1535,7 +1616,7 @@ addition to plain <code>target/</code>).</p>
 </code></pre>
 <h3 id="通用设置-1"><a class="header" href="#通用设置-1">通用设置</a></h3>
 <p>在 sbt 2.x 中，<code>build.sbt</code> 中的裸设置被解释为通用设置，并注入到所有子项目中。这意味着我们现在可以在不使用 <code>ThisBuild</code> 作用域的情况下设置 <code>scalaVersion</code>：</p>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 </code></pre>
 <p>这也修复了所谓的动态分派问题：</p>
 <pre><code class="language-scala">lazy val hi = taskKey[String]("")
@@ -1657,7 +1738,7 @@ libraryDependencies +=
 </code></pre>
 <h2 id="裸设置变更"><a class="header" href="#裸设置变更">裸设置变更</a></h2>
 <pre><code class="language-scala">version := "0.1.0"
-scalaVersion := "3.8.4"
+scalaVersion := "3.9.0"
 </code></pre>
 <p>如上例所示，<em>Bare settings</em>（裸设置）是直接在 <code>build.sbt</code> 中编写且不带 <code>settings(...)</code> 的设置。</p>
 <div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
@@ -1888,14 +1969,14 @@ myTask := {
 <h2 id="项目矩阵"><a class="header" href="#项目矩阵">项目矩阵</a></h2>
 <p>sbt 2.x 引入了项目矩阵，使交叉构建可以并行进行。</p>
 <pre><code class="language-scala">organization := "com.example"
-scalaVersion := "3.8.4"
+scalaVersion := "3.9.0"
 version      := "0.1.0-SNAPSHOT"
 
 lazy val core = (projectMatrix in file("core"))
   .settings(
     name := "core"
   )
-  .jvmPlatform(scalaVersions = Seq("3.8.4", "2.13.18"))
+  .jvmPlatform(scalaVersions = Seq("3.9.0", "2.13.18"))
 </code></pre>
 <p>有关设置的更多详情，请参阅 <a href="concepts/../reference/cross-building-setup.html">cross building setup</a>。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-query-1"><a class="header" href="#sbt-query-1">sbt query</a></h1>
@@ -1912,7 +1993,7 @@ lazy val core = (projectMatrix in file("core"))
 <a class="admonition-anchor-link" href="concepts/sbt-query.html#admonition-buildsbt-example-1"></a>
 </div>
 <div>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 
 lazy val foo = project
 </code></pre>
@@ -1953,13 +2034,13 @@ lazy val foo = projectMatrix
   .settings(
     libraryDependencies += toolkit,
   )
-  .jvmPlatform(scalaVersions = Seq("3.8.4", "2.13.18"))
+  .jvmPlatform(scalaVersions = Seq("3.9.0", "2.13.18"))
 
 lazy val bar = projectMatrix
   .settings(
     libraryDependencies += toolkit,
   )
-  .jvmPlatform(scalaVersions = Seq("3.8.4", "2.13.18"))
+  .jvmPlatform(scalaVersions = Seq("3.9.0", "2.13.18"))
 </code></pre>
 </div>
 </div>
@@ -2691,7 +2772,7 @@ Evictions: 2
 <h3 id="编译设置"><a class="header" href="#编译设置">编译设置</a></h3>
 <h4 id="scalaversion"><a class="header" href="#scalaversion">scalaVersion</a></h4>
 <p>用于编译的 Scala 版本。</p>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 </code></pre>
 <h4 id="scalacoptions"><a class="header" href="#scalacoptions">scalacOptions</a></h4>
 <p>Scala 编译器选项。</p>
@@ -4036,7 +4117,7 @@ ${CSR_CACHE}/https/repo1.maven.org/maven2/org/scala-lang/scala3-library_3/3.7.4/
 <a class="admonition-anchor-link" href="reference/cross-building-setup.html#admonition-buildsbt"></a>
 </div>
 <div>
-<pre><code class="language-scala">lazy val scala3 = "3.8.4"
+<pre><code class="language-scala">lazy val scala3 = "3.9.0"
 lazy val scala2_13 = "2.13.18"
 
 organization := "com.example"
@@ -5674,7 +5755,7 @@ your plugin to the list.</p>
 </li>
 <li>
 <p>在 <code>hello_scala/</code> 下创建 <code>build.sbt</code>：</p>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 </code></pre>
 </li>
 <li>
@@ -6166,7 +6247,7 @@ case class SparkAxis(idSuffix: String, directorySuffix: String)
 <div>
 <pre><code class="language-scala">lazy val scala212 = "2.12.21"
 lazy val scala213 = "2.13.18"
-lazy val scala3 = "3.8.4"
+lazy val scala3 = "3.9.0"
 lazy val spark3 = SparkAxis(idSuffix = "Spark3", directorySuffix = "spark3")
 lazy val spark4 = SparkAxis(idSuffix = "Spark4", directorySuffix = "spark4")
 
@@ -6248,7 +6329,7 @@ Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties
 </ol>
 <pre><code class="language-scala">lazy val demo1 = taskKey[Int]("demo1")
 
-scalaVersion := "3.8.4"
+scalaVersion := "3.9.0"
 
 demo1 := Def.uncached {
   val srv = interactionService.value

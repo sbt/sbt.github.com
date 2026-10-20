@@ -221,7 +221,7 @@
 </ul>
 <p><img src="files/sbt-logo.svg" alt="sbt logo" /></p>
 <p>sbt は主に Scala と Java のためのシンプルなビルド・ツールだ。sbt は、Coursier を用いたライブラリ依存性のダウンロード、プロジェクトの差分コンパイルや差分テスト、IntelliJ や VS Code などの IDE との統合、JAR パッケージの作成、および JVM コミュニティーがパッケージ管理に用いる <a href="https://central.sonatype.com/">Central Repo</a> への公開などを行う。</p>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 </code></pre>
 <p>Scala を始めるには、一行の <code>build.sbt</code> を書くだけでいい。</p>
 <h2 id="リンク"><a class="header" href="#リンク">リンク</a></h2>
@@ -335,7 +335,7 @@ Hello
 [success] elapsed time: 0 s, cache 50%, 1 disk cache hit, 1 onsite task
 </code></pre>
 <h3 id="sbt-シェルから-scalaversion-を設定する"><a class="header" href="#sbt-シェルから-scalaversion-を設定する">sbt シェルから scalaVersion を設定する</a></h3>
-<pre><code>sbt:foo-build&gt; set scalaVersion := "3.8.4"
+<pre><code>sbt:foo-build&gt; set scalaVersion := "3.9.0"
 [info] Defining scalaVersion
 [info] The new value will be used by Compile / bspBuildTarget, Compile / dependencyTreeCrossProjectId and 51 others.
 [info]  Run `last` for details.
@@ -344,7 +344,7 @@ Hello
 </code></pre>
 <p><code>scalaVersion</code> セッティングを確認する:</p>
 <pre><code>sbt:foo-build&gt; scalaVersion
-[info] 3.8.4
+[info] 3.9.0
 </code></pre>
 <h3 id="セッションを-buildsbt-へと保存する"><a class="header" href="#セッションを-buildsbt-へと保存する">セッションを build.sbt へと保存する</a></h3>
 <p>アドホックに設定したセッティングは <code>session save</code> で保存できる。</p>
@@ -359,7 +359,7 @@ Hello
 [warn] Disable this warning by setting `Global / onChangedBuildSource := IgnoreSourceChanges`.
 </code></pre>
 <p><code>build.sbt</code> ファイルは以下のようになったはずだ:</p>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 
 </code></pre>
 <h3 id="プロジェクトに名前を付ける"><a class="header" href="#プロジェクトに名前を付ける">プロジェクトに名前を付ける</a></h3>
@@ -758,7 +758,7 @@ Hello, World!
 <p>JAR ファイルや <code>scalac</code> を直接用いるという代わりに、サブプロジェクトという抽象概念とビルドツールを導入することで、無意味に非効率的な苦労を回避することができる。</p>
 <h2 id="sbt"><a class="header" href="#sbt">sbt</a></h2>
 <p><strong>sbt</strong> は主に Scala と Java のためのシンプルなビルド・ツールだ。sbt を使うことで、サブプロジェクトおよびそれらの依存性、カスタム・タスクを設定ファイルに宣言することができ、高速かつ再現性のあるビルドを得ることができる。コンパイラを自分でダウンロードする代わりに以下のように書くことができる:</p>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 </code></pre>
 <p>sbt は、これに従ってコンパイラをダウンロードしてくれる。</p>
 <p>この目標のため、sbt はいくつかのことを行う:</p>
@@ -889,7 +889,7 @@ $ sbt new scala/scala3.g8
 <p>sbt server は、そのサブコンポーネントとして <a href="https://get-coursier.io/">Couriser</a> を実行して、Scala 標準ライブラリ、Scala コンパイラ、ビルドで使われるその他のライブラリ依存性の解決を行う。</p>
 <h3 id="zinc"><a class="header" href="#zinc">Zinc</a></h3>
 <p>Zinc は、sbt プロジェクトにより開発、メンテされている、Scala の差分コンパイラだ。Zinc の側面として見落とされがちなのは、Zinc は<strong>ここ数年に出た全てのバージョン</strong>の Scala コンパイラに対する安定した API を提供しているということがある。Coursier がどんな Scala バージョンでも解決できることと合わせると、sbt は <code>build.sbt</code> に一行書くだけで、ここ数年に出たどのバージョンの Scala でも走らせることができる:</p>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 </code></pre>
 <h3 id="bsp-server"><a class="header" href="#bsp-server">BSP server</a></h3>
 <p>sbt server は <a href="https://build-server-protocol.github.io/">Build Server Protocol (BSP)</a> をサポートして、ビルド対象の列挙、ビルドの実行、その他を行うことができる。これにより、IntelliJ や Metals といった IDE が既に実行中の sbt server  とコードを用いて通信することが可能となる。</p>
@@ -1119,7 +1119,7 @@ key           operator   (setting/task) body
 val toolkit = "org.scala-lang" %% "toolkit" % toolkitV
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % toolkitV
 
-scalaVersion := "3.8.4"
+scalaVersion := "3.9.0"
 libraryDependencies += toolkit
 libraryDependencies += (toolkitTest % Test)
 </code></pre>
@@ -1147,7 +1147,89 @@ lazy val toolkitV = "0.2.0"
 <p><code>build.sbt</code> トップレベルでのクラスやオブジェクトの定義は禁止されている。
 それらは、<code>project/</code> ディレクトリ内の Scala ソース内に書かれる。</p>
 </div>
-</div><div style="break-before: page; page-break-before: always;"></div><h1 id="ライブラリ依存性の基本"><a class="header" href="#ライブラリ依存性の基本">ライブラリ依存性の基本</a></h1>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="スコープの基本"><a class="header" href="#スコープの基本">スコープの基本</a></h1>
+<p>このページではスコープについて説明する。</p>
+<h2 id="キーに関する本当の話"><a class="header" href="#キーに関する本当の話">キーに関する本当の話</a></h2>
+<p><a href="guide/build-definition-basics.html">以前のページ</a>では、<code>name</code> のようなキーは sbt のキーと値のペアから成るマップの 1つのエントリーに対応するかのように説明した。これは単純化したものだった。実際のビルドでは、各キーは<strong>スコープ</strong>と呼ばれる複数の文脈において、それぞれ値を持つことができる。</p>
+<p>具体例をいくつか挙げる:</p>
+<ul>
+<li>ビルド定義に複数のサブプロジェクトがある場合、キーはサブプロジェクトごとに異なる値を持つことができる。</li>
+<li>メインのソースとテストのソースを異なる方法でコンパイルしたい場合、<code>compile</code> キーはそれぞれに対して異なる値を持つことができる。</li>
+<li>(Scala コンパイラのオプションを保持する) <code>scalacOptions</code> キーは、クラスファイルをコンパイルする時 (<code>compile</code>) と REPL を実行する時 (<code>console</code>) とで異なる値を持つことができる。</li>
+</ul>
+<h2 id="統一スラッシュ構文"><a class="header" href="#統一スラッシュ構文">統一スラッシュ構文</a></h2>
+<p>sbt における完全なスコープは<strong>統一スラッシュ構文</strong>を用いて記述される:</p>
+<pre><code class="language-scala">projA / Compile / console / scalacOptions
+</code></pre>
+<p>これらは 3つのレベルのスコープ付けを表す:</p>
+<ul>
+<li>サブプロジェクトによるスコープ付け</li>
+<li>依存性コンフィギュレーションによるスコープ付け</li>
+<li>タスクによるスコープ付け</li>
+</ul>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="guide/scope-basics.html#admonition-note"></a>
+</div>
+<div>
+<p>sbt 1.1 で導入された統一スラッシュ構文は、sbt シェルと <code>build.sbt</code> の両方で
+使うことができる。</p>
+</div>
+</div>
+<h3 id="サブプロジェクトによるスコープ付け"><a class="header" href="#サブプロジェクトによるスコープ付け">サブプロジェクトによるスコープ付け</a></h3>
+<p><a href="guide/multi-project-basics.html">1つのビルドに複数のサブプロジェクトを置く</a>場合、各サブプロジェクトはそれぞれのセッティングを必要とする。sbt シェルからは、以下のようにして特定のサブプロジェクトをコンパイルできる:</p>
+<pre><code class="language-bash">sbt&gt; projA/compile
+</code></pre>
+<h3 id="依存性コンフィギュレーションによるスコープ付け"><a class="header" href="#依存性コンフィギュレーションによるスコープ付け">依存性コンフィギュレーションによるスコープ付け</a></h3>
+<p>依存性コンフィギュレーション (通称「コンフィギュレーション」) は、ライブラリ依存性のグラフを定義し、独自のクラスパス、ソース、生成パッケージなどを持つことがある。</p>
+<p>sbt でよく見かけるコンフィギュレーションには以下がある:</p>
+<ul>
+<li><code>Compile</code>: メインのコード (<code>src/main/scala</code>) を定義する。</li>
+<li><code>Test</code>: テスト (<code>src/test/scala</code>) のコンパイル方法を定義する。</li>
+<li><code>Runtime</code>: <code>run</code> タスクのクラスパスを定義する。</li>
+</ul>
+<p>sbt シェルからは、以下のようにしてテストコードをコンパイルできる。この時メインのコードもコンパイルされる:</p>
+<pre><code class="language-bash">sbt&gt; Test/compile
+</code></pre>
+<p><code>build.sbt</code> では、以下のようにしてテストをフォークするよう指定できる:</p>
+<pre><code class="language-scala">Test / fork := true
+</code></pre>
+<h3 id="タスクによるスコープ付け"><a class="header" href="#タスクによるスコープ付け">タスクによるスコープ付け</a></h3>
+<p>セッティングはタスクの動作に影響を与えることができる。例えば、<code>compile</code> タスクは <code>scalacOptions</code> セッティングの影響を受ける。</p>
+<p>これをサポートするために、(<code>compile</code> のような) タスクキーは (<code>scalacOptions</code> のような) 他のキーのスコープとなることができる。Scala コンパイラを呼び出す様々なタスク (<code>compile</code>、<code>console</code>、<code>doc</code>) は、<code>scalacOptions</code> のようなコンパイル関連のキーを共有することができ、それらのキーはタスクごとに異なる値を持つことができる。</p>
+<pre><code class="language-scala">scalaVersion := "3.9.0"
+Compile / scalacOptions ++= List("-deprecation", "-Werror", "-Wunused:imports")
+Compile / console / scalacOptions --= List("-Werror", "-Wunused:imports")
+</code></pre>
+<h3 id="スコープの検査"><a class="header" href="#スコープの検査">スコープの検査</a></h3>
+<p>sbt シェルでは、<code>inspect</code> コマンドを使ってキーとそのスコープを調べることができる。<code>inspect Test / fullClasspath</code> を試してみよう:</p>
+<pre><code class="language-bash">sbt:Hello&gt; inspect Test / fullClasspath
+[info] Task: Seq[class sbt.internal.util.Attributed]
+[info] Description:
+[info] 	The exported classpath, consisting of build products and unmanaged and
+        managed, internal and external dependencies.
+[info] Provided by:
+[info] 	Test / fullClasspath
+[info] Defined at:
+[info] 	Defaults.scala:2823
+[info] Dependencies:
+[info] 	Test / fullClasspath / streams
+[info] 	Test / exportedProducts
+[info] 	Test / dependencyClasspath
+[info] Reverse dependencies:
+[info] 	Test / fgRun
+[info] 	Test / run / bspBuildTargetJvmEnvironmentItem
+[info] 	Test / console
+[info] 	Test / fgRunMain
+[info] 	Test / testLoader
+[info] 	Test / bspBuildTargetJvmEnvironmentItem
+....
+</code></pre>
+<p>詳細は <a href="guide/../reference/sbt-inspect.html">sbt inspect</a> のリファレンスを参照。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ライブラリ依存性の基本"><a class="header" href="#ライブラリ依存性の基本">ライブラリ依存性の基本</a></h1>
 <p>このページは、sbt を使ったライブラリ依存性管理の基本を説明する。</p>
 <p>sbt はマネージ依存性 (managed dependency) を実装するのに内部で <a href="https://get-coursier.io/">Coursier</a> を採用していて、Coursier、npm、PIP などのパッケージ管理を使った事がある人は違和感無く入り込めるだろう。</p>
 <div id="admonition-マネージ依存性とは何か" class="admonition admonish-note" role="note" aria-labelledby="admonition-マネージ依存性とは何か-title">
@@ -1198,7 +1280,7 @@ end Dependencies
 <p>この <code>Dependencies</code> オブジェクトは <code>build.sbt</code> 内で利用可能となる。 定義されている <code>val</code> が使いやすいように <code>Dependencies.*</code> を import しておこう。</p>
 <pre><code class="language-scala">import Dependencies.*
 
-scalaVersion := "3.8.4"
+scalaVersion := "3.9.0"
 name := "something"
 libraryDependencies += toolkit
 libraryDependencies += toolkitTest % Test
@@ -1222,7 +1304,7 @@ libraryDependencies += toolkitTest % Test
 <p>簡単なプログラムならば単一プロジェクトから作り始めてもいいが、ビルドが複数の小さいのサブプロジェクトに分かれていくのが普通だ。</p>
 <p>ビルド内のサブプロジェクトは、それぞれ独自のソースディレクトリを持ち、<code>packageBin</code> を実行すると独自の JAR ファイルを生成するなど、概ね通常のプロジェクトと同様に動作する。</p>
 <p><strong>サブプロジェクト</strong>は、<code>lazy val</code> を用いて <a href="guide/../../api/sbt/Project.html">Project</a> 型の値を宣言することで定義される。例えば:</p>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 LocalRootProject / publish / skip := true
 
 lazy val core = (project in file("core"))
@@ -1247,7 +1329,7 @@ lazy val util = (project in file("util"))
 <p>ビルドのルートにあるサブプロジェクトは、<strong>ルートプロジェクト</strong>と呼ばれ、ビルドの中で特別な役割を果たすことがある。もしルートディレクトリにサブプロジェクトが定義されてない場合、sbt は自動的に他のプロジェクトを集約するデフォルトのルートプロジェクトを生成する。</p>
 <h2 id="タスク集約"><a class="header" href="#タスク集約">タスク集約</a></h2>
 <p>タスク集約は、集約する側のサブプロジェクトで任意のタスクを実行するとき、集約される側の複数のサブプロジェクトでも同じタスクが実行されるという関係を意味する。</p>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 
 lazy val root = rootProject
   .autoAggregate
@@ -1262,7 +1344,7 @@ lazy val core = (project in file("core"))
 <p>上の例では、ルートプロジェクトが <code>util</code> と <code>core</code> を集約する。そのため、sbt シェルに <code>compile</code> と打ち込むと、3つのサブプロジェクトが並列にコンパイルされる。</p>
 <h2 id="コモンセッティング"><a class="header" href="#コモンセッティング">コモン・セッティング</a></h2>
 <p>sbt 2.x では、<code>settings(...)</code> を使わずに <code>build.sbt</code> にセッティングを直書きした場合、<strong>コモン・セッティング</strong>として全サブプロジェクトに注入される。</p>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 
 lazy val core = (project in file("core"))
 
@@ -1271,7 +1353,7 @@ lazy val app = (project in file("app"))
 </code></pre>
 <p>上の例では、<code>scalaVersion</code> セッティングはデフォルトのルートプロジェクト、<code>core</code>、<code>util</code> に適用される。</p>
 <p>既にサブプロジェクトにスコープ付けされたセッティングはこのルールの例外となる。</p>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 
 lazy val core = (project in file("core"))
 
@@ -1282,7 +1364,7 @@ lazy val app = (project in file("app"))
 app / name := "app1"
 </code></pre>
 <p>この例外を利用して、以下のように、ルートプロジェクトにのみ適用されるセッティングを書くことができる:</p>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 
 lazy val core = (project in file("core"))
 
@@ -1533,7 +1615,7 @@ an odd trick, but this fact becomes relevant [later][Organizing-Build].
 </code></pre>
 <h3 id="コモンセッティング-1"><a class="header" href="#コモンセッティング-1">コモン・セッティング</a></h3>
 <p>sbt 2.x では、<code>build.sbt</code> に直書きされたセッティングはコモン・セッティングとして解釈され、全サブプロジェクトに注入される。そのため、<code>ThisBuild</code> スコープ付けを使わずに <code>scalaVersion</code> を設定できる:</p>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 </code></pre>
 <p>さらに、これはいわゆる動的ディスパッチ問題を解決する:</p>
 <pre><code class="language-scala">lazy val hi = taskKey[String]("")
@@ -1655,7 +1737,7 @@ libraryDependencies +=
 </code></pre>
 <h2 id="ベアセッティングの変更点"><a class="header" href="#ベアセッティングの変更点">ベア・セッティングの変更点</a></h2>
 <pre><code class="language-scala">version := "0.1.0"
-scalaVersion := "3.8.4"
+scalaVersion := "3.9.0"
 </code></pre>
 <p><code>settings(...)</code> を介さず、上の例のように <code>build.sbt</code> に直書きされたセッティングを<strong>ベア・セッティング</strong> (bare settings) と呼ぶ。</p>
 <div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
@@ -1886,14 +1968,14 @@ myTask := {
 <h2 id="project-matrix"><a class="header" href="#project-matrix">Project matrix</a></h2>
 <p>sbt 2.x は project matrix を導入して、並列クロスビルドを可能とする。</p>
 <pre><code class="language-scala">organization := "com.example"
-scalaVersion := "3.8.4"
+scalaVersion := "3.9.0"
 version      := "0.1.0-SNAPSHOT"
 
 lazy val core = (projectMatrix in file("core"))
   .settings(
     name := "core"
   )
-  .jvmPlatform(scalaVersions = Seq("3.8.4", "2.13.18"))
+  .jvmPlatform(scalaVersions = Seq("3.9.0", "2.13.18"))
 </code></pre>
 <p>セットアップに関しては、<a href="concepts/../reference/cross-building-setup.html">クロスビルドの設定</a>を参照。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-クエリ-1"><a class="header" href="#sbt-クエリ-1">sbt クエリ</a></h1>
@@ -1910,7 +1992,7 @@ lazy val core = (projectMatrix in file("core"))
 <a class="admonition-anchor-link" href="concepts/sbt-query.html#admonition-buildsbt-example-1"></a>
 </div>
 <div>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 
 lazy val foo = project
 </code></pre>
@@ -1951,13 +2033,13 @@ lazy val foo = projectMatrix
   .settings(
     libraryDependencies += toolkit,
   )
-  .jvmPlatform(scalaVersions = Seq("3.8.4", "2.13.18"))
+  .jvmPlatform(scalaVersions = Seq("3.9.0", "2.13.18"))
 
 lazy val bar = projectMatrix
   .settings(
     libraryDependencies += toolkit,
   )
-  .jvmPlatform(scalaVersions = Seq("3.8.4", "2.13.18"))
+  .jvmPlatform(scalaVersions = Seq("3.9.0", "2.13.18"))
 </code></pre>
 </div>
 </div>
@@ -2689,7 +2771,7 @@ Evictions: 2
 <h3 id="コンパイル設定"><a class="header" href="#コンパイル設定">コンパイル設定</a></h3>
 <h4 id="scalaversion"><a class="header" href="#scalaversion">scalaVersion</a></h4>
 <p>コンパイルに使用する Scala のバージョン。</p>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 </code></pre>
 <h4 id="scalacoptions"><a class="header" href="#scalacoptions">scalacOptions</a></h4>
 <p>Scala コンパイラのオプション。</p>
@@ -4035,7 +4117,7 @@ ${CSR_CACHE}/https/repo1.maven.org/maven2/org/scala-lang/scala3-library_3/3.7.4/
 <a class="admonition-anchor-link" href="reference/cross-building-setup.html#admonition-buildsbt"></a>
 </div>
 <div>
-<pre><code class="language-scala">lazy val scala3 = "3.8.4"
+<pre><code class="language-scala">lazy val scala3 = "3.9.0"
 lazy val scala2_13 = "2.13.18"
 
 organization := "com.example"
@@ -5673,7 +5755,7 @@ your plugin to the list.</p>
 </li>
 <li>
 <p><code>hello_scala/</code> の下に <code>build.sbt</code> を作成する:</p>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 </code></pre>
 </li>
 <li>
@@ -6165,7 +6247,7 @@ case class SparkAxis(idSuffix: String, directorySuffix: String)
 <div>
 <pre><code class="language-scala">lazy val scala212 = "2.12.21"
 lazy val scala213 = "2.13.18"
-lazy val scala3 = "3.8.4"
+lazy val scala3 = "3.9.0"
 lazy val spark3 = SparkAxis(idSuffix = "Spark3", directorySuffix = "spark3")
 lazy val spark4 = SparkAxis(idSuffix = "Spark4", directorySuffix = "spark4")
 
@@ -6248,7 +6330,7 @@ Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties
 </ol>
 <pre><code class="language-scala">lazy val demo1 = taskKey[Int]("demo1")
 
-scalaVersion := "3.8.4"
+scalaVersion := "3.9.0"
 
 demo1 := Def.uncached {
   val srv = interactionService.value

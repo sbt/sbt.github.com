@@ -226,7 +226,7 @@ incrementally compiles and tests your projects,
 integrates with IDEs like IntelliJ and VS Code,
 makes JAR packages, and publishes them to <a href="https://central.sonatype.com/">the Central Repo</a>,
 JVM community's package registry.</p>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 </code></pre>
 <p>You just need one line of <code>build.sbt</code> to get started with Scala.</p>
 <h2 id="links"><a class="header" href="#links">Links</a></h2>
@@ -345,7 +345,7 @@ Hello
 [success] elapsed time: 0 s, cache 50%, 1 disk cache hit, 1 onsite task
 </code></pre>
 <h3 id="set-scalaversion-from-sbt-shell"><a class="header" href="#set-scalaversion-from-sbt-shell">Set scalaVersion from sbt shell</a></h3>
-<pre><code>sbt:foo-build&gt; set scalaVersion := "3.8.4"
+<pre><code>sbt:foo-build&gt; set scalaVersion := "3.9.0"
 [info] Defining scalaVersion
 [info] The new value will be used by Compile / bspBuildTarget, Compile / dependencyTreeCrossProjectId and 51 others.
 [info]  Run `last` for details.
@@ -354,7 +354,7 @@ Hello
 </code></pre>
 <p>Check the <code>scalaVersion</code> setting:</p>
 <pre><code>sbt:foo-build&gt; scalaVersion
-[info] 3.8.4
+[info] 3.9.0
 </code></pre>
 <h3 id="save-the-session-to-buildsbt"><a class="header" href="#save-the-session-to-buildsbt">Save the session to build.sbt</a></h3>
 <p>We can save the ad-hoc settings using <code>session save</code>.</p>
@@ -369,7 +369,7 @@ Hello
 [warn] Disable this warning by setting `Global / onChangedBuildSource := IgnoreSourceChanges`.
 </code></pre>
 <p><code>build.sbt</code> file should now contain:</p>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 
 </code></pre>
 <h3 id="name-your-project"><a class="header" href="#name-your-project">Name your project</a></h3>
@@ -776,7 +776,7 @@ This is doubly complicated for Scala ecosystem because we have Scala 2.12, 2.13 
 <h2 id="sbt"><a class="header" href="#sbt">sbt</a></h2>
 <p><em>sbt</em> is a simple build tool created for Scala and Java.
 It lets us declare subprojects, their various dependencies, and custom tasks in a configuration file to ensure that we'll always get a fast, repeatable build. Instead of downloading the compiler yourself, you can write:</p>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 </code></pre>
 <p>and sbt will download the compiler for you.</p>
 <p>To accomplish this goal, sbt does several things:</p>
@@ -910,7 +910,7 @@ $ sbt new scala/scala3.g8
 <h3 id="zinc"><a class="header" href="#zinc">Zinc</a></h3>
 <p>Zinc is the incremental compiler for Scala, developed and maintained by sbt project.
 An often overlooked aspect of Zinc is that Zinc provides a stable API to invoke <strong>any modern versions</strong> of Scala compiler. Combined with the fact that Coursier can resolve any Scala version, with sbt we can invoke any modern versions of Scala just by writing a single line <code>build.sbt</code>:</p>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 </code></pre>
 <h3 id="bsp-server"><a class="header" href="#bsp-server">BSP server</a></h3>
 <p>sbt server supports <a href="https://build-server-protocol.github.io/">Build Server Protocol (BSP)</a> to list build targets, build them, etc.
@@ -1167,7 +1167,7 @@ If you use the wrong value type, the build definition will not compile:</p>
 val toolkit = "org.scala-lang" %% "toolkit" % toolkitV
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % toolkitV
 
-scalaVersion := "3.8.4"
+scalaVersion := "3.9.0"
 libraryDependencies += toolkit
 libraryDependencies += (toolkitTest % Test)
 </code></pre>
@@ -1199,6 +1199,103 @@ and we think it makes the build definition more robust for copy-pasting.</p>
 Those should go in the <code>project/</code> directory as Scala source files.</p>
 </div>
 </div>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="scope-basics"><a class="header" href="#scope-basics">Scope basics</a></h1>
+<p>This page describes scopes.</p>
+<h2 id="the-whole-story-about-keys"><a class="header" href="#the-whole-story-about-keys">The whole story about keys</a></h2>
+<p><a href="guide/build-definition-basics.html">Previously</a> we pretended that a key like <code>name</code> corresponded
+to one entry in sbt's map of key-value pairs. This was a simplification.
+In the real builds, each key can have an associated value in more than one
+context, called a <em>scope.</em></p>
+<p>Some concrete examples:</p>
+<ul>
+<li>if you have multiple subprojects in your build definition, a key can
+have a different value in each project.</li>
+<li>the <code>compile</code> key may have a different value for your main sources and
+your test sources, if you want to compile them differently.</li>
+<li>the <code>scalacOptions</code> key (which contains Scala compiler options) may have different values when compiling class files
+(<code>compile</code>) or running the REPL (<code>console</code>).</li>
+</ul>
+<h2 id="unified-slash-syntax"><a class="header" href="#unified-slash-syntax">Unified slash syntax</a></h2>
+<p>A full scope in sbt is described using the <em>unified slash syntax</em>:</p>
+<pre><code class="language-scala">projA / Compile / console / scalacOptions
+</code></pre>
+<p>These represent the three level of scoping:</p>
+<ul>
+<li>The subproject scoping</li>
+<li>The dependency configuration scoping</li>
+<li>The task scoping</li>
+</ul>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="guide/scope-basics.html#admonition-note"></a>
+</div>
+<div>
+<p>Introduced in sbt 1.1, the unified slash syntax can be used in both
+the sbt shell and in <code>build.sbt</code>.</p>
+</div>
+</div>
+<h3 id="scoping-by-the-subproject"><a class="header" href="#scoping-by-the-subproject">Scoping by the subproject</a></h3>
+<p>If you <a href="guide/multi-project-basics.html">put multiple subprojects in a single build</a>, each
+subproject needs its own settings.
+From the sbt shell, you can compile a specific subproject as follows:</p>
+<pre><code class="language-bash">sbt&gt; projA/compile
+</code></pre>
+<h3 id="scoping-by-the-dependency-configuration"><a class="header" href="#scoping-by-the-dependency-configuration">Scoping by the dependency configuration</a></h3>
+<p>A dependency configuration (or <em>configuration</em> for short) defines
+a graph of library dependencies, potentially with its own
+classpath, sources, generated packages, etc.</p>
+<p>Some configurations you'll see in sbt:</p>
+<ul>
+<li><code>Compile</code> which defines the main code (<code>src/main/scala</code>).</li>
+<li><code>Test</code> which defines how to compile tests (<code>src/test/scala</code>).</li>
+<li><code>Runtime</code> which defines the classpath for the <code>run</code> task.</li>
+</ul>
+<p>From the sbt shell, you can compile the test code as follows, which would also compile the main code:</p>
+<pre><code class="language-bash">sbt&gt; Test/compile
+</code></pre>
+<p>In <code>build.sbt</code>, you can specify the tests to be forked as follows:</p>
+<pre><code class="language-scala">Test / fork := true
+</code></pre>
+<h3 id="scoping-by-task"><a class="header" href="#scoping-by-task">Scoping by task</a></h3>
+<p>Settings can affect how a task works. For example, the <code>compile</code> task
+is affected by the <code>scalacOptions</code> setting.</p>
+<p>To support this, a task key (such as <code>compile</code>) can be a scope for
+another key (such as <code>scalacOptions</code>).
+Various tasks that invoke the Scala compiler (<code>compile</code>, <code>console</code>,
+<code>doc</code>) can share keys related to compilation such as <code>scalacOptions</code>. Those keys can have distinct values.</p>
+<pre><code class="language-scala">scalaVersion := "3.9.0"
+Compile / scalacOptions ++= List("-deprecation", "-Werror", "-Wunused:imports")
+Compile / console / scalacOptions --= List("-Werror", "-Wunused:imports")
+</code></pre>
+<h3 id="inspecting-scopes"><a class="header" href="#inspecting-scopes">Inspecting scopes</a></h3>
+<p>In sbt shell, you can use the <code>inspect</code> command to understand
+keys and their scopes. Try <code>inspect Test / fullClasspath</code>:</p>
+<pre><code class="language-bash">sbt:Hello&gt; inspect Test / fullClasspath
+[info] Task: Seq[class sbt.internal.util.Attributed]
+[info] Description:
+[info] 	The exported classpath, consisting of build products and unmanaged and
+        managed, internal and external dependencies.
+[info] Provided by:
+[info] 	Test / fullClasspath
+[info] Defined at:
+[info] 	Defaults.scala:2823
+[info] Dependencies:
+[info] 	Test / fullClasspath / streams
+[info] 	Test / exportedProducts
+[info] 	Test / dependencyClasspath
+[info] Reverse dependencies:
+[info] 	Test / fgRun
+[info] 	Test / run / bspBuildTargetJvmEnvironmentItem
+[info] 	Test / console
+[info] 	Test / fgRunMain
+[info] 	Test / testLoader
+[info] 	Test / bspBuildTargetJvmEnvironmentItem
+....
+</code></pre>
+<p>For more details, see <a href="guide/../reference/sbt-inspect.html">sbt inspect</a> reference guide.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="library-dependency-basics"><a class="header" href="#library-dependency-basics">Library dependency basics</a></h1>
 <p>This page explains the basics of library dependency management using sbt.</p>
 <p>sbt uses <a href="https://get-coursier.io/">Coursier</a> to implement managed
@@ -1262,7 +1359,7 @@ end Dependencies
 To make it easier to use the <code>val</code>s defined in it, import <code>Dependencies.*</code> in your build.sbt file.</p>
 <pre><code class="language-scala">import Dependencies.*
 
-scalaVersion := "3.8.4"
+scalaVersion := "3.9.0"
 name := "something"
 libraryDependencies += toolkit
 libraryDependencies += toolkitTest % Test
@@ -1290,7 +1387,7 @@ its own JAR file when you run <code>packageBin</code>, and in general works like
 other project.</p>
 <p>A <strong>subproject</strong> is defined by declaring a <code>lazy val</code> of type
 <a href="guide/../../api/sbt/Project.html">Project</a>. For example, :</p>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 LocalRootProject / publish / skip := true
 
 lazy val core = (project in file("core"))
@@ -1321,7 +1418,7 @@ If a subproject is not defined at the root directory of the build,
 sbt automatically creates a default one that aggregates all other subprojects in the build.</p>
 <h2 id="task-aggregation"><a class="header" href="#task-aggregation">Task aggregation</a></h2>
 <p>Task aggregation means that running a task on the aggregate subproject will also run on the aggregated subprojects.</p>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 
 lazy val root = rootProject
   .autoAggregate
@@ -1336,7 +1433,7 @@ lazy val core = (project in file("core"))
 <p>In the above example, the root subproject aggregates <code>util</code> and <code>core</code>. When you type <code>compile</code> in the sbt shell, all tree subprojects are compiled in parallel.</p>
 <h2 id="common-settings"><a class="header" href="#common-settings">Common settings</a></h2>
 <p>In sbt 2.x, bare settings that are written directly in <code>build.sbt</code> without <code>settings(...)</code> are <strong>common settings</strong> that are injected to all subprojects.</p>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 
 lazy val core = (project in file("core"))
 
@@ -1345,7 +1442,7 @@ lazy val app = (project in file("app"))
 </code></pre>
 <p>In the above, the <code>scalaVersion</code> setting is applied to the default root subproject, <code>core</code>, and <code>util</code>.</p>
 <p>One exception to this rule is settings that are already scoped to a subproject.</p>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 
 lazy val core = (project in file("core"))
 
@@ -1356,7 +1453,7 @@ lazy val app = (project in file("app"))
 app / name := "app1"
 </code></pre>
 <p>We can take advantage of this exception to add some settings that only apply to the default root project as follows:</p>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 
 lazy val core = (project in file("core"))
 
@@ -1641,7 +1738,7 @@ Two of the popular IDEs in Scala are <a href="https://scalameta.org/metals/">Met
 </code></pre>
 <h3 id="common-settings-1"><a class="header" href="#common-settings-1">Common settings</a></h3>
 <p>In sbt 2.x, the bare settings in <code>build.sbt</code> are interpreted to be common settings, and are injected to all subprojects. This means we can now set <code>scalaVersion</code> without using <code>ThisBuild</code> scoping:</p>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 </code></pre>
 <p>This also fixes the so-called dynamic dispatch problem:</p>
 <pre><code class="language-scala">lazy val hi = taskKey[String]("")
@@ -1765,7 +1862,7 @@ libraryDependencies +=
 </code></pre>
 <h2 id="bare-settings-changes"><a class="header" href="#bare-settings-changes">Bare settings changes</a></h2>
 <pre><code class="language-scala">version := "0.1.0"
-scalaVersion := "3.8.4"
+scalaVersion := "3.9.0"
 </code></pre>
 <p><em>Bare settings</em>, like the example above, are settings written directly in <code>build.sbt</code> without <code>settings(...)</code>.</p>
 <div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
@@ -2008,14 +2105,14 @@ myTask := {
 <h2 id="project-matrix"><a class="header" href="#project-matrix">Project matrix</a></h2>
 <p>sbt 2.x introduces project matrix, which enables cross building to happen in parallel.</p>
 <pre><code class="language-scala">organization := "com.example"
-scalaVersion := "3.8.4"
+scalaVersion := "3.9.0"
 version      := "0.1.0-SNAPSHOT"
 
 lazy val core = (projectMatrix in file("core"))
   .settings(
     name := "core"
   )
-  .jvmPlatform(scalaVersions = Seq("3.8.4", "2.13.18"))
+  .jvmPlatform(scalaVersions = Seq("3.9.0", "2.13.18"))
 </code></pre>
 <p>See <a href="concepts/../reference/cross-building-setup.html">cross building setup</a> for more details on the setup.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sbt-query-1"><a class="header" href="#sbt-query-1">sbt query</a></h1>
@@ -2032,7 +2129,7 @@ lazy val core = (projectMatrix in file("core"))
 <a class="admonition-anchor-link" href="concepts/sbt-query.html#admonition-buildsbt-example-1"></a>
 </div>
 <div>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 
 lazy val foo = project
 </code></pre>
@@ -2073,13 +2170,13 @@ lazy val foo = projectMatrix
   .settings(
     libraryDependencies += toolkit,
   )
-  .jvmPlatform(scalaVersions = Seq("3.8.4", "2.13.18"))
+  .jvmPlatform(scalaVersions = Seq("3.9.0", "2.13.18"))
 
 lazy val bar = projectMatrix
   .settings(
     libraryDependencies += toolkit,
   )
-  .jvmPlatform(scalaVersions = Seq("3.8.4", "2.13.18"))
+  .jvmPlatform(scalaVersions = Seq("3.9.0", "2.13.18"))
 </code></pre>
 </div>
 </div>
@@ -2942,7 +3039,7 @@ to minimize the other source files recompiled due to <code>A.scala</code>'s chan
 <h3 id="compilation-settings"><a class="header" href="#compilation-settings">Compilation settings</a></h3>
 <h4 id="scalaversion"><a class="header" href="#scalaversion">scalaVersion</a></h4>
 <p>The version of Scala used for compilation.</p>
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 </code></pre>
 <h4 id="scalacoptions"><a class="header" href="#scalacoptions">scalacOptions</a></h4>
 <p>Options for the Scala compiler.</p>
@@ -4577,7 +4674,7 @@ ${CSR_CACHE}/https/repo1.maven.org/maven2/org/scala-lang/scala3-library_3/3.7.4/
 <a class="admonition-anchor-link" href="reference/cross-building-setup.html#admonition-buildsbt"></a>
 </div>
 <div>
-<pre><code class="language-scala">lazy val scala3 = "3.8.4"
+<pre><code class="language-scala">lazy val scala3 = "3.9.0"
 lazy val scala2_13 = "2.13.18"
 
 organization := "com.example"
@@ -6356,7 +6453,7 @@ with minimal explanations.</p>
 </code></pre>
 </li>
 <li>Under <code>hello_scala/</code>, create <code>build.sbt</code>:
-<pre><code class="language-scala">scalaVersion := "3.8.4"
+<pre><code class="language-scala">scalaVersion := "3.9.0"
 </code></pre>
 </li>
 <li>Under <code>hello_scala/</code>, create <code>Hello.scala</code>:
@@ -6872,7 +6969,7 @@ case class SparkAxis(idSuffix: String, directorySuffix: String)
 <div>
 <pre><code class="language-scala">lazy val scala212 = "2.12.21"
 lazy val scala213 = "2.13.18"
-lazy val scala3 = "3.8.4"
+lazy val scala3 = "3.9.0"
 lazy val spark3 = SparkAxis(idSuffix = "Spark3", directorySuffix = "spark3")
 lazy val spark4 = SparkAxis(idSuffix = "Spark4", directorySuffix = "spark4")
 
@@ -6955,7 +7052,7 @@ with minimal explanations about the basics.</p>
 </ol>
 <pre><code class="language-scala">lazy val demo1 = taskKey[Int]("demo1")
 
-scalaVersion := "3.8.4"
+scalaVersion := "3.9.0"
 
 demo1 := Def.uncached {
   val srv = interactionService.value
