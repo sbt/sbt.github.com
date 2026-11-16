@@ -2495,6 +2495,9 @@ my-maven-repo: https://example.org/repo
 my-ivy-repo: https://example.org/ivy-repo/, [organization]/[module]/[revision]/[type]s/[artifact](-[classifier]).[ext]
 </code></pre>
 <p>リポジトリファイルの別の場所は、sbt 起動スクリプトの <code>sbt.repository.config</code> システムプロパティで指定できる。最後に、ライブラリ依存性の解決と取得にこれらのリポジトリを使用するには、<code>sbt.override.build.repos</code> を true に設定する。</p>
+<p>If a repository requires authentication for plugin or build dependency resolution, set <code>credentials</code> in an <code>.sbt</code> file at the root of the sbt 2 <a href="reference/sbt.html#global-base-directory">global base directory</a>. For example, on Linux and macOS with the default global base directory, put this setting in <code>~/.config/sbt/2/credential.sbt</code>:</p>
+<pre><code class="language-scala">credentials += Credentials(Path.userHome / ".sbt" / ".credentials")
+</code></pre>
 <h3 id="間接依存ライブラリを除外する"><a class="header" href="#間接依存ライブラリを除外する">間接依存ライブラリを除外する</a></h3>
 <p>特定のケースでは、間接依存ライブラリを全てのライブラリ依存性から除外する必要がある。<code>excludeDependencies</code> で <code>ExclusionRules</code> を設定することで実現できる。</p>
 <pre><code class="language-scala">excludeDependencies ++= Seq(

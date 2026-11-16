@@ -2496,6 +2496,9 @@ my-maven-repo: https://example.org/repo
 my-ivy-repo: https://example.org/ivy-repo/, [organization]/[module]/[revision]/[type]s/[artifact](-[classifier]).[ext]
 </code></pre>
 <p>可通过 sbt 启动脚本中的 <code>sbt.repository.config</code> 系统属性指定仓库文件的不同位置。最后一步是将 <code>sbt.override.build.repos</code> 设为 true，以使用这些仓库进行依赖解析和获取。</p>
+<p>If a repository requires authentication for plugin or build dependency resolution, set <code>credentials</code> in an <code>.sbt</code> file at the root of the sbt 2 <a href="reference/sbt.html#global-base-directory">global base directory</a>. For example, on Linux and macOS with the default global base directory, put this setting in <code>~/.config/sbt/2/credential.sbt</code>:</p>
+<pre><code class="language-scala">credentials += Credentials(Path.userHome / ".sbt" / ".credentials")
+</code></pre>
 <h3 id="排除传递依赖"><a class="header" href="#排除传递依赖">排除传递依赖</a></h3>
 <p>某些情况下需从所有依赖中排除传递依赖。可通过在 <code>excludeDependencies</code> 中设置 <code>ExclusionRules</code> 实现。</p>
 <pre><code class="language-scala">excludeDependencies ++= Seq(

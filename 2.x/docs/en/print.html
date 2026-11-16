@@ -2730,6 +2730,13 @@ my-ivy-repo: https://example.org/ivy-repo/, [organization]/[module]/[revision]/[
 <code>sbt.repository.config</code> system property in the sbt startup script. The
 final step is to set <code>sbt.override.build.repos</code> to true to use these
 repositories for dependency resolution and retrieval.</p>
+<p>If a repository requires authentication for plugin or build dependency resolution,
+set <code>credentials</code> in an <code>.sbt</code> file at the root of the sbt 2
+<a href="reference/sbt.html#global-base-directory">global base directory</a>. For example, on Linux and
+macOS with the default global base directory, put this setting in
+<code>~/.config/sbt/2/credential.sbt</code>:</p>
+<pre><code class="language-scala">credentials += Credentials(Path.userHome / ".sbt" / ".credentials")
+</code></pre>
 <h3 id="exclude-transitive-dependencies"><a class="header" href="#exclude-transitive-dependencies">Exclude Transitive Dependencies</a></h3>
 <p>In certain cases a transitive dependency should be excluded from
 all dependencies. This can be achieved by setting up <code>ExclusionRules</code>
