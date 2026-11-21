@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>sbt 2.0 の変更点 - sbt ハンドブック</title>
+        <title>sbt 2.x の変更点 - sbt ハンドブック</title>
 
 
         <!-- Custom HTML head -->
@@ -211,8 +211,68 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="sbt-20-の変更点"><a class="header" href="#sbt-20-の変更点">sbt 2.0 の変更点</a></h1>
-<h2 id="互換性に影響のある変更点"><a class="header" href="#互換性に影響のある変更点">互換性に影響のある変更点</a></h2>
+                        <h1 id="sbt-2x-の変更点"><a class="header" href="#sbt-2x-の変更点">sbt 2.x の変更点</a></h1>
+<p><a id="2.1"></a></p>
+<h2 id="sbt-21-の変更点"><a class="header" href="#sbt-21-の変更点">sbt 2.1 の変更点</a></h2>
+<p>リリースノートの全文は <a href="https://github.com/sbt/sbt/releases/tag/v2.1.0">https://github.com/sbt/sbt/releases/tag/v2.1.0</a> を参照。</p>
+<h3 id="互換性に影響のある変更点-21"><a class="header" href="#互換性に影響のある変更点-21">互換性に影響のある変更点 (2.1)</a></h3>
+<ul>
+<li><strong>Scala 3.9 LTS を用いたメタビルド</strong>。</li>
+<li>Apache Ivy が依存ライブラリから削除された。</li>
+<li>フォークされたテストは排他的ではなくなった。</li>
+</ul>
+<h3 id="新機能-21"><a class="header" href="#新機能-21">新機能 (2.1)</a></h3>
+<h4 id="workermaxinstances-と-testtopology"><a class="header" href="#workermaxinstances-と-testtopology">workerMaxInstances と testTopology</a></h4>
+<p>sbt 2.1.0 は、テストのスケジューリング (特にフォークされたテスト) を制御するための新しいセッティング <code>workerMaxInstances</code> と <code>testTopology</code> を追加する。ワーカー・インスタンスの数を変更するには <code>Global / workerMaxInstances</code> を使う。デフォルトは <code>2</code> に設定されている:</p>
+<pre><code class="language-scala">// または sbt -Dsbt.worker_max_instances=2
+Global / workerMaxInstances := 2
+</code></pre>
+<p>テストクラスを複数のワーカーに分割するか、まとめて実行するかを制御するには <code>testTopology</code> セッティングを使う。デフォルトは 2 グループに分割するように変更された:</p>
+<pre><code class="language-scala">Test / testTopology := TestTopology.subprojectSplit(2)
+</code></pre>
+<p>代わりにサブプロジェクト内の全てのクラスを 1つのワーカーで実行するには、以下を使う:</p>
+<pre><code class="language-scala">Test / testTopology := TestTopology.subprojectExclusive
+</code></pre>
+<h4 id="テストサマリー"><a class="header" href="#テストサマリー">テストサマリー</a></h4>
+<p>テストが実行されると、sbt 2.1.0 は最後にテストサマリーを表示し、以下のように失敗したテストスイートを列挙する:</p>
+<pre><code class="language-bash">[error] Test summary (2 test tasks failed):
+[error]   a / Test / testQuick
+[error]         com.example.a.TestA     FAIL
+[error]   b / Test / testQuick
+[error]         com.example.b.TestB     FAIL
+[error]
+[error] failed: total 4, failed 2, errors 0, passed 2, cached 2
+</code></pre>
+<h4 id="テストキャッシュのオプトアウト"><a class="header" href="#テストキャッシュのオプトアウト">テストキャッシュのオプトアウト</a></h4>
+<p>sbt 2.1.0 ではテスト結果のキャッシュ化をオプトアウトできる:</p>
+<pre><code class="language-bash">$ sbt test --cache_test_result=false
+</code></pre>
+<h4 id="公開"><a class="header" href="#公開">公開</a></h4>
+<p>sbt 2.1.0 は、以前は公開に用いられていた Apache Ivy を間接依存ライブラリから削除し、Ivy を用いない公開 (Ivyless publishing) を実装する。</p>
+<h4 id="clean-タスク"><a class="header" href="#clean-タスク">clean タスク</a></h4>
+<p>sbt 2.1.0 は clean タスクがキャッシュの無効化として機能するように更新する。キャッシュの状態に関わらず、clean を実行すると次回のコマンド実行に対してキャッシュが無効化される。これはサブプロジェクトやコンフィギュレーションにスコープ付けすることができる。</p>
+<h4 id="タスク単位でのキャッシュ化のオプトアウト"><a class="header" href="#タスク単位でのキャッシュ化のオプトアウト">タスク単位でのキャッシュ化のオプトアウト</a></h4>
+<p>sbt 2.1.0 では、ビルドユーザーがコンパイルのキャッシュ化やテストのキャッシュ化をオプトアウトできる:</p>
+<pre><code class="language-scala">// コンパイルキャッシュをオプトアウトする
+Compile / compile / cacheStores := Nil
+Test / compile / cacheStores := Nil
+
+// テストキャッシュをオプトアウトする
+Test / test / cacheStores := Nil
+</code></pre>
+<h4 id="インプットのみのキャッシュ"><a class="header" href="#インプットのみのキャッシュ">インプットのみのキャッシュ</a></h4>
+<p>sbt 2.1.0 は新しいキャッシュレベル <code>CacheLevelTag.InputOnly</code> を導入する:</p>
+<pre><code class="language-scala">@cacheLevel(include = Array(CacheLevelTag.InputOnly))
+val scalacOptions = taskKey[Seq[String]]("Options for the Scala compiler.")
+</code></pre>
+<p><code>Def.uncached(...)</code> と同様に <code>scalacOptions</code> は毎回評価されるが、<code>scalacOptions.value</code> は他のキャッシュ化タスクへのインプットとして扱われる。</p>
+<h4 id="http-bazel-キャッシュ"><a class="header" href="#http-bazel-キャッシュ">HTTP Bazel キャッシュ</a></h4>
+<p>sbt 2.1.0 は、gRPC に加えて HTTP Bazel キャッシュのサポートを追加する。</p>
+<pre><code class="language-scala">Global / remoteCache := Some(uri("http://127.0.0.1:8000"))
+</code></pre>
+<p><a id="2.0"></a></p>
+<h2 id="sbt-20-の変更点"><a class="header" href="#sbt-20-の変更点">sbt 2.0 の変更点</a></h2>
+<h3 id="互換性に影響のある変更点-20"><a class="header" href="#互換性に影響のある変更点-20">互換性に影響のある変更点 (2.0)</a></h3>
 <p><a href="./migrating-from-sbt-1.x.html">sbt 1.x からのマイグレーション</a>も参照。</p>
 <ul>
 <li><strong>Scala 3 を用いたメタビルド</strong>。ビルド定義やプラグインに使われる sbt 2.x build.sbt DSL は Scala 3.x ベースとなった (sbt 1.x 並びに 2.x は、Scala 2.x と 3.x の両方をビルドすることが可能) by <a href="https://github.com/eed3si9n">@eed3si9n</a>, <a href="https://github.com/adpi2">@adpi2</a>, and others.</li>
@@ -242,7 +302,7 @@
 <li><code>IntegrationTest</code> コンフィギュレーションは廃止された in <a href="https://github.com/sbt/sbt/pull/8184">#8184</a></li>
 <li>sbt 0.13 スタイルのシェル構文は廃止された in <a href="https://github.com/sbt/sbt/pull/7700">#7700</a></li>
 </ul>
-<h2 id="機能"><a class="header" href="#機能">機能</a></h2>
+<h3 id="新機能-20"><a class="header" href="#新機能-20">新機能 (2.0)</a></h3>
 <ul>
 <li><strong>project matrix</strong>。sbt 1.x からプラグインで使用可能だった project matrix が本体に取り込まれ、並列クロスビルドができるようになった。</li>
 <li><strong>sbt クエリ</strong>。sbt 2.x は統一スラッシュ構文を拡張してサブプロジェクトのクエリを可能とする。詳細は下記参照。</li>
@@ -252,7 +312,7 @@
 <li><strong>rootProject と autoAggregate</strong>。詳細は下記参照。</li>
 <li><strong>Maven BOM (Bill of Materials) の使用</strong>。詳細は下記参照。</li>
 </ul>
-<h3 id="クライアントサーバーモード"><a class="header" href="#クライアントサーバーモード">クライアント・サーバーモード</a></h3>
+<h4 id="クライアントサーバーモード"><a class="header" href="#クライアントサーバーモード">クライアント・サーバーモード</a></h4>
 <p>クライアント・サーバーモードでは、sbt server はデーモン・プロセスとして起動し、<code>sbt</code> runner スクリプトは sbtn (ネイティブ・クライアント) に処理を委譲して sbt セッションに接続する。これは sbt 1.x では <code>--client</code> フラグの下で利用可能だったが、sbt 2.x ではデフォルトのモードとなる。</p>
 <ol>
 <li>クライアント・サーバーモードの主な動機は、コマンド毎に発生する JVM の起動、JIT のウォームアップ、およびビルド定義の読み込みを回避することだ。sbt は従来、独自のシェルを実装することでこの起動コストを回避してきたが、これは対話的なセッションでは機能するものの、単一ユーザーに限定される。サーバー・プロセスが起動していれば、sbtn は 1秒未満で接続できる。</li>
@@ -263,7 +323,7 @@
 <p>旧サーバー専用モードを使うには、<code>--server</code> フラグを使用する:</p>
 <pre><code class="language-bash">$ sbt --server test
 </code></pre>
-<h3 id="コモンセッティング"><a class="header" href="#コモンセッティング">コモン・セッティング</a></h3>
+<h4 id="コモンセッティング"><a class="header" href="#コモンセッティング">コモン・セッティング</a></h4>
 <p>sbt 2.x では、<code>build.sbt</code> に直書きされたセッティングはコモン・セッティングとして解釈され、全サブプロジェクトに注入される。そのため、<code>ThisBuild</code> スコープ付けを使わずに <code>scalaVersion</code> を設定できる:</p>
 <pre><code class="language-scala">scalaVersion := "3.9.0"
 </code></pre>
@@ -290,13 +350,13 @@ hi := name.value + "!"
 <pre><code class="language-bash">$ sbt ...@scalaBinaryVersion=3/test
 </code></pre>
 <p>上の例では、<code>scalaBinaryVersion</code> が <code>3</code> の全てのサブプロジェクトを実行する。これは、<a href="https://github.com/eed3si9n">@eed3si9n</a> によって <a href="https://github.com/sbt/sbt/pull/7699">#7699</a> としてコントリされた。</p>
-<h3 id="差分テスト"><a class="header" href="#差分テスト">差分テスト</a></h3>
+<h4 id="差分テスト"><a class="header" href="#差分テスト">差分テスト</a></h4>
 <p>sbt 2.x では、<code>test</code> タスクはインプット・タスクとなって、実行するテスト・スイートをフィルターできるようになった:</p>
 <pre><code class="language-bash">&gt; test ...ExampleTest
 </code></pre>
 <p>さらに、<code>test</code> はキャッシュ化された差分テストとなった。そのため、以前にテストが失敗したか、前回の実行から何かが変更されないと実行されないようになった。</p>
 <p>詳細は<a href="../reference/sbt-test.html">test</a>を参照</p>
-<h3 id="ローカルリモート兼用のキャッシュシステム"><a class="header" href="#ローカルリモート兼用のキャッシュシステム">ローカル/リモート兼用のキャッシュ・システム</a></h3>
+<h4 id="ローカルリモート兼用のキャッシュシステム"><a class="header" href="#ローカルリモート兼用のキャッシュシステム">ローカル/リモート兼用のキャッシュ・システム</a></h4>
 <p>sbt 2.x は、デフォルトでキャッシュ化されたタスクを実装するため、自動的にタスクの結果をローカルのディスクもしくは Bazel 互換のリモートキャッシュにてキャッシュ化することができる。</p>
 <pre><code class="language-scala">lazy val task1 = taskKey[String]("doc for task1")
 
@@ -314,17 +374,17 @@ task1 := {
 }
 </code></pre>
 <p>詳細は<a href="../concepts/caching.html">キャッシュ化</a>を参照。これは <a href="https://github.com/eed3si9n">@eed3si9n</a> によって <a href="https://github.com/sbt/sbt/pull/7464">#7464</a> / <a href="https://github.com/sbt/sbt/pull/7525">#7525</a> としてコントリされた。</p>
-<h3 id="クライアントサイドラン"><a class="header" href="#クライアントサイドラン">クライアントサイド・ラン</a></h3>
+<h4 id="クライアントサイドラン"><a class="header" href="#クライアントサイドラン">クライアントサイド・ラン</a></h4>
 <p>sbt 2.0 では、sbt server は <code>run</code> タスクを sbtn に送り返して、sbtn 側で新しい JVM にフォークさせる。以下のように実行するだけでいい:</p>
 <pre><code class="language-bash">sbt run
 </code></pre>
 <p>これは、sbt server をブロックしてしまうことを回避し、かつ複数の実行を行うことができる。これは <a href="https://github.com/eed3si9n">@eed3si9n</a> によって<a href="https://github.com/sbt/sbt/pull/8060">#8060</a> としてコントリされた。<a href="../reference/sbt-run.html">run</a> ドキュメンテーション参照。</p>
-<h3 id="クライアントサイド-repl"><a class="header" href="#クライアントサイド-repl">クライアントサイド REPL</a></h3>
+<h4 id="クライアントサイド-repl"><a class="header" href="#クライアントサイド-repl">クライアントサイド REPL</a></h4>
 <p>クライアントサイド・ラン同様に、sbt server は <code>console</code> (Scala REPL) を sbtn に送り返して、sbtn 側で新しい JVM をフォークして REPL を実行する。以下のように実行するだけでいい:</p>
 <pre><code class="language-bash">sbt console
 </code></pre>
 <p>これは、sbt server をブロックしてしまうことを回避する。これは <a href="https://github.com/eed3si9n">@eed3si9n</a> と <a href="https://github.com/calm329">@calm329</a> によって<a href="https://github.com/sbt/sbt/pull/8018">#8018</a>, <a href="https://github.com/sbt/sbt/pull/8604">#8604</a>, <a href="https://github.com/sbt/sbt/pull/8677">#8677</a>, <a href="https://github.com/sbt/sbt/pull/8705">#8705</a>, <a href="https://github.com/sbt/sbt/pull/8722">#8722</a> としてコントリされた。</p>
-<h3 id="rootproject-と-autoaggregate"><a class="header" href="#rootproject-と-autoaggregate">rootProject と autoAggregate</a></h3>
+<h4 id="rootproject-と-autoaggregate"><a class="header" href="#rootproject-と-autoaggregate">rootProject と autoAggregate</a></h4>
 <p>sbt 2.0 は <code>rootProject</code> マクロを追加する:</p>
 <pre><code class="language-scala">lazy val root = rootProject
 </code></pre>
@@ -333,7 +393,7 @@ task1 := {
   .autoAggregate
 </code></pre>
 <p>sbt 2.0 は、ロード時にローカルの全サブプロジェクトに展開する <code>autoAggregate</code> メソッドを追加する。</p>
-<h3 id="maven-bom-bill-of-materials-の使用"><a class="header" href="#maven-bom-bill-of-materials-の使用">Maven BOM (Bill of Materials) の使用</a></h3>
+<h4 id="maven-bom-bill-of-materials-の使用"><a class="header" href="#maven-bom-bill-of-materials-の使用">Maven BOM (Bill of Materials) の使用</a></h4>
 <p>sbt 2.0 は Maven BOM (Bill of Materials) の使用を追加する。サブプロジェクトは <code>.pomOnly()</code> を使って BOM アーティファクトに依存することができる:</p>
 <pre><code class="language-scala">libraryDependencies += ("com.fasterxml.jackson" % "jackson-bom" % "2.21.0").pomOnly()
 </code></pre>
@@ -341,7 +401,7 @@ task1 := {
 <pre><code class="language-scala">libraryDependencies += "com.fasterxml.jackson.core" % "jackson-core" % "*"
 </code></pre>
 <p>これによって Coursier に自動的に部品表からのバージョンを穴埋めさせることができる (この場合 <code>"2.21.0"</code>)。これは <a href="https://github.com/bitloi">@bitloi</a> により <a href="https://github.com/sbt/sbt/pull/8675">#8675</a> としてコントリされた。</p>
-<h3 id="性能の改善"><a class="header" href="#性能の改善">性能の改善</a></h3>
+<h4 id="性能の改善"><a class="header" href="#性能の改善">性能の改善</a></h4>
 <p>Adrien Piquerez さんが Scala Center に在籍していたときに、性能改善に関連するコントリをいくつか行った。</p>
 <ul>
 <li>perf: 長生きするオブジェクトの数を削減して、2.0.0-M2 比較で起動を 20% 高速化した by <a href="https://github.com/adpi2">@adpi2</a> in <a href="https://github.com/sbt/sbt/pull/7866">#7866</a></li>
